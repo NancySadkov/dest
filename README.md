@@ -9,10 +9,19 @@ The project's goal is recovering original code in a form compilable by Borland C
 # Milestones
 * Decompiled small part of the init code and mapped most of the asseta init code.
 * Recovered the raw asset files (LBMs, VOCs, etc), which can be assembled back into the STRONG.DAT stash file by going to assets/ folder and typing `st.exe grab`. The LBM files can be edited with [Deluxe Paint](https://winworldpc.com/product/deluxepaint/2x). These are PBM LBMs, so not many programs support them.
+* **Recovered the full executable into `src/decompiled/`**: every code segment is
+  exported as a C module (57 modules, 1130 functions), together with recovered
+  types, globals, prototypes and a function index. See `doc/STATUS.md` for the
+  current state and the plan for turning the decompiler baseline into a
+  rebuildable, original-like source tree.
 
 
 # TODO
 
+* Refine the recovered modules into compilable, original-like C (Phase B in
+  `doc/STATUS.md`), starting with the init/asset-loading modules.
+* Recover the 6 functions that currently defeat the Ghidra decompiler
+  (`init_assets`, `manage_4d05_1bee`, `stshRead`, ...).
 * Fix skylines palettes and and entity frame rect markers, which are used to determine sprite centering.
 * Fix RLE encoding for PBM LBM files.
 * Decompile the rest of the game, starting with these huge assets init routines.
@@ -25,6 +34,10 @@ gpr - the Ghidra project file
 tools/ungrab - utility which recovers files from the English STRONG.DAT.
 
 tools/mzap - utility which converts the Borland FBOV overlayed STRONG.EXE into a plain MZ format loadable by Ghidra and IDA.
+
+scripts/ghidra - reproducible headless-Ghidra naming/export pipeline.
+
+See doc/STATUS.md for the current recovery state and roadmap.
 
 See doc/journey.txt for the explanation on how to prepare Ghidra.
 
