@@ -215,7 +215,7 @@ void __cdecl16far videoMiceEvent(uint16_t x,uint16_t y,uint16_t mask)
           if (dy < 0) {
             dy = 0;
           }
-          miceBlitAtSeg(0xa000,(far_t)0x224a0000,dx,dy);
+          miceBlitAtSeg(0xa000,far_from_u32((uint32_t)(0x224a0000)),dx,dy);
         }
         MiceIndex = (uint)bVar3;
         dx = MiceX - *(int *)(MiceIndex * 2 + 0x4ce);

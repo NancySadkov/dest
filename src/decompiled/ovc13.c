@@ -22,7 +22,7 @@ void __cdecl16far OVC13_3d16_0000(void)
     }
     gfx.seg = ((undefined2 *)&DAT_2000_d11d)[(uint)DAT_2000_d100 * 2];
     gfx.ofs = ((undefined2 *)&DAT_2000_d11b)[(uint)DAT_2000_d100 * 2];
-    ovr_blitLoadRleGfx(gfx,(far_t)0xa000db93);
+    ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000db93)));
     DAT_2000_d100 = DAT_2000_d100 + 1;
   }
   return;
@@ -91,7 +91,7 @@ int __cdecl16far OVC13_3d16_01a4(int param_1,int param_2)
        (SCARRY2(param_1,Seed_2000_d110) == param_1 + Seed_2000_d110 < 0)) &&
       (Seed_2000_d10e + param_2 < 0x3c)) &&
      (SCARRY2(Seed_2000_d10e,param_2) == Seed_2000_d10e + param_2 < 0)) {
-    iVar1 = (int)*(char *)((int)_DAT_2000_cb05 + (Seed_2000_d10e + param_2) * 0x94 + param_1 +
+    iVar1 = (int)*(char *)((int)DAT_2000_cb05 + (Seed_2000_d10e + param_2) * 0x94 + param_1 +
                           Seed_2000_d110);
   }
   else {
@@ -382,26 +382,26 @@ void __cdecl16far OVC13_3d16_08ee(void)
     puVar13 = (undefined1 *)(DAT_2000_cb05 + (DAT_2000_d10a + iStack_6) * 0x94 + DAT_2000_d10c);
     uStack_14 = (undefined1 *)CONCAT22(DAT_2000_cb07,puVar13);
     puVar14 = (uint *)((int)DAT_2000_cb09 + (DAT_2000_d10a + iStack_6) * 0x128 + DAT_2000_d10c * 2);
-    uStack_18 = (uint *)CONCAT22(DAT_2000_cb09._2_2_,puVar14);
+    uStack_18 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(DAT_2000_cb09) + 2)),puVar14);
     if (DAT_2000_d10a + iStack_6 != 0 &&
         SCARRY2(DAT_2000_d10a,iStack_6) == DAT_2000_d10a + iStack_6 < 0) {
       puVar14 = (uint *)((DAT_2000_d10a + iStack_6) * 0x128 + (int)DAT_2000_cb09 + DAT_2000_d10c * 2
                         + -0x128);
     }
-    uStack_1c = (uint *)CONCAT22(DAT_2000_cb09._2_2_,puVar14);
+    uStack_1c = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(DAT_2000_cb09) + 2)),puVar14);
     uVar1 = *uStack_10;
     uStack_10 = (undefined1 *)CONCAT22(DAT_2000_cb07,(undefined1 *)(iVar8 + 0x95));
     uVar2 = *uStack_14;
     uStack_14 = (undefined1 *)CONCAT22(DAT_2000_cb07,puVar13 + 1);
     for (iVar8 = 0; iVar8 < 0x23; iVar8 = iVar8 + 1) {
       uVar3 = *uStack_10;
-      uStack_10 = (undefined1 *)CONCAT22(uStack_10._2_2_,(undefined1 *)uStack_10 + 1);
+      uStack_10 = (undefined1 *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_10) + 2)),(undefined1 *)uStack_10 + 1);
       uVar4 = *uStack_14;
-      uStack_14 = (undefined1 *)CONCAT22(uStack_14._2_2_,(undefined1 *)uStack_14 + 1);
+      uStack_14 = (undefined1 *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_14) + 2)),(undefined1 *)uStack_14 + 1);
       uVar5 = *uStack_18;
-      uStack_18 = (uint *)CONCAT22(uStack_18._2_2_,(uint *)uStack_18 + 1);
+      uStack_18 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_18) + 2)),(uint *)uStack_18 + 1);
       uVar6 = *uStack_1c;
-      uStack_1c = (uint *)CONCAT22(uStack_1c._2_2_,(uint *)uStack_1c + 1);
+      uStack_1c = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_1c) + 2)),(uint *)uStack_1c + 1);
       uVar11 = (undefined1)(uVar6 >> 8);
       uStack_26 = (undefined1)uVar5;
       if ((uVar5 & 4) == 0) {
@@ -789,13 +789,13 @@ void __cdecl16far OVC13_3d16_1558(void)
     uStack_c = (char *)CONCAT22(DAT_2000_cb07,pcVar9);
     puVar10 = (uint *)((int)DAT_2000_cb09 + (Seed_2000_d10e + iStack_16) * 0x128 +
                       Seed_2000_d110 * 2);
-    uStack_10 = (uint *)CONCAT22(DAT_2000_cb09._2_2_,puVar10);
+    uStack_10 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(DAT_2000_cb09) + 2)),puVar10);
     if (Seed_2000_d10e + iStack_16 != 0 &&
         SCARRY2(Seed_2000_d10e,iStack_16) == Seed_2000_d10e + iStack_16 < 0) {
       puVar10 = (uint *)((Seed_2000_d10e + iStack_16) * 0x128 + (int)DAT_2000_cb09 +
                          Seed_2000_d110 * 2 + -0x128);
     }
-    uStack_14 = (uint *)CONCAT22(DAT_2000_cb09._2_2_,puVar10);
+    uStack_14 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(DAT_2000_cb09) + 2)),puVar10);
     iStack_1c = (int)*uStack_8;
     uStack_8 = (char *)CONCAT22(DAT_2000_cb07,(char *)(iVar5 + 0x95));
     iStack_20 = (int)*uStack_c;
@@ -806,19 +806,19 @@ void __cdecl16far OVC13_3d16_1558(void)
       iStack_1e = iStack_20;
       iVar3 = iStack_1e;
       cVar1 = *uStack_8;
-      uStack_8 = (char *)CONCAT22(uStack_8._2_2_,(char *)uStack_8 + 1);
+      uStack_8 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_8) + 2)),(char *)uStack_8 + 1);
       cVar2 = *uStack_c;
-      uStack_c = (char *)CONCAT22(uStack_c._2_2_,(char *)uStack_c + 1);
+      uStack_c = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_c) + 2)),(char *)uStack_c + 1);
       uStack_28 = *uStack_10;
-      uStack_10 = (uint *)CONCAT22(uStack_10._2_2_,(uint *)uStack_10 + 1);
+      uStack_10 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_10) + 2)),(uint *)uStack_10 + 1);
       uStack_2a = *uStack_14;
-      uStack_14 = (uint *)CONCAT22(uStack_14._2_2_,(uint *)uStack_14 + 1);
+      uStack_14 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_14) + 2)),(uint *)uStack_14 + 1);
       uVar8 = (undefined1)(uStack_2a >> 8);
-      iStack_1a._0_1_ = (undefined1)iStack_1c;
+      (*(uint8_t *)((uint8_t *)&(iStack_1a))) = (undefined1)iStack_1c;
       iStack_1c = (int)cVar1;
       iStack_1a = iVar4;
       if ((uStack_28 & 4) == 0) {
-        iStack_1e._0_1_ = (undefined1)iStack_20;
+        (*(uint8_t *)((uint8_t *)&(iStack_1e))) = (undefined1)iStack_20;
         uVar6 = CONCAT11(uVar8,(undefined1)iStack_1e);
         uVar7 = CONCAT11(uVar8,(undefined1)iStack_1a);
         iStack_20 = (int)cVar2;
@@ -899,7 +899,7 @@ void __cdecl16far OVC13_3d16_1945(int param_1,int param_2,char param_3)
   if (((param_3 != '\0') || (GfxRndSeed != uVar1)) || (GfxRndSeed2 != iVar2)) {
     gfx.seg = FontHandle.seg;
     gfx.ofs = FontHandle.ofs;
-    ovr_blitLoadRleGfx(gfx,(far_t)0xa000c31d);
+    ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)));
     ovr_attact_3f0b_0685();
     AgntFlag1 = false;
     GfxRndSeed2 = iVar2;
@@ -937,7 +937,7 @@ void __cdecl16far OVC13_3d16_1a01(int param_1,int param_2,char param_3)
   if (((param_3 != '\0') || (GfxRndSeed != uVar1)) || (GfxRndSeed2 != iVar2)) {
     gfx.seg = FontHandle.seg;
     gfx.ofs = FontHandle.ofs;
-    ovr_blitLoadRleGfx(gfx,(far_t)0xa000c31d);
+    ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)));
     ovr_attact_3f0b_0685();
     AgntFlag1 = false;
     GfxRndSeed2 = iVar2;

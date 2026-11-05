@@ -321,11 +321,11 @@ undefined2 __cdecl16near __InitModules(void)
       }
       else {
         ((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0x14)[0] = -0x3d;
-        uVar3 = GUnitDescriptions._43_2_;
+        uVar3 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 43));
         ((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0x14)[1] = '\x04';
         puVar1 = (uint *)"Borland C++ - Copyright 1991 Borland Intl.";
-        bVar7 = CARRY2(*puVar1,GUnitDescriptions[10]._1_2_);
-        *puVar1 = *puVar1 + GUnitDescriptions[10]._1_2_;
+        bVar7 = CARRY2(*puVar1,(*(uint16_t *)((uint8_t *)&(GUnitDescriptions[10]) + 1)));
+        *puVar1 = *puVar1 + (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[10]) + 1));
         *(uint *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 2) =
              *(int *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 2) + uVar3 +
              (uint)bVar7;
@@ -338,7 +338,7 @@ undefined2 __cdecl16near __InitModules(void)
     }
     pcVar5 = pcVar5 + 8;
   } while (pcVar5 < (char *)0x478);
-  GUnitDescriptions._47_2_ = uVar4 + 2;
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 47)) = uVar4 + 2;
   return 0;
 }
 
@@ -360,11 +360,11 @@ void __cdecl16near __OvrInitReadSegs(void)
   bool bVar7;
   char *pcVar8;
   
-  uVar2 = GUnitDescriptions._59_2_;
-  GUnitDescriptions[0x10]._1_2_ = GUnitDescriptions._55_2_;
-  iVar4 = GUnitDescriptions._55_2_;
-  iVar6 = GUnitDescriptions._55_2_;
-  GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions[0xe]._1_2_;
+  uVar2 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 59));
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 55));
+  iVar4 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 55));
+  iVar6 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 55));
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xe]) + 1));
   while ((iVar5 = iVar4,
          iVar4 = *(int *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0xe), iVar4 != 0 &&
          (uVar3 = (int)(CONCAT22((*(int *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 2)
@@ -374,21 +374,21 @@ void __cdecl16near __OvrInitReadSegs(void)
                                        *(uint *)"Borland C++ - Copyright 1991 Borland Intl."),
                                  *(uint *)"Borland C++ - Copyright 1991 Borland Intl." -
                                  *(uint *)"Borland C++ - Copyright 1991 Borland Intl.") / 0x10) +
-                  GUnitDescriptions[0xd]._1_2_, uVar3 <= (uint)uVar2))) {
+                  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)), uVar3 <= (uint)uVar2))) {
     *(undefined2 *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0xc) =
-         GUnitDescriptions[0xd]._1_2_;
+         (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
     *(int *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0x18) = iVar4;
     iVar6 = iVar5;
-    GUnitDescriptions[0xd]._1_2_ = uVar3;
+    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = uVar3;
   }
   ((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0x18)[0] = '\0';
   ((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0x18)[1] = '\0';
-  if (GUnitDescriptions[0xd]._1_2_ != GUnitDescriptions[0xe]._1_2_) {
+  if ((*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) != (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xe]) + 1))) {
     bVar7 = false;
     __OvrRead();
     if (!bVar7) {
       pcVar8 = (char *)"puppetmaker" + 3;
-      iVar4 = GUnitDescriptions[0x10]._1_2_;
+      iVar4 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
       do {
         if (*(int *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 6) != 0) {
           __OvrDoFixups(pcVar8);
@@ -586,7 +586,7 @@ void __cdecl16near __OvrAllocateSpace(void)
   byte in_CF;
   undefined4 uVar3;
   
-  GUnitDescriptions._63_2_ = GUnitDescriptions._63_2_ + 1;
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 63)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 63)) + 1;
   __OvrCalcSize();
   while( true ) {
     uVar3 = __OvrGetSegMemInfo();
@@ -597,14 +597,14 @@ void __cdecl16near __OvrAllocateSpace(void)
     }
     in_CF = 0;
     if (((char *)"Borland C++ - Copyright 1991 Borland Intl.")[0x17] == '\0') {
-      GUnitDescriptions[0x10]._1_2_ =
+      (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) =
            *(undefined2 *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0x18);
       __OvrAllocEvict();
       __OvrCalcCodeSz();
     }
     else {
       pcVar1 = (char *)"Borland C++ - Copyright 1991 Borland Intl." + 0x17;
-      GUnitDescriptions[0x10]._1_2_ =
+      (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) =
            *(undefined2 *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0x18);
       *pcVar1 = *pcVar1 + -1;
       __OvrCompactHeap();
@@ -612,7 +612,7 @@ void __cdecl16near __OvrAllocateSpace(void)
     }
   }
   *(undefined2 *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0xc) =
-       GUnitDescriptions[0xd]._1_2_;
+       (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
   return;
 }
 
@@ -629,7 +629,7 @@ void __cdecl16near __OvrFixupTrap(void)
   undefined2 unaff_ES;
   undefined1 uVar4;
   
-  GUnitDescriptions[0xc]._1_2_ = GUnitDescriptions[0xc]._1_2_ + 1;
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xc]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xc]) + 1)) + 1;
   if (*(int *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0xc) == 0) {
     uVar4 = 0;
     ((char *)"Borland C++ - Copyright 1991 Borland Intl.")[0x16] =
@@ -653,9 +653,9 @@ void __cdecl16near __OvrFixupTrap(void)
        ((char *)"Borland C++ - Copyright 1991 Borland Intl.")[0x17] +
        (((char *)"Borland C++ - Copyright 1991 Borland Intl.")[0x16] & 3U);
   uVar2 = __OvrGetSegMemInfo();
-  iVar3 = GUnitDescriptions[0x10]._1_2_;
+  iVar3 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
   while ((iVar1 = *(int *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0x18), iVar1 != 0
-         && (uVar2 < (uint)GUnitDescriptions[0xb]._1_2_))) {
+         && (uVar2 < (uint)(*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xb]) + 1))))) {
     if (((char *)"Borland C++ - Copyright 1991 Borland Intl.")[0x17] == '\0') {
       __OvrTrapJmpsAndStack();
       iVar3 = __OvrCalcCodeSz();
@@ -702,24 +702,24 @@ void __cdecl16near __OvrAddToLoadList(void)
   
   iVar1 = 0;
   do {
-    iVar3 = GUnitDescriptions[0x10]._1_2_;
+    iVar3 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
     iVar1 = iVar1 + 1;
-    GUnitDescriptions[0x10]._1_2_ =
+    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) =
          *(undefined2 *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0x18);
-  } while (GUnitDescriptions[0x10]._1_2_ != 0);
-  GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions._59_2_;
+  } while ((*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) != 0);
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 59));
   do {
     iVar2 = iVar1;
     *(undefined2 *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0x18) =
-         GUnitDescriptions[0x10]._1_2_;
-    GUnitDescriptions[0x10]._1_2_ = iVar3;
+         (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
+    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = iVar3;
     iVar1 = __OvrCalcCodeSz();
-    GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions[0xd]._1_2_ - iVar1;
+    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) - iVar1;
     __OvrCompactHeap();
     iVar1 = iVar2 + -1;
     iVar3 = iVar2;
   } while (iVar1 != 0);
-  GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions[0xe]._1_2_;
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xe]) + 1));
   return;
 }
 
@@ -810,7 +810,7 @@ void __cdecl16near __OvrTrapJmpsAndStack(void)
     pcVar4 = (char *)"Borland C++ - Copyright 1991 Borland Intl." + 0x1c;
     do {
       uVar2 = *(undefined2 *)(pcVar4 + 1);
-      *(undefined2 *)pcVar4 = GUnitDescriptions[9]._1_2_;
+      *(undefined2 *)pcVar4 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[9]) + 1));
       pcVar1 = pcVar4 + 4;
       *(undefined2 *)(pcVar4 + 2) = uVar2;
       pcVar4 = pcVar4 + 5;
@@ -839,10 +839,10 @@ undefined2 __cdecl16near __OvrCompactHeap(void)
   undefined2 unaff_ES;
   bool bVar9;
   
-  uVar3 = GUnitDescriptions[0xd]._1_2_;
+  uVar3 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
   uVar2 = *(uint *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0xc);
   *(undefined2 *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0xc) =
-       GUnitDescriptions[0xd]._1_2_;
+       (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
   uVar4 = *(int *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 4) + 1U >> 1;
   puVar6 = (undefined2 *)0x0;
   bVar9 = uVar2 <= (uint)uVar3;
@@ -884,7 +884,7 @@ void __cdecl16near __OvrAddToLoadList(void)
   undefined2 unaff_ES;
   
   iVar2 = __OvrCalcCodeSz();
-  GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions[0xd]._1_2_ + iVar2;
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) + iVar2;
   pcVar1 = (char *)"manned n/s gate" + 0xe;
   do {
     pcVar3 = pcVar1;
@@ -952,12 +952,12 @@ int __cdecl16near __OvrGetSegMemInfo(void)
 {
   int iVar1;
   
-  if ((GUnitDescriptions[0x10]._1_2_ == 0) ||
+  if (((*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) == 0) ||
      (iVar1 = *(uint *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0xc) -
-              GUnitDescriptions[0xd]._1_2_,
+              (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)),
      *(uint *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 0xc) <
-     (uint)GUnitDescriptions[0xd]._1_2_)) {
-    iVar1 = GUnitDescriptions._59_2_ - GUnitDescriptions[0xd]._1_2_;
+     (uint)(*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)))) {
+    iVar1 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 59)) - (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
   }
   return iVar1;
 }
@@ -1309,23 +1309,23 @@ LAB_1403_0ad9:
     }
     else {
       while( true ) {
-        if ((startAddress._2_2_ < *(uint *)0x3c) ||
-           ((startAddress._2_2_ == *(uint *)0x3c &&
+        if (((*(uint16_t *)((uint8_t *)&(startAddress) + 2)) < *(uint *)0x3c) ||
+           (((*(uint16_t *)((uint8_t *)&(startAddress) + 2)) == *(uint *)0x3c &&
             ((uint)startAddress < *(uint *)&__ExtStartAddress)))) {
-          startAddress._2_2_ = *(uint *)0x3c;
-          startAddress._0_2_ = *(uint *)&__ExtStartAddress;
+          (*(uint16_t *)((uint8_t *)&(startAddress) + 2)) = *(uint *)0x3c;
+          (*(uint16_t *)((uint8_t *)&(startAddress))) = *(uint *)&__ExtStartAddress;
         }
-        if ((*(uint *)0x40 < startAddress._2_2_) ||
-           ((*(uint *)0x40 <= startAddress._2_2_ && (*(uint *)&__ExtEndAddress < (uint)startAddress)
+        if ((*(uint *)0x40 < (*(uint16_t *)((uint8_t *)&(startAddress) + 2))) ||
+           ((*(uint *)0x40 <= (*(uint16_t *)((uint8_t *)&(startAddress) + 2)) && (*(uint *)&__ExtEndAddress < (uint)startAddress)
             ))) goto LAB_1403_0ad9;
         uVar4 = *(uint *)&__ExtEndAddress - (uint)startAddress;
-        uVar5 = (*(int *)0x40 - startAddress._2_2_) -
+        uVar5 = (*(int *)0x40 - (*(uint16_t *)((uint8_t *)&(startAddress) + 2))) -
                 (uint)(*(uint *)&__ExtEndAddress < (uint)startAddress);
-        if (((uint)length != 0 || length._2_2_ != 0) &&
-           ((length._2_2_ <= uVar5 &&
-            ((length._2_2_ < uVar5 || (*(uint *)&__ExtEndAddress < uVar4)))))) {
+        if (((uint)length != 0 || (*(uint16_t *)((uint8_t *)&(length) + 2)) != 0) &&
+           (((*(uint16_t *)((uint8_t *)&(length) + 2)) <= uVar5 &&
+            (((*(uint16_t *)((uint8_t *)&(length) + 2)) < uVar5 || (*(uint *)&__ExtEndAddress < uVar4)))))) {
           uVar4 = (uint)length;
-          uVar5 = length._2_2_;
+          uVar5 = (*(uint16_t *)((uint8_t *)&(length) + 2));
         }
         if ((*(uint *)((char *)"Your may continue playing, but your score will not be recorded." + 9
                       ) <= uVar5) &&
@@ -1341,12 +1341,12 @@ LAB_1403_0ad9:
         length = CONCAT22(uVar5,uVar4);
         if ((uVar5 == 0) && (uVar4 >> 4 < *(uint *)&__OvrMinHeapSize)) goto LAB_1403_0ad9;
         *(uint *)&__EmsRec = (uint)startAddress;
-        *(uint *)0x132 = startAddress._2_2_;
+        *(uint *)0x132 = (*(uint16_t *)((uint8_t *)&(startAddress) + 2));
         *(int *)0x134 = uVar4 + (uint)startAddress;
-        *(int *)0x136 = uVar5 + startAddress._2_2_ + (uint)CARRY2(uVar4,(uint)startAddress);
+        *(int *)0x136 = uVar5 + (*(uint16_t *)((uint8_t *)&(startAddress) + 2)) + (uint)CARRY2(uVar4,(uint)startAddress);
         *(uint *)0x138 = (uint)startAddress;
-        *(uint *)0x13a = startAddress._2_2_;
-        iVar3 = __INITEXTMEM(uVar4,uVar5,(uint)startAddress,startAddress._2_2_);
+        *(uint *)0x13a = (*(uint16_t *)((uint8_t *)&(startAddress) + 2));
+        iVar3 = __INITEXTMEM(uVar4,uVar5,(uint)startAddress,(*(uint16_t *)((uint8_t *)&(startAddress) + 2)));
         if (iVar3 != 0) {
           return iVar3;
         }
@@ -1591,8 +1591,8 @@ void __cdecl16far __OvrPrepare(void)
     uVar2 = __OvrMinHeapSize << 1;
   }
   uVar2 = uVar2 + 1;
-  fVar3 = farmalloc((ulong)uVar2 * 0x10);
-  if ((fVar3 != (far_t)0x0) &&
+  fVar3 = far_from_u32((uint32_t)farmalloc((ulong)uVar2 * 0x10));
+  if ((far_to_u32(fVar3) != 0) &&
      (iVar1 = fVar3.seg + 1, iVar1 = __OVRINIT(0,0,uVar2 + iVar1,iVar1), iVar1 == 0)) {
     return;
   }

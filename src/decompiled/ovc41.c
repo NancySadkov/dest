@@ -365,7 +365,7 @@ undefined2 __cdecl16far OVC41_6a8f_063f(undefined4 param_1,undefined4 param_2)
     uVar3 = 0;
   }
   else {
-    if (((int)param_1 != 0 || param_1._2_2_ != 0) &&
+    if (((int)param_1 != 0 || (*(uint16_t *)((uint8_t *)&(param_1) + 2)) != 0) &&
        (*(char *)*(undefined4 *)((int)param_1 + 0x1d) == *(char *)((int)param_1 + 0x2f))) {
       OVC41_6a8f_016b(*(undefined2 *)(iVar2 + 0x17),*(undefined2 *)(iVar2 + 0x19),1,
                       *(undefined2 *)((int)param_1 + 0x17),*(undefined2 *)((int)param_1 + 0x19));
@@ -982,11 +982,11 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
   undefined1 uVar23;
   
   bVar20 = 0x6a;
-  gfx.seg._0_1_ = (char)FontHandle.seg;
+  (*(uint8_t *)((uint8_t *)&(gfx.seg))) = (char)FontHandle.seg;
   gfx.ofs = FontHandle.ofs;
-  gfx.seg._1_1_ = (char)(FontHandle.seg >> 8);
+  (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) = (char)(FontHandle.seg >> 8);
   uVar10 = FontHandle.ofs;
-  ovr_blitLoadRleGfx(gfx,(far_t)0xa000c31d);
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)));
   bVar17 = (byte)((ulong)in_stack_00000002 >> 0x10);
   if (param_1 != '\0') {
     pcVar8 = (char *)(uint)bVar17;
@@ -1049,9 +1049,9 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
         uVar16 = (undefined1)((ulong)pcVar13 >> 0x10);
         uVar18 = (undefined1)((ulong)pcVar13 >> 0x18);
         pcVar5 = (char *)ovr_drawString();
-        handle.seg._0_1_ = uVar16;
+        (*(uint8_t *)((uint8_t *)&(handle.seg))) = uVar16;
         handle.ofs = (uint16_t)pcVar8;
-        handle.seg._1_1_ = uVar18;
+        (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = uVar18;
         ovr_stshFree(handle);
         return pcVar5;
       }
@@ -1070,9 +1070,9 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
           uVar16 = (undefined1)((ulong)pcVar13 >> 0x10);
           uVar18 = (undefined1)((ulong)pcVar13 >> 0x18);
           pcVar5 = (char *)ovr_drawString();
-          handle_00.seg._0_1_ = uVar16;
+          (*(uint8_t *)((uint8_t *)&(handle_00.seg))) = uVar16;
           handle_00.ofs = (uint16_t)pcVar8;
-          handle_00.seg._1_1_ = uVar18;
+          (*(uint8_t *)((uint8_t *)&(handle_00.seg) + 1)) = uVar18;
           ovr_stshFree(handle_00);
           return pcVar5;
         }
@@ -1089,9 +1089,9 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
           uVar16 = (undefined1)((ulong)pcVar13 >> 0x10);
           uVar18 = (undefined1)((ulong)pcVar13 >> 0x18);
           pcVar5 = (char *)ovr_drawString();
-          handle_01.seg._0_1_ = uVar16;
+          (*(uint8_t *)((uint8_t *)&(handle_01.seg))) = uVar16;
           handle_01.ofs = (uint16_t)pcVar8;
-          handle_01.seg._1_1_ = uVar18;
+          (*(uint8_t *)((uint8_t *)&(handle_01.seg) + 1)) = uVar18;
           ovr_stshFree(handle_01);
           return pcVar5;
         }
@@ -1111,9 +1111,9 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
             uVar16 = (undefined1)((ulong)pcVar13 >> 0x10);
             uVar18 = (undefined1)((ulong)pcVar13 >> 0x18);
             pcVar5 = (char *)ovr_drawString();
-            handle_02.seg._0_1_ = uVar16;
+            (*(uint8_t *)((uint8_t *)&(handle_02.seg))) = uVar16;
             handle_02.ofs = (uint16_t)pcVar8;
-            handle_02.seg._1_1_ = uVar18;
+            (*(uint8_t *)((uint8_t *)&(handle_02.seg) + 1)) = uVar18;
             ovr_stshFree(handle_02);
             return pcVar5;
           }
@@ -1131,9 +1131,9 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
           uVar16 = (undefined1)((ulong)pcVar13 >> 0x10);
           uVar18 = (undefined1)((ulong)pcVar13 >> 0x18);
           pcVar5 = (char *)ovr_drawString();
-          handle_03.seg._0_1_ = uVar16;
+          (*(uint8_t *)((uint8_t *)&(handle_03.seg))) = uVar16;
           handle_03.ofs = (uint16_t)pcVar8;
-          handle_03.seg._1_1_ = uVar18;
+          (*(uint8_t *)((uint8_t *)&(handle_03.seg) + 1)) = uVar18;
           ovr_stshFree(handle_03);
           return pcVar5;
         }
@@ -1237,8 +1237,8 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
               else {
                 uStack_10 = (char *)((uint)uStack_10 & 0xff);
               }
-              if (uStack_10._1_1_ < bVar17) {
-                bVar17 = uStack_10._1_1_;
+              if ((*(uint8_t *)((uint8_t *)&(uStack_10) + 1)) < bVar17) {
+                bVar17 = (*(uint8_t *)((uint8_t *)&(uStack_10) + 1));
               }
               uVar12 = (undefined2)((ulong)*(undefined4 *)((uint)bVar20 << 2) >> 0x10);
               iVar4 = (int)*(undefined4 *)((uint)bVar20 << 2);
@@ -1320,9 +1320,9 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
                 uVar16 = (undefined1)((ulong)pcVar13 >> 0x10);
                 uVar18 = (undefined1)((ulong)pcVar13 >> 0x18);
                 pcVar5 = (char *)ovr_drawString();
-                handle_04.seg._0_1_ = uVar16;
+                (*(uint8_t *)((uint8_t *)&(handle_04.seg))) = uVar16;
                 handle_04.ofs = (uint16_t)pcVar8;
-                handle_04.seg._1_1_ = uVar18;
+                (*(uint8_t *)((uint8_t *)&(handle_04.seg) + 1)) = uVar18;
                 ovr_stshFree(handle_04);
                 return pcVar5;
               }
@@ -1338,9 +1338,9 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
                 uVar16 = (undefined1)((ulong)pcVar13 >> 0x10);
                 uVar18 = (undefined1)((ulong)pcVar13 >> 0x18);
                 pcVar5 = (char *)ovr_drawString();
-                handle_05.seg._0_1_ = uVar16;
+                (*(uint8_t *)((uint8_t *)&(handle_05.seg))) = uVar16;
                 handle_05.ofs = (uint16_t)pcVar8;
-                handle_05.seg._1_1_ = uVar18;
+                (*(uint8_t *)((uint8_t *)&(handle_05.seg) + 1)) = uVar18;
                 ovr_stshFree(handle_05);
                 return pcVar5;
               }
@@ -1356,9 +1356,9 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
                 uVar16 = (undefined1)((ulong)pcVar13 >> 0x10);
                 uVar18 = (undefined1)((ulong)pcVar13 >> 0x18);
                 pcVar5 = (char *)ovr_drawString();
-                handle_06.seg._0_1_ = uVar16;
+                (*(uint8_t *)((uint8_t *)&(handle_06.seg))) = uVar16;
                 handle_06.ofs = (uint16_t)pcVar8;
-                handle_06.seg._1_1_ = uVar18;
+                (*(uint8_t *)((uint8_t *)&(handle_06.seg) + 1)) = uVar18;
                 ovr_stshFree(handle_06);
                 return pcVar5;
               }
@@ -1366,8 +1366,8 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
               uStack_12 = 0x9bb1;
               uStack_10 = pcVar5;
               ovr_stsprintf(acStack_2cc,
-                            (char *)CONCAT13((char)((uint)_DAT_2410_6ac6 >> 8),
-                                             CONCAT12((char)_DAT_2410_6ac6,DAT_2410_6ac4)),pcVar8);
+                            (char *)CONCAT13((char)((uint)DAT_2410_6ac6 >> 8),
+                                             CONCAT12((char)DAT_2410_6ac6,DAT_2410_6ac4)),pcVar8);
               pcVar8 = (char *)ovr_drawString();
               return pcVar8;
             }
@@ -1452,7 +1452,7 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
     }
     return pcVar5;
   case (char *)0x3:
-    AgntAnms[0x11]._18_2_ = AgntAnms[0x11]._18_2_ + (int)pcVar8 * 2;
+    (*(uint16_t *)((uint8_t *)&(AgntAnms[0x11]) + 18)) = (*(uint16_t *)((uint8_t *)&(AgntAnms[0x11]) + 18)) + (int)pcVar8 * 2;
     pcVar13 = ovr_stsprintf(pcVar8,(char *)CONCAT22(in_stack_00000000,unaff_BP),
                             (char *)in_stack_00000002);
     bVar20 = (byte)((ulong)pcVar13 >> 0x10);
@@ -1496,7 +1496,7 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
       if ((iVar4 == 100) && (in_stack_0000000e == '\x02')) {
         gfx_00.seg = DAT_2000_d3ea;
         gfx_00.ofs = DAT_2000_d3e8;
-        ovr_blitLoadRleGfx(gfx_00,(far_t)0xa000b400);
+        ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa000b400)));
         OVC40_69c8_0000();
         OVC40_69c8_0000();
         uVar22 = 0xd3;
@@ -1541,9 +1541,9 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
     OVC40_69c8_047f();
     DAT_2000_ccaf = '\0';
     if ((in_stack_0000000e == '\x02') || (in_stack_0000000e == '\x03')) {
-      TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
       uVar9 = *(undefined2 *)BDA_DailyTimeCounter;
-      TextBlitCycle._0_2_ = uVar9;
+      (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = uVar9;
       if (bStack_1d == 0) {
         uVar7 = ovr_inputUpdate(0x48);
         bStack_1d = (byte)uVar7;
@@ -1552,7 +1552,7 @@ char * __cdecl16far OVC41_6a8f_15a0(char param_1)
     else {
       gfx_01.seg = far_t_2000_d3e4.seg;
       gfx_01.ofs = far_t_2000_d3e4.ofs;
-      ovr_blitLoadRleGfx(gfx_01,(far_t)0xa000e908);
+      ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa000e908)));
       MiceProcessed = 0;
       ovr_miceBlitRect(BlitRects + 1);
       do {
@@ -1651,8 +1651,8 @@ void __cdecl16far OVC41_6a8f_18c6(void)
     ovr_draw_2e25_130a();
   }
   ovr_draw_2e25_025a();
-  GDailyTimeCounter._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  GDailyTimeCounter._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
+  (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+  (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter))) = *(undefined2 *)BDA_DailyTimeCounter;
   return;
 }
 
@@ -1674,17 +1674,17 @@ void __cdecl16far uiMainMenu(void)
   DAT_2000_ca70 = DAT_2000_ca6f;
   gfx.seg = DAT_2000_cabb;
   gfx.ofs = DAT_2000_cab9;
-  ovr_blitLoadRleGfx(gfx,(far_t)0xa000e249);
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000e249)));
   gfx_00.seg = DAT_2000_cabf;
   gfx_00.ofs = DAT_2000_cabd;
-  ovr_blitLoadRleGfx(gfx_00,(far_t)0xa000e249);
+  ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa000e249)));
   ovr_uiMainMenuLoop();
   gfx_01.seg = DAT_2000_cabb;
   gfx_01.ofs = DAT_2000_cab9;
-  ovr_blitLoadRleGfx(gfx_01,(far_t)0xa000e249);
+  ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa000e249)));
   gfx_02.seg = DAT_2000_cac3;
   gfx_02.ofs = DAT_2000_cac1;
-  ovr_blitLoadRleGfx(gfx_02,(far_t)0xa000e249);
+  ovr_blitLoadRleGfx(gfx_02,far_from_u32((uint32_t)(0xa000e249)));
   OVC41_6a8f_18c6();
   return;
 }
@@ -1998,18 +1998,18 @@ char * __cdecl16far OVC41_6a8f_2084(undefined4 param_1,int param_2)
     iVar15 = (int)param_1;
     *(uint *)(iVar15 + 0x2b) = *(uint *)(iVar15 + 0x2b) & 0xfff7;
     if (*(byte *)((int)*(undefined4 *)(iVar15 + 0x17) + 0xf) < 8) {
-      fStack_6 = (far_t)((ulong)fStack_6 & 0xffffff);
+      fStack_6 = far_from_u32((uint32_t)(far_to_u32(fStack_6) & 0xffffff));
     }
     else if (*(byte *)((int)*(undefined4 *)(iVar15 + 0x17) + 0xf) < 10) {
-      fStack_6.seg._1_1_ = 1;
+      (*(uint8_t *)((uint8_t *)&(fStack_6.seg) + 1)) = 1;
     }
     else if (*(byte *)((int)*(undefined4 *)(iVar15 + 0x17) + 0xf) < 0xc) {
-      fStack_6.seg._1_1_ = 2;
+      (*(uint8_t *)((uint8_t *)&(fStack_6.seg) + 1)) = 2;
     }
     else {
-      fStack_6.seg._1_1_ = 3;
+      (*(uint8_t *)((uint8_t *)&(fStack_6.seg) + 1)) = 3;
     }
-    uVar12 = (uint)fStack_6.seg._1_1_;
+    uVar12 = (uint)(*(uint8_t *)((uint8_t *)&(fStack_6.seg) + 1));
     if (uVar12 < 4) {
       switch(uVar12) {
       case 0:
@@ -2064,7 +2064,7 @@ char * __cdecl16far OVC41_6a8f_2084(undefined4 param_1,int param_2)
           pcVar8 = (char *)*puVar14;
           fStack_6.seg = puVar14[1];
           fStack_6.ofs = (uint16_t)pcVar8;
-          if (*(char *)fStack_6 == '%') {
+          if (*(char *)MK_FP(fStack_6.seg, fStack_6.ofs) == '%') {
             BlitLetterType = 2;
             uVar21 = 0xf;
             pfVar20 = (far_t *)(GUnitDescriptions + 0x15);
@@ -2074,7 +2074,7 @@ char * __cdecl16far OVC41_6a8f_2084(undefined4 param_1,int param_2)
             pcVar8 = (char *)"puppetmaker" + 3;
             BlitLetterType = 0;
           }
-          else if (*(char *)fStack_6 == '@') {
+          else if (*(char *)MK_FP(fStack_6.seg, fStack_6.ofs) == '@') {
             uVar21 = 0xf;
             pfVar20 = (far_t *)(GUnitDescriptions + 0x15);
             pcVar7 = (char *)ovr_OVC45_77eb_226e();
@@ -2108,9 +2108,9 @@ char * __cdecl16far OVC41_6a8f_2084(undefined4 param_1,int param_2)
           in_stack_0000fee2 = (uint8_t)DAT_2000_d37e;
           in_stack_0000fee0 = (undefined1)DAT_2000_d37c;
           in_stack_0000fee1 = (undefined1)((uint)DAT_2000_d37c >> 8);
-          gfx_03.seg._0_1_ = in_stack_0000fee2;
+          (*(uint8_t *)((uint8_t *)&(gfx_03.seg))) = in_stack_0000fee2;
           gfx_03.ofs = DAT_2000_d37c;
-          gfx_03.seg._1_1_ = (char)((uint)DAT_2000_d37e >> 8);
+          (*(uint8_t *)((uint8_t *)&(gfx_03.seg) + 1)) = (char)((uint)DAT_2000_d37e >> 8);
           dst_02.seg = 0xa000;
           dst_02.ofs = uStack_8 + (int)unaff_DI * 0x140;
           ovr_blitLoadRleGfx(gfx_03,dst_02);
@@ -2142,9 +2142,9 @@ switchD_6000_ca06_caseD_1:
           dst.seg = uStack_8;
           dst.ofs = 0x8cc;
           ovr_blitLoadRleGfx(gfx_00,dst);
-          gfx.seg._0_1_ = (char)MiceCursors[3].seg;
+          (*(uint8_t *)((uint8_t *)&(gfx.seg))) = (char)MiceCursors[3].seg;
           gfx.ofs = MiceCursors[3].ofs;
-          gfx.seg._1_1_ = (char)(MiceCursors[3].seg >> 8);
+          (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) = (char)(MiceCursors[3].seg >> 8);
           ovr_blitGfx10(gfx,(uint16_t)(pcStack_36 + -6),(uint16_t)(pcStack_38 + -5),
                         (brect_t *)CONCAT22(unaff_SS,&bStack_16),0);
           ovr_miceBlitRect((brect_t *)CONCAT22(unaff_SS,&bStack_16));
@@ -2188,9 +2188,9 @@ switchD_6000_ca06_caseD_1:
           bStack_16.seg = uStack_8;
           gfx_01.seg = uStack_18;
           gfx_01.ofs = uStack_1a;
-          dst_00.seg._0_1_ = (char)uStack_8;
+          (*(uint8_t *)((uint8_t *)&(dst_00.seg))) = (char)uStack_8;
           dst_00.ofs = 0x8cc;
-          dst_00.seg._1_1_ = (char)(uStack_8 >> 8);
+          (*(uint8_t *)((uint8_t *)&(dst_00.seg) + 1)) = (char)(uStack_8 >> 8);
           ovr_blitLoadRleGfx(gfx_01,dst_00);
           ovr_vga_2d63_04b7();
           ovr_vga_2d63_04b7();
@@ -2323,9 +2323,9 @@ LAB_6616_1054:
         ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x24));
       }
       bStack_16.seg = uStack_8;
-      gfx_02.seg._0_1_ = (char)uStack_18;
+      (*(uint8_t *)((uint8_t *)&(gfx_02.seg))) = (char)uStack_18;
       gfx_02.ofs = uStack_1a;
-      gfx_02.seg._1_1_ = (char)(uStack_18 >> 8);
+      (*(uint8_t *)((uint8_t *)&(gfx_02.seg) + 1)) = (char)(uStack_18 >> 8);
       dst_01.seg = uStack_8;
       dst_01.ofs = 0x8cc;
       ovr_blitLoadRleGfx(gfx_02,dst_01);
@@ -2347,7 +2347,7 @@ LAB_6616_1054:
     pbVar1 = (byte *)(pcVar8 + 0x21);
     pcVar8 = (char *)(uint)*pbVar1;
     if (*pbVar1 != bVar4) {
-      uStack_8._1_1_ = bVar4;
+      (*(uint8_t *)((uint8_t *)&(uStack_8) + 1)) = bVar4;
       uVar9 = ovr_audio_3a5b_0afd();
       ovr_play_sfxU(0x3b,0,uVar9);
       OVC41_6a8f_0000();
@@ -2435,7 +2435,7 @@ void __cdecl16far OVC41_6a8f_22cb(undefined4 param_1,int param_2)
             iVar4 = (int)_iStack_8;
             if (((*(uint *)((int)*(undefined4 *)(iVar4 + 0x1d) + 0x3e) & 0x10) == 0) ||
                (*(char *)((int)param_1 + 0xd) != '\x02')) {
-              cStack_3 = OVC41_6a8f_1c74((int)param_1,param_1._2_2_,iVar4,uVar5,uVar9);
+              cStack_3 = OVC41_6a8f_1c74((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)),iVar4,uVar5,uVar9);
               if ((cStack_3 == '\0') &&
                  ((*(char *)((int)param_1 + 0xd) == '\0' &&
                   ((*(uint *)((int)*(undefined4 *)((int)param_1 + 0x1d) + 0x3e) & 2) != 0)))) {
@@ -2444,7 +2444,7 @@ void __cdecl16far OVC41_6a8f_22cb(undefined4 param_1,int param_2)
                   uVar7 = DAT_2000_d0f7;
                   uVar5 = ovr_agnt_3b1d_0ac0(iStack_8,(int)((ulong)_iStack_8 >> 0x10),local_120);
                   uVar11 = CONCAT22(uVar8,uVar5);
-                  uVar5 = ovr_agnt_3b1d_0ac0((int)param_1,param_1._2_2_,local_d0);
+                  uVar5 = ovr_agnt_3b1d_0ac0((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)),local_d0);
                   pcVar6 = (char *)ovr_OVC15_4207_1c16(uVar5,uVar8,uVar11);
                   pcVar10 = ovr_stsprintf(local_80,"%s poisons %s.",pcVar6);
                   uVar8 = (uint)((ulong)pcVar10 >> 0x10);
@@ -2465,7 +2465,7 @@ void __cdecl16far OVC41_6a8f_22cb(undefined4 param_1,int param_2)
                     uVar7 = DAT_2000_d0f7;
                     uVar5 = ovr_agnt_3b1d_0ac0((int)_iStack_8,uVar5,local_120);
                     uVar11 = CONCAT22(uVar8,uVar5);
-                    uVar5 = ovr_agnt_3b1d_0ac0((int)param_1,param_1._2_2_,local_d0);
+                    uVar5 = ovr_agnt_3b1d_0ac0((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)),local_d0);
                     pcVar6 = (char *)ovr_OVC15_4207_1c16(uVar5,uVar8,uVar11);
                     pcVar10 = ovr_stsprintf(local_80,"%s infects %s with blast spore disease.",
                                             pcVar6);
@@ -2483,13 +2483,13 @@ void __cdecl16far OVC41_6a8f_22cb(undefined4 param_1,int param_2)
                   ((*(uint *)((int)*(undefined4 *)((int)param_1 + 0x1d) + 0x3e) & 0x400) != 0)) &&
                  (uVar7 = ovr_randBelow((uint)*(byte *)((int)*(undefined4 *)((int)param_1 + 0x17) +
                                                        0xe)), (uVar7 & 0xff) == 0)) {
-                cVar2 = ovr_OVC27_5ded_1fe1((int)param_1,param_1._2_2_,iStack_8,
+                cVar2 = ovr_OVC27_5ded_1fe1((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)),iStack_8,
                                             (int)((ulong)_iStack_8 >> 0x10),1);
                 if (cVar2 == '\0') {
                   uVar7 = DAT_2000_d0f7;
                   uVar5 = ovr_agnt_3b1d_0ac0(iStack_8,uStack_6,local_120);
                   uVar11 = CONCAT22(uVar8,uVar5);
-                  uVar5 = ovr_agnt_3b1d_0ac0((int)param_1,param_1._2_2_,local_d0);
+                  uVar5 = ovr_agnt_3b1d_0ac0((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)),local_d0);
                   pcVar6 = (char *)ovr_OVC15_4207_1c16(uVar5,uVar8,uVar11);
                   pcVar10 = ovr_stsprintf(local_80,"%s drains all energy from %s.",pcVar6);
                   uVar8 = (uint)((ulong)pcVar10 >> 0x10);
@@ -2499,7 +2499,7 @@ void __cdecl16far OVC41_6a8f_22cb(undefined4 param_1,int param_2)
                   uVar7 = DAT_2000_d0f7;
                   uVar5 = ovr_agnt_3b1d_0ac0(iStack_8,uStack_6,local_120);
                   uVar11 = CONCAT22(uVar8,uVar5);
-                  uVar5 = ovr_agnt_3b1d_0ac0((int)param_1,param_1._2_2_,local_d0);
+                  uVar5 = ovr_agnt_3b1d_0ac0((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)),local_d0);
                   pcVar6 = (char *)ovr_OVC15_4207_1c16(uVar5,uVar8,uVar11);
                   pcVar10 = ovr_stsprintf(local_80,"%s drains a level from %s.",pcVar6);
                   uVar8 = (uint)((ulong)pcVar10 >> 0x10);
@@ -2510,13 +2510,13 @@ void __cdecl16far OVC41_6a8f_22cb(undefined4 param_1,int param_2)
                   ((*(uint *)((int)*(undefined4 *)((int)param_1 + 0x1d) + 0x3e) & 0x800) != 0)) &&
                  (uVar7 = ovr_randBelow((uint)*(byte *)((int)*(undefined4 *)((int)param_1 + 0x17) +
                                                        0xe)), (uVar7 & 0xff) == 0)) {
-                cVar2 = ovr_OVC27_5ded_1fe1((int)param_1,param_1._2_2_,iStack_8,
+                cVar2 = ovr_OVC27_5ded_1fe1((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)),iStack_8,
                                             (int)((ulong)_iStack_8 >> 0x10),2);
                 if (cVar2 == '\0') {
                   uVar7 = DAT_2000_d0f7;
                   uVar5 = ovr_agnt_3b1d_0ac0(iStack_8,uStack_6,local_120);
                   uVar11 = CONCAT22(uVar8,uVar5);
-                  uVar5 = ovr_agnt_3b1d_0ac0((int)param_1,param_1._2_2_,local_d0);
+                  uVar5 = ovr_agnt_3b1d_0ac0((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)),local_d0);
                   pcVar6 = (char *)ovr_OVC15_4207_1c16(uVar5,uVar8,uVar11);
                   pcVar10 = ovr_stsprintf(local_80,"%s drains all energy from %s.",pcVar6);
                   ovr_uiNotify(pcVar10,uVar7);
@@ -2525,7 +2525,7 @@ void __cdecl16far OVC41_6a8f_22cb(undefined4 param_1,int param_2)
                   uVar7 = DAT_2000_d0f7;
                   uVar5 = ovr_agnt_3b1d_0ac0(iStack_8,uStack_6,local_120);
                   uVar11 = CONCAT22(uVar8,uVar5);
-                  uVar5 = ovr_agnt_3b1d_0ac0((int)param_1,param_1._2_2_,local_d0);
+                  uVar5 = ovr_agnt_3b1d_0ac0((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)),local_d0);
                   pcVar6 = (char *)ovr_OVC15_4207_1c16(uVar5,uVar8,uVar11);
                   pcVar10 = ovr_stsprintf(local_80,"%s drains two levels from %s.",pcVar6);
                   ovr_uiNotify(pcVar10,uVar7);
@@ -2568,7 +2568,7 @@ void __cdecl16far OVC41_6a8f_22cb(undefined4 param_1,int param_2)
       }
     }
     else {
-      OVC41_6a8f_2084((int)param_1,param_1._2_2_,param_2);
+      OVC41_6a8f_2084((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)),param_2);
     }
   }
   return;

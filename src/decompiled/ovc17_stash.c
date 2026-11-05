@@ -94,15 +94,15 @@ char __cdecl16far stshRead(uint16_t file_id, far_t buf, uint32_t nbytes)
     uStack_e = nb_hi;
     uStack_10 = nb_lo;
     if (file_id == 0) {
-      if ((StshPtrs[0]._2_2_ <= FMXmsHandle._2_2_) &&
-         ((StshPtrs[0]._2_2_ < FMXmsHandle._2_2_ || ((uint)StshPtrs[0] < (uint)FMXmsHandle)))) {
-        uVar5 = (FMXmsHandle._2_2_ - StshPtrs[0]._2_2_) -
+      if (((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) <= (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2))) &&
+         (((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) < (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) || ((uint)StshPtrs[0] < (uint)FMXmsHandle)))) {
+        uVar5 = ((*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) - (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) -
                 (uint)((uint)FMXmsHandle < (uint)StshPtrs[0]);
         if ((uVar5 < nb_hi) ||
            ((uVar5 <= nb_hi &&
             ((uint)FMXmsHandle - (uint)StshPtrs[0] <= nb_lo)))) {
           uStack_c = (uint)FMXmsHandle - (uint)StshPtrs[0];
-          uStack_a = (FMXmsHandle._2_2_ - StshPtrs[0]._2_2_) -
+          uStack_a = ((*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) - (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) -
                      (uint)((uint)FMXmsHandle < (uint)StshPtrs[0]);
         }
         else {
@@ -110,35 +110,35 @@ char __cdecl16far stshRead(uint16_t file_id, far_t buf, uint32_t nbytes)
           uStack_c = nb_lo;
         }
         uVar5 = (uint)StshPtrs[0];
-        uVar7 = StshPtrs[0]._2_2_;
+        uVar7 = (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2));
         uVar12 = uStack_c;
         uVar13 = uStack_a;
         uVar10 = ovr_mkp((uint16_t)buf.ofs,buf.seg);
-        xms_1000_032f(uVar10,uVar5,uVar7,uVar12,uVar13);
+        xms_1000_032f((int)uVar10,(undefined2)(uVar10 >> 16),uVar5,uVar7,uVar12,uVar13);
         bVar9 = CARRY2((uint)StshPtrs[0],uStack_c);
-        StshPtrs[0]._0_2_ = (uint)StshPtrs[0] + uStack_c;
-        StshPtrs[0]._2_2_ = StshPtrs[0]._2_2_ + uStack_a + (uint)bVar9;
+        (*(uint16_t *)((uint8_t *)&(StshPtrs[0]))) = (uint)StshPtrs[0] + uStack_c;
+        (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) = (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) + uStack_a + (uint)bVar9;
         uStack_10 = nb_lo - uStack_c;
         uStack_e = (nb_hi - uStack_a) - (uint)(nb_lo < uStack_c);
         uVar10 = LXURSH_at_(CONCAT22(uStack_a,uStack_c),0x4);
         buf.seg = (int)uVar10 + buf.seg;
-        buf.ofs = (void *)((int)buf.ofs + (uStack_c & 0xf));
+        buf.ofs = (uint16_t)((int)buf.ofs + (uStack_c & 0xf));
       }
       if (uStack_10 != 0 || uStack_e != 0) {
-        uVar5 = FMXmsHandle._2_2_ + FMEmsHandle._2_2_ +
+        uVar5 = (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
                 (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle);
-        if ((StshPtrs[0]._2_2_ <= uVar5) &&
-           ((StshPtrs[0]._2_2_ < uVar5 ||
+        if (((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) <= uVar5) &&
+           (((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) < uVar5 ||
             ((uint)StshPtrs[0] < (uint)FMXmsHandle + (uint)FMEmsHandle)))) {
-          uVar5 = ((FMXmsHandle._2_2_ + FMEmsHandle._2_2_ +
-                   (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle)) - StshPtrs[0]._2_2_) -
+          uVar5 = (((*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
+                   (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle)) - (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) -
                   (uint)((uint)FMXmsHandle + (uint)FMEmsHandle < (uint)StshPtrs[0]);
           if ((uVar5 < uStack_e) ||
              ((uVar5 <= uStack_e &&
               (((uint)FMXmsHandle + (uint)FMEmsHandle) - (uint)StshPtrs[0] <= uStack_10)))) {
             uStack_c = ((uint)FMXmsHandle + (uint)FMEmsHandle) - (uint)StshPtrs[0];
-            uStack_a = ((FMXmsHandle._2_2_ + FMEmsHandle._2_2_ +
-                        (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle)) - StshPtrs[0]._2_2_) -
+            uStack_a = (((*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
+                        (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle)) - (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) -
                        (uint)((uint)FMXmsHandle + (uint)FMEmsHandle < (uint)StshPtrs[0]);
           }
           else {
@@ -146,29 +146,29 @@ char __cdecl16far stshRead(uint16_t file_id, far_t buf, uint32_t nbytes)
             uStack_c = uStack_10;
           }
           iVar8 = (uint)StshPtrs[0] - (uint)FMXmsHandle;
-          iVar4 = (StshPtrs[0]._2_2_ - FMXmsHandle._2_2_) -
+          iVar4 = ((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) - (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2))) -
                   (uint)((uint)StshPtrs[0] < (uint)FMXmsHandle);
           uVar5 = uStack_c;
           uVar7 = uStack_a;
           uVar10 = ovr_mkp((uint16_t)buf.ofs,buf.seg);
-          ems_memmove1(uVar10,iVar8,iVar4,uVar5,uVar7);
+          ems_memmove1((undefined2)uVar10,(undefined2)(uVar10 >> 16),iVar8,iVar4,uVar5,uVar7);
           bVar9 = CARRY2((uint)StshPtrs[0],uStack_c);
-          StshPtrs[0]._0_2_ = (uint)StshPtrs[0] + uStack_c;
-          StshPtrs[0]._2_2_ = StshPtrs[0]._2_2_ + uStack_a + (uint)bVar9;
+          (*(uint16_t *)((uint8_t *)&(StshPtrs[0]))) = (uint)StshPtrs[0] + uStack_c;
+          (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) = (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) + uStack_a + (uint)bVar9;
           bVar9 = uStack_10 < uStack_c;
           uStack_10 = uStack_10 - uStack_c;
           uStack_e = (uStack_e - uStack_a) - (uint)bVar9;
           uVar10 = LXURSH_at_(CONCAT22(uStack_a,uStack_c),0x4);
           buf.seg = (int)uVar10 + buf.seg;
-          buf.ofs = (void *)((int)buf.ofs + (uStack_c & 0xf));
+          buf.ofs = (uint16_t)((int)buf.ofs + (uStack_c & 0xf));
         }
       }
-      uVar5 = FMXmsHandle._2_2_ + FMEmsHandle._2_2_ +
+      uVar5 = (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
               (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle);
-      if ((uVar5 <= StshPtrs[0]._2_2_) &&
-         ((uVar5 != StshPtrs[0]._2_2_ ||
+      if ((uVar5 <= (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) &&
+         ((uVar5 != (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) ||
           ((uint)FMXmsHandle + (uint)FMEmsHandle <= (uint)StshPtrs[0])))) {
-        lseek(StshHandles[0],CONCAT22(StshPtrs[0]._2_2_,(uint)StshPtrs[0]),0);
+        lseek(StshHandles[0],CONCAT22((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)),(uint)StshPtrs[0]),0);
       }
       if (uStack_10 == 0 && uStack_e == 0) {
         return (cVar6 - (char)nb_hi) - (uVar3 < nb_lo);
@@ -245,17 +245,17 @@ void __cdecl16far stshInit(void)
   FMEmsHandle = ems_init();
   uVar1 = FMXmsHandle;
   if (FMXmsHandle != 0) {
-    if (CONCAT22(StshSizes[0]._2_2_,(uint)StshSizes[0]) < FMXmsHandle) {
-      xms_1000_0472(CONCAT22(StshSizes[0]._2_2_,(uint)StshSizes[0]));
-      FMXmsHandle = CONCAT22(StshSizes[0]._2_2_,(uint)StshSizes[0]);
+    if (CONCAT22((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)),(uint)StshSizes[0]) < FMXmsHandle) {
+      xms_1000_0472(CONCAT22((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)),(uint)StshSizes[0]));
+      FMXmsHandle = CONCAT22((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)),(uint)StshSizes[0]);
     }
-    fmReadIntoHimem((char *)StshNames[0],StshNames[0]._2_2_,0,0,0,(uint)FMXmsHandle);
+    fmReadIntoHimem((char *)StshNames[0],(*(uint16_t *)((uint8_t *)&(StshNames[0]) + 2)),0,0,0,(uint)FMXmsHandle,(int)(FMXmsHandle >> 0x10));
     uVar1 = FMXmsHandle;
   }
-  FMXmsHandle._2_2_ = (int)(uVar1 >> 0x10);
-  FMXmsHandle._0_2_ = (uint)uVar1;
+  (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) = (int)(uVar1 >> 0x10);
+  (*(uint16_t *)((uint8_t *)&(FMXmsHandle))) = (uint)uVar1;
   FMXmsHandle = uVar1;
-  if ((FMEmsHandle == 0) || (CONCAT22(StshSizes[0]._2_2_,(uint)StshSizes[0]) <= uVar1)) {
+  if ((FMEmsHandle == 0) || (CONCAT22((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)),(uint)StshSizes[0]) <= uVar1)) {
     if (FMEmsHandle != 0) {
       ems_realloc(0);
     }
@@ -263,24 +263,24 @@ void __cdecl16far stshInit(void)
     uVar2 = 0;
   }
   else {
-    if (CONCAT22(StshSizes[0]._2_2_,(uint)StshSizes[0]) < FMEmsHandle + uVar1) {
-      FMEmsHandle._0_2_ = (uint)StshSizes[0] - (uint)FMXmsHandle;
-      FMEmsHandle._2_2_ =
-           (StshSizes[0]._2_2_ - FMXmsHandle._2_2_) - (uint)((uint)StshSizes[0] < (uint)FMXmsHandle)
+    if (CONCAT22((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)),(uint)StshSizes[0]) < FMEmsHandle + uVar1) {
+      (*(uint16_t *)((uint8_t *)&(FMEmsHandle))) = (uint)StshSizes[0] - (uint)FMXmsHandle;
+      (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) =
+           ((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) - (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2))) - (uint)((uint)StshSizes[0] < (uint)FMXmsHandle)
       ;
-      ems_realloc(CONCAT22(FMEmsHandle._2_2_,(int)FMEmsHandle));
+      ems_realloc(CONCAT22((*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)),(int)FMEmsHandle));
       uVar1 = FMXmsHandle;
     }
     FMXmsHandle = uVar1;
-    fmReadIntoHimem((char *)StshNames[0],StshNames[0]._2_2_,uVar1,1,(int)FMEmsHandle,
+    fmReadIntoHimem((char *)StshNames[0],(*(uint16_t *)((uint8_t *)&(StshNames[0]) + 2)),uVar1,1,0,(int)FMEmsHandle,
                     (int)(FMEmsHandle >> 0x10));
     uVar1 = FMXmsHandle;
     uVar2 = FMEmsHandle;
   }
-  FMEmsHandle._2_2_ = (int)(uVar2 >> 0x10);
-  FMEmsHandle._0_2_ = (int)uVar2;
-  FMXmsHandle._2_2_ = (int)(uVar1 >> 0x10);
-  FMXmsHandle._0_2_ = (uint)uVar1;
+  (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) = (int)(uVar2 >> 0x10);
+  (*(uint16_t *)((uint8_t *)&(FMEmsHandle))) = (int)uVar2;
+  (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) = (int)(uVar1 >> 0x10);
+  (*(uint16_t *)((uint8_t *)&(FMXmsHandle))) = (uint)uVar1;
   return;
 }
 
@@ -295,7 +295,7 @@ void __cdecl16far stshSeek(uint16_t fid,long ofs)
   uint in_stack_00000006;
   
   if (fid == 0) {
-    uVar1 = FMEmsHandle._2_2_ + FMXmsHandle._2_2_ +
+    uVar1 = (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) +
             (uint)CARRY2((uint)FMEmsHandle,(uint)FMXmsHandle);
     if ((uVar1 <= (uint)ofs) &&
        ((uVar1 != (uint)ofs || ((uint)FMEmsHandle + (uint)FMXmsHandle <= in_stack_00000006)))) {
@@ -370,10 +370,10 @@ void * __cdecl16far stshAlloc(uint32_t nbytes)
         r = farmalloc(nbytes);
       }
       else {
-        r = (far_t)ovr_heapAlloc(nbytes);
+        r = far_from_u32((uint32_t)(ovr_heapAlloc(nbytes)));
       }
       ofs = r.ofs;
-      if (r == (far_t)0x0) {
+      if (far_to_u32(r) == 0) {
         cVar2 = fmOutOfMemory(nbytes);
         fVar1.seg = StshBuf.seg;
         fVar1.ofs = StshBuf.ofs;
@@ -383,15 +383,15 @@ void * __cdecl16far stshAlloc(uint32_t nbytes)
           goto end;
         }
       }
-    } while (r == (far_t)0x0);
-    r = (far_t)ovr_mkp(ofs,r.seg);
+    } while (far_to_u32(r) == 0);
+    r = far_from_u32((uint32_t)(ovr_mkp(ofs,r.seg)));
     fVar1.seg = StshBuf.seg;
     fVar1.ofs = StshBuf.ofs;
   }
 end:
   StshBuf.seg = fVar1.seg;
   StshBuf.ofs = fVar1.ofs;
-  return (void *)r;
+  return (void *)MK_FP(r.seg, r.ofs);
 }
 
 
@@ -423,7 +423,7 @@ uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes)
       }
       else {
         r = (uint8_t *)ovr_heapRealloc(oldblock,nbytes);
-        in_DX = (undefined2)((ulong)r >> 0x10);
+        in_DX = (undefined2)((uint32_t)r >> 0x10);
       }
       if ((r == (uint8_t *)0x0) && (cVar2 = fmOutOfMemory(nbytes), cVar2 == '\0')) {
         return (uint8_t *)0x0;
@@ -453,10 +453,10 @@ far_t __cdecl16far fmMalloc(uint32_t nbytes)
       fVar2 = farmalloc(nbytes);
     }
     else {
-      fVar2 = ovr_heapMalloc(nbytes);
+      fVar2 = far_from_u32((uint32_t)ovr_heapMalloc(nbytes));
     }
-    if ((fVar2 == (far_t)0x0) && (cVar1 = fmMallocRecover(), cVar1 == '\0')) break;
-    if (fVar2 != (far_t)0x0) {
+    if ((far_to_u32(fVar2) == 0) && (cVar1 = fmMallocRecover(), cVar1 == '\0')) break;
+    if (far_to_u32(fVar2) != 0) {
       return fVar2;
     }
   }
@@ -485,13 +485,13 @@ char * __cdecl16far fmVsprintf(char *fmt,char *arg)
   
   FMRingIndex = FMRingIndex + 1 & 7;
   ppcStack_6 = &arg;
-  iStack_8 = vsprintf(local_d0,fmt,ppcStack_6);
+  iStack_8 = vsprintf(local_d0,fmt,(char *)ppcStack_6);
   src = local_d0;
   puVar4 = stshRealloc(CONCAT22(*(undefined2 *)((int)&FMRingBuf[0].seg + (uint)FMRingIndex * 4),
                                 ((far_t *)FMRingBuf + FMRingIndex)->ofs),(long)(iStack_8 + 1));
   uVar2 = (undefined2)((ulong)puVar4 >> 0x10);
                     /* Copy sprintfed string to dst */
-  uVar1 = strcpy((char *)(uint8_t *)puVar4,src);
+  uVar1 = (uint16_t)_fstrcpy((char far *)puVar4,(char far *)src);
   uVar3 = (uint)FMRingIndex;
   *(undefined2 *)((int)&FMRingBuf[0].seg + uVar3 * 4) = uVar2;
   ((far_t *)FMRingBuf + uVar3)->ofs = uVar1;
@@ -507,7 +507,7 @@ char * __cdecl16far stsprintf(char *buf,char *fmt,char *arg1)
 {
   undefined2 in_stack_00000006;
   
-  vsprintf(buf,(char *)fmt,&arg1);
+  vsprintf(buf,(char *)fmt,(char *)&arg1);
   return (char *)CONCAT22(in_stack_00000006,buf);
 }
 
@@ -660,10 +660,10 @@ fmReadIntoHimem(char *param_1,undefined2 param_2,int param_3,int param_4,char pa
       nbytes = CONCAT22(param_7,param_6);
     }
     if ((long)nbytes < 0xc001) {
-      handle = (far_t)stshAlloc(nbytes);
+      handle = far_from_u32((uint32_t)(stshAlloc(nbytes)));
     }
     else {
-      handle = (far_t)stshAlloc(0xc000);
+      handle = far_from_u32((uint32_t)(stshAlloc(0xc000)));
     }
     iStack_c = 0;
     uStack_e = 0;
@@ -679,10 +679,10 @@ fmReadIntoHimem(char *param_1,undefined2 param_2,int param_3,int param_4,char pa
       uVar1 = read(hande,pvStack_6,uVar1);
       if ((uVar1 == 0) || (uVar1 == 0xffff)) break;
       if (param_5 == '\0') {
-        xms_1000_03c2(uStack_e,iStack_c,handle,uVar1,0);
+        xms_1000_03c2(uStack_e,iStack_c,handle.ofs,handle.seg,uVar1,0);
       }
       else {
-        ems_memmove2(uStack_e,iStack_c,handle,uVar1,0);
+        ems_memmove2(uStack_e,iStack_c,handle.ofs,handle.seg,uVar1,0);
       }
       bVar2 = CARRY2(uStack_e,uVar1);
       uStack_e = uStack_e + uVar1;
@@ -710,12 +710,12 @@ stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle)
   int in_stack_0000fff6;
   char *pcVar4;
   
-  fVar5 = (far_t)ovr_mkp(handle.ofs,handle.seg);
+  fVar5 = far_from_u32((uint32_t)(ovr_mkp(handle.ofs,handle.seg)));
   pcVar4 = (char *)fVar5.ofs;
   handle.seg = fVar5.seg;
-  if (*(char *)fVar5 == '\0') {
-    fVar6 = (far_t)ovr_mkp(Stsh_2410_47f6.ofs,Stsh_2410_47f6.seg);
-    if (fVar6 != fVar5) {
+  if (*(char *)MK_FP(fVar5.seg, fVar5.ofs) == '\0') {
+    fVar6 = far_from_u32((uint32_t)(ovr_mkp(Stsh_2410_47f6.ofs,Stsh_2410_47f6.seg)));
+    if (far_to_u32(fVar6) != far_to_u32(fVar5)) {
       iVar1 = *(int *)(pcVar4 + 0xf);
       in_stack_0000fff6 = *(int *)(pcVar4 + 0xd);
       uVar2 = *(uint16_t *)(pcVar4 + 0xb);
@@ -740,7 +740,7 @@ stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle)
       (pcVar4 + 9)[0] = '\0';
       (pcVar4 + 9)[1] = '\0';
       *(uint16_t *)(Stsh_2410_47f6.ofs + 0xb) = handle.seg;
-      *(undefined2 *)(Stsh_2410_47f6.ofs + 9) = pcVar4;
+      *(undefined2 *)(Stsh_2410_47f6.ofs + 9) = (uint16_t)pcVar4;
       Stsh_2410_47f6 = fVar5;
     }
     if (*(int *)(pcVar4 + 0x11) == 0 && *(int *)(pcVar4 + 0x13) == 0) {
@@ -760,7 +760,7 @@ stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle)
     fVar5.seg = *(uint16_t *)(pcVar4 + 0x13);
     fVar5.ofs = (uint16_t)*(char **)(pcVar4 + 0x11);
   }
-  return (stg_tmp_t *)fVar5;
+  return (stg_tmp_t *)MK_FP(fVar5.seg, fVar5.ofs);
 }
 
 
@@ -782,14 +782,14 @@ uint8_t * __cdecl16far stash_474a_0e9b(undefined4 param_1)
   undefined1 in_stack_0000fff0;
   undefined1 in_stack_0000fff1;
   
-  fVar7 = (far_t)ovr_mkp((uint16_t)param_1,param_1._2_2_);
+  fVar7 = far_from_u32((uint32_t)(ovr_mkp((uint16_t)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)))));
   puVar6 = (uint8_t *)fVar7.ofs;
-  param_1._2_2_ = fVar7.seg;
+  (*(uint16_t *)((uint8_t *)&(param_1) + 2)) = fVar7.seg;
   src = puVar6;
-  if (*(char *)fVar7 == '\0') {
+  if (*(char *)MK_FP(fVar7.seg, fVar7.ofs) == '\0') {
     fVar8 = fmMalloc(CONCAT22(*(undefined2 *)(puVar6 + 7),*(undefined2 *)(puVar6 + 5)));
     src = (uint8_t *)fVar8.ofs;
-    if (fVar8 == (far_t)0x0) {
+    if (far_to_u32(fVar8) == 0) {
       src = (uint8_t *)0x0;
     }
     else {
@@ -799,7 +799,7 @@ uint8_t * __cdecl16far stash_474a_0e9b(undefined4 param_1)
                 );
         stshRead(StshStrongDatHnd,fVar8,
                  CONCAT22(*(undefined2 *)(puVar6 + 7),*(undefined2 *)(puVar6 + 5)));
-        fVar8 = ovr_heapMalloc(CONCAT22(*(undefined2 *)(puVar6 + 7),*(undefined2 *)(puVar6 + 5)));
+        fVar8 = far_from_u32((uint32_t)ovr_heapMalloc(CONCAT22(*(undefined2 *)(puVar6 + 7),*(undefined2 *)(puVar6 + 5))));
         *(uint16_t *)(puVar6 + 0x13) = fVar8.seg;
         *(uint16_t *)(puVar6 + 0x11) = fVar8.ofs;
         if (*(int *)(puVar6 + 0x11) == 0 && *(int *)(puVar6 + 0x13) == 0) {
@@ -815,8 +815,8 @@ uint8_t * __cdecl16far stash_474a_0e9b(undefined4 param_1)
         bVar5 = true;
       }
       if (bVar5) {
-        fVar8 = (far_t)ovr_mkp(Stsh_2410_47f6.ofs,Stsh_2410_47f6.seg);
-        if (fVar8 != fVar7) {
+        fVar8 = far_from_u32((uint32_t)(ovr_mkp(Stsh_2410_47f6.ofs,Stsh_2410_47f6.seg)));
+        if (far_to_u32(fVar8) != far_to_u32(fVar7)) {
           iVar1 = *(int *)(puVar6 + 0xf);
           iVar2 = *(int *)(puVar6 + 0xd);
           uVar3 = *(uint16_t *)(puVar6 + 0xb);
@@ -840,8 +840,8 @@ uint8_t * __cdecl16far stash_474a_0e9b(undefined4 param_1)
           (puVar6 + 0xb)[1] = 0x0;
           (puVar6 + 9)[0] = 0x0;
           (puVar6 + 9)[1] = 0x0;
-          *(uint16_t *)(Stsh_2410_47f6.ofs + 0xb) = param_1._2_2_;
-          *(undefined2 *)(Stsh_2410_47f6.ofs + 9) = puVar6;
+          *(uint16_t *)(Stsh_2410_47f6.ofs + 0xb) = (*(uint16_t *)((uint8_t *)&(param_1) + 2));
+          *(undefined2 *)(Stsh_2410_47f6.ofs + 9) = (uint16_t)puVar6;
           Stsh_2410_47f6 = fVar7;
         }
       }
@@ -861,21 +861,21 @@ stg_tmp_t * __cdecl16far stash_474a_10ac(stg_tmp_t *param_1,byte param_2)
   stg_tmp_t *psVar2;
   far_t handle;
   
-  if ((stg_tmp_t *)param_1 == (stg_tmp_t *)0x0 && param_1._2_2_ == 0) {
+  if ((stg_tmp_t *)param_1 == (stg_tmp_t *)0x0 && (*(uint16_t *)((uint8_t *)&(param_1) + 2)) == 0) {
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0xb);
   }
   if (param_1->cmap[0] == 0x0) {
-    handle.seg = param_1._2_2_;
+    handle.seg = (*(uint16_t *)((uint8_t *)&(param_1) + 2));
     handle.ofs = (uint16_t)(((stg_tmp_t *)param_1)->cmap + (uint)param_2 * 0x15);
     psVar2 = stshLoadGfx(handle);
-    param_1._0_2_ = (stg_tmp_t *)psVar2;
+    (*(uint16_t *)((uint8_t *)&(param_1))) = (uint16_t)psVar2;
   }
   else {
     uVar1 = 0;
     while( true ) {
       if (param_2 <= uVar1) break;
-      if ((stg_tmp_t *)param_1 == (stg_tmp_t *)0x0 && param_1._2_2_ == 0) {
+      if ((stg_tmp_t *)param_1 == (stg_tmp_t *)0x0 && (*(uint16_t *)((uint8_t *)&(param_1) + 2)) == 0) {
                     /* WARNING: Subroutine does not return */
         ovr_stExit(0xb);
       }
@@ -884,7 +884,7 @@ stg_tmp_t * __cdecl16far stash_474a_10ac(stg_tmp_t *param_1,byte param_2)
                 CONCAT22(*(undefined2 *)(((stg_tmp_t *)param_1)->cmap + 3),
                          *(stg_tmp_t **)(((stg_tmp_t *)param_1)->cmap + 1));
     }
-    if ((stg_tmp_t *)param_1 == (stg_tmp_t *)0x0 && param_1._2_2_ == 0) {
+    if ((stg_tmp_t *)param_1 == (stg_tmp_t *)0x0 && (*(uint16_t *)((uint8_t *)&(param_1) + 2)) == 0) {
                     /* WARNING: Subroutine does not return */
       ovr_stExit(0xb);
     }

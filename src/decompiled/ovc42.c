@@ -63,8 +63,8 @@ undefined2 __cdecl16far OVC42_6d7a_009b(byte param_1)
   undefined1 extraout_AH;
   ulong uVar5;
   
-  TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  TextBlitCycle._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
   DAT_2000_ccaf = 0;
   if (MiceNeedsUpdate == '\0') {
     bVar1 = false;
@@ -86,7 +86,7 @@ undefined2 __cdecl16far OVC42_6d7a_009b(byte param_1)
     uVar3 = ovr_draw_2e25_1d7c();
     cVar2 = (char)uVar3;
     if (cVar2 != '\0') break;
-    uVar5 = ovr_attact_3f0b_082f(CONCAT22(TextBlitCycle._2_2_,(undefined2)TextBlitCycle));
+    uVar5 = ovr_attact_3f0b_082f(CONCAT22((*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)),(undefined2)TextBlitCycle));
     uVar3 = (uint)uVar5;
     if (((int)(uVar5 >> 0x10) != 0) || (param_1 <= uVar3)) break;
   }
@@ -129,10 +129,10 @@ void __cdecl16far OVC42_6d7a_0190(char param_1,int param_2,int param_3)
   ovr_blitGfxRect(gfx,0,0,BlitRects + 1,0x10,false);
   gfx_00.seg = DAT_2000_d1a1;
   gfx_00.ofs = DAT_2000_d19f;
-  ovr_blitLoadRleGfx(gfx_00,(far_t)0xa00009af);
+  ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa00009af)));
   gfx_01.seg = DAT_2000_caf3;
   gfx_01.ofs = DAT_2000_caf1;
-  ovr_blitLoadRleGfx(gfx_01,(far_t)0xa000c51d);
+  ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa000c51d)));
   DAT_2000_d116 = 0;
   SaveAuto = 0;
   AgntFlag1 = false;
@@ -373,14 +373,14 @@ void __cdecl16far OVC42_6d7a_078f(char *param_1,undefined2 param_2,byte param_3)
   }
   TextBlitY = (uint)param_3 * 0xd + 0x9e;
   TextBlitX = 0xb;
-  handle.seg._0_1_ = (char)DAT_2000_d47e;
+  (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)DAT_2000_d47e;
   handle.ofs = DAT_2000_d47c;
-  handle.seg._1_1_ = (char)((uint)DAT_2000_d47e >> 8);
+  (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)DAT_2000_d47e >> 8);
   psStack_6 = ovr_stshLoadGfx(handle);
   TextBlitDstSeg = 0xa000;
   ovr_blitLabel((char *)CONCAT22(param_2,param_1),psStack_6->cmap,319,0xe0);
-  TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  TextBlitCycle._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
   return;
 }
 
@@ -401,8 +401,8 @@ void __cdecl16far OVC42_6d7a_0850(char *param_1,undefined2 param_2,byte param_3)
   handle.ofs = DAT_2000_d47c;
   widths = ovr_stshLoadGfx(handle);
   ovr_blitLabel((char *)CONCAT22(param_2,param_1),widths->cmap,319,0xe0);
-  TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  TextBlitCycle._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
   BlitLetterType = 0;
   return;
 }
@@ -498,7 +498,7 @@ undefined2 __cdecl16far run_demo(void)
       ovr_driver_2d63_05e5(0,0,0x13f,199,0);
       gfx.seg = DAT_2000_d476;
       gfx.ofs = DAT_2000_d474;
-      ovr_blitLoadRleGfx(gfx,(far_t)0xa0000000);
+      ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa0000000)));
       ovr_setSeasonPalette(local_30c);
       bVar1 = OVC42_6d7a_0000(0x48);
       if (bVar1 < 2) {
@@ -568,32 +568,32 @@ undefined2 __cdecl16far run_demo(void)
                       OVC42_6d7a_033e(0,CONCAT11((char)((uint)local_30c >> 8),bStack_4),0);
                       ovr_miceBlitRect(BlitRects + 1);
                       MiceUnkState = 0;
-                      TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                      TextBlitCycle._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
+                      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+                      (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
                       uVar3 = ovr_inputUpdate(0x3c);
                       if ((byte)uVar3 < 2) {
                         ovr_miceRestoreArea(BlitRects + 1);
                         ovr_OVC40_69c8_011e(local_30c);
                         OVC42_6d7a_033e(3,CONCAT11((char)((uint)local_30c >> 8),bStack_5),1);
                         ovr_miceBlitRect(BlitRects + 1);
-                        TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                        TextBlitCycle._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
+                        (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+                        (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
                         uVar3 = ovr_inputUpdate(0x32);
                         if ((byte)uVar3 < 2) {
                           ovr_miceRestoreArea(BlitRects + 1);
                           ovr_OVC40_69c8_011e(local_30c);
                           OVC42_6d7a_033e(8,CONCAT11((char)((uint)local_30c >> 8),bStack_6),1);
                           ovr_miceBlitRect(BlitRects + 1);
-                          TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                          TextBlitCycle._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
+                          (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+                          (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
                           uVar3 = ovr_inputUpdate(0x32);
                           if ((byte)uVar3 < 2) {
                             ovr_miceRestoreArea(BlitRects + 1);
                             ovr_OVC40_69c8_011e(local_30c);
                             OVC42_6d7a_033e(1,CONCAT11((char)((uint)local_30c >> 8),bStack_6),0);
                             ovr_miceBlitRect(BlitRects + 1);
-                            TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                            TextBlitCycle._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
+                            (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+                            (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
                             uVar3 = ovr_inputUpdate(0x32);
                             if ((byte)uVar3 < 2) {
                               ovr_miceRestoreArea(BlitRects + 1);
@@ -604,8 +604,8 @@ undefined2 __cdecl16far run_demo(void)
                               OVC42_6d7a_033e(0x15,CONCAT11((char)((uint)local_30c >> 8),bStack_3),1
                                              );
                               ovr_miceBlitRect(BlitRects + 1);
-                              TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                              TextBlitCycle._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
+                              (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+                              (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
                               uVar3 = ovr_inputUpdate(0x32);
                               if ((byte)uVar3 < 2) {
                                 ovr_miceRestoreArea(BlitRects + 1);
@@ -613,8 +613,8 @@ undefined2 __cdecl16far run_demo(void)
                                 OVC42_6d7a_033e(0x24,CONCAT11((char)((uint)local_30c >> 8),bStack_3)
                                                 ,1);
                                 ovr_miceBlitRect(BlitRects + 1);
-                                TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                                TextBlitCycle._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
+                                (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+                                (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
                                 uVar3 = ovr_inputUpdate(0x32);
                                 if ((byte)uVar3 < 2) {
                                   ovr_miceRestoreArea(BlitRects + 1);
@@ -622,9 +622,9 @@ undefined2 __cdecl16far run_demo(void)
                                   OVC42_6d7a_033e(0xe,CONCAT11((char)((uint)local_30c >> 8),bStack_3
                                                               ),1);
                                   ovr_miceBlitRect(BlitRects + 1);
-                                  TextBlitCycle._2_2_ =
+                                  (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                        *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                                  TextBlitCycle._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
+                                  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
                                   uVar3 = ovr_inputUpdate(0x32);
                                   if ((byte)uVar3 < 2) {
                                     ovr_miceRestoreArea(BlitRects + 1);
@@ -751,10 +751,10 @@ undefined2 __cdecl16far run_demo(void)
                                                       bVar1 = ovr_OVC43_6fbe_0322(DAT_2000_d484,
                                                                                   DAT_2000_d486);
                                                       if (bVar1 < 2) {
-                                                        TextBlitCycle._2_2_ =
+                                                        (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                                              *(undefined2 *)
                                                               (BDA_DailyTimeCounter.ofs + 2);
-                                                        TextBlitCycle._0_2_ =
+                                                        (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) =
                                                              *(undefined2 *)BDA_DailyTimeCounter;
                                                         bVar1 = OVC42_6d7a_0000(0x30);
                                                         if (bVar1 < 2) {
@@ -768,13 +768,12 @@ undefined2 __cdecl16far run_demo(void)
                                                           ovr_driver_2d63_05e5(0,0,0x13f,199,0);
                                                           gfx_00.seg = DAT_2000_d462;
                                                           gfx_00.ofs = DAT_2000_d460;
-                                                          ovr_blitLoadRleGfx(gfx_00,(far_t)
-                                                  0xa0000000);
+                                                          ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa0000000)));
                                                   ovr_setSeasonPalette(local_30c);
-                                                  TextBlitCycle._2_2_ =
+                                                  (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                                        *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2)
                                                   ;
-                                                  TextBlitCycle._0_2_ =
+                                                  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) =
                                                        *(undefined2 *)BDA_DailyTimeCounter;
                                                   uVar3 = ovr_inputUpdate(0xb4);
                                                   if ((byte)uVar3 < 2) {
@@ -788,12 +787,12 @@ undefined2 __cdecl16far run_demo(void)
                                                     ovr_driver_2d63_05e5(0,0,0x13f,199,0);
                                                     gfx_01.seg = DAT_2000_d466;
                                                     gfx_01.ofs = DAT_2000_d464;
-                                                    ovr_blitLoadRleGfx(gfx_01,(far_t)0xa0000000);
+                                                    ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa0000000)));
                                                     ovr_setSeasonPalette(local_30c);
-                                                    TextBlitCycle._2_2_ =
+                                                    (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                                          *(undefined2 *)
                                                           (BDA_DailyTimeCounter.ofs + 2);
-                                                    TextBlitCycle._0_2_ =
+                                                    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) =
                                                          *(undefined2 *)BDA_DailyTimeCounter;
                                                     uVar3 = ovr_inputUpdate(0xb4);
                                                     if ((byte)uVar3 < 2) {
@@ -807,12 +806,12 @@ undefined2 __cdecl16far run_demo(void)
                                                       ovr_driver_2d63_05e5(0,0,0x13f,199,0);
                                                       gfx_02.seg = DAT_2000_d46a;
                                                       gfx_02.ofs = DAT_2000_d468;
-                                                      ovr_blitLoadRleGfx(gfx_02,(far_t)0xa0000000);
+                                                      ovr_blitLoadRleGfx(gfx_02,far_from_u32((uint32_t)(0xa0000000)));
                                                       ovr_setSeasonPalette(local_30c);
-                                                      TextBlitCycle._2_2_ =
+                                                      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                                            *(undefined2 *)
                                                             (BDA_DailyTimeCounter.ofs + 2);
-                                                      TextBlitCycle._0_2_ =
+                                                      (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) =
                                                            *(undefined2 *)BDA_DailyTimeCounter;
                                                       uVar3 = ovr_inputUpdate(0xb4);
                                                       if ((byte)uVar3 < 2) {

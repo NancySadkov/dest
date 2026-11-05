@@ -359,7 +359,7 @@ uint * __cdecl16far OVC23_55fe_0af5(int param_1,uint *param_2,byte param_3)
                        || *(int *)((char *)"build\\clebath2.lbm" + 0xe + (uint)bStackY_20 * 0xc) !=
                           0) || (*(char *)((uint)bStackY_20 * 0x27 + 0x11e) == '\x10')) &&
                     (cVar12 = OVC22_5087_510e(), cVar12 != '\0')) {
-              uStackY_1c = (char *)CONCAT11(uStackY_1c._1_1_,1);
+              uStackY_1c = (char *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStackY_1c) + 1)),1);
             }
           }
         }
@@ -427,7 +427,7 @@ uint * __cdecl16far OVC23_55fe_0af5(int param_1,uint *param_2,byte param_3)
                                        ) != 0) ||
                              (*(char *)((uint)bStackY_20 * 0x27 + 0x11e) == '\x10')) &&
                             (cVar11 = OVC22_5087_510e(), cVar11 != '\0')) {
-                      uStackY_1c = (char *)CONCAT11(uStackY_1c._1_1_,1);
+                      uStackY_1c = (char *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStackY_1c) + 1)),1);
                     }
                   }
                 }
@@ -875,7 +875,7 @@ code_r0x00053afb:
     uVar29 = in_stack_0000ffea + 1;
   }
   if (EntityCount <= DAT_2410_55d6) {
-    DAT_2410_55d6 = (char *)0x0;
+    DAT_2410_55d6 = (uint16_t)(0x0);
     for (pcVar30 = (char *)0x0; (int)pcVar30 < (int)(uint)DAT_2000_d1e6; pcVar30 = pcVar30 + 1) {
       if (*(char *)((int)*(undefined4 *)((int)pcVar30 << 2) + 0x3d) != '\0') {
         piVar18 = (int *)((int)pcVar30 * 4);
@@ -910,12 +910,12 @@ code_r0x00053afb:
           pcVar30 = (char *)"puppetmaker" + 3;
           if ((*(uint *)((int)DAT_2000_cb09 + (int)pcStackY_1a * 0x128 + (int)pcStackY_18 * 2) & 8)
               == 0) {
-            uStackY_1e = (char *)CONCAT11(uStackY_1e._1_1_,0x22);
+            uStackY_1e = (char *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStackY_1e) + 1)),0x22);
             bStackY_1f = 0x21;
             bStackY_20 = 0x22;
           }
           else {
-            pcVar27 = (char *)CONCAT11((char)((uint)&bStackY_20 >> 8),uStackY_1c._1_1_);
+            pcVar27 = (char *)CONCAT11((char)((uint)&bStackY_20 >> 8),(*(uint8_t *)((uint8_t *)&(uStackY_1c) + 1)));
             pcStackY_18 = pcStackY_1a;
             uStackY_1c = (char *)"dwarf outpost" + 6;
             uStackY_1e = (char *)"portrait\\sp23.lbm" + 0x11;
@@ -927,7 +927,7 @@ code_r0x00053afb:
           }
         }
         else {
-          uStackY_1e = (char *)CONCAT11(uStackY_1e._1_1_,0x22);
+          uStackY_1e = (char *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStackY_1e) + 1)),0x22);
           bStackY_1f = 0x21;
           bStackY_20 = 0x22;
         }
@@ -1052,7 +1052,7 @@ code_r0x00053afb:
   if (DebugVerbose != false) {
     puVar15 = (uint *)printf("%d \r",0x44);
   }
-  if (uStackY_1e._1_1_ != '\0') {
+  if ((*(uint8_t *)((uint8_t *)&(uStackY_1e) + 1)) != '\0') {
     puVar15 = (uint *)(EntityCount + -1);
     for (puVar31 = puVar15; -1 < (int)puVar31; puVar31 = (uint *)((int)puVar31 + -1)) {
       puVar15 = (uint *)(uint)*(byte *)(Entities.ofs + (int)puVar31 * 0x37 + 0xe);
@@ -1218,7 +1218,7 @@ char * __cdecl16far OVC23_55fe_0cdf(char *param_1,undefined1 *param_2,byte param
       *puVar2 = (uVar21 - (int)puVar24) - uVar31;
                     /* WARNING: Read-only address (ram,0x00026a19) is written */
       uVar21 = (uint)(puVar25 < puVar24 || uVar21 - (int)puVar24 < uVar31);
-      s_Peaceful_2410_2915._4_2_ = (0x6665U - (int)puVar33) - uVar21;
+      (*(uint16_t *)((uint8_t *)&(s_Peaceful_2410_2915) + 4)) = (0x6665U - (int)puVar33) - uVar21;
       uVar21 = (uint)((uint)0x6665 < puVar33 || (uint)(0x6665U - (int)puVar33) < uVar21);
       bVar35 = (uint)AgntAnms[6].y < pcVar22;
       uVar31 = AgntAnms[6].y - (int)pcVar22;

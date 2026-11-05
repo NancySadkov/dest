@@ -47,20 +47,70 @@ public class ExportData extends GhidraScript {
         return tn + " " + name;
     }
 
+    private boolean isFarStruct(DataType dt) {
+        if (dt == null) return false;
+        if (dt instanceof Structure) return true;
+        String n = dt.getName();
+        if (n != null && (n.equals("far_t") || n.equals("Pfar_t"))) return true;
+        if (dt instanceof TypeDef) {
+            DataType base = ((TypeDef) dt).getDataType();
+            if (base instanceof Structure) return true;
+            String bn = base.getName();
+            return bn != null && bn.equals("far_t");
+        }
+        return false;
+    }
+
+    private String toC(String rep, DataType dt) {
+        if (rep == null) return "0";
+        rep = rep.trim();
+        if (rep.length() == 0) return "0";
+        if (rep.startsWith("\"") || rep.startsWith("'")) return rep;
+        if (rep.equalsIgnoreCase("true")) return "1";
+        if (rep.equalsIgnoreCase("false")) return "0";
+        if (rep.equalsIgnoreCase("NULL")) return "0";
+
+        // Ghidra sometimes appends a rendered ASCII column: "0x20     ".
+        if (rep.matches("^-?0x[0-9A-Fa-f]+\\s+.*")) rep = rep.split("\\s+")[0];
+        if (rep.matches("^-?[0-9A-Fa-f]+h\\s+.*")) rep = rep.split("\\s+")[0];
+
+        // Segmented address SSSS:OOOO.
+        java.util.regex.Matcher sa = java.util.regex.Pattern
+                .compile("^([0-9A-Fa-f]{1,4}):([0-9A-Fa-f]{1,4})$").matcher(rep);
+        if (sa.matches()) {
+            String seg = sa.group(1);
+            String off = sa.group(2);
+            if (dt instanceof Pointer) {
+                return "(void far *)0x" + seg + "0000UL + 0x" + off + "UL";
+            }
+            if (isFarStruct(dt)) {
+                return "{ 0x" + off + ", 0x" + seg + " }";
+            }
+            return "0x" + seg + "0000UL + 0x" + off + "UL";
+        }
+
+        // Borland-style hex suffix forms: 0h, Ah, BB8h, -1h.
+        java.util.regex.Matcher hm = java.util.regex.Pattern
+                .compile("^(-?)(?:0x)?([0-9A-Fa-f]+)h$").matcher(rep);
+        if (hm.matches()) return hm.group(1) + "0x" + hm.group(2);
+
+        return rep;
+    }
+
     private String initOf(Data d, int depth) throws Exception {
         if (depth > 8) return "0";
         DataType dt = d.getDataType();
-        if (dt instanceof Pointer) {
-            String rep = d.getDefaultValueRepresentation();
-            return rep == null ? "0" : rep;
-        }
-        if (dt.getName().contains("String")) {
-            String rep = d.getDefaultValueRepresentation();
-            if (rep != null && rep.startsWith("\"")) return rep;
-        }
+        String rep = d.getDefaultValueRepresentation();
+        if (rep != null && rep.trim().startsWith("\"")) return rep.trim();
+        if (dt instanceof Pointer) return toC(rep, dt);
+        if (dt.getName().contains("String") && rep != null && rep.trim().startsWith("\""))
+            return rep.trim();
+        if (dt instanceof Dynamic) return "{ " + toC(rep, null) + " }";
+        if (dt instanceof Array && d.getNumComponents() == 0)
+            return "{ " + toC(rep, ((Array) dt).getDataType()) + " }";
         int n = d.getNumComponents();
         if (n > 0) {
-            if (d.isUnion() || n > 8192) return "{ " + initOf(d.getComponent(0), depth + 1) + " }";
+            if (d.isUnion()) return "{ " + initOf(d.getComponent(0), depth + 1) + " }";
             StringBuilder b = new StringBuilder("{ ");
             for (int i = 0; i < n; i++) {
                 if (i > 0) b.append(", ");
@@ -69,9 +119,7 @@ public class ExportData extends GhidraScript {
             b.append(" }");
             return b.toString();
         }
-        String rep = d.getDefaultValueRepresentation();
-        if (rep == null || rep.length() == 0) rep = "0";
-        return rep;
+        return toC(rep, dt);
     }
 
     @Override

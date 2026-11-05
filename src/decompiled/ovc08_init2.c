@@ -36,7 +36,7 @@ void __cdecl16far miceRestoreArea(brect_t *br)
       if (dst_y < 0) {
         dst_y = 0;
       }
-      miceBlitAtSeg(0xa000,(far_t)0x224a0000,dst_x,dst_y);
+      miceBlitAtSeg(0xa000,far_from_u32((uint32_t)(0x224a0000)),dst_x,dst_y);
       MiceProcessed = '\0';
     }
   }

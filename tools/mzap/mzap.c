@@ -291,6 +291,36 @@ void __OvrFixupFunref(uint16_t rseg, uint8_t *p) {
 #define FIXUP_FUNREF 0x1
 #define X86_JMP 0xEA
 
+// Borland's __OvrFixupFunref: a FIXUP_FUNREF site is the sequence
+//   mov reg,seg ; push reg ; mov reg,ofs ; push reg
+// The segment word was already replaced by the target segment.  The offset
+// word must point at the overlay header's trampoline (botrp_t) entry instead
+// of the raw function offset, so the overlay manager can patch it on load.
+static int mz_fixup_funref(uint8_t *file, int start_ofs, boseg_t *sbst,
+                           int target_index, uint8_t *pp) {
+  boseg_t *tb = &sbst[target_index];
+  if (!(tb->flags & FBOV_OVR)) return 0;
+  uint8_t *q = file + start_ofs + tb->seg*16;
+  bosh_t *bo = (bosh_t *)q;
+
+  // mov reg,imm16 ; push reg ; mov reg2,imm16 ; push reg2
+  if ((pp[-1] & 0xF8) != 0xB8) return 0;
+  if ((pp[ 2] & 0xF8) != 0x50) return 0;
+  if ((pp[-1] & 0x07) != (pp[2] & 0x07)) return 0;
+  if (pp[-1] != pp[3]) return 0;
+  if (pp[ 2] != pp[6]) return 0;
+
+  uint16_t fofs = *(uint16_t *)(pp + 4);
+  int rofs = (int)sizeof(bosh_t);
+  for (int j = 0; j < bo->jmpcnt; j++, rofs += 5) {
+    if (*(uint16_t *)(q + rofs + 2) == fofs) {
+      *(uint16_t *)(pp + 4) = (uint16_t)rofs;
+      return 1;
+    }
+  }
+  return 0;
+}
+
 int main(int argc, char **argv) {
   int i;
   int do_reloc = 0;
@@ -609,34 +639,6 @@ int main(int argc, char **argv) {
     //*(uint16_t*)(file+linear) += reloc;
 
 #if 1
-    printf("Untrapping the FBOV stub headers...\n");
-    for (pbs = sbst; pbs < ebst; pbs++) { //untrap trampoulines
-      if (!(pbs->flags&FBOV_OVR)) continue;
-      int linear = start_ofs + pbs->seg*16;
-      bosh_t *bo = (bosh_t *)(file+linear);
-      botrp_t *trp = (botrp_t*)(bo+1);
-
-      int cofs32 = fbovofs+16+bo->fileofs;
-      uint8_t *p = file + cofs32; //segments code
-      cofs32 -= start_ofs;
-      int cseg = (cofs32&0xFFFF0) >> 4; //code segment
-      int cdisp = cofs32&0xF; //displacement
-
-      for (i = 0; i < bo->jmpcnt; i++) {
-        uint16_t ofs = trp->ofs;
-        bojmp_t *trmp = (bojmp_t *)trp++;
-        trmp->code = X86_JMP;
-        trmp->dst.ofs = ofs + cdisp;
-        trmp->dst.seg = cseg;
-        far_t ptr;
-        ptr.seg = pbs->seg;
-        ptr.ofs = (uint8_t*)&trmp->dst.seg - file - linear;
-        arrput(relocs, ptr);
-      }
-    }
-#endif
-
-#if 1
     printf("Rebasing FBOV fixups...\n");
     for (pbs = sbst; pbs < ebst; pbs++) { //relocate
       if (!(pbs->flags&FBOV_OVR)) continue;
@@ -663,9 +665,39 @@ int main(int argc, char **argv) {
         //printf("%04X:%04X\n", ptr.seg, ptr.ofs);
         arrput(relocs, ptr);
         if (flags&FIXUP_FUNREF) {
-          printf("FIXME: merge function reference reloc!!!\n");
-          //__OvrFixupFunref(rseg,*(uint8_t*)&p[q[i]]);
+          if (!mz_fixup_funref(file, start_ofs, sbst, sf>>3, pp)) {
+            printf("WARN: funref at %04X:%04X (target %04X) not resolved\n",
+                   cseg, ptr.ofs, rseg);
+          }
         }
+      }
+    }
+#endif
+
+#if 1
+    printf("Untrapping the FBOV stub headers...\n");
+    for (pbs = sbst; pbs < ebst; pbs++) { //untrap trampoulines
+      if (!(pbs->flags&FBOV_OVR)) continue;
+      int linear = start_ofs + pbs->seg*16;
+      bosh_t *bo = (bosh_t *)(file+linear);
+      botrp_t *trp = (botrp_t*)(bo+1);
+
+      int cofs32 = fbovofs+16+bo->fileofs;
+      uint8_t *p = file + cofs32; //segments code
+      cofs32 -= start_ofs;
+      int cseg = (cofs32&0xFFFF0) >> 4; //code segment
+      int cdisp = cofs32&0xF; //displacement
+
+      for (i = 0; i < bo->jmpcnt; i++) {
+        uint16_t ofs = trp->ofs;
+        bojmp_t *trmp = (bojmp_t *)trp++;
+        trmp->code = X86_JMP;
+        trmp->dst.ofs = ofs + cdisp;
+        trmp->dst.seg = cseg;
+        far_t ptr;
+        ptr.seg = pbs->seg;
+        ptr.ofs = (uint8_t*)&trmp->dst.seg - file - linear;
+        arrput(relocs, ptr);
       }
     }
 #endif
@@ -716,8 +748,11 @@ int main(int argc, char **argv) {
         int rseg = sbst[sf>>3].seg + reloc;
         *(uint16_t*)&p[q[i]] = rseg;
         if (flags&FIXUP_FUNREF) {
-          printf("FIXME: relocate function reference\n");
-          //__OvrFixupFunref(rseg,*(uint8_t*)&p[q[i]]);
+          if (!mz_fixup_funref(file, start_ofs, sbst, sf>>3,
+                               (uint8_t*)&p[q[i]])) {
+            printf("WARN: funref at %04X:%04X (target %04X) not resolved\n",
+                   pbs->seg + reloc, q[i], rseg);
+          }
         }
       }
     }
@@ -760,8 +795,11 @@ int main(int argc, char **argv) {
         int rseg = sbst[sf>>3].seg + reloc;
         *(uint16_t*)&p[q[i]] = rseg;
         if (flags&FIXUP_FUNREF) {
-          printf("FIXME: relocate function reference\n");
-          //__OvrFixupFunref(rseg,*(uint8_t*)&p[q[i]]);
+          if (!mz_fixup_funref(file, start_ofs, sbst, sf>>3,
+                               (uint8_t*)&p[q[i]])) {
+            printf("WARN: funref at %04X:%04X (target %04X) not resolved\n",
+                   pbs->seg + reloc, q[i], rseg);
+          }
         }
       }
     }

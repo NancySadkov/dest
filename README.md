@@ -10,10 +10,17 @@ The project's goal is recovering original code in a form compilable by Borland C
 * Decompiled small part of the init code and mapped most of the asseta init code.
 * Recovered the raw asset files (LBMs, VOCs, etc), which can be assembled back into the STRONG.DAT stash file by going to assets/ folder and typing `st.exe grab`. The LBM files can be edited with [Deluxe Paint](https://winworldpc.com/product/deluxepaint/2x). These are PBM LBMs, so not many programs support them.
 * **Recovered the full executable into `src/decompiled/`**: every code segment is
-  exported as a C module (57 modules, 1130 functions), together with recovered
-  types, globals, prototypes and a function index. See `doc/STATUS.md` for the
-  current state and the plan for turning the decompiler baseline into a
-  rebuildable, original-like source tree.
+  exported as a C module (55 modules, 1021 functions), together with recovered
+  types, globals (with original initialisers), prototypes and a function index.
+  See `doc/STATUS.md` for the current state and the plan for turning the
+  decompiler baseline into a rebuildable, original-like source tree.
+* Added a TC30/DOSBox build harness. **15 of 58** staged modules now compile
+  with Turbo C++ 3.0, including the asset-init chain (`ovc44/46/48`), the stash
+  layer (`ovc17/20`), the LBM decoder (`ovc04`), `main` and `mouse`.
+* Implemented mzap's missing Borland `FIXUP_FUNREF` relocation and verified the
+  merge/relocation paths against `STRONG.EXE`.
+* Validated the refined asset-init/stash paths dynamically with the DOSBox
+  harness (`init_assets`, `init_assets1/2`, `stshRead`, `grabLbm`).
 
 
 # TODO

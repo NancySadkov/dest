@@ -18,7 +18,7 @@ int __cdecl16far constr_36ce_0000(int param_1,int param_2)
   
   if ((((param_1 + GfxRndSeed < 0x94) && (SCARRY2(param_1,GfxRndSeed) == param_1 + GfxRndSeed < 0))
       && (GfxRndSeed2 - param_2 < 0x3c)) && (param_2 <= GfxRndSeed2)) {
-    iVar1 = (int)*(char *)((int)_DAT_2000_cb05 + (GfxRndSeed2 - param_2) * 0x94 + param_1 +
+    iVar1 = (int)*(char *)((int)DAT_2000_cb05 + (GfxRndSeed2 - param_2) * 0x94 + param_1 +
                           GfxRndSeed);
   }
   else {
@@ -215,7 +215,7 @@ void __cdecl16far constr_36ce_03a6(void)
   far_t ptr;
   far_t fVar2;
   
-  ptr = (far_t)ovr_stshAlloc(0xfa0f);
+  ptr = far_from_u32((uint32_t)(ovr_stshAlloc(0xfa0f)));
   fVar2 = ovr_alignToSeg(ptr);
   if (GOngoingBattle != '\0') {
     BlitRects[0].seg = fVar2.seg;
@@ -783,7 +783,7 @@ void __cdecl16far constr_36ce_1db4(void)
   far_t ptr;
   far_t fVar1;
   
-  ptr = (far_t)ovr_stshAlloc(0xfa0f);
+  ptr = far_from_u32((uint32_t)(ovr_stshAlloc(0xfa0f)));
   fVar1 = ovr_alignToSeg(ptr);
   BlitRects[0].seg = fVar1.seg;
   BlitRects[3].seg = BlitRects[0].seg;
@@ -811,7 +811,7 @@ void __cdecl16far constr_36ce_1e76(void)
   far_t ptr;
   far_t fVar1;
   
-  ptr = (far_t)ovr_stshAlloc(0xfa0f);
+  ptr = far_from_u32((uint32_t)(ovr_stshAlloc(0xfa0f)));
   fVar1 = ovr_alignToSeg(ptr);
   BlitRects[3].seg = fVar1.seg;
   ovr_miceRestoreArea(BlitRects + 3);
@@ -834,7 +834,7 @@ void __cdecl16far constr_36ce_1efc(void)
   far_t ptr;
   far_t fVar1;
   
-  ptr = (far_t)ovr_stshAlloc(0xfa0f);
+  ptr = far_from_u32((uint32_t)(ovr_stshAlloc(0xfa0f)));
   fVar1 = ovr_alignToSeg(ptr);
   BlitRects[0].seg = fVar1.seg;
   GGameState = 0x22;

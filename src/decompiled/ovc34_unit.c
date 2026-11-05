@@ -63,7 +63,7 @@ void __cdecl16far unit_6616_00d8(void)
   
   if (DAT_2410_648e != '\0') {
     DAT_2410_648e = '\0';
-    ovr_driver_2d63_0a67((undefined2)DAT_2000_cb09,DAT_2000_cb09._2_2_,0,0,0x93,0x3b,0xfff7);
+    ovr_driver_2d63_0a67((undefined2)DAT_2000_cb09,(*(uint16_t *)((uint8_t *)&(DAT_2000_cb09) + 2)),0,0,0x93,0x3b,0xfff7);
     for (uStack_c = 0; uStack_c < EntityCount; uStack_c = uStack_c + 1) {
       uVar7 = Entities.seg;
       uVar6 = Entities.ofs;
@@ -99,7 +99,7 @@ void __cdecl16far unit_6616_00d8(void)
           iStack_14 = 0x3b;
         }
         ovr_driver_2d63_0a24
-                  ((undefined2)DAT_2000_cb09,DAT_2000_cb09._2_2_,iStack_e,iStack_12,iStack_10,
+                  ((undefined2)DAT_2000_cb09,(*(uint16_t *)((uint8_t *)&(DAT_2000_cb09) + 2)),iStack_e,iStack_12,iStack_10,
                    iStack_14,8);
       }
     }
@@ -131,7 +131,7 @@ void __cdecl16far unit_6616_00d8(void)
           iStack_14 = 0x3b;
         }
         ovr_driver_2d63_0a24
-                  ((undefined2)DAT_2000_cb09,DAT_2000_cb09._2_2_,iStack_e,iStack_12,iStack_10,
+                  ((undefined2)DAT_2000_cb09,(*(uint16_t *)((uint8_t *)&(DAT_2000_cb09) + 2)),iStack_e,iStack_12,iStack_10,
                    iStack_14,8);
       }
     }
@@ -362,9 +362,9 @@ void __cdecl16far ui_unit_order_6616_0689(byte param_1)
   uVar13 = (undefined1)unaff_SS;
   uVar15 = (undefined1)((uint)unaff_SS >> 8);
   ovr_miceRestoreArea((brect_t *)CONCAT13(uVar15,CONCAT12(uVar13,&local_16)));
-  fStack_1a = ovr_stshRleCut((far_t)0xa0000000,12,7,222,150);
+  fStack_1a = ovr_stshRleCut(far_from_u32((uint32_t)(0xa0000000)),12,7,222,150);
   ovr_miceBlitRect((brect_t *)CONCAT13(uVar15,CONCAT12(uVar13,&local_16)));
-  fStack_6 = (far_t)ovr_stshAlloc(0xfa0f);
+  fStack_6 = far_from_u32((uint32_t)(ovr_stshAlloc(0xfa0f)));
   fVar12 = ovr_alignToSeg(fStack_6);
   uStack_8 = fVar12.seg;
   uStack_2a = local_2e;
@@ -384,9 +384,9 @@ void __cdecl16far ui_unit_order_6616_0689(byte param_1)
       uStack_34 = local_38;
       uStack_1e = local_38;
       local_16.seg = uStack_8;
-      dst.seg._0_1_ = (char)uStack_8;
+      (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)uStack_8;
       dst.ofs = 0x8cc;
-      dst.seg._1_1_ = (char)(uStack_8 >> 8);
+      (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)(uStack_8 >> 8);
       ovr_blitLoadRleGfx(fStack_1a,dst);
       fVar12.seg = MiceCursors[3].seg;
       fVar12.ofs = MiceCursors[3].ofs;
@@ -439,9 +439,9 @@ void __cdecl16far ui_unit_order_6616_0689(byte param_1)
       }
       if ((uStack_26 != uVar9) || (uStack_28 != uStack_20)) {
         local_16.seg = uStack_8;
-        dst_00.seg._0_1_ = (char)uStack_8;
+        (*(uint8_t *)((uint8_t *)&(dst_00.seg))) = (char)uStack_8;
         dst_00.ofs = 0x8cc;
-        dst_00.seg._1_1_ = (char)(uStack_8 >> 8);
+        (*(uint8_t *)((uint8_t *)&(dst_00.seg) + 1)) = (char)(uStack_8 >> 8);
         ovr_blitLoadRleGfx(fStack_1a,dst_00);
         ovr_vga_2d63_04b7(uStack_1c,uStack_1e,uVar9,uStack_1e,0xff,(char)uStack_8);
         ovr_vga_2d63_04b7(uStack_1c,uStack_1e,uStack_1c,uStack_20,0xff,(char)uStack_8);
@@ -581,9 +581,9 @@ LAB_6616_1054:
   ovr_say("Region selection aborted.");
 LAB_6616_106e:
   local_16.seg = uStack_8;
-  dst_01.seg._0_1_ = (char)uStack_8;
+  (*(uint8_t *)((uint8_t *)&(dst_01.seg))) = (char)uStack_8;
   dst_01.ofs = 0x8cc;
-  dst_01.seg._1_1_ = (char)(uStack_8 >> 8);
+  (*(uint8_t *)((uint8_t *)&(dst_01.seg) + 1)) = (char)(uStack_8 >> 8);
   ovr_blitLoadRleGfx(fStack_1a,dst_01);
   ovr_miceBlitRect((brect_t *)CONCAT13(uVar15,CONCAT12(uVar13,&local_16)));
   ovr_blitRect((brect_t *)CONCAT13(uVar15,CONCAT12(uVar13,&local_16)));

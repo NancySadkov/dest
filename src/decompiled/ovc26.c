@@ -193,7 +193,7 @@ uint __cdecl16far OVC26_5d45_031f(int param_1)
       pcStack_6 = DAT_2000_d2e8;
       for (iVar4 = 0; iVar4 < 0xa1; iVar4 = iVar4 + 1) {
         for (iVar5 = 0; pcVar2 = pcStack_6, iVar5 < 0xa1; iVar5 = iVar5 + 1) {
-          pcStack_6 = (char *)CONCAT22(pcStack_6._2_2_,(char *)pcStack_6 + 1);
+          pcStack_6 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(pcStack_6) + 2)),(char *)pcStack_6 + 1);
           if ((*pcVar2 != '\0') &&
              (uVar6 = iStack_14 + iVar4 >> 0xf, uVar7 = iStack_16 + iVar5 >> 0xf,
              uStack_e = ((iStack_14 + iVar4 ^ uVar6) - uVar6) +
@@ -254,7 +254,7 @@ uint __cdecl16far OVC26_5d45_031f(int param_1)
         uVar6 = uVar6 & 0xff00;
       }
       else {
-        _fmemset((void *)CONCAT22(uStack_a._2_2_,(void *)((int)(int *)uStack_a + 0x1b)),0,0x14);
+        _fmemset((void *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_a) + 2)),(void *)((int)(int *)uStack_a + 0x1b)),0,0x14);
         uVar10 = (undefined2)((ulong)uStack_a >> 0x10);
         piVar8 = (int *)uStack_a;
         *(byte *)(piVar8 + 0x18) = bStack_f;

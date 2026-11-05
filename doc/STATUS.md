@@ -188,7 +188,60 @@ of the running intro is in `tmp/emu_print.png`.
 3. Recover data initialisers and overlay thunk tables exactly.
 4. Validate a byte-for-byte or behaviour-for-behaviour rebuild.
 
-## 7. Reproduce the recovery
+## 7. Progress on the four follow-up steps
+
+### Step 1 — mzap `FIXUP_FUNREF`
+Implemented `mzap`'s missing function-reference relocation (`mz_fixup_funref`)
+and reordered the FBOV fixup pass before trampoline untrapping, because the
+trampoline table's original `ofs` fields are destroyed by untrapping. The tool
+was rebuilt and tested against `STRONG.EXE` (merge and `-r 0x10000` paths). The
+game contains **zero** `FIXUP_FUNREF` fixups, so the last decompiler failure is
+not an mzap bug: `OVC23_55fe_0000` trips a Ghidra tracked-register/overlay
+address canonicalization bug. This is documented in `hard/README.md`.
+
+### Step 2 — exact global initialisers
+`ExportData.java` now converts Ghidra literals to C (Borland `h` suffixes,
+segmented addresses, ASCII-annotated bytes, `FALSE`) and emits recursive
+initialisers. The resulting `st_globals.c` is valid C (`gcc -fsyntax-only`
+passes) and replaces the zero-initialised file. `scripts/recover.bat` now runs
+`ExportData` after the main export.
+
+### Step 3 — TC30 refinement
+Created a DOS/TC30 build harness (`scripts/stage_build.py`,
+`src/decompiled/build_tc30.bat`) and a short-name staging tree. Automated
+rewrites for Ghidra artifacts were added to `scripts/fix_recovered.py`:
+`. _offset_size_` overlays, `(far_t)` casts, far-pointer comparisons and
+allocator assignments, pointer-to-word stores, and `MK_FP` construction.
+
+TC30 compile baseline (58 staged modules): **15 compile**. This includes all
+requested targets:
+
+| module | source | status |
+|---|---|---|
+| OVC04 | LBM decode / grab | **compiles** |
+| OVC17 | stash read (`stshRead`) | **compiles** |
+| OVC20 | stash files/audio (`stshStoreFile`) | **compiles** |
+| OVC29 | animation init | **compiles** |
+| OVC44 | `init_assets` | **compiles** |
+| OVC46 | `init_assets1` | **compiles** |
+| OVC48 | `init_assets2` | **compiles** |
+
+Also compiling: `main.c`, `mouse.c`, `ovc05`, `ovc07`, `ovc08`, `ovc36`,
+`ovr_stubs`, `support.c`.
+
+### Step 4 — dynamic validation
+Using the harness `bplog` (log-only execute breakpoints), with the runtime load
+base derived from the INT 3Fh vector (`static - 0x7DE`):
+
+* normal boot: `init_assets` ×2, `init_assets1` ×2, `init_assets2` ×2,
+  `stshRead` ×31
+* `grab` mode: `init_assets` ×2, `grabLbm` ×2 (grab then stops on a missing
+  input asset in the copied save folder)
+
+This confirms the refined asset-init and stash paths are the real runtime
+paths.
+
+## 8. Reproduce the recovery
 
 ```bat
 C:\soft\ghidra_12.1.3_PUBLIC\support\analyzeHeadless.bat ^

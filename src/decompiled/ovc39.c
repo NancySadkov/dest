@@ -383,7 +383,7 @@ void __cdecl16far OVC39_690b_0180(byte param_1)
       if ((bStack_e == 0) || (bStack_e < bStack_d)) {
         if (bStack_d == 0) {
           pcVar3 = (char *)OVC39_690b_00d1();
-          pcVar8 = ovr_stsprintf(local_2cc,(char *)CONCAT22(_DAT_2410_6ac6,DAT_2410_6ac4),pcVar3);
+          pcVar8 = ovr_stsprintf(local_2cc,(char *)CONCAT22(DAT_2410_6ac6,DAT_2410_6ac4),pcVar3);
           ovr_drawString((char *)pcVar8,(int)((ulong)pcVar8 >> 0x10));
         }
         else {

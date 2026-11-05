@@ -86,7 +86,7 @@ undefined1 __cdecl16far OVC49_8699_0000(int *param_1,undefined1 *param_2)
                 && (*(char *)((uint)*(byte *)(iVar4 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x10) ==
                     '\0')))) {
               *param_2 = *(undefined1 *)(iVar4 * 0x69 + iStack_a + 0x8fa);
-              cVar3 = ovr_agnt_3b1d_00b7((undefined1 *)param_2,param_2._2_2_);
+              cVar3 = ovr_agnt_3b1d_00b7((undefined1 *)param_2,(*(uint16_t *)((uint8_t *)&(param_2) + 2)));
               if (cVar3 != '\0') {
                 return *param_2;
               }
@@ -190,7 +190,7 @@ undefined1 __cdecl16far OVC49_8699_036e(int *param_1,undefined1 *param_2)
                 && (*(char *)((uint)*(byte *)(iVar4 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x10) ==
                     '\0')))) {
               *param_2 = *(undefined1 *)(iVar4 * 0x69 + iStack_a + 0x8fa);
-              cVar3 = ovr_agnt_3b1d_00b7((undefined1 *)param_2,param_2._2_2_);
+              cVar3 = ovr_agnt_3b1d_00b7((undefined1 *)param_2,(*(uint16_t *)((uint8_t *)&(param_2) + 2)));
               if (cVar3 != '\0') {
                 return *param_2;
               }
@@ -1226,19 +1226,19 @@ LAB_8699_1ca7:
         pcVar1 = (char *)(uVar14 * 2 + unaff_SI);
         uRam0002db84 = uVar14;
         *pcVar1 = *pcVar1 + -0x4d;
-        fVar36.seg._0_1_ = (char)DAT_2410_07e5;
+        (*(uint8_t *)((uint8_t *)&(fVar36.seg))) = (char)DAT_2410_07e5;
         fVar36.ofs = DAT_2410_07e3;
-        fVar36.seg._1_1_ = (char)((uint)DAT_2410_07e5 >> 8);
-        dst.seg._0_1_ = (char)stack0xffd6;
+        (*(uint8_t *)((uint8_t *)&(fVar36.seg) + 1)) = (char)((uint)DAT_2410_07e5 >> 8);
+        (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)stack0xffd6;
         dst.ofs = 0x8cc;
-        dst.seg._1_1_ = (char)((uint)stack0xffd6 >> 8);
+        (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)stack0xffd6 >> 8);
         ovr_blitLoadRleGfx(fVar36,dst);
-        gfx_06.seg._0_1_ = (char)DAT_2410_07e9;
+        (*(uint8_t *)((uint8_t *)&(gfx_06.seg))) = (char)DAT_2410_07e9;
         gfx_06.ofs = DAT_2410_07e7;
-        gfx_06.seg._1_1_ = (char)((uint)DAT_2410_07e9 >> 8);
-        dst_00.seg._0_1_ = (char)stack0xffd6;
+        (*(uint8_t *)((uint8_t *)&(gfx_06.seg) + 1)) = (char)((uint)DAT_2410_07e9 >> 8);
+        (*(uint8_t *)((uint8_t *)&(dst_00.seg))) = (char)stack0xffd6;
         dst_00.ofs = (uint16_t)((char *)"Stronghold requires 585,000 bytes.\n" + 1);
-        dst_00.seg._1_1_ = (char)((uint)stack0xffd6 >> 8);
+        (*(uint8_t *)((uint8_t *)&(dst_00.seg) + 1)) = (char)((uint)stack0xffd6 >> 8);
         ovr_blitLoadRleGfx(gfx_06,dst_00);
         GGameState = 0x2c;
         ovr_OVC23_55fe_0863();
@@ -1309,14 +1309,14 @@ LAB_8699_1ca7:
       iVar16 = 0;
       uVar24 = (undefined2)((ulong)DAT_2000_ca95 >> 0x10);
       iVar13 = (int)DAT_2000_ca95;
-      uStackY_20 = (char *)((int)(((long)*(int *)((uint)uStackY_22._1_1_ * 0x27 + 0x125) *
+      uStackY_20 = (char *)((int)(((long)*(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x125) *
                                    (long)(int)(uint)*(byte *)(iVar13 + (int)auStackY_26 * 9 + 1) &
                                   0xffffU) / 0x18) + 1);
-      if (*(int *)((uint)uStackY_22._1_1_ * 0x27 + 0x116) == 0 &&
-          *(int *)((uint)uStackY_22._1_1_ * 0x27 + 0x118) == 0) {
-        if ((((uint)auStackY_26 < 0xf8) || (*(int *)((uint)uStackY_22._1_1_ * 0x27 + 0x125) == 0))
-           || ((*(uint *)((uint)uStackY_22._1_1_ * 0x27 + 0x121) & 4) != 0)) {
-          if ((((*(uint *)((uint)uStackY_22._1_1_ * 0x27 + 0x121) & 4) == 0) ||
+      if (*(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x116) == 0 &&
+          *(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x118) == 0) {
+        if ((((uint)auStackY_26 < 0xf8) || (*(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x125) == 0))
+           || ((*(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x121) & 4) != 0)) {
+          if ((((*(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x121) & 4) == 0) ||
               (*(char *)(iVar13 + (int)auStackY_26 * 9 + 2) == -1)) ||
              (uVar5 = *(undefined4 *)((uint)*(byte *)(iVar13 + (int)auStackY_26 * 9 + 2) << 2),
              *(char *)((int)uVar5 + 0x3f) != '\0')) {
@@ -1337,8 +1337,8 @@ LAB_8699_1ca7:
         }
       }
       else {
-        apcStackY_2f2[1] = (char *)*(undefined2 *)((uint)uStackY_22._1_1_ * 0x27 + 0x118);
-        apcStackY_2f2[0] = (char *)*(undefined2 *)((uint)uStackY_22._1_1_ * 0x27 + 0x116);
+        apcStackY_2f2[1] = (char *)*(undefined2 *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x118);
+        apcStackY_2f2[0] = (char *)*(undefined2 *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x116);
         iVar16 = 1;
       }
       pcVar49 = (char *)"trade faire" + 8;
@@ -1353,8 +1353,8 @@ LAB_8699_1ca7:
           iVar16 = iVar16 + 1;
           in_stack_0000ffe2 =
                (char *)*(undefined2 *)
-                        (((uint)uStackY_22._1_1_ +
-                         (uint)*(byte *)((uint)uStackY_22._1_1_ * 0x27 + 300)) * 0x27 + 0x125);
+                        (((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) +
+                         (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 300)) * 0x27 + 0x125);
           if (cStackY_29 == '\0') {
             pcVar26 = ovr_fmVsprintf((char *)" Upgrade costs %d gp.",in_stack_0000ffe2);
             pcVar49 = (char *)0x1000;
@@ -1375,7 +1375,7 @@ LAB_8699_1ca7:
         }
       }
       bVar7 = *(byte *)((int)DAT_2000_ca95 + (int)auStackY_26 * 9 + 2);
-      uStackY_24 = CONCAT11(uStackY_24._1_1_,bVar7);
+      uStackY_24 = CONCAT11((*(uint8_t *)((uint8_t *)&(uStackY_24) + 1)),bVar7);
       if ((((*(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x121) & 0x400) == 0) && (bVar7 != 0xff)) &&
          (*(char *)((int)*(undefined4 *)((uint)bVar7 << 2) + 0x3f) == '\0')) {
         (&stack0xffec)[iVar16] = 7;
@@ -1387,7 +1387,7 @@ LAB_8699_1ca7:
       if (((*(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x121) & 4) == 0) &&
          (0xf7 < (uint)auStackY_26)) {
         uVar9 = 0x24;
-        if (*(char *)(Entities.ofs + param_2._2_2_ * 0x37 + 0x1a) != (char)uStackY_24) {
+        if (*(char *)(Entities.ofs + (*(uint16_t *)((uint8_t *)&(param_2) + 2)) * 0x37 + 0x1a) != (char)uStackY_24) {
           (&stack0xffec)[iVar16] = 6;
           apcStackY_2f2[iVar16 * 2 + 1] = (char *)"puppetmaker" + 3;
           apcStackY_2f2[iVar16 * 2] = (char *)"New Owner";
@@ -1513,7 +1513,7 @@ code_r0x00088b64:
                   goto LAB_8699_2982;
                 }
               }
-              if ((uStackY_20._1_1_ == '\0') ||
+              if (((*(uint8_t *)((uint8_t *)&(uStackY_20) + 1)) == '\0') ||
                  ((((char)uStackY_20 == '\0' && (-1 < *(char *)((int)uStackY_22 * 0x34 + 5))) &&
                   (cVar8 = OVC49_8699_1711(), cVar8 == '\0')))) {
                 if (*(char *)((int)uStackY_22 * 0x34 + 0x25) != '\x02') {
@@ -1667,62 +1667,62 @@ LAB_8699_29b9:
         DAT_2000_d1ce = (undefined2)(uVar44 >> 0x10);
         DAT_2000_d1cc = (undefined2)uVar44;
         uVar15 = (psStack_a->aptr).seg;
-        src.seg._0_1_ = (char)uVar15;
+        (*(uint8_t *)((uint8_t *)&(src.seg))) = (char)uVar15;
         src.ofs = (&psStack_a->aptr)->ofs;
-        src.seg._1_1_ = (char)(uVar15 >> 8);
+        (*(uint8_t *)((uint8_t *)&(src.seg) + 1)) = (char)(uVar15 >> 8);
         fVar36 = ovr_stshRleCut(src,234,64,314,120);
-        pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+        pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
         DAT_2000_cafb = (undefined2)((ulong)pcVar45 >> 0x10);
-        DAT_2000_caf9 = (cte_t *)pcVar45;
+        DAT_2000_caf9 = (uint16_t)(pcVar45);
         uVar15 = (psStack_a->aptr).seg;
-        src_00.seg._0_1_ = (char)uVar15;
+        (*(uint8_t *)((uint8_t *)&(src_00.seg))) = (char)uVar15;
         src_00.ofs = (&psStack_a->aptr)->ofs;
-        src_00.seg._1_1_ = (char)(uVar15 >> 8);
+        (*(uint8_t *)((uint8_t *)&(src_00.seg) + 1)) = (char)(uVar15 >> 8);
         fVar36 = ovr_stshRleCut(src_00,208,158,228,176);
-        pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+        pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
         DAT_2000_cb13 = (undefined2)((ulong)pcVar45 >> 0x10);
-        DAT_2000_cb11 = (cte_t *)pcVar45;
+        DAT_2000_cb11 = (uint16_t)(pcVar45);
         uVar15 = (psStack_a->aptr).seg;
-        src_01.seg._0_1_ = (char)uVar15;
+        (*(uint8_t *)((uint8_t *)&(src_01.seg))) = (char)uVar15;
         src_01.ofs = (&psStack_a->aptr)->ofs;
-        src_01.seg._1_1_ = (char)(uVar15 >> 8);
+        (*(uint8_t *)((uint8_t *)&(src_01.seg) + 1)) = (char)(uVar15 >> 8);
         fVar36 = ovr_stshRleCut(src_01,179,180,198,196);
-        pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+        pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
         DAT_2000_cacb = (undefined2)((ulong)pcVar45 >> 0x10);
-        DAT_2000_cac9 = (cte_t *)pcVar45;
+        DAT_2000_cac9 = (uint16_t)(pcVar45);
         uVar15 = (psStack_a->aptr).seg;
-        src_02.seg._0_1_ = (char)uVar15;
+        (*(uint8_t *)((uint8_t *)&(src_02.seg))) = (char)uVar15;
         src_02.ofs = (&psStack_a->aptr)->ofs;
-        src_02.seg._1_1_ = (char)(uVar15 >> 8);
+        (*(uint8_t *)((uint8_t *)&(src_02.seg) + 1)) = (char)(uVar15 >> 8);
         fVar36 = ovr_stshRleCut(src_02,207,180,226,196);
-        pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+        pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
         DAT_2000_cac7 = (undefined2)((ulong)pcVar45 >> 0x10);
-        DAT_2000_cac5 = (cte_t *)pcVar45;
+        DAT_2000_cac5 = (uint16_t)(pcVar45);
         uVar15 = (psStack_a->aptr).seg;
-        src_03.seg._0_1_ = (char)uVar15;
+        (*(uint8_t *)((uint8_t *)&(src_03.seg))) = (char)uVar15;
         src_03.ofs = (&psStack_a->aptr)->ofs;
-        src_03.seg._1_1_ = (char)(uVar15 >> 8);
+        (*(uint8_t *)((uint8_t *)&(src_03.seg) + 1)) = (char)(uVar15 >> 8);
         fVar36 = ovr_stshRleCut(src_03,38,181,57,196);
-        pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+        pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
         DAT_2000_cac3 = (undefined2)((ulong)pcVar45 >> 0x10);
-        DAT_2000_cac1 = (cte_t *)pcVar45;
+        DAT_2000_cac1 = (uint16_t)(pcVar45);
         uVar15 = (psStack_a->aptr).seg;
-        src_04.seg._0_1_ = (char)uVar15;
+        (*(uint8_t *)((uint8_t *)&(src_04.seg))) = (char)uVar15;
         src_04.ofs = (&psStack_a->aptr)->ofs;
-        src_04.seg._1_1_ = (char)(uVar15 >> 8);
+        (*(uint8_t *)((uint8_t *)&(src_04.seg) + 1)) = (char)(uVar15 >> 8);
         fVar36 = ovr_stshRleCut(src_04,9,181,24,196);
-        pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+        pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
         DAT_2000_cabf = (undefined2)((ulong)pcVar45 >> 0x10);
-        DAT_2000_cabd = (cte_t *)pcVar45;
+        DAT_2000_cabd = (uint16_t)(pcVar45);
         ovr_stgFreeTmp((stg_tmp_t *)
                        CONCAT13((char)((uint)pcStack_8 >> 8),CONCAT12((char)pcStack_8,psStack_a)));
-        if (param_1._0_1_ == false) {
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar36 = ovr_stshAllocStub();
           DAT_2000_ca3a = fVar36.seg;
-          DAT_2000_ca38 = (cte_t *)fVar36.ofs;
+          DAT_2000_ca38 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_caf7 = fVar36.seg;
-          DAT_2000_caf5 = (cte_t *)fVar36.ofs;
+          DAT_2000_caf5 = (uint16_t)(fVar36.ofs);
           fVar27 = ovr_stshAllocStub();
           psVar43 = (stg_tmp_t *)CONCAT22(pcStack_8,psStack_a);
         }
@@ -1731,125 +1731,125 @@ LAB_8699_29b9:
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           psVar12 = (stg_tmp_t *)psVar43;
           uVar15 = (psVar12->aptr).seg;
-          src_05.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_05.seg))) = (char)uVar15;
           src_05.ofs = (&psVar12->aptr)->ofs;
-          src_05.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_05.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_05,245,116,267,128);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_ca3a = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_ca38 = (cte_t *)pcVar45;
+          DAT_2000_ca38 = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_06.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_06.seg))) = (char)uVar15;
           src_06.ofs = (&psVar12->aptr)->ofs;
-          src_06.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_06.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_06,292,114,314,133);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_caf7 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_caf5 = (cte_t *)pcVar45;
+          DAT_2000_caf5 = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_07.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_07.seg))) = (char)uVar15;
           src_07.ofs = (&psVar12->aptr)->ofs;
-          src_07.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_07.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_07,221,157,228,198);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_caf3 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_caf1 = (cte_t *)pcVar45;
+          DAT_2000_caf1 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar27.seg = DAT_2000_caf3;
           fVar27.ofs = (uint16_t)DAT_2000_caf1;
         }
         DAT_2000_caf3 = fVar27.seg;
-        DAT_2000_caf1 = (cte_t *)fVar27.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_caf1 = (uint16_t)(fVar27.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           Lbm_nwpanel1 = ovr_stshAllocStub();
           fVar36 = ovr_stshAllocStub();
           DAT_2000_caff = fVar36.seg;
-          DAT_2000_cafd = (cte_t *)fVar36.ofs;
+          DAT_2000_cafd = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_cacf = fVar36.seg;
-          DAT_2000_cacd = (cte_t *)fVar36.ofs;
+          DAT_2000_cacd = (uint16_t)(fVar36.ofs);
           FontHandle = ovr_stshAllocStub();
           fVar36 = ovr_stshAllocStub();
           DAT_2000_cabb = fVar36.seg;
-          DAT_2000_cab9 = (cte_t *)fVar36.ofs;
+          DAT_2000_cab9 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_caab = fVar36.seg;
-          DAT_2000_caa9 = (cte_t *)fVar36.ofs;
+          DAT_2000_caa9 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d1aa = fVar36.seg;
-          DAT_2000_d1a8 = (cte_t *)fVar36.ofs;
+          DAT_2000_d1a8 = (uint16_t)(fVar36.ofs);
           fVar28 = ovr_stshAllocStub();
         }
         else {
           psVar43 = ovr_grabLbm(15,0,0);
           psVar12 = (stg_tmp_t *)psVar43;
-          Lbm_nwpanel1 = (far_t)ovr_stshWrite(psVar12->cmap,0x300);
+          Lbm_nwpanel1 = far_from_u32((uint32_t)(ovr_stshWrite(psVar12->cmap,0x300)));
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           uVar15 = (psVar12->aptr).seg;
-          src_08.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_08.seg))) = (char)uVar15;
           src_08.ofs = (&psVar12->aptr)->ofs;
-          src_08.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_08.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_08,230,57,314,113);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_caff = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_cafd = (cte_t *)pcVar45;
+          DAT_2000_cafd = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_09.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_09.seg))) = (char)uVar15;
           src_09.ofs = (&psVar12->aptr)->ofs;
-          src_09.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_09.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_09,0,0,319,199);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_cacf = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_cacd = (cte_t *)pcVar45;
+          DAT_2000_cacd = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_10.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_10.seg))) = (char)uVar15;
           src_10.ofs = (&psVar12->aptr)->ofs;
-          src_10.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_10.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_10,29,156,207,199);
-          FontHandle = (far_t)ovr_stshStoreFile((uint8_t *)fVar36);
+          FontHandle = far_from_u32((uint32_t)(ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs))));
           uVar15 = (psVar12->aptr).seg;
-          src_11.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_11.seg))) = (char)uVar15;
           src_11.ofs = (&psVar12->aptr)->ofs;
-          src_11.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_11.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_11,9,181,28,196);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_cabb = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_cab9 = (cte_t *)pcVar45;
+          DAT_2000_cab9 = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_12.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_12.seg))) = (char)uVar15;
           src_12.ofs = (&psVar12->aptr)->ofs;
-          src_12.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_12.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_12,223,8,237,50);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_caab = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_caa9 = (cte_t *)pcVar45;
+          DAT_2000_caa9 = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_13.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_13.seg))) = (char)uVar15;
           src_13.ofs = (&psVar12->aptr)->ofs;
-          src_13.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_13.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_13,6,156,28,171);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d1aa = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d1a8 = (cte_t *)pcVar45;
+          DAT_2000_d1a8 = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_14.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_14.seg))) = (char)uVar15;
           src_14.ofs = (&psVar12->aptr)->ofs;
-          src_14.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_14.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_14,208,157,229,198);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d119 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d117 = (cte_t *)pcVar45;
+          DAT_2000_d117 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar28.seg = DAT_2000_d119;
           fVar28.ofs = (uint16_t)DAT_2000_d117;
         }
         DAT_2000_d119 = fVar28.seg;
-        DAT_2000_d117 = (cte_t *)fVar28.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_d117 = (uint16_t)(fVar28.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           iVar13 = 0;
           while( true ) {
             DAT_2000_d119 = fVar28.seg;
-            DAT_2000_d117 = (cte_t *)fVar28.ofs;
+            DAT_2000_d117 = (uint16_t)(fVar28.ofs);
             if (3 < iVar13) break;
             fVar36 = ovr_stshAllocStub();
             *(uint16_t *)((int)&CrossBlitGfx.seg + iVar13 * 4) = fVar36.seg;
@@ -1868,11 +1868,11 @@ LAB_8699_29b9:
           psVar12 = (stg_tmp_t *)psVar43;
           for (iVar13 = 0; iVar13 < 4; iVar13 = iVar13 + 1) {
             uVar15 = (psVar12->aptr).seg;
-            src_15.seg._0_1_ = (char)uVar15;
+            (*(uint8_t *)((uint8_t *)&(src_15.seg))) = (char)uVar15;
             src_15.ofs = (&psVar12->aptr)->ofs;
-            src_15.seg._1_1_ = (char)(uVar15 >> 8);
+            (*(uint8_t *)((uint8_t *)&(src_15.seg) + 1)) = (char)(uVar15 >> 8);
             fVar36 = ovr_stshRleCut(src_15,iVar13 * 0xe,46,iVar13 * 0xe + 0xd,55);
-            pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+            pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
             *(undefined2 *)((int)&CrossBlitGfx.seg + iVar13 * 4) = (int)((ulong)pcVar45 >> 0x10);
             ((far_t *)&CrossBlitGfx + iVar13)->ofs = (uint16_t)(cte_t *)pcVar45;
             pixels.seg = (psVar12->aptr).seg;
@@ -1880,19 +1880,19 @@ LAB_8699_29b9:
             puVar33 = (uint8_t *)ovr_stshRleType2(pixels,iVar13 * 0xe,16,iVar13 * 0xe + 0xd,24,6,4);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cc67)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cc65)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cc65)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           ovr_stgFreeTmp(psVar43);
           fVar28.seg = DAT_2000_d119;
           fVar28.ofs = (uint16_t)DAT_2000_d117;
         }
         DAT_2000_d119 = fVar28.seg;
-        DAT_2000_d117 = (cte_t *)fVar28.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_d117 = (uint16_t)(fVar28.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           iVar13 = 0;
           while( true ) {
             DAT_2000_d119 = fVar28.seg;
-            DAT_2000_d117 = (cte_t *)fVar28.ofs;
+            DAT_2000_d117 = (uint16_t)(fVar28.ofs);
             if (0x16 < iVar13) break;
             fVar36 = ovr_stshAllocStub();
             ((undefined2 *)&DAT_2000_cc0b)[iVar13 * 2] = fVar36.seg;
@@ -1904,7 +1904,7 @@ LAB_8699_29b9:
           iVar13 = 0;
           while( true ) {
             DAT_2000_d119 = fVar28.seg;
-            DAT_2000_d117 = (cte_t *)fVar28.ofs;
+            DAT_2000_d117 = (uint16_t)(fVar28.ofs);
             if (0x17 < iVar13) break;
             fVar36 = ovr_stshAllocStub();
             ((undefined2 *)&DAT_2000_cbab)[iVar13 * 2] = fVar36.seg;
@@ -1916,7 +1916,7 @@ LAB_8699_29b9:
           iVar13 = 0;
           while( true ) {
             DAT_2000_d119 = fVar28.seg;
-            DAT_2000_d117 = (cte_t *)fVar28.ofs;
+            DAT_2000_d117 = (uint16_t)(fVar28.ofs);
             if (0x1f < iVar13) break;
             fVar36 = ovr_stshAllocStub();
             ((undefined2 *)&DAT_2000_cb2b)[iVar13 * 2] = fVar36.seg;
@@ -1928,7 +1928,7 @@ LAB_8699_29b9:
           iVar13 = 0;
           while( true ) {
             DAT_2000_d119 = fVar28.seg;
-            DAT_2000_d117 = (cte_t *)fVar28.ofs;
+            DAT_2000_d117 = (uint16_t)(fVar28.ofs);
             if (0xd < iVar13) break;
             fVar36 = ovr_stshAllocStub();
             ((undefined2 *)&DAT_2000_d2a0)[iVar13 * 2] = fVar36.seg;
@@ -1940,7 +1940,7 @@ LAB_8699_29b9:
           iVar13 = 0;
           while( true ) {
             DAT_2000_d119 = fVar28.seg;
-            DAT_2000_d117 = (cte_t *)fVar28.ofs;
+            DAT_2000_d117 = (uint16_t)(fVar28.ofs);
             if (0x10 < iVar13) break;
             fVar36 = ovr_stshAllocStub();
             ((undefined2 *)&DAT_2000_d25c)[iVar13 * 2] = fVar36.seg;
@@ -1952,7 +1952,7 @@ LAB_8699_29b9:
           iVar13 = 0;
           while( true ) {
             DAT_2000_d119 = fVar28.seg;
-            DAT_2000_d117 = (cte_t *)fVar28.ofs;
+            DAT_2000_d117 = (uint16_t)(fVar28.ofs);
             if (6 < iVar13) break;
             fVar36 = ovr_stshAllocStub();
             ((undefined2 *)&DAT_2000_d240)[iVar13 * 2] = fVar36.seg;
@@ -1964,7 +1964,7 @@ LAB_8699_29b9:
           iVar13 = 0;
           while( true ) {
             DAT_2000_d119 = fVar28.seg;
-            DAT_2000_d117 = (cte_t *)fVar28.ofs;
+            DAT_2000_d117 = (uint16_t)(fVar28.ofs);
             if (6 < iVar13) break;
             fVar36 = ovr_stshAllocStub();
             ((undefined2 *)&DAT_2000_d224)[iVar13 * 2] = fVar36.seg;
@@ -1976,7 +1976,7 @@ LAB_8699_29b9:
           iVar13 = 0;
           while( true ) {
             DAT_2000_d119 = fVar28.seg;
-            DAT_2000_d117 = (cte_t *)fVar28.ofs;
+            DAT_2000_d117 = (uint16_t)(fVar28.ofs);
             if (7 < iVar13) break;
             fVar36 = ovr_stshAllocStub();
             ((undefined2 *)&DAT_2000_d204)[iVar13 * 2] = fVar36.seg;
@@ -1988,7 +1988,7 @@ LAB_8699_29b9:
           iVar13 = 0;
           while( true ) {
             DAT_2000_d119 = fVar28.seg;
-            DAT_2000_d117 = (cte_t *)fVar28.ofs;
+            DAT_2000_d117 = (uint16_t)(fVar28.ofs);
             if (4 < iVar13) break;
             fVar36 = ovr_stshAllocStub();
             ((undefined2 *)&DAT_2000_d1f0)[iVar13 * 2] = fVar36.seg;
@@ -2009,7 +2009,7 @@ LAB_8699_29b9:
                       ovr_stshRleType2(pixels_00,8,iVar13 * 0x20 + 10,63,iVar13 * 0x20 + 0x24,0,0);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cc0b)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cc09)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cc09)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 6; iVar13 = iVar13 + 1) {
             pixels_01.seg = (psVar12->aptr).seg;
@@ -2019,7 +2019,7 @@ LAB_8699_29b9:
             ;
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cc23)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cc21)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cc21)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 6; iVar13 = iVar13 + 1) {
             pixels_02.seg = (psVar12->aptr).seg;
@@ -2029,7 +2029,7 @@ LAB_8699_29b9:
                                       );
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cc3b)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cc39)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cc39)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 5; iVar13 = iVar13 + 1) {
             pixels_03.seg = (psVar12->aptr).seg;
@@ -2039,7 +2039,7 @@ LAB_8699_29b9:
                                       );
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cc53)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cc51)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cc51)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(94,0,0);
@@ -2053,7 +2053,7 @@ LAB_8699_29b9:
                                        -60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cbab)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cba9)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cba9)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 3; iVar13 = iVar13 + 1) {
             pixels_05.seg = (psVar12->aptr).seg;
@@ -2063,7 +2063,7 @@ LAB_8699_29b9:
                                        ,-60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cbb7)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cbb5)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cbb5)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 3; iVar13 = iVar13 + 1) {
             pixels_06.seg = (psVar12->aptr).seg;
@@ -2073,7 +2073,7 @@ LAB_8699_29b9:
                                        ,-60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cbc3)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cbc1)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cbc1)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(95,0,0);
@@ -2087,7 +2087,7 @@ LAB_8699_29b9:
                                        -60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cbcf)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cbcd)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cbcd)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 3; iVar13 = iVar13 + 1) {
             pixels_08.seg = (psVar12->aptr).seg;
@@ -2097,7 +2097,7 @@ LAB_8699_29b9:
                                        ,-60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cbdb)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cbd9)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cbd9)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(96,0,0);
@@ -2111,7 +2111,7 @@ LAB_8699_29b9:
                                        -60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cbe7)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cbe5)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cbe5)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 3; iVar13 = iVar13 + 1) {
             pixels_10.seg = (psVar12->aptr).seg;
@@ -2121,7 +2121,7 @@ LAB_8699_29b9:
                                        ,-60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cbf3)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cbf1)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cbf1)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 3; iVar13 = iVar13 + 1) {
             pixels_11.seg = (psVar12->aptr).seg;
@@ -2131,7 +2131,7 @@ LAB_8699_29b9:
                                        ,-60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cbff)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cbfd)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cbfd)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(531,0,0);
@@ -2145,7 +2145,7 @@ LAB_8699_29b9:
                                        -60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cb2b)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cb29)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cb29)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 3; iVar13 = iVar13 + 1) {
             pixels_13.seg = (psVar12->aptr).seg;
@@ -2155,7 +2155,7 @@ LAB_8699_29b9:
                                        -4,-60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cb37)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cb35)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cb35)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 3; iVar13 = iVar13 + 1) {
             pixels_14.seg = (psVar12->aptr).seg;
@@ -2165,7 +2165,7 @@ LAB_8699_29b9:
                                        -4,-60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cb43)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cb41)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cb41)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(532,0,0);
@@ -2179,7 +2179,7 @@ LAB_8699_29b9:
                                        -60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cb4f)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cb4d)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cb4d)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 3; iVar13 = iVar13 + 1) {
             pixels_16.seg = (psVar12->aptr).seg;
@@ -2189,7 +2189,7 @@ LAB_8699_29b9:
                                        -4,-60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cb5b)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cb59)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cb59)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 3; iVar13 = iVar13 + 1) {
             pixels_17.seg = (psVar12->aptr).seg;
@@ -2199,7 +2199,7 @@ LAB_8699_29b9:
                                        -4,-60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cb67)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cb65)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cb65)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(533,0,0);
@@ -2213,7 +2213,7 @@ LAB_8699_29b9:
                                        -60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cb73)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cb71)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cb71)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 3; iVar13 = iVar13 + 1) {
             pixels_19.seg = (psVar12->aptr).seg;
@@ -2223,7 +2223,7 @@ LAB_8699_29b9:
                                        -4,-60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cb7f)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cb7d)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cb7d)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 3; iVar13 = iVar13 + 1) {
             pixels_20.seg = (psVar12->aptr).seg;
@@ -2233,7 +2233,7 @@ LAB_8699_29b9:
                                        -4,-60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cb8b)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cb89)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cb89)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(534,0,0);
@@ -2247,7 +2247,7 @@ LAB_8699_29b9:
                                        -60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cb97)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cb95)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cb95)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 2; iVar13 = iVar13 + 1) {
             pixels_22.seg = (psVar12->aptr).seg;
@@ -2257,7 +2257,7 @@ LAB_8699_29b9:
                                        -4,-60);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_cba3)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_cba1)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_cba1)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(535,0,0);
@@ -2270,7 +2270,7 @@ LAB_8699_29b9:
                       ovr_stshRleType2(pixels_23,6,iVar13 * 0x1b + 8,33,iVar13 * 0x1b + 0x13,0,0);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_d2a0)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_d29e)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_d29e)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 7; iVar13 = iVar13 + 1) {
             pixels_24.seg = (psVar12->aptr).seg;
@@ -2279,7 +2279,7 @@ LAB_8699_29b9:
                       ovr_stshRleType2(pixels_24,35,iVar13 * 0x1b + 8,62,iVar13 * 0x1b + 0x13,0,0);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_d2bc)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_d2ba)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_d2ba)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 7; iVar13 = iVar13 + 1) {
             pixels_25.seg = (psVar12->aptr).seg;
@@ -2288,7 +2288,7 @@ LAB_8699_29b9:
                       ovr_stshRleType2(pixels_25,76,iVar13 * 0x1b + 8,88,iVar13 * 0x1b + 0x13,0,0);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_d25c)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_d25a)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_d25a)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 7; iVar13 = iVar13 + 1) {
             pixels_26.seg = (psVar12->aptr).seg;
@@ -2298,7 +2298,7 @@ LAB_8699_29b9:
             ;
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_d278)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_d276)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_d276)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 3; iVar13 = iVar13 + 1) {
             pixels_27.seg = (psVar12->aptr).seg;
@@ -2308,7 +2308,7 @@ LAB_8699_29b9:
             ;
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_d294)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_d292)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_d292)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 7; iVar13 = iVar13 + 1) {
             pixels_28.seg = (psVar12->aptr).seg;
@@ -2318,7 +2318,7 @@ LAB_8699_29b9:
             ;
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_d240)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_d23e)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_d23e)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 7; iVar13 = iVar13 + 1) {
             pixels_29.seg = (psVar12->aptr).seg;
@@ -2328,7 +2328,7 @@ LAB_8699_29b9:
             ;
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_d224)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_d222)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_d222)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           for (iVar13 = 0; iVar13 < 7; iVar13 = iVar13 + 1) {
             pixels_30.seg = (psVar12->aptr).seg;
@@ -2338,7 +2338,7 @@ LAB_8699_29b9:
             ;
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_d204)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_d202)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_d202)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           pixels_31.seg = (psVar12->aptr).seg;
           pixels_31.ofs = (&psVar12->aptr)->ofs;
@@ -2347,7 +2347,7 @@ LAB_8699_29b9:
           iVar13 = 0;
           while( true ) {
             DAT_2000_d220 = (undefined2)((ulong)pcVar45 >> 0x10);
-            DAT_2000_d21e = (cte_t *)pcVar45;
+            DAT_2000_d21e = (uint16_t)(pcVar45);
             if (4 < iVar13) break;
             pixels_32.seg = (psVar12->aptr).seg;
             pixels_32.ofs = (&psVar12->aptr)->ofs;
@@ -2356,7 +2356,7 @@ LAB_8699_29b9:
             ;
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_d1f0)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_d1ee)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_d1ee)[iVar13 * 2] = (uint16_t)(pcVar45);
             pcVar45 = (cte_t *)CONCAT22(DAT_2000_d220,DAT_2000_d21e);
             iVar13 = iVar13 + 1;
           }
@@ -2365,8 +2365,8 @@ LAB_8699_29b9:
           fVar28.ofs = (uint16_t)DAT_2000_d117;
         }
         DAT_2000_d119 = fVar28.seg;
-        DAT_2000_d117 = (cte_t *)fVar28.ofs;
-        if (param_1._0_1_ != false) {
+        DAT_2000_d117 = (uint16_t)(fVar28.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) != false) {
           psVar43 = ovr_grabLbm(35,0,0);
           fVar28.seg = DAT_2000_d119;
           fVar28.ofs = (uint16_t)DAT_2000_d117;
@@ -2376,9 +2376,9 @@ LAB_8699_29b9:
         iVar13 = 0;
         while( true ) {
           DAT_2000_d119 = fVar28.seg;
-          DAT_2000_d117 = (cte_t *)fVar28.ofs;
+          DAT_2000_d117 = (uint16_t)(fVar28.ofs);
           if (3 < iVar13) break;
-          if (param_1._0_1_ == false) {
+          if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
             fVar36 = ovr_stshAllocStub();
             ((undefined2 *)&DAT_2000_d2ee)[iVar13 * 2] = fVar36.seg;
             ((undefined2 *)&DAT_2000_d2ec)[iVar13 * 2] = fVar36.ofs;
@@ -2390,13 +2390,13 @@ LAB_8699_29b9:
                       ovr_stshRleType2(pixels_33,iVar13 * 0x16,0,iVar13 * 0x16 + 0x15,14,11,7);
             pcVar45 = ovr_stshStoreFile(puVar33);
             ((undefined2 *)&DAT_2000_d2ee)[iVar13 * 2] = (int)((ulong)pcVar45 >> 0x10);
-            ((undefined2 *)&DAT_2000_d2ec)[iVar13 * 2] = (cte_t *)pcVar45;
+            ((undefined2 *)&DAT_2000_d2ec)[iVar13 * 2] = (uint16_t)(pcVar45);
           }
           fVar28.seg = DAT_2000_d119;
           fVar28.ofs = (uint16_t)DAT_2000_d117;
           iVar13 = iVar13 + 1;
         }
-        if (param_1._0_1_ == false) {
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar29 = ovr_stshAllocStub();
         }
         else {
@@ -2404,60 +2404,60 @@ LAB_8699_29b9:
           psVar43 = ovr_grabLbm(8,0,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_16.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_16.seg))) = (char)uVar15;
           src_16.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_16.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_16.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_16,0,0,319,199);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d1ca = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d1c8 = (cte_t *)pcVar45;
+          DAT_2000_d1c8 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar29.seg = DAT_2000_d1ca;
           fVar29.ofs = (uint16_t)DAT_2000_d1c8;
         }
         DAT_2000_d1ca = fVar29.seg;
-        DAT_2000_d1c8 = (cte_t *)fVar29.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_d1c8 = (uint16_t)(fVar29.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar30 = ovr_stshAllocStub();
         }
         else {
           psVar43 = ovr_grabLbm(6,0,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_17.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_17.seg))) = (char)uVar15;
           src_17.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_17.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_17.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_17,0,0,319,199);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d1c6 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d1c4 = (cte_t *)pcVar45;
+          DAT_2000_d1c4 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar30.seg = DAT_2000_d1c6;
           fVar30.ofs = (uint16_t)DAT_2000_d1c4;
         }
         DAT_2000_d1c6 = fVar30.seg;
-        DAT_2000_d1c4 = (cte_t *)fVar30.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_d1c4 = (uint16_t)(fVar30.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar31 = ovr_stshAllocStub();
         }
         else {
           psVar43 = ovr_grabLbm(140,0,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_18.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_18.seg))) = (char)uVar15;
           src_18.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_18.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_18.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_18,0,0,319,27);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d1c2 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          _DAT_2000_d1c0 = (cte_t *)pcVar45;
+          DAT_2000_d1c0 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar31.seg = DAT_2000_d1c2;
-          fVar31.ofs = (uint16_t)_DAT_2000_d1c0;
+          fVar31.ofs = (uint16_t)DAT_2000_d1c0;
         }
         DAT_2000_d1c2 = fVar31.seg;
-        _DAT_2000_d1c0 = (cte_t *)fVar31.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_d1c0 = (uint16_t)(fVar31.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar32 = ovr_stshAllocStub();
         }
         else {
@@ -2466,9 +2466,9 @@ LAB_8699_29b9:
           FontSize.hi = 0;
           FontSize.lo = 0;
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          hndl.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(hndl.seg))) = (char)uVar15;
           hndl.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          hndl.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(hndl.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshProcessFontSub(hndl);
           uVar44 = ovr_stshWrite((uint8_t *)fVar36.ofs,
                                  CONCAT13((char)(FontSize.hi >> 8),
@@ -2481,19 +2481,19 @@ LAB_8699_29b9:
         }
         DAT_2000_d47e = fVar32.seg;
         DAT_2000_d47c = fVar32.ofs;
-        if (param_1._0_1_ == false) {
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar36 = ovr_stshAllocStub();
           DAT_2000_cc87 = fVar36.seg;
-          DAT_2000_cc85 = (cte_t *)fVar36.ofs;
+          DAT_2000_cc85 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d3a6 = fVar36.seg;
-          DAT_2000_d3a4 = (cte_t *)fVar36.ofs;
+          DAT_2000_d3a4 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d3a2 = fVar36.seg;
-          DAT_2000_d3a0 = (cte_t *)fVar36.ofs;
+          DAT_2000_d3a0 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d39e = fVar36.seg;
-          DAT_2000_d39c = (cte_t *)fVar36.ofs;
+          DAT_2000_d39c = (uint16_t)(fVar36.ofs);
           fVar34 = ovr_stshAllocStub();
         }
         else {
@@ -2505,25 +2505,25 @@ LAB_8699_29b9:
           puVar33 = (uint8_t *)ovr_stshRleType2(pixels_34,8,3,226,194,-8,-3);
           pcVar45 = ovr_stshStoreFile(puVar33);
           DAT_2000_cc87 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_cc85 = (cte_t *)pcVar45;
+          DAT_2000_cc85 = (uint16_t)(pcVar45);
           pixels_35.seg = (psVar12->aptr).seg;
           pixels_35.ofs = (&psVar12->aptr)->ofs;
           puVar33 = (uint8_t *)ovr_stshRleType2(pixels_35,221,157,229,198,-221,-157);
           pcVar45 = ovr_stshStoreFile(puVar33);
           DAT_2000_d3a6 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d3a4 = (cte_t *)pcVar45;
+          DAT_2000_d3a4 = (uint16_t)(pcVar45);
           pixels_36.seg = (psVar12->aptr).seg;
           pixels_36.ofs = (&psVar12->aptr)->ofs;
           puVar33 = (uint8_t *)ovr_stshRleType2(pixels_36,208,195,223,199,-208,-195);
           pcVar45 = ovr_stshStoreFile(puVar33);
           DAT_2000_d3a2 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d3a0 = (cte_t *)pcVar45;
+          DAT_2000_d3a0 = (uint16_t)(pcVar45);
           pixels_37.seg = (psVar12->aptr).seg;
           pixels_37.ofs = (&psVar12->aptr)->ofs;
           puVar33 = (uint8_t *)ovr_stshRleType2(pixels_37,8,117,226,194,-8,-117);
           pcVar45 = ovr_stshStoreFile(puVar33);
           DAT_2000_d39e = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d39c = (cte_t *)pcVar45;
+          DAT_2000_d39c = (uint16_t)(pcVar45);
           uVar44 = ovr_stshWrite(psVar12->cmap,0x300);
           DAT_2000_d386 = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d384 = (uint16_t)uVar44;
@@ -2533,7 +2533,7 @@ LAB_8699_29b9:
         }
         DAT_2000_d386 = fVar34.seg;
         DAT_2000_d384 = fVar34.ofs;
-        if (param_1._0_1_ == false) {
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           LbxButton2 = ovr_stshAllocStub();
           fVar35 = ovr_stshAllocStub();
           pcVar21 = (char *)"puppetmaker" + 3;
@@ -2542,92 +2542,92 @@ code_r0x00083f6a:
           *(cte_t **)&DAT_2000_d36c = (cte_t *)fVar35.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d372 = fVar36.seg;
-          DAT_2000_d370 = (cte_t *)fVar36.ofs;
+          DAT_2000_d370 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d376 = fVar36.seg;
-          DAT_2000_d374 = (cte_t *)fVar36.ofs;
+          DAT_2000_d374 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d37a = fVar36.seg;
-          DAT_2000_d378 = (cte_t *)fVar36.ofs;
+          DAT_2000_d378 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d37e = fVar36.seg;
-          DAT_2000_d37c = (cte_t *)fVar36.ofs;
+          DAT_2000_d37c = (uint16_t)(fVar36.ofs);
           fVar37 = ovr_stshAllocStub();
         }
         else {
           psVar43 = ovr_grabLbm(543,0,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_19.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_19.seg))) = (char)uVar15;
           src_19.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_19.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_19.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_19,8,5,16,10);
-          LbxButton2 = (far_t)ovr_stshStoreFile((uint8_t *)fVar36);
+          LbxButton2 = far_from_u32((uint32_t)(ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs))));
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(139,0,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           psVar12 = (stg_tmp_t *)psVar43;
           uVar15 = (psVar12->aptr).seg;
-          src_20.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_20.seg))) = (char)uVar15;
           src_20.ofs = (&psVar12->aptr)->ofs;
-          src_20.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_20.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_20,16,121,57,131);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d36e = (undefined2)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d36c = (cte_t *)pcVar45;
+          DAT_2000_d36c = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_21.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_21.seg))) = (char)uVar15;
           src_21.ofs = (&psVar12->aptr)->ofs;
-          src_21.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_21.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_21,16,134,57,144);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d372 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d370 = (cte_t *)pcVar45;
+          DAT_2000_d370 = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_22.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_22.seg))) = (char)uVar15;
           src_22.ofs = (&psVar12->aptr)->ofs;
-          src_22.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_22.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_22,234,121,300,131);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d376 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d374 = (cte_t *)pcVar45;
+          DAT_2000_d374 = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_23.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_23.seg))) = (char)uVar15;
           src_23.ofs = (&psVar12->aptr)->ofs;
-          src_23.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_23.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_23,234,134,300,144);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d37a = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d378 = (cte_t *)pcVar45;
+          DAT_2000_d378 = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_24.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_24.seg))) = (char)uVar15;
           src_24.ofs = (&psVar12->aptr)->ofs;
-          src_24.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_24.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_24,153,121,230,131);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d37e = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d37c = (cte_t *)pcVar45;
+          DAT_2000_d37c = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_25.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_25.seg))) = (char)uVar15;
           src_25.ofs = (&psVar12->aptr)->ofs;
-          src_25.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_25.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_25,153,134,230,144);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d382 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d380 = (cte_t *)pcVar45;
+          DAT_2000_d380 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar37.seg = DAT_2000_d382;
           fVar37.ofs = (uint16_t)DAT_2000_d380;
         }
         DAT_2000_d382 = fVar37.seg;
-        DAT_2000_d380 = (cte_t *)fVar37.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_d380 = (uint16_t)(fVar37.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar36 = ovr_stshAllocStub();
           DAT_2000_cab7 = fVar36.seg;
-          DAT_2000_cab5 = (cte_t *)fVar36.ofs;
+          DAT_2000_cab5 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_cab3 = fVar36.seg;
-          DAT_2000_cab1 = (cte_t *)fVar36.ofs;
+          DAT_2000_cab1 = (uint16_t)(fVar36.ofs);
           fVar38 = ovr_stshAllocStub();
         }
         else {
@@ -2635,76 +2635,76 @@ code_r0x00083f6a:
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           psVar12 = (stg_tmp_t *)psVar43;
           uVar15 = (psVar12->aptr).seg;
-          src_26.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_26.seg))) = (char)uVar15;
           src_26.ofs = (&psVar12->aptr)->ofs;
-          src_26.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_26.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_26,94,47,108,89);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_cab7 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_cab5 = (cte_t *)pcVar45;
+          DAT_2000_cab5 = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_27.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_27.seg))) = (char)uVar15;
           src_27.ofs = (&psVar12->aptr)->ofs;
-          src_27.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_27.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_27,114,47,128,89);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_cab3 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_cab1 = (cte_t *)pcVar45;
+          DAT_2000_cab1 = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_28.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_28.seg))) = (char)uVar15;
           src_28.ofs = (&psVar12->aptr)->ofs;
-          src_28.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_28.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_28,223,8,237,50);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_caaf = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_caad = (cte_t *)pcVar45;
+          DAT_2000_caad = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar38.seg = DAT_2000_caaf;
           fVar38.ofs = (uint16_t)DAT_2000_caad;
         }
         DAT_2000_caaf = fVar38.seg;
-        DAT_2000_caad = (cte_t *)fVar38.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_caad = (uint16_t)(fVar38.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d3d6 = fVar36.seg;
           DAT_2000_d3d4 = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d3ee = fVar36.seg;
-          DAT_2000_d3ec = (cte_t *)fVar36.ofs;
+          DAT_2000_d3ec = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d3fe = fVar36.seg;
-          DAT_2000_d3fc = (cte_t *)fVar36.ofs;
+          DAT_2000_d3fc = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d40e = fVar36.seg;
-          DAT_2000_d40c = (cte_t *)fVar36.ofs;
+          DAT_2000_d40c = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d41e = fVar36.seg;
-          DAT_2000_d41c = (cte_t *)fVar36.ofs;
+          DAT_2000_d41c = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d42e = fVar36.seg;
-          DAT_2000_d42c = (cte_t *)fVar36.ofs;
+          DAT_2000_d42c = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d3d2 = fVar36.seg;
           DAT_2000_d3d0 = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d3ea = fVar36.seg;
-          DAT_2000_d3e8 = (cte_t *)fVar36.ofs;
+          DAT_2000_d3e8 = (uint16_t)(fVar36.ofs);
           far_t_2000_d3e4 = ovr_stshAllocStub();
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d3da = fVar36.seg;
           DAT_2000_d3d8 = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d3f2 = fVar36.seg;
-          DAT_2000_d3f0 = (cte_t *)fVar36.ofs;
+          DAT_2000_d3f0 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d402 = fVar36.seg;
-          DAT_2000_d400 = (cte_t *)fVar36.ofs;
+          DAT_2000_d400 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d412 = fVar36.seg;
-          DAT_2000_d410 = (cte_t *)fVar36.ofs;
+          DAT_2000_d410 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d422 = fVar36.seg;
-          DAT_2000_d420 = (cte_t *)fVar36.ofs;
+          DAT_2000_d420 = (uint16_t)(fVar36.ofs);
           fVar39 = ovr_stshAllocStub();
         }
         else {
@@ -2715,57 +2715,57 @@ code_r0x00083f6a:
           DAT_2000_d3d6 = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d3d4 = (uint16_t)uVar44;
           uVar15 = (psVar12->aptr).seg;
-          src_29.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_29.seg))) = (char)uVar15;
           src_29.ofs = (&psVar12->aptr)->ofs;
-          src_29.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_29.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_29,0,0,319,80);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d3ee = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d3ec = (cte_t *)pcVar45;
+          DAT_2000_d3ec = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(159,0,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_30.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_30.seg))) = (char)uVar15;
           src_30.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_30.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_30.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_30,0,0,219,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d3fe = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d3fc = (cte_t *)pcVar45;
+          DAT_2000_d3fc = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(159,220,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_31.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_31.seg))) = (char)uVar15;
           src_31.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_31.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_31.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_31,0,0,219,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d40e = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d40c = (cte_t *)pcVar45;
+          DAT_2000_d40c = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(160,0,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_32.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_32.seg))) = (char)uVar15;
           src_32.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_32.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_32.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_32,0,0,279,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d41e = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d41c = (cte_t *)pcVar45;
+          DAT_2000_d41c = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(160,280,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_33.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_33.seg))) = (char)uVar15;
           src_33.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_33.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_33.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_33,0,0,279,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d42e = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d42c = (cte_t *)pcVar45;
+          DAT_2000_d42c = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(161,0,0);
           psVar12 = (stg_tmp_t *)psVar43;
@@ -2774,19 +2774,19 @@ code_r0x00083f6a:
           DAT_2000_d3d2 = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d3d0 = (uint16_t)uVar44;
           uVar15 = (psVar12->aptr).seg;
-          src_34.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_34.seg))) = (char)uVar15;
           src_34.ofs = (&psVar12->aptr)->ofs;
-          src_34.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_34.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_34,0,144,319,199);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d3ea = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d3e8 = (cte_t *)pcVar45;
+          DAT_2000_d3e8 = (uint16_t)(pcVar45);
           uVar15 = (psVar12->aptr).seg;
-          src_35.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_35.seg))) = (char)uVar15;
           src_35.ofs = (&psVar12->aptr)->ofs;
-          src_35.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_35.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_35,0,0,47,10);
-          far_t_2000_d3e4 = (far_t)ovr_stshStoreFile((uint8_t *)fVar36);
+          far_t_2000_d3e4 = far_from_u32((uint32_t)(ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs))));
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(412,0,0);
           psVar12 = (stg_tmp_t *)psVar43;
@@ -2795,79 +2795,79 @@ code_r0x00083f6a:
           DAT_2000_d3da = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d3d8 = (uint16_t)uVar44;
           uVar15 = (psVar12->aptr).seg;
-          src_36.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_36.seg))) = (char)uVar15;
           src_36.ofs = (&psVar12->aptr)->ofs;
-          src_36.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_36.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_36,0,0,319,80);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d3f2 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d3f0 = (cte_t *)pcVar45;
+          DAT_2000_d3f0 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(414,0,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_37.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_37.seg))) = (char)uVar15;
           src_37.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_37.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_37.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_37,0,0,219,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d402 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d400 = (cte_t *)pcVar45;
+          DAT_2000_d400 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(414,220,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_38.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_38.seg))) = (char)uVar15;
           src_38.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_38.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_38.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_38,0,0,219,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d412 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d410 = (cte_t *)pcVar45;
+          DAT_2000_d410 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(413,0,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_39.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_39.seg))) = (char)uVar15;
           src_39.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_39.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_39.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_39,0,0,279,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d422 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d420 = (cte_t *)pcVar45;
+          DAT_2000_d420 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(413,280,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_40.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_40.seg))) = (char)uVar15;
           src_40.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_40.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_40.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_40,0,0,279,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d432 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d430 = (cte_t *)pcVar45;
+          DAT_2000_d430 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar39.seg = DAT_2000_d432;
           fVar39.ofs = (uint16_t)DAT_2000_d430;
         }
         DAT_2000_d432 = fVar39.seg;
-        DAT_2000_d430 = (cte_t *)fVar39.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_d430 = (uint16_t)(fVar39.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d3de = fVar36.seg;
           DAT_2000_d3dc = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d3f6 = fVar36.seg;
-          DAT_2000_d3f4 = (cte_t *)fVar36.ofs;
+          DAT_2000_d3f4 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d406 = fVar36.seg;
-          DAT_2000_d404 = (cte_t *)fVar36.ofs;
+          DAT_2000_d404 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d416 = fVar36.seg;
-          DAT_2000_d414 = (cte_t *)fVar36.ofs;
+          DAT_2000_d414 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d426 = fVar36.seg;
-          DAT_2000_d424 = (cte_t *)fVar36.ofs;
+          DAT_2000_d424 = (uint16_t)(fVar36.ofs);
           fVar40 = ovr_stshAllocStub();
         }
         else {
@@ -2878,79 +2878,79 @@ code_r0x00083f6a:
           DAT_2000_d3de = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d3dc = (uint16_t)uVar44;
           uVar15 = (psVar12->aptr).seg;
-          src_41.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_41.seg))) = (char)uVar15;
           src_41.ofs = (&psVar12->aptr)->ofs;
-          src_41.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_41.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_41,0,0,319,113);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d3f6 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d3f4 = (cte_t *)pcVar45;
+          DAT_2000_d3f4 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(421,0,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_42.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_42.seg))) = (char)uVar15;
           src_42.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_42.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_42.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_42,0,0,219,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d406 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d404 = (cte_t *)pcVar45;
+          DAT_2000_d404 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(421,220,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_43.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_43.seg))) = (char)uVar15;
           src_43.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_43.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_43.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_43,0,0,219,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d416 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d414 = (cte_t *)pcVar45;
+          DAT_2000_d414 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(420,0,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_44.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_44.seg))) = (char)uVar15;
           src_44.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_44.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_44.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_44,0,0,279,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d426 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d424 = (cte_t *)pcVar45;
+          DAT_2000_d424 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(420,280,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_45.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_45.seg))) = (char)uVar15;
           src_45.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_45.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_45.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_45,0,0,279,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d436 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d434 = (cte_t *)pcVar45;
+          DAT_2000_d434 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar40.seg = DAT_2000_d436;
           fVar40.ofs = (uint16_t)DAT_2000_d434;
         }
         DAT_2000_d436 = fVar40.seg;
-        DAT_2000_d434 = (cte_t *)fVar40.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_d434 = (uint16_t)(fVar40.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d3e2 = fVar36.seg;
           DAT_2000_d3e0 = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d3fa = fVar36.seg;
-          DAT_2000_d3f8 = (cte_t *)fVar36.ofs;
+          DAT_2000_d3f8 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d40a = fVar36.seg;
-          DAT_2000_d408 = (cte_t *)fVar36.ofs;
+          DAT_2000_d408 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d41a = fVar36.seg;
-          DAT_2000_d418 = (cte_t *)fVar36.ofs;
+          DAT_2000_d418 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d42a = fVar36.seg;
-          DAT_2000_d428 = (cte_t *)fVar36.ofs;
+          DAT_2000_d428 = (uint16_t)(fVar36.ofs);
           fVar41 = ovr_stshAllocStub();
         }
         else {
@@ -2961,139 +2961,139 @@ code_r0x00083f6a:
           DAT_2000_d3e2 = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d3e0 = (uint16_t)uVar44;
           uVar15 = (psVar12->aptr).seg;
-          src_46.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_46.seg))) = (char)uVar15;
           src_46.ofs = (&psVar12->aptr)->ofs;
-          src_46.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_46.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_46,0,0,319,113);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d3fa = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d3f8 = (cte_t *)pcVar45;
+          DAT_2000_d3f8 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(438,0,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_47.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_47.seg))) = (char)uVar15;
           src_47.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_47.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_47.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_47,0,0,219,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d40a = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d408 = (cte_t *)pcVar45;
+          DAT_2000_d408 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(438,220,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_48.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_48.seg))) = (char)uVar15;
           src_48.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_48.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_48.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_48,0,0,219,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d41a = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d418 = (cte_t *)pcVar45;
+          DAT_2000_d418 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(439,0,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_49.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_49.seg))) = (char)uVar15;
           src_49.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_49.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_49.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_49,0,0,279,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d42a = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d428 = (cte_t *)pcVar45;
+          DAT_2000_d428 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(439,280,0);
           uVar24 = (undefined2)((ulong)psVar43 >> 0x10);
           uVar15 = (((stg_tmp_t *)psVar43)->aptr).seg;
-          src_50.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_50.seg))) = (char)uVar15;
           src_50.ofs = (&((stg_tmp_t *)psVar43)->aptr)->ofs;
-          src_50.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_50.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_50,0,0,279,143);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d43a = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d438 = (cte_t *)pcVar45;
+          DAT_2000_d438 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar41.seg = DAT_2000_d43a;
           fVar41.ofs = (uint16_t)DAT_2000_d438;
         }
         DAT_2000_d43a = fVar41.seg;
-        DAT_2000_d438 = (cte_t *)fVar41.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_d438 = (uint16_t)(fVar41.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d04a = fVar36.seg;
-          DAT_2000_d048 = (cte_t *)fVar36.ofs;
+          DAT_2000_d048 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d026 = fVar36.seg;
           DAT_2000_d024 = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d04e = fVar36.seg;
-          DAT_2000_d04c = (cte_t *)fVar36.ofs;
+          DAT_2000_d04c = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d052 = fVar36.seg;
-          DAT_2000_d050 = (cte_t *)fVar36.ofs;
+          DAT_2000_d050 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d02a = fVar36.seg;
           DAT_2000_d028 = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d056 = fVar36.seg;
-          DAT_2000_d054 = (cte_t *)fVar36.ofs;
+          DAT_2000_d054 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d05a = fVar36.seg;
-          DAT_2000_d058 = (cte_t *)fVar36.ofs;
+          DAT_2000_d058 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d02e = fVar36.seg;
           DAT_2000_d02c = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d05e = fVar36.seg;
-          DAT_2000_d05c = (cte_t *)fVar36.ofs;
+          DAT_2000_d05c = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d062 = fVar36.seg;
-          DAT_2000_d060 = (cte_t *)fVar36.ofs;
+          DAT_2000_d060 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d032 = fVar36.seg;
           DAT_2000_d030 = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d066 = fVar36.seg;
-          DAT_2000_d064 = (cte_t *)fVar36.ofs;
+          DAT_2000_d064 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d06a = fVar36.seg;
-          DAT_2000_d068 = (cte_t *)fVar36.ofs;
+          DAT_2000_d068 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d036 = fVar36.seg;
           DAT_2000_d034 = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d06e = fVar36.seg;
-          DAT_2000_d06c = (cte_t *)fVar36.ofs;
+          DAT_2000_d06c = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d072 = fVar36.seg;
-          DAT_2000_d070 = (cte_t *)fVar36.ofs;
+          DAT_2000_d070 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d03a = fVar36.seg;
           DAT_2000_d038 = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d076 = fVar36.seg;
-          DAT_2000_d074 = (cte_t *)fVar36.ofs;
+          DAT_2000_d074 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d07a = fVar36.seg;
-          DAT_2000_d078 = (cte_t *)fVar36.ofs;
+          DAT_2000_d078 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d03e = fVar36.seg;
           DAT_2000_d03c = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d07e = fVar36.seg;
-          DAT_2000_d07c = (cte_t *)fVar36.ofs;
+          DAT_2000_d07c = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d082 = fVar36.seg;
-          DAT_2000_d080 = (cte_t *)fVar36.ofs;
+          DAT_2000_d080 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d042 = fVar36.seg;
           DAT_2000_d040 = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d086 = fVar36.seg;
-          DAT_2000_d084 = (cte_t *)fVar36.ofs;
+          DAT_2000_d084 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d08a = fVar36.seg;
-          DAT_2000_d088 = (cte_t *)fVar36.ofs;
+          DAT_2000_d088 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d046 = fVar36.seg;
           DAT_2000_d044 = fVar36.ofs;
@@ -3102,19 +3102,19 @@ code_r0x00083f6a:
         else {
 LAB_81b9_2fc9:
           DAT_2000_d43a = fVar41.seg;
-          DAT_2000_d438 = (cte_t *)fVar41.ofs;
+          DAT_2000_d438 = (uint16_t)(fVar41.ofs);
           psVar43 = ovr_grabLbm(305,0,0);
           ovr_stshUniqueColorsRemap(psVar43);
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_51.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_51.seg))) = (char)uVar15;
           src_51.ofs = (&psStack_a->aptr)->ofs;
-          src_51.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_51.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_51,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d04a = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d048 = (cte_t *)pcVar45;
+          DAT_2000_d048 = (uint16_t)(pcVar45);
           uVar44 = ovr_stshWrite(psStack_a->cmap + 0x1e0,0x90);
           DAT_2000_d026 = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d024 = (uint16_t)uVar44;
@@ -3124,26 +3124,26 @@ LAB_81b9_2fc9:
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_52.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_52.seg))) = (char)uVar15;
           src_52.ofs = (&psStack_a->aptr)->ofs;
-          src_52.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_52.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_52,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d04e = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d04c = (cte_t *)pcVar45;
+          DAT_2000_d04c = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(328,0,0);
           ovr_stshUniqueColorsRemap(psVar43);
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_53.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_53.seg))) = (char)uVar15;
           src_53.ofs = (&psStack_a->aptr)->ofs;
-          src_53.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_53.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_53,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d052 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d050 = (cte_t *)pcVar45;
+          DAT_2000_d050 = (uint16_t)(pcVar45);
           uVar44 = ovr_stshWrite(psStack_a->cmap + 0x1e0,0x90);
           DAT_2000_d02a = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d028 = (uint16_t)uVar44;
@@ -3153,26 +3153,26 @@ LAB_81b9_2fc9:
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_54.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_54.seg))) = (char)uVar15;
           src_54.ofs = (&psStack_a->aptr)->ofs;
-          src_54.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_54.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_54,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d056 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d054 = (cte_t *)pcVar45;
+          DAT_2000_d054 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(331,0,0);
           ovr_stshUniqueColorsRemap(psVar43);
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_55.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_55.seg))) = (char)uVar15;
           src_55.ofs = (&psStack_a->aptr)->ofs;
-          src_55.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_55.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_55,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d05a = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d058 = (cte_t *)pcVar45;
+          DAT_2000_d058 = (uint16_t)(pcVar45);
           uVar44 = ovr_stshWrite(psStack_a->cmap + 0x1e0,0x90);
           DAT_2000_d02e = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d02c = (uint16_t)uVar44;
@@ -3182,26 +3182,26 @@ LAB_81b9_2fc9:
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_56.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_56.seg))) = (char)uVar15;
           src_56.ofs = (&psStack_a->aptr)->ofs;
-          src_56.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_56.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_56,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d05e = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d05c = (cte_t *)pcVar45;
+          DAT_2000_d05c = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(307,0,0);
           ovr_stshUniqueColorsRemap(psVar43);
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_57.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_57.seg))) = (char)uVar15;
           src_57.ofs = (&psStack_a->aptr)->ofs;
-          src_57.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_57.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_57,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d062 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d060 = (cte_t *)pcVar45;
+          DAT_2000_d060 = (uint16_t)(pcVar45);
           uVar44 = ovr_stshWrite(psStack_a->cmap + 0x1e0,0x90);
           DAT_2000_d032 = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d030 = (uint16_t)uVar44;
@@ -3211,26 +3211,26 @@ LAB_81b9_2fc9:
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_58.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_58.seg))) = (char)uVar15;
           src_58.ofs = (&psStack_a->aptr)->ofs;
-          src_58.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_58.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_58,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d066 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d064 = (cte_t *)pcVar45;
+          DAT_2000_d064 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(329,0,0);
           ovr_stshUniqueColorsRemap(psVar43);
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_59.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_59.seg))) = (char)uVar15;
           src_59.ofs = (&psStack_a->aptr)->ofs;
-          src_59.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_59.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_59,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d06a = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d068 = (cte_t *)pcVar45;
+          DAT_2000_d068 = (uint16_t)(pcVar45);
           uVar44 = ovr_stshWrite(psStack_a->cmap + 0x1e0,0x90);
           DAT_2000_d036 = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d034 = (uint16_t)uVar44;
@@ -3240,26 +3240,26 @@ LAB_81b9_2fc9:
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_60.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_60.seg))) = (char)uVar15;
           src_60.ofs = (&psStack_a->aptr)->ofs;
-          src_60.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_60.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_60,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d06e = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d06c = (cte_t *)pcVar45;
+          DAT_2000_d06c = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(332,0,0);
           ovr_stshUniqueColorsRemap(psVar43);
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_61.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_61.seg))) = (char)uVar15;
           src_61.ofs = (&psStack_a->aptr)->ofs;
-          src_61.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_61.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_61,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d072 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d070 = (cte_t *)pcVar45;
+          DAT_2000_d070 = (uint16_t)(pcVar45);
           uVar44 = ovr_stshWrite(psStack_a->cmap + 0x1e0,0x90);
           DAT_2000_d03a = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d038 = (uint16_t)uVar44;
@@ -3269,26 +3269,26 @@ LAB_81b9_2fc9:
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_62.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_62.seg))) = (char)uVar15;
           src_62.ofs = (&psStack_a->aptr)->ofs;
-          src_62.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_62.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_62,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d076 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d074 = (cte_t *)pcVar45;
+          DAT_2000_d074 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(306,0,0);
           ovr_stshUniqueColorsRemap(psVar43);
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_63.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_63.seg))) = (char)uVar15;
           src_63.ofs = (&psStack_a->aptr)->ofs;
-          src_63.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_63.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_63,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d07a = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d078 = (cte_t *)pcVar45;
+          DAT_2000_d078 = (uint16_t)(pcVar45);
           uVar44 = ovr_stshWrite(psStack_a->cmap + 0x1e0,0x90);
           DAT_2000_d03e = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d03c = (uint16_t)uVar44;
@@ -3298,26 +3298,26 @@ LAB_81b9_2fc9:
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_64.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_64.seg))) = (char)uVar15;
           src_64.ofs = (&psStack_a->aptr)->ofs;
-          src_64.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_64.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_64,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d07e = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d07c = (cte_t *)pcVar45;
+          DAT_2000_d07c = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(330,0,0);
           ovr_stshUniqueColorsRemap(psVar43);
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_65.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_65.seg))) = (char)uVar15;
           src_65.ofs = (&psStack_a->aptr)->ofs;
-          src_65.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_65.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_65,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d082 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d080 = (cte_t *)pcVar45;
+          DAT_2000_d080 = (uint16_t)(pcVar45);
           uVar44 = ovr_stshWrite(psStack_a->cmap + 0x1e0,0x90);
           DAT_2000_d042 = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d040 = (uint16_t)uVar44;
@@ -3327,26 +3327,26 @@ LAB_81b9_2fc9:
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_66.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_66.seg))) = (char)uVar15;
           src_66.ofs = (&psStack_a->aptr)->ofs;
-          src_66.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_66.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_66,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d086 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d084 = (cte_t *)pcVar45;
+          DAT_2000_d084 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(333,0,0);
           ovr_stshUniqueColorsRemap(psVar43);
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_67.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_67.seg))) = (char)uVar15;
           src_67.ofs = (&psStack_a->aptr)->ofs;
-          src_67.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_67.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_67,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d08a = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d088 = (cte_t *)pcVar45;
+          DAT_2000_d088 = (uint16_t)(pcVar45);
           uVar44 = ovr_stshWrite(psStack_a->cmap + 0x1e0,0x90);
           DAT_2000_d046 = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d044 = (uint16_t)uVar44;
@@ -3356,24 +3356,24 @@ LAB_81b9_2fc9:
           pcStack_8 = (char *)((ulong)psVar43 >> 0x10);
           psStack_a = (stg_tmp_t *)psVar43;
           uVar15 = (psStack_a->aptr).seg;
-          src_68.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_68.seg))) = (char)uVar15;
           src_68.ofs = (&psStack_a->aptr)->ofs;
-          src_68.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_68.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_68,0,0,319,59);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d08e = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d08c = (cte_t *)pcVar45;
+          DAT_2000_d08c = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar42.seg = DAT_2000_d08e;
           fVar42.ofs = (uint16_t)DAT_2000_d08c;
         }
         DAT_2000_d08e = fVar42.seg;
-        DAT_2000_d08c = (cte_t *)fVar42.ofs;
+        DAT_2000_d08c = (uint16_t)(fVar42.ofs);
         ovr_stshInitAudioAssets();
-        ovr_stshLoadAudioDrivers(param_1._0_1_);
-        ovr_stshInitSprites(param_1._0_1_);
+        ovr_stshLoadAudioDrivers((*(uint8_t *)((uint8_t *)&(param_1))));
+        ovr_stshInitSprites((*(uint8_t *)((uint8_t *)&(param_1))));
         stshInitTxtFiles();
-        if (param_1._0_1_ == false) {
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar36 = ovr_stshAllocStub();
         }
         else {
@@ -3381,7 +3381,7 @@ LAB_81b9_2fc9:
         }
         DAT_2000_d486 = fVar36.seg;
         DAT_2000_d484 = fVar36.ofs;
-        if (param_1._0_1_ == false) {
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar36 = ovr_stshAllocStub();
         }
         else {
@@ -3389,7 +3389,7 @@ LAB_81b9_2fc9:
         }
         DAT_2000_d482 = fVar36.seg;
         DAT_2000_d480 = fVar36.ofs;
-        if (param_1._0_1_ == false) {
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d45a = fVar36.seg;
           DAT_2000_d458 = fVar36.ofs;
@@ -3403,20 +3403,20 @@ LAB_81b9_2fc9:
           DAT_2000_d45a = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d458 = (uint16_t)uVar44;
           uVar15 = (psVar12->aptr).seg;
-          src_69.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_69.seg))) = (char)uVar15;
           src_69.ofs = (&psVar12->aptr)->ofs;
-          src_69.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_69.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_69,0,0,319,199);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d476 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d474 = (cte_t *)pcVar45;
+          DAT_2000_d474 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar46.seg = DAT_2000_d476;
           fVar46.ofs = (uint16_t)DAT_2000_d474;
         }
         DAT_2000_d476 = fVar46.seg;
-        DAT_2000_d474 = (cte_t *)fVar46.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_d474 = (uint16_t)(fVar46.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d43e = fVar36.seg;
           DAT_2000_d43c = fVar36.ofs;
@@ -3430,32 +3430,32 @@ LAB_81b9_2fc9:
           DAT_2000_d43e = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d43c = (uint16_t)uVar44;
           uVar15 = (psVar12->aptr).seg;
-          src_70.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_70.seg))) = (char)uVar15;
           src_70.ofs = (&psVar12->aptr)->ofs;
-          src_70.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_70.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_70,0,0,319,144);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d45e = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d45c = (cte_t *)pcVar45;
+          DAT_2000_d45c = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar47.seg = DAT_2000_d45e;
           fVar47.ofs = (uint16_t)DAT_2000_d45c;
         }
         DAT_2000_d45e = fVar47.seg;
-        DAT_2000_d45c = (cte_t *)fVar47.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_d45c = (uint16_t)(fVar47.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d442 = fVar36.seg;
           DAT_2000_d440 = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d462 = fVar36.seg;
-          DAT_2000_d460 = (cte_t *)fVar36.ofs;
+          DAT_2000_d460 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d446 = fVar36.seg;
           DAT_2000_d444 = fVar36.ofs;
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d466 = fVar36.seg;
-          DAT_2000_d464 = (cte_t *)fVar36.ofs;
+          DAT_2000_d464 = (uint16_t)(fVar36.ofs);
           fVar36 = ovr_stshAllocStub();
           DAT_2000_d44a = fVar36.seg;
           DAT_2000_d448 = fVar36.ofs;
@@ -3469,13 +3469,13 @@ LAB_81b9_2fc9:
           DAT_2000_d442 = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d440 = (uint16_t)uVar44;
           uVar15 = (psVar12->aptr).seg;
-          src_71.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_71.seg))) = (char)uVar15;
           src_71.ofs = (&psVar12->aptr)->ofs;
-          src_71.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_71.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_71,0,0,319,199);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d462 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d460 = (cte_t *)pcVar45;
+          DAT_2000_d460 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(540,0,0);
           psVar12 = (stg_tmp_t *)psVar43;
@@ -3484,13 +3484,13 @@ LAB_81b9_2fc9:
           DAT_2000_d446 = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d444 = (uint16_t)uVar44;
           uVar15 = (psVar12->aptr).seg;
-          src_72.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_72.seg))) = (char)uVar15;
           src_72.ofs = (&psVar12->aptr)->ofs;
-          src_72.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_72.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_72,0,0,319,199);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d466 = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d464 = (cte_t *)pcVar45;
+          DAT_2000_d464 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           psVar43 = ovr_grabLbm(541,0,0);
           psVar12 = (stg_tmp_t *)psVar43;
@@ -3499,20 +3499,20 @@ LAB_81b9_2fc9:
           DAT_2000_d44a = (uint16_t)(uVar44 >> 0x10);
           DAT_2000_d448 = (uint16_t)uVar44;
           uVar15 = (psVar12->aptr).seg;
-          src_73.seg._0_1_ = (char)uVar15;
+          (*(uint8_t *)((uint8_t *)&(src_73.seg))) = (char)uVar15;
           src_73.ofs = (&psVar12->aptr)->ofs;
-          src_73.seg._1_1_ = (char)(uVar15 >> 8);
+          (*(uint8_t *)((uint8_t *)&(src_73.seg) + 1)) = (char)(uVar15 >> 8);
           fVar36 = ovr_stshRleCut(src_73,0,0,319,199);
-          pcVar45 = ovr_stshStoreFile((uint8_t *)fVar36);
+          pcVar45 = ovr_stshStoreFile((uint8_t *)MK_FP(fVar36.seg, fVar36.ofs));
           DAT_2000_d46a = (uint16_t)((ulong)pcVar45 >> 0x10);
-          DAT_2000_d468 = (cte_t *)pcVar45;
+          DAT_2000_d468 = (uint16_t)(pcVar45);
           ovr_stgFreeTmp(psVar43);
           fVar48.seg = DAT_2000_d46a;
           fVar48.ofs = (uint16_t)DAT_2000_d468;
         }
         DAT_2000_d46a = fVar48.seg;
-        DAT_2000_d468 = (cte_t *)fVar48.ofs;
-        if (param_1._0_1_ == false) {
+        DAT_2000_d468 = (uint16_t)(fVar48.ofs);
+        if ((*(uint8_t *)((uint8_t *)&(param_1))) == false) {
           fVar36 = ovr_stshAllocStub();
           uVar14 = fVar36.ofs;
         }
@@ -4237,19 +4237,19 @@ void __cdecl16far OVC49_8699_1e09(void)
   if (DebugVerbose != false) {
     printf("%d \r",0x2b);
   }
-  gfx.seg._0_1_ = (char)DAT_2410_07e5;
+  (*(uint8_t *)((uint8_t *)&(gfx.seg))) = (char)DAT_2410_07e5;
   gfx.ofs = DAT_2410_07e3;
-  gfx.seg._1_1_ = (char)((uint)DAT_2410_07e5 >> 8);
-  dst.seg._0_1_ = (char)uStack_2a;
+  (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) = (char)((uint)DAT_2410_07e5 >> 8);
+  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)uStack_2a;
   dst.ofs = 0x8cc;
-  dst.seg._1_1_ = (char)((uint)uStack_2a >> 8);
+  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)uStack_2a >> 8);
   ovr_blitLoadRleGfx(gfx,dst);
-  gfx_00.seg._0_1_ = (char)DAT_2410_07e9;
+  (*(uint8_t *)((uint8_t *)&(gfx_00.seg))) = (char)DAT_2410_07e9;
   gfx_00.ofs = DAT_2410_07e7;
-  gfx_00.seg._1_1_ = (char)((uint)DAT_2410_07e9 >> 8);
-  dst_00.seg._0_1_ = (char)uStack_2a;
+  (*(uint8_t *)((uint8_t *)&(gfx_00.seg) + 1)) = (char)((uint)DAT_2410_07e9 >> 8);
+  (*(uint8_t *)((uint8_t *)&(dst_00.seg))) = (char)uStack_2a;
   dst_00.ofs = (uint16_t)((char *)"Stronghold requires 585,000 bytes.\n" + 1);
-  dst_00.seg._1_1_ = (char)((uint)uStack_2a >> 8);
+  (*(uint8_t *)((uint8_t *)&(dst_00.seg) + 1)) = (char)((uint)uStack_2a >> 8);
   ovr_blitLoadRleGfx(gfx_00,dst_00);
   GGameState = 0x2c;
   ovr_OVC23_55fe_0863((char)local_32);

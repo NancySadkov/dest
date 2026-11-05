@@ -1186,7 +1186,7 @@ extern undefined2 StshFile;
 extern uint16_t StshCount;
 extern far_t StshCtPtrCopy;
 extern far_t StshCtPtr;
-extern undefined DAT_2000_d1c0;
+extern undefined2 DAT_2000_d1c0;
 extern undefined2 DAT_2000_d1c2;
 extern undefined2 DAT_2000_d1c4;
 extern undefined2 DAT_2000_d1c6;

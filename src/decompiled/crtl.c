@@ -41,10 +41,10 @@ void startx(void)
   undefined4 uVar20;
   
   puVar11 = (undefined1 *)((int)(int *)&errno + 1);
-  DGROUP_at__at_ = (char *)"puppetmaker" + 3;
+  DGROUP_at__at_ = (uint16_t)("puppetmaker" + 3);
   pcVar3 = (code *)swi(0x21);
   uVar20 = (*pcVar3)();
-  iVar9 = _DATA._2_2_;
+  iVar9 = (*(uint16_t *)((uint8_t *)&(_DATA) + 2));
   uVar10 = (undefined2)((ulong)uVar20 >> 0x10);
   *(dosver_t *)&DosVersion = SUB42(uVar20,0);
   *(undefined2 *)&_psp = unaff_ES;
@@ -763,9 +763,9 @@ void __cdecl16far srand8(uint32_t seed)
   int i;
   
   r8s[1] = (byte)seed ^ 0x55;
-  r8s[2] = seed._1_1_ ^ 0x55;
-  r8s[3] = seed._2_1_ ^ 0x55;
-  r8s[4] = seed._3_1_ ^ 0x55;
+  r8s[2] = (*(uint8_t *)((uint8_t *)&(seed) + 1)) ^ 0x55;
+  r8s[3] = (*(uint8_t *)((uint8_t *)&(seed) + 2)) ^ 0x55;
+  r8s[4] = (*(uint8_t *)((uint8_t *)&(seed) + 3)) ^ 0x55;
   r8s[0] = 0x0;
   r8s[5] = 0x0;
   i = 200;
@@ -1209,17 +1209,17 @@ long __stdcall16far LDIV_at_(long a,long b)
   bool bVar7;
   bool bVar8;
   
-  if ((b._2_2_ == 0) && ((a._2_2_ == 0 || ((int)b == 0)))) {
+  if (((*(uint16_t *)((uint8_t *)&(b) + 2)) == 0) && (((*(uint16_t *)((uint8_t *)&(a) + 2)) == 0 || ((int)b == 0)))) {
     iVar2 = (int)((ulong)a / (b & 0xffffU));
     iVar4 = 0;
   }
   else {
     bVar8 = a < 0;
     if (bVar8) {
-      a = CONCAT22(-(uint)((int)a != 0) - a._2_2_,-(int)a);
+      a = CONCAT22(-(uint)((int)a != 0) - (*(uint16_t *)((uint8_t *)&(a) + 2)),-(int)a);
     }
     if (b < 0) {
-      b = CONCAT22(-(uint)((int)b != 0) - b._2_2_,-(int)b);
+      b = CONCAT22(-(uint)((int)b != 0) - (*(uint16_t *)((uint8_t *)&(b) + 2)),-(int)b);
       bVar8 = !bVar8;
     }
     iVar3 = 0x20;
@@ -1435,17 +1435,17 @@ long __stdcall16far LMOD_at_(long param_1,long param_2)
   int iVar3;
   
   uVar7 = 2;
-  if ((param_2._2_2_ == 0) && ((param_1._2_2_ == 0 || ((int)param_2 == 0)))) {
+  if (((*(uint16_t *)((uint8_t *)&(param_2) + 2)) == 0) && (((*(uint16_t *)((uint8_t *)&(param_1) + 2)) == 0 || ((int)param_2 == 0)))) {
     uVar2 = (uint)((ulong)param_1 % (param_2 & 0xffffU));
     uVar5 = 0;
   }
   else {
     if (param_1 < 0) {
-      param_1 = CONCAT22(-(uint)((int)param_1 != 0) - param_1._2_2_,-(int)param_1);
+      param_1 = CONCAT22(-(uint)((int)param_1 != 0) - (*(uint16_t *)((uint8_t *)&(param_1) + 2)),-(int)param_1);
       uVar7 = 0xe;
     }
     if (param_2 < 0) {
-      param_2 = CONCAT22(-(uint)((int)param_2 != 0) - param_2._2_2_,-(int)param_2);
+      param_2 = CONCAT22(-(uint)((int)param_2 != 0) - (*(uint16_t *)((uint8_t *)&(param_2) + 2)),-(int)param_2);
       uVar7 = uVar7 ^ 4;
     }
     iVar4 = 0x20;
@@ -1672,7 +1672,7 @@ far_t PADD_at_(far_t ptr_base,far_t ptr_ofs)
   far_t fVar3;
   
   uVar2 = ptr_base.seg;
-  if ((long)ptr_ofs < 0) {
+  if ((long)far_to_u32(ptr_ofs) < 0) {
     fVar3.ofs = sub1_at__at_();
     fVar3.seg = uVar2;
     return fVar3;
@@ -1681,8 +1681,8 @@ far_t PADD_at_(far_t ptr_base,far_t ptr_ofs)
   if (CARRY2(ptr_base.ofs,ptr_ofs.ofs)) {
     uVar2 = uVar2 + 0x1000;
   }
-  return (far_t)(CONCAT22(CONCAT11((char)(uVar2 >> 8) + (char)ptr_ofs.seg * '\x10',(char)uVar2) +
-                          (uVar1 >> 4),uVar1) & 0xffff000f);
+  return far_from_u32((uint32_t)(CONCAT22(CONCAT11((char)(uVar2 >> 8) + (char)ptr_ofs.seg * '\x10',(char)uVar2) +
+                          (uVar1 >> 4),uVar1) & 0xffff000f));
 }
 
 
@@ -1954,8 +1954,8 @@ uint __cdecl16near N_PCMP_at_(void)
 void __cdecl16far _srand(uint16_t s)
 
 {
-  rand_Seed._2_2_ = 0;
-  rand_Seed._0_2_ = s;
+  (*(uint16_t *)((uint8_t *)&(rand_Seed) + 2)) = 0;
+  (*(uint16_t *)((uint8_t *)&(rand_Seed))) = s;
   return;
 }
 
@@ -2714,8 +2714,8 @@ LAB_1000_11ed:
 undefined4 __VPTR(int param_1,int param_2)
 
 {
-  return CONCAT22(_video.displayptr._1_2_,
-                  (_video._11_2_ + (uint)_video.screenwidth * (param_1 + -1) + param_2 + -1) * 2);
+  return CONCAT22((*(uint16_t *)((uint8_t *)&(_video.displayptr) + 1)),
+                  ((*(uint16_t *)((uint8_t *)&(_video) + 11)) + (uint)_video.screenwidth * (param_1 + -1) + param_2 + -1) * 2);
 }
 
 
@@ -2850,8 +2850,8 @@ undefined2 _crtinit_system(char *param_1,char *param_2)
     if (*param_1 == '\0') {
       return 1;
     }
-    param_1 = (char *)CONCAT22(param_1._2_2_,(char *)param_1 + 1);
-    param_2 = (char *)CONCAT22(param_2._2_2_,(char *)param_2 + 1);
+    param_1 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(param_1) + 2)),(char *)param_1 + 1);
+    param_2 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(param_2) + 2)),(char *)param_2 + 1);
   } while (*pcVar1 == *pcVar2);
   return 0;
 }
@@ -3001,12 +3001,12 @@ void __cdecl16near __crtinit(uint8_t param_1)
   _video.snow = 0x0;
 LAB_1000_159a:
   if (_video.currmode == 0x7) {
-    _video.displayptr._1_2_ = 0xb000;
+    (*(uint16_t *)((uint8_t *)&(_video.displayptr) + 1)) = 0xb000;
   }
   else {
-    _video.displayptr._1_2_ = 0xb800;
+    (*(uint16_t *)((uint8_t *)&(_video.displayptr) + 1)) = 0xb800;
   }
-  _video._11_2_ = 0;
+  (*(uint16_t *)((uint8_t *)&(_video) + 11)) = 0;
   _video.windowy1 = 0x0;
   _video.windowx1 = 0x0;
   _video.windowx2 = _video.screenwidth + 0xff;
@@ -3146,14 +3146,14 @@ void __cdecl16far malloc_JoinFreeBlocks(void)
   
   *(int *)0x0 = *(int *)0x0 + (int)_DATA;
   *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = unaff_ES;
-  uRam0006f426._0_1_ = 'r';
-  uRam0006f426._1_1_ = 'l';
+  (*(uint8_t *)((uint8_t *)&(uRam0006f426))) = 'r';
+  (*(uint8_t *)((uint8_t *)&(uRam0006f426) + 1)) = 'l';
                     /* WARNING: Read-only address (ram,0x0006f426) is written */
-  uRam0006c724._0_1_ = 'B';
-  uRam0006c724._1_1_ = 'o';
+  (*(uint8_t *)((uint8_t *)&(uRam0006c724))) = 'B';
+  (*(uint8_t *)((uint8_t *)&(uRam0006c724) + 1)) = 'o';
                     /* WARNING: Read-only address (ram,0x0006c724) is written */
-  __farmalloc_rover._0_1_ = 'B';
-  __farmalloc_rover._1_1_ = 'o';
+  (*(uint8_t *)((uint8_t *)&(__farmalloc_rover))) = 'B';
+  (*(uint8_t *)((uint8_t *)&(__farmalloc_rover) + 1)) = 'o';
   return;
 }
 
@@ -3166,14 +3166,14 @@ void __cdecl16far malloc_JoinFreeBlocks(void)
 void __cdecl16near malloc_PullFreeBlock(void)
 
 {
-  uRam0006f426._0_1_ = 'r';
-  uRam0006f426._1_1_ = 'l';
+  (*(uint8_t *)((uint8_t *)&(uRam0006f426))) = 'r';
+  (*(uint8_t *)((uint8_t *)&(uRam0006f426) + 1)) = 'l';
                     /* WARNING: Read-only address (ram,0x0006f426) is written */
-  uRam0006c724._0_1_ = 'B';
-  uRam0006c724._1_1_ = 'o';
+  (*(uint8_t *)((uint8_t *)&(uRam0006c724))) = 'B';
+  (*(uint8_t *)((uint8_t *)&(uRam0006c724) + 1)) = 'o';
                     /* WARNING: Read-only address (ram,0x0006c724) is written */
-  __farmalloc_rover._0_1_ = 'B';
-  __farmalloc_rover._1_1_ = 'o';
+  (*(uint8_t *)((uint8_t *)&(__farmalloc_rover))) = 'B';
+  (*(uint8_t *)((uint8_t *)&(__farmalloc_rover) + 1)) = 'o';
   return;
 }
 
@@ -3186,7 +3186,7 @@ void __cdecl16near malloc_InsertFreeBlock(void)
 {
   undefined2 uVar1;
   
-  __C0_ASM_CopyRight._0_2_ = __farmalloc_rover;
+  (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight))) = __farmalloc_rover;
   if (__farmalloc_rover != (char *)0x0) {
     uVar1 = *(undefined2 *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 2);
     *(char **)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 2) = (char *)"puppetmaker" + 3
@@ -3198,11 +3198,11 @@ void __cdecl16near malloc_InsertFreeBlock(void)
     __C0_ASM_CopyRight[3] = SUB21(uVar1,1);
     return;
   }
-  __farmalloc_rover = (char *)"puppetmaker" + 3;
+  __farmalloc_rover = (uint16_t)("puppetmaker" + 3);
                     /* WARNING: Read-only address (ram,0x00024104) is written */
-  __C0_ASM_CopyRight._0_2_ = (int)(char *)"puppetmaker" + 3;
+  (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight))) = (int)(char *)"puppetmaker" + 3;
                     /* WARNING: Read-only address (ram,0x00024106) is written */
-  __C0_ASM_CopyRight._2_2_ = (int)(char *)"puppetmaker" + 3;
+  (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 2)) = (int)(char *)"puppetmaker" + 3;
   return;
 }
 
@@ -3213,7 +3213,7 @@ void __cdecl16near malloc_InsertFreeBlock(void)
 void __cdecl16far farfree(undefined2 param_1,int param_2)
 
 {
-  __farmalloc_data_seg = (char *)"puppetmaker" + 3;
+  __farmalloc_data_seg = (uint16_t)("puppetmaker" + 3);
   if (param_2 != 0) {
     if (param_2 == malloc__last) {
       malloc_FreeLastBlock();
@@ -3296,7 +3296,7 @@ undefined2 __cdecl16near malloc_AllocatePartialBlock(void)
   int in_DX;
   int iVar1;
   
-  _DATA._0_2_ = (int)_DATA - in_AX;
+  (*(uint16_t *)((uint8_t *)&(_DATA))) = (int)_DATA - in_AX;
   iVar1 = in_DX + (int)_DATA;
   *(int *)0x0 = in_AX;
   *(int *)((int)(undefined4 *)&_DATA + 2) = in_DX;
@@ -3318,7 +3318,7 @@ undefined2 __cdecl16far malloc(code *param_1)
   undefined2 uVar3;
   int iVar4;
   
-  __farmalloc_data_seg = (char *)"puppetmaker" + 3;
+  __farmalloc_data_seg = (uint16_t)("puppetmaker" + 3);
   uVar3 = 0;
   if (param_1 != (code *)0x0) {
     uVar2 = CONCAT11((byte)((uint)(param_1 + 0x13) >> 0xc) | ((code *)init_3381_08dc < param_1) << 4
@@ -3365,12 +3365,12 @@ far_t __cdecl16far farmalloc(uint32_t nbytes)
   int iVar6;
   uint16_t extraout_DX;
   
-  __farmalloc_data_seg = (char *)"puppetmaker" + 3;
+  __farmalloc_data_seg = (uint16_t)("puppetmaker" + 3);
   fVar3.ofs = 0;
   fVar3.seg = 0;
   if (nbytes != 0) {
     uVar2 = nbytes + 0x13;
-    if ((CARRY2(nbytes._2_2_,(uint)((code *)init_3381_08dc < (code *)nbytes))) ||
+    if ((CARRY2((*(uint16_t *)((uint8_t *)&(nbytes) + 2)),(uint)((code *)init_3381_08dc < (code *)nbytes))) ||
        ((uVar2 & 0xfff00000) != 0)) {
       fVar3.ofs = 0;
       fVar3.seg = 0;
@@ -3379,7 +3379,7 @@ far_t __cdecl16far farmalloc(uint32_t nbytes)
       uVar5 = CONCAT11((byte)(uVar2 >> 8) >> 4 | (char)(uVar2 >> 0x10) * '\x10',
                        (char)((uint)uVar2 >> 4));
       if (__farmalloc_first == 0) {
-        fVar3 = (far_t)malloc_CreateHeap();
+        fVar3 = far_from_u32((uint32_t)(malloc_CreateHeap()));
       }
       else {
         iVar6 = __farmalloc_rover;
@@ -3394,14 +3394,14 @@ far_t __cdecl16far farmalloc(uint32_t nbytes)
                 fVar4.ofs = 4;
                 return fVar4;
               }
-              fVar3 = (far_t)malloc_AllocatePartialBlock();
+              fVar3 = far_from_u32((uint32_t)(malloc_AllocatePartialBlock()));
               return fVar3;
             }
             piVar1 = (int *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 2);
             iVar6 = *piVar1;
           } while (*piVar1 != __farmalloc_rover);
         }
-        fVar3 = (far_t)malloc_ExtendHeap();
+        fVar3 = far_from_u32((uint32_t)(malloc_ExtendHeap()));
       }
     }
   }
@@ -3434,7 +3434,7 @@ far_t __cdecl16near malloc_ExpandBlock(void)
   far_t fVar16;
   
   iVar10 = in_BX;
-  fVar16 = farmalloc(CONCAT22(malloc_save_hi,malloc_save_lo));
+  fVar16 = far_from_u32((uint32_t)farmalloc(CONCAT22(malloc_save_hi,malloc_save_lo)));
   if (fVar16.seg == 0) {
     return fVar16;
   }
@@ -3521,11 +3521,11 @@ uint16_t __cdecl16far _realloc(undefined2 param_1,int param_2,code *param_3)
   uint16_t uVar2;
   far_t fVar3;
   
-  __farmalloc_data_seg = (char *)"puppetmaker" + 3;
+  __farmalloc_data_seg = (uint16_t)("puppetmaker" + 3);
   malloc_save_hi = 0;
   malloc_save_lo = param_3;
   if (param_2 == 0) {
-    fVar3 = farmalloc(ZEXT24(param_3));
+    fVar3 = far_from_u32((uint32_t)farmalloc(ZEXT24(param_3)));
     uVar2 = fVar3.ofs;
   }
   else if (param_3 == (code *)0x0) {
@@ -3560,20 +3560,20 @@ uint8_t __cdecl16far farrealloc(long oldblock,long nbytes)
   uint uVar3;
   far_t fVar4;
   
-  __farmalloc_data_seg = (char *)"puppetmaker" + 3;
-  malloc_save_hi = nbytes._2_2_;
-  malloc_save_lo = (code *)nbytes;
-  if (oldblock._2_2_ == 0) {
-    fVar4 = farmalloc(nbytes);
+  __farmalloc_data_seg = (uint16_t)("puppetmaker" + 3);
+  malloc_save_hi = (*(uint16_t *)((uint8_t *)&(nbytes) + 2));
+  malloc_save_lo = (uint16_t)(nbytes);
+  if ((*(uint16_t *)((uint8_t *)&(oldblock) + 2)) == 0) {
+    fVar4 = far_from_u32((uint32_t)farmalloc(nbytes));
     uVar2 = (uint8_t)fVar4.ofs;
   }
   else {
     if (nbytes == 0) {
-      farfree(0,oldblock._2_2_);
+      farfree(0,(*(uint16_t *)((uint8_t *)&(oldblock) + 2)));
     }
     else {
       uVar1 = nbytes + 0x13;
-      if ((!CARRY2(nbytes._2_2_,(uint)((code *)init_3381_08dc < (code *)nbytes))) &&
+      if ((!CARRY2((*(uint16_t *)((uint8_t *)&(nbytes) + 2)),(uint)((code *)init_3381_08dc < (code *)nbytes))) &&
          ((uVar1 & 0xfff00000) == 0)) {
         uVar3 = CONCAT11((byte)(uVar1 >> 8) >> 4 | (char)(uVar1 >> 0x10) * '\x10',
                          (char)((uint)uVar1 >> 4));
@@ -3582,7 +3582,7 @@ uint8_t __cdecl16far farrealloc(long oldblock,long nbytes)
           return uVar2;
         }
         if (*(uint *)0x0 == uVar3) {
-          __farmalloc_data_seg = (char *)((int)(char *)"puppetmaker" + 3);
+          __farmalloc_data_seg = (uint16_t)(((int)(char *)"puppetmaker" + 3));
           return 0x4;
         }
         uVar2 = malloc_ShrinkBlock();
@@ -3843,13 +3843,13 @@ void bios(int param_1,undefined2 *param_2,undefined2 *param_3)
   undefined2 local_4;
   
   local_8 = _wherexy();
-  bVar3 = param_3._2_2_ == _video.displayptr._1_2_;
+  bVar3 = (*(uint16_t *)((uint8_t *)&(param_3) + 2)) == (*(uint16_t *)((uint8_t *)&(_video.displayptr) + 1));
   if (bVar3) {
-    local_4 = screenpos((undefined2 *)param_3,param_3._2_2_);
+    local_4 = screenpos((undefined2 *)param_3,(*(uint16_t *)((uint8_t *)&(param_3) + 2)));
   }
-  bVar4 = param_2._2_2_ == _video.displayptr._1_2_;
+  bVar4 = (*(uint16_t *)((uint8_t *)&(param_2) + 2)) == (*(uint16_t *)((uint8_t *)&(_video.displayptr) + 1));
   if (bVar4) {
-    local_6 = screenpos((undefined2 *)param_2,param_2._2_2_);
+    local_6 = screenpos((undefined2 *)param_2,(*(uint16_t *)((uint8_t *)&(param_2) + 2)));
   }
   while (param_1 != 0) {
     if (bVar4) {
@@ -3859,7 +3859,7 @@ void bios(int param_1,undefined2 *param_2,undefined2 *param_3)
     }
     else {
       uVar2 = *param_2;
-      param_2 = (undefined2 *)CONCAT22(param_2._2_2_,(undefined2 *)param_2 + 1);
+      param_2 = (undefined2 *)CONCAT22((*(uint16_t *)((uint8_t *)&(param_2) + 2)),(undefined2 *)param_2 + 1);
     }
     if (bVar3) {
       moveto(&local_8,unaff_SS,&local_4,unaff_SS);
@@ -3868,7 +3868,7 @@ void bios(int param_1,undefined2 *param_2,undefined2 *param_3)
     }
     else {
       *param_3 = uVar2;
-      param_3 = (undefined2 *)CONCAT22(param_3._2_2_,(undefined2 *)param_3 + 1);
+      param_3 = (undefined2 *)CONCAT22((*(uint16_t *)((uint8_t *)&(param_3) + 2)),(undefined2 *)param_3 + 1);
       param_1 = param_1 + -1;
     }
   }
@@ -3928,7 +3928,7 @@ void _zapline(int param_1,int param_2,undefined2 *param_3)
   uVar1 = CONCAT11(_video.attribute,0x20);
   for (; param_2 <= param_1; param_2 = param_2 + 1) {
     *param_3 = uVar1;
-    param_3 = (undefined2 *)CONCAT22(param_3._2_2_,(undefined2 *)param_3 + 1);
+    param_3 = (undefined2 *)CONCAT22((*(uint16_t *)((uint8_t *)&(param_3) + 2)),(undefined2 *)param_3 + 1);
   }
   return;
 }
@@ -4008,7 +4008,7 @@ void __cdecl16far __setargv(uint param_1)
   
   __setargv_SavedES = uStack0002;
   __setargv_SavedReturn2 = param_1;
-  __setargv_SavedDS = (char *)"puppetmaker" + 3;
+  __setargv_SavedDS = (uint16_t)("puppetmaker" + 3);
   pcVar9 = (char *)(_env + 2);
   uVar5 = 1;
   uVar11 = _psp;
@@ -4362,7 +4362,7 @@ undefined2 __cdecl16far fflush(int *param_1)
   int iVar2;
   int iVar3;
   
-  if ((int *)param_1 == (int *)0x0 && param_1._2_2_ == 0) {
+  if ((int *)param_1 == (int *)0x0 && (*(uint16_t *)((uint8_t *)&(param_1) + 2)) == 0) {
     flushall();
   }
   else {
@@ -4383,10 +4383,10 @@ undefined2 __cdecl16far fflush(int *param_1)
       }
     }
     else if (((((int *)param_1)[1] & 8U) != 0) ||
-            ((((int *)param_1)[7] == param_1._2_2_ &&
+            ((((int *)param_1)[7] == (*(uint16_t *)((uint8_t *)&(param_1) + 2)) &&
              (((int *)param_1)[6] == (int)(int *)param_1 + 5)))) {
       *param_1 = 0;
-      if ((((int *)param_1)[7] == param_1._2_2_) && (((int *)param_1)[6] == (int)(int *)param_1 + 5)
+      if ((((int *)param_1)[7] == (*(uint16_t *)((uint8_t *)&(param_1) + 2))) && (((int *)param_1)[6] == (int)(int *)param_1 + 5)
          ) {
         iVar3 = ((int *)param_1)[4];
         ((int *)param_1)[7] = ((int *)param_1)[5];
@@ -4491,7 +4491,7 @@ int fseek_Displacement(uint *param_1)
     iVar3 = iVar2;
     if ((int)*param_1 < 0) {
       while (iVar3 = iVar2 + -1, iVar2 != 0) {
-        uStack_6 = (char *)CONCAT22(uStack_6._2_2_,(char *)uStack_6 + -1);
+        uStack_6 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(char *)uStack_6 + -1);
         iVar2 = iVar3;
         if (*uStack_6 == '\n') {
           iVar7 = iVar7 + 1;
@@ -4500,7 +4500,7 @@ int fseek_Displacement(uint *param_1)
     }
     else {
       while (pcVar1 = uStack_6, iVar4 = iVar3 + -1, iVar7 = iVar2, iVar3 != 0) {
-        uStack_6 = (char *)CONCAT22(uStack_6._2_2_,(char *)uStack_6 + 1);
+        uStack_6 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(char *)uStack_6 + 1);
         iVar3 = iVar4;
         if (*pcVar1 == '\n') {
           iVar2 = iVar2 + 1;
@@ -4834,7 +4834,7 @@ void __cdecl16far _fputc(char param_1,int *param_2)
 
 {
   *param_2 = *param_2 + -1;
-  fputc((int)param_1,(int *)param_2,param_2._2_2_);
+  fputc((int)param_1,(int *)param_2,(*(uint16_t *)((uint8_t *)&(param_2) + 2)));
   return;
 }
 
@@ -4950,12 +4950,12 @@ uint __fputn(int *param_1,uint param_2,byte *param_3)
             *pbVar2 = bVar1;
             uVar5 = (uint)bVar1;
           }
-          param_3 = (byte *)CONCAT22(param_3._2_2_,(byte *)param_3 + 1);
+          param_3 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(param_3) + 2)),(byte *)param_3 + 1);
           uVar6 = uVar6 - 1;
         } while (uVar5 != 0xffff);
         return 0;
       }
-      uVar6 = __write((int)(char)piVar7[2],(byte *)param_3,param_3._2_2_,param_2);
+      uVar6 = __write((int)(char)piVar7[2],(byte *)param_3,(*(uint16_t *)((uint8_t *)&(param_3) + 2)),param_2);
     }
     else if (piVar7[3] == 0) {
       if ((((uint16_t *)_openfd)[(char)piVar7[2]] & 0x800) != 0) {
@@ -4999,7 +4999,7 @@ uint __fputn(int *param_1,uint param_2,byte *param_3)
       if (uVar6 == 0) {
         return param_2;
       }
-      param_3 = (byte *)CONCAT22(param_3._2_2_,(byte *)param_3 + 1);
+      param_3 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(param_3) + 2)),(byte *)param_3 + 1);
       iVar4 = fputc((int)(char)*pbVar3,piVar7,uVar8);
       uVar6 = uVar6 - 1;
     } while (iVar4 != -1);
@@ -5462,7 +5462,7 @@ uint16_t __cdecl16far __write(uint param_1,char *param_2,undefined2 param_3,uint
               goto LAB_1000_2f99;
             }
             uStack_8 = uStack_8 - 1;
-            uStack_e = (char *)CONCAT22(uStack_e._2_2_,(char *)uStack_e + 1);
+            uStack_e = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_e) + 2)),(char *)uStack_e + 1);
             cStack_9 = *pcVar3;
             if (cStack_9 == '\n') {
               *_pcStack_6 = '\r';

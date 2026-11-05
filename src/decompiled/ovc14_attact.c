@@ -93,8 +93,8 @@ uint __cdecl16far attact_3f0b_00d8(int param_1,int param_2)
     uVar1 = in_AX & 0xff00;
   }
   else {
-    uVar5 = (undefined2)((ulong)_DAT_2000_cb05 >> 0x10);
-    iVar3 = (int)_DAT_2000_cb05;
+    uVar5 = (undefined2)((ulong)DAT_2000_cb05 >> 0x10);
+    iVar3 = (int)DAT_2000_cb05;
     local_a[0] = (int)*(char *)(iVar3 + param_2 * 0x94 + param_1);
     local_a[1] = (int)*(char *)(iVar3 + param_2 * 0x94 + param_1 + 1);
     local_a[2] = (int)*(char *)(param_2 * 0x94 + iVar3 + param_1 + 0x94);
@@ -400,12 +400,12 @@ ulong __cdecl16far attact_3f0b_082f(ulong param_1)
   uVar1 = *(uint *)BDA_DailyTimeCounter;
   if (CONCAT22(iVar3,uVar1) < param_1) {
     iVar2 = (uVar1 + 0xb0) - (uint)param_1;
-    iVar3 = ((iVar3 + 0x18 + (uint)(0xff4f < uVar1)) - param_1._2_2_) -
+    iVar3 = ((iVar3 + 0x18 + (uint)(0xff4f < uVar1)) - (*(uint16_t *)((uint8_t *)&(param_1) + 2))) -
             (uint)(uVar1 + 0xb0 < (uint)param_1);
   }
   else {
     iVar2 = uVar1 - (uint)param_1;
-    iVar3 = (iVar3 - param_1._2_2_) - (uint)(uVar1 < (uint)param_1);
+    iVar3 = (iVar3 - (*(uint16_t *)((uint8_t *)&(param_1) + 2))) - (uint)(uVar1 < (uint)param_1);
   }
   return CONCAT22(iVar3,iVar2);
 }
@@ -494,7 +494,7 @@ void __cdecl16far attact_3f0b_0941(undefined2 param_1,int param_2,char param_3,u
           *(undefined1 *)(uVar3 * 0x13 + (uint)bStack_3 + 0xe) = (undefined1)uStack_8;
           iVar2 = ovr_OVC23_55fe_3450(GfxRndSeed);
           if ((iVar2 == iVar1) && (GfxRndSeed2 == param_2)) {
-            if ((int)param_4 == 0 && param_4._2_2_ == 0) {
+            if ((int)param_4 == 0 && (*(uint16_t *)((uint8_t *)&(param_4) + 2)) == 0) {
               ovr_OVC41_6a8f_1be0(bStack_3);
             }
             else {
@@ -561,7 +561,7 @@ void __stdcall16far attact_3f0b_0c2a(void)
   uint uVar3;
   uint16_t uVar4;
   
-  ovr_driver_2d63_0a67((undefined2)DAT_2000_cb09,DAT_2000_cb09._2_2_,0,0,0x93,0x3b,0xcfff);
+  ovr_driver_2d63_0a67((undefined2)DAT_2000_cb09,(*(uint16_t *)((uint8_t *)&(DAT_2000_cb09) + 2)),0,0,0x93,0x3b,0xcfff);
   for (uVar3 = 0; uVar3 < EntityCount; uVar3 = uVar3 + 1) {
     uVar4 = Entities.seg;
     uVar2 = Entities.ofs;
@@ -870,8 +870,8 @@ void __cdecl16far attact_3f0b_18fe(int param_1,int param_2)
         pcVar2 = (char *)func_0x0004f501();
         DAT_2000_d114 = pcVar2;
         if (pcVar2 < pcStack_6) {
-          pcStack_6._0_1_ = SUB21(pcVar2,0);
-          *(undefined1 *)(param_1 + -0x6f7e) = pcStack_6._0_1_;
+          (*(uint8_t *)((uint8_t *)&(pcStack_6))) = SUB21(pcVar2,0);
+          *(undefined1 *)(param_1 + -0x6f7e) = (*(uint8_t *)((uint8_t *)&(pcStack_6)));
           pcStack_6 = pcVar2;
         }
         cStack_3 = *(char *)((int)*(undefined4 *)((uint)bStack_4 << 2) + 0x2f);
@@ -1340,8 +1340,8 @@ void __cdecl16far attact_3f0b_251d(void)
     bVar1 = 0xfffe < DAT_2000_d169;
     DAT_2000_d169 = DAT_2000_d169 + 1;
     DAT_2000_d16b = DAT_2000_d16b + (uint)bVar1;
-    GDailyTimeCounter._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    GDailyTimeCounter._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
+    (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+    (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter))) = *(undefined2 *)BDA_DailyTimeCounter;
   }
   return;
 }
@@ -1497,7 +1497,7 @@ void __cdecl16far attact_3f0b_2997(void)
   iVar1 = (int)(((long)(int)uVar2 * 0xc & 0xffffU) / 0xf) * 4;
   gfx.seg = *(uint16_t *)((undefined *)&DAT_2000_d135 + iVar1);
   gfx.ofs = *(uint16_t *)((undefined *)&DAT_2000_d133 + iVar1);
-  ovr_blitLoadRleGfx(gfx,(far_t)0xa000c510);
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c510)));
   ovr_OVC13_3d16_0000();
   return;
 }
@@ -1557,10 +1557,10 @@ void __cdecl16far attact_3f0b_2a09(void)
           }
           gfx.seg = DAT_2000_d119;
           gfx.ofs = DAT_2000_d117;
-          ovr_blitLoadRleGfx(gfx,(far_t)0xa000c510);
+          ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c510)));
           gfx_00.seg = DAT_2000_caf3;
           gfx_00.ofs = DAT_2000_caf1;
-          ovr_blitLoadRleGfx(gfx_00,(far_t)0xa000c51d);
+          ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa000c51d)));
           if (cStack_17 != '\0') {
             ovr_miceBlitRect((brect_t *)CONCAT22(unaff_SS,&local_16));
           }

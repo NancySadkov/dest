@@ -117,7 +117,7 @@ code_r0x00061e64:
   piVar3[0x2c] = 0;
   piVar3[0x2b] = 100;
   *(undefined1 *)((int)piVar3 + 0x89) = 0xff;
-  ovr_OVC22_5087_056e(CONCAT11((char)((uint)(byte)param_1 * 0x95 >> 8),piStack_8._0_1_));
+  ovr_OVC22_5087_056e(CONCAT11((char)((uint)(byte)param_1 * 0x95 >> 8),(*(uint8_t *)((uint8_t *)&(piStack_8)))));
   return (int *)((uint)piStack_8 & 0xff);
 }
 
@@ -190,7 +190,7 @@ OVC43_6fbe_01a9(uint16_t param_1,undefined2 param_2,undefined2 param_3,byte para
   }
   pvVar5 = ovr_stshAlloc(0xfa0f);
   DAT_2000_d0fb = (uint16_t)((ulong)pvVar5 >> 0x10);
-  DAT_2000_d0f9 = (void *)pvVar5;
+  DAT_2000_d0f9 = (uint16_t)(pvVar5);
   OVC43_6fbe_013a(param_2,param_3,param_1,DAT_2000_d0f9);
   ovr_init2_3338_0401();
   uStack_4 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);

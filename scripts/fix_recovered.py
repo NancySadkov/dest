@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 """Post-process the Ghidra export in src/decompiled.
 
-- Rewrites namespace-qualified function names such as
-  ``switchD_4000:6835::caseD_0`` into valid C identifiers.
-- Generates ``st_artifacts.h`` declaring Ghidra's RAM/register pseudo-variables
-  (``uRam000100f8``, ``in_AX``, ``extraout_DH``, ``stack0xfff0``, ...).
-- Adds the small compatibility aliases used by the recovered code.
+Run this once after a fresh ExportRecovered/ExportData export.  It rewrites
+Ghidra decompiler artifacts into constructs Turbo C++ 3.0 accepts.  It is not
+idempotent: re-running it on an already-post-processed tree can re-wrap casts.
 """
 import os
 import re
@@ -16,7 +14,239 @@ OUT = os.path.join(ROOT, "src", "decompiled")
 
 NS_RE = re.compile(r"switchD_[0-9a-fA-F]+:[0-9a-fA-F]+::(caseD_[0-9]+)")
 
+OVERLAY_RE = re.compile(
+    r"((?:[A-Za-z_]\w*(?:\s*\[[^\]]*\])?)(?:\s*(?:\.|->)\s*[A-Za-z_]\w*(?:\s*\[[^\]]*\])?)*)"
+    r"\._(\d+)_(\d+)_")
+
+def overlay_repl(m):
+    base, off, size = m.group(1), int(m.group(2)), int(m.group(3))
+    typ = {1: "uint8_t", 2: "uint16_t", 4: "uint32_t"}.get(size)
+    if typ is None:
+        typ = "uint32_t"
+    if off:
+        return "(*(%s *)((uint8_t *)&(%s) + %d))" % (typ, base, off)
+    return "(*(%s *)((uint8_t *)&(%s)))" % (typ, base)
+
+def rewrite_overlays():
+    changed = 0
+    total = 0
+    for name in os.listdir(OUT):
+        if not name.endswith(".c"):
+            continue
+        path = os.path.join(OUT, name)
+        with open(path, "r", encoding="utf-8", errors="replace") as f:
+            s = f.read()
+        new, n = OVERLAY_RE.subn(overlay_repl, s)
+        if n:
+            with open(path, "w", encoding="utf-8", errors="replace") as f:
+                f.write(new)
+            changed += 1
+            total += n
+    return changed, total
+
+def nearest_is_far(s, pos, var):
+    """True if the nearest declaration of var before pos is far_t."""
+    far_pat = re.compile(r"\bfar_t\s+" + re.escape(var) + r"\b")
+    other_pat = re.compile(
+        r"(?m)^\s*(?:void|uint32_t|uint16_t|uint8_t|uint|int|long|undefined4|"
+        r"undefined2|undefined1|undefined|char|byte|bool|DW|stg_tmp_t|far_t)\b"
+        r"[^;\n]*\b" + re.escape(var) + r"\b")
+    far = None
+    for m in far_pat.finditer(s, 0, pos):
+        far = m
+    other = None
+    for m in other_pat.finditer(s, 0, pos):
+        other = m
+    if far is None:
+        return False
+    return other is None or far.start() >= other.start()
+
+def rewrite_far_casts():
+    total = 0
+    for name in os.listdir(OUT):
+        if not name.endswith(".c"):
+            continue
+        path = os.path.join(OUT, name)
+        s = open(path, "r", encoding="utf-8", errors="replace").read()
+        far_vars = set(re.findall(r"\bfar_t\s+([A-Za-z_]\w*)", s))
+        out = []
+        i = 0
+        n = 0
+        while True:
+            j = s.find("(far_t)", i)
+            if j < 0:
+                out.append(s[i:])
+                break
+            out.append(s[i:j])
+            k = j + 7
+            while k < len(s) and s[k].isspace():
+                k += 1
+            if k < len(s) and s[k] == "(":
+                depth = 0
+                e = k
+                while e < len(s):
+                    if s[e] == "(":
+                        depth += 1
+                    elif s[e] == ")":
+                        depth -= 1
+                        if depth == 0:
+                            e += 1
+                            break
+                    e += 1
+                expr = s[k:e]
+                out.append("far_from_u32((uint32_t)%s)" % expr)
+                i = e
+                n += 1
+                continue
+            m = re.match(r"[A-Za-z_]\w*", s[k:])
+            if not m:
+                m2 = re.match(r"[^;,)\s]+", s[k:])
+                if m2:
+                    expr = m2.group(0)
+                    out.append("far_from_u32((uint32_t)(%s))" % expr)
+                    i = k + len(expr)
+                    n += 1
+                    continue
+                out.append("(far_t)")
+                i = j + 7
+                continue
+            root = m.group(0)
+            e = k + len(root)
+            while e < len(s):
+                if s[e] == "[":
+                    depth = 0
+                    while e < len(s):
+                        if s[e] == "[":
+                            depth += 1
+                        elif s[e] == "]":
+                            depth -= 1
+                            if depth == 0:
+                                e += 1
+                                break
+                        e += 1
+                    continue
+                if s[e] == "(":
+                    depth = 0
+                    while e < len(s):
+                        if s[e] == "(":
+                            depth += 1
+                        elif s[e] == ")":
+                            depth -= 1
+                            if depth == 0:
+                                e += 1
+                                break
+                        e += 1
+                    continue
+                mm = re.match(r"\s*(\.|->)\s*[A-Za-z_]\w*", s[e:])
+                if mm:
+                    e += mm.end()
+                    continue
+                break
+            expr = s[k:e]
+            if root in far_vars and not re.match(r"\s*\(", s[k+len(root):]) and nearest_is_far(s, j, root):
+                out.append(expr)
+            else:
+                out.append("far_from_u32((uint32_t)(%s))" % expr)
+            i = e
+            n += 1
+        if True:
+            joined = "".join(out)
+            cast_re = re.compile(
+                r"\((ulong|uint32_t|long)\)\s*([A-Za-z_]\w*)"
+                r"(?:\s*\[[^\]]*\])?(?!\s*(?:\.|->))")
+            def cast_repl(m):
+                typ, var = m.group(1), m.group(2)
+                if not nearest_is_far(joined, m.start(), var):
+                    return m.group(0)
+                inner = "far_to_u32(%s)" % var
+                return inner if typ != "long" else "(long)" + inner
+            joined = cast_re.sub(cast_repl, joined)
+            ptr_re = re.compile(r"\(([A-Za-z_]\w*)\s*\*\)\s*([A-Za-z_]\w*)\b(?!\s*\.)")
+            def ptr_repl(m):
+                typ, var = m.group(1), m.group(2)
+                if nearest_is_far(joined, m.start(), var):
+                    return "(%s *)MK_FP(%s.seg, %s.ofs)" % (typ, var, var)
+                return m.group(0)
+            joined = ptr_re.sub(ptr_repl, joined)
+            # far_t compared against a zero far pointer
+            joined = re.sub(r"\b([A-Za-z_]\w*)\s*(==|!=)\s*far_from_u32\(\(uint32_t\)\(0x0\)\)",
+                            lambda m: "far_to_u32(%s) %s 0" % (m.group(1), m.group(2))
+                            if nearest_is_far(joined, m.start(), m.group(1)) else m.group(0),
+                            joined)
+            # far_t == far_t / far_t != far_t
+            def cmp_repl(m):
+                a, op, b = m.group(1), m.group(2), m.group(3)
+                if nearest_is_far(joined, m.start(), a) and nearest_is_far(joined, m.end(), b):
+                    return "far_to_u32(%s) %s far_to_u32(%s)" % (a, op, b)
+                return m.group(0)
+            joined = re.sub(r"\b([A-Za-z_]\w*)\s*(==|!=)\s*([A-Za-z_]\w*)\b",
+                            cmp_repl, joined)
+            # far_t = allocator(...)
+            allocs = ("farmalloc", "ovr_heapMalloc", "ovr_heapRealloc",
+                      "ovr_stshAlloc", "ovr_stshRealloc", "malloc", "calloc")
+            def alloc_repl(m):
+                ws, lhs, fn, args = m.group(1), m.group(2), m.group(3), m.group(4)
+                if nearest_is_far(joined, m.start(), lhs):
+                    return "%s%s = far_from_u32((uint32_t)%s(%s));" % (ws, lhs, fn, args)
+                return m.group(0)
+            joined = re.sub(r"(?m)^(\s*)([A-Za-z_]\w*)\s*=\s*(" +
+                            "|".join(allocs) + r")\s*\(([^;\n]*)\);",
+                            alloc_repl, joined)
+            # undo the earlier over-eager form: (T *)MK_FP(x.seg,x.ofs).ofs
+            joined = re.sub(r"\(([A-Za-z_]\w*)\s*\*\)\s*MK_FP\((\w+)\.seg,\s*\2\.ofs\)\.ofs",
+                            r"(\1 *)\2.ofs", joined)
+            joined = re.sub(r"\(([A-Za-z_]\w*)\s*\*\)\s*MK_FP\((\w+)\.seg,\s*\2\.ofs\)\.seg",
+                            r"(\1 *)\2.seg", joined)
+            open(path, "w", encoding="utf-8", errors="replace").write(joined)
+            total += n
+    return total
+
+def rewrite_ptr_to_word():
+    glob = os.path.join(OUT, "st_globals.h")
+    if not os.path.isfile(glob):
+        return 0
+    txt = open(glob, "r", encoding="utf-8", errors="replace").read()
+    types = {}
+    for m in re.finditer(r"extern\s+(undefined1|uint8_t|undefined2|uint16_t|int16_t)\s+(\w+);", txt):
+        types[m.group(2)] = m.group(1)
+    cast = {"undefined1": "uint8_t", "uint8_t": "uint8_t",
+            "undefined2": "uint16_t", "uint16_t": "uint16_t", "int16_t": "int16_t"}
+    total = 0
+    for name in os.listdir(OUT):
+        if not name.endswith(".c"):
+            continue
+        path = os.path.join(OUT, name)
+        s = open(path, "r", encoding="utf-8", errors="replace").read()
+        def repl(m):
+            nonlocal total
+            ws, lhs, typ, expr = m.group(1), m.group(2), m.group(3), m.group(4)
+            if lhs not in types:
+                return m.group(0)
+            total += 1
+            return "%s%s = (%s)(%s);" % (ws, lhs, cast.get(types[lhs], "uint16_t"), expr)
+        s2 = re.sub(r"(?m)^(\s*)([A-Za-z_]\w*)\s*=\s*\(([A-Za-z_]\w*)\s*\*\)\s*([^;\n]+);",
+                    repl, s)
+        def arr_repl(m):
+            nonlocal total
+            total += 1
+            return "%s = (uint16_t)(%s);" % (m.group(1), m.group(3))
+        s2 = re.sub(
+            r"(\(\s*(?:undefined2|uint16_t)\s*\*\)\s*&[A-Za-z_]\w*\)\[[^\]]*\])\s*=\s*"
+            r"\(([A-Za-z_]\w*)\s*\*\)\s*([^;\n]+);",
+            arr_repl, s2)
+        if s2 != s:
+            open(path, "w", encoding="utf-8", errors="replace").write(s2)
+    return total
+
 def rewrite_names():
+    for name in os.listdir(OUT):
+        if not name.endswith(".c"):
+            continue
+        pp = os.path.join(OUT, name)
+        t = open(pp, "r", encoding="utf-8", errors="replace").read()
+        t2 = re.sub(r"(?<![A-Za-z0-9])_DAT_(2000|2410)_", r"DAT_\1_", t)
+        if t2 != t:
+            open(pp, "w", encoding="utf-8", errors="replace").write(t2)
     changed = 0
     for name in os.listdir(OUT):
         if not name.endswith((".c", ".h")):
@@ -34,8 +264,15 @@ def rewrite_names():
     return changed
 
 def ident_type(name):
-    if name.startswith("stack0x"):
+    if name.startswith(("stack0x", "ram0x")):
         return "undefined1"
+        return "undefined1"
+    if "Stack_" in name:
+        if name.startswith("_") or name.lower().startswith(("u", "i")):
+            return "uint32_t"
+        if name.lower().startswith("p"):
+            return "undefined1 *"
+        return "uint16_t"
     if name.startswith("puRam"):
         return "undefined2 *"
     if name.startswith("pcRam"):
@@ -61,7 +298,7 @@ def ident_type(name):
 
 def generate_artifacts():
     ids = set()
-    pat = re.compile(r"\b((?:p?[uic]?Ram[0-9a-fA-F]{5,8})|(?:stack0x[0-9a-fA-F]+)|(?:in_[A-Za-z0-9_]+)|(?:unaff_[A-Za-z0-9_]+)|(?:extraout_[A-Za-z0-9_]+)|(?:out_[A-Za-z0-9_]+))\b")
+    pat = re.compile(r"\b((?:p?[uic]?Ram[0-9a-fA-F]{5,8})|(?:stack0x[0-9a-fA-F]+)|(?:in_[A-Za-z0-9_]+)|(?:unaff_[A-Za-z0-9_]+)|(?:extraout_[A-Za-z0-9_]+)|(?:out_[A-Za-z0-9_]+)|(?:_?[A-Za-z]*Stack_[0-9a-fA-F]+)|(?:ram0x[0-9a-fA-F]+))\b")
     for name in os.listdir(OUT):
         if not name.endswith(".c"):
             continue
@@ -114,6 +351,10 @@ if __name__ == "__main__":
         print("missing", OUT)
         sys.exit(1)
     n = rewrite_names()
+    f = rewrite_far_casts()
+    w = rewrite_ptr_to_word()
+    o, ot = rewrite_overlays()
     a = generate_artifacts()
     patch_headers()
-    print("rewrote files:", n, "artifact declarations:", a)
+    print("rewrote files:", n, "far casts:", f, "ptr->word:", w,
+          "overlay files:", o, "overlay refs:", ot, "artifact declarations:", a)

@@ -14,11 +14,16 @@
 far_t __cdecl16far alignToSeg(far_t ptr)
 
 {
-  if (((ulong)ptr & 0xf) != 0) {
+  if ((far_to_u32(ptr) & 0xf) != 0) {
     ptr.seg = ptr.seg + 1;
     ptr.ofs = ptr.ofs & 0xfff0;
   }
-  return (far_t)((ulong)(ptr.seg + (ptr.ofs >> 4)) << 0x10);
+  {
+    far_t r;
+    r.ofs = 0;
+    r.seg = ptr.seg + (ptr.ofs >> 4);
+    return r;
+  }
 }
 
 
@@ -57,7 +62,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
   buf = ovr_stshAlloc(0xfa0f);
   dseg = (undefined2)((ulong)dst >> 0x10);
   t = (stg_tmp_t *)dst;
-  (t->bptr).seg = (uint16_t)((ulong)buf >> 0x10);
+  (t->bptr).seg = (uint16_t)((uint32_t)(void *)buf >> 0x10);
   (&t->bptr)->ofs = (uint16_t)(void *)buf;
   dstline.seg = (t->bptr).seg;
   dstline.ofs = (&t->bptr)->ofs;
@@ -83,8 +88,8 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
         len = len + plane_sz;
       }
     }
-    dstline = (far_t)ovr_stshAlloc((ulong)(len + 0x80));
-    bsrcline = (far_t)ovr_stshAlloc((ulong)(len + 0x80));
+    dstline = far_from_u32((uint32_t)(ovr_stshAlloc((ulong)(len + 0x80))));
+    bsrcline = far_from_u32((uint32_t)(ovr_stshAlloc((ulong)(len + 0x80))));
     if (DebugVerbose != false) {
       printf("N %d W %u s %u \r",(uint)format);
       ovr_biosReadKey();
@@ -148,7 +153,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
       bsrcline.seg = uVar1;
       bsrcline.ofs = (uint16_t)dst_ofs;
       written = ovr_unrle(src,bsrcline,0x140);
-      src = (far_t)ovr_mkp(src_ofs + written,src_seg);
+      src = far_from_u32((uint32_t)(ovr_mkp(src_ofs + written,src_seg)));
       dst_ofs = dst_ofs + 0x140;
       uVar2 = uVar2 + 1;
     }
@@ -229,16 +234,16 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y)
     ovr_stExit(0x16);
   }
   dst = ovr_stshAlloc(0x308);
-  dst._0_2_ = (stg_tmp_t *)dst;
+  /* Ghidra artifact: far-pointer low-word self-assignment dropped. */
   uVar1 = (undefined2)((ulong)dst >> 0x10);
   _fmemset(dst,0,0x308);
   fVar15.seg = unaff_SS;
   fVar15.ofs = (uint16_t)&tmp;
   remain = ovr_stshRead(fid,fVar15,4);
   if (((remain == 0) &&
-      (sz = CONCAT22(sz._2_2_,(undefined2)sz), chnk_sz = CONCAT22(chnk_sz._2_2_,(undefined2)chnk_sz)
+      (sz = CONCAT22((*(uint16_t *)((uint8_t *)&(sz) + 2)),(undefined2)sz), chnk_sz = CONCAT22((*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)),(undefined2)chnk_sz)
       , tmp.hi == uVar4)) &&
-     (sz = CONCAT22(sz._2_2_,(undefined2)sz), chnk_sz = CONCAT22(chnk_sz._2_2_,(undefined2)chnk_sz),
+     (sz = CONCAT22((*(uint16_t *)((uint8_t *)&(sz) + 2)),(undefined2)sz), chnk_sz = CONCAT22((*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)),(undefined2)chnk_sz),
      tmp.lo == uVar3)) {
     bVar2 = false;
     buf.seg = unaff_SS;
@@ -249,8 +254,8 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y)
     ovr_stshRead(fid,buf_00,4);
     if ((tmp.hi == uVar14) && (tmp.lo == uVar13)) {
       lbm_type = LBM_PBM;
-      sz = CONCAT22(sz._2_2_,(undefined2)sz);
-      chnk_sz = CONCAT22(chnk_sz._2_2_,(undefined2)chnk_sz);
+      sz = CONCAT22((*(uint16_t *)((uint8_t *)&(sz) + 2)),(undefined2)sz);
+      chnk_sz = CONCAT22((*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)),(undefined2)chnk_sz);
     }
     else {
       if ((tmp.hi != uVar6) || (tmp.lo != uVar5)) goto bad_lbm;
@@ -301,7 +306,7 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y)
           if (0x300 < (long)chnk_sz) {
             cmszB = ovr_stshTell(fid);
             remain = chnk_sz + (long)(int)cmszB;
-            ovr_stshSeek(fid,CONCAT22(unaff_DI,(int)((ulong)remain >> 0x10) + -1 +
+            ovr_stshSeek(fid,CONCAT22(unaff_DI,(int)((uint32_t)remain >> 0x10) + -1 +
                                                (uint)(0x2ff < (uint)remain)));
           }
         }
@@ -328,7 +333,7 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y)
               chnk_sz = cmszB + 1;
             }
             sz = cmszB;
-            fVar15 = (far_t)ovr_stshAlloc(chnk_sz);
+            fVar15 = far_from_u32((uint32_t)(ovr_stshAlloc(chnk_sz)));
             ovr_stshRead(fid,fVar15,chnk_sz);
             ovr_stshClose(fid);
             lbm_decode_body(lbm_type,hd.enc,hd.nplanes,hd.mask,fVar15,dst,x,y,w,h);
@@ -358,7 +363,7 @@ bad_lbm:
     ovr_stshFree(handle);
   }
   ovr_stshClose(fid);
-  ovr_stshFree((far_t)dst);
+  ovr_stshFree(far_from_u32((uint32_t)(dst)));
   printf("Filename %d %s  \r",file_id);
   ovr_biosReadKey();
                     /* WARNING: Subroutine does not return */

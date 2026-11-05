@@ -167,7 +167,7 @@ lbm_combine_bitplanes(far_t src,far_t dst,uint16_t npixels,uint8_t nplanes,uint1
 uint32_t __cdecl16far be4(uint32_t be)
 
 {
-  return CONCAT22((int)be,CONCAT11(be._2_1_,be._3_1_));
+  return CONCAT22((int)be,CONCAT11((*(uint8_t *)((uint8_t *)&(be) + 2)),(*(uint8_t *)((uint8_t *)&(be) + 3))));
 }
 
 
@@ -179,7 +179,7 @@ uint32_t __cdecl16far be4(uint32_t be)
 uint16_t __cdecl16far be2(uint16_t w)
 
 {
-  return CONCAT11((undefined1)w,w._1_1_);
+  return CONCAT11((undefined1)w,(*(uint8_t *)((uint8_t *)&(w) + 1)));
 }
 
 
@@ -558,10 +558,10 @@ int __cdecl16far rle_line(uint8_t *src,uint8_t *dst,uint16_t npixels)
   undefined2 uVar4;
   undefined2 uVar5;
   
-  uVar5 = (undefined2)((ulong)src >> 0x10);
+  uVar5 = (undefined2)(far_to_u32(src) >> 0x10);
   puVar3 = (uint8_t *)src;
   end = puVar3 + npixels;
-  uVar4 = (undefined2)((ulong)dst >> 0x10);
+  uVar4 = (undefined2)(far_to_u32(dst) >> 0x10);
   ps = puVar3;
   pd = (uint8_t *)dst;
 LAB_2d63_0343:
@@ -661,8 +661,8 @@ int __cdecl16far unrle_mirror(byte *src,byte *dst,int len)
   undefined2 uVar5;
   undefined2 uVar6;
   
-  uVar6 = (undefined2)((ulong)src >> 0x10);
-  uVar5 = (undefined2)((ulong)dst >> 0x10);
+  uVar6 = (undefined2)(far_to_u32(src) >> 0x10);
+  uVar5 = (undefined2)(far_to_u32(dst) >> 0x10);
   pdst = (byte *)dst + len + -1;
   psrc = (byte *)src;
   do {

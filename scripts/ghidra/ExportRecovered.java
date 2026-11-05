@@ -292,6 +292,8 @@ public class ExportRecovered extends GhidraScript {
             if (emitted.add(f.getName()))
                 protos.println("undefined " + f.getName() + "();");
         }
+        protos.println("/* helper for Ghidra's (far_t) scalar casts */");
+        protos.println("far_t far_from_u32(uint32_t v);");
         protos.println("#endif");
         protos.close();
         idx.close();
@@ -330,6 +332,7 @@ public class ExportRecovered extends GhidraScript {
         ch.println("#endif");
         ch.println("typedef unsigned short code(void);");
         ch.println("code *swi(int vector);");
+        ch.println("#define MK_FP(seg,ofs) ((void far *)(((uint32_t)(seg) << 16) | (uint16_t)(ofs)))");
         ch.println("#define CONCAT11(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint8_t)(b)))");
         ch.println("#define CONCAT12(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint16_t)(b)))");
         ch.println("#define CONCAT13(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint16_t)(b)))");

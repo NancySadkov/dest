@@ -184,23 +184,23 @@ void __cdecl16far OVC24_5943_026e(uint param_1)
   } while (param_1 < EntityCount);
   iStack_16 = 0;
   uStack_18 = 200;
-  if ((-1 < local_2c._2_2_) && ((0 < local_2c._2_2_ || (200 < (uint)local_2c)))) {
-    iStack_16 = local_2c._2_2_;
+  if ((-1 < (*(uint16_t *)((uint8_t *)&(local_2c) + 2))) && ((0 < (*(uint16_t *)((uint8_t *)&(local_2c) + 2)) || (200 < (uint)local_2c)))) {
+    iStack_16 = (*(uint16_t *)((uint8_t *)&(local_2c) + 2));
     uStack_18 = (uint)local_2c;
   }
-  if ((iStack_16 <= uStack_28._2_2_) &&
-     ((iStack_16 < uStack_28._2_2_ || (uStack_18 < (uint)uStack_28)))) {
-    iStack_16 = uStack_28._2_2_;
+  if ((iStack_16 <= (*(uint16_t *)((uint8_t *)&(uStack_28) + 2))) &&
+     ((iStack_16 < (*(uint16_t *)((uint8_t *)&(uStack_28) + 2)) || (uStack_18 < (uint)uStack_28)))) {
+    iStack_16 = (*(uint16_t *)((uint8_t *)&(uStack_28) + 2));
     uStack_18 = (uint)uStack_28;
   }
   uVar11 = uStack_18;
   iVar6 = iStack_16;
-  lVar13 = LXMUL_at_(200,CONCAT22(local_2c._2_2_,(uint)local_2c));
+  lVar13 = LXMUL_at_(200,CONCAT22((*(uint16_t *)((uint8_t *)&(local_2c) + 2)),(uint)local_2c));
   local_2c = LDIV_at_(lVar13,CONCAT22(iVar6,uVar11));
   local_2c = local_2c + 0x14;
   uVar11 = uStack_18;
   iVar6 = iStack_16;
-  lVar13 = LXMUL_at_(200,CONCAT22(uStack_28._2_2_,(uint)uStack_28));
+  lVar13 = LXMUL_at_(200,CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_28) + 2)),(uint)uStack_28));
   uStack_28 = LDIV_at_(lVar13,CONCAT22(iVar6,uVar11));
   uStack_28 = uStack_28 + 0x14;
   uVar7 = ovr_randBelow((uint)local_2c);

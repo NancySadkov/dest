@@ -50,5 +50,25 @@ integer names onto Borland forms. Compile a module with e.g.:
 tcc -ml -I. -c ovc02_draw.c
 ```
 
+### TC30 harness
+
+`scripts/stage_build.py` creates `tmp/buildsrc` with 8.3 filenames and rewrites
+the single local include to `st.h`; `src/decompiled/build_tc30.bat` is a
+template for a DOSBox/TC30 build. The intended loop is:
+
+```
+python scripts/stage_build.py
+dosbox-x -conf <a config mounting tmp/buildsrc as C: and tools/TC30 as D:>
+```
+
+Current TC30 baseline: 15 of 58 staged modules compile, including the whole
+asset-init chain (`ovc44/46/48`), the stash layer (`ovc17/20`), the LBM decoder
+(`ovc04`), `main`, `mouse`, and the small helper modules. Remaining modules
+still expose decompiler type/overlay artifacts and are the next refinement
+target.
+
+`support.c` provides the small helpers used by the rewritten code
+(`far_from_u32`, `far_to_u32`, `dw_from_u32`, `dw_to_u32`).
+
 Because the tree still contains decompiler artifacts and the full data image,
 linking a working executable is a later phase; see `doc/STATUS.md`.

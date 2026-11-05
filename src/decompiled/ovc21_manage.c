@@ -637,7 +637,7 @@ undefined2 __cdecl16far abilitiesDlg(undefined4 param_1)
       *(char *)((int)param_1 + (uint)local_18[bStack_1a] + 0x29) =
            *(char *)((int)param_1 + (uint)local_18[bStack_1a] + 0x29) + -2;
       manage_4d05_0081();
-      manage_4d05_056e((int)param_1,param_1._2_2_);
+      manage_4d05_056e((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)));
     }
   }
   return 1;
@@ -847,7 +847,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
     *unaff_DI = cVar8;
     far_t_2000_d098 = stshStoreFile(unaff_BP,(uint16_t)((ulong)in_stack_00000000 >> 0x10));
     fVar22 = stshStoreFile((char *)"cmidpak.com",1);
-    _DAT_2000_d096 = fVar22.seg;
+    DAT_2000_d096 = fVar22.seg;
     DAT_2000_d094 = fVar22.ofs;
     fVar22 = stshStoreFile((char *)"ibmsnd.com",1);
     DAT_2000_d0ca = fVar22.seg;
@@ -907,7 +907,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
     DAT_2000_d0c0 = fVar22.ofs;
     fVar22 = stshStoreFile((char *)"mt32mpu.adv",1);
     DAT_2000_d0c6 = fVar22.seg;
-    DAT_2000_d0c4 = (char *)fVar22.ofs;
+    DAT_2000_d0c4 = (uint16_t)(fVar22.ofs);
     return (char *)fVar22.ofs;
   case 1:
     iVar14 = ovr_OVC23_55fe_2da3();
@@ -989,9 +989,9 @@ char * __cdecl16far chargen_switch(uint16_t index)
       if (iVar14 < (int)(uint)DAT_2000_d1e6) {
         DAT_2000_d1e4 = (char)iVar14 + 1;
         uVar13 = *(undefined2 *)((uint)DAT_2000_d1e4 * 4 + -2);
-        handle.seg._0_1_ = (char)uVar13;
+        (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)uVar13;
         handle.ofs = *(undefined2 *)((uint)DAT_2000_d1e4 * 4 + -4);
-        handle.seg._1_1_ = (char)((uint)uVar13 >> 8);
+        (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)uVar13 >> 8);
         ovr_stshFree(handle);
       }
       else {
@@ -1038,26 +1038,26 @@ char * __cdecl16far chargen_switch(uint16_t index)
     }
     return pcVar17;
   case 5:
-    fVar22 = (far_t)ovr_mkp((uint16_t)unaff_BP,(uint16_t)in_stack_00000000);
+    fVar22 = far_from_u32((uint32_t)(ovr_mkp((uint16_t)unaff_BP,(uint16_t)in_stack_00000000)));
     uVar12 = fVar22.seg;
     pcVar17 = (char *)fVar22.ofs;
-    if (*(char *)fVar22 == '\0') {
+    if (*(char *)MK_FP(fVar22.seg, fVar22.ofs) == '\0') {
       uVar13 = (undefined2)((ulong)in_stack_00000000 >> 0x10);
       fVar23 = fmMalloc(CONCAT22(*(undefined2 *)(pcVar17 + 7),*(undefined2 *)(pcVar17 + 5)));
       uVar27 = (undefined1)fVar23.seg;
-      uVar28 = fVar23.seg._1_1_;
+      uVar28 = (*(uint8_t *)((uint8_t *)&(fVar23.seg) + 1));
       bVar30 = (byte)fVar23.ofs;
-      uVar11 = fVar23.ofs._1_1_;
-      if (fVar23 == (far_t)0x0) {
+      uVar11 = (*(uint8_t *)((uint8_t *)&(fVar23.ofs) + 1));
+      if (far_to_u32(fVar23) == 0) {
         pcVar17 = (char *)0x0;
       }
       else {
         if (*(int *)(pcVar17 + 0x11) == 0 && *(int *)(pcVar17 + 0x13) == 0) {
           stshSeek(StshStrongDatHnd,CONCAT22(uVar13,*(undefined2 *)(pcVar17 + 3)));
-          fVar23.ofs._1_1_ = uVar11;
-          fVar23.ofs._0_1_ = bVar30;
-          fVar23.seg._0_1_ = uVar27;
-          fVar23.seg._1_1_ = uVar28;
+          (*(uint8_t *)((uint8_t *)&(fVar23.ofs) + 1)) = uVar11;
+          (*(uint8_t *)((uint8_t *)&(fVar23.ofs))) = bVar30;
+          (*(uint8_t *)((uint8_t *)&(fVar23.seg))) = uVar27;
+          (*(uint8_t *)((uint8_t *)&(fVar23.seg) + 1)) = uVar28;
           stshRead(StshStrongDatHnd,fVar23,
                    CONCAT22(*(undefined2 *)(pcVar17 + 7),*(undefined2 *)(pcVar17 + 5)));
           fVar23 = ovr_heapMalloc(CONCAT22(*(undefined2 *)(pcVar17 + 7),*(undefined2 *)(pcVar17 + 5)
@@ -1078,8 +1078,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
           bVar9 = true;
         }
         if (bVar9) {
-          fVar23 = (far_t)ovr_mkp(Stsh_2410_47f6.ofs,Stsh_2410_47f6.seg);
-          if (fVar23 != fVar22) {
+          fVar23 = far_from_u32((uint32_t)(ovr_mkp(Stsh_2410_47f6.ofs,Stsh_2410_47f6.seg)));
+          if (far_to_u32(fVar23) != far_to_u32(fVar22)) {
             iVar14 = *(int *)(pcVar17 + 0xf);
             iVar4 = *(int *)(pcVar17 + 0xd);
             uVar5 = *(uint16_t *)(pcVar17 + 0xb);
@@ -1381,9 +1381,9 @@ LAB_3f0b_1477:
                               (char)((ulong)((byte)((uint *)in_stack_0000ffe2)[7] + 0xf) / 0x10));
             while (cVar8 = (char)uVar26, uVar26 = CONCAT31((int3)(uVar26 >> 8),cVar8 + -1),
                   cVar8 != '\0') {
-              fVar22.seg._0_1_ = (char)Entities.seg;
+              (*(uint8_t *)((uint8_t *)&(fVar22.seg))) = (char)Entities.seg;
               fVar22.ofs = Entities.ofs + (int)unaff_DI * 0x37;
-              fVar22.seg._1_1_ = Entities.seg._1_1_;
+              (*(uint8_t *)((uint8_t *)&(fVar22.seg) + 1)) = (*(uint8_t *)((uint8_t *)&(Entities.seg) + 1));
               ovr_agnt_3b1d_196b(fVar22);
             }
           }
@@ -1757,7 +1757,7 @@ void __cdecl16far manage_4d05_1835(void)
   F_SCOPY(local_e,(uint8_t *)(far_t *)(GKeepDiscardStrings + 2),8);
   gfx.seg = FontHandle.seg;
   gfx.ofs = FontHandle.ofs;
-  ovr_blitLoadRleGfx(gfx,(far_t)0xa000c31d);
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)));
   ovr_attact_3f0b_0685();
   ovr_draw_2e25_1662();
   ovr_stop_audio();
@@ -6312,13 +6312,13 @@ code_r0x0004c28e:
     *(undefined2 *)((int)puVar273 + 0xe) = pfVar24;
     *(undefined2 *)((int)puVar273 + 0xc) = 0;
     *(undefined2 *)((int)puVar273 + 10) = DAT_2000_d1c2;
-    *(undefined2 *)((int)puVar273 + 8) = _DAT_2000_d1c0;
+    *(undefined2 *)((int)puVar273 + 8) = DAT_2000_d1c0;
     *(undefined2 *)((int)puVar273 + 6) = (char *)"arrowsmith" + 3;
     puVar274 = (undefined1 *)((int)puVar273 + 4);
     *(undefined2 *)((int)puVar273 + 4) = 0xc36c;
     ovr_blitLoadRleGfx(*(far_t *)((int)puVar273 + 8),*(far_t *)((int)puVar273 + 0xc));
     *(undefined2 *)(puVar274 + 10) = DAT_2000_d1c2;
-    *(undefined2 *)(puVar274 + 8) = _DAT_2000_d1c0;
+    *(undefined2 *)(puVar274 + 8) = DAT_2000_d1c0;
     *(char **)(puVar274 + 6) = (char *)"bath house" + 10;
     puVar275 = (undefined2 *)(puVar274 + 4);
     *(undefined2 *)(puVar274 + 4) = 0xc37b;
@@ -6937,7 +6937,7 @@ LAB_4d05_17b2:
     puVar283[1] = 0x4000;
     *puVar283 = 0xc4a4;
     fVar503 = stshStoreFile((char *)puVar283[2],puVar283[4]);
-    _DAT_2000_d096 = fVar503.seg;
+    DAT_2000_d096 = fVar503.seg;
     DAT_2000_d094 = fVar503.ofs;
     puVar283[4] = 1;
     puVar283[3] = (char *)"puppetmaker" + 3;
@@ -7072,7 +7072,7 @@ LAB_4d05_17b2:
     *puVar283 = 0xc6d0;
     fVar503 = stshStoreFile((char *)puVar283[2],puVar283[4]);
     DAT_2000_d0c6 = fVar503.seg;
-    DAT_2000_d0c4 = (far_t *)fVar503.ofs;
+    DAT_2000_d0c4 = (uint16_t)(fVar503.ofs);
     return (far_t *)fVar503.ofs;
   case 0x58:
     pfVar37->ofs = pfVar37->ofs & (uint)pfVar25;
@@ -7421,7 +7421,7 @@ LAB_4d05_17b2:
           pcVar495 = (char *)"money dealer\'s shop" + 8;
           puVar205 = (undefined2 *)((int)puVar204 + 6);
           *(undefined2 *)((int)puVar204 + 6) = (char *)"cflow5.txt" + 4;
-          fVar503 = ovr_heapMalloc(*(uint32_t *)((int)puVar204 + 10));
+          fVar503 = far_from_u32((uint32_t)ovr_heapMalloc(*(uint32_t *)((int)puVar204 + 10)));
           puVar202 = puVar205 + 4;
           uVar20 = (undefined2)((ulong)*(undefined4 *)(iVar404 + 4) >> 0x10);
           iVar488 = (int)*(undefined4 *)(iVar404 + 4);
@@ -8061,8 +8061,8 @@ code_r0x0004fe85:
   case 0xbe:
   case 0xed:
     if ((!bVar499 && !bVar500) || ((char *)*(uint *)((int)&AgntAnms[0x53].y + 1) < pcVar21)) {
-      uVar487 = ((FMXmsHandle._2_2_ + FMEmsHandle._2_2_ +
-                 (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle)) - StshPtrs[0]._2_2_) -
+      uVar487 = (((*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
+                 (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle)) - (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) -
                 (uint)((uint)FMXmsHandle + (uint)FMEmsHandle < (uint)StshPtrs[0]);
       if ((uVar487 < *(uint *)(iVar404 + -0xe)) ||
          ((uVar487 <= *(uint *)(iVar404 + -0xe) &&
@@ -8070,8 +8070,8 @@ code_r0x0004fe85:
           )))) {
         iVar488 = ((uint)FMXmsHandle + (uint)FMEmsHandle) - (uint)StshPtrs[0];
         *(int *)(iVar404 + -10) =
-             ((FMXmsHandle._2_2_ + FMEmsHandle._2_2_ +
-              (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle)) - StshPtrs[0]._2_2_) -
+             (((*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
+              (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle)) - (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) -
              (uint)((uint)FMXmsHandle + (uint)FMEmsHandle < (uint)StshPtrs[0]);
         *(int *)(iVar404 + -0xc) = iVar488;
       }
@@ -8084,7 +8084,7 @@ code_r0x0004fe85:
       *(undefined2 *)((int)puVar97 + 0xc) = *(undefined2 *)(iVar404 + -0xc);
       iVar488 = (uint)StshPtrs[0] - (uint)FMXmsHandle;
       *(int *)((int)puVar97 + 10) =
-           (StshPtrs[0]._2_2_ - FMXmsHandle._2_2_) - (uint)((uint)StshPtrs[0] < (uint)FMXmsHandle);
+           ((*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) - (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2))) - (uint)((uint)StshPtrs[0] < (uint)FMXmsHandle);
       *(int *)((int)puVar97 + 8) = iVar488;
       *(undefined2 *)((int)puVar97 + 6) = *(undefined2 *)(iVar404 + 8);
       *(undefined2 *)((int)puVar97 + 4) = *(undefined2 *)(iVar404 + 6);
@@ -8097,8 +8097,8 @@ code_r0x0004fe85:
       *(char **)puVar97 = (char *)"Iron deposits discovered." + 0xb;
       ems_memmove1();
       bVar499 = CARRY2((uint)StshPtrs[0],*(uint *)(iVar404 + -0xc));
-      StshPtrs[0]._0_2_ = (uint)StshPtrs[0] + *(uint *)(iVar404 + -0xc);
-      StshPtrs[0]._2_2_ = StshPtrs[0]._2_2_ + *(int *)(iVar404 + -10) + (uint)bVar499;
+      (*(uint16_t *)((uint8_t *)&(StshPtrs[0]))) = (uint)StshPtrs[0] + *(uint *)(iVar404 + -0xc);
+      (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) = (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) + *(int *)(iVar404 + -10) + (uint)bVar499;
       iVar488 = *(int *)(iVar404 + -10);
       uVar484 = *(uint *)(iVar404 + -0xc);
       puVar2 = (uint *)(iVar404 + -0x10);
@@ -8118,13 +8118,13 @@ code_r0x0004fe85:
       *(int *)(iVar404 + 8) = (int)uVar504 + *(int *)(iVar404 + 8);
       *(int *)(iVar404 + 6) = iVar488 + (uVar487 & 0xf);
     }
-    uVar487 = FMXmsHandle._2_2_ + FMEmsHandle._2_2_ +
+    uVar487 = (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
               (uint)CARRY2((uint)FMXmsHandle,(uint)FMEmsHandle);
-    if ((uVar487 <= StshPtrs[0]._2_2_) &&
-       ((uVar487 != StshPtrs[0]._2_2_ ||
+    if ((uVar487 <= (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2))) &&
+       ((uVar487 != (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) ||
         ((uint)FMXmsHandle + (uint)FMEmsHandle <= (uint)StshPtrs[0])))) {
       *(undefined2 *)((int)puVar192 + -2) = 0;
-      *(uint *)((int)puVar192 + -4) = StshPtrs[0]._2_2_;
+      *(uint *)((int)puVar192 + -4) = (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2));
       *(uint *)((int)puVar192 + -6) = (uint)StshPtrs[0];
       *(int *)((int)puVar192 + -8) = StshHandles[0];
       *(undefined2 *)((int)puVar192 + -10) = pcVar495;
@@ -9373,7 +9373,7 @@ code_r0x0004fffe:
     }
     return (far_t *)((char *)"puppetmaker" + 3);
   case 0xef:
-    AgntAnms[0x70]._17_1_ = 0;
+    (*(uint8_t *)((uint8_t *)&(AgntAnms[0x70]) + 17)) = 0;
     *(undefined2 *)((int)&pfVar489[7].seg + iVar404) = pfVar37;
 code_r0x0004fc81:
     GfxRndSeed = *(int *)(iVar404 + -4);
@@ -9531,7 +9531,7 @@ LAB_4207_151b:
       *(undefined2 *)(iVar488 + 0x10) = 100;
     }
     *(undefined2 *)(iVar404 + -4) = EntityCount;
-    EntityCount = (far_t *)((int)&EntityCount->ofs + 1);
+    EntityCount = (uint16_t)(((int)&EntityCount->ofs + 1));
     *(undefined2 *)((int)puVar32 + -2) = 0x4000;
     pcVar495 = (char *)"ringmaker\'s shop" + 7;
     puVar127 = (undefined1 *)((int)puVar32 + -4);
@@ -9778,7 +9778,7 @@ char * __cdecl16far litoa10(char *buf,long n)
   
   if ((n < 0x10000) && (n < 0)) {
     bVar1 = true;
-    n = CONCAT22(-(uint)((int)n != 0) - n._2_2_,-(int)n);
+    n = CONCAT22(-(uint)((int)n != 0) - (*(uint16_t *)((uint8_t *)&(n) + 2)),-(int)n);
   }
   else {
     bVar1 = false;
@@ -10857,7 +10857,7 @@ char * __cdecl16far manage_4d05_2d79(byte param_1,undefined2 param_2,undefined4 
            *(undefined1 *)(Entities.ofs + (int)pcVar8 * 0x37 + 0x32);
       if (EntityCount <= pcVar8 + 1) {
         if ((acStack_e[0] != '\0') || (acStack_e[1] != '\0')) {
-          if (uStack_4._1_1_ == '\0') {
+          if ((*(uint8_t *)((uint8_t *)&(uStack_4) + 1)) == '\0') {
             ovr_stop_audio();
             CurSfxType3 = 0xff;
             ovr_play_sfx(90,0);
@@ -11013,7 +11013,7 @@ LAB_3f0b_1477:
                                 auStack_6);
         }
         pcVar12 = _auStack_6;
-        uStack_4._0_1_ = (byte)((uint3)_auStack_6 >> 0x10);
+        (*(uint8_t *)((uint8_t *)&(uStack_4))) = (byte)((uint3)_auStack_6 >> 0x10);
         bVar11 = (byte)uStack_4 != -1;
         _auStack_6 = pcVar12;
         if (bVar11) {
@@ -11077,9 +11077,9 @@ LAB_3f0b_1477:
         else if (cStack_19 == '\0') {
           cStack_1a = (char)((ulong)(*(byte *)((char **)ppcStack_1e + 7) + 0xf) / 0x10);
           while (cStack_1a != '\0') {
-            ptr.seg._0_1_ = (char)Entities.seg;
+            (*(uint8_t *)((uint8_t *)&(ptr.seg))) = (char)Entities.seg;
             ptr.ofs = Entities.ofs + (int)pcVar9 * 0x37;
-            ptr.seg._1_1_ = Entities.seg._1_1_;
+            (*(uint8_t *)((uint8_t *)&(ptr.seg) + 1)) = (*(uint8_t *)((uint8_t *)&(Entities.seg) + 1));
             cStack_1a = cStack_1a + -1;
             ovr_agnt_3b1d_196b(ptr);
           }
@@ -11393,7 +11393,7 @@ int __cdecl16far switchD_5000_123d_caseD_0(void)
   *(undefined2 *)((int)&uStack_7 + iVar9) = unaff_DI;
                     /* WARNING: Read-only address (ram,0x00026a19) is written */
   uVar15 = (uint)(puVar26 < puVar19 || uVar15 - (int)puVar19 < uVar24);
-  s_Peaceful_2410_2915._4_2_ = (0x6665U - (int)unaff_DI) - uVar15;
+  (*(uint16_t *)((uint8_t *)&(s_Peaceful_2410_2915) + 4)) = (0x6665U - (int)unaff_DI) - uVar15;
   uVar15 = (uint)((uint)0x6665 < unaff_DI || (uint)(0x6665U - (int)unaff_DI) < uVar15);
   bVar29 = (uint)AgntAnms[6].y < CONCAT11(bVar16,bVar12);
   uVar24 = AgntAnms[6].y - CONCAT11(bVar16,bVar12);

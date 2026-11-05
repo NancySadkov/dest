@@ -150,7 +150,7 @@ stg_tmp_t * __cdecl16far OVC40_69c8_023a(byte param_1)
     handle_02.ofs = ((undefined2 *)&DAT_2000_d3d4)[(uint)param_1 * 2];
     psVar2 = ovr_stshLoadGfx(handle_02);
   }
-  psStack_6._0_2_ = (stg_tmp_t *)psVar2;
+  (*(uint16_t *)((uint8_t *)&(psStack_6))) = (stg_tmp_t *)psVar2;
   puVar1 = ((stg_tmp_t *)psStack_6)->cmap;
   psStack_6 = psVar2;
   _fmemmove(puVar1 + 0x231,local_d6,0xcf);
@@ -196,7 +196,7 @@ void __cdecl16far OVC40_69c8_0373(byte param_1,int param_2,brect_t *param_3)
   
   gfx.seg = ((undefined2 *)&DAT_2000_d3ee)[(uint)param_1 * 2];
   gfx.ofs = ((undefined2 *)&DAT_2000_d3ec)[(uint)param_1 * 2];
-  ovr_blitLoadRleGfx(gfx,(far_t)((ulong)((brect_t *)param_3)->seg << 0x10));
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)((ulong)((brect_t *)param_3)->seg << 0x10)));
   gfx_00.seg = ((undefined2 *)&DAT_2000_d3fe)[(uint)param_1 * 2];
   gfx_00.ofs = ((undefined2 *)&DAT_2000_d3fc)[(uint)param_1 * 2];
   ovr_blitGfx10(gfx_00,-(param_2 >> 1),0,param_3,0);
@@ -316,7 +316,7 @@ OVC40_69c8_04c6(char param_1,char *param_2,undefined2 param_3,char *param_4,unde
   OVC40_69c8_047f();
   ovr_draw_2e25_1662();
   MiceUnkState = 0;
-  fStack_18 = (far_t)ovr_stshAlloc(0xfa0f);
+  fStack_18 = far_from_u32((uint32_t)(ovr_stshAlloc(0xfa0f)));
   fVar8 = ovr_alignToSeg(fStack_18);
   uVar3 = fVar8.seg;
   uStack_c = uVar3;
@@ -327,7 +327,7 @@ OVC40_69c8_04c6(char param_1,char *param_2,undefined2 param_3,char *param_4,unde
   ovr_driver_2d63_05e5(0,0,0x13f,199,0xec);
   fVar8.seg = DAT_2000_d3ea;
   fVar8.ofs = DAT_2000_d3e8;
-  ovr_blitLoadRleGfx(fVar8,(far_t)0xa000b400);
+  ovr_blitLoadRleGfx(fVar8,far_from_u32((uint32_t)(0xa000b400)));
   if (param_1 == '\x02') {
     cStack_1f = '\x02';
   }
@@ -337,7 +337,7 @@ OVC40_69c8_04c6(char param_1,char *param_2,undefined2 param_3,char *param_4,unde
   if (param_1 == '\x04') {
     gfx.seg = DAT_2000_d45e;
     gfx.ofs = DAT_2000_d45c;
-    ovr_blitLoadRleGfx(gfx,(far_t)0xa0000000);
+    ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa0000000)));
   }
   else if (cStack_1f < '\0') {
     OVC40_69c8_0373(CONCAT11((char)((uint)local_14 >> 8),param_1),0xef,local_14);
@@ -422,7 +422,7 @@ OVC40_69c8_04c6(char param_1,char *param_2,undefined2 param_3,char *param_4,unde
       if ((iVar7 == 100) && (param_6 == 2)) {
         gfx_00.seg = DAT_2000_d3ea;
         gfx_00.ofs = DAT_2000_d3e8;
-        ovr_blitLoadRleGfx(gfx_00,(far_t)0xa000b400);
+        ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa000b400)));
         OVC40_69c8_0000(uStack_38,uStack_36,uStack_38,uStack_36,0);
         OVC40_69c8_0000(uStack_34,uStack_32,uStack_34,uStack_32,1);
         OVC40_69c8_0000(uStack_30,uStack_2e,uStack_30,uStack_2e,2);
@@ -460,9 +460,9 @@ OVC40_69c8_04c6(char param_1,char *param_2,undefined2 param_3,char *param_4,unde
     OVC40_69c8_047f();
     DAT_2000_ccaf = '\0';
     if ((param_6 == 2) || (param_6 == 3)) {
-      TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
       iVar6 = *(int *)BDA_DailyTimeCounter;
-      TextBlitCycle._0_2_ = iVar6;
+      (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = iVar6;
       if (cStack_1d == '\0') {
         uVar3 = ovr_inputUpdate(0x48);
         cStack_1d = (char)uVar3;
@@ -471,7 +471,7 @@ OVC40_69c8_04c6(char param_1,char *param_2,undefined2 param_3,char *param_4,unde
     else {
       gfx_01.seg = far_t_2000_d3e4.seg;
       gfx_01.ofs = far_t_2000_d3e4.ofs;
-      ovr_blitLoadRleGfx(gfx_01,(far_t)0xa000e908);
+      ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa000e908)));
       MiceProcessed = 0;
       ovr_miceBlitRect(BlitRects + 1);
       do {

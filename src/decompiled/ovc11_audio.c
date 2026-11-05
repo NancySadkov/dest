@@ -284,11 +284,11 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk)
         else {
           pcStack_a = (char *)*(undefined2 *)(DIGHandle.ofs + 5);
         }
-        DIGHandle = (far_t)ovr_stshRealloc(CONCAT22(uVar2,DIGHandle.ofs),
+        DIGHandle = far_from_u32((uint32_t)(ovr_stshRealloc(CONCAT22(uVar2,DIGHandle.ofs),
                                            (uint32_t)
                                            CONCAT22((uint)((char *)0xfff1 < pcStack_a) -
                                                     (uint)(pcStack_a == (char *)0xfff2),
-                                                    pcStack_a + 0xd));
+                                                    pcStack_a + 0xd))));
         uVar3 = DIGHandle.ofs;
         uVar2 = DIGHandle.seg;
         DIG_2410_07a8 = 0;
@@ -388,7 +388,7 @@ uint16_t __cdecl16far audio_3a5b_0761(uint8_t *param_1,uint16_t param_2,int para
   }
   else {
     _fmemmove((uint8_t *)((uint)param_1 & 0xfff0),param_1,param_3 + -0xf);
-    fVar2 = ovr_alignToSeg((far_t)((ulong)CONCAT22(param_2 + 1,param_1) & 0xfffffff0));
+    fVar2 = ovr_alignToSeg(far_from_u32((uint32_t)((ulong)CONCAT22(param_2 + 1,param_1) & 0xfffffff0)));
     uVar1 = fVar2.ofs;
   }
   return uVar1;
@@ -448,7 +448,7 @@ void __cdecl16far sfxInit(void)
       handle.ofs = ((undefined2 *)&DAT_2000_d0c8)[unaff_SI * 2];
       psVar3 = ovr_stshLoadGfx(handle);
       uVar2 = (uint16_t)((ulong)psVar3 >> 0x10);
-      DAT_2410_07b6 = (stg_tmp_t *)psVar3;
+      DAT_2410_07b6 = (uint16_t)(psVar3);
       DAT_2410_07b8 = uVar2;
       DIGHandle.ofs =
            audio_3a5b_0761(psVar3,*(undefined2 *)
@@ -501,9 +501,9 @@ void __cdecl16far musInit(void)
     }
     if (((undefined2 *)&DAT_2000_d09c)[unaff_SI * 2] != 0 ||
         ((undefined2 *)&DAT_2000_d09e)[unaff_SI * 2] != 0) {
-      psVar4 = ovr_stshLoadGfx(_DAT_2000_d094);
+      psVar4 = ovr_stshLoadGfx(DAT_2000_d094);
       uVar2 = (uint16_t)((ulong)psVar4 >> 0x10);
-      DAT_2410_07be = (stg_tmp_t *)psVar4;
+      DAT_2410_07be = (uint16_t)(psVar4);
       DAT_2410_07c0 = uVar2;
       MIDHandle.ofs = audio_3a5b_0761(psVar4,*(undefined2 *)(DAT_2000_d094 + 5));
       MIDHandle.seg = uVar2;
@@ -512,7 +512,7 @@ void __cdecl16far musInit(void)
       handle.ofs = ((undefined2 *)&DAT_2000_d09c)[unaff_SI * 2];
       psVar4 = ovr_stshLoadGfx(handle);
       uVar3 = (undefined2)((ulong)psVar4 >> 0x10);
-      DAT_2410_07c6 = (stg_tmp_t *)psVar4;
+      DAT_2410_07c6 = (uint16_t)(psVar4);
       DAT_2410_07c8 = uVar3;
       DAT_2410_07ca =
            audio_3a5b_0761(psVar4,*(undefined2 *)
@@ -524,7 +524,7 @@ void __cdecl16far musInit(void)
       handle_00.ofs = far_t_2000_d098.ofs;
       psVar4 = ovr_stshLoadGfx(handle_00);
       DAT_2410_07d0 = (undefined2)((ulong)psVar4 >> 0x10);
-      DAT_2410_07ce = (stg_tmp_t *)psVar4;
+      DAT_2410_07ce = (uint16_t)(psVar4);
       ovr_OVC20_4b0a_112d(far_t_2000_d098.ofs);
       bVar1 = audio_init(MIDHandle.seg);
       if (CONCAT11(extraout_AH_00,bVar1) == 0) {

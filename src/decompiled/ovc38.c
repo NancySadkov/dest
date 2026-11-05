@@ -60,7 +60,7 @@ void __cdecl16far OVC38_68ac_008a(undefined4 param_1)
   handle = ovr_creat_wait_unlock_and_disk((char *)pcVar4);
   if (-1 < handle) {
     for (iVar2 = 0; iVar2 < 6; iVar2 = iVar2 + 1) {
-      uVar3 = (undefined2)((ulong)param_1 >> 0x10);
+      uVar3 = (undefined2)(far_to_u32(param_1) >> 0x10);
       piVar1 = (int *)((int)param_1 + iVar2 * 4);
       if (*piVar1 != 0 || piVar1[1] != 0) {
         ovr_saveui_4528_10c5();
@@ -139,13 +139,13 @@ void __cdecl16far OVC38_68ac_0148(void)
       while (((iVar2 < 0x4f && (*uStack_6 != '@')) && (*uStack_6 != '\0'))) {
         local_5a[iVar2] = *uStack_6;
         iVar2 = iVar2 + 1;
-        uStack_6 = (char *)CONCAT22(uStack_6._2_2_,(char *)uStack_6 + 1);
+        uStack_6 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(char *)uStack_6 + 1);
       }
       local_5a[iVar2] = '\0';
       ovr_blitText((char *)CONCAT22(unaff_SS,local_5a),(byte *)Font03.ofs,0xde,0x8);
       TextBlitX = 0xc2;
       if (*uStack_6 == '@') {
-        uStack_6 = (char *)CONCAT22(uStack_6._2_2_,(char *)uStack_6 + 1);
+        uStack_6 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(char *)uStack_6 + 1);
       }
       ovr_blitText(uStack_6,(byte *)Font03.ofs,0xde,0x8);
     }
@@ -173,8 +173,8 @@ int __cdecl16far OVC38_68ac_0339(byte *param_1,byte *param_2)
   uint uVar2;
   uint uVar4;
   
-  bVar3 = (byte)(((uint)(byte *)param_2 | param_2._2_2_) >> 8);
-  if (((uint)(byte *)param_2 | param_2._2_2_) == 0) {
+  bVar3 = (byte)(((uint)(byte *)param_2 | (*(uint16_t *)((uint8_t *)&(param_2) + 2))) >> 8);
+  if (((uint)(byte *)param_2 | (*(uint16_t *)((uint8_t *)&(param_2) + 2))) == 0) {
     iVar1 = 0;
   }
   else if (*param_1 < *param_2) {
@@ -185,16 +185,16 @@ int __cdecl16far OVC38_68ac_0339(byte *param_1,byte *param_2)
   }
   else {
     while ((*param_2 != 0 && (*param_2 != 0x40))) {
-      param_2 = (byte *)CONCAT22(param_2._2_2_,(byte *)param_2 + 1);
+      param_2 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(param_2) + 2)),(byte *)param_2 + 1);
     }
     if (*param_2 == 0x40) {
-      param_2 = (byte *)CONCAT22(param_2._2_2_,(byte *)param_2 + 1);
+      param_2 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(param_2) + 2)),(byte *)param_2 + 1);
     }
     uVar2 = (uint)(char)*param_2;
     uVar4 = 0;
     if ((((byte *)_ctype + 1)[uVar2] & 2) != 0) {
       bVar3 = *param_2;
-      param_2 = (byte *)CONCAT22(param_2._2_2_,(byte *)param_2 + 1);
+      param_2 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(param_2) + 2)),(byte *)param_2 + 1);
       uVar2 = (uint)(char)*param_2;
       uVar4 = (int)(char)bVar3 - 0x30U;
       if ((((byte *)_ctype + 1)[uVar2] & 2) != 0) {

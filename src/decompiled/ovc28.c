@@ -39,7 +39,7 @@ void __cdecl16far OVC28_6018_0048(void)
     ovr_OVC18_48ac_0027();
     gfx.seg = FontHandle.seg;
     gfx.ofs = FontHandle.ofs;
-    ovr_blitLoadRleGfx(gfx,(far_t)0xa000c31d);
+    ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)));
   }
   return;
 }
@@ -152,10 +152,10 @@ void __cdecl16far OVC28_6018_0251(void)
   if (GameRunning == false) {
     gfx_00.seg = DAT_2000_caf7;
     gfx_00.ofs = DAT_2000_caf5;
-    ovr_blitLoadRleGfx(gfx_00,(far_t)0xa0008fa4);
+    ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa0008fa4)));
     gfx_01.seg = DAT_2000_cac3;
     gfx_01.ofs = DAT_2000_cac1;
-    ovr_blitLoadRleGfx(gfx_01,(far_t)0xa000e249);
+    ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa000e249)));
     for (iVar2 = 0; iVar2 < 5; iVar2 = iVar2 + 1) {
       if (((undefined1 *)&DAT_2000_d1de)[iVar2] != -1) {
         TextBlitX = 0xea;
@@ -246,9 +246,9 @@ void __cdecl16far OVC28_6018_0456(undefined4 param_1,int param_2)
     if (*piVar3 != 0 || piVar3[1] != 0) {
       gfx_00.seg = DAT_2000_d37e;
       gfx_00.ofs = DAT_2000_d37c;
-      dst.seg._0_1_ = 0;
+      (*(uint8_t *)((uint8_t *)&(dst.seg))) = 0;
       dst.ofs = iStack_8 + iVar6 * 0x140;
-      dst.seg._1_1_ = 0xa0;
+      (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = 0xa0;
       ovr_blitLoadRleGfx(gfx_00,dst);
       TextBlitDstSeg = 0xa000;
       TextBlitX = iStack_8 + 6;
@@ -480,7 +480,7 @@ void __cdecl16far OVC28_6018_0aef(void)
     handle.ofs = CrossBlitPtr.ofs;
     ovr_stshFree(handle);
   }
-  CrossBlitPtr = ovr_stshRleCut((far_t)0xa0000000,CrossBlitX,CrossBlitY,CrossBlitX + 0xd,
+  CrossBlitPtr = ovr_stshRleCut(far_from_u32((uint32_t)(0xa0000000)),CrossBlitX,CrossBlitY,CrossBlitX + 0xd,
                                 CrossBlitY + 9);
   dst.seg = 0xa000;
   dst.ofs = CrossBlitX + CrossBlitY * 0x140;
@@ -781,7 +781,7 @@ OVC28_6018_1398(undefined4 param_1,int param_2,undefined2 param_3,undefined2 par
   uStack_c = param_4;
   uStack_e = param_3;
   if (param_2 < 10) {
-    uVar2 = uiInputText((int)param_1,param_1._2_2_,param_2,param_3,param_4,0);
+    uVar2 = uiInputText((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)),param_2,param_3,param_4,0);
   }
   else {
     while( true ) {

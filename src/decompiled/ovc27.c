@@ -1346,7 +1346,7 @@ int __cdecl16far OVC27_5ded_1c94(undefined4 param_1,byte param_2)
                                ((int)&far_t_ARRAY_2410_5aeb[0].seg + (uint)bStack_8 * 4),
                               (byte *)((far_t *)far_t_ARRAY_2410_5aeb + bStack_8)->ofs);
   while ((*uStack_6 != 0xff && (*uStack_6 < bStack_7))) {
-    uStack_6 = (byte *)CONCAT22(uStack_6._2_2_,(byte *)uStack_6 + 6);
+    uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 6);
   }
   bStack_9 = ((byte *)uStack_6)[param_2 + 1];
   if ((param_2 == 3) && (*(char *)((int)*(undefined4 *)(iVar5 + 0x17) + 0x1a) != -1)) {
@@ -1398,7 +1398,7 @@ int __cdecl16far OVC27_5ded_1d8e(undefined4 param_1,byte param_2)
                                ((int)&far_t_ARRAY_2410_5aeb[0].seg + (uint)bStack_8 * 4),
                               (byte *)((far_t *)far_t_ARRAY_2410_5aeb + bStack_8)->ofs);
   while ((*uStack_6 != 0xff && (*uStack_6 < bStack_7))) {
-    uStack_6 = (byte *)CONCAT22(uStack_6._2_2_,(byte *)uStack_6 + 6);
+    uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 6);
   }
   bStack_9 = ((byte *)uStack_6)[param_2 + 1];
   if ((param_2 == 3) && (*(char *)(iVar5 + 0x1a) != -1)) {

@@ -99,9 +99,9 @@ undefined2 __cdecl16far save_49fd_01da(int param_1)
     ovr_init_3381_20ee();
     cVar1 = save_49fd_0000(param_1,local_2a);
     if ((((((cVar1 != '\0') && (iVar2 = strcmp(local_2a,(char *)SaveHeader.ofs), iVar2 == 0)) &&
-          (cVar1 = save_49fd_0000(param_1,(undefined2)DAT_2000_cb0d,DAT_2000_cb0d._2_2_,
+          (cVar1 = save_49fd_0000(param_1,(undefined2)DAT_2000_cb0d,(*(uint16_t *)((uint8_t *)&(DAT_2000_cb0d) + 2)),
                                   (char *)"sky07.lbm" + 1), cVar1 != '\0')) &&
-         (((cVar1 = save_49fd_0000(param_1,(undefined2)DAT_2000_cb09,DAT_2000_cb09._2_2_,
+         (((cVar1 = save_49fd_0000(param_1,(undefined2)DAT_2000_cb09,(*(uint16_t *)((uint8_t *)&(DAT_2000_cb09) + 2)),
                                    (char *)"sky07.lbm" + 1), cVar1 != '\0' &&
            (cVar1 = save_49fd_0000(param_1,DAT_2000_cb05,DAT_2000_cb07,
                                    (char *)"fletcher\'s shop" + 2), cVar1 != '\0')) &&
@@ -136,7 +136,7 @@ undefined2 __cdecl16far save_49fd_01da(int param_1)
                                          DAT_2000_d2df * 0x12), cVar1 != '\0')))) &&
                (cVar1 = save_49fd_0000(param_1,(undefined2 *)&DAT_2000_ca99,
                                        (char *)"puppetmaker" + 3,2), cVar1 != '\0')) &&
-              (((((cVar1 = save_49fd_0000(param_1,(undefined2)DAT_2000_ca95,DAT_2000_ca95._2_2_,
+              (((((cVar1 = save_49fd_0000(param_1,(undefined2)DAT_2000_ca95,(*(uint16_t *)((uint8_t *)&(DAT_2000_ca95) + 2)),
                                           DAT_2000_ca99 * 9), cVar1 != '\0' &&
                   (cVar1 = save_49fd_0000(param_1,0x2f3,(char *)"puppetmaker" + 3,1), cVar1 != '\0')
                   ) && (cVar1 = save_49fd_0000(param_1,(undefined1 *)&DAT_2000_d19e,
@@ -248,9 +248,9 @@ undefined1 __cdecl16far save_49fd_0863(void)
   if (StshHandles[0] < 0) {
     handle = ovr_open_wait_unlock_and_disk((char *)StshNames[0]);
   }
-  uVar2 = (undefined2)((ulong)_DAT_2000_d1b0 >> 0x10);
-  lseek(handle,CONCAT22(*(undefined2 *)((int)_DAT_2000_d1b0 + 3),
-                        *(undefined2 *)((int)_DAT_2000_d1b0 + 1)),0);
+  uVar2 = (undefined2)((ulong)DAT_2000_d1b0 >> 0x10);
+  lseek(handle,CONCAT22(*(undefined2 *)((int)DAT_2000_d1b0 + 3),
+                        *(undefined2 *)((int)DAT_2000_d1b0 + 1)),0);
   uVar1 = save_49fd_01da(handle);
   if (StshHandles[0] < 0) {
     close(handle);
@@ -303,9 +303,9 @@ undefined2 __cdecl16far stSave(void)
   if (-1 < handle) {
     cVar1 = save_49fd_08da(handle,SaveHeader.ofs,SaveHeader.seg,0x28);
     if (((((cVar1 != '\0') &&
-          (cVar1 = save_49fd_08da(handle,(undefined2)DAT_2000_cb0d,DAT_2000_cb0d._2_2_,
+          (cVar1 = save_49fd_08da(handle,(undefined2)DAT_2000_cb0d,(*(uint16_t *)((uint8_t *)&(DAT_2000_cb0d) + 2)),
                                   (char *)"sky07.lbm" + 1), cVar1 != '\0')) &&
-         (cVar1 = save_49fd_08da(handle,(undefined2)DAT_2000_cb09,DAT_2000_cb09._2_2_,
+         (cVar1 = save_49fd_08da(handle,(undefined2)DAT_2000_cb09,(*(uint16_t *)((uint8_t *)&(DAT_2000_cb09) + 2)),
                                  (char *)"sky07.lbm" + 1), cVar1 != '\0')) &&
         ((((cVar1 = save_49fd_08da(handle,DAT_2000_cb05,DAT_2000_cb07,(char *)"fletcher\'s shop" + 2
                                   ), cVar1 != '\0' &&
@@ -338,7 +338,7 @@ undefined2 __cdecl16far stSave(void)
              cVar1 != '\0')) &&
             ((cVar1 = save_49fd_08da(handle,(undefined2 *)&DAT_2000_ca99,(char *)"puppetmaker" + 3,2
                                     ), cVar1 != '\0' &&
-             ((cVar1 = save_49fd_08da(handle,(undefined2)DAT_2000_ca95,DAT_2000_ca95._2_2_,
+             ((cVar1 = save_49fd_08da(handle,(undefined2)DAT_2000_ca95,(*(uint16_t *)((uint8_t *)&(DAT_2000_ca95) + 2)),
                                       DAT_2000_ca99 * 9), cVar1 != '\0' &&
               (cVar1 = save_49fd_08da(handle,0x2f3,(char *)"puppetmaker" + 3,1), cVar1 != '\0'))))))
            )) && ((cVar1 = save_49fd_08da(handle,(undefined1 *)&DAT_2000_d19e,

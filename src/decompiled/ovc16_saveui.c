@@ -95,7 +95,7 @@ void __cdecl16far saveui_4528_01b2(void)
     handle.ofs = CrossBlitPtr.ofs;
     ovr_stshFree(handle);
   }
-  CrossBlitPtr = ovr_stshRleCut((far_t)0xa0000000,CrossBlitX,CrossBlitY,CrossBlitX + 0xd,
+  CrossBlitPtr = ovr_stshRleCut(far_from_u32((uint32_t)(0xa0000000)),CrossBlitX,CrossBlitY,CrossBlitX + 0xd,
                                 CrossBlitY + 9);
   dst.seg = 0xa000;
   dst.ofs = CrossBlitX + CrossBlitY * 0x140;
@@ -526,7 +526,7 @@ uiReadString(char *param_1,int param_2,int param_3,char *param_4,uint16_t param_
   }
   sVar1 = strlen(local_5c);
   bStack_5 = (byte)sVar1;
-  fStack_c = ovr_stshRleCut((far_t)0xa0000000,22,param_3 * 0xf + 0x1d,222,param_3 * 0xf + 0x29);
+  fStack_c = ovr_stshRleCut(far_from_u32((uint32_t)(0xa0000000)),22,param_3 * 0xf + 0x1d,222,param_3 * 0xf + 0x29);
   TextBlitX = 0x2a;
   TextBlitY = param_3 * 0xf + 0x1d;
   local_8 = 0;
@@ -901,7 +901,7 @@ char * __cdecl16far saveui_4528_1303(void)
     *puVar1 = *puVar1 | unaff_DI;
     *puVar13 = *puVar13 | (uint)&stack0xffff;
                     /* WARNING: Read-only address (ram,0x00025f09) is written */
-    s_fighters__residence_2410_1e09._0_2_ = (uint)&stack0xffde | 0x6966;
+    (*(uint16_t *)((uint8_t *)&(s_fighters__residence_2410_1e09))) = (uint)&stack0xffde | 0x6966;
     bVar14 = (byte)((uint)puVar13 >> 8) | (byte)in_CX | bVar14 | (byte)unaff_DI;
     iVar6 = CONCAT11(bVar14,(byte)puVar13);
     pbVar2 = (byte *)(iVar6 + -0x51f8);
@@ -926,7 +926,7 @@ switchD_4000_6642_caseD_3:
     ovr_OVC15_4207_0b88();
     uVar15 = (undefined2)((ulong)uStack_1e >> 0x10);
     puVar13 = (uint *)uStack_1e;
-    uStack_1a = (char *)CONCAT11(uStack_1a._1_1_,(char)((ulong)((byte)puVar13[7] + 0xf) / 0x10));
+    uStack_1a = (char *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(char)((ulong)((byte)puVar13[7] + 0xf) / 0x10));
     if ((puVar13[6] & 1) == 0) {
       pcStack_16 = (char *)0x0;
     }
@@ -935,25 +935,25 @@ switchD_4000_6642_caseD_3:
     }
     while( true ) {
       cVar4 = (char)uStack_1a;
-      uStack_1a = (char *)CONCAT11(uStack_1a._1_1_,(char)uStack_1a + -1);
+      uStack_1a = (char *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(char)uStack_1a + -1);
       if (cVar4 == '\0') break;
       ovr_OVC15_4207_2301();
     }
   }
-  else if (uStack_1a._1_1_ == '\0') {
+  else if ((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) == '\0') {
     uStack_1a = (char *)(uint)(byte)((ulong)((byte)((uint *)uStack_1e)[7] + 0xf) / 0x10);
     while( true ) {
       cVar4 = (char)uStack_1a;
-      uStack_1a = (char *)CONCAT11(uStack_1a._1_1_,(char)uStack_1a + -1);
+      uStack_1a = (char *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(char)uStack_1a + -1);
       if (cVar4 == '\0') break;
       ptr.seg = Entities.seg;
       ptr.ofs = Entities.ofs + unaff_DI * 0x37;
       ovr_agnt_3b1d_196b(ptr);
     }
   }
-  else if (((char)uStack_18 != '\0') && (uStack_1a._1_1_ != '\0')) {
+  else if (((char)uStack_18 != '\0') && ((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) != '\0')) {
     uVar5 = manage_4d05_28f4();
-    uStack_1a = (char *)CONCAT11(uStack_1a._1_1_,uVar5);
+    uStack_1a = (char *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),uVar5);
     while ((char)uStack_1a != '\0') {
       uVar15 = (undefined2)((ulong)uStack_1e >> 0x10);
       if ((((uint *)uStack_1e)[6] & 1) == 0) {
@@ -964,7 +964,7 @@ switchD_4000_6642_caseD_3:
       }
       cVar4 = ovr_OVC15_4207_2301();
       if (cVar4 == '\0') break;
-      uStack_1a = (char *)CONCAT11(uStack_1a._1_1_,(char)uStack_1a + -1);
+      uStack_1a = (char *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(char)uStack_1a + -1);
     }
   }
   do {
@@ -991,7 +991,7 @@ switchD_4000_6642_caseD_3:
           }
           ovr_OVC24_5943_0d5a();
           GGameState = 0x1f;
-          if (uStack_18._1_1_ != '\0') {
+          if ((*(uint8_t *)((uint8_t *)&(uStack_18) + 1)) != '\0') {
             ovr_constr_36ce_03a6();
             GGameState = 0x13;
           }
@@ -1165,7 +1165,7 @@ LAB_3f0b_1477:
     else {
       bVar14 = 1;
     }
-    uStack_18 = (char *)CONCAT11(uStack_18._1_1_,bVar14);
+    uStack_18 = (char *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_18) + 1)),bVar14);
   } while (bVar14 == 0 && cVar4 == '\0');
   uVar9 = (uint)bVar14;
   goto switchD_4000_6642_caseD_3;
@@ -1182,7 +1182,7 @@ void __cdecl16far saveui_4528_144e(void)
   
   gfx.seg = FontHandle.seg;
   gfx.ofs = FontHandle.ofs;
-  ovr_blitLoadRleGfx(gfx,(far_t)0xa000c31d);
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)));
   return;
 }
 
@@ -1246,13 +1246,13 @@ byte * __cdecl16far uiMainMenuLoop(long param_1,byte *param_2,uint param_3,uint 
   ovr_say("Stronghold V 1.00");
   fVar11.seg = DAT_2000_d1a1;
   fVar11.ofs = DAT_2000_d19f;
-  ovr_blitLoadRleGfx(fVar11,(far_t)0xa00009af);
+  ovr_blitLoadRleGfx(fVar11,far_from_u32((uint32_t)(0xa00009af)));
   ovr_stats_6386_00f8();
   saveui_4528_0533();
-  fStack_8 = (far_t)ovr_stshAlloc(400);
-  _fsetmem((void *)fStack_8,400,0);
+  fStack_8 = far_from_u32((uint32_t)(ovr_stshAlloc(400)));
+  _fsetmem((void *)MK_FP(fStack_8.seg, fStack_8.ofs),400,0);
   pbVar7 = (byte *)0x0;
-  uStack_4 = (byte *)((uint)uStack_4._1_1_ << 8);
+  uStack_4 = (byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_4) + 1)) << 8);
   while( true ) {
     if (SaveAuto == '\0') {
       pcStack_2e = (char *)0x0;
@@ -1299,7 +1299,7 @@ byte * __cdecl16far uiMainMenuLoop(long param_1,byte *param_2,uint param_3,uint 
     while( true ) {
       (pbVar5 + (int)unaff_DI)[-0x1ba] = (pbVar5 + (int)unaff_DI)[-0x1ba] + (char)uVar4;
       piVar6 = (int *)(fStack_8.ofs + (int)uStack_4 * 4);
-      piVar6[1] = param_1._2_2_;
+      piVar6[1] = (*(uint16_t *)((uint8_t *)&(param_1) + 2));
       *piVar6 = (int)param_1 + (int)unaff_DI * 0x1e;
       for (uVar8 = 0; uVar8 < *(byte *)((int)param_1 + (int)unaff_DI * 0x1e + 0x1b);
           uVar8 = uVar8 + 1) {
@@ -1338,7 +1338,7 @@ byte * __cdecl16far uiMainMenuLoop(long param_1,byte *param_2,uint param_3,uint 
       return pbVar7;
     }
     if ((cStack_e != '\0') || (cStack_d != '\0')) {
-      if (uStack_4._1_1_ == '\0') {
+      if ((*(uint8_t *)((uint8_t *)&(uStack_4) + 1)) == '\0') {
         ovr_stop_audio();
         CurSfxType3 = 0xff;
         ovr_play_sfx(90,0);
@@ -1382,7 +1382,7 @@ byte * __cdecl16far uiMainMenuLoop(long param_1,byte *param_2,uint param_3,uint 
       if ((0 < (int)param_4) || ((uVar8 = param_3, -1 < (int)param_4 && (0xbfff < param_3)))) {
         uVar8 = 0xc000;
       }
-      pvVar10 = (void *)ovr_mkp(param_1._2_2_,(uint16_t)param_2);
+      pvVar10 = (void *)ovr_mkp((*(uint16_t *)((uint8_t *)&(param_1) + 2)),(uint16_t)param_2);
       param_2 = (byte *)((ulong)pvVar10 >> 0x10);
       write((int)unaff_DI,(void *)pvVar10,uVar8);
       param_1 = (ulong)((int)(void *)pvVar10 + uVar8) << 0x10;
@@ -1416,15 +1416,15 @@ byte * __cdecl16far uiMainMenuLoop(long param_1,byte *param_2,uint param_3,uint 
       }
     }
   }
-  *(undefined1 *)((int)DAT_2000_ca95 + (int)pbVar3 * 9) = param_2._0_1_;
+  *(undefined1 *)((int)DAT_2000_ca95 + (int)pbVar3 * 9) = (*(uint8_t *)((uint8_t *)&(param_2)));
   *(undefined1 *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 1) = 8;
   *(undefined1 *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 2) = (undefined1)param_3;
   *(int *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 4) = (int)param_1;
-  *(int *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 6) = param_1._2_2_;
-  *(undefined2 *)((int)DAT_2000_cb0d + (int)param_1 * 0x78 + param_1._2_2_ * 2) = pbVar3;
+  *(int *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 6) = (*(uint16_t *)((uint8_t *)&(param_1) + 2));
+  *(undefined2 *)((int)DAT_2000_cb0d + (int)param_1 * 0x78 + (*(uint16_t *)((uint8_t *)&(param_1) + 2)) * 2) = pbVar3;
   uVar4 = (undefined2)((ulong)DAT_2000_cb09 >> 0x10);
-  *(uint *)((int)DAT_2000_cb09 + param_1._2_2_ * 0x128 + (int)param_1 * 2) =
-       *(uint *)((int)DAT_2000_cb09 + param_1._2_2_ * 0x128 + (int)param_1 * 2) & 0x3fff |
+  *(uint *)((int)DAT_2000_cb09 + (*(uint16_t *)((uint8_t *)&(param_1) + 2)) * 0x128 + (int)param_1 * 2) =
+       *(uint *)((int)DAT_2000_cb09 + (*(uint16_t *)((uint8_t *)&(param_1) + 2)) * 0x128 + (int)param_1 * 2) & 0x3fff |
        (uint)*(byte *)(((uint)param_2 & 0xff) * 0x27 + 0x11e) << 0xe;
   if ((*(uint *)(((uint)param_2 & 0xff) * 0x27 + 0x121) & 0x40) == 0) {
     *(undefined1 *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 8) = 0;
@@ -1569,7 +1569,7 @@ int __cdecl16far saveui_4528_1d0f(char *param_1)
     if ((((byte *)_ctype + 1)[*param_1] & 2) != 0) {
       iVar1 = (int)*param_1 + iVar1 * 10 + -0x30;
     }
-    param_1 = (char *)CONCAT22(param_1._2_2_,(char *)param_1 + 1);
+    param_1 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(param_1) + 2)),(char *)param_1 + 1);
   }
   return iVar1;
 }
@@ -1599,7 +1599,7 @@ undefined2 __cdecl16far saveui_4528_1d55(char *param_1,int param_2,int param_3)
   }
   bStack_5 = 0;
   local_5c[0] = 0;
-  fStack_c = ovr_stshRleCut((far_t)0xa0000000,22,param_3 * 0xf + 0x1d,222,param_3 * 0xf + 0x27);
+  fStack_c = ovr_stshRleCut(far_from_u32((uint32_t)(0xa0000000)),22,param_3 * 0xf + 0x1d,222,param_3 * 0xf + 0x27);
   TextBlitX = 0x2a;
   TextBlitY = param_3 * 0xf + 0x1d;
   local_8 = 0;
@@ -1611,7 +1611,7 @@ LAB_4528_1e1d:
       while( true ) {
         pcStack_4 = (char *)uiReadKey2();
         if (((((byte *)_ctype + 1)[(uint)pcStack_4 & 0xff] & 2) == 0) || (1 < bStack_5)) break;
-        local_5c[bStack_5] = pcStack_4._0_1_;
+        local_5c[bStack_5] = (*(uint8_t *)((uint8_t *)&(pcStack_4)));
         local_5c[bStack_5 + 1] = 0;
         iVar1 = ovr_font_302d_06ea(local_5c);
         iVar2 = ovr_font_302d_06ea();

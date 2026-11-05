@@ -166,7 +166,7 @@ undefined1 __cdecl16far agnt_3b1d_00ce(int *param_1,undefined1 *param_2)
                 && (*(char *)((uint)*(byte *)(iVar4 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x10) ==
                     '\0')))) {
               *param_2 = *(undefined1 *)(iVar4 * 0x69 + iStack_a + 0x8fa);
-              cVar3 = agnt_3b1d_00b7((undefined1 *)param_2,param_2._2_2_);
+              cVar3 = agnt_3b1d_00b7((undefined1 *)param_2,(*(uint16_t *)((uint8_t *)&(param_2) + 2)));
               if (cVar3 != '\0') {
                 return *param_2;
               }
@@ -287,7 +287,7 @@ undefined1 __cdecl16far agnt_3b1d_0426(int *param_1,byte *param_2,char param_3)
                                         ((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa) * 0x34 +
                                         -0x17), (*(uint *)((int)uVar3 + 0x3c) & 0x20) == 0)))))) {
               *param_2 = *(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa);
-              cVar4 = agnt_3b1d_00b7((byte *)param_2,param_2._2_2_);
+              cVar4 = agnt_3b1d_00b7((byte *)param_2,(*(uint16_t *)((uint8_t *)&(param_2) + 2)));
               if ((cVar4 != '\0') &&
                  ((*(byte *)((uint)*param_2 * 0x34 + -0x13) <
                    *(byte *)((uint)*param_2 * 0x34 + -0x12) &&
@@ -1083,10 +1083,10 @@ void __cdecl16far agnt_3b1d_19e0(void)
   else {
     ovr_fmFreeAudio(0);
   }
-  fVar2 = ovr_stshRleCut((far_t)((ulong)BlitRects[0].seg << 0x10),12,7,222,77);
+  fVar2 = ovr_stshRleCut(far_from_u32((uint32_t)((ulong)BlitRects[0].seg << 0x10)),12,7,222,77);
   DAT_2410_07e5 = fVar2.seg;
   DAT_2410_07e3 = fVar2.ofs;
-  fVar3 = ovr_stshRleCut((far_t)((ulong)BlitRects[0].seg << 0x10),12,78,222,150);
+  fVar3 = ovr_stshRleCut(far_from_u32((uint32_t)((ulong)BlitRects[0].seg << 0x10)),12,78,222,150);
   DAT_2410_07e9 = fVar3.seg;
   DAT_2410_07e7 = fVar3.ofs;
   GGameState = 0x29;
@@ -1128,7 +1128,7 @@ void __cdecl16far agnt_3b1d_1ad8(void)
   }
   if (((DAT_2000_d0f6 != '\0') && (GOngoingBattle == '\0')) &&
      (DAT_2410_07f6 = DAT_2410_07f6 + 1, 2 < DAT_2410_07f6)) {
-    fVar2 = (far_t)ovr_stshAlloc(0xfa0f);
+    fVar2 = far_from_u32((uint32_t)(ovr_stshAlloc(0xfa0f)));
     DAT_2000_d0fb = fVar2.seg;
     DAT_2000_d0f9 = fVar2.ofs;
     fVar2 = ovr_alignToSeg(fVar2);

@@ -186,7 +186,7 @@ long __cdecl16far heapRealloc(long block,long nbytes)
   uint uVar6;
   long lVar7;
   
-  bVar4 = heapIsBadPtr((far_t)block);
+  bVar4 = heapIsBadPtr(far_from_u32((uint32_t)(block)));
   if (bVar4) {
     block = 0;
   }
@@ -203,9 +203,9 @@ long __cdecl16far heapRealloc(long block,long nbytes)
           *(int *)0x0 = uVar1 - uVar5;
         }
         *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
-        *(uint16_t *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 4) = block._2_2_;
+        *(uint16_t *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 4) = (*(uint16_t *)((uint8_t *)&(block) + 2));
         *(uint *)0x0 = uVar5;
-        heapFreeSub(block._2_2_ + uVar5);
+        heapFreeSub((*(uint16_t *)((uint8_t *)&(block) + 2)) + uVar5);
       }
       else {
         iVar2 = *(int *)0x0;
@@ -214,11 +214,11 @@ long __cdecl16far heapRealloc(long block,long nbytes)
           if (uVar5 < uVar1 + iVar2) {
             *(int *)0x0 = (uVar1 + iVar2) - uVar5;
             *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
-            *(uint16_t *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 4) = block._2_2_;
-            heapFreeSub(block._2_2_ + uVar5);
+            *(uint16_t *)((char *)"Borland C++ - Copyright 1991 Borland Intl." + 4) = (*(uint16_t *)((uint8_t *)&(block) + 2));
+            heapFreeSub((*(uint16_t *)((uint8_t *)&(block) + 2)) + uVar5);
           }
           else {
-            heapFreeSub(block._2_2_);
+            heapFreeSub((*(uint16_t *)((uint8_t *)&(block) + 2)));
           }
         }
         else {
@@ -249,7 +249,7 @@ long __cdecl16far heapRealloc(long block,long nbytes)
           }
           lVar7 = LXLSH_at_((ulong)uVar5,4);
           heapMemmove(4,uVar6,block,(int)(lVar7 + -4));
-          heapFree((far_t)block);
+          heapFree(far_from_u32((uint32_t)(block)));
           block = CONCAT22(uVar6,4);
         }
       }

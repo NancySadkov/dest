@@ -18,7 +18,10 @@ public class DumpAsm extends GhidraScript {
         while (it.hasNext()) {
             Instruction ins = it.next();
             StringBuilder b = new StringBuilder();
-            b.append(ins.getAddress()).append("  ").append(ins.toString());
+            b.append(ins.getAddress()).append("  ");
+            byte[] ib = ins.getBytes();
+            for (byte x : ib) b.append(String.format("%02X ", x & 0xff));
+            b.append(" ").append(ins.toString());
             for (int i = 0; i < ins.getNumOperands(); i++) {
                 Object[] objs = ins.getOpObjects(i);
                 for (Object o : objs) b.append("  [").append(o.getClass().getSimpleName()).append(":").append(o).append("]");

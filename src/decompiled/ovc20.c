@@ -130,7 +130,7 @@ void __cdecl16far stgFreeTmp(stg_tmp_t *tg)
   handle.seg = (((stg_tmp_t *)tg)->bptr).seg;
   handle.ofs = (&((stg_tmp_t *)tg)->bptr)->ofs;
   ovr_stshFree(handle);
-  ovr_stshFree((far_t)tg);
+  ovr_stshFree(far_from_u32((uint32_t)(tg)));
   return;
 }
 
@@ -283,7 +283,7 @@ void __cdecl16far stshWriteFile(int fhandle,far_t buf,DW sz)
   void *pbuf;
   
   do {
-    if ((0 < (int)sz.hi) || ((wrsz = sz.lo, -1 < (long)sz && (0xbfff < sz.lo)))) {
+    if ((0 < (int)sz.hi) || ((wrsz = sz.lo, -1 < (int32_t)dw_to_u32(sz) && (0xbfff < sz.lo)))) {
       wrsz = 0xc000;
     }
     pbuf = (void *)ovr_mkp(buf.ofs,buf.seg);
@@ -309,7 +309,7 @@ void __cdecl16far stshReadFile(int handle,far_t dst,DW nbytes)
   void *pdst;
   
   do {
-    if ((0 < (int)nbytes.hi) || ((len = nbytes.lo, -1 < (long)nbytes && (0xbfff < nbytes.lo)))) {
+    if ((0 < (int)nbytes.hi) || ((len = nbytes.lo, -1 < (int32_t)dw_to_u32(nbytes) && (0xbfff < nbytes.lo)))) {
       len = 0xc000;
     }
     pdst = (void *)ovr_mkp(dst.ofs,dst.seg);
@@ -352,11 +352,11 @@ spr_t * __cdecl16far stshSpriteStub(anm_t *anms,uint16_t nanims)
   }
   ofs = (spr_t *)StshSprites + StshSprIndex;
   StshSprIndex = StshSprIndex + 1;
-  dst = (spr_t *)ovr_mkp((uint16_t)ofs,StshSprites._2_2_);
+  dst = (spr_t *)ovr_mkp((uint16_t)ofs,(*(uint16_t *)((uint8_t *)&(StshSprites) + 2)));
   _fsetmem(dst,0xb0,0);
   i = 0;
   while( true ) {
-    sdst = (undefined2)((ulong)dst >> 0x10);
+    sdst = (uint16_t)((uint32_t)dst >> 0x10);
     pdst = (spr_t *)dst;
     if (nanims <= i) {
       return dst;
@@ -404,7 +404,7 @@ OVC20_4b0a_08ee(uint16_t param_1,uint16_t param_2,uint param_3,uint16_t param_4)
   if (StshCount < 0xd93) {
     b = (ulong)StshCount;
     StshCount = StshCount + 1;
-    fVar5 = (far_t)LXMUL_at_(0x15,b);
+    fVar5 = far_from_u32((uint32_t)(LXMUL_at_(0x15,b)));
     ptr_base.seg = StshCtPtr.seg;
     ptr_base.ofs = StshCtPtr.ofs;
     fVar5 = PADD_at_(ptr_base,fVar5);
@@ -485,7 +485,7 @@ cte_t * __cdecl16far stshStoreFile(uint8_t *data)
   if (StshCount < 0xd93) {
     b = (ulong)StshCount;
     StshCount = StshCount + 1;
-    fVar4 = (far_t)LXMUL_at_(0x15,b);
+    fVar4 = far_from_u32((uint32_t)(LXMUL_at_(0x15,b)));
     ptr_base.seg = StshCtPtr.seg;
     ptr_base.ofs = StshCtPtr.ofs;
     fVar4 = PADD_at_(ptr_base,fVar4);
@@ -519,8 +519,8 @@ cte_t * __cdecl16far stshStoreFile(uint8_t *data)
     }
     sz_00.hi = sz.hi;
     sz_00.lo = sz.lo;
-    stshWriteFile(StshFile,(far_t)data,sz_00);
-    ovr_stshFree((far_t)data);
+    stshWriteFile(StshFile,far_from_u32((uint32_t)(data)),sz_00);
+    ovr_stshFree(far_from_u32((uint32_t)(data)));
     return pcVar5;
   }
                     /* WARNING: Subroutine does not return */
@@ -600,7 +600,7 @@ void __cdecl16far stshInitAudioAssets(char grab)
         pvVar7 = ovr_stshAlloc(nbytes + 0xd);
         sz = (undefined2)nbytes;
         ((undefined2 *)(i * 4))[1] = (int)((ulong)pvVar7 >> 0x10);
-        *(undefined2 *)(i * 4) = (void *)pvVar7;
+        *(undefined2 *)(i * 4) = (uint16_t)pvVar7;
         *(undefined1 *)*(undefined4 *)(i << 2) = 3;
         uVar6 = (undefined2)((ulong)*(undefined4 *)(i << 2) >> 0x10);
         iVar5 = (int)*(undefined4 *)(i << 2);
@@ -634,7 +634,7 @@ void __cdecl16far stshInitAudioAssets(char grab)
         uVar4 = ((int)((ulong)lVar8 >> 0x10) + (uint)voc.blksz[2]) - (uint)(uVar2 < 2);
         pvVar7 = ovr_stshAlloc(CONCAT22(uVar4 + (0xfff2 < uVar3),uVar2 + 0xb));
         ((undefined2 *)(i * 4))[1] = (int)((ulong)pvVar7 >> 0x10);
-        *(undefined2 *)(i * 4) = (void *)pvVar7;
+        *(undefined2 *)(i * 4) = (uint16_t)pvVar7;
         *(undefined1 *)*(undefined4 *)(i << 2) = 3;
         uVar6 = (undefined2)((ulong)*(undefined4 *)(i << 2) >> 0x10);
         iVar5 = (int)*(undefined4 *)(i << 2);
@@ -661,7 +661,7 @@ void __cdecl16far stshInitAudioAssets(char grab)
       ;
       in_DX = (uint16_t)((ulong)pcVar9 >> 0x10);
       ((undefined2 *)(i * 4))[1] = in_DX;
-      *(undefined2 *)(i * 4) = (cte_t *)pcVar9;
+      *(undefined2 *)(i * 4) = (uint16_t)pcVar9;
     }
     i = i + 1;
   } while( true );
@@ -671,7 +671,7 @@ void __cdecl16far stshInitAudioAssets(char grab)
 
 /* 4b0a:0eda */
 
-long __cdecl16far stshAlloc(DW sz)
+long __cdecl16far stshAlloc2(DW sz)
 
 {
   undefined2 uVar1;
@@ -686,7 +686,7 @@ long __cdecl16far stshAlloc(DW sz)
   if (StshCount < 0xd93) {
     b = (ulong)StshCount;
     StshCount = StshCount + 1;
-    fVar5 = (far_t)LXMUL_at_(0x15,b);
+    fVar5 = far_from_u32((uint32_t)(LXMUL_at_(0x15,b)));
     ptr_base.seg = StshCtPtr.seg;
     ptr_base.ofs = StshCtPtr.ofs;
     fVar5 = PADD_at_(ptr_base,fVar5);
@@ -731,8 +731,8 @@ uint32_t __cdecl16far stshWrite(uint8_t *data,long sz)
   }
   buf.seg = in_stack_00000006;
   buf.ofs = (uint16_t)data;
-  stshWriteFile(StshFile,buf,(DW)sz);
-  uVar1 = stshAlloc((DW)sz);
+  stshWriteFile(StshFile,buf,dw_from_u32((uint32_t)sz));
+  uVar1 = stshAlloc2(dw_from_u32((uint32_t)sz));
   return uVar1;
 }
 
@@ -744,7 +744,7 @@ uint32_t __cdecl16far stshWrite(uint8_t *data,long sz)
 /* WARNING: Removing unreachable block (ram,0x0004c116) */
 /* Opens a file and writes it into STRONG.DAT */
 
-far_t __cdecl16far stshStoreFile(char *filename,uint16_t flag)
+far_t __cdecl16far stshStoreFile2(char *filename,uint16_t flag)
 
 {
   int hande;
@@ -761,26 +761,26 @@ far_t __cdecl16far stshStoreFile(char *filename,uint16_t flag)
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0x23);
   }
-  sz = (DW)filelength(hande);
+  sz = dw_from_u32(filelength(hande));
   if ((char)flag != '\0') {
-    sz = (DW)((long)sz + 0xf);
+    sz = dw_from_u32((uint32_t)((int32_t)dw_to_u32(sz) + 0xf));
   }
-  fVar1 = (far_t)stshAlloc(sz);
-  if ((long)sz < 0xc000) {
-    buf = (far_t)ovr_stshAlloc((uint32_t)sz);
+  fVar1 = far_from_u32((uint32_t)(stshAlloc2(sz)));
+  if ((int32_t)dw_to_u32(sz) < 0xc000) {
+    buf = far_from_u32((uint32_t)(ovr_stshAlloc(dw_to_u32(sz))));
   }
   else {
-    buf = (far_t)ovr_stshAlloc(0xc000);
+    buf = far_from_u32((uint32_t)(ovr_stshAlloc(0xc000)));
   }
   while( true ) {
     uStack_8 = sz.hi;
     len = sz.lo;
-    if (sz == (DW)0x0) break;
+    if (dw_to_u32(sz) == 0) break;
     count = len;
-    if (0xbfff < (long)sz) {
+    if (0xbfff < (int32_t)dw_to_u32(sz)) {
       count = 0xc000;
     }
-    _fmemset((void *)buf,0,count);
+    _fmemset((void *)MK_FP(buf.seg, buf.ofs),0,count);
     read(hande,(void *)buf.ofs,count);
     sz_00.hi = 0;
     sz_00.lo = count;
@@ -852,43 +852,43 @@ void __cdecl16far init_ui_gfxes(void)
   handle.ofs = Lbm_nwpanel1.ofs;
   psStack_a = ovr_stshLoadGfx(handle);
   uVar1 = ovr_calcSeasonPalette(psStack_a,local_30e);
-  init_special_graphics(uVar1);
+  init_special_graphics(uVar1,0);
   ovr_vgaSetPalette8bit(local_30e);
-  init_special_graphics(Lbm_nwpanel1.ofs);
+  init_special_graphics(Lbm_nwpanel1.ofs,0);
   handle_00.seg = DAT_2000_d1ce;
   handle_00.ofs = DAT_2000_d1cc;
   psStack_e = ovr_stshLoadGfx(handle_00);
   memcpy((uint8_t *)SpecialColors,((stg_tmp_t *)psStack_e)->cmap,8);
-  init_special_graphics(DAT_2000_d1cc);
-  fStack_6 = (far_t)ovr_stshAlloc(0xfa0f);
+  init_special_graphics(DAT_2000_d1cc,0);
+  fStack_6 = far_from_u32((uint32_t)(ovr_stshAlloc(0xfa0f)));
   fVar3 = ovr_alignToSeg(fStack_6);
   uVar2 = fVar3.seg;
   ovr_driver_2d63_05e5(0,0,0x13f,199,0);
   fVar3.seg = DAT_2000_d1ca;
   fVar3.ofs = DAT_2000_d1c8;
-  ovr_blitLoadRleGfx(fVar3,(far_t)((ulong)uVar2 << 0x10));
-  init_special_graphics(DAT_2000_d1c8);
-  Font03 = ovr_stshProcessFontSub((far_t)((ulong)uVar2 << 0x10));
+  ovr_blitLoadRleGfx(fVar3,far_from_u32((uint32_t)((ulong)uVar2 << 0x10)));
+  init_special_graphics(DAT_2000_d1c8,0);
+  Font03 = ovr_stshProcessFontSub(far_from_u32((uint32_t)((ulong)uVar2 << 0x10)));
   ovr_driver_2d63_05e5(0,0,0x13f,199,0);
   gfx.seg = DAT_2000_d1c6;
   gfx.ofs = DAT_2000_d1c4;
-  ovr_blitLoadRleGfx(gfx,(far_t)((ulong)uVar2 << 0x10));
-  init_special_graphics(DAT_2000_d1c4);
-  Font02 = ovr_stshProcessFontSub((far_t)((ulong)uVar2 << 0x10));
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)((ulong)uVar2 << 0x10)));
+  init_special_graphics(DAT_2000_d1c4,0);
+  Font02 = ovr_stshProcessFontSub(far_from_u32((uint32_t)((ulong)uVar2 << 0x10)));
   ovr_driver_2d63_05e5(0,0,0x13f,199,0);
   gfx_00.seg = DAT_2000_d1c2;
-  gfx_00.ofs = _DAT_2000_d1c0;
-  ovr_blitLoadRleGfx(gfx_00,(far_t)((ulong)uVar2 << 0x10));
-  init_special_graphics(_DAT_2000_d1c0);
-  Font01 = ovr_stshProcessFontSub((far_t)((ulong)uVar2 << 0x10));
+  gfx_00.ofs = DAT_2000_d1c0;
+  ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)((ulong)uVar2 << 0x10)));
+  init_special_graphics(DAT_2000_d1c0,0);
+  Font01 = ovr_stshProcessFontSub(far_from_u32((uint32_t)((ulong)uVar2 << 0x10)));
   FontMain = Font01;
   for (i = 0; i < 4; i = i + 1) {
     ovr_driver_2d63_05e5(0,0,0x11,0x11,0);
     gfx_01.seg = *(uint16_t *)((int)&MiceCursors[0].seg + i * 4);
     gfx_01.ofs = ((far_t *)MiceCursors + i)->ofs;
-    ovr_blitLoadRleGfx(gfx_01,(far_t)((ulong)uVar2 << 0x10));
-    init_special_graphics(((far_t *)MiceCursors + i)->ofs);
-    video_13aa_0266();
+    ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)((ulong)uVar2 << 0x10)));
+    init_special_graphics(((far_t *)MiceCursors + i)->ofs,0);
+    video_13aa_0266(0,0,0);
     pvVar4 = ovr_stshAlloc(0x121);
     *(undefined2 *)((int)&MicePtrs.seg + i * 4) = (int)((ulong)pvVar4 >> 0x10);
     ((far_t *)&MicePtrs + i)->ofs = (uint16_t)(void *)pvVar4;
@@ -910,72 +910,72 @@ void __cdecl16far stshLoadAudioDrivers(bool grab)
   far_t fVar1;
   
   if (grab) {
-    far_t_2000_d098 = stshStoreFile((char *)"midpak.ad",0);
-    fVar1 = stshStoreFile((char *)"cmidpak.com",1);
-    _DAT_2000_d096 = fVar1.seg;
+    far_t_2000_d098 = stshStoreFile2((char *)"midpak.ad",0);
+    fVar1 = stshStoreFile2((char *)"cmidpak.com",1);
+    DAT_2000_d096 = fVar1.seg;
     DAT_2000_d094 = fVar1.ofs;
-    fVar1 = stshStoreFile((char *)"ibmsnd.com",1);
+    fVar1 = stshStoreFile2((char *)"ibmsnd.com",1);
     DAT_2000_d0ca = fVar1.seg;
     DAT_2000_d0c8 = fVar1.ofs;
-    fVar1 = stshStoreFile((char *)"sblaster.com",1);
+    fVar1 = stshStoreFile2((char *)"sblaster.com",1);
     DAT_2000_d0ce = fVar1.seg;
     DAT_2000_d0cc = fVar1.ofs;
     DAT_2000_d0d2 = 0;
     DAT_2000_d0d0 = 0;
-    fVar1 = stshStoreFile((char *)"fibmbak.com",1);
+    fVar1 = stshStoreFile2((char *)"fibmbak.com",1);
     DAT_2000_d0d6 = fVar1.seg;
     DAT_2000_d0d4 = fVar1.ofs;
-    fVar1 = stshStoreFile((char *)"sbpro.com",1);
+    fVar1 = stshStoreFile2((char *)"sbpro.com",1);
     DAT_2000_d0da = fVar1.seg;
     DAT_2000_d0d8 = fVar1.ofs;
     DAT_2000_d0dc = DAT_2000_d0d8;
     DAT_2000_d0de = DAT_2000_d0da;
-    fVar1 = stshStoreFile((char *)"paudio.com",1);
+    fVar1 = stshStoreFile2((char *)"paudio.com",1);
     DAT_2000_d0e2 = fVar1.seg;
     DAT_2000_d0e0 = fVar1.ofs;
     DAT_2000_d0e6 = DAT_2000_d0ce;
     DAT_2000_d0e4 = DAT_2000_d0cc;
-    fVar1 = stshStoreFile((char *)"adlib.com",1);
+    fVar1 = stshStoreFile2((char *)"adlib.com",1);
     DAT_2000_d0ea = fVar1.seg;
     DAT_2000_d0e8 = fVar1.ofs;
-    fVar1 = stshStoreFile((char *)"adlibg.com",1);
+    fVar1 = stshStoreFile2((char *)"adlibg.com",1);
     DAT_2000_d0ee = fVar1.seg;
     DAT_2000_d0ec = fVar1.ofs;
     DAT_2000_d0f2 = 0;
     DAT_2000_d0f0 = 0;
     DAT_2000_d09e = 0;
     DAT_2000_d09c = 0;
-    fVar1 = stshStoreFile((char *)"sbfm.adv",1);
+    fVar1 = stshStoreFile2((char *)"sbfm.adv",1);
     DAT_2000_d0a2 = fVar1.seg;
     DAT_2000_d0a0 = fVar1.ofs;
     DAT_2000_d0a6 = 0;
     DAT_2000_d0a4 = 0;
     DAT_2000_d0aa = 0;
     DAT_2000_d0a8 = 0;
-    fVar1 = stshStoreFile((char *)"sbp2fm.adv",1);
+    fVar1 = stshStoreFile2((char *)"sbp2fm.adv",1);
     DAT_2000_d0ae = fVar1.seg;
     DAT_2000_d0ac = fVar1.ofs;
-    fVar1 = stshStoreFile((char *)"sbp1fm.adv",1);
+    fVar1 = stshStoreFile2((char *)"sbp1fm.adv",1);
     DAT_2000_d0b2 = fVar1.seg;
     DAT_2000_d0b0 = fVar1.ofs;
-    fVar1 = stshStoreFile((char *)"pasfm.adv",1);
+    fVar1 = stshStoreFile2((char *)"pasfm.adv",1);
     DAT_2000_d0b6 = fVar1.seg;
     DAT_2000_d0b4 = fVar1.ofs;
-    fVar1 = stshStoreFile((char *)"pasopl.adv",1);
+    fVar1 = stshStoreFile2((char *)"pasopl.adv",1);
     DAT_2000_d0ba = fVar1.seg;
     DAT_2000_d0b8 = fVar1.ofs;
-    fVar1 = stshStoreFile((char *)"adlib.adv",1);
+    fVar1 = stshStoreFile2((char *)"adlib.adv",1);
     DAT_2000_d0be = fVar1.seg;
     DAT_2000_d0bc = fVar1.ofs;
-    fVar1 = stshStoreFile((char *)"adlibg.adv",1);
+    fVar1 = stshStoreFile2((char *)"adlibg.adv",1);
     DAT_2000_d0c2 = fVar1.seg;
     DAT_2000_d0c0 = fVar1.ofs;
-    fVar1 = stshStoreFile((char *)"mt32mpu.adv",1);
+    fVar1 = stshStoreFile2((char *)"mt32mpu.adv",1);
   }
   else {
     far_t_2000_d098 = ovr_stshAllocStub();
     fVar1 = ovr_stshAllocStub();
-    _DAT_2000_d096 = fVar1.seg;
+    DAT_2000_d096 = fVar1.seg;
     DAT_2000_d094 = fVar1.ofs;
     fVar1 = ovr_stshAllocStub();
     DAT_2000_d0ca = fVar1.seg;

@@ -16,7 +16,7 @@ void __cdecl16far OVC18_48ac_0000(void)
   
   gfx.seg = DAT_2000_cac7;
   gfx.ofs = DAT_2000_cac5;
-  ovr_blitLoadRleGfx(gfx,(far_t)0xa000c306);
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c306)));
   DAT_2000_d1ae = 1;
   return;
 }
@@ -33,7 +33,7 @@ void __cdecl16far OVC18_48ac_0027(void)
   if (!GameRunning) {
     gfx.seg = DAT_2000_d1aa;
     gfx.ofs = DAT_2000_d1a8;
-    ovr_blitLoadRleGfx(gfx,(far_t)0xa000c306);
+    ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c306)));
   }
   return;
 }
@@ -201,7 +201,7 @@ OVC18_48ac_0251(uint8_t *param_1,undefined4 param_2,uint8_t *param_3,byte param_
           }
           uVar11 = (uint)*(byte *)((int)param_2 + (int)puVar10 * 0x1e);
           uStackY_24 = (uint16_t *)CONCAT22(uStackY_26,puStackY_28 + uVar11 * 4 + 0x58);
-          *(int *)((int)(puStackY_28 + uVar11 * 4) + 2) = param_2._2_2_;
+          *(int *)((int)(puStackY_28 + uVar11 * 4) + 2) = (*(uint16_t *)((uint8_t *)&(param_2) + 2));
           *(int *)(puStackY_28 + uVar11 * 4) = (int)param_2 + (int)puVar10 * 0x1e;
           puVar7 = (uint8_t *)*(undefined2 *)((int)param_2 + (int)puVar10 * 0x1e + 1);
           unaff_SI = (char *)*(int *)((int)param_2 + (int)puVar10 * 0x1e + 3);
@@ -281,10 +281,10 @@ OVC18_48ac_0251(uint8_t *param_1,undefined4 param_2,uint8_t *param_3,byte param_
       } while( true );
     case (uint8_t *)0x1:
       uVar1 = in(iVar8);
-      *param_1._2_2_ = uVar1;
+      *(*(uint16_t *)((uint8_t *)&(param_1) + 2)) = uVar1;
       far_t_2000_d098 = stshStoreFile(unaff_DI,(uint16_t)puVar7);
       fVar12 = stshStoreFile((char *)"cmidpak.com",1);
-      _DAT_2000_d096 = fVar12.seg;
+      DAT_2000_d096 = fVar12.seg;
       DAT_2000_d094 = fVar12.ofs;
       fVar12 = stshStoreFile((char *)"ibmsnd.com",1);
       DAT_2000_d0ca = fVar12.seg;
@@ -344,7 +344,7 @@ OVC18_48ac_0251(uint8_t *param_1,undefined4 param_2,uint8_t *param_3,byte param_
       DAT_2000_d0c0 = fVar12.ofs;
       fVar12 = stshStoreFile((char *)"mt32mpu.adv",1);
       DAT_2000_d0c6 = fVar12.seg;
-      DAT_2000_d0c4 = (uint8_t *)fVar12.ofs;
+      DAT_2000_d0c4 = (uint16_t)(fVar12.ofs);
       return (uint8_t *)fVar12.ofs;
     case (uint8_t *)0x2:
       iVar8 = ovr_OVC23_55fe_2da3();
@@ -367,7 +367,7 @@ OVC18_48ac_0251(uint8_t *param_1,undefined4 param_2,uint8_t *param_3,byte param_
         if (cVar15 != -1) {
           uVar16 = 0xa000;
           ovr_OVC41_6a8f_0000();
-          _pcStackY_20 = (far_t)CONCAT22(acStackY_56,(char *)"builder\'s hall" + 8);
+          _pcStackY_20 = far_from_u32((uint32_t)(CONCAT22(acStackY_56,(char *)"builder\'s hall" + 8)));
           uStackY_24 = (uint16_t *)CONCAT22(0xad0,(uint16_t *)uStackY_24);
           txt = ovr_stsprintf(acStackY_56,"Attracting %d of a possible %d %s%s to this location.",
                               unaff_SI);
@@ -475,7 +475,7 @@ OVC18_48ac_0382(far_t param_1,int *param_2,int *param_3,undefined2 param_4,undef
         if (StshCount < 0xd93) {
           b = (ulong)StshCount;
           StshCount = StshCount + 1;
-          fVar18 = (far_t)LXMUL_at_(0x15,b);
+          fVar18 = far_from_u32((uint32_t)(LXMUL_at_(0x15,b)));
           ptr_base.seg = StshCtPtr.seg;
           ptr_base.ofs = StshCtPtr.ofs;
           fVar18 = PADD_at_(ptr_base,fVar18);
@@ -506,14 +506,14 @@ OVC18_48ac_0382(far_t param_1,int *param_2,int *param_3,undefined2 param_4,undef
           if (DebugVerbose != false) {
             pcStackY_1e = (char *)"arrowsmith" + 3;
             pcStackY_20 = (char *)0xbbd4;
-            printf("type %d len %ld \r",(uint)*(byte *)param_1);
+            printf("type %d len %ld \r",(uint)*(byte *)MK_FP(param_1.seg, param_1.ofs));
             ovr_biosReadKey();
           }
           pcStackY_1e = (char *)"arrowsmith" + 3;
           pcStackY_20 = "";
-          sz.hi._0_1_ = (char)iVar9;
+          (*(uint8_t *)((uint8_t *)&(sz.hi))) = (char)iVar9;
           sz.lo = uVar12;
-          sz.hi._1_1_ = (char)((uint)iVar9 >> 8);
+          (*(uint8_t *)((uint8_t *)&(sz.hi) + 1)) = (char)((uint)iVar9 >> 8);
           stshWriteFile(StshFile,param_1,sz);
           ovr_stshFree(param_1);
           return pcVar11;
@@ -527,7 +527,7 @@ OVC18_48ac_0382(far_t param_1,int *param_2,int *param_3,undefined2 param_4,undef
         do {
           cVar5 = ovr_OVC15_4207_2301();
           if (cVar5 == '\0') goto LAB_3f0b_2767;
-          param_2._0_2_ = (int *)((int)(int *)param_2 + -1);
+          (*(uint16_t *)((uint8_t *)&(param_2))) = (int *)((int)(int *)param_2 + -1);
           while ((int *)param_2 == (int *)0x0) {
 LAB_3f0b_2767:
             do {
@@ -537,7 +537,7 @@ LAB_3f0b_2767:
               }
               cVar5 = ovr_OVC23_55fe_05db();
             } while (cVar5 == '\0');
-            param_2._0_2_ = (int *)manage_4d05_28f4();
+            (*(uint16_t *)((uint8_t *)&(param_2))) = (int *)manage_4d05_28f4();
           }
         } while( true );
       case 3:
@@ -730,7 +730,7 @@ LAB_3f0b_2767:
   else if ((uVar7 == 0xff) &&
           ((*(uint *)((int)&far_t_ARRAY_2410_26f7[7].seg + 1 + (uint)*(byte *)(iVar13 + 0x3e) * 0x95
                      ) & 0x800) == 0)) {
-    if (param_2._2_1_ == '\0') {
+    if ((*(uint8_t *)((uint8_t *)&(param_2) + 2)) == '\0') {
       pcStackY_20 = (char *)"sbpro.com" + 6;
       pcVar11 = (char *)"jeweler\'s shop" + 3;
       puStackY_22 = (undefined2 *)0x906a;

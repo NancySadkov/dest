@@ -3482,13 +3482,13 @@ void __cdecl16far draw_2e25_025a(void)
         pcVar47 = pcVar47 + (int)pcVar50;
         *pcVar50 = *pcVar50 + cVar32;
                     /* WARNING: Read-only address (ram,0x00026001) is written */
-        s_halfling_lodge_2410_1efd._4_2_ = pcVar34 + 0x696c;
+        (*(uint16_t *)((uint8_t *)&(s_halfling_lodge_2410_1efd) + 4)) = pcVar34 + 0x696c;
         piVar51 = (int *)(pcVar50 + (int)pcVar47);
         cVar36 = cVar36 + cVar23;
         iVar15 = CONCAT11(cVar36,cVar32);
         *(char *)piVar5 = (char)*piVar5 + cVar19;
         *piVar51 = *piVar51 + CONCAT11(cVar23,cVar19);
-        AgntAnms[0x30]._9_2_ = AgntAnms[0x30]._9_2_ + CONCAT11(cVar23,cVar19);
+        (*(uint16_t *)((uint8_t *)&(AgntAnms[0x30]) + 9)) = (*(uint16_t *)((uint8_t *)&(AgntAnms[0x30]) + 9)) + CONCAT11(cVar23,cVar19);
         piVar2 = (int *)(iVar15 + (int)piVar5);
         *piVar2 = *piVar2 + CONCAT11(cVar28,cVar24);
         piVar2 = (int *)(iVar15 + (int)piVar51);
@@ -3629,16 +3629,16 @@ code_r0x000219ee:
           if (bVar54 != bVar53) {
             *(undefined1 **)(pbVar48 + (int)puVar26 + 1) =
                  puVar40 + (int)piVar5 + *(int *)(pbVar48 + (int)puVar26 + 1) + 0xc;
-            cVar9 = _DATA._1_1_;
+            cVar9 = (*(uint8_t *)((uint8_t *)&(_DATA) + 1));
             goto code_r0x000219f5;
           }
         }
         if (bVar54 == bVar53) {
           *(uint *)(pbVar33 + (int)puVar26) = *(int *)(pbVar33 + (int)puVar26) + uVar13;
-          cVar9 = _DATA._1_1_;
+          cVar9 = (*(uint8_t *)((uint8_t *)&(_DATA) + 1));
         }
 code_r0x000219f5:
-        _DATA._1_1_ = cVar9;
+        (*(uint8_t *)((uint8_t *)&(_DATA) + 1)) = cVar9;
         pbVar33[(int)puVar26] = pbVar33[(int)puVar26] + cVar8;
         pbVar33[(int)puVar26] = pbVar33[(int)puVar26] + cVar8;
         pbVar33[(int)puVar26] = pbVar33[(int)puVar26] + cVar8;
@@ -4181,7 +4181,7 @@ void __cdecl16far draw_2e25_0938(void)
     if ((GPaused != '\0') &&
        ((cVar1 = ovr_OVC15_4207_288b(), cVar1 == '\0' || (GOngoingBattle != '\0'))))
     goto LAB_2e25_0a0d;
-    uVar2 = ovr_attact_3f0b_082f(CONCAT22(GDailyTimeCounter._2_2_,(undefined2)GDailyTimeCounter));
+    uVar2 = ovr_attact_3f0b_082f(CONCAT22((*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)),(undefined2)GDailyTimeCounter));
     if (((int)(uVar2 >> 0x10) == 0) && ((uint)uVar2 < 0x5b)) goto LAB_2e25_0a0d;
   }
   ovr_attact_3f0b_251d();
@@ -4490,7 +4490,7 @@ void __cdecl16far draw_2e25_130a(void)
   far_t fStack_6;
   
   if (!GameRunning) {
-    fStack_6 = (far_t)ovr_stshAlloc(0xfa0f);
+    fStack_6 = far_from_u32((uint32_t)(ovr_stshAlloc(0xfa0f)));
     fVar3 = ovr_alignToSeg(fStack_6);
     TextBlitDstSeg = fVar3.seg;
     dst.seg = TextBlitDstSeg;
@@ -4925,7 +4925,7 @@ void __stdcall16far draw_2e25_1e42(void)
   pbVar23 = (byte *)(uVar22 | (int)&uStack_4 + 1U);
   uVar6 = CONCAT11((byte)(uVar6 >> 8) | bVar9 | *(byte *)(uVar18 + uVar22),bVar5) | uVar19;
   uVar10 = CONCAT11((byte)(uVar10 >> 8) | bVar7 | *(byte *)CONCAT11(bVar16,bVar14),
-                    bVar8 | AgntAnms[0xe].y._1_1_) | uVar12;
+                    bVar8 | (*(uint8_t *)((uint8_t *)&(AgntAnms[0xe].y) + 1))) | uVar12;
   *(uint *)(pbVar23 + uVar18 + 0xb009) = *(uint *)(pbVar23 + uVar18 + 0xb009) | (uint)puVar20;
   puVar1 = (uint *)((int)puVar20 + uVar19 + 0x9809);
   *puVar1 = *puVar1 | uVar18;

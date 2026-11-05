@@ -68,7 +68,7 @@ struct anm_t { /* sprite animation definition */
     int16_t x;
     int16_t y;
     uint8_t ow;
-    undefined field10_0x10;
+    undefined field_0x10;
     undefined field11_0x11;
     undefined field12_0x12;
     undefined field13_0x13;
