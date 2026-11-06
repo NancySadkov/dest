@@ -50,3 +50,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Generated FBOV manifest (regenerate with scripts/fbov/model.py)
+doc/fbov_manifest.json
