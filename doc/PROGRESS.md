@@ -13,7 +13,7 @@ Plan: [`../plan.md`](../plan.md)
 | G2 — fresh Ghidra model | **PASS** | `gpr_fresh`: 133 blocks, 756 trampolines, 13,367 fixups, 1,814 MZ relocations |
 | G3 — reference audit | **PASS** | `scripts/fbov/audit_refs.py`: 0 errors; 18 null-target relocations documented |
 | G4 — data/global model | **PASS** | DGROUP byte-identical under TC30 (0/38,042 differences); 1,205 symbols/types applied |
-| G5 — startup/`main` byte-exact | NEXT | |
+| G5 — startup/`main` byte-exact | **IN PROGRESS** | `mkp` (`2D63:0000`) byte-exact; `main` baseline decompiled |
 | G6 — link | NOT STARTED | |
 | G7 — runtime equivalence | NOT STARTED | |
 
@@ -155,10 +155,36 @@ Remaining artifacts such as `s__magic_mill_2410_68f7 + 9` are overlay segment
 constants stored into pointer-typed fields in the consuming function, not
 missing DGROUP data. They belong to the function/struct recovery phase.
 
+### Phase 5 results (started)
+
+Byte-match harness: `scripts/fbov/byte_match.py`.
+Headless runner: `scripts/fbov/run_dosbox.py` (SDL dummy, `-noconsole`, hidden
+window; no focus stealing).
+
+First function verified byte-for-byte:
+
+```
+mkp   2D63:0000  22 bytes   MATCH
+```
+
+The original `mkp` is an assembly helper that normalizes `ofs:seg` into
+`far_t` (`seg += ofs >> 4; ofs &= 0x0f`). The two register-register encodings
+that TC30 chooses differently were emitted explicitly to match the original:
+
+```
+8B D8   mov bx,ax
+03 D3   add dx,bx
+```
+
+`main` (`1301:000C`, 2,215 bytes) was missing from the fresh analysis; it is
+now created and decompiled as a baseline (`tmp/main_dec.c`). It uses the
+recovered DGROUP names (`GGameExe`, `GExeArg`, `GMenuItem`, ...). The next
+work is its byte-matched recovery.
+
 ## Next
 
-1. G5: build the per-function byte-match harness and recover the startup /
-   `main` chain.
+1. Recover `main` (`1301:000C`) byte-for-byte from the decompiled baseline,
+   then the startup/init chain.
 2. Repair `OVC23` (`55FE:0000`) alongside the function queue.
 3. G6: link the recovered modules against the original runtime/overlay
    manager.

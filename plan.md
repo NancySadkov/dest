@@ -556,13 +556,12 @@ Completed:
 Next:
 
 7. ~~G4: recover the DGROUP layout, structs and globals.~~
-8. G5: build the per-function byte-match harness.
+8. ~~G5: build the per-function byte-match harness.~~ (`mkp` byte-exact)
 9. Recover the startup/`main` chain function by function.
 10. Repair `OVC23` (`55FE:0000`) alongside the function queue.
 
-The DGROUP data is complete and byte-identical under TC30; see
-`doc/dgroup_verify.md`. No function C is claimed as recovered source until its
-byte-match gate passes.
+All emulator runs use `scripts/fbov/run_dosbox.py` or `-noconsole` +
+`SDL_VIDEODRIVER=dummy` + a hidden window, so they do not steal focus.
 
 ---
 
