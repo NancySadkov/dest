@@ -1,0 +1,189 @@
+/* Recovered overlay OVC_09 (code segment 3381) helpers. */
+#include "dgroup.h"
+
+#define SBUF ((char far *)MK_FP(0x280, 0x8bb1))
+#define GGameExeP (*(far_t far *)MK_FP(0x280, 0x8976))
+#define EMPTY_5BB ((char far *)&GCfgFileName[-1])
+#define MAPDIR ((char far * far *)MK_FP(0x280, 0x8a05))
+#define MAPFLG ((uint16_t far * far *)MK_FP(0x280, 0x8a09))
+
+/* String/path helpers in segment 0x1000 (not yet recovered). */
+int __cdecl16far f_1000_2d9b(char far *s);
+char far * __cdecl16far f_1000_2d31(char far *dst, char far *src);
+char far * __cdecl16far f_1000_2cc2(char far *dst, char far *src);
+int __cdecl16far f_1000_0865(char far *s);
+int __cdecl16far f_1000_0e30(int c);
+void __cdecl16far f_1000_09a2(int v);
+void __cdecl16far f_1000_2568(char far *buf, int len);
+int __cdecl16far f_1000_0e04(int c);
+void __cdecl16far f_3381_1fba(void);
+void __cdecl16far f_1400_0039(int);
+
+/* 3381:0132 -- append a trailing backslash to a path if needed.
+ * Returns the same far pointer.
+ */
+char far * __cdecl16far f_3381_0132(char far *s)
+{
+  int n;
+
+  n = f_1000_2d9b(s);
+  if (n == 0 || s[n - 1] != '\\') {
+    s[n] = '\\';
+    s[n + 1] = 0;
+  }
+  return s;
+}
+
+/* 3381:00fe -- remove a trailing backslash when the name is longer than 3. */
+char far * __cdecl16far f_3381_00fe(char far *s)
+{
+  int n;
+
+  n = f_1000_2d9b(s);
+  if (n > 3 && s[n - 1] == '\\') {
+    s[n - 1] = 0;
+  }
+  return s;
+}
+
+/* 3381:009a -- join two path components in the static DGROUP buffer. */
+char far * __cdecl16far f_3381_009a(char far *a, char far *b)
+{
+  int n;
+
+  f_1000_2d31(SBUF, a);
+  n = f_1000_2d9b(SBUF);
+  while (n > 0 && SBUF[n - 1] != '\\') {
+    n--;
+  }
+  SBUF[n] = 0;
+  f_1000_2cc2(SBUF, b);
+  return SBUF;
+}
+
+/* 3381:016c -- handle a drive-letter path spec. */
+void __cdecl16far f_3381_016c(char far *s)
+{
+  char c;
+
+  if (f_1000_0865(s) == 0) {
+    c = (char)f_1000_0e30((int)s[0]);
+    if (s[1] == ':' && c >= 'A' && c <= 'Z') {
+      f_1000_09a2(f_1000_0e30((int)c) - 0x41);
+    }
+  }
+}
+
+/* 3381:023c -- enable the mouse configuration flag. */
+void __cdecl16far f_3381_023c(void)
+{
+  *(uint16_t far *)MK_FP(0x280, 0x432) = 1;
+}
+
+/* 3381:01c8 -- initialise the saved-game path buffer from argv[0]. */
+void __cdecl16far f_3381_01c8(void)
+{
+  f_1000_2568((char far *)MK_FP(0x280, 0x8c28), 0x44);
+  f_1000_2d31((char far *)MK_FP(0x280, 0x8c6c),
+              (char far *)MK_FP(0x280, 0x8c28));
+  f_3381_0132((char far *)MK_FP(0x280, 0x8c6c));
+  f_1000_2cc2((char far *)MK_FP(0x280, 0x8c6c),
+              (char far *)GSaveFileName);
+  f_3381_016c(f_3381_00fe(
+      f_3381_009a(*(char far * far *)&GGameExeP, EMPTY_5BB)));
+}
+
+/* 3381:1fa9 -- clear the entity count. */
+void __cdecl16far f_3381_1fa9(void)
+{
+  *(undefined2 far *)MK_FP(0x280, 0x9097) = 0;
+}
+
+/* placeholder until 3381:1fba is recovered */
+void __cdecl16far f_3381_1fba(void) { }
+
+/* 3381:20ee -- start a game mode and refresh the clock. */
+void __cdecl16far f_3381_20ee(void)
+{
+  f_1400_0039(1);
+  f_3381_1fba();
+}
+
+typedef char maprow[0x94];
+typedef uint16_t mapfrow[0x94];
+
+/* PENDING byte order: 3381:233e -- read a map cell. */
+char __cdecl16far f_3381_233e(int x, int y)
+{
+  if (x >= 0x94 || x < 0 || y >= 0x3c || y < 0) {
+    return 0;
+  }
+  return ((maprow far *)*MAPDIR)[y][x];
+}
+
+/* PENDING byte order: 3381:237a -- write a map cell. */
+void __cdecl16far f_3381_237a(int x, int y, char v)
+{
+  if (x >= 0x94 || x < 0 || y >= 0x3c || y < 0) {
+    return;
+  }
+  ((maprow far *)*MAPDIR)[y][x] = v;
+}
+
+/* PENDING byte order: 3381:23b5 -- read a map flag word. */
+char __cdecl16far f_3381_23b5(int x, int y)
+{
+  if (x >= 0x94 || x < 0 || y >= 0x3c || y < 0) {
+    return 0;
+  }
+  return (char)(((mapfrow far *)*MAPFLG)[y][x] & 3);
+}
+/* 3381:23f9 -- sum the four cells around a corner. */
+int __cdecl16far f_3381_23f9(int x, int y)
+{
+  return (unsigned char)f_3381_233e(x, y)
+       + (unsigned char)f_3381_233e(x + 1, y)
+       + (unsigned char)f_3381_233e(x, y + 1)
+       + (unsigned char)f_3381_233e(x + 1, y + 1);
+}
+
+
+
+
+
+
+
+/* 3381:2e9a -- remove spaces from a string in place. */
+void __cdecl16far f_3381_2e9a(char far *p)
+{
+  int i;
+  int j;
+
+  if (p == 0) {
+    return;
+  }
+  i = 0;
+  j = 0;
+  while (p[i] != 0) {
+    if (p[i] != ' ') {
+      p[j] = (char)f_1000_0e04((int)p[i]);
+      j++;
+    }
+    i++;
+  }
+  p[j] = 0;
+}
+
+/* PENDING byte order: 3381:1697 -- initialise the 0xF8 entity slots. */
+typedef char entrow[9];
+void __cdecl16far f_3381_1697(void)
+{
+  int i;
+
+  for (i = 0; i < 0xf8; i++) {
+    ((entrow far *)(*(char far * far *)MK_FP(0x280, 0x8995)))[i][0] = (char)i;
+    ((entrow far *)(*(char far * far *)MK_FP(0x280, 0x8995)))[i][1] = (char)0xff;
+    ((entrow far *)(*(char far * far *)MK_FP(0x280, 0x8995)))[i][2] = (char)0xff;
+  }
+}
+

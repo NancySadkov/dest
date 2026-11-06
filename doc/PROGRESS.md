@@ -283,13 +283,51 @@ some gap arrays used by `main` (`gap_2410_009A`).
 
 
 
+### Overlay recovery (started)
+
+The first overlay module recovered is **OVC_09**, code segment `0x3381`,
+file offset `0x25610`. Its header trampolines map `main`'s calls, e.g.
+`main`'s `0x12E3:0x0025` -> `0x3381:0x0579`.
+
+Overlay code requires an extra **`-O`** flag (the `main` module matches
+without it). Two comparison paths are used:
+
+- `scripts/fbov/ov_compare.py` for standalone objects (no near DGROUP symbol
+  relocations);
+- the linked harness (`tmp/ov_link.py` / `link_compare.py`) for functions such
+  as `f_3381_01c8` whose near string pointers are link-time relocations.
+
+Byte-exact overlay functions in `src/recovered/ov_3381.c`:
+
+```
+009a  100 bytes      0132   58 bytes      1fa9   17 bytes
+00fe   52 bytes      016c   92 bytes      20ee   19 bytes
+01c8  116 bytes      023c   17 bytes      23f9   89 bytes
+2e9a   72 bytes
+```
+
+All are matched with call operands (and, for `01c8`, near call operands)
+masked.
+
+Four additional functions are recovered semantically but still differ in
+instruction order/encoding:
+
+```
+233e, 237a, 23b5, 1697   (pointer/index evaluation order)
+```
+
+They are marked `PENDING byte order` in the source.
+
+
+
 ## Next
 
-1. Recover the startup/init chain and the direct callees of `main` in other
-   segments (`0x12E3`, `0x13E3`, `0x1347`, `0x13D5`, `0x12F8`, `0x12BB`,
-   `0x1315`, `0x13B6`, `0x1356`, `0x1391`, `0x12C4`, `0x1322`, `0x1400`,
-   `0x6018`, `0x7E7C`, ...), then the remaining resident functions.
-2. Repair `OVC23` (`55FE:0000`) alongside the function queue.
-3. G6: link the recovered modules against the original runtime/overlay
+1. Finish OVC_09 (`3381`): recover the remaining trampoline targets, starting
+   with the four pending table/entity functions and then the startup function
+   `3381:0579`.
+2. Continue with the other overlay headers used by `main` (`0x23E3`,
+   `0x2347`, `0x23D5`, ...), then the resident startup/init chain.
+3. Repair `OVC23` (`55FE:0000`) alongside the function queue.
+4. G6: link the recovered modules against the original runtime/overlay
    manager.
-4. G7: runtime equivalence under the DOSBox harness.
+5. G7: runtime equivalence under the DOSBox harness.

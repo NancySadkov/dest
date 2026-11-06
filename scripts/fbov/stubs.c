@@ -40,3 +40,12 @@ void __cdecl16far f_6a8f_15a0(int a, int b) {}
 void __cdecl16far f_6616_0689(int a) {}
 void __cdecl16far f_7e7c_004b(int a) {}
 void __cdecl16far f_6018_007e(void) {}
+
+/* segment 0x1000 helpers used by the overlay modules */
+int __cdecl16far f_1000_2d9b(char far *s) { return 0; }
+char far * __cdecl16far f_1000_2d31(char far *d, char far *s) { return d; }
+char far * __cdecl16far f_1000_2cc2(char far *d, char far *s) { return d; }
+int __cdecl16far f_1000_0865(char far *s) { return 0; }
+int __cdecl16far f_1000_0e30(int c) { return c; }
+void __cdecl16far f_1000_09a2(int v) {}
+void __cdecl16far f_1000_2568(char far *b, int n) {}
