@@ -310,6 +310,7 @@ Byte-exact overlay functions in `src/recovered/ov_3381.c`:
 2d9e  252 bytes      024d  812 bytes      0693  585 bytes
 08dc 3507 bytes      24c3  398 bytes      2651  562 bytes
 2ee2  581 bytes      2883 1631 bytes      2101  573 bytes
+17e8 1845 bytes
 ```
 
 All are matched with call operands (and, for `01c8`/`0579`, near call
