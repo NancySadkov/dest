@@ -66,3 +66,7 @@ doc/audit_report.json
 doc/dgroup_items.csv
 tmp/
 
+
+# DGROUP candidate diagnostics
+doc/dgroup_old_symbols.csv
+

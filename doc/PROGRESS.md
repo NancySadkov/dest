@@ -181,6 +181,13 @@ now created and decompiled as a baseline (`tmp/main_dec.c`). It uses the
 recovered DGROUP names (`GGameExe`, `GExeArg`, `GMenuItem`, ...). The next
 work is its byte-matched recovery.
 
+The first `main` prologue comparison exposed a harness requirement: an
+unlinked OBJ still contains relocations for DGROUP globals (`GGameExe`,
+`GExeArg`), so raw OBJ bytes legitimately differ from the linked original.
+The next harness step is a **linked comparison**: link `main.obj` with
+`DGROUP.obj` (plus function stubs), then compare the linked `main` bytes with
+call targets masked. `main` is not accepted until that gate passes.
+
 ## Next
 
 1. Recover `main` (`1301:000C`) byte-for-byte from the decompiled baseline,
