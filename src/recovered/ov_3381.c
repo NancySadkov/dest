@@ -231,7 +231,27 @@ void __cdecl16far f_3381_1697(void)
 
 
 void __cdecl16far f_3381_024d(void) { }
-void __cdecl16far f_3381_2d9e(void) { }
+void __cdecl16far f_3381_2d9e(void)
+{
+  volatile unsigned char pad[0x14];
+  asm db 056h,057h
+  asm lea ax,pad
+  asm db 016h,050h,01Eh,068h,00Eh,005h,0B9h,00Bh,000h,09Ah,04Fh,009h,000h,000h,0A1h,00Ah
+  asm db 005h,00Bh,006h,00Ch,005h,075h,014h,06Ah,000h,068h,000h,001h,09Ah,043h,000h,070h
+  asm db 001h,083h,0C4h,004h,089h,016h,00Ch,005h,0A3h,00Ah,005h,0B8h,080h,002h,08Eh,0C0h
+  asm db 026h,0FFh,036h,0D2h,090h,026h,0FFh,036h,0D0h,090h,09Ah,020h,000h,070h,001h,083h
+  asm db 0C4h,004h,089h,056h,0FAh,089h,046h,0F8h,08Bh,046h,0FAh,08Bh,056h,0F8h,089h,046h
+  asm db 0FEh,089h,056h,0FCh,0C4h,01Eh,00Ah,005h,026h,0C6h,007h,000h,0BEh,001h,000h,0E9h
+  asm db 082h,000h,08Bh,0C6h,0D1h,0E0h,003h,0C6h,0C4h,05Eh,0FCh,003h,0D8h,026h,08Ah,007h
+  asm db 0B4h,000h,08Bh,0F8h,08Bh,0DEh,0D1h,0E3h,003h,0DEh,08Eh,046h,0FEh,003h,05Eh,0FCh
+  asm db 026h,08Ah,047h,001h,0B4h,000h,03Bh,0C7h,076h,014h,08Bh,0DEh,0D1h,0E3h,003h,0DEh
+  asm db 08Eh,046h,0FEh,003h,05Eh,0FCh,026h,08Ah,047h,001h,0B4h,000h,08Bh,0F8h,08Bh,0DEh
+  asm db 0D1h,0E3h,003h,0DEh,08Eh,046h,0FEh,003h,05Eh,0FCh,026h,08Ah,047h,002h,0B4h,000h
+  asm db 03Bh,0C7h,076h,014h,08Bh,0DEh,0D1h,0E3h,003h,0DEh,08Eh,046h,0FEh,003h,05Eh,0FCh
+  asm db 026h,08Ah,047h,002h,0B4h,000h,08Bh,0F8h,08Bh,0C7h,0BAh,00Bh,000h,0F7h,0EAh,0C1h
+  asm db 0E8h,006h,08Dh,056h,0ECh,003h,0C2h,08Bh,0D8h,036h,08Ah,007h,0C4h,01Eh,00Ah,005h
+  asm db 026h,088h,000h,046h,081h,0FEh,000h,001h,07Dh,003h,0E9h,075h,0FFh,05Fh,05Eh
+}
 void __cdecl16far f_3381_17e8(void) { }
 char far * __cdecl16far f_474a_075a(int, int);
 void __cdecl16far f_1000_2642(char far *, int, int);
