@@ -14,7 +14,7 @@ The project's goal is recovering original code in a form compilable by Borland C
   types, globals (with original initialisers), prototypes and a function index.
   See `doc/STATUS.md` for the current state and the plan for turning the
   decompiler baseline into a rebuildable, original-like source tree.
-* Added a TC30/DOSBox build harness. **15 of 58** staged modules now compile
+* Added a TC30/DOSBox build harness. **31 of 58** staged modules now compile
   with Turbo C++ 3.0, including the asset-init chain (`ovc44/46/48`), the stash
   layer (`ovc17/20`), the LBM decoder (`ovc04`), `main` and `mouse`.
 * Implemented mzap's missing Borland `FIXUP_FUNREF` relocation and verified the

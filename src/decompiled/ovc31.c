@@ -167,7 +167,7 @@ void __cdecl16far input_folder_name(char *result)
   undefined2 in_stack_00000006;
   
   len = 0;
-  *_result = '\0';
+  *result = '\0';
   while( true ) {
     key = ovr_biosReadKey();
     if (key == 0x11b) {

@@ -81,7 +81,7 @@ public class ExportData extends GhidraScript {
             String seg = sa.group(1);
             String off = sa.group(2);
             if (dt instanceof Pointer) {
-                return "(void far *)0x" + seg + "0000UL + 0x" + off + "UL";
+                return "(void far *)(0x" + seg + "0000UL + 0x" + off + "UL)";
             }
             if (isFarStruct(dt)) {
                 return "{ 0x" + off + ", 0x" + seg + " }";

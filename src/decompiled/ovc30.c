@@ -52,7 +52,7 @@ void __cdecl16far OVC30_619c_004e(byte param_1)
       while (cStack_3 != '\0') {
         cStack_3 = cStack_3 + -1;
         uVar1 = OVC30_619c_025d(0,1,1,0x19);
-        OVC30_619c_05a5(uVar1);
+        OVC30_619c_05a5(uVar1,0,0,0);
       }
       cVar2 = *(char *)(DAT_2000_d19d + 0x5dd3);
       cStack_3 = cStack_3 + -1;
@@ -61,7 +61,7 @@ void __cdecl16far OVC30_619c_004e(byte param_1)
       while (cStack_3 != '\0') {
         cStack_3 = cStack_3 + -1;
         uVar1 = OVC30_619c_025d(1,1,1,0x19);
-        OVC30_619c_05a5(uVar1);
+        OVC30_619c_05a5(uVar1,0,0,0);
       }
       cVar2 = *(char *)(DAT_2000_d19d + 0x5ddb);
       cStack_3 = cStack_3 + -1;
@@ -70,7 +70,7 @@ void __cdecl16far OVC30_619c_004e(byte param_1)
       while (cStack_3 != '\0') {
         cStack_3 = cStack_3 + -1;
         uVar1 = OVC30_619c_025d(2,1,1,0);
-        OVC30_619c_05a5(uVar1);
+        OVC30_619c_05a5(uVar1,0,0,0);
       }
       cStack_3 = -1;
     }
@@ -79,12 +79,12 @@ void __cdecl16far OVC30_619c_004e(byte param_1)
       while (cVar2 = cStack_3 + -1, cStack_3 != '\0') {
         cStack_3 = cVar2;
         uVar1 = OVC30_619c_025d(3,1,1,0);
-        OVC30_619c_05a5(uVar1);
+        OVC30_619c_05a5(uVar1,0,0,0);
       }
       cStack_3 = cVar2;
       if (1 < DAT_2000_d19d) {
         uVar1 = OVC30_619c_025d(4,1,1,0);
-        OVC30_619c_05a5(uVar1);
+        OVC30_619c_05a5(uVar1,0,0,0);
       }
       if ((param_1 & 1) != 0) {
         ovr_uiNotify("All enemies destroyed.",0xa000);
@@ -106,7 +106,7 @@ void __cdecl16far OVC30_619c_004e(byte param_1)
 
 /* 619c:025d */
 
-undefined2 __cdecl16far OVC30_619c_025d(byte param_1)
+undefined2 __cdecl16far OVC30_619c_025d(byte param_1,undefined2 param_2,undefined2 param_3,undefined2 param_4)
 
 {
   undefined2 uVar1;
@@ -197,7 +197,7 @@ uint __cdecl16far OVC30_619c_0339(byte param_1,undefined2 param_2,undefined2 par
     uStack_8 = (uint)DAT_2000_d1e6;
     uVar1 = (uint)DAT_2000_d1e6;
     ((undefined2 *)(uVar1 * 4))[1] = uStack_4;
-    *(undefined2 *)(uVar1 * 4) = pcStack_6;
+    *(undefined2 *)(uVar1 * 4) = (uint16_t)(ulong)pcStack_6;
     DAT_2000_d1e6 = DAT_2000_d1e6 + 1;
   }
   _fmemset((char *)CONCAT22(uStack_4,pcStack_6),0,0xae);

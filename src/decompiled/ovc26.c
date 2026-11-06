@@ -39,8 +39,10 @@ void __cdecl16far OVC26_5d45_0000(int param_1,int param_2,undefined1 param_3)
   int *piStack_e;
   int iStack_a;
   int iStack_8;
+  int *_piStack_1a;
+  int *_piStack_1e;
   
-  _fmemset(DAT_2000_d2e8,0,0x6541);
+  _fmemset((void far *)DAT_2000_d2e8,0,0x6541);
   iVar10 = 0x50 - param_1;
   iVar11 = 0x50 - param_2;
   iStack_a = 1;
@@ -166,10 +168,10 @@ uint __cdecl16far OVC26_5d45_031f(int param_1)
   }
   else {
     DAT_2000_d165 = DAT_2000_d165 + 1;
-    OVC26_5d45_0000();
+    OVC26_5d45_0000(piVar8[0],piVar8[1],bStack_f);
     uVar10 = (undefined2)((ulong)uStack_a >> 0x10);
     piVar8 = (int *)uStack_a;
-    iVar4 = piVar8[4] - (*uStack_a + -0x50);
+    iVar4 = piVar8[4] - (piVar8[0] + -0x50);
     if (iVar4 < 0) {
       iVar4 = 0;
     }
@@ -188,7 +190,7 @@ uint __cdecl16far OVC26_5d45_031f(int param_1)
     if (pcVar9[iVar5 + iVar4 * 0xa1] == '\0') {
       DAT_2000_d163 = DAT_2000_d163 + 1;
       uStack_c = 0xffff;
-      iStack_14 = (*uStack_a + -0x50) - piVar8[4];
+      iStack_14 = (piVar8[0] + -0x50) - piVar8[4];
       iStack_16 = (piVar8[1] + -0x50) - piVar8[5];
       pcStack_6 = DAT_2000_d2e8;
       for (iVar4 = 0; iVar4 < 0xa1; iVar4 = iVar4 + 1) {

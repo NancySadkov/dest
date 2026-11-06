@@ -330,7 +330,8 @@ public class ExportRecovered extends GhidraScript {
         ch.println("#define far");
         ch.println("#define near");
         ch.println("#endif");
-        ch.println("typedef unsigned short code(void);");
+        ch.println("typedef unsigned short code();");
+        ch.println("typedef unsigned short blitfn_t();");
         ch.println("code *swi(int vector);");
         ch.println("#define MK_FP(seg,ofs) ((void far *)(((uint32_t)(seg) << 16) | (uint16_t)(ofs)))");
         ch.println("#define CONCAT11(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint8_t)(b)))");

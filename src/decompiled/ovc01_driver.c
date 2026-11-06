@@ -558,10 +558,10 @@ int __cdecl16far rle_line(uint8_t *src,uint8_t *dst,uint16_t npixels)
   undefined2 uVar4;
   undefined2 uVar5;
   
-  uVar5 = (undefined2)(far_to_u32(src) >> 0x10);
+  uVar5 = (undefined2)((uint32_t)src >> 0x10);
   puVar3 = (uint8_t *)src;
   end = puVar3 + npixels;
-  uVar4 = (undefined2)(far_to_u32(dst) >> 0x10);
+  uVar4 = (undefined2)((uint32_t)dst >> 0x10);
   ps = puVar3;
   pd = (uint8_t *)dst;
 LAB_2d63_0343:
@@ -661,8 +661,8 @@ int __cdecl16far unrle_mirror(byte *src,byte *dst,int len)
   undefined2 uVar5;
   undefined2 uVar6;
   
-  uVar6 = (undefined2)(far_to_u32(src) >> 0x10);
-  uVar5 = (undefined2)(far_to_u32(dst) >> 0x10);
+  uVar6 = (undefined2)((uint32_t)src >> 0x10);
+  uVar5 = (undefined2)((uint32_t)dst >> 0x10);
   pdst = (byte *)dst + len + -1;
   psrc = (byte *)src;
   do {
@@ -889,7 +889,7 @@ vga_2d63_04b7(undefined1 *param_1,int param_2,undefined1 *param_3,int param_4,un
 
 /* 2d63:0599 */
 
-undefined2 __cdecl16near driver_2d63_0599(void)
+undefined2 __cdecl16near driver_2d63_0599()
 
 {
   int unaff_BP;
@@ -1289,7 +1289,7 @@ driver_2d63_0846(undefined2 param_1,byte param_2,undefined2 param_3,byte param_4
 
 /* 2d63:098a */
 
-void __cdecl16near driver_2d63_098a(void)
+void __cdecl16near driver_2d63_098a()
 
 {
   undefined1 *puVar1;
@@ -1337,7 +1337,7 @@ void __cdecl16near driver_2d63_098a(void)
     bVar7 = bVar7 - bVar3;
     if (bVar9) {
       unaff_DI = unaff_DI + *(int *)(unaff_BP + -0x12);
-      bVar7 = bVar7 + (char)((code *)init_3381_08dc)[unaff_BP];
+      bVar7 = bVar7 + (char)((uint8_t *)init_3381_08dc)[unaff_BP];
     }
     in_CX = in_CX + -1;
   } while (in_CX != 0);

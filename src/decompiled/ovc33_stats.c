@@ -525,7 +525,7 @@ stats_6386_0411(char *param_1,uint16_t param_2,undefined2 param_3,far_t param_4)
       return (far_t *)((char *)"puppetmaker" + 3);
     case (int *)0x1:
                     /* WARNING: Read-only address (ram,0x0002c58a) is written */
-      s__s_regenerates_3_hitpoints_to_a_t_2410_846c[0x1e] = '\0';
+      s__s_regenerates_3_hi_2410_846c[0x1e] = '\0';
       (unaff_SI + 0xec0)->ofs = (uint16_t)unaff_SI;
                     /* WARNING: Bad instruction - Truncating control flow here */
       halt_baddata();
@@ -536,7 +536,7 @@ stats_6386_0411(char *param_1,uint16_t param_2,undefined2 param_3,far_t param_4)
       }
       __C0_ASM_CopyRight[0x15] = 'h';
       __C0_ASM_CopyRight[0x16] = 't';
-      s__s_regenerates_3_hitpoints_to_a_t_2410_846c[0x1e] = 'a';
+      s__s_regenerates_3_hi_2410_846c[0x1e] = 'a';
       return pfVar16;
     case (int *)0x3:
       do {

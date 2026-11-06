@@ -48,6 +48,9 @@ def nearest_is_far(s, pos, var):
     """True if the nearest declaration of var before pos is far_t."""
     far_pat = re.compile(r"\bfar_t\s+" + re.escape(var) + r"\b")
     other_pat = re.compile(
+        r"(?m)^\s*[A-Za-z_]\w*(?:\s+[A-Za-z_]\w*)*\s*\*+\s*"
+        + re.escape(var) + r"\b")
+    loose_pat = re.compile(
         r"(?m)^\s*(?:void|uint32_t|uint16_t|uint8_t|uint|int|long|undefined4|"
         r"undefined2|undefined1|undefined|char|byte|bool|DW|stg_tmp_t|far_t)\b"
         r"[^;\n]*\b" + re.escape(var) + r"\b")
@@ -55,8 +58,10 @@ def nearest_is_far(s, pos, var):
     for m in far_pat.finditer(s, 0, pos):
         far = m
     other = None
-    for m in other_pat.finditer(s, 0, pos):
-        other = m
+    for p in (other_pat, loose_pat):
+        for m in p.finditer(s, 0, pos):
+            if other is None or m.start() > other.start():
+                other = m
     if far is None:
         return False
     return other is None or far.start() >= other.start()
@@ -182,7 +187,7 @@ def rewrite_far_casts():
             joined = re.sub(r"\b([A-Za-z_]\w*)\s*(==|!=)\s*([A-Za-z_]\w*)\b",
                             cmp_repl, joined)
             # far_t = allocator(...)
-            allocs = ("farmalloc", "ovr_heapMalloc", "ovr_heapRealloc",
+            allocs = ("ovr_heapMalloc", "ovr_heapRealloc",
                       "ovr_stshAlloc", "ovr_stshRealloc", "malloc", "calloc")
             def alloc_repl(m):
                 ws, lhs, fn, args = m.group(1), m.group(2), m.group(3), m.group(4)
@@ -266,7 +271,12 @@ def rewrite_names():
 def ident_type(name):
     if name.startswith(("stack0x", "ram0x")):
         return "undefined1"
-        return "undefined1"
+    if name.startswith("far_t_ARRAY_"):
+        return "far_t"
+    if name.startswith("UNK_"):
+        return "uint32_t"
+    if name.startswith("_font_"):
+        return "int"
     if "Stack_" in name:
         if name.startswith("_") or name.lower().startswith(("u", "i")):
             return "uint32_t"
@@ -298,7 +308,7 @@ def ident_type(name):
 
 def generate_artifacts():
     ids = set()
-    pat = re.compile(r"\b((?:p?[uic]?Ram[0-9a-fA-F]{5,8})|(?:stack0x[0-9a-fA-F]+)|(?:in_[A-Za-z0-9_]+)|(?:unaff_[A-Za-z0-9_]+)|(?:extraout_[A-Za-z0-9_]+)|(?:out_[A-Za-z0-9_]+)|(?:_?[A-Za-z]*Stack_[0-9a-fA-F]+)|(?:ram0x[0-9a-fA-F]+))\b")
+    pat = re.compile(r"\b((?:p?[uic]?Ram[0-9a-fA-F]{5,8})|(?:stack0x[0-9a-fA-F]+)|(?:in_[A-Za-z0-9_]+)|(?:unaff_[A-Za-z0-9_]+)|(?:extraout_[A-Za-z0-9_]+)|(?:out_[A-Za-z0-9_]+)|(?:_?[A-Za-z]*Stack_[0-9a-fA-F]+)|(?:ram0x[0-9a-fA-F]+)|(?:far_t_ARRAY_[0-9a-fA-F_]+)|(?:UNK_[0-9A-Fa-f_]+)|(?:_font_[0-9a-fA-F_]+))\b")
     for name in os.listdir(OUT):
         if not name.endswith(".c"):
             continue
@@ -311,7 +321,10 @@ def generate_artifacts():
         for i in sorted(ids):
             t = ident_type(i)
             if t:
-                f.write("extern %s %s;\n" % (t, i))
+                if i.startswith("far_t_ARRAY_"):
+                    f.write("extern %s %s[];\n" % (t, i))
+                else:
+                    f.write("extern %s %s;\n" % (t, i))
         f.write("#endif\n")
     return len(ids)
 
@@ -339,12 +352,76 @@ def patch_headers():
         extra.append("#define _envSize _envSize_at_")
         extra.append("#define bdata bdata_at_")
         extra.append("#define DGROUP_ DGROUP_at__at_")
+    if "#define _bdata_at_" not in s:
+        extra.append("#define _bdata_at_ bdata_at_")
     if extra:
         # insert before the final #endif
         idx = s.rfind("#endif")
         s = s[:idx] + "\n".join(extra) + "\n" + s[idx:]
         with open(compat, "w", encoding="utf-8") as f:
             f.write(s)
+
+def fix_global_data():
+    """Make the exported data file acceptable to TC30.
+
+    - Shorten Borland-visible string symbols to 31 chars.
+    - Declare string tables as ``char`` arrays.
+    - Fix a few scalar/array types the exporter inferred differently.
+    """
+    files = [f for f in os.listdir(OUT) if f.endswith((".c", ".h"))]
+    texts = {}
+    for f in files:
+        texts[f] = open(os.path.join(OUT, f), "r", encoding="utf-8",
+                        errors="replace").read()
+
+    pat = re.compile(r"\bs_[A-Za-z0-9_]+_(?:2410|2000)_[0-9a-fA-F]{4}\b")
+    names = set()
+    for s in texts.values():
+        names.update(pat.findall(s))
+    rename = {}
+    used = set()
+    for n in sorted(names):
+        if len(n) <= 31:
+            used.add(n)
+            continue
+        m = re.search(r"(_(?:2410|2000)_[0-9a-fA-F]{4})$", n)
+        if not m:
+            continue
+        suffix = m.group(1)
+        prefix = n[: len(n) - len(suffix)]
+        room = 31 - len(suffix)
+        cand = prefix[:room] + suffix
+        k = 0
+        while cand in used or (cand in names and cand != n):
+            k += 1
+            tail = "_%d" % k
+            cand = prefix[: room - len(tail)] + tail + suffix
+        rename[n] = cand
+        used.add(cand)
+    for f in files:
+        s = texts[f]
+        for a, b in rename.items():
+            s = re.sub(r"\b" + re.escape(a) + r"\b", b, s)
+        if f == "st_globals.c":
+            s = re.sub(r'(?m)^undefined (s_[A-Za-z0-9_]+\[\]) = "',
+                       r'char \1 = "', s)
+            s = s.replace("undefined DAT_2000_d1c0 = 0x00;",
+                          "undefined2 DAT_2000_d1c0 = 0x00;")
+            s = s.replace("undefined s__2410_62db[] = { 0x7F };",
+                          "char s__2410_62db[] = { 0x7F };")
+        if f == "st_globals.h":
+            s = re.sub(r'(?m)^extern undefined (s_[A-Za-z0-9_]+\[\]);',
+                       r'extern char \1;', s)
+        texts[f] = s
+    changed = 0
+    for f in files:
+        if texts[f] != open(os.path.join(OUT, f), "r", encoding="utf-8",
+                            errors="replace").read():
+            changed += 1
+        with open(os.path.join(OUT, f), "w", encoding="utf-8",
+                  errors="replace") as fh:
+            fh.write(texts[f])
+    return len(rename), changed
 
 if __name__ == "__main__":
     if not os.path.isdir(OUT):
@@ -354,7 +431,9 @@ if __name__ == "__main__":
     f = rewrite_far_casts()
     w = rewrite_ptr_to_word()
     o, ot = rewrite_overlays()
+    gr, gc = fix_global_data()
     a = generate_artifacts()
     patch_headers()
     print("rewrote files:", n, "far casts:", f, "ptr->word:", w,
-          "overlay files:", o, "overlay refs:", ot, "artifact declarations:", a)
+          "overlay files:", o, "overlay refs:", ot, "renamed globals:", gr,
+          "global files:", gc, "artifact declarations:", a)

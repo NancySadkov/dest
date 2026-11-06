@@ -22,7 +22,7 @@ void __cdecl16far OVC28_6018_0000(int param_1)
     do {
       param_1 = iVar1;
       if (*(int *)(BDA_DailyTimeCounter.ofs + 2) != *(int *)(BDA_DailyTimeCounter.ofs + 2)) break;
-    } while (*(int *)BDA_DailyTimeCounter == *(int *)BDA_DailyTimeCounter);
+    } while (*(int *)(BDA_DailyTimeCounter.ofs) == *(int *)(BDA_DailyTimeCounter.ofs));
   } while( true );
 }
 
@@ -233,7 +233,7 @@ void __cdecl16far OVC28_6018_0456(undefined4 param_1,int param_2)
   uint8_t uVar11;
   undefined1 local_80 [120];
   int iStack_8;
-  undefined4 uStack_6;
+  char *uStack_6;
   
   gfx.seg = DAT_2000_cacf;
   gfx.ofs = DAT_2000_cacd;
@@ -395,7 +395,7 @@ void __cdecl16far OVC28_6018_0813(int param_1,int param_2,char *param_3)
     ovr_blitText((char *)CONCAT22(pcVar2,pcVar1),pbVar3,(uint16_t)uVar5,
                  (uint8_t)((ulong)uVar5 >> 0x10));
   }
-  OVC28_6018_0000();
+  OVC28_6018_0000(0);
   dst_00.seg = 0xa000;
   dst_00.ofs = param_1 + param_2 * 0x140;
   gfx_00.seg = DAT_2000_d37e;
@@ -443,7 +443,7 @@ void __cdecl16far OVC28_6018_0aac(undefined4 param_1,int param_2)
   if (param_2 < 0xfa) {
     uVar2 = (undefined2)((ulong)param_1 >> 0x10);
     puVar1 = (undefined2 *)((int)param_1 + param_2 * 4);
-    OVC28_6018_0813(0xeb,param_2 * 0xe + 0x3c,*puVar1,puVar1[1]);
+    OVC28_6018_0813(0xeb,param_2 * 0xe + 0x3c,(char *)(void far *)MK_FP(puVar1[1],*puVar1));
   }
   return;
 }
@@ -519,7 +519,7 @@ undefined2 __cdecl16far OVC28_6018_0c76(undefined4 param_1,uint param_2)
         uVar3 = (undefined2)((ulong)param_1 >> 0x10);
         piVar2 = (int *)((int)param_1 + uVar1 * 4);
         if (*piVar2 != 0 || piVar2[1] != 0) {
-          OVC28_6018_0aac((int)param_1,uVar3,uVar1);
+          OVC28_6018_0aac(CONCAT22(uVar3,(int)param_1),uVar1);
           cStack_4 = (char)uVar1;
           GMenuItem = cStack_4 + '\x01';
           return CONCAT11(0x24,cStack_4 + '\x01');
@@ -580,7 +580,7 @@ uiInputText(int param_1,undefined2 param_2,uint param_3,char *param_4,int param_
       ovr_drawString();
     }
   }
-  OVC28_6018_0456(param_1,param_2,param_3);
+  OVC28_6018_0456(CONCAT22(param_2,param_1),param_3);
   GMenuItem = 1;
   while (((int)(uint)GMenuItem <= (int)param_3 &&
          (iVar2 = (uint)GMenuItem * 4 + param_1,
@@ -667,7 +667,7 @@ LAB_6018_10f1:
         }
         if (pcVar3 == (char *)"%s: provides housing and income." + 8) {
           if (GMenuItem != 0) {
-            OVC28_6018_0aac(param_1,param_2,GMenuItem - 1);
+            OVC28_6018_0aac(CONCAT22(param_2,param_1),GMenuItem - 1);
           }
           OVC28_6018_0048();
           GMenuFlag = 0;
@@ -742,7 +742,7 @@ LAB_6018_1348:
         return (char *)"arena" + 4;
       }
       if ((pcVar3 == (char *)0xffff) &&
-         (cVar1 = OVC28_6018_0c76(param_1,param_2,param_3), cVar1 != -1)) {
+         (cVar1 = OVC28_6018_0c76(CONCAT22(param_2,param_1),param_3), cVar1 != -1)) {
         OVC28_6018_0048();
         GMenuFlag = 0;
         return (char *)CONCAT11(0x24,cVar1);
@@ -781,7 +781,7 @@ OVC28_6018_1398(undefined4 param_1,int param_2,undefined2 param_3,undefined2 par
   uStack_c = param_4;
   uStack_e = param_3;
   if (param_2 < 10) {
-    uVar2 = uiInputText((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)),param_2,param_3,param_4,0);
+    uVar2 = (undefined2)(ulong)uiInputText((int)param_1,(*(uint16_t *)((uint8_t *)&(param_1) + 2)),param_2,(char *)(void far *)MK_FP(0,(uint16_t)param_3),param_4,0);
   }
   else {
     while( true ) {
@@ -818,7 +818,7 @@ OVC28_6018_1398(undefined4 param_1,int param_2,undefined2 param_3,undefined2 par
         local_36[(uVar5 + uVar3) * 2 + 1] = (char *)puVar4[1];
         local_36[(uVar5 + uVar3) * 2] = pcVar1;
       }
-      bStack_3 = uiInputText(local_36);
+      bStack_3 = (byte)(ulong)uiInputText(0,0,0,(char *)0,0,0);
       if (bStack_3 == 0) {
         return 0;
       }
@@ -851,7 +851,7 @@ OVC28_6018_1527(undefined2 param_1,undefined2 param_2,undefined2 param_3,undefin
   undefined1 local_3;
   
   local_3 = 0;
-  OVC28_6018_1398(param_1,param_2,param_3,param_4,param_5,&local_3);
+  OVC28_6018_1398(CONCAT22(param_2,param_1),param_3,param_4,param_5,&local_3);
   return;
 }
 

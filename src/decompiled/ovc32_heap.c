@@ -223,7 +223,7 @@ long __cdecl16far heapRealloc(long block,long nbytes)
         }
         else {
           do {
-            uVar6 = heapValidate();
+            uVar6 = heapValidate(0);
             if (uVar6 == 0) {
               return 0;
             }
@@ -248,7 +248,9 @@ long __cdecl16far heapRealloc(long block,long nbytes)
             uVar5 = uVar1;
           }
           lVar7 = LXLSH_at_((ulong)uVar5,4);
-          heapMemmove(4,uVar6,block,(int)(lVar7 + -4));
+          heapMemmove((uint8_t *)4,uVar6,(uint8_t *)(uint16_t)block,
+                      (uint16_t)(*(uint16_t *)((uint8_t *)&(block) + 2)),
+                      (uint16_t)(lVar7 + -4),(int)((lVar7 + -4) >> 16));
           heapFree(far_from_u32((uint32_t)(block)));
           block = CONCAT22(uVar6,4);
         }

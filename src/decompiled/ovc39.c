@@ -138,7 +138,7 @@ void __cdecl16far OVC39_690b_0180(byte param_1)
       for (iVar6 = -2; iVar6 < 2; iVar6 = iVar6 + 1) {
         iVar2 = ovr_OVC23_55fe_2937(iStack_8 + iVar6);
         if (iVar2 == -1) {
-          iVar2 = OVC39_690b_0111(iStack_8 + iVar6);
+          iVar2 = OVC39_690b_0111(iStack_8 + iVar6,0);
           uVar7 = (undefined2)((ulong)DAT_2000_ca95 >> 0x10);
           iVar5 = (int)DAT_2000_ca95;
           bStack_9 = *(byte *)(iVar5 + iVar2 * 9);
@@ -151,10 +151,10 @@ void __cdecl16far OVC39_690b_0180(byte param_1)
              (pcVar3 = (char *)"puppetmaker" + 3, *(byte *)(iVar5 + iVar2 * 9 + 1) < 8)) {
             uVar4 = 0x195d;
             if ((*(uint *)((uint)bStack_9 * 0x27 + 0x121) & 0x80) == 0) {
-              pcStack_6 = (char *)OVC39_690b_0000();
+              pcStack_6 = (char *)OVC39_690b_0000(0);
             }
             else {
-              pcStack_6 = (char *)OVC39_690b_0000();
+              pcStack_6 = (char *)OVC39_690b_0000(0);
             }
             pcStack_4 = (char *)uVar4;
             pcVar3 = (char *)OVC39_690b_00d1();
@@ -167,7 +167,7 @@ void __cdecl16far OVC39_690b_0180(byte param_1)
           }
           if (((bStack_b == 1) && (iVar2 < 0xf8)) &&
              (pcVar3 = (char *)0x195d, (*(uint *)((uint)bStack_9 * 0x27 + 0x121) & 2) != 0)) {
-            pcStack_6 = (char *)OVC39_690b_0000();
+            pcStack_6 = (char *)OVC39_690b_0000(0);
             pcStack_4 = pcVar3;
             pcVar3 = (char *)OVC39_690b_00d1();
             pcVar8 = ovr_stsprintf(local_2cc,(char *)CONCAT22(pcStack_4,pcStack_6),pcVar3);
@@ -179,7 +179,7 @@ void __cdecl16far OVC39_690b_0180(byte param_1)
           }
           if (((bStack_b == 2) && (iVar2 < 0xf8)) &&
              (pcVar3 = (char *)0x195d, (*(uint *)((uint)bStack_9 * 0x27 + 0x121) & 0x20) != 0)) {
-            pcStack_6 = (char *)OVC39_690b_0000();
+            pcStack_6 = (char *)OVC39_690b_0000(0);
             pcStack_4 = pcVar3;
             pcVar3 = (char *)OVC39_690b_00d1();
             pcVar8 = ovr_stsprintf(local_2cc,(char *)CONCAT22(pcStack_4,pcStack_6),pcVar3);
@@ -190,7 +190,7 @@ void __cdecl16far OVC39_690b_0180(byte param_1)
             return;
           }
           if ((bStack_b == 3) && (cVar1 = ovr_OVC45_77eb_0aea(iStack_8 + iVar6), cVar1 != '\0')) {
-            pcStack_6 = (char *)OVC39_690b_0000();
+            pcStack_6 = (char *)OVC39_690b_0000(0);
             pcStack_4 = pcVar3;
             pcVar3 = (char *)OVC39_690b_00d1();
             pcVar8 = ovr_stsprintf(local_2cc,(char *)CONCAT22(pcStack_4,pcStack_6),pcVar3);
@@ -202,7 +202,7 @@ void __cdecl16far OVC39_690b_0180(byte param_1)
           }
           if (((bStack_b == 4) && (iVar2 < 0xf8)) &&
              (uVar4 = 0x195d, (*(uint *)((uint)bStack_9 * 0x27 + 0x121) & 0x400) != 0)) {
-            pcStack_6 = (char *)OVC39_690b_0000();
+            pcStack_6 = (char *)OVC39_690b_0000(0);
             pcStack_4 = (char *)uVar4;
             pcVar3 = (char *)OVC39_690b_00d1();
             pcVar8 = ovr_stsprintf(local_2cc,(char *)CONCAT22(pcStack_4,pcStack_6),pcVar3);
@@ -387,7 +387,7 @@ void __cdecl16far OVC39_690b_0180(byte param_1)
           ovr_drawString((char *)pcVar8,(int)((ulong)pcVar8 >> 0x10));
         }
         else {
-          pcStack_6 = (char *)OVC39_690b_0000();
+          pcStack_6 = (char *)OVC39_690b_0000(0);
           pcStack_4 = pcVar3;
           pcVar3 = (char *)OVC39_690b_00d1();
           pcVar8 = ovr_stsprintf(local_2cc,(char *)CONCAT22(pcStack_4,pcStack_6),pcVar3);
@@ -398,7 +398,7 @@ void __cdecl16far OVC39_690b_0180(byte param_1)
         }
       }
       else {
-        pcStack_6 = (char *)OVC39_690b_0000();
+        pcStack_6 = (char *)OVC39_690b_0000(0);
         pcStack_4 = pcVar3;
         pcVar3 = (char *)OVC39_690b_00d1();
         pcVar8 = ovr_stsprintf(local_2cc,(char *)CONCAT22(pcStack_4,pcStack_6),pcVar3);
@@ -409,7 +409,7 @@ void __cdecl16far OVC39_690b_0180(byte param_1)
       }
     }
     else {
-      pcStack_6 = (char *)OVC39_690b_0000();
+      pcStack_6 = (char *)OVC39_690b_0000(0);
       pcStack_4 = pcVar3;
       pcVar3 = (char *)OVC39_690b_00d1();
       pcVar8 = ovr_stsprintf(local_2cc,(char *)CONCAT22(pcStack_4,pcStack_6),pcVar3);

@@ -213,7 +213,7 @@ rewrites for Ghidra artifacts were added to `scripts/fix_recovered.py`:
 `. _offset_size_` overlays, `(far_t)` casts, far-pointer comparisons and
 allocator assignments, pointer-to-word stores, and `MK_FP` construction.
 
-TC30 compile baseline (58 staged modules): **15 compile**. This includes all
+TC30 compile baseline (58 staged modules): **31 compile**. This includes all
 requested targets:
 
 | module | source | status |
@@ -226,8 +226,15 @@ requested targets:
 | OVC46 | `init_assets1` | **compiles** |
 | OVC48 | `init_assets2` | **compiles** |
 
-Also compiling: `main.c`, `mouse.c`, `ovc05`, `ovc07`, `ovc08`, `ovc36`,
-`ovr_stubs`, `support.c`.
+Also compiling: `glob.c` (the exact data image), `main.c`, `mouse.c`, `ovc01`,
+`ovc03`, `ovc05`, `ovc06`, `ovc07`, `ovc08`, `ovc24`, `ovc26`, `ovc28`,
+`ovc30`, `ovc31`, `ovc32`, `ovc35`, `ovc36`, `ovc37`, `ovc38`, `ovc39`,
+`ovc43`, `ovc50`, `ovr_stubs`, `support.c`.
+
+Notable remaining blockers: `ovc02` hits a Turbo C++ compiler table limit in
+the very large decompiled `draw_2e25_025a`; `crtl.c`, `ovl.c` and `video.c`
+are runtime/overlay infrastructure that will be replaced or rewritten. The
+rest still expose lost call arguments and pointer/word type artifacts.
 
 ### Step 4 — dynamic validation
 Using the harness `bplog` (log-only execute breakpoints), with the runtime load

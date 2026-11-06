@@ -188,8 +188,8 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
   int iStack_c;
   uint16_t uStack_a;
   uint16_t uStack_8;
-  code *pfn;
-  code *pcStack_4;
+  blitfn_t *pfn;
+  blitfn_t *pcStack_4;
   
   pcVar4 = (char *)"anim\\1ma3m.lbm" + 0xb;
   if (gfx.ofs != 0 || gfx.seg != 0) {
@@ -202,7 +202,7 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
       ovr_stExit(0x1a);
     }
     dst_x = dst->x;
-    uVar3 = (undefined2)(far_to_u32(dst) >> 0x10);
+    uVar3 = (undefined2)((uint32_t)dst >> 0x10);
     pdst = (brect_t *)dst;
     dst_y = pdst->y;
     dst_w = pdst->w;
@@ -211,12 +211,12 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
         (dst_w < (int)(x + *(int *)(gfx.ofs + 5) + -1))) ||
        (dst_h < (int)(y + *(int *)(gfx.ofs + 7) + -1))) {
       if (type == false) {
-        pfn = (code *)ovr_unrle;
+        pfn = (blitfn_t *)ovr_unrle;
       }
       else {
-        pfn = (code *)ovr_unrle_mirror;
+        pfn = (blitfn_t *)ovr_unrle_mirror;
       }
-      pcStack_4 = (code *)0x22a6;
+      pcStack_4 = (blitfn_t *)0x22a6;
       if (((int)dst_x <= (int)(x + *(int *)(gfx.ofs + 5) + -1)) && ((int)x <= dst_w)) {
         if ((int)x < (int)dst_x) {
           iStack_10 = dst_x - x;
@@ -391,8 +391,8 @@ void __cdecl16far blitGfxN(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t ty
   int srcsz;
   int skip;
   uint uStack_8;
-  code *pcStack_6;
-  code *pcStack_4;
+  blitfn_t *pcStack_6;
+  blitfn_t *pcStack_4;
   
   pcVar3 = (char *)"anim\\1ma3m.lbm" + 0xb;
   if ((gfx.ofs != 0 || gfx.seg != 0) && (type != 0x0)) {
@@ -423,12 +423,12 @@ void __cdecl16far blitGfxN(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t ty
         uStack_18 = ((brect_t *)dst)->seg;
         uVar2 = 1;
         if (mirror) {
-          pcStack_6 = (code *)ovr_unrle_mirror;
+          pcStack_6 = (blitfn_t *)ovr_unrle_mirror;
         }
         else {
-          pcStack_6 = (code *)ovr_unrle;
+          pcStack_6 = (blitfn_t *)ovr_unrle;
         }
-        pcStack_4 = (code *)0x22a6;
+        pcStack_4 = (blitfn_t *)0x22a6;
         iStack_1e = gfx.ofs + 9;
         uStack_1c = gfx.seg;
         uStack_8 = 0;
@@ -588,7 +588,7 @@ gfxRlePrepare(far_t gfx,int param_2,int param_3,int *param_4,byte param_5,char p
       if (param_7 == -1) {
         uStack_8 = 0;
         while ((uStack_8 < *(uint *)(((stg_tmp_t *)gfx.ofs)->cmap + 0xc) && (uVar1 <= uStack_16))) {
-          iVar2 = (*(code *)pfStack_6)(pcVar6,puStack_1e,uStack_1c,local_15e);
+          iVar2 = (*(blitfn_t *)pfStack_6)(pcVar6,puStack_1e,uStack_1c,local_15e);
           puStack_1e = puStack_1e + iVar2;
           if ((*(uint *)((uint)param_5 * 2 + 0x470) & uVar4) != 0) {
             if (uStack_12 <= uVar1) {
@@ -616,7 +616,7 @@ gfxRlePrepare(far_t gfx,int param_2,int param_3,int *param_4,byte param_5,char p
       else {
         uStack_8 = 0;
         while ((uStack_8 < *(uint *)(((stg_tmp_t *)gfx.ofs)->cmap + 0xc) && (uVar1 <= uStack_16))) {
-          iVar2 = (*(code *)pfStack_6)(pcVar6,puStack_1e,uStack_1c,local_15e);
+          iVar2 = (*(blitfn_t *)pfStack_6)(pcVar6,puStack_1e,uStack_1c,local_15e);
           puStack_1e = puStack_1e + iVar2;
           if ((*(uint *)((uint)param_5 * 2 + 0x470) & uVar4) != 0) {
             if (uStack_12 <= uVar1) {
@@ -935,10 +935,10 @@ blit_317e_0f7d(far_t param_1,int param_2,int param_3,byte param_4,int param_5,in
       uStack_20 = ovr_OVC07_32c9_0026();
       uStack_e = 0;
       while ((uStack_e < *(uint *)(psVar6->cmap + 7) && (param_3 <= iStack_1a))) {
-        iVar3 = (*(code *)pfStack_6)((char *)"public baths" + 6,puStack_28,uStack_26,local_168);
+        iVar3 = (*(blitfn_t *)pfStack_6)((char *)"public baths" + 6,puStack_28,uStack_26,local_168);
         puStack_28 = puStack_28 + iVar3;
         if ((*(uint *)((uint)bStack_7 * 2 + 0x470) & uVar7) != 0) {
-          blit_317e_0ebe(piVar5[4],param_3,iStack_12,local_168);
+          blit_317e_0ebe(piVar5[4],param_3,iStack_12,(undefined4)(void far *)local_168,0,0,0,0,0,0,0,0,0,0);
           param_3 = param_3 + 1;
         }
         if (uVar7 == 0x8000) {

@@ -246,8 +246,7 @@ void __cdecl16far OVC24_5943_026e(uint param_1)
           bStack_f = *(char *)((int)(char **)GMenuStrings + (uint)bStack_13 * 0x95 + 0x1f);
           if (bStack_f == '\0') {
             dst = 0xa000;
-            OVC23_55fe_3450(*(undefined2 *)(uVar7 + uVar11 * 0x37),
-                            *(undefined2 *)(uVar7 + uVar11 * 0x37 + 2));
+            OVC23_55fe_3450(*(undefined2 *)(uVar7 + uVar11 * 0x37));
             uVar9 = 0x195d;
             pcVar8 = ovr_fmVsprintf((char *)
                                     "Intelligence reports %s unit fleeing from battle. (%d, %d)",
@@ -280,8 +279,7 @@ void __cdecl16far OVC24_5943_026e(uint param_1)
                 puVar1 = (uint *)(Entities.ofs + uVar5 * 0x37 + 0x14);
                 *puVar1 = *puVar1 | 1;
                 uVar7 = 0xa000;
-                OVC23_55fe_3450(*(undefined2 *)(Entities.ofs + uVar11 * 0x37),
-                                *(undefined2 *)(Entities.ofs + uVar11 * 0x37 + 2));
+                OVC23_55fe_3450(*(undefined2 *)(Entities.ofs + uVar11 * 0x37));
                 uVar9 = 0x195d;
                 pcVar8 = ovr_fmVsprintf((char *)
                                         "Intelligence reports %s unit infected with disease. (%d, %d)"
@@ -316,8 +314,7 @@ void __cdecl16far OVC24_5943_026e(uint param_1)
                   }
                 }
                 uVar7 = 0xa000;
-                OVC23_55fe_3450(*(undefined2 *)(Entities.ofs + uVar11 * 0x37),
-                                *(undefined2 *)(Entities.ofs + uVar11 * 0x37 + 2));
+                OVC23_55fe_3450(*(undefined2 *)(Entities.ofs + uVar11 * 0x37));
                 uVar9 = 0x195d;
                 pcVar8 = ovr_fmVsprintf((char *)
                                         "Intelligence reports %s unit drained of energy. (%d, %d)",
@@ -401,7 +398,7 @@ void __cdecl16far OVC24_5943_0d5a(undefined1 *param_1)
          (*(char *)(uVar6 + uVar7 * 0x37 + 0x19) == '\0')) {
         if ((GOngoingBattle == '\0') && (*(int *)(uVar6 + uVar7 * 0x37 + 2) == GfxRndSeed2)) {
           iVar2 = OVC23_55fe_3450(*(undefined2 *)(uVar6 + uVar7 * 0x37));
-          iVar3 = OVC23_55fe_3450();
+          iVar3 = OVC23_55fe_3450(0);
           if (iVar2 == iVar3) goto LAB_5943_0e45;
         }
         OVC24_5943_026e(uVar7);
@@ -543,7 +540,7 @@ void __cdecl16far OVC24_5943_112e(void)
         }
         if (((uStack_10 & bStack_8) == 0) && ((uStack_10 & uStack_c) != 0)) {
           cVar1 = OVC24_5943_1007(uStack_6 & 0xff);
-          if ((cVar1 == '\0') || (cVar1 = OVC24_5943_1eeb(iStack_e,iVar4,bStack_7), cVar1 != '\0'))
+          if ((cVar1 == '\0') || (cVar1 = (char)(ulong)OVC24_5943_1eeb(iStack_e,iVar4,bStack_7), cVar1 != '\0'))
           goto LAB_5943_1263;
         }
         else {
@@ -566,7 +563,7 @@ LAB_5943_1263:
         if ((*(uint *)((int)&far_t_ARRAY_2410_26f7[7].seg + 1 + (uint)bStack_9 * 0x95) & 0x800) == 0
            ) {
           uVar6 = 0xa000;
-          OVC23_55fe_3450(*(undefined2 *)((int)*(undefined4 *)(uStack_6 << 2) + 0x39),iVar4);
+          OVC23_55fe_3450(*(undefined2 *)((int)*(undefined4 *)(uStack_6 << 2) + 0x39));
           pcVar2 = (char *)ovr_OVC15_4207_1c79(local_dc);
           pcVar5 = ovr_stsprintf(sbuf,"%s stronghold destroyed. (%d, %d)",pcVar2);
           ovr_uiNotify(pcVar5,uVar6);
@@ -574,7 +571,7 @@ LAB_5943_1263:
         else {
           uVar6 = 0xa000;
           pcVar2 = (char *)OVC23_55fe_3450(*(undefined2 *)
-                                            ((int)*(undefined4 *)(uStack_6 << 2) + 0x39),iVar4);
+                                            ((int)*(undefined4 *)(uStack_6 << 2) + 0x39));
           pcVar5 = ovr_stsprintf(sbuf,"Mindark\'s keep destroyed. (%d, %d)",pcVar2);
           ovr_uiNotify(pcVar5,uVar6);
         }

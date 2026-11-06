@@ -29,19 +29,19 @@ int __cdecl16far bldng_676c_0000(byte param_1)
 
 /* 676c:003d */
 
-char * __cdecl16far bldng_676c_003d(byte param_1,char param_2)
+char __cdecl16far bldng_676c_003d(byte param_1,char param_2)
 
 {
   byte bVar1;
   undefined4 uVar2;
-  char *pcVar3;
+  char pcVar3;
   uint uVar4;
   uint uVar5;
   byte bStack_6;
   
   bVar1 = *(byte *)((uint)param_1 * 0x27 + 0x134);
   if (bVar1 == 1) {
-    pcVar3 = (char *)CONCAT11((char)((uint)param_1 * 0x27 >> 8),1);
+    pcVar3 = (char)1;
   }
   else {
     bVar1 = bVar1 & 0x7f;
@@ -49,20 +49,20 @@ char * __cdecl16far bldng_676c_003d(byte param_1,char param_2)
       for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
         if ((*(char *)(Entities.ofs + uVar5 * 0x37 + 0x1a) == param_2) &&
            (bVar1 <= *(byte *)(Entities.ofs + uVar5 * 0x37 + 0xf))) {
-          return (char *)CONCAT11((char)(uVar5 * 0x37 >> 8),1);
+          return (char)1;
         }
       }
-      pcVar3 = (char *)"arena" + 4;
+      pcVar3 = 0;
     }
     else {
       uVar5 = ovr_manage_4d05_1b1d();
       if ((byte)uVar5 == 0xff) {
-        pcVar3 = (char *)(uVar5 & 0xff00);
+        pcVar3 = (char)(uVar5 & 0xff00);
       }
       else {
         uVar2 = *(undefined4 *)((uVar5 & 0xff) << 2);
         if (*(byte *)((int)uVar2 + 0x86) < bVar1) {
-          pcVar3 = (char *)((uint)(byte)((byte)uVar5 >> 6) << 8);
+          pcVar3 = (char)((uint)(byte)((byte)uVar5 >> 6) << 8);
         }
         else if (*(char *)((uint)param_1 * 0x27 + 0x133) == '\x12') {
           bStack_6 = DAT_2000_d3c6;
@@ -74,18 +74,18 @@ char * __cdecl16far bldng_676c_003d(byte param_1,char param_2)
           if (bStack_6 < 5) {
             uVar2 = *(undefined4 *)((uVar5 & 0xff) << 2);
             if ((uint)*(byte *)((int)uVar2 + 0x86) < bStack_6 + 4) {
-              pcVar3 = (char *)0x0;
+              pcVar3 = 0;
             }
             else {
-              pcVar3 = (char *)0x1;
+              pcVar3 = 1;
             }
           }
           else {
-            pcVar3 = (char *)"arena" + 4;
+            pcVar3 = 0;
           }
         }
         else {
-          pcVar3 = (char *)CONCAT11((char)((uint)param_1 * 0x27 >> 8),1);
+          pcVar3 = (char)1;
         }
       }
     }
@@ -117,7 +117,7 @@ bldng_676c_01b0(undefined4 param_1,undefined4 param_2,int param_3,undefined1 par
   undefined2 uVar15;
   undefined1 *puVar17;
   uint uStack_e;
-  undefined4 uStack_c;
+  undefined1 *uStack_c;
   int iVar12;
   undefined2 uVar16;
   
@@ -176,8 +176,8 @@ LAB_676c_037f:
     }
     else {
       uVar7 = bldng_676c_05ac(CONCAT11((char)((uint)(iVar13 * 2) >> 8),
-                                       *(undefined1 *)(iVar11 + iVar13 * 2)),param_4);
-      cVar5 = bldng_676c_003d(uVar7);
+                                       *(undefined1 *)(iVar11 + iVar13 * 2)));
+      cVar5 = bldng_676c_003d(uVar7,param_4);
       if (cVar5 == '\0') goto LAB_676c_037f;
       *uStack_c = 0x40;
     }
@@ -265,7 +265,8 @@ void __cdecl16far bldng_676c_03dd(byte param_1)
     }
     uStack_6 = uStack_6 + 1;
   }
-  bldng_676c_01b0(local_1f4);
+  bldng_676c_01b0((undefined4)(void far *)MK_FP(unaff_SS,local_1f4),
+                  (undefined4)(void far *)MK_FP(unaff_SS,local_192),iVar5,param_1);
   uVar2 = *(undefined4 *)((uint)param_1 << 2);
   bVar3 = bldng_676c_05ac(CONCAT11((char)(((uint)param_1 << 2) >> 8),
                                    *(undefined1 *)((int)uVar2 + 0x85)));
@@ -300,7 +301,8 @@ undefined2 __cdecl16far bldng_676c_05c3(byte param_1)
   uint16_t uVar1;
   int iVar2;
   
-  uVar1 = ovr_randBelow((uint)*(byte *)((far_t *)GStrangeTable)[param_1]);
+  uVar1 = ovr_randBelow((uint)*(uint8_t far *)MK_FP(((far_t *)GStrangeTable)[param_1].seg,
+                                                            ((far_t *)GStrangeTable)[param_1].ofs));
   iVar2 = (uVar1 & 0xff) + ((far_t *)GStrangeTable + param_1)->ofs;
   return CONCAT11((char)((uint)iVar2 >> 8),*(undefined1 *)(iVar2 + 1));
 }

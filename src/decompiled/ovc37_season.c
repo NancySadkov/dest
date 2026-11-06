@@ -384,7 +384,7 @@ void __cdecl16far updSeason(void)
     handle.seg = Lbm_nwpanel1.seg;
     handle.ofs = Lbm_nwpanel1.ofs;
     psStack_8 = ovr_stshLoadGfx(handle);
-    calcSeasonPalette();
+    calcSeasonPalette((uint8_t *)0,0,(uint8_t *)0,0);
     ovr_OVC40_69c8_011e(palette);
     ovr_miceRestoreArea(BlitRects + 1);
     GSeason = season;
@@ -403,7 +403,7 @@ void __cdecl16far updSeason(void)
     handle_00.ofs = Lbm_nwpanel1.ofs;
     psVar1 = ovr_stshLoadGfx(handle_00);
     psStack_8 = psVar1;
-    calcSeasonPalette();
+    calcSeasonPalette((uint8_t *)0,0,(uint8_t *)0,0);
     ovr_setSeasonPalette(palette);
     GTimeHi = '\0';
     if ((season == 0) && (GTimeLo == 0xf)) {

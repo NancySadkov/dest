@@ -163,8 +163,8 @@ void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term)
   int iVar2;
   undefined2 uVar3;
   uint uStack_e;
-  undefined4 uStack_a;
-  undefined4 uStack_6;
+  byte *uStack_a;
+  byte *uStack_6;
   
   if (((ch != '\r') && (ch != '\n')) && (ch != '\x1a')) {
     if (ch == '\x7f') {
@@ -426,9 +426,9 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay)
   } while (cVar2 != '\0');
   do {
     if ((*(uint16_t *)(BDA_DailyTimeCounter.ofs + 2) != InputEventTime.hi) ||
-       (*(uint16_t *)BDA_DailyTimeCounter != InputEventTime.lo)) {
+       (*(uint16_t *)(BDA_DailyTimeCounter.ofs) != InputEventTime.lo)) {
       InputEventTime.hi = *(uint16_t *)(BDA_DailyTimeCounter.ofs + 2);
-      InputEventTime.lo = *(uint16_t *)BDA_DailyTimeCounter;
+      InputEventTime.lo = *(uint16_t *)(BDA_DailyTimeCounter.ofs);
       ovr_draw_2e25_046b();
     }
     cVar2 = ovr_draw_2e25_1d7c();
@@ -464,7 +464,7 @@ uint __cdecl16far font_302d_080b(byte param_1)
   cVar2 = ovr_audio_3a5b_037e();
   if (cVar2 == '\0') {
     (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t *)(BDA_DailyTimeCounter.ofs);
     uVar3 = inputUpdate((ulong)param_1);
     uVar4 = uVar3 & 0xff00;
   }
@@ -483,9 +483,9 @@ uint __cdecl16far font_302d_080b(byte param_1)
       uVar5 = ovr_audio_3a5b_037e();
       if ((char)uVar5 == '\0') break;
       if ((*(uint16_t *)(BDA_DailyTimeCounter.ofs + 2) != InputEventTime.hi) ||
-         (*(uint16_t *)BDA_DailyTimeCounter != InputEventTime.lo)) {
+         (*(uint16_t *)(BDA_DailyTimeCounter.ofs) != InputEventTime.lo)) {
         InputEventTime.hi = *(uint16_t *)(BDA_DailyTimeCounter.ofs + 2);
-        InputEventTime.lo = *(uint16_t *)BDA_DailyTimeCounter;
+        InputEventTime.lo = *(uint16_t *)(BDA_DailyTimeCounter.ofs);
         ovr_draw_2e25_046b();
       }
       uVar5 = ovr_draw_2e25_1d7c();
@@ -522,7 +522,7 @@ void __cdecl16far drawTextAt(char *txt,uint16_t dst)
     TextBlitFlag = 1;
     TextBlitDstSeg = dst;
     (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t *)(BDA_DailyTimeCounter.ofs);
     dst_00.seg = dst;
     dst_00.ofs = 0xc31d;
     gfx.seg = FontHandle.seg;
@@ -589,7 +589,7 @@ void __cdecl16far uiNotify(char *msg,uint16_t dst)
   
   inputUpdate((ulong)MessageDelay << 1);
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t *)(BDA_DailyTimeCounter.ofs);
   BlitRects[4].seg = dst;
   mice_no_update = MiceNeedsUpdate == '\0';
   if (mice_no_update) {

@@ -228,7 +228,7 @@ void __cdecl16far draw_2e25_025a(void)
   if (CrossBlitPtr.ofs != 0 || CrossBlitPtr.seg != 0) {
     *(uint16_t *)(iVar38 + -4) = CrossBlitPtr.seg;
     *(uint16_t *)(iVar38 + -6) = CrossBlitPtr.ofs;
-    *(undefined2 *)(iVar38 + -8) = (char *)"talkwin9.lbm" + 0xb;
+    *(undefined2 *)(iVar38 + -8) = (uint16_t)(ulong)((char *)"talkwin9.lbm" + 0xb);
     pcVar34 = (char *)"glassworks" + 9;
     puVar39 = (undefined1 *)(iVar38 + -10);
     *(undefined2 *)(iVar38 + -10) = 0xe4f0;
@@ -3482,7 +3482,7 @@ void __cdecl16far draw_2e25_025a(void)
         pcVar47 = pcVar47 + (int)pcVar50;
         *pcVar50 = *pcVar50 + cVar32;
                     /* WARNING: Read-only address (ram,0x00026001) is written */
-        (*(uint16_t *)((uint8_t *)&(s_halfling_lodge_2410_1efd) + 4)) = pcVar34 + 0x696c;
+        (*(uint16_t *)((uint8_t *)&(s_halfling_lodge_2410_1efd) + 4)) = (uint16_t)(ulong)(pcVar34 + 0x696c);
         piVar51 = (int *)(pcVar50 + (int)pcVar47);
         cVar36 = cVar36 + cVar23;
         iVar15 = CONCAT11(cVar36,cVar32);
@@ -3873,11 +3873,11 @@ code_r0x000219f5:
         *(uint *)(iVar37 + -4) = uVar13;
         *(int *)(iVar37 + -6) = iVar15;
         *(undefined2 *)(iVar37 + -8) = CONCAT11(bVar30,bVar25);
-        *(undefined2 *)(iVar37 + -10) = pbVar33;
+        *(undefined2 *)(iVar37 + -10) = (uint16_t)(ulong)pbVar33;
         *(int *)(iVar37 + -0xc) = iVar37 + -2;
-        *(undefined2 *)(iVar37 + -0xe) = pbVar48;
+        *(undefined2 *)(iVar37 + -0xe) = (uint16_t)(ulong)pbVar48;
         *(uint *)(iVar37 + -0x10) = (uint)puVar26;
-        *(undefined2 *)(iVar37 + -0x12) = piVar51;
+        *(undefined2 *)(iVar37 + -0x12) = (uint16_t)(ulong)piVar51;
         if (iVar15 != 0) {
           pbVar1 = pbVar33 + (int)puVar26 + 0x2d;
           bVar11 = *pbVar1;
@@ -3899,11 +3899,11 @@ code_r0x000219f5:
             *(int *)(iVar37 + -0x14) = iVar14;
             *(int *)(iVar37 + -0x16) = iVar15;
             *(undefined2 *)(iVar37 + -0x18) = CONCAT11(bVar11,bVar25);
-            *(undefined2 *)(iVar37 + -0x1a) = pbVar33;
+            *(undefined2 *)(iVar37 + -0x1a) = (uint16_t)(ulong)pbVar33;
             *(int *)(iVar37 + -0x1c) = iVar37 + -0x12;
-            *(undefined2 *)(iVar37 + -0x1e) = pbVar48;
+            *(undefined2 *)(iVar37 + -0x1e) = (uint16_t)(ulong)pbVar48;
             *(uint *)(iVar37 + -0x20) = (uint)puVar26;
-            *(undefined2 *)(iVar37 + -0x22) = piVar51;
+            *(undefined2 *)(iVar37 + -0x22) = (uint16_t)(ulong)piVar51;
             *(int *)(iVar37 + -0x24) = iVar14;
             pcVar7 = (code *)swi(3);
             (*pcVar7)();
@@ -3951,12 +3951,12 @@ code_r0x000219f5:
     *(char **)(puVar40 + -4) = pcVar34;
     puVar42 = (undefined2 *)(puVar40 + -6);
     *(undefined2 *)(puVar40 + -6) = 0xe60d;
-    iVar15 = draw_2e25_018a();
+    iVar15 = draw_2e25_018a(0);
     CrossBlitX = iVar15 + -6;
     puVar42[2] = (uint)GMenuItem;
-    puVar42[1] = pcVar34;
+    puVar42[1] = (uint16_t)(ulong)pcVar34;
     *puVar42 = 0xe620;
-    iVar15 = draw_2e25_01eb();
+    iVar15 = draw_2e25_01eb(0);
     puVar40 = (undefined1 *)((int)puVar42 + 6);
     CrossBlitY = iVar15 + -5;
   }
@@ -3989,7 +3989,7 @@ code_r0x000219f5:
     *(char **)(puVar40 + -4) = pcVar34;
     pbVar45 = puVar40 + -6;
     *(undefined2 *)(puVar40 + -6) = 0xe69b;
-    uVar16 = draw_2e25_0245();
+    uVar16 = draw_2e25_0245(0);
     *(undefined2 *)(pbVar45 + 4) = uVar16;
     *(undefined2 *)(pbVar45 + 2) = 1;
     *(undefined2 *)pbVar45 = 0;
@@ -4090,7 +4090,7 @@ void __cdecl16far draw_2e25_05e9(void)
   uVar8 = ovr_attact_3f0b_082f(CONCAT22(DAT_2000_ca36,_bdata_at_));
   if (((int)(uVar8 >> 0x10) != 0) || (1 < (uint)uVar8)) {
     DAT_2000_ca36 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    _bdata_at_ = *(undefined2 *)BDA_DailyTimeCounter;
+    _bdata_at_ = *(uint16_t *)(BDA_DailyTimeCounter.ofs);
     bVar5 = false;
     bVar4 = false;
     for (uVar7 = 0; uVar7 < DAT_2000_d2df; uVar7 = uVar7 + 1) {
@@ -4338,9 +4338,9 @@ uint16_t __cdecl16far draw_2e25_0d35(void)
   DAT_2410_00e8 = 0;
   while( true ) {
     if ((*(int *)(BDA_DailyTimeCounter.ofs + 2) != iStack_8) ||
-       (*(int *)BDA_DailyTimeCounter != iStack_a)) {
+       (*(int *)(BDA_DailyTimeCounter.ofs) != iStack_a)) {
       iStack_8 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-      iStack_a = *(int *)BDA_DailyTimeCounter;
+      iStack_a = *(int *)(BDA_DailyTimeCounter.ofs);
       draw_2e25_0938();
       if (DAT_2000_ca90 != '\0') {
         ovr_miceRestoreArea(BlitRects + 1);
@@ -4407,9 +4407,9 @@ void __cdecl16far draw_2e25_0efd(int param_1)
     gfx.seg = DAT_2000_ca3a;
     gfx.ofs = DAT_2000_ca38;
     ovr_blitLoadRleGfx(gfx,dst);
-    iVar2 = draw_2e25_018a();
+    iVar2 = draw_2e25_018a(0);
     iVar2 = iVar2 + 2;
-    uVar3 = draw_2e25_01eb();
+    uVar3 = draw_2e25_01eb(0);
     ovr_driver_2d63_0846(0x12e,iVar1,iVar2,uVar3,0x126,iVar1 + 8,SpecialColors[0],TextBlitDstSeg);
     ovr_driver_2d63_0846(0x12e,iVar1,iVar2,uVar3,0x136,iVar1 + 8,SpecialColors[1],TextBlitDstSeg);
     ovr_driver_2d63_0846
@@ -4531,8 +4531,8 @@ void __cdecl16far draw_2e25_130a(void)
       pcVar1 = (char *)ovr_OVC45_77eb_226e(local_32);
       ovr_blitText((char *)CONCAT22(pcVar2,pcVar1),widths,(uint16_t)uVar4,
                    (uint8_t)((ulong)uVar4 >> 0x10));
-      draw_2e25_10c7((int)(char)((undefined *)&DAT_2000_d178)[GMenuItem]);
-      draw_2e25_0098(*(undefined1 *)(GMenuItem + 0x9082));
+      draw_2e25_10c7((int)(char)((undefined *)&DAT_2000_d178)[GMenuItem],0);
+      draw_2e25_0098(*(undefined1 *)(GMenuItem + 0x9082),0);
     }
     ovr_blitRaw(0xe6,0x39,0x13a,0x71,TextBlitDstSeg,0xa000);
     TextBlitDstSeg = 0xa000;
@@ -4678,12 +4678,12 @@ void __cdecl16far draw_2e25_17b3(void)
          ((7 < DAT_2410_00e6 && (DAT_2410_00e6 < 0x33)))) ||
         ((((GOngoingBattle != '\0' && (0xee < DAT_2410_00e4)) && (DAT_2410_00e4 < 0x135)) &&
          (((6 < DAT_2410_00e6 && (DAT_2410_00e6 < 0x37)) &&
-          (cVar1 = draw_2e25_15d6(), cVar1 != '\0')))))))) {
+          (cVar1 = (char)(ulong)draw_2e25_15d6(), cVar1 != '\0')))))))) {
       ovr_OVC41_6a8f_1847();
     }
     else if ((((DAT_2410_00e8 == 0) && (0xee < DAT_2410_00e4)) &&
              ((DAT_2410_00e4 < 0x135 && ((6 < DAT_2410_00e6 && (DAT_2410_00e6 < 0x37)))))) &&
-            ((GOngoingBattle == '\0' || (cVar1 = draw_2e25_15d6(), cVar1 == '\0')))) {
+            ((GOngoingBattle == '\0' || (cVar1 = (char)(ulong)draw_2e25_15d6(), cVar1 == '\0')))) {
       ovr_OVC13_3d16_1a01(DAT_2410_00e4 - 0xef >> 1,DAT_2410_00e6 - 7,0);
     }
     else if ((((DAT_2410_00e4 < 9) || (0x18 < DAT_2410_00e4)) || (DAT_2410_00e6 < 0xb5)) ||
@@ -4703,7 +4703,7 @@ void __cdecl16far draw_2e25_17b3(void)
                   ((DAT_2410_00e6 < 0x58 && (0x3a < DAT_2410_00e6)))))) &&
                 (((DAT_2410_00e4 < 0x110 && (0x10f - DAT_2410_00e4 <= DAT_2410_00e6 - 0x3b)) ||
                  ((0x10f < DAT_2410_00e4 && (DAT_2410_00e4 - 0x10f <= DAT_2410_00e6 - 0x3b)))))) {
-          draw_2e25_10c7();
+          draw_2e25_10c7(0,0);
           DAT_2000_ca6f = '\x01';
           draw_2e25_025a();
           ovr_OVC41_6a8f_04c0(CONCAT11(extraout_AH,GMenuItem));
@@ -4778,7 +4778,7 @@ void __cdecl16far draw_2e25_17b3(void)
         }
         else {
           ovr_attact_3f0b_0540(DAT_2410_00e4 - 0xea,GMenuItem,0xa000);
-          draw_2e25_0098();
+          draw_2e25_0098(0,0);
           if (DAT_2000_ca6f == '\x02') {
             ovr_attact_3f0b_18fe();
           }

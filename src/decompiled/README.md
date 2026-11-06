@@ -61,7 +61,7 @@ python scripts/stage_build.py
 dosbox-x -conf <a config mounting tmp/buildsrc as C: and tools/TC30 as D:>
 ```
 
-Current TC30 baseline: 15 of 58 staged modules compile, including the whole
+Current TC30 baseline: 31 of 58 staged modules compile, including the whole
 asset-init chain (`ovc44/46/48`), the stash layer (`ovc17/20`), the LBM decoder
 (`ovc04`), `main`, `mouse`, and the small helper modules. Remaining modules
 still expose decompiler type/overlay artifacts and are the next refinement

@@ -60,7 +60,7 @@ void __cdecl16far OVC38_68ac_008a(undefined4 param_1)
   handle = ovr_creat_wait_unlock_and_disk((char *)pcVar4);
   if (-1 < handle) {
     for (iVar2 = 0; iVar2 < 6; iVar2 = iVar2 + 1) {
-      uVar3 = (undefined2)(far_to_u32(param_1) >> 0x10);
+      uVar3 = (undefined2)((uint32_t)param_1 >> 0x10);
       piVar1 = (int *)((int)param_1 + iVar2 * 4);
       if (*piVar1 != 0 || piVar1[1] != 0) {
         ovr_saveui_4528_10c5();
@@ -114,10 +114,10 @@ void __cdecl16far OVC38_68ac_0148(void)
   char *pcStack_64;
   char local_5a [80];
   void *pvStack_a;
-  undefined4 uStack_6;
+  char *uStack_6;
   
   pvStack_a = ovr_stshAlloc(0x18);
-  OVC38_68ac_0000((void *)pvStack_a,(char)((ulong)pvStack_a >> 0x10));
+  OVC38_68ac_0000((undefined4)(void far *)pvStack_a);
   ovr_saveui_4528_0533();
   TextBlitX = 0x16;
   TextBlitY = 0xb;
@@ -156,7 +156,7 @@ void __cdecl16far OVC38_68ac_0148(void)
   items.seg = unaff_SS;
   items.ofs = (uint16_t)local_82;
   ovr_uiMenu((char *)0x0,items,8);
-  OVC38_68ac_00fd((void *)pvStack_a,(char)((ulong)pvStack_a >> 0x10));
+  OVC38_68ac_00fd(far_from_u32((uint32_t)(void far *)pvStack_a));
   ovr_saveui_4528_0533();
   return;
 }
@@ -236,7 +236,7 @@ void __cdecl16far OVC38_68ac_03fc(void)
     pvVar6 = ovr_stshAlloc(0x18);
     pvStack_8 = (void *)pvVar6;
     uStack_6 = (undefined2)((ulong)pvVar6 >> 0x10);
-    OVC38_68ac_0000(pvStack_8);
+    OVC38_68ac_0000((undefined4)(void far *)pvStack_8);
     if (*(int *)((int)pvStack_8 + 0x14) != 0 || *(int *)((int)pvStack_8 + 0x16) != 0) {
       handle.seg = *(uint16_t *)((int)pvStack_8 + 0x16);
       handle.ofs = *(uint16_t *)((int)pvStack_8 + 0x14);
@@ -245,9 +245,9 @@ void __cdecl16far OVC38_68ac_03fc(void)
     ovr_manage_4d05_03a4
               (*(undefined2 *)((uint)bStack_3 * 4),((undefined2 *)((uint)bStack_3 * 4))[1],
                *(undefined2 *)((uint)bStack_3 * 4),((undefined2 *)((uint)bStack_3 * 4))[1]);
-    _sprintf(local_d0);
+    _sprintf(local_d0,(undefined2)0,(undefined2)0);
     iVar4 = 5;
-    while ((0 < iVar4 && (cVar2 = OVC38_68ac_0339(local_d0), cVar2 == '\0'))) {
+    while ((0 < iVar4 && (cVar2 = OVC38_68ac_0339((byte *)local_d0,(byte *)0), cVar2 == '\0'))) {
       uVar1 = *(undefined2 *)((int)pvStack_8 + iVar4 * 4 + -4);
       puVar5 = (undefined2 *)((int)pvStack_8 + iVar4 * 4);
       puVar5[1] = *(undefined2 *)((int)pvStack_8 + iVar4 * 4 + -2);
@@ -258,10 +258,10 @@ void __cdecl16far OVC38_68ac_03fc(void)
     pvVar6 = ovr_stshAlloc((ulong)(sVar3 + 1));
     puVar5 = (undefined2 *)((int)pvStack_8 + iVar4 * 4);
     puVar5[1] = (int)((ulong)pvVar6 >> 0x10);
-    *puVar5 = (void *)pvVar6;
+    *puVar5 = (uint16_t)(ulong)pvVar6;
     strcpy((char *)*(undefined2 *)((int)pvStack_8 + iVar4 * 4),local_d0);
-    OVC38_68ac_008a(pvStack_8,uStack_6);
-    OVC38_68ac_00fd(pvStack_8,uStack_6);
+    OVC38_68ac_008a((undefined4)(void far *)pvStack_8);
+    OVC38_68ac_00fd(far_from_u32((uint32_t)(void far *)pvStack_8));
     DAT_2410_6a88 = '\x01';
   }
   return;

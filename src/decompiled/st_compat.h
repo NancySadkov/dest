@@ -17,7 +17,8 @@
 #define far
 #define near
 #endif
-typedef unsigned short code(void);
+typedef unsigned short code();
+typedef unsigned short blitfn_t();
 code *swi(int vector);
 #define MK_FP(seg,ofs) ((void far *)(((uint32_t)(seg) << 16) | (uint16_t)(ofs)))
 #define CONCAT11(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint8_t)(b)))
@@ -61,5 +62,6 @@ code *swi(int vector);
 #define _envseg _envseg_at_
 #define _envSize _envSize_at_
 #define bdata bdata_at_
+#define _bdata_at_ bdata_at_
 #define DGROUP_ DGROUP_at__at_
 #endif

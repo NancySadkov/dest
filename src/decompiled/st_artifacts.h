@@ -1,7 +1,11 @@
 /* Declarations for Ghidra decompiler RAM/register pseudo-variables. */
 #ifndef ST_ARTIFACTS_H
 #define ST_ARTIFACTS_H
+extern uint32_t UNK_0000_0198;
+extern uint32_t UNK_0000_0484;
+extern uint32_t UNK_0000_0487;
 extern uint32_t _auStack_6;
+extern int _font_302d_0a30;
 extern uint32_t _iStack_10;
 extern uint32_t _iStack_12;
 extern uint32_t _iStack_18;
@@ -115,6 +119,18 @@ extern uint16_t fStack_30;
 extern uint16_t fStack_6;
 extern uint16_t fStack_8;
 extern uint16_t fStack_c;
+extern far_t far_t_ARRAY_2410_26f7[];
+extern far_t far_t_ARRAY_2410_45b9[];
+extern far_t far_t_ARRAY_2410_4933[];
+extern far_t far_t_ARRAY_2410_49eb[];
+extern far_t far_t_ARRAY_2410_49f7[];
+extern far_t far_t_ARRAY_2410_4ada[];
+extern far_t far_t_ARRAY_2410_4b06[];
+extern far_t far_t_ARRAY_2410_5aeb[];
+extern far_t far_t_ARRAY_2410_6b3a[];
+extern far_t far_t_ARRAY_2410_6e38[];
+extern far_t far_t_ARRAY_2410_74ad[];
+extern far_t far_t_ARRAY_2410_84a8[];
 extern int16_t iRam0001000b;
 extern int16_t iRam00033501;
 extern uint32_t iStack_10;

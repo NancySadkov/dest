@@ -7078,7 +7078,7 @@ LAB_4d05_17b2:
     pfVar37->ofs = pfVar37->ofs & (uint)pfVar25;
                     /* WARNING (jumptable): Read-only address (ram,0x000247db) is written */
                     /* WARNING: Read-only address (ram,0x000247db) is written */
-    s_Turn_to_page___d_of_the_manual__2410_06cd[0xe] = '&';
+    s_Turn_to_page___d_of_2410_06cd[0xe] = '&';
     *(undefined2 *)((int)puVar97 + 0xe) = pcVar494;
     *(undefined2 *)((int)puVar97 + 0xc) = pcVar494;
     *(char *)&pfVar24->ofs = (char)pfVar24->ofs + '\x01';

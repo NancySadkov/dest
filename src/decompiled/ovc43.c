@@ -25,7 +25,7 @@ int * __cdecl16far OVC43_6fbe_0000(undefined4 param_1,int *param_2,int *param_3)
   int unaff_DI;
   undefined2 uVar7;
   int *piStack_8;
-  undefined4 uStack_6;
+  int *uStack_6;
   
   piVar3 = (int *)((char *)"puppetmaker" + 3);
   TextBlitDstSeg = 0xa000;
@@ -69,11 +69,11 @@ code_r0x00061d78:
       ovr_fmFreeAudio(1);
     }
 LAB_619c_03ce:
-    uStack_6 = ovr_stshAlloc(0xae);
+    uStack_6 = (int *)ovr_stshAlloc(0xae);
     piStack_8 = (int *)(uint)DAT_2000_d1e6;
     uVar5 = (uint)DAT_2000_d1e6;
     ((undefined2 *)(uVar5 * 4))[1] = (int)((ulong)uStack_6 >> 0x10);
-    *(undefined2 *)(uVar5 * 4) = (int *)uStack_6;
+    *(undefined2 *)(uVar5 * 4) = (uint16_t)uStack_6;
     DAT_2000_d1e6 = DAT_2000_d1e6 + 1;
     break;
   case 5:
@@ -81,13 +81,13 @@ LAB_619c_03ce:
     *pcVar1 = *pcVar1 + (char)in_CX;
     uStack_6 = (int *)CONCAT22(param_3,piVar4);
   }
-  _fmemset(uStack_6,0,0xae);
-  strcpy((char *)(int *)uStack_6,
+  _fmemset((void far *)uStack_6,0,0xae);
+  strcpy((char *)uStack_6,
          (char *)*(undefined2 *)
                   ((int)&far_t_ARRAY_2410_26f7[0].seg + 1 + (uint)(byte)param_1 * 0x95));
   *(undefined1 *)((int)(int *)uStack_6 + 0x3d) = 1;
   *(undefined2 *)((int)(int *)uStack_6 + 0x39) = uVar7;
-  *(undefined2 *)((int)(int *)uStack_6 + 0x3b) = param_2;
+  *(undefined2 *)((int)uStack_6 + 0x3b) = (uint16_t)param_2;
   *(byte *)((int *)uStack_6 + 0x1f) = (byte)param_1;
   *(undefined1 *)((int)(int *)uStack_6 + 0x2f) = 0xff;
   *(undefined1 *)((int *)uStack_6 + 0x18) = 3;
@@ -152,7 +152,9 @@ OVC43_6fbe_013a(undefined2 param_1,undefined2 param_2,uint16_t param_3,uint16_t 
     buf_00.seg = param_5;
     buf_00.ofs = param_4;
     ovr_stshRead(param_3,buf_00,CONCAT22(iStack_10,local_12));
-    OVC43_6fbe_0000(&local_12);
+    OVC43_6fbe_0000((undefined4)(void far *)MK_FP(unaff_SS,(uint16_t)&local_12),
+                  (int *)(void far *)MK_FP(param_4,param_3),
+                  (int *)(void far *)MK_FP(param_2,param_1));
   }
   return;
 }
@@ -166,7 +168,7 @@ OVC43_6fbe_01a9(uint16_t param_1,undefined2 param_2,undefined2 param_3,byte para
 
 {
   uint16_t uVar1;
-  char *pcVar2;
+  uint16_t pcVar2;
   int iVar3;
   uint uVar4;
   uint16_t unaff_SS;
@@ -191,20 +193,20 @@ OVC43_6fbe_01a9(uint16_t param_1,undefined2 param_2,undefined2 param_3,byte para
   pvVar5 = ovr_stshAlloc(0xfa0f);
   DAT_2000_d0fb = (uint16_t)((ulong)pvVar5 >> 0x10);
   DAT_2000_d0f9 = (uint16_t)(pvVar5);
-  OVC43_6fbe_013a(param_2,param_3,param_1,DAT_2000_d0f9);
+  OVC43_6fbe_013a(param_2,param_3,param_1,DAT_2000_d0f9,DAT_2000_d0fb);
   ovr_init2_3338_0401();
   uStack_4 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  uStack_6 = *(undefined2 *)BDA_DailyTimeCounter;
+  uStack_6 = *(undefined2 *)(BDA_DailyTimeCounter.ofs);
   cStack_7 = '\0';
   for (uVar4 = 0; uVar4 < iStack_82 - 1U; uVar4 = uVar4 + 1) {
     do {
       uVar1 = ovr_biosKeyAvail();
       if ((char)uVar1 != '\0') {
-        pcVar2 = (char *)ovr_gameProcessKey();
-        if (pcVar2 == (char *)0x11b) {
+        pcVar2 = ovr_gameProcessKey();
+        if (pcVar2 == 0x11b) {
           cStack_7 = '\x02';
         }
-        if (pcVar2 == (char *)"%s: provides housing and income." + 8) {
+        if (pcVar2 == 0x1c0d) {
           cStack_7 = '\x01';
         }
       }
@@ -216,10 +218,10 @@ OVC43_6fbe_01a9(uint16_t param_1,undefined2 param_2,undefined2 param_3,byte para
       uVar6 = ovr_attact_3f0b_082f(CONCAT22(uStack_4,uStack_6));
     } while (((int)(uVar6 >> 0x10) == 0) && ((uint)uVar6 < (uint)param_4));
     uStack_4 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    uStack_6 = *(undefined2 *)BDA_DailyTimeCounter;
+    uStack_6 = *(undefined2 *)(BDA_DailyTimeCounter.ofs);
 LAB_6fbe_02c7:
     if (cStack_7 != '\0') break;
-    OVC43_6fbe_013a(param_2,param_3,param_1,DAT_2000_d0f9);
+    OVC43_6fbe_013a(param_2,param_3,param_1,DAT_2000_d0f9,DAT_2000_d0fb);
   }
   TextBlitDstSeg = 0xa000;
   handle.seg = DAT_2000_d0fb;
