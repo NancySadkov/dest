@@ -376,3 +376,30 @@ Covers all six `main` calls through header `0x12BB` (`0x43`, `0x52`, `0x57`, `0x
 ### OVC 1347 (code segment 49FD)
 
 8 functions covering the full 3,947-byte code region, byte-exact.
+
+### Full code-region recovery (13 overlays)
+
+The sequential generator now emits every function in address order, and
+switch jump tables are reproduced with real C `switch` statements (raw case
+bodies plus `default:`/`goto` shapes as needed). Verified whole-region
+byte equality with call operands masked:
+
+| Header | Code segment | Bytes | Source |
+|---|---|---|---|
+| 12BB | 2E25 | 7,628 | `ov_2e25.c` |
+| 12E3 | 3381 | 12,583 | `ov_3381.c` |
+| 12C4 | 302D | 2,799 | `ov_302d.c` |
+| 12F8 | 3A5B | 2,859 | `ov_3a5b.c` |
+| 1315 | 3F0B | 11,419 | `ov_3f0b.c` |
+| 1322 | 4207 | 12,152 | `ov_4207.c` |
+| 1347 | 49FD | 3,947 | `ov_49fd.c` |
+| 1356 | 4D05 | 13,414 | `ov_4d05.c` |
+| 1391 | 6018 | 5,454 | `ov_6018.c` |
+| 13B6 | 6616 | 5,091 | `ov_6616.c` |
+| 13D5 | 6A8F | 10,867 | `ov_6a8f.c` |
+| 13E3 | 6D7A | 8,297 | `ov_6d7a.c` |
+| 1400 | 7E7C | 12,142 | `ov_7e7c.c` |
+
+`ov_2e25.c` and `ov_3381.c` use DGROUP symbols, so they are verified through
+the linked harness (padded `_DATA` so code-segment group offset is zero).
+The remaining overlay headers are next.

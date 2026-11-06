@@ -51,13 +51,21 @@ def main():
 
     out = ['#include "dgroup.h"', ""]
     skipped = []
+    gaps = []
     p = 0
     count = 0
     while p < code_size:
         pro = parse_prologue(code, p)
         if pro is None:
-            skipped.append((p, "prologue " + code[p:p + 6].hex(" ")))
-            break
+            q = p
+            while q + 2 < code_size and code[q:q + 3] != b"\x55\x8b\xec":
+                q += 1
+            if q + 2 >= code_size:
+                skipped.append((p, "prologue " + code[p:p + 6].hex(" ")))
+                break
+            gaps.append((p, q))
+            p = q
+            continue
         frame, body_start = pro
         end = None
         for ins in md.disasm(code[p:], p):
@@ -105,6 +113,8 @@ def main():
     print("wrote", path, "functions", count, "bytes", p, "of", code_size)
     for s in skipped:
         print("  skip %04X %s" % s)
+    for a, b in gaps:
+        print("  table %04X..%04X (%d bytes)" % (a, b, b - a))
 
 
 if __name__ == "__main__":
