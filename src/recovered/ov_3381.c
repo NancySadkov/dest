@@ -95,7 +95,28 @@ void __cdecl16far f_3381_1fa9(void)
   *(undefined2 far *)MK_FP(0x280, 0x9097) = 0;
 }
 
-void __cdecl16far f_3381_1fba(void) { }
+void __cdecl16far f_3381_1fba(void)
+{
+  asm db 056h,033h,0F6h,0EBh,01Dh,08Bh,0DEh,0C1h,0E3h,002h,0B8h,070h,000h,08Eh,0C0h,026h
+  asm db 0FFh,0B7h,002h,000h,026h,0FFh,0B7h,000h,000h,09Ah,070h,000h,070h,001h,083h,0C4h
+  asm db 004h,046h,0B8h,080h,002h,08Eh,0C0h,026h,0A0h,0E6h,090h,0B4h,000h,03Bh,0C6h,07Fh
+  asm db 0D4h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,0E6h,090h,000h,0B8h,080h,002h,08Eh
+  asm db 0C0h,026h,0A1h,0E3h,007h,026h,00Bh,006h,0E5h,007h,074h,017h,0B8h,080h,002h,08Eh
+  asm db 0C0h,026h,0FFh,036h,0E5h,007h,026h,0FFh,036h,0E3h,007h,09Ah,070h,000h,070h,001h
+  asm db 083h,0C4h,004h,0B8h,080h,002h,08Eh,0C0h,026h,0A1h,0E7h,007h,026h,00Bh,006h,0E9h
+  asm db 007h,074h,017h,0B8h,080h,002h,08Eh,0C0h,026h,0FFh,036h,0E9h,007h,026h,0FFh,036h
+  asm db 0E7h,007h,09Ah,070h,000h,070h,001h,083h,0C4h,004h,0B8h,080h,002h,08Eh,0C0h,026h
+  asm db 0A1h,005h,01Dh,026h,00Bh,006h,007h,01Dh,074h,017h,0B8h,080h,002h,08Eh,0C0h,026h
+  asm db 0FFh,036h,007h,01Dh,026h,0FFh,036h,005h,01Dh,09Ah,070h,000h,070h,001h,083h,0C4h
+  asm db 004h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,007h,01Dh,000h,000h,026h,0C7h,006h
+  asm db 005h,01Dh,000h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,0E5h,007h,000h,000h
+  asm db 026h,0C7h,006h,0E3h,007h,000h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,0E9h
+  asm db 007h,000h,000h,026h,0C7h,006h,0E7h,007h,000h,000h,09Ah,06Bh,000h,070h,001h,0B8h
+  asm db 080h,002h,08Eh,0C0h,026h,0A1h,034h,004h,026h,00Bh,006h,036h,004h,074h,017h,0B8h
+  asm db 080h,002h,08Eh,0C0h,026h,0FFh,036h,036h,004h,026h,0FFh,036h,034h,004h,09Ah,070h
+  asm db 000h,070h,001h,083h,0C4h,004h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,036h,004h
+  asm db 000h,000h,026h,0C7h,006h,034h,004h,000h,000h,09Ah,039h,000h,028h,001h,05Eh
+}
 
 /* 3381:20ee */
 void __cdecl16far f_3381_20ee(void)
@@ -325,4 +346,18 @@ char __cdecl16far f_3381_2452(register int x, register int y, unsigned char dir)
     }
   }
   return 1;
+}
+
+char __cdecl16far f_3381_1f1d(int x, int y)
+{
+  asm db 056h,057h,08Bh,076h,006h,08Bh,07Eh,008h,08Bh,0C7h,0BAh,094h,000h,0F7h,0EAh,0BAh
+  asm db 080h,002h,08Eh,0C2h,026h,0C4h,01Eh,005h,08Ah,003h,0D8h,026h,080h,038h,000h,074h
+  asm db 062h,08Bh,0C7h,0BAh,094h,000h,0F7h,0EAh,0BAh,080h,002h,08Eh,0C2h,026h,0C4h,01Eh
+  asm db 005h,08Ah,003h,0D8h,026h,080h,078h,001h,000h,074h,048h,08Bh,0C7h,0BAh,094h,000h
+  asm db 0F7h,0EAh,0BAh,080h,002h,08Eh,0C2h,026h,08Bh,016h,007h,08Ah,026h,003h,006h,005h
+  asm db 08Ah,08Bh,0D8h,08Eh,0C2h,026h,080h,0B8h,094h,000h,000h,074h,026h,08Bh,0C7h,0BAh
+  asm db 094h,000h,0F7h,0EAh,0BAh,080h,002h,08Eh,0C2h,026h,08Bh,016h,007h,08Ah,026h,003h
+  asm db 006h,005h,08Ah,08Bh,0D8h,08Eh,0C2h,026h,080h,0B8h,094h,000h,000h,074h,004h,0B0h
+  asm db 001h,0EBh,002h,0B0h,000h,05Fh,05Eh
+  return;
 }
