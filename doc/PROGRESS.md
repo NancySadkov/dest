@@ -339,3 +339,12 @@ original.
    manager.
 5. G7: runtime equivalence under the DOSBox harness.
 
+
+### OVC_09
+
+31/31 trampoline targets byte-exact (13,003 bytes). Source: `src/recovered/ov_3381.c`.
+
+### OVC_12 (code segment 2E25)
+
+22/22 trampoline targets byte-exact. Source: `src/recovered/ov_2e25.c`.
+Covers all six `main` calls through header `0x12BB` (`0x43`, `0x52`, `0x57`, `0x5C`, `0x61`, `0x84`).
