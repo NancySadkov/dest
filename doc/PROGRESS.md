@@ -419,3 +419,28 @@ Whole code region byte-exact (call operands masked):
 ```
 
 `317d` is an empty code segment (0 bytes).
+
+### Remaining overlays complete
+
+All 51 overlay code regions are now byte-exact. The last group uses
+per-table TASM data modules interleaved with C function chunks:
+
+| Header | Code segment | Bytes |
+|---|---|---|
+| 12A6 | 2D63 | 3,094 |
+| 132E | 4528 | 8,097 |
+| 1342 | 48AC | 4,889 |
+| 134C | 4B0A | 7,553 |
+| 1363 | 5087 | 20,957 |
+| 136F | 55FE | 12,536 |
+| 13A0 | 6257 | 2,812 |
+| 13AC | 6386 | 9,673 |
+| 13E9 | 6FBE | 938 |
+| 13F1 | 77EB | 9,319 |
+| 1408 | 8699 | 16,332 |
+
+Chunked sources and table modules are under `src/recovered/chunks/<seg>/`.
+`scripts/fbov/chunk_build.py` splits the generated C at each data gap and
+emits a TASM module for the gap bytes; TLINK then concatenates
+`chunk, table, chunk, ...` in order. Functions with a manual frame and a
+`pop bp` epilogue are emitted frameless with the `sub sp` bytes inline.

@@ -84,7 +84,7 @@ def main():
         if frame > 0 and leave:
             body = b[body_start - p:-2]
             pad = True
-        elif frame == 0 and popbp:
+        elif popbp:
             body = b[3:-2]
             pad = False
         else:
