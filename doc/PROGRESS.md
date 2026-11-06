@@ -403,3 +403,19 @@ byte equality with call operands masked:
 `ov_2e25.c` and `ov_3381.c` use DGROUP symbols, so they are verified through
 the linked harness (padded `_DATA` so code-segment group offset is zero).
 The remaining overlay headers are next.
+
+### Additional fully recovered overlays (26)
+
+Whole code region byte-exact (call operands masked):
+
+```
+30e6 1972   3168  288    317e 5191   32c9 1736
+3338 1102   36ce 13282  3b1d 7684   3d16 7476
+474a 5310   5943 8063   5b66 7145   5d45 2583
+5ded 8454   6190  173   619c 2787   6316 1735
+676c 1534   67d1  311   67e7 2919   68ac 1423
+690b 2834   69c8 2939   6ffe 30021  7a57 15626
+81b9 17997  8adb  352
+```
+
+`317d` is an empty code segment (0 bytes).
