@@ -311,3 +311,18 @@ void __cdecl16far f_3381_0000(void)
   }
 }
 
+
+char __cdecl16far f_3381_2452(register int x, register int y, unsigned char dir)
+{
+  volatile unsigned char i;
+
+  for (i = 0; i < 4; i++) {
+    if (i != (dir ^ 2)) {
+      if (f_3381_23b5(x + (char)*(unsigned char far *)MK_FP(0x280, 0x885 + i),
+                      y + (char)*(unsigned char far *)MK_FP(0x280, 0x889 + i))) {
+        return 0;
+      }
+    }
+  }
+  return 1;
+}
