@@ -12,8 +12,8 @@ Plan: [`../plan.md`](../plan.md)
 | G1 — independent FBOV manifest | **PASS** | `scripts/fbov/model.py` produced `doc/fbov_manifest.json` and CSVs; 0 validation errors |
 | G2 — fresh Ghidra model | **PASS** | `gpr_fresh`: 133 blocks, 756 trampolines, 13,367 fixups, 1,814 MZ relocations |
 | G3 — reference audit | **PASS** | `scripts/fbov/audit_refs.py`: 0 errors; 18 null-target relocations documented |
-| G4 — data/global model | NOT STARTED | |
-| G5 — startup/`main` byte-exact | NOT STARTED | |
+| G4 — data/global model | **PASS** | DGROUP byte-identical under TC30 (0/38,042 differences); 1,205 symbols/types applied |
+| G5 — startup/`main` byte-exact | NEXT | |
 | G6 — link | NOT STARTED | |
 | G7 — runtime equivalence | NOT STARTED | |
 
@@ -126,12 +126,40 @@ Known G4 work (not loader errors):
   separate tracked-register/overlapping-instruction issue, not the segment
   model; the function has a targeted repair queue entry.
 
+### Phase 4 results
+
+DGROUP `0x2410:0000..0x9499` is recovered completely:
+
+- 1,205 named symbols with recovered types and exact initialisers;
+- 257 gap byte-arrays covering every remaining byte;
+- 38,042 / 38,042 bytes accounted for exactly once;
+- `src/recovered/dgroup.c` and `dgroup.h` generated reproducibly by
+  `scripts/fbov/gen_dgroup.py`.
+
+TC30 verification (`DGROUP.OBJ`):
+
+- 1,160 exported symbols matched against `doc/dgroup_map.csv`;
+- **0 symbol-offset mismatches**;
+- **0 byte differences** in the full `0x949A` DGROUP segment.
+
+The Ghidra map (`ApplyDgroupMap.java`) applied all 1,205 names/types to
+`gpr_fresh`. The decompiler now uses `GMenuItem`, `CrossBlitPtr`, `GWorkDir`,
+etc. instead of raw `DAT_2410_*` offsets.
+
+The source file keeps the original file's relative segment values (`0x1410`)
+so the object is byte-identical to `STRONG.EXE`; the Ghidra view deliberately
+uses the static `0x2410` values by applying the MZ relocations. See
+`doc/dgroup_verify.md`.
+
+Remaining artifacts such as `s__magic_mill_2410_68f7 + 9` are overlay segment
+constants stored into pointer-typed fields in the consuming function, not
+missing DGROUP data. They belong to the function/struct recovery phase.
+
 ## Next
 
-1. G4: recover the DGROUP layout, the first structs, and the globals behind
-   the remaining word/segment fields.
-2. Repair `OVC23` (`55FE:0000`) with a targeted re-disassembly/overlap fix.
-3. Build the per-function byte-match harness (`scripts/fbov/byte_diff.py`)
-   and begin at the startup/`main` chain.
-4. Recover functions in dependency order; each must compile with TC30 and
-   match the original instruction stream before it is accepted.
+1. G5: build the per-function byte-match harness and recover the startup /
+   `main` chain.
+2. Repair `OVC23` (`55FE:0000`) alongside the function queue.
+3. G6: link the recovered modules against the original runtime/overlay
+   manager.
+4. G7: runtime equivalence under the DOSBox harness.

@@ -555,13 +555,14 @@ Completed:
 
 Next:
 
-7. G4: recover the DGROUP layout, structs and globals.
-8. Repair `OVC23` (`55FE:0000`).
-9. Build the per-function byte-match harness.
-10. Recover the startup/`main` chain function by function.
+7. ~~G4: recover the DGROUP layout, structs and globals.~~
+8. G5: build the per-function byte-match harness.
+9. Recover the startup/`main` chain function by function.
+10. Repair `OVC23` (`55FE:0000`) alongside the function queue.
 
-No C is exported from the new pipeline as "recovered source" until G4 is
-underway and the byte-match harness is in place.
+The DGROUP data is complete and byte-identical under TC30; see
+`doc/dgroup_verify.md`. No function C is claimed as recovered source until its
+byte-match gate passes.
 
 ---
 

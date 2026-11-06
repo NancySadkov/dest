@@ -61,3 +61,8 @@ gpr_fresh/
 # Generated audit report (regenerate with scripts/fbov/audit_refs.py)
 doc/audit_report.json
 
+
+# DGROUP verification intermediates
+doc/dgroup_items.csv
+tmp/
+
