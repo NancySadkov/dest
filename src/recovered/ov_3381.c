@@ -187,3 +187,72 @@ void __cdecl16far f_3381_1697(void)
   }
 }
 
+
+/* placeholders for OVC_09 functions not yet recovered */
+void __cdecl16far f_3381_024d(void) { }
+void __cdecl16far f_3381_2d9e(void) { }
+void __cdecl16far f_3381_16ef(void) { }
+
+/* far/segment 0x1000 and other overlay helpers */
+void __cdecl16far f_1403_0ab2(int, int, int, int);
+void __cdecl16far f_1403_08e8(int, int, int);
+void __cdecl16far f_6257_046a(void);
+void __cdecl16far f_1000_13e9(void);
+void __cdecl16far f_1000_0730(far_t);
+int  __cdecl16far f_1000_2d01(far_t, char far *);
+int  __cdecl16far f_1700_002a(int);
+void __cdecl16far f_1700_0034(void);
+void __cdecl16far f_6ffe_02f7(int);
+void __cdecl16far f_474a_0470(void);
+void __cdecl16far f_474a_075a(int, int);
+void __cdecl16far f_474a_0a10(void);
+void __cdecl16far f_3a5b_081e(void);
+void __cdecl16far f_3a5b_0956(void);
+void __cdecl16far f_317e_11f0(void);
+void __cdecl16far f_3338_034a(void);
+void __cdecl16far f_2d63_0016(int);
+void __cdecl16far f_4b0a_1150(void);
+void __cdecl16far f_6316_00b1(void);
+void __cdecl16far f_3a5b_0633(int, int);
+
+/* 3381:0579 -- main initialisation for the overlay. */
+void __cdecl16far f_3381_0579(void)
+{
+  f_1403_0ab2(0, 0, 0, 0);
+  f_1403_08e8(0, 0, 0);
+  f_6257_046a();
+  f_3381_01c8();
+  f_3381_024d();
+  f_1000_13e9();
+  f_1000_0730(**(far_t far * far *)MK_FP(0x280, 0x15b));
+  f_474a_075a(0xfa0f, 0);
+  if (f_1000_2d01(*(far_t far *)MK_FP(0x280, 0x8972),
+                  (char far *)s_debug_2410_05c7) == 0) {
+    *(bool far *)MK_FP(0x280, 0x43a) = 1;
+  }
+  if (f_1000_2d01(*(far_t far *)MK_FP(0x280, 0x8972),
+                  (char far *)s_grab_2410_05cd) == 0) {
+    *(bool far *)MK_FP(0x280, 0x43a) = 1;
+    f_6ffe_02f7(1);
+  }
+  else {
+    f_6ffe_02f7(0);
+  }
+  f_474a_0470();
+  StshStrongDatHnd = f_1700_002a(0);
+  f_3a5b_081e();
+  f_3a5b_0956();
+  f_317e_11f0();
+  f_3338_034a();
+  f_2d63_0016(0x13);
+  asm nop
+  f_3381_2d9e();
+  f_4b0a_1150();
+  asm nop
+  f_3381_16ef();
+  f_474a_0a10();
+  f_6316_00b1();
+  f_3a5b_0633(0x53, 0);
+}
+
+

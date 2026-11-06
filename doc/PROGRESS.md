@@ -8,14 +8,14 @@ Plan: [`../plan.md`](../plan.md)
 
 | Gate | Status | Evidence |
 |---|---|---|
-| G0 — quarantine old baseline | **PASS** | `src/decompiled` moved to `reference/decompiled_baseline`; old `gpr/` marked reference-only |
-| G1 — independent FBOV manifest | **PASS** | `scripts/fbov/model.py` produced `doc/fbov_manifest.json` and CSVs; 0 validation errors |
-| G2 — fresh Ghidra model | **PASS** | `gpr_fresh`: 133 blocks, 756 trampolines, 13,367 fixups, 1,814 MZ relocations |
-| G3 — reference audit | **PASS** | `scripts/fbov/audit_refs.py`: 0 errors; 18 null-target relocations documented |
-| G4 — data/global model | **PASS** | DGROUP byte-identical under TC30 (0/38,042 differences); 1,205 symbols/types applied |
+| G0 ? quarantine old baseline | **PASS** | `src/decompiled` moved to `reference/decompiled_baseline`; old `gpr/` marked reference-only |
+| G1 ? independent FBOV manifest | **PASS** | `scripts/fbov/model.py` produced `doc/fbov_manifest.json` and CSVs; 0 validation errors |
+| G2 ? fresh Ghidra model | **PASS** | `gpr_fresh`: 133 blocks, 756 trampolines, 13,367 fixups, 1,814 MZ relocations |
+| G3 ? reference audit | **PASS** | `scripts/fbov/audit_refs.py`: 0 errors; 18 null-target relocations documented |
+| G4 ? data/global model | **PASS** | DGROUP byte-identical under TC30 (0/38,042 differences); 1,205 symbols/types applied |
 | G5 - startup/`main` byte-exact | **PASS for `main`** | `mkp` byte-exact; `main` 2246 bytes byte-exact (external call operands masked) |
-| G6 — link | NOT STARTED | |
-| G7 — runtime equivalence | NOT STARTED | |
+| G6 ? link | NOT STARTED | |
+| G7 ? runtime equivalence | NOT STARTED | |
 
 ## Phase 1 results
 
@@ -66,7 +66,7 @@ The original FBOV structure is now parsed and internally consistent:
 - DGROUP `0x2410` and `_OVRDATA_` `0x225D` exist at the addresses given by
   the reversed overlay manager.
 
-This is the model the fresh Ghidra program will be built from — not the
+This is the model the fresh Ghidra program will be built from ? not the
 mzap-merged image and not the old decompiled tree.
 
 ## Phase 2 results (fresh model)
@@ -303,11 +303,13 @@ Byte-exact overlay functions in `src/recovered/ov_3381.c`:
 009a  100 bytes      0132   58 bytes      1fa9   17 bytes
 00fe   52 bytes      016c   92 bytes      20ee   19 bytes
 01c8  116 bytes      023c   17 bytes      23f9   89 bytes
-2e9a   72 bytes
+2e9a   72 bytes      0579  282 bytes
 ```
 
-All are matched with call operands (and, for `01c8`, near call operands)
-masked.
+All are matched with call operands (and, for `01c8`/`0579`, near call
+operands) masked. `0579` is the overlay startup function `main` calls
+first; two same-segment far calls are preceded by a literal `90` (`nop`)
+in the original, reproduced with `asm nop`.
 
 Four additional functions are recovered semantically but still differ in
 instruction order/encoding:
@@ -331,3 +333,4 @@ They are marked `PENDING byte order` in the source.
 4. G6: link the recovered modules against the original runtime/overlay
    manager.
 5. G7: runtime equivalence under the DOSBox harness.
+
