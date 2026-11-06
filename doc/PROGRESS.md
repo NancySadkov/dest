@@ -13,7 +13,7 @@ Plan: [`../plan.md`](../plan.md)
 | G2 ? fresh Ghidra model | **PASS** | `gpr_fresh`: 133 blocks, 756 trampolines, 13,367 fixups, 1,814 MZ relocations |
 | G3 ? reference audit | **PASS** | `scripts/fbov/audit_refs.py`: 0 errors; 18 null-target relocations documented |
 | G4 ? data/global model | **PASS** | DGROUP byte-identical under TC30 (0/38,042 differences); 1,205 symbols/types applied |
-| G5 - startup/`main` byte-exact | **PASS for `main`** | `mkp` byte-exact; `main` 2246 bytes byte-exact (external call operands masked) |
+| G5 - startup/`main` byte-exact | **PASS for `main` and all 51 overlays** | `mkp` byte-exact; `main` 2246 bytes byte-exact; all 51 overlay code regions whole-region byte-exact (call operands masked) |
 | G6 ? link | NOT STARTED | |
 | G7 ? runtime equivalence | NOT STARTED | |
 
