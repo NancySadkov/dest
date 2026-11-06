@@ -300,10 +300,12 @@ without it). Two comparison paths are used:
 Byte-exact overlay functions in `src/recovered/ov_3381.c`:
 
 ```
-009a  100 bytes      0132   58 bytes      1fa9   17 bytes
-00fe   52 bytes      016c   92 bytes      20ee   19 bytes
-01c8  116 bytes      023c   17 bytes      23f9   89 bytes
-2e9a   72 bytes      0579  282 bytes      16ef  249 bytes
+009a  100 bytes      016c   92 bytes      23f9   89 bytes
+00fe   52 bytes      023c   17 bytes      2e9a   72 bytes
+0132   58 bytes      1fa9   17 bytes      0579  282 bytes
+01c8  116 bytes      20ee   19 bytes      16ef  249 bytes
+233e   60 bytes      237a   59 bytes      23b5   68 bytes
+1697   88 bytes
 ```
 
 All are matched with call operands (and, for `01c8`/`0579`, near call
@@ -311,22 +313,20 @@ operands) masked. `0579` is the overlay startup function `main` calls
 first; two same-segment far calls are preceded by a literal `90` (`nop`)
 in the original, reproduced with `asm nop`.
 
-Four additional functions are recovered semantically but still differ in
-instruction order/encoding:
-
-```
-233e, 237a, 23b5, 1697   (pointer/index evaluation order)
-```
-
-They are marked `PENDING byte order` in the source.
+The four table/entity accessors (`233e`, `237a`, `23b5`, `1697`) are
+byte-exact with **no masking**. TC30 was forced to keep the index in `AX`
+by using `register int x, register int y` parameters (so `x`->SI,
+`y`->DI) and explicit register encodings in inline asm. `1697`'s loop
+uses an assembly body so the counter stays in `CX` exactly as in the
+original.
 
 
 
 ## Next
 
-1. Finish OVC_09 (`3381`): recover the remaining trampoline targets, starting
-   with the four pending table/entity functions and then the startup function
-   `3381:0579`.
+1. Finish OVC_09 (`3381`): recover the remaining trampoline targets
+   (`024d`, `2d9e`, `1fba`, `17e8`, `0693`, `08dc`, `2101`, `24c3`,
+   `2651`, `2883`, `2ee2`, ...).
 2. Continue with the other overlay headers used by `main` (`0x23E3`,
    `0x2347`, `0x23D5`, ...), then the resident startup/init chain.
 3. Repair `OVC23` (`55FE:0000`) alongside the function queue.

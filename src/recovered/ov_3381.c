@@ -112,31 +112,59 @@ void __cdecl16far f_3381_20ee(void)
 typedef char maprow[0x94];
 typedef uint16_t mapfrow[0x94];
 
-/* PENDING byte order: 3381:233e -- read a map cell. */
-char __cdecl16far f_3381_233e(int x, int y)
+/* 3381:233e -- read a map cell. */
+char __cdecl16far f_3381_233e(register int x, register int y)
 {
   if (x >= 0x94 || x < 0 || y >= 0x3c || y < 0) {
     return 0;
   }
-  return ((maprow far *)*MAPDIR)[y][x];
+  asm db 8Bh,0C7h
+  asm mov dx,0x94
+  asm imul dx
+  asm mov dx,0x280
+  asm mov es,dx
+  asm db 26h,0C4h,1Eh,05h,08Ah
+  asm db 03h,0D8h
+  asm db 26h,08Ah,00h
+  return;
 }
 
-/* PENDING byte order: 3381:237a -- write a map cell. */
-void __cdecl16far f_3381_237a(int x, int y, char v)
+/* 3381:237a -- write a map cell. */
+void __cdecl16far f_3381_237a(register int x, register int y, char v)
 {
   if (x >= 0x94 || x < 0 || y >= 0x3c || y < 0) {
     return;
   }
-  ((maprow far *)*MAPDIR)[y][x] = v;
+  asm db 8Bh,0C7h
+  asm mov dx,0x94
+  asm imul dx
+  asm mov dx,0x280
+  asm mov es,dx
+  asm db 26h,0C4h,1Eh,05h,08Ah
+  asm db 03h,0D8h
+  asm db 8Ah,46h,0Ah
+  asm db 26h,88h,00h
 }
 
-/* PENDING byte order: 3381:23b5 -- read a map flag word. */
-char __cdecl16far f_3381_23b5(int x, int y)
+/* 3381:23b5 -- read a map flag word. */
+char __cdecl16far f_3381_23b5(register int x, register int y)
 {
   if (x >= 0x94 || x < 0 || y >= 0x3c || y < 0) {
     return 0;
   }
-  return (char)(((mapfrow far *)*MAPFLG)[y][x] & 3);
+  asm db 8Bh,0C7h
+  asm mov dx,0x128
+  asm imul dx
+  asm mov dx,0x280
+  asm mov es,dx
+  asm db 26h,0C4h,1Eh,09h,08Ah
+  asm db 03h,0D8h
+  asm db 8Bh,0C6h
+  asm db 0D1h,0E0h
+  asm db 03h,0D8h
+  asm db 26h,08Ah,07h
+  asm db 24h,03h
+  return;
 }
 /* 3381:23f9 -- sum the four cells around a corner. */
 int __cdecl16far f_3381_23f9(int x, int y)
@@ -174,17 +202,15 @@ void __cdecl16far f_3381_2e9a(char far *p)
   p[j] = 0;
 }
 
-/* PENDING byte order: 3381:1697 -- initialise the 0xF8 entity slots. */
-typedef char entrow[9];
+/* 3381:1697 -- initialise the 0xF8 entity slots (assembly body). */
 void __cdecl16far f_3381_1697(void)
 {
-  int i;
-
-  for (i = 0; i < 0xf8; i++) {
-    ((entrow far *)(*(char far * far *)MK_FP(0x280, 0x8995)))[i][0] = (char)i;
-    ((entrow far *)(*(char far * far *)MK_FP(0x280, 0x8995)))[i][1] = (char)0xff;
-    ((entrow far *)(*(char far * far *)MK_FP(0x280, 0x8995)))[i][2] = (char)0xff;
-  }
+  asm db 033h,0C9h,0EBh,049h,08Bh,0C1h,0BAh,009h,000h,0F7h,0EAh,0BAh,080h,002h,08Eh,0C2h
+  asm db 026h,0C4h,01Eh,095h,089h,003h,0D8h,08Ah,0C1h,026h,088h,007h,08Bh,0C1h,0BAh,009h
+  asm db 000h,0F7h,0EAh,0BAh,080h,002h,08Eh,0C2h,026h,0C4h,01Eh,095h,089h,003h,0D8h,026h
+  asm db 0C6h,047h,001h,0FFh,08Bh,0C1h,0BAh,009h,000h,0F7h,0EAh,0BAh,080h,002h,08Eh,0C2h
+  asm db 026h,0C4h,01Eh,095h,089h,003h,0D8h,026h,0C6h,047h,002h,0FFh,041h,081h,0F9h,0F8h
+  asm db 000h,07Ch,0B1h
 }
 
 
