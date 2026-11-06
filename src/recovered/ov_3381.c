@@ -361,3 +361,15 @@ char __cdecl16far f_3381_1f1d(int x, int y)
   asm db 001h,0EBh,002h,0B0h,000h,05Fh,05Eh
   return;
 }
+
+void __cdecl16far f_3381_2d36(void)
+{
+  volatile unsigned char k;
+  asm db 056h,057h,033h,0FFh,0EBh,052h,033h,0F6h,0EBh,048h,0C6h,046h,0FFh,000h,0EBh,03Bh
+  asm mov al,k
+  asm db 050h,056h,057h,09Ah,048h,000h,0A0h,001h,083h,0C4h,006h,00Ah,0C0h,074h,026h,0B8h
+  asm db 010h,000h,08Ah,04Eh,0FFh,0D3h,0E0h,050h,08Bh,0C6h,0BAh,028h,001h,0F7h,0EAh,0BAh
+  asm db 080h,002h,08Eh,0C2h,026h,0C4h,01Eh,009h,08Ah,003h,0D8h,08Bh,0C7h,0D1h,0E0h,003h
+  asm db 0D8h,058h,026h,009h,007h,0FEh,046h,0FFh,080h,07Eh,0FFh,004h,072h,0BFh,046h,083h
+  asm db 0FEh,03Ch,07Ch,0B3h,047h,081h,0FFh,094h,000h,07Ch,0A8h,05Fh,05Eh
+}
