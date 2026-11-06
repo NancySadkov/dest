@@ -348,3 +348,31 @@ original.
 
 22/22 trampoline targets byte-exact. Source: `src/recovered/ov_2e25.c`.
 Covers all six `main` calls through header `0x12BB` (`0x43`, `0x52`, `0x57`, `0x5C`, `0x61`, `0x84`).
+
+### OVC 12C4 (code segment 302D)
+
+15 functions covering the full 2,799-byte code region, byte-exact.
+
+### OVC 13B6 (code segment 6616)
+
+6 functions covering the full 5,091-byte code region, byte-exact.
+
+### OVC 13E3 (code segment 6D7A)
+
+12 functions covering the full 8,297-byte code region, byte-exact.
+
+### OVC 1391 (code segment 6018)
+
+16 functions covering the full 5,454-byte code region, byte-exact.
+
+### OVC 1315 (code segment 3F0B)
+
+35 functions covering the full 11,419-byte code region, byte-exact.
+
+### OVC 12F8 (code segment 3A5B)
+
+13 functions covering the full 2,859-byte code region, byte-exact.
+
+### OVC 1347 (code segment 49FD)
+
+8 functions covering the full 3,947-byte code region, byte-exact.
