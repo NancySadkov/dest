@@ -57,3 +57,7 @@ doc/fbov_manifest.json
 # Fresh Ghidra model (regenerate with BuildFbovModel.java)
 gpr_fresh/
 
+
+# Generated audit report (regenerate with scripts/fbov/audit_refs.py)
+doc/audit_report.json
+

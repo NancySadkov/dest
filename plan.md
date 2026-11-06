@@ -544,15 +544,24 @@ Compile counts are not a progress metric.
 
 ## 15. Immediate next steps
 
-1. Create `plan.md` (this file).
-2. Quarantine `src/decompiled/` under `reference/`.
-3. Implement `scripts/fbov/model.py`.
-4. Produce and validate the FBOV manifest.
-5. Implement the fresh Ghidra model builder and `gpr_fresh`.
-6. Run the reference audit against the fresh program.
-7. Recover the startup and `main` with byte-match verification.
+Completed:
 
-No C is exported from the new pipeline until G3 passes.
+1. ~~Create `plan.md`.~~
+2. ~~Quarantine `src/decompiled/` under `reference/`.~~
+3. ~~Implement `scripts/fbov/model.py`.~~
+4. ~~Produce and validate the FBOV manifest.~~
+5. ~~Implement the fresh Ghidra model builder and `gpr_fresh`.~~
+6. ~~Run the reference audit (G3): 0 errors.~~
+
+Next:
+
+7. G4: recover the DGROUP layout, structs and globals.
+8. Repair `OVC23` (`55FE:0000`).
+9. Build the per-function byte-match harness.
+10. Recover the startup/`main` chain function by function.
+
+No C is exported from the new pipeline as "recovered source" until G4 is
+underway and the byte-match harness is in place.
 
 ---
 
