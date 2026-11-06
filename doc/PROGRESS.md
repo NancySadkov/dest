@@ -13,7 +13,7 @@ Plan: [`../plan.md`](../plan.md)
 | G2 — fresh Ghidra model | **PASS** | `gpr_fresh`: 133 blocks, 756 trampolines, 13,367 fixups, 1,814 MZ relocations |
 | G3 — reference audit | **PASS** | `scripts/fbov/audit_refs.py`: 0 errors; 18 null-target relocations documented |
 | G4 — data/global model | **PASS** | DGROUP byte-identical under TC30 (0/38,042 differences); 1,205 symbols/types applied |
-| G5 - startup/`main` byte-exact | **IN PROGRESS** | `mkp` byte-exact; `main` first `0x150` bytes byte-exact (calls masked) |
+| G5 - startup/`main` byte-exact | **IN PROGRESS** | `mkp` byte-exact; `main` first `0x5F6` bytes byte-exact (calls/jmps masked) |
 | G6 — link | NOT STARTED | |
 | G7 — runtime equivalence | NOT STARTED | |
 
@@ -235,10 +235,34 @@ DGROUP stores (`GGameExe`, `GExeArg`, `GMenuItem`, `GGameState`, ...), the
 and the first `0xFFFF` check. Only direct call operands are masked (their
 target segments are recovered later). The `switch (key)` follows at `0x150`.
 
-The 4-byte local is `int spare; volatile int key;`: `key` lands at `[bp-4]`
-(the original's word) and `spare` at `[bp-2]`. `key` is volatile so TC keeps
-it in memory; the real purpose of the second word is still to be identified
-in the switch body.
+The 4-byte local is `unsigned char sel; volatile unsigned key;`: `sel` lands
+at `[bp-1]`, `key` at `[bp-4]`. `key` is volatile so TC keeps it in memory.
+
+### `main` switch (in progress)
+
+The switch at `0x150` is a TC binary-search dispatch tree over **59 case
+values** with **28 bodies**. The case values and target bodies were extracted
+from the original tree; a standalone `switch` with the same cases reproduces
+the tree's comparison order exactly. Key detail: `key` must be **unsigned**
+(the original uses `jbe`/`ja`, not `jle`/`jg`).
+
+Current byte-match of the whole function:
+
+```
+main  1301:000C  0x5F6 bytes  MATCH   (1526 of 2246 bytes)
+```
+
+The matched region includes the complete dispatch tree and the first 19 case
+bodies (through the `0x3920` body's first statement). Remaining work is the
+`0x3920` body tail and the eight later bodies (`0x1E41`, `0x184F`, `0x2E43`,
+`0x1454`, `0x1352`, `0x2646`, `0x0C2D`, `0x0D2B`). The WIP source is
+`src/wip/main.c`; it is not yet moved to `src/recovered` because the
+per-function gate has not fully passed.
+
+The link-time DGROUP object now takes its labels directly from
+`DGROUP.OBJ`'s PUBDEFs (1,461 symbols) instead of `dgroup_map.csv`, because
+the CSV omits some gap arrays used by `main` (`gap_2410_009A`).
+
 
 
 

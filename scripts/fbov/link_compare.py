@@ -49,6 +49,8 @@ def main():
     ap.add_argument("--show", type=lambda x: int(x, 0), default=0x60)
     ap.add_argument("--mask-calls", action="store_true", default=True)
     ap.add_argument("--no-mask-calls", dest="mask_calls", action="store_false")
+    ap.add_argument("--mask-jumps", action="store_true", default=True)
+    ap.add_argument("--no-mask-jumps", dest="mask_jumps", action="store_false")
     ap.add_argument("--linkdir", default=os.path.join(ROOT, "tmp", "linkbuild"))
     a = ap.parse_args()
 
@@ -90,6 +92,11 @@ def main():
                     if ins.bytes[0] == 0xE8:
                         mask.update(ins.address + 1 - a.ofs + i for i in range(2))
                     elif ins.bytes[0] == 0x9A:
+                        mask.update(ins.address + 1 - a.ofs + i for i in range(4))
+                elif a.mask_jumps and ins.mnemonic == "jmp":
+                    if ins.bytes[0] == 0xE9:
+                        mask.update(ins.address + 1 - a.ofs + i for i in range(2))
+                    elif ins.bytes[0] == 0xEA:
                         mask.update(ins.address + 1 - a.ofs + i for i in range(4))
         except ImportError:
             pass
