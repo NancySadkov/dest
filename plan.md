@@ -459,6 +459,11 @@ Gate G5: `main` and the startup path are recovered and `exact`.
 ## 11. Phase 6 — build and link
 
 - Use TC++ 3.0 (`tools/TC30`), large model, overlays.
+- Fixed compiler flags, established empirically against `main`:
+  `-ml -1 -G` (large model, 80186 instructions, generate for speed).
+  `-1` is required for the original `push imm8` encodings; `-G` is required
+  for the original `PUSH BP / MOV BP,SP / SUB SP,N` prologue instead of
+  `ENTER`.
 - Reconstruct the original project/module boundaries from the segment table and
   the linker's segment classes.
 - Link against the original Borland runtime and overlay manager where possible;

@@ -38,8 +38,8 @@ def main():
 
     bat = ("@echo off\r\n"
            "mode con lines=50\r\n"
-           "D:\\BIN\\TCC.EXE -ml -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c main.c\r\n"
-           "D:\\BIN\\TCC.EXE -ml -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c stubs.c\r\n"
+           "D:\\BIN\\TCC.EXE -ml -1 -G -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c main.c\r\n"
+           "D:\\BIN\\TCC.EXE -ml -1 -G -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c stubs.c\r\n"
            "E:\\BIN\\TASM.EXE start.asm\r\n"
            "E:\\BIN\\TASM.EXE dglink.asm\r\n"
            "D:\\BIN\\TLINK.EXE /m dglink.obj start.obj main.obj stubs.obj, "

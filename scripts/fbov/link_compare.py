@@ -47,6 +47,8 @@ def main():
     ap.add_argument("--ofs", required=True, type=lambda x: int(x, 0))
     ap.add_argument("--size", required=True, type=lambda x: int(x, 0))
     ap.add_argument("--show", type=lambda x: int(x, 0), default=0x60)
+    ap.add_argument("--mask-calls", action="store_true", default=True)
+    ap.add_argument("--no-mask-calls", dest="mask_calls", action="store_false")
     ap.add_argument("--linkdir", default=os.path.join(ROOT, "tmp", "linkbuild"))
     a = ap.parse_args()
 
@@ -77,9 +79,25 @@ def main():
     print("linked %s @ %04X:%04X -> %02X" % (a.symbol, start, real, real))
     print("orig  ", orig[:a.show].hex(" "))
     print("link  ", linked[:a.show].hex(" "))
-    diffs = [i for i in range(min(len(orig), len(linked))) if orig[i] != linked[i]]
+    mask = set()
+    if a.mask_calls:
+        try:
+            import capstone
+            md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_16)
+            for ins in md.disasm(orig, a.ofs):
+                if ins.mnemonic in ("call", "lcall"):
+                    # direct near call E8 rel16 / far call 9A off16 seg16
+                    if ins.bytes[0] == 0xE8:
+                        mask.update(ins.address + 1 - a.ofs + i for i in range(2))
+                    elif ins.bytes[0] == 0x9A:
+                        mask.update(ins.address + 1 - a.ofs + i for i in range(4))
+        except ImportError:
+            pass
+    diffs = [i for i in range(min(len(orig), len(linked)))
+             if orig[i] != linked[i] and i not in mask]
     if not diffs:
-        print("MATCH %d bytes" % len(orig))
+        print("MATCH %d bytes (%d call-operand bytes masked)"
+              % (len(orig), len(mask)))
         return 0
     print("DIFF %d of %d" % (len(diffs), len(orig)))
     for i in diffs[:30]:

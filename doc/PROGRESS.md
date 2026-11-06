@@ -13,7 +13,7 @@ Plan: [`../plan.md`](../plan.md)
 | G2 — fresh Ghidra model | **PASS** | `gpr_fresh`: 133 blocks, 756 trampolines, 13,367 fixups, 1,814 MZ relocations |
 | G3 — reference audit | **PASS** | `scripts/fbov/audit_refs.py`: 0 errors; 18 null-target relocations documented |
 | G4 — data/global model | **PASS** | DGROUP byte-identical under TC30 (0/38,042 differences); 1,205 symbols/types applied |
-| G5 - startup/`main` byte-exact | **IN PROGRESS** | `mkp` byte-exact; `main` prologue `0x50` bytes byte-exact |
+| G5 - startup/`main` byte-exact | **IN PROGRESS** | `mkp` byte-exact; `main` first `0x150` bytes byte-exact (calls masked) |
 | G6 — link | NOT STARTED | |
 | G7 — runtime equivalence | NOT STARTED | |
 
@@ -208,8 +208,38 @@ The accepted region covers `PUSH BP` through the `argc < 2` branch and its
 `JMP` (`0x000C..0x005B`). It includes the 4-byte local (`SUB SP,4`), the two
 far stores through `ES = 0x1410`, and the default `_DS:0x94` argument. The
 default is the empty string at DGROUP offset `0x94` (`s__2410_0094`).
-The 4-byte local's real use is still to be identified later in `main`; the
-current harness-only use starts at `0x50`, outside the accepted region.
+
+### Original compiler flags (new, important)
+
+Comparing candidate codegen against the original established the build flags:
+
+```
+-ml -1 -G
+```
+
+- `-ml` large model (far code, far data pointers);
+- `-1` 80186/286 instructions: the original uses `6A xx` (`push imm8`) for
+  constant arguments; without `-1` TC30 emits `xor ax,ax; push ax`;
+- `-G` generate for speed: without `-G`, TC30 with `-1` emits `ENTER` for
+  functions with locals; the original uses `PUSH BP; MOV BP,SP; SUB SP,N`.
+
+With `-ml -1 -G`, the `main` initialisation sequence is also byte-exact:
+
+```
+main  1301:000C  0x150 bytes  MATCH
+```
+
+That covers the prologue, the argument setup, the startup calls, the initial
+DGROUP stores (`GGameExe`, `GExeArg`, `GMenuItem`, `GGameState`, ...), the
+`unsigned char` busy-wait loop (`while (!f())`), the debug `"%d \r"` calls,
+and the first `0xFFFF` check. Only direct call operands are masked (their
+target segments are recovered later). The `switch (key)` follows at `0x150`.
+
+The 4-byte local is `int spare; volatile int key;`: `key` lands at `[bp-4]`
+(the original's word) and `spare` at `[bp-2]`. `key` is volatile so TC keeps
+it in memory; the real purpose of the second word is still to be identified
+in the switch body.
+
 
 
 ## Next
