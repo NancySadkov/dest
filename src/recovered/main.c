@@ -1,23 +1,13 @@
-/* Recovered main entry point (1301:000C, 2246 bytes).
- *
- * Verified byte-for-byte against the original with TC30 `-ml -1 -G`.
- * The only excluded bytes are the operands of direct calls into segments
- * whose functions are not yet recovered; every internal jump and every
- * other instruction byte matches.  DGROUP is addressed through the
- * original ES=0x1410 convention.
- */
 #include "dgroup.h"
 
 #define GGameExeP ((void far * far *)MK_FP(0x1410, 0x8976))
 #define GExeArgP  ((void far * far *)MK_FP(0x1410, 0x8972))
 
-/* DGROUP access through the original ES convention (0x1410 in the file). */
 #define DB(off) (*(undefined1 far *)MK_FP(0x1410, (off)))
 #define DW(off) (*(undefined2 far *)MK_FP(0x1410, (off)))
 #define A90DE ((undefined1 far *)MK_FP(0x1410, 0x90de))
 #define A9082 ((undefined1 far *)MK_FP(0x1410, 0x9082))
 
-/* Not yet recovered: call targets in other segments. */
 void __cdecl16far f_12e3_0025(void);
 unsigned char __cdecl16far f_13e3_0020(void);
 void __cdecl16far f_1347_0020(int);
