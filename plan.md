@@ -561,8 +561,9 @@ Completed:
 Next:
 
 7. ~~G4: recover the DGROUP layout, structs and globals.~~
-8. ~~G5: build the per-function byte-match harness.~~ (`mkp` byte-exact)
-9. Recover the startup/`main` chain function by function.
+8. ~~G5: build the per-function byte-match harness.~~ (`mkp` byte-exact;
+   `main` 2246 bytes byte-exact with external call operands masked)
+9. Recover the startup/`main` callees in the other code segments.
 10. Repair `OVC23` (`55FE:0000`) alongside the function queue.
 
 All emulator runs use `scripts/fbov/run_dosbox.py` or `-noconsole` +

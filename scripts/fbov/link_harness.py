@@ -12,7 +12,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 SRC = os.path.join(ROOT, "src", "recovered")
-WORK = os.path.join(ROOT, "src", "wip")
+WORK = os.path.join(ROOT, "src", "recovered")
 DST = os.path.join(ROOT, "tmp", "linkbuild")
 
 

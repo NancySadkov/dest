@@ -1,4 +1,11 @@
-/* Work-in-progress main (linked byte-match target). */
+/* Recovered main entry point (1301:000C, 2246 bytes).
+ *
+ * Verified byte-for-byte against the original with TC30 `-ml -1 -G`.
+ * The only excluded bytes are the operands of direct calls into segments
+ * whose functions are not yet recovered; every internal jump and every
+ * other instruction byte matches.  DGROUP is addressed through the
+ * original ES=0x1410 convention.
+ */
 #include "dgroup.h"
 
 #define GGameExeP ((void far * far *)MK_FP(0x1410, 0x8976))
@@ -79,7 +86,8 @@ int __cdecl16far main(int argc, char **argv)
   f_13d5_008e();                 /* 0x1301:00B8 */
   f_12f8_0020(7, 0);             /* 0x1301:00BE */
 
-  for (;;) {
+  {
+L_loop:
     DB(0x4e0) = 1;               /* MiceUnkState */
     key = f_12bb_0052();         /* 0x1301:00D5 */
     DW(0x430) = 0xa000;          /* TextBlitDstSeg */
@@ -199,87 +207,102 @@ int __cdecl16far main(int argc, char **argv)
     case 0x3920:
       if (!DB(0x899c) && f_1322_0057()) {
         f_12c4_005c((char far *)(gap_2410_009A + 0), 0xa000);
+        break;
       }
-      else {
-        DB(0x0161) = 1;
-        f_12c4_005c((char far *)(gap_2410_009A + 0x2e), 0xa000);
-        if (DB(0x0439)) {
-          DB(0x0439) = 0;
-          f_1391_0052();
-          f_1391_0048(3);
-          DB(0x0439) = 1;
-          f_1391_0052();
-        }
+      DB(0x0161) = 1;
+      f_12c4_005c((char far *)(gap_2410_009A + 0x2e), 0xa000);
+      if (DB(0x0439) == 0) {
+        break;
       }
+      DB(0x0439) = 0;
+      f_1391_0052();
+      f_1391_0048(3);
+      DB(0x0439) = 1;
+      f_1391_0052();
+      break;
       break;
 
     case 0x1e41:
     case 0x1e61:
-      if (DB(0x8980) < 5) {
-        if (DB(0x899c) == 0) {
-          f_13d5_0084();
-        }
-        f_13b6_0025(DB(0x8980));
+      if (DB(0x8980) > 4) {
+        break;
       }
+      if (!DB(0x899c)) {
+        f_13d5_0084();
+      }
+      f_13b6_0025(DB(0x8980));
+      break;
       break;
 
     case 0x184f:
     case 0x186f:
-      if (DB(0x90ae)) {
-        f_1356_0020();
+      if (DB(0x90ae) == 0) {
+        break;
       }
+      f_1356_0020();
+      break;
       break;
 
     case 0x2e43:
     case 0x2e63:
-      if (DB(0x8980) < 5) {
-        f_12bb_0084(0x1c, 0x0e);
-        f_13d5_005c(DB(0x8980));
-        DB(0x896f) = 1;
+      if (DB(0x8980) > 4) {
+        break;
       }
+      f_12bb_0084(0x1c, 0x0e);
+      f_13d5_005c(DB(0x8980));
+      DB(0x896f) = 1;
+      break;
       break;
 
     case 0x1454:
     case 0x1474:
     case 0x332c:
-      if (DB(0x8980) < 5) {
-        f_12bb_0084(0, 0x1c);
-        f_13d5_005c(DB(0x8980));
-        DB(0x896f) = 1;
+      if (DB(0x8980) > 4) {
+        break;
       }
+      f_12bb_0084(0, 0x1c);
+      f_13d5_005c(DB(0x8980));
+      DB(0x896f) = 1;
+      break;
       break;
 
     case 0x1352:
     case 0x1372:
     case 0x342e:
-      if (DB(0x8980) < 5) {
-        f_12bb_0084(0x38, 0x1c);
-        f_13d5_005c(DB(0x8980));
-        DB(0x896f) = 1;
+      if (DB(0x8980) > 4) {
+        break;
       }
+      f_12bb_0084(0x38, 0x1c);
+      f_13d5_005c(DB(0x8980));
+      DB(0x896f) = 1;
+      break;
       break;
 
     case 0x2646:
     case 0x266c:
     case 0x3042:
     case 0x3062:
-      if (DB(0x8980) < 5) {
-        f_12bb_0084(0x1c, 0);
-        f_13d5_005c(DB(0x8980));
-        DB(0x896f) = 1;
+      if (DB(0x8980) > 4) {
+        break;
       }
+      f_12bb_0084(0x1c, 0);
+      f_13d5_005c(DB(0x8980));
+      DB(0x896f) = 1;
+      break;
       break;
 
     case 0x0c2d:
     case 0x333c:
     case 0x492d:
     case 0x4a2d:
-      if (DB(0x8980) < 5) {
-        DB(0x896f) = 2;
-        f_12bb_0043(A9082[DB(0x8980)] - 1, 0xa000);
-        f_1315_0039(DB(0x8980), 1);
-        f_12bb_0061();
+      if (DB(0x8980) > 4) {
+        break;
       }
+      DB(0x896f) = 2;
+      f_12bb_0043(A9082[DB(0x8980)] - 1, 0xa000);
+      f_1315_0039(DB(0x8980), 1);
+      f_12bb_0061();
+      break;
       break;
 
     case 0x0d2b:
@@ -287,24 +310,25 @@ int __cdecl16far main(int argc, char **argv)
     case 0x0d3d:
     case 0x343e:
     case 0x4e2b:
-      if (DB(0x8980) < 5) {
+      if (DB(0x8980) <= 4) {
         DB(0x896f) = 2;
         f_12bb_0043(A9082[DB(0x8980)] + 1, 0xa000);
         f_1315_0039(DB(0x8980), 1);
         f_12bb_0061();
+        break;
       }
-      break;
 
-    default:
-      break;
     }
 
     if (DB(0x8990)) {
       f_13d5_008e();
     }
     DW(0x898e) = 0x17;
-    if (DB(0x438)) {
-      f_0000_2747((char far *)s__d_2410_0095, DW(0x898e));
+    if (DB(0x438) == 0) {
+      goto L_loop;
     }
+    f_0000_2747((char far *)s__d_2410_0095, DW(0x898e));
+    goto L_loop;
+    goto L_loop;
   }
 }

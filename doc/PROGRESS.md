@@ -13,7 +13,7 @@ Plan: [`../plan.md`](../plan.md)
 | G2 — fresh Ghidra model | **PASS** | `gpr_fresh`: 133 blocks, 756 trampolines, 13,367 fixups, 1,814 MZ relocations |
 | G3 — reference audit | **PASS** | `scripts/fbov/audit_refs.py`: 0 errors; 18 null-target relocations documented |
 | G4 — data/global model | **PASS** | DGROUP byte-identical under TC30 (0/38,042 differences); 1,205 symbols/types applied |
-| G5 - startup/`main` byte-exact | **IN PROGRESS** | `mkp` byte-exact; `main` first `0x5F6` bytes byte-exact (calls/jmps masked) |
+| G5 - startup/`main` byte-exact | **PASS for `main`** | `mkp` byte-exact; `main` 2246 bytes byte-exact (external call operands masked) |
 | G6 — link | NOT STARTED | |
 | G7 — runtime equivalence | NOT STARTED | |
 
@@ -246,30 +246,49 @@ from the original tree; a standalone `switch` with the same cases reproduces
 the tree's comparison order exactly. Key detail: `key` must be **unsigned**
 (the original uses `jbe`/`ja`, not `jle`/`jg`).
 
-Current byte-match of the whole function:
+**`main` is now fully matched:**
 
 ```
-main  1301:000C  0x5F6 bytes  MATCH   (1526 of 2246 bytes)
+main  1301:000C  2246 bytes  MATCH
 ```
 
-The matched region includes the complete dispatch tree and the first 19 case
-bodies (through the `0x3920` body's first statement). Remaining work is the
-`0x3920` body tail and the eight later bodies (`0x1E41`, `0x184F`, `0x2E43`,
-`0x1454`, `0x1352`, `0x2646`, `0x0C2D`, `0x0D2B`). The WIP source is
-`src/wip/main.c`; it is not yet moved to `src/recovered` because the
-per-function gate has not fully passed.
+Every instruction byte and every internal jump (short and near) matches the
+original. The only masked bytes are the 240 operand bytes of direct
+`CALLF` instructions whose target segments are not recovered yet. The
+recovered source is `src/recovered/main.c`. It covers the whole function:
+argument setup, startup calls, the `for(;;)` loop, the entire 59-case/28-body
+switch, the `0x3920` battle/pause body, the menu-selection bodies, and the
+loop tail.
 
-The link-time DGROUP object now takes its labels directly from
-`DGROUP.OBJ`'s PUBDEFs (1,461 symbols) instead of `dgroup_map.csv`, because
-the CSV omits some gap arrays used by `main` (`gap_2410_009A`).
+Notes on code shape (all required for the match):
+
+- DGROUP accesses use the original `ES = 0x1410` convention; `DB`/`DW`/
+  `A90DE`/`A9082` macros expand to the original far accesses.
+- The 4-byte frame is `unsigned char sel; volatile unsigned key;`
+  (`sel` at `[bp-1]`, `key` at `[bp-4]`).
+- Menu validity tables are indexed as far arrays (`A90DE[...]`,
+  `A9082[...]`), which makes TC fold the base into the displacement
+  (`es:[bx-0x6f22]` / `es:[bx-0x6f7e]`).
+- Guard-clause shapes (`if (GMenuItem > 4) break;`) reproduce the original
+  out-of-line bodies; several case tails carry an extra unreachable
+  `break;`, matching the original's extra `jmp`.
+- The loop tail uses an explicit `L_loop:` label and `goto` so `continue`
+  jumps directly to `0x00C8` instead of through an intermediate label.
+
+The link-time DGROUP object takes its labels directly from `DGROUP.OBJ`'s
+PUBDEFs (1,461 symbols) instead of `dgroup_map.csv`, because the CSV omits
+some gap arrays used by `main` (`gap_2410_009A`).
+
 
 
 
 
 ## Next
 
-1. Recover `main` (`1301:000C`) byte-for-byte from the decompiled baseline,
-   then the startup/init chain.
+1. Recover the startup/init chain and the direct callees of `main` in other
+   segments (`0x12E3`, `0x13E3`, `0x1347`, `0x13D5`, `0x12F8`, `0x12BB`,
+   `0x1315`, `0x13B6`, `0x1356`, `0x1391`, `0x12C4`, `0x1322`, `0x1400`,
+   `0x6018`, `0x7E7C`, ...), then the remaining resident functions.
 2. Repair `OVC23` (`55FE:0000`) alongside the function queue.
 3. G6: link the recovered modules against the original runtime/overlay
    manager.
