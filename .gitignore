@@ -70,3 +70,8 @@ tmp/
 # DGROUP candidate diagnostics
 doc/dgroup_old_symbols.csv
 
+
+# python cache
+__pycache__/
+scripts/fbov/__pycache__/
+

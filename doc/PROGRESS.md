@@ -13,7 +13,7 @@ Plan: [`../plan.md`](../plan.md)
 | G2 — fresh Ghidra model | **PASS** | `gpr_fresh`: 133 blocks, 756 trampolines, 13,367 fixups, 1,814 MZ relocations |
 | G3 — reference audit | **PASS** | `scripts/fbov/audit_refs.py`: 0 errors; 18 null-target relocations documented |
 | G4 — data/global model | **PASS** | DGROUP byte-identical under TC30 (0/38,042 differences); 1,205 symbols/types applied |
-| G5 — startup/`main` byte-exact | **IN PROGRESS** | `mkp` (`2D63:0000`) byte-exact; `main` baseline decompiled |
+| G5 - startup/`main` byte-exact | **IN PROGRESS** | `mkp` byte-exact; `main` prologue `0x50` bytes byte-exact |
 | G6 — link | NOT STARTED | |
 | G7 — runtime equivalence | NOT STARTED | |
 
@@ -184,9 +184,33 @@ work is its byte-matched recovery.
 The first `main` prologue comparison exposed a harness requirement: an
 unlinked OBJ still contains relocations for DGROUP globals (`GGameExe`,
 `GExeArg`), so raw OBJ bytes legitimately differ from the linked original.
-The next harness step is a **linked comparison**: link `main.obj` with
-`DGROUP.obj` (plus function stubs), then compare the linked `main` bytes with
-call targets masked. `main` is not accepted until that gate passes.
+
+Linked harness (new):
+
+- `scripts/fbov/link_harness.py` stages `start.asm`, `main.c`, `stubs.c` and
+  the link-time DGROUP object; `scripts/fbov/link_compare.py` extracts the
+  function from `OUT.MAP`/`OUT.EXE` and compares it with the original bytes.
+- `scripts/fbov/gen_link_dgroup.py` emits `dglink.asm` from the verified
+  DGROUP bytes. It deliberately **omits the recovered `_DATA` symbol**: when
+  a TC-compiled object is linked, Turbo Link reserves the first eight DGROUP
+  bytes for the C0 startup and shifts the recovered blob by 8. With the
+  assembly blob first in the link and no `__DATA` definition, every DGROUP
+  symbol resolves to its original offset, while the authoritative
+  `dgroup.c`/`DGROUP.OBJ` remains untouched for G4.
+
+`main` prologue is now byte-exact:
+
+```
+main  1301:000C  0x50 bytes  MATCH
+```
+
+The accepted region covers `PUSH BP` through the `argc < 2` branch and its
+`JMP` (`0x000C..0x005B`). It includes the 4-byte local (`SUB SP,4`), the two
+far stores through `ES = 0x1410`, and the default `_DS:0x94` argument. The
+default is the empty string at DGROUP offset `0x94` (`s__2410_0094`).
+The 4-byte local's real use is still to be identified later in `main`; the
+current harness-only use starts at `0x50`, outside the accepted region.
+
 
 ## Next
 
