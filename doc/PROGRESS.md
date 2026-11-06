@@ -300,12 +300,12 @@ without it). Two comparison paths are used:
 Byte-exact overlay functions in `src/recovered/ov_3381.c`:
 
 ```
-009a  100 bytes      016c   92 bytes      23f9   89 bytes
-00fe   52 bytes      023c   17 bytes      2e9a   72 bytes
-0132   58 bytes      1fa9   17 bytes      0579  282 bytes
-01c8  116 bytes      20ee   19 bytes      16ef  249 bytes
-233e   60 bytes      237a   59 bytes      23b5   68 bytes
-1697   88 bytes
+0000  154 bytes      016c   92 bytes      23f9   89 bytes
+009a  100 bytes      023c   17 bytes      2e9a   72 bytes
+00fe   52 bytes      1fa9   17 bytes      0579  282 bytes
+0132   58 bytes      20ee   19 bytes      16ef  249 bytes
+01c8  116 bytes      233e   60 bytes      237a   59 bytes
+1697   88 bytes      23b5   68 bytes
 ```
 
 All are matched with call operands (and, for `01c8`/`0579`, near call

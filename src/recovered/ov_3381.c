@@ -295,3 +295,19 @@ void __cdecl16far f_3381_0579(void)
 
 
 
+
+void __cdecl16far f_118_002a(far_t, int, int);
+void __cdecl16far f_118_0034(far_t, int, int, char far *, int, int);
+
+void __cdecl16far f_3381_0000(void)
+{
+  f_118_002a(*(far_t far *)MK_FP(0x280, 0x89cd), 0, 0xa000);
+  f_118_002a(*(far_t far *)MK_FP(0x280, 0x909f), 0x9af, 0xa000);
+  f_118_0034(*(far_t far *)MK_FP(0x280, 0x90a3), 0, 0,
+             (char far *)MK_FP(0x280, 0x44a), 0x10, 0);
+  if (!*(unsigned char far *)MK_FP(0x280, 0x7144)) {
+    f_118_002a(*(far_t far *)MK_FP(0x280, 0x89f1), 0xc51d, 0xa000);
+    *(unsigned char far *)MK_FP(0x280, 0x9016) = 0;
+  }
+}
+
