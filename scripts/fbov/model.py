@@ -119,15 +119,20 @@ def parse(path):
         ems_ofs = u16(data, hdr_off + 24)
 
         code_off = fbovofs + 16 + fileofs
-        # Canonical analysis segment (same convention mzap used for the merged
-        # image): load-module-relative 16-byte unit.
-        code_seg = (code_off - start_ofs) >> 4
+        # The segment table and the overlay code offsets are load-module
+        # relative.  The linker's first segment is 0x1000, so the static
+        # analysis segment is 0x1000 + relative.  mzap forgot this for the
+        # overlay fixups; that is the off-by-0x1000 bug.
+        code_seg_rel = (code_off - start_ofs) >> 4
+        code_seg = STATIC_BASE + code_seg_rel
         code_disp = (code_off - start_ofs) & 0xF
 
         ov = {
             "index": i, "header_seg": e["seg"],
+            "header_static_seg": e["static_seg"],
             "header_file_offset": hdr_off,
             "fileofs": fileofs, "code_file_offset": code_off,
+            "code_seg_rel": code_seg_rel,
             "code_seg": code_seg, "code_disp": code_disp,
             "codesz": codesz, "fixupsz": fixupsz, "jmpcnt": jmpcnt,
             "saveret": saveret, "link": link, "bufseg": bufseg,
@@ -162,6 +167,7 @@ def parse(path):
             target_seg = target_info["static_seg"] if target_info else None
             f = {
                 "overlay_header_seg": e["seg"],
+                "overlay_header_static_seg": e["static_seg"],
                 "overlay_code_seg": code_seg,
                 "index": j, "code_offset": q,
                 "site_seg": code_seg,
@@ -177,8 +183,8 @@ def parse(path):
                 f["funref_offset_word"] = u16(data, site + 4) if site + 6 <= len(data) else None
                 f["trampoline_offset"] = None
                 # Find the matching trampoline in the target header segment.
-                if target_seg is not None:
-                    th = start_ofs + target_seg * 16
+                if target_info is not None:
+                    th = start_ofs + target_info["seg"] * 16
                     for k in range(jmpcnt):
                         tofs = u16(data, th + 0x20 + k * 5 + 2)
                         if tofs == f["funref_offset_word"]:
@@ -315,10 +321,14 @@ def main():
     with open(os.path.join(base, "fbov_overlays.csv"), "w", newline="",
               encoding="ascii") as f:
         w = csv.writer(f)
-        w.writerow(["header_seg", "code_seg", "code_disp", "code_file_offset",
+        w.writerow(["header_seg", "header_static_seg", "code_seg",
+                    "code_seg_rel", "code_disp", "code_file_offset",
                     "codesz", "fixupsz", "jmpcnt"])
         for e in m["overlays"]:
-            w.writerow(["%04X" % e["header_seg"], "%04X" % e["code_seg"],
+            w.writerow(["%04X" % e["header_seg"],
+                        "%04X" % e["header_static_seg"],
+                        "%04X" % e["code_seg"],
+                        "%04X" % e["code_seg_rel"],
                         "%X" % e["code_disp"], "0x%X" % e["code_file_offset"],
                         "%04X" % e["codesz"], "%04X" % e["fixupsz"],
                         e["jmpcnt"]])
@@ -326,11 +336,12 @@ def main():
     with open(os.path.join(base, "fbov_fixups.csv"), "w", newline="",
               encoding="ascii") as f:
         w = csv.writer(f)
-        w.writerow(["header_seg", "code_seg", "site_ofs", "flags",
-                    "target_index", "target_seg", "target_class", "funref",
-                    "trampoline_offset"])
+        w.writerow(["header_seg", "header_static_seg", "code_seg", "site_ofs",
+                    "flags", "target_index", "target_seg", "target_class",
+                    "funref", "trampoline_offset"])
         for e in m["fixups"]:
             w.writerow(["%04X" % e["overlay_header_seg"],
+                        "%04X" % e["overlay_header_static_seg"],
                         "%04X" % e["overlay_code_seg"],
                         "%04X" % e["site_ofs"], e["flags"],
                         e["target_index"],

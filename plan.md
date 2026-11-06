@@ -39,6 +39,17 @@ invented plausible-looking C.
 
 Compile counts hid the problem because wrong code often compiles.
 
+Two concrete causes were found while rebuilding the model:
+
+1. `mzap -mb` writes `_SEGTABLE_[i].seg` (load-module-relative) into the
+   overlay fixups, while the merged blocks are at `0x1000 + seg`. Every
+   overlay data reference is therefore off by `0x1000` (`0x1410` instead of
+   `0x2410` for DGROUP).
+2. Ghidra's `InferConstantPointers` decompiler option turns 16-bit segment
+   constants (`0x2410`, `0x2337`, ...) into data pointers into DGROUP, which
+   produces expressions such as `"puppetmaker" + 3` and `"glassworks" + 9`.
+   With `setInferConstantPointers(false)` those constants stay scalars.
+
 The old tree is therefore quarantined under `reference/` for its function
 inventory only. It is not built, not edited, and not used as a source of truth.
 
@@ -332,6 +343,17 @@ that case create:
 - a comment on the instruction naming the target.
 The audit (Phase 3) defines what is acceptable; a missing relocation is a
 failure, not a warning.
+
+All decompilation must use:
+
+```java
+DecompileOptions o = new DecompileOptions();
+o.setProtoEvalModel("__cdecl16far");
+o.setInferConstantPointers(false);   // segment constants are not pointers
+```
+
+Everything is written with the **static** segment (`0x1000 + table_seg`).
+The loader never writes a load-module-relative segment into a fixup.
 
 ### 7.4 Segment context
 

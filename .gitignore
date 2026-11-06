@@ -53,3 +53,7 @@ dkms.conf
 
 # Generated FBOV manifest (regenerate with scripts/fbov/model.py)
 doc/fbov_manifest.json
+
+# Fresh Ghidra model (regenerate with BuildFbovModel.java)
+gpr_fresh/
+
