@@ -47,6 +47,11 @@ public class BuildFbovModel extends GhidraScript {
         int seg, ofs, target;
     }
 
+    private static class BlockRow {
+        String name, kind, cls;
+        int staticSeg, start, size, fileOffset, initialized, initSize;
+    }
+
     private String[] split(String line) {
         return line.split(",", -1);
     }
@@ -110,6 +115,21 @@ public class BuildFbovModel extends GhidraScript {
         try { createLabel(start, name, true); } catch (Exception e) { }
     }
 
+    private void createUninitBlock(String name, Address start, int size,
+                                   boolean write) throws Exception {
+        if (size <= 0) return;
+        Memory mem = currentProgram.getMemory();
+        if (mem.getBlock(start) != null) {
+            println("SKIP overlapping uninit block " + name + " at " + start);
+            return;
+        }
+        MemoryBlock b = mem.createUninitializedBlock(name, start, size, false);
+        b.setRead(true);
+        b.setWrite(write);
+        b.setExecute(false);
+        try { createLabel(start, name, true); } catch (Exception e) { }
+    }
+
     @Override
     public void run() throws Exception {
         String[] args = getScriptArgs();
@@ -168,64 +188,62 @@ public class BuildFbovModel extends GhidraScript {
             fixes.add(f);
         }
 
+        List<BlockRow> blocks = new ArrayList<>();
+        for (String ln : readLines(Paths.get(doc, "fbov_blocks.csv").toString())) {
+            if (ln.startsWith("name")) continue;
+            String[] c = split(ln);
+            BlockRow b = new BlockRow();
+            b.name = c[0];
+            b.kind = c[1];
+            b.staticSeg = hex(c[2]);
+            b.start = hex(c[3]);
+            b.size = hex(c[4]);
+            b.fileOffset = hex(c[5]);
+            b.initialized = Integer.parseInt(c[6].trim());
+            b.initSize = hex(c[7]);
+            b.cls = c[8];
+            blocks.add(b);
+        }
+
         List<RelRow> rels = new ArrayList<>();
         for (String ln : readLines(Paths.get(doc, "fbov_relocs.csv").toString())) {
             if (ln.startsWith("index")) continue;
             String[] c = split(ln);
-            if (c.length < 5 || c[4].trim().isEmpty()) continue;
+            if (c.length < 6 || c[5].trim().isEmpty()) continue;
             RelRow r = new RelRow();
             r.seg = hex(c[1]);
             r.ofs = hex(c[2]);
-            r.target = hex(c[4]);
+            r.target = hex(c[5]); // static target
             rels.add(r);
         }
 
         int tx = currentProgram.startTransaction("Build FBOV model");
         try {
-            // ---- normal segments ------------------------------------------
-            // Merge duplicate static segments; skip sentinel/empty entries.
-            Map<Integer, SegRow> merged = new TreeMap<>();
-            for (SegRow s : segs) {
-                if (s.max == 0xFFFF || s.min > s.max) continue;
-                if (s.max - s.min <= 0) continue;
-                SegRow m = merged.get(s.staticSeg);
-                if (m == null) {
-                    m = new SegRow();
-                    m.seg = s.seg;
-                    m.staticSeg = s.staticSeg;
-                    m.min = s.min;
-                    m.max = s.max;
-                    m.cls = s.cls;
-                    merged.put(s.staticSeg, m);
-                } else {
-                    if (s.min < m.min) { m.min = s.min; m.seg = s.seg; }
-                    if (s.max > m.max) m.max = s.max;
-                }
-            }
-
+            Map<Integer, Integer> segStart = new TreeMap<>();
             int nblocks = 0;
-            for (SegRow s : merged.values()) {
-                String name;
-                if (s.staticSeg == DGROUP_SEG) name = "DGROUP";
-                else if (s.staticSeg == OVRDATA_SEG) name = "_OVRDATA_";
-                else name = String.format("SEG_%04X_%s", s.staticSeg, s.cls);
-                int size = s.max - s.min;
-                int off = startOfs + s.seg * 16 + s.min;
-                createBlock(name, addr(s.staticSeg, s.min), file, off, size,
-                        s.cls.equals("CODE") || s.cls.equals("OVR"),
-                        s.cls.equals("DATA"));
-                nblocks++;
-            }
-
-            // ---- overlay code --------------------------------------------
             int ncode = 0;
-            for (int i = 0; i < ovs.size(); i++) {
-                OvRow o = ovs.get(i);
-                if (o.codesz <= 0) continue;
-                String name = String.format("OVC_%02d_%04X", i, o.codeSeg);
-                createBlock(name, addr(o.codeSeg, o.codeDisp), file,
-                        o.fileOffset, o.codesz, true, false);
-                ncode++;
+            for (BlockRow b : blocks) {
+                if (b.size <= 0) continue;
+                boolean exec = b.cls.equals("CODE") || b.cls.equals("OVR");
+                boolean write = b.cls.equals("DATA") || b.cls.equals("BSS");
+                if (b.initialized == 0) {
+                    createUninitBlock(b.name, addr(b.staticSeg, b.start),
+                            b.size, write);
+                    nblocks++;
+                } else {
+                    createBlock(b.name, addr(b.staticSeg, b.start), file,
+                            b.fileOffset, b.initSize, exec, write);
+                    nblocks++;
+                    if (b.size > b.initSize) {
+                        int rem = b.size - b.initSize;
+                        Address ba = addr(b.staticSeg, b.start + b.initSize);
+                        createUninitBlock(b.name + "_BSS", ba, rem, write);
+                    }
+                }
+                if (!segStart.containsKey(b.staticSeg)
+                        || b.start < segStart.get(b.staticSeg))
+                    segStart.put(b.staticSeg, b.start);
+                if (b.kind.equals("overlay_code")) ncode++;
             }
 
             // ---- overlay trampolines -------------------------------------
@@ -264,13 +282,29 @@ public class BuildFbovModel extends GhidraScript {
             }
 
             // ---- MZ relocation references --------------------------------
+            // The file stores load-module-relative segments (0x1410 for
+            // DGROUP); rewrite them to the static segment (0x2410) and add
+            // the corresponding reference.
             int nrel = 0;
+            int nskip = 0;
             ReferenceManager rm = currentProgram.getReferenceManager();
             for (RelRow r : rels) {
                 Address site = addr(STATIC_BASE + r.seg, r.ofs);
-                Address target = addr(r.target, 0);
-                if (currentProgram.getMemory().getBlock(site) == null) continue;
-                if (currentProgram.getMemory().getBlock(target) == null) continue;
+                if (currentProgram.getMemory().getBlock(site) == null) {
+                    nskip++;
+                    continue;
+                }
+                if (r.target == 0) {
+                    nskip++;
+                    continue;
+                }
+                put16(site, r.target);
+                int tmin = segStart.getOrDefault(r.target, 0);
+                Address target = addr(r.target, tmin);
+                if (currentProgram.getMemory().getBlock(target) == null) {
+                    nskip++;
+                    continue;
+                }
                 try {
                     rm.addMemoryReference(site, target, RefType.DATA,
                             SourceType.USER_DEFINED, 0);
@@ -295,7 +329,8 @@ public class BuildFbovModel extends GhidraScript {
             println("BLOCKS segments=" + nblocks + " overlay_code=" + ncode);
             println("TRAMPOLINES untrapped=" + ntramp);
             println("FIXUPS applied=" + nfix + " of " + fixes.size());
-            println("MZ reloc references=" + nrel + " of " + rels.size());
+            println("MZ reloc references=" + nrel + " of " + rels.size()
+                    + " skipped=" + nskip);
             println("CONTEXT DS=ES=0x2410 SS=0x2D5A");
         } finally {
             currentProgram.endTransaction(tx, true);

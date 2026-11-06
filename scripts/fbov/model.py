@@ -91,10 +91,13 @@ def parse(path):
             break
         r_ofs, r_seg = struct.unpack_from("<HH", data, off)
         site = start_ofs + r_seg * 16 + r_ofs
-        target = u16(data, site) if site + 2 <= len(data) else None
+        target_raw = u16(data, site) if site + 2 <= len(data) else None
         relocs.append({
             "index": i, "seg": r_seg, "ofs": r_ofs,
-            "file_offset": site, "target_seg": target,
+            "file_offset": site,
+            "target_seg_raw": target_raw,
+            "target_seg": (STATIC_BASE + target_raw
+                           if target_raw else 0),
         })
 
     overlays = []
@@ -294,6 +297,94 @@ def validate(m, data):
     return {"errors": errs, "warnings": warnings}
 
 
+def build_blocks(m):
+    """Compute the exact block layout used by the Ghidra model.
+
+    The layout is driven by _SEGTABLE_ plus the next segment's start, which is
+    how Borland packs segments that share a 64K window.  It is emitted to
+    doc/fbov_blocks.csv so the loader and the audit cannot disagree.
+    """
+    start_ofs = m["mz"]["start_ofs"]
+    load_end = m["fbov"]["offset"]
+    nsegs = len(m["segments"])
+
+    info = {}
+    for e in m["segments"]:
+        s = e["static_seg"]
+        d = info.setdefault(s, {"seg": e["seg"], "min": None, "max": None,
+                                "class": e["class"], "sentinel": False})
+        if e["maxoff"] == 0xFFFF or e["minoff"] > e["maxoff"]:
+            d["sentinel"] = True
+            continue
+        d["min"] = e["minoff"] if d["min"] is None else min(d["min"], e["minoff"])
+        d["max"] = e["maxoff"] if d["max"] is None else max(d["max"], e["maxoff"])
+
+    # _SEGTABLE_ is a real data block with the 0xFFFF sentinel.
+    info[0x2277] = {"seg": 0x1277, "min": 0, "max": nsegs * 8,
+                    "class": "DATA", "sentinel": False}
+
+    keys = sorted(info)
+    blocks = []
+    for i, s in enumerate(keys):
+        d = info[s]
+        smin = d["min"] if d["min"] is not None else 0
+        smax = d["max"]
+        sentinel = d["sentinel"] or smax is None
+        start = s * 16 + smin
+        if i + 1 < len(keys):
+            n = keys[i + 1]
+            nd = info[n]
+            nmin = nd["min"] if nd["min"] is not None else 0
+            end = n * 16 + nmin
+        else:
+            end = start + (smax if smax is not None else 0x100)
+        if not sentinel and smax is not None:
+            end = min(end, s * 16 + smax)
+        size = end - start
+        if size <= 0:
+            continue
+
+        if s == 0x2410:
+            name = "DGROUP"
+        elif s == 0x225D:
+            name = "_OVRDATA_"
+        elif s == 0x2277:
+            name = "_SEGTABLE_"
+        elif d["class"] == "OVR":
+            name = "OVR_HDR_%04X" % s
+        else:
+            name = "SEG_%04X_%s" % (s, d["class"])
+
+        file_off = start_ofs + (s - 0x1000) * 16 + smin
+        avail = max(0, load_end - file_off)
+        init = min(size, avail)
+        blocks.append({
+            "name": name, "kind": "segment", "static_seg": s,
+            "start": smin, "size": size, "file_offset": file_off,
+            "initialized": 1 if init > 0 else 0, "init_size": init,
+            "class": d["class"],
+        })
+        if size > init:
+            blocks.append({
+                "name": name + "_BSS", "kind": "bss", "static_seg": s,
+                "start": smin + init, "size": size - init,
+                "file_offset": 0, "initialized": 0, "init_size": 0,
+                "class": "BSS",
+            })
+
+    for i, o in enumerate(m["overlays"]):
+        if o["codesz"] <= 0:
+            continue
+        blocks.append({
+            "name": "OVC_%02d_%04X" % (i, o["code_seg"]),
+            "kind": "overlay_code", "static_seg": o["code_seg"],
+            "start": o["code_disp"], "size": o["codesz"],
+            "file_offset": o["code_file_offset"], "initialized": 1,
+            "init_size": o["codesz"], "class": "CODE",
+        })
+    return blocks
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--exe", default=os.path.join("game", "STRONG.EXE"))
@@ -302,6 +393,7 @@ def main():
     m = parse(a.exe)
     v = validate(m, open(a.exe, "rb").read())
     m["validation"] = v
+    m["blocks"] = build_blocks(m)
 
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
     with open(a.out, "w", encoding="ascii") as f:
@@ -353,12 +445,26 @@ def main():
     with open(os.path.join(base, "fbov_relocs.csv"), "w", newline="",
               encoding="ascii") as f:
         w = csv.writer(f)
-        w.writerow(["index", "seg", "ofs", "file_offset", "target_seg"])
+        w.writerow(["index", "seg", "ofs", "file_offset",
+                    "target_seg_raw", "target_seg"])
         for e in m["relocs"]:
             w.writerow([e["index"], "%04X" % e["seg"], "%04X" % e["ofs"],
                         "0x%X" % e["file_offset"],
+                        "" if e["target_seg_raw"] is None
+                        else "%04X" % e["target_seg_raw"],
                         "" if e["target_seg"] is None
                         else "%04X" % e["target_seg"]])
+
+    with open(os.path.join(base, "fbov_blocks.csv"), "w", newline="",
+              encoding="ascii") as f:
+        w = csv.writer(f)
+        w.writerow(["name", "kind", "static_seg", "start", "size",
+                    "file_offset", "initialized", "init_size", "class"])
+        for e in m["blocks"]:
+            w.writerow([e["name"], e["kind"], "%04X" % e["static_seg"],
+                        "%04X" % e["start"], "%04X" % e["size"],
+                        "0x%X" % e["file_offset"], e["initialized"],
+                        "%04X" % e["init_size"], e["class"]])
 
     # Summary.
     classes = {}
