@@ -401,7 +401,7 @@ void __cdecl16far f_3381_0000(void)
   f_118_002a(*(far_t far *)MK_FP(0x280, 0x909f), 0x9af, 0xa000);
   f_118_0034(*(far_t far *)MK_FP(0x280, 0x90a3), 0, 0,
              (char far *)MK_FP(0x280, 0x44a), 0x10, 0);
-  if (!*(unsigned char far *)MK_FP(0x280, 0x7144)) {
+  if (!GameRunning) {
     f_118_002a(*(far_t far *)MK_FP(0x280, 0x89f1), 0xc51d, 0xa000);
     *(unsigned char far *)MK_FP(0x280, 0x9016) = 0;
   }
@@ -935,44 +935,52 @@ void __cdecl16far f_3381_2883(void)
   asm db 0D6h,0C4h,05Eh,006h,026h,0C6h,001h,000h,05Fh,05Eh
 }
 
+void __cdecl16far f_e0_011f(char far *);
+void __cdecl16far f_190_004d(void);
+
+void __cdecl16far f_e0_011f(char far *);
+void __cdecl16far f_190_004d(void);
+
 void __cdecl16far f_3381_2101(void)
 {
   volatile unsigned char pad[0x304];
-  asm db 081h,0ECh,004h,003h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,099h,089h,0F8h,000h
-  asm db 00Eh,0E8h,07Fh,0F5h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,096h,090h,000h,00Eh
-  asm db 0E8h,0C7h,0FFh,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,0E6h,090h,000h,0B8h,080h
-  asm db 002h,08Eh,0C0h,026h,0C6h,006h,0E5h,090h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h
-  asm db 006h,0E3h,090h,005h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,0E4h,090h,000h,0B8h
-  asm db 080h,002h,08Eh,0C0h,026h,0C7h,006h,0DFh,091h,000h,000h,0B8h,080h,002h,08Eh,0C0h
-  asm db 026h,0C6h,006h,06Fh,090h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,06Eh,090h
-  asm db 000h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,06Dh,090h,000h,0B8h,080h,002h,08Eh
-  asm db 0C0h,026h,0C7h,006h,06Bh,090h,000h,000h,026h,0C7h,006h,069h,090h,000h,000h,0B8h
-  asm db 080h,002h,08Eh,0C0h,026h,0C6h,006h,010h,092h,000h,06Ah,003h,09Ah,05Ch,000h,070h
-  asm db 001h,083h,0C4h,002h,0B4h,000h,08Bh,0D0h,0D1h,0E2h,003h,0D0h,0B8h,080h,002h,08Eh
-  asm db 0C0h,026h,088h,016h,044h,007h,0B8h,080h,002h,08Eh,0C0h,026h,080h,03Eh,044h,071h
-  asm db 000h,074h,012h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,044h,007h,000h,0C6h,006h
-  asm db 0B0h,08Bh,014h,0EBh,00Dh,06Ah,014h,09Ah,05Ch,000h,070h,001h,083h,0C4h,002h,0A2h
-  asm db 0B0h,08Bh,00Eh,0E8h,0F2h,0E6h,09Ah,02Ah,000h,058h,001h,00Eh,0E8h,0B6h,0FDh,09Ah
-  asm db 020h,000h,0A8h,001h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,09Fh,089h,048h,000h
-  asm db 0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,09Dh,089h,01Eh,000h,0B8h,080h,002h,08Eh
-  asm db 0C0h,026h,0C6h,006h,056h,047h,001h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,014h
-  asm db 04Ah,000h,000h,026h,0C7h,006h,012h,04Ah,000h,000h,0B8h,080h,002h,08Eh,0C0h,026h
-  asm db 0C7h,006h,067h,090h,000h,000h,06Ah,002h,06Ah,000h,068h,080h,002h,068h,0CDh,092h
-  asm db 09Ah,066h,026h,000h,000h,083h,0C4h,008h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h
-  asm db 0CCh,092h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,086h,06Ah,000h,000h,0B8h
-  asm db 080h,002h,08Eh,0C0h,026h,0C6h,006h,088h,06Ah,000h,0B8h,080h,002h,08Eh,0C0h,026h
-  asm db 0C7h,006h,0CAh,092h,000h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,093h,089h
-  asm db 000h,000h,026h,0C7h,006h,091h,089h,000h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h
-  asm db 006h,090h,089h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,03Ah,069h,000h,0B8h
-  asm db 080h,002h,08Eh,0C0h,026h,0C7h,006h,0C8h,092h,000h,000h,0B8h,080h,002h,08Eh,0C0h
-  asm db 026h,080h,03Eh,09Dh,090h,003h,072h,00Bh,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h
-  asm db 0E6h,091h,002h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,0E4h,091h,000h,000h,0B8h
-  asm db 080h,002h,08Eh,0C0h,026h,0C6h,006h,0C6h,092h,000h,0B8h,080h,002h,08Eh,0C0h,026h
-  asm db 0C6h,006h,0E2h,091h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0FFh,036h,0D2h,090h,026h
-  asm db 0FFh,036h,0D0h,090h,09Ah,020h,000h,070h,001h,083h,0C4h,004h
-  asm mov word ptr pad[0x302],dx
-  asm db 089h,046h,0FCh,016h,08Dh,086h,0FCh,0FCh,050h,0FFh,076h,0FEh,0FFh,076h,0FCh,09Ah
-  asm db 02Fh,000h,010h,002h,083h,0C4h,008h,0B8h,080h,002h,08Eh,0C0h,026h,0A0h,044h,071h
-  asm db 0B4h,000h,00Bh,0C0h,075h,00Eh,016h,08Dh,086h,0FCh,0FCh,050h,09Ah,01Fh,001h,0E0h
-  asm db 000h,083h,0C4h,004h,09Ah,04Dh,000h,090h,001h
+  asm db 0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,099h,089h,0F8h,000h,00Eh,0E8h,07Fh,0F5h
+  asm db 0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,096h,090h,000h,00Eh,0E8h,0C7h,0FFh,0B8h
+  asm db 080h,002h,08Eh,0C0h,026h,0C6h,006h,0E6h,090h,000h,0B8h,080h,002h,08Eh,0C0h,026h
+  asm db 0C6h,006h,0E5h,090h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,0E3h,090h,005h
+  asm db 0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,0E4h,090h,000h,0B8h,080h,002h,08Eh,0C0h
+  asm db 026h,0C7h,006h,0DFh,091h,000h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,06Fh
+  asm db 090h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,06Eh,090h,000h,0B8h,080h,002h
+  asm db 08Eh,0C0h,026h,0C6h,006h,06Dh,090h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h
+  asm db 06Bh,090h,000h,000h,026h,0C7h,006h,069h,090h,000h,000h,0B8h,080h,002h,08Eh,0C0h
+  asm db 026h,0C6h,006h,010h,092h,000h,06Ah,003h,09Ah,05Ch,000h,070h,001h,083h,0C4h,002h
+  asm db 0B4h,000h,08Bh,0D0h,0D1h,0E2h,003h,0D0h,0B8h,080h,002h,08Eh,0C0h,026h,088h,016h
+  asm db 044h,007h,0B8h,080h,002h,08Eh,0C0h,026h,080h,03Eh,044h,071h,000h,074h,012h,0B8h
+  asm db 080h,002h,08Eh,0C0h,026h,0C6h,006h,044h,007h,000h,0C6h,006h,0B0h,08Bh,014h,0EBh
+  asm db 00Dh,06Ah,014h,09Ah,05Ch,000h,070h,001h,083h,0C4h,002h,0A2h,0B0h,08Bh,00Eh,0E8h
+  asm db 0F2h,0E6h,09Ah,02Ah,000h,058h,001h,00Eh,0E8h,0B6h,0FDh,09Ah,020h,000h,0A8h,001h
+  asm db 0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,09Fh,089h,048h,000h,0B8h,080h,002h,08Eh
+  asm db 0C0h,026h,0C7h,006h,09Dh,089h,01Eh,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h
+  asm db 056h,047h,001h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,014h,04Ah,000h,000h,026h
+  asm db 0C7h,006h,012h,04Ah,000h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,067h,090h
+  asm db 000h,000h,06Ah,002h,06Ah,000h,068h,080h,002h,068h,0CDh,092h,09Ah,066h,026h,000h
+  asm db 000h,083h,0C4h,008h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,0CCh,092h,000h,0B8h
+  asm db 080h,002h,08Eh,0C0h,026h,0C7h,006h,086h,06Ah,000h,000h,0B8h,080h,002h,08Eh,0C0h
+  asm db 026h,0C6h,006h,088h,06Ah,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,0CAh,092h
+  asm db 000h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,093h,089h,000h,000h,026h,0C7h
+  asm db 006h,091h,089h,000h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,090h,089h,000h
+  asm db 0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,03Ah,069h,000h,0B8h,080h,002h,08Eh,0C0h
+  asm db 026h,0C7h,006h,0C8h,092h,000h,000h,0B8h,080h,002h,08Eh,0C0h,026h,080h,03Eh,09Dh
+  asm db 090h,003h,072h,00Bh,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,0E6h,091h,002h,0B8h
+  asm db 080h,002h,08Eh,0C0h,026h,0C7h,006h,0E4h,091h,000h,000h,0B8h,080h,002h,08Eh,0C0h
+  asm db 026h,0C6h,006h,0C6h,092h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,0E2h,091h
+  asm db 000h,0B8h,080h,002h,08Eh,0C0h,026h,0FFh,036h,0D2h,090h,026h,0FFh,036h,0D0h,090h
+  asm db 09Ah,020h,000h,070h,001h,083h,0C4h,004h,089h,056h,0FEh,089h,046h,0FCh,016h,08Dh
+  asm db 086h,0FCh,0FCh,050h,0FFh,076h,0FEh,0FFh,076h,0FCh,09Ah,02Fh,000h,010h,002h,083h
+  asm db 0C4h,008h,0B8h,080h,002h,08Eh,0C0h,026h
+  if (!GameRunning) {
+    f_e0_011f((char far *)pad);
+  }
+  f_190_004d();
 }
+

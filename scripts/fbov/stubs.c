@@ -49,3 +49,6 @@ int __cdecl16far f_1000_0865(char far *s) { return 0; }
 int __cdecl16far f_1000_0e30(int c) { return c; }
 void __cdecl16far f_1000_09a2(int v) {}
 void __cdecl16far f_1000_2568(char far *b, int n) {}
+void __cdecl16far f_e0_011f(char far *p) {}
+void __cdecl16far f_190_004d(void) {}
+
