@@ -191,7 +191,26 @@ void __cdecl16far f_3381_1697(void)
 /* placeholders for OVC_09 functions not yet recovered */
 void __cdecl16far f_3381_024d(void) { }
 void __cdecl16far f_3381_2d9e(void) { }
-void __cdecl16far f_3381_16ef(void) { }
+void __cdecl16far f_3381_17e8(void) { }
+char far * __cdecl16far f_474a_075a(int, int);
+void __cdecl16far f_1000_2642(char far *, int, int);
+void __cdecl16far f_3381_16ef(void)
+{
+  *(char far * far *)MK_FP(0x280, 0x8995) = f_474a_075a(0x2a30, 0);
+  f_1000_2642(*(char far * far *)MK_FP(0x280, 0x8995), 0x2a30, 0);
+  f_3381_1697();
+  *(undefined2 far *)MK_FP(0x280, 0x8999) = 0xf8;
+  *(char far * far *)MK_FP(0x280, 0x8a0d) = f_474a_075a(0x4560, 0);
+  *(char far * far *)MK_FP(0x280, 0x8a09) = f_474a_075a(0x4560, 0);
+  *(char far * far *)MK_FP(0x280, 0x8a05) = f_474a_075a(0x22b0, 0);
+  *(char far * far *)MK_FP(0x280, 0x908e) = f_474a_075a(0x80e8, 0);
+  *(char far * far *)MK_FP(0x280, 0x91e8) = f_474a_075a(0x6541, 0);
+  asm nop
+  f_3381_17e8();
+  *(undefined1 far *)MK_FP(0x280, 0x90e6) = 0;
+  *(undefined1 far *)MK_FP(0x280, 0x909b) = 0;
+  *(undefined1 far *)MK_FP(0x280, 0x9016) = 0xff;
+}
 
 /* far/segment 0x1000 and other overlay helpers */
 void __cdecl16far f_1403_0ab2(int, int, int, int);
@@ -204,7 +223,7 @@ int  __cdecl16far f_1700_002a(int);
 void __cdecl16far f_1700_0034(void);
 void __cdecl16far f_6ffe_02f7(int);
 void __cdecl16far f_474a_0470(void);
-void __cdecl16far f_474a_075a(int, int);
+void __cdecl16far f_3381_17e8(void);
 void __cdecl16far f_474a_0a10(void);
 void __cdecl16far f_3a5b_081e(void);
 void __cdecl16far f_3a5b_0956(void);
@@ -254,5 +273,6 @@ void __cdecl16far f_3381_0579(void)
   f_6316_00b1();
   f_3a5b_0633(0x53, 0);
 }
+
 
 
