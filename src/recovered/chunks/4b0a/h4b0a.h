@@ -14,7 +14,7 @@ void __cdecl16far f_4b0a_077a(void);
 void __cdecl16far f_4b0a_07d3(void);
 void __cdecl16far f_4b0a_08ee(void);
 void __cdecl16far f_4b0a_09ce(void);
-void __cdecl16far f_4b0a_0b75(void);
+int __cdecl16far f_4b0a_0b75(unsigned char x);
 void __cdecl16far f_4b0a_0b9c(void);
 void __cdecl16far f_4b0a_0eda(void);
 void __cdecl16far f_4b0a_0f95(void);

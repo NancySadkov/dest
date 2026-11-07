@@ -251,12 +251,12 @@ void __cdecl16far f_4b0a_09ce(void)
   (void)pad;
 }
 
-void __cdecl16far f_4b0a_0b75(void)
+int __cdecl16far f_4b0a_0b75(unsigned char x)
 {
-  unsigned char pad[0x2];
-  asm db 08Ah,046h,006h,0B4h,000h,050h,0B8h,000h,001h,05Ah,02Bh,0C2h,099h,052h,050h,06Ah
-  asm db 00Fh,068h,040h,042h,09Ah,0C4h,009h,000h,000h,089h,046h,0FEh,08Bh,046h,0FEh
-  (void)pad;
+  int r;
+
+  r = (int)(1000000L / (long)(0x100 - x));
+  return r;
 }
 
 void __cdecl16far f_4b0a_0b9c(void)

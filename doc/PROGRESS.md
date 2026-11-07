@@ -533,3 +533,10 @@ Refactoring batch 10:
 
 Whole `48AC` and `4B0A` regions still match (0 diffs).
 `4B0A:112d` also confirmed the 32-bit-zero source shape (`unsigned long` store).
+
+Refactoring batch 11 (`ov_4b0a.c`):
+
+- `f_4b0a_0b75` -> `1000000L / (0x100 - x)`; the compiler emits the
+  `LDIV@` helper call with its own cleanup, matching the original
+
+Whole `4B0A` region still matches (0 diffs).
