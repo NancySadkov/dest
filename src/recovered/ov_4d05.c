@@ -1,5 +1,7 @@
 #include "dgroup.h"
 
+extern unsigned char __cdecl16far f_170_005c(unsigned int);
+
 void __cdecl16far f_4d05_0000(void)
 {
   asm db 056h,033h,0F6h,0EBh,00Ch,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,084h,0DEh,090h,0FFh
@@ -42,13 +44,14 @@ void __cdecl16far f_4d05_0166(void)
   (void)pad;
 }
 
-void __cdecl16far f_4d05_01a3(void)
+unsigned char __cdecl16far f_4d05_01a3(unsigned char n, unsigned char max)
 {
-  unsigned char pad[0x2];
-  asm db 0C6h,046h,0FFh,000h,0EBh,016h,08Ah,046h,008h,0B4h,000h,050h,09Ah,05Ch,000h,070h
-  asm db 001h,083h,0C4h,002h,002h,046h,0FFh,0FEh,0C0h,088h,046h,0FFh,08Ah,046h,006h,0FEh
-  asm db 04Eh,006h,00Ah,0C0h,075h,0E0h,08Ah,046h,0FFh
-  (void)pad;
+  volatile unsigned char sum = 0;
+
+  while (n--) {
+    sum += f_170_005c(max) + 1;
+  }
+  return sum;
 }
 
 void __cdecl16far f_4d05_01d4(void)
@@ -371,12 +374,21 @@ void __cdecl16far f_4d05_1146(void)
   (void)pad;
 }
 
-void __cdecl16far f_4d05_118b(void)
+unsigned char __cdecl16far f_4d05_118b(unsigned char x)
 {
-  asm db 08Ah,056h,006h,080h,0FAh,003h,077h,004h,0B0h,0FDh,0EBh,02Fh,080h,0FAh,005h,077h
-  asm db 004h,0B0h,0FEh,0EBh,026h,080h,0FAh,008h,077h,004h,0B0h,0FFh,0EBh,01Dh,080h,0FAh
-  asm db 00Ch,077h,004h,0B0h,000h,0EBh,014h,080h,0FAh,00Fh,077h,004h,0B0h,001h,0EBh,00Bh
-  asm db 080h,0FAh,011h,077h,004h,0B0h,002h,0EBh,002h,0B0h,003h
+  if (x <= 3)
+    return 0xfd;
+  if (x <= 5)
+    return 0xfe;
+  if (x <= 8)
+    return 0xff;
+  if (x <= 0xc)
+    return 0;
+  if (x <= 0xf)
+    return 1;
+  if (x <= 0x11)
+    return 2;
+  return 3;
 }
 
 void __cdecl16far f_4d05_11cb(void)

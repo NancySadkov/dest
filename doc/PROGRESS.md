@@ -461,3 +461,11 @@ Full `4528` code region still matches 0 diffs.
 Borland runtime symbols (`_printf`, `_strcpy`, `_strlen`, `_memset`,
 `LDIV@`, `SCOPY@`, ...). The resident segments are runtime/overlay-manager
 code and will be linked from the original TC30 libraries during G6.
+
+Refactoring batch 2 (`ov_4d05.c`):
+
+- `f_4d05_01a3` -> `while (n--) sum += f_170_005c(max) + 1;`
+- `f_4d05_118b` -> threshold mapping returning `0xfd..3`
+
+Whole `4D05` region still matches (0 diffs). `4207` remains 0 diffs
+through the linked harness after adding the `StshSprites` initialiser.
