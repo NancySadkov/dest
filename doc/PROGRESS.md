@@ -502,3 +502,9 @@ Refactoring batch 6 (`ov_7e7c.c`):
 
 Whole `7E7C` region still matches (0 diffs) through the linked harness.
 Duplicate `f_7e7c_004b` stub removed.
+
+Refactoring batch 7 (`ov_6a8f.c`):
+
+- `f_6a8f_01e7` -> guarded `printf` + nested counter decrement
+
+Whole `6A8F` region still matches (0 diffs) through the linked harness.

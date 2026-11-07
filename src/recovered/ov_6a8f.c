@@ -5,6 +5,7 @@ void __cdecl16far f_6a8f_22cb(char far *, int);
 extern void __cdecl16far f_148_009d(char far *);
 extern unsigned char __cdecl16far f_148_004d(unsigned char);
 extern void __cdecl16far f_1000_261e(char far *, char far *, unsigned int);
+extern int __cdecl16far f_1000_2747(char far *);
 
 char far *__cdecl16far f_6a8f_0000(int x)
 {
@@ -60,10 +61,11 @@ void __cdecl16far f_6a8f_016b(void)
 
 void __cdecl16far f_6a8f_01e7(char far *p)
 {
-  asm db 0B8h,080h,002h,08Eh,0C0h,026h,080h,03Eh,038h,004h,000h,074h,00Ch,01Eh,068h,077h
-  asm db 06Eh,09Ah,047h,027h,000h,000h,083h,0C4h,004h,0C4h,05Eh,006h,026h,0C4h,05Fh,017h
-  asm db 026h,080h,07Fh,00Eh,000h,074h,00Bh,0C4h,05Eh,006h,026h,0C4h,05Fh,017h,026h,0FEh
-  asm db 04Fh,00Eh,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,0F5h,08Fh,001h
+  if (*(unsigned char far *)MK_FP(0x280, 0x438))
+    f_1000_2747((char far *)(gap_2410_6DCE + 0xA9));
+  if ((*(char far * far *)(p + 0x17))[0x0e])
+    (*(char far * far *)(p + 0x17))[0x0e]--;
+  *(unsigned char far *)MK_FP(0x280, 0x8ff5) = 1;
 }
 
 void __cdecl16far f_6a8f_0229(char far *p)
