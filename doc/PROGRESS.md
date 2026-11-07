@@ -14,7 +14,7 @@ Plan: [`../plan.md`](../plan.md)
 | G3 ? reference audit | **PASS** | `scripts/fbov/audit_refs.py`: 0 errors; 18 null-target relocations documented |
 | G4 ? data/global model | **PASS** | DGROUP byte-identical under TC30 (0/38,042 differences); 1,205 symbols/types applied |
 | G5 - startup/`main` byte-exact | **PASS for `main` and all 51 overlays** | `mkp` byte-exact; `main` 2246 bytes byte-exact; all 51 overlay code regions whole-region byte-exact (call operands masked) |
-| G6 ? link | NOT STARTED | |
+| G6 ? link | **PARTIAL** | flat development EXE links and boots to the game's startup configuration screen; see `doc/flat_build.md`. Not yet fully runnable past sound setup. |
 | G7 ? runtime equivalence | NOT STARTED | |
 
 ## Phase 1 results
@@ -540,3 +540,12 @@ Refactoring batch 11 (`ov_4b0a.c`):
   `LDIV@` helper call with its own cleanup, matching the original
 
 Whole `4B0A` region still matches (0 diffs).
+
+## Flat development build
+
+A resident, no-overlay development EXE now compiles, links and runs through
+TC30 and the original resident runtime.  It reaches the game's startup
+configuration screen (ENTER/SPACE/ESC) and the sound-selection prompt.
+Selecting a sound option still crashes on an overlay call/return mismatch.
+See [flat_build.md](flat_build.md) for the pipeline and the current blocker.
+

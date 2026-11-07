@@ -21,8 +21,6 @@ void __cdecl16far f_12bb_005c(void);
 void __cdecl16far f_12bb_0061(void);
 void __cdecl16far f_13d5_007f(int, int);
 void __cdecl16far f_1400_0020(int);
-void __cdecl16far f_2e25_130a(void);
-void __cdecl16far f_2e25_025a(void);
 void __cdecl16far f_1391_002f(void);
 void __cdecl16far f_13d5_0084(void);
 void __cdecl16far f_1315_0020(void);
@@ -42,7 +40,6 @@ void __cdecl16far f_6a8f_1847(void);
 void __cdecl16far f_6a8f_04c0(int);
 void __cdecl16far f_6a8f_15a0(int, int);
 void __cdecl16far f_6616_0689(int);
-void __cdecl16far f_7e7c_004b(int);
 void __cdecl16far f_6018_007e(void);
 
 int __cdecl16far main(int argc, char **argv)
@@ -132,17 +129,17 @@ L_loop:
     case 0x5100: f_13d5_007f(2, 1); break;
     case 0x4f00: f_13d5_007f(1, 1); break;
 
-    case 0x3f00: f_7e7c_004b(0); break;
-    case 0x4000: f_7e7c_004b(1); break;
-    case 0x4100: f_7e7c_004b(2); break;
-    case 0x4200: f_7e7c_004b(3); break;
+    case 0x3f00: f_1400_0020(0); break;
+    case 0x4000: f_1400_0020(1); break;
+    case 0x4100: f_1400_0020(2); break;
+    case 0x4200: f_1400_0020(3); break;
 
     case 0x2247:
     case 0x2267:
       DB(0x8980) = 5;
       DB(0x896f) = 1;
-      f_2e25_130a();
-      f_2e25_025a();
+      f_12bb_005c();
+      f_12bb_0061();
       break;
 
     case 0x1950:
