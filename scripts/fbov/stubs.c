@@ -32,7 +32,6 @@ void __cdecl16far f_12c4_005c(char far *s, int v) {}
 unsigned char __cdecl16far f_1322_0057(void) { return 0; }
 void __cdecl16far f_4d05_1835(void) {}
 void __cdecl16far f_6616_0689(int a) {}
-void __cdecl16far f_7e7c_004b(int a) {}
 void __cdecl16far f_6018_007e(void) {}
 
 /* segment 0x1000 helpers used by the overlay modules */
@@ -76,3 +75,5 @@ unsigned char __cdecl16far f_170_005c(unsigned int x) { return 0; }
 unsigned char __cdecl16far f_148_004d(unsigned char x) { return 0; }
 void __cdecl16far f_148_009d(char far *p) { }
 void __cdecl16far f_1000_261e(char far *d, char far *s, unsigned int n) { }
+void __cdecl16far f_198_0039(unsigned char a, char far *p) { }
+void __cdecl16far f_138_0039(void) { }

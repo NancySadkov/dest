@@ -494,3 +494,11 @@ Refactoring batch 5 (`ov_6a8f.c`):
   `gap_2410_6DCE` for the near source strings
 
 Whole `6A8F` region still matches (0 diffs) through the linked harness.
+
+Refactoring batch 6 (`ov_7e7c.c`):
+
+- `f_7e7c_0000` -> nested `.6e`-style scan loop calling
+  `f_198_0039(i, &a)`, with the DGROUP count read through `ES = 0x280`
+
+Whole `7E7C` region still matches (0 diffs) through the linked harness.
+Duplicate `f_7e7c_004b` stub removed.

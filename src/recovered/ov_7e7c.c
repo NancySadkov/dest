@@ -1,14 +1,21 @@
 #include "dgroup.h"
 
+extern void __cdecl16far f_198_0039(unsigned char, char far *);
+extern void __cdecl16far f_138_0039(void);
+
 void __cdecl16far f_7e7c_0000(void)
 {
-  unsigned char pad[0x2];
-  asm db 056h,0C6h,046h,0FEh,000h,0C6h,046h,0FFh,000h,0EBh,01Eh,033h,0F6h,0EBh,012h,016h
-  asm db 08Dh,046h,0FEh,050h,08Ah,046h,0FFh,050h,09Ah,039h,000h,098h,001h,083h,0C4h,006h
-  asm db 046h,083h,0FEh,00Ah,07Ch,0E9h,0FEh,046h,0FFh,0B8h,080h,002h,08Eh,0C0h,026h,0A0h
-  asm db 0E6h,090h,03Ah,046h,0FFh,077h,0D4h,080h,07Eh,0FEh,000h,074h,005h,09Ah,039h,000h
-  asm db 038h,001h,05Eh
-  (void)pad;
+  unsigned char i, a;
+  register int j;
+
+  a = 0;
+  i = 0;
+  for (; i < *(unsigned char far *)MK_FP(0x280, 0x90e6); i++) {
+    for (j = 0; j < 10; j++)
+      f_198_0039(i, &a);
+  }
+  if (a)
+    f_138_0039();
 }
 
 void __cdecl16far f_7e7c_004b(void)
