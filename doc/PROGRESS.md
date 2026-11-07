@@ -487,3 +487,10 @@ Refactoring batch 4 (`ov_6a8f.c`):
 - `f_6a8f_01e7`/`22cb` signatures adjusted to their real arguments
 
 Whole `6A8F` region still matches (0 diffs) through the linked harness.
+
+Refactoring batch 5 (`ov_6a8f.c`):
+
+- `f_6a8f_1a4c` -> four `memcpy` calls into DGROUP tables, using
+  `gap_2410_6DCE` for the near source strings
+
+Whole `6A8F` region still matches (0 diffs) through the linked harness.

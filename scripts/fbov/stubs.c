@@ -75,3 +75,4 @@ void * __cdecl16far f_170_0043(unsigned int a, unsigned int b) { return 0; }
 unsigned char __cdecl16far f_170_005c(unsigned int x) { return 0; }
 unsigned char __cdecl16far f_148_004d(unsigned char x) { return 0; }
 void __cdecl16far f_148_009d(char far *p) { }
+void __cdecl16far f_1000_261e(char far *d, char far *s, unsigned int n) { }
