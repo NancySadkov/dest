@@ -82,17 +82,34 @@ screen:
 ENTER: use previous configuration, SPACE: reconfigure, ESC: quit
 ```
 
-and `SPACE` opens the sound configuration prompt:
+and `SPACE` opens the sound configuration prompts.  After the questions are
+answered the game prints its own fatal message:
 
 ```text
-Sound (1. PC Speaker  2. Sound Blaster ... 6. Off):
+Error 0 20.  (Give Cathryn BOTH numbers.)
 ```
 
-Selecting an option currently faults: an overlay function returns to a bogus
-`CS:IP`, so there is still at least one unbalanced call/return or an unmapped
-absolute pointer on the configuration path.  The next debugging step is to
-follow the return stack of the first bad `retf` (the harness `cslog` output
-shows the transition) rather than guessing at more relocations.
+and exits.  The message comes from the game's fatal handler (overlay code
+`0x3168`); the call site is overlay `0x474A` at offset `0x1482`, which reports
+the failure of its block allocator (DGROUP free-list head `0x47FA` is still
+zero).  The immediate cause is lack of conventional memory: keeping every
+overlay resident leaves roughly 100 KiB, while the original 128 KiB load
+module leaves about 500 KiB.  The original program shows the same screens and
+continues into a 320x400 mode, so this is a flat-build limitation rather than
+a relocation bug.
+
+Two relocator details matter here:
+
+- Turbo C's code segments are byte aligned.  `flat_align.py` rewrites every
+  object's SEGDEF to paragraph alignment before the final link, otherwise all
+  original absolute code offsets acquire a per-segment byte bias.
+- Turbo Link puts `_STACK` before the code segments.  `flat_patch.py` moves
+  the MZ `SS:SP` past the whole image, otherwise the C0 startup grows its
+  stack over game code (this caused the earlier wild jumps to `CS=0000`).
+
+The remaining path to a fully runnable binary is the overlayed link (the real
+VROOMM target).  The flat build remains useful as a harness for code that
+fits in the space, and as the reference for the relocation/segment model.
 
 ## Why original bytes for overlays
 

@@ -179,6 +179,12 @@ for i, (ofs, seg) in enumerate(all_relocs):
 
 out = header + image
 size = len(out)
+# Put the initial stack after the whole image.  Turbo Link placed _STACK
+# immediately before the code segments, so the MZ SS would otherwise point
+# inside the image; the C0 startup then grows its stack over the game code.
+image_paras = (len(image) + 15) // 16
+e_ss = image_paras + 0x10
+e_sp = 0x1000
 if size % 512 == 0:
     e_cblp, e_cp = 0, size // 512
 else:
@@ -189,6 +195,8 @@ struct.pack_into("<H", out, 2, e_cblp)
 struct.pack_into("<H", out, 4, e_cp)
 struct.pack_into("<H", out, 6, len(all_relocs))
 struct.pack_into("<H", out, 8, new_parhdr)
+struct.pack_into("<H", out, 0x0E, e_ss)
+struct.pack_into("<H", out, 0x10, e_sp)
 
 open(exe_path, "wb").write(out)
 print("patched %d sites (%d skipped); relocs %d -> %d; header %d -> %d; size %d"
