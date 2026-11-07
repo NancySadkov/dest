@@ -478,3 +478,12 @@ Refactoring batch 3 (`ov_6a8f.c`):
 
 Whole `6A8F` region still matches (0 diffs) through the linked harness.
 Duplicate stubs now defined by the recovered source were removed.
+
+Refactoring batch 4 (`ov_6a8f.c`):
+
+- `f_6a8f_0229` -> guarded nested call
+- `f_6a8f_0b0a` -> compare helper with `f_148_004d`
+- `f_6a8f_297d` -> two-call wrapper
+- `f_6a8f_01e7`/`22cb` signatures adjusted to their real arguments
+
+Whole `6A8F` region still matches (0 diffs) through the linked harness.
