@@ -469,3 +469,12 @@ Refactoring batch 2 (`ov_4d05.c`):
 
 Whole `4D05` region still matches (0 diffs). `4207` remains 0 diffs
 through the linked harness after adding the `StshSprites` initialiser.
+
+Refactoring batch 3 (`ov_6a8f.c`):
+
+- `f_6a8f_0246` -> nested far-pointer byte increment
+- `f_6a8f_0000`, `f_6a8f_0017` -> pointer selectors into `gap_2410_6DCE`
+- `f_6a8f_04a9` -> flipped pointer selector
+
+Whole `6A8F` region still matches (0 diffs) through the linked harness.
+Duplicate stubs now defined by the recovered source were removed.

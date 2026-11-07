@@ -31,10 +31,6 @@ void __cdecl16far f_1391_0048(int a) {}
 void __cdecl16far f_12c4_005c(char far *s, int v) {}
 unsigned char __cdecl16far f_1322_0057(void) { return 0; }
 void __cdecl16far f_4d05_1835(void) {}
-void __cdecl16far f_6a8f_199c(void) {}
-void __cdecl16far f_6a8f_1847(void) {}
-void __cdecl16far f_6a8f_04c0(int a) {}
-void __cdecl16far f_6a8f_15a0(int a, int b) {}
 void __cdecl16far f_6616_0689(int a) {}
 void __cdecl16far f_7e7c_004b(int a) {}
 void __cdecl16far f_6018_007e(void) {}
