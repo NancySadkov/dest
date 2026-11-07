@@ -4,7 +4,7 @@
 void __cdecl16far f_4b0a_0000(void);
 void __cdecl16far f_4b0a_010c(void);
 void __cdecl16far f_4b0a_01f8(void);
-void __cdecl16far f_4b0a_024e(void);
+void __cdecl16far f_4b0a_024e(char far *p);
 void __cdecl16far f_4b0a_0276(void);
 void __cdecl16far f_4b0a_032c(void);
 void __cdecl16far f_4b0a_03cd(void);
@@ -20,7 +20,7 @@ void __cdecl16far f_4b0a_0eda(void);
 void __cdecl16far f_4b0a_0f95(void);
 void __cdecl16far f_4b0a_0fd0(void);
 void __cdecl16far f_4b0a_10ea(void);
-void __cdecl16far f_4b0a_112d(void);
+void __cdecl16far f_4b0a_112d(char far *p);
 void __cdecl16far f_4b0a_1150(void);
 void __cdecl16far f_4b0a_13d3(void);
 void __cdecl16far f_4b0a_1820(void);

@@ -47,7 +47,6 @@ void __cdecl16far f_190_004d(void) {}
 
 void __cdecl16far f_1400_0039(void) {}
 void __cdecl16far f_1000_0e04(void) {}
-void __cdecl16far f_118_002a(void) {}
 void __cdecl16far f_118_0034(void) {}
 void __cdecl16far f_3a5b_0633(void) {}
 void __cdecl16far f_6316_00b1(void) {}
@@ -79,3 +78,5 @@ void __cdecl16far f_198_0039(unsigned char a, char far *p) { }
 void __cdecl16far f_138_0039(void) { }
 int __cdecl16far f_1000_2747(char far *fmt) { return 0; }
 void __cdecl16far f_190_0057(int a, int b) { }
+void __cdecl16far f_118_002a(char far *a, char far *b) { }
+void __cdecl16far f_170_0070(char far *p) { }

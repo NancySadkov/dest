@@ -523,3 +523,13 @@ Refactoring batch 9 (`ov_77eb.c`):
 
 Whole `77EB` region still matches (0 diffs) through the chunked link.
 Chunk sources under `src/recovered/chunks/77eb` regenerated.
+
+Refactoring batch 10:
+
+- `48ac:0000` -> `f_118_002a` with an ES-relative far pointer + flag set
+- `48ac:0027` -> guarded `f_118_002a` with a DS-relative far pointer
+- `4b0a:024e` -> two `f_170_0070` calls, one through a stored far pointer
+- `4b0a:112d` -> local far pointer + single 32-bit zero store
+
+Whole `48AC` and `4B0A` regions still match (0 diffs).
+`4B0A:112d` also confirmed the 32-bit-zero source shape (`unsigned long` store).

@@ -3,16 +3,16 @@
 
 void __cdecl16far f_48ac_0000(void)
 {
-  asm db 068h,000h,0A0h,068h,006h,0C3h,0B8h,080h,002h,08Eh,0C0h,026h,0FFh,036h,0C7h,089h
-  asm db 026h,0FFh,036h,0C5h,089h,09Ah,02Ah,000h,018h,001h,083h,0C4h,008h,0C6h,006h,0AEh
-  asm db 090h,001h
+  f_118_002a(*(char far * far *)MK_FP(0x280, 0x89c5),
+             (char far *)MK_FP(0xa000, 0xc306));
+  DAT_2000_d1ae = 1;
 }
 
 void __cdecl16far f_48ac_0027(void)
 {
-  asm db 0B8h,080h,002h,08Eh,0C0h,026h,0A0h,044h,071h,0B4h,000h,00Bh,0C0h,075h,016h,068h
-  asm db 000h,0A0h,068h,006h,0C3h,0FFh,036h,0AAh,090h,0FFh,036h,0A8h,090h,09Ah,02Ah,000h
-  asm db 018h,001h,083h,0C4h,008h
+  if (!*(unsigned char far *)MK_FP(0x280, 0x7144))
+    f_118_002a((char far *)MK_FP(DAT_2000_d1aa, DAT_2000_d1a8),
+               (char far *)MK_FP(0xa000, 0xc306));
 }
 
 void __cdecl16far f_48ac_0051(void)

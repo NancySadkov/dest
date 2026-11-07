@@ -56,11 +56,10 @@ void __cdecl16far f_4b0a_01f8(void)
   (void)pad;
 }
 
-void __cdecl16far f_4b0a_024e(void)
+void __cdecl16far f_4b0a_024e(char far *p)
 {
-  asm db 0C4h,05Eh,006h,026h,0FFh,0B7h,006h,003h,026h,0FFh,0B7h,004h,003h,09Ah,070h,000h
-  asm db 070h,001h,083h,0C4h,004h,0FFh,076h,008h,0FFh,076h,006h,09Ah,070h,000h,070h,001h
-  asm db 083h,0C4h,004h
+  f_170_0070(*(char far * far *)(p + 0x304));
+  f_170_0070(p);
 }
 
 void __cdecl16far f_4b0a_0276(void)
