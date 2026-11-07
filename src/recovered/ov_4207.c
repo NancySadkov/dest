@@ -1,5 +1,9 @@
 #include "dgroup.h"
 
+extern spr_t * __cdecl16far f_170_0043(unsigned int, unsigned int);
+extern char far * __cdecl16far f_1000_2d31(char far *, char far *);
+extern int __cdecl16far f_1000_0e30(int);
+
 void __cdecl16far f_4207_0000(void)
 {
   unsigned char pad[0x26];
@@ -84,8 +88,7 @@ void __cdecl16far f_4207_03ac(void)
 
 void __cdecl16far f_4207_0462(void)
 {
-  asm db 06Ah,000h,068h,050h,036h,09Ah,043h,000h,070h,001h,083h,0C4h,004h,089h,016h,08Ch
-  asm db 090h,0A3h,08Ah,090h
+  StshSprites = f_170_0043(0x3650, 0);
 }
 
 void __cdecl16far f_4207_047b(void)
@@ -208,11 +211,15 @@ void __cdecl16far f_4207_0b05(void)
   asm db 0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,0EBh,007h,001h
 }
 
-void __cdecl16far f_4207_0b55(void)
+void __cdecl16far f_4207_0b55(unsigned int x)
 {
-  asm db 056h,057h,08Bh,046h,006h,0D1h,0E8h,08Bh,0F8h,083h,0FFh,069h,073h,01Eh,033h,0F6h
-  asm db 0EBh,015h,08Bh,0C6h,0BAh,069h,000h,0F7h,0EAh,0BAh,050h,000h,08Bh,0D8h,08Eh,0C2h
-  asm db 026h,0C6h,081h,0FAh,008h,0FFh,046h,083h,0FEh,00Ah,072h,0E6h,05Fh,05Eh
+  register unsigned int i, j;
+
+  j = x >> 1;
+  if (j < 0x69) {
+    for (i = 0; i < 10; i++)
+      *(unsigned char far *)MK_FP(0x50, i * 0x69 + j + 0x8fa) = 0xff;
+  }
 }
 
 void __cdecl16far f_4207_0b88(void)
@@ -528,11 +535,11 @@ void __cdecl16far f_4207_1c16(void)
   asm db 0C4h,01Eh,005h,01Dh,026h,088h,007h,08Bh,016h,007h,01Dh,0A1h,005h,01Dh
 }
 
-void __cdecl16far f_4207_1c79(void)
+char far *__cdecl16far f_4207_1c79(char far *dst, char far *src)
 {
-  asm db 0FFh,076h,00Ch,0FFh,076h,00Ah,0FFh,076h,008h,0FFh,076h,006h,09Ah,031h,02Dh,000h
-  asm db 000h,083h,0C4h,008h,0C4h,05Eh,006h,026h,08Ah,007h,098h,050h,09Ah,030h,00Eh,000h
-  asm db 000h,083h,0C4h,002h,0C4h,05Eh,006h,026h,088h,007h,08Bh,056h,008h,08Bh,046h,006h
+  f_1000_2d31(dst, src);
+  *dst = f_1000_0e30(*dst);
+  return dst;
 }
 
 void __cdecl16far f_4207_1cae(void)

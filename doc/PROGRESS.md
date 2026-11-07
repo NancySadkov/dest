@@ -444,3 +444,20 @@ Chunked sources and table modules are under `src/recovered/chunks/<seg>/`.
 emits a TASM module for the gap bytes; TLINK then concatenates
 `chunk, table, chunk, ...` in order. Functions with a manual frame and a
 `pop bp` epilogue are emitted frameless with the `sub sp` bytes inline.
+
+### Refactoring (started)
+
+Raw-asm bodies are being replaced with C one function at a time, with the
+whole overlay region re-verified after each change. First conversions in
+`ov_4207.c`:
+
+- `f_4207_0462` -> `StshSprites = f_170_0043(0x3650, 0);`
+- `f_4207_0b55` -> unsigned loop over a far `0x50:0` array
+- `f_4207_1c79` -> `strcpy` + `tolower` wrapper
+
+Full `4528` code region still matches 0 diffs.
+
+`doc/resident_functions.md` maps the resident `0x1000` offsets to their
+Borland runtime symbols (`_printf`, `_strcpy`, `_strlen`, `_memset`,
+`LDIV@`, `SCOPY@`, ...). The resident segments are runtime/overlay-manager
+code and will be linked from the original TC30 libraries during G6.
