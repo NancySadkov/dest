@@ -6,6 +6,7 @@ extern void __cdecl16far f_148_009d(char far *);
 extern unsigned char __cdecl16far f_148_004d(unsigned char);
 extern void __cdecl16far f_1000_261e(char far *, char far *, unsigned int);
 extern int __cdecl16far f_1000_2747(char far *);
+extern void __cdecl16far f_190_0057(int, int);
 
 char far *__cdecl16far f_6a8f_0000(int x)
 {
@@ -254,28 +255,36 @@ void __cdecl16far f_6a8f_08c2(void)
   (void)pad;
 }
 
-void __cdecl16far f_6a8f_0a45(void)
+unsigned char __cdecl16far f_6a8f_0a45(unsigned char a, unsigned char b)
 {
-  unsigned char pad[0x2];
-  asm db 08Ah,046h,008h,050h,09Ah,04Dh,000h,048h,001h,083h,0C4h,002h,088h,046h,0FFh,08Ah
-  asm db 046h,0FFh,0B4h,000h,005h,002h,000h,08Ah,056h,006h,0B6h,000h,03Bh,0C2h,07Dh,004h
-  asm db 0B0h,00Dh,0EBh,036h,08Ah,046h,0FFh,0B4h,000h,005h,002h,000h,08Ah,056h,006h,0B6h
-  asm db 000h,03Bh,0C2h,075h,004h,0B0h,00Bh,0EBh,021h,08Ah,046h,0FFh,0B4h,000h,040h,08Ah
-  asm db 056h,006h,0B6h,000h,03Bh,0C2h,075h,004h,0B0h,009h,0EBh,00Eh,08Ah,046h,0FFh,03Ah
-  asm db 046h,006h,075h,004h,0B0h,007h,0EBh,002h,0B0h,002h
-  (void)pad;
+  volatile unsigned char v;
+
+  v = f_148_004d(b);
+  if (v + 2 < a)
+    return 0x0d;
+  if (v + 2 == a)
+    return 0x0b;
+  if (v + 1 == a)
+    return 0x09;
+  if (v == a)
+    return 0x07;
+  return 0x02;
 }
 
-void __cdecl16far f_6a8f_0aa7(void)
+void __cdecl16far f_6a8f_0aa7(unsigned char a, unsigned char b)
 {
-  unsigned char pad[0x2];
-  asm db 08Ah,046h,008h,050h,09Ah,04Dh,000h,048h,001h,083h,0C4h,002h,088h,046h,0FFh,08Ah
-  asm db 046h,006h,0B4h,000h,005h,00Fh,000h,08Ah,056h,0FFh,0B6h,000h,042h,03Bh,0C2h,07Fh
-  asm db 00Eh,06Ah,006h,06Ah,004h,09Ah,057h,000h,090h,001h,083h,0C4h,004h,0EBh,02Ch,08Ah
-  asm db 046h,006h,0B4h,000h,005h,00Ah,000h,08Ah,056h,0FFh,0B6h,000h,042h,03Bh,0C2h,07Fh
-  asm db 00Eh,06Ah,006h,06Ah,003h,09Ah,057h,000h,090h,001h,083h,0C4h,004h,0EBh,00Ch,06Ah
-  asm db 006h,06Ah,002h,09Ah,057h,000h,090h,001h,083h,0C4h,004h
-  (void)pad;
+  volatile unsigned char v;
+
+  v = f_148_004d(b);
+  if (a + 0xf <= v + 1) {
+    f_190_0057(4, 6);
+    return;
+  }
+  if (a + 0xa <= v + 1) {
+    f_190_0057(3, 6);
+    return;
+  }
+  f_190_0057(2, 6);
 }
 
 unsigned char __cdecl16far f_6a8f_0b0a(unsigned char x, unsigned char y)

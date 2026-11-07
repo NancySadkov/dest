@@ -508,3 +508,10 @@ Refactoring batch 7 (`ov_6a8f.c`):
 - `f_6a8f_01e7` -> guarded `printf` + nested counter decrement
 
 Whole `6A8F` region still matches (0 diffs) through the linked harness.
+
+Refactoring batch 8 (`ov_6a8f.c`):
+
+- `f_6a8f_0a45` -> threshold selector returning `0x0d/0x0b/0x09/0x07/0x02`
+- `f_6a8f_0aa7` -> guard-clause dispatch calling `f_190_0057(2..4, 6)`
+
+Whole `6A8F` region still matches (0 diffs) through the linked harness.
