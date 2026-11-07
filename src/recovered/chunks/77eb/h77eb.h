@@ -21,14 +21,14 @@ void __cdecl16far f_77eb_0c36(void);
 void __cdecl16far f_77eb_0d61(void);
 void __cdecl16far f_77eb_16b2(void);
 void __cdecl16far f_77eb_1754(void);
-void __cdecl16far f_77eb_1ba2(void);
+unsigned char __cdecl16far f_77eb_1ba2(int x);
 void __cdecl16far f_77eb_1bb3(void);
 void __cdecl16far f_77eb_20e8(void);
 void __cdecl16far f_77eb_215a(void);
 void __cdecl16far f_77eb_21d3(void);
 void __cdecl16far f_77eb_21f1(void);
 void __cdecl16far f_77eb_2226(void);
-void __cdecl16far f_77eb_2257(void);
+char far *__cdecl16far f_77eb_2257(int x);
 void __cdecl16far f_77eb_226e(void);
 void __cdecl16far f_77eb_234a(void);
 

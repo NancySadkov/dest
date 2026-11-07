@@ -515,3 +515,11 @@ Refactoring batch 8 (`ov_6a8f.c`):
 - `f_6a8f_0aa7` -> guard-clause dispatch calling `f_190_0057(2..4, 6)`
 
 Whole `6A8F` region still matches (0 diffs) through the linked harness.
+
+Refactoring batch 9 (`ov_77eb.c`):
+
+- `f_77eb_1ba2` -> `x == 1 ? 0 : 1`
+- `f_77eb_2257` -> pointer selector for `x <= 0`
+
+Whole `77EB` region still matches (0 diffs) through the chunked link.
+Chunk sources under `src/recovered/chunks/77eb` regenerated.

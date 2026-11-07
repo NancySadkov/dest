@@ -90,9 +90,11 @@ void __cdecl16far f_77eb_1754(void)
   (void)pad;
 }
 
-void __cdecl16far f_77eb_1ba2(void)
+unsigned char __cdecl16far f_77eb_1ba2(int x)
 {
-  asm db 083h,07Eh,006h,001h,075h,004h,0B0h,000h,0EBh,002h,0B0h,001h
+  if (x == 1)
+    return 0;
+  return 1;
 }
 
 void __cdecl16far f_77eb_1bb3(void)
@@ -229,10 +231,11 @@ void __cdecl16far f_77eb_2226(void)
   asm db 080h,07Fh,03Fh,000h,074h,004h,0B0h,000h,0EBh,002h,0B0h,001h
 }
 
-void __cdecl16far f_77eb_2257(void)
+char far *__cdecl16far f_77eb_2257(int x)
 {
-  asm db 083h,07Eh,006h,000h,07Fh,007h,08Ch,0DAh,0B8h,0B2h,078h,0EBh,005h,08Ch,0DAh,0B8h
-  asm db 0C6h,078h
+  if (x <= 0)
+    return (char far *)(gap_2410_77F0 + 0xC2);
+  return (char far *)(gap_2410_77F0 + 0xD6);
 }
 
 void __cdecl16far f_77eb_226e(void)
