@@ -182,6 +182,27 @@ def verify_module(exe, map_path, seghex, module):
     return passed
 
 
+def verify_standalone(seghex, module):
+    """Verify against the standalone OMF object when the linked harness fails."""
+    obj = None
+    for name in (module.upper() + ".OBJ", module + ".OBJ"):
+        p = os.path.join(LINK, name)
+        if os.path.exists(p):
+            obj = p
+            break
+    if obj is None:
+        print("  no standalone object available")
+        return 0
+    src = os.path.join(ROOT, "src", module + ".c")
+    r = subprocess.run(
+        [sys.executable, os.path.join(ROOT, "scripts", "fbov", "vroomm_verify_module.py"),
+         "--obj", obj, "--seg", seghex, "--src", src],
+        capture_output=True, text=True)
+    print(r.stdout.rstrip())
+    m = re.search(r"passed (\d+)", r.stdout)
+    return int(m.group(1)) if m else 0
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("modules", nargs="+", metavar="SEG:MODULE",
@@ -197,7 +218,8 @@ def main():
         print("=== %s (%s) ===" % (module, seghex))
         exe, map_path = build_harness(module, a.wait)
         if not (os.path.exists(exe) and os.path.exists(map_path)):
-            print("  link harness failed")
+            print("  link harness failed; trying standalone object")
+            total += verify_standalone(seghex, module)
             continue
         total += verify_module(exe, map_path, seghex, module)
     print("total accepted:", total)

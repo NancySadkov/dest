@@ -591,38 +591,25 @@ substitution verifier is in place.  Accepted functions are compiled from
 operands allowed to differ, relocated to the original segment addresses, and
 patched into the staged EXE.
 
-The accepted set (all byte-exact; 156 pure-C overlay functions plus `main`):
+The accepted set (all byte-exact; 480 pure-C overlay functions plus `main`):
 
 ```
 main          1301:000C  2246  (230 call-operand bytes)
 ```
 
-| Module | Accepted |
-|---|---|
-| `ov_2d63` | 26 |
-| `ov_302d` | 9 |
-| `ov_3338` | 4 |
-| `ov_3381` | 12 |
-| `ov_3b1d` | 11 |
-| `ov_3f0b` | 24 |
-| `ov_4207` | 3 |
-| `ov_474a` | 16 |
-| `ov_48ac` | 2 |
-| `ov_4b0a` | 3 |
-| `ov_4d05` | 3 |
-| `ov_5087` | 20 |
-| `ov_5943` | 9 |
-| `ov_6a8f` | 11 |
-| `ov_77eb` | 2 |
-| `ov_7e7c` | 1 |
+Per-module counts and every accepted function's offset/size are recorded in
+`doc/vroomm_accepted.md`.  The largest accepted modules are `ov_6ffe` (3
+functions, including the 28,741-byte `init_assets`), `ov_2d63` (26),
+`ov_3381` (27), `ov_6a8f` (27), and `ov_3f0b` (24).
 
-The per-function offsets and sizes are recorded in `doc/vroomm_accepted.md`.
 The staged image remains byte-identical after the accepted substitutions
 (as expected for byte-exact functions); the milestone is that the build path
-from C source to the running VROOMM EXE is exercised for 157 recovered
+from C source to the running VROOMM EXE is exercised for 481 recovered
 functions.  `f_3381_01c8` and the remaining DGROUP-dependent functions are
 accepted through the linked harness (`vroomm_verify_linked.py`), which
-resolves `_DATA` offsets exactly as the original.
+resolves `_DATA` offsets exactly as the original.  Modules whose linked
+harness cannot be built (for example a `>64K` DGROUP in the harness) fall
+back to the standalone OMF object.
 
 The wider verifier sweep also showed that many earlier converted hybrid
 functions (C with small `asm db` encoding fixes) were already byte-exact; the

@@ -98,7 +98,7 @@ python scripts/fbov/vroomm_verify_linked.py 3381:ov_3381 48ac:ov_48ac \
     7e7c:ov_7e7c
 ```
 
-Result: 156 pure-C overlay functions accepted across 16 modules (plus
+Result: 480 pure-C overlay functions accepted across 51 modules (plus
 `main`).  The per-function list is in `doc/vroomm_accepted.md`.  After every
 accepted substitution the staged image remains byte-identical to the original,
 which is the expected parity result for a byte-exact function.
@@ -121,3 +121,7 @@ python scripts/fbov/vroomm_sweep.py --wait 20
 A single module can still be checked directly with `vroomm_verify_linked.py`
 (as shown above).  `scripts/fbov/vroomm_manifest.py` can rebuild only the
 manifest from an existing log.
+
+If the linked harness cannot be built (for example `ov_6ffe`, whose harness
+DGROUP exceeds 64 KiB), the verifier falls back to the standalone OMF object
+and accepts the functions that do not need DGROUP relocation.
