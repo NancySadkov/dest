@@ -460,7 +460,7 @@ void __cdecl16far f_55fe_1803(void)
   asm db 091h,00Eh,0E8h,0B5h,0E7h,05Eh
 }
 
-void __cdecl16far f_55fe_184e(void)
+void __cdecl16far f_55fe_184e(unsigned char a, unsigned b, unsigned c, unsigned d, unsigned e, unsigned char f, unsigned g)
 {
   unsigned char pad[0x8];
   asm db 056h,057h,0C7h,046h,0FAh,000h,000h,0EBh,028h,0FFh,076h,00Ah,08Bh,046h,008h,003h
@@ -566,10 +566,10 @@ void __cdecl16far f_55fe_184e(void)
   (void)pad;
 }
 
-void __cdecl16far f_55fe_1e87(void)
+void __cdecl16far f_55fe_1e87(unsigned char a, unsigned b, unsigned c, unsigned d, unsigned e,
+            unsigned char f)
 {
-  asm db 06Ah,001h,08Ah,046h,010h,050h,0FFh,076h,00Eh,0FFh,076h,00Ch,0FFh,076h,00Ah,0FFh
-  asm db 076h,008h,08Ah,046h,006h,050h,00Eh,0E8h,0AAh,0F9h,083h,0C4h,00Eh
+  f_55fe_184e(a, b, c, d, e, f, 1);
 }
 
 void __cdecl16far f_55fe_1ea9(void)
@@ -764,7 +764,7 @@ void __cdecl16far f_55fe_2937(void)
   asm db 0A8h,0B8h,0FFh,0FFh,05Fh,05Eh
 }
 
-void __cdecl16far f_55fe_29a2(void)
+void __cdecl16far f_55fe_29a2(unsigned a)
 {
   unsigned char pad[0xa];
   asm db 056h,057h,08Bh,076h,006h,08Bh,0C6h,0BAh,012h,000h,0F7h,0EAh,0BAh,088h,000h,08Bh
@@ -802,8 +802,9 @@ void __cdecl16far f_55fe_29a2(void)
 
 void __cdecl16far f_55fe_2b82(void)
 {
-  asm db 056h,0A1h,0DFh,091h,048h,08Bh,0F0h,0EBh,009h,056h,00Eh,0E8h,00Fh,0FEh,083h,0C4h
-  asm db 002h,04Eh,00Bh,0F6h,07Dh,0F3h,05Eh
+  int i;
+  for (i = DAT_2000_d2df - 1; i >= 0; i--)
+    f_55fe_29a2(i);
 }
 
 void __cdecl16far f_55fe_2b9e(void)
@@ -844,7 +845,7 @@ void __cdecl16far f_55fe_2b9e(void)
   (void)pad;
 }
 
-void __cdecl16far f_55fe_2da3(void)
+int __cdecl16far f_55fe_2da3(int a, int b)
 {
   asm db 056h,057h,08Bh,046h,008h,0BAh,028h,001h,0F7h,0EAh,0BAh,080h,002h,08Eh,0C2h,026h
   asm db 08Bh,016h,00Bh,08Ah,026h,003h,006h,009h,08Ah,08Bh,05Eh,006h,0D1h,0E3h,003h,0C3h

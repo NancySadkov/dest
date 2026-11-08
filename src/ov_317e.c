@@ -1,6 +1,6 @@
 #include "dgroup.h"
 
-void __cdecl16far f_317e_0000(void)
+void __cdecl16far f_317e_0000(unsigned a, unsigned b, unsigned c, unsigned d, unsigned e, unsigned f, unsigned g)
 {
   unsigned char pad[0x1c];
   asm db 056h,057h,08Bh,07Eh,00Ah,08Bh,046h,00Eh,02Bh,0C7h,040h,0C1h,0E8h,007h,050h,08Bh
@@ -26,10 +26,9 @@ void __cdecl16far f_317e_0000(void)
   (void)pad;
 }
 
-void __cdecl16far f_317e_0148(void)
+void __cdecl16far f_317e_0148(unsigned a, unsigned b, unsigned c, unsigned d, unsigned e, unsigned f)
 {
-  asm db 06Ah,00Ah,0FFh,076h,010h,0FFh,076h,00Eh,0FFh,076h,00Ch,0FFh,076h,00Ah,0FFh,076h
-  asm db 008h,0FFh,076h,006h,00Eh,0E8h,09Dh,0FEh,083h,0C4h,00Eh
+  f_317e_0000(a, b, c, d, e, f, 0xa);
 }
 
 void __cdecl16far f_317e_0168(void)

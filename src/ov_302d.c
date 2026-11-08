@@ -217,16 +217,16 @@ void __cdecl16far f_302d_08ef(void)
   asm db 05Eh
 }
 
-void __cdecl16far f_302d_09f5(void)
+void __cdecl16far f_302d_09f5(unsigned a, unsigned b, unsigned c)
 {
   asm db 0A0h,0F3h,002h,0B4h,000h,0D1h,0E0h,099h,052h,050h,00Eh,0E8h,025h,0FDh,083h,0C4h
   asm db 004h,0FFh,076h,00Ah,0FFh,076h,008h,0FFh,076h,006h,00Eh,0E8h,0D9h,0FEh,083h,0C4h
   asm db 006h
 }
 
-void __cdecl16far f_302d_0a1b(void)
+void __cdecl16far f_302d_0a1b(unsigned a, unsigned b)
 {
-  asm db 068h,000h,0A0h,0FFh,076h,008h,0FFh,076h,006h,00Eh,0E8h,0CAh,0FFh,083h,0C4h,006h
+  f_302d_09f5(a, b, 0xa000);
 }
 
 /* 302D:0A30  clear the blit cycle counter */

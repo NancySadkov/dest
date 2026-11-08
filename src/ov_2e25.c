@@ -189,7 +189,8 @@ void __cdecl16far f_2e25_0938(void)
 
 void __cdecl16far f_2e25_0ad1(void)
 {
-  asm db 00Eh,0E8h,09Bh,0FAh,09Ah,048h,000h,0F8h,000h
+  f_2e25_0573();
+  f_00f8_0048();
 }
 
 void __cdecl16far f_2e25_0adf(void)

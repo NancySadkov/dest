@@ -207,7 +207,7 @@ void __cdecl16far f_3b1d_093e(void)
   (void)pad;
 }
 
-void __cdecl16far f_3b1d_0a53(void)
+void __cdecl16far f_3b1d_0a53(char far *a)
 {
   asm db 0C4h,05Eh,006h,026h,0C6h,047h,00Eh,0FFh,0C4h,05Eh,006h,026h,0C6h,047h,00Ch,0FFh
   asm db 0C4h,05Eh,006h,026h,0C6h,047h,010h,000h,0C4h,05Eh,006h,026h,0C6h,047h,00Dh,000h
@@ -222,10 +222,10 @@ void __cdecl16far f_3b1d_0a8d(char far *p)
   DAT_2410_07e2 = 0;
 }
 
-void __cdecl16far f_3b1d_0a9f(void)
+void __cdecl16far f_3b1d_0a9f(char far *p)
 {
-  asm db 0C4h,05Eh,006h,026h,0C4h,05Fh,01Dh,026h,0F7h,047h,040h,004h,000h,075h,00Dh,0FFh
-  asm db 076h,008h,0FFh,076h,006h,00Eh,0E8h,098h,0FFh,083h,0C4h,004h
+  if (!(*(unsigned far *)(*(char far * far *)(p + 0x1d) + 0x40) & 4))
+    f_3b1d_0a53(p);
 }
 
 void __cdecl16far f_3b1d_0ac0(void)

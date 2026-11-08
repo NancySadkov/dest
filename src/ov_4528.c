@@ -148,7 +148,7 @@ void __cdecl16far f_4528_0664(void)
   asm db 083h,0C4h,00Ch,046h,03Bh,0F7h,07Dh,003h,0E9h,06Fh,0FFh,05Fh,05Eh
 }
 
-void __cdecl16far f_4528_0706(void)
+void __cdecl16far f_4528_0706(unsigned a, unsigned b, unsigned c, unsigned d, unsigned e, unsigned f)
 {
   unsigned char pad[0x26];
   asm db 056h,057h,08Bh,076h,00Eh,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,030h,004h,000h
@@ -314,10 +314,9 @@ void __cdecl16far f_4528_0c98(void)
   (void)pad;
 }
 
-void __cdecl16far f_4528_10a8(void)
+void __cdecl16far f_4528_10a8(unsigned a, unsigned b, unsigned c, unsigned d, unsigned e)
 {
-  asm db 06Ah,001h,0FFh,076h,00Eh,0FFh,076h,00Ch,0FFh,076h,00Ah,0FFh,076h,008h,0FFh,076h
-  asm db 006h,00Eh,0E8h,046h,0F6h,083h,0C4h,00Ch
+  f_4528_0706(a, b, c, d, e, 1);
 }
 
 void __cdecl16far f_4528_10c5(void)
