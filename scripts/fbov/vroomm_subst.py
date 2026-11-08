@@ -25,25 +25,47 @@ STATIC_BASE = 0x1000
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--seg", required=True, help="original static segment, e.g. 1301")
+    ap.add_argument("--seg", help="original static segment, e.g. 1301")
     ap.add_argument("--ofs", required=True, help="offset inside that segment")
     ap.add_argument("--len", required=True, type=int)
-    ap.add_argument("--compiled", required=True, help="linked EXE containing the function")
-    ap.add_argument("--compiled-ofs", required=True, help="image offset inside --compiled")
+    ap.add_argument("--compiled", help="linked EXE containing the function")
+    ap.add_argument("--compiled-ofs", help="image offset inside --compiled")
+    ap.add_argument("--obj", help="OMF object containing an overlay function")
+    ap.add_argument("--name", help="symbol in --obj")
+    ap.add_argument("--overlay-seg", help="overlay code segment for --obj, e.g. 3381")
     a = ap.parse_args()
 
-    seg = int(a.seg, 16)
-    ofs = int(a.ofs, 16)
-    cseg = int(a.compiled_ofs, 16)
+    if a.obj:
+        import csv
+        import sys
+        sys.path.insert(0, os.path.join(ROOT, "scripts", "fbov"))
+        from byte_match import parse_omf
 
-    staged = bytearray(open(STAGED, "rb").read())
-    image_off = struct.unpack_from("<H", staged, 8)[0] * 16
-    orig_pos = LOAD + (seg - STATIC_BASE) * 16 + ofs
-    original = bytes(staged[orig_pos:orig_pos + a.len])
-
-    cdata = open(a.compiled, "rb").read()
-    cimage = struct.unpack_from("<H", cdata, 8)[0] * 16
-    compiled = cdata[cimage + cseg:cimage + cseg + a.len]
+        seg = int(a.overlay_seg, 16)
+        ofs = int(a.ofs, 16)
+        pos = None
+        for r in csv.DictReader(open(os.path.join(ROOT, "doc", "fbov_overlays.csv"))):
+            if int(r["code_seg"], 16) == seg:
+                pos = int(r["code_file_offset"], 0) + ofs - int(r["code_disp"], 16)
+                break
+        if pos is None:
+            raise SystemExit("overlay segment not found")
+        staged = bytearray(open(STAGED, "rb").read())
+        orig_pos = pos
+        original = bytes(staged[orig_pos:orig_pos + a.len])
+        segdata, pub = parse_omf(a.obj)
+        sseg, soff = pub[a.name]
+        compiled = bytes(segdata[sseg][soff:soff + a.len])
+    else:
+        seg = int(a.seg, 16)
+        ofs = int(a.ofs, 16)
+        cseg = int(a.compiled_ofs, 16)
+        staged = bytearray(open(STAGED, "rb").read())
+        orig_pos = LOAD + (seg - STATIC_BASE) * 16 + ofs
+        original = bytes(staged[orig_pos:orig_pos + a.len])
+        cdata = open(a.compiled, "rb").read()
+        cimage = struct.unpack_from("<H", cdata, 8)[0] * 16
+        compiled = cdata[cimage + cseg:cimage + cseg + a.len]
 
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_16)
     mask = set()

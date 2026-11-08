@@ -60,4 +60,14 @@ python scripts/fbov/vroomm_subst.py --seg 1301 --ofs 000C --len 2246 \
 Verified: `main` compiled from `src/recovered/main.c` differs from the
 original only in 230 call/jump operand bytes; after relocation the staged
 image is byte-identical, as expected for a byte-exact recovered function.
-The same command is the acceptance test for every later overlay function.
+
+Overlay functions use the same verifier with an OMF object:
+
+```text
+python scripts/fbov/vroomm_subst.py --obj tmp/ovbuild/OV_3381.OBJ \
+    --name f_3381_0132 --overlay-seg 3381 --ofs 0x132 --len 58
+```
+
+`f_3381_0132` (58 bytes) has 2 call-operand differences; `f_3381_233e`
+(60 bytes) is exact.  Both produce a byte-identical staged image, which is the
+acceptance condition for a converted function.
