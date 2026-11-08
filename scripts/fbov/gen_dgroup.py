@@ -2,8 +2,8 @@
 """Generate the canonical DGROUP data source from the validated candidate map.
 
 Outputs:
-  src/recovered/dgroup.c
-  src/recovered/dgroup.h
+  src/dgroup.c
+  src/dgroup.h
   doc/dgroup_map.csv
 
 Every byte of DGROUP (0x2410:0000..0x9499) is defined exactly once.  Known
@@ -17,8 +17,8 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 EXE = os.path.join(ROOT, "game", "STRONG.EXE")
 CAND = os.path.join(ROOT, "doc", "dgroup_candidate.csv")
-OUT_C = os.path.join(ROOT, "src", "recovered", "dgroup.c")
-OUT_H = os.path.join(ROOT, "src", "recovered", "dgroup.h")
+OUT_C = os.path.join(ROOT, "src", "dgroup.c")
+OUT_H = os.path.join(ROOT, "src", "dgroup.h")
 OUT_MAP = os.path.join(ROOT, "doc", "dgroup_map.csv")
 
 FILE_OFF = 0x15F00

@@ -10,7 +10,7 @@ Target: `game/STRONG.EXE`, DGROUP `0x2410:0000..0x9499`.
 | Gap byte-arrays | 257 |
 | Bytes accounted for | 38,042 / 38,042 |
 | Map | `doc/dgroup_map.csv` |
-| Source | `src/recovered/dgroup.c`, `dgroup.h` |
+| Source | `src/dgroup.c`, `dgroup.h` |
 | Compiler | Turbo C++ 3.0, `-ml` |
 | Object | `DGROUP.OBJ` |
 
@@ -42,7 +42,7 @@ rewritten to the static `0x1000 + value` form (`0x2410` instead of the file's
 `0x1410`). The source file keeps the original relative values so the object
 matches the original EXE. The two views are intentional and separate:
 
-- `src/recovered/dgroup.c` — original/linker view, byte-identical to the file.
+- `src/dgroup.c` — original/linker view, byte-identical to the file.
 - `gpr_fresh` — static analysis view, `DS = 0x2410`, all MZ relocations applied.
 
 `ApplyDgroupMap.java` applied 1,205 names/types to `gpr_fresh`. The decompiler

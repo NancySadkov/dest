@@ -8,7 +8,7 @@ ov = [x for x in m["overlays"] if x["header_seg"] == hdr][0]
 seg = ov["code_seg"]
 segname = "OV_%04X_TEXT" % seg
 name = "ov_%04x" % seg
-src = os.path.join(ROOT, "src", "recovered", name + ".c")
+src = os.path.join(ROOT, "src", name + ".c")
 lines = open(src, encoding="ascii").read().splitlines()
 
 sig_re = re.compile(r'^[^\n]*__cdecl16far\s+f_%04x_([0-9a-fA-F]{4})\s*\([^\n]*\)\s*$' % seg)

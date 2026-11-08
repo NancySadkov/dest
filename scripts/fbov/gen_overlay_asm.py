@@ -3,7 +3,7 @@
 
 Usage: python scripts/fbov/gen_overlay_asm.py --header 13D5
 
-Emits src/recovered/ov_<code_seg>.c.  The region is walked sequentially:
+Emits src/ov_<code_seg>.c.  The region is walked sequentially:
 every function starts with `push bp; mov bp, sp` and ends at its `retf`.
 Each function reproduces the original bytes exactly; prologue/epilogue are
 supplied by TC30.  Functions with a local frame use a dummy array plus
@@ -108,7 +108,7 @@ def main():
         out.append("")
         count += 1
         p = end
-    path = os.path.join(ROOT, "src", "recovered", "ov_%04x.c" % seg)
+    path = os.path.join(ROOT, "src", "ov_%04x.c" % seg)
     open(path, "w", encoding="ascii", newline="").write("\n".join(out))
     print("wrote", path, "functions", count, "bytes", p, "of", code_size)
     for s in skipped:

@@ -57,7 +57,7 @@ python scripts/fbov/vroomm_subst.py --seg 1301 --ofs 000C --len 2246 \
     --compiled tmp/linkbuild/OUT.EXE --compiled-ofs 94AB
 ```
 
-Verified: `main` compiled from `src/recovered/main.c` differs from the
+Verified: `main` compiled from `src/main.c` differs from the
 original only in 230 call/jump operand bytes; after relocation the staged
 image is byte-identical, as expected for a byte-exact recovered function.
 
@@ -79,7 +79,7 @@ recovered module and accepts the ones whose standalone object matches:
 
 ```text
 python scripts/fbov/vroomm_verify_module.py --obj tmp/ovbuild/OV_3381.OBJ \
-    --seg 3381 --src src/recovered/ov_3381.c
+    --seg 3381 --src src/ov_3381.c
 ```
 
 Functions that reference `_DATA` by offset cannot be resolved in a standalone

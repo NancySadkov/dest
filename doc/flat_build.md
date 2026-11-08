@@ -9,7 +9,7 @@ header stub is called, so the game keeps conventional memory for its own heap.
 | Part | Source |
 |---|---|
 | DGROUP (`_DATA`, 38,042 bytes) | `dglink.asm` from `tmp/linkbuild` |
-| `main` | `src/recovered/main.c`, TC30 `-ml -1 -G -O` |
+| `main` | `src/main.c`, TC30 `-ml -1 -G -O` |
 | Resident runtime | original bytes of segments `0x1000`, `0x138E`, `0x13AA`, `0x1403` |
 | Far data | original static DATA segments except DGROUP |
 | Overlay headers | generated entries `CD 3F <ov> <ofs>` (INT 3F) |

@@ -55,7 +55,7 @@ def kill_dosbox():
 
 def build_harness(module, wait):
     os.makedirs(LINK, exist_ok=True)
-    src = os.path.join(ROOT, "src", "recovered", module + ".c")
+    src = os.path.join(ROOT, "src", module + ".c")
     if not os.path.exists(src):
         raise SystemExit("missing source: " + src)
     open(os.path.join(LINK, module + ".c"), "wb").write(open(src, "rb").read())
@@ -115,7 +115,7 @@ def verify_module(exe, map_path, seghex, module):
     seg = int(seghex, 16)
     segname, syms = parse_map(map_path, seg)
     offsets = sorted(syms)
-    pure = pure_functions(os.path.join(ROOT, "src", "recovered", module + ".c"), seg)
+    pure = pure_functions(os.path.join(ROOT, "src", module + ".c"), seg)
     total = codesize(seg)
     obj = None
     for name in (module.upper() + ".OBJ", module + ".OBJ"):

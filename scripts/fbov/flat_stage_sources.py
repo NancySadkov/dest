@@ -1,7 +1,7 @@
 import json, os, re, shutil, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-SRC = os.path.join(ROOT, "src", "recovered")
+SRC = os.path.join(ROOT, "src")
 OUT = os.path.join(ROOT, "tmp", "flat")
 os.makedirs(OUT, exist_ok=True)
 

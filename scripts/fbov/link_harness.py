@@ -11,8 +11,8 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-SRC = os.path.join(ROOT, "src", "recovered")
-WORK = os.path.join(ROOT, "src", "recovered")
+SRC = os.path.join(ROOT, "src")
+WORK = os.path.join(ROOT, "src")
 DST = os.path.join(ROOT, "tmp", "linkbuild")
 
 

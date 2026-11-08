@@ -17,6 +17,14 @@ Plan: [`../plan.md`](../plan.md)
 | G6 ? link | **PARTIAL** | flat development EXE links and boots to the game's startup configuration screen; see `doc/flat_build.md`. Not yet fully runnable past sound setup. |
 | G7 ? runtime equivalence | NOT STARTED | |
 
+## Source layout
+
+The active reversed tree lives directly in `src/`: one `ov_<seg>.c` per
+original overlay module, `main.c`, `dgroup.c`/`dgroup.h`, `st_types.h`,
+`st_compat.h`, and chunked sources under `src/chunks/<seg>/`.  The early 2024
+partial rewrite (old `src/init.c`, `src/util.c`, `src/build.BAT`, ...) is
+quarantined in `reference/legacy_src/` and is not built.
+
 ## Phase 1 results
 
 Source: `game/STRONG.EXE` (511,280 bytes), parsed independently of mzap.
@@ -133,7 +141,7 @@ DGROUP `0x2410:0000..0x9499` is recovered completely:
 - 1,205 named symbols with recovered types and exact initialisers;
 - 257 gap byte-arrays covering every remaining byte;
 - 38,042 / 38,042 bytes accounted for exactly once;
-- `src/recovered/dgroup.c` and `dgroup.h` generated reproducibly by
+- `src/dgroup.c` and `dgroup.h` generated reproducibly by
   `scripts/fbov/gen_dgroup.py`.
 
 TC30 verification (`DGROUP.OBJ`):
@@ -255,7 +263,7 @@ main  1301:000C  2246 bytes  MATCH
 Every instruction byte and every internal jump (short and near) matches the
 original. The only masked bytes are the 240 operand bytes of direct
 `CALLF` instructions whose target segments are not recovered yet. The
-recovered source is `src/recovered/main.c`. It covers the whole function:
+recovered source is `src/main.c`. It covers the whole function:
 argument setup, startup calls, the `for(;;)` loop, the entire 59-case/28-body
 switch, the `0x3920` battle/pause body, the menu-selection bodies, and the
 loop tail.
@@ -297,7 +305,7 @@ without it). Two comparison paths are used:
 - the linked harness (`tmp/ov_link.py` / `link_compare.py`) for functions such
   as `f_3381_01c8` whose near string pointers are link-time relocations.
 
-Byte-exact overlay functions in `src/recovered/ov_3381.c`:
+Byte-exact overlay functions in `src/ov_3381.c`:
 
 ```
 0000  154 bytes      016c   92 bytes      23f9   89 bytes
@@ -342,11 +350,11 @@ original.
 
 ### OVC_09
 
-31/31 trampoline targets byte-exact (13,003 bytes). Source: `src/recovered/ov_3381.c`.
+31/31 trampoline targets byte-exact (13,003 bytes). Source: `src/ov_3381.c`.
 
 ### OVC_12 (code segment 2E25)
 
-22/22 trampoline targets byte-exact. Source: `src/recovered/ov_2e25.c`.
+22/22 trampoline targets byte-exact. Source: `src/ov_2e25.c`.
 Covers all six `main` calls through header `0x12BB` (`0x43`, `0x52`, `0x57`, `0x5C`, `0x61`, `0x84`).
 
 ### OVC 12C4 (code segment 302D)
@@ -439,7 +447,7 @@ per-table TASM data modules interleaved with C function chunks:
 | 13F1 | 77EB | 9,319 |
 | 1408 | 8699 | 16,332 |
 
-Chunked sources and table modules are under `src/recovered/chunks/<seg>/`.
+Chunked sources and table modules are under `src/chunks/<seg>/`.
 `scripts/fbov/chunk_build.py` splits the generated C at each data gap and
 emits a TASM module for the gap bytes; TLINK then concatenates
 `chunk, table, chunk, ...` in order. Functions with a manual frame and a
@@ -522,7 +530,7 @@ Refactoring batch 9 (`ov_77eb.c`):
 - `f_77eb_2257` -> pointer selector for `x <= 0`
 
 Whole `77EB` region still matches (0 diffs) through the chunked link.
-Chunk sources under `src/recovered/chunks/77eb` regenerated.
+Chunk sources under `src/chunks/77eb` regenerated.
 
 Refactoring batch 10:
 
@@ -579,7 +587,7 @@ is no longer the target runnable build.
 
 The staged VROOMM build boots (startup prompt, 320x400, intro frames) and the
 substitution verifier is in place.  Accepted functions are compiled from
-`src/recovered`, checked against the original bytes with only call/jump
+`src/`, checked against the original bytes with only call/jump
 operands allowed to differ, relocated to the original segment addresses, and
 patched into the staged EXE.
 
