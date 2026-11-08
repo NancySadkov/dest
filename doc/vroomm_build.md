@@ -107,3 +107,17 @@ Note: a linked harness can shift a module's internal layout, which perturbs
 segment-relative switch jump tables.  For that reason the linked bytes are
 used only for functions that the layout-preserving standalone object cannot
 verify.
+
+## Full sweep
+
+`scripts/fbov/vroomm_sweep.py` discovers every `src/ov_<seg>.c`, runs the
+linked verifier for each module, writes `tmp/verify_all.log`, and refreshes
+`doc/vroomm_accepted.md`:
+
+```text
+python scripts/fbov/vroomm_sweep.py --wait 20
+```
+
+A single module can still be checked directly with `vroomm_verify_linked.py`
+(as shown above).  `scripts/fbov/vroomm_manifest.py` can rebuild only the
+manifest from an existing log.
