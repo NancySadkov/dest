@@ -80,3 +80,7 @@ int __cdecl16far f_1000_2747(char far *fmt) { return 0; }
 void __cdecl16far f_190_0057(int a, int b) { }
 void __cdecl16far f_118_002a(char far *a, char far *b) { }
 void __cdecl16far f_170_0070(char far *p) { }
+
+void __cdecl16far f_00e0_002a(void) {}
+unsigned __cdecl16far f_0000_06f8(void) { return 0; }
+

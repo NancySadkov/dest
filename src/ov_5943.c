@@ -1,8 +1,9 @@
 #include "dgroup.h"
 
-void __cdecl16far f_5943_0000(void)
+/* 5943:0000  round a size up to a 4-byte boundary */
+unsigned __cdecl16far f_5943_0000(unsigned x)
 {
-  asm db 08Bh,046h,006h,005h,002h,000h,025h,0FCh,0FFh
+  return (x + 2) & 0xfffc;
 }
 
 void __cdecl16far f_5943_000e(void)

@@ -1,5 +1,7 @@
 #include "dgroup.h"
 
+unsigned __cdecl16far f_0000_06f8(void);
+
 void __cdecl16far f_474a_0000(void)
 {
   asm db 056h,08Bh,076h,006h,08Bh,0DEh,0C1h,0E3h,002h,0B8h,068h,000h,08Eh,0C0h,026h,0FFh
@@ -255,9 +257,10 @@ void __cdecl16far f_474a_0aa7(void)
   asm db 097h,0A2h,00Ah,026h,08Bh,087h,0A0h,00Ah,05Fh,05Eh
 }
 
-void __cdecl16far f_474a_0b26(void)
+/* 474A:0B26  scale a byte result by a word */
+unsigned __cdecl16far f_474a_0b26(unsigned x)
 {
-  asm db 09Ah,0F8h,006h,000h,000h,0B4h,000h,0F7h,06Eh,006h,0C1h,0E8h,008h
+  return ((unsigned char)f_0000_06f8() * x) >> 8;
 }
 
 void __cdecl16far f_474a_0b38(void)

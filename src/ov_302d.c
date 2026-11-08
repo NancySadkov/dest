@@ -229,9 +229,10 @@ void __cdecl16far f_302d_0a1b(void)
   asm db 068h,000h,0A0h,0FFh,076h,008h,0FFh,076h,006h,00Eh,0E8h,0CAh,0FFh,083h,0C4h,006h
 }
 
+/* 302D:0A30  clear the blit cycle counter */
 void __cdecl16far f_302d_0a30(void)
 {
-  asm db 0C7h,006h,08Ch,089h,000h,000h,0C7h,006h,08Ah,089h,000h,000h
+  TextBlitCycle = 0;
 }
 
 void __cdecl16far f_302d_0a41(void)

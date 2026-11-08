@@ -211,9 +211,11 @@ void __cdecl16far f_3b1d_0a53(void)
   asm db 0C6h,006h,0E2h,007h,000h
 }
 
-void __cdecl16far f_3b1d_0a8d(void)
+/* 3B1D:0A8D  clear a structure byte and a global flag */
+void __cdecl16far f_3b1d_0a8d(char far *p)
 {
-  asm db 0C4h,05Eh,006h,026h,0C6h,047h,010h,000h,0C6h,006h,0E2h,007h,000h
+  p[0x10] = 0;
+  DAT_2410_07e2 = 0;
 }
 
 void __cdecl16far f_3b1d_0a9f(void)

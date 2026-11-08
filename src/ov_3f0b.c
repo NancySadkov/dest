@@ -130,9 +130,10 @@ void __cdecl16far f_3f0b_0540(void)
   (void)pad;
 }
 
+/* 3F0B:057A  clear the pending-animation word */
 void __cdecl16far f_3f0b_057a(void)
 {
-  asm db 0C7h,006h,081h,008h,000h,000h
+  DAT_2410_0881 = 0;
 }
 
 void __cdecl16far f_3f0b_0585(void)

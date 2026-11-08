@@ -457,9 +457,10 @@ void __cdecl16far f_5087_18b6(void)
   (void)pad;
 }
 
-void __cdecl16far f_5087_197d(void)
+/* 5087:197D  normalise a signed byte */
+char __cdecl16far f_5087_197d(char c)
 {
-  asm db 08Ah,056h,006h,00Ah,0D2h,07Dh,006h,08Ah,0C2h,004h,006h,0EBh,002h,08Ah,0C2h
+  return c < 0 ? c + 6 : c;
 }
 
 void __cdecl16far f_5087_1991(void)

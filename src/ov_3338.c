@@ -1,5 +1,7 @@
 #include "dgroup.h"
 
+void __cdecl16far f_00e0_002a(void);
+
 void __cdecl16far f_3338_0000(void)
 {
   asm db 056h,057h,0B8h,080h,002h,08Eh,0C0h,026h,083h,03Eh,032h,004h,000h,075h,003h,0E9h
@@ -92,9 +94,12 @@ void __cdecl16far f_3338_0388(void)
   (void)pad;
 }
 
+/* 3338:0401  clear two bytes then call the sound driver */
 void __cdecl16far f_3338_0401(void)
 {
-  asm db 0C6h,006h,0AFh,08Bh,000h,0C6h,006h,0AEh,08Bh,000h,09Ah,02Ah,000h,0E0h,000h
+  DAT_2000_ccaf = 0;
+  DAT_2000_ccae = 0;
+  f_00e0_002a();
 }
 
 void __cdecl16far f_3338_0415(void)
@@ -104,7 +109,8 @@ void __cdecl16far f_3338_0415(void)
   asm db 025h,001h,000h,05Eh
 }
 
+/* 3338:043E  clear a byte in segment 0x280 */
 void __cdecl16far f_3338_043e(void)
 {
-  asm db 0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,0E0h,078h,000h
+  *(unsigned char far *)MK_FP(0x280, 0x78e0) = 0;
 }

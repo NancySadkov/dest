@@ -591,28 +591,41 @@ substitution verifier is in place.  Accepted functions are compiled from
 operands allowed to differ, relocated to the original segment addresses, and
 patched into the staged EXE.
 
-The accepted set (all byte-exact; 63 pure-C overlay functions plus `main`):
+The accepted set (all byte-exact; 156 pure-C overlay functions plus `main`):
 
 ```
 main          1301:000C  2246  (230 call-operand bytes)
 ```
 
-| Module | Accepted functions |
+| Module | Accepted |
 |---|---|
-| `ov_3381` | 12: `0000`(154) `009a`(100) `00fe`(52) `0132`(58) `016c`(92) `01c8`(116) `023c`(17) `1fa9`(17) `20ee`(19) `23f9`(89) `2452`(113) `2e9a`(72) |
-| `ov_2d63` | 26: `0000`(22) `0016`(26) `0030`(9) `0039`(17) `004a`(19) `00eb`(17) `00fc`(11) `017a`(22) `0190`(23) `01a7`(24) `06bf`(18) `06d1`(21) `06e6`(21) `06fb`(18) `075f`(21) `0774`(24) `078c`(30) `07aa`(18) `07bc`(18) `07fb`(30) `0819`(21) `082e`(24) `0a18`(12) `0b94`(25) `0bad`(27) `0bc8`(22) |
-| `ov_4207` | 3: `0462`(25) `0b55`(51) `1c79`(53) |
-| `ov_48ac` | 2: `0000`(39) `0027`(42) |
-| `ov_4b0a` | 3: `024e`(40) `0b75`(39) `112d`(35) |
-| `ov_4d05` | 3: `01a3`(49) `118b`(64) `125c`(58) |
-| `ov_6a8f` | 11: `0000`(23) `0017`(23) `01e7`(66) `0229`(29) `0246`(16) `04a9`(23) `0a45`(98) `0aa7`(99) `0b0a`(47) `1a4c`(85) `297d`(35) |
-| `ov_77eb` | 2: `1ba2`(17) `2257`(23) |
-| `ov_7e7c` | 1: `0000`(75) |
+| `ov_2d63` | 26 |
+| `ov_302d` | 9 |
+| `ov_3338` | 4 |
+| `ov_3381` | 12 |
+| `ov_3b1d` | 11 |
+| `ov_3f0b` | 24 |
+| `ov_4207` | 3 |
+| `ov_474a` | 16 |
+| `ov_48ac` | 2 |
+| `ov_4b0a` | 3 |
+| `ov_4d05` | 3 |
+| `ov_5087` | 20 |
+| `ov_5943` | 9 |
+| `ov_6a8f` | 11 |
+| `ov_77eb` | 2 |
+| `ov_7e7c` | 1 |
 
+The per-function offsets and sizes are recorded in `doc/vroomm_accepted.md`.
 The staged image remains byte-identical after the accepted substitutions
 (as expected for byte-exact functions); the milestone is that the build path
-from C source to the running VROOMM EXE is exercised for 64 recovered
+from C source to the running VROOMM EXE is exercised for 157 recovered
 functions.  `f_3381_01c8` and the remaining DGROUP-dependent functions are
 accepted through the linked harness (`vroomm_verify_linked.py`), which
 resolves `_DATA` offsets exactly as the original.
+
+The wider verifier sweep also showed that many earlier converted hybrid
+functions (C with small `asm db` encoding fixes) were already byte-exact; the
+new recovered-function check accepts them instead of treating any `asm db` as
+"not reversed".
 
