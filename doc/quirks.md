@@ -14,6 +14,25 @@ The verifier (`scripts/fbov/vroomm_subst.py`) refuses any other difference.
 When the function is already byte-exact the staged `STRONG.EXE` stays
 byte-identical; that is the expected parity result, not a no-op failure.
 
+**Byte acceptance is not C recovery.**  Many overlay functions are still
+manual-frame dumps of the form
+
+```c
+unsigned char pad[N];
+asm db ...;
+(void)pad;
+```
+
+and can be byte-exact without being C.  The strict recovery check ignores
+`pad` scaffolding and the recovery-status tool reports the real split:
+
+```text
+python scripts/fbov/recovery_status.py
+```
+
+See `doc/recovery_status.md` for the current C / accepted-asm / unaccepted-asm
+counts.
+
 ## 2. Source conventions
 
 - `src/ov_<seg>.c` contains one function per original symbol, named

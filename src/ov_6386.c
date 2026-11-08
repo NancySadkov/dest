@@ -562,7 +562,7 @@ void __cdecl16far f_6386_1abe(void)
   (void)pad;
 }
 
-void __cdecl16far f_6386_1c9f(void)
+void __cdecl16far f_6386_1c9f(char a)
 {
   unsigned char pad[0x36];
   asm db 056h,057h,0B8h,080h,002h,08Eh,0C0h,026h,0A0h,0FEh,08Fh,03Ah,046h,006h,077h,003h
@@ -669,13 +669,14 @@ void __cdecl16far f_6386_1c9f(void)
   (void)pad;
 }
 
-void __cdecl16far f_6386_22fd(void)
+char __cdecl16far f_6386_22fd(unsigned a, unsigned b)
 {
-  unsigned char pad[0x2];
-  asm db 0FFh,076h,008h,0FFh,076h,006h,09Ah,05Bh,000h,018h,000h,083h,0C4h,004h,089h,046h
-  asm db 0FEh,083h,07Eh,0FEh,0FFh,074h,00Fh,08Ah,046h,0FEh,050h,00Eh,0E8h,07Dh,0F9h,083h
-  asm db 0C4h,002h,0B0h,001h,0EBh,002h,0B0h,000h
-  (void)pad;
+  int r = f_0018_005b(a, b);
+  if (r != -1) {
+    f_6386_1c9f((char)r);
+    return 1;
+  }
+  return 0;
 }
 
 void __cdecl16far f_6386_232d(void)

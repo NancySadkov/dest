@@ -591,28 +591,32 @@ substitution verifier is in place.  Accepted functions are compiled from
 operands allowed to differ, relocated to the original segment addresses, and
 patched into the staged EXE.
 
-The accepted set (all byte-exact; 504 pure-C overlay functions plus `main`):
+The byte-accepted set contains 504 overlay bodies plus `main`.  Byte
+acceptance is not C recovery: **117 of the 504 are real C**, while **387 are
+byte-exact manual-frame `asm db`/pad dumps**.  A further 253 overlay functions
+are not yet byte-accepted.  The current C/asm split is tracked in
+`doc/recovery_status.md` (`scripts/fbov/recovery_status.py`).
 
 ```
 main          1301:000C  2246  (230 call-operand bytes)
 ```
 
-Per-module counts and every accepted function's offset/size are recorded in
-`doc/vroomm_accepted.md`.  The largest accepted modules are `ov_6ffe` (3
+Per-module counts and every byte-accepted function's offset/size are recorded
+in `doc/vroomm_accepted.md`.  The largest accepted modules are `ov_6ffe` (3
 functions, including the 28,741-byte `init_assets`), `ov_2d63` (26),
 `ov_3381` (27), `ov_6a8f` (27), and `ov_3f0b` (24).
 
 The staged image remains byte-identical after the accepted substitutions
 (as expected for byte-exact functions); the milestone is that the build path
-from C source to the running VROOMM EXE is exercised for 505 recovered
-functions.  `f_3381_01c8` and the remaining DGROUP-dependent functions are
-accepted through the linked harness (`vroomm_verify_linked.py`), which
-resolves `_DATA` offsets exactly as the original.  Modules whose linked
-harness cannot be built (for example a `>64K` DGROUP in the harness) fall
-back to the standalone OMF object.
+from C source to the running VROOMM EXE is exercised for 504 byte-accepted
+functions, of which 117 are real C.  `f_3381_01c8` and the remaining
+DGROUP-dependent functions are accepted through the linked harness
+(`vroomm_verify_linked.py`), which resolves `_DATA` offsets exactly as the
+original.  Modules whose linked harness cannot be built (for example a `>64K`
+DGROUP in the harness) fall back to the standalone OMF object.
 
-The wider verifier sweep also showed that many earlier converted hybrid
-functions (C with small `asm db` encoding fixes) were already byte-exact; the
-new recovered-function check accepts them instead of treating any `asm db` as
-"not reversed".
+The verifier's recovered-function check now ignores manual-frame `asm db`/
+`pad` scaffolding, so byte acceptance and C recovery are separate metrics.
+The 13 former "failing C bodies" were actually pad dumps and are counted in
+the unaccepted asm backlog, not as broken C.
 

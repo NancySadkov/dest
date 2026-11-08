@@ -1,11 +1,10 @@
 #include "dgroup.h"
 
-void __cdecl16far f_32c9_0000(void)
+void __cdecl16far f_32c9_0000(unsigned far *a, unsigned far *b)
 {
-  unsigned char pad[0x2];
-  asm db 0C4h,05Eh,006h,026h,08Bh,007h,089h,046h,0FEh,0C4h,05Eh,00Ah,026h,08Bh,007h,0C4h
-  asm db 05Eh,006h,026h,089h,007h,0C4h,05Eh,00Ah,08Bh,046h,0FEh,026h,089h,007h
-  (void)pad;
+  unsigned t = *a;
+  *a = *b;
+  *b = t;
 }
 
 /* 32C9:0026  three-way sign */

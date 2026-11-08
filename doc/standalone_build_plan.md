@@ -15,11 +15,13 @@ that are still borrowed from the original image.
 ### Overlay code
 
 - 51 overlay modules, 757 functions.
-- **504 accepted** byte-exact (call/jump operands masked).
-- **242 still raw `asm db`** (about 40,212 bytes).
-- **11 C bodies fail verification** and need fixing or reverting to `asm db`.
-- Per-function status: `doc/vroomm_accepted.md`; per-function inventory:
-  `tmp/fn_inventory.csv` (regenerate with `tmp/inventory.py`).
+- **504 byte-accepted** (call/jump operands masked).  Byte acceptance is not
+  C recovery: only **117 are real C** (22,201 bytes); **387 are byte-exact
+  manual-frame `asm db`/pad dumps** (278,434 bytes).
+- **253 functions are not yet byte-accepted** (55,154 bytes of raw asm/pad).
+- True C coverage: 117/757 functions.  Per-function status:
+  `doc/recovery_status.md`; per-function inventory: `tmp/fn_inventory.csv`
+  (regenerate with `tmp/inventory.py`).
 
 ### Static/resident code
 
@@ -126,10 +128,14 @@ practical deliverable, or complete A first if exact parity is the priority.
 
 ### Phase 1 — finish overlay function recovery
 
-- Convert the 242 raw `asm db` functions and resolve the 11 failing C bodies.
+- Convert the 640 remaining non-C functions: 387 byte-accepted manual-frame
+  `asm db`/pad dumps plus 253 raw asm/pad functions that are not yet
+  byte-accepted.  There are no failing C bodies; the former "mismatches" were
+  pad dumps.
 - Keep using `vroomm_verify_linked.py` / `vroomm_sweep.py`; refresh
-  `doc/vroomm_accepted.md`.
-- Exit: 757/757 overlay functions accepted.
+  `doc/vroomm_accepted.md` and `doc/recovery_status.md`.
+- Exit: 757/757 overlay functions are C, with byte acceptance tracked
+  separately.
 
 ### Phase 2 — static code
 

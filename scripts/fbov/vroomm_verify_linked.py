@@ -97,6 +97,10 @@ def is_recovered(body):
             continue
         if re.match(r"asm\s+db\b", s):
             continue
+        if re.match(r"unsigned\s+char\s+pad\s*\[", s):
+            continue
+        if s == "(void)pad;":
+            continue
         return True
     return False
 

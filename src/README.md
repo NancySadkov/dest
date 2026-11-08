@@ -23,8 +23,10 @@ python scripts/fbov/vroomm_verify_linked.py 2d63:ov_2d63
 python scripts/fbov/vroomm_sweep.py
 ```
 
-Accepted functions are listed in `doc/vroomm_accepted.md`.  The early 2024
-partial rewrite is quarantined in `reference/legacy_src/` and is not built.
+Accepted functions are listed in `doc/vroomm_accepted.md`.  Byte acceptance
+is tracked separately from true C recovery in `doc/recovery_status.md`
+(`scripts/fbov/recovery_status.py`).  The early 2024 partial rewrite is
+quarantined in `reference/legacy_src/` and is not built.
 
 See `../doc/quirks.md` for the compiler/tooling quirks and the full recovery
 checklist.  The path from the current oracle build to a source-only EXE is in
