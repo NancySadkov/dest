@@ -4,11 +4,26 @@ Goal: a build that produces a runnable `STRONG.EXE` from `src/` plus committed
 data/metadata, **without reading `game/STRONG.EXE`**.  The original EXE remains
 only as a test oracle.
 
-The current VROOMM build is not that build.  `scripts/fbov/vroomm_baseline.py`
-copies the original EXE, and `vroomm_verify_linked.py` patches verified
-functions into it.  That is deliberate: it gives a byte-exact oracle and lets
-us recover functions safely.  The standalone build has to replace the parts
-that are still borrowed from the original image.
+## Current build (2026-11-08)
+
+```text
+python scripts/fbov/build_standalone.py
+```
+
+This compiles all 51 overlay modules from `src/`, applies the committed
+operand/table patches in `src/ov_patch.csv`, and combines them with:
+
+| Part | File | Status |
+|---|---|---|
+| MZ header + static load module | `src/base_static.bin` | transitional blob |
+| FBOV metadata with overlay code zeroed | `src/base_fbov.bin` | transitional blob |
+| Overlay code | `src/` + `src/ov_patch.csv` | rebuilt from source |
+
+The result is byte-identical to the original EXE (SHA-256 `aebde62f...`), and
+the build does not read `game/STRONG.EXE`.
+
+`scripts/fbov/vroomm_baseline.py` and `vroomm_verify_linked.py` remain as the
+oracle/verification path.
 
 ## Current gap
 
@@ -40,9 +55,10 @@ From `doc/fbov_segments.csv`:
 | `0x1403` | 4,692 | missing |
 | `0x22BB` | 1 | placeholder |
 
-So of ~21 KB of static code, only `main` (2,247 bytes) is currently
-recovered/verified.  The `0x1000` segment is the critical dependency: it owns
-startup, the overlay manager and resident utility code.
+So of ~21 KB of static code, only `main` (2,247 bytes) is recovered as C.
+The rest is currently carried in `src/base_static.bin`.  The `0x1000` segment
+is the critical dependency: it owns startup, the overlay manager and resident
+utility code.
 
 ### Static data
 
@@ -51,14 +67,16 @@ startup, the overlay manager and resident utility code.
 - There are **16 other non-BSS static data segments**, together about 55 KB
   (`0x1529`, `0x1539`, `0x16B3`, `0x1703`, `0x1726`, `0x17F8`, `0x195D`,
   `0x1EF4`, `0x217A`, `0x218E`, `0x21B1`, `0x21F2`, `0x222B`, `0x224A`,
-  `0x225D`, `0x2D5A`).  These are not yet represented in the source tree.
+  `0x225D`, `0x2D5A`).  These are carried in `src/base_static.bin` until they
+  are split into `src/data_<seg>.bin` files.
 - The 64 KiB `flags=4` segment entries are segment-table/BSS placeholders, not
   file data; they belong in the generated segment table.
 
 ### Overlay metadata
 
 - The original FBOV trailer, overlay header segments, `int 3Fh` thunk tables,
-  segment table and fixup tables are still copied from the original EXE.
+  segment table and fixup tables are carried in `src/base_fbov.bin`, with the
+  overlay code regions zeroed.
 - We have the data to generate them: `doc/fbov_manifest.json`,
   `doc/fbov_segments.csv`, `doc/fbov_overlays.csv`, and the trampoline
   information in the manifest.

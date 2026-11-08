@@ -17,7 +17,17 @@ Progress is measured against those criteria, not against module compile counts.
 
 ## Current status (2026-11-08)
 
-The project has a working **oracle build**, but not yet a standalone build.
+The project now has a **source-only build** that reproduces the original EXE
+byte-for-byte, and an oracle build for verification.
+
+```text
+python scripts/fbov/build_standalone.py
+```
+
+The build compiles every overlay module from `src/`, restores call/jump
+operands from `src/ov_patch.csv`, and fills the committed static/FBOV base
+blobs.  It does not read `game/STRONG.EXE`.  The output hash is verified
+against the original (`aebde62f...`).
 
 - Source tree: active recovered source is in `src/` (no `src/recovered/`,
   no `src/chunks/`).  Layout and conventions: `src/README.md`.
@@ -30,21 +40,22 @@ The project has a working **oracle build**, but not yet a standalone build.
   ordered C chunks plus TASM byte blocks (`src/c<seg><n>.c`,
   `src/a<seg><n>.asm`, shared prototype header `src/k<seg>.h`); segment
   parts are linked in original order.
-- Static code: only `main` (`0x1301`, 2,247 bytes) is recovered/verified.
-  Missing: `0x1000` (12,317 bytes — startup, VROOMM manager, utilities),
-  `0x138E` (458), `0x13AA` (1,416), `0x1403` (4,692).
-- Data: DGROUP (`0x2410`, 38,043 bytes) is recovered byte-exact.  Sixteen
-  other non-BSS static data segments (~55 KB) are not yet represented in
-  source.
-- Overlay metadata: the FBOV trailer, overlay headers, `int 3Fh` thunks,
-  `_SEGTABLE_` and fixups are still copied from the original EXE.  A
-  generator has not been written yet.
-- Runtime: still the original VROOMM manager and startup.
+- Static code: only `main` (`0x1301`, 2,247 bytes) is recovered as C.
+  The remaining static segments (`0x1000` 12,317 bytes - startup, VROOMM
+  manager, utilities; `0x138E` 458; `0x13AA` 1,416; `0x1403` 4,692) are
+  currently carried as the committed `src/base_static.bin` load-module blob.
+  They are the next recovery target.
+- Data: DGROUP (`0x2410`, 38,043 bytes) is recovered byte-exact.  The sixteen
+  other non-BSS static data segments (~55 KB) are also carried in
+  `base_static.bin` for now.
+- Overlay metadata: the FBOV trailer, overlay headers, `int 3Fh` thunk tables,
+  `_SEGTABLE_` and fixups are carried in `src/base_fbov.bin`.  Overlay code
+  regions in that blob are zeroed and rebuilt from `src/`.
+- Runtime: still the original VROOMM manager and startup bytes.
   `tools/devroomm/src/ovrman.c` is the reversed manager reference.
 - Oracle build: `scripts/fbov/vroomm_baseline.py` stages the original EXE and
   `vroomm_verify_linked.py` patches verified functions into it.  It boots to
-  320x400 and stays byte-identical for accepted functions, but it **reads the
-  original EXE**, so it is not the final build.
+  320x400 and stays byte-identical for accepted functions.
 
 Detailed current plan: `doc/standalone_build_plan.md`.
 Recovery quirks: `doc/quirks.md`.
