@@ -85,6 +85,22 @@ def parse_map(map_path, seg):
     return segname, syms
 
 
+def is_recovered(body):
+    """True if the body is more than a raw `asm db` byte dump."""
+    for line in body.splitlines():
+        s = line.strip()
+        if s in ("{", "}"):
+            continue
+        s = re.sub(r"/\*.*?\*/", "", s).strip()
+        s = re.sub(r"//.*$", "", s).strip()
+        if not s:
+            continue
+        if re.match(r"asm\s+db\b", s):
+            continue
+        return True
+    return False
+
+
 def pure_functions(src, seg):
     prefix = "f_%04x_" % seg
     text = open(src, encoding="ascii", errors="replace").read()
@@ -99,7 +115,7 @@ def pure_functions(src, seg):
             elif text[j] == "}":
                 depth -= 1
                 if depth == 0:
-                    out[name] = "asm db" not in text[i:j + 1]
+                    out[name] = is_recovered(text[i:j + 1])
                     break
     return out
 

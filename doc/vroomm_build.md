@@ -82,6 +82,11 @@ python scripts/fbov/vroomm_verify_module.py --obj tmp/ovbuild/OV_3381.OBJ \
     --seg 3381 --src src/ov_3381.c
 ```
 
+A function counts as recovered when its body is more than a raw `asm db` byte
+dump.  Small `asm db` encodings may still appear inside recovered code where
+the compiler chooses a different but equivalent encoding (for example
+`mov bx, ax` assembled as `8B D8` instead of `89 C3`).
+
 Functions that reference `_DATA` by offset cannot be resolved in a standalone
 object.  `scripts/fbov/vroomm_verify_linked.py` builds a linked harness per
 module (against the recovered DGROUP), verifies those functions, and patches
@@ -93,7 +98,7 @@ python scripts/fbov/vroomm_verify_linked.py 3381:ov_3381 48ac:ov_48ac \
     7e7c:ov_7e7c
 ```
 
-Result: 37 pure-C overlay functions accepted across the eight modules (plus
+Result: 43 pure-C overlay functions accepted across the nine modules (plus
 `main`).  After every accepted substitution the staged image remains
 byte-identical to the original, which is the expected parity result for a
 byte-exact function.

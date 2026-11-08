@@ -1,20 +1,45 @@
 #include "dgroup.h"
 
-void __cdecl16far f_2d63_0000(void)
+/* 2D63:0000  linear address -> far pointer (result in DX:AX) */
+void __cdecl16far f_2d63_0000(unsigned offv, unsigned segv)
 {
-  asm db 08Bh,056h,008h,08Bh,046h,006h,08Bh,0D8h,0B1h,004h,0D3h,0EBh,003h,0D3h,025h,00Fh
-  asm db 000h
+  asm mov dx, segv
+  asm mov ax, offv
+  asm db 8Bh, 0D8h        /* mov bx, ax */
+  asm mov cl, 4
+  asm shr bx, cl
+  asm db 03h, 0D3h        /* add dx, bx */
+  asm and ax, 0xf
 }
 
-void __cdecl16far f_2d63_0016(void)
+/* 2D63:0016  BIOS video service, all registers preserved */
+void __cdecl16far f_2d63_0016(unsigned v)
 {
-  asm db 006h,01Eh,050h,053h,051h,052h,056h,057h,08Bh,046h,006h,0CDh,010h,05Fh,05Eh,05Ah
-  asm db 059h,05Bh,058h,01Fh,007h
+  asm db 06h              /* push es */
+  asm db 1Eh              /* push ds */
+  asm db 50h              /* push ax */
+  asm db 53h              /* push bx */
+  asm db 51h              /* push cx */
+  asm db 52h              /* push dx */
+  asm db 56h              /* push si */
+  asm db 57h              /* push di */
+  asm mov ax, v
+  asm int 0x10
+  asm db 5Fh              /* pop di */
+  asm db 5Eh              /* pop si */
+  asm db 5Ah              /* pop dx */
+  asm db 59h              /* pop cx */
+  asm db 5Bh              /* pop bx */
+  asm db 58h              /* pop ax */
+  asm db 1Fh              /* pop ds */
+  asm db 07h              /* pop es */
 }
 
+/* 2D63:0030  BIOS keyboard read (result in AX) */
 void __cdecl16far f_2d63_0030(void)
 {
-  asm db 032h,0E4h,0CDh,016h
+  asm db 32h, 0E4h        /* xor ah, ah */
+  asm int 0x16
 }
 
 void __cdecl16far f_2d63_0039(void)
@@ -22,9 +47,17 @@ void __cdecl16far f_2d63_0039(void)
   asm db 0B4h,001h,0CDh,016h,0B8h,000h,000h,074h,003h,0B8h,001h,000h
 }
 
+/* 2D63:004A  mouse button state (result in AX, low 3 bits) */
 void __cdecl16far f_2d63_004a(void)
 {
-  asm db 006h,057h,0B8h,003h,000h,0CDh,033h,08Bh,0C3h,025h,007h,000h,05Fh,007h
+  asm db 06h              /* push es */
+  asm db 57h              /* push di */
+  asm mov ax, 3
+  asm int 0x33
+  asm db 8Bh, 0C3h        /* mov ax, bx */
+  asm and ax, 7
+  asm db 5Fh              /* pop di */
+  asm db 07h              /* pop es */
 }
 
 void __cdecl16far f_2d63_005d(void)
@@ -44,14 +77,20 @@ void __cdecl16far f_2d63_00aa(void)
   asm db 0AAh,0D0h,0CEh,073h,001h,045h,0E2h,0E4h,01Fh,007h,05Fh,05Eh
 }
 
-void __cdecl16far f_2d63_00eb(void)
+/* 2D63:00EB  build a far pointer from two words (result in DX:AX) */
+void __cdecl16far f_2d63_00eb(unsigned segv, unsigned offv)
 {
-  asm db 08Ah,046h,009h,08Ah,066h,008h,08Ah,056h,006h,08Ah,076h,007h
+  asm mov al, byte ptr [bp+9]
+  asm mov ah, byte ptr [bp+8]
+  asm mov dl, byte ptr [bp+6]
+  asm mov dh, byte ptr [bp+7]
 }
 
-void __cdecl16far f_2d63_00fc(void)
+/* 2D63:00FC  byte-swap a word (result in AX) */
+void __cdecl16far f_2d63_00fc(unsigned x)
 {
-  asm db 08Ah,046h,007h,08Ah,066h,006h
+  asm mov al, byte ptr [bp+7]
+  asm mov ah, byte ptr [bp+6]
 }
 
 void __cdecl16far f_2d63_0107(void)

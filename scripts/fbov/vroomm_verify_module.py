@@ -18,6 +18,22 @@ sys.path.insert(0, os.path.join(ROOT, "scripts", "fbov"))
 from byte_match import parse_omf
 
 
+def is_recovered(body):
+    """True if the body is more than a raw `asm db` byte dump."""
+    for line in body.splitlines():
+        s = line.strip()
+        if s in ("{", "}"):
+            continue
+        s = re.sub(r"/\*.*?\*/", "", s).strip()
+        s = re.sub(r"//.*$", "", s).strip()
+        if not s:
+            continue
+        if re.match(r"asm\s+db\b", s):
+            continue
+        return True
+    return False
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--obj", required=True)
@@ -56,7 +72,7 @@ def main():
             elif src[j] == "}":
                 depth -= 1
                 if depth == 0:
-                    pure[name] = "asm db" not in src[i:j + 1]
+                    pure[name] = is_recovered(src[i:j + 1])
                     break
 
     codesz = 0

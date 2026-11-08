@@ -591,7 +591,7 @@ substitution verifier is in place.  Accepted functions are compiled from
 operands allowed to differ, relocated to the original segment addresses, and
 patched into the staged EXE.
 
-The accepted set (all byte-exact; 37 pure-C overlay functions plus `main`):
+The accepted set (all byte-exact; 43 pure-C overlay functions plus `main`):
 
 ```
 main          1301:000C  2246  (230 call-operand bytes)
@@ -600,6 +600,7 @@ main          1301:000C  2246  (230 call-operand bytes)
 | Module | Accepted functions |
 |---|---|
 | `ov_3381` | 12: `0000`(154) `009a`(100) `00fe`(52) `0132`(58) `016c`(92) `01c8`(116) `023c`(17) `1fa9`(17) `20ee`(19) `23f9`(89) `2452`(113) `2e9a`(72) |
+| `ov_2d63` | 6: `0000`(22) `0016`(26) `0030`(9) `004a`(19) `00eb`(17) `00fc`(11) |
 | `ov_4207` | 3: `0462`(25) `0b55`(51) `1c79`(53) |
 | `ov_48ac` | 2: `0000`(39) `0027`(42) |
 | `ov_4b0a` | 3: `024e`(40) `0b75`(39) `112d`(35) |
