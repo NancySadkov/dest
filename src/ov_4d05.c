@@ -70,16 +70,19 @@ void __cdecl16far f_4d05_01d4(struct s4d05 far *p)
   p->pad[0x28] |= 0x20;
 }
 
-void __cdecl16far f_4d05_023a(void)
+char far *__cdecl16far f_4d05_023a(int n)
 {
-  unsigned char pad[0x4];
-  asm db 056h,057h,08Bh,076h,006h,08Bh,0C6h,0BBh,00Ah,000h,099h,0F7h,0FBh,08Bh,0FAh,083h
-  asm db 0FFh,001h,075h,00Fh,083h,0FEh,00Bh,074h,00Ah,08Ch,05Eh,0FEh,0C7h,046h,0FCh,0AAh
-  asm db 04Bh,0EBh,030h,083h,0FFh,002h,075h,00Fh,083h,0FEh,00Ch,074h,00Ah,08Ch,05Eh,0FEh
-  asm db 0C7h,046h,0FCh,0ADh,04Bh,0EBh,01Ch,083h,0FFh,003h,075h,00Fh,083h,0FEh,00Dh,074h
-  asm db 00Ah,08Ch,05Eh,0FEh,0C7h,046h,0FCh,0B0h,04Bh,0EBh,008h,08Ch,05Eh,0FEh,0C7h,046h
-  asm db 0FCh,0B3h,04Bh,08Bh,056h,0FEh,08Bh,046h,0FCh,05Fh,05Eh
-  (void)pad;
+  int r = n % 10;
+  char far *p;
+  if (r == 1 && n != 0xb)
+    p = (char far *)(gap_2410_4B92 + 0x18);
+  else if (r == 2 && n != 0xc)
+    p = (char far *)(gap_2410_4B92 + 0x1b);
+  else if (r == 3 && n != 0xd)
+    p = (char far *)(gap_2410_4B92 + 0x1e);
+  else
+    p = (char far *)(gap_2410_4B92 + 0x21);
+  return p;
 }
 
 void __cdecl16far f_4d05_029d(void)

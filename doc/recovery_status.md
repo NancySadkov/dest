@@ -5,8 +5,8 @@ function when its bytes match; many are still manual-frame `asm db` dumps.
 
 | Class | Functions | Bytes |
 |---|---:|---:|
-| C | 124 | 22730 |
-| accepted-asm | 380 | 277905 |
+| C | 125 | 22829 |
+| accepted-asm | 379 | 277806 |
 | unaccepted-asm | 253 | 55154 |
 | **total** | **757** | **355789** |
 
@@ -33,7 +33,7 @@ function when its bytes match; many are still manual-frame `asm db` dumps.
 | `ov_48ac` | 2 | 5 | 2 |
 | `ov_49fd` | 2 | 4 | 2 |
 | `ov_4b0a` | 3 | 11 | 9 |
-| `ov_4d05` | 5 | 18 | 11 |
+| `ov_4d05` | 6 | 17 | 11 |
 | `ov_5087` | 1 | 19 | 11 |
 | `ov_55fe` | 2 | 14 | 9 |
 | `ov_5943` | 1 | 8 | 2 |
