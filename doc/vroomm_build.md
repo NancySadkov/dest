@@ -41,3 +41,23 @@ overlay code without VROOMM.  It reached the 320x400 screen but its fixed
 overlay pool leaves too little conventional memory for the game's 74 KiB
 allocation.  The VROOMM build does not have this limitation because VROOMM
 manages the original overlay buffer and swap policy.
+
+## Substitution tool
+
+`scripts/fbov/vroomm_subst.py` verifies a compiled function against the
+original at its original segment:offset.  It allows differences only in
+direct call/jump operands, takes those operands from the original image
+(original segment addresses), writes the patched function back to the staged
+EXE and rejects any unmasked difference.
+
+Example for `main`:
+
+```text
+python scripts/fbov/vroomm_subst.py --seg 1301 --ofs 000C --len 2246 \
+    --compiled tmp/linkbuild/OUT.EXE --compiled-ofs 94AB
+```
+
+Verified: `main` compiled from `src/recovered/main.c` differs from the
+original only in 230 call/jump operand bytes; after relocation the staged
+image is byte-identical, as expected for a byte-exact recovered function.
+The same command is the acceptance test for every later overlay function.
