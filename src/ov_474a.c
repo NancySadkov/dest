@@ -138,10 +138,10 @@ void __cdecl16far f_474a_067b(void)
   asm db 008h,08Eh,0C0h,026h,089h,097h,022h,013h,026h,089h,08Fh,020h,013h,05Eh
 }
 
-void __cdecl16far f_474a_06fe(void)
+/* 474A:06FE  fetch a far pointer from a table in segment 0x68 */
+void far *__cdecl16far f_474a_06fe(unsigned i)
 {
-  asm db 08Bh,05Eh,006h,0C1h,0E3h,002h,0B8h,068h,000h,08Eh,0C0h,026h,08Bh,097h,022h,013h
-  asm db 026h,08Bh,087h,020h,013h
+  return *(void far * far *)MK_FP(0x68, 0x1320 + (i << 2));
 }
 
 void __cdecl16far f_474a_0718(void)

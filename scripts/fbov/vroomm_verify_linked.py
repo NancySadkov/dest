@@ -53,9 +53,9 @@ def kill_dosbox():
         capture_output=True)
 
 
-def build_harness(module, wait):
+def build_harness(module, wait, srcdir):
     os.makedirs(LINK, exist_ok=True)
-    src = os.path.join(ROOT, "src", module + ".c")
+    src = os.path.join(srcdir, module + ".c")
     if not os.path.exists(src):
         raise SystemExit("missing source: " + src)
     open(os.path.join(LINK, module + ".c"), "wb").write(open(src, "rb").read())
@@ -127,11 +127,11 @@ def codesize(seg):
     raise SystemExit("segment missing from overlay table")
 
 
-def verify_module(exe, map_path, seghex, module):
+def verify_module(exe, map_path, seghex, module, srcdir):
     seg = int(seghex, 16)
     segname, syms = parse_map(map_path, seg)
     offsets = sorted(syms)
-    pure = pure_functions(os.path.join(ROOT, "src", module + ".c"), seg)
+    pure = pure_functions(os.path.join(srcdir, module + ".c"), seg)
     total = codesize(seg)
     obj = None
     for name in (module.upper() + ".OBJ", module + ".OBJ"):
@@ -182,7 +182,7 @@ def verify_module(exe, map_path, seghex, module):
     return passed
 
 
-def verify_standalone(seghex, module):
+def verify_standalone(seghex, module, srcdir):
     """Verify against the standalone OMF object when the linked harness fails."""
     obj = None
     for name in (module.upper() + ".OBJ", module + ".OBJ"):
@@ -193,7 +193,7 @@ def verify_standalone(seghex, module):
     if obj is None:
         print("  no standalone object available")
         return 0
-    src = os.path.join(ROOT, "src", module + ".c")
+    src = os.path.join(srcdir, module + ".c")
     r = subprocess.run(
         [sys.executable, os.path.join(ROOT, "scripts", "fbov", "vroomm_verify_module.py"),
          "--obj", obj, "--seg", seghex, "--src", src],
@@ -208,6 +208,8 @@ def main():
     ap.add_argument("modules", nargs="+", metavar="SEG:MODULE",
                     help="overlay segment and recovered source, e.g. 3381:ov_3381")
     ap.add_argument("--wait", type=int, default=30, help="seconds for the DOS build")
+    ap.add_argument("--src-dir", default=os.path.join(ROOT, "src"),
+                    help="directory holding the recovered module sources")
     a = ap.parse_args()
 
     total = 0
@@ -216,12 +218,12 @@ def main():
             raise SystemExit("expected SEG:MODULE, got " + spec)
         seghex, module = spec.split(":", 1)
         print("=== %s (%s) ===" % (module, seghex))
-        exe, map_path = build_harness(module, a.wait)
+        exe, map_path = build_harness(module, a.wait, a.src_dir)
         if not (os.path.exists(exe) and os.path.exists(map_path)):
             print("  link harness failed; trying standalone object")
-            total += verify_standalone(seghex, module)
+            total += verify_standalone(seghex, module, a.src_dir)
             continue
-        total += verify_module(exe, map_path, seghex, module)
+        total += verify_module(exe, map_path, seghex, module, a.src_dir)
     print("total accepted:", total)
 
 

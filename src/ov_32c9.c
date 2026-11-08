@@ -8,10 +8,10 @@ void __cdecl16far f_32c9_0000(void)
   (void)pad;
 }
 
-void __cdecl16far f_32c9_0026(void)
+/* 32C9:0026  three-way sign */
+int __cdecl16far f_32c9_0026(int x)
 {
-  asm db 056h,08Bh,076h,006h,00Bh,0F6h,07Dh,005h,0B8h,0FFh,0FFh,0EBh,00Bh,00Bh,0F6h,07Eh
-  asm db 005h,0B8h,001h,000h,0EBh,002h,033h,0C0h,05Eh
+  return x < 0 ? -1 : x > 0 ? 1 : 0;
 }
 
 void __cdecl16far f_32c9_0044(void)

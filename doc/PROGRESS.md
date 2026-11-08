@@ -591,7 +591,7 @@ substitution verifier is in place.  Accepted functions are compiled from
 operands allowed to differ, relocated to the original segment addresses, and
 patched into the staged EXE.
 
-The accepted set (all byte-exact; 480 pure-C overlay functions plus `main`):
+The accepted set (all byte-exact; 490 pure-C overlay functions plus `main`):
 
 ```
 main          1301:000C  2246  (230 call-operand bytes)
@@ -604,7 +604,7 @@ functions, including the 28,741-byte `init_assets`), `ov_2d63` (26),
 
 The staged image remains byte-identical after the accepted substitutions
 (as expected for byte-exact functions); the milestone is that the build path
-from C source to the running VROOMM EXE is exercised for 481 recovered
+from C source to the running VROOMM EXE is exercised for 491 recovered
 functions.  `f_3381_01c8` and the remaining DGROUP-dependent functions are
 accepted through the linked harness (`vroomm_verify_linked.py`), which
 resolves `_DATA` offsets exactly as the original.  Modules whose linked

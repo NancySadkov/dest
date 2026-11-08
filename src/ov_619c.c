@@ -66,10 +66,14 @@ void __cdecl16far f_619c_025d(void)
   (void)pad;
 }
 
-void __cdecl16far f_619c_031d(void)
+/* 619C:031D  classify a value into three buckets */
+char __cdecl16far f_619c_031d(unsigned char c)
 {
-  asm db 08Ah,056h,006h,080h,0FAh,005h,073h,004h,0B0h,000h,0EBh,00Bh,080h,0FAh,009h,073h
-  asm db 004h,0B0h,001h,0EBh,002h,0B0h,002h
+  if (c < 5)
+    return 0;
+  if (c < 9)
+    return 1;
+  return 2;
 }
 
 void __cdecl16far f_619c_0339(void)

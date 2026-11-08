@@ -14,10 +14,14 @@ void __cdecl16far f_3b1d_0032(void)
   asm db 0C0h,026h,08Bh,087h,04Ch,003h,05Eh
 }
 
-void __cdecl16far f_3b1d_005e(void)
+/* 3B1D:005E  clamp a value to 0..0xd2 */
+unsigned __cdecl16far f_3b1d_005e(int x)
 {
-  asm db 056h,08Bh,076h,006h,00Bh,0F6h,07Dh,002h,033h,0F6h,081h,0FEh,0D2h,000h,07Eh,003h
-  asm db 0BEh,0D2h,000h,08Bh,0C6h,05Eh
+  if (x < 0)
+    x = 0;
+  if (x > 0xd2)
+    x = 0xd2;
+  return x;
 }
 
 void __cdecl16far f_3b1d_0079(void)
@@ -260,10 +264,13 @@ void __cdecl16far f_3b1d_0c1e(void)
   asm db 011h,077h,004h,0B0h,002h,0EBh,002h,0B0h,003h
 }
 
-void __cdecl16far f_3b1d_0c7c(void)
+/* 3B1D:0C7C  reduce a structure byte modulo 6 into -2..3 */
+char __cdecl16far f_3b1d_0c7c(char far *p)
 {
-  asm db 0C4h,05Eh,006h,026h,08Ah,047h,036h,0B4h,000h,0BBh,006h,000h,099h,0F7h,0FBh,08Ah
-  asm db 0CAh,080h,0F9h,004h,07Ch,006h,08Ah,0C1h,004h,0FAh,08Ah,0C8h,08Ah,0C1h
+  signed char r = (signed char)(*(unsigned char *)(p + 0x36) % 6);
+  if (r >= 4)
+    r = (signed char)(r - 6);
+  return r;
 }
 
 void __cdecl16far f_3b1d_0c9f(void)

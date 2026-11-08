@@ -203,9 +203,11 @@ void __cdecl16far f_3f0b_082f(void)
   (void)pad;
 }
 
-void __cdecl16far f_3f0b_0880(void)
+/* 3F0B:0880  decrement a byte through a far pointer */
+void __cdecl16far f_3f0b_0880(char far *p)
 {
-  asm db 0C4h,05Eh,006h,026h,080h,03Fh,000h,074h,006h,0C4h,05Eh,006h,026h,0FEh,00Fh
+  if (*p)
+    (*p)--;
 }
 
 void __cdecl16far f_3f0b_0894(void)

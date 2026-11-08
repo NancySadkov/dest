@@ -1,5 +1,9 @@
 #include "dgroup.h"
 
+void __cdecl16far f_0150_0020(void);
+void __cdecl16far f_0150_0025(void);
+void __cdecl16far f_0158_0075(void);
+
 void __cdecl16far f_36ce_0000(void)
 {
   asm db 056h,057h,08Bh,076h,006h,08Bh,07Eh,008h,0B8h,080h,002h,08Bh,0D6h,08Eh,0C0h,026h
@@ -69,10 +73,14 @@ void __cdecl16far f_36ce_023c(void)
   (void)pad;
 }
 
+/* 36CE:02F0  switch the battle/music state */
 void __cdecl16far f_36ce_02f0(void)
 {
-  asm db 0B8h,080h,002h,08Eh,0C0h,026h,080h,03Eh,09Ch,089h,000h,074h,007h,09Ah,020h,000h
-  asm db 050h,001h,0EBh,005h,09Ah,025h,000h,050h,001h,09Ah,075h,000h,058h,001h
+  if (*(unsigned char far *)MK_FP(0x280, 0x899c))
+    f_0150_0020();
+  else
+    f_0150_0025();
+  f_0158_0075();
 }
 
 void __cdecl16far f_36ce_0313(void)
