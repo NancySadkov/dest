@@ -1,5 +1,9 @@
 #include "dgroup.h"
 
+char __cdecl16far f_00e0_0020(void);
+char __cdecl16far f_00e0_0061(void);
+void __cdecl16far f_0140_003e(void);
+
 void __cdecl16far f_2e25_0000(void)
 {
   asm db 056h,057h,083h,07Eh,006h,005h,07Ch,003h,0E9h,086h,000h,0B8h,080h,002h,08Bh,05Eh
@@ -193,7 +197,7 @@ void __cdecl16far f_2e25_0ad1(void)
   f_00f8_0048();
 }
 
-void __cdecl16far f_2e25_0adf(void)
+unsigned __cdecl16far f_2e25_0adf(void)
 {
   unsigned char pad[0x50];
   asm db 056h,09Ah,057h,000h,0E0h,000h,08Bh,0F0h,081h,0FEh,00Dh,032h,075h,02Eh,0B8h,080h
@@ -538,13 +542,20 @@ void __cdecl16far f_2e25_17b3(void)
   (void)pad;
 }
 
-void __cdecl16far f_2e25_1d7c(void)
+char __cdecl16far f_2e25_1d7c(void)
 {
-  unsigned char pad[0x2];
-  asm db 056h,09Ah,020h,000h,0E0h,000h,088h,046h,0FFh,0F6h,046h,0FFh,001h,074h,004h,0B0h
-  asm db 001h,0EBh,034h,0F6h,046h,0FFh,002h,074h,004h,0B0h,002h,0EBh,02Ah,09Ah,061h,000h
-  asm db 0E0h,000h,00Ah,0C0h,074h,01Ah,00Eh,0E8h,033h,0EDh,08Bh,0F0h,081h,0FEh,01Bh,001h
-  asm db 075h,004h,0B0h,002h,0EBh,011h,081h,0FEh,00Dh,01Ch,075h,004h,0B0h,001h,0EBh,007h
-  asm db 09Ah,03Eh,000h,040h,001h,0B0h,000h,05Eh
-  (void)pad;
+  char x = f_00e0_0020();
+  if (x & 1)
+    return 1;
+  if (x & 2)
+    return 2;
+  if (f_00e0_0061()) {
+    unsigned si = f_2e25_0adf();
+    if (si == 0x11b)
+      return 2;
+    if (si == 0x1c0d)
+      return 1;
+  }
+  f_0140_003e();
+  return 0;
 }

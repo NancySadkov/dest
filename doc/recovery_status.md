@@ -5,15 +5,15 @@ function when its bytes match; many are still manual-frame `asm db` dumps.
 
 | Class | Functions | Bytes |
 |---|---:|---:|
-| C | 121 | 22453 |
-| accepted-asm | 383 | 278182 |
+| C | 122 | 22533 |
+| accepted-asm | 382 | 278102 |
 | unaccepted-asm | 253 | 55154 |
 | **total** | **757** | **355789** |
 
 | Module | C | accepted-asm | unaccepted-asm |
 |---|---:|---:|---:|
 | `ov_2d63` | 26 | 0 | 28 |
-| `ov_2e25` | 1 | 9 | 11 |
+| `ov_2e25` | 2 | 8 | 11 |
 | `ov_302d` | 2 | 8 | 5 |
 | `ov_30e6` | 0 | 2 | 1 |
 | `ov_3168` | 0 | 0 | 1 |
