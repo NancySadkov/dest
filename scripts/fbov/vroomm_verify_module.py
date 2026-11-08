@@ -33,7 +33,16 @@ def main():
         if name.startswith(prefix):
             byseg.setdefault(s, []).append((ofs, name))
     sseg = max(byseg, key=lambda s: len(byseg[s]))
-    funcs = sorted(byseg[sseg])
+
+    # The object may not lay functions out at the original offsets (an earlier
+    # recovered function can be a different size).  The recovered name encodes
+    # the authoritative original offset, so derive sizes from the names.
+    orig_at = {}
+    for _, name in byseg[sseg]:
+        m = re.match(r"^%s([0-9a-f]+)$" % re.escape(prefix), name)
+        if m:
+            orig_at[name] = int(m.group(1), 16)
+    funcs = sorted((ofs, name) for name, ofs in orig_at.items())
 
     src = open(a.src, encoding="ascii").read()
     pure = {}
@@ -53,7 +62,7 @@ def main():
     codesz = 0
     for r in csv.DictReader(open(os.path.join(ROOT, "doc", "fbov_overlays.csv"))):
         if int(r["code_seg"], 16) == seg:
-            codesz = int(r["codesz"], 0)
+            codesz = int(r["codesz"], 16)
             break
 
     passed = 0

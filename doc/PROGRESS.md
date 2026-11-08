@@ -583,26 +583,27 @@ substitution verifier is in place.  Accepted functions are compiled from
 operands allowed to differ, relocated to the original segment addresses, and
 patched into the staged EXE.
 
-The first accepted set (all byte-exact; 11 overlay functions plus `main`):
+The accepted set (all byte-exact; 37 pure-C overlay functions plus `main`):
 
 ```
 main          1301:000C  2246  (230 call-operand bytes)
-f_3381_0000   3381:0000   154
-f_3381_009a   3381:009A   100
-f_3381_00fe   3381:00FE    52
-f_3381_0132   3381:0132    58  (2 call-operand bytes)
-f_3381_016c   3381:016C    92
-f_3381_023c   3381:023C    17
-f_3381_1fa9   3381:1FA9    17
-f_3381_20ee   3381:20EE    19
-f_3381_23f9   3381:23F9    89
-f_3381_2452   3381:2452   113
-f_3381_2e9a   3381:2E9A    72
 ```
 
-`f_3381_01c8` is still open: its standalone object has four unmasked data
-differences, so it must be verified through the linked harness before it can
-be accepted.  The staged image remains byte-identical after the accepted
-substitutions (as expected for byte-exact functions); the milestone is that
-the build path from C source to the running VROOMM EXE is now exercised.
+| Module | Accepted functions |
+|---|---|
+| `ov_3381` | 12: `0000`(154) `009a`(100) `00fe`(52) `0132`(58) `016c`(92) `01c8`(116) `023c`(17) `1fa9`(17) `20ee`(19) `23f9`(89) `2452`(113) `2e9a`(72) |
+| `ov_4207` | 3: `0462`(25) `0b55`(51) `1c79`(53) |
+| `ov_48ac` | 2: `0000`(39) `0027`(42) |
+| `ov_4b0a` | 3: `024e`(40) `0b75`(39) `112d`(35) |
+| `ov_4d05` | 3: `01a3`(49) `118b`(64) `125c`(58) |
+| `ov_6a8f` | 11: `0000`(23) `0017`(23) `01e7`(66) `0229`(29) `0246`(16) `04a9`(23) `0a45`(98) `0aa7`(99) `0b0a`(47) `1a4c`(85) `297d`(35) |
+| `ov_77eb` | 2: `1ba2`(17) `2257`(23) |
+| `ov_7e7c` | 1: `0000`(75) |
+
+The staged image remains byte-identical after the accepted substitutions
+(as expected for byte-exact functions); the milestone is that the build path
+from C source to the running VROOMM EXE is exercised for 38 recovered
+functions.  `f_3381_01c8` and the remaining DGROUP-dependent functions are
+accepted through the linked harness (`vroomm_verify_linked.py`), which
+resolves `_DATA` offsets exactly as the original.
 

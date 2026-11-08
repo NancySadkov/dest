@@ -71,3 +71,34 @@ python scripts/fbov/vroomm_subst.py --obj tmp/ovbuild/OV_3381.OBJ \
 `f_3381_0132` (58 bytes) has 2 call-operand differences; `f_3381_233e`
 (60 bytes) is exact.  Both produce a byte-identical staged image, which is the
 acceptance condition for a converted function.
+
+## Module batches
+
+`scripts/fbov/vroomm_verify_module.py` walks every pure-C function in a
+recovered module and accepts the ones whose standalone object matches:
+
+```text
+python scripts/fbov/vroomm_verify_module.py --obj tmp/ovbuild/OV_3381.OBJ \
+    --seg 3381 --src src/recovered/ov_3381.c
+```
+
+Functions that reference `_DATA` by offset cannot be resolved in a standalone
+object.  `scripts/fbov/vroomm_verify_linked.py` builds a linked harness per
+module (against the recovered DGROUP), verifies those functions, and patches
+them in; it prefers the standalone object when that already matches:
+
+```text
+python scripts/fbov/vroomm_verify_linked.py 3381:ov_3381 48ac:ov_48ac \
+    4207:ov_4207 4b0a:ov_4b0a 4d05:ov_4d05 6a8f:ov_6a8f 77eb:ov_77eb \
+    7e7c:ov_7e7c
+```
+
+Result: 37 pure-C overlay functions accepted across the eight modules (plus
+`main`).  After every accepted substitution the staged image remains
+byte-identical to the original, which is the expected parity result for a
+byte-exact function.
+
+Note: a linked harness can shift a module's internal layout, which perturbs
+segment-relative switch jump tables.  For that reason the linked bytes are
+used only for functions that the layout-preserving standalone object cannot
+verify.

@@ -32,14 +32,17 @@ def main():
     ap.add_argument("--compiled-ofs", help="image offset inside --compiled")
     ap.add_argument("--obj", help="OMF object containing an overlay function")
     ap.add_argument("--name", help="symbol in --obj")
-    ap.add_argument("--overlay-seg", help="overlay code segment for --obj, e.g. 3381")
+    ap.add_argument("--linked-exe", help="linked harness EXE containing an overlay function")
+    ap.add_argument("--linked-map", help="map file for --linked-exe")
+    ap.add_argument("--symbol", help="symbol in --linked-map, e.g. _F_3381_01C8")
+    ap.add_argument("--segname", help="code segment in --linked-map, e.g. OV_3381_TEXT")
+    ap.add_argument("--overlay-seg", help="overlay code segment, e.g. 3381")
     a = ap.parse_args()
 
-    if a.obj:
+    if a.obj or a.linked_exe:
         import csv
         import sys
         sys.path.insert(0, os.path.join(ROOT, "scripts", "fbov"))
-        from byte_match import parse_omf
 
         seg = int(a.overlay_seg, 16)
         ofs = int(a.ofs, 16)
@@ -53,9 +56,17 @@ def main():
         staged = bytearray(open(STAGED, "rb").read())
         orig_pos = pos
         original = bytes(staged[orig_pos:orig_pos + a.len])
-        segdata, pub = parse_omf(a.obj)
-        sseg, soff = pub[a.name]
-        compiled = bytes(segdata[sseg][soff:soff + a.len])
+        if a.obj:
+            from byte_match import parse_omf
+            segdata, pub = parse_omf(a.obj)
+            sseg, soff = pub[a.name]
+            compiled = bytes(segdata[sseg][soff:soff + a.len])
+        else:
+            from link_compare import load_image
+            _, real = load_image(a.linked_map, a.segname, a.symbol)
+            cdata = open(a.linked_exe, "rb").read()
+            cimage = struct.unpack_from("<H", cdata, 8)[0] * 16
+            compiled = cdata[cimage + real:cimage + real + a.len]
     else:
         seg = int(a.seg, 16)
         ofs = int(a.ofs, 16)
