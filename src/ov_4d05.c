@@ -2,6 +2,11 @@
 
 extern unsigned char __cdecl16far f_170_005c(unsigned int);
 
+struct s4d05 {
+  char pad[0x29];
+  unsigned char v[6];
+};
+
 void __cdecl16far f_4d05_0000(void)
 {
   asm db 056h,033h,0F6h,0EBh,00Ch,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,084h,0DEh,090h,0FFh
@@ -54,16 +59,15 @@ unsigned char __cdecl16far f_4d05_01a3(unsigned char n, unsigned char max)
   return sum;
 }
 
-void __cdecl16far f_4d05_01d4(void)
+void __cdecl16far f_4d05_01d4(struct s4d05 far *p)
 {
-  unsigned char pad[0x2];
-  asm db 0C6h,046h,0FFh,000h,0EBh,04Ah,06Ah,006h,06Ah,003h,00Eh,0E8h,0BBh,0FFh,083h,0C4h
-  asm db 004h,050h,06Ah,004h,09Ah,05Ch,000h,070h,001h,083h,0C4h,002h,05Ah,002h,0D0h,08Ah
-  asm db 046h,0FFh,0B4h,000h,0C4h,05Eh,006h,003h,0D8h,026h,088h,057h,029h,08Ah,046h,0FFh
-  asm db 0B4h,000h,0C4h,05Eh,006h,003h,0D8h,026h,080h,07Fh,029h,012h,072h,00Fh,08Ah,046h
-  asm db 0FFh,0B4h,000h,0C4h,05Eh,006h,003h,0D8h,026h,0C6h,047h,029h,012h,0FEh,046h,0FFh
-  asm db 080h,07Eh,0FFh,006h,072h,0B0h,0C4h,05Eh,006h,026h,080h,04Fh,028h,020h
-  (void)pad;
+  unsigned char i;
+  for (i = 0; i < 6; i++) {
+    p->v[i] = (unsigned char)(f_4d05_01a3(3, 6) + f_170_005c(4));
+    if (p->v[i] >= 0x12)
+      p->v[i] = 0x12;
+  }
+  p->pad[0x28] |= 0x20;
 }
 
 void __cdecl16far f_4d05_023a(void)
