@@ -553,3 +553,25 @@ intro.  The gap is the 192 KiB fixed slot pool (rebuild ~300 KiB free vs
 original ~500 KiB); the next step is a variable-size packed pool or real
 VROOMM-style swapping.  See [flat_build.md](flat_build.md).
 
+## Decision: run under the original VROOMM
+
+The flat slot loader is a diagnostic scaffold.  The runnable target keeps the
+original VROOMM manager, because it reproduces the original overlay buffer
+segments, load/retry policy and conventional-memory profile exactly.
+
+Requirements for the VROOMM-mode build:
+
+1. restore the C0 `__OvrInit` init-table entry (do not replace it);
+2. build a layout-preserving image with the original segment table and a valid
+   FBOV trailer (the original FBOV while the recovered code is byte-exact);
+3. keep the original overlay header stubs (`CD 3F <ov> <entry>`), not the flat
+   loader's private encoding;
+4. every overlay segment reference must be present in the FBOV fixup tables,
+   so raw `asm db` references must become symbolic before compiled C is
+   substituted.
+
+Route: byte-exact reconstruction first (all recovered regions are already
+verified), then replace functions one at a time, keeping the segment layout
+and the FBOV valid.  The flat loader remains available for ad-hoc checks but
+is no longer the target runnable build.
+
