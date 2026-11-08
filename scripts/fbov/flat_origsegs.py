@@ -152,9 +152,9 @@ emit("DZERO ENDS")
 emit("")
 segmap["zero"] = "DZERO"
 
-# ---- resident overlay slot pool (4 x 32K) ------------------------------
+# ---- resident overlay slot pool (7 x 32K) ------------------------------
 slots = []
-for i in range(8):
+for i in range(6):
     name = "OVSLOT%d" % i
     slots.append(name)
     emit("%s SEGMENT PARA PUBLIC 'FARDATA'" % name)

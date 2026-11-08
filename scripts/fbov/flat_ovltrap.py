@@ -98,27 +98,46 @@ _ovl_handler PROC FAR
     mov ax, es:[si+4]
     mov cs:save_flags, ax
 
-    ; allocate a slot from the resident pool
-    mov bx, 7
-find_slot:
-    cmp byte ptr cs:slot_use[bx], 0
+    ; look for a pinned copy of this overlay
+    mov al, byte ptr cs:cur_ov
+    mov bx, 5
+cache_scan:
+    cmp byte ptr cs:slot_ov[bx], al
+    je  cache_hit
+    dec bx
+    jns cache_scan
+
+    ; otherwise use a slot with no active callers
+    mov bx, 5
+free_scan:
+    cmp byte ptr cs:slot_ref[bx], 0
     je  got_slot
     dec bx
-    jns find_slot
+    jns free_scan
     mov cs:_ovl_dbg, 3
     jmp ovl_fail
 got_slot:
-    mov byte ptr cs:slot_use[bx], 1
+    mov byte ptr cs:slot_ov[bx], al
+    mov cs:cur_slotidx, bx
+    mov byte ptr cs:slot_ref[bx], 1
+    shl bx, 1
+    mov ax, cs:_ovl_slot_para[bx]
+    add ax, cs:load_base
+    mov cs:cur_slot, ax
+    mov bx, cs:cur_ov
+    shl bx, 1
+    mov ax, cs:_ovl_codesz[bx]
+    mov cs:cur_size, ax
+    jmp load_code
+cache_hit:
+    inc byte ptr cs:slot_ref[bx]
     mov cs:cur_slotidx, bx
     shl bx, 1
     mov ax, cs:_ovl_slot_para[bx]
     add ax, cs:load_base
     mov cs:cur_slot, ax
-    ; code size
-    mov bx, cs:cur_ov
-    shl bx, 1
-    mov ax, cs:_ovl_codesz[bx]
-    mov cs:cur_size, ax
+    jmp cache_done
+load_code:
 
     ; seek to the code blob and read it into the block
     mov bx, cs:cur_ov
@@ -173,6 +192,7 @@ fix_loop:
     add si, 4
     loop fix_loop
 fix_done:
+cache_done:
 
     ; push a call record
     mov bx, cs:depth
@@ -263,7 +283,7 @@ _ovl_tramp PROC FAR
     mov ax, word ptr cs:recs[si+2]
     mov cs:cur_ret_cs, ax
     mov bx, word ptr cs:recs[si+4]
-    mov byte ptr cs:slot_use[bx], 0
+    dec byte ptr cs:slot_ref[bx]
     mov ax, cs:cur_ret_ip
     mov cs:jump_ip, ax
     mov ax, cs:cur_ret_cs
@@ -299,7 +319,7 @@ _ovl_fixoff_lo   LABEL WORD
 _ovl_fixoff_hi   LABEL WORD
     dw 51 dup(0)
 _ovl_slot_para   LABEL WORD
-    dw 8 dup(0)
+    dw 6 dup(0)
 _ovl_dbg         LABEL WORD
     dw 0
 _ovl_calls       LABEL WORD
@@ -325,7 +345,8 @@ jump_ptr    LABEL DWORD
 jump_ip     dw 0
 jump_cs     dw 0
 recs        db 32*6 dup(0)
-slot_use    db 8 dup(0)
+slot_ov     db 6 dup(0FFh)
+slot_ref    db 6 dup(0)
 cur_slotidx dw 0
 fixbuf      db 1216*4 dup(0)
 trap_stack  db 1024 dup(0)

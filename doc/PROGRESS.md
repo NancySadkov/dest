@@ -543,13 +543,13 @@ Whole `4B0A` region still matches (0 diffs).
 
 ## Flat development build
 
-A resident-overlay-loader development EXE now compiles, links and runs.  The
-game reaches the real startup screen (ENTER/SPACE/ESC), ENTER switches to
-320x400 and starts loading `STRONG.DAT`, and the loader handles nested
-overlay calls.  It still stops in the game's own fatal handler with
-`Error 0 20`: the sample/memory allocator in overlay `0x474A` cannot get a
-~74 KiB block and the game's own free list at `DGROUP:0x47FA` is empty.  The
-original has a block at `0x478E:0x0008` there and continues.  Remaining work
-is the game's sample-pool initialisation / overlay pinning, not the segment
-relocations.  See [flat_build.md](flat_build.md).
+A resident-overlay-loader development EXE now compiles, links and runs.  It
+reaches the real startup screen, ENTER switches to 320x400 and initialises the
+game cache/free list (`DGROUP:0x47FA`, original `0x478E:8` vs rebuild
+`0x6CC2:8`).  On the next key the game requests a 73,999-byte block and the
+rebuild's smaller free-memory window makes both `farmalloc` and the game pool
+fail, so it prints `Error 0 20`; the original continues into its 16-colour
+intro.  The gap is the 192 KiB fixed slot pool (rebuild ~300 KiB free vs
+original ~500 KiB); the next step is a variable-size packed pool or real
+VROOMM-style swapping.  See [flat_build.md](flat_build.md).
 
