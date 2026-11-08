@@ -637,14 +637,18 @@ void __cdecl16far f_3b1d_1d0c(void)
   asm db 006h,05Fh,001h,000h
 }
 
-void __cdecl16far f_3b1d_1da5(void)
+char __cdecl16far f_3b1d_1da5(char far *a, char far *c)
 {
-  unsigned char pad[0x2];
-  asm db 0C4h,05Eh,006h,026h,0C4h,05Fh,01Dh,026h,0F7h,047h,03Ch,002h,000h,075h,004h,0B0h
-  asm db 001h,0EBh,044h,0FFh,076h,008h,0FFh,076h,006h,00Eh,0E8h,0D7h,0EEh,083h,0C4h,004h
-  asm db 088h,046h,0FFh,0C4h,05Eh,00Ah,026h,0C4h,05Fh,01Dh,026h,0F7h,047h,040h,040h,000h
-  asm db 074h,00Ah,080h,07Eh,0FFh,002h,07Dh,004h,0B0h,000h,0EBh,01Bh,0C4h,05Eh,00Ah,026h
-  asm db 0C4h,05Fh,01Dh,026h,0F7h,047h,03Eh,008h,000h,074h,00Ah,080h,07Eh,0FFh,001h,07Dh
-  asm db 004h,0B0h,000h,0EBh,002h,0B0h,001h
-  (void)pad;
+  if (!(*(unsigned *)(*(char far * far *)(a + 0x1d) + 0x3c) & 2))
+    return 1;
+  {
+    char r = f_3b1d_0c9f(a);
+    if ((*(unsigned *)(*(char far * far *)(c + 0x1d) + 0x40) & 0x40)
+        && r < 2)
+      return 0;
+    if ((*(unsigned *)(*(char far * far *)(c + 0x1d) + 0x3e) & 8)
+        && r < 1)
+      return 0;
+  }
+  return 1;
 }
