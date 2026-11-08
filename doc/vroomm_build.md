@@ -98,7 +98,7 @@ python scripts/fbov/vroomm_verify_linked.py 3381:ov_3381 48ac:ov_48ac \
     7e7c:ov_7e7c
 ```
 
-Result: 502 pure-C overlay functions accepted across 51 modules (plus
+Result: 504 pure-C overlay functions accepted across 51 modules (plus
 `main`).  The per-function list is in `doc/vroomm_accepted.md`.  After every
 accepted substitution the staged image remains byte-identical to the original,
 which is the expected parity result for a byte-exact function.

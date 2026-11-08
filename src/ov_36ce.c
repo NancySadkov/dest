@@ -1,5 +1,9 @@
 #include "dgroup.h"
 
+struct six { unsigned a, b, c, d, e; };
+void __cdecl16far f_00e0_0043(unsigned, unsigned, unsigned, unsigned,
+                              unsigned, unsigned);
+
 void __cdecl16far f_0150_0020(void);
 void __cdecl16far f_0150_0025(void);
 void __cdecl16far f_0158_0075(void);
@@ -85,11 +89,9 @@ void __cdecl16far f_36ce_02f0(void)
   f_0158_0075();
 }
 
-void __cdecl16far f_36ce_0313(void)
+void __cdecl16far f_36ce_0313(struct six far *p)
 {
-  asm db 068h,000h,0A0h,0C4h,05Eh,006h,026h,0FFh,077h,008h,0C4h,05Eh,006h,026h,0FFh,077h
-  asm db 006h,0C4h,05Eh,006h,026h,0FFh,077h,004h,0C4h,05Eh,006h,026h,0FFh,077h,002h,0C4h
-  asm db 05Eh,006h,026h,0FFh,037h,09Ah,043h,000h,0E0h,000h,083h,0C4h,00Ch
+  f_00e0_0043(p->a, p->b, p->c, p->d, p->e, 0xa000);
 }
 
 void __cdecl16far f_36ce_0345(void)

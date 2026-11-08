@@ -1,5 +1,8 @@
 #include "dgroup.h"
 
+char __cdecl16far f_0018_000b(unsigned a, unsigned b);
+void __cdecl16far f_0260_0020(unsigned a);
+
 void __cdecl16far f_77eb_0000(void)
 {
   unsigned char pad[0xc];
@@ -674,11 +677,13 @@ void __cdecl16far f_77eb_21d3(void)
   asm db 0F7h,0EAh,0C1h,0E8h,003h,08Bh,0D8h,08Ah,0C3h
 }
 
-void __cdecl16far f_77eb_21f1(void)
+char __cdecl16far f_77eb_21f1(unsigned a, unsigned b)
 {
-  asm db 056h,08Bh,076h,006h,0FFh,076h,008h,056h,09Ah,00Bh,000h,018h,000h,083h,0C4h,004h
-  asm db 00Ah,0C0h,074h,019h,08Bh,0C6h,02Dh,009h,000h,0BBh,030h,000h,033h,0D2h,0F7h,0F3h
-  asm db 050h,09Ah,020h,000h,060h,002h,083h,0C4h,002h,0B0h,001h,0EBh,002h,0B0h,000h,05Eh
+  if (f_0018_000b(a, b)) {
+    f_0260_0020((a - 9) / 0x30);
+    return 1;
+  }
+  return 0;
 }
 
 void __cdecl16far f_77eb_2226(void)
