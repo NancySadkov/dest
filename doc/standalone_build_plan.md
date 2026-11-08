@@ -17,7 +17,7 @@ operand/table patches in `src/ov_patch.csv`, and combines them with:
 |---|---|---|
 | MZ header | `src/mz_header.bin` | data blob |
 | Static load module | `src/static/*.asm` + `src/static_index.json` | labeled asm blocks |
-| FBOV metadata with overlay code zeroed | `src/base_fbov.bin` | transitional blob |
+| FBOV fixup/trailer metadata | `src/fbov_metadata.bin` + `src/fbov_index.json` | data blob with explicit ranges |
 | Overlay code | `src/` + `src/ov_patch.csv` | rebuilt from source |
 
 The result is byte-identical to the original EXE (SHA-256 `aebde62f...`), and
@@ -74,9 +74,10 @@ manager and resident utility code.
 
 ### Overlay metadata
 
-- The original FBOV trailer, overlay header segments, `int 3Fh` thunk tables,
-  segment table and fixup tables are carried in `src/base_fbov.bin`, with the
-  overlay code regions zeroed.
+- The original FBOV trailer, fixup tables and non-code overlay bytes are
+  carried in `src/fbov_metadata.bin`; `src/fbov_index.json` records where each
+  chunk belongs and where overlay code must be inserted.  Overlay header and
+  thunk segments are part of the static load module in `src/static/`.
 - We have the data to generate them: `doc/fbov_manifest.json`,
   `doc/fbov_segments.csv`, `doc/fbov_overlays.csv`, and the trampoline
   information in the manifest.

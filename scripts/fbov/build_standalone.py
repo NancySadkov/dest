@@ -45,8 +45,15 @@ def main():
     mz = open(os.path.join(SRC, "mz_header.bin"), "rb").read()
     load = open(os.path.join(ROOT, "tmp", "static_load.bin"), "rb").read()
     static = mz + load
-    fbov = bytearray(open(os.path.join(SRC, "base_fbov.bin"), "rb").read())
-    fbov_off = len(static)
+
+    meta_index = json.load(open(os.path.join(SRC, "fbov_index.json")))
+    fbov_off = meta_index["fbov_offset"]
+    fbov = bytearray(meta_index["size"])
+    meta = open(os.path.join(SRC, "fbov_metadata.bin"), "rb").read()
+    for ch in meta_index["chunks"]:
+        fbov[ch["offset"]:ch["offset"] + ch["size"]] = \
+            meta[ch["meta"]:ch["meta"] + ch["size"]]
+    code_pos = {int(c["seg"], 16): c for c in meta_index["code"]}
 
     index = json.load(open(os.path.join(OVCODE, "index.json")))
     for ent in index:
@@ -54,16 +61,12 @@ def main():
         if len(data) != ent["size"]:
             raise SystemExit("%s size %d != %d"
                              % (ent["file"], len(data), ent["size"]))
-        row = None
-        for r in csv.DictReader(open(os.path.join(ROOT, "doc",
-                                                  "fbov_overlays.csv"))):
-            if int(r["code_seg"], 16) == int(ent["seg"], 16):
-                row = r
-                break
-        if row is None:
-            raise SystemExit("overlay %s missing from table" % ent["seg"])
-        off = int(row["code_file_offset"], 0) - fbov_off
-        fbov[off:off + len(data)] = data
+        pos = code_pos.get(int(ent["seg"], 16))
+        if pos is None:
+            raise SystemExit("overlay %s missing from fbov_index" % ent["seg"])
+        if pos["size"] != ent["size"]:
+            raise SystemExit("overlay %s size mismatch" % ent["seg"])
+        fbov[pos["offset"]:pos["offset"] + len(data)] = data
 
     out = static + bytes(fbov)
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
