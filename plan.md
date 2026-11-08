@@ -41,13 +41,13 @@ against the original (`aebde62f...`).
   `src/a<seg><n>.asm`, shared prototype header `src/k<seg>.h`); segment
   parts are linked in original order.
 - Static code: only `main` (`0x1301`, 2,247 bytes) is recovered as C.
-  The remaining static segments (`0x1000` 12,317 bytes - startup, VROOMM
-  manager, utilities; `0x138E` 458; `0x13AA` 1,416; `0x1403` 4,692) are
-  currently carried as the committed `src/base_static.bin` load-module blob.
-  They are the next recovery target.
+  The other static segments (`0x1000` 12,317 bytes - startup, VROOMM manager,
+  utilities; `0x138E` 458; `0x13AA` 1,416; `0x1403` 4,692) are represented as
+  labeled TASM byte blocks in `src/static/`; converting them to C is the next
+  recovery target.
 - Data: DGROUP (`0x2410`, 38,043 bytes) is recovered byte-exact.  The sixteen
-  other non-BSS static data segments (~55 KB) are also carried in
-  `base_static.bin` for now.
+  other non-BSS static data segments (~55 KB) are also byte blocks in
+  `src/static/`.
 - Overlay metadata: the FBOV trailer, overlay headers, `int 3Fh` thunk tables,
   `_SEGTABLE_` and fixups are carried in `src/base_fbov.bin`.  Overlay code
   regions in that blob are zeroed and rebuilt from `src/`.

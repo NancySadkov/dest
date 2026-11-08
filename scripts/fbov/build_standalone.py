@@ -26,17 +26,25 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--skip-overlays", action="store_true",
                     help="use the existing tmp/ovcode build")
+    ap.add_argument("--skip-static", action="store_true",
+                    help="use the existing tmp/static_load.bin")
     ap.add_argument("--out", default=os.path.join(ROOT, "out", "STRONG.EXE"))
     ap.add_argument("--wait", type=int, default=150)
     a = ap.parse_args()
 
+    if not a.skip_static:
+        subprocess.run([sys.executable,
+                        os.path.join(ROOT, "scripts", "fbov",
+                                     "build_static.py")], check=True)
     if not a.skip_overlays:
         subprocess.run([sys.executable,
                         os.path.join(ROOT, "scripts", "fbov",
                                      "build_overlays.py"),
                         "--wait", str(a.wait)], check=True)
 
-    static = open(os.path.join(SRC, "base_static.bin"), "rb").read()
+    mz = open(os.path.join(SRC, "mz_header.bin"), "rb").read()
+    load = open(os.path.join(ROOT, "tmp", "static_load.bin"), "rb").read()
+    static = mz + load
     fbov = bytearray(open(os.path.join(SRC, "base_fbov.bin"), "rb").read())
     fbov_off = len(static)
 

@@ -58,17 +58,19 @@ read at build time.
 `scripts/fbov/build_standalone.py` builds a byte-identical `STRONG.EXE`
 without opening `game/STRONG.EXE`:
 
-1. `build_overlays.py` compiles all overlay modules and chunks in one link,
+1. `build_static.py` assembles the labeled blocks in `src/static/` and places
+   each one at its original load-module offset.
+2. `build_overlays.py` compiles all overlay modules and chunks in one link,
    extracts every `OV_<seg>_TEXT` segment, and applies `src/ov_patch.csv`
    (original call/jump operand and switch-table bytes).
-2. The overlay code is written into the zeroed regions of
-   `src/base_fbov.bin`.
-3. The result is concatenated with `src/base_static.bin` and checked against
-   the original SHA-256 (`aebde62f...`).
+3. The overlay code is written into the zeroed regions of
+   `src/base_fbov.bin`, then concatenated with `src/mz_header.bin` and the
+   static load module.
+4. The output is checked against the original SHA-256 (`aebde62f...`).
 
-The two base blobs are transitional: they hold the static load module and the
-FBOV metadata until those parts are generated from recovered source.  Overlay
-code is already built from source.
+`base_fbov.bin` is the remaining transitional blob; it holds the FBOV
+metadata until those tables are generated from recovered source.  Static code
+and data and all overlay code are already built from source files.
 
 ## Relationship to the flat build
 

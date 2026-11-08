@@ -10,7 +10,9 @@ This is the active reversed source tree for `STRONG.EXE`.
 | `a<seg><n>.asm` | TASM byte block holding one non-standard function |
 | `k<seg>.h` | prototypes shared by that module's chunks |
 | `ov_patch.csv` | original call/jump operand and switch-table bytes restored at build time |
-| `base_static.bin` | transitional static load-module blob |
+| `static/` | labeled TASM blocks for the static code/data/header segments |
+| `static_index.json` | original file offset, size and segment name for each static block |
+| `mz_header.bin` | original MZ header and relocation table |
 | `base_fbov.bin` | transitional FBOV/overlay-metadata blob with overlay code zeroed |
 | `dgroup.c`, `dgroup.h` | recovered DGROUP (`_DATA`), byte-identical to the original |
 | `st_types.h` | recovered structs/enums/typedefs |

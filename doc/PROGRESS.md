@@ -14,7 +14,7 @@ Plan: [`../plan.md`](../plan.md)
 | G3 ? reference audit | **PASS** | `scripts/fbov/audit_refs.py`: 0 errors; 18 null-target relocations documented |
 | G4 ? data/global model | **PASS** | DGROUP byte-identical under TC30 (0/38,042 differences); 1,205 symbols/types applied |
 | G5 - startup/`main` byte-exact | **PASS for `main` and all 51 overlays** | `mkp` byte-exact; `main` 2246 bytes byte-exact; all 51 overlay code regions rebuilt at original offsets; 757/757 functions byte-accepted (call/jump operands masked) |
-| G6 ? link | **PASS** | `scripts/fbov/build_standalone.py` builds a byte-identical `STRONG.EXE` from `src/` + committed base blobs without reading the original EXE; SHA-256 `aebde62f...` |
+| G6 ? link | **PASS** | `scripts/fbov/build_standalone.py` builds a byte-identical `STRONG.EXE` from `src/` (static blocks in `src/static/`, overlays in `src/`) without reading the original EXE; SHA-256 `aebde62f...` |
 | G7 ? runtime equivalence | NOT STARTED | output is byte-identical to the original; runtime scenario tests still to be automated |
 
 ## Source layout
