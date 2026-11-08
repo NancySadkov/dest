@@ -1,5 +1,9 @@
 #include "dgroup.h"
 
+char __cdecl16far f_00e0_0061(void);
+void __cdecl16far f_00f0_007a(void);
+unsigned __cdecl16far f_00e0_0020(void);
+
 void __cdecl16far f_69c8_0000(void)
 {
   asm db 056h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,0D9h,000h,001h,0B8h,080h,002h,08Eh
@@ -107,12 +111,18 @@ void __cdecl16far f_69c8_0373(void)
 
 void __cdecl16far f_69c8_047f(void)
 {
-  unsigned char pad[0x2];
-  asm db 0C6h,046h,0FFh,000h,09Ah,061h,000h,0E0h,000h,00Ah,0C0h,074h,009h,09Ah,07Ah,000h
-  asm db 0F0h,000h,0C6h,046h,0FFh,001h,09Ah,020h,000h,0E0h,000h,00Bh,0C0h,074h,004h,0C6h
-  asm db 046h,0FFh,001h,080h,07Eh,0FFh,000h,075h,0D7h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h
-  asm db 006h,0AFh,08Bh,000h,0B8h,080h,002h,08Eh,0C0h,026h,0C6h,006h,0AEh,08Bh,000h
-  (void)pad;
+  char flag;
+  do {
+    flag = 0;
+    if (f_00e0_0061()) {
+      f_00f0_007a();
+      flag = 1;
+    }
+    if (f_00e0_0020())
+      flag = 1;
+  } while (flag != 0);
+  *(unsigned char far *)MK_FP(0x280, 0x8baf) = 0;
+  *(unsigned char far *)MK_FP(0x280, 0x8bae) = 0;
 }
 
 void __cdecl16far f_69c8_04c6(void)

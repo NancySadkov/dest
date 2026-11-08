@@ -38,7 +38,7 @@ void __cdecl16far f_6fbe_013a(void)
   (void)pad;
 }
 
-void __cdecl16far f_6fbe_01a9(void)
+char __cdecl16far f_6fbe_01a9(unsigned a, unsigned b, unsigned c, unsigned d)
 {
   unsigned char pad[0x86];
   asm db 056h,057h,06Ah,000h,068h,080h,000h,016h,08Dh,086h,07Ah,0FFh,050h,0FFh,076h,006h
@@ -75,13 +75,14 @@ void __cdecl16far f_6fbe_0322(void)
   asm db 004h,00Eh,0E8h,04Fh,0FEh,083h,0C4h,008h
 }
 
-void __cdecl16far f_6fbe_035f(void)
+char __cdecl16far f_6fbe_035f(unsigned a, unsigned b, unsigned c)
 {
-  unsigned char pad[0x2];
-  asm db 056h,0FFh,076h,006h,09Ah,02Ah,000h,070h,001h,083h,0C4h,002h,08Bh,0F0h,08Bh,0DEh
-  asm db 0D1h,0E3h,0B8h,068h,000h,08Eh,0C0h,026h,083h,0BFh,020h,024h,000h,07Dh,004h,0B0h
-  asm db 001h,0EBh,01Fh,06Ah,004h,0FFh,076h,00Ah,0FFh,076h,008h,056h,00Eh,0E8h,014h,0FEh
-  asm db 083h,0C4h,008h,088h,046h,0FFh,056h,09Ah,02Fh,000h,070h,001h,083h,0C4h,002h,08Ah
-  asm db 046h,0FFh,05Eh
-  (void)pad;
+  int i = f_0170_002a(a);
+  if (*(int far *)MK_FP(0x68, i * 2 + 0x2420) < 0)
+    return 1;
+  {
+    char r = f_6fbe_01a9(i, b, c, 4);
+    f_0170_002f(i);
+    return r;
+  }
 }
