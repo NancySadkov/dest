@@ -16,10 +16,10 @@ that are still borrowed from the original image.
 
 - 51 overlay modules, 757 functions.
 - **504 byte-accepted** (call/jump operands masked).  Byte acceptance is not
-  C recovery: only **119 are real C** (22,347 bytes); **385 are byte-exact
-  manual-frame `asm db`/pad dumps** (278,288 bytes).
+  C recovery: only **121 are real C** (22,453 bytes); **383 are byte-exact
+  manual-frame `asm db`/pad dumps** (278,182 bytes).
 - **253 functions are not yet byte-accepted** (55,154 bytes of raw asm/pad).
-- True C coverage: 119/757 functions.  Per-function status:
+- True C coverage: 121/757 functions.  Per-function status:
   `doc/recovery_status.md`; per-function inventory: `tmp/fn_inventory.csv`
   (regenerate with `tmp/inventory.py`).
 
@@ -128,7 +128,7 @@ practical deliverable, or complete A first if exact parity is the priority.
 
 ### Phase 1 — finish overlay function recovery
 
-- Convert the 638 remaining non-C functions: 385 byte-accepted manual-frame
+- Convert the 636 remaining non-C functions: 383 byte-accepted manual-frame
   `asm db`/pad dumps plus 253 raw asm/pad functions that are not yet
   byte-accepted.  There are no failing C bodies; the former "mismatches" were
   pad dumps.
