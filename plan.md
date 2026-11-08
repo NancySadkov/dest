@@ -15,6 +15,50 @@ Progress is measured against those criteria, not against module compile counts.
 
 ---
 
+## Current status (2026-11-08)
+
+The project has a working **oracle build**, but not yet a standalone build.
+
+- Source tree: active recovered source is in `src/` (no `src/recovered/`,
+  no `src/chunks/`).  Layout and conventions: `src/README.md`.
+- Overlay code: 51 modules, 757 functions. **504 accepted byte-exact**;
+  **242 still raw `asm db`** (about 40 KB); **11 C bodies fail verification**.
+- Static code: only `main` (`0x1301`, 2,247 bytes) is recovered/verified.
+  Missing: `0x1000` (12,317 bytes — startup, VROOMM manager, utilities),
+  `0x138E` (458), `0x13AA` (1,416), `0x1403` (4,692).
+- Data: DGROUP (`0x2410`, 38,043 bytes) is recovered byte-exact.  Sixteen
+  other non-BSS static data segments (~55 KB) are not yet represented in
+  source.
+- Overlay metadata: the FBOV trailer, overlay headers, `int 3Fh` thunks,
+  `_SEGTABLE_` and fixups are still copied from the original EXE.  A
+  generator has not been written yet.
+- Runtime: still the original VROOMM manager and startup.
+  `tools/devroomm/src/ovrman.c` is the reversed manager reference.
+- Oracle build: `scripts/fbov/vroomm_baseline.py` stages the original EXE and
+  `vroomm_verify_linked.py` patches verified functions into it.  It boots to
+  320x400 and stays byte-identical for accepted functions, but it **reads the
+  original EXE**, so it is not the final build.
+
+Detailed current plan: `doc/standalone_build_plan.md`.
+Recovery quirks: `doc/quirks.md`.
+Accepted functions: `doc/vroomm_accepted.md`.
+
+### Route to a standalone build
+
+1. **Layout-preserving** — recover static `0x1000`, generate the overlay
+   headers/thunks/FBOV, rebuild the VROOMM manager, link in the original
+   segment order, and target a byte-identical source-built EXE.  Strongest
+   parity; hardest.
+2. **Functional** — link recovered code into a conventional EXE with direct
+   thunk calls or a custom overlay loader, accepting a non-identical memory
+   layout.  Faster to a runnable build; requires a memory strategy and runtime
+   parity tests.
+
+Recommended: use route 1 as the correctness oracle and route 2 as the
+practical deliverable, or finish route 1 if exact parity is the priority.
+
+---
+
 ## 1. What went wrong
 
 The previous attempt started from a merged image produced by `mzap -mb` and
@@ -428,11 +472,12 @@ For each function:
 1. Determine its exact bounds from the new analysis/relocations.
 2. Read the assembly and pcode. The decompiler is a hint, never the answer.
 3. Recover the signature, calling convention, locals, and segment assumptions.
-4. Write clean C in `src/recovered/<module>.c`.
+4. Write clean C in `src/ov_<seg>.c` (or `src/main.c` for the static main).
 5. Compile with TC30 using the project's fixed flags.
 6. Compare the generated function code with the original bytes.
 7. Fix until the comparison passes.
-8. Add the function to `doc/functions.csv`.
+8. Add the function to the accepted manifest (`doc/vroomm_accepted.md`) by
+   running the verifier; do not hand-edit that file.
 
 ### Byte-match rules
 
@@ -456,7 +501,7 @@ Gate G5: `main` and the startup path are recovered and `exact`.
 
 ---
 
-## 11. Phase 6 — build and link
+## 11. Phase 6 - build and link
 
 - Use TC++ 3.0 (`tools/TC30`), large model, overlays.
 - Fixed compiler flags, established empirically against `main`:
@@ -469,6 +514,12 @@ Gate G5: `main` and the startup path are recovered and `exact`.
 - Link against the original Borland runtime and overlay manager where possible;
   do not re-implement CRT/overlay code unless necessary.
 - Compare the linked image's segment map and entry state with the original.
+
+The current oracle build (`vroomm_baseline.py` + `vroomm_subst.py`) is a
+verification aid, not this phase: it patches the original EXE.  The standalone
+build must compile, link and package the image without reading
+`game/STRONG.EXE`.  See `doc/standalone_build_plan.md` for the two routes
+(layout-preserving vs functional) and the gap list.
 
 Gate G6: the reconstruction links and its segment map matches the original.
 
@@ -560,11 +611,16 @@ Completed:
 
 Next:
 
-7. ~~G4: recover the DGROUP layout, structs and globals.~~
-8. ~~G5: build the per-function byte-match harness.~~ (`mkp` byte-exact;
-   `main` 2246 bytes byte-exact with external call operands masked)
-9. Recover the startup/`main` callees in the other code segments.
-10. Repair `OVC23` (`55FE:0000`) alongside the function queue.
+9. Finish overlay recovery: 242 raw `asm db` functions and 11 failing C
+   bodies (including `OVC23` / `55FE:0000`).
+10. Recover the static code, starting with `0x1000` (startup, VROOMM manager,
+    utilities), then `0x138E`, `0x13AA`, `0x1403`.
+11. Extract and commit the 16 non-DGROUP static data segments.
+12. Generate the overlay metadata (`bosh_t` headers, `botrp_t` thunks,
+    `_SEGTABLE_`, FBOV fixups) from committed metadata.
+13. Build the static core first, then add overlays; make the build script stop
+    reading `game/STRONG.EXE`.
+14. Run runtime parity tests against the original oracle.
 
 All emulator runs use `scripts/fbov/run_dosbox.py` or `-noconsole` +
 `SDL_VIDEODRIVER=dummy` + a hidden window, so they do not steal focus.
@@ -573,12 +629,19 @@ All emulator runs use `scripts/fbov/run_dosbox.py` or `-noconsole` +
 
 ## 16. Definition of done
 
+- The build script compiles, links and packages the game from `src/` and
+  committed metadata **without reading `game/STRONG.EXE`**.  The original EXE
+  remains only as a test oracle.
 - Every function in the original is either recovered or identified as part of
   the Borland runtime/overlay manager.
 - Every recovered function compiles with TC30 and matches the original bytes
   (or has a documented, reviewed equivalent).
-- Every data reference resolves to a verified segment/symbol.
-- The reconstruction links and runs with the original runtime.
+- Every data reference resolves to a verified segment/symbol; all static data
+  is represented in source or in committed generated data.
+- Overlay headers, thunks, segment/fixup tables and overlay layout are
+  generated from committed metadata, not copied from the original image.
+- The reconstruction links and runs with the recovered/rebuilt runtime, or a
+  documented replacement loader with verified behaviour.
 - Behaviour matches the original under the harness.
 - `doc/PROGRESS.md` reports zero bogus references and zero unverified symbols.
 
