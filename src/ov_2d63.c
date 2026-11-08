@@ -1,5 +1,9 @@
 #include "dgroup.h"
 
+/* INT 66h service wrappers preserve es, ds, si and di. */
+#define ENTER_INT66 asm db 06h, 1Eh, 56h, 57h
+#define LEAVE_INT66 asm db 5Fh, 5Eh, 1Fh, 07h
+
 /* 2D63:0000  linear address -> far pointer (result in DX:AX) */
 void __cdecl16far f_2d63_0000(unsigned offv, unsigned segv)
 {
@@ -42,9 +46,14 @@ void __cdecl16far f_2d63_0030(void)
   asm int 0x16
 }
 
+/* 2D63:0039  key available? (result in AX) */
 void __cdecl16far f_2d63_0039(void)
 {
-  asm db 0B4h,001h,0CDh,016h,0B8h,000h,000h,074h,003h,0B8h,001h,000h
+  asm mov ah, 1
+  asm int 0x16
+  asm mov ax, 0
+  asm db 74h, 03h        /* je +3 (flags from int 16h) */
+  asm mov ax, 1
 }
 
 /* 2D63:004A  mouse button state (result in AX, low 3 bits) */
@@ -108,22 +117,36 @@ void __cdecl16far f_2d63_014b(void)
   asm db 002h,0D2h,0E2h,002h,0D6h,080h,0C2h,0F2h,08Ah,0C2h
 }
 
+/* 2D63:017A  mouse reset */
 void __cdecl16far f_2d63_017a(void)
 {
-  asm db 056h,057h,006h,01Eh,00Eh,007h,0B8h,00Ch,000h,033h,0C9h,0CDh,033h,01Fh,007h,05Fh
-  asm db 05Eh
+  asm db 56h, 57h, 06h, 1Eh, 0Eh, 07h   /* push si,di,es,ds, push cs, pop es */
+  asm mov ax, 0xc
+  asm db 33h, 0C9h                       /* xor cx, cx */
+  asm int 0x33
+  asm db 1Fh, 07h, 5Fh, 5Eh             /* pop ds, es, di, si */
 }
 
+/* 2D63:0190  mouse button state (result in AX) */
 void __cdecl16far f_2d63_0190(void)
 {
-  asm db 006h,057h,01Eh,056h,0B8h,005h,000h,033h,0DBh,0CDh,033h,025h,007h,000h,05Eh,01Fh
-  asm db 05Fh,007h
+  asm db 06h, 57h, 1Eh, 56h             /* push es, di, ds, si */
+  asm mov ax, 5
+  asm db 33h, 0DBh                       /* xor bx, bx */
+  asm int 0x33
+  asm and ax, 7
+  asm db 5Eh, 1Fh, 5Fh, 07h             /* pop si, ds, di, es */
 }
 
-void __cdecl16far f_2d63_01a7(void)
+/* 2D63:01A7  mouse position */
+void __cdecl16far f_2d63_01a7(unsigned x, unsigned y)
 {
-  asm db 006h,057h,01Eh,056h,0B8h,004h,000h,08Bh,04Eh,006h,08Bh,056h,008h,0CDh,033h,05Eh
-  asm db 01Fh,05Fh,007h
+  asm db 06h, 57h, 1Eh, 56h             /* push es, di, ds, si */
+  asm mov ax, 4
+  asm mov cx, x
+  asm mov dx, y
+  asm int 0x33
+  asm db 5Eh, 1Fh, 5Fh, 07h             /* pop si, ds, di, es */
 }
 
 void __cdecl16far f_2d63_01bf(void)
@@ -256,24 +279,42 @@ void __cdecl16far f_2d63_05e5(void)
   asm db 0E2h,0F3h,05Ah,05Bh,059h,058h,05Fh,007h
 }
 
+/* 2D63:06BF  INT 66h service 0x689 */
 void __cdecl16far f_2d63_06bf(void)
 {
-  asm db 006h,01Eh,056h,057h,0B8h,089h,006h,0CDh,066h,05Fh,05Eh,01Fh,007h
+  ENTER_INT66;
+  asm mov ax, 0x689
+  asm int 0x66
+  LEAVE_INT66;
 }
 
-void __cdecl16far f_2d63_06d1(void)
+/* 2D63:06D1  INT 66h service 0x68B, si:ds = string */
+void __cdecl16far f_2d63_06d1(char far *p)
 {
-  asm db 006h,01Eh,056h,057h,0B8h,08Bh,006h,0C5h,076h,006h,0CDh,066h,05Fh,05Eh,01Fh,007h
+  ENTER_INT66;
+  asm mov ax, 0x68b
+  asm db 0C5h, 76h, 06h        /* lds si, [bp+6] */
+  asm int 0x66
+  LEAVE_INT66;
 }
 
-void __cdecl16far f_2d63_06e6(void)
+/* 2D63:06E6  INT 66h service 0x694, si:ds = string */
+void __cdecl16far f_2d63_06e6(char far *p)
 {
-  asm db 006h,01Eh,056h,057h,0B8h,094h,006h,0C5h,076h,006h,0CDh,066h,05Fh,05Eh,01Fh,007h
+  ENTER_INT66;
+  asm mov ax, 0x694
+  asm db 0C5h, 76h, 06h        /* lds si, [bp+6] */
+  asm int 0x66
+  LEAVE_INT66;
 }
 
+/* 2D63:06FB  INT 66h service 0x68F */
 void __cdecl16far f_2d63_06fb(void)
 {
-  asm db 006h,01Eh,056h,057h,0B8h,08Fh,006h,0CDh,066h,05Fh,05Eh,01Fh,007h
+  ENTER_INT66;
+  asm mov ax, 0x68f
+  asm int 0x66
+  LEAVE_INT66;
 }
 
 void __cdecl16far f_2d63_070d(void)
@@ -281,31 +322,56 @@ void __cdecl16far f_2d63_070d(void)
   asm db 01Eh,056h,0B8h,08Ah,006h,0C5h,076h,006h,0CDh,066h,05Eh,01Fh
 }
 
-void __cdecl16far f_2d63_075f(void)
+/* 2D63:075F  INT 66h service 0x702, bx = value */
+void __cdecl16far f_2d63_075f(unsigned x)
 {
-  asm db 006h,01Eh,056h,057h,0B8h,002h,007h,08Bh,05Eh,006h,0CDh,066h,05Fh,05Eh,01Fh,007h
+  ENTER_INT66;
+  asm mov ax, 0x702
+  asm mov bx, x
+  asm int 0x66
+  LEAVE_INT66;
 }
 
-void __cdecl16far f_2d63_0774(void)
+/* 2D63:0774  INT 66h service 0x703, bx/cx = values */
+void __cdecl16far f_2d63_0774(unsigned x, unsigned y)
 {
-  asm db 006h,01Eh,056h,057h,0B8h,003h,007h,08Bh,05Eh,006h,08Bh,04Eh,008h,0CDh,066h,05Fh
-  asm db 05Eh,01Fh,007h
+  ENTER_INT66;
+  asm mov ax, 0x703
+  asm mov bx, x
+  asm mov cx, y
+  asm int 0x66
+  LEAVE_INT66;
 }
 
-void __cdecl16far f_2d63_078c(void)
+/* 2D63:078C  INT 66h service 0x704 */
+void __cdecl16far f_2d63_078c(unsigned a, unsigned b, unsigned c, unsigned d)
 {
-  asm db 006h,01Eh,056h,057h,0B8h,004h,007h,08Bh,05Eh,006h,08Bh,04Eh,008h,08Bh,076h,00Ah
-  asm db 08Bh,07Eh,00Ch,0CDh,066h,05Fh,05Eh,01Fh,007h
+  ENTER_INT66;
+  asm mov ax, 0x704
+  asm mov bx, a
+  asm mov cx, b
+  asm db 8Bh, 76h, 0Ah        /* mov si, [bp+0ah] */
+  asm db 8Bh, 7Eh, 0Ch        /* mov di, [bp+0ch] */
+  asm int 0x66
+  LEAVE_INT66;
 }
 
+/* 2D63:07AA  INT 66h service 0x705 */
 void __cdecl16far f_2d63_07aa(void)
 {
-  asm db 006h,01Eh,056h,057h,0B8h,005h,007h,0CDh,066h,05Fh,05Eh,01Fh,007h
+  ENTER_INT66;
+  asm mov ax, 0x705
+  asm int 0x66
+  LEAVE_INT66;
 }
 
+/* 2D63:07BC  INT 66h service 0x70C */
 void __cdecl16far f_2d63_07bc(void)
 {
-  asm db 006h,01Eh,056h,057h,0B8h,00Ch,007h,0CDh,066h,05Fh,05Eh,01Fh,007h
+  ENTER_INT66;
+  asm mov ax, 0x70c
+  asm int 0x66
+  LEAVE_INT66;
 }
 
 void __cdecl16far f_2d63_07ce(void)
@@ -315,21 +381,38 @@ void __cdecl16far f_2d63_07ce(void)
   asm db 001h,000h,05Eh,01Fh
 }
 
-void __cdecl16far f_2d63_07fb(void)
+/* 2D63:07FB  INT 66h service 0x710, bx/cx/dx/si from args */
+void __cdecl16far f_2d63_07fb(unsigned a, unsigned b, unsigned c, unsigned d)
 {
-  asm db 006h,01Eh,056h,057h,08Bh,05Eh,008h,08Bh,04Eh,006h,08Bh,056h,00Ch,08Bh,076h,00Ah
-  asm db 0B8h,010h,007h,0CDh,066h,05Fh,05Eh,01Fh,007h
+  ENTER_INT66;
+  asm mov bx, b
+  asm mov cx, a
+  asm mov dx, d
+  asm db 8Bh, 76h, 0Ah        /* mov si, [bp+0ah] */
+  asm mov ax, 0x710
+  asm int 0x66
+  LEAVE_INT66;
 }
 
-void __cdecl16far f_2d63_0819(void)
+/* 2D63:0819  INT 66h service 0x697, dx = value */
+void __cdecl16far f_2d63_0819(unsigned x)
 {
-  asm db 006h,01Eh,056h,057h,08Bh,056h,006h,0B8h,097h,006h,0CDh,066h,05Fh,05Eh,01Fh,007h
+  ENTER_INT66;
+  asm mov dx, x
+  asm mov ax, 0x697
+  asm int 0x66
+  LEAVE_INT66;
 }
 
-void __cdecl16far f_2d63_082e(void)
+/* 2D63:082E  INT 66h service 0x70F, bx/cx = values */
+void __cdecl16far f_2d63_082e(unsigned a, unsigned b)
 {
-  asm db 006h,01Eh,056h,057h,0B8h,00Fh,007h,08Bh,05Eh,006h,08Bh,04Eh,008h,0CDh,066h,05Fh
-  asm db 05Eh,01Fh,007h
+  ENTER_INT66;
+  asm mov ax, 0x70f
+  asm mov bx, a
+  asm mov cx, b
+  asm int 0x66
+  LEAVE_INT66;
 }
 
 void __cdecl16far f_2d63_0846(void)
@@ -365,9 +448,12 @@ void __cdecl16far f_2d63_09c9(void)
   asm db 0C2h,08Ah,046h,00Ch,0FCh,0F3h,0AAh,01Fh,007h,05Fh
 }
 
+/* 2D63:0A18  multiplex interrupt 0x16, low result byte */
 void __cdecl16far f_2d63_0a18(void)
 {
-  asm db 0B8h,000h,016h,0CDh,02Fh,032h,0E4h
+  asm mov ax, 0x1600
+  asm int 0x2f
+  asm db 32h, 0E4h            /* xor ah, ah */
 }
 
 void __cdecl16far f_2d63_0a24(void)
@@ -413,22 +499,42 @@ void __cdecl16far f_2d63_0b4d(void)
   asm db 0F0h,04Bh,075h,0E0h,05Bh,059h,05Fh,05Eh,01Fh
 }
 
-void __cdecl16far f_2d63_0b94(void)
+/* 2D63:0B94  linear address -> far pointer (result in DX:AX) */
+void __cdecl16far f_2d63_0b94(unsigned offv, unsigned segv)
 {
-  asm db 051h,08Bh,046h,006h,08Bh,056h,008h,0B1h,004h,0D3h,0E8h,003h,0D0h,08Bh,046h,006h
-  asm db 025h,00Fh,000h,059h
+  asm push cx
+  asm mov ax, offv
+  asm mov dx, segv
+  asm mov cl, 4
+  asm shr ax, cl
+  asm db 03h, 0D0h            /* add dx, ax */
+  asm mov ax, offv
+  asm and ax, 0xf
+  asm pop cx
 }
 
-void __cdecl16far f_2d63_0bad(void)
+/* 2D63:0BAD  copy words between far pointers */
+void __cdecl16far f_2d63_0bad(char far *src, char far *dst, unsigned words)
 {
-  asm db 006h,057h,01Eh,056h,051h,0C5h,076h,006h,0C4h,07Eh,00Ah,08Bh,04Eh,00Eh,0FCh,0F3h
-  asm db 0A5h,059h,05Eh,01Fh,05Fh,007h
+  asm db 06h, 57h, 1Eh, 56h, 51h       /* push es,di,ds,si,cx */
+  asm db 0C5h, 76h, 06h                /* lds si, [bp+6] */
+  asm db 0C4h, 7Eh, 0Ah                /* les di, [bp+0ah] */
+  asm mov cx, words
+  asm cld
+  asm rep movsw
+  asm db 59h, 5Eh, 1Fh, 5Fh, 07h       /* pop cx,si,ds,di,es */
 }
 
-void __cdecl16far f_2d63_0bc8(void)
+/* 2D63:0BC8  fill a far buffer with words */
+void __cdecl16far f_2d63_0bc8(char far *dst, unsigned words)
 {
-  asm db 006h,057h,051h,0C4h,07Eh,006h,08Bh,04Eh,00Ah,033h,0C0h,0FCh,0F3h,0ABh,059h,05Fh
-  asm db 007h
+  asm db 06h, 57h, 51h                 /* push es,di,cx */
+  asm db 0C4h, 7Eh, 06h                /* les di, [bp+6] */
+  asm mov cx, words
+  asm db 33h, 0C0h                     /* xor ax, ax */
+  asm cld
+  asm rep stosw
+  asm db 59h, 5Fh, 07h                 /* pop cx,di,es */
 }
 
 void __cdecl16far f_2d63_0bde(void)
