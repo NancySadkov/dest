@@ -20,10 +20,10 @@ Plan: [`../plan.md`](../plan.md)
 ## Source layout
 
 The active reversed tree lives directly in `src/`: one `ov_<seg>.c` per
-original overlay module, `main.c`, `dgroup.c`/`dgroup.h`, `st_types.h`,
-`st_compat.h`, and chunked sources under `src/chunks/<seg>/`.  The early 2024
-partial rewrite (old `src/init.c`, `src/util.c`, `src/build.BAT`, ...) is
-quarantined in `reference/legacy_src/` and is not built.
+original overlay module, `main.c`, `dgroup.c`/`dgroup.h`, `st_types.h`, and
+`st_compat.h`.  The early 2024 partial rewrite (old `src/init.c`,
+`src/util.c`, `src/build.BAT`, ...) is quarantined in
+`reference/legacy_src/` and is not built.
 
 ## Phase 1 results
 
@@ -447,11 +447,11 @@ per-table TASM data modules interleaved with C function chunks:
 | 13F1 | 77EB | 9,319 |
 | 1408 | 8699 | 16,332 |
 
-Chunked sources and table modules are under `src/chunks/<seg>/`.
-`scripts/fbov/chunk_build.py` splits the generated C at each data gap and
-emits a TASM module for the gap bytes; TLINK then concatenates
-`chunk, table, chunk, ...` in order. Functions with a manual frame and a
-`pop bp` epilogue are emitted frameless with the `sub sp` bytes inline.
+The chunked-link experiment used per-table TASM data modules interleaved with
+C function chunks.  Its committed sources under `src/chunks/` have been
+removed now that the active build consumes `src/ov_<seg>.c` directly;
+`scripts/fbov/chunk_build.py` can still regenerate equivalent chunks into
+`tmp/chunkbuild/` if that approach is needed again.
 
 ### Refactoring (started)
 
@@ -530,7 +530,7 @@ Refactoring batch 9 (`ov_77eb.c`):
 - `f_77eb_2257` -> pointer selector for `x <= 0`
 
 Whole `77EB` region still matches (0 diffs) through the chunked link.
-Chunk sources under `src/chunks/77eb` regenerated.
+The 77EB overlay sources were regenerated for the chunked link.
 
 Refactoring batch 10:
 
