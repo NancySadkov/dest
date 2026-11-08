@@ -15,6 +15,8 @@ import struct
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if not os.path.isdir(os.path.join(ROOT, "doc")):
+    ROOT = r"C:\Users\nangl\d\code\dest"
 MAN = os.path.join(ROOT, "doc", "fbov_manifest.json")
 EXE = os.path.join(ROOT, "game", "STRONG.EXE")
 OUT = os.path.join(ROOT, "tmp", "flat")
@@ -150,13 +152,30 @@ emit("DZERO ENDS")
 emit("")
 segmap["zero"] = "DZERO"
 
-# ---- overlay header trampolines -----------------------------------------
+# ---- resident overlay slot pool (4 x 32K) ------------------------------
+slots = []
+for i in range(8):
+    name = "OVSLOT%d" % i
+    slots.append(name)
+    emit("%s SEGMENT PARA PUBLIC 'FARDATA'" % name)
+    emit("db 8000h dup(0)")
+    emit("%s ENDS" % name)
+    emit("")
+segmap["slots"] = slots
+
+# ---- overlay header trampolines (INT 3F entries) ------------------------
+ov_ids = {o["code_seg"]: i for i, o in enumerate(
+    sorted(m["overlays"], key=lambda x: x["code_seg"]))}
+segmap["ov_ids"] = {("%04X" % k): v for k, v in sorted(ov_ids.items())}
+
 for ov in m["overlays"]:
     static = ov["header_static_seg"]
     name = "H%04X" % static
+    oid = ov_ids[ov["code_seg"]]
     segmap["headers"][static] = {"seg": name,
                                  "raw_header": ov["header_seg"],
-                                 "code_seg": ov["code_seg"]}
+                                 "code_seg": ov["code_seg"],
+                                 "ov_id": oid}
     entries = []
     emit("%s SEGMENT PARA PUBLIC 'CODE'" % name)
     prefix = seg_bytes(static, 0x20)
@@ -171,9 +190,14 @@ for ov in m["overlays"]:
         if off > cur:
             emit("db " + ",".join("00h" for _ in range(off - cur)))
             cur = off
-        emit("db 0EAh,000h,000h,000h,000h")
+        sym = "f_%04x_%04x" % (ov["header_seg"], off)
+        emit("PUBLIC _%s" % sym)
+        emit("_%s LABEL FAR" % sym)
+        emit("db 0CDh,03Fh,0%02Xh,0%02Xh,0%02Xh"
+             % (oid, t["target_ofs"] & 0xFF, (t["target_ofs"] >> 8) & 0xFF))
         entries.append({"off": off, "code": ov["code_seg"],
-                        "target": t["target_ofs"]})
+                        "target": t["target_ofs"], "ov_id": oid,
+                        "sym": sym})
         cur += 5
     emit("%s ENDS" % name)
     emit("")

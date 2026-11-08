@@ -543,14 +543,13 @@ Whole `4B0A` region still matches (0 diffs).
 
 ## Flat development build
 
-A resident, no-overlay development EXE now compiles, links and runs through
-TC30 and the original resident runtime.  It reaches the game's startup
-configuration screen (ENTER/SPACE/ESC), the sound-selection prompts, and then
-stops in the game's own fatal handler with `Error 0 20`: the game's block
-allocator cannot obtain memory because keeping every overlay resident leaves
-only about 100 KiB of conventional memory (the original 128 KiB load module
-leaves about 500 KiB).  The original EXE continues past the same screens into
-a 320x400 mode under the same DOSBox configuration.  See
-[flat_build.md](flat_build.md) for the pipeline, the segment/relocation model,
-and the remaining route (the real overlayed link).
+A resident-overlay-loader development EXE now compiles, links and runs.  The
+game reaches the real startup screen (ENTER/SPACE/ESC), ENTER switches to
+320x400 and starts loading `STRONG.DAT`, and the loader handles nested
+overlay calls.  It still stops in the game's own fatal handler with
+`Error 0 20`: the sample/memory allocator in overlay `0x474A` cannot get a
+~74 KiB block and the game's own free list at `DGROUP:0x47FA` is empty.  The
+original has a block at `0x478E:0x0008` there and continues.  Remaining work
+is the game's sample-pool initialisation / overlay pinning, not the segment
+relocations.  See [flat_build.md](flat_build.md).
 
