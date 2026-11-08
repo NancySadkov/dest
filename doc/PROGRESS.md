@@ -575,3 +575,34 @@ verified), then replace functions one at a time, keeping the segment layout
 and the FBOV valid.  The flat loader remains available for ad-hoc checks but
 is no longer the target runnable build.
 
+## VROOMM substitution milestone
+
+The staged VROOMM build boots (startup prompt, 320x400, intro frames) and the
+substitution verifier is in place.  Accepted functions are compiled from
+`src/recovered`, checked against the original bytes with only call/jump
+operands allowed to differ, relocated to the original segment addresses, and
+patched into the staged EXE.
+
+The first accepted set (all byte-exact; 11 overlay functions plus `main`):
+
+```
+main          1301:000C  2246  (230 call-operand bytes)
+f_3381_0000   3381:0000   154
+f_3381_009a   3381:009A   100
+f_3381_00fe   3381:00FE    52
+f_3381_0132   3381:0132    58  (2 call-operand bytes)
+f_3381_016c   3381:016C    92
+f_3381_023c   3381:023C    17
+f_3381_1fa9   3381:1FA9    17
+f_3381_20ee   3381:20EE    19
+f_3381_23f9   3381:23F9    89
+f_3381_2452   3381:2452   113
+f_3381_2e9a   3381:2E9A    72
+```
+
+`f_3381_01c8` is still open: its standalone object has four unmasked data
+differences, so it must be verified through the linked harness before it can
+be accepted.  The staged image remains byte-identical after the accepted
+substitutions (as expected for byte-exact functions); the milestone is that
+the build path from C source to the running VROOMM EXE is now exercised.
+
