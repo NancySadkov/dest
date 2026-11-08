@@ -27,4 +27,5 @@ Accepted functions are listed in `doc/vroomm_accepted.md`.  The early 2024
 partial rewrite is quarantined in `reference/legacy_src/` and is not built.
 
 See `../doc/quirks.md` for the compiler/tooling quirks and the full recovery
-checklist.
+checklist.  The path from the current oracle build to a source-only EXE is in
+`../doc/standalone_build_plan.md`.
