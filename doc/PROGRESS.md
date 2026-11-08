@@ -592,7 +592,7 @@ operands allowed to differ, relocated to the original segment addresses, and
 patched into the staged EXE.
 
 The byte-accepted set contains 504 overlay bodies plus `main`.  Byte
-acceptance is not C recovery: **125 of the 504 are real C**, while **379 are
+acceptance is not C recovery: **126 of the 504 are real C**, while **378 are
 byte-exact manual-frame `asm db`/pad dumps**.  A further 253 overlay functions
 are not yet byte-accepted.  The current C/asm split is tracked in
 `doc/recovery_status.md` (`scripts/fbov/recovery_status.py`).
@@ -609,7 +609,7 @@ functions, including the 28,741-byte `init_assets`), `ov_2d63` (26),
 The staged image remains byte-identical after the accepted substitutions
 (as expected for byte-exact functions); the milestone is that the build path
 from C source to the running VROOMM EXE is exercised for 504 byte-accepted
-functions, of which 125 are real C.  `f_3381_01c8` and the remaining
+functions, of which 126 are real C.  `f_3381_01c8` and the remaining
 DGROUP-dependent functions are accepted through the linked harness
 (`vroomm_verify_linked.py`), which resolves `_DATA` offsets exactly as the
 original.  Modules whose linked harness cannot be built (for example a `>64K`

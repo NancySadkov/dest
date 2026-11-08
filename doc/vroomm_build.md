@@ -98,8 +98,8 @@ python scripts/fbov/vroomm_verify_linked.py 3381:ov_3381 48ac:ov_48ac \
     7e7c:ov_7e7c
 ```
 
-Result: 504 byte-accepted overlay bodies across 51 modules, of which 125 are
-real C and 379 are byte-exact manual-frame `asm db`/pad dumps.  See
+Result: 504 byte-accepted overlay bodies across 51 modules, of which 126 are
+real C and 378 are byte-exact manual-frame `asm db`/pad dumps.  See
 `doc/recovery_status.md` for the C-versus-asm split.  After every accepted
 substitution the staged image remains byte-identical to the original, which is
 the expected parity result for a byte-exact function.

@@ -1,6 +1,8 @@
 #include "dgroup.h"
 
 extern unsigned char __cdecl16far f_170_005c(unsigned int);
+void __cdecl16far f_1f0_002f(char far *);
+unsigned char __cdecl16far f_1c8_0020(char far *, unsigned, unsigned, unsigned, unsigned);
 
 struct s4d05 {
   char pad[0x29];
@@ -371,14 +373,18 @@ void __cdecl16far f_4d05_1095(void)
   (void)pad;
 }
 
-void __cdecl16far f_4d05_1146(void)
+unsigned char __cdecl16far f_4d05_1146(char far *p)
 {
-  unsigned char pad[0x2];
-  asm db 01Eh,068h,0B1h,04Fh,09Ah,02Fh,000h,0F0h,001h,083h,0C4h,004h,06Ah,000h,06Ah,000h
-  asm db 06Ah,000h,06Ah,002h,01Eh,068h,033h,049h,09Ah,020h,000h,0C8h,001h,083h,0C4h,00Ch
-  asm db 0B4h,000h,089h,046h,0FEh,083h,07Eh,0FEh,000h,075h,004h,0B0h,000h,0EBh,00Eh,0C4h
-  asm db 05Eh,006h,08Ah,046h,0FEh,004h,0FFh,026h,088h,047h,034h,0B0h,001h
-  (void)pad;
+  volatile unsigned r;
+  f_1f0_002f((char far *)(gap_2410_4F9C + 0x15));
+  r = f_1c8_0020((char far *)far_t_ARRAY_2410_4933, 2, 0, 0, 0);
+  if (r == 0)
+    return 0;
+  asm les bx, [bp+6]
+  asm mov al, [bp-2]
+  asm db 04h, 0FFh
+  asm mov byte ptr es:[bx+0x34], al
+  return 1;
 }
 
 unsigned char __cdecl16far f_4d05_118b(unsigned char x)
