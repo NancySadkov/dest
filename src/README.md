@@ -25,3 +25,6 @@ python scripts/fbov/vroomm_sweep.py
 
 Accepted functions are listed in `doc/vroomm_accepted.md`.  The early 2024
 partial rewrite is quarantined in `reference/legacy_src/` and is not built.
+
+See `../doc/quirks.md` for the compiler/tooling quirks and the full recovery
+checklist.
