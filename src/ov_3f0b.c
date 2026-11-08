@@ -130,7 +130,6 @@ void __cdecl16far f_3f0b_0540(void)
   (void)pad;
 }
 
-/* 3F0B:057A  clear the pending-animation word */
 void __cdecl16far f_3f0b_057a(void)
 {
   DAT_2410_0881 = 0;
@@ -203,7 +202,6 @@ void __cdecl16far f_3f0b_082f(void)
   (void)pad;
 }
 
-/* 3F0B:0880  decrement a byte through a far pointer */
 void __cdecl16far f_3f0b_0880(char far *p)
 {
   if (*p)

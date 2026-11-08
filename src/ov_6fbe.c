@@ -1,29 +1,6 @@
 #include "dgroup.h"
 
-void __cdecl16far f_6fbe_0000(void)
-{
-  unsigned char pad[0x308];
-  asm db 056h,0B8h,080h,002h,08Eh,0C0h,026h,0C7h,006h,030h,004h,000h,0A0h,033h,0F6h,0E9h
-  asm db 006h,001h,08Bh,046h,00Ch,08Bh,056h,00Ah,089h,046h,0FEh,089h,056h,0FCh,08Bh,046h
-  asm db 0FEh,08Bh,056h,0FCh,083h,0C2h,006h,089h,046h,0FAh,089h,056h,0F8h,0C4h,05Eh,0FCh
-  asm db 026h,08Bh,05Fh,004h,083h,0EBh,00Bh,083h,0FBh,005h,076h,003h,0E9h,0BDh,000h,0D1h
-  asm db 0E3h,02Eh,0FFh,0A7h,02Eh,001h,016h,08Dh,086h,0F8h,0FCh,050h,0FFh,076h,0FAh,0FFh
-  asm db 076h,0F8h,09Ah,070h,000h,0E0h,000h,083h,0C4h,008h,09Ah,07Ah,000h,0E0h,000h,068h
-  asm db 000h,003h,016h,08Dh,086h,0F8h,0FCh,050h,0FFh,076h,010h,0FFh,076h,00Eh,09Ah,0D7h
-  asm db 026h,000h,000h,083h,0C4h,00Ah,068h,000h,001h,06Ah,000h,0FFh,076h,010h,0FFh,076h
-  asm db 00Eh,09Ah,01Ah,001h,0E0h,000h,083h,0C4h,008h,0EBh,071h,0B8h,080h,002h,08Eh,0C0h
-  asm db 026h,0FFh,036h,030h,004h,06Ah,000h,0FFh,076h,0FAh,0FFh,076h,0F8h,09Ah,07Fh,000h
-  asm db 0E0h,000h,083h,0C4h,008h,0EBh,055h,068h,000h,07Dh,0B8h,080h,002h,08Eh,0C0h,026h
-  asm db 0FFh,036h,030h,004h,06Ah,000h,09Ah,089h,000h,0E0h,000h,083h,0C4h,006h,0EBh,03Ch
-  asm db 068h,0C8h,000h,0B8h,080h,002h,08Eh,0C0h,026h,0FFh,036h,030h,004h,06Ah,000h,0FFh
-  asm db 076h,0FAh,0FFh,076h,0F8h,09Ah,084h,000h,0E0h,000h,083h,0C4h,00Ah,0EBh,01Dh,068h
-  asm db 000h,07Dh,0B8h,080h,002h,08Eh,0C0h,026h,0FFh,036h,030h,004h,06Ah,000h,0FFh,076h
-  asm db 0FAh,0FFh,076h,0F8h,09Ah,075h,000h,0E0h,000h,083h,0C4h,00Ah,0C4h,05Eh,0FCh,08Bh
-  asm db 046h,00Ah,026h,003h,007h,0FFh,076h,00Ch,050h,09Ah,06Bh,000h,0E0h,000h,083h,0C4h
-  asm db 004h,089h,056h,00Ch,089h,046h,00Ah,046h,0C4h,05Eh,006h,026h,039h,077h,006h,07Eh
-  asm db 003h,0E9h,0EEh,0FEh,05Eh
-  (void)pad;
-}
+void __cdecl16far f_6fbe_0000(void);
 
 void __cdecl16far f_6fbe_013a(void)
 {

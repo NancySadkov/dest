@@ -6,6 +6,9 @@ This is the active reversed source tree for `STRONG.EXE`.
 |---|---|
 | `main.c` | recovered `main` (`1301:000C`) |
 | `ov_<seg>.c` | one file per original overlay code segment (`ov_2d63.c`, ...) |
+| `c<seg><n>.c` | ordered C chunk for a module that needs non-standard byte blocks |
+| `a<seg><n>.asm` | TASM byte block holding one non-standard function |
+| `k<seg>.h` | prototypes shared by that module's chunks |
 | `dgroup.c`, `dgroup.h` | recovered DGROUP (`_DATA`), byte-identical to the original |
 | `st_types.h` | recovered structs/enums/typedefs |
 | `st_compat.h` | decompiler/calling-convention shims |

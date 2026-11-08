@@ -21,11 +21,15 @@ The project has a working **oracle build**, but not yet a standalone build.
 
 - Source tree: active recovered source is in `src/` (no `src/recovered/`,
   no `src/chunks/`).  Layout and conventions: `src/README.md`.
-- Overlay code: 51 modules, 757 functions. **504 byte-accepted**:
-  **126 are real C** (22,898 bytes) and **378 are byte-exact manual-frame
-  `asm db`/pad dumps** (277,737 bytes).  A further **253 functions are not
-  yet byte-accepted** (55,154 bytes of raw asm/pad).  True C coverage is
-  126/757 functions.  Details: `doc/recovery_status.md`.
+- Overlay code: 51 modules, 757 functions. **All 757 byte-accepted**:
+  **125 are real C** (22,850 bytes) and **632 are byte-exact manual-frame
+  `asm db`/pad dumps or TASM byte blocks** (332,939 bytes).  True C coverage
+  is 125/757 functions.  Details: `doc/recovery_status.md`.
+- Function layout is preserved: every overlay is rebuilt at its original
+  offsets.  Modules with non-standard prologues/epilogues are split into
+  ordered C chunks plus TASM byte blocks (`src/c<seg><n>.c`,
+  `src/a<seg><n>.asm`, shared prototype header `src/k<seg>.h`); segment
+  parts are linked in original order.
 - Static code: only `main` (`0x1301`, 2,247 bytes) is recovered/verified.
   Missing: `0x1000` (12,317 bytes — startup, VROOMM manager, utilities),
   `0x138E` (458), `0x13AA` (1,416), `0x1403` (4,692).

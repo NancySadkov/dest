@@ -229,7 +229,6 @@ void __cdecl16far f_302d_0a1b(unsigned a, unsigned b)
   f_302d_09f5(a, b, 0xa000);
 }
 
-/* 302D:0A30  clear the blit cycle counter */
 void __cdecl16far f_302d_0a30(void)
 {
   TextBlitCycle = 0;

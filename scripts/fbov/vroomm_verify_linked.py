@@ -22,14 +22,66 @@ LINK = os.path.join(ROOT, "tmp", "linkbuild")
 EMU = os.path.join(ROOT, "emulator", "dosbox-x-mod.exe")
 
 
-def write_link_batch(module):
-    bat = (
-        "@echo off\r\nmode con lines=50\r\n"
-        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c %s.c\r\n"
-        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c stubs.c\r\n"
-        "D:\\BIN\\TLINK.EXE /m dglink.obj %s.obj start.obj stubs.obj, out.exe, out.map\r\n"
-        "pause\r\n"
-    ) % (module, module)
+def chunk_plan(module, srcdir):
+    seg = module[3:]
+    plan = []
+    i = 0
+    while os.path.exists(os.path.join(srcdir, "c%s%d.c" % (seg, i))):
+        plan.append(("c", "c%s%d" % (seg, i)))
+        a = "a%s%d" % (seg, i)
+        if os.path.exists(os.path.join(srcdir, a + ".asm")):
+            plan.append(("a", a))
+        i += 1
+    return plan or None
+
+
+def filter_stubs(srcdir, module, plan):
+    text = open(os.path.join(ROOT, "scripts", "fbov", "stubs.c"),
+                encoding="ascii").read()
+    if plan:
+        hdr = open(os.path.join(srcdir, "k%s.h" % module[3:]),
+                   encoding="ascii").read()
+        defined = set(re.findall(
+            r"__cdecl16far\s+(f_[0-9a-f]{4}_[0-9a-f]+)\s*\(", hdr))
+    else:
+        src = open(os.path.join(srcdir, module + ".c"),
+                   encoding="ascii").read()
+        defined = set(re.findall(
+            r"__cdecl16far\s+(f_[0-9a-f]{4}_[0-9a-f]+)\s*\([^)]*\)\s*\{",
+            src))
+        defined |= set(re.findall(
+            r"unsigned char (f_[0-9a-f]{4}_[0-9a-f]+)\[\]", src))
+    out = []
+    for line in text.splitlines():
+        m = re.search(r"(f_[0-9a-f]{4}_[0-9a-f]+)\s*\(", line)
+        if m and m.group(1) in defined:
+            continue
+        out.append(line)
+    return "\n".join(out) + "\n"
+
+
+def write_link_batch(module, plan):
+    comp = []
+    objs = []
+    if plan:
+        for kind, base in plan:
+            if kind == "c":
+                comp.append("D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE "
+                            "-IC:\\ -LD:\\LIB -w- -c %s.c" % base)
+                objs.append(base + ".obj")
+            else:
+                comp.append("E:\\BIN\\TASM.EXE /mx " + base + ".asm")
+                objs.append(base + ".obj")
+    else:
+        comp.append("D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ "
+                    "-LD:\\LIB -w- -c %s.c" % module)
+        objs.append(module + ".obj")
+    comp.append("D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c stubs.c")
+    objs += ["start.obj", "stubs.obj"]
+    open(os.path.join(LINK, "link.rsp"), "w", newline="").write(
+        "/m dglink.obj " + " ".join(objs) + ", out.exe, out.map\r\n")
+    bat = ("@echo off\r\nmode con lines=50\r\n" + "\r\n".join(comp) +
+           "\r\nD:\\BIN\\TLINK.EXE @link.rsp\r\npause\r\n")
     open(os.path.join(LINK, "ovlink.bat"), "w", newline="").write(bat)
     conf = (
         "[sdl]\nfullscreen = false\noutput = surface\n"
@@ -38,6 +90,7 @@ def write_link_batch(module):
         "[mixer]\nnosound = true\n[sblaster]\nsbtype = none\n[midi]\nmididevice = none\n"
         "[autoexec]\nmount c " + LINK.replace("\\", "\\\\") + "\n"
         "mount d " + os.path.join(ROOT, "tools", "TC30").replace("\\", "\\\\") + "\n"
+        "mount e " + os.path.join(ROOT, "tools", "BC30").replace("\\", "\\\\") + "\n"
         "c:\ncall ovlink.bat\n"
     )
     path = os.path.join(ROOT, "tmp", "ovlink.conf")
@@ -58,10 +111,20 @@ def build_harness(module, wait, srcdir):
     src = os.path.join(srcdir, module + ".c")
     if not os.path.exists(src):
         raise SystemExit("missing source: " + src)
-    open(os.path.join(LINK, module + ".c"), "wb").write(open(src, "rb").read())
-    open(os.path.join(LINK, "stubs.c"), "wb").write(
-        open(os.path.join(ROOT, "scripts", "fbov", "stubs.c"), "rb").read())
-    conf = write_link_batch(module)
+    plan = chunk_plan(module, srcdir)
+    if plan:
+        seg = module[3:]
+        open(os.path.join(LINK, "k%s.h" % seg), "wb").write(
+            open(os.path.join(srcdir, "k%s.h" % seg), "rb").read())
+        for kind, base in plan:
+            ext = ".c" if kind == "c" else ".asm"
+            open(os.path.join(LINK, base + ext), "wb").write(
+                open(os.path.join(srcdir, base + ext), "rb").read())
+    else:
+        open(os.path.join(LINK, module + ".c"), "wb").write(open(src, "rb").read())
+    open(os.path.join(LINK, "stubs.c"), "w", newline="").write(
+        filter_stubs(srcdir, module, plan))
+    conf = write_link_batch(module, plan)
     kill_dosbox()
     for name in ("OUT.EXE", "OUT.MAP"):
         p = os.path.join(LINK, name)
@@ -131,18 +194,28 @@ def codesize(seg):
     raise SystemExit("segment missing from overlay table")
 
 
-def verify_module(exe, map_path, seghex, module, srcdir):
+def verify_module(exe, map_path, seghex, module, srcdir, all_funcs=False):
     seg = int(seghex, 16)
     segname, syms = parse_map(map_path, seg)
+    bad = [(o, s) for o, s in syms.items()
+           if int(s.rsplit("_", 1)[1], 16) != o]
+    if bad:
+        print("  layout: %d/%d symbol(s) shifted (e.g. %s at %04X, want %04X)"
+              % (len(bad), len(syms), bad[0][1], bad[0][0],
+                 int(bad[0][1].rsplit("_", 1)[1], 16)))
     offsets = sorted(syms)
-    pure = pure_functions(os.path.join(srcdir, module + ".c"), seg)
+    if all_funcs:
+        pure = {("f_%04x_%04x" % (seg, ofs)): True for ofs in offsets}
+    else:
+        pure = pure_functions(os.path.join(srcdir, module + ".c"), seg)
     total = codesize(seg)
     obj = None
-    for name in (module.upper() + ".OBJ", module + ".OBJ"):
-        p = os.path.join(LINK, name)
-        if os.path.exists(p):
-            obj = p
-            break
+    if not chunk_plan(module, srcdir):
+        for name in (module.upper() + ".OBJ", module + ".OBJ"):
+            p = os.path.join(LINK, name)
+            if os.path.exists(p):
+                obj = p
+                break
     passed = 0
     for idx, ofs in enumerate(offsets):
         name = "f_%04x_%04x" % (seg, ofs)
@@ -186,8 +259,11 @@ def verify_module(exe, map_path, seghex, module, srcdir):
     return passed
 
 
-def verify_standalone(seghex, module, srcdir):
+def verify_standalone(seghex, module, srcdir, all_funcs=False):
     """Verify against the standalone OMF object when the linked harness fails."""
+    if chunk_plan(module, srcdir):
+        print("  chunked module: no standalone object")
+        return 0
     obj = None
     for name in (module.upper() + ".OBJ", module + ".OBJ"):
         p = os.path.join(LINK, name)
@@ -198,10 +274,11 @@ def verify_standalone(seghex, module, srcdir):
         print("  no standalone object available")
         return 0
     src = os.path.join(srcdir, module + ".c")
-    r = subprocess.run(
-        [sys.executable, os.path.join(ROOT, "scripts", "fbov", "vroomm_verify_module.py"),
-         "--obj", obj, "--seg", seghex, "--src", src],
-        capture_output=True, text=True)
+    cmd = [sys.executable, os.path.join(ROOT, "scripts", "fbov", "vroomm_verify_module.py"),
+           "--obj", obj, "--seg", seghex, "--src", src]
+    if all_funcs:
+        cmd.append("--all")
+    r = subprocess.run(cmd, capture_output=True, text=True)
     print(r.stdout.rstrip())
     m = re.search(r"passed (\d+)", r.stdout)
     return int(m.group(1)) if m else 0
@@ -212,6 +289,8 @@ def main():
     ap.add_argument("modules", nargs="+", metavar="SEG:MODULE",
                     help="overlay segment and recovered source, e.g. 3381:ov_3381")
     ap.add_argument("--wait", type=int, default=30, help="seconds for the DOS build")
+    ap.add_argument("--all", action="store_true",
+                    help="verify every function, including raw asm/pad bodies")
     ap.add_argument("--src-dir", default=os.path.join(ROOT, "src"),
                     help="directory holding the recovered module sources")
     a = ap.parse_args()
@@ -225,9 +304,9 @@ def main():
         exe, map_path = build_harness(module, a.wait, a.src_dir)
         if not (os.path.exists(exe) and os.path.exists(map_path)):
             print("  link harness failed; trying standalone object")
-            total += verify_standalone(seghex, module, a.src_dir)
+            total += verify_standalone(seghex, module, a.src_dir, a.all)
             continue
-        total += verify_module(exe, map_path, seghex, module, a.src_dir)
+        total += verify_module(exe, map_path, seghex, module, a.src_dir, a.all)
     print("total accepted:", total)
 
 

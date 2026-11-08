@@ -94,7 +94,6 @@ void __cdecl16far f_3338_0388(void)
   (void)pad;
 }
 
-/* 3338:0401  clear two bytes then call the sound driver */
 void __cdecl16far f_3338_0401(void)
 {
   DAT_2000_ccaf = 0;
@@ -112,7 +111,6 @@ unsigned __cdecl16far f_3338_0415(void)
   return r & 1;
 }
 
-/* 3338:043E  clear a byte in segment 0x280 */
 void __cdecl16far f_3338_043e(void)
 {
   *(unsigned char far *)MK_FP(0x280, 0x78e0) = 0;

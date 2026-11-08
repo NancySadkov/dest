@@ -15,13 +15,17 @@ that are still borrowed from the original image.
 ### Overlay code
 
 - 51 overlay modules, 757 functions.
-- **504 byte-accepted** (call/jump operands masked).  Byte acceptance is not
-  C recovery: only **126 are real C** (22,898 bytes); **378 are byte-exact
-  manual-frame `asm db`/pad dumps** (277,737 bytes).
-- **253 functions are not yet byte-accepted** (55,154 bytes of raw asm/pad).
-- True C coverage: 126/757 functions.  Per-function status:
+- **All 757 byte-accepted** (call/jump operands masked), at their original
+  offsets.  Byte acceptance is not C recovery: **125 are real C**
+  (22,850 bytes); **632 are byte-exact manual-frame `asm db`/pad dumps or
+  TASM byte blocks** (332,939 bytes).
+- True C coverage: 125/757 functions.  Per-function status:
   `doc/recovery_status.md`; per-function inventory: `tmp/fn_inventory.csv`
   (regenerate with `tmp/inventory.py`).
+- Modules whose functions have non-standard prologues/epilogues are split
+  into ordered C chunks and TASM byte blocks.  The source tree carries the
+  chunks (`src/c<seg><n>.c`), byte blocks (`src/a<seg><n>.asm`) and a shared
+  prototype header (`src/k<seg>.h`); no original EXE is read to build them.
 
 ### Static/resident code
 

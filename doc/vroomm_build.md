@@ -34,6 +34,25 @@ For each recovered function:
 Functions that are not yet byte-exact stay as the original scaffold bytes;
 they can be replaced when the C body passes step 2.
 
+## Chunked modules
+
+Most modules compile as one C translation unit in their original segment.
+Modules containing functions with non-standard prologues/epilogues cannot be
+reproduced by a single TC30 function body.  Those modules are split in source
+order:
+
+- `src/c<seg><n>.c` - a C chunk containing the next run of compiler-reproduced
+  functions;
+- `src/a<seg><n>.asm` - a TASM byte block holding one non-standard function,
+  including its prologue and epilogue;
+- `src/k<seg>.h` - prototypes for every function in the module.
+
+The build compiles the chunks and assembles the byte blocks, then links the
+segment parts in source order (`c<seg>0`, `a<seg>0`, `c<seg>1`, ...).  TLINK
+concatenates the `OV_<seg>_TEXT` contributions, so every symbol lands at its
+original offset.  The byte blocks are committed source; no original EXE is
+read at build time.
+
 ## Relationship to the flat build
 
 The flat build (`doc/flat_build.md`) is a diagnostic loader that runs the

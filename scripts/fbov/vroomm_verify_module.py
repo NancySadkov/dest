@@ -43,6 +43,8 @@ def main():
     ap.add_argument("--obj", required=True)
     ap.add_argument("--seg", required=True, help="overlay code segment, e.g. 3381")
     ap.add_argument("--src", required=True)
+    ap.add_argument("--all", action="store_true",
+                    help="verify every function, including raw asm/pad bodies")
     a = ap.parse_args()
     seg = int(a.seg, 16)
 
@@ -87,7 +89,7 @@ def main():
 
     passed = 0
     for idx, (ofs, name) in enumerate(funcs):
-        if not pure.get(name, False):
+        if not a.all and not pure.get(name, False):
             continue
         nxt = funcs[idx + 1][0] if idx + 1 < len(funcs) else codesz
         size = nxt - ofs

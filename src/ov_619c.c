@@ -66,7 +66,6 @@ void __cdecl16far f_619c_025d(void)
   (void)pad;
 }
 
-/* 619C:031D  classify a value into three buckets */
 char __cdecl16far f_619c_031d(unsigned char c)
 {
   if (c < 5)

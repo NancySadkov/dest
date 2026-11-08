@@ -138,7 +138,6 @@ void __cdecl16far f_474a_067b(void)
   asm db 008h,08Eh,0C0h,026h,089h,097h,022h,013h,026h,089h,08Fh,020h,013h,05Eh
 }
 
-/* 474A:06FE  fetch a far pointer from a table in segment 0x68 */
 void far *__cdecl16far f_474a_06fe(unsigned i)
 {
   return *(void far * far *)MK_FP(0x68, 0x1320 + (i << 2));
@@ -257,7 +256,6 @@ void __cdecl16far f_474a_0aa7(void)
   asm db 097h,0A2h,00Ah,026h,08Bh,087h,0A0h,00Ah,05Fh,05Eh
 }
 
-/* 474A:0B26  scale a byte result by a word */
 unsigned __cdecl16far f_474a_0b26(unsigned x)
 {
   return ((unsigned char)f_0000_06f8() * x) >> 8;

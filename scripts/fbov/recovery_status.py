@@ -48,6 +48,13 @@ def codesizes():
     return out
 
 
+def inventory():
+    out = {}
+    for r in csv.DictReader(open(os.path.join(ROOT, "tmp", "fn_inventory.csv"))):
+        out[(int(r["seg"], 16), int(r["ofs"], 16))] = int(r["size"])
+    return out
+
+
 def accepted():
     out = {}
     for line in open(ACC, encoding="ascii"):
@@ -66,6 +73,7 @@ def main():
 
     acc = accepted()
     sizes = codesizes()
+    inv = inventory()
     totals = {"C": [0, 0], "accepted-asm": [0, 0], "unaccepted-asm": [0, 0]}
     per = {}
 
@@ -91,9 +99,21 @@ def main():
                         break
         funcs.sort()
         row = {"C": [0, 0], "accepted-asm": [0, 0], "unaccepted-asm": [0, 0]}
+        for name in os.listdir(os.path.join(ROOT, "src")):
+            am = re.match(r"a%s\d+\.asm$" % m.group(1), name)
+            if not am:
+                continue
+            asm = open(os.path.join(ROOT, "src", name),
+                       encoding="ascii", errors="replace").read()
+            for hm in re.finditer(r"_(f_%s_([0-9a-f]+)):" % m.group(1), asm, re.I):
+                ofs = int(hm.group(2), 16)
+                n = inv.get((seg, ofs), 0)
+                row["accepted-asm"][0] += 1
+                row["accepted-asm"][1] += n
+                totals["accepted-asm"][0] += 1
+                totals["accepted-asm"][1] += n
         for k, (ofs, name, c) in enumerate(funcs):
-            nxt = funcs[k + 1][0] if k + 1 < len(funcs) else sizes.get(seg, 0)
-            size = nxt - ofs
+            size = inv.get((seg, ofs), 0)
             if c:
                 bucket = "C"
             elif ofs in acc.get(seg, set()):

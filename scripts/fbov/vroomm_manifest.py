@@ -38,7 +38,7 @@ def parse_log(path):
             cur = int(m.group(2), 16)
             rows.setdefault(cur, [])
             continue
-        p = re.match(r"\s+PASS f_[0-9a-f]+_([0-9a-f]+) ofs=([0-9A-F]+) size=(\d+)", line)
+        p = re.match(r"^\s*PASS f_[0-9a-f]+_([0-9a-f]+) ofs=([0-9A-F]+) size=(\d+)", line)
         if p and cur is not None:
             rows[cur].append((int(p.group(1), 16), p.group(1).lower(), int(p.group(3))))
     return rows

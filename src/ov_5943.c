@@ -1,6 +1,7 @@
 #include "dgroup.h"
 
 /* 5943:0000  round a size up to a 4-byte boundary */
+
 unsigned __cdecl16far f_5943_0000(unsigned x)
 {
   return (x + 2) & 0xfffc;

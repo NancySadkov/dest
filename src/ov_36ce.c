@@ -79,7 +79,6 @@ void __cdecl16far f_36ce_023c(void)
   (void)pad;
 }
 
-/* 36CE:02F0  switch the battle/music state */
 void __cdecl16far f_36ce_02f0(void)
 {
   if (*(unsigned char far *)MK_FP(0x280, 0x899c))

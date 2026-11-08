@@ -7,7 +7,6 @@ void __cdecl16far f_32c9_0000(unsigned far *a, unsigned far *b)
   *b = t;
 }
 
-/* 32C9:0026  three-way sign */
 int __cdecl16far f_32c9_0026(int x)
 {
   return x < 0 ? -1 : x > 0 ? 1 : 0;

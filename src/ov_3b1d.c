@@ -14,7 +14,6 @@ void __cdecl16far f_3b1d_0032(void)
   asm db 0C0h,026h,08Bh,087h,04Ch,003h,05Eh
 }
 
-/* 3B1D:005E */
 unsigned __cdecl16far f_3b1d_005e(int x)
 {
   if (x < 0)
@@ -215,7 +214,6 @@ void __cdecl16far f_3b1d_0a53(char far *a)
   asm db 0C6h,006h,0E2h,007h,000h
 }
 
-/* 3B1D:0A8D */
 void __cdecl16far f_3b1d_0a8d(char far *p)
 {
   p[0x10] = 0;
@@ -264,7 +262,6 @@ void __cdecl16far f_3b1d_0c1e(void)
   asm db 011h,077h,004h,0B0h,002h,0EBh,002h,0B0h,003h
 }
 
-/* 3B1D:0C7C */
 char __cdecl16far f_3b1d_0c7c(char far *p)
 {
   signed char r = (signed char)(*(unsigned char *)(p + 0x36) % 6);

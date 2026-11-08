@@ -54,6 +54,7 @@ void __cdecl16far f_3381_2e9a(char far *p);
 void __cdecl16far f_3381_2ee2(void);
 
 /* 3381:0000 */
+
 void __cdecl16far f_3381_0000(void)
 {
   f_118_002a(*(far_t far *)MK_FP(0x280, 0x89cd), 0, 0xa000);
@@ -66,7 +67,6 @@ void __cdecl16far f_3381_0000(void)
   }
 }
 
-/* 3381:009A */
 char far * __cdecl16far f_3381_009a(char far *a, char far *b)
 {
   int n;
@@ -81,7 +81,6 @@ char far * __cdecl16far f_3381_009a(char far *a, char far *b)
   return SBUF;
 }
 
-/* 3381:00FE */
 char far * __cdecl16far f_3381_00fe(char far *s)
 {
   int n;
@@ -93,7 +92,6 @@ char far * __cdecl16far f_3381_00fe(char far *s)
   return s;
 }
 
-/* 3381:0132 */
 char far * __cdecl16far f_3381_0132(char far *s)
 {
   int n;
@@ -106,7 +104,6 @@ char far * __cdecl16far f_3381_0132(char far *s)
   return s;
 }
 
-/* 3381:016C */
 void __cdecl16far f_3381_016c(char far *s)
 {
   char c;
@@ -119,7 +116,6 @@ void __cdecl16far f_3381_016c(char far *s)
   }
 }
 
-/* 3381:01C8 */
 void __cdecl16far f_3381_01c8(void)
 {
   f_1000_2568((char far *)MK_FP(0x280, 0x8c28), 0x44);
@@ -132,13 +128,11 @@ void __cdecl16far f_3381_01c8(void)
       f_3381_009a(*(char far * far *)&GGameExeP, EMPTY_5BB)));
 }
 
-/* 3381:023C */
 void __cdecl16far f_3381_023c(void)
 {
   *(uint16_t far *)MK_FP(0x280, 0x432) = 1;
 }
 
-/* 3381:024D */
 void __cdecl16far f_3381_024d(void)
 {
   volatile unsigned char pad[0x56];
@@ -196,7 +190,6 @@ void __cdecl16far f_3381_024d(void)
   asm db 083h,0C4h,002h,09Ah,0E9h,013h,000h,000h,05Fh,05Eh
 }
 
-/* 3381:0579 */
 void __cdecl16far f_3381_0579(void)
 {
   f_1403_0ab2(0, 0, 0, 0);
@@ -240,7 +233,6 @@ void __cdecl16far f_3381_0579(void)
   f_3a5b_0633(0x53, 0);
 }
 
-/* 3381:0693 */
 void __cdecl16far f_3381_0693(void)
 {
   asm db 056h,057h,033h,0FFh,0E9h,033h,002h,033h,0F6h,0E9h,024h,002h,08Bh,0C7h,0BAh,028h
@@ -282,7 +274,6 @@ void __cdecl16far f_3381_0693(void)
   asm db 0C5h,0FDh,05Fh,05Eh
 }
 
-/* 3381:08DC */
 void __cdecl16far f_3381_08dc(void)
 {
   unsigned char padlo[8];
@@ -522,7 +513,6 @@ end:
   asm db 05Fh,05Eh
 }
 
-/* 3381:1697 */
 void __cdecl16far f_3381_1697(void)
 {
   asm db 033h,0C9h,0EBh,049h,08Bh,0C1h,0BAh,009h,000h,0F7h,0EAh,0BAh,080h,002h,08Eh,0C2h
@@ -533,7 +523,6 @@ void __cdecl16far f_3381_1697(void)
   asm db 000h,07Ch,0B1h
 }
 
-/* 3381:16EF */
 void __cdecl16far f_3381_16ef(void)
 {
   *(char far * far *)MK_FP(0x280, 0x8995) = f_474a_075a(0x2a30, 0);
@@ -554,7 +543,6 @@ void __cdecl16far f_3381_16ef(void)
   *(undefined1 far *)MK_FP(0x280, 0x9016) = 0xff;
 }
 
-/* 3381:17E8 */
 void __cdecl16far f_3381_17e8(void)
 {
   unsigned char pad[0x1c];
@@ -676,7 +664,6 @@ void __cdecl16far f_3381_17e8(void)
   (void)pad;
 }
 
-/* 3381:1F1D */
 char __cdecl16far f_3381_1f1d(int x, int y)
 {
   asm db 056h,057h,08Bh,076h,006h,08Bh,07Eh,008h,08Bh,0C7h,0BAh,094h,000h,0F7h,0EAh,0BAh
@@ -691,13 +678,11 @@ char __cdecl16far f_3381_1f1d(int x, int y)
   return;
 }
 
-/* 3381:1FA9 */
 void __cdecl16far f_3381_1fa9(void)
 {
   *(undefined2 far *)MK_FP(0x280, 0x9097) = 0;
 }
 
-/* 3381:1FBA */
 void __cdecl16far f_3381_1fba(void)
 {
   asm db 056h,033h,0F6h,0EBh,01Dh,08Bh,0DEh,0C1h,0E3h,002h,0B8h,070h,000h,08Eh,0C0h,026h
@@ -721,14 +706,12 @@ void __cdecl16far f_3381_1fba(void)
   asm db 000h,000h,026h,0C7h,006h,034h,004h,000h,000h,09Ah,039h,000h,028h,001h,05Eh
 }
 
-/* 3381:20EE */
 void __cdecl16far f_3381_20ee(void)
 {
   f_1400_0039(1);
   f_3381_1fba();
 }
 
-/* 3381:2101 */
 void __cdecl16far f_3381_2101(void)
 {
   volatile unsigned char pad[0x304];
@@ -772,7 +755,6 @@ void __cdecl16far f_3381_2101(void)
   f_190_004d();
 }
 
-/* 3381:233E */
 char __cdecl16far f_3381_233e(register int x, register int y)
 {
   if (x >= 0x94 || x < 0 || y >= 0x3c || y < 0) {
@@ -789,7 +771,6 @@ char __cdecl16far f_3381_233e(register int x, register int y)
   return;
 }
 
-/* 3381:237A */
 void __cdecl16far f_3381_237a(register int x, register int y, char v)
 {
   if (x >= 0x94 || x < 0 || y >= 0x3c || y < 0) {
@@ -806,7 +787,6 @@ void __cdecl16far f_3381_237a(register int x, register int y, char v)
   asm db 26h,88h,00h
 }
 
-/* 3381:23B5 */
 char __cdecl16far f_3381_23b5(register int x, register int y)
 {
   if (x >= 0x94 || x < 0 || y >= 0x3c || y < 0) {
@@ -827,7 +807,6 @@ char __cdecl16far f_3381_23b5(register int x, register int y)
   return;
 }
 
-/* 3381:23F9 */
 int __cdecl16far f_3381_23f9(int x, int y)
 {
   return (unsigned char)f_3381_233e(x, y)
@@ -836,7 +815,6 @@ int __cdecl16far f_3381_23f9(int x, int y)
        + (unsigned char)f_3381_233e(x + 1, y + 1);
 }
 
-/* 3381:2452 */
 char __cdecl16far f_3381_2452(register int x, register int y, unsigned char dir)
 {
   volatile unsigned char i;
@@ -852,7 +830,6 @@ char __cdecl16far f_3381_2452(register int x, register int y, unsigned char dir)
   return 1;
 }
 
-/* 3381:24C3 */
 void __cdecl16far f_3381_24c3(void)
 {
   volatile unsigned char pad[0xc];
@@ -884,7 +861,6 @@ void __cdecl16far f_3381_24c3(void)
   asm db 026h,088h,007h,0EBh,006h,0C4h,05Eh,010h,026h,0FEh,007h,08Ah,046h,0FFh,05Fh,05Eh
 }
 
-/* 3381:2651 */
 void __cdecl16far f_3381_2651(void)
 {
   asm db 056h,057h,08Bh,076h,006h,08Bh,07Eh,008h,08Bh,0C7h,0BAh,028h,001h,0F7h,0EAh,0BAh
@@ -924,7 +900,6 @@ void __cdecl16far f_3381_2651(void)
   asm db 0D8h,08Bh,0C6h,0D1h,0E0h,003h,0D8h,026h,083h,00Fh,002h,05Fh,05Eh
 }
 
-/* 3381:2883 */
 void __cdecl16far f_3381_2883(void)
 {
   unsigned char pad[0x22];
@@ -1002,12 +977,10 @@ void __cdecl16far f_3381_2883(void)
   asm db 08Bh,0D8h,08Eh,0C2h,026h,08Ah,087h,085h,008h,098h,003h,0F0h,08Ah,046h,0EEh,0B4h
   asm db 000h,0BAh,080h,002h,08Bh,0D8h,08Eh,0C2h,026h,08Ah,087h,089h,008h,098h,003h,0F8h
   asm db 08Ah,046h,0EEh,088h,046h,0EFh,0E9h,0BFh,0FCh,0FFh,046h,0F0h,0A0h,0B0h,08Bh,0B4h
-  asm db 000h,03Bh,046h,0F0h,07Eh,003h,0E9h,083h,0FBh
-  asm db 05Fh,05EH
+  asm db 000h,03Bh,046h,0F0h,07Eh,003h,0E9h,083h,0FBh,05Fh,05Eh
   (void)pad;
 }
 
-/* 3381:2D36 */
 void __cdecl16far f_3381_2d36(void)
 {
   volatile unsigned char k;
@@ -1020,7 +993,6 @@ void __cdecl16far f_3381_2d36(void)
   asm db 0FEh,03Ch,07Ch,0B3h,047h,081h,0FFh,094h,000h,07Ch,0A8h,05Fh,05Eh
 }
 
-/* 3381:2D9E */
 void __cdecl16far f_3381_2d9e(void)
 {
   volatile unsigned char pad[0x14];
@@ -1043,7 +1015,6 @@ void __cdecl16far f_3381_2d9e(void)
   asm db 026h,088h,000h,046h,081h,0FEh,000h,001h,07Dh,003h,0E9h,075h,0FFh,05Fh,05Eh
 }
 
-/* 3381:2E9A */
 void __cdecl16far f_3381_2e9a(char far *p)
 {
   int i;
@@ -1064,7 +1035,6 @@ void __cdecl16far f_3381_2e9a(char far *p)
   p[j] = 0;
 }
 
-/* 3381:2EE2 */
 void __cdecl16far f_3381_2ee2(void)
 {
   volatile unsigned char pad[0x5a];
@@ -1107,4 +1077,3 @@ void __cdecl16far f_3381_2ee2(void)
   asm db 001h,083h,0C4h,004h,0EBh,006h,0FEh,046h,0FEh,0E9h,0E8h,0FDh,09Ah,025h,000h,068h
   asm db 001h,0C6h,006h,019h,005h,001h
 }
-

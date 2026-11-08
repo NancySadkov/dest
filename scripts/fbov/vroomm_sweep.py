@@ -21,6 +21,8 @@ def main():
     ap.add_argument("modules", nargs="*", metavar="SEG:MODULE")
     ap.add_argument("--wait", type=int, default=20)
     ap.add_argument("--log", default=os.path.join(ROOT, "tmp", "verify_all.log"))
+    ap.add_argument("--all", action="store_true",
+                    help="verify every function, including raw asm/pad bodies")
     a = ap.parse_args()
 
     specs = list(a.modules)
@@ -35,7 +37,7 @@ def main():
     with open(a.log, "w", encoding="ascii", errors="replace") as log:
         subprocess.run(
             [sys.executable, os.path.join(ROOT, "scripts", "fbov", "vroomm_verify_linked.py"),
-             *specs, "--wait", str(a.wait)],
+             *specs, "--wait", str(a.wait)] + (["--all"] if a.all else []),
             stdout=log, stderr=subprocess.STDOUT, cwd=ROOT)
 
     subprocess.run(

@@ -219,37 +219,7 @@ void __cdecl16far f_4b0a_08ee(void)
   (void)pad;
 }
 
-void __cdecl16far f_4b0a_09ce(void)
-{
-  unsigned char pad[0x8];
-  asm db 0C4h,05Eh,006h,026h,08Ah,007h,0B4h,000h,08Bh,0D8h,083h,0FBh,005h,077h,007h,0D1h
-  asm db 0E3h,02Eh,0FFh,0A7h,069h,00Bh,06Ah,018h,09Ah,020h,000h,008h,001h,083h,0C4h,002h
-  asm db 08Bh,056h,008h,08Bh,046h,006h,0E9h,06Ah,001h,0C4h,05Eh,006h,026h,08Bh,047h,003h
-  asm db 026h,08Bh,057h,001h,083h,0C2h,009h,015h,000h,000h,089h,046h,0FAh,089h,056h,0F8h
-  asm db 0EBh,046h,0C4h,05Eh,006h,026h,08Bh,047h,008h,026h,08Bh,057h,006h,083h,0C2h,00Eh
-  asm db 015h,000h,000h,089h,046h,0FAh,089h,056h,0F8h,0EBh,02Dh,0C4h,05Eh,006h,026h,08Bh
-  asm db 047h,005h,005h,00Dh,000h,0C7h,046h,0FAh,000h,000h,089h,046h,0F8h,0EBh,019h,0C4h
-  asm db 05Eh,006h,026h,08Bh,047h,00Eh,026h,08Bh,057h,00Ch,083h,0C2h,014h,015h,000h,000h
-  asm db 089h,046h,0FAh,089h,056h,0F8h,0EBh,000h,081h,03Eh,0B6h,090h,093h,00Dh,073h,036h
-  asm db 08Bh,01Eh,0B6h,090h,0FFh,006h,0B6h,090h,033h,0C9h,033h,0D2h,0B8h,015h,000h,09Ah
-  asm db 038h,009h,000h,000h,050h,052h,08Bh,016h,0BEh,090h,0A1h,0BCh,090h,059h,05Bh,09Ah
-  asm db 0D4h,00Ah,000h,000h,052h,050h,09Ah,025h,000h,0E0h,000h,083h,0C4h,004h,089h,056h
-  asm db 0FEh,089h,046h,0FCh,0EBh,00Ah,06Ah,024h,09Ah,020h,000h,008h,001h,083h,0C4h,002h
-  asm db 0C4h,05Eh,0FCh,08Bh,046h,0FAh,08Bh,056h,0F8h,026h,089h,047h,007h,026h,089h,057h
-  asm db 005h,0C4h,05Eh,0FCh,026h,0C6h,007h,000h,0C4h,05Eh,0FCh,0A1h,000h,048h,08Bh,016h
-  asm db 0FEh,047h,026h,089h,047h,003h,026h,089h,057h,001h,0C4h,05Eh,0FCh,026h,0C7h,047h
-  asm db 013h,000h,000h,026h,0C7h,047h,011h,000h,000h,0A1h,000h,048h,08Bh,016h,0FEh,047h
-  asm db 003h,056h,0F8h,013h,046h,0FAh,0A3h,000h,048h,089h,016h,0FEh,047h,0C4h,05Eh,0FCh
-  asm db 026h,0C7h,047h,00Bh,000h,000h,026h,0C7h,047h,009h,000h,000h,0C4h,05Eh,0FCh,026h
-  asm db 0C7h,047h,00Fh,000h,000h,026h,0C7h,047h,00Dh,000h,000h,0B8h,080h,002h,08Eh,0C0h
-  asm db 026h,080h,03Eh,038h,004h,000h,074h,020h,0FFh,076h,0FAh,0FFh,076h,0F8h,0C4h,05Eh
-  asm db 006h,026h,08Ah,007h,0B4h,000h,050h,01Eh,068h,055h,048h,09Ah,047h,027h,000h,000h
-  asm db 083h,0C4h,00Ah,09Ah,057h,000h,0E0h,000h,0FFh,076h,0FAh,0FFh,076h,0F8h,0FFh,076h
-  asm db 008h,0FFh,076h,006h,0FFh,036h,0B4h,090h,00Eh,0E8h,0D1h,0FBh,083h,0C4h,00Ah,0FFh
-  asm db 076h,008h,0FFh,076h,006h,09Ah,070h,000h,070h,001h,083h,0C4h,004h,08Bh,056h,0FEh
-  asm db 08Bh,046h,0FCh
-  (void)pad;
-}
+void __cdecl16far f_4b0a_09ce(void);
 
 int __cdecl16far f_4b0a_0b75(unsigned char x)
 {

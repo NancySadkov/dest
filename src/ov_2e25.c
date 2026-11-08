@@ -63,10 +63,7 @@ void __cdecl16far f_2e25_0217(void)
   asm db 087h,04Ch,003h,005h,0F1h,0FFh,0A3h,07Ch,089h
 }
 
-void __cdecl16far f_2e25_0245(void)
-{
-  asm db 0B8h,03Fh,001h,02Bh,046h,006h,0C1h,0E0h,007h,0BBh,040h,001h,033h,0D2h,0F7h,0F3h
-}
+void __cdecl16far f_2e25_0245(void);
 
 void __cdecl16far f_2e25_046b(void)
 {
