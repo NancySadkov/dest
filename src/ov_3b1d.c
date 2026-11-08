@@ -273,11 +273,13 @@ char __cdecl16far f_3b1d_0c7c(char far *p)
   return r;
 }
 
-void __cdecl16far f_3b1d_0c9f(void)
+char __cdecl16far f_3b1d_0c9f(char far *p)
 {
-  asm db 0C4h,05Eh,006h,026h,0C4h,05Fh,017h,026h,08Ah,047h,036h,0B4h,000h,0BBh,006h,000h
-  asm db 099h,0F7h,0FBh,08Ah,0CAh,080h,0F9h,004h,07Ch,006h,08Ah,0C1h,004h,0FAh,08Ah,0C8h
-  asm db 08Ah,0C1h
+  signed char r = (signed char)
+      (*(unsigned char *)(*(char far * far *)(p + 0x17) + 0x36) % 6);
+  if (r >= 4)
+    r = (signed char)(r - 6);
+  return r;
 }
 
 void __cdecl16far f_3b1d_0cc6(void)

@@ -3,6 +3,8 @@
 void __cdecl16far f_0150_0020(void);
 void __cdecl16far f_0150_0025(void);
 void __cdecl16far f_0158_0075(void);
+char __cdecl16far f_00e0_003e(char a, char b, char c);
+char __cdecl16far f_00e0_0039(char a, char b, char c);
 
 void __cdecl16far f_36ce_0000(void)
 {
@@ -122,16 +124,18 @@ void __cdecl16far f_36ce_03a6(void)
   (void)pad;
 }
 
-void __cdecl16far f_36ce_049f(void)
+char __cdecl16far f_36ce_049f(char a, char b, char c, char d, char e)
 {
-  asm db 08Ah,046h,00Eh,084h,046h,00Ch,074h,004h,0B0h,0E2h,0EBh,014h,08Ah,046h,00Ah,050h
-  asm db 08Ah,046h,008h,050h,08Ah,046h,006h,050h,09Ah,03Eh,000h,0E0h,000h,083h,0C4h,006h
+  if (d & e)
+    return 0xe2;
+  return f_00e0_003e(a, b, c);
 }
 
-void __cdecl16far f_36ce_04c4(void)
+char __cdecl16far f_36ce_04c4(char a, char b, char c, char d, char e)
 {
-  asm db 08Ah,046h,00Eh,084h,046h,00Ch,074h,004h,0B0h,0E2h,0EBh,014h,08Ah,046h,00Ah,050h
-  asm db 08Ah,046h,008h,050h,08Ah,046h,006h,050h,09Ah,039h,000h,0E0h,000h,083h,0C4h,006h
+  if (d & e)
+    return 0xe2;
+  return f_00e0_0039(a, b, c);
 }
 
 void __cdecl16far f_36ce_04e9(void)

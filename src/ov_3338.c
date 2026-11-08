@@ -1,6 +1,6 @@
 #include "dgroup.h"
 
-void __cdecl16far f_00e0_002a(void);
+unsigned __cdecl16far f_00e0_002a(void);
 
 void __cdecl16far f_3338_0000(void)
 {
@@ -102,11 +102,14 @@ void __cdecl16far f_3338_0401(void)
   f_00e0_002a();
 }
 
-void __cdecl16far f_3338_0415(void)
+unsigned __cdecl16far f_3338_0415(void)
 {
-  asm db 056h,09Ah,02Ah,000h,0E0h,000h,08Bh,0F0h,0F7h,0C6h,002h,000h,074h,005h,0C6h,006h
-  asm db 0AFh,08Bh,001h,0F7h,0C6h,004h,000h,074h,005h,0C6h,006h,0AEh,08Bh,001h,08Bh,0C6h
-  asm db 025h,001h,000h,05Eh
+  unsigned r = f_00e0_002a();
+  if (r & 2)
+    DAT_2000_ccaf = 1;
+  if (r & 4)
+    DAT_2000_ccae = 1;
+  return r & 1;
 }
 
 /* 3338:043E  clear a byte in segment 0x280 */

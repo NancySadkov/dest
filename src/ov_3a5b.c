@@ -241,9 +241,12 @@ void __cdecl16far f_3a5b_0956(void)
   asm db 001h,05Eh
 }
 
-void __cdecl16far f_3a5b_0afd(void)
+int __cdecl16far f_3a5b_0afd(unsigned far *p)
 {
-  asm db 056h,0C4h,05Eh,006h,026h,08Bh,007h,0BAh,07Fh,000h,0F7h,0EAh,0BBh,0D2h,000h,033h
-  asm db 0D2h,0F7h,0F3h,08Bh,0F0h,00Bh,0F6h,07Dh,002h,033h,0F6h,083h,0FEh,07Fh,07Eh,003h
-  asm db 0BEh,07Fh,000h,0B8h,07Fh,000h,02Bh,0C6h,05Eh
+  int v = *p * 0x7f / 0xd2;
+  if (v < 0)
+    v = 0;
+  if (v > 0x7f)
+    v = 0x7f;
+  return 0x7f - v;
 }
