@@ -70,8 +70,8 @@ segment name.
 
 ```text
 functions=1590 default=0
-symbols=12812 default=8669
-definedData=2493 noSymbol=536 defaultSymbol=527
+symbols=12812 default=8668
+definedData=2493 noSymbol=536 defaultSymbol=526
 equates=26
 ```
 
