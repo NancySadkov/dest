@@ -57,6 +57,24 @@ All are elapsed-time counters or state flags and differ by ±1 depending on the
 emulated tick at capture.  `_StartTime` now matches exactly, confirming that
 the synthesized date/time removed the start-clock factor.
 
-To remove the final ±1 ticks, the input driver must stop at a fixed emulated
-instruction/tick count (or force the BIOS tick counter and timer state before
-the dump).  That is a test-harness refinement, not a code-recovery issue.
+## Deterministic harness
+
+`scripts/fbov/boot_game_det.py` removes the final timing variance:
+
+1. halt at the sound prompt,
+2. reset `_StartTime`, the BIOS tick counter and all timer fields above,
+3. advance an exact instruction count (`step 20000000`) with the harness,
+4. dump DGROUP at the map screen.
+
+Result:
+
+```text
+map after 1 step(s)
+map after 1 step(s)
+DGROUP differing bytes: 0
+```
+
+Both the original and the functional C EXE now reach the map screen after the
+same instruction count and produce **identical DGROUP state**, with no
+run-to-run differences.  The reset fields are all clock/timer/state values, so
+this removes the butterfly-effect source without touching game logic.

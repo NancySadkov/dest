@@ -65,9 +65,10 @@ against the original (`aebde62f...`).
   unit update loop is in `src/game/` and compiles/links via
   `scripts/fbov/build_game.py`.  `scripts/fbov/build_functional_exe.py`
   substitutes the C management-index function into the overlay; the resulting
-  `STRONG_FUNC.EXE` boots to the same map screen and matches DGROUP within the
-  game's run-to-run nondeterminism (5 bytes with a synthesized clock/date vs.
-  6 between two original runs; see `doc/memory_state.md`).
+  `STRONG_FUNC.EXE` boots to the same map screen and, under the deterministic
+  harness `scripts/fbov/boot_game_det.py` (synthesized clock, reset timer
+  fields, exact instruction stepping), matches DGROUP exactly (0 differing
+  bytes; see `doc/memory_state.md`).
 - Oracle build: `scripts/fbov/vroomm_baseline.py` stages the original EXE and
   `vroomm_verify_linked.py` patches verified functions into it.  It boots to
   320x400 and stays byte-identical for accepted functions.
