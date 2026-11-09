@@ -24,10 +24,10 @@ Result:
 ```text
 OK   KEY.OBJ    1672 bytes
 OK   MANAGE.OBJ 397 bytes
-OK   SCREEN.OBJ 4486 bytes
-OK   UNITS.OBJ  12481 bytes
-OK   MENU.OBJ   3627 bytes
-LINK OK game.exe 17660 bytes
+OK   SCREEN.OBJ 4567 bytes
+OK   UNITS.OBJ  12466 bytes
+OK   MENU.OBJ   3756 bytes
+LINK OK game.exe 17677 bytes
 ```
 
 `gameProcessKey` is also exercised by a real 16-bit run:
@@ -56,10 +56,11 @@ relocated against the real DGROUP object and the overlay fixup table is
 rewritten to point at the new call sites; the boot comparison again reports
 0 differing DGROUP bytes.  See `doc/ghidra_string_artifacts.md`.
 
-`menubody.inc` is **not yet trustworthy**: Ghidra followed a bad jump-table
-parse inside `uiMainMenuLoop`, so its tail belongs to another routine.  The
-file is kept as a compile-only fragment until it is re-recovered from the
-disassembly.
+`uiMainMenuLoop` is recovered from a corrected Ghidra decompilation.  The
+original switch table lives immediately after the function's `retf` at
+`4528:1AD6`; `scripts/ghidra/AddJumpTable.java` attaches it as a Ghidra
+jump-table override, which restores the eight case bodies.  The resulting
+`menubody.inc` is the real menu loop, not a tail merged from another routine.
 
 The active byte-exact build remains unchanged (original SHA-256).
 

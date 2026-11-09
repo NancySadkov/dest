@@ -82,3 +82,32 @@ values, not hard-coded `0x1410`.
 3. Compile and compare against the original `0x624`-byte slot; this function
    is larger than its slot only if the helper calls are expanded, so check the
    size before attempting substitution.
+
+
+## Resolved
+
+`scripts/ghidra/AddJumpTable.java` attaches the nine-word table at
+`4528:1AD6` to the function as a Ghidra jump-table override (the override has
+to use the `jmp` site `4528:15B5`, not the table address, because the table is
+outside the function body).  Decompiling `4528:14B1` now yields:
+
+```c
+void __cdecl16far uiMainMenuLoop(void)
+```
+
+with eight case bodies in target order:
+
+| case body target | menu result | menu item |
+|---|---|---|
+| `15BA` | 1 | New Game |
+| `1615` | 2 | Save Game |
+| `189B` | 3 | Load Game |
+| `193F` | 4 | Delete Game |
+| `1A39` | 5 | Quit Game |
+| `1A60` | 6 | Message Delay |
+| `1A6A` | 7 | Great Achievements |
+| `1A71` | 0/8 | Begin Play / exit |
+
+`src/game/menubody.inc` is now generated from that decompilation (with the
+`uiMenu` result and menu-array entries restored), and `menu.c` compiles and
+links with `build_game.py`.

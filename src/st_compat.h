@@ -20,6 +20,8 @@
 typedef unsigned short code();
 typedef unsigned short blitfn_t();
 code *swi(int vector);
+#define FP_OFF(p) ((uint16_t)(uint32_t)(void far *)(p))
+#define FP_SEG(p) ((uint16_t)((uint32_t)(void far *)(p) >> 16))
 #define MK_FP(seg,ofs) ((void far *)(((uint32_t)(seg) << 16) | (uint16_t)(ofs)))
 #define CONCAT11(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint8_t)(b)))
 #define CONCAT12(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint16_t)(b)))

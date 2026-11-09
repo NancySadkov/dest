@@ -69,14 +69,18 @@ functional C fragments are in `src/game/`:
 - unit update loop `upd_units_5087_1d7d` (`5087:1D7D`),
 - main menu loop `uiMainMenuLoop` (`4528:14B1`).
 
-They compile and link via `scripts/fbov/build_game.py` (`game.exe` 17,660
+They compile and link via `scripts/fbov/build_game.py` (`game.exe` 17,677
 bytes with generated stubs).  `gameProcessKey` is additionally exercised by
 `scripts/fbov/test_key_runtime.py`, which runs the compiled function in a real
 16-bit DOS session (`doc/ghidra_string_artifacts.md`).
+
+`uiMainMenuLoop` was re-recovered with the Ghidra jump-table override
+(`scripts/ghidra/AddJumpTable.java`); its eight case bodies now match the
+original `4528:1AD6` table and `menubody.inc` is compiled from that
+decompilation (`doc/menu_recovery.md`).
 
 The remaining large loop pieces still resist C recovery:
 
 - `5087:056E` helper: 123 KB Ghidra source with `unaff_` registers and
   `halt_baddata` failures.
 - `ovc02_draw.c`: compiler table limit exceeded in `draw_2e25_025a`.
-- `uiMainMenuLoop`: Ghidra stack/unaff artifacts.

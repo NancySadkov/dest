@@ -34,6 +34,26 @@ far_t __cdecl16far f_474a_075a(uint32_t n);
 far_t __cdecl16far f_6ffe_0000(void);
 void __cdecl16far f_474a_0718(far_t h);
 
+/* Near helpers of the main-menu overlay.  Declared far here so the fragment
+   links against the generated stubs; the original calls are near. */
+uint8_t __cdecl16far uiMenu(char *title, far_t items, int count);
+uint16_t __cdecl16far uiReadString(uint16_t fmt_ofs, uint16_t fmt_seg,
+                                   int a, int b, int c);
+void __cdecl16far saveui_4528_0533(void);
+void __cdecl16far saveui_4528_1288(uint16_t ofs, uint16_t seg, uint count);
+uint __cdecl16far saveui_4528_1175(uint16_t ofs, uint16_t seg);
+uint8_t __cdecl16far saveui_4528_1470(void);
+void __cdecl16far saveui_4528_144e(void);
+void __cdecl16far saveui_4528_120d(uint16_t ofs, uint16_t seg, uint count);
+void __cdecl16far saveui_4528_1ae8(void);
+void __cdecl16far saveui_4528_1303(void);
+char __cdecl16far ovr_stSave(int slot);
+void __cdecl16far ovr_copyProtectionCheck(void);
+void __cdecl16far ovr_save_49fd_081e(uint16_t slot);
+void __cdecl16far ovr_save_49fd_0f26(uint8_t slot);
+void __cdecl16far ovr_OVC38_68ac_0148(void);
+int __cdecl16far strcmp(char *a, char *b);
+
 far_t far_from_u32(uint32_t v)
 {
   far_t r;
