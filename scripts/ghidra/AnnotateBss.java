@@ -41,7 +41,9 @@ public class AnnotateBss extends GhidraScript {
             { "D020", "GMaxSquare",
               "Maximum map square (0x1B0); printed by the init debug path as NEW MAXSQUARE." },
             { "CFD6", "GSMaxSquare",
-              "Secondary maximum square (0x24); printed as NEW SMAXSQUARE." }
+              "Secondary maximum square (0x24); printed as NEW SMAXSQUARE." },
+            { "CB05", "GMapCells",
+              "Byte per map cell (0x3B rows x 0x93 columns, stride 0x94); init_3381_0693 tests neighbors to set GMapFlags bits." }
         };
         int tx = currentProgram.startTransaction("annotate BSS");
         int n = 0;

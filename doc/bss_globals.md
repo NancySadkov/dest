@@ -23,6 +23,7 @@ recovered in-game code are named; the rest are still `DAT_2000_xxxx`.
 | `D0F7` | `GSavedBlitSeg` | saved `BlitRects[0].seg` |
 | `D020` | `GMaxSquare` | maximum map square, `0x1B0` |
 | `CFD6` | `GSMaxSquare` | secondary maximum square, `0x24` |
+| `CB05` | `GMapCells` | byte per map cell, `0x3B x 0x93`, stride `0x94` |
 
 ## Highest-use remaining globals
 
