@@ -41,23 +41,29 @@ Counts of `"string" + offset` expressions:
 | old baseline | 2,224 | 633 |
 | `InferConstantPointers(false)` | 386 | 34 |
 | plus copyright retype | 252 | 37 |
-| plus `sweep_string_offsets.py` | 196 | 0 |
+| plus `sweep_string_offsets.py` | **106** | **0** |
 
 The sweep resolved every expression whose value is a segment constant and
-replaced it with `DGROUP_SEG` or `SEG_xxxx` (`tmp/export_swept2`).  It also
-renamed 530 raw segment scalars, so the key debug call now reads:
+replaced it with `DGROUP_SEG` or `SEG_xxxx` (`tmp/export_swept6`).  It also
+renamed 561 raw segment scalars and replaced 89 small-integer collisions with
+their integers, so the key debug call now reads:
 
 ```c
 ovr_OVC40_69c8_04c6(0,0x251,DGROUP_SEG,0x27a,DGROUP_SEG,0);
 ```
 
-The remaining 196 expressions are in two groups:
+The remaining 106 expressions all resolve to **real DGROUP data offsets**, not
+segment values or integer constants.  The most common bases are:
 
-- 91 strings that live outside DGROUP (`__C0`/OVRTEXT segments), so the
-  literal-to-segment map needs those blocks;
-- 68 DGROUP data offsets which point at a real substring or table entry and
-  must be resolved against `doc/dgroup_map.csv`/the Ghidra data item, not
-  renamed as a segment.
+```text
+0x4234/0x4236  building record base (units)
+0x3F48         build\thfres01.lbm follow-on table
+0x69E4/0x69E2  substring pointers inside the save warning text
+0x20A8/0x20AF  substring pointers inside "cleric castle"
+```
+
+Those need the DGROUP symbol/gap name (e.g. `BLD_RECORDS`) rather than a
+segment name.
 
 
 ## Naming audit (`tmp/ghidra_audit`)

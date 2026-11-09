@@ -41,6 +41,13 @@ def build_segments():
     path = os.path.join(ROOT, "doc", "fbov_segments.csv")
     for r in csv.DictReader(open(path)):
         segs[int(r["static_seg"], 16)] = r
+    # Overlay code and header segments are also 16-bit segment constants.
+    path = os.path.join(ROOT, "doc", "fbov_overlays.csv")
+    for r in csv.DictReader(open(path)):
+        segs.setdefault(int(r["code_seg"], 16),
+                        {"class": "OVRCODE", "static_seg": r["code_seg"]})
+        segs.setdefault(int(r["header_static_seg"], 16),
+                        {"class": "OVRHDR", "static_seg": r["header_static_seg"]})
     return segs
 
 
@@ -50,6 +57,22 @@ def token_for(value, segs):
     if value in segs:
         return "SEG_%04X" % value
     return None
+
+
+def c_unescape(s):
+    """Decode C string escapes without confusing \\t with a tab."""
+    out = []
+    i = 0
+    while i < len(s):
+        if s[i] == "\\" and i + 1 < len(s):
+            c = s[i + 1]
+            out.append({"n": "\n", "r": "\r", "t": "\t",
+                        "\\": "\\", '"': '"', "'": "'"}.get(c, c))
+            i += 2
+        else:
+            out.append(s[i])
+            i += 1
+    return "".join(out)
 
 
 def main():
@@ -82,11 +105,15 @@ def main():
             used = set()
             for ln, line in enumerate(lines, 1):
                 def repl(m):
-                    lit = m.group(1)
-                    lit = lit.replace('\\"', '"').replace("\\'", "'")
-                    lit = lit.replace("\\\\", "\\")
+                    lit = c_unescape(m.group(1))
                     k = int(m.group(2), 0)
                     off = lits.get(lit)
+                    if off is None:
+                        for sstr, soff in lits.items():
+                            j = sstr.find(lit)
+                            if j >= 0:
+                                off = soff + j
+                                break
                     if off is None:
                         wr.writerow([p, ln, m.group(0), "", "unmapped", ""])
                         return m.group(0)
@@ -97,7 +124,7 @@ def main():
                         wr.writerow([p, ln, m.group(0), "0x%04X" % val,
                                      "segment", tok])
                         return tok
-                    if off == 0x0004:
+                    if off is not None and off < 0x100 and val < 0x100:
                         wr.writerow([p, ln, m.group(0), "0x%04X" % val,
                                      "small-int", "0x%X" % val])
                         return "0x%X" % val
