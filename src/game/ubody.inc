@@ -600,7 +600,7 @@ void __cdecl16far upd_units_5087_1d7d(void)
     }
     iStack_e = 0;
     bStack_5 = ovr_manage_4d05_1b1d();
-    if ((bStack_5 == 0xff) || (DAT_2000_d1e8 == '\0')) {
+    if ((bStack_5 == 0xff) || (GCanPromote == '\0')) {
       iStack_c = 0;
     }
     else if (*(byte *)((int)*(undefined4 *)((uint)bStack_5 << 2) + 0x86) < 5) {

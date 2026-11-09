@@ -29,7 +29,11 @@ public class AnnotateBss extends GhidraScript {
             { "CB09", "GMapFlags",
               "Far pointer to the 0x4560-byte map flag array; rows are 0x128 bytes, entries are 2 bytes." },
             { "CA90", "GGameInProgress",
-              "Non-zero while a game is loaded/running; the main menu uses it to choose the Begin Play item." }
+              "Non-zero while a game is loaded/running; the main menu uses it to choose the Begin Play item." },
+            { "D3CA", "GPromotableCount",
+              "Number of units that have reached the promotion threshold; reset and counted each season." },
+            { "D1E8", "GCanPromote",
+              "Non-zero when the current turn allows promotion UI/actions." }
         };
         int tx = currentProgram.startTransaction("annotate BSS");
         int n = 0;

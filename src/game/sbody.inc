@@ -177,7 +177,7 @@ void __cdecl16far manage_4d05_056e(undefined4 param_1)
       pcVar8 = ovr_stsprintf(local_7e,"%d%%",pcVar2);
       manage_4d05_04c6(pcVar8);
       uVar7 = 0xdc;
-      pcVar8 = ovr_stsprintf(local_7e,"%d",DAT_2000_d3ca);
+      pcVar8 = ovr_stsprintf(local_7e,"%d",GPromotableCount);
       manage_4d05_04c6(pcVar8,uVar7);
       TextBlitY = TextBlitY + 10;
       TextBlitX = 0x11;

@@ -17,5 +17,7 @@
 #define GUnitGrid        DAT_2000_cb0d  /* 0x4560-byte unit grid, 0x78-byte rows */
 #define GMapFlags        DAT_2000_cb09  /* 0x4560-byte map flags, 0x128-byte rows */
 #define GGameInProgress  DAT_2000_ca90  /* non-zero while a game is running */
+#define GPromotableCount DAT_2000_d3ca  /* units over the promotion threshold */
+#define GCanPromote      DAT_2000_d1e8  /* promotion UI enabled this turn */
 
 #endif
