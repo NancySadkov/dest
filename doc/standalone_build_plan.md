@@ -22,7 +22,8 @@ operand/table patches in `src/ov_patch.csv`, and combines them with:
 | Overlay code | `src/` + `src/ov_patch.csv` | rebuilt from source |
 
 The result is byte-identical to the original EXE (SHA-256 `aebde62f...`), and
-the build does not read `game/STRONG.EXE`.
+the build does not read `game/STRONG.EXE`.  `scripts/fbov/smoke_test.py`
+boots the built EXE and checks that the startup prompt appears.
 
 `scripts/fbov/vroomm_baseline.py` and `vroomm_verify_linked.py` remain as the
 oracle/verification path.
