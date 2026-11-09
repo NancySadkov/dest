@@ -42,14 +42,15 @@ functional C fragments are in `src/game/`:
 
 - `gameProcessKey` (`2e25:0ADF`),
 - management index setup (`4d05:0000`),
-- management screen loop (`4d05:056E`).
+- management screen loop (`4d05:056E`),
+- unit update loop `upd_units_5087_1d7d` (`5087:1D7D`).
 
-They compile and link via `scripts/fbov/build_game.py` (`game.exe` 4,539
+They compile and link via `scripts/fbov/build_game.py` (`game.exe` 15,662
 bytes with generated stubs).
 
 The remaining large loop pieces still resist C recovery:
 
-- `5087:056E` unit update: 123 KB Ghidra source with `unaff_` registers and
+- `5087:056E` helper: 123 KB Ghidra source with `unaff_` registers and
   `halt_baddata` failures.
 - `ovc02_draw.c`: compiler table limit exceeded in `draw_2e25_025a`.
 - `uiMainMenuLoop`: Ghidra stack/unaff artifacts.

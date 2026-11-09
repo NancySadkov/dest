@@ -53,13 +53,15 @@ def main():
     h = h.replace('#include "st_types.h"', '#include "types.h"')
     open(os.path.join(WORK, "dgroup.h"), "w", encoding="ascii",
          newline="").write(h)
-    files = ["key.c", "keybody.inc", "manage.c", "screen.c", "sbody.inc"]
+    files = ["key.c", "keybody.inc", "manage.c", "screen.c", "sbody.inc",
+             "units.c", "ubody.inc"]
     for name in files:
         shutil.copyfile(os.path.join(SRC, name), os.path.join(WORK, name))
     cmds = [
         "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c key.c",
         "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c manage.c",
         "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c screen.c",
+        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c units.c",
     ]
     open(os.path.join(WORK, "build.bat"), "w", newline="").write(
         "@echo off\r\nmode con lines=50\r\n" + "\r\n".join(cmds) +
@@ -83,14 +85,14 @@ def main():
                     os.path.join(ROOT, "scripts", "fbov", "run_dosbox.py"),
                     "--conf", conf_path, "--wait", "25"], check=True)
     objs = []
-    for name in ("KEY.OBJ", "MANAGE.OBJ", "SCREEN.OBJ"):
+    for name in ("KEY.OBJ", "MANAGE.OBJ", "SCREEN.OBJ", "UNITS.OBJ"):
         p = os.path.join(WORK, name)
         if os.path.exists(p):
             print("OK   %-10s %d bytes" % (name, os.path.getsize(p)))
             objs.append(name)
         else:
             print("FAIL", name)
-    if len(objs) != 3:
+    if len(objs) != 4:
         raise SystemExit(1)
 
     names = set()
