@@ -60,3 +60,11 @@ These need semantic names derived from the owning subsystem, not guesses.
 The next pass should start with `D2DF` (record count) and the `CE6E`/`CFFC`/
 `CF8E`/`CEFE` init arrays, because they are used by save/load and init and can
 be cross-checked against the file layout.
+
+
+## Bulk-named remainder
+
+The remaining `2000_BSS` items now have deterministic type/address names from
+`scripts/ghidra/BulkNameRemaining.java` (for example
+`byte_2000_BSS_0039`, `word_2000_BSS_0002`).  No `DAT_` names remain; those
+type/address names are the placeholders for the next semantic pass.

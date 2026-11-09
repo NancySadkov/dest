@@ -66,32 +66,19 @@ Those need the DGROUP symbol/gap name (e.g. `BLD_RECORDS`) rather than a
 segment name.
 
 
-## Naming audit (`tmp/ghidra_audit`)
+## Naming coverage (final)
 
 ```text
 functions=1590 default=0
-symbols=12812 default=8668
-definedData=2493 noSymbol=536 defaultSymbol=526
+symbols=13348 default=0
+definedData=2493 noSymbol=0 defaultSymbol=0
 equates=26
 ```
 
-- All 1,590 functions already have names.
-- The 8,688 default symbols are almost entirely `LAB_` branch labels
-  (`LAB_` 8,093, `DAT_` 591, `SUB_` 4).
-- DGROUP (`2410`) has 506 symbols, 383 named plus 123 strings.
-- The BSS block `2000_BSS` has 435 `DAT_` globals; the ten used by the
-  recovered in-game code are now named in Ghidra by
-  `scripts/ghidra/AnnotateBss.java`:
-
-  ```text
-  CA95 GUnits          CA99 GUnitCount     D1E6 GLeaderCount
-  D19F GMenuGfxOfs     D1A1 GMenuGfxSeg    CA91 GPopulationLo
-  CA93 GPopulationHi   CB0D GUnitGrid      CB09 GMapFlags
-  CA90 GGameInProgress
-  ```
-
-  `src/game/bss.h` exposes the same names as aliases while the recovered C
-  still carries the `DAT_2000_` identifiers.
+All functions, symbols and defined data items now have names.  The semantic
+names for the in-game state are recorded in `doc/bss_globals.md`; the rest use
+the deterministic type/address scheme from the bulk pass below.  The old
+`LAB_`/`DAT_`/`UNK_` prefixes are gone.
 
 ## Next project work
 
@@ -102,6 +89,27 @@ equates=26
    (`BLD_RECORDS`), `0x69E4 -> s_Your_may_continue_p_2410_69db + 9`.
 2. Fix function prototypes for the functions where segment values were
    typed as pointers so the clean export stays clean without the sweep.
-3. Name the remaining `2000_BSS` globals and `DAT_` data items.
+3. Refine the type/address names for individual subsystems into semantic
+   names; every item already has a unique name, but only the in-game state and
+   BSS globals are semantically named so far.
 4. Replace `unaff_`/`in_`/`extraout_` locals by fixing signatures and
    register/return types.
+
+
+## Bulk naming pass
+
+After the semantic names above, the remaining default symbols were given
+deterministic, type-based names by `scripts/ghidra/BulkNameRemaining.java`:
+
+```text
+LAB_*   -> L_<function>_<offset>
+DAT_*   -> <type>_<block>_<offset>
+SUB_*   -> sub_<block>_<offset>
+UNK_*   -> unk_<block>_<offset>
+unsymbolized data -> data_<block>_<offset>_<type>
+```
+
+`scripts/ghidra/RefineBulkNames.java` then turns `undefined1/2/4_` prefixes into
+`byte_/word_/dword_`.  Every function, data item and symbol now has a name; the
+semantic names for the in-game state and BSS continue to take precedence.
+Project backup before the bulk pass: `gpr_bak_before_bulk`.
