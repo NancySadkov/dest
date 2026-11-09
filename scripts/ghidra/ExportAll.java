@@ -19,6 +19,7 @@ public class ExportAll extends GhidraScript {
         DecompInterface ifc = new DecompInterface();
         ifc.openProgram(currentProgram);
         DecompileOptions opts = new DecompileOptions();
+        opts.setInferConstantPointers(false);
         opts.setProtoEvalModel("__cdecl16far");
         ifc.setOptions(opts);
 
