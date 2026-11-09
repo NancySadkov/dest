@@ -39,15 +39,15 @@ def main():
         subprocess.run([sys.executable,
                         os.path.join(ROOT, "scripts", "fbov",
                                      "build_mz.py")], check=True)
-    if not a.skip_static:
-        subprocess.run([sys.executable,
-                        os.path.join(ROOT, "scripts", "fbov",
-                                     "build_static.py")], check=True)
     if not a.skip_overlays:
         subprocess.run([sys.executable,
                         os.path.join(ROOT, "scripts", "fbov",
                                      "build_overlays.py"),
                         "--wait", str(a.wait)], check=True)
+    if not a.skip_static:
+        subprocess.run([sys.executable,
+                        os.path.join(ROOT, "scripts", "fbov",
+                                     "build_static.py")], check=True)
 
     mz = open(os.path.join(ROOT, "tmp", "mz_header.bin"), "rb").read()
     load = open(os.path.join(ROOT, "tmp", "static_load.bin"), "rb").read()

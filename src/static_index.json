@@ -15,7 +15,8 @@
   "size": 2246,
   "code_size": 2246,
   "start": 12,
-  "class": "CODE"
+  "class": "CODE",
+  "source": "main.c"
  },
  {
   "name": "S138E",

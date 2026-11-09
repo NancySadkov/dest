@@ -40,11 +40,11 @@ against the original (`aebde62f...`).
   ordered C chunks plus TASM byte blocks (`src/c<seg><n>.c`,
   `src/a<seg><n>.asm`, shared prototype header `src/k<seg>.h`); segment
   parts are linked in original order.
-- Static code: only `main` (`0x1301`, 2,247 bytes) is recovered as C.
-  The other static segments (`0x1000` 12,317 bytes - startup, VROOMM manager,
-  utilities; `0x138E` 458; `0x13AA` 1,416; `0x1403` 4,692) are represented as
-  labeled TASM byte blocks in `src/static/`; converting them to C is the next
-  recovery target.
+- Static code: `main` (`0x1301`, 2,246 bytes) is compiled from `src/main.c`
+  in the build.  The other static segments (`0x1000` 12,317 bytes -
+  startup, VROOMM manager, utilities; `0x138E` 458; `0x13AA` 1,416; `0x1403`
+  4,692) are labeled TASM byte blocks in `src/static/`; converting them to C
+  is the next recovery target.
 - Data: DGROUP (`0x2410`, 38,043 bytes) is recovered byte-exact.  The sixteen
   other non-BSS static data segments (~55 KB) are also byte blocks in
   `src/static/`.

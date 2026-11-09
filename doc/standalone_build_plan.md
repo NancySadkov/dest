@@ -16,7 +16,7 @@ operand/table patches in `src/ov_patch.csv`, and combines them with:
 | Part | File | Status |
 |---|---|---|
 | MZ header + relocations | `src/mz_header.json` + `doc/fbov_relocs.csv` | generated |
-| Static load module | `src/static/*.asm` + `src/static_index.json` | labeled asm blocks |
+| Static load module | `src/static/*.asm` + `src/static_index.json` | labeled asm blocks; `main` compiled from C |
 | FBOV fixup tables | `doc/fbov_fixups.csv` | generated |
 | Remaining FBOV bytes | `src/fbov_other.bin` + `src/fbov_other.json` | 725-byte data blob |
 | Overlay code | `src/` + `src/ov_patch.csv` | rebuilt from source |
@@ -57,10 +57,10 @@ From `doc/fbov_segments.csv`:
 | `0x1403` | 4,692 | missing |
 | `0x22BB` | 1 | placeholder |
 
-So of ~21 KB of static code, only `main` (2,247 bytes) is recovered as C.
-The rest is represented as labeled TASM byte blocks in `src/static/`.  The
-`0x1000` segment is the critical dependency: it owns startup, the overlay
-manager and resident utility code.
+So of ~21 KB of static code, `main` (2,246 bytes) is compiled from `src/main.c`
+in the build.  The rest is represented as labeled TASM byte blocks in
+`src/static/`.  The `0x1000` segment is the critical dependency: it owns
+startup, the overlay manager and resident utility code.
 
 ### Static data
 

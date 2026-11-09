@@ -24,6 +24,7 @@ def main():
     ap.add_argument("--len", required=True, type=lambda x: int(x, 0))
     ap.add_argument("--src", required=True)
     ap.add_argument("--name", required=True)
+    ap.add_argument("--opt", action="store_true", help="compile with -O")
     ap.add_argument("--wait", type=int, default=15)
     a = ap.parse_args()
 
@@ -35,10 +36,13 @@ def main():
     shutil.copyfile(a.src, os.path.join(WORK, "cand.c"))
 
     defined = set(re.findall(
-        r"__cdecl16far\s+(f_[0-9a-f]{4}_[0-9a-f]+)\s*\(",
+        r"__cdecl16far\s+(f_[0-9a-f]{4}_[0-9a-f]+)\s*\([^)]*\)\s*\{",
         open(a.src, encoding="ascii").read()))
+    has_main = re.search(r"\bmain\s*\(", open(a.src, encoding="ascii").read())
     lines = []
     for line in open(os.path.join(WORK, "stubs.c"), encoding="ascii").read().splitlines():
+        if has_main and re.search(r"\bmain\s*\(", line):
+            continue
         m = re.search(r"(f_[0-9a-f]{4}_[0-9a-f]+)\s*\(", line)
         if m and m.group(1) in defined:
             continue
@@ -46,11 +50,12 @@ def main():
     open(os.path.join(WORK, "stubs.c"), "w", newline="").write(
         "\n".join(lines) + "\n")
 
+    opt = " -O" if a.opt else ""
     bat = ("@echo off\r\nmode con lines=50\r\n"
-           "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c cand.c\r\n"
-           "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c stubs.c\r\n"
-           "D:\\BIN\\TLINK.EXE /m dglink.obj cand.obj start.obj stubs.obj, out.exe, out.map\r\n"
-           "pause\r\n")
+           "D:\\BIN\\TCC.EXE -ml -1 -G%s -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c cand.c\r\n"
+           "D:\\BIN\\TCC.EXE -ml -1 -G%s -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c stubs.c\r\n"
+           "D:\\BIN\\TLINK.EXE /m dglink.obj cand.obj stubs.obj, out.exe, out.map\r\n"
+           "pause\r\n") % (opt, opt)
     open(os.path.join(WORK, "build.bat"), "w", newline="").write(bat)
     conf = (
         "[sdl]\nfullscreen = false\noutput = surface\n"

@@ -12,6 +12,7 @@ This is the active reversed source tree for `STRONG.EXE`.
 | `ov_patch.csv` | original call/jump operand and switch-table bytes restored at build time |
 | `static/` | labeled TASM blocks for the static code/data/header segments |
 | `static_index.json` | original file offset, size and segment name for each static block |
+| `main_patch.csv` | call/jump operand bytes for the compiled `main` |
 | `mz_header.json` | MZ header fields and prefix; relocations come from `doc/fbov_relocs.csv` |
 | `fbov_other.bin` | small remaining FBOV byte ranges; fixup tables come from `doc/fbov_fixups.csv` |
 | `fbov_other.json` | placement of those FBOV byte ranges |

@@ -22,11 +22,16 @@ from byte_match import parse_omf
 
 
 def main():
+    subprocess.run([sys.executable,
+                    os.path.join(ROOT, "scripts", "fbov", "build_main.py")],
+                   check=True)
     index = json.load(open(os.path.join(SRC, "static_index.json")))
     shutil.rmtree(WORK, ignore_errors=True)
     os.makedirs(WORK, exist_ok=True)
     cmds = []
     for ent in index:
+        if ent.get("source") == "main.c":
+            continue
         shutil.copyfile(os.path.join(STATIC, ent["name"] + ".asm"),
                         os.path.join(WORK, ent["name"] + ".asm"))
         cmds.append("E:\\BIN\\TASM.EXE " + ent["name"] + ".asm")
@@ -55,6 +60,8 @@ def main():
     end = index[-1]["file_offset"] + index[-1]["size"]
     image = bytearray(end - LOAD)
     for ent in index:
+        if ent.get("source") == "main.c":
+            continue
         segdata, _ = parse_omf(os.path.join(WORK, ent["name"] + ".OBJ"))
         bufs = [bytes(b) for b in segdata.values() if len(b)]
         if len(bufs) != 1:
@@ -66,6 +73,15 @@ def main():
                              % (ent["name"], len(data), ent["size"]))
         off = ent["file_offset"] - LOAD
         image[off:off + len(data)] = data
+    main_code = open(os.path.join(ROOT, "tmp", "main_code.bin"), "rb").read()
+    for ent in index:
+        if ent["static_seg"] == "1301":
+            off = ent["file_offset"] - LOAD
+            image[off:off + len(main_code)] = main_code
+            break
+    else:
+        raise SystemExit("main segment 1301 missing from static index")
+
     out = os.path.join(ROOT, "tmp", "static_load.bin")
     open(out, "wb").write(image)
     print("wrote", out, len(image), "bytes")
