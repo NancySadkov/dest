@@ -66,9 +66,10 @@ functional C fragments are in `src/game/`:
 - `gameProcessKey` (`2e25:0ADF`),
 - management index setup (`4d05:0000`),
 - management screen loop (`4d05:056E`),
-- unit update loop `upd_units_5087_1d7d` (`5087:1D7D`).
+- unit update loop `upd_units_5087_1d7d` (`5087:1D7D`),
+- main menu loop `uiMainMenuLoop` (`4528:14B1`).
 
-They compile and link via `scripts/fbov/build_game.py` (`game.exe` 15,662
+They compile and link via `scripts/fbov/build_game.py` (`game.exe` 18,022
 bytes with generated stubs).
 
 The remaining large loop pieces still resist C recovery:

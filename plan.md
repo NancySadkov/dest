@@ -61,9 +61,9 @@ against the original (`aebde62f...`).
   compiles via `scripts/fbov/build_init.py`.
 - Runtime: `scripts/fbov/boot_game.py` drives the built EXE through the intro
   into the in-game map screen (`doc/boot_game.md`).  Functional C for key
-  input, management index setup, the management screen loop and the per-turn
-  unit update loop is in `src/game/` and compiles/links via
-  `scripts/fbov/build_game.py`.  `scripts/fbov/build_functional_exe.py`
+  input, management index setup, the management screen loop, the per-turn
+  unit update loop and the main menu loop is in `src/game/` and compiles/links
+  via `scripts/fbov/build_game.py`.  `scripts/fbov/build_functional_exe.py`
   substitutes the C management-index function into the overlay; the resulting
   `STRONG_FUNC.EXE` boots to the same map screen and, under the deterministic
   harness `scripts/fbov/boot_game_det.py` (synthesized clock, reset timer
