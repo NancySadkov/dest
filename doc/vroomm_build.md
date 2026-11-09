@@ -63,15 +63,14 @@ without opening `game/STRONG.EXE`:
 2. `build_overlays.py` compiles all overlay modules and chunks in one link,
    extracts every `OV_<seg>_TEXT` segment, and applies `src/ov_patch.csv`
    (original call/jump operand and switch-table bytes).
-3. The overlay code is placed into the regions described by
-   `src/fbov_index.json`, surrounded by the FBOV metadata in
-   `src/fbov_metadata.bin`, then concatenated with the generated MZ header
-   and the static load module.
-4. The output is checked against the original SHA-256 (`aebde62f...`).
+3. Fixup tables are generated from `doc/fbov_fixups.csv`; the few remaining
+   non-code bytes come from `src/fbov_other.bin` / `src/fbov_other.json`.
+4. The image is assembled with the generated MZ header and the static load
+   module, then checked against the original SHA-256 (`aebde62f...`).
 
 Overlay header/thunk segments are part of `src/static/`; static code and data
-and all overlay code are built from source files.  `fbov_metadata.bin` is the
-remaining data blob and can be replaced by generated tables later.
+and all overlay code are built from source files.  Only a 725-byte FBOV
+header/padding blob remains to be symbolized.
 
 ## Relationship to the flat build
 

@@ -13,6 +13,7 @@ import csv
 import hashlib
 import json
 import os
+import struct
 import subprocess
 import sys
 
@@ -52,27 +53,42 @@ def main():
     load = open(os.path.join(ROOT, "tmp", "static_load.bin"), "rb").read()
     static = mz + load
 
-    meta_index = json.load(open(os.path.join(SRC, "fbov_index.json")))
-    fbov_off = meta_index["fbov_offset"]
-    fbov = bytearray(meta_index["size"])
-    meta = open(os.path.join(SRC, "fbov_metadata.bin"), "rb").read()
-    for ch in meta_index["chunks"]:
+    other_index = json.load(open(os.path.join(SRC, "fbov_other.json")))
+    fbov = bytearray(other_index["size"])
+    other = open(os.path.join(SRC, "fbov_other.bin"), "rb").read()
+    for ch in other_index["chunks"]:
         fbov[ch["offset"]:ch["offset"] + ch["size"]] = \
-            meta[ch["meta"]:ch["meta"] + ch["size"]]
-    code_pos = {int(c["seg"], 16): c for c in meta_index["code"]}
+            other[ch["meta"]:ch["meta"] + ch["size"]]
+
+    overlays = list(csv.DictReader(open(os.path.join(ROOT, "doc",
+                                                     "fbov_overlays.csv"))))
+    fbov_off = len(static)
+    fixups = {}
+    for r in csv.DictReader(open(os.path.join(ROOT, "doc",
+                                              "fbov_fixups.csv"))):
+        fixups.setdefault(r["code_seg"], []).append(int(r["site_ofs"], 16))
+    for r in overlays:
+        seg = r["code_seg"]
+        off = int(r["code_file_offset"], 0) - fbov_off + int(r["codesz"], 16)
+        table = b"".join(struct.pack("<H", x) for x in fixups.get(seg, []))
+        if len(table) != int(r["fixupsz"], 16):
+            raise SystemExit("%s fixup size mismatch" % seg)
+        fbov[off:off + len(table)] = table
 
     index = json.load(open(os.path.join(OVCODE, "index.json")))
+    code_pos = {r["code_seg"]: r for r in overlays}
     for ent in index:
         data = open(os.path.join(OVCODE, ent["file"]), "rb").read()
         if len(data) != ent["size"]:
             raise SystemExit("%s size %d != %d"
                              % (ent["file"], len(data), ent["size"]))
-        pos = code_pos.get(int(ent["seg"], 16))
-        if pos is None:
-            raise SystemExit("overlay %s missing from fbov_index" % ent["seg"])
-        if pos["size"] != ent["size"]:
+        row = code_pos.get("%04X" % int(ent["seg"], 16))
+        if row is None:
+            raise SystemExit("overlay %s missing from table" % ent["seg"])
+        if int(row["codesz"], 16) != ent["size"]:
             raise SystemExit("overlay %s size mismatch" % ent["seg"])
-        fbov[pos["offset"]:pos["offset"] + len(data)] = data
+        off = int(row["code_file_offset"], 0) - fbov_off
+        fbov[off:off + len(data)] = data
 
     out = static + bytes(fbov)
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
