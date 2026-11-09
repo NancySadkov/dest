@@ -96,6 +96,27 @@ reproduced by straightforward C:
 - `init_assets` is an unrolled asset list, not a loop over a table: 233
   `stshStoreFile` calls and 199 `stshRleType2` calls.
 
+## Functional C tree
+
+`src/init/` now contains the recovered C sources for the three large init
+modules:
+
+| File | Original |
+|---|---|
+| `src/init/assets.c` | `6ffe:02F7` `init_assets` |
+| `src/init/assets1.c` | `7a57:0000` `init_assets1` |
+| `src/init/assets2.c` | `81b9:0086` `init_assets2` |
+
+They compile with:
+
+```text
+python scripts/fbov/build_init.py
+```
+
+The active init sequence (`main` and `f_3381_0579`) is already C in
+`src/main.c` and `src/ov_3381.c`.  The `src/init/` sources are functional,
+not yet byte-exact, and are not linked into the standalone build.
+
 ## Next steps
 
 1. Generate a table from `doc/init_assets_ops.csv` and write a compact
