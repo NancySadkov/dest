@@ -55,10 +55,8 @@ def main():
 
     other_index = json.load(open(os.path.join(SRC, "fbov_other.json")))
     fbov = bytearray(other_index["size"])
-    other = open(os.path.join(SRC, "fbov_other.bin"), "rb").read()
     for ch in other_index["chunks"]:
-        fbov[ch["offset"]:ch["offset"] + ch["size"]] = \
-            other[ch["meta"]:ch["meta"] + ch["size"]]
+        fbov[ch["offset"]:ch["offset"] + ch["size"]] = bytes.fromhex(ch["data"])
 
     overlays = list(csv.DictReader(open(os.path.join(ROOT, "doc",
                                                      "fbov_overlays.csv"))))

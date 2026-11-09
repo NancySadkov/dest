@@ -67,13 +67,13 @@ without opening `game/STRONG.EXE`:
    extracts every `OV_<seg>_TEXT` segment, and applies `src/ov_patch.csv`
    (original call/jump operand and switch-table bytes).
 4. Fixup tables are generated from `doc/fbov_fixups.csv`; the few remaining
-   non-code bytes come from `src/fbov_other.bin` / `src/fbov_other.json`.
+   non-code bytes are hex data in `src/fbov_other.json`.
 5. The image is assembled with the generated MZ header and the static load
    module, then checked against the original SHA-256 (`aebde62f...`).
 
 Overlay header/thunk segments are part of `src/static/`; static code and data
-and all overlay code are built from source files.  Only a 725-byte FBOV
-header/padding blob remains to be symbolized.
+and all overlay code are built from source files.  The remaining FBOV bytes
+are only 725 bytes of header/padding data in `fbov_other.json`.
 
 ## Relationship to the flat build
 

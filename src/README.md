@@ -14,8 +14,7 @@ This is the active reversed source tree for `STRONG.EXE`.
 | `static_index.json` | original file offset, size and segment name for each static block |
 | `main_patch.csv` | call/jump operand bytes for the compiled `main` |
 | `mz_header.json` | MZ header fields and prefix; relocations come from `doc/fbov_relocs.csv` |
-| `fbov_other.bin` | small remaining FBOV byte ranges; fixup tables come from `doc/fbov_fixups.csv` |
-| `fbov_other.json` | placement of those FBOV byte ranges |
+| `fbov_other.json` | small remaining FBOV byte ranges as hex; fixup tables come from `doc/fbov_fixups.csv` |
 | `dgroup.c`, `dgroup.h` | recovered DGROUP (`_DATA`), byte-identical to the original |
 | `st_types.h` | recovered structs/enums/typedefs |
 | `st_compat.h` | decompiler/calling-convention shims |

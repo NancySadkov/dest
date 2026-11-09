@@ -49,9 +49,9 @@ against the original (`aebde62f...`).
   other non-BSS static data segments (~55 KB) are also byte blocks in
   `src/static/`.
 - Overlay metadata: fixup tables are generated from `doc/fbov_fixups.csv`;
-  the remaining non-code bytes are in `src/fbov_other.bin` with
-  `src/fbov_other.json`.  Overlay header/thunk segments are already in
-  `src/static/`, and every overlay code region is rebuilt from `src/`.
+  the remaining non-code bytes are embedded in `src/fbov_other.json`.
+  Overlay header/thunk segments are already in `src/static/`, and every
+  overlay code region is rebuilt from `src/`.
 - Runtime: still the original VROOMM manager and startup bytes.
   `tools/devroomm/src/ovrman.c` is the reversed manager reference.
 - Oracle build: `scripts/fbov/vroomm_baseline.py` stages the original EXE and
