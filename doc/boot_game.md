@@ -37,11 +37,19 @@ A new land lies before you. Choose carefully where you settle.
 The active init path (`main`, `f_3381_0579`) is C.  The large init modules
 are in `src/init/` and compile/link.
 
-The in-game loop modules (`ovc02_draw`, `ovc16_saveui`, `ovc21_manage`,
-`ovc22`) are still asm blocks in the byte-exact build.  The Ghidra baseline C
-for them does not compile under TC30:
+The byte-exact build still uses asm blocks for the in-game loop.  Recovered
+functional C fragments are in `src/game/`:
 
+- `gameProcessKey` (`2e25:0ADF`),
+- management index setup (`4d05:0000`),
+- management screen loop (`4d05:056E`).
+
+They compile and link via `scripts/fbov/build_game.py` (`game.exe` 4,539
+bytes with generated stubs).
+
+The remaining large loop pieces still resist C recovery:
+
+- `5087:056E` unit update: 123 KB Ghidra source with `unaff_` registers and
+  `halt_baddata` failures.
 - `ovc02_draw.c`: compiler table limit exceeded in `draw_2e25_025a`.
-- `ovc21_manage.c` / `ovc22.c`: prototype and type mismatches.
-
-Manual byte-exact recovery of these modules is the remaining work.
+- `uiMainMenuLoop`: Ghidra stack/unaff artifacts.
