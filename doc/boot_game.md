@@ -46,10 +46,11 @@ python scripts/fbov/build_functional_exe.py
 python scripts/fbov/boot_game.py --exe out/STRONG_FUNC.EXE --mem-out tmp/func_mem.bin
 ```
 
-Result: the functional EXE boots into the same map screen.  DGROUP differs
-from the original by **12 bytes**, all in the same run-to-run nondeterministic
-locations that differ between two original runs (13 bytes: random seed and
-runtime overlay segment pointers).
+With the synthesized clock/date setup (`date 01-01-1993`, `time 00:00:00`,
+`synchronize time = false`, `cycles = fixed 20000`), the functional EXE boots
+into the same map screen.  DGROUP differs from the original by **5 bytes**;
+two original runs differ by **6 bytes** in the same elapsed-time counters.
+See `doc/memory_state.md` for the byte-by-byte analysis.
 
 ## In-game loop C status
 

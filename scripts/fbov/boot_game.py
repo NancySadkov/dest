@@ -35,9 +35,11 @@ def main():
     conf = (
         "[sdl]\nfullscreen = false\noutput = surface\n"
         "[dosbox]\nmachine = svga_s3\nmemsize = 16\n"
-        "[cpu]\ncore = normal\ncputype = 386\ncycles = max\n"
+        "[dos]\nsynchronize time = false\n"
+        "[cpu]\ncore = normal\ncputype = 386\ncycles = fixed 20000\n"
         "[mixer]\nnosound = true\n[sblaster]\nsbtype = none\n[midi]\nmididevice = none\n"
         "[autoexec]\nmount c " + WORK.replace("\\", "\\\\") + "\n"
+        "date 01-01-1993\ntime 00:00:00\n"
         "c:\nSTRONG.EXE\n"
     )
     conf_path = os.path.join(WORK, "run.conf")
@@ -100,24 +102,36 @@ def main():
                       % (step, mini, text))
                 print("saved tmp/boot_game.png")
                 if a.mem_out:
-                    s.sendall(b"regs\n")
-                    time.sleep(0.5)
-                    data = b""
-                    try:
-                        while True:
-                            data += s.recv(65536)
-                    except Exception:
-                        pass
                     import re
-                    m = re.search(rb"DS=([0-9A-Fa-f]+)", data)
-                    if not m:
-                        raise SystemExit("DS not found in regs output")
-                    ds = int(m.group(1), 16)
-                    print("DS=%04X" % ds)
-                    path = a.mem_out.replace("\\", "\\\\")
-                    send("dump %X 949A %s" % (ds * 16, path))
-                    time.sleep(1.5)
-                    print("saved DGROUP dump", a.mem_out)
+                    import struct
+                    for attempt in range(6):
+                        s.sendall(b"regs\n")
+                        time.sleep(0.5)
+                        data = b""
+                        try:
+                            while True:
+                                data += s.recv(65536)
+                        except Exception:
+                            pass
+                        m = re.search(rb"DS=([0-9A-Fa-f]+)", data)
+                        if not m:
+                            raise SystemExit("DS not found in regs output")
+                        ds = int(m.group(1), 16)
+                        path = a.mem_out.replace("\\", "\\\\")
+                        send("dump %X 949A %s" % (ds * 16, path))
+                        time.sleep(1.0)
+                        try:
+                            blob = open(a.mem_out, "rb").read()
+                        except OSError:
+                            blob = b""
+                        psp = struct.unpack_from("<H", blob, 0x7B)[0] if len(blob) >= 0x7D else 0
+                        print("DS=%04X PSP=%04X" % (ds, psp))
+                        if 0x100 <= psp < 0xF000:
+                            print("saved DGROUP dump", a.mem_out)
+                            break
+                        time.sleep(0.8)
+                    else:
+                        raise SystemExit("could not capture a valid DGROUP segment")
                 return
         raise SystemExit("did not reach the map screen")
     finally:

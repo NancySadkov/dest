@@ -31,9 +31,11 @@ LINK OK game.exe 15662 bytes
 Status: functional C, not byte-exact.  `f_4d05_0000` is small enough to fit
 the original 129-byte slot and is substituted by
 `scripts/fbov/build_functional_exe.py`; the resulting `out/STRONG_FUNC.EXE`
-boots to the map screen and matches DGROUP within the game's 12-byte run-to-run
-nondeterminism.  The other fragments are larger than their original slots and
-still need an overlay-growth/relocation step before substitution.
+boots to the map screen and matches DGROUP within the game's run-to-run
+nondeterminism (5 bytes with the synthesized clock, versus 6 between two
+original runs).  See `doc/memory_state.md`.  The other fragments are larger
+than their original slots and still need an overlay-growth/relocation step
+before substitution.
 
 The active byte-exact build remains unchanged (original SHA-256).
 

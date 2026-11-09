@@ -35,9 +35,11 @@ def main():
     conf = (
         "[sdl]\nfullscreen = false\noutput = surface\n"
         "[dosbox]\nmachine = svga_s3\nmemsize = 16\n"
-        "[cpu]\ncore = normal\ncputype = 386\ncycles = max\n"
+        "[dos]\nsynchronize time = false\n"
+        "[cpu]\ncore = normal\ncputype = 386\ncycles = fixed 20000\n"
         "[mixer]\nnosound = true\n[sblaster]\nsbtype = none\n[midi]\nmididevice = none\n"
         "[autoexec]\nmount c " + WORK.replace("\\", "\\\\") + "\n"
+        "date 01-01-1993\ntime 00:00:00\n"
         "c:\nSTRONG.EXE\n"
     )
     conf_path = os.path.join(WORK, "run.conf")

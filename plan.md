@@ -66,7 +66,8 @@ against the original (`aebde62f...`).
   `scripts/fbov/build_game.py`.  `scripts/fbov/build_functional_exe.py`
   substitutes the C management-index function into the overlay; the resulting
   `STRONG_FUNC.EXE` boots to the same map screen and matches DGROUP within the
-  game's run-to-run nondeterminism.
+  game's run-to-run nondeterminism (5 bytes with a synthesized clock/date vs.
+  6 between two original runs; see `doc/memory_state.md`).
 - Oracle build: `scripts/fbov/vroomm_baseline.py` stages the original EXE and
   `vroomm_verify_linked.py` patches verified functions into it.  It boots to
   320x400 and stays byte-identical for accepted functions.
