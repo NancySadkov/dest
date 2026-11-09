@@ -33,7 +33,15 @@ public class AnnotateBss extends GhidraScript {
             { "D3CA", "GPromotableCount",
               "Number of units that have reached the promotion threshold; reset and counted each season." },
             { "D1E8", "GCanPromote",
-              "Non-zero when the current turn allows promotion UI/actions." }
+              "Non-zero when the current turn allows promotion UI/actions." },
+            { "D2DF", "GRecordCount",
+              "Count of 0x12-byte records saved from SEG_21F2; incremented/decremented on add/remove." },
+            { "D0F7", "GSavedBlitSeg",
+              "Saved BlitRects[0].seg restored around blit operations." },
+            { "D020", "GMaxSquare",
+              "Maximum map square (0x1B0); printed by the init debug path as NEW MAXSQUARE." },
+            { "CFD6", "GSMaxSquare",
+              "Secondary maximum square (0x24); printed as NEW SMAXSQUARE." }
         };
         int tx = currentProgram.startTransaction("annotate BSS");
         int n = 0;
