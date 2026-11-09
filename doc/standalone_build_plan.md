@@ -15,7 +15,7 @@ operand/table patches in `src/ov_patch.csv`, and combines them with:
 
 | Part | File | Status |
 |---|---|---|
-| MZ header | `src/mz_header.bin` | data blob |
+| MZ header + relocations | `src/mz_header.json` + `doc/fbov_relocs.csv` | generated |
 | Static load module | `src/static/*.asm` + `src/static_index.json` | labeled asm blocks |
 | FBOV fixup/trailer metadata | `src/fbov_metadata.bin` + `src/fbov_index.json` | data blob with explicit ranges |
 | Overlay code | `src/` + `src/ov_patch.csv` | rebuilt from source |

@@ -65,8 +65,8 @@ without opening `game/STRONG.EXE`:
    (original call/jump operand and switch-table bytes).
 3. The overlay code is placed into the regions described by
    `src/fbov_index.json`, surrounded by the FBOV metadata in
-   `src/fbov_metadata.bin`, then concatenated with `src/mz_header.bin` and
-   the static load module.
+   `src/fbov_metadata.bin`, then concatenated with the generated MZ header
+   and the static load module.
 4. The output is checked against the original SHA-256 (`aebde62f...`).
 
 Overlay header/thunk segments are part of `src/static/`; static code and data

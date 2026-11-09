@@ -12,7 +12,7 @@ This is the active reversed source tree for `STRONG.EXE`.
 | `ov_patch.csv` | original call/jump operand and switch-table bytes restored at build time |
 | `static/` | labeled TASM blocks for the static code/data/header segments |
 | `static_index.json` | original file offset, size and segment name for each static block |
-| `mz_header.bin` | original MZ header and relocation table |
+| `mz_header.json` | MZ header fields and prefix; relocations come from `doc/fbov_relocs.csv` |
 | `fbov_metadata.bin` | FBOV fixup/trailer and non-code overlay bytes |
 | `fbov_index.json` | placement of FBOV metadata chunks and overlay code regions |
 | `dgroup.c`, `dgroup.h` | recovered DGROUP (`_DATA`), byte-identical to the original |
