@@ -114,15 +114,19 @@ was spurious.  The recovered call is `manage_4d05_0519("popularity",0x7d,0xe0)`.
 These expressions are still Ghidra artifacts and must be re-derived from the
 disassembly before the fragments are trusted:
 
-* `menubody.inc` — the whole function is based on a bad jump-table parse
+* `menubody.inc` - the whole function is based on a bad jump-table parse
   (`WARNING: Instruction at 0x4b811 overlaps 0x4b810`); its tail is a different
   routine.  Recovered only as a compile/format exercise for now.
-* `sbody.inc:69` and `ubody.inc:570` — `fmVsprintf` returns a far pointer in
-  `DX:AX`; Ghidra split it into an offset local plus a bogus segment constant.
-* `ubody.inc:633` — the argument passed to `attact_3f0b_2303` still needs the
+* `ubody.inc:633` - the argument passed to `attact_3f0b_2303` still needs the
   push sequence checked.
-* `menubody.inc:125`, `menubody.inc:198` — constants `"thief"+5` and
-  `"y1 ..."+0x11` still need the real integer values.
+
+The two menubody constants are now resolved, even though the function itself
+still needs re-recovery:
+
+```text
+"thief" + 5          = 0x01E6 = gap_2410_0183 + 99
+"y1 %d ..." + 0x11   = 0x04AF = gap_2410_049E + 17
+```
 
 ## Regression evidence
 

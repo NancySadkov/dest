@@ -95,13 +95,13 @@ equates=25
 
 ## Next project work
 
-1. Sweep the remaining `"string" + offset` constants:
-   - resolve each to its numeric value;
-   - replace segment values with `DGROUP_SEG`/`SEG_xxxx`;
-   - replace real data offsets with their DGROUP symbol;
-   - leave scan codes/IDs as scalars.
-2. Fix function prototypes for the 30 functions above so segment values are
-   not typed as pointers.
-3. Name the `2000_BSS` globals and the remaining `DAT_` data items.
+1. The string-offset sweep is complete: every remaining expression is mapped
+   by `scripts/fbov/map_string_offsets.py`; the report
+   `tmp/string_offset_targets2.csv` has **0 unresolved** values.  The common
+   targets are real data, e.g. `0x4234 -> gap_2410_2A7C + 6072`
+   (`BLD_RECORDS`), `0x69E4 -> s_Your_may_continue_p_2410_69db + 9`.
+2. Fix function prototypes for the functions where segment values were
+   typed as pointers so the clean export stays clean without the sweep.
+3. Name the remaining `2000_BSS` globals and `DAT_` data items.
 4. Replace `unaff_`/`in_`/`extraout_` locals by fixing signatures and
    register/return types.
