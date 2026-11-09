@@ -22,13 +22,26 @@ python scripts/fbov/build_game.py
 Result:
 
 ```text
-OK   KEY.OBJ    1926 bytes
+OK   KEY.OBJ    1672 bytes
 OK   MANAGE.OBJ 397 bytes
-OK   SCREEN.OBJ 4528 bytes
-OK   UNITS.OBJ  12541 bytes
+OK   SCREEN.OBJ 4486 bytes
+OK   UNITS.OBJ  12481 bytes
 OK   MENU.OBJ   3627 bytes
-LINK OK game.exe 18022 bytes
+LINK OK game.exe 17660 bytes
 ```
+
+`gameProcessKey` is also exercised by a real 16-bit run:
+
+```text
+python scripts/fbov/test_key_runtime.py
+KEY RUNTIME TEST: PASS
+```
+
+The test feeds every scan code through the compiled function and checks the
+dispatch target, the 32-bit seed formatting and the two DGROUP string
+arguments of the `0x1300` debug key.  See
+`doc/ghidra_string_artifacts.md` for the Ghidra string-address bug that this
+test catches.
 
 Status: functional C, not byte-exact.  `f_4d05_0000` is small enough to fit
 the original 129-byte slot and is substituted by
@@ -37,6 +50,11 @@ boots to the map screen and matches DGROUP exactly when run through the
 deterministic harness `scripts/fbov/boot_game_det.py` (0 differing bytes).
 See `doc/memory_state.md`.  The other fragments are larger than their original
 slots and still need an overlay-growth/relocation step before substitution.
+
+`menubody.inc` is **not yet trustworthy**: Ghidra followed a bad jump-table
+parse inside `uiMainMenuLoop`, so its tail belongs to another routine.  The
+file is kept as a compile-only fragment until it is re-recovered from the
+disassembly.
 
 The active byte-exact build remains unchanged (original SHA-256).
 

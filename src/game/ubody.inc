@@ -97,8 +97,8 @@ void __cdecl16far upd_units_5087_1d7d(void)
                 ((*(uint *)((uint)local_20 * 0x27 + 0x121) & 0x200) != 0)))) {
               OVC22_5087_1674(uVar21,&local_1c);
             }
-            else if (((*(int *)((char *)"build\\clebath2.lbm" + 0xc + (uint)local_20 * 0xc) != 0 ||
-                       *(int *)((char *)"build\\clebath2.lbm" + 0xe + (uint)local_20 * 0xc) != 0) ||
+            else if (((*(int *)(BLD_RECORDS + (uint)local_20 * 0xc) != 0 ||
+                       *(int *)(BLD_RECORDS + 2 + (uint)local_20 * 0xc) != 0) ||
                      (*(char *)((uint)local_20 * 0x27 + 0x11e) == '\x10')) &&
                     (cVar11 = OVC22_5087_510e(CONCAT11((char)(uVar21 * 9 >> 8),
                                                        *(undefined1 *)(iVar17 + uVar21 * 9 + 4)),
@@ -162,8 +162,8 @@ void __cdecl16far upd_units_5087_1d7d(void)
                         ((*(uint *)((uint)local_20 * 0x27 + 0x121) & 0x200) != 0)))) {
                       OVC22_5087_1674(uVar21,&local_1c);
                     }
-                    else if (((*(int *)((char *)"build\\clebath2.lbm" + 0xc + (uint)local_20 * 0xc)
-                               != 0 || *(int *)((char *)"build\\clebath2.lbm" + 0xe +
+                    else if (((*(int *)(BLD_RECORDS + (uint)local_20 * 0xc)
+                               != 0 || *(int *)(BLD_RECORDS + 2 +
                                                (uint)local_20 * 0xc) != 0) ||
                              (*(char *)((uint)local_20 * 0x27 + 0x11e) == '\x10')) &&
                             (cVar12 = OVC22_5087_510e(CONCAT11((char)(uVar21 * 9 >> 8),

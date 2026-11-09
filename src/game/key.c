@@ -27,7 +27,7 @@ uint16_t __cdecl16far f_474a_0b26(uint16_t n);
 void __cdecl16far f_4b0a_010c(void);
 void __cdecl16far f_619c_0a5e(int a, int b);
 uint __cdecl16far f_67e7_004d(undefined1 a);
-char __cdecl16far f_69c8_04c6();
+char __cdecl16far f_69c8_04c6(int, char *, char *, int);
 void __cdecl16far f_6a8f_076f(void);
 void __cdecl16far f_6a8f_0fc1(char a);
 void __cdecl16far f_6a8f_108a(void);

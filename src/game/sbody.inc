@@ -167,8 +167,8 @@ void __cdecl16far manage_4d05_056e(undefined4 param_1)
     TextBlitY = TextBlitY + 0xf;
     if (((*(char *)(iVar4 + 0x86) != '\0') && (bStack_5 != 0xff)) &&
        (*(byte *)((int)*(undefined4 *)((uint)bStack_5 << 2) + 0x86) < 9)) {
-      manage_4d05_0519((char *)"popularity",(char *)"puppetmaker" + 3,0x7d,0xe0);
-      manage_4d05_0519((char *)"city blocks",(char *)"puppetmaker" + 3,0xdc,0xe0);
+      manage_4d05_0519((char *)"popularity",0x7d,0xe0);
+      manage_4d05_0519((char *)"city blocks",0xdc,0xe0);
       TextBlitY = TextBlitY + 10;
       TextBlitX = 0x11;
       ovr_blitLabel("Current",(uint8_t *)CONCAT22(Font02.seg,Font02.ofs),222,0xe0);

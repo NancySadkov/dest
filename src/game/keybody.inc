@@ -7,13 +7,13 @@ uint16_t __cdecl16far gameProcessKey(void)
   char local_52 [80];
   
   key = ovr_biosReadKey();
-  if ((char *)key == (char *)"marble.lbm" + 5) {
+  if (key == 0x320D) {
     if (AudioAssetsReady2 != '\0') {
       ovr_stop_audio();
     }
     AudioAssetsReady2 = '\x01' - (AudioAssetsReady2 != '\0');
   }
-  else if ((char *)key == (char *)"halfling abode" + 7) {
+  else if (key == 0x1F13) {
     if (AudioAssetsReady1 != '\0') {
       ovr_stop_audio();
     }
@@ -26,7 +26,7 @@ uint16_t __cdecl16far gameProcessKey(void)
     else if ((key == 0x1300) && (VideoFlag_2410_0167 == 0)) {
       VideoFlag_2410_0167 = 1;
       ovr_miceBlitRect(BlitRects + 1);
-      ovr_OVC40_69c8_04c6(0,0x251,(char *)"puppetmaker" + 3,0x27a,(char *)"puppetmaker" + 3,0);
+      ovr_OVC40_69c8_04c6(0,s_W_2410_0251,s_Archduchess_2410_027a,0);
       ovr_miceRestoreArea(BlitRects + 1);
       VideoFlag_2410_0167 = 0;
     }
@@ -47,39 +47,39 @@ uint16_t __cdecl16far gameProcessKey(void)
     else if (key == 0x2000) {
       DebugVerbose = (bool)('\x01' - (DebugVerbose != false));
     }
-    else if ((char *)key == (char *)"main castle" + 1) {
+    else if (key == 0x2100) {
       ovr_OVC41_6a8f_0fc1(10);
     }
-    else if ((char *)key == (char *)"manned corner wall" + 0xb) {
+    else if (key == 0x2200) {
       DAT_2410_0165 = 1;
     }
-    else if ((char *)key == (char *)"mason\'s hall" + 7) {
-      pcVar2 = ovr_stsprintf(local_52,"The seed is %lx.",GSeed);
+    else if (key == 0x2300) {
+      pcVar2 = ovr_stsprintf(local_52,"The seed is %lx.",*(uint32_t *)&GSeed);
       ovr_say(pcVar2);
     }
-    else if ((char *)key == (char *)"arena" + 4) {
+    else if (key == 0x2400) {
       ovr_constrct_7e7c_0000();
     }
-    else if ((char *)key == (char *)"dagger") {
+    else if (key == 0x2500) {
       DAT_2410_0164 = 1;
     }
-    else if ((char *)key == (char *)"wood golem" + 6) {
+    else if (key == 0x2600) {
       GCharLevelsInc = GCharLevelsInc + 1;
       pcVar2 = ovr_stsprintf(local_52,
                              "Increase by %d levels.  Click on character for higher levels.",
-                             (char *)(uint)GCharLevelsInc);
+                             (int)GCharLevelsInc);
       ovr_say(pcVar2);
     }
-    else if ((char *)key == (char *)"wall2.lbm" + 2) {
+    else if (key == 0x2C00) {
       ovr_OVC41_6a8f_29a0();
     }
-    else if ((char *)key == (char *)"magelop2.xmi" + 0xb) {
+    else if (key == 0x2E00) {
       ovr_dbgPromoteEnemy();
     }
     else if (key == 0x3000) {
       ovr_OVC41_6a8f_0fc1(1);
     }
-    else if ((char *)key == (char *)"strong4.lbm" + 4) {
+    else if (key == 0x3200) {
       ovr_OVC20_4b0a_010c();
     }
   }

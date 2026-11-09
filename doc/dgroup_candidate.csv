@@ -44,6 +44,8 @@ offset,name,length,decl,init
 022A,"s_dwarf_unit_2410_022a",11,"undefined s_dwarf_unit_2410_022a[]","""dwarf unit"""
 0235,"s_elf_unit_2410_0235",9,"undefined s_elf_unit_2410_0235[]","""elf unit"""
 023E,"s_halfling_unit_2410_023e",14,"undefined s_halfling_unit_2410_023e[]","""halfling unit"""
+0251,"s_W_2410_0251",41,"undefined s_W_2410_0251[]","""WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"""
+027A,"s_Archduchess_2410_027a",12,"undefined s_Archduchess_2410_027a[]","""Archduchess"""
 02F2,"BlitLetterType",1,"undefined1 BlitLetterType","0x00"
 02F3,"MessageDelay",1,"undefined1 MessageDelay","0x03"
 02F4,"DAT_2410_02f4",1,"undefined1 DAT_2410_02f4","0x0F"

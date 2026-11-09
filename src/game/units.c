@@ -1,6 +1,11 @@
 #include "dgroup.h"
 extern far_t far_t_ARRAY_2410_26f7[];
 
+/* DGROUP 0x4234: array of 0xc-byte building records.  Ghidra rendered the
+   base as (char *)"build\\clebath2.lbm" + 0xc; the disassembly uses the
+   constant es:[bx+0x4234], i.e. DGROUP offset 0x4234. */
+#define BLD_RECORDS ((uint8_t *)gap_2410_2A7C + 0x17B8)
+
 #define ovr_OVC15_4207_0e17 f_4207_0e17
 #define ovr_OVC15_4207_26bc f_4207_26bc
 #define ovr_OVC23_55fe_0487 f_55fe_0487
