@@ -28,8 +28,8 @@ WORK = os.path.join(ROOT, "tmp", "det_game")
 def start(exe):
     os.makedirs(WORK, exist_ok=True)
     subprocess.run(["powershell", "-NoProfile", "-Command",
-                    "Get-Process | Where-Object {$_.ProcessName -match 'dosbox'} | "
-                    "Stop-Process -Force -ErrorAction SilentlyContinue"],
+                    "Get-CimInstance Win32_Process | Where-Object {$_.Name -match 'dosbox' -and $_.CommandLine -match 'det_game'} | "
+                    "ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }"],
                    capture_output=True)
     for _ in range(10):
         try:
@@ -56,8 +56,8 @@ def start(exe):
     path = os.path.join(WORK, "run.conf")
     open(path, "w").write(conf)
     subprocess.run(["powershell", "-NoProfile", "-Command",
-                    "Get-Process | Where-Object {$_.ProcessName -match 'dosbox'} | "
-                    "Stop-Process -Force -ErrorAction SilentlyContinue"],
+                    "Get-CimInstance Win32_Process | Where-Object {$_.Name -match 'dosbox' -and $_.CommandLine -match 'det_game'} | "
+                    "ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }"],
                    capture_output=True)
     time.sleep(0.4)
     subprocess.run([sys.executable,
@@ -145,8 +145,8 @@ def capture(exe, mem_out):
         pass
     s.close()
     subprocess.run(["powershell", "-NoProfile", "-Command",
-                    "Get-Process | Where-Object {$_.ProcessName -match 'dosbox'} | "
-                    "Stop-Process -Force -ErrorAction SilentlyContinue"],
+                    "Get-CimInstance Win32_Process | Where-Object {$_.Name -match 'dosbox' -and $_.CommandLine -match 'det_game'} | "
+                    "ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }"],
                    capture_output=True)
     return open(mem_out, "rb").read()
 

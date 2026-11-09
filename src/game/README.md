@@ -48,8 +48,13 @@ the original 129-byte slot and is substituted by
 `scripts/fbov/build_functional_exe.py`; the resulting `out/STRONG_FUNC.EXE`
 boots to the map screen and matches DGROUP exactly when run through the
 deterministic harness `scripts/fbov/boot_game_det.py` (0 differing bytes).
-See `doc/memory_state.md`.  The other fragments are larger than their original
-slots and still need an overlay-growth/relocation step before substitution.
+See `doc/memory_state.md`.
+
+`gameProcessKey` also fits its original 604-byte slot and is substituted by
+`scripts/fbov/build_key_exe.py` (output `out/STRONG_KEY.EXE`).  The image is
+relocated against the real DGROUP object and the overlay fixup table is
+rewritten to point at the new call sites; the boot comparison again reports
+0 differing DGROUP bytes.  See `doc/ghidra_string_artifacts.md`.
 
 `menubody.inc` is **not yet trustworthy**: Ghidra followed a bad jump-table
 parse inside `uiMainMenuLoop`, so its tail belongs to another routine.  The

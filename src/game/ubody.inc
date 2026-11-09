@@ -567,13 +567,12 @@ void __cdecl16far upd_units_5087_1d7d(void)
           if (*(char *)((int)uVar8 + 0x3f) == '\0') {
             ovr_play_sfx(81,0);
             uVar22 = (undefined2)((ulong)DAT_2000_ca95 >> 0x10);
-            pcVar16 = (char *)"puppetmaker" + 3;
             pcVar15 = (char *)ovr_OVC23_55fe_3450(*(undefined2 *)
                                                    ((int)DAT_2000_ca95 + uVar21 * 9 + 4),
                                                   *(undefined2 *)
                                                    ((int)DAT_2000_ca95 + uVar21 * 9 + 6));
             pcVar15 = ovr_fmVsprintf((char *)"Mine exhausted at (%d, %d).",pcVar15);
-            ovr_say((char *)CONCAT22(pcVar16,pcVar15));
+            ovr_say(pcVar15);
             ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x24));
           }
           OVC22_5087_1674(uVar21,&local_1c);

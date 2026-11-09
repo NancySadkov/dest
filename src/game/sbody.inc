@@ -60,18 +60,19 @@ void __cdecl16far manage_4d05_056e(undefined4 param_1)
     puVar9 = (uint8_t *)Font02.ofs;
     uVar6 = Font02.seg;
     pcVar2 = ovr_fmVsprintf((char *)"%s ",
-                            (char *)((far_t *)GAlignmentsNames + *(byte *)(iVar4 + 0x33))->ofs);
-    ovr_blitLabel((char *)CONCAT22(in_DX,pcVar2),(uint8_t *)CONCAT22(uVar6,puVar9),iVar10,uVar11);
+                            (char *)MK_FP(GAlignmentsNames[*(byte *)(iVar4 + 0x33)].seg,
+                                          GAlignmentsNames[*(byte *)(iVar4 + 0x33)].ofs));
+    ovr_blitLabel(pcVar2,(uint8_t *)CONCAT22(uVar6,puVar9),iVar10,uVar11);
   }
   if ((bStack_6 & 1) != 0) {
     uVar11 = 0x50;
     iVar10 = 222;
-    pcVar3 = (char *)"puppetmaker" + 3;
     puVar9 = (uint8_t *)Font02.ofs;
     uVar6 = Font02.seg;
     pcVar2 = ovr_fmVsprintf((char *)"%s",
-                            (char *)*(undefined2 *)((uint)*(byte *)(iVar4 + 0x2f) * 4 + 0xeb));
-    ovr_blitLabel((char *)CONCAT22(pcVar3,pcVar2),(uint8_t *)CONCAT22(uVar6,puVar9),iVar10,uVar11);
+                            (char *)MK_FP(GUnitDescriptions[*(byte *)(iVar4 + 0x2f)].seg,
+                                          GUnitDescriptions[*(byte *)(iVar4 + 0x2f)].ofs));
+    ovr_blitLabel(pcVar2,(uint8_t *)CONCAT22(uVar6,puVar9),iVar10,uVar11);
   }
   TextBlitY = TextBlitY + 10;
   if (((bStack_6 & 0x40) != 0) || (DebugVerbose != false)) {

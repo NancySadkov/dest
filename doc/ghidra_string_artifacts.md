@@ -152,3 +152,28 @@ key=3200 ret=3200 hit=4
 Link check with the real DGROUP object: `s_W_2410_0251` is at
 `DGROUP:0x02A1` and `s_Archduchess_2410_027a` at `DGROUP:0x02CA`; the linker
 reserves `0x50` bytes, so both are at their true offsets `0x251` and `0x27A`.
+
+## Substitution into the original slot
+
+`gameProcessKey` compiles to 576 bytes, which fits the original 604-byte slot
+at `2E25:0ADF`:
+
+```text
+python scripts/fbov/make_key_image.py
+python scripts/fbov/build_key_exe.py
+```
+
+`make_key_image.py` links `key.c` against the recovered DGROUP object, rewrites
+the 31 DGROUP references from the link-time layout to their true offsets, and
+rewrites the 22 far calls with the original operands.  The segment word of each
+far call is the FBOV fixup descriptor, so `build_key_exe.py` points the overlay
+fixup table at the new call sites.  The old data-fixup sites inside the
+replaced function are redirected to the NOP padding at `0D20`.
+
+Result:
+
+```text
+python scripts/fbov/boot_game_det.py --compare out/STRONG.EXE out/STRONG_KEY.EXE
+DGROUP differing bytes: 0
+```
+
