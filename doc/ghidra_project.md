@@ -70,9 +70,9 @@ segment name.
 
 ```text
 functions=1590 default=0
-symbols=12812 default=8688
-definedData=2493 noSymbol=536 defaultSymbol=543
-equates=25
+symbols=12812 default=8669
+definedData=2493 noSymbol=536 defaultSymbol=527
+equates=26
 ```
 
 - All 1,590 functions already have names.
