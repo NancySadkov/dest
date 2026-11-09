@@ -111,3 +111,12 @@ with eight case bodies in target order:
 `src/game/menubody.inc` is now generated from that decompilation (with the
 `uiMenu` result and menu-array entries restored), and `menu.c` compiles and
 links with `build_game.py`.
+
+
+## Validation
+
+The compiled `uiMainMenuLoop` has **69 call instructions**, the same number
+and order as the original `4528:14B1..1AD5` body.  The sequence was checked
+side by side (`tmp/cmpcalls.py`); the only expected difference is that the
+near helpers are declared far in the standalone fragment so it can link
+against the generated stubs.

@@ -2,6 +2,7 @@ void __cdecl16far uiMainMenuLoop(void)
 
 {
   far_t gfx;
+  far_t video;
   far_t items;
   far_t items_00;
   far_t items_01;
@@ -36,7 +37,9 @@ void __cdecl16far uiMainMenuLoop(void)
   ovr_say("Stronghold V 1.00");
   gfx.seg = GMenuGfxSeg;
   gfx.ofs = GMenuGfxOfs;
-  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)0xa00009af));
+  video.ofs = 0x09af;
+  video.seg = 0xa000;
+  ovr_blitLoadRleGfx(gfx,video);
   ovr_stats_6386_00f8();
   saveui_4528_0533();
   savearea = ovr_stshAlloc(400);
