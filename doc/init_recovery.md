@@ -107,15 +107,17 @@ modules:
 | `src/init/assets1.c` | `7a57:0000` `init_assets1` |
 | `src/init/assets2.c` | `81b9:0086` `init_assets2` |
 
-They compile with:
+They compile and link with:
 
 ```text
 python scripts/fbov/build_init.py
 ```
 
-The active init sequence (`main` and `f_3381_0579`) is already C in
-`src/main.c` and `src/ov_3381.c`.  The `src/init/` sources are functional,
-not yet byte-exact, and are not linked into the standalone build.
+The script compiles the three modules, generates stubs for every external
+reference and links a test `init.exe` (95,508 bytes).  The active init
+sequence (`main` and `f_3381_0579`) is already C in `src/main.c` and
+`src/ov_3381.c`.  The `src/init/` sources are functional, not yet byte-exact,
+and are not linked into the standalone build.
 
 ## Next steps
 

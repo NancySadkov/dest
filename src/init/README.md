@@ -16,9 +16,10 @@ C reconstruction.  They compile with TC30:
 python scripts/fbov/build_init.py
 ```
 
-Current status: **compiles** (`assets.obj`, `assets1.obj`, `assets2.obj`), but
-is **not yet byte-exact** and is not linked into the standalone build.  The
-byte-exact build still uses the asm blocks in `src/ov_*.c`/`src/static/`.
+Current status: **compiles and links** (`assets.obj`, `assets1.obj`,
+`assets2.obj`, `init.exe` 95,508 bytes with generated stubs), but is **not yet
+byte-exact** and is not linked into the standalone build.  The byte-exact
+build still uses the asm blocks in `src/ov_*.c`/`src/static/`.
 
 ## Symbol mapping
 
