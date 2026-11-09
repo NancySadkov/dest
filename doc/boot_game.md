@@ -51,7 +51,9 @@ With the synthesized clock/date setup (`date 01-01-1993`, `time 00:00:00`,
 into the same map screen.  The full deterministic harness
 (`scripts/fbov/boot_game_det.py`) also resets the timer fields and advances an
 exact instruction count; original and functional C EXE then produce
-**identical DGROUP state (0 differing bytes)**.  See `doc/memory_state.md`.
+**identical DGROUP state (0 differing bytes)**.  Regression check:
+`python scripts/fbov/check_determinism.py --exe out/STRONG.EXE`.
+See `doc/memory_state.md`.
 
 ## In-game loop C status
 

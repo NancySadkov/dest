@@ -78,3 +78,12 @@ Both the original and the functional C EXE now reach the map screen after the
 same instruction count and produce **identical DGROUP state**, with no
 run-to-run differences.  The reset fields are all clock/timer/state values, so
 this removes the butterfly-effect source without touching game logic.
+
+Regression check:
+
+```text
+python scripts/fbov/check_determinism.py --exe out/STRONG.EXE
+python scripts/fbov/check_determinism.py --exe out/STRONG_FUNC.EXE
+```
+
+Both report `DGROUP differing bytes: 0` and `DETERMINISTIC: two runs matched`.
