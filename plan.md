@@ -56,7 +56,9 @@ against the original (`aebde62f...`).
   `tools/devroomm/src/ovrman.c` is the reversed manager reference.
 - Init recovery: the `main` -> `f_3381_0579` call graph and the 768-operation
   `f_6ffe_02f7` sprite loader are mapped in `doc/init_recovery.md`; the
-  ordered operation table is `doc/init_assets_ops.csv`.
+  ordered operation table is `doc/init_assets_ops.csv`.  Functional C for
+  `init_assets`, `init_assets1` and `init_assets2` is in `src/init/` and
+  compiles via `scripts/fbov/build_init.py`.
 - Oracle build: `scripts/fbov/vroomm_baseline.py` stages the original EXE and
   `vroomm_verify_linked.py` patches verified functions into it.  It boots to
   320x400 and stays byte-identical for accepted functions.
