@@ -32,6 +32,25 @@ The captured frame shows the map with the minimap and the message:
 A new land lies before you. Choose carefully where you settle.
 ```
 
+## Functional C integration
+
+`scripts/fbov/build_functional_exe.py` substitutes the C
+`f_4d05_0000` into the overlay, pads it to the original 129 bytes, rewrites
+the runtime DGROUP/unit-array segment operands and neutralises the stale
+FBOV fixup sites.
+
+Run:
+
+```text
+python scripts/fbov/build_functional_exe.py
+python scripts/fbov/boot_game.py --exe out/STRONG_FUNC.EXE --mem-out tmp/func_mem.bin
+```
+
+Result: the functional EXE boots into the same map screen.  DGROUP differs
+from the original by **12 bytes**, all in the same run-to-run nondeterministic
+locations that differ between two original runs (13 bytes: random seed and
+runtime overlay segment pointers).
+
 ## In-game loop C status
 
 The active init path (`main`, `f_3381_0579`) is C.  The large init modules

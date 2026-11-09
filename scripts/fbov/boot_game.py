@@ -22,11 +22,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--wait", type=int, default=4)
     ap.add_argument("--steps", type=int, default=12)
+    ap.add_argument("--exe", default=os.path.join(ROOT, "out", "STRONG.EXE"))
+    ap.add_argument("--mem-out", default="")
     a = ap.parse_args()
 
     os.makedirs(WORK, exist_ok=True)
-    shutil.copyfile(os.path.join(ROOT, "out", "STRONG.EXE"),
-                    os.path.join(WORK, "STRONG.EXE"))
+    shutil.copyfile(a.exe, os.path.join(WORK, "STRONG.EXE"))
     for name in ("STRONG.DAT", "STRONG.FLI"):
         src = os.path.join(ROOT, "game", name)
         if os.path.exists(src):
@@ -98,6 +99,25 @@ def main():
                 print("IN GAME at step %d (mini=%d text=%d)"
                       % (step, mini, text))
                 print("saved tmp/boot_game.png")
+                if a.mem_out:
+                    s.sendall(b"regs\n")
+                    time.sleep(0.5)
+                    data = b""
+                    try:
+                        while True:
+                            data += s.recv(65536)
+                    except Exception:
+                        pass
+                    import re
+                    m = re.search(rb"DS=([0-9A-Fa-f]+)", data)
+                    if not m:
+                        raise SystemExit("DS not found in regs output")
+                    ds = int(m.group(1), 16)
+                    print("DS=%04X" % ds)
+                    path = a.mem_out.replace("\\", "\\\\")
+                    send("dump %X 949A %s" % (ds * 16, path))
+                    time.sleep(1.5)
+                    print("saved DGROUP dump", a.mem_out)
                 return
         raise SystemExit("did not reach the map screen")
     finally:

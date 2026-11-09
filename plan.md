@@ -63,7 +63,10 @@ against the original (`aebde62f...`).
   into the in-game map screen (`doc/boot_game.md`).  Functional C for key
   input, management index setup, the management screen loop and the per-turn
   unit update loop is in `src/game/` and compiles/links via
-  `scripts/fbov/build_game.py`.
+  `scripts/fbov/build_game.py`.  `scripts/fbov/build_functional_exe.py`
+  substitutes the C management-index function into the overlay; the resulting
+  `STRONG_FUNC.EXE` boots to the same map screen and matches DGROUP within the
+  game's run-to-run nondeterminism.
 - Oracle build: `scripts/fbov/vroomm_baseline.py` stages the original EXE and
   `vroomm_verify_linked.py` patches verified functions into it.  It boots to
   320x400 and stays byte-identical for accepted functions.

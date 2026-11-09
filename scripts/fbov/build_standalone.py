@@ -33,6 +33,8 @@ def main():
                     help="use the existing tmp/mz_header.bin")
     ap.add_argument("--out", default=os.path.join(ROOT, "out", "STRONG.EXE"))
     ap.add_argument("--wait", type=int, default=150)
+    ap.add_argument("--allow-mismatch", action="store_true",
+                    help="write the EXE even when the hash is not the original")
     a = ap.parse_args()
 
     if not a.skip_mz:
@@ -95,6 +97,9 @@ def main():
     print("wrote %s (%d bytes)" % (a.out, len(out)))
     print("sha256", digest)
     if digest != EXPECTED:
+        if a.allow_mismatch:
+            print("functional build (hash differs from original)")
+            return
         raise SystemExit("hash mismatch; expected " + EXPECTED)
     print("byte-identical to original")
 
