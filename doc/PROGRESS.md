@@ -15,7 +15,7 @@ Plan: [`../plan.md`](../plan.md)
 | G4 ? data/global model | **PASS** | DGROUP byte-identical under TC30 (0/38,042 differences); 1,205 symbols/types applied |
 | G5 - startup/`main` byte-exact | **PASS for `main` and all 51 overlays** | `mkp` byte-exact; `main` 2246 bytes byte-exact; all 51 overlay code regions rebuilt at original offsets; 757/757 functions byte-accepted (call/jump operands masked) |
 | G6 ? link | **PASS** | `scripts/fbov/build_standalone.py` builds a byte-identical `STRONG.EXE` from `src/` (static blocks in `src/static/`, overlays in `src/`) without reading the original EXE; SHA-256 `aebde62f...` |
-| G7 ? runtime equivalence | **PARTIAL** | output is byte-identical to the original; `scripts/fbov/smoke_test.py` boots the built EXE and checks the startup prompt; menu/gameplay/save/audio scenarios still to be automated |
+| G7 ? runtime equivalence | **PARTIAL** | output is byte-identical to the original; `smoke_test.py` checks the startup prompt and `boot_game.py` drives the built EXE through the intro into the in-game map screen; broader gameplay/save/audio scenarios still to be automated |
 
 ## Source layout
 

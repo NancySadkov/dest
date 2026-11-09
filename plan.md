@@ -59,6 +59,8 @@ against the original (`aebde62f...`).
   ordered operation table is `doc/init_assets_ops.csv`.  Functional C for
   `init_assets`, `init_assets1` and `init_assets2` is in `src/init/` and
   compiles via `scripts/fbov/build_init.py`.
+- Runtime: `scripts/fbov/boot_game.py` drives the built EXE through the intro
+  into the in-game map screen (`doc/boot_game.md`).
 - Oracle build: `scripts/fbov/vroomm_baseline.py` stages the original EXE and
   `vroomm_verify_linked.py` patches verified functions into it.  It boots to
   320x400 and stays byte-identical for accepted functions.
