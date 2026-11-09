@@ -162,7 +162,7 @@ void __cdecl16far manage_4d05_056e(undefined4 param_1)
     TextBlitX = 0x37;
     ovr_blitLabel("Common fund",(uint8_t *)CONCAT22(Font02.seg,Font02.ofs),222,0xe0);
     uVar13 = 0xdc;
-    pcVar2 = litoa10(local_f6,CONCAT22(DAT_2000_ca93,DAT_2000_ca91));
+    pcVar2 = litoa10(local_f6,CONCAT22(GPopulationHi,GPopulationLo));
     manage_4d05_04c6(pcVar2,iVar5,uVar13);
     bStack_5 = manage_4d05_1b1d();
     TextBlitY = TextBlitY + 0xf;

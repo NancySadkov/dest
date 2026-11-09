@@ -79,7 +79,19 @@ equates=25
 - The 8,688 default symbols are almost entirely `LAB_` branch labels
   (`LAB_` 8,093, `DAT_` 591, `SUB_` 4).
 - DGROUP (`2410`) has 506 symbols, 383 named plus 123 strings.
-- The BSS block `2000_BSS` has 435 `DAT_` globals still to name.
+- The BSS block `2000_BSS` has 435 `DAT_` globals; the ten used by the
+  recovered in-game code are now named in Ghidra by
+  `scripts/ghidra/AnnotateBss.java`:
+
+  ```text
+  CA95 GUnits          CA99 GUnitCount     D1E6 GLeaderCount
+  D19F GMenuGfxOfs     D1A1 GMenuGfxSeg    CA91 GPopulationLo
+  CA93 GPopulationHi   CB0D GUnitGrid      CB09 GMapFlags
+  CA90 GGameInProgress
+  ```
+
+  `src/game/bss.h` exposes the same names as aliases while the recovered C
+  still carries the `DAT_2000_` identifiers.
 
 ## Next project work
 

@@ -56,11 +56,11 @@ void __cdecl16far upd_units_5087_1d7d(void)
   if (!GameRunning) {
     cStack_1d = '\0';
     local_1c = '\0';
-    for (uStack_16 = 0xf8; uStack_16 < DAT_2000_ca99; uStack_16 = uStack_16 + 1) {
-      pbVar1 = (byte *)((int)DAT_2000_ca95 + uStack_16 * 9 + 3);
+    for (uStack_16 = 0xf8; uStack_16 < GUnitCount; uStack_16 = uStack_16 + 1) {
+      pbVar1 = (byte *)((int)GUnits + uStack_16 * 9 + 3);
       *pbVar1 = *pbVar1 & 0xfc;
     }
-    for (uStack_16 = 0; (int)uStack_16 < (int)(uint)DAT_2000_d1e6; uStack_16 = uStack_16 + 1) {
+    for (uStack_16 = 0; (int)uStack_16 < (int)(uint)GLeaderCount; uStack_16 = uStack_16 + 1) {
       if (*(char *)((int)*(undefined4 *)(uStack_16 << 2) + 0x3d) != '\0') {
         OVC22_5087_056e(CONCAT11(0x21,(undefined1)uStack_16));
       }
@@ -69,9 +69,9 @@ void __cdecl16far upd_units_5087_1d7d(void)
     if (DebugVerbose != false) {
       printf("%d \r",0x3e);
     }
-    for (uVar21 = 0xf8; uVar21 < DAT_2000_ca99; uVar21 = uVar21 + 1) {
-      uVar22 = (undefined2)((ulong)DAT_2000_ca95 >> 0x10);
-      iVar17 = (int)DAT_2000_ca95;
+    for (uVar21 = 0xf8; uVar21 < GUnitCount; uVar21 = uVar21 + 1) {
+      uVar22 = (undefined2)((ulong)GUnits >> 0x10);
+      iVar17 = (int)GUnits;
       if ((*(byte *)(iVar17 + uVar21 * 9 + 3) & 3) == 0) {
         bVar5 = *(byte *)(iVar17 + uVar21 * 9 + 2);
         if ((bVar5 == 0xff) ||
@@ -83,15 +83,15 @@ void __cdecl16far upd_units_5087_1d7d(void)
         }
         if (*(char *)(iVar17 + uVar21 * 9 + 1) != '\0') {
           uVar13 = ovr_randBelow(uStack_8);
-          uVar22 = (undefined2)((ulong)DAT_2000_ca95 >> 0x10);
-          iVar17 = (int)DAT_2000_ca95;
+          uVar22 = (undefined2)((ulong)GUnits >> 0x10);
+          iVar17 = (int)GUnits;
           if ((int)(uVar13 & 0xff) <
               (int)(100 - (uint)*(byte *)((uint)*(byte *)(iVar17 + uVar21 * 9) * 0x27 + 0x130))) {
             local_20 = *(byte *)(iVar17 + uVar21 * 9);
             pcVar2 = (char *)(iVar17 + uVar21 * 9 + 1);
             *pcVar2 = *pcVar2 + -1;
-            iVar17 = (int)DAT_2000_ca95;
-            uVar22 = (undefined2)((ulong)DAT_2000_ca95 >> 0x10);
+            iVar17 = (int)GUnits;
+            uVar22 = (undefined2)((ulong)GUnits >> 0x10);
             if (((*(uint *)((uint)local_20 * 0x27 + 0x121) & 4) == 0) &&
                ((*(char *)(iVar17 + uVar21 * 9 + 1) == '\0' ||
                 ((*(uint *)((uint)local_20 * 0x27 + 0x121) & 0x200) != 0)))) {
@@ -115,7 +115,7 @@ void __cdecl16far upd_units_5087_1d7d(void)
     if (DebugVerbose != false) {
       printf("%d \r",0x43);
     }
-    for (uStack_16 = 0; (int)uStack_16 < (int)(uint)DAT_2000_d1e6; uStack_16 = uStack_16 + 1) {
+    for (uStack_16 = 0; (int)uStack_16 < (int)(uint)GLeaderCount; uStack_16 = uStack_16 + 1) {
       if (*(char *)((int)*(undefined4 *)(uStack_16 << 2) + 0x3d) != '\0') {
         *(undefined2 *)((int)*(undefined4 *)(uStack_16 << 2) + 0xa2) = 0;
         cVar11 = *(char *)((int)*(undefined4 *)(uStack_16 << 2) + 0x3f);
@@ -133,9 +133,9 @@ void __cdecl16far upd_units_5087_1d7d(void)
         iVar17 = *(int *)(iVar17 + 0x58) + ((int)uVar21 >> 0xf) +
                  (uint)CARRY2(*(uint *)(iVar17 + 0x56),uVar21);
         if ((iVar17 < 1) && (iVar17 < 0)) {
-          for (uVar21 = 0xf8; uVar21 < DAT_2000_ca99; uVar21 = uVar21 + 1) {
-            uVar22 = (undefined2)((ulong)DAT_2000_ca95 >> 0x10);
-            iVar17 = (int)DAT_2000_ca95;
+          for (uVar21 = 0xf8; uVar21 < GUnitCount; uVar21 = uVar21 + 1) {
+            uVar22 = (undefined2)((ulong)GUnits >> 0x10);
+            iVar17 = (int)GUnits;
             local_20 = *(byte *)(iVar17 + uVar21 * 9);
             if ((*(byte *)(iVar17 + uVar21 * 9 + 2) == uStack_16) &&
                (*(int *)((uint)local_20 * 0x27 + 0x123) < 0)) {
@@ -147,16 +147,16 @@ void __cdecl16far upd_units_5087_1d7d(void)
               if ((iVar20 < 1) && (iVar20 < 0)) {
                 if ((cVar11 == '\0') && (*(char *)(iVar17 + uVar21 * 9 + 1) != '\0')) {
                   uVar13 = ovr_randBelow(100);
-                  uVar22 = (undefined2)((ulong)DAT_2000_ca95 >> 0x10);
-                  iVar17 = (int)DAT_2000_ca95;
+                  uVar22 = (undefined2)((ulong)GUnits >> 0x10);
+                  iVar17 = (int)GUnits;
                   if (*(byte *)((uint)*(byte *)(iVar17 + uVar21 * 9) * 0x27 + 0x130) <= (byte)uVar13
                      ) {
                     if (*(char *)(iVar17 + uVar21 * 9 + 1) != '\0') {
                       pcVar2 = (char *)(iVar17 + uVar21 * 9 + 1);
                       *pcVar2 = *pcVar2 + -1;
                     }
-                    iVar17 = (int)DAT_2000_ca95;
-                    uVar22 = (undefined2)((ulong)DAT_2000_ca95 >> 0x10);
+                    iVar17 = (int)GUnits;
+                    uVar22 = (undefined2)((ulong)GUnits >> 0x10);
                     if (((*(uint *)((uint)local_20 * 0x27 + 0x121) & 4) == 0) &&
                        ((*(char *)(iVar17 + uVar21 * 9 + 1) == '\0' ||
                         ((*(uint *)((uint)local_20 * 0x27 + 0x121) & 0x200) != 0)))) {
@@ -202,9 +202,9 @@ void __cdecl16far upd_units_5087_1d7d(void)
           else {
             uStack_10 = 0;
           }
-          bVar26 = CARRY2(DAT_2000_ca91,uStack_10);
-          DAT_2000_ca91 = DAT_2000_ca91 + uStack_10;
-          DAT_2000_ca93 = DAT_2000_ca93 + ((int)uStack_10 >> 0xf) + (uint)bVar26;
+          bVar26 = CARRY2(GPopulationLo,uStack_10);
+          GPopulationLo = GPopulationLo + uStack_10;
+          GPopulationHi = GPopulationHi + ((int)uStack_10 >> 0xf) + (uint)bVar26;
           uVar14 = *(int *)((int)*(undefined4 *)(uStack_16 << 2) + 0x54) - uStack_10;
           uVar22 = (undefined2)((ulong)*(undefined4 *)(uStack_16 << 2) >> 0x10);
           iVar17 = (int)*(undefined4 *)(uStack_16 << 2);
@@ -265,7 +265,7 @@ void __cdecl16far upd_units_5087_1d7d(void)
               *(uint *)((int)*(undefined4 *)(uStack_16 << 2) + 0xa2) = uStack_a;
             }
             if (cVar11 == '\0') {
-              for (iVar17 = 0; (uStack_12 != 0 && (iVar17 < (int)(uint)DAT_2000_d1e6));
+              for (iVar17 = 0; (uStack_12 != 0 && (iVar17 < (int)(uint)GLeaderCount));
                   iVar17 = iVar17 + 1) {
                 if ((*(char *)((int)*(undefined4 *)(iVar17 << 2) + 0x3d) != '\0') &&
                    ((*(char *)((int)*(undefined4 *)(iVar17 << 2) + 0x3f) == '\0' &&
@@ -461,7 +461,7 @@ void __cdecl16far upd_units_5087_1d7d(void)
         }
         if (*(char *)((int)*(undefined4 *)(uStack_16 << 2) + 0xaa) != '\0') {
           uStack_4 = (uint)*(byte *)((int)*(undefined4 *)(uStack_16 << 2) + 0xaa);
-          for (uVar21 = 0; (int)uVar21 < (int)(uint)DAT_2000_d1e6; uVar21 = uVar21 + 1) {
+          for (uVar21 = 0; (int)uVar21 < (int)(uint)GLeaderCount; uVar21 = uVar21 + 1) {
             uVar22 = (undefined2)((ulong)*(undefined4 *)(uStack_16 << 2) >> 0x10);
             iVar18 = (int)*(undefined4 *)(uStack_16 << 2);
             iVar17 = *(int *)(iVar18 + 0x58);
@@ -553,24 +553,24 @@ void __cdecl16far upd_units_5087_1d7d(void)
     if (DebugVerbose != false) {
       printf("%d \r",0x40);
     }
-    for (uVar21 = 0xf8; uVar21 < DAT_2000_ca99; uVar21 = uVar21 + 1) {
-      uVar22 = (undefined2)((ulong)DAT_2000_ca95 >> 0x10);
-      iVar17 = (int)DAT_2000_ca95;
+    for (uVar21 = 0xf8; uVar21 < GUnitCount; uVar21 = uVar21 + 1) {
+      uVar22 = (undefined2)((ulong)GUnits >> 0x10);
+      iVar17 = (int)GUnits;
       if ((*(uint *)((uint)*(byte *)(iVar17 + uVar21 * 9) * 0x27 + 0x121) & 0x40) != 0) {
         if (*(char *)(iVar17 + uVar21 * 9 + 8) != '\0') {
           pcVar2 = (char *)(iVar17 + uVar21 * 9 + 8);
           *pcVar2 = *pcVar2 + -1;
         }
-        uVar22 = (undefined2)((ulong)DAT_2000_ca95 >> 0x10);
-        if (*(char *)((int)DAT_2000_ca95 + uVar21 * 9 + 8) == '\0') {
-          uVar8 = *(undefined4 *)((uint)*(byte *)((int)DAT_2000_ca95 + uVar21 * 9 + 2) << 2);
+        uVar22 = (undefined2)((ulong)GUnits >> 0x10);
+        if (*(char *)((int)GUnits + uVar21 * 9 + 8) == '\0') {
+          uVar8 = *(undefined4 *)((uint)*(byte *)((int)GUnits + uVar21 * 9 + 2) << 2);
           if (*(char *)((int)uVar8 + 0x3f) == '\0') {
             ovr_play_sfx(81,0);
-            uVar22 = (undefined2)((ulong)DAT_2000_ca95 >> 0x10);
+            uVar22 = (undefined2)((ulong)GUnits >> 0x10);
             pcVar15 = (char *)ovr_OVC23_55fe_3450(*(undefined2 *)
-                                                   ((int)DAT_2000_ca95 + uVar21 * 9 + 4),
+                                                   ((int)GUnits + uVar21 * 9 + 4),
                                                   *(undefined2 *)
-                                                   ((int)DAT_2000_ca95 + uVar21 * 9 + 6));
+                                                   ((int)GUnits + uVar21 * 9 + 6));
             pcVar15 = ovr_fmVsprintf((char *)"Mine exhausted at (%d, %d).",pcVar15);
             ovr_say(pcVar15);
             ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x24));
@@ -583,15 +583,15 @@ void __cdecl16far upd_units_5087_1d7d(void)
     if (DebugVerbose != false) {
       printf("%d \r",0x42);
     }
-    ovr_driver_2d63_0a67((undefined2)DAT_2000_cb09,(*(uint16_t *)((uint8_t *)&(DAT_2000_cb09) + 2)),0,0,0x93,0x3b,0xfff7);
+    ovr_driver_2d63_0a67((undefined2)GMapFlags,(*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),0,0,0x93,0x3b,0xfff7);
     for (uStack_16 = 0; uStack_16 < DAT_2410_0881; uStack_16 = uStack_16 + 1) {
-      puVar3 = (uint *)((int)DAT_2000_cb09 + *(int *)(uStack_16 * 0x13 + 2) * 0x128 +
+      puVar3 = (uint *)((int)GMapFlags + *(int *)(uStack_16 * 0x13 + 2) * 0x128 +
                        *(int *)(uStack_16 * 0x13) * 2);
       *puVar3 = *puVar3 | 8;
     }
     if (EntityCount <= DAT_2410_55d6) {
       DAT_2410_55d6 = 0;
-      for (uStack_16 = 0; (int)uStack_16 < (int)(uint)DAT_2000_d1e6; uStack_16 = uStack_16 + 1) {
+      for (uStack_16 = 0; (int)uStack_16 < (int)(uint)GLeaderCount; uStack_16 = uStack_16 + 1) {
         if (*(char *)((int)*(undefined4 *)(uStack_16 << 2) + 0x3d) != '\0') {
           memcpy((uint8_t *)(*(int *)(uStack_16 * 4) + 0x8e),
                  (uint8_t *)(*(int *)(uStack_16 * 4) + 0x94),3);
@@ -630,7 +630,7 @@ void __cdecl16far upd_units_5087_1d7d(void)
             iStack_1a = *(int *)(uVar13 + uStack_16 * 0x37 + 2);
             iStack_18 = ovr_OVC23_55fe_3450(*(undefined2 *)(uVar13 + uStack_16 * 0x37));
             pcVar15 = (char *)"puppetmaker" + 3;
-            if ((*(uint *)((int)DAT_2000_cb09 + iStack_1a * 0x128 + iStack_18 * 2) & 8) == 0) {
+            if ((*(uint *)((int)GMapFlags + iStack_1a * 0x128 + iStack_18 * 2) & 8) == 0) {
               local_1e = 0x22;
               local_1f = 0x21;
               local_20 = 0x22;

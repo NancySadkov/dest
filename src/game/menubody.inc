@@ -36,8 +36,8 @@ byte * __cdecl16far uiMainMenuLoop(long param_1,byte *param_2,uint param_3,uint 
   uVar4 = 8;
   F_SCOPY(yesno,(uint8_t *)(char **)GYesNo,8);
   ovr_say("Stronghold V 1.00");
-  fVar11.seg = DAT_2000_d1a1;
-  fVar11.ofs = DAT_2000_d19f;
+  fVar11.seg = GMenuGfxSeg;
+  fVar11.ofs = GMenuGfxOfs;
   ovr_blitLoadRleGfx(fVar11,far_from_u32((uint32_t)(0xa00009af)));
   ovr_stats_6386_00f8();
   saveui_4528_0533();
@@ -54,7 +54,7 @@ byte * __cdecl16far uiMainMenuLoop(long param_1,byte *param_2,uint param_3,uint 
       pcStack_2e = (char *)"puppetmaker" + 3;
       pcStack_30 = (char *)"Save Game";
     }
-    if ((DAT_2000_ca90 == '\0') && (SaveAuto != '\0')) {
+    if ((GGameInProgress == '\0') && (SaveAuto != '\0')) {
       pcStack_16 = (char *)"puppetmaker" + 3;
       pcStack_18 = (char *)"Begin Play";
     }
@@ -201,38 +201,38 @@ byte * __cdecl16far uiMainMenuLoop(long param_1,byte *param_2,uint param_3,uint 
   } while (uStack_4 != pbVar3);
   for (fStack_8.seg = 0; fStack_8.seg < 0x94; fStack_8.seg = fStack_8.seg + 1) {
     for (uVar8 = 0; uVar8 < 0x3c; uVar8 = uVar8 + 1) {
-      uVar4 = (undefined2)((ulong)DAT_2000_cb0d >> 0x10);
-      if ((byte *)*(int *)((int)DAT_2000_cb0d + fStack_8.seg * 0x78 + uVar8 * 2) == pbVar3) {
-        *(undefined2 *)((int)DAT_2000_cb0d + fStack_8.seg * 0x78 + uVar8 * 2) = 0;
+      uVar4 = (undefined2)((ulong)GUnitGrid >> 0x10);
+      if ((byte *)*(int *)((int)GUnitGrid + fStack_8.seg * 0x78 + uVar8 * 2) == pbVar3) {
+        *(undefined2 *)((int)GUnitGrid + fStack_8.seg * 0x78 + uVar8 * 2) = 0;
       }
     }
   }
-  *(undefined1 *)((int)DAT_2000_ca95 + (int)pbVar3 * 9) = (*(uint8_t *)((uint8_t *)&(param_2)));
-  *(undefined1 *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 1) = 8;
-  *(undefined1 *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 2) = (undefined1)param_3;
-  *(int *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 4) = (int)param_1;
-  *(int *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 6) = (*(uint16_t *)((uint8_t *)&(param_1) + 2));
-  *(undefined2 *)((int)DAT_2000_cb0d + (int)param_1 * 0x78 + (*(uint16_t *)((uint8_t *)&(param_1) + 2)) * 2) = (undefined2)(uint)pbVar3;
-  uVar4 = (undefined2)((ulong)DAT_2000_cb09 >> 0x10);
-  *(uint *)((int)DAT_2000_cb09 + (*(uint16_t *)((uint8_t *)&(param_1) + 2)) * 0x128 + (int)param_1 * 2) =
-       *(uint *)((int)DAT_2000_cb09 + (*(uint16_t *)((uint8_t *)&(param_1) + 2)) * 0x128 + (int)param_1 * 2) & 0x3fff |
+  *(undefined1 *)((int)GUnits + (int)pbVar3 * 9) = (*(uint8_t *)((uint8_t *)&(param_2)));
+  *(undefined1 *)((int)GUnits + (int)pbVar3 * 9 + 1) = 8;
+  *(undefined1 *)((int)GUnits + (int)pbVar3 * 9 + 2) = (undefined1)param_3;
+  *(int *)((int)GUnits + (int)pbVar3 * 9 + 4) = (int)param_1;
+  *(int *)((int)GUnits + (int)pbVar3 * 9 + 6) = (*(uint16_t *)((uint8_t *)&(param_1) + 2));
+  *(undefined2 *)((int)GUnitGrid + (int)param_1 * 0x78 + (*(uint16_t *)((uint8_t *)&(param_1) + 2)) * 2) = (undefined2)(uint)pbVar3;
+  uVar4 = (undefined2)((ulong)GMapFlags >> 0x10);
+  *(uint *)((int)GMapFlags + (*(uint16_t *)((uint8_t *)&(param_1) + 2)) * 0x128 + (int)param_1 * 2) =
+       *(uint *)((int)GMapFlags + (*(uint16_t *)((uint8_t *)&(param_1) + 2)) * 0x128 + (int)param_1 * 2) & 0x3fff |
        (uint)*(byte *)(((uint)param_2 & 0xff) * 0x27 + 0x11e) << 0xe;
   if ((*(uint *)(((uint)param_2 & 0xff) * 0x27 + 0x121) & 0x40) == 0) {
-    *(undefined1 *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 8) = 0;
+    *(undefined1 *)((int)GUnits + (int)pbVar3 * 9 + 8) = 0;
   }
   else {
     cVar1 = ovr_constr_36ce_3172();
     if (cVar1 == '\x03') {
       uVar2 = ovr_randBelow(0x28);
-      *(char *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 8) = (char)uVar2 + '\x1e';
+      *(char *)((int)GUnits + (int)pbVar3 * 9 + 8) = (char)uVar2 + '\x1e';
     }
     else if (cVar1 == '\x04') {
       uVar2 = ovr_randBelow(0x50);
-      *(char *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 8) = (char)uVar2 + '<';
+      *(char *)((int)GUnits + (int)pbVar3 * 9 + 8) = (char)uVar2 + '<';
     }
     else {
       uVar2 = ovr_randBelow(0x14);
-      *(char *)((int)DAT_2000_ca95 + (int)pbVar3 * 9 + 8) = (char)uVar2 + '\x0f';
+      *(char *)((int)GUnits + (int)pbVar3 * 9 + 8) = (char)uVar2 + '\x0f';
     }
   }
   return pbVar3;

@@ -48,6 +48,8 @@ def main():
                                      else "st_types.h" if name == "types.h"
                                      else "dgroup.h"),
                         os.path.join(WORK, name))
+    shutil.copyfile(os.path.join(ROOT, "src", "game", "bss.h"),
+                    os.path.join(WORK, "bss.h"))
     h = open(os.path.join(WORK, "dgroup.h"), encoding="ascii").read()
     h = h.replace('#include "st_compat.h"', '#include "compat.h"')
     h = h.replace('#include "st_types.h"', '#include "types.h"')

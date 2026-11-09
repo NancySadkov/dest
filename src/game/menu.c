@@ -1,5 +1,6 @@
 #pragma warn -pnt
 #include "dgroup.h"
+#include "bss.h"
 
 #define ovr_OVC23_55fe_05db f_55fe_05db
 #define ovr_OVC23_55fe_2b82 f_55fe_2b82

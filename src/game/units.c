@@ -1,4 +1,5 @@
 #include "dgroup.h"
+#include "bss.h"
 extern far_t far_t_ARRAY_2410_26f7[];
 
 /* DGROUP 0x4234: array of 0xc-byte building records.  Ghidra rendered the

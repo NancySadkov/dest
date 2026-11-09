@@ -1,4 +1,5 @@
 #include "dgroup.h"
+#include "bss.h"
 
 #define ovr_OVC22_5087_056e f_5087_056e
 #define ovr_OVC45_77eb_0904 f_77eb_0904
