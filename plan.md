@@ -127,6 +127,10 @@ Two concrete causes were found while rebuilding the model:
    constants (`0x2410`, `0x2337`, ...) into data pointers into DGROUP, which
    produces expressions such as `"puppetmaker" + 3` and `"glassworks" + 9`.
    With `setInferConstantPointers(false)` those constants stay scalars.
+   The project now exports with this option disabled, retypes the DGROUP
+   copyright string, names the in-game BSS globals, and sweeps the remaining
+   `"string" + offset` constants against DGROUP symbols/segments.  Results and
+   audit data: `doc/ghidra_project.md`.
 
 The old tree is therefore quarantined under `reference/` for its function
 inventory only. It is not built, not edited, and not used as a source of truth.
