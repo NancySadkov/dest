@@ -70,8 +70,8 @@ segment name.
 
 ```text
 functions=1590 default=0
-symbols=13348 default=0
-definedData=2493 noSymbol=0 defaultSymbol=0
+symbols=13360 default=0
+definedData=2440 noSymbol=0 defaultSymbol=0
 equates=26
 ```
 
@@ -144,3 +144,63 @@ to correct `font_302d_06ea` to
 The remaining `in_DX` in `manage_4d05_056e` comes from `blitLabel` calls whose
 far pointer arguments are still reconstructed from split return registers; that
 is the next type-propagation target.
+
+
+## Unit and building structs
+
+`scripts/ghidra/RecoverStructs.java` creates and applies the game structs.
+
+```c
+struct unit_t {          /* size 9, GUnits[] */
+    byte bldType;        /* index into BuildingTypes, stride 0x27 */
+    byte level;          /* level/count */
+    byte unitType;
+    byte flags;
+    short x;
+    short y;
+    byte timer;
+};
+
+struct entity_t {        /* size 0x37, Entities[] */
+    struct agnt_t base;  /* 0x00..0x33 */
+    byte reserved[3];
+};
+
+struct bld_inst_t {      /* size 0xC, BldInstances[75] */
+    short field0;
+    short field2;
+    byte data[8];
+};
+```
+
+Typed globals:
+
+```text
+2000:CA95  GUnits       unit_t *32
+2000:D18E  Entities     entity_t *32
+2000:CB05  GMapCells    byte[59][148] *32
+2000:CB09  GMapFlags    short[60][148] *32
+2000:CB0D  GUnitGrid    short[148][60] *32
+2410:4234  BldInstances bld_inst_t[75]
+195D:010E  BuildingTypes bldtp_t[248]   (already present)
+1726:0000  Agnts        agnt_t[24]      (already present)
+195D:26D6  AgntGs       agntG_t[42]     (already present)
+2410:0958  AgntAnms     anm_t[139]      (already present)
+```
+
+The `agnt_t` fields at offsets 0 and 2 are named `x` and `y`: they index
+`GMapFlags[y][x]`.
+
+Verification from the re-decompiled functions:
+
+```c
+/* upd_units_5087_1d7d */
+((unit_t *)GUnits)[i].flags
+((unit_t *)GUnits)[i].x
+((unit_t *)GUnits)[i].y
+((unit_t *)GUnits)[i].bldType
+
+/* OVC13_3d16_0255 */
+((entity_t *)Entities)[i].base.y
+((entity_t *)Entities)[i].base.field15_0x17
+```
