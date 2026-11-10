@@ -629,3 +629,30 @@ struct brect_t {
     uint16_t seg;
 };
 
+
+typedef struct unit_t unit_t, *Punit_t;
+
+struct unit_t {
+    uint8_t bldType;  /* index into BuildingTypes, stride 0x27 */
+    uint8_t level;    /* level/count */
+    uint8_t unitType; /* unit/sprite type */
+    uint8_t flags;
+    int16_t x;
+    int16_t y;
+    uint8_t timer;
+};
+
+typedef struct entity_t entity_t, *Pentity_t;
+
+struct entity_t {
+    agnt_t base;       /* 0x00..0x33 */
+    uint8_t reserved[3];
+};
+
+typedef struct bld_inst_t bld_inst_t, *Pbld_inst_t;
+
+struct bld_inst_t {
+    int16_t field0;
+    int16_t field2;
+    uint8_t data[8];
+};
