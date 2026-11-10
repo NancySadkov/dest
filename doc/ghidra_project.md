@@ -125,3 +125,22 @@ Caution: for a `__cdecl16far` function that returns a far pointer, Ghidra may
 insert a hidden `__return_storage_ptr__` parameter instead of using `DX:AX`.
 `manage_4d05_03a4` needs its return type modeled as a scalar (`uint32_t`) or
 with explicit custom storage before its callers lose the `in_DX` artifact.
+
+
+`SetProtoCustom.java` sets a function return/parameter with explicit storage.
+For `manage_4d05_03a4` it now produces the correct signature without a hidden
+return pointer:
+
+```text
+void * manage_4d05_03a4(char * p)   cc=__cdecl16far
+return DX:2,AX:2
+param p char *32 @ Stack[0x6]:4
+```
+
+`SetProtoTwo.java` does the same for two far-pointer parameters; it was used
+to correct `font_302d_06ea` to
+`uint16_t font_302d_06ea(char *text, uint8_t *widths)`.
+
+The remaining `in_DX` in `manage_4d05_056e` comes from `blitLabel` calls whose
+far pointer arguments are still reconstructed from split return registers; that
+is the next type-propagation target.
