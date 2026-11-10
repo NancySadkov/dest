@@ -113,3 +113,15 @@ unsymbolized data -> data_<block>_<offset>_<type>
 `byte_/word_/dword_`.  Every function, data item and symbol now has a name; the
 semantic names for the in-game state and BSS continue to take precedence.
 Project backup before the bulk pass: `gpr_bak_before_bulk`.
+
+
+## Prototype tooling
+
+`scripts/ghidra/DumpProtos.java` prints signatures, parameter storage and
+return storage for a list of addresses.  `scripts/ghidra/SetProtoSimple.java`
+copies a return type and a parameter type from donor functions.
+
+Caution: for a `__cdecl16far` function that returns a far pointer, Ghidra may
+insert a hidden `__return_storage_ptr__` parameter instead of using `DX:AX`.
+`manage_4d05_03a4` needs its return type modeled as a scalar (`uint32_t`) or
+with explicit custom storage before its callers lose the `in_DX` artifact.
