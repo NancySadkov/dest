@@ -38,6 +38,7 @@ FUNCS = [
     ("manage_4d05_118b", 0x4D05, 0x118B, 0x40),
     ("manage_4d05_11cb", 0x4D05, 0x11CB, 0x91),
     ("manage_4d05_125c", 0x4D05, 0x125C, 0x3A),
+    ("manage_4d05_17c7", 0x4D05, 0x17C7, 0x6E),
     ("manage_4d05_1b1d", 0x4D05, 0x1B1D, 0x34),
     ("manage_4d05_1b51", 0x4D05, 0x1B51, 0x9D),
     ("manage_4d05_217a", 0x4D05, 0x217A, 0x139),
@@ -72,6 +73,33 @@ def operand_mask(md, code, ofs):
     return mask
 
 
+def linker_rewrites(compiled, original, length):
+    """Offsets covered by the overlay linker's lcall -> push cs;call;nop pass.
+
+    A cross-module far call compiles to a 5-byte `lcall`; the overlay linker
+    rewrites it in place to `push cs`, a near `call`, and a padding `nop`
+    (still 5 bytes).  Returns a set of byte offsets to mask and a count.
+    """
+    mask = set()
+    count = 0
+    i = 0
+    while i + 5 <= length:
+        if compiled[i] != 0x9A:
+            i += 1
+            continue
+        nop_first = (original[i] == 0x90 and original[i + 1] == 0x0E
+                     and original[i + 2] == 0xE8)
+        nop_last = (original[i] == 0x0E and original[i + 1] == 0xE8
+                    and original[i + 4] == 0x90)
+        if nop_first or nop_last:
+            mask.update(range(i, i + 5))
+            count += 1
+            i += 5
+        else:
+            i += 1
+    return mask, count
+
+
 def main():
     segdata, pub = parse_omf(OBJ)
     relocs = parse_relocs(OBJ)
@@ -96,6 +124,8 @@ def main():
             ok = False
             continue
         mask = operand_mask(md, body, ofs)
+        rw_mask, rw_count = linker_rewrites(compiled, original, length)
+        mask |= rw_mask
         fixups = []
         for roff, rsize, rtarget in relocs.get(segno, []):
             if pos <= roff < pos + length:
@@ -111,6 +141,8 @@ def main():
         elif diffs:
             extra = (" relocs " + ",".join("+%02X:%s" % (o, t)
                                            for o, t in fixups)) if fixups else ""
+            if rw_count:
+                extra += " %d linker rewrite(s)" % rw_count
             print("OK   %-22s %d bytes, %d relocated operands%s"
                   % (name, length, len(diffs), extra))
         else:

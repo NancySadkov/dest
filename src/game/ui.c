@@ -36,6 +36,28 @@ void __cdecl16far f_3a5b_032e(void);
 void __cdecl16far f_6a8f_18c6(void);
 void __cdecl16far manage_4d05_1bee(uint8_t index);
 
+/* Enter the full-screen panel with the given character index selected.
+ * `manage_4d05_1bee` is a cross-module call: TCC emits a far call here and
+ * the overlay linker rewrites it to `push cs; call; nop` (see the verifier's
+ * linker_rewrites pass). */
+void __cdecl16far manage_4d05_17c7(uint8_t index)
+{
+    f_3f0b_0685();
+    f_2e25_1662();
+    f_3a5b_032e();
+    *(uint8_t far *)MK_FP(0x0280, 0x07a6) = 0xff;
+    *(uint8_t far *)MK_FP(0x0280, 0x8971) =
+        *(uint8_t far *)MK_FP(0x0280, 0x8980);
+    *(uint8_t far *)MK_FP(0x0280, 0x8970) =
+        *(uint8_t far *)MK_FP(0x0280, 0x896f);
+    *(uint16_t far *)MK_FP(0x0280, 0x0430) = 0xa000;
+    manage_4d05_1bee(index);
+    if (!DAT_2410_4926) {
+        f_6386_232d();
+        f_6a8f_18c6();
+    }
+}
+
 /* Ten-byte panel geometry copied from the static table. */
 struct panel {
     int v[5];

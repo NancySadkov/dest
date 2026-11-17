@@ -269,7 +269,7 @@ Evidence applied in the project:
 
 ### Byte-exact replacements
 
-`src/game/ui.c` holds twenty-two recompiled UI functions.  With byte returns and
+`src/game/ui.c` holds twenty-three recompiled UI functions.  With byte returns and
 the recovered structs they compile to the original instruction streams exactly:
 
 ```text
@@ -293,6 +293,7 @@ the recovered structs they compile to the original instruction streams exactly:
 4D05:125C  58 bytes  manage_4d05_125c   (default class by race)
 4D05:1B1D  52 bytes  manage_4d05_1b1d   (first levelled record)
 4D05:1B51 157 bytes  manage_4d05_1b51   (next record by excluded status)
+4D05:17C7 110 bytes  manage_4d05_17c7   (open character panel)
 4D05:217A 313 bytes  manage_4d05_217a   (comma-separated decimal)
 4D05:330C 346 bytes  manage_4d05_330c   (unit filter description)
 ```
@@ -327,11 +328,13 @@ field access, which the macro in `ui.c` reproduces.
 
 Two functions need a link-time fix-up rather than a source shape:
 
-- `17c7` calls `1bee` in the same overlay.  That call was a cross-module
-  `lcall` at compile time; the overlay linker rewrote it into
-  `push cs; call rel16; nop` (one byte larger than TCC's own
-  `push cs; call rel16`).  Reproducing it needs either a one-byte padding
-  pass or an out-of-line definition, so `17c7` is not in `ui.c` yet.
+- `17c7` calls `1bee`, which lived in another module: TCC emits a 5-byte
+  `lcall`, and the overlay linker rewrote it in place to
+  `nop; push cs; call rel16` (5 bytes).  The verifier's `linker_rewrites`
+  pass recognises that pattern (237 sites in the image), so `ui.c` keeps
+  `1bee` as an external far call and still matches.  Any other cross-module
+  call reacts the same way; functions that shared a module get TCC's own
+  4-byte `push cs; call` (as in `01d4` → `01a3`).
 - `22b3` indexes the entity array as `base + i`; TCC schedules the pointer
   load before the `i * 0x37` scaling, while the original computes the index
   first.  The function is semantically understood but awaits the idiom that
