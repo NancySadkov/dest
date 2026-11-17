@@ -946,3 +946,15 @@ Set together with 0x31 by the flag-driven transitions in agnt_3b1d_11c1
 (0 -> 0xc when flags&0x80, -> 0xd when flags&0x100), and only ever 0, 0xc or
 0xd, so it is a small state value.  Generated struct fields: 52 -> 51
 (agnt_t 11).
+
+## agnt_t+0x32 = flags32
+
+The first attempt to name 0x33 as a byte failed because no component starts
+there: the construction switch ORs 8 into the *high byte* of the 16-bit word at
+0x32, and the constructor initialises that high byte to 2 (0x0200).  So 0x32 is
+a flags word and the observed bit is 0x800:
+
+    pbVar1 = &entity.base.field_0x32 + 1;   /* 0x33, high byte */
+    *pbVar1 = *pbVar1 | 8;                  /* word bit 0x800    */
+
+Named flags32.  Generated struct fields: 51 -> 50 (agnt_t 10).
