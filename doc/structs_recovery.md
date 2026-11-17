@@ -855,3 +855,21 @@ byte __cdecl16far agnt_3b1d_0c9f(agnt_t *agnt)
 ```
 
 This also validates `agnt_t.entity` and `entity_t.dir` end to end.
+
+## `agnt_3b1d_11c1` typed from its call site
+
+Called as `agnt_3b1d_11c1(iVar3, 0x1726)`, and its body reads `0x30`, `0x31`
+and the `flags` word at `0x2b`, so it takes `agnt_t *`:
+
+```c
+void __cdecl16far agnt_3b1d_11c1(agnt_t *agnt)
+{
+  if ((char)paVar1->field_0x30 == '\0') {
+    if ((paVar1->flags & 0x100) == 0) {
+      if ((paVar1->flags & 0x80) != 0) {
+        *(undefined1 *)&paVar1->field_0x30 = 0xc;
+```
+
+`0x30` takes 0, 0xc or 0xd depending on `flags & 0x80` / `flags & 0x100`, i.e. it
+is a small state value, but the values are opaque and it stays unnamed.
+Struct-typed functions: 92 -> 93.
