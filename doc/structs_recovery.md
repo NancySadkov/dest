@@ -774,3 +774,34 @@ called with segment `0x1726` (e.g. `ovc27: ovr_agnt_3b1d_0a53(param_1,0x1726)`)
 are array elements and keep `agnt_t`; those reached from
 `((entity_t *)Entities)[i].base` need the entity base type.  The split must
 happen before `0x13`/`0x16` and `entity_t+0x34`/`+0x35` can be named.
+
+### The split was wrong: the overlap is inside one record
+
+After creating `entBase_t` the entity-typed function was re-decompiled:
+
+```c
+byte __cdecl16far agnt_3b1d_0c9f(entity_t *ent)
+{
+  uVar1 = *(undefined4 *)((int)&(((entity_t *)ent)->base).flags16 + 1);  /* 0x17 */
+  bVar2 = *(byte *)((int)uVar1 + 0x36) % 6;
+  ...
+```
+
+`0x17` is dereferenced as a four-byte pointer on the **entity** as well, exactly
+as in the `0x1726` array.  So the entity record really does hold a pointer at
+`0x17..0x1a`, and the word OR at `0x16` overlaps its first byte *within the same
+record*.  Two structures cannot express that; the earlier reading of
+`CMP byte [BX+0x18]` as "a separate byte field" was wrong (it is a byte of that
+pointer).
+
+Consequences, applied:
+
+- `entity_t` is back to `{ agnt_t base; byte field_0x34; byte field_0x35; byte dir; }`;
+- `/st.h/entBase_t` was deleted, restoring the audit to 35 structs / 313 fields
+  / 55 generated.
+
+The `0x13..0x1a` overlap remains an unresolved modelling problem: it is a
+deliberate union/bitfield overlap in the original source, and Ghidra's type
+system here cannot place a word at `0x16` and a pointer at `0x17` in one
+structure.  Naming those bytes would require rewriting the pointer as two
+words, which contradicts every reader of the pointer.
