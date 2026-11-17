@@ -92,3 +92,15 @@ gfxRlePrepare(..., ((undefined2 *)&word_2000_BSS_039E)[iVar8] - iStack_14, ...);
 ```
 
 so it is the per-row screen y base, named `RowScreenY` (`2000:cdd2`).
+
+## Batch 5 - message latch
+
+2410:45B8 is set right after a notification and used to skip one update pass:
+
+    if ((byte_45B8 != 0) || (GameRunning)) { byte_45B8 = 0; }
+    else { ...rebuild the leader list... }
+
+    /* where it is set: the player entity stands on the cursor square */
+    stats_6386_232d(); say(); byte_45B8 = 1; return;
+
+Named MsgShown.
