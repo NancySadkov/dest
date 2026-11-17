@@ -873,3 +873,25 @@ void __cdecl16far agnt_3b1d_11c1(agnt_t *agnt)
 `0x30` takes 0, 0xc or 0xd depending on `flags & 0x80` / `flags & 0x100`, i.e. it
 is a small state value, but the values are opaque and it stays unnamed.
 Struct-typed functions: 92 -> 93.
+
+## Why `0426`/`0d4d` cannot be typed by changing one parameter
+
+Their callers pass the record as an offset plus its segment, because the thunk
+call splits the far pointer:
+
+```c
+/* ovc49 */
+ovr_agnt_3b1d_0426(piVar7, uVar8, &local_5)
+ovr_agnt_3b1d_0d4d(piVar7, uVar8, ...)
+```
+
+`piVar7` is an agent record (`piVar7[1]` is y, `piVar7 + 0x1d` is gdata), and
+`uVar8` is its segment.  Ghidra recovered the prototype as
+`0426(int *param_1, byte *param_2, char param_3)`, i.e. the offset in `param_1`
+and the segment in `param_2`, so replacing `param_1` alone with a four-byte
+pointer would swallow half of `param_2` and corrupt the rest of the signature.
+
+The fix for these two is to correct the *prototype first* (one far-pointer
+parameter instead of offset+segment), then type it.  `RenameVars` cannot do that
+because it only renames existing variables, and a wrong width here would shift
+every argument after it — the same class of mistake as the `entity_t *` retype.
