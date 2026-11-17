@@ -23,6 +23,41 @@ void __cdecl16far f_6190_0039(void)
 `asm db` is a placeholder: it reproduces the original instructions, but it is
 not recovered source.  The long-term goal is to remove every one of them.
 
+## The exported tree (`src/decompiled`)
+
+`scripts/ghidra/ExportRecovered.java` exports the whole program: 55 modules,
+1016 decompiled functions, plus `st_types.h`, `st_globals.[ch]`,
+`st_functions.h` and the compatibility headers.  This tree is the "exporter
+source"; the goal is for all of it to compile under Turbo C++ 3.0 without
+byte-dump or artifact hacks.
+
+Current compile baseline (TC30, large model, `-w-`):
+
+```
+python scripts/fbov/build_decompiled.py      # stages + compiles all 58 files
+compiled 32/58 modules
+```
+
+The remaining modules fail on decompiler artifacts, in this order of
+frequency:
+
+| Error | Count | Cause |
+|---|---|---|
+| Too few / extra parameters | ~370 | the decompiler lost some call arguments |
+| Type mismatch in parameter | ~220 | prototype and call-site types disagree |
+| Illegal structure operation | ~170 | `far_t` used as a value/address |
+| Nonportable pointer conversion | ~140 | a word local typed as a pointer |
+| Declaration is not allowed here | ~130 | a declaration after a statement (C89) |
+| Invalid indirection | ~120 | pointer typed as a value or vice versa |
+| Incompatible type conversion | ~80 | int/pointer/struct conversion |
+| Type mismatch in redeclaration | ~60 | duplicate prototypes |
+| Undefined symbol | ~40 | missing globals / helper names |
+
+Reproducible fixes so far live in `scripts/fbov/fix_compile.py` (type names,
+`far_t` dereferences, artifact names).  Per-function fixes that needed
+judgement (e.g. restoring lost call arguments from the original bytes) are
+applied directly to the tree.
+
 ## Conversion standard: behavioural C
 
 The recovered tree is now converted to **behavioural C**: the C must produce the
