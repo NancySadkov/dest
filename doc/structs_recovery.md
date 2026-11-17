@@ -935,6 +935,14 @@ the type was missing; the caller passes \piVar7\ (an agent record) and
 \&local_5\.  Typed \gnt_t *agnt\.  Struct-typed functions: 95 -> 96;
 auto parameters: 1234 -> 1233.
 
-The rest of the xxx\ group (C5(byte)\, Pb(uint,int)\, bd(uint)\,
+The rest of the xxx\ group (C5(byte)\, Pb(uint,int)\, 
+bd(uint)\,
 cd(int)\, f(int)\) takes plain indices, not records, so there is nothing
 to type there.
+
+## agnt_t+0x30 = state
+
+Set together with 0x31 by the flag-driven transitions in agnt_3b1d_11c1
+(0 -> 0xc when flags&0x80, -> 0xd when flags&0x100), and only ever 0, 0xc or
+0xd, so it is a small state value.  Generated struct fields: 52 -> 51
+(agnt_t 11).
