@@ -637,3 +637,15 @@ Eight levels scaled by `*0xff>>3` cover 0..223, i.e. an intensity, not an index;
 the neighbouring `*0xff>>0xb` term is always zero for a 0..7 value and is a
 decompiler artefact of the packed argument.  Named `HighlightLevel`
 (`2000:d022`).
+
+## `agnt_t+0x2e` = `variant`
+
+A 0/1 selector used as a table index, not a boolean state:
+
+```c
+*(byte *)(agent + 0x2e) = 0;   /* or 1 */
+... (*(byte *)(agent + 0x2e) * 0x21 + -0x16) ...      /* 0x21 = 33-byte records */
+```
+
+The value picks one of two 33-byte records, and the clear-orders routine resets
+it to 0, so it selects a variant of the agent.
