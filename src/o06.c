@@ -27,7 +27,7 @@ far_t __cdecl16far stshRleType2(far_t pixels,int16_t sx,int16_t sy,int16_t ex,in
 }
 
 /* 317e:01b2 */
-void __cdecl16far blitLoadRleGfx(far_t gfx,far_t dst)
+void __cdecl16far blitLoadRleGfx(char *gfx,char *dst)
 {
 }
 
@@ -67,7 +67,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int param_2,int param_3,int *param_4,b
 }
 
 /* 317e:0bf2 */
-void __cdecl16far blitGfxRect(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t type,bool mirror)
+void __cdecl16far blitGfxRect(char *gfx,int16_t x,int16_t y,brect_t *dst,uint8_t type,bool mirror)
 {
 }
 

@@ -167,6 +167,22 @@ void __cdecl16far OVC41_6a8f_18c6(void)
 /* 6a8f:199c */
 void __cdecl16far uiMainMenu(void)
 {
+    char *gfx;
+
+    draw_2e25_1662();
+    stop_audio();
+    byte_2000_BSS_003D = GMenuItem;
+    byte_2000_BSS_003C = byte_2000_BSS_003B;
+    gfx = MK_FP(word_2000_BSS_0087,word_2000_BSS_0085);
+    blitLoadRleGfx(gfx,(char *)0xa000e249L);
+    gfx = MK_FP(word_2000_BSS_008B,word_2000_BSS_0089);
+    blitLoadRleGfx(gfx,(char *)0xa000e249L);
+    uiMainMenuLoop();
+    gfx = MK_FP(word_2000_BSS_0087,word_2000_BSS_0085);
+    blitLoadRleGfx(gfx,(char *)0xa000e249L);
+    gfx = MK_FP(word_2000_BSS_008F,word_2000_BSS_008D);
+    blitLoadRleGfx(gfx,(char *)0xa000e249L);
+    OVC41_6a8f_18c6();
 }
 
 /* 6a8f:1a4c */

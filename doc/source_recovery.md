@@ -71,8 +71,18 @@ Consequences:
 |---|---|
 | Ghidra structure audit | 35 structures, 497 fields; 261 auto names in 6 structs |
 | Structure refinement | `scripts/ghidra/RefineStructs.java` named all 261 fields |
-| Stub tree | 55 modules, 1016 stubs, 453 thunks; 56/56 compile |
-| Function recovery | `main()` in progress |
+| Stub tree | 55 modules, 1016 stubs; 55/55 compile |
+| Function recovery | `main`, `init`-side helpers below |
+
+Recovered so far (in `src/`):
+
+| Function | Module |
+|---|---|
+| `main` | `main.c` |
+| `play_sfx` | `o11.c` |
+| `uiMainMenu` | `o41.c` |
+| `update_pause_button`, `toggle_pause` | `o28.c` |
+| `save_49fd_081e` | `o19.c` |
 
 ## Data image
 

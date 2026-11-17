@@ -16,25 +16,23 @@ void __cdecl16far OVC28_6018_0048(void)
 void __cdecl16far update_pause_button(void)
 {
     bool busy;
-    far_t gfx;
+    char *gfx;
 
     TextBlitDstSeg = 0xa000;
     if ((GPaused != '\0') &&
         ((busy = OVC15_4207_288b(), busy == '\0' || (GOngoingBattle != '\0')))) {
-        gfx.seg = word_2000_BSS_093E;
-        gfx.ofs = word_2000_BSS_093C;
+        gfx = MK_FP(word_2000_BSS_093E,word_2000_BSS_093C);
         blitGfxRect(gfx,235,116,BlitRects + 1,0x10,false);
         TextBlitY = 0x76;
         TextBlitX = 0xf1;
-        blitLabel("Resume",(uint8_t *)CONCAT22(FontMain.seg,FontMain.ofs),319,0xe0);
+        blitLabel("Resume",(uint8_t *)FontMain,319,0xe0);
         return;
     }
-    gfx.seg = word_2000_BSS_093A;
-    gfx.ofs = word_2000_BSS_0938;
+    gfx = MK_FP(word_2000_BSS_093A,word_2000_BSS_0938);
     blitGfxRect(gfx,235,116,BlitRects + 1,0x10,false);
     TextBlitY = 0x76;
     TextBlitX = 0xf0;
-    blitLabel("Pause",(uint8_t *)CONCAT22(Font01.seg,Font01.ofs),319,0xe0);
+    blitLabel("Pause",(uint8_t *)Font01,319,0xe0);
 }
 
 /* 6018:0176 */

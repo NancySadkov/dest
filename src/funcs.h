@@ -367,7 +367,7 @@ void __cdecl16far stExit(int n);
 far_t __cdecl16far stshRleSub(uint8_t *src,uint16_t sx,uint16_t sy,uint16_t ex,uint16_t ey,int16_t hdrsz);
 far_t __cdecl16far stshRleCut(far_t src,int16_t sx,int16_t sy,int16_t ex,int16_t ey);
 far_t __cdecl16far stshRleType2(far_t pixels,int16_t sx,int16_t sy,int16_t ex,int16_t ey,int16_t ox,int16_t oy);
-void __cdecl16far blitLoadRleGfx(far_t gfx,far_t dst);
+void __cdecl16far blitLoadRleGfx(char *gfx,char *dst);
 void __cdecl16far drawGfx(far_t gfx,far_t dst,bool type);
 void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool type);
 void __cdecl16far blit_317e_04c2(far_t param_1,int param_2,int param_3,int *param_4);
@@ -375,7 +375,7 @@ void __cdecl16far blitGfxN(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t ty
 void __cdecl16far blit_317e_0879(char *param_1,int param_2,char param_3,byte param_4);
 void __cdecl16far copyGrayscalePalette(uint8_t *dst,int count);
 void __cdecl16far gfxRlePrepare(far_t gfx,int param_2,int param_3,int *param_4,byte param_5,char param_6,char param_7);
-void __cdecl16far blitGfxRect(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t type,bool mirror);
+void __cdecl16far blitGfxRect(char *gfx,int16_t x,int16_t y,brect_t *dst,uint8_t type,bool mirror);
 void __cdecl16far blit_317e_0db7(uint16_t param_1,uint16_t param_2,int16_t param_3,int param_4,byte param_5,int param_6,byte param_7,brect_t *param_8,undefined2 param_9);
 void __cdecl16far blit_317e_0ebe(undefined2 param_1,int param_2,int param_3,undefined4 param_4,uint param_5,uint param_6,uint param_7,uint param_8,int param_9,int param_10,int param_11,int param_12,int param_13,int param_14);
 void __cdecl16far blit_317e_0f7d(far_t param_1,int param_2,int param_3,byte param_4,int param_5,int param_6,byte param_7,int *param_8,char param_9);
