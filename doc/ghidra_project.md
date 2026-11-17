@@ -269,7 +269,7 @@ Evidence applied in the project:
 
 ### Byte-exact replacements
 
-`src/game/ui.c` holds fifteen recompiled UI functions.  With byte returns and
+`src/game/ui.c` holds sixteen recompiled UI functions.  With byte returns and
 the recovered structs they compile to the original instruction streams exactly:
 
 ```text
@@ -286,6 +286,7 @@ the recovered structs they compile to the original instruction streams exactly:
 4D05:1095 177 bytes  manage_4d05_1095   (alignment picker)
 4D05:1146  69 bytes  manage_4d05_1146   (gender picker)
 4D05:118B  64 bytes  manage_4d05_118b   (alignment stop by race)
+4D05:11CB 145 bytes  manage_4d05_11cb   (starting hit points)
 4D05:125C  58 bytes  manage_4d05_125c   (default class by race)
 4D05:1B1D  52 bytes  manage_4d05_1b1d   (first levelled record)
 ```

@@ -7,7 +7,7 @@
 #include "dgroup.h"
 #include "bss.h"
 
-uint16_t __cdecl16far f_474a_0b26(uint16_t n);
+uint8_t __cdecl16far f_474a_0b26(uint16_t n);
 uint16_t __cdecl16far f_302d_06ea(char *text, uint8_t *widths);
 uint __cdecl16far f_302d_0634(char *text, uint8_t *widths,
                               int16_t max_width, uint8_t term);
@@ -17,6 +17,8 @@ char * __cdecl16far manage_4d05_03a4(char_sheet_t *sheet);
 void __cdecl16far f_6386_24c2(char *text);
 uint8_t __cdecl16far uiInputText(far_t *entries, int count, char *hint,
                                  uint8_t flags);
+char __cdecl16far manage_4d05_118b(uint8_t race);
+void __cdecl16far manage_4d05_11cb(char_sheet_t *sheet);
 
 /* Roll `count` dice with `sides` faces and return the total. */
 uint8_t __cdecl16far manage_4d05_01a3(uint8_t count, uint8_t sides)
@@ -168,6 +170,50 @@ char __cdecl16far manage_4d05_1b1d(void)
     return -1;
 }
 
+/* Hit-point roll table (one die size per class). */
+struct hp_table {
+    uint8_t die[7];
+};
+
+/* Alignment slider stop for a race value. */
+char __cdecl16far manage_4d05_118b(uint8_t race)
+{
+    if (race <= 3)
+        return -3;
+    if (race <= 5)
+        return -2;
+    if (race <= 8)
+        return -1;
+    if (race <= 0xc)
+        return 0;
+    if (race <= 0xf)
+        return 1;
+    if (race <= 0x11)
+        return 2;
+    return 3;
+}
+
+/* Roll starting hit points from the class die table. */
+void __cdecl16far manage_4d05_11cb(char_sheet_t *sheet)
+{
+    int hp;
+    struct hp_table local;
+    int i;
+
+    local = *(struct hp_table far *)&DAT_2410_4a0b;
+    hp = 0;
+    for (i = 0; i < sheet->race; i++) {
+        int v = f_474a_0b26(local.die[sheet->cls]) +
+                manage_4d05_118b(sheet->stats[4]) + 1;
+        if (v <= 0)
+            v = 1;
+        hp += v;
+    }
+    sheet->pad_31[0] = hp;
+    sheet->pad_31[1] = hp;
+    sheet->statMask |= 0x10;
+}
+
 /* Two-entry menu (OK / Try Again) assembled from the static DGROUP table. */
 struct menu_pair {
     far_t item[2];
@@ -209,23 +255,6 @@ uint8_t __cdecl16far manage_4d05_1146(char_sheet_t *sheet)
         return 0;
     sheet->gender = sel - 1;
     return 1;
-}
-
-/* Alignment slider stop for a race value. */
-char __cdecl16far manage_4d05_118b(uint8_t race){
-    if (race <= 3)
-        return -3;
-    if (race <= 5)
-        return -2;
-    if (race <= 8)
-        return -1;
-    if (race <= 0xc)
-        return 0;
-    if (race <= 0xf)
-        return 1;
-    if (race <= 0x11)
-        return 2;
-    return 3;
 }
 
 /* Default class for a race in the character generator. */
