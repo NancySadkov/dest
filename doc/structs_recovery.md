@@ -238,3 +238,33 @@ if (*(byte *)(anm + 0x1b) <= *(byte *)(rec + 0xe))
 `anm+0x1b` is `nframes`, so the record byte at `0x0e` is the animation frame
 cursor (`animFrame`, `0xff` = no animation) and `anm+0x1a` is the frame it is
 reset to (`startFrame`).
+
+## `agnt_t+0x17` and `entity_t+0x36`
+
+`agnt_t+0x17` is a far pointer to the agent's `entity_t`.  The callers build the
+argument to `agnt_3b1d_196b` from the entity array
+
+```c
+ptr.seg = Entities.seg;
+ptr.ofs = (entity_t *)Entities + index;
+ovr_agnt_3b1d_196b(ptr);
+```
+
+and the function compares `*(int *)(agent + 0x17)` and `*(int *)(agent + 0x19)`
+against it, so the four bytes at 0x17 are that pointer.  With the field typed,
+the decompiler resolves the chain:
+
+```c
+byte __cdecl16far agnt_3b1d_0c9f(entity_t *ent)
+{
+  entity_t *peVar1 = ((entity_t *)ent)->base.entity;
+  bVar2 = ((entity_t *)peVar1)->reserved[2] % 6;   /* byte 0x36 */
+  if (3 < bVar2) bVar2 = bVar2 - 6;
+  return bVar2;
+}
+```
+
+The value reduced modulo 6 into -3..3 is the sprite direction, so
+`entity_t+0x36` (the third byte of `reserved`) is a **direction**, not reserved.
+`entity_t` still carries `byte reserved[3]`; the next step is to rebuild it as
+two unnamed bytes plus `dir`.
