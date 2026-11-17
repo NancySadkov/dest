@@ -622,3 +622,18 @@ is not claimed.
 `word_2000_BSS_05EE` (ovc10) holds 0..7 and is scaled with `v * 0xff >> 3` and
 `v * 0xff >> 0xb` before being handed to a draw call, so it is a small intensity
 or shade level; it stays unnamed because no consumer says which of the two.
+
+## `word_2000_BSS_05EE` = `HighlightLevel`
+
+Its draw call settles the range.  It is handed to the ability-select blit as a
+fourth colour argument, scaled to a byte:
+
+```c
+gfxRlePrepare(..., 0, 0, word_2000_BSS_05EE * 0xff >> 3, 0);
+```
+
+with the bounds `1 < word_2000_BSS_05EE` and `7 < word_2000_BSS_05EE` elsewhere.
+Eight levels scaled by `*0xff>>3` cover 0..223, i.e. an intensity, not an index;
+the neighbouring `*0xff>>0xb` term is always zero for a 0..7 value and is a
+decompiler artefact of the packed argument.  Named `HighlightLevel`
+(`2000:d022`).
