@@ -601,3 +601,24 @@ bit 3 set and that pass the entity filter.  They are named `PanelGridX` /
 `PanelGridY` (`2000:d10c` / `2000:d10a`): what they are is proven, while *which*
 panel it is (minimap, roster, ...) is not fixed by this code and is therefore
 not claimed in the name.
+
+## Two 12-entry index permutations in `ovc41`
+
+`2000:0008` and `2000:0014` are initialised from constant templates and then
+permuted in place:
+
+```c
+memcpy(&byte_2000_BSS_0008, (uint8_t *)0x6e2c, 0xc);
+if (((undefined1 *)&byte_2000_BSS_0008)[uVar2] == param_1) { ... }
+((undefined1 *)&byte_2000_BSS_0008)[uVar2] = ((undefined1 *)&byte_2000_BSS_0008)[param_1];
+```
+
+i.e. 12-byte tables looked up and swapped entry by entry and compared with
+`table[i] == i`.  Named `IndexPermA` (`2000:ca3c`, template `0x6e2c`) and
+`IndexPermB` (`2000:ca48`, template `0x6e20`).  What is proven is that they are
+12-entry permutations; which 12 things they order is not in this code, so that
+is not claimed.
+
+`word_2000_BSS_05EE` (ovc10) holds 0..7 and is scaled with `v * 0xff >> 3` and
+`v * 0xff >> 0xb` before being handed to a draw call, so it is a small intensity
+or shade level; it stays unnamed because no consumer says which of the two.
