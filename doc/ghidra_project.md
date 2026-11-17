@@ -269,19 +269,40 @@ Evidence applied in the project:
 
 ### Byte-exact replacements
 
-`src/game/ui.c` holds the first four recompiled UI functions.  With byte
-returns and the recovered struct they compile to the original instruction
-streams exactly:
+`src/game/ui.c` holds ten recompiled UI functions.  With byte returns and the
+recovered structs they compile to the original instruction streams exactly:
 
 ```text
+4D05:01A3  49 bytes  manage_4d05_01a3   (3d6 ability roll)
+4D05:01D4 102 bytes  manage_4d05_01d4   (roll the six starting stats)
 4D05:029D  84 bytes  manage_4d05_029d
 4D05:02F1  79 bytes  manage_4d05_02f1
 4D05:0340 100 bytes  manage_4d05_0340
+4D05:044E 120 bytes  manage_4d05_044e   (average active popularity)
+4D05:04C6  83 bytes  manage_4d05_04c6   (right-align text run)
+4D05:0519  85 bytes  manage_4d05_0519   (right-align text at row)
 4D05:0D7B  67 bytes  manage_4d05_0d7b
+4D05:1B1D  52 bytes  manage_4d05_1b1d   (first levelled record)
 ```
 
 `scripts/fbov/verify_ui_bytes.py` parses `UI.OBJ` and compares every body with
-the original overlay, allowing only relative call/jump operands to differ.
-All four currently report an exact match, so they can replace the original
-functions in place without relocation.  (`build_game.py` compiles `ui.c`
-alongside the other recovered fragments.)
+the original overlay.  It allows relative call/jump operands to differ (they
+encode positions inside the overlay) and masks OMF relocation sites, which it
+prints together with their target symbols so a wrong global reference is
+visible.  Current relocations:
+
+- `_f_474a_0b26` (random roll) in `01a3`/`01d4`;
+- `_f_302d_06ea` (text width) and `_f_302d_0634` (text blit) in `04c6`/`0519`
+  — the call operands are FBOV overlay-header trampoline offsets;
+- `_DAT_2000_d1e6` (`GLeaderCount`, DGROUP `0x90E6`) in `044e`/`1b1d`;
+- `__DATA` (DGROUP offset 0) as the base of the character-pointer table at
+  load-time segment `0x0070`.  The original linker emitted a zero offset for
+  that table, so the recovered source uses `&_DATA` to reproduce the
+  relocatable zero and the 4-byte `les bx, es:[bx+0]` encoding.
+
+The character table itself is an array of `char_sheet_t far *` at offset 0 of
+segment `0x0070`; the count lives in `GLeaderCount`.  `044e` and `1b1d` must
+not cache the table pointer: the original recomputes the far address for every
+field access, which the macro in `ui.c` reproduces.
+
+(`build_game.py` compiles `ui.c` alongside the other recovered fragments.)
