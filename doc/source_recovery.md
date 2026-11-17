@@ -52,9 +52,9 @@ already compile and are reported by the behavioural build.
 |---|---|
 | overlay modules | 50 |
 | functions | 967 |
-| functions still byte dumps | 851 |
-| functions in C | 116 (12%) |
-| bytes still emitted by `asm db` | 409,873 |
+| functions still byte dumps | 849 |
+| functions in C | 118 (12%) |
+| bytes still emitted by `asm db` | 409,287 |
 | `src/ov_patch.csv` byte patches | 38,616 |
 
 `recovery_progress.py --detail` prints the same per module.
@@ -65,6 +65,7 @@ already compile and are reported by the behavioural build.
 |---|---|---|
 | `0x6190` | 173 B | 2/2 functions in C, verified byte-identical |
 | `0x3168` | 288 B (C: 264) | 1/1 function in behavioural C (`src/behaviour/ov_3168.c`) |
+| `0x67D1` | 311 B (C: 228) | 1/1 function in behavioural C (`src/behaviour/ov_67d1.c`) |
 
 Overlay `4D05` has 24 of its 34 functions in C (`src/game/ui.c`), verified
 against the original overlay by `scripts/fbov/verify_ui_bytes.py`; the

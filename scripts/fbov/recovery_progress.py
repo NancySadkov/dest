@@ -51,14 +51,20 @@ def functions(path):
 def module_files(seg):
     pats = ("c%04x" % int(seg, 16), "ov_%04x" % int(seg, 16),
             "a%04x" % int(seg, 16))
-    found = []
-    for p in sorted(glob.glob(os.path.join(SRC, "*"))):
-        base = os.path.basename(p)
-        for pat in pats:
-            if base.lower().startswith(pat) and base.rsplit(".", 1)[-1] in (
-                    "c", "asm"):
-                found.append(p)
-    return found
+    beh = os.path.join(SRC, "behaviour")
+
+    def collect(root):
+        found = []
+        for p in sorted(glob.glob(os.path.join(root, "*"))):
+            base = os.path.basename(p)
+            for pat in pats:
+                if base.lower().startswith(pat) and \
+                        base.rsplit(".", 1)[-1] in ("c", "asm"):
+                    found.append(p)
+        return found
+
+    found = collect(beh)
+    return found if found else collect(SRC)
 
 
 def main():
