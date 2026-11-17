@@ -476,3 +476,28 @@ The field is renamed `target`.
 
 The dir value used for sprite selection is `entity_t+0x36` (`dir`), which is a
 separate field in a separate structure.
+
+## What `agntG_t+0x46` actually selects
+
+The branch it guards formats a notification; the message is in the export as a
+literal (the typed export dropped it):
+
+```c
+if (((g[0x46] == 4) && (15 < entity[0xf])) ||
+    ((g[0x46] == 6) && ( 8 < entity[0xf]))) {
+    agnt_3b1d_0ac0(agent, buf);
+    arg1 = OVC15_4207_1c16(buf);
+    msg  = stsprintf(local, "%s takes half damage from spells.", arg1);
+    uiNotify(msg, GSavedBlitSeg);
+}
+```
+
+So `0x46` is a byte that selects *which level threshold* enables the
+"half damage from spells" trait: kind 4 at level 16, kind 6 at level 9.  It is
+therefore a creature/unit kind, but the only values ever tested are 4, 5 and 6
+and there is no table mapping them to names, so calling it `kind` or `type`
+would still be a guess.  It stays unnamed, with this evidence recorded.
+
+Note that this also identifies `entity_t.base.field_0xf` as a **level**: it is
+the value compared against 15 and 8 here, and `ovc15` uses it as
+`table[field_0xf * 4]`, a per-level table.
