@@ -311,3 +311,27 @@ if (paVar2->animFrame == 0xff) {
 
 It stays a byte in the structure because the readers use `*(char *)`; the
 16-bit initialisation is a word store over `0x10..0x11`.
+
+## `agnt_t` coordinates from the constructor
+
+`OVC15_4207_10a3(x, y, tx, ty, gindex, param6, param7)` fills a fresh record:
+
+```c
+field_0x4 = tx;  field_0x6 = ty;
+if (tx == x && ty == y) { field_0x8 = 0; field_0xa = 0; }
+else                    { field_0x8 = tx; field_0xa = ty; }
+x = x;  y = y;
+field_0xc = 0xff;              /* dir = none */
+field_0xd = gindex;            /* the generic-agent index */
+field_0x10 = 100;              /* health */
+field_0x12 = 0;
+field_0x13.hi + 1 = 0;         /* the word at 0x16 */
+```
+
+so `0x4`/`0x6` are the requested target and `0x8`/`0xa` the destination actually
+used (zero when the target is the square the agent already stands on).  All
+four are named.
+
+The constructor also copies the generic record's byte `0x1a` into the record's
+`0x31` and `0x32`, and sets `0x33` to 2, which is why those bytes appear in the
+0x30 group.
