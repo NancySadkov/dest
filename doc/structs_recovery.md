@@ -100,15 +100,57 @@ void __cdecl16far agnt_3b1d_0a53(agnt_t *agnt)
 }
 ```
 
+## `agntG_t` - located, partially mapped (149 bytes, 38 generated fields)
+
+The generic-agent records are **not** in DGROUP: `ovc15` stores the pointer into
+the agent record as a segment and an offset pair:
+
+```c
+*(undefined2 *)(agent + 0x1f) = 0x195d;                  /* segment */
+*(int *)(agent + 0x1d) = bVar3 * 0x95 + 0x26d6;          /* offset  */
+```
+
+So the records live at `195d:26d6`, stride 149, and `agnt_t+0x1d` is the pointer
+to them (`agnt_t+0x1b` is the owning entity index, compared against `Entities[i]`).
+Typing `agnt_t+0x1d` as `agntG_t *` makes the decompiler read the record fields:
+
+```c
+paVar1 = ((agnt_t *)agnt)->gdata;
+if ((*(uint *)&((agntG_t *)paVar1)->field_0x40 & 4) == 0) { agnt_3b1d_0a53(agnt); }
+```
+
+Fields with evidence so far:
+
+| offset | observed use | status |
+|---|---|---|
+| `0x1b`,`0x1c` | horizontal extents of the current frame: `(g->0x1b + x) >> 1`, `(g->0x1c - g->0x1b) >> 1` | unnamed |
+| `0x1d` | `(g->0x1d) >> 1` used as a half height | unnamed |
+| `0x21`,`0x22` | same extent pair in the mirrored draw path | unnamed |
+| `0x23` | `(g->0x23) >> 1` half height | unnamed |
+| `0x3c` | 16-bit mask: `& 1`, `& 2`, `& 4`, `& 0x20`, `& 0x800` | unnamed (see below) |
+| `0x40` | 16-bit mask: `& 4` | unnamed |
+
+The `0x3c` word cannot be typed yet: the structure currently holds one-byte
+`undefined` components there, and `replaceAtOffset` refuses to span two of them
+("needs 1 more byte").  Fixing it means rebuilding the structure, which is what
+the two `field_0x38..0x53` blocks need anyway.
+
+## `agnt_t` - additions
+
+| offset | evidence | name |
+|---|---|---|
+| `0x1b` | compared against an index into `Entities`: `*(int *)(i * 0x34 + 0x1b) == param_1` | `owner` |
+| `0x1d` | holds `195d:26d6 + gindex * 0x95` | `gdata` (`agntG_t *`) |
+
 ## Remaining structures with generated field names
 
 | structure | size | fields | generated |
 |---|---|---|---|
 | `/st.h/agntG_t` | 149 | 49 | 38 |
-| `/st.h/agnt_t` | 52 | 32 | 28 |
+| `/st.h/agnt_t` | 52 | 32 | 26 |
 | `/st.h/bldtp_t` | 39 | 26 | 14 |
 | `/st.h/anm_t` | 30 | 24 | 12 |
 | `/st.h/unk01_t` | 6 | 3 | 3 |
 
-100 fields in total still carry `field_0xNN`; each needs the same treatment
+98 fields in total still carry `field_0xNN`; each needs the same treatment
 (allocation size or access pattern), not a guess.
