@@ -990,3 +990,15 @@ No name is added because there is no field there.
 The four-parameter shape came from the thunk pushing the pointer as offset plus
 segment and Ghidra inventing two extra pointers.  Struct-typed functions:
 96 -> 97; auto parameters: 1233 -> 1229.
+
+## agntG_t+0x3a = attackBonus
+
+When the unit's 0x3e bit 0x200 is clear, the combat value is built as
+
+    bVar4 = manage_4d05_01a3(gdata[0x38], gdata[0x39]);
+    iVar5 = bVar4 + gdata[0x3a];
+    uVar8 = iVar5 + (dir % 6);        /* used as the strength/damage value */
+
+so 0x3a is an additive bonus on that value.  0x38/0x39 are the two arguments of
+that routine and stay unnamed: elsewhere it is called with the constants (2,6),
+(3,6) and (4,6), which fixes neither argument.
