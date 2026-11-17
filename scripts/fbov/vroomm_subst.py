@@ -96,6 +96,17 @@ def main():
             mask.add(ins.address + 1 - ofs)
 
     diffs = [i for i in range(a.len) if compiled[i] != original[i]]
+    # The overlay linker rewrites cross-module far calls to
+    # `nop; push cs; call rel16` (or the nop after the call).
+    for i in range(a.len - 4):
+        if compiled[i] != 0x9A:
+            continue
+        nop_first = (original[i] == 0x90 and original[i + 1] == 0x0E
+                     and original[i + 2] == 0xE8)
+        nop_last = (original[i] == 0x0E and original[i + 1] == 0xE8
+                    and original[i + 4] == 0x90)
+        if nop_first or nop_last:
+            mask.update(range(i, i + 5))
     bad = [i for i in diffs if i not in mask]
     if bad:
         raise SystemExit("unmasked differences at %s" % [hex(x) for x in bad[:20]])
