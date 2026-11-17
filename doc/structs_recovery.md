@@ -649,3 +649,32 @@ A 0/1 selector used as a table index, not a boolean state:
 
 The value picks one of two 33-byte records, and the clear-orders routine resets
 it to 0, so it selects a variant of the agent.
+
+## Open question: is `entity_t.base` really `agnt_t`?
+
+The layout cannot be fixed by widening or narrowing bytes, because two
+16-bit fields overlap:
+
+- the constructor ORs a word at `0x16`:
+  ```
+  4207:13c8  OR word ptr ES:[BX + 0x16],0x1
+  4207:13f7  OR word ptr ES:[BX + 0x16],0x1
+  ```
+  on `((entity_t *)Entities)[EntityCount].base`;
+- `agnt_3b1d_196b` compares a word at `0x17` of the *other* record array
+  (`ES = 0x1726`, stride `0x34`):
+  ```
+  197a  MOV DX,0x1726
+  1981  MOV AX,word ptr ES:[BX + 0x19]
+  1986  MOV DX,word ptr ES:[BX + 0x17]
+  ```
+
+Both arrays are indexed by 0x34/0x37 strides, but a word at `0x16` in the
+entity and a word at `0x17` in the 1726 array cannot both hold unless the two
+records have different layouts.  So `entity_t.base` may not be the same
+`agnt_t` as the 1726 array, and the current definition (which reuses agnt_t)
+would then be wrong for one of them.
+
+Until that is settled, `agnt_t+0x13`/`0x16` stays unnamed and unchanged: naming
+it would freeze an unresolved conflict into the model.  The next step is to
+diff the field usage of `Entities[i].base` against `agent[i]` at 0x1726.
