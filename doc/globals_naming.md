@@ -151,3 +151,23 @@ are tested by the overlay manager in \ovl\.
 0:06C0\ is a 0/1 flag paired with an agent's 0x2a == 2 test and
 \DS:0198\ is a far pointer used by the driver module; neither has a consumer
 that fixes a name, so both stay unnamed.
+
+## Batch 10 - the sound driver pointer
+
+`DS:0198` is a far pointer to a loaded sound driver.  The checker validates the
+tag six bytes before it:
+
+```c
+iVar2 = (int)data_DS_0198;
+if (*(int *)(iVar2 + -6) == 0x494d && *(int *)(iVar2 + -4) == 0x4944) {   /* "MIDI" */
+    pcVar1 = (code *)swi(0x66);
+    if ((*pcVar1)(0x2410) == 0) return_false;
+}
+else if (*(int *)(iVar2 + -6) != 0x454b || *(int *)(iVar2 + -4) != 0x4e52)  /* "KERN" */
+    return_false;
+```
+
+Named `DriverEntry` (`0000:0198`).
+
+`2000:06C0` still has no consumer that fixes a meaning: its only context is
+`agent->0x2a == 2 && flag != 0`, which names neither side.
