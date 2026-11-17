@@ -53,6 +53,12 @@ public class RecoverUiStructs extends GhidraScript {
         }
     }
 
+    private void setByteReturn(Function f, DataType u8) throws Exception {
+        if (f == null) return;
+        f.setReturn(u8, new VariableStorage(currentProgram,
+                currentProgram.getRegister("AL")), SourceType.USER_DEFINED);
+    }
+
     @Override
     public void run() throws Exception {
         DataTypeManager dtm = currentProgram.getDataTypeManager();
@@ -133,15 +139,19 @@ public class RecoverUiStructs extends GhidraScript {
                         SourceType.USER_DEFINED);
             f = getFunctionAt(toAddr("4D05:029D"));
             setParams(f, new Object[][] {{"sheet", sheetPtr, 4}});
+            setByteReturn(f, u8);
             f = getFunctionAt(toAddr("4D05:02F1"));
             setParams(f, new Object[][] {{"sheet", sheetPtr, 4}});
+            setByteReturn(f, u8);
             f = getFunctionAt(toAddr("4D05:0340"));
             setParams(f, new Object[][] {{"sheet", sheetPtr, 4}});
+            setByteReturn(f, u8);
             f = getFunctionAt(toAddr("4D05:11CB"));
             setParams(f, new Object[][] {{"sheet", sheetPtr, 4}});
             f = getFunctionAt(toAddr("4D05:0D7B"));
             setParams(f, new Object[][] {
                 {"statIndex", u8, 4}, {"sheet", sheetPtr, 6}});
+            setByteReturn(f, u8);
             f = getFunctionAt(toAddr("4D05:2D79"));
             setParams(f, new Object[][] {
                 {"charIndex", u8, 4}, {"arg6", u16, 6}, {"sheet", sheetPtr, 8}});

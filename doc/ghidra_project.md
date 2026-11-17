@@ -266,3 +266,22 @@ Evidence applied in the project:
   `gender`.
 - `uiInputText(far_t *entries, short count, byte *hint, byte flags)` receives
   the `ui_menu_t` entry list; its first entry is the title.
+
+### Byte-exact replacements
+
+`src/game/ui.c` holds the first four recompiled UI functions.  With byte
+returns and the recovered struct they compile to the original instruction
+streams exactly:
+
+```text
+4D05:029D  84 bytes  manage_4d05_029d
+4D05:02F1  79 bytes  manage_4d05_02f1
+4D05:0340 100 bytes  manage_4d05_0340
+4D05:0D7B  67 bytes  manage_4d05_0d7b
+```
+
+`scripts/fbov/verify_ui_bytes.py` parses `UI.OBJ` and compares every body with
+the original overlay, allowing only relative call/jump operands to differ.
+All four currently report an exact match, so they can replace the original
+functions in place without relocation.  (`build_game.py` compiles `ui.c`
+alongside the other recovered fragments.)

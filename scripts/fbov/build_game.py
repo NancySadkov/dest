@@ -56,7 +56,7 @@ def main():
     open(os.path.join(WORK, "dgroup.h"), "w", encoding="ascii",
          newline="").write(h)
     files = ["key.c", "keybody.inc", "manage.c", "screen.c", "sbody.inc",
-             "units.c", "ubody.inc", "menu.c", "menubody.inc"]
+             "units.c", "ubody.inc", "menu.c", "menubody.inc", "ui.c"]
     for name in files:
         shutil.copyfile(os.path.join(SRC, name), os.path.join(WORK, name))
     cmds = [
@@ -65,6 +65,7 @@ def main():
         "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c screen.c > screen.log",
         "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c units.c > units.log",
         "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c menu.c > menu.log",
+        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c ui.c > ui.log",
     ]
     open(os.path.join(WORK, "build.bat"), "w", newline="").write(
         "@echo off\r\nmode con lines=50\r\n" + "\r\n".join(cmds) +
@@ -89,7 +90,7 @@ def main():
                     "--conf", conf_path, "--wait", "25"], check=True)
     objs = []
     for name in ("KEY.OBJ", "MANAGE.OBJ", "SCREEN.OBJ", "UNITS.OBJ",
-                 "MENU.OBJ"):
+                 "MENU.OBJ", "UI.OBJ"):
         p = os.path.join(WORK, name)
         if os.path.exists(p):
             print("OK   %-10s %d bytes" % (name, os.path.getsize(p)))
@@ -101,7 +102,7 @@ def main():
                 for line in open(log, encoding="latin1").read().splitlines():
                     if line.strip():
                         print("   " + line)
-    if len(objs) != 5:
+    if len(objs) != 6:
         raise SystemExit(1)
 
     names = set()
