@@ -895,3 +895,35 @@ The fix for these two is to correct the *prototype first* (one far-pointer
 parameter instead of offset+segment), then type it.  `RenameVars` cannot do that
 because it only renames existing variables, and a wrong width here would shift
 every argument after it — the same class of mistake as the `entity_t *` retype.
+
+## Prototypes repaired for the split-far-pointer entry points
+
+`ApplyProto.java` applies a C prototype from a TSV (parse + apply), which is what
+these needed: their callers push a far pointer as offset+segment, so Ghidra had
+recovered two parameters where the source has one.
+
+| function | before | after |
+|---|---|---|
+| `agnt_3b1d_196b` | `(void)` | `void agnt_3b1d_196b(entity_t *ptr)` |
+| `agnt_3b1d_0426` | `(int *,byte *,char)` | `undefined1 agnt_3b1d_0426(agnt_t *agnt, byte *out)` |
+| `agnt_3b1d_0d4d` | `(uint *,int *)` | `uint agnt_3b1d_0d4d(agnt_t *a, agnt_t *b)` |
+
+Call sites that forced the shapes:
+
+```c
+ovr_agnt_3b1d_0426(piVar7, uVar8, &local_5);                        /* ptr + out   */
+ovr_agnt_3b1d_0d4d(piVar7, uVar8, (uint)local_5*0x34 - 0x34, 0x1726); /* two agents */
+```
+
+`196b` now decompiles the comparison through the typed pointer:
+
+```c
+void __cdecl16far agnt_3b1d_196b(entity_t *ptr)
+{
+  for (i = 0; i < (int)(uint)AgntCount; i = i + 1) {
+    if ((*(int *)(i * 0x34 + 0x19) == in_stack_00000006) &&
+       ((entity_t *)*(int *)(i * 0x34 + 0x17) == ptr)) {
+```
+
+(the remaining `in_stack_00000006` is the segment half the thunk pushes; the
+pointer parameter consumed the offset half.)
