@@ -10,7 +10,7 @@ Plan: [`../plan.md`](../plan.md)
 |---|---|---|
 | G0 ? quarantine old baseline | **PASS** | `src/decompiled` moved to `reference/decompiled_baseline`; old `gpr/` marked reference-only |
 | G1 ? independent FBOV manifest | **PASS** | `scripts/fbov/model.py` produced `doc/fbov_manifest.json` and CSVs; 0 validation errors |
-| G2 ? fresh Ghidra model | **PASS** | `gpr_fresh`: 133 blocks, 756 trampolines, 13,367 fixups, 1,814 MZ relocations |
+| G2 ? fresh Ghidra model | **PASS** | `tmp/gpr_fresh`: 133 blocks, 756 trampolines, 13,367 fixups, 1,814 MZ relocations |
 | G3 ? reference audit | **PASS** | `scripts/fbov/audit_refs.py`: 0 errors; 18 null-target relocations documented |
 | G4 ? data/global model | **PASS** | DGROUP byte-identical under TC30 (0/38,042 differences); 1,205 symbols/types applied |
 | G5 - startup/`main` byte-exact | **PASS for `main` and all 51 overlays** | `mkp` byte-exact; `main` 2246 bytes byte-exact; all 51 overlay code regions rebuilt at original offsets; 757/757 functions byte-accepted (call/jump operands masked) |
@@ -80,7 +80,7 @@ mzap-merged image and not the old decompiled tree.
 ## Phase 2 results (fresh model)
 
 `tools`-side builder: `scripts/ghidra/BuildFbovModel.java`.
-Fresh project: `gpr_fresh` (not tracked; regenerate from the original EXE).
+Fresh project: `tmp/gpr_fresh` (not tracked; regenerate from the original EXE).
 
 | Item | Result |
 |---|---|
@@ -151,7 +151,7 @@ TC30 verification (`DGROUP.OBJ`):
 - **0 byte differences** in the full `0x949A` DGROUP segment.
 
 The Ghidra map (`ApplyDgroupMap.java`) applied all 1,205 names/types to
-`gpr_fresh`. The decompiler now uses `GMenuItem`, `CrossBlitPtr`, `GWorkDir`,
+`tmp/gpr_fresh`. The decompiler now uses `GMenuItem`, `CrossBlitPtr`, `GWorkDir`,
 etc. instead of raw `DAT_2410_*` offsets.
 
 The source file keeps the original file's relative segment values (`0x1410`)

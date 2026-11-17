@@ -42,7 +42,7 @@ ___________________________
   where type can be 'l' (label) or 'f' (function)
   'l' is default and can be omitted
   
-  see sym/int21.txt for an example of DOS syscall map.
+  see tmp/sym/int21.txt for an example of DOS syscall map.
 
   
   

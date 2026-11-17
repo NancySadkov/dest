@@ -26,6 +26,8 @@ SUBS = [
     (r"\blongdouble\b", "long double"),
     (r"\b_pcStackY_20\b", "pcStackY_20"),
     (r"\b_path\b", "path"),
+    # Ghidra sometimes prefixes a stack local with an underscore at use sites.
+    (r"\b_([a-z]Stack[0-9A-Fa-f]+)\b", r"\1"),
     # far_t used as an address: dereference through its own segment/offset.
     (r"\*\(int \*\)\(BDA_DailyTimeCounter\.ofs \+ 2\)",
      "*(int far *)MK_FP(BDA_DailyTimeCounter.seg, "

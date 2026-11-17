@@ -82,8 +82,8 @@ this removes the butterfly-effect source without touching game logic.
 Regression check:
 
 ```text
-python scripts/fbov/check_determinism.py --exe out/STRONG.EXE
-python scripts/fbov/check_determinism.py --exe out/STRONG_FUNC.EXE
+python scripts/fbov/check_determinism.py --exe tmp/out/STRONG.EXE
+python scripts/fbov/check_determinism.py --exe tmp/out/STRONG_FUNC.EXE
 ```
 
 Both report `DGROUP differing bytes: 0` and `DETERMINISTIC: two runs matched`.

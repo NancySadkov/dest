@@ -24,7 +24,7 @@ The long-term goal is original-looking C that can be rebuilt with Turbo C++ 3.0.
 | ungrab | `tools/ungrab/` | recover assets from `STRONG.DAT` |
 | devroomm docs | `tools/devroomm/doc/` | Borland overlay manager format |
 
-`unfbov/st.exe` is the merged plain-MZ image loaded into Ghidra. The Ghidra
+`tmp/unfbov/st.exe` is the merged plain-MZ image loaded into Ghidra. The Ghidra
 project already contains the DOS `int 21h` imaginary address space, FID-matched
 Borland runtime functions, named MZ segments, and a substantial recovered type
 library under `/st.h` (agent, entity, sprite, animation, building, stash, ...).

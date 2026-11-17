@@ -177,7 +177,7 @@ replaced function are redirected to the NOP padding at `0D20`.
 Result:
 
 ```text
-python scripts/fbov/boot_game_det.py --compare out/STRONG.EXE out/STRONG_KEY.EXE
+python scripts/fbov/boot_game_det.py --compare tmp/out/STRONG.EXE tmp/out/STRONG_KEY.EXE
 DGROUP differing bytes: 0
 ```
 

@@ -43,9 +43,9 @@ rewritten to the static `0x1000 + value` form (`0x2410` instead of the file's
 matches the original EXE. The two views are intentional and separate:
 
 - `src/dgroup.c` — original/linker view, byte-identical to the file.
-- `gpr_fresh` — static analysis view, `DS = 0x2410`, all MZ relocations applied.
+- `tmp/gpr_fresh` — static analysis view, `DS = 0x2410`, all MZ relocations applied.
 
-`ApplyDgroupMap.java` applied 1,205 names/types to `gpr_fresh`. The decompiler
+`ApplyDgroupMap.java` applied 1,205 names/types to `tmp/gpr_fresh`. The decompiler
 now renders `GMenuItem`, `CrossBlitPtr`, `GWorkDir`, etc. instead of raw
 `DAT_2410_*` offsets.
 

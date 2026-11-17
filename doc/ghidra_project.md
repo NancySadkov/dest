@@ -112,7 +112,7 @@ unsymbolized data -> data_<block>_<offset>_<type>
 `scripts/ghidra/RefineBulkNames.java` then turns `undefined1/2/4_` prefixes into
 `byte_/word_/dword_`.  Every function, data item and symbol now has a name; the
 semantic names for the in-game state and BSS continue to take precedence.
-Project backup before the bulk pass: `gpr_bak_before_bulk`.
+Project backup before the bulk pass: `tmp/gpr_bak_before_bulk`.
 
 
 ## Prototype tooling

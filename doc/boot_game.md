@@ -5,7 +5,7 @@ in-game map screen.
 
 Flow:
 
-1. Boot `out/STRONG.EXE` with `STRONG.DAT`/`STRONG.FLI`.
+1. Boot `tmp/out/STRONG.EXE` with `STRONG.DAT`/`STRONG.FLI`.
 2. Select sound option 6 (off).
 3. Press Enter through the intro until the map screen.
 4. Dump VGA `A0000` and detect the map screen from the minimap and bottom
@@ -43,7 +43,7 @@ Run:
 
 ```text
 python scripts/fbov/build_functional_exe.py
-python scripts/fbov/boot_game.py --exe out/STRONG_FUNC.EXE --mem-out tmp/func_mem.bin
+python scripts/fbov/boot_game.py --exe tmp/out/STRONG_FUNC.EXE --mem-out tmp/func_mem.bin
 ```
 
 With the synthesized clock/date setup (`date 01-01-1993`, `time 00:00:00`,
@@ -52,7 +52,7 @@ into the same map screen.  The full deterministic harness
 (`scripts/fbov/boot_game_det.py`) also resets the timer fields and advances an
 exact instruction count; original and functional C EXE then produce
 **identical DGROUP state (0 differing bytes)**.  Regression check:
-`python scripts/fbov/check_determinism.py --exe out/STRONG.EXE`.
+`python scripts/fbov/check_determinism.py --exe tmp/out/STRONG.EXE`.
 See `doc/memory_state.md`.
 
 ## In-game loop C status
