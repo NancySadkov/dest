@@ -269,7 +269,7 @@ Evidence applied in the project:
 
 ### Byte-exact replacements
 
-`src/game/ui.c` holds twenty-three recompiled UI functions.  With byte returns and
+`src/game/ui.c` holds twenty-four recompiled UI functions.  With byte returns and
 the recovered structs they compile to the original instruction streams exactly:
 
 ```text
@@ -295,6 +295,7 @@ the recovered structs they compile to the original instruction streams exactly:
 4D05:1B51 157 bytes  manage_4d05_1b51   (next record by excluded status)
 4D05:17C7 110 bytes  manage_4d05_17c7   (open character panel)
 4D05:217A 313 bytes  manage_4d05_217a   (comma-separated decimal)
+4D05:2BC4 437 bytes  manage_4d05_2bc4   (structure highlight text)
 4D05:330C 346 bytes  manage_4d05_330c   (unit filter description)
 ```
 
@@ -339,5 +340,10 @@ Two functions need a link-time fix-up rather than a source shape:
   load before the `i * 0x37` scaling, while the original computes the index
   first.  The function is semantically understood but awaits the idiom that
   reproduces that order.
+
+A related codegen rule showed up in `2bc4`: when one arm of an `if`/`else` is
+more than 127 bytes away, TCC encodes the branch as `jcc +2; jmp target`
+instead of a near conditional jump.  Preserving that idiom (and the branch
+order) was what made `2bc4` match.
 
 (`build_game.py` compiles `ui.c` alongside the other recovered fragments.)

@@ -8,6 +8,11 @@
 #include "bss.h"
 #include <string.h>
 
+/* Character table: array of far pointers at offset 0 of the load-time
+ * segment 0x0070.  `&_DATA` gives the original zero-offset relocation. */
+#define CHARSHEET(i) \
+    (*(char_sheet_t far * far *)MK_FP(0x0070, (uint)&_DATA + (i) * 4))
+
 uint8_t __cdecl16far f_474a_0b26(uint16_t n);
 uint16_t __cdecl16far f_302d_06ea(char *text, uint8_t *widths);
 uint __cdecl16far f_302d_0634(char *text, uint8_t *widths,
@@ -35,6 +40,60 @@ void __cdecl16far f_2e25_1662(void);
 void __cdecl16far f_3a5b_032e(void);
 void __cdecl16far f_6a8f_18c6(void);
 void __cdecl16far manage_4d05_1bee(uint8_t index);
+
+/* Describe the highlighted structure filter (red highlight message). */
+#define STRUCT_TEXT(i) (*(char * far *)&GStructures[(i)].field2_0x2)
+
+void __cdecl16far manage_4d05_2bc4(uint8_t index, int mode)
+{
+    int savedSeed;
+    int savedSeed2;
+    char buf[0x100];
+    int i;
+
+    *(uint8_t far *)MK_FP(0x0280, 0x0862) = mode;
+    *(uint8_t far *)MK_FP(0x0280, 0x0863) = index;
+    if (*(uint8_t far *)MK_FP(0x0280, 0x26a8) != 0)
+        f_6386_232d();
+    savedSeed = *(uint16_t far *)MK_FP(0x0280, 0x899f);
+    savedSeed2 = *(uint16_t far *)MK_FP(0x0280, 0x899d);
+    *(uint16_t far *)MK_FP(0x0280, 0x899f) = Seed_2000_d1da;
+    *(uint16_t far *)MK_FP(0x0280, 0x899d) = Seed_2000_d1d8;
+    f_3d16_1558();
+    *(uint16_t far *)MK_FP(0x0280, 0x899f) = savedSeed;
+    *(uint16_t far *)MK_FP(0x0280, 0x899d) = savedSeed2;
+    *(uint8_t far *)MK_FP(0x0280, 0x0862) = 0xff;
+    *(uint8_t far *)MK_FP(0x0280, 0x0863) = 0xff;
+    if (mode != 0xfe) {
+        for (i = 0; i < 0x1e; i++)
+            if (GStructures[i].field0_0x0 == mode)
+                break;
+        if (i == 0x1e)
+            return;
+        if (index != 0xff) {
+            f_302d_0a1b(f_474a_09df(buf,
+                "The %s belonging to %s the %s are highlighted in red.",
+                STRUCT_TEXT(i), CHARSHEET(index), f_5087_0119(index)));
+        }
+        else {
+            f_302d_0a1b(f_474a_09df(buf,
+                "The %s belonging to all leaders are highlighted in red.",
+                STRUCT_TEXT(i)));
+        }
+    }
+    else {
+        if (index != 0xff) {
+            f_302d_0a1b(f_474a_09df(buf,
+                "The damaged structures belonging to %s the %s are "
+                "highlighted in red.",
+                CHARSHEET(index), f_5087_0119(index)));
+        }
+        else {
+            f_302d_0a1b("The damaged structures belonging to all leaders are "
+                        "highlighted in red.");
+        }
+    }
+}
 
 /* Enter the full-screen panel with the given character index selected.
  * `manage_4d05_1bee` is a cross-module call: TCC emits a far call here and
@@ -215,10 +274,6 @@ uint8_t __cdecl16far manage_4d05_0d7b(uint8_t statIndex, char_sheet_t *sheet)
     return 0;
 }
 
-/* Character table: array of far pointers at offset 0 of the load-time
- * segment 0x0070.  `&_DATA` gives the original zero-offset relocation. */
-#define CHARSHEET(i) \
-    (*(char_sheet_t far * far *)MK_FP(0x0070, (uint)&_DATA + (i) * 4))
 
 /* Two titles (male/female) per row.  The original build laid the class rows
  * directly after the four stat labels, and the copied title set at
