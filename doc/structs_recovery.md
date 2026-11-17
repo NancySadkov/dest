@@ -549,3 +549,33 @@ appended only when it differs from the previous one.  The pair is named
 payload's meaning is not (the static record at `2410:9074` is all zeroes and is
 filled at run time by code outside the export's reach), so no richer name is
 claimed.
+
+## The 19-byte records are per map square
+
+`attact_3f0b_05df` shows what the list holds.  It looks for a record whose first
+two words match the current square, and appends one when missing:
+
+```c
+while (true) {
+    if (word_2410_DATA_DGROUP_0881 <= uVar1) {       /* not found */
+        word_2410_DATA_DGROUP_086E = GfxRndSeed;     /* square x */
+        word_2410_DATA_DGROUP_0870 = GfxRndSeed2;    /* square y */
+        memcpy(0x9074, &word_2410_DATA_DGROUP_086E, 0x13);
+        ...;
+        return;
+    }
+    if ((*(int *)(uVar1 * 0x13) == GfxRndSeed) &&
+        (*(int *)(uVar1 * 0x13 + 2) == GfxRndSeed2)) { ... }
+```
+
+`GfxRndSeed` / `GfxRndSeed2` are the square x/y used by `ovc15`
+(`entity.x <= GfxRndSeed + 1 && entity.y == GfxRndSeed2`), so the records are
+keyed by map square, one 19-byte record per square, max 299.  Renamed:
+
+| address | name | role |
+|---|---|---|
+| `2410:086e` | `SquareRecord` | scratch record for the current square |
+| `2410:0881` | `SquareRecCount` | number of per-square records |
+| `2410:0883` | `SquareRecIndex` | index during compaction |
+
+(The earlier `AttactRec*` names are superseded by these.)
