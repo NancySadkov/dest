@@ -8,9 +8,9 @@ void __cdecl16far audio_3a5b_0000(void)
 }
 
 /* 3a5b:026f */
-bool __cdecl16far fmFreeAudio(uint16_t force)
+undefined1 __cdecl16far fmFreeAudio(void)
 {
-    bool r;
+    undefined1 r;
 
     return r;
 }
@@ -18,10 +18,6 @@ bool __cdecl16far fmFreeAudio(uint16_t force)
 /* 3a5b:032e */
 void __cdecl16far stop_audio(void)
 {
-    if (!GameRunning) {
-        fmFreeAudio(1);
-        CurSfxType3 = 0xff;
-    }
 }
 
 /* 3a5b:034e */
@@ -41,14 +37,13 @@ uint __cdecl16far audio_3a5b_037e(void)
 }
 
 /* 3a5b:039a */
-void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk)
+void __cdecl16far play_sfxU(void)
 {
 }
 
 /* 3a5b:0633 */
-void __cdecl16far play_sfx(int16_t track,int16_t type)
+void __cdecl16far play_sfx(void)
 {
-    play_sfxU((byte)track,type,0x40);
 }
 
 /* 3a5b:0648 */
@@ -57,11 +52,8 @@ void __cdecl16far audio_3a5b_0648(byte param_1,int param_2)
 }
 
 /* 3a5b:0761 */
-uint16_t __cdecl16far audio_3a5b_0761(uint8_t *param_1,uint16_t param_2,int param_3)
+void __cdecl16far audio_3a5b_0761(uint8_t *param_1,undefined2 param_2,int param_3)
 {
-    uint16_t r;
-
-    return r;
 }
 
 /* 3a5b:07c2 */

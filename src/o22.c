@@ -3,17 +3,17 @@
 /* ovc22: 31 function(s) */
 
 /* 5087:0000 */
-char * __cdecl16far OVC22_5087_0000(int param_1,int param_2)
+uint __cdecl16far OVC22_5087_0000(int param_1,int param_2)
 {
-    char * r;
+    uint r;
 
     return r;
 }
 
 /* 5087:0119 */
-char * __cdecl16far OVC22_5087_0119(byte param_1)
+undefined2 __cdecl16far OVC22_5087_0119(byte param_1)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
@@ -35,9 +35,9 @@ int __cdecl16far OVC22_5087_018f(byte param_1,int param_2)
 }
 
 /* 5087:0234 */
-char * __cdecl16far OVC22_5087_0234(byte param_1,byte param_2,undefined4 param_3)
+uint __cdecl16far OVC22_5087_0234(byte param_1,byte param_2,undefined4 param_3)
 {
-    char * r;
+    uint r;
 
     return r;
 }
@@ -121,9 +121,9 @@ void __cdecl16far upd_units_5087_1d7d(void)
 }
 
 /* 5087:3a6b */
-char * __cdecl16far OVC22_5087_3a6b(uint param_1,int param_2)
+uint __cdecl16far OVC22_5087_3a6b(uint param_1,int param_2)
 {
-    char * r;
+    uint r;
 
     return r;
 }

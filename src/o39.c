@@ -3,17 +3,17 @@
 /* ovc39: 4 function(s) */
 
 /* 690b:0000 */
-int __cdecl16far OVC39_690b_0000(byte param_1)
+uint8_t * __cdecl16far OVC39_690b_0000(byte param_1)
 {
-    int r;
+    uint8_t * r;
 
     return r;
 }
 
 /* 690b:00d1 */
-char * __cdecl16far OVC39_690b_00d1(void)
+undefined2 __cdecl16far OVC39_690b_00d1(void)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }

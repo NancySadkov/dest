@@ -3,7 +3,7 @@
 /* ovc50: 3 function(s) */
 
 /* 8adb:0000 */
-void __cdecl16far OVC50_8adb_0000(char *param_1,undefined2 param_2)
+void __cdecl16far OVC50_8adb_0000(char *param_1)
 {
 }
 

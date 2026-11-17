@@ -24,7 +24,7 @@ void __cdecl16far allocSprSeqs(void)
 }
 
 /* 4207:047b */
-void __cdecl16far stshInitSprites(bool grab)
+void __cdecl16far stshInitSprites(void)
 {
 }
 
@@ -80,9 +80,9 @@ void __cdecl16far OVC15_4207_1aae(int param_1)
 }
 
 /* 4207:1c16 */
-uint8_t * __cdecl16far OVC15_4207_1c16(char *param_1)
+char * __cdecl16far OVC15_4207_1c16(char *param_1)
 {
-    uint8_t * r;
+    char * r;
 
     return r;
 }
@@ -125,15 +125,15 @@ int __cdecl16far OVC15_4207_1ffe(int *param_1,int param_2,char param_3,char para
 }
 
 /* 4207:2301 */
-char * __cdecl16far OVC15_4207_2301(int param_1)
+undefined2 __cdecl16far OVC15_4207_2301(int param_1)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
 
 /* 4207:25dd */
-entity_t * __cdecl16far OVC15_4207_25dd(code *param_1,int *param_2,int *param_3,undefined2 param_4,undefined2 param_5,int *param_6,int *param_7,int *param_8,int *param_9)
+entity_t * __cdecl16far OVC15_4207_25dd(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,undefined2 param_5,int *param_6,int *param_7,int *param_8,int *param_9)
 {
     entity_t * r;
 
@@ -141,9 +141,9 @@ entity_t * __cdecl16far OVC15_4207_25dd(code *param_1,int *param_2,int *param_3,
 }
 
 /* 4207:26bc */
-char * __cdecl16far OVC15_4207_26bc(code *param_1,char *param_2)
+uint __cdecl16far OVC15_4207_26bc(ulong param_1,ulong param_2)
 {
-    char * r;
+    uint r;
 
     return r;
 }
@@ -162,33 +162,33 @@ void __cdecl16far OVC15_4207_28fa(void)
 }
 
 /* 4207:2961 */
-char * __cdecl16far OVC15_4207_2961(void)
+undefined2 __cdecl16far OVC15_4207_2961(void)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
 
 /* 4207:2a0e */
-char * __cdecl16far OVC15_4207_2a0e(void)
+undefined2 __cdecl16far OVC15_4207_2a0e(void)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
 
 /* 4207:2ab9 */
-char * __cdecl16far OVC15_4207_2ab9(void)
+undefined2 __cdecl16far OVC15_4207_2ab9(void)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
 
 /* 4207:2c18 */
-char * __cdecl16far OVC15_4207_2c18(void)
+undefined2 __cdecl16far OVC15_4207_2c18(void)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }

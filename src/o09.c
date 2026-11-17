@@ -16,7 +16,7 @@ char * __cdecl16far append_name_to_path(char *path,char *name)
 }
 
 /* 3381:00fe */
-char * __cdecl16far path_strip_tail_slash(char *s)
+char * __cdecl16far path_strip_tail_slash(void)
 {
     char * r;
 
@@ -24,7 +24,7 @@ char * __cdecl16far path_strip_tail_slash(char *s)
 }
 
 /* 3381:0132 */
-char * __cdecl16far ensure_tail_slash(char *s)
+char * __cdecl16far ensure_tail_slash(void)
 {
     char * r;
 
@@ -32,7 +32,7 @@ char * __cdecl16far ensure_tail_slash(char *s)
 }
 
 /* 3381:016c */
-void __cdecl16far chpath(char *path)
+void __cdecl16far chpath(void)
 {
 }
 

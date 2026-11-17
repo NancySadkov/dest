@@ -238,9 +238,9 @@ void __cdecl16near OVRSWAP_1403_0c2b(void)
 }
 
 /* 1403:0cd2 */
-char * __cdecl16near OVRSWAP_1403_0cd2(void)
+int __cdecl16near OVRSWAP_1403_0cd2(void)
 {
-    char * r;
+    int r;
 
     return r;
 }

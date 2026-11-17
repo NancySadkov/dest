@@ -11,7 +11,7 @@ bool __cdecl16far heapIsBadPtr(far_t ptr)
 }
 
 /* 6316:0039 */
-void __cdecl16far heapMemmove(uint8_t *param_1,uint16_t param_2,uint8_t *param_3,uint16_t param_4,uint param_5,int param_6)
+void __cdecl16far heapMemmove(void)
 {
 }
 
@@ -34,25 +34,25 @@ void __cdecl16far heapFreeSub(uint16_t param_1)
 }
 
 /* 6316:01ed */
-uint32_t __cdecl16far heapAlloc(uint32_t nbytes)
+undefined2 __cdecl16far heapAlloc(void)
 {
-    uint32_t r;
+    undefined2 r;
 
     return r;
 }
 
 /* 6316:02a4 */
-long __cdecl16far heapRealloc(long block,long nbytes)
+uint16_t __cdecl16far heapRealloc(void)
 {
-    long r;
+    uint16_t r;
 
     return r;
 }
 
 /* 6316:04ec */
-far_t __cdecl16far heapMalloc(uint32_t nbytes)
+undefined2 __cdecl16far heapMalloc(void)
 {
-    far_t r;
+    undefined2 r;
 
     return r;
 }
@@ -63,7 +63,7 @@ void __cdecl16far heapValidateAll(void)
 }
 
 /* 6316:0600 */
-void __cdecl16far heapFree(far_t ptr)
+void __cdecl16far heapFree(void)
 {
 }
 

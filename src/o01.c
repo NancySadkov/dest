@@ -3,67 +3,64 @@
 /* ovc01_driver: 60 function(s) */
 
 /* 2d63:0000 */
-uint32_t __cdecl16far mkp(uint16_t ofs,uint16_t seg)
+uint __cdecl16far mkp(void)
 {
-    uint32_t r;
+    uint r;
 
     return r;
 }
 
 /* 2d63:0016 */
-uint16_t __cdecl16far biosVideoCall(uint8_t operation,uint8_t argument)
+undefined2 __cdecl16far biosVideoCall(void)
 {
-    uint16_t r;
+    undefined2 r;
 
     return r;
 }
 
 /* 2d63:0030 */
-uint16_t __cdecl16far biosReadKey(void)
+void __cdecl16far biosReadKey(void)
 {
-    uint16_t r;
-
-    return r;
 }
 
 /* 2d63:0039 */
-uint16_t __cdecl16far biosKeyAvail(void)
+bool __cdecl16far biosKeyAvail(void)
 {
-    uint16_t r;
+    bool r;
 
     return r;
 }
 
 /* 2d63:004a */
-uint16_t __cdecl16far miceButtonsStates(void)
+uint __cdecl16far miceButtonsStates(void)
 {
-    uint16_t r;
+    uint r;
 
     return r;
 }
 
 /* 2d63:005d */
-void __cdecl16far blitRaw(uint16_t x,uint16_t y,uint16_t w,uint16_t h,uint16_t src,uint16_t dst)
+void __cdecl16far blitRaw(void)
 {
 }
 
 /* 2d63:00aa */
-void __cdecl16far lbm_combine_bitplanes(far_t src,far_t dst,uint16_t npixels,uint8_t nplanes,uint16_t plane_sz)
+void __cdecl16far lbm_combine_bitplanes(void)
 {
 }
 
 /* 2d63:00eb */
-uint32_t __cdecl16far be4(uint32_t be)
+undefined2 __cdecl16far be4(void)
 {
-    uint32_t r;
+    undefined2 r;
 
     return r;
 }
 
 /* 2d63:00fc */
-uint16_t __cdecl16far be2(uint16_t w)
+undefined2 __cdecl16far be2(void)
 {
-    uint16_t r;
+    undefined2 r;
 
     return r;
 }
@@ -90,15 +87,15 @@ void __cdecl16far miceDisableHandler(void)
 }
 
 /* 2d63:0190 */
-uint16_t __cdecl16far miceButton0PressStates(void)
+uint __cdecl16far miceButton0PressStates(void)
 {
-    uint16_t r;
+    uint r;
 
     return r;
 }
 
 /* 2d63:01a7 */
-void __cdecl16far miceSetPosition(uint16_t col,uint16_t row)
+void __cdecl16far miceSetPosition(void)
 {
 }
 
@@ -119,7 +116,7 @@ undefined1 __cdecl16far vgaSetPalette8bit(undefined1 *param_1)
 }
 
 /* 2d63:0203 */
-int __cdecl16far unrle(far_t src,far_t dst,uint16_t len)
+int __cdecl16far unrle(void)
 {
     int r;
 
@@ -127,7 +124,7 @@ int __cdecl16far unrle(far_t src,far_t dst,uint16_t len)
 }
 
 /* 2d63:0241 */
-int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz)
+int __cdecl16far rle_blit_decode(void)
 {
     int r;
 
@@ -135,12 +132,12 @@ int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz)
 }
 
 /* 2d63:0292 */
-void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor)
+void __cdecl16far grabRemap(void)
 {
 }
 
 /* 2d63:02b5 */
-void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_sz,uint mask)
+void __cdecl16far masked_memcpy(void)
 {
 }
 
@@ -153,7 +150,7 @@ int __cdecl16far driver_2d63_02fe(char *param_1,uint param_2,uint param_3)
 }
 
 /* 2d63:032d */
-int __cdecl16far rle_line(uint8_t *src,uint8_t *dst,uint16_t npixels)
+int __cdecl16far rle_line(void)
 {
     int r;
 
@@ -161,7 +158,7 @@ int __cdecl16far rle_line(uint8_t *src,uint8_t *dst,uint16_t npixels)
 }
 
 /* 2d63:03b6 */
-int __cdecl16far unrle_mirror(byte *src,byte *dst,int len)
+int __cdecl16far unrle_mirror(byte *param_1,byte *param_2,int param_3)
 {
     int r;
 
@@ -218,11 +215,8 @@ void __cdecl16far driver_2d63_0687(int param_1,byte param_2,undefined1 param_3,u
 }
 
 /* 2d63:06bf */
-bool __cdecl16far digSoundPlaying(void)
+void __cdecl16far digSoundPlaying(void)
 {
-    bool r;
-
-    return r;
 }
 
 /* 2d63:06d1 */
@@ -246,15 +240,15 @@ void __cdecl16far digPreformatSound(void)
 }
 
 /* 2d63:071e */
-bool __cdecl16far digIsInstalled(void)
+undefined2 __cdecl16far digIsInstalled(void)
 {
-    bool r;
+    undefined2 r;
 
     return r;
 }
 
 /* 2d63:075f */
-void __cdecl16far midPlaySequence(uint16_t param_1)
+void __cdecl16far midPlaySequence(void)
 {
 }
 
@@ -279,9 +273,9 @@ void __cdecl16far midGetSequenceStatus(void)
 }
 
 /* 2d63:07ce */
-bool __cdecl16far midIsLoaded(void)
+undefined2 __cdecl16far midIsLoaded(void)
 {
-    bool r;
+    undefined2 r;
 
     return r;
 }
@@ -317,11 +311,8 @@ void __cdecl16far driver_2d63_09c9(int param_1,int param_2,byte param_3,undefine
 }
 
 /* 2d63:0a18 */
-uint8_t __cdecl16far vda_query(void)
+void __cdecl16far vda_query(void)
 {
-    uint8_t r;
-
-    return r;
 }
 
 /* 2d63:0a24 */

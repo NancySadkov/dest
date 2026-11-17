@@ -3,15 +3,15 @@
 /* ovc37_season: 11 function(s) */
 
 /* 67e7:0000 */
-char * __cdecl16far season_67e7_0000(void)
+undefined2 __cdecl16far season_67e7_0000(void)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
 
 /* 67e7:004d */
-uint __cdecl16far season_67e7_004d(undefined1 param_1)
+uint __cdecl16far season_67e7_004d(void)
 {
     uint r;
 
@@ -53,9 +53,9 @@ char __cdecl16far season_67e7_04e5(void)
 }
 
 /* 67e7:058d */
-uint16_t __cdecl16far calcSeasonPalette(uint8_t *param_1,undefined2 param_2,uint8_t *param_3,undefined2 param_4)
+undefined2 __cdecl16far calcSeasonPalette(uint8_t *param_1,undefined2 param_2,uint8_t *param_3,undefined2 param_4)
 {
-    uint16_t r;
+    undefined2 r;
 
     return r;
 }

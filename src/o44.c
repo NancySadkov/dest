@@ -1,11 +1,11 @@
 #include "st.h"
 
-/* ovc44_strong_dat: 4 function(s) */
+/* ovc44_strong_dat: 5 function(s) */
 
 /* 6ffe:0000 */
-far_t __cdecl16far stshAllocStub(void)
+uint16_t __cdecl16far stshAllocStub(void)
 {
-    far_t r;
+    uint16_t r;
 
     return r;
 }
@@ -16,7 +16,12 @@ void __cdecl16far stshTR_S_stubify0(int index)
 }
 
 /* 6ffe:01c5 */
-void __cdecl16far stshStubifyBld(uint16_t index)
+void __cdecl16far stshStubifyBld(void)
+{
+}
+
+/* 6ffe:02f7 */
+void __cdecl16far init_assets(void)
 {
 }
 

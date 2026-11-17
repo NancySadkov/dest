@@ -3,7 +3,7 @@
 /* ovc20: 23 function(s) */
 
 /* 4b0a:0000 */
-void __cdecl16far stshUniqueColorsRemap(stg_tmp_t *gfx)
+void __cdecl16far stshUniqueColorsRemap(void)
 {
 }
 
@@ -13,58 +13,58 @@ void __cdecl16far OVC20_4b0a_010c(void)
 }
 
 /* 4b0a:01f8 */
-stg_tmp_t * __cdecl16far grabLbmTR(int16_t file_id)
+undefined2 __cdecl16far grabLbmTR(void)
 {
-    stg_tmp_t * r;
+    undefined2 r;
 
     return r;
 }
 
 /* 4b0a:024e */
-void __cdecl16far stgFreeTmp(stg_tmp_t *tg)
+void __cdecl16far stgFreeTmp(void)
 {
 }
 
 /* 4b0a:0276 */
-void __cdecl16far stubyBufSrcToDst(int src,int dst)
+void __cdecl16far stubyBufSrcToDst(int param_1,int param_2)
 {
 }
 
 /* 4b0a:032c */
-void __cdecl16far stshStubifyFromSrc(int src,int dst)
+void __cdecl16far stshStubifyFromSrc(int param_1,int param_2)
 {
 }
 
 /* 4b0a:03cd */
-void __cdecl16far StubifyCopy1to0_alt(int index)
+void __cdecl16far StubifyCopy1to0_alt(int param_1)
 {
 }
 
 /* 4b0a:04a7 */
-void __cdecl16far stshStubifyCopy1to0(int index)
+void __cdecl16far stshStubifyCopy1to0(int param_1)
 {
 }
 
 /* 4b0a:0721 */
-void __cdecl16far stshWriteFile(int fhandle,far_t buf,DW sz)
+void __cdecl16far stshWriteFile(void)
 {
 }
 
 /* 4b0a:077a */
-void __cdecl16far stshReadFile(int handle,far_t dst,DW nbytes)
+void __cdecl16far stshReadFile(void)
 {
 }
 
 /* 4b0a:07d3 */
-spr_t * __cdecl16far stshSpriteStub(anm_t *anms,uint16_t nanims)
+void * __cdecl16far stshSpriteStub(void)
 {
-    spr_t * r;
+    void * r;
 
     return r;
 }
 
 /* 4b0a:08ee */
-undefined1 * __cdecl16far OVC20_4b0a_08ee(uint16_t param_1,uint16_t param_2,uint param_3,uint16_t param_4)
+undefined1 * __cdecl16far OVC20_4b0a_08ee(undefined2 param_1,undefined2 param_2,uint param_3,int param_4)
 {
     undefined1 * r;
 
@@ -72,7 +72,7 @@ undefined1 * __cdecl16far OVC20_4b0a_08ee(uint16_t param_1,uint16_t param_2,uint
 }
 
 /* 4b0a:09ce */
-cte_t * __cdecl16far stshStoreFile(uint8_t *data)
+cte_t * __cdecl16far stshStoreFile(void)
 {
     cte_t * r;
 
@@ -88,7 +88,7 @@ uint16_t __cdecl16far stshDecVocSampleRate(uint8_t encfreq)
 }
 
 /* 4b0a:0b9c */
-void __cdecl16far stshInitAudioAssets(char grab)
+void __cdecl16far stshInitAudioAssets(char param_1)
 {
 }
 
@@ -101,17 +101,17 @@ long __cdecl16far stshAlloc_0eda(DW sz)
 }
 
 /* 4b0a:0f95 */
-uint32_t __cdecl16far stshWrite(uint8_t *data,long sz)
+undefined2 __cdecl16far stshWrite(void)
 {
-    uint32_t r;
+    undefined2 r;
 
     return r;
 }
 
 /* 4b0a:0fd0 */
-far_t __cdecl16far stshStoreFile_0fd0(char *filename,uint16_t flag)
+undefined2 __cdecl16far stshStoreFile_0fd0(void)
 {
-    far_t r;
+    undefined2 r;
 
     return r;
 }
@@ -132,12 +132,12 @@ void __cdecl16far init_ui_gfxes(void)
 }
 
 /* 4b0a:13d3 */
-void __cdecl16far stshLoadAudioDrivers(bool grab)
+void __cdecl16far stshLoadAudioDrivers(void)
 {
 }
 
 /* 4b0a:1820 */
-void __cdecl16far grabBldLbm(int16_t file_normal,int16_t file_ruin,uint16_t index)
+void __cdecl16far grabBldLbm(void)
 {
 }
 

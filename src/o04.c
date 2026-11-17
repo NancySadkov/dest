@@ -3,9 +3,9 @@
 /* ovc04: 3 function(s) */
 
 /* 30e6:0000 */
-far_t __cdecl16far alignToSeg(far_t ptr)
+undefined2 __cdecl16far alignToSeg(void)
 {
-    far_t r;
+    undefined2 r;
 
     return r;
 }
@@ -16,7 +16,7 @@ void __cdecl16far lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t npla
 }
 
 /* 30e6:0321 */
-stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y)
+stg_tmp_t * __cdecl16far grabLbm(void)
 {
     stg_tmp_t * r;
 

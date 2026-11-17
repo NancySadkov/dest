@@ -707,7 +707,7 @@ undefined2 __cdecl16near malloc_AllocatePartialBlock(void)
 }
 
 /* 1000:1838 */
-undefined2 __cdecl16far malloc(code *param_1)
+undefined2 __cdecl16far malloc(uint param_1)
 {
     undefined2 r;
 
@@ -739,7 +739,7 @@ undefined4 __cdecl16near malloc_ShrinkBlock(void)
 }
 
 /* 1000:199f */
-uint16_t __cdecl16far _realloc(undefined2 param_1,int param_2,code *param_3)
+uint16_t __cdecl16far _realloc(undefined2 param_1,int param_2,uint param_3)
 {
     uint16_t r;
 

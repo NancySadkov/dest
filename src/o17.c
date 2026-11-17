@@ -1,18 +1,26 @@
 #include "st.h"
 
-/* ovc17_stash: 25 function(s) */
+/* ovc17_stash: 26 function(s) */
 
 /* 474a:0000 */
-uint16_t __cdecl16far stshOpen(uint16_t file_id)
+int __cdecl16far stshOpen(void)
 {
-    uint16_t r;
+    int r;
 
     return r;
 }
 
 /* 474a:004e */
-void __cdecl16far stshClose(uint16_t file_id)
+void __cdecl16far stshClose(void)
 {
+}
+
+/* 474a:008f */
+uint __cdecl16far stshRead(void)
+{
+    uint r;
+
+    return r;
 }
 
 /* 474a:0470 */
@@ -21,35 +29,35 @@ void __cdecl16far stshInit(void)
 }
 
 /* 474a:067b */
-void __cdecl16far stshSeek(uint16_t fid,long ofs)
+void __cdecl16far stshSeek(void)
 {
 }
 
 /* 474a:06fe */
-uint32_t __cdecl16far stshTell(uint16_t file_id)
+undefined2 __cdecl16far stshTell(void)
 {
-    uint32_t r;
+    undefined2 r;
 
     return r;
 }
 
 /* 474a:0718 */
-void __cdecl16far stshFree(far_t handle)
+void __cdecl16far stshFree(void)
 {
 }
 
 /* 474a:075a */
-void * __cdecl16far stshAlloc(uint32_t nbytes)
+uint16_t __cdecl16far stshAlloc(void)
 {
-    void * r;
+    uint16_t r;
 
     return r;
 }
 
 /* 474a:0822 */
-uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes)
+int __cdecl16far stshRealloc(void)
 {
-    uint8_t * r;
+    int r;
 
     return r;
 }
@@ -63,15 +71,15 @@ far_t __cdecl16far fmMalloc(uint32_t nbytes)
 }
 
 /* 474a:0953 */
-char * __cdecl16far fmVsprintf(char *fmt,...)
+uint16_t __cdecl16far fmVsprintf(void)
 {
-    char * r;
+    uint16_t r;
 
     return r;
 }
 
 /* 474a:09df */
-char * __cdecl16far stsprintf(char *buf,char *fmt,char *arg1)
+char * __cdecl16far stsprintf(void)
 {
     char * r;
 
@@ -84,28 +92,31 @@ void __cdecl16far clean_ring_buffer(void)
 }
 
 /* 474a:0a6a */
-void __cdecl16far initStshTables(void)
+char * __cdecl16far initStshTables(void)
 {
+    char * r;
+
+    return r;
 }
 
 /* 474a:0aa7 */
-uint32_t __cdecl16far stshFilesize(uint16_t file_id)
+undefined2 __cdecl16far stshFilesize(void)
 {
-    uint32_t r;
+    undefined2 r;
 
     return r;
 }
 
 /* 474a:0b26 */
-uint16_t __cdecl16far randBelow(uint16_t n)
+uint __cdecl16far randBelow(void)
 {
-    uint16_t r;
+    uint r;
 
     return r;
 }
 
 /* 474a:0b38 */
-int __cdecl16far creat_wait_unlock_and_disk(char *path)
+int __cdecl16far creat_wait_unlock_and_disk(void)
 {
     int r;
 
@@ -113,7 +124,7 @@ int __cdecl16far creat_wait_unlock_and_disk(char *path)
 }
 
 /* 474a:0b70 */
-int __cdecl16far open_wait_unlock_and_disk(char *filename)
+int __cdecl16far open_wait_unlock_and_disk(void)
 {
     int r;
 
@@ -121,20 +132,20 @@ int __cdecl16far open_wait_unlock_and_disk(char *filename)
 }
 
 /* 474a:0ba8 */
-void __cdecl16far fmReadIntoHimem(char *param_1,undefined2 param_2,int param_3,int param_4,char param_5,undefined2 param_6,undefined2 param_7)
+void __cdecl16far fmReadIntoHimem(undefined2 param_1,undefined2 param_2,int param_3,int param_4,char param_5,undefined2 param_6,undefined2 param_7)
 {
 }
 
 /* 474a:0cf8 */
-stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle)
+char * __cdecl16far stshLoadGfx(void)
 {
-    stg_tmp_t * r;
+    char * r;
 
     return r;
 }
 
 /* 474a:0e9b */
-uint8_t * __cdecl16far stash_474a_0e9b(undefined4 param_1)
+uint8_t * __cdecl16far stash_474a_0e9b(void)
 {
     uint8_t * r;
 
@@ -142,9 +153,9 @@ uint8_t * __cdecl16far stash_474a_0e9b(undefined4 param_1)
 }
 
 /* 474a:10ac */
-stg_tmp_t * __cdecl16far stash_474a_10ac(stg_tmp_t *param_1,byte param_2)
+char * __cdecl16far stash_474a_10ac(char *param_1,byte param_2)
 {
-    stg_tmp_t * r;
+    char * r;
 
     return r;
 }

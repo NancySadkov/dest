@@ -11,9 +11,9 @@ int __cdecl16far bldng_676c_0000(byte param_1)
 }
 
 /* 676c:003d */
-char * __cdecl16far bldng_676c_003d(byte param_1,char param_2)
+uint __cdecl16far bldng_676c_003d(byte param_1,char param_2)
 {
-    char * r;
+    uint r;
 
     return r;
 }

@@ -90,9 +90,9 @@ void __cdecl16far attact_3f0b_0685(void)
 }
 
 /* 3f0b:082f */
-ulong __cdecl16far attact_3f0b_082f(ulong param_1)
+int __cdecl16far attact_3f0b_082f(void)
 {
-    ulong r;
+    int r;
 
     return r;
 }
@@ -131,30 +131,30 @@ void __cdecl16far attact_3f0b_1082(void)
 }
 
 /* 3f0b:18fe */
-void __cdecl16far attact_3f0b_18fe(void)
+void __cdecl16far attact_3f0b_18fe(uint param_1,int param_2)
 {
 }
 
 /* 3f0b:1a2f */
-char * __cdecl16far attact_3f0b_1a2f(uint *param_1,int param_2,char param_3,undefined2 param_4,uint16_t param_5)
+undefined2 __cdecl16far attact_3f0b_1a2f(uint *param_1,int param_2,char param_3,undefined2 param_4,uint16_t param_5)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
 
 /* 3f0b:1bfc */
-char * __cdecl16far attact_3f0b_1bfc(uint *param_1,char param_2,undefined2 param_3,uint16_t param_4)
+undefined2 __cdecl16far attact_3f0b_1bfc(uint *param_1,char param_2,undefined2 param_3,uint16_t param_4)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
 
 /* 3f0b:1cfb */
-char * __cdecl16far attact_3f0b_1cfb(uint *param_1,char param_2,undefined2 param_3,int param_4)
+undefined2 __cdecl16far attact_3f0b_1cfb(uint *param_1,char param_2,undefined2 param_3,int param_4)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }

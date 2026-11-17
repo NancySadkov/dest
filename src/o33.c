@@ -32,7 +32,7 @@ undefined1 __cdecl16far stats_6386_013d(undefined4 param_1)
 }
 
 /* 6386:01a4 */
-void __cdecl16far stats_6386_01a4(undefined4 param_1,byte param_2,int param_3)
+void __cdecl16far stats_6386_01a4(undefined4 param_1,byte param_2,int param_3,undefined2 param_4)
 {
 }
 
@@ -53,7 +53,7 @@ char * __cdecl16far agntGetWeaponName(char *dst,uint8_t atype,bool magical,uint8
 }
 
 /* 6386:0411 */
-far_t * __cdecl16far stats_6386_0411(char *param_1,uint16_t param_2,undefined2 param_3,far_t param_4)
+far_t * __cdecl16far stats_6386_0411(far_t *param_1,uint param_2,int param_3,undefined2 param_4)
 {
     far_t * r;
 
@@ -77,16 +77,13 @@ char * __cdecl16far stats_6386_065c(char *param_1,uint param_2,int param_3)
 }
 
 /* 6386:06cd */
-void __cdecl16far drawAgntStats(int32_t agnt,far_t cmap)
+void __cdecl16far drawAgntStats(void)
 {
 }
 
 /* 6386:12b7 */
-char * __cdecl16far stats_6386_12b7(byte param_1,char *param_2)
+void __cdecl16far stats_6386_12b7(byte param_1)
 {
-    char * r;
-
-    return r;
 }
 
 /* 6386:1353 */
@@ -144,7 +141,7 @@ void __cdecl16far stats_6386_1abe(int param_1)
 }
 
 /* 6386:1c9f */
-byte __cdecl16far stats_6386_1c9f(byte param_1,byte param_2,int16_t param_3,int16_t param_4,brect_t *param_5,undefined2 param_6)
+byte __cdecl16far stats_6386_1c9f(byte param_1)
 {
     byte r;
 
@@ -165,7 +162,7 @@ void __cdecl16far stats_6386_232d(void)
 }
 
 /* 6386:24c2 */
-void __cdecl16far drawString(char *param_1,undefined2 param_2)
+void __cdecl16far drawString(char *param_1)
 {
 }
 

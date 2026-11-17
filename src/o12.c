@@ -82,9 +82,9 @@ void __cdecl16far agnt_3b1d_0a9f(undefined4 param_1)
 }
 
 /* 3b1d:0ac0 */
-char * __cdecl16far agnt_3b1d_0ac0(undefined4 param_1,char *param_2)
+undefined2 __cdecl16far agnt_3b1d_0ac0(undefined4 param_1)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
@@ -151,7 +151,7 @@ void __cdecl16far agnt_3b1d_0d82(undefined4 param_1,undefined4 param_2,undefined
 }
 
 /* 3b1d:1035 */
-void __cdecl16far agnt_3b1d_1035(byte param_1,brect_t *param_2,undefined2 param_3)
+void __cdecl16far agnt_3b1d_1035(byte param_1)
 {
 }
 
@@ -184,7 +184,7 @@ undefined2 __cdecl16far agnt_3b1d_177f(int param_1)
 }
 
 /* 3b1d:196b */
-void __cdecl16far agnt_3b1d_196b(far_t ptr)
+void __cdecl16far agnt_3b1d_196b(void)
 {
 }
 

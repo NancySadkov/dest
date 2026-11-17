@@ -15,24 +15,6 @@ void __cdecl16far OVC28_6018_0048(void)
 /* 6018:007e */
 void __cdecl16far update_pause_button(void)
 {
-    bool busy;
-    char *gfx;
-
-    TextBlitDstSeg = 0xa000;
-    if ((GPaused != '\0') &&
-        ((busy = OVC15_4207_288b(), busy == '\0' || (GOngoingBattle != '\0')))) {
-        gfx = MK_FP(word_2000_BSS_093E,word_2000_BSS_093C);
-        blitGfxRect(gfx,235,116,BlitRects + 1,0x10,false);
-        TextBlitY = 0x76;
-        TextBlitX = 0xf1;
-        blitLabel("Resume",(uint8_t *)FontMain,319,0xe0);
-        return;
-    }
-    gfx = MK_FP(word_2000_BSS_093A,word_2000_BSS_0938);
-    blitGfxRect(gfx,235,116,BlitRects + 1,0x10,false);
-    TextBlitY = 0x76;
-    TextBlitX = 0xf0;
-    blitLabel("Pause",(uint8_t *)Font01,319,0xe0);
 }
 
 /* 6018:0176 */
@@ -53,24 +35,6 @@ void __cdecl16far OVC28_6018_0251(void)
 /* 6018:03d3 */
 void __cdecl16far toggle_pause(void)
 {
-    bool busy;
-
-    busy = OVC15_4207_288b();
-    if ((busy == '\0') || (GOngoingBattle != '\0')) {
-        GPaused = !GPaused;
-        if (GPaused == '\0') {
-            drawTextAt("Resume. Game events will now occur normally.",0xa000);
-        }
-        else {
-            drawTextAt("Pause. Select 'Resume' to enable game events. Press SPACE for a single game event."
-                       ,0xa000);
-        }
-        update_pause_button();
-    }
-    else {
-        drawTextAt("Sorry, you may not pause during a battle.",0xa000);
-        GPaused = '\0';
-    }
 }
 
 /* 6018:0456 */
@@ -79,7 +43,7 @@ void __cdecl16far OVC28_6018_0456(undefined4 param_1,int param_2)
 }
 
 /* 6018:0634 */
-void __cdecl16far OVC28_6018_0634(byte param_1)
+void __cdecl16far OVC28_6018_0634(undefined1 param_1)
 {
 }
 
@@ -107,15 +71,15 @@ undefined2 __cdecl16far OVC28_6018_0c76(undefined4 param_1,uint param_2)
 }
 
 /* 6018:0f29 */
-char * __cdecl16far uiInputText(far_t *entries,short count,byte *hint,byte flags)
+undefined2 __cdecl16far uiInputText(void)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
 
 /* 6018:1398 */
-undefined2 __cdecl16far OVC28_6018_1398(far_t *param_1,int param_2,byte *param_3,undefined2 param_4,byte *param_5)
+undefined2 __cdecl16far OVC28_6018_1398(undefined4 param_1,int param_2,undefined2 param_3,undefined2 param_4,byte *param_5)
 {
     undefined2 r;
 

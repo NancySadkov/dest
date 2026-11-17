@@ -57,9 +57,9 @@ undefined2 __cdecl16far OVC41_6a8f_0422(byte param_1,int param_2)
 }
 
 /* 6a8f:04a9 */
-char * __cdecl16far OVC41_6a8f_04a9(int param_1)
+undefined2 __cdecl16far OVC41_6a8f_04a9(int param_1)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
@@ -147,9 +147,9 @@ void __cdecl16far OVC41_6a8f_1520(void)
 }
 
 /* 6a8f:15a0 */
-char * __cdecl16far OVC41_6a8f_15a0(void)
+byte __cdecl16far OVC41_6a8f_15a0(byte param_1,char param_2)
 {
-    char * r;
+    byte r;
 
     return r;
 }
@@ -157,22 +157,6 @@ char * __cdecl16far OVC41_6a8f_15a0(void)
 /* 6a8f:1847 */
 void __cdecl16far OVC41_6a8f_1847(void)
 {
-    byte_2000_BSS_0067 = !byte_2000_BSS_0067;
-    GOngoingBattle = byte_2000_BSS_0067;
-    OVC28_6018_0176();
-    if (draw_2e25_15d6() == '\0') {
-        GOngoingBattle = '\x01';
-        say("You cannot see the terrain here.");
-        stop_audio();
-    }
-    else {
-        agnt_clear();
-        constr_36ce_1efc();
-        if (GOngoingBattle != '\0') {
-            stop_audio();
-        }
-        update_pause_button();
-    }
 }
 
 /* 6a8f:18c6 */
@@ -183,22 +167,6 @@ void __cdecl16far OVC41_6a8f_18c6(void)
 /* 6a8f:199c */
 void __cdecl16far uiMainMenu(void)
 {
-    char *gfx;
-
-    draw_2e25_1662();
-    stop_audio();
-    byte_2000_BSS_003D = GMenuItem;
-    byte_2000_BSS_003C = byte_2000_BSS_003B;
-    gfx = MK_FP(word_2000_BSS_0087,word_2000_BSS_0085);
-    blitLoadRleGfx(gfx,(char *)0xa000e249L);
-    gfx = MK_FP(word_2000_BSS_008B,word_2000_BSS_0089);
-    blitLoadRleGfx(gfx,(char *)0xa000e249L);
-    uiMainMenuLoop();
-    gfx = MK_FP(word_2000_BSS_0087,word_2000_BSS_0085);
-    blitLoadRleGfx(gfx,(char *)0xa000e249L);
-    gfx = MK_FP(word_2000_BSS_008F,word_2000_BSS_008D);
-    blitLoadRleGfx(gfx,(char *)0xa000e249L);
-    OVC41_6a8f_18c6();
 }
 
 /* 6a8f:1a4c */
@@ -225,9 +193,9 @@ undefined1 __cdecl16far OVC41_6a8f_1c74(undefined4 param_1,undefined4 param_2,ui
 }
 
 /* 6a8f:2084 */
-byte * __cdecl16far OVC41_6a8f_2084(undefined4 param_1,int param_2)
+uint ** __cdecl16far OVC41_6a8f_2084(undefined4 param_1,int param_2)
 {
-    byte * r;
+    uint ** r;
 
     return r;
 }

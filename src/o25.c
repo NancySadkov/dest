@@ -19,9 +19,9 @@ undefined2 __cdecl16far OVC25_5b66_00ff(char param_1,byte param_2,uint16_t param
 }
 
 /* 5b66:028d */
-char * __cdecl16far OVC25_5b66_028d(uint *param_1,char param_2,char param_3,undefined2 param_4,int param_5)
+undefined2 __cdecl16far OVC25_5b66_028d(uint *param_1,char param_2,char param_3,undefined2 param_4,int param_5)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }

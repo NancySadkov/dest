@@ -3,9 +3,9 @@
 /* ovc16_saveui: 22 function(s) */
 
 /* 4528:0000 */
-uint16_t __cdecl16far uiReadKey2(void)
+undefined2 __cdecl16far uiReadKey2(void)
 {
-    uint16_t r;
+    undefined2 r;
 
     return r;
 }
@@ -16,7 +16,7 @@ void __cdecl16far saveui_4528_01b2(void)
 }
 
 /* 4528:02fb */
-void __cdecl16far saveui_4528_02fb(undefined4 param_1,int param_2,int param_3)
+void __cdecl16far saveui_4528_02fb(undefined2 param_1,undefined2 param_2,int param_3)
 {
 }
 
@@ -34,7 +34,7 @@ void __cdecl16far saveui_4528_0533(void)
 }
 
 /* 4528:055b */
-void __cdecl16far saveui_4528_055b(uint16_t param_1,uint16_t param_2,char *param_3,undefined2 param_4,uint *param_5,int param_6)
+void __cdecl16far saveui_4528_055b(void)
 {
 }
 
@@ -49,7 +49,7 @@ void __cdecl16far uiMenuSub(char *title,far_t items,uint16_t nitems,uint16_t def
 }
 
 /* 4528:0c98 */
-undefined2 __cdecl16far uiReadString(char *param_1,int param_2,int param_3,char *param_4,uint16_t param_5)
+undefined2 __cdecl16far uiReadString(int param_1,int param_2,int param_3,char *param_4,int param_5)
 {
     undefined2 r;
 
@@ -57,7 +57,7 @@ undefined2 __cdecl16far uiReadString(char *param_1,int param_2,int param_3,char 
 }
 
 /* 4528:10a8 */
-void __cdecl16far uiMenu(char *title,far_t items,int nitems)
+void __cdecl16far uiMenu(void)
 {
 }
 
@@ -93,9 +93,9 @@ void __cdecl16far saveui_4528_1288(undefined4 param_1,uint param_2)
 }
 
 /* 4528:1303 */
-char * __cdecl16far saveui_4528_1303(void)
+uint __cdecl16far saveui_4528_1303(void)
 {
-    char * r;
+    uint r;
 
     return r;
 }
@@ -129,7 +129,7 @@ int __cdecl16far saveui_4528_1d0f(char *param_1)
 }
 
 /* 4528:1d55 */
-undefined2 __cdecl16far saveui_4528_1d55(char *param_1,int param_2,int param_3)
+undefined2 __cdecl16far saveui_4528_1d55(int param_1,int param_2,int param_3)
 {
     undefined2 r;
 

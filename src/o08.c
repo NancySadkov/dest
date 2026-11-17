@@ -3,12 +3,12 @@
 /* ovc08_init2: 9 function(s) */
 
 /* 3338:0000 */
-void __cdecl16far miceRestoreArea(brect_t *br)
+void __cdecl16far miceRestoreArea(void)
 {
 }
 
 /* 3338:00fe */
-void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br)
+void __cdecl16far miceSaveArea(void)
 {
 }
 
@@ -18,7 +18,7 @@ void __cdecl16far miceUpdate(void)
 }
 
 /* 3338:0256 */
-void __cdecl16far miceBlitRect(brect_t *br)
+void __cdecl16far miceBlitRect(void)
 {
 }
 

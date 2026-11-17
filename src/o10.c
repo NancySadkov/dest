@@ -45,12 +45,12 @@ void __cdecl16far constr_36ce_02f0(void)
 }
 
 /* 36ce:0313 */
-void __cdecl16far blitRect(brect_t *br)
+void __cdecl16far blitRect(void)
 {
 }
 
 /* 36ce:0345 */
-void __cdecl16far constr_36ce_0345(brect_t *param_1)
+void __cdecl16far constr_36ce_0345(undefined4 param_1)
 {
 }
 
@@ -81,7 +81,7 @@ void __cdecl16far constr_36ce_04e9(undefined2 param_1,undefined2 param_2)
 }
 
 /* 36ce:08ee */
-void __cdecl16far constr_36ce_08ee(brect_t *param_1,undefined2 param_2)
+void __cdecl16far constr_36ce_08ee(void)
 {
 }
 

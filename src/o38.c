@@ -13,7 +13,7 @@ void __cdecl16far OVC38_68ac_008a(undefined4 param_1)
 }
 
 /* 68ac:00fd */
-void __cdecl16far OVC38_68ac_00fd(far_t param_1)
+void __cdecl16far OVC38_68ac_00fd(undefined4 param_1)
 {
 }
 

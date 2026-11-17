@@ -29,9 +29,9 @@ int __cdecl16far OVC27_5ded_04cd(undefined4 param_1,byte param_2)
 }
 
 /* 5ded:052d */
-undefined2 __cdecl16far OVC27_5ded_052d(undefined4 param_1,undefined4 param_2,int param_3)
+uint __cdecl16far OVC27_5ded_052d(undefined4 param_1,undefined4 param_2,int param_3)
 {
-    undefined2 r;
+    uint r;
 
     return r;
 }
@@ -69,7 +69,7 @@ undefined2 __cdecl16far OVC27_5ded_0a05(int param_1)
 }
 
 /* 5ded:0cc2 */
-void __cdecl16far OVC27_5ded_0cc2(int param_1,brect_t *param_2,undefined2 param_3)
+void __cdecl16far OVC27_5ded_0cc2(int param_1,undefined2 param_2,undefined2 param_3)
 {
 }
 

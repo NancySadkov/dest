@@ -54,9 +54,9 @@ void __cdecl16far OVC24_5943_1bff(int param_1)
 }
 
 /* 5943:1eeb */
-char * __cdecl16far OVC24_5943_1eeb(undefined2 param_1,uint param_2,char param_3)
+uint __cdecl16far OVC24_5943_1eeb(undefined2 param_1,uint param_2,char param_3)
 {
-    char * r;
+    uint r;
 
     return r;
 }

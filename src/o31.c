@@ -35,7 +35,7 @@ bool __cdecl16far write_game_cfg(char sfx,char mus,char irq)
 }
 
 /* 6257:01cc */
-char __cdecl16far read_cfg(int handle)
+char __cdecl16far read_cfg(void)
 {
     char r;
 
@@ -56,9 +56,9 @@ void __cdecl16far input_folder_name(char *result)
 }
 
 /* 6257:0345 */
-byte __cdecl16far init_strong_sav(void)
+undefined2 __cdecl16far init_strong_sav(void)
 {
-    byte r;
+    undefined2 r;
 
     return r;
 }

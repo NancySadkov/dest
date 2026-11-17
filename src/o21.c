@@ -18,7 +18,7 @@ void __cdecl16far manage_4d05_0166(void)
 }
 
 /* 4d05:01a3 */
-char __cdecl16far manage_4d05_01a3(char param_1,byte param_2)
+char __cdecl16far manage_4d05_01a3(char param_1)
 {
     char r;
 
@@ -26,14 +26,14 @@ char __cdecl16far manage_4d05_01a3(char param_1,byte param_2)
 }
 
 /* 4d05:01d4 */
-void __cdecl16far manage_4d05_01d4(char_sheet_t *sheet)
+void __cdecl16far manage_4d05_01d4(void)
 {
 }
 
 /* 4d05:023a */
-char * __cdecl16far manage_4d05_023a(int param_1)
+undefined2 __cdecl16far manage_4d05_023a(int param_1)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
@@ -63,9 +63,9 @@ byte __cdecl16far manage_4d05_0340(char_sheet_t *sheet)
 }
 
 /* 4d05:03a4 */
-void * __cdecl16far manage_4d05_03a4(char_sheet_t *sheet)
+uint16_t __cdecl16far manage_4d05_03a4(void)
 {
-    void * r;
+    uint16_t r;
 
     return r;
 }
@@ -79,12 +79,12 @@ uint __cdecl16far manage_4d05_044e(void)
 }
 
 /* 4d05:04c6 */
-void __cdecl16far manage_4d05_04c6(char *param_1,undefined2 param_2,int param_3)
+void __cdecl16far manage_4d05_04c6(undefined2 param_1,undefined2 param_2,int param_3)
 {
 }
 
 /* 4d05:0519 */
-void __cdecl16far manage_4d05_0519(char *param_1,undefined2 param_2,int param_3,uint8_t param_4)
+void __cdecl16far manage_4d05_0519(undefined2 param_1,undefined2 param_2,int param_3)
 {
 }
 
@@ -181,9 +181,9 @@ undefined2 __cdecl16far manage_4d05_1b51(byte param_1)
 }
 
 /* 4d05:217a */
-char * __cdecl16far litoa10(char *buf,long n)
+uint8_t * __cdecl16far litoa10(void)
 {
-    char * r;
+    uint8_t * r;
 
     return r;
 }
@@ -255,15 +255,15 @@ void __cdecl16far manage_4d05_2bc4(uint8_t param_1,int param_2)
 }
 
 /* 4d05:2d79 */
-char * __cdecl16far manage_4d05_2d79(byte charIndex,short arg6,char_sheet_t *sheet)
+undefined2 __cdecl16far manage_4d05_2d79(byte charIndex,short arg6,char_sheet_t *sheet)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
 
 /* 4d05:330c */
-void __cdecl16far manage_4d05_330c(byte param_1,int param_2,char *param_3)
+void __cdecl16far manage_4d05_330c(char param_1,int param_2)
 {
 }
 

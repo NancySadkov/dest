@@ -43,7 +43,7 @@ int __cdecl16far OVC23_55fe_0768(int param_1,int param_2)
 }
 
 /* 55fe:0863 */
-void __cdecl16far OVC23_55fe_0863(uint16_t param_1,uint16_t param_2)
+void __cdecl16far OVC23_55fe_0863(undefined2 param_1,undefined2 param_2)
 {
 }
 
@@ -69,9 +69,9 @@ uint * __cdecl16far OVC23_55fe_0af5(int param_1,uint *param_2,byte param_3)
 }
 
 /* 55fe:0cdf */
-char * __cdecl16far OVC23_55fe_0cdf(char *param_1,undefined1 *param_2,byte param_3)
+uint __cdecl16far OVC23_55fe_0cdf(char *param_1,undefined1 *param_2,byte param_3)
 {
-    char * r;
+    uint r;
 
     return r;
 }
@@ -102,12 +102,12 @@ void __cdecl16far OVC23_55fe_1e87(undefined1 param_1,undefined2 param_2,undefine
 }
 
 /* 55fe:1ea9 */
-void __cdecl16far OVC23_55fe_1ea9(int param_1,int param_2,int param_3,brect_t *param_4,undefined2 param_5)
+void __cdecl16far OVC23_55fe_1ea9(int param_1,undefined2 param_2,int param_3)
 {
 }
 
 /* 55fe:23d8 */
-void __cdecl16far OVC23_55fe_23d8(int param_1,int param_2,int param_3,brect_t *param_4,undefined2 param_5)
+void __cdecl16far OVC23_55fe_23d8(int param_1,int param_2,int param_3,undefined2 param_4,undefined2 param_5)
 {
 }
 

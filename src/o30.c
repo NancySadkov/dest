@@ -40,9 +40,9 @@ uint __cdecl16far OVC30_619c_0339(byte param_1,undefined2 param_2,undefined2 par
 }
 
 /* 619c:05a5 */
-byte __cdecl16far OVC30_619c_05a5(byte param_1,int param_2,char param_3,byte param_4)
+undefined2 __cdecl16far OVC30_619c_05a5(byte param_1,int param_2,char param_3,byte param_4)
 {
-    byte r;
+    undefined2 r;
 
     return r;
 }

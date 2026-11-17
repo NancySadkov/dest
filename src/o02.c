@@ -8,7 +8,7 @@ void __cdecl16far draw_2e25_0000(int param_1,undefined2 param_2)
 }
 
 /* 2e25:0098 */
-void __cdecl16far draw_2e25_0098(void)
+void __cdecl16far draw_2e25_0098(uint param_1,int param_2)
 {
 }
 
@@ -80,9 +80,9 @@ uint16_t __cdecl16far gameProcessKey(void)
 }
 
 /* 2e25:0d35 */
-uint16_t __cdecl16far draw_2e25_0d35(void)
+undefined2 __cdecl16far draw_2e25_0d35(void)
 {
-    uint16_t r;
+    undefined2 r;
 
     return r;
 }
@@ -93,7 +93,7 @@ void __cdecl16far draw_2e25_0efd(int param_1)
 }
 
 /* 2e25:10c7 */
-void __cdecl16far draw_2e25_10c7(void)
+void __cdecl16far draw_2e25_10c7(int param_1,int param_2)
 {
 }
 
@@ -103,9 +103,9 @@ void __cdecl16far draw_2e25_130a(void)
 }
 
 /* 2e25:15d6 */
-char __cdecl16far draw_2e25_15d6(void)
+uint __cdecl16far draw_2e25_15d6(void)
 {
-    char r;
+    uint r;
 
     return r;
 }
@@ -129,9 +129,9 @@ void __cdecl16far draw_2e25_17b3(void)
 }
 
 /* 2e25:1d7c */
-char * __cdecl16far draw_2e25_1d7c(void)
+undefined2 __cdecl16far draw_2e25_1d7c(void)
 {
-    char * r;
+    undefined2 r;
 
     return r;
 }
