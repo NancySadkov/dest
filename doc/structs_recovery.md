@@ -268,3 +268,30 @@ The value reduced modulo 6 into -3..3 is the sprite direction, so
 `entity_t+0x36` (the third byte of `reserved`) is a **direction**, not reserved.
 `entity_t` still carries `byte reserved[3]`; the next step is to rebuild it as
 two unnamed bytes plus `dir`.
+
+## `entity_t` rebuilt, `agnt_t+0x0c` named
+
+```
+entity_t (55 bytes)
+  +0  base        agnt_t
+  +52 field_0x34  byte   (shifted left in ovc22)
+  +53 field_0x35  byte   (no reader yet)
+  +54 dir         byte   (sprite direction)
+```
+
+`reserved[3]` was hiding three unrelated bytes; the audit now counts two of
+them as generated, which is the honest reading.
+
+`agnt_t+0x0c` is a direction.  The attack code computes the sign of the step it
+is about to take and encodes it as `2 - sign`:
+
+```c
+iStack_12 = OVC07_32c9_0026(entity.field_0x8 - other->x);   /* -1, 0, 1 */
+entity.x += iStack_12;
+entity.field_0xc = 0x2 - iStack_12;                          /* 1..3 */
+func_0x0004f412(..., '\x02' - iStack_12, ...);
+```
+
+Readers shift it back (`field_0xc + 0xfe` = value - 2) and test its low bit;
+`0xff` is the "none" value written by the clear-orders routine.  The vertical
+branch uses the same encoding with `dy + 1` (0..2).
