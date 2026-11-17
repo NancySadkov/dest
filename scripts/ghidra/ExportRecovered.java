@@ -172,6 +172,9 @@ public class ExportRecovered extends GhidraScript {
         ifc.openProgram(currentProgram);
         DecompileOptions opts = new DecompileOptions();
         opts.setProtoEvalModel("__cdecl16far");
+        // Keep integer constants as integers: the constant-pointer heuristic
+        // renders key codes as expressions like (char *)"sword4.voc" + 8.
+        opts.setInferConstantPointers(false);
         ifc.setOptions(opts);
 
         // group functions by module

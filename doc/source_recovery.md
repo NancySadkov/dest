@@ -1,145 +1,92 @@
 # Source tree recovery status
 
-_Measured by `python scripts/fbov/recovery_progress.py`._
+The rebuild is a **stub-first** reconstruction.  The Ghidra project is the
+model of the program; `src/` is a tree of compilable stubs that are replaced by
+real code one function at a time, starting at `main()`.
+
+## Method
+
+1. **Refine the Ghidra project** - recover structures, name their fields, apply
+   those types, and name arguments, locals and globals.  This is where the
+   evidence lives, and it is why every exported signature is trustworthy.
+2. **Dump the stubs** - `scripts/fbov/make_stub_tree.py` writes one C module per
+   original module into `src/`, every function a stub with its recovered
+   signature, plus `funcs.h`, `globals.h`, `types.h`, `compat.h` and `st.h`.
+3. **Replace from `main()` outwards** - follow the call graph from `main()`,
+   replace one stub with its recovered body, and keep the whole tree compiling
+   after every function.  This is the progress ratchet.
+4. **Validate** - boot the rebuild and compare its data state with
+   `STRONG.EXE`.  The original is the oracle.
+
+No step is done out of order, and nothing is committed that does not compile.
 
 ## What is in `src/`
 
-`src/` is the rebuildable tree.  Each overlay module is one or more C/asm
-files (e.g. `src/c50872.c`, `src/ov_6190.c`, `src/a77eb0.asm`); `src/dgroup.c`
-holds the exact DGROUP image and `src/st_types.h` the recovered structs.
+| File | Contents |
+|---|---|
+| `main.c`, `mouse.c`, `video.c`, `crtl.c`, `ovl.c`, `o01.c`-`o50.c` | one module each, augmented by the caller |
+| `ovr.c` | overlay entry stubs (`ovr_<name>`), forwarders to `<name>` |
+| `funcs.h` | prototype of every recovered function |
+| `globals.h`, `types.h`, `compat.h`, `st.h` | data declarations, recovered structs, compiler shims, aggregate header |
+| `types/` | hand-written Ghidra type-library includes |
 
-A function that has been converted to C is plain C.  A function that has not
-is kept as an inline byte dump:
+`scripts/fbov/build_tree.py` stages `src/` into a scratch directory, generates
+`buildall.bat` and compiles every module with Turbo C++ 3.0.
 
-```c
-void __cdecl16far f_6190_0039(void)
-{
-  unsigned char pad[0x2];
-  asm db 056h,08Bh,076h,006h, ...
-  (void)pad;
-}
-```
+`src/` is 55 modules and 1016 recovered functions plus 453 overlay forwarders.
+Every one of them compiles (`python scripts/fbov/build_tree.py --src src --work
+tmp/buildsrc` reports `compiled 56/56 modules`).
 
-`asm db` is a placeholder: it reproduces the original instructions, but it is
-not recovered source.  The long-term goal is to remove every one of them.
+A stub is empty (or returns a zeroed value).  A recovered function is plain C.
+There is no `asm db`, no byte patching and no generated data image: a stub whose
+turn has not come yet is *empty*, not a dump, so a half-finished tree is still
+honest C.
 
-## The exported tree (`src/decompiled`)
+## The overlay thunks
 
-`scripts/ghidra/ExportRecovered.java` exports the whole program: 55 modules,
-1016 decompiled functions, plus `st_types.h`, `st_globals.[ch]`,
-`st_functions.h` and the compatibility headers.  This tree is the "exporter
-source"; the goal is for all of it to compile under Turbo C++ 3.0 without
-byte-dump or artifact hacks.
-
-Current compile baseline (TC30, large model, `-w-`):
-
-```
-python scripts/fbov/build_decompiled.py      # stages + compiles all 58 files
-compiled 32/58 modules
-```
-
-The remaining modules fail on decompiler artifacts, in this order of
-frequency:
-
-| Error | Count | Cause |
-|---|---|---|
-| Too few / extra parameters | ~370 | the decompiler lost some call arguments |
-| Type mismatch in parameter | ~220 | prototype and call-site types disagree |
-| Illegal structure operation | ~170 | `far_t` used as a value/address |
-| Nonportable pointer conversion | ~140 | a word local typed as a pointer |
-| Declaration is not allowed here | ~130 | a declaration after a statement (C89) |
-| Invalid indirection | ~120 | pointer typed as a value or vice versa |
-| Incompatible type conversion | ~80 | int/pointer/struct conversion |
-| Type mismatch in redeclaration | ~60 | duplicate prototypes |
-| Undefined symbol | ~40 | missing globals / helper names |
-
-Reproducible fixes so far live in `scripts/fbov/fix_compile.py` (type names,
-`far_t` dereferences, artifact names).  Per-function fixes that needed
-judgement (e.g. restoring lost call arguments from the original bytes) are
-applied directly to the tree.
+The original binary calls `ovr_<name>` to load an overlay and jump to `<name>`.
+Borland's VROOMM generated those from `#pragma overlay`; the rebuilt tree has no
+overlay manager, so each thunk is a C forwarder with the target's recovered
+signature.  `scripts/ghidra/TypeThunks.java` gives the thunk functions in the
+Ghidra project the target prototype, which is what makes call sites decompile
+with real argument types.
 
 ## Conversion standard: behavioural C
 
-The recovered tree is now converted to **behavioural C**: the C must produce the
-same data state and I/O effects as the original, but it does not have to be
-instruction-identical.  The original `STRONG.EXE` is the oracle — the rebuild is
-booted under the deterministic harness and its memory is compared with the
-original at the same point.
+The C must produce the same state and effects as the original; it does not have
+to be instruction-identical.  `STRONG.EXE` is the oracle, exercised with the
+deterministic harness (`scripts/fbov/boot_game_det.py`), which boots a build and
+snapshots memory at a fixed point for comparison.
 
 Consequences:
 
-- `src/behaviour/` holds the behavioural C for a module.  When a file exists
-  there it is used instead of the byte-dump module in `src/`.
-- `python scripts/fbov/build_overlays.py --behaviour` compiles the whole tree
-  with those overrides, skips the patch table and the size check, and reports
-  every module whose linked size changed.
-- The byte-exact build (`build_overlays.py --verify`, `build_standalone.py`)
-  remains available for the modules that have not been converted yet; it is
-  the reference image generator, not the conversion gate.
+- Struct layout and every global's value are part of the contract.
+- Code shape, register use, helper names and local names are not.
+- A recovered function is written the way the original C plausibly looked, then
+  corrected until the rebuild's data state matches.
 
-A behavioural body may be smaller or larger than its original slot.  Sizes that
-grow need the overlay re-layout/loader work described below; sizes that shrink
-already compile and are reported by the behavioural build.
+## What has been done
 
-## Current numbers
-
-| Metric | Value |
+| Item | State |
 |---|---|
-| overlay modules | 50 |
-| functions | 967 |
-| functions still byte dumps | 849 |
-| functions in C | 118 (12%) |
-| bytes still emitted by `asm db` | 409,287 |
-| `src/ov_patch.csv` byte patches | 38,616 |
+| Ghidra structure audit | 35 structures, 497 fields; 261 auto names in 6 structs |
+| Structure refinement | `scripts/ghidra/RefineStructs.java` named all 261 fields |
+| Stub tree | 55 modules, 1016 stubs, 453 thunks; 56/56 compile |
+| Function recovery | `main()` in progress |
 
-`recovery_progress.py --detail` prints the same per module.
+## Data image
 
-## Completed modules
+`globals.h` declares all recovered globals; the definitions are added as the
+functions that reference them are recovered.  The data image is deliberately
+**not** emitted as one blob: it would exceed Turbo C's 64 KB per-object limit and
+would be a dump rather than a recovery.
 
-| Module | Size | Notes |
-|---|---|---|
-| `0x6190` | 173 B | 2/2 functions in C, verified byte-identical |
-| `0x3168` | 288 B (C: 264) | 1/1 function in behavioural C (`src/behaviour/ov_3168.c`) |
-| `0x67D1` | 311 B (C: 228) | 1/1 function in behavioural C (`src/behaviour/ov_67d1.c`) |
+## Notes
 
-Overlay `4D05` has 24 of its 34 functions in C (`src/game/ui.c`), verified
-against the original overlay by `scripts/fbov/verify_ui_bytes.py`; the
-remaining bodies (`0000`, `056E`, `0DBE`, `1296`, `1835`, `1BEE`, `23FC`,
-`26F6`, `2D79`) are the large sheet renderer, its dialogs and the management
-loop.
-
-## The `ov_patch.csv` layer
-
-`src/ov_patch.csv` overwrites individual bytes of the linked overlay output.
-It exists because Borland VROOMM encodes cross-overlay calls as
-`lcall <trampoline slot>:<loader-patched segment>`; a normal C link produces a
-direct far call instead.  The patch table restores the original operands, so
-C and byte dumps can coexist and the standalone build stays byte-identical.
-
-Retiring the table means either (a) converting modules together with a linker
-that emits the trampoline form, or (b) accepting a rebuild that links against
-the real overlay manager rather than reproducing the original image.
-
-## How a function is converted
-
-1. Disassemble the original slot.
-2. Write C in the module's file (`src/behaviour/ov_XXXX.c` for new work),
-   replacing the dump.
-3. Compile with `python scripts/fbov/build_overlays.py --behaviour`; the whole
-   tree must compile and link, and the module's size delta is reported.
-4. For the byte-exact subset, compare the linked segment with the original
-   (`--verify`), masking relative operands and OMF relocations.
-5. Validate behaviour against the original with the deterministic harness
-   (`boot_game_det.py`) once the rebuild can run the module.
-
-The behavioural build now finishes in roughly a minute: `run_dosbox.py
---until <sentinel>` stops the emulator as soon as the batch writes its done
-marker instead of waiting out the timeout.
-
-## Why full conversion is a long job
-
-851 functions remain, most in the 1–8 KB range, and each needs the
-decompiler output to be re-typed and re-shaped until TCC reproduces the exact
-instruction stream.  Small functions take one or two compile/test cycles;
-the large renderers (`5087:056E` is 2,061 bytes, `6FFE` has 1,877 dump lines)
-take many more.
+- Keyboard values are raw BIOS `INT 16h` results: scan code in the high byte,
+  ASCII in the low byte (`0x1c0d` = Enter, `0x4800` = Up, `0x2f56` = `V`).
+- The decompiler's constant-pointer heuristic renders those key values as
+  expressions such as `(char *)"sword4.voc" + 8`; exports set
+  `setInferConstantPointers(false)` so keys stay numeric.
+- `scripts/ghidra/TypeThunks.java` must be re-run after new function prototypes
+  are recovered, otherwise the thunks keep their old `undefined f()` shape.
