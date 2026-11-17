@@ -12,6 +12,10 @@ void __cdecl16far f_12f8_0020(int a, int b) {}
 int  __cdecl16far f_12bb_0052(void) { return 0; }
 void __cdecl16far f_12bb_0057(void) {}
 void __cdecl16far f_0000_2747(char far *fmt, int v) {}
+void __cdecl16far f_0000_0295(uint16_t a) {}
+void __cdecl16far f_0000_044f(void) {}
+void __cdecl16far f_0000_069f(void) {}
+void __cdecl16far f_0000_08fd(int a) {}
 
 void __cdecl16far f_12bb_005c(void) {}
 void __cdecl16far f_12bb_0061(void) {}

@@ -50,8 +50,9 @@ def copy_headers():
 
 
 def write_conf(name, cmds, wait):
+    sentinel = name + ".done"
     bat = ("@echo off\r\nmode con lines=50\r\n" + "\r\n".join(cmds) +
-           "\r\npause\r\n")
+           "\r\necho done> " + sentinel + "\r\npause\r\n")
     open(os.path.join(WORK, name + ".bat"), "w", newline="").write(bat)
     conf = (
         "[sdl]\nfullscreen = false\noutput = surface\n"
@@ -65,15 +66,16 @@ def write_conf(name, cmds, wait):
     )
     path = os.path.join(WORK, name + ".conf")
     open(path, "w").write(conf)
-    return path
+    return path, os.path.join(WORK, sentinel)
 
 
 def run(cmds, wait):
-    conf = write_conf("run", cmds, wait)
+    conf, sentinel = write_conf("run", cmds, wait)
     V.kill_dosbox()
     subprocess.run([sys.executable,
                     os.path.join(ROOT, "scripts", "fbov", "run_dosbox.py"),
-                    "--conf", conf, "--wait", str(wait)], check=True)
+                    "--conf", conf, "--wait", str(wait),
+                    "--until", sentinel], check=True)
 
 
 def patch_bss():
@@ -143,11 +145,15 @@ def main():
     ap.add_argument("--wait", type=int, default=150)
     ap.add_argument("--verify", action="store_true",
                     help="compare against game/STRONG.EXE")
+    ap.add_argument("--behaviour", action="store_true",
+                    help="behavioural mode: no patch table, no size check")
     a = ap.parse_args()
 
+    outdir = os.path.join(ROOT, "tmp",
+                          "ovcode_behaviour" if a.behaviour else "ovcode")
     shutil.rmtree(WORK, ignore_errors=True)
     os.makedirs(WORK, exist_ok=True)
-    os.makedirs(OUT, exist_ok=True)
+    os.makedirs(outdir, exist_ok=True)
     copy_headers()
 
     # Phase 1: DGROUP object from src/dgroup.c.
@@ -171,34 +177,41 @@ def main():
                                               "fbov_overlays.csv"))):
         modules.append("ov_%04x" % int(r["code_seg"], 16))
     defined = set()
+    BEH = os.path.join(SRC, "behaviour")
+
+    def pick(name):
+        p = os.path.join(BEH, name)
+        if a.behaviour and os.path.exists(p):
+            return p
+        return os.path.join(SRC, name)
+
     cmds = ["E:\\BIN\\TASM.EXE dglink.asm", "E:\\BIN\\TASM.EXE start.asm"]
     objs = ["dglink.obj", "start.obj"]
     for mod in modules:
         plan = V.chunk_plan(mod, SRC)
         if plan:
             seg = mod[3:]
-            shutil.copyfile(os.path.join(SRC, "k%s.h" % seg),
+            shutil.copyfile(pick("k%s.h" % seg),
                             os.path.join(WORK, "k%s.h" % seg))
             for kind, base in plan:
                 ext = ".c" if kind == "c" else ".asm"
-                shutil.copyfile(os.path.join(SRC, base + ext),
+                shutil.copyfile(pick(base + ext),
                                 os.path.join(WORK, base + ext))
                 if kind == "c":
                     cmds.append(tcc(base + ".c"))
                 else:
                     cmds.append("E:\\BIN\\TASM.EXE /mx " + base + ".asm")
                 objs.append(base + ".obj")
-            hdr = open(os.path.join(SRC, "k%s.h" % seg),
+            hdr = open(pick("k%s.h" % seg),
                        encoding="ascii").read()
             defined |= set(re.findall(
                 r"__cdecl16far\s+(f_[0-9a-f]{4}_[0-9a-f]+)\s*\(", hdr))
         else:
-            shutil.copyfile(os.path.join(SRC, mod + ".c"),
-                            os.path.join(WORK, mod + ".c"))
+            src = pick(mod + ".c")
+            shutil.copyfile(src, os.path.join(WORK, mod + ".c"))
             cmds.append(tcc(mod + ".c"))
             objs.append(mod + ".obj")
-            text = open(os.path.join(SRC, mod + ".c"),
-                        encoding="ascii").read()
+            text = open(src, encoding="ascii").read()
             defined |= set(re.findall(
                 r"__cdecl16far\s+(f_[0-9a-f]{4}_[0-9a-f]+)\s*\([^)]*\)\s*\{",
                 text))
@@ -251,15 +264,22 @@ def main():
         else:
             start, length = segs[name]
             code = bytearray(raw[base + start:base + start + length])
-            if len(code) != size:
-                raise SystemExit("%s: linked size %d != %d"
-                                 % (name, len(code), size))
-            for off, val in patches.get(seg, {}).items():
-                code[off] = val
-            code = bytes(code)
+            if a.behaviour:
+                code = bytes(code)
+            else:
+                if len(code) != size:
+                    raise SystemExit("%s: linked size %d != %d"
+                                     % (name, len(code), size))
+                for off, val in patches.get(seg, {}).items():
+                    code[off] = val
+                code = bytes(code)
         fn = "OV_%04X.BIN" % seg
-        open(os.path.join(OUT, fn), "wb").write(code)
-        index.append({"seg": "%04X" % seg, "size": size, "file": fn})
+        open(os.path.join(outdir, fn), "wb").write(code)
+        index.append({"seg": "%04X" % seg, "size": len(code), "file": fn})
+        if a.behaviour:
+            if len(code) != size:
+                print("%s: size %d -> %d" % (name, size, len(code)))
+            continue
         if exe is not None:
             off0 = int(r["code_file_offset"], 0)
             orig = exe[off0:off0 + size]
@@ -267,10 +287,10 @@ def main():
                 d = [i for i in range(size) if code[i] != orig[i]]
                 print("%s: %d byte(s) differ" % (name, len(d)))
                 bad += len(d)
-    open(os.path.join(OUT, "index.json"), "w").write(
+    open(os.path.join(outdir, "index.json"), "w").write(
         json.dumps(index, indent=1) + "\n")
     print("wrote %d overlay code regions to %s" %
-          (len(index), OUT))
+          (len(index), outdir))
     if a.verify:
         print("verify differences:", bad)
         if bad:
