@@ -171,3 +171,17 @@ if ((paVar1->field14_0x40 & 4) == 0) agnt_3b1d_0a53(agnt);
 
 73 fields in total still carry `field_0xNN`; each needs the same treatment
 (allocation size or access pattern), not a guess.
+
+### What blocks the remaining two
+
+- `anm_t` bytes 16..26 and 29 have **no reader in the export**: searching every
+  `* 0x1e + offset` access finds only 0, 3, 9, 0x1b and the named fields.  They
+  are file-format bytes (the record is loaded from the asset file), so naming
+  them from code is impossible; only the format documentation could fix them.
+- `bldtp_t` (`BuildingTypes[248]`) is referenced in code exactly once:
+  `BuildingTypes[0x76]._24_2_ < 0x195d` in `ovc15`.  The array lives at
+  `195d:010e`, but Ghidra's own element labels do not have a 39-byte stride
+  (`BuildingTypes[12]` is labelled at `195d:0300`, i.e. 498 bytes after
+  element 0, which is not a multiple of 39), so the array base or the record
+  size is still wrong.  That has to be resolved before its unnamed bytes can be
+  named; guessing would corrupt 248 records.
