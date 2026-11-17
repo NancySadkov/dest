@@ -958,3 +958,25 @@ a flags word and the observed bit is 0x800:
     *pbVar1 = *pbVar1 | 8;                  /* word bit 0x800    */
 
 Named flags32.  Generated struct fields: 51 -> 50 (agnt_t 10).
+
+## There is only one 149-byte table, not two
+
+Disassembly of OVC13_3d16_1045, the access that looked like
+\GMenuStrings + gindex*0x95 + 0x1f\:
+
+    3d16:10f0  MOV DX,0x95
+    3d16:10f3  IMUL DX
+    3d16:10f5  MOV DX,0x195d
+    3d16:10f8  MOV BX,AX
+    3d16:10fa  MOV DX,ES
+    3d16:10fc  MOV AL,byte ptr ES:[BX + 0x26d6]
+
+ES is 0x195d, so the address is 95d:26d6 + gindex*0x95\ - the same entity-segment
+table that agntG_t models.  The \GMenuStrings + 0x1f\ form was a symbol-relative
+rendering: GMenuStrings sits at 2410:26b7 and 0x26b7+0x1f = 0x26d6, a numeric
+coincidence, not a second array.
+
+Offset 0x1f is therefore not a field of its own: 31 decimal falls inside
+\xtents[3][3]\ (27..35) as \xtents[1][1]\, the second triple's right extent.
+Comparing it with 0 is testing for an empty frame, not reading a separate flag.
+No name is added because there is no field there.
