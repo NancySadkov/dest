@@ -420,3 +420,23 @@ its behaviour but not its unit: it is not proven whether it is a level, a size
 in pixels, or a strength.  The four dependent bytes (`agntG_t+0x3b`,
 `agnt_t+0x21`, `+0x22`, and the entity `0x31`/`0x32` pair) therefore stay
 unnamed; naming them would be a guess.
+
+## `agnt_t+0x21` / `agntG_t+0x3b` = `strength`
+
+The only consumer settles the unit: `attact_3f0b_28eb(uint *faction0, uint
+*others)` walks every agent and accumulates this byte into one of two 32-bit
+totals, split by faction (`agent[0x2f] == 0` is the player):
+
+```c
+if ((*(uint *)(agent + 0x2b) & 0xae4) == 0) {
+    if (*(char *)(agent + 0x2f) == '\0') { *faction0 += agent[0x21]; }
+    else                                  { *others   += agent[0x21]; }
+```
+
+It is therefore a per-agent combat quantity that each side sums, initialised
+from `agntG_t+0x3b` with a random perturbation and a floor of 1, and mirrored
+back into the entity's `0x31`/`0x32` (`*(byte *)(x + 0x31) = agent[0x21]`).  Both
+are named `strength`.
+
+An observer pass (`ovc21`) keeps the smallest `agent[0x22]`, a separate byte
+that is *not* this value; it stays unnamed.
