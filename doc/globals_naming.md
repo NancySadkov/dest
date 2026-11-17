@@ -13,9 +13,10 @@ data_2410_DATA_DGROUP_002F_string -> s_divide_error         ("Divide error\n")
 data_2410_DATA_DGROUP_003D_string -> s_abnormal_program_termination
 ```
 
-Applied by `scripts/ghidra/RenameStrings.java`; the full mapping with the
-original text is in `doc/strings_renamed.tsv`.  9 candidates were skipped
-because the data at the label is not printable text.
+Applied by `scripts/ghidra/RenameStrings.java`; every `s_*` string label with
+its escaped bytes is in `doc/strings_renamed.tsv` (1516 rows), so any name can
+be checked against the data it names.  9 candidates were skipped because the
+data at the label is not printable text.
 
 ## Batch 2 - mouse cursor state (4 renamed)
 

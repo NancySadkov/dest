@@ -1,438 +1,1517 @@
-address	old	value	new
-2272:0012	data_2272_DATA_FakeVdisk_0012_string	VDISK FAKE	s_vdisk_fake
-2410:002f	data_2410_DATA_DGROUP_002F_string	Divide error
-	s_divide_error
-2410:003d	data_2410_DATA_DGROUP_003D_string	Abnormal program termination
-	s_abnormal_program_termination
-2410:009a	data_2410_DATA_DGROUP_009A_string	Sorry, you may not pass time during a battle.	s_sorry_you_may_not_pass_time_during_a_battle
-2410:00c8	data_2410_DATA_DGROUP_00C8_string	Time passes...	s_time_passes
-2410:0171	data_2410_DATA_DGROUP_0171_string	Mage	s_mage
-2410:0176	data_2410_DATA_DGROUP_0176_string	Cleric	s_cleric
-2410:0183	data_2410_DATA_DGROUP_0183_string	Dwarf	s_dwarf
-2410:0189	data_2410_DATA_DGROUP_0189_string	Elf	s_elf
-2410:018d	data_2410_DATA_DGROUP_018D_string	Halfling	s_halfling
-2410:0196	data_2410_DATA_DGROUP_0196_string	fighters	s_fighters
-2410:019f	data_2410_DATA_DGROUP_019F_string	mages	s_mages
-2410:01a5	data_2410_DATA_DGROUP_01A5_string	clerics	s_clerics
-2410:01ad	data_2410_DATA_DGROUP_01AD_string	thieves	s_thieves
-2410:01b5	data_2410_DATA_DGROUP_01B5_string	dwarves	s_dwarves
-2410:01bd	data_2410_DATA_DGROUP_01BD_string	elves	s_elves
-2410:01c3	data_2410_DATA_DGROUP_01C3_string	halflings	s_halflings
-2410:01cd	data_2410_DATA_DGROUP_01CD_string	fighter	s_fighter
-2410:01d5	data_2410_DATA_DGROUP_01D5_string	mage	s_mage
-2410:01da	data_2410_DATA_DGROUP_01DA_string	cleric	s_cleric
-2410:01e1	data_2410_DATA_DGROUP_01E1_string	thief	s_thief
-2410:01e7	data_2410_DATA_DGROUP_01E7_string	dwarf	s_dwarf
-2410:01ed	data_2410_DATA_DGROUP_01ED_string	elf	s_elf
-2410:01f1	data_2410_DATA_DGROUP_01F1_string	halfling	s_halfling
-2410:0211	data_2410_DATA_DGROUP_0211_string	clerical unit	s_clerical_unit
-2410:024c	data_2410_DATA_DGROUP_024C_string	%d 	s_d
-2410:0251	data_2410_DATA_DGROUP_0251_string	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW	s_wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
-2410:027a	data_2410_DATA_DGROUP_027A_string	Archduchess	s_archduchess
-2410:0286	data_2410_DATA_DGROUP_0286_string	The seed is %lx.	s_the_seed_is_lx
-2410:0297	data_2410_DATA_DGROUP_0297_string	Increase by %d levels.  Click on character for higher levels.	s_increase_by_d_levels_click_on_character_for_
-2410:02d5	data_2410_DATA_DGROUP_02D5_string	Movement	s_movement
-2410:02de	data_2410_DATA_DGROUP_02DE_string	Recruit	s_recruit
-2410:02e6	data_2410_DATA_DGROUP_02E6_string	Train	s_train
-2410:02ec	data_2410_DATA_DGROUP_02EC_string	Build	s_build
-2410:031a	data_2410_DATA_DGROUP_031A_string	N %d W %u s %u 	s_n_d_w_u_s_u
-2410:03fb	data_2410_DATA_DGROUP_03FB_string	%s
-	s_s
-2410:049e	data_2410_DATA_DGROUP_049E_string	y1 %d yn %d y3 %d yx %d 	s_y1_d_yn_d_y3_d_yx_d
-2410:05d2	data_2410_DATA_DGROUP_05D2_string	NEW MAXSQUARE %d 	s_new_maxsquare_d
-2410:05e5	data_2410_DATA_DGROUP_05E5_string	NEW SMAXSQUARE %d 	s_new_smaxsquare_d
-2410:0712	data_2410_DATA_DGROUP_0712_string	Enter the first word.	s_enter_the_first_word
-2410:0755	data_2410_DATA_DGROUP_0755_string	%d 	s_d
-2410:075a	data_2410_DATA_DGROUP_075A_string	Bad House # %d 	s_bad_house_d
-2410:076b	data_2410_DATA_DGROUP_076B_string	(%d, %d)	s_d_d
-2410:0774	data_2410_DATA_DGROUP_0774_string	x:%d y:%d  %x %x %x %x   %x %x %x %x    	s_x_d_y_d_x_x_x_x_x_x_x_x
-2410:07d6	data_2410_DATA_DGROUP_07D6_string	Midi error	s_midi_error
-2410:07f8	data_2410_DATA_DGROUP_07F8_string	charmed %s	s_charmed_s
-2410:0803	data_2410_DATA_DGROUP_0803_string	turned %s	s_turned_s
-2410:080d	data_2410_DATA_DGROUP_080D_string	stoned %s	s_stoned_s
-2410:0817	data_2410_DATA_DGROUP_0817_string	diseased %s	s_diseased_s
-2410:0823	data_2410_DATA_DGROUP_0823_string	paralyzed %s	s_paralyzed_s
-2410:0830	data_2410_DATA_DGROUP_0830_string	sleeping %s	s_sleeping_s
-2410:083c	data_2410_DATA_DGROUP_083C_string	held %s	s_held_s
-2410:0864	data_2410_DATA_DGROUP_0864_string	(%d, %d)	s_d_d
-2410:08a1	data_2410_DATA_DGROUP_08A1_string	Intelligence reports %s unit engaged in combat. (%d, %d)	s_intelligence_reports_s_unit_engaged_in_comba
-2410:08da	data_2410_DATA_DGROUP_08DA_string	%d 	s_d
-2410:08df	data_2410_DATA_DGROUP_08DF_string	%d %d %d 	s_d_d_d
-2410:19a2	data_2410_DATA_DGROUP_19A2_string	%s: produces bows and arrows.	s_s_produces_bows_and_arrows
-2410:2733	data_2410_DATA_DGROUP_2733_string	More	s_more
-2410:273a	data_2410_DATA_DGROUP_273A_string	
-	s_empty
-2410:273d	data_2410_DATA_DGROUP_273D_string	%ssaves.txt	s_ssaves_txt
-2410:2749	data_2410_DATA_DGROUP_2749_string	%u	s_u
-2410:274c	data_2410_DATA_DGROUP_274C_string	Message delay is now %d.	s_message_delay_is_now_d
-2410:2765	data_2410_DATA_DGROUP_2765_string	Decrease message delay	s_decrease_message_delay
-2410:277c	data_2410_DATA_DGROUP_277C_string	Increase message delay	s_increase_message_delay
-2410:2793	data_2410_DATA_DGROUP_2793_string	Test	s_test
-2410:2798	data_2410_DATA_DGROUP_2798_string	Done	s_done
-2410:279d	data_2410_DATA_DGROUP_279D_string	Change message delay:	s_change_message_delay
-2410:27b3	data_2410_DATA_DGROUP_27B3_string	This message appears at the message delay of %d.	s_this_message_appears_at_the_message_delay_of
-2410:27e4	data_2410_DATA_DGROUP_27E4_string	Cancel	s_cancel
-2410:2851	data_2410_DATA_DGROUP_2851_string	Stronghold V 1.00	s_stronghold_v_1_00
-2410:2875	data_2410_DATA_DGROUP_2875_string	Game not saved: Are you sure?	s_game_not_saved_are_you_sure
-2410:2893	data_2410_DATA_DGROUP_2893_string	Save Game:	s_save_game
-2410:289e	data_2410_DATA_DGROUP_289E_string	Name this save:  (Esc to cancel)	s_name_this_save_esc_to_cancel
-2410:28bf	data_2410_DATA_DGROUP_28BF_string	Name for this save:  (Esc to cancel)	s_name_for_this_save_esc_to_cancel
-2410:28e4	data_2410_DATA_DGROUP_28E4_string	Load Game:	s_load_game
-2410:28ef	data_2410_DATA_DGROUP_28EF_string	Delete Game:	s_delete_game
-2410:28fc	data_2410_DATA_DGROUP_28FC_string	Delete %s: Are you sure?	s_delete_s_are_you_sure
-2410:2962	data_2410_DATA_DGROUP_2962_string	World 4	s_world_4
-2410:296a	data_2410_DATA_DGROUP_296A_string	World 5	s_world_5
-2410:2979	data_2410_DATA_DGROUP_2979_string	Which new world:	s_which_new_world
-2410:298a	data_2410_DATA_DGROUP_298A_string	Hostility level:	s_hostility_level
-2410:299b	data_2410_DATA_DGROUP_299B_string	Low intelligence enemies:	s_low_intelligence_enemies
-2410:29b5	data_2410_DATA_DGROUP_29B5_string	Medium intelligence enemies:	s_medium_intelligence_enemies
-2410:29d2	data_2410_DATA_DGROUP_29D2_string	High intelligence enemies:	s_high_intelligence_enemies
-2410:29ed	data_2410_DATA_DGROUP_29ED_string	Size of second wave:	s_size_of_second_wave
-2410:2a02	data_2410_DATA_DGROUP_2A02_string	Too many enemies. 60 enemies maximum.	s_too_many_enemies_60_enemies_maximum
-2410:2a28	data_2410_DATA_DGROUP_2A28_string	Resetting game...	s_resetting_game
-2410:2a3a	data_2410_DATA_DGROUP_2A3A_string	New world complete.	s_new_world_complete
-2410:45ce	data_2410_DATA_DGROUP_45CE_string	Place %s.	s_place_s
-2410:45d8	data_2410_DATA_DGROUP_45D8_string	View %s. (Cannot place)	s_view_s_cannot_place
-2410:45f0	data_2410_DATA_DGROUP_45F0_string	Create baron or baroness.	s_create_baron_or_baroness
-2410:460a	data_2410_DATA_DGROUP_460A_string	Create party member.	s_create_party_member
-2410:4689	data_2410_DATA_DGROUP_4689_string	A fortress cannot be placed among enemy units.	s_a_fortress_cannot_be_placed_among_enemy_unit
-2410:46b8	data_2410_DATA_DGROUP_46B8_string	Cannot place another fortress here.	s_cannot_place_another_fortress_here
-2410:46dc	data_2410_DATA_DGROUP_46DC_string	This location is unsuitable for a main stronghold.  %s	s_this_location_is_unsuitable_for_a_main_stron
-2410:4713	data_2410_DATA_DGROUP_4713_string	This location is unsuitable.  %s	s_this_location_is_unsuitable_s
-2410:4734	data_2410_DATA_DGROUP_4734_string	Your stronghold is too far away.	s_your_stronghold_is_too_far_away
-2410:4802	data_2410_DATA_DGROUP_4802_string	uc%lx %d len %ld loc %ld 	s_uc_lx_d_len_ld_loc_ld
-2410:481d	data_2410_DATA_DGROUP_481D_string	N UP = %d 	s_n_up_d
-2410:4829	data_2410_DATA_DGROUP_4829_string	dc%lx %d ln %ld lc %ld @%lx 	s_dc_lx_d_ln_ld_lc_ld_lx
-2410:4847	data_2410_DATA_DGROUP_4847_string	N DOWN = %d 	s_n_down_d
-2410:4b92	data_2410_DATA_DGROUP_4B92_string	STR	s_str
-2410:4b96	data_2410_DATA_DGROUP_4B96_string	INT	s_int
-2410:4b9a	data_2410_DATA_DGROUP_4B9A_string	WIS	s_wis
-2410:4b9e	data_2410_DATA_DGROUP_4B9E_string	DEX	s_dex
-2410:4ba2	data_2410_DATA_DGROUP_4BA2_string	CON	s_con
-2410:4ba6	data_2410_DATA_DGROUP_4BA6_string	CHA	s_cha
-2410:4baa	data_2410_DATA_DGROUP_4BAA_string	st	s_st
-2410:4bad	data_2410_DATA_DGROUP_4BAD_string	nd	s_nd
-2410:4bb0	data_2410_DATA_DGROUP_4BB0_string	rd	s_rd
-2410:4bb3	data_2410_DATA_DGROUP_4BB3_string	th	s_th
-2410:4bb6	data_2410_DATA_DGROUP_4BB6_string	Baron 	s_baron
-2410:4bbd	data_2410_DATA_DGROUP_4BBD_string	Baroness 	s_baroness
-2410:4bc7	data_2410_DATA_DGROUP_4BC7_string	Viscount 	s_viscount
-2410:4bd1	data_2410_DATA_DGROUP_4BD1_string	Viscountess 	s_viscountess
-2410:4bde	data_2410_DATA_DGROUP_4BDE_string	Count 	s_count
-2410:4be5	data_2410_DATA_DGROUP_4BE5_string	Countess 	s_countess
-2410:4bef	data_2410_DATA_DGROUP_4BEF_string	Marquis 	s_marquis
-2410:4bf8	data_2410_DATA_DGROUP_4BF8_string	Marquise 	s_marquise
-2410:4c02	data_2410_DATA_DGROUP_4C02_string	Duke 	s_duke
-2410:4c08	data_2410_DATA_DGROUP_4C08_string	Duchess 	s_duchess
-2410:4c11	data_2410_DATA_DGROUP_4C11_string	Archduke 	s_archduke
-2410:4c1b	data_2410_DATA_DGROUP_4C1B_string	Archduchess 	s_archduchess
-2410:4c28	data_2410_DATA_DGROUP_4C28_string	Prince 	s_prince
-2410:4c30	data_2410_DATA_DGROUP_4C30_string	Princess 	s_princess
-2410:4c3a	data_2410_DATA_DGROUP_4C3A_string	King 	s_king
-2410:4c40	data_2410_DATA_DGROUP_4C40_string	Queen 	s_queen
-2410:4c47	data_2410_DATA_DGROUP_4C47_string	Emperor 	s_emperor
-2410:4c50	data_2410_DATA_DGROUP_4C50_string	Emperess 	s_emperess
-2410:4c5a	data_2410_DATA_DGROUP_4C5A_string	Lord 	s_lord
-2410:4c60	data_2410_DATA_DGROUP_4C60_string	Lady 	s_lady
-2410:4c66	data_2410_DATA_DGROUP_4C66_string	Wizard 	s_wizard
-2410:4c6e	data_2410_DATA_DGROUP_4C6E_string	Maga 	s_maga
-2410:4c74	data_2410_DATA_DGROUP_4C74_string	Patriarch 	s_patriarch
-2410:4c7f	data_2410_DATA_DGROUP_4C7F_string	Matriarch 	s_matriarch
-2410:4c8a	data_2410_DATA_DGROUP_4C8A_string	Master Thief 	s_master_thief
-2410:4c98	data_2410_DATA_DGROUP_4C98_string	Dwarf Lord 	s_dwarf_lord
-2410:4ca4	data_2410_DATA_DGROUP_4CA4_string	Dwarf Lady 	s_dwarf_lady
-2410:4cb0	data_2410_DATA_DGROUP_4CB0_string	Lord Wizard 	s_lord_wizard
-2410:4cbd	data_2410_DATA_DGROUP_4CBD_string	Lady Maga 	s_lady_maga
-2410:4cd4	data_2410_DATA_DGROUP_4CD4_string	%s%s, 	s_s_s
-2410:4e3a	data_2410_DATA_DGROUP_4E3A_string	Cancel	s_cancel
-2410:4fb1	data_2410_DATA_DGROUP_4FB1_string	Male or female?	s_male_or_female
-2410:4fce	data_2410_DATA_DGROUP_4FCE_string	Reroll	s_reroll
-2410:5072	data_2410_DATA_DGROUP_5072_string	Place %s here.	s_place_s_here
-2410:5081	data_2410_DATA_DGROUP_5081_string	Year %d. %s	s_year_d_s
-2410:508d	data_2410_DATA_DGROUP_508D_string	Year %d. This leader %s	s_year_d_this_leader_s
-2410:50a5	data_2410_DATA_DGROUP_50A5_string	Next Leader	s_next_leader
-2410:50b1	data_2410_DATA_DGROUP_50B1_string	Auto-build    	s_auto_build
-2410:50c1	data_2410_DATA_DGROUP_50C1_string	Auto-build	s_auto_build
-2410:50cc	data_2410_DATA_DGROUP_50CC_string	Census	s_census
-2410:50d3	data_2410_DATA_DGROUP_50D3_string	Property	s_property
-2410:50dc	data_2410_DATA_DGROUP_50DC_string	Total Census	s_total_census
-2410:50e9	data_2410_DATA_DGROUP_50E9_string	All Property	s_all_property
-2410:50f6	data_2410_DATA_DGROUP_50F6_string	Help	s_help
-2410:5100	data_2410_DATA_DGROUP_5100_string	%s will now build homes automatically.	s_s_will_now_build_homes_automatically
-2410:5127	data_2410_DATA_DGROUP_5127_string	%s will no longer build houses automatically.	s_s_will_no_longer_build_houses_automatically
-2410:5165	data_2410_DATA_DGROUP_5165_string	bakeries	s_bakeries
-2410:5174	data_2410_DATA_DGROUP_5174_string	bazaars	s_bazaars
-2410:517c	data_2410_DATA_DGROUP_517C_string	builder hall	s_builder_hall
-2410:5189	data_2410_DATA_DGROUP_5189_string	castles	s_castles
-2410:5191	data_2410_DATA_DGROUP_5191_string	farms	s_farms
-2410:5197	data_2410_DATA_DGROUP_5197_string	fletchers	s_fletchers
-2410:51a1	data_2410_DATA_DGROUP_51A1_string	forester camp	s_forester_camp
-2410:51af	data_2410_DATA_DGROUP_51AF_string	forges	s_forges
-2410:51b6	data_2410_DATA_DGROUP_51B6_string	gaming halls	s_gaming_halls
-2410:51c3	data_2410_DATA_DGROUP_51C3_string	gem mines	s_gem_mines
-2410:51cd	data_2410_DATA_DGROUP_51CD_string	glassworks	s_glassworks
-2410:51d8	data_2410_DATA_DGROUP_51D8_string	gold mines	s_gold_mines
-2410:51e3	data_2410_DATA_DGROUP_51E3_string	granaries	s_granaries
-2410:51f2	data_2410_DATA_DGROUP_51F2_string	iron mines	s_iron_mines
-2410:51fd	data_2410_DATA_DGROUP_51FD_string	jewelers	s_jewelers
-2410:5206	data_2410_DATA_DGROUP_5206_string	magic mills	s_magic_mills
-2410:5212	data_2410_DATA_DGROUP_5212_string	markets	s_markets
-2410:521a	data_2410_DATA_DGROUP_521A_string	mason's halls	s_mason_s_halls
-2410:5228	data_2410_DATA_DGROUP_5228_string	outposts	s_outposts
-2410:5231	data_2410_DATA_DGROUP_5231_string	residences	s_residences
-2410:523c	data_2410_DATA_DGROUP_523C_string	scriberies	s_scriberies
-2410:5247	data_2410_DATA_DGROUP_5247_string	towers	s_towers
-2410:524e	data_2410_DATA_DGROUP_524E_string	toymakers	s_toymakers
-2410:5258	data_2410_DATA_DGROUP_5258_string	training	s_training
-2410:5293	data_2410_DATA_DGROUP_5293_string	All property.	s_all_property
-2410:52a1	data_2410_DATA_DGROUP_52A1_string	Buildings belonging to %s%s	s_buildings_belonging_to_s_s
-2410:52bd	data_2410_DATA_DGROUP_52BD_string	Buildings	s_buildings
-2410:52c7	data_2410_DATA_DGROUP_52C7_string	Total	s_total
-2410:52cd	data_2410_DATA_DGROUP_52CD_string	Level 1	s_level_1
-2410:52d5	data_2410_DATA_DGROUP_52D5_string	Level 2	s_level_2
-2410:52dd	data_2410_DATA_DGROUP_52DD_string	Level 3	s_level_3
-2410:52e5	data_2410_DATA_DGROUP_52E5_string	%d (%d)	s_d_d
-2410:54e5	data_2410_DATA_DGROUP_54E5_string	Summary	s_summary
-2410:54ed	data_2410_DATA_DGROUP_54ED_string	All levels	s_all_levels
-2410:54f8	data_2410_DATA_DGROUP_54F8_string	Total population.	s_total_population
-2410:550a	data_2410_DATA_DGROUP_550A_string	%s population, loyal to %s%s	s_s_population_loyal_to_s_s
-2410:5527	data_2410_DATA_DGROUP_5527_string	UNITS	s_units
-2410:552d	data_2410_DATA_DGROUP_552D_string	POPULATION	s_population
-2410:5538	data_2410_DATA_DGROUP_5538_string	All units loyal to %s the %s are displayed.	s_all_units_loyal_to_s_the_s_are_displayed
-2410:5564	data_2410_DATA_DGROUP_5564_string	All units are displayed.	s_all_units_are_displayed
-2410:557d	data_2410_DATA_DGROUP_557D_string	Only units of %s loyal to %s the %s are displayed.	s_only_units_of_s_loyal_to_s_the_s_are_display
-2410:55b0	data_2410_DATA_DGROUP_55B0_string	Only units of %s are displayed.	s_only_units_of_s_are_displayed
-2410:55d8	data_2410_DATA_DGROUP_55D8_string	monster	s_monster
-2410:55e5	data_2410_DATA_DGROUP_55E5_string	kill 3	s_kill_3
-2410:55ed	data_2410_DATA_DGROUP_55ED_string	kill 2 	s_kill_2
-2410:55f6	data_2410_DATA_DGROUP_55F6_string	Mine exhausted at (%d, %d).	s_mine_exhausted_at_d_d
-2410:564d	data_2410_DATA_DGROUP_564D_string	Construction abandoned.	s_construction_abandoned
-2410:5665	data_2410_DATA_DGROUP_5665_string	%s unit drowns.  (%d, %d)	s_s_unit_drowns_d_d
-2410:5680	data_2410_DATA_DGROUP_5680_string	Intelligence reports %s unit fleeing from battle. (%d, %d)	s_intelligence_reports_s_unit_fleeing_from_bat
-2410:56bb	data_2410_DATA_DGROUP_56BB_string	Intelligence reports %s unit infected with disease. (%d, %d)	s_intelligence_reports_s_unit_infected_with_di
-2410:56f8	data_2410_DATA_DGROUP_56F8_string	kill 3	s_kill_3
-2410:5700	data_2410_DATA_DGROUP_5700_string	Intelligence reports %s unit drained of energy. (%d, %d)	s_intelligence_reports_s_unit_drained_of_energ
-2410:5739	data_2410_DATA_DGROUP_5739_string	Intelligence reports %s unit destroyed. (%d, %d)	s_intelligence_reports_s_unit_destroyed_d_d
-2410:576a	data_2410_DATA_DGROUP_576A_string	Mindark's keep destroyed. (%d, %d)	s_mindark_s_keep_destroyed_d_d
-2410:578d	data_2410_DATA_DGROUP_578D_string	%s stronghold destroyed. (%d, %d)	s_s_stronghold_destroyed_d_d
-2410:57af	data_2410_DATA_DGROUP_57AF_string	Your main stronghold has been destroyed. Game over.	s_your_main_stronghold_has_been_destroyed_game
-2410:57e3	data_2410_DATA_DGROUP_57E3_string	You have defeated all enemies.	s_you_have_defeated_all_enemies
-2410:5802	data_2410_DATA_DGROUP_5802_string	You may continue playing, but your score will not be recorded.	s_you_may_continue_playing_but_your_score_will
-2410:5841	data_2410_DATA_DGROUP_5841_string	Intelligence reports %s unit cured of disease. (%d, %d)	s_intelligence_reports_s_unit_cured_of_disease
-2410:5879	data_2410_DATA_DGROUP_5879_string	Intelligence reports %s unit succombs to blast spore disease. (%d, %d)	s_intelligence_reports_s_unit_succombs_to_blas
-2410:58c0	data_2410_DATA_DGROUP_58C0_string	Spies report %s heading towards stronghold. (%d, %d)	s_spies_report_s_heading_towards_stronghold_d_
-2410:58f5	data_2410_DATA_DGROUP_58F5_string	%s is attacking.	s_s_is_attacking
-2410:5906	data_2410_DATA_DGROUP_5906_string	Intelligence reports %s attacking.	s_intelligence_reports_s_attacking
-2410:5b07	data_2410_DATA_DGROUP_5B07_string	lightning bolt	s_lightning_bolt
-2410:5b16	data_2410_DATA_DGROUP_5B16_string	towards	s_towards
-2410:5b1e	data_2410_DATA_DGROUP_5B1E_string	magic missile	s_magic_missile
-2410:5b2c	data_2410_DATA_DGROUP_5B2C_string	charm person	s_charm_person
-2410:5b39	data_2410_DATA_DGROUP_5B39_string	fireball	s_fireball
-2410:5b42	data_2410_DATA_DGROUP_5B42_string	charm monsters	s_charm_monsters
-2410:5b51	data_2410_DATA_DGROUP_5B51_string	hold person	s_hold_person
-2410:5b5d	data_2410_DATA_DGROUP_5B5D_string	sleep	s_sleep
-2410:5b63	data_2410_DATA_DGROUP_5B63_string	web	s_web
-2410:5b67	data_2410_DATA_DGROUP_5B67_string	charm	s_charm
-2410:5b6d	data_2410_DATA_DGROUP_5B6D_string	finger of death	s_finger_of_death
-2410:5b7d	data_2410_DATA_DGROUP_5B7D_string	disintegrate	s_disintegrate
-2410:5b8a	data_2410_DATA_DGROUP_5B8A_string	flesh to stone	s_flesh_to_stone
-2410:5b99	data_2410_DATA_DGROUP_5B99_string	mass charm	s_mass_charm
-2410:5ba4	data_2410_DATA_DGROUP_5BA4_string	%s casts a %s spell %s %s.	s_s_casts_a_s_spell_s_s
-2410:5bbf	data_2410_DATA_DGROUP_5BBF_string	%s takes half damage from spells.	s_s_takes_half_damage_from_spells
-2410:5be1	data_2410_DATA_DGROUP_5BE1_string	%s takes half damage from dragon breath.	s_s_takes_half_damage_from_dragon_breath
-2410:5c0a	data_2410_DATA_DGROUP_5C0A_string	%s takes half damage from lightning.	s_s_takes_half_damage_from_lightning
-2410:5c2f	data_2410_DATA_DGROUP_5C2F_string	%s is charmed by %s.	s_s_is_charmed_by_s
-2410:5c44	data_2410_DATA_DGROUP_5C44_string	%s fails to charm %s.	s_s_fails_to_charm_s
-2410:5c5a	data_2410_DATA_DGROUP_5C5A_string	%s is immune to fire.	s_s_is_immune_to_fire
-2410:5c70	data_2410_DATA_DGROUP_5C70_string	%s takes half damage from fire.	s_s_takes_half_damage_from_fire
-2410:5c90	data_2410_DATA_DGROUP_5C90_string	%s is held by %s.	s_s_is_held_by_s
-2410:5ca2	data_2410_DATA_DGROUP_5CA2_string	%s is put to sleep by %s.	s_s_is_put_to_sleep_by_s
-2410:5cbc	data_2410_DATA_DGROUP_5CBC_string	%s is entangled in a web created by %s.	s_s_is_entangled_in_a_web_created_by_s
-2410:5cf2	data_2410_DATA_DGROUP_5CF2_string	Pause	s_pause
-2410:5cf8	data_2410_DATA_DGROUP_5CF8_string	Resume	s_resume
-2410:5cff	data_2410_DATA_DGROUP_5CFF_string	%s-%c	s_s_c
-2410:5d05	data_2410_DATA_DGROUP_5D05_string	Sorry, you may not pause during a battle.	s_sorry_you_may_not_pause_during_a_battle
-2410:5d2f	data_2410_DATA_DGROUP_5D2F_string	Pause. Select 'Resume' to enable game events. Press SPACE for a single game event.	s_pause_select_resume_to_enable_game_events_pr
-2410:5d82	data_2410_DATA_DGROUP_5D82_string	Resume. Game events will now occur normally.	s_resume_game_events_will_now_occur_normally
-2410:5daf	data_2410_DATA_DGROUP_5DAF_string	Gold	s_gold
-2410:5db4	data_2410_DATA_DGROUP_5DB4_string	Fund	s_fund
-2410:5db9	data_2410_DATA_DGROUP_5DB9_string	Previous	s_previous
-2410:5dc2	data_2410_DATA_DGROUP_5DC2_string	Next	s_next
-2410:5df8	data_2410_DATA_DGROUP_5DF8_string	All enemies destroyed.	s_all_enemies_destroyed
-2410:5e0f	data_2410_DATA_DGROUP_5E0F_string	Next wave of enemies appear.	s_next_wave_of_enemies_appear
-2410:611f	data_2410_DATA_DGROUP_611F_string	                                 	s_empty
-2410:6140	data_2410_DATA_DGROUP_6140_string	4. IRQ 7  5. IRQ 10):	s_4_irq_7_5_irq_10
-2410:62d1	data_2410_DATA_DGROUP_62D1_string	Exp %ld 	s_exp_ld
-2410:638d	data_2410_DATA_DGROUP_638D_string	  %s is not readied.	s_s_is_not_readied
-2410:63a2	data_2410_DATA_DGROUP_63A2_string	  %s is ready.	s_s_is_ready
-2410:63b1	data_2410_DATA_DGROUP_63B1_string	%s is no longer ready.	s_s_is_no_longer_ready
-2410:63c8	data_2410_DATA_DGROUP_63C8_string	Ready characters are the first to come when attracted.%s	s_ready_characters_are_the_first_to_come_when_
-2410:6406	data_2410_DATA_DGROUP_6406_string	%s is now based at (%d, %d). This unit will remain home when attracted.	s_s_is_now_based_at_d_d_this_unit_will_remain_
-2410:644e	data_2410_DATA_DGROUP_644E_string	%s can now be called away from home.	s_s_can_now_be_called_away_from_home
-2410:6792	data_2410_DATA_DGROUP_6792_string	@Farmland	s_farmland
-2410:679c	data_2410_DATA_DGROUP_679C_string	@Inn	s_inn
-2410:67a1	data_2410_DATA_DGROUP_67A1_string	@Temple	s_temple
-2410:67a9	data_2410_DATA_DGROUP_67A9_string	@Forge	s_forge
-2410:67b0	data_2410_DATA_DGROUP_67B0_string	@University	s_university
-2410:67bc	data_2410_DATA_DGROUP_67BC_string	@Tower	s_tower
-2410:67c3	data_2410_DATA_DGROUP_67C3_string	@Granary	s_granary
-2410:67cc	data_2410_DATA_DGROUP_67CC_string	@Marketplace	s_marketplace
-2410:67d9	data_2410_DATA_DGROUP_67D9_string	@Tree	s_tree
-2410:67df	data_2410_DATA_DGROUP_67DF_string	@E/W wall	s_e_w_wall
-2410:67e9	data_2410_DATA_DGROUP_67E9_string	@N/S wall	s_n_s_wall
-2410:67f3	data_2410_DATA_DGROUP_67F3_string	@E/W bridge	s_e_w_bridge
-2410:67ff	data_2410_DATA_DGROUP_67FF_string	@N/S bridge	s_n_s_bridge
-2410:680b	data_2410_DATA_DGROUP_680B_string	@Guard house	s_guard_house
-2410:6818	data_2410_DATA_DGROUP_6818_string	@Thieve's Den	s_thieve_s_den
-2410:6826	data_2410_DATA_DGROUP_6826_string	@Social hall	s_social_hall
-2410:6833	data_2410_DATA_DGROUP_6833_string	@E/W gate	s_e_w_gate
-2410:683d	data_2410_DATA_DGROUP_683D_string	@N/S gate	s_n_s_gate
-2410:6847	data_2410_DATA_DGROUP_6847_string	@Elf Gardens	s_elf_gardens
-2410:6854	data_2410_DATA_DGROUP_6854_string	@Fletcher	s_fletcher
-2410:685e	data_2410_DATA_DGROUP_685E_string	@public bath	s_public_bath
-2410:686b	data_2410_DATA_DGROUP_686B_string	@mason's hall	s_mason_s_hall
-2410:6879	data_2410_DATA_DGROUP_6879_string	@jeweler	s_jeweler
-2410:6882	data_2410_DATA_DGROUP_6882_string	@glassworks	s_glassworks
-2410:688e	data_2410_DATA_DGROUP_688E_string	@outpost	s_outpost
-2410:6897	data_2410_DATA_DGROUP_6897_string	@vault	s_vault
-2410:689e	data_2410_DATA_DGROUP_689E_string	@Forester's camp	s_forester_s_camp
-2410:68af	data_2410_DATA_DGROUP_68AF_string	@Builder's hall	s_builder_s_hall
-2410:68bf	data_2410_DATA_DGROUP_68BF_string	@bazaar	s_bazaar
-2410:68c7	data_2410_DATA_DGROUP_68C7_string	@arena	s_arena
-2410:68ce	data_2410_DATA_DGROUP_68CE_string	@toymaker	s_toymaker
-2410:68d8	data_2410_DATA_DGROUP_68D8_string	@bakery	s_bakery
-2410:68e0	data_2410_DATA_DGROUP_68E0_string	@gaming hall	s_gaming_hall
-2410:68ed	data_2410_DATA_DGROUP_68ED_string	@scribery	s_scribery
-2410:68f7	data_2410_DATA_DGROUP_68F7_string	@magic mill	s_magic_mill
-2410:6903	data_2410_DATA_DGROUP_6903_string	@armory	s_armory
-2410:6a2e	data_2410_DATA_DGROUP_6A2E_string	The season has changed to summer.	s_the_season_has_changed_to_summer
-2410:6a6e	data_2410_DATA_DGROUP_6A6E_string	%d building%s repaired.	s_d_building_s_repaired
-2410:6a89	data_2410_DATA_DGROUP_6A89_string	%shigh.txt	s_shigh_txt
-2410:6a94	data_2410_DATA_DGROUP_6A94_string	Great Achievements	s_great_achievements
-2410:6aa7	data_2410_DATA_DGROUP_6AA7_string	Name	s_name
-2410:6aac	data_2410_DATA_DGROUP_6AAC_string	Enemies	s_enemies
-2410:6ab4	data_2410_DATA_DGROUP_6AB4_string	Done	s_done
-2410:6ab9	data_2410_DATA_DGROUP_6AB9_string	%c%s%s@%d	s_c_s_s_d
-2410:6ac7	data_2410_DATA_DGROUP_6AC7_string	$My %s, we in this neighborhood are doing well. We thank you for all you have done to help your people.	s_my_s_we_in_this_neighborhood_are_doing_well_
-2410:6b2f	data_2410_DATA_DGROUP_6B2F_string	lord	s_lord
-2410:6b34	data_2410_DATA_DGROUP_6B34_string	lady	s_lady
-2410:6e77	data_2410_DATA_DGROUP_6E77_string	kill 4	s_kill_4
-2410:6e7f	data_2410_DATA_DGROUP_6E7F_string	are	s_are
-2410:6e83	data_2410_DATA_DGROUP_6E83_string	is	s_is
-2410:6e86	data_2410_DATA_DGROUP_6E86_string	The %d unit%s loyal to %s %s %d%% recruiting, %d%% training, and %d%% building.	s_the_d_unit_s_loyal_to_s_s_d_recruiting_d_tra
-2410:6ed6	data_2410_DATA_DGROUP_6ED6_string	%s fails to turn.	s_s_fails_to_turn
-2410:6ee8	data_2410_DATA_DGROUP_6EE8_string	%s cannot turn.	s_s_cannot_turn
-2410:6ef8	data_2410_DATA_DGROUP_6EF8_string	%s destroys %d undead.	s_s_destroys_d_undead
-2410:6f0f	data_2410_DATA_DGROUP_6F0F_string	%s turns %d undead.	s_s_turns_d_undead
-2410:6f23	data_2410_DATA_DGROUP_6F23_string	Building %d %s.	s_building_d_s
-2410:6f3d	data_2410_DATA_DGROUP_6F3D_string	%d 	s_d
-2410:6f42	data_2410_DATA_DGROUP_6F42_string	You cannot see the terrain here.	s_you_cannot_see_the_terrain_here
-2410:6f63	data_2410_DATA_DGROUP_6F63_string	%s is paralyzed by %s.	s_s_is_paralyzed_by_s
-2410:6f7a	data_2410_DATA_DGROUP_6F7A_string	%s is stoned by %s.	s_s_is_stoned_by_s
-2410:6f8e	data_2410_DATA_DGROUP_6F8E_string	%s is no longer charmed.	s_s_is_no_longer_charmed
-2410:6feb	data_2410_DATA_DGROUP_6FEB_string	%s casts %s on %s to heal %d hitpoint%s for a total of %d hitpoint%s.	s_s_casts_s_on_s_to_heal_d_hitpoint_s_for_a_to
-2410:7031	data_2410_DATA_DGROUP_7031_string	%s takes no damage from non-magical weapons.	s_s_takes_no_damage_from_non_magical_weapons
-2410:705e	data_2410_DATA_DGROUP_705E_string	%s takes no damage from less than +2 weapons.	s_s_takes_no_damage_from_less_than_2_weapons
-2410:708c	data_2410_DATA_DGROUP_708C_string	%s takes no damage from missile attacks.	s_s_takes_no_damage_from_missile_attacks
-2410:70b5	data_2410_DATA_DGROUP_70B5_string	%s poisons %s.	s_s_poisons_s
-2410:70c4	data_2410_DATA_DGROUP_70C4_string	%s infects %s with blast spore disease.	s_s_infects_s_with_blast_spore_disease
-2410:70ec	data_2410_DATA_DGROUP_70EC_string	%s drains a level from %s.	s_s_drains_a_level_from_s
-2410:7107	data_2410_DATA_DGROUP_7107_string	%s drains all energy from %s.	s_s_drains_all_energy_from_s
-2410:7125	data_2410_DATA_DGROUP_7125_string	%s drains two levels from %s.	s_s_drains_two_levels_from_s
-2410:7165	data_2410_DATA_DGROUP_7165_string	Demo cancelled.	s_demo_cancelled
-2410:7175	data_2410_DATA_DGROUP_7175_string	Nasher	s_nasher
-2410:717c	data_2410_DATA_DGROUP_717C_string	Fordor	s_fordor
-2410:7183	data_2410_DATA_DGROUP_7183_string	Kaunas	s_kaunas
-2410:718a	data_2410_DATA_DGROUP_718A_string	Mindark	s_mindark
-2410:7192	data_2410_DATA_DGROUP_7192_string	A new land lies before you. Choose carefully	s_a_new_land_lies_before_you_choose_carefully
-2410:71bf	data_2410_DATA_DGROUP_71BF_string	where you settle.	s_where_you_settle
-2410:71d1	data_2410_DATA_DGROUP_71D1_string	Your goal: Create a thriving community.	s_your_goal_create_a_thriving_community
-2410:71f9	data_2410_DATA_DGROUP_71F9_string	Balance building, money, and food production	s_balance_building_money_and_food_production
-2410:7226	data_2410_DATA_DGROUP_7226_string	to keep your people happy.	s_to_keep_your_people_happy
-2410:7241	data_2410_DATA_DGROUP_7241_string	Your world will be filled with a full range	s_your_world_will_be_filled_with_a_full_range
-2410:726d	data_2410_DATA_DGROUP_726D_string	of official D&D@ game characters.	s_of_official_d_d_game_characters
-2410:728f	data_2410_DATA_DGROUP_728F_string	You are not alone in this pristine land.	s_you_are_not_alone_in_this_pristine_land
-2410:72b8	data_2410_DATA_DGROUP_72B8_string	Official D&D@ game monsters will fight to	s_official_d_d_game_monsters_will_fight_to
-2410:72e2	data_2410_DATA_DGROUP_72E2_string	destroy your city.	s_destroy_your_city
-2410:72f5	data_2410_DATA_DGROUP_72F5_string	Force and fury meet magic spells as battles	s_force_and_fury_meet_magic_spells_as_battles
-2410:7321	data_2410_DATA_DGROUP_7321_string	play out in the courtyards of mighty castles.	s_play_out_in_the_courtyards_of_mighty_castles
-2410:734f	data_2410_DATA_DGROUP_734F_string	Your people will fight bravely and work	s_your_people_will_fight_bravely_and_work
-2410:7377	data_2410_DATA_DGROUP_7377_string	hard. Your city will grow...	s_hard_your_city_will_grow
-2410:7394	data_2410_DATA_DGROUP_7394_string	and grow...	s_and_grow
-2410:73a0	data_2410_DATA_DGROUP_73A0_string	                     and grow...	s_and_grow
-2410:73c1	data_2410_DATA_DGROUP_73C1_string	But beware the evil Mindark, whose	s_but_beware_the_evil_mindark_whose
-2410:73e4	data_2410_DATA_DGROUP_73E4_string	hordes destroyed your homeland long ago.	s_hordes_destroyed_your_homeland_long_ago
-2410:740d	data_2410_DATA_DGROUP_740D_string	If you lead with wisdom and cunning...	s_if_you_lead_with_wisdom_and_cunning
-2410:7434	data_2410_DATA_DGROUP_7434_string	If you fight with valor and guile...	s_if_you_fight_with_valor_and_guile
-2410:7459	data_2410_DATA_DGROUP_7459_string	You will truly be master of your...	s_you_will_truly_be_master_of_your
-2410:74b8	data_2410_DATA_DGROUP_74B8_string	Choose party to build for.  Now building for %s the %s.	s_choose_party_to_build_for_now_building_for_s
-2410:74f0	data_2410_DATA_DGROUP_74F0_string	%s:	s_s
-2410:74f4	data_2410_DATA_DGROUP_74F4_string	 You can only place a single arena.	s_you_can_only_place_a_single_arena
-2410:7518	data_2410_DATA_DGROUP_7518_string	 Bridges must be near water's edge.	s_bridges_must_be_near_water_s_edge
-2410:753c	data_2410_DATA_DGROUP_753C_string	 Next outpost available at rank %s.	s_next_outpost_available_at_rank_s
-2410:7560	data_2410_DATA_DGROUP_7560_string	 No more outposts are available.	s_no_more_outposts_are_available
-2410:7581	data_2410_DATA_DGROUP_7581_string	 Requires a rank of %s.	s_requires_a_rank_of_s
-2410:7599	data_2410_DATA_DGROUP_7599_string	 Requires a unit of level %d.	s_requires_a_unit_of_level_d
-2410:75b7	data_2410_DATA_DGROUP_75B7_string	 Location is too narrow for %s.	s_location_is_too_narrow_for_s
-2410:75d7	data_2410_DATA_DGROUP_75D7_string	 Location is too narrow for a %s.	s_location_is_too_narrow_for_a_s
-2410:75f9	data_2410_DATA_DGROUP_75F9_string	 Walls must be near land.	s_walls_must_be_near_land
-2410:7613	data_2410_DATA_DGROUP_7613_string	Buildings cannot be placed over water.	s_buildings_cannot_be_placed_over_water
-2410:763a	data_2410_DATA_DGROUP_763A_string	This location is unsuitable for buildings.	s_this_location_is_unsuitable_for_buildings
-2410:7665	data_2410_DATA_DGROUP_7665_string	 It will cost %s the %s %d gp. 	s_it_will_cost_s_the_s_d_gp
-2410:7685	data_2410_DATA_DGROUP_7685_string	Place	s_place
-2410:768b	data_2410_DATA_DGROUP_768B_string	Change Building	s_change_building
-2410:769b	data_2410_DATA_DGROUP_769B_string	Change Party	s_change_party
-2410:76a8	data_2410_DATA_DGROUP_76A8_string	Done	s_done
-2410:76ad	data_2410_DATA_DGROUP_76AD_string	Party member %s doesn't have enough gold to construct a %s.	s_party_member_s_doesn_t_have_enough_gold_to_c
-2410:76e9	data_2410_DATA_DGROUP_76E9_string	Too many construction sites.	s_too_many_construction_sites
-2410:7706	data_2410_DATA_DGROUP_7706_string	Excavate	s_excavate
-2410:770f	data_2410_DATA_DGROUP_770F_string	Remove	s_remove
-2410:7716	data_2410_DATA_DGROUP_7716_string	Change party	s_change_party
-2410:7723	data_2410_DATA_DGROUP_7723_string	%s: Search this location for minerals?  Active party is %s the %s.	s_s_search_this_location_for_minerals_active_p
-2410:7766	data_2410_DATA_DGROUP_7766_string	No minerals were found.	s_no_minerals_were_found
-2410:777e	data_2410_DATA_DGROUP_777E_string	Gems discovered.	s_gems_discovered
-2410:778f	data_2410_DATA_DGROUP_778F_string	Iron deposits discovered.	s_iron_deposits_discovered
-2410:77a9	data_2410_DATA_DGROUP_77A9_string	Gold discovered.	s_gold_discovered
-2410:77ba	data_2410_DATA_DGROUP_77BA_string	No	s_no
-2410:77bd	data_2410_DATA_DGROUP_77BD_string	Remove %s permanently. Are you sure?	s_remove_s_permanently_are_you_sure
-2410:77f0	data_2410_DATA_DGROUP_77F0_string	Claim	s_claim
-2410:77f6	data_2410_DATA_DGROUP_77F6_string	Chop down	s_chop_down
-2410:7800	data_2410_DATA_DGROUP_7800_string	%s: Claim this tree? Harvest value is %d gold. Active party is %s the %s.	s_s_claim_this_tree_harvest_value_is_d_gold_ac
-2410:784a	data_2410_DATA_DGROUP_784A_string	Forest claimed. This forest creates %d gold of income and feeds %d %s.	s_forest_claimed_this_forest_creates_d_gold_of
-2410:7891	data_2410_DATA_DGROUP_7891_string	Tree cut down. %d gold obtained.	s_tree_cut_down_d_gold_obtained
-2410:78b2	data_2410_DATA_DGROUP_78B2_string	Maintenance cost is	s_maintenance_cost_is
-2410:78c6	data_2410_DATA_DGROUP_78C6_string	Income created is	s_income_created_is
-2410:78d8	data_2410_DATA_DGROUP_78D8_string	..	s_empty
-2410:78db	data_2410_DATA_DGROUP_78DB_string	...	s_empty
-2410:78ed	data_2410_DATA_DGROUP_78ED_string	%s: %d%% complete. Owned by %s.	s_s_d_complete_owned_by_s
-2410:790d	data_2410_DATA_DGROUP_790D_string	%s (%u/%u): Held by %s.	s_s_u_u_held_by_s
-2410:7925	data_2410_DATA_DGROUP_7925_string	 Home a unit here to halt damage.	s_home_a_unit_here_to_halt_damage
-2410:7947	data_2410_DATA_DGROUP_7947_string	%s: Held by %s.	s_s_held_by_s
-2410:7957	data_2410_DATA_DGROUP_7957_string	Water:	s_water
-2410:795e	data_2410_DATA_DGROUP_795E_string	Shore:	s_shore
-2410:7965	data_2410_DATA_DGROUP_7965_string	%s:	s_s
-2410:7969	data_2410_DATA_DGROUP_7969_string	Suspend	s_suspend
-2410:7971	data_2410_DATA_DGROUP_7971_string	Change party	s_change_party
-2410:797e	data_2410_DATA_DGROUP_797E_string	%s: %d%% complete. Owned by %s. Active party is %s the %s.	s_s_d_complete_owned_by_s_active_party_is_s_th
-2410:79b9	data_2410_DATA_DGROUP_79B9_string	Clearing of land: %d%% complete. Owned by %s. Active party is %s the %s.	s_clearing_of_land_d_complete_owned_by_s_activ
-2410:7a02	data_2410_DATA_DGROUP_7A02_string	No	s_no
-2410:7a05	data_2410_DATA_DGROUP_7A05_string	Construction of %s will be permanently suspended. Are you sure?	s_construction_of_s_will_be_permanently_suspen
-2410:7a45	data_2410_DATA_DGROUP_7A45_string	%s (%d/%d): Owned by %s. Active party is %s the %s.	s_s_d_d_owned_by_s_active_party_is_s_the_s
-2410:7aa5	data_2410_DATA_DGROUP_7AA5_string	%s: Active party is %s the %s.	s_s_active_party_is_s_the_s
-2410:7eaa	data_2410_DATA_DGROUP_7EAA_string	%s: Costs %d gold of income and provides visibility of %d squares n/s, %d squares e/w.	s_s_costs_d_gold_of_income_and_provides_visibi
-2410:7f01	data_2410_DATA_DGROUP_7F01_string	%s: Costs %d gold of income and provides storage for %u food.	s_s_costs_d_gold_of_income_and_provides_storag
-2410:806a	data_2410_DATA_DGROUP_806A_string	Salvage	s_salvage
-2410:808a	data_2410_DATA_DGROUP_808A_string	Demolish	s_demolish
-2410:8093	data_2410_DATA_DGROUP_8093_string	Repair	s_repair
-2410:80af	data_2410_DATA_DGROUP_80AF_string	Upgrade	s_upgrade
-2410:80cd	data_2410_DATA_DGROUP_80CD_string	Information	s_information
-2410:80d9	data_2410_DATA_DGROUP_80D9_string	New Owner	s_new_owner
-2410:80e3	data_2410_DATA_DGROUP_80E3_string	Change Party	s_change_party
-2410:811f	data_2410_DATA_DGROUP_811F_string	Get rid of %s permanently. Are you sure?	s_get_rid_of_s_permanently_are_you_sure
-2410:81dc	data_2410_DATA_DGROUP_81DC_string	%ld experience obtained. %ld experience given to each unit. %ld gold recovered.	s_ld_experience_obtained_ld_experience_given_t
-2410:8340	data_2410_DATA_DGROUP_8340_string	house1.txt	s_house1_txt
-2410:8436	data_2410_DATA_DGROUP_8436_string	%s is no longer paralyzed.	s_s_is_no_longer_paralyzed
-2410:8451	data_2410_DATA_DGROUP_8451_string	%s breaks free of the web.	s_s_breaks_free_of_the_web
-2410:846c	data_2410_DATA_DGROUP_846C_string	%s regenerates 3 hitpoints to a total of %d hitpoints.	s_s_regenerates_3_hitpoints_to_a_total_of_d_hi
-2410:84a3	data_2410_DATA_DGROUP_84A3_string	%d 	s_d
-2410:88bd	data_2410_DATA_DGROUP_88BD_string	COMPAQ	s_compaq
+address	name	value
+2272:0012	s_vdisk_fake	VDISK FAKE
+2410:002f	s_divide_error	Divide error\r\n
+2410:003d	s_abnormal_program_termination	Abnormal program termination\r\n
+2410:0095	s__d_2410_0095	%d \r
+2410:009a	s_sorry_you_may_not_pass_time_during_a_battle	Sorry, you may not pass time during a battle.
+2410:00c8	s_time_passes	Time passes...
+2410:0169	s_Fighter_2410_0169	Fighter
+2410:0171	s_mage	Mage
+2410:0176	s_cleric	Cleric
+2410:017d	s_Thief_2410_017d	Thief
+2410:0183	s_dwarf	Dwarf
+2410:0189	s_elf	Elf
+2410:018d	s_halfling	Halfling
+2410:0196	s_fighters	fighters
+2410:019f	s_mages	mages
+2410:01a5	s_clerics	clerics
+2410:01ad	s_thieves	thieves
+2410:01b5	s_dwarves	dwarves
+2410:01bd	s_elves	elves
+2410:01c3	s_halflings	halflings
+2410:01cd	s_fighter	fighter
+2410:01d5	s_mage	mage
+2410:01da	s_cleric	cleric
+2410:01e1	s_thief	thief
+2410:01e7	s_dwarf	dwarf
+2410:01ed	s_elf	elf
+2410:01f1	s_halfling	halfling
+2410:01fa	s_fighter_unit_2410_01fa	fighter unit
+2410:0207	s_mage_unit_2410_0207	mage unit
+2410:0211	s_clerical_unit	clerical unit
+2410:021f	s_thief_unit_2410_021f	thief unit
+2410:022a	s_dwarf_unit_2410_022a	dwarf unit
+2410:0235	s_elf_unit_2410_0235	elf unit
+2410:023e	s_halfling_unit_2410_023e	halfling unit
+2410:024c	s_d	%d \r
+2410:0251	s_wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+2410:027a	s_archduchess	Archduchess
+2410:0286	s_the_seed_is_lx	The seed is %lx.
+2410:0297	s_increase_by_d_levels_click_on_character_for_	Increase by %d levels.  Click on character for higher levels.
+2410:02d5	s_movement	Movement
+2410:02de	s_recruit	Recruit
+2410:02e6	s_train	Train
+2410:02ec	s_build	Build
+2410:02f5	s_Error_4__d_2410_02f5	Error 4 %d \r
+2410:031a	s_n_d_w_u_s_u	N %d W %u s %u \r
+2410:032b	s_Filename__d__s_2410_032b	Filename %d %s  \r
+2410:0352	s_Bad_'game.cfg'_file._Please_reco_2410_0352	Bad 'game.cfg' file. Please reconfigure.
+2410:037b	s_Cannot_find_sound_card._2410_037b	Cannot find sound card.
+2410:0393	s_Cannot_find_music_card._2410_0393	Cannot find music card.
+2410:03ab	s_Cannot_create_configuration_file_2410_03ab	Cannot create configuration file.  Stronghold aborted.
+2410:03e2	s_Mouse_error._2410_03e2	Mouse error.
+2410:03ef	s_Error__d_2410_03ef	\n\rError %d\n
+2410:03fb	s_s	%s\n
+2410:03ff	s_Error_%d_%d._(Give_Cathryn_BOTH_n_2410_03ff	Error %d %d.  (Give Cathryn BOTH numbers.)\n
+2410:0492	s_error_27__2410_0492	error(27) \r
+2410:049e	s_y1_d_yn_d_y3_d_yx_d	y1 %d yn %d y3 %d yx %d 
+2410:04e1	s__2410_04e1	\r
+2410:05c7	s_debug_2410_05c7	debug
+2410:05cd	s_grab_2410_05cd	grab
+2410:05d2	s_new_maxsquare_d	NEW MAXSQUARE %d \r
+2410:05e5	s_new_smaxsquare_d	NEW SMAXSQUARE %d \r
+2410:05f9	s_choose_2410_05f9	choose
+2410:0600	s_movement_2410_0600	movement
+2410:0609	s_button_2410_0609	button
+2410:0610	s_gold_2410_0610	gold
+2410:0615	s_plan_2410_0615	plan
+2410:061a	s_hit_2410_061a	hit
+2410:061e	s_squares_2410_061e	squares
+2410:0626	s_swamps_2410_0626	swamps
+2410:062d	s_would_2410_062d	would
+2410:0633	s_repair_2410_0633	repair
+2410:063a	s_controlling_2410_063a	controlling
+2410:0646	s_setting_2410_0646	setting
+2410:064e	s_sage_2410_064e	sage
+2410:0653	s_when_2410_0653	when
+2410:0658	s_home_2410_0658	home
+2410:065d	s_needed_2410_065d	needed
+2410:0664	s_screen_2410_0664	screen
+2410:066b	s_spellcasting_2410_066b	spellcasting
+2410:0678	s_opponents_2410_0678	opponents
+2410:0682	s_expense_2410_0682	expense
+2410:068a	s_after_2410_068a	after
+2410:0690	s_dots_2410_0690	dots
+2410:0695	s_longbow_2410_0695	longbow
+2410:069d	s_spells_2410_069d	spells
+2410:06a4	s_constructing_2410_06a4	constructing
+2410:06b1	s_Stronghold_copy_protection._2410_06b1	Stronghold copy protection.
+2410:06cd	s_Turn_to_page_#%d_of_the_manual._2410_06cd	Turn to page #%d of the manual.
+2410:06ed	s_Including_titles__count_to_line___2410_06ed	Including titles, count to line #%d.
+2410:0712	s_enter_the_first_word	Enter the first word.
+2410:0755	s_d	%d \r
+2410:075a	s_bad_house_d	Bad House # %d \r
+2410:076b	s_d_d	(%d, %d)
+2410:0774	s_x_d_y_d_x_x_x_x_x_x_x_x	x:%d y:%d  %x %x %x %x   %x %x %x %x    \r
+2410:07d6	s_midi_error	Midi error\r
+2410:07f8	s_charmed_s	charmed %s
+2410:0803	s_turned_s	turned %s
+2410:080d	s_stoned_s	stoned %s
+2410:0817	s_diseased_s	diseased %s
+2410:0823	s_paralyzed_s	paralyzed %s
+2410:0830	s_sleeping_s	sleeping %s
+2410:083c	s_held_s	held %s
+2410:0864	s_d_d	(%d, %d)
+2410:08a1	s_intelligence_reports_s_unit_engaged_in_comba	Intelligence reports %s unit engaged in combat. (%d, %d)
+2410:08da	s_d	%d \r
+2410:08df	s_d_d_d	%d %d %d \r
+2410:08ea	s__d__d__d_2410_08ea	%d %d %d  \r
+2410:08f6	s_You_cannot_attract_units_to_this_2410_08f6	You cannot attract units to this location.
+2410:0921	s_Attracting__d_of_a_possible__d___2410_0921	Attracting %d of a possible %d %s%s to this location.
+2410:19a2	s_s_produces_bows_and_arrows	%s: produces bows and arrows.
+2410:19c0	s_%s:_increases_unit_size._2410_19c0	%s: increases unit size.
+2410:19d9	s_%s:_enhances_building_speed._2410_19d9	%s: enhances building speed.
+2410:19f6	s__s__produces_rings_of_protection_2410_19f6	%s: produces rings of protection.
+2410:1a18	s__s__creates_mirrors_for_medsae_c_2410_1a18	%s: creates mirrors for medsae combat and lenses for towers.
+2410:1a55	s_%s:_populates_a_remote_location._2410_1a55	%s: populates a remote location.
+2410:1a76	s_%s:_provides_gold_storage._2410_1a76	%s: provides gold storage.
+2410:1a91	s_%s:_enables_claiming_of_trees._2410_1a91	%s: enables claiming of trees.
+2410:1ab0	s__s__repairs_buildings_automatica_2410_1ab0	%s: repairs buildings automatically.
+2410:1ad5	s_%s:_provides_for_food_trade._2410_1ad5	%s: provides for food trade.
+2410:1af2	s__s__enhances_training_for_entire_2410_1af2	%s: enhances training for entire stronghold.
+2410:1b1f	s_%s:_creates_income._2410_1b1f	%s: creates income.
+2410:1b33	s_%s:_produces_food_in_winter._2410_1b33	%s: produces food in winter.
+2410:1b50	s_%s:_creates_gambling_income._2410_1b50	%s: creates gambling income.
+2410:1b6d	s_%s:_creates_income._2410_1b6d	%s: creates income.
+2410:1b81	s_%s:_enhances_weapons_production._2410_1b81	%s: enhances weapons production.
+2410:1ba2	s_%s:_creates_food_and_income._2410_1ba2	%s: creates food and income.
+2410:1bbf	s_%s:_enhances_training._2410_1bbf	%s: enhances training.
+2410:1bd6	s_%s:_creates_arrows._2410_1bd6	%s: creates arrows.
+2410:1bea	s_%s:_provides_more_housing._2410_1bea	%s: provides more housing.
+2410:1c05	s_%s:_provides_housing_and_income._2410_1c05	%s: provides housing and income.
+2410:1c26	s_%s:_blocks_passage._2410_1c26	%s: blocks passage.
+2410:1c3a	s_%s:_allows_passage_over_water._2410_1c3a	%s: allows passage over water.
+2410:1c59	s__s__provides_storage_and_distrib_2410_1c59	%s: provides storage and distribution of food.
+2410:1c88	s__s__adds_to_crop_value_and_gives_2410_1c88	%s: adds to crop value and gives access to fund.
+2410:1cb9	s_%s:_blocks_enemy_passage._Allows_2410_1cb9	%s: blocks enemy passage. Allows friendly passage.
+2410:1cec	s_Chop_Down_2410_1cec	Chop Down
+2410:1cf6	s_Remove_2410_1cf6	Remove
+2410:1cfd	s_Fill_in_2410_1cfd	Fill in
+2410:1d11	s_undeveloped_land_2410_1d11	undeveloped land
+2410:1d22	s_plot_2410_1d22	plot
+2410:1d27	s_farm_2410_1d27	farm
+2410:1d2c	s_plantation_2410_1d2c	plantation
+2410:1d37	s_guest_house_2410_1d37	guest house
+2410:1d43	s_tavern_2410_1d43	tavern
+2410:1d4a	s_inn_2410_1d4a	inn
+2410:1d4e	s_magicians__room_2410_1d4e	magicians' room
+2410:1d5e	s_magicians__cottage_2410_1d5e	magicians' cottage
+2410:1d71	s_magician_s_manor_2410_1d71	magician's manor
+2410:1d82	s_shrine_2410_1d82	shrine
+2410:1d89	s_church_2410_1d89	church
+2410:1d90	s_temple_2410_1d90	temple
+2410:1d97	s_thieves__den_2410_1d97	thieves' den
+2410:1da4	s_black_market_2410_1da4	black market
+2410:1db1	s_thieves__guild_2410_1db1	thieves' guild
+2410:1dc0	s_guard_house_2410_1dc0	guard house
+2410:1dcc	s_drill_house_2410_1dcc	drill house
+2410:1dd8	s_training_hall_2410_1dd8	training hall
+2410:1de6	s_elf_house_2410_1de6	elf house
+2410:1df0	s_elven_cottage_2410_1df0	elven cottage
+2410:1dfe	s_elven_home_2410_1dfe	elven home
+2410:1e09	s_fighters__residence_2410_1e09	fighters' residence
+2410:1e1d	s_fighters__house_2410_1e1d	fighters' house
+2410:1e2d	s_fighters__mansion_2410_1e2d	fighters' mansion
+2410:1e3f	s_mage_school_2410_1e3f	mage school
+2410:1e4b	s_mage_college_2410_1e4b	mage college
+2410:1e58	s_mage_university_2410_1e58	mage university
+2410:1e68	s_small_tower_2410_1e68	small tower
+2410:1e74	s_large_tower_2410_1e74	large tower
+2410:1e80	s_storage_shed_2410_1e80	storage shed
+2410:1e8d	s_storehouse_2410_1e8d	storehouse
+2410:1e98	s_granary_2410_1e98	granary
+2410:1ea0	s_thieves__hut_2410_1ea0	thieves' hut
+2410:1ead	s_thieves__shack_2410_1ead	thieves' shack
+2410:1ebc	s_thieves__house_2410_1ebc	thieves' house
+2410:1ecb	s_clerics__chamber_2410_1ecb	clerics' chamber
+2410:1edc	s_clerics__refuge_2410_1edc	clerics' refuge
+2410:1eec	s_clerics__retreat_2410_1eec	clerics' retreat
+2410:1efd	s_halfling_lodge_2410_1efd	halfling lodge
+2410:1f0c	s_halfling_abode_2410_1f0c	halfling abode
+2410:1f1b	s_halfling_dwelling_2410_1f1b	halfling dwelling
+2410:1f2d	s_drill_hall_2410_1f2d	drill hall
+2410:1f38	s_marketplace_2410_1f38	marketplace
+2410:1f44	s_dwarven_home_2410_1f44	dwarven home
+2410:1f51	s_dwarven_hall_2410_1f51	dwarven hall
+2410:1f5e	s_dwarven_mansion_2410_1f5e	dwarven mansion
+2410:1f6e	s_metalworks_2410_1f6e	metalworks
+2410:1f79	s_swordmaker_s_shop_2410_1f79	swordmaker's shop
+2410:1f8b	s_forge_2410_1f8b	forge
+2410:1f91	s_social_club_2410_1f91	social club
+2410:1f9d	s_hall_of_fellowship_2410_1f9d	hall of fellowship
+2410:1fb0	s_social_hall_2410_1fb0	social hall
+2410:1fbc	s_tree_2410_1fbc	tree
+2410:1fc1	s_grove_2410_1fc1	grove
+2410:1fc7	s_forest_2410_1fc7	forest
+2410:1fce	s_elf_tree_2410_1fce	elf tree
+2410:1fd7	s_elf_grove_2410_1fd7	elf grove
+2410:1fe1	s_elf_forest_2410_1fe1	elf forest
+2410:1fec	s_rock_2410_1fec	rock
+2410:1ff1	s_iron_mine_2410_1ff1	iron mine
+2410:1ffb	s_gold_mine_2410_1ffb	gold mine
+2410:2005	s_gem_mine_2410_2005	gem mine
+2410:200e	s_fighter_keep_2410_200e	fighter keep
+2410:201b	s_fighter_fortress_2410_201b	fighter fortress
+2410:202c	s_fighter_castle_2410_202c	fighter castle
+2410:203b	s_thief_keep_2410_203b	thief keep
+2410:2046	s_thief_fortress_2410_2046	thief fortress
+2410:2055	s_thief_castle_2410_2055	thief castle
+2410:2062	s_mage_keep_2410_2062	mage keep
+2410:206c	s_mage_fortress_2410_206c	mage fortress
+2410:207a	s_mage_castle_2410_207a	mage castle
+2410:2086	s_cleric_keep_2410_2086	cleric keep
+2410:2092	s_cleric_fortress_2410_2092	cleric fortress
+2410:20a2	s_cleric_castle_2410_20a2	cleric castle
+2410:20b0	s_elf_keep_2410_20b0	elf keep
+2410:20b9	s_elf_fortress_2410_20b9	elf fortress
+2410:20c6	s_elf_castle_2410_20c6	elf castle
+2410:20d1	s_Mindark_s_keep_2410_20d1	Mindark's keep
+2410:20e0	s_tomb_2410_20e0	tomb
+2410:20e5	s_giant_mound_2410_20e5	giant mound
+2410:20f1	s_dragon_s_lair_2410_20f1	dragon's lair
+2410:20ff	s_main_castle_2410_20ff	main castle
+2410:210b	s_fortified_castle_2410_210b	fortified castle
+2410:211c	s_stronghold_2410_211c	stronghold
+2410:2127	s_dwarf_keep_2410_2127	dwarf keep
+2410:2132	s_dwarf_fortress_2410_2132	dwarf fortress
+2410:2141	s_dwarf_castle_2410_2141	dwarf castle
+2410:214e	s_halfling_keep_2410_214e	halfling keep
+2410:215c	s_halfling_fortress_2410_215c	halfling fortress
+2410:216e	s_halfling_castle_2410_216e	halfling castle
+2410:217e	s_swamp_2410_217e	swamp
+2410:2184	s_e_w_wall_2410_2184	e/w wall
+2410:218d	s_n_s_wall_2410_218d	n/s wall
+2410:2196	s_corner_wall_2410_2196	corner wall
+2410:21a2	s_sturdy_e_w_wall_2410_21a2	sturdy e/w wall
+2410:21b2	s_sturdy_n_s_wall_2410_21b2	sturdy n/s wall
+2410:21c2	s_sturdy_corner_wall_2410_21c2	sturdy corner wall
+2410:21d5	s_manned_e_w_wall_2410_21d5	manned e/w wall
+2410:21e5	s_manned_n_s_wall_2410_21e5	manned n/s wall
+2410:21f5	s_manned_corner_wall_2410_21f5	manned corner wall
+2410:2208	s_e_w_bridge_2410_2208	e/w bridge
+2410:2213	s_n_s_bridge_2410_2213	n/s bridge
+2410:221e	s_e_w_gate_2410_221e	e/w gate
+2410:2227	s_n_s_gate_2410_2227	n/s gate
+2410:2230	s_sturdy_e_w_gate_2410_2230	sturdy e/w gate
+2410:2240	s_sturdy_n_s_gate_2410_2240	sturdy n/s gate
+2410:2250	s_manned_e_w_gate_2410_2250	manned e/w gate
+2410:2260	s_manned_n_s_gate_2410_2260	manned n/s gate
+2410:2270	s_nursery_2410_2270	nursery
+2410:2278	s_flower_garden_2410_2278	flower garden
+2410:2286	s_elf_garden_2410_2286	elf garden
+2410:2291	s_Arrowmaker_s_shop_2410_2291	Arrowmaker's shop
+2410:22a3	s_arrowsmith_2410_22a3	arrowsmith
+2410:22ae	s_fletcher_s_shop_2410_22ae	fletcher's shop
+2410:22be	s_steam_bath_2410_22be	steam bath
+2410:22c9	s_bath_house_2410_22c9	bath house
+2410:22d4	s_public_baths_2410_22d4	public baths
+2410:22e1	s_brick_kiln_2410_22e1	brick kiln
+2410:22ec	s_stonemasonry_2410_22ec	stonemasonry
+2410:22f9	s_mason_s_hall_2410_22f9	mason's hall
+2410:2306	s_jeweler_2410_2306	jeweler
+2410:230e	s_ringmaker_s_shop_2410_230e	ringmaker's shop
+2410:231f	s_jeweler_s_shop_2410_231f	jeweler's shop
+2410:232e	s_glassworks_2410_232e	glassworks
+2410:2339	s_fighter_outpost_2410_2339	fighter outpost
+2410:2349	s_mage_outpost_2410_2349	mage outpost
+2410:2356	s_cleric_outpost_2410_2356	cleric outpost
+2410:2365	s_thief_outpost_2410_2365	thief outpost
+2410:2373	s_dwarf_outpost_2410_2373	dwarf outpost
+2410:2381	s_elf_outpost_2410_2381	elf outpost
+2410:238d	s_halfling_outpost_2410_238d	halfling outpost
+2410:239e	s_money_dealer_s_shop_2410_239e	money dealer's shop
+2410:23b2	s_bank_2410_23b2	bank
+2410:23b7	s_vault_2410_23b7	vault
+2410:23bd	s_forester_s_camp_2410_23bd	forester's camp
+2410:23cd	s_builder_s_hall_2410_23cd	builder's hall
+2410:23dc	s_trading_post_2410_23dc	trading post
+2410:23e9	s_trade_faire_2410_23e9	trade faire
+2410:23f5	s_bazaar_2410_23f5	bazaar
+2410:23fc	s_arena_2410_23fc	arena
+2410:2402	s_woodcarver_2410_2402	woodcarver
+2410:240d	s_puppetmaker_2410_240d	puppetmaker
+2410:2419	s_toymaker_2410_2419	toymaker
+2410:2422	s_bread_shop_2410_2422	bread shop
+2410:242d	s_bakehouse_2410_242d	bakehouse
+2410:2437	s_bakery_2410_2437	bakery
+2410:243e	s_dice_den_2410_243e	dice den
+2410:2447	s_card_parlor_2410_2447	card parlor
+2410:2453	s_gaming_hall_2410_2453	gaming hall
+2410:245f	s_clerk_s_office_2410_245f	clerk's office
+2410:246e	s_transcriber_s_shop_2410_246e	transcriber's shop
+2410:2481	s_scribery_2410_2481	scribery
+2410:248a	s_apothecary_2410_248a	apothecary
+2410:2495	s_alchemist_s_lab_2410_2495	alchemist's lab
+2410:24a5	s_magic_mill_2410_24a5	magic mill
+2410:24b0	s_leatherworks_2410_24b0	leatherworks
+2410:24bd	s_shieldsmith_2410_24bd	shieldsmith
+2410:24c9	s_armory_2410_24c9	armory
+2410:24d0	s_ruin_2410_24d0	ruin
+2410:24d5	s_fighter_2410_24d5	fighter
+2410:24dd	s_spear_2410_24dd	spear
+2410:24e3	s_mage_2410_24e3	mage
+2410:24e8	s_cleric_2410_24e8	cleric
+2410:24ef	s_staff_club_2410_24ef	staff,club
+2410:24fa	s_thief_2410_24fa	thief
+2410:2500	s_dagger_2410_2500	dagger
+2410:2507	s_red_dragon_2410_2507	red dragon
+2410:2512	s_archer_2410_2512	archer
+2410:2519	s_bow_2410_2519	bow
+2410:251d	s_skeleton_2410_251d	skeleton
+2410:2526	s_short_sword_2410_2526	short sword
+2410:2532	s_orc_2410_2532	orc
+2410:2536	s_morning_star_2410_2536	morning star
+2410:2543	s_elf_2410_2543	elf
+2410:2547	s_evil_fighter_2410_2547	evil fighter
+2410:2554	s_pike_2410_2554	pike
+2410:2559	s_dwarf_2410_2559	dwarf
+2410:255f	s_axe_hammer_2410_255f	axe,hammer
+2410:256a	s_halfling_2410_256a	halfling
+2410:2573	s_carrion_crawler_2410_2573	carrion crawler
+2410:2583	s_giant_ant_2410_2583	giant ant
+2410:258d	s_harpy_2410_258d	harpy
+2410:2593	s_dire_wolf_2410_2593	dire wolf
+2410:259d	s_giant_bat_2410_259d	giant bat
+2410:25a7	s_blast_spore_2410_25a7	blast spore
+2410:25b3	s_kobold_2410_25b3	kobold
+2410:25ba	s_obsidian_statue_2410_25ba	obsidian statue
+2410:25ca	s_giant_toad_2410_25ca	giant toad
+2410:25d5	s_hobgoblin_2410_25d5	hobgoblin
+2410:25df	s_manscorpion_2410_25df	manscorpion
+2410:25eb	s_giant_scorpion_2410_25eb	giant scorpion
+2410:25fa	s_wood_golem_2410_25fa	wood golem
+2410:2605	s_evil_mage_2410_2605	evil mage
+2410:260f	s_medusa_2410_260f	medusa
+2410:2616	s_evil_cleric_2410_2616	evil cleric
+2410:2622	s_evil_thief_2410_2622	evil thief
+2410:262d	s_wight_2410_262d	wight
+2410:2633	s_blue_dragon_2410_2633	blue dragon
+2410:263f	s_purple_worm_2410_263f	purple worm
+2410:264b	s_griffon_2410_264b	griffon
+2410:2653	s_stone_giant_2410_2653	stone giant
+2410:265f	s_troll_2410_265f	troll
+2410:2665	s_fire_giant_2410_2665	fire giant
+2410:2670	s_lesser_phoenix_2410_2670	lesser phoenix
+2410:267f	s_minotaur_2410_267f	minotaur
+2410:2688	s_axe_2410_2688	axe
+2410:268c	s_cockatrice_2410_268c	cockatrice
+2410:2697	s_vampire_2410_2697	vampire
+2410:269f	s_Mindark_2410_269f	Mindark
+2410:272b	s__Empty__2410_272b	<Empty>
+2410:2733	s_more	More
+2410:273a	s_empty	\r\n
+2410:273d	s_ssaves_txt	%ssaves.txt
+2410:2749	s_u	%u
+2410:274c	s_message_delay_is_now_d	Message delay is now %d.
+2410:2765	s_decrease_message_delay	Decrease message delay
+2410:277c	s_increase_message_delay	Increase message delay
+2410:2793	s_test	Test
+2410:2798	s_done	Done
+2410:279d	s_change_message_delay	Change message delay:
+2410:27b3	s_this_message_appears_at_the_message_delay_of	This message appears at the message delay of %d.
+2410:27e4	s_cancel	Cancel
+2410:27eb	s_New_Game_2410_27eb	New Game
+2410:27f4	s_Save_Game_2410_27f4	Save Game
+2410:27fe	s_Load_Game_2410_27fe	Load Game
+2410:2808	s_Delete_Game_2410_2808	Delete Game
+2410:2814	s_Quit_Game_2410_2814	Quit Game
+2410:281e	s_Message_Delay_2410_281e	Message Delay
+2410:282c	s_Great_Achievements_2410_282c	Great Achievements
+2410:283f	s_Begin_Play_2410_283f	Begin Play
+2410:284a	s_Yes_2410_284a	Yes
+2410:284e	s_No_2410_284e	No
+2410:2851	s_stronghold_v_1_00	Stronghold V 1.00
+2410:2863	s_Select_an_option__2410_2863	Select an option:
+2410:2875	s_game_not_saved_are_you_sure	Game not saved: Are you sure?
+2410:2893	s_save_game	Save Game:
+2410:289e	s_name_this_save_esc_to_cancel	Name this save:  (Esc to cancel)
+2410:28bf	s_name_for_this_save_esc_to_cancel	Name for this save:  (Esc to cancel)
+2410:28e4	s_load_game	Load Game:
+2410:28ef	s_delete_game	Delete Game:
+2410:28fc	s_delete_s_are_you_sure	Delete %s: Are you sure?
+2410:2915	s_Peaceful_2410_2915	Peaceful
+2410:291e	s_Aggressive_2410_291e	Aggressive
+2410:2929	s_Hostile_2410_2929	Hostile
+2410:2931	s_Custom_2410_2931	Custom
+2410:2938	s_Return_2410_2938	Return
+2410:293f	s_First_City_2410_293f	First City
+2410:294a	s_World_1_2410_294a	World 1
+2410:2952	s_World_2_2410_2952	World 2
+2410:295a	s_World_3_2410_295a	World 3
+2410:2962	s_world_4	World 4
+2410:296a	s_world_5	World 5
+2410:2972	s_Random_2410_2972	Random
+2410:2979	s_which_new_world	Which new world:
+2410:298a	s_hostility_level	Hostility level:
+2410:299b	s_low_intelligence_enemies	Low intelligence enemies:
+2410:29b5	s_medium_intelligence_enemies	Medium intelligence enemies:
+2410:29d2	s_high_intelligence_enemies	High intelligence enemies:
+2410:29ed	s_size_of_second_wave	Size of second wave:
+2410:2a02	s_too_many_enemies_60_enemies_maximum	Too many enemies. 60 enemies maximum.
+2410:2a28	s_resetting_game	Resetting game...
+2410:2a3a	s_new_world_complete	New world complete.
+2410:2a7c	s_strong.dat_2410_2a7c	strong.dat
+2410:2a87	s_bigcomp.lbm_2410_2a87	bigcomp.lbm
+2410:2a93	s_bighous1.lbm_2410_2a93	bighous1.lbm
+2410:2aa0	s_bighous2.lbm_2410_2aa0	bighous2.lbm
+2410:2aad	s_bighous3.lbm_2410_2aad	bighous3.lbm
+2410:2aba	s_bighous6.lbm_2410_2aba	bighous6.lbm
+2410:2ac7	s_davfont.lbm_2410_2ac7	davfont.lbm
+2410:2ad3	s_anim\2rdrag0.lbm_2410_2ad3	anim\2rdrag0.lbm
+2410:2ae4	s_gamfont1.lbm_2410_2ae4	gamfont1.lbm
+2410:2af1	s_mouse.lbm_2410_2af1	mouse.lbm
+2410:2afb	s_nwpanel2.lbm_2410_2afb	nwpanel2.lbm
+2410:2b08	s_build\rock01.lbm_2410_2b08	build\rock01.lbm
+2410:2b19	s_star.lbm_2410_2b19	star.lbm
+2410:2b22	s_trees2.lbm_2410_2b22	trees2.lbm
+2410:2b2d	s_triangls.lbm_2410_2b2d	triangls.lbm
+2410:2b3a	s_nwpanel1.lbm_2410_2b3a	nwpanel1.lbm
+2410:2b47	s_anim\1fi1m.lbm_2410_2b47	anim\1fi1m.lbm
+2410:2b56	s_water1.lbm_2410_2b56	water1.lbm
+2410:2b61	s_ping.xmi_2410_2b61	ping.xmi
+2410:2b6a	s_zound007.voc_2410_2b6a	zound007.voc
+2410:2b77	s_zound011.voc_2410_2b77	zound011.voc
+2410:2b84	s_zound006.voc_2410_2b84	zound006.voc
+2410:2b91	s_zound001.voc_2410_2b91	zound001.voc
+2410:2b9e	s_mages.lbm_2410_2b9e	mages.lbm
+2410:2ba8	s_zound005.voc_2410_2ba8	zound005.voc
+2410:2bb5	s_thud2.voc_2410_2bb5	thud2.voc
+2410:2bbf	s_csite1.lbm_2410_2bbf	csite1.lbm
+2410:2bca	s_anim\1cl1m.lbm_2410_2bca	anim\1cl1m.lbm
+2410:2bd9	s_skels1.lbm_2410_2bd9	skels1.lbm
+2410:2be4	s_bighous4.lbm_2410_2be4	bighous4.lbm
+2410:2bf1	s_bighous5.lbm_2410_2bf1	bighous5.lbm
+2410:2bfe	s_wall2.lbm_2410_2bfe	wall2.lbm
+2410:2c08	s_thieves2.lbm_2410_2c08	thieves2.lbm
+2410:2c15	s_orcs.lbm_2410_2c15	orcs.lbm
+2410:2c1e	s_elves.lbm_2410_2c1e	elves.lbm
+2410:2c28	s_bolt.lbm_2410_2c28	bolt.lbm
+2410:2c31	s_anim\2fi1m.lbm_2410_2c31	anim\2fi1m.lbm
+2410:2c40	s_fire.lbm_2410_2c40	fire.lbm
+2410:2c49	s_dwarves.lbm_2410_2c49	dwarves.lbm
+2410:2c55	s_halfls.lbm_2410_2c55	halfls.lbm
+2410:2c60	s_crwlrs.lbm_2410_2c60	crwlrs.lbm
+2410:2c6b	s_aunts.lbm_2410_2c6b	aunts.lbm
+2410:2c75	s_castle01.lbm_2410_2c75	castle01.lbm
+2410:2c82	s_castle02.lbm_2410_2c82	castle02.lbm
+2410:2c8f	s_castle03.lbm_2410_2c8f	castle03.lbm
+2410:2c9c	s_keep1.lbm_2410_2c9c	keep1.lbm
+2410:2ca6	s_keep2.lbm_2410_2ca6	keep2.lbm
+2410:2cb0	s_keep3.lbm_2410_2cb0	keep3.lbm
+2410:2cba	s_keep4.lbm_2410_2cba	keep4.lbm
+2410:2cc4	s_keep5.lbm_2410_2cc4	keep5.lbm
+2410:2cce	s_harpies.lbm_2410_2cce	harpies.lbm
+2410:2cda	s_bridge.lbm_2410_2cda	bridge.lbm
+2410:2ce5	s_build\mine01.lbm_2410_2ce5	build\mine01.lbm
+2410:2cf6	s_keep6.lbm_2410_2cf6	keep6.lbm
+2410:2d00	s_dlair.lbm_2410_2d00	dlair.lbm
+2410:2d0a	s_wolves.lbm_2410_2d0a	wolves.lbm
+2410:2d15	s_build\cletem01.lbm_2410_2d15	build\cletem01.lbm
+2410:2d28	s_univ.lbm_2410_2d28	univ.lbm
+2410:2d31	s_anim\nubats.lbm_2410_2d31	anim\nubats.lbm
+2410:2d41	s_mage.xmi_2410_2d41	mage.xmi
+2410:2d4a	s_anim\1fi1f.lbm_2410_2d4a	anim\1fi1f.lbm
+2410:2d59	s_blasts.lbm_2410_2d59	blasts.lbm
+2410:2d64	s_kobolds.lbm_2410_2d64	kobolds.lbm
+2410:2d70	s_house1.lbm_2410_2d70	house1.lbm
+2410:2d7b	s_house2.lbm_2410_2d7b	house2.lbm
+2410:2d86	s_house3.lbm_2410_2d86	house3.lbm
+2410:2d91	s_fallen.xmi_2410_2d91	fallen.xmi
+2410:2d9c	s_falloop.xmi_2410_2d9c	falloop.xmi
+2410:2da8	s_falop2.xmi_2410_2da8	falop2.xmi
+2410:2db3	s_antkill.xmi_2410_2db3	antkill.xmi
+2410:2dbf	s_add.xmi_2410_2dbf	add.xmi
+2410:2dc7	s_march.xmi_2410_2dc7	march.xmi
+2410:2dd1	s_ants2.xmi_2410_2dd1	ants2.xmi
+2410:2ddb	s_ant2loop.xmi_2410_2ddb	ant2loop.xmi
+2410:2de8	s_mageloop.xmi_2410_2de8	mageloop.xmi
+2410:2df5	s_magelop2.xmi_2410_2df5	magelop2.xmi
+2410:2e02	s_granary.lbm_2410_2e02	granary.lbm
+2410:2e0e	s_ogolems.lbm_2410_2e0e	ogolems.lbm
+2410:2e1a	s_talkwin9.lbm_2410_2e1a	talkwin9.lbm
+2410:2e27	s_faces.lbm_2410_2e27	faces.lbm
+2410:2e31	s_frmlnd.lbm_2410_2e31	frmlnd.lbm
+2410:2e3c	s_toads.lbm_2410_2e3c	toads.lbm
+2410:2e46	s_stone1.lbm_2410_2e46	stone1.lbm
+2410:2e51	s_stone2.lbm_2410_2e51	stone2.lbm
+2410:2e5c	s_harpy01.lbm_2410_2e5c	harpy01.lbm
+2410:2e68	s_hobs.lbm_2410_2e68	hobs.lbm
+2410:2e71	s_gobs.lbm_2410_2e71	gobs.lbm
+2410:2e7a	s_stucco1.lbm_2410_2e7a	stucco1.lbm
+2410:2e86	s_stucco2.lbm_2410_2e86	stucco2.lbm
+2410:2e92	s_wicker1.lbm_2410_2e92	wicker1.lbm
+2410:2e9e	s_wicker2.lbm_2410_2e9e	wicker2.lbm
+2410:2eaa	s_thatch1.lbm_2410_2eaa	thatch1.lbm
+2410:2eb6	s_thatch2.lbm_2410_2eb6	thatch2.lbm
+2410:2ec2	s_csite2.lbm_2410_2ec2	csite2.lbm
+2410:2ecd	s_csite3.lbm_2410_2ecd	csite3.lbm
+2410:2ed8	s_csite4.lbm_2410_2ed8	csite4.lbm
+2410:2ee3	s_bhouse01.lbm_2410_2ee3	bhouse01.lbm
+2410:2ef0	s_bhouse02.lbm_2410_2ef0	bhouse02.lbm
+2410:2efd	s_bhouse03.lbm_2410_2efd	bhouse03.lbm
+2410:2f0a	s_bhouse05.lbm_2410_2f0a	bhouse05.lbm
+2410:2f17	s_bhouse04.lbm_2410_2f17	bhouse04.lbm
+2410:2f24	s_bhouse06.lbm_2410_2f24	bhouse06.lbm
+2410:2f31	s_bat.voc_2410_2f31	bat.voc
+2410:2f39	s_dragon.voc_2410_2f39	dragon.voc
+2410:2f44	s_clank.voc_2410_2f44	clank.voc
+2410:2f4e	s_sword4.voc_2410_2f4e	sword4.voc
+2410:2f59	s_foots.voc_2410_2f59	foots.voc
+2410:2f63	s_clink.voc_2410_2f63	clink.voc
+2410:2f6d	s_crash1.voc_2410_2f6d	crash1.voc
+2410:2f78	s_foots2.voc_2410_2f78	foots2.voc
+2410:2f83	s_walk2.voc_2410_2f83	walk2.voc
+2410:2f8d	s_magic.voc_2410_2f8d	magic.voc
+2410:2f97	s_dies.voc_2410_2f97	dies.voc
+2410:2fa0	s_harpy.voc_2410_2fa0	harpy.voc
+2410:2faa	s_arch1.lbm_2410_2faa	arch1.lbm
+2410:2fb4	s_arch2.lbm_2410_2fb4	arch2.lbm
+2410:2fbe	s_western1.lbm_2410_2fbe	western1.lbm
+2410:2fcb	s_western2.lbm_2410_2fcb	western2.lbm
+2410:2fd8	s_castle04.lbm_2410_2fd8	castle04.lbm
+2410:2fe5	s_castle05.lbm_2410_2fe5	castle05.lbm
+2410:2ff2	s_castle06.lbm_2410_2ff2	castle06.lbm
+2410:2fff	s_castle07.lbm_2410_2fff	castle07.lbm
+2410:300c	s_castle08.lbm_2410_300c	castle08.lbm
+2410:3019	s_castle09.lbm_2410_3019	castle09.lbm
+2410:3026	s_anim\2mansc0.lbm_2410_3026	anim\2mansc0.lbm
+2410:3037	s_scorps.lbm_2410_3037	scorps.lbm
+2410:3042	s_panel01.lbm_2410_3042	panel01.lbm
+2410:304e	s_wgolems.lbm_2410_304e	wgolems.lbm
+2410:305a	s_mouse03.lbm_2410_305a	mouse03.lbm
+2410:3066	s_brick1.lbm_2410_3066	brick1.lbm
+2410:3071	s_brick2.lbm_2410_3071	brick2.lbm
+2410:307c	s_brick3.lbm_2410_307c	brick3.lbm
+2410:3087	s_brick4.lbm_2410_3087	brick4.lbm
+2410:3092	s_ruin1.lbm_2410_3092	ruin1.lbm
+2410:309c	s_ruin2.lbm_2410_309c	ruin2.lbm
+2410:30a6	s_frog.voc_2410_30a6	frog.voc
+2410:30af	s_pelf.lbm_2410_30af	pelf.lbm
+2410:30b8	s_talkwin8.lbm_2410_30b8	talkwin8.lbm
+2410:30c5	s_butt01.lbm_2410_30c5	butt01.lbm
+2410:30d0	s_davfont2.lbm_2410_30d0	davfont2.lbm
+2410:30dd	s_anim\1el1m.lbm_2410_30dd	anim\1el1m.lbm
+2410:30ec	s_anim\1el1f.lbm_2410_30ec	anim\1el1f.lbm
+2410:30fb	s_anim\1el2m.lbm_2410_30fb	anim\1el2m.lbm
+2410:310a	s_anim\1el2f.lbm_2410_310a	anim\1el2f.lbm
+2410:3119	s_anim\1el3m.lbm_2410_3119	anim\1el3m.lbm
+2410:3128	s_anim\1el3f.lbm_2410_3128	anim\1el3f.lbm
+2410:3137	s_anim\1ma1m.lbm_2410_3137	anim\1ma1m.lbm
+2410:3146	s_anim\1ma1f.lbm_2410_3146	anim\1ma1f.lbm
+2410:3155	s_anim\1ma2m.lbm_2410_3155	anim\1ma2m.lbm
+2410:3164	s_anim\1ma2f.lbm_2410_3164	anim\1ma2f.lbm
+2410:3173	s_anim\1ma3m.lbm_2410_3173	anim\1ma3m.lbm
+2410:3182	s_anim\1ma3f.lbm_2410_3182	anim\1ma3f.lbm
+2410:3191	s_anim\2ma1m.lbm_2410_3191	anim\2ma1m.lbm
+2410:31a0	s_anim\2ma2m.lbm_2410_31a0	anim\2ma2m.lbm
+2410:31af	s_anim\2ma3m.lbm_2410_31af	anim\2ma3m.lbm
+2410:31be	s_build\gencas01.lbm_2410_31be	build\gencas01.lbm
+2410:31d1	s_build\gencas03.lbm_2410_31d1	build\gencas03.lbm
+2410:31e4	s_back03.lbm_2410_31e4	back03.lbm
+2410:31ef	s_midgrnd5.lbm_2410_31ef	midgrnd5.lbm
+2410:31fc	s_strong4.lbm_2410_31fc	strong4.lbm
+2410:3208	s_marble.lbm_2410_3208	marble.lbm
+2410:3213	s_anim\2medus0.lbm_2410_3213	anim\2medus0.lbm
+2410:3224	s_rattler.voc_2410_3224	rattler.voc
+2410:3230	s_anim\1cl1f.lbm_2410_3230	anim\1cl1f.lbm
+2410:323f	s_anim\1fi2f.lbm_2410_323f	anim\1fi2f.lbm
+2410:324e	s_anim\1fi3f.lbm_2410_324e	anim\1fi3f.lbm
+2410:325d	s_anim\1fi2m.lbm_2410_325d	anim\1fi2m.lbm
+2410:326c	s_anim\1fi3m.lbm_2410_326c	anim\1fi3m.lbm
+2410:327b	s_anim\2fi2m.lbm_2410_327b	anim\2fi2m.lbm
+2410:328a	s_anim\2fi3m.lbm_2410_328a	anim\2fi3m.lbm
+2410:3299	s_pemage.lbm_2410_3299	pemage.lbm
+2410:32a4	s_build\gentow01.lbm_2410_32a4	build\gentow01.lbm
+2410:32b7	s_build\genmkt01.lbm_2410_32b7	build\genmkt01.lbm
+2410:32ca	s_build\gengra01.lbm_2410_32ca	build\gengra01.lbm
+2410:32dd	s_build\gentow02.lbm_2410_32dd	build\gentow02.lbm
+2410:32f0	s_build\gengra02.lbm_2410_32f0	build\gengra02.lbm
+2410:3303	s_pfdwarf.lbm_2410_3303	pfdwarf.lbm
+2410:330f	s_pffight.lbm_2410_330f	pffight.lbm
+2410:331b	s_button1.lbm_2410_331b	button1.lbm
+2410:3327	s_anim\1th1m.lbm_2410_3327	anim\1th1m.lbm
+2410:3336	s_anim\1th1f.lbm_2410_3336	anim\1th1f.lbm
+2410:3345	s_anim\1th2m.lbm_2410_3345	anim\1th2m.lbm
+2410:3354	s_anim\1th2f.lbm_2410_3354	anim\1th2f.lbm
+2410:3363	s_anim\1th3m.lbm_2410_3363	anim\1th3m.lbm
+2410:3372	s_anim\1th3f.lbm_2410_3372	anim\1th3f.lbm
+2410:3381	s_anim\2th3m.lbm_2410_3381	anim\2th3m.lbm
+2410:3390	s_anim\2th1m.lbm_2410_3390	anim\2th1m.lbm
+2410:339f	s_anim\2th2m.lbm_2410_339f	anim\2th2m.lbm
+2410:33ae	s_anim\1cl2m.lbm_2410_33ae	anim\1cl2m.lbm
+2410:33bd	s_anim\1cl2f.lbm_2410_33bd	anim\1cl2f.lbm
+2410:33cc	s_anim\1cl3m.lbm_2410_33cc	anim\1cl3m.lbm
+2410:33db	s_anim\1cl3f.lbm_2410_33db	anim\1cl3f.lbm
+2410:33ea	s_anim\2cl1m.lbm_2410_33ea	anim\2cl1m.lbm
+2410:33f9	s_anim\2cl2m.lbm_2410_33f9	anim\2cl2m.lbm
+2410:3408	s_anim\2cl3m.lbm_2410_3408	anim\2cl3m.lbm
+2410:3417	s_anim\1dw1m.lbm_2410_3417	anim\1dw1m.lbm
+2410:3426	s_anim\1dw1f.lbm_2410_3426	anim\1dw1f.lbm
+2410:3435	s_anim\1dw2m.lbm_2410_3435	anim\1dw2m.lbm
+2410:3444	s_anim\1dw2f.lbm_2410_3444	anim\1dw2f.lbm
+2410:3453	s_anim\1ha1m.lbm_2410_3453	anim\1ha1m.lbm
+2410:3462	s_anim\1ha1f.lbm_2410_3462	anim\1ha1f.lbm
+2410:3471	s_anim\1ha2m.lbm_2410_3471	anim\1ha2m.lbm
+2410:3480	s_anim\1ha2f.lbm_2410_3480	anim\1ha2f.lbm
+2410:348f	s_cue13.xmi_2410_348f	cue13.xmi
+2410:3499	s_cue2.xmi_2410_3499	cue2.xmi
+2410:34a2	s_cue3.xmi_2410_34a2	cue3.xmi
+2410:34ab	s_cue4.xmi_2410_34ab	cue4.xmi
+2410:34b4	s_cue5a.xmi_2410_34b4	cue5a.xmi
+2410:34be	s_cue6.xmi_2410_34be	cue6.xmi
+2410:34c7	s_cue7.xmi_2410_34c7	cue7.xmi
+2410:34d0	s_cue8.xmi_2410_34d0	cue8.xmi
+2410:34d9	s_cue10.xmi_2410_34d9	cue10.xmi
+2410:34e3	s_cue12.xmi_2410_34e3	cue12.xmi
+2410:34ed	s_cue15a.xmi_2410_34ed	cue15a.xmi
+2410:34f8	s_cue15b.xmi_2410_34f8	cue15b.xmi
+2410:3503	s_cuex1.xmi_2410_3503	cuex1.xmi
+2410:350d	s_cuex2b.xmi_2410_350d	cuex2b.xmi
+2410:3518	s_theme2.xmi_2410_3518	theme2.xmi
+2410:3523	s_pfhfight.lbm_2410_3523	pfhfight.lbm
+2410:3530	s_portrait\sp06.lbm_2410_3530	portrait\sp06.lbm
+2410:3542	s_pfhthief.lbm_2410_3542	pfhthief.lbm
+2410:354f	s_cleric.voc_2410_354f	cleric.voc
+2410:355a	s_6B.voc_2410_355a	6B.voc
+2410:3561	s_poison.voc_2410_3561	poison.voc
+2410:356c	s_8.voc_2410_356c	8.voc
+2410:3572	s_murm1.voc_2410_3572	murm1.voc
+2410:357c	s_magecast.voc_2410_357c	magecast.voc
+2410:3589	s_magecst2.voc_2410_3589	magecst2.voc
+2410:3596	s_hit1.voc_2410_3596	hit1.voc
+2410:359f	s_hit2.voc_2410_359f	hit2.voc
+2410:35a8	s_miss.voc_2410_35a8	miss.voc
+2410:35b1	s_17.voc_2410_35b1	17.voc
+2410:35b8	s_18.voc_2410_35b8	18.voc
+2410:35bf	s_19.voc_2410_35bf	19.voc
+2410:35c6	s_20.voc_2410_35c6	20.voc
+2410:35cd	s_21.voc_2410_35cd	21.voc
+2410:35d4	s_zero.voc_2410_35d4	zero.voc
+2410:35dd	s_22.voc_2410_35dd	22.voc
+2410:35e4	s_placeb1.xmi_2410_35e4	placeb1.xmi
+2410:35f0	s_placeb2.xmi_2410_35f0	placeb2.xmi
+2410:35fc	s_placeb3.xmi_2410_35fc	placeb3.xmi
+2410:3608	s_placeb5.xmi_2410_3608	placeb5.xmi
+2410:3614	s_mine4.xmi_2410_3614	mine4.xmi
+2410:361e	s_attack1.xmi_2410_361e	attack1.xmi
+2410:362a	s_29.voc_2410_362a	29.voc
+2410:3631	s_wolf.voc_2410_3631	wolf.voc
+2410:363a	s_31.voc_2410_363a	31.voc
+2410:3641	s_32.voc_2410_3641	32.voc
+2410:3648	s_33.voc_2410_3648	33.voc
+2410:364f	s_33B.voc_2410_364f	33B.voc
+2410:3657	s_35a.voc_2410_3657	35a.voc
+2410:365f	s_37.voc_2410_365f	37.voc
+2410:3666	s_38.voc_2410_3666	38.voc
+2410:366d	s_39.voc_2410_366d	39.voc
+2410:3674	s_sword5.voc_2410_3674	sword5.voc
+2410:367f	s_spore2.voc_2410_367f	spore2.voc
+2410:368a	s_spore3.voc_2410_368a	spore3.voc
+2410:3695	s_phoenix.voc_2410_3695	phoenix.voc
+2410:36a1	s_troll.voc_2410_36a1	troll.voc
+2410:36ab	s_fire4.voc_2410_36ab	fire4.voc
+2410:36b5	s_45A.voc_2410_36b5	45A.voc
+2410:36bd	s_45B.voc_2410_36bd	45B.voc
+2410:36c5	s_x1.voc_2410_36c5	x1.voc
+2410:36cc	s_cue11.xmi_2410_36cc	cue11.xmi
+2410:36d6	s_cue9b.xmi_2410_36d6	cue9b.xmi
+2410:36e0	s_cue16.xmi_2410_36e0	cue16.xmi
+2410:36ea	s_gate.lbm_2410_36ea	gate.lbm
+2410:36f3	s_volume.xmi_2410_36f3	volume.xmi
+2410:36fe	s_cue9a.xmi_2410_36fe	cue9a.xmi
+2410:3708	s_wintree.lbm_2410_3708	wintree.lbm
+2410:3714	s_falltree.lbm_2410_3714	falltree.lbm
+2410:3721	s_anim\2wights0.lbm_2410_3721	anim\2wights0.lbm
+2410:3733	s_anim\2bdrag0.lbm_2410_3733	anim\2bdrag0.lbm
+2410:3744	s_anim\2bdragt0.lbm_2410_3744	anim\2bdragt0.lbm
+2410:3756	s_anim\2pworm0.lbm_2410_3756	anim\2pworm0.lbm
+2410:3767	s_l3.lbm_2410_3767	l3.lbm
+2410:376e	s_build\figcas01.lbm_2410_376e	build\figcas01.lbm
+2410:3781	s_build\figcas02.lbm_2410_3781	build\figcas02.lbm
+2410:3794	s_dwfcas03.lbm_2410_3794	dwfcas03.lbm
+2410:37a1	s_dwfcas04.lbm_2410_37a1	dwfcas04.lbm
+2410:37ae	s_build\figres01.lbm_2410_37ae	build\figres01.lbm
+2410:37c1	s_build\figres02.lbm_2410_37c1	build\figres02.lbm
+2410:37d4	s_build\dwfres01.lbm_2410_37d4	build\dwfres01.lbm
+2410:37e7	s_build\dwfres02.lbm_2410_37e7	build\dwfres02.lbm
+2410:37fa	s_dwffrg01.lbm_2410_37fa	dwffrg01.lbm
+2410:3807	s_dwffrg02.lbm_2410_3807	dwffrg02.lbm
+2410:3814	s_build\hafcas01.lbm_2410_3814	build\hafcas01.lbm
+2410:3827	s_build\hafcas02.lbm_2410_3827	build\hafcas02.lbm
+2410:383a	s_build\hafhal01.lbm_2410_383a	build\hafhal01.lbm
+2410:384d	s_build\hafhal02.lbm_2410_384d	build\hafhal02.lbm
+2410:3860	s_anim\2sgian0.lbm_2410_3860	anim\2sgian0.lbm
+2410:3871	s_anim\2troll0.lbm_2410_3871	anim\2troll0.lbm
+2410:3882	s_anim\2griff0.lbm_2410_3882	anim\2griff0.lbm
+2410:3893	s_place.xmi_2410_3893	place.xmi
+2410:389d	s_VOLUME.xmi_2410_389d	VOLUME.xmi
+2410:38a8	s_l4.lbm_2410_38a8	l4.lbm
+2410:38af	s_l5.lbm_2410_38af	l5.lbm
+2410:38b6	s_l6.lbm_2410_38b6	l6.lbm
+2410:38bd	s_l7.lbm_2410_38bd	l7.lbm
+2410:38c4	s_l8.lbm_2410_38c4	l8.lbm
+2410:38cb	s_l9.lbm_2410_38cb	l9.lbm
+2410:38d2	s_14a.xmi_2410_38d2	14a.xmi
+2410:38da	s_cue5b.xmi_2410_38da	cue5b.xmi
+2410:38e4	s_boos.voc_2410_38e4	boos.voc
+2410:38ed	s_lightngn.voc_2410_38ed	lightngn.voc
+2410:38fa	s_outdoor1.voc_2410_38fa	outdoor1.voc
+2410:3907	s_outdoor2.voc_2410_3907	outdoor2.voc
+2410:3914	s_outdoor3.voc_2410_3914	outdoor3.voc
+2410:3921	s_unhappy1.voc_2410_3921	unhappy1.voc
+2410:392e	s_unhappy2.voc_2410_392e	unhappy2.voc
+2410:393b	s_unhappy3.voc_2410_393b	unhappy3.voc
+2410:3948	s_trn1out.voc_2410_3948	trn1out.voc
+2410:3954	s_trn2out.voc_2410_3954	trn2out.voc
+2410:3960	s_trn3out.voc_2410_3960	trn3out.voc
+2410:396c	s_mine1out.voc_2410_396c	mine1out.voc
+2410:3979	s_mine2out.voc_2410_3979	mine2out.voc
+2410:3986	s_mine3out.voc_2410_3986	mine3out.voc
+2410:3993	s_mark1.voc_2410_3993	mark1.voc
+2410:399d	s_mark2.voc_2410_399d	mark2.voc
+2410:39a7	s_mark3.voc_2410_39a7	mark3.voc
+2410:39b1	s_forg3out.voc_2410_39b1	forg3out.voc
+2410:39be	s_forg2out.voc_2410_39be	forg2out.voc
+2410:39cb	s_forg1out.voc_2410_39cb	forg1out.voc
+2410:39d8	s_saw1out.voc_2410_39d8	saw1out.voc
+2410:39e4	s_saw2out.voc_2410_39e4	saw2out.voc
+2410:39f0	s_saw3out.voc_2410_39f0	saw3out.voc
+2410:39fc	s_crick1.voc_2410_39fc	crick1.voc
+2410:3a07	s_crick2.voc_2410_3a07	crick2.voc
+2410:3a12	s_crick3.voc_2410_3a12	crick3.voc
+2410:3a1d	s_birdssp.voc_2410_3a1d	birdssp.voc
+2410:3a29	s_birds1.voc_2410_3a29	birds1.voc
+2410:3a34	s_birds2.voc_2410_3a34	birds2.voc
+2410:3a3f	s_birds3.voc_2410_3a3f	birds3.voc
+2410:3a4a	s_howl1.voc_2410_3a4a	howl1.voc
+2410:3a54	s_howl2.voc_2410_3a54	howl2.voc
+2410:3a5e	s_howl3.voc_2410_3a5e	howl3.voc
+2410:3a68	s_breeze1.voc_2410_3a68	breeze1.voc
+2410:3a74	s_breeze2.voc_2410_3a74	breeze2.voc
+2410:3a80	s_breeze3.voc_2410_3a80	breeze3.voc
+2410:3a8c	s_riv1.voc_2410_3a8c	riv1.voc
+2410:3a95	s_riv2.voc_2410_3a95	riv2.voc
+2410:3a9e	s_riv3.voc_2410_3a9e	riv3.voc
+2410:3aa7	s_brook1.voc_2410_3aa7	brook1.voc
+2410:3ab2	s_brook2.voc_2410_3ab2	brook2.voc
+2410:3abd	s_brook3.voc_2410_3abd	brook3.voc
+2410:3ac8	s_farm1.voc_2410_3ac8	farm1.voc
+2410:3ad2	s_farm2.voc_2410_3ad2	farm2.voc
+2410:3adc	s_farm3.voc_2410_3adc	farm3.voc
+2410:3ae6	s_anim\2fgian0.lbm_2410_3ae6	anim\2fgian0.lbm
+2410:3af7	s_anim\2phoen0.lbm_2410_3af7	anim\2phoen0.lbm
+2410:3b08	s_anim\2minot0.lbm_2410_3b08	anim\2minot0.lbm
+2410:3b19	s_anim\2cockas0.lbm_2410_3b19	anim\2cockas0.lbm
+2410:3b2b	s_anim\2vamps0.lbm_2410_3b2b	anim\2vamps0.lbm
+2410:3b3c	s_build\geninn01.lbm_2410_3b3c	build\geninn01.lbm
+2410:3b4f	s_strong.fli_2410_3b4f	strong.fli
+2410:3b5a	s_build\hafres01.lbm_2410_3b5a	build\hafres01.lbm
+2410:3b6d	s_build\cleres01.lbm_2410_3b6d	build\cleres01.lbm
+2410:3b80	s_build\cleres02.lbm_2410_3b80	build\cleres02.lbm
+2410:3b93	s_build\magres01.lbm_2410_3b93	build\magres01.lbm
+2410:3ba6	s_build\magres02.lbm_2410_3ba6	build\magres02.lbm
+2410:3bb9	s_fighal01.lbm_2410_3bb9	fighal01.lbm
+2410:3bc6	s_portrait\sp07.lbm_2410_3bc6	portrait\sp07.lbm
+2410:3bd8	s_portrait\sp08.lbm_2410_3bd8	portrait\sp08.lbm
+2410:3bea	s_portrait\sp09.lbm_2410_3bea	portrait\sp09.lbm
+2410:3bfc	s_portrait\sp10.lbm_2410_3bfc	portrait\sp10.lbm
+2410:3c0e	s_portrait\sp11.lbm_2410_3c0e	portrait\sp11.lbm
+2410:3c20	s_portrait\sp12.lbm_2410_3c20	portrait\sp12.lbm
+2410:3c32	s_portrait\sp13.lbm_2410_3c32	portrait\sp13.lbm
+2410:3c44	s_portrait\sp14.lbm_2410_3c44	portrait\sp14.lbm
+2410:3c56	s_portrait\sp15.lbm_2410_3c56	portrait\sp15.lbm
+2410:3c68	s_portrait\sp16.lbm_2410_3c68	portrait\sp16.lbm
+2410:3c7a	s_portrait\sp17.lbm_2410_3c7a	portrait\sp17.lbm
+2410:3c8c	s_portrait\sp18.lbm_2410_3c8c	portrait\sp18.lbm
+2410:3c9e	s_portrait\sp19.lbm_2410_3c9e	portrait\sp19.lbm
+2410:3cb0	s_portrait\sp20.lbm_2410_3cb0	portrait\sp20.lbm
+2410:3cc2	s_portrait\sp21.lbm_2410_3cc2	portrait\sp21.lbm
+2410:3cd4	s_portrait\sp22.lbm_2410_3cd4	portrait\sp22.lbm
+2410:3ce6	s_demfont1.lbm_2410_3ce6	demfont1.lbm
+2410:3cf3	s_back2.lbm_2410_3cf3	back2.lbm
+2410:3cfd	s_frnt3.lbm_2410_3cfd	frnt3.lbm
+2410:3d07	s_midl3.lbm_2410_3d07	midl3.lbm
+2410:3d11	s_sky06.fli_2410_3d11	sky06.fli
+2410:3d1b	s_storm01.lbm_2410_3d1b	storm01.lbm
+2410:3d27	s_ssilogo.lbm_2410_3d27	ssilogo.lbm
+2410:3d33	s_thunshrt.voc_2410_3d33	thunshrt.voc
+2410:3d40	s_txtscrn6.lbm_2410_3d40	txtscrn6.lbm
+2410:3d4d	s_winrefg1.lbm_2410_3d4d	winrefg1.lbm
+2410:3d5a	s_winremg2.lbm_2410_3d5a	winremg2.lbm
+2410:3d67	s_winrebg1.lbm_2410_3d67	winrebg1.lbm
+2410:3d74	s_build\elfres01.lbm_2410_3d74	build\elfres01.lbm
+2410:3d87	s_portrait\sp23.lbm_2410_3d87	portrait\sp23.lbm
+2410:3d99	s_portrait\sp24.lbm_2410_3d99	portrait\sp24.lbm
+2410:3dab	s_portrait\sp25.lbm_2410_3dab	portrait\sp25.lbm
+2410:3dbd	s_portrait\sp26.lbm_2410_3dbd	portrait\sp26.lbm
+2410:3dcf	s_portrait\sp27.lbm_2410_3dcf	portrait\sp27.lbm
+2410:3de1	s_portrait\sp28.lbm_2410_3de1	portrait\sp28.lbm
+2410:3df3	s_portrait\sp29.lbm_2410_3df3	portrait\sp29.lbm
+2410:3e05	s_portrait\sp30.lbm_2410_3e05	portrait\sp30.lbm
+2410:3e17	s_portrait\sp31.lbm_2410_3e17	portrait\sp31.lbm
+2410:3e29	s_portrait\sp32.lbm_2410_3e29	portrait\sp32.lbm
+2410:3e3b	s_portrait\sp33.lbm_2410_3e3b	portrait\sp33.lbm
+2410:3e4d	s_portrait\sp34.lbm_2410_3e4d	portrait\sp34.lbm
+2410:3e5f	s_portrait\sp35.lbm_2410_3e5f	portrait\sp35.lbm
+2410:3e71	s_captbg2.lbm_2410_3e71	captbg2.lbm
+2410:3e7d	s_captmg3.lbm_2410_3e7d	captmg3.lbm
+2410:3e89	s_captfg1.lbm_2410_3e89	captfg1.lbm
+2410:3e95	s_build\gencas04.lbm_2410_3e95	build\gencas04.lbm
+2410:3ea8	s_build\gencas02.lbm_2410_3ea8	build\gencas02.lbm
+2410:3ebb	s_build\hafres02.lbm_2410_3ebb	build\hafres02.lbm
+2410:3ece	s_fighal02.lbm_2410_3ece	fighal02.lbm
+2410:3edb	s_build\cletem02.lbm_2410_3edb	build\cletem02.lbm
+2410:3eee	s_anim\2mndark.lbm_2410_3eee	anim\2mndark.lbm
+2410:3eff	s_build\elfres02.lbm_2410_3eff	build\elfres02.lbm
+2410:3f12	s_build\thfgld01.lbm_2410_3f12	build\thfgld01.lbm
+2410:3f25	s_build\thfgld02.lbm_2410_3f25	build\thfgld02.lbm
+2410:3f38	s_build\thfres01.lbm_2410_3f38	build\thfres01.lbm
+2410:3f4b	s_build\thfres02.lbm_2410_3f4b	build\thfres02.lbm
+2410:3f5e	s_portrait\sp36.lbm_2410_3f5e	portrait\sp36.lbm
+2410:3f70	s_portrait\sp37.lbm_2410_3f70	portrait\sp37.lbm
+2410:3f82	s_portrait\sp38.lbm_2410_3f82	portrait\sp38.lbm
+2410:3f94	s_portrait\sp39.lbm_2410_3f94	portrait\sp39.lbm
+2410:3fa6	s_portrait\sp40.lbm_2410_3fa6	portrait\sp40.lbm
+2410:3fb8	s_portrait\sp41.lbm_2410_3fb8	portrait\sp41.lbm
+2410:3fca	s_portrait\sp42.lbm_2410_3fca	portrait\sp42.lbm
+2410:3fdc	s_portrait\sp43.lbm_2410_3fdc	portrait\sp43.lbm
+2410:3fee	s_build\magunv01.lbm_2410_3fee	build\magunv01.lbm
+2410:4001	s_build\magunv02.lbm_2410_4001	build\magunv02.lbm
+2410:4014	s_portrait\sp00.lbm_2410_4014	portrait\sp00.lbm
+2410:4026	s_build\elfgar01.lbm_2410_4026	build\elfgar01.lbm
+2410:4039	s_build\elfgar02.lbm_2410_4039	build\elfgar02.lbm
+2410:404c	s_garden03.lbm_2410_404c	garden03.lbm
+2410:4059	s_magcas01.lbm_2410_4059	magcas01.lbm
+2410:4066	s_magcas02.lbm_2410_4066	magcas02.lbm
+2410:4073	s_build\elfwood1.lbm_2410_4073	build\elfwood1.lbm
+2410:4086	s_build\elfwood2.lbm_2410_4086	build\elfwood2.lbm
+2410:4099	s_build\genbnk01.lbm_2410_4099	build\genbnk01.lbm
+2410:40ac	s_build\genbnk02.lbm_2410_40ac	build\genbnk02.lbm
+2410:40bf	s_build\magjwl01.lbm_2410_40bf	build\magjwl01.lbm
+2410:40d2	s_build\magjwl02.lbm_2410_40d2	build\magjwl02.lbm
+2410:40e5	s_build\thfgls01.lbm_2410_40e5	build\thfgls01.lbm
+2410:40f8	s_build\thfgls02.lbm_2410_40f8	build\thfgls02.lbm
+2410:410b	s_build\gencmp01.lbm_2410_410b	build\gencmp01.lbm
+2410:411e	s_build\gencmp02.lbm_2410_411e	build\gencmp02.lbm
+2410:4131	s_build\hafbak01.lbm_2410_4131	build\hafbak01.lbm
+2410:4144	s_build\hafbak02.lbm_2410_4144	build\hafbak02.lbm
+2410:4157	s_build\clescr01.lbm_2410_4157	build\clescr01.lbm
+2410:416a	s_build\clescr02.lbm_2410_416a	build\clescr02.lbm
+2410:417d	s_build\magmil01.lbm_2410_417d	build\magmil01.lbm
+2410:4190	s_build\magmil02.lbm_2410_4190	build\magmil02.lbm
+2410:41a3	s_build\geninn02.lbm_2410_41a3	build\geninn02.lbm
+2410:41b6	s_build\thfgam01.lbm_2410_41b6	build\thfgam01.lbm
+2410:41c9	s_build\gentrad1.lbm_2410_41c9	build\gentrad1.lbm
+2410:41dc	s_build\gentrad2.lbm_2410_41dc	build\gentrad2.lbm
+2410:41ef	s_build\elfarro1.lbm_2410_41ef	build\elfarro1.lbm
+2410:4202	s_build\elfarro2.lbm_2410_4202	build\elfarro2.lbm
+2410:4215	s_build\clebath1.lbm_2410_4215	build\clebath1.lbm
+2410:4228	s_build_clebath2_lbm_2410_4228	b
+2410:45c5	s_View_%s._2410_45c5	View %s.
+2410:45ce	s_place_s	Place %s.
+2410:45d8	s_view_s_cannot_place	View %s. (Cannot place)
+2410:45f0	s_create_baron_or_baroness	Create baron or baroness.
+2410:460a	s_create_party_member	Create party member.
+2410:461f	s_Strongholds_cannot_be_placed_on_r_2410_461f	Strongholds cannot be placed on rivers.
+2410:4647	s_Strongholds_cannot_be_placed_ove_2410_4647	Strongholds cannot be placed over seas.
+2410:466f	s_The_ground_is_too_steep.._2410_466f	The ground is too steep..
+2410:4689	s_a_fortress_cannot_be_placed_among_enemy_unit	A fortress cannot be placed among enemy units.
+2410:46b8	s_cannot_place_another_fortress_here	Cannot place another fortress here.
+2410:46dc	s_this_location_is_unsuitable_for_a_main_stron	This location is unsuitable for a main stronghold.  %s
+2410:4713	s_this_location_is_unsuitable_s	This location is unsuitable.  %s
+2410:4734	s_your_stronghold_is_too_far_away	Your stronghold is too far away.
+2410:475c	s_0.21._Stronghold_Save._2410_475c	0.21.  Stronghold Save.\x1a               
+2410:4784	s_Loading..._2410_4784	Loading...
+2410:478f	s_Load_complete._2410_478f	Load complete.
+2410:479e	s_Load_Error_2410_479e	Load Error
+2410:47a9	s_%ssave.%03d_2410_47a9	%ssave.%03d
+2410:47b5	s_Saving..._2410_47b5	Saving...
+2410:47bf	s_Save_complete._2410_47bf	Save complete.
+2410:47ce	s_Save_Error_2410_47ce	Save Error
+2410:47d9	s_Deleting..._2410_47d9	Deleting...
+2410:47e5	s_Delete_complete._2410_47e5	Delete complete.
+2410:4802	s_uc_lx_d_len_ld_loc_ld	uc%lx %d len %ld loc %ld \r
+2410:481d	s_n_up_d	N UP = %d \r
+2410:4829	s_dc_lx_d_ln_ld_lc_ld_lx	dc%lx %d ln %ld lc %ld @%lx \r
+2410:4847	s_n_down_d	N DOWN = %d \r
+2410:4855	s_type__d_len__ld_2410_4855	type %d len %ld \r
+2410:4867	s_.xmi_2410_4867	.xmi
+2410:486c	s_midpak.ad_2410_486c	midpak.ad
+2410:4876	s_cmidpak.com_2410_4876	cmidpak.com
+2410:4882	s_ibmsnd.com_2410_4882	ibmsnd.com
+2410:488d	s_sblaster.com_2410_488d	sblaster.com
+2410:489a	s_fibmbak.com_2410_489a	fibmbak.com
+2410:48a6	s_sbpro.com_2410_48a6	sbpro.com
+2410:48b0	s_paudio.com_2410_48b0	paudio.com
+2410:48bb	s_adlib.com_2410_48bb	adlib.com
+2410:48c5	s_adlibg.com_2410_48c5	adlibg.com
+2410:48d0	s_sbfm.adv_2410_48d0	sbfm.adv
+2410:48d9	s_sbp2fm.adv_2410_48d9	sbp2fm.adv
+2410:48e4	s_sbp1fm.adv_2410_48e4	sbp1fm.adv
+2410:48ef	s_pasfm.adv_2410_48ef	pasfm.adv
+2410:48f9	s_pasopl.adv_2410_48f9	pasopl.adv
+2410:4904	s_adlib.adv_2410_4904	adlib.adv
+2410:490e	s_adlibg.adv_2410_490e	adlibg.adv
+2410:4919	s_mt32mpu.adv_2410_4919	mt32mpu.adv
+2410:4b6f	s_Lawful_2410_4b6f	Lawful
+2410:4b76	s_Neutral_2410_4b76	Neutral
+2410:4b7e	s_Chaotic_2410_4b7e	Chaotic
+2410:4b86	s_Male_2410_4b86	Male
+2410:4b8b	s_Female_2410_4b8b	Female
+2410:4b92	s_str	STR
+2410:4b96	s_int	INT
+2410:4b9a	s_wis	WIS
+2410:4b9e	s_dex	DEX
+2410:4ba2	s_con	CON
+2410:4ba6	s_cha	CHA
+2410:4baa	s_st	st
+2410:4bad	s_nd	nd
+2410:4bb0	s_rd	rd
+2410:4bb3	s_th	th
+2410:4bb6	s_baron	Baron 
+2410:4bbd	s_baroness	Baroness 
+2410:4bc7	s_viscount	Viscount 
+2410:4bd1	s_viscountess	Viscountess 
+2410:4bde	s_count	Count 
+2410:4be5	s_countess	Countess 
+2410:4bef	s_marquis	Marquis 
+2410:4bf8	s_marquise	Marquise 
+2410:4c02	s_duke	Duke 
+2410:4c08	s_duchess	Duchess 
+2410:4c11	s_archduke	Archduke 
+2410:4c1b	s_archduchess	Archduchess 
+2410:4c28	s_prince	Prince 
+2410:4c30	s_princess	Princess 
+2410:4c3a	s_king	King 
+2410:4c40	s_queen	Queen 
+2410:4c47	s_emperor	Emperor 
+2410:4c50	s_emperess	Emperess 
+2410:4c5a	s_lord	Lord 
+2410:4c60	s_lady	Lady 
+2410:4c66	s_wizard	Wizard 
+2410:4c6e	s_maga	Maga 
+2410:4c74	s_patriarch	Patriarch 
+2410:4c7f	s_matriarch	Matriarch 
+2410:4c8a	s_master_thief	Master Thief 
+2410:4c98	s_dwarf_lord	Dwarf Lord 
+2410:4ca4	s_dwarf_lady	Dwarf Lady 
+2410:4cb0	s_lord_wizard	Lord Wizard 
+2410:4cbd	s_lady_maga	Lady Maga 
+2410:4cc8	s_Sheriff_2410_4cc8	Sheriff 
+2410:4cd1	s__d_2410_4cd1	%d
+2410:4cd4	s_s_s	%s%s, 
+2410:4cdb	s__s_2410_4cdb	%s 
+2410:4cdf	s__s_2410_4cdf	%s
+2410:4ce2	s_Population_2410_4ce2	Population
+2410:4ced	s_Food_prod._2410_4ced	Food prod.
+2410:4cf8	s_Food_stored_2410_4cf8	Food stored
+2410:4d04	s_Housing_2410_4d04	Housing
+2410:4d0c	s_Food_storage_2410_4d0c	Food storage
+2410:4d19	s_Food_bought_2410_4d19	Food bought
+2410:4d25	s_Food_sold_2410_4d25	Food sold
+2410:4d2f	s_Max._trade_2410_4d2f	Max. trade
+2410:4d3a	s_Income_2410_4d3a	Income
+2410:4d41	s_Gold_2410_4d41	Gold
+2410:4d46	s_Vault_storage_2410_4d46	Vault storage
+2410:4d54	s_Fund_Access_2410_4d54	Fund Access
+2410:4d60	s_Common_fund_2410_4d60	Common fund
+2410:4d6c	s_popularity_2410_4d6c	popularity
+2410:4d77	s_city_blocks_2410_4d77	city blocks
+2410:4d83	s_Current_2410_4d83	Current
+2410:4d8b	s__d___2410_4d8b	%d%%
+2410:4d90	s_to_promote_2410_4d90	to promote
+2410:4d9b	s_Accept_2410_4d9b	Accept
+2410:4da2	s_You_may_raise_a_primary_ability_b_2410_4da2	You may raise a primary ability by trading two points of another ability. Select ability to increase.
+2410:4e08	s_Select_ability_to_adjust_downwar_2410_4e08	Select ability to adjust downwards by two points.
+2410:4e3a	s_cancel	Cancel
+2410:4e41	s_A_LAWFUL_leader_must_achieve_the_2410_4e41	A LAWFUL leader must achieve the rank of EMPEROR.
+2410:4e73	s_A_NEUTRAL_leader_must_destroy_al_2410_4e73	A NEUTRAL leader must destroy all enemies and achieve the rank of EMPEROR.
+2410:4ebe	s_A_CHAOTIC_leader_must_destroy_al_2410_4ebe	A CHAOTIC leader must destroy all enemies.
+2410:4ee9	s_has_achieved_the_rank_of_EMPEROR_2410_4ee9	has achieved the rank of EMPEROR.  Congratulations!
+2410:4f1d	s_has_destroyed_all_enemies_and_ha_2410_4f1d	has destroyed all enemies and has achieved EMPEROR. Congratulations!
+2410:4f62	s_has_destroyed_all_enemies._Congr_2410_4f62	has destroyed all enemies.  Congratulations!
+2410:4f8f	s_OK_2410_4f8f	OK
+2410:4f92	s_Try_Again_2410_4f92	Try Again
+2410:4f9c	s_Select_an_alignment._2410_4f9c	Select an alignment.
+2410:4fb1	s_male_or_female	Male or female?
+2410:4fc1	s_Keep_2410_4fc1	Keep
+2410:4fc6	s_Discard_2410_4fc6	Discard
+2410:4fce	s_reroll	Reroll
+2410:4fd5	s_Reroll_ability_scores__or_select_2410_4fd5	Reroll ability scores, or select the character's class.
+2410:500d	s_Select_the_character's_name._2410_500d	Select the character's name.
+2410:502a	s_Please_type_your_character_s_nam_2410_502a	Please type your character's name. Esc go back.
+2410:505a	s_Keep_%s._2410_505a	Keep %s.
+2410:5063	s_Place_2410_5063	Place
+2410:5069	s_Continue_2410_5069	Continue
+2410:5072	s_place_s_here	Place %s here.
+2410:5081	s_year_d_s	Year %d. %s
+2410:508d	s_year_d_this_leader_s	Year %d. This leader %s
+2410:50a5	s_next_leader	Next Leader
+2410:50b1	s_auto_build	Auto-build    \x7f
+2410:50c1	s_auto_build	Auto-build
+2410:50cc	s_census	Census
+2410:50d3	s_property	Property
+2410:50dc	s_total_census	Total Census
+2410:50e9	s_all_property	All Property
+2410:50f6	s_help	Help
+2410:50fb	s_Done_2410_50fb	Done
+2410:5100	s_s_will_now_build_homes_automatically	%s will now build homes automatically.
+2410:5127	s_s_will_no_longer_build_houses_automatically	%s will no longer build houses automatically.
+2410:5155	s_arenas_2410_5155	arenas
+2410:515c	s_armories_2410_515c	armories
+2410:5165	s_bakeries	bakeries
+2410:516e	s_baths_2410_516e	baths
+2410:5174	s_bazaars	bazaars
+2410:517c	s_builder_hall	builder hall
+2410:5189	s_castles	castles
+2410:5191	s_farms	farms
+2410:5197	s_fletchers	fletchers
+2410:51a1	s_forester_camp	forester camp
+2410:51af	s_forges	forges
+2410:51b6	s_gaming_halls	gaming halls
+2410:51c3	s_gem_mines	gem mines
+2410:51cd	s_glassworks	glassworks
+2410:51d8	s_gold_mines	gold mines
+2410:51e3	s_granaries	granaries
+2410:51ed	s_inns_2410_51ed	inns
+2410:51f2	s_iron_mines	iron mines
+2410:51fd	s_jewelers	jewelers
+2410:5206	s_magic_mills	magic mills
+2410:5212	s_markets	markets
+2410:521a	s_mason_s_halls	mason's halls
+2410:5228	s_outposts	outposts
+2410:5231	s_residences	residences
+2410:523c	s_scriberies	scriberies
+2410:5247	s_towers	towers
+2410:524e	s_toymakers	toymakers
+2410:5258	s_training	training
+2410:5261	s_trees_2410_5261	trees
+2410:5267	s_vaults_2410_5267	vaults
+2410:526e	s_Summary_1_2410_526e	Summary 1
+2410:5278	s_Summary_2_2410_5278	Summary 2
+2410:5282	s_Summary_3_2410_5282	Summary 3
+2410:528c	s_Damage_2410_528c	Damage
+2410:5293	s_all_property	All property.
+2410:52a1	s_buildings_belonging_to_s_s	Buildings belonging to %s%s
+2410:52bd	s_buildings	Buildings
+2410:52c7	s_total	Total
+2410:52cd	s_level_1	Level 1
+2410:52d5	s_level_2	Level 2
+2410:52dd	s_level_3	Level 3
+2410:52e5	s_d_d	%d (%d)
+2410:52ed	s_The__s_belonging_to__s_the__s_ar_2410_52ed	The %s belonging to %s the %s are highlighted in red.
+2410:5323	s_The__s_belonging_to_all_leaders_a_2410_5323	The %s belonging to all leaders are highlighted in red.
+2410:535b	s_The_damaged_structures_belonging_2410_535b	The damaged structures belonging to %s the %s are highlighted in red.
+2410:53a1	s_The_damaged_structures_belonging_2410_53a1	The damaged structures belonging to all leaders are highlighted in red.
+2410:53e9	s_level_1_2410_53e9	level 1
+2410:53f1	s_level_2_2410_53f1	level 2
+2410:53f9	s_level_3_2410_53f9	level 3
+2410:5401	s_level_4_2410_5401	level 4
+2410:5409	s_level_5_2410_5409	level 5
+2410:5411	s_levels_6_10_2410_5411	levels 6-10
+2410:541d	s_levels_11_15_2410_541d	levels 11-15
+2410:542a	s_levels_16_20_2410_542a	levels 16-20
+2410:5437	s_levels_20_25_2410_5437	levels 20-25
+2410:5444	s_levels_26_30_2410_5444	levels 26-30
+2410:5451	s_levels_31_35_2410_5451	levels 31-35
+2410:545e	s_level_36_2410_545e	level 36
+2410:5467	s_levels_11_12f_2410_5467	levels 11-12f
+2410:5475	s_levels_12g_12k_2410_5475	levels 12g-12k
+2410:5484	s_levels_12l_12m_2410_5484	levels 12l-12m
+2410:5493	s_levels_6_10c_2410_5493	levels 6-10c
+2410:54a0	s_levels_10d_10h_2410_54a0	levels 10d-10h
+2410:54af	s_levels_10i__10m_2410_54af	levels 10i- 10m
+2410:54bf	s_levels_6_8c_2410_54bf	levels 6-8c
+2410:54cb	s_levels_8d_8h_2410_54cb	levels 8d-8h
+2410:54d8	s_levels_8i_8k_2410_54d8	levels 8i-8k
+2410:54e5	s_summary	Summary
+2410:54ed	s_all_levels	All levels
+2410:54f8	s_total_population	Total population.
+2410:550a	s_s_population_loyal_to_s_s	%s population, loyal to %s%s
+2410:5527	s_units	UNITS
+2410:552d	s_population	POPULATION
+2410:5538	s_all_units_loyal_to_s_the_s_are_displayed	All units loyal to %s the %s are displayed.
+2410:5564	s_all_units_are_displayed	All units are displayed.
+2410:557d	s_only_units_of_s_loyal_to_s_the_s_are_display	Only units of %s loyal to %s the %s are displayed.
+2410:55b0	s_only_units_of_s_are_displayed	Only units of %s are displayed.
+2410:55d8	s_monster	monster
+2410:55e0	s__d_2410_55e0	%d \r
+2410:55e5	s_kill_3	kill 3\r
+2410:55ed	s_kill_2	kill 2 \r
+2410:55f6	s_mine_exhausted_at_d_d	Mine exhausted at (%d, %d).
+2410:5612	s_Intelligence_reports__s_unit_die_2410_5612	Intelligence reports %s unit died of starvation. (%d, %d)
+2410:564d	s_construction_abandoned	Construction abandoned.
+2410:5665	s_s_unit_drowns_d_d	%s unit drowns.  (%d, %d)
+2410:5680	s_intelligence_reports_s_unit_fleeing_from_bat	Intelligence reports %s unit fleeing from battle. (%d, %d)
+2410:56bb	s_intelligence_reports_s_unit_infected_with_di	Intelligence reports %s unit infected with disease. (%d, %d)
+2410:56f8	s_kill_3	kill 3\r
+2410:5700	s_intelligence_reports_s_unit_drained_of_energ	Intelligence reports %s unit drained of energy. (%d, %d)
+2410:5739	s_intelligence_reports_s_unit_destroyed_d_d	Intelligence reports %s unit destroyed. (%d, %d)
+2410:576a	s_mindark_s_keep_destroyed_d_d	Mindark's keep destroyed. (%d, %d)
+2410:578d	s_s_stronghold_destroyed_d_d	%s stronghold destroyed. (%d, %d)
+2410:57af	s_your_main_stronghold_has_been_destroyed_game	Your main stronghold has been destroyed. Game over.
+2410:57e3	s_you_have_defeated_all_enemies	You have defeated all enemies.
+2410:5802	s_you_may_continue_playing_but_your_score_will	You may continue playing, but your score will not be recorded.
+2410:5841	s_intelligence_reports_s_unit_cured_of_disease	Intelligence reports %s unit cured of disease. (%d, %d)
+2410:5879	s_intelligence_reports_s_unit_succombs_to_blas	Intelligence reports %s unit succombs to blast spore disease. (%d, %d)
+2410:58c0	s_spies_report_s_heading_towards_stronghold_d_	Spies report %s heading towards stronghold. (%d, %d)
+2410:58f5	s_s_is_attacking	%s is attacking.
+2410:5906	s_intelligence_reports_s_attacking	Intelligence reports %s attacking.
+2410:5b07	s_lightning_bolt	lightning bolt
+2410:5b16	s_towards	towards
+2410:5b1e	s_magic_missile	magic missile
+2410:5b2c	s_charm_person	charm person
+2410:5b39	s_fireball	fireball
+2410:5b42	s_charm_monsters	charm monsters
+2410:5b51	s_hold_person	hold person
+2410:5b5d	s_sleep	sleep
+2410:5b63	s_web	web
+2410:5b67	s_charm	charm
+2410:5b6d	s_finger_of_death	finger of death
+2410:5b7d	s_disintegrate	disintegrate
+2410:5b8a	s_flesh_to_stone	flesh to stone
+2410:5b99	s_mass_charm	mass charm
+2410:5ba4	s_s_casts_a_s_spell_s_s	%s casts a %s spell %s %s.
+2410:5bbf	s_s_takes_half_damage_from_spells	%s takes half damage from spells.
+2410:5be1	s_s_takes_half_damage_from_dragon_breath	%s takes half damage from dragon breath.
+2410:5c0a	s_s_takes_half_damage_from_lightning	%s takes half damage from lightning.
+2410:5c2f	s_s_is_charmed_by_s	%s is charmed by %s.
+2410:5c44	s_s_fails_to_charm_s	%s fails to charm %s.
+2410:5c5a	s_s_is_immune_to_fire	%s is immune to fire.
+2410:5c70	s_s_takes_half_damage_from_fire	%s takes half damage from fire.
+2410:5c90	s_s_is_held_by_s	%s is held by %s.
+2410:5ca2	s_s_is_put_to_sleep_by_s	%s is put to sleep by %s.
+2410:5cbc	s_s_is_entangled_in_a_web_created_by_s	%s is entangled in a web created by %s.
+2410:5cf2	s_pause	Pause
+2410:5cf8	s_resume	Resume
+2410:5cff	s_s_c	%s-%c
+2410:5d05	s_sorry_you_may_not_pause_during_a_battle	Sorry, you may not pause during a battle.
+2410:5d2f	s_pause_select_resume_to_enable_game_events_pr	Pause. Select 'Resume' to enable game events. Press SPACE for a single game event.
+2410:5d82	s_resume_game_events_will_now_occur_normally	Resume. Game events will now occur normally.
+2410:5daf	s_gold	Gold
+2410:5db4	s_fund	Fund
+2410:5db9	s_previous	Previous
+2410:5dc2	s_next	Next
+2410:5df8	s_all_enemies_destroyed	All enemies destroyed.
+2410:5e0f	s_next_wave_of_enemies_appear	Next wave of enemies appear.
+2410:5e30	s_strong.sav_2410_5e30	strong.sav
+2410:5e3b	s_strong.sav\game.cfg_2410_5e3b	strong.sav\game.cfg
+2410:5e4f	s__2410_5e4f	\n
+2410:5e51	s__2410_5e51	\x08 \x08
+2410:5e55	s__c_2410_5e55	%c
+2410:5e58	s_strong.sav\game.cfg_2410_5e58	strong.sav\game.cfg
+2410:5e6c	s_strong.sav_2410_5e6c	strong.sav
+2410:5e77	s_strong.sav\strong.$$$_2410_5e77	strong.sav\strong.$$$
+2410:5e8d	s_strong.sav\strong.$$$_2410_5e8d	strong.sav\strong.$$$
+2410:5ea3	s_Path_to_write_game_data__2410_5ea3	Path to write game data:\n
+2410:5ebd	s_ENTER__use_previous_configuratio_2410_5ebd	ENTER: use previous configuration, SPACE: reconfigure, ESC: quit
+2410:5efe	s_Newline1	\n
+2410:5f00	s_Sound_(1._PC_Speaker_2._Sound_Bl_2410_5f00	Sound (1. PC Speaker  2. Sound Blaster  3. Pro Audio Spectrum\n
+2410:5f3f	s_4._Adlib_5._Roland_6._Off):_2410_5f3f	       4. Adlib       5. Roland         6. Off):
+2410:5f70	s_Newline2	\n
+2410:5f72	s_Sound_Blaster_(1._Original_2._Pr_2410_5f72	Sound Blaster (1. Original  2.  Pro Type 2  3. Pro Type 1):
+2410:5fae	s__2410_5fae	\n
+2410:5fb0	s_Pro_Audio_Spectrum_(1._Plus_2._S_2410_5fb0	Pro Audio Spectrum (1. Plus  2. Spectrum 16):
+2410:5fe0	s_Adlib_(1._Original_2._Gold):_2410_5fe0	Adlib (1. Original  2. Gold):
+2410:5ffe	s__2410_5ffe	\n
+2410:6000	s_Sound_Effects_(1._PC_Speaker_2._S_2410_6000	Sound Effects (1. PC Speaker  2. Sound Blaster  3. Pro Audio Spectrum\n
+2410:6047	s_4._Adlib_5._None):_2410_6047	               4. Adlib       5. None):
+2410:606f	s__2410_606f	\n
+2410:6071	s_Sound_Blaster_(1._Original_2._Pr_2410_6071	Sound Blaster (1. Original  2.  Pro):
+2410:6099	s_Pro_Audio_Spectrum_(1._Plus_2._S_2410_6099	Pro Audio Spectrum (1. Plus  2. Spectrum 16):
+2410:60c7	s__2410_60c7	\n
+2410:60c9	s_Adlib_(1._Original_2._Gold):_2410_60c9	Adlib (1. Original  2. Gold):
+2410:60e7	s__2410_60e7	\n
+2410:60e9	s_Sound_IRQ_is_%c_(1._Don't_change_2410_60e9	Sound IRQ is %c (1. Don't change  2. IRQ 2  3. IRQ 5\n
+2410:611f	s_empty	                                 
+2410:6140	s_4_irq_7_5_irq_10	4. IRQ 7  5. IRQ 10):
+2410:6158	s_Largest_executable_program_size_i_2410_6158	Largest executable program size is only %s bytes.\n
+2410:618b	s_Stronghold_requires_585_000_byte_2410_618b	Stronghold requires 585,000 bytes.\n
+2410:61b1	s_Bad_Pointer__lx_2410_61b1	Bad Pointer %lx \r
+2410:61c3	s_Str__x__x_2410_61c3	Str %x %x  \r
+2410:61d0	s_Bad_heap__at__x_S_x_Z_x_P_x_2410_61d0	Bad heap @%x S%x Z%x P%x  \r
+2410:61ec	s__lx_already_free_2410_61ec	%lx already free \r
+2410:6204	s_short_sword_2410_6204	short sword
+2410:6210	s_normal_weaponry_2410_6210	normal weaponry
+2410:6220	s_+%d_ring_of_prot._2410_6220	+%d ring of prot.
+2410:6232	s_no_armor_2410_6232	no armor
+2410:623b	s_leather_armor_2410_623b	leather armor
+2410:6249	s_+1_leather_armor_2410_6249	+1 leather armor
+2410:625a	s_+2_leather_armor_2410_625a	+2 leather armor
+2410:626b	s_shield_2410_626b	shield
+2410:6272	s_scale_armor_2410_6272	scale armor
+2410:627e	s_chain_mail_2410_627e	chain mail
+2410:6289	s_banded_armor_2410_6289	banded armor
+2410:6296	s_plate_mail_2410_6296	plate mail
+2410:62a1	s_plate_and_shield_2410_62a1	plate and shield
+2410:62b2	s_plate_and_shield_+1_2410_62b2	plate and shield +1
+2410:62c6	s_suit_armor_2410_62c6	suit armor
+2410:62d1	s_exp_ld	Exp %ld \r
+2410:62db	s__2410_62db	\x7f
+2410:62dd	s_Ready_2410_62dd	Ready
+2410:62e3	s_Home_2410_62e3	Home
+2410:62e8	s_Unassigned_2410_62e8	Unassigned
+2410:62f3	s_Unit_of__d_2410_62f3	Unit of %d
+2410:62fe	s_Loyal_to__s_2410_62fe	Loyal to %s
+2410:630a	s_L._to_%s_2410_630a	L. to %s
+2410:6313	s__d_s_lv_rn__c__2410_6313	%d%s lv rn %c, 
+2410:6323	s__d_s_level__2410_6323	%d%s level, 
+2410:6330	s_Experience_points_2410_6330	Experience points
+2410:6342	s__s__s_2410_6342	%s/%s
+2410:6348	s_XP_value__d_2410_6348	XP value %d
+2410:6354	s_Hit_Points__d__d_2410_6354	Hit Points %d/%d
+2410:6365	s_damaged__s_2410_6365	damaged %s
+2410:6370	s_+%d_%s_2410_6370	+%d %s
+2410:6377	s_Armor_class__d_2410_6377	Armor class %d
+2410:6386	s_Mirror_2410_6386	Mirror
+2410:638d	s_s_is_not_readied	  %s is not readied.
+2410:63a2	s_s_is_ready	  %s is ready.
+2410:63b1	s_s_is_no_longer_ready	%s is no longer ready.
+2410:63c8	s_ready_characters_are_the_first_to_come_when_	Ready characters are the first to come when attracted.%s
+2410:6401	s_Done_2410_6401	Done
+2410:6406	s_s_is_now_based_at_d_d_this_unit_will_remain_	%s is now based at (%d, %d). This unit will remain home when attracted.
+2410:644e	s_s_can_now_be_called_away_from_home	%s can now be called away from home.
+2410:6473	s_Previous_2410_6473	Previous
+2410:647c	s_Next_2410_647c	Next
+2410:6481	s_Leader_2410_6481	Leader
+2410:6488	s_Help_2410_6488	Help
+2410:648f	s_Define_region_to_command__s_loya_2410_648f	Define region to command %s loyal to %s.
+2410:64b8	s_%d_%s%s_loyal_to_%s_found._Left_c_2410_64b8	%d %s%s loyal to %s found. Left click: set triangles. R: ready. U: unassign. H: home. Right click: abort.
+2410:6522	s_Priorities_adjusted_for_%d_%s%s._2410_6522	Priorities adjusted for %d %s%s.
+2410:6543	s_%d_%s%s_unassigned._2410_6543	%d %s%s unassigned.
+2410:6557	s_%d_%s%s_readied._2410_6557	%d %s%s readied.
+2410:6568	s_%d_%s%s_homed._2410_6568	%d %s%s homed.
+2410:6577	s_Region_selection_aborted._2410_6577	Region selection aborted.
+2410:6789	s__at_Housing_2410_6789	@Housing
+2410:6792	s_farmland	@Farmland
+2410:679c	s_inn	@Inn
+2410:67a1	s_temple	@Temple
+2410:67a9	s_forge	@Forge
+2410:67b0	s_university	@University
+2410:67bc	s_tower	@Tower
+2410:67c3	s_granary	@Granary
+2410:67cc	s_marketplace	@Marketplace
+2410:67d9	s_tree	@Tree
+2410:67df	s_e_w_wall	@E/W wall
+2410:67e9	s_n_s_wall	@N/S wall
+2410:67f3	s_e_w_bridge	@E/W bridge
+2410:67ff	s_n_s_bridge	@N/S bridge
+2410:680b	s_guard_house	@Guard house
+2410:6818	s_thieve_s_den	@Thieve's Den
+2410:6826	s_social_hall	@Social hall
+2410:6833	s_e_w_gate	@E/W gate
+2410:683d	s_n_s_gate	@N/S gate
+2410:6847	s_elf_gardens	@Elf Gardens
+2410:6854	s_fletcher	@Fletcher
+2410:685e	s_public_bath	@public bath
+2410:686b	s_mason_s_hall	@mason's hall
+2410:6879	s_jeweler	@jeweler
+2410:6882	s_glassworks	@glassworks
+2410:688e	s_outpost	@outpost
+2410:6897	s_vault	@vault
+2410:689e	s_forester_s_camp	@Forester's camp
+2410:68af	s_builder_s_hall	@Builder's hall
+2410:68bf	s_bazaar	@bazaar
+2410:68c7	s_arena	@arena
+2410:68ce	s_toymaker	@toymaker
+2410:68d8	s_bakery	@bakery
+2410:68e0	s_gaming_hall	@gaming hall
+2410:68ed	s_scribery	@scribery
+2410:68f7	s_magic_mill	@magic mill
+2410:6903	s_armory	@armory
+2410:690b	s_Building_is_now_%s._Select_type_o_2410_690b	Building is now %s.  Select type of building.
+2410:69db	s_Your_may_continue_playing__but_y_2410_69db	Your may continue playing, but your score will not be recorded.
+2410:6a1b	s_spring_2410_6a1b	spring
+2410:6a22	s_fall_2410_6a22	fall
+2410:6a27	s_winter_2410_6a27	winter
+2410:6a2e	s_the_season_has_changed_to_summer	The season has changed to summer.
+2410:6a50	s_The_season_has_changed_to_%s._2410_6a50	The season has changed to %s.
+2410:6a6e	s_d_building_s_repaired	%d building%s repaired.
+2410:6a89	s_shigh_txt	%shigh.txt
+2410:6a94	s_great_achievements	Great Achievements
+2410:6aa7	s_name	Name
+2410:6aac	s_enemies	Enemies
+2410:6ab4	s_done	Done
+2410:6ab9	s_c_s_s_d	%c%s%s@%d
+2410:6ac7	s_my_s_we_in_this_neighborhood_are_doing_well_	$My %s, we in this neighborhood are doing well. We thank you for all you have done to help your people.
+2410:6b2f	s_lord	lord
+2410:6b34	s_lady	lady
+2410:6b90	s_On_this_day_it_was_declared_to_a_2410_6b90	On this day it was declared to all the Realms
+2410:6bbe	s_that__s_shall_henceforth_hold_th_2410_6bbe	that %s shall henceforth hold the rank of
+2410:6be8	s__s__in_recognition_of_valor_on_t_2410_6be8	%s, in recognition of valor on the field of battle.
+2410:6c1c	s__s__in_recognition_for_city_mana_2410_6c1c	%s, in recognition for city management.
+2410:6c44	s_Your_desire_to_destroy_him_and_2410_6c44	Your desire to destroy him and
+2410:6c63	s_gain_revenge_inspires_you_to_new_2410_6c63	gain revenge inspires you to new heights
+2410:6c8c	s_You_will_be_promoted_to_ever_gre_2410_6c8c	You will be promoted to ever-greater ranks
+2410:6cb7	s_of_nobility._You_will_truly_be_t_2410_6cb7	of nobility. You will truly be the master
+2410:6ce1	s_of_your..._2410_6ce1	of your...
+2410:6cec	s_Your_desire_to_destroy_him_and_g_2410_6cec	Your desire to destroy him and gain revenge
+2410:6d18	s_inspired_you_to_seek_a_life_of_g_2410_6d18	inspired you to seek a life of glory and
+2410:6d41	s_adventure._2410_6d41	adventure.
+2410:6d4c	s__s_stronghold_destroyed_2410_6d4c	%s stronghold destroyed
+2410:6d64	s_Congratulations__you_have_achiev_2410_6d64	Congratulations, you have achieved your objective.
+2410:6d97	s_of_adventure_and_glory._2410_6d97	of adventure and glory.
+2410:6daf	s_that__s_shall_hold_the_rank_of_2410_6daf	that %s shall hold the rank of
+2410:6dce	s_%s,_for_valor_in_battle._2410_6dce	%s, for valor in battle.
+2410:6de7	s_%s,_for_city_management._2410_6de7	%s, for city management.
+2410:6e77	s_kill_4	kill 4\r
+2410:6e7f	s_are	are
+2410:6e83	s_is	is
+2410:6e86	s_the_d_unit_s_loyal_to_s_s_d_recruiting_d_tra	The %d unit%s loyal to %s %s %d%% recruiting, %d%% training, and %d%% building.
+2410:6ed6	s_s_fails_to_turn	%s fails to turn.
+2410:6ee8	s_s_cannot_turn	%s cannot turn.
+2410:6ef8	s_s_destroys_d_undead	%s destroys %d undead.
+2410:6f0f	s_s_turns_d_undead	%s turns %d undead.
+2410:6f23	s_building_d_s	Building %d %s.
+2410:6f33	s_Enemy_%s._2410_6f33	Enemy %s.
+2410:6f3d	s_d	%d \r
+2410:6f42	s_you_cannot_see_the_terrain_here	You cannot see the terrain here.
+2410:6f63	s_s_is_paralyzed_by_s	%s is paralyzed by %s.
+2410:6f7a	s_s_is_stoned_by_s	%s is stoned by %s.
+2410:6f8e	s_s_is_no_longer_charmed	%s is no longer charmed.
+2410:6fa7	s_cure_light_wounds_2410_6fa7	cure light wounds
+2410:6fb9	s_cure_serious_wounds_2410_6fb9	cure serious wounds
+2410:6fcd	s_cure_critical_wounds_2410_6fcd	cure critical wounds
+2410:6fe2	s_cure_all_2410_6fe2	cure all
+2410:6feb	s_s_casts_s_on_s_to_heal_d_hitpoint_s_for_a_to	%s casts %s on %s to heal %d hitpoint%s for a total of %d hitpoint%s.
+2410:7031	s_s_takes_no_damage_from_non_magical_weapons	%s takes no damage from non-magical weapons.
+2410:705e	s_s_takes_no_damage_from_less_than_2_weapons	%s takes no damage from less than +2 weapons.
+2410:708c	s_s_takes_no_damage_from_missile_attacks	%s takes no damage from missile attacks.
+2410:70b5	s_s_poisons_s	%s poisons %s.
+2410:70c4	s_s_infects_s_with_blast_spore_disease	%s infects %s with blast spore disease.
+2410:70ec	s_s_drains_a_level_from_s	%s drains a level from %s.
+2410:7107	s_s_drains_all_energy_from_s	%s drains all energy from %s.
+2410:7125	s_s_drains_two_levels_from_s	%s drains two levels from %s.
+2410:7165	s_demo_cancelled	Demo cancelled.
+2410:7175	s_nasher	Nasher
+2410:717c	s_fordor	Fordor
+2410:7183	s_kaunas	Kaunas
+2410:718a	s_mindark	Mindark
+2410:7192	s_a_new_land_lies_before_you_choose_carefully	A new land lies before you. Choose carefully
+2410:71bf	s_where_you_settle	where you settle.
+2410:71d1	s_your_goal_create_a_thriving_community	Your goal: Create a thriving community.
+2410:71f9	s_balance_building_money_and_food_production	Balance building, money, and food production
+2410:7226	s_to_keep_your_people_happy	to keep your people happy.
+2410:7241	s_your_world_will_be_filled_with_a_full_range	Your world will be filled with a full range
+2410:726d	s_of_official_d_d_game_characters	of official D&D@ game characters.
+2410:728f	s_you_are_not_alone_in_this_pristine_land	You are not alone in this pristine land.
+2410:72b8	s_official_d_d_game_monsters_will_fight_to	Official D&D@ game monsters will fight to
+2410:72e2	s_destroy_your_city	destroy your city.
+2410:72f5	s_force_and_fury_meet_magic_spells_as_battles	Force and fury meet magic spells as battles
+2410:7321	s_play_out_in_the_courtyards_of_mighty_castles	play out in the courtyards of mighty castles.
+2410:734f	s_your_people_will_fight_bravely_and_work	Your people will fight bravely and work
+2410:7377	s_hard_your_city_will_grow	hard. Your city will grow...
+2410:7394	s_and_grow	and grow...
+2410:73a0	s_and_grow	                     and grow...
+2410:73c1	s_but_beware_the_evil_mindark_whose	But beware the evil Mindark, whose
+2410:73e4	s_hordes_destroyed_your_homeland_long_ago	hordes destroyed your homeland long ago.
+2410:740d	s_if_you_lead_with_wisdom_and_cunning	If you lead with wisdom and cunning...
+2410:7434	s_if_you_fight_with_valor_and_guile	If you fight with valor and guile...
+2410:7459	s_you_will_truly_be_master_of_your	You will truly be master of your...
+2410:748e	s_getcache__d_SIZESTASH__d_2410_748e	getcache %d  SIZESTASH %d  \r
+2410:74b8	s_choose_party_to_build_for_now_building_for_s	Choose party to build for.  Now building for %s the %s.
+2410:74f0	s_s	%s:
+2410:74f4	s_you_can_only_place_a_single_arena	 You can only place a single arena.
+2410:7518	s_bridges_must_be_near_water_s_edge	 Bridges must be near water's edge.
+2410:753c	s_next_outpost_available_at_rank_s	 Next outpost available at rank %s.
+2410:7560	s_no_more_outposts_are_available	 No more outposts are available.
+2410:7581	s_requires_a_rank_of_s	 Requires a rank of %s.
+2410:7599	s_requires_a_unit_of_level_d	 Requires a unit of level %d.
+2410:75b7	s_location_is_too_narrow_for_s	 Location is too narrow for %s.
+2410:75d7	s_location_is_too_narrow_for_a_s	 Location is too narrow for a %s.
+2410:75f9	s_walls_must_be_near_land	 Walls must be near land.
+2410:7613	s_buildings_cannot_be_placed_over_water	Buildings cannot be placed over water.
+2410:763a	s_this_location_is_unsuitable_for_buildings	This location is unsuitable for buildings.
+2410:7665	s_it_will_cost_s_the_s_d_gp	 It will cost %s the %s %d gp. 
+2410:7685	s_place	Place
+2410:768b	s_change_building	Change Building
+2410:769b	s_change_party	Change Party
+2410:76a8	s_done	Done
+2410:76ad	s_party_member_s_doesn_t_have_enough_gold_to_c	Party member %s doesn't have enough gold to construct a %s.
+2410:76e9	s_too_many_construction_sites	Too many construction sites.
+2410:7706	s_excavate	Excavate
+2410:770f	s_remove	Remove
+2410:7716	s_change_party	Change party
+2410:7723	s_s_search_this_location_for_minerals_active_p	%s: Search this location for minerals?  Active party is %s the %s.
+2410:7766	s_no_minerals_were_found	No minerals were found.
+2410:777e	s_gems_discovered	Gems discovered.
+2410:778f	s_iron_deposits_discovered	Iron deposits discovered.
+2410:77a9	s_gold_discovered	Gold discovered.
+2410:77ba	s_no	No
+2410:77bd	s_remove_s_permanently_are_you_sure	Remove %s permanently. Are you sure?
+2410:77e2	s_person_2410_77e2	person
+2410:77e9	s_people_2410_77e9	people
+2410:77f0	s_claim	Claim
+2410:77f6	s_chop_down	Chop down
+2410:7800	s_s_claim_this_tree_harvest_value_is_d_gold_ac	%s: Claim this tree? Harvest value is %d gold. Active party is %s the %s.
+2410:784a	s_forest_claimed_this_forest_creates_d_gold_of	Forest claimed. This forest creates %d gold of income and feeds %d %s.
+2410:7891	s_tree_cut_down_d_gold_obtained	Tree cut down. %d gold obtained.
+2410:78b2	s_maintenance_cost_is	Maintenance cost is
+2410:78c6	s_income_created_is	Income created is
+2410:78d8	s_empty	..
+2410:78db	s_empty	...
+2410:78e8	s_Done_2410_78e8	Done
+2410:78ed	s_s_d_complete_owned_by_s	%s: %d%% complete. Owned by %s.
+2410:790d	s_s_u_u_held_by_s	%s (%u/%u): Held by %s.
+2410:7925	s_home_a_unit_here_to_halt_damage	 Home a unit here to halt damage.
+2410:7947	s_s_held_by_s	%s: Held by %s.
+2410:7957	s_water	Water:
+2410:795e	s_shore	Shore:
+2410:7965	s_s	%s:
+2410:7969	s_suspend	Suspend
+2410:7971	s_change_party	Change party
+2410:797e	s_s_d_complete_owned_by_s_active_party_is_s_th	%s: %d%% complete. Owned by %s. Active party is %s the %s.
+2410:79b9	s_clearing_of_land_d_complete_owned_by_s_activ	Clearing of land: %d%% complete. Owned by %s. Active party is %s the %s.
+2410:7a02	s_no	No
+2410:7a05	s_construction_of_s_will_be_permanently_suspen	Construction of %s will be permanently suspended. Are you sure?
+2410:7a45	s_s_d_d_owned_by_s_active_party_is_s_the_s	%s (%d/%d): Owned by %s. Active party is %s the %s.
+2410:7a79	s_%s:_Owned_by_%s._Active_party_is_2410_7a79	%s: Owned by %s. Active party is %s the %s.
+2410:7aa5	s_s_active_party_is_s_the_s	%s: Active party is %s the %s.
+2410:7ac4	s__s__Costs__d_gold_and_provides_t_2410_7ac4	%s: Costs %d gold and provides training to level %d.
+2410:7af9	s_%s:_Costs_%d_gold_of_income._Rep_2410_7af9	%s: Costs %d gold of income. Replaces broken weapons.
+2410:7b2f	s_%s:_Costs_%d_gold_of_income._For_2410_7b2f	%s: Costs %d gold of income. Forges +%d weapons.
+2410:7b60	s_%s:_Costs_%d_gold_of_income._Imp_2410_7b60	%s: Costs %d gold of income. Improves armor.
+2410:7b8d	s_%s:_Costs_%d_gold_of_income._Imp_2410_7b8d	%s: Costs %d gold of income. Improves armor class by -%d.
+2410:7bc7	s_%s:_Costs_%d_gold_of_income._Rep_2410_7bc7	%s: Costs %d gold of income. Replaces broken bows.
+2410:7bfa	s_%s:_Costs_%d_gold_of_income._Cre_2410_7bfa	%s: Costs %d gold of income. Creates +%d bow and arrows.
+2410:7c33	s_%s:_Costs_%d_gold._Increases_uni_2410_7c33	%s: Costs %d gold. Increases unit size of five units by %d.
+2410:7c6f	s_%s:_Costs_%d_gold._Increases_bui_2410_7c6f	%s: Costs %d gold. Increases building speed by %d0%%.
+2410:7ca5	s_%s:_Costs_%d_gold._Enhances_trai_2410_7ca5	%s: Costs %d gold. Enhances training by %d%%.
+2410:7cd3	s_%s:_Costs_%d_gold._Produces_+%d_r_2410_7cd3	%s: Costs %d gold. Produces +%d rings of protection.
+2410:7d08	s_%s:_Costs_%d_gold._Produces_mirr_2410_7d08	%s: Costs %d gold. Produces mirrors for medusae combat. Increases tower range by 5.
+2410:7d5c	s_%s:_Costs_%d_gold._Attracts_new_u_2410_7d5c	%s: Costs %d gold. Attracts new units to this location.
+2410:7d94	s_%s:_Costs_%d_gold._Provides_%u_u_2410_7d94	%s: Costs %d gold. Provides %u units of gold storage.
+2410:7dca	s_%s:_Costs_%d_gold._Claim_trees_a_2410_7dca	%s: Costs %d gold. Claim trees automatically.
+2410:7df8	s_%s:_Costs_%d_gold._Repairs_build_2410_7df8	%s: Costs %d gold. Repairs buildings at season changes.
+2410:7e30	s_%s:_Trades_%d_food_for_gold._Tot_2410_7e30	%s: Trades %d food for gold. Total trade is %d food.
+2410:7e65	s__s__Creates__d_gold_of_income__a_2410_7e65	%s: Creates %d gold of income, and accesses %d%% of the market fund.
+2410:7eaa	s_s_costs_d_gold_of_income_and_provides_visibi	%s: Costs %d gold of income and provides visibility of %d squares n/s, %d squares e/w.
+2410:7f01	s_s_costs_d_gold_of_income_and_provides_storag	%s: Costs %d gold of income and provides storage for %u food.
+2410:7f3f	s__s__Costs__d_gold_of_income_and_p_2410_7f3f	%s: Costs %d gold of income and provides storage for %u gold.
+2410:7f7d	s__s__Provides_housing_for__d__s_a_2410_7f7d	%s: Provides housing for %d %s and storage for %d food.
+2410:7fb5	s_%s:_Provides_housing_for_%d_%s._2410_7fb5	%s: Provides housing for %d %s.
+2410:7fd5	s_%s:_%s_%d_gold._Feeds_%d_%s._2410_7fd5	%s: %s %d gold. Feeds %d %s.
+2410:7ff2	s_%s:_%s_%d_gold._provides_housing_2410_7ff2	%s: %s %d gold. provides housing for %d %s and feeds %d %s.
+2410:802e	s_%s:_%s_%d_gold._Provides_housing_2410_802e	%s: %s %d gold. Provides housing for %d %s.
+2410:805a	s_%s:_%s_%d_gold._2410_805a	%s: %s %d gold.
+2410:806a	s_salvage	Salvage
+2410:8072	s_Salvage_value_%d_gold._2410_8072	 Salvage value %d gold.
+2410:808a	s_demolish	Demolish
+2410:8093	s_repair	Repair
+2410:809a	s_Repair_costs_%d_gp._2410_809a	 Repair costs %d gp.
+2410:80af	s_upgrade	Upgrade
+2410:80b7	s_Upgrade_costs_%d_gp._2410_80b7	 Upgrade costs %d gp.
+2410:80cd	s_information	Information
+2410:80d9	s_new_owner	New Owner
+2410:80e3	s_change_party	Change Party
+2410:80f0	s_%s_will_be_salvaged_for_%d_gold._2410_80f0	%s will be salvaged for %d gold. Are you sure?
+2410:811f	s_get_rid_of_s_permanently_are_you_sure	Get rid of %s permanently. Are you sure?
+2410:8148	s_%s_is_being_filled._2410_8148	%s is being filled.
+2410:815c	s_%s_salvaged_for_%d_gold._2410_815c	%s salvaged for %d gold.
+2410:8175	s_%s_is_demolished._2410_8175	%s is demolished.
+2410:8187	s_%s_does_not_have_enough_gold._2410_8187	%s does not have enough gold.
+2410:81a5	s_%s_repaired._2410_81a5	%s repaired.
+2410:81b2	s_Too_many_construction_sites._2410_81b2	Too many construction sites.
+2410:81cf	s_%s_upgraded._2410_81cf	%s upgraded.
+2410:81dc	s_ld_experience_obtained_ld_experience_given_t	%ld experience obtained. %ld experience given to each unit. %ld gold recovered.
+2410:82b4	s_help0.txt_2410_82b4	help0.txt
+2410:82be	s_help1.txt_2410_82be	help1.txt
+2410:82c8	s_help2.txt_2410_82c8	help2.txt
+2410:82d2	s_help3.txt_2410_82d2	help3.txt
+2410:82dc	s_help4.txt_2410_82dc	help4.txt
+2410:82e6	s_help5.txt_2410_82e6	help5.txt
+2410:82f0	s_help6.txt_2410_82f0	help6.txt
+2410:82fa	s_help7.txt_2410_82fa	help7.txt
+2410:8304	s_text1.txt_2410_8304	text1.txt
+2410:830e	s_text2.txt_2410_830e	text2.txt
+2410:8318	s_text3.txt_2410_8318	text3.txt
+2410:8322	s_text4.txt_2410_8322	text4.txt
+2410:832c	s_text5.txt_2410_832c	text5.txt
+2410:8336	s_text6.txt_2410_8336	text6.txt
+2410:8340	s_house1_txt	house1.txt
+2410:834b	s_house2.txt_2410_834b	house2.txt
+2410:8356	s_house3.txt_2410_8356	house3.txt
+2410:8361	s_house4.txt_2410_8361	house4.txt
+2410:836c	s_house5.txt_2410_836c	house5.txt
+2410:8377	s_hung1.txt_2410_8377	hung1.txt
+2410:8381	s_hung2.txt_2410_8381	hung2.txt
+2410:838b	s_hung3.txt_2410_838b	hung3.txt
+2410:8395	s_hung4.txt_2410_8395	hung4.txt
+2410:839f	s_hung5.txt_2410_839f	hung5.txt
+2410:83a9	s_incom1.txt_2410_83a9	incom1.txt
+2410:83b4	s_incom2.txt_2410_83b4	incom2.txt
+2410:83bf	s_incom3.txt_2410_83bf	incom3.txt
+2410:83ca	s_incom4.txt_2410_83ca	incom4.txt
+2410:83d5	s_incom5.txt_2410_83d5	incom5.txt
+2410:83e0	s_cflow1.txt_2410_83e0	cflow1.txt
+2410:83eb	s_cflow2.txt_2410_83eb	cflow2.txt
+2410:83f6	s_cflow3.txt_2410_83f6	cflow3.txt
+2410:8401	s_cflow4.txt_2410_8401	cflow4.txt
+2410:840c	s_cflow5.txt_2410_840c	cflow5.txt
+2410:8417	s_bolt12.fli_2410_8417	bolt12.fli
+2410:8422	s_save.999_2410_8422	save.999
+2410:8436	s_s_is_no_longer_paralyzed	%s is no longer paralyzed.
+2410:8451	s_s_breaks_free_of_the_web	%s breaks free of the web.
+2410:846c	s_s_regenerates_3_hitpoints_to_a_total_of_d_hi	%s regenerates 3 hitpoints to a total of %d hitpoints.
+2410:84a3	s_d	%d \r
+2410:84cc	s_Summary_2410_84cc	Summary
+2410:84d4	s_Now_what__2410_84d4	Now what?
+2410:84de	s_City_2410_84de	City
+2410:84e3	s_Buildings_2410_84e3	Buildings
+2410:84ed	s_Money_2410_84ed	Money
+2410:84f3	s_Popularity_2410_84f3	Popularity
+2410:84fe	s_Combat_2410_84fe	Combat
+2410:8505	s_Winter_2410_8505	Winter
+2410:850c	s_Done_2410_850c	Done
+2410:88bd	s_compaq	COMPAQ
+2410:88c4	s_print_scanf___floating_point_for_2410_88c4	print scanf : floating point formats not linked\r\n
