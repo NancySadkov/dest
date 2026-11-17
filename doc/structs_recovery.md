@@ -927,3 +927,14 @@ void __cdecl16far agnt_3b1d_196b(entity_t *ptr)
 
 (the remaining `in_stack_00000006` is the segment half the thunk pushes; the
 pointer parameter consumed the offset half.)
+
+## \gnt_3b1d_1c26\ typed
+
+Its prototype already carried the far pointer as one four-byte parameter, so only
+the type was missing; the caller passes \piVar7\ (an agent record) and
+\&local_5\.  Typed \gnt_t *agnt\.  Struct-typed functions: 95 -> 96;
+auto parameters: 1234 -> 1233.
+
+The rest of the xxx\ group (C5(byte)\, Pb(uint,int)\, bd(uint)\,
+cd(int)\, f(int)\) takes plain indices, not records, so there is nothing
+to type there.
