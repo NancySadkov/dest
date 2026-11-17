@@ -127,3 +127,16 @@ The same routine sets the command as a 32-bit value before calling the driver:
 
 so 02B9/02BB are its low and high words: XmsCmdLo / XmsCmdHi (the earlier
 XmsCmd name covered only the low word).
+
+## Batch 8 - the remaining two index permutations
+
+2000:0020 and 2000:002C follow the same pattern as IndexPermA/B: a 12-byte
+table initialised from a constant template, then permuted in place with the
+X[uVar2] = X[param_1] and X[i] == i idiom.
+
+    0020: memcpy(&X, 0x6e14, 0xc)   -> IndexPermC (2000:ca54)
+    002C: memcpy(&X, 0x6e08, 0xc)   -> IndexPermD (2000:ca60)
+
+yte_2410_DATA_DGROUP_00D8 is a 0..6 index (bound 6 <), used as * 2 and
+added into a byte offset; seven values with no identifying consumer, so it stays
+unnamed.
