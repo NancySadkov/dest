@@ -501,3 +501,7 @@ would still be a guess.  It stays unnamed, with this evidence recorded.
 Note that this also identifies `entity_t.base.field_0xf` as a **level**: it is
 the value compared against 15 and 8 here, and `ovc15` uses it as
 `table[field_0xf * 4]`, a per-level table.
+
+`agnt_t+0x0f` is therefore named **`level`**: it is compared with the per-kind
+thresholds (15 and 8) and used as `table[level*4]` in the constructor.  Generated
+struct fields: 58.
