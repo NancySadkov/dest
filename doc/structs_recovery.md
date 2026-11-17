@@ -440,3 +440,19 @@ are named `strength`.
 
 An observer pass (`ovc21`) keeps the smallest `agent[0x22]`, a separate byte
 that is *not* this value; it stays unnamed.
+
+## `agntG_t+0x42` = `rank`
+
+Both consumers compare it with the ladder `agnt_3b1d_1bc1` returns (9..16 map to
+9..12, 17 and above to 13+):
+
+```c
+bVar1 = agnt_3b1d_1bc1(param_2);
+if      (bVar1 + 2 <  value) icon = 0xd;
+else if (bVar1 + 2 == value) icon = 0xb;
+else if (bVar1 + 1 == value) icon = 9;
+else if (bVar1     == value) icon = 7;      /* OVC41_6a8f_0a45 */
+```
+
+and `OVC41_6a8f_0aa7` selects one of three management actions from the same
+comparison.  No other code reads the byte, so its only role is a rank level.
