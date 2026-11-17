@@ -140,3 +140,14 @@ X[uVar2] = X[param_1] and X[i] == i idiom.
 yte_2410_DATA_DGROUP_00D8 is a 0..6 index (bound 6 <), used as * 2 and
 added into a byte offset; seven values with no identifying consumer, so it stays
 unnamed.
+
+## Batch 9 - overlay flag byte
+
+225d:0010 (the OVRDATA segment) is a flag byte: bit 0 is set and bits 0 and 1
+are tested by the overlay manager in \ovl\.
+
+    225d:0010 -> OvrFlags
+
+0:06C0\ is a 0/1 flag paired with an agent's 0x2a == 2 test and
+\DS:0198\ is a far pointer used by the driver module; neither has a consumer
+that fixes a name, so both stay unnamed.
