@@ -1,0 +1,438 @@
+address	old	value	new
+2272:0012	data_2272_DATA_FakeVdisk_0012_string	VDISK FAKE	s_vdisk_fake
+2410:002f	data_2410_DATA_DGROUP_002F_string	Divide error
+	s_divide_error
+2410:003d	data_2410_DATA_DGROUP_003D_string	Abnormal program termination
+	s_abnormal_program_termination
+2410:009a	data_2410_DATA_DGROUP_009A_string	Sorry, you may not pass time during a battle.	s_sorry_you_may_not_pass_time_during_a_battle
+2410:00c8	data_2410_DATA_DGROUP_00C8_string	Time passes...	s_time_passes
+2410:0171	data_2410_DATA_DGROUP_0171_string	Mage	s_mage
+2410:0176	data_2410_DATA_DGROUP_0176_string	Cleric	s_cleric
+2410:0183	data_2410_DATA_DGROUP_0183_string	Dwarf	s_dwarf
+2410:0189	data_2410_DATA_DGROUP_0189_string	Elf	s_elf
+2410:018d	data_2410_DATA_DGROUP_018D_string	Halfling	s_halfling
+2410:0196	data_2410_DATA_DGROUP_0196_string	fighters	s_fighters
+2410:019f	data_2410_DATA_DGROUP_019F_string	mages	s_mages
+2410:01a5	data_2410_DATA_DGROUP_01A5_string	clerics	s_clerics
+2410:01ad	data_2410_DATA_DGROUP_01AD_string	thieves	s_thieves
+2410:01b5	data_2410_DATA_DGROUP_01B5_string	dwarves	s_dwarves
+2410:01bd	data_2410_DATA_DGROUP_01BD_string	elves	s_elves
+2410:01c3	data_2410_DATA_DGROUP_01C3_string	halflings	s_halflings
+2410:01cd	data_2410_DATA_DGROUP_01CD_string	fighter	s_fighter
+2410:01d5	data_2410_DATA_DGROUP_01D5_string	mage	s_mage
+2410:01da	data_2410_DATA_DGROUP_01DA_string	cleric	s_cleric
+2410:01e1	data_2410_DATA_DGROUP_01E1_string	thief	s_thief
+2410:01e7	data_2410_DATA_DGROUP_01E7_string	dwarf	s_dwarf
+2410:01ed	data_2410_DATA_DGROUP_01ED_string	elf	s_elf
+2410:01f1	data_2410_DATA_DGROUP_01F1_string	halfling	s_halfling
+2410:0211	data_2410_DATA_DGROUP_0211_string	clerical unit	s_clerical_unit
+2410:024c	data_2410_DATA_DGROUP_024C_string	%d 	s_d
+2410:0251	data_2410_DATA_DGROUP_0251_string	WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW	s_wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+2410:027a	data_2410_DATA_DGROUP_027A_string	Archduchess	s_archduchess
+2410:0286	data_2410_DATA_DGROUP_0286_string	The seed is %lx.	s_the_seed_is_lx
+2410:0297	data_2410_DATA_DGROUP_0297_string	Increase by %d levels.  Click on character for higher levels.	s_increase_by_d_levels_click_on_character_for_
+2410:02d5	data_2410_DATA_DGROUP_02D5_string	Movement	s_movement
+2410:02de	data_2410_DATA_DGROUP_02DE_string	Recruit	s_recruit
+2410:02e6	data_2410_DATA_DGROUP_02E6_string	Train	s_train
+2410:02ec	data_2410_DATA_DGROUP_02EC_string	Build	s_build
+2410:031a	data_2410_DATA_DGROUP_031A_string	N %d W %u s %u 	s_n_d_w_u_s_u
+2410:03fb	data_2410_DATA_DGROUP_03FB_string	%s
+	s_s
+2410:049e	data_2410_DATA_DGROUP_049E_string	y1 %d yn %d y3 %d yx %d 	s_y1_d_yn_d_y3_d_yx_d
+2410:05d2	data_2410_DATA_DGROUP_05D2_string	NEW MAXSQUARE %d 	s_new_maxsquare_d
+2410:05e5	data_2410_DATA_DGROUP_05E5_string	NEW SMAXSQUARE %d 	s_new_smaxsquare_d
+2410:0712	data_2410_DATA_DGROUP_0712_string	Enter the first word.	s_enter_the_first_word
+2410:0755	data_2410_DATA_DGROUP_0755_string	%d 	s_d
+2410:075a	data_2410_DATA_DGROUP_075A_string	Bad House # %d 	s_bad_house_d
+2410:076b	data_2410_DATA_DGROUP_076B_string	(%d, %d)	s_d_d
+2410:0774	data_2410_DATA_DGROUP_0774_string	x:%d y:%d  %x %x %x %x   %x %x %x %x    	s_x_d_y_d_x_x_x_x_x_x_x_x
+2410:07d6	data_2410_DATA_DGROUP_07D6_string	Midi error	s_midi_error
+2410:07f8	data_2410_DATA_DGROUP_07F8_string	charmed %s	s_charmed_s
+2410:0803	data_2410_DATA_DGROUP_0803_string	turned %s	s_turned_s
+2410:080d	data_2410_DATA_DGROUP_080D_string	stoned %s	s_stoned_s
+2410:0817	data_2410_DATA_DGROUP_0817_string	diseased %s	s_diseased_s
+2410:0823	data_2410_DATA_DGROUP_0823_string	paralyzed %s	s_paralyzed_s
+2410:0830	data_2410_DATA_DGROUP_0830_string	sleeping %s	s_sleeping_s
+2410:083c	data_2410_DATA_DGROUP_083C_string	held %s	s_held_s
+2410:0864	data_2410_DATA_DGROUP_0864_string	(%d, %d)	s_d_d
+2410:08a1	data_2410_DATA_DGROUP_08A1_string	Intelligence reports %s unit engaged in combat. (%d, %d)	s_intelligence_reports_s_unit_engaged_in_comba
+2410:08da	data_2410_DATA_DGROUP_08DA_string	%d 	s_d
+2410:08df	data_2410_DATA_DGROUP_08DF_string	%d %d %d 	s_d_d_d
+2410:19a2	data_2410_DATA_DGROUP_19A2_string	%s: produces bows and arrows.	s_s_produces_bows_and_arrows
+2410:2733	data_2410_DATA_DGROUP_2733_string	More	s_more
+2410:273a	data_2410_DATA_DGROUP_273A_string	
+	s_empty
+2410:273d	data_2410_DATA_DGROUP_273D_string	%ssaves.txt	s_ssaves_txt
+2410:2749	data_2410_DATA_DGROUP_2749_string	%u	s_u
+2410:274c	data_2410_DATA_DGROUP_274C_string	Message delay is now %d.	s_message_delay_is_now_d
+2410:2765	data_2410_DATA_DGROUP_2765_string	Decrease message delay	s_decrease_message_delay
+2410:277c	data_2410_DATA_DGROUP_277C_string	Increase message delay	s_increase_message_delay
+2410:2793	data_2410_DATA_DGROUP_2793_string	Test	s_test
+2410:2798	data_2410_DATA_DGROUP_2798_string	Done	s_done
+2410:279d	data_2410_DATA_DGROUP_279D_string	Change message delay:	s_change_message_delay
+2410:27b3	data_2410_DATA_DGROUP_27B3_string	This message appears at the message delay of %d.	s_this_message_appears_at_the_message_delay_of
+2410:27e4	data_2410_DATA_DGROUP_27E4_string	Cancel	s_cancel
+2410:2851	data_2410_DATA_DGROUP_2851_string	Stronghold V 1.00	s_stronghold_v_1_00
+2410:2875	data_2410_DATA_DGROUP_2875_string	Game not saved: Are you sure?	s_game_not_saved_are_you_sure
+2410:2893	data_2410_DATA_DGROUP_2893_string	Save Game:	s_save_game
+2410:289e	data_2410_DATA_DGROUP_289E_string	Name this save:  (Esc to cancel)	s_name_this_save_esc_to_cancel
+2410:28bf	data_2410_DATA_DGROUP_28BF_string	Name for this save:  (Esc to cancel)	s_name_for_this_save_esc_to_cancel
+2410:28e4	data_2410_DATA_DGROUP_28E4_string	Load Game:	s_load_game
+2410:28ef	data_2410_DATA_DGROUP_28EF_string	Delete Game:	s_delete_game
+2410:28fc	data_2410_DATA_DGROUP_28FC_string	Delete %s: Are you sure?	s_delete_s_are_you_sure
+2410:2962	data_2410_DATA_DGROUP_2962_string	World 4	s_world_4
+2410:296a	data_2410_DATA_DGROUP_296A_string	World 5	s_world_5
+2410:2979	data_2410_DATA_DGROUP_2979_string	Which new world:	s_which_new_world
+2410:298a	data_2410_DATA_DGROUP_298A_string	Hostility level:	s_hostility_level
+2410:299b	data_2410_DATA_DGROUP_299B_string	Low intelligence enemies:	s_low_intelligence_enemies
+2410:29b5	data_2410_DATA_DGROUP_29B5_string	Medium intelligence enemies:	s_medium_intelligence_enemies
+2410:29d2	data_2410_DATA_DGROUP_29D2_string	High intelligence enemies:	s_high_intelligence_enemies
+2410:29ed	data_2410_DATA_DGROUP_29ED_string	Size of second wave:	s_size_of_second_wave
+2410:2a02	data_2410_DATA_DGROUP_2A02_string	Too many enemies. 60 enemies maximum.	s_too_many_enemies_60_enemies_maximum
+2410:2a28	data_2410_DATA_DGROUP_2A28_string	Resetting game...	s_resetting_game
+2410:2a3a	data_2410_DATA_DGROUP_2A3A_string	New world complete.	s_new_world_complete
+2410:45ce	data_2410_DATA_DGROUP_45CE_string	Place %s.	s_place_s
+2410:45d8	data_2410_DATA_DGROUP_45D8_string	View %s. (Cannot place)	s_view_s_cannot_place
+2410:45f0	data_2410_DATA_DGROUP_45F0_string	Create baron or baroness.	s_create_baron_or_baroness
+2410:460a	data_2410_DATA_DGROUP_460A_string	Create party member.	s_create_party_member
+2410:4689	data_2410_DATA_DGROUP_4689_string	A fortress cannot be placed among enemy units.	s_a_fortress_cannot_be_placed_among_enemy_unit
+2410:46b8	data_2410_DATA_DGROUP_46B8_string	Cannot place another fortress here.	s_cannot_place_another_fortress_here
+2410:46dc	data_2410_DATA_DGROUP_46DC_string	This location is unsuitable for a main stronghold.  %s	s_this_location_is_unsuitable_for_a_main_stron
+2410:4713	data_2410_DATA_DGROUP_4713_string	This location is unsuitable.  %s	s_this_location_is_unsuitable_s
+2410:4734	data_2410_DATA_DGROUP_4734_string	Your stronghold is too far away.	s_your_stronghold_is_too_far_away
+2410:4802	data_2410_DATA_DGROUP_4802_string	uc%lx %d len %ld loc %ld 	s_uc_lx_d_len_ld_loc_ld
+2410:481d	data_2410_DATA_DGROUP_481D_string	N UP = %d 	s_n_up_d
+2410:4829	data_2410_DATA_DGROUP_4829_string	dc%lx %d ln %ld lc %ld @%lx 	s_dc_lx_d_ln_ld_lc_ld_lx
+2410:4847	data_2410_DATA_DGROUP_4847_string	N DOWN = %d 	s_n_down_d
+2410:4b92	data_2410_DATA_DGROUP_4B92_string	STR	s_str
+2410:4b96	data_2410_DATA_DGROUP_4B96_string	INT	s_int
+2410:4b9a	data_2410_DATA_DGROUP_4B9A_string	WIS	s_wis
+2410:4b9e	data_2410_DATA_DGROUP_4B9E_string	DEX	s_dex
+2410:4ba2	data_2410_DATA_DGROUP_4BA2_string	CON	s_con
+2410:4ba6	data_2410_DATA_DGROUP_4BA6_string	CHA	s_cha
+2410:4baa	data_2410_DATA_DGROUP_4BAA_string	st	s_st
+2410:4bad	data_2410_DATA_DGROUP_4BAD_string	nd	s_nd
+2410:4bb0	data_2410_DATA_DGROUP_4BB0_string	rd	s_rd
+2410:4bb3	data_2410_DATA_DGROUP_4BB3_string	th	s_th
+2410:4bb6	data_2410_DATA_DGROUP_4BB6_string	Baron 	s_baron
+2410:4bbd	data_2410_DATA_DGROUP_4BBD_string	Baroness 	s_baroness
+2410:4bc7	data_2410_DATA_DGROUP_4BC7_string	Viscount 	s_viscount
+2410:4bd1	data_2410_DATA_DGROUP_4BD1_string	Viscountess 	s_viscountess
+2410:4bde	data_2410_DATA_DGROUP_4BDE_string	Count 	s_count
+2410:4be5	data_2410_DATA_DGROUP_4BE5_string	Countess 	s_countess
+2410:4bef	data_2410_DATA_DGROUP_4BEF_string	Marquis 	s_marquis
+2410:4bf8	data_2410_DATA_DGROUP_4BF8_string	Marquise 	s_marquise
+2410:4c02	data_2410_DATA_DGROUP_4C02_string	Duke 	s_duke
+2410:4c08	data_2410_DATA_DGROUP_4C08_string	Duchess 	s_duchess
+2410:4c11	data_2410_DATA_DGROUP_4C11_string	Archduke 	s_archduke
+2410:4c1b	data_2410_DATA_DGROUP_4C1B_string	Archduchess 	s_archduchess
+2410:4c28	data_2410_DATA_DGROUP_4C28_string	Prince 	s_prince
+2410:4c30	data_2410_DATA_DGROUP_4C30_string	Princess 	s_princess
+2410:4c3a	data_2410_DATA_DGROUP_4C3A_string	King 	s_king
+2410:4c40	data_2410_DATA_DGROUP_4C40_string	Queen 	s_queen
+2410:4c47	data_2410_DATA_DGROUP_4C47_string	Emperor 	s_emperor
+2410:4c50	data_2410_DATA_DGROUP_4C50_string	Emperess 	s_emperess
+2410:4c5a	data_2410_DATA_DGROUP_4C5A_string	Lord 	s_lord
+2410:4c60	data_2410_DATA_DGROUP_4C60_string	Lady 	s_lady
+2410:4c66	data_2410_DATA_DGROUP_4C66_string	Wizard 	s_wizard
+2410:4c6e	data_2410_DATA_DGROUP_4C6E_string	Maga 	s_maga
+2410:4c74	data_2410_DATA_DGROUP_4C74_string	Patriarch 	s_patriarch
+2410:4c7f	data_2410_DATA_DGROUP_4C7F_string	Matriarch 	s_matriarch
+2410:4c8a	data_2410_DATA_DGROUP_4C8A_string	Master Thief 	s_master_thief
+2410:4c98	data_2410_DATA_DGROUP_4C98_string	Dwarf Lord 	s_dwarf_lord
+2410:4ca4	data_2410_DATA_DGROUP_4CA4_string	Dwarf Lady 	s_dwarf_lady
+2410:4cb0	data_2410_DATA_DGROUP_4CB0_string	Lord Wizard 	s_lord_wizard
+2410:4cbd	data_2410_DATA_DGROUP_4CBD_string	Lady Maga 	s_lady_maga
+2410:4cd4	data_2410_DATA_DGROUP_4CD4_string	%s%s, 	s_s_s
+2410:4e3a	data_2410_DATA_DGROUP_4E3A_string	Cancel	s_cancel
+2410:4fb1	data_2410_DATA_DGROUP_4FB1_string	Male or female?	s_male_or_female
+2410:4fce	data_2410_DATA_DGROUP_4FCE_string	Reroll	s_reroll
+2410:5072	data_2410_DATA_DGROUP_5072_string	Place %s here.	s_place_s_here
+2410:5081	data_2410_DATA_DGROUP_5081_string	Year %d. %s	s_year_d_s
+2410:508d	data_2410_DATA_DGROUP_508D_string	Year %d. This leader %s	s_year_d_this_leader_s
+2410:50a5	data_2410_DATA_DGROUP_50A5_string	Next Leader	s_next_leader
+2410:50b1	data_2410_DATA_DGROUP_50B1_string	Auto-build    	s_auto_build
+2410:50c1	data_2410_DATA_DGROUP_50C1_string	Auto-build	s_auto_build
+2410:50cc	data_2410_DATA_DGROUP_50CC_string	Census	s_census
+2410:50d3	data_2410_DATA_DGROUP_50D3_string	Property	s_property
+2410:50dc	data_2410_DATA_DGROUP_50DC_string	Total Census	s_total_census
+2410:50e9	data_2410_DATA_DGROUP_50E9_string	All Property	s_all_property
+2410:50f6	data_2410_DATA_DGROUP_50F6_string	Help	s_help
+2410:5100	data_2410_DATA_DGROUP_5100_string	%s will now build homes automatically.	s_s_will_now_build_homes_automatically
+2410:5127	data_2410_DATA_DGROUP_5127_string	%s will no longer build houses automatically.	s_s_will_no_longer_build_houses_automatically
+2410:5165	data_2410_DATA_DGROUP_5165_string	bakeries	s_bakeries
+2410:5174	data_2410_DATA_DGROUP_5174_string	bazaars	s_bazaars
+2410:517c	data_2410_DATA_DGROUP_517C_string	builder hall	s_builder_hall
+2410:5189	data_2410_DATA_DGROUP_5189_string	castles	s_castles
+2410:5191	data_2410_DATA_DGROUP_5191_string	farms	s_farms
+2410:5197	data_2410_DATA_DGROUP_5197_string	fletchers	s_fletchers
+2410:51a1	data_2410_DATA_DGROUP_51A1_string	forester camp	s_forester_camp
+2410:51af	data_2410_DATA_DGROUP_51AF_string	forges	s_forges
+2410:51b6	data_2410_DATA_DGROUP_51B6_string	gaming halls	s_gaming_halls
+2410:51c3	data_2410_DATA_DGROUP_51C3_string	gem mines	s_gem_mines
+2410:51cd	data_2410_DATA_DGROUP_51CD_string	glassworks	s_glassworks
+2410:51d8	data_2410_DATA_DGROUP_51D8_string	gold mines	s_gold_mines
+2410:51e3	data_2410_DATA_DGROUP_51E3_string	granaries	s_granaries
+2410:51f2	data_2410_DATA_DGROUP_51F2_string	iron mines	s_iron_mines
+2410:51fd	data_2410_DATA_DGROUP_51FD_string	jewelers	s_jewelers
+2410:5206	data_2410_DATA_DGROUP_5206_string	magic mills	s_magic_mills
+2410:5212	data_2410_DATA_DGROUP_5212_string	markets	s_markets
+2410:521a	data_2410_DATA_DGROUP_521A_string	mason's halls	s_mason_s_halls
+2410:5228	data_2410_DATA_DGROUP_5228_string	outposts	s_outposts
+2410:5231	data_2410_DATA_DGROUP_5231_string	residences	s_residences
+2410:523c	data_2410_DATA_DGROUP_523C_string	scriberies	s_scriberies
+2410:5247	data_2410_DATA_DGROUP_5247_string	towers	s_towers
+2410:524e	data_2410_DATA_DGROUP_524E_string	toymakers	s_toymakers
+2410:5258	data_2410_DATA_DGROUP_5258_string	training	s_training
+2410:5293	data_2410_DATA_DGROUP_5293_string	All property.	s_all_property
+2410:52a1	data_2410_DATA_DGROUP_52A1_string	Buildings belonging to %s%s	s_buildings_belonging_to_s_s
+2410:52bd	data_2410_DATA_DGROUP_52BD_string	Buildings	s_buildings
+2410:52c7	data_2410_DATA_DGROUP_52C7_string	Total	s_total
+2410:52cd	data_2410_DATA_DGROUP_52CD_string	Level 1	s_level_1
+2410:52d5	data_2410_DATA_DGROUP_52D5_string	Level 2	s_level_2
+2410:52dd	data_2410_DATA_DGROUP_52DD_string	Level 3	s_level_3
+2410:52e5	data_2410_DATA_DGROUP_52E5_string	%d (%d)	s_d_d
+2410:54e5	data_2410_DATA_DGROUP_54E5_string	Summary	s_summary
+2410:54ed	data_2410_DATA_DGROUP_54ED_string	All levels	s_all_levels
+2410:54f8	data_2410_DATA_DGROUP_54F8_string	Total population.	s_total_population
+2410:550a	data_2410_DATA_DGROUP_550A_string	%s population, loyal to %s%s	s_s_population_loyal_to_s_s
+2410:5527	data_2410_DATA_DGROUP_5527_string	UNITS	s_units
+2410:552d	data_2410_DATA_DGROUP_552D_string	POPULATION	s_population
+2410:5538	data_2410_DATA_DGROUP_5538_string	All units loyal to %s the %s are displayed.	s_all_units_loyal_to_s_the_s_are_displayed
+2410:5564	data_2410_DATA_DGROUP_5564_string	All units are displayed.	s_all_units_are_displayed
+2410:557d	data_2410_DATA_DGROUP_557D_string	Only units of %s loyal to %s the %s are displayed.	s_only_units_of_s_loyal_to_s_the_s_are_display
+2410:55b0	data_2410_DATA_DGROUP_55B0_string	Only units of %s are displayed.	s_only_units_of_s_are_displayed
+2410:55d8	data_2410_DATA_DGROUP_55D8_string	monster	s_monster
+2410:55e5	data_2410_DATA_DGROUP_55E5_string	kill 3	s_kill_3
+2410:55ed	data_2410_DATA_DGROUP_55ED_string	kill 2 	s_kill_2
+2410:55f6	data_2410_DATA_DGROUP_55F6_string	Mine exhausted at (%d, %d).	s_mine_exhausted_at_d_d
+2410:564d	data_2410_DATA_DGROUP_564D_string	Construction abandoned.	s_construction_abandoned
+2410:5665	data_2410_DATA_DGROUP_5665_string	%s unit drowns.  (%d, %d)	s_s_unit_drowns_d_d
+2410:5680	data_2410_DATA_DGROUP_5680_string	Intelligence reports %s unit fleeing from battle. (%d, %d)	s_intelligence_reports_s_unit_fleeing_from_bat
+2410:56bb	data_2410_DATA_DGROUP_56BB_string	Intelligence reports %s unit infected with disease. (%d, %d)	s_intelligence_reports_s_unit_infected_with_di
+2410:56f8	data_2410_DATA_DGROUP_56F8_string	kill 3	s_kill_3
+2410:5700	data_2410_DATA_DGROUP_5700_string	Intelligence reports %s unit drained of energy. (%d, %d)	s_intelligence_reports_s_unit_drained_of_energ
+2410:5739	data_2410_DATA_DGROUP_5739_string	Intelligence reports %s unit destroyed. (%d, %d)	s_intelligence_reports_s_unit_destroyed_d_d
+2410:576a	data_2410_DATA_DGROUP_576A_string	Mindark's keep destroyed. (%d, %d)	s_mindark_s_keep_destroyed_d_d
+2410:578d	data_2410_DATA_DGROUP_578D_string	%s stronghold destroyed. (%d, %d)	s_s_stronghold_destroyed_d_d
+2410:57af	data_2410_DATA_DGROUP_57AF_string	Your main stronghold has been destroyed. Game over.	s_your_main_stronghold_has_been_destroyed_game
+2410:57e3	data_2410_DATA_DGROUP_57E3_string	You have defeated all enemies.	s_you_have_defeated_all_enemies
+2410:5802	data_2410_DATA_DGROUP_5802_string	You may continue playing, but your score will not be recorded.	s_you_may_continue_playing_but_your_score_will
+2410:5841	data_2410_DATA_DGROUP_5841_string	Intelligence reports %s unit cured of disease. (%d, %d)	s_intelligence_reports_s_unit_cured_of_disease
+2410:5879	data_2410_DATA_DGROUP_5879_string	Intelligence reports %s unit succombs to blast spore disease. (%d, %d)	s_intelligence_reports_s_unit_succombs_to_blas
+2410:58c0	data_2410_DATA_DGROUP_58C0_string	Spies report %s heading towards stronghold. (%d, %d)	s_spies_report_s_heading_towards_stronghold_d_
+2410:58f5	data_2410_DATA_DGROUP_58F5_string	%s is attacking.	s_s_is_attacking
+2410:5906	data_2410_DATA_DGROUP_5906_string	Intelligence reports %s attacking.	s_intelligence_reports_s_attacking
+2410:5b07	data_2410_DATA_DGROUP_5B07_string	lightning bolt	s_lightning_bolt
+2410:5b16	data_2410_DATA_DGROUP_5B16_string	towards	s_towards
+2410:5b1e	data_2410_DATA_DGROUP_5B1E_string	magic missile	s_magic_missile
+2410:5b2c	data_2410_DATA_DGROUP_5B2C_string	charm person	s_charm_person
+2410:5b39	data_2410_DATA_DGROUP_5B39_string	fireball	s_fireball
+2410:5b42	data_2410_DATA_DGROUP_5B42_string	charm monsters	s_charm_monsters
+2410:5b51	data_2410_DATA_DGROUP_5B51_string	hold person	s_hold_person
+2410:5b5d	data_2410_DATA_DGROUP_5B5D_string	sleep	s_sleep
+2410:5b63	data_2410_DATA_DGROUP_5B63_string	web	s_web
+2410:5b67	data_2410_DATA_DGROUP_5B67_string	charm	s_charm
+2410:5b6d	data_2410_DATA_DGROUP_5B6D_string	finger of death	s_finger_of_death
+2410:5b7d	data_2410_DATA_DGROUP_5B7D_string	disintegrate	s_disintegrate
+2410:5b8a	data_2410_DATA_DGROUP_5B8A_string	flesh to stone	s_flesh_to_stone
+2410:5b99	data_2410_DATA_DGROUP_5B99_string	mass charm	s_mass_charm
+2410:5ba4	data_2410_DATA_DGROUP_5BA4_string	%s casts a %s spell %s %s.	s_s_casts_a_s_spell_s_s
+2410:5bbf	data_2410_DATA_DGROUP_5BBF_string	%s takes half damage from spells.	s_s_takes_half_damage_from_spells
+2410:5be1	data_2410_DATA_DGROUP_5BE1_string	%s takes half damage from dragon breath.	s_s_takes_half_damage_from_dragon_breath
+2410:5c0a	data_2410_DATA_DGROUP_5C0A_string	%s takes half damage from lightning.	s_s_takes_half_damage_from_lightning
+2410:5c2f	data_2410_DATA_DGROUP_5C2F_string	%s is charmed by %s.	s_s_is_charmed_by_s
+2410:5c44	data_2410_DATA_DGROUP_5C44_string	%s fails to charm %s.	s_s_fails_to_charm_s
+2410:5c5a	data_2410_DATA_DGROUP_5C5A_string	%s is immune to fire.	s_s_is_immune_to_fire
+2410:5c70	data_2410_DATA_DGROUP_5C70_string	%s takes half damage from fire.	s_s_takes_half_damage_from_fire
+2410:5c90	data_2410_DATA_DGROUP_5C90_string	%s is held by %s.	s_s_is_held_by_s
+2410:5ca2	data_2410_DATA_DGROUP_5CA2_string	%s is put to sleep by %s.	s_s_is_put_to_sleep_by_s
+2410:5cbc	data_2410_DATA_DGROUP_5CBC_string	%s is entangled in a web created by %s.	s_s_is_entangled_in_a_web_created_by_s
+2410:5cf2	data_2410_DATA_DGROUP_5CF2_string	Pause	s_pause
+2410:5cf8	data_2410_DATA_DGROUP_5CF8_string	Resume	s_resume
+2410:5cff	data_2410_DATA_DGROUP_5CFF_string	%s-%c	s_s_c
+2410:5d05	data_2410_DATA_DGROUP_5D05_string	Sorry, you may not pause during a battle.	s_sorry_you_may_not_pause_during_a_battle
+2410:5d2f	data_2410_DATA_DGROUP_5D2F_string	Pause. Select 'Resume' to enable game events. Press SPACE for a single game event.	s_pause_select_resume_to_enable_game_events_pr
+2410:5d82	data_2410_DATA_DGROUP_5D82_string	Resume. Game events will now occur normally.	s_resume_game_events_will_now_occur_normally
+2410:5daf	data_2410_DATA_DGROUP_5DAF_string	Gold	s_gold
+2410:5db4	data_2410_DATA_DGROUP_5DB4_string	Fund	s_fund
+2410:5db9	data_2410_DATA_DGROUP_5DB9_string	Previous	s_previous
+2410:5dc2	data_2410_DATA_DGROUP_5DC2_string	Next	s_next
+2410:5df8	data_2410_DATA_DGROUP_5DF8_string	All enemies destroyed.	s_all_enemies_destroyed
+2410:5e0f	data_2410_DATA_DGROUP_5E0F_string	Next wave of enemies appear.	s_next_wave_of_enemies_appear
+2410:611f	data_2410_DATA_DGROUP_611F_string	                                 	s_empty
+2410:6140	data_2410_DATA_DGROUP_6140_string	4. IRQ 7  5. IRQ 10):	s_4_irq_7_5_irq_10
+2410:62d1	data_2410_DATA_DGROUP_62D1_string	Exp %ld 	s_exp_ld
+2410:638d	data_2410_DATA_DGROUP_638D_string	  %s is not readied.	s_s_is_not_readied
+2410:63a2	data_2410_DATA_DGROUP_63A2_string	  %s is ready.	s_s_is_ready
+2410:63b1	data_2410_DATA_DGROUP_63B1_string	%s is no longer ready.	s_s_is_no_longer_ready
+2410:63c8	data_2410_DATA_DGROUP_63C8_string	Ready characters are the first to come when attracted.%s	s_ready_characters_are_the_first_to_come_when_
+2410:6406	data_2410_DATA_DGROUP_6406_string	%s is now based at (%d, %d). This unit will remain home when attracted.	s_s_is_now_based_at_d_d_this_unit_will_remain_
+2410:644e	data_2410_DATA_DGROUP_644E_string	%s can now be called away from home.	s_s_can_now_be_called_away_from_home
+2410:6792	data_2410_DATA_DGROUP_6792_string	@Farmland	s_farmland
+2410:679c	data_2410_DATA_DGROUP_679C_string	@Inn	s_inn
+2410:67a1	data_2410_DATA_DGROUP_67A1_string	@Temple	s_temple
+2410:67a9	data_2410_DATA_DGROUP_67A9_string	@Forge	s_forge
+2410:67b0	data_2410_DATA_DGROUP_67B0_string	@University	s_university
+2410:67bc	data_2410_DATA_DGROUP_67BC_string	@Tower	s_tower
+2410:67c3	data_2410_DATA_DGROUP_67C3_string	@Granary	s_granary
+2410:67cc	data_2410_DATA_DGROUP_67CC_string	@Marketplace	s_marketplace
+2410:67d9	data_2410_DATA_DGROUP_67D9_string	@Tree	s_tree
+2410:67df	data_2410_DATA_DGROUP_67DF_string	@E/W wall	s_e_w_wall
+2410:67e9	data_2410_DATA_DGROUP_67E9_string	@N/S wall	s_n_s_wall
+2410:67f3	data_2410_DATA_DGROUP_67F3_string	@E/W bridge	s_e_w_bridge
+2410:67ff	data_2410_DATA_DGROUP_67FF_string	@N/S bridge	s_n_s_bridge
+2410:680b	data_2410_DATA_DGROUP_680B_string	@Guard house	s_guard_house
+2410:6818	data_2410_DATA_DGROUP_6818_string	@Thieve's Den	s_thieve_s_den
+2410:6826	data_2410_DATA_DGROUP_6826_string	@Social hall	s_social_hall
+2410:6833	data_2410_DATA_DGROUP_6833_string	@E/W gate	s_e_w_gate
+2410:683d	data_2410_DATA_DGROUP_683D_string	@N/S gate	s_n_s_gate
+2410:6847	data_2410_DATA_DGROUP_6847_string	@Elf Gardens	s_elf_gardens
+2410:6854	data_2410_DATA_DGROUP_6854_string	@Fletcher	s_fletcher
+2410:685e	data_2410_DATA_DGROUP_685E_string	@public bath	s_public_bath
+2410:686b	data_2410_DATA_DGROUP_686B_string	@mason's hall	s_mason_s_hall
+2410:6879	data_2410_DATA_DGROUP_6879_string	@jeweler	s_jeweler
+2410:6882	data_2410_DATA_DGROUP_6882_string	@glassworks	s_glassworks
+2410:688e	data_2410_DATA_DGROUP_688E_string	@outpost	s_outpost
+2410:6897	data_2410_DATA_DGROUP_6897_string	@vault	s_vault
+2410:689e	data_2410_DATA_DGROUP_689E_string	@Forester's camp	s_forester_s_camp
+2410:68af	data_2410_DATA_DGROUP_68AF_string	@Builder's hall	s_builder_s_hall
+2410:68bf	data_2410_DATA_DGROUP_68BF_string	@bazaar	s_bazaar
+2410:68c7	data_2410_DATA_DGROUP_68C7_string	@arena	s_arena
+2410:68ce	data_2410_DATA_DGROUP_68CE_string	@toymaker	s_toymaker
+2410:68d8	data_2410_DATA_DGROUP_68D8_string	@bakery	s_bakery
+2410:68e0	data_2410_DATA_DGROUP_68E0_string	@gaming hall	s_gaming_hall
+2410:68ed	data_2410_DATA_DGROUP_68ED_string	@scribery	s_scribery
+2410:68f7	data_2410_DATA_DGROUP_68F7_string	@magic mill	s_magic_mill
+2410:6903	data_2410_DATA_DGROUP_6903_string	@armory	s_armory
+2410:6a2e	data_2410_DATA_DGROUP_6A2E_string	The season has changed to summer.	s_the_season_has_changed_to_summer
+2410:6a6e	data_2410_DATA_DGROUP_6A6E_string	%d building%s repaired.	s_d_building_s_repaired
+2410:6a89	data_2410_DATA_DGROUP_6A89_string	%shigh.txt	s_shigh_txt
+2410:6a94	data_2410_DATA_DGROUP_6A94_string	Great Achievements	s_great_achievements
+2410:6aa7	data_2410_DATA_DGROUP_6AA7_string	Name	s_name
+2410:6aac	data_2410_DATA_DGROUP_6AAC_string	Enemies	s_enemies
+2410:6ab4	data_2410_DATA_DGROUP_6AB4_string	Done	s_done
+2410:6ab9	data_2410_DATA_DGROUP_6AB9_string	%c%s%s@%d	s_c_s_s_d
+2410:6ac7	data_2410_DATA_DGROUP_6AC7_string	$My %s, we in this neighborhood are doing well. We thank you for all you have done to help your people.	s_my_s_we_in_this_neighborhood_are_doing_well_
+2410:6b2f	data_2410_DATA_DGROUP_6B2F_string	lord	s_lord
+2410:6b34	data_2410_DATA_DGROUP_6B34_string	lady	s_lady
+2410:6e77	data_2410_DATA_DGROUP_6E77_string	kill 4	s_kill_4
+2410:6e7f	data_2410_DATA_DGROUP_6E7F_string	are	s_are
+2410:6e83	data_2410_DATA_DGROUP_6E83_string	is	s_is
+2410:6e86	data_2410_DATA_DGROUP_6E86_string	The %d unit%s loyal to %s %s %d%% recruiting, %d%% training, and %d%% building.	s_the_d_unit_s_loyal_to_s_s_d_recruiting_d_tra
+2410:6ed6	data_2410_DATA_DGROUP_6ED6_string	%s fails to turn.	s_s_fails_to_turn
+2410:6ee8	data_2410_DATA_DGROUP_6EE8_string	%s cannot turn.	s_s_cannot_turn
+2410:6ef8	data_2410_DATA_DGROUP_6EF8_string	%s destroys %d undead.	s_s_destroys_d_undead
+2410:6f0f	data_2410_DATA_DGROUP_6F0F_string	%s turns %d undead.	s_s_turns_d_undead
+2410:6f23	data_2410_DATA_DGROUP_6F23_string	Building %d %s.	s_building_d_s
+2410:6f3d	data_2410_DATA_DGROUP_6F3D_string	%d 	s_d
+2410:6f42	data_2410_DATA_DGROUP_6F42_string	You cannot see the terrain here.	s_you_cannot_see_the_terrain_here
+2410:6f63	data_2410_DATA_DGROUP_6F63_string	%s is paralyzed by %s.	s_s_is_paralyzed_by_s
+2410:6f7a	data_2410_DATA_DGROUP_6F7A_string	%s is stoned by %s.	s_s_is_stoned_by_s
+2410:6f8e	data_2410_DATA_DGROUP_6F8E_string	%s is no longer charmed.	s_s_is_no_longer_charmed
+2410:6feb	data_2410_DATA_DGROUP_6FEB_string	%s casts %s on %s to heal %d hitpoint%s for a total of %d hitpoint%s.	s_s_casts_s_on_s_to_heal_d_hitpoint_s_for_a_to
+2410:7031	data_2410_DATA_DGROUP_7031_string	%s takes no damage from non-magical weapons.	s_s_takes_no_damage_from_non_magical_weapons
+2410:705e	data_2410_DATA_DGROUP_705E_string	%s takes no damage from less than +2 weapons.	s_s_takes_no_damage_from_less_than_2_weapons
+2410:708c	data_2410_DATA_DGROUP_708C_string	%s takes no damage from missile attacks.	s_s_takes_no_damage_from_missile_attacks
+2410:70b5	data_2410_DATA_DGROUP_70B5_string	%s poisons %s.	s_s_poisons_s
+2410:70c4	data_2410_DATA_DGROUP_70C4_string	%s infects %s with blast spore disease.	s_s_infects_s_with_blast_spore_disease
+2410:70ec	data_2410_DATA_DGROUP_70EC_string	%s drains a level from %s.	s_s_drains_a_level_from_s
+2410:7107	data_2410_DATA_DGROUP_7107_string	%s drains all energy from %s.	s_s_drains_all_energy_from_s
+2410:7125	data_2410_DATA_DGROUP_7125_string	%s drains two levels from %s.	s_s_drains_two_levels_from_s
+2410:7165	data_2410_DATA_DGROUP_7165_string	Demo cancelled.	s_demo_cancelled
+2410:7175	data_2410_DATA_DGROUP_7175_string	Nasher	s_nasher
+2410:717c	data_2410_DATA_DGROUP_717C_string	Fordor	s_fordor
+2410:7183	data_2410_DATA_DGROUP_7183_string	Kaunas	s_kaunas
+2410:718a	data_2410_DATA_DGROUP_718A_string	Mindark	s_mindark
+2410:7192	data_2410_DATA_DGROUP_7192_string	A new land lies before you. Choose carefully	s_a_new_land_lies_before_you_choose_carefully
+2410:71bf	data_2410_DATA_DGROUP_71BF_string	where you settle.	s_where_you_settle
+2410:71d1	data_2410_DATA_DGROUP_71D1_string	Your goal: Create a thriving community.	s_your_goal_create_a_thriving_community
+2410:71f9	data_2410_DATA_DGROUP_71F9_string	Balance building, money, and food production	s_balance_building_money_and_food_production
+2410:7226	data_2410_DATA_DGROUP_7226_string	to keep your people happy.	s_to_keep_your_people_happy
+2410:7241	data_2410_DATA_DGROUP_7241_string	Your world will be filled with a full range	s_your_world_will_be_filled_with_a_full_range
+2410:726d	data_2410_DATA_DGROUP_726D_string	of official D&D@ game characters.	s_of_official_d_d_game_characters
+2410:728f	data_2410_DATA_DGROUP_728F_string	You are not alone in this pristine land.	s_you_are_not_alone_in_this_pristine_land
+2410:72b8	data_2410_DATA_DGROUP_72B8_string	Official D&D@ game monsters will fight to	s_official_d_d_game_monsters_will_fight_to
+2410:72e2	data_2410_DATA_DGROUP_72E2_string	destroy your city.	s_destroy_your_city
+2410:72f5	data_2410_DATA_DGROUP_72F5_string	Force and fury meet magic spells as battles	s_force_and_fury_meet_magic_spells_as_battles
+2410:7321	data_2410_DATA_DGROUP_7321_string	play out in the courtyards of mighty castles.	s_play_out_in_the_courtyards_of_mighty_castles
+2410:734f	data_2410_DATA_DGROUP_734F_string	Your people will fight bravely and work	s_your_people_will_fight_bravely_and_work
+2410:7377	data_2410_DATA_DGROUP_7377_string	hard. Your city will grow...	s_hard_your_city_will_grow
+2410:7394	data_2410_DATA_DGROUP_7394_string	and grow...	s_and_grow
+2410:73a0	data_2410_DATA_DGROUP_73A0_string	                     and grow...	s_and_grow
+2410:73c1	data_2410_DATA_DGROUP_73C1_string	But beware the evil Mindark, whose	s_but_beware_the_evil_mindark_whose
+2410:73e4	data_2410_DATA_DGROUP_73E4_string	hordes destroyed your homeland long ago.	s_hordes_destroyed_your_homeland_long_ago
+2410:740d	data_2410_DATA_DGROUP_740D_string	If you lead with wisdom and cunning...	s_if_you_lead_with_wisdom_and_cunning
+2410:7434	data_2410_DATA_DGROUP_7434_string	If you fight with valor and guile...	s_if_you_fight_with_valor_and_guile
+2410:7459	data_2410_DATA_DGROUP_7459_string	You will truly be master of your...	s_you_will_truly_be_master_of_your
+2410:74b8	data_2410_DATA_DGROUP_74B8_string	Choose party to build for.  Now building for %s the %s.	s_choose_party_to_build_for_now_building_for_s
+2410:74f0	data_2410_DATA_DGROUP_74F0_string	%s:	s_s
+2410:74f4	data_2410_DATA_DGROUP_74F4_string	 You can only place a single arena.	s_you_can_only_place_a_single_arena
+2410:7518	data_2410_DATA_DGROUP_7518_string	 Bridges must be near water's edge.	s_bridges_must_be_near_water_s_edge
+2410:753c	data_2410_DATA_DGROUP_753C_string	 Next outpost available at rank %s.	s_next_outpost_available_at_rank_s
+2410:7560	data_2410_DATA_DGROUP_7560_string	 No more outposts are available.	s_no_more_outposts_are_available
+2410:7581	data_2410_DATA_DGROUP_7581_string	 Requires a rank of %s.	s_requires_a_rank_of_s
+2410:7599	data_2410_DATA_DGROUP_7599_string	 Requires a unit of level %d.	s_requires_a_unit_of_level_d
+2410:75b7	data_2410_DATA_DGROUP_75B7_string	 Location is too narrow for %s.	s_location_is_too_narrow_for_s
+2410:75d7	data_2410_DATA_DGROUP_75D7_string	 Location is too narrow for a %s.	s_location_is_too_narrow_for_a_s
+2410:75f9	data_2410_DATA_DGROUP_75F9_string	 Walls must be near land.	s_walls_must_be_near_land
+2410:7613	data_2410_DATA_DGROUP_7613_string	Buildings cannot be placed over water.	s_buildings_cannot_be_placed_over_water
+2410:763a	data_2410_DATA_DGROUP_763A_string	This location is unsuitable for buildings.	s_this_location_is_unsuitable_for_buildings
+2410:7665	data_2410_DATA_DGROUP_7665_string	 It will cost %s the %s %d gp. 	s_it_will_cost_s_the_s_d_gp
+2410:7685	data_2410_DATA_DGROUP_7685_string	Place	s_place
+2410:768b	data_2410_DATA_DGROUP_768B_string	Change Building	s_change_building
+2410:769b	data_2410_DATA_DGROUP_769B_string	Change Party	s_change_party
+2410:76a8	data_2410_DATA_DGROUP_76A8_string	Done	s_done
+2410:76ad	data_2410_DATA_DGROUP_76AD_string	Party member %s doesn't have enough gold to construct a %s.	s_party_member_s_doesn_t_have_enough_gold_to_c
+2410:76e9	data_2410_DATA_DGROUP_76E9_string	Too many construction sites.	s_too_many_construction_sites
+2410:7706	data_2410_DATA_DGROUP_7706_string	Excavate	s_excavate
+2410:770f	data_2410_DATA_DGROUP_770F_string	Remove	s_remove
+2410:7716	data_2410_DATA_DGROUP_7716_string	Change party	s_change_party
+2410:7723	data_2410_DATA_DGROUP_7723_string	%s: Search this location for minerals?  Active party is %s the %s.	s_s_search_this_location_for_minerals_active_p
+2410:7766	data_2410_DATA_DGROUP_7766_string	No minerals were found.	s_no_minerals_were_found
+2410:777e	data_2410_DATA_DGROUP_777E_string	Gems discovered.	s_gems_discovered
+2410:778f	data_2410_DATA_DGROUP_778F_string	Iron deposits discovered.	s_iron_deposits_discovered
+2410:77a9	data_2410_DATA_DGROUP_77A9_string	Gold discovered.	s_gold_discovered
+2410:77ba	data_2410_DATA_DGROUP_77BA_string	No	s_no
+2410:77bd	data_2410_DATA_DGROUP_77BD_string	Remove %s permanently. Are you sure?	s_remove_s_permanently_are_you_sure
+2410:77f0	data_2410_DATA_DGROUP_77F0_string	Claim	s_claim
+2410:77f6	data_2410_DATA_DGROUP_77F6_string	Chop down	s_chop_down
+2410:7800	data_2410_DATA_DGROUP_7800_string	%s: Claim this tree? Harvest value is %d gold. Active party is %s the %s.	s_s_claim_this_tree_harvest_value_is_d_gold_ac
+2410:784a	data_2410_DATA_DGROUP_784A_string	Forest claimed. This forest creates %d gold of income and feeds %d %s.	s_forest_claimed_this_forest_creates_d_gold_of
+2410:7891	data_2410_DATA_DGROUP_7891_string	Tree cut down. %d gold obtained.	s_tree_cut_down_d_gold_obtained
+2410:78b2	data_2410_DATA_DGROUP_78B2_string	Maintenance cost is	s_maintenance_cost_is
+2410:78c6	data_2410_DATA_DGROUP_78C6_string	Income created is	s_income_created_is
+2410:78d8	data_2410_DATA_DGROUP_78D8_string	..	s_empty
+2410:78db	data_2410_DATA_DGROUP_78DB_string	...	s_empty
+2410:78ed	data_2410_DATA_DGROUP_78ED_string	%s: %d%% complete. Owned by %s.	s_s_d_complete_owned_by_s
+2410:790d	data_2410_DATA_DGROUP_790D_string	%s (%u/%u): Held by %s.	s_s_u_u_held_by_s
+2410:7925	data_2410_DATA_DGROUP_7925_string	 Home a unit here to halt damage.	s_home_a_unit_here_to_halt_damage
+2410:7947	data_2410_DATA_DGROUP_7947_string	%s: Held by %s.	s_s_held_by_s
+2410:7957	data_2410_DATA_DGROUP_7957_string	Water:	s_water
+2410:795e	data_2410_DATA_DGROUP_795E_string	Shore:	s_shore
+2410:7965	data_2410_DATA_DGROUP_7965_string	%s:	s_s
+2410:7969	data_2410_DATA_DGROUP_7969_string	Suspend	s_suspend
+2410:7971	data_2410_DATA_DGROUP_7971_string	Change party	s_change_party
+2410:797e	data_2410_DATA_DGROUP_797E_string	%s: %d%% complete. Owned by %s. Active party is %s the %s.	s_s_d_complete_owned_by_s_active_party_is_s_th
+2410:79b9	data_2410_DATA_DGROUP_79B9_string	Clearing of land: %d%% complete. Owned by %s. Active party is %s the %s.	s_clearing_of_land_d_complete_owned_by_s_activ
+2410:7a02	data_2410_DATA_DGROUP_7A02_string	No	s_no
+2410:7a05	data_2410_DATA_DGROUP_7A05_string	Construction of %s will be permanently suspended. Are you sure?	s_construction_of_s_will_be_permanently_suspen
+2410:7a45	data_2410_DATA_DGROUP_7A45_string	%s (%d/%d): Owned by %s. Active party is %s the %s.	s_s_d_d_owned_by_s_active_party_is_s_the_s
+2410:7aa5	data_2410_DATA_DGROUP_7AA5_string	%s: Active party is %s the %s.	s_s_active_party_is_s_the_s
+2410:7eaa	data_2410_DATA_DGROUP_7EAA_string	%s: Costs %d gold of income and provides visibility of %d squares n/s, %d squares e/w.	s_s_costs_d_gold_of_income_and_provides_visibi
+2410:7f01	data_2410_DATA_DGROUP_7F01_string	%s: Costs %d gold of income and provides storage for %u food.	s_s_costs_d_gold_of_income_and_provides_storag
+2410:806a	data_2410_DATA_DGROUP_806A_string	Salvage	s_salvage
+2410:808a	data_2410_DATA_DGROUP_808A_string	Demolish	s_demolish
+2410:8093	data_2410_DATA_DGROUP_8093_string	Repair	s_repair
+2410:80af	data_2410_DATA_DGROUP_80AF_string	Upgrade	s_upgrade
+2410:80cd	data_2410_DATA_DGROUP_80CD_string	Information	s_information
+2410:80d9	data_2410_DATA_DGROUP_80D9_string	New Owner	s_new_owner
+2410:80e3	data_2410_DATA_DGROUP_80E3_string	Change Party	s_change_party
+2410:811f	data_2410_DATA_DGROUP_811F_string	Get rid of %s permanently. Are you sure?	s_get_rid_of_s_permanently_are_you_sure
+2410:81dc	data_2410_DATA_DGROUP_81DC_string	%ld experience obtained. %ld experience given to each unit. %ld gold recovered.	s_ld_experience_obtained_ld_experience_given_t
+2410:8340	data_2410_DATA_DGROUP_8340_string	house1.txt	s_house1_txt
+2410:8436	data_2410_DATA_DGROUP_8436_string	%s is no longer paralyzed.	s_s_is_no_longer_paralyzed
+2410:8451	data_2410_DATA_DGROUP_8451_string	%s breaks free of the web.	s_s_breaks_free_of_the_web
+2410:846c	data_2410_DATA_DGROUP_846C_string	%s regenerates 3 hitpoints to a total of %d hitpoints.	s_s_regenerates_3_hitpoints_to_a_total_of_d_hi
+2410:84a3	data_2410_DATA_DGROUP_84A3_string	%d 	s_d
+2410:88bd	data_2410_DATA_DGROUP_88BD_string	COMPAQ	s_compaq
