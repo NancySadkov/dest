@@ -25,6 +25,52 @@ void __cdecl16far f_3d16_1558(void);
 char * __cdecl16far f_5087_0119(char index);
 char * __cdecl16far f_474a_09df(char *buf, char *fmt, ...);
 void __cdecl16far f_302d_0a1b(char *msg);
+char * __cdecl16far f_474a_0cf8(char *text);
+void __cdecl16far f_67e7_058d(char *buf, char *text);
+void __cdecl16far f_2d63_05e5(int a, int b, int c, int d, int e, int f);
+void __cdecl16far f_2d63_01df(char *buf);
+void __cdecl16far f_317e_0bf2(char *a, int b, int c, char *d, int e, int f);
+void __cdecl16far f_3f0b_0685(void);
+void __cdecl16far f_2e25_1662(void);
+void __cdecl16far f_3a5b_032e(void);
+void __cdecl16far f_6a8f_18c6(void);
+void __cdecl16far manage_4d05_1bee(uint8_t index);
+
+/* Ten-byte panel geometry copied from the static table. */
+struct panel {
+    int v[5];
+};
+
+/* Draw one panel with the standard geometry. */
+void __cdecl16far manage_4d05_0166(void)
+{
+    struct panel local;
+
+    local = *(struct panel far *)((far_t *)far_t_ARRAY_2410_4933 + 2);
+    f_317e_0bf2(*(char far * far *)MK_FP(0x0280, 0x8b85), 0, 0,
+                (char *)&local, 0x10, 0);
+}
+
+/* Character-generator panel setup: format the title line, then lay out the
+ * three stat panels into the shared DGROUP buffer. */
+void __cdecl16far manage_4d05_0081(void)
+{
+    char *p;
+    char buf[0x300];
+
+    *(uint8_t far *)MK_FP(0x0280, 0x9016) = 0xff;
+    *(uint8_t far *)MK_FP(0x0280, 0x26a8) = 1;
+    p = f_474a_0cf8(*(char far * far *)MK_FP(0x0280, 0x9284));
+    f_67e7_058d(p, buf);
+    f_2d63_05e5(0xc, 7, 0xde, 0x96, 0xec, 0xa000);
+    f_2d63_01df(buf);
+    f_317e_0bf2(*(char far * far *)MK_FP(0x0280, 0x8b85), 0, 0,
+                MK_FP(0x0280, 0x044a), 0x10, 0);
+    f_317e_0bf2(*(char far * far *)MK_FP(0x0280, 0x92a4), 0, 0,
+                MK_FP(0x0280, 0x044a), 0x10, 0);
+    f_317e_0bf2(*(char far * far *)MK_FP(0x0280, 0x92a0), 0, 0,
+                MK_FP(0x0280, 0x044a), 0x10, 0);
+}
 
 /* Roll `count` dice with `sides` faces and return the total. */
 uint8_t __cdecl16far manage_4d05_01a3(uint8_t count, uint8_t sides)

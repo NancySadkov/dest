@@ -269,10 +269,12 @@ Evidence applied in the project:
 
 ### Byte-exact replacements
 
-`src/game/ui.c` holds twenty recompiled UI functions.  With byte returns and
+`src/game/ui.c` holds twenty-two recompiled UI functions.  With byte returns and
 the recovered structs they compile to the original instruction streams exactly:
 
 ```text
+4D05:0081 229 bytes  manage_4d05_0081   (chargen panel setup)
+4D05:0166  61 bytes  manage_4d05_0166   (standard panel)
 4D05:01A3  49 bytes  manage_4d05_01a3   (3d6 ability roll)
 4D05:01D4 102 bytes  manage_4d05_01d4   (roll the six starting stats)
 4D05:023A  99 bytes  manage_4d05_023a   (ordinal suffix)
@@ -322,5 +324,17 @@ The character table itself is an array of `char_sheet_t far *` at offset 0 of
 segment `0x0070`; the count lives in `GLeaderCount`.  `044e` and `1b1d` must
 not cache the table pointer: the original recomputes the far address for every
 field access, which the macro in `ui.c` reproduces.
+
+Two functions need a link-time fix-up rather than a source shape:
+
+- `17c7` calls `1bee` in the same overlay.  That call was a cross-module
+  `lcall` at compile time; the overlay linker rewrote it into
+  `push cs; call rel16; nop` (one byte larger than TCC's own
+  `push cs; call rel16`).  Reproducing it needs either a one-byte padding
+  pass or an out-of-line definition, so `17c7` is not in `ui.c` yet.
+- `22b3` indexes the entity array as `base + i`; TCC schedules the pointer
+  load before the `i * 0x37` scaling, while the original computes the index
+  first.  The function is semantically understood but awaits the idiom that
+  reproduces that order.
 
 (`build_game.py` compiles `ui.c` alongside the other recovered fragments.)

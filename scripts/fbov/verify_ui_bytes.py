@@ -20,6 +20,8 @@ EXE = os.path.join(ROOT, "game", "STRONG.EXE")
 
 # Symbol -> (overlay code segment, offset, length up to the next function).
 FUNCS = [
+    ("manage_4d05_0081", 0x4D05, 0x0081, 0xE5),
+    ("manage_4d05_0166", 0x4D05, 0x0166, 0x3D),
     ("manage_4d05_01a3", 0x4D05, 0x01A3, 0x31),
     ("manage_4d05_01d4", 0x4D05, 0x01D4, 0x66),
     ("manage_4d05_023a", 0x4D05, 0x023A, 0x63),
