@@ -335,3 +335,22 @@ four are named.
 The constructor also copies the generic record's byte `0x1a` into the record's
 `0x31` and `0x32`, and sets `0x33` to 2, which is why those bytes appear in the
 0x30 group.
+
+## More typed agent helpers
+
+`agnt_3b1d_0079` reads the record's `y`, `x` and `0x25` before delegating, so it
+is another `agnt_t *` consumer:
+
+```c
+undefined1 __cdecl16far agnt_3b1d_0079(agnt_t *agnt)
+{
+  if (((((int)paVar3->y < 0x15) || (paVar3->field_0x25 == 1)) &&
+       ((int)agnt->x < 0xd3)) && (-1 < (int)agnt->x)) {
+    iVar2 = ovr_OVC49_8699_06dc((int *)paVar3);
+```
+
+The bounds (`x` in 0..210, `y` in 0..20) are the agent map extent.
+
+Typed record-taking functions: 13 of the 34 in `ovc12_agnt` (`agnt_t *`:
+`0032`? no - `0079`, `00ce`, `0a53`, `0a8d`, `0a9f`, `0ac0`, `0d1c`, `0d82`;
+`entity_t *`: `0c7c`, `0c9f`, `0cc6`, `0cef`).
