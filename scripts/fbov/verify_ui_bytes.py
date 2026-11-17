@@ -25,10 +25,15 @@ FUNCS = [
     ("manage_4d05_029d", 0x4D05, 0x029D, 0x54),
     ("manage_4d05_02f1", 0x4D05, 0x02F1, 0x4F),
     ("manage_4d05_0340", 0x4D05, 0x0340, 0x64),
+    ("manage_4d05_03a4", 0x4D05, 0x03A4, 0xAA),
     ("manage_4d05_044e", 0x4D05, 0x044E, 0x78),
     ("manage_4d05_04c6", 0x4D05, 0x04C6, 0x53),
     ("manage_4d05_0519", 0x4D05, 0x0519, 0x55),
     ("manage_4d05_0d7b", 0x4D05, 0x0D7B, 0x43),
+    ("manage_4d05_1095", 0x4D05, 0x1095, 0xB1),
+    ("manage_4d05_1146", 0x4D05, 0x1146, 0x45),
+    ("manage_4d05_118b", 0x4D05, 0x118B, 0x40),
+    ("manage_4d05_125c", 0x4D05, 0x125C, 0x3A),
     ("manage_4d05_1b1d", 0x4D05, 0x1B1D, 0x34),
 ]
 
@@ -76,14 +81,14 @@ def main():
             print("FAIL %-22s no retf in compiled body" % name)
             ok = False
             continue
-        compiled = compiled[:end + 2]
+        body = compiled[:end + 2]
         start = overlay_offset(seg) + ofs
         original = image[start:start + length]
         if len(compiled) != length:
             print("FAIL %-22s length %d != %d" % (name, len(compiled), length))
             ok = False
             continue
-        mask = operand_mask(md, compiled, ofs)
+        mask = operand_mask(md, body, ofs)
         fixups = []
         for roff, rsize, rtarget in relocs.get(segno, []):
             if pos <= roff < pos + length:

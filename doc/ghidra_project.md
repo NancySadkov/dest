@@ -269,8 +269,8 @@ Evidence applied in the project:
 
 ### Byte-exact replacements
 
-`src/game/ui.c` holds ten recompiled UI functions.  With byte returns and the
-recovered structs they compile to the original instruction streams exactly:
+`src/game/ui.c` holds fifteen recompiled UI functions.  With byte returns and
+the recovered structs they compile to the original instruction streams exactly:
 
 ```text
 4D05:01A3  49 bytes  manage_4d05_01a3   (3d6 ability roll)
@@ -278,10 +278,15 @@ recovered structs they compile to the original instruction streams exactly:
 4D05:029D  84 bytes  manage_4d05_029d
 4D05:02F1  79 bytes  manage_4d05_02f1
 4D05:0340 100 bytes  manage_4d05_0340
+4D05:03A4 170 bytes  manage_4d05_03a4   (class/level title)
 4D05:044E 120 bytes  manage_4d05_044e   (average active popularity)
 4D05:04C6  83 bytes  manage_4d05_04c6   (right-align text run)
 4D05:0519  85 bytes  manage_4d05_0519   (right-align text at row)
 4D05:0D7B  67 bytes  manage_4d05_0d7b
+4D05:1095 177 bytes  manage_4d05_1095   (alignment picker)
+4D05:1146  69 bytes  manage_4d05_1146   (gender picker)
+4D05:118B  64 bytes  manage_4d05_118b   (alignment stop by race)
+4D05:125C  58 bytes  manage_4d05_125c   (default class by race)
 4D05:1B1D  52 bytes  manage_4d05_1b1d   (first levelled record)
 ```
 
@@ -299,6 +304,14 @@ visible.  Current relocations:
   load-time segment `0x0070`.  The original linker emitted a zero offset for
   that table, so the recovered source uses `&_DATA` to reproduce the
   relocatable zero and the 4-byte `les bx, es:[bx+0]` encoding.
+- `F_SCOPY@` plus `_GPlayerTitles`, `_GAlignmentString`, `_GStatsLabels`,
+  `_GAlignmentsNames` and `_DAT_2000_d1e5` in the dialog helpers.  The original
+  copied menus/title sets with C struct assignment, which TCC implements with
+  the resident `SCOPY@` block copy (`dst`, `src` on the stack, byte count in
+  `CX`).  `03a4` and `1095` reproduce that with struct assignments; the string
+  literals (`""`, `"Select an alignment."`, `"Male or female?"`) resolve to
+  the original DGROUP pool (e.g. `""` shares the NUL of `"Lawful"` at
+  `0x4B75`).
 
 The character table itself is an array of `char_sheet_t far *` at offset 0 of
 segment `0x0070`; the count lives in `GLeaderCount`.  `044e` and `1b1d` must
