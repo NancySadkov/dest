@@ -20,27 +20,23 @@ real code one function at a time, starting at `main()`.
 
 No step is done out of order, and nothing is committed that does not compile.
 
-## What is in `src/`
+## `src/` does not exist yet
 
-| File | Contents |
-|---|---|
-| `main.c`, `mouse.c`, `video.c`, `crtl.c`, `ovl.c`, `o01.c`-`o50.c` | one module each, augmented by the caller |
-| `ovr.c` | overlay entry stubs (`ovr_<name>`), forwarders to `<name>` |
-| `funcs.h` | prototype of every recovered function |
-| `globals.h`, `types.h`, `compat.h`, `st.h` | data declarations, recovered structs, compiler shims, aggregate header |
-| `types/` | hand-written Ghidra type-library includes |
+`src/` is the **output of step 2**, not a working area.  It is created by
+`scripts/fbov/make_stub_tree.py` from the refined Ghidra project, and only then
+filled in, one function at a time.
 
-`scripts/fbov/build_tree.py` stages `src/` into a scratch directory, generates
-`buildall.bat` and compiles every module with Turbo C++ 3.0.
+An earlier attempt exported it before step 1 was finished.  Every signature in
+that tree was a placeholder (`undefined f()`, `param_1`), every global had a
+generated name (`byte_2000_BSS_007A`), and the structs were full of
+`field_0xNN`.  It compiled, and it was worthless: a dump.  It has been
+deleted, and the rule is now explicit:
 
-`src/` is 55 modules and 1016 recovered functions plus 453 overlay forwarders.
-Every one of them compiles (`python scripts/fbov/build_tree.py --src src --work
-tmp/buildsrc` reports `compiled 56/56 modules`).
+> No function body enters `src/` until its prototype, arguments, locals and
+> globals are recovered in the Ghidra project.
 
-A stub is empty (or returns a zeroed value).  A recovered function is plain C.
-There is no `asm db`, no byte patching and no generated data image: a stub whose
-turn has not come yet is *empty*, not a dump, so a half-finished tree is still
-honest C.
+The hand-written Ghidra type-library headers live in `types/`; they are input
+to the project, not export output.
 
 ## The overlay thunks
 
