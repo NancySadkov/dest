@@ -527,3 +527,25 @@ across agents to order the blits.
 fixed-width strips (`base <= v <= base+0xf` with stride 3, and
 `base <= v <= base+0x22` with stride 2), i.e. UI list origins, but which lists
 is not fixed by their uses, so they stay unnamed.
+
+## The 19-byte record list in `ovc14_attact`
+
+`word_2410_DATA_DGROUP_0881` counts a list of `0x13`-byte records and
+`0883` indexes it while one is removed:
+
+```c
+if (memcmp(0x86e, 0x2410, 0x9074, 0x2410, 0x13) == 0) { ...; return; }  /* unchanged */
+if (299 < word_2410_DATA_DGROUP_0881) { compact; word_2410_DATA_DGROUP_0881 = 299; }
+memcpy(buf + word_2410_DATA_DGROUP_0881 * 0x13, (uint8_t *)0x9074, 0x13);
+...
+_fmemmove(buf + word_2410_DATA_DGROUP_0883 * 0x13,
+          buf + (word_2410_DATA_DGROUP_0883 + 1) * 0x13,
+          (word_2410_DATA_DGROUP_0881 - word_2410_DATA_DGROUP_0883 - 1) * 0x13);
+```
+
+Each record is a 19-byte snapshot of the scratch record at `2410:086e`,
+appended only when it differs from the previous one.  The pair is named
+`AttactRecCount` / `AttactRecIndex`: what they count/index is proven, while the
+payload's meaning is not (the static record at `2410:9074` is all zeroes and is
+filled at run time by code outside the export's reach), so no richer name is
+claimed.
