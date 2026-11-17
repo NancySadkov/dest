@@ -354,3 +354,34 @@ The bounds (`x` in 0..210, `y` in 0..20) are the agent map extent.
 Typed record-taking functions: 13 of the 34 in `ovc12_agnt` (`agnt_t *`:
 `0032`? no - `0079`, `00ce`, `0a53`, `0a8d`, `0a9f`, `0ac0`, `0d1c`, `0d82`;
 `entity_t *`: `0c7c`, `0c9f`, `0cc6`, `0cef`).
+
+## The generic-record base is settled: `195d:26d6`
+
+The constructor's load disassembles to
+
+```
+4207:1255  MOV AL,byte ptr [BP + 0xe]    ; the gindex argument
+4207:1258  MOV AH,0x0
+4207:125a  MOV DX,0x95
+4207:125d  IMUL DX
+4207:125f  MOV DX,0x195d                 ; segment
+4207:1262  MOV BX,AX
+4207:1266  MOV AL,byte ptr ES:[BX + 0x2711]
+4207:127b  MOV byte ptr ES:[BX + 0x31],AL
+```
+
+so the byte is at `195d:2711 + gindex * 0x95`.  The other function stores the
+record pointer as `gindex * 0x95 + 0x26d6`, and `0x2711 - 0x26d6 = 0x3b`.
+Therefore:
+
+- the records are at **`195d:26d6`**, stride `0x95`;
+- the field the constructor reads is **`agntG_t+0x3b`**, not `+0x1a`.
+
+The `+0x1a` in the decompiled line was arithmetic relative to the symbol at
+`2410:26f7` (`0x26f7 + 26 = 0x2711`), which is correct but misleading: the
+access uses the entity segment, not DGROUP.
+
+`agntG_t+0x3b` is a byte: the constructor copies it into both `agnt_t+0x31` and
+`agnt_t+0x32`, and `ovc41` copies it into an agent's `+0x21`.  Those three
+targets are drawing extents, so the byte is a size/scale, but its exact meaning
+is not pinned yet; it stays unnamed rather than guessed.
