@@ -385,3 +385,38 @@ access uses the entity segment, not DGROUP.
 `agnt_t+0x32`, and `ovc41` copies it into an agent's `+0x21`.  Those three
 targets are drawing extents, so the byte is a size/scale, but its exact meaning
 is not pinned yet; it stays unnamed rather than guessed.
+
+## The `0x3b` size byte and the record's `0x21`/`0x22`/`0x31`/`0x32`
+
+Consumers of the byte at `agntG_t+0x3b`:
+
+```c
+/* constructor: copy, then a randomised variation, floored at 1 */
+entity.base.field_0x31 = generic[0x3b];
+entity.base.field_0x32 = generic[0x3b];
+if (generic's 0x2f != -1) {
+    cVar4 = agnt_3b1d_0c1e();
+    iStack_6 = generic[0x3b] + cVar4;
+    if (iStack_6 < 1) iStack_6 = 1;
+    entity.base.field_0x31 = iStack_6;
+    entity.base.field_0x32 = iStack_6;
+}
+
+/* per agent record: copied from those entity bytes */
+agent[0x21] = entity.field_0x31;
+agent[0x22] = entity.field_0x32;
+
+/* then compared across agents, keeping the larger/smaller */
+if (agent_a[0x22] < agent_b[0x21]) agent_a[0x21] = agent_a[0x22];
+if (agent[0x22] < bVar27) bVar27 = agent[0x22];
+
+/* attack code copies it back into an entity */
+*(byte *)(x + 0x31) = *(byte *)(agent + 0x21);
+```
+
+So `0x3b` is a per-generic-agent quantity that is copied per instance, perturbed
+by a random offset, floored at 1, and then min/max'ed across agents.  That fixes
+its behaviour but not its unit: it is not proven whether it is a level, a size
+in pixels, or a strength.  The four dependent bytes (`agntG_t+0x3b`,
+`agnt_t+0x21`, `+0x22`, and the entity `0x31`/`0x32` pair) therefore stay
+unnamed; naming them would be a guess.
