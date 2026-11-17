@@ -678,3 +678,29 @@ would then be wrong for one of them.
 Until that is settled, `agnt_t+0x13`/`0x16` stays unnamed and unchanged: naming
 it would freeze an unresolved conflict into the model.  The next step is to
 diff the field usage of `Entities[i].base` against `agent[i]` at 0x1726.
+
+### Result of the `Entities[].base` vs `0x1726` diff
+
+```
+Entities[].base : 04 06 08 0a 0c 0d 0e 0f 10 12 13 17 2a 2f 30 32
+i*0x34 array    : 02 04 05 06 08 0a 0b 0c 0d 0e 0f 10 11 12 13 15 17 19
+                  1a 1b 1d 1f 21 22 23 24 25 26 28 2b 2d 2e 2f 30 31 34 36
+shared          : 04 06 08 0a 0c 0d 0e 0f 10 12 13 17 2f 30
+```
+
+The two records agree on every offset that both touch, including `0x17`, which
+on `Entities[]` is a four-byte value addressed byte-wise (`field_0x17.lo + 1` =
+`0x18`, `.hi + 1` = `0x1a`) and in the `0x1726` array is compared as a word at
+`0x17` and `0x19`.  So `entity_t.base` **is** the same record as the `0x1726`
+array; the record is not being split.
+
+The only real conflict is the word OR at `0x16`, which overlaps the low byte of
+that four-byte value at `0x17`.  The same bytes are therefore used two ways:
+
+- `DGROUP:0x16` — `OR word ptr [BX+0x16],1` (constructor),
+- `0x17..0x1a` — the entity far pointer (`CMP word [BX+0x17]`, `CMP [BX+0x19]`).
+
+That is a union in the original source, not a modelling error in `agnt_t`.
+Ghidra needs a union type over `0x13..0x1a`, or the two uses keep overwriting
+each other in the decompiler.  Until that union exists, `0x13`/`0x16` cannot be
+named without misdescribing one of the two uses.
