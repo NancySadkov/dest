@@ -980,3 +980,13 @@ Offset 0x1f is therefore not a field of its own: 31 decimal falls inside
 \xtents[3][3]\ (27..35) as \xtents[1][1]\, the second triple's right extent.
 Comparing it with 0 is testing for an empty frame, not reading a separate flag.
 No name is added because there is no field there.
+
+## agnt_3b1d_093e prototype repaired
+
+    caller: ovr_agnt_3b1d_093e(piVar7,uVar8,&local_8)   /* far ptr + out */
+    before: bool agnt_3b1d_093e(int *,undefined2 *,undefined2 *,uint *)
+    after : bool agnt_3b1d_093e(agnt_t *agnt,undefined2 *out)
+
+The four-parameter shape came from the thunk pushing the pointer as offset plus
+segment and Ghidra inventing two extra pointers.  Struct-typed functions:
+96 -> 97; auto parameters: 1233 -> 1229.
