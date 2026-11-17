@@ -80,3 +80,15 @@ if (((SfxRunning != '\0') && (CurSfxType3 != 0xff)) ...
 657 globals keep their generated names.  They are not named yet because the
 evidence has not been read, not because the names are unknown: the worklist is
 `tmp/globals_by_module.tsv`, ordered by how many modules reference each one.
+
+## Batch 4 - construction row table
+
+`2000:039E` is filled per row index in `ovc09_init` and read back in
+`ovc10_constr` only as a blit y coordinate:
+
+```c
+((undefined2 *)&word_2000_BSS_039E)[iVar8] = ...;          /* init, by row */
+gfxRlePrepare(..., ((undefined2 *)&word_2000_BSS_039E)[iVar8] - iStack_14, ...);
+```
+
+so it is the per-row screen y base, named `RowScreenY` (`2000:cdd2`).
