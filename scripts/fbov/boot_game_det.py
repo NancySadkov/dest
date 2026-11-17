@@ -97,6 +97,9 @@ def capture(exe, mem_out):
     send(s, "poked %X 0" % (0x40 * 16 + 0x6C))     # BIOS tick counter
     for off in (0x8986, 0x898A, 0x9070):
         send(s, "poked %X 0" % (ds * 16 + off))
+    # EMS/XMS handles handed out by the sound driver vary between runs.
+    for off in (0x2A4F, 0x2A51, 0x2A53, 0x2A55):
+        send(s, "poked %X 0" % (ds * 16 + off))
     send(s, "pokeb %X 0" % (ds * 16 + 0x8934))
     send(s, "poked %X 0" % (ds * 16 + 0x9001))
     send(s, "pokeb %X 0" % (ds * 16 + 0x7144))

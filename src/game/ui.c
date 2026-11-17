@@ -19,6 +19,11 @@ uint8_t __cdecl16far uiInputText(far_t *entries, int count, char *hint,
                                  uint8_t flags);
 char __cdecl16far manage_4d05_118b(uint8_t race);
 void __cdecl16far manage_4d05_11cb(char_sheet_t *sheet);
+void __cdecl16far f_6386_232d(void);
+void __cdecl16far f_3d16_1558(void);
+char * __cdecl16far f_5087_0119(char index);
+char * __cdecl16far f_474a_09df(char *buf, char *fmt, ...);
+void __cdecl16far f_302d_0a1b(char *msg);
 
 /* Roll `count` dice with `sides` faces and return the total. */
 uint8_t __cdecl16far manage_4d05_01a3(uint8_t count, uint8_t sides)
@@ -167,6 +172,70 @@ char __cdecl16far manage_4d05_1b1d(void)
     for (i = 0; i < GLeaderCount; i++)
         if (CHARSHEET(i)->level != 0)
             return i;
+    return -1;
+}
+
+/* Describe the current unit filter, save the RNG seeds around the
+ * refresh, then print the composed line. */
+void __cdecl16far manage_4d05_330c(uint8_t index, int mode, char *text)
+{
+    int savedSeed;
+    int savedSeed2;
+    char buf[0x100];
+
+    DAT_2410_4b6d = mode;
+    DAT_2410_4b6e = index;
+    if (*(uint8_t far *)MK_FP(0x0280, 0x26a8) != 0)
+        f_6386_232d();
+    savedSeed = *(uint16_t far *)MK_FP(0x0280, 0x899f);
+    savedSeed2 = *(uint16_t far *)MK_FP(0x0280, 0x899d);
+    *(uint16_t far *)MK_FP(0x0280, 0x899f) = Seed_2000_d1da;
+    *(uint16_t far *)MK_FP(0x0280, 0x899d) = Seed_2000_d1d8;
+    f_3d16_1558();
+    *(uint16_t far *)MK_FP(0x0280, 0x899f) = savedSeed;
+    *(uint16_t far *)MK_FP(0x0280, 0x899d) = savedSeed2;
+    DAT_2410_4b6d = 0xff;
+    DAT_2410_4b6e = 0xff;
+    if (mode == 0xfe) {
+        if (index != 0xff) {
+            f_302d_0a1b(f_474a_09df(buf,
+                        "All units loyal to %s the %s are displayed.",
+                        CHARSHEET(index), f_5087_0119(index)));
+        }
+        else {
+            f_302d_0a1b("All units are displayed.");
+        }
+    }
+    else {
+        if (index != 0xff) {
+            f_302d_0a1b(f_474a_09df(buf,
+                        "Only units of %s loyal to %s the %s are displayed.",
+                        text, CHARSHEET(index), f_5087_0119(index)));
+        }
+        else {
+            f_302d_0a1b(f_474a_09df(buf, "Only units of %s are displayed.",
+                                    text));
+        }
+    }
+}
+
+/* Next record with the same excluded status, starting at `start`. */
+char __cdecl16far manage_4d05_1b51(uint8_t start)
+{
+    uint8_t first;
+    uint8_t i;
+
+    first = manage_4d05_1b1d();
+    i = start;
+    do {
+        if (i < GLeaderCount && i != first && i != start &&
+            CHARSHEET(i)->active != 0 &&
+            CHARSHEET(i)->excluded == CHARSHEET(start)->excluded)
+            return i;
+        i++;
+        if (i >= GLeaderCount)
+            i = 0;
+    } while (i != start);
     return -1;
 }
 
