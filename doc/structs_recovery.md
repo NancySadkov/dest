@@ -295,3 +295,19 @@ func_0x0004f412(..., '\x02' - iStack_12, ...);
 Readers shift it back (`field_0xc + 0xfe` = value - 2) and test its low bit;
 `0xff` is the "none" value written by the clear-orders routine.  The vertical
 branch uses the same encoding with `dy + 1` (0..2).
+
+## `agnt_t+0x10` = `health`
+
+The entity constructor writes 100 into it and reloads it from a per-type table
+(`*(undefined2 *)(table + type*4 - 4)`); the idle predicate tests the dying
+range:
+
+```c
+if (paVar2->animFrame == 0xff) {
+  if ((char)paVar2->health < 2) return 1;
+  else if (paVar2->health == 4) return 1;
+}
+```
+
+It stays a byte in the structure because the readers use `*(char *)`; the
+16-bit initialisation is a word store over `0x10..0x11`.
