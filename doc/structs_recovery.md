@@ -456,3 +456,23 @@ else if (bVar1     == value) icon = 7;      /* OVC41_6a8f_0a45 */
 
 and `OVC41_6a8f_0aa7` selects one of three management actions from the same
 comparison.  No other code reads the byte, so its only role is a rank level.
+
+## Correction: `agnt_t+0x0c` is `target`, not `dir`
+
+An earlier turn named `0x0c` `dir` from writes of the form `0x2 - sign(dx)`,
+which only ever produce 1..3.  `agnt_3b1d_0d82` shows what the field is used
+for:
+
+```c
+iVar3 = (uint)*(byte *)(agent + 0xc) * 0x34;        /* Agents[agent->0xc] */
+piVar8 = (int *)(*(int *)(iVar3 + 0x13) + (uint)*(byte *)(iVar3 + 0x12) * 4);
+```
+
+`0x0c` is multiplied by the record size and used as a base, and
+`agnt_3b1d_196b` range-checks it (`param1 < agent[0x0c] <= param2`) while
+`agnt_3b1d_0a53` clears it to `0xff`.  That is an index of another agent
+record with `0xff` as "none"; the 1..3 writes are the index of a neighbour.
+The field is renamed `target`.
+
+The dir value used for sprite selection is `entity_t+0x36` (`dir`), which is a
+separate field in a separate structure.
