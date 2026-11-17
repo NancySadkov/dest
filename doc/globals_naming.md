@@ -104,3 +104,17 @@ so it is the per-row screen y base, named `RowScreenY` (`2000:cdd2`).
     stats_6386_232d(); say(); byte_45B8 = 1; return;
 
 Named MsgShown.
+
+## Batch 6 - XMS copy state
+
+xms_1000_032f loads the extended-memory copy parameters into DGROUP cells,
+advances the offsets and issues the driver call:
+
+    word_02BD = xms_data2;  word_02BF = param_3;  word_02C1 = param_4;
+    word_02C5 = param_1;    word_02C7 = param_2;
+    if ((param_5 & 1) != 0) { 02B9 = 2; 02BB = 0; (*xms_driver)(0x1000);
+        bVar1 = 0xfffe < 02BF;  02BF++;  02C1 += bVar1;  02C5++; ... }
+
+so 02BF/02C1 are the 32-bit source offset and 02C5/02C7 the destination offset,
+02BD the handle and 02B9 the command word.  Named XmsHandle, XmsCmd, XmsSrcLo,
+XmsSrcHi, XmsDstLo, XmsDstHi.
