@@ -18,6 +18,10 @@ bool __cdecl16far fmFreeAudio(uint16_t force)
 /* 3a5b:032e */
 void __cdecl16far stop_audio(void)
 {
+    if (!GameRunning) {
+        fmFreeAudio(1);
+        CurSfxType3 = 0xff;
+    }
 }
 
 /* 3a5b:034e */

@@ -331,7 +331,7 @@ uint16_t __cdecl16far draw_2e25_0d35(void);
 void __cdecl16far draw_2e25_0efd(int param_1);
 void __cdecl16far draw_2e25_10c7(void);
 void __cdecl16far draw_2e25_130a(void);
-char * __cdecl16far draw_2e25_15d6(void);
+char __cdecl16far draw_2e25_15d6(void);
 void __cdecl16far draw_2e25_1662(void);
 undefined2 __cdecl16far draw_2e25_1759(byte param_1);
 void __cdecl16far draw_2e25_17b3(void);

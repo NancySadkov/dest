@@ -103,9 +103,9 @@ void __cdecl16far draw_2e25_130a(void)
 }
 
 /* 2e25:15d6 */
-char * __cdecl16far draw_2e25_15d6(void)
+char __cdecl16far draw_2e25_15d6(void)
 {
-    char * r;
+    char r;
 
     return r;
 }

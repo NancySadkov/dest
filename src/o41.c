@@ -157,6 +157,22 @@ char * __cdecl16far OVC41_6a8f_15a0(void)
 /* 6a8f:1847 */
 void __cdecl16far OVC41_6a8f_1847(void)
 {
+    byte_2000_BSS_0067 = !byte_2000_BSS_0067;
+    GOngoingBattle = byte_2000_BSS_0067;
+    OVC28_6018_0176();
+    if (draw_2e25_15d6() == '\0') {
+        GOngoingBattle = '\x01';
+        say("You cannot see the terrain here.");
+        stop_audio();
+    }
+    else {
+        agnt_clear();
+        constr_36ce_1efc();
+        if (GOngoingBattle != '\0') {
+            stop_audio();
+        }
+        update_pause_button();
+    }
 }
 
 /* 6a8f:18c6 */
