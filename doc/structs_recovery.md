@@ -704,3 +704,40 @@ That is a union in the original source, not a modelling error in `agnt_t`.
 Ghidra needs a union type over `0x13..0x1a`, or the two uses keep overwriting
 each other in the decompiler.  Until that union exists, `0x13`/`0x16` cannot be
 named without misdescribing one of the two uses.
+
+### The bitfield plan does not work, and the diff needs re-reading
+
+Modelling `0x13..0x16` as a bitfield cannot remove the overlap: the instruction
+is a two-byte write,
+
+```
+4207:13c8  OR word ptr ES:[BX + 0x16],0x1
+4207:13f7  OR word ptr ES:[BX + 0x16],0x1
+```
+
+so any field at `0x16` covers `0x16..0x17` whatever its bit layout, and
+`0x17` is where the `0x1726` array keeps a word of its far pointer.  A union
+cannot help either, because a union member must start at the union's own base:
+`0x16` and `0x17` are different offsets.
+
+Re-reading the earlier diff with **access widths** instead of bare offsets shows
+why it did not settle the question:
+
+| offset | `Entities[].base` | `0x1726` array |
+|---|---|---|
+| `0x14` | word, `& 1` (`field_0x13.lo + 1`) | 16-bit read |
+| `0x16` | **word** OR `| 1` | — |
+| `0x17` | **byte** (`field_0x17.lo + 1` = `0x18`) | **word** `CMP [BX+0x17]` |
+| `0x19` | **byte** (`field_0x17.hi + 1` = `0x1a`) | **word** `CMP [BX+0x19]` |
+
+The same offsets carry different widths in the two records, which means they are
+**not** the same layout after all: `Entities[].base` appears to hold a 32-bit
+flags value with words at `0x14` and `0x16`, while the `0x1726` array holds a
+far pointer with words at `0x17` and `0x19`.  The earlier "no split needed"
+conclusion compared offsets only and was therefore wrong.
+
+Settling it needs one more disassembly: the instructions that read `0x17`/`0x19`
+on `Entities[]` (whether they are byte or word moves) and the ones that write
+`0x14`/`0x16` on the `0x1726` array.  Only then can `entity_t.base` and the
+agent array element be declared as two different structures, which would also
+change the 92 functions currently typed as `agnt_t *`.
