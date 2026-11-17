@@ -1002,3 +1002,15 @@ When the unit's 0x3e bit 0x200 is clear, the combat value is built as
 so 0x3a is an additive bonus on that value.  0x38/0x39 are the two arguments of
 that routine and stay unnamed: elsewhere it is called with the constants (2,6),
 (3,6) and (4,6), which fixes neither argument.
+
+## agnt_t+0x22 = strengthMax
+
+It caps the combat strength at 0x21:
+
+    if (agent[0x22] < agent[0x21]) agent[0x21] = agent[0x22];
+
+and it is set from the entity's 0x32, the strength copy the constructor fills
+from the generic record's 0x3b.  Generated struct fields: 49 -> 48 (agnt_t 9).
+
+agnt_t+0x11 is a plain 0/1 flag (set to 0, 1 or a byte, tested against 0) with no
+consumer that fixes its meaning, so it stays unnamed.
