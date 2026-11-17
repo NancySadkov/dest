@@ -44,6 +44,7 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk)
 /* 3a5b:0633 */
 void __cdecl16far play_sfx(int16_t track,int16_t type)
 {
+    play_sfxU((byte)track,type,0x40);
 }
 
 /* 3a5b:0648 */

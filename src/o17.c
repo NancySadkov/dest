@@ -63,7 +63,7 @@ far_t __cdecl16far fmMalloc(uint32_t nbytes)
 }
 
 /* 474a:0953 */
-char * __cdecl16far fmVsprintf(char *fmt,char *arg)
+char * __cdecl16far fmVsprintf(char *fmt,...)
 {
     char * r;
 

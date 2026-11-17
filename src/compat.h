@@ -1,6 +1,10 @@
 /* Compatibility shims for Ghidra's decompiler output. */
 #ifndef ST_COMPAT_H
 #define ST_COMPAT_H
+#ifndef true
+#define true 1
+#define false 0
+#endif
 #ifdef __BORLANDC__
 #define __cdecl16far
 #define __cdecl16near __cdecl

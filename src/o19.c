@@ -24,11 +24,17 @@ undefined2 __cdecl16far save_49fd_01da(int param_1)
 }
 
 /* 49fd:081e */
-undefined1 __cdecl16far save_49fd_081e(int param_1)
+undefined1 __cdecl16far save_49fd_081e(byte slot)
 {
-    undefined1 r;
+    char *filename;
+    int handle;
+    undefined1 result;
 
-    return r;
+    filename = fmVsprintf("%ssave.%03d",GWorkDir,slot);
+    handle = open_wait_unlock_and_disk(filename);
+    result = save_49fd_01da(handle);
+    close(handle);
+    return result;
 }
 
 /* 49fd:0863 */

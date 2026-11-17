@@ -1482,7 +1482,7 @@ extern char CFG_Irq;
 extern char CFG_Mus;
 extern char CFG_Sfx;
 extern char GOriginalDir[68];
-extern undefined GWorkDir;
+extern char GWorkDir[];
 extern undefined2 word_2000_BSS_0392;
 extern undefined2 word_2000_BSS_0396;
 extern undefined2 word_2000_BSS_0398;
