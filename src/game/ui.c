@@ -6,6 +6,7 @@
  */
 #include "dgroup.h"
 #include "bss.h"
+#include <string.h>
 
 uint8_t __cdecl16far f_474a_0b26(uint16_t n);
 uint16_t __cdecl16far f_302d_06ea(char *text, uint8_t *widths);
@@ -48,6 +49,54 @@ void __cdecl16far manage_4d05_01d4(char_sheet_t *sheet)
             sheet->stats[i] = 0x12;
     }
     sheet->statMask |= 0x20;
+}
+
+/* Render a long as a comma-separated decimal string. */
+char * __cdecl16far manage_4d05_217a(char *buf, long value)
+{
+    char neg;
+
+    if (value < 0) {
+        neg = 1;
+        value = -value;
+    }
+    else {
+        neg = 0;
+    }
+    *buf = (char)(value % 10) + '0';
+    buf[1] = 0;
+    while (value / 10 != 0) {
+        if ((strlen(buf) & 3) == 3) {
+            memmove(buf + 1, buf, strlen(buf) + 1);
+            *buf = ',';
+        }
+        memmove(buf + 1, buf, strlen(buf) + 1);
+        value /= 10;
+        *buf = (char)(value % 10) + '0';
+    }
+    if (neg) {
+        memmove(buf + 1, buf, strlen(buf) + 1);
+        *buf = '-';
+    }
+    return buf;
+}
+
+/* English ordinal suffix ("st", "nd", "rd", "th"). */
+char * __cdecl16far manage_4d05_023a(int n)
+{
+    int r;
+    char *suffix;
+
+    r = n % 10;
+    if (r == 1 && n != 11)
+        suffix = "st";
+    else if (r == 2 && n != 12)
+        suffix = "nd";
+    else if (r == 3 && n != 13)
+        suffix = "rd";
+    else
+        suffix = "th";
+    return suffix;
 }
 
 uint8_t __cdecl16far manage_4d05_029d(char_sheet_t *sheet)
