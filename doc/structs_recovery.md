@@ -805,3 +805,17 @@ deliberate union/bitfield overlap in the original source, and Ghidra's type
 system here cannot place a word at `0x16` and a pointer at `0x17` in one
 structure.  Naming those bytes would require rewriting the pointer as two
 words, which contradicts every reader of the pointer.
+
+## `agntG_t+0x3e` / `+0x40` = `flags2` / `flags3`
+
+Both are bit-mask words used exactly like `flags` at `0x3c`; they are only ever
+tested, and also ANDed with another record's mask word:
+
+```c
+(gdata->0x3e & 0x10) == 0 ... (& 8) ... (& 4) ... (& other->mask)
+(gdata->0x40 & 0x80) == 0 ... (& 1) ... (& 0x100) ... (& other->mask)
+```
+
+No consumer computes a value from them, so nothing distinguishes an individual
+bit; what the evidence fixes is that each is a flag word.  Named `flags2` and
+`flags3`, continuing `flags` at `0x3c`.  Generated struct fields: 55 -> 53.
