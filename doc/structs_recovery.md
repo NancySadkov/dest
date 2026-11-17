@@ -835,3 +835,23 @@ else if (*(char *)(gdata + 0x50) == 3)     { ... }
 
 so it selects the impact-sound variant for the unit.  `0x51` is only ever
 compared with `-1` in a single place and stays unnamed.
+
+## Correction: the four `+0x36` readers take `agnt_t *`
+
+`agnt_3b1d_0c7c`, `0c9f`, `0cc6` and `0cef` are called with segment `0x1726`
+(`ovc27: agnt_3b1d_0c9f(param_1,0x1726)`), so their parameter is an agent-array
+element.  The `+0x36` they read belongs to the record reached through
+`agnt_t.entity`, not to the parameter itself; retyping them as `entity_t *` had
+hidden that.  With `agnt_t *` the whole chain is typed and named:
+
+```c
+byte __cdecl16far agnt_3b1d_0c9f(agnt_t *agnt)
+{
+  peVar1 = ((agnt_t *)agnt)->entity;
+  bVar2 = ((entity_t *)peVar1)->dir % 6;
+  if (3 < bVar2) bVar2 = bVar2 - 6;
+  return bVar2;
+}
+```
+
+This also validates `agnt_t.entity` and `entity_t.dir` end to end.
