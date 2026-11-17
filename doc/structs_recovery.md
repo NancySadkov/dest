@@ -226,3 +226,15 @@ not DGROUP globals.  They must not be turned into DGROUP symbols.
 The function's remaining stack slots are decompiler artifacts at positive
 offsets (beyond the two parameters), so they cannot be named until its stack
 model is fixed.
+
+## Animation cursor (`agnt_t+0x0e`, `anm_t+0x1a`)
+
+```c
+*(char *)(rec + 0xe) = *(char *)(rec + 0xe) + 1;
+if (*(byte *)(anm + 0x1b) <= *(byte *)(rec + 0xe))
+    *(byte *)(rec + 0xe) = *(byte *)(anm + 0x1a);
+```
+
+`anm+0x1b` is `nframes`, so the record byte at `0x0e` is the animation frame
+cursor (`animFrame`, `0xff` = no animation) and `anm+0x1a` is the frame it is
+reset to (`startFrame`).
