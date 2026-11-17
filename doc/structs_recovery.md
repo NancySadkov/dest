@@ -217,8 +217,11 @@ The function walks the columns between the frame extents and the rows around
 *(char *)(idx * 0x34 - 0x10) == 0            /* and the 0x24 flag is clear */
 ```
 
-so `agnt_t+0x2f` is the agent's **faction** and `+0x24` a state byte.  The two
-grids are the agent occupancy layers; they are not yet symbols in the project.
+so `agnt_t+0x2f` is the agent's **faction** (now named) and `+0x24` a state
+byte.  The two tables are indexed with a 0x69 (105) stride, but the expressions
+carry only an offset (0x4e0, 0x8fa), not a segment; `0x4e0` is also the address
+of `MiceUnkState`, so these are offsets inside a segment the decompiler dropped,
+not DGROUP globals.  They must not be turned into DGROUP symbols.
 
 The function's remaining stack slots are decompiler artifacts at positive
 offsets (beyond the two parameters), so they cannot be named until its stack
