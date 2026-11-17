@@ -25,7 +25,7 @@ public class AuditNaming extends GhidraScript {
         + "^(byte|word|dword|data)_\\w+_\\w+_\\w+$|"
         + "^.*_DATA_[A-Za-z0-9._]+_[0-9A-F]{4,8}(_string)?$");
     static final Pattern AUTO_FIELD = Pattern.compile(
-        "^(field_0x[0-9a-f]+|unnamed\\w*|pad_\\d+|unk\\w*|FUN_\\w+|DAT_\\w+)$");
+        "^(field\\d*_0x[0-9a-f]+|unnamed\\w*|pad_\\d+|unk\\w*|FUN_\\w+|DAT_\\w+)$");
 
     int fnTotal, fnNoProto, fnWeakRet, fnStructArg, paramTotal, paramAuto,
         localTotal, localAuto, structTotal, structFieldTotal, structFieldAuto,
