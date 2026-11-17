@@ -60,11 +60,11 @@ def main():
     for name in files:
         shutil.copyfile(os.path.join(SRC, name), os.path.join(WORK, name))
     cmds = [
-        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c key.c > build.log 2>&1",
-        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c manage.c >> build.log 2>&1",
-        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c screen.c >> build.log 2>&1",
-        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c units.c >> build.log 2>&1",
-        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c menu.c >> build.log 2>&1",
+        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c key.c > key.log",
+        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c manage.c > manage.log",
+        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c screen.c > screen.log",
+        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c units.c > units.log",
+        "D:\\BIN\\TCC.EXE -ml -1 -G -O -ID:\\INCLUDE -IC:\\ -LD:\\LIB -w- -c menu.c > menu.log",
     ]
     open(os.path.join(WORK, "build.bat"), "w", newline="").write(
         "@echo off\r\nmode con lines=50\r\n" + "\r\n".join(cmds) +
@@ -96,6 +96,11 @@ def main():
             objs.append(name)
         else:
             print("FAIL", name)
+            log = os.path.join(WORK, name.split(".")[0].lower() + ".log")
+            if os.path.exists(log):
+                for line in open(log, encoding="latin1").read().splitlines():
+                    if line.strip():
+                        print("   " + line)
     if len(objs) != 5:
         raise SystemExit(1)
 

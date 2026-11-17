@@ -141,9 +141,10 @@ param p char *32 @ Stack[0x6]:4
 to correct `font_302d_06ea` to
 `uint16_t font_302d_06ea(char *text, uint8_t *widths)`.
 
-The remaining `in_DX` in `manage_4d05_056e` comes from `blitLabel` calls whose
-far pointer arguments are still reconstructed from split return registers; that
-is the next type-propagation target.
+The remaining `in_DX`/`extraout_AH` values in `manage_4d05_056e` come from
+`blitLabel`/`77eb:0904` calls whose far-pointer or long arguments are still
+reconstructed from split return registers; the sheet fields themselves are
+now fully typed.
 
 
 ## Unit and building structs
@@ -204,3 +205,64 @@ Verification from the re-decompiled functions:
 ((entity_t *)Entities)[i].base.y
 ((entity_t *)Entities)[i].base.field15_0x17
 ```
+
+
+## UI and character-sheet structs
+
+`scripts/ghidra/RecoverUiStructs.java` creates `char_sheet_t` and `ui_menu_t`
+and applies `char_sheet_t *` to the dialogs.  A freshly constructed dynamic
+`StructureDataType` reports length 1 even with no components, so the script
+treats an empty structure as length 0 in `padTo()`; without that correction
+every field lands one byte early (`stats[i + 1]`, `stats[0] |= 0x20`).
+
+```c
+struct char_sheet_t {    /* size 0xAE, character/town record */
+    byte pad_0[0x28];
+    byte statMask;       /* 0x28, bit 5 = stats rolled, bit 1/2 = dialog flags */
+    byte stats[6];       /* 0x29..0x2e */
+    byte cls;            /* 0x2f, -1 = no class */
+    byte race;           /* 0x30 */
+    byte alignment;      /* 0x33 */
+    byte gender;         /* 0x34 */
+    far_t name;          /* 0x35 */
+    byte active;         /* 0x3d */
+    byte classStr;       /* 0x3e */
+    byte excluded;       /* 0x3f */
+    short population;    /* 0x4d */
+    short foodProd;      /* 0x4f */
+    byte charIndex;      /* 0x51, -1 = none */
+    short income;        /* 0x54 */
+    long gold;           /* 0x56 */
+    short housing;       /* 0x5b */
+    long foodStored;     /* 0x60 */
+    long foodStorage;    /* 0x7e */
+    byte popularity;     /* 0x84 */
+    byte level;          /* 0x86 */
+    short rank;          /* 0x87, clamped to 10 for Fund Access */
+    byte partySlot;      /* 0x89, 0xff = none */
+    long vaultStorage;   /* 0x8a */
+    short maxTrade;      /* 0xa0 */
+    short foodSold;      /* 0xa2 */
+};
+
+struct ui_menu_t {       /* size 0x10; far-pointer entry list */
+    far_t title;         /* entries[0], not selectable */
+    far_t items[3];      /* entries[1..3] */
+};
+```
+
+Evidence applied in the project:
+
+- `manage_4d05_01d4` rolls `stats[0..5]` and sets `statMask |= 0x20`.
+- `manage_4d05_03a4` returns a title from `cls`, `level`, `race` and `gender`.
+- `manage_4d05_056e` reads `population`, `foodProd`, `charIndex`, `gold`,
+  `foodStored`, `housing`, `foodStorage`, `income`, `vaultStorage`,
+  `maxTrade` and `foodSold` directly from the sheet.
+- `manage_4d05_0d7b(byte, char_sheet_t *)` and
+  `manage_4d05_2d79(byte, short, char_sheet_t *)` take the sheet after the
+  leading byte/short arguments.
+- `manage_4d05_029d`, `02f1`, `0340` and `11cb` read `cls`, `race` and
+  `stats`; `alignmentDlg` writes `alignment` and `uiPickGender` writes
+  `gender`.
+- `uiInputText(far_t *entries, short count, byte *hint, byte flags)` receives
+  the `ui_menu_t` entry list; its first entry is the title.

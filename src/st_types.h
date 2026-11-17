@@ -656,3 +656,53 @@ struct bld_inst_t {
     int16_t field2;
     uint8_t data[8];
 };
+
+typedef struct char_sheet_t char_sheet_t, *Pchar_sheet_t;
+
+struct char_sheet_t {
+    uint8_t pad_0[0x28];
+    uint8_t statMask; /* enabled-stat bit mask */
+    uint8_t stats[6]; /* six ability scores */
+    uint8_t cls; /* class index, -1 = none */
+    uint8_t race; /* race index */
+    uint8_t pad_31[2];
+    uint8_t alignment; /* index into GAlignmentsNames */
+    uint8_t gender; /* gender index */
+    far_t name; /* far pointer to character name */
+    uint8_t pad_39[4];
+    uint8_t active; /* non-zero if the record is in play */
+    uint8_t classStr; /* class string index */
+    uint8_t excluded; /* non-zero excludes record from population average */
+    uint8_t pad_40[0x0d];
+    int16_t population; /* town population */
+    int16_t foodProd; /* food production */
+    uint8_t charIndex; /* index into the character table, -1 = none */
+    uint8_t pad_52[2];
+    int16_t income; /* income */
+    int32_t gold; /* gold on hand */
+    uint8_t pad_5a[1];
+    int16_t housing; /* housing capacity */
+    uint8_t flags5d; /* UI/character flags */
+    uint8_t pad_5e[2];
+    int32_t foodStored; /* food in storage */
+    uint8_t pad_64[0x1a];
+    int32_t foodStorage; /* food storage capacity */
+    uint8_t pad_82[2];
+    uint8_t popularity; /* popularity percentage */
+    uint8_t pad_85[1];
+    uint8_t level; /* level/type (<9 checks) */
+    int16_t rank; /* rank (clamped to 10 for Fund Access) */
+    uint8_t partySlot; /* party slot index, 0xff = none */
+    int32_t vaultStorage; /* vault storage */
+    uint8_t pad_8e[0x12];
+    int16_t maxTrade; /* maximum trade */
+    int16_t foodSold; /* food sold */
+    uint8_t pad_a4[0x0a];
+};
+
+typedef struct ui_menu_t ui_menu_t, *Pui_menu_t;
+
+struct ui_menu_t {
+    far_t title; /* dialog title entry */
+    far_t items[3]; /* selectable menu entries */
+};
