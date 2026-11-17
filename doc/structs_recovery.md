@@ -505,3 +505,25 @@ the value compared against 15 and 8 here, and `ovc15` uses it as
 `agnt_t+0x0f` is therefore named **`level`**: it is compared with the per-kind
 thresholds (15 and 8) and used as `table[level*4]` in the constructor.  Generated
 struct fields: 58.
+
+## `SelectedAgent` and the agent's screen position
+
+`2000:003A` (BSS `0x3a`, address `2000:ca6e`) is an agent index: it is
+bounds-checked against `AgntCount` and used to read that record's position into
+the crosshair blit variables:
+
+```c
+if (byte_2000_BSS_003A < AgntCount) {
+    CrossBlitX = *(undefined2 *)(byte_2000_BSS_003A * 0x34 + 0x26);
+    CrossBlitY = *(int *)(byte_2000_BSS_003A * 0x34 + 0x28) + -0x10;
+}
+```
+
+so it is `SelectedAgent`, and `agnt_t+0x26` / `+0x28` are the record's screen
+coordinates (`screenX`, `screenY`); the draw path also compares those two
+across agents to order the blits.
+
+`word_2000_BSS_06D6` and `06D8` (ovc13) are used as the first index of two
+fixed-width strips (`base <= v <= base+0xf` with stride 3, and
+`base <= v <= base+0x22` with stride 2), i.e. UI list origins, but which lists
+is not fixed by their uses, so they stay unnamed.
