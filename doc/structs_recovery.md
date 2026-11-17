@@ -172,16 +172,29 @@ if ((paVar1->field14_0x40 & 4) == 0) agnt_3b1d_0a53(agnt);
 73 fields in total still carry `field_0xNN`; each needs the same treatment
 (allocation size or access pattern), not a guess.
 
-### What blocks the remaining two
+### `bldtp_t` - rebuilt (39 bytes, 11 generated fields left)
 
-- `anm_t` bytes 16..26 and 29 have **no reader in the export**: searching every
-  `* 0x1e + offset` access finds only 0, 3, 9, 0x1b and the named fields.  They
-  are file-format bytes (the record is loaded from the asset file), so naming
-  them from code is impossible; only the format documentation could fix them.
-- `bldtp_t` (`BuildingTypes[248]`) is referenced in code exactly once:
-  `BuildingTypes[0x76]._24_2_ < 0x195d` in `ovc15`.  The array lives at
-  `195d:010e`, but Ghidra's own element labels do not have a 39-byte stride
-  (`BuildingTypes[12]` is labelled at `195d:0300`, i.e. 498 bytes after
-  element 0, which is not a multiple of 39), so the array base or the record
-  size is still wrong.  That has to be resolved before its unnamed bytes can be
-  named; guessing would corrupt 248 records.
+`BuildingTypes` is at `195d:010e` and the code indexes it as
+`*(T *)(idx * 0x27 + 0x10e + off)`, which gives a complete field map: `0x00`,
+`0x02` (name halves), `0x04`, `0x06` (description), `0x08`, `0x0a` (action),
+`0x0c`, `0x0d`, `0x0e`, `0x0f`, `0x10` (bits 0 and 1 tested), `0x11`
+(`1 << n` mask), `0x12`, `0x13` (masked with `0x20` and `0x800`), `0x15`
+(signed compare), `0x17`, `0x19` (accumulated), `0x1c`, `0x20`, `0x22`
+(`100 - x`), `0x23` (compared with 1, 2, 3), `0x24`, `0x25`, `0x26`.
+
+The earlier note that the stride was wrong was an arithmetic mistake: element 12
+start is `0x010e + 12*0x27 = 0x2E2`, so its `0x1e` field is at `0x300`, exactly
+where Ghidra labelled it.  The rebuild confirms it - the relabelled data still
+reads `BuildingTypes[0].flags2` at `195d:0121` (= base + `0x13`) and
+`BuildingTypes[12].field17_0x1e` at `195d:0300`.
+
+Two fields became typed instead of split bytes: `flags` at `0x10` (bits tested)
+and `flags2` at `0x13` (a word masked with `0x20`/`0x800`).  The eleven bytes
+that remain unnamed have only a comparison each (`== 2`, `< 2`, `< 3`,
+`!= 0`, `& 0x80`), which fixes their width but not their meaning.
+
+### `anm_t`
+
+Bytes 16..26 and 29 have **no reader in the export**: every `* 0x1e + offset`
+access lands on 0, 3, 9, `0x1b` or an already-named field.  They are asset-file
+bytes, so only the format documentation could name them.
