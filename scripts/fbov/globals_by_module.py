@@ -18,9 +18,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 
 
 def main():
-    audit = os.path.join(ROOT, 'tmp', 'auditn5', 'naming_globals.tsv')
+    audit = sys.argv[1] if len(sys.argv) > 1 else \
+        os.path.join(ROOT, 'tmp', 'auditn5', 'naming_globals.tsv')
     export = os.path.join(ROOT, 'tmp', 'decompiled4')
-    out = os.path.join(ROOT, 'tmp', 'globals_by_module.tsv')
+    out = sys.argv[2] if len(sys.argv) > 2 else \
+        os.path.join(ROOT, 'tmp', 'globals_by_module.tsv')
 
     names = {}
     for r in csv.DictReader(io.open(audit, encoding='utf-8'), delimiter='\t'):

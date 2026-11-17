@@ -118,3 +118,12 @@ advances the offsets and issues the driver call:
 so 02BF/02C1 are the 32-bit source offset and 02C5/02C7 the destination offset,
 02BD the handle and 02B9 the command word.  Named XmsHandle, XmsCmd, XmsSrcLo,
 XmsSrcHi, XmsDstLo, XmsDstHi.
+
+## Batch 7 - XMS command word
+
+The same routine sets the command as a 32-bit value before calling the driver:
+
+    word_02B9 = 2;  word_02BB = 0;  (*xms_driver)(0x1000);
+
+so 02B9/02BB are its low and high words: XmsCmdLo / XmsCmdHi (the earlier
+XmsCmd name covered only the low word).
