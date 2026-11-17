@@ -147,7 +147,7 @@ void __cdecl16far OVC41_6a8f_1520(void)
 }
 
 /* 6a8f:15a0 */
-char * __cdecl16far OVC41_6a8f_15a0(char param_1)
+char * __cdecl16far OVC41_6a8f_15a0(void)
 {
     char * r;
 

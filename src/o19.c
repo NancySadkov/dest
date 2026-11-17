@@ -24,7 +24,7 @@ undefined2 __cdecl16far save_49fd_01da(int param_1)
 }
 
 /* 49fd:081e */
-undefined1 __cdecl16far save_49fd_081e(void)
+undefined1 __cdecl16far save_49fd_081e(int param_1)
 {
     undefined1 r;
 

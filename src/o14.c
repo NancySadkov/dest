@@ -131,7 +131,7 @@ void __cdecl16far attact_3f0b_1082(void)
 }
 
 /* 3f0b:18fe */
-void __cdecl16far attact_3f0b_18fe(int param_1,int param_2)
+void __cdecl16far attact_3f0b_18fe(void)
 {
 }
 

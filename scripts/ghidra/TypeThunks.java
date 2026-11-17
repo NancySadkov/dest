@@ -47,6 +47,10 @@ public class TypeThunks extends GhidraScript {
                     f.addParameter(new ParameterImpl(v.getName(), v.getDataType(),
                             currentProgram), SourceType.USER_DEFINED);
                 }
+                // Keep the call site's pushed arguments visible: a recovered
+                // target prototype can under-state the real parameter list,
+                // and the extra arguments are the evidence used to fix it.
+                f.setVarArgs(true);
                 typed++;
             }
         } finally {
