@@ -47,6 +47,23 @@ signature.  `scripts/ghidra/TypeThunks.java` gives the thunk functions in the
 Ghidra project the target prototype, which is what makes call sites decompile
 with real argument types.
 
+## Step 1 notes
+
+- `LinkThunks.java` marks every `ovr_<name>` entry stub as a thunk of
+  `<name>`.  Only then does a call through an overlay stub carry the target's
+  prototype, instead of hiding the pushed arguments.
+- **Do not run Ghidra's "Decompiler Parameter ID" analyzer on this program.**
+  Its "Analysis Clear Level" defaults to `ANALYSIS`, so it first erases the
+  stored signature and then re-infers it; on this image that lost parameters
+  from 100 functions (1646 -> 1362) and turned named arguments such as
+  `play_sfxU(byte fid,int type,uint16_t unk)` into `(void)`.
+- The non-destructive equivalent is `ApplyExportProtos.java`: the export
+  records what the decompiler inferred for each function *without* erasing
+  anything, and the script stores those signatures in the project.  It skips
+  empty shapes, so nothing is overwritten with `undefined f(void)`.
+- Measured completion of step 1 is `AuditNaming.java` (prototypes, parameters,
+  locals, struct fields, globals), not a compiling tree.
+
 ## Conversion standard: behavioural C
 
 The C must produce the same state and effects as the original; it does not have

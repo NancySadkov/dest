@@ -19,6 +19,9 @@ public class ShowFunc extends GhidraScript {
         }
         println("FUNC " + f.getEntryPoint() + " " + f.getName() + " :: " + f.getPrototypeString(false, false));
         println("RET " + f.getReturnType().getName());
+        println("THUNK " + f.isThunk() + " -> "
+                + (f.getThunkedFunction(true) == null ? "none"
+                   : f.getThunkedFunction(true).getName()));
         for (Variable v : f.getParameters()) {
             println("PARAM " + v.getName() + " " + v.getDataType().getName());
         }
