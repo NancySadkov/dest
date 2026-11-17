@@ -819,3 +819,19 @@ tested, and also ANDed with another record's mask word:
 No consumer computes a value from them, so nothing distinguishes an individual
 bit; what the evidence fixes is that each is a flag word.  Named `flags2` and
 `flags3`, continuing `flags` at `0x3c`.  Generated struct fields: 55 -> 53.
+
+## `agntG_t+0x50` = `hitSound`
+
+It is consulted at the moment a unit takes damage, right after its strength is
+reduced, and each value chooses a different effect:
+
+```c
+*(char *)(agent + 0x21) = *(char *)(agent + 0x21) - (char)param_3;   /* damage */
+...
+if (*(char *)(gdata + 0x50) == '\0')      { audio_3a5b_0afd(); randBelow(); play_sfxU(); }
+else if (*(char *)(gdata + 0x50) == 0x15)  { cVar1 = randBelow(); ... }
+else if (*(char *)(gdata + 0x50) == 3)     { ... }
+```
+
+so it selects the impact-sound variant for the unit.  `0x51` is only ever
+compared with `-1` in a single place and stays unnamed.
