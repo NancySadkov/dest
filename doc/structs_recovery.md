@@ -579,3 +579,25 @@ keyed by map square, one 19-byte record per square, max 299.  Renamed:
 | `2410:0883` | `SquareRecIndex` | index during compaction |
 
 (The earlier `AttactRec*` names are superseded by these.)
+
+## The `06D6`/`06D8` pair is a panel grid origin
+
+Both are read as the top-left of a cell grid that is hit-tested and converted
+to screen coordinates:
+
+```c
+if (... (map flags & 8) && OVC13_3d16_1045(entity) &&
+    (word_2000_BSS_06D8 <= x) && (x <= word_2000_BSS_06D8 + 0x22) &&
+    (word_2000_BSS_06D6 <= y) && (y <= word_2000_BSS_06D6 + 0xf)) {
+    screenY = (y - word_2000_BSS_06D6) * 3 + 7;
+    screenX = (x - word_2000_BSS_06D8) * 2 + 0xef;
+    cStack_3 = OVC13_3d16_0186(screenX, screenY, 0x45e, 0x2410);
+}
+```
+
+So `06D8` is the first column and `06D6` the first row of a 35 x 16 cell grid
+whose cells are 2 x 3 pixels on screen, drawn only for cells whose map flag has
+bit 3 set and that pass the entity filter.  They are named `PanelGridX` /
+`PanelGridY` (`2000:d10c` / `2000:d10a`): what they are is proven, while *which*
+panel it is (minimap, roster, ...) is not fixed by this code and is therefore
+not claimed in the name.
