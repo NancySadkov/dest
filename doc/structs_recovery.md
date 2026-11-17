@@ -741,3 +741,36 @@ on `Entities[]` (whether they are byte or word moves) and the ones that write
 `0x14`/`0x16` on the `0x1726` array.  Only then can `entity_t.base` and the
 agent array element be declared as two different structures, which would also
 change the 92 functions currently typed as `agnt_t *`.
+
+### The widths confirm two different records
+
+Disassembly of `OVC13_3d16_0255` (which walks `Entities[]`):
+
+```
+3d16:02a9  CMP byte ptr ES:[BX + 0x18],0x0
+3d16:0391  CMP byte ptr ES:[BX + 0x18],0x0
+```
+
+together with the constructor's `OR word ptr ES:[BX + 0x16],0x1`, and the
+agent-array disassembly
+
+```
+197a  MOV DX,0x1726
+1986  MOV DX,word ptr ES:[BX + 0x17]
+```
+
+means:
+
+- `Entities[].base`: word at `0x14`, **word at `0x16`** (covering `0x16..0x17`),
+  **byte at `0x18`**, byte at `0x1a`;
+- the `0x1726` element: **word at `0x17`** and word at `0x19`.
+
+A byte at `0x18` is impossible if `0x17` starts a word there, so the two records
+cannot share one layout.  `entity_t.base` is a distinct structure from the
+`0x1726` array element, and reusing `agnt_t` for both is wrong for one of them.
+
+Consequence: the 92 functions typed `agnt_t *` split into two groups.  Those
+called with segment `0x1726` (e.g. `ovc27: ovr_agnt_3b1d_0a53(param_1,0x1726)`)
+are array elements and keep `agnt_t`; those reached from
+`((entity_t *)Entities)[i].base` need the entity base type.  The split must
+happen before `0x13`/`0x16` and `entity_t+0x34`/`+0x35` can be named.
