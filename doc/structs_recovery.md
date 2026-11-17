@@ -198,3 +198,28 @@ that remain unnamed have only a comparison each (`== 2`, `< 2`, `< 3`,
 Bytes 16..26 and 29 have **no reader in the export**: every `* 0x1e + offset`
 access lands on 0, 3, 9, `0x1b` or an already-named field.  They are asset-file
 bytes, so only the format documentation could name them.
+
+## Agent hit test (`agnt_3b1d_00ce`)
+
+Its signature is now `(agnt_t *agnt, uint8_t *result)`; `param_2` was evidently
+the output pointer because the body ends with
+
+```c
+*param_2 = *(undefined1 *)(row * 0x69 + col + 0x8fa);
+```
+
+The function walks the columns between the frame extents and the rows around
+`agnt->y >> 1`, testing two grids at DGROUP offsets `+0x8fa` and `+0x4e0`
+(stride `0x69` = 105 columns, 10 rows).  It accepts a cell's agent index when
+
+```c
+*(char *)(idx * 0x34 - 5)  != agnt->0x2f     /* different faction */
+*(char *)(idx * 0x34 - 0x10) == 0            /* and the 0x24 flag is clear */
+```
+
+so `agnt_t+0x2f` is the agent's **faction** and `+0x24` a state byte.  The two
+grids are the agent occupancy layers; they are not yet symbols in the project.
+
+The function's remaining stack slots are decompiler artifacts at positive
+offsets (beyond the two parameters), so they cannot be named until its stack
+model is fixed.
