@@ -2267,3 +2267,34 @@ functions: 119 -> 120.
 - `saveui_4528_1ae8`'s `local_20[20]` is copied from `2410:26E3` and never read.
 - `saveui_4528_1d55`'s `local_8` is only ever an `&local_8` output of
   `saveui_4528_055b`; the callee does not show what it returns.
+
+### Seventh pass: status buffers and a signed x delta
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `OVC49_8699_0874` | `local_5a[80]` | `msg` | `stsprintf(local_5a, ..., "%s is no longer paralyzed.")` and the web/freedom variants |
+| | `local_8` | `dx` | written only by `agnt_3b1d_093e(agnt, &local_8)`, then tested `< 0` / `== 0` and negated into `targetX` |
+| `OVC41_6a8f_04c0` | `local_7e[122]` | `msg` | `txt = ovr_stsprintf(local_7e, unaff_SS, ...)` |
+
+Live check:
+
+```c
+char msg [80];
+int dx;
+bVar3 = ovr_agnt_3b1d_093e(agnt,&dx);
+paVar10->targetX = -(uint8_t)dx;
+```
+
+Auto-named locals: 254 -> 251.
+
+### Left alone in the same functions
+
+- `OVC49_8699_0874`'s `local_a` and `local_4` have **no assignment anywhere** in the
+  decompiled text (the writes go through a pointer the decompiler did not recover),
+  so their values cannot be characterised.  `local_a` is only ever stored into
+  `agnt_t+0x5`, which is the high byte of the word-sized `targetX` - the overlap
+  already documented for that field.
+- `OVC41_6a8f_04c0`'s `local_3`/`local_4` are the two out-parameters of
+  `attact_3f0b_2252`, whose own body does not state what it returns.
+- `OVC26_5d45_0000`'s four `int[300]` locals are only ever stored as pointers into
+  other variables, so the flood-fill queues cannot be told apart from the code shown.
