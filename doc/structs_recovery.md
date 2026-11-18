@@ -2986,3 +2986,74 @@ Auto-named parameters for this function: 4 -> 0.
 | `constr_36ce_0101` | `param_3` | writes the raw cell value through it (`*param_3 = iVar1`) before scaling; callers pass the corner slots | `cell` |
 
 Auto-named parameters: 1052 -> 1046 over the turn; struct-typed functions: 120 -> 121.
+
+## `bldtp_t+0x1e` is a half-width, and it has a computing consumer
+
+The machine code decides the width - a **word**, not two bytes:
+
+```
+6616:0063  MOV SI,word ptr ES:[BX + 0x12e]
+```
+
+and the consumer scales it and uses it as a span around the unit:
+
+```c
+iVar5 = *(int *)(bldType * 0x27 + 0x12e);
+uVar3 = ovr_constr_36ce_3172(x, y) & 0xff;      /* terrain type */
+if (uVar3 == 3)      iVar5 = iVar5 * 3 >> 1;   /* +50% */
+else if (uVar3 == 4) iVar5 = iVar5 << 1;       /* +100% */
+if (unitType != 0xff && (unitType->[0x5d] & 8)) iVar5 += 5;
+...
+uVar6 = ovr_OVC23_55fe_3450(iVar4 + iVar7 * -2);   /* left  edge */
+uVar6 = ovr_OVC23_55fe_3450(iVar4 + iVar7 *  2);   /* right edge */
+```
+
+so the building type carries a **half-width** that terrain and a unit flag widen, and the
+drawing code turns it into `x +- halfWidth * 2`.  A zero value means "nothing to draw"
+(the callers guard with `!= 0`).  The two 1-byte components at `0x1e`/`0x1f` were merged
+into one `uint16_t` named `halfWidth`, which required rebuilding the struct (SetFieldType
+cannot span adjacent byte components).
+
+`RebuildStruct.java` gained `BASE *` (two-byte) and `BASE *32` (four-byte) specs so the
+existing pointer fields could be reproduced exactly; the layout comparison shows only the
+intended change:
+
+```
+30 ('-', 1) -> ('halfWidth', 2)
+31 ('-', 1) -> None
+```
+
+Generated struct fields: 29 -> 27 (`bldtp_t` 4 -> 2); total fields 314 -> 313.
+
+### Tooling trap: placeholder names inflate the audit
+
+`AuditTypes` renders a generated component name as `-`, and my first rebuild fed that
+back in as the component's *real* name, so two unidentified bytes at `0x0c` and `0x24`
+stopped matching `AUTO_FIELD` and were counted as named.  They were renamed back to
+`field_0x0c`/`field_0x24` before quoting any number - the audit above is measured after
+that correction.
+
+## Four locals from constant-table copies
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `constr_36ce_0995` | `local_18[6]` | `shades` | copied from `2410:0745` (10 0C 06 04 02 01) and fed one per step as the colour of the rectangle calls |
+| `manage_4d05_0166` | `local_c` | `rect` | copied from a brect-shaped constant (`2410:493B` = 12,99,222,150,seg 0xA000) and passed to `ovr_blitGfxRect` |
+| `OVC27_5ded_052d` | `local_c[10]` | `reqLevel1` | ascending table `00 01 03 05 07 09 0B 0F 12 15` compared with the entity level, indexed by a unit-record byte |
+| | `local_1c[12]` | `reqLevel2` | the second table at `2410:59B4`, same comparison |
+
+```c
+if (*(byte *)((int)*(undefined4 *)(iVar7 + 0x17) + 0xf) < reqLevel1[*(byte *)(iVar6 + 9)])
+    return ...;
+```
+
+Auto-named locals: 175 -> 171.
+
+## Readers re-checked
+
+- `agntG_t+0x94`: the `+ 0x94` hits all belong to other bases (the `217A` party-sheet table
+  and `*piVar23 + 0x8e/0x94`), so the field still has no reader.
+- `bldtp_t+0x1f` no longer exists as a separate field (merged into `halfWidth`).
+- `bldtp_t+0x24`: byte, tested `& 0x80` only.
+- `agntG_t+0x52`: unchanged - two consumers, one clean (a signed y offset) and one that
+  indexes a table with the high byte of an entity pointer (a decompiler artifact).

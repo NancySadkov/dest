@@ -40,13 +40,21 @@ public class RebuildStruct extends GhidraScript {
                 if (f.length < 4) continue;
                 if (f[0].startsWith("/")) continue;
                 DataType t = null;
-                String spec = f[1];
+                String spec = f[1].trim();
                 java.util.regex.Matcher am =
                         java.util.regex.Pattern.compile("^(.*)\\[(\\d+)\\]$").matcher(spec);
+                java.util.regex.Matcher pm =
+                        java.util.regex.Pattern.compile("^(.*?)\\s*\\*(32)?$").matcher(spec);
                 if (am.matches()) {
                     DataType base = dtm.getDataType(am.group(1));
                     if (base != null) {
                         t = new ArrayDataType(base, Integer.parseInt(am.group(2)), base.getLength());
+                    }
+                } else if (pm.matches()) {
+                    DataType base = dtm.getDataType(pm.group(1));
+                    if (base != null) {
+                        t = new ghidra.program.model.data.PointerDataType(base,
+                                pm.group(2) != null ? 4 : 2, dtm);
                     }
                 } else {
                     t = dtm.getDataType(spec);
