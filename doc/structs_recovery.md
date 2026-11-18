@@ -6141,3 +6141,32 @@ One finding from the same pass is worth stating: `word_2000_BSS_06E7`/`06E9` is 
 six-frame mouse cursor table is filled by code outside these overlays.
 
 Local variables: 145 -> 133.  Globals and struct fields unchanged.
+
+## `agnt_t+0x24` / `+0x25`: width confirmed from the listing
+
+The opcodes settle the width question the decompiled text left implicit:
+
+```
+4207:0e50  CMP byte ptr ES:[BX + 0x24],0x2      ; compare with constant 2
+4207:0e66  MOV byte ptr ES:[BX + 0x24],0x2      ; store constant 2
+```
+
+Both are single-byte accesses against immediate constants, and the complete writer list from the
+earlier sweep is `+0x24 <- {0,1,2}` and `+0x25 <- {1,2}` from seven sites.  There is no writer whose
+source is a named global, a parameter or a table entry, and the readers select one of three sprite
+branches (`== 0` blits `cmap + 6`, `== 1` blits a second block and counts down `agnt+0x23`, `== 2` a
+third).  Width is therefore settled (byte) and the role is settled (sprite-state selector), but the
+*meaning* of states 0/1/2 is not stated anywhere in the binary, so both stay generated.
+
+## 3 parameters from `ovc30_textDivideError`
+
+| parameter | name | evidence |
+|---|---|---|
+| `param_2` | `frames` | iteration countdown: `if (param_2 == 0) return;` ... `param_2 += -1` at the end of each pass |
+| `param_3` | `mode` | selects the spawn behaviour (`== 2` uses the stored centre, `== 0` picks a random one) and is replaced each pass by the next mode |
+| `param_4` | `percent` | `uVar10 = ovr_randBelow(100); param_3 = (byte)uVar10 < param_4;` |
+
+`ovc43_usesStExit`'s `param_1`/`param_2`/`param_3` are refused: the body reads only `param_4` and
+`param_5` (already `sheetOfs`/`sheetSeg`), so those three slots carry no data to name.
+
+Auto-named parameters: 368 -> 365.

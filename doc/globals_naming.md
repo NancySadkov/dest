@@ -1904,25 +1904,23 @@ All three are additionally read as a *single* far pointer (a fallback sprite) in
 `ovc23_usesBlitGfxRect` / `ovc22_textRingProt`, which is consistent with being one entry of the
 array rather than a separate variable.
 
-### Contradiction 1 - csite8 cannot start at `0161`
+### Retraction - the two "contradictions" were a category error
 
-`2410:0161` is `byte_2410_DATA_DGROUP_0161`, a flag that `main` sets to 1 and `draw_usesPrintf`
-tests, and `attact_*` clears.  It is a **byte**, and the same DGROUP offset cannot also be the
-offset word of csite8's first far pointer.  The grab-branch scan attributed an `0161` base to LBM
-534, so that attribution (or that array length) is wrong; csite8's base stays **unverified** and
-the symbol is left alone.
+The previous pass reported that `2410:0161` and `2410:07E2` refuted the csite8 base and the
+`tmstrsSprites2` length, because both offsets are occupied by byte variables.  That reasoning was
+wrong: the sprite arrays live in the **BSS segment (2000)** while those byte flags live in the
+**DATA segment (2410)**.  Identical offsets in two different segments of a group are different
+memory, and the symbols are distinct:
 
-### Contradiction 2 - `tmstrsSprites2` is not seven entries
+```
+2000:cb95  csite8Ofs            (the array's offset word)
+2410:0161  byte_2410_DATA_DGROUP_0161   (the flag)
+2000:ce02  NOSYM               (no BSS symbol at this offset at all)
+2410:07e2  byte_2410_DATA_DGROUP_07E2   (the state code)
+```
 
-`2410:07E2` is `byte_2410_DATA_DGROUP_07E2`, a state code written with constant values 0..15 by
-`agnt_usesStExit`, `agnt_usesAnimFrame`, `agnt_compute*` and `ovc49_usesBlitGfxRect`.  With a base
-of `07CE` and a stride of 4, entry 5's offset word would be `07CE+20 = 07E2`, so the loop bound of
-7 that I attributed to this array is wrong - the array must be shorter.  The *base* name is fine
-(the consumer indexes from `&word_07CE`), but every `tmstrsSpritesN` **length** I recorded in the
-previous batch is unverified and must be treated as open.
-
-The lesson is the same one this project keeps relearning: a loop bound found by scanning text is a
-hypothesis, while a symbol that already holds a different kind of data is a refutation.  The three
-pairs named here survived that test; the two that failed it did not get a name.
+So no name from the previous batch is invalidated: `csite8Ofs` stands, and the `tmstrsSpritesN`
+lengths stand as loop-bound readings (hypotheses, but no longer refuted).  The recorded lesson is
+the one that actually applies: **compare segments before comparing offsets.**
 
 Auto-named globals: 228 -> 222.
