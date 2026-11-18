@@ -5712,3 +5712,45 @@ script through `out(0x3c8)`/`out(0x3c9)`), so both take a `paletteData` script.
   `param_5`: never read.
 
 Auto-named parameters: 543 -> 523.
+
+## 13 parameters from the RLE decoders and two clipped fills
+
+### The RLE decoders
+
+| function | parameters | evidence |
+|---|---|---|
+| `driver_unrleScreen` | `src` | the whole body reads `param_1` as the stream (200 rows, `+0x140` stride into a stack destination); `param_2` is never read |
+| `driver_unrleSprite` | `spr`, `dst` | `pbVar10 = (byte *)((int)dst + *spr * 0x140)`, the stream starts at `spr + 2`, and `spr[1]` is the row count |
+| `drawLine2` | `src`, `dstOfs` | writes backwards from `stackDst + dstOfs - 1` down to `dstOfs` (`while ((uint)dstOfs <= pbVar6)`); `param_2` is never read |
+
+### `driver_loop2` (5)
+
+A clipped horizontal fill, the same shape as `ovc07_usesFillRect`:
+
+```c
+if (param_2 < param_1) swap(param_1, param_2);
+if (param_1 < rect[0]) param_1 = rect[0];
+if (rect[2] < x2) x2 = rect[2];
+if ((rect[1] <= y) && (y <= rect[3])) {
+  puVar4 = (undefined1 *)(x1 + y * 0x140);
+  for (i = (x2 - x1) + 1; i != 0; i--) *puVar4++ = colour;
+}
+```
+
+so `x1, x2, y, colour, rect`.  The rect is named rather than retyped: it is a 2-byte `int *`
+and widening it would change what callers push.
+
+### `gfxRlePrepare` (3 of 7)
+
+```c
+uVar1 = (int)((uint)(byte)scale * *(int *)(gfx.ofs + 1)) >> 4;
+x = x - uVar1;
+y = y - ((int)((uint)(byte)scale * *(int *)(gfx.ofs + 3)) >> 4);
+if (x < rect[0]) ...
+```
+
+so `x`, `y` and `scale` (a fraction in 16ths).  Its `param_7` selects one of two reference
+edges (the plain width or `right - left`) but nothing states which, so it stays auto-named, as
+does `param_4`/`param_5` (the rect halves).
+
+Auto-named parameters: 523 -> 510.
