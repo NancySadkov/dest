@@ -5537,3 +5537,41 @@ parameters are still unnamed, so it stays auto-named.
 - `agnt_t+0x24`/`+0x25`: still byte-wide 0/1/2 state with no stated value meaning.
 
 Auto-named parameters: 561 -> 559.  Struct fields: 24 -> 23.
+
+## The 23 remaining struct fields: a complete accounting by code offset
+
+Each generated component was re-checked through the offset the code actually uses (the technique
+that recovered `bldtp_t+0x24`), and every one now has its obstacle recorded.  The audit's `pad_`
+count is worth explaining first: `AUTO_FIELD` matches `pad_\d+`, so it counts only the
+**all-digit** pad names.  `char_sheet_t` therefore reports 6 (`pad_0`, `pad_40`, `pad_52`,
+`pad_64`, `pad_82`, `pad_85`); `pad_5a`, `pad_5e`, `pad_8e` and `pad_a4` contain letters and do
+not match, even though they are equally generated.  `ListFieldNames.java` (new) prints exactly
+which components the audit counts.
+
+| struct | offset | obstacle |
+|---|---|---|
+| `char_sheet_t` | `+0` `pad_0` | passed as `blitLabel`'s **`widths`** table (`ovr_blitLabel(pcVar3, widths->pad_0, uVar7, term)`) while also read as 4-byte ints at `+4` and `+6` and compared dword-wise at `+0x1b` -- heterogeneous, and the widths use contradicts a plain 40-byte blob |
+| `char_sheet_t` | `+64` `pad_40` | written `pad_40[0] = 1` in the two character-creation routines and never read |
+| `char_sheet_t` | `+82` `pad_52` | written with a 0xff sentinel, then read as a table index clamped to the agent level and as a signed pixel offset (two incompatible uses) |
+| `char_sheet_t` | `+100` `pad_64` | no access anywhere in the export |
+| `char_sheet_t` | `+130` `pad_82` | no access anywhere in the export |
+| `char_sheet_t` | `+133` `pad_85` | written `pad_85[0] = 7` in `chargen` and never read |
+| `bldtp_t` | `+12` `field_0x0c` | one test, `== 2`, whose branch drowns units; a single value is not a taxonomy |
+| `agnt_t` | `+5` `field_0x5` | high byte of the 16-bit store at `+4` (the two-byte peephole); the byte layout is proven by the per-byte sign tests |
+| `agnt_t` | `+17` `field_0x11` | 0/1 variant that is `randBelow(2)` in the common branch |
+| `agnt_t` | `+36` `field_0x24` | byte-wide 0/1/2 state selecting sprite branches; no stated value meaning |
+| `agnt_t` | `+37` `field_0x25` | same, set to 2 and tested `== 2` |
+| `agnt_t` | `+42` `field_0x2a` | one comparison with 0 |
+| `anm_t` | `0x10..0x18` (9) | no read by field name and none by `* 0x1e` stride offset; the records are constant archive data, so no writer exists either |
+| `agntG_t` | `+82`, `+148` | no access at all (size-derived padding) |
+
+That is the whole of the 23, each with the specific reason a name would be a guess rather than
+a finding.
+
+## One more parameter (1)
+
+`ovc15_compute1`'s argument is an `agnt_t *`: it reads `+0x11`, and the far pointer at
+`+0x13/+0x15` (`frames`), and `*param_1` is the agent's `x`.  Only the name is applied; the
+declared type stays a 2-byte pointer because widening it would change what callers push.
+
+Auto-named parameters: 559 -> 558.
