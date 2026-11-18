@@ -409,3 +409,36 @@ The vector address `0000:0064` is `0x19 * 4`, and the pair
 (`_BootHandlerCode`, this word) is exactly an interrupt vector's two halves.
 Named `Int19Seg`.  Its partner `_BootHandlerCode` was already named, which is
 what made the pairing checkable.
+
+## Batch 29 - the midLoadDriver argument pairs
+
+`musInit` stores two consecutive far-pointer pairs and passes them straight
+into the driver load:
+
+```c
+MusHandle     = audio_3a5b_0761(word_07C6->cmap, in_DX, ...);  /* AX = offset */
+MusHandleSeg  = in_DX;                                        /* DX = segment */
+MusDrvOfs     = ovr_stshLoadGfx(handle_00);                   /* AX = offset */
+MusDrvSeg     = in_DX;                                        /* DX = segment */
+ovr_midLoadDriver(MusHandle, MusHandleSeg, MusDrvOfs, MusDrvSeg);
+```
+
+Every one of the four is either the AX return of a loader or the DX segment
+that accompanies it, and the callee (`midLoadDriver`) names what the pair
+feeds.  Renamed `07CC` to `MusHandleSeg` (completing the `MusHandle` offset
+named earlier) and `07CE`/`07D0` to `MusDrvOfs`/`MusDrvSeg`.
+
+The decompiler confirms the flow:
+
+```c
+MidGfxOfs = ovr_stshLoadGfx(_word_2000_BSS_0660);
+MidGfxSeg = in_DX;
+MusHandle = audio_3a5b_0761(word_2410_DATA_DGROUP_07C6->cmap, in_DX, ...);
+MusHandleSeg = in_DX;
+MusDrvOfs = ovr_stshLoadGfx(handle_00);
+MusDrvSeg = in_DX;
+```
+
+The remaining `07C6`/`07C8` pair stays unnamed: it is a second raw graphics
+pointer whose only distinguished use is being handed to `audio_3a5b_0761`,
+which the `MidGfx` pair already does.
