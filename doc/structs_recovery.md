@@ -5456,3 +5456,44 @@ confirmed by a writer, not only by readers).  `char_sheet_t+0x89` carries the sa
   membership test over type codes.
 
 Auto-named parameters: 577 -> 575.
+
+## 14 parameters: the save primitives, an entity state setter and another matcher
+
+### `save_usesWrite` / `save_usesRead` (8)
+
+Both forward to the C library and compare the result with the requested count, and the call
+sites spell the argument order out:
+
+```c
+save_usesWrite(iVar2, (void *)SaveHeader.ofs, SaveHeader.seg, 0x28);
+save_usesWrite(iVar2, GUnitGrid, GUnitGrid._2_2_, 0x4560);   /* 148 * 60 * 2 */
+save_usesWrite(iVar2, GMapCells, GMapCells._2_2_, 0x22b0);  /* 59 * 148 */
+```
+
+so `handle`, `buf` (offset), `bufSeg`, `count` -- eight parameters across the pair.  The
+decompiled body passes `param_3` to `write()` as the length because the far pointer's second
+word was split into its own argument; the call sites are what identify it as the segment.
+
+### `unit_usesEntities` (2)
+
+```c
+if (param_1 != '\x02') {
+  if (param_1 == '\x03') { flags32 |= 1; ovr_attact_usesEntities(param_2,0,0,param_3,param_4); }
+  else if (param_1 == '\x04') { flags32 |= 2; targetX = x; targetY = y; ... }
+}
+```
+
+so `param_1` is a small `state` code and `param_2` is the `entityIndex` into `Entities`.
+
+### `ovc25_usesAlignUp46` (4)
+
+```c
+uVar2 = alignUp4(*(int *)&Entities[i].base.targetX);  if (uVar2 == alignUp4(param_1)) ...
+if (Entities[i].base.targetY == param_2) ...
+if (*(char *)((int)(char **)GMenuStrings + gindex * 0x95 + 0x1f) != param_3) return 0xff;
+*_param_4 = 0;  ...  *_param_4 = 1;
+```
+
+→ `x`, `y`, `excluded` (the per-gindex byte the project already names `excluded`), `foundFlag`.
+
+Auto-named parameters: 575 -> 561.
