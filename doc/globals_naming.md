@@ -1151,3 +1151,36 @@ Six modules set it to 1 and `ovc34_unit` clears it while testing `!= 0`, i.e. a
 one-shot "something changed" flag with the same shape as `AgentsChanged`, but the
 setters do not say what changed and the consumer only calls an unnamed routine
 before clearing it.
+
+## Batch 54 - the small pending list
+
+`2000:0992` is the entry count of a small word list (capped at five).  `ovc23`
+appends to it and the other modules use the count as a loop bound and presence
+test:
+
+```c
+if ((bldtp->unitType == 0x12) && (ListCount < 5)) {
+    *(uint *)((uint)ListCount * 2 + base) = uVar6;
+    ListCount = ListCount + 1;
+}
+for (bStack_8 = 0; bStack_8 < ListCount; bStack_8 = bStack_8 + 1) { ... }
+```
+
+What the appended entries denote is never stated, so the name says only what is
+proven - it is the list's count.  `2000:d3c6`, confirmed live in `55fe:1005`.
+
+Auto globals: 573 -> 572.
+
+### Examined, not named
+
+- `2000:0998` is incremented when a promotion event succeeds and is used as
+  `0998 * 0x32 + 0x32`, i.e. an index into 50-byte records.  Whether it counts
+  turns, seasons or promotions is not distinguishable from those two uses.
+- `word_2000_BSS_06E0` caches the count returned by `attact_3f0b_0451` (entities
+  near the cursor matching a menu value) and is used as `(count + 1) * param / 0x51`;
+  the divisor `0x51` has no stated meaning, so the quantity is unnamed.
+- `word_2000_BSS_03F2` holds per-square values that can be negative (the init
+  loop counts down into it) and is used as the x operand of
+  `constr_36ce_0101`, so it is an offset of some kind rather than a coordinate.
+- `byte_2410_DATA_DGROUP_0728` is only ever the minuend of a coordinate
+  (`0728 - offset`) like `ScreenOriginY`, but which origin is not stated.
