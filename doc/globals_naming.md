@@ -1462,3 +1462,37 @@ Auto-named globals: 329 -> 327.
   edges are plausible from that, so the names would encode a guess about which button.
 - `byte_2000_BSS_06E2`: written `0xff`, `1` and `0` in five different places and tested
   `!= 0` / `== 1`; nothing states what the three states mean.
+
+## Batch - the two cursor/flash tick snapshots
+
+Two places stamp `BDA_DailyTimeCounter` into a word pair and then compare it on the next
+call to decide whether enough ticks have passed:
+
+```c
+puVar1 = ovr_attact_usesBDADailyTimeCounter(word_2000_BSS_06CD, ...);
+if ((in_DX == 0) && (puVar1 <= (byte *)__C0_ASM_CopyRight + 4)) { /* too soon */ }
+else {
+  word_2000_BSS_06CF = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+  word_2000_BSS_06CD = *(ulong **)BDA_DailyTimeCounter;
+  FlashToggle = 1 - (FlashToggle != 0);
+  ovr_vgaSetPalette(&stack0xffe2 + (uint)FlashToggle * 3, ...);
+}
+```
+
+| global | name | evidence |
+|---|---|---|
+| `word_2000_BSS_06CD` / `_06CF` | `flashTickLo` / `flashTickHi` | the tick at which the palette flash was last started; gates the next one |
+| `word_2000_BSS_06D2` / `_06D4` | `blitFrameTickLo` / `blitFrameTickHi` | the same snapshot taken beside the `BlitFrame` counter that resets at 6 |
+
+Both are written low-word-then-high-word in that order, which is why the odd address is the
+low half.  Auto-named globals: 327 -> 323.
+
+### Examined and refused in the same pass
+
+- `byte_2000_BSS_0046` (`main` sets it to 1) and `word_2000_BSS_0002`: each has exactly one
+  write and **no reader anywhere** in the export, so nothing states what they gate.
+- `2410:5DCF/5DD7/5DDF/5DE7` are written from stack bytes in `saveui` with one write each and
+  no read; four adjacent unknown bytes with no consumer.
+- `0x59AA`/`0x59B4` (copied into `reqLevel1[10]`/`reqLevel2[10]`) are rows of a packed level
+  table, not strings: the bytes there are `05 0D 0E 0D 10 ...`, so naming them would mean
+  naming a table whose column meaning is not stated.

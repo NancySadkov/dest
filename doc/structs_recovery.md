@@ -4251,3 +4251,71 @@ undefined2 agnt_usesPlay_sfxU(agnt_t * agnt, char * agntIndex)
 ```
 
 Auto-named parameters: 852 -> 844.
+
+## Per-function reading: the blit-N argument order and the party-sheet index (49)
+
+Call sites settle the two `blitGfxN` wrappers completely, because every caller passes the
+same shape.  `36ce:0995` is the clearest:
+
+```c
+blit_usesBlitGfxN(gfx, x,
+                 y,          shades[i],
+                 y2,         shades[i + 1],
+                 (brect_t *)BlitRects, type);
+```
+
+and the body swaps the two endpoints together with their shades, which is only meaningful
+if the fourth and sixth arguments belong to the third and fifth:
+
+```c
+if (param_5 < y) { y = param_5; ...; param_4 = param_6; param_6 = bVar1; }
+```
+
+`blit_usesBlitGfxN2` gets `x1, y1, shade1, x2, y2, shade2, rect, type`, and its last
+argument is `HighlightLevel` at every observed call, compared in the body against
+`(*p & 7)`, so it is `highlightLevel`.
+
+| function | parameters | evidence |
+|---|---|---|
+| `blit_usesBlitGfxN` | `shade1`, `y2`, `shade2`, `rect`, `type` | argument slots 4-8, shade/y pairing proved by the swap |
+| `blit_usesBlitGfxN2` | `x1`, `y1`, `shade1`, `x2`, `y2`, `shade2`, `highlightLevel` | slots 3-8 and 11; `HighlightLevel` at every call |
+| `constr_usesScreenOriginY` | `rect`, `type` | the single `blit_usesBlitGfxN` call's last two slots |
+| `ovc28_usesBlitLabel` | `x`, `y` | `dst.ofs = x + y * 0x140`, `TextBlitX = x + 6`, `TextBlitY = y + 2` |
+| `blit_usesDrawGfx` | `x`, `y`, and `rect` retyped `brect_t *` | `rect[0..3]` bound the blit, `rect[4]` is the destination segment |
+| `ovc23_usesBlitGfxRect`, `...Rect2` | `x`, `y` | `x = param_1 - 1`, `row = param_2 + k`, then every blit uses `x` and `row` |
+| `ovc40_usesBlitGfx10` | `backdropIndex`, `scrollOffset` | the index selects six parallel backdrop cut tables; the offset is halved and subtracted from `0xdc` |
+
+### The 0x217A table: 17 more `partyIndex` parameters
+
+The party-sheet table's access form is unmistakable and now appears in 17 more functions:
+
+```c
+*(undefined4 *)((uint)param_N << 2)          /* far pointer per sheet */
+*(byte *)((...) + 0x2f)                      /* cls        */
+*(byte *)((...) + 0x3e) / + 0x3f             /* classStr / excluded */
+*(byte *)((...) + 0x5d)                      /* flags5d    */
+*(int *)((...) + 0x56)                       /* the value compute3 adds */
+```
+
+Before renaming, every candidate's field offsets were listed and all of them fall inside the
+documented `char_sheet_t` range (`0x29..0x9c`): `3b1d:0c1e` 0x29, `4207:10a3` 0x2f/0x5d,
+`4d05:1b51` 0x3d/0x3f, `5087:3dc7` 0x2f/0x5d, `5087:4576` 0x3e/0x3f/0x4d/0x4f/0x5d,
+`55fe:2f90` 0x9b/0x9c, `5b66:1929` 0x2a/0x3e/0x40/0x45/0x49/0x5d/0x5e, `67d1:0000` 0x4d,
+`67e7:09b9` 0x3f, `690b:0180` 0x3f/0x4d/0x4f/0x54/0x5b, `77eb:0976` 0x87 (rank),
+`77eb:09c1` 0x56, `7e7c:2b4c` 0x3e, `676c:0000` 0x2f.
+
+`agnt_compute7` gets one more: it reads `*(sheet + param_2 + 0x29)` and maps the value
+through thresholds 4/6/9/0xd/0x10/0x12 to -3..3, so `param_2` is an ability index and the
+byte array at `+0x29` holds the six ability scores.
+
+### Refused in this pass
+
+| candidate | why refused |
+|---|---|
+| `bldng_usesBldng` `param_4` | it is forwarded to `ovc45_compute3` (a party-sheet index) **and** to `bldng_textArena`, whose second argument is compared with a byte inside an entity record. Both can only be true if that entity byte stores a party slot, which nothing shows |
+| `ovc27_usesRandBelow3` `param_2` | an `undefined4` far pointer whose target is read at +8/+9/+0xf/+0x13/+0x15 but never named; typing it would require inventing a struct |
+| `stats_usesAlignUp42` `param_2` | the function carries *Control flow encountered bad instruction data* and an overlapping-instruction warning |
+| `ovc45_usesClose` `param_1`/`param_2` | the function has no stored prototype (0 parameters), so the names in its decompiled text are not variables that `RenameVars` can set; giving it one would change its stack layout without evidence |
+| `ovc22_textRingProt` | unchanged: flagged-unstable decompilation, and `param_4`/`param_5` are the halves of a far byte pointer |
+
+Auto-named parameters: 844 -> 795.  Struct-typed arguments stay at 130.
