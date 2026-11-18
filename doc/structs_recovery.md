@@ -3057,3 +3057,43 @@ Auto-named locals: 175 -> 171.
 - `bldtp_t+0x24`: byte, tested `& 0x80` only.
 - `agntG_t+0x52`: unchanged - two consumers, one clean (a signed y offset) and one that
   indexes a table with the high byte of an entity pointer (a decompiler artifact).
+
+## Two locals that are slices of a named table
+
+`manage_4d05_2d79` copies parts of `LevelBandLabels` into two locals and uses them exactly
+as that table is used elsewhere - as label far pointers:
+
+```c
+F_SCOPY(LevelBandLabels,       ..., bandLabels);    /* first slice  */
+F_SCOPY(LevelBandLabels + 0xc, ..., bandLabels2);   /* second slice */
+in_DX = bandLabels[pcVar15 * 2];
+ovr_blitLabel((char *)bandLabels[iVar9 * 2], (uint8_t *)bandLabels[iVar9 * 2 + 1], ...);
+```
+
+Auto-named locals: 171 -> 169.
+
+## `char_sheet_t.pad_0` is the record prefix, and it holds the owner
+
+`pad_0` is a `byte[40]` at offset 0, so `sheet->pad_0 + N` is simply `sheet + N`.  That
+re-reads the three `OVC43_6fbe_0000` uses as accesses to `+0` (an index), `+4` (a value
+minus 11) and `+6` (a base pointer), and gives the decisive one in `manage_4d05_2d79`:
+
+```c
+} while (*(int *)(iVar10 * 0x34 + 0x1b) != *(int *)(sheet->pad_0 + 0x1b));
+```
+
+left side is `agnt_t+0x1b` (the agent's `owner`), so `char_sheet_t+0x1b` is a **dword owner
+id** - the same quantity in the sheet record.
+
+It is not renamed, and the reason is measurable rather than lazy: splitting the 40-byte pad
+into `blob[0x1b]` + `owner` + `blob[9]` would turn one generated component into **two**
+(the two residual blobs are still pads), so the operation would *raise* the generated
+field count by one while only one field gained a name.  It is recorded here as the concrete
+shape to apply if `char_sheet_t` is ever rebuilt field by field with the other two blobs
+identified at the same time.
+
+## `agntG_t+0x52`, `+0x94` re-checked in the new export
+
+Nothing changed in `tmp/decompiled6`: `+0x52` still has one clean consumer (a signed y
+offset, `+ -0x16`) and one that indexes with the high byte of an entity pointer, and `+0x94`
+has no reader at all.  Both stay unnamed.
