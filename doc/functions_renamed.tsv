@@ -1,0 +1,15 @@
+address	old	new	evidence
+2d63:05e5	driver_2d63_05e5	driver_fillRect	orders (x1,y1)-(x2,y2), rows = y2-y1+1, cols = x2-x1+1, writes `colour` along a 320-byte stride
+2d63:04b7	vga_2d63_04b7	driver_drawLine	ofs2-ofs1 and row2-row1 drive a loop that writes `colour`, stepping 0x140 per row
+2d63:0bc8	driver_2d63_0bc8	driver_zeroWords	writes 0 into consecutive words, count from the third stack argument
+55fe:184e	OVC23_55fe_184e	createConstructionRecord	writes the 0x12-byte construction records at 0x21f2 with bldType/+2 x/+4 y/+9 party/+0xf tick
+55fe:1e87	OVC23_55fe_1e87	createConstructionRecordFar	forwards all six arguments to createConstructionRecord
+55fe:3450	OVC23_55fe_3450	alignUp4	returns param_1 + 2U & 0xfffc
+3f0b:057a	attact_3f0b_057a	clearSquareRecords	SquareRecCount = 0
+3381:1fa9	init_3381_1fa9	clearEntities	EntityCount = 0
+302d:0a30	font_302d_0a30	resetTextBlitCycle	clears both halves of TextBlitCycle
+3338:043e	init2_3338_043e	clearMiceProcessed	MiceProcessed = 0
+3381:1fba	init_3381_1fba	freeLeaderData	stshFree on every leader sheet plus four cached blocks, then GLeaderCount = 0
+3381:20ee	init_3381_20ee	freeGameResources	ovr_fmFreeAudio(1) followed by freeLeaderData()
+1403:03d8	ovrman_1000_4408	ovl_rotateRight4	returns AX >> 4 | DX << 0xc
+5ded:1be7	OVC27_5ded_1be7	emptyFunction	empty body

@@ -3900,3 +3900,67 @@ ovr_OVC23_55fe_1e87(0x89,GfxRndSeed - 2,GfxRndSeed2,&outFlag,(byte)unaff_SS,Part
 
 Auto-named locals over this turn: 160 -> 152.  Auto-named parameters unchanged at 937
 (the thunk parameters were already named by delegation).
+
+## Function naming: convention, tooling and the first batch
+
+Variable names are done function by function, so the function names had to stop being
+address soup first.  The inventory (`scripts/ghidra/ListFuncs.java` -> `tmp/funcs3.tsv`)
+is 1590 functions, of which 460 are thunks; 868 names still match an address-shaped
+pattern.  The 460 thunks are already systematic: their names are `ovr_<target>`, so they
+will follow their targets as those are named.
+
+### Convention
+
+- `<module>_<verb><Object>` - `driver_fillRect`, `createConstructionRecord`,
+  `freeLeaderData`, `clearSquareRecords`.  The module word is the existing one where it
+  meant something (`driver`, `stsh`, `agnt`, `constr`, `stats`, `saveui`).
+- `ovr_<target>` for overlay entries (Ghidra thunks and the hand-written forwarders).
+- The **address is not part of the name** any more.  `ExportAll` already writes
+  `// <name> @ <addr>  [<module>]` at the top of every function, which is what makes
+  dropping the address safe:
+
+```
+// driver_fillRect @ 2d63:05e5  [OVC01_driver.c]
+/* fills the rectangle (x1,y1)-(x2,y2) with one colour */
+```
+
+Every rename also sets a one-line comment quoting the evidence, so the reason survives in
+the export.  `doc/functions_renamed.tsv` keeps the old-name mapping.
+
+### Tooling
+
+- `scripts/ghidra/RenameFunctions.java` - TSV `address-or-name <TAB> newName <TAB> comment`.
+  Resolves by name when the address does not resolve (overlay spaces), and renames every
+  thunk called `ovr_<oldName>` to `ovr_<newName>` so the pair never drifts.
+- `scripts/ghidra/ListFuncs.java` - address, name, thunk target, size, parameter count.
+
+### First batch (14 functions, 9 thunks)
+
+| address | old | new | evidence |
+|---|---|---|---|
+| `2d63:05e5` | `driver_2d63_05e5` | `driver_fillRect` | rows = `y2-y1+1`, cols = `x2-x1+1`, then writes `colour` along a 320-byte stride |
+| `2d63:04b7` | `vga_2d63_04b7` | `driver_drawLine` | `ofs2-ofs1`, `row2-row1` drive a loop writing `colour`, `+= 0x140` per row |
+| `2d63:0bc8` | `driver_2d63_0bc8` | `driver_zeroWords` | writes 0 to consecutive words, count from the third stack argument |
+| `55fe:184e` | `OVC23_55fe_184e` | `createConstructionRecord` | writes the 0x12-byte records at 0x21f2: bldType `+8`, x `+2`, y `+4`, party `+9`, tick `+0xf` |
+| `55fe:1e87` | `OVC23_55fe_1e87` | `createConstructionRecordFar` | forwards all six arguments to the above |
+| `55fe:3450` | `OVC23_55fe_3450` | `alignUp4` | `return param_1 + 2U & 0xfffc;` |
+| `3f0b:057a` | `attact_3f0b_057a` | `clearSquareRecords` | `SquareRecCount = 0;` |
+| `3381:1fa9` | `init_3381_1fa9` | `clearEntities` | `EntityCount = 0;` |
+| `302d:0a30` | `font_302d_0a30` | `resetTextBlitCycle` | clears both halves of `TextBlitCycle` |
+| `3338:043e` | `init2_3338_043e` | `clearMiceProcessed` | `MiceProcessed = 0;` |
+| `3381:1fba` | `init_3381_1fba` | `freeLeaderData` | `stshFree` on every leader sheet and four cached blocks, then `GLeaderCount = 0` |
+| `3381:20ee` | `init_3381_20ee` | `freeGameResources` | `ovr_fmFreeAudio(1)` then `freeLeaderData()` |
+| `1403:03d8` | `ovrman_1000_4408` | `ovl_rotateRight4` | `return AX >> 4 | DX << 0xc;` |
+| `5ded:1be7` | `OVC27_5ded_1be7` | `emptyFunction` | empty body |
+
+The thunks tracked automatically: `ovr_driver_fillRect`, `ovr_driver_drawLine`,
+`ovr_createConstructionRecord`, `ovr_createConstructionRecordFar`, `ovr_freeGameResources`,
+and five more.
+
+### Deliberately not named yet
+
+`agnt_3b1d_0a8d` (sets `health = 0` and clears one global byte, but has **no caller** in the
+export); `draw_2e25_0245` (`(0x13f - x) * 0x80 / 0x140`, context not established);
+`bldng_676c_05ac` (reads `GStrangeTable[i].ofs + 1`, table meaning unknown); and the trivial
+predicates (`return param_1 != 1;`, `return *p != 0;`), where a name would only restate the
+expression.  Each needs the surrounding module read before it earns a name.
