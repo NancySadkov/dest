@@ -3324,3 +3324,94 @@ confirms the type now reads `char *32 [4]` and the body starts with
 that function, not the parameter.
 
 Auto-named parameters: 1025 -> 1017.
+
+## A wrong CRT prototype that every `_fmemmove` call inherited
+
+`_fmemmove` (1000:26d7) was described as `(dst, src, count)` with three **near**
+pointers - six bytes of parameters, while the function actually consumes ten:
+
+```
+1000:26d7  PUSH [BP + 0xe]     ; count
+1000:26da  PUSH [BP + 0x8]     ; second word
+1000:26dd  PUSH [BP + 0x6]     ; first word
+1000:26e0  PUSH [BP + 0xc]     ; fourth word
+1000:26e3  PUSH [BP + 0xa]     ; third word
+1000:26e6  PUSH CS
+1000:26e9  CALL 0x1000:2685    ; __fmovmem
+```
+
+and the callee proves the layout, because it loads the pointers with far loads:
+
+```
+1000:2688  LDS SI,[BP + 0x6]    ; source  far pointer
+1000:26a5  LES DI,[BP + 0xa]    ; destination far pointer
+1000:26a8  MOV CX,word ptr [BP + 0xe]   ; count
+```
+
+A far pointer is four bytes in this program's data model, so ten parameter bytes are
+`(dst, src, count)` with two four-byte pointers.  The old signature covered only the
+first six, which had two consequences visible throughout the export:
+
+- the count was invisible (it leaked into an `in_stack_...` slot), and
+- the third displayed argument was the **source offset**, not the count.
+
+Rebuilt as `void * _fmemmove(char *dst, char *src, word count)` and
+`void * __fmovmem(char *src, char *dst, word count)`, with the pointer parameters
+retyped through `/char *`.  Call sites now read correctly, e.g.
+
+```c
+_fmemmove((char *)CONCAT22(unaff_SS,cmap),(char *)CONCAT22(in_stack_00000006,gfx),0x300);
+_fmemmove((char *)CONCAT22(unaff_SS,&agntCopy),
+          (char *)CONCAT22(0x1726,(char *)(uStack_8 * 0x34)),0x34);
+```
+
+The wrapper's own body still renders oddly (`__fmovmem` forwarding through registers),
+which is expected for a hand-written far-copy shim and does not affect callers.
+
+### Evidence checked because of the change
+
+Every documented claim that rested on an `_fmemmove` third argument was re-read:
+
+- `OVC15_4207_2301`'s local was the one real casualty: the copy is **one** 0x34-byte
+  record out of the agent table, not "count * 0x34".  It was renamed `agntCopy` and
+  typed `agnt_t`, which is also why the decompile now shows `agntCopy.target = 0xff;`
+  and passes `&agntCopy` as a struct pointer.
+- `OVC23_55fe_1803`'s `recordIndex` still holds: the corrected call puts
+  `recordIndex * 0x12` at segment `0x21f2`, i.e. the 0x12-stride record array.
+- the `seasonPalette`/`colorA`-`colorC` destinations in `calcSeasonPalette` still hold;
+  the corrected calls write `dstOfs + 0x2d0`, `+0x2ac`, `+0x2b2`, `+0x2be`.
+
+## `calcSeasonPalette`'s two far pointers
+
+With the copy prototype fixed the calls are legible:
+
+```c
+_fmemmove((char *)CONCAT22(dstSeg,dstOfs),(char *)CONCAT22(srcSeg,srcOfs),0x300);
+_fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x1e0),
+          (char *)CONCAT22(uVar1,psStack_6),0x90);
+_fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2d0),
+          (char *)CONCAT22(unaff_SS,seasonPalette + (uint)GSeason * 0x2d),0x2d);
+```
+
+and every caller passes `->cmap` first and a local buffer third:
+`ovr_calcSeasonPalette(psVar2->cmap, iVar3, &stack0xfcfa, unaff_SS);` - so
+`srcOfs`/`srcSeg` and `dstOfs`/`dstSeg`.
+
+## `heapMemmove` and the audio block aligner
+
+| function | parameters | evidence |
+|---|---|---|
+| `heapMemmove` (6316:0039) | `dstOfs`, `dstSeg`, `srcOfs`, `srcSeg`, `countLo`, `countHi` | `ovr_mkp(param_1, param_2)` / `ovr_mkp(param_3, param_4)` are the two far pointers of the `_fmemmove`, and the last pair is decremented with borrow (`param_6 -= (param_5 < count); param_5 -= count;`) |
+| `audio_3a5b_0761` | `ofs`, `seg`, `size` | `if ((param_1 & 0xf) == 0) alignToSeg(...)` else `_fmemmove((CONCAT22(param_2 + 1, param_1) & 0xfffffff0), CONCAT22(param_2, param_1), param_3 - 0xf)` - shifts the block one paragraph to align the offset |
+
+## Three agent-index parameters, re-confirmed after the export refresh
+
+| function | parameter | evidence |
+|---|---|---|
+| `OVC27_5ded_052d` | `param_3` -> `agntIndex`, `param_1` -> `agnt` | `uVar2 = param_3 * 0x34; CONCAT22(0x1726, uVar2)`; `param_1` is dereferenced at `+0x1d` (gdata) and `+0x17` (entity) |
+| `stats_6386_1abe` | `param_1` -> `agntIndex` | `*(int *)(param_1 * 0x34 + 0x1b)` (owner) and `drawAgntStats(CONCAT22(0x1726, param_1 * 0x34), ...)` |
+| `OVC41_6a8f_2084` | `param_2` -> `agntIndex` | `paVar4 = (agnt_t *)((long)param_2 * 0x34); ... paVar9->flags & 0x820` |
+
+Auto-named parameters over the turn: 1017 -> 997.  Struct-typed arguments: 121 -> 122.
+The stored-variable inventory moved 3117 -> 3112 rows because the two copy wrappers now
+have five parameters each instead of six near ones.
