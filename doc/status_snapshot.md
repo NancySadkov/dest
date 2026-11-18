@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn317/naming_summary.txt`.
+`tmp/auditn318/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -14,7 +14,7 @@ parameters               1642   auto-named  368   (22.4%)
 locals                    692   auto-named  126   (18.2%)
 structs                    35
   struct fields           313   generated    23   (7.3%)
-globals                  2559   auto-named  228   (8.9%)
+globals                  2559   auto-named  222   (8.7%)
 ```
 
 Function names are complete: 1590 functions (including 460 thunks), 0 duplicates,
@@ -27,7 +27,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 |---|---|
 | function names | 1590/1590 unique and address-free; 591 renames recorded with evidence tier |
 | string labels | 1516 `s_*` labels from their own bytes (`doc/strings_renamed.tsv`) |
-| globals | 1096 -> 228 auto-named (26 previously unnamed DGROUP tables labelled, 68 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
+| globals | 1096 -> 222 auto-named (26 previously unnamed DGROUP tables labelled, 74 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
 | structures | `spr_t`, `unit_t` and `entity_t` complete; `agnt_t` rebuilt as `agnt_t[52]` + `tick` + `dir`; `bld_inst_t` and most of `char_sheet_t` recovered |
 | struct fields | 266 -> 23 generated |
 | typing | struct-typed arguments 80 -> 137; `_fmemmove`/`__fmovmem`/`memcpy` re-typed to `(far dst, far src, count)`; `blit_usesDrawGfx`'s rectangle parameter retyped `brect_t *`, which resolves its fields by name |
@@ -61,6 +61,8 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 - `anm_t 0x10..0x1d`: no exported module reads any of the eleven bytes.
 - `bldtp_t+0x0c` vs `+0x0e`: the table is loaded data with no writer, so which is the
   minimum cannot be decided from code.
+- `csite8`'s array base and every `tmstrsSpritesN` length: the loop bounds that produced them are
+  refuted by existing byte variables at the same offsets (`2410:0161`, `2410:07E2`).
 - The `07xx`/`08xx` far-pointer tables in `5087:056e`: no writer, and the index
   expressions are register artifacts (`unaff_DI`, `(uint)&unaff_DI->seg % 7`) in a
   function flagged for untracked spacebase and bad instruction data.

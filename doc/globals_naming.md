@@ -1887,3 +1887,42 @@ at every block boundary.  The real lengths are the ones in the layout above, and
 confirmed by the boundary arithmetic rather than by any single loop bound.
 
 Auto-named globals: 296 -> 228.
+
+## Batch - the last entry of three arrays, and two contradictions that stop the method
+
+Extending the array naming to *every* auto symbol that falls inside a known array (computed from
+`k = (dgroupOffset - base) / 4` and `dgroupOffset % 4`) produced nine candidates.  Six are real and
+are now named; three are contradictions, and they are the important part of this pass.
+
+| address | name | why |
+|---|---|---|
+| `2000:cbe1/cbe3` | `csite3_5Ofs`/`Seg` | csite3 is 3+3 entries from `0199`, so entry 5 is `0199+20 = 01AD` |
+| `2000:cc05/cc07` | `csite4_8Ofs`/`Seg` | csite4 is 3+3+3 from `01B1`, entry 8 = `01B1+32 = 01D1` |
+| `2000:cc61/cc63` | `csite1_22Ofs`/`Seg` | csite1 is 6+6+6+5 from `01D5`, entry 22 = `01D5+88 = 022D` |
+
+All three are additionally read as a *single* far pointer (a fallback sprite) in
+`ovc23_usesBlitGfxRect` / `ovc22_textRingProt`, which is consistent with being one entry of the
+array rather than a separate variable.
+
+### Contradiction 1 - csite8 cannot start at `0161`
+
+`2410:0161` is `byte_2410_DATA_DGROUP_0161`, a flag that `main` sets to 1 and `draw_usesPrintf`
+tests, and `attact_*` clears.  It is a **byte**, and the same DGROUP offset cannot also be the
+offset word of csite8's first far pointer.  The grab-branch scan attributed an `0161` base to LBM
+534, so that attribution (or that array length) is wrong; csite8's base stays **unverified** and
+the symbol is left alone.
+
+### Contradiction 2 - `tmstrsSprites2` is not seven entries
+
+`2410:07E2` is `byte_2410_DATA_DGROUP_07E2`, a state code written with constant values 0..15 by
+`agnt_usesStExit`, `agnt_usesAnimFrame`, `agnt_compute*` and `ovc49_usesBlitGfxRect`.  With a base
+of `07CE` and a stride of 4, entry 5's offset word would be `07CE+20 = 07E2`, so the loop bound of
+7 that I attributed to this array is wrong - the array must be shorter.  The *base* name is fine
+(the consumer indexes from `&word_07CE`), but every `tmstrsSpritesN` **length** I recorded in the
+previous batch is unverified and must be treated as open.
+
+The lesson is the same one this project keeps relearning: a loop bound found by scanning text is a
+hypothesis, while a symbol that already holds a different kind of data is a refutation.  The three
+pairs named here survived that test; the two that failed it did not get a name.
+
+Auto-named globals: 228 -> 222.
