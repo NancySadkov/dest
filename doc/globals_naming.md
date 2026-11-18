@@ -641,3 +641,10 @@ F_SCOPY((far_t *)PlaceErrPtrs, ...);        /* 48ac:05f2 */
 F_SCOPY((far_t *)CureSpellPtrs, ...);       /* 6a8f:2084 */
 F_SCOPY((far_t *)ManageResultPtrs, ...);    /* 4d05:26f6 */
 ```
+
+### 2000:0039 - no writer anywhere in the export
+
+A full search finds only the two reads in draw_2e25_0217 and no write at all, so
+the byte is produced by code outside the exported modules.  Combined with the
+index-used-as-coordinate arithmetic recorded earlier, there is not enough to name
+it, and it stays unnamed.
