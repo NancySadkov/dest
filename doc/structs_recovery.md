@@ -5848,3 +5848,46 @@ the string's **segment** (`0x2410`) there -- a far-pointer split, so a name woul
 decompiler's argument mapping rather than the code.
 
 Auto-named parameters: 502 -> 492.
+
+## 6 parameters from OVC45/OVC43/OVC28
+
+### `ovc45_usesGMapFlags5` (3)
+
+```c
+if (param_1 == '\x01') { ... GMapFlags[param_3] + param_2 ... }
+else if (param_1 == '\x02') { ... GMapFlags[param_3][param_2] & 1 ... }
+```
+
+so `mode`, `x`, `y` -- the first argument only chooses which flag bits are tested.
+
+### Three map lookups and one asset open
+
+| function | parameter | evidence |
+|---|---|---|
+| `ovc45_usesGMapFlags4` | `x`, `y` | bounds `0x93`/`0x3b`, then `GMapFlags[y][x]` |
+| `ovc45_usesLand_info` | `screenX` | converts its argument to a map column with `(param_1 - 9) / 0x30` (0x30 = 48, the cell size) |
+| `ovc28_usesUiInputText`, `ovc28_compute2` | `hint` | the third argument sits in `uiInputText`'s `hint` position |
+| `ovc43_textToymaker` | `fileId` | `file_id = ovr_stshOpen(param_1)`, then `ovc43_usesBiosKeyAvail(file_id, ...)` |
+
+### The party-gold check (2 of 3)
+
+`ovc45_usesGPopulationLo` compares its second and third arguments with the party sheet's 32-bit
+value before subtracting:
+
+```c
+iVar6 = *(int *)(iVar5 + 0x58);
+if ((iVar6 < param_3) || ((iVar6 == param_3) && (*(uint *)(iVar5 + 0x56) < param_2))) ...
+uVar3 = param_2 - uVar4;
+```
+
+`+0x56/+0x58` is the sheet's `gold` long (`ovc28_textGold` formats exactly that pair), so the
+arguments are `goldLo`/`goldHi`.  Its first argument indexes the 0x217A table and is already
+`partyIndex` (renamed in an earlier pass, which is why the tool reported it as missing).
+
+### Refused
+
+`stats_textRingProt` (6386:0411) carries *Control flow encountered bad instruction data*, an
+overlapping instruction at 0x6014c/0x6014b and an untracked spacebase, so its three slots stay
+auto-named.
+
+Auto-named parameters: 484 -> 478.
