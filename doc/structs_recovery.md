@@ -2038,3 +2038,101 @@ carrying placeholder names.
   byte.
 - `55fe:2f90`'s `local_6` is a plain zero-then-increment counter bounded by a
   parameter; `count` would restate the mechanism, so it stays.
+
+## Parameters typed from their bodies (fifth pass)
+
+### A tooling rule that made three of these possible
+
+`RenameVars.java` handles a pointer type by taking `spec` minus ` *` and calling
+`dtm.getDataType(...)`, so the base type **must be a full path with a leading
+slash**.  Passing `char *` silently produced a type the decompiler rendered as
+`long text`; passing `/char *` produces the correct four-byte far pointer:
+
+```
+RenameVars ... param_1 text char *     -> int font_302d_06ea(long text, undefined4 font)
+RenameVars ... param_1 text /char *    -> int font_302d_06ea(char * text, char * font)
+```
+
+The two label helpers from an earlier batch (`manage_4d05_04c6`/`0519`) were re-typed
+the same way and now read `char * text`.
+
+### Named and typed
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `font_302d_06ea` | `param_1`, `param_2` | `char *text`, `char *font` | sums `font[text[i] + 0xa1]` over the string |
+| `OVC45_77eb_226e` | `param_1..5` | `char *dest`, `char *src`, `char *font`, `uint maxWidth`, `char mode` | copies src into dest until the pixel budget runs out, then appends `..`/`...` and a terminator |
+| `OVC41_6a8f_0246` | `param_1` | `agnt_t *agnt` | reads `*(undefined4 *)((int)param_1 + 0x17)` |
+| `OVC41_6a8f_29ea` | `param_1` | `agnt_t *agnt` | reads `+0xd` (`gindex`) and `+0xf` (`level`) |
+| `OVC23_55fe_0000` | `param_3` | `agnt_t *agnt` | compares `+0x1b` (`owner`) with the agent owner field |
+| `OVC18_48ac_0251` | `param_2` | `anm_t *anims` | indexes it with the `0x1e` stride and reads `sy`, `fw`, `fh` |
+
+Live signatures:
+
+```
+int font_302d_06ea(char * text, char * font)
+int OVC45_77eb_226e(char * dest, char * src, char * font, uint maxWidth, char mode)
+int OVC41_6a8f_29ea(agnt_t * agnt)
+uint8_t * OVC18_48ac_0251(uint8_t * param_1, anm_t * anims, uint8_t * param_3, byte param_4, char param_5)
+```
+
+Auto-named parameters: 1076 -> 1065.  Struct-typed functions: 115 -> 119.
+
+### Correction accepted mid-batch
+
+`48ac:0251`'s parameter was first applied as `/frm_t *` from the `0x1e` stride, but
+the type audit shows `frm_t` is 20 bytes while `anm_t` is 30 = `0x1e`, and the three
+offsets read through the stride (`+3`, `+9`, `+10`) are `sy`, `fw`, `fh` of `anm_t`.
+It was re-applied as `anm_t *anims`.
+
+## Locals (fifth pass)
+
+`abilitiesDlg` keeps two per-class stat maps as locals, copied from constant tables;
+the bytes at the copy sources are the proof:
+
+```
+2410:49DD  00 01 02 03 00 00 00 FF      /* class -> primary stat, 0xFF = none   */
+2410:49E4  FF FF FF FF FF 01 03         /* class -> secondary stat             */
+```
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `abilitiesDlg` | `local_a[8]` | `classStatMap1` | copied from `49DD`, indexed `[sheet->cls]`, passed to the ability-modifier helper |
+| | `local_12[8]` | `classStatMap2` | copied from `49E4`, tested `!= 0xff` |
+| | `local_18[6]` | `statIndex` | `[0]` reused as scan counter, `[1]` the chosen primary stat, `[entry + 1]` the stat offered per entry |
+| | `local_2a[4]` | `menuItems` | far pointers to `GStatsLabels` filled per entry and passed to `uiInputText` |
+| `constr_36ce_0995` | `local_26/28/2a/2c` | `cornerTL/TR/BL/BR` | the same four `constr_36ce_0101(x, y-1 … x+1, y)` calls as `constr_36ce_1f99` |
+
+Live check:
+
+```c
+far_t menuItems [4];
+byte statIndex [6];
+byte classStatMap1 [8];
+F_SCOPY((uint8_t *)0x49dd, ..., (uint16_t)classStatMap1);
+_fsetmem(menuItems, unaff_SS, 0x10);
+```
+
+Auto-named locals: 286 -> 278.
+
+### 2000:0744 / 2000:0749 re-derived - still refused
+
+The writer is `draw_2e25_10c7(x, y)`: it clamps `x` to `0..0x38` and `y` to `0..0x1c`,
+*restores* the stored pair when the new point falls inside `x < 0x1c && y < 0x1c - x`,
+otherwise stores the new pair for `GMenuItem`, and then draws with
+`x + 0xf3` / `y + 0x3b`.  The consumers scale them differently:
+
+```c
+iVar1 = (char)0749[param_1] * 0x12 / 0x39;   /* ovc02_draw: y used in a screen y */
+iVar2 = (char)0744[param_1] * 0x12 / 0x39;   /* ovc02_draw: x used in a screen x */
+and in the 0x13-byte square record (unit_6616_10d5):
+local_12[param_1] = 0744[param_1];
+local_d[param_1]  = 0749[param_1];
+```
+
+So the index is a five-slot value shared between `GMenuItem` at the drawing sites and
+the slot index inside a square record - not provably "menu item", "entity" or
+"sprite" - and the value is used both as a scaled coordinate and as a percentage
+(`(0x1c - v) * 100 / 0x1c` in ovc14_attact).  Position and amount are both consistent
+with the evidence, so no name is applied; this is the derivation the next pass should
+start from.
