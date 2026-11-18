@@ -1258,3 +1258,32 @@ unnamed stack word.
 
 Rule recorded: prototype *shape* repairs go through `ApplyProto`, but the far
 pointer types must be applied afterwards with `RenameVars`.
+
+## `attact_3f0b_2430` typed, and its direction argument
+
+It reads the record's `gindex` (`0xd`), indexes the `0x95`-stride table with it,
+and uses the record's `x`, so the first argument is an agent record passed far:
+
+```c
+void __cdecl16far attact_3f0b_2430(agnt_t *agnt,byte dir)
+{
+  uVar6 = *(undefined1 *)((int)(char **)GMenuStrings + (uint)agnt->gindex * 0x95 + 0x1f);
+  if (dir == 0xff) { ... dir = dir + 1 & 3; ... }
+  else { dir = dir ^ 2; ... }
+  agnt->y = agnt->y + (int)*(char *)(dir + 0x889);
+  iVar3 = ovr_OVC23_55fe_2e2b(agnt->x + *(char *)(dir + 0x885), agnt->y, uVar6);
+```
+
+The second argument is a direction `0..3`: it is masked with `& 3` when
+randomised, `^ 2` reverses it, and it indexes the four-entry dx/dy tables at
+`0x885`/`0x889`.  Named `dir`.
+
+Struct-typed functions: 111 -> 112.  Auto-named parameters: 1198 -> 1196.
+
+### Scan result
+
+The three scans for remaining record consumers are now empty: no function reached
+with `0x1726`, no function doing `(ulong)param_N >> 0x10` on an untyped pointer,
+and no function mixing `* 0x95` with `0x34` still carries an `int *`/`undefined4`
+first parameter.  What remains untyped takes plain values (coordinates, counts,
+VGA registers) rather than records.
