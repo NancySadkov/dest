@@ -4396,3 +4396,76 @@ reading, so the layout needs a disassembly check before `entity` is retyped.
 | `setvbuf` `param_2`/`param_3`/`param_4` | the decompiled signature splits the far buffer into ofs/seg words; naming them CRT buffer halves would not teach the game model anything |
 
 Auto-named parameters: 804 -> 780 over the two batches.
+
+## The per-entity party byte: disassembled, and why it must not become a field
+
+The open question from the previous pass was whether `agnt_t`'s `entity` field is really a
+4-byte far pointer at +0x17, or whether the decompiler's `(int)&...entity + 3` was hiding a
+separate byte field.  `scripts/ghidra/ListInsn.java` (added this pass) prints the listing, and
+the answer is unambiguous.
+
+**Read side** (`ovc45_textDone`, 77eb:1754): the byte is read at `entity+0x1a` and fed
+straight into the 0x217A party table:
+
+```
+77eb:181c  MOV  AX,[BP + 0xa]            ; entityIndex
+77eb:181f  MOV  DX,0x37                 ; entity_t stride
+77eb:1822  IMUL DX
+77eb:1829  LES  BX,ES:[0x908e]          ; Entities (far pointer)
+77eb:182e  ADD  BX,AX
+77eb:1830  MOV  AL,byte ptr ES:[BX + 0x1a]
+```
+
+and at another site the same byte indexes the party table, with the raw bytes confirming the
+`MOV ES,DX` that Ghidra mis-renders as `MOV DX,ES`:
+
+```
+77eb:1866  26 8A 47 1A        MOV AL,ES:[BX+0x1a]
+77eb:186a  B4 00              MOV AH,0
+77eb:186c  C1 E0 02           SHL AX,2
+77eb:186f  BA 7A 21           MOV DX,0x217a
+77eb:1872  8B D8              MOV BX,AX
+77eb:1874  8E C2              MOV ES,DX        ; ES = 0x217a  (bytes 8E C2)
+77eb:1876  26 FF B7 02 00     PUSH ES:[BX+2]   ; partyTable[b].seg
+77eb:187b  26 FF B7 00 00     PUSH ES:[BX+0]   ; partyTable[b].ofs
+```
+
+**Write side** (`ovc15_usesAgntFlag1`, 4207:0e17): the same four bytes are written as a far
+pointer, offset first and segment second:
+
+```
+4207:0f9c  MOV word ptr ES:[BX + 0x19],DX   ; entity.seg = Entities.seg
+4207:0fa1  MOV word ptr ES:[BX + 0x17],AX   ; entity.ofs = Entities + index
+```
+
+and `ovc15_usesStExit` writes the identical pair.  So `agnt_t+0x17` **is** a 4-byte far
+pointer, `+0x19` is its segment word, and `+0x1a` is the high byte of that segment.  There is
+no room for a separate byte field: any `partySlot` added at 0x1a would overlap the pointer and
+break the eight `LES BX,ES:[BX+0x17]; ... [BX+0xf]` dereferences that read the target's level.
+
+### What the byte means, independently
+
+The value stored in that byte is treated as a party index by two unrelated functions:
+
+| site | evidence |
+|---|---|
+| `ovc45_textDone` | read from the byte, tested `!= 0xff`, passed to `ovc28_textGold(byte partyIndex)`, which indexes 0x217A and formats `sheet+0x56/+0x58` |
+| `ovc13_usesEntities` | `partyFilter` is assigned from `manage_textAllUnits`' `partyIndex` parameter and compared with this same byte; 0xff means none |
+
+So the party slot is `entity.seg >> 8`.  `agnt_t.entity` therefore stays `entity_t *32` and no
+field is added; the fact is recorded here instead, because expressing it as a field would make
+the struct disagree with the pointer loads the same code performs.
+
+### Consequence for the decompiled source
+
+The correct rewrite of the party-slot sites is `entity.seg >> 8`, not a new field.  I have not
+applied that rewrite because it needs a small custom script (the decompiler will keep printing
+`&entity + 3` until the expression is rewritten), and inventing a struct field to make the text
+prettier would be exactly the kind of guess this project refuses.
+
+### Two globals that came out of the same reading
+
+| global | name | evidence |
+|---|---|---|
+| `2410:4B6D` | `levelRangeIndex` | `LevelRangeMin[4B6D] <= entity.base.level <= LevelRangeMax[4B6D]`, with 0xfe handled as a special case |
+| `2410:4B6E` | `partyFilter` | assigned from `manage_textAllUnits`' `partyIndex` parameter, 0xff for none, compared with the per-entity party byte |
