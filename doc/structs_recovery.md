@@ -4627,3 +4627,11 @@ adjacent byte components (`agnt_t+4/+5`, `anm_t+0x0f/+0x10`, `anm_t+0x11/+0x12`)
 byte is also used on its own somewhere.  In every case the word access is a single
 instruction in a hot path, which is what a compiler does when it moves two byte fields
 together -- not proof that the field is 16 bits.  That is why none of them is merged.
+
+### Corroboration: the party slot is a char_sheet_t field too
+
+char_sheet_t+137 (+0x89) is already named partySlot, and the value the entity pointer's
+segment high byte carries is compared against partyFilter and handed to ovc28_textGold as a
+party index.  So the slot exists as a real field on the character sheet and the entity record
+mirrors it in the segment byte -- which is why ntity.seg >> 8 is the correct reading rather
+than a decompiler artifact.
