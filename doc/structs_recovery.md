@@ -5612,3 +5612,60 @@ case where the earlier refusal was lifted: the call site shows the pairing, and 
 of the even-numbered arguments confirms which ones are the y values.
 
 Auto-named parameters: 558 -> 552.
+
+## `agnt_t+0x24`/`+0x25`: every writer enumerated, still unnamed
+
+The step asked for a writer that assigns a symbolic value.  A scan of every store to the two
+bytes across the export finds only constants:
+
+| site | store |
+|---|---|
+| `agnt_usesAgntCount` | `+0x25 <- 1` |
+| `ovc15_usesAgntFlag1` | `+0x24 <- 2` |
+| `ovc41_textFailsTurn` | `+0x24 <- 1` |
+| `ovc49_usesBlitGfxRect` | `+0x25 <- 2` (four sites), `+0x24 <- 0` (two), `+0x24 <- 2` (one) |
+
+No store comes from a named global, a parameter, or a table entry -- so the value set is
+`{0,1,2}` and nothing in the binary says what the three states mean.  The readers select one of
+three sprite branches (`== 0` blits the anim block at `cmap + 6`, `== 1` blits a second block and
+counts down `agnt+0x23` (`timer`), `== 2` blits a third), so a name would be a description of the
+artwork rather than of the code.  Final refusal, with the complete writer list above.
+
+## Nine parameters from the construction corner helpers and the blitter (9)
+
+### The three corner/map reads
+
+All three take a map **column**:
+
+```c
+/* ovc23_usesCornerBR  */ constr_usesSmoothPrev(param_1, -1, &cornerTL);  ... param_1 + 1/2/4
+/* ovc23_usesCornerBR2 */ constr_usesSmoothPrev(param_1, ...);           ... param_1 + param_2
+/* ovc23_usesGMapFlags */ if ((-1 < param_1) && (param_1 < 0x94)) GMapFlags[unitIndex][param_1]
+```
+
+so `x` in each, and `ovc23_usesCornerBR2`'s second argument is the `step` added to reach the far
+corner (its own `param_2 == 4` branch picks a hard-coded pair instead).
+
+### `blit_compute1` - three of fourteen
+
+Its only call site passes 14 arguments, three of which are unambiguous:
+
+```c
+blit_compute1(rectOfs[4], iVar2, iStack_12, CONCAT22(iStack_c,unaff_SS),
+              *(uint *)(uVar5 + 5), uStack_10,
+              *(uint *)((uint)bStack_7 * 2 + 0x470), uStack_22,   /* mask, x2 - x1 */
+              iStack_1c, iStack_1e, iStack_20, iStack_16, iStack_1a, unaff_DI);
+```
+
+arg1 is the destination segment (`rect[4]`), arg7 is the table value ANDed with a rotating bit
+inside, and arg8 is `uStack_22 = x2 - x1` -- so `dstSeg`, `mask`, `dx`.  The other eleven depend
+on locals of `blit_usesStExit`, which is itself an unresolved dither blitter, so they stay
+auto-named rather than guessed.
+
+### `ovc23_textConstructionAbandoned` - two halves
+
+`dst.seg = (uint16_t)param_2; dst.ofs = (uint16_t)param_1;` makes the first two arguments the
+halves of a far pointer (`ofs`, `seg`).  The third indexes the `0x885`/`0x889` direction tables
+but is also compared `(byte)param_3 < 6` / `< 0xb` to pick a graphic, so it stays auto-named.
+
+Auto-named parameters: 552 -> 543.
