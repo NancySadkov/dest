@@ -2949,3 +2949,40 @@ byte stats_6386_1c9f(byte agntIndex, byte param_2, int16_t param_3, ...)
 ```
 
 Auto-named parameters: 1055 -> 1052.
+
+## `OVC41_6a8f_016b`: the argument list has a padding byte
+
+Callers pass two far pointers and a flag, and the stack layout proves it:
+
+```
+6a8f:0171  MOV AL,byte ptr [BP + 0xa]        ; the flag
+6a8f:017a  LES BX,[BP + 0xc]                 ; second far pointer: offset +0xc
+6a8f:019d  PUSH word ptr [BP + 0x8]          ; first far pointer: segment +8
+6a8f:01a0  PUSH word ptr [BP + 0x6]          ;                    offset  +6
+6a8f:01bf  PUSH word ptr [BP + 0xe]          ; second far pointer: segment +0xe
+6a8f:01c2  PUSH word ptr [BP + 0xc]
+```
+
+So the layout is `+6..+9` (pointer), `+0xa` (flag), **`+0xb` is padding**, `+0xc..+0xf`
+(second pointer).  Ghidra does not insert that padding itself, so the prototype declares
+it: `void OVC41_6a8f_016b(agnt_t *agnt, byte flag, byte pad, agnt_t *other)`.
+
+`pad` is a representation name for a real padding byte, not a claim about meaning; the
+alternative would be to leave it `param_3`.  The two pointers are now four-byte types and
+the first one reads correctly: `OVC41_6a8f_29ea(agnt);`.
+
+Residual limitation: the second pointer's *field* accesses still render as
+`CONCAT11(in_stack_0000000b, pad) + 0xd` instead of `other->gindex`, because Ghidra has not
+bound the far pointer across the padding byte; the value itself is passed correctly
+(`ovr_OVC15_4207_26bc(..., (agnt_t *)other, ...)`).
+
+Auto-named parameters for this function: 4 -> 0.
+
+## Two more parameters from their bodies
+
+| function | parameter | evidence | name |
+|---|---|---|---|
+| `agnt_3b1d_0ac0` | `param_2` | `pcVar1 = ovr_stsprintf(param_2, in_stack_0000000a, "he...")` | `text` |
+| `constr_36ce_0101` | `param_3` | writes the raw cell value through it (`*param_3 = iVar1`) before scaling; callers pass the corner slots | `cell` |
+
+Auto-named parameters: 1052 -> 1046 over the turn; struct-typed functions: 120 -> 121.
