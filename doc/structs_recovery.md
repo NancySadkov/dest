@@ -5217,3 +5217,57 @@ are the halves of a pointer (`CONCAT12(param_2, param_1)`) that is never derefer
 `param_3` is unused, so those stay auto-named.
 
 Auto-named parameters: 663 -> 643.
+
+## 21 parameters: an entity matcher, two arena searches and a sprite-run blitter
+
+### `ovc25_usesAlignUp4` (5) - the cleanest entity lookup yet
+
+Every argument is matched against exactly one field, so there is no inference:
+
+```c
+if ((*(char *)((int)&peVar4[uVar5].base.entity + 3) == param_1) &&
+    ((*(byte *)((int)&peVar4[uVar5].base.flags32 + 1) & 2) == 0)) {
+  if ((alignUp4(entity.x) == alignUp4(param_2)) && (entity.y == param_3)) return uVar5;
+  if (alignUp4(entity.destX) != alignUp4(param_4)) return uVar5;
+  if (entity.destY != param_5) return uVar5;
+}
+```
+
+→ `partyIndex, x, y, destX, destY`.
+
+### The arena searches (3)
+
+`attact_textArena` compares `param_4` with the per-entity party byte and aligns `param_5` like
+an entity x, while `param_3` selects which `flags32` bit the search requires (0,1,2,3) -- so
+`partyIndex`, `x`, `mode`.  `param_2` is never read.  Its sibling `ovc25_textArena`'s `partyIndex`
+and `x` were named in the previous pass; this one adds the mode byte.
+
+### `ovc13_compute2` (3)
+
+`puVar1 = (undefined1 *)(param_1 + param_2 * 0x140)` and `CONCAT22(param_5, puVar1)` -- a screen
+pixel at (x, y) with the 320-byte pitch plus its segment, then four single-pixel writes at
++0x140/+0x141/+0x280/+0x281 selected by two bit masks.  `x`, `y` and `seg` are named; the two
+masks are not, because one value with one effect is not a name.
+
+### `ovc43_usesStExit` (2)
+
+It reads only its last two arguments and forwards them as the halves of the sheet pointer to
+`ovc43_usesFmFreeAudio(undefined4 gindex, char_sheet_t * sheet, uint16_t sheetSeg)`, so
+`sheetOfs`/`sheetSeg`.  They are deliberately **not** retyped: both are 2-byte parameters and a
+4-byte pointer in the first slot would consume the second (the documented widening hazard).
+
+### `blit_usesStExit` (8) - pinned by the call sites
+
+`constr_usesScreenOriginY` calls it with a horizontal run:
+
+```c
+blit_usesStExit(gfx_11, SquareLeftX[i], RowScreenY[i] - off1, shades[i],
+                SquareRightX[i], RowScreenY[i] - off2, shades[i], &BlitRects[3].x, 0x10);
+```
+
+so slots 2..7 are two `(x, y, shade)` endpoints and the body's `if (param_5 < param_2)` swap
+carries `y` and the shades with the x -- exactly the `blit_usesBlitGfxN` family pattern, but
+with x as the ordered key.  The destination rect arrives as two 2-byte halves
+(`CONCAT12(param_9, param_8)`), so `rectOfs`/`rectSeg` rather than a retype.
+
+Auto-named parameters: 643 -> 622.
