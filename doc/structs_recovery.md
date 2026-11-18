@@ -5937,3 +5937,88 @@ pointer -- callers elsewhere pass `(byte)unaff_SS` there.  So `x` and `outFlagSe
 - `ovc45_textDone`'s `param_1` and `ovc45_textDone2`'s `param_1`: only ever tested `!= 0`.
 
 Auto-named parameters: 478 -> 466.
+
+## 65 parameters from the CRT, the driver and five game modules
+
+### The pointer-width hazard, re-confirmed
+
+`ovc18_textTypeLen` takes a 4-byte far pointer to a party sheet.  Renaming it with
+`/char_sheet_t *` applied a **2-byte near pointer** and Ghidra re-derived the parameter list:
+`param_4` changed from `int *` to `undefined2`.  The fix is the explicit far type:
+
+```
+48ac:0382	sheet	sheet	/char_sheet_t *32
+```
+
+`/char_sheet_t *32` is size 4 (like `/st.h/agnt_t *32`), so the nine-parameter layout
+(4 + 2 + 7*2 = 20 bytes) is preserved and `param_4` is `int *` again.  A second detail: a rename
+entry must use the variable's *current* name, so after the first attempt `param_1` no longer
+existed and the corrected line had to say `sheet`.  The audit's struct-argument count does not
+move for `*32` types (they are composites, not `Pointer` instances), which is why the metric
+stays at 137 while the declaration is now correct.
+
+### The CRT text primitives (12)
+
+| function | parameters | evidence |
+|---|---|---|
+| `__VALIDATEXY` | `y2, x2, y1, x1` | x bounded by `_video.screenwidth`, y by `_video.screenheight`, requiring `x2 >= x1` and `y2 >= y1` |
+| `__SCREENIO` | `width, srcOfs, srcSeg, dstOfs, dstSeg` | from `_puttext`: first arg is `(x2-x1)+1`, last two are the `__VPTR(y,x)` halves |
+| `__write` | `fd, bufOfs, bufSeg, count` | `uStack_e = CONCAT22(param_3, param_2)` builds a far pointer; `param_4 + 1 < 2` is the zero-length test |
+| `LUDIV_at_` | `dividendLo, dividendHi, divisorLo, divisorHi` | fast path divides `CONCAT22(param_2,param_1)` by `param_3`; the loop subtracts `param_4:param_3` from the remainder |
+| `__INITEXTMEM` | `sizeLo, sizeHi, baseLo, baseHi` | `(param_4:param_3) + (param_2:param_1)` stored as base then top |
+
+### The driver and OVC42/OVC45/OVC34 (20)
+
+- `constr_compute1/2` get `cornerA/cornerB/cornerC, flags, bit`: call sites pass three corner
+  samples plus a mask and a literal 1 or 2, which also **lifts the earlier `flags & bit`
+  refusal** -- the AND is not symmetric once the fifth slot is always a single bit.
+- `ovc42_usesBlitGfxRect` gets `exitCode, paletteOfs, paletteSeg`: its callers pass a literal
+  0 or 3 and `CONCAT22(unaff_SS, (int)palette)`, and the body rebuilds the 4-byte palette
+  pointer before calling the already-named `...VgaSetPalette8bit`.
+- `ovc42_usesBlitGfxRect2` gets `flag` (sets bit 0 of a flags word) and `level` (a non-zero
+  value replaces the level that would be read from the 0x95-stride table, then indexes the
+  stride-4 level table).
+- `unit_usesAlignUp42` gets `menuIndex, x, y`: it indexes the 0x744/0x749 per-menu tables and
+  builds a 0x13-stride square record from `alignUp4(x)` and `y`.
+- `ovc41_textParalyzed` gets `strength` (clamped to the target's own strength; only a stronger
+  attack paralyzes).
+- `bldng_usesBldng` gets `bldTypes, entries, count`: a selection sort over a stride-2 word array
+  and a parallel stride-4 far-pointer array, both swapped together.
+- `ovc22_usesAlignUp4` gets `unitType` (compared with `GUnits[..].unitType`) and `mask` (OR of a
+  +/-2 `GMapFlags` window).
+- `ovc22_usesAlignUp42` gets `xOut`, `yOutOfs`, `yOutSeg` (it writes the aligned x through
+  `param_1` and the record y through the split pointer).
+- `ovc22_usesLUDIV_at_2` gets `valueLo`, `valueHi` (the pair passed to `LUDIV_at_` as the
+  dividend's low and high words).
+- `ovc45_usesAlignUp4` gets `slotMin, x, y, entityIndexOut` -- it finds the lowest party slot
+  strictly above `slotMin` at a cell.
+- `ovc45_usesGMapFlags5` gets `mode, x, y`; `ovc45_usesGMapFlags4` `x, y`;
+  `ovc45_usesLand_info` `screenX` (`(x - 9) / 0x30`, 0x30 = the 48-pixel cell).
+- `ovc45_textChoosePartyBuild` gets `x, y, entityIndexPtr`; `ovc43_textToymaker` `fileId`
+  (`ovr_stshOpen(param_1)`).
+- `stats_compute6` gets `x, y` (forwards into `video_usesAgntCount`, whose other caller passes
+  `MouseX-0xc, MouseY-7`).
+- The two `ovc45_textDone` screens get `x` and `outFlagSeg` (the fifth argument of
+  `createConstructionRecordFar` is the segment half of its outFlag pointer; other callers pass
+  `(byte)unaff_SS`). `textDone2` also gets `entityIndex`.
+- `manage_usesGUnitCount` gets `resource1Count/resource2Count/resource3Count/recordCount`
+  (split by `bldtp_t+0x23`), while its `param_4/param_6/param_8` are the never-dereferenced
+  segment words of the caller's output pairs.
+- `ovc23_usesCornerBR/CornerBR2/usesGMapFlags` get `x` (and `step` for CornerBR2);
+  `ovc23_usesGUnits` `x, y`; `ovc23_usesGfxRndSeed2` `x, y`; `ovc23_usesAlignUp44`/
+  `ovc23_compute2` `x, y`; `ovc23_usesAlignUp4` `x, y, excluded`.
+
+### Refused in the same pass, with the obstacle
+
+| candidate | why |
+|---|---|
+| `ovc18_textTypeLen`'s `param_3..param_9` | only `param_4` (`-= stack`) and `param_8` (`+= 1`) are written and `param_6/7/9` are never read; `param_3`'s low byte is forwarded into `ovc18_textBathHouse`'s already-refused flag slot |
+| `ovc41_textParalyzed`'s `param_1`/`param_2` | the body sets the target's timer on `param_2` (so it is the victim) while the message reads `agnt_textHeld(param_1, victimName)` first -- the two disagree, so neither slot is named |
+| `ems_memmove1/2` (6 each) | the INT 67h register block assigns `param_1/param_2`, `param_3/param_4`, `param_5/param_6` to `emms_var05c1/05c3`, `05ba/05bc`, `05b3/05b5`, and call sites disagree on which pair is source |
+| `blit_compute1`'s remaining 11 | they depend on locals of `blit_usesStExit`, itself an unresolved dither blitter |
+| `ovc22_textRingProt` (7) | unstable decompilation, unchanged |
+| `ovc43_usesStshSeek` / `ovc43_usesBiosKeyAvail` (8) | three of each four arguments are forwarded into `ovc43_usesStExit`'s **unused** parameters |
+| `ovc15_usesRandBelow` (4) | it fills a two-word sound out-pair and branches on two mode flags whose meanings are not stated |
+| `ovc49_body1` (5) | the batch decompiler times out on it |
+
+Auto-named parameters: 466 -> 401.
