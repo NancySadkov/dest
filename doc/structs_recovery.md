@@ -1142,3 +1142,32 @@ ovr_play_sfxU(((agntG_t *)paVar5->gdata)->actSound,0,uVar4);
 ```
 
 Generated struct fields: 44 -> 43 (`agntG_t` 2).
+
+## Parameter names from body and call sites
+
+`agnt_3b1d_005e(int x)` clamps its argument to `[0, 0xd2]`, and every caller
+passes the record's first word, which is `agnt_t.x`:
+
+```c
+copy = agnt_3b1d_005e(*(undefined2 *)(agentRecord));   /* ovc49 */
+iVar4 = agnt_3b1d_005e(*param_1);                      /* ovc15, *param_1 = x */
+```
+
+`agnt_3b1d_0032(int y)` clamps to `[0xc, 0xde]` and indexes the row table with
+`table[(v - 0xc) * 2 + 0x34c]`, i.e. it maps a vertical coordinate to a screen
+row.  Both names are now visible in the decompiled bodies:
+
+```c
+int __cdecl16far agnt_3b1d_005e(int x) { if (x < 0) x = 0; if (0xd2 < x) x = 0xd2; return x; }
+undefined2 __cdecl16far agnt_3b1d_0032(int y) { if (y < 0xc) y = 0xc; ... }
+```
+
+Auto-named parameters: 1227 -> 1225.
+
+### Examined, not named
+
+- `2000:06D2`/`06D4` (`ovc13`): copies of the BIOS tick counter's low and high
+  words (`BDA_DailyTimeCounter`), written once and never read in any exported
+  module.  Two such copies exist (`06CD`/`06CF` too), so which timer each
+  snapshot belongs to is not established; they stay unnamed rather than being
+  given a shared name that hides that.
