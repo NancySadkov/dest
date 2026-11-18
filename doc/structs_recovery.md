@@ -5366,3 +5366,49 @@ _param_5 = (int *)CONCAT13(..., CONCAT12(param_6, param_5));
 | `__setargv` | carries *Unable to track spacebase fully for stack* and an untracked jumptable |
 
 Auto-named parameters: 600 -> 589.
+
+## 12 parameters from a store-to-global scan and four short bodies
+
+A new scan looked for parameters stored straight into an **already named global** (filtering
+out locals and generated global names).  It found four, three usable:
+
+```c
+ovc42_usesAlignUp4:     partyIndex   = param_1;
+audio_textMidiError:    CurrentTrack = param_1;
+__setargv:              __setargv_SavedES = param_1;
+```
+
+so `partyIndex`, `track`, `savedES`.  (The fourth hit, `ovc28_usesUiInputText`'s `param_5`,
+stores into a stack local, not a global.)
+
+### `stats_compute1/2/3` (3, retyped)
+
+All three read `agnt->gdata` (`+0x1d`) and `agnt->entity` (`+0x17`), and return a difficulty
+character from the class byte at `gdata+0x46` and the level at `entity+0xf`:
+
+```c
+if ((*(char *)((int)*(undefined4 *)(iVar2 + 0x1d) + 0x46) == '\x04') &&
+    (0xb < *(byte *)((int)*(undefined4 *)(iVar2 + 0x17) + 0xf))) { ... }
+```
+
+so the argument is an `agnt_t *`.  It was already `undefined4` (4 bytes), so the retype is
+size-neutral and moves no argument -- struct-typed arguments 134 -> 137.
+
+### `attact_compute3` (4)
+
+```c
+*pctOut = (byte)(((0x1c - *(char *)(table + index + 9)) * 100) / 0x1c);
+iVar1   = (int)*(char *)(table + index + 9) << 1;
+*remainderOut = ('d' - *pctOut) - *in_stack;      /* 'd' is 0x64 = 100 */
+```
+
+→ `table`, `index`, `pctOut`, `remainderOut`; its sibling `attact_compute2` is the same
+computation with the table fixed at `data_2000_BSS_0744/0749`.  `param_4` is never read.
+
+### Two one-liners
+
+`ovc15_loop1` takes a byte offset, halves it (`param_1 >> 1`, i.e. 2 bytes per cell) and uses it
+to index a 0x69-stride table of 10 rows -- `vramOfs`.  `ovc07_compute2` is a sign function
+(-1 / 0 / 1 for `<0`, `<1`, else), so its argument is the `value` whose sign it returns.
+
+Auto-named parameters: 589 -> 577.
