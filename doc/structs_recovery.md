@@ -1319,3 +1319,33 @@ Generated struct fields: 41 -> 40.
 `SetFieldType` needs the full type path with a leading slash; passing
 `stdint.h/uint8_t` fails silently as "typed=0 failed=2" until corrected to
 `/stdint.h/uint8_t`.
+
+## `bldtp_t+0x0e`/`+0x0f` = build duration floor and value
+
+The building instance records are `0x12` bytes and carry the building type at
+`+8` — `bldtp[record[8]]->resource` is what ovc21 compares against the requested
+goods — and a progress counter at `+0x11` tested against the duration at `+6`:
+
+```c
+if (record[0x11] + 1 < record[6]) { record[0xe] = 2; ... }   /* ovc02_draw */
+```
+
+The duration itself is the type's value clamped to a floor:
+
+```c
+v = bldtp->buildTime;  if (v == 0) v = 1;
+record[6] = (v < bldtp->minBuildTime) ? bldtp->minBuildTime : v;   /* ovc22 */
+```
+
+so `+0x0e` is `minBuildTime` and `+0x0f` `buildTime`.  Generated struct fields:
+40 -> 38.
+
+## Four index parameters
+
+`agnt_3b1d_1035`, `15bd`, `16cd` and `177f` do not take records: they multiply
+their argument by the `0x34` record stride or compare it against an index stored
+in a grid.  Renamed to `index` / `agntIndex`.  The live decompile of `1035` also
+shows its full prototype `(byte index, brect_t *param_2, undefined2 param_3)`,
+which the older export had truncated to one parameter.
+
+Auto-named parameters: 1196 -> 1192.
