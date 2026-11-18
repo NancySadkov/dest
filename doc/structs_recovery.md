@@ -2679,3 +2679,53 @@ fully` and `Type propagation algorithm not settling`, and its locals confirm it:
 an entity index (`Entities[(int)local_c].base.y`), a `far_t *` and a byte
 (`(char)local_c`) in different places.  Naming any of them would encode one of those
 contradictions, so the function stays untouched.
+
+## Twelfth pass: the sprintf-destination family
+
+A scan of the stored locals against the fresh export found 35 of them in one role: the
+**destination of `sprintf`/`stsprintf`**.  That is a single, mechanical piece of
+evidence, so they were named in one batch rather than one function at a time.
+
+### `msg` (28)
+
+Every one of these is the first argument of a formatting call, i.e. the buffer that
+receives the rendered text:
+
+| function | local | function | local |
+|---|---|---|---|
+| `gameProcessKey` | `local_52[80]` | `manage_4d05_056e` | `local_7e[120]` |
+| `copyProtectionCheck` | `local_5c[80]` | `manage_4d05_2bc4` | `local_106[256]` |
+| `OVC13_3d16_1558` | `local_7a[80]` | `manage_4d05_330c` | `local_106[256]` |
+| `attact_3f0b_18fe` | `local_56[80]` | `OVC25_5b66_085d` | `local_68[81]` |
+| `saveui_4528_120d` | `local_16[20]` | `OVC25_5b66_173b` | `local_54[81]` |
+| `OVC23_55fe_2e4c` | `local_56[80]` | `OVC25_5b66_1929` | `local_56[81]` |
+| `OVC27_5ded_0a05` | `local_aa[151]` | `OVC28_6018_0251` | `local_104[128]` |
+| `OVC27_5ded_0fd2` | `local_7a[120]` | `OVC27_5ded_105e` | `local_7a[120]` |
+
+plus the remaining entries of the same shape.  Live check:
+
+```c
+char msg [80];
+pcVar2 = ovr_stsprintf(msg, unaff_SS, (char *)"The seed is %lx.");
+```
+
+### `text` / `text2` (7)
+
+These are the destinations of the ellipsis-truncation helper (`OVC45_77eb_226e`) or of
+the text-draw call (`OVC15_4207_1c79`), i.e. buffers that are displayed rather than
+formatted: `55fe:2e4c`, `6018:0251`, `6018:0456`, `6018:0813`, `67e7:004d`.  Two of
+them collided with an existing `text` in the same function and became `text2`:
+
+```
+FAIL 55fe:2e4c local_a6 : DuplicateNameException: A Local Var symbol with name text
+     already exists in namespace OVC23_55fe_2e4c
+FAIL 67e7:004d local_58 : ... already exists in namespace season_67e7_004d
+```
+
+### Not in the batch
+
+`fmVsprintf` (`474a:0953`) also formats into a local (`local_d0[200]`), but that local
+sits inside the formatter itself, where the buffer holds padding state rather than a
+message; it was left out deliberately.
+
+Auto-named locals: 213 -> 177.
