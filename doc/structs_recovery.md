@@ -2360,3 +2360,48 @@ Auto-named locals: 251 -> 236.
 - `bios`'s `local_8` is the `_wherexy()` result handed to `moveto`, while `local_4` and
   `local_6` are `screenpos()` results for the two cursor addresses; these are CRT
   internals whose roles are already expressed by the calls themselves.
+
+### Ninth pass: the manage-result tables and the structure-name copy
+
+`manage_4d05_26f6` copies the result-label table, re-lays it as far pointers and copies
+the thirty structure names:
+
+```c
+F_SCOPY(ManageResultPtrs, ..., resultPtrs);           /* 0x14 bytes = 5 pointers as words */
+uVar7 = resultPtrs[i * 2];
+menuItems[i].seg = resultPtrs[i * 2 + 1];
+(menuItems + i)->ofs = uVar7;
+structNames[i * 2 + 1] = *(undefined2 *)((int)&GStructures[0].name + 2 + i * 6);
+structNames[i * 2]     = uVar4;
+... ovr_OVC28_6018_1398(menuItems, ...);
+```
+
+Live check:
+
+```c
+uint16_t resultPtrs [10];
+far_t menuItems [5];
+undefined2 structNames [60];
+```
+
+Auto-named locals: 236 -> 233 (251 at the start of the turn).
+
+## Struct fields re-examined in the fresh export (no name added)
+
+Each of the remaining generated fields was searched again in `tmp/decompiled5`, this
+time with the accesses that only appear through typed pointers:
+
+| field | every access found | conclusion |
+|---|---|---|
+| `agnt_t+0x11` | writes `0`, `1`, `randBelow()`; reads are only `== 0` tests in five functions | a flag/selector whose subject is never computed with; unchanged refusal |
+| `agnt_t+0x2a` | one read, `peVar24[0xb4].base.field_0x2a == 0` | equality only |
+| `agnt_t+0x24` | written `1` on the orders-cleared path and `2` on the strength-zeroed path, tested `!= 2` | three-state byte, each name would cover one meaning |
+| `agnt_t+0x25` | `== 0`, `!= 1`, `!= 2`, `< 2` | state byte, comparison only |
+| `bldtp_t+0x0c` | `== 2` in the placement checks | equality only |
+| `char_sheet_t.pad_40` | `sheet->pad_40[0] = 1` in `OVC30_619c_0339` and `OVC43_6fbe_0000` | write-only |
+| `char_sheet_t.pad_0` | `*(int *)(sheet->pad_0 + 0x1b)` compared with an agent owner; in `OVC43_6fbe_0000`: `*(int *)(param_2->pad_0 + 4) - 0xb`, `param_2->pad_0 + 6`, and `param_2->pad_0 + *(int *)uStack_6->pad_0` | the block is indexed as an array and holds dwords at `+4` and `+0x1b`; what those dwords mean (an owner index and an index into another sheet's block) does not name the 40-byte region |
+
+The `pad_0` evidence is new: `OVC43_6fbe_0000` treats it as an *indexed base*, so the
+block is not padding but an array of records whose element index comes from another
+sheet.  That is a real step towards it, but a name would still be an interpretation of
+who those records describe, so none is applied.
