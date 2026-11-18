@@ -1322,3 +1322,40 @@ Auto-named globals: 536 -> 360.
 Any code that indexes an asset by a number can now be read through this table: the id to
 file name mapping is data, not inference.  `stshOpen(file_id)` reads
 `*(u16 *)(file_id * 4)` as the name pointer, which is exactly `StshNames[file_id].ofs`.
+
+## Batch - the transparency-remap cuts and the cached upper-case text
+
+The first asset batch only followed `grabLbm(id)`, so the cuts made from a **transparency
+remapped** load (`grabLbmTR(id)`) were missed.  Same table, same rule:
+
+```c
+psVar1 = ovr_grabLbmTR(10);                        /* id 10 = nwpanel2.lbm */
+pfVar2 = ovr_stshRleType2(..., 7, 222, 150, -12, -7, ...);
+nwpanel2Cut1Ofs = ovr_stshStoreFile_2((uint8_t *)pfVar2);
+nwpanel2Cut1Seg = puVar7;
+```
+
+22 more globals:
+
+| source | globals |
+|---|---|
+| `nwpanel2.lbm` (id 10) | `nwpanel2Cut1Ofs` / `Seg` |
+| `triangls.lbm` | `trianglsCut1..6Ofs` / `Seg` |
+| `panel01.lbm` | `panel01Cut1..3Ofs` / `Seg` |
+
+### The cached upper-case text buffer
+
+`OVC15_4207_1c16` upper-cases a string for display and keeps it in a persistent block:
+
+```c
+sVar2 = strlen((char *)text);
+puVar3 = ovr_stshRealloc(_word_2410_1D05, sVar2 + 1);
+_word_2410_1D05 = CONCAT22(in_DX, puVar3);
+strcpy((char *)puVar3, in_DX);
+uVar1 = toupper(*_word_2410_1D05);
+```
+
+and `freeLeaderData` / `draw_usesRingBuffer` free the pair as one handle, so it is
+`upperTextOfs` / `upperTextSeg`.
+
+Auto-named globals: 360 -> 338.

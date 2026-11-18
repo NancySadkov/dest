@@ -4019,3 +4019,34 @@ This is a better source of names than body-reading wherever it exists, so the ne
 will start by harvesting these comments and then work outward through each module's callers.
 
 `doc/functions_renamed.tsv` is updated with the whole driver batch.
+
+## Struct fields re-examined with the named functions (no rebuild)
+
+`char_sheet_t.pad_0`: every access in `tmp/decompiled19` is one of three:
+
+```
+manage_textTotal:   *(int *)(sheet->pad_0 + 0x1b)  !=  *(int *)(agent * 0x34 + 0x1b)
+ovc43_usesFmFreeAudio: pcVar5 = (char_sheet_t *)(sheet->pad_0 + 6);
+                       uVar6  = *(int *)(sheet->pad_0 + 4) - 0xb;
+```
+
+The `+0x1b` comparison is **not** proof of a dword: on the agent side `+0x1b` is the word
+`owner` followed by the low word of `gdata`, so the decompiler widened a word comparison.
+Splitting `pad_0` into `byte[0x1b]` + `owner` + `byte[9]` would therefore encode a guess
+about the width and add two generated components to name one field.  Not done.
+
+`bldtp_t+0x0c`: the only consumer is
+
+```c
+if (bStack_3 < *(byte *)(bldType * 0x27 + 0x11c)) instance[+6] = *(byte *)(... + 0x11c);
+else                                            instance[+6] = bStack_3;
+```
+
+where `bStack_3` is taken from the *terrain* building type's `+0x0d` (`size`).  So the field
+is a lower bound on the build duration - but the neighbouring `+0x0e` is already named
+`minBuildTime`, and calling both minima would be a contradiction.  Settling which one is
+the minimum needs a writer, and the export has none (the table is loaded data).  Refused,
+with this evidence recorded.
+
+`bldtp_t+0x24`: only `& 0x80`; `agntG_t+0x52`/`+0x94` and the `anm_t` block keep their
+earlier refusals.
