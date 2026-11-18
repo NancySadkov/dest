@@ -5575,3 +5575,40 @@ a finding.
 declared type stays a 2-byte pointer because widening it would change what callers push.
 
 Auto-named parameters: 559 -> 558.
+
+## Correction: the `+0x94` word write is in `pad_8e`, not `pad_5e`
+
+An earlier note in this document described a 16-bit write at "`char_sheet_t+0x94`
+(`pad_5e`)".  The two numbers are different: `AuditTypes` prints component offsets in
+**decimal**, so `pad_5e` is at 94 = `0x5e`, while the code's `+ 0x94` is 148 -- inside
+`pad_8e` (142..159), six bytes in.  `pad_5e` therefore has **no access anywhere** in the
+export, and the word write belongs to `pad_8e`.
+
+## The four lettered pads, checked by code offset
+
+`AUTO_FIELD` only matches `pad_\d+`, so `pad_5a`, `pad_5e`, `pad_8e` and `pad_a4` are
+generated fields the audit does not count.  Their code offsets are `+0x5a`, `+0x5e`, `+0x8e`
+and `+0xa4`, and searching those finds real accesses:
+
+| pad | offset | evidence |
+|---|---|---|
+| `pad_5a` | `+0x5a` | `*(char *)(sheet + 0x5a) = param_1` in `ovc18_textFortressCannotPlaced`, with a separate `= 1` branch when the argument is 2: a mode byte whose two values are the only evidence, so refused |
+| `pad_5e` | `+0x5e` | **no access at all** |
+| `pad_8e` | `+0x8e` | `if (*(int *)(sheet + 0x8e) == 0) { piVar = (int *)(sheet + 0x8e); ... }` -- a 32-bit field whose address is taken, plus a 16-bit write six bytes in (the `+0x94` above); it behaves like a far pointer but is never built from an ofs/seg pair, so refused |
+| `pad_a4` | `+0xa4` | `ovc22_usesPlayerCount`: `bVar2 = PlayerCount / 2 + 1; if (10 < bVar2) bVar2 = 10; *(byte *)(sheet + 0xa4) = bVar2;` and readers add it to another byte; the formula is pinned but what the number *is* is not stated |
+
+## `driver_compute5`'s six slots (6)
+
+Its only call site groups the arguments as (x, y) pairs, and the body sorts exactly the three
+second elements:
+
+```c
+ovr_driver_compute5(0x12e, row1, ofs2, y1, 0x126, row1 + 8);
+/* body: if (param_4 < param_2) { param_4 = param_2; param_2 = bVar1; } ... param_6 ... */
+```
+
+so `x1, y1, x2, y2, x3, y3` -- three vertices sorted by y for a scanline fill.  This is the one
+case where the earlier refusal was lifted: the call site shows the pairing, and the body's sort
+of the even-numbered arguments confirms which ones are the y values.
+
+Auto-named parameters: 558 -> 552.
