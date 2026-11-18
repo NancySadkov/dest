@@ -565,3 +565,10 @@ Examined and left unnamed in the same pass:
   `MOV AL,[0x896d]; IMUL 0x34; ADD AX,0x26; MOV [0x897e],AX` and then that
   value is used as a *row* into the `0x34c` table.  The distance between
   "agent index" and "row coordinate" is unresolved, so it stays unnamed.
+
+The name is visible in the live decompile of the consumer, which also shows the
+whole table is copied into locals before use:
+
+    F_SCOPY((far_t *)RankMsgPtrs, ..., &local_5c)        /* entries 0..14  */
+    F_SCOPY((far_t *)(RankMsgPtrs + 0xf), ..., local_6c) /* entries 15..18 */
+    F_SCOPY((uint8_t *)0x6b86, ..., &local_14)           /* 10 bytes after  */
