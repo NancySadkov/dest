@@ -4319,3 +4319,80 @@ byte array at `+0x29` holds the six ability scores.
 | `ovc22_textRingProt` | unchanged: flagged-unstable decompilation, and `param_4`/`param_5` are the halves of a far byte pointer |
 
 Auto-named parameters: 844 -> 795.  Struct-typed arguments stay at 130.
+
+## Per-body reading continued: the table parameters (15)
+
+### The 0x222B requirement table
+
+`ovc27_usesRandBelow3`'s second parameter is a far pointer into segment `0x222b`, and
+every call site shows the same table:
+
+```c
+ovc27_usesRandBelow3(agnt, 0x222b0108, param);
+ovc27_usesRandBelow3(agnt, 0x222b014a, param);
+ovc27_usesRandBelow3(agnt, CONCAT22(0x222b, recIndex * 0x21), 3);
+```
+
+0x108/0x21 = 8 and 0x14a/0x21 = 10, so the records are 0x21 bytes.  The body reads
++8 (a kind 0/1/2 that selects the `agntG_t.flags` bit 2/1/0x800), +9 (an index into the
+`reqLevel1`/`reqLevel2` rows copied from 0x59AA/0x59B4), and the mask words +0xf, +0x13,
++0x15, +0x17, +0x19, +0x1b, +0x1d.  So the parameter is `reqRecord`.
+
+### The menu text table
+
+`saveui_usesBlitLoadRleGfx2` and `saveui_usesMouseMoved` share one shape:
+
+```c
+puVar1 = (undefined2 *)((int)param_1 + (row + param_3) * 4);
+ovr_blitText((char *)*puVar1, (byte *)puVar1[1], Font03.ofs, (uint8_t)Font03.seg);
+TextBlitY = param_2 * 0xf + 0x1d;          /* 15-pixel row pitch */
+dst.ofs  = param_2 * 0x12c0 + 0x2096;      /* 0x12c0 = 15 * 320 */
+```
+
+so `param_1` is the far-pointer table, `param_2` a row and `param_3` an item offset.  The
+callers confirm it: `uiMenuSub` passes `GMenuItem - 1`, and `saveui_usesMouseMoved` passes
+`(MouseY - 0x1a) / 0xf`.  In `saveui_usesMouseMoved` the *entered* `param_2` is only a
+vertical bound (`MouseY <= param_2 * 0xf + 0x19`), so that copy is `rowLimit` while the row
+actually drawn comes from `MouseY`.
+
+### Two CRT arguments
+
+| function | parameter | evidence |
+|---|---|---|
+| `_brk_normalize` | `brkOfs`, `brkSeg` | `_brklvl.ofs = param_1; _brklvl.seg = param_2;` and `(param_2 - _psp) >> 6` |
+| `__crtinit` | `videoMode` | `_video.currmode = param_1`, then `if (param_1 != _video.currmode)` to detect a rejected mode |
+| `ovc28_usesUiInputText` | `entries`, `count`, `flags` | forwarded at the same positions into `uiInputText(far_t *entries, short count, byte *hint, byte flags)` |
+
+### The per-entity party slot: a new field fact and a typing inconsistency
+
+`ovc45_textDone` reads a byte from an entity record and hands it to `ovc28_textGold`:
+
+```c
+byte_2410_DATA_DGROUP_5CEF =
+    *(undefined1 *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+...
+if (byte_2410_DATA_DGROUP_5CEF != 0xff) ovc28_textGold(byte_2410_DATA_DGROUP_5CEF);
+```
+
+`ovc28_textGold(byte partyIndex)` indexes the 0x217A party table and formats
+`sheet[partyIndex] + 0x56/+0x58` as a decimal, so the byte must be a party slot in 0..4 or
+0xff.  `bldng_textArena` compares its second argument against the same byte, and its only
+caller passes the party index of `bldng_usesBldng` -- which resolves that earlier refusal.
+
+The inconsistency to record: `agnt_t.entity` is typed `entity_t *32` at +0x17, so its byte
++3 is the high byte of the far pointer's segment, not a slot.  Either the field is not a
+4-byte far pointer there, or the decompiler renders a raw byte access that way.  The value's
+range (0..4/0xff, consumed by a function that needs a party index) rules out the segment
+reading, so the layout needs a disassembly check before `entity` is retyped.
+
+### Refused in this pass
+
+| candidate | why refused |
+|---|---|
+| `agnt_usesStExit` `param_2`, `param_3` | `param_2` is read as ints at +0xf/+0x11/+0x1c and `param_3` at +5; the only caller passes a record that `ovc49_usesBlitGfxRect` reads at +0x19/+0x1b/+0x1c/+0x1d, which is the `anm_t` block this project already recorded as unreadable |
+| `ovc18_textBathHouse` `param_3` | compared with 6 and 0xb to pick a graphic **and** used as the upper bound of the anims walk -- two incompatible roles |
+| `ovc18_textBathHouse` `param_5` | only ever compared with 2 |
+| `stats_usesAlignUp42` `param_2` | *Control flow encountered bad instruction data* + overlapping instruction |
+| `setvbuf` `param_2`/`param_3`/`param_4` | the decompiled signature splits the far buffer into ofs/seg words; naming them CRT buffer halves would not teach the game model anything |
+
+Auto-named parameters: 804 -> 780 over the two batches.

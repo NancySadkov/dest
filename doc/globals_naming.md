@@ -1496,3 +1496,68 @@ low half.  Auto-named globals: 327 -> 323.
 - `0x59AA`/`0x59B4` (copied into `reqLevel1[10]`/`reqLevel2[10]`) are rows of a packed level
   table, not strings: the bytes there are `05 0D 0E 0D 10 ...`, so naming them would mean
   naming a table whose column meaning is not stated.
+
+## Batch - season, menu, redraw, party slot and six asset blocks (13)
+
+### `seasonGroupBase` (2410:0744)
+
+```c
+uVar1 = ovr_randBelow(3);
+srcSeg = (uVar1 & 0xff) * 3;
+seasonGroupBase = (undefined1)srcSeg;        /* 0, 3 or 6 */
+...
+gfx.ofs = ((undefined2 *)&l1Cut1Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
+iVar4   = iStack_e * 0xc + (uint)GSeason * 4;   /* 0xc / 4 = 3 seasons per group */
+```
+
+It is one of three 3-season groups in the `l1Cut1/l1Cut2/l1Cut3` art tables, it is saved to
+the save game, and it is added to `GSeason` everywhere it is used.
+
+### `savedMenuItem` (2000:003D)
+
+Six screens store `GMenuItem` into it on exit and two restore `GMenuItem` from it on
+re-entry (`GMenuItem = savedMenuItem`), so it is the menu selection kept across screens.
+
+### `mapDirty` (2410:648E)
+
+```c
+if (mapDirty != '\0') {
+  mapDirty = '\0';
+  ovr_driver_scan4((short (*)[60][148])GMapFlags, 0, 0, 0x93, 0x3b, 0xfff7);
+  for (uStack_c = 0; uStack_c < EntityCount; uStack_c++) { ... }
+}
+```
+
+Ten state-changing screens set it to 1; this one place consumes and clears it by redrawing
+the map and every entity.
+
+### `goldPartyIndex` (2410:5CEF) and `selectedPartyIndex` (2410:74AC)
+
+`5CEF` is loaded from the per-entity party-slot byte, tested against 0xff and passed to
+`ovc28_textGold`, which indexes the 0x217A party table and formats that sheet's
+`+0x56/+0x58` -- the gold value.  `74AC` is stored from the chosen entity's same byte and
+compared against another entity's to find the member's entity.
+
+### Six asset blocks
+
+| globals | name | evidence |
+|---|---|---|
+| `2000:0A48/0A4A` | `demfont1FontOfs/Seg` | `grabLbm(411)` = `demfont1.lbm`, then `stshProcessFontSub`, then `stshWrite(pfVar2, puVar9, FontSize)` |
+| `2000:0A50/0A52` | `sky06FliOfs/Seg` | `stshStoreFile_3(StshNames[0x19f])` and entry 415 is `sky06.fli` |
+| `2000:0798/079A` | `specialColorsOfs/Seg` | `stshWrite((uint32_t *)SpecialColors, ..., 8)`, later `init_special_graphics(ofs, seg)` |
+| `2410:07E3/07E5` | `audioSaveCut1Ofs/Seg` | `stshRleCut(NULL, src, 7, 222, 77)` inside `agnt_usesFmFreeAudio` |
+| `2410:07E7/07E9` | `audioSaveCut2Ofs/Seg` | `stshRleCut(NULL, src_00, 78, 222, 150)` in the same call |
+| `2410:00D8` | `bigcompFrame` | `gfx_00 = LbmBigcomp50x42[bigcompFrame]` and `draw_textTalkwin9L` bounds it with `6 < bigcompFrame` (7 frames) |
+
+### Examined and refused in the same pass
+
+| global | why refused |
+|---|---|
+| `2410:07E2` | fifteen writes of 0..15 and **no read** anywhere |
+| `2410:5CF0`, `2410:5CE4`, `2000:0768` | toggled 0/1 by several UI screens; nothing states which condition the flag represents |
+| `2000:06E0` | assigned from four different calls and used both as an `LXMUL` operand and as a comparison bound; its role differs per site |
+| `2000:027A` / `027B` | set by bits 2 and 4 of `miceButton0PressStates`; the bit meanings (button vs edge) are not stated |
+| `2410:5DF4`/`5DF6` | used as a screen centre in `textDivideError` and copied into `GfxRndSeed` in `run_demo` -- two incompatible roles |
+| `2000:0998` | incremented on one condition and used as `*0x32 + 0x32` for a far pointer; the 50-byte table it indexes has no name |
+
+Auto-named globals: 320 -> 307.
