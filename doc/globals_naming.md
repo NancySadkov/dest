@@ -211,3 +211,14 @@ The disassembly confirms the base:
 
     5ded:1cc0  MOV AX,word ptr [BX + 0x5aed]     ; segment
     5ded:1cc4  MOV DX,word ptr [BX + 0x5aeb]     ; offset
+
+## Batch 13 - palette flash toggle
+
+2000:06D1 flips on every pass and selects one of two 3-byte colours for the
+palette call:
+
+    byte_2000_BSS_06D1 = 1 - (byte_2000_BSS_06D1 != 0);
+    ovr_vgaSetPalette(local_1e + (uint)byte_2000_BSS_06D1 * 3);
+    ovr_vgaSetPalette(local_18 + (uint)byte_2000_BSS_06D1 * 3);
+
+Named FlashToggle (2000:d105).
