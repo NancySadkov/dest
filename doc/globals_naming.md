@@ -1117,3 +1117,37 @@ Auto globals: 577 -> 575.
   (`*(int *)(sheet->pad_0 + 0x1b) == agent->owner`), which identifies a dword at
   offset 0x1b inside it but not the block's role; splitting it would encode that
   one comparison as the whole field's meaning.
+
+## Batch 53 - player count and the resumable entity scan
+
+`2000:08B2` is the number of players, which the init code ties to the difficulty:
+
+```c
+if (2 < Difficulty) { byte_2000_BSS_08B2 = 2; }        /* custom = two players */
+bVar2 = PlayerCount / 2 + 1;
+if ((int)(uint)PlayerCount < iVar28) { ... }
+```
+
+Named `PlayerCount` (`2000:d2e6`).
+
+`2410:55D6` is a scan position into the entity array that survives across calls:
+a routine starts from it, stops when it has done its work, and stores the index
+back so the next call continues:
+
+```c
+if (EntityCount <= EntityScanPos) { EntityScanPos = 0; ... }
+for (uStack_16 = EntityScanPos; uStack_16 < EntityCount; uStack_16 = uStack_16 + 1)
+    ...  EntityScanPos = uStack_16;
+```
+
+Named `EntityScanPos` (`2410:55d6`).  Both confirmed in the live decompile of
+`5087:056e` and with `ListSyms`.
+
+Auto globals: 575 -> 573.
+
+### `2410:648E` - examined, not named
+
+Six modules set it to 1 and `ovc34_unit` clears it while testing `!= 0`, i.e. a
+one-shot "something changed" flag with the same shape as `AgentsChanged`, but the
+setters do not say what changed and the consumer only calls an unnamed routine
+before clearing it.
