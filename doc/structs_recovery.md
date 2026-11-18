@@ -4146,3 +4146,58 @@ The 768 bytes (256 x RGB) are the type-level proof, independent of the calls.
   refused for inconsistent sizing.
 
 Auto-named locals: 152 -> 145.  No local remains whose only use is an unexamined call.
+
+## Parameters (second pass with named callees): 39 more
+
+Two cycles of `tmp/param_scan4.py` against `decompiled23`/`decompiled24`: role A is
+"stored into a recovered field", role B is "passed where the callee's parameter is named,
+unanimous over >=2 sites", role C accepts a **single** site only when the callee's
+parameter names a concrete recovered role (a coordinate, a colour, a party/unit/entity
+index, an out-flag, or an agent pointer).
+
+| function | parameters | evidence |
+|---|---|---|
+| `OVC45_77eb_0778` | `x`, `y` (12 sites each) | callers pass them where a drawing helper takes x/y |
+| `OVC45_77eb_0aea` | `x`, `y` (3 / 6 sites) | same |
+| `blit_317e_0db7` | `x`, `y` | same |
+| `init_3381_24c3`, `stats_6386_1c9f` | `x`, `y` | same |
+| `OVC07_32c9_03c4` | `x1`, `y1`, `x2`, `y2`, `colour` | passed as `fillRect`'s five arguments |
+| `OVC07_32c9_0466` | `ofs1`, `row1`, `ofs2`, `row2`, `colour` | passed as `drawLine`'s arguments |
+| `OVC15_4207_26bc`, `stats_6386_05d3` | `agntPtr`, `agnt` | passed where the callee takes `agnt_t *` |
+| `OVC22_5087_4975`, `OVC23_55fe_0000` | `partyIndex`, `outFlag` | the two roles of that pair |
+| `OVC26_5d45_06f0` | `outFlag` | passed as the out-flag |
+| `OVC23_55fe_0f39` | `unitIndex` | passed as a unit index |
+| `OVC45_77eb_1754` | `entityIndex` | passed as an entity index |
+| `OVC23_55fe_1ea9`, `23d8`, `OVC27_5ded_0cc2`, `OVC06_317e_1240` | `type` | the blit `type` argument |
+| `stats_6386_0411` | `term` | `blitLabel`'s terminator argument |
+| `saveui_69c8_0373` | `rect` | already typed `brect_t *`, passed where the callee calls it `dst` |
+| `OVC49_8699_1753` | `count` | five sites pass it as a count |
+
+### The collision that RenameVars is supposed to catch
+
+Typing `OVC41_6a8f_2084`'s first parameter as `agnt_t *` and naming it `agnt` failed:
+
+```
+FAIL 6a8f:2084 param_1 : DuplicateNameException: A Local Var symbol with name agnt
+     already exists in namespace ovc41_textOnlyPlaceSingle
+```
+
+The function already had a local `agnt` from an earlier pass, so the parameter became
+`agntPtr` instead - and because `RenameVars` applies the type before the name, the type had
+already landed, which the signature confirms:
+
+```c
+byte * ovc41_textOnlyPlaceSingle(agnt_t * agntPtr, int agntIndex)
+```
+
+### Refused in this pass
+
+- `OVC22_5087_056e`: the vote offers `partyIndex`, `dst` and `type`, but the function is one
+  of the two with flagged-unstable decompilation and its `param_4`/`param_5` are the halves of
+  a far byte pointer (`*(undefined1 *)CONCAT22(param_5,param_4) = 1;`), not a rect.  All of
+  its parameters stay as they are.
+- Role A hits that store into `.ofs`/`.seg` of a local `far_t` (12 cases) were not renamed:
+  `ofs`/`seg` would collide with the existing names in those functions and say no more than
+  the assignment already does.
+
+Auto-named parameters: 891 -> 852.  Struct-typed arguments: 128 -> 130.
