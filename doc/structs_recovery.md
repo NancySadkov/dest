@@ -4950,3 +4950,48 @@ and the region the decompiler emitted are not the same code.  The width therefor
 read off the listing, and the existing refusal (agent side is `owner` word + `gdata` low word)
 stands unchanged.  What would settle it is a byte-level dump of the 0x5ff50 region, which
 needs the overlay's load base -- not something the current tools expose.
+
+## The `char_sheet_t` pads re-examined at raw offsets
+
+The scan for `+ 0x52` / `+ 0x94` on the party-sheet pointer found real accesses that the
+field-name search could not see (the decompiler prints them numerically), and they are
+recorded here without names because both are ambiguous.
+
+### `char_sheet_t+0x52` (`pad_52`, byte) - two incompatible uses
+
+```c
+/* write, in textRingProt, with a sentinel */
+if (uStack_24 < (byte *)0x100) sheet[0x52] = (char)uStack_24; else sheet[0x52] = 0xff;
+/* read 1: a base value clamped by the agent's level and 36 */
+uVar2 = *(byte *)(sheet + 0x52) + 1;
+if (*(byte *)(agnt + 0xf) < uVar2) uVar2 = *(byte *)(agnt + 0xf);
+if (0x24 < uVar2) uVar2 = 0x24;
+piVar3 = (int *)(cls * 0x94 + uVar2 * 4);   /* 37 four-byte entries per class row */
+LUDIV_at_(*piVar3, piVar3[1], 0x1e, 0);
+/* read 2: a signed pixel offset */
+iVar = (int)*(char *)(sheet + 0x52) + -0x16;
+```
+
+Read 1 treats it as an index into a per-class table of 37 entries and clamps it to the agent's
+level; read 2 treats it as a signed byte and subtracts 22 to get a screen offset.  A level index
+and a pixel offset cannot be the same quantity, and nothing writes it with a value whose units
+are stated.  Refused.
+
+### `char_sheet_t+0x94` (`pad_5e`, byte[2]) - written as a word, read as a byte
+
+```c
+*(undefined2 *)(sheet + 0x94) = local_c;      /* 16-bit write, in textRingProt */
+CONCAT12((char)iVar28, *(...) + 0x94)         /* low byte read, three sites */
+```
+
+The 2-byte field being written as a word is consistent with a 16-bit value, but every read takes
+only the low byte, and the word write comes from a function that copies a dozen sheet fields at
+once (`+0x66`, `+0x68`, `+0x70`, `+0x72`, `+0x74`, `+0x87`, `+0x94`, `+0x96`, `+0x98`, `+0xaa`,
+`+0x52`, `+0x84`) -- i.e. a bulk copy whose source is a whole record, so the copy tells us the
+width but not the meaning.  Refused.
+
+### What did become certain
+
+`char_sheet_t+0x96..+0x99` is written as two consecutive words right after `+0x94`
+(`+0x96 = pfStack_a`, `+0x98 = uStack_8`), which confirms `foodStored` at +96 as a 4-byte field
+and confirms that `+0x94` is a field boundary rather than the start of a larger value.
