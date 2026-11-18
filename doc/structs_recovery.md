@@ -5271,3 +5271,53 @@ with x as the ordered key.  The destination rect arrives as two 2-byte halves
 (`CONCAT12(param_9, param_8)`), so `rectOfs`/`rectSeg` rather than a retype.
 
 Auto-named parameters: 643 -> 622.
+
+## 22 parameters: driver pixel blocks, a span fill, and three C streams
+
+### The driver pixel pair (8)
+
+`driver_compute3` and `driver_compute4` are the same four-pixel block with the two colours
+swapped on the second row:
+
+```c
+puVar1 = (undefined2 *)(param_1 + param_2 * 0x140);
+*puVar1 = CONCAT11(param_3,param_3);            (puVar1 + 0xa0) = param_3;   /* 0x140 bytes */
+(int)puVar1 + 0x141 = param_4;                 puVar1[0x140] = CONCAT11(param_4,param_4);
+```
+
+so `ofs` (screen base), `y`, `colour1`, `colour2`; `param_5` is never read in either.
+
+### `driver_loop1` (3)
+
+```c
+if (param_2 < param_1) swap(param_1, param_2);
+for (iVar3 = (param_2 - param_1) + 1; iVar3 != 0; iVar3--) *puVar4++ = param_4;
+```
+
+→ `x1`, `x2`, `colour`.  `param_3` is a base added as `seg + (seg >> 2)` with its bytes
+swapped (`CONCAT11`), which does not match a 16-byte paragraph conversion, so it stays
+auto-named rather than guessed.
+
+### Three C streams (3)
+
+`fseek(stream, ...)`, `fputc(c, stream)` and `__fputn(stream, n, buf)` -- the call-role scan
+found two, three and two agreeing sites for each.
+
+### `ovc25_usesAlignUp42` (4)
+
+```c
+if (*(char *)((int)&Entities[uVar4].base.entity + 3) == param_1) { ... }
+while ((iStack_4 < param_2) && (uVar4 = ovc25_usesAlignUp4(param_1,param_5,param_6,destX,destY), ...))
+```
+
+→ `partyIndex`, `count`, and `x`/`y` from position in the `ovc25_usesAlignUp4(partyIndex, x, y,
+destX, destY)` call whose own parameters were pinned last pass.
+
+### `gfxRlePrepare` and `ovc40_usesAlignToSeg` (4)
+
+Both complete a pointer from two 2-byte halves rather than taking one:
+`_param_4 = CONCAT13(..., CONCAT12(param_5, param_4))` and `CONCAT22(param_5, param_4)`, so the
+pairs are `rectOfs`/`rectSeg` and `textOfs`/`textSeg`.  Naming them as halves rather than
+retyping avoids consuming the neighbouring slot.
+
+Auto-named parameters: 622 -> 600.
