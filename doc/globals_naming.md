@@ -755,3 +755,21 @@ So three are genuine single-character newline literals, and the rest are labels
 sitting one or two bytes before the real object (a string, a struct, or the
 pointer table already named).  None of them is a meaningful nameable string, and
 they are left as they are rather than given invented text names.
+
+## Batch 39 - the music-path graphics pair
+
+`musInit` loads two graphics pairs and uses them for different things:
+
+```c
+MidGfxOfs = ovr_stshLoadGfx(_word_2000_BSS_0660);   /* fixed asset      */
+MidGfxSeg = in_DX;
+MIDHandle.ofs = audio_3a5b_0761(MidGfxOfs->cmap, in_DX, ...);
+
+MusGfxOfs = ovr_stshLoadGfx(handle);                 /* per music type   */
+MusGfxSeg = in_DX;
+MusHandle  = audio_3a5b_0761(MusGfxOfs->cmap, in_DX, ...);
+```
+
+The second pair therefore feeds only the music handle, so it is
+`MusGfxOfs`/`MusGfxSeg` (`2410:07C6`/`07C8`), while `07BE`/`07C0` stay the
+`MidGfx` pair that feeds `MIDHandle`.  Auto globals: 599 -> 597.
