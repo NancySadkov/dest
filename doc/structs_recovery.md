@@ -1948,3 +1948,20 @@ strcat(msg, unaff_SS);
 ```
 
 Auto-named locals: 317 -> 296 over the two passes.
+
+### Third pass: loop indices, an agent snapshot and a description buffer
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `OVC25_5b66_038d`, `OVC25_5b66_0530` | `local_4` | `entityIndex` | `for (local_4 = 0; local_4 < EntityCount; local_4++)` then `Entities[local_4]` |
+| `OVC15_4207_2301` | `local_3e` | `agents` | `_fmemmove(local_3e, ..., count * 0x34)` — a copy of the agent records by their stride |
+| `OVC49_8699_0874` | `local_aa[80]` | `text` | destination of `agnt_3b1d_0ac0(agnt, local_aa)` |
+| | `local_5` | `agntIndex` | filled by the hit tests whose `out` parameter is an index, then used as `local_5 * 0x34` |
+
+`OVC22_5087_056e` and `OVC22_5087_0234` were left alone: the first carries
+`Unable to track spacebase fully` / `Type propagation algorithm not settling`, and
+the second's `local_14`/`local_16` are a far pointer to a format string rather than a
+quantity.  `OVC40_69c8_023a`'s `local_d6[171]`/`local_2b[37]` are save/restore blocks
+copied out of a sprite and back, which describes the operation, not the data.
+
+Auto-named locals over the whole turn: 317 -> 291.
