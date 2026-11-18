@@ -246,3 +246,14 @@ It must not be given a name: the correct model fix is to drop the redundant
 label so those references resolve to `GStaticBuffer`.  That is a symbol cleanup
 (needs a remove-symbol pass), not a rename, and it is recorded here rather than
 papered over with a name like `PathScanBase`.
+
+## Batch 15 - RNG seed high word
+
+¡0:26E1\ is combined with GSeed as one 32-bit seed and refreshed from the
+BIOS timer:
+
+    word_26E1 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+    srand8(CONCAT22(word_26E1, GSeed));
+
+Named SeedHi.  ¡0:74AC\ (ovc45) has only a conditional and one assignment in
+the export and stays unnamed.
