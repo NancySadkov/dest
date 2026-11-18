@@ -1781,3 +1781,17 @@ It is compared for equality with the same selector as `unit_t.unitType`:
 the building field is the unit type that building relates to - the one it can
 provide.  Named `unitType`; `ovc18` breaking its scan on values 0 and 7 is
 consistent with `0` meaning none.  Generated struct fields: 37 -> 36.
+
+## `agnt_t+0x2d` = `visited`
+
+It is a per-search marker: one routine clears it for every agent, and a scan sets
+it as it examines each candidate so that no agent is considered twice in the same
+pass:
+
+```c
+if (((agent[0x2d] == 0) && (agent[0x1b] == param_1) && ...)) {
+    agent[0x2d] = 1;
+    ...
+```
+
+Generated struct fields: 35 -> 34.

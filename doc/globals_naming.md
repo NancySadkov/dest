@@ -1015,3 +1015,22 @@ pcVar1 = (char *)(agent + 0x23);
 Readers test it for zero, so it is a countdown `timer`.  `0x24` stays unnamed: it
 is only compared with 0/1/2 and set on the same resets, with no computation on the
 value.  Generated struct fields: 36 -> 35.
+
+## Batch 49 - the side being initialised
+
+`2000:08DC` enumerates the two sides of a new game.  Init clears it, and the setup
+routine walks it up to two while spawning each side's starting units from the
+per-difficulty tables:
+
+```c
+if (PlayerIndex < 2) {
+    PlayerIndex = PlayerIndex + 1;
+    if (PlayerIndex == 1) {
+        cVar5 = *(char *)(Difficulty + 0x5dcb);   /* per-difficulty unit count */
+        ...
+```
+
+and the consumers branch on `== 1` / `1 <` to treat the second side differently.
+Named `PlayerIndex` (`2000:d310`); confirmed live in `619c:004e`.
+
+Auto globals: 580 -> 579.
