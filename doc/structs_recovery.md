@@ -1405,3 +1405,30 @@ char * __cdecl16far stats_6386_12b7(byte agntIndex,char *param_2)
 ```
 
 Auto-named parameters: 1185 -> 1164 (8 + 13).
+
+## Unit-index, owner-index and coordinate parameters
+
+**Unit index** (4): `OVC22_5087_1674`, `unit_6616_0000`, `season_67e7_09b9`,
+`constrct_7e7c_2e8e` index `((unit_t *)GUnits)[param_1]` and never `Entities`.
+
+**Owner index** (1): `attact_3f0b_0894` compares each agent's owner
+(`record + 0x1b`) with its argument and counts matches:
+
+```c
+for (bVar3 = 0; bVar3 < AgntCount; bVar3++)
+    if (*(int *)(bVar3 * 0x34 + 0x1b) == ownerIndex && ... ) bStack_3++;
+```
+
+**Coordinates** (2 functions, 4 parameters): `OVC23_55fe_05db` and
+`OVC15_4207_0ff0` take an x (clamped with the square-x helper and compared with
+`GfxRndSeed`) and a y (compared with `GfxRndSeed2` / the entity's `targetY`):
+
+```c
+uint __cdecl16far OVC23_55fe_05db(int x,int y)
+{
+  uVar1 = ovr_OVC23_55fe_3450(x);
+  uVar2 = ovr_OVC23_55fe_3450(GfxRndSeed);
+  if ((uVar1 == uVar2) && (GfxRndSeed2 == y)) { ... }
+```
+
+Auto-named parameters: 1164 -> 1155.
