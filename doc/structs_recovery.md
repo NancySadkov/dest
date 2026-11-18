@@ -4898,3 +4898,55 @@ any exported body, and the fields stay generated rather than guessed from their 
 (`CMP ES:[BX+0x0f],SI`, `MOV SI,ES:[BX+0x0f]`, and the same at `+0x11`) while `ow` at `+0x0f`
 has four direct byte uses.  No writer exists: the records are constant data loaded from the
 archive, so the binary cannot say whether the byte pair is one word.  Unchanged and recorded.
+
+## Four parameters from the manage/saveui screens (4)
+
+### `saveui_usesBlitGfx10`
+
+```c
+ovr_blitText(text, widths, Font03.ofs, (uint8_t)Font03.seg);
+rect.x = *cursorX;
+if (TextBlitX < *cursorX) { ... }
+*cursorX = TextBlitX;          /* the running text cursor is written back */
+```
+
+so the 2nd and 3rd arguments are `blitText`'s `text`/`widths` and the 4th is `cursorX`, a
+pointer to the current text x.  The 5th argument is never read -- the row comes in on the
+stack -- so it stays auto-named.
+
+### `manage_textAllUnitsDisplayed`
+
+```c
+unitTypeFilter = (undefined1)unitType;    /* 0xfe = all types */
+partyFilter    = partyIndex;              /* 0xff = all parties */
+...
+if (unitType == 0xfe) { if (partyIndex == 0xff) ovr_say("All units are displayed."); ... }
+else if (partyIndex == 0xff) ovr_say("Only units of %s are displayed.");
+else ovr_say("Only units of %s loyal to %s the %s are displayed.");
+```
+
+so its second argument is the unit type being filtered on.  That also corrects the global
+named last pass: `levelRangeIndex` is really `unitTypeFilter` (renamed), because the value is
+the selected unit type and `LevelRangeMin/Max` are simply looked up by that type.
+
+### `attact_usesLDIV_at_` and `attact_textAbnormalProgramTermination`
+
+Neither is nameable: the former's `param_1` is never read (it works from
+`word_2000_BSS_06E0`, a stack product and a 0x50 clamp), and the latter's lone argument is only
+reached through a string-literal error path.
+
+## `char_sheet_t+0x1b`: the listing cannot settle it
+
+The comparison that created the width question is in `manage_textTotalPopulation`:
+
+```c
+} while (*(int *)(iVar10 * 0x34 + 0x1b) != *(int *)(sheet->pad_0 + 0x1b));
+```
+
+`ListInsn` over that function reports `body=557`, 197 instructions, and **no access at offset
+0x1b at all** (the only offsets present are 0x00, 0x21, 0x22, 0x2f).  The function also carries
+*Instruction at (ram,0x0005ff51) overlaps instruction at (ram,0x0005ff50)*, so its tracked body
+and the region the decompiler emitted are not the same code.  The width therefore cannot be
+read off the listing, and the existing refusal (agent side is `owner` word + `gdata` low word)
+stands unchanged.  What would settle it is a byte-level dump of the 0x5ff50 region, which
+needs the overlay's load base -- not something the current tools expose.

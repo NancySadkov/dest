@@ -1715,3 +1715,20 @@ Refusals re-confirmed with their sites:
 | `2410:4757` | set 1 before `save_textSsave()` and 0 right after, checked as `== 0` before printing "Load Error" -- three sites, polarity unresolved |
 | `2000:072F` / `0731` | reset each turn, incremented, never read |
 | `2000:06A4` / `06A6` / `069C` / `069E` | written beside the audio driver pairs, never read |
+
+## Correction - `levelRangeIndex` is really `unitTypeFilter`
+
+The global at 2410:4B6D was named last pass from the fact that it indexes `LevelRangeMin` and
+`LevelRangeMax`.  Reading the screen that sets it shows what the value *is*:
+
+```c
+unitTypeFilter = (undefined1)unitType;    /* manage_textAllUnitsDisplayed, 0xfe = all types */
+partyFilter    = partyIndex;              /* 0xff = all parties */
+...
+byte_2410_DATA_DGROUP_4B6D = 0xff;        /* clear after the redraw */
+byte_2410_DATA_DGROUP_4B6E = 0xff;
+```
+
+and the level-range lookup is a consequence (`ovc13_usesEntities` bounds the displayed entities'
+levels with `LevelRangeMin[type]`/`LevelRangeMax[type]`).  Renamed to `unitTypeFilter` with the
+old name recorded here so earlier notes stay traceable.
