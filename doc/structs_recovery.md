@@ -1027,3 +1027,27 @@ a stride of 0x94:
 and the same byte selects per-kind rules in ovc27 (spell resistance at level 16
 for 4, level 9 for 6).  Named kind.  Generated struct fields: 48 -> 47
 (agntG_t 6).
+
+## agnt_t+0x10/+0x12: the table is at a runtime segment offset
+
+Both constructors load the pair from the same expression:
+
+```c
+iVar11 = (uint)peVar8[EntityCount].base.field_0xf * 4;      /* level * 4 */
+uVar6 = *(undefined2 *)(iVar11 + -4);
+*(undefined2 *)&peVar8[EntityCount].base.field_0x12 = *(undefined2 *)(iVar11 + -2);
+*(undefined2 *)&peVar8[iVar13].base.field_0x10 = uVar6;
+```
+
+There is no base symbol and no segment override in the decompiled form: the
+address is `(level-1)*4` from offset zero of whatever DS points at when the
+constructor runs.  In the static image offset 0 of a segment is the PSP, so the
+segment must be selected at run time (a loaded asset segment), which is why no
+symbol exists there and why the earlier search for a base in the function body
+found none.
+
+Consequence: the table cannot be peeked from the program image at all.  Settling
+`0x10`/`0x12` therefore requires the asset format (which record holds the
+per-level pair), not further disassembly.  `0x10` stays `health` because its
+default 100 and its `< 2` dying test are proven independently; `0x12` remains
+unnamed.
