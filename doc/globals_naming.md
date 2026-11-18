@@ -372,3 +372,11 @@ cleared on one result path and set on the other, around the INT 10h call.
     ...                data_DS_0487 = data_DS_0487 | 1;      /* CF = 1 */
 
 Named IntFlags (0000:0487).
+
+## Batch 26 - music graphics far pointer
+
+`2410:07BE`/`07C0` are the offset and segment of the graphics loaded for the
+music routine: the offset comes from `stshLoadGfx()`, the segment from the
+register the loader returns, and the pair is passed to `audio_3a5b_0761`
+together with the MIDI handle.  Named `MidGfxOfs` / `MidGfxSeg`.  It is the
+same shape as `SfxGfx` (07B6), the single-word handle for the effects path.
