@@ -4061,3 +4061,51 @@ earlier refusals.
 - `bldtp_t+0x24` (`& 0x80` only), `agntG_t+0x52` (one clean signed-y-offset consumer, one
   index through a pointer's high byte), `agntG_t+0x94` (no reader) and the `anm_t` block
   (`stshRleAnims` reads only the already-named fields) are unchanged.
+
+## Parameters named from the recovered structs and the named callees
+
+Two scans over `tmp/decompiled21` (with `allvars20.csv`): parameters that are stored
+straight into a recovered field, and parameters passed as an argument whose callee
+parameter already has a name.
+
+### Stored into a field (24)
+
+| function | parameters | evidence |
+|---|---|---|
+| `4207:10a3` (entity spawn) | `x`, `y`, `destX`, `destY`, `gindex`, `animFrame` | `Entities[EntityCount].base.x/y/targetX/targetY/destX/destY/gindex/animFrame = param_1..6` |
+| `attact_3f0b_0ade` | `destX`, `destY` | `Entities[param_1].base.destX/destY = param_2/3` |
+| `OVC25_5b66_00ff`, `_038d`, `_0530` | `destX`, `destY` | same two stores through `Entities[...]` |
+| `OVC18_48ac_0bf4` | `unitType` | `((unit_t *)GUnits)[i].unitType = param_4` |
+| `OVC15_4207_2301` | `owner` | `agntCopy.owner = param_1` |
+| `OVC15_4207_16a5` | `gindex` | `Entities[i].base.gindex = param_2` |
+| `OVC23_55fe_1005`, `2b9e`, `0617` | `bldType` | index `bldtp_t` with `* 0x27` (base 0x110) |
+| `OVC23_55fe_1ea9`, `23d8`, `2f90` | `recordIndex` | index the 0x12-stride record array |
+| `OVC26_5d45_06f0` | `entityIndex` | indexes `Entities[...]` and reads x/y/destX/destY/targetX/targetY |
+
+### Passed to a named parameter (17)
+
+`tmp/param_args.py` maps each call argument to the callee's parameter name at that position
+and keeps only roles where **every** observation agrees and at least two sites exist:
+
+| role | functions | sites |
+|---|---|---|
+| `x` / `y` | `init_3381_23f9`, `OVC13_3d16_0c22`, `OVC22_5087_4576`, `OVC10_36ce_2b9e` | 2-9 each |
+| `partyIndex` | `manage_4d05_2bc4`, `manage_4d05_330c`, `OVC22_5087_0234`, `OVC22_5087_0411` | 2 each |
+| `rect` | `OVC23_55fe_1ea9`, `23d8`, `OVC27_5ded_0cc2`, `OVC06_317e_1240` | 2-13 each |
+| `outFlag` | `OVC22_5087_1674` | 4 |
+
+The `rect` translation matters: the callee parameter is named `dst` but is typed
+`brect_t *` (`blitGfxRect(gfx, x, y, dst, type, mirror)`), so the caller's argument is a
+**rectangle**, not a destination.  Naming the callers' parameters `dst` would have hidden
+the type the signature already shows.
+
+### Examined and refused
+
+- `OVC22_5087_056e`'s `param_4`/`param_5` were voted `dst` but the body writes
+  `*(undefined1 *)CONCAT22(param_5,param_4) = 1;`, i.e. they are the two halves of a far
+  **byte pointer**, not a rect and not a destination block.  The function is also one of the
+  two whose decompilation is flagged unstable, so it stays untouched.
+- `OVC23_55fe_0617`'s `param_1` is only ever a coordinate passed to the height probe; it has
+  no stored field and no unanimous callee role, so it keeps its number.
+
+Auto-named parameters: 937 -> 891.
