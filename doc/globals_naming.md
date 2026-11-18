@@ -572,3 +572,35 @@ whole table is copied into locals before use:
     F_SCOPY((far_t *)RankMsgPtrs, ..., &local_5c)        /* entries 0..14  */
     F_SCOPY((far_t *)(RankMsgPtrs + 0xf), ..., local_6c) /* entries 15..18 */
     F_SCOPY((uint8_t *)0x6b86, ..., &local_14)           /* 10 bytes after  */
+
+## Batch 34 - level bands and the level cap they select on
+
+`OVC30_619c_025d(param_1)` picks a random generic agent whose cap falls in a
+per-slot band.  Four consecutive DGROUP words are loaded as two byte arrays and
+indexed by `param_1`:
+
+```c
+local_6 = LevelBandMin;   /* 5DEC, array spans 5DEC..5DEF */
+local_a = LevelBandMax;   /* 5DF0, array spans 5DF0..5DF3 */
+do {
+    uVar2 = ovr_randBelow(0x2a);
+    if ((char)uVar2 == 0x29) continue;            /* 0x29 excluded */
+} while (GMenuStrings[i*0x95 + 0x1f] == 0 ||
+         gdata->levelLimit < *(byte *)(&local_6 + param_1) ||
+         *(byte *)(&local_a + param_1) < gdata->levelLimit);
+```
+
+So the four words are a minimum and a maximum level array of four bytes each,
+indexed by the slot, and the compared record byte is a **level cap**.  That byte
+is `agntG_t+0x53`, whose other uses agree: `ovc22` writes 4, 8 or 0xc into it
+from the progression counters (`0xff` for none), compares it with
+`entity.base.level` (`field_0xf`), and `ovc27` tests it against 4.
+
+| symbol | name | evidence |
+|---|---|---|
+| `2410:5DEC` | `LevelBandMin` | first word of the 4-byte per-slot minimum array |
+| `2410:5DF0` | `LevelBandMax` | first word of the 4-byte per-slot maximum array |
+| `agntG_t+0x53` | `levelLimit` | compared against entity level; 4/8/0xc, 0xff = none |
+
+The tail words `5DEE` and `5DF2` are the second half of each four-byte array; they
+are not separate variables and must not be named as such.

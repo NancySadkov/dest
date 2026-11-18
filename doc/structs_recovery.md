@@ -1051,3 +1051,10 @@ Consequence: the table cannot be peeked from the program image at all.  Settling
 per-level pair), not further disassembly.  `0x10` stays `health` because its
 default 100 and its `< 2` dying test are proven independently; `0x12` remains
 unnamed.
+
+## agntG_t+0x53 = levelLimit
+
+The random-band selector in ovc30 compares this byte against a per-slot minimum and
+maximum (LevelBandMin/LevelBandMax), and ovc22 writes 4, 8 or 0xc into it and
+compares it with the entity level (agnt_t+0x0f).  Both uses make it a level cap;
+0xff means none.  Generated struct fields: 47 -> 46 (agntG_t 5).
