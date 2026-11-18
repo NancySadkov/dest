@@ -257,3 +257,18 @@ BIOS timer:
 
 Named SeedHi.  ¡0:74AC\ (ovc45) has only a conditional and one assignment in
 the export and stays unnamed.
+
+## Batch 16 - smoothing latch
+
+¡0:0742\ stores the previous value of an interpolation step:
+
+    iVar1 = constr_36ce_0000(param_1,param_2);  *param_3 = iVar1;
+    iVar1 = (*param_3 - word_0742) * 3;
+    if (iVar1 < 0) iVar1 = iVar1 * *(byte*)(param_2+0x733) / 0x10;
+    else           iVar1 = iVar1 * *(byte*)(param_2+0x733) >> 4;
+    ... word_0742 = iVar1 / 3;
+
+The delta from the stored value is scaled by a per-object factor with the same
+signed shift in both branches, i.e. a lerp, and the result is stored back.
+Named SmoothPrev.  ¡0:74AC\ is compared against entity+0x1a (an id set from a
+constructor argument) as a fallback match; it stays unnamed.
