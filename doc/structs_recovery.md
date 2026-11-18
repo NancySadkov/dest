@@ -4659,3 +4659,39 @@ about which variant the 0/1 means.
 bytes (`MOV AL,ES:[BX+0x24]`, `CMP byte ptr ES:[BX+0x25],0x2`, `MOV byte ptr ES:[BX+0x24],0`)
 with the values 0/1/2 selecting different sprite branches, but nothing states what the three
 values mean.
+
+### Five parameters from the saves-index helpers and the gfx-block owners (5)
+
+`saveui_textSsavesTxt` fills an array of far pointers while reading the saves index, and
+`saveui_usesStshFree` walks the same array:
+
+```c
+/* textSsavesTxt */
+puVar4 = (undefined2 *)(param_1 + uVar5 * 4);
+/* usesStshFree */
+for (uVar6 = 0; uVar6 < param_2; uVar6 = uVar6 + 1) {
+  piVar3 = (int *)(iVar2 + uVar6 * 4);
+  ... handle.seg = puVar5[1]; handle.ofs = *puVar5;
+```
+
+so `param_1` is the `entries` array and the free's second argument is the `count`.
+
+`init_special_graphics` and `ovc20_compute1` are both called with loaded graphics block
+pairs and act on the far pointer nested at block+0x11/+0x13:
+
+```c
+if (*(int *)(param_1 + 0x11) != 0 || *(int *)(param_1 + 0x13) != 0) {
+  handle.seg = *(uint16_t *)(param_1 + 0x13);
+  handle.ofs = *(uint16_t *)(param_1 + 0x11);
+  ovr_stshFree(handle);
+}
+/* ovc20_compute1 */
+*(undefined2 *)(param_1 + 0x13) = 0;
+*(undefined2 *)(param_1 + 0x11) = 0;
+```
+
+Call sites are `Lbm_nwpanel1.ofs/seg`, `specialColorsOfs/Seg`, `gamfont1Cut1Ofs/Seg`,
+`davfontCut1Ofs/Seg` and `_davfont2Cut1Ofs/Seg`, so the pointer is a `gfxBlock`.  Both
+functions leave their second argument unused, which is why it stays auto-named.
+
+Auto-named parameters: 771 -> 766.
