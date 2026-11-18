@@ -891,3 +891,29 @@ the **DGROUP** address, so:
 Tooling note: `Rename.java` reports success even when the target name collides
 with an existing symbol (`byte_2000_BSS_06A8` did), and the symbol keeps its old
 name.  The audit then shows no change; always confirm with `ListSyms`.
+
+## Batch 45 - the menu mode and its saved copy
+
+`2000:003B` selects which menu screen is active.  `main` sets it to 1 immediately
+before `uiMainMenu()` and whenever a menu item is chosen, and `ovc02_draw`
+branches on 1/2 to draw the matching crosshair.  `2000:003C` is its save slot:
+
+```c
+MenuModeSaved = MenuMode;      /* ovc41 before a nested screen */
+...
+MenuMode = MenuModeSaved;      /* afterwards */
+```
+
+and `ovc21`/`ovc33` snapshot it the same way.  Named `MenuMode` (`2000:ca6f`) and
+`MenuModeSaved` (`2000:ca70`); the live decompile of `6a8f:199c` reads
+`MenuModeSaved = MenuMode;`.
+
+Auto globals: 586 -> 584.
+
+### `2410:07E2` - examined, write-only
+
+It has 25 references and **all of them are stores** (values `0..0xf` written from
+`ovc12_agnt` and `ovc49`, next to `agnt_3b1d_0a53`/`play_sfx` calls).  A full
+search finds no reader anywhere in the export, so the value domain alone (sixteen
+small ids) does not identify whether it is an action id, a sound id or a cursor
+state.  It stays unnamed rather than guessed.
