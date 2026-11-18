@@ -2608,3 +2608,74 @@ Auto-named locals: 218 -> 213.
   `attact_3f0b_277b`, tested for zero.
 - `OVC42_6d7a_033e`'s `local_40[23]`/`local_78[13]` are `_fmemset` targets with no
   reader in the recovered body.
+
+## `entity_t` is now fully recovered - the tail is a tick stamp
+
+The machine code, not the decompiler, decides the width of `+0x34`:
+
+```
+5d45:035e  SUB AX,word ptr ES:[BX + 0x34]      ; elapsed = GameTick - tick
+5d45:0362  CMP AX,0x19
+5d45:0365  JNC ...
+5d45:04c0  MOV word ptr ES:[BX + 0x34],AX      ; tick = GameTick
+```
+
+The decompiler had printed a 32-bit lvalue for both accesses, which is why the field
+had been left as two bytes; the instructions are words.  The surrounding test is a
+periodic-update gate (`elapsed >= 25`), the same timestamp idiom as the building
+instance records.
+
+`SetFieldType` cannot widen the field in place:
+
+```
+FAIL /entity_t+0x34 : Not enough undefined bytes to fit /stdint.h/uint16_t in
+structure /entity_t at offset 0x34. It needs 1 more byte(s) to be able to fit.
+```
+
+so `RebuildEntity.java` was updated to build the record exactly as the sizes demand -
+`Entities` is 33000 bytes for 600 records, so 55 bytes:
+
+```
+entity_t length=55
+  +0  base : agnt_t   [52]
+  +52 tick : uint16_t [2]
+  +54 dir  : byte     [1]
+```
+
+and the decompile now reads `GameTick - peVar8->tick`.  `entity_t` is complete:
+3 fields, 0 generated (`entity_t 3 0` in `naming_structs.tsv`).
+
+## Three bit-plane tables feed a terrain-plane write
+
+`OVC27_5ded_01ac` copies three 16-entry tables and writes each to a different VGA
+plane of a 320-byte-wide region:
+
+```c
+F_SCOPY(2410:594A, ..., plane0);   F_SCOPY(2410:596A, ..., plane1);
+F_SCOPY(2410:598A, ..., plane2);
+*puVar3       = (char)plane0[bStack_3];   /* +0     */
+puVar3[0x140] = (char)plane1[bStack_3];   /* +320   */
+puVar3[0x280] = (char)plane2[bStack_3];   /* +640   */
+```
+
+The plane offset is what names them - each table can only ever land in its own plane.
+
+Auto-named locals: 213 -> 210.  Generated struct fields: 33 -> 31.
+
+## Struct fields re-examined (no name added)
+
+| field group | search result | conclusion |
+|---|---|---|
+| `anm_t` `0x10`..`0x1d` | the only `field_0x18` hits are symbol-relative addresses such as `&AgntAnms[0x75].field_0x18`, i.e. DGROUP addresses rendered through the wrong symbol | still no typed `anm_t` read of that block |
+| `agntG_t+0x52`, `+0x94` | no `field_0x52`/`field_0x94` access anywhere in the export | unread |
+| `entity_t+0x34`/`+0x35` | `SUB/MOV word ptr ES:[BX+0x34]` | resolved: now `tick` |
+| `agnt_t+0x11`, `+0x24`, `+0x25`, `+0x2a`; `bldtp_t+0x0c` | unchanged from the previous pass (writes of 0/1/random, equality tests only) | unchanged refusals |
+
+### `OVC22_5087_056e` - still refused
+
+The function the step named is the one whose export carries `Unable to track spacebase
+fully` and `Type propagation algorithm not settling`, and its locals confirm it:
+`local_c` is a loop counter (`for (local_c = 0; local_c < GLeaderCount; local_c++)`),
+an entity index (`Entities[(int)local_c].base.y`), a `far_t *` and a byte
+(`(char)local_c`) in different places.  Naming any of them would encode one of those
+contradictions, so the function stays untouched.
