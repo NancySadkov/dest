@@ -324,3 +324,16 @@ and never reads it.
 Named XmsPad.  Note this also confirms the offset assignment used earlier: the
 destination really is the 02C5/02C7 pair, because both halves are written
 consecutively (02C5 = param_1, 02C7 = param_2).
+
+## Batch 22 - current music track
+
+¡0:07B5\ records the track the MIDI routine last started: the routine returns
+early when the requested track already matches it, and stores the argument after
+registering the XMIDI and starting playback.
+
+    if ((byte_07B5 == param_1 || ...)) ...;
+    midRegisterXMIDI(...); midSetRelativeValue(100,0); midPlaySequence();
+    byte_07B5 = param_1;
+
+Named CurrentTrack.  The earlier refusal was premature: it was based on the
+store alone, and the caller shows the comparison that fixes the meaning.
