@@ -2298,3 +2298,65 @@ Auto-named locals: 254 -> 251.
   `attact_3f0b_2252`, whose own body does not state what it returns.
 - `OVC26_5d45_0000`'s four `int[300]` locals are only ever stored as pointers into
   other variables, so the flood-fill queues cannot be told apart from the code shown.
+
+## Locals (eighth pass) - text buffers, menu and label arrays, the polled pointer
+
+### A rename that failed loudly (and why that matters)
+
+`RenameVars` refuses a name that already exists in the function's namespace:
+
+```
+RenameVars ... 77eb:0d61 local_b4 msg
+  -> FAIL 77eb:0d61 local_b4 : ghidra.util.exception.DuplicateNameException:
+     a Local Var symbol with name msg already exists in namespace OVC45_77eb_0d61
+  -> renamed=4 missing=0 failed=1
+```
+
+`OVC45_77eb_0d61` already had a `msg` (the description buffer named in an earlier
+batch), so the requirement/warning buffer became `reqMsg` instead.  This is the
+opposite of `Rename.java`, which reports success on a symbol-name collision and
+leaves the old name in place.
+
+### Named
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `OVC45_77eb_0d61` | `local_b4[161]` | `reqMsg` | destination of `stsprintf` for " Next outpost available at rank %s.", " Requires a rank of %s.", " Location is too narrow for %s.", " It will cost %s the %s %d gp. " |
+| | `local_104[80]` | `text` | destination of the ellipsis-truncation helper `OVC45_77eb_226e` |
+| `OVC41_6a8f_2084` | `local_e4[80]` | `text` | `agnt_3b1d_0ac0(param_1, local_e4)` builds the agent description |
+| | `local_94[20]` | `msg` | `stsprintf(local_94, ...)` caption |
+| `OVC45_77eb_04d8` | `local_2e[20]` | `menuItems` | filled two words at a time from the candidate table and passed as the entries of `ovc28_6018_1527(puVar4, ..., iVar6, ...)` |
+| `OVC22_5087_0234` | `local_96[24]` | `labelPtrs` | `ovr_blitLabel(local_96[i*2], local_96[i*2+1], ...)` |
+| | `local_13e[36]` | `numBuf` | `stsprintf(local_13e, ..., "%d")` then measured with `font_302d_06ea` |
+| | `local_66[20]` | `menuItems` | menu array passed to `ovc28_6018_1527` |
+| `land_info` | `local_18` | `gfxOfs` | `local_18 = far_t_2410_78e4.ofs` (segment stays in the synthesised `uStack_16`) |
+| | `local_29e[80]`, `local_2ee[80]` | `text1`, `text2` | both are destinations of `OVC45_77eb_226e` and go into the same formatted line |
+| `ui_unit_order_6616_0689` | `local_2e`, `local_30` | `mouseX`, `mouseY` | the poll `ovr_init2_3338_0388((uint16_t *)&local_2e, ...)` writes the word pair and the code compares both against the previous pair to detect movement; the lower word is x, matching the MouseX/Y globals at `00E4`/`00E6` |
+| | `local_3b` | `input` | the poll's return value, `} while (local_3b == 0);` |
+| | `local_1aa[120]` | `text` | destination of the ellipsis helper |
+
+Live checks:
+
+```c
+byte *mouseY;
+byte *mouseX;
+bVar1 = ovr_init2_3338_0388((uint16_t *)&mouseX,unaff_SS);
+if ((mouseX != pbStack_2a) || (mouseY != pbStack_2c)) { ... }
+
+char text [120];
+byte input;
+```
+
+Auto-named locals: 251 -> 236.
+
+### Refused
+
+- `OVC45_77eb_04d8`'s `local_42[10]` collects `local_6` (an entity index) per menu
+  entry and is **never read**, so its meaning is not established.
+- `ui_unit_order_6616_0689`'s `local_42[5]` has no reference in the body at all.
+- `land_info`'s `local_1e`/`local_22` are only ever `&local_1e`/`&local_22` outputs of
+  `constrct_7e7c_0b9c` and `ovc45_77eb_02c1`, and the callers of neither state what
+  they return.
+- `bios`'s `local_8` is the `_wherexy()` result handed to `moveto`, while `local_4` and
+  `local_6` are `screenpos()` results for the two cursor addresses; these are CRT
+  internals whose roles are already expressed by the calls themselves.
