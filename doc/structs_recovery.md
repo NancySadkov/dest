@@ -4995,3 +4995,65 @@ width but not the meaning.  Refused.
 `char_sheet_t+0x96..+0x99` is written as two consecutive words right after `+0x94`
 (`+0x96 = pfStack_a`, `+0x98 = uStack_8`), which confirms `foodStored` at +96 as a 4-byte field
 and confirms that `+0x94` is a field boundary rather than the start of a larger value.
+
+## 17 parameters from the stash reader, the manage counters, the CRT and the menu drawing (17)
+
+### `fmReadIntoHimem`
+
+```c
+h = open_wait_unlock_and_disk(filename);
+if (skipLo != 0 || skipHi != 0) { lseek(h, ...); len -= (skipHi:skipLo); }
+if ((limitHi <= len) && (len != limitHi || limitLo < lenLo)) { len = limitHi:limitLo; }
+if (useEms == 0) xms_usesXmsHandle2(...) else ems_memmove2(...);
+```
+
+so `filename`, a 32-bit `skipLo`/`skipHi` subtracted from the file length, a 32-bit
+`limitLo`/`limitHi` cap, and `useEms` selecting the XMS or EMS mover.  Its second parameter is
+never read and stays auto-named.  (The `lseek` call renders the high half as the offset; the
+subtraction below it uses the pair as one 32-bit quantity, which is what the naming follows.)
+
+### `manage_usesGUnitCount`
+
+```c
+if ((*(char *)(rec * 0x12 + 9) == partyIndex) &&
+    (*(char *)(bldType * 0x27 + 0x133) == unitType)) { ... }
+if (partyIndex != -1) break;
+```
+
+`record[+9]` is the party slot and `bldtp_t+0x25` (`unitType`, base 0x10e) is the unit type.
+The seven counters it fills are per-`resource` tallies (`bldtp_t+0x23`); their individual
+meanings are not stated, so they stay auto-named.
+
+### The CRT quartet
+
+| function | parameter | evidence |
+|---|---|---|
+| `_atol` | `s` | whitespace skip via `_ctype & 1`, `+`/`-` (0x2b/0x2d), digit accumulation |
+| `fflush`, `ftell` | `stream` | `param_1[9] == param_1` self pointer, `param_1[1] & 0x200`, `param_1[2]` fd, `param_1[6]/[7]` buffer/end |
+| `_tell` | `fd` | `lseek(param_1, 0x10000, ...)` = whence 1, offset 0 |
+| `screenpos` | `vramOfs` | `(param_1 >> 1) / screenwidth` and `% screenwidth`, 2 bytes per cell |
+
+### Menu drawing
+
+`draw_usesBlitLoadRleGfx3`, `draw_compute1` and `draw_compute2` all index the same per-item
+tables from one value:
+
+```c
+((undefined1 *)&MenuItemEnabled)[menuIndex] != -1
+*(int *)(menuIndex * 2 + 0xda)
+((undefined *)&data_2000_BSS_0749)[menuIndex], ((undefined *)&data_2000_BSS_0744)[menuIndex]
+```
+
+and `draw_compute3` maps an x coordinate between screen widths:
+`(0x13f - x) * 0x80 / 0x140` (319/320 -> 128).
+
+## `agntG_t+0x52` / `+0x94` have no accesses at all
+
+Both offsets were re-checked two ways: the 0x95 stride form (`... * 0x95 ... + 0x52`) and the
+generated field names.  Neither appears anywhere in `tmp/decompiled35`, so these two components
+exist only because the record size and the neighbouring fields were rebuilt -- they are
+size-derived padding, not fields the program reads or writes.  The `+0x52`/`+0x94` accesses
+found in the previous pass are **`char_sheet_t`** offsets reached through the 0x217A party
+table, not `agntG_t`.
+
+Auto-named parameters: 738 -> 721.
