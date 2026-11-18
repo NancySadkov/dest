@@ -1849,3 +1849,63 @@ if (((5 < unit.level) && (cVar10 == -0x7a)) && ...) { ... }
 ```
 
 One equality against `-0x7a` identifies neither the domain nor the meaning.
+
+## Local variable names (first pass)
+
+Until now only parameters, fields and globals had been named; the 317 auto-named
+locals were untouched.  `scripts/ghidra/ListVars.java` now dumps the *stored*
+variables of a function, which is what `RenameVars` operates on, and that exposed a
+method limit worth recording.
+
+### Only stored variables can be named
+
+`ListVars 7e7c:004b` lists 11 locals, while the decompiled body shows about 30
+names.  The extra ones (`iStack_14`, `bStack_1d`, `auStack_14`, `cStack_23`, ...)
+are synthesised by the decompiler from unmodelled stack slots and **do not exist as
+variables**, so `RenameVars` reports `NOVAR` for them.  Names therefore have to come
+from the stored set:
+
+```
+RenameVars 7e7c:004b auStack_14 ...  ->  NOVAR 7e7c:004b auStack_14
+RenameVars 7e7c:004b bStack_1d ...   ->  NOVAR 7e7c:004b bStack_1d
+RenameVars ...                      ->  renamed=4 missing=2 failed=0
+```
+
+### Named locals
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `land_info` (7e7c:004b) | `local_226[513]` | `msg` | `strcpy` destination that is then displayed |
+| | `local_24e[20]` | `menuItems` | array of offset/segment pairs for "Change party" and "Done" |
+| | `local_1a` | `tileX` | `GfxRndSeed + param_1 - 2`, passed as the x coordinate |
+| | `local_20` | `entityIndex` | filled by `ovc45_77eb_02c1(...,&local_20)`, then used to index `Entities` |
+| `ui_unit_order_6616_0689` | `local_132[240]` | `msg` | `stsprintf` destination passed to `say()` |
+| | `local_36` | `cursorX` | `(GfxRndSeed - Seed_2000_d110) * 2 + 7`, the x argument of `blitGfx10` |
+| | `local_38` | `cursorY` | `(GfxRndSeed2 - Seed_2000_d10e) * 3 + 8`, the y argument of `blitGfx10` |
+| | `local_16` | `saveArea` | `memcpy` destination (0x440 bytes) passed to `miceRestoreArea`/`blitRect` |
+| `OVC40_69c8_04c6` | `local_4`, `local_6` | `clickX`, `clickY` | filled by the input poll, then tested `0x87 < x < 0xd6`, `0xb9 < y < 0xc6` |
+
+The decompiler keeps the array sizes it inferred after the renames, which is the
+check that the name landed on the right variable:
+
+```c
+undefined2 menuItems [20];
+char msg [513];
+tileX = GfxRndSeed + (char)param_1 + -2;
+uVar2 = ovr_OVC45_77eb_20e8(&tileX);
+```
+
+Auto-named locals: 317 -> 307.
+
+### Examined, not named
+
+- `init_3381_2883` has only five stored locals (`local_9`, `local_a`, `local_e`,
+  `local_f`, `local_24`) and the interesting values in its body (`bStack_b` = the
+  running minimum of the four neighbour cells, `iStack_12` = the loop index) are
+  synthesised slots, not variables, so they cannot be named.
+- `OVC22_5087_056e` carries `Unable to track spacebase fully` and `Type propagation
+  algorithm not settling` warnings, so names on its locals would rest on a suspect
+  decompilation; skipped deliberately.
+- `local_14`/`local_16` in `OVC22_5087_0234` hold `0x22c4` plus a changing low word
+  immediately before `blitLabel`/`stsprintf`, i.e. a far pointer to a format string;
+  naming them would describe the argument, not a quantity, so they stay.
