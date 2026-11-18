@@ -3733,3 +3733,93 @@ No arithmetic or indexing appears on any of them, so the refusals stand.
 | | `dstSeg` | `param_2 == -0x6000` (0xa000) triggers `draw_2e25_0573()`; callers pass `TextBlitDstSeg` and `-0x6000` |
 
 Auto-named parameters over this turn: 952 -> 948.
+
+## The `dstSeg` family, mapped mechanically from the call sites
+
+`tmp/dstseg_scan.py` walks every call in the export, splits the argument list, and maps
+each argument that is literally `TextBlitDstSeg`, `0xa000` or `-0x6000` onto the callee's
+parameter in that position.  Only five callees matched, and three of them already had the
+parameter named, which is a good sign for the method: the scan re-derived `dst_seg`,
+`dstSeg` and `dstSeg` where earlier passes had named them by reading one site.
+
+The one unnamed case with many sites was `driver_2d63_05e5`, where 15 call sites pass a
+screen segment as the sixth argument.  Its body settles all six names:
+
+```c
+if (x2 < x1) { x2 = x1; x1 = uVar3; }      /* ordering */
+if (y2 < y1) { y2 = y1; y1 = uVar2; }
+rows = (y2 - y1) + 1;  cols = (x2 - x1) + 1;
+puVar7 = x1 + y1 * 320;                    /* 320-byte stride */
+*puVar7 = colour;                          /* fill */
+```
+
+so `driver_2d63_05e5(x1, y1, x2, y2, colour, dstSeg)`.
+
+The line drawer beside it is the same shape in offsets rather than coordinates:
+
+```c
+iVar2 = ofs2 - ofs1;   iVar3 = row2 - row1;
+*ofs1 = colour;  ofs1 = ofs1 + 0x140;      /* vertical case */
+```
+
+so `vga_2d63_04b7(ofs1, row1, ofs2, row2, colour)`.
+
+### `blitRaw`'s w/h were really inclusive end coordinates
+
+`blitRaw` already had parameter names, but two of them were wrong in a way the arithmetic
+shows plainly:
+
+```c
+iVar3 = (h - y) + 1;        /* rows, so h is the bottom coordinate, not a height */
+iVar5 = (w - x) + 1;        /* cols, so w is the right coordinate               */
+puVar6 = puVar6 + (0x140 - iVar5);   /* advance to the next row */
+```
+
+renamed to `x1, y1, x2, y2, srcSeg, dstSeg`.
+
+### What the scan could not reach
+
+The overlay copies of these same routines live at `22a6:00f2`, `22a6:0101`, `22a6:0043`
+(`ovr_driver_2d63_05e5`, `ovr_vga_2d63_04b7`, `ovr_blitRaw`).  `RenameVars` addresses
+functions with `AddressFactory.getAddress(addr)`, and for that segment it resolves to the
+default address space, so `getFunctionAt` returns null and every line reports `NOVAR`:
+
+```
+NOVAR 22a6:00f2 param_1      (17 of 34 lines)
+renamed=17 missing=17 failed=0
+```
+
+The 17 that did land are the `2d63:` twins, which is why the audit moved.  The overlay
+entries keep their generated names until a script resolves overlay addresses by function
+name instead of by address.  This is a tooling gap, recorded rather than worked around by
+editing the wrong function.
+
+## `OVC49_8699_18c4`: a rename that had to be reverted for the second time
+
+Its `param_1` is unmistakably an agent record - the body reads `+0x11`, `+0x12`
+(`frameIndex`), `+0x13` (`entity`), `+0x15` (`level`) and `[0]` (`x`).  Typing it as
+`agnt_t *` did make the code read better:
+
+```c
+iVar13 = ovr_agnt_3b1d_005e(agnt->x);
+if ((((agntG_t *)paVar20->gdata)->stdint_h_uint16_t & 4) == 0) {
+```
+
+but it also changed the *rest* of the signature, because a far pointer is four bytes and
+the old `int *` was two:
+
+```
+before: uint OVC49_8699_18c4(int *param_1,byte *param_2,char *param_3,int param_4,char param_5)
+after:  uint OVC49_8699_18c4(agnt_t *agnt,byte *param_2,int param_3,undefined2 param_4,char param_5)
+```
+
+and `param_3` became an entity index (`Entities[param_3]`) - proof that the arguments had
+shifted.  The callers only push five words, so this function's true convention has a
+segment word the model does not carry; widening a parameter cannot be correct until that
+is resolved.  The original prototype was re-applied and verified with `ShowFunc`:
+
+```
+uint OVC49_8699_18c4(int * param_1, byte * param_2, char * param_3, int param_4, char param_5)
+```
+
+Auto-named parameters over this turn: 948 -> 937.
