@@ -5800,3 +5800,51 @@ and fourth arguments are packed into a far pointer byte-by-byte
 named slots, so they stay auto-named.
 
 Auto-named parameters: 510 -> 502.
+
+## 10 parameters: the construction tallies and three more map pairs
+
+### `manage_usesGUnitCount`'s counters (4 of 7)
+
+The function counts construction records and placed units for one `(partyIndex, unitType)`
+pair, split by `bldtp_t+0x23` (`resource`):
+
+```c
+/* units loop */
+if (resource == 1) *param_3 += 1;
+else if (resource == 2) *param_5 += 1;
+else if (resource == 3) *param_7 += 1;
+/* records loop */
+*param_9 += 1;                       /* every matching record */
+if (resource == 1) *stack_18 += 1; else if (resource == 2) *stack_1c += 1; else *stack_20 += 1;
+...
+*param_3 -= *stack_1c;   *param_5 -= *stack_20;
+```
+
+so `resource1Count`, `resource2Count`, `resource3Count` and `recordCount`.  The subtraction of
+the record tallies at the end is recorded but does not change what each slot holds: the number
+of **units** whose building type carries that resource value.
+
+**`param_4`, `param_6` and `param_8` are never dereferenced** -- the caller passes a (pointer,
+segment) pair for each output, and the even slots are the segment words.  They stay auto-named
+because a name would describe the calling convention, not the data.
+
+### Three more map pairs (6)
+
+| function | evidence |
+|---|---|
+| `ovc22_textArena` | bounds `param_1 + 1 <= 0x93` and `param_2 + 1 <= 0x3b`, then `GMapFlags[param_2][param_1]` and `GMapCells[param_2+1][param_1+1]` |
+| `ovc22_usesGOngoingBattle` | `param_2` against `GfxRndSeed2 - k` and `param_1` against `GfxRndSeed + table[...]` |
+| `ovc22_usesGOngoingBattle2` | the same with a different k |
+
+All three are `x`/`y`; `GfxRndSeed`/`GfxRndSeed2` are the cursor pair already pinned against
+`entity.base.x`/`.y`.
+
+### The 4528 tail
+
+Only three parameters remain in `saveui` and none is nameable:
+`saveui_usesBlitGfx10`'s `param_5` and `saveui_textSsavesTxt`'s `param_2` are never read, and
+`saveui_usesBlitText`'s `param_2` lands in `blitText`'s `widths` slot while every caller passes
+the string's **segment** (`0x2410`) there -- a far-pointer split, so a name would describe the
+decompiler's argument mapping rather than the code.
+
+Auto-named parameters: 502 -> 492.
