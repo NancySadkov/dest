@@ -3964,3 +3964,58 @@ export); `draw_2e25_0245` (`(0x13f - x) * 0x80 / 0x140`, context not established
 `bldng_676c_05ac` (reads `GStrangeTable[i].ofs + 1`, table meaning unknown); and the trivial
 predicates (`return param_1 != 1;`, `return *p != 0;`), where a name would only restate the
 expression.  Each needs the surrounding module read before it earns a name.
+
+### Second batch: the driver segment (2d63)
+
+18 functions in `2d63` still had address-shaped names.  Five bodies were decisive:
+
+| address | old | new | evidence |
+|---|---|---|---|
+| `2d63:02fe` | `driver_2d63_02fe` | `countRunLength` | compares `*p[0]` with successive bytes until a mismatch or the limit argument, returns the offset |
+| `2d63:0b94` | `driver_2d63_0b94` | `lowNibble` | `return param_1 & 0xf;` |
+| `2d63:0bad` | `driver_2d63_0bad` | `driver_copyWords` | `*dst = *src` over a word count from the fourth stack argument |
+| `2d63:0aac` | `driver_2d63_0aac` | `driver_unrleScreen` | decodes 200 rows of run/literal pairs, destination advancing `0x140` per row |
+| `2d63:0af7` | `driver_2d63_0af7` | `driver_unrleSprite` | header `param_1[0]` = row offset, `param_1[1]` = height; each run adds an x delta then copies literals or repeats a byte |
+
+The last two were first written `driver_rleImage`/`driver_rleSprite` and then corrected to
+`unrle` spelling, because the same segment already contains `unrle` (PCX run-length) and
+`rle_blit_decode`; keeping one prefix means a reader can tell the three decoders apart by
+their targets rather than by which synonym was used.
+
+Deferred, with reasons: `driver_2d63_0107`/`014b` (a clamped sum scaled by five, role not
+established), `driver_2d63_0652`/`0687` (a 2-wide, 3-tall two-colour diagonal stamp; the
+terrain shading that consumes it is not visible from this segment), `driver_2d63_044e`,
+`0846`, `09c9`, `0a24`, `0a67` (rect blits whose callers are not in the export), and
+`driver_2d63_0599` (the decompiler shows a return of a stack argument - the prototype is not
+trustworthy yet).
+
+### The binary carries 48 original source comments
+
+A scan for non-`WARNING` comments in the decompiled bodies found **48 functions whose
+original C comments survived into the image**, e.g.
+
+```
+2d63:0000 mkp        packs seg+ofs into a uint32_t
+2d63:00eb be4        Loads big-endian 32bit integer into DX:AX pair NOTE: the function has a bug
+2d63:00fc be2        Flips bytes in a 16bt word
+317e:0148 stshRleCut Cuts X,Y,W,H rect out of 8bit pixels pointed by src. returns ptrr to stg_t struct
+317e:01b2 blitLoadRleGfx  typedef struct { ... uint8_t type; //0=not loaded, 1=loaded ... } gfx_t;
+4b0a:07d3 stshSpriteStub  anms points to the array 0x1e sized anim_t entries, the last entry has nframes == 0 ...
+```
+
+Every one of those 48 already had a proper name, so they produced no renames - but they are
+now the strongest available confirmation of those names, and three of them state facts no
+amount of body-reading gave:
+
+- `anm_t` entries are **0x1e sized** and the array is terminated by `nframes == 0`
+  (`stshSpriteStub`'s own comment), which independently confirms the `0x1e` stride used
+  throughout `stshRleAnims`.
+- `gfx_t`'s layout is given in source: `type` (0 = not loaded, 1 = loaded), `sz`, `width`,
+  `height`, then `pixels[width*height]`.
+- `be4`'s comment names a **known bug** (high-order bytes swapped) - the function is not to
+  be "fixed" during reconstruction.
+
+This is a better source of names than body-reading wherever it exists, so the next batches
+will start by harvesting these comments and then work outward through each module's callers.
+
+`doc/functions_renamed.tsv` is updated with the whole driver batch.

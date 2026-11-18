@@ -13,3 +13,8 @@ address	old	new	evidence
 3381:20ee	init_3381_20ee	freeGameResources	ovr_fmFreeAudio(1) followed by freeLeaderData()
 1403:03d8	ovrman_1000_4408	ovl_rotateRight4	returns AX >> 4 | DX << 0xc
 5ded:1be7	OVC27_5ded_1be7	emptyFunction	empty body
+2d63:02fe	driver_2d63_02fe	countRunLength	counts the run of bytes equal to the first, bounded by the limit argument
+2d63:0b94	driver_2d63_0b94	lowNibble	returns param_1 & 0xf
+2d63:0bad	driver_2d63_0bad	driver_copyWords	copies a run of words, count from the 4th stack argument
+2d63:0aac	driver_2d63_0aac	driver_unrleScreen	decodes 200 rows of run/literal pairs, destination += 0x140 per row
+2d63:0af7	driver_2d63_0af7	driver_unrleSprite	header row offset + height, per-run x offsets, rows += 0x140
