@@ -5100,3 +5100,72 @@ The retype is size-neutral (a 2-byte `int *` becomes a 4-byte far pointer only w
 argument was already a far pointer, and the call sites pass `&rect` / `BlitRects + n`).
 
 Auto-named parameters: 721 -> 706.
+
+## 43 parameters from the text primitives, the driver fills and two rect clipping paths
+
+Three scans first confirmed the remaining tail has no shortcut left: comparing auto parameters
+against the known counters (`AgntCount`, `EntityCount`, `PartySize`, `GMenuItem`, ...) yields
+exactly one candidate, and scaling them by a known struct stride yields exactly one -- the
+already-refused `ovc22_textRingProt`.  So the rest came from reading bodies.
+
+### The Borland text primitives
+
+`_gettext` and `_puttext` both call `__VALIDATEXY(param_4, param_3, param_2, param_1)` and then
+`width = (param_3 - param_1) + 1` walking `param_2 .. param_4`:
+
+```c
+iVar1 = __VALIDATEXY(param_4,param_3,param_2,param_1);
+iVar1 = (param_3 - param_1) + 1;
+for (; param_2 <= param_4; param_2 = param_2 + 1)
+    __SCREENIO(iVar1, param_5, param_6, ...);
+```
+
+so `x1, y1, x2, y2, buf, bufSeg`.  `_movetext` adds a second `__VALIDATEXY` on a destination
+rectangle anchored at `(param_5, param_6)` with the same size, so `x1, y1, x2, y2, dstX, dstY`.
+
+### `driver_scan4`
+
+```c
+puVar4 = (uint *)((int)param_1 + param_2 * 2 + param_3 * 0x128);  /* 0x128 = 148 words */
+rows = (param_5 - param_3) + 1;  cols = (param_4 - param_2) + 1;
+*puVar4 = *puVar4 & param_6;
+```
+
+→ `buf, x1, y1, x2, y2, mask`; the caller's `driver_scan4(GMapFlags,0,0,0x93,0x3b,0xfff7)` is the
+whole 148x60 flag map with a keep-mask.
+
+### `__LONGTOA`
+
+```c
+if ((param_3 < 0x25) && (1 < (byte)param_3)) { ... param_6 = param_6 / param_3 ... }
+if (param_2 != '\0') { *param_4 = '-'; ... }
+cVar4 = (bVar2 - 10) + param_1;
+```
+
+→ `radix`, `signed` (enables the leading '-'), `alphaBase` (the letter base for digits >= 10),
+`buf`, and `valueLo` (the low word of the 32-bit value, whose high word arrives on the stack).
+`param_5` is never read.
+
+### Two rectangle clippers
+
+`ovc22_usesGMapFlags2` walks a line between two map squares -- `GMapFlags[param_3][param_2]`
+with deltas `(param_4 - param_2)` and `(param_5 - param_3)` -- so `x1, y1, x2, y2`.
+
+`ovc27_usesRandBelow` clips a sprite rect and swaps both coordinate pairs together:
+
+```c
+if (param_3 < param_1) { swap(param_3, param_1); swap(param_4, param_2); }
+if (param_1 < rect[0]) param_1 = rect[0];      if (rect[2] < param_3) param_3 = rect[2];
+if ((rect[1] <= param_2) && (param_2 <= rect[3])) ...
+```
+
+→ `x1, y1, x2, y2`, `rect` (retyped `brect_t *` -- [0]/[2] are the x bounds and [1]/[3] the y
+bounds) and `rectSeg` (the pointer is built as `CONCAT12(param_6, param_5)`).
+
+### `driver_scan1`
+
+A dithered span fill: it counts down `param_3`, steps one byte per iteration through a pattern
+at `param_5` (offset low word, segment high word) and writes 0 or `param_4` depending on the
+threshold test -- so `buf`, `count`, `fill`, `pattern`.  `param_2` and `param_6` are never read.
+
+Auto-named parameters: 706 -> 663.  Struct-typed arguments: 132 -> 133.
