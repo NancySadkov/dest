@@ -6022,3 +6022,60 @@ stays at 137 while the declaration is now correct.
 | `ovc49_body1` (5) | the batch decompiler times out on it |
 
 Auto-named parameters: 466 -> 401.
+
+## 33 parameters from a call-slot scan, plus what it cannot decide
+
+The scan behind this batch is narrow on purpose: for each still-unnamed parameter, collect
+**every** line where it appears, and accept a name only if the only use is one argument
+position of a call whose callee slot already carries that name.  It is a candidate generator,
+not a proof -- `saveui_usesBlitText`'s `param_2` satisfies it (`ovr_blitText(text, param_2, ...)`,
+the `widths` slot) but is refused, because every caller passes the string's **segment**
+(`0x2410`) there.  Each candidate below was therefore read line by line first.
+
+| function | parameters | evidence |
+|---|---|---|
+| `__UTOA` | `buf`, `valueLo` | tail-calls `__LONGTOA('a','\0',10, param_1, param_2, param_3)` and `param_2` is the slot `__LONGTOA` never reads |
+| `bios` | `width`, `vramOfs`, `vramSeg` | counts down `param_1`, walks `CONCAT22(param_3, param_2 + 1)` and measures it with `screenpos` |
+| `_atoi`, `_fputc` | `s`; `c`, `stream` | single forwards into `_atol` / `fputc` |
+| `ovc22_textArena2` | `x`, `y` | forwards into `ovc22_textArena(x, y)` and also indexes the map with the same pair |
+| `ovc22_loop1` | `yOutOfs`, `yOutSeg` | the third argument goes to `ovc22_usesAlignUp42`'s `yOutOfs` slot and `param_4` is the same split pointer's high word |
+| `ovc23_usesGUnitGrid`, `ovc23_compute1` | `unitType` | `ovr_ovc18_usesRandBelow(x,y,bldType,param_4)` at every site (8 for `compute1`) |
+| `ovc23_textUnitDrowns` | `x`, `y` | `GMapFlags[param_2 + 1][param_1]` and comparisons with `entity.x`/`entity.y` |
+| `ovc31_usesClose` | `filename` | `file_open_rdonly(param_1)` |
+| `drawString`, `ovc50_usesBlitText` | `widths` | single use as `ovr_blitText`'s `widths` slot |
+| `ui_textDefineRegionCommand`, `ovc41_usesDrawTextAt`, `ovc41_usesMiceBlitRect` | `menuIndex` | index `MenuItemEnabled` / compared with `GMenuItem` |
+| `season_textHalflingCastle` | `formatIndex` | `ovr_ovc40_usesAlignToSeg(..., param_1)` at both sites |
+| `ovc38_usesStshFree` | `handle` | `ovr_stshFree(param_1)` |
+| `ovc40_usesAlignToSeg`, `ovc41_usesBiosKeyAvail` | `backdropIndex` | passed to `ovc40_usesBlitGfx10`/`ovc40_usesStshLoadGfx`, whose slot is already `backdropIndex` |
+| `ovc18_textTypeLen` | `recordCount` | `*_param_8 += 1` once per matching construction record -- the same statement that gave `manage_usesGUnitCount` its `recordCount` |
+| `ovc28_usesBlitGfx10`, `ovc28_usesScreenMode` | `entries`, `count` | a stride-4 far-pointer table whose entries are null-tested (`*p != 0 || p[1] != 0`), bounded by the second argument |
+| `keyprocessor_usesBiosKeyAvail` | `x` | moves `*param_1` in 8-pixel steps clamped to `0xde` |
+| `ovc26_usesRandBelow` | `outFlagSeg` | `ovr_createConstructionRecordFar(..., (byte)param_3, partySlot)` -- the fifth slot is the outFlag pointer's segment |
+
+### What the EMS pair actually does, and why it still has no names
+
+Comparing the two functions side by side settles their *shapes* even though no field of the
+block is named anywhere in the program:
+
+```c
+/* ems_memmove1 */                       /* ems_memmove2 */
+var05b7 = 1;  var05b8 = EMS_Handle;      var05b7 = 0;  var05b8 = 0;
+var05bc = page(param_4, param_3);        var05ba = param_3;  var05bc = param_4;
+var05ba = param_3 & 0x3fff;
+var05be = 0;  var05bf = 0;               var05be = 1;  var05bf = EMS_Handle;
+var05c1 = param_1; var05c3 = param_2;    var05c3 = page(param_2, param_1);
+                                        var05c1 = param_1 & 0x3fff;
+var05b3 = param_5; var05b5 = param_6;    var05b3 = param_5; var05b5 = param_6;
+```
+
+So exactly one of the two 32-bit addresses is converted to an expanded-memory page plus a
+14-bit offset (`& 0x3fff`, and the shifted page built from the other word), and the other is
+stored raw -- i.e. one side is EMS and the other conventional memory.  `ems_memmove1` converts
+the **third/fourth** arguments and `ems_memmove2` the **first/second**.  But which side is the
+source is decided by field order only: the only markers are `emms_var05b7/05b8` versus
+`emms_var05be/05bf`, which are the decompiler's auto-names for an absolute data block, and no
+symbol at that block exists in the export.  Naming `src`/`dst` from that ordering would be a
+guess about which label is the source type, so both functions stay refused -- now with the
+asymmetry documented, which is the part the binary does state.
+
+Auto-named parameters: 401 -> 368.
