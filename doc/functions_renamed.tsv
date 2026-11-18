@@ -18,3 +18,574 @@ address	old	new	evidence
 2d63:0bad	driver_2d63_0bad	driver_copyWords	copies a run of words, count from the 4th stack argument
 2d63:0aac	driver_2d63_0aac	driver_unrleScreen	decodes 200 rows of run/literal pairs, destination += 0x140 per row
 2d63:0af7	driver_2d63_0af7	driver_unrleSprite	header row offset + height, per-run x offsets, rows += 0x140
+1000:032f	xms_1000_032f	xms_usesXmsHandle	[R6] touches XmsHandle, XmsSrcLo
+1000:03c2	xms_1000_03c2	xms_usesXmsHandle2	[R6] touches XmsHandle, XmsSrcLo
+1000:0472	xms_1000_0472	stshInit_scan	[R5] only caller stshInit
+13aa:000b	video_13aa_000b	video_compute1	[R7] body shape: compute
+13aa:005b	video_13aa_005b	video_usesAgntCount	[R6] touches AgntCount
+13aa:0165	video_13aa_0165	video_usesMiceUnkState	[R6] touches MiceUnkState, MouseX
+13aa:0266	video_13aa_0266	video_copy1	[R7] body shape: copy
+2d63:0107	driver_2d63_0107	driver_compute1	[R7] body shape: compute
+2d63:014b	driver_2d63_014b	driver_compute2	[R7] body shape: compute
+2d63:044e	driver_2d63_044e	driver_scan1	[R7] body shape: scan
+2d63:0599	driver_2d63_0599	driver_drawLine_compute	[R5] only caller driver_drawLine
+2d63:05a9	driver_2d63_05a9	driver_loop1	[R7] body shape: loop
+2d63:0652	driver_2d63_0652	driver_compute3	[R7] body shape: compute
+2d63:0687	driver_2d63_0687	driver_compute4	[R7] body shape: compute
+2d63:0846	driver_2d63_0846	driver_compute5	[R7] body shape: compute
+2d63:098a	driver_2d63_098a	driver_scan2	[R7] body shape: scan
+2d63:09c9	driver_2d63_09c9	driver_loop2	[R7] body shape: loop
+2d63:0a24	driver_2d63_0a24	driver_scan3	[R7] body shape: scan
+2d63:0a67	driver_2d63_0a67	driver_scan4	[R7] body shape: scan
+2d63:0bde	driver_2d63_0bde	driver_loop3	[R7] body shape: loop
+2e25:0000	draw_2e25_0000	draw_usesFillRect	[R4] calls ovr_driver_fillRect
+2e25:0098	draw_2e25_0098	draw_usesFillRect2	[R4] calls ovr_driver_fillRect
+2e25:018a	draw_2e25_018a	draw_compute1	[R7] body shape: compute
+2e25:01eb	draw_2e25_01eb	draw_compute2	[R7] body shape: compute
+2e25:0217	draw_2e25_0217	draw_usesCrossBlitX	[R6] touches CrossBlitX, CrossBlitY
+2e25:0245	draw_2e25_0245	draw_compute3	[R7] body shape: compute
+2e25:025a	draw_2e25_025a	draw_textTalkwin9Lbm	[R2] string "talkwin9.lbm"
+2e25:046b	draw_2e25_046b	draw_usesBlitLoadRleGfx	[R4] calls ovr_blitLoadRleGfx
+2e25:0573	draw_2e25_0573	draw_usesBlitLoadRleGfx2	[R4] calls ovr_blitLoadRleGfx
+2e25:05e9	draw_2e25_05e9	draw_usesPlay_sfx	[R4] calls ovr_play_sfx
+2e25:0938	draw_2e25_0938	draw_usesPrintf	[R4] calls printf
+2e25:0ad1	draw_2e25_0ad1	draw_usesResetTextBlitCycle	[R4] calls ovr_resetTextBlitCycle
+2e25:0d35	draw_2e25_0d35	draw_usesGameProcessKey	[R4] calls gameProcessKey
+2e25:0efd	draw_2e25_0efd	draw_usesBlitLoadRleGfx3	[R4] calls ovr_blitLoadRleGfx
+2e25:10c7	draw_2e25_10c7	draw_usesDrawLine	[R4] calls ovr_driver_drawLine
+2e25:130a	draw_2e25_130a	draw_textMovement	[R2] string "Movement"
+2e25:15d6	draw_2e25_15d6	draw_textArena	[R2] string "arena"
+2e25:1662	draw_2e25_1662	draw_usesRing_buffer	[R4] calls ovr_clean_ring_buffer
+2e25:1759	draw_2e25_1759	draw_compute4	[R7] body shape: compute
+2e25:17b3	draw_2e25_17b3	draw_usesToggle_pause	[R4] calls ovr_toggle_pause
+2e25:1d7c	draw_2e25_1d7c	draw_textProvidesMoreHousing	[R2] string "%s: provides more housing."
+2e25:1e42	draw_2e25_1e42	draw_textGoldProvidesHousing	[R2] string "%s: %s %d gold. provides housing for %d "
+302d:06ea	font_302d_06ea	font_loop1	[R7] body shape: loop
+302d:080b	font_302d_080b	font_usesMiceBlitRect	[R4] calls ovr_miceBlitRect
+317e:04c2	blit_317e_04c2	blit_usesDrawGfx	[R4] calls drawGfx
+317e:0879	blit_317e_0879	blit_usesRandBelow	[R4] calls ovr_randBelow
+317e:0db7	blit_317e_0db7	blit_usesBlitGfxN	[R4] calls blitGfxN
+317e:0ebe	blit_317e_0ebe	blit_compute1	[R7] body shape: compute
+317e:0f7d	blit_317e_0f7d	blit_usesStExit	[R4] calls ovr_stExit
+317e:1240	blit_317e_1240	blit_usesBlitGfxN2	[R4] calls blitGfxN
+32c9:0000	OVC07_32c9_0000	ovc07_compute1	[R7] body shape: compute
+32c9:0026	OVC07_32c9_0026	ovc07_compute2	[R7] body shape: compute
+32c9:0044	OVC07_32c9_0044	ovc07_usesBiosReadKey	[R4] calls ovr_biosReadKey
+32c9:03c4	OVC07_32c9_03c4	ovc07_usesFillRect	[R4] calls ovr_driver_fillRect
+32c9:0466	OVC07_32c9_0466	ovc07_usesLDIV_at_	[R4] calls LDIV_at_
+3338:0388	init2_3338_0388	init2_usesCFGMice	[R6] touches CFG_Mice, MiceClick
+3338:0401	init2_3338_0401	ovr_miceButton0PressStates_entry	[R1] forwards to ovr_miceButton0PressStates
+3338:0415	init2_3338_0415	init2_usesMiceButton0PressStates	[R4] calls ovr_miceButton0PressStates
+3381:0000	init_3381_0000	init_usesBlitGfxRect	[R4] calls ovr_blitGfxRect
+3381:0693	init_3381_0693	init_usesGMapFlags	[R6] touches GMapFlags, GMapCells
+3381:08dc	init_3381_08dc	init_textFilename	[R2] string "Filename %d %s  \r"
+3381:1697	init_3381_1697	init_usesGUnits	[R6] touches GUnits, bldType
+3381:17e8	init_3381_17e8	init_textNEWMAXSQUARE	[R2] string "NEW MAXSQUARE %d \r"
+3381:1f1d	init_3381_1f1d	init_usesGMapCells	[R6] touches GMapCells
+3381:2101	init_3381_2101	init_usesClearEntities	[R4] calls clearEntities
+3381:233e	init_3381_233e	init_usesGMapCells2	[R6] touches GMapCells
+3381:237a	init_3381_237a	init_usesGMapCells3	[R6] touches GMapCells
+3381:23b5	init_3381_23b5	init_usesGMapFlags2	[R6] touches GMapFlags
+3381:23f9	init_3381_23f9	init_compute1	[R7] body shape: compute
+3381:2452	init_3381_2452	init_compute2	[R7] body shape: compute
+3381:24c3	init_3381_24c3	init_usesRandBelow	[R4] calls ovr_randBelow
+3381:2651	init_3381_2651	init_usesGMapFlags3	[R6] touches GMapFlags, GMapCells
+3381:2883	init_3381_2883	init_usesRandBelow2	[R4] calls ovr_randBelow
+3381:2d36	init_3381_2d36	init_usesUnitIndex	[R6] touches unitIndex, GMapFlags
+3381:2e9a	init_3381_2e9a	init_usesTolower	[R4] calls tolower
+36ce:0000	constr_36ce_0000	constr_usesGfxRndSeed	[R6] touches GfxRndSeed, SCARRY2
+36ce:0080	constr_36ce_0080	constr_usesGfxRndSeed2	[R6] touches GfxRndSeed, SCARRY2
+36ce:0101	constr_36ce_0101	constr_usesSmoothPrev	[R6] touches SmoothPrev
+36ce:0159	constr_36ce_0159	constr_usesGfxRndSeed3	[R6] touches GfxRndSeed, SCARRY2
+36ce:023c	constr_36ce_023c	constr_usesSmoothPrev2	[R6] touches SmoothPrev
+36ce:02f0	constr_36ce_02f0	constr_usesGOngoingBattle	[R6] touches GOngoingBattle
+36ce:0345	constr_36ce_0345	constr_usesBlitRaw	[R4] calls ovr_blitRaw
+36ce:03a6	constr_36ce_03a6	constr_usesBlitRect	[R4] calls blitRect
+36ce:049f	constr_36ce_049f	constr_compute1	[R7] body shape: compute
+36ce:04c4	constr_36ce_04c4	constr_compute2	[R7] body shape: compute
+36ce:04e9	constr_36ce_04e9	constr_usesScreenOriginY	[R6] touches ScreenOriginY, GfxRndSeed
+36ce:08ee	constr_36ce_08ee	constr_usesBlitGfxRect	[R4] calls ovr_blitGfxRect
+36ce:0995	constr_36ce_0995	constr_usesAgnt_clear	[R4] calls ovr_agnt_clear
+36ce:1db4	constr_36ce_1db4	constr_usesBlitRect2	[R4] calls blitRect
+36ce:1e76	constr_36ce_1e76	constr_usesBlitRect3	[R4] calls blitRect
+36ce:1efc	constr_36ce_1efc	constr_usesBlitRect4	[R4] calls blitRect
+36ce:1f99	constr_36ce_1f99	constr_usesBlitGfxRect2	[R4] calls ovr_blitGfxRect
+36ce:306b	constr_36ce_306b	constr_usesGMapFlags	[R6] touches GMapFlags, GMapCells
+36ce:3172	constr_36ce_3172	constr_usesGMapFlags2	[R6] touches GMapFlags, GMapCells
+3a5b:0000	audio_3a5b_0000	audio_usesLDIV_at_	[R4] calls LDIV_at_
+3a5b:034e	audio_3a5b_034e	audio_usesDigSoundPlaying	[R4] calls ovr_digSoundPlaying
+3a5b:037e	audio_3a5b_037e	ovr_midGetSequenceStatus_entry	[R1] forwards to ovr_midGetSequenceStatus
+3a5b:0648	audio_3a5b_0648	audio_textMidiError	[R2] string "Midi error\r"
+3a5b:0761	audio_3a5b_0761	audio_usesAlignToSeg	[R4] calls ovr_alignToSeg
+3a5b:07c2	audio_3a5b_07c2	audio_compute1	[R7] body shape: compute
+3a5b:0afd	audio_3a5b_0afd	audio_compute2	[R7] body shape: compute
+3b1d:0000	agnt_3b1d_0000	agnt_usesAgntCount	[R6] touches AgntCount, GAnimPlaying
+3b1d:0032	agnt_3b1d_0032	agnt_compute1	[R7] body shape: compute
+3b1d:005e	agnt_3b1d_005e	agnt_compute2	[R7] body shape: compute
+3b1d:0079	agnt_3b1d_0079	agnt_compute3	[R7] body shape: compute
+3b1d:00b7	agnt_3b1d_00b7	agnt_compute4	[R7] body shape: compute
+3b1d:00ce	agnt_3b1d_00ce	agnt_usesFrameIndex	[R6] touches frameIndex, AgntCount
+3b1d:0426	agnt_3b1d_0426	agnt_usesStrengthMax	[R6] touches strengthMax, frameIndex
+3b1d:093e	agnt_3b1d_093e	agnt_usesAgntCount2	[R6] touches AgntCount
+3b1d:0a53	agnt_3b1d_0a53	agnt_usesAnimFrame	[R6] touches animFrame
+3b1d:0a8d	agnt_3b1d_0a8d	agnt_compute5	[R7] body shape: compute
+3b1d:0a9f	agnt_3b1d_0a9f	agnt_compute6	[R7] body shape: compute
+3b1d:0ac0	agnt_3b1d_0ac0	agnt_textHeld	[R2] string "held %s"
+3b1d:0c1e	agnt_3b1d_0c1e	agnt_compute7	[R7] body shape: compute
+3b1d:0c7c	agnt_3b1d_0c7c	agnt_compute8	[R7] body shape: compute
+3b1d:0c9f	agnt_3b1d_0c9f	agnt_compute9	[R7] body shape: compute
+3b1d:0cc6	agnt_3b1d_0cc6	agnt_compute10	[R7] body shape: compute
+3b1d:0cef	agnt_3b1d_0cef	agnt_compute11	[R7] body shape: compute
+3b1d:0d1c	agnt_3b1d_0d1c	agnt_usesAnimFrame2	[R6] touches animFrame
+3b1d:0d4d	agnt_3b1d_0d4d	agnt_compute12	[R7] body shape: compute
+3b1d:0d82	agnt_3b1d_0d82	agnt_usesStExit	[R4] calls ovr_stExit
+3b1d:1035	agnt_3b1d_1035	agnt_usesBlitGfxRect	[R4] calls ovr_blitGfxRect
+3b1d:11c1	agnt_3b1d_11c1	agnt_compute13	[R7] body shape: compute
+3b1d:120b	agnt_3b1d_120b	agnt_usesAgntCount3	[R6] touches AgntCount
+3b1d:15bd	agnt_3b1d_15bd	agnt_usesAgntCount4	[R6] touches AgntCount
+3b1d:16cd	agnt_3b1d_16cd	agnt_usesAgntCount5	[R6] touches AgntCount
+3b1d:177f	agnt_3b1d_177f	agnt_usesAgntSaved	[R6] touches agntSaved, AgntCount
+3b1d:196b	agnt_3b1d_196b	agnt_usesAgntCount6	[R6] touches AgntCount
+3b1d:19e0	agnt_3b1d_19e0	agnt_usesFmFreeAudio	[R4] calls ovr_fmFreeAudio
+3b1d:1ad8	agnt_3b1d_1ad8	agnt_usesAlignToSeg	[R4] calls ovr_alignToSeg
+3b1d:1bc1	agnt_3b1d_1bc1	agnt_compute14	[R7] body shape: compute
+3b1d:1bf5	agnt_3b1d_1bf5	agnt_compute15	[R7] body shape: compute
+3b1d:1c26	agnt_3b1d_1c26	agnt_usesPlay_sfxU	[R4] calls ovr_play_sfxU
+3b1d:1d0c	agnt_3b1d_1d0c	agnt_usesBlitLoadRleGfx	[R4] calls ovr_blitLoadRleGfx
+3b1d:1da5	agnt_3b1d_1da5	agnt_compute16	[R7] body shape: compute
+3d16:0000	OVC13_3d16_0000	ovc13_usesBlitLoadRleGfx	[R4] calls ovr_blitLoadRleGfx
+3d16:005b	OVC13_3d16_005b	ovc13_usesMiceBlitRect	[R4] calls ovr_miceBlitRect
+3d16:0186	OVC13_3d16_0186	ovc13_compute1	[R7] body shape: compute
+3d16:01a4	OVC13_3d16_01a4	ovc13_usesSeedD110	[R6] touches Seed_2000_d110, SCARRY2
+3d16:01fb	OVC13_3d16_01fb	ovc13_usesSeedD1102	[R6] touches Seed_2000_d110, SCARRY2
+3d16:0255	OVC13_3d16_0255	ovc13_usesScreenY	[R6] touches screenY, entityIndex
+3d16:0472	OVC13_3d16_0472	ovc13_usesScreenX	[R6] touches screenX, screenY
+3d16:06a2	OVC13_3d16_06a2	ovc13_usesGLeaderCount	[R6] touches GLeaderCount, DebugVerbose
+3d16:0883	OVC13_3d16_0883	ovc13_compute2	[R7] body shape: compute
+3d16:08ee	OVC13_3d16_08ee	ovc13_usesBlitRects	[R6] touches BlitRects, PanelGridX
+3d16:0c22	OVC13_3d16_0c22	ovc13_usesBlitRects2	[R6] touches BlitRects
+3d16:0e03	OVC13_3d16_0e03	ovc13_usesScreenY2	[R6] touches screenY, EntityCount
+3d16:1045	OVC13_3d16_1045	ovc13_usesEntities	[R6] touches Entities, L_OVC13_3d16_1045_10C4
+3d16:113d	OVC13_3d16_113d	ovc13_usesScreenY3	[R6] touches screenY, entityIndex
+3d16:135d	OVC13_3d16_135d	ovc13_usesHighlight1	[R6] touches Highlight1, GLeaderCount
+3d16:1558	OVC13_3d16_1558	ovc13_usesAlignUp4	[R4] calls ovr_alignUp4
+3d16:1945	OVC13_3d16_1945	ovc13_usesBlitLoadRleGfx2	[R4] calls ovr_blitLoadRleGfx
+3d16:1a01	OVC13_3d16_1a01	ovc13_usesBlitLoadRleGfx3	[R4] calls ovr_blitLoadRleGfx
+3d16:1abd	OVC13_3d16_1abd	ovc13_usesBlitRect	[R4] calls ovr_blitRect
+3d16:1b3b	OVC13_3d16_1b3b	ovc13_usesHighlight12	[R6] touches Highlight1, GUnitCount
+3f0b:0000	attact_3f0b_0000	attact_usesGMapFlags	[R6] touches GMapFlags
+3f0b:007e	attact_3f0b_007e	attact_usesGMapFlags2	[R6] touches GMapFlags
+3f0b:00d8	attact_3f0b_00d8	attact_usesGMapCells	[R6] touches GMapCells
+3f0b:01ec	attact_3f0b_01ec	attact_usesGUnits	[R6] touches GUnits, GUnitGrid
+3f0b:027d	attact_3f0b_027d	attact_usesSCARRY2	[R6] touches SCARRY2, GMapFlags
+3f0b:0362	attact_3f0b_0362	attact_usesSCARRY22	[R6] touches SCARRY2, GMapFlags
+3f0b:0451	attact_3f0b_0451	attact_usesMenuItemEnabled	[R6] touches MenuItemEnabled, EntityCount
+3f0b:0540	attact_3f0b_0540	attact_textAbnormalProgramTermination	[R2] string "Abnormal program termination\r\n"
+3f0b:0585	attact_3f0b_0585	attact_usesSquareRecCount	[R6] touches SquareRecCount
+3f0b:05df	attact_3f0b_05df	attact_usesSquareRecCount2	[R6] touches SquareRecCount, SquareRecX
+3f0b:0685	attact_3f0b_0685	attact_usesAgntFlag1	[R6] touches AgntFlag1, AgntCount
+3f0b:082f	attact_3f0b_082f	attact_usesBDADailyTimeCounter	[R6] touches BDA_DailyTimeCounter
+3f0b:0880	attact_3f0b_0880	attact_compute1	[R7] body shape: compute
+3f0b:0894	attact_3f0b_0894	attact_usesAgntCount	[R6] touches AgntCount, Entities
+3f0b:0941	attact_3f0b_0941	attact_usesAlignUp4	[R4] calls ovr_alignUp4
+3f0b:0ade	attact_3f0b_0ade	attact_usesEntities	[R6] touches Entities, destX
+3f0b:0c2a	attact_3f0b_0c2a	attact_usesGMapFlags3	[R6] touches GMapFlags, EntityCount
+3f0b:1082	attact_3f0b_1082	attact_usesAlignUp42	[R4] calls ovr_alignUp4
+3f0b:18fe	attact_3f0b_18fe	attact_textCannotAttractUnits	[R2] string "You cannot attract units to this locatio"
+3f0b:1a2f	attact_3f0b_1a2f	attact_textArena	[R2] string "arena"
+3f0b:1bfc	attact_3f0b_1bfc	attact_textArena2	[R2] string "arena"
+3f0b:1cfb	attact_3f0b_1cfb	attact_textArena3	[R2] string "arena"
+3f0b:1db1	attact_3f0b_1db1	attact_usesAlignUp43	[R4] calls ovr_alignUp4
+3f0b:21ef	attact_3f0b_21ef	attact_usesLDIV_at_	[R4] calls LDIV_at_
+3f0b:2252	attact_3f0b_2252	attact_compute2	[R7] body shape: compute
+3f0b:2303	attact_3f0b_2303	attact_compute3	[R7] body shape: compute
+3f0b:23ab	attact_3f0b_23ab	attact_usesAlignUp44	[R4] calls ovr_alignUp4
+3f0b:2430	attact_3f0b_2430	attact_usesRandBelow	[R4] calls ovr_randBelow
+3f0b:251d	attact_3f0b_251d	attact_usesUpdSeason	[R4] calls ovr_updSeason
+3f0b:26bd	attact_3f0b_26bd	attact_usesEntityCount	[R6] touches EntityCount, Entities
+3f0b:277b	attact_3f0b_277b	attact_usesEntityCount2	[R6] touches EntityCount, Entities
+3f0b:28eb	attact_3f0b_28eb	attact_usesAgntCount2	[R6] touches AgntCount
+3f0b:2997	attact_3f0b_2997	attact_usesBlitLoadRleGfx	[R4] calls ovr_blitLoadRleGfx
+3f0b:2a09	attact_3f0b_2a09	attact_usesLDIV_at_2	[R4] calls LDIV_at_
+4207:0b55	OVC15_4207_0b55	ovc15_loop1	[R7] body shape: loop
+4207:0b88	OVC15_4207_0b88	ovc15_usesAgntCount	[R6] touches AgntCount
+4207:0bb7	OVC15_4207_0bb7	ovc15_usesAgntIndex	[R6] touches agntIndex, EntityCount
+4207:0e17	OVC15_4207_0e17	ovc15_usesAgntFlag1	[R6] touches AgntFlag1, AgntCount
+4207:0ff0	OVC15_4207_0ff0	ovc15_usesAlignUp4	[R4] calls ovr_alignUp4
+4207:10a3	OVC15_4207_10a3	ovc15_usesLDIV_at_	[R4] calls LDIV_at_
+4207:16a5	OVC15_4207_16a5	ovc15_usesLDIV_at_2	[R4] calls LDIV_at_
+4207:1aae	OVC15_4207_1aae	ovc15_usesStExit	[R4] calls ovr_stExit
+4207:1c16	OVC15_4207_1c16	ovc15_usesStshRealloc	[R4] calls ovr_stshRealloc
+4207:1c79	OVC15_4207_1c79	ovc15_usesToupper	[R4] calls toupper
+4207:1d87	OVC15_4207_1d87	ovc15_usesStExit2	[R4] calls ovr_stExit
+4207:1f5b	OVC15_4207_1f5b	ovc15_compute1	[R7] body shape: compute
+4207:1ffe	OVC15_4207_1ffe	ovc15_usesRandBelow	[R4] calls ovr_randBelow
+4207:2301	OVC15_4207_2301	ovc15_textArena	[R2] string "arena"
+4207:25dd	OVC15_4207_25dd	ovc15_textView	[R2] string "View %s."
+4207:26bc	OVC15_4207_26bc	ovc15_textError	[R2] string "Error 4 %d \r"
+4207:288b	OVC15_4207_288b	ovc15_usesAlignUp42	[R4] calls ovr_alignUp4
+4207:28fa	OVC15_4207_28fa	ovc15_usesSelectedAgent	[R6] touches SelectedAgent, AgntCount
+4207:2961	OVC15_4207_2961	ovc15_textArena2	[R2] string "arena"
+4207:2a0e	OVC15_4207_2a0e	ovc15_textArena3	[R2] string "arena"
+4207:2ab9	OVC15_4207_2ab9	ovc15_textArena4	[R2] string "arena"
+4207:2c18	OVC15_4207_2c18	ovc15_textArena5	[R2] string "arena"
+4207:2d75	OVC15_4207_2d75	ovc15_usesRandBelow2	[R4] calls ovr_randBelow
+4528:01b2	saveui_4528_01b2	saveui_usesBlitLoadRleGfx	[R4] calls ovr_blitLoadRleGfx
+4528:02fb	saveui_4528_02fb	saveui_usesBlitLoadRleGfx2	[R4] calls ovr_blitLoadRleGfx
+4528:0404	saveui_4528_0404	saveui_usesMouseMoved	[R6] touches MouseMoved, MouseX
+4528:0533	saveui_4528_0533	saveui_usesBlitGfxRect	[R4] calls ovr_blitGfxRect
+4528:055b	saveui_4528_055b	saveui_usesBlitGfx10	[R4] calls ovr_blitGfx10
+4528:0664	saveui_4528_0664	saveui_usesBlitLoadRleGfx3	[R4] calls ovr_blitLoadRleGfx
+4528:10c5	saveui_4528_10c5	saveui_usesWrite	[R4] calls write
+4528:1104	saveui_4528_1104	saveui_usesStshAlloc	[R4] calls ovr_stshAlloc
+4528:1175	saveui_4528_1175	saveui_textSsavesTxt	[R2] string "%ssaves.txt"
+4528:120d	saveui_4528_120d	saveui_textSsavesTxt2	[R2] string "%ssaves.txt"
+4528:1288	saveui_4528_1288	saveui_usesStshFree	[R4] calls ovr_stshFree
+4528:1303	saveui_4528_1303	saveui_textMessageDelayNow	[R2] string "Message delay is now %d."
+4528:144e	saveui_4528_144e	saveui_usesBlitLoadRleGfx4	[R4] calls ovr_blitLoadRleGfx
+4528:1470	saveui_4528_1470	saveui_textCancel	[R2] string "Cancel"
+4528:1ae8	saveui_4528_1ae8	saveui_textWhichNewWorld	[R2] string "Which new world:"
+4528:1d0f	saveui_4528_1d0f	saveui_scan1	[R7] body shape: scan
+4528:1d55	saveui_4528_1d55	saveui_usesBlitText	[R4] calls ovr_blitText
+474a:0e9b	stash_474a_0e9b	stash_usesFmMalloc	[R4] calls fmMalloc
+474a:10ac	stash_474a_10ac	stash_usesStExit	[R4] calls ovr_stExit
+48ac:0000	OVC18_48ac_0000	ovc18_usesBlitLoadRleGfx	[R4] calls ovr_blitLoadRleGfx
+48ac:0027	OVC18_48ac_0027	ovc18_usesBlitLoadRleGfx2	[R4] calls ovr_blitLoadRleGfx
+48ac:0051	OVC18_48ac_0051	ovc18_textView	[R2] string "View %s."
+48ac:0251	OVC18_48ac_0251	ovc18_textBathHouse	[R2] string "bath house"
+48ac:0382	OVC18_48ac_0382	ovc18_textTypeLen	[R2] string "type %d len %ld \r"
+48ac:05f2	OVC18_48ac_05f2	ovc18_textFortressCannotPlaced	[R2] string "A fortress cannot be placed among enemy "
+48ac:0bf4	OVC18_48ac_0bf4	ovc18_usesRandBelow	[R4] calls ovr_randBelow
+48ac:1022	OVC18_48ac_1022	ovc18_textArena	[R2] string "arena"
+48ac:1092	OVC18_48ac_1092	ovc18_usesAlignUp4	[R4] calls ovr_alignUp4
+49fd:0000	save_49fd_0000	save_usesRead	[R4] calls read
+49fd:0035	save_49fd_0035	save_usesCalcSeasonPalette	[R4] calls ovr_calcSeasonPalette
+49fd:01da	save_49fd_01da	save_textLoading	[R2] string "Loading..."
+49fd:081e	save_49fd_081e	save_textSsave	[R2] string "%ssave.%03d"
+49fd:0863	save_49fd_0863	save_usesClose	[R4] calls close
+49fd:08da	save_49fd_08da	save_usesWrite	[R4] calls write
+49fd:0f26	save_49fd_0f26	save_textDeleting	[R2] string "Deleting..."
+4b0a:010c	OVC20_4b0a_010c	ovc20_textLenLoc	[R2] string "uc%lx %d len %ld loc %ld \r"
+4b0a:08ee	OVC20_4b0a_08ee	ovc20_usesPADD_at_	[R4] calls PADD_at_
+4b0a:112d	OVC20_4b0a_112d	ovc20_compute1	[R7] body shape: compute
+4d05:0000	manage_4d05_0000	manage_usesMenuItemEnabled	[R6] touches MenuItemEnabled, GLeaderCount
+4d05:0081	manage_4d05_0081	manage_usesBlitGfxRect	[R4] calls ovr_blitGfxRect
+4d05:0166	manage_4d05_0166	manage_usesBlitGfxRect2	[R4] calls ovr_blitGfxRect
+4d05:01a3	manage_4d05_01a3	manage_usesRandBelow	[R4] calls ovr_randBelow
+4d05:01d4	manage_4d05_01d4	manage_usesRandBelow2	[R4] calls ovr_randBelow
+4d05:023a	manage_4d05_023a	manage_compute1	[R7] body shape: compute
+4d05:029d	manage_4d05_029d	manage_compute2	[R7] body shape: compute
+4d05:02f1	manage_4d05_02f1	manage_compute3	[R7] body shape: compute
+4d05:0340	manage_4d05_0340	manage_compute4	[R7] body shape: compute
+4d05:03a4	manage_4d05_03a4	manage_textLawful	[R2] string "Lawful"
+4d05:044e	manage_4d05_044e	manage_usesGLeaderCount	[R6] touches GLeaderCount
+4d05:04c6	manage_4d05_04c6	manage_usesBlitLabel	[R4] calls ovr_blitLabel
+4d05:0519	manage_4d05_0519	manage_usesBlitLabel2	[R4] calls ovr_blitLabel
+4d05:056e	manage_4d05_056e	manage_usesLitoa10	[R4] calls litoa10
+4d05:0d7b	manage_4d05_0d7b	manage_loop1	[R7] body shape: loop
+4d05:118b	manage_4d05_118b	manage_compute5	[R7] body shape: compute
+4d05:11cb	manage_4d05_11cb	manage_usesRandBelow3	[R4] calls ovr_randBelow
+4d05:17c7	manage_4d05_17c7	manage_usesStop_audio	[R4] calls ovr_stop_audio
+4d05:1835	manage_4d05_1835	manage_textHalflingCastle	[R2] string "halfling castle"
+4d05:1b1d	manage_4d05_1b1d	manage_usesGLeaderCount2	[R6] touches GLeaderCount
+4d05:1b51	manage_4d05_1b51	manage_usesGLeaderCount3	[R6] touches GLeaderCount
+4d05:1bee	manage_4d05_1bee	manage_body1	[R7] no exported body
+4d05:22b3	manage_4d05_22b3	manage_4d05_22cf_entry	[R1] forwards to manage_4d05_22cf
+4d05:22cf	manage_4d05_22cf	manage_usesEntities	[R6] touches Entities, GMenuStrings
+4d05:2371	manage_4d05_2371	manage_usesEntities2	[R6] touches Entities, animFrame
+4d05:23fc	manage_4d05_23fc	manage_usesGUnitCount	[R6] touches GUnitCount, GRecordCount
+4d05:2543	manage_4d05_2543	manage_usesGUnits	[R6] touches GUnits, unitType
+4d05:26f6	manage_4d05_26f6	manage_textAllProperty	[R2] string "All property."
+4d05:277a	manage_4d05_277a	manage_textAllProperty2	[R2] string "All property."
+4d05:28e0	manage_4d05_28e0	manage_usesLitoa102	[R4] calls litoa10
+4d05:28f4	manage_4d05_28f4	manage_usesLitoa103	[R4] calls litoa10
+4d05:2b09	manage_4d05_2b09	manage_usesCurSfxType3	[R6] touches CurSfxType3, __C0_ASM_CopyRight
+4d05:2b3e	manage_4d05_2b3e	manage_usesCurSfxType32	[R6] touches CurSfxType3, __C0_ASM_CopyRight
+4d05:2bc4	manage_4d05_2bc4	manage_textBelongingAllLeaders	[R2] string "The %s belonging to all leaders are high"
+4d05:2d79	manage_4d05_2d79	manage_textTotalPopulation	[R2] string "Total population."
+4d05:330c	manage_4d05_330c	manage_textAllUnitsDisplayed	[R2] string "All units are displayed."
+5087:0000	OVC22_5087_0000	ovc22_textArena	[R2] string "arena"
+5087:0119	OVC22_5087_0119	ovc22_textMonster	[R2] string "monster"
+5087:015c	OVC22_5087_015c	ovc22_compute1	[R7] body shape: compute
+5087:018f	OVC22_5087_018f	ovc22_compute2	[R7] body shape: compute
+5087:0234	OVC22_5087_0234	ovc22_textPOPULATION	[R2] string "POPULATION"
+5087:0411	OVC22_5087_0411	ovc22_usesGSeason	[R6] touches GSeason, GTimeLo
+5087:056e	OVC22_5087_056e	ovc22_textRingProt	[R2] string "+%d ring of prot."
+5087:1470	OVC22_5087_1470	ovc22_usesPlayerCount	[R6] touches PlayerCount
+5087:1532	OVC22_5087_1532	ovc22_usesEntities	[R6] touches Entities, animFrame
+5087:1674	OVC22_5087_1674	ovc22_usesGUnits	[R6] touches GUnits, GRecordCount
+5087:18b6	OVC22_5087_18b6	ovc22_usesLUDIV_at_	[R4] calls LUDIV_at_
+5087:197d	OVC22_5087_197d	ovc22_compute3	[R7] body shape: compute
+5087:1991	OVC22_5087_1991	ovc22_usesEntities2	[R6] touches Entities
+5087:1ac1	OVC22_5087_1ac1	ovc22_usesEntities3	[R6] touches Entities
+5087:1ca4	OVC22_5087_1ca4	ovc22_usesEntities4	[R6] touches Entities
+5087:1d4a	OVC22_5087_1d4a	ovc22_usesLUDIV_at_2	[R4] calls LUDIV_at_
+5087:1d7d	upd_units_5087_1d7d	upd_usesAlignUp4	[R4] calls ovr_alignUp4
+5087:3a6b	OVC22_5087_3a6b	ovc22_textArena2	[R2] string "arena"
+5087:3c93	OVC22_5087_3c93	ovc22_usesAlignUp4	[R4] calls ovr_alignUp4
+5087:3d25	OVC22_5087_3d25	ovc22_usesGUnitGrid	[R6] touches GUnitGrid, GUnits
+5087:3dc7	OVC22_5087_3dc7	ovc22_usesGUnitGrid2	[R6] touches GUnitGrid, GUnits
+5087:3eb1	OVC22_5087_3eb1	ovc22_usesGUnitGrid3	[R6] touches GUnitGrid, GUnits
+5087:3f3b	OVC22_5087_3f3b	ovc22_usesGMapFlags	[R6] touches GMapFlags
+5087:3f8d	OVC22_5087_3f8d	ovc22_usesGMapFlags2	[R6] touches GMapFlags
+5087:40ad	OVC22_5087_40ad	ovc22_usesAlignUp42	[R4] calls ovr_alignUp4
+5087:416e	OVC22_5087_416e	ovc22_loop1	[R7] body shape: loop
+5087:4576	OVC22_5087_4576	ovc22_usesRandBelow	[R4] calls ovr_randBelow
+5087:4975	OVC22_5087_4975	ovc22_usesRandBelow2	[R4] calls ovr_randBelow
+5087:4dd9	OVC22_5087_4dd9	ovc22_textDecreaseMessageDelay	[R2] string "Decrease message delay"
+5087:503d	OVC22_5087_503d	ovc22_usesGOngoingBattle	[R6] touches GOngoingBattle, GfxRndSeed2
+5087:510e	OVC22_5087_510e	ovc22_usesGOngoingBattle2	[R6] touches GOngoingBattle, GfxRndSeed2
+55fe:0000	OVC23_55fe_0000	ovc23_textAdlibNone	[R2] string "               4. Adlib       5. None):"
+55fe:0487	OVC23_55fe_0487	ovc23_usesAlignUp4	[R4] calls ovr_alignUp4
+55fe:05db	OVC23_55fe_05db	ovc23_usesAlignUp42	[R4] calls ovr_alignUp4
+55fe:0617	OVC23_55fe_0617	ovc23_usesCornerBR	[R6] touches cornerBR, cornerBL
+55fe:0768	OVC23_55fe_0768	ovc23_usesCornerBR2	[R6] touches cornerBR, cornerBL
+55fe:0863	OVC23_55fe_0863	ovc23_textBuildThfres01Lbm	[R2] string "build\\thfres01.lbm"
+55fe:0a56	OVC23_55fe_0a56	ovc23_usesGUnits	[R6] touches GUnits, GUnitGrid
+55fe:0aba	OVC23_55fe_0aba	ovc23_usesGfxRndSeed2	[R6] touches GfxRndSeed2, GfxRndSeed
+55fe:0af5	OVC23_55fe_0af5	ovc23_usesAlignUp43	[R4] calls ovr_alignUp4
+55fe:0cdf	OVC23_55fe_0cdf	ovc23_textConstructionAbandoned	[R2] string "Construction abandoned."
+55fe:0f39	OVC23_55fe_0f39	ovc23_usesGMapFlags	[R6] touches GMapFlags
+55fe:1005	OVC23_55fe_1005	ovc23_usesGUnitGrid	[R6] touches GUnitGrid, GUnits
+55fe:1803	OVC23_55fe_1803	ovc23_usesGRecordCount	[R6] touches GRecordCount
+55fe:1ea9	OVC23_55fe_1ea9	ovc23_usesBlitGfxRect	[R4] calls ovr_blitGfxRect
+55fe:23d8	OVC23_55fe_23d8	ovc23_usesBlitGfxRect2	[R4] calls ovr_blitGfxRect
+55fe:2937	OVC23_55fe_2937	ovc23_usesGRecordCount2	[R6] touches GRecordCount
+55fe:29a2	OVC23_55fe_29a2	ovc23_textConstructionAbandoned2	[R2] string "Construction abandoned."
+55fe:2b82	OVC23_55fe_2b82	OVC23_55fe_29a2_entry	[R1] forwards to OVC23_55fe_29a2
+55fe:2b9e	OVC23_55fe_2b9e	ovc23_compute1	[R7] body shape: compute
+55fe:2da3	OVC23_55fe_2da3	ovc23_usesAlignUp44	[R4] calls ovr_alignUp4
+55fe:2e2b	OVC23_55fe_2e2b	ovc23_compute2	[R7] body shape: compute
+55fe:2e4c	OVC23_55fe_2e4c	ovc23_textUnitDrowns	[R2] string "%s unit drowns.  (%d, %d)"
+55fe:2f90	OVC23_55fe_2f90	ovc23_usesGRecordCount3	[R6] touches GRecordCount
+5943:000e	OVC24_5943_000e	ovc24_usesAlignUp4	[R4] calls alignUp4
+5943:0196	OVC24_5943_0196	ovc24_usesEntities	[R6] touches Entities
+5943:026e	OVC24_5943_026e	ovc24_textKill	[R2] string "kill 3\r"
+5943:0d5a	OVC24_5943_0d5a	ovc24_textIntelligenceReportsUnit	[R2] string "Intelligence reports %s unit destroyed. "
+5943:1007	OVC24_5943_1007	ovc24_usesGUnitGrid	[R6] touches GUnitGrid, GUnits
+5943:112e	OVC24_5943_112e	ovc24_textStrongholdDestroyed	[R2] string "%s stronghold destroyed. (%d, %d)"
+5943:181d	OVC24_5943_181d	ovc24_usesLDIV_at_	[R4] calls LDIV_at_
+5943:190b	OVC24_5943_190b	ovc24_usesGLeaderCount	[R6] touches GLeaderCount, EntityCount
+5943:1bff	OVC24_5943_1bff	ovc24_textIntelligenceReportsUnit2	[R2] string "Intelligence reports %s unit cured of di"
+5943:1eeb	OVC24_5943_1eeb	ovc24_textArena	[R2] string "arena"
+5b66:0000	OVC25_5b66_0000	ovc25_usesAlignUp4	[R4] calls ovr_alignUp4
+5b66:00ff	OVC25_5b66_00ff	ovc25_usesAlignUp42	[R4] calls ovr_alignUp4
+5b66:028d	OVC25_5b66_028d	ovc25_textArena	[R2] string "arena"
+5b66:038d	OVC25_5b66_038d	ovc25_usesAlignUp43	[R4] calls ovr_alignUp4
+5b66:0530	OVC25_5b66_0530	ovc25_usesAlignUp44	[R4] calls ovr_alignUp4
+5b66:0722	OVC25_5b66_0722	ovc25_scan1	[R7] body shape: scan
+5b66:080f	OVC25_5b66_080f	ovc25_usesEntityCount	[R6] touches EntityCount, Entities
+5b66:085d	OVC25_5b66_085d	ovc25_textSpiesReportHeading	[R2] string "Spies report %s heading towards strongho"
+5b66:112d	OVC25_5b66_112d	ovc25_usesAlignUp45	[R4] calls ovr_alignUp4
+5b66:11cb	OVC25_5b66_11cb	ovc25_usesAlignUp46	[R4] calls ovr_alignUp4
+5b66:12de	OVC25_5b66_12de	ovc25_usesEntityCount2	[R6] touches EntityCount, Entities
+5b66:131f	OVC25_5b66_131f	ovc25_usesAlignUp47	[R4] calls ovr_alignUp4
+5b66:1667	OVC25_5b66_1667	ovc25_usesEntities	[R6] touches Entities, destX
+5b66:170e	OVC25_5b66_170e	ovc25_usesAlignUp48	[R4] calls ovr_alignUp4
+5b66:1723	OVC25_5b66_1723	OVC25_5b66_131f_entry	[R1] forwards to OVC25_5b66_131f
+5b66:173b	OVC25_5b66_173b	ovc25_textAttacking	[R2] string "%s is attacking."
+5b66:18cc	OVC25_5b66_18cc	ovc25_compute1	[R7] body shape: compute
+5b66:1929	OVC25_5b66_1929	ovc25_textIntelligenceReportsAttacking	[R2] string "Intelligence reports %s attacking."
+5b66:1b48	OVC25_5b66_1b48	ovc25_compute2	[R7] body shape: compute
+5d45:0000	OVC26_5d45_0000	ovc26_usesFillGrid	[R6] touches FillGrid
+5d45:031f	OVC26_5d45_031f	ovc26_usesStExit	[R4] calls ovr_stExit
+5d45:06f0	OVC26_5d45_06f0	ovc26_usesRandBelow	[R4] calls ovr_randBelow
+5ded:0000	OVC27_5ded_0000	ovc27_textIntelligenceReportsAttacking	[R2] string "Intelligence reports %s attacking."
+5ded:01ac	OVC27_5ded_01ac	ovc27_usesRandBelow	[R4] calls ovr_randBelow
+5ded:0404	OVC27_5ded_0404	ovc27_compute1	[R7] body shape: compute
+5ded:04cd	OVC27_5ded_04cd	ovc27_usesRandBelow2	[R4] calls ovr_randBelow
+5ded:052d	OVC27_5ded_052d	ovc27_usesRandBelow3	[R4] calls ovr_randBelow
+5ded:079d	OVC27_5ded_079d	ovc27_usesRandBelow4	[R4] calls ovr_randBelow
+5ded:07d0	OVC27_5ded_07d0	ovc27_compute2	[R7] body shape: compute
+5ded:0960	OVC27_5ded_0960	ovc27_usesRandBelow5	[R4] calls ovr_randBelow
+5ded:0a05	OVC27_5ded_0a05	ovc27_textCastsSpell	[R2] string "%s casts a %s spell %s %s."
+5ded:0cc2	OVC27_5ded_0cc2	ovc27_usesBlitGfxRect	[R4] calls ovr_blitGfxRect
+5ded:0fd2	OVC27_5ded_0fd2	ovc27_textTakesHalfDamage	[R2] string "%s takes half damage from spells."
+5ded:105e	OVC27_5ded_105e	ovc27_textTakesHalfDamage2	[R2] string "%s takes half damage from dragon breath."
+5ded:10ea	OVC27_5ded_10ea	ovc27_textTakesHalfDamage3	[R2] string "%s takes half damage from lightning."
+5ded:1433	OVC27_5ded_1433	ovc27_textCharmed	[R2] string "%s is charmed by %s."
+5ded:14a8	OVC27_5ded_14a8	ovc27_textTakesHalfDamage4	[R2] string "%s takes half damage from fire."
+5ded:1beb	OVC27_5ded_1beb	ovc27_usesAgntCount	[R6] touches AgntCount
+5ded:1c94	OVC27_5ded_1c94	ovc27_usesRandBelow6	[R4] calls ovr_randBelow
+5ded:1d8e	OVC27_5ded_1d8e	ovc27_usesRandBelow7	[R4] calls ovr_randBelow
+5ded:1eb7	OVC27_5ded_1eb7	ovc27_compute3	[R7] body shape: compute
+5ded:1fe1	OVC27_5ded_1fe1	ovc27_usesPlay_sfxU	[R4] calls ovr_play_sfxU
+6018:0000	OVC28_6018_0000	ovc28_usesBDADailyTimeCounter	[R6] touches BDA_DailyTimeCounter
+6018:0048	OVC28_6018_0048	ovc28_usesBlitLoadRleGfx	[R4] calls ovr_blitLoadRleGfx
+6018:0176	OVC28_6018_0176	ovc28_usesBlitGfxRect	[R4] calls ovr_blitGfxRect
+6018:01af	OVC28_6018_01af	ovc28_usesBlitGfxRect2	[R4] calls ovr_blitGfxRect
+6018:0251	OVC28_6018_0251	ovc28_textHalflingCastle	[R2] string "halfling castle"
+6018:0456	OVC28_6018_0456	ovc28_usesBlitGfx10	[R4] calls ovr_blitGfx10
+6018:0634	OVC28_6018_0634	ovc28_textGold	[R2] string "Gold"
+6018:0813	OVC28_6018_0813	ovc28_usesBlitLabel	[R4] calls ovr_blitLabel
+6018:0aac	OVC28_6018_0aac	ovc28_compute1	[R7] body shape: compute
+6018:0aef	OVC28_6018_0aef	ovc28_usesBlitLoadRleGfx2	[R4] calls ovr_blitLoadRleGfx
+6018:0c76	OVC28_6018_0c76	ovc28_usesScreenMode	[R6] touches ScreenMode, MouseMoved
+6018:1398	OVC28_6018_1398	ovc28_usesUiInputText	[R4] calls uiInputText
+6018:1527	OVC28_6018_1527	ovc28_compute2	[R7] body shape: compute
+619c:0000	OVC30_619c_0000	ovc30_usesDifficulty	[R6] touches Difficulty
+619c:004e	OVC30_619c_004e	ovc30_textAllEnemiesDestroyed	[R2] string "All enemies destroyed."
+619c:025d	OVC30_619c_025d	ovc30_usesRandBelow	[R4] calls ovr_randBelow
+619c:031d	OVC30_619c_031d	ovc30_compute1	[R7] body shape: compute
+619c:0339	OVC30_619c_0339	ovc30_usesFmFreeAudio	[R4] calls ovr_fmFreeAudio
+619c:05a5	OVC30_619c_05a5	ovc30_textDivideError	[R2] string "Divide error\r\n"
+619c:0a5e	OVC30_619c_0a5e	ovc30_usesRandBelow2	[R4] calls ovr_randBelow
+6257:0077	OVC31_6257_0077	ovc31_usesClose	[R4] calls close
+6386:0000	stats_6386_0000	stats_compute1	[R7] body shape: compute
+6386:0088	stats_6386_0088	stats_compute2	[R7] body shape: compute
+6386:00f8	stats_6386_00f8	stats_usesBlitGfx10	[R4] calls ovr_blitGfx10
+6386:013d	stats_6386_013d	stats_compute3	[R7] body shape: compute
+6386:01a4	stats_6386_01a4	stats_usesBlitGfxRect	[R4] calls ovr_blitGfxRect
+6386:0411	stats_6386_0411	stats_textRingProt	[R2] string "+%d ring of prot."
+6386:05d3	stats_6386_05d3	stats_compute4	[R7] body shape: compute
+6386:065c	stats_6386_065c	stats_usesLDIV_at_	[R4] calls LDIV_at_
+6386:12b7	stats_6386_12b7	stats_textReadied	[R2] string "  %s is not readied."
+6386:1353	stats_6386_1353	stats_usesEntityCount	[R6] touches EntityCount, Entities
+6386:13a1	stats_6386_13a1	stats_textLongerReady	[R2] string "%s is no longer ready."
+6386:1572	stats_6386_1572	stats_usesAlignUp4	[R4] calls ovr_alignUp4
+6386:16a2	stats_6386_16a2	stats_usesDrawAgntStats	[R4] calls drawAgntStats
+6386:1837	stats_6386_1837	stats_textNowCalledAway	[R2] string "%s can now be called away from home."
+6386:1997	stats_6386_1997	stats_usesAgntCount	[R6] touches AgntCount
+6386:1a19	stats_6386_1a19	stats_usesAgntCount2	[R6] touches AgntCount
+6386:1a9b	stats_6386_1a9b	stats_compute5	[R7] body shape: compute
+6386:1abe	stats_6386_1abe	stats_textShortSword	[R2] string "short sword"
+6386:1c9f	stats_6386_1c9f	stats_usesAlignUp42	[R4] calls ovr_alignUp4
+6386:22fd	stats_6386_22fd	stats_compute6	[R7] body shape: compute
+6386:232d	stats_6386_232d	stats_usesAlignToSeg	[R4] calls ovr_alignToSeg
+6616:0000	unit_6616_0000	unit_usesGUnits	[R6] touches GUnits, bldType
+6616:00d8	unit_6616_00d8	unit_usesAlignUp4	[R4] calls ovr_alignUp4
+6616:03bd	keyprocessor_6616_03bd	keyprocessor_usesBiosKeyAvail	[R4] calls ovr_biosKeyAvail
+6616:0689	ui_unit_order_6616_0689	ui_textDefineRegionCommand	[R2] string "Define region to command %s loyal to %s."
+6616:10d5	unit_6616_10d5	unit_usesAlignUp42	[R4] calls ovr_alignUp4
+6616:12ce	unit_6616_12ce	unit_usesEntities	[R6] touches Entities, targetX
+676c:0000	bldng_676c_0000	bldng_compute1	[R7] body shape: compute
+676c:003d	bldng_676c_003d	bldng_textArena	[R2] string "arena"
+676c:01b0	bldng_676c_01b0	bldng_usesBldng	[R6] touches L_bldng_676c_01b0_037F
+676c:0393	bldng_676c_0393	bldng_compute2	[R7] body shape: compute
+676c:03dd	bldng_676c_03dd	bldng_textBuildingNowSelect	[R2] string "Building is now %s.  Select type of buil"
+676c:05ac	bldng_676c_05ac	bldng_usesGStrangeTable	[R6] touches GStrangeTable
+676c:05c3	bldng_676c_05c3	bldng_usesRandBelow	[R4] calls ovr_randBelow
+67d1:0000	OVC36_67d1_0000	ovc36_usesLDIV_at_	[R4] calls LDIV_at_
+67e7:0000	season_67e7_0000	season_textMainCastle	[R2] string "main castle"
+67e7:004d	season_67e7_004d	season_textHalflingCastle	[R2] string "halfling castle"
+67e7:026a	season_67e7_026a	season_compute1	[R7] body shape: compute
+67e7:030a	season_67e7_030a	season_usesAlignUp4	[R4] calls ovr_alignUp4
+67e7:042b	season_67e7_042b	season_usesGPromotableCount	[R6] touches GPromotableCount
+67e7:048f	season_67e7_048f	season_usesGPromotableCount2	[R6] touches GPromotableCount
+67e7:04e5	season_67e7_04e5	season_usesDifficulty	[R6] touches Difficulty
+67e7:09b9	season_67e7_09b9	season_usesAlignUp42	[R4] calls ovr_alignUp4
+67e7:0a5c	season_67e7_0a5c	season_textBuildingRepaired	[R2] string "%d building%s repaired."
+68ac:0000	OVC38_68ac_0000	ovc38_textShighTxt	[R2] string "%shigh.txt"
+68ac:008a	OVC38_68ac_008a	ovc38_textShighTxt2	[R2] string "%shigh.txt"
+68ac:00fd	OVC38_68ac_00fd	ovc38_usesStshFree	[R4] calls ovr_stshFree
+68ac:0148	OVC38_68ac_0148	ovc38_textGreatAchievements	[R2] string "Great Achievements"
+68ac:0339	OVC38_68ac_0339	ovc38_scan1	[R7] body shape: scan
+68ac:03fc	OVC38_68ac_03fc	ovc38_usesStshAlloc	[R4] calls ovr_stshAlloc
+690b:0000	OVC39_690b_0000	ovc39_usesStshAlloc	[R4] calls ovr_stshAlloc
+690b:00d1	OVC39_690b_00d1	ovc39_textLord	[R2] string "lord"
+690b:0111	OVC39_690b_0111	ovc39_compute1	[R7] body shape: compute
+690b:0180	OVC39_690b_0180	ovc39_textHalflingCastle	[R2] string "halfling castle"
+69c8:0000	OVC40_69c8_0000	ovc40_usesBlitLabel	[R4] calls ovr_blitLabel
+69c8:011e	OVC40_69c8_011e	ovc40_usesVgaSetPalette8bit	[R4] calls ovr_vgaSetPalette8bit
+69c8:023a	OVC40_69c8_023a	ovc40_usesStshLoadGfx	[R4] calls ovr_stshLoadGfx
+69c8:0317	OVC40_69c8_0317	ovc40_usesCalcSeasonPalette	[R4] calls ovr_calcSeasonPalette
+69c8:0373	OVC40_69c8_0373	ovc40_usesBlitGfx10	[R4] calls ovr_blitGfx10
+69c8:047f	OVC40_69c8_047f	ovc40_usesBiosKeyAvail	[R4] calls ovr_biosKeyAvail
+69c8:04c6	OVC40_69c8_04c6	ovc40_usesAlignToSeg	[R4] calls ovr_alignToSeg
+6a8f:0000	OVC41_6a8f_0000	ovc41_compute1	[R7] body shape: compute
+6a8f:0017	OVC41_6a8f_0017	ovc41_compute2	[R7] body shape: compute
+6a8f:002e	OVC41_6a8f_002e	ovc41_compute3	[R7] body shape: compute
+6a8f:016b	OVC41_6a8f_016b	ovc41_compute4	[R7] body shape: compute
+6a8f:01e7	OVC41_6a8f_01e7	ovc41_textKill	[R2] string "kill 4\r"
+6a8f:0229	OVC41_6a8f_0229	OVC41_6a8f_01e7_entry	[R1] forwards to OVC41_6a8f_01e7
+6a8f:0246	OVC41_6a8f_0246	ovc41_usesAnimFrame	[R6] touches animFrame
+6a8f:0256	OVC41_6a8f_0256	ovc41_usesAgntCount	[R6] touches AgntCount, GfxRndSeed2
+6a8f:0422	OVC41_6a8f_0422	ovc41_usesMenuItemEnabled	[R6] touches MenuItemEnabled
+6a8f:04a9	OVC41_6a8f_04a9	ovc41_compute5	[R7] body shape: compute
+6a8f:04c0	OVC41_6a8f_04c0	ovc41_usesDrawTextAt	[R4] calls ovr_drawTextAt
+6a8f:05ad	OVC41_6a8f_05ad	ovc41_usesDebugVerbose	[R6] touches DebugVerbose
+6a8f:063f	OVC41_6a8f_063f	ovc41_usesAnimFrame2	[R6] touches animFrame, targetY
+6a8f:076f	OVC41_6a8f_076f	ovc41_usesPlay_sfxU	[R4] calls ovr_play_sfxU
+6a8f:0807	OVC41_6a8f_0807	ovc41_usesAgntCount2	[R6] touches AgntCount
+6a8f:08c2	OVC41_6a8f_08c2	ovc41_usesXOfs	[R6] touches xOfs
+6a8f:0a45	OVC41_6a8f_0a45	ovc41_compute6	[R7] body shape: compute
+6a8f:0aa7	OVC41_6a8f_0aa7	ovc41_compute7	[R7] body shape: compute
+6a8f:0b0a	OVC41_6a8f_0b0a	ovc41_compute8	[R7] body shape: compute
+6a8f:0b39	OVC41_6a8f_0b39	ovc41_textFailsTurn	[R2] string "%s fails to turn."
+6a8f:0fc1	OVC41_6a8f_0fc1	ovc41_textBuilding	[R2] string "Building %d %s."
+6a8f:11d2	OVC41_6a8f_11d2	ovc41_usesAgnt_clear	[R4] calls ovr_agnt_clear
+6a8f:1520	OVC41_6a8f_1520	ovc41_usesAgnt_clear2	[R4] calls ovr_agnt_clear
+6a8f:15a0	OVC41_6a8f_15a0	ovc41_usesBiosKeyAvail	[R4] calls ovr_biosKeyAvail
+6a8f:1847	OVC41_6a8f_1847	ovc41_textCannotSeeTerrain	[R2] string "You cannot see the terrain here."
+6a8f:18c6	OVC41_6a8f_18c6	ovc41_usesGMenuItem	[R6] touches GMenuItem, MenuMode
+6a8f:1a4c	OVC41_6a8f_1a4c	ovc41_usesIndexPermD	[R6] touches IndexPermD, IndexPermC
+6a8f:1aa1	OVC41_6a8f_1aa1	ovc41_usesIndexPermD2	[R6] touches IndexPermD, IndexPermC
+6a8f:1be0	OVC41_6a8f_1be0	ovc41_usesMiceBlitRect	[R4] calls ovr_miceBlitRect
+6a8f:1c74	OVC41_6a8f_1c74	ovc41_textParalyzed	[R2] string "%s is paralyzed by %s."
+6a8f:2084	OVC41_6a8f_2084	ovc41_textOnlyPlaceSingle	[R2] string " You can only place a single arena."
+6a8f:22cb	OVC41_6a8f_22cb	ovc41_textPoisons	[R2] string "%s poisons %s."
+6a8f:297d	OVC41_6a8f_297d	ovc41_compute9	[R7] body shape: compute
+6a8f:29a0	OVC41_6a8f_29a0	ovc41_usesAgntCount3	[R6] touches AgntCount
+6a8f:29ea	OVC41_6a8f_29ea	ovc41_compute10	[R7] body shape: compute
+6d7a:0000	OVC42_6d7a_0000	ovc42_textProvidesMoreHousing	[R2] string "%s: provides more housing."
+6d7a:009b	OVC42_6d7a_009b	ovc42_usesMiceBlitRect	[R4] calls ovr_miceBlitRect
+6d7a:0190	OVC42_6d7a_0190	ovc42_usesBlitGfxRect	[R4] calls ovr_blitGfxRect
+6d7a:02ab	OVC42_6d7a_02ab	ovc42_usesEntityCount	[R6] touches EntityCount, Entities
+6d7a:033e	OVC42_6d7a_033e	ovc42_usesBlitGfxRect2	[R4] calls ovr_blitGfxRect
+6d7a:04f2	OVC42_6d7a_04f2	ovc42_usesAlignUp4	[R4] calls ovr_alignUp4
+6d7a:0643	OVC42_6d7a_0643	ovc42_usesGfxRndSeed	[R6] touches GfxRndSeed, GfxRndSeed2
+6d7a:0736	OVC42_6d7a_0736	ovc42_copy1	[R7] body shape: copy
+6d7a:078f	OVC42_6d7a_078f	ovc42_usesBlitGfx10	[R4] calls ovr_blitGfx10
+6d7a:0850	OVC42_6d7a_0850	ovc42_usesBlitLabel	[R4] calls ovr_blitLabel
+6d7a:1f25	OVC42_6d7a_1f25	ovc42_usesAgntCount	[R6] touches AgntCount
+6fbe:0000	OVC43_6fbe_0000	ovc43_usesFmFreeAudio	[R4] calls ovr_fmFreeAudio
+6fbe:013a	OVC43_6fbe_013a	ovc43_usesStExit	[R4] calls ovr_stExit
+6fbe:01a9	OVC43_6fbe_01a9	ovc43_usesBiosKeyAvail	[R4] calls ovr_biosKeyAvail
+6fbe:0322	OVC43_6fbe_0322	ovc43_usesStshSeek	[R4] calls ovr_stshSeek
+6fbe:035f	OVC43_6fbe_035f	ovc43_textToymaker	[R2] string "toymaker"
+77eb:0121	OVC45_77eb_0121	ovc45_usesGUnits	[R6] touches GUnits, GUnitGrid
+77eb:0179	OVC45_77eb_0179	ovc45_usesGUnitGrid	[R6] touches GUnitGrid
+77eb:01bb	OVC45_77eb_01bb	ovc45_usesAlignUp4	[R4] calls ovr_alignUp4
+77eb:02c1	OVC45_77eb_02c1	ovc45_textArena	[R2] string "arena"
+77eb:04d8	OVC45_77eb_04d8	ovc45_textChoosePartyBuild	[R2] string "Choose party to build for.  Now building"
+77eb:0683	OVC45_77eb_0683	ovc45_usesGMapFlags	[R6] touches GMapFlags, GUnits
+77eb:0708	OVC45_77eb_0708	ovc45_usesGMapFlags2	[R6] touches GMapFlags
+77eb:0742	OVC45_77eb_0742	ovc45_usesGMapFlags3	[R6] touches GMapFlags
+77eb:0778	OVC45_77eb_0778	ovc45_compute1	[R7] body shape: compute
+77eb:0904	OVC45_77eb_0904	ovc45_usesLDIV_at_	[R4] calls LDIV_at_
+77eb:0976	OVC45_77eb_0976	ovc45_compute2	[R7] body shape: compute
+77eb:09c1	OVC45_77eb_09c1	ovc45_compute3	[R7] body shape: compute
+77eb:0a02	OVC45_77eb_0a02	ovc45_usesGPopulationLo	[R6] touches GPopulationLo, GPopulationHi
+77eb:0aea	OVC45_77eb_0aea	ovc45_compute4	[R7] body shape: compute
+77eb:0bc1	OVC45_77eb_0bc1	ovc45_compute5	[R7] body shape: compute
+77eb:0c36	OVC45_77eb_0c36	ovc45_textArena2	[R2] string "arena"
+77eb:0d61	OVC45_77eb_0d61	ovc45_usesClose	[R4] calls close
+77eb:16b2	OVC45_77eb_16b2	ovc45_usesRandBelow	[R4] calls ovr_randBelow
+77eb:1754	OVC45_77eb_1754	ovc45_textDone	[R2] string "Done"
+77eb:1ba2	OVC45_77eb_1ba2	ovc45_compute6	[R7] body shape: compute
+77eb:1bb3	OVC45_77eb_1bb3	ovc45_textDone2	[R2] string "Done"
+77eb:20e8	OVC45_77eb_20e8	ovc45_usesGfxRndSeed2	[R6] touches GfxRndSeed2
+77eb:215a	OVC45_77eb_215a	ovc45_usesGMapFlags4	[R6] touches GMapFlags
+77eb:21d3	OVC45_77eb_21d3	ovc45_compute7	[R7] body shape: compute
+77eb:21f1	OVC45_77eb_21f1	ovc45_usesLand_info	[R4] calls ovr_land_info
+77eb:2226	OVC45_77eb_2226	ovc45_compute8	[R7] body shape: compute
+77eb:2257	OVC45_77eb_2257	ovc45_textMaintenanceCost	[R2] string "Maintenance cost is"
+77eb:226e	OVC45_77eb_226e	ovc45_compute9	[R7] body shape: compute
+77eb:234a	OVC45_77eb_234a	ovc45_usesGMapFlags5	[R6] touches GMapFlags
+7e7c:0000	constrct_7e7c_0000	constrct_usesGLeaderCount	[R6] touches GLeaderCount
+7e7c:0b40	constrct_7e7c_0b40	constrct_compute1	[R7] body shape: compute
+7e7c:0b9c	constrct_7e7c_0b9c	constrct_body1	[R7] no exported body
+7e7c:2b4c	constrct_7e7c_2b4c	constrct_usesLDIV_at_	[R4] calls LDIV_at_
+7e7c:2e8e	constrct_7e7c_2e8e	constrct_usesAlignUp4	[R4] calls ovr_alignUp4
+8699:0000	OVC49_8699_0000	ovc49_usesFrameIndex	[R6] touches frameIndex, AgntCount
+8699:036e	OVC49_8699_036e	ovc49_usesFrameIndex2	[R6] touches frameIndex, AgntCount
+8699:06dc	OVC49_8699_06dc	ovc49_usesStExit	[R4] calls ovr_stExit
+8699:0849	OVC49_8699_0849	ovc49_compute1	[R7] body shape: compute
+8699:0874	OVC49_8699_0874	ovc49_textLongerParalyzed	[R2] string "%s is no longer paralyzed."
+8699:1711	OVC49_8699_1711	ovc49_usesBothFactions	[R6] touches BothFactions
+8699:1753	OVC49_8699_1753	ovc49_fill1	[R7] body shape: fill
+8699:18c4	OVC49_8699_18c4	ovc49_body1	[R7] no exported body
+8699:1e09	OVC49_8699_1e09	ovc49_usesBlitGfxRect	[R4] calls ovr_blitGfxRect
+8adb:0000	OVC50_8adb_0000	ovc50_usesBlitText	[R4] calls ovr_blitText
+8adb:0083	OVC50_8adb_0083	ovc50_usesStshLoadGfx	[R4] calls ovr_stshLoadGfx
+8adb:00f1	OVC50_8adb_00f1	ovc50_usesUiInputText	[R4] calls ovr_uiInputText
