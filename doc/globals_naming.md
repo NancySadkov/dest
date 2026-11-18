@@ -538,3 +538,30 @@ initialised as a far-pointer table (whose targets are the congratulation and
 OK/Try-Again strings) and is also read as a six-byte-stride table at run time.
 A single structure cannot describe that, so `49F7` stays unnamed; the finding
 is recorded here instead of being resolved by picking one of the two uses.
+
+## Batch 33 - the rank announcement phrase table
+
+`2410:6B3A` is an array of nineteen far pointers, all into DGROUP, and the
+bytes they point at are the phrases the rank announcement is assembled from:
+
+```
+[0] 6B90:2410  "On this day it was declared to all the Realms"
+[1] 6BBE:2410  "that %s shall henceforth hold the rank of"
+[2] 6BE8:2410  "%s, in recognition of valor on the field of battle."
+...
+[15] 6BBD:2410  points at the terminating zero of the previous phrase,
+                i.e. an intentionally empty slot
+```
+
+`ovc40` copies entries `0..14` (0x3c bytes) and `15..18` (0x10 bytes) into a
+local, i.e. it is a fixed nineteen-entry table.  Named `RankMsgPtrs`.
+
+Examined and left unnamed in the same pass:
+
+- `2410:5DF2` (`ovc30`): one of four consecutive words (`5DEC`, `5DEE`, `5DF0`,
+  `5DF2`) loaded as a group and used only as `CONCAT11(word >> 8, 0x29)`; the
+  group is real, but which of the four is what is not distinguished.
+- `2000:0039` (`ovc02_draw`): the raw code confirms the odd arithmetic —
+  `MOV AL,[0x896d]; IMUL 0x34; ADD AX,0x26; MOV [0x897e],AX` and then that
+  value is used as a *row* into the `0x34c` table.  The distance between
+  "agent index" and "row coordinate" is unresolved, so it stays unnamed.
