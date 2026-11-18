@@ -1287,3 +1287,35 @@ with `0x1726`, no function doing `(ulong)param_N >> 0x10` on an untyped pointer,
 and no function mixing `* 0x95` with `0x34` still carries an `int *`/`undefined4`
 first parameter.  What remains untyped takes plain values (coordinates, counts,
 VGA registers) rather than records.
+
+## Correction: `bldtp_t+0x23` is `resource`, not `tier`
+
+`tier` was named from equality tests with 1, 2 and 3 alone, which is also exactly
+what a good index looks like.  The ovc22 consumer decides it:
+
+```c
+int local_32[4];
+...
+local_32[(uint)bldtp->resource]          = local_32[...] + (uint)bldtp->output;
+local_32[(uint)bldtp->resource + 3]      = local_32[...] + ...;
+... && (bldtp->resource < 4)
+...
+*(int  *)(record + 0x70) = local_32[0];      /* amounts stored into a unit */
+*(undefined2 *)(record + 0x70) = local_32[1];
+*(uint *)(record + 0x72)    = local_32[2];
+```
+
+A `0..3` value used to index a four-entry array (`< 4` guarded) whose slots are
+then written into a unit record as amounts is a **good index**, not a tier.
+Renamed `resource`.
+
+The same consumer names the neighbour: `bldtp_t+0x1b` is the amount added to that
+resource total each step, so it is `output`.
+
+Generated struct fields: 41 -> 40.
+
+### Tooling note
+
+`SetFieldType` needs the full type path with a leading slash; passing
+`stdint.h/uint8_t` fails silently as "typed=0 failed=2" until corrected to
+`/stdint.h/uint8_t`.
