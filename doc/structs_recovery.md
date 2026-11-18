@@ -4554,3 +4554,26 @@ Two unrelated functions treating the byte as a party index is what makes `entity
 the right reading of it rather than a decompiler artifact.
 
 Struct fields: 27 -> 25 generated.
+
+### The two opaque pointers in agnt_usesStExit, now typed (2)
+
+The listing identified the second parameter as an `anm_t`, and the caller fixes the third:
+
+```c
+uStack_12 = CONCAT22(puVar16[1], *puVar16);            /* anm_t * entry */
+psVar11   = ovr_stash_usesStExit((stg_tmp_t *)*(undefined2 *)(iVar17 + 0x58), ...);
+uStack_18 = (stg_tmp_t *)CONCAT22(uVar15, psVar11);
+ovr_agnt_usesStExit((agnt_t *)..., uStack_12, uStack_18);
+```
+
+so the signature is
+
+```
+void agnt_usesStExit(agnt_t * agnt, anm_t * anim, stg_tmp_t * sprite)
+```
+
+and the body now reads `sprite->cmap[5]` instead of a raw byte at +5.  Both parameters were
+`undefined4` (4 bytes) before, so the retype is size-neutral and the argument order is
+unchanged.
+
+Auto-named parameters: 780 -> 778.
