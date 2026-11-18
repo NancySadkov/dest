@@ -1606,3 +1606,95 @@ else if (((byte *)_ctype + 1)[param_1 & 0xff] & 4) return (param_1 & 0xff) + 0x2
 so `tolower`'s argument is the character code `c`.
 
 Auto-named parameters: 778 -> 771.
+
+## Batch - new-world prompts, a stronghold counter and the music-driver table (9)
+
+### The four new-world counters (string-labelled)
+
+`saveui_textWhichNewWorld` prompts for each count and stores it immediately after:
+
+```c
+iStack_a = saveui_usesBlitText((char *)"Low intelligence enemies:", ...);
+iStack_8 = saveui_usesBlitText((char *)"Medium intelligence enemies:", ...);
+iStack_6 = saveui_usesBlitText((char *)"High intelligence enemies:", ...);
+iStack_4 = saveui_usesBlitText((char *)"Size of second wave:", ...);
+if (0x3c < iStack_a + iStack_8 + iStack_6 + iStack_4)
+    ovr_say("Too many enemies. 60 enemies maximum.");
+lowIntelEnemies  = (undefined1)iStack_a;
+medIntelEnemies  = (undefined1)iStack_8;
+highIntelEnemies = (undefined1)iStack_6;
+secondWaveSize   = (undefined1)iStack_4;
+```
+
+All four are save-game fields, and the 60 total is the dialog's own limit.
+
+### `worldIndex`
+
+```c
+uiMenu((char *)"Which new world:", items, ...);
+bStack_b = (byte)puVar1;
+...
+cStack_c = bStack_b - 1;          /* 0-based world */
+uiMenu((char *)"Hostility level:", items_00, ...);
+Difficulty = bStack_b;            /* the hostility result */
+worldIndex = cStack_c;
+```
+
+so the earlier "zeroed next to a driver block and never read" note was about a different
+byte, and this one is the menu selection.
+
+### `strongholdsDestroyed` (2410:6A86)
+
+```c
+if (bStack_7 == 0) ovr_play_sfx(68,0);
+else { ovr_play_sfx(44,0); strongholdsDestroyed = strongholdsDestroyed + 1; }
+```
+
+and `ovc38_scan1` compares it with a value parsed from a decimal string.  It is saved.
+
+### `audioBusy` (2410:2A4E)
+
+Set immediately before and cleared immediately after an audio handle operation, and consulted
+by the audio error paths:
+
+```c
+byte_2410_DATA_DGROUP_2A4E = 1;
+if (DIGHandle.ofs != 0 || DIGHandle.seg != 0) ovr_stshFree(DIGHandle);
+... byte_2410_DATA_DGROUP_2A4E = 0;
+```
+
+`fmOutOfMemory` / `fmMallocRecover` take the normal path only when it is 0, and `textError` /
+`textView` branch on it.  It is transient (always cleared), so it is a busy flag rather than a
+sticky error.
+
+### The music-driver table
+
+`musInit` turns the configured music device into an index and reads a far pointer out of a
+4-byte-stride table based at 0x0668:
+
+```c
+if (('1' <= CFG_Mus) && (CFG_Mus <= '9')) unaff_SI = CFG_Mus - '1';
+else if (('@' < CFG_Mus) && (CFG_Mus < 'G')) unaff_SI = CFG_Mus - 0x38;
+if (((undefined2 *)&word_2000_BSS_0668)[unaff_SI * 2] != 0 ||
+    ((undefined2 *)&word_2000_BSS_066A)[unaff_SI * 2] != 0) {
+  handle.ofs = ((undefined2 *)&word_2000_BSS_0668)[unaff_SI * 2];
+  handle.seg = ((undefined2 *)&word_2000_BSS_066A)[unaff_SI * 2];
+  MusGfxOfs = ovr_stshLoadGfx(handle);
+```
+
+so `0668`/`066A` are the offset and segment of table entry 0 (the `* 2` on a word pointer is
+the 4-byte stride).  Named `musDriver0Ofs` / `musDriver0Seg` rather than `musDrivers`, because
+the symbol covers one entry and the array length (index range from the device letters) is not
+stated anywhere.
+
+Auto-named globals: 305 -> 296.
+
+### Examined and refused in the same pass
+
+| global | why refused |
+|---|---|
+| `2000:0067` | toggled (`1 - (x != 0)`) and copied into `GOngoingBattle`; the two are kept in sync by explicit copies, so a distinct name would have to invent why both exist |
+| `2410:4757` | set 1 before `save_textSsave()` in `main`, cleared right after, and checked as `== 0` before printing "Load Error"; with three sites the polarity cannot be settled |
+| `2000:072F` / `0731` | reset in `attact_usesAlignUp42`, incremented in `ovc26_usesStExit`, and never read |
+| `2000:06A4`, `06A6`, `069C`, `069E` | written next to the audio driver pairs and never read |
+| `2410:0161`, `5CE4`, `5CF0` | toggled by several screens with no stated condition |

@@ -4635,3 +4635,27 @@ segment high byte carries is compared against partyFilter and handed to ovc28_te
 party index.  So the slot exists as a real field on the character sheet and the entity record
 mirrors it in the segment byte -- which is why ntity.seg >> 8 is the correct reading rather
 than a decompiler artifact.
+
+## `agnt_t+0x11` disassembled: a coin-flip variant, refused
+
+`ovc15_usesLDIV_at_2` respawns an agent from an entity record and sets the byte from the
+animation's two pointer words:
+
+```c
+if ((*(int *)(iVar10 + 0x68) == 0 && *(int *)(iVar10 + 0x6a) == 0) ||
+    (*(int *)(iVar10 + 0x58) == 0 && *(int *)(iVar10 + 0x5a) == 0)) {
+  if (frames->w68 == 0 && frames->w6a == 0) agent[+0x11] = 0;
+  else                                     agent[+0x11] = 1;
+}
+else agent[+0x11] = (char)ovr_randBelow(2);
+```
+
+So the byte is a two-valued variant choice that is a coin flip in the common branch, and the
+same function picks an animation variant from `entity.frames` byte +3 (the party-slot byte)
+and the entity level.  There is no name the binary supports here: `variant` would be a guess
+about which variant the 0/1 means.
+
+`agnt_t+0x24` / `+0x25` are the same story at the width level: all twelve accesses are single
+bytes (`MOV AL,ES:[BX+0x24]`, `CMP byte ptr ES:[BX+0x25],0x2`, `MOV byte ptr ES:[BX+0x24],0`)
+with the values 0/1/2 selecting different sprite branches, but nothing states what the three
+values mean.
