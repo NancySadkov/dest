@@ -1058,3 +1058,58 @@ The random-band selector in ovc30 compares this byte against a per-slot minimum 
 maximum (LevelBandMin/LevelBandMax), and ovc22 writes 4, 8 or 0xc into it and
 compares it with the entity level (agnt_t+0x0f).  Both uses make it a level cap;
 0xff means none.  Generated struct fields: 47 -> 46 (agntG_t 5).
+
+## `agntG_t+0x38`/`+0x39` = `dmgDice`/`dmgSides`, and the roll prototype
+
+The routine the constructor calls with these two bytes had been recovered with
+one parameter, but the stack disassembly shows two:
+
+```
+4d05:01af  MOV AL,byte ptr [BP + 0x8]    ; sides -> pushed to randBelow
+4d05:01b5  CALLF ovr_randBelow
+4d05:01c5  MOV AL,byte ptr [BP + 0x6]    ; count -> loop counter
+4d05:01cd  JNZ  (loop)
+```
+
+so `ApplyProto.java` applied `char manage_4d05_01a3(char count, char sides)`,
+and the body now reads correctly:
+
+```c
+char __cdecl16far manage_4d05_01a3(char count,char sides)
+{
+  uStack_3 = '\0';
+  while (count != '\0') {
+    uVar1 = ovr_randBelow((uint)(byte)sides);
+    uStack_3 = (char)uVar1 + uStack_3 + '\x01';
+    count = count + -1;
+  }
+  return uStack_3;
+}
+```
+
+i.e. `count + sum(randBelow(sides))`, a dice roll.  The attack code feeds it the
+two record bytes and adds the bonus and direction:
+
+```c
+bVar4 = manage_4d05_01a3(gdata->dmgDice, gdata->dmgSides);
+iVar5 = bVar4 + gdata->attackBonus;
+uVar8 = iVar5 + dir;
+```
+
+and other callers pass the constants `(2,6)`, `(3,6)`, `(4,6)`.  Named
+`dmgDice` / `dmgSides`.  Generated struct fields: 46 -> 44; auto parameters:
+1229 -> 1227.
+
+### `agnt_t+0x2a` - examined, not named
+
+Three consumers, no shared meaning:
+
+```c
+/* ovc49 */ 0x2a == 2 && BothFactions          -> returns "busy"
+/* ovc25 */ 8 < (record + 0x2a)                -> gate on a count/quantity
+/* ovc21 */ peVar22[0xb4].base.field_0x2a == 0 -> index expression is bogus
+```
+
+The values seen are 0, 2 and something above 8, which fits a count, a state and
+an index equally well; nothing computes with it.  It stays unnamed rather than
+being called "count" on the strength of one comparison.
