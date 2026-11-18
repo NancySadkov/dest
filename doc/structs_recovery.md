@@ -5321,3 +5321,48 @@ pairs are `rectOfs`/`rectSeg` and `textOfs`/`textSeg`.  Naming them as halves ra
 retyping avoids consuming the neighbouring slot.
 
 Auto-named parameters: 622 -> 600.
+
+## 11 parameters: setvbuf's buffer pair and another rect clipper
+
+### `setvbuf` (5)
+
+The decompiled form splits the far buffer into words, but each word's role is written down:
+
+```c
+if ((((FILE *)param_1->token == param_1) && ((int)param_5 < 3)) && (size < 0x8000)) {
+  *(int *)((int)&param_1->buffer + 2) = param_2;   /* default buffer segment */
+  *(int *)((int)&param_1->curp   + 2) = param_2;
+  ...
+  *(int *)((int)&param_1->buffer + 2) = param_4;   /* caller's buffer seg */
+  *(uint8_t **)&param_1->buffer       = param_3;   /* caller's buffer ofs */
+  if (param_5 == 1) { ... }
+```
+
+so `stream`, `defaultSeg`, `bufOfs`, `bufSeg`, `mode` (compared `< 3`, `== 1`, `== 2`, i.e. the
+three `_IOFBF`/`_IOLBF`/`_IONBF` constants).
+
+### `ovc27_textIntelligenceReportsAttacking` (6)
+
+The identical clip to `ovc27_usesRandBelow`, so the identical names:
+
+```c
+if (param_3 < param_1) { swap(param_3,param_1); swap(param_4,param_2); }
+if (param_1 < rect[0]) param_1 = rect[0];
+if (rect[2] < param_3) param_3 = rect[2];
+_param_5 = (int *)CONCAT13(..., CONCAT12(param_6, param_5));
+```
+
+→ `x1, y1, x2, y2, rectOfs, rectSeg`.
+
+### Examined and refused in the same pass
+
+| function | why refused |
+|---|---|
+| `blit_compute1` (14 auto) | its only caller passes 10 locals whose meanings are themselves unresolved inside `blit_usesStExit`, so the slots cannot be pinned |
+| `driver_compute1/2` | pure arithmetic on three bytes (`(param_3+param_1+param_2)`, `(param_2-param_1)>>2`) with no positional meaning |
+| `constr_compute1/2` | only forwards three arguments and then tests `param_4 & param_5`; the AND is symmetric so neither mask can be told from the other |
+| `manage_usesGUnitCount`'s seven counters | the call sites pass each as a (pointer, segment) pair, i.e. far pointers to the caller's locals; the tallies are per-`resource` but the mapping to slots differs between the record loop and the unit loop |
+| `ems_memmove1/2` | the EMS register block assigns `param_1/param_2`, `param_3/param_4` and `param_5/param_6` to `emms_var05c1/05c3`, `05ba/05bc` and `05b3/05b5` respectively, and call sites disagree on which pair is source and destination |
+| `__setargv` | carries *Unable to track spacebase fully for stack* and an untracked jumptable |
+
+Auto-named parameters: 600 -> 589.
