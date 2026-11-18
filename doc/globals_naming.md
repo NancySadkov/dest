@@ -917,3 +917,36 @@ It has 25 references and **all of them are stores** (values `0..0xf` written fro
 search finds no reader anywhere in the export, so the value domain alone (sixteen
 small ids) does not identify whether it is an action id, a sound id or a cursor
 state.  It stays unnamed rather than guessed.
+
+## Batch 46 - the difficulty setting
+
+`2000:0769` is the new-game difficulty index.  The setup screen assigns it right
+before the game initialiser runs:
+
+```c
+byte_2000_BSS_0769 = bStack_b;
+byte_2000_BSS_076A = cStack_c;
+ovr_init_3381_2101();
+```
+
+and every consumer treats it as one of four values (`== 1`, `== 2`, `2 < value`),
+matching the four difficulty strings of the new-game menu - "Peaceful",
+"Aggressive", "Hostile", "Custom".  It is also an index into the per-value
+constant table at `2410:5DE4`, where the timer period is computed from it:
+
+```c
+uVar1 = 0x3c / (*(byte *)(Difficulty + 0x5de4));
+```
+
+Named `Difficulty` (`2000:d19d`); the live decompile of `619c:0000` reads
+`*(char *)(Difficulty + 0x5de4)`.
+
+Auto globals: 584 -> 583.
+
+### Examined, not named
+
+- `2000:076A` is written next to `Difficulty` (the second setup value) but has **no
+  reader** anywhere in the export, so what it selects is not established.
+- `2000:027B` (22 refs, 8 modules) is only ever set to 0/1 and tested `!= 0` as an
+  early-out, with no computation on the value; a boolean flag whose subject the
+  code never states.
