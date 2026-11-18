@@ -2136,3 +2136,23 @@ the slot index inside a square record - not provably "menu item", "entity" or
 (`(0x1c - v) * 100 / 0x1c` in ovc14_attact).  Position and amount are both consistent
 with the evidence, so no name is applied; this is the derivation the next pass should
 start from.
+
+### Flash palette pair and a save rectangle
+
+`OVC13_3d16_005b` flashes three palette blocks and saves the drawing area around the
+redraw:
+
+```c
+FlashToggle = 1 - (FlashToggle != 0);
+ovr_vgaSetPalette(&stack0xffe2 + (uint)FlashToggle * 3, ..., 0xef);
+ovr_vgaSetPalette(flashPalette1 + (uint)FlashToggle * 3, ..., 0xee);
+ovr_vgaSetPalette(flashPalette2 + (uint)FlashToggle * 3, ..., 0xeb);
+...
+ovr_miceRestoreArea(&rect);  OVC13_3d16_0000();  ovr_miceBlitRect(&rect);
+```
+
+Each six-byte block therefore holds two three-byte colour entries selected by the
+toggle, so they are `flashPalette1`/`flashPalette2`, and the `brect_t` used for the
+save/restore is `rect`.
+
+Auto-named locals: 278 -> 275 (286 at the start of the turn).
