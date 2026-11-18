@@ -1349,3 +1349,34 @@ shows its full prototype `(byte index, brect_t *param_2, undefined2 param_3)`,
 which the older export had truncated to one parameter.
 
 Auto-named parameters: 1196 -> 1192.
+
+## `bldtp_t+0x1a` = `production`
+
+Tracing the value rather than the merged block: `OVC22_5087_0234` reads the byte,
+scales it by season, and the only caller formats the result into the construction
+message.
+
+```c
+uVar7 = bldtp->production;
+if (category == 0x19) {
+    if (GSeason == 0)      uVar7 >>= (GTimeLo < 0xf) ? 2 : 1;   /* winter   */
+    else if (GSeason == 2) uVar7 += uVar7 >> 2;                 /* summer   */
+}
+...
+uStack_16 = OVC22_5087_0234(buildingType, entityId, ...);       /* ovc45 */
+OVC45_77eb_1ba2(uStack_16);  fmVsprintf();  say();              /* shown    */
+```
+
+A per-building amount that winter reduces and summer raises, whose result is
+reported to the player, is `production` (distinct from `output`, which is added
+into the resource totals).  Generated struct fields: 38 -> 37.
+
+## Seven entity-index parameters
+
+`OVC13_3d16_1045`, `OVC22_5087_1470/1532`, `OVC24_5943_0196`,
+`stats_6386_1572`, `OVC15_4207_0e17` and `OVC45_77eb_16b2` all index
+`((entity_t *)Entities)[param_1]` (or take `Entities + param_1`), so the
+parameter is an entity index, not a record.  Renamed `entityIndex`; the live
+decompile now reads `int entityIndex`.
+
+Auto-named parameters: 1192 -> 1185.
