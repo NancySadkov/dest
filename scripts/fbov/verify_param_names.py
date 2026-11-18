@@ -114,6 +114,9 @@ CHECKS = [
     # far agent pointer forwarded to typed callees
     ('ovc41.c', '6a8f:22cb', r'0ac0\(\(int\)param_1,param_1\._2_2_'),
     ('ovc41.c', '6a8f:297d', r'agnt_3b1d_0a9f\(param_1,param_2\)'),
+    # label helpers: (far text pointer, x)
+    ('ovc21_manage.c', '4d05:04c6', r'font_302d_06ea\(param_1,param_2'),
+    ('ovc21_manage.c', '4d05:0519', r'font_302d_06ea\(param_1,param_2'),
 ]
 
 

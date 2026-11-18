@@ -1742,3 +1742,28 @@ than strings:
 
 So no data blob hides an unlabelled string: the string pass plus the offset
 artefacts account for the text in DGROUP.
+
+## Two label helpers: far text pointer plus x
+
+Both functions measured a string and used the width to place it:
+
+```c
+iVar1 = ovr_font_302d_06ea(param_1,param_2,Font02.ofs,Font02.seg);
+TextBlitX = param_3 - iVar1;
+ovr_blitLabel();
+```
+
+`font_302d_06ea` takes two far pointers, so `(param_1, param_2)` is one text
+pointer and `param_3` is the centre x.  The prototypes are now one four-byte
+pointer plus an int:
+
+```
+void manage_4d05_04c6(undefined4 text, int x)
+void manage_4d05_0519(undefined4 text, int x)
+```
+
+The pointer keeps the `undefined4` type (the char-pointer type path did not
+resolve through `RenameVars`), but its shape is right and both slots are named.
+
+Auto-named parameters: 1083 -> 1076 (two merged slots removed, four names added).
+The verification script runs 71 checks.
