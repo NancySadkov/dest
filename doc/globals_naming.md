@@ -1080,3 +1080,40 @@ The writer brackets a nested screen call (`5CF0 = 1; ...nested screen...; 5CF0 =
 and the screens clear it while drawing.  That is consistent with "a child screen is
 open", but the same conditions would hold for "the pointer is hidden", and nothing
 in the code chooses between them, so it keeps its generated name.
+
+## Batch 52 - the flood-fill grid and the game tick
+
+`2000:08B4` is a far pointer (allocated with `stshAlloc`, segment in `DX`) to a
+scratch grid whose size and stride are both in the code:
+
+```c
+_fmemset(FillGrid, ..., 0x6541);                     /* 0x101 * 0xA1 bytes */
+*(byte *)((int)FillGrid + (param_1 + iVar7) * 0xa1 + param_2 + iVar8) = 1;
+```
+
+`0x6541 = 161 * 161` with stride `0xa1`, cleared then seeded and flooded with
+neighbour checks during map generation, so it is `FillGrid` (`2000:d2e8`).
+
+`2000:0733` is the game tick counter: it is incremented every pass, buildings store
+it as a timestamp and delays are the difference:
+
+```c
+GameTick = GameTick + 1;                              /* ovc14 */
+*(undefined2 *)(record * 0x12 + 0xf) = GameTick;      /* timestamp */
+uVar8 = GameTick - *(int *)(record * 0x12 + 0xf);     /* elapsed */
+```
+
+so it is `GameTick` (`2000:d167`).  Both confirmed live (`55fe:0487`, `5d45:0000`)
+and with `ListSyms`.
+
+Auto globals: 577 -> 575.
+
+### Examined, not named
+
+- `agnt_t+0x2a`: three consumers disagree on the domain (`== 2` together with
+  `BothFactions`, `8 < value`, and a `== 0` test) and none computes with it, so a
+  count, a battle state and an index all remain possible.
+- `char_sheet_t.pad_0`: the 40-byte block has exactly one consumer
+  (`*(int *)(sheet->pad_0 + 0x1b) == agent->owner`), which identifies a dword at
+  offset 0x1b inside it but not the block's role; splitting it would encode that
+  one comparison as the whole field's meaning.
