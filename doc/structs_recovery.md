@@ -5891,3 +5891,49 @@ overlapping instruction at 0x6014c/0x6014b and an untracked spacebase, so its th
 auto-named.
 
 Auto-named parameters: 484 -> 478.
+
+## 12 parameters from the OVC45 done-screens and the stats helpers
+
+### `ovc45_usesAlignUp4` (4)
+
+It searches the entity list for the **lowest party slot above** its first argument at a map
+cell:
+
+```c
+if ((alignUp4(entity.x) == param_2) && (entity.y == param_3) &&
+    (param_1 < *(byte *)((int)&entity + 3))) && (*(byte *)((int)&entity + 3) < bStack_3))
+  { bStack_3 = slot; *_param_4 = index; }
+```
+
+so `slotMin`, `x`, `y` and `entityIndexOut` (the out-parameter holding the matching index).
+
+### The two done-screens (5)
+
+`ovc45_textDone` and `ovc45_textDone2` share their shape:
+
+```c
+x = param_4;                                  /* the record's x */
+createConstructionRecordFar(..., (int)x, GfxRndSeed2, outFlag, (byte)param_6, ...)
+```
+
+and the fifth argument of `createConstructionRecordFar` is the **segment half** of its outFlag
+pointer -- callers elsewhere pass `(byte)unaff_SS` there.  So `x` and `outFlagSeg`.
+`textDone2`'s third argument indexes `Entities` and is `entityIndex`.
+
+### Two stat helpers (3)
+
+| function | parameter | evidence |
+|---|---|---|
+| `stats_compute6` | `x`, `y` | forwards both into `video_usesAgntCount`, whose only other caller passes `(MouseX - 0xc, MouseY - 7)` |
+| `stats_usesLDIV_at_` | `valueLo` | `litoa10(text, CONCAT22(stackHigh, param_3))`; `param_2` is never read |
+
+### Refused in the same pass
+
+- `ovc43_usesStshSeek`'s four: the first is only used as `*(u16 *)((int)param_1 + 3)` for a seek
+  target and the other three are forwarded into `ovc43_usesBiosKeyAvail`'s three **unused**
+  parameters.
+- `ovc43_usesBiosKeyAvail`'s four: three are forwarded into `ovc43_usesStExit`'s unused slots and
+  the fourth is never read.
+- `ovc45_textDone`'s `param_1` and `ovc45_textDone2`'s `param_1`: only ever tested `!= 0`.
+
+Auto-named parameters: 478 -> 466.
