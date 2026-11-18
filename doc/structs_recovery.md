@@ -3207,9 +3207,12 @@ Auto-named parameters: 1043 -> 1037.
 
 Auto-named locals: 167 -> 165.
 
-### Decompiler regression noted
+### An export failure that is not a broken function
 
-The new export reports `ok=1125 fail=5` (it was 1126/4), and the new failure is
-`OVC45_77eb_0d61`, which had exported before the last few struct rebuilds.  Nothing in this
-pass depends on that function (its locals are already named), but the regression is
-recorded so a later pass does not read its absence as evidence.
+The new export reports `ok=1125 fail=5` (it was 1126/4); the additional failure is
+`OVC45_77eb_0d61`.  It is **not** damaged: `DecompileAt 77eb:0d61` produces its usual 3030
+lines on demand, and its signature still reads `undefined OVC45_77eb_0d61()` with its five
+locals (`reqMsg`, `text`, `msg`, ...) intact.  So the `fail` is an artifact of that
+`ExportAll` run (the batch decompiler gives up on some long functions), not a change in the
+program.  Recorded so a later pass checks with `DecompileAt` before treating a missing body
+as evidence.
