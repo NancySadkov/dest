@@ -3548,3 +3548,57 @@ not two words.
 `agnt_t+0x11`, `+0x24` and `+0x25` still have no computing consumer in `tmp/decompiled10`
 - the only forms are `= 0`, `= 1`, `= 2` and `== 0` / `!= 2` / `< 2` tests.  The
 `char_sheet_t` pads and `agntG_t+0x94` likewise keep their earlier refusals.
+
+## Splitting isn't always wrong: the `far_t` parameter merges
+
+A generic scan for the inverse pattern - two adjacent word parameters that the body
+immediately stores into a `far_t` - found six functions, and in each of them the pair is
+one pointer argument that the compiler passed as two words:
+
+| function | merged parameter | body evidence |
+|---|---|---|
+| `OVC23_55fe_0863` | `far_t dst` | `dst.seg = param_2; dst.ofs = param_1;` then `ovr_animAdvance(..., dst)` and `ovr_constr_36ce_04e9(dst.ofs, dst.seg)` |
+| `blit_317e_0db7` | `far_t gfx` | stored then `blitGfxN(gfx, ...)` |
+| `blit_317e_1240` | `far_t gfx`, `far_t gfx_00` | two pairs, each passed to its own `blitGfxN` |
+| `saveui_4528_055b` | `far_t gfx` | stored then `ovr_blitGfx10(gfx, ...)`, twice |
+| `OVC20_4b0a_08ee` | `far_t buf` and `DW sz` | `buf.ofs/seg = param_1/2`, `sz.lo/hi = param_3/4`, then `StshCtOfs.lo += sz.lo; StshCtOfs.hi += sz.hi + carry` |
+| `OVC42_6d7a_033e` | `far_t cmap` | `cmap.ofs/seg = param_4/5`, then `ovr_drawAgntStats(..., cmap)` |
+
+Because a `far_t` is four bytes and the two words were four bytes, **every later argument
+kept its slot** - that is the check that distinguishes this from the `OVC23_55fe_184e`
+case above, where widening a pointer did move the following word.  The decompiled bodies
+were compared before and after; e.g. `blit_317e_0db7` went from
+`blitGfxN(gfx,...)` on a local to the parameter directly.
+
+Live checks:
+
+```c
+void OVC23_55fe_0863(far_t dst)
+... ovr_animAdvance(..., dst);  ovr_constr_36ce_04e9(dst.ofs,dst.seg);
+
+undefined1 * OVC20_4b0a_08ee(far_t buf, DW sz)
+... bVar2 = CARRY2(StshCtOfs.lo,sz.lo);  StshCtOfs.lo = StshCtOfs.lo + sz.lo;
+```
+
+## `uiReadString`: the merge was refused, so only the names changed
+
+Its five words are two far pointers and a row:
+
+```c
+if (textOfs != 0 || textSeg != 0) { TextBlitX = 0x16; ...
+                                    ovr_blitText(textOfs,(byte *)textSeg,...); }
+TextBlitY = row * 0xf + 0x1d;                      /* 15 = row height     */
+if (gfxOfs != 0 || gfxSeg != 0) { handle.seg = gfxSeg;
+                                  handle.ofs = (uint16_t)gfxOfs;
+                                  ovr_stshFree(handle); }   /* a supplied block */
+```
+
+`ApplyFunctionSignatureCmd` refuses the merged form here (even with the correct return
+type), and one intermediate attempt with a 4-byte return type made it worse by inserting
+a hidden `__return_storage_ptr__`; the original signature was re-applied and verified with
+`ShowFunc` before the names were set.  The parameters are therefore named without merging:
+`textOfs`, `textSeg`, `row`, `gfxOfs`, `gfxSeg`.  This is recorded as a tool limitation,
+not a semantic doubt - the two halves are unambiguous.
+
+Auto-named parameters over this turn: 980 -> 959 (8 merged away, 8 new merged-pointer
+names, 5 names on `uiReadString`).  Struct-typed arguments: 123 -> 127.
