@@ -1583,3 +1583,45 @@ int __cdecl16far OVC25_5b66_18cc(byte gindex)
 Live confirmation: `char * __cdecl16far OVC45_77eb_0c36(byte bldType)`.
 
 Auto-named parameters: 1120 -> 1105 (11 + 4).
+
+## Correction: scan windows leaked into the next function
+
+The parameter sweeps matched an expression anywhere in the **next 80 source
+lines**, which can cross into the following function.  Re-checking every renamed
+function against its own body (split on the `/* addr */` markers) exposed six
+names that came from the neighbour:
+
+| function | wrong name | body actually shows | corrected to |
+|---|---|---|---|
+| `OVC22_5087_0119`, `015c`, `018f` | `bldType` | a far-pointer table with a dropped base, read at `+0x2f`, `+0x87` | `param_1` |
+| `OVC30_619c_031d` | `gindex` | only `< 5` / `< 9` classification, no table | `param_1` |
+| `OVC25_5b66_173b` | `gindex` | pointer table at `+0x3e/+0x3f/+0x5d/+0x5e`, no `0x95` | `param_1` |
+| `OVC22_5087_1470` | `entityIndex` | pointer table at `+0x3f/+0x45/+0x4f`, not `Entities[]` | `param_1` |
+
+Three of the same batch were right for a different reason and are now named
+correctly, and two more functions that the window had hidden are fixed:
+
+| function | body | corrected to |
+|---|---|---|
+| `OVC45_77eb_0683`, `0708`, `0742` | `GMapFlags[y][x]` | `x`, `y` |
+| `OVC23_55fe_2937` | `record+2 <= x <= record+2+width`, `record+4 == y` | `x`, `y` |
+| `OVC41_6a8f_01e7` | `(int)param_1 + 0x17` (dereferences a far pointer) | `agnt_t *agnt` |
+
+Verified signatures after the fix:
+
+```
+OVC22_5087_1470(byte param_1)
+OVC30_619c_031d(byte param_1)
+OVC25_5b66_173b(byte param_1)
+OVC23_55fe_2937(int x, int y)
+OVC41_6a8f_01e7(agnt_t * agnt)
+```
+
+Auto-named parameters: 1105 -> 1107 (six false names withdrawn, the correct ones
+kept).  Struct-typed functions: 112 -> 113.
+
+### Method fix
+
+The sweeps now extract a function body strictly between `/* addr */` markers and
+search only inside it - `scripts/fbov/verify_param_names.py` re-runs 53 such checks
+and reports failures, so a leaking window cannot pass silently again.
