@@ -283,3 +283,13 @@ before playing again:
     ... word_07B2 = bVar2 + 0x80;
 
 so 07B2 is the earliest time the sound may repeat.  Named SfxDeadline.
+
+## Batch 18 - menu blit frame
+
+0:06CC\ is a six-frame counter for the menu blit:
+
+    if (5 < byte_2000_BSS_06CC) byte_2000_BSS_06CC = 0;
+    ovr_blitLoadRleGfx();
+    byte_2000_BSS_06CC = byte_2000_BSS_06CC + 1;
+
+Named BlitFrame (2000:d100).
