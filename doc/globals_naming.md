@@ -826,3 +826,31 @@ That completes the three audio graphics pairs, all built the same way
 (`stshLoadGfx` for the offset, the returned `DX` for the segment):
 `MidGfxOfs`/`MidGfxSeg` (07BE/07C0), `MusGfxOfs`/`MusGfxSeg` (07C6/07C8) and
 `SfxGfxOfs`/`SfxGfxSeg` (07B6/07B8).  Auto globals: 595 -> 594.
+
+## Batch 42 - season palettes and the promotion threshold
+
+`2410:693B` is three 45-byte blocks selected by the season:
+
+```c
+F_SCOPY(&local_a0, &SeasonPalettes, 0x87);                  /* 3 * 0x2d */
+_fmemmove(dest + 0x2d0, local_a0 + (uint)GSeason * 0x2d, 0x2d);
+```
+
+The copy size and the `GSeason * 0x2d` selection fix both the block size and the
+count, so it is `SeasonPalettes`.
+
+`2410:69D7` (its second word is `69D9`) is a four-byte threshold array indexed by
+the caller's argument and compared with the leader record's `0xa5` byte; reaching
+it promotes the matching units that are below level 8:
+
+```c
+local_6 = PromoteThreshold;                     /* with 69D9 as the high word */
+for (bStack_7 = 0; bStack_7 < GLeaderCount; bStack_7 = bStack_7 + 1) {
+    if (*(byte *)(&local_6 + param_1) <= *(byte *)(leader + 0xa5)) {
+        for (...) if (unit.level < 8) { ... unit.level = 8; iVar3++; }
+```
+
+Named `PromoteThreshold`.  Its high word `69D9` is part of the same array and is
+not a separate variable.
+
+Auto globals: 594 -> 592.
