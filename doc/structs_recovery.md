@@ -3243,3 +3243,28 @@ The worklist regenerated from the current audit still reports the same 35 single
 globals, every one of which has been examined and refused on its own evidence
 (`00D8`, `5DF2`, `49F7`, `076F`/`0771`, `2272:002C/002E/003A/003C`, ...).  No new payload or
 guarding comparison appeared after the recent renames, so nothing was named in this batch.
+
+## Twelve XMS parameters, named by the structure they fill
+
+Both block-move helpers write the caller's arguments straight into the XMS request
+structure, which is what names them:
+
+```c
+XmsDstLo = param_1;  XmsDstHi = param_2;    /* destination address */
+XmsSrcLo = param_3;  XmsSrcHi = param_4;    /* source address      */
+if ((param_5 & 1) != 0) { ... }             /* odd length handling */
+param_5 = param_5 - 1;  param_6 = param_6 - (uint)bVar1;
+if ((param_6 == 0) && (param_5 == 0)) ...
+XmsCmdLo = param_5;  XmsCmdHi = param_6;    /* count handed to the driver */
+```
+
+The pair `param_5`/`param_6` is a 32-bit count that is decremented with borrow and tested
+for zero - not a flags word, which is what the `& 1` alone would have suggested.  So the
+names are `dstLo/dstHi`, `srcLo/srcHi`, `countLo/countHi`, applied to both functions:
+
+```
+void xms_1000_032f(int dstLo, undefined2 dstHi, uint srcLo, int srcHi, uint countLo, int countHi)
+void xms_1000_03c2(uint dstLo, int dstHi, int srcLo, undefined2 srcHi, uint countLo, int countHi)
+```
+
+Auto-named parameters: 1037 -> 1025.
