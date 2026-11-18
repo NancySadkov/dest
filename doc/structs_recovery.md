@@ -4469,3 +4469,88 @@ prettier would be exactly the kind of guess this project refuses.
 |---|---|---|
 | `2410:4B6D` | `levelRangeIndex` | `LevelRangeMin[4B6D] <= entity.base.level <= LevelRangeMax[4B6D]`, with 0xfe handled as a special case |
 | `2410:4B6E` | `partyFilter` | assigned from `manage_textAllUnits`' `partyIndex` parameter, 0xff for none, compared with the per-entity party byte |
+
+## Two more struct fields from the listing (27 -> 25)
+
+### `anm_t+0x1d` is `sfxId`
+
+`agnt_usesStExit`'s second parameter, which the decompiler typed `undefined4`, is an
+`anm_t *`.  The listing shows it driving the agent's frame counter:
+
+```
+3b1d:0fef  LES  BX,[BP + 0x6]        ; agnt
+3b1d:0ff2  INC  byte ptr ES:[BX + 0xe]   ; agnt->animFrame++
+3b1d:0ff9  MOV  AL,ES:[BX + 0xe]
+3b1d:0ffd  LES  BX,[BP + 0xa]        ; param_2 (anm_t *)
+3b1d:1000  CMP  AL,ES:[BX + 0x1b]    ; nframes
+3b1d:1004  JC   ...
+3b1d:1006  LES  BX,[BP + 0xa]
+3b1d:1009  CMP  byte ptr ES:[BX + 0x1a],0xff   ; startFrame sentinel
+3b1d:100e  JZ   ...
+3b1d:1010  LES  BX,[BP + 0xa]
+3b1d:1013  MOV  AL,ES:[BX + 0x1a]
+3b1d:1017  LES  BX,[BP + 0x6]
+3b1d:101a  MOV  byte ptr ES:[BX + 0xe],AL   ; restart at startFrame
+```
+
+so `+0x1a` = `startFrame`, `+0x1b` = `nframes` and `+0x1c` = `flags` exactly as the struct
+already had them.  The remaining byte `+0x1d` is passed as the sound id:
+
+```c
+ovr_play_sfxU(*(byte *)((int)uStack_12 + 0x1d), 0, uVar12);   /* 4 sites */
+```
+
+and `play_sfxU(byte fid, int type, uint16_t unk)` fixes the first argument as the sound file
+id, so the field is `sfxId`.
+
+### `agnt_t+0x13` is `frames`, a far pointer to 4-byte entries
+
+`ovc49_usesBlitGfxRect` builds a far pointer from the words at agnt+0x13/+0x15 and indexes it:
+
+```c
+uStack_a = CONCAT22(*(undefined2 *)(uStack_22 * 0x34 + 0x15),
+                    *(undefined2 *)(uStack_22 * 0x34 + 0x13));
+uVar10   = ovc49_body1(...);                       /* frame id */
+puVar16  = (undefined2 *)((int)uStack_a + (uVar10 & 0xff) * 4);
+uStack_12 = CONCAT22(puVar16[1], *puVar16);        /* far pointer per entry */
+```
+
+The field was a bare `DW`; it is now `far_t *` named `frames` (same four bytes, so no layout
+change).  The entries it points at are the `anm_t` records whose `nframes`/`sfxId` the same
+function consumes.
+
+### The `anm_t+0x0x0f` / `+0x11` width conflict - refused, with opcodes
+
+The same listing shows genuine 16-bit reads where the struct has single bytes:
+
+```
+3b1d:0ec6  C4 5E 0A        LES BX,[BP + 0xa]
+           26 39 77 0F     CMP ES:[BX+0x0f],SI      ; 16-bit compare
+3b1d:0ec9  C4 5E 0A        LES BX,[BP + 0xa]
+           26 8B 77 0F     MOV SI,ES:[BX+0x0f]     ; 16-bit load
+```
+
+and the same two forms at `+0x11` (0e5c, 0e6a, 0e78, 0e84).  But `ow` at `+0x0f` has four
+byte uses that are equally direct:
+
+```c
+((frm_t *)frm)->ow = *(uint8_t *)(nanims + i * 0x1e + 0xf);   /* stshRleAnims */
+((frm_t *)frm)->ow = (char)exx - (char)xx;
+*(uint8_t *)((int)&pfVar6[1].ofs + 1) = ((anm_t *)anims)[i].ow;   /* textBathHouse */
+```
+
+So `+0x0f` is read both as a byte and as a word, and `+0x11`/`+0x12` are read as one word.
+Either the two bytes are a 16-bit value whose low byte is `ow`, or the movement code reads
+the pair deliberately.  `stshRleAnims` only *writes* `ow` as a byte and nothing writes anm's
+`+0x0f` as a word, so the binary does not settle the width.  Retyping would have to delete
+`ow`, and a wrong merge would silently change every byte access to it.  Refused; the finding
+is recorded here with the opcodes so it can be decided if a writer ever turns up.
+
+### Independent confirmation of the per-entity party byte
+
+`partyFilter` (2410:4B6E) is assigned from `manage_textAllUnits`' `partyIndex` parameter and
+compared with the same `entity+0x1a` byte that `ovc45_textDone` passes to `ovc28_textGold`.
+Two unrelated functions treating the byte as a party index is what makes `entity.seg >> 8`
+the right reading of it rather than a decompiler artifact.
+
+Struct fields: 27 -> 25 generated.

@@ -1561,3 +1561,25 @@ compared against another entity's to find the member's entity.
 | `2000:0998` | incremented on one condition and used as `*0x32 + 0x32` for a far pointer; the 50-byte table it indexes has no name |
 
 Auto-named globals: 320 -> 307.
+
+## Batch - level-range index and party filter
+
+| global | name | evidence |
+|---|---|---|
+| `2410:4B6D` | `levelRangeIndex` | `LevelRangeMin[4B6D] <= entity.base.level <= LevelRangeMax[4B6D]`, with 0xfe special-cased before the range test |
+| `2410:4B6E` | `partyFilter` | assigned from `manage_textAllUnits`' `partyIndex` parameter, 0xff for none, compared with the per-entity party byte |
+
+```c
+if (byte_2410_DATA_DGROUP_4B6D == 0xfe) goto L_...;
+if ((byte)((undefined1 *)&LevelRangeMin)[levelRangeIndex] <= peVar3[entityIndex].base.level)
+  if (peVar3[entityIndex].base.level <=
+      (byte)((undefined1 *)&LevelRangeMax)[levelRangeIndex]) goto L_...;
+```
+
+Auto-named globals: 307 -> 305.
+
+### Examined and refused in the same pass
+
+- `2410:6A88`: a one-shot guard around the `stshAlloc_2(0x18)` block that
+  `ovc38_textShighTxt` fills, saved to the save game.  It has one setter, one clearer at
+  init, and only `== 0` tests -- a name could only restate `if (never done)`.
