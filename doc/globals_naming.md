@@ -801,3 +801,28 @@ comparison proves (a per-index level range).
 
 The same decompile also shows `entity.base.level`, i.e. the `agnt_t+0x0f` name
 resolving in a third module.  Auto globals: 597 -> 595.
+
+## Batch 41 - correcting `SfxGfx` into its two halves
+
+`sfxInit` shows `2410:07B6` is only the offset of a far-pointer pair whose segment
+is `2410:07B8`, and the pair builds the digital-sound handle:
+
+```c
+SfxGfxOfs = ovr_stshLoadGfx(handle);          /* AX */
+SfxGfxSeg = in_DX;                            /* DX */
+DIGHandle.ofs = audio_3a5b_0761(SfxGfxOfs->cmap, in_DX, ...);
+DIGHandle.seg = in_DX;
+```
+
+The earlier single name covered only the offset half, so it is renamed and the
+segment named:
+
+| address | name |
+|---|---|
+| `2410:07B6` | `SfxGfxOfs` (renamed from `SfxGfx`) |
+| `2410:07B8` | `SfxGfxSeg` (new) |
+
+That completes the three audio graphics pairs, all built the same way
+(`stshLoadGfx` for the offset, the returned `DX` for the segment):
+`MidGfxOfs`/`MidGfxSeg` (07BE/07C0), `MusGfxOfs`/`MusGfxSeg` (07C6/07C8) and
+`SfxGfxOfs`/`SfxGfxSeg` (07B6/07B8).  Auto globals: 595 -> 594.
