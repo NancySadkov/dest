@@ -458,3 +458,44 @@ if (((AnimActive != '\0') && (GOngoingBattle == '\0')) &&
 It is incremented in the animation-without-battle branch, the setup runs when
 it exceeds 2, and it is cleared immediately after the setup, so it delays the
 battle by three passes.  Named `BattleDelay`.
+
+## Batch 31 - menu redraw cache
+
+`2000:06DE` stores the menu-item value that was drawn last, so the tooltip is
+only redrawn when it changes (or the caller forces a redraw):
+
+```c
+uStack_6 = *(byte *)(menuIndex + 0x9082);
+if ((force != 0) || (word_2000_BSS_06DE != uStack_6)) {
+    word_2000_BSS_06DE = uStack_6;
+    font_302d_0a30();
+    ...draw the item...
+```
+
+Named `PrevMenuValue` (`2000:d112`).
+
+### Examined and not named
+
+- `2410:00D8` (`ovc02_draw`): bounded `0..6`, used as `*2` and repeatedly as
+  an addend in an unrolled byte accumulation.  The bound and the arithmetic
+  are clear, the quantity being accumulated is not, so the earlier refusal
+  stands.
+- `2410:49F7` (`ovc21_manage`): the five entries really are far pointers, and
+  their targets are readable in the image:
+
+  ```
+  [0] 4EE9:2410  "has achieved the rank of EMPEROR.  Congratulations!"
+  [1] 4F1D:2410  "has destroyed all enemies and has achieved EMPEROR. ..."
+  [2] 4F62:2410  "has destroyed all enemies.  Congratulations!"
+  [3] 4F8F:2410  "OK"
+  [4] 4F92:2410  "Try Again"
+  ```
+
+  but the same module reads a *six-byte-stride* table at `0x4A02`
+  (`4d05:2b37 MOV AL,byte ptr [BX + 0x4a02]`, `BX = index*6`), which lies
+  inside entry 2's segment word.  Pointer array and byte table cannot both
+  be correct at those addresses, so the extent of the array is unresolved and
+  no name is applied yet.
+- `2000:076F`/`0771` (`ovc48`): another `stshAllocStub()` far pointer
+  (offset/segment) allocated in `init_assets2` next to `GMenuGfxOfs`/
+  `GMenuGfxSeg`.  Which asset it holds is not distinguished by the code.
