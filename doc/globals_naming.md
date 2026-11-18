@@ -1698,3 +1698,20 @@ Auto-named globals: 305 -> 296.
 | `2000:072F` / `0731` | reset in `attact_usesAlignUp42`, incremented in `ovc26_usesStExit`, and never read |
 | `2000:06A4`, `06A6`, `069C`, `069E` | written next to the audio driver pairs and never read |
 | `2410:0161`, `5CE4`, `5CF0` | toggled by several screens with no stated condition |
+
+## Globals pass - the string-adjacent scan is now exhausted
+
+Re-running the string-adjacent store scan over `tmp/decompiled32` returns only the globals
+already named or already refused: the new-world dialog was the only place where a prompt's
+own text labels the store, and those five are done.  A tighter scan for assignments whose
+**right-hand side** contains a prompt literal returns nothing, because the dialogs all stage
+their result through a stack local first.
+
+Refusals re-confirmed with their sites:
+
+| global | evidence |
+|---|---|
+| `2000:0067` | toggled and copied into `GOngoingBattle`; the two are kept in sync explicitly |
+| `2410:4757` | set 1 before `save_textSsave()` and 0 right after, checked as `== 0` before printing "Load Error" -- three sites, polarity unresolved |
+| `2000:072F` / `0731` | reset each turn, incremented, never read |
+| `2000:06A4` / `06A6` / `069C` / `069E` | written beside the audio driver pairs, never read |

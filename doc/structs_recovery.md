@@ -4695,3 +4695,88 @@ Call sites are `Lbm_nwpanel1.ofs/seg`, `specialColorsOfs/Seg`, `gamfont1Cut1Ofs/
 functions leave their second argument unused, which is why it stays auto-named.
 
 Auto-named parameters: 771 -> 766.
+
+## Saves-index helpers, prompts and map squares (18 parameters)
+
+### The three saves-index walkers
+
+`saveui_textSsavesTxt2`, `saveui_usesStshFree` and `saveui_usesBlitLoadRleGfx3` all walk the
+same array of far pointers with a bound:
+
+```c
+puVar1 = (undefined2 *)((int)entries + i * 4);      /* far_t per entry */
+for (i = 0; i < count; i = i + 1) { ... }
+```
+
+so their first argument is `entries` and the bound is `count`.  `saveui_usesWrite` forwards
+both of its own into the C library: `write(handle, text, count)`.
+
+### `saveui_usesBlitText` (the new-world prompt helper)
+
+```c
+ovr_blitText(prompt, (byte *)param_2, Font03.ofs, (uint8_t)Font03.seg);
+TextBlitY = row * 0xf + 0x1d;
+pfStack_c = ovr_stshRleCut(..., row * 0xf + 0x1d, 222, row * 0xf + 0x27, ...);
+```
+
+The first argument is `blitText`'s `text`, and the third is a 15-pixel row used for both the
+text baseline and the cut rectangle.  The first rename was rejected:
+
+```
+FAIL 4528:1d55 param_1 : DuplicateNameException: A Local Var symbol with name text
+     already exists in namespace saveui_usesBlitText
+```
+
+because the function already has a local `char text[80]`, so the parameter became `prompt`.
+
+### `saveui_usesStshAlloc`
+
+```c
+iVar1 = read(fd, local_52 + iVar3, unSS);
+```
+
+so its single argument is the saves-file descriptor.
+
+### `attact_usesMenuItemEnabled` -> `menuIndex`
+
+```c
+if (((undefined1 *)&MenuItemEnabled)[param_1] == -1) ...
+... == ((undefined1 *)&MenuItemEnabled)[param_1]
+```
+
+### `manage_compute1` -> `n`, `attact_compute1` -> `counter`
+
+`manage_compute1` returns `"st"`/`"nd"`/`"rd"`/`"th"` from `param_1 % 10` with the 0xb/0xc/0xd
+exceptions, i.e. an ordinal suffix for a number.  `attact_compute1` does
+`if (*p != 0) *p -= 1`, so its argument points at a countdown byte.
+
+### Map coordinates, pinned two ways
+
+`attact_usesGMapCells` bounds its arguments with the array's own dimensions and indexes the
+declared `byte [59][148]`:
+
+```c
+if (param_1 < 0 || param_2 < 0 || 0x93 < param_1 + 1 || 0x3b < param_2 + 1) ...
+local_a[0] = (int)(char)(*paabVar3)[param_2][param_1];
+```
+
+so `param_1` is the 148-wide coordinate (x) and `param_2` the 59-wide one (y).
+
+`attact_usesSquareRecCount` searches the 0x13-stride square records by their first two ints:
+
+```c
+if ((*(int *)(uVar1 * 0x13) == param_1) && (*(int *)(uVar1 * 0x13 + 2) == param_2)) break;
+```
+
+and the same record is matched elsewhere against `GfxRndSeed`/`GfxRndSeed2`, which
+`attact_usesMenuItemEnabled` compares with `entity.base.x` / `entity.base.y`.  So those two
+arguments are x and y as well.
+
+### The two accumulators
+
+`attact_usesEntityCount2` and `attact_usesAgntCount2` zero a 32-bit output and add
+`animFrame * level * level` with an explicit carry into the second word, so their first
+argument is `sum`.  Both leave their second pointer argument unused -- the third accumulator
+arrives on the stack -- so it stays auto-named.
+
+Auto-named parameters: 766 -> 748.
