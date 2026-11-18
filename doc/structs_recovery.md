@@ -3268,3 +3268,42 @@ void xms_1000_03c2(uint dstLo, int dstHi, int srcLo, undefined2 srcHi, uint coun
 ```
 
 Auto-named parameters: 1037 -> 1025.
+
+## Eight more parameters: string destinations and string arguments
+
+### Copy and case-convert
+
+`OVC15_4207_1c79` copies one string into another and upper-cases the first character, which
+names both arguments:
+
+```c
+strcpy(dest, src);
+cVar1 = toupper(*_dest);  *_dest = cVar1;
+return dest;
+```
+
+### `sprintf` destinations
+
+`stats_6386_12b7`'s second argument receives "  %s is ready." / "  %s is not readied.", so it
+is `text`.
+
+### Parameters walked as NUL-terminated strings
+
+A scan for `strlen(param)` and for `_ctype[*param]` found five parameters that can only be
+strings, all named `text`:
+
+| function | parameter |
+|---|---|
+| `OVC15_4207_1c16` | `param_1` |
+| `saveui_4528_10c5` | `param_2` |
+| `stats_6386_065c` | `param_1` |
+| `drawString` (6386:24c2) | `param_1` |
+| `OVC50_8adb_0000` | `param_1` |
+
+`OVC15_4207_1c16` was also retyped: its callers push two words for it
+(`1c16(0x4f9c, 0x2410)`), so the single argument is a four-byte far pointer.  `ListVars`
+confirms the type now reads `char *32 [4]` and the body starts with
+`sVar2 = strlen((char *)text);`.  The `in_DX` visible beside it is a register artifact of
+that function, not the parameter.
+
+Auto-named parameters: 1025 -> 1017.
