@@ -1732,3 +1732,56 @@ byte_2410_DATA_DGROUP_4B6E = 0xff;
 and the level-range lookup is a consequence (`ovc13_usesEntities` bounds the displayed entities'
 levels with `LevelRangeMin[type]`/`LevelRangeMax[type]`).  Renamed to `unitTypeFilter` with the
 old name recorded here so earlier notes stay traceable.
+
+## Batch - 17 DGROUP data tables named through `F_SCOPY`'s corrected signature (17 new globals)
+
+Now that `F_SCOPY` reads as `(srcOfs, srcSeg, dst)`, every call site names a data table that the
+code copies into a local.  The 29 sites with a literal source were enumerated, each source was
+checked for an existing symbol (`SymAt.java`: all 29 were **completely unnamed**, not merely
+auto-named), and the bytes were dumped (`DumpData.java`) so the name could follow the contents:
+
+| address | name | destination | dumped contents |
+|---|---|---|---|
+| `2410:04F2` | `edgeMaskTable` | `edgeMasks` | `03 06 00 01 05 03 01 00` -- edge bit masks |
+| `2410:0502` | `neighbourOfsTable` | `neighbourOfs` | `00 01 01 02 02 03 03 00` -- neighbour offsets |
+| `2410:0745` | `shadeTable` | `shades` | `10 0C 06 04 02 01 1F 1C 19 16 10 0C` -- descending shade steps |
+| `2410:49DD` | `classStatTable1` | `classStatMap1` | `00 01 02 03 00 00 00 FF FF FF` |
+| `2410:49E4` | `classStatTable2` | `classStatMap2` | `FF FF FF FF FF 01 03 ...` |
+| `2410:594A` | `ditherPlane0` | `plane0` (`int[16]`) | `0,0,4,12,13,13,13,13,12,4,...` |
+| `2410:596A` | `ditherPlane1` | `plane1` | `13,13,13,13,12,4,4,12,...` |
+| `2410:598A` | `ditherPlane2` | `plane2` | `12,4,0,...,4,12,13,13,13,13` |
+| `2410:59AA` | `reqLevelRow1` | `reqLevel1[10]` | `00 01 03 05 07 09 0B 0F 12 15` (strictly increasing) |
+| `2410:59B4` | `reqLevelRow2` | `reqLevel2` | `00 02 04 06 08 0A 0C 11 11 11` |
+| `2410:6E00` | `xOfsTable` | `xOfs` | words `0x36 0x27 0x1D 0x10`, then `01 02 03 03` |
+| `2410:6E48` | `growthTable` | `local_30` | `5,10,20,35,75,175,275,450,650,900,1000,1100` |
+| `2410:7145` | `unitTypeTable` | `local_1c` | `07 28 25 34 35 01 02 03 2E 2F 30 1C 1F 71`; its entries are stored into `GUnitGrid[x][y]` |
+| `2410:1D09` | `sfxXOffsets` | `&stack0xfff2` | words `33,81,129,177` |
+| `2410:26AD` | `promptRect` | `&rect` | `{22,29,222,39,0xA000}` -- exactly the prompt row, since the caller sets `TextBlitX = 0x16` and `TextBlitY = row*0xf + 0x1d` |
+| `2410:6B86` | `fullWidthRect` | `&rect` | `{0,0,319,143,0xA000}` |
+| `2410:715B` | `lowerScreenRect` | `&dst` | `{0,152,319,199,0xA000}` -- the bottom 48 rows, full width |
+
+The rectangles also settle what a `brect_t` holds: `left, top, right, bottom, seg` (not width and
+height), because `{22,29,222,39}` only makes sense as a 200x10 text row and `{0,0,319,143}` as the
+full width.  The decompiled call sites now read
+`F_SCOPY((uint8_t *)&shadeTable, 0x2410, shades)` instead of `F_SCOPY((uint8_t *)0x745, ...)`.
+
+Because these addresses had **no symbol at all**, they were not part of the 2533 counted globals;
+naming them raises the total to 2550 (auto-named stays 296, so 11.6%).
+
+### Examined and refused in the same pass (the rest of the 29 sources)
+
+| source | dumped / obstacle |
+|---|---|
+| `2410:04E8` | `16,12,6,4,2,1,1,1,1,1` copied into a 10-byte local that is multiplied by screen dimensions and divided by `0x30`; the divisors say "fractions of 48" but not what is being scaled |
+| `2410:074F` | only 2 bytes (`16,12`) reach `local_c[2]`; two values cannot name a table |
+| `2410:07EC`, `2410:842C` | both `{12,7,222,150}`; naming them "panel" would be an inference about the UI, and they are byte-identical so a distinguishing name is not available |
+| `2410:493B` | `{12,99,222,150}` -- same size, different y |
+| `2410:088D`, `2410:0897`, `2410:0858` | small rects `{223,159,226,196}`, `{208,157,226,196}`, `{211,175,223,178}`; their roles are battle-UI markers whose names are not stated |
+| `2410:0846` | not a rect at all: `3F 00 00 3F 3F 3F 20 20 20 3F 3F 3F`, a `'?'`/space pattern |
+| `2410:26E3` | `100,200,300,400` into a 20-byte local; the values alone do not say what is being counted |
+| `2410:4B66` | the destination is `acStack_e + 4`, i.e. the middle of a stack buffer, so the copy offset is part of the structure |
+| `2410:7153` | `0,1,2,3,5,8,10,11` copied into an 8-byte local passed as one argument to `ovc15_usesLDIV_at_` |
+
+New tool this pass: `scripts/ghidra/LabelData.java` creates a label at a data address (and sets an
+EOL comment), because `Rename.java` intentionally only renames an existing symbol and reported
+`missing=16` for these.
