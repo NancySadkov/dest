@@ -4780,3 +4780,98 @@ argument is `sum`.  Both leave their second pointer argument unused -- the third
 arrives on the stack -- so it stays auto-named.
 
 Auto-named parameters: 766 -> 748.
+
+## The `bldtp_t` access base is 0x10E, not 0x110 - and that closes the +0x0c conflict
+
+The table's first far pointer is built from two words 2 bytes apart, which fixes the base:
+
+```c
+((char *)CONCAT22(*(undefined2 *)(bldType * 0x27 + 0x110),
+                  *(undefined2 *)(bldType * 0x27 + 0x10e)));   /* name.ofs/segs */
+```
+
+so `name` starts at **0x10e**.  Four independent fields confirm it:
+
+| code offset | field | evidence |
+|---|---|---|
+| `0x116` / `0x118` | `action` (+8) | null-tested as a pair and copied into `menuItems[2]/[3]` |
+| `0x11a` | `field_0x0c` | `== 2` |
+| `0x11b` | `size` (+0x0d) | compared `< 2` and `< 3` |
+| `0x121` | `flags2` (+0x13) | `& 0x800`, `& 0x20` |
+| `0x130` | `durability` (+0x22) | `100 - value` |
+
+With the corrected base, the construction-time code reads:
+
+```c
+bStack_3 = *(byte *)(terrainType * 0x27 + 0x11d);   /* buildTime      (+0x0f) */
+if (bStack_3 == 0) bStack_3 = 1;
+if (bStack_3 < *(byte *)(bldType * 0x27 + 0x11c))  /* minBuildTime   (+0x0e) */
+    record[+6] = *(byte *)(bldType * 0x27 + 0x11c);
+else
+    record[+6] = bStack_3;
+```
+
+i.e. the new construction's duration is `max(current building's buildTime, the new type's
+minBuildTime)`.  Both fields are already named, and `record[+6]` is the duration
+(`draw_usesPlay_sfx` tests `record[+0x11] + 1 < record[+6]`).
+
+**So `bldtp_t+0x0c` is not a second lower bound at all** -- the 0x11c read is `minBuildTime`
+at +0x0e, and the older note came from assuming the base was 0x110.  What survives at +0x0c is
+a single test:
+
+```c
+if (*(char *)(bldType * 0x27 + 0x11a) == '\x02') { ... ovc23_textUnitDrowns(x, y); }
+```
+
+so `field_0x0c == 2` marks squares where units drown.  One value with one effect is not enough
+to name the field (a terrain-class taxonomy cannot be enumerated from a single member), so it
+stays generated, but the record now says what the byte does rather than claiming a time bound.
+
+## `agnt_t+4..+7` settled as bytes, with the mechanism
+
+The spawner's store is one instruction:
+
+```
+4207:113e  MOV word ptr ES:[BX + 0x4],SI
+4207:1150  MOV word ptr ES:[BX + 0x6],DI
+```
+
+and the movement code reads the same bytes as independent signs:
+
+```c
+if (*(char *)(i * 0x34 + 4) < 0) *(int *)(i * 0x34) -= cmap[5];
+else if (...)                    *(int *)(i * 0x34) += cmap[5];
+/* identical at i * 0x34 + 5 */
+```
+
+The two are consistent if the 16-bit move writes **two adjacent byte fields** at once -- the
+classic 8086 peephole that loads two bytes into AL/AH and stores the pair with one `MOV`.  The
+decisive argument is the sign test: if +4 were the low half of a 16-bit coordinate, testing its
+bit 7 as a movement direction would be meaningless, whereas as a signed direction byte it is
+exactly right.  So the byte layout stands and `field_0x5` is a real field, not a spurious high
+byte; the earlier "width conflict" is closed as a compiler artifact rather than a layout error.
+
+## Six parameters from the direction tables (6)
+
+`0x885` and `0x889` are per-direction delta tables, and the same index is a bit position in
+`GMapFlags`:
+
+```c
+iVar1 = (int)*(char *)(dir + 0x885);        /* dx */
+iVar1 = (int)*(char *)(dir + 0x889);        /* dy */
+GMapFlags[y][x] >> (dir + 4 & 0x1f);
+GMapFlags[y][x] >> (dir + 8 & 0x1f);
+```
+
+so `attact_usesSCARRY2` and `attact_usesSCARRY22`'s third parameter is `dir`.
+`attact_usesAlignUp44` takes x by pointer, the matching segment, y, and the same direction:
+
+```c
+*_param_1 = iVar4;                       /* the stepped x is stored back */
+func_0x0004f32d(..., *_param_1, param_3, param_4, ...);
+iVar4 = iVar4 + *(char *)(param_4 + 0x885);
+```
+
+so `xPtr`, `xSeg`, `y`, `dir`.
+
+Auto-named parameters: 748 -> 742.
