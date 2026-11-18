@@ -5754,3 +5754,49 @@ edges (the plain width or `right - left`) but nothing states which, so it stays 
 does `param_4`/`param_5` (the rect halves).
 
 Auto-named parameters: 523 -> 510.
+
+## 8 parameters: the season-palette fades and OVC22's map tests
+
+### The two palette fades (2)
+
+`setSeasonPalette` and `ovc40_usesVgaSetPalette8bit` run the same loop:
+
+```c
+for (u = 0; u < 0x300; u++)
+    local[u] = (char)(((long)(int)(uint)*(byte *)((int)param_1 + u) * (long)(int)step & 0xffff) / 10);
+ovr_vgaSetPalette8bit(local);
+```
+
+0x300 = 768 bytes and the division by 10 is the fade step, so `param_1` is the target `palette`
+in both.
+
+### `ovc40_usesStshLoadGfx` (1)
+
+```c
+if (param_1 == 4) { handle = youlose1Cut1; }
+else { handle.seg = ((undefined2 *)&back03Cut1Seg)[param_1 * 2];
+       handle.ofs = ((undefined2 *)&back03Cut1Ofs)[param_1 * 2]; }
+```
+
+a backdrop selector with 4 special-cased to the losing screen -- the same role as
+`ovc40_usesBlitGfx10`'s `backdropIndex`, so the same name.
+
+### `ovc22_usesGMapFlags` (3)
+
+```c
+pcVar1 = ovc22_textArena(param_1, param_2);
+... if ((GMapFlags[param_2][param_1] & param_3) == 0) ...
+```
+
+so `x`, `y` and a `mask`, with the pair also forwarded positionally into `ovc22_textArena`.
+
+### `ovc22_loop1` (3 of 5)
+
+It walks outward from a coordinate pair held **by pointer** (the loop writes `*xPtr`) and uses
+its fifth argument to index the party table (`*(undefined4 *)((uint)partyIndex << 2)` then
+`+0x3f`, the field this project names `excluded`), so `xPtr`, `yPtr`, `partyIndex`.  Its third
+and fourth arguments are packed into a far pointer byte-by-byte
+(`CONCAT12(param_4, CONCAT11(..., param_3))`), which is a decompiler artifact rather than two
+named slots, so they stay auto-named.
+
+Auto-named parameters: 510 -> 502.
