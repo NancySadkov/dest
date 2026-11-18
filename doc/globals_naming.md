@@ -272,3 +272,14 @@ The delta from the stored value is scaled by a per-object factor with the same
 signed shift in both branches, i.e. a lerp, and the result is stored back.
 Named SmoothPrev.  ¡0:74AC\ is compared against entity+0x1a (an id set from a
 constructor argument) as a fallback match; it stays unnamed.
+
+## Batch 17 - sound repeat deadline
+
+For sound 0x76 the audio routine checks a stored time against the current counter
+before playing again:
+
+    uVar3 = ovr_attact_3f0b_082f();
+    if ((in_DX == 0) && (uVar3 < word_07B2)) return;
+    ... word_07B2 = bVar2 + 0x80;
+
+so 07B2 is the earliest time the sound may repeat.  Named SfxDeadline.
