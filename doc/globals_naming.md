@@ -442,3 +442,19 @@ MusDrvSeg = in_DX;
 The remaining `07C6`/`07C8` pair stays unnamed: it is a second raw graphics
 pointer whose only distinguished use is being handed to `audio_3a5b_0761`,
 which the `MidGfx` pair already does.
+
+## Batch 30 - battle setup delay
+
+`2410:07F6` counts animation passes before a battle is set up:
+
+```c
+if (((AnimActive != '\0') && (GOngoingBattle == '\0')) &&
+    (BattleDelay = BattleDelay + 1, 2 < BattleDelay)) {
+    word_2000_BSS_06C5 = ovr_stshAlloc();      /* blit buffer */
+    ...
+    BattleDelay = 0;                           /* after setup */
+```
+
+It is incremented in the animation-without-battle branch, the setup runs when
+it exceeds 2, and it is cleared immediately after the setup, so it delays the
+battle by three passes.  Named `BattleDelay`.
