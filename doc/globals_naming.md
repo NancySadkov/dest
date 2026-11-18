@@ -362,3 +362,13 @@ Named ScreenHeight (0000:0484).
 as a fallback match, and entity+0x1a is a small index into a pointer table set
 from a constructor argument, so 74AC is an id in that space whose subject is not
 named anywhere.
+
+## Batch 25 - interrupt result flags
+
+\DS:0487\ is the flags byte of the software-interrupt helper: bit 0 (carry) is
+cleared on one result path and set on the other, around the INT 10h call.
+
+    if (cVar2 != 0x1a) data_DS_0487 = data_DS_0487 & 0xfe;   /* CF = 0 */
+    ...                data_DS_0487 = data_DS_0487 | 1;      /* CF = 1 */
+
+Named IntFlags (0000:0487).
