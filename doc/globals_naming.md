@@ -773,3 +773,31 @@ MusHandle  = audio_3a5b_0761(MusGfxOfs->cmap, in_DX, ...);
 The second pair therefore feeds only the music handle, so it is
 `MusGfxOfs`/`MusGfxSeg` (`2410:07C6`/`07C8`), while `07BE`/`07C0` stay the
 `MidGfx` pair that feeds `MIDHandle`.  Auto globals: 599 -> 597.
+
+## Batch 40 - the twelve-entry level range tables
+
+`2410:4AEE` and `2410:4AFA` are two twelve-byte tables read with the same index,
+and the code tests the entity level against both:
+
+```c
+if ((byte)((undefined1 *)&LevelRangeMin)[byte_2410_DATA_DGROUP_4B6D] <= entity.base.level) {
+    if (entity.base.level <= (byte)((undefined1 *)&LevelRangeMax)[byte_2410_DATA_DGROUP_4B6D])
+        goto accept;
+}
+return 0;
+```
+
+The values are monotonic, which is why they read as bounds:
+
+```
+min: 00 02 03 04 05 06 0B 10 14 1A 1F 24
+max: 01 02 03 04 05 0A 0F 14 19 1E 23 FF
+```
+
+Named `LevelRangeMin` / `LevelRangeMax`.  The index `4B6D` is a selector with
+`0xfe`/`0xff` sentinels set from a caller argument in `ovc21_manage`; what the
+twelve entries are keyed by is not established, so the names say only what the
+comparison proves (a per-index level range).
+
+The same decompile also shows `entity.base.level`, i.e. the `agnt_t+0x0f` name
+resolving in a third module.  Auto globals: 597 -> 595.
