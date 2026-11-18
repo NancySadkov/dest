@@ -3681,3 +3681,55 @@ uStack_26 = ovr_OVC45_77eb_0179(tileX,GfxRndSeed2);
 
 Auto-named parameters over this turn: 959 -> 952.  Auto-named locals: 164 -> 160.
 Struct-typed arguments: 127 -> 128.
+
+## `char_sheet_t` pads: why the prefix is still not split
+
+The step asked for a field-by-field rebuild now that `+0x1b` is a proven dword owner.
+Re-checking every writer of the region first turned up a **conflict** that has to be
+settled before any rebuild:
+
+| function | store | reads as |
+|---|---|---|
+| `OVC18_48ac_05f2` | `*(uint16_t *)(uVar1 + 0x39) = GfxRndSeed;`  `*(uint16_t *)(uVar1 + 0x3b) = GfxRndSeed2;` | a coordinate pair |
+| `OVC30_619c_0339` | `sheet->x = param_2;  sheet->y = param_3;` (caller passes map x, y) | a coordinate pair |
+| `OVC43_6fbe_0000` | `*(undefined2 *)((char *)uStack_6 + 0x39) = uVar8;`  `*(char_sheet_t **)((char *)uStack_6 + 0x3b) = sheet;` | a pointer at `+0x3b` |
+
+Two independent functions store a coordinate pair at `+0x39`/`+0x3b`, so the second
+field is a y word and the earlier `pos` -> `x`/`y` split stands.  The `OVC43_6fbe_0000`
+store sits inside a branch the decompiler mangled badly (that function carries
+`Instruction at ... overlaps instruction at ...`, and the same branch emits
+`_fmemset(sheet, sheet._2_2_, 0)` and `strcpy(sheet, sheet._2_2_)`), so it is recorded as
+an artifact of that decompilation rather than as counter-evidence.  Had I trusted it, I
+would have turned a proved field back into an unknown.
+
+For the prefix itself the outcome is unchanged: `+0x1b` is a dword compared against
+`agnt_t+0x1b`, but nothing in the export reads `+0x00`, `+4`, `+6` or any other prefix
+byte except through that one comparison.  Splitting `pad_0` into
+`byte[0x1b]` + `owner` + `byte[9]` would add two generated components to name one field
+whose width the comparison alone does not fix (the left side of that comparison is itself
+a 4-byte read spanning `owner` and the `gdata` word).  Not done, and the reason is
+recorded rather than the step being silently skipped.
+
+## Generated struct fields re-checked in `tmp/decompiled13`
+
+| field | references | every form found |
+|---|---|---|
+| `agnt_t+0x11` | 10 | `= 0`, `= 1`, `= (char)uVar8`, `!= '\0'`, `== '\0'` |
+| `agnt_t+0x24` | 12 | `= 1`, `= 2`, `== '\0'`, `!= '\x02'` |
+| `agnt_t+0x25` | 9 | `= 1`, `= 2`, `< 2`, `!= '\x02'`, `== '\x02'` |
+| `agnt_t+0x2a` | 0 raw | only the typed read `peVar24[0xb4].base.field_0x2a == 0` |
+| `bldtp_t+0x0c` | 4 | `uStack_6._3_1_ < byte[bldType*0x27+0x11c]` and `instance[+6] = byte[...+0x11c]` (a bound copied into the build duration) |
+| `bldtp_t+0x24` | 3 | `& 0x80` only |
+
+No arithmetic or indexing appears on any of them, so the refusals stand.
+
+## Four more parameters: a menu row's value and the destination segment
+
+| function | parameter | evidence |
+|---|---|---|
+| `draw_2e25_0000` | `menuItem` | `(param_1 < 5) && MenuItemEnabled[param_1] != -1`, `param_1 * 0xd + 0x91` (row); callers pass `GMenuItem` |
+| | `dstSeg` | passed last to `ovr_driver_2d63_05e5(..., SpecialColors[6], param_2)`; callers pass `TextBlitDstSeg` / `0xa000` |
+| `draw_2e25_0098` | `value` | callers pass `*(byte *)(GMenuItem + 0x9082) + 1` and `- 1`, and the body stores it back: `*(undefined1 *)(GMenuItem + 0x9082) = (undefined1)param_1;` |
+| | `dstSeg` | `param_2 == -0x6000` (0xa000) triggers `draw_2e25_0573()`; callers pass `TextBlitDstSeg` and `-0x6000` |
+
+Auto-named parameters over this turn: 952 -> 948.
