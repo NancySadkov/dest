@@ -2492,3 +2492,77 @@ Auto-named locals: 233 -> 218.
   exists in the recovered code and cannot be renamed.
 - `attact_3f0b_2a09`'s two constant rects stay unnamed; the only information about
   them is their geometry.
+
+## Prototypes repaired (second pass) - a far byte buffer and two far strings
+
+### `blit_317e_0879`: two slots are one far pointer
+
+The loop advances a far pointer, so the decompiler's first argument and the integer
+after it were halves of the same pointer:
+
+```c
+_param_1 = (byte *)CONCAT22(param_2, param_1 + 1);
+```
+
+After `ApplyProto` for the shape and `RenameVars` for the four-byte type:
+
+```c
+void blit_317e_0879(byte *buf, char count, byte value, byte chance)
+{
+  while (_count != 0) {
+    if (*buf != 0) {
+      uVar1 = ovr_randBelow(0x100);
+      if (chance < (byte)uVar1) *buf = 0; else *buf = value;
+    }
+    buf = (byte *)CONCAT22(buf._2_2_, (byte *)buf + 1);
+  }
+}
+```
+
+i.e. it rewrites each non-zero byte of a buffer to `value` with probability
+`chance/256`, else to zero - a speckle/dither pass.
+
+### `saveui_4528_1d0f`: the string is far too
+
+```c
+_param_1 = (char *)CONCAT22(in_stack_00000006, param_1 + 1);
+iVar1 = (int)*_param_1 + iVar1 * 10 + -0x30;   /* with an isdigit() guard */
+```
+
+so it parses a far string as a decimal number: `int saveui_4528_1d0f(char * str)`.
+
+### Named in the same pass
+
+| function | param | name | evidence |
+|---|---|---|---|
+| `blit_317e_04c2`, `blit_317e_0f7d` | `param_1` | `gfx` | `far_t` tested `param_1.ofs != 0 || param_1.seg != 0` |
+| `vgaSetPalette8bit` | `param_1` | `pal` | walks 256 RGB triples: `out(0x3c9,*param_1); param_1 = param_1 + 3;` |
+| `drawAnimTextAt` | `param_1` | `text` | forwarded to `drawTextAt(param_1, param_2)` |
+
+Live signatures:
+
+```
+void blit_317e_04c2(far_t gfx, int param_2, int param_3, int * param_4)
+undefined1 vgaSetPalette8bit(undefined1 * pal)
+void drawAnimTextAt(char * text, uint16_t param_2)
+```
+
+Auto-named parameters: 1064 -> 1055.
+
+## Three DGROUP bytes are constants, not variables
+
+`2410:0728`, `2410:073C` and `2410:074B` were re-checked in the fresh export: **none
+of them is ever written**, so they are initialised data rather than state.  Their
+values, read from the image, and the roles their uses give them:
+
+| address | value | every use |
+|---|---|---|
+| `2410:0728` | `0x4E` (78) | the minuend of y coordinates: `(uint)byte_0728 - offset` passed as a y argument to four drawing calls |
+| `2410:073C` | `0x0D` (13) | subtracted from tile corner heights before the average is clamped to the lowest corner, so the result is at most `lowestCorner - 13` |
+| `2410:074B` | `0x1F` (31) | the minuend of a y coordinate in `constr_36ce_1f99`/`init_3381_08dc`: `(uint)byte_074B - offset` |
+
+Naming them would mean asserting what those baselines are (a panel row, a wall height);
+the arithmetic fixes only that they are constants subtracted from a coordinate, so they
+keep their generated names with the values recorded.  Note that the same region holds
+other referenced bytes (`0730`, `0731`, `0740`, `074D`, `074E`) which are equally
+constant, so this is a family, not three isolated cases.
