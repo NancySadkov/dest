@@ -619,3 +619,25 @@ target are the level-band labels:
 `ovc21_manage` copies entries `0..11` (0x30 bytes) and `12..19` (0x30 bytes)
 into a local before display.  Named `LevelBandLabels`; it is the label side of
 the same bands that `LevelBandMin`/`LevelBandMax` encode numerically.
+
+## Batch 36 - three more label tables
+
+Each is a fixed far-pointer table copied wholesale into a local by its only
+consumer, and the bytes they point at are readable text, so the payload is the
+evidence.
+
+| symbol | consumer | copied | targets | name |
+|---|---|---|---|---|
+| `2410:45B9` | `OVC18_48ac_05f2` | `0xc` (3 ptrs) | "Strongholds cannot be placed on rivers." ... | `PlaceErrPtrs` |
+| `2410:4ADA` | `manage_4d05_26f6` | `0x14` (5 ptrs) | "Done", "Summary 1", "Summary 2", "Summary 3", "Damage" | `ManageResultPtrs` |
+| `2410:6E38` | `OVC41_6a8f_2084` | `0x10` (4 ptrs) | "cure light wounds", "cure serious wounds", "cure critical wounds", "cure all" | `CureSpellPtrs` |
+
+The byte counts prove the entry count (`0xc/4 = 3`, `0x14/4 = 5`, `0x10/4 = 4`),
+and every target was read from the image.  The live decompiles now show the
+names at the copy sites:
+
+```c
+F_SCOPY((far_t *)PlaceErrPtrs, ...);        /* 48ac:05f2 */
+F_SCOPY((far_t *)CureSpellPtrs, ...);       /* 6a8f:2084 */
+F_SCOPY((far_t *)ManageResultPtrs, ...);    /* 4d05:26f6 */
+```
