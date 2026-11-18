@@ -1965,3 +1965,76 @@ quantity.  `OVC40_69c8_023a`'s `local_d6[171]`/`local_2b[37]` are save/restore b
 copied out of a sprite and back, which describes the operation, not the data.
 
 Auto-named locals over the whole turn: 317 -> 291.
+
+### Fourth pass: out-parameters, a record buffer and `bld_inst_t`
+
+Candidates came from a scan of every `&local_X` handed to a known callee plus the
+`allvars.csv` inventory, so each name below starts from a stored variable whose
+address is taken or whose value is indexed.
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `OVC49_8699_1e09` | `local_1c` | `agntIndex` | out-parameter of the hit tests, then `*(char *)(agent + 0xc) = local_1c - 1` |
+| `upd_units_5087_1d7d` | `local_20` | `bldType` | `= (unit)->bldType`, then `* 0x27 + 0x121` and `BldInstances[local_20]` |
+| | `local_1c` | `found` | `= 0`, set by `OVC22_5087_1674(unit, &local_1c, ...)` (which does `*param_2 = 1`), tested `!= 0` at the end |
+| `unit_6616_10d5` | `local_16` | `rec` | the `0x13`-byte square record being compared against `SquareRecX` and appended to the list |
+| `saveui_4528_055b` | `local_c` | `rect` | `brect_t` whose `.x`/`.y` are filled from the caller's outputs |
+
+Live check:
+
+```c
+char found;
+found = '\0';
+bldType = (puVar15 + uVar22)->bldType;
+OVC22_5087_1674(uVar22,&found,uVar29);
+found = '\x01';
+
+uint rec;
+rec = GfxRndSeed;
+iVar3 = memcmp((char *)&SquareRecX,(char *)"puppetmaker" + 3,(int)&rec);
+```
+
+Auto-named locals: 291 -> 286.
+
+## `bld_inst_t` is a graphics far pointer plus eight spare bytes
+
+The construction module fills the first two words from a loader and a constant
+segment, which is exactly a far pointer:
+
+```c
+sVar5 = ovr_stshStoreFile();                 /* AX = offset */
+uVar4 = 0x195d;                              /* DX = segment */
+((bld_inst_t *)BldInstances + i)->ofs = sVar5;
+*(uint16_t *)((int)&BldInstances[0].seg + i * 0xc) = (uint16_t)pbVar11;
+```
+
+and the consumers test the pair for zero to detect an empty slot:
+
+```c
+BldInstances[i].ofs != 0 || *(int *)((int)&BldInstances[0].seg + i * 0xc) != 0
+```
+
+| offset | name | note |
+|---|---|---|
+| `0x0` | `ofs` | offset half |
+| `0x2` | `seg` | segment half |
+| `0x4` | `data[8]` | untouched by any reader found |
+
+These two fields did not move the audit's count - `AUTO_FIELD` only treats
+`fieldN_0xNN`, `pad_N`, `unnamed*`, `unk*` and `FUN_`/`DAT_` names as generated, and
+`field0`/`field2` are not in that set - but the struct is now recovered rather than
+carrying placeholder names.
+
+### Examined, not named this pass
+
+- `2000:0744`/`2000:0749` are per-index small x/y offsets: they are added to a base
+  to place a blit (`CrossBlitX = value + 0xed`, `CrossBlitY = value + 0x36`), store
+  the player's clamped value back per `GMenuItem`, and one consumer turns 0749 into a
+  percentage (`(0x1c - value) * 100 / 0x1c`).  Whether the index is a menu item, an
+  entity or a sprite is not stated, so the two names would be guesses.
+- `2410:5CF0`, `2410:5CEF`, `2410:648E`, `2000:027B` and `2410:07E2` were re-checked
+  and keep the refusals recorded in `doc/globals_naming.md`: two boolean gates with an
+  unstated subject, a packed pointer byte, a one-shot change flag, and a write-only
+  byte.
+- `55fe:2f90`'s `local_6` is a plain zero-then-increment counter bounded by a
+  parameter; `count` would restate the mechanism, so it stays.
