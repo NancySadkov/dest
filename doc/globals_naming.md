@@ -1359,3 +1359,45 @@ and `freeLeaderData` / `draw_usesRingBuffer` free the pair as one handle, so it 
 `upperTextOfs` / `upperTextSeg`.
 
 Auto-named globals: 360 -> 338.
+
+## Batch - a screen-sized temp block and the SFX start tick
+
+| global | name | evidence |
+|---|---|---|
+| `word_2000_BSS_06C5` / `_06C7` | `tempScreenOfs` / `tempScreenSeg` | `stshAlloc_2(0xfa0f)` = 64000 pixels plus the 15-byte `stg_tmp_t` header, passed to `alignToSeg`, then used as a far gfx handle and freed |
+| `word_2410_07AE` / `_07B0` | `sfxTickLo` / `sfxTickHi` | saved from `BDA_DailyTimeCounter` before an SFX is scheduled and compared with `SfxDeadline` |
+
+```c
+word_2000_BSS_06C5 = ovr_stshAlloc_2(0xfa0f);   /* 320*200 pixels + header */
+word_2000_BSS_06C7 = in_DX;
+ovr_alignToSeg(word_2000_BSS_06C5,ptr);
+```
+
+Auto-named globals: 338 -> 334.
+
+## The `07xx`/`08xx` pointer tables in `5087:056e` - examined, refused
+
+The function indexes twelve far-pointer tables by small values and blits each handle:
+
+```c
+gfx_06.seg = ((uint16_t *)&word_2000_BSS_07F0)[(unaff_DI % 7) * 2];
+gfx_06.ofs = ((uint16_t *)&word_2000_BSS_07EE)[(unaff_DI % 7) * 2];
+ovr_blitGfxRect(gfx_06, ...);
+gfx_10.ofs = ((uint16_t *)&word_2000_BSS_07BA)[(unaff_DI % 5) * 2];
+```
+
+Each pair (`07EE`/`07F0`, `07CE`/`07D0`, `07BA`/`07BC`) is one interleaved array of `far_t`
+handles, because the second name is the first + 2.  Two independent reasons stop a name:
+
+1. **No writer exists in the export.**  Neither the arrays nor the single-word tables
+   (`080C`, `0828`, `086C`, `01D5`/`01D7`, `0205`) are assigned anywhere in
+   `tmp/decompiled20`; they must be filled through a pointer or in unexported code, so the
+   contents cannot be characterised from the image.
+2. **The index expressions are register artifacts.**  `unaff_DI` is an unmodelled register,
+   and one index is literally `(uint)&unaff_DI->seg % 7`; the function carries
+   *Unable to track spacebase fully* and *Control flow encountered bad instruction data*.
+   Naming a table `unitFramePtrs7` from `unaff_DI % 7` would be reading the decompiler's
+   confusion as if it were the program's structure.
+
+The same refusal applies to the single-word handles (`0205`, `080C`, `0828`, `086C`): they
+are loaded into `gfx.ofs`/`seg` and blitted, nothing more.

@@ -4050,3 +4050,14 @@ with this evidence recorded.
 
 `bldtp_t+0x24`: only `& 0x80`; `agntG_t+0x52`/`+0x94` and the `anm_t` block keep their
 earlier refusals.
+
+### Struct refusals re-confirmed after the latest re-export
+
+- `char_sheet_t.pad_0` `+0x1b`: the comparison reads a dword on both sides, but the agent
+  side spans `owner` (word) and the low word of `gdata`, so the width is a word; splitting
+  `pad_0` would encode a guess and add two generated components.
+- `bldtp_t+0x0c`: a lower bound on build duration, but `+0x0e` is already `minBuildTime` and
+  no writer exists in the export to settle which is the minimum.
+- `bldtp_t+0x24` (`& 0x80` only), `agntG_t+0x52` (one clean signed-y-offset consumer, one
+  index through a pointer's high byte), `agntG_t+0x94` (no reader) and the `anm_t` block
+  (`stshRleAnims` reads only the already-named fields) are unchanged.
