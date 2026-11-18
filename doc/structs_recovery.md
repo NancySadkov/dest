@@ -2892,3 +2892,60 @@ local_92.seg = 0x2410;  local_92.ofs = 0x4fce;
 so it is `menuItems`.
 
 Auto-named locals: 176 -> 175.
+
+## `char_sheet_t+0x31` is the hit-point pair
+
+`manage_4d05_11cb` rolls the character's hit dice - the sum over its levels of
+`randBelow() + CON-modifier + 1`, clamped to at least 1 - and stores that total into
+both bytes of the field:
+
+```c
+for (iVar5 = 0; iVar5 < pcVar4->race; iVar5 = iVar5 + 1) {
+    bVar1 = ovr_randBelow();
+    cVar2 = manage_4d05_118b(pcVar4->stats[4]);   /* CON modifier, proven earlier */
+    iVar3 = (uint)bVar1 + (int)cVar2 + 1;
+    if (iVar3 < 1) iVar3 = 1;
+    iStack_4 = iStack_4 + iVar3;
+}
+pcVar4->hp[0] = (byte)iStack_4;
+pcVar4->hp[1] = (byte)iStack_4;
+```
+
+The machine code confirms these are two separate byte stores of the same value, not a
+16-bit word:
+
+```
+4d05:1242  MOV byte ptr ES:[BX + 0x31],AL
+4d05:124c  MOV byte ptr ES:[BX + 0x32],AL
+```
+
+so the field is a current/maximum pair initialised from one roll, and `pad_31` became
+`hp`.  Nothing reads it back in the export, so the name rests on the roll and on that
+initialisation, not on a reader.
+
+Generated struct fields: 30 -> 29 (`char_sheet_t` 7 -> 6).
+
+## Three index parameters from their record-count bounds
+
+A scan for parameters bounded by the record counts found three counters whose limit and
+stride settle them:
+
+| function | parameter | bound / use | name |
+|---|---|---|---|
+| `OVC18_48ac_0382` | `param_2` | `param_2 = param_2 + 1; if (GRecordCount <= param_2)` | `recordIndex` |
+| `OVC23_55fe_0af5` | `param_2` | `param_2 = param_2 + 1; if (GUnitCount <= param_2) break;` then `(int)param_2 * 9` indexes `GUnits` | `unitIndex` |
+| `stats_6386_1c9f` | `param_1` | `if (AgntCount <= param_1) return AgntCount;` | `agntIndex` |
+
+The first two were typed as pointers only because the decompiler rendered the increment
+as a pointer bump (`param_2 = (int *)param_2 + 1`); both are two-byte values, so they
+were retyped to `int16_t`/`uint16_t` without changing the calling convention.
+
+Live signatures:
+
+```
+uint * OVC23_55fe_0af5(int param_1, uint16_t unitIndex, byte param_3)
+char * OVC18_48ac_0382(far_t param_1, int16_t recordIndex, int * param_3, ...)
+byte stats_6386_1c9f(byte agntIndex, byte param_2, int16_t param_3, ...)
+```
+
+Auto-named parameters: 1055 -> 1052.
