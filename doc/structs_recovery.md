@@ -2156,3 +2156,114 @@ toggle, so they are `flashPalette1`/`flashPalette2`, and the `brect_t` used for 
 save/restore is `rect`.
 
 Auto-named locals: 278 -> 275 (286 at the start of the turn).
+
+## Locals (sixth pass) - menu tables, seeds, corners, colours
+
+Read from `tmp/decompiled5` (the regenerated export) and `tmp/allvars2.csv`.
+
+### Menu tables built from the game's own pointer tables
+
+`saveui_4528_1ae8` copies slices of the thirteen-entry table at `2410:26F7` into
+locals and passes each as a menu:
+
+```c
+F_SCOPY(2410:26F7 + 5, ..., worldItems);          /* 32 bytes = 8 pointers */
+puVar1 = worldItems; items.seg = (uint16_t)puVar1;
+uiMenu((char *)"Which new world:", items, unaff_SS);
+
+F_SCOPY(2410:26F7, ..., hostilityItems);          /* 12 bytes = 3 pointers */
+puVar1 = hostilityItems; uiMenu((char *)"Hostility level:", ...);
+```
+
+which matches the strings those entries point at - "First City", "World 1..5",
+"Random" for the eight world choices and "Peaceful", "Aggressive", "Hostile"
+for the three hostility levels.  The third local holds the per-world seed pairs:
+
+```c
+SeedHi = seedTable[(uint)bStack_b * 2 + 1];
+GSeed  = seedTable[(uint)bStack_b * 2];
+```
+
+`local_20[20]` in the same function is copied from `2410:26E3` and never read, so it
+keeps its generated name.
+
+### Tile corners, twice more
+
+`OVC23_55fe_0617` and `OVC23_55fe_0768` use exactly the `constr_36ce_0101` corner
+pattern already established for `constr_36ce_1f99`/`0995`, with the same argument
+order `(x, y-1)`, `(x+w, y-1)`, `(x, y)`, `(x+w, y)`:
+
+```c
+iVar1    = ovr_constr_36ce_0101(param_1 + 1, -1, &cornerTL);
+iStack_4 = ovr_constr_36ce_0101(param_1 + 1,  0, &cornerBL);
+```
+
+### Season palette and its three colour entries
+
+`calcSeasonPalette` copies the season palette and three single colour entries, then
+writes them into palette slots:
+
+```c
+F_SCOPY(SeasonPalettes, ..., seasonPalette);          /* 3 * 0x2d bytes */
+_fmemmove(param_3 + 0x2d0, ..., seasonPalette + (uint)GSeason * 0x2d);
+F_SCOPY(2410:69C2, ..., colorA);   _fmemmove(param_3 + 0x2ac, ..., colorA);
+F_SCOPY(2410:69C5, ..., colorB);   _fmemmove(param_3 + 0x2b2, ..., colorB);
+F_SCOPY(2410:69C8, ..., colorC);   _fmemmove(param_3 + 0x2be, ..., colorC);
+```
+
+The three sources are 3-byte RGB triples (`22 24 3F`, `29 2C 3F`, `3F 00 00`), so
+they are colour entries; the ordering A/B/C follows their source addresses and the
+ascending destination offsets.
+
+### Summary of names
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `saveui_4528_1ae8` | `local_54[32]` | `worldItems` | eight pointers from `26F7+5`, menu title "Which new world:" |
+| | `local_34[12]` | `hostilityItems` | three pointers from `26F7`, title "Hostility level:" |
+| | `local_28[4]` | `seedTable` | `SeedHi`/`GSeed` read as `[n*2+1]`/`[n*2]` |
+| `chargen` | `local_a[2]` | `keepDiscard` | copied from `GKeepDiscardStrings`, passed to `uiInputText` with 2 entries |
+| | `local_66[80]` | `msg` | `stsprintf(local_66, ..., "Keep %s.")` |
+| `OVC23_55fe_0617` | `local_6/8/a/c` | `cornerTL/TR/BL/BR` | corner pattern |
+| `OVC23_55fe_0768` | `local_a/c/e/10` | `cornerTL/TR/BL/BR` | corner pattern |
+| `OVC41_6a8f_2084` | `local_1c` | `agnt` | `agnt_t *` assigned from the caller's agent |
+| `calcSeasonPalette` | `local_a0[136]` | `seasonPalette` | copy of `SeasonPalettes`, indexed by `GSeason * 0x2d` |
+| | `local_a/e/12` | `colorA/B/C` | 3-byte RGB triples from `69C2/69C5/69C8` written into palette slots |
+| `saveui_4528_1d55` | `local_5c[80]` | `text` | prompt buffer passed to `saveui_4528_055b` |
+| `OVC45_77eb_1754` | `local_290[20]` | `menuItems` | offset/segment menu entries, `"Done"` last |
+| | `local_68[81]` | `text` | destination of the ellipsis-truncation helper |
+
+Live check:
+
+```c
+int cornerBR;  int cornerBL;  int cornerTR;  int cornerTL;
+iVar1    = ovr_constr_36ce_0101(param_1 + 1, -1, &cornerTL);
+iStack_4 = ovr_constr_36ce_0101(param_1 + 1,  0, &cornerBL);
+
+undefined1 seasonPalette [136];  undefined1 colorA [4];  undefined1 colorB [4];
+```
+
+Auto-named locals: 275 -> 254.
+
+## One parameter: OVC22_5087_0234's agent
+
+Its third argument is dereferenced as an agent and handed to the pan helper:
+
+```c
+} while (*(uint16_t *)((int)pcVar8 * 0x34 + 0x1b) != ((agnt_t *)param_3)->owner);
+uVar11 = ovr_audio_3a5b_0afd(param_3);
+```
+
+so it is `agnt` (`agnt_t *`).  Auto-named parameters: 1065 -> 1064; struct-typed
+functions: 119 -> 120.
+
+### Examined, not named
+
+- `attact_3f0b_2a09`'s two `brect_t` locals are constant rectangles copied from
+  `2410:088D` = (223,159)-(226,196) and `2410:0897` = (208,157)-(226,196).  They are
+  save areas for `miceRestoreArea`/`miceBlitRect` (`local_16` around every animation
+  step, `local_c` around one larger redraw), but naming them by role would need the
+  meaning of the two screen regions, which the code does not give.
+- `saveui_4528_1ae8`'s `local_20[20]` is copied from `2410:26E3` and never read.
+- `saveui_4528_1d55`'s `local_8` is only ever an `&local_8` output of
+  `saveui_4528_055b`; the callee does not show what it returns.
