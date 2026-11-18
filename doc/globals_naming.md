@@ -337,3 +337,14 @@ registering the XMIDI and starting playback.
 
 Named CurrentTrack.  The earlier refusal was premature: it was based on the
 store alone, and the caller shows the comparison that fixes the meaning.
+
+## Batch 23 - both factions present
+
+0:06C0\ is computed from a two-byte faction map: the loop marks one byte per
+agent faction (agent+0x2f) and the flag is 1 only when both bytes are set.
+
+    ((char *)&map)[agents[i] * 0x34 + 0x2f] = 1;
+    if ((map[0] == 0) || (map[1] == 0)) 06C0 = 0; else 06C0 = 1;
+
+Named BothFactions (2000:d0f4).  This is the second previously-refused entry that
+reading the call site resolved.
