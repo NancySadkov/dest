@@ -1785,3 +1785,52 @@ naming them raises the total to 2550 (auto-named stays 296, so 11.6%).
 New tool this pass: `scripts/ghidra/LabelData.java` creates a label at a data address (and sets an
 EOL comment), because `Rename.java` intentionally only renames an existing symbol and reported
 `missing=16` for these.
+
+## Batch - the remaining `F_SCOPY` sources, part 2 (9 globals)
+
+Each of the thirteen remaining sources was read against the *consumer* of its destination local,
+not just its bytes.  Nine resolved; four are refused below with the reason.
+
+| address | name | evidence |
+|---|---|---|
+| `2410:7153` | `spawnGindexTable` | copied into `local_e[8]`, indexed by `ovr_randBelow(8)`, and the entry is passed as `ovc15_usesLDIV_at_`'s **`gindex`** argument (which assigns `entity.base.gindex`) |
+| `2410:04E8` | `scaleTable` | copied into `local_1e[10]`; every use is `entry * <screen dimension> / 0x30` (or `/0x10`) added to a base byte at `+0x728/+0x729/+0x74b/+0x74c` |
+| `2410:0846` | `flashPaletteEf` | **not a rect**: `3F 00 00 3F 3F 3F 20 20 20 3F 3F 3F` is four 3-byte colours, loaded at DAC index `0xef` as `&stack0xffe2 + FlashToggle*3` |
+| `2410:0858` | `mouseSaveRect1` | `{211,175,223,178}`; `ovr_miceRestoreArea` / `ovr_miceBlitRect` in `ovc13_usesMiceBlitRect` |
+| `2410:0897` | `mouseSaveRect2` | `{208,157,226,196}`; the same pair in `attact_usesLDIV_at_2` |
+| `2410:088D` | `mouseSaveRect3` | `{223,159,226,196}`; the same pair in the same function |
+| `2410:07EC` | `mouseSaveRect4` | `{12,7,222,150}`; `ovr_miceBlitRect` in `agnt_usesAlignToSeg` |
+| `2410:842C` | `agentClipRect` | `{12,7,222,150}`; it is the `dst` rectangle of *every* `ovr_blitGfxRect` in `ovc49_usesBlitGfxRect` |
+| `2410:493B` | `panelClipRect` | `{12,99,222,150}`; the `dst` of `ovr_blitGfxRect(gfx,0,0,...)` in `manage_usesBlitGfxRect2` |
+
+`2410:0846` is the interesting one: it was on my rejected list as "a `'?'`/space pattern" because
+the bytes looked like text.  Reading the consumer showed it is a palette loaded three bytes at a
+time at DAC index `0xef`, which is why the pattern is `3F 00 00 / 3F 3F 3F / 20 20 20 / 3F 3F 3F`.
+Note that `2410:07EC` and `2410:842C` are byte-identical rectangles with **different roles**
+(mouse save area vs. sprite clip), so the duplicate bytes are not a duplicated constant.
+
+### Deliberately still refused
+
+| source | reason |
+|---|---|
+| `2410:074F` | only two bytes (`16,12`) reach `local_c[2]`; two values cannot name a table |
+| `2410:26E3` | `100,200,300,400` are copied into `saveui_textWhichNewWorld`'s `local_20[20]`, which is **never read** again in that function |
+| `2410:4B66` | the destination is `acStack_e + 4`, the middle of a stack buffer, so the copy is a partial overwrite whose structure is not visible |
+
+Globals: 2550 -> 2559 named (auto-named still 296, 11.6%).
+
+## Seven locals named from their now-named source tables
+
+With the tables above labelled, the locals that receive them are the working copies:
+
+| local | name | source |
+|---|---|---|
+| `6a8f:29ea local_30[22]` | `growthMap` | `&growthTable` |
+| `4d05:03a4 local_3a[28]` | `titlesMap` | `GPlayerTitles + 0x12` (an already-named global table) |
+| `6d7a:04f2 local_1c[14]` | `unitTypeMap` | `&unitTypeTable` |
+| `6d7a:04f2 local_e[8]` | `spawnGindexMap` | `&spawnGindexTable` |
+| `3381:17e8 local_1e[10]` | `scaleMap` | `&scaleTable` |
+| `474a:0953 local_d0` | `buf` | the single output buffer of `vsprintf` |
+| `36ce:04e9 local_c[2]` | `cellNext` | `constr_usesSmoothPrev(i+1, -1, ...)` beside `cell` from `(i, -1)` |
+
+Locals: 133 -> 126.
