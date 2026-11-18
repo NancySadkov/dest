@@ -1264,3 +1264,61 @@ gfx_00.ofs = fullScreenGfxOfs;  gfx_00.seg = fullScreenGfxSeg;
   zeroed next to a driver block and never read in the export.
 
 Auto-named globals: 572 -> 542.
+
+## Batch - the asset name table unlocks 176 cut-graphics globals
+
+`StshNames` (1ef4:0000) is a table of far pointers to the archive's file names, and **the
+strings are plain ASCII in DGROUP**:
+
+```
+1ef4:0000  7C 2A 10 24  87 2A 10 24  93 2A 10 24 ...     /* far_t -> DGROUP strings */
+2410:2A7C  "strong.dat\0bigcomp.lbm\0bighous1.lbm\0bighous2.lbm\0..."
+```
+
+Walking the table until the segment stops being `0x2410` yields **544 entries**:
+`0 = strong.dat`, `1 = bigcomp.lbm`, `2 = bighous1.lbm`, `8 = gamfont1.lbm`,
+`9 = mouse.lbm`, `10 = nwpanel2.lbm`, `11 = build\\rock01.lbm`, ...  That is the id space
+of `grabLbm(file_id, x, y)` and `stshOpen(file_id)`, so an asset id can now be turned into
+a real file name.
+
+`init_assets2` (81b9:0086) cuts rectangles out of those images and stores each cut as a
+block (offset, then the segment word):
+
+```c
+psVar1 = ovr_grabLbm(10,0,0);                       /* id 10 = nwpanel2.lbm */
+pfVar2 = ovr_stshRleCut((far_t *)(&psVar1->aptr)->ofs, src_10, 57, 314, 113, ...);
+nwpanel1Cut1Ofs = ovr_stshStoreFile_2((uint8_t *)pfVar2);
+nwpanel1Cut1Seg = puVar7;
+```
+
+so each stored pair is named `<sourceFile>Cut<n>Ofs` / `<sourceFile>Cut<n>Seg`, where the
+number is the n-th cut taken from that file in source order.  176 globals:
+
+| source file | globals |
+|---|---|
+| `nwpanel1.lbm` | `nwpanel1Cut1..5Ofs/Seg` |
+| `nwpanel2.lbm` | `nwpanel2Cut1..Ofs/Seg` |
+| `talkwin9.lbm` | `talkwin9Cut1..Ofs/Seg` |
+| `gamfont1.lbm`, `davfont.lbm`, `davfont2.lbm` | `...Cut1Ofs/Seg` |
+| `anim\\tmstrs.lbm` | `anim_tmstrsCut1Ofs/Seg` |
+| ... 20 further source files | the same pattern |
+
+Live check:
+
+```c
+nwpanel1Cut1Ofs = ovr_stshStoreFile_2((uint8_t *)pfVar2);
+gamfont1Cut1Ofs = ovr_stshStoreFile_2((uint8_t *)pfVar2);
+talkwin9Cut1Ofs = ovr_stshStoreFile_2((uint8_t *)pfVar2);
+```
+
+Blocks that `stshAllocStub` allocates before the first `grabLbm` deliberately keep their
+generated names: they are computed buffers, not cuts of a named file, so the table gives
+no name for them.
+
+Auto-named globals: 536 -> 360.
+
+### Reusable consequence
+
+Any code that indexes an asset by a number can now be read through this table: the id to
+file name mapping is data, not inference.  `stshOpen(file_id)` reads
+`*(u16 *)(file_id * 4)` as the name pointer, which is exactly `StshNames[file_id].ofs`.
