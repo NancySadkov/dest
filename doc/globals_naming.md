@@ -1834,3 +1834,56 @@ With the tables above labelled, the locals that receive them are the working cop
 | `36ce:04e9 local_c[2]` | `cellNext` | `constr_usesSmoothPrev(i+1, -1, ...)` beside `cell` from `(i, -1)` |
 
 Locals: 133 -> 126.
+
+## Batch - the sprite arrays, named from the asset table (68 globals)
+
+The project's `StshNames` dump (`tmp/asset_lookup.py` over `1ef4:0000`, 544 far pointers) resolves
+`grabLbm(n)` ids to filenames, and that is what unblocked this region:
+
+| asset id | file |
+|---|---|
+| 12 | `star.lbm` |
+| 35 | `bolt.lbm` |
+| 93, 94, 95, 96 | `csite1.lbm` .. `csite4.lbm` |
+| 531, 532, 533, 534 | `csite5.lbm` .. `csite8.lbm` |
+| 535 | `anim\tmstrs.lbm` |
+
+With the ids resolved, `init_assets2`'s loops become readable, and the arrays are **contiguous**:
+the arithmetic closes exactly at every boundary, which is what proves the base and the length of
+each one (it also proves that the `0199`, `01B1`, `0119`, `013D`, `0161` symbols are *not* bases
+but interior addresses of the preceding array):
+
+```
+00F5 csite5   9 entries -> 0119
+0119 csite6   9 entries -> 013D
+013D csite7   9 entries -> 0161
+0161 csite8   5 entries -> 0175
+0175 csite2   9 entries -> 0199
+0199 csite3   6 entries -> 01B1
+01B1 csite4   9 entries -> 01D5
+01D5 csite1  23 entries -> 0231
+0231 star     4 entries -> 0241
+07BA tmstrs1  5 entries -> 07CE
+07CE tmstrs2  7        07EE   tmstrs3  7       080A tmstrs4  7
+0826 tmstrs5  7        0842   tmstrs6  7       085E tmstrs7  3
+086A tmstrs8  7        0886   tmstrs9  7
+```
+
+Each array is a packed array of far pointers (ofs at `base + 4k`, seg at `base + 4k + 2`), and the
+consumers index it from zero -- `((undefined2 *)&csite1Ofs)[(i + 0xc) * 2]` for csite1's 23
+entries, `(&tmstrsSprites1Ofs)[(x % 5) * 2]` for the 5-entry tmstrs animation.  Symbols:
+`<asset>Ofs`/`<asset>Seg` for the base, `<asset>_<k>Ofs`/`_<k>Seg` for the interior block whose
+far-pointer index is `k = (address - base) / 4`.  Two further tables came from the same reasoning:
+`crossBlitType2Ofs/Seg` (2410:0231, four entries cut from `star.lbm` in the same loop as
+`CrossBlitGfx`, with `stshRleType2` instead of `stshRleCut`) and `boltSpritesOfs/Seg`
+(2410:08B8, four entries from `bolt.lbm`).
+
+### A correction to the earlier frame-table note
+
+The first pass reported frame counts of 23/24/32 for these tables.  Those were the bounds of the
+**`else` (no-assets) branch** loops, which allocate the whole array in one go; the `if (grab)`
+branch fills the same array in blocks of 3-6, which is why Ghidra created a separate word symbol
+at every block boundary.  The real lengths are the ones in the layout above, and they are
+confirmed by the boundary arithmetic rather than by any single loop bound.
+
+Auto-named globals: 296 -> 228.
