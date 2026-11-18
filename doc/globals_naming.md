@@ -1206,3 +1206,61 @@ That is a real computing consumer, so the "equality only" description recorded e
 was incomplete.  It still does not name the field: the value bounds the build duration
 (which is the neighbouring `0x0f`), and nothing distinguishes "maximum duration" from
 "default duration", so it stays generated with this evidence recorded.
+
+## Batch - the audio driver blocks and the full-screen image
+
+`stshLoadAudioDrivers` (4b0a:13d3) loads each sound driver file into its own pair of
+words, so the pair is one far pointer and the file literal names it:
+
+```c
+cmidpakComOfs = stshStoreFile_2((far_t *)"cmidpak.com", ..., 1);
+_cmidpakComSeg = in_DX;                 /* the segment half, stored on the next line */
+ibmsndComOfs  = stshStoreFile_2((far_t *)"ibmsnd.com", ...);
+ibmsndComSeg  = in_DX;
+...
+```
+
+30 globals were named on that evidence:
+
+| file | offset / segment names |
+|---|---|
+| `cmidpak.com` | `cmidpakComOfs` / `cmidpakComSeg` |
+| `ibmsnd.com` | `ibmsndComOfs` / `ibmsndComSeg` |
+| `sblaster.com` | `sblasterComOfs` / `sblasterComSeg` |
+| `fibmbak.com` | `fibmbakComOfs` / `fibmbakComSeg` |
+| `paudio.com` | `paudioComOfs` / `paudioComSeg` |
+| `adlib.com` | `adlibComOfs` / `adlibComSeg` |
+| `adlibg.com` | `adlibgComOfs` / `adlibgComSeg` |
+| `sbfm.adv` | `sbfmAdvOfs` / `sbfmAdvSeg` |
+| `sbp2fm.adv` | `sbp2fmAdvOfs` / `sbp2fmAdvSeg` |
+| `sbp1fm.adv` | `sbp1fmAdvOfs` / `sbp1fmAdvSeg` |
+| `pasfm.adv` | `pasfmAdvOfs` / `pasfmAdvSeg` |
+| `pasopl.adv` | `pasoplAdvOfs` / `pasoplAdvSeg` |
+| `adlib.adv` | `adlibAdvOfs` / `adlibAdvSeg` |
+| `adlibg.adv` | `adlibgAdvOfs` / `adlibgAdvSeg` |
+| `mt32mpu.adv` | `mt32mpuAdvOfs` / `mt32mpuAdvSeg` |
+| (full screen cut) | `fullScreenGfxOfs` / `fullScreenGfxSeg` |
+
+`fullScreenGfxOfs/Seg` (2000:0099/009B) is separate evidence: `init_assets2` cuts the
+rectangle (0, 319, 199) - the whole 320x200 screen - and stores it there, and every later
+use loads the pair into `gfx.ofs` / `gfx.seg` for a full-screen blit:
+
+```c
+word_2000_BSS_0099 = ovr_stshStoreFile_2((uint8_t *)pfVar2);   /* cut 0,319,199 */
+word_2000_BSS_009B = puVar7;
+...
+gfx_00.ofs = fullScreenGfxOfs;  gfx_00.seg = fullScreenGfxSeg;
+```
+
+### Evidence checked and left alone
+
+- `word_2000_BSS_06B0` / `_06B2` are assigned `sblasterComOfs` / `sblasterComSeg` in every
+  loader, i.e. they alias the sblaster block.  A name would have to say *why* the same
+  pointer is kept twice (selected driver? rollback copy?), and the export never
+  distinguishes the two, so they stay generated.
+- `word_2000_BSS_06A8`/`_06AA` receive a second copy of the `sbpro.com` block in the same
+  function; same reasoning.
+- `word_2000_BSS_069C`/`_069E`, `_0670`/`_0672`, `_0674`/`_0676`, `_06BC`/`_06BE` are all
+  zeroed next to a driver block and never read in the export.
+
+Auto-named globals: 572 -> 542.
