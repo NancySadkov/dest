@@ -1503,3 +1503,35 @@ Auto-named parameters: 1145 -> 1131 (12 + 2).
 **no function reads `pad_31`** anywhere in the export.  Whether it is hit points
 split into two bytes or two separate stats cannot be decided from a write-only
 pair, so the field keeps its padded name.
+
+## Screen coordinates and one more map pair
+
+`OVC13_3d16_0186` reads the framebuffer directly, which fixes both arguments:
+
+```c
+return CONCAT11((char)((uint)(screenY * 0x140) >> 8),
+                *(undefined1 *)(screenX + screenY * 0x140));
+```
+
+`0x140` is the 320-byte row, so the first argument is the screen x (`0..319`) and
+the second the screen y.
+
+`OVC13_3d16_01fb` bounds its arguments around the view origin and indexes
+`GMapFlags[origin_y + param_2][origin_x + param_1]`, so it is the map `(x, y)`
+pair like its neighbour `01a4`.
+
+Auto-named parameters: 1131 -> 1127.
+
+### Remaining generated struct fields, from a fresh type audit
+
+| struct | offsets left | note |
+|---|---|---|
+| `anm_t` | 11 | no reader in any export (asset-file bytes) |
+| `agnt_t` | `0x05`, `0x11`, `0x12`, `0x13`(+`0x16`/`0x17`), `0x23`, `0x24`, `0x25`, `0x2a`, `0x2d` | four inside the word/pointer overlap; the rest are set/cleared but never compute |
+| `bldtp_t` | `0x0c`, `0x1e`, `0x1f`, `0x24`, `0x25` | equality tests only |
+| `entity_t` | `0x34`, `0x35` | no typed reader |
+| `agntG_t` | `0x52`, `0x94` | no reader |
+
+`agnt_t+0x23`/`+0x24` are always written together on the reset path (`0x23 = 10`
+with `0x24 = 2`, or `0x23 = 5` with `0x24 = 1`) and cleared elsewhere, which is a
+timer/state pair but does not fix which is which; they stay unnamed.
