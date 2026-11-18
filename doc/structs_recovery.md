@@ -4201,3 +4201,24 @@ byte * ovc41_textOnlyPlaceSingle(agnt_t * agntPtr, int agntIndex)
   the assignment already does.
 
 Auto-named parameters: 891 -> 852.  Struct-typed arguments: 128 -> 130.
+
+### Parameter scan after the second pass: the family is exhausted
+
+`tmp/param_scan4.py` on `decompiled25` returns only three multi-site candidates, all inside
+`OVC22_5087_056e` (the function with flagged-unstable decompilation), and twelve single-site
+ones.  Each of the latter was checked and refused:
+
+| candidate | why refused |
+|---|---|
+| `OVC15_4207_26bc` `param_2` | typed `agnt_t *` already, but the body treats it as a scratch
+  value (`param_2._2_2_`, `param_2 = CONCAT22(...)`, arithmetic on it), so naming it would
+  describe a register, not an argument |
+| `OVC23_55fe_0cdf` `param_1` | passed where a callee calls the value `rect`, but in this body
+  it is a base pointer moved by a direction offset (`param_1 + *(char *)(param_3 + 0x885)`) |
+| `OVC06_317e_1240` `param_3`/`param_6`/`param_7` | single-site votes through an unnamed
+  callee's argument order, with no coordinate arithmetic to confirm it |
+| `buf` / `count` / `text` single-site votes | the callee parameter is generic; the name would
+  add nothing |
+
+So the call-role rule now yields nothing new that its own evidence supports.  The remaining
+852 parameter names are in functions where no call or field pins the value.

@@ -1401,3 +1401,37 @@ handles, because the second name is the first + 2.  Two independent reasons stop
 
 The same refusal applies to the single-word handles (`0205`, `080C`, `0828`, `086C`): they
 are loaded into `gfx.ofs`/`seg` and blitted, nothing more.
+
+## Batch - the tick handler's periodic counters
+
+`attact_usesUpdSeason` (3f0b:251d) is the per-tick handler: it bumps `GameTick`, then runs
+three period counters and one 32-bit counter, all of which are also written to save games.
+Each timer is named by the action it gates:
+
+```c
+byte_073B++; if (9 < byte_073B)  { byte_073B = 0; ovr_ovc25_textSpiesReportHeading(); }
+byte_073A++; if (0xe < byte_073A){ byte_073A = 0; textDecreaseMessageDelay();
+                                  GPromotableCount(); unit_alignUp4(); updSeason(); }
+byte_0739++; if (4 < byte_0739)  { byte_0739 = 0; upd_usesAlignUp4(); }  /* the unit update */
+bVar1 = 0xfffe < word_0735;  word_0735++;  word_0737 += bVar1;
+```
+
+| global | name | evidence |
+|---|---|---|
+| `byte_2000_BSS_073B` | `spyReportTimer` | resets at 10 and calls the spies-report builder |
+| `byte_2000_BSS_073A` | `seasonTimer` | resets at 15 and runs the message-delay, promotion and season updates |
+| `byte_2000_BSS_0739` | `unitUpdateTimer` | resets at 5 and calls `upd_usesAlignUp4`, the unit updater |
+| `word_2000_BSS_0735` | `tickCountLo` | incremented with carry into 0737 every tick |
+| `word_2000_BSS_0737` | `tickCountHi` | high half of the same counter |
+
+The 32-bit width is not inferred from the carry alone: `stSave` writes it as one field of
+size 4 from the address of `0735`:
+
+```c
+save_usesWrite(handle,(undefined2 *)&word_2000_BSS_0735,...,4u)
+```
+
+and `save_textLoading` reads the same four bytes back, which is why `0737` has no separate
+save entry.
+
+Auto-named globals: 334 -> 329.
