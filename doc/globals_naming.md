@@ -981,3 +981,37 @@ does not distinguish them from any other busy-flag:
   expressed anywhere.
 - `2410:4926` (17 refs) is set to 1 in six modules and returned by a stats
   predicate - again a boolean whose subject is unnamed.
+
+## Batch 48 - the square's two screen edges, vertical pair
+
+The same init loop that produced the horizontal pair also produces the vertical
+one from the shared `0x111` origin:
+
+```c
+iVar1   = 0x111 - uStack_12;                       /* y base */
+SquareTopY[GSMaxSquare]    = iVar1 + uStack_12;
+SquareBottomY[GSMaxSquare] = SquareTopY[GSMaxSquare] + uStack_6;
+iStack_8 = 0x111 - uStack_14;                      /* x base */
+SquareLeftX[GSMaxSquare]   = iStack_8 + uStack_14;
+SquareRightX[GSMaxSquare]  = SquareLeftX[GSMaxSquare] + uStack_4;
+```
+
+`uStack_12`/`uStack_6` come from `local_1e[cStack_f + 1]` (the row extent) while
+`uStack_14`/`uStack_4` come from `local_1e[cStack_f]` (the column extent), so the
+first pair is y and the second x.  Named `SquareTopY` (`2000:cf8e`) and
+`SquareBottomY` (`2000:cefe`), confirmed live in `3381:17e8`.
+
+Auto globals: 582 -> 580.
+
+### `agnt_t+0x23` = `timer`
+
+The reset paths store 10 or 5 into it and the per-tick code decrements it:
+
+```c
+pcVar1 = (char *)(agent + 0x23);
+*pcVar1 = *pcVar1 + -1;            /* ovc49, when flags & 0x64 */
+```
+
+Readers test it for zero, so it is a countdown `timer`.  `0x24` stays unnamed: it
+is only compared with 0/1/2 and set on the same resets, with no computation on the
+value.  Generated struct fields: 36 -> 35.
