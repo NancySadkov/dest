@@ -1535,3 +1535,26 @@ Auto-named parameters: 1131 -> 1127.
 `agnt_t+0x23`/`+0x24` are always written together on the reset path (`0x23 = 10`
 with `0x24 = 2`, or `0x23 = 5` with `0x24 = 1`) and cleared elsewhere, which is a
 timer/state pair but does not fix which is which; they stay unnamed.
+
+## Index and handle parameters from the pointer/record tables
+
+Seven more parameters, each verified from the expression it feeds:
+
+| function | expression | name |
+|---|---|---|
+| `save_49fd_01da` | forwards `param_1` as the first argument of `save_49fd_0000` twice (file position/length pairs) | `handle` |
+| `OVC23_55fe_1803` | `_fmemmove(param_1 * 0x12, param_1 * 0x12 + 0x12, ...)` over `GRecordCount` | `recordIndex` |
+| `OVC23_55fe_29a2`, `2937` | read `*(byte *)(param_1 * 0x12 + 9)` and the record's coordinates | `recordIndex` |
+| `OVC24_5943_1007` | `*(undefined4 *)(param_1 << 2) + 0x39 / 0x3b` | `leaderIndex` |
+| `OVC24_5943_190b`, `season_67e7_026a` | `*(undefined4 *)(param_1 << 2) + 0x3e / 0x3f` | `leaderIndex` |
+
+Live confirmation:
+
+```c
+void __cdecl16far OVC23_55fe_29a2(int recordIndex)
+uint __cdecl16far save_49fd_01da(int handle)
+{
+  if (-1 < handle) { ... }        /* file-handle test */
+```
+
+Auto-named parameters: 1127 -> 1120.
