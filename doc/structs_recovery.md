@@ -6079,3 +6079,65 @@ guess about which label is the source type, so both functions stay refused -- no
 asymmetry documented, which is the part the binary does state.
 
 Auto-named parameters: 401 -> 368.
+
+## `F_SCOPY`'s parameter names were inverted - corrected (12 locals + 1 signature)
+
+The compiler helper was declared `F_SCOPY(uint8_t *dst, uint8_t *src, uint16_t nbytes)`, but its
+body says otherwise:
+
+```c
+for (uVar3 = in_CX >> 1; uVar3 != 0; uVar3--) {
+  puVar2 = (uint8_t *)nbytes;  nbytes  = nbytes + 2;   /* written */
+  puVar1 = dst;                dst     = dst + 2;      /* read    */
+  *(undefined2 *)puVar2 = *(undefined2 *)puVar1;
+}
+```
+
+The **third** argument is the destination and the **first** is the source; the count travels in
+`CX`.  Every call site agrees: `F_SCOPY(0x59aa, 0x2410, reqLevel1)` copies `DGROUP:59AA` into
+the stack array, so the middle argument is the *source segment* (the routine relies on DS/ES
+being preset, which is why the body never touches it).  The parameters are now
+`srcOfs`, `srcSeg`, `dst`.
+
+That correction immediately made twelve locals readable, because each was only ever the copy
+destination:
+
+| local | new name | evidence |
+|---|---|---|
+| `36ce:1f99 local_c[2]` | `dst` | sole use is the third argument of one `F_SCOPY` |
+| `4528:1ae8 local_20[20]` | `dst` | same |
+| `69c8:04c6 local_6c[4]` | `dst` | same |
+| `69c8:011e`, `69c8:01ac` `local_306[768]` | `pal` | filled element-wise, then handed to `ovr_vgaSetPalette8bit` |
+| `69c8:0317 local_306[768]` | `pal` | passed to `calcSeasonPalette`, `usesVgaSetPalette8bit` and `setSeasonPalette` (two of the three slots are the palette) |
+| `5ded:0fd2`, `5ded:105e`, `6a8f:0b39` `local_ca[80]`/`local_aa[80]` | `text` | the only use is `ovr_agnt_textHeld(agnt, <local>)` |
+| `68ac:0148 local_5a[80]` | `text` | filled char-by-char, then `ovr_blitText(<local>, ...)` |
+| `1000:2e59 local_90[130]` | `buf` | the text-mode conversion buffer passed to `write(fd, <local>, ...)` |
+| `6018:1398 local_36[9]` | `menuEntries` | a `far_t[9]` built in place and passed to `uiInputText`'s `entries` slot; `entries` alone collided with the parameter |
+
+## The animation frame tables: identified as tables, not nameable as sprites
+
+`init_assets2` builds dozens of **frame tables** as pairs of word globals used with a 4-byte
+stride, `((undefined2 *)&word_X)[frame * 2] = asset` and `[frame * 2] = seg`.  Extracting each
+table's source LBM and frame count gives a precise picture:
+
+| table (ofs/seg) | LBMs | frames | built by |
+|---|---|---|---|
+| `0231`/`0233` | 12 | 4 | `stshRleType2(..., 16, i*0xe+0xd, 24, 6, 4)` in the **same loop** as `CrossBlitGfx` (`stshRleCut(..., 46, i*0xe+0xd, 55)`) |
+| `01D5`..`021F` (4 tables) | 93 | 0x17, 0x18, 0x20, 0xe | `stshRleType2` |
+| `0175`..`01CB` (6 tables) | 94, 95, 96 | 0xe, 0x11 | `stshRleType2` |
+| `00F5`..`016D` (8 tables) | 531, 532, 533, 534 | 0x20, 0xe | `stshRleType2` |
+| `07BA`..`086C` (12 tables) | **all 535** | 5, 7, 8, 3, 0x11, 0xe | `stshRleType2`, one of them right after `anim_tmstrsCut1` |
+| `08B8`/`08BA` | 35 | 4 (`if (3 < i) break`) | `stshRleType2(..., 0, i*0x16+0x15, 14, 11, 7)` |
+
+So the *kind* of each global is settled (a frame-indexed far-pointer table of RLE-type-2 cuts),
+but the sprite identity is not: twelve different tables come from LBM 535 and six from LBM 93/94,
+and the LBM filename therefore cannot distinguish them.  The consumers index them by
+`animFrame & 3`, `timer & 3` or `BlitFrame`, which says *when* a table is used, not *what* it is.
+Naming them `...FramesOfs` would require inventing the sprite name, so they stay refused with the
+table above as the evidence.
+
+One finding from the same pass is worth stating: `word_2000_BSS_06E7`/`06E9` is indexed by
+`BlitFrame` in `ovc13_usesBlitLoadRleGfx` but has **no writer anywhere in the export**, so the
+six-frame mouse cursor table is filled by code outside these overlays.
+
+Local variables: 145 -> 133.  Globals and struct fields unchanged.
