@@ -1184,3 +1184,25 @@ Auto globals: 573 -> 572.
   `constr_36ce_0101`, so it is an offset of some kind rather than a coordinate.
 - `byte_2410_DATA_DGROUP_0728` is only ever the minuend of a coordinate
   (`0728 - offset`) like `ScreenOriginY`, but which origin is not stated.
+
+## Evidence base regenerated (decompiled6)
+
+The export used for the last several passes predated ~45 renames, so it was rebuilt:
+`ExportAll` -> `tmp/decompiled6` (ok=1126 fail=4) and `ListAllVars` ->
+`tmp/allvars8.csv`.  Re-running the parameter scans against it returned only cases that
+are already handled; the remaining hits are CRT internals.
+
+### `bldtp_t+0x0c` is a bound on the build duration, not equality-only
+
+Accessed as `bldType * 0x27 + 0x11c`, the field is compared as an upper bound and then
+copied into the building instance's duration byte as a fallback:
+
+```c
+if (bStack_3 < *(byte *)((uint)param_1 * 0x27 + 0x11c)) {
+    *(undefined1 *)(GRecordCount * 0x12 + 6) = *(byte *)((uint)param_1 * 0x27 + 0x11c);
+```
+
+That is a real computing consumer, so the "equality only" description recorded earlier
+was incomplete.  It still does not name the field: the value bounds the build duration
+(which is the neighbouring `0x0f`), and nothing distinguishes "maximum duration" from
+"default duration", so it stays generated with this evidence recorded.
