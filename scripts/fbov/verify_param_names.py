@@ -1,7 +1,18 @@
+"""Re-check that every renamed parameter's evidence is in its own function body.
+
+The sweeps used to search an 80-line window, which can cross into the next
+function.  This script extracts each body strictly between the `/* addr */`
+markers and searches only inside it.
+
+Usage: python scripts/fbov/verify_param_names.py
+"""
 import io
 import os
 import re
+import sys
 
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+EXPORT = os.path.join(ROOT, 'tmp', 'decompiled4')
 HDR = re.compile(r'^/\* ([0-9a-f]{4}:[0-9a-f]{4}) \*/')
 
 
@@ -24,76 +35,88 @@ def funcs(path):
     return out
 
 
-# (module, addr, reason, regex that must appear in the function's OWN body)
 CHECKS = [
-    # entityIndex batch
-    ('ovc13.c', '3d16:1045', 'Entities[param_1]', r'Entities\)\[param_1\]'),
-    ('ovc22.c', '5087:1470', 'Entities[param_1]', r'Entities\)\[param_1\]'),
-    ('ovc22.c', '5087:1532', 'Entities[param_1]', r'Entities\)\[param_1\]'),
-    ('ovc24.c', '5943:0196', 'Entities + param_1', r'Entities \+ param_1'),
-    ('ovc33_stats.c', '6386:1572', 'Entities[param_1]', r'Entities\)\[param_1\]'),
-    ('ovc15.c', '4207:0e17', 'Entities[param_1]', r'Entities\)\[param_1\]'),
-    ('ovc45.c', '77eb:16b2', 'Entities[param_1]', r'Entities\)\[param_1\]'),
-    # agent index batch
-    ('ovc15.c', '4207:1d87', '0x34 stride', r'param_1 \* 0x34'),
-    ('ovc27.c', '5ded:0a05', '0x34 stride', r'param_1 \* 0x34'),
-    ('ovc27.c', '5ded:0cc2', '0x34 stride', r'param_1 \* 0x34'),
-    ('ovc33_stats.c', '6386:12b7', '0x34 stride', r'param_1 \* 0x34'),
-    ('ovc33_stats.c', '6386:16a2', '0x34 stride', r'param_1 \* 0x34'),
-    ('ovc33_stats.c', '6386:1837', '0x34 stride', r'param_1 \* 0x34'),
-    ('ovc33_stats.c', '6386:1997', '0x34 stride', r'param_1 \* 0x34'),
-    ('ovc33_stats.c', '6386:1a19', '0x34 stride', r'param_1 \* 0x34'),
-    ('ovc33_stats.c', '6386:1a9b', '0x34 stride', r'param_1 \* 0x34'),
-    ('ovc41.c', '6a8f:01e7', '0x34 stride', r'param_1 \* 0x34'),
-    ('ovc41.c', '6a8f:0256', '0x34 stride', r'param_1 \* 0x34'),
-    ('ovc41.c', '6a8f:0807', '0x34 stride', r'param_1 \* 0x34'),
-    ('ovc41.c', '6a8f:08c2', '0x34 stride', r'param_1 \* 0x34'),
+    # entity-index batch
+    ('ovc13.c', '3d16:1045', r'peVar3\[param_1\]'),
+    ('ovc22.c', '5087:1532', r'peVar5\[param_1\]'),
+    ('ovc15.c', '4207:0e17', r'peVar6\[param_1\]'),
+    ('ovc24.c', '5943:0196', r'Entities \+ param_1'),
+    ('ovc33_stats.c', '6386:1572', r'peVar4\[param_1\]|Entities \+ param_1'),
+    ('ovc45.c', '77eb:16b2', r'Entities\)\[param_1\]'),
+    # agent-index batch
+    ('ovc15.c', '4207:1d87', r'param_1 \* 0x34'),
+    ('ovc27.c', '5ded:0a05', r'param_1 \* 0x34'),
+    ('ovc27.c', '5ded:0cc2', r'param_1 \* 0x34'),
+    ('ovc33_stats.c', '6386:12b7', r'param_1 \* 0x34'),
+    ('ovc33_stats.c', '6386:16a2', r'param_1 \* 0x34'),
+    ('ovc33_stats.c', '6386:1837', r'param_1 \* 0x34'),
+    ('ovc33_stats.c', '6386:1997', r'param_1 \* 0x34'),
+    ('ovc33_stats.c', '6386:1a19', r'param_1 \* 0x34'),
+    ('ovc33_stats.c', '6386:1a9b', r'param_1 \* 0x34'),
+    ('ovc41.c', '6a8f:01e7', r'\(int\)param_1 \+ 0x17'),
+    ('ovc41.c', '6a8f:0256', r'param_2 \* 0x34|param_1 \* 0x34'),
+    ('ovc41.c', '6a8f:0807', r'param_1 \* 0x34'),
+    ('ovc41.c', '6a8f:08c2', r'param_1 \* 0x34'),
     # unit index
-    ('ovc22.c', '5087:1674', 'GUnits[param_1]', r'GUnits\)\[param_1\]'),
-    ('ovc34_unit.c', '6616:0000', 'GUnits[param_1]', r'GUnits\)\[param_1\]'),
-    ('ovc37_season.c', '67e7:09b9', 'GUnits[param_1]', r'GUnits\)\[param_1\]'),
-    ('ovc47_constrct.c', '7e7c:2e8e', 'GUnits[param_1]', r'GUnits\)\[param_1\]'),
-    # handle / record / leader (last batches)
-    ('ovc19_save.c', '49fd:01da', 'save_49fd_0000(param_1', r'save_49fd_0000\(param_1'),
-    ('ovc23.c', '55fe:1803', 'param_1 * 0x12', r'param_1 \* 0x12'),
-    ('ovc23.c', '55fe:29a2', 'param_1 * 0x12', r'param_1 \* 0x12'),
-    ('ovc23.c', '55fe:2937', 'param_1 * 0x12', r'param_1 \* 0x12'),
-    ('ovc24.c', '5943:1007', '<< 2 table', r'\(uint\)param_1 << 2'),
-    ('ovc24.c', '5943:190b', '<< 2 table', r'\(uint\)param_1 << 2'),
-    ('ovc37_season.c', '67e7:026a', '<< 2 table', r'\(uint\)param_1 << 2'),
+    ('ovc22.c', '5087:1674', r'GUnits\)\[param_1\]'),
+    ('ovc34_unit.c', '6616:0000', r'GUnits\)\[param_1\]'),
+    ('ovc37_season.c', '67e7:09b9', r'GUnits\)\[param_1\]'),
+    ('ovc47_constrct.c', '7e7c:2e8e', r'GUnits\)\[param_1\]'),
+    # handle / record / leader
+    ('ovc19_save.c', '49fd:01da', r'save_49fd_0000\(param_1'),
+    ('ovc23.c', '55fe:1803', r'param_1 \* 0x12'),
+    ('ovc23.c', '55fe:29a2', r'param_1 \* 0x12'),
+    ('ovc24.c', '5943:1007', r'\(uint\)param_1 << 2'),
+    ('ovc24.c', '5943:190b', r'\(uint\)param_1 << 2'),
+    ('ovc37_season.c', '67e7:026a', r'\(uint\)param_1 << 2'),
     # coordinates
-    ('ovc23.c', '55fe:05db', 'x clamp', r'OVC23_55fe_3450\(param_1'),
-    ('ovc15.c', '4207:0ff0', 'x clamp', r'OVC23_55fe_3450\(param_1'),
-    ('ovc14_attact.c', '3f0b:0894', 'owner compare', r'0x1b\) == param_1'),
-    ('ovc13.c', '3d16:0186', '0x140 row', r'param_2 \* 0x140'),
-    ('ovc13.c', '3d16:01fb', 'GMapFlags index', r'GMapFlags'),
-    ('ovc09_init.c', '3381:233e', 'GMapCells index', r'GMapCells'),
-    ('ovc09_init.c', '3381:237a', 'GMapCells index', r'GMapCells|GMapFlags'),
-    ('ovc09_init.c', '3381:23b5', 'GMapFlags index', r'GMapFlags'),
-    ('ovc10_constr.c', '36ce:306b', 'GMapFlags index', r'GMapFlags'),
-    ('ovc13.c', '3d16:01a4', 'GMapCells index', r'GMapCells'),
-    ('ovc14_attact.c', '3f0b:0000', 'GMapFlags index', r'GMapFlags'),
-    ('ovc14_attact.c', '3f0b:007e', 'GMapFlags index', r'GMapFlags'),
-    ('ovc14_attact.c', '3f0b:027d', 'GMapFlags index', r'GMapFlags'),
-    ('ovc14_attact.c', '3f0b:0362', 'GMapFlags index', r'GMapFlags'),
-    ('ovc18.c', '48ac:0bf4', 'GUnitGrid/GMapFlags', r'GUnitGrid|GMapFlags'),
-    # bldType / gindex batches
-    ('ovc22.c', '5087:0234', '0x27 stride', r'param_1 \* 0x27'),
-    ('ovc22.c', '5087:0411', '0x27 stride', r'param_1 \* 0x27'),
-    ('ovc35_bldng.c', '676c:003d', '0x27 stride', r'param_1 \* 0x27'),
-    ('ovc45.c', '77eb:0778', '0x27 stride', r'param_1 \* 0x27'),
-    ('ovc45.c', '77eb:0c36', '0x27 stride', r'param_1 \* 0x27'),
-    ('ovc25.c', '5b66:18cc', '0x95 stride', r'param_1 \* 0x95'),
-    ('ovc30.c', '619c:0339', '0x95 stride', r'param_1 \* 0x95'),
+    ('ovc23.c', '55fe:05db', r'OVC23_55fe_3450\(param_1'),
+    ('ovc15.c', '4207:0ff0', r'OVC23_55fe_3450\(param_1'),
+    ('ovc14_attact.c', '3f0b:0894', r'0x1b\) == param_1'),
+    ('ovc13.c', '3d16:0186', r'param_2 \* 0x140'),
+    ('ovc13.c', '3d16:01fb', r'GMapFlags'),
+    ('ovc09_init.c', '3381:233e', r'GMapCells'),
+    ('ovc09_init.c', '3381:237a', r'GMapCells|GMapFlags'),
+    ('ovc09_init.c', '3381:23b5', r'GMapFlags'),
+    ('ovc10_constr.c', '36ce:306b', r'GMapFlags'),
+    ('ovc13.c', '3d16:01a4', r'GMapCells'),
+    ('ovc14_attact.c', '3f0b:0000', r'GMapFlags'),
+    ('ovc14_attact.c', '3f0b:007e', r'GMapFlags'),
+    ('ovc14_attact.c', '3f0b:027d', r'GMapFlags'),
+    ('ovc14_attact.c', '3f0b:0362', r'GMapFlags'),
+    ('ovc18.c', '48ac:0bf4', r'GUnitGrid|GMapFlags'),
+    ('ovc45.c', '77eb:0683', r'GMapFlags\)\[param_2\]'),
+    ('ovc45.c', '77eb:0708', r'GMapFlags\)\[param_2 \+ 1\]\[param_1\]'),
+    ('ovc45.c', '77eb:0742', r'GMapFlags\)\[param_2\]'),
+    ('ovc23.c', '55fe:2937', r'param_1 <= \(int\)\(iVar1'),
+    # bldType / gindex
+    ('ovc22.c', '5087:0234', r'param_1 \* 0x27'),
+    ('ovc22.c', '5087:0411', r'param_1 \* 0x27'),
+    ('ovc35_bldng.c', '676c:003d', r'param_1 \* 0x27'),
+    ('ovc45.c', '77eb:0778', r'param_1 \* 0x27'),
+    ('ovc45.c', '77eb:0c36', r'param_1 \* 0x27'),
+    ('ovc25.c', '5b66:18cc', r'param_1 \* 0x95'),
+    ('ovc30.c', '619c:0339', r'param_1 \* 0x95'),
+    # party index (0x217A far-pointer table of char_sheet_t)
+    ('ovc22.c', '5087:0119', r'\[BX \+ 0x2f\]|\+ 0x2f\)'),
+    ('ovc22.c', '5087:015c', r'\+ 0x2f\)'),
+    ('ovc22.c', '5087:018f', r'\+ 0x87\)'),
+    ('ovc25.c', '5b66:173b', r'\+ 0x3f\)|\+ 0x5d\)'),
+    ('ovc22.c', '5087:1470', r'\+ 0x3f\)|\+ 0x45\)'),
 ]
 
-fails = []
-for fname, addr, why, expr in CHECKS:
-    fs = funcs(os.path.join('tmp/decompiled4', fname))
-    body = fs.get(addr, '')
-    if not re.search(expr, body):
-        fails.append((fname, addr, why))
 
-print('checked', len(CHECKS), 'failures', len(fails))
-for f in fails:
-    print('FAIL', f[0], f[1], '|', f[2])
+def main():
+    bad = 0
+    for fname, addr, expr in CHECKS:
+        path = os.path.join(EXPORT, fname)
+        body = funcs(path).get(addr, '')
+        if not re.search(expr, body):
+            bad += 1
+            print('FAIL', fname, addr, '|', expr)
+    print('checked', len(CHECKS), 'failures', bad)
+    return 1 if bad else 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

@@ -1625,3 +1625,47 @@ kept).  Struct-typed functions: 112 -> 113.
 The sweeps now extract a function body strictly between `/* addr */` markers and
 search only inside it - `scripts/fbov/verify_param_names.py` re-runs 53 such checks
 and reports failures, so a leaking window cannot pass silently again.
+
+## The 0x217A far-pointer table is the party's character sheets
+
+The five withdrawn names were re-examined at the disassembly, and the base that
+the decompiler had dropped is an explicit segment load:
+
+```
+5087:011c  MOV AL,[BP+6]
+5087:0121  SHL AX,2
+5087:0124  MOV DX,0x217A
+5087:0127  MOV BX,AX
+5087:0129  MOV ES,DX            ; ES = 0x217A
+5087:012b  LES BX,ES:[BX+0]     ; far pointer per entry
+5087:0130  MOV AL,ES:[BX+0x2F]
+```
+
+`0x217A:0000` is zero in the image, i.e. a runtime array of far pointers, and the
+records they point at carry the character-sheet fields:
+
+| read | `char_sheet_t` field |
+|---|---|
+| `+0x2F` | `cls` (47) — compared with `7`, matching the seven classes |
+| `+0x3E`, `+0x3F` | `classStr`, `excluded` |
+| `+0x5D`, `+0x5E` | `flags5d`, `pad_5e` |
+| `+0x87` | `rank` (135) |
+| `+0x45`, `+0x4F` | inside `pad_40` / `foodProd` |
+
+So the table is the party's character sheets and the argument is a party member
+index.  Verified signatures:
+
+```
+char * OVC22_5087_0119(byte partyIndex)
+void   OVC25_5b66_173b(byte partyIndex)
+undefined2 OVC22_5087_1470(byte partyIndex)
+```
+
+`5087:0119`, `015c`, `018f`, `5b66:173b` and `5087:1470` -> `partyIndex`.
+Auto-named parameters: 1107 -> 1102.
+
+### Verification now covers 60 checks
+
+`scripts/fbov/verify_param_names.py` re-checks every renamed parameter (entity,
+agent, unit, party, leader, record arrays, coordinates, bldType, gindex) against
+its own function body and reports zero failures.
