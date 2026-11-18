@@ -1171,3 +1171,32 @@ Auto-named parameters: 1227 -> 1225.
   module.  Two such copies exist (`06CD`/`06CF` too), so which timer each
   snapshot belongs to is not established; they stay unnamed rather than being
   given a shared name that hides that.
+
+## Six more record consumers typed from their bodies
+
+Each reads agent-record fields through its first argument, and every caller
+pushes the record as offset+segment, so the parameter is one far `agnt_t *`
+rather than the near `int *`/`undefined4` the export had recovered.
+
+| function | what it reads | new prototype |
+|---|---|---|
+| `3a5b:0afd` | `record.x` scaled to `0..0x7f`, returned inverted | `int audio_3a5b_0afd(agnt_t *agnt)` |
+| `6a8f:0229` | `record + 0x2b` flags (`& 0xae4`) | `void OVC41_6a8f_0229(agnt_t *agnt)` |
+| `6a8f:063f` | both records: `+0x24`, `+0x1d`, `+0x2f`, `+0x17` | `undefined2 OVC41_6a8f_063f(agnt_t *a, agnt_t *b)` |
+| `5ded:0960` | `record + 0xc` (target) | `uint OVC27_5ded_0960(agnt_t *agnt)` |
+| `5ded:105e` | `record + 0x1d`, `+0x17`, `+0x46` | `undefined2 OVC27_5ded_105e(agnt_t *agnt)` |
+| `5ded:04cd` | `record + 0x17`, plus a byte mode | `int OVC27_5ded_04cd(agnt_t *agnt, byte mode)` |
+
+With the types applied the pan helper reads through the record field instead of
+an anonymous dereference:
+
+```c
+int __cdecl16far audio_3a5b_0afd(agnt_t *agnt)
+{
+  uVar1 = (uint)(((long)(int)_agnt->x * 0x7f & 0xffffU) / 0xd2);
+  if (0x7f < uVar1) uVar1 = 0x7f;
+  return 0x7f - uVar1;
+}
+```
+
+Struct-typed functions: 97 -> 103.  Auto-named parameters: 1225 -> 1217.
