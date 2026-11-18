@@ -1669,3 +1669,39 @@ Auto-named parameters: 1107 -> 1102.
 `scripts/fbov/verify_param_names.py` re-checks every renamed parameter (entity,
 agent, unit, party, leader, record arrays, coordinates, bldType, gindex) against
 its own function body and reports zero failures.
+
+## Seven GUnitGrid map-coordinate pairs
+
+`GUnitGrid` is declared `[148][60]` (x, y) and each of these bodies indexes it as
+`(*(short (*)[148][60])GUnitGrid)[param_1][param_2]`, so the arguments are the map
+coordinates:
+
+| module | function | use of the cell |
+|---|---|---|
+| ovc22 | `5087:3c93` | `GUnits[cell].unitType == param_3` |
+| ovc22 | `5087:3d25`, `3dc7`, `3eb1` | read the cell's unit index |
+| ovc23 | `55fe:1005` | read the cell's unit index |
+| ovc45 | `77eb:0121` | `GUnits[cell].bldType` |
+| ovc45 | `77eb:0179` | read the cell's unit index |
+
+Verified signatures:
+
+```
+uint OVC22_5087_3d25(int x, int y)
+byte OVC45_77eb_0121(int x, int y)
+```
+
+Auto-named parameters: 1102 -> 1088 (7 pairs).
+
+### Struct fields checked this pass, still unnamed
+
+- `agnt_t+0x05` (and `+0x04`) are written with `randBelow() - 1`/`-value` and
+  tested as signed bytes, i.e. small signed random offsets, but `0x04..0x05` is
+  also stored as the 16-bit `targetX` word by the constructor - a byte/word
+  overlap like `0x13..0x1a`, so no name is added.
+- `bldtp_t+0x1e`/`+0x1f` have **no reader at all** in the export.
+- `bldtp_t+0x25` is only compared for equality with the menu highlight selector
+  (`Highlight1`) or a caller's category, which does not distinguish
+  "category" from "resource" - and `0x23` is already `resource`.
+- `2410:02F4` is shifted left four and combined as `CONCAT11(0x24, v << 4)` for a
+  text blit, so it is a colour attribute, but which palette entry is not stated.

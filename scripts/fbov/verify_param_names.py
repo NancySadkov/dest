@@ -103,6 +103,14 @@ CHECKS = [
     ('ovc22.c', '5087:018f', r'\+ 0x87\)'),
     ('ovc25.c', '5b66:173b', r'\+ 0x3f\)|\+ 0x5d\)'),
     ('ovc22.c', '5087:1470', r'\+ 0x3f\)|\+ 0x45\)'),
+    # GUnitGrid (x, y)
+    ('ovc22.c', '5087:3c93', r'GUnitGrid\)\[param_1\]\[param_2\]'),
+    ('ovc22.c', '5087:3d25', r'GUnitGrid\)\[param_1\]\[param_2\]'),
+    ('ovc22.c', '5087:3dc7', r'GUnitGrid\)\[param_1\]\[param_2\]'),
+    ('ovc22.c', '5087:3eb1', r'GUnitGrid\)\[param_1\]\[param_2\]'),
+    ('ovc23.c', '55fe:1005', r'GUnitGrid\)\[param_1\]\[param_2\]'),
+    ('ovc45.c', '77eb:0121', r'GUnitGrid\)\[param_1\]\[param_2\]'),
+    ('ovc45.c', '77eb:0179', r'GUnitGrid\)\[param_1\]\[param_2\]'),
 ]
 
 
