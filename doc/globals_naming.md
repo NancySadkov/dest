@@ -222,3 +222,27 @@ palette call:
     ovr_vgaSetPalette(local_18 + (uint)byte_2000_BSS_06D1 * 3);
 
 Named FlashToggle (2000:d105).
+
+## Batch 14 - `2000:027C` is not a variable
+
+The consumer is `append_name_to_path`, which copies a path into `GStaticBuffer`,
+scans back to the last backslash, truncates and appends a name:
+
+```c
+strcpy((char *)&GStaticBuffer,path);
+for (l = strlen((char *)&GStaticBuffer);
+     (0 < (int)l && (((undefined1 *)&byte_2000_BSS_027C)[l] != '\\')); l = l - 1) { }
+((undefined *)&GStaticBuffer)[l] = 0;
+strcat((char *)&GStaticBuffer,name);
+```
+
+The two symbols are adjacent, not equal: `byte_2000_BSS_027C` is at
+`2000:ccb0` and `GStaticBuffer` at `2000:ccb1`.  The scan therefore addresses
+one byte before the buffer, i.e. `027C` is only the base of a
+symbol-relative pointer expression - the nearest label minus one - not a
+storage location of its own.
+
+It must not be given a name: the correct model fix is to drop the redundant
+label so those references resolve to `GStaticBuffer`.  That is a symbol cleanup
+(needs a remove-symbol pass), not a rename, and it is recorded here rather than
+papered over with a name like `PathScanBase`.
