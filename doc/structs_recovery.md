@@ -1380,3 +1380,28 @@ parameter is an entity index, not a record.  Renamed `entityIndex`; the live
 decompile now reads `int entityIndex`.
 
 Auto-named parameters: 1192 -> 1185.
+
+## Entity-index and agent-index parameter sweeps
+
+Two verified sweeps, each function checked for the indexing expression before the
+rename:
+
+**Entity index** (8 functions) — body indexes `((entity_t *)Entities)[param_1]`
+or takes `Entities + param_1`:
+`OVC22_5087_1991/1ac1/1ca4`, `OVC24_5943_026e/181d/1bff`,
+`OVC15_4207_1aae/16a5` -> `entityIndex`.
+
+**Agent index** (13 functions) — body multiplies the argument by the `0x34`
+agent-record stride and reads the record's entity/gdata pointers:
+`stats_6386_12b7/16a2/1837/1997/1a19/1a9b`, `OVC15_4207_1d87`,
+`OVC27_5ded_0a05/0cc2`, `OVC41_6a8f_01e7/0256/0807/08c2` -> `agntIndex`.
+
+A live decompile confirms the second sweep:
+
+```c
+char * __cdecl16far stats_6386_12b7(byte agntIndex,char *param_2)
+{
+  uVar1 = *(undefined4 *)((uint)agntIndex * 0x34 + 0x17);   /* entity pointer */
+```
+
+Auto-named parameters: 1185 -> 1164 (8 + 13).
