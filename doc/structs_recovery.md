@@ -5412,3 +5412,47 @@ to index a 0x69-stride table of 10 rows -- `vramOfs`.  `ovc07_compute2` is a sig
 (-1 / 0 / 1 for `<0`, `<1`, else), so its argument is the `value` whose sign it returns.
 
 Auto-named parameters: 589 -> 577.
+
+## A writer for the party byte - the `agnt_t+0x1a` question is closed
+
+`ovc15_usesLDIV_at_2` builds an entity record from scratch and is the writer that was missing:
+
+```c
+((entity_t *)Entities)[entityIndex].base.target = 0xff;
+peVar6[entityIndex].base.gindex = gindex;
+peVar6[entityIndex].base.level  = gdata[gindex].level;
+... puVar1[0] = 0; puVar1[1] = 0;            /* frameIndex */
+... puVar1[0] = 0x64; puVar1[1] = 0;          /* health = 100 */
+*(undefined2 *)((int)&peVar6[entityIndex].base.frames + 1) = 0;
+*(undefined2 *)((int)&peVar6[entityIndex].base.frames + 3) = 0;
+*(char *)((int)&peVar6[entityIndex].base.entity + 3) = param_3;   /* <- the slot */
+```
+
+The 32 bits at `base.entity` are zeroed first (`frames+1` and `frames+3` are the two words of
+the same four bytes) and then **only byte 3 is written**, with the parameter guarded by
+`if (param_3 != -1)`.  So the byte at `agnt_t+0x1a` is written as a party slot with an 0xff-style
+sentinel, and the parameter is now `partySlot`.
+
+This closes the loop on the earlier far-pointer finding.  The two writes are the same 32 bits:
+
+| writer | bytes written |
+|---|---|
+| `ovc15_usesAgntFlag1` / `ovc15_usesStExit` | `+0x17 = Entities + index`, `+0x19 = Entities.seg` |
+| `ovc15_usesLDIV_at_2` | `+0x1a = partySlot` (after zeroing the other three) |
+| `ovc15_usesAgntFlag1` (line 39-40) | `frames+1 = 0`, `frames+3 = 0` |
+
+So the entity pointer's **segment high byte is the party slot** -- the design stores the slot in
+the top byte of the segment, which is exactly why every reader takes `entity.seg >> 8`.  The
+decompiler cannot express that as two fields, and a `partySlot` component at 0x1a would overlap
+the pointer, so `agnt_t.entity` stays `entity_t *32` and the fact is recorded here (this is now
+confirmed by a writer, not only by readers).  `char_sheet_t+0x89` carries the same value as
+`partySlot`, so the two records agree.
+
+## Two more parameters (2)
+
+- `ovc15_usesLDIV_at_2`'s `param_3` -> `partySlot`, from the store above.
+- `draw_compute4`'s `param_1` -> `type`: it returns 1 only for the hard-coded set
+  {9, 0xe, 0x1c, 0x1e, 0x1f, 0x20, 0x37, 0x38, 0x39, 0x44, 0x45, 0x55} and 0 otherwise, i.e. a
+  membership test over type codes.
+
+Auto-named parameters: 577 -> 575.
