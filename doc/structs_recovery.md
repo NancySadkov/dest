@@ -3160,7 +3160,7 @@ No arithmetic or indexing on any of them, so none can be named from its use.
 
 ```c
 *(int *)(uVar1 * 0x34) = *(int *)(agntIndex * 0x34) + xOfs[iStack_c];
-*_int_)(uVar1 * 0x34) = *(int *)(agntIndex * 0x34) - xOfs[iStack_c];
+*(int *)(uVar1 * 0x34) = *(int *)(agntIndex * 0x34) - xOfs[iStack_c];
 ```
 
 Auto-named locals: 171 -> 167 over the turn; auto-named parameters: 1046 -> 1043.
