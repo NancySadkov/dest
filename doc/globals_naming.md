@@ -171,3 +171,27 @@ Named `DriverEntry` (`0000:0198`).
 
 `2000:06C0` still has no consumer that fixes a meaning: its only context is
 `agent->0x2a == 2 && flag != 0`, which names neither side.
+
+## Batch 11 - animation activity flag
+
+`2000:06C2` mirrors the activity predicate: it is set whenever
+`agnt_3b1d_0000()` reports something moving
+
+```c
+/* agnt_3b1d_0000: AgntCount != 0 || byte_2000_BSS_08A2 != 0 || GAnimPlaying != 0 */
+bVar1 = agnt_3b1d_0000();
+if (bVar1) byte_2000_BSS_06C2 = 1;
+...
+if ((byte_2000_BSS_06C2 != 0) && (GOngoingBattle == 0)) ...
+```
+
+Named `AnimActive` (`2000:d0f6`).
+
+Examined and left unnamed in the same pass:
+
+- `2000:027C` - start of a byte buffer that is scanned backwards until a `\`
+  and initialised with a random value or 20; the buffer is the object, not this
+  byte.
+- `2410:5AEB` - an array of seven far pointers, each walked in 6-byte steps
+  while the level is halved (`bStack_7 >>= 1`) until `0xff`; it is a ramp search
+  but whether the entries are palettes or shade bands is not fixed.
