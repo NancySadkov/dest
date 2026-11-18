@@ -3823,3 +3823,80 @@ uint OVC49_8699_18c4(int * param_1, byte * param_2, char * param_3, int param_4,
 ```
 
 Auto-named parameters over this turn: 948 -> 937.
+
+## The `22a6:` overlay entries are thunks - correcting my own tooling claim
+
+Last pass reported that the overlay twins could not be renamed because their addresses
+resolve in the wrong address space.  Extending `RenameVars` to fall back to a *name* lookup
+(`FunctionManager.getFunctions(true)`, exactly-one match required) found the functions fine
+and then still reported `NOVAR` for every parameter:
+
+```
+BYNAME ovr_driver_2d63_05e5 -> 22a6:00f2
+NOVAR  ovr_driver_2d63_05e5 param_1
+... renamed=0 missing=17 failed=0
+```
+
+The reason is not a tooling gap but a Ghidra feature: these entries are **thunks**.  Adding
+thunk reporting to `ListVars` shows it directly:
+
+```
+FUNC ovr_driver_2d63_05e5 @ 22a6:00f2
+THUNK of driver_2d63_05e5
+param x1 uint 2
+param y1 uint 2
+param x2 uint 2
+param y2 uint 2
+param colour undefined1 1
+param dstSeg undefined2 2
+```
+
+A thunk delegates its prototype to its target, so renaming `driver_2d63_05e5`'s parameters
+*had already* renamed `ovr_driver_2d63_05e5`'s - which is why `param_1` no longer existed when
+the overlay lines ran.  All three twins verify cleanly:
+
+| thunk | target | parameters now |
+|---|---|---|
+| `ovr_driver_2d63_05e5` | `driver_2d63_05e5` | `x1, y1, x2, y2, colour, dstSeg` |
+| `ovr_vga_2d63_04b7` | `vga_2d63_04b7` | `ofs1, row1, ofs2, row2, colour` |
+| `ovr_blitRaw` | `blitRaw` | `x1, y1, x2, y2, srcSeg, dstSeg` |
+
+`AuditNaming` iterates 1034 of the 1130 functions (it skips thunks), so those names cannot
+move its counters - the previous turn's "17 NOVAR lines" were therefore the expected result,
+not a failure, and the claim that a script change was needed to fix them is withdrawn.  The
+name fallback stays in `RenameVars`/`ListVars` anyway, because it is what made the thunk
+relationship visible, and it will be needed for any genuinely overlay-resident function.
+
+## A mechanical family: locals that are a callee's out-parameter
+
+`tmp/outparam_names.py` finds auto locals whose every use is `&local` passed to a parameter
+that already has a real name.  The local *is* that out-parameter, so it takes the same name:
+
+| function | local | name | callee parameter |
+|---|---|---|---|
+| `OVC18_48ac_05f2` | `local_5` | `outFlag` | `OVC23_55fe_1e87`'s `outFlag`, four call sites, never read |
+| `OVC24_5943_112e` | `local_13` | `outFlag` | same |
+| `stats_6386_232d` | `local_10` | `dst` | the destination rect of `blitGfx10`/`blitGfxRect`/`blitRect` |
+| `OVC42_6d7a_078f` | `local_10` | `dst` | same |
+| `stats_6386_1c9f` | `local_38` | `entries` | `ovr_uiInputText`'s `entries` |
+| `OVC02_2e25_046b` | `local_c` | `rect` | `br` (a `brect_t *`) of `miceRestoreArea`/`miceBlitRect` |
+| `attact_3f0b_2a09` | `local_16` | `rect` | same, called around every animation step |
+| | `local_c` | `rect2` | same, around the one larger redraw |
+
+A note on the last two: an earlier pass refused them because "naming by role would need the
+meaning of the two screen regions".  That refusal was too strict - `rect`/`rect2` claims only
+that they are the save/restore rectangles the calls write and read, which is exactly what the
+call sites show; the region meaning is still not claimed.
+
+Live checks:
+
+```c
+brect_t dst;  dst.y = 7;  dst.h = 0xc2;  dst.x = 8;  dst.w = 0xe2;
+ovr_blitGfx10(gfx_00,0,0,&dst,SUB21(unaff_SS,0));
+
+undefined1 outFlag;
+ovr_OVC23_55fe_1e87(0x89,GfxRndSeed - 2,GfxRndSeed2,&outFlag,(byte)unaff_SS,PartyCount - 1);
+```
+
+Auto-named locals over this turn: 160 -> 152.  Auto-named parameters unchanged at 937
+(the thunk parameters were already named by delegation).

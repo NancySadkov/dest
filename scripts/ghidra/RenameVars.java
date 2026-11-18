@@ -1,4 +1,10 @@
-// Rename parameters and locals from a TSV: address<TAB>old<TAB>new[<TAB>type].
+// Rename parameters and locals from a TSV: address-or-name<TAB>old<TAB>new[<TAB>type].
+//
+// The first column is normally a function address.  When AddressFactory cannot resolve it to a
+// function (overlay segments such as 22a6:xxxx live in another address space, so getFunctionAt
+// returns null), the column is treated as a global function name and resolved through the
+// FunctionManager instead.  Names must identify exactly one function.
+//
 // Args: renames.tsv
 //@category DeSt
 import ghidra.app.script.GhidraScript;
@@ -25,16 +31,30 @@ public class RenameVars extends GhidraScript {
             for (String line : lines) {
                 line = line.trim();
                 if (line.isEmpty() || line.startsWith("#")) continue;
-                String[] f = line.split("\t");
+                String[] f = line.split("\t", -1);
                 if (f.length < 3) continue;
-                Address ad = currentProgram.getAddressFactory().getAddress(f[0]);
-                Function fn = fm.getFunctionAt(ad);
-                if (fn == null) { println("NOFUNC " + f[0]); missing++; continue; }
+                Function fn = null;
+                String ref = f[0];
+                Address ad = currentProgram.getAddressFactory().getAddress(ref);
+                if (ad != null) fn = fm.getFunctionAt(ad);
+                if (fn == null) {
+                    List<Function> found = new ArrayList<>();
+                    String want = ref.trim();
+                    for (Function cand : fm.getFunctions(true))
+                        if (cand.getName().equals(want)) found.add(cand);
+                    if (found.size() == 1) {
+                        fn = found.get(0);
+                        println("BYNAME " + want + " -> " + fn.getEntryPoint());
+                    } else if (found.size() > 1) {
+                        println("AMBIG " + want + " (" + found.size() + " functions)");
+                    }
+                }
+                if (fn == null) { println("NOFUNC " + ref); missing++; continue; }
                 Variable hit = null;
                 for (Variable v : fn.getParameters()) if (v.getName().equals(f[1])) hit = v;
                 if (hit == null)
                     for (Variable v : fn.getLocalVariables()) if (v.getName().equals(f[1])) hit = v;
-                if (hit == null) { println("NOVAR " + f[0] + " " + f[1]); missing++; continue; }
+                if (hit == null) { println("NOVAR " + ref + " " + f[1]); missing++; continue; }
                 try {
                     if (f.length > 3 && !f[3].isEmpty()) {
                         String spec = f[3].trim();
@@ -51,7 +71,7 @@ public class RenameVars extends GhidraScript {
                     hit.setName(f[2], SourceType.USER_DEFINED);
                     ok++;
                 } catch (Throwable t) {
-                    println("FAIL " + f[0] + " " + f[1] + " : " + t);
+                    println("FAIL " + ref + " " + f[1] + " : " + t);
                     failed++;
                 }
             }
