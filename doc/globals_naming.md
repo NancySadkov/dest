@@ -1583,3 +1583,26 @@ Auto-named globals: 307 -> 305.
 - `2410:6A88`: a one-shot guard around the `stshAlloc_2(0x18)` block that
   `ovc38_textShighTxt` fills, saved to the save game.  It has one setter, one clearer at
   init, and only `== 0` tests -- a name could only restate `if (never done)`.
+
+## Parameter batch - pure positional forwarders (7)
+
+A function whose body is a single tail call passing every parameter in order has no room for
+an argument-order mistake, so the callee's names transfer exactly.  Seven such forwarders
+exist; four of them map onto already-named parameters:
+
+| function | parameters | callee |
+|---|---|---|
+| `ovc28_compute2` | `entries`, `count`, `flags` | `ovc28_usesUiInputText` |
+| `__brk` | `brkOfs`, `brkSeg` | `_brk_normalize` |
+| `heapFreeSub` | `entry` | `heapValidate` |
+
+A seventh comes from the body rather than a call:
+
+```c
+if (param_1 == 0xffff) return 0xffff;                 /* EOF
+else if (((byte *)_ctype + 1)[param_1 & 0xff] & 4) return (param_1 & 0xff) + 0x20;
+```
+
+so `tolower`'s argument is the character code `c`.
+
+Auto-named parameters: 778 -> 771.

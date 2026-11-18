@@ -4577,3 +4577,53 @@ and the body now reads `sprite->cmap[5]` instead of a raw byte at +5.  Both para
 unchanged.
 
 Auto-named parameters: 780 -> 778.
+
+## `anm_t+0x19` is read, and gates an effect (25 -> 24)
+
+The earlier note that `anm_t 0x10..0x1d` is never read was wrong again.  Inside the
+per-agent loop of `ovc49_usesBlitGfxRect` the pointer `uStack_12` is an `anm_t` (its
+`nframes` and `y` are used by name), and it drives a running frame counter:
+
+```c
+uStack_1a = uStack_1a + 1;
+if (((anm_t *)uStack_12)->field_0x19 + 1 == uStack_1a) {
+    ovr_ovc41_textPoisons((agnt_t *)..., *(byte *)(uStack_22 * 0x34 + 0xc));
+}
+if ((int)uStack_1a < (int)(uint)((anm_t *)uStack_12)->nframes) { ... }
+```
+
+so the byte is the frame index at which the animation fires its effect, and the same byte is
+compared with the agent word at +6 in the same loop.  It is now `eventFrame`.
+
+### The `agnt_t+4..+7` width conflict - refused, with the stores
+
+The entity spawner writes 16-bit coordinates:
+
+```
+4207:113e  MOV word ptr ES:[BX + 0x4],SI   ; targetX?
+4207:1150  MOV word ptr ES:[BX + 0x6],DI   ; targetY
+```
+
+but the movement code reads the same bytes as two independent signed directions:
+
+```c
+if (*(char *)(i * 0x34 + 4) < 1) {
+  if (*(char *)(i * 0x34 + 4) < 0) *(int *)(i * 0x34) -= cmap[5];
+} else *(int *)(i * 0x34) += cmap[5];
+/* and the identical shape at i * 0x34 + 5 */
+```
+
+A 16-bit store into a byte field is not something a C compiler emits for a byte assignment,
+so `+4` really is 16 bits at the spawn, while `+4` and `+5` really are separate bytes during
+movement.  The two readings cannot both be a flat field.  `field_0x5` is the high byte of that
+word, so removing it would make the movement code read the top of a coordinate as a sign --
+and keeping it leaves the spawn's word store spanning two fields.  Refused; recorded with the
+instructions so it can be settled if a writer for the movement path turns up.
+
+### The general pattern now visible
+
+Three of the four open width questions have the same shape: a 16-bit access spanning two
+adjacent byte components (`agnt_t+4/+5`, `anm_t+0x0f/+0x10`, `anm_t+0x11/+0x12`), where each
+byte is also used on its own somewhere.  In every case the word access is a single
+instruction in a hot path, which is what a compiler does when it moves two byte fields
+together -- not proof that the field is 16 bits.  That is why none of them is merged.
