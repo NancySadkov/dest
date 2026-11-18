@@ -1817,3 +1817,35 @@ three meanings.  It stays generated with this analysis recorded.
 
 `bldtp_t+0x0c` likewise stays: every use is `== 2` in the placement checks, with no
 computation on the value.
+
+## `agnt_t+0x12` = `frameIndex`
+
+The visual routine shows the value's only computed use - it indexes the table
+held in the field at `+0x13`:
+
+```c
+uVar1 = *(undefined2 *)(iVar5 * 0x34 + 0x15);
+piVar4 = (int *)(*(int *)(iVar5 * 0x34 + 0x13)
+                 + (uint)*(byte *)(iVar5 * 0x34 + 0x12) * 4);
+iVar2 = piVar4[1];  iVar3 = *piVar4;              /* a far frame record */
+```
+
+so `0x12` is a byte index into a far-pointer table of frame records.  The special
+values tested elsewhere (`== 3`, `== 0x0f`) are poses of that table, so the name is
+`frameIndex` rather than a pose id.  Generated struct fields: 34 -> 33.
+
+Note that this particular access is raw pointer arithmetic (`iVar5 * 0x34 + 0x12`),
+so the decompiled text still shows an offset even though the structure names it.
+
+### `bldtp_t+0x24` - still unnamed
+
+Its single read compares it with one magic value and packs it into a combined
+key:
+
+```c
+cVar10 = *(char *)(bldtp + 0x132);
+uStack_6 = CONCAT13(cVar10, ...);
+if (((5 < unit.level) && (cVar10 == -0x7a)) && ...) { ... }
+```
+
+One equality against `-0x7a` identifies neither the domain nor the meaning.
