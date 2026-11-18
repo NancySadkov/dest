@@ -4875,3 +4875,26 @@ iVar4 = iVar4 + *(char *)(param_4 + 0x885);
 so `xPtr`, `xSeg`, `y`, `dir`.
 
 Auto-named parameters: 748 -> 742.
+
+## `anm_t 0x10..0x18` re-verified two ways
+
+The nine remaining `anm_t` bytes were checked by field name (`field_0x10`..`field_0x18`
+appear nowhere in the export) **and** by raw stride: there are 25 sites of the form
+`... * 0x1e ...` in `tmp/decompiled33`, and the only record offsets they add are `0x1b`
+(`nframes`) and `0x1c` (`flags`):
+
+```c
+while ((i < in_stack_0000000c && (*(char *)(nanims + i * 0x1e + 0x1b) != '\0'))) { ... }
+if (*(byte *)(nanims + (int)((long)(int)i * 0x1e) + 0x1b) <= j) break;
+if ((*(byte *)(nanims + i * 0x1e + 0x1c) & 1) == 0) { ... }
+```
+
+the other `0x10`-looking hits are `>> 0x10` shifts.  So the block is genuinely never read by
+any exported body, and the fields stay generated rather than guessed from their position.
+
+### The one remaining anm width question
+
+`anm_t+0x0f` and `+0x11` are read as 16-bit words in `agnt_usesStExit`
+(`CMP ES:[BX+0x0f],SI`, `MOV SI,ES:[BX+0x0f]`, and the same at `+0x11`) while `ow` at `+0x0f`
+has four direct byte uses.  No writer exists: the records are constant data loaded from the
+archive, so the binary cannot say whether the byte pair is one word.  Unchanged and recorded.
