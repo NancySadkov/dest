@@ -2876,3 +2876,19 @@ level cap is a field of its own instead of the unknown high half of a pad.
   that comparison.
 - `line.trim()` before splitting removes the trailing tab as well, which is the same
   trap from the other side; the check is now `line.trim().isEmpty()` instead.
+
+### One more local: chargen's menu array
+
+`chargen`'s `local_92` is the first `far_t` of a menu array - entry 0 is set directly
+(`0x2410:4FCE`) and the rest through `(&local_92)[i].seg` / `(&local_92 + i)->ofs`, with
+a parallel synthesized byte array holding the entry codes:
+
+```c
+local_92.seg = 0x2410;  local_92.ofs = 0x4fce;
+(&local_92)[iVar6].seg = *(uint16_t *)(iStack_12 * 4 + 0xed);
+(&local_92 + iVar6)->ofs = uVar5;
+```
+
+so it is `menuItems`.
+
+Auto-named locals: 176 -> 175.
