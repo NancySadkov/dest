@@ -1014,3 +1014,16 @@ from the generic record's 0x3b.  Generated struct fields: 49 -> 48 (agnt_t 9).
 
 agnt_t+0x11 is a plain 0/1 flag (set to 0, 1 or a byte, tested against 0) with no
 consumer that fixes its meaning, so it stays unnamed.
+
+## agntG_t+0x46 = kind
+
+The disassembly of the constructor's else-branch shows it indexing a table with
+a stride of 0x94:
+
+    4207:1589  MOV AL,byte ptr ES:[BX + 0x271c]   ; 0x26d6 + 0x46
+    4207:1590  MOV DX,0x94
+    4207:1593  IMUL DX
+
+and the same byte selects per-kind rules in ovc27 (spell resistance at level 16
+for 4, level 9 for 6).  Named kind.  Generated struct fields: 48 -> 47
+(agntG_t 6).
