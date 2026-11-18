@@ -2566,3 +2566,45 @@ the arithmetic fixes only that they are constants subtracted from a coordinate, 
 keep their generated names with the values recorded.  Note that the same region holds
 other referenced bytes (`0730`, `0731`, `0740`, `074D`, `074E`) which are equally
 constant, so this is a family, not three isolated cases.
+
+### Eleventh pass: terrain neighbour tables and a player-exclusion array
+
+`init_3381_2883` copies two constant tables and uses them as neighbour data while
+generating terrain:
+
+```c
+F_SCOPY(0x4f2, ..., edgeMasks);        /* 16 bytes = 4 directions x 4 values */
+*puVar1 = *puVar1 | (uint)edgeMasks[bStack_13 * 4 + (uVar3 & 0xff)];
+F_SCOPY(0x502, ..., neighbourOfs);     /* 8 bytes = 4 pairs */
+init_3381_233e(x + (neighbourOfs[bStack_13 * 2]     & 1),
+               y + ((int)(uint)neighbourOfs[bStack_13 * 2] >> 1));
+init_3381_233e(x + (neighbourOfs[bStack_13 * 2 + 1] & 1),
+               y + ((int)(uint)neighbourOfs[bStack_13 * 2 + 1] >> 1));
+```
+
+The first table's values are OR-ed into a word (bit masks per direction), the second
+packs `dx = value & 1` and `dy = value >> 1` (the four neighbour offsets).
+
+`OVC24_5943_112e` keeps a per-player exclusion array indexed by the sheet's own flag:
+
+```c
+_fmemset(excludedFlags, 0, ...);
+excludedFlags[*(byte *)((int)*(undefined4 *)(iVar5 << 2) + 0x3f)] = 1;  /* char_sheet_t.excluded */
+if (((excludedFlags[1] == 0) && (1 < PlayerIndex)) ...
+```
+
+and draws a caption through `ovr_OVC15_4207_1c79(text, ...)`.
+
+`OVC42_6d7a_033e` builds the blit rectangle it hands to `ovr_blitGfxRect`:
+`memcpy(&rect, ..., 0x44a); rect.h = 150;`
+
+Auto-named locals: 218 -> 213.
+
+### Refused
+
+- `init_3381_2883`'s `local_e`/`local_f` are only `&local_e`/`&local_f` outputs of
+  `init_3381_24c3`, initialised to zero and never otherwise used.
+- `attact_3f0b_2a09`'s `local_1c` is only an `&local_1c` output of
+  `attact_3f0b_277b`, tested for zero.
+- `OVC42_6d7a_033e`'s `local_40[23]`/`local_78[13]` are `_fmemset` targets with no
+  reader in the recovered body.
