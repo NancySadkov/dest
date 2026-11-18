@@ -685,3 +685,51 @@ stays unlabelled as the interior continuation rather than being given a second
 name for the same object.  The six-byte read at `0x4A02` (`ovc21_manage`) still
 overlaps entry 6 and remains unexplained; that anomaly is unchanged by this
 naming.
+
+## Batch 38 - the square record's two key words
+
+`attact_3f0b_05df` builds the per-square record from the square coordinates and
+the list search compares exactly those two words:
+
+```c
+word_2410_DATA_DGROUP_086E = GfxRndSeed;    /* square x */
+word_2410_DATA_DGROUP_0870 = GfxRndSeed2;   /* square y */
+...
+if ((*(int *)(uVar1 * 0x13) == GfxRndSeed) &&
+    (*(int *)(uVar1 * 0x13 + 2) == GfxRndSeed2)) { ... }
+```
+
+so the first word named `SquareRecord` is really the x and the next word the y:
+
+| address | name |
+|---|---|
+| `2410:086E` | `SquareRecX` (renamed) |
+| `2410:0870` | `SquareRecY` (new) |
+
+## The `26F7` symbol is a numeric coincidence, not a table use
+
+The data at `2410:26F7` really is a thirteen-entry far-pointer table, and its
+targets are readable:
+
+```
+2915 "Peaceful"   291E "Aggressive"   2929 "Hostile"   2931 "Custom"
+2938 "Return"     293F "First City"   294A "World 1"    2952 "World 2"
+295A "World 3"    2962 "World 4"      296A "World 5"    2972 "Random"
+```
+
+but **all 136 references to the symbol in the decompiled output are
+symbol-relative renderings of offsets into a different segment** — every one has
+the shape `&26F7[k].seg + index * 0x95`, i.e. the constant is an offset inside
+the `195d:26d6` generic-agent table that happens to fall numerically inside this
+DGROUP table's address range (e.g. `0x2711 = 0x26d6 + 0x3b`, and
+`26F7 + 0x1A = 0x2711`).  The same coincidence is what makes some code appear to
+write into the string `"Peaceful"`.
+
+Consequences, deliberately not acted on:
+
+- the symbol is **not** renamed, because giving it a menu name would relabel
+  those 136 agent-table expressions with a menu name and make the decompiled
+  code actively misleading;
+- the generic-agent table base stays `195d:26d6` with stride `0x95`, as
+  established from the constructor's `ES:[BX+0x2711]` and the stored pointer
+  `gindex * 0x95 + 0x26d6`.
