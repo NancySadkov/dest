@@ -305,3 +305,10 @@ audio routine:
 Named SfxGfx.  ¡0:07B5\ caches its previous argument for change detection
 (compared, then assigned from param_1) and stays unnamed because the argument's
 own meaning is not established.
+
+## Batch 20 - draw busy flag
+
+¡0:0160\ brackets draw_2e25_0938: set to 1 at entry next to MiceUnkState and
+GGameState, cleared to 0 before returning, and never read in any exported module,
+so the consumer is code outside the export (an interrupt handler guarding the
+screen).  Named DrawBusy.
