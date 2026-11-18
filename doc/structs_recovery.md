@@ -2823,3 +2823,56 @@ reader of the block exists yet to justify that).
 Generated struct fields: 31 -> 30 (`char_sheet_t` 8 -> 7).  `char_sheet_t` still has
 `pad_0`, `pad_31`, `pad_40`, `pad_52`, `pad_64`, `pad_82`, `pad_8e`, and its neighbour
 `pad_52`'s high byte carries the 4/8/0xc level cap described above.
+
+## `char_sheet_t` rebuilt: `pos` split into x/y and the level cap broken out
+
+The two proven facts - that `+0x39` holds the map position as two words and that
+`+0x53` is a level cap - could not be expressed by editing components in place, so the
+structure was rebuilt from a description.  New tool: `scripts/ghidra/RebuildStruct.java`
+takes a TSV of `offset<TAB>typePath<TAB>name<TAB>comment` lines, deletes every
+component and re-adds them in order, supporting `type[n]` array syntax.
+
+The description was generated from the existing layout, with two changes:
+
+| offset | before | after |
+|---|---|---|
+| `0x39` | `pos` `byte[4]` | `x` `uint16_t`, `y` `uint16_t` |
+| `0x52` | `pad_52` `byte[2]` | `pad_52` `uint8_t`, `levelLimit` `uint8_t` |
+
+Verification that nothing else moved - every other component identical, size unchanged:
+
+```
+size before/after fields: 38 40
+changed offsets:
+  (57, ('pos', 4), ('x', 2))
+  (59, None, ('y', 2))
+  (82, ('pad_52', 2), ('pad_52', 1))
+  (83, None, ('levelLimit', 1))
+```
+
+and the decompile now shows the words separately:
+
+```c
+sheet->x = param_2;
+sheet->y = param_3;
+```
+
+### Honest accounting
+
+This does **not** improve the audit's ratio: splitting two components adds two fields,
+so the total moves 312 -> 314 while the generated count stays 30 (`char_sheet_t` still
+has 7, because the remaining byte of the old `pad_52` keeps its generated name - the
+0..10 value stored there in `OVC22_5087_056e` has no evidence to name it by).  What
+improved is the description: the position is two words as the code writes it, and the
+level cap is a field of its own instead of the unknown high half of a pad.
+
+### Tooling notes
+
+- A rebuild script must split TSV lines with a negative limit: Java's `split("\\t")`
+  drops trailing empty fields, so rows with an empty comment were silently skipped and
+  the first attempt left `char_sheet_t` as three components.  The struct was rebuilt
+  again from the untouched description and the layout compared against the previous
+  CSV, which is how the table above was produced - a rebuild is never accepted without
+  that comparison.
+- `line.trim()` before splitting removes the trailing tab as well, which is the same
+  trap from the other side; the check is now `line.trim().isEmpty()` instead.
