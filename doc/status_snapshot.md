@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn319/naming_summary.txt`.
+`tmp/auditn322/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -9,11 +9,11 @@ Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
 functions                1130
   no prototype            115
   weak return type        987
-  has struct-typed arg    137
-parameters               1642   auto-named  365   (22.2%)
+  has struct-typed arg    138
+parameters               1642   auto-named  363   (22.1%)
 locals                    692   auto-named  126   (18.2%)
 structs                    35
-  struct fields           313   generated    23   (7.3%)
+  struct fields           311   generated    20   (6.4%)
 globals                  2559   auto-named  222   (8.7%)
 ```
 
@@ -42,13 +42,13 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    meaning (`flashTickLo/Hi`, `destroyLatchSide0/1`, the audio-driver block pairs,
    the `StshNames` cut graphics); where only an equality or a lone write exists the
    result is a documented refusal.
-2. **365 parameters / 126 locals.** Call-site scanning is exhausted: the unanimous
+2. **363 parameters / 126 locals.** Call-site scanning is exhausted: the unanimous
    call-role rule yields 6 multi-site candidates, all inside the two functions whose
    decompilation Ghidra flags as unstable, and 10 single-site ones that the bodies
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in
    total across 145 locals.  What remains needs per-body reading, and this session
    did 461 parameters that way (blit argument order, party-sheet indices, x/y pairs).
-3. **23 struct fields.** Each group has been re-examined at least three times.  The
+3. **20 struct fields.** Each group has been re-examined at least three times.  The
    two that are provably meaningful have irreducible conflicts the image cannot
    settle: `char_sheet_t+0x1b` is a word comparison widened to a dword, and
    `bldtp_t+0x0c` is a second lower bound beside the already-named `minBuildTime`.
@@ -58,7 +58,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 
 ## Blocked on information the binary does not carry
 
-- `anm_t 0x10..0x1d`: no exported module reads any of the eleven bytes.
+- `anm_t 0x13..0x18`: six bytes with no read; `0x0f`/`0x11` are now `maxDx`/`maxDy`.
 - `bldtp_t+0x0c` vs `+0x0e`: the table is loaded data with no writer, so which is the
   minimum cannot be decided from code.
 - The `07xx`/`08xx` far-pointer tables in `5087:056e`: no writer, and the index

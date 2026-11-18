@@ -6170,3 +6170,57 @@ third).  Width is therefore settled (byte) and the role is settled (sprite-state
 `param_5` (already `sheetOfs`/`sheetSeg`), so those three slots carry no data to name.
 
 Auto-named parameters: 368 -> 365.
+
+## `anm_t+0x0f` and `+0x11` are 16-bit fields: `maxDx` / `maxDy` (fields 23 -> 20)
+
+The recorded refusal said these two offsets could not be settled because `ow` at `+0x0f` is read as
+a byte while the same offset is read as a word.  Three independent pieces of evidence settle it:
+
+1. **The listing reads words.** `3b1d:0ec9 CMP word ptr ES:[BX+0xf],SI`,
+   `3b1d:0ed2 MOV SI,word ptr ES:[BX+0xf]`, and `3b1d:0e5c MOV AX,word ptr ES:[BX+0x11]` (four
+   sites at `+0x11`, five at `+0x0f`).
+2. **The use is a clamp.** `agnt_usesStExit` computes the per-frame x delta and clamps it:
+
+```c
+uVar4 = entity->x - agnt->destX;
+if (anm->maxDx < (int)uVar4) uVar4 = anm->maxDx;
+else if (-uVar4 != anm->maxDx && (int)uVar4 <= -anm->maxDx) uVar4 = -anm->maxDx;
+```
+
+   and the same shape for the y delta with `maxDy`.  A `movement step limit` is the only reading that
+   makes the clamp meaningful.
+3. **The data agrees.**  All 68 `AgntAnms` records were dumped: byte `+0x10` and byte `+0x12` are
+   **always 0**, so the word value equals its low byte and the existing byte reader of
+   `+0x0f` (`ow`) sees exactly the same number.  Most records hold 1, one holds 0.
+
+`anm_t` was rebuilt (30 bytes, 22 components):
+
+| offset | field |
+|---|---|
+| +0x0f | `maxDx` (`int16_t`) |
+| +0x11 | `maxDy` (`int16_t`) |
+| +0x13..+0x18 | `field_0x13`..`field_0x18` (6 bytes, still unread) |
+
+`ow` no longer exists as a separate field: it was the low byte of `maxDx`, and the revision is
+recorded here so the earlier note stays traceable.
+
+### My own tooling error in this pass, and the fix
+
+`SetFieldType` refused (correctly, as documented): *"Not enough undefined bytes to fit int16_t at
+offset 0xf"*.  I then wrote `MergeField.java`, which cleared the overlapping components and called
+`replace` - that **corrupted the layout**: `StructureDB.replace` inserted a component instead of
+spanning, so `maxDx` ended up 1 byte wide and two unnamed `int16_t` fields appeared at +21 and +24.
+The correct tool is a full rebuild: `RebuildStruct2.java` deletes every component and re-adds the
+declared list, which produced the exact 30-byte layout above.  `MergeField.java` is kept but marked
+obsolete in this note; use the rebuild path for any span change.
+
+## 2 parameters: an agent pointer and a graphics pointer
+
+| function | parameter | evidence |
+|---|---|---|
+| `ovc15_usesRandBelow` | `agnt` (`agnt_t *`) | its callers pass `(int *)&agntCopy`, and the body writes offsets 0 and 2 (x, y) while reading `+0x17` as a far pointer to the entity |
+| `ovc43_usesStshSeek` | `gfx` | both call sites pass a far pointer assembled from a named cut-graphics pair (`l9Cut4Ofs/Seg`, `sky06FliOfs/Seg`), and the body reads a word at +3 as the seek target |
+
+`ovc43_usesStExit`'s `param_1`..`param_3` stay refused: the body reads only `param_4`/`param_5`.
+
+Struct fields: 313 -> 311 components, 23 -> 20 auto.  Parameters: 365 -> 363.
