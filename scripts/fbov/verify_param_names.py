@@ -111,6 +111,9 @@ CHECKS = [
     ('ovc23.c', '55fe:1005', r'GUnitGrid\)\[param_1\]\[param_2\]'),
     ('ovc45.c', '77eb:0121', r'GUnitGrid\)\[param_1\]\[param_2\]'),
     ('ovc45.c', '77eb:0179', r'GUnitGrid\)\[param_1\]\[param_2\]'),
+    # far agent pointer forwarded to typed callees
+    ('ovc41.c', '6a8f:22cb', r'0ac0\(\(int\)param_1,param_1\._2_2_'),
+    ('ovc41.c', '6a8f:297d', r'agnt_3b1d_0a9f\(param_1,param_2\)'),
 ]
 
 

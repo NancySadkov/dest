@@ -1705,3 +1705,40 @@ Auto-named parameters: 1102 -> 1088 (7 pairs).
   "category" from "resource" - and `0x23` is already `resource`.
 - `2410:02F4` is shifted left four and combined as `CONCAT11(0x24, v << 4)` for a
   text blit, so it is a colour attribute, but which palette entry is not stated.
+
+## Two more agent-pointer prototypes repaired
+
+`OVC41_6a8f_22cb` receives one far agent pointer — it splits it as
+`(int)param_1, param_1._2_2_` when forwarding to `agnt_3b1d_0ac0` — plus an
+integer:
+
+```c
+void OVC41_6a8f_22cb(agnt_t * agnt, int param)
+```
+
+`OVC41_6a8f_297d` was three `undefined2` parameters because the thunk splits the
+pointer; it forwards `(param_1, param_2)` as that pointer and `param_3` as the
+integer, so the prototype is one far pointer plus one word:
+
+```c
+void OVC41_6a8f_297d(agnt_t * agnt, undefined2 param)
+```
+
+Struct-typed functions: 113 -> 115.  Auto-named parameters: 1088 -> 1083
+(the repaired prototype merges two parameter slots into one).
+
+### Text-in-data sweep: no new names
+
+`scripts/ghidra/FindTextData.java` scans every auto-named data symbol for bytes
+that look like ASCII with a space.  It found five, all offset artefacts rather
+than strings:
+
+| address | bytes | why not a string |
+|---|---|---|
+| `2410:02F4` | `.Error 4 %d .` | the middle of a format string; the symbol itself is the colour attribute |
+| `2410:69D9` | `..Your may continue play` | the high word of `PromoteThreshold` |
+| `2410:6AC4`, `6AC6` | `.j.$My %s, we in this ne` | one or two bytes before a far pointer to the text |
+| `2410:74AC` | `..w.$.w.$..$Choose party` | byte before a pointer table, then text |
+
+So no data blob hides an unlabelled string: the string pass plus the offset
+artefacts account for the text in DGROUP.
