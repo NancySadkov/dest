@@ -348,3 +348,17 @@ agent faction (agent+0x2f) and the flag is 1 only when both bytes are set.
 
 Named BothFactions (2000:d0f4).  This is the second previously-refused entry that
 reading the call site resolved.
+
+## Batch 24 - text-mode screen height
+
+\DS:0484\ is the text-mode height in rows: mode 3 is 80x25, so a value above 24
+means a taller text mode and the CRT switches to its special mode 0x40.
+
+    if ((uVar1 == 0x3) && ('\x18' < data_DS_0484_undefined1)) { _video.currmode = 0x40; }
+
+Named ScreenHeight (0000:0484).
+
+¡0:74AC\ remains unnamed: it is a stored value compared against entity+0x1a
+as a fallback match, and entity+0x1a is a small index into a pointer table set
+from a constructor argument, so 74AC is an id in that space whose subject is not
+named anywhere.
