@@ -733,3 +733,25 @@ Consequences, deliberately not acted on:
 - the generic-agent table base stays `195d:26d6` with stride `0x95`, as
   established from the constructor's `ES:[BX+0x2711]` and the stored pointer
   `gindex * 0x95 + 0x26d6`.
+
+## The nine skipped string labels are one-character literals or offset artifacts
+
+Batch 1 skipped nine `_string` candidates because the data at the label is not
+printable.  Reading their bytes explains all nine:
+
+| address | first bytes | what it really is |
+|---|---|---|
+| `2410:5FDE` | `0A 00` | a one-character `"\n"` literal, followed by "Adlib (1. Original 2. Gold):" |
+| `2410:6097` | `0A 00` | `"\n"`, followed by "Pro Audio Spectrum (1. Plus 2..." |
+| `2410:6156` | `0A 00` | `"\n"`, followed by "Largest executable program siz..." |
+| `2410:2738` | `5F 00` | `"_"`, then a separate `"\r\n"` literal |
+| `2410:747D` | `00` | NUL; `"strong.dat"` starts one byte later |
+| `2410:78DF` | `00 00 01 00 00` | a small struct whose far pointer precedes "Done" |
+| `2410:6939` | `00 00 43 8B 27 3F ...` | not text at all: a coordinate/value table |
+| `2410:6AC3` | `00 C8 6A 10 24` | NUL then the far pointer `6AC8:2410`, then "My %s, we in this neighbourhood..." |
+| `2410:6B39` | `00 90 6B 10 24 ...` | one byte before `RankMsgPtrs` (`6B3A`) |
+
+So three are genuine single-character newline literals, and the rest are labels
+sitting one or two bytes before the real object (a string, a struct, or the
+pointer table already named).  None of them is a meaningful nameable string, and
+they are left as they are rather than given invented text names.
