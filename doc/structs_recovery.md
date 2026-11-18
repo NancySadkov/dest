@@ -1432,3 +1432,40 @@ uint __cdecl16far OVC23_55fe_05db(int x,int y)
 ```
 
 Auto-named parameters: 1164 -> 1155.
+
+## Map-coordinate parameters (x, y)
+
+The map arrays are `[60][148]`, so the first index is y (`0..0x3b`) and the second
+x (`0..0x93`).  Five functions bound their arguments accordingly and index
+`GMapCells`/`GMapFlags[y][x]`, which pins the order:
+
+```c
+uint __cdecl16far init_3381_233e(int x,int y)
+{
+  if ((((x < 0x94) && (-1 < x)) && (y < 0x3c)) && (-1 < y)) {
+    uVar1 = CONCAT11((char)((uint)(y * 0x94) >> 8), (*(byte (*)[59][148])GMapCells)[y][x]);
+```
+
+`init_3381_233e/237a/23b5`, `constr_36ce_306b` and `OVC13_3d16_01a4` now read
+`(int x,int y)`; `01a4` makes the split explicit by adding the view origin:
+`GMapCells[Seed_2000_d10e + y][Seed_2000_d110 + x]`.
+
+Auto-named parameters: 1155 -> 1145.
+
+### `char_sheet_t` - investigated, not renamed
+
+Two names in the recovered character sheet look suspicious, and the evidence does
+not settle them either way:
+
+- `race` (`+48`) is compared against per-class thresholds (`cls == 4 && race > 12`),
+  indexes `cls * 0x94 + race * 4`, and is used as the iteration count when hit
+  points are rolled (`for (i = 0; i < sheet->race; i++) hp += rand + statMod(stats[4]) + 1`).
+  That reads like a level, but `race = 6` is also assigned as an initial value and
+  `level` (`+134`) is set to 1 alongside an `if (level != 0)` validity test, so the
+  two names cannot simply be swapped.
+- the same function confirms `manage_4d05_118b` is an ability modifier (it maps
+  3..18-style scores to `-3..+3`), which is why `stats[4]` behaves like a
+  constitution value - useful evidence, but it does not name the padded regions.
+
+No rename is applied: guessing `race` -> `level` here would repeat the `tier`
+mistake in the opposite direction.
