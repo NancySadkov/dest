@@ -4222,3 +4222,32 @@ ones.  Each of the latter was checked and refused:
 
 So the call-role rule now yields nothing new that its own evidence supports.  The remaining
 852 parameter names are in functions where no call or field pins the value.
+
+## Per-function reading: the blit callers around `brect_t` (8 parameters)
+
+With the call-site scans exhausted, the remaining candidates were read body by body.  The
+`brect_t *` callers all pass the pointer into the same argument slot of `blitGfxRect`:
+
+```c
+ovr_blitGfxRect(gfx, screenX, y, rect, (uint8_t)type, true);
+```
+
+which fixes two parameters per function:
+
+| function | parameters | evidence |
+|---|---|---|
+| `constr_usesBlitRaw` | `rect` | its `seg` is swapped to 0xa000 and it is handed to `blitRaw` as the destination |
+| `constr_usesBlitGfxRect` | `rect`, `type` | arguments 4 and 5 of `blitGfxRect` |
+| `agnt_usesBlitGfxRect` | `rect`, `type` | same |
+| `stats_usesAlignUp42` | `rect`, `type` | same |
+| `agnt_usesPlay_sfxU` | `agntIndex` | the body writes `*param_2 = <agent loop index> + 1` - an out-parameter holding a 1-based agent index, the same convention the other hit tests use |
+
+Live signatures:
+
+```
+void constr_usesBlitRaw(brect_t * rect)
+byte stats_usesAlignUp42(byte agntIndex, byte param_2, int16_t x, int16_t y, brect_t * rect, undefined2 type)
+undefined2 agnt_usesPlay_sfxU(agnt_t * agnt, char * agntIndex)
+```
+
+Auto-named parameters: 852 -> 844.

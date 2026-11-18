@@ -1435,3 +1435,30 @@ and `save_textLoading` reads the same four bytes back, which is why `0737` has n
 save entry.
 
 Auto-named globals: 334 -> 329.
+
+## Batch - the two stronghold-destruction latches
+
+`gameProcessKey` latches two debug keys into bytes, and `textStrongholdDestroyed` consumes
+them per side:
+
+```c
+else if (key == 0x2200) byte_2410_DATA_DGROUP_0165 = 1;
+else if (key == 0x2500) byte_2410_DATA_DGROUP_0164 = 1;
+
+if (((byte_0164 == '\0') || (side == 0)) &&
+    ((byte_0165 == '\0') || (side != 0))) goto skip;
+byte_0164 = '\0';  byte_0165 = '\0';
+```
+
+so `0164` is required when the side argument is non-zero and `0165` when it is zero:
+`destroyLatchSide1` and `destroyLatchSide0`.
+
+Auto-named globals: 329 -> 327.
+
+### Examined and refused in the same pass
+
+- `byte_2000_BSS_027A` / `027B`: set to 1 next to the mouse-button thunks and cleared in
+  `inputUpdate`, read by `uiReadKey2` and the region-definition loop.  Both buttons and both
+  edges are plausible from that, so the names would encode a guess about which button.
+- `byte_2000_BSS_06E2`: written `0xff`, `1` and `0` in five different places and tested
+  `!= 0` / `== 1`; nothing states what the three states mean.
