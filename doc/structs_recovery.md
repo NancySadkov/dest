@@ -1767,3 +1767,17 @@ resolve through `RenameVars`), but its shape is right and both slots are named.
 
 Auto-named parameters: 1083 -> 1076 (two merged slots removed, four names added).
 The verification script runs 71 checks.
+
+## `bldtp_t+0x25` = `unitType`
+
+It is compared for equality with the same selector as `unit_t.unitType`:
+
+```c
+(*(char *)(bldtp->... + 0x133) == Highlight1) ...      /* ovc13 */
+(puVar7[uVar8].unitType == Highlight1 || Highlight1 == 0xff)
+```
+
+`Highlight1` is the menu's selected unit type (`0xff`/`-1`/`-2` as sentinels), so
+the building field is the unit type that building relates to - the one it can
+provide.  Named `unitType`; `ovc18` breaking its scan on values 0 and 7 is
+consistent with `0` meaning none.  Generated struct fields: 37 -> 36.
