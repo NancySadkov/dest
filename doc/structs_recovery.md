@@ -1795,3 +1795,25 @@ if (((agent[0x2d] == 0) && (agent[0x1b] == param_1) && ...)) {
 ```
 
 Generated struct fields: 35 -> 34.
+
+## `agnt_t+0x24` - analysed, still unnamed
+
+Two writers bracket the values, and together they describe a death path rather
+than a named state:
+
+```c
+/* orders cleared (ovc41) */
+flags |= 4;  agent[0x24] = 1;  targetY = 0;  agent[0x23] = 5;  clearOrders();
+
+/* remove/kill path (ovc49) */
+strength (0x21) = 0;  agent[0x23] = 10;  agent[0x24] = 2;  targetY = 0;
+```
+
+and readers skip a unit whose value is 2 (`!= 2` guards in ovc15/ovc41/ovc49).
+So 1 accompanies "orders cleared" and 2 accompanies "strength zeroed", which is
+the death/removal path - but the field itself is a small enum whose third value
+(0) also appears, and naming it `dead` or `state` would encode only one of the
+three meanings.  It stays generated with this analysis recorded.
+
+`bldtp_t+0x0c` likewise stays: every use is `== 2` in the placement checks, with no
+computation on the value.

@@ -1034,3 +1034,17 @@ and the consumers branch on `== 1` / `1 <` to treat the second side differently.
 Named `PlayerIndex` (`2000:d310`); confirmed live in `619c:004e`.
 
 Auto globals: 580 -> 579.
+
+## Batch 50 - the cancel flag
+
+`2410:4926` records that a screen was left through its cancel path.  The screens
+set it when their input result is the `-2` sentinel, and the caller propagates it:
+
+```c
+if (cVar8 == -2) { Cancelled = 1; }                    /* ovc21 */
+if (Cancelled != 0) return Cancelled;                  /* ovc33 */
+Cancelled = 0;                                         /* before entering */
+```
+
+Named `Cancelled`, confirmed live in `6386:1c9f` and with `ListSyms` at
+`2410:4926`.  Auto globals: 579 -> 578.
