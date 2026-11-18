@@ -1200,3 +1200,18 @@ int __cdecl16far audio_3a5b_0afd(agnt_t *agnt)
 ```
 
 Struct-typed functions: 97 -> 103.  Auto-named parameters: 1225 -> 1217.
+
+## Four more record consumers (second pass)
+
+| function | what it reads | new prototype |
+|---|---|---|
+| `5ded:0fd2` | `gdata->kind` (0x46) and `entity->level` (0xf) | `undefined2 OVC27_5ded_0fd2(agnt_t *agnt)` |
+| `5ded:0404` | `gdata->flags` (0x3c, bit 2) | `uint OVC27_5ded_0404(agnt_t *agnt,int param)` |
+| `5ded:07d0` | `gdata->flags` (0x3c, bit 2) | `uint OVC27_5ded_07d0(agnt_t *agnt,int param)` |
+| `3b1d:1da5` | `gdata->flags`/`flags2`/`flags3` of both arguments | `undefined1 agnt_3b1d_1da5(agnt_t *a,agnt_t *b)` |
+
+The last one is the clearest: both parameters are dereferenced at `+0x1d` and
+the resulting generic record is tested at `0x3c`, `0x3e` and `0x40`, i.e. the
+three flag words named earlier.
+
+Struct-typed functions: 103 -> 107.  Auto-named parameters: 1217 -> 1210.
