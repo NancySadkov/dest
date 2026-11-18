@@ -2596,7 +2596,7 @@ if (((excludedFlags[1] == 0) && (1 < PlayerIndex)) ...
 and draws a caption through `ovr_OVC15_4207_1c79(text, ...)`.
 
 `OVC42_6d7a_033e` builds the blit rectangle it hands to `ovr_blitGfxRect`:
-`memcpy(&rect, ..., 0x44a); rect.h = 150;`
+`memcpy(dst = &rect, src = BlitRects + 1, 10); rect.h = 150;   /* 10 = sizeof(brect_t) */
 
 Auto-named locals: 218 -> 213.
 
@@ -3202,8 +3202,8 @@ Auto-named parameters: 1043 -> 1037.
 
 | function | local | name | evidence |
 |---|---|---|---|
-| `drawString` (6386:24c2) | `local_c` | `rect` | `memcpy(&local_c, ..., 0x44a)` then `local_c.y/.h/.x/.w` are overwritten before `ovr_blitGfxRect(gfx,0,0,&local_c,...)` |
-| `blit_317e_04c2` | `local_160[320]` | `rowBuf` | `dst_00.ofs = (uint16_t)local_160;` and `memcpy(..., local_160 + i, 320)` - one screen row used as a far buffer |
+| `drawString` (6386:24c2) | `local_c` | `rect` | `memcpy(dst = &rect:SS, src = BlitRects + 1, 10)` - one 10-byte `brect_t`; then `.y/.h/.x/.w` are overwritten before `ovr_blitGfxRect(gfx,0,0,&rect,...)`.  **Corrected**: the old three-argument `memcpy` rendering made `0x44a` look like a size, but it is the source offset and the real size is 10 |
+| `blit_317e_04c2` | `local_160[320]` | `rowBuf` | `dst_00 = {ofs = rowBuf, seg = SS}; ovr_unrle(src, dst_00, width)` fills it with one decoded row, and `memcpy(dst, src = rowBuf + i, w)` copies it out - a decoded screen row.  **Corrected**: `320` in the old rendering was the source offset, not a byte count |
 
 Auto-named locals: 167 -> 165.
 
@@ -3415,3 +3415,52 @@ and every caller passes `->cmap` first and a local buffer third:
 Auto-named parameters over the turn: 1017 -> 997.  Struct-typed arguments: 121 -> 122.
 The stored-variable inventory moved 3117 -> 3112 rows because the two copy wrappers now
 have five parameters each instead of six near ones.
+
+## `memcpy` had the same wrong prototype as `_fmemmove`
+
+`memcpy` (1000:261e) is the second hand-written far-copy wrapper, and it was also
+described with near pointers, so the same two symptoms appeared: the count was hidden
+and the third displayed argument was the source offset.  Its machine code:
+
+```
+1000:2625  LES DI,[BP + 0x6]               ; destination far pointer
+1000:2628  LDS SI,[BP + 0xa]               ; source far pointer
+1000:262b  MOV CX,word ptr [BP + 0xe]      ; size
+1000:2631  MOVSW.REP ES:DI,SI
+```
+
+Rebuilt as `void * memcpy(char *dst, char *src, word size)` with `/char *` retypes.
+A call site that reads correctly now:
+
+```c
+memcpy(dst = &rect:SS, src = BlitRects + 1, 10);
+```
+
+### Evidence corrected by the change
+
+| claim | before | after (verified) |
+|---|---|---|
+| `drawString`'s `rect` | `memcpy(&local_c, ..., 0x44a)` read as a 0x44a-byte copy | one 10-byte `brect_t` from `BlitRects + 1`; the name stands, the size did not |
+| `blit_317e_04c2`'s `rowBuf` | `memcpy(..., local_160 + i, 320)` read as a 320-byte copy | `ovr_unrle(src, {ofs=rowBuf, seg=SS}, width)` fills it, then `memcpy(dst, rowBuf + i, w)` copies it out; the name stands, the role is clearer (one decoded row) |
+| `IndexPermC`/`IndexPermD` | `memcpy(&X, 0x6e14, 0xc)` | `memcpy(&IndexPermC, (char *)0x24106e08, 0xc)` - a 12-byte table copy, as the naming assumed |
+| `attact_3f0b_05df`'s square-record save | `memcpy(0x9074, &word_...086E, 0x13)` | `memcpy(dst = 0x2410:0x9074, src = &SquareRecX, 0x13)` |
+
+## Parameters named from the corrected `memcpy` calls
+
+| function | parameters | evidence |
+|---|---|---|
+| `stats_6386_01a4` | `gdata` (`agntG_t *`), `portraitIndex`, `palette` | caller passes the agent's `gdata` far pointer (`agnt_t+0x1d`); the body indexes `agntG_t.prts`/`agntG_t.prtpals` (both `far_t[6]`) with the byte index; the third argument is `calcSeasonPalette`'s destination and receives `gfx->cmap + 3` for 0xed bytes |
+| `video_13aa_0266` | `srcSeg`, `x`, `y` | caller `video_13aa_0266(0xa000, dx, dy)`; body copies `min(0x140 - x, 0x11)` pixels from `srcSeg:(x + y * 0x140 + row)` for `min(200 - y, 0x11)` rows |
+| `agnt_3b1d_177f` | `agntIndex` (was `index`), `agntSaved` (`agnt_t`, was `local_36`) | the function keeps the agent table ordered: it saves the record, shifts the ones between with `_fmemmove`, then writes the saved 0x34-byte record into its new slot |
+
+The typed access confirms the portrait tables:
+
+```c
+if (((paVar2->prts + portraitIndex)->ofs != 0 || paVar2->prts[portraitIndex].seg != 0) &&
+    ((paVar2->prtpals + portraitIndex)->ofs != 0 || paVar2->prtpals[portraitIndex].seg != 0)) {
+    handle_00.seg = paVar2->prtpals[portraitIndex].seg;
+```
+
+Auto-named parameters: 997 -> 991; auto-named locals: 165 -> 164; struct-typed
+arguments: 122 -> 123.  New evidence base: `tmp/decompiled9` (ok=1125 fail=5) and
+`tmp/allvars11.csv` (3112 vars).
