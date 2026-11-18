@@ -3164,3 +3164,52 @@ No arithmetic or indexing on any of them, so none can be named from its use.
 ```
 
 Auto-named locals: 171 -> 167 over the turn; auto-named parameters: 1046 -> 1043.
+
+## Two label helpers take one far text pointer and a row
+
+`ovr_blitLabel(ofs, seg, font_ofs, font_seg)` is what revealed the split: the first two
+arguments are one far pointer, and the callers pass literals plus a row index:
+
+```c
+OVC42_6d7a_078f((char *)"Demo cancelled.",        (char *)"puppetmaker" + 3, 0);
+OVC42_6d7a_078f((char *)"where you settle.",      (char *)"puppetmaker" + 3, 1);
+OVC42_6d7a_078f((char *)"Your goal: Create a thriving community.", ..., 2);
+
+TextBlitY = (uint)row * 0xd + 0x9c;   /* 13 = row height */
+```
+
+so both helpers are `void (char *text, byte row)`.  The merged pointer reads back as one
+value in the body, which is the check that the merge is right:
+
+```c
+void __cdecl16far OVC42_6d7a_0850(char *text,byte row)
+{
+  TextBlitY = (uint)row * 0xd + 0x9c;
+  ...
+  ovr_blitLabel((char *)text,text._2_2_,(int16_t)max_width,term);
+}
+```
+
+`OVC40_69c8_0000` was left alone deliberately: it takes *two* far text pointers followed by
+two byte arguments, and in 16-bit cdecl each byte still occupies a word slot, so widening
+both pointers would place the bytes at `+8`/`+9` where the code reads `+0xa`/`+0xc`.  It
+would need explicit padding parameters, which is a worse description than leaving the
+split.
+
+Auto-named parameters: 1043 -> 1037.
+
+## Two buffers identified by their copy destination
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `drawString` (6386:24c2) | `local_c` | `rect` | `memcpy(&local_c, ..., 0x44a)` then `local_c.y/.h/.x/.w` are overwritten before `ovr_blitGfxRect(gfx,0,0,&local_c,...)` |
+| `blit_317e_04c2` | `local_160[320]` | `rowBuf` | `dst_00.ofs = (uint16_t)local_160;` and `memcpy(..., local_160 + i, 320)` - one screen row used as a far buffer |
+
+Auto-named locals: 167 -> 165.
+
+### Decompiler regression noted
+
+The new export reports `ok=1125 fail=5` (it was 1126/4), and the new failure is
+`OVC45_77eb_0d61`, which had exported before the last few struct rebuilds.  Nothing in this
+pass depends on that function (its locals are already named), but the regression is
+recorded so a later pass does not read its absence as evidence.
