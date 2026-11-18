@@ -5057,3 +5057,46 @@ found in the previous pass are **`char_sheet_t`** offsets reached through the 0x
 table, not `agntG_t`.
 
 Auto-named parameters: 738 -> 721.
+
+## 15 parameters across the palette writer, the CRT and the map/cell helpers (15)
+
+### The palette writer and two one-liners
+
+`vgaDoSomethingWithPalette` walks a count followed by `(start, runLength, r,g,b ...)` groups and
+writes each colour through `out(0x3c8)`/`out(0x3c9)`, so its argument is the palette script;
+`lowNibble` is literally `param_1 & 0xf`; `agnt_compute4` is `*param_1 != 0`.
+
+### The CRT batch
+
+| function | parameter | evidence |
+|---|---|---|
+| `__exit` | `status` | `___exit(param_1, 0, 1)` |
+| `__IOerror`, `__DOSerror` | `dosErr` | `_doserrno = param_1`, `errno = _dosErrorToSV[param_1]`, and the second forwards to the first |
+| `fputchar` | `c` | `fputc((byte)param_1, stdout)` |
+| `CreateFile` | `mode` | `((uint16_t *)_openfd)[fd] = param_1` |
+| `fseek_Displacement` | `stream` | receives `ftell`'s `FILE *` and tests `param_1[1] & 0x40` |
+
+### Positional and store evidence
+
+- `init_usesTolower` lower-cases in place with `tolower(*(char *)(base + i))` and drops spaces,
+  so its argument is the string `s`.
+- `drawAnimTextAt` forwards positionally into `drawTextAt(char *txt, uint16_t dst)` -> `dst`.
+- `font_usesMiceBlitRect` passes its argument as `inputUpdate(ulong msg_delay)` -> `msgDelay`.
+- `init_usesGMapCells3` does `GMapCells[y][x] = param_3` -> `cell`.
+
+### Two `brect_t *` retypes (struct-typed arguments 130 -> 132)
+
+`ovc07_usesFillRect` and `ovc07_usesLDIV_at_` both take an `int *` whose first four words clamp
+their two corners, and the first also passes `param_6[4]` as the destination segment:
+
+```c
+if (x1 < (int)*rect) x1 = *rect;      if (y1 < rect[1]) y1 = rect[1];
+if (rect[2] < x2)    x2 = rect[2];    if (rect[3] < y2) y2 = rect[3];
+ovr_driver_fillRect(x1,y1,x2,y2,colour,rect[4]);
+```
+
+That is exactly `brect_t` (x, y, w, h, seg), so both parameters are now `brect_t * rect`.
+The retype is size-neutral (a 2-byte `int *` becomes a 4-byte far pointer only where the
+argument was already a far pointer, and the call sites pass `&rect` / `BlitRects + n`).
+
+Auto-named parameters: 721 -> 706.
