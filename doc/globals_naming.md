@@ -854,3 +854,40 @@ Named `PromoteThreshold`.  Its high word `69D9` is part of the same array and is
 not a separate variable.
 
 Auto globals: 594 -> 592.
+
+## Batch 44 - party creation slots and the panel mode
+
+`2000:07AF` is the party size and `2000:07B1` the 1-based slot of the character
+being created:
+
+```c
+PartySize = 5;                        /* ovc09_init */
+if (07B1 < PartySize) { ...; *(char *)(record + 0x89) = 07B1 - 1; }   /* partySlot */
+if (PartySize <= 07B1) { ... next screen ... }
+```
+
+so `2000:d1e3` = `PartySize` and `2000:d1e5` = `CurPartySlot`.
+
+`2410:26A8` records which full-screen panel is drawn: the manage-screen painter
+sets it to 1, the unit-stats page to 2, and the draw routines test `== 0` to
+decide whether painting is needed:
+
+```c
+byte_2000_BSS_06E2 = 0xff;
+ScreenMode = 1;                       /* manage_4d05_0081 */
+```
+
+Auto globals: 589 -> 586.
+
+### Correction: 2000:26A8 is not 2410:26A8
+
+The first attempt renamed `2000:d0dc` (BSS offset `0x06A8`) because the audit name
+`byte_2410_DATA_DGROUP_26A8` was misread as a BSS address.  The code references
+the **DGROUP** address, so:
+
+- `2000:d0dc` is restored to its generated name `word_2000_BSS_06A8`;
+- `2410:26A8` is the one named `ScreenMode`.
+
+Tooling note: `Rename.java` reports success even when the target name collides
+with an existing symbol (`byte_2000_BSS_06A8` did), and the symbol keeps its old
+name.  The audit then shows no change; always confirm with `ListSyms`.
