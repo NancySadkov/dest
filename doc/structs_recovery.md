@@ -1909,3 +1909,42 @@ Auto-named locals: 317 -> 307.
 - `local_14`/`local_16` in `OVC22_5087_0234` hold `0x22c4` plus a changing low word
   immediately before `blitLabel`/`stsprintf`, i.e. a far pointer to a format string;
   naming them would describe the argument, not a quantity, so they stay.
+
+### Second pass: text buffers, tile corners and the DOS drive helpers
+
+`scripts/ghidra/ListAllVars.java` dumps every stored variable of every function
+(`tmp/allvars.csv`, 692 locals), so candidates can be picked from real variables
+instead of guessing at decompiler slots.
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `OVC45_77eb_0d61` | `local_3cc[712]` | `msg` | `stsprintf` destination, then `strcat`-ed repeatedly |
+| `OVC45_77eb_1754` | `local_268[512]` | `msg` | `strcpy` destination handed to the dialog function |
+| `OVC45_77eb_1bb3` | `local_26a[512]` | `msg` | same shape |
+| `uiReadString` (4528:0c98) | `local_5c[80]` | `text` | `strcpy` destination measured with `strlen` |
+| `season_67e7_004d` | `local_a8[80]` | `text` | `strcpy` destination measured with `strlen`, then walked |
+| `constr_36ce_1f99` | `local_1c` | `cornerTL` | `constr_36ce_0101(x, y-1, &out)` |
+| | `local_1e` | `cornerTR` | `constr_36ce_0101(x+1, y-1, &out)` |
+| | `local_20` | `cornerBL` | `constr_36ce_0101(x, y, &out)` |
+| | `local_22` | `cornerBR` | `constr_36ce_0101(x+1, y, &out)` |
+| `getdisk` (1000:0988) | `local_4` | `drive` | `_dos_getdrive(&local_4)`, returned as `local_4 - 1` |
+| `setdisk` (1000:09a2) | `local_4` | `driveCount` | `_dos_setdrive(drive+1, &local_4)`, returned |
+
+The four corner values are the raw cell values written by the third argument of
+`constr_36ce_0101` before scaling, taken at the four corners of one tile, and then
+passed together to `constr_36ce_049f`, which shades that tile.
+
+Live check:
+
+```c
+undefined1 cornerBR [2];
+int cornerTR;
+iStack_14 = constr_36ce_0101(iVar4,     iVar5 + -1, &cornerTL);
+iStack_16 = constr_36ce_0101(iVar4 + 1, iVar5 + -1, &cornerTR);
+
+char msg [712];
+ovr_stsprintf(msg, unaff_SS, (char *)"%s:");
+strcat(msg, unaff_SS);
+```
+
+Auto-named locals: 317 -> 296 over the two passes.
