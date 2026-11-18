@@ -1954,7 +1954,7 @@ Auto-named locals: 317 -> 296 over the two passes.
 | function | local | name | evidence |
 |---|---|---|---|
 | `OVC25_5b66_038d`, `OVC25_5b66_0530` | `local_4` | `entityIndex` | `for (local_4 = 0; local_4 < EntityCount; local_4++)` then `Entities[local_4]` |
-| `OVC15_4207_2301` | `local_3e` | `agents` | `_fmemmove(local_3e, ..., count * 0x34)` — a copy of the agent records by their stride |
+| `OVC15_4207_2301` | `local_3e` | `agntCopy` | `_fmemmove(dst = agntCopy:SS, src = 0x1726:index * 0x34, count = 0x34)` - one 0x34-byte agent record; **corrected** in the `_fmemmove` pass (the old three-argument rendering showed the source offset where the count belonged) |
 | `OVC49_8699_0874` | `local_aa[80]` | `text` | destination of `agnt_3b1d_0ac0(agnt, local_aa)` |
 | | `local_5` | `agntIndex` | filled by the hit tests whose `out` parameter is an index, then used as `local_5 * 0x34` |
 
