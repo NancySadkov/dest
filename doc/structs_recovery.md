@@ -3464,3 +3464,87 @@ if (((paVar2->prts + portraitIndex)->ofs != 0 || paVar2->prts[portraitIndex].seg
 Auto-named parameters: 997 -> 991; auto-named locals: 165 -> 164; struct-typed
 arguments: 122 -> 123.  New evidence base: `tmp/decompiled9` (ok=1125 fail=5) and
 `tmp/allvars11.csv` (3112 vars).
+
+## The construction-record builder: `OVC23_55fe_184e` and its trampoline
+
+These two functions create the 0x12-byte construction records at segment `0x21f2`,
+and the field stores name the parameters:
+
+```c
+*(byte *)(GRecordCount * 0x12 + 8) = bldType;   /* bldType * 0x27 indexes bldtp_t   */
+*(int  *)(GRecordCount * 0x12 + 2) = x;
+*(int  *)(GRecordCount * 0x12 + 4) = y;
+*(char *)(GRecordCount * 0x12 + 9) = partyIndex;
+*(int  *)(GRecordCount * 0x12 + 0xf) = GameTick;   /* record timestamp */
+*outFlag = 1;
+```
+
+`partyIndex` is confirmed twice over: it is stored at `+9` and used as
+`(char *)(*(u32 *)(partyIndex << 2))->excluded`, i.e. an index into the party-sheet
+far-pointer table; and the callers pass `PartyCount - 1`.
+
+`x`/`y` come from the callers:
+`1e87(0, GUnits[i].x, GUnits[i].y, ...)` and `1e87(0x89, GfxRndSeed - 2, GfxRndSeed2, ...)`.
+
+`outFlag` is the byte that receives the 1, and every caller passes the address of a
+local (`&cStack_1c`, `&local_5`).  Its companion word (`param_5`) is left unnamed: its
+only use is inside the decompiler's 24-bit pointer build, so calling it a segment would
+be a guess about the rendering rather than about the code.
+
+### A merge that had to be reverted (recorded because it is instructive)
+
+The first attempt declared the flag as one four-byte pointer:
+
+```
+void OVC23_55fe_184e(byte bldType, int x, int y, char * outFlag, char partyIndex)
+```
+
+which produced
+
+```c
+*(undefined1 *)CONCAT22((char *)outFlag, in_stack_000000a) = 1;
+if (*(char *)((int)*(undefined4 *)((uint)outFlag._2_1_ << 2) + 0x3f) == '\0') {
+*(char *)(GRecordCount * 0x12 + 9) = outFlag._2_1_;      /* partyIndex disappeared */
+```
+
+The four-byte pointer swallowed `partyIndex`'s word, because this function's arguments
+are already word-aligned by the caller (`offset, segment, byte`), so widening the
+pointer shifted every later parameter.  The prototype was reverted to the original
+sizes with only the names changed, and the body became coherent again:
+
+```c
+_outFlag = (undefined1 *)CONCAT13(in_stack_0000000d,CONCAT12(param_5,outFlag));
+*_outFlag = 1;
+OVC23_55fe_1005(x + iVar4,y,0,partyIndex);
+```
+
+Same sizes, names only - the opposite lesson to `blit_317e_0879`, where widening a
+split pointer *was* correct because the two words were adjacent halves of one argument.
+
+Auto-named parameters over this turn: 991 -> 980.
+
+## `OVC42_6d7a_0736` takes one far buffer
+
+With the corrected far-copy prototype the two stack words become one pointer:
+
+```c
+void __cdecl16far OVC42_6d7a_0736(char *buf)
+{
+  _fmemmove((char *)CONCAT22(buf._2_2_,(char *)buf + 0x210),
+            (char *)CONCAT22(buf._2_2_,(char *)buf + 0xf0),0xf0);
+  for (pbVar2 = (byte *)0x0; pbVar2 < (byte *)0xfa00; pbVar2++) {
+    bVar1 = *pbVar2;
+    if ((0x4f < bVar1) && (bVar1 < 0xa0)) *pbVar2 = bVar1 + 0x60;
+  }
+}
+```
+
+i.e. it copies a 0xf0-byte block forward inside the buffer and then remaps the byte
+range `0x50..0x9f` by `+0x60` - a demo transition effect.  The parameter is the buffer,
+not two words.
+
+## Re-checked, unchanged
+
+`agnt_t+0x11`, `+0x24` and `+0x25` still have no computing consumer in `tmp/decompiled10`
+- the only forms are `= 0`, `= 1`, `= 2` and `== 0` / `!= 2` / `< 2` tests.  The
+`char_sheet_t` pads and `agntG_t+0x94` likewise keep their earlier refusals.
