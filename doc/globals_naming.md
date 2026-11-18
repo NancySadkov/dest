@@ -392,3 +392,20 @@ sequence, after the second graphics load:
 Named MusHandle.  The pair `07C6`/`07C8` is examined but unnamed: it is a
 second graphics far pointer (offset from stshLoadGfx, segment from the same
 register), and which asset it is cannot be told apart from the 07BE/07C0 pair.
+
+## Batch 28 - saved INT 19h segment
+
+`2272:0031` is the segment half of the old INT 19h vector, saved before the
+overlay handler installs itself:
+
+```c
+_BootHandlerCode = uRam00000064;          /* 0x19*4 = old offset   */
+word_2272_0031   = uRam00000066;          /* old segment           */
+uRam00000064 = 0x3f;
+uRam00000066 = 0x2272;                    /* new vector            */
+```
+
+The vector address `0000:0064` is `0x19 * 4`, and the pair
+(`_BootHandlerCode`, this word) is exactly an interrupt vector's two halves.
+Named `Int19Seg`.  Its partner `_BootHandlerCode` was already named, which is
+what made the pairing checkable.
