@@ -195,3 +195,19 @@ Examined and left unnamed in the same pass:
 - `2410:5AEB` - an array of seven far pointers, each walked in 6-byte steps
   while the level is halved (`bStack_7 >>= 1`) until `0xff`; it is a ramp search
   but whether the entries are palettes or shade bands is not fixed.
+
+## Batch 12 - the ramp table array
+
+2410:5AEB holds seven far pointers (offset at 0x5aeb, segment at 0x5aed,
+BX = i*4), and OVC27_5ded_1c94 walks the selected table in 6-byte steps:
+
+    while (*p != 0xff && (*p < level)) { p += 6; level >>= 1; }
+
+so each table maps a value to one of six buckets by successive halving, and 0xff
+terminates.  Named RampTables: the layout and the lookup are proven, the payload
+of each 6-byte entry (colour? shade?) is not.
+
+The disassembly confirms the base:
+
+    5ded:1cc0  MOV AX,word ptr [BX + 0x5aed]     ; segment
+    5ded:1cc4  MOV DX,word ptr [BX + 0x5aeb]     ; offset
