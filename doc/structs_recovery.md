@@ -3271,16 +3271,33 @@ Auto-named parameters: 1037 -> 1025.
 
 ## Eight more parameters: string destinations and string arguments
 
-### Copy and case-convert
+### A far string, not two arguments (correction)
 
-`OVC15_4207_1c79` copies one string into another and upper-cases the first character, which
-names both arguments:
+`OVC15_4207_1c79` first looked like `(dest, src)` because the body renders as
+`strcpy(param_1, param_2)`.  The callers say otherwise:
 
 ```c
-strcpy(dest, src);
-cVar1 = toupper(*_dest);  *_dest = cVar1;
-return dest;
+ovr_OVC15_4207_1c79(text2, unaff_SS);      /* one far pointer, not two arguments */
 ```
+
+and the body itself uses `_param_1`, the decompiler's far view of a single pointer.  So the
+signature is one four-byte `char *`, and after `ApplyProto` + a `/char *` retype the body
+reads
+
+```c
+char * __cdecl16far OVC15_4207_1c79(char *text)
+{
+  strcpy((char *)text,text._2_2_);     /* the split halves of the same pointer */
+  cVar1 = toupper(*text);
+  *text = cVar1;
+  return (char *)text;
+}
+```
+
+The `strcpy` line is still a decompiler artifact (it feeds the offset and segment halves to
+`strcpy` as dst and src), and it is recorded as such rather than "explained" by inventing a
+second parameter.  This is the same lesson as `SfxGfx`: a plausible-looking pair of
+arguments can be one object.
 
 ### `sprintf` destinations
 
