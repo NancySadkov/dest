@@ -2729,3 +2729,72 @@ sits inside the formatter itself, where the buffer holds padding state rather th
 message; it was left out deliberately.
 
 Auto-named locals: 213 -> 177.
+
+## Correction: `+0x53` exists in two different structures
+
+Re-reading every `+0x53` access in the fresh export separates two things that an
+earlier batch had merged:
+
+| base expression | structure | accesses |
+|---|---|---|
+| `(int)*(undefined4 *)((uint)param_1 << 2) + 0x53` | `char_sheet_t` (the `217A` party-sheet pointer table) | writes `4`, `8`, `0xc`, `0xff` in `OVC22_5087_056e`; compared with `entity.base.level`; tested `< 4` in `upd_units_5087_1d7d` and `OVC23_55fe_0af5` |
+| `*(byte *)((int)*(undefined4 *)(agent + 0x1d) + 0x53)` | `agntG_t` (via `gdata`) | `< 4` in `OVC27_5ded_1c94`; the level-band comparison in `OVC30_619c_025d` |
+
+So the `4/8/0xc/0xff` writes cited earlier for `agntG_t+0x53` are actually
+`char_sheet_t+0x53`, i.e. the **high byte of the `pad_52[2]` field at 0x52**.  The name
+`levelLimit` on `agntG_t+0x53` still stands, but on its own evidence only: the `< 4`
+test through `gdata` and the band comparison, plus the values read from the table
+itself (`00 01 07 0B 0D FF` across the first fourteen records).
+
+`char_sheet_t+0x53` is therefore also a level-cap byte (4/8/0xc, `0xff` = none) and
+should be recovered when that struct is rebuilt - it cannot be named today because it
+is the second byte of a two-byte `pad_52` component and `SetFieldType` cannot split a
+component.
+
+## `agntG_t+0x52`: the table data does not decide between the two readings
+
+The step suggested reading the field across records, so all fourteen records at
+`195d:26d6 + 0x52 + n * 0x95` were dumped:
+
+```
+rec  0 +0x52=00 +0x53=FF      rec  7 +0x52=00 +0x53=07
+rec  1 +0x52=00 +0x53=FF      rec  8 +0x52=00 +0x53=FF
+rec  2 +0x52=00 +0x53=FF      rec  9 +0x52=00 +0x53=0B
+rec  3 +0x52=00 +0x53=FF      rec 10 +0x52=00 +0x53=FF
+rec  4 +0x52=08 +0x53=0D      rec 11 +0x52=00 +0x53=FF
+rec  5 +0x52=00 +0x53=FF      rec 12 +0x52=00 +0x53=00
+rec  6 +0x52=00 +0x53=01      rec 13 +0x52=00 +0x53=01
+```
+
+`+0x52` is zero in thirteen of fourteen records and `08` in one; `+0x53` varies over
+`00..0D` with `FF` as "none", which is what a level cap looks like and confirms the
+`levelLimit` reading for the neighbour byte.
+
+For `+0x52` itself the two consumers remain irreconcilable:
+
+```c
+/* OVC49_8699_1e09 - clean: uVar5 = *(undefined4 *)(agent + 0x1d) is gdata */
+iStack_28 = *(int *)(iVar14 * 2 + 0x34c) + *(int *)(agent + 2) +
+            (int)*(char *)((int)uVar5 + 0x52) + -0x16;
+
+/* OVC22_5087_18b6 - suspect: the index is the high byte of the entity pointer */
+uVar1 = *(undefined4 *)((uint)*(byte *)(iVar4 + 0x1a) << 2);
+uVar2 = *(byte *)((int)uVar1 + 0x52) + 1;
+if (*(byte *)(iVar4 + 0xf) < uVar2) uVar2 = *(byte *)(iVar4 + 0xf);
+```
+
+The first is a signed byte added to a screen y with a `-0x16` base; the second treats
+it as a level floor, but reaches it through `*(byte *)(agent + 0x1a)`, which is the
+high byte of the entity far pointer - a decompiler artifact, not a real index.  Since
+the table says the value is 0 almost everywhere, both "default vertical offset" and
+"minimum level - 1" fit, and the only *trustworthy* consumer is the offset one.  No
+name is applied; naming it after the suspect consumer is exactly the kind of error the
+`tier` -> `resource` correction taught us to avoid.
+
+## One more local
+
+`constr_36ce_023c` probes five columns with `constr_36ce_0101(x, -1, &local_6)`
+(`x = -1, 0, 1, 2, -2`) and uses only the return value, so the local is the cell value
+at the probed column: `cell`.
+
+Auto-named locals: 177 -> 176.
