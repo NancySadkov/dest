@@ -2405,3 +2405,90 @@ The `pad_0` evidence is new: `OVC43_6fbe_0000` treats it as an *indexed base*, s
 block is not padding but an array of records whose element index comes from another
 sheet.  That is a real step towards it, but a name would still be an interpretation of
 who those records describe, so none is applied.
+
+## Locals (tenth pass) - paired text lines and the combat message buffers
+
+### Two formatted lines and their format tables
+
+`OVC40_69c8_04c6` formats two lines per mode and draws them in one call; the format
+tables are the two small arrays it indexes:
+
+```c
+puVar8 = local_64;
+pcVar4 = ovr_stsprintf(local_26c, unaff_SS, (char *)puVar8[(uint)param_6 * 2]);
+puVar9 = local_54;
+pcVar5 = ovr_stsprintf(local_16c, unaff_SS, (char *)puVar9[(uint)param_6 * 2]);
+OVC40_69c8_0000(pcVar5,(int)puVar9,pcVar4,(int)puVar8,bVar3,uVar13);
+```
+
+so each buffer pairs with the table that supplies its format: `text1`/`format1`
+(`local_26c`, `local_64`) and `text2`/`format2` (`local_16c`, `local_54`).
+The numbering follows the pairing, not the addresses (`local_16c` is the lower one).
+
+Live check:
+
+```c
+char text1 [256];
+char text2 [256];
+undefined2 format1 [4];
+undefined2 format2 [4];
+```
+
+### Agent-name pairs feeding a result sentence
+
+Two spells share one shape - fill one or two name buffers, then format the sentence:
+
+```c
+/* OVC41_6a8f_22cb */
+ovr_agnt_3b1d_0ac0(uStack_8, actorName);   /* actor  */
+ovr_agnt_3b1d_0ac0(agnt,     targetName);  /* target */
+ovr_stsprintf(msg, unaff_SS, "%s poisons %s.");
+... "%s drains all energy from %s." / "%s drains a level from %s."
+
+/* OVC41_6a8f_1c74 */
+ovr_agnt_3b1d_0ac0(param_1, victimName);   /* the one afflicted */
+ovr_agnt_3b1d_0ac0(param_2, sourceName);   /* the cause        */
+ovr_stsprintf(msg, unaff_SS, "%s is paralyzed by %s.");
+... "%s is stoned by %s." / "%s is no longer charmed."
+```
+
+Live check:
+
+```c
+char victimName [80];
+char sourceName [80];
+char msg [121];
+ovr_agnt_3b1d_0ac0(param_1,victimName);
+```
+
+### Display buffers
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `drawAgntStats` | `local_7e[121]` | `line` | `stsprintf(local_7e, ...)` for "Unit of %d", "%d%s level, ", then truncated by the ellipsis helper |
+| | `local_f6[120]` | `text` | `stsprintf(local_f6, "Loyal to %s")`, `litoa10(local_f6, ...)`, `stats_6386_065c(local_f6, ...)` |
+| `OVC27_5ded_10ea` | `local_84[120]` | `msg` | `stsprintf(local_84, "%s is charmed by %s.")`, "%s fails to charm %s." |
+| `stats_6386_13a1` | `local_82[120]` | `msg` | `stsprintf(local_82, "%s is no longer ready.")` |
+| | `local_d2[80]` | `text` | filled by `stats_6386_12b7(agnt_id, local_d2)` |
+
+Auto-named locals: 233 -> 218.
+
+### Refused this pass
+
+- `OVC27_5ded_10ea`'s `local_124`/`local_d4` swap roles between call sites (line 95
+  puts `param_1`'s name in one, line 130 puts `param_2`'s name in the same one), so a
+  name like `actorName` would be wrong for half the calls; only the message buffer
+  was named.
+- `OVC40_69c8_04c6`'s `local_6c` is the tail of `RankMsgPtrs` copied in and never
+  read, and `local_5c` is a `char *` that receives a pointer-array copy - the
+  decompiler's sizing for both is inconsistent with the copy lengths, so neither is
+  named.
+- `stats_6386_13a1`'s `local_a[6]` is only an output of `attact_3f0b_0ade(i,0,0,
+  local_a, ...)`; that callee does not state what it writes.
+- `OVC24_5943_026e`'s `local_24[4]` is a 2x2 byte state (`local_24[side]` and
+  `local_24[side+2]`, values compared `< 2` and set to `2`); what the two halves
+  distinguish is not stated.  Its `local_22`/`local_2c` are unreferenced in the
+  current decompilation, so the 8-byte scratch pair described earlier no longer
+  exists in the recovered code and cannot be renamed.
+- `attact_3f0b_2a09`'s two constant rects stay unnamed; the only information about
+  them is their geometry.
