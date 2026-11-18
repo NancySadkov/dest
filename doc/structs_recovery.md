@@ -5497,3 +5497,43 @@ if (*(char *)((int)(char **)GMenuStrings + gindex * 0x95 + 0x1f) != param_3) ret
 → `x`, `y`, `excluded` (the per-gindex byte the project already names `excluded`), `foundFlag`.
 
 Auto-named parameters: 575 -> 561.
+
+## `bldtp_t+0x24` has a reader after all - it is the building's SFX type (24 -> 23)
+
+The field was recorded as "only `& 0x80`", but a raw-offset scan for `0x27 + 0x132` finds a
+reader in `ovc23_textAdlibNone`:
+
+```c
+cVar12 = *(char *)((uint)bVar13 * 0x27 + 0x132);
+uStack_6 = (byte *)CONCAT13(cVar12,(uint3)uStack_6);
+if (((5 < Entities[i].level) && (cVar12 == -0x7a)) && (bVar4 = bVar4 + 1, bVar4 < 2)) ...
+if (uStack_6._3_1_ != 0x0) {
+  if (CurSfxType3 == 0xff) { in_DX = CONCAT11(0x24, uStack_6._3_1_); CurSfxType3 = uStack_6._3_1_; }
+  else { if ((ovr_randBelow(2) & 0xff) == 0) { in_DX = uStack_6._3_1_; CurSfxType3 = ...; } }
+}
+```
+
+The value is loaded into **`CurSfxType3`**, the named global that is elsewhere compared with
+0x76 and 0x70 to choose the sound, and the value 0x86 (`-0x7a`) is special-cased when the
+entity's level is above 5.  So the field is the building type's `sfxType`.
+
+That leaves `bldtp_t` with a single generated field (`field_0x0c`), whose only observed effect is
+drowning when equal to 2.
+
+## Two more parameters (2)
+
+`ovc27_usesPlay_sfxU` builds a far pointer from its first two arguments --
+`CONCAT13((char)(param_2 >> 8), CONCAT12((char)param_2, param_1))` -- so `ptrOfs` and `ptrSeg`.
+Its third argument was already typed `agnt_t *`; the fourth goes to `ovc27_compute3` whose own
+parameters are still unnamed, so it stays auto-named.
+
+### Examined and refused in the same pass
+
+- `ovc15_usesRandBelow`'s four arguments: the function picks a sound into a two-word out-pair
+  (`*param_1`, `param_1[1] = randBelow(0x14)`) with two independent mode flags, so the slots
+  exist but their meanings are not stated anywhere in the body.
+- `ovc43_usesBiosKeyAvail`: its first three arguments are forwarded into
+  `ovc43_usesStExit`'s **unused** parameters and the fourth is never read.
+- `agnt_t+0x24`/`+0x25`: still byte-wide 0/1/2 state with no stated value meaning.
+
+Auto-named parameters: 561 -> 559.  Struct fields: 24 -> 23.

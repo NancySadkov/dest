@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn283/naming_summary.txt`.
+`tmp/auditn285/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -10,10 +10,10 @@ functions                1130
   no prototype            115
   weak return type        987
   has struct-typed arg    137
-parameters               1642   auto-named  561   (34.2%)
+parameters               1642   auto-named  559   (34.0%)
 locals                    692   auto-named  145   (21.0%)
 structs                    35
-  struct fields           313   generated    24   (7.7%)
+  struct fields           313   generated    23   (7.3%)
 globals                  2533   auto-named  296   (11.7%)
 ```
 
@@ -29,7 +29,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 | string labels | 1516 `s_*` labels from their own bytes (`doc/strings_renamed.tsv`) |
 | globals | 1096 -> 296 auto-named; every rename quotes its writer/consumer in `doc/globals_naming.md` |
 | structures | `spr_t`, `unit_t` and `entity_t` complete; `agnt_t` rebuilt as `agnt_t[52]` + `tick` + `dir`; `bld_inst_t` and most of `char_sheet_t` recovered |
-| struct fields | 266 -> 24 generated |
+| struct fields | 266 -> 23 generated |
 | typing | struct-typed arguments 80 -> 137; `_fmemmove`/`__fmovmem`/`memcpy` re-typed to `(far dst, far src, count)`; `blit_usesDrawGfx`'s rectangle parameter retyped `brect_t *`, which resolves its fields by name |
 | corrections | wrong names/types found by later evidence reverted (three pointer widenings, `OVC22_5087_056e`, `anm_t` block) |
 
@@ -42,13 +42,13 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    meaning (`flashTickLo/Hi`, `destroyLatchSide0/1`, the audio-driver block pairs,
    the `StshNames` cut graphics); where only an equality or a lone write exists the
    result is a documented refusal.
-2. **561 parameters / 145 locals.** Call-site scanning is exhausted: the unanimous
+2. **559 parameters / 145 locals.** Call-site scanning is exhausted: the unanimous
    call-role rule yields 6 multi-site candidates, all inside the two functions whose
    decompilation Ghidra flags as unstable, and 10 single-site ones that the bodies
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in
    total across 145 locals.  What remains needs per-body reading, and this session
-   did 276 parameters that way (blit argument order, party-sheet indices, x/y pairs).
-3. **24 struct fields.** Each group has been re-examined at least three times.  The
+   did 278 parameters that way (blit argument order, party-sheet indices, x/y pairs).
+3. **23 struct fields.** Each group has been re-examined at least three times.  The
    two that are provably meaningful have irreducible conflicts the image cannot
    settle: `char_sheet_t+0x1b` is a word comparison widened to a dword, and
    `bldtp_t+0x0c` is a second lower bound beside the already-named `minBuildTime`.
