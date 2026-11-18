@@ -1558,3 +1558,28 @@ uint __cdecl16far save_49fd_01da(int handle)
 ```
 
 Auto-named parameters: 1127 -> 1120.
+
+## Building-type and generic-agent-index parameters
+
+**`bldType` (11 functions):** each multiplies the first argument by the `0x27`
+`bldtp_t` stride and reads named fields through it (`+0x121` flags2, `+0x123`
+income, `+0x128` production, `+0x133` resource, `+0x134` flags3):
+
+`OVC22_5087_0119/015c/018f/0234/0411`, `bldng_676c_003d`,
+`OVC45_77eb_0683/0708/0742/0778/0c36`.
+
+**`gindex` (4 functions):** each indexes the `0x95`-stride generic-agent table
+with the argument, i.e. the same index stored in `agnt_t.gindex`:
+
+```c
+int __cdecl16far OVC25_5b66_18cc(byte gindex)
+{
+  return (uint)*(byte *)((int)&26F7[8].seg + (uint)gindex * 0x95) + ...;
+}
+```
+
+`OVC25_5b66_173b/18cc`, `OVC30_619c_031d/0339` -> `gindex`.
+
+Live confirmation: `char * __cdecl16far OVC45_77eb_0c36(byte bldType)`.
+
+Auto-named parameters: 1120 -> 1105 (11 + 4).
