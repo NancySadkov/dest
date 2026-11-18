@@ -648,3 +648,40 @@ A full search finds only the two reads in draw_2e25_0217 and no write at all, so
 the byte is produced by code outside the exported modules.  Combined with the
 index-used-as-coordinate arithmetic recorded earlier, there is not enough to name
 it, and it stays unnamed.
+
+## Batch 37 - four more data tables from their payload
+
+Found by listing every remaining `far_t[n]` symbol and reading the bytes each
+pointer targets.
+
+| symbol | declared | targets | name |
+|---|---|---|---|
+| `2410:49EB` | `far_t[3]` | "A LAWFUL leader must achieve the rank of EMPEROR.", "A NEUTRAL leader ..." | `RankReqMsgPtrs` |
+| `2410:4B56` | `far_t[4]` | "levels 6-8c", "levels 8d-8h", "levels 8i-8k", NULL | `LevelRangeLabels` |
+| `2410:74AD` | `far_t[2]` | "person", "people" | `PersonWordPtrs` |
+| `2410:84A8` | `far_t[9]` | "Summary", "Now what?", "City", "Buildings", "Money", "Popularity", "Combat", "Winter", ... | `StatsTabPtrs` |
+
+`StatsTabPtrs` is confirmed by both sides: nine declared entries and a consumer
+that copies `0x24 = 9 * 4` bytes:
+
+```c
+F_SCOPY((far_t *)StatsTabPtrs, ..., local_2a);   /* ovc50, 0x24 bytes */
+```
+
+### `49EB` and `49F7` are one table
+
+The pointer sequence is continuous across the two symbols:
+
+```
+49EB: 4E41 (A LAWFUL leader ...)   49EF: 4E73 (A NEUTRAL leader ...)
+49F3: 4EBE                        49F7: 4EE9 (has achieved the rank of EMPEROR ...)
+49FB: 4F1D                        49FF: 4F62
+4A03: 4F8F ("OK")                 4A07: 4F92 ("Try Again")
+```
+
+so the real array is eight entries (`49EB..4A0A`), and Ghidra split it into
+`far_t[3]` + `far_t[5]` at `49F7`.  The first symbol carries the name; `49F7`
+stays unlabelled as the interior continuation rather than being given a second
+name for the same object.  The six-byte read at `0x4A02` (`ovc21_manage`) still
+overlaps entry 6 and remains unexplained; that anomaly is unchanged by this
+naming.
