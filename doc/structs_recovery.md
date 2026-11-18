@@ -2798,3 +2798,28 @@ name is applied; naming it after the suspect consumer is exactly the kind of err
 at the probed column: `cell`.
 
 Auto-named locals: 177 -> 176.
+
+## `char_sheet_t+0x39` is the leader's map position
+
+The generic-agent constructor writes the two words at `+0x39` from its last two
+arguments, and its caller hands it exactly the coordinates it had just passed to the
+map-coordinate helpers:
+
+```c
+uVar8 = ovr_constr_36ce_306b(uVar11, (int)pbStack_c);     /* x, y - named earlier */
+...
+uVar8 = OVC30_619c_0339(param_1, uVar11, pbStack_c);
+
+/* inside */
+*(undefined2 *)sheet->pos     = param_2;   /* x */
+*(undefined2 *)(sheet->pos + 2) = param_3; /* y */
+```
+
+So the four bytes are the leader's map position, stored as two words.  The field was a
+`byte[4]` named `pad_39`; it is now `pos` with the layout in its comment (it cannot be
+split into two `uint16_t` components without rebuilding the 38-field struct, and no
+reader of the block exists yet to justify that).
+
+Generated struct fields: 31 -> 30 (`char_sheet_t` 8 -> 7).  `char_sheet_t` still has
+`pad_0`, `pad_31`, `pad_40`, `pad_52`, `pad_64`, `pad_82`, `pad_8e`, and its neighbour
+`pad_52`'s high byte carries the 4/8/0xc level cap described above.
