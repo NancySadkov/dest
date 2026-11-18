@@ -293,3 +293,15 @@ so 07B2 is the earliest time the sound may repeat.  Named SfxDeadline.
     byte_2000_BSS_06CC = byte_2000_BSS_06CC + 1;
 
 Named BlitFrame (2000:d100).
+
+## Batch 19 - audio graphics handle
+
+¡0:07B6\ receives a handle from stshLoadGfx and passes it straight into the
+audio routine:
+
+    word_07B6 = ovr_stshLoadGfx();
+    audio_3a5b_0761(word_07B6, in_DX, ...);
+
+Named SfxGfx.  ¡0:07B5\ caches its previous argument for change detection
+(compared, then assigned from param_1) and stays unnamed because the argument's
+own meaning is not established.
