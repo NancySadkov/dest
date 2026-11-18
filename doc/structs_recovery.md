@@ -1113,3 +1113,32 @@ Three consumers, no shared meaning:
 The values seen are 0, 2 and something above 8, which fits a count, a state and
 an index equally well; nothing computes with it.  It stays unnamed rather than
 being called "count" on the strength of one comparison.
+
+## `agntG_t+0x51` = `actSound`
+
+The decompiler showed two identical branches, because the argument that differs
+was hidden.  The disassembly shows it:
+
+```
+6a8f:2016  LES BX,ES:[BX + 0x1d]
+6a8f:201a  CMP byte ptr ES:[BX + 0x51],0xff
+6a8f:201f  JZ  (default path)
+...
+6a8f:2039  MOV AL,byte ptr ES:[BX + 0x51]
+6a8f:203d  PUSH AX                  ; the record's own id
+6a8f:203e  CALLF ovr_play_sfxU
+...
+6a8f:2059  PUSH 0x4                 ; default path: fixed id 4
+6a8f:205b  CALLF ovr_play_sfxU
+```
+
+so the byte selects which sound an agent plays when it acts, `0xff` meaning
+"use the default".  With the field named the decompiler now shows the two
+branches distinctly:
+
+```c
+if (((agntG_t *)paVar5->gdata)->actSound == 0xff) { ... }
+ovr_play_sfxU(((agntG_t *)paVar5->gdata)->actSound,0,uVar4);
+```
+
+Generated struct fields: 44 -> 43 (`agntG_t` 2).

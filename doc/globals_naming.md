@@ -604,3 +604,18 @@ from the progression counters (`0xff` for none), compares it with
 
 The tail words `5DEE` and `5DF2` are the second half of each four-byte array; they
 are not separate variables and must not be named as such.
+
+## Batch 35 - level-band labels
+
+`2410:4B06` is an array of twenty far pointers into DGROUP, and the bytes they
+target are the level-band labels:
+
+```
+[0] 53E9:2410  "level 1"      [1] "level 2"      [2] "level 3"
+[3] "level 4"      [4] "level 5"      [5] "levels 6-10"
+[6] "levels 11-15"  [7] "levels 16-20"  [8] "levels 20-25" ...
+```
+
+`ovc21_manage` copies entries `0..11` (0x30 bytes) and `12..19` (0x30 bytes)
+into a local before display.  Named `LevelBandLabels`; it is the label side of
+the same bands that `LevelBandMin`/`LevelBandMax` encode numerically.
