@@ -4109,3 +4109,40 @@ the type the signature already shows.
   no stored field and no unanimous callee role, so it keeps its number.
 
 Auto-named parameters: 937 -> 891.
+
+## Locals named from unanimous call roles and from their own contents (7)
+
+The parameter scan's rule was applied to the 152 auto-named locals: a local passed where the
+callee's parameter already has a semantic name, with two or more sites and no disagreement.
+Only eight candidates survived the filter, which is itself the finding: the local tail is
+not hiding a large family.
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `constr_36ce_04e9` | `local_a` | `cell` | out-parameter of `constr_usesSmoothPrev(..., &local_a)`, then read as the cell in the shading call |
+| `saveui_4528_0706` | `local_28` | `dest` | 0x1c-byte block `_fsetmem`-ed and passed as the destination of the blit/mouse helpers |
+| `OVC27_5ded_10ea` | `local_124` / `local_d4` | `text1` / `text2` | both passed to `ovr_agnt_textHeld(agnt, text)`; the earlier refusal was about actor/target semantics, which these names do not claim |
+| `OVC06_317e_08ed` | `local_15e` | `skip` | passed as `masked_memcpy`'s `skip` and used as an offset into the palette copy |
+| `attact_3f0b_2430` | `local_8` | `agntX` | `local_8 = agnt->x`, then `alignUp4(&local_8, ...)` and `local_8 + dirOffset` |
+| `OVC42_6d7a_08df` | `local_30c[768]` | `palette` | cleared, handed to `vgaSetPalette8bit`, filled by `calcSeasonPalette(..., local_30c, ...)`, used as `cmap.ofs` |
+
+Live check:
+
+```c
+uint8_t palette [768];
+_fmemset(palette,unaff_SS,0);
+ovr_vgaSetPalette8bit(palette);
+```
+
+The 768 bytes (256 x RGB) are the type-level proof, independent of the calls.
+
+### Examined and refused in the same pass
+
+- `OVC22_5087_056e`'s `local_2a` (loads `.animFrame`) and `local_c` (loads `.y`): the function
+  is one of the two with flagged-unstable decompilation, and its own locals already
+  contradict each other, so nothing there is renamed.
+- `OVC40_69c8_04c6`'s `local_5c` (stores into `.ofs`) and `OVC42_6d7a_08df`'s sibling
+  `local_30c`-style blocks were re-checked; the first is the pointer-array copy already
+  refused for inconsistent sizing.
+
+Auto-named locals: 152 -> 145.  No local remains whose only use is an unexamined call.
