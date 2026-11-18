@@ -5669,3 +5669,46 @@ halves of a far pointer (`ofs`, `seg`).  The third indexes the `0x885`/`0x889` d
 but is also compared `(byte)param_3 < 6` / `< 0xb` to pick a graphic, so it stays auto-named.
 
 Auto-named parameters: 552 -> 543.
+
+## 20 parameters: the construction/map helpers and the driver primitives
+
+### OVC23's map-coordinate readers (11)
+
+Five functions in `OVC23` take a map coordinate pair, each pinned by the array or the cursor
+global it is compared with:
+
+```c
+ovc23_usesGUnits:       GUnitGrid[param_1][param_2]                    /* 148 x 60 */
+ovc23_usesGfxRndSeed2:  GfxRndSeed2 == param_2 && GfxRndSeed-2 <= param_1 <= GfxRndSeed+1
+ovc23_usesAlignUp4:     alignUp4(param_1) vs record[+2],  record[+4] == param_2,
+                        sheet->excluded == param_3
+ovc23_usesAlignUp44:    GMapFlags[param_2 + 1][param_1]
+ovc23_compute2:         forwards positionally into usesAlignUp44
+```
+
+`GfxRndSeed`/`GfxRndSeed2` are the map cursor x/y (they are what `attact_usesMenuItemEnabled`
+compares with `entity.base.x`/`.y`), which is what makes the second line's x/y unambiguous.
+
+### The driver primitives (9)
+
+| function | parameters | evidence |
+|---|---|---|
+| `driver_zeroWords` | `dst` | `*dst++ = 0`, count on the stack; `param_2` unread |
+| `driver_copyWords` | `src`, `dst` | `*dst++ = *src++`; `param_3` is used as a pointer |
+| `vgaSetPalette` | `paletteOfs`, `paletteSeg`, `startIndex` | pointer halves via `CONCAT12`, and `out(0x3c8, param_3)` |
+| `countRunLength` | `src`, `limit` | run of equal bytes, clamped by `param_3` and a stack limit |
+| `driver_loop3` | `paletteData` | count at `*param_1`, then runs advanced by `n * 3` (RGB triples) |
+
+`driver_loop3` is the memory-writing twin of `vgaDoSomethingWithPalette` (which writes the same
+script through `out(0x3c8)`/`out(0x3c9)`), so both take a `paletteData` script.
+
+### Refused in the same pass
+
+- `ovc23_usesAlignUp43` (55fe:0af5): carries *Control flow encountered bad instruction data* and
+  an overlapping-instruction warning at 0x53af7/0x53af6.
+- `driver_compute1`/`driver_compute2`: pure byte arithmetic (`(param_3+param_1+param_2)`,
+  `(param_2-param_1)>>2`) with no positional meaning.
+- `driver_scan1`'s `param_2`/`param_6`, `driver_loop1`'s `param_3`, `driver_compute3`/`4`'s
+  `param_5`: never read.
+
+Auto-named parameters: 543 -> 523.
