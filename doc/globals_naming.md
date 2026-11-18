@@ -950,3 +950,34 @@ Auto globals: 584 -> 583.
 - `2000:027B` (22 refs, 8 modules) is only ever set to 0/1 and tested `!= 0` as an
   early-out, with no computation on the value; a boolean flag whose subject the
   code never states.
+
+## Batch 47 - the square's two screen edges
+
+The init loop computes the pair one from the other, which settles both:
+
+```c
+((undefined2 *)&SquareLeftX)[GSMaxSquare]  = iStack_8 + uStack_14;
+((undefined2 *)&SquareRightX)[GSMaxSquare] = SquareLeftX[GSMaxSquare] + uStack_4;
+```
+
+So `2000:0482` is the left screen x of a square and `2000:043A` its right edge;
+the earlier single name (`SquareScreenX`) covered only the left table, and it is
+now `SquareLeftX` (`2000:ceb6`) plus `SquareRightX` (`2000:ce6e`), verified in the
+live decompile of `3381:17e8`.
+
+Auto globals: 583 -> 582.
+
+### Examined, not named
+
+All three are 0/1 style gates whose subject the code never states, so the evidence
+does not distinguish them from any other busy-flag:
+
+- `2410:5CF0` (20 refs) is set to 1 around a nested UI call and cleared after, and
+  consumers skip the redraw while it is set *and* the mouse has not moved
+  (`5CF0 == 0 || MouseMoved != 0`).  It behaves like a screen lock, but the names
+  would only restate that.
+- `2410:5CEF` (15 refs) is a small id with `0xff` as "none", written by the
+  construction modules and passed to one UI function; what the id denotes is not
+  expressed anywhere.
+- `2410:4926` (17 refs) is set to 1 in six modules and returned by a stats
+  predicate - again a boolean whose subject is unnamed.
