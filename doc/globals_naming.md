@@ -380,3 +380,15 @@ music routine: the offset comes from `stshLoadGfx()`, the segment from the
 register the loader returns, and the pair is passed to `audio_3a5b_0761`
 together with the MIDI handle.  Named `MidGfxOfs` / `MidGfxSeg`.  It is the
 same shape as `SfxGfx` (07B6), the single-word handle for the effects path.
+
+## Batch 27 - music sequence handle
+
+`2410:07CA` holds the handle that `audio_3a5b_0761` returns for the music
+sequence, after the second graphics load:
+
+    word_07C6 = ovr_stshLoadGfx();  word_07C8 = in_DX;
+    word_07CA = audio_3a5b_0761(word_07C6, in_DX, *(undefined2 *)(iVar2 + 5), ...);
+
+Named MusHandle.  The pair `07C6`/`07C8` is examined but unnamed: it is a
+second graphics far pointer (offset from stshLoadGfx, segment from the same
+register), and which asset it is cannot be told apart from the 07BE/07C0 pair.
