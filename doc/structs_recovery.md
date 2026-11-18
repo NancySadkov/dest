@@ -3216,3 +3216,30 @@ locals (`reqMsg`, `text`, `msg`, ...) intact.  So the `fail` is an artifact of t
 `ExportAll` run (the batch decompiler gives up on some long functions), not a change in the
 program.  Recorded so a later pass checks with `DecompileAt` before treating a missing body
 as evidence.
+
+## Split far-pointer scan: what is left, and why each refusal stands
+
+Scanning the fresh export for `CONCAT22(param_2, param_1)` (the clearest signature of a
+far pointer the decompiler split into two parameters) leaves only these non-CRT cases:
+
+| function | why it is not merged |
+|---|---|
+| `OVC27_5ded_10ea` | Ghidra marks it *Unknown calling convention - yet parameter storage is locked*, so a prototype change is refused by the program model; its single caller also builds the pointer with `CONCAT13(...,CONCAT12((char)agnt,0x6a8f))`, i.e. a constant segment, and the function reads its agent index from a stack slot. |
+| `OVC40_69c8_0000` | two far text pointers followed by two byte arguments; in 16-bit cdecl each byte still occupies a word slot, so widening both pointers would place the bytes at `+8`/`+9` where the code reads `+0xa`/`+0xc`. Expressing it correctly needs explicit padding parameters. |
+| `OVC45_77eb_0d61` | the `CONCAT22` there builds a far pointer from a local plus a synthesized stack word (`local_5c` + `iStack_5a`); the pointer is not a parameter at all. |
+
+### A function whose body cannot be recovered
+
+`manage_4d05_1bee` fails in `ExportAll` **and** in `DecompileAt` (no output at all), so its
+three locals (`local_13`, `local_1f6`, `local_21e`, all byte-sized slots at large stack
+offsets) have no body to quote.  They stay unnamed: naming them from the offsets alone
+would be guessing, which is exactly what the method forbids.  This is the one case where a
+missing export really does mean a missing body, unlike `OVC45_77eb_0d61` from the previous
+pass.
+
+### Globals tail unchanged
+
+The worklist regenerated from the current audit still reports the same 35 single-module
+globals, every one of which has been examined and refused on its own evidence
+(`00D8`, `5DF2`, `49F7`, `076F`/`0771`, `2272:002C/002E/003A/003C`, ...).  No new payload or
+guarding comparison appeared after the recent renames, so nothing was named in this batch.
