@@ -3097,3 +3097,19 @@ identified at the same time.
 Nothing changed in `tmp/decompiled6`: `+0x52` still has one clean consumer (a signed y
 offset, `+ -0x16`) and one that indexes with the high byte of an entity pointer, and `+0x94`
 has no reader at all.  Both stay unnamed.
+
+### Parameters stored straight into the field they are named after
+
+A scan for `-><field> = param_N` assignments found three:
+
+```c
+/* OVC30_619c_0339 */
+sheet->x = param_2;   sheet->y = param_3;
+/* OVC18_48ac_0bf4 */
+((unit_t *)GUnits + unaff_SI)->bldType = param_3;
+```
+
+so they are `x`, `y` and `bldType`.  The live signature confirms the first two:
+`uint OVC30_619c_0339(byte gindex, undefined2 x, undefined2 y)`.
+
+Auto-named parameters: 1046 -> 1043.
