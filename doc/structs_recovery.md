@@ -5169,3 +5169,51 @@ at `param_5` (offset low word, segment high word) and writes 0 or `param_4` depe
 threshold test -- so `buf`, `count`, `fill`, `pattern`.  `param_2` and `param_6` are never read.
 
 Auto-named parameters: 706 -> 663.  Struct-typed arguments: 132 -> 133.
+
+## 20 parameters: the OR-mask fill, a three-vertex clipper and two arena searches
+
+### `driver_scan3` (6)
+
+Byte-for-byte the same loop as `driver_scan4` -- the same `0x128` row stride (148 words) and the
+same `(param_5 - param_3)` / `(param_4 - param_2)` extents -- with `|=` instead of `&=`:
+
+```c
+*puVar4 = *puVar4 | param_6;      /* scan4 does & param_6 */
+```
+
+so the same `buf, x1, y1, x2, y2, mask`.
+
+### `ovc07_usesBiosReadKey` (8)
+
+Three vertices tested against a four-word clip rectangle, with the first two swapped when they
+are out of order:
+
+```c
+if ((param_1 < r[0]) || (r[2] < param_1) || (param_2 < r[1]) || (r[3] < param_2) ||
+    (param_3 < r[0]) || ... || (param_6 < r[1]) || (r[3] < param_6)) {
+  if (param_4 < param_2) { param_4 = param_2; param_1 = param_3; param_3 = iVar9; param_2 = iVar4; }
+}
+```
+
+So `x1,y1,x2,y2,x3,y3`, then `rectSeg` and `rect` -- the pointer is built as
+`CONCAT12(param_7, param_8)` and its four words are the bounds, so `rect` is retyped
+`brect_t *` (struct-typed arguments 133 -> 134).
+
+### `ovc45_textArena` (4)
+
+```c
+uVar1 = ovr_alignUp4(param_1); ... ovr_alignUp4(entity.x) == uVar1
+if (peVar4[uVar5].base.y == param_2) { ... *_param_3 = uVar5; }
+*_param_3 = 0xffff;   *_param_5 = 0;  ... *_param_5 = 1;
+```
+
+so `x`, `y`, `foundIndex` (0xffff until a match) and `foundFlag`.  `param_4` is never read.
+
+### `ovc25_textArena` (2)
+
+The same search from the other module: `param_4` is compared with the per-entity party byte and
+`param_5` is aligned exactly like an entity x, so `partyIndex` and `x`.  Its first two arguments
+are the halves of a pointer (`CONCAT12(param_2, param_1)`) that is never dereferenced, and
+`param_3` is unused, so those stay auto-named.
+
+Auto-named parameters: 663 -> 643.
