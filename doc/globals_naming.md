@@ -499,3 +499,42 @@ Named `PrevMenuValue` (`2000:d112`).
 - `2000:076F`/`0771` (`ovc48`): another `stshAllocStub()` far pointer
   (offset/segment) allocated in `init_assets2` next to `GMenuGfxOfs`/
   `GMenuGfxSeg`.  Which asset it holds is not distinguished by the code.
+
+## Batch 32 - pending sound request
+
+`2410:5CF1` is a one-shot sound request in the menu input loop: the only
+reader plays a sound and clears the flag, and no exported module sets it:
+
+```c
+if (byte_2410_DATA_DGROUP_5CF1 != '\0') {
+    ovr_play_sfx();
+    byte_2410_DATA_DGROUP_5CF1 = '\0';
+}
+```
+
+Named `SfxPending`.  As with `DrawBusy`, the setter is outside the export, and
+the doc records that rather than hiding the inference.
+
+### `2410:49F7` - the overlap is real, and ES is 2410
+
+The `49F7` question is settled as far as the image allows.  The instruction
+that reads the six-byte table is preceded by an explicit segment load, and the
+raw bytes prove it is `MOV ES,AX` rather than the decompiler's `MOV AX,ES`:
+
+```
+4d05:2b1e  B8 10 24     MOV AX,0x2410
+4d05:2b21  8E C0        MOV ES,AX          <- 8E C0, not 8C C0
+4d05:2b23  26 C6 06 F0 5C 01   MOV byte ptr ES:[0x5cf0],1
+4d05:2b2b  8A 46 EB     MOV AL,[BP-0x15]
+4d05:2b30  BA 06 00     MOV DX,6
+4d05:2b33  F7 EA        IMUL DX
+4d05:2b37  8A 87 02 4A  MOV AL,byte ptr [BX+0x4a02]
+```
+
+So the read really is `DGROUP:0x4A02 + index*6`, and `0x4A02` is the last byte
+of the `4F62:2410` pointer in the array that starts at `0x49F7`.  Both cannot
+be plain static objects, which means the region is **dual-use**: it is
+initialised as a far-pointer table (whose targets are the congratulation and
+OK/Try-Again strings) and is also read as a six-byte-stride table at run time.
+A single structure cannot describe that, so `49F7` stays unnamed; the finding
+is recorded here instead of being resolved by picking one of the two uses.
