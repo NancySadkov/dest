@@ -3230,9 +3230,11 @@ far pointer the decompiler split into two parameters) leaves only these non-CRT 
 
 ### A function whose body cannot be recovered
 
-`manage_4d05_1bee` fails in `ExportAll` **and** in `DecompileAt` (no output at all), so its
-three locals (`local_13`, `local_1f6`, `local_21e`, all byte-sized slots at large stack
-offsets) have no body to quote.  They stay unnamed: naming them from the offsets alone
+`manage_4d05_1bee` fails in `ExportAll`; an earlier note said it also failed in
+`DecompileAt`, but re-checking after the prototype fixes shows it decompiles on demand
+(7841 lines).  Its three stored locals (`local_13`, `local_1f6`, `local_21e`, all
+byte-sized slots at large stack offsets) are **never referenced** in that body, so there is
+no writer or consumer to quote for them.  They stay unnamed: naming them from the offsets alone
 would be guessing, which is exactly what the method forbids.  This is the one case where a
 missing export really does mean a missing body, unlike `OVC45_77eb_0d61` from the previous
 pass.
@@ -3602,3 +3604,80 @@ not a semantic doubt - the two halves are unambiguous.
 
 Auto-named parameters over this turn: 980 -> 959 (8 merged away, 8 new merged-pointer
 names, 5 names on `uiReadString`).  Struct-typed arguments: 123 -> 127.
+
+## Two more `far_t` merges, and a refusal that turned out to be stale
+
+### `OVC40_69c8_0000`: the case I had written off as needing padding
+
+An earlier pass recorded that merging this signature's two far pointers would misplace
+the two byte arguments.  That was wrong, and the merge works:
+
+```c
+void __cdecl16far OVC40_69c8_0000(far_t text1,far_t text2,byte row,byte param_4)
+{
+  if (GameRunning) ovr_OVC42_6d7a_0850((char *)text1,row);
+  else {
+    TextBlitY = (uint)row * 0xb + 0x98;
+    iVar1 = ovr_font_302d_06ea((char *)text1,...);
+    if ((text2.ofs == 0 && text2.seg == 0) || (iVar1 < 0x140)) ...
+    else { text1 = text2; ... }
+    ovr_blitLabel((char *)text1.ofs,(uint8_t *)text1.seg,...);
+  }
+}
+```
+
+So the arguments are two formatted lines (drawn, or replaced by the shorter one), a row,
+and one byte the body never reads (every caller passes `0xf2`).  Ghidra places the byte
+parameters on word slots itself, which is why the earlier "needs explicit padding"
+conclusion was unnecessary: the `far_t` merges give 10 nominal bytes for 12 pushed bytes
+and the binding is still correct.
+
+The local names from the previous batch (`text1`/`text2` in `OVC40_69c8_04c6`) are the same
+two lines, so the parameters carry the same names.
+
+### `OVC43_6fbe_0000`: a sheet chain
+
+```c
+uStack_6 = (char_sheet_t *)CONCAT22(sheetSeg,sheet);
+pcVar5 = (char_sheet_t *)(sheet->pad_0 + 6);
+uVar6  = *(int *)(sheet->pad_0 + 4) - 0xb;
+... param_2 = pcVar4;  param_3 = pcVar5;      /* advance to the next sheet */
+```
+
+`sheet`/`sheetSeg` are the two halves of one far sheet pointer.  They are **not** merged,
+because keeping the near pointer typed gives readable field access (`sheet->pad_0`) and the
+far view is needed in one place only; the segment half is typed `uint16_t` so the
+`CONCAT22` reads honestly.
+
+## An export failure does not mean a missing body - four checks
+
+`ExportAll` gives up on five functions.  Each was retried with `DecompileAt`:
+
+| function | on-demand result | conclusion |
+|---|---|---|
+| `constrct_7e7c_0b9c` | 5976 lines | four locals named below |
+| `manage_4d05_1bee` | **7841 lines** | the earlier "fails in both" note was stale; its three stored locals (`local_13`, `local_1f6`, `local_21e`) are simply **never referenced** in the body, so they stay unnamed |
+| `OVC49_8699_18c4` | 3009 lines | the body contains no stored `local_*` at all |
+| `OVC45_77eb_0d61` | 3036 lines | already named in an earlier pass |
+| `rle_line` (2d63:032d) | 2 lines | genuinely no body |
+
+### Four locals in `constrct_7e7c_0b9c`
+
+| local | name | evidence |
+|---|---|---|
+| `local_16` | `tileX` | `tileX = (GfxRndSeed + (uint)param_1) - 2;` then passed to `ovr_OVC45_77eb_20e8(&tileX)` and `ovr_OVC45_77eb_0179(tileX, GfxRndSeed2)` - the identical formula and consumers as `land_info`'s `tileX` |
+| `local_ca[80]` | `text1` | destination of the ellipsis helper for a character name (`ovr_OVC45_77eb_226e(dst = text1, src = name, font, 0x46, 3)`) |
+| `local_7a[72]` | `text2` | destination of the same helper for a unit-type name |
+| `local_2ca[512]` | `msg` | `strcpy(msg, ...)` / `ovr_stsprintf(msg, ...)` before the `"%s (%d/%d): Owned by %s. Active party is %s the %s."` render |
+
+Live check:
+
+```c
+undefined2 tileX;
+tileX = (GfxRndSeed + (uint)param_1) - 2;
+uVar15 = ovr_OVC45_77eb_20e8(&tileX);
+uStack_26 = ovr_OVC45_77eb_0179(tileX,GfxRndSeed2);
+```
+
+Auto-named parameters over this turn: 959 -> 952.  Auto-named locals: 164 -> 160.
+Struct-typed arguments: 127 -> 128.
