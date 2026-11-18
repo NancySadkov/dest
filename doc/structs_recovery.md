@@ -1469,3 +1469,37 @@ not settle them either way:
 
 No rename is applied: guessing `race` -> `level` here would repeat the `tier`
 mistake in the opposite direction.
+
+## More map coordinates, a structure type and an ability score
+
+Six more functions take map `(x, y)` pairs, verified per function:
+
+| function | evidence |
+|---|---|
+| `3f0b:0000`, `3f0b:007e` | bounds `0..0x93` / `0..0x3b`, `GMapFlags[param_2] + param_1` |
+| `3f0b:01ec` | forwards both to `007e`/`00d8` |
+| `3f0b:027d`, `3f0b:0362` | bounds `0x91`/`0x39` plus the direction offsets at `0x885`/`0x889`, `GMapFlags[param_2][param_1]` |
+| `48ac:0bf4` | `GUnitGrid[param_1][param_2]` (declared `[148][60]`) and `GMapFlags[param_2] + param_1` |
+
+`manage_4d05_2bc4`'s second argument is compared against `GStructures[i].type`
+while searching the thirty structure records, so it is `structType`.
+
+`manage_4d05_118b` is an ability modifier and now says so:
+
+```c
+undefined1 __cdecl16far manage_4d05_118b(byte abilityScore)
+{
+  if (abilityScore < 4) uVar1 = 0xfd;        /* -3 */
+  else if (abilityScore < 6) uVar1 = 0xfe;   /* -2 */
+  ...                                        /* +3 at 18 and above */
+```
+
+Auto-named parameters: 1145 -> 1131 (12 + 2).
+
+### `char_sheet_t.pad_31` - no reader
+
+`manage_4d05_11cb` writes the same rolled value into both bytes
+(`pad_31[0] = value; pad_31[1] = value;`) after summing hit-dice-style rolls, but
+**no function reads `pad_31`** anywhere in the export.  Whether it is hit points
+split into two bytes or two separate stats cannot be decided from a write-only
+pair, so the field keeps its padded name.
