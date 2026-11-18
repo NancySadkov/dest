@@ -1215,3 +1215,46 @@ the resulting generic record is tested at `0x3c`, `0x3e` and `0x40`, i.e. the
 three flag words named earlier.
 
 Struct-typed functions: 103 -> 107.  Auto-named parameters: 1217 -> 1210.
+
+## Correction: `ApplyProto` produced near pointers
+
+`CParserUtils.parseSignature` sizes a plain `T *` with the program's default
+pointer size, which in this 16-bit program is 2.  Every function typed through
+`ApplyProto` with `agnt_t *` therefore got a **near** pointer, and the callee
+consumed only the offset word.  The decompiler showed it plainly as the segment
+half left on the stack:
+
+```c
+/* before the fix */
+int __cdecl16far audio_3a5b_0afd(agnt_t *agnt)
+{
+  undefined2 in_stack_00000006;
+  uVar1 = (uint)(((long)(int)_agnt->x * 0x7f & 0xffffU) / 0xd2);
+
+int __cdecl16far OVC27_5ded_1beb(agnt_t *agnt,byte recIndex,byte maxLevel,int *cursor)
+{
+  _agnt = CONCAT13(in_stack_00000007,CONCAT12(recIndex,agnt));
+```
+
+`RenameVars.java` builds a four-byte pointer explicitly (`PointerDataType(base,4)`),
+so the 21 parameters were re-typed through it.  Both bodies are now clean:
+
+```c
+int __cdecl16far audio_3a5b_0afd(agnt_t *agnt)
+{
+  uVar1 = (uint)(((long)(int)agnt->x * 0x7f & 0xffffU) / 0xd2);
+
+int __cdecl16far OVC27_5ded_1beb(agnt_t *agnt,byte recIndex,byte maxLevel,int *cursor)
+{
+  while( true ) {
+    if ((int)(uint)AgntCount <= *_cursor) return 0;
+    uVar2 = *(undefined4 *)(*_cursor * 0x34 + 0x17);
+    if (((*(byte *)((int)uVar2 + 0xf) <= maxLevel) &&
+        (*(uint8_t *)*(undefined4 *)(*_cursor * 0x34 + 0x1d) != ((agnt_t *)agnt)->faction)) ...
+```
+
+and `agnt_3b1d_196b` uses the pointer's segment via `ptr._2_2_` rather than an
+unnamed stack word.
+
+Rule recorded: prototype *shape* repairs go through `ApplyProto`, but the far
+pointer types must be applied afterwards with `RenameVars`.
