@@ -1048,3 +1048,35 @@ Cancelled = 0;                                         /* before entering */
 
 Named `Cancelled`, confirmed live in `6386:1c9f` and with `ListSyms` at
 `2410:4926`.  Auto globals: 579 -> 578.
+
+## Batch 51 - the agents-changed flag
+
+`2000:06C1` marks that the agent set changed during a pass.  `ovc41` sets it at
+the end of the per-agent block that may zero strength and mark the unit dead, and
+`ovc49` consumes it once at the start of the next battle step:
+
+```c
+byte_2000_BSS_06C1 = 1;                                  /* after the block  */
+if (byte_2000_BSS_06C1 != 0) {                           /* next step        */
+    ovr_attact_3f0b_26bd();
+    byte_2000_BSS_06C1 = 0;
+}
+```
+
+Named `AgentsChanged` (`2000:d0f5`); confirmed with `ListSyms`.
+
+Auto globals: 578 -> 577.
+
+### `2410:5CF0` - examined again, still not named
+
+The consumers are mouse hit tests.  They proceed only when the flag is clear **or**
+the pointer moved:
+
+```c
+if (((5CF0 == 0) || (MouseMoved != 0)) || (MouseX outside the panel ...)) { ... }
+```
+
+The writer brackets a nested screen call (`5CF0 = 1; ...nested screen...; 5CF0 = 0`)
+and the screens clear it while drawing.  That is consistent with "a child screen is
+open", but the same conditions would hold for "the pointer is hidden", and nothing
+in the code chooses between them, so it keeps its generated name.
