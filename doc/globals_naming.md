@@ -312,3 +312,15 @@ own meaning is not established.
 GGameState, cleared to 0 before returning, and never read in any exported module,
 so the consumer is code outside the export (an interrupt handler guarding the
 screen).  Named DrawBusy.
+
+## Batch 21 - XMS padding word
+
+@0:02C3\ lies between the 32-bit source offset (02BF/02C1) and the 32-bit
+destination offset (02C5/02C7) in the XMS request block; the routine zeroes it
+and never reads it.
+
+    02BD handle | 02BF/02C1 source | 02C3 zeroed | 02C5/02C7 destination
+
+Named XmsPad.  Note this also confirms the offset assignment used earlier: the
+destination really is the 02C5/02C7 pair, because both halves are written
+consecutively (02C5 = param_1, 02C7 = param_2).
