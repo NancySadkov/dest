@@ -929,3 +929,31 @@ agents and square records, redraws the five menu bars, calls `ovc18_showLeaderVi
 the text at `(x+6, y+2)` and draws `label`; the parameter is renamed from `param_3` |
 
 Parameters: 273 -> 272.
+
+### Thirty-fifth batch: the save I/O wrappers and two screen helpers
+
+| old | new | evidence |
+|---|---|---|
+| `save_usesRead` | `save_readBlock` | wraps `read()` and returns 1 only when `read() == count` |
+| `save_usesWrite` | `save_writeBlock` | the mirror image around `write()` |
+| `saveui_usesStshAlloc` | `saveui_readLine` | reads one line (up to 0x4f bytes, stopping at newline
+or `^Z`) and returns a heap copy; 0/empty for `^Z` or an empty line |
+| `ovc42_usesBlitGfxRect2` | `ovc42_showAgentStats` | fills a temporary agent record (`agntTmp`) and
+hands it with the palette to `drawAgntStats` |
+
+### Globals: the single-store candidates dumped and refused
+
+The six globals named in the brief were each dumped in full:
+
+| global | uses | why it stays a refusal |
+|---|---|---|
+| `2000:ca36` | 1 | write-only: `= *(u16 *)(BDA tick + 2)` in `draw_usesPlay_sfx`; no reader |
+| `2000:ca7a` | 1 | write-only: `= 1` in main after the load; no reader |
+| `2410:073c` | 1 | read as a bias in the terrain smoothing compare, no writer anywhere |
+| `2410:0845` | 1 | read in the animation gate (`0845 == 0 && GPaused == 0 && 06E2 == 1`), no writer |
+| `2410:074b` | 2 | read as the y origin of a 6x0x27 strip blit in two draw paths, no writer |
+| `2410:5dee` / `5df2` | 1 / 2 | read next to `bandMin = LevelBandMin` / `bandMax = LevelBandMax` in
+`ovc30_usesRandBelow`, but one use builds `CONCAT11(hi(5df2), 0x29)`, so the pair is not a clean
+offset/segment split -- refused rather than guessed |
+
+Globals stay at 190; mechanical names: 585 -> 580.
