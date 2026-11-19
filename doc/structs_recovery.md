@@ -6224,3 +6224,52 @@ obsolete in this note; use the rebuild path for any span change.
 `ovc43_usesStExit`'s `param_1`..`param_3` stay refused: the body reads only `param_4`/`param_5`.
 
 Struct fields: 313 -> 311 components, 23 -> 20 auto.  Parameters: 365 -> 363.
+
+## `char_sheet_t+0x52` is `level` -- the "dual use" was a base conflation (20 -> 19)
+
+The refusal said this byte was used two incompatible ways: as a per-class table index and as a
+signed pixel offset.  Checking the *base* of the second use shows it is not the character sheet at
+all:
+
+```c
+uVar5 = *(undefined4 *)(uStack_22 * 0x34 + 0x1d);      /* agnt->gdata, not a sheet */
+iStack_28 = ... + (int)*(char *)((int)uVar5 + 0x52) + -0x16;
+```
+
+`agnt_t+0x1d` is `gdata`, so that access is **`agntG_t+0x52`**.  The sheet has exactly one use, and
+it is decisive:
+
+```c
+uVar2 = *(byte *)((int)uVar1 + 0x52) + 1;
+if (*(byte *)(iVar4 + 0xf) < uVar2) uVar2 = *(byte *)(iVar4 + 0xf);   /* clamp to agnt->level */
+if (0x24 < uVar2) uVar2 = 0x24;                                      /* 36 */
+bStack_3 = *(byte *)((int)uVar1 + 0x2f);                             /* cls */
+piVar3 = (int *)((uint)bStack_3 * 0x94 + uVar2 * 4);                 /* 0x94 = 37 * 4 */
+LUDIV_at_(*piVar3, piVar3[1], 0x1e, 0);
+```
+
+A per-class table whose stride is exactly `37 * 4`, indexed by the byte clamped to `level` and to
+36, is a per-level progression table; the byte is therefore the sheet's **`level`**, and the
+already-named `levelLimit` at `+0x53` is its cap.  Field renamed to `level`.
+
+### Correction: `agntG_t+0x52` *is* read
+
+The earlier note said `agntG_t+0x52`/`+0x94` have no access at all.  That was wrong for `+0x52`:
+I had searched for the stride form (`* 0x95 + 0x52`) and missed the pointer form.  The real read is
+the one quoted above, a **signed byte added to a screen y** (`- 0x16`), i.e. a per-unit-type
+vertical offset.  Dumping `AgntGs` (`195d:26d6`, stride 0x95) shows the byte is 0 in eleven of the
+thirteen sampled records and 8 in one, which fits an offset that is normally zero.  It stays
+generated because nothing in the export writes it -- the table is constant data.
+
+`agntG_t+0x94` remains refused: its data is meaningful (5, 20, 40 across the sample) but no function
+in the export reads it.
+
+## `ovc18_textTypeLen`'s remaining slots - refused with call-site evidence
+
+| slot | evidence |
+|---|---|
+| `param_3` | every call site passes `(int *)0x0`, and the body only tests `(char)param_3 == 0` before forwarding it into `ovc18_textBathHouse`'s already-refused flag slot |
+| `param_4` | the body only does `*param_4 -= <count of resource-3 records>`; callers pass split stack words (`CONCAT11(...)`, `unaff_DI`), so the pointee has no recoverable meaning |
+| `param_5`, `param_6`, `param_7`, `param_9` | never read anywhere in the body |
+
+Struct fields: 311 components, 19 auto.
