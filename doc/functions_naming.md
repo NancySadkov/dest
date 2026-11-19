@@ -715,3 +715,40 @@ recovered by decompiling on demand.
 The parameter and local axes were re-scanned on the refreshed export and returned nothing new: auto
 params stored into a named struct field: 0; auto locals assigned from a named global: 0; auto params
 multiplied by a known record stride: 1, in the deliberately-untouched `OVC22_5087_056e`.
+
+### Twenty-sixth batch: 10 more names from the string-literal candidates
+
+| old | new | evidence |
+|---|---|---|
+| `ovc23_textUnitDrowns` | `ovc23_drownUnitsAt` | marks the cell flags with 3, then kills every
+entity at (x,y) reporting `"%s unit drowns.  (%d, %d)"` |
+| `stats_usesDrawAgntStats` | `stats_setAgentBase` | moves the agent's entity to the cursor and
+reports `"%s is now based at (%d, %d). This unit will remain home when attracted."` |
+| `manage_textAllUnitsDisplayed` | `manage_applyUnitFilter` | sets `unitTypeFilter = unitType` and
+`partyFilter = partyIndex`, redraws and prints which filter is active |
+| `season_textBuildingRepaired` | `season_repairBuildings` | runs the repair pass and reports
+`"%d building%s repaired."` |
+| `ovc25_textIntelligenceReportsAttacking` | `ovc25_intelAttackingNotice` | emits
+`"Intelligence reports %s attacking."` |
+| `ovc38_textGreatAchievements` | `ovc38_showAchievements` | loads the high-score table, blits the
+save panel and runs the menu -- the "Great Achievements" screen |
+| `ovc22_textDecreaseMessageDelay` | `ovc22_spawnForLeaders` | the literal is only an address base;
+the body loops the leaders, applies the per-class chance against `sheet+0x2e` and spawns through
+`ovc22_usesRandBelow2` |
+| `ovc27_textCastsSpell` | `ovc27_spellNotice` | formats `"%s casts a %s spell %s %s."` |
+| `ovc24_textIntelligenceReportsUnit2` | `ovc24_intelUnitReport` | formats the per-unit intelligence
+report (cured of disease/poison, blast spore variants) |
+| `ovc27_textIntelligenceReportsAttacking` | `ovc27_intelAttackingNotice` | emits
+`"Intelligence reports %s attacking."` |
+
+Two of these are worth flagging as near-misses caught by reading the body rather than the literal:
+`ovc22_textDecreaseMessageDelay`'s string is `"Decrease message delay" + 5`, an address, not a
+message it prints -- the body is a spawn pass; and `draw_textProvidesMoreHousing` / `ovc42_text`
+`ProvidesMoreHousing` are modal input loops that use their strings the same way, so they stay
+unnamed.
+
+Refused in the same batch: `ovc27_textCharmed` (its prototype has locked storage and the body is
+flagged as having moved the stack pointer -- a fragment, not a clean function), `ovc18_textArena`
+and the five `*_textArena*` helpers (the string is used only as a non-zero return value),
+`stats_textShortSword`/`ovc28_textHalflingCastle` (plain name lookups), and
+`draw_textGoldProvidesHousing`.
