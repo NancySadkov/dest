@@ -976,3 +976,24 @@ uses `gdata->prts[portraitIndex]` -- the agent type's portrait |
 reads it, allocates a heap block, `memcpy`s the data and caches the handle in the record |
 
 Mechanical names: 580 -> 572.
+
+### Thirty-seventh batch: the ovc13 panel family + one allocator
+
+The six remaining `ovc13_uses*` functions all draw the on-map panel, and their bodies differ only in
+which globals they filter on.  That filter set is the evidence for each name:
+
+| function | filters on | new name |
+|---|---|---|
+| `3d16:06a2` | `PanelGridX/Y` + `GLeaderCount` | `ovc13_drawPanelLeaders` |
+| `3d16:135d` | `Highlight1` + `GLeaderCount` | `ovc13_drawPanelHighlight` |
+| `3d16:1b3b` | `Highlight1` + `unitType` | `ovc13_drawHighlightedUnits` |
+| `3d16:0255` | `PanelGridX/Y` + `EntityCount` | `ovc13_drawPanelEntitiesAll` (the type-filtered one
+is the already-named `ovc13_drawPanelEntities`) |
+| `3d16:0c22` | `(x,y)` parameters, `y*3` and `x*2` | `ovc13_drawPanelCell` |
+
+Also named: `4b0a:08ee ovc20_usesPADD_at_` -> `ovc20_allocBlock` (guards on `StshCount < 0xd93`,
+rounds the size with `LXMUL_at_`, returns the padded block).
+
+Refused: `5d45:06f0 ovc26_usesRandBelow` (a spawn routine whose out-flag semantics are not stated).
+
+Mechanical names: 572 -> 566.
