@@ -2217,3 +2217,41 @@ Globals: 167 -> 165.
   `ovc26_usesStExit`; no reader exists, so they are counters with no recoverable meaning.
 
 Both stay unnamed by design; the evidence above is the reason, not a guess.
+
+## Construction projection tables are arrays (157 globals)
+
+`init_computeMaxSquares` (`3381:17e8`) fills the projection tables in three loops:
+
+* `cStack_f = 8..0`: `rowMapSquareEnd`, `rowMapSquareFirst`, `ScreenOriginY`, `ScreenOriginX`
+  -- **9 words each**;
+* `cStack_f = 2..0`: `rowBandSquareEnd`, `rowBandSquareFirst`, `RowScreenY`, `RowScreenX`
+  -- **3 words each**;
+* `GSMaxSquare = 0..0x24` (36): `squareSide`, `squareColumn`, `SquareRightX`, `SquareLeftX`,
+  `SquareBottomY`, `SquareTopY` -- **36 words each**.
+
+The named bases had been typed as single `undefined2`, so the last element of each short array
+carried its own auto label (`word_..._0396/039C/03A2/03A8/05B4/05C6/05D8/05EA`).  The new
+`RetypeArray.java` cleared and recreated the ranges as `uint16_t[N]`, which absorbed those eight
+labels and restored the two missing X arrays (`RowScreenX` at `2000:cdd8`, `ScreenOriginX` at
+`2000:d00e`), whose slots were only written by raw `ES:` stores in the initializer.  The eight
+interior labels were then deleted with `RemoveSyms`.
+
+Re-decompiling `constr_usesBlitGfxRect2` now shows the arrays and the X coordinate:
+
+```
+for (uVar5 = ((uint16_t *)rowBandSquareFirst)[dy]; uVar5 < rowBandSquareEnd[dy]; ...) {
+  blit(..., ((uint16_t *)RowScreenX)[dy] - iStack_18, ...);
+  ... ((uint16_t *)RowScreenY)[dy] - iStack_14 ...
+}
+```
+
+**Globals: 165 -> 157.**
+
+### Note on the `1539:*` auto words
+
+`init_computeMaxSquares` addresses some tables with `ES = 0x2410` at offsets `0x0`, `0x360`,
+`0x6c0`, `0xa20`, `0xd80`, `0x1440`; those low offsets match the six auto symbols at
+`1539:0000/0360/06c0/0a20/0d80/1440`.  `1539` is the MZ image of an overlay data segment that the
+loader places at a runtime segment (`0x2410` in the code), so the Ghidra address and the code
+address differ by an unresolved overlay mapping.  Those six stay unnamed until that mapping is
+established; naming them from the offsets alone would be a guess.
