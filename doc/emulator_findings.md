@@ -223,3 +223,16 @@ or per-faction definitions, not live player state, and the demo cannot be used t
 
 The same data does confirm the records' shape: 192 bytes each, a `(count, segment)` header whose
 segment points back at the record itself, and the name inline at `+4`.
+
+## `agntG_t+0x94` is independent of every other numeric field in the record
+
+Comparing the live 42-record table, the byte at `+0x94` equals no other field except by chance:
+
+```
+dmgDice 0/42   dmgSides 0/42   levelLimit 0/42   rank 0/42
++0x3e   0/42   +0x3f    0/42   nanims     0/42   flags-lo 0/42   strength 4/42 (coincidence)
+```
+
+while its own values are exactly `05 0A 14 1E 28` (5, 10, 20, 30, 40).  So it is not a copy of a
+stat already named in the record; whatever it measures is carried only by this byte, which is why
+it stays refused with the distribution recorded.
