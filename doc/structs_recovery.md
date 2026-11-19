@@ -7083,3 +7083,20 @@ Parameters: 297 -> 296.
 base of a specific table, which fixes the name without guessing.
 
 Parameters: 292 -> 287 (17.5%).
+
+## Five parameters and three locals from the exhausted-scan sweep
+
+| function | slot | name | evidence |
+|---|---|---|---|
+| `ovc41_pluralSuffix` | `param_1` | `count` | tests `== 1` to choose the singular/plural form |
+| `ovc41_compute2` | `param_1` | `count` | same test (byte-identical twin) |
+| `ovc41_isAre` | `param_1` | `count` | same test |
+| `ovc30_nextWave` | `param_1` | `flags` | read as a bit field (bit 0 and bit 1) |
+| `bldng_selectBuildingType` | `param_1` | `partyIndex` | indexes the party-sheet table
+(`bldng_getClass(slot)`) |
+| `bios` (1000:1d59) | `local_8` | `cursorPos` | saved with `_wherexy()` and restored with
+`moveto(&cursorPos)` |
+| `bios` | `local_4` | `srcScreenOfs` | `screenpos()` of the source buffer pointer |
+| `bios` | `local_6` | `vramScreenOfs` | `screenpos()` of the VRAM pointer |
+
+Parameters: 287 -> 282 (17.2%).  Locals: 94 -> 91 (13.2%).

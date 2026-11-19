@@ -831,3 +831,13 @@ Parameters: 292 -> 287.
 Refused in the same pass: `driver_zeroWords`' second parameter and
 `attact_usesEntityCount2`'s second parameter (both unused -- the bodies read the value from the
 stack slot instead), and `midPlaySequence`'s only parameter (a `swi(0x66)` trampoline).
+
+### Twenty-ninth batch
+
+| old | new | evidence |
+|---|---|---|
+| `ovc41_textFailsTurn` | `ovc41_turnUndeadNotice` | rolls the turn-undead attempt and reports
+`"%s fails to turn."`, `"%s cannot turn."` or `"%s turns %d undead."` |
+
+The remaining string-bearing candidates are all in the two refused classes recorded in the previous
+batch (literal-as-return-value, locked-storage fragments) or are the multi-message dispatchers.
