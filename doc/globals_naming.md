@@ -2002,3 +2002,26 @@ temporaries (`d0a2..d0aa`, `d0d0..d0e6`, `d163/d165`, `5dee/5df2`) whose stores 
 and whose readers live in the unrecovered overlays.
 
 Globals: 222 -> 197 (7.7% auto-named).
+
+## Third BSS/DGROUP pass: 4 more globals (197 -> 193)
+
+| address | name | evidence |
+|---|---|---|
+| `2410:07e2` | `animBranchCode` | set to a distinct code (3, 4, 5, 6) on each branch of the agent
+animation state machine immediately before `agnt_usesAnimFrame`, cleared to 0 by both reset paths |
+| `2000:d2d6` | `cursorRecordFound` | set when the 0x12-stride map-record scan finds a record
+covering the cursor; the caller returns early with `CurSfxType3 = 0x70`, and `agnt_isAnimating`
+counts it as activity |
+| `2000:d2e2` | `strongholdCheckPending` | cleared during setup, set by the map update; the draw
+state machine calls `ovc24_checkStrongholds` only when it is non-zero |
+| `2410:02f4` | `messageDelayTicks` | saved as a single byte between `unitUpdateTimer` and `GameTick`,
+and used as `value << 4` timer ticks while the victory screen waits |
+
+Refused this pass, with reasons: the audio driver pointer block `2000:066e..06be` (four functions
+assign it from `stshStoreFile_2("*.com"/"*.adv")` results, but *no reader exists* in the export, so
+the per-entry meaning is in the unrecovered driver loader); `2000:ccb0` (indexed as a byte table and
+also used as a length bound, so its meaning is the structure that follows it); and
+`2000:ca9b` (assigned into `GOngoingBattle` and toggled, i.e. a battle-state mirror whose semantics
+are the caller's, not its own).
+
+Globals: 197 -> 193 (7.5%).
