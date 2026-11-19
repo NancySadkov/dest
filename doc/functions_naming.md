@@ -1134,3 +1134,13 @@ Parameters: 266 -> 247 (15.0%).  Gate: checked 71 failures 0.
 | `bldng_compute2` | `param_1`, `param_2` | `buildType`, `leader` | indexes the 0x27-stride `BuildingTypes` table with `param_1`; compares `param_2` with `manage_findFirstLeader()` |
 
 Parameters: 247 -> 238 (14.5%).  Gate: checked 71 failures 0.
+
+### Parameters batch 4: direction and thresholds
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `ovc22_compute3` | `param_1` | `direction` | adds 6 to negative values; callers pass `dir`, `dir+1`, `dir-1` and add the result to `dir - dir % 6` |
+| `ovc27_usesRandBelow4` | `param_1`, `param_2` | `level`, `threshold` | called as `(entity.level, 4/10)` and `(entity.level, 1)`; returns 0 below, 1 above, 1/8 at equality |
+| `ovc41_usesAgnt_clear` | `param_1` | `playSound` | the flag only gates `play_sfx(6,0)` |
+
+Parameters: 238 -> 234 (14.2%).  Gate: checked 71 failures 0.
