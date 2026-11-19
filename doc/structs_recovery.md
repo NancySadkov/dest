@@ -7127,3 +7127,11 @@ parameter (both phantom -- the body reads the count from the stack slot instead)
 locals that are declared but never referenced (`1403:0eca local_22`, `2e25:130a local_32`,
 `3381:17e8 local_1d`, `3381:2101 local_306`, `3b1d:1ad8 local_c`, `3d16:005b local_1e`, ...), which
 cannot be named from a use because they have none.
+
+## Four more parameters: the to-hit ramp columns
+
+`ovc27_rollToHitEntity` and `ovc27_rollToHitAgent` both take `(agnt, column)`: the first word is the
+agent record (entity pointer at +0x17, or level at +0xf with gindex at +0xd) and the second indexes
+the `RampTables` entry (`[column + 1]`) and is compared with 3 for the ability-column modifier.
+
+Parameters: 272 -> 268 (16.3%).

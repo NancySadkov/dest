@@ -1018,3 +1018,24 @@ Refused: `ovc22_usesGUnitGrid` / `ovc22_usesGUnitGrid2` (same shape but their ex
 and `ovc22_usesAlignUp4`.
 
 Mechanical names: 566 -> 561.
+
+### Thirty-ninth batch: combat resolution and two to-hit rolls
+
+| old | new | evidence |
+|---|---|---|
+| `ovc41_usesAnimFrame2` | `ovc41_settleAgentCombat(a, b)` | applies the combat outcome to agent `b`:
+returns when it is already dead, otherwise (after optionally running the AI via `ovc41_compute4`) it
+either zeroes `strength`, sets `timer = 0xa` and `combatState = 2`, or restores `strength` from the
+type record with `timer = 6` |
+| `ovc27_usesRandBelow6` | `ovc27_rollToHitEntity(agnt, column)` | walks `RampTables[faction]` while
+the ramp value is below the level byte, reads `[column+1]`, subtracts the ability modifier for
+column 3, and succeeds when `randBelow(0x14)+1` is below that value; the level comes from the entity
+(`+0x17 -> +0xf`) |
+| `ovc27_usesRandBelow7` | `ovc27_rollToHitAgent(agnt, column)` | the same roll, with the level taken
+from the agent itself (`+0xf`) and the faction from its `+0xd` type record |
+
+The `agnt`/`column` parameter names are evidence-pinned: `param_1` is the agent record in both, and
+`param_2` indexes the ramp entry (`[param_2 + 1]`) and is compared with 3 for the ability column.
+Parameters: 272 -> 268.
+
+Mechanical names: 561 -> 555.
