@@ -2036,3 +2036,26 @@ Refused this pass: `2410:6a88` (saved byte with a single writer that stores 0, r
 defeat test -- no vocabulary), `2000:0768` (cleared at the start of a saveui message and tested in
 the new-world dialog), `2410:5ce4` (selects the wide-menu cursor path for items >= 0x7f, but the
 layout it selects is not described anywhere), and `2410:0728` (used as a blit y origin).
+
+## Fifth pass: 2 more globals (192 -> 190)
+
+| address | name | evidence |
+|---|---|---|
+| `2410:5cf0` | `keyboardInputMode` | set to 1 immediately before `uiInputText` and cleared by every
+menu handler; read as `value == 0 || MouseMoved != 0` to choose the keyboard path (the 0x24 scan code) |
+| `2410:5ce4` | `menuBarShown` | when set, menu items with id ≥ 0x7f are laid out horizontally
+(`x = (id-0xfc)*0x44+10`, `y = 0xb0`) instead of the vertical list; cleared with the menu |
+
+### `2410:26f7` is the AgntGs array, and why it is still unconverted
+
+This label is the **only** access path to the agent-type records in the export (126 references): the
+code reads `(int)&data_[6].seg + 1 + g*0x95`, `(int)&data_[9].ofs + 1 + g*0x95`, etc. -- the 0x95
+stride and the field usage (`gdata->flags`, `gdata->name`, `gdata->stdint_h_uint8_t`) are exactly the
+`AgntGs` record, which is labelled at `195d:26d6`.
+
+Naming this blob `AgntGs` would create **two symbols with the same name at different addresses**
+(2410:26f7 here, 195d:26d6 there), which is worse for the export than a documented alias.  The
+correct fix is to establish which segment mapping the code really uses for the table -- that is a
+listing-level decision, not a rename.  Recorded as a refusal with the evidence above.
+
+Globals: 192 -> 190 (7.4%).
