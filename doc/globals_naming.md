@@ -2308,3 +2308,32 @@ segment; the array replaces it.  The four auto bytes at `0002`, `003f`, `0053`, 
 interior bytes of entries 0, 15, 20 and 36 and are deleted.
 
 **Globals: 151 -> 147.**
+
+## `randomFeatureCount` at 2000:ccb0 (146 globals)
+
+`init_usesRandBelow2` stamps random terrain features in a loop bounded by this byte:
+
+```
+for (i = 0; i < randomFeatureCount; i++) {
+  x = randBelow(0x93); y = randBelow(0x3b);
+  min = min(cell(x,y), cell(x+1,y), cell(x,y+1), cell(x+1,y+1));
+  setMapCell(x,y,min); ... setMapCell(x+1,y+1,min);
+}
+```
+
+`init_usesClearEntities` sets it to `randBelow(0x14)` before a demo and to `0x14` (20) when a
+game is running.  The earlier address `ccb0` also appears in `append_name_to_path`, but only
+as `((byte *)&ccb0)[l]` with `l > 0`, i.e. `GStaticBuffer[l-1]` (the buffer starts at `ccb1`),
+so that is an address-alias artifact, not a real read.
+
+**Globals: 147 -> 146.**
+
+### Refused: 17f8:0000/0002/0013 (the 0x13-byte square-record array)
+
+`attact_usesSquareRecCount` and `unit_usesAlignUp42` index records of stride `0x13` at
+`17f8:SquareRecCount*0x13` with x at +0 and y at +2, and the allocator caps `SquareRecCount` at
+299.  That makes `17f8:0000/0002` the first record's x/y and `17f8:0013` the second record's x
+(the old `game4State`/`game4InitState` names).  But the same block also holds `ExitStart`
+(`09ae`) and `ExitEnd` (`09b4`), which are not record-aligned, so typing the whole segment as a
+record array would overwrite live labels with a guess.  Left unnamed pending a map of the
+block's non-record part.
