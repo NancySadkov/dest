@@ -957,3 +957,22 @@ The six globals named in the brief were each dumped in full:
 offset/segment split -- refused rather than guessed |
 
 Globals stay at 190; mechanical names: 585 -> 580.
+
+### Thirty-sixth batch: five more from call profiles
+
+| old | new | evidence |
+|---|---|---|
+| `saveui_usesStshFree` | `saveui_freeLines` | frees each non-null far-pointer entry (guarded by an
+`ofs != seg` strcmp) and zeroes it -- the partner of `saveui_readLine` |
+| `stats_usesAlignToSeg` | `stats_openCastlePanel` | allocates a `0xfa0f` screen buffer, fills
+(8,7,0xe2,0xc2), blits the full-screen background and `nwpanel2Cut1`, installs the `Lbm_nwpanel1`
+season palette, draws the castle panel text and the five menu bars, then sets `mapViewActive = 0xff` |
+| `season_compute1` | `season_checkEndGame` | takes the leader's type band (`ovc30_compute1`) and,
+once per band (flag array `2000:0999`), runs the end-of-game score screen
+`season_textHalflingCastle(0)` |
+| `stats_usesBlitGfxRect` | `stats_drawPortrait` | loads `talkwin9Cut5`, builds the season palette and
+uses `gdata->prts[portraitIndex]` -- the agent type's portrait |
+| `stash_usesFmMalloc` | `stash_loadFromStrongDat` | seeks `StshStrongDatHnd` to the entry offset,
+reads it, allocates a heap block, `memcpy`s the data and caches the handle in the record |
+
+Mechanical names: 580 -> 572.
