@@ -2247,96 +2247,27 @@ for (uVar5 = ((uint16_t *)rowBandSquareFirst)[dy]; uVar5 < rowBandSquareEnd[dy];
 
 **Globals: 165 -> 157.**
 
-### Note on the `1539:*` auto words
+### The `1539:*` words are 432-word map-square arrays
 
-`init_computeMaxSquares` addresses some tables with `ES = 0x2410` at offsets `0x0`, `0x360`,
-`0x6c0`, `0xa20`, `0xd80`, `0x1440`; those low offsets match the six auto symbols at
-`1539:0000/0360/06c0/0a20/0d80/1440`.  `1539` is the MZ image of an overlay data segment that the
-loader places at a runtime segment (`0x2410` in the code), so the Ghidra address and the code
-address differ by an unresolved overlay mapping.  Those six stay unnamed until that mapping is
-established; naming them from the offsets alone would be a guess.
+`init_computeMaxSquares` fills six per-map-square tables with `ES = 0x2410`, and Ghidra's
+overlay relocation resolves those stores to the six symbols at `1539:0000/0360/06c0/0a20/`
+`0d80/1440`.  The stores give each offset its role:
 
-## Band-origin tables at DGROUP:0728/074b (151 globals)
+| offset | name | store in `init_computeMaxSquares` |
+|---|---|---|
+| `0000` | `mapSquareSide` | `ES:[GMaxSquare*2 + 0] = 0/1/2` |
+| `0360` | `mapSquareColumn` | `ES:[GMaxSquare*2 + 0x360] = column` |
+| `06c0` | `mapSquareRightX` | `... + 0x6c0 = leftX + width` |
+| `0a20` | `mapSquareLeftX` | `... + 0xa20 = iStack_a + uStack_14` |
+| `0d80` | `mapSquareBottomY` | `... + 0xd80 = topY + height` |
+| `1440` | `mapSquareTopY` | `... + 0x1440 = iStack_c + uStack_12` |
 
-The initializer reads two staggered byte tables and builds the projection origins from them:
+Each is 432 words because the loop guards on `0x1af < GMaxSquare` (0x1b0 = 432).  The bases
+are 0x360 bytes apart and the last ends exactly at the block end (0x1440 + 0x360 = 0x17a0); the
+0x10e0 slot between `mapSquareBottomY` and `mapSquareTopY` is unused (no reference).  Retyped
+all six as `uint16_t[432]`; the six `word_1539...` autos are absorbed.
 
-```
-ScreenOriginY[b] = bandOrigin[b]   + scale[b]*0x38/0x10;
-ScreenOriginX[b] = bandOrigin[b+1] + scale[b+1]*0x38/0x10;   // 9 bands, b = 0..8
-RowScreenY[b]    = rowBandOrigin[b]   + scale[b]*0x3c/0x30;
-RowScreenX[b]    = rowBandOrigin[b+1] + scale[b+1]*0x3c/0x30; // 3 bands, b = 0..2
-```
-
-The data confirms ten descending bytes in each table:
-
-* `bandOrigin` at `2410:0728`: `4E 49 47 45 43 41 40 3F 3E 3D`;
-* `rowBandOrigin` at `2410:074b`: `1F 1C 19 16 10 0C 06 04 02 01`.
-
-They are now `uint8_t[10]`; the four auto bytes at `0730/0731` and `074d/074e` were the last
-elements of those tables and are deleted (the arrays absorb them).
-
-**Globals: 157 -> 151.**
-
-### Refused: `2410:073c` / `0740`
-
-`2410:073c..0741` is a six-byte descending table (`0D 0A 05 03 02 01`) read as `[SI+0x73c]`
-and `[SI+0x73e]` and subtracted from corner heights in `ovc23_usesCornerBR` and
-`constr_usesBlitGfxRect2`; `0x740` is an interior element reached with SI=4.  What SI means
-(corner index, shade level, ...) and therefore what each element names is not established, so
-the table stays unnamed rather than guessed.
-
-## `GLeaderSheets` at 217a:0000 (147 globals)
-
-Segment `217a` (320 bytes) is one table.  The allocator in `ovc30_usesFmFreeAudio` shows the
-whole protocol:
-
-```
-if (0x4f < GLeaderCount) stExit(0x21);        // 0x50 entries maximum
-sheet = stshAlloc_2(0xae);                    // char_sheet_t is 174 bytes
-*(uint16 *)(GLeaderCount*4)     = sheet;      // offset
-*(uint16 *)(GLeaderCount*4 + 2) = in_DX;      // segment
-GLeaderCount++;
-```
-
-`freeLeaderData` frees `ES:[i*4+2]:ES:[i*4]` for `i < GLeaderCount`, and
-`manage_mapPartySlots` indexes the same table by `i*4` when it builds `MenuItemEnabled`.
-So `217a:0000..013f` is exactly **80 far pointers** to `char_sheet_t`, now typed
-`char_sheet_t *32[80]` and named `GLeaderSheets`.
-
-The old `StatsSeg` symbol at `217a:0000` was the offset word of entry 0, not a statistics
-segment; the array replaces it.  The four auto bytes at `0002`, `003f`, `0053`, `0092` were
-interior bytes of entries 0, 15, 20 and 36 and are deleted.
-
-**Globals: 151 -> 147.**
-
-## `randomFeatureCount` at 2000:ccb0 (146 globals)
-
-`init_usesRandBelow2` stamps random terrain features in a loop bounded by this byte:
-
-```
-for (i = 0; i < randomFeatureCount; i++) {
-  x = randBelow(0x93); y = randBelow(0x3b);
-  min = min(cell(x,y), cell(x+1,y), cell(x,y+1), cell(x+1,y+1));
-  setMapCell(x,y,min); ... setMapCell(x+1,y+1,min);
-}
-```
-
-`init_usesClearEntities` sets it to `randBelow(0x14)` before a demo and to `0x14` (20) when a
-game is running.  The earlier address `ccb0` also appears in `append_name_to_path`, but only
-as `((byte *)&ccb0)[l]` with `l > 0`, i.e. `GStaticBuffer[l-1]` (the buffer starts at `ccb1`),
-so that is an address-alias artifact, not a real read.
-
-**Globals: 147 -> 146.**
-
-### Refused: 17f8:0000/0002/0013 (the 0x13-byte square-record array)
-
-`attact_usesSquareRecCount` and `unit_usesAlignUp42` index records of stride `0x13` at
-`17f8:SquareRecCount*0x13` with x at +0 and y at +2, and the allocator caps `SquareRecCount` at
-299.  That makes `17f8:0000/0002` the first record's x/y and `17f8:0013` the second record's x
-(the old `game4State`/`game4InitState` names).  But the same block also holds `ExitStart`
-(`09ae`) and `ExitEnd` (`09b4`), which are not record-aligned, so typing the whole segment as a
-record array would overwrite live labels with a guess.  Left unnamed pending a map of the
-block's non-record part.
+**Globals: 143 -> 137.**
 
 ## `timeOfDayGfx` is `far_t[12]` at 2000:d133 (144 globals)
 
