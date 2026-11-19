@@ -686,3 +686,32 @@ self-contradictory and deliberately untouched.
 Refused in the same batch: `ovc15_textError` and `ovc18_textTypeLen` (complex panel renderers whose
 literals name only some of their sections), `draw_textProvidesMoreHousing` (an input-wait loop that
 uses the housing string only as an address for a return code), and `draw_textGoldProvidesHousing`.
+
+### Twenty-fifth batch: 7 message emitters named from their format strings
+
+`tmp/mech_strings2.py` was fixed to take the *current* name by address from `tmp/funcs35.tsv`
+instead of the stale signature line in the export, so renamed functions drop out of the candidate
+list (73 remained).  The literals can also be read as evidence of a function's purpose:
+
+| old | new | evidence |
+|---|---|---|
+| `ovc38_textShighTxt2` | `ovc38_saveHighScores` | creates `"%shigh.txt"` and writes the six far
+pointers, skipping empty entries -- the writer paired with `ovc38_loadHighScores` |
+| `stats_textReadied` | `stats_readyStatusText` | formats `"  %s is not readied."` /
+`"  %s is ready."` from `flags32` bit 0 |
+| `ovc41_usesDrawTextAt` | `ovc41_unitStatusText` | formats `"The %d unit%s loyal to %s %s %d%%
+recruiting, %d%% training, and %d%% building."` |
+| `stats_textNowCalledAway` | `stats_calledAwayNotice` | formats `"%s can now be called away from
+home."` |
+| `ovc25_textAttacking` | `ovc25_attackingNotice` | formats `"%s is attacking."` |
+| `ovc41_textBuilding` | `ovc41_buildingNotice` | formats `"Building %d %s."` |
+| `ovc41_textCannotSeeTerrain` | `ovc41_cannotSeeTerrainNotice` | prints `"You cannot see the terrain
+here."` |
+
+Also checked and dismissed this pass: the 164 non-thunk functions absent from the decompiled tree
+are the DOS interrupt stubs (`DOS21::*`, size 1), not real bodies, so nothing is missing that can be
+recovered by decompiling on demand.
+
+The parameter and local axes were re-scanned on the refreshed export and returned nothing new: auto
+params stored into a named struct field: 0; auto locals assigned from a named global: 0; auto params
+multiplied by a known record stride: 1, in the deliberately-untouched `OVC22_5087_056e`.
