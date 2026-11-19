@@ -6817,3 +6817,50 @@ it), so the body was reset explicitly to the two contiguous ranges `4d05:1bee-1d
 `4d05:1d70-2009` (1050 bytes), dropping the distant `4d05:212c-2167` fragment.
 
 New tools: `AddParam.java`, `SetReturn.java`, `SetBody.java`.
+
+## 7 parameters: the corner-shading triple and a repeated flag
+
+| function | parameters | evidence |
+|---|---|---|
+| `driver_compute1`, `driver_compute2` | `cornerA`, `cornerB`, `cornerC` | their only call sites
+pass the same three terrain corner samples that `constr_compute1/2` already carry under those
+names (`ovr_driver_compute1(cornerA, cornerB, cornerC)` in the constr module, and three sampled
+corner bytes in `constr_usesGMapFlags2`); the bodies reduce the sum and the difference of the
+three to a small shading level |
+| `attact_usesSCARRY22` | `ignoreBlocked` | its fourth slot carries the same test as
+`attact_usesSCARRY2`: when the direction bit is set and the flag is zero it returns the opposite
+`GMapFlags` bit, otherwise it returns the bit itself -- i.e. non-zero ignores the blocker.  Its
+fifth slot returns the sign bit of the y step offset and stays unnamed |
+
+Parameters: 311 -> 304.
+
+## `ovc22_loop1` -> `ovc22_searchCellsAround`
+
+The body is a ring search, and the decompilation is short enough to read completely (131 lines):
+
+```c
+bVar2 = *(byte *)(sheet + 0x3f);           /* party's own kind */
+mask  = 0x1000 << (bVar2 & 0x1f);
+for (iStack_4 = 1; iStack_4 < 0x94; iStack_4++)
+  for (iStack_6 = 0; iStack_6 <= iStack_4; iStack_6++)
+    for (cStack_7 = -1; cStack_7 < 2; cStack_7 += 2)
+      for (cStack_8 = -1; cStack_8 < 2; cStack_8 += 2) { ... }
+```
+
+Each candidate is clipped to `3 < x < 0x90`, `0 < y < 0x3b` and tested against the party's own
+unit cell (`usesAlignUp4`/`GUnitGrid`), the map flags (`usesGMapFlags`, `usesGMapFlags2`), an
+arena (`textArena2`) and the party grid (`usesGUnitGrid2`); the first cell that passes the
+requested checks returns 1 with its coordinates written through the out pointers.  The mode byte
+selects the checks (bit0 arena, bit1 party grid, value 3 map flags).  When the whole spiral fails
+it sets bit 2 at `sheet+0x5d` (`no placement` mark) and restores x/y.
+
+Callers confirm the start point: `ovc22_usesRandBelow2` loads `x = sheet+0x39`, `y = sheet+0x3b`
+(the leader's position) and searches around it; `ovc22_textRingProt` does the same before
+drawing the ring.
+
+### `constrct_body1` is genuinely large
+
+`BodySegs` on `7e7c:0b9c` gives 6071 bytes in **14 fragments** spread over `0b9c..2375`, with only
+4-8 byte gaps between them (the overlay call stubs).  That is a real 6 KB function, not a
+cross-segment artifact, so it needs `SliceDecompile` over prefixes rather than `TrimBody`.
+`ovc22_loop1` by contrast was a clean single 1032-byte range and decompiled in one pass.

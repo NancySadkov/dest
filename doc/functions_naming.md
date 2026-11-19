@@ -143,3 +143,11 @@ height - 7`), or -1.  Parameters `x`, `y` |
 `money dealer's shop` and lists buildings with `"%s: %s %d gold. Feeds %d %s."`,
 `"Buildings belonging to %s%s"`, plus the `Census`/`Property`/`Auto-build`/`Next Leader` options;
 its parameter is the party-slot byte used to index the party-sheet pointer table |
+
+### Fifth batch
+
+| old | new | evidence |
+|---|---|---|
+| `ovc22_loop1` | `ovc22_searchCellsAround` | expanding-ring search (radius 1..0x94, four sign
+combinations) that returns the first cell passing the requested occupancy/flag/arena checks and
+writes its coordinates through the out pointers; sets bit 2 at `sheet+0x5d` when none is found |
