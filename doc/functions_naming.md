@@ -1236,3 +1236,11 @@ Parameters: 227 -> 191 (11.6%).  Gate: checked 71 failures 0.
 | `unit_usesAlignUp42` | `local_d` | `savedCursorY` | `savedCursorY[menuIndex] = menuCursorY[menuIndex]` |
 
 Parameters: 191 -> 189 (11.5%).  Locals: 86 -> 80 (11.6%).  Gate: checked 71 failures 0.
+
+### Parameters batch 11: the found flag handed to the message builders
+
+`land_info` passes the byte it receives from `ovc45_findEntityAt` as the first argument of
+`ovc45_textDone` / `ovc45_textDone2`, whose parameter is only tested with `if (param_1 != 0)`
+before choosing between the "nothing here" and the normal message.  That byte is the found
+flag produced by `ovc45_findEntityAt` (`*_foundFlag = 0/1`), so both `param_1`s became
+`foundFlag`.  Parameters: 189 -> 187.

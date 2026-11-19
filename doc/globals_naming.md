@@ -2420,3 +2420,31 @@ writer, and they are not shaped like init records (which start `01 01 24 0D ...`
 `boinit_t[5]` typing was already withdrawn.  They stay unnamed.
 
 **Globals: 65 -> 52.**
+
+## `2000:d0a2` = `sbfmAdvSeg` (51 globals)
+
+The audio-driver block `2000:d094..d0f3` is a run of far-pointer pairs written by
+`stshLoadAudioDrivers`.  The loader was re-read instruction by instruction: the string table at
+`2410:48d0` is `"sbfm.adv"`, `"sbp2fm.adv"`, `"sbp1fm.adv"`, `"pasfm..."`, and the store
+right after the `sbfm.adv` call is
+
+```
+4b0a:154a  CALLF 4000:c070        ; stshStoreFile_2(DS:0x48d0 == "sbfm.adv", ..., 1)
+4b0a:1555  MOV  ES:[0x8fa2],DX    ; segment  -> 2000:d0a2
+4b0a:155a  MOV  ES:[0x8fa0],AX    ; offset   -> 2000:d0a0 (= sbfmAdvOfs)
+```
+
+so `d0a2` is the segment half of the `sbfm.adv` handle.  The decompiler had printed the source
+as `pfVar2` (a stale register guess); the instruction above shows the pair comes from the same
+`stshStoreFile_2` return.  Re-decompiling now shows `sbfmAdvOfs = stshStoreFile_2("sbfm.adv",...);
+sbfmAdvSeg = ...;`.
+
+### Still refused in this block
+
+The remaining 15 autos (`d0a4..d0aa`, `d0d0/d0d2`, `d0d8..d0de`, `d0e4/d0e6`, `d0ee..d0f2`) are
+**cleared to zero or duplicated** by the loader rather than loaded from a named file: e.g. after
+the `sblaster.com` pair is stored the loader executes `MOV word ptr ES:[0x8fd2],0` /
+`ES:[0x8fd0],0`, and `d0d8..d0de` is written twice from the same return value.  With no reader
+and no file name attached, naming them would be positional guessing.
+
+**Globals: 52 -> 51.**
