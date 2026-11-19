@@ -365,3 +365,30 @@ an unidentified field), `ovc23_compute2` (`alignUp44(x,y)`, falling back to `x`)
 (`(dir % 6)` or `((dir/6) % 6)`, folded to -2..3 -- a direction component whose encoding is not
 stated), `agnt_compute14` (an index remap of a value above 8), and `constr_usesGOngoingBattle` (a
 two-way choice between two draw paths whose names are themselves mechanical).
+
+### Sixteenth batch
+
+| old | new | evidence |
+|---|---|---|
+| `video_compute1` | `video_pointInButton` | returns 1 when `(x,y)` falls inside the region
+recorded for column `x`: the y range is the word at `(x-0xc)*2 + 0x34c`, with `8 < x < 0xc9`.
+Callers pass `MouseX`/`MouseY`, so it is the button hit test |
+| `constr_usesGfxRndSeed` | `constr_getCellAtOffset` | reads
+`GMapCells[GfxRndSeed2 - dy][GfxRndSeed + dx]` with the map bounds check -- the cell at the
+drawing cursor offset by `(dx,dy)` |
+| `init_usesGMapFlags2` | `init_getMapFlags` | returns the flag bits of `GMapFlags[y][x]` inside
+the map bounds |
+| `manage_usesRandBelow` | `manage_rollDice` | rolls `count` dice of `sides` faces, summing
+`randBelow(sides) + 1` |
+| `ovc25_usesEntityCount2` | `ovc25_clearEntityFlags` | clears the byte at
+`Entities[i].base.entity+2` for every entity, then rebuilds the derived table
+(`ovc25_usesAlignUp47`) when entities exist |
+| `stats_usesBlitGfx10` | `stats_drawStatsPanel` | blits the full-screen stats background at the
+origin, then the `nwpanel1Cut3` panel to `0xa000:0adf` |
+| `stats_compute6` | `stats_selectAgentAt` | hit-tests the point with `video_findAgentAt` and, on
+a hit, opens that agent's stats page (`stats_usesAlignUp42`) |
+
+Refused in the same batch: `ovc49_compute1` (bounds `0..0xd2` then
+`*(int *)(param_1 * 2) == 0` with the base segment lost) and `ovc13_usesSeedD1102` (already carries
+`x`,`y`, but the `Seed_2000_d110`/`d10e` offset pair it applies to `GMapFlags` has no stated
+meaning).
