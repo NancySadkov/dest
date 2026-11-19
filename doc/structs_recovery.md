@@ -7216,3 +7216,20 @@ so the meaning (XP value, build cost or AI tier) is not decided and the field st
 char_sheet_t (OVC21_manage.c__chargen_switch.c:700) and a strategy record
 (OVC25__ovc25_textIntelligenceReportsAttacking.c:28), not the 0x34-byte gnt_t.  The earlier
 attribution to ovc49_agentIsActive is therefore withdrawn; the field is unread in the export.
+
+## `agnt_t+0x4`: `field_0x5` was the high byte of `targetX`
+
+`targetX` was typed `uint8_t`, so Ghidra split a 16-bit store into two byte components:
+`targetX` at +0x4 and an AUTO `field_0x5` at +0x5.  Three independent facts show the word:
+
+* `ovc41_textPoisons` clears both with consecutive byte stores (`paVar6->targetX = 0;
+  paVar6->field_0x5 = 0;`) right beside `targetY` -- one word clear in the source.
+* `entity_t` has the same field and is accessed as a word: `*(uint16_t *)&entity.base.targetX
+  = destX` in `ovc15_usesLDIV_at_.c:37`, and `*(uint16_t *)&entity.base.targetX` read in
+  `ovc14_attact_usesAlignUp43.c:95`.
+* The neighbours are words too: `targetY` at +0x6 is `uint16_t`.
+
+Merging the two bytes into `/stdint.h/uint16_t targetX` at +0x4 makes `agnt_t` 31 components.
+The first attempt with `MergeField` damaged the adjacent `targetY`, so the struct was rebuilt
+from an explicit 31-row layout with `RebuildStruct2` (comments preserved by the new
+`DumpStruct` script).  **Struct fields: 322 -> 321, generated 7 -> 6.**

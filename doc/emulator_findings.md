@@ -349,3 +349,29 @@ the per-type animation data used to settle `anm_t+0x13/+0x15/+0x17` (see
 * Heavy commands (`dump`, `regs`, `peek`) are queued while the CPU runs, and the queue only
   drains when the harness tick is active (a command such as `mabs`/`mick` sets it).  When in
   doubt: `halt`, run the heavy command (it executes synchronously), then `run`.
+
+## Loading a shipped save (working recipe)
+
+The main menu is keyboard-driven (`uiMenuSub`, 4528:0706): up/down move the selection and
+Enter (`0x1c0d`) activates it; Escape (`0x11b`) cancels.  Mouse hover only moves the
+highlight, so scripted menu navigation must use `key up` / `key down` / `key enter`.
+
+```
+ESC                              # from the attract demo -> main menu
+down down enter                  # New Game, Save Game, Load Game
+down x N, enter                  # save slot N (1-based)
+enter                            # Yes on "Game not saved! Are you sure?"
+up enter                         # Begin Play (last item, wraps from the top)
+```
+
+`game/STRONG.SAV/SAVE.000..005` are real saves; `SAVES.TXT` names them (Emperor Corak,
+Prince Corak, Duke Corak, Marquis Corak, Baron ojk).  Slot 5 gives a live animated empire
+(`GGameState` 8/44, `AgntCount` 1-2, `mabs` lands exactly: `MouseX = x/2`, `MouseY = y`).
+
+### The pick window is smaller than the map
+
+`video_usesMiceUnkState` only calls `video_findAgentAt` while `MouseX` is in `0x0c..0xde` and
+`MouseY` in `0x07..0x96`; outside that it returns a map/button cursor state.  In the loaded
+Emperor view the two live agents were at screen `(217,104)` and `(131,168)`, i.e. outside the
+window on one axis each, so the planned `anm_t+0x17` pick-box poke could not be exercised
+there.  It needs a view with a unit inside the window (scroll the minimap or load another slot).

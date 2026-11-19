@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn405/naming_summary.txt`.
+`tmp/auditn406/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -13,7 +13,7 @@ functions                1130
 parameters               1643   auto-named  266   (16.2%)
 locals                    692   auto-named  90   (13.0%)
 structs                    36
-  struct fields           322   generated     7   (2.2%)
+  struct fields           321   generated     6   (1.9%)
 globals                  2548   auto-named  175   (6.9%)
 ```
 
@@ -29,9 +29,9 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 | string labels | 1516 `s_*` labels from their own bytes (`doc/strings_renamed.tsv`) |
 | globals | 1096 -> 175 auto-named (26 previously unnamed DGROUP tables labelled, 74 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
 | structures | `spr_t`, `unit_t` and `entity_t` complete; `agnt_t` rebuilt as `agnt_t[52]` + `tick` + `dir`; `bld_inst_t` and most of `char_sheet_t` recovered |
-| struct fields | 266 -> 7 generated |
+| struct fields | 266 -> 6 generated |
 | typing | struct-typed arguments 80 -> 144; `_fmemmove`/`__fmovmem`/`memcpy` re-typed to `(far dst, far src, count)`; `blit_usesDrawGfx`'s rectangle parameter retyped `brect_t *`, which resolves its fields by name |
-| corrections | wrong names/types found by later evidence reverted (three pointer widenings, `OVC22_5087_056e`, `anm_t` block) |
+| corrections | wrong names/types found by later evidence reverted (three pointer widenings, `OVC22_5087_056e`, `anm_t` block, `agnt_t+0x5` merged into `targetX`) |
 
 ## What remains, and why it is not done
 
@@ -48,12 +48,12 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in
    total across 145 locals.  What remains needs per-body reading, and this session
    did 461 parameters that way (blit argument order, party-sheet indices, x/y pairs).
-3. **7 struct fields.** Each group has been re-examined at least three times.  The
+3. **6 struct fields.** Each group has been re-examined at least three times.  The
    two that are provably meaningful have irreducible conflicts the image cannot
    settle: `char_sheet_t+0x1b` is a word comparison widened to a dword, and
    `bldtp_t+0x0c` is a second lower bound beside the already-named `minBuildTime`.
    The rest are equality-only (`agnt_t+0x11/+0x24/+0x25/+0x2a`,
-   `agntG_t+0x52/+0x94`, `agnt_t+0x13`).
+   `agntG_t+0x52/+0x94`).
 
 ## Blocked on information the binary does not carry
 
