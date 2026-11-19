@@ -1154,3 +1154,13 @@ Parameters: 238 -> 234 (14.2%).  Gate: checked 71 failures 0.
 | `ovc41_buildingNotice` | `param_1` | `delta` | adds the argument to `unit.bldType` and wraps at 0xf7 (the debug building-type change) |
 
 Parameters: 234 -> 231 (14.1%).  Gate: checked 71 failures 0.
+
+### Parameters batch 6: map x, level, rank
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `ovc49_compute1` | `param_1` | `x` | called with `agnt->x`; range-checked to `0..0xd2`, then indexes a word table at `DS:[x*2]` |
+| `agnt_compute14` | `param_1` | `level` | its only caller is `agnt_compute15`, which passes `entity.level`; thresholds 9 and 0x10 |
+| `agnt_compute15` | `param_1`, `param_2` | `rank`, `level` | caller passes `agntG_t+0x42` (rank) and `entity.level`; compares `agnt_compute14(level)+2` with the rank |
+
+Parameters: 231 -> 227 (13.8%).  Gate: checked 71 failures 0.
