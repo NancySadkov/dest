@@ -1289,3 +1289,16 @@ became `count`, `src`, `dstSeg`; the signature now reads
 | `stats_textRingProt` | `param_1`, `param_2` | `dst`, `src` | `strcpy(param_1,(char *)param_2)` and `ovr_stsprintf(param_1,(char *)param_2,"+%d ring of prot.")` |
 
 Parameters: 174 -> 155 (9.4%).  Gate: checked 71 failures 0.
+
+### Parameters batch 17: long-math helpers and the paralysis pair (15 renames)
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `N_LDIV_at_` | `param_1`, `param_2`, `param_3` | `dividendLo`, `dividendHi`, `divisorLo` | the fast path evaluates `CONCAT22(param_2,param_1) / (ulong)param_3`; the divisor's high word arrives as `in_stack_00000008` |
+| `N_LUDIV_at_` | same | same | `CONCAT22(param_2,param_1) / (ulong)param_3` |
+| `N_LMOD_at_` | same | same | `CONCAT22(param_2,param_1) % (ulong)param_3` |
+| `LMOD_at_` | `param_1`, `param_2` | `dividend`, `divisor` | the function is `param_1 % param_2` |
+| `ovc41_textParalyzed` | `param_1`, `param_2` | `source`, `victim` | `paVar5 = (agnt_t *)param_2` is the agent whose `strength`/`combatState`/`targetY` are cleared, and the two status strings name the pair: `agnt_statusText(param_1,victimName)` / `agnt_statusText(param_2,sourceName)` |
+| `ovc25_usesAlignUp44` | `param_1`, `param_2` | `partyIndex`, `count` | `param_1` is compared with the entity party byte and `iVar4 < (uint)param_2` bounds the placement loop, the same pair as `ovc25_usesAlignUp43` |
+
+Parameters: 155 -> 140 (8.5%).  Gate: checked 71 failures 0.
