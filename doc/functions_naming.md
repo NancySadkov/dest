@@ -541,3 +541,53 @@ from the target |
 
 Refused in the same pass: `ovc41_usesMiceBlitRect` (restores the mouse area and draws the menu item,
 but the body is cut off in the export), `ovc41_compute8` and `draw_compute1`.
+
+### Twenty-first batch: 19 names from the 30-45-line tier
+
+| old | new | evidence |
+|---|---|---|
+| `manage_compute5` | `manage_abilityModifier` | maps a score to a modifier with the thresholds
+4/6/9/13/16/18 and the outputs -3..+3 |
+| `agnt_compute7` | `agnt_abilityModifier` | the identical table applied to
+`sheet->stats[abilityIndex]` (+0x29 base) |
+| `ovc41_compute10` | `ovc41_growthForLevel` | indexes the table copied from `growthTable` by
+`agnt->level` (`level*0xfa - 0xabe` above level 0x15), or takes the type value from `AgntGs` |
+| `constr_usesBlitRect2` | `constr_flushDirtyRects` | saves the mouse over both `BlitRects` entries,
+blits each dirty rect and frees the `0xfa0f` staging block |
+| `ovc15_textArena2` | `ovc15_selectLeftmostAgent` | keeps the agent with the smallest
+`screenX`/`screenY` and stores it in `SelectedAgent` |
+| `ovc15_textArena3` | `ovc15_selectRightmostAgent` | keeps the largest |
+| `constr_usesBlitGfxRect` | `constr_blitRowObjects` | walks `rowMapSquareFirst..End` and blits the
+building graphic when `bldtp_t.flags` (+0x10) has bit 0 or 2 set |
+| `attact_usesMenuItemEnabled` | `attact_countPartyUnits` | counts a party's entities that are off
+the cursor cell and whose `flags32+1` bit 1 is clear, capped at 0x50 |
+| `ovc23_usesAlignUp4` | `ovc23_tickRecordsAt` | stamps `GameTick` into every 0x12-stride record
+overlapping the column, decrements `+0xb` and sets `+0xe` at zero |
+| `ovc27_textTakesHalfDamage` | `ovc27_spellHalfDamage` | notifies
+`"%s takes half damage from spells."` for type 4 above level 15 or type 6 above level 8 |
+| `ovc27_textTakesHalfDamage2` | `ovc27_breathHalfDamage` | the same for
+`"%s takes half damage from dragon breath."` |
+| `driver_loop2` | `driver_fillSpan` | clips x1..x2 to `rect[0]`/`rect[2]` and y to
+`rect[1]`/`rect[3]`, then fills the span |
+| `ovc42_usesBlitGfx10` | `ovc42_drawTextRow` | sets `TextBlitX/Y` (`row*0xd + 0x9e`), blits the
+background for row 0 and the label in `demfont1` |
+| `ovc41_usesAgntCount2` | `ovc41_paralyzeNearbyAgents` | when the type record has bit 4 of +0x3e
+set, rolls against every agent within 0x32 pixels and calls `ovc41_textParalyzed` |
+| `manage_usesBlitGfxRect` | `manage_openTalkWindow` | sets `ScreenMode`, installs the `talkwin9`
+palette, fills `0xc,7..0xde,0x96` and blits `talkwin9Cut1/2/3` |
+| `manage_usesRandBelow3` | `manage_rollHitPoints` | sums `randBelow(classLimits[cls]) +
+abilityModifier(stats[4]) + 1` per race point into `hp[0]`/`hp[1]`, sets `statMask` bit 4 |
+| `ovc27_usesRandBelow2` | `ovc27_rollAgainstStat` | rolls 1..40 and succeeds when it does not
+exceed the owner's stat at `[mode]` (6 when unowned) |
+| `season_usesAlignUp4` | `season_countPromotable` | recomputes `GPromotableCount` by counting units
+whose four map-flag words OR to exactly 0x1000 |
+| `ovc38_textShighTxt` | `ovc38_loadHighScores` | builds `"%shigh.txt"`, opens it and reads six
+far pointers, zeroing them when the file is missing |
+
+`season_countPromotable` also explains the earlier refusals that depended on `GPromotableCount`:
+the counter is recomputed here, not maintained incrementally.
+
+Refused in the same batch: `draw_textArena` (debug/slot gates plus a 3-cell flag scan, no stated
+meaning), `draw_compute4` (a whitelist of type ids 9/0xe/0x1c/0x1e/0x1f/0x20/0x37-0x39/0x44/0x45/
+0x55 with no vocabulary), `ovc41_compute6` (returns 13/11/9/7/2 from a margin), `agnt_compute16`
+(a predicate over the two types' flags), `ovc41_usesXOfs` and `ovc22_usesLUDIV_at_`.
