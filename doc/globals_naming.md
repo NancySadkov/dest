@@ -1924,3 +1924,50 @@ lengths stand as loop-bound readings (hypotheses, but no longer refuted).  The r
 the one that actually applies: **compare segments before comparing offsets.**
 
 Auto-named globals: 228 -> 222.
+
+## The BSS/DGROUP cell route: 10 globals named from writers already read
+
+Rather than starting from the global list, this pass started from functions whose bodies had already
+been read and asked which unattributed global each one writes.  Ten answered:
+
+| address | name | evidence |
+|---|---|---|
+| `2000:d178` | `menuCursorX` | `draw_menuCursor` clamps it to 0..0x38 and stores it back at
+`[GMenuItem]`; every reader adds 0xed..0x1c to make a screen x (`CrossBlitX = value + 0xed`,
+3f0b:2252 uses `value - 0x1c`) |
+| `2000:d17d` | `menuCursorY` | clamped to 0..0x1c; `CrossBlitY = value + 0x36` and 3f0b:2252
+computes `(0x1c - value) * 100 / 0x1c` |
+| `2000:d11b` | `blitFrameOfs` | `ovc13_blitAnimFrame` reads `((word *)&blitFrameOfs)[BlitFrame*2]`
+as the offset of frame `BlitFrame` (0..5) |
+| `2000:d11d` | `blitFrameSeg` | the segment half, same index |
+| `2000:d1ae` | `trianglesShown` | cleared while the leader view is shown, set by
+`ovc18_blitTriangles`, and tested against the `MouseX 10..0x16` / `MouseY >= 0x9e` hit region |
+| `2000:ca6d` | `crossAgentIndex` | `CrossBlitX = value * 0x34 + 0x26` and the y comes from
+`*(value * 0x34 + 0x1a)` |
+| `2000:ccaf` | `rightButtonLatch` | `init2_updateMouseButtons` latches bit 1 of
+`miceButton0PressStates` here |
+| `2000:ccae` | `middleButtonLatch` | the same function latches bit 2 here |
+| `2410:4757` | `suppressLoadError` | main sets it to 1 around the startup `save_loadGameFile()` and
+back to 0; `stLoad` prints `"Load Error"` only when it is 0 |
+| `2410:0161` | `timePassing` | set to 1 immediately before `"Time passes..."` is drawn, cleared by
+the turn tick, tested by the draw state machine |
+
+## Why the rest of the globals axis is now quantified, not just called "blocked"
+
+For every one of the remaining auto-named globals, its name was searched across the whole decompiled
+export (`tmp/global_refs.py`):
+
+```
+remaining auto globals: 214
+  referenced 0 times: 151
+  referenced 1 time : 16
+  referenced 2 times: 5
+  referenced 3+     : 42
+```
+
+**151 of 214 are never referenced by any recovered function** -- they are dead labels in BSS/DGROUP
+whose only possible source of meaning would be code that was not recovered.  Of the 63 that are
+referenced, the families checked this pass are write-only temporaries (`2000:d0a2..d0aa`,
+`d0d0..d0e6`, `d163/d165`), which cannot be named from a store alone.
+
+Globals: 222 -> 212.
