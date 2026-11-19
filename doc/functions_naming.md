@@ -752,3 +752,40 @@ flagged as having moved the stack pointer -- a fragment, not a clean function), 
 and the five `*_textArena*` helpers (the string is used only as a non-zero return value),
 `stats_textShortSword`/`ovc28_textHalflingCastle` (plain name lookups), and
 `draw_textGoldProvidesHousing`.
+
+### Twenty-seventh batch: 5 names, and the string lever starts to thin
+
+| old | new | evidence |
+|---|---|---|
+| `ovc30_textAllEnemiesDestroyed` | `ovc30_nextWave` | advances `PlayerIndex`, spawns the next wave
+from `lowIntelEnemies`/`Difficulty` and prints `"Next wave of enemies appear."` /
+`"All enemies destroyed."` |
+| `ovc23_textConstructionAbandoned2` | `ovc23_abandonConstruction` | when the site is unreachable it
+removes the 0x12-stride record, saying `"Construction abandoned."` if the cursor is on it |
+| `bldng_textBuildingNowSelect` | `bldng_selectBuildingType` | formats `"Building is now %s.  Select
+type of building."`, runs the list and stores the pick into `char_sheet_t.buildType` |
+| `stats_textLongerReady` | `stats_unreadyNotice` | formats `"%s is no longer ready."` and the
+ready-list hint |
+| `ovc25_textSpiesReportHeading` | `ovc25_spyReportNotice` | emits `"Spies report %s heading towards
+stronghold. (%d, %d)"` |
+
+The remaining 56 string-bearing mechanical functions are mostly *not* describable from their
+literals: 13 of them use a string purely as a non-zero return value (`"arena"`, `"main castle"`,
+`"halfling castle"`, `"short sword"`, `"Level 2"`), and the rest are large multi-message
+dispatchers (`draw_textTalkwin9Lbm`, `ovc22_textRingProt`, `ovc15_textError`) whose bodies need the
+overlay mapping to read.
+
+### Four more parameters from the single-slot scan
+
+| function | parameter | name | evidence |
+|---|---|---|---|
+| `alignUp4` | `param_1` | `value` | the body is `return (value + 2) & 0xfffc` |
+| `ovc26_usesStExit` | `param_1` | `entityIndex` | indexes `Entities` with it |
+| `ovc25_usesEntityCount` | `param_1` | `partyIndex` | the loop compares the party byte
+(`&Entities[i].base.entity + 3`) against it |
+| `stats_usesEntityCount` | `param_1` | `partyIndex` | same comparison |
+
+Parameters: 296 -> 292.
+
+Refused in the same pass: `midPlaySequence`'s only parameter (the body is a `swi(0x66)` trampoline
+that never reads it) and the `*_textArena*` family.
