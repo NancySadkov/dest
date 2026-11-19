@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn404/naming_summary.txt`.
+`tmp/auditn405/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -10,10 +10,10 @@ functions                1130
   no prototype            114
   weak return type        986
   has struct-typed arg    144
-parameters               1643   auto-named  267   (16.3%)
+parameters               1643   auto-named  266   (16.2%)
 locals                    692   auto-named  90   (13.0%)
-structs                    35
-  struct fields           322   generated    10   (3.1%)
+structs                    36
+  struct fields           322   generated     7   (2.2%)
 globals                  2548   auto-named  175   (6.9%)
 ```
 
@@ -27,9 +27,9 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 |---|---|
 | function names | 1590/1590 unique and address-free; 591 renames recorded with evidence tier |
 | string labels | 1516 `s_*` labels from their own bytes (`doc/strings_renamed.tsv`) |
-| globals | 1096 -> 222 auto-named (26 previously unnamed DGROUP tables labelled, 74 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
+| globals | 1096 -> 175 auto-named (26 previously unnamed DGROUP tables labelled, 74 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
 | structures | `spr_t`, `unit_t` and `entity_t` complete; `agnt_t` rebuilt as `agnt_t[52]` + `tick` + `dir`; `bld_inst_t` and most of `char_sheet_t` recovered |
-| struct fields | 266 -> 10 generated |
+| struct fields | 266 -> 7 generated |
 | typing | struct-typed arguments 80 -> 144; `_fmemmove`/`__fmovmem`/`memcpy` re-typed to `(far dst, far src, count)`; `blit_usesDrawGfx`'s rectangle parameter retyped `brect_t *`, which resolves its fields by name |
 | corrections | wrong names/types found by later evidence reverted (three pointer widenings, `OVC22_5087_056e`, `anm_t` block) |
 
@@ -48,17 +48,17 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in
    total across 145 locals.  What remains needs per-body reading, and this session
    did 461 parameters that way (blit argument order, party-sheet indices, x/y pairs).
-3. **10 struct fields.** Each group has been re-examined at least three times.  The
+3. **7 struct fields.** Each group has been re-examined at least three times.  The
    two that are provably meaningful have irreducible conflicts the image cannot
    settle: `char_sheet_t+0x1b` is a word comparison widened to a dword, and
    `bldtp_t+0x0c` is a second lower bound beside the already-named `minBuildTime`.
    The rest are equality-only (`agnt_t+0x11/+0x24/+0x25/+0x2a`,
-   `agntG_t+0x52/+0x94`, `agnt_t+0x13`), unread, or the `anm_t` block that
-   `stshRleAnims` never touches.
+   `agntG_t+0x52/+0x94`, `agnt_t+0x13`).
 
 ## Blocked on information the binary does not carry
 
-- `anm_t 0x13..0x18`: three signed/unsigned words with readers, no name; `0x0f`/`0x11` are now `maxDx`/`maxDy`.
+- `agnt_t+0x05`, `agnt_t+0x2a`, `agnt_t+0x1a`, `agntG_t+0x94`: one-byte fields with
+  equality-only readers; the live values seen so far do not separate their roles.
 - The `07xx`/`08xx` far-pointer tables in `5087:056e`: no writer, and the index
   expressions are register artifacts (`unaff_DI`, `(uint)&unaff_DI->seg % 7`) in a
   function flagged for untracked spacebase and bad instruction data.
@@ -77,7 +77,11 @@ The patched DOSBox-X in `emulator/` runs the original `game/STRONG.EXE` and expo
 guest memory over `127.0.0.1:23946`.  See `doc/emulator_findings.md` for the run recipe,
 the `peek`/`dump`/`find` command set, and the way the runtime DGROUP is recovered
 (`find "undeveloped"` -> `DGROUP = 0x1C33`, `delta = 0x7DD`; the delta changes when the
-game reloads after the setup screen, so it is located per process).
+game reloads after the setup screen, so it is located per process).  The same delta maps
+every Ghidra segment, including the BSS block: `2000:xxxx` is runtime `1823:xxxx`.
+  A recorded scenario can be reached without the attract demo: press ESC while the demo
+  runs to open the main menu, which has Load Game; `game/STRONG.SAV/SAVE.000..005` are
+  real saves.
 
 What it has already settled: `AgntGs` decodes end to end (42 unit types with names and
 weapons through the far pointers at `+0x24`/`+0x90`); `Agnts` is live with `gdata`

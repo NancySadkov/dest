@@ -7170,3 +7170,36 @@ Dumping the block contradicts that: the bytes at `0000` are `D4 15 D4 15 D4 15` 
 real records are `InitStart` (`boinit_t[4]`, 0x06..0x1d) plus `InitEnd` (`0x1e`), which is exactly
 5 x 6 bytes -- so the existing typing is already correct and the three words at 0x00 are a different
 object.  No retype was made; that earlier hypothesis is withdrawn.
+
+## `anm_t` 0x13/0x15/0x17: three fields recovered from their readers
+
+The block `anm_t` (stride 0x1e, 139 records at `2410:0958`) had three unnamed words after
+`maxDy`.  Two independent readers plus the live table give their meaning.
+
+| offset | field | evidence |
+|---|---|---|
+| +0x13 | `missileDx` | `ovc27_textCastsSpell` (`5ded:0a05`) does
+`destX = screenX + anm[0x13]` for `level == 0` and `destX = screenX - anm[0x13]` otherwise
+right where it creates a bolt; `ovc27_usesBlitGfxRect` (`5ded:0cc2`) uses the same expression
+to place the projectile and to decide whether it has reached the target. |
+| +0x15 | `missileDy` | Same two functions: `destY = (char)anm[0x15] + (char)screenY` and
+`blitGfxRect(..., anm[0x15] + screenY, ...)` -- the signed vertical spawn offset. |
+| +0x17 | `halfWidth` | `video_findAgentAt` (`13aa:005b`) tests
+`screenX - anm[0x17] - 0x0c <= x <= screenX + anm[0x17] - 0x0c` before returning an agent
+index; `ovc15_usesStExit2` (`4207:1d87`) uses `x -/+ anm[0x17]` as the horizontal span when it
+checks which map cells the unit owns.  Both read it as a half-extent. |
+
+Live confirmation of the values (DGROUP `0x1C33`, `AgntGs` at `0x1180:26d6`, `anms` far pointer
+at +0x28 of each `agntG_t`): the table of 42 types gives `missileDx/missileDy` = 0 for 35 types
+and `(16,-14)` fighter, `(22,-15)` cleric, `(16,-14)` archer, `(16,-14)` evil fighter,
+`(12,-10)` manscorpion, `(22,-15)` evil cleric, `(18,-12)` vampire -- exactly the types that
+fire bolts/spells.  `halfWidth` is 5 for humanoids, 8-10 for large beasts
+(giant ant 10, carrion crawler 10, dire wolf 9, griffon 9, scorpion 9, purple worm 8) and 0 for
+the dragons/fire giant, i.e. it scales with creature size.
+
+A mouse-poke attempt on `halfWidth` (widen the pick box and read `MiceIndex`, 2410:04de) was
+inconclusive: the attract demo does not run `draw_usesGameProcessKey`, and the main-menu save
+UI switches to a 320x400 mode whose vertical mouse mapping is not yet calibrated.  The names
+rest on the two decompiled readers above, not on that poke.
+
+**Struct fields: 322 total, generated 10 -> 7.**

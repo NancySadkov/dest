@@ -293,17 +293,59 @@ python -u scripts/emulator/probe.py          # locate -> DGROUP 1C33, delta 7DD
 * A second client cannot connect while an earlier socket is still half-open: run one script per
   emulator session, and restart the emulator after a killed script.
 
-### Open problem: the BSS segment is not `DS + Ghidra-offset`
+### Resolved: the BSS segment is `2000 - delta`
 
-Ghidra's BSS block is `2000:ca34 - 2000:d59f`.  Reading `DS:0xca34` in the live process returns
-overlay *code*, not BSS, so the block's offsets are not DS-relative.  `Agnts` (`1726:0000` ->
-`0xF490` with the delta) is all zeros and no record with `gdata` pointing at `0x1180:26d6` exists in
-a 1 MB dump taken after `key enter`, which means the process was still in the logo/demo stage and no
-scenario had been generated.  Two follow-ups are needed before the live `agnt_t`/`agntG_t`/`anm_t`
-questions can be poked:
+Ghidra's BSS block is `2000:ca34 - 2000:d59f`.  Earlier this looked like an exception because
+`DS:0xca34` returned overlay code; the reason is that the block is its own segment, not DS.
+The uniform delta applies to it too: runtime segment = `0x2000 - 0x7DD = 0x1823`.
 
-1. the key sequence that reaches a generated map (the menu is graphics-only, so the text-screen
-   trick cannot see it);
-2. the mapping of Ghidra segment `2000` to its runtime segment, best found from a far pointer stored
-   in DGROUP once a scenario exists (for example the `GMapFlags`/`GUnits` globals are far pointers
-   whose segment field is the BSS segment).
+A 1 MB dump taken in the game stage decodes every far-pointer global in that block to real
+data, which confirms the mapping:
+
+```
+GUnits    @1823:ca95 = 69C4:0004   (records 00ffff..., 0001ffff...)
+GMapCells @1823:cb05 = 7516:0004
+GMapFlags @1823:cb09 = 70BF:0004   (0900 1400 1400 1000 ...)
+GUnitGrid @1823:cb0d = 6C68:0004
+Entities  @1823:d18e = 7742:0004
+```
+
+Reads of the BSS scalars through the same base are consistent too (`EntityCount = 98`,
+`GGameState = 61` for the logo screen, `AgntCount` 0..10 depending on the demo step).  Use
+`bss_base = (0x2000 - delta) << 4`.
+
+## Reaching a recorded scenario and the live agent table
+
+The attract demo is not interactive (`MouseX` stays `-1`, `GGameInProgress = 0`).  Pressing
+**ESC while the demo runs opens the main menu**, whose options are `New Game`, `Save Game`,
+`Load Game`, `Delete Game`, `Quit Game`, `Message Delay`, `Great Achievements`, `Begin Play`.
+The game already ships real saves: `game/STRONG.SAV/SAVE.000` .. `SAVE.005` (plus `SAVES.TXT`),
+so `Load Game` can put the process into a recorded scenario.  The save/load UI runs in
+`320x400`, where `mabs`'s vertical mapping is not 1:1 with the 200-line coordinate space; that
+is the remaining nuisance for scripted menu clicks.
+
+Once a scenario is live, `Agnts` (`1726:0000`, 24 records of 0x34) fills and each record's
+`gdata` is `1180:26d6 + gindex*0x95`.  Reading the 42 `agntG_t` records gave their names
+straight from the engine:
+
+```
+0 fighter      1 mage       2 cleric      3 thief       4 red dragon  5 archer
+6 skeleton     7 orc        8 elf         9 evil fighter 10 dwarf     11 halfling
+12 carrion crawler  13 giant ant  14 harpy  15 dire wolf  16 giant bat  17 blast spore
+18 kobold      19 obsidian statue  20 giant toad  21 hobgoblin  22 goblin  23 manscorpion
+24 giant scorpion  25 wood golem  26 evil mage  27 medusa  28 evil cleric  29 evil thief
+30 wight       31 blue dragon  32 purple worm  33 griffon  34 stone giant  35 troll
+36 fire giant  37 lesser phoenix  38 minotaur  39 cockatrice  40 vampire  41 Mindark
+```
+
+Each `agntG_t.anms` (+0x28) is a far pointer into `AgntAnms`; reading `nanims` records gives
+the per-type animation data used to settle `anm_t+0x13/+0x15/+0x17` (see
+`doc/structs_recovery.md`).
+
+### Saved-state and queue gotchas
+
+* `mabs <x> <y>` lands the game cursor at `MouseX = x/2`, `MouseY = y` in the 320x200 screens;
+  use `mabs 2*X Y` to target game pixel `(X,Y)`.
+* Heavy commands (`dump`, `regs`, `peek`) are queued while the CPU runs, and the queue only
+  drains when the harness tick is active (a command such as `mabs`/`mick` sets it).  When in
+  doubt: `halt`, run the heavy command (it executes synchronously), then `run`.
