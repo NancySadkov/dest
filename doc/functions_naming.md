@@ -160,3 +160,17 @@ writes its coordinates through the out pointers; sets bit 2 at `sheet+0x5d` when
 and the building-description format strings it pushes (`"%s: Costs %d gold. Enhances training by
 %d%%."`, `"... Provides housing for %d %s."`, `"... Owned by %s. ..."`); no drawing calls, and it
 indexes the unit table with stride 0x37 |
+
+### Seventh batch (disassembly-based)
+
+Three short bodies read directly from `DumpAsmNamed`, all with unambiguous logic:
+
+| old | new | evidence |
+|---|---|---|
+| `manage_loop1` | `manage_statSelectable` | `if (sheet->stats[statIndex] < 0x12) { for i in 0..2
+if (sheet->stats[i] > 0xa && i != statIndex) return 1; } return 0;` and its only caller
+(`abilitiesDlg`) appends the stat to `menuItems` only when the result is non-zero |
+| `saveui_scan1` | `saveui_parseNumber` | walks the string, skips non-digits through the CRT
+`_ctype` table (`ES:[BX+0x8519] & 2`), and accumulates `value*10 + (ch - '0')` until the NUL |
+| `ovc15_loop1` | `ovc15_fillGridColumn` | clamps `arg >> 1 < 0x69` and writes `0xff` to all ten
+rows of that column in the agent grid at `Agnts+0x8fa` (stride 0x69) |
