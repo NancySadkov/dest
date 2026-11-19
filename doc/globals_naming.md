@@ -2255,3 +2255,32 @@ for (uVar5 = ((uint16_t *)rowBandSquareFirst)[dy]; uVar5 < rowBandSquareEnd[dy];
 loader places at a runtime segment (`0x2410` in the code), so the Ghidra address and the code
 address differ by an unresolved overlay mapping.  Those six stay unnamed until that mapping is
 established; naming them from the offsets alone would be a guess.
+
+## Band-origin tables at DGROUP:0728/074b (151 globals)
+
+The initializer reads two staggered byte tables and builds the projection origins from them:
+
+```
+ScreenOriginY[b] = bandOrigin[b]   + scale[b]*0x38/0x10;
+ScreenOriginX[b] = bandOrigin[b+1] + scale[b+1]*0x38/0x10;   // 9 bands, b = 0..8
+RowScreenY[b]    = rowBandOrigin[b]   + scale[b]*0x3c/0x30;
+RowScreenX[b]    = rowBandOrigin[b+1] + scale[b+1]*0x3c/0x30; // 3 bands, b = 0..2
+```
+
+The data confirms ten descending bytes in each table:
+
+* `bandOrigin` at `2410:0728`: `4E 49 47 45 43 41 40 3F 3E 3D`;
+* `rowBandOrigin` at `2410:074b`: `1F 1C 19 16 10 0C 06 04 02 01`.
+
+They are now `uint8_t[10]`; the four auto bytes at `0730/0731` and `074d/074e` were the last
+elements of those tables and are deleted (the arrays absorb them).
+
+**Globals: 157 -> 151.**
+
+### Refused: `2410:073c` / `0740`
+
+`2410:073c..0741` is a six-byte descending table (`0D 0A 05 03 02 01`) read as `[SI+0x73c]`
+and `[SI+0x73e]` and subtracted from corner heights in `ovc23_usesCornerBR` and
+`constr_usesBlitGfxRect2`; `0x740` is an interior element reached with SI=4.  What SI means
+(corner index, shade level, ...) and therefore what each element names is not established, so
+the table stays unnamed rather than guessed.
