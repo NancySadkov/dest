@@ -495,3 +495,29 @@ Refused in the same pass: `ovc41_compute8` (compares `param_1 + 4` with
 `agnt_compute16_4(param_2) + 1`), `draw_compute1` (a scaled menu-highlight offset), `ovc25_compute1`,
 `attact_usesBDADailyTimeCounter`, `season_usesGPromotableCount2` and `constrct_compute1` (both depend
 on unresolved `GPromotableCount`/BSS counters).
+
+### Nineteenth batch: rank-scaled helpers and three more UI/audio names
+
+`char_sheet_t` offsets are decimal in `ListFieldNames`, so `+0x87` = 135 = `rank`.  Two functions
+read it as a number and state what it is for:
+
+| old | new | evidence |
+|---|---|---|
+| `ovc45_compute2` | `ovc45_rankPercent` | returns `rank*10` while `rank < 0xb`, else 100 -- the
+rank as a percentage (this was refused in the fifteenth batch for want of the offset) |
+| `ovc22_compute2` | `ovc22_applyRankBonus` | scales its value by `(rank+10)/10` while `rank < 10`,
+doubles it at `rank >= 10`, then takes 96% when `cls` (+0x2f) is 6 |
+| `draw_usesFillRect` | `draw_menuRowBar` | for `menuItem < 5` and
+`MenuItemEnabled[menuItem] != -1`, fills a proportional bar at `y = menuItem*0xd + 0x91`:
+`SpecialColors[6]` up to `attact_usesLDIV_at_(menuItem) * 0x17 / 0x51`, `SpecialColors[7]` beyond |
+| `audio_usesDigSoundPlaying` | `audio_isPlaying` | true when the dig SFX is running
+(`SfxRunning` + `digSoundPlaying`) or the music sequence is (`MusRunning` +
+`midGetSequenceStatus() == 1`) |
+| `agnt_usesBlitLoadRleGfx` | `agnt_blitCrossFrame` | blits cross-hair frame `CrossBlitCount` 1..4
+from the table at `-0x748d` into `GSavedBlitSeg` at `(CrossBlitX, CrossBlitY*0x140)` and wraps the
+counter at 5 |
+
+Refused in the same pass: `constrct_compute1` (`0x14` below level 5, then `level*4 + 0x14` -- a
+level-scaled limit with no stated unit), `season_usesGPromotableCount2` (depends on unresolved
+`GPromotableCount` and `byte_2000_BSS_0998`), `driver_compute1/2` (the two corner-shade
+arithmetics), and `attact_usesBDADailyTimeCounter` (a wrapped tick difference).
