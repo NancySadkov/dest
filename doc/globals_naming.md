@@ -2362,3 +2362,43 @@ gfx.ofs = ((far_t *)timeOfDayGfx + iVar1)->ofs;
 ```
 
 **Globals: 146 -> 144.**
+
+## `recordUpdateTick` is a 32-bit BDA timer at 2000:ca34 (143 globals)
+
+`draw_usesPlay_sfx` pushes the far value at `DS:0x8936:0x8934` as one 32-bit tick to
+`attact_usesBDADailyTimeCounter`, then refreshes it from the BIOS timer:
+
+```
+MOV AX,ES:[BX+2]      ; BDA daily-timer high word
+MOV DX,ES:[BX]        ; low word
+MOV [0x8936],AX       ; high half
+MOV [0x8934],DX       ; low half
+```
+
+That pair is `2000:ca34` (low) and `ca36` (high), i.e. one `uint32_t`.  The old
+`_bdata_at_`/`ExitEnd` labels at `ca34` are **not variables**: `startx` zeroes BSS with
+`MOV DI,0x8934; MOV CX,0x949a; STOSB.REP`, so Ghidra labelled the first byte of that fill.
+The value is the tick that gates the `GRecordCount` update loop, hence `recordUpdateTick`.
+
+Retyped `2000:ca34` as `/stdint.h/uint32_t` and deleted the high-half label at `ca36`.
+Re-decompiling the writer shows `recordUpdateTick._2_2_` / `._0_2_` stores and
+`attact_usesBDADailyTimeCounter((ulong *)recordUpdateTick, ...)`.
+
+**Globals: 144 -> 143.**
+
+### Refused: the `6616:*` overlay-stub header fields
+
+`__InitModules` addresses the overlay stub with `ES = 0x226e`:
+
+```
+1403:02ce  CMP byte ptr ES:[0x1a],0xff
+1403:02e2  MOV word ptr ES:[0x18],0x4c3
+1403:02f0  ADD word ptr ES:[0x4],AX     ; AX = GUnitDescriptions[10] size
+1403:02f5  ADC word ptr ES:[0x6],DX
+```
+
+Ghidra resolves those to `6616:14b4` (+0x4), `14b6` (+0x6), `14c8` (+0x18) and `14ca` (+0x1a),
+i.e. a header based at `6616:14b0`: a 32-bit size accumulator at +0x4/+0x6, a word at +0x18 set
+to 0x4c3, and a 0xff state byte at +0x1a.  The header's other fields and the meaning of the
+0x4c3/0xff values are not established, so the four fields stay unnamed rather than being given
+generic "headerFieldN" names.
