@@ -6935,3 +6935,27 @@ argument of `drawAgntStats(agnt_t *agnt, far_t cmap)`, so it is named `agntTmp`.
 
 The single argument is the party slot: it is passed as `CONCAT11(0x24, param_1)` to
 `manage_settlementScreen`, whose parameter is that same party-slot byte.  Parameters: 303 -> 302.
+
+## `char_sheet_t+0x85` = `buildType`
+
+The byte at +133 was still a generated `pad_85`.  Two functions state what it is:
+
+* `bldng_textBuildingNowSelect` formats `"Building is now %s.  Select type of building."`, runs the
+  selection list (`ovc28_compute2`), and on a choice writes
+  `sheet+0x85 = local_1f4[selection - 1]` -- the building type picked from that list;
+* `ovc45_buildPlacementMessage` reads it, passes it through `bldng_usesGStrangeTable`, multiplies by
+  `0x27` and indexes the `bldtp_t` table at `195d:010e` (it ORs the `description` and `action` words
+  of that record, offsets +4 and +6 = `0x112`/`0x114`).
+
+So it is the building type this party's leader is placing.  Renamed `buildType` with
+`RenameFields` (same offset, same length); the audit's generated-field count drops 11 -> 10.
+
+### New blocked axis: `agnt_t+0x1a`
+
+The spawn path writes it as a party index -- `*(byte *)(&Entities[EntityCount].base.entity + 3) =
+partyIndex` in `ovc15_usesLDIV_at_` -- and ~10 functions compare it against a party index
+(`attact_textArena`, `attact_usesAlignUp4`, `ovc13_usesEntities`, `ovc15_usesRandBelow2`, ...).  But
+`&base.entity + 3` is byte 26, the high byte of the `entity` far pointer, and the live `Agnts` image
+has `entity = 4277:3817`, `4277:0117`, ... -- byte 26 is `0x77` in every record, not a party index.
+Either the Entities record layout differs from `agnt_t` at this offset, or the `entity` field is not
+a 4-byte pointer there.  Recorded as an open conflict; nothing renamed.

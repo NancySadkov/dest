@@ -392,3 +392,41 @@ Refused in the same batch: `ovc49_compute1` (bounds `0..0xd2` then
 `*(int *)(param_1 * 2) == 0` with the base segment lost) and `ovc13_usesSeedD1102` (already carries
 `x`,`y`, but the `Seed_2000_d110`/`d10e` offset pair it applies to `GMapFlags` has no stated
 meaning).
+
+### Seventeenth batch: sheet fields named by the literals that consume them
+
+| old | new | evidence |
+|---|---|---|
+| `ovc22_textMonster` | `ovc22_className` | reads `char_sheet_t.cls` (+0x2f = 47): for `cls < 7` it
+returns the class-name far pointer from the table at `DGROUP:0x123`, otherwise the literal
+`"monster"` |
+| `ovc39_textLord` | `ovc39_lordOrLady` | first leader with `level` (+0x86 = 134) non-zero, then
+`"lord"` when that sheet's `gender` (+0x34 = 52) is 0 and `"lady"` otherwise |
+| `manage_usesGLeaderCount2` | `manage_findFirstLeader` | returns the first party-sheet index whose
+`level` is non-zero, or `0xff` |
+| `bldng_compute1` | `bldng_getClass` | returns the sheet's `cls` byte (0 when it is -1) |
+| `ovc07_compute2` | `ovc07_signum` | `-1`, `0` or `1` for a negative, zero or positive argument |
+| `init_compute1` | `init_sumMapCells2x2` | sums the four `GMapCells` bytes of the 2x2 block at
+(x,y) |
+| `ovc23_usesGRecordCount` | `ovc23_removeRecord` | memmoves the 0x12-stride table at 0x21f2 down
+over `recordIndex`, decrements `GRecordCount`, refills the view |
+| `audio_compute1` | `audio_parseHexDigit` | stores one character as a hex digit
+(`c-0x30` for digits, `c-0x37` otherwise) in the driver parameter at `+0x108`, clears `+0x109` |
+| `ovc23_usesAlignUp42` | `ovc23_isCursorAt` | 1 when `alignUp4(x) == alignUp4(GfxRndSeed)` and
+`y == GfxRndSeed2` |
+| `ovc45_usesClose` | `ovc45_buildPlacementMessage` | a 665-instruction body with 10 `strcat` and
+8 `stsprintf` calls whose pushed strings are the placement verdicts: `" It will cost %s the %s %d
+gp. "`, `"Buildings cannot be placed over water."`, `" Location is too narrow for %s."`,
+`" Requires a rank of %s."`, `" Next outpost available at rank %s."`, `" No more outposts are
+available."`, `" Walls must be near land."`, `" You can only place a single arena."`, `"
+Bridges must be near water's edge."`, `"This location is unsuitable for buildings."` |
+
+The last one was in the decompiler-failure list, so it was read with `DumpAsmNamed` plus the pushed
+DGROUP offsets, exactly the recipe used for `constrct_body1`.
+
+Refused in the same pass, with reasons: `agnt_usesAgntCount6` (sets `moveState = 1` when it is
+below 2 and clears `+4`, but the vocabulary of both fields is unstated), `ovc30_compute1` (buckets
+at 5 and 9), `stats_usesEntityCount` (clears `flags32` bit 2 for a party's entities; the bit has no
+stated meaning), `season_textMainCastle` (needs `+0x3d` and `+0x3f` both non-zero, which contradicts
+the current `active`/`excluded` reading of those bytes -- recorded, not renamed), and
+`constr_compute1/2` (choose between `driver_compute1/2` and the constant `0xe2` on a flags bit).
