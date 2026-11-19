@@ -6930,3 +6930,8 @@ was retyped to the near `agnt_t *` with the exact-path form.  Parameters: 304 ->
 
 `6d7a:033e local_40[23]` is a zeroed working copy of an agent record; it is passed as the agent
 argument of `drawAgntStats(agnt_t *agnt, far_t cmap)`, so it is named `agntTmp`.  Locals: 124 -> 123.
+
+## One more parameter: `manage_showSettlementScreen(byte partySlot)`
+
+The single argument is the party slot: it is passed as `CONCAT11(0x24, param_1)` to
+`manage_settlementScreen`, whose parameter is that same party-slot byte.  Parameters: 303 -> 302.

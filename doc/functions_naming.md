@@ -236,3 +236,27 @@ Two more parameter scans came back empty, which is the evidence that the cheap s
 auto params used as an index into a named array (`Entities`, `Agnts`, `GUnits`, `AgntGs`,
 `AgntAnms`, `GStructures`): 0 hits; auto params stored into a named struct field:
 0 hits.
+
+### Twelfth batch
+
+| old | new | evidence |
+|---|---|---|
+| `manage_usesStop_audio` | `manage_showSettlementScreen` | stops the agents/ring buffer and the
+music (`CurMusicType = 0xff`), saves `GMenuItem`/`MenuMode`, sets `TextBlitDstSeg = 0xa000`, calls
+`manage_settlementScreen(CONCAT11(0x24, partySlot))`, then restores the menu when `Cancelled` is
+clear.  Its parameter is the party slot handed to that screen |
+| `ovc18_textBathHouse` | `ovc18_spawnClassAgent` | derives a gindex from the party sheet's
+`classStr` (`sheet+0x3e`), tests `AgntGs[cls].flags & 0x800`, selects one of 6/19/25 (or a
+`randBelow(5)` case) and calls the spawn routine `ovc15_usesLDIV_at_`.  The `"bath house"` string
+does not describe the body |
+
+### A prototype change made and reverted
+
+The entry code uses six stack slots (`[BP+6]`, `+8`, `+0xa`, `+0xc`, `+0xe`, `+0x10`) and the
+party-sheet index is the last one, so the stored five-parameter prototype is shifted.  I set
+`(int x, int y, int destX, int destY, byte mode, byte partyIndex)` and decompiled: `mode` and
+`partyIndex` then read correctly (`mode < 6`, `mode < 0xb`, `partyIndex << 2` + `0x3e`), but the
+body also dereferences the second slot as an `anm_t` array (`anims[i].frmid`, `.fw`, `.fh`,
+`.nframes`, `anims._2_2_`), which only makes sense if that slot is an `anm_t` far pointer -- and
+`DI` is reassigned before the spawn call.  So the mapping is not the simple six-argument order;
+the original prototype was restored and the layout recorded as unresolved.
