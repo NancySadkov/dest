@@ -1123,3 +1123,14 @@ All nineteen slots below had an all-auto signature.  Names come from the body pl
 | ovc30_compute1 | param_1 | level | returns band 0/1/2 at level thresholds 5 and 9; season_compute1 passes the AgntGs level byte |
 
 Parameters: 266 -> 247 (15.0%).  Gate: checked 71 failures 0.
+
+### Parameters batch 3: coordinates, rank and build type
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `init_usesGMapFlags3` | `param_1`, `param_2` | `x`, `y` | indexes `GMapFlags[y][x]`/`GMapCells[y][x]`; callers pass `(x,y)`, `(x-1,y)`, `(x,y+1)` |
+| `init_compute2` | `param_1..3` | `x`, `y`, `direction` | calls `init_getMapFlags(x+dx, y+dy)`; `param_3` selects one of four neighbours via `param_3 ^ 2` |
+| `ovc41_rollStatDice` | `param_1`, `param_2` | `rank`, `level` | caller passes `agntG_t+0x42` (rank) and `entity.level`; body rolls 2d6/3d6/4d6 from the margin `level-helper - rank` |
+| `bldng_compute2` | `param_1`, `param_2` | `buildType`, `leader` | indexes the 0x27-stride `BuildingTypes` table with `param_1`; compares `param_2` with `manage_findFirstLeader()` |
+
+Parameters: 247 -> 238 (14.5%).  Gate: checked 71 failures 0.
