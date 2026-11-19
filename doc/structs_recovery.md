@@ -6720,3 +6720,29 @@ body only swaps through `param_1` and a stack pointer, leaving `param_2` unread)
 `ovc22_textRingProt` (still `bad instruction data` + untracked stack spacebase).
 
 Parameters: 338 -> 324.
+
+## 6 parameters from split pointers and a hit test
+
+| function | parameters | evidence |
+|---|---|---|
+| `_atexit` | `funcOfs`, `funcSeg` | it stores the two argument words into the two halves of
+one entry of `_atexittbl` (`*(u16 *)(i*4 - 0x6be6) = param_2; *(u16 *)&_atexittbl + i*4 =
+param_1`), i.e. the offset and segment of the far function pointer it registers |
+| `__sbrk` | `incrLo`, `incrHi` | it adds a 32-bit increment to `_brklvl`: `param_1` goes into
+the `.ofs` word and `param_2` is added with `CARRY2` into the segment word |
+| `video_findAgentAt` | `x`, `y` | it walks `Agnts` and tests a point against each sprite's
+bounds: `screenX - spriteW - 0xc <= param_1 <= screenX + spriteW - 0xc` and
+`screenY - spriteH - 7 <= param_2 <= screenY - 7`, returning the index or -1.  The `-0xc`/`-7`
+offsets are the same screen-origin constants that `video_compute1`'s callers subtract from
+`MouseX`/`MouseY`, so the two arguments are a screen position |
+
+`video_usesAgntCount` was itself a placeholder name; it is now `video_findAgentAt` (with the
+functional name recorded in `doc/functions_naming.md`).
+
+Refused in the same pass: `memcmp`/`_fstrncpy` (the decompiler places the second pointer and the
+count in stack locals, so the stored parameter list does not match the body and any naming would
+be attached to the wrong slot), `fseek` (same shift around the `long` offset), `sprintf_strputn`
+(its `param_1` is a pointer to a far-pointer state pair, not a buffer), and the `driver_compute1/2`
+pair (a clamped function of three bytes whose meaning, colour or shade, is not stated).
+
+Parameters: 324 -> 318.

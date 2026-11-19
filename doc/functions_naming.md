@@ -126,3 +126,11 @@ plus a screen-index remap whose base segment the decompiler lost), `ovc25_scan1`
 `saveui_scan1`, `manage_loop1`.
 
 ListFuncs after the batch: 1590 functions, 0 duplicates, 0 address-shaped names, 460 thunks.
+
+### Third batch: one more functional name
+
+| old | new | evidence |
+|---|---|---|
+| `video_usesAgntCount` | `video_findAgentAt` | walks `Agnts` and returns the first agent whose
+sprite bounds contain a screen point (`screenX +/- sprite width - 0xc`, `screenY +/- sprite
+height - 7`), or -1.  Parameters `x`, `y` |
