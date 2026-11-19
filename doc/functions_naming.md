@@ -1085,3 +1085,22 @@ One parameter was renamed by the same evidence: `ovc23_rebuildDirectionFlags`'s 
 (`GMapFlags[y][x]`), not an index.  Parameters: 268 -> 267.
 
 Mechanical names: 552 -> 546.
+
+### Forty-second batch: three agent-drawing helpers
+
+| old | new | evidence |
+|---|---|---|
+| `agnt_usesFrameIndex` | `agnt_computeFrameExtents` | resolves `frames[frameIndex]` into (ofs,seg),
+reads the type's extents table and the frame width, clamps `y>>1` to 0..9 and branches on
+`level == 0` -- the pixel extents of the current animation frame |
+| `agnt_usesPlay_sfxU` | `agnt_acquireTarget` | scans `Agnts` for a live agent of another faction with
+no `0xae4` flags, sets `flags |= 3`, writes its index+1 through the out pointer and plays sfx 0x3b
+panned by `audio_panFromX` |
+| `agnt_usesBlitGfxRect` | `agnt_drawSpriteFrame` | resolves the sprite frame, picks `y` from `state`
+(0xd -> `screenY`, 0xc -> `screenY - height`, else `screenY - height/2`), blits with `blitGfxRect`,
+advances the frame counter and wraps to `startFrame` at `nframes` |
+
+Refused in the same pass: `blit_usesDrawGfx` (its only calls are `unrle` and `memcpy` -- it decodes
+rows but no blit target is visible, so "draws" would be an assumption).
+
+Mechanical names: 546 -> 540.
