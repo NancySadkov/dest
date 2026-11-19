@@ -1039,3 +1039,28 @@ The `agnt`/`column` parameter names are evidence-pinned: `param_1` is the agent 
 Parameters: 272 -> 268.
 
 Mechanical names: 561 -> 555.
+
+### Fortieth batch: two UI/combat wrappers
+
+| old | new | evidence |
+|---|---|---|
+| `stats_textShortSword` | `stats_openAgentDetail` | switches `ScreenMode` to 2, calls
+`drawAgntStats(Agnts[i], 0)` and then draws the detail string, setting `CurMusicType` from the type
+record's byte |
+| `ovc41_compute9` | `ovc41_resolveSpecialAttack` | a two-call wrapper: `ovc41_specialAttack(agnt,param)`
+followed by `agnt_compute16_9(agnt)` on the same agent |
+
+Refused in the same pass, with evidence:
+
+* `ovc41_compute4` -- it adds a computed amount into the 32-bit field at sheet `+0x10/+0x12` with carry
+and then calls `ovc41_compute3`, but the field has no established vocabulary and the amount arrives
+from `ovc15_textError`'s return (the string-pointer-as-value idiom);
+* `ovc41_compute6` / `ovc41_compute8` -- margin-to-threshold functions returning 13/11/9/7/2 and a
+single 0/1, with no stated target;
+* `stats_compute4` -- subtracts two modifiers from a type-record byte, but which stat is not stated;
+* `6fbe:0000 ovc43_usesFmFreeAudio` -- a bytecode-style `switch` loop over a data script (length from
+`*(int *)(gindex+6)`); the opcode vocabulary is not in the export;
+* `unit_usesAlignUp42` -- scans `SquareRec` and copies `SquareRecX` (0x13 bytes), but the record's role
+is not stated.
+
+Mechanical names: 555 -> 552.
