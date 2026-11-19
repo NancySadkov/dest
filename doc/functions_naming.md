@@ -997,3 +997,24 @@ rounds the size with `LXMUL_at_`, returns the padded block).
 Refused: `5d45:06f0 ovc26_usesRandBelow` (a spawn routine whose out-flag semantics are not stated).
 
 Mechanical names: 572 -> 566.
+
+### Thirty-eighth batch: five more from call profiles and grid accessors
+
+| old | new | evidence |
+|---|---|---|
+| `ovc22_usesGMapFlags` | `ovc22_testMapFlags(x,y,mask)` | validates the cell (via `ovc22_textArena`)
+then returns whether `GMapFlags[y][x] & mask` is non-zero |
+| `ovc28_usesBlitLoadRleGfx2` | `ovc28_startCrossBlit` | the same preamble as `saveui_startCrossBlit`:
+`CrossBlitFlag = 0`, `CrossBlitCount2 = 0`, `CrossBlitCount = 1`, `CrossBlitX/Y` from `GMenuItem` |
+| `ovc41_textKill` | `ovc41_markAgentDead` | prints the `"kill 4"` debug line, decrements the entity
+`animFrame` and sets `AgentsChanged` |
+| `ovc42_usesAlignUp4` | `ovc42_populateArea(partyIndex)` | fills the cells around the cursor with
+`unitTypeMap[randBelow(0xe)]` and spawns from `spawnGindexMap[randBelow(8)]` via `ovc15_usesLDIV_at_` |
+| `ovc22_usesGUnitGrid3` | `ovc22_buildingTypeAt(x,y)` | returns `GUnits[GUnitGrid[x][y]].bldType` when
+the type's `bldtp_t` flags (+0x121) have bit 0x20 and no construction record overlaps the cell |
+
+Refused: `ovc22_usesGUnitGrid` / `ovc22_usesGUnitGrid2` (same shape but their extra filters --
+`& 2 | & 0x20`, and `flags5d` bit 2 plus the class-5 `+0x18` adjustment -- have no stated vocabulary),
+and `ovc22_usesAlignUp4`.
+
+Mechanical names: 566 -> 561.
