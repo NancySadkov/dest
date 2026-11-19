@@ -841,3 +841,29 @@ stack slot instead), and `midPlaySequence`'s only parameter (a `swi(0x66)` tramp
 
 The remaining string-bearing candidates are all in the two refused classes recorded in the previous
 batch (literal-as-return-value, locked-storage fragments) or are the multi-message dispatchers.
+
+### Thirtieth batch: the 170-260-line tier (only six candidates, two named)
+
+| old | new | evidence |
+|---|---|---|
+| `init_textNEWMAXSQUARE` | `init_computeMaxSquares` | computes `GMaxSquare`/`GSMaxSquare` from the
+scale table and prints `"NEW MAXSQUARE %d"` / `"NEW SMAXSQUARE %d"` whenever the result differs
+from 0x1b0 / 0x24 |
+| `ovc41_textPoisons` | `ovc41_specialAttack` | resolves the special attacks: the literals it emits
+are `"%s poisons %s."`, `"%s infects %s with blast spore disease."` and `"%s drains all energy from
+%s."` |
+
+Refused: `ovc30_textDivideError` (spawn helper whose role is unclear from the body) and the large
+multi-message dispatchers.
+
+### Three parameters
+
+| function | parameter | name | evidence |
+|---|---|---|---|
+| `fputc` | `param_1` | `ch` | stored into `_fputc_c`, the character |
+| `audio_textMidiError` | `param_2` | `status` | compared against 1 and 2, an event code for the
+track |
+| `ovc41_specialAttack` | `param` | `targetIndex` | `targetIndex < AgntCount`, scaled by 0x34 to reach
+the agent record |
+
+Parameters: 282 -> 280.

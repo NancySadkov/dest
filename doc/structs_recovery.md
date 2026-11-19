@@ -7100,3 +7100,9 @@ Parameters: 292 -> 287 (17.5%).
 | `bios` | `local_6` | `vramScreenOfs` | `screenpos()` of the VRAM pointer |
 
 Parameters: 287 -> 282 (17.2%).  Locals: 94 -> 91 (13.2%).
+
+## Three more parameters from the 2-3-slot scan
+
+`fputc(param_1 -> ch)`, `audio_textMidiError(param_2 -> status)` and
+`ovc41_specialAttack(param -> targetIndex)` were each pinned by a store or a comparison in the body
+rather than by the callee.  Parameters: 282 -> 280 (17.0%).
