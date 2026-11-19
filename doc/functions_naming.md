@@ -1104,3 +1104,22 @@ Refused in the same pass: `blit_usesDrawGfx` (its only calls are `unrle` and `me
 rows but no blit target is visible, so "draws" would be an assumption).
 
 Mechanical names: 546 -> 540.
+
+### Parameters batch: seven small bodies
+
+All nineteen slots below had an all-auto signature.  Names come from the body plus the call sites.
+
+| function | old | new | evidence |
+|---|---|---|---|
+| ovc07_swapWords | param_1, param_2 | wordA, wordB | body loads *a, stores *b into it and *a into *b |
+| constr_usesGMapFlags2 | param_1, param_2 | x, y | indexes GMapFlags[y][x], GMapCells[y][x]; caller passes (x,y) |
+| ovc30_usesRandBelow2 | param_1, param_2 | centerX, centerY | indexes GUnitGrid[param_1+i][param_2+j]; caller passes (GfxRndSeed,GfxRndSeed2) |
+| ovc30_usesRandBelow | param_1 | and | indexes LevelBandMin[band]/LevelBandMax[band]; callers pass 0..4 |
+| ovc25_findUnitCell | param_1, param_2 | x, y | reads *x/*y as the start cell and writes the found cell back |
+| ovc28_usesBDADailyTimeCounter | param_1 | 	icks | decrements it while waiting on the BIOS timer; callers pass 3 or 6 |
+| init2_usesCFGMice | param_1, param_2 | mouseX, mouseY | writes MiceX/MiceY through them; callers pass &MouseX, &MouseY |
+| ovc13_usesBlitLoadRleGfx2 | param_1..3 | x, y, orce | adds x to a scroll origin, clamps x 4..0x93 and y 0..0x39, stores them into GfxRndSeed/GfxRndSeed2; callers pass (MouseX-0xc>>1, MouseY-7, 0) |
+| ovc13_usesBlitLoadRleGfx3 | param_1..3 | x, y, orce | same body with PanelGridX/Y; callers pass (MouseX-0xef>>1, MouseY-7, 0) |
+| ovc30_compute1 | param_1 | level | returns band 0/1/2 at level thresholds 5 and 9; season_compute1 passes the AgntGs level byte |
+
+Parameters: 266 -> 247 (15.0%).  Gate: checked 71 failures 0.
