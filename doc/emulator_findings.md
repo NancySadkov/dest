@@ -375,3 +375,10 @@ Prince Corak, Duke Corak, Marquis Corak, Baron ojk).  Slot 5 gives a live animat
 Emperor view the two live agents were at screen `(217,104)` and `(131,168)`, i.e. outside the
 window on one axis each, so the planned `anm_t+0x17` pick-box poke could not be exercised
 there.  It needs a view with a unit inside the window (scroll the minimap or load another slot).
+
+### Live bytes behind the level-band table
+
+A read of `DGROUP:5dec` in the loaded game gives
+`LevelBandMin = 00 05 09 00`, `LevelBandMax = 04 08 FF FF` -- the level bands [0,4], [5,8],
+[9,255], [0,255].  The same read shows `DGROUP:5df4/5df6` at `0x28/0x1d` during a demo, i.e.
+the demo centre values move from the initial `0x58/0x24` as the attract camera advances.

@@ -2125,3 +2125,29 @@ pointers decode to `Peaceful`, `Aggressive`, `Hostile`, `Custom`, `Return`, `Fir
 `doc/emulator_findings.md` for the dump and for the withdrawal of the alias claim.
 
 Globals: 176 -> 175.
+
+## `LevelBandMin/Max` are `byte[4]`, and `demoCenterX/Y` (173 globals)
+
+`ovc30_usesRandBelow` (619c:025d) copies four bytes into four adjacent locals and then
+indexes them by the band argument:
+
+```
+byte bandMin[4], bandMax[4];
+bandMin._0_2_ = LevelBandMin._0_2_;  bandMin._2_2_ = LevelBandMin._2_2_;
+bandMax._0_2_ = LevelBandMax._0_2_;  bandMax._2_2_ = LevelBandMax._2_2_;
+... bandMin[param_1] ... bandMax[param_1] ...
+```
+
+The live bytes are `LevelBandMin = 00 05 09 00` and `LevelBandMax = 04 08 FF FF`, i.e. the
+level bands [0,4], [5,8], [9,255], [0,255].  Both globals were `undefined2` with a second
+`word_..._5DEE`/`_5DF2` symbol covering their upper half; they are now `byte[4]` arrays and
+those two half-symbols are deleted.  The retype is verified by re-decompiling the reader
+(the listing now shows `byte bandMin[4]` and `LevelBandMin._2_2_`).
+
+`word_2410_DATA_DGROUP_5DF4/5DF6` are the demo's map/spawn centre: `run_demo` (6d7a:08df)
+writes `0x58` and `0x24` (or `0x1e`) there, calls `ovc30_textDivideError(mode 2)`, and copies
+them into `GfxRndSeed`/`GfxRndSeed2`.  `ovc30_textDivideError` places units at random offsets
+inside `centerX +/- 8` (clamped 8..0x8c) and `centerY +/- 4` (clamped 8..0x34).  Named
+**`demoCenterX`** and **`demoCenterY`**.
+
+Globals: 175 -> 173 (2548 -> 2546 symbols; the two deleted labels are the absorbed halves).
