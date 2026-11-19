@@ -1316,3 +1316,23 @@ sign test against byte 0 instead of the high word, so the original two-word `far
 restored and only the name changed (the type is a placeholder for a value passed as two words).
 
 Parameters: 140 -> 137 (8.3%).  Gate: checked 71 failures 0.
+
+### Batches 19-21: remaining used parameters and readable locals (19 renames)
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `ovc42_textProvidesMoreHousing` | `param_1` | `timeoutTicks` | every caller passes the timeout first (`(0x48,0)`, `(0x10,0)`, `(0x30,0)`) and the loop exits once the elapsed ticks reach it |
+| `ovc27_usesPlay_sfxU` | `param_4` | `frames` | forwarded as `ovc27_compute3`'s second argument, which counts frames down next to the counter at `+0xf`; callers pass 1 and 2 |
+| `ovc22_usesLUDIV_at_2` | `param_3` | `applyPercent` | the whole body is `if (param_3 != 0)` and only then divides by 100 |
+| `ovc18_checkFortressPlacement` | `param_1` | `strongholdKind` | its only caller passes 1 and 2, and the `== 2` branch is the fortress path (bldType `0x89`, five-tile width check), whose value it also stores at sheet `+0x5a` |
+| `attact_usesEntities` | `param_4`, `param_5` | `flagsOfs`, `flagsSeg` | the prologue keeps them at `[BP+0xc]`/`[BP+0xe]` and the calls push `[BP+0xe]` then `[BP+0xc]`, i.e. segment then offset; all five call sites pass a 6-byte buffer and `unaff_SS` |
+| `constrct_usesGLeaderCount`, `ovc22_spawnForLeaders` | `local_4`, `local_5` | `outFlag` | passed as `ovc22_usesRandBelow2(partyIndex, undefined1 *outFlag, outFlagSeg)`'s out pointer |
+| `stats_setAgentBase`, `stats_calledAwayNotice`, `stats_unreadyNotice` | `local_8`, `local_8`, `local_a` | `unitFlags` | each is passed as `attact_usesEntities(entityIndex,0,0,<local>,unaff_SS)` |
+| `ovc45_textDone2` | `local_292`, `local_d` | `menuLabels`, `menuActions` | `local_292` holds the item far pointers ("Claim", "Chop down", "Done"), `local_d` their action codes 1/2/3/4 with `local_d[0]` taking the selection |
+| `ovc45_textDone`, `saveui_configureMessageDelay` | `local_14`, `local_20` | `menuLabel` | a single label pointer whose address is taken for the menu |
+| `attact_isTerrainFlat` | `local_a` | `cornerHeights` | filled from the 2x2 cells around the cursor and then min/max compared |
+| `ovc18_showLeaderView` | `local_8` | `partyCounts` | cleared, then `local_8[sheet->0x3f]++` per leader; `+0x3f` is the party index the other per-party arrays use |
+| `ovc50_usesUiInputText` | `local_2a` | `tabPtrs` | filled with `F_SCOPY(&StatsTabPtrs,...)` and handed to `ovr_uiInputText` |
+| `land_info` | `local_a` | `menuLabel` | `local_a = menuItems[0]` and its address is taken for the menu call |
+
+Parameters: 137 -> 131 (8.0%).  Locals: 80 -> 67 (9.7%).  Gate: checked 71 failures 0.
