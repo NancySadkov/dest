@@ -2403,3 +2403,20 @@ convention: `s_underscore_2410_2738`, `s_lf_2410_5fde/6097/6156`, and
 `0000:046c` is the BIOS data area `0040:006C` tick counter, typed `uint32_t BDA_TickCount`.
 
 **Globals: 130 -> 65.**
+
+## Residual no-xref items (52 globals)
+
+| address | name | evidence |
+|---|---|---|
+| `4b0a:0b69` | `audioCommandSwitch` (`uint16_t[6]`) | the function at `4b0a:09ce` loads `AL=ES:[*arg]`, checks `BX <= 5` and executes `JMP word ptr CS:[BX + 0xb69]`; handlers are `0x09f4, 0x09fd, 0x0a16, 0x0a2f, 0x0a43, 0x0a5c`. |
+| `6018:16b0` | `ovc28_codeOffsetTable` (`uint16_t[59]`) | a contiguous run of 59 descending 16-bit code offsets `0x0ff2..0x0c00` from `16b0` to `1725`; the run before it at `1670` and the ascending run at `1726` are separate. No dispatcher survives in the disassembled overlay, so the name states the data image rather than an unproven purpose. |
+| `138e:0002` | `miceHandlerStack` (`uint8_t[256]`) | the INT 33 handler saves `SS`/`SP` at `GMiceSS`/`GMiceSP`, then `PUSH CS; POP SS; MOV BX,2; ADD BX,0xfe; MOV SP,BX`, so `SS=CS` and `SP=0x100`: `0002..0101` is the handler's private downward stack below the saved-state words. |
+| `224a:0121` | `miceTileTail` (`uint8_t[15]`) | the `224a` block is 0x130 bytes; its first 0x121 bytes are `MiceSaveArea` (the template copied into the four `MicePtrs` buffers), while `video_copyScreenTile`/`miceBlitAtSeg` use the same segment as a screen-tile scratch, so `0121..012f` is the remaining 15 bytes. |
+
+### Refused: `2ca1:0000/0002/0004`
+
+Three words of `0x15D4` before `InitStart` (`boinit_t[4]` at `0006`).  They have no reader and no
+writer, and they are not shaped like init records (which start `01 01 24 0D ...`); the earlier
+`boinit_t[5]` typing was already withdrawn.  They stay unnamed.
+
+**Globals: 65 -> 52.**
