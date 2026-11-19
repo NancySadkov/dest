@@ -6691,3 +6691,32 @@ The block then writes `targetX`/`field_0x5`, the two bytes `ovc41_usesAgnount` c
 test for.  `field_0x2a` stayed 0 in every snapshot and every record, so it remains refused.
 
 Struct fields: 308 components, 11 auto.
+
+## 14 parameters from array indices, call sites and grid offsets
+
+| function | parameters | evidence |
+|---|---|---|
+| `ovc24_textArena` | `x`, `y`, `faction` | it snaps the first two through `alignUp4` and
+compares them with `GfxRndSeed`/`GfxRndSeed2` (the x/y pair the other arena finders use), then
+scans `Agnts` for the first live unit whose `+0x2f` equals the third argument - and `agnt_t+0x2f`
+is `faction` |
+| `attact_usesEntities` | `entityIndex` | its first argument indexes `Entities` directly
+(`Entities[param_1].base.faction = 0; ... .destX ...`) |
+| `ovc43_textToymaker` | `paletteOfs`, `paletteSeg` | one call site,
+`ovr_ovc43_textToymaker(0x184, palette, unaff_SS)`, forwarded straight into
+`ovc43_usesBiosKeyAvail`'s already-named palette slots |
+| `video_compute1` | `x`, `y` | callers pass `MouseX - 0xc, MouseY - 7` and `screenX, ...`; the
+body indexes a per-column table with `x - 0xc` and compares a vertical span against `y` |
+| `init_usesGMapCells` | `x`, `y` | the cell address is `y * 0x94` (the `GMapCells` row stride)
+plus `x` inside the row |
+| `constr_usesGfxRndSeed` | `dx`, `dy` | `dx` is added to `GfxRndSeed` and bounded by the map
+width `0x94`; `dy` is subtracted from `GfxRndSeed2` and bounded by the height `0x3c` |
+| `agnt_usesAgntCount3` | `fromIndex`, `toIndex` | it remaps both `10 x 0x69` index grids: every
+value in `(from, to]` is decremented and `from + 1` becomes `to + 1`, i.e. remove-with-last |
+
+Refused in the same pass: `attact_usesEntities param_4/param_5` (unused slot and the low word of
+a packed argument that `attact_usesAlignUp4` never reads), `ovc07_compute1`'s second pointer (the
+body only swaps through `param_1` and a stack pointer, leaving `param_2` unread), and
+`ovc22_textRingProt` (still `bad instruction data` + untracked stack spacebase).
+
+Parameters: 338 -> 324.

@@ -211,3 +211,15 @@ Two practical notes:
 What the 120-snapshot run settled: `agnt_t+0x25` goes 0 -> 1 -> 2 -> 0, and `+0x11` stays 0 for
 every unit of that spawn while an earlier spawn had 1 for the same types - which is why the two
 fields are now named from their writers/readers rather than from position correlation.
+
+## Negative result: the `StatsSeg` faction records are static during the demo
+
+To test whether `agntG_t+0x94` (the 5/10/20/30/40 byte) is a score or price, 40 one-megabyte
+memory dumps were taken while the demo built its army (4 -> 7 -> 17 agents), and the five
+`StatsSeg` records (`Nasher`, `Fordor`, `Kaunas`, `red dragon`, `Mindark`) were compared field by
+field.  **No byte of any record changed** across the whole run, so these are starting templates
+or per-faction definitions, not live player state, and the demo cannot be used to correlate
+`+0x94` with a score change.
+
+The same data does confirm the records' shape: 192 bytes each, a `(count, segment)` header whose
+segment points back at the record itself, and the name inline at `+4`.
