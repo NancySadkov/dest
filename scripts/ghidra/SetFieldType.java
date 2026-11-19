@@ -30,10 +30,16 @@ public class SetFieldType extends GhidraScript {
                 int off = Integer.decode(f[1]);
                 DataType fieldType;
                 String spec = f[2].trim();
+                java.util.regex.Matcher am = java.util.regex.Pattern
+                        .compile("^(.+)\\[(\\d+)\\]$").matcher(spec);
                 if (spec.endsWith(" *")) {
                     DataType base = dtm.getDataType(spec.substring(0, spec.length() - 2).trim());
                     if (base == null) { println("NOTYPE " + spec); failed++; continue; }
                     fieldType = new PointerDataType(base, 4, dtm);
+                } else if (am.matches()) {
+                    DataType base = dtm.getDataType(am.group(1).trim());
+                    if (base == null) { println("NOTYPE " + spec); failed++; continue; }
+                    fieldType = new ArrayDataType(base, Integer.parseInt(am.group(2)), base.getLength());
                 } else {
                     fieldType = dtm.getDataType(spec);
                     if (fieldType == null) { println("NOTYPE " + spec); failed++; continue; }

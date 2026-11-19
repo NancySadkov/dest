@@ -7263,3 +7263,42 @@ labels were record 0's and record 1's x, and `ExitStart`/`ExitEnd` at `09ae/09b4
 references** (spurious labels inside record 127), so there was no real overlap to preserve.
 
 **Structs: 36 -> 37; fields 321 -> 324, generated stays 6.  Globals: 137 -> 136.**
+
+## `char_sheet_t+0` is a 40-byte name buffer (fields 6 -> 5)
+
+`ovc30_usesFmFreeAudio` (`619c:0339`) creates a leader sheet and shows the front of the record:
+
+```
+619c:041e  PUSH 0xae            ; length
+619c:0421  PUSH 0x0             ; fill byte
+619c:0423  PUSH [BP-2]          ; sheet segment
+619c:0426  PUSH [BP-4]          ; sheet offset
+619c:0429  CALLF 1000:2666      ; _fmemset(sheet, 0, 0xae)
+...
+619c:0442  PUSH ES:[BX + 0x26fc]  ; class-record name far pointer (high)
+619c:0447  PUSH ES:[BX + 0x26fa]  ; (low)
+619c:044c  PUSH [BP-2]            ; sheet segment
+619c:044f  PUSH [BP-4]            ; sheet offset == offset 0
+619c:0452  CALLF 1000:2d31        ; strcpy(sheet, className)
+```
+
+`BX` there is `gindex * 0x95` against `ES = 0x195d`, i.e. the class/unit-type record, and
+`1000:2d31` is `strcpy` (the `_f*` variant, matching the two far pointers).  The destination is
+the sheet base, so `char_sheet_t+0` is a NUL-terminated name buffer, and the next field
+(`statMask`) starts at `+40`.  It is now `char nameText[40]`.
+
+Re-decompiling confirms it: `strcpy(sheet->nameText, in_DX);`.
+
+### Refused: `agnt_t+0x2a`, `agntG_t+0x94`, `char_sheet_t+0x40/0x64/0x82`
+
+`scripts/ghidra/FindFieldDisp.java` was added: for a struct-plus-displacement pair it scans the
+instructions of every function that takes that struct and reports each operand that mentions
+the displacement.  Results:
+
+| field | finding |
+|---|---|
+| `agnt_t+0x2a` | exactly one reader: `ovc49_agentIsActive` does `CMP byte ptr ES:[BX+0x2a],2` and requires `BothFactions != 0`; no writer anywhere. A single equality test against 2 gated by a debug flag does not identify the field. |
+| `agntG_t+0x94` | no reader and no writer: every `+0x94` operand belongs to `GMapFlags` (`[BX+SI+0x94]`/`[BX+0x94]` in the terrain routines) or to stack locals. The byte is real (the records have stride `0x95`), but nothing reads it. |
+| `char_sheet_t+0x40`, `+0x64`, `+0x82` | no operand in the recovered code addresses them; the only `+0x64` hits are `LEA AX,[BP-0x64]` stack locals. |
+
+These stay unnamed rather than receiving invented labels.
