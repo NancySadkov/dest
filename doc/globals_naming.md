@@ -2184,3 +2184,24 @@ of their references; the full program gives 84 with xrefs.  Five had direct sema
 
 Re-decompiling the readers shows the new names (`GBattleMode = 1 - (GBattleMode != 0)`,
 `promotionCount * 0x32 + 0x32`, `if (GHighScoreSaved == 0)`).  **Globals: 172 -> 167.**
+
+## Two more referenced bytes (165 globals) and the audio-driver refusal
+
+| address | name | evidence |
+|---|---|---|
+| `2000:d090` | `placementStatus` | `constr_usesGMapFlags`, `ovc22_textArena` and `ovc22_textRingProt` set it to 1 when the cell/flags are occupied, 2 when the coordinates are outside 0..0x93/0x3b, and 3 when the edge height difference is below 9; a valid plot leaves it 0. |
+| `2000:d19c` | `inputCancelled` | `uiReadString` / `saveui_usesBlitText` clear it on entry and set it on Esc (`0x11b`), `0xfffe`, or the cancel-button click; `saveui_textWhichNewWorld` and `chargen` abort when it is nonzero. |
+
+Re-decompiling the writers shows `placementStatus = 2/3/1` in the three branches and
+`inputCancelled = 0/1` at entry/cancel.
+
+### Refused: the audio-driver copy words (`2000:d0a2..d0f2`)
+
+`RefsToAddrs.java` finds only writes for these words, all inside `stshLoadAudioDrivers`
+(`4b0a:13d3`).  Their stored values duplicate already-named handles: `d0a2` gets
+`sblasterComOfs`, `d0e4/d0e6` get `sblasterComOfs/Seg`, and `d0d8..d0de` get the same
+`sbpro.com` far pointer twice.  No reader exists in the program and no indirect table access
+into the block appears either, so the individual slots cannot be named without guessing; they
+stay unnamed with this note.
+
+Globals: 167 -> 165.
