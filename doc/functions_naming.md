@@ -186,3 +186,20 @@ agent-index grids `agnt_remapGridRefs` rewrites |
 
 Its second parameter is now typed and named `agnt_t *agnt`: the body reads `x` (+0), `y` (+2),
 `frameIndex` (+0x12), `frames` (+0x13) and `animVariant` (+0x11), and the callers pass `&Agnts[i]`.
+
+### Ninth batch
+
+| old | new | evidence |
+|---|---|---|
+| `driver_scan3` | `driver_setMapFlagsRect` | every caller passes `GMapFlags` and a rect
+(`0,0,0x93,0x3b` = the whole 148x60 map); the address is `buf + x1*2 + y1*0x128` (0x128 = 296 =
+148 words, the map-flag row stride) and the loop ORs every word with the mask |
+| `driver_scan4` | `driver_clearMapFlagsRect` | same body with `&= mask` |
+| `ovc25_scan1` | `ovc25_findUnitCell` | expands square rings from the start cell (radius 0..99,
+offsets 0..radius, both signs), tests each candidate with `attact_usesGUnits`, and on a hit writes
+the coordinates back through the two pointers and returns 1 |
+
+Refused in the same pass: `ovc38_scan1` (parses a decimal after an `@` marker in a message and
+compares it against `strongholdsDestroyed`, but the message format is not stated anywhere in the
+export) and `driver_scan1` (its remaining slots are CRT register values and a `pattern._2_2_`
+artifact).
