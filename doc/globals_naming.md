@@ -2370,3 +2370,36 @@ animation blit in `ovc13_usesMiceBlitRect`: `DGROUP_0845 == 0 && GPaused == 0 &&
 byte_2000_06E2 == 1`), and **no writer anywhere in the program**.  It sits between `GMenuFlag`
 (`0844`) and `flashPaletteEf` (`0846`).  A constant, never-written byte cannot be distinguished
 from alignment padding or a compiled-out debug switch from this evidence, so it stays unnamed.
+
+## No-xref sweep: the CRТ jump table, false code-data, strings (65 globals)
+
+### `1000:131a` is `printfFormatJumpTable` (`uint16_t[24]`)
+
+The CRT format parser at `1000:0f1a` reads a `%` directive, maps the byte through
+`vprinter_printCtype[byte-0x20]` (96 entries at `2410:884b`), bounds-checks the index against
+`0x17`, shifts it and executes `JMP word ptr CS:[BX + 0x131a]`.  The table is 24 code offsets
+(`0x0f7b, 0x0f65, 0x0fb0, ... 0x0f91`) from `0x131a` to `0x1349`; a new function starts at
+`0x134a`.  Retyped `uint16_t[24]`, absorbing the 23 `data_1000_TEXT_crtl_13xx_uint` autos.
+
+### 32 auto words were code, not globals
+
+In executable overlays several auto words were instruction bytes that Ghidra had typed as data
+because the surrounding function bodies had gaps.  `ForceDisasm.java` clears a range and runs
+`DisassembleCommand`; these five ranges decoded with zero holes:
+
+```
+3f0b:1ab9-1ac5   3f0b:21d8-21e6   4d05:33b8-33c1   4d05:342d-3437   5087:0bd2-0c02
+```
+
+Examples: `3f0b:1ab9 POP DX / ADD DX,AX / MOV [BP-4],DX / CMP [BP-4],0 / JNZ`;
+`5087:0bd2 MOV DX,0x195D / PUSH ES / PUSH BX / ...` (the `0c00` word was even misaligned).
+The false data units are gone, so they no longer appear as globals.
+
+### Strings and the BIOS tick
+
+Nine auto string units were named from their own bytes, using the existing address-suffixed
+convention: `s_underscore_2410_2738`, `s_lf_2410_5fde/6097/6156`, and
+`s_empty_2410_6939/6ac3/6b39/747d/78df` (the last is the null before `strong.dat`).
+`0000:046c` is the BIOS data area `0040:006C` tick counter, typed `uint32_t BDA_TickCount`.
+
+**Globals: 130 -> 65.**
