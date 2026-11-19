@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn373/naming_summary.txt`.
+`tmp/auditn374/naming_summary.txt`.
 
 ## Where the model stands
 

@@ -650,3 +650,39 @@ its local `reported` flag and tests it immediately afterwards.  Parameters: 297 
 Refused in the same batch: `ovc15_usesRandBelow2` (picks a random entity for the side with the
 larger `sheet+0x45`, which lands inside the unnamed `pad_40` region), `draw_usesGameProcessKey`,
 and `ovc49_usesStExit`.
+
+### Twenty-fourth batch: 9 names, driven by the string literals each body carries
+
+A new scan (`tmp/mech_strings.py`) lists every mechanical-named function whose body contains a
+string literal other than the `"puppetmaker"+3` filler: 89 candidates.  Each name below comes from
+the literal plus the code around it.
+
+| old | new | evidence |
+|---|---|---|
+| `agnt_textHeld` | `agnt_statusText` | tests the agent flags in order and builds the matching status
+text; the literals are `"charmed %s"`, `"diseased %s"`, `"held %s"`, `"paralyzed %s"` |
+| `ovc18_textFortressCannotPlaced` | `ovc18_checkFortressPlacement` | carries the verdicts
+`"A fortress cannot be placed among enemy units."`, `"Cannot place another fortress here."`,
+`"This location is unsuitable for a main stronghold.  %s"` |
+| `saveui_textSsavesTxt` | `saveui_readSavesList` | opens `"%ssaves.txt"` and reads each entry |
+| `saveui_textSsavesTxt2` | `saveui_writeSavesList` | creates `"%ssaves.txt"`, writes the count line
+and one line per entry with `saveui_writeLine` |
+| `draw_textMovement` | `draw_toolbarLabels` | blits `"Build"` at (0x104,0x5b), `"Recruit"` at
+(0xe6,0x3e), `"Train"` at (0x11e,0x3e) and `"Movement"` |
+| `manage_textLawful` | `manage_playerTitle` | copies `GPlayerTitles` and returns
+`titlesMap[gender*2 + cls*4]`, the empty string when `cls == 0xff` or unset |
+| `saveui_textCancel` | `saveui_drawCancel` | blits `"Cancel"` at (0x1d,0xb7) in Font03 |
+| `saveui_textMessageDelayNow` | `saveui_configureMessageDelay` | `"Change message delay:"`,
+`"Message delay is now %d."` and `"cflow4.txt"` |
+| `saveui_textWhichNewWorld` | `saveui_configureNewWorld` | `"Which new world:"`,
+`"Hostility level:"`, `"Low/Medium/High intelligence enemies:"`, `"Size of second wave:"`,
+`"Too many enemies. 60 enemies maximum."`, `"Resetting game..."`, `"New world complete."` |
+
+Two parameter scans were run first and both came back nearly empty, which is the evidence that the
+automated levers are exhausted: auto params multiplied by a known record stride (0x34/0x37/0x95/
+0x27/0x1e/0x12/9) yields **one** hit, in `OVC22_5087_056e` -- the function already documented as
+self-contradictory and deliberately untouched.
+
+Refused in the same batch: `ovc15_textError` and `ovc18_textTypeLen` (complex panel renderers whose
+literals name only some of their sections), `draw_textProvidesMoreHousing` (an input-wait loop that
+uses the housing string only as an address for a return code), and `draw_textGoldProvidesHousing`.
