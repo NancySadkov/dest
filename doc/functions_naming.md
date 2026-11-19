@@ -215,3 +215,24 @@ artifact).
 `targetY = 0`) when `AgntFlag1` is set, memmoves the `Entities` tail down over the record,
 decrements every agent `owner` above it and re-points those agents' entity pointer, then
 `EntityCount--` |
+
+### Eleventh batch
+
+| old | new | evidence |
+|---|---|---|
+| `ovc49_usesBlitGfxRect` | `ovc49_drawAgents` | the body has three loops over `AgntCount`; per
+agent it fills the grid cells (`ovc49_fillGridCells`), runs the paralysis/AI check
+(`ovc49_textLongerParalyzed`), calls the state dispatcher (`ovc49_body1`) for the animation index,
+resolves the animation record and sprite, and draws it with `blitGfxRect`; it also derives
+`BothFactions` from the per-faction presence table and sets `GGameState = 0x2d` |
+
+Refused in the same pass: `ovc18_textBathHouse` -- its body derives a gindex from the party
+sheet's `classStr`, tests `AgntGs[cls].flags & 0x800`, picks one of 6/19/25 and calls the spawn
+routine `ovc15_usesLDIV_at_`, so it is a class-based spawn helper, but the "bath house" string
+that named it is not explained by the body and the callers pass six packed arguments whose roles
+are not settled.
+
+Two more parameter scans came back empty, which is the evidence that the cheap slots are gone:
+auto params used as an index into a named array (`Entities`, `Agnts`, `GUnits`, `AgntGs`,
+`AgntAnms`, `GStructures`): 0 hits; auto params stored into a named struct field:
+0 hits.
