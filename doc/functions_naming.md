@@ -1221,3 +1221,18 @@ the same name (`createConstructionRecord`, `createConstructionRecordFar`, `ovc22
 (`CONCAT22(param_2, param_1._2_2_)`) and became `agntSeg`.
 
 Parameters: 227 -> 191 (11.6%).  Gate: checked 71 failures 0.
+
+### Parameters/locals batch 10: out-pointer and copy evidence (8 renames)
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `ovc45_findEntityAt` | `param_4` | `foundFlagOut` | `*_foundFlag = 0` at entry and `*_foundFlag = 1` when several parties are in the tile; the function comment already says "writes its index and a found flag through the out pointers" |
+| `land_info` | `local_22` | `foundFlag` | receives that out flag (`ovc45_findEntityAt(...,(char)&local_22)`) and is then passed as `textDone`'s first boolean argument |
+| `land_info` | `local_1e` | `outFlag` | passed as `ovc45_textDone2`'s `undefined1 *outFlag` argument |
+| `land_info` | `param_1` | `tileOffset` | clamped to `0..3` and used as `tileX = GfxRndSeed + param_1 - 2`, an x offset of `-2..+1` from the cursor tile |
+| `uiReadString` | `local_8` | `cursorX` | cleared, then passed as `saveui_usesBlitGfx10`'s `uint *cursorX`, which ends with `*_cursorX = TextBlitX` |
+| `saveui_usesBlitText` | `local_8` | `cursorX` | same argument and same callee |
+| `unit_usesAlignUp42` | `local_12` | `savedCursorX` | `savedCursorX[menuIndex] = menuCursorX[menuIndex]` |
+| `unit_usesAlignUp42` | `local_d` | `savedCursorY` | `savedCursorY[menuIndex] = menuCursorY[menuIndex]` |
+
+Parameters: 191 -> 189 (11.5%).  Locals: 86 -> 80 (11.6%).  Gate: checked 71 failures 0.
