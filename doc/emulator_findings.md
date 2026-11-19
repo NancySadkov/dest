@@ -269,3 +269,41 @@ table and `DGROUP:0804` lands inside the string `"returned %s"`, so the values l
 leftovers rather than initialised LEVELBAND pointers.  The `levelBandMinSeg`/`levelBandMaxSeg`
 names therefore still rest only on the code's load pattern (`bandMin = LevelBandMin; uStack_4 =
 5DEE;` and the matching pair for Max); confirming them needs a read during a generated scenario.
+
+## Harness notes from the 2026-11-19 session
+
+Working recipe (verified this session):
+
+```
+cd emulator; $env:SDL_AUDIODRIVER='dummy'; .\dosbox-x-mod.exe -conf strong.conf
+# then, from another shell:
+python -u scripts/emulator/probe.py          # locate -> DGROUP 1C33, delta 7DD
+```
+
+* `regs` confirms `DS=1C33 SS=257D ES=1C33` in the game stage, so the DGROUP mapping is right.
+* The setup prompt is readable as text: `dump`/`peek` at `0xB8000` and take every second byte --
+  `ENTER: use previous configuration, SPACE: reconfigure, ESC: quit` was visible there.
+* After `key enter` the display switches to VGA graphics and `0xB8000` no longer shows the screen.
+  Use a text-mode screen dump only to check the setup stage.
+* **`peek` is capped at 64 bytes and each call costs about a second** -- scanning megabytes with it
+  is impractical (a 64 KB scan did not finish in minutes).  Use `dump <lin> <len> <file>` instead:
+  four `dump` calls of 0x40000 each produce a full 1 MB image in a few seconds.
+* `find <hex>` over the full 16 MB is fast enough and is the reliable way to locate DGROUP
+  (`find 756E646576656C6F706564` -> `0x1E041` here, delta `0x7DD`).
+* A second client cannot connect while an earlier socket is still half-open: run one script per
+  emulator session, and restart the emulator after a killed script.
+
+### Open problem: the BSS segment is not `DS + Ghidra-offset`
+
+Ghidra's BSS block is `2000:ca34 - 2000:d59f`.  Reading `DS:0xca34` in the live process returns
+overlay *code*, not BSS, so the block's offsets are not DS-relative.  `Agnts` (`1726:0000` ->
+`0xF490` with the delta) is all zeros and no record with `gdata` pointing at `0x1180:26d6` exists in
+a 1 MB dump taken after `key enter`, which means the process was still in the logo/demo stage and no
+scenario had been generated.  Two follow-ups are needed before the live `agnt_t`/`agntG_t`/`anm_t`
+questions can be poked:
+
+1. the key sequence that reaches a generated map (the menu is graphics-only, so the text-screen
+   trick cannot see it);
+2. the mapping of Ghidra segment `2000` to its runtime segment, best found from a far pointer stored
+   in DGROUP once a scenario exists (for example the `GMapFlags`/`GUnits` globals are far pointers
+   whose segment field is the BSS segment).
