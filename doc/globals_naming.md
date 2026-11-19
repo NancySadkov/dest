@@ -2377,7 +2377,7 @@ MOV [0x8934],DX       ; low half
 
 That pair is `2000:ca34` (low) and `ca36` (high), i.e. one `uint32_t`.  The old
 `_bdata_at_`/`ExitEnd` labels at `ca34` are **not variables**: `startx` zeroes BSS with
-`MOV DI,0x8934; MOV CX,0x949a; STOSB.REP`, so Ghidra labelled the first byte of that fill.
+`MOV DI,0x8934; MOV CX,0x949a; STOSB.REP`, so Ghidra labelled the first byte of that fill; both aliases are now removed.
 The value is the tick that gates the `GRecordCount` update loop, hence `recordUpdateTick`.
 
 Retyped `2000:ca34` as `/stdint.h/uint32_t` and deleted the high-half label at `ca36`.
