@@ -2205,3 +2205,15 @@ into the block appears either, so the individual slots cannot be named without g
 stay unnamed with this note.
 
 Globals: 167 -> 165.
+
+### Refused: writer-only temporaries and counters
+
+* `2000:d114` (`word_2000_BSS_06E0`) is written by unrelated routines with unrelated values:
+  `attact_usesMenuItemEnabled(...)` (a menu state), `uVar2` in `attact_textCannotAttractUnits`,
+  a `pcVar3` pointer in `ovc18_spawnClassAgent`, `func_0x0004f501()` in `chargen_switch`, and
+  `func_0x0004f501(0x3f0b)` in `attact_usesLDIV_at_`, which then divides by it.  It is a shared
+  scratch slot, not one semantic variable.
+* `2000:d163`/`2000:d165` are reset in `attact_usesAlignUp42` and then only incremented in
+  `ovc26_usesStExit`; no reader exists, so they are counters with no recoverable meaning.
+
+Both stay unnamed by design; the evidence above is the reason, not a guess.
