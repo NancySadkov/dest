@@ -6457,3 +6457,90 @@ iVar3  = (int)(param_2->x - *(int *)(*piVar5 + 0x17)) >> 1;                 /* +
 and `in_stack_00000008` / `in_stack_00000006` survive, i.e. the 2-byte layout is preserved.
 
 Struct fields: 308 components, **14 auto**.  Struct-typed arguments: 138 -> **140**.
+
+## `blit_compute1`: the dither line walker (12 parameters, 9 named)
+
+This was the largest surviving pile of unnamed parameters (11).  It has exactly one caller,
+`blit_usesStExit`, so the call site supplies the argument order and the body supplies the roles:
+
+```c
+blit_compute1(rectOfs[4], iVar2, iStack_12, CONCAT22(iStack_c, unaff_SS), *(uint *)(uVar5 + 5),
+              uStack_10, *(uint *)((uint)bStack_7 * 2 + 0x470), uStack_22, iStack_1c,
+              iStack_1e, iStack_20, iStack_16, iStack_1a, unaff_DI);
+```
+
+| parameter | name | evidence |
+|---|---|---|
+| `param_2` | `y` | the row: `*(dst + y * 0x140)` is the store, and `clipTop <= y <= clipBottom` |
+| `param_3` | `x` | the column: `iStack_6 = x`, incremented once per drawn pixel |
+| `param_5` | `imgWidth` | the loop bound `imgWidth <= uStack_8` over source pixels (`gfx+5` in the caller) |
+| `param_6` | `clipWidth` | the bound `clipWidth <= uStack_c` over drawn pixels; the caller passes
+`min(x2, rect.right) - max(x1, rect.left) + 1` |
+| `param_9` | `ySlope` | `iStack_1c = dy / dx`; the body does `y += ySlope` every pixel |
+| `param_10` | `yRemainder` | `iStack_1e = |dy %% dx|`; accumulated into the error term and compared with `dx` |
+| `param_11` | `yStep` | `iStack_20 = ovc07_compute2(dy)`, whose body returns -1/0/+1; added to `y`
+when the error overflows `dx` |
+| `param_12` | `clipTop` | `rectOfs[1]`; the lower row bound |
+| `param_13` | `clipBottom` | `rectOfs[3]`; the upper row bound |
+
+So the routine walks a 16-bit dither mask along x (`uVar2` rotates 1,2,4...0x8000), draws a pixel
+when the mask bit is set, and steps `y` by an integer Bresenham increment.  `param_14` stays
+refused: it is the caller's `unaff_DI` and the body never reads it.
+
+### `param_4` refused - the slot is the source far pointer
+
+I first named it `xInset` because the body compares its **high** word against a counter
+(`param_4._2_2_ <= uStack_a`).  The listing refutes that reading:
+
+```
+317e:0ecd  MOV SI,word ptr [BP + 0x8]        ; y
+317e:0ed6  MOV DX,word ptr [BP + 0xa]        ; x (dest offset, incremented)
+317e:0efd  LES BX,[BP + 0xc]                 ; source offset at 0x0c
+317e:0f20  MOV ES,word ptr [BP + 0xe]        ; source segment at 0x0e
+317e:0ef0  TEST word ptr [BP + 0x16],DI      ; mask
+317e:0f4d  CMP AX,word ptr [BP + 0x18]       ; dx
+```
+
+The 4-byte slot at `[BP+0x0c]` **is** the source far pointer, so its high word is the source
+segment, not an inset; the comparison the decompiler prints against it is an artifact.  The name
+was reverted to `param_4`.
+
+The listing also shows the parameter mapping is shifted by one 2-byte slot from `mask` onward:
+the real stack has the mask at `[BP+0x16]` and `dx` at `[BP+0x18]`, while the stored prototype
+places them at `0x14`/`0x16`.  The names above are correct for the *variables in the decompiled
+body* (each is used with the role stated), but the prototype itself needs the extra slot inserted
+before it can be trusted for argument-order questions.  Recorded as an open prototype issue.
+
+## `ovc15_usesRandBelow`: `param_3` is `keepPos` (1 more parameter)
+
+```c
+if (param_3 == '\0') { ...set agnt->x / agnt->y... }     /* the whole placement block */
+```
+
+The two call sites in `ovc15_textArena` differ exactly there:
+
+| site | agntCopy state before the call | `param_3` |
+|---|---|---|
+| after `_fmemmove(&agntCopy, ...)` + `target = 0xff` | position not set | `1` |
+| after `agntCopy.level` / `targetX` / `field_0x11` have been written | position fixed | `0` |
+
+So `1` means "keep the position already in the record" and `0` means "generate one".  Named
+`keepPos`.  `param_2` is refused: it selects one of three placements (x = 0, an `sfxXOffsets`
+slot, or x = 0xd2), but its -1/0/+1 values arrive through an *undeclared* stack slot of the
+caller (`ovc15_textArena(int owner)` shows `in_stack_00000006`), so what each value means is not
+stated.  `param_4` is refused for the same reason: it only chooses y = 0x20 versus a random y
+inside the `param_2 == 0` branch.
+
+## 5 agent pointers retyped (struct-typed arguments 140 -> 143)
+
+Each was already 4 bytes wide (`undefined4` or `int32_t`), so retyping to `/st.h/agnt_t *32` is
+size-neutral and cannot shift the stack:
+
+| function | parameter | evidence |
+|---|---|---|
+| `5ded:1fe1 ovc27_usesPlay_sfxU` | `param_3` -> `agnt` | body does `paVar5 = (agnt_t *)param_3`; every use is an `agnt_t *32` callee slot |
+| `6386:06cd drawAgntStats` | `agnt` (was `int32_t`) | body casts `(agnt_t *)agnt` ten times and splits its words |
+| `6a8f:0b39 ovc41_textFailsTurn` | `param_1` -> `agnt` | `agnt_t *` slots only (`agnt_textHeld`, `agnt_usesAnimFrame`) |
+| `6a8f:1c74 ovc41_textParalyzed` | `param_1`, `param_2` | both cast to `agnt_t *` and passed only to agent slots; **names stay generated** because the body sets the timer on `param_2` while the message reads `param_1` first |
+
+Parameters: 363 -> 351.  Struct-typed arguments: 140 -> 143.
