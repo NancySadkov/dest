@@ -7203,3 +7203,16 @@ UI switches to a 320x400 mode whose vertical mouse mapping is not yet calibrated
 rest on the two decompiled readers above, not on that poke.
 
 **Struct fields: 322 total, generated 10 -> 7.**
+
+## Refusals re-checked against the live table
+
+gntG_t+0x94 (the last byte, AUTO) was read for all 42 live types: 5 for skeleton/orc/giant ant/
+giant bat, 10 for kobold/giant toad, 20 for the player classes and most mid monsters, 30 for harpy/
+stone giant/fire giant/minotaur, 40 for the dragons, manscorpion, medusa, wight, purple worm,
+phoenix and vampire.  That correlates with toughness, but no reader exists in the exported code,
+so the meaning (XP value, build cost or AI tier) is not decided and the field stays unnamed.
+
+gnt_t+0x2a is the same: the only ield_0x2a uses in the export are
+char_sheet_t (OVC21_manage.c__chargen_switch.c:700) and a strategy record
+(OVC25__ovc25_textIntelligenceReportsAttacking.c:28), not the 0x34-byte gnt_t.  The earlier
+attribution to ovc49_agentIsActive is therefore withdrawn; the field is unread in the export.
