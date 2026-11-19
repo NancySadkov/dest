@@ -312,3 +312,56 @@ mix the high byte of the `+0x40` word with `rank`, so the intent is not clear), 
 (`sheet+0x56` plus an unresolved callee), `bldng_usesRandBelow` / `bldng_usesGStrangeTable` (table
 lookups), `saveui_usesBlitLoadRleGfx4` (font blit at a fixed address), `ovc15_usesToupper`,
 `agnt_compute1` and `ovc23_usesGfxRndSeed2`.
+
+### Fifteenth batch: 19 names from the bulk short-body read
+
+Both passes came from the same enumeration (`read_short3.py`): the 114 mechanical-named
+functions whose decompiled body is 10-20 lines, read 12 at a time.
+
+| old | new | evidence |
+|---|---|---|
+| `saveui_usesBlitGfxRect` | `saveui_blitPanel` | blits the panel asset `nwpanel2Cut1` at
+(0,0) against `BlitRects+1`; every caller is a save/UI screen (`uiMainMenuLoop`,
+`saveui_text...`, `init_copyProt...`) |
+| `ovc18_usesBlitLoadRleGfx` | `ovc18_blitTriangles` | blits `trianglsCut4` to
+`0xa000:c306` and sets the `byte_2000_BSS_077A` loaded flag |
+| `ovc18_usesBlitLoadRleGfx2` | `ovc18_blitPanelIfNotRunning` | blits `nwpanel1Cut4` to the
+same screen address, but only while `GameRunning` is 0 |
+| `ovc41_usesAnimFrame` | `ovc41_advanceAnimFrame` | increments `entity->base.animFrame`
+(`+0x1b`) through the agent's entity pointer |
+| `init_usesGUnits` | `init_initGUnits` | initialises all 0xf8 `GUnits` records:
+`bldType = index`, `level = 0xff`, `unitType = 0xff` |
+| `agnt_compute6` | `agnt_advanceAnimFrame` | calls `agnt_usesAnimFrame` only when bit 2 of the
+agent type record's first word (`agntG_t+0`) is clear |
+| `ovc31_usesClose` | `ovc31_fileExists` | opens the named file read-only, closes it again and
+returns whether the open succeeded |
+| `ovc28_usesBlitGfxRect` | `ovc28_blitButton` | blits `button1Cut3` at (223,8) against
+`BlitRects+1`, ticks the daily-time counter by 3, then blits the follow-up graphic |
+| `agnt_usesAgntCount` | `agnt_isAnimating` | returns true when `AgntCount`, `byte_2000_BSS_08A2`
+or `GAnimPlaying` is non-zero -- whether anything is still animating |
+| `save_textSsave` | `saveui_saveGame` | builds `"save.%03d"`, opens it, writes the save through
+`save_textLoading` and closes it |
+| `manage_usesBlitGfxRect2` | `manage_blitTalkWindow` | copies `panelClipRect` into a local rect
+and blits `talkwin9Cut1` at (0,0) clipped to it |
+| `ovc41_compute1` | `ovc41_pluralSuffix` | returns the DGROUP address of `""` for an argument of
+1 and of `"s"` (`0x2410:6e75`) otherwise |
+| `ovc41_compute5` | `ovc41_isAre` | returns `"is"` for 1 and `"are"` otherwise |
+| `ovc45_usesGUnits` | `ovc45_getUnitType` | returns `GUnits[GUnitGrid[x][y]].bldType` inside the
+map bounds, else 0 |
+| `ovc45_usesGUnitGrid` | `ovc45_getUnitIndex` | returns `GUnitGrid[x][y]` inside the map bounds |
+| `ovc45_textMaintenanceCost` | `ovc45_costOrIncomeLabel` | returns `"Maintenance cost is"` for a
+non-positive argument and `"Income created is"` otherwise |
+| `init2_usesMiceButton0PressStates` | `init2_updateMouseButtons` | latches the secondary mouse
+buttons into two BSS flags and returns bit 0 (primary) |
+| `init_usesGMapCells2` | `init_getMapCell` | returns `GMapCells[y][x]` inside the map bounds |
+| `constr_usesBlitRaw` | `constr_blitRawToScreen` | retargets the rect segment to 0xa000, restores
+the mouse area, blits the rect raw, blits the mouse back and restores the segment |
+
+Refused in the same two passes, with reasons: `ovc41_compute2` (byte-identical twin of
+`ovc41_compute1`; left unnamed rather than forced into a suffix), `driver_compute3`/`driver_compute4`
+(they write two colours into a 3x2 pixel block at `(ofs, y*0x140)`, but which of the two is the
+upper/lower diagonal is not stated), `ovc45_compute2` (`min(sheet+0x87*10, 100)`, a percentage of
+an unidentified field), `ovc23_compute2` (`alignUp44(x,y)`, falling back to `x`), `agnt_compute8/9/10/11`
+(`(dir % 6)` or `((dir/6) % 6)`, folded to -2..3 -- a direction component whose encoding is not
+stated), `agnt_compute14` (an index remap of a value above 8), and `constr_usesGOngoingBattle` (a
+two-way choice between two draw paths whose names are themselves mechanical).
