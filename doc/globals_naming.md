@@ -2168,3 +2168,19 @@ So it is a four-byte table of promotion thresholds indexed by rank.  Retyped as 
 parameter that indexes it is now `rank`.
 
 Globals: 173 -> 172.
+
+## Five BSS/DGROUP bytes from the full-program xref scan (167 globals)
+
+`scripts/ghidra/RefsToAddrs.java` was run over all 172 auto globals.  The export had hidden most
+of their references; the full program gives 84 with xrefs.  Five had direct semantic evidence:
+
+| address | name | evidence |
+|---|---|---|
+| `2000:ca9b` | `GBattleMode` | `ovc41_textCannotSeeTerrain` does `GBattleMode = 1 - (GBattleMode != 0); GOngoingBattle = GBattleMode;`; `ovc41_usesAgnt_clear` seeds `GOngoingBattle` from it; `main` clears it when a game starts. |
+| `2000:d2e4` | `GYear` | `updSeason` increments it when `season == 0 && GTimeLo == 0`, once per three-season cycle; `init_usesClearEntities` resets it; it is saved right after `PlayerCount`. |
+| `2000:d3cc` | `promotionCount` | incremented by `season_usesGPromotableCount` on a successful promotion; `season_usesGPromotableCount2` and the stats promotion case compute the next threshold as `promotionCount*0x32 + 0x32`. |
+| `2000:d3cd` | `promotionBandUsed` | two-byte per-band latch: `season_compute1` indexes it with `ovc30_compute1(level)` (0..1), returns 0 if set, otherwise sets it; retyped `byte[2]`. |
+| `2410:6a88` | `GHighScoreSaved` | set by `ovc38_usesStshAlloc` after it formats `"%c%s%s@%d"` and inserts the entry; `ovc24_textStrongholdDestroyed`, `season_textHalflingCastle` and `ovc38_usesStshAlloc` guard on it being 0. |
+
+Re-decompiling the readers shows the new names (`GBattleMode = 1 - (GBattleMode != 0)`,
+`promotionCount * 0x32 + 0x32`, `if (GHighScoreSaved == 0)`).  **Globals: 172 -> 167.**
