@@ -1336,3 +1336,13 @@ Parameters: 140 -> 137 (8.3%).  Gate: checked 71 failures 0.
 | `land_info` | `local_a` | `menuLabel` | `local_a = menuItems[0]` and its address is taken for the menu call |
 
 Parameters: 137 -> 131 (8.0%).  Locals: 80 -> 67 (9.7%).  Gate: checked 71 failures 0.
+
+### Batch 22: scanline buffers and an agent index list (3 locals)
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `blitGfx10` | `local_164` | `rowBuf` | the 320-byte buffer is passed to the row callback and then used as a source row: `src.ofs = (uint16_t)(local_164 + iStack_10)` |
+| `blit_usesStExit` | `local_168` | `rowBuf` | same 320-byte buffer passed to the row callback |
+| `ovc15_usesAgntIndex` | `local_4ba` | `agentIndices` | filled with agent indices and dereferenced as `peVar1[local_4ba[i]].base.gindex` |
+
+Locals: 67 -> 64 (9.7% -> 9.2%).  Gate: checked 71 failures 0.
