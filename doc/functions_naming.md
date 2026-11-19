@@ -914,3 +914,18 @@ space** (the write index only advances for non-space characters) -- a name canon
 scales it by season: `GSeason == 0` picks `>>2` or `>>1` from `GTimeLo`, `GSeason == 2` adds 25% |
 | `ovc15_usesToupper` | `ovc15_capitalize` | copies the string and uppercases only its first
 character |
+
+### Thirty-fourth batch: three UI helpers
+
+| old | new | evidence |
+|---|---|---|
+| `ovc28_textGold` | `ovc28_drawGold` | draws the label `"Gold"` centred at (0x10e,0x9c) in Font03
+and then formats the party sheet's 32-bit gold value (words at +0x56/+0x58 = `char_sheet_t.gold`)
+into that position |
+| `ovc41_usesAgnt_clear2` | `ovc41_enterLeaderView` | resets the RNG and text cycle, clears the
+agents and square records, redraws the five menu bars, calls `ovc18_showLeaderView`, then restores
+`GMenuItem` |
+| `ovc28_usesBlitLabel` | `ovc28_drawButton(x, y, label)` | blits `butt01Cut6` at `(x,y)`, positions
+the text at `(x+6, y+2)` and draws `label`; the parameter is renamed from `param_3` |
+
+Parameters: 273 -> 272.
