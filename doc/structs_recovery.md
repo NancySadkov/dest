@@ -6636,3 +6636,58 @@ the earlier "high byte of a 16-bit spawn store" reading does not settle it eithe
 AI code writes the two bytes independently.  That conflict is recorded, not guessed.
 
 Struct fields: 308 components, 13 auto.
+
+## `agnt_t+0x11` -> `animVariant` and `+0x25` -> `moveState` (fields 13 -> 11)
+
+Both were refused as "state vocabulary never stated".  The writers and readers state enough to
+name the role, and the emulator supplied the value ranges.
+
+### `animVariant`
+
+The value is derived from the agent's animation table, not from its stats:
+
+```c
+pfVar7 = agntCopy.frames;
+if (((pfVar7 + 0x1a)->ofs == 0 && pfVar7[0x1a].seg == 0) ||
+    ((pfVar7 + 0x16)->ofs == 0 && pfVar7[0x16].seg == 0)) {
+    if ((pfVar7 + 0x1a)->ofs != 0 || pfVar7[0x1a].seg != 0) agntCopy.animVariant = 1;
+} else {
+    agntCopy.animVariant = randBelow(2);
+}
+```
+
+and the drawing code picks one of two vertical anchors from it:
+
+```c
+if (animVariant == 0) y = rowBase + agnt->y + 3;
+else                  y = rowBase + agnt->y + (char)gdata->yOffset - 0x16;
+```
+
+So the byte selects which of two animation-table/sprite variants is in use for this spawn.  It is
+not a per-type property: 120 live snapshots of one world had **no** unit with 1, while an earlier
+spawn of the same scenario had two mages and a griffon with 1 - consistent with `randBelow(2)`
+when both table entries exist.  This also retires the earlier "flying unit" guess: the griffon
+appears with 0 in one spawn and 1 in another.
+
+### `moveState`
+
+The AI's target-selection block is entirely gated on it:
+
+```c
+else if ((moveState != 2) &&
+         (((field_0x5 == 0 && targetX == 0 && randBelow(4) == 0) ||
+           ((char)field_0x5 < 0 || moveState != 1 || randBelow(8) == 0)))) {
+    moveState = 1;
+    field_0x5 = randBelow(2);
+    targetX   = randBelow(2) * 2 - 1;
+    ...                                   /* clamp/steer by agnt->x */
+}
+```
+
+Three states with three probabilities: 0 = free (1-in-4), 1 = restricted (1-in-8), 2 = blocked.
+The block then writes `targetX`/`field_0x5`, the two bytes `ovc41_usesAgnount` copies into
+`destX`, so the gate is a movement-permission state.  The emulator observed the full cycle
+`0 -> 1 -> 2 -> 0` in one continuous world (120 snapshots), which is the value range the readers
+test for.  `field_0x2a` stayed 0 in every snapshot and every record, so it remains refused.
+
+Struct fields: 308 components, 11 auto.

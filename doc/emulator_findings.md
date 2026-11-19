@@ -191,3 +191,23 @@ scenarios.  A single `dump` therefore gives a consistent world, but *successive*
 give a time series of one world.  For time-series work the harness needs `halt`/`run` around
 each dump (atomic snapshot), and the demo must be exited first.  Recorded so a later pass does
 not misread a scenario switch as unit movement.
+
+## Sampling one world: `cycles` matters, and the array can be trusted
+
+With `cycles = max` the demo advanced so far between dumps that unit positions could not be told
+apart from scenario reloads.  Setting `cycles = 6000` in `emulator/strong.conf` and dumping every
+~0.6 s gave 120 consecutive snapshots of **one** scenario: all 17 agents stayed in the array, the
+type multiset was constant, and positions evolved.  That is the setup for time-series work.
+
+Two practical notes:
+
+- A `dump` is already atomic: heavy commands run on the emulation thread, so the CPU does not
+  step while the file is being written.  `halt` is *not* usable for this, because heavy commands
+  only execute from the timer tick while the CPU is running (`harness_tick` returns early when
+  halted) - a dump sent while halted just queues.
+- The scenario starts slowly: the first ~30 snapshots had 0, then 4, then 7 agents as the demo
+  built its army.  Analyse only after the count stabilises.
+
+What the 120-snapshot run settled: `agnt_t+0x25` goes 0 -> 1 -> 2 -> 0, and `+0x11` stays 0 for
+every unit of that spawn while an earlier spawn had 1 for the same types - which is why the two
+fields are now named from their writers/readers rather than from position correlation.
