@@ -2333,3 +2333,40 @@ i.e. a header based at `6616:14b0`: a 32-bit size accumulator at +0x4/+0x6, a wo
 to 0x4c3, and a 0xff state byte at +0x1a.  The header's other fields and the meaning of the
 0x4c3/0xff values are not established, so the four fields stay unnamed rather than being given
 generic "headerFieldN" names.
+
+## Resolved: the `6616:*` overlay-stub fields and `2410:073c/0740` (130 globals)
+
+### The `6616:*` words are the Borland overlay-manager block
+
+The `ES` in `__InitModules` is literal `0x226e`, which is the program's `OVR_STUB` block.  That
+block already carries the canonical Borland symbols:
+
+```
+226e:0004 __OvrFileBase    226e:0012 __OvrCodeList
+226e:0018 __OvrDosHandle   226e:001a __OvrLoadCount
+```
+
+`__InitModules` adds the overlay size through `ES:[0x4]/ES:[0x6]` (`__OvrFileBase` is a 32-bit
+file position), writes `ES:[0x18] = 0x4c3`, compares `ES:[0x1a]` with 0xff, and sets
+`ES:[0x12]` from the module-table entry.  The four `6616:14b4/14b6/14c8/14ca` symbols were
+relocated image aliases of those fields.  They are now typed/named as the same fields
+(`__OvrFileBase` dword absorbing the `14b6` high word, `__OvrDosHandle` word,
+`__OvrLoadCount` byte), and the canonical `226e` fields were given their proper types too.
+
+### `2410:073c` is the corner-shade bias table
+
+`2410:073c..0741` is exactly six bytes (`0D 0A 05 03 02 01`) before `SmoothPrev` at `0742`.
+`ovc23_usesCornerBR` subtracts element 0 from the four corner heights, while
+`constr_usesAgnt_clear` reads `[SI+0x73c]` and `constr_usesBlitGfxRect2` reads `[SI+0x73e]`,
+i.e. two overlapping 3-entry views (`0D/0A/05` and `05/03/02`) used to pick the minimum corner.
+Typed `uint8_t[6] cornerShadeBias`; the `0740` interior label is deleted.
+
+**Globals: 136 -> 130.**
+
+### Refused: `2410:0845`
+
+The byte is constant `0x00` in the image, has exactly one reference (the first guard of the
+animation blit in `ovc13_usesMiceBlitRect`: `DGROUP_0845 == 0 && GPaused == 0 &&
+byte_2000_06E2 == 1`), and **no writer anywhere in the program**.  It sits between `GMenuFlag`
+(`0844`) and `flashPaletteEf` (`0846`).  A constant, never-written byte cannot be distinguished
+from alignment padding or a compiled-out debug switch from this evidence, so it stays unnamed.
