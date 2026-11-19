@@ -1064,3 +1064,24 @@ single 0/1, with no stated target;
 is not stated.
 
 Mechanical names: 555 -> 552.
+
+### Forty-first batch: four map-grid operations
+
+| old | new | evidence |
+|---|---|---|
+| `ovc23_usesGMapFlags` | `ovc23_rebuildDirectionFlags(x, y)` | clears the four direction bits
+(`&= 0xff0f`) then sets `0x10 << dir` for each direction whose neighbour test
+(`ovc23_usesAlignUp43`) succeeds |
+| `ovc23_usesGUnitGrid` | `ovc23_placeBuilding(x, y, bldType, unitType)` | reads the building at the
+cell; when its `bldtp_t` flags have bit 4 it sets `strongholdCheckPending`, then places the new type
+through `ovc18_usesRandBelow(x,y,bldType,unitType)` |
+| `ovc24_usesGUnitGrid` | `ovc24_unitAtLeader(leaderIndex)` | reads the leader's position
+(`+0x39`/`+0x3b`) and returns the `GUnitGrid` entry there, one column over for leaders other than the
+first |
+| `ovc25_usesAlignUp45` | `ovc25_hasBuildingNear(x, y)` | scans four columns around `alignUp4(x)` and
+returns 1 when a cell holds a building whose `bldtp_t.kind` (+0xc = 0x11a) is non-zero |
+
+One parameter was renamed by the same evidence: `ovc23_rebuildDirectionFlags`'s second slot is the row
+(`GMapFlags[y][x]`), not an index.  Parameters: 268 -> 267.
+
+Mechanical names: 552 -> 546.
