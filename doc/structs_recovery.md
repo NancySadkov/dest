@@ -6975,3 +6975,68 @@ if ((paVar1->moveState < 2) &&
 New evidence for the disputed `agnt_t+0x2a`: it is compared with exactly 2, and that branch is
 gated on `BothFactions` -- still no vocabulary, so it stays a refusal, but the reader is now
 recorded.
+
+## Locals named from their single role (23 this pass)
+
+The 123 generated locals were worked directly: `tmp/local_uses.py` prints every generated local with
+at most six uses, so each candidate can be read in place.  Only the ones whose use pins the role
+were renamed.
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `49fd:0035`, `4d05:0081` | `local_306` | `palette` | 768-byte buffer filled by
+`calcSeasonPalette(cmap, dx, buf)` and handed to `vgaSetPalette8bit(buf)` |
+| `4b0a:1150`, `6386:232d` | `local_30e`, `local_314` | `palette` | same two calls |
+| `stLoad` (49fd:01da) | `local_2a` | `header` | `save_usesRead(handle, header, 0x28)` then
+`strcmp(header, magic)` |
+| `bldng_textBuildingNowSelect` | `local_1f4` | `buildTypes` | first entry from `bldng_getClass`,
+then each candidate matched into `GStrangeTable`; the picked one is stored into
+`char_sheet_t.buildType` (+0x85) |
+| `bldng_textBuildingNowSelect` | `local_192` | `menuEntries` | the far-pointer entry array passed
+to `bldng_usesBldng` and `ovc28_compute2` |
+| `manage_usesRandBelow3` (4d05:11cb) | `local_c` | `classLimits` | `randBelow(classLimits[sheet->cls])`
+per race point |
+| `saveui_usesStshAlloc` (4528:1104) | `local_52` | `lineBuf` | `read(fd, lineBuf+i, 1)` until a
+newline, strips CR, NUL-terminates, `strcpy`s |
+| `attact_usesAlignUp42` (3f0b:1082) | `local_e` | `reportedUnits` | one flag per unit, set to 1
+after `textIntelligenceReportsUnit` handles it |
+| `attact_usesAlignUp42` | `local_17` | `reported` | the same function's single "was reported"
+flag |
+| `unit_usesEntities` caller (6616:0689) | `local_42` | `unitFlags` | filled by
+`unit_usesEntities(input, x, unitFlags, ...)` and then tested per entry |
+| `69c8:04c6` | `local_5c` | `rankMsg` | `F_SCOPY(RankMsgPtrs, ..., &rankMsg)` and then used as
+the `.ofs` of two text far pointers |
+| `619c:025d` | `local_6`, `local_a` | `bandMin`, `bandMax` | assigned from `LevelBandMin` /
+`LevelBandMax` and indexed bytewise |
+| `77eb:04d8` | `local_6` | `entityIndex` | a working copy of `*entityIndexPtr`, passed by address
+to `ovc45_usesAlignUp4` and written back |
+| `77eb:04d8` | `local_42` | `foundEntities` | collects the produced entity indices |
+| `69c8:023a` | `local_2b`, `local_d6` | `cmapBackupA`, `cmapBackupB` | `fmemmove` of `cmap+0x2ac`
+(0xc bytes) and `cmap+0x231` (0xcf bytes), restored by the reverse memmove |
+| `67e7:0a5c` | `local_6` | `promoteThreshold` | assigned from the `PromoteThreshold` global and
+indexed bytewise |
+| `4d05:1095`, `4d05:1835` | `local_a`, `local_e` | `inputBuf` | filled by `F_SCOPY` and handed to
+`uiInputText` as the editable buffer |
+| `55fe:2f90` | `local_6` | `loopIndex` | zeroed, incremented once per iteration, compared with
+the bound |
+
+Locals: 123 -> 100 (14.5%).
+
+### Why typing the party-sheet table does not fix the `*(undefined4 *)(i << 2)` bodies
+
+The generated expression `*(undefined4 *)((uint)partyIndex << 2)` is a far pointer read whose
+segment Ghidra lost.  The disassembly shows why:
+
+```
+5087:0121  SHL AX,0x2
+5087:0124  MOV DX,0x217a     ; the table's segment
+5087:012b  LES BX,ES:[BX+0]  ; Ghidra renders the LES without the segment constant
+```
+
+The table itself is the block at `217a:0000` (labelled `StatsSeg`), and in the program image it is
+**all zeros** -- it is filled at runtime.  Defining a
+`char_sheet_t *32[5]` array there therefore changes nothing in the decompiled C: the bodies read the
+pointer through `LES`, not through a symbol at `217a:0000`.  The fix would be an `LES`-segment
+repair pass in the listing, which is a tooling change rather than a data-typing one.  The field
+semantics themselves are proven elsewhere: every consumer indexes `+0x2f` = `cls`, `+0x34` =
+`gender`, `+0x85` = `buildType`, `+0x86` = `level`, `+0x87` = `rank`, all of which are named.
