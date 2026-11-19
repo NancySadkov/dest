@@ -55,3 +55,52 @@ Batch-export failures are a decompiler-batch limitation, not damage: `rle_line`,
 `manage_body1`, `constrct_body1`, `ovc49_body1` and `ovc45_usesClose` were already failing
 before the rename, and the two new ones (`ovc41_textFailsTurn`, `init_assets`) decompile on
 demand to 152 and 2854 lines respectively.
+
+## Second pass: functional names for the generated class
+
+The R4/R7 names above are mechanical by construction (`<module>_uses<Callee>N`,
+`<module>_<shape>N`).  They are still 839 of the 1590 functions: `uses*` 519, `text*` 158,
+`compute*` 131, `scan*` 11, `loop*` 10, `body*` 6, `fill*` 2, `copy*` 2.  The second pass replaces
+them only where the body states the functionality, starting with the two that were flagged.
+
+| old | new | evidence |
+|---|---|---|
+| `ovc43_textToymaker` | `ovc43_playFli` | it opens archive entry `0x184`, and `StshNames[388]`
+is `strong.fli`; it then hands the handle to the frame loop below with a palette and closes it.
+`run_demo` calls it once, right after the panel graphics and palette are set up, i.e. the intro
+movie |
+| `agnt_usesAgntCount3` | `agnt_remapGridRefs` | the caller memcpy's `Agnts[agntIndex]` into
+`Agnts[iVar6]` and memmoves the block between them down; this function then rewrites both
+`10 x 0x69` index grids (bases `Agnts+0x8fa` and `Agnts+0x4e0`, entries are agentIndex+1): every
+value in `(from, to]` decrements and `from+1` becomes `to+1` |
+
+Verified live: `ovc43_playFli(uint16_t fileId, undefined2 paletteOfs, undefined2 paletteSeg)` and
+`agnt_remapGridRefs(uint fromIndex, int toIndex)`; ListFuncs still reports 1590 functions, 0
+duplicates, 0 address-shaped names, and the thunk `ovr_ovc43_textToymaker` was renamed with its
+target by `RenameFunctions`.
+
+### `ovc49_body1` is a 150-byte dispatcher, not an insanely large function
+
+The batch export fails on it with a 60 s decompile timeout, and a forced decompile produced 3020
+lines that include the whole `init_assets2` sprite builder.  That looked like a monster function;
+it is not.  `BodySegs.java` shows the body is a **single 150-byte range**
+`8699:18c4 - 8699:1959`, and every path in it ends with a tail jump to an **unmapped** segment:
+
+```
+8699:18fc  CMP byte ptr ES:[BX + 0x24],0x1     ; agnt_t+0x24 combatState
+8699:1901  JZ  0x8000:8296
+8699:1903  JMP 0x8000:83c2
+...
+8699:1942  JMP 0x8000:830f
+8699:1958  JMP 0x8000:830f                    ; SI = 0 / 1 / 2 per branch
+```
+
+0x8000 is not a memory block in the program (`Could not follow disassembly flow into non-existing
+memory at 8000:f633`), so the decompiler follows those jumps into whatever it maps them to and
+pulls unrelated overlay code into the result.  The 150-byte body is a **state dispatcher**: it
+loads the agent's frame table (`+0x13`), computes a table index through `agnt_compute2(x)`, and
+selects a tail-jump target (and SI = 0/1/2) from `combatState`, `flags & 2`, `animVariant` and
+the movement bytes.  Naming it needs the 0x8000 overlay segment mapped, not a bigger timeout.
+`TrimSeg.java` (keep only the entry segment) and `BodySegs.java` (print body composition) are the
+tools for that pass; `SliceDecompile.java` restricts the body to a byte range when a real monster
+turns up.
