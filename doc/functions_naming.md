@@ -1270,3 +1270,22 @@ the source that is read (`*puVar1 = *param_2`), and `param_3` is compared with t
 segment that arrived on the stack (`if (puVar8 == param_3)`) to choose the non-snow path.  They
 became `count`, `src`, `dstSeg`; the signature now reads
 `__VRAM(int count,uint *src,uint *dstSeg)`.  Parameters: 177 -> 174 (10.6%).
+
+### Parameters batches 14-16: split far pointers, table indices, directions (25 renames)
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `manage_usesGUnitCount` | `param_4`, `param_6`, `param_8` | `resource1Seg`, `resource2Seg`, `resource3Seg` | the disassembly loads each output as a far pointer (`LES BX,[BP+0xa]`, `[BP+0xe]`, `[BP+0x12]`), so Ghidra's extra `int *` parameters are the segment halves of `resource1Count`/`resource2Count`/`resource3Count` |
+| `ovc22_usesGUnits` | `param_3` | `outFlagSeg` | `_outFlag = CONCAT13(in_stack_00000009,CONCAT12(param_3,outFlag))` |
+| `ovc40_usesAlignToSeg` | `param_2`, `param_3` | `capTextOfs`, `capTextSeg` | `[BP+0x8]`/`[BP+0xa]` are pushed as one far pointer straight into `CALLF 2000:324a` (`ovr_ovc15_capitalize`) |
+| `stats_usesAlignUp42` | `param_2` | `gfxIndex` | indexes `GfxFramePtrs` at `param_2 * 4` and reads both the offset and the segment |
+| `ovc18_spawnClassAgent` | `param_5` | `classStr` | compared with 6 and 0x0b to pick gindex 6 / 0x19 / 0x13 before the spawn call |
+| `ovc41_compute8` | `param_1`, `param_2` | `rank`, `level` | the caller passes `agntG_t+0x42` (rank) and `entity.base.level`, as for `ovc41_compute6`/`ovc41_rollStatDice` |
+| `unit_usesEntities` | `param_3`, `param_4` | `unitFlags`, `unitFlagsSeg` | its callers pass `unit_usesEntities(input,uVar10,unitFlags,unaff_SS)` |
+| `attact_textArena2` | `param_2` | `foundIndexSeg` | `CONCAT13(in_stack_00000007,CONCAT12(param_2,foundIndexOut))` |
+| `ovc23_textConstructionAbandoned` | `param_3` | `dir` | indexes the step tables at `+0x885`/`+0x889`, the same shape as `attact_usesSCARRY22`'s `dir` |
+| `ovc23_usesAlignUp43` | `param_3` | `dir` | same `+0x885`/`+0x889` indexing |
+| `ovc15_usesRandBelow` | `param_2`, `param_4` | `xSide`, `randomY` | `if (param_2 < 0) agnt->x = 0 ... else agnt->x = 0xd2` selects left/middle/right, and `param_4` nonzero makes y random instead of the fixed `0x20` |
+| `stats_textRingProt` | `param_1`, `param_2` | `dst`, `src` | `strcpy(param_1,(char *)param_2)` and `ovr_stsprintf(param_1,(char *)param_2,"+%d ring of prot.")` |
+
+Parameters: 174 -> 155 (9.4%).  Gate: checked 71 failures 0.
