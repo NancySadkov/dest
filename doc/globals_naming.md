@@ -2337,3 +2337,28 @@ so that is an address-alias artifact, not a real read.
 (`09ae`) and `ExitEnd` (`09b4`), which are not record-aligned, so typing the whole segment as a
 record array would overwrite live labels with a guess.  Left unnamed pending a map of the
 block's non-record part.
+
+## `timeOfDayGfx` is `far_t[12]` at 2000:d133 (144 globals)
+
+`attact_usesBlitLoadRleGfx` picks a time-of-day image from `GTimeLo`:
+
+```
+uVar2 = (GTimeLo <= 0xe) ? GTimeLo : GTimeLo - 0xf;
+if (0xe < uVar2) uVar2 = 0xe;
+i = ((uVar2 * 12) / 15) * 4;
+gfx.seg = timeOfDayGfx[i/4].seg;  gfx.ofs = timeOfDayGfx[i/4].ofs;
+```
+
+`i/4` reaches 11, so the table has 12 four-byte far pointers.  It starts at `2000:d133` and
+ends exactly where the `d163/d165` counters begin (`d133 + 0x30 = d163`), which confirms both
+the length and the earlier counter refusal.  The old `timeOfDayGfxSeg` at `d135` was entry 0's
+segment, and the autos at `d15f/d161` were entry 11; all three are deleted.
+
+Re-decompiling the reader now shows:
+
+```
+gfx.seg = *(&timeOfDayGfx[0].seg + iVar1 * 4);
+gfx.ofs = ((far_t *)timeOfDayGfx + iVar1)->ofs;
+```
+
+**Globals: 146 -> 144.**
