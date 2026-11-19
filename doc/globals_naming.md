@@ -2116,3 +2116,12 @@ vocabulary.  The `boinit_t` case is fully proven (5 x 6 bytes) and is the one re
 it is a data-layout change rather than a rename.
 
 Globals: 190 -> 188.
+
+## `2410:26f7` resolved at runtime: `worldMenuLabels` (175 globals)
+
+The emulator settled the global that had been refused as an "AgntGs alias": its thirteen far
+pointers decode to `Peaceful`, `Aggressive`, `Hostile`, `Custom`, `Return`, `First City`,
+`World 1`..`World 5`, `Random`, `Return` -- the new-world dialog's item labels.  See
+`doc/emulator_findings.md` for the dump and for the withdrawal of the alias claim.
+
+Globals: 176 -> 175.

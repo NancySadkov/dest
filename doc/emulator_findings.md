@@ -236,3 +236,36 @@ dmgDice 0/42   dmgSides 0/42   levelLimit 0/42   rank 0/42
 while its own values are exactly `05 0A 14 1E 28` (5, 10, 20, 30, 40).  So it is not a copy of a
 stat already named in the record; whatever it measures is carried only by this byte, which is why
 it stays refused with the distribution recorded.
+
+## `2410:26f7` is the new-world dialog's label table, not an AgntGs alias
+
+Dumping the blob at runtime (DGROUP = `0x1C33`, delta `0x7DD`, i.e. linear `0x1C330 + 0x26f7`)
+shows thirteen far pointers into DGROUP:
+
+```
+ 0  1C33:2915  'Peaceful'      7  1C33:2952  'World 2'
+ 1  1C33:291E  'Aggressive'    8  1C33:295A  'World 3'
+ 2  1C33:2929  'Hostile'       9  1C33:2962  'World 4'
+ 3  1C33:2931  'Custom'       10  1C33:296A  'World 5'
+ 4  1C33:2938  'Return'       11  1C33:2972  'Random'
+ 5  1C33:293F  'First City'   12  1C33:2938  'Return'
+ 6  1C33:294A  'World 1'
+```
+
+These are the item labels of the "Which new world:" dialog whose strings
+`saveui_configureNewWorld` uses, so the global is now **`worldMenuLabels`** (13 far pointers).
+
+This also **withdraws the earlier "AgntGs alias" claim**.  `AgntGs` is `195d:26d6`; the code that
+looked like it indexed an alias (`data_[9].ofs + 1 + g*0x95`, `GMenuStrings + g*0x95 + 0x1f`) is a
+lost-segment artifact: `GMenuStrings` ends at `2410:26d7` and `GMenuStrings + 0x1f` = `0x26d6`,
+which is exactly the `AgntGs` **offset** -- the real base is the far pointer to `195d:26d6` and the
+segment is lost in the listing.  There is no second table and no alias to name.
+
+## `DGROUP:5dec` at the main menu (inconclusive)
+
+A read taken at the main menu (before a scenario is generated) gives
+`5dec=0x0500, 5dee=0x0009, 5df0=0x0804, 5df2=0xFFFF, 5df4=0, 5df6=0`.  `DGROUP:0500` is a byte
+table and `DGROUP:0804` lands inside the string `"returned %s"`, so the values look like pre-game
+leftovers rather than initialised LEVELBAND pointers.  The `levelBandMinSeg`/`levelBandMaxSeg`
+names therefore still rest only on the code's load pattern (`bandMin = LevelBandMin; uStack_4 =
+5DEE;` and the matching pair for Max); confirming them needs a read during a generated scenario.
