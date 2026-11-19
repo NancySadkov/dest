@@ -6919,3 +6919,9 @@ agent (`Agnts[i]+0x2f` is `agnt_t.faction`), and both entries are tested afterwa
 state argument |
 
 Locals: 126 -> 124.
+
+## One more typed parameter: `ovc49_fillGridCells(byte count, agnt_t *agnt)`
+
+The second slot was `int *` (2 bytes); the body only reads `agnt_t` fields (`x` +0, `y` +2,
+`frameIndex` +0x12, `frames` +0x13, `animVariant` +0x11) and every caller passes `&Agnts[i]`, so it
+was retyped to the near `agnt_t *` with the exact-path form.  Parameters: 304 -> 303.

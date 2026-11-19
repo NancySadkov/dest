@@ -174,3 +174,15 @@ if (sheet->stats[i] > 0xa && i != statIndex) return 1; } return 0;` and its only
 `_ctype` table (`ES:[BX+0x8519] & 2`), and accumulates `value*10 + (ch - '0')` until the NUL |
 | `ovc15_loop1` | `ovc15_fillGridColumn` | clamps `arg >> 1 < 0x69` and writes `0xff` to all ten
 rows of that column in the agent grid at `Agnts+0x8fa` (stride 0x69) |
+
+### Eighth batch
+
+| old | new | evidence |
+|---|---|---|
+| `ovc49_fill1` | `ovc49_fillGridCells` | computes `row = clamp(agnt->y >> 1, 0, 7)` and
+`col = clamp(agnt->x - spriteWidth/2, 0, 0x68)`, then memsets `count` bytes at `Agnts+0x8fa` and
+`+0x963` when `animVariant == 0`, or at `+0x4e0`, `+0x549` and `+0x5b2` otherwise -- the same
+agent-index grids `agnt_remapGridRefs` rewrites |
+
+Its second parameter is now typed and named `agnt_t *agnt`: the body reads `x` (+0), `y` (+2),
+`frameIndex` (+0x12), `frames` (+0x13) and `animVariant` (+0x11), and the callers pass `&Agnts[i]`.
