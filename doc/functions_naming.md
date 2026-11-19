@@ -433,3 +433,65 @@ at 5 and 9), `stats_usesEntityCount` (clears `flags32` bit 2 for a party's entit
 stated meaning), `season_textMainCastle` (needs `+0x3d` and `+0x3f` both non-zero, which contradicts
 the current `active`/`excluded` reading of those bytes -- recorded, not renamed), and
 `constr_compute1/2` (choose between `driver_compute1/2` and the constant `0xe2` on a flags bit).
+
+### Eighteenth batch: the save module read end to end, plus 11 more names
+
+Reading `save_textLoading` settled the direction of the whole save module:
+
+```c
+uint save_textLoading(int handle) {
+  ovr_stop_audio();
+  ovr_drawTextAt("Loading...", 0x2410);
+  SaveAuto = 0; AgntFlag1 = false; ovr_freeGameResources();
+  save_usesRead(handle, local_2a, ..., 0x28);          /* header + magic */
+  save_usesRead(handle, GUnitGrid,  ..., 0x4560);
+  save_usesRead(handle, GMapFlags,  ..., 0x4560);
+  save_usesRead(handle, GMapCells,  ..., 0x22b0);
+  save_usesRead(handle, &GfxRndSeed, ..., 2); ...
+}
+```
+
+It prints `"Loading..."`, frees the resources and **reads** the header, `GUnitGrid`, `GMapFlags`,
+`GMapCells`, the RNG seeds and `Entities`.  Its counterpart is the existing `stSave`, which writes
+the same block through `save_usesWrite`.
+
+| old | new | evidence |
+|---|---|---|
+| `save_textLoading` | `stLoad` | the loader described above |
+| `saveui_saveGame` (**wrong**) | `save_loadGameFile` | it builds `"save.%03d"`, opens it and calls
+`save_textLoading` -- the loader.  The earlier name came from assuming that callee was the writer;
+it is not.  Recorded as a correction |
+| `save_usesClose` | `save_loadArchiveGame` | opens `StshNames[0]` when its handle is not cached,
+seeks to the offset stored at `cred03Cut3Ofs + 3` and runs `stLoad`, closing only if it opened |
+| `save_textDeleting` | `save_deleteGameFile` | shows `"Deleting..."`, `unlink`s the `save.NNN`
+file and shows `"Delete complete."` |
+| `ovc23_usesGUnits` | `ovc23_isLargeBuilding` | maps the cell to `GUnits[...].bldType`, multiplies
+by 0x27 and tests `bldtp_t.size` (+0xd = 0x11b from the table base): 1 when `size >= 2` |
+| `manage_usesMenuItemEnabled` | `manage_mapPartySlots` | fills `MenuItemEnabled[0..4]` with 0xff,
+then for every active leader (`sheet+0x3d`) stores the leader index at
+`MenuItemEnabled[sheet+0x89]` -- and +0x89 = 137 = `char_sheet_t.partySlot` |
+| `ovc25_compute2` | `ovc25_tickCountdown` | decrements the sheet word at +0x5e while +0x3f and the
+counter are non-zero; at 0 it reloads 10 and clears bit 0 of `flags5d` |
+| `ovc45_usesGMapFlags3` | `ovc45_cellBelowBlocked` | tests `GMapFlags[y+1][x]` (row stride 0x94
+words), i.e. the cell directly below |
+| `ovc23_usesAlignUp44` | `ovc23_findClearColumn` | scans `GMapFlags[y][alignUp4(x)+i]`, i = 0..3,
+for a cell with clear low flag bits and returns `alignUp4(x)+i-2`, else -1 |
+| `ovc13_usesBlitLoadRleGfx` | `ovc13_blitAnimFrame` | while `GMenuFlag` is clear, latches the BDA
+tick, cycles `BlitFrame` 0..5 and blits `word_2000_BSS_06E7/06E9[BlitFrame]` to `0xa000:db93` |
+| `ovc23_usesGRecordCount2` | `ovc23_findRecordAt` | scans the 0x12-stride records at 0x21f2 and
+returns the index whose +4 word is `y` and whose `[+2, +2+byte(+7)-1]` span contains `x` |
+| `stats_usesAgntCount` | `stats_nextAgentByOwner` | the agent with the smallest `owner`
+(`agnt_t+0x1b`) greater than the given agent's |
+| `stats_usesAgntCount2` | `stats_prevAgentByOwner` | the mirror image: the largest `owner` smaller |
+| `ovc49_usesBothFactions` | `ovc49_agentIsActive` | a predicate over `moveState < 2` and
+`flags & 4`, `moveState == 1`, or `field_0x2a == 2 && BothFactions` |
+
+`ovc49_agentIsActive`'s parameter is now typed and named `agnt_t *agnt` (the exact-path **4-byte**
+form, `/st.h/agnt_t *32`, so the far pointer keeps its width).  The decompiled body now reads
+`agnt->moveState`, `agnt->flags` and `agnt->field_0x2a` by name, and the audit's struct-argument
+count goes 143 -> 144 while the auto-parameter count goes 300 -> 299.
+
+Refused in the same pass: `ovc41_compute8` (compares `param_1 + 4` with
+`agnt_compute16_4(param_2) + 1`), `draw_compute1` (a scaled menu-highlight offset), `ovc25_compute1`,
+`attact_usesBDADailyTimeCounter`, `season_usesGPromotableCount2` and `constrct_compute1` (both depend
+on unresolved `GPromotableCount`/BSS counters).

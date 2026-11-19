@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn361/naming_summary.txt`.
+`tmp/auditn362/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -9,8 +9,8 @@ Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
 functions                1130
   no prototype            114
   weak return type        986
-  has struct-typed arg    143
-parameters               1643   auto-named  300   (18.3%)
+  has struct-typed arg    144
+parameters               1643   auto-named  299   (18.2%)
 locals                    692   auto-named  123   (17.8%)
 structs                    35
   struct fields           308   generated    10   (3.2%)
@@ -30,7 +30,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 | globals | 1096 -> 222 auto-named (26 previously unnamed DGROUP tables labelled, 74 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
 | structures | `spr_t`, `unit_t` and `entity_t` complete; `agnt_t` rebuilt as `agnt_t[52]` + `tick` + `dir`; `bld_inst_t` and most of `char_sheet_t` recovered |
 | struct fields | 266 -> 10 generated |
-| typing | struct-typed arguments 80 -> 143; `_fmemmove`/`__fmovmem`/`memcpy` re-typed to `(far dst, far src, count)`; `blit_usesDrawGfx`'s rectangle parameter retyped `brect_t *`, which resolves its fields by name |
+| typing | struct-typed arguments 80 -> 144; `_fmemmove`/`__fmovmem`/`memcpy` re-typed to `(far dst, far src, count)`; `blit_usesDrawGfx`'s rectangle parameter retyped `brect_t *`, which resolves its fields by name |
 | corrections | wrong names/types found by later evidence reverted (three pointer widenings, `OVC22_5087_056e`, `anm_t` block) |
 
 ## What remains, and why it is not done

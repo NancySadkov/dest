@@ -6959,3 +6959,19 @@ partyIndex` in `ovc15_usesLDIV_at_` -- and ~10 functions compare it against a pa
 has `entity = 4277:3817`, `4277:0117`, ... -- byte 26 is `0x77` in every record, not a party index.
 Either the Entities record layout differs from `agnt_t` at this offset, or the `entity` field is not
 a 4-byte pointer there.  Recorded as an open conflict; nothing renamed.
+
+## Another typed far-pointer parameter
+
+`ovc49_agentIsActive` (8699:1711) now takes `agnt_t *agnt` in its **4-byte** form
+(`@/st.h/agnt_t *32`).  The body reads `moveState` (+0x25), `flags` (+0x2b) and `field_0x2a`, and
+the decompiled output shows them by name:
+
+```c
+if ((paVar1->moveState < 2) &&
+    (((paVar1->flags & 4) != 0 || (paVar1->moveState == 0x1)) ||
+     ((paVar1->field_0x2a == 0x2 && (BothFactions != '\0'))))) return 1;
+```
+
+New evidence for the disputed `agnt_t+0x2a`: it is compared with exactly 2, and that branch is
+gated on `BothFactions` -- still no vocabulary, so it stays a refusal, but the reader is now
+recorded.
