@@ -884,3 +884,22 @@ building types |
 Refused from the same scan: `draw_usesPrintf` (a game-state step, not a printer), `attact_usesUpdSeason`
 and `draw_usesGameProcessKey` (debug/input helpers whose purpose is the state transition, not the
 call), and `agnt_usesAgntSaved` (an insertion pass whose ordering key is not stated).
+
+### Thirty-second batch
+
+| old | new | evidence |
+|---|---|---|
+| `draw_usesDrawLine` | `draw_menuCursor` | clamps a menu cursor offset to (0..0x38, 0..0x1c), stores
+it back into `data_2000_BSS_0744/0749[GMenuItem]`, then draws the three indicator lines and the dot
+from `(x+0xf3, y+0x3b)` in `SpecialColors[3..5]` |
+
+Its two parameters are the clamped offsets (`x` within 0..0x38, `y` within 0..0x1c before the
+0xf3/0x3b origin is added).  Parameters: 275 -> 273.
+
+Two other scans were run this pass and both confirm the tail:
+
+* a constant-store scan (`tmp/mech_global_store.py`, 114 hits) found no R3-style setter -- every hit
+  assigns into a local (`uVar`, `iVar`) rather than a named global;
+* the remaining entries of the call-profile scan are large multi-purpose routines
+  (`agnt_usesStExit`, `constr_usesBlitGfxRect2`, `blit_usesBlitGfxN`) whose purpose needs the overlay
+  mapping, so they stay unnamed.
