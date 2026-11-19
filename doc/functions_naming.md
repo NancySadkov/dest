@@ -1244,3 +1244,21 @@ Parameters: 191 -> 189 (11.5%).  Locals: 86 -> 80 (11.6%).  Gate: checked 71 fai
 before choosing between the "nothing here" and the normal message.  That byte is the found
 flag produced by `ovc45_findEntityAt` (`*_foundFlag = 0/1`), so both `param_1`s became
 `foundFlag`.  Parameters: 189 -> 187.
+
+### Parameters batch 12: CRT helpers, with datatype corrections
+
+| function | old | new | type | evidence |
+|---|---|---|---|---|
+| `memcmp` | `param_1`, `param_3` | `s1`, `s2` | `char *` | the loop advances two byte pointers and compares `*pcVar1 == *pcVar2`; the length arrives as `in_stack_0000000c` |
+| `__fstrncpy` | `param_1`, `param_3` | `dst`, `src` | `char *` | `pcVar5 = (char *)param_3` is walked to its terminator first, then `pcVar5 = param_1` is filled |
+| `__fputn` | `param_3` | `n` | `uint16_t` | used as `(word)param_3` for `memcpy`, `param_3 + *_stream` for the position and `param_3 <= pbVar6` for the short-write test |
+| `sprintf_strputn` | `param_1`, `param_3` | `dest`, `n` | `int *`, `uint16_t` | `*_param_1 = param_3 + *_param_1` advances the far-pointer cursor, and `param_3` is the `memcpy` length |
+| `farfree` | `param_2` | `ofs` | - | the offset half of the far pointer, compared with `malloc__last` |
+| `fseek` | `param_3`, `param_4` | `offsetHi`, `offsetLo` | `uint16_t` | `CONCAT22(in_stack_0000000c, param_4)` is passed to `lseek` and `param_3` is subtracted from its high word |
+
+The four `int`/`uint8_t *` declarations that Ghidra gave those arguments were replaced with the
+real types using the new `SetVarType.java` (address + variable name + type path); parameters now
+read `memcmp(char *s1,char *param_2,char *s2)`, `__fstrncpy(char *dst,char *param_2,char *src)`
+and `sprintf_strputn(int *dest,uint16_t param_2,uint16_t n)`.
+
+Parameters: 187 -> 177 (10.8%).  Gate: checked 71 failures 0.
