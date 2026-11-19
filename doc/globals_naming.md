@@ -1971,3 +1971,34 @@ referenced, the families checked this pass are write-only temporaries (`2000:d0a
 `d0d0..d0e6`, `d163/d165`), which cannot be named from a store alone.
 
 Globals: 222 -> 212.
+
+## Second BSS/DGROUP pass: 15 more globals (222 -> 197)
+
+Continuing the route of reading the store/read site of each still-referenced auto global:
+
+| address | name | evidence |
+|---|---|---|
+| `2272:003a` / `2272:003c` | `vdiskBaseOfs` / `vdiskBaseHi` | the Int19 handler installs the fake
+vdisk: `baseLo`/`baseHi` are stored here (1403:107a) |
+| `2272:002c` / `2272:002e` | `vdiskEndOfs` / `vdiskEndHi` | the same handler stores `base+size`
+(with `CARRY2`) here |
+| `2000:d133` / `2000:d135` | `timeOfDayGfxOfs` / `timeOfDayGfxSeg` | `attact_usesBlitLoadRleGfx`
+derives an index from `GTimeLo` (`(GTimeLo-0xf)/0xf`) and blits the pair to `0xa000:c510` |
+| `2410:49f7` | `menuHighlightTable` | the byte at `0x49f7+0x0b+6*i` is passed as the `structType`
+argument of `manage_highlightStructures` |
+| `2410:4a0b` | `classLimitTable` | `F_SCOPY(&classLimitTable, ..., classLimits)` in
+`manage_rollHitPoints` -- it is the source of the per-class random limits |
+| `17f8:0000` / `17f8:0013` | `game4State` / `game4InitState` |
+`fmemmove(&game4State, &game4InitState, 0x1631)` restores the scenario block from its pristine copy |
+| `2000:d0fd` | `constructionDirty` | cleared each frame, set when a unit is placed, and tested to
+repaint the construction overlay via `constr_usesBlitRect` |
+| `2410:6ac4` | `msgFormat` | used as the `stsprintf` format argument in the three message emitters |
+| `2410:69c2` / `69c5` / `69c8` | `paletteColorA/B/C` | copied into `colorA/B/C` and written into the
+palette at offsets 0x2ac / 0x2b2 / 0x2be |
+
+Reference census after this pass: of the 197 remaining auto globals, **151 are still never referenced
+by any recovered function**.  The referenced remainder is 46, mostly the write-only pointer-pair
+temporaries (`d0a2..d0aa`, `d0d0..d0e6`, `d163/d165`, `5dee/5df2`) whose stores carry no vocabulary
+and whose readers live in the unrecovered overlays.
+
+Globals: 222 -> 197 (7.7% auto-named).
