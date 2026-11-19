@@ -6925,3 +6925,8 @@ Locals: 126 -> 124.
 The second slot was `int *` (2 bytes); the body only reads `agnt_t` fields (`x` +0, `y` +2,
 `frameIndex` +0x12, `frames` +0x13, `animVariant` +0x11) and every caller passes `&Agnts[i]`, so it
 was retyped to the near `agnt_t *` with the exact-path form.  Parameters: 304 -> 303.
+
+## One more local: `agntTmp`
+
+`6d7a:033e local_40[23]` is a zeroed working copy of an agent record; it is passed as the agent
+argument of `drawAgntStats(agnt_t *agnt, far_t cmap)`, so it is named `agntTmp`.  Locals: 124 -> 123.

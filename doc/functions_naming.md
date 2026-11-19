@@ -203,3 +203,15 @@ Refused in the same pass: `ovc38_scan1` (parses a decimal after an `@` marker in
 compares it against `strongholdsDestroyed`, but the message format is not stated anywhere in the
 export) and `driver_scan1` (its remaining slots are CRT register values and a `pattern._2_2_`
 artifact).
+
+### Tenth batch
+
+| old | new | evidence |
+|---|---|---|
+| `ovc45_usesLand_info` | `ovc45_showLandInfo` | hit-tests the point with
+`video_compute1(screenX, y)`; inside, it maps `x` to a tile column with `(x - 9) / 0x30` and calls
+`land_info(column)`, returning 1 -- the hover handler for the land-info popup |
+| `ovc15_usesAgntFlag1` | `ovc15_removeEntity` | kills the entity's agents (`combatState = 2`,
+`targetY = 0`) when `AgntFlag1` is set, memmoves the `Entities` tail down over the record,
+decrements every agent `owner` above it and re-points those agents' entity pointer, then
+`EntityCount--` |
