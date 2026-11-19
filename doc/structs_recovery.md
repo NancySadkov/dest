@@ -6385,3 +6385,75 @@ i.e. an *address* used as the base of another structure, not a field read.  They
 the record now distinguishes meaningful data from fill.
 
 Struct fields: 311 components, 17 auto.
+
+## `anm_t 0x13..0x18` is **three 16-bit fields**, not six bytes (fields 17 -> 14)
+
+The previous note concluded "no reader exists" from the decompiled text.  That was wrong: the
+listing reads words throughout the block.
+
+```
+8699:1f71  MOV AX,word ptr ES:[BX + 0x15]     8699:1f76  MOV DX,word ptr ES:[BX + 0x13]
+8699:2a12  MOV AX,word ptr ES:[BX + 0x15]     8699:2a17  MOV DX,word ptr ES:[BX + 0x13]
+8699:34fa  MOV BX,word ptr ES:[BX + 0x13]     8699:17b3  SUB AX,word ptr ES:[BX + 0x17]
+8699:17cb  ADD AX,word ptr ES:[BX + 0x17]
+```
+
+The data agrees with the width, and the *sign* byte settles the signedness:
+
+| word | low byte | high byte | reading |
+|---|---|---|---|
+| `+0x13` | 7, 15, 16, 22, 28 | `+0x14` is **always 0** | unsigned small count |
+| `+0x15` | 237, 241, 242, 246, 247, 251 | `+0x16` is **0xFF for exactly those 8 records** | signed word, -19..-5 |
+| `+0x17` | 5, 9, 10, 26 | `+0x18` is **always 0** | unsigned small count |
+
+So the bytes pair up: `+0x14` and `+0x18` are not fields at all, they are the high halves of the
+words at `+0x13` and `+0x17`, which is why they are always zero.  `+0x16` being `FF` for exactly
+the records whose `+0x15` byte is >= 0xED is the signature of a sign extension, i.e. `+0x15` is a
+signed 16-bit value.  `anm_t` was rebuilt as 30 bytes / 19 components with
+`field_0x13`/`field_0x15`/`field_0x17` as `int16_t`.
+
+No name is assigned to the three words: the only reader applies them arithmetically (a subtract
+followed by an add of the same word, and a compare against a sprite dimension), and the data alone
+does not say what they measure.  Width and signedness are now proven, which is the part the
+listing and the data image can state.
+
+### `char_sheet_t+0x1b`: width re-examined
+
+The one sheet-side read is a dword comparison with `agnt->owner`, and `owner` is read as a word
+elsewhere (`*(uint16_t *)(i * 0x34 + 0x1b)`), with the value used as an `Entities` index.  Because
+the two sides must have the same width to be compared, and the agent side is proven 16-bit, the
+sheet side is a **16-bit entity index** as well.  It stays generated only because the containing
+function's code is not in the listing (overlapping instruction at `0x5ff50`), so the compiler's
+choice of a dword load cannot be checked against opcodes.  Recorded, not guessed.
+
+## The far/near pointer hazard in `RenameVars`, and the exact-path fix
+
+Retyping `ovc49_fill1`'s and `ovc49_usesStExit`'s single pointer parameter to `agnt_t *` produced
+`agnt_t *32` -- a **4-byte** far pointer -- and that shifted the stack: the body stopped seeing
+`param_2` and read `in_stack_00000006` instead, exactly the regression seen earlier with
+`ovc18_textTypeLen`.
+
+The cause is in the tool, not the data: `RenameVars` builds
+`new PointerDataType(base, 4, dtm)` for **any** spec ending in `" *"`, so a near-pointer request
+silently becomes a far pointer.  Affected parameters are those that were already 2 bytes wide
+(`int *`, `char *`, ...) and whose real type is a near struct pointer.
+
+`RenameVars` now accepts an exact-datatype form: a spec beginning with `@` is looked up verbatim,
+so `@/st.h/agnt_t *` selects the existing **2-byte** near pointer.
+
+```
+8699:1753	param_2	param_2	@/st.h/agnt_t *
+8699:06dc	param_1	param_1	@/st.h/agnt_t *
+```
+
+Both bodies now read named fields with the stack unchanged:
+
+```c
+piVar5 = (int *)(*(int *)&param_2->frames + (uint)param_2->frameIndex * 4);   /* +0x13, +0x12 */
+iVar2  = (int)param_2->y >> 1;                                              /* +2 */
+iVar3  = (int)(param_2->x - *(int *)(*piVar5 + 0x17)) >> 1;                 /* +0 */
+```
+
+and `in_stack_00000008` / `in_stack_00000006` survive, i.e. the 2-byte layout is preserved.
+
+Struct fields: 308 components, **14 auto**.  Struct-typed arguments: 138 -> **140**.

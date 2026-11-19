@@ -59,7 +59,12 @@ public class RenameVars extends GhidraScript {
                     if (f.length > 3 && !f[3].isEmpty()) {
                         String spec = f[3].trim();
                         DataType t;
-                        if (spec.endsWith(" *")) {
+                        // A spec beginning with '@' is an exact datatype path (e.g.
+                        // "@/st.h/agnt_t *"), which selects an existing 2-byte near pointer
+                        // instead of building a 4-byte far pointer from the base type.
+                        if (spec.startsWith("@")) {
+                            t = dtm.getDataType(spec.substring(1));
+                        } else if (spec.endsWith(" *")) {
                             DataType base = dtm.getDataType(spec.substring(0, spec.length() - 2).trim());
                             t = base == null ? null
                                     : new ghidra.program.model.data.PointerDataType(base, 4, dtm);
