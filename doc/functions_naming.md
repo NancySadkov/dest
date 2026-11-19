@@ -1187,3 +1187,37 @@ current ring (`*_piStack_1a = x; *_piStack_1e = y;`), `nextQueueX`/`nextQueueY` 
 are swapped in at the end of each ring (`piStack_e = piStack_1a;`).
 
 Parameters: 227 -> 214 (13.0%).  Locals: 90 -> 86 (12.4%).  Gate: checked 71 failures 0.
+
+### Parameters batch 8: 17 renames from quoted reader bodies
+
+Every remaining auto parameter was re-checked against a **fresh** decompilation of its function
+(`ExportMany.java` exports a whole list in one headless run, so the body is current, not the
+stale `tmp/decompiled67` copy).  The renames that survived review:
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `__VPTR` | `param_1`, `param_2` | `row`, `col` | returns `displayptr + (screenwidth*(param_1-1) + param_2-1)*2`, the text-cell pointer, so `param_1` is the 1-based row |
+| `ovc45_costOrIncomeLabel` | `param_1` | `amount` | `< 1` returns `"Maintenance cost is"`, otherwise `"Income created is"` |
+| `attact_usesBDADailyTimeCounter` | `param_1` | `prevTick` | compared with the BDA daily counter's high and low words and subtracted from it; callers pass `recordUpdateTick` |
+| `ovc43_playFliFrames` | `param_4` | `delayTicks` | the function's own contract ("delays param_4 ticks") and `puVar4 < (uint)param_4` in the wait loop |
+| `ovc25_textArena` | `param_2` | `foundIndexSeg` | segment byte of the `foundIndex` far pointer: `CONCAT13(in_stack_00000007,CONCAT12(param_2,foundIndexOut))` |
+| `ovc41_removeIndexPerm` | `param_1` | `removedIndex` | drops one index from the four 12-entry permutation tables; every test is `IndexPermX[uVar2] == param_1` |
+| `ovc22_usesGMapFlags2` | `param_1` | `skipCheck` | `if (param_1 == 0)` runs the map-flag line walk, any other value returns success at once |
+| `ovc23_usesGRecordCount3` | `param_1` | `amount` | scaled into the record flags: `(param_1*7)/10`, `(param_1*8)/100`, `(param_1*9)/10` |
+| `ovc50_usesStshLoadGfx` | `param_1` | `gfxIndex` | indexes the far-pointer table at `DS:0x9390` (`param_1*4 - 0x6c70`), then loads and blits it |
+| `ovc25_usesAlignUp43` | `param_2` | `count` | `while (iVar5 < (uint)param_2 ...)` with `iVar5` counting placed entities |
+| `ovc27_compute3` | `param_1`, `param_2` | `view`, `frames` | `param_1` is passed to `ovc15_textView` and read at `+0xd/+0xf`; `param_2` counts down next to the frame counter at `+0xf` |
+| `ovc41_compute3` | `param_1` | `view` | same text-view state: `ovc15_textView(param_1)`, reads `+0xd/+0xf/+0x31/+0x32` |
+| `_zapline` | `param_1`, `param_2`, `param_3` | `endCol`, `startCol`, `dst` | `for (; param_2 <= param_1; param_2++) *param_3 = 0x20|attribute` |
+
+### Parameters batch 9: the outFlag segment byte (6 renames)
+
+`createConstructionRecord` splits its `outFlag` far pointer across two stack slots:
+`_outFlag = CONCAT13(in_stack_0000000d, CONCAT12(param_5, outFlag))`, so the byte after `outFlag`
+is that pointer's segment byte.  The caller `ovc26_usesRandBelow` already names the same argument
+`outFlagSeg`, which confirms the identification, so the three functions that forward it now use
+the same name (`createConstructionRecord`, `createConstructionRecordFar`, `ovc22_usesRandBelow2`).
+`ovc27_textTakesHalfDamage3`'s `param_2` is the same split-far-pointer pattern for an agent
+(`CONCAT22(param_2, param_1._2_2_)`) and became `agntSeg`.
+
+Parameters: 227 -> 191 (11.6%).  Gate: checked 71 failures 0.
