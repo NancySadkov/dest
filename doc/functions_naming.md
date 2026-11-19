@@ -1302,3 +1302,17 @@ Parameters: 174 -> 155 (9.4%).  Gate: checked 71 failures 0.
 | `ovc25_usesAlignUp44` | `param_1`, `param_2` | `partyIndex`, `count` | `param_1` is compared with the entity party byte and `iVar4 < (uint)param_2` bounds the placement loop, the same pair as `ovc25_usesAlignUp43` |
 
 Parameters: 155 -> 140 (8.5%).  Gate: checked 71 failures 0.
+
+### Parameters batch 18: a tick deadline, a direction base, a ring amount (3 renames)
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `ovc42_usesMiceBlitRect` | `param_1` | `timeoutTicks` | the wait loop breaks when the elapsed ticks from `attact_usesBDADailyTimeCounter` reach it: `if ((uVar4 != 0) || ((ulong *)(uint)param_1 <= puVar2)) break;` |
+| `init_usesRandBelow` | `param_3` | `dir` | subtracted from the candidate direction and masked to two bits (`bStack_3 - param_3 & 3`); the only caller passes `randBelow(4)` |
+| `stats_textRingProt` | `param_4` | `ringValue` | the two words are used separately: `ringValue.seg` carries the sign (`== 0`, `0 <`), `ringValue.ofs` feeds the arithmetic (`(byte)ringValue.ofs - (char)ringValue.seg`) and the `"+%d ring of prot."` format |
+
+`stats_textRingProt`'s argument was first retyped to `int32_t`, but that made Ghidra render the
+sign test against byte 0 instead of the high word, so the original two-word `far_t` typing was
+restored and only the name changed (the type is a placeholder for a value passed as two words).
+
+Parameters: 140 -> 137 (8.3%).  Gate: checked 71 failures 0.
