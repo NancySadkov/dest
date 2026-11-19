@@ -7075,3 +7075,11 @@ passed to the audio free routine).
 tests it (`if (local_17 != '\0')`), so the parameter is an output flag.
 
 Parameters: 297 -> 296.
+
+## Five parameters pinned by the table they index
+
+`bldng_usesGStrangeTable`/`bldng_usesRandBelow` (`typeIndex`), `ovc39_loadArchiveEntry` (`fileId`) and
+`ovc38_loadHighScores`/`ovc38_saveHighScores` (`entries`) each use their only argument as the index or
+base of a specific table, which fixes the name without guessing.
+
+Parameters: 292 -> 287 (17.5%).

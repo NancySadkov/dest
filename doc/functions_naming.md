@@ -789,3 +789,45 @@ Parameters: 296 -> 292.
 
 Refused in the same pass: `midPlaySequence`'s only parameter (the body is a `swi(0x66)` trampoline
 that never reads it) and the `*_textArena*` family.
+
+### Twenty-eighth batch: 2 names, and why the rest of the string list is refused
+
+| old | new | evidence |
+|---|---|---|
+| `ovc24_textStrongholdDestroyed` | `ovc24_checkStrongholds` | loops the sides with `outFlag` and
+`excludedFlags[2]` and reports `"%s stronghold destroyed. (%d, %d)"`,
+`"Your main stronghold has been destroyed. Game over."` and `"You have defeated all enemies."` |
+| `manage_textBelongingAllLeaders` | `manage_highlightStructures` | sets the highlight filter from
+`(partyIndex, structType)`, redraws and prints `"The damaged structures belonging to %s the %s are
+highlighted in red."` |
+
+The 51 remaining string-bearing candidate are now blocked for one of two reasons, both recorded:
+
+* **literal used as a value, not a message** (13): `"arena"`, `"main castle"`, `"halfling
+  castle"`, `"short sword"`, `"Level 2"`/`"Level 3"` and the `*_textArena*` family appear as
+  `"<string>" + k` address arithmetic returning small non-zero codes, so the literal says nothing
+  about the function;
+* **locked-storage fragments** (3): `ovc27_textTakesHalfDamage3/4` and `ovc27_textCharmed` carry
+  "parameter storage is locked" and (for the last) a stack-pointer warning.  Ghidra's model of
+  their arguments is unreliable, so naming them would attach names to slots that are not the real
+  arguments.
+
+The rest are large multi-message dispatchers (`draw_textTalkwin9Lbm`, `ovc22_textRingProt`,
+`ovc15_textError`, `ovc23_textAdlibNone`) that need the overlay mapping to read.
+
+### Five more parameters from the single-slot scan
+
+| function | parameter | name | evidence |
+|---|---|---|---|
+| `bldng_usesGStrangeTable` | `param_1` | `typeIndex` | indexes `((far_t *)GStrangeTable)[i]` |
+| `bldng_usesRandBelow` | `param_1` | `typeIndex` | same table, then `randBelow(GStrangeTable[i])` |
+| `ovc39_loadArchiveEntry` | `param_1` | `fileId` | indexes the archive far-pointer table at -0x6c70
+with `i*4` under `i < 0x22` |
+| `ovc38_loadHighScores` | `param_1` | `entries` | the six-entry far-pointer table written by the loop |
+| `ovc38_saveHighScores` | `param_1` | `entries` | the same table, read by the writer |
+
+Parameters: 292 -> 287.
+
+Refused in the same pass: `driver_zeroWords`' second parameter and
+`attact_usesEntityCount2`'s second parameter (both unused -- the bodies read the value from the
+stack slot instead), and `midPlaySequence`'s only parameter (a `swi(0x66)` trampoline).

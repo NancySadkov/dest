@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn377/naming_summary.txt`.
+`tmp/auditn378/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -10,7 +10,7 @@ functions                1130
   no prototype            114
   weak return type        986
   has struct-typed arg    144
-parameters               1643   auto-named  292   (17.8%)
+parameters               1643   auto-named  287   (17.5%)
 locals                    692   auto-named  94   (13.6%)
 structs                    35
   struct fields           308   generated    10   (3.2%)
@@ -42,7 +42,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    meaning (`flashTickLo/Hi`, `destroyLatchSide0/1`, the audio-driver block pairs,
    the `StshNames` cut graphics); where only an equality or a lone write exists the
    result is a documented refusal.
-2. **292 parameters / 94 locals.** Call-site scanning is exhausted: the unanimous
+2. **287 parameters / 94 locals.** Call-site scanning is exhausted: the unanimous
    call-role rule yields 6 multi-site candidates, all inside the two functions whose
    decompilation Ghidra flags as unstable, and 10 single-site ones that the bodies
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in
