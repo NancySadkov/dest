@@ -1,14 +1,14 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn347/naming_summary.txt`.
+`tmp/auditn360/naming_summary.txt`.
 
 ## Where the model stands
 
 ```
 functions                1130
-  no prototype            115
-  weak return type        987
+  no prototype            114
+  weak return type        986
   has struct-typed arg    143
 parameters               1643   auto-named  300   (18.3%)
 locals                    692   auto-named  123   (17.8%)
@@ -29,13 +29,13 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 | string labels | 1516 `s_*` labels from their own bytes (`doc/strings_renamed.tsv`) |
 | globals | 1096 -> 222 auto-named (26 previously unnamed DGROUP tables labelled, 74 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
 | structures | `spr_t`, `unit_t` and `entity_t` complete; `agnt_t` rebuilt as `agnt_t[52]` + `tick` + `dir`; `bld_inst_t` and most of `char_sheet_t` recovered |
-| struct fields | 266 -> 23 generated |
-| typing | struct-typed arguments 80 -> 137; `_fmemmove`/`__fmovmem`/`memcpy` re-typed to `(far dst, far src, count)`; `blit_usesDrawGfx`'s rectangle parameter retyped `brect_t *`, which resolves its fields by name |
+| struct fields | 266 -> 11 generated |
+| typing | struct-typed arguments 80 -> 143; `_fmemmove`/`__fmovmem`/`memcpy` re-typed to `(far dst, far src, count)`; `blit_usesDrawGfx`'s rectangle parameter retyped `brect_t *`, which resolves its fields by name |
 | corrections | wrong names/types found by later evidence reverted (three pointer widenings, `OVC22_5087_056e`, `anm_t` block) |
 
 ## What remains, and why it is not done
 
-1. **296 globals.** The remainder splits three ways: no writer appears anywhere in
+1. **222 globals.** The remainder splits three ways: no writer appears anywhere in
    the export (so the value can only be characterised from unexported code), only
    zeroing writers exist, or the value is a `stshAllocStub` block with no source
    asset.  Every rename in this session came from a writer or a gate that pins the
