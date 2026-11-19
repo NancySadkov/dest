@@ -867,3 +867,20 @@ track |
 the agent record |
 
 Parameters: 282 -> 280.
+
+### Thirty-first batch: two names from call profiles
+
+A new scan (`tmp/mech_callees3.py`) lists mechanical functions by the distinct callees in their body
+(the function's own name excluded).  Most of its 122 hits are trivial wrappers, but two are clean:
+
+| old | new | evidence |
+|---|---|---|
+| `draw_usesRing_buffer` | `draw_freeRingBuffers` | frees the `audioSaveCut1` and `audioSaveCut2`
+blocks when present, clears their offset/segment and calls `clean_ring_buffer` |
+| `bldng_usesBldng` | `bldng_buildMenuEntries` | called as `(buildTypes, menuEntries, count,
+partyIndex)` and fills the far-pointer menu entries with the names and prices of the candidate
+building types |
+
+Refused from the same scan: `draw_usesPrintf` (a game-state step, not a printer), `attact_usesUpdSeason`
+and `draw_usesGameProcessKey` (debug/input helpers whose purpose is the state transition, not the
+call), and `agnt_usesAgntSaved` (an insertion pass whose ordering key is not stated).
