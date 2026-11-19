@@ -2059,3 +2059,60 @@ correct fix is to establish which segment mapping the code really uses for the t
 listing-level decision, not a rename.  Recorded as a refusal with the evidence above.
 
 Globals: 192 -> 190 (7.4%).
+
+## Structural audit: how many remaining globals are really struct fields?
+
+Asked to check whether any of the remaining auto globals are members of larger structures rather
+than standalone variables, two scripts were written:
+
+* `scripts/ghidra/SymTypes.java` dumps every label with its data type and length (11795 symbols);
+* `tmp/inside_struct.py` tests strict containment of each auto global in another labelled span;
+* `tmp/adjacent_runs.py` / `tmp/run_status.py` group the auto globals by segment into contiguous
+runs separated by at most 4 bytes.
+
+**Strict containment inside a labelled span: 0.**  Ghidra does not allow two defined data items to
+overlap, so no auto global sits inside an existing typed table.
+
+**Contiguous runs: 134 of the 190 remaining auto globals (71%)**, spread over 27 runs.  Only 26 of
+those 134 are referenced anywhere in the export; 108 are unreferenced table members:
+
+| run | span | members | referenced | reading |
+|---|---|---|---|---|
+| `1000:131c-1348` | 46 | 23 | 0 | a 23-word CRT data table, unreferenced |
+| `5087:0bd6-0bfe` | 42 | 21 | 0 | a 21-word OVC22 data table, unreferenced |
+| `21f2:0000-0011` | 19 | 12 | 0 | **one GRecords record** (stride 0x12): `+0` timer, `+2` x0,
+`+4` y, `+7` width, `+9` party, `+0xb` countdown, `+0xd` kind, `+0xe` done, `+0xf` tick |
+| `2ca1:0000-0004` | 6 | 3 | 0 | **one `boinit_t` record**: `InitEnd` at `2ca1:001e` is exactly
+5 x 6 bytes after `2ca1:0000`, so the array really is `boinit_t[5]` starting at 0000, not `[4]`
+at 0006 |
+| `2410:5dee-5df6` | 10 | 4 | 4 | **the LEVELBAND far pointers**: `5dec`/`5dee` and `5df0`/`5df2`
+are (ofs, seg) pairs, `5df4`/`5df6` a third pair |
+| `2000:d0a2-..-d0f2` | 10+8+6 | 14 | 14 | the audio-driver pointer block (writers only) |
+| `2000:d15f-165` | 8 | 4 | 2 | a four-word BSS pair block |
+| `3f0b:1abb-1ac3`, `3f0b:21da-21e4` | 10, 12 | 5, 6 | 0 | two overlay data tables |
+| `4b0a:0b6b-b73`, `4d05:33bb-33bf`, `4d05:342f-3435` | 10, 6, 8 | 5, 3, 4 | 0 | overlay tables |
+| `6018:16b9-16c5`, `6616:14b4/14b6`, `6616:14c8/14ca`, `21b1:0000/0002` | - | 6, 2, 2, 2 | 0 |
+overlay tables |
+
+### What was fixed from this
+
+`2410:5dee` and `2410:5df2` are the **segment halves** of the `LevelBandMin`/`LevelBandMax` far
+pointers, proven by `ovc30_usesRandBelow`:
+
+```c
+uStack_4 = word_5DEE;  bandMin = LevelBandMin;    /* 2410:5dec:5dee  */
+uStack_8 = word_5DF2;  bandMax = LevelBandMax;    /* 2410:5df0:5df2  */
+```
+
+They are now `levelBandMinSeg` and `levelBandMaxSeg`; the pairs are 6 far pointers total with
+`5df4`/`5df6` still unnamed (no reader).
+
+### What cannot be fixed by naming
+
+The 108 unreferenced members (and the 26 referenced but role-less ones) are **fields of tables whose
+element type is not stated anywhere in the export**.  The correct fix is to type the regions as
+arrays, which needs each table's element layout; naming the members individually would invent a
+vocabulary.  The `boinit_t` case is fully proven (5 x 6 bytes) and is the one retype worth doing, but
+it is a data-layout change rather than a rename.
+
+Globals: 190 -> 188.
