@@ -521,3 +521,23 @@ Refused in the same pass: `constrct_compute1` (`0x14` below level 5, then `level
 level-scaled limit with no stated unit), `season_usesGPromotableCount2` (depends on unresolved
 `GPromotableCount` and `byte_2000_BSS_0998`), `driver_compute1/2` (the two corner-shade
 arithmetics), and `attact_usesBDADailyTimeCounter` (a wrapped tick difference).
+
+### Twentieth batch: stat generation, formatting and input
+
+| old | new | evidence |
+|---|---|---|
+| `manage_usesRandBelow2` | `manage_rollStats` | rolls all six stats as `3d6 + randBelow(4)`,
+clamps each to 0x12 and sets bit 5 of `statMask` |
+| `ovc30_usesDifficulty` | `ovc30_difficultyFactor` | 10 when the `Difficulty` byte is 0, otherwise
+`0x3c / difficulty` clamped to 1..10 |
+| `stats_usesLDIV_at_` | `stats_formatThousands` | `litoa10` for small values, otherwise divides by
+1000 and appends `'K'` |
+| `ovc39_compute1` | `ovc39_findBuildingAt` | walks up to four columns left looking for a unit whose
+`bldtp_t.size` covers the original column, then returns that `GUnitGrid` index |
+| `ovc40_usesBiosKeyAvail` | `ovc40_flushInput` | drains `biosKeyAvail`/`gameProcessKey` and the
+mouse until neither reports anything, then clears the two mouse-button flags |
+| `ovc41_compute7` | `ovc41_rollStatDice` | rolls 2d6, 3d6 or 4d6 depending on how far the value is
+from the target |
+
+Refused in the same pass: `ovc41_usesMiceBlitRect` (restores the mouse area and draws the menu item,
+but the body is cut off in the export), `ovc41_compute8` and `draw_compute1`.
