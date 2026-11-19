@@ -1164,3 +1164,26 @@ Parameters: 234 -> 231 (14.1%).  Gate: checked 71 failures 0.
 | `agnt_compute15` | `param_1`, `param_2` | `rank`, `level` | caller passes `agntG_t+0x42` (rank) and `entity.level`; compares `agnt_compute14(level)+2` with the rank |
 
 Parameters: 231 -> 227 (13.8%).  Gate: checked 71 failures 0.
+
+### Parameters/locals batch 7: body-evidence renames
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `audio_parseHexDigit` | `param_1` | `driverData` | byte stores at `+0x108`/`+0x109` of the audio driver data block |
+| `audio_parseHexDigit` | `param_3` | `ch` | tested against `'0'`, indexed into `_ctype`, converted with `-0x37` (A-F) or `-0x30` (digits) |
+| `ovc13_compute2` | `param_3` | `upperMask` | its bits set the pixels in rows `y` and `y+1` |
+| `ovc13_compute2` | `param_4` | `lowerMask` | its bits set the pixels in rows `y+1` and `y+2` |
+| `attact_usesSCARRY22` | `param_5` | `directionOnly` | nonzero returns only the y-direction sign, skipping the `GMapFlags` probe |
+| `ovc22_applyRankBonus` | `param_2` | `cost` | scaled by `(rank+10)/10`, doubled at rank >= 10, 96% for class 6; the only caller passes `*(int *)(bldType*0x27 + 0x123)` |
+| `ovc40_usesCalcSeasonPalette` | `param_1` | `useVgaPalette` | 0 calls `ovc40_usesVgaSetPalette8bit`, nonzero calls `setSeasonPalette` |
+| `ovc41_usesMenuItemEnabled` | `param_1` | `menuIndex` | indexes `MenuItemEnabled[5]` |
+| `ovc41_usesMenuItemEnabled` | `param_2` | `gfxVariant` | `== 1` reads the word table 0x1c further along (the second `GUnitDescriptions` graphic set) |
+| `ovc41_compute6` | `param_1`, `param_2` | `rank`, `level` | caller passes `agntG_t+0x42` (rank) and `entity.base.level`; compares `agnt_compute16_4(level)+2/+1/+0` with the rank |
+| `ovc43_playArchiveFli` | `param_4` | `delayTicks` | forwarded as `playFliFrames`' documented delay-in-ticks argument |
+| `attact_textArena3` | `param_2` | `foundIndexSeg` | segment half of the `foundIndex` far pointer: `CONCAT13(in_stack_00000007,CONCAT12(param_2,foundIndexOut))` |
+
+Four locals in `ovc26_usesFillGrid` are the flood-fill ring queues: `fillQueueX`/`fillQueueY` hold the
+current ring (`*_piStack_1a = x; *_piStack_1e = y;`), `nextQueueX`/`nextQueueY` receive the next one and
+are swapped in at the end of each ring (`piStack_e = piStack_1a;`).
+
+Parameters: 227 -> 214 (13.0%).  Locals: 90 -> 86 (12.4%).  Gate: checked 71 failures 0.
