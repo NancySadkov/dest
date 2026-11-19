@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn335/naming_summary.txt`.
+`tmp/auditn336/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -70,3 +70,19 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 Every batch is gated by `scripts/fbov/verify_param_names.py` (71 per-function checks,
 currently `checked 71 failures 0`) and followed by a fresh `AuditNaming.java` run whose
 delta is quoted in the commit message.
+
+## Runtime instrumentation now available
+
+The patched DOSBox-X in `emulator/` runs the original `game/STRONG.EXE` and exposes
+guest memory over `127.0.0.1:23946`.  See `doc/emulator_findings.md` for the run recipe,
+the `peek`/`dump`/`find` command set, and the way the runtime DGROUP is recovered
+(`find "undeveloped"` -> `DGROUP = 0x1C33`, `delta = 0x7DD`; the delta changes when the
+game reloads after the setup screen, so it is located per process).
+
+What it has already settled: `AgntGs` decodes end to end (42 unit types with names and
+weapons through the far pointers at `+0x24`/`+0x90`); `Agnts` is live with `gdata`
+pointing into `AgntGs` (an archer record with 6/6 strength); `AgntAnms` holds the same
+word values as the static image.  It has also recorded `agntG_t+0x94`'s full value
+distribution (5/10/20/30/40 across the 42 types) and `agnt_t+0x11`'s writer predicate
+(animation-table shape, then `randBelow(2)`).  Neither is named yet: no exported reader
+exists for the first, and the second's vocabulary is still unstated.
