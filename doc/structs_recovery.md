@@ -7106,3 +7106,24 @@ Parameters: 287 -> 282 (17.2%).  Locals: 94 -> 91 (13.2%).
 `fputc(param_1 -> ch)`, `audio_textMidiError(param_2 -> status)` and
 `ovc41_specialAttack(param -> targetIndex)` were each pinned by a store or a comparison in the body
 rather than by the callee.  Parameters: 282 -> 280 (17.0%).
+
+## Six more slots pinned by a callee signature, a store or a bound
+
+| function | slot | name | evidence |
+|---|---|---|---|
+| `ovc39_findBuildingAt` | `param_1` | `x` | scans left with `ovc45_getUnitType(x - i, y)` |
+| `saveui_usesBlitText` | `param_2` | `textSeg` | passed as `blitText`'s second argument, the text
+segment (its fourth is `Font03.seg` here) |
+| `__UTOA` | `param_2` | `valueHi` | forwarded as `__LONGTOA`'s fifth argument, the high word |
+| `ovc22_compute1` | `param_2` | `value` | halved when the sheet class is 4, then returned |
+| `ovc41_removeAgent` | `param_2` | `notify` | tested against 0 to gate the `y == GfxRndSeed2` branch |
+| `5087:0234` | `local_16` | `labelOfs` | set to successive DGROUP string offsets (0x1b7, 0x21a,
+0x27d, 0x327) right before the label blit / input prompt |
+
+Parameters: 280 -> 275 (16.7%).  Locals: 91 -> 90 (13.0%).
+
+Refused in the same pass: `driver_copyWords`' second parameter and `countRunLength`'s second
+parameter (both phantom -- the body reads the count from the stack slot instead), and the dead
+locals that are declared but never referenced (`1403:0eca local_22`, `2e25:130a local_32`,
+`3381:17e8 local_1d`, `3381:2101 local_306`, `3b1d:1ad8 local_c`, `3d16:005b local_1e`, ...), which
+cannot be named from a use because they have none.
