@@ -2284,3 +2284,27 @@ and `[SI+0x73e]` and subtracted from corner heights in `ovc23_usesCornerBR` and
 `constr_usesBlitGfxRect2`; `0x740` is an interior element reached with SI=4.  What SI means
 (corner index, shade level, ...) and therefore what each element names is not established, so
 the table stays unnamed rather than guessed.
+
+## `GLeaderSheets` at 217a:0000 (147 globals)
+
+Segment `217a` (320 bytes) is one table.  The allocator in `ovc30_usesFmFreeAudio` shows the
+whole protocol:
+
+```
+if (0x4f < GLeaderCount) stExit(0x21);        // 0x50 entries maximum
+sheet = stshAlloc_2(0xae);                    // char_sheet_t is 174 bytes
+*(uint16 *)(GLeaderCount*4)     = sheet;      // offset
+*(uint16 *)(GLeaderCount*4 + 2) = in_DX;      // segment
+GLeaderCount++;
+```
+
+`freeLeaderData` frees `ES:[i*4+2]:ES:[i*4]` for `i < GLeaderCount`, and
+`manage_mapPartySlots` indexes the same table by `i*4` when it builds `MenuItemEnabled`.
+So `217a:0000..013f` is exactly **80 far pointers** to `char_sheet_t`, now typed
+`char_sheet_t *32[80]` and named `GLeaderSheets`.
+
+The old `StatsSeg` symbol at `217a:0000` was the offset word of entry 0, not a statistics
+segment; the array replaces it.  The four auto bytes at `0002`, `003f`, `0053`, `0092` were
+interior bytes of entries 0, 15, 20 and 36 and are deleted.
+
+**Globals: 151 -> 147.**
