@@ -2025,3 +2025,14 @@ also used as a length bound, so its meaning is the structure that follows it); a
 are the caller's, not its own).
 
 Globals: 197 -> 193 (7.5%).
+
+## Fourth pass: `2000:06e2` = `mapViewActive` (193 -> 192)
+
+`attact_usesBlitLoadRleGfx` sets it to 1 when it draws the map, the full-screen panels set it to
+0xff and initialisation clears it.  The frame advance in `ovc13_usesMiceBlitRect` runs only when it
+equals 1, together with `GPaused == 0` and `DGROUP_0845 == 0` -- i.e. the map view owns the screen.
+
+Refused this pass: `2410:6a88` (saved byte with a single writer that stores 0, read as a gate on the
+defeat test -- no vocabulary), `2000:0768` (cleared at the start of a saveui message and tested in
+the new-world dialog), `2410:5ce4` (selects the wide-menu cursor path for items >= 0x7f, but the
+layout it selects is not described anywhere), and `2410:0728` (used as a blit y origin).

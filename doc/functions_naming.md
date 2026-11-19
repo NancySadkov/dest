@@ -903,3 +903,14 @@ Two other scans were run this pass and both confirm the tail:
 * the remaining entries of the call-profile scan are large multi-purpose routines
   (`agnt_usesStExit`, `constr_usesBlitGfxRect2`, `blit_usesBlitGfxN`) whose purpose needs the overlay
   mapping, so they stay unnamed.
+
+### Thirty-third batch: three string helpers
+
+| old | new | evidence |
+|---|---|---|
+| `init_usesTolower` | `init_normalizeName` | lowercases the string in place **and drops every
+space** (the write index only advances for non-space characters) -- a name canonicaliser |
+| `ovc22_usesGSeason` | `ovc22_seasonalIncome` | takes a building's income (`bldtp_t+0x15`) and
+scales it by season: `GSeason == 0` picks `>>2` or `>>1` from `GTimeLo`, `GSeason == 2` adds 25% |
+| `ovc15_usesToupper` | `ovc15_capitalize` | copies the string and uppercases only its first
+character |
