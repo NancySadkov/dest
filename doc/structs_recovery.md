@@ -6746,3 +6746,17 @@ be attached to the wrong slot), `fseek` (same shift around the `long` offset), `
 pair (a clamped function of three bytes whose meaning, colour or shade, is not stated).
 
 Parameters: 324 -> 318.
+
+## 3 parameters: a grid coordinate pair and one more arena finder
+
+| function | parameters | evidence |
+|---|---|---|
+| `ovc25_usesAlignUp45` | `x`, `y` | it snaps the first argument with `alignUp4`, keeps it inside
+the map bounds `0x94` wide and `0x3c` high, then scans a +/-2 column window of `GUnitGrid` at
+`[x + i][y]` looking for a building whose `bldtp_t.kind != 0` -- the same coordinate domain as
+`constr_usesGfxRndSeed` |
+| `attact_textArena` | `foundIndexOut` | it writes the found entity index through the first
+argument (`*_param_1 = uVar8`), the role `attact_textArena2/3` and `ovc25_textArena` already
+carry; its second argument is never read in the body |
+
+Parameters: 318 -> 315.
