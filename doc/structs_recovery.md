@@ -6273,3 +6273,66 @@ in the export reads it.
 | `param_5`, `param_6`, `param_7`, `param_9` | never read anywhere in the body |
 
 Struct fields: 311 components, 19 auto.
+
+## Two more base conflations, and `agntG_t+0x52` becomes `yOffset` (19 -> 18)
+
+The `char_sheet_t+0x52` result was not a one-off: two more of my stored refusals came from reading
+the same offset on two different structures as if it were one.
+
+### `agnt_t+0x11` is a byte flag - the "dword readers" were `anm_t+0x11`
+
+The refusal said writers store bytes `{0,1,randBelow(2)}` while readers take a 32-bit step.  After
+`anm_t+0x11` became the 16-bit `maxDy`, the dword reads vanished and what remains on the agent is
+byte-only:
+
+```c
+*(char *)(agnt + 0x11) == '\0'        /* six sites in ovc49_usesBlitGfxRect */
+MOV AL,byte ptr ES:[BX + 0x11]        /* 8699:21fa, 8699:23f1 */
+CMP byte ptr ES:[BX + 0x11],0x0       /* 8699:2264, 2829, 287f, 2b28 */
+```
+
+The 16-bit reads that used to appear at `+0x11` are the animation record's `maxDy` clamp
+(`paVar9->maxDy`), and the arithmetic that looked like `x -= agnt[0x11]` is
+`*piVar1 = *piVar1 - paVar18->maxDy`, i.e. on the `anm_t *`.  So the **width is settled (byte)**;
+only the *meaning* of the flag is unstated (it is tested `== 0` in six places and set to
+0/1/`randBelow(2)`), and it stays generated on that ground alone.
+
+### `char_sheet_t+0x1b` is compared with `agnt->owner`
+
+The one read is
+
+```c
+} while (*(int *)(i * 0x34 + 0x1b) != *(int *)(sheet->pad_0 + 0x1b));
+```
+
+`agnt_t+0x1b` is the already-named `owner`, and other functions read it as a **word** and use it as
+an `Entities` index:
+
+```c
+} while (*(uint16_t *)(i * 0x34 + 0x1b) != ((agnt_t *)param_2)->owner);   /* ovc15_textError */
+peVar3 = (entity_t *)Entities + *(int *)(uVar4 * 0x34 + 0x1b);           /* ovc15_usesAgntFlag1 */
+```
+
+So the sheet's `+0x1b` holds the same kind of value: an entity index identifying the character's
+unit.  What stops a name is the **width**: the only sheet-side read is the dword comparison, while
+the agent side is proven 16-bit, and the function carrying the comparison
+(`manage_textTotalPopulation`) has an overlapping-instruction warning at `0x5ff50` and a listing
+that does not contain the code, so the opcodes cannot arbitrate.  `pad_0` stays a 40-byte blob and
+the finding is recorded instead of a guess.
+
+### `agntG_t+0x52` -> `yOffset`
+
+Read as a signed byte added to the screen y of an agent sprite:
+
+```c
+iStack_28 = rowScreenY + agnt->y + (int)*(char *)(gdata + 0x52) - 0x16;
+```
+
+The `AgntGs` table (`195d:26d6`, stride 0x95) holds 0 in eleven of the thirteen sampled records and
+8 in one, which fits a per-unit-type vertical adjustment that is normally zero.  Named `yOffset`.
+
+`agntG_t+0x94` stays generated: its data is meaningful (5, 20, 40 across the sample) but the only
+`+ 0x94` reads in the export are on the party-sheet table (`param_1 << 2`) and on stride-4 entries,
+never on a `gdata` pointer.
+
+Struct fields: 311 components, 18 auto.
