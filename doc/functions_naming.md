@@ -423,6 +423,9 @@ Bridges must be near water's edge."`, `"This location is unsuitable for building
 
 The last one was in the decompiler-failure list, so it was read with `DumpAsmNamed` plus the pushed
 DGROUP offsets, exactly the recipe used for `constrct_body1`.
+Its prototype stays empty because the decompiler never recovered one; the entry code reads
+`[BP+6]` (a coordinate, passed through `alignUp4`), `[BP+8]` (a far pointer, kept in `DI`) and
+`[BP+0xa]` (an entity index, multiplied by `0x37`).
 
 Refused in the same pass, with reasons: `agnt_usesAgntCount6` (sets `moveState = 1` when it is
 below 2 and clears `+4`, but the vocabulary of both fields is unstated), `ovc30_compute1` (buckets
