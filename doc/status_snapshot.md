@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn336/naming_summary.txt`.
+`tmp/auditn337/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -13,7 +13,7 @@ functions                1130
 parameters               1642   auto-named  338   (20.6%)
 locals                    692   auto-named  126   (18.2%)
 structs                    35
-  struct fields           308   generated    14   (4.5%)
+  struct fields           308   generated    13   (4.2%)
 globals                  2559   auto-named  222   (8.7%)
 ```
 
@@ -48,7 +48,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in
    total across 145 locals.  What remains needs per-body reading, and this session
    did 461 parameters that way (blit argument order, party-sheet indices, x/y pairs).
-3. **14 struct fields.** Each group has been re-examined at least three times.  The
+3. **13 struct fields.** Each group has been re-examined at least three times.  The
    two that are provably meaningful have irreducible conflicts the image cannot
    settle: `char_sheet_t+0x1b` is a word comparison widened to a dword, and
    `bldtp_t+0x0c` is a second lower bound beside the already-named `minBuildTime`.

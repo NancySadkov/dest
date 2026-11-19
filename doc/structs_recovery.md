@@ -6582,3 +6582,57 @@ means |
 untracked stack spacebase, so no width or role can be trusted |
 
 Parameters: 351 -> 338.
+
+## `agnt_t+0x24` is `combatState`: 0 normal, 1 stunned, 2 dead (fields 14 -> 13)
+
+The field had been refused as "a sprite-state selector whose vocabulary is never stated".
+The vocabulary is stated, in the functions that resolve a hit:
+
+```c
+/* ovc41_usesAnimFrame2 */
+if (b->combatState == 0x2) return;                 /* already resolved  */
+...
+if (entity->animFrame == 0 || animFrame % 16 == 1 || (flags & 0xae4) != 0 || (gdata->flags & 4) != 0) {
+    b->strength = 0;      b->timer = 0xa;   b->combatState = 0x2;   /* dead   */
+} else {
+    b->strength = gdata->strength;  b->timer = 6;  b->combatState = 0x1;  /* alive */
+}
+```
+
+and the paralysis path agrees:
+
+```c
+/* ovc41_textParalyzed */
+if ((int)strength < (int)target->strength) {
+    target->timer = 0x6;
+    target->combatState = 0x1;
+```
+
+Three independent readers also only let a unit *act* while this byte is 0:
+`ovc27_usesBlitGfxRect` (`combatState == 0 && target != 0xff && animFrame != 0xff`),
+`ovc49_textLongerParalyzed` (the whole AI body is under `combatState == 0`), and
+`ovc49_textLongerParalyzed`'s paralysis-recovery branch.  So the state is the outcome of the
+unit's last combat exchange, and `2` is terminal (strength is zeroed).  Renamed `combatState`.
+
+### `agnt_t+0x25` refused, with the closest reading recorded
+
+`+0x25` is written in exactly one place, always to 1:
+
+```c
+else if ((field_0x25 != 0x2) &&
+         (((field_0x5 == 0 && targetX == 0 && randBelow(4) == 0) ||
+           ((char)field_0x5 < 0 || field_0x25 != 1 || randBelow(8) == 0)))) {
+    field_0x25 = 0x1;
+    field_0x5 = randBelow(2);
+    targetX = randBelow(2) * 2 - 1;
+```
+
+so it gates an AI decision with three states: 0 (can act, 1-in-4 roll), 1 (1-in-8 roll),
+2 (never).  Nothing in the export ever writes 2, and no name is stated for the states, so it
+stays generated.  This is the same function that shows `field_0x5` is a signed movement
+component (`randBelow(2)`, `0xff` for -1, sign-tested with `(char)field_0x5 < 0`), which is why
+the earlier "high byte of a 16-bit spawn store" reading does not settle it either:
+`ovc41_usesAgnount` copies the pair as a word (`destX = *(uint16_t *)&agnt->targetX`) while the
+AI code writes the two bytes independently.  That conflict is recorded, not guessed.
+
+Struct fields: 308 components, 13 auto.

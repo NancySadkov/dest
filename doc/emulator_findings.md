@@ -152,3 +152,42 @@ them, so they stay named `field_0x13/15/17` with this data recorded.
 - Heavy commands (`dump`, `find`, `regs`) are queued to the emulation thread.  A client
   that opens a second connection while the first is still open can block the accept loop
   and make the harness appear dead; restart the emulator if `ping` stops answering.
+
+## Second session: live validation and a correction
+
+### `AgntGs` and `Agnts` agree with the static image
+
+Dumping `AgntGs` from the running game gives the same 42 records as the file image, and the
+`name`/`wpn_name` far pointers resolve inside DGROUP (`1C33:2562 -> "fighter"`,
+`1C33:24DD -> "spear"`).  The live agent array resolves through `gdata` the same way:
+`0x1180:29BF` is `AgntGs + 5*0x95`, the archer record, and the agent's `strength/strengthMax`
+match that type.  This is what makes the emulator useful for the structs: it proves the field
+offsets against the running program, not just against the file.
+
+### `StatsSeg` (`217a`) is not a party-sheet table
+
+Earlier static reading suggested the five dwords at `217a:0000` were `char_sheet_t *` entries.
+The live segment shows what they are: five 192-byte records with **inline ASCII names**:
+
+```
+085A70  0C 00 A7 85 'Nasher'   ...
+085B30  0C 00 A7 85 'Fordor'   ...
+085BF0  0C 00 B3 85 'Kaunas'   ...
+085CB0  0C 00 BF 85 'red dragon' ...
+085D70  0C 00 CB 85 'Mindark'  ...
+```
+
+The first dword is a `(count, segment)` header pointing back at the record's own segment, the
+name is inline at `+4`, and the stats follow.  A `char_sheet_t` has `name` as a **far pointer**
+at `+0x35` and is 174 bytes, so these are the five **faction/player** records, not character
+sheets.  `217a` is a segment symbol (`StatsSeg`), not a sheet array; the `217a:003F/0053/0092`
+labels in the database are offsets inside the first of these records.
+
+### The game cycles scenarios, so per-snapshot field values are not a controlled experiment
+
+Polling the live agent array at 0.5 s intervals shows whole-array changes: positions, strengths
+and even unit types jump between snapshots because the attract/demo mode loads different
+scenarios.  A single `dump` therefore gives a consistent world, but *successive* dumps do not
+give a time series of one world.  For time-series work the harness needs `halt`/`run` around
+each dump (atomic snapshot), and the demo must be exited first.  Recorded so a later pass does
+not misread a scenario switch as unit movement.
