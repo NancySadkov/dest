@@ -104,3 +104,25 @@ the movement bytes.  Naming it needs the 0x8000 overlay segment mapped, not a bi
 `TrimSeg.java` (keep only the entry segment) and `BodySegs.java` (print body composition) are the
 tools for that pass; `SliceDecompile.java` restricts the body to a byte range when a real monster
 turns up.
+
+### Second batch of functional names (5 total in this pass)
+
+| old | new | evidence |
+|---|---|---|
+| `video_copy1` | `video_copyScreenTile` | copies a tile of at most `0x11 x 0x11` pixels from
+segment `srcSeg` at `x + y*0x140` into the staging segment `0x224a`, clamping
+`w = min(0x140-x, 0x11)` and `h = min(200-y, 0x11)` |
+| `font_loop1` | `font_textWidth` | sums `font[ch + 0xa1]` over every character of the string
+(0 for a null string), i.e. the pixel width of the text in that font |
+| `ovc43_usesBiosKeyAvail` | `ovc43_playFliFrames` | the frame loop behind `ovc43_playFli`: it
+allocates a `0xfa0f`-byte (320x200 + header) buffer, presents one frame per iteration through
+`ovc43_usesStExit` with the palette, waits `param_4` timer ticks, and returns 1 on ENTER/mouse or
+2 on ESC |
+
+So `ovc43_playFli` (open + close) now calls `ovc43_playFliFrames` (the loop), which reads the way
+the code does.  Refused in the same pass: `ovc15_loop1` (writes 0xff down a 10-row column of the
+`+0x8fa` grid, but what 0xff means for that grid is not stated), `ovc42_copy1` (a palette move
+plus a screen-index remap whose base segment the decompiler lost), `ovc25_scan1`,
+`saveui_scan1`, `manage_loop1`.
+
+ListFuncs after the batch: 1590 functions, 0 duplicates, 0 address-shaped names, 460 thunks.
