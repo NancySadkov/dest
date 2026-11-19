@@ -260,3 +260,29 @@ body also dereferences the second slot as an `anm_t` array (`anims[i].frmid`, `.
 `.nframes`, `anims._2_2_`), which only makes sense if that slot is an `anm_t` far pointer -- and
 `DI` is reassigned before the spawn call.  So the mapping is not the simple six-argument order;
 the original prototype was restored and the layout recorded as unresolved.
+
+### Thirteenth batch (short bodies read in bulk)
+
+I enumerated the 323 functions whose names are still mechanical and whose decompiled bodies are
+short, and read the smallest ones.  Five state their functionality unambiguously:
+
+| old | new | evidence |
+|---|---|---|
+| `init_usesGMapCells3` | `init_setMapCell` | `(*(byte (*)[59][148])GMapCells)[y][x] = cell`
+guarded by `0 <= x < 0x94`, `0 <= y < 0x3c` |
+| `ovc13_compute1` | `ovc13_readPixel` | returns `*(byte *)(screenX + screenY*0x140)` packed with
+the high byte of the offset; the third argument is unused |
+| `ovc15_usesAgntCount` | `ovc15_clearVisited` | loops every agent and writes 0 to `agnt_t+0x2d`
+(`visited`) |
+| `saveui_usesWrite` | `saveui_writeLine` | writes the text when non-empty, then `write(handle,
+"\r\n", ...)` |
+| `manage_usesBlitLabel` | `manage_blitLabelRight` | measures the text with `font_textWidth`, sets
+`TextBlitX = x - width`, then blits -- right-aligned at `x` |
+
+Refused in the same batch, with the reason: `ovc45_compute6` (`return param_1 != 1;` -- a bare
+predicate), `ovc45_compute7` (`(a*b)>>3` fixed-point multiply), `bldng_usesGStrangeTable` and
+`bldng_usesRandBelow` (table lookups whose meaning is in the table), `saveui_usesBlitLoadRleGfx4`
+(draws the font handle at a fixed address), `ovc15_usesToupper` (uppercases only the first
+character), `ovc41_compute9` and `stats_compute5` (their meaning depends on callees that are
+themselves unresolved), and `manage_usesBlitLabel2` (an identical twin of the one renamed -- left
+unnamed rather than forced into a numeric suffix).
