@@ -6864,3 +6864,58 @@ drawing the ring.
 4-8 byte gaps between them (the overlay call stubs).  That is a real 6 KB function, not a
 cross-segment artifact, so it needs `SliceDecompile` over prefixes rather than `TrimBody`.
 `ovc22_loop1` by contrast was a clean single 1032-byte range and decompiled in one pass.
+
+## `constrct_body1` -> `constrct_buildInfoText`: named from disassembly, not decompilation
+
+The decompiler cannot analyse this function at any size.  Every attempt hangs and is killed:
+
+```
+SliceDecompile 0..0x400   -> fail Exception ... process: timeout (240 s)
+CutAndDecompile +0x100    -> fail Exception ... process: timeout (180 s)
+CutAndDecompile +0x20     -> fail Exception ... process: timeout (180 s)
+```
+
+so even a 32-byte prefix with a forced `RET` does not return.  The prologue explains why the
+analysis is heavy: `SUB SP,0x2f0` (752 bytes of locals) on a 6071-byte body spread over 14
+fragments, with a jump table and `bad instruction data` warnings.
+
+`DumpAsmNamed` sidesteps the decompiler, and the call profile plus the string immediates identify
+the function:
+
+| call | count |
+|---|---|
+| `fmVsprintf` | 35 |
+| `ovc15_usesStshRealloc` | 33 |
+| `strcpy` / `strcat` | 32 / 3 |
+| `ovc45_textMaintenanceCost` | 5 |
+| `ovc45_compute6/7/8/9` | 9 / 1 / 2 / 5 |
+| `ovc22_textMonster`, `ovc22_textPOPULATION`, `usesGSeason` | 3 / 1 / 1 |
+
+and the DGROUP string offsets pushed by the code are the building descriptions:
+
+```
+"%s: Costs %d gold. Enhances training by %d%%."
+"%s: Costs %d gold of income. Improves armor."
+"%s: Costs %d gold. Claim trees automatically."
+"%s: Provides housing for %d %s."
+"%s: %s %d gold. Feeds %d %s."
+"%s: Owned by %s. Active party is %s the %s."
+"%s: Active party is %s the %s."
+```
+
+There is no drawing call, so it **builds** the text rather than showing it; it indexes the unit
+table with stride `0x37` (`IMUL DX,0x37` on the word argument at `[BP+0xc]`) and calls
+`ovc45_textMaintenanceCost` five times.  Renamed `constrct_buildInfoText`.  Its prototype stays
+empty because the decompiler never recovered one; the entry code shows a byte argument at
+`[BP+0x6]` and a word argument at `[BP+0xc]`.
+
+## Two local arrays named from their element semantics
+
+| local | name | evidence |
+|---|---|---|
+| `8699:1e09 local_14[2]` | `factionSeen` | zeroed, then `local_14[agnt->faction] = 1` for each
+agent (`Agnts[i]+0x2f` is `agnt_t.faction`), and both entries are tested afterwards |
+| `68ac:0148 local_82[28]` | `menuState` | zeroed and handed to `ovr_uiMenu` as its far-pointer
+state argument |
+
+Locals: 126 -> 124.

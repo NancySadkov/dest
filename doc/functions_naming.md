@@ -151,3 +151,12 @@ its parameter is the party-slot byte used to index the party-sheet pointer table
 | `ovc22_loop1` | `ovc22_searchCellsAround` | expanding-ring search (radius 1..0x94, four sign
 combinations) that returns the first cell passing the requested occupancy/flag/arena checks and
 writes its coordinates through the out pointers; sets bit 2 at `sheet+0x5d` when none is found |
+
+### Sixth batch
+
+| old | new | evidence |
+|---|---|---|
+| `constrct_body1` | `constrct_buildInfoText` | 35 `fmVsprintf` + 33 `stshRealloc` + 32 `strcpy`
+and the building-description format strings it pushes (`"%s: Costs %d gold. Enhances training by
+%d%%."`, `"... Provides housing for %d %s."`, `"... Owned by %s. ..."`); no drawing calls, and it
+indexes the unit table with stride 0x37 |
