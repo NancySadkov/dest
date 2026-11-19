@@ -2151,3 +2151,20 @@ inside `centerX +/- 8` (clamped 8..0x8c) and `centerY +/- 4` (clamped 8..0x34). 
 **`demoCenterX`** and **`demoCenterY`**.
 
 Globals: 175 -> 173 (2548 -> 2546 symbols; the two deleted labels are the absorbed halves).
+
+## `PromoteThreshold` is `byte[4]` (172 globals)
+
+The same two-word copy pattern as `LevelBandMin/Max`: `season_repairBuildings` copies
+`PromoteThreshold` and `word_..._69D9` into adjacent locals and then reads
+`PromoteThreshold[rank]`:
+
+```
+promoteThreshold = PromoteThreshold;  uStack_4 = word_2410_DATA_DGROUP_69D9;
+... *(byte *)((int)&promoteThreshold + rank) <= leader[0xa5] ...
+```
+
+So it is a four-byte table of promotion thresholds indexed by rank.  Retyped as `byte[4]` at
+`2410:69d7`; the upper-half symbol at `2410:69d9` is deleted.  The `season_repairBuildings`
+parameter that indexes it is now `rank`.
+
+Globals: 173 -> 172.

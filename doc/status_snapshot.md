@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn411/naming_summary.txt`.
+`tmp/auditn412/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -10,7 +10,7 @@ functions                1130
   no prototype            114
   weak return type        986
   has struct-typed arg    144
-parameters               1643   auto-named  234   (14.2%)
+parameters               1643   auto-named  231   (14.1%)
 locals                    692   auto-named  90   (13.0%)
 structs                    36
   struct fields           321   generated     6   (1.9%)
@@ -27,7 +27,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 |---|---|
 | function names | 1590/1590 unique and address-free; 591 renames recorded with evidence tier |
 | string labels | 1516 `s_*` labels from their own bytes (`doc/strings_renamed.tsv`) |
-| globals | 1096 -> 173 auto-named (26 previously unnamed DGROUP tables labelled, 74 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
+| globals | 1096 -> 172 auto-named (26 previously unnamed DGROUP tables labelled, 74 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
 | structures | `spr_t`, `unit_t` and `entity_t` complete; `agnt_t` rebuilt as `agnt_t[52]` + `tick` + `dir`; `bld_inst_t` and most of `char_sheet_t` recovered |
 | struct fields | 266 -> 6 generated |
 | typing | struct-typed arguments 80 -> 144; `_fmemmove`/`__fmovmem`/`memcpy` re-typed to `(far dst, far src, count)`; `blit_usesDrawGfx`'s rectangle parameter retyped `brect_t *`, which resolves its fields by name |
@@ -35,14 +35,14 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 
 ## What remains, and why it is not done
 
-1. **173 globals.** The remainder splits three ways: no writer appears anywhere in
+1. **172 globals.** The remainder splits three ways: no writer appears anywhere in
    the export (so the value can only be characterised from unexported code), only
    zeroing writers exist, or the value is a `stshAllocStub` block with no source
    asset.  Every rename in this session came from a writer or a gate that pins the
    meaning (`flashTickLo/Hi`, `destroyLatchSide0/1`, the audio-driver block pairs,
    the `StshNames` cut graphics); where only an equality or a lone write exists the
    result is a documented refusal.
-2. **234 parameters / 90 locals.** Call-site scanning is exhausted: the unanimous
+2. **231 parameters / 90 locals.** Call-site scanning is exhausted: the unanimous
    call-role rule yields 6 multi-site candidates, all inside the two functions whose
    decompilation Ghidra flags as unstable, and 10 single-site ones that the bodies
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in

@@ -1144,3 +1144,13 @@ Parameters: 247 -> 238 (14.5%).  Gate: checked 71 failures 0.
 | `ovc41_usesAgnt_clear` | `param_1` | `playSound` | the flag only gates `play_sfx(6,0)` |
 
 Parameters: 238 -> 234 (14.2%).  Gate: checked 71 failures 0.
+
+### Parameters batch 5: agent, rank, building delta
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `ovc49_usesStExit` | `param_1` | `agnt` | the body reads `->frames`, `->frameIndex`, `->x`, `->y`, `->animVariant` |
+| `season_repairBuildings` | `param_1` | `rank` | indexes `PromoteThreshold[rank]` and compares it with `leader+0xa5` |
+| `ovc41_buildingNotice` | `param_1` | `delta` | adds the argument to `unit.bldType` and wraps at 0xf7 (the debug building-type change) |
+
+Parameters: 234 -> 231 (14.1%).  Gate: checked 71 failures 0.
