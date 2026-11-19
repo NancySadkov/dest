@@ -7067,3 +7067,11 @@ is never read back), `48ac:0051 local_8[2]` (incremented per sheet but never rea
 four 300-int arrays (only handed on to an unresolved callee), `6616:10d5 local_d/local_12` (copies
 of the menu arrays whose meaning is not stated), and `6fbe:013a local_12` (a 16-byte chunk counter
 passed to the audio free routine).
+
+## Another address-taken output parameter
+
+`ovc24_removeOtherEntities` (5943:0d5a) takes `undefined1 *reportedOut`.  The only caller is
+`attact_usesAlignUp42`, which passes `&local_17` -- the local already named `reported` -- and then
+tests it (`if (local_17 != '\0')`), so the parameter is an output flag.
+
+Parameters: 297 -> 296.

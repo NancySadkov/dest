@@ -623,3 +623,30 @@ Refused in the same batch: `attact_usesGMapFlags`/`constr_usesGMapFlags` (they s
 state 2/3 from neighbouring triples, but the vocabulary of those states is unstated),
 `ovc22_usesEntities` (a capacity test comparing `sheet+0x5b` with `sheet+0x4d` mixed with type
 flags), `ovc41_compute3`, and `ovc39_compute1`-style helpers whose callee is still unresolved.
+
+### Twenty-third batch: 6 names from the 70-110-line tier
+
+| old | new | evidence |
+|---|---|---|
+| `ovc13_usesScreenX` | `ovc13_drawPanelEntities` | walks every entity inside the panel grid
+(`PanelGridX..+0x22`, `PanelGridY..+0xf`), maps it with `(x-PanelGridX)*2+0xef`,
+`(y-PanelGridY)*3+7`, reads that pixel with `ovc13_readPixel` and blits the sprite |
+| `ovc13_usesScreenY3` | `ovc13_drawWindowEntities` | the same pass over the
+`Seed_2000_d110/d10e` window (0x69 x 0x2f), filtered by `ovc13_usesEntities` |
+| `ovc45_textArena` | `ovc45_findEntityAt` | scans `Entities` for the record at `(alignUp4(x), y)`
+and writes its index through `foundIndex` and a flag through `foundFlag` (`param_4` is never used) |
+| `ovc18_textView` | `ovc18_showLeaderView` | with the game stopped, counts the active leaders per
+side and for the leader on the cursor cell says `"View %s."` and blits the view graphics |
+| `ovc24_textIntelligenceReportsUnit` | `ovc24_removeOtherEntities` | clears every entity's +2 byte,
+then kills (`ovc24_textKill`) and reports every entity except the one under the cursor, then sets
+`GGameState = 0x20` |
+| `ovc30_usesFmFreeAudio` | `ovc30_createLeader` | finds a leader slot whose `sheet+0x28` is zero,
+otherwise allocates a new **0xae-byte** record (the size of `char_sheet_t`) into the leader table,
+exiting with 0x21 when full |
+
+`ovc24_removeOtherEntities`'s parameter is now `reportedOut`: its only caller passes the address of
+its local `reported` flag and tests it immediately afterwards.  Parameters: 297 -> 296.
+
+Refused in the same batch: `ovc15_usesRandBelow2` (picks a random entity for the side with the
+larger `sheet+0x45`, which lands inside the unnamed `pad_40` region), `draw_usesGameProcessKey`,
+and `ovc49_usesStExit`.
