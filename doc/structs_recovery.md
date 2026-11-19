@@ -6544,3 +6544,41 @@ size-neutral and cannot shift the stack:
 | `6a8f:1c74 ovc41_textParalyzed` | `param_1`, `param_2` | both cast to `agnt_t *` and passed only to agent slots; **names stay generated** because the body sets the timer on `param_2` while the message reads `param_1` first |
 
 Parameters: 363 -> 351.  Struct-typed arguments: 140 -> 143.
+
+## 13 more parameters from call-site literals and single-use forwards
+
+| function | parameters | evidence |
+|---|---|---|
+| `ovc43_usesStshSeek` | `paletteOfs`, `paletteSeg` | both call sites (both in `run_demo`) pass
+`palette, unaff_SS`, where `palette` is the local array that the same block has just `_fmemset`
+and handed to `ovr_vgaSetPalette8bit` |
+| `ovc43_usesBiosKeyAvail` | `handle`, `paletteOfs`, `paletteSeg` | it has one caller; that caller
+passes `StshStrongDatHnd` first and the same palette pair next |
+| `ovc25_textArena` | `foundIndexOut`, `includeFlag8` | the first argument is only written
+(`*_param_1 = uVar8`), the role `attact_textArena2/3` already carry; `param_3` is the include
+switch `param_3 != 0 || (flags32+1 & 8) == 0` |
+| `ovc26_usesFillGrid` | `x`, `y`, `ignoreBlocked` | the cell is written at
+`(x + (0x50 - x)) * 0xa1 + y + (0x50 - y)`; `param_3` is forwarded unchanged into
+`attact_usesSCARRY2`'s fourth slot for all four directions |
+| `attact_usesSCARRY2` | `ignoreBlocked` | non-zero bypasses the second `GMapFlags` test
+(`if ((bit == 0) || (param_4 != 0)) return bit;`), i.e. the terrain blocker is ignored |
+| `ovc25_usesAlignUp43` | `partyIndex`, `setFlag8` | `param_1` is compared with
+`*(char *)((int)&Entities[i].base.entity + 3)`, the per-entity party byte; non-zero `param_5`
+sets bit 8 in every match's `flags32` |
+
+### Refused in the same pass
+
+| slot | obstacle |
+|---|---|
+| `ovc43_usesStshSeek param_4`, `ovc43_usesBiosKeyAvail param_4` | only literals 2 and 4 at the two
+call sites, and the value is never read by either body |
+| `ovc43_usesStExit param_1..param_3` | the body reads only `param_4`/`param_5` (a `char_sheet_t`
+pointer); these three are the receiving side of a forward that goes nowhere |
+| `ovc25_textArena param_2` | it only appears inside `CONCAT12(param_2, param_1)`, i.e. it is the
+packed high byte of a pointer artifact, not a value |
+| `ovc25_usesAlignUp43 param_2` | a bare `!= 0` gate on the whole pass; nothing states what it
+means |
+| `stats_textRingProt param_1/param_2` | the decompilation carries `bad instruction data` and an
+untracked stack spacebase, so no width or role can be trusted |
+
+Parameters: 351 -> 338.
