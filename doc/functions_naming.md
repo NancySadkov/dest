@@ -1262,3 +1262,11 @@ read `memcmp(char *s1,char *param_2,char *s2)`, `__fstrncpy(char *dst,char *para
 and `sprintf_strputn(int *dest,uint16_t param_2,uint16_t n)`.
 
 Parameters: 187 -> 177 (10.8%).  Gate: checked 71 failures 0.
+
+### Parameters batch 13: `__VRAM`
+
+`__VRAM` is Borland's snow-safe video copy: `param_1` counts down in every copy loop, `param_2` is
+the source that is read (`*puVar1 = *param_2`), and `param_3` is compared with the destination
+segment that arrived on the stack (`if (puVar8 == param_3)`) to choose the non-snow path.  They
+became `count`, `src`, `dstSeg`; the signature now reads
+`__VRAM(int count,uint *src,uint *dstSeg)`.  Parameters: 177 -> 174 (10.6%).
