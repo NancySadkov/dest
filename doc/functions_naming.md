@@ -591,3 +591,35 @@ Refused in the same batch: `draw_textArena` (debug/slot gates plus a 3-cell flag
 meaning), `draw_compute4` (a whitelist of type ids 9/0xe/0x1c/0x1e/0x1f/0x20/0x37-0x39/0x44/0x45/
 0x55 with no vocabulary), `ovc41_compute6` (returns 13/11/9/7/2 from a margin), `agnt_compute16`
 (a predicate over the two types' flags), `ovc41_usesXOfs` and `ovc22_usesLUDIV_at_`.
+
+### Twenty-second batch: 10 names from the 45-70-line tier
+
+| old | new | evidence |
+|---|---|---|
+| `constr_usesGfxRndSeed3` | `constr_setHighlightAtOffset` | reads
+`GUnitGrid[GfxRndSeed + dx][GfxRndSeed2 - dy]`, stores that unit's `level` into `HighlightLevel`
+and returns its `bldType`; parameters renamed `dx`/`dy` (same roles as `constr_getCellAtOffset`) |
+| `attact_usesGMapCells` | `attact_isTerrainFlat` | takes max and min of the four `GMapCells` of the
+2x2 block at (x,y) and returns 1 when `max-min < 0x3c` |
+| `ovc39_usesStshAlloc` | `ovc39_loadArchiveEntry` | loads archive entry `param_1` (table at
+-0x6c70), reads the size words at +5/+7 of the record, allocates and `memcpy`s it |
+| `constrct_usesAlignUp4` | `constrct_unitFlagsClear` | ORs the four `GMapFlags` words covering the
+unit footprint and returns 1 when the OR is zero |
+| `ovc41_usesAgntCount` | `ovc41_removeAgent` | calls `agnt_usesAgntCount4(agntIndex+1)`, rewrites
+every agent's +0xc reference (decrement above, 0xff for the removed one) and memmoves the tail |
+| `ovc41_usesIndexPermD2` | `ovc41_removeIndexPerm` | rewrites all four `IndexPermA..D` tables of 12
+entries so references to the removed index are replaced |
+| `attact_textCannotAttractUnits` | `attact_updateAttractEntry` | caches the value at -0x6f7e, resets
+the text cycle, shows `"You cannot attract units to this location."` when
+`ovc23_findClearColumn` returns -1, else recomputes the count |
+| `saveui_usesBlitLoadRleGfx` | `saveui_startCrossBlit` | sets `CrossBlitFlag = 0`, `CrossBlitCount2
+= 0`, `CrossBlitCount = 1` and `CrossBlitX/Y` from `GMenuItem` |
+| `ovc42_usesBlitGfxRect` | `ovc42_endDemo` | prints `"Demo cancelled."` for exit codes other than
+0/3, restores palette and mouse, sets `GameRunning = false` and blits the menu panels |
+| `init_usesGMapFlags` | `init_rebuildMapFlags` | rebuilds the whole `GMapFlags` array (0x3b x 0x93)
+from `GMapCells`, setting bits 0/1/2 per cell triple |
+
+Refused in the same batch: `attact_usesGMapFlags`/`constr_usesGMapFlags` (they set the BSS cell
+state 2/3 from neighbouring triples, but the vocabulary of those states is unstated),
+`ovc22_usesEntities` (a capacity test comparing `sheet+0x5b` with `sheet+0x4d` mixed with type
+flags), `ovc41_compute3`, and `ovc39_compute1`-style helpers whose callee is still unresolved.
