@@ -286,3 +286,29 @@ predicate), `ovc45_compute7` (`(a*b)>>3` fixed-point multiply), `bldng_usesGStra
 character), `ovc41_compute9` and `stats_compute5` (their meaning depends on callees that are
 themselves unresolved), and `manage_usesBlitLabel2` (an identical twin of the one renamed -- left
 unnamed rather than forced into a numeric suffix).
+
+### Fourteenth batch (two bulk passes over short bodies)
+
+| old | new | evidence |
+|---|---|---|
+| `ovc41_usesIndexPermD` | `ovc41_initIndexPerms` | four 12-byte `memcpy`s from
+`0x2410:6e08/6e14/6e20/6e2c` into `IndexPermD/C/B/A` |
+| `attact_compute1` | `attact_decrementCounter` | decrements the byte pointed at while non-zero |
+| `ovc28_compute1` | `ovc28_blitMenuEntry` | `blitLabel(0xeb, index*0xe + 0x3c, entries[index])`
+for `index < 0xfa`; parameters named `entries`, `index` |
+| `ovc15_usesSelectedAgent` | `ovc15_positionCrosshair` | sets `CrossBlitX = agent.screenX`,
+`CrossBlitY = agent.screenY - 0x10` for the selected agent |
+| `agnt_compute2` | `agnt_clampX` | clamps its argument to `0..0xd2` and returns it |
+| `audio_compute2` | `audio_panFromX` | `0x7f - min(x*0x7f/0xd2, 0x7f)`, a pan value from the
+agent's x |
+| `ovc43_usesStshSeek` | `ovc43_playArchiveFli` | seeks `strong.dat` to the offset at `gfx+3` and
+runs the frame player `ovc43_playFliFrames` |
+| `ovc07_compute1` | `ovc07_swapWords` | swaps the two 16-bit values (second pointer arrives
+packed on the stack; its own `param_2` is unused) |
+
+Refused in the same pass: `ovc25_compute1` (its three reads land on `AgntGs+0x41/0x42/0x43`, which
+mix the high byte of the `+0x40` word with `rank`, so the intent is not clear), `ovc22_compute1`
+(halves a value when the sheet class is 4), `ovc22_compute3` (`if (v < 0) v += 6`), `ovc45_compute3`
+(`sheet+0x56` plus an unresolved callee), `bldng_usesRandBelow` / `bldng_usesGStrangeTable` (table
+lookups), `saveui_usesBlitLoadRleGfx4` (font blit at a fixed address), `ovc15_usesToupper`,
+`agnt_compute1` and `ovc23_usesGfxRndSeed2`.
