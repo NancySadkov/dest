@@ -7135,3 +7135,38 @@ agent record (entity pointer at +0x17, or level at +0xf with gindex at +0xd) and
 the `RampTables` entry (`[column + 1]`) and is compared with 3 for the ability-column modifier.
 
 Parameters: 272 -> 268 (16.3%).
+
+## New struct: `grec_t` (the 0x12-stride construction record)
+
+The 12 auto globals at `21f2:0000..0011` were the fields of a single record of the construction /
+building-record table (stride 0x12).  Six readers state the layout:
+
+| offset | field | evidence |
+|---|---|---|
+| +0x00 | `buildTimer` (word) | `if (20000 < *(uint *)(i*0x12)) *(u16 *)(i*0x12) = 3;` in
+`ovc23_placeBuilding` |
+| +0x02 | `x` (word) | `x0 <= x <= x0 + width - 1` in `ovc23_findRecordAt` / `ovc23_tickRecordsAt` |
+| +0x04 | `y` (word) | compared with `GfxRndSeed2` in both |
+| +0x07 | `width` (byte) | the span length in the same test |
+| +0x09 | `party` (byte) | used as `*(undefined4 *)(party * 4)` to reach the sheet |
+| +0x0b | `countdown` (byte) | decremented by `ovc23_tickRecordsAt` |
+| +0x0d | `kind` (byte) | tested with `& 3`; `== 1` is a construction |
+| +0x0e | `done` (byte) | set to 1 when the countdown reaches 0 |
+| +0x0f | `tick` (word) | assigned `GameTick` |
+| +0x06, +0x08, +0x0a, +0x0c, +0x11 | `reserved*` (byte) | no reader and no writer anywhere in the
+recovered code (the table is BSS, all zero) |
+
+The struct is `/st.h/grec_t`, 18 bytes, 14 components, 0 generated names.  It is applied at
+`21f2:0000`, labelled `GRecords` (the table base).  The eleven obsolete member labels were deleted;
+Ghidra now shows them as `GRecords.x`, `GRecords.party`, ... which is what they are.
+
+**Globals: 188 -> 176.  Struct fields: 308 -> 322 (generated stays 10).**
+
+## Correction: `2ca1:0000` is not a `boinit_t`
+
+The last pass proposed typing `2ca1:0000` as `boinit_t[5]` because `InitEnd` sits at `2ca1:001e`.
+Dumping the block contradicts that: the bytes at `0000` are `D4 15 D4 15 D4 15` (three copies of
+0x15D4), while `boinit_t` entries in this table start with `01 01 24 0D 03 14`-style data.  The five
+real records are `InitStart` (`boinit_t[4]`, 0x06..0x1d) plus `InitEnd` (`0x1e`), which is exactly
+5 x 6 bytes -- so the existing typing is already correct and the three words at 0x00 are a different
+object.  No retype was made; that earlier hypothesis is withdrawn.
