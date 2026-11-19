@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn324/naming_summary.txt`.
+`tmp/auditn325/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -13,7 +13,7 @@ functions                1130
 parameters               1642   auto-named  363   (22.1%)
 locals                    692   auto-named  126   (18.2%)
 structs                    35
-  struct fields           311   generated    18   (5.8%)
+  struct fields           311   generated    17   (5.5%)
 globals                  2559   auto-named  222   (8.7%)
 ```
 
@@ -48,7 +48,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in
    total across 145 locals.  What remains needs per-body reading, and this session
    did 461 parameters that way (blit argument order, party-sheet indices, x/y pairs).
-3. **18 struct fields.** Each group has been re-examined at least three times.  The
+3. **17 struct fields.** Each group has been re-examined at least three times.  The
    two that are provably meaningful have irreducible conflicts the image cannot
    settle: `char_sheet_t+0x1b` is a word comparison widened to a dword, and
    `bldtp_t+0x0c` is a second lower bound beside the already-named `minBuildTime`.
@@ -59,8 +59,6 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 ## Blocked on information the binary does not carry
 
 - `anm_t 0x13..0x18`: six bytes with no read; `0x0f`/`0x11` are now `maxDx`/`maxDy`.
-- `bldtp_t+0x0c` vs `+0x0e`: the table is loaded data with no writer, so which is the
-  minimum cannot be decided from code.
 - The `07xx`/`08xx` far-pointer tables in `5087:056e`: no writer, and the index
   expressions are register artifacts (`unaff_DI`, `(uint)&unaff_DI->seg % 7`) in a
   function flagged for untracked spacebase and bad instruction data.

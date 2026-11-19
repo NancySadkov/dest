@@ -6336,3 +6336,52 @@ The `AgntGs` table (`195d:26d6`, stride 0x95) holds 0 in eleven of the thirteen 
 never on a `gdata` pointer.
 
 Struct fields: 311 components, 18 auto.
+
+## `bldtp_t+0x0c` is `kind`: the data image supplies the taxonomy (18 -> 17)
+
+The refusal said this byte had one test (`== 2`, whose branch drowns units) and that a single value
+is not a taxonomy.  The table is **static data**, so the taxonomy can simply be read: the building
+table starts at `195d:010e` (`bldType * 0x27 + <field>` with `name` at `+0`), it has 164 records,
+and resolving each record's own name string gives
+
+| value of `+0x0c` | records | names |
+|---|---|---|
+| 0 | 57 | `undeveloped land`, `tree` (many) |
+| 1 | 105 | `plot`, `farm`, `plantation`, `guest house`, `tavern`, `inn`, `magicians' room`, ... |
+| 2 | **2** | `e/w bridge`, `n/s bridge` |
+
+Exactly the two records whose name contains `bridge` carry 2, and nothing else does.  The readers
+agree with that split:
+
+```c
+if (*(char *)((uint)bldType * 0x27 + 0x11a) == '\x02') {   /* bridge: unit may cross water */
+  ... unit flags |= 4;  GMapFlags[y+1][x] &= ~3 ...
+}
+if ((bVar1 < 0xf8) && (*(char *)(bldType * 0x27 + 0x11a) != 0)) { ... }   /* ovc25_usesAlignUp45 */
+```
+
+So the field is a three-valued **`kind`**: 0 = natural terrain, 1 = building, 2 = bridge.  Renamed.
+
+This also corrects the earlier note that the `== 2` branch could never fire: it fires exactly for the
+two bridge types.
+
+## `anm_t 0x13..0x18`: the data shows which bytes are real, but no reader exists
+
+Dumping all 68 `AgntAnms` records (stride 0x1e) gives, per byte:
+
+| byte | values |
+|---|---|
+| `+0x13` | 0 (60), 7, 15, 16, 22, 28 |
+| `+0x14` | 0 (68) |
+| `+0x15` | 0 (60), and negative values -19, -15, -14, -10, -9, -5 |
+| `+0x16` | 0 (60), 255 (8) |
+| `+0x17` | 5 (49), 9 (8), 10 (8), 26 (2), 0 (1) |
+| `+0x18` | 0 (68) |
+
+So `+0x14` and `+0x18` are zero fill, while `+0x13`, `+0x15`, `+0x16` and `+0x17` genuinely carry
+data (the `+0x15` bytes are small negatives, which is exactly the shape of an offset).  None of them
+is read anywhere: the only textual hit is `&AgntAnms[0x88].field_0x15` passed as an `anm_t *`,
+i.e. an *address* used as the base of another structure, not a field read.  They stay generated, but
+the record now distinguishes meaningful data from fill.
+
+Struct fields: 311 components, 17 auto.
