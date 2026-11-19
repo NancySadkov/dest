@@ -7040,3 +7040,30 @@ pointer through `LES`, not through a symbol at `217a:0000`.  The fix would be an
 repair pass in the listing, which is a tooling change rather than a data-typing one.  The field
 semantics themselves are proven elsewhere: every consumer indexes `+0x2f` = `cls`, `+0x34` =
 `gender`, `+0x85` = `buildType`, `+0x86` = `level`, `+0x87` = `rank`, all of which are named.
+
+## Six more locals, read against the freshly exported tree
+
+The export (968 of 987 functions) was refreshed so the bodies show the names added in the previous
+passes; the local scan then ran against `tmp/allvars81.csv` + `tmp/decompiled67`.
+
+| function | local | name | evidence |
+|---|---|---|---|
+| `6018:0634` | `local_52` | `numText` | `litoa10(buf, value)` then `font_textWidth(buf)` and
+`blitText(buf, ...)` |
+| `6386:1c9f` | `local_11` | `permTable` | a fixed sequence written at indices 1..5 (4, 5, 7, 9, 6)
+and then used as a byte table |
+| `5ded:0000` | `local_30` | `yOffset` | copied from a table with `F_SCOPY`, then added to `y1`
+through a `&0xf` index |
+| `5ded:0960` | `local_14` | `indexMap` | zeroed, filled with `index + 1`, then used as an index |
+| `5087:1d7d` | `local_1e`, `local_1f` | `successWeight`, `partialWeight` | the code rolls
+`randBelow(100)` and compares it with `local_1e` and `local_1e + local_1f` to choose between the
+two outcomes; both default to 0x22/0x21 when the helper is not called |
+
+Locals: 100 -> 94 (13.6%).
+
+Refused in the same pass, with reasons: `3381:2883 local_e/local_f` (zeroed and passed by address
+but never read), `4528:0c98/1d55 local_8` (a repeated out-parameter of `saveui_usesBlitGfx10` that
+is never read back), `48ac:0051 local_8[2]` (incremented per sheet but never read), `5d45:0000`'s
+four 300-int arrays (only handed on to an unresolved callee), `6616:10d5 local_d/local_12` (copies
+of the menu arrays whose meaning is not stated), and `6fbe:013a local_12` (a 16-byte chunk counter
+passed to the audio free routine).
