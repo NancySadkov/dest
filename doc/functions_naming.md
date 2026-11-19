@@ -134,3 +134,12 @@ ListFuncs after the batch: 1590 functions, 0 duplicates, 0 address-shaped names,
 | `video_usesAgntCount` | `video_findAgentAt` | walks `Agnts` and returns the first agent whose
 sprite bounds contain a screen point (`screenX +/- sprite width - 0xc`, `screenY +/- sprite
 height - 7`), or -1.  Parameters `x`, `y` |
+
+### Fourth batch: the settlement screen
+
+| old | new | evidence |
+|---|---|---|
+| `manage_body1` | `manage_settlementScreen` | the body draws `Housing`, `jeweler`,
+`money dealer's shop` and lists buildings with `"%s: %s %d gold. Feeds %d %s."`,
+`"Buildings belonging to %s%s"`, plus the `Census`/`Property`/`Auto-build`/`Next Leader` options;
+its parameter is the party-slot byte used to index the party-sheet pointer table |

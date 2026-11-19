@@ -6760,3 +6760,60 @@ argument (`*_param_1 = uVar8`), the role `attact_textArena2/3` and `ovc25_textAr
 carry; its second argument is never read in the body |
 
 Parameters: 318 -> 315.
+
+## 4 parameters from forwarded slots and callee signatures
+
+| function | parameters | evidence |
+|---|---|---|
+| `constr_usesSmoothPrev` | `dx`, `dy` | both are forwarded unchanged into
+`constr_usesGfxRndSeed` (now `dx`, `dy`), and the second is also the index of the smoothing
+coefficient at `DGROUP:0x733` |
+| `ovc45_usesLand_info` | `y` | its single call is `video_compute1(screenX, param_2)`, whose
+second slot is `y` |
+| `init_textFilename` | `w` | it passes the argument as the **9th** argument of
+`lbm_decode_body`, whose 9th parameter is `w` (checked against the callee's full signature and
+the 10-argument call site) |
+
+Parameters: 315 -> 311 (total slots 1643 after the new `partySlot`).
+
+## `manage_body1` -> `manage_settlementScreen`
+
+The body had no prototype and 1110 bytes in three ranges.  `TrimBody` clamped it and the
+decompilation completed (the first attempt at 600 s was killed too early; ~7.5 min was not
+enough, the body needs about 9).  The entry block is a UI screen:
+
+```c
+*(u16 *)(sp - 0x224) = "Housing" + 1;
+ovr_ovc13_usesBlitRect();
+... "jeweler" ... "money dealer's shop" ...
+pfVar33 = manage_usesGLeaderCount();
+stats_usesBlitGfx10();
+Seed_2000_d1da = GfxRndSeed;  Seed_2000_d1d8 = GfxRndSeed2;
+Cancelled = 0;
+do {
+    manage_usesBlitGfxRect();
+    uVar34 = *(u16 *)((uint)*(byte *)(arg + 4) * 4);   /* party-sheet pointer table */
+    ...
+}
+```
+
+and it carries the settlement text: building names (`steam bath`, `glassworks`, `arrowsmith`,
+`halfling outpost`, `bath house`, `stonemasonry`, `public baths`, `trade faire`, `jeweler`), the
+price line `"%s: %s %d gold. Feeds %d %s."`, `"Buildings belonging to %s%s"`, and the
+`Census` / `Property` / `Auto-build` / `Next Leader` options.  Renamed `manage_settlementScreen`.
+
+Its parameter is a **party slot byte**, not a pointer:
+
+- `manage_usesStop_audio` calls `manage_body1(CONCAT11(0x24, param_1))`, and the body reads only
+  the low byte of that slot;
+- it then indexes a 4-byte pointer table with that byte (`(*(byte*)arg) * 4`), i.e. the party
+  sheets, and reads `sheet->classStr`-side fields.
+
+The prototype is now `far_t * __cdecl16far manage_settlementScreen(byte partySlot)`.  Two
+mistakes were made and corrected on the way, recorded so they are not repeated: `AddParam` reset
+the return type to `undefined` (a full signature must be applied instead of adding a parameter
+to a far-pointer-returning function), and `TrimBody` leaves the body clamped (it does not restore
+it), so the body was reset explicitly to the two contiguous ranges `4d05:1bee-1d6d` and
+`4d05:1d70-2009` (1050 bytes), dropping the distant `4d05:212c-2167` fragment.
+
+New tools: `AddParam.java`, `SetReturn.java`, `SetBody.java`.
