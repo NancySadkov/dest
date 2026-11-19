@@ -7233,3 +7233,33 @@ Merging the two bytes into `/stdint.h/uint16_t targetX` at +0x4 makes `agnt_t` 3
 The first attempt with `MergeField` damaged the adjacent `targetY`, so the struct was rebuilt
 from an explicit 31-row layout with `RebuildStruct2` (comments preserved by the new
 `DumpStruct` script).  **Struct fields: 322 -> 321, generated 7 -> 6.**
+
+## `squarerec_t`: the 0x13-byte square record (37 structs)
+
+`attact_usesSquareRecCount` (`3f0b:0585`) indexes records with a hard-coded stride:
+
+```
+MOV DX,0x13 ; IMUL
+MOV DX,0x17f8 ; MOV ES,DX
+CMP word ptr ES:[BX + 0x0],DI     ; x
+MOV AX,word ptr ES:[BX + 0x2]     ; y
+```
+
+The table base is `17f8:0000` (the literal segment, not a lost-segment alias), entries are
+0x13 bytes, x is at +0 and y at +2, and `SquareRecCount` is capped at 299, so there are 300
+records (300 * 0x13 = 5700 = 0x1644 within the 0x1650 block).  The remaining 15 bytes are
+copied as a whole by `memcpy`/`fmemmove` but never read individually in the recovered code.
+
+The struct is `/st.h/squarerec_t` (19 bytes):
+
+| offset | field | evidence |
+|---|---|---|
+| +0x00 | `x` (word) | compared with the requested x in `attact_usesSquareRecCount` / `unit_usesAlignUp42` |
+| +0x02 | `y` (word) | compared with the requested y in the same |
+| +0x04 | `reserved` (byte[15]) | moved with the whole record, no individual reader |
+
+`17f8:0000` is now `SquareRecs` (`squarerec_t[300]`).  The old `game4State`/`game4InitState`
+labels were record 0's and record 1's x, and `ExitStart`/`ExitEnd` at `09ae/09b4` had **zero
+references** (spurious labels inside record 127), so there was no real overlap to preserve.
+
+**Structs: 36 -> 37; fields 321 -> 324, generated stays 6.  Globals: 137 -> 136.**
