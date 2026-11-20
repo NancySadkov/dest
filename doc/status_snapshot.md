@@ -181,3 +181,11 @@ No `reserved_` name remains in the model (`ListSyms reserved_` -> 0; `ListFieldN
 that state exactly what the evidence shows: `unused_ca7a`, `unused_ovrSlot`, `pad_0x2a`,
 `pad_0x3a`, `pad_0x43`, `pad_0x46`, `pad_0x47`, `pad_0x94`, each with the access count in its
 symbol/field comment.
+
+## Second instrumented round (agent cloning)
+
+`bpwrite` on `Agnts[i]+0x2a` caught two block copies, including `0823:26C8 REP MOVSW` with
+`DS=ES=0F49`, `ESI=0x21`, `EDI=0x55`, `CX=0x11`: spawning copies the 17-byte run
+`+0x21..+0x31` between agents, which is why `+0x2a` is never assigned semantically.  Fifteen
+watchpoints on the live class records at `+0x3a`/`+0x46`/`+0x94` produced **0 hits** over 30
+input steps.

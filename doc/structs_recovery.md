@@ -7853,3 +7853,39 @@ their role as padding and for their offset:
 The offsets use the `0x` form because the naming audit's own rule treats `pad_<digits>` as a
 generated name (`pad_2a` escaped it only because of the hex letter); `pad_0x2a` is unambiguous
 and keeps the audit at 0 auto-named fields.
+
+## Instrumented agent/class-record session (second round)
+
+The harness was used again with the game actually running (`AgntCount` 0 -> 5) to look for a
+real writer of the unclear bytes.
+
+### Agents are cloned block-wise, not field-by-field
+
+A `bpwrite` on `Agnts[i]+0x2a` fired twice with different call sites:
+
+```
+0823:2631  REP MOVSW ES:[DI],DS:[SI]    ES=0F49   (record copy from another segment)
+0823:26C8  REP MOVSW ES:[DI],DS:[SI]    DS=0F49, ES=0F49, ESI=0x21, EDI=0x55, CX=0x11
+```
+
+The second is a **17-byte block copy from `Agnts[0]+0x21` to `Agnts[1]+0x21`** - i.e. spawning
+copies `+0x21..+0x31` (strength, strengthMax, timer, combatState, moveState, screenX, screenY,
+`+0x2a`, flags `+0x2b..0x2c`) as one unit.  So `+0x2a` is only ever *carried along*; nothing
+assigns it a value, which matches the static result (one read, zero stores) and the live values
+(all five agents read 0).
+
+### Class records: no writer observed for `+0x3a`, `+0x46`, `+0x94`
+
+Fifteen watchpoints were armed on the five live class records (`gdata` at `1180:276B`,
+`1180:26D6`, `1180:2CA8`, `1180:2D3D`, and one agent with a **null** `gdata` = `0000:0000`) at
+offsets `+0x3a`, `+0x46` and `+0x94`, then the game was played for 30 input steps:
+
+```
+armed 15 watches on +3a/+46/+94
+total hits 0
+```
+
+The class records are separate heap allocations (their addresses differ between sessions), and
+one agent runs with a null `gdata`, so the game itself tolerates a missing class record.  The
+three offsets remain unread and unwritten in every observation, which is why they keep explicit
+`pad_0x3a` / `pad_0x46` / `pad_0x94` names with their counts.
