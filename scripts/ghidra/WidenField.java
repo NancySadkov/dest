@@ -22,6 +22,9 @@ public class WidenField extends GhidraScript {
         int off = Integer.decode(f[1]);
         int len = Integer.decode(f[2]);
         DataType ft = dtm.getDataType(f[3]);
+        if (ft != null && ft.getLength() > 0 && len > ft.getLength()
+                && len % ft.getLength() == 0)
+            ft = new ArrayDataType(ft, len / ft.getLength(), ft.getLength());
         if (ft == null) { println("NOTYPE " + f[3]); return; }
         int tx = currentProgram.startTransaction("widen field");
         try {

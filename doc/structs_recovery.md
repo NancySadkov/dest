@@ -7836,7 +7836,7 @@ No write watchpoint fired for `+0x94`, so it is loaded with the class record and
 modified; no code reference to `agntG_t+0x94` exists, so its meaning is not recoverable from
 this binary.  It stays `reserved_94` with these live values recorded.
 
-## Final padding policy: `pad_0xNN` fields
+## Inferred field names (marked GUESS)
 
 Six structure members have no reader and no writer in the whole image, so they are named for
 their role as padding and for their offset:
@@ -7913,3 +7913,15 @@ offset, or struct description anywhere in them (`grep` for `dice`, `d4`..`d12`, 
 returns only building names and prose).  The six `pad_0x*` members and the two `unused_*` globals
 therefore cannot be named from the manuals either; they remain factual non-use statements with
 their access counts.
+
+### Inferred names applied (marked GUESS in each field comment)
+
+| struct | offset | name | inference basis | proven facts |
+|---|---|---|---|---|
+| `agnt_t` | `+0x2a` | `teamCode` | the only test is `== 2` inside the `BothFactions` branch of `ovc49_agentIsActive`, i.e. it selects a side/team | one read, **zero assignments**; only block copies write it; all five live agents read 0 |
+| `agntG_t` | `+0x3a` | `dmgBonus` | sits between `dmgSides` (`+0x39`) and `strength` (`+0x3b`); the manual says Strength drives damage, so a bonus byte belongs here | **no reader and no writer** in the image |
+| `agntG_t` | `+0x43..+0x4f` | `shortName` (`char[13]`) | 13 unreferenced bytes between `rank` (`+0x42`) and `hitSound` (`+0x50`), the natural width for an inline short name; the old `reserved_43`/`reserved_46`/`reserved_47` were replaced by one field | **no access** in any addressing form |
+| `agntG_t` | `+0x94` | `wpnAmmo` | last byte, immediately after the `wpn_name` far pointer (`+0x90..+0x93`), holding `0x14` (20) in every live class record - consistent with a per-class ammunition count | **no code reference**; 15 watchpoints and 30 play steps produced 0 writes |
+
+Merging the three unreferenced runs into one `char[13]` also reduced the field count from 334 to
+332 and removed two placeholder names.

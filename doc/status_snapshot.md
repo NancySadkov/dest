@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn552/naming_summary.txt`.
+`tmp/auditn553/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -41,7 +41,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    zeroed audio pairs became `far_t audioPlaceholder0..3`; `MenuItemEnabled` was
    retyped `uint8_t[5]` (absorbing `DAT_2000_d1e2`); `2ca1:0000` became
    `uint16_t[3] crtInitReserved`; and the unreferenced bytes/scratch words became
-   `noAnimBlit`, `unused_ca7a`, `unused_ovrSlot`,
+   `noAnimBlit`, `menuEnteredFlag` (GUESS), `ovrAuxSlot` (GUESS),
    `callResultTemp`, `debugEmptyCellCount` and `debugStaleTickCount`, each with its
    store/read counts in `doc/globals_naming.md`.  `reserved_187` is gone: it was
    `menuItemRow[5]`, the last element of the six-byte table at `2410:9082` that is
@@ -255,3 +255,20 @@ map to rule-book concepts - `levelLimit` (levels 1..36), `rank`, the `flags & 0x
 ability for dwarves/halflings, `dmgDice`/`dmgSides`/`strength`, and `hitSound`.  They contain
 **no data-structure documentation** (no field table, offsets or struct description), so they
 cannot name the six `pad_0x*` members or the two `unused_*` globals.
+
+## Inferred names applied (explicitly marked as guesses)
+
+Following the decision to allow documented inference, the remaining non-semantic names were
+replaced.  Each is marked `GUESS:` in its symbol/field comment with the reasoning, so no reader
+of the model can mistake it for evidence:
+
+| kind | address / offset | name | inference |
+|---|---|---|---|
+| global | `2000:ca7a` | `menuEnteredFlag` | written 1 just before `ovr_uiMainMenu()` |
+| global | `225d:008e` | `ovrAuxSlot` | auxiliary pointer slot in `__OVRGROUP` |
+| field | `agnt_t+0x2a` | `teamCode` | compared with 2 in the `BothFactions` branch |
+| field | `agntG_t+0x3a` | `dmgBonus` | between `dmgSides` and `strength` |
+| field | `agntG_t+0x43` | `shortName` (`char[13]`) | 13 inline bytes between `rank` and `hitSound` |
+| field | `agntG_t+0x94` | `wpnAmmo` | after `wpn_name`, constant 0x14 |
+
+`ListSyms pad_` and `ListSyms unused_` both return 0, so no placeholder prefix remains.
