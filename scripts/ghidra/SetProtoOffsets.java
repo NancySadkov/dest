@@ -55,7 +55,7 @@ public class SetProtoOffsets extends GhidraScript {
                 line = line.trim();
                 if (line.isEmpty() || line.startsWith("#")) continue;
                 String[] f = line.split("\t", -1);
-                if (f.length < 4) { println("BADLINE " + line); continue; }
+                if (f.length < 3) { println("BADLINE " + line); continue; }
                 Function fn = getFunctionAt(toAddr(f[0]));
                 if (fn == null) { println("NOFUNC " + f[0]); continue; }
                 if (sp == null) sp = stackSpace(fn);

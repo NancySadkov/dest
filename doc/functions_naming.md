@@ -3116,3 +3116,37 @@ the old `st.gpr` index while the `.rep` kept newer data, and previously deleted 
 (`caseD_0`, `caseD_0_2`, `ovc27_textCharmed`, `manage_usesLitoa102/103`,
 `manage_usesCurSfxType32`) reappeared in `ListFuncs` (1584 -> 1590 rows).  The revert is no
 longer performed; the project working tree is left in place between batches.
+## `N_LUMOD_at_`: shifted stack base resolved, model made clean
+
+The stub prologue (`POP CX; PUSH CS; PUSH CX; MOV CX,3; PUSH BP; PUSH SI; PUSH DI`) moves `BP`
+eight bytes below the entry `SP`, so the decompiler maps `BP+0xa` to `Stack[2]`.  Ghidra refuses
+a *parameter* there:
+
+```
+InvalidInputException: Variable contains invalid stack parameter offset: dividendLo offset 2
+```
+
+Attempting to keep the ABI as parameters at `Stack[0xa]`/`Stack[0xe]` was wrong: those offsets
+correspond to `BP+0x12`/`BP+0x16`, which the body never reads, so the two declarations were
+unused while the real accesses were bound by separate locals - a mismatch, not a model.
+
+The clean form keeps only what the machine code actually does:
+
+```
+undefined4 N_LUMOD_at_(void)
+  long dividendValue;   /* Stack[0x2]:4  = BP+0xa  */
+  long divisorValue;    /* Stack[0x6]:4  = BP+0xe  */
+```
+
+`scripts/ghidra/AddLocalAt.java` created the locals at the decompiler's own offsets and
+`SetProtoOffsets.java` was extended to accept a prototype with **no** parameters, keeping the
+explicit `DX:AX` return storage:
+
+```
+set N_LUMOD_at_ : undefined4 N_LUMOD_at_(void)
+body: if ((divisorValue._2_2_ == 0) && ((dividendValue._2_2_ == 0 || ((uint)divisorValue == 0))))
+in_stack_ occurrences: 0
+```
+
+Parameters: 1615 -> 1613 (the two unused declarations removed).  The four pushed words are
+recorded here and in the symbol comments.

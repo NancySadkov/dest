@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn551/naming_summary.txt`.
+`tmp/auditn552/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -10,7 +10,7 @@ functions                1123
   no prototype            114
   weak return type        963
   has struct-typed arg    169
-parameters               1615   auto-named    0   (0.0%)
+parameters               1613   auto-named    0   (0.0%)
 locals                    659   auto-named    0   (0.0%)
 structs                    37
   struct fields           334   generated     0   (0.0%)
@@ -97,16 +97,14 @@ exists for the first, and the second's vocabulary is still unstated.
 
 ## Blocked symbols, with the operand counts that block them
 
-### Unbound prototype: `N_LUMOD_at_`
+### `N_LUMOD_at_`: clean model (was: unbound prototype)
 
-**Resolved for the body; the parameter slots stay as the ABI declaration.**  The parameters
-`dividend`/`divisor` (`long`, `Stack[0xa]:4`/`Stack[0xe]:4`) record the four pushed words, and
-the decompiler's shifted frame is bound by locals at its own offsets
-(`dividendValue` `Stack[0x2]:4`, `divisorValue` `Stack[0x6]:4`, added with
-`scripts/ghidra/AddLocalAt.java`).  The body no longer prints `in_stack_00000002..08`; it
-computes on `dividendValue`/`divisorValue`.  Parameters still cannot sit at `Stack[2]`
-(`InvalidInputException: invalid stack parameter offset: dividendLo offset 2`), which is why
-the bound slots are locals, not parameters.
+The four argument words live at `BP+0xa..0x10`, which the decompiler maps to `Stack[2]`
+and `Stack[6]` because the stub's prologue shifts `BP` by eight.  Parameters cannot be
+placed there (`invalid stack parameter offset: 2`), and the earlier parameters at
+`Stack[0xa]`/`[0xe]` pointed at memory the body never reads.  The clean model is
+`undefined4 N_LUMOD_at_(void)` with `long dividendValue` at `Stack[0x2]:4` and
+`long divisorValue` at `Stack[0x6]:4`; the body has **0** `in_stack_*` occurrences.
 
 ### Placeholder globals and fields
 
