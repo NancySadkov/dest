@@ -2012,3 +2012,19 @@ and the body starts 3f0b:1db9 LES BX,[BP+0x6], i.e. it reads a 4-byte far pointe
 and the decompiler read in_stack_00000004 instead.  Applying
 oid attact_usesAlignUp43(uint16_t *32 value) with __cdecl16far puts the parameter at
 Stack[0x4]:4 and the body now decompiles as ovr_alignUp4(*value).
+
+### Convention audit: no remaining near/far mismatches
+
+scripts/ghidra/ConvCheck.java, ConvCheck2.java and ConvCheck3.java scan every function for a
+disagreement between its declared convention and its own return instruction (RETF vs RET),
+and for parameters still stored on the near base Stack[0x2] inside a RETF function:
+
+`
+ConvCheck  : SUMMARY nearButFar=0 farButNear=0 noReturn=627
+ConvCheck2 : SUMMARY nearLayoutFarFuncs=0
+ConvCheck3 : SUMMARY hits=0
+`
+
+The only such function was ttact_usesAlignUp43, fixed above; every other function with
+parameters is on the base its return instruction implies.  (The 627 no-return functions are
+the ovr_* thunks and jump-table stubs.)
