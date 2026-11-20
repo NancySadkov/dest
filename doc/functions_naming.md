@@ -2520,3 +2520,30 @@ so `uint16_t __INITEMSPAGE(uint16_t pageCount, uint16_t frameSeg, uint16_t handl
 now stores `frameSeg` at +0x34, `pageCount` at +0x36 and allocates a handle when `handle==0`.
 
 Parameters: auto 27 -> 19 (1.2%).  Gate: checked 71 failures 0.
+
+### `ovc43_usesStExit`: a 32-bit gindex plus two far-pointer words (19 -> 16)
+
+The prologue and tail:
+
+```
+6fbe:0141  MOV SI,[BP+0xa]                  ; forwarded to stshRead, unchanged
+6fbe:0144  PUSH 0 / PUSH 0x10 / PUSH SS / LEA AX,[BP-0x10] / PUSH AX / PUSH SI
+6fbe:018e  PUSH [BP+0x8] / PUSH [BP+0x6]    ; first pair of the final call
+6fbe:0191  PUSH [BP+0xe] / PUSH [BP+0xc]    ; the sheet far pointer
+6fbe:019a  PUSH SS / LEA AX,[BP-0x10] / PUSH AX ; the 32-bit remaining count
+6fbe:01a0  CALL ovc43_usesFmFreeAudio
+```
+
+`ovc43_usesFmFreeAudio` is declared `(uint32_t gindex, char_sheet_t *sheet, uint16_t
+sheetSeg)`, so its first argument consumes the **two** words `[BP+6]/[BP+8]` as one 32-bit
+value.  That gives
+
+```
+void ovc43_usesStExit(uint32_t gindex, uint16_t hnd, uint16_t sheetOfs, uint16_t sheetSeg)
+```
+
+with `hnd` the word carried in SI and pushed as the only non-buffer argument of `stshRead`
+(the reader has no prototype, so the handle role is proven by position, not by callee types).
+Offsets: `Stack[4]:4, [8]:2, [a]:2, [c]:2` = `BP+6..9`, `BP+0xa`, `BP+0xc`, `BP+0xe`.
+
+Parameters: auto 19 -> 16 (1.0%).  Gate: checked 71 failures 0.
