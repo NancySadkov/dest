@@ -2270,3 +2270,22 @@ puVar1 = (undefined2 *)(ofs + (uint)y * 0x140);
 ```
 
 Parameters: auto 43 -> 39 (2.4%).  Gate: checked 71 failures 0.
+
+### `ovc38_scan1` (`68ac:0339`): two far strings, not two near pointers
+
+The prologue tests both halves of the second argument and loads both with `LES`:
+
+```
+68ac:0340  MOV AX,[BP + 0xa] / OR AX,[BP + 0xc]   ; second far pointer null test
+68ac:034d  LES BX,[BP + 0x6]                      ; first far pointer
+68ac:0355  LES BX,[BP + 0xa]                      ; second far pointer
+```
+
+and its only caller pushes two far pointers and cleans 8 bytes
+(`68ac:04e0-04f2`: `PUSH ES:[BX-2]`, `PUSH ES:[BX-4]`, `PUSH SS`, `LEA AX,[BP+0xff32]`,
+`ADD SP,0x8`).  The body compares the two first bytes, then walks to `'@'` and parses decimal
+digits with `_ctype`, i.e. it compares two version strings.  Prototype:
+`int16_t ovc38_scan1(char *32 s1, char *32 s2)`; storage `Stack[4]:4, Stack[8]:4` matches
+`[BP+6..9]` and `[BP+0xa..0xd]`, and the body now reads `*s1` / `*s2`.
+
+Parameters: auto 39 -> 37 (2.3%).  Gate: checked 71 failures 0.
