@@ -1346,3 +1346,53 @@ Parameters: 137 -> 131 (8.0%).  Locals: 80 -> 67 (9.7%).  Gate: checked 71 failu
 | `ovc15_usesAgntIndex` | `local_4ba` | `agentIndices` | filled with agent indices and dereferenced as `peVar1[local_4ba[i]].base.gindex` |
 
 Locals: 67 -> 64 (9.7% -> 9.2%).  Gate: checked 71 failures 0.
+
+## Typing pass: listing types that contradicted the decompiler's own inference
+
+Method: export every function that still owns an auto variable, parse the decompiler's declaration
+line for that variable, and compare it with the datatype stored in the listing.  A variable the
+listing calls `undefined1` but the decompiler renders as `uint`, `int`, `char *` or `byte[N]` is a
+provable mistyping, because both views come from the same code.
+
+### The accumulator case from the goal: `attact_usesLDIV_at_2`
+
+```
+before:  undefined1 local_1c      (1 byte)   + int iStack_1a
+         attact_usesEntityCount2(&local_1c,unaff_SS);
+         if ((local_1c == 0 && iStack_1a == 0) || ...)
+         CONCAT22(iVar5 + iStack_1a + CARRY2(uVar4,local_1c), uVar4 + local_1c)
+after:   uint32_t sum;
+         attact_usesEntityCount2((uint *)&sum,unaff_SS);
+         if (((uint)sum == 0 && sum._2_2_ == 0) || ...)
+         CONCAT22(iVar5 + sum._2_2_ + CARRY2(uVar4,(uint)sum), uVar4 + (uint)sum)
+```
+
+`attact_usesEntityCount2`/`attact_usesAgntCount2` take `uint *sum` and write `sum[0]`/`sum[1]`, so
+the local is one 32-bit accumulator; declaring it `uint32_t` also merged away the decompiler's
+split high word `iStack_1a` and dropped one auto local.
+
+### Ten more local/parameter types from the same comparison
+
+| function | variable | new type | decompiler declaration |
+|---|---|---|---|
+| `__LONGTOA` | `local_24` | `uint8_t[34]` | `byte local_24 [34]` |
+| `__INITEXT` | `local_1f` | `uint8_t[8]` | `byte local_1f [8]` |
+| `ovc26_usesStExit` | `local_6e` | `uint8_t[80]` | `byte local_6e [80]` |
+| `init_usesRandBelow2` | `local_e` | `uint8_t` | `byte local_e` |
+| `ovc41_unitStatusText` | `local_3` | `uint8_t` | `byte local_3` |
+| `ovc45_buildPlacementMessage` | `local_d` | `uint8_t` | `byte local_d` |
+| `ovc22_textRingProt` | `local_2a` | `int16_t` | `int local_2a` |
+| `ovc43_usesStExit` | `local_12` | `uint16_t` | `uint local_12` |
+| `ovc49_textLongerParalyzed` | `local_4` | `uint16_t` | `uint local_4` |
+| `ovc42_textProvidesMoreHousing` | `param_2` | `uint16_t` | `uint param_2` |
+
+### Blocked by storage conflicts
+
+`ovc22_textRingProt`'s `local_32` (`int local_32 [4]`) and `ovc24_textKill`'s `local_24`
+(`byte local_24 [4]`) could not be widened: Ghidra rejects the change with
+`VariableSizeException: Variable storage conflict between local_32{Stack[-0x32]:8} and
+local_2c{Stack[-0x2c]:1}, local_30{Stack[-0x30]:1}` (and `local_24` vs `local_22`) — the
+decompiler had carved 1-byte locals out of the same stack slots, so widening needs those removed
+first.  Left as recorded rather than force-fitted.
+
+Locals: 64 -> 63 (9.1%).  Gate: checked 71 failures 0.
