@@ -1936,3 +1936,60 @@ the callers push segment first, and the value compared with `malloc__last` is th
   as the `INT 67h AH=43h/47h/48h` argument; no name beyond the EMM call sequence is provable.
 
 Parameters: 1622 -> 1619 total, auto 87 -> 72 (4.4%).  Gate: checked 71 failures 0.
+
+## Two more far-pointer fixes, and a Ghidra alignment trap that had to be reverted
+
+### `moveto` (`1000:1d25`): two far pointers, not two near ones
+
+The prologue loads both arguments with `LES` and the function returns with `RET 0x8`:
+
+```
+1000:1d28  LES BX,[BP + 0x8]      ; *nextPos
+1000:1d2b  MOV DX,word ptr ES:[BX]
+1000:1d2e  LES BX,[BP + 0x4]      ; *curPos
+1000:1d31  CMP DX,word ptr ES:[BX]
+1000:1d34  JZ  ...
+1000:1d36  MOV BH,0x0 / MOV AH,0x2 / CALL VideoInt   ; set cursor
+1000:1d40  MOV word ptr ES:[BX],DX                   ; *curPos = new position
+1000:1d43  INC DL                                     ; advance column, wrap by [0x88b4]
+1000:1d52  MOV word ptr ES:[BX],DX                   ; *nextPos = following position
+```
+
+so `curPos` is the value already sent to the BIOS cursor and `nextPos` the position the next
+character will use.  Both are far pointers, replaced with
+`void moveto(uint16_t *32 curPos, uint16_t *32 nextPos)`.
+
+### `_crtinit_system` (`1000:1418`): two far string pointers
+
+```
+1000:141d  LES BX,[BP + 0x4] ; INC [BP+4] ; MOV AL,ES:[BX]
+1000:1426  LES BX,[BP + 0x8] ; INC [BP+8] ; CMP AL,ES:[BX]
+```
+
+each argument is advanced by one **word** between fetches, which is the signature of a far
+pointer, not a near one.  Corrected to
+`int16_t _crtinit_system(char *32 s1, char *32 s2)`; storage `Stack[2]:4, Stack[6]:4`
+matches `[BP+4]`/`[BP+8]`.
+
+### The alignment trap: `ApplySig` with 4-byte parameters
+
+Ghidra lays out stack parameters with alignment relative to the **start of the argument list**:
+a 4-byte pointer is placed at a relative offset that is a multiple of 4, inserting padding on
+the 8086 stack where none exists.  Two signatures exposed it and had to be reverted:
+
+* `attact_compute2(byte menuIndex, byte *32 pctOut, ...)`: the real `pctOut` is at `[BP+8]`
+  (`3f0b:227f LES BX,[BP+8]`), but because the byte occupies relative offset 0 the pointer was
+  placed at `Stack[0x8]` = `[BP+0xa]`, so the decompiler rendered
+  `CONCAT22((char *)pctOut,in_stack_00000006)`;
+* `__LONGTOA(char alphaBase, char signed, uint radix, char *32 buf, ...)`: the real `buf` is
+  at `[BP+0xa]` (`1000:0bbe LES DI,[BP+0xa]`), but after the two chars and the word radix the
+  pointer was moved to `Stack[0xa]` = `[BP+0xc]`, and the decompiler started doing arithmetic
+  on `buf._2_2_`.
+
+Both were restored to the coherent two-byte-pointer prototypes (`char *buf` + `param_5` as the
+segment half, `byte *pctOut` + `param_3`/`param_4`), which keep the existing body model and the
+auto names.  `ApplySig` with `*32` is only used where the 4-byte argument lands on a
+relative offset divisible by four — as in `memcmp` (`0,4,8`), `_sprintf` (`0,4`),
+`sprintf_strputn` (`0,4,8`), `fseek` (`0,4,8,12`) and `moveto` (`0,4`).
+
+Parameters: auto 72 -> 68 (4.2%).  Gate: checked 71 failures 0.
