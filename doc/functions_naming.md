@@ -2460,3 +2460,63 @@ and the callee reads `+0xf` (base.level) and `+0x1a` (the party byte at entity+3
 `*(byte *)((int)&(peVar5->base).entity + 3)` and `(peVar5->base).level` by name.
 
 Parameters: auto 28 -> 27 (1.7%).  Gate: checked 71 failures 0.
+
+## Five more body-proven signatures (27 -> 19)
+
+### `ovc27_textTakesHalfDamage3`: far agent + index
+
+`LES BX,[BP+0x6]` / `LES BX,[BP+0xa]` / `LES BX,[BP+0xe]` are not all used, but the split
+`CONCAT22(agntSeg, param_1._2_2_)` showed the first argument is a far pointer at `BP+6`, and
+`BP+0xa` is multiplied by `0x34` (`agnt_t` stride) as an array index.  The function is far
+(params at `BP+6`), so:
+`void ovc27_textTakesHalfDamage3(agnt_t *32 agnt, uint16_t agntIndex)`; the body now reads
+`paVar7->variant`, `paVar7->gdata`, and `agntIndex * 0x34`.
+
+### `keyprocessor_usesBiosKeyAvail`: three far pointers
+
+`LES BX,[BP+6]`, `LES BX,[BP+0xa]`, `LES BX,[BP+0xe]` prove the arguments are far pointers,
+not near ones.  The only caller passes `&cursorX`, `&cursorY`, `&input`
+(`6616:0842-0852`), and the body adjusts `*cursorY` in the 3-wide grid (`(v-7)%3+7`, `-0x18`),
+`*cursorX` in 0..0xde, and writes `*input` = 1/2/3/4 (the caller then treats 0 as "poll the
+mouse").  Signature:
+`uint16_t keyprocessor_usesBiosKeyAvail(uint16_t *32 cursorX, uint16_t *32 cursorY,
+uint8_t *32 input)`.
+
+### `ovc28_compute2` is a wrapper
+
+It forwards five words to `ovc28_usesUiInputText` plus a fresh page byte:
+`ovc28_usesUiInputText(entries,count,hint,&uStack_3,unaff_SS)`, so its signature is
+`void ovc28_compute2(far_t entries, uint16_t count, far_t hint)`.
+
+### `ovc18_spawnClassAgent`: x/y/destX/destY/class/party/mode
+
+The prologue loads `[BP+6]` into SI and `[BP+8]` into DI, and the spawn call does
+`PUSH DI / PUSH SI` as the `x,y` arguments of `ovc15_usesLDIV_at_`; `[BP+0xa]`/`[BP+0xc]` are
+pushed as its `destX/destY`; `[BP+0xe]` is compared with 5 (class), `[BP+0x10]` indexes the
+`217a` leader-sheet table (`SHL 2`, `+0x3e`), and `[BP+0x12]` selects the spawn path
+(`CMP ...,2`).  The only caller (`ovc18_textTypeLen`, `48ac:05cd-05e3`) pushes exactly these
+seven words and does `ADD SP,0xe`:
+
+```
+void ovc18_spawnClassAgent(uint16_t x, uint16_t y, uint16_t destX, uint16_t destY,
+                           uint8_t classStr, uint8_t partyIndex, uint16_t mode)
+```
+
+The old `fileId`/`anims` names were the x/y words (their storage is `Stack[4]:2`/`[6]:2`, and
+the body never dereferences them).
+
+### `__INITEMSPAGE`: the EMM AH=43h sequence names the three words
+
+```
+1403:0e59  OR byte ptr [0x38],0x2
+1403:0e5e  MOV AX,[BP+0x8] / MOV [0x34],AX    ; frame segment slot
+1403:0e64  MOV BX,[BP+0x6] / MOV [0x36],BX    ; page count slot
+1403:0e6b  MOV DX,[BP+0xa] / OR DX,DX         ; pre-set handle?
+1403:0e72  MOV AH,0x43 / INT 0x67             ; EMM allocate pages: BX = pages, DX = handle
+1403:0e7f  MOV [0x32],DX                      ; handle slot
+```
+
+so `uint16_t __INITEMSPAGE(uint16_t pageCount, uint16_t frameSeg, uint16_t handle)`; the body
+now stores `frameSeg` at +0x34, `pageCount` at +0x36 and allocates a handle when `handle==0`.
+
+Parameters: auto 27 -> 19 (1.2%).  Gate: checked 71 failures 0.
