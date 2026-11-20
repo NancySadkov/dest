@@ -247,3 +247,11 @@ no new variables from that coverage, so the 0-auto totals are not an artifact of
 The class-record source table is not in `STRONG.DAT` (no 0x95-stride table; only noise runs) and
 not in the packed class names (`2000:4269..428d` is a string pool), so no on-disk layout can name
 these offsets.  Naming them semantically would require the game's data/source documentation.
+
+## Manual cross-check (doc/info)
+
+`manual.txt`, `addenda.txt`, `faq.txt` and `buildings.txt` confirm the recovered semantics that
+map to rule-book concepts - `levelLimit` (levels 1..36), `rank`, the `flags & 0x8000` half-damage
+ability for dwarves/halflings, `dmgDice`/`dmgSides`/`strength`, and `hitSound`.  They contain
+**no data-structure documentation** (no field table, offsets or struct description), so they
+cannot name the six `pad_0x*` members or the two `unused_*` globals.

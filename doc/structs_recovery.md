@@ -7889,3 +7889,27 @@ The class records are separate heap allocations (their addresses differ between 
 one agent runs with a null `gdata`, so the game itself tolerates a missing class record.  The
 three offsets remain unread and unwritten in every observation, which is why they keep explicit
 `pad_0x3a` / `pad_0x46` / `pad_0x94` names with their counts.
+
+## Manual cross-check of the recovered names
+
+The dumps in `doc/info/` (`manual.txt`, `addenda.txt`, `faq.txt`, `buildings.txt`) were used to
+check the recovered semantics.  Several names are confirmed by the rule book:
+
+| recovered name | manual evidence |
+|---|---|
+| `agntG_t.levelLimit` (`+0x53`) | "Characters can go up in level from level one (rank amateur) to 36 (supreme expert)" (`manual.txt:423`) - the class record's cap, never above 36 |
+| `agntG_t.rank` (`+0x42`) | same passage: levels are expressed as ranks, and the promotion thresholds are morale-based (`addenda.txt`, "morale requirements for promotions") |
+| `agntG_t.flags` half-damage bit (`0x8000`) | "High-level dwarves take only half-damage from magical attacks" and "halflings take only half-damage" (`manual.txt:505`, `manual.txt:528`); the damage routine tests exactly `gdata->flags & 0x8000` before halving |
+| `agntG_t.dmgDice` / `dmgSides` (`+0x38`/`+0x39`) | "Strength: Units with high Strength do greater damage to opponents in combat" (`manual.txt:382`) - damage is dice + strength-dependent bonus |
+| `agntG_t.strength` (`+0x3b`), `agnt_t.strength` (`+0x21`) | six attributes 3..18 (`manual.txt:370`) with Strength driving damage |
+| `agntG_t.hitSound` (`+0x50`) | combat audio: the routine compares it with `0`, `0x15`, `3` and otherwise calls `play_sfx(value,0)` when the agent takes damage |
+| `agntG_t.prtfls` / `prts` / `prtpals` (`+0x54`/`+0x60`/`+0x78`) | per-direction protection arrays; the manual's armour/defence wording is qualitative only |
+
+### What the manuals do not contain
+
+All four dumps are **gameplay documentation**: rules, controls, building tables and FAQ answers.
+None of them documents the on-disk or in-memory record layout - there is no field table, byte
+offset, or struct description anywhere in them (`grep` for `dice`, `d4`..`d12`, `offset`, `struct`
+returns only building names and prose).  The six `pad_0x*` members and the two `unused_*` globals
+therefore cannot be named from the manuals either; they remain factual non-use statements with
+their access counts.
