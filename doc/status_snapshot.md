@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn477/naming_summary.txt`.
+`tmp/auditn479/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -9,8 +9,8 @@ Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
 functions                1130
   no prototype            114
   weak return type        986
-  has struct-typed arg    144
-parameters               1634   auto-named  122   (7.5%)
+  has struct-typed arg    143
+parameters               1625   auto-named  101   (6.2%)
 locals                    689   auto-named   60   (8.7%)
 structs                    37
   struct fields           331   generated     4   (1.2%)
@@ -30,7 +30,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 | globals | 1096 -> 25 auto-named (26 previously unnamed DGROUP tables labelled, 74 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
 | structures | `spr_t`, `unit_t` and `entity_t` complete; `agnt_t` rebuilt as `agnt_t[52]` + `tick` + `dir`; `bld_inst_t` and most of `char_sheet_t` recovered |
 | struct fields | 266 -> 4 generated |
-| typing | struct-typed arguments 80 -> 144; `_fmemmove`/`__fmovmem`/`memcpy` re-typed to `(far dst, far src, count)`; `blit_usesDrawGfx`'s rectangle parameter retyped `brect_t *`, which resolves its fields by name |
+| typing | struct-typed arguments 80 -> 143; `_fmemmove`/`__fmovmem`/`memcpy` re-typed to `(far dst, far src, count)`; `blit_usesDrawGfx`'s rectangle parameter retyped `brect_t *`, which resolves its fields by name |
 | corrections | wrong names/types found by later evidence reverted (three pointer widenings, `OVC22_5087_056e`, `anm_t` block, `agnt_t+0x5` merged into `targetX`) |
 
 ## What remains, and why it is not done
@@ -42,7 +42,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    meaning (`flashTickLo/Hi`, `destroyLatchSide0/1`, the audio-driver block pairs,
    the `StshNames` cut graphics); where only an equality or a lone write exists the
    result is a documented refusal.
-2. **122 parameters / 60 locals.** Call-site scanning is exhausted: the unanimous
+2. **101 parameters / 60 locals.** Call-site scanning is exhausted: the unanimous
    call-role rule yields 6 multi-site candidates, all inside the two functions whose
    decompilation Ghidra flags as unstable, and 10 single-site ones that the bodies
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in

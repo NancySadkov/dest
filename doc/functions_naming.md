@@ -1766,3 +1766,85 @@ consequence of the signature change.
 
 `__return_storage_ptr__` never appears in the audit's auto-parameter count (it does not match the
 `param_\d+`/`in_stack_*` patterns), so this fix does not move the metric; it corrects the prototype.
+
+## The EMS helpers build a documented EMM 4.0 request block (12 parameters)
+
+`ems_memmove1` (`1000:05c5`) and `ems_memmove2` (`1000:0632`) both fill the same request
+block and then issue `INT 67h`.  The block layout is EMM function 57h (Move/Exchange Memory
+Region):
+
+```
++0  DWORD length
++4  BYTE  source memory type (0 = conventional, 1 = expanded)
++5  WORD  source handle
++7  WORD  source offset
++9  WORD  source page
++B  BYTE  destination memory type
++C  WORD  destination handle
++E  WORD  destination offset
++10 WORD  destination segment/page
+```
+
+`ems_memmove1` writes it as
+
+```
+emms_var05b7 = 1;                                  /* source type: expanded */
+emms_var05b8 = EMS_Handle;                         /* source handle        */
+emms_var05ba = param_3 & 0x3fff;                   /* source offset        */
+emms_var05bc = (param_4<<1 | (param_3<0))<<1 | ((param_3<<1)<0);  /* source page */
+emms_var05be = 0; emms_var05bf = 0;                /* dest: conventional   */
+emms_var05c1 = param_1; emms_var05c3 = param_2;    /* dest offset/segment  */
+emms_var05b3 = param_5; emms_var05b5 = param_6;    /* length low/high      */
+```
+
+so `param_1/param_2` are the conventional destination (`dstOfs`/`dstSeg`),
+`param_3/param_4` the expanded source offset (`srcEmsOfs`/`srcEmsOfsHi`), and
+`param_5/param_6` the 32-bit length (`lenLo`/`lenHi`).  `ems_memmove2` writes the mirror
+image (source conventional at `+4..+8`, destination expanded at `+B..+10`), giving
+`dstEmsOfs`, `dstEmsOfsHi`, `srcOfs`, `srcSeg`, `lenLo`, `lenHi`.  All twelve were retyped
+`uint16_t` after the rename.
+
+## Call-site arity for two more functions (9 parameters removed)
+
+### `ovc49_body1` (`8699:18c4`): one argument
+
+All four call sites in `ovc49_drawAgents` push exactly one far pointer:
+
+```
+8699:1fec  PUSH 0x1726          ; segment
+8699:1fef  PUSH AX              ; offset
+8699:1ff1  CALL 0x8000:8254
+8699:1ff4  ADD SP,0x4          ; 4 bytes
+```
+
+and the 150-byte body reads only `[BP+6]` as `agnt_t *`.  `TrimParams` 5 -> 1; the body was
+untouched (`FnGaps` still reports 150 bytes, 0 gaps).
+
+### `ovc18_textTypeLen` (`48ac:0382`): four word arguments
+
+Its own body reads `[BP+6]` (byte), `[BP+8]`, `[BP+0xa]` and `[BP+0xc]`, and all four call
+sites push four words and clean 8 bytes:
+
+```
+48ac:0a88  PUSH 0x0
+48ac:0a8f  PUSH ES:[0x899d]     ; GfxRndSeed2
+48ac:0a99  PUSH ES:[0x899f]     ; GfxRndSeed
+48ac:0aa3  MOV AL,ES:[0x90e4]   ; PartyCount
+48ac:0aa7  ADD AL,0xff
+48ac:0aa9  PUSH AX
+48ac:0aab  CALL ovc18_textTypeLen
+48ac:0aae  ADD SP,0x8
+```
+
+(the thunk `2342:002a JMPF 0x4000:8e42` lands on the same entry, and its three callers in
+`ovc22_usesRandBelow2` plus the one in `ovc30_textDivideError` also push four words).  The
+old 9-parameter prototype was fabricated: `ApplySig` replaced it with
+`char *ovc18_textTypeLen(uint8_t partyIndex, uint16_t destX, uint16_t destY, uint16_t
+param_4)`.  `partyIndex` is proved by the prologue (`SHL AX,2` then `LES BX,ES:[BX+0]` on the
+`217a` far-pointer table) and by the record scan `*(record+9) != partyIndex`; `destX`/`destY`
+are the words it forwards into positions 3 and 4 of
+`ovc15_usesLDIV_at_(x,y,destX,destY,gindex,animFrame,partyIndex)`.  The 4th word is left as
+`param_4` because its only use is a branch selector.  `FnGaps` confirms the body kept its 373
+bytes.
+
+Parameters: 1634 -> 1625 total, auto 122 -> 101 (6.2%).  Gate: checked 71 failures 0.
