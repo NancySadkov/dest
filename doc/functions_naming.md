@@ -1993,3 +1993,22 @@ relative offset divisible by four — as in `memcmp` (`0,4,8`), `_sprintf` (`0,4
 `sprintf_strputn` (`0,4,8`), `fseek` (`0,4,8,12`) and `moveto` (`0,4`).
 
 Parameters: auto 72 -> 68 (4.2%).  Gate: checked 71 failures 0.
+
+### ttact_usesAlignUp43: a far function that Ghidra modelled as near
+
+The callers use the small-model far-call idiom: PUSH CS followed by a near CALL, and the
+callee returns with RETF (so the pushed CS supplies the return segment):
+
+`
+3f0b:0749  PUSH 0x2410            ; argument segment
+3f0b:074c  PUSH -0x6f8c           ; argument offset  (2410:9074)
+3f0b:0750  PUSH CS                ; return segment for RETF
+3f0b:0751  CALL 0x3000:0e61
+3f0b:0754  ADD SP,0x4             ; callers pop the 4 argument bytes
+`
+
+and the body starts 3f0b:1db9 LES BX,[BP+0x6], i.e. it reads a 4-byte far pointer at
+[BP+6].  Ghidra had the function as near, so param_1 was stored at Stack[0x2] ([BP+4])
+and the decompiler read in_stack_00000004 instead.  Applying
+oid attact_usesAlignUp43(uint16_t *32 value) with __cdecl16far puts the parameter at
+Stack[0x4]:4 and the body now decompiles as ovr_alignUp4(*value).
