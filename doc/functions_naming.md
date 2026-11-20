@@ -2057,3 +2057,14 @@ int16_t max_width, uint8_t term)`).  Cdecl order makes it the `term` argument, s
 `param_4` became `term`.
 
 Parameters: auto 62 -> 60 (3.7%).  Gate: checked 71 failures 0.
+
+## Four more parameters from their readers (60 -> 56)
+
+| function | change | evidence |
+|---|---|---|
+| `saveui_readSavesList` | `param_2` -> `entriesSeg` | `4528:11e2 MOV ES,[BP+0x8]` then `4528:11e8 MOV BX,[BP+0x6]` loads the first argument as one far pointer; the second word is its segment |
+| `ovc42_textProvidesMoreHousing` | two words -> one `uint32_t timeoutTicks` | the wait loop compares the 32-bit elapsed counter against the two words: `6d7a:0086 CMP DX,[BP+0x8]` / `6d7a:008d CMP AX,[BP+0x6]`; the callers pass `(0x48,0)`, `(0x10,0)`, `(0x30,0)` |
+| `manage_textAllProperty` | `param_1` byte -> `uint16_t partyIndex` | the body checks the word at `[BP+4]` against `0xff` and indexes the `GLeaderSheets` far-pointer table with it: `if (in_stack_00000004 == 0xff)` then `GLeaderSheets[index]` |
+| `gfxRlePrepare` | `param_7` -> `flip` | zero selects the normal extent and draw routine (`scale * *(gfx+1) >> 4`, table `GUnitDescriptions+0x12`); nonzero selects the flipped extent and routine (`scale * ((*(gfx+10)-1) - *(gfx+1)) >> 4`, table `&GUnitDescriptions[0xf].seg`) |
+
+Parameters: auto 60 -> 56 (3.5%).  Gate: checked 71 failures 0.
