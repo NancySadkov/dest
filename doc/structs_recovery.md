@@ -7780,3 +7780,58 @@ but the same routine also writes `+0x2d`, `+0x31`, `+0x33`, `+0x3f` and `+0x40` 
 pointer, and `agnt_t` is 52 bytes (`+50 flags32` is the last component).  So the destination is a
 larger record, not `agnt_t`, and the `1 read / 0 writes` count for `agnt_t+0x2a` stands: a
 `TEST`-free `CMP ES:[BX+0x2a],2` in `ovc49_agentIsActive`, and no writer anywhere.
+
+## Live-memory evidence for `agnt_t+0x2a` and `agntG_t+0x94`
+
+The emulator was started with the socket harness, the game reached a running state, and the
+live `Agnts` array was read from segment `0F49` (Ghidra `1726` minus the harness map), where
+`AgntCount = 5`:
+
+```
+idx gindex lvl hp mv   x   y  +0x2a flags visited state
+  0    0     1   0  0  90   1    0   0000     1    0000
+  1    0     1   1  0  47   2    0   0000     1    0000
+  2    0     1   0  0  71   3    0   0000     1    0000
+  3    0     1   0  0  50   6    0   0000     1    0000
+  4    0     1   0  0   1   9    0   0000     1    0000
+```
+
+### The only writer of `+0x2a` is a record copy
+
+A write watchpoint (`bpwrite`) was armed on `Agnts[0..4]+0x2a` and on the five live
+`agntG_t+0x94` addresses.  It fired on `bp#2` (`Agnts[2]+0x2a`) and the halted instruction is a
+block move, not a field store:
+
+```
+0823:2625  LES DI,[BP+0x6]        ; destination
+0823:2628  LDS SI,[BP+0xa]        ; source
+0823:262B  MOV CX,[BP+0xe]
+0823:262E  SHR CX,1
+0823:2631  REP MOVSW ES:[DI],DS:[SI]   <-- hit (ES = 0F49, the Agnts segment)
+```
+
+So `+0x2a` is propagated by a 0x34-byte record copy (`memcpy`) and is never assigned by a
+field-specific store; with the source record zeroed it stays 0, which is what all five live
+agents show.  The single reader is the debug-only branch
+`8699:1736 CMP byte ptr ES:[BX+0x2a],2` inside `ovc49_agentIsActive`, guarded by
+`BothFactions`.  It is therefore an unassigned byte of the agent record, and `reserved_2a`
+remains the accurate name.
+
+### `agntG_t+0x94` reads `0x14` live but is never written
+
+The five live class records (through each agent's `gdata` far pointer) all have `+0x94 = 0x14`,
+and the same five records confirm the earlier naming of `+0x50` (`hitSound`): it is `0x15` for
+three classes and `0x00` for two, exactly the values the damage path compares against.
+
+```
+agnt gdata        +0x3e  +0x40  +0x50  +0x94
+  0  1180:2CA8    0080   000C   15     14
+  1  1180:26D6    1000   4008   15     14
+  2  1180:2B7E    00A1   0018   00     14
+  3  1180:2895    0000   0008   15     14
+  4  1180:276B    0000   0018   00     14
+```
+
+No write watchpoint fired for `+0x94`, so it is loaded with the class record and never
+modified; no code reference to `agntG_t+0x94` exists, so its meaning is not recoverable from
+this binary.  It stays `reserved_94` with these live values recorded.

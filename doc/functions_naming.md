@@ -2955,3 +2955,38 @@ run     -> RESUMED
 
 So the parameter has no reader, no caller and no callee behaviour to derive a name from.
 Parameters: auto 1 (0.1%).  Gate: checked 71 failures 0.
+
+## Three false entries inside misaligned code (BodyEnds 133 -> 130)
+
+`manage_usesLitoa102` (`4d05:28e0`), `manage_usesLitoa103` (`28f4`) and
+`manage_usesCurSfxType32` (`2b3e`) were entries **inside instructions**.  The bytes show why:
+
+```
+4d05:28d8  68 E0 00      PUSH 0x00e0
+4d05:28db  68 8C 00      PUSH 0x008c
+4d05:28de  1E            PUSH DS
+4d05:28df  68 CD 52      PUSH 0x52cd      <- Ghidra had left this undefined
+4d05:28e2  0E            PUSH CS
+4d05:28e3  E8 33 DC      CALL 0x4000:d569
+```
+
+`0x28e0` is the middle of `PUSH 0x52cd`, which is why it decoded as the nonsense `INT 52h`.
+`ForceDisasm 4d05:28df-4d05:2bc4` decoded **305 instructions, 0 holes**, and none of the three
+entries had a same-segment `CALL` (their only references came from other overlay segments,
+i.e. alias noise).  They were deleted and the enclosing bodies extended to their real
+terminators:
+
+```
+4d05:277a  manage_textAllProperty2   911 bytes   277a-2b08  (ends JMP)
+4d05:2b09  manage_usesCurSfxType3   187 bytes   2b09-2bc3  (ends RETF)
+```
+
+### `manage_textAllProperty` is a real entry with a shared tail
+
+`4d05:26f6` stays flagged, but it is not false: `4d05:26f5` is a `RETF`, and the entry begins
+with a clean prologue (`PUSH BP; MOV BP,SP; SUB SP,0x156; PUSH SI; PUSH DI`).  Its exit path
+falls through into `277a`, which is itself a real entry (called from `2b99`), so the two share
+a tail - the overlap case Ghidra cannot express.
+
+BodyEnds: 133 -> 130.  Functions: 1127 -> 1124.  No spurious function was created by the
+force-disassembly (verified by diffing the function list).

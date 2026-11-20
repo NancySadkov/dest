@@ -1,14 +1,14 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn540/naming_summary.txt`.
+`tmp/auditn541/naming_summary.txt`.
 
 ## Where the model stands
 
 ```
-functions                1127
+functions                1124
   no prototype            114
-  weak return type        967
+  weak return type        964
   has struct-typed arg    169
 parameters               1617   auto-named    1   (0.1%)
 locals                    659   auto-named    0   (0.0%)
@@ -116,7 +116,7 @@ the bound slots are locals, not parameters.
 | `2000:ca7a` (`reserved_ca7a`) | **1 write, 0 reads** | `main` sets it to 1 between `MenuMode=1` and `ovr_uiMainMenu()`; never read |
 | ~~`2000:d187`~~ | **resolved** | it is `menuItemRow[5]`: the six-byte table at `2410:9082` is indexed by `GMenuItem` (`0..5`), written at `2e25:0116` and read at `1301:07fb`; the symbol was replaced by `menuItemRow uint8_t[6]` |
 | `225d:008e` (`ovrHeaderReserved`) | **0 refs** | padding inside the Borland `OVRDATA` header |
-| `agnt_t+0x2a` (`reserved_2a`) | **1 read, 0 writes** | `CMP ES:[BX+0x2a],2` only, inside `BothFactions` debug branch of `ovc49_agentIsActive` |
+| `agnt_t+0x2a` (`reserved_2a`) | **1 read, 0 writes** (live: all 5 agents 0; only writer is a `REP MOVSW` record copy) | `CMP ES:[BX+0x2a],2` only, inside `BothFactions` debug branch of `ovc49_agentIsActive` |
 | `agntG_t+0x94` (`reserved_94`) | **0 reads, 0 writes** | last byte of the 0x95-byte class record; all `0x94` displacements are the `GMapCells` row stride (148) |
 
 Each is typed (`uint8_t`/`uint16_t`/`uint32_t`) and named for what the binary proves (a reserved
@@ -131,7 +131,7 @@ so the foreign ranges were overlay-resolution artifacts; `SetBody` dropped them
 `ovc23_usesAlignUp43`, `ovc23_textConstructionAbandoned`, `ovc41_textOnlyPlaceSingle`).
 The audit is unchanged by the rebuild, so nothing was hidden there.
 
-`BodyEnds.java`: 141 -> **133 / 1587**.  Breakdown: 108 `DOS21::` pseudo-functions, 9
+`BodyEnds.java`: 141 -> **130 / 1584**.  Breakdown: 108 `DOS21::` pseudo-functions, 9
 noreturn tails (`CALL`/`CALLF`/`INT`), 10 `PUSH` (7 `N_*_at_` far-call stubs + 3
 shared-frame fragments), and 6 instruction-level fragments (`MOV` 3, `XCHG`, `JNZ`).
 Three entries were proven false and deleted (`caseD_0`, `caseD_0_2` = jump tables;
