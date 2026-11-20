@@ -119,15 +119,6 @@ binding cannot be forced, so this is recorded rather than worked around.
 Each is typed (`uint8_t`/`uint16_t`/`uint32_t`) and named for what the binary proves (a reserved
 byte), because no reader or writer exists from which a domain name could be derived.
 
-## The four remaining auto parameters, with operand counts
-
-| function | parameter | evidence | why it stays auto |
-|---|---|---|---|
-| `__CHECKOVERLAY` | `param_1` | `1403:08c3 MOV BX,[BP+0x6]` then `1403:08d9 CALLF [0x86]` | the callee is a runtime pointer at `DS:0x86` (inside the CRT heap area); its argument role is only known at run time |
-| `midPlaySequence` | `param_1` | `2d63:0769 MOV BX,[BP+0x6]` into `INT 66h AX=0702h` | the only caller pushes the literal `0` (`3a5b:0740 PUSH 0x0`); the MIDPAK subfunction's use of BX is not in the binary |
-| `attact_textArena` | `param_2` | whole 69-instruction body references only `BP+0xa` (DI), `BP+0xc`, `BP+0xe`, `BP+0x10`; `BP+0x6`/`BP+0x8` have **0 reads** | pushed by the callers (`ADD SP,0xc`) but never read |
-| `ovc45_compute6` | `param_1` | `77eb:1ba5 CMP word ptr [BP+0x6],1`, returns 0/1 | the only call passes a text pointer and discards the result, so the compared value has no recoverable meaning |
-
 ## Model defects that can hide variables
 
 `BodyEnds.java`: 141/1590 bodies do not end in a return/jump — 108 DOS pseudo-functions,
