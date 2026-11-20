@@ -189,3 +189,61 @@ symbol/field comment.
 `+0x21..+0x31` between agents, which is why `+0x2a` is never assigned semantically.  Fifteen
 watchpoints on the live class records at `+0x3a`/`+0x46`/`+0x94` produced **0 hits** over 30
 input steps.
+
+## Final verification ledger
+
+Every claim below is reproducible with the listed script and argument.
+
+### Objective clause 1: all globals have proper names
+
+```
+ListSyms.java reserved_   -> total 0
+ListSyms.java unused_     -> unused_ca7a (2000:ca7a), unused_ovrSlot (225d:008e)
+AuditNaming: globals 2434, auto-named 0 (0.0%)
+```
+
+The two `unused_*` names are evidence statements, not placeholders:
+
+| symbol | evidence (symbol comment) |
+|---|---|
+| `unused_ca7a` | one store in `main` (`1301:00bd`), **zero reads**; the displacement bytes `7A 89` occur exactly once in the whole image - that store (`ScanBytes.java`) |
+| `unused_ovrSlot` | **0 code and 0 data references**; zero 4-byte slot at the tail of Borland `__OVRGROUP` |
+
+### Objective clause 2: all locals/globals properly typed, structs recovered
+
+```
+AuditVarTypes.java -> params=1613 unresolved=0  locals=659 unresolved=0  namedButUnresolved=0
+AuditNaming        -> structs 37, fields 334, auto-named 0 (0.0%)
+ListBadFields.java -> 0 fields whose name is a type path
+```
+
+The class-record fields that do have readers are named from them, e.g. `hitSound` (`0x50`: compared
+with `0`/`0x15`/`3`, else `play_sfx(value,0)` on damage), `flags2`/`flags3` (`0x3e`/`0x40`: every
+access is a `TEST word ptr ES:[BX+off],mask`), `dmgDice`/`dmgSides`, `strength`, `rank`,
+`levelLimit`, `prtfls`/`prts`/`prtpals`, `wpn_name`.
+
+### Objective clause 3: no partial coverage hiding variables
+
+```
+BodyEnds.java   -> 130 / 1583   (108 DOS21 pseudo-functions, 9 noreturn tails, 10 stubs, overlap cases)
+BadBodies.java  -> 14 non-contiguous (all genuine multi-block functions; the gaps hold other functions)
+```
+
+340 intra-function gaps were decoded with an independent disassembler, accepted only when the
+stream consumed the gap exactly, and filled; 148 bodies were then coalesced.  The audit produced
+no new variables from that coverage, so the 0-auto totals are not an artifact of missing ranges.
+
+### The six pad_* fields and their access records
+
+| struct | offset | name | reads | writes |
+|---|---|---|---|---|
+| `agnt_t` | `+0x2a` | `pad_0x2a` | 1 (debug branch `8699:1736`) | 0 assignments; only block copies (`REP MOVSW`, live watchpoints `0823:2631`/`0823:26C8`) |
+| `agntG_t` | `+0x3a` | `pad_0x3a` | 0 | 0 |
+| `agntG_t` | `+0x43` | `pad_0x43` | 0 | 0 |
+| `agntG_t` | `+0x46` | `pad_0x46` | 0 | 0 |
+| `agntG_t` | `+0x47` | `pad_0x47` | 0 | 0 |
+| `agntG_t` | `+0x94` | `pad_0x94` | 0 | 0 (15 watchpoints, 30 play steps, 0 hits) |
+
+The class-record source table is not in `STRONG.DAT` (no 0x95-stride table; only noise runs) and
+not in the packed class names (`2000:4269..428d` is a string pool), so no on-disk layout can name
+these offsets.  Naming them semantically would require the game's data/source documentation.
