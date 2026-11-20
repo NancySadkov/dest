@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn535/naming_summary.txt`.
+`tmp/auditn536/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -11,7 +11,7 @@ functions                1127
   weak return type        967
   has struct-typed arg    169
 parameters               1617   auto-named    2   (0.1%)
-locals                    657   auto-named    0   (0.0%)
+locals                    659   auto-named    0   (0.0%)
 structs                    37
   struct fields           334   generated     0   (0.0%)
 globals                  2435   auto-named    0   (0.0%)
@@ -97,13 +97,14 @@ exists for the first, and the second's vocabulary is still unstated.
 
 ### Unbound prototype: `N_LUMOD_at_`
 
-`long dividend` / `long divisor` sit at `Stack[0xa]:4` / `Stack[0xe]:4`, which is the proven
-ABI (`MOV AX,[BP+0xa]`/`MOV DX,[BP+0xc]`, `MOV BX,[BP+0xe]`/`MOV CX,[BP+0x10]`; return in
-`DX:AX`).  The decompiler renders those four operand reads as `in_stack_00000002..08` because
-its frame maps `BP+0xa` to `Stack[2]`.  Placing the parameters there is rejected:
-`InvalidInputException: Variable contains invalid stack parameter offset: dividendLo offset 2`
-(parameters may not sit below the return address).  The prototype storage is exact; the body
-binding cannot be forced, so this is recorded rather than worked around.
+**Resolved for the body; the parameter slots stay as the ABI declaration.**  The parameters
+`dividend`/`divisor` (`long`, `Stack[0xa]:4`/`Stack[0xe]:4`) record the four pushed words, and
+the decompiler's shifted frame is bound by locals at its own offsets
+(`dividendValue` `Stack[0x2]:4`, `divisorValue` `Stack[0x6]:4`, added with
+`scripts/ghidra/AddLocalAt.java`).  The body no longer prints `in_stack_00000002..08`; it
+computes on `dividendValue`/`divisorValue`.  Parameters still cannot sit at `Stack[2]`
+(`InvalidInputException: invalid stack parameter offset: dividendLo offset 2`), which is why
+the bound slots are locals, not parameters.
 
 ### Placeholder globals and fields
 

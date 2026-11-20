@@ -7742,3 +7742,41 @@ address-decay of an array and confirms the buffer type.
 After the reverts `AuditVarTypes` still reports `params=1622 unresolved=0
 locals=657 unresolved=0`, so the corrected set is fully typed and no `far_t` remains
 without a `.ofs`/`.seg` reader.
+
+## `agntG_t`: five fields were named after a type path
+
+`ListBadFields.java` (new) reports structure fields whose name is not an identifier.  It found
+**5**, all in `agntG_t`:
+
+```
+agntG_t  +58  stdint.h/uint8_t    byte
+agntG_t  +62  stdint.h/uint16_t   word
+agntG_t  +64  stdint.h/uint16_t   word
+agntG_t  +70  stdint.h/uint8_t    byte
+agntG_t  +80  stdint.h/uint8_t    byte
+```
+
+Each was resolved from its accesses:
+
+| offset | new name | evidence |
+|---|---|---|
+| +0x50 | `hitSound` | `6a8f:1c74` compares it with `0`, `0x15` and `3`, else calls `play_sfx(value,0)` when the agent takes damage; the special cases play `0x3d`/`0x3e`, `21`/`71`, `0x14`/`0x15` |
+| +0x3e | `flags2` | every access is a mask test: `6a8f:1cf3 TEST word ptr ES:[BX+0x3e],0x40`, `8699:0c44 TEST ...,0x200` |
+| +0x40 | `flags3` | `6a8f:1dba TEST word ptr ES:[BX+0x40],0x100`, `8699:0939 TEST ...,0x2000` |
+| +0x3a | `reserved_3a` | no struct access found; the scan matches only the immediate `0x3a` and `DS:[0x3a]` globals |
+| +0x46 | `reserved_46` | no struct access found; sits between `reserved_43` (byte[3]) and `reserved_47` (byte[9]) |
+
+`ListBadFields` now reports **0**.
+
+### `agnt_t+0x2a`: the apparent writer is a different struct
+
+A displacement scan did find a store at that offset:
+
+```
+619c:04e1  MOV byte ptr ES:[BX + 0x2a],AL     ; ovc30_createLeader
+```
+
+but the same routine also writes `+0x2d`, `+0x31`, `+0x33`, `+0x3f` and `+0x40` through the same
+pointer, and `agnt_t` is 52 bytes (`+50 flags32` is the last component).  So the destination is a
+larger record, not `agnt_t`, and the `1 read / 0 writes` count for `agnt_t+0x2a` stands: a
+`TEST`-free `CMP ES:[BX+0x2a],2` in `ovc49_agentIsActive`, and no writer anywhere.
