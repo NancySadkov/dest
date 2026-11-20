@@ -1,14 +1,14 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn532/naming_summary.txt`.
+`tmp/auditn535/naming_summary.txt`.
 
 ## Where the model stands
 
 ```
-functions                1130
+functions                1127
   no prototype            114
-  weak return type        970
+  weak return type        967
   has struct-typed arg    169
 parameters               1617   auto-named    2   (0.1%)
 locals                    657   auto-named    0   (0.0%)
@@ -128,10 +128,13 @@ so the foreign ranges were overlay-resolution artifacts; `SetBody` dropped them
 `ovc23_usesAlignUp43`, `ovc23_textConstructionAbandoned`, `ovc41_textOnlyPlaceSingle`).
 The audit is unchanged by the rebuild, so nothing was hidden there.
 
-`BodyEnds.java`: 141 -> **137 / 1590**.  Breakdown: 108 `DOS21::` pseudo-functions, 9
-noreturn tails (`CALL`/`CALLF`/`INT`), 12 `PUSH` (7 `N_*_at_` far-call stubs + 5
-shared-entry helpers), and 8 instruction-level fragments (`MOV` 3, `XCHG`, `JNZ`, `AND`,
-`SBB`).  Two classes are structural, not truncation, and are rejected by Ghidra:
+`BodyEnds.java`: 141 -> **133 / 1587**.  Breakdown: 108 `DOS21::` pseudo-functions, 9
+noreturn tails (`CALL`/`CALLF`/`INT`), 10 `PUSH` (7 `N_*_at_` far-call stubs + 3
+shared-frame fragments), and 6 instruction-level fragments (`MOV` 3, `XCHG`, `JNZ`).
+Three entries were proven false and deleted (`caseD_0`, `caseD_0_2` = jump tables;
+`ovc27_textCharmed` = mid-push-sequence), and two bodies were recovered
+(`ovc27_textTakesHalfDamage3` 956 bytes, `manage_textTotalPopulation` 1427 bytes).
+Two classes are structural, not truncation, and are rejected by Ghidra:
 
 | case | evidence | why it stays split |
 |---|---|---|

@@ -2776,3 +2776,81 @@ binary states about the argument is that it is the word tested against 1.  Named
 `attact_textAbnormalProgramTermination(uint16_t value, ...)`.
 
 Parameters: auto 3 -> 2 (0.1%).  Gate: checked 71 failures 0.
+
+## Residual body fragments: tested one by one (BodyEnds 137 -> 133)
+
+New instrument `scripts/ghidra/RefsIn.java` lists every reference **to** an address with its
+reference type and containing function, which is what separates a real entry from a
+jump-table label or an overlay-alias artifact.
+
+### Three entries were false and are gone
+
+| address | references | verdict |
+|---|---|---|
+| `3f0b:2da0` `caseD_0` | **0 refs** | the bytes are a jump table: `0D 8A 0D 54 0D 30 0D 20 0D ...` = descending word offsets; deleted |
+| `4d05:35c9` `caseD_0_2` | 1 **COMPUTED_JUMP** (no CALL) | jump table from its second byte: `4C 16 09 16 8F 15 63 15 FE 14 ...`; deleted |
+| `5ded:1433` `ovc27_textCharmed` | 1 CALL from `4d05:3164` (different overlay = alias) | starts mid-push-sequence: `1430 PUSH [BP-8]`, `1433 PUSH [BP-0xa]`, `1436 CALLF`; deleted and the parent extended |
+
+`ovc27_textTakesHalfDamage3` body: `5ded:10ea-5ded:1432` -> `5ded:10ea-5ded:14a5` (956 bytes).
+The result is clean - **no `WARNING`, no `in_stack_*`, no `unaff_BP`** - where the split version
+had `WARNING: Unknown calling convention` and `in_stack_00000008`.  Its two parameters stay
+`agnt_t *32 agnt, uint16_t agntIndex`; the locals stay `msg`, `text2`, `text1`.
+
+### One body was cut into undefined bytes
+
+`manage_textTotalPopulation` ended at `4d05:2fae`, and `2faf` was undefined.  The bytes are
+code, continuing in the same `BP` frame:
+
+```
+4d05:2faf  9A 39 00 F1 23   CALLF 0x23f1:0x0039
+4d05:2fb4  83 C4 10         ADD SP,0x10
+```
+
+`ForceDisasm 4d05:2faf-4d05:330c` decoded **298 instructions, 0 holes**, and the tail shows the
+real epilogue:
+
+```
+4d05:3308  5F        POP DI
+4d05:3309  5E        POP SI
+4d05:330a  C9        LEAVE
+4d05:330b  CB        RETF
+4d05:330c  55        PUSH BP      <- manage_applyUnitFilter starts clean
+```
+
+Body extended to `4d05:2d79-4d05:330b` (**1427 bytes**).  The recovered tail binds the named
+locals `bandLabels` / `bandLabels2` (far-table bases passed to `ovr_blitLabel`) and a typed
+set of buffers (`char[120]`, `char[36]`, `undefined2[42]`, `entity_t *32`).
+
+### Side effect of `ForceDisasm` that had to be undone
+
+`DisassembleCommand` follows flow, so it re-created two functions at **cross-overlay** call
+targets:
+
+```
+5ded:1433  <- CALLF 0x23f1:0x0039 from 4d05:2faf   (re-split ovc27)
+5b66:1d94  <- CALL from 4d05:2fc0 (inside the new body)
+```
+
+A call from one overlay segment to another cannot execute (only one overlay is resident),
+so these are alias resolutions, not calls.  Both were deleted and the `ovc27` body re-set.
+Rule applied from here on: **a reference whose source and target lie in different overlay
+segments is alias noise, not evidence.**
+
+### The 8 residual fragments, with their evidence
+
+| function | ends at | next entry | evidence | why it stays split |
+|---|---|---|---|---|
+| `__vprinter_1000_0e74` | `MOV 0e7a` | `0e7b` | `0e76 CALL 0x1000:0e7b` (same segment) | shared-entry helper; body overlap refused |
+| `__vprinter_1000_0e7b` | `XCHG 0e83` | `0e84` | `0e7f CALL 0x1000:0e84` (same segment) | same |
+| `__vprinter_1000_0eb3` | `JNZ 0ebb` | `0ebc` | 3 CALLs from `__vprinter_func_start` (same segment) | same |
+| `malloc_JoinFreeBlocks` | `MOV 16cd` | `16ce` | 2 CALLs (`farmalloc`, `malloc_FreeLastBlock`) | shared tail; overlap refused |
+| `manage_textAllProperty` | `MOV 2779` | `277a` | `4d05:2b99 CALL` (same segment) | local subroutine sharing the parent frame |
+| `manage_textAllProperty2` | `PUSH 28de` | `28e0` | next entry `28f4` ends in a real `RET` | fragment across a complete function; overlap refused |
+| `manage_usesLitoa102` | `PUSH 28f3` | `28f4` | `28f4` itself is complete (`RET`) | same |
+| `manage_usesCurSfxType3` | `PUSH 2b3d` | `2b3e` | `2b3e` itself is complete (`RET`) | same |
+
+Each of the 4 `manage_*` fragments sits between two functions that do end in `RET`/`RETF`
+(`28f4`, `2b3e`, `2bc3`, `2d78`), so extending any of them to its own `RET` would overlap a
+complete neighbour - the same `OverlappingFunctionException` reproduced earlier.
+
+BodyEnds: 137 -> 133.  BadBodies: 173 -> 171.  Multi-segment: 0.
