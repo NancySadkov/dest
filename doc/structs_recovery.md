@@ -7603,15 +7603,21 @@ so the local is `agnt_t agntRec`.  (The decompiler keeps a second, older view of
 routine's stack as `agntTmp [23]` at BP-0x3e, which is what the final
 `ovr_drawAgntStats` call consumes; the two views do not overlap.)
 
-### The last six, with what blocks each
+### Closing the last six (6 -> 0)
 
-| function | local | blocking evidence |
-|---|---|---|
-| `__INITEXT` | `local_1f` | 8-byte buffer read once and compared byte-by-byte with two data blobs; the function never writes it, so it is either a callee-filled buffer or an uninitialised comparand |
-| `init_usesRandBelow2` | `local_f` | written with 0 and never read; the neighbouring `outFlag` is the real out-parameter |
-| `ovc22_textRingProt` | `local_c` | one stack slot reused by the compiler for five unrelated loops (entity index, leader index, a y coordinate, an arithmetic temporary); the stored offset also disagrees with the disassembly, so a single name would be wrong |
-| `ovc22_textRingProt` | `local_6a` | the slot is not addressable in the disassembly at `BP-0x6a`; the code uses the adjacent `BP-0x68` area both as a `stsprintf` destination and as the base of a far-pointer table, so no single type is honest |
-| `ovc45_buildPlacementMessage` | `local_d` | byte set to 0 at `77eb:0d82`/`1412` and tested at `1698`; nothing in the function ever sets it non-zero |
-| `ovc49_textLongerParalyzed` | `local_4` | word out-parameter of `CALLF 2000:3083` (pushed as `SS:BP-0x2`), compared with 110/48/6; the helper lives in an overlay thunk (`2000:3083 -> 3000:bb0e`) that is not statically attributable to a named function |
+Two tools settled them.  `scripts/ghidra/HighLocals.java` prints the **decompiler's own**
+local symbols (name, type, storage), which showed that several stored entries were a size or
+an offset out of date; and the overlay thunk `2000:3083` turned out to resolve through
+`SymAt 3000:bb0e` to a named function, which named its out-parameters.
 
-Locals: 657 total, auto 46 -> 6 (0.9%).  Gate: checked 71 failures 0.
+| function | old | new | type | evidence |
+|---|---|---|---|---|
+| `ovc22_textRingProt` | `local_c` | `scratch` | `uint16_t` | HighLocals reports `Stack[-0xc]:2` (the listing said 1 byte); one slot reused for five non-overlapping temporaries (entity scan index, leader loop index, second entity loop, per-leader menu offset, the word stored to `char_sheet_t+0x94`) |
+| `ovc49_textLongerParalyzed` | `local_4` | `distance` | `uint16_t` | `CALLF 2000:3083` is `agnt_usesAgntCount2`; its third far out-parameter starts at 0xffff, receives the smallest `|dx|+|dy|` over the other faction and is compared with 110/48/6 |
+| `init_usesRandBelow2` | `local_f` | `sameDirCount` | `uint8_t` | passed as the second far out-pointer (`PUSH SS; LEA AX,[BP-0xd]` at `3381:2ae6`); the callee increments it while the direction repeats |
+| `init_usesRandBelow2` | `outFlag` | `lastDir` | `uint8_t` | the first far out-pointer (`LEA AX,[BP-0xc]`); the callee stores the newly picked direction there |
+| `__INITEXT` | `local_1f` | `cmpBuf` | `uint8_t[8]` | only reference is `LEA DI,[BP-0x1d]` (`1403:1008`) followed by `PUSH SS/POP ES`, `LEA SI,[0x20]`, `MOV CX,5`, `REPE CMPSB`; five bytes are compared with `DS:0x20` and nothing writes the buffer |
+| `ovc45_buildPlacementMessage` | `local_d` | `unusedFlag` | `uint8_t` | written 0 at `77eb:0d82`/`1412`, tested at `1698` (`MOV AL,[BP-0xd]; OR AX,AX; JNZ`); no other write exists |
+| `ovc22_textRingProt` | `local_6a` | `unitNameOfs` | `uint16_t` | entry i's offset is the word at `unitNameOfs + i*4`, its segment the word at `BP-0x68 + i*4`, and the pair is passed to `manage_applyUnitFilter` as the unit name; the same bottom-of-frame area doubles as the spy-report `stsprintf` buffer in another branch, so the two source variables share the slot with disjoint lifetimes |
+
+Locals: 657 total, auto 46 -> 0 (0.0%).  Gate: checked 71 failures 0.

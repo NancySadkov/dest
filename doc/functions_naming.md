@@ -2186,3 +2186,53 @@ entity code reads as the owning party (`*(byte *)((int)&entity + 3)`), so the ar
 `partyIndex`.
 
 Parameters: auto 46 -> 45 (2.8%).  Gate: checked 71 failures 0.
+
+## Two callees with far out-parameter blocks (45 -> 43)
+
+### `agnt_usesAgntCount2` (`3b1d:093e`): three far out-pointers
+
+The caller pushes `agnt` plus three `SS:offset` pairs and does `ADD SP,0x10`
+(`8699:0d6b-0d85`), i.e. 4 + 3*4 bytes.  Mapping the callee's accesses:
+
+```
+*distance = 0xffff;                       /* the word at [BP+0x12] */
+... if (|dx|+|dy| < *distance) {
+      *distance = |dx|+|dy|;
+      *xDir = signum(dx);                /* [BP+0xa]  */
+      *yDir = signum(dy);                /* [BP+0xe]  */
+}
+return *distance != 0xffff;
+```
+
+so the signature is
+`bool agnt_usesAgntCount2(agnt_t *agnt, uint16_t *32 xDir, uint16_t *32 yDir, uint16_t *32 distance)`.
+The relative offsets 4/8/12 are all divisible by four, so `*32` keeps the exact layout; the
+caller's `local_4` is the distance and became `distance`.
+
+### `init_usesRandBelow` (`3381:24c3`): two far in/out bytes
+
+`init_usesRandBelow2` calls it with two `SS:offset` pairs (`3381:2ae6-2af7`, `ADD SP,0xe`):
+
+```
+3381:2ae6  PUSH SS / LEA AX,[BP-0xd] / PUSH AX   ; far ptr A
+3381:2aeb  PUSH SS / LEA AX,[BP-0xc] / PUSH AX   ; far ptr B
+3381:2af0  PUSH [BP-0x11] / PUSH DI / PUSH SI
+3381:2af7  CALL 3000:5cd3                        (= 3381:24c3, delta 0x3810)
+```
+
+and the callee reads `LES BX,[BP+0xc]` and `LES BX,[BP+0x10]`.  Its tail is the proof of
+meaning:
+
+```
+if (*lastDir == dirDelta) (*sameDirCount)++;
+else { *sameDirCount = 0; *lastDir = dirDelta; }
+```
+
+Modelled as seven two-byte slots (the two far pointers kept split, since a four-byte pointer
+at relative offset 6 would be re-aligned):
+`uint16_t init_usesRandBelow(int16_t x, int16_t y, uint8_t dir, uint8_t *lastDir,
+uint16_t lastDirSeg, uint8_t *sameDirCount, uint16_t sameDirCountSeg)`.
+The body now dereferences `*_lastDir` / `*_sameDirCount` and the caller passes
+`&lastDir, SS, &sameDirCount, SS`.
+
+Parameters: auto 45 -> 43 (2.7%).  Gate: checked 71 failures 0.
