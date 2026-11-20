@@ -2068,3 +2068,20 @@ Parameters: auto 62 -> 60 (3.7%).  Gate: checked 71 failures 0.
 | `gfxRlePrepare` | `param_7` -> `flip` | zero selects the normal extent and draw routine (`scale * *(gfx+1) >> 4`, table `GUnitDescriptions+0x12`); nonzero selects the flipped extent and routine (`scale * ((*(gfx+10)-1) - *(gfx+1)) >> 4`, table `&GUnitDescriptions[0xf].seg`) |
 
 Parameters: auto 60 -> 56 (3.5%).  Gate: checked 71 failures 0.
+
+### `attact_usesAlignUp4`'s fourth argument is the flags buffer (55 auto)
+
+Both call sites in `attact_usesEntities` push the callee's own `flagsOfs`/`flagsSeg` parameters first:
+
+```
+3f0b:0bc8  PUSH word ptr [BP + 0xe]   ; flagsSeg
+3f0b:0bcb  PUSH word ptr [BP + 0xc]   ; flagsOfs
+3f0b:0be5  PUSH AX                   ; entity party byte at +0x1a
+3f0b:0be6  PUSH word ptr [BP - 0x4]
+3f0b:0be9  PUSH word ptr [BP - 0x2]
+3f0b:0bed  CALL attact_usesAlignUp4
+```
+
+so the 4-byte `param_4` is that far flags pointer (the body's `in_stack_0000000a == 0 && (int)param_4 == 0` is the both-words-zero test).  Renamed `flags`; the widths were left alone because a 4-byte parameter at relative offset 6 would be re-aligned by Ghidra and shift `x`/`y`.
+
+Parameters: auto 56 -> 55 (3.4%).  Gate: checked 71 failures 0.
