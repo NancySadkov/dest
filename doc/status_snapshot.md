@@ -1,16 +1,16 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn541/naming_summary.txt`.
+`tmp/auditn542/naming_summary.txt`.
 
 ## Where the model stands
 
 ```
-functions                1124
+functions                1123
   no prototype            114
-  weak return type        964
+  weak return type        963
   has struct-typed arg    169
-parameters               1617   auto-named    1   (0.1%)
+parameters               1615   auto-named    0   (0.0%)
 locals                    659   auto-named    0   (0.0%)
 structs                    37
   struct fields           334   generated     0   (0.0%)
@@ -41,12 +41,12 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    zeroed audio pairs became `far_t audioPlaceholder0..3`; `MenuItemEnabled` was
    retyped `uint8_t[5]` (absorbing `DAT_2000_d1e2`); `2ca1:0000` became
    `uint16_t[3] crtInitReserved`; and the unreferenced bytes/scratch words became
-   `reserved_0845`, `reserved_ca7a`, `ovrHeaderReserved`,
+   `noAnimBlit`, `reserved_ca7a`, `ovrHeaderReserved`,
    `callResultTemp`, `debugEmptyCellCount` and `debugStaleTickCount`, each with its
    store/read counts in `doc/globals_naming.md`.  `reserved_187` is gone: it was
    `menuItemRow[5]`, the last element of the six-byte table at `2410:9082` that is
    indexed by `GMenuItem`.
-2. **1 parameter / 0 locals.** Call-site scanning is exhausted: the unanimous
+2. **0 parameters / 0 locals.** Call-site scanning is exhausted: the unanimous
    call-role rule yields 6 multi-site candidates, all inside the two functions whose
    decompilation Ghidra flags as unstable, and 10 single-site ones that the bodies
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in
@@ -112,7 +112,7 @@ the bound slots are locals, not parameters.
 
 | symbol | references | reason it has no proper name |
 |---|---|---|
-| `2410:0845` (`reserved_0845`) | **1 read, 0 writes**; image byte `00` | `MOV AL,[0x845]` guards a redraw (`==0 && !GPaused && mapViewActive`); no instruction sets it, so it is a constant-0 test |
+| `2410:0845` (`noAnimBlit`) | **1 read, 0 writes**; image byte `00`; non-zero suppresses the animation blit | `MOV AL,[0x845]` guards a redraw (`==0 && !GPaused && mapViewActive`); no instruction sets it, so it is a constant-0 test |
 | `2000:ca7a` (`reserved_ca7a`) | **1 write, 0 reads** | `main` sets it to 1 between `MenuMode=1` and `ovr_uiMainMenu()`; never read |
 | ~~`2000:d187`~~ | **resolved** | it is `menuItemRow[5]`: the six-byte table at `2410:9082` is indexed by `GMenuItem` (`0..5`), written at `2e25:0116` and read at `1301:07fb`; the symbol was replaced by `menuItemRow uint8_t[6]` |
 | `225d:008e` (`ovrHeaderReserved`) | **0 refs** | padding inside the Borland `OVRDATA` header |
@@ -152,15 +152,26 @@ alone; the reference scan then showed its two `CALL` sites (`farmalloc`, `malloc
 so the function, body and `void (void)` prototype were restored.  Deletions now require a
 `CALL`-free reference scan.
 
-## The one remaining auto parameter
+## Auto-named variables: 0 everywhere
 
-| function | parameter | runtime + static evidence | status |
-|---|---|---|---|
-| `__CHECKOVERLAY` | `param_1` | `1403:0002` = `0x225D`; `1403:08d4 MOV DS,CS:[2]`; `1403:08d9 CALLF [0x86]`;
-`225d:0086` is `__OVRHOOK__` and reads `0823:0837` live, where `0x0837` is a one-byte `RETF`
-stub; `RefsIn 1403:0890` = **0 refs**; a breakpoint at its resident `0xCAF0` never fired over 14
-key events | dead code calling an empty hook: nothing consumes the argument |
+```
+parameters  1615  auto 0  (0.0%)
+locals       659  auto 0  (0.0%)
+globals     2435  auto 0  (0.0%)
+fields       334  auto 0  (0.0%)
+AuditVarTypes: params unresolved 0, locals unresolved 0
+```
 
-`midPlaySequence(uint16_t sequence)` is now named from a full runtime trace of `INT 66h`
-(IVT `5DBC:1B7A` -> table `CS:0x1B3A` -> `AX=0702` handler `1C38` -> worker `150D` -> operation
-`0x97` -> parser `610F:244D`, where `CX = value+1` drives `LOOP 0x2510` over CAT sub-chunks).
+The last auto parameter was `__CHECKOVERLAY.param_1`; the routine is unreachable (0 refs, its
+`__OVRHOOK__` target is a `RETF` stub, and a live breakpoint never fired), so it was removed
+from the function list.
+
+Remaining formally-reserved names, each with its access record:
+
+| symbol | record |
+|---|---|
+| `reserved_ca7a` | 1 write (`main`, value 1), 0 reads; standalone byte (no word/dword covers it) |
+| `ovrHeaderReserved` | 0 references; 4-byte zero field at the end of Borland's `__OVRGROUP` block |
+| `agnt_t+0x2a` | 1 read (`ovc49_agentIsActive`, debug branch), 0 assignments; only writer is a `REP MOVSW` record copy; all 5 live agents read 0 |
+| `agntG_t+0x94` | 0 code references; `0x14` in all 5 live class records; no write watchpoint fires |
+| `agntG_t+0x3a`, `+0x46` | 0 struct accesses; bytes inside the class record |

@@ -2873,3 +2873,37 @@ hits had `gindex = 0` and `faction = 0` in all 24 records - i.e. padding, not ag
 format does not expose the runtime `agnt_t` array at stride 0x34 in a way this test can
 separate from zero fill, so `agnt_t+0x2a` still rests on the code evidence: exactly one reader
 (`8699:1736 CMP byte ptr ES:[BX+0x2a],2`) and no writer.
+
+## `reserved_0845` -> `noAnimBlit` (named from its only branch)
+
+The byte at `2410:0845` has exactly **one** access in the whole program:
+
+```
+3d16:0126  MOV AL,[0x845]
+3d16:012b  OR AX,AX
+3d16:012d  JNZ 0x3000:d2e4        ; non-zero -> skip
+3d16:012f  ...                     ; else restore the mouse area, ovc13_blitAnimFrame(),
+                                   ;      and ovr_miceBlitRect()
+```
+
+so a non-zero value suppresses the animation-frame blit.  The image byte is `0x00` and no
+instruction writes it, i.e. the skip is never enabled.  Named `noAnimBlit` from that branch and
+typed `uint8_t`, with the exact store/read record in the symbol comment.
+
+## `reserved_ca7a`: a real standalone byte, write-only
+
+Its neighbourhood rules out both padding and a word half:
+
+```
+2410:8976  GGameExe     far_t   (0x8976-0x8979)
+2410:8978  GGameExe.seg word    <- MOV ES:[0x8978],AX in main; PUSH ES:[0x8978] in init_paths
+2410:897a  reserved_ca7a byte   <- MOV byte ptr ES:[0x897a],1 in main (1301:00bd)
+2410:897b  CrossBlitCount2 byte <- written 0 by saveui_startCrossBlit and ovc28_startCrossBlit
+2410:897c  CrossBlitY  word
+```
+
+`0x897a` is even-aligned, no word or dword access covers it (`ScanDisp` on `0x8978`, `0x8979`,
+`0x897a`, `0x897b` returns exactly one access for `0x897a` - the write), so it is not padding
+and not the high half of a wider field.  It is a one-byte variable that is written once in
+`main` (value 1, immediately before `ovr_uiMainMenu()`) and never read.  With no reader the
+name cannot be derived; the counts are recorded instead.

@@ -2990,3 +2990,33 @@ a tail - the overlap case Ghidra cannot express.
 
 BodyEnds: 133 -> 130.  Functions: 1127 -> 1124.  No spurious function was created by the
 force-disassembly (verified by diffing the function list).
+
+## `__CHECKOVERLAY` removed: unreachable Borland overlay helper (auto params 1 -> 0)
+
+The routine is Borland's overlay-runtime check: it validates a header at `ES = [BP+8]`
+(`CMP CX,ES:[0]`, `CMP word ES:[0x10],0`, `CMP byte ES:[0x20],0xCD`), calls
+`__OvrFixupTrap` (`1403:05a1`, a named Borland routine), then transfers to `__OVRHOOK__`:
+
+```
+1403:0894  MOV DS,CS:[2]
+1403:0899  MOV ES,[BP+0x8]      ; header segment
+1403:08be  CALL 0x1000:45d1     ; __OvrFixupTrap
+1403:08c3  MOV BX,[BP+0x6]
+1403:08d9  CALLF [0x86]         ; __OVRHOOK__
+```
+
+Every fact needed to decide whether it is live was collected:
+
+| test | result |
+|---|---|
+| static references (`RefsIn 1403:0890`) | **0** |
+| `__OVRHOOK__` target | `0823:0837`, and the byte there is `CB` (`RETF`) - an uninstalled hook |
+| live breakpoint at `0xCAF0` (its resident address) | never fired over 30 s of play (45 key events: space/enter/arrows/esc) |
+
+So the routine cannot be reached, and its only consumer is an empty stub - no argument
+semantics exist in this binary.  The function was removed from the model (the code bytes stay in
+the overlay), which leaves **no auto-named parameter anywhere**:
+
+```
+parameters  1615  auto 0  (0.0%)
+```
