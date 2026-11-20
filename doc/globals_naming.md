@@ -2634,3 +2634,103 @@ the 1040-byte block is zero padding.  Retyped `uint32_t[240] expThresholds`; the
 were the two halves of entry 0.
 
 **Globals: 49 -> 33** across this sweep.
+
+## Audio-driver handle pairs: reading the loader's own push/store sequence
+
+`stshLoadAudioDrivers` (`4b0a:13d3`) loads each driver file with
+`CALL 4000:c070` (= `stshStoreFile_2`) and immediately stores the return in a DS-relative
+word pair.  Because DS offsets map to BSS offsets by `+0x4100` (`DS:0x8f98` = `2000:d098`),
+each pair can be tied to the exact string pushed just before the call.  The string table is
+contiguous at `2410:486c`:
+
+| string | address | pair (ofs/seg) |
+|---|---|---|
+| `midpak.ad` | `486c` | `2000:d098` (now `far_t midpakAd`) |
+| `cmidpak.com` | `4876` | `2000:d094/d096` |
+| `ibmsnd.com` | `4882` | `2000:d0c8/d0ca` |
+| `sblaster.com` | `488d` | `2000:d0cc/d0ce` |
+| `fibmbak.com` | `489a` | `2000:d0d4/d0d6` |
+| `sbpro.com` | `48a6` | `2000:d0d8/d0da` |
+| `paudio.com` | `48b0` | `2000:d0e0/d0e2` |
+| `adlib.com` | `48bb` | `2000:d0e8/d0ea` |
+| `adlibg.com` | `48c5` | `2000:d0ec/d0ee` |
+| `sbfm.adv` | `48d0` | `2000:d0a0/d0a2` |
+| `sbp2fm.adv` | `48d9` | `2000:d0ac/d0ae` |
+| `sbp1fm.adv` | `48e4` | `2000:d0b0/d0b2` |
+| `pasfm.adv` | `48ef` | `2000:d0b4/d0b6` |
+| `pasopl.adv` | `48f9` | `2000:d0b8/d0ba` |
+| `adlib.adv` | `4904` | `2000:d0bc/d0be` |
+| `adlibg.adv` | `490e` | `2000:d0c0/d0c2` |
+| `mt32mpu.adv` | `4919` | `2000:d0c4/d0c6` |
+
+### The seven words resolved from it (33 -> 26)
+
+```
+4b0a:147c  PUSH 0x48a6                 ; "sbpro.com"
+4b0a:1480  CALL 0x4000:c070
+4b0a:148b  MOV ES:[0x8fda],DX          ; segment -> 2000:d0da
+4b0a:1490  MOV ES:[0x8fd8],AX          ; offset  -> 2000:d0d8
+4b0a:1499  MOV AX,ES:[0x8fda]          ; second copy of the same handle
+4b0a:149d  MOV DX,ES:[0x8fd8]
+4b0a:14a7  MOV ES:[0x8fde],AX          ; -> 2000:d0de
+4b0a:14ab  MOV ES:[0x8fdc],DX          ; -> 2000:d0dc
+4b0a:14d0  MOV AX,ES:[0x8fce]          ; second copy of the sblaster handle
+4b0a:14d4  MOV DX,ES:[0x8fcc]
+4b0a:14de  MOV ES:[0x8fe6],AX          ; -> 2000:d0e6
+4b0a:14e2  MOV ES:[0x8fe4],DX          ; -> 2000:d0e4
+4b0a:1505  PUSH 0x48c5                 ; "adlibg.com"
+4b0a:1514  MOV ES:[0x8fee],DX          ; segment -> 2000:d0ee
+```
+
+so `d0d8/d0da` = `sbproComOfs`/`sbproComSeg`, `d0dc/d0de` = the second copy
+(`sbproComCopyOfs`/`sbproComCopySeg`), `d0e4/d0e6` = the second copy of the sblaster handle
+(`sblasterComCopyOfs`/`sblasterComCopySeg`), and `d0ee` = `adlibgComSeg` (its offset at
+`d0ec` was already `adlibgComOfs`).  `d098` was retyped `far_t midpakAd`, replacing the
+generic `far_t_2000_d098`.
+
+### `3381:168f` is a jump table, not a variable (26 -> 25)
+
+```
+3381:1250  MOV AH,0x0
+3381:1252  MOV BX,AX                   ; randBelow(4)
+3381:1254  CMP BX,0x3
+3381:125c  SHL BX,0x1
+3381:125e  JMP word ptr CS:[BX + 0x168f]
+```
+
+Four words at `3381:168f` (all `0x1263`), retyped `uint16_t[4] init_textFilenameJumpTable`.
+
+## What the last 25 are, with the operand counts
+
+### Six `0000:08b8..08c0` labels are `unit_t[0]` shadows
+
+The offsets of the six live references are `+0, +1, +2, +4, +6, +8` — exactly the field
+offsets of `unit_t` (`bldType +0`, `level +1`, `unitType +2`, `flags +3`, `x +4`, `y +6`,
+`timer +8`).  They sit in Ghidra's uninitialised `DS` block (`0000:0000-0000:0fff`,
+`init=false`) and are produced by pointer analysis of `GUnits`, which `init_buffers` allocates
+at runtime:
+
+```
+3381:16f2  PUSH 0x0 / PUSH 0x2a30      ; 0x2a30 = 1200 * sizeof(unit_t)
+3381:16f7  CALLF 2000:33b3             ; allocate
+3381:1709  MOV ES:[0x8995],AX          ; GUnits.ofs
+3381:1704  MOV ES:[0x8997],DX          ; GUnits.seg
+3381:1721  CALLF 1000:2642             ; _fmemset(GUnits, 0, 0x2a30)
+```
+
+So no real data lives at `0000:08b8`; Ghidra guessed that base for the runtime pointer.  They
+stay labelled as artifacts rather than deleted (deleting regenerates them on save, the same
+behaviour as `2000:d187/d1e2`).
+
+### Still refused
+
+| address | evidence |
+|---|---|
+| `2000:d0a4/d0a6`, `d0a8/d0aa`, `d0d0/d0d2`, `d0f0/d0f2` | zeroed by the loader right after the adjacent named pair (`MOV word ptr ES:[0x8fa6],0` etc.) and never read; they are placeholder slots, not file handles |
+| `2410:0845` | one read (`3d16:0126 MOV AL,[0x845]` then `JNZ`), zero writes anywhere; it sits between `GMenuFlag` (0844) and `flashPaletteEf` (0846), so it is a sibling flag that no code ever sets |
+| `2000:ca7a` | single write `1301:00bd MOV byte ptr ES:[0x897a],0x1` in `main`, immediately after `MenuMode = 1`; no reader |
+| `2ca1:0000/0002/0004` | three words in front of `InitStart` (`boinit_t[4]` at `2ca1:0006`); no reference to segment `2ca1` anywhere |
+| `225d:008e` | inside the Borland `OVRDATA` header next to `__OVRBACKLINK__`/`__OvrExepathBuf` |
+| `2000:d114` | 6 reads / 3 writes: a compiler call-result temporary reused with unrelated values |
+| `2000:d163/d165` | 5 reads each, all `PUSH [0x9063]`/`[0x9065]` before a `DebugVerbose`-gated `printf`; incremented in `ovc26_usesStExit` |
+| `2000:d187`, `2000:d1e2` | computed-reference artifacts (`MenuItemEnabled[index]`, element 5 of a table at `d182`); the labels regenerate when removed |

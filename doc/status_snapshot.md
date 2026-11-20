@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn475/naming_summary.txt`.
+`tmp/auditn477/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -14,7 +14,7 @@ parameters               1634   auto-named  122   (7.5%)
 locals                    689   auto-named   60   (8.7%)
 structs                    37
   struct fields           331   generated     4   (1.2%)
-globals                  2447   auto-named   33   (1.3%)
+globals                  2447   auto-named   25   (1.0%)
 ```
 
 Function names are complete: 1590 functions (including 460 thunks), 0 duplicates,
@@ -27,7 +27,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 |---|---|
 | function names | 1590/1590 unique and address-free; 591 renames recorded with evidence tier |
 | string labels | 1516 `s_*` labels from their own bytes (`doc/strings_renamed.tsv`) |
-| globals | 1096 -> 52 auto-named (26 previously unnamed DGROUP tables labelled, 74 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
+| globals | 1096 -> 25 auto-named (26 previously unnamed DGROUP tables labelled, 74 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
 | structures | `spr_t`, `unit_t` and `entity_t` complete; `agnt_t` rebuilt as `agnt_t[52]` + `tick` + `dir`; `bld_inst_t` and most of `char_sheet_t` recovered |
 | struct fields | 266 -> 4 generated |
 | typing | struct-typed arguments 80 -> 144; `_fmemmove`/`__fmovmem`/`memcpy` re-typed to `(far dst, far src, count)`; `blit_usesDrawGfx`'s rectangle parameter retyped `brect_t *`, which resolves its fields by name |
@@ -35,7 +35,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 
 ## What remains, and why it is not done
 
-1. **33 globals.** The remainder splits three ways: no writer appears anywhere in
+1. **25 globals.** The remainder splits three ways: no writer appears anywhere in
    the export (so the value can only be characterised from unexported code), only
    zeroing writers exist, or the value is a `stshAllocStub` block with no source
    asset.  Every rename in this session came from a writer or a gate that pins the
