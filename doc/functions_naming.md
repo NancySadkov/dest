@@ -2579,3 +2579,26 @@ then forwarded as `ovc18_spawnClassAgent`'s `mode` argument (`48ac:05cd-05e3`). 
 `textVariant` (`uint8_t`).
 
 Parameters: auto 16 -> 13 (0.8%).  Gate: checked 71 failures 0.
+
+## Split far pointers and a missing argument (13 -> 9)
+
+### `audio_parseHexDigit`: driver block far pointer
+
+`MOV AX,[BP+8] / MOV DX,[BP+6] / LES BX,[BP-4]` is one far pointer, not an offset plus a
+separate word.  The body writes `driverData[0x108]` and clears `[0x109]`, so:
+`void audio_parseHexDigit(char *32 driverData, char ch)`.
+
+### `init_special_graphics` / `ovc20_compute1`: the block pointer
+
+Both load the same far pointer from `[BP+6]/[BP+8]` and touch `+0x11`/`+0x13` (a far handle):
+one checks it and frees it (`handle.ofs/seg`, `ovr_stshFree`), the other zeroes it.  Both are
+now `(char *32 gfxBlock)`; the old `gfxBlock`/`param_2` pair was the split pointer.
+
+### `attact_textAbnormalProgramTermination`: two arguments, not one
+
+The prologue reads `[BP+6]` (the value scaled by `LXMUL`) **and** `[BP+8]` (passed to
+`attact_countPartyUnits`).  The old prototype had only `param_1`.  Corrected to
+`uint16_t attact_textAbnormalProgramTermination(uint16_t value, uint8_t partyIndex)`; the body
+now calls `attact_countPartyUnits(partyIndex)`.
+
+Parameters: auto 13 -> 9 (0.6%).  Gate: checked 71 failures 0.

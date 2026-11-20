@@ -1,16 +1,16 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn524/naming_summary.txt`.
+`tmp/auditn526/naming_summary.txt`.
 
 ## Where the model stands
 
 ```
 functions                1130
   no prototype            114
-  weak return type        971
+  weak return type        970
   has struct-typed arg    169
-parameters               1620   auto-named   13   (0.8%)
+parameters               1618   auto-named    9   (0.6%)
 locals                    657   auto-named    0   (0.0%)
 structs                    37
   struct fields           334   generated     0   (0.0%)
@@ -44,7 +44,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    `reserved_187`, `reserved_0845`, `reserved_ca7a`, `ovrHeaderReserved`,
    `callResultTemp`, `debugEmptyCellCount` and `debugStaleTickCount`, each with its
    store/read counts in `doc/globals_naming.md`.
-2. **13 parameters / 0 locals.** Call-site scanning is exhausted: the unanimous
+2. **9 parameters / 0 locals.** Call-site scanning is exhausted: the unanimous
    call-role rule yields 6 multi-site candidates, all inside the two functions whose
    decompilation Ghidra flags as unstable, and 10 single-site ones that the bodies
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in
