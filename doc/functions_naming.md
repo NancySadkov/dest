@@ -1422,3 +1422,62 @@ The sweep is now exhausted: re-running the two comparisons over all remaining `u
 signedness rather than a reading of the code.
 
 Locals: 63 -> 60 (8.7%).  Gate: checked 71 failures 0.
+
+## Repairing the `decompiler-broken` bodies: the premise was mostly wrong
+
+New tool `FnGaps.java` walks a function's body instruction by instruction and reports the byte
+ranges that hold neither an instruction nor defined data.  Measured against the three bodies the
+plan named:
+
+| function | body bytes | gap ranges | gap bytes |
+|---|---|---|---|
+| `ovc49_body1` (`8699:18c4`) | **150** | 0 | 0 |
+| `ovc22_textRingProt` (`5087:056e`) | 3248 | 0 | 0 |
+| `ovc18_textTypeLen` (`48ac:0382`) | 373 | 0 | 0 |
+| `constrct_buildInfoText` (`7e7c:0b9c`) | 6071 | 3 | 10 |
+
+So the thousand-line decompiles are **decompiler output**, not a disassembly problem: those three
+functions have no undecoded bytes at all, and `ovc49_body1` is a 150-byte, 52-instruction routine
+whose 3023-line C listing is produced entirely by bad control flow inside the callee it calls
+(`2000:3029`) plus hundreds of `pixels_*` spills.  Only `constrct_buildInfoText` had real gaps.
+
+### Reading `ovc49_body1` from its 52 instructions
+
+```
+8699:18cc  LES BX,[BP + 0x6]         ; param_1 is a far pointer
+8699:18cf  MOV AX,ES:[BX + 0x15]     ; high word of the far pointer at +0x13  (agnt_t.frames)
+8699:18d3  MOV DX,ES:[BX + 0x13]     ; low word
+8699:18fc  CMP byte ptr ES:[BX + 0x24],0x1     ; agnt_t.combatState
+8699:1909  LES BX,ES:[BX + 0x1d]     ; agnt_t.gdata
+8699:190d  TEST word ptr ES:[BX + 0x40],0x2    ; agntG_t.flags bit 2
+8699:191f  MOV AL,byte ptr ES:[BX + 0x11]      ; agnt_t.animVariant
+```
+
+That identifies `param_1` exactly: `agnt_t *`, which Ghidra had typed `int *`.  Renamed to `agnt`
+and retyped `/st.h/agnt_t *32`.  The same 52 instructions contain **no reference to** `[BP+0x8]`,
+`[BP+0xa]`, `[BP+0xc]` or `[BP+0xe]`, so `param_2`..`param_5` are provably unused.
+
+### `ovc22_textRingProt`: one live parameter out of seven
+
+Counting every `[BP+0x..]` access in the 3248-byte body gives **only `[BP+6]`, 56 times** —
+`param_2`..`param_7` are never read.  `param_1` is the leader index: it is guarded with
+`if (param_1 != 0xff)` and indexes the far-pointer table with `param_1 * 4`, then reads
+`+0x3f`, `+0x5d`, `+0x9a`, `+0xa0`, `+0xa6`, `+0xaa`, `+0xad` of the resulting `char_sheet_t`.
+That is the same `partyIndex` convention as `ovc22_applyRankBonus`, so it is now `partyIndex`.
+
+`ovc18_textTypeLen` behaves the same way: accesses reach only `[BP+6]`, `[BP+8]`, `[BP+0xa]`,
+`[BP+0xc]` — the first two far-pointer arguments — so its remaining seven parameters are dead.
+
+### `constrct_buildInfoText` gaps
+
+```
+7e7c:0bba ADD DX,-0x2                 (3 bytes, clean)
+7e7c:0c99 LEA AX,[BP + 0xff38]        (4 bytes, clean)
+7e7c:181f CALLF 0x2000:3245           (5 bytes; the earlier decode started mid-instruction)
+```
+
+All three ranges decoded with zero holes, but the function still reports "Control flow encountered
+bad instruction data" with an overlap at `ram:0x85000` — a jump to an address outside the
+program, so the remaining breakage is a bad control-flow target rather than undecoded bytes.
+
+Parameters: 131 -> 129 (7.9%).  Structures typed as arguments: 144 -> 145.  Gate: checked 71 failures 0.
