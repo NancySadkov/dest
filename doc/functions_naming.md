@@ -2028,3 +2028,13 @@ ConvCheck3 : SUMMARY hits=0
 The only such function was ttact_usesAlignUp43, fixed above; every other function with
 parameters is on the base its return instruction implies.  (The 627 no-return functions are
 the ovr_* thunks and jump-table stubs.)
+
+## Final parameter names from the remaining stack-passed bodies
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `ovc45_usesGfxRndSeed2` | `param_1` | `x` | `ovc45_getUnitType(*x - i, GfxRndSeed2)` for i = 0..3, then `*x -= i` when the found unit type's height exceeds i; the parameter is an in/out x coordinate |
+| `attact_usesEntityCount2`, `attact_usesAgntCount2` | `param_2` | `enemySum` | the second 32-bit accumulator: `sum` receives the faction-0 total and `param_2` the faction-!=0 total (entity: `animFrame*level*level`; agent: `strength`, both gated by `flags & 0xae4 == 0`) |
+| `ovc45_compute7` | `param_1`, `param_2` | `a`, `b` | the body is exactly `CONCAT11(product>>0xb, product>>3)`, i.e. `(a*b) >> 3`; the two factors are symmetric, so the names record the only structure the code has |
+
+Parameters: auto 67 -> 62 (3.8%).  Gate: checked 71 failures 0.

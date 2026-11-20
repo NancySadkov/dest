@@ -2734,3 +2734,74 @@ behaviour as `2000:d187/d1e2`).
 | `2000:d114` | 6 reads / 3 writes: a compiler call-result temporary reused with unrelated values |
 | `2000:d163/d165` | 5 reads each, all `PUSH [0x9063]`/`[0x9065]` before a `DebugVerbose`-gated `printf`; incremented in `ovc26_usesStExit` |
 | `2000:d187`, `2000:d1e2` | computed-reference artifacts (`MenuItemEnabled[index]`, element 5 of a table at `d182`); the labels regenerate when removed |
+
+## Closing the global axis: 25 -> 0 auto-named (0.0%)
+
+### The six `0000:08b8..08c0` labels are one `unit_t` shadow
+
+The live offsets of those labels are `+0,+1,+2,+4,+6,+8`, exactly the field offsets of
+`unit_t` (`bldType +0`, `level +1`, `unitType +2`, `flags +3`, `x +4`, `y +6`, `timer +8`),
+and they sit in Ghidra's uninitialised `DS` block (segment 0).  `init_buffers` allocates the
+real array at runtime:
+
+```
+3381:16f2  PUSH 0x0 / PUSH 0x2a30      ; 0x2a30 = 1200 * sizeof(unit_t)
+3381:16f7  CALLF 2000:33b3             ; allocate
+3381:1709  MOV ES:[0x8995],AX          ; GUnits.ofs
+3381:1704  MOV ES:[0x8997],DX          ; GUnits.seg
+3381:1721  CALLF 1000:2642             ; _fmemset(GUnits, 0, 0x2a30)
+```
+
+so segment 0 is the analyzer's guess for the pointer target.  Deleting the labels regenerated
+them (verified), so the 9 bytes were retyped as one `unit_t` named `GUnitsShadow` with a
+comment; the six fields are now `GUnitsShadow.bldType/level/unitType/x/y/timer`.
+
+### The four zeroed audio pairs are typed placeholders
+
+`stshLoadAudioDrivers` zeroes these words in **both** the file-load and the stub-allocation
+paths, and no instruction reads them:
+
+| pair | zero stores | retyped |
+|---|---|---|
+| `2000:d0a4/d0a6` | `4b0a:1563/156a` and `4b0a:1778/177f` (`ES:[0x8fa6]/[0x8fa4]`) | `far_t audioPlaceholder0` |
+| `2000:d0a8/d0aa` | `4b0a:1576/157d` and `4b0a:178b/1792` (`ES:[0x8faa]/[0x8fa8]`) | `far_t audioPlaceholder1` |
+| `2000:d0d0/d0d2` | `4b0a:1450/1457` and `4b0a:1695/169c` (`ES:[0x8fd2]/[0x8fd0]`) | `far_t audioPlaceholder2` |
+| `2000:d0f0/d0f2` | `4b0a:1522/1529` and `4b0a:173f/1746` (`ES:[0x8ff2]/[0x8ff0]`) | `far_t audioPlaceholder3` |
+
+### `MenuItemEnabled` is a 5-byte array (absorbs `DAT_2000_d1e2`)
+
+`main` sets `GMenuItem = 5` as the "no selection" sentinel and tests
+`((undefined1 *)&MenuItemEnabled)[GMenuItem]` only under `GMenuItem < 5`; the navigation loops
+wrap to 5 and stop.  `ovc41_usesMenuItemEnabled` also indexes `MenuItemEnabled[5]`.  Retyped
+`uint8_t[5]`, so the former `DAT_2000_d1e2` at `[4]` is now `MenuItemEnabled[4]`.
+
+### `2000:d187` is an out-of-range artifact of the menu table at `2000:d182`
+
+`main` reads `*(byte *)(GMenuItem + 0x9082)` (= `2000:d182 + GMenuItem`) only inside
+`GMenuItem < 5` guards, so the 5-byte array ends at `d186`; Ghidra still formed a reference at
+`base+5`.  Typed `uint8_t` and named `reserved_187`.
+
+### The remaining unreferenced blocks
+
+* `2ca1:0000` — the six bytes immediately before `InitStart` (`boinit_t[4]` at `2ca1:0006`).
+  No operand references segment `2ca1` at all; retyped `uint16_t[3] crtInitReserved`.
+* `2410:0845` — one read (`3d16:0126 MOV AL,[0x845]; OR AX,AX; JNZ`), zero writes; it sits
+  between `GMenuFlag` (0844) and `flashPaletteEf` (0846) -> `reserved_0845`.
+* `2000:ca7a` — written 1 by `main` (`1301:00bd`) right after `MenuMode = 1`, never read ->
+  `reserved_ca7a`.
+* `225d:008e` — four bytes in the Borland `OVRDATA` header -> `uint32_t ovrHeaderReserved`.
+
+### The three used scratch words got descriptive names
+
+* `2000:d114` -> `callResultTemp`: three functions store a call result and read it back
+  immediately (`3f0b:0551 MOV [0x9014],AX` then `3f0b:055d MOV AX,[0x9014]; INC AX`, plus
+  `attact_usesLDIV_at_` and `attact_updateAttractEntry`).  The stored values are unrelated, so
+  the name records exactly what it is: the last call result.
+* `2000:d163` -> `debugEmptyCellCount`: incremented at `5d45:0406` immediately after
+  `if (FillGrid[y*0xa1+x] == 0)`, printed only under `DebugVerbose` (`3f0b:10bc PUSH [0x9063]`,
+  format at `3f0b:10cf`) and zeroed at `3f0b:10e0`.
+* `2000:d165` -> `debugStaleTickCount`: incremented at `5d45:0371` on the
+  `GameTick - entity.tick >= 0x19` path, printed with the previous counter and zeroed at
+  `3f0b:10da`.
+
+**Globals: 25 auto -> 0 auto (2435 symbols).**

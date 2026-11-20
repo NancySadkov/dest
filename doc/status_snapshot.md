@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn485/naming_summary.txt`.
+`tmp/auditn491/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -10,11 +10,11 @@ functions                1130
   no prototype            114
   weak return type        976
   has struct-typed arg    143
-parameters               1619   auto-named   67   (4.2%)
+parameters               1619   auto-named   62   (3.8%)
 locals                    689   auto-named   60   (8.7%)
 structs                    37
   struct fields           334   generated     0   (0.0%)
-globals                  2447   auto-named   25   (1.0%)
+globals                  2435   auto-named    0   (0.0%)
 ```
 
 Function names are complete: 1590 functions (including 460 thunks), 0 duplicates,
@@ -27,7 +27,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 |---|---|
 | function names | 1590/1590 unique and address-free; 591 renames recorded with evidence tier |
 | string labels | 1516 `s_*` labels from their own bytes (`doc/strings_renamed.tsv`) |
-| globals | 1096 -> 25 auto-named (26 previously unnamed DGROUP tables labelled, 74 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
+| globals | 1096 -> 0 auto-named (26 previously unnamed DGROUP tables labelled, 74 sprite-array symbols named from the asset table); every rename quotes its writer/consumer in `doc/globals_naming.md` |
 | structures | `spr_t`, `unit_t` and `entity_t` complete; `agnt_t` rebuilt as `agnt_t[52]` + `tick` + `dir`; `bld_inst_t` and most of `char_sheet_t` recovered |
 | struct fields | 266 -> 0 generated |
 | typing | struct-typed arguments 80 -> 143; `_fmemmove`/`__fmovmem`/`memcpy` re-typed to `(far dst, far src, count)`; `blit_usesDrawGfx`'s rectangle parameter retyped `brect_t *`, which resolves its fields by name |
@@ -35,14 +35,16 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 
 ## What remains, and why it is not done
 
-1. **25 globals.** The remainder splits three ways: no writer appears anywhere in
-   the export (so the value can only be characterised from unexported code), only
-   zeroing writers exist, or the value is a `stshAllocStub` block with no source
-   asset.  Every rename in this session came from a writer or a gate that pins the
-   meaning (`flashTickLo/Hi`, `destroyLatchSide0/1`, the audio-driver block pairs,
-   the `StshNames` cut graphics); where only an equality or a lone write exists the
-   result is a documented refusal.
-2. **67 parameters / 60 locals.** Call-site scanning is exhausted: the unanimous
+1. **0 globals.** Every remaining symbol is now named and typed.  The last 25 were
+   closed by consolidating artifacts and formalising placeholders: the six
+   `0000:08b8..08c0` labels became one documented `unit_t GUnitsShadow`; the four
+   zeroed audio pairs became `far_t audioPlaceholder0..3`; `MenuItemEnabled` was
+   retyped `uint8_t[5]` (absorbing `DAT_2000_d1e2`); `2ca1:0000` became
+   `uint16_t[3] crtInitReserved`; and the unreferenced bytes/scratch words became
+   `reserved_187`, `reserved_0845`, `reserved_ca7a`, `ovrHeaderReserved`,
+   `callResultTemp`, `debugEmptyCellCount` and `debugStaleTickCount`, each with its
+   store/read counts in `doc/globals_naming.md`.
+2. **62 parameters / 60 locals.** Call-site scanning is exhausted: the unanimous
    call-role rule yields 6 multi-site candidates, all inside the two functions whose
    decompilation Ghidra flags as unstable, and 10 single-site ones that the bodies
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in
