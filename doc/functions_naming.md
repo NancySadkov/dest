@@ -2377,3 +2377,67 @@ segment being read.  Corrected to
 still renders the read through the default segment.
 
 Parameters: auto 35 -> 34 (2.1%).  Gate: checked 71 failures 0.
+
+## `long` aligns to 2, not 4: the 32-bit parameter fix (34 -> 28)
+
+`/stdint.h/uint32_t` has alignment 4 in this program's data organisation, which is what
+shifted `__LONGTOA`'s value and `blit_compute1`'s source pointer.  Ghidra's builtin `long`
+has alignment 2, which matches the 8086 argument layout.  Verified with
+`SetProtoOffsets`: `long` at `Stack[0xa]` and `Stack[0xe]` stays at 0xa/0xe.
+
+### `N_LUMOD_at_` now carries the proven ABI
+
+```
+1000:09d8  POP CX / PUSH CS / PUSH CX     ; near call turned into a far return
+1000:09e5  MOV AX,[BP+0xa]  / MOV DX,[BP+0xc]   ; dividend (32-bit)
+1000:09eb  MOV BX,[BP+0xe]  / MOV CX,[BP+0x10]  ; divisor  (32-bit)
+```
+
+`N_LUMOD_at_(long dividend, long divisor)` with the return storage set to `DX:AX`
+(`SetProtoOffsets` `@DX:AX`) models both 32-bit values at their real offsets without the
+phantom `__return_storage_ptr__`.  The decompiler still renders the four operand reads as
+`in_stack_00000002..08` because its frame maps `BP+0xa` to `Stack[2]` (below the return
+address, which Ghidra refuses to accept as a parameter) — the prototype storage is exact,
+the body rendering is the documented stub limitation.
+
+`__LONGTOA` profits directly: `long value` at `Stack[0xc]:4` (=`[BP+0xe..0x11]`) replaces the
+old `valueLo` + implicit high word, and the body now computes `if (value < 0)` and
+`value = CONCAT22(...)` on one 32-bit parameter.
+
+### `uiInputText` / `ovc28_usesUiInputText`: shifted by one parameter
+
+Both read pairs of words at `BP+6/8`, `BP+0xc/0xe`, so the old two-byte `entries`/`hint`
+model was one parameter off.  The caller of `ovc28_usesUiInputText`
+(`6018:1531-1549`) pushes seven words and cleans `0xe`:
+
+```
+PUSH SS / LEA AX,[BP-0x1] / PUSH AX   ; far page-index pointer, seeded 0
+PUSH [BP+0xe] / PUSH [BP+0xc]         ; hint  (far)
+PUSH [BP+0xa]                         ; count
+PUSH [BP+0x8] / PUSH [BP+0x6]         ; entries (far)
+```
+
+so the signatures are
+
+```
+char * uiInputText(far_t entries, uint16_t count, far_t hint, uint8_t flags)
+undefined2 ovc28_usesUiInputText(far_t entries, uint16_t count, far_t hint,
+                                 uint8_t *pageOut, uint16_t pageOutSeg)
+```
+
+with `pageOut` the paging index (`*pageOut == 0`, `*pageOut * 8 + 8 < hint`,
+`--*pageOut`).  The call now renders exactly as the machine code: `uiInputText(entries,count,
+hint,0x0)`.
+
+### `blit_compute1`: far source, and the clip bounds were off by one slot
+
+`MOV BX,[BP+0xc]` + `MOV ES,[BP+0xe]` make the fourth argument a far pointer; `far_t`
+(alignment 2) places it at `Stack[0xa]:4` = `[BP+0xc..0xf]`, which restores every later
+offset.  With exact offsets the old names turned out to be shifted: `BP+0x1e` is added to y
+when the slope accumulator crosses (`ADD SI,[BP+0x1e]`), while `BP+0x20`/`BP+0x22` are the
+store guard bounds (`CMP SI,[BP+0x20]; JL`, `CMP SI,[BP+0x22]; JG`).  So
+`clipTop` on 0x1e became `yJump`, `clipBottom` on 0x20 became `clipTop`, and `param_14` on
+0x22 became `clipBottom`.  The body now reads
+`if (src[...] != 0 && clipTop <= y && y <= clipBottom)` and `y += yJump`.
+
+Parameters: auto 34 -> 28 (1.7%).  Gate: checked 71 failures 0.
