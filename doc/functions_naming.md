@@ -2289,3 +2289,68 @@ digits with `_ctype`, i.e. it compares two version strings.  Prototype:
 `[BP+6..9]` and `[BP+0xa..0xd]`, and the body now reads `*s1` / `*s2`.
 
 Parameters: auto 39 -> 37 (2.3%).  Gate: checked 71 failures 0.
+
+## CRT helpers: what the bodies prove, and where Ghidra cannot express the ABI (37 -> 35)
+
+### `__fputn` (`1000:2925`) is a **near** function with two far pointers
+
+```
+1000:292d  MOV DI,[BP + 0x8]      ; count (saved to [BP-2])
+1000:2933  LES BX,[BP + 0x4]      ; far FILE stream  -> params start at BP+4
+1000:2946  LES BX,[BP + 0xa]      ; far source buffer
+1000:2949  INC word ptr [BP + 0xa] ; the buffer offset is advanced
+```
+
+`LES BX,[BP+4]` can only be a parameter if the function is `__cdecl16near` (under the far
+convention the first argument starts at `BP+6` and `BP+4` is the return segment).  Corrected to
+`uint16_t __fputn(far_t stream, uint16_t count, far_t buf)`; storage `Stack[2]:4, [6]:2, [8]:4`
+matches `[BP+4]`, `[BP+8]`, `[BP+0xa]`.  The body now reads
+`_fputc(*(char *)buf, stream_00)` and `__write(fd, buf.ofs, buf.seg, count)`.
+
+### `__CHECKOVERLAY` (`1403:0890`): the second argument is the header segment
+
+```
+1403:0899  MOV ES,[BP + 0x8]      ; the segment argument
+1403:08a0  CMP CX,ES:[0x0]        ; OVR header signature
+1403:08a7  CMP word ptr ES:[0x10],0x0
+1403:08af  CMP byte ptr ES:[0x20],0xcd
+```
+
+so `param_2` -> `hdrSeg` (typed `uint16_t`).  The first argument is loaded into `BX`
+(`1403:08c3`) immediately before `CALLF [0x86]` and is not otherwise read, so it is a register
+argument of that indirect callee and stays `param_1`.
+
+### `N_LUMOD_at_` (`1000:09d8`): the ABI is real, but Ghidra rejects its offsets
+
+The stub pops the near return address and re-pushes it with `CS`, then reads four words:
+
+```
+1000:09d8  POP CX / PUSH CS / PUSH CX     ; make the near call return far
+1000:09e5  MOV AX,[BP + 0xa]              ; dividend low
+1000:09e8  MOV DX,[BP + 0xc]              ; dividend high
+1000:09eb  MOV BX,[BP + 0xe]              ; divisor low
+1000:09ee  MOV CX,[BP + 0x10]             ; divisor high
+```
+
+i.e. `uint32 N_LUMOD_at_(uint32 dividend, uint32 divisor)` with the arguments at
+`BP+0xa..0x10`.  Two Ghidra limits block an exact model, both reproduced:
+
+* placing the parameters on the decompiler's own base (`Stack[2]`) is rejected with
+  `InvalidInputException: Variable contains invalid stack parameter offset: dividendLo
+  offset 2` — parameters may not sit below the return address;
+* a 32-bit return under `__cdecl16far` inserts a phantom `__return_storage_ptr__` parameter
+  (verified with `ApplySig /undefined4`).
+
+Keeping the 16-bit-return form of the prototype (with the true storage set explicitly to
+`DX:AX` by `SetProtoOffsets`) preserves the original three-parameter model and the `DX:AX`
+return without the phantom parameter, so the function stays honestly at three auto parameters.
+The exact ABI is recorded here instead of being guessed onto the wrong slots.
+
+### New tool: `scripts/ghidra/SetProtoOffsets.java`
+
+Sets parameters at explicit stack offsets and an explicit register return storage, e.g.
+`1000:09d8 <TAB> /undefined4@DX:AX <TAB> __cdecl16far <TAB> param_1:/stdint.h/uint16_t:0x6 ...`.
+It derives the stack address space from an existing variable (the factory does not list it) and
+is what showed the `offset 2` rejection at first hand.
+
+Parameters: auto 37 -> 35 (2.2%).  Gate: checked 71 failures 0.
