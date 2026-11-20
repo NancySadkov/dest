@@ -14,7 +14,7 @@ parameters               1634   auto-named  122   (7.5%)
 locals                    689   auto-named   60   (8.7%)
 structs                    37
   struct fields           324   generated     5   (1.5%)
-globals                  2454   auto-named   49   (2.0%)
+globals                  2448   auto-named   35   (1.4%)
 ```
 
 Function names are complete: 1590 functions (including 460 thunks), 0 duplicates,
@@ -35,7 +35,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 
 ## What remains, and why it is not done
 
-1. **49 globals.** The remainder splits three ways: no writer appears anywhere in
+1. **35 globals.** The remainder splits three ways: no writer appears anywhere in
    the export (so the value can only be characterised from unexported code), only
    zeroing writers exist, or the value is a `stshAllocStub` block with no source
    asset.  Every rename in this session came from a writer or a gate that pins the

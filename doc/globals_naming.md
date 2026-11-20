@@ -2545,3 +2545,67 @@ they are recorded here as artifacts instead of being renamed.
   `0x19`-tick guard, `INC word ptr ES:[0x9063]` when the gfx cell is empty) and cleared in
   `attact_usesAlignUp42`.  They are verbose-mode diagnostic counters; the format string does not
   say what they count.
+
+## Pointer-target sweep: 14 auto globals resolved (49 -> 35)
+
+The remaining auto labels were not independent variables.  Each one turned out to be either the
+second word of a far pointer or the head of a record that a **named pointer table** points at.
+The test that settled them is to read the table's own entries.
+
+### `2410:6ac6` is the segment half of `msgFormat`
+
+```
+690b:0aee  PUSH word ptr [0x6ac6]      ; segment
+690b:0af2  PUSH word ptr [0x6ac4]      ; offset
+```
+
+one 32-bit far argument, and the stored pair at `6ac4` is `6AC8:2410`, exactly the string at
+`2410:6ac8`.  So `msgFormat` was a two-byte `undefined2` that should have been a `far_t`; retyped,
+and the `6ac6` label removed.
+
+### `2410:6592` is `strangeTableData`, `uint16_t[55]`
+
+`GStrangeTable` (`far_t[98]` at `2410:6601`) has entries
+
+```
+6594 6596 6598 659A 659C 659E 65A0 65A2 6592 65A4 ... 65FD 65FF  (all segment 2410)
+```
+
+i.e. stride-2 records from `0x6592` to `0x65FF`, one per entry, plus the all-zero record at
+`0x6592`.  The auto labels `6594/6596/6598/65C4/65FD/65FF` were individual record heads.  Retyped as
+`uint16_t[55] strangeTableData`; the six labels are gone and the array covers `0x6592..0x65FF`.
+
+### Seven `RampTables` rows
+
+`RampTables` (`far_t[7]` at `2410:5aeb`) holds
+
+```
+59BF 5A0D 5A3D 5A73 5AA9 5AC1 5AD9  (all segment 2410)
+```
+
+which are exactly the seven remaining auto labels.  Each row runs to the next row's start, so its
+length is fixed by the table itself:
+
+| entry | address | length | name |
+|---|---|---|---|
+| 0 | `2410:59bf` | 78 | `rampRow0` |
+| 1 | `2410:5a0d` | 48 | `rampRow1` |
+| 2 | `2410:5a3d` | 54 | `rampRow2` |
+| 3 | `2410:5a73` | 54 | `rampRow3` |
+| 4 | `2410:5aa9` | 24 | `rampRow4` |
+| 5 | `2410:5ac1` | 24 | `rampRow5` |
+| 6 | `2410:5ad9` | 18 | `rampRow6` |
+
+All seven retyped `uint8_t[N]`; the labels are gone.
+
+### `2410:6b14` was inside a string
+
+The bytes at `2410:6ac8` read "My %s, we in this neighborhood are doing well. We thank you for all
+you have done to help your people." and end with a NUL at `2410:6b2e`.  `DAT_2410_6b14` was the
+space at "have done", i.e. a split inside the string.  Retyped as `char[103]`
+`s_my_s_we_in_this_neighborhood_are_doing_well`, which absorbs it; the stale zero-length alias on
+`2410:6ac7` (the high byte of `msgFormat`) was removed too.
+
+**Globals: 49 -> 35.**  Remaining: 15 audio-driver copy words, the 6 `0000:08b8..08c0` computed-
+reference artifacts, 2 `DAT_2000_d1xx` artifacts, 3 `2ca1` words, `21b1` dwords, `225d:008e`
+overlay-header padding, `2410:0845`, `2000:ca7a`, `d114`, `d163/d165`, and `3381:168f`.
