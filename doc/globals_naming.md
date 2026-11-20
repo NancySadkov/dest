@@ -2448,3 +2448,100 @@ the `sblaster.com` pair is stored the loader executes `MOV word ptr ES:[0x8fd2],
 and no file name attached, naming them would be positional guessing.
 
 **Globals: 52 -> 51.**
+
+## Whole-program read/write classification for every remaining auto global
+
+`scripts/ghidra/RefKinds.java` classifies each reference with Ghidra's `RefType` and, where the
+reference is unclassified, inspects the operand whose scalar matches the address (DS-relative or
+BSS-relative) to read the READ/WRITE operand flags.  This replaces the earlier assumption that
+most of the remainder were writer-only: it found readers the export had hidden, and it proves
+which ones really have none.
+
+| address | symbol | reads | writes |
+|---|---|---|---|
+| `0000:08b8` | DAT_0000_08b8 | reads=0 | writes=0 |
+| `0000:08b9` | DAT_0000_08b9 | reads=0 | writes=0 |
+| `0000:08ba` | DAT_0000_08ba | reads=0 | writes=0 |
+| `0000:08bc` | DAT_0000_08bc | reads=0 | writes=0 |
+| `0000:08be` | DAT_0000_08be | reads=0 | writes=0 |
+| `0000:08c0` | DAT_0000_08c0 | reads=0 | writes=0 |
+| `16b3:034c` | word_16b3_DATA_game2_034C | reads=1 | writes=0 |
+| `16b3:04f0` | word_16b3_DATA_game2_04F0 | reads=1 | writes=0 |
+| `21b1:0000` | data_21b1_DATA_game9_0000 | reads=0 | writes=0 |
+| `21b1:0002` | data_21b1_DATA_game9_0002 | reads=0 | writes=0 |
+| `225d:008e` | DAT_225d_008e | reads=1 | writes=0 |
+| `2410:0845` | byte_2410_DATA_DGROUP_0845 | reads=1 | writes=0 |
+| `2410:59bf` | data_2410_DATA_DGROUP_59BF | reads=0 | writes=0 |
+| `2410:5a0d` | data_2410_DATA_DGROUP_5A0D | reads=0 | writes=0 |
+| `2410:5a3d` | data_2410_DATA_DGROUP_5A3D | reads=0 | writes=0 |
+| `2410:5a73` | data_2410_DATA_DGROUP_5A73 | reads=0 | writes=0 |
+| `2410:5aa9` | data_2410_DATA_DGROUP_5AA9 | reads=0 | writes=0 |
+| `2410:5ac1` | data_2410_DATA_DGROUP_5AC1 | reads=0 | writes=0 |
+| `2410:5ad9` | data_2410_DATA_DGROUP_5AD9 | reads=0 | writes=0 |
+| `2410:6594` | data_2410_DATA_DGROUP_6594 | reads=0 | writes=0 |
+| `2410:6596` | data_2410_DATA_DGROUP_6596 | reads=0 | writes=0 |
+| `2410:6598` | data_2410_DATA_DGROUP_6598 | reads=0 | writes=0 |
+| `2410:65c4` | data_2410_DATA_DGROUP_65C4 | reads=0 | writes=0 |
+| `2410:65fd` | data_2410_DATA_DGROUP_65FD | reads=0 | writes=0 |
+| `2410:65ff` | data_2410_DATA_DGROUP_65FF | reads=0 | writes=0 |
+| `2410:6ac6` | data_2410_DATA_DGROUP_6AC6 | reads=1 | writes=0 |
+| `2ca1:0000` | data_2ca1_DATA_INIT_0000_word | reads=0 | writes=0 |
+| `2ca1:0002` | data_2ca1_DATA_INIT_0002_word | reads=0 | writes=0 |
+| `2ca1:0004` | data_2ca1_DATA_INIT_0004_word | reads=0 | writes=0 |
+| `2000:ca7a` | byte_2000_BSS_0046 | reads=0 | writes=1 |
+| `2000:d0a4` | word_2000_BSS_0670 | reads=0 | writes=2 |
+| `2000:d0a6` | word_2000_BSS_0672 | reads=0 | writes=2 |
+| `2000:d0a8` | word_2000_BSS_0674 | reads=0 | writes=2 |
+| `2000:d0aa` | word_2000_BSS_0676 | reads=0 | writes=2 |
+| `2000:d0d0` | word_2000_BSS_069C | reads=0 | writes=2 |
+| `2000:d0d2` | word_2000_BSS_069E | reads=0 | writes=2 |
+| `2000:d0d8` | word_2000_BSS_06A4 | reads=2 | writes=2 |
+| `2000:d0da` | word_2000_BSS_06A6 | reads=2 | writes=2 |
+| `2000:d0dc` | word_2000_BSS_06A8 | reads=0 | writes=2 |
+| `2000:d0de` | word_2000_BSS_06AA | reads=0 | writes=2 |
+| `2000:d0e4` | word_2000_BSS_06B0 | reads=0 | writes=2 |
+| `2000:d0e6` | word_2000_BSS_06B2 | reads=0 | writes=2 |
+| `2000:d0ee` | word_2000_BSS_06BA | reads=0 | writes=2 |
+| `2000:d0f0` | word_2000_BSS_06BC | reads=0 | writes=2 |
+| `2000:d0f2` | word_2000_BSS_06BE | reads=0 | writes=2 |
+| `2000:d114` | word_2000_BSS_06E0 | reads=6 | writes=3 |
+| `2000:d163` | word_2000_BSS_072F | reads=5 | writes=2 |
+| `2000:d165` | word_2000_BSS_0731 | reads=5 | writes=2 |
+| `2000:d187` | byte_2000_BSS_0753 | reads=2 | writes=0 |
+| `2000:d1e2` | byte_2000_BSS_07AE | reads=1 | writes=0 |
+| `3381:168f` | data_OVC09_init_c_168F | reads=0 | writes=0 |
+
+### `16b3:034c` is `columnScreenY`, `uint16_t[211]` (51 -> 49)
+
+`ovc49_body1` computes `screenY = columnScreenY[agnt_clampX(entity.x)] + entity.y + 3` (and the
+same with a height adjustment in the other branch), and `agnt_compute1` returns
+`columnScreenY[y - 0xc]` for `y` clamped to `0xc..0xde`.  `0xde - 0xc + 1 = 211` entries, so the
+array spans `0x34c..0x4f1` and the old auto label at `0x4f0` is its last element.  Retyped and
+relabelled; that label is gone.
+
+### Two labels that are not globals
+
+`2000:d187` and `2000:d1e2` are **computed-reference artifacts**, not variables:
+
+```
+1301:03d1  CMP byte ptr ES:[BX + 0x90de],0xff   ; BX = MenuItemEnabled index -> d1de + 4
+1301:07fb  MOV AL,byte ptr ES:[BX + 0x9082]     ; d182 + 5
+```
+
+The first is `MenuItemEnabled[index]` and the second is element 5 of a table at `d182`.
+Removing the labels makes Ghidra re-create them as `DAT_2000_d187`/`DAT_2000_d1e2` on save, so
+they are recorded here as artifacts instead of being renamed.
+
+### Corrected notes on earlier refusals
+
+* `2000:d114` is not merely "shared scratch": it has 6 reads and 3 writes.  In
+  `attact_textAbnormalProgramTermination` it receives the return value of `3000:f501`
+  (`MOV [0x9014],AX`) and is then read back (`MOV AX,[0x9014]; INC AX`), so it is a compiler
+  temporary for a call result; `attact_updateAttractEntry` reuses the same slot for a different
+  value.  Different functions store unrelated values, so no single name is possible.
+* `2000:d163`/`d165` do have readers: five each, every one a `PUSH [0x9063]`/`PUSH [0x9065]`
+  immediately before a `printf` guarded by `DebugVerbose` (format `"%d %d %d  \r"` at
+  `2410:08ea`).  They are incremented in `ovc26_usesStExit` (`INC word ptr ES:[0x9065]` after the
+  `0x19`-tick guard, `INC word ptr ES:[0x9063]` when the gfx cell is empty) and cleared in
+  `attact_usesAlignUp42`.  They are verbose-mode diagnostic counters; the format string does not
+  say what they count.

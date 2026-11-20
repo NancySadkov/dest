@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn456/naming_summary.txt`.
+`tmp/auditn458/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -14,7 +14,7 @@ parameters               1643   auto-named  131   (8.0%)
 locals                    692   auto-named   64   (9.2%)
 structs                    37
   struct fields           324   generated     5   (1.5%)
-globals                  2455   auto-named   51   (2.1%)
+globals                  2454   auto-named   49   (2.0%)
 ```
 
 Function names are complete: 1590 functions (including 460 thunks), 0 duplicates,
@@ -35,7 +35,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
 
 ## What remains, and why it is not done
 
-1. **51 globals.** The remainder splits three ways: no writer appears anywhere in
+1. **49 globals.** The remainder splits three ways: no writer appears anywhere in
    the export (so the value can only be characterised from unexported code), only
    zeroing writers exist, or the value is a `stshAllocStub` block with no source
    asset.  Every rename in this session came from a writer or a gate that pins the
