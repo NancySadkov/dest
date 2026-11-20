@@ -7657,3 +7657,88 @@ params=1622 unresolved=0 locals=657 unresolved=0 namedButUnresolved=0
 so every one of the 2279 parameters and locals has a concrete data type; the remaining
 37 auto-named parameters (35 by the name audit's own pattern) are a naming question, not a
 typing one.
+
+### Verification of the 46 heuristic pointer/text typings
+
+The 805 conversions were width-preserving, but 34 `far_t` and 12 `char[N]` were chosen
+from name patterns.  Each of the 46 was then checked against its decompiled uses:
+a `far_t` must show `.ofs`/`.seg` access, a `char[N]` must be indexed, passed to a text
+callee, or decayed to an address.
+
+`tmp/heur_report.tsv` holds the raw verdicts and the first matching source line.
+
+#### Kept as `far_t` (22) — every one has `.ofs`/`.seg` access
+
+| function | variable | reader |
+|---|---|---|
+| `driver_unrleSprite` | `dst` | `pbVar10 = (byte *)(dst.seg + *(int *)CONCAT22(dst.ofs,spr) * 0x140);` |
+| `lbm_decode_body` | `dstline` | `dstline.seg = (uint16_t)((ulong)lVar1 >> 0x10);` |
+| `lbm_decode_body` | `bsrcline` | `bsrcline.seg = dstline.seg;` |
+| `stshRleAnims` | `dst` | `dst.seg = (uint16_t)((spr_t *)StshSprites + StshSprIndex);` |
+| `saveui_usesBlitLoadRleGfx2` | `textTable` | `uVar2 = textTable.seg;` |
+| `saveui_usesMouseMoved` | `textTable` | `(piVar3 = (int *)(textTable.ofs + (rowIndex + itemOffset) * 4), pcVar2 = (char *)0x0,` |
+| `saveui_usesBlitLoadRleGfx3` | `entries` | `uVar4 = entries.seg;` |
+| `saveui_writeSavesList` | `entries` | `puVar1 = (undefined2 *)(entries.ofs + uVar2 * 4);` |
+| `saveui_freeLines` | `entries` | `uVar7 = entries.seg;` |
+| `stshReadFile` | `pdst` | `pdst.ofs = (uint16_t)ovr_mkp((uint32_t *)dst.ofs,dst.seg,unaff_DI);` |
+| `stshSpriteStub` | `dst` | `dst.seg = (uint16_t)((spr_t *)StshSprites + StshSprIndex);` |
+| `stshSpriteStub` | `pstub` | `for (j = 0; pstub.seg = (uint16_t)((ulong)((long)(int)i * 0x1e) >> 0x10),` |
+| `ovc28_usesBlitGfx10` | `entries` | `uVar8 = entries.seg;` |
+| `ovc28_blitMenuEntry` | `entries` | `ovc28_drawButton(0xeb,index * 0xe + 0x3c,(char *)*(undefined2 *)(entries.ofs + index * 4));` |
+| `ovc28_usesScreenMode` | `entries` | `(piVar4 = (int *)(entries.ofs + uVar2 * 4), *piVar4 != 0 \|\| piVar4[1] != 0)) {` |
+| `init_check_mem` | `lmem_without_psp` | `lmem_without_psp.seg = 0;` |
+| `bldng_buildMenuEntries` | `entries` | `uVar11 = entries.ofs;` |
+| `ovc38_loadHighScores` | `entries` | `puVar3 = (undefined2 *)(entries.ofs + iVar1 * 4);` |
+| `ovc38_saveHighScores` | `entries` | `uVar4 = entries.seg;` |
+| `ovc40_usesVgaSetPalette8bit` | `palette` | `(uint8_t)(((long)(int)(uint)*(byte *)(palette.ofs + iVar1) * (long)iVar2 & 0xffffU) / 10)` |
+| `setSeasonPalette` | `palette` | `(uint8_t)(((long)(int)(uint)*(byte *)(palette.ofs + uVar1) * (long)(int)uVar2 & 0xffffU)` |
+| `ovc43_playArchiveFli` | `gfx` | `ovr_stshSeek(StshStrongDatHnd,CONCAT22(unaff_BP,*(undefined2 *)(gfx.ofs + 3)));` |
+
+`lbm_decode_body.srcline` is a register-pair (`DX:AX`) far pointer: assigned from
+`PADD_at_(ptr_base, ptr_ofs)` and passed to `ovr_unrle((far_t)srcline, ...)`.  Typed
+`char *32` so the assignment renders as a pointer instead of a struct copy.
+
+#### Reverted to `uint32_t` (11) — never referenced after the declaration
+
+| function | variable |
+|---|---|
+| `rand8` | `dst_c` |
+| `rand8` | `src_c` |
+| `blitTillAlpha` | `ps` |
+| `blitTillAlpha` | `pd` |
+| `blitRaw` | `ps` |
+| `lbm_combine_bitplanes` | `pd` |
+| `unrle` | `ps` |
+| `unrle` | `pd` |
+| `unrle_mirror` | `ps` |
+| `unrle_mirror` | `pd` |
+| `init_grayscale_palette` | `gfx` |
+
+These came from names like `ps`/`pd`/`dst_c`/`src_c`/`gfx`; the decompiled body never reads
+them, so only their width (32 bits) is proven and they stay plain `uint32_t`.
+
+#### Kept as `char[N]` (12) — indexed, passed to a text callee, or decayed
+
+| function | variable | reader |
+|---|---|---|
+| `blitGfxN` | `buf` | `ovr_masked_memcpy((char *)pdst,src,(int)buf,unaff_SS,skip,*(uint *)(gfx.ofs + 5));` |
+| `init_cfg` | `lbuf` | `cfgPath = (uint16_t)ovr_stsprintf(lbuf,unaff_SS,(char *)"%sgame.cfg");` |
+| `init_grayscale_palette` | `buf` | `*(char *)(GrayscalePalette.ofs + i) = buf[max_c * 0xb >> 6];` |
+| `constr_usesAgnt_clear` | `buf` | `text = ovr_stsprintf(buf,unaff_SS,(char *)"(%d, %d)");` |
+| `uiMainMenuLoop` | `yesno` | `dst_00.ofs = (uint16_t)yesno;` |
+| `ovc24_checkStrongholds` | `sbuf` | `pcVar3 = ovr_stsprintf(sbuf,unaff_SS,(char *)"%s stronghold destroyed. (%d, %d)");` |
+| `init_strong_sav` | `path_buffer` | `input_folder_name(path_buffer);` |
+| `init_check_mem` | `buf` | `lmem_without_psp.ofs = (uint16_t)LXLSH_at_((long *)buf._0_2_,buf._4_4_,buf[8]);` |
+| `drawAgntStats` | `buf` | `((char *)CONCAT22(unaff_SS,buf),` |
+| `drawAgntStats` | `palbuf` | `cmap.ofs = (uint16_t)palbuf;` |
+| `updSeason` | `snames` | `dst.ofs = (uint16_t)snames;` |
+| `dbgPromoteEnemy` | `buf` | `msg = ovr_stsprintf(buf,unaff_SS,(char *)"Enemy %s.");` |
+
+Five of them were classified `SCALAR` by the first pass only because the reader takes
+their address instead of indexing them (`dst_00.ofs = (uint16_t)yesno;`,
+`cmap.ofs = (uint16_t)palbuf;`, `input_folder_name(path_buffer)`), which is the
+address-decay of an array and confirms the buffer type.
+
+After the reverts `AuditVarTypes` still reports `params=1622 unresolved=0
+locals=657 unresolved=0`, so the corrected set is fully typed and no `far_t` remains
+without a `.ofs`/`.seg` reader.
