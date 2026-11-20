@@ -2236,3 +2236,37 @@ The body now dereferences `*_lastDir` / `*_sameDirCount` and the caller passes
 `&lastDir, SS, &sameDirCount, SS`.
 
 Parameters: auto 45 -> 43 (2.7%).  Gate: checked 71 failures 0.
+
+## Driver helpers recovered from their own prologues (43 -> 39)
+
+### `driver_scan1` (`2d63:044e`)
+
+The whole 105-byte prologue fixes every argument:
+
+```
+2d63:0456  MOV CX,[BP + 0xa]       ; count
+2d63:0459  LES DI,[BP + 0x6]       ; far buffer
+2d63:045c  MOV DH,[BP + 0xe]       ; threshold
+2d63:045f  LDS SI,[BP + 0x10]      ; far pattern
+2d63:0464  MOV BL,[BP + 0xc]       ; fill byte
+2d63:0467  MOV BP,[BP + 0x14]      ; ring index (BP is reused as an index register)
+```
+
+with DS:`[BP+SI]` and the `INC BP / AND BP,0xff` wrap proving the index role, and
+`CMP DL,DH / JNC` proving the threshold role.  Corrected to
+`void driver_scan1(far_t buf, uint16_t count, uint8_t fill, uint8_t threshold, far_t pattern,
+uint16_t index)`; storage `Stack[4]:4, [8]:2, [a]:1, [c]:1, [e]:4, [12]:2` matches
+`[BP+6]`, `[BP+0xa]`, `[BP+0xc]`, `[BP+0xe]`, `[BP+0x10]`, `[BP+0x14]`.
+
+### `driver_compute3` / `driver_compute4` (`2d63:0652`, `2d63:0687`)
+
+Both start `MOV AX,[BP+0xe] / MOV ES,AX`, so the fifth argument is the destination segment.
+Renamed `dstSeg` and typed `uint16_t`; `driver_compute3` now decompiles as
+
+```
+puVar1 = (undefined2 *)(ofs + (uint)y * 0x140);
+*puVar1 = CONCAT11(colour1,colour1);
+*(undefined1 *)(puVar1 + 0xa0) = colour1;
+```
+
+Parameters: auto 43 -> 39 (2.4%).  Gate: checked 71 failures 0.
