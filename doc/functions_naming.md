@@ -2120,3 +2120,11 @@ This is the same 2-byte-alignment trick needed for any future 4-byte argument th
 start on a multiple of four.
 
 Parameters: auto 55 -> 53 (3.3%).  Gate: checked 71 failures 0.
+
+### `saveui_usesBlitGfx10`'s last argument is the row (53 -> 52)
+
+`param_5` is stored at `Stack[0xe]` (= `[BP+0x10]`), which is exactly the word the body uses as
+`in_stack_00000010`: the drawn row's y is `row * 0xf + 0x1d` and the rectangle is
+`rect.y = ...`, `rect.h = ... + 0x28` in the same expression.  Renamed `row`.
+
+Parameters: auto 53 -> 52 (3.2%).  Gate: checked 71 failures 0.

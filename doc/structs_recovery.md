@@ -7545,3 +7545,13 @@ its use and retyped:
 
 The remaining 49 auto locals have no contradicting declaration: their decompiled form is also
 `undefined1`, or they never appear in the decompiled body (phantom listing spills).
+
+### Three more locals named from their address-taken uses (49 -> 46 auto)
+
+| function | old | new | evidence |
+|---|---|---|---|
+| `ovc41_unitStatusText` | `local_4` | `remainder` | `remainderOut.ofs = (uint16_t)&local_4;` then passed to `attact_compute3` |
+| `ovc41_unitStatusText` | `local_5` | `part` | `partOut.ofs = (uint16_t)&local_5;` then passed to `attact_compute3` |
+| `drawAgntStats` | `cStack_3` | `damage` | receives `ovr_agnt_compute16_2(agnt)`, is compared with 0, and is passed to `agntGetWeaponName` in the branches that print `\"damaged %s\"` / `\"+%d %s\"` |
+
+Locals: auto 49 -> 46 (6.7%).
