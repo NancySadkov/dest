@@ -1884,3 +1884,22 @@ returns through hidden storage in this Ghidra processor module, the same quirk t
 body forwards them straight into `attact_usesEntities(entityIndex,x,y,flagsOfs,flagsSeg)`.
 
 Parameters: 1625 -> 1622 total, auto 101 -> 88 (5.4%).  Gate: checked 71 failures 0.
+
+### `fmReadIntoHimem`: the file name is a far pointer split across two slots
+
+Its prologue pushes `[BP+8]` then `[BP+6]` as one far argument to
+`open_wait_unlock_and_disk`:
+
+```
+474a:0bb0  PUSH word ptr [BP + 0x8]
+474a:0bb3  PUSH word ptr [BP + 0x6]
+474a:0bb7  CALL 0x4000:8010
+474a:0bba  ADD SP,0x4
+```
+
+so `param_2` is the segment half of `filename`, not a separate argument.  Because the
+existing slots already sit at the right offsets (`skipLo` is `[BP+0xa]`, `skipHi`
+`[BP+0xc]`, `useEms` `[BP+0xe]`, `limitLo` `[BP+0x10]`, `limitHi` `[BP+0x12]`), only the name
+was corrected to `filenameSeg` rather than re-typing the pair into one pointer.
+
+Parameters: auto 88 -> 87 (5.4%).  Gate: checked 71 failures 0.
