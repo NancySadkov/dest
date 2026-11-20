@@ -382,3 +382,49 @@ A read of `DGROUP:5dec` in the loaded game gives
 `LevelBandMin = 00 05 09 00`, `LevelBandMax = 04 08 FF FF` -- the level bands [0,4], [5,8],
 [9,255], [0,255].  The same read shows `DGROUP:5df4/5df6` at `0x28/0x1d` during a demo, i.e.
 the demo centre values move from the initial `0x58/0x24` as the attract camera advances.
+
+## Attempt: measuring the pushed argument count for the jump-table-only functions
+
+Target: `driver_unrleScreen` (`2d63:0aac`), `driver_zeroWords` (`2d63:0bc8`), `driver_loop3`
+(`2d63:0bde`), `stshTell` (`474a:06fe`), `stshFilesize` (`474a:0aa7`), `ovc07_swapWords`
+(`32c9:0000`) — the six whose only static reference is their `22xx:00xx` jump-table slot.
+
+The harness came up cleanly and the setup prompt was passed with `key enter`:
+
+```
+> regs
+EAX=00000000 ... EIP=00000438 CS=30B0 DS=1C33 SS=257D
+```
+
+`find 756E646576656C6F706564` returned `0001E041`, so the runtime DGROUP is
+`(0x1E041 - 0x1D11) >> 4 = 0x1C33`, exactly the live `DS` — the segment mapping helper still works.
+
+Searching each function's first 16 bytes found four of the six:
+
+| function | resident copy |
+|---|---|
+| `ovc07_swapWords` | `0x001745D8` |
+| `driver_unrleScreen` | `0x0002CB5C` |
+| `driver_zeroWords` | `0x0002C288` |
+| `driver_loop3` | `0x0002C59E` |
+| `stshTell` | not resident |
+| `stshFilesize` | not resident |
+
+### Why the measurement did not complete
+
+`bp 1745D8` was accepted (`OK bp 001745D8`) but never hit: after a two-second wait `EIP=00001216`,
+i.e. the game was in its idle loop and none of these routines were being called.  Two further
+problems make the method unreliable for this set:
+
+1. a `find` hit is a *resident copy* of the overlay image, which need not be the segment the CPU
+   executes from after an overlay swap, so a breakpoint on that address can sit in dead memory;
+2. `stshTell`/`stshFilesize` live in an overlay that is not loaded at all while the game idles, so
+   their code has to be caught at the moment of a load.
+
+A successful measurement would have to: find the live segment, catch a call, read the return
+address from `[SS:SP]`, break there, and decode the caller's `ADD SP,0xN`.  That is a long
+interactive protocol, and its payoff is only the *pushed byte count* — the parameters stay unnamed
+either way, and trimming one that the caller really pushes would corrupt the call-site rendering.
+
+No project change was made from this attempt; it is recorded so the next session does not repeat the
+same dead ends.
