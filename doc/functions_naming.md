@@ -1848,3 +1848,39 @@ are the words it forwards into positions 3 and 4 of
 bytes.
 
 Parameters: 1634 -> 1625 total, auto 122 -> 101 (6.2%).  Gate: checked 71 failures 0.
+
+## CRT prototypes: far pointers determined from `LES`/`LDS` prologues (11 parameters)
+
+The earlier batch named these arguments but left their *widths* as two-byte pointers, which
+put every later argument at the wrong stack offset.  Each is now settled by the load in the
+prologue, and replaced with `ApplySig` (which also removes the auto names that were really
+segment halves):
+
+| function | machine-code proof | corrected prototype |
+|---|---|---|
+| `memcmp` | `LDS SI,[BP+6]`, `LES DI,[BP+0xa]`, count `[BP+0xe]` | `int16_t memcmp(char *32 s1, char *32 s2, uint16_t n)` |
+| `__fstrncpy` | `LES DI,[BP+0xa]` (src), `LES DI,[BP+6]` (dst), `[BP+0xe]` (count) | `__fstrncpy(char *32 dst, char *32 src, uint16_t n)` |
+| `_fstrstr` | `LES BX,[BP+0xa]` (needle); haystack at `[BP+6]`/`[BP+8]` | `_fstrstr(char *32 haystack, char *32 needle)` |
+| `printf` | pushes `[BP+8]` then `[BP+6]` as one format pointer, `LEA AX,[BP+0xa]` is the vararg area | `void printf(char *32 fmt)` |
+| `_sprintf` | `LES BX,[BP+6]` (dest), `[BP+0xa]`/`[BP+0xc]` (fmt), `LEA [BP+0xe]` varargs | `void _sprintf(char *32 buf, char *32 fmt)` |
+| `vsprintf` | `LES BX,[BP+6]` (buf), `[BP+0xa]`/`[BP+0xc]` (fmt), `[BP+0xe]` third word | `int16_t vsprintf(char *32 buf, char *32 fmt, uint16_t ap)` |
+| `_atoi`, `_atol` | `_atoi` pushes `[BP+8]`+`[BP+6]` into `_atol`, and `_atol` does `LES SI,[BP+6]` | `_atoi(char *32 s)`, `_atol(char *32 s)` |
+| `sprintf_strputn` | near function: `LES BX,[BP+4]` (dest), src `[BP+0xa]`/`[BP+8]`, `n` at `[BP+0xc]` | `uint16_t sprintf_strputn(char *32 dest, char *32 src, uint16_t n)` |
+
+The former `param_2` of `printf`, `_atoi` and `__fstrncpy` were the **segment halves** of
+those far arguments, not separate parameters.  For example `printf`'s old
+`(char *fmt, undefined2 param_2)` described 4 bytes while the body uses `[BP+6]` and
+`[BP+8]` as a single 32-bit format pointer.
+
+### A tool caveat worth recording
+
+Giving `_atol` a 32-bit return type made Ghidra insert a hidden
+`int32_t *__return_storage_ptr__` parameter and push `s` to `[BP+8]`, so the prototype was
+reverted to a 16-bit return with the far parameter kept.  `__cdecl16far` handles 32-bit
+returns through hidden storage in this Ghidra processor module, the same quirk that made
+`SetReturn` fail for `alignToSeg`.
+
+`ovc26_usesRandBelow`'s last two arguments were also named `flagsOfs`/`flagsSeg`, because the
+body forwards them straight into `attact_usesEntities(entityIndex,x,y,flagsOfs,flagsSeg)`.
+
+Parameters: 1625 -> 1622 total, auto 101 -> 88 (5.4%).  Gate: checked 71 failures 0.
