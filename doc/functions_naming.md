@@ -2038,3 +2038,22 @@ the ovr_* thunks and jump-table stubs.)
 | `ovc45_compute7` | `param_1`, `param_2` | `a`, `b` | the body is exactly `CONCAT11(product>>0xb, product>>3)`, i.e. `(a*b) >> 3`; the two factors are symmetric, so the names record the only structure the code has |
 
 Parameters: auto 67 -> 62 (3.8%).  Gate: checked 71 failures 0.
+
+### Two more parameters from their callees (62 -> 60)
+
+**manage_applyUnitFilter**: the callers push **four** words (`4d05:329c` pushes
+`SS:[BX+2]`, `4d05:32a0` pushes `SS:[BX]`, then the computed unit type and the party byte;
+`ADD SP,0x8`), and the body pushes `[BP+0xc]` then `[BP+0xa]` as one far pointer into
+`stsprintf` with the format "Only units of %s loyal to %s the %s are displayed."
+(`2410:557d`).  So the third word is the offset half of a far name pointer and the fourth
+its segment.  The prototype became `void manage_applyUnitFilter(uint8_t partyIndex,
+uint16_t unitType, char *32 unitName)`; storage `Stack[4]:1, Stack[6]:2, Stack[8]:4`
+matches `[BP+6]/[BP+8]/[BP+0xa..0xd]`.
+
+**ovc40_usesBlitLabel**: `[BP+0x10]` is loaded at `69c8:00ec` and pushed last among
+`[BP+0x10]`, `0x13f`, the `[0x8a27]/[0x8a25]` far pointer and the `[BP+8]/[BP+6]` text
+pointer, then `CALLF 2000:2c97` (`ovr_blitLabel(char *text, uint8_t *widths,
+int16_t max_width, uint8_t term)`).  Cdecl order makes it the `term` argument, so
+`param_4` became `term`.
+
+Parameters: auto 62 -> 60 (3.7%).  Gate: checked 71 failures 0.
