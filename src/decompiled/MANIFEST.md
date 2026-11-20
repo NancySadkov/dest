@@ -13,61 +13,61 @@ Modules: 55, functions: 1014 (ok 1010, failed 4), overlay thunks: 460.
 | ovc01_driver | 60 |
 | ovc02_draw | 23 |
 | ovc03_font | 15 |
-| ovc04 | 3 |
+| ovc04_lbm | 3 |
 | ovc05_error | 1 |
 | ovc06_blit | 17 |
-| ovc07 | 5 |
+| ovc07_gfxutil | 5 |
 | ovc08_init2 | 9 |
 | ovc09_init | 31 |
 | ovc10_constr | 20 |
 | ovc11_audio | 13 |
 | ovc12_agnt | 34 |
-| ovc13 | 20 |
+| ovc13_panel | 20 |
 | ovc14_attact | 35 |
-| ovc15 | 29 |
+| ovc15_sprite | 29 |
 | ovc16_saveui | 22 |
 | ovc17_stash | 26 |
-| ovc18 | 9 |
+| ovc18_leaderview | 9 |
 | ovc19_save | 8 |
-| ovc20 | 23 |
+| ovc20_stash | 23 |
 | ovc21_manage | 39 |
-| ovc22 | 31 |
-| ovc23 | 26 |
-| ovc24 | 10 |
-| ovc25 | 19 |
-| ovc26 | 3 |
-| ovc27 | 21 |
-| ovc28 | 16 |
+| ovc22_classes | 31 |
+| ovc23_bldrec | 26 |
+| ovc24_entities | 10 |
+| ovc25_intel | 19 |
+| ovc26_fillgrid | 3 |
+| ovc27_combat | 21 |
+| ovc28_ui | 16 |
 | ovc29_anim | 2 |
-| ovc30 | 7 |
-| ovc31 | 10 |
+| ovc30_waves | 7 |
+| ovc31_config | 10 |
 | ovc32_heap | 10 |
 | ovc33_stats | 25 |
 | ovc34_unit | 6 |
 | ovc35_bldng | 7 |
-| ovc36 | 1 |
+| ovc36_math | 1 |
 | ovc37_season | 11 |
-| ovc38 | 6 |
-| ovc39 | 4 |
-| ovc40 | 8 |
-| ovc41 | 37 |
-| ovc42 | 12 |
-| ovc43 | 5 |
+| ovc38_scores | 6 |
+| ovc39_archive | 4 |
+| ovc40_palette | 8 |
+| ovc41_main | 37 |
+| ovc42_demo | 12 |
+| ovc43_fli | 5 |
 | ovc44_strong_dat | 5 |
-| ovc45 | 29 |
-| ovc46 | 1 |
+| ovc45_unitinfo | 29 |
+| ovc46_assets | 1 |
 | ovc47_constrct | 6 |
-| ovc48 | 4 |
-| ovc49 | 9 |
-| ovc50 | 3 |
+| ovc48_assets2 | 4 |
+| ovc49_agents | 9 |
+| ovc50_textui | 3 |
 
 ## Failed decompilations
 
-- ovc01_driver 2d63:032d rle_line : 
-Low-level Error: Overlapping input varnodes
 - ovc21_manage 4d05:1bee manage_settlementScreen : Exception while decompiling 4d05:1bee: Response buffer size exceeded for: st.exe
 
 - ovc44_strong_dat 6ffe:02f7 init_assets : Exception while decompiling 6ffe:02f7: process: timeout
 
 - ovc47_constrct 7e7c:0b9c constrct_buildInfoText : Exception while decompiling 7e7c:0b9c: process: timeout
 
+- ovc49_agents 8699:18c4 ovc49_body1 : 
+Low-level Error: Unlinked join address

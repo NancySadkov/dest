@@ -1,22 +1,23 @@
-// Give every overlay entry thunk (ovr_<name>) the prototype of its target
-// function <name>, so call sites decompile with real argument and return
-// types instead of K&R `undefined f()`.
+// Verify overlay stub signatures.
+//
+// An `ovr_<name>` stub SHARES the parameter list of its target `<name>`: Ghidra
+// reports the target's parameters through the stub, and removeParameter() on the
+// stub deletes them from the target.  So there is nothing to copy -- the stub is
+// already typed -- and the previous implementation, which removed every stub
+// parameter and re-added the target's, silently emptied 308 real functions.
+//
+// This script therefore only reports.  See doc/functions_naming.md.
 //@category DeSt
 import ghidra.app.script.GhidraScript;
-import ghidra.program.model.address.*;
-import ghidra.program.model.data.*;
 import ghidra.program.model.listing.*;
 import ghidra.program.model.symbol.*;
-import java.util.*;
 
 public class TypeThunks extends GhidraScript {
     @Override
     public void run() throws Exception {
         FunctionManager fm = currentProgram.getFunctionManager();
         SymbolTable st = currentProgram.getSymbolTable();
-        int typed = 0, missing = 0;
-        List<Function> targets = new ArrayList<Function>();
-        List<Function> thunks = new ArrayList<Function>();
+        int match = 0, differ = 0, missing = 0;
         for (Function f : fm.getFunctions(true)) {
             String n = f.getName();
             if (!n.startsWith("ovr_")) continue;
@@ -30,32 +31,11 @@ public class TypeThunks extends GhidraScript {
                 if (g != null && g != f) { t = g; break; }
             }
             if (t == null) { missing++; continue; }
-            thunks.add(f);
-            targets.add(t);
+            int a = f.getParameters().length, b = t.getParameters().length;
+            if (a == b) match++;
+            else { differ++; println("DIFFER " + n + " stub=" + a + " target=" + b); }
         }
-        int tx = currentProgram.startTransaction("type thunks");
-        try {
-            for (int i = 0; i < thunks.size(); i++) {
-                Function f = thunks.get(i);
-                Function t = targets.get(i);
-                f.setCallingConvention(t.getCallingConventionName());
-                f.setReturn(t.getReturnType(), t.getReturn().getVariableStorage(),
-                            SourceType.USER_DEFINED);
-                Variable[] old = f.getParameters();
-                for (int j = old.length - 1; j >= 0; j--) f.removeParameter(j);
-                for (Variable v : t.getParameters()) {
-                    f.addParameter(new ParameterImpl(v.getName(), v.getDataType(),
-                            currentProgram), SourceType.USER_DEFINED);
-                }
-                // Keep the call site's pushed arguments visible: a recovered
-                // target prototype can under-state the real parameter list,
-                // and the extra arguments are the evidence used to fix it.
-                f.setVarArgs(true);
-                typed++;
-            }
-        } finally {
-            currentProgram.endTransaction(tx, true);
-        }
-        println("typed=" + typed + " missing=" + missing);
+        println("stubs_matching_target=" + match + " differing=" + differ + " no-target=" + missing);
+        println("stubs share their target's parameters; no copying is performed");
     }
 }

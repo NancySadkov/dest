@@ -11,7 +11,7 @@
 
 /* [R2] string "main castle" */
 
-char * __cdecl16far season_textMainCastle(void)
+bool __cdecl16far season_textMainCastle(void)
 
 {
   int iVar1;
@@ -19,36 +19,44 @@ char * __cdecl16far season_textMainCastle(void)
   iVar1 = 0;
   while( true ) {
     if ((int)(uint)GLeaderCount <= iVar1) {
-      return (char *)((int)(undefined4 *)&_DATA + 1);
+      return true;
     }
     if ((*(char *)((int)*(undefined4 *)(iVar1 << 2) + 0x3d) != '\0') &&
        (*(char *)((int)*(undefined4 *)(iVar1 << 2) + 0x3f) != '\0')) break;
     iVar1 = iVar1 + 1;
   }
-  return (char *)"main castle" + 1;
+  return false;
 }
 
 
 
 /* 67e7:004d */
 
+/* WARNING: Variable defined which should be unmapped: text */
 /* [R2] string "halfling castle" */
 
-uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
+uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex,...)
 
 {
-  int iVar1;
+  uint uVar1;
+  int iVar2;
+  bool bVar3;
   byte extraout_AH;
-  uint uVar2;
-  size_t sVar3;
-  char *pcVar4;
+  size_t sVar4;
   undefined1 extraout_AH_00;
+  undefined4 *puVar5;
   undefined1 extraout_AH_01;
-  undefined1 uVar5;
-  uint8_t *capTextSeg;
+  char *pcVar6;
+  char *pcVar7;
+  undefined1 extraout_AH_02;
+  undefined1 extraout_AH_03;
+  undefined1 uVar8;
+  uint8_t *puVar9;
   char *unaff_SS;
-  uint8_t *puVar6;
+  undefined1 in_stack_00000004;
+  uint8_t *puVar10;
   uint8_t text;
+  byte in_stack_0000ff5a;
   uint8_t text2;
   int iStack_8;
   uint uStack_6;
@@ -57,73 +65,92 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
   
   bStack_3 = ovr_manage_findFirstLeader();
   if (bStack_3 == 0xff) {
-    uVar2 = (uint)extraout_AH << 8;
+    return (uint)extraout_AH << 8;
+  }
+  uVar1 = ((int *)((uint)bStack_3 * 4))[1];
+  iVar2 = *(int *)((uint)bStack_3 * 4);
+  _iStack_8 = CONCAT22(uVar1,iVar2);
+  if (8 < *(byte *)(iVar2 + 0x86)) {
+    return uVar1 & 0xff00;
+  }
+  *(char *)(iVar2 + 0x86) = *(char *)(iVar2 + 0x86) + '\x01';
+  strcpy((char *)CONCAT22(unaff_SS,&text),
+         (char *)CONCAT22(*(undefined2 *)
+                           ((int)&GStatsLabels[4].seg +
+                           (uint)*(byte *)(iVar2 + 0x86) * 8 + (uint)*(byte *)(iVar2 + 0x34) * 4),
+                          (char *)((far_t *)(GStatsLabels + 4) +
+                                  (uint)*(byte *)(iVar2 + 0x34) + (uint)*(byte *)(iVar2 + 0x86) * 2)
+                                  ->ofs));
+  sVar4 = strlen((char *)CONCAT22(unaff_SS,&text));
+  puVar9 = &text;
+  puVar9[sVar4 - 1] = 0x0;
+  puVar5 = (undefined4 *)(uint)GHighScoreSaved;
+  if (puVar5 == (undefined4 *)0x0) {
+    if ((1 < PlayerIndex) &&
+       (puVar9 = (uint8_t *)((char *)"halfling castle" + 0xc),
+       *(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\x02')) {
+      bVar3 = season_textMainCastle();
+      puVar5 = (undefined4 *)CONCAT11(extraout_AH_00,bVar3);
+      if (!bVar3) goto L_season_67e7_004d_0135;
+L_season_67e7_004d_018F:
+      uVar8 = (undefined1)((uint)puVar5 >> 8);
+      cStack_4 = '\x01';
+      goto L_season_67e7_004d_0199;
+    }
+L_season_67e7_004d_0135:
+    puVar5 = (undefined4 *)((uint)bStack_3 << 2);
+    puVar9 = (uint8_t *)((char *)"halfling castle" + 0xc);
+    if (8 < *(byte *)((int)*puVar5 + 0x86)) {
+      puVar5 = (undefined4 *)((uint)bStack_3 << 2);
+      puVar9 = (uint8_t *)((char *)"halfling castle" + 0xc);
+      if (*(char *)((int)*puVar5 + 0x33) == '\0') goto L_season_67e7_004d_018F;
+      puVar5 = (undefined4 *)((uint)bStack_3 << 2);
+      puVar9 = (uint8_t *)((char *)"halfling castle" + 0xc);
+      if (*(char *)((int)*puVar5 + 0x33) == '\x01') {
+        bVar3 = season_textMainCastle();
+        puVar5 = (undefined4 *)CONCAT11(extraout_AH_01,bVar3);
+        if (bVar3) goto L_season_67e7_004d_018F;
+      }
+    }
+  }
+  uVar8 = (undefined1)((uint)puVar5 >> 8);
+  cStack_4 = '\0';
+L_season_67e7_004d_0199:
+  if (cStack_4 == '\0') {
+    pcVar6 = (char *)CONCAT11(uVar8,in_stack_00000004);
+    puVar10 = &text;
+    pcVar7 = ovr_ovc15_capitalize((char *)CONCAT22((int)_iStack_8,unaff_SS),&text2,uStack_6);
+    ovr_ovc40_usesAlignToSeg
+              ((char)pcVar7,(char *)CONCAT22(puVar10,puVar9),(uint16_t)unaff_SS,pcVar6,_text,
+               in_stack_0000ff5a,0,pcVar7);
+    uVar8 = extraout_AH_03;
   }
   else {
-    uVar2 = ((int *)((uint)bStack_3 * 4))[1];
-    iVar1 = *(int *)((uint)bStack_3 * 4);
-    _iStack_8 = CONCAT22(uVar2,iVar1);
-    if (*(byte *)(iVar1 + 0x86) < 9) {
-      *(char *)(iVar1 + 0x86) = *(char *)(iVar1 + 0x86) + '\x01';
-      strcpy((char *)&text,unaff_SS);
-      sVar3 = strlen((char *)&text);
-      capTextSeg = &text;
-      capTextSeg[sVar3 - 1] = 0x0;
-      if ((GHighScoreSaved == '\0') &&
-         ((((1 < PlayerIndex &&
-            (capTextSeg = (uint8_t *)((char *)"halfling castle" + 0xc),
-            *(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\x02')) &&
-           (pcVar4 = season_textMainCastle(), (char)pcVar4 != '\0')) ||
-          ((capTextSeg = (uint8_t *)((char *)"halfling castle" + 0xc),
-           8 < *(byte *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x86) &&
-           ((capTextSeg = (uint8_t *)((char *)"halfling castle" + 0xc),
-            *(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\0' ||
-            ((capTextSeg = (uint8_t *)((char *)"halfling castle" + 0xc),
-             *(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\x01' &&
-             (pcVar4 = season_textMainCastle(), (char)pcVar4 != '\0')))))))))) {
-        cStack_4 = '\x01';
-      }
-      else {
-        cStack_4 = '\0';
-      }
-      if (cStack_4 == '\0') {
-        puVar6 = &text;
-        pcVar4 = ovr_ovc15_capitalize((char *)CONCAT22(unaff_SS,&text2));
-        ovr_ovc40_usesAlignToSeg
-                  ('\0',pcVar4,(uint16_t)capTextSeg,(char *)puVar6,(uint16_t)unaff_SS,formatIndex);
-        uVar5 = extraout_AH_01;
-      }
-      else {
-        puVar6 = &text;
-        pcVar4 = ovr_ovc15_capitalize((char *)CONCAT22(unaff_SS,&text2));
-        ovr_ovc40_usesAlignToSeg
-                  ('\x02',pcVar4,(uint16_t)capTextSeg,(char *)puVar6,(uint16_t)unaff_SS,formatIndex)
-        ;
-        uVar5 = extraout_AH_00;
-      }
-      if (cStack_4 != '\0') {
-        ovr_stop_audio();
-        CurMusicType = 0x54;
-        ovr_play_sfx(84,0);
-        ovr_ovc38_usesStshAlloc();
-        ovr_miceRestoreArea((brect_t *)(BlitRects + 1));
-        ovr_stats_drawStatsPanel();
-        ovr_say((char *)"Your may continue playing, but your score will not be recorded.");
-        ovr_ovc38_showAchievements();
-        ovr_ovc28_textHalflingCastle();
-        ovr_ovc41_usesGMenuItem();
-        ovr_miceBlitRect((brect_t *)(BlitRects + 1));
-        ovr_stop_audio();
-        uVar5 = 0x24;
-        CurMusicType = 0xff;
-      }
-      uVar2 = CONCAT11(uVar5,1);
-    }
-    else {
-      uVar2 = uVar2 & 0xff00;
-    }
+    pcVar6 = (char *)CONCAT11(uVar8,in_stack_00000004);
+    puVar10 = &text;
+    pcVar7 = ovr_ovc15_capitalize((char *)CONCAT22((int)_iStack_8,unaff_SS),&text2,uStack_6);
+    ovr_ovc40_usesAlignToSeg
+              ((char)pcVar7,(char *)CONCAT22(puVar10,puVar9),(uint16_t)unaff_SS,pcVar6,_text,
+               in_stack_0000ff5a,2,pcVar7);
+    uVar8 = extraout_AH_02;
   }
-  return uVar2;
+  if (cStack_4 != '\0') {
+    ovr_stop_audio();
+    CurMusicType = 0x54;
+    ovr_play_sfx(0,_text,0x54);
+    ovr_ovc38_usesStshAlloc();
+    ovr_miceRestoreArea((brect_t *)CONCAT22(_text,(brect_t *)((char *)"puppetmaker" + 3)),0x44a);
+    ovr_stats_drawStatsPanel();
+    ovr_say((char *)CONCAT22(_text,(char *)"puppetmaker" + 3),0x69db);
+    ovr_ovc38_showAchievements();
+    ovr_ovc28_textHalflingCastle();
+    ovr_ovc41_usesGMenuItem();
+    ovr_miceBlitRect((brect_t *)CONCAT22(_text,(brect_t *)((char *)"puppetmaker" + 3)),0x44a);
+    ovr_stop_audio();
+    uVar8 = 0x24;
+    CurMusicType = 0xff;
+  }
+  return CONCAT11(uVar8,1);
 }
 
 
@@ -132,26 +159,30 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
 
 /* Runs the end-of-game score screen once per leader-type band. */
 
-uint __cdecl16far season_checkEndGame(byte leaderIndex)
+uint __cdecl16far season_checkEndGame(byte leaderIndex,...)
 
 {
   byte bVar1;
   uint uVar2;
+  byte in_stack_00000004;
+  byte level;
   
-  if (*(char *)((int)*(undefined4 *)((uint)leaderIndex << 2) + 0x3f) == '\0') {
+  if (*(char *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2) + 0x3f) == '\0') {
     uVar2 = 0;
   }
   else {
-    bVar1 = ovr_ovc30_compute1(*(byte *)((int)&worldMenuLabels[0xc].seg +
-                                        (uint)*(byte *)((int)*(undefined4 *)((uint)leaderIndex << 2)
-                                                       + 0x3e) * 0x95));
+    level = *(byte *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2) + 0x3e);
+    bVar1 = ovr_ovc30_compute1(level,CONCAT11((char)((uint)level * 0x95 >> 8),
+                                              *(undefined1 *)
+                                               ((int)&worldMenuLabels[0xc].seg + (uint)level * 0x95)
+                                             ));
     if (bVar1 < 2) {
       if (((byte *)promotionBandUsed)[bVar1] != 0) {
         return 0;
       }
       ((byte *)promotionBandUsed)[bVar1] = 1;
     }
-    uVar2 = season_textHalflingCastle(0x0);
+    uVar2 = season_textHalflingCastle(level,0);
   }
   return uVar2;
 }
@@ -162,13 +193,14 @@ uint __cdecl16far season_checkEndGame(byte leaderIndex)
 
 /* Recomputes GPromotableCount by counting the units whose four map-flag words OR to 0x1000. */
 
-void __cdecl16far season_countPromotable(void)
+void __cdecl16far season_countPromotable(void...)
 
 {
   undefined4 uVar1;
   uint uVar2;
   unit_t *puVar3;
   int iVar4;
+  int unaff_DI;
   uint uVar5;
   undefined2 uVar6;
   uint uStack_6;
@@ -181,7 +213,7 @@ void __cdecl16far season_countPromotable(void)
         (puVar3[uStack_6].unitType != 0xff)) &&
        (uVar1 = *(undefined4 *)((uint)puVar3[uStack_6].unitType << 2),
        *(char *)((int)uVar1 + 0x3f) == '\0')) {
-      uVar2 = ovr_alignUp4(puVar3[uStack_6].x);
+      uVar2 = ovr_alignUp4(unaff_DI,puVar3[uStack_6].x);
       uVar5 = 0;
       for (iVar4 = 0; iVar4 < 4; iVar4 = iVar4 + 1) {
         uVar5 = uVar5 | ((short (*) [60] [148])GMapFlags)[-1][((unit_t *)GUnits)[uStack_6].y + 0x3b]
@@ -201,11 +233,12 @@ void __cdecl16far season_countPromotable(void)
 
 /* [R6] touches GPromotableCount */
 
-void __cdecl16far season_usesGPromotableCount(void)
+void __cdecl16far season_usesGPromotableCount(void...)
 
 {
   byte bVar1;
   uint uVar2;
+  uint8_t in_stack_0000fffc;
   
   season_countPromotable();
   bVar1 = ovr_manage_findFirstLeader();
@@ -215,7 +248,7 @@ void __cdecl16far season_usesGPromotableCount(void)
     if (bVar1 <= uVar2) {
       uVar2 = season_usesGPromotableCount2();
       if (uVar2 <= GPromotableCount) {
-        uVar2 = season_textHalflingCastle(0x1);
+        uVar2 = season_textHalflingCastle(in_stack_0000fffc,1);
         if ((char)uVar2 != '\0') {
           promotionCount = promotionCount + '\x01';
         }
@@ -231,7 +264,7 @@ void __cdecl16far season_usesGPromotableCount(void)
 
 /* [R6] touches GPromotableCount */
 
-int __cdecl16far season_usesGPromotableCount2(void)
+int __cdecl16far season_usesGPromotableCount2(void...)
 
 {
   byte bVar1;
@@ -256,7 +289,7 @@ int __cdecl16far season_usesGPromotableCount2(void)
 
 /* [R6] touches Difficulty */
 
-char __cdecl16far season_usesDifficulty(void)
+char __cdecl16far season_usesDifficulty(void...)
 
 {
   int iVar1;
@@ -298,8 +331,10 @@ char __cdecl16far season_usesDifficulty(void)
 
 /* 67e7:058d */
 
+/* WARNING: Variable defined which should be unmapped: seasonPalette */
+
 uint16_t __cdecl16far
-calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSeg)
+calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSeg,...)
 
 {
   far_t dst;
@@ -309,6 +344,7 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
   far_t handle;
   uint16_t uVar1;
   uint16_t unaff_SS;
+  char *in_stack_00000004;
   uint8_t seasonPalette;
   uint16_t uStack_18;
   uint16_t uStack_16;
@@ -331,26 +367,27 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
   dst_02.seg = unaff_SS;
   dst_02.ofs = (uint16_t)&colorC;
   F_SCOPY(far_from_u32((uint32_t)(0x241069c8)),dst_02);
-  _fmemmove((char *)CONCAT22(dstSeg,dstOfs),(char *)CONCAT22(srcSeg,srcOfs),0x300);
+  _fmemmove((char *)CONCAT22(srcSeg,(*(uint16_t *)((uint8_t *)&(srcOfs) + 2))),
+            (char *)CONCAT22((uint8_t *)srcOfs,in_stack_00000004),0x300);
   uStack_16 = ((undefined2 *)&l1Cut2Seg)[((uint)seasonGroupBase + (uint)GSeason) * 2];
   uVar1 = ((undefined2 *)&l1Cut2Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 2];
-  handle.seg = uStack_16;
-  handle.ofs = uVar1;
+  handle.seg = _seasonPalette;
+  handle.ofs = uStack_16;
   uStack_18 = uVar1;
-  psStack_6 = ovr_stshLoadGfx(handle);
+  psStack_6 = ovr_stshLoadGfx(handle,uVar1);
   uStack_4 = uVar1;
-  _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x1e0),(char *)CONCAT22(uVar1,psStack_6),0x90);
-  _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2d0),
+  _fmemmove((char *)CONCAT22(srcSeg,(*(uint16_t *)((uint8_t *)&(srcOfs) + 2)) + 0x1e0),(char *)CONCAT22(uVar1,psStack_6),0x90);
+  _fmemmove((char *)CONCAT22(srcSeg,(*(uint16_t *)((uint8_t *)&(srcOfs) + 2)) + 0x2d0),
             (char *)CONCAT22(unaff_SS,&seasonPalette + (uint)GSeason * 0x2d),0x2d);
   if (GameRunning == false) {
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2ac),(char *)CONCAT22(unaff_SS,&colorA),3);
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2af),(char *)CONCAT22(unaff_SS,&colorA),3);
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2b2),(char *)CONCAT22(unaff_SS,&colorB),3);
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2b5),(char *)CONCAT22(unaff_SS,&colorB),3);
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2be),(char *)CONCAT22(unaff_SS,&colorC),3);
+    _fmemmove((char *)CONCAT22(srcSeg,(*(uint16_t *)((uint8_t *)&(srcOfs) + 2)) + 0x2ac),(char *)CONCAT22(unaff_SS,&colorA),3);
+    _fmemmove((char *)CONCAT22(srcSeg,(*(uint16_t *)((uint8_t *)&(srcOfs) + 2)) + 0x2af),(char *)CONCAT22(unaff_SS,&colorA),3);
+    _fmemmove((char *)CONCAT22(srcSeg,(*(uint16_t *)((uint8_t *)&(srcOfs) + 2)) + 0x2b2),(char *)CONCAT22(unaff_SS,&colorB),3);
+    _fmemmove((char *)CONCAT22(srcSeg,(*(uint16_t *)((uint8_t *)&(srcOfs) + 2)) + 0x2b5),(char *)CONCAT22(unaff_SS,&colorB),3);
+    _fmemmove((char *)CONCAT22(srcSeg,(*(uint16_t *)((uint8_t *)&(srcOfs) + 2)) + 0x2be),(char *)CONCAT22(unaff_SS,&colorC),3);
   }
   for (bStack_13 = 0; bStack_13 < 0x2d; bStack_13 = bStack_13 + 1) {
-    dstOfs[bStack_13 + 0x2d0] = (uint8_t)((int)(uint)dstOfs[bStack_13 + 0x2d0] >> 2);
+    (*(uint16_t *)((uint8_t *)&(srcOfs) + 2))[bStack_13 + 0x2d0] = (char)((int)(uint)(byte)(*(uint16_t *)((uint8_t *)&(srcOfs) + 2))[bStack_13 + 0x2d0] >> 2);
   }
   return uStack_18;
 }
@@ -359,28 +396,33 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
 
 /* 67e7:073e */
 
-void __cdecl16far updSeason(void)
+/* WARNING: Variable defined which should be unmapped: palette */
+
+void __cdecl16far updSeason(void...)
 
 {
-  char *msg;
-  char *in_DX;
-  char *unaff_SS;
   far_t dst;
   far_t handle;
   far_t palette_00;
   far_t handle_00;
   far_t palette_01;
+  char *dst_00;
+  uint8_t *in_DX;
+  char *unaff_SS;
+  undefined1 uVar1;
+  undefined1 uVar2;
   uint8_t palette [768];
   char snames [12];
   uint8_t text;
   uint8_t seaon2;
   stg_tmp_t *psStack_8;
-  char *pcStack_6;
+  uint8_t *puStack_6;
   uint8_t s;
   uint8_t season;
   
-  dst.seg = (uint16_t)unaff_SS;
+  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)unaff_SS;
   dst.ofs = (uint16_t)snames;
+  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)unaff_SS >> 8);
   F_SCOPY(far_from_u32((uint32_t)(0x241069cb)),dst);
   seaon2 = GSeason;
   season = GSeason;
@@ -406,33 +448,42 @@ void __cdecl16far updSeason(void)
     if ((season == 0x0) && (GTimeLo == 0)) {
       GYear = GYear + 1;
     }
-    handle.seg = Lbm_nwpanel1.seg;
-    handle.ofs = Lbm_nwpanel1.ofs;
-    psStack_8 = ovr_stshLoadGfx(handle);
-    calcSeasonPalette(psStack_8->cmap,(uint16_t)in_DX,palette,(uint16_t)unaff_SS);
-    palette_00.seg = (uint16_t)unaff_SS;
-    palette_00.ofs = (uint16_t)palette;
-    ovr_ovc40_usesVgaSetPalette8bit(palette_00);
-    ovr_miceRestoreArea((brect_t *)(BlitRects + 1));
+    (*(uint8_t *)((uint8_t *)&(handle.seg))) = palette[0];
+    handle.ofs = Lbm_nwpanel1.seg;
+    (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = palette[1];
+    psStack_8 = ovr_stshLoadGfx(handle,Lbm_nwpanel1.ofs);
+    calcSeasonPalette((uint8_t *)CONCAT22(palette,in_DX),(uint16_t)psStack_8);
+    (*(uint8_t *)((uint8_t *)&(palette_00.seg))) = palette[0];
+    palette_00.ofs = (uint16_t)unaff_SS;
+    (*(uint8_t *)((uint8_t *)&(palette_00.seg) + 1)) = palette[1];
+    ovr_ovc40_usesVgaSetPalette8bit(palette_00,palette);
+    ovr_miceRestoreArea((brect_t *)CONCAT13(palette[1],CONCAT12(palette[0],0x2410)),0x44a);
     GSeason = season;
-    ovr_ovc41_usesAgnt_clear('\0');
-    ovr_miceBlitRect((brect_t *)(BlitRects + 1));
+    ovr_ovc41_usesAgnt_clear(palette[0],0);
+    ovr_miceBlitRect((brect_t *)CONCAT13(palette[1],CONCAT12(palette[0],0x2410)),0x44a);
     if ((season == 0x0) && (GTimeLo == 0xf)) {
-      ovr_uiNotify((char *)"The season has changed to summer.",0x2410);
+      ovr_uiNotify((char *)0xa0002410,0x6a2e);
     }
     else {
-      in_DX = snames;
-      msg = ovr_stsprintf((char *)&text,unaff_SS,(char *)"The season has changed to %s.");
-      ovr_uiNotify(msg,(uint16_t)in_DX);
+      uVar1 = 0;
+      uVar2 = 0xa0;
+      in_DX = (uint8_t *)snames;
+      dst_00 = ovr_stsprintf((char *)CONCAT22(0x6a50,unaff_SS),
+                             (char *)CONCAT22(*(undefined2 *)(in_DX + (uint)season * 4),
+                                              (char *)"puppetmaker" + 3),
+                             *(char **)(snames + (uint)season * 4 + 2),&text);
+      ovr_uiNotify((char *)CONCAT13(uVar2,CONCAT12(uVar1,in_DX)),(uint16_t)dst_00);
     }
-    handle_00.seg = Lbm_nwpanel1.seg;
-    handle_00.ofs = Lbm_nwpanel1.ofs;
-    psStack_8 = ovr_stshLoadGfx(handle_00);
-    pcStack_6 = in_DX;
-    calcSeasonPalette(psStack_8->cmap,(uint16_t)in_DX,palette,(uint16_t)unaff_SS);
-    palette_01.seg = (uint16_t)unaff_SS;
-    palette_01.ofs = (uint16_t)palette;
-    ovr_setSeasonPalette(palette_01);
+    (*(uint8_t *)((uint8_t *)&(handle_00.seg))) = palette[0];
+    handle_00.ofs = Lbm_nwpanel1.seg;
+    (*(uint8_t *)((uint8_t *)&(handle_00.seg) + 1)) = palette[1];
+    psStack_8 = ovr_stshLoadGfx(handle_00,Lbm_nwpanel1.ofs);
+    puStack_6 = in_DX;
+    calcSeasonPalette((uint8_t *)CONCAT22(palette,in_DX),(uint16_t)psStack_8);
+    (*(uint8_t *)((uint8_t *)&(palette_01.seg))) = palette[0];
+    palette_01.ofs = (uint16_t)unaff_SS;
+    (*(uint8_t *)((uint8_t *)&(palette_01.seg) + 1)) = palette[1];
+    ovr_setSeasonPalette(palette_01,palette);
     GTimeHi = '\0';
     if ((season == 0x0) && (GTimeLo == 0xf)) {
       s = 0x1;
@@ -473,9 +524,10 @@ int __cdecl16far season_usesAlignUp42(int unitIndex,byte partyIndex)
   uint uVar1;
   byte bVar2;
   int iVar3;
+  int unaff_DI;
   uint uVar4;
   
-  uVar1 = ovr_alignUp4(((unit_t *)GUnits)[unitIndex].x);
+  uVar1 = ovr_alignUp4(unaff_DI,((unit_t *)GUnits)[unitIndex].x);
   uVar4 = 0;
   for (iVar3 = 0; iVar3 < 4; iVar3 = iVar3 + 1) {
     uVar4 = uVar4 | ((short (*) [60] [148])GMapFlags)[-1][((unit_t *)GUnits)[unitIndex].y + 0x3b]
@@ -502,12 +554,15 @@ void __cdecl16far season_repairBuildings(byte rank)
 
 {
   int iVar1;
-  char *msg;
-  char *dst;
+  char *pcVar2;
+  char *pcVar3;
   uint unitIndex;
-  int count;
-  undefined2 uVar2;
+  uint unaff_DI;
+  int iVar4;
+  undefined2 uVar5;
   char *unaff_SS;
+  undefined1 uVar6;
+  undefined1 uVar7;
   uint8_t text;
   byte bStack_7;
   uint8_t promoteThreshold;
@@ -515,33 +570,36 @@ void __cdecl16far season_repairBuildings(byte rank)
   
   abStack_4 = (byte  [2])(*(uint16_t *)((uint8_t *)&(PromoteThreshold) + 2));
   _promoteThreshold = (*(uint16_t *)((uint8_t *)&(PromoteThreshold)));
-  count = 0;
-  dst = (char *)(*(uint16_t *)((uint8_t *)&(PromoteThreshold)));
+  iVar4 = 0;
+  pcVar3 = (char *)(*(uint16_t *)((uint8_t *)&(PromoteThreshold)));
   for (bStack_7 = 0; bStack_7 < GLeaderCount; bStack_7 = bStack_7 + 1) {
-    dst = (char *)((uint)bStack_7 << 2);
-    if ((&promoteThreshold)[rank] <= *(byte *)((int)*(undefined4 *)dst + 0xa5)) {
+    pcVar3 = (char *)((uint)bStack_7 << 2);
+    if ((&promoteThreshold)[rank] <= *(byte *)((int)*(undefined4 *)pcVar3 + 0xa5)) {
       for (unitIndex = 0xf8; unitIndex < GUnitCount; unitIndex = unitIndex + 1) {
-        dst = (char *)"puppetmaker" + 3;
-        uVar2 = (undefined2)((ulong)GUnits >> 0x10);
+        pcVar3 = (char *)"puppetmaker" + 3;
+        uVar5 = (undefined2)((ulong)GUnits >> 0x10);
         if (((unit_t *)GUnits)[unitIndex].unitType == bStack_7) {
-          dst = (char *)"puppetmaker" + 3;
+          pcVar3 = (char *)"puppetmaker" + 3;
           if (((unit_t *)GUnits)[unitIndex].level < 8) {
             iVar1 = season_usesAlignUp42(unitIndex,bStack_7);
             if ((char)iVar1 != '\0') {
-              dst = (char *)"puppetmaker" + 3;
+              pcVar3 = (char *)"puppetmaker" + 3;
               ((unit_t *)GUnits)[unitIndex].level = 8;
-              count = count + 1;
+              iVar4 = iVar4 + 1;
             }
           }
         }
       }
     }
   }
-  if (count != 0) {
-    ovr_inputUpdate(0x24);
-    ovr_ovc41_pluralSuffix(count);
-    msg = ovr_stsprintf((char *)&text,unaff_SS,(char *)"%d building%s repaired.");
-    ovr_uiNotify(msg,(uint16_t)dst);
+  if (iVar4 != 0) {
+    ovr_inputUpdate((ulong)unaff_DI << 0x10,0x24);
+    uVar6 = 0;
+    uVar7 = 0xa0;
+    pcVar2 = (char *)ovr_ovc41_pluralSuffix(-0x6000,iVar4);
+    pcVar2 = ovr_stsprintf((char *)CONCAT22(0x6a6e,unaff_SS),
+                           (char *)CONCAT22(iVar4,(char *)"puppetmaker" + 3),pcVar2,&text,pcVar3);
+    ovr_uiNotify((char *)CONCAT13(uVar7,CONCAT12(uVar6,pcVar3)),unaff_DI,pcVar2);
   }
   return;
 }

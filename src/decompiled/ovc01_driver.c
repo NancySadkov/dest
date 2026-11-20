@@ -11,17 +11,19 @@
 
 /* packs seg+ofs into a uint32_t */
 
-uint32_t * __cdecl16far mkp(uint32_t *__return_storage_ptr__,uint16_t ofs,uint16_t seg)
+uint32_t * __cdecl16far mkp(uint32_t *__return_storage_ptr__,uint16_t ofs,uint16_t seg,...)
 
 {
-  return (uint32_t *)((uint)__return_storage_ptr__ & 0xf);
+  uint in_stack_00000004;
+  
+  return (uint32_t *)(in_stack_00000004 & 0xf);
 }
 
 
 
 /* 2d63:0016 */
 
-uint16_t __cdecl16far biosVideoCall(uint8_t operation,uint8_t argument)
+uint16_t __cdecl16far biosVideoCall(uint8_t operation,uint8_t argument,...)
 
 {
   code *pcVar1;
@@ -36,7 +38,7 @@ uint16_t __cdecl16far biosVideoCall(uint8_t operation,uint8_t argument)
 
 /* 2d63:0030 */
 
-uint16_t __cdecl16far biosReadKey(void)
+uint16_t __cdecl16far biosReadKey(void...)
 
 {
   code *pcVar1;
@@ -51,7 +53,7 @@ uint16_t __cdecl16far biosReadKey(void)
 
 /* 2d63:0039 */
 
-uint16_t __cdecl16far biosKeyAvail(void)
+uint16_t __cdecl16far biosKeyAvail(void...)
 
 {
   code *pcVar1;
@@ -66,7 +68,7 @@ uint16_t __cdecl16far biosKeyAvail(void)
 
 /* 2d63:004a */
 
-uint16_t __cdecl16far miceButtonsStates(void)
+uint16_t __cdecl16far miceButtonsStates(void...)
 
 {
   code *pcVar1;
@@ -82,7 +84,7 @@ uint16_t __cdecl16far miceButtonsStates(void)
 /* 2d63:005d */
 
 void __cdecl16far
-blitRaw(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t srcSeg,uint16_t dstSeg)
+blitRaw(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t srcSeg,uint16_t dstSeg,...)
 
 {
   undefined1 *puVar1;
@@ -92,12 +94,13 @@ blitRaw(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t srcSeg,uint16_t
   uint16_t dx;
   uint16_t s;
   uint16_t d;
+  int in_stack_00000004;
   uint32_t ps;
   
-  uVar2 = CONCAT11((char)y1,(char)(y1 >> 8));
-  s = uVar2 + (uVar2 >> 2) + x1;
-  dy = (y2 - y1) + 1;
-  dx = (x2 - x1) + 1;
+  uVar2 = CONCAT11((char)x1,(char)(x1 >> 8));
+  s = uVar2 + (uVar2 >> 2) + in_stack_00000004;
+  dy = (x2 - x1) + 1;
+  dx = (y1 - in_stack_00000004) + 1;
   uVar3 = dx;
   d = s;
   do {
@@ -120,7 +123,7 @@ blitRaw(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t srcSeg,uint16_t
 /* 2d63:00aa */
 
 void __cdecl16far
-lbm_combine_bitplanes(far_t src,far_t dst,uint16_t npixels,uint8_t nplanes,uint16_t plane_sz)
+lbm_combine_bitplanes(far_t src,far_t dst,uint16_t npixels,uint8_t nplanes,uint16_t plane_sz,...)
 
 {
   byte *pbVar1;
@@ -131,32 +134,31 @@ lbm_combine_bitplanes(far_t src,far_t dst,uint16_t npixels,uint8_t nplanes,uint1
   uint16_t ps;
   uint16_t d;
   uint8_t bit0;
+  byte *in_stack_00000004;
   uint32_t pd;
   
-  s = src.ofs;
-  d = dst.ofs;
   mask = 0x80;
   do {
     pixel = 0x0;
     bits = 0x1;
-    ps = s;
+    ps = (uint16_t)in_stack_00000004;
     do {
       if ((*(byte *)ps & mask) != 0) {
         pixel = pixel | bits;
       }
       bits = bits << 1 | (char)bits < '\0';
-      ps = ps + plane_sz;
-    } while (bits != (byte)('\x01' << (nplanes & 7) | 1U >> 8 - (nplanes & 7)));
-    pbVar1 = (byte *)d;
-    d = d + 1;
+      ps = ps + _nplanes;
+    } while (bits != (byte)('\x01' << ((byte)npixels & 7) | 1U >> 8 - ((byte)npixels & 7)));
+    pbVar1 = (byte *)src.seg;
+    src.seg = src.seg + 1;
     *pbVar1 = pixel;
     bit0 = mask & 1;
     mask = mask >> 1 | mask << 7;
     if ((bool)bit0) {
-      s = s + 1;
+      in_stack_00000004 = in_stack_00000004 + 1;
     }
-    npixels = npixels - 1;
-  } while (npixels != 0);
+    dst.seg = dst.seg - 1;
+  } while (dst.seg != 0);
   return;
 }
 
@@ -167,13 +169,10 @@ lbm_combine_bitplanes(far_t src,far_t dst,uint16_t npixels,uint8_t nplanes,uint1
 /* Loads big-endian 32bit integer into DX:AX pair
    NOTE: the function has a bug (high order bytes are swapped) */
 
-uint32_t * __cdecl16far be4(uint32_t *__return_storage_ptr__,uint32_t be)
+uint32_t * __cdecl16far be4(uint32_t *__return_storage_ptr__,uint32_t be,...)
 
 {
-  undefined1 in_stack_00000006;
-  undefined1 in_stack_00000007;
-  
-  return (uint32_t *)CONCAT11(in_stack_00000006,in_stack_00000007);
+  return (uint32_t *)CONCAT11((*(uint8_t *)((uint8_t *)&(__return_storage_ptr__))),(*(uint8_t *)((uint8_t *)&(__return_storage_ptr__) + 1)));
 }
 
 
@@ -182,10 +181,13 @@ uint32_t * __cdecl16far be4(uint32_t *__return_storage_ptr__,uint32_t be)
 
 /* Flips bytes in a 16bt word */
 
-uint16_t __cdecl16far be2(uint16_t w)
+uint16_t __cdecl16far be2(uint16_t w,...)
 
 {
-  return CONCAT11((undefined1)w,(*(uint8_t *)((uint8_t *)&(w) + 1)));
+  undefined1 uStack0004;
+  undefined1 uStack0005;
+  
+  return CONCAT11(uStack0004,uStack0005);
 }
 
 
@@ -194,17 +196,19 @@ uint16_t __cdecl16far be2(uint16_t w)
 
 /* [R7] body shape: compute */
 
-char __cdecl16far driver_compute1(char cornerA,byte cornerB,char cornerC)
+char __cdecl16far driver_compute1(char cornerA,byte cornerB,char cornerC,...)
 
 {
   byte bVar1;
   byte bVar2;
+  char in_stack_00000004;
   
-  bVar1 = (byte)(CONCAT11(CARRY1(cornerC + cornerA,cornerB),cornerC + cornerA + cornerB) >> 7);
+  bVar1 = (byte)(CONCAT11(CARRY1(cornerB + in_stack_00000004,cornerA),
+                          cornerB + in_stack_00000004 + cornerA) >> 7);
   if (2 < bVar1) {
     bVar1 = 2;
   }
-  bVar2 = ((char)(cornerB - cornerA) >> 2) + 2;
+  bVar2 = ((char)(cornerA - in_stack_00000004) >> 2) + 2;
   if ((char)bVar2 < '\0') {
     bVar2 = 0;
   }
@@ -220,12 +224,14 @@ char __cdecl16far driver_compute1(char cornerA,byte cornerB,char cornerC)
 
 /* [R7] body shape: compute */
 
-char __cdecl16far driver_compute2(char cornerA,byte cornerB,char cornerC)
+char __cdecl16far driver_compute2(char cornerA,byte cornerB,char cornerC,...)
 
 {
   byte bVar1;
+  char in_stack_00000004;
   
-  bVar1 = (byte)(CONCAT11(CARRY1(cornerC + cornerA,cornerB),cornerC + cornerA + cornerB) >> 7);
+  bVar1 = (byte)(CONCAT11(CARRY1(cornerB + in_stack_00000004,cornerA),
+                          cornerB + in_stack_00000004 + cornerA) >> 7);
   if (2 < bVar1) {
     bVar1 = 2;
   }
@@ -236,7 +242,7 @@ char __cdecl16far driver_compute2(char cornerA,byte cornerB,char cornerC)
 
 /* 2d63:017a */
 
-void __cdecl16far miceDisableHandler(void)
+void __cdecl16far miceDisableHandler(void...)
 
 {
   code *pcVar1;
@@ -250,7 +256,7 @@ void __cdecl16far miceDisableHandler(void)
 
 /* 2d63:0190 */
 
-uint16_t __cdecl16far miceButton0PressStates(void)
+uint16_t __cdecl16far miceButton0PressStates(void...)
 
 {
   code *pcVar1;
@@ -265,7 +271,7 @@ uint16_t __cdecl16far miceButton0PressStates(void)
 
 /* 2d63:01a7 */
 
-void __cdecl16far miceSetPosition(uint16_t col,uint16_t row)
+void __cdecl16far miceSetPosition(uint16_t col,uint16_t row,...)
 
 {
   code *pcVar1;
@@ -279,24 +285,21 @@ void __cdecl16far miceSetPosition(uint16_t col,uint16_t row)
 
 /* 2d63:01bf */
 
-uint8_t __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int startIndex)
+undefined1 __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int startIndex,...)
 
 {
-  uint8_t *puVar1;
-  uint8_t *puVar2;
-  undefined2 uVar3;
+  undefined1 *puVar1;
+  undefined1 *in_stack_00000004;
   
-  out(0x3c8,paletteSeg);
-  uVar3 = (undefined2)((ulong)paletteOfs >> 0x10);
-  puVar2 = (uint8_t *)paletteOfs;
+  out(0x3c8,(*(uint8_t *)((uint8_t *)&(paletteOfs) + 2)));
   do {
-    out(0x3c9,*puVar2);
-    puVar1 = puVar2 + 2;
-    out(0x3c9,puVar2[1]);
-    puVar2 = puVar2 + 3;
+    out(0x3c9,*in_stack_00000004);
+    puVar1 = in_stack_00000004 + 2;
+    out(0x3c9,in_stack_00000004[1]);
+    in_stack_00000004 = in_stack_00000004 + 3;
     out(0x3c9,*puVar1);
-    startIndex = startIndex + -1;
-  } while (startIndex != 0);
+    _paletteSeg = _paletteSeg + -1;
+  } while (_paletteSeg != 0);
   return *puVar1;
 }
 
@@ -304,23 +307,20 @@ uint8_t __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int st
 
 /* 2d63:01df */
 
-uint8_t __cdecl16far vgaSetPalette8bit(uint8_t *pal)
+undefined1 __cdecl16far vgaSetPalette8bit(uint8_t *pal,...)
 
 {
-  uint8_t *puVar1;
+  undefined1 *puVar1;
   int iVar2;
-  uint8_t *puVar3;
-  undefined2 uVar4;
+  undefined1 *in_stack_00000004;
   
   out(0x3c8,0);
   iVar2 = 0x100;
-  uVar4 = (undefined2)((ulong)pal >> 0x10);
-  puVar3 = (uint8_t *)pal;
   do {
-    out(0x3c9,*puVar3);
-    puVar1 = puVar3 + 2;
-    out(0x3c9,puVar3[1]);
-    puVar3 = puVar3 + 3;
+    out(0x3c9,*in_stack_00000004);
+    puVar1 = in_stack_00000004 + 2;
+    out(0x3c9,in_stack_00000004[1]);
+    in_stack_00000004 = in_stack_00000004 + 3;
     out(0x3c9,*puVar1);
     iVar2 = iVar2 + -1;
   } while (iVar2 != 0);
@@ -368,7 +368,7 @@ uint8_t __cdecl16far vgaSetPalette8bit(uint8_t *pal)
        uint16_t adjusted_length = DI - dest;
    } */
 
-int __cdecl16far unrle(far_t src,far_t dst,uint16_t len)
+int __cdecl16far unrle(far_t src,far_t dst,uint16_t len,...)
 
 {
   undefined1 *puVar1;
@@ -382,16 +382,14 @@ int __cdecl16far unrle(far_t src,far_t dst,uint16_t len)
   uint16_t pps;
   uint16_t s;
   uint16_t d;
-  uint16_t uVar7;
+  uint16_t in_stack_00000004;
   uint32_t ps;
   uint8_t val;
   uint32_t pd;
   uint8_t run_val;
   
-  uVar7 = src.seg;
-  d = dst.ofs;
-  end = len + d;
-  puVar5 = (undefined1 *)src.ofs;
+  end = dst.seg + src.seg;
+  puVar5 = (undefined1 *)in_stack_00000004;
   do {
     do {
       pps = (uint16_t)puVar5;
@@ -401,8 +399,8 @@ int __cdecl16far unrle(far_t src,far_t dst,uint16_t len)
     } while (bVar2 == 0x80);
     if (bVar2 < 0x80) {
       for (uVar6 = (uint)(byte)(bVar2 + 1); uVar6 != 0; uVar6 = uVar6 - 1) {
-        puVar4 = (undefined1 *)d;
-        d = d + 1;
+        puVar4 = (undefined1 *)src.seg;
+        src.seg = src.seg + 1;
         puVar1 = (undefined1 *)s;
         s = s + 1;
         *puVar4 = *puVar1;
@@ -414,45 +412,44 @@ int __cdecl16far unrle(far_t src,far_t dst,uint16_t len)
       s = pps + 2;
       uVar3 = *puVar1;
       for (i = (uint16_t)(byte)i; i != 0; i = i - 1) {
-        puVar1 = (undefined1 *)d;
-        d = d + 1;
+        puVar1 = (undefined1 *)src.seg;
+        src.seg = src.seg + 1;
         *puVar1 = uVar3;
       }
     }
     puVar5 = (undefined1 *)s;
-  } while (d < end);
-  return s - src.ofs;
+  } while (src.seg < end);
+  return s - in_stack_00000004;
 }
 
 
 
 /* 2d63:0241 */
 
-int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz)
+int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz,...)
 
 {
   char *pcVar1;
   byte bVar2;
   char cVar3;
-  byte *pbVar4;
+  char *pcVar4;
   uint uVar5;
   uint16_t i;
   uint16_t end;
   uint16_t ps;
   uint16_t s;
   uint16_t d;
-  undefined2 in_stack_0000000a;
-  int in_stack_0000000c;
+  uint16_t in_stack_00000004;
   uint32_t q;
   
-  end = in_stack_0000000c + sz;
-  pbVar4 = src;
+  end = (*(uint16_t *)((uint8_t *)&(dst) + 2)) + (int)(*(uint16_t *)((uint8_t *)&(src) + 2));
+  pcVar4 = (char *)in_stack_00000004;
   do {
     do {
-      ps = (uint16_t)pbVar4;
+      ps = (uint16_t)pcVar4;
       s = ps + 1;
       bVar2 = *(byte *)ps;
-      pbVar4 = (byte *)(char *)s;
+      pcVar4 = (char *)s;
     } while (bVar2 == 0x80);
     if (bVar2 < 0x80) {
       uVar5 = (uint)(byte)(bVar2 + 1);
@@ -460,9 +457,9 @@ int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz)
         pcVar1 = (char *)s;
         s = s + 1;
         if (*pcVar1 != '\0') {
-          *(char *)sz = *pcVar1;
+          *(*(uint16_t *)((uint8_t *)&(src) + 2)) = *pcVar1;
         }
-        sz = sz + 1;
+        (*(uint16_t *)((uint8_t *)&(src) + 2)) = (*(uint16_t *)((uint8_t *)&(src) + 2)) + 1;
         uVar5 = uVar5 - 1;
       } while (uVar5 != 0);
     }
@@ -472,38 +469,38 @@ int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz)
       s = ps + 2;
       cVar3 = *pcVar1;
       if (cVar3 == '\0') {
-        sz = sz + i;
+        (*(uint16_t *)((uint8_t *)&(src) + 2)) = (*(uint16_t *)((uint8_t *)&(src) + 2)) + i;
       }
       else {
         for (; i != 0; i = i - 1) {
-          pcVar1 = (char *)sz;
-          sz = sz + 1;
+          pcVar1 = (*(uint16_t *)((uint8_t *)&(src) + 2));
+          (*(uint16_t *)((uint8_t *)&(src) + 2)) = (*(uint16_t *)((uint8_t *)&(src) + 2)) + 1;
           *pcVar1 = cVar3;
         }
       }
     }
-    pbVar4 = (byte *)s;
-  } while (sz < end);
-  return s - (int)src;
+    pcVar4 = (char *)s;
+  } while ((*(uint16_t *)((uint8_t *)&(src) + 2)) < end);
+  return s - in_stack_00000004;
 }
 
 
 
 /* 2d63:0292 */
 
-void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor)
+void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor,...)
 
 {
   uint16_t count;
   uint8_t *p;
+  uint8_t *in_stack_00000004;
   
-  p = (uint8_t *)pixels.ofs;
   count = 64000;
   do {
-    if (*p == scolor) {
-      *p = dcolor;
+    if (*in_stack_00000004 == (uint8_t)pixels.seg) {
+      *in_stack_00000004 = scolor;
     }
-    p = p + 1;
+    in_stack_00000004 = in_stack_00000004 + 1;
     count = count - 1;
   } while (count != 0);
   return;
@@ -513,31 +510,30 @@ void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor)
 
 /* 2d63:02b5 */
 
-void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_sz,uint mask)
+void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_sz,uint mask,...)
 
 {
   uint16_t edst;
   uint16_t erc;
   uint16_t psrc;
   uint16_t pdst;
-  int in_stack_00000010;
-  uint in_stack_00000012;
+  char *in_stack_00000004;
   
-  erc = mask + skip;
-  edst = in_stack_00000010 + (int)dst;
-  for (; (dst < edst && ((uint)skip < erc)); skip = skip + 1) {
-    if ((in_stack_00000012 & 1) != 0) {
-      if (dst_sz == 0) {
-        if (*(char *)skip != '\0') {
-          *dst = *(char *)skip;
+  erc = skip + (int)(*(uint16_t *)((uint8_t *)&(dst) + 2));
+  edst = src_sz + (int)in_stack_00000004;
+  for (; (in_stack_00000004 < edst && ((*(uint16_t *)((uint8_t *)&(dst) + 2)) < erc)); (*(uint16_t *)((uint8_t *)&(dst) + 2)) = (*(uint16_t *)((uint8_t *)&(dst) + 2)) + 1) {
+    if ((dst_sz & 1U) != 0) {
+      if ((*(uint16_t *)((uint8_t *)&(src) + 2)) == 0) {
+        if (*(*(uint16_t *)((uint8_t *)&(dst) + 2)) != '\0') {
+          *in_stack_00000004 = *(*(uint16_t *)((uint8_t *)&(dst) + 2));
         }
-        dst = dst + 1;
+        in_stack_00000004 = in_stack_00000004 + 1;
       }
       else {
-        dst_sz = dst_sz + -1;
+        (*(uint16_t *)((uint8_t *)&(src) + 2)) = (*(uint16_t *)((uint8_t *)&(src) + 2)) + -1;
       }
     }
-    in_stack_00000012 = in_stack_00000012 >> 1 | (uint)((in_stack_00000012 & 1) != 0) << 0xf;
+    dst_sz = (uint)dst_sz >> 1 | (uint)((dst_sz & 1U) != 0) << 0xf;
   }
   return;
 }
@@ -569,9 +565,73 @@ int16_t __cdecl16far countRunLength(char *src,uint16_t avail,uint16_t maxRun)
 
 
 /* 2d63:032d */
-/* DECOMPILATION FAILED: 
-Low-level Error: Overlapping input varnodes */
-void rle_line(void) { /* failed */ }
+
+/* WARNING: Restarted to delay deadcode elimination for space: stack */
+
+int __cdecl16far rle_line(uint8_t *src,uint8_t *dst,uint16_t npixels,...)
+
+{
+  char *pcVar1;
+  char *pcVar2;
+  uint uVar3;
+  int iVar4;
+  uint16_t end;
+  uint16_t pps;
+  uint16_t c;
+  uint16_t ps;
+  uint16_t pd;
+  char *in_stack_00000004;
+  
+  end = (*(uint16_t *)((uint8_t *)&(dst) + 2)) + (int)in_stack_00000004;
+  ps = (uint16_t)in_stack_00000004;
+  pd = (uint16_t)(*(uint16_t *)((uint8_t *)&(src) + 2));
+L_rle_line_0343:
+  do {
+    uVar3 = end - ps;
+    if (0x7f < uVar3) {
+      uVar3 = 0x80;
+    }
+    pps = ps;
+    do {
+      pps = pps + 1;
+      if ((char *)(ps + uVar3) <= pps) break;
+    } while (*(char *)ps == *(char *)pps);
+    c = pps - ps;
+    if (c < 3) {
+      ps = ps + 1;
+      iVar4 = ps - (int)in_stack_00000004;
+      if (((byte)iVar4 < 0x80) && (ps < end)) goto L_rle_line_0343;
+      *(byte *)pd = (byte)iVar4 - 1;
+      for (; pd = pd + 1, iVar4 != 0; iVar4 = iVar4 + -1) {
+        pcVar1 = in_stack_00000004;
+        in_stack_00000004 = in_stack_00000004 + 1;
+        *(char *)pd = *pcVar1;
+      }
+    }
+    else {
+      if (in_stack_00000004 != (char *)ps) {
+        iVar4 = ps - (int)in_stack_00000004;
+        *(char *)pd = (char)iVar4 + -1;
+        for (; pd = pd + 1, ps = (uint16_t)in_stack_00000004, iVar4 != 0; iVar4 = iVar4 + -1) {
+          pcVar1 = in_stack_00000004;
+          in_stack_00000004 = in_stack_00000004 + 1;
+          *(char *)pd = *pcVar1;
+        }
+      }
+      pcVar2 = (char *)(pd + 1);
+      *(char *)pd = '\x01' - (char)c;
+      pd = pd + 2;
+      *pcVar2 = *(char *)ps;
+      in_stack_00000004 = (char *)(ps + c);
+    }
+    ps = (uint16_t)in_stack_00000004;
+    if (end <= in_stack_00000004) {
+      return pd - (int)(*(uint16_t *)((uint8_t *)&(src) + 2));
+    }
+  } while( true );
+}
+
+
 
 /* 2d63:03b6 */
 
@@ -608,33 +668,32 @@ void rle_line(void) { /* failed */ }
        }
    } */
 
-int __cdecl16far unrle_mirror(byte *src,byte *dst,int len)
+int __cdecl16far unrle_mirror(byte *src,byte *dst,int len,...)
 
 {
   undefined1 *puVar1;
   byte bVar2;
   undefined1 uVar3;
   undefined1 *puVar4;
-  byte *pbVar5;
+  undefined1 *puVar5;
   uint16_t cnt;
   uint uVar6;
   uint16_t ppsrc;
   uint16_t psrc;
   uint16_t pdst;
-  undefined2 in_stack_0000000a;
-  int in_stack_0000000c;
+  uint16_t in_stack_00000004;
   uint32_t pd;
   uint32_t ps;
   uint8_t b;
   
-  pdst = (in_stack_0000000c + len) - 1;
-  pbVar5 = src;
+  pdst = (int)(*(uint16_t *)((uint8_t *)&(src) + 2)) + (*(uint16_t *)((uint8_t *)&(dst) + 2)) + -1;
+  puVar5 = (undefined1 *)in_stack_00000004;
   do {
     do {
-      ppsrc = (uint16_t)pbVar5;
+      ppsrc = (uint16_t)puVar5;
       psrc = ppsrc + 1;
       bVar2 = *(byte *)ppsrc;
-      pbVar5 = (undefined1 *)psrc;
+      puVar5 = (undefined1 *)psrc;
     } while (bVar2 == 0x80);
     if (bVar2 < 0x80) {
       cnt = (uint16_t)(byte)(bVar2 + 1);
@@ -657,16 +716,16 @@ int __cdecl16far unrle_mirror(byte *src,byte *dst,int len)
         *puVar1 = uVar3;
       }
     }
-    pbVar5 = (byte *)psrc;
-  } while ((uint)len <= pdst);
-  return psrc - (int)src;
+    puVar5 = (undefined1 *)psrc;
+  } while ((*(uint16_t *)((uint8_t *)&(src) + 2)) <= pdst);
+  return psrc - in_stack_00000004;
 }
 
 
 
 /* 2d63:03fc */
 
-int16_t __cdecl16far drawLine2(char *src,char *dst,uint16_t count)
+int16_t __cdecl16far drawLine2(char *src,char *dst,uint16_t count,...)
 
 {
   byte *pbVar1;
@@ -675,13 +734,10 @@ int16_t __cdecl16far drawLine2(char *src,char *dst,uint16_t count)
   byte *pbVar4;
   byte *pbVar5;
   byte *pbVar6;
-  undefined2 uVar7;
-  undefined2 uVar8;
+  byte *in_stack_00000004;
   
-  uVar8 = (undefined2)((ulong)src >> 0x10);
-  uVar7 = (undefined2)((ulong)dst >> 0x10);
-  pbVar6 = (byte *)dst + (count - 1);
-  pbVar5 = (byte *)src;
+  pbVar6 = (*(uint16_t *)((uint8_t *)&(src) + 2)) + (*(uint16_t *)((uint8_t *)&(dst) + 2)) + -1;
+  pbVar5 = in_stack_00000004;
   do {
     do {
       pbVar4 = pbVar5;
@@ -716,8 +772,8 @@ int16_t __cdecl16far drawLine2(char *src,char *dst,uint16_t count)
         }
       }
     }
-  } while ((byte *)dst <= pbVar6);
-  return (int)pbVar5 - (int)(byte *)src;
+  } while ((*(uint16_t *)((uint8_t *)&(src) + 2)) <= pbVar6);
+  return (int)pbVar5 - (int)in_stack_00000004;
 }
 
 
@@ -727,56 +783,54 @@ int16_t __cdecl16far drawLine2(char *src,char *dst,uint16_t count)
 /* [R7] body shape: scan */
 
 void __cdecl16far
-driver_scan1(far_t buf,uint16_t count,uint8_t fill,uint8_t threshold,far_t pattern,uint16_t index)
+driver_scan1(far_t buf,uint16_t count,uint8_t fill,uint8_t threshold,far_t pattern,uint16_t index,
+            ...)
 
 {
   byte *pbVar1;
-  uint8_t *puVar2;
-  uint8_t uVar3;
-  uint8_t *puVar4;
-  uint16_t uVar5;
+  char *pcVar2;
+  char cVar3;
+  char *in_stack_00000004;
   
-  uVar5 = buf.seg;
-  puVar4 = (uint8_t *)buf.ofs;
-  if (fill == 0x0) {
+  if ((char)count == '\0') {
     do {
-      while (uVar3 = *puVar4, uVar3 == 0x0) {
-        puVar4 = puVar4 + 1;
-        count = count - 1;
-        if (count == 0) {
+      while (cVar3 = *in_stack_00000004, cVar3 == '\0') {
+        in_stack_00000004 = in_stack_00000004 + 1;
+        buf.seg = buf.seg - 1;
+        if (buf.seg == 0) {
           return;
         }
       }
-      pbVar1 = (byte *)(index + pattern.ofs);
-      index = index + 1 & 0xff;
-      if (threshold <= *pbVar1) {
-        uVar3 = 0x0;
+      pbVar1 = (byte *)(pattern.seg + _threshold);
+      pattern.seg = pattern.seg + 1 & 0xff;
+      if (fill <= *pbVar1) {
+        cVar3 = '\0';
       }
-      puVar2 = puVar4;
-      puVar4 = puVar4 + 1;
-      *puVar2 = uVar3;
-      count = count - 1;
-    } while (count != 0);
+      pcVar2 = in_stack_00000004;
+      in_stack_00000004 = in_stack_00000004 + 1;
+      *pcVar2 = cVar3;
+      buf.seg = buf.seg - 1;
+    } while (buf.seg != 0);
   }
   else {
     do {
-      while (*puVar4 != 0x0) {
-        index = index + 1 & 0xff;
-        if (*(byte *)(index + pattern.ofs) < threshold) {
-          *puVar4 = fill;
+      while (*in_stack_00000004 != '\0') {
+        pattern.seg = pattern.seg + 1 & 0xff;
+        if (*(byte *)(pattern.seg + _threshold) < fill) {
+          *in_stack_00000004 = (char)count;
           break;
         }
-        puVar2 = puVar4;
-        puVar4 = puVar4 + 1;
-        *puVar2 = 0x0;
-        count = count - 1;
-        if (count == 0) {
+        pcVar2 = in_stack_00000004;
+        in_stack_00000004 = in_stack_00000004 + 1;
+        *pcVar2 = '\0';
+        buf.seg = buf.seg - 1;
+        if (buf.seg == 0) {
           return;
         }
       }
-      count = count - 1;
-      puVar4 = puVar4 + 1;
-    } while (count != 0);
+      buf.seg = buf.seg - 1;
+      in_stack_00000004 = in_stack_00000004 + 1;
+    } while (buf.seg != 0);
   }
   return;
 }
@@ -787,48 +841,50 @@ driver_scan1(far_t buf,uint16_t count,uint8_t fill,uint8_t threshold,far_t patte
 
 /* draws a line between two screen positions in one colour */
 
-void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,uint8_t colour)
+void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,uint8_t colour,...)
 
 {
-  uint8_t *puVar1;
-  int iVar2;
+  undefined1 *puVar1;
+  uint8_t *puVar2;
   int iVar3;
+  int iVar4;
   undefined2 unaff_ES;
+  undefined1 *in_stack_00000004;
   far_t *pfStack_8;
   
-  iVar3 = row1;
-  iVar2 = (int)ofs2 - (int)ofs1;
-  if (iVar2 == 0) {
-    iVar3 = row2 - row1;
-    if (row2 < row1) {
+  puVar2 = ofs1;
+  iVar3 = row1 - (int)in_stack_00000004;
+  if (iVar3 == 0) {
+    iVar3 = (int)ofs2 - (int)ofs1;
+    if ((int)ofs2 < (int)ofs1) {
       iVar3 = -iVar3;
     }
     iVar3 = iVar3 + 1;
     driver_drawLine_compute();
     do {
-      *ofs1 = colour;
-      ofs1 = ofs1 + 0x140;
+      *in_stack_00000004 = (undefined1)row2;
+      in_stack_00000004 = in_stack_00000004 + 0x140;
       iVar3 = iVar3 + -1;
     } while (iVar3 != 0);
   }
   else {
-    if (iVar2 < 0) {
-      iVar2 = -iVar2;
+    if (iVar3 < 0) {
+      iVar3 = -iVar3;
+      LOCK();
+      in_stack_00000004 = (undefined1 *)row1;
+      UNLOCK();
       LOCK();
       ofs1 = ofs2;
       UNLOCK();
-      LOCK();
-      row1 = row2;
-      UNLOCK();
-      row2 = iVar3;
+      ofs2 = puVar2;
     }
-    iVar3 = row2 - row1;
-    if (iVar3 != 0) {
-      if (iVar3 < 0) {
-        iVar3 = -iVar3;
+    iVar4 = (int)ofs2 - (int)ofs1;
+    if (iVar4 != 0) {
+      if (iVar4 < 0) {
+        iVar4 = -iVar4;
       }
       pfStack_8 = (far_t *)(CPKeys + 5);
-      if (iVar2 < iVar3) {
+      if (iVar3 < iVar4) {
         pfStack_8 = (far_t *)(CPKeys + 0xb);
       }
       driver_drawLine_compute();
@@ -838,10 +894,10 @@ void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,
       return;
     }
     driver_drawLine_compute();
-    for (iVar2 = iVar2 + 1; iVar2 != 0; iVar2 = iVar2 + -1) {
-      puVar1 = ofs1;
-      ofs1 = ofs1 + 1;
-      *puVar1 = colour;
+    for (iVar3 = iVar3 + 1; iVar3 != 0; iVar3 = iVar3 + -1) {
+      puVar1 = in_stack_00000004;
+      in_stack_00000004 = in_stack_00000004 + 1;
+      *puVar1 = (undefined1)row2;
     }
   }
   return;
@@ -898,42 +954,41 @@ void __cdecl16far driver_loop1(uint x1,uint x2,uint16_t y,uint8_t colour,uint16_
 /* fills the rectangle (x1,y1)-(x2,y2) with one colour */
 
 undefined2 __cdecl16far
-driver_fillRect(uint x1,uint y1,uint x2,uint y2,uint8_t colour,uint16_t dstSeg)
+driver_fillRect(uint x1,uint y1,uint x2,uint y2,uint8_t colour,uint16_t dstSeg,...)
 
 {
-  uint8_t *puVar1;
+  undefined1 *puVar1;
   uint uVar2;
   undefined2 in_AX;
   uint uVar3;
   int iVar4;
   int iVar5;
   int iVar6;
-  uint8_t *puVar7;
+  undefined1 *puVar7;
+  uint in_stack_00000004;
   
-  uVar2 = y2;
-  uVar3 = x2;
+  uVar2 = x2;
+  uVar3 = y1;
+  if (y1 < in_stack_00000004) {
+    y1 = in_stack_00000004;
+    in_stack_00000004 = uVar3;
+  }
   if (x2 < x1) {
     x2 = x1;
-    x1 = uVar3;
+    x1 = uVar2;
   }
-  if (y2 < y1) {
-    y2 = y1;
-    y1 = uVar2;
-  }
-  uVar3 = CONCAT11((char)y1,(char)(y1 >> 8));
-  puVar7 = (uint8_t *)(x1 + uVar3 + (uVar3 >> 2));
-  iVar4 = (y2 - y1) + 1;
-  iVar6 = (x2 - x1) + 1;
-  iVar5 = iVar6;
+  uVar3 = CONCAT11((char)x1,(char)(x1 >> 8));
+  puVar7 = (undefined1 *)(in_stack_00000004 + uVar3 + (uVar3 >> 2));
+  iVar4 = (x2 - x1) + 1;
+  iVar6 = (y1 - in_stack_00000004) + 1;
   do {
-    for (; iVar5 != 0; iVar5 = iVar5 + -1) {
+    for (iVar5 = iVar6; iVar5 != 0; iVar5 = iVar5 + -1) {
       puVar1 = puVar7;
       puVar7 = puVar7 + 1;
-      *puVar1 = colour;
+      *puVar1 = (undefined1)y2;
     }
     puVar7 = puVar7 + (0x140 - iVar6);
     iVar4 = iVar4 + -1;
-    iVar5 = iVar6;
   } while (iVar4 != 0);
   return in_AX;
 }
@@ -944,16 +999,18 @@ driver_fillRect(uint x1,uint y1,uint x2,uint y2,uint8_t colour,uint16_t dstSeg)
 
 /* [R7] body shape: compute */
 
-void __cdecl16far driver_compute3(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg)
+void __cdecl16far
+driver_compute3(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg,...)
 
 {
   undefined2 *puVar1;
+  int in_stack_00000004;
   
-  puVar1 = (undefined2 *)(ofs + (uint)y * 0x140);
-  *puVar1 = CONCAT11(colour1,colour1);
-  *(uint8_t *)(puVar1 + 0xa0) = colour1;
-  *(uint8_t *)((int)puVar1 + 0x141) = colour2;
-  puVar1[0x140] = CONCAT11(colour2,colour2);
+  puVar1 = (undefined2 *)(in_stack_00000004 + (ofs & 0xffU) * 0x140);
+  *puVar1 = CONCAT11(y,y);
+  *(byte *)(puVar1 + 0xa0) = y;
+  *(uint8_t *)((int)puVar1 + 0x141) = colour1;
+  puVar1[0x140] = CONCAT11(colour1,colour1);
   return;
 }
 
@@ -963,16 +1020,18 @@ void __cdecl16far driver_compute3(int ofs,byte y,uint8_t colour1,uint8_t colour2
 
 /* [R7] body shape: compute */
 
-void __cdecl16far driver_compute4(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg)
+void __cdecl16far
+driver_compute4(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg,...)
 
 {
   undefined2 *puVar1;
+  int in_stack_00000004;
   
-  puVar1 = (undefined2 *)(ofs + (uint)y * 0x140);
-  *puVar1 = CONCAT11(colour1,colour1);
-  *(uint8_t *)((int)puVar1 + 0x141) = colour1;
-  *(uint8_t *)(puVar1 + 0xa0) = colour2;
-  puVar1[0x140] = CONCAT11(colour2,colour2);
+  puVar1 = (undefined2 *)(in_stack_00000004 + (ofs & 0xffU) * 0x140);
+  *puVar1 = CONCAT11(y,y);
+  *(byte *)((int)puVar1 + 0x141) = y;
+  *(uint8_t *)(puVar1 + 0xa0) = colour1;
+  puVar1[0x140] = CONCAT11(colour1,colour1);
   return;
 }
 
@@ -980,7 +1039,7 @@ void __cdecl16far driver_compute4(int ofs,byte y,uint8_t colour1,uint8_t colour2
 
 /* 2d63:06bf */
 
-bool __cdecl16far digSoundPlaying(void)
+bool __cdecl16far digSoundPlaying(void...)
 
 {
   code *pcVar1;
@@ -995,7 +1054,7 @@ bool __cdecl16far digSoundPlaying(void)
 
 /* 2d63:06d1 */
 
-void __cdecl16far digPlayPreformatedSound(void)
+void __cdecl16far digPlayPreformatedSound(void...)
 
 {
   code *pcVar1;
@@ -1023,7 +1082,7 @@ void __cdecl16far digPlayPreformatedData(void)
 
 /* 2d63:06fb */
 
-void __cdecl16far digStopCurrentSound(void)
+void __cdecl16far digStopCurrentSound(void...)
 
 {
   code *pcVar1;
@@ -1037,7 +1096,7 @@ void __cdecl16far digStopCurrentSound(void)
 
 /* 2d63:070d */
 
-void __cdecl16far digPreformatSound(void)
+void __cdecl16far digPreformatSound(void...)
 
 {
   code *pcVar1;
@@ -1057,7 +1116,7 @@ void __cdecl16far digPreformatSound(void)
    the latter case, call AX=0701h to determine whether IBMSND is
    installed) */
 
-bool __cdecl16far digIsInstalled(void)
+bool __cdecl16far digIsInstalled(void...)
 
 {
   code *pcVar1;
@@ -1088,7 +1147,7 @@ return_false:
 
 /* 2d63:075f */
 
-void __cdecl16far midPlaySequence(uint16_t sequence)
+void __cdecl16far midPlaySequence(uint16_t sequence,...)
 
 {
   code *pcVar1;
@@ -1116,7 +1175,7 @@ void __cdecl16far midSegueSequence(void)
 
 /* 2d63:078c */
 
-void __cdecl16far midRegisterXMIDI(void)
+void __cdecl16far midRegisterXMIDI(void...)
 
 {
   code *pcVar1;
@@ -1130,7 +1189,7 @@ void __cdecl16far midRegisterXMIDI(void)
 
 /* 2d63:07aa */
 
-void __cdecl16far midMidiStop(void)
+void __cdecl16far midMidiStop(void...)
 
 {
   code *pcVar1;
@@ -1144,7 +1203,7 @@ void __cdecl16far midMidiStop(void)
 
 /* 2d63:07bc */
 
-void __cdecl16far midGetSequenceStatus(void)
+void __cdecl16far midGetSequenceStatus(void...)
 
 {
   code *pcVar1;
@@ -1158,7 +1217,7 @@ void __cdecl16far midGetSequenceStatus(void)
 
 /* 2d63:07ce */
 
-bool __cdecl16far midIsLoaded(void)
+bool __cdecl16far midIsLoaded(void...)
 
 {
   bool bVar1;
@@ -1180,7 +1239,7 @@ bool __cdecl16far midIsLoaded(void)
 
 /* 2d63:07fb */
 
-void __cdecl16far midLoadDriver(void)
+void __cdecl16far midLoadDriver(void...)
 
 {
   code *pcVar1;
@@ -1194,7 +1253,7 @@ void __cdecl16far midLoadDriver(void)
 
 /* 2d63:0819 */
 
-void __cdecl16far digSetSterioPanning(void)
+void __cdecl16far digSetSterioPanning(void...)
 
 {
   code *pcVar1;
@@ -1208,7 +1267,7 @@ void __cdecl16far digSetSterioPanning(void)
 
 /* 2d63:082e */
 
-void __cdecl16far midSetRelativeValue(void)
+void __cdecl16far midSetRelativeValue(void...)
 
 {
   code *pcVar1;
@@ -1224,26 +1283,29 @@ void __cdecl16far midSetRelativeValue(void)
 
 /* [R7] body shape: compute */
 
-void __cdecl16far driver_compute5(uint16_t x1,byte y1,uint16_t x2,byte y2,uint16_t x3,byte y3)
+void __cdecl16far driver_compute5(uint16_t x1,byte y1,uint16_t x2,byte y2,uint16_t x3,byte y3,...)
 
 {
   byte bVar1;
-  byte bVar2;
+  undefined2 in_stack_00000004;
   
-  bVar2 = y3;
-  bVar1 = y2;
-  if (y2 < y1) {
-    y2 = y1;
-    y1 = bVar1;
+  bVar1 = (byte)x1;
+  if ((byte)x2 < (byte)x1) {
+    (*(uint8_t *)((uint8_t *)&(x1))) = (byte)x2;
+    in_stack_00000004 = _y1;
+    (*(uint8_t *)((uint8_t *)&(x2))) = bVar1;
   }
-  if (y3 < y1) {
-    y3 = y1;
-    y1 = bVar2;
+  bVar1 = (byte)x1;
+  if ((byte)x3 < (byte)x1) {
+    in_stack_00000004 = _y2;
+    bVar1 = (byte)x3;
+    (*(uint8_t *)((uint8_t *)&(x3))) = (byte)x1;
   }
-  if (y3 < y2) {
-    y2 = y3;
+  (*(uint8_t *)((uint8_t *)&(x1))) = bVar1;
+  if ((byte)x3 < (byte)x2) {
+    (*(uint8_t *)((uint8_t *)&(x2))) = (byte)x3;
   }
-  if (y2 != y1) {
+  if ((byte)x2 != (byte)x1) {
     driver_scan2();
   }
   driver_scan2();
@@ -1317,33 +1379,34 @@ void __cdecl16near driver_scan2(void)
 
 /* Fills the horizontal span x1..x2 at y, clipped to the given rect. */
 
-void __cdecl16far driver_fillSpan(int x1,int x2,byte y,uint8_t colour,int *rect)
+void __cdecl16far driver_fillSpan(int x1,int x2,byte y,uint8_t colour,int *rect,...)
 
 {
-  uint8_t *puVar1;
+  byte *pbVar1;
   int iVar2;
   int iVar3;
-  uint8_t *puVar4;
-  undefined2 in_stack_0000000e;
+  byte *pbVar4;
+  int in_stack_00000004;
   
-  iVar3 = x2;
-  if (x2 < x1) {
-    iVar3 = x1;
-    x1 = x2;
+  iVar3 = x1;
+  if (x1 < in_stack_00000004) {
+    iVar3 = in_stack_00000004;
+    in_stack_00000004 = x1;
   }
-  if (x1 < *_rect) {
-    x1 = *_rect;
+  if (in_stack_00000004 < *(int *)CONCAT22((int *)rect,_colour)) {
+    in_stack_00000004 = *(int *)CONCAT22((int *)rect,_colour);
   }
-  if (rect[2] < iVar3) {
-    iVar3 = rect[2];
+  if (_colour[2] < iVar3) {
+    iVar3 = _colour[2];
   }
-  if (((x1 <= iVar3) && (*(byte *)(rect + 1) <= y)) && (y <= *(byte *)(rect + 3))) {
-    puVar4 = (uint8_t *)(x1 + (uint)y * 0x140);
-    iVar2 = rect[4];
-    for (iVar3 = (iVar3 - x1) + 1; iVar3 != 0; iVar3 = iVar3 + -1) {
-      puVar1 = puVar4;
-      puVar4 = puVar4 + 1;
-      *puVar1 = colour;
+  if (((in_stack_00000004 <= iVar3) && (*(byte *)(_colour + 1) <= (byte)x2)) &&
+     ((byte)x2 <= *(byte *)(_colour + 3))) {
+    pbVar4 = (byte *)(in_stack_00000004 + (x2 & 0xffU) * 0x140);
+    iVar2 = _colour[4];
+    for (iVar3 = (iVar3 - in_stack_00000004) + 1; iVar3 != 0; iVar3 = iVar3 + -1) {
+      pbVar1 = pbVar4;
+      pbVar4 = pbVar4 + 1;
+      *pbVar1 = y;
     }
   }
   return;
@@ -1353,7 +1416,7 @@ void __cdecl16far driver_fillSpan(int x1,int x2,byte y,uint8_t colour,int *rect)
 
 /* 2d63:0a18 */
 
-uint8_t __cdecl16far vda_query(void)
+uint8_t __cdecl16far vda_query(void...)
 
 {
   code *pcVar1;
@@ -1370,7 +1433,7 @@ uint8_t __cdecl16far vda_query(void)
 
 /* ORs a mask into every word of a rectangle of the map-flag array (row stride 0x128 bytes). */
 
-void __cdecl16far driver_setMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int y2,uint mask)
+void __cdecl16far driver_setMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int y2,uint mask,...)
 
 {
   int iVar1;
@@ -1378,15 +1441,16 @@ void __cdecl16far driver_setMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int y
   int iVar3;
   uint *puVar4;
   uint *puVar5;
+  int in_stack_00000004;
   
-  puVar4 = (uint *)((int)buf + x1 * 2 + y1 * 0x128);
-  iVar1 = (y2 - y1) + 1;
-  iVar3 = (x2 - x1) + 1;
+  puVar4 = (uint *)(in_stack_00000004 + (*(uint16_t *)((uint8_t *)&(buf) + 2)) * 2 + x1 * 0x128);
+  iVar1 = (x2 - x1) + 1;
+  iVar3 = (y1 - (*(uint16_t *)((uint8_t *)&(buf) + 2))) + 1;
   iVar2 = iVar3;
   puVar5 = puVar4;
   do {
     do {
-      *puVar4 = *puVar4 | mask;
+      *puVar4 = *puVar4 | y2;
       puVar4 = puVar4 + 1;
       iVar2 = iVar2 + -1;
     } while (iVar2 != 0);
@@ -1404,7 +1468,7 @@ void __cdecl16far driver_setMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int y
 
 /* ANDs every word of a rectangle of the map-flag array with a mask (row stride 0x128 bytes). */
 
-void __cdecl16far driver_clearMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int y2,uint mask)
+void __cdecl16far driver_clearMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int y2,uint mask,...)
 
 {
   int iVar1;
@@ -1412,15 +1476,16 @@ void __cdecl16far driver_clearMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int
   int iVar3;
   uint *puVar4;
   uint *puVar5;
+  int in_stack_00000004;
   
-  puVar4 = (uint *)((int)buf + x1 * 2 + y1 * 0x128);
-  iVar1 = (y2 - y1) + 1;
-  iVar3 = (x2 - x1) + 1;
+  puVar4 = (uint *)(in_stack_00000004 + (*(uint16_t *)((uint8_t *)&(buf) + 2)) * 2 + x1 * 0x128);
+  iVar1 = (x2 - x1) + 1;
+  iVar3 = (y1 - (*(uint16_t *)((uint8_t *)&(buf) + 2))) + 1;
   iVar2 = iVar3;
   puVar5 = puVar4;
   do {
     do {
-      *puVar4 = *puVar4 & mask;
+      *puVar4 = *puVar4 & y2;
       puVar4 = puVar4 + 1;
       iVar2 = iVar2 + -1;
     } while (iVar2 != 0);
@@ -1513,11 +1578,12 @@ void __cdecl16far driver_unrleSprite(int *spr,far_t dst)
   byte *pbVar9;
   byte *pbVar10;
   byte *pbVar11;
-  undefined2 in_stack_0000000a;
+  undefined2 uVar12;
   
-  pbVar10 = (byte *)(dst.seg + *(int *)CONCAT22(dst.ofs,spr) * 0x140);
-  pbVar9 = (byte *)(spr + 2);
-  iVar8 = spr[1];
+  uVar12 = (undefined2)((ulong)spr >> 0x10);
+  pbVar10 = (byte *)(dst.ofs + *spr * 0x140);
+  pbVar9 = (byte *)((int *)spr + 2);
+  iVar8 = ((int *)spr)[1];
   do {
     pbVar11 = pbVar10;
     for (bVar7 = *pbVar9; pbVar9 = pbVar9 + 1, bVar7 != 0; bVar7 = bVar7 - 1) {
@@ -1570,11 +1636,12 @@ int __cdecl16far vgaDoSomethingWithPalette(int *paletteData)
   int *piVar7;
   int iVar8;
   int iVar9;
-  undefined2 in_stack_00000006;
+  undefined2 uVar10;
   
+  uVar10 = (undefined2)((ulong)paletteData >> 0x10);
   iVar8 = 0;
-  piVar7 = paletteData + 1;
-  iVar3 = *_paletteData;
+  piVar7 = (int *)paletteData + 1;
+  iVar3 = *paletteData;
   for (iVar6 = iVar3; iVar6 != 0; iVar6 = iVar6 + -1) {
     puVar1 = (undefined1 *)((int)piVar7 + 1);
     uVar4 = (undefined1)((uint)iVar3 >> 8);
@@ -1625,10 +1692,12 @@ uint8_t __cdecl16far vgaWaitVerticalRetrace(void)
 
 /* returns the low four bits of the argument */
 
-uint __cdecl16far lowNibble(uint value)
+uint __cdecl16far lowNibble(uint value,...)
 
 {
-  return value & 0xf;
+  uint in_stack_00000004;
+  
+  return in_stack_00000004 & 0xf;
 }
 
 

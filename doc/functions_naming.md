@@ -3150,3 +3150,140 @@ in_stack_ occurrences: 0
 
 Parameters: 1615 -> 1613 (the two unused declarations removed).  The four pushed words are
 recorded here and in the symbol comments.
+
+
+## Near and far parameters: the wrong-data-segment class
+
+### The defect
+
+In this model `char *` is a **two-byte near pointer** and `char *32` is a four-byte far
+pointer (`getReturnType().getLength()` returns 2 and 4).  Borland large model passes every
+ordinary pointer as a four-byte segment:offset pair, so a near-typed parameter makes Ghidra
+consume only the offset word and leave the segment word to the next parameter.
+
+`auditfarparams` found **170 parameters in 144 functions** that the body reads with `LES`/`LDS`
+from the parameter's own stack slot while the model typed them as two-byte near pointers.  The
+canonical case is `fmVsprintf` at `474a:0953`:
+
+```
+474a:096d  FF 76 FE   PUSH word ptr [BP + -0x2]     ; built from LEA AX,[BP+0xa] and SS
+474a:0970  FF 76 FC   PUSH word ptr [BP + -0x4]
+474a:0973  FF 76 08   PUSH word ptr [BP + 0x8]      ; argument 1, segment half
+474a:0976  FF 76 06   PUSH word ptr [BP + 0x6]      ; argument 1, offset half
+```
+
+`[BP+6]` and `[BP+8]` are one far pointer and `[BP+0xa]` is the second, i.e.
+
+```c
+char * fmVsprintf(char *32 fmt, char *32 arg)
+```
+
+but the model had `char *fmt, char *arg` (4 bytes of arguments instead of 8).  Ghidra then
+decompiled the body as `CONCAT22(arg,fmt)`, and at call sites it took the **segment** constant
+`0x2410` as a near pointer, which symbolized inside the building-name table as
+`(char *)"puppetmaker" + 3` - literally a reference into the wrong data segment.
+
+### The fix, and its evidence
+
+`FixFarParams` widens a parameter to a four-byte pointer only when the body loads it with
+`LES`/`LDS`, and absorbs the following parameter only when that parameter is **named** as a
+segment half (`...Seg`).  `FixFarParamOffsets` then lays the whole parameter list out at
+explicit stack offsets, because Ghidra does not reflow stack parameters after a type change.
+
+```
+LES rows 317
+  near-ptr 2B before: 170   after: 0
+  already far/4B    : 289
+OVERFLOW (body reads past the parameter area) before: 140   after: 75
+```
+
+21 parameters were removed as segment halves, each by name: `bufSeg`, `dstSeg`, `vramSeg`,
+`defaultSeg`, `foundIndexSeg` (x3), `xSeg`, `gfxListSeg`, `resource1Seg`, `resource2Seg`,
+`resource3Seg`, `outFlagSeg` (x2), `lastDirSeg`, `sameDirCountSeg`, `rectSeg` (x3),
+`pageOutSeg`.  The parameter total therefore went 1613 -> 1592, and every one of the 21 is a
+proven second half of a pointer, not a lost argument.
+
+The 53 routines whose prototypes were rebuilt this way include the C runtime
+(`strcat`, `strcmp`, `strcpy`, `_fstricmp`, `write`, `_fsetmem`, `_open`, `read`,
+`fflush`, `ftell`, `_open`, `mkdir`, `unlink`, `getcurdir`, `chdir`, `setvbuf`), which is
+what large-model Borland requires: those all take far pointers.
+
+### `TypeThunks` was destroying prototypes (fixed)
+
+An `ovr_<name>` stub **shares** its target's parameter list: `getParameters()` on the stub
+returns the target's array, and `removeParameter()` on the stub deletes from the target.
+`TypeThunks` used to remove every stub parameter and re-add the target's, which therefore
+emptied the target instead of copying to the stub.  Running it deleted the parameters of
+**308 real functions** at once.  They were restored from the pre-damage inventory
+(`tmp/inv_after_far.txt`) and re-widened from `LES` evidence.
+
+`TypeThunks` is now report-only and states the inheritance rule; `SetVarArgs` and
+`SetProtoSeq` handle explicit-storage edits, which do not touch the shared list.
+`stubs_matching_target=455 differing=0`.
+
+## Byte returns typed as pointers: the `(char *)"arena" + 4` class
+
+`AuditReturns` walks back from every `RET` and records which return registers the tail
+actually writes.  Nineteen functions declared `char *` (a two-byte near return in `AX`) write
+only `AL`/`AH`.  `attact_textArena` is the canonical case:
+
+```
+3f0b:1bec  83 7E FE FF   CMP word ptr [BP + -0x2],-0x1
+3f0b:1bf0  74 04         JZ  ...
+3f0b:1bf2  B0 01         MOV AL,0x1
+3f0b:1bf6  B0 00         MOV AL,0x0
+```
+
+The tail returns one byte, but earlier code had left `AH = 0x24` (the high byte of the
+`MOV AX,0x2410` that loads the DGROUP segment into `ES`).  Declaring the return `char *`
+makes Ghidra read `AX`, so `0x2401` and `0x2400` were rendered as `(char *)"arena" + 5` and
+`(char *)"arena" + 4`.
+
+Eighteen of the nineteen were changed to `bool` (`chargen_switch` is left alone: its body is
+42 bytes with eleven `return` statements, so the return type is not its only defect).  The
+result, verified by decompiling in place:
+
+```c
+bool __cdecl16far attact_textArena(...)
+{
+  ...
+  return uStack_4 != 0xffff;
+}
+```
+
+```c
+bool __cdecl16far season_textMainCastle(void)
+{
+  ...
+      return true;
+  ...
+  return false;
+}
+```
+
+## What the remaining `(char *)"literal" + N` expressions are
+
+After both fixes the export still contains 511 such expressions, and the largest single
+group is `(char *)"puppetmaker" + 3` with **325 occurrences**.  That literal is at DGROUP
+offset `0x240d`, so `+3` is the constant **`0x2410`**, which is also the value the game loads
+into `ES` as the DGROUP segment (`48ac:0064 MOV AX,0x2410`, eleven times in
+`ovc18_showLeaderView`).
+
+They are therefore *not* a parameter-typing artefact.  With `fmVsprintf` correctly typed the
+call site becomes the honest form
+
+```c
+ovr_fmVsprintf((char *)CONCAT22(uStack_6,(char *)"puppetmaker" + 3), ...)
+```
+
+i.e. the decompiler has an **untracked segment local** (`uStack_6`, read but never written in
+the decompiled view) and falls back to the default data space to symbolize the offset
+`0x2410`, which lands three bytes into a building-name string.  Two further checks rule out
+the obvious alternatives:
+
+* the pcode for `8E C2` is `(register,0x100) = (register,0x8)`, i.e. `ES = DX` - the listing's
+  `MOV DX,ES` is only a display inversion in `DumpRange`, so segment handling is correct;
+* naming the constant with an equate (`DGROUP_SEG = 0x2410`, 4657 operand references) does
+  not change the decompiled text at all, so the symbolization is not driven by the equate
+  table.  The equate was removed again to avoid labelling a constant that is also used as an
+  offset.

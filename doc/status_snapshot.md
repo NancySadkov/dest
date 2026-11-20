@@ -272,3 +272,30 @@ of the model can mistake it for evidence:
 | field | `agntG_t+0x94` | `wpnAmmo` | after `wpn_name`, constant 0x14 |
 
 `ListSyms pad_` and `ListSyms unused_` both return 0, so no placeholder prefix remains.
+
+
+## Translation units: all 27 bare `ovcNN` blocks named
+
+`ExportRecovered.moduleName()` derives the module name from the memory block, and 27 overlay
+blocks were still named with the bare overlay number (`OVC24`), which can only produce
+`ovc24`.  Those blocks were renamed in the project to `OVC24_entities.c` and so on, so the
+exporter needs no change and no post-processing.  The topic is inferred from the functions the
+module contains; `doc/module_topics.md` records the basis for each one.
+
+```
+unnamed translation units before: 27
+unnamed translation units after : 0
+```
+
+## Near/far parameters
+
+170 parameters in 144 functions were read with `LES`/`LDS` off their own stack slot while
+typed as two-byte near pointers.  All are now four-byte pointers, and 21 parameters whose
+names declare them as segment halves (`...Seg`) were absorbed into the pointer they belong to.
+Detail and evidence: `doc/functions_naming.md`, section "Near and far parameters".
+
+```
+LES near-ptr parameters: 170 -> 0
+parameters:              1613 -> 1592  (21 proven segment halves)
+auto-named parameters:   0
+```

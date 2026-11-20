@@ -49,16 +49,18 @@ undefined2 __cdecl16far agnt_compute1(int y)
 
 /* Clamps an x coordinate to 0..0xd2. */
 
-int __cdecl16far agnt_clampX(int x)
+int __cdecl16far agnt_clampX(int x,...)
 
 {
-  if (x < 0) {
-    x = 0;
+  int in_stack_00000004;
+  
+  if (in_stack_00000004 < 0) {
+    in_stack_00000004 = 0;
   }
-  if (0xd2 < x) {
-    x = 0xd2;
+  if (0xd2 < in_stack_00000004) {
+    in_stack_00000004 = 0xd2;
   }
-  return x;
+  return in_stack_00000004;
 }
 
 
@@ -72,14 +74,15 @@ undefined1 __cdecl16far agnt_compute3(agnt_t *agnt)
 {
   undefined1 uVar1;
   int iVar2;
-  agnt_t *agnt_00;
-  undefined2 uVar3;
+  agnt_t *paVar3;
+  undefined2 unaff_BP;
+  agnt_t *paVar4;
   
-  uVar3 = (undefined2)((ulong)agnt >> 0x10);
-  agnt_00 = (agnt_t *)agnt;
-  if (((((int)agnt_00->y < 0x15) || (agnt_00->moveState == 0x1)) && ((int)agnt->x < 0xd3)) &&
+  paVar4 = (agnt_t *)((ulong)agnt >> 0x10);
+  paVar3 = (agnt_t *)agnt;
+  if (((((int)paVar3->y < 0x15) || (paVar3->moveState == 0x1)) && ((int)agnt->x < 0xd3)) &&
      (-1 < (int)agnt->x)) {
-    iVar2 = ovr_ovc49_usesStExit(agnt_00);
+    iVar2 = ovr_ovc49_usesStExit((agnt_t *)CONCAT22(unaff_BP,paVar4),paVar3);
     uVar1 = (undefined1)iVar2;
   }
   else {
@@ -94,12 +97,12 @@ undefined1 __cdecl16far agnt_compute3(agnt_t *agnt)
 
 /* [R7] body shape: compute */
 
-bool __cdecl16far agnt_compute4(char *flag)
+bool __cdecl16far agnt_compute4(char *flag,...)
 
 {
-  undefined2 in_stack_00000006;
+  char *in_stack_00000004;
   
-  return *_flag != '\0';
+  return *(char *)CONCAT22((char *)flag,in_stack_00000004) != '\0';
 }
 
 
@@ -108,18 +111,18 @@ bool __cdecl16far agnt_compute4(char *flag)
 
 /* Computes the screen extents of the agent's current animation frame. */
 
-undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result)
+undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,...)
 
 {
-  uint8_t uVar1;
-  undefined2 uVar2;
-  int iVar3;
-  bool bVar4;
-  int iVar5;
-  agnt_t *paVar6;
-  int *piVar7;
-  undefined2 uVar8;
-  undefined2 in_stack_0000000a;
+  char cVar1;
+  int iVar2;
+  bool bVar3;
+  int iVar4;
+  int *piVar5;
+  uint unaff_DI;
+  int *in_stack_00000004;
+  uint8_t *flag;
+  undefined2 uVar6;
   char cStack_e;
   char cStack_d;
   int iStack_c;
@@ -127,37 +130,38 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result)
   int iStack_8;
   int iStack_6;
   
-  uVar8 = (undefined2)((ulong)agnt >> 0x10);
-  paVar6 = (agnt_t *)agnt;
-  if ((int)paVar6->y < 0x15) {
-    uVar1 = paVar6->faction;
-    uVar2 = *(undefined2 *)((int)&paVar6->frames + 2);
-    piVar7 = (int *)(*(int *)&paVar6->frames + (uint)paVar6->frameIndex * 4);
-    iVar5 = piVar7[1];
-    iVar3 = *piVar7;
-    iStack_6 = (int)paVar6->y >> 1;
+  if (in_stack_00000004[1] < 0x15) {
+    cVar1 = *(char *)((int)in_stack_00000004 + 0x2f);
+    piVar5 = (int *)(*(int *)((int)in_stack_00000004 + 0x13) +
+                    (uint)*(byte *)(in_stack_00000004 + 9) * 4);
+    iVar4 = piVar5[1];
+    iVar2 = *piVar5;
+    iStack_6 = in_stack_00000004[1] >> 1;
     if (iStack_6 < 0) {
       iStack_6 = 0;
     }
     if (9 < iStack_6) {
       iStack_6 = 9;
     }
-    if (paVar6->level == 0x0) {
+    if (*(char *)((int)in_stack_00000004 + 0xf) == '\0') {
       cStack_d = '\x01';
-      iStack_a = ((int)((int)(*(((agntG_t *)paVar6->gdata)->extents + 2))[0] +
-                        *(int *)(iVar3 + 0x17) + agnt->x) >> 1) + -1;
+      iStack_a = ((int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x21) +
+                  *(int *)(iVar2 + 0x17) + *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004) >> 1)
+                 + -1;
       iStack_c = iStack_a +
-                 ((int)((agntG_t *)paVar6->gdata)->extents[2][1] -
-                  (int)(*(((agntG_t *)paVar6->gdata)->extents + 2))[0] >> 1);
+                 ((int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x22) -
+                  (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x21) >> 1);
     }
     else {
       cStack_d = -1;
-      iStack_a = ((int)((-*(int *)(iVar3 + 0x17) -
-                        (int)(*(((agntG_t *)paVar6->gdata)->extents + 2))[0]) + agnt->x) >> 1) + 1;
+      iStack_a = ((-*(int *)(iVar2 + 0x17) -
+                  (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x21)) +
+                  *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004) >> 1) + 1;
       iStack_c = iStack_a -
-                 ((int)((agntG_t *)paVar6->gdata)->extents[2][1] -
-                  (int)(*(((agntG_t *)paVar6->gdata)->extents + 2))[0] >> 1);
+                 ((int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x22) -
+                  (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x21) >> 1);
     }
+    flag = (uint8_t *)((ulong)unaff_DI << 0x10);
     if (iStack_a < 0) {
       iStack_a = 0;
     }
@@ -171,31 +175,37 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result)
       iStack_c = 0x68;
     }
     while( true ) {
-      for (iStack_8 = 0; iStack_8 <= (int)((agntG_t *)paVar6->gdata)->extents[2][2] >> 1;
+      for (iStack_8 = 0;
+          iStack_8 <=
+          (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x23) >> 1;
           iStack_8 = iStack_8 + 1) {
         cStack_e = -1;
         while (((cStack_e < '\x02' && (iStack_8 != 0)) || ((cStack_e == -1 && (iStack_8 == 0))))) {
-          iVar5 = iStack_6 + iStack_8 * cStack_e;
-          if ((-1 < iVar5) && (iVar5 < 10)) {
-            if ((*(char *)(iVar5 * 0x69 + iStack_a + 0x8fa) != '\0') &&
-               (((*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) <= AgntCount &&
-                 (*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) * 0x34 + -5) !=
-                  uVar1)) &&
-                (*(char *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x10) == '\0')
-                ))) {
-              *_result = *(uint8_t *)(iVar5 * 0x69 + iStack_a + 0x8fa);
-              bVar4 = agnt_compute4((char *)result);
-              if (bVar4) {
-                return *_result;
+          uVar6 = (undefined2)((ulong)flag >> 0x10);
+          flag = (uint8_t *)CONCAT22(uVar6,(uint8_t *)(int)cStack_e);
+          iVar4 = iStack_6 + iStack_8 * cStack_e;
+          if ((-1 < iVar4) && (iVar4 < 10)) {
+            if ((*(char *)(iVar4 * 0x69 + iStack_a + 0x8fa) != '\0') &&
+               (((*(byte *)(iVar4 * 0x69 + iStack_a + 0x8fa) <= AgntCount &&
+                 (*(char *)((uint)*(byte *)(iVar4 * 0x69 + iStack_a + 0x8fa) * 0x34 + -5) != cVar1))
+                && (*(char *)((uint)*(byte *)(iVar4 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x10) ==
+                    '\0')))) {
+              *(undefined1 *)CONCAT22((uint8_t *)result,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) =
+                   *(undefined1 *)(iVar4 * 0x69 + iStack_a + 0x8fa);
+              flag = (uint8_t *)CONCAT22(uVar6,(uint8_t *)result);
+              bVar3 = agnt_compute4((char *)flag,(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
+              if (bVar3) {
+                return *(undefined1 *)CONCAT22((uint8_t *)result,(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
               }
             }
-            if (((*(char *)(iVar5 * 0x69 + iStack_a + 0x4e0) != '\0') &&
-                (*(byte *)(iVar5 * 0x69 + iStack_a + 0x4e0) <= AgntCount)) &&
-               ((*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x4e0) * 0x34 + -5) != uVar1
-                && (*(char *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x10) ==
-                    '\0')))) {
-              *_result = *(uint8_t *)(iVar5 * 0x69 + iStack_a + 0x4e0);
-              return *_result;
+            if (((*(char *)(iVar4 * 0x69 + iStack_a + 0x4e0) != '\0') &&
+                (*(byte *)(iVar4 * 0x69 + iStack_a + 0x4e0) <= AgntCount)) &&
+               ((*(char *)((uint)*(byte *)(iVar4 * 0x69 + iStack_a + 0x4e0) * 0x34 + -5) != cVar1 &&
+                (*(char *)((uint)*(byte *)(iVar4 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x10) == '\0')
+                ))) {
+              *(undefined1 *)CONCAT22((uint8_t *)result,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) =
+                   *(undefined1 *)(iVar4 * 0x69 + iStack_a + 0x4e0);
+              return *(undefined1 *)CONCAT22((uint8_t *)result,(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
             }
           }
           cStack_e = cStack_e + '\x02';
@@ -204,10 +214,10 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result)
       if (iStack_a == iStack_c) break;
       iStack_a = iStack_a + cStack_d;
     }
-    *_result = 0x0;
+    *(undefined1 *)CONCAT22((uint8_t *)result,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = 0;
   }
   else {
-    *_result = 0x0;
+    *(undefined1 *)CONCAT22((uint8_t *)result,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = 0;
   }
   return 0;
 }
@@ -219,21 +229,20 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result)
 /* WARNING: Type propagation algorithm not settling */
 /* [R6] touches strengthMax, frameIndex */
 
-undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
+undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out,...)
 
 {
-  uint8_t uVar1;
-  undefined2 uVar2;
-  int iVar3;
-  undefined4 uVar4;
-  bool bVar5;
-  undefined1 uVar6;
-  int iVar7;
-  agnt_t *paVar8;
-  int *piVar9;
-  undefined2 uVar10;
-  undefined2 in_stack_0000000a;
-  char in_stack_0000000c;
+  char cVar1;
+  int iVar2;
+  undefined4 uVar3;
+  bool bVar4;
+  undefined1 uVar5;
+  int iVar6;
+  int *piVar7;
+  uint unaff_DI;
+  int *in_stack_00000004;
+  byte *flag;
+  uint uVar8;
   char cStack_e;
   char cStack_d;
   int iStack_c;
@@ -241,42 +250,44 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
   int iStack_8;
   int iStack_6;
   
-  uVar10 = (undefined2)((ulong)agnt >> 0x10);
-  paVar8 = (agnt_t *)agnt;
-  if (((paVar8->strength < paVar8->strengthMax) && ((paVar8->flags & 0x820) == 0)) &&
-     ((((agntG_t *)paVar8->gdata)->flags & 0x20) == 0)) {
-    *_out = in_stack_0000000c + 1;
-    uVar6 = 1;
+  if (((*(byte *)((int)in_stack_00000004 + 0x21) < *(byte *)(in_stack_00000004 + 0x11)) &&
+      ((*(uint *)((int)in_stack_00000004 + 0x2b) & 0x820) == 0)) &&
+     ((*(uint *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x3c) & 0x20) == 0)) {
+    *(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = (*(uint8_t *)((uint8_t *)&(out) + 2)) + 1;
+    uVar5 = 1;
   }
   else {
-    uVar1 = paVar8->faction;
-    uVar2 = *(undefined2 *)((int)&paVar8->frames + 2);
-    piVar9 = (int *)(*(int *)&paVar8->frames + (uint)paVar8->frameIndex * 4);
-    iVar7 = piVar9[1];
-    iVar3 = *piVar9;
-    iStack_6 = (int)paVar8->y >> 1;
+    cVar1 = *(char *)((int)in_stack_00000004 + 0x2f);
+    piVar7 = (int *)(*(int *)((int)in_stack_00000004 + 0x13) +
+                    (uint)*(byte *)(in_stack_00000004 + 9) * 4);
+    iVar6 = piVar7[1];
+    iVar2 = *piVar7;
+    iStack_6 = in_stack_00000004[1] >> 1;
     if (iStack_6 < 0) {
       iStack_6 = 0;
     }
     if (9 < iStack_6) {
       iStack_6 = 9;
     }
-    if (paVar8->level == 0x0) {
+    if (*(char *)((int)in_stack_00000004 + 0xf) == '\0') {
       cStack_d = '\x01';
-      iStack_a = ((int)((int)(*((agntG_t *)paVar8->gdata)->extents)[0] + *(int *)(iVar3 + 0x17) +
-                       agnt->x) >> 1) + -1;
+      iStack_a = ((int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1b) +
+                  *(int *)(iVar2 + 0x17) + *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004) >> 1)
+                 + -1;
       iStack_c = iStack_a +
-                 ((int)((agntG_t *)paVar8->gdata)->extents[0][1] -
-                  (int)(*((agntG_t *)paVar8->gdata)->extents)[0] >> 1);
+                 ((int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1c) -
+                  (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1b) >> 1);
     }
     else {
       cStack_d = -1;
-      iStack_a = ((int)((-*(int *)(iVar3 + 0x17) - (int)(*((agntG_t *)paVar8->gdata)->extents)[0]) +
-                       agnt->x) >> 1) + 1;
+      iStack_a = ((-*(int *)(iVar2 + 0x17) -
+                  (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1b)) +
+                  *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004) >> 1) + 1;
       iStack_c = iStack_a -
-                 ((int)((agntG_t *)paVar8->gdata)->extents[0][1] -
-                  (int)(*((agntG_t *)paVar8->gdata)->extents)[0] >> 1);
+                 ((int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1c) -
+                  (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1b) >> 1);
     }
+    flag = (byte *)((ulong)unaff_DI << 0x10);
     if (iStack_a < 0) {
       iStack_a = 0;
     }
@@ -290,56 +301,65 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
       iStack_c = 0x68;
     }
     for (; iStack_a != iStack_c; iStack_a = iStack_a + cStack_d) {
-      for (iStack_8 = 0; iStack_8 <= (int)((agntG_t *)paVar8->gdata)->extents[0][2] >> 1;
+      for (iStack_8 = 0;
+          iStack_8 <=
+          (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1d) >> 1;
           iStack_8 = iStack_8 + 1) {
         cStack_e = -1;
         while (((cStack_e < '\x02' && (iStack_8 != 0)) || ((cStack_e == -1 && (iStack_8 == 0))))) {
-          iVar7 = iStack_6 + iStack_8 * cStack_e;
-          if ((-1 < iVar7) && (iVar7 < 10)) {
-            if ((*(char *)(iVar7 * 0x69 + iStack_a + 0x8fa) != '\0') &&
-               ((((*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) <= AgntCount &&
-                  (*(byte *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x13) <
-                   *(byte *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x12))) &&
-                 (*(uint8_t *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -5) ==
-                  uVar1)) &&
-                ((*(uint8_t *)
-                   *(undefined4 *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x17)
-                  == uVar1 &&
-                 (uVar4 = *(undefined4 *)
-                           ((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x17),
-                 (*(uint *)((int)uVar4 + 0x3c) & 0x20) == 0)))))) {
-              *_out = *(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa);
-              bVar5 = agnt_compute4((char *)out);
-              if ((bVar5) &&
-                 ((*(byte *)((uint)*_out * 0x34 + -0x13) < *(byte *)((uint)*_out * 0x34 + -0x12) &&
-                  ((*(uint *)((uint)*_out * 0x34 + -9) & 0x820) == 0)))) {
-                return *(undefined1 *)(iVar7 * 0x69 + iStack_a + 0x8fa);
+          uVar8 = (uint)((ulong)flag >> 0x10);
+          flag = (byte *)CONCAT22(uVar8,(byte *)(int)cStack_e);
+          iVar6 = iStack_6 + iStack_8 * cStack_e;
+          if ((-1 < iVar6) && (iVar6 < 10)) {
+            if ((*(char *)(iVar6 * 0x69 + iStack_a + 0x8fa) != '\0') &&
+               ((((*(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa) <= AgntCount &&
+                  (flag = (byte *)((ulong)uVar8 << 0x10),
+                  *(byte *)((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x13) <
+                  *(byte *)((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x12))) &&
+                 (*(char *)((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa) * 0x34 + -5) == cVar1))
+                && ((*(char *)*(undefined4 *)
+                               ((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x17) ==
+                     cVar1 && (uVar3 = *(undefined4 *)
+                                        ((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa) * 0x34 +
+                                        -0x17), (*(uint *)((int)uVar3 + 0x3c) & 0x20) == 0)))))) {
+              *(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = *(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa)
+              ;
+              flag = (byte *)CONCAT22(uVar8,(byte *)out);
+              bVar4 = agnt_compute4((char *)flag,(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
+              if ((bVar4) &&
+                 ((flag = (byte *)((ulong)flag & 0xffff0000),
+                  *(byte *)((uint)*(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) * 0x34 + -0x13) <
+                  *(byte *)((uint)*(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) * 0x34 + -0x12) &&
+                  ((*(uint *)((uint)*(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) * 0x34 + -9) & 0x820)
+                   == 0)))) {
+                return *(undefined1 *)(iVar6 * 0x69 + iStack_a + 0x8fa);
               }
             }
-            if ((((*(char *)(iVar7 * 0x69 + iStack_a + 0x4e0) != '\0') &&
-                 (*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) <= AgntCount)) &&
-                (*(byte *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x13) <
-                 *(byte *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x12))) &&
-               (((*(uint8_t *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -5) ==
-                  uVar1 && (*(uint8_t *)
-                             *(undefined4 *)
-                              ((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x17) ==
-                            uVar1)) &&
-                (uVar4 = *(undefined4 *)
-                          ((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x17),
-                (*(uint *)((int)uVar4 + 0x3c) & 0x20) == 0)))) {
-              *_out = *(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0);
-              return *(undefined1 *)(iVar7 * 0x69 + iStack_a + 0x4e0);
+            if ((((*(char *)(iVar6 * 0x69 + iStack_a + 0x4e0) != '\0') &&
+                 (*(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0) <= AgntCount)) &&
+                (flag = (byte *)((ulong)flag & 0xffff0000),
+                *(byte *)((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x13) <
+                *(byte *)((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x12))) &&
+               (((*(char *)((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0) * 0x34 + -5) == cVar1
+                 && (*(char *)*(undefined4 *)
+                               ((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x17) ==
+                     cVar1)) &&
+                (uVar3 = *(undefined4 *)
+                          ((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x17),
+                (*(uint *)((int)uVar3 + 0x3c) & 0x20) == 0)))) {
+              *(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = *(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0)
+              ;
+              return *(undefined1 *)(iVar6 * 0x69 + iStack_a + 0x4e0);
             }
           }
           cStack_e = cStack_e + '\x02';
         }
       }
     }
-    *_out = 0;
-    uVar6 = 0;
+    *(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = 0;
+    uVar5 = 0;
   }
-  return uVar6;
+  return uVar5;
 }
 
 
@@ -348,36 +368,40 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
 
 /* [R6] touches AgntCount */
 
-bool __cdecl16far agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distance)
+bool __cdecl16far
+agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distance,...)
 
 {
-  uint8_t uVar1;
+  char cVar1;
   uint uVar2;
   uint uVar3;
-  uint16_t uVar4;
+  undefined2 uVar4;
   uint uVar5;
   uint uVar6;
-  agnt_t *paVar7;
-  undefined2 uVar8;
+  int unaff_DI;
+  int *in_stack_00000004;
   byte bStack_4;
   
-  uVar8 = (undefined2)((ulong)agnt >> 0x10);
-  paVar7 = (agnt_t *)agnt;
-  uVar1 = paVar7->faction;
-  *distance = 0xffff;
-  for (bStack_4 = 0; bStack_4 < AgntCount; bStack_4 = bStack_4 + 1) {
-    if ((*(uint8_t *)((uint)bStack_4 * 0x34 + 0x2f) != uVar1) &&
-       (uVar2 = *(int *)((uint)bStack_4 * 0x34) - agnt->x, uVar5 = (int)uVar2 >> 0xf,
-       uVar3 = *(int *)((uint)bStack_4 * 0x34 + 2) - paVar7->y, uVar6 = (int)uVar3 >> 0xf,
-       uVar2 = ((uVar2 ^ uVar5) - uVar5) + ((uVar3 ^ uVar6) - uVar6), uVar2 < *distance)) {
-      *distance = uVar2;
-      uVar4 = ovr_ovc07_signum(*(int *)((uint)bStack_4 * 0x34) - agnt->x);
-      *xDir = uVar4;
-      uVar4 = ovr_ovc07_signum(*(int *)((uint)bStack_4 * 0x34 + 2) - paVar7->y);
-      *yDir = uVar4;
+  cVar1 = *(char *)((int)in_stack_00000004 + 0x2f);
+  *(uint *)CONCAT22((uint16_t *)distance,(*(uint16_t *)((uint8_t *)&(yDir) + 2))) = 0xffff;
+  bStack_4 = 0;
+  while( true ) {
+    if (AgntCount <= bStack_4) break;
+    if ((*(char *)((uint)bStack_4 * 0x34 + 0x2f) != cVar1) &&
+       (uVar2 = *(int *)((uint)bStack_4 * 0x34) - *in_stack_00000004, uVar5 = (int)uVar2 >> 0xf,
+       uVar3 = *(int *)((uint)bStack_4 * 0x34 + 2) - in_stack_00000004[1], uVar6 = (int)uVar3 >> 0xf
+       , uVar2 = ((uVar2 ^ uVar5) - uVar5) + ((uVar3 ^ uVar6) - uVar6),
+       uVar2 < *(uint *)CONCAT22((uint16_t *)distance,(*(uint16_t *)((uint8_t *)&(yDir) + 2))))) {
+      *(uint *)CONCAT22((uint16_t *)distance,(*(uint16_t *)((uint8_t *)&(yDir) + 2))) = uVar2;
+      uVar4 = ovr_ovc07_signum(unaff_DI,*(int *)((uint)bStack_4 * 0x34) -
+                                        *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004));
+      *(undefined2 *)CONCAT22((uint16_t *)xDir,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = uVar4;
+      uVar4 = ovr_ovc07_signum(unaff_DI,*(int *)((uint)bStack_4 * 0x34 + 2) - in_stack_00000004[1]);
+      *(undefined2 *)CONCAT22((uint16_t *)yDir,(*(uint16_t *)((uint8_t *)&(xDir) + 2))) = uVar4;
     }
+    bStack_4 = bStack_4 + 1;
   }
-  return *distance != 0xffff;
+  return *(uint *)CONCAT22((uint16_t *)distance,(*(uint16_t *)((uint8_t *)&(yDir) + 2))) != 0xffff;
 }
 
 
@@ -386,20 +410,17 @@ bool __cdecl16far agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir
 
 /* [R6] touches animFrame */
 
-void __cdecl16far agnt_usesAnimFrame(agnt_t *agnt)
+void __cdecl16far agnt_usesAnimFrame(agnt_t *agnt,...)
 
 {
-  agnt_t *paVar1;
-  undefined2 uVar2;
+  int in_stack_00000004;
   
-  uVar2 = (undefined2)((ulong)agnt >> 0x10);
-  paVar1 = (agnt_t *)agnt;
-  paVar1->animFrame = 0xff;
-  paVar1->target = 0xff;
-  paVar1->health = 0x0;
-  paVar1->gindex = 0x0;
-  paVar1->flags = paVar1->flags & 0xfff5;
-  paVar1->variant = 0x0;
+  *(undefined1 *)(in_stack_00000004 + 0xe) = 0xff;
+  *(undefined1 *)(in_stack_00000004 + 0xc) = 0xff;
+  *(undefined1 *)(in_stack_00000004 + 0x10) = 0;
+  *(undefined1 *)(in_stack_00000004 + 0xd) = 0;
+  *(uint *)(in_stack_00000004 + 0x2b) = *(uint *)(in_stack_00000004 + 0x2b) & 0xfff5;
+  *(undefined1 *)(in_stack_00000004 + 0x2e) = 0;
   animBranchCode = 0;
   return;
 }
@@ -424,14 +445,14 @@ void __cdecl16far agnt_compute5(agnt_t *agnt)
 
 /* Advances the agent's animation frame unless bit 2 of its type record (agntG_t+0) is set. */
 
-void __cdecl16far agnt_advanceAnimFrame(agnt_t *agnt)
+void __cdecl16far agnt_advanceAnimFrame(agnt_t *agnt,...)
 
 {
-  agntG_t *paVar1;
+  undefined2 unaff_BP;
+  int in_stack_00000004;
   
-  paVar1 = ((agnt_t *)agnt)->gdata;
-  if ((((agntG_t *)paVar1)->flags3 & 4) == 0) {
-    agnt_usesAnimFrame(agnt);
+  if ((*(uint *)((int)*(undefined4 *)(in_stack_00000004 + 0x1d) + 0x40) & 4) == 0) {
+    agnt_usesAnimFrame((agnt_t *)CONCAT22(unaff_BP,(agnt_t *)agnt),in_stack_00000004);
   }
   return;
 }
@@ -442,52 +463,84 @@ void __cdecl16far agnt_advanceAnimFrame(agnt_t *agnt)
 
 /* Builds the agent's status text from its flags (charmed / diseased / held / paralyzed). */
 
-char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text)
+char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
 
 {
   char *pcVar1;
-  agnt_t *paVar2;
+  int iVar2;
   undefined2 uVar3;
-  char *in_stack_0000000a;
+  int in_stack_00000004;
   
-  uVar3 = (undefined2)((ulong)agnt >> 0x10);
-  paVar2 = (agnt_t *)agnt;
-  if ((paVar2->flags & 0x20) == 0) {
-    if ((paVar2->flags & 4) == 0) {
-      if ((paVar2->flags & 0x800) == 0) {
-        if ((*(uint *)((int)&(((entity_t *)paVar2->entity)->base).frames + 1) & 1) == 0) {
-          if ((paVar2->flags & 0x200) == 0) {
-            if ((paVar2->flags & 0x80) == 0) {
-              if ((paVar2->flags & 0x40) == 0) {
-                    /* WARNING: Load size is inaccurate */
-                pcVar1 = ((agntG_t *)paVar2->gdata)->name;
+  if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x20) == 0) {
+    if ((*(uint *)(in_stack_00000004 + 0x2b) & 4) == 0) {
+      if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x800) == 0) {
+        if ((*(uint *)((int)*(undefined4 *)(in_stack_00000004 + 0x17) + 0x14) & 1) == 0) {
+          if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x200) == 0) {
+            if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x80) == 0) {
+              if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x40) == 0) {
+                pcVar1 = (char *)*(undefined2 *)
+                                  ((int)*(undefined4 *)(in_stack_00000004 + 0x1d) + 0x24);
               }
               else {
-                pcVar1 = ovr_stsprintf(text,in_stack_0000000a,(char *)"held %s");
+                uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
+                iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
+                pcVar1 = ovr_stsprintf((char *)CONCAT22(0x83c,(char *)text),
+                                       (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),
+                                                        (char *)"puppetmaker" + 3),
+                                       (char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
               }
             }
             else {
-              pcVar1 = ovr_stsprintf(text,in_stack_0000000a,(char *)"sleeping %s");
+              uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
+              iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
+              pcVar1 = ovr_stsprintf((char *)CONCAT22(0x830,(char *)text),
+                                     (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),
+                                                      (char *)"puppetmaker" + 3),
+                                     (char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
             }
           }
           else {
-            pcVar1 = ovr_stsprintf(text,in_stack_0000000a,(char *)"paralyzed %s");
+            uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
+            iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
+            pcVar1 = ovr_stsprintf((char *)CONCAT22(0x823,(char *)text),
+                                   (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),
+                                                    (char *)"puppetmaker" + 3),
+                                   (char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
           }
         }
         else {
-          pcVar1 = ovr_stsprintf(text,in_stack_0000000a,(char *)"diseased %s");
+          uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
+          iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
+          pcVar1 = ovr_stsprintf((char *)CONCAT22(0x817,(char *)text),
+                                 (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),
+                                                  (char *)"puppetmaker" + 3),
+                                 (char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
         }
       }
       else {
-        pcVar1 = ovr_stsprintf(text,in_stack_0000000a,(char *)"stoned %s");
+        uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
+        iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
+        pcVar1 = ovr_stsprintf((char *)CONCAT22(0x80d,(char *)text),
+                               (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),
+                                                (char *)"puppetmaker" + 3),
+                               (char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
       }
     }
     else {
-      pcVar1 = ovr_stsprintf(text,in_stack_0000000a,(char *)"turned %s");
+      uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
+      iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
+      pcVar1 = ovr_stsprintf((char *)CONCAT22(0x803,(char *)text),
+                             (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),
+                                              (char *)"puppetmaker" + 3),
+                             (char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
     }
   }
   else {
-    pcVar1 = ovr_stsprintf(text,in_stack_0000000a,(char *)"charmed %s");
+    uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
+    iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
+    pcVar1 = ovr_stsprintf((char *)CONCAT22(0x7f8,(char *)text),
+                           (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),(char *)"puppetmaker" + 3)
+                           ,(char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
   }
   return pcVar1;
 }
@@ -499,13 +552,14 @@ char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text)
 /* Returns the ability modifier of a party sheet's stat (same thresholds as manage_abilityModifier).
     */
 
-undefined2 __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex)
+undefined2 __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex,...)
 
 {
   byte bVar1;
   undefined2 uVar2;
+  byte in_stack_00000004;
   
-  bVar1 = *(byte *)((int)*(undefined4 *)((uint)partyIndex << 2) + (uint)abilityIndex + 0x29);
+  bVar1 = *(byte *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2) + (uint)partyIndex + 0x29);
   if (bVar1 < 4) {
     uVar2 = 0xfd;
   }
@@ -536,12 +590,13 @@ undefined2 __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute8(agnt_t *agnt)
+byte __cdecl16far agnt_compute8(agnt_t *agnt,...)
 
 {
   byte bVar1;
+  int in_stack_00000004;
   
-  bVar1 = (byte)((agnt_t *)agnt)[1].y % 6;
+  bVar1 = *(byte *)(in_stack_00000004 + 0x36) % 6;
   if (3 < bVar1) {
     bVar1 = bVar1 - 6;
   }
@@ -554,18 +609,17 @@ byte __cdecl16far agnt_compute8(agnt_t *agnt)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute9(agnt_t *agnt)
+byte __cdecl16far agnt_compute9(agnt_t *agnt,...)
 
 {
-  entity_t *peVar1;
-  byte bVar2;
+  byte bVar1;
+  int in_stack_00000004;
   
-  peVar1 = ((agnt_t *)agnt)->entity;
-  bVar2 = ((entity_t *)peVar1)->dir % 6;
-  if (3 < bVar2) {
-    bVar2 = bVar2 - 6;
+  bVar1 = *(byte *)((int)*(undefined4 *)(in_stack_00000004 + 0x17) + 0x36) % 6;
+  if (3 < bVar1) {
+    bVar1 = bVar1 - 6;
   }
-  return bVar2;
+  return bVar1;
 }
 
 
@@ -574,12 +628,13 @@ byte __cdecl16far agnt_compute9(agnt_t *agnt)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute10(agnt_t *agnt)
+byte __cdecl16far agnt_compute10(agnt_t *agnt,...)
 
 {
   byte bVar1;
+  int in_stack_00000004;
   
-  bVar1 = (byte)(((ulong)(byte)((agnt_t *)agnt)[1].y / 6) % 6);
+  bVar1 = (byte)(((ulong)*(byte *)(in_stack_00000004 + 0x36) / 6) % 6);
   if (4 < bVar1) {
     bVar1 = bVar1 - 6;
   }
@@ -592,18 +647,17 @@ byte __cdecl16far agnt_compute10(agnt_t *agnt)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute11(agnt_t *agnt)
+byte __cdecl16far agnt_compute11(agnt_t *agnt,...)
 
 {
-  entity_t *peVar1;
-  byte bVar2;
+  byte bVar1;
+  int in_stack_00000004;
   
-  peVar1 = ((agnt_t *)agnt)->entity;
-  bVar2 = (byte)(((ulong)((entity_t *)peVar1)->dir / 6) % 6);
-  if (4 < bVar2) {
-    bVar2 = bVar2 - 6;
+  bVar1 = (byte)(((ulong)*(byte *)((int)*(undefined4 *)(in_stack_00000004 + 0x17) + 0x36) / 6) % 6);
+  if (4 < bVar1) {
+    bVar1 = bVar1 - 6;
   }
-  return bVar2;
+  return bVar1;
 }
 
 
@@ -612,20 +666,17 @@ byte __cdecl16far agnt_compute11(agnt_t *agnt)
 
 /* [R6] touches animFrame */
 
-undefined1 __cdecl16far agnt_usesAnimFrame2(agnt_t *agnt)
+undefined1 __cdecl16far agnt_usesAnimFrame2(agnt_t *agnt,...)
 
 {
   undefined1 uVar1;
-  agnt_t *paVar2;
-  undefined2 uVar3;
+  int in_stack_00000004;
   
-  uVar3 = (undefined2)((ulong)agnt >> 0x10);
-  paVar2 = (agnt_t *)agnt;
-  if (paVar2->animFrame == 0xff) {
-    if ((char)paVar2->health < '\x02') {
+  if (*(char *)(in_stack_00000004 + 0xe) == -1) {
+    if (*(char *)(in_stack_00000004 + 0x10) < '\x02') {
       uVar1 = 1;
     }
-    else if (paVar2->health == 0x4) {
+    else if (*(char *)(in_stack_00000004 + 0x10) == '\x04') {
       uVar1 = 1;
     }
     else {
@@ -644,28 +695,25 @@ undefined1 __cdecl16far agnt_usesAnimFrame2(agnt_t *agnt)
 
 /* [R7] body shape: compute */
 
-uint __cdecl16far agnt_compute12(agnt_t *a,agnt_t *b)
+uint __cdecl16far agnt_compute12(agnt_t *a,agnt_t *b,...)
 
 {
-  uint8_t uVar1;
-  uint uVar2;
-  undefined2 uVar3;
+  uint uVar1;
+  uint *in_stack_00000004;
   
-  uVar2 = a->x;
-  uVar3 = (undefined2)((ulong)b >> 0x10);
-  if ((int)uVar2 < (int)b->x) {
-    if (((agnt_t *)b)->level != 0x0) {
-      return CONCAT11((char)(uVar2 >> 8),1);
+  uVar1 = *(uint *)CONCAT22((agnt_t *)a,in_stack_00000004);
+  if ((int)uVar1 < *(int *)CONCAT22((agnt_t *)b,(*(uint16_t *)((uint8_t *)&(a) + 2)))) {
+    if (*(char *)((int)(*(uint16_t *)((uint8_t *)&(a) + 2)) + 0xf) != '\0') {
+      return CONCAT11((char)(uVar1 >> 8),1);
     }
   }
   else {
-    uVar1 = ((agnt_t *)b)->level;
-    uVar2 = (uint)(char)uVar1;
-    if (uVar2 == 0) {
-      return CONCAT11((char)uVar1 >> 7,1);
+    uVar1 = (uint)*(char *)((int)(*(uint16_t *)((uint8_t *)&(a) + 2)) + 0xf);
+    if (uVar1 == 0) {
+      return CONCAT11(*(char *)((int)(*(uint16_t *)((uint8_t *)&(a) + 2)) + 0xf) >> 7,1);
     }
   }
-  return uVar2 & 0xff00;
+  return uVar1 & 0xff00;
 }
 
 
@@ -674,7 +722,7 @@ uint __cdecl16far agnt_compute12(agnt_t *a,agnt_t *b)
 
 /* [R4] calls ovr_stExit */
 
-void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite)
+void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite,...)
 
 {
   int iVar1;
@@ -683,89 +731,88 @@ void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite)
   uint uVar4;
   uint uVar5;
   uint uVar6;
-  agnt_t *paVar7;
-  int *piVar8;
-  anm_t *paVar9;
-  undefined2 uVar10;
-  undefined2 uVar11;
-  undefined2 uVar12;
+  int *piVar7;
+  agnt_t *in_stack_00000004;
   uint uStack_10;
   
-  uVar10 = (undefined2)((ulong)agnt >> 0x10);
-  paVar7 = (agnt_t *)agnt;
-  iVar3 = (uint)paVar7->target * 0x34;
-  piVar8 = (int *)(*(int *)(iVar3 + 0x13) + (uint)*(byte *)(iVar3 + 0x12) * 4);
-  iVar1 = piVar8[1];
-  iVar2 = *piVar8;
+  iVar3 = (uint)in_stack_00000004->target * 0x34;
+  piVar7 = (int *)(*(int *)(iVar3 + 0x13) + (uint)*(byte *)(iVar3 + 0x12) * 4);
+  iVar1 = piVar7[1];
+  iVar2 = *piVar7;
   if (iVar2 == 0 && iVar1 == 0) {
                     /* WARNING: Subroutine does not return */
-    ovr_stExit(0x12);
+    ovr_stExit();
   }
-  uVar4 = *(int *)(iVar3 + 0x26) - paVar7->destX;
-  uStack_10 = (*(int *)(iVar3 + 0x28) - (uint)(byte)paVar7->destY) - (*(int *)(iVar2 + 0xd) >> 1);
+  uVar4 = *(int *)(iVar3 + 0x26) - in_stack_00000004->destX;
+  uStack_10 = (*(int *)(iVar3 + 0x28) - (uint)(byte)in_stack_00000004->destY) -
+              (*(int *)(iVar2 + 0xd) >> 1);
   if (((int)((uVar4 ^ (int)uVar4 >> 0xf) - ((int)uVar4 >> 0xf)) < 4) &&
      ((int)((uStack_10 ^ (int)uStack_10 >> 0xf) - ((int)uStack_10 >> 0xf)) < 4)) {
-    ovr_ovc41_resolveSpecialAttack_2(agnt,(uint)paVar7->target);
+    ovr_ovc41_resolveSpecialAttack
+              ((agnt_t *)CONCAT22((agnt_t *)agnt,in_stack_00000004),(uint)in_stack_00000004->target)
+    ;
     animBranchCode = 3;
-    agnt_usesAnimFrame(agnt);
+    agnt_usesAnimFrame();
   }
   else {
-    uVar11 = (undefined2)((ulong)anim >> 0x10);
-    paVar9 = (anm_t *)anim;
-    if (-uStack_10 == paVar9->maxDy || -paVar9->maxDy < (int)uStack_10) {
-      if (paVar9->maxDy < (int)uStack_10) {
-        uStack_10 = paVar9->maxDy;
+    if (-uStack_10 == *(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x11) || -*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x11) < (int)uStack_10)
+    {
+      if (*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x11) < (int)uStack_10) {
+        uStack_10 = *(uint *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x11);
       }
     }
     else {
-      uStack_10 = -paVar9->maxDy;
+      uStack_10 = -*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x11);
     }
-    uVar12 = (undefined2)((ulong)sprite >> 0x10);
-    if (((stg_tmp_t *)sprite)->cmap[5] != 0x0) {
-      *(char *)&paVar7->destY = (char)paVar7->destY + (char)uStack_10;
+    if (*(char *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 5) != '\0') {
+      *(char *)&in_stack_00000004->destY = (char)in_stack_00000004->destY + (char)uStack_10;
     }
-    if (paVar9->maxDx < (int)uVar4) {
-      uVar4 = paVar9->maxDx;
+    if (*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf) < (int)uVar4) {
+      uVar4 = *(uint *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf);
     }
-    else if (-uVar4 != paVar9->maxDx && (int)uVar4 <= -paVar9->maxDx) {
-      uVar4 = -paVar9->maxDx;
+    else if (-uVar4 != *(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf) && (int)uVar4 <= -*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf)) {
+      uVar4 = -*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf);
     }
-    if (((paVar9->flags & 4) == 0) &&
-       (((*(int *)(iVar3 + 0x28) - (uint)(byte)paVar7->destY != *(int *)(iVar2 + 0xd) >> 1 ||
-         ((*(char *)((int)&paVar7->destY + 1) == '\0' && ((int)uVar4 < 0)))) ||
-        ((*(char *)((int)&paVar7->destY + 1) != '\0' && (0 < (int)uVar4)))))) {
-      if (*(char *)((int)&paVar7->destY + 1) == '\0') {
-        uVar4 = paVar9->maxDx;
+    if (((*(byte *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x1c) & 4) == 0) &&
+       (((*(int *)(iVar3 + 0x28) - (uint)(byte)in_stack_00000004->destY !=
+          *(int *)(iVar2 + 0xd) >> 1 ||
+         ((*(char *)((int)&in_stack_00000004->destY + 1) == '\0' && ((int)uVar4 < 0)))) ||
+        ((*(char *)((int)&in_stack_00000004->destY + 1) != '\0' && (0 < (int)uVar4)))))) {
+      if (*(char *)((int)&in_stack_00000004->destY + 1) == '\0') {
+        uVar4 = *(uint *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf);
       }
       else {
-        uVar4 = -paVar9->maxDx;
+        uVar4 = -*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf);
       }
     }
-    if (((stg_tmp_t *)sprite)->cmap[5] != 0x0) {
-      paVar7->destX = paVar7->destX + uVar4;
+    if (*(char *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 5) != '\0') {
+      in_stack_00000004->destX = in_stack_00000004->destX + uVar4;
     }
-    uVar4 = *(int *)(iVar3 + 0x26) - paVar7->destX;
-    uVar5 = (*(int *)(iVar3 + 0x28) - (uint)(byte)paVar7->destY) - (*(int *)(iVar2 + 0xd) >> 1);
+    uVar4 = *(int *)(iVar3 + 0x26) - in_stack_00000004->destX;
+    uVar5 = (*(int *)(iVar3 + 0x28) - (uint)(byte)in_stack_00000004->destY) -
+            (*(int *)(iVar2 + 0xd) >> 1);
     uVar6 = (int)uVar4 >> 0xf;
     if (((int)((uVar4 ^ uVar6) - uVar6) < 4) &&
        (uVar4 = (int)uVar5 >> 0xf, (int)((uVar5 ^ uVar4) - uVar4) < 4)) {
-      ovr_ovc41_resolveSpecialAttack_2(agnt,(uint)paVar7->target);
+      ovr_ovc41_resolveSpecialAttack
+                ((agnt_t *)CONCAT22((agnt_t *)agnt,in_stack_00000004),
+                 (uint)in_stack_00000004->target);
       animBranchCode = 5;
-      agnt_usesAnimFrame(agnt);
+      agnt_usesAnimFrame();
     }
-    else if (((int)paVar7->destX < -0xe) || (0xe0 < (int)paVar7->destX)) {
+    else if (((int)in_stack_00000004->destX < -0xe) || (0xe0 < (int)in_stack_00000004->destX)) {
       animBranchCode = 4;
-      agnt_usesAnimFrame(agnt);
+      agnt_usesAnimFrame();
     }
     else {
-      paVar7->animFrame = paVar7->animFrame + 0x1;
-      if (paVar9->nframes <= paVar7->animFrame) {
-        if (paVar9->startFrame == 0xff) {
-          agnt_usesAnimFrame(agnt);
+      in_stack_00000004->animFrame = in_stack_00000004->animFrame + 0x1;
+      if (*(byte *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x1b) <= in_stack_00000004->animFrame) {
+        if (*(char *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x1a) == -1) {
+          agnt_usesAnimFrame();
           animBranchCode = 6;
         }
         else {
-          paVar7->animFrame = paVar9->startFrame;
+          in_stack_00000004->animFrame = *(uint8_t *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x1a);
         }
       }
     }
@@ -779,66 +826,74 @@ void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite)
 
 /* Draws the agent's current sprite frame, advances the counter and wraps at nframes. */
 
-void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
+void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type,...)
 
 {
-  char *pcVar1;
+  int iVar1;
   int iVar2;
   int iVar3;
   int iVar4;
   int iVar5;
-  agnt_t *paVar6;
-  stg_tmp_t *psVar7;
-  uint16_t y;
-  uint16_t uVar8;
-  int *piVar9;
-  int iVar10;
+  stg_tmp_t *psVar6;
+  int16_t x;
+  uint16_t uVar7;
+  int *piVar8;
+  int iVar9;
+  undefined2 unaff_SI;
+  byte in_stack_00000004;
   far_t gfx;
+  undefined1 mirror;
+  undefined1 uVar10;
   uint16_t uStack_e;
   uint16_t uStack_c;
   
-  paVar6 = (agnt_t *)((uint)index * 0x34);
-  uStack_c = *(uint16_t *)((int)&paVar6->frames + 2);
-  uStack_e = *(uint16_t *)&paVar6->frames;
-  piVar9 = (int *)(uStack_e + (uint)paVar6->frameIndex * 4);
-  iVar2 = piVar9[1];
-  iVar3 = *piVar9;
-  piVar9 = (int *)(uStack_e + (uint)(byte)paVar6->state * 4);
-  if (*piVar9 == 0 && piVar9[1] == 0) {
+  mirror = (undefined1)unaff_SI;
+  uVar10 = (undefined1)((uint)unaff_SI >> 8);
+  iVar5 = (uint)in_stack_00000004 * 0x34;
+  uStack_c = *(uint16_t *)(iVar5 + 0x15);
+  uStack_e = *(uint16_t *)(iVar5 + 0x13);
+  piVar8 = (int *)(uStack_e + (uint)*(byte *)(iVar5 + 0x12) * 4);
+  iVar1 = piVar8[1];
+  iVar2 = *piVar8;
+  piVar8 = (int *)(uStack_e + (uint)*(byte *)(iVar5 + 0x30) * 4);
+  if (*piVar8 == 0 && piVar8[1] == 0) {
     uStack_e = SprProjectiles.ofs;
     uStack_c = SprProjectiles.seg;
   }
-  piVar9 = (int *)(uStack_e + (uint)(byte)paVar6->state * 4);
-  iVar4 = piVar9[1];
-  iVar5 = *piVar9;
-  uVar8 = 0x1726;
-  iVar10 = uStack_e + (uint)(byte)paVar6->state * 4;
-  psVar7 = ovr_stash_usesStExit
-                     ((stg_tmp_t *)*(undefined2 *)(iVar10 + 0x58),
-                      (byte)*(undefined2 *)(iVar10 + 0x5a));
-  if ((char)paVar6->state == '\r') {
-    y = paVar6->screenY;
+  piVar8 = (int *)(uStack_e + (uint)*(byte *)(iVar5 + 0x30) * 4);
+  iVar3 = piVar8[1];
+  iVar4 = *piVar8;
+  uVar7 = 0x1726;
+  iVar9 = uStack_e + (uint)*(byte *)(iVar5 + 0x30) * 4;
+  psVar6 = ovr_stash_usesStExit
+                     ((stg_tmp_t *)
+                      CONCAT13((char)((uint)in_stack_00000004 * 0x34 >> 8),
+                               CONCAT12(*(undefined1 *)((uint)in_stack_00000004 * 0x34 + 0x31),
+                                        *(undefined2 *)(iVar9 + 0x5a))),
+                      *(undefined2 *)(iVar9 + 0x58));
+  if (*(char *)(iVar5 + 0x30) == '\r') {
+    x = *(int16_t *)(iVar5 + 0x28);
   }
-  else if ((char)paVar6->state == '\f') {
-    y = paVar6->screenY - *(int *)(iVar3 + 0xd);
+  else if (*(char *)(iVar5 + 0x30) == '\f') {
+    x = *(int *)(iVar5 + 0x28) - *(int *)(iVar2 + 0xd);
   }
   else {
-    y = paVar6->screenY - (*(int *)(iVar3 + 0xd) >> 1);
+    x = *(int *)(iVar5 + 0x28) - (*(int *)(iVar2 + 0xd) >> 1);
   }
-  gfx.seg = uVar8;
-  gfx.ofs = (uint16_t)(psVar7->cmap + 6);
-  ovr_blitGfxRect(gfx,paVar6->screenX,y,rect,(uint8_t)type,true);
-  pcVar1 = (char *)((int)&paVar6->state + 1);
-  *pcVar1 = *pcVar1 + '\x01';
-  if (*(byte *)(iVar5 + 0x1b) <= *(byte *)((int)&paVar6->state + 1)) {
-    if (*(char *)(iVar5 + 0x1a) == -1) {
-      *(undefined1 *)&paVar6->state = 0;
+  gfx.seg = *(uint16_t *)(iVar5 + 0x26);
+  gfx.ofs = uVar7;
+  ovr_blitGfxRect(gfx,x,_index,(brect_t *)CONCAT22(0x10,(brect_t *)rect),*(uint8_t *)(iVar5 + 0x33),
+                  (bool)mirror,psVar6->cmap + 6,*(uint8_t *)(iVar5 + 0x33));
+  *(char *)(iVar5 + 0x31) = *(char *)(iVar5 + 0x31) + '\x01';
+  if (*(byte *)(iVar4 + 0x1b) <= *(byte *)(iVar5 + 0x31)) {
+    if (*(char *)(iVar4 + 0x1a) == -1) {
+      *(undefined1 *)(iVar5 + 0x30) = 0;
     }
     else {
-      *(undefined1 *)((int)&paVar6->state + 1) = *(undefined1 *)(iVar5 + 0x1a);
+      *(undefined1 *)(iVar5 + 0x31) = *(undefined1 *)(iVar4 + 0x1a);
     }
   }
-  agnt_compute13((agnt_t *)CONCAT22(0x1726,paVar6));
+  agnt_compute13((agnt_t *)CONCAT13(uVar10,CONCAT12(mirror,0x1726)),iVar5);
   return;
 }
 
@@ -848,24 +903,21 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
 
 /* [R7] body shape: compute */
 
-void __cdecl16far agnt_compute13(agnt_t *agnt)
+void __cdecl16far agnt_compute13(agnt_t *agnt,...)
 
 {
-  agnt_t *paVar1;
-  undefined2 uVar2;
+  int in_stack_00000004;
   
-  uVar2 = (undefined2)((ulong)agnt >> 0x10);
-  paVar1 = (agnt_t *)agnt;
-  if ((char)paVar1->state == '\0') {
-    if ((paVar1->flags & 0x100) == 0) {
-      if ((paVar1->flags & 0x80) != 0) {
-        *(undefined1 *)&paVar1->state = 0xc;
-        *(undefined1 *)((int)&paVar1->state + 1) = 0;
+  if (*(char *)(in_stack_00000004 + 0x30) == '\0') {
+    if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x100) == 0) {
+      if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x80) != 0) {
+        *(undefined1 *)(in_stack_00000004 + 0x30) = 0xc;
+        *(undefined1 *)(in_stack_00000004 + 0x31) = 0;
       }
     }
     else {
-      *(undefined1 *)&paVar1->state = 0xd;
-      *(undefined1 *)((int)&paVar1->state + 1) = 5;
+      *(undefined1 *)(in_stack_00000004 + 0x30) = 0xd;
+      *(undefined1 *)(in_stack_00000004 + 0x31) = 5;
     }
   }
   return;
@@ -969,18 +1021,19 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
 
 /* [R6] touches AgntCount */
 
-void __cdecl16far agnt_usesAgntCount4(uint agntIndex)
+void __cdecl16far agnt_usesAgntCount4(uint agntIndex,...)
 
 {
   char *pcVar1;
   int iVar2;
   int iVar3;
+  uint in_stack_00000004;
   
   for (iVar3 = 0; iVar3 < 10; iVar3 = iVar3 + 1) {
     for (iVar2 = 0; iVar2 < 0x69; iVar2 = iVar2 + 1) {
       if ((AgntCount < *(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa)) ||
-         ((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) <= (int)agntIndex)) {
-        if (*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) == agntIndex) {
+         ((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) <= (int)in_stack_00000004)) {
+        if (*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) == in_stack_00000004) {
           *(undefined1 *)(iVar3 * 0x69 + iVar2 + 0x8fa) = 0;
         }
       }
@@ -989,8 +1042,8 @@ void __cdecl16far agnt_usesAgntCount4(uint agntIndex)
         *pcVar1 = *pcVar1 + -1;
       }
       if ((AgntCount < *(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0)) ||
-         ((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) <= (int)agntIndex)) {
-        if (*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) == agntIndex) {
+         ((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) <= (int)in_stack_00000004)) {
+        if (*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) == in_stack_00000004) {
           *(undefined1 *)(iVar3 * 0x69 + iVar2 + 0x4e0) = 0;
         }
       }
@@ -1009,22 +1062,23 @@ void __cdecl16far agnt_usesAgntCount4(uint agntIndex)
 
 /* [R6] touches AgntCount */
 
-void __cdecl16far agnt_usesAgntCount5(int agntIndex)
+void __cdecl16far agnt_usesAgntCount5(int agntIndex,...)
 
 {
   char *pcVar1;
   int iVar2;
   int iVar3;
+  int in_stack_00000004;
   
   for (iVar3 = 0; iVar3 < 10; iVar3 = iVar3 + 1) {
     for (iVar2 = 0; iVar2 < 0x69; iVar2 = iVar2 + 1) {
       if ((*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) <= AgntCount) &&
-         (agntIndex <= (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa))) {
+         (in_stack_00000004 <= (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa))) {
         pcVar1 = (char *)(iVar3 * 0x69 + iVar2 + 0x8fa);
         *pcVar1 = *pcVar1 + '\x01';
       }
       if ((*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) <= AgntCount) &&
-         (agntIndex <= (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0))) {
+         (in_stack_00000004 <= (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0))) {
         pcVar1 = (char *)(iVar3 * 0x69 + iVar2 + 0x4e0);
         *pcVar1 = *pcVar1 + '\x01';
       }
@@ -1039,60 +1093,63 @@ void __cdecl16far agnt_usesAgntCount5(int agntIndex)
 
 /* [R6] touches agntSaved, AgntCount */
 
-uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
+uint __cdecl16far agnt_usesAgntSaved(int agntIndex,...)
 
 {
-  byte bVar3;
   uint uVar1;
+  uint fromIndex;
+  byte bVar3;
   void *pvVar2;
-  int iVar5;
-  int toIndex;
+  uint uVar5;
   undefined2 unaff_SS;
+  uint in_stack_00000004;
   agnt_t agntSaved;
   undefined1 uVar4;
   
-  if ((agntIndex < 1) ||
-     (iVar5 = agntIndex, *(int *)(agntIndex * 0x34 + -0x32) <= *(int *)(agntIndex * 0x34 + 2))) {
-    uVar1 = (uint)AgntCount;
-    if ((agntIndex + 1 < (int)uVar1) &&
-       (uVar1 = *(uint *)(agntIndex * 0x34 + 2), iVar5 = agntIndex,
-       *(int *)(agntIndex * 0x34 + 0x36) < (int)uVar1)) {
+  fromIndex = in_stack_00000004;
+  if (((int)in_stack_00000004 < 1) ||
+     (uVar5 = in_stack_00000004,
+     *(int *)(in_stack_00000004 * 0x34 + -0x32) <= *(int *)(in_stack_00000004 * 0x34 + 2))) {
+    uVar5 = (uint)AgntCount;
+    if (((int)(in_stack_00000004 + 1) < (int)uVar5) &&
+       (uVar5 = *(uint *)(in_stack_00000004 * 0x34 + 2), uVar1 = in_stack_00000004,
+       *(int *)(in_stack_00000004 * 0x34 + 0x36) < (int)uVar5)) {
       do {
-        toIndex = iVar5 + 1;
-        if ((int)(uint)AgntCount <= iVar5 + 2) break;
-        iVar5 = toIndex;
-      } while (*(int *)(toIndex * 0x34 + 0x36) < *(int *)(agntIndex * 0x34 + 2));
+        uVar5 = uVar1 + 1;
+        if ((int)(uint)AgntCount <= (int)(uVar1 + 2)) break;
+        uVar1 = uVar5;
+      } while (*(int *)(uVar5 * 0x34 + 0x36) < *(int *)(in_stack_00000004 * 0x34 + 2));
       memcpy((char *)CONCAT22(unaff_SS,&agntSaved),
-             (char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34)),0x34);
-      _fmemmove((char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34)),
-                (char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34 + 0x34)),
-                (toIndex - agntIndex) * 0x34);
-      pvVar2 = memcpy((char *)CONCAT22(0x1726,(char *)(toIndex * 0x34)),
+             (char *)CONCAT22(0x1726,(char *)(in_stack_00000004 * 0x34)),0x34);
+      _fmemmove((char *)CONCAT22(0x1726,(char *)(fromIndex * 0x34)),
+                (char *)CONCAT22(0x1726,(char *)(fromIndex * 0x34 + 0x34)),
+                (uVar5 - fromIndex) * 0x34);
+      pvVar2 = memcpy((char *)CONCAT22(0x1726,(char *)(uVar5 * 0x34)),
                       (char *)CONCAT22(unaff_SS,&agntSaved),0x34);
       uVar4 = (undefined1)((uint)pvVar2 >> 8);
-      agnt_remapGridRefs(agntIndex,toIndex);
-      uVar1 = CONCAT11(uVar4,1);
+      agnt_remapGridRefs(fromIndex,uVar5);
+      uVar5 = CONCAT11(uVar4,1);
     }
     else {
-      uVar1 = uVar1 & 0xff00;
+      uVar5 = uVar5 & 0xff00;
     }
   }
   else {
     do {
-      iVar5 = iVar5 + -1;
-      if (iVar5 < 1) break;
-    } while (*(int *)(agntIndex * 0x34 + 2) < *(int *)(iVar5 * 0x34 + -0x32));
-    memcpy((char *)CONCAT22(unaff_SS,&agntSaved),(char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34))
-           ,0x34);
-    _fmemmove((char *)CONCAT22(0x1726,(char *)(iVar5 * 0x34 + 0x34)),
-              (char *)CONCAT22(0x1726,(char *)(iVar5 * 0x34)),(agntIndex - iVar5) * 0x34);
-    pvVar2 = memcpy((char *)CONCAT22(0x1726,(char *)(iVar5 * 0x34)),
+      uVar5 = uVar5 - 1;
+      if ((int)uVar5 < 1) break;
+    } while (*(int *)(in_stack_00000004 * 0x34 + 2) < *(int *)(uVar5 * 0x34 + -0x32));
+    memcpy((char *)CONCAT22(unaff_SS,&agntSaved),
+           (char *)CONCAT22(0x1726,(char *)(in_stack_00000004 * 0x34)),0x34);
+    _fmemmove((char *)CONCAT22(0x1726,(char *)(uVar5 * 0x34 + 0x34)),
+              (char *)CONCAT22(0x1726,(char *)(uVar5 * 0x34)),(fromIndex - uVar5) * 0x34);
+    pvVar2 = memcpy((char *)CONCAT22(0x1726,(char *)(uVar5 * 0x34)),
                     (char *)CONCAT22(unaff_SS,&agntSaved),0x34);
     bVar3 = (byte)((uint)pvVar2 >> 8);
-    agnt_remapGridRefs(agntIndex,iVar5);
-    uVar1 = (uint)bVar3 << 8;
+    agnt_remapGridRefs(fromIndex,uVar5);
+    uVar5 = (uint)bVar3 << 8;
   }
-  return uVar1;
+  return uVar5;
 }
 
 
@@ -1101,14 +1158,15 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
 
 /* [R6] touches AgntCount */
 
-void __cdecl16far agnt_usesAgntCount6(entity_t *ptr)
+void __cdecl16far agnt_usesAgntCount6(entity_t *ptr,...)
 
 {
   uint16_t i;
+  int in_stack_00000004;
   
   for (i = 0; (int)i < (int)(uint)AgntCount; i = i + 1) {
-    if ((*(int *)(i * 0x34 + 0x19) == (*(uint16_t *)((uint8_t *)&(ptr) + 2))) &&
-       ((entity_t *)*(int *)(i * 0x34 + 0x17) == (entity_t *)ptr)) {
+    if (((entity_t *)*(int *)(i * 0x34 + 0x19) == ptr) &&
+       (*(int *)(i * 0x34 + 0x17) == in_stack_00000004)) {
       if (*(byte *)(i * 0x34 + 0x25) < 2) {
         *(undefined1 *)(i * 0x34 + 0x25) = 1;
       }
@@ -1124,41 +1182,41 @@ void __cdecl16far agnt_usesAgntCount6(entity_t *ptr)
 
 /* [R4] calls ovr_fmFreeAudio */
 
-void __cdecl16far agnt_usesFmFreeAudio(void)
+void __cdecl16far agnt_usesFmFreeAudio(void...)
 
 {
   bool bVar1;
   undefined2 in_DX;
-  int16_t unaff_BP;
-  far_t src;
-  far_t src_00;
+  uint16_t unaff_BP;
+  int16_t in_stack_00000000;
   far_t handle;
   far_t handle_00;
   
   if (audioSaveCut1Ofs != (far_t *)0x0 || audioSaveCut1Seg != 0) {
-    handle.seg = audioSaveCut1Seg;
-    handle.ofs = (uint16_t)audioSaveCut1Ofs;
-    ovr_stshFree(handle);
+    handle.seg = unaff_BP;
+    handle.ofs = audioSaveCut1Seg;
+    ovr_stshFree(handle,audioSaveCut1Ofs);
+    unaff_BP = handle.seg;
   }
   if (audioSaveCut2Ofs != (far_t *)0x0 || audioSaveCut2Seg != 0) {
-    handle_00.seg = audioSaveCut2Seg;
-    handle_00.ofs = (uint16_t)audioSaveCut2Ofs;
-    ovr_stshFree(handle_00);
+    handle_00.seg = unaff_BP;
+    handle_00.ofs = audioSaveCut2Seg;
+    ovr_stshFree(handle_00,audioSaveCut2Ofs);
+    unaff_BP = handle_00.seg;
   }
   GGameState = 0x28;
   if (GameRunning == false) {
-    ovr_fmFreeAudio(1);
+    ovr_fmFreeAudio();
   }
   else {
-    ovr_fmFreeAudio(0);
+    ovr_fmFreeAudio();
   }
-  src.seg = 0xc;
-  src.ofs = BlitRects[0].seg;
-  audioSaveCut1Ofs = ovr_stshRleCut((far_t *)0x0,src,7,222,77,unaff_BP);
-  src_00.seg = 0xc;
-  src_00.ofs = BlitRects[0].seg;
+  audioSaveCut1Ofs =
+       ovr_stshRleCut((far_t *)BlitRects[0].seg,far_from_u32((uint32_t)(0x7000c)),222,77,unaff_BP,in_stack_00000000,0);
   audioSaveCut1Seg = in_DX;
-  audioSaveCut2Ofs = ovr_stshRleCut((far_t *)0x0,src_00,78,222,150,unaff_BP);
+  audioSaveCut2Ofs =
+       ovr_stshRleCut((far_t *)BlitRects[0].seg,far_from_u32((uint32_t)(0x4e000c)),222,150,unaff_BP,in_stack_00000000,0
+                     );
   GGameState = 0x29;
   audioSaveCut2Seg = in_DX;
   if (AgntFlag2 != false) {
@@ -1179,20 +1237,21 @@ void __cdecl16far agnt_usesFmFreeAudio(void)
 
 /* 3b1d:1ad8 */
 
+/* WARNING: Variable defined which should be unmapped: mouseRect */
 /* [R4] calls ovr_alignToSeg */
 
-void __cdecl16far agnt_usesAlignToSeg(void)
+void __cdecl16far agnt_usesAlignToSeg(void...)
 
 {
-  bool bVar1;
-  uint16_t in_DX;
-  uint16_t unaff_SS;
   far_t dst;
   far_t ptr;
   far_t handle;
+  bool bVar1;
+  uint16_t in_DX;
+  brect_t *unaff_SS;
   brect_t mouseRect;
   
-  dst.seg = unaff_SS;
+  dst.seg = (uint16_t)unaff_SS;
   dst.ofs = (uint16_t)&mouseRect;
   F_SCOPY(far_from_u32((uint32_t)(0x241007ec)),dst);
   constructionDirty = '\0';
@@ -1202,11 +1261,11 @@ void __cdecl16far agnt_usesAlignToSeg(void)
   }
   if (((AnimActive != '\0') && (GOngoingBattle == '\0')) &&
      (BattleDelay = BattleDelay + 1, 2 < BattleDelay)) {
-    tempScreenOfs = ovr_stshAlloc(0xfa0f);
-    ptr.seg = in_DX;
-    ptr.ofs = (uint16_t)tempScreenOfs;
+    tempScreenOfs = ovr_stshAlloc((ulong)(uint)mouseRect.x << 0x10,0xfa0f);
+    ptr.seg = mouseRect.x;
+    ptr.ofs = in_DX;
     tempScreenSeg = in_DX;
-    ovr_alignToSeg(ptr);
+    ovr_alignToSeg(ptr,tempScreenOfs);
     GSavedBlitSeg = in_DX;
     bVar1 = agnt_isAnimating();
     if (!bVar1) {
@@ -1215,12 +1274,12 @@ void __cdecl16far agnt_usesAlignToSeg(void)
     ovr_ovc49_drawAgents();
     BattleDelay = 0;
     agnt_blitCrossFrame();
-    ovr_miceBlitRect(&mouseRect);
-    ovr_blitRaw(0xc,7,0xde,0x96,GSavedBlitSeg,0xa000);
+    ovr_miceBlitRect((brect_t *)CONCAT22(mouseRect.x,unaff_SS),&mouseRect);
+    ovr_blitRaw(7,0xde,0x96,GSavedBlitSeg,0xa000,mouseRect.x,0xc);
     ovr_miceUpdate();
-    handle.seg = tempScreenSeg;
-    handle.ofs = (uint16_t)tempScreenOfs;
-    ovr_stshFree(handle);
+    handle.seg = mouseRect.x;
+    handle.ofs = tempScreenSeg;
+    ovr_stshFree(handle,tempScreenOfs);
     if (constructionDirty != '\0') {
       ovr_constr_usesBlitRect();
     }
@@ -1234,18 +1293,20 @@ void __cdecl16far agnt_usesAlignToSeg(void)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute14(byte level)
+byte __cdecl16far agnt_compute14(byte level,...)
 
 {
-  if (8 < level) {
-    if ((level < 9) || (0x10 < level)) {
-      level = (char)((int)(level - 0x11) >> 2) + 0xd;
+  byte in_stack_00000004;
+  
+  if (8 < in_stack_00000004) {
+    if ((in_stack_00000004 < 9) || (0x10 < in_stack_00000004)) {
+      in_stack_00000004 = (char)((int)(in_stack_00000004 - 0x11) >> 2) + 0xd;
     }
     else {
-      level = (char)((int)(level - 9) >> 1) + 9;
+      in_stack_00000004 = (char)((int)(in_stack_00000004 - 9) >> 1) + 9;
     }
   }
-  return level;
+  return in_stack_00000004;
 }
 
 
@@ -1260,12 +1321,13 @@ int __cdecl16far agnt_compute15(byte rank,uint8_t level)
   byte bVar1;
   int iVar2;
   byte bVar3;
+  byte unaff_BP;
   
   if (rank == 0) {
     iVar2 = 0;
   }
   else {
-    bVar1 = agnt_compute14(level);
+    bVar1 = agnt_compute14(unaff_BP,(uint)level);
     bVar3 = (byte)(bVar1 + 2 >> 8);
     if (bVar1 + 2 < (uint)rank) {
       iVar2 = (uint)bVar3 << 8;
@@ -1283,35 +1345,36 @@ int __cdecl16far agnt_compute15(byte rank,uint8_t level)
 
 /* Selects an enemy agent as target, flags it and reports the index with the attack sound. */
 
-uint __cdecl16far agnt_acquireTarget(agnt_t *agnt,char *agntIndex)
+uint __cdecl16far agnt_acquireTarget(agnt_t *agnt,char *agntIndex,...)
 
 {
   undefined4 uVar1;
   uint in_AX;
   uint uVar2;
   int iVar3;
-  uint16_t unk;
-  agnt_t *paVar4;
-  undefined2 uVar5;
-  undefined2 in_stack_0000000a;
-  int iStack_4;
+  int iVar4;
+  int in_stack_00000004;
+  agnt_t *agnt_00;
   
-  uVar5 = (undefined2)((ulong)agnt >> 0x10);
-  paVar4 = (agnt_t *)agnt;
-  if ((paVar4->flags & 1) == 0) {
-    for (iStack_4 = 0; iStack_4 < (int)(uint)AgntCount; iStack_4 = iStack_4 + 1) {
-      if ((((*(uint8_t *)(iStack_4 * 0x34 + 0x2f) != paVar4->faction) &&
-           ((*(uint *)(iStack_4 * 0x34 + 0x2b) & 0xae4) == 0)) &&
-          (*(char *)(iStack_4 * 0x34 + 0x24) == '\0')) &&
-         (uVar1 = *(undefined4 *)(iStack_4 * 0x34 + 0x1d),
+  if ((*(uint *)(in_stack_00000004 + 0x2b) & 1) == 0) {
+    iVar4 = 0;
+    while( true ) {
+      if ((int)(uint)AgntCount <= iVar4) break;
+      if ((((*(char *)(iVar4 * 0x34 + 0x2f) != *(char *)(in_stack_00000004 + 0x2f)) &&
+           ((*(uint *)(iVar4 * 0x34 + 0x2b) & 0xae4) == 0)) &&
+          (*(char *)(iVar4 * 0x34 + 0x24) == '\0')) &&
+         (uVar1 = *(undefined4 *)(iVar4 * 0x34 + 0x1d),
          iVar3 = agnt_compute15(*(byte *)((int)uVar1 + 0x42),
-                                (((entity_t *)paVar4->entity)->base).level), (char)iVar3 != '\0')) {
-        paVar4->flags = paVar4->flags | 3;
-        *_agntIndex = (char)iStack_4 + '\x01';
-        unk = ovr_audio_panFromX(agnt);
-        ovr_play_sfxU(0x3b,0,unk);
-        return CONCAT11((char)(unk >> 8),1);
+                                *(uint8_t *)((int)*(undefined4 *)(in_stack_00000004 + 0x17) + 0xf)),
+         (char)iVar3 != '\0')) {
+        *(uint *)(in_stack_00000004 + 0x2b) = *(uint *)(in_stack_00000004 + 0x2b) | 3;
+        *(char *)CONCAT22((char *)agntIndex,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = (char)iVar4 + '\x01';
+        agnt_00 = (agnt_t *)CONCAT22(iVar4,(agnt_t *)agnt);
+        iVar4 = ovr_audio_panFromX(agnt_00,in_stack_00000004);
+        ovr_play_sfxU(0,iVar4,(uint16_t)((ulong)agnt_00 >> 0x10),0x3b);
+        return CONCAT11((char)((uint)iVar4 >> 8),1);
       }
+      iVar4 = iVar4 + 1;
     }
     uVar2 = 0;
   }
@@ -1331,15 +1394,16 @@ uint __cdecl16far agnt_acquireTarget(agnt_t *agnt,char *agntIndex)
 void __cdecl16far agnt_blitCrossFrame(void)
 
 {
+  uint16_t unaff_BP;
   far_t gfx;
   far_t dst;
   
   if (((CrossBlitFlag != '\0') && (CrossBlitCount != 0)) && (CrossBlitCount < 5)) {
-    dst.seg = GSavedBlitSeg;
-    dst.ofs = CrossBlitX + CrossBlitY * 0x140;
-    gfx.seg = *(uint16_t *)((uint)CrossBlitCount * 4 + -0x748d);
-    gfx.ofs = *(uint16_t *)((uint)CrossBlitCount * 4 + -0x748f);
-    ovr_blitLoadRleGfx(gfx,dst);
+    dst.seg = unaff_BP;
+    dst.ofs = GSavedBlitSeg;
+    gfx.seg = CrossBlitX + CrossBlitY * 0x140;
+    gfx.ofs = *(uint16_t *)((uint)CrossBlitCount * 4 + -0x748d);
+    ovr_blitLoadRleGfx(gfx,dst,*(undefined2 *)((uint)CrossBlitCount * 4 + -0x748f));
     CrossBlitCount = CrossBlitCount + 1;
     if (4 < CrossBlitCount) {
       CrossBlitCount = 0;
@@ -1360,15 +1424,19 @@ undefined1 __cdecl16far agnt_compute16(agnt_t *a,agnt_t *b)
   agntG_t *paVar1;
   undefined1 uVar2;
   byte bVar3;
-  undefined2 uVar4;
+  agnt_t *paVar4;
+  undefined2 uVar5;
+  undefined4 in_stack_0000fffa;
   
+  paVar4 = (agnt_t *)((ulong)a >> 0x10);
   paVar1 = ((agnt_t *)a)->gdata;
   if ((((agntG_t *)paVar1)->flags & 2) == 0) {
     uVar2 = 1;
   }
   else {
-    bVar3 = agnt_compute9(a);
-    uVar4 = (undefined2)((ulong)b >> 0x10);
+    bVar3 = agnt_compute9((agnt_t *)CONCAT22((int)((ulong)in_stack_0000fffa >> 0x10),paVar4),
+                          (agnt_t *)a);
+    uVar5 = (undefined2)((ulong)b >> 0x10);
     paVar1 = ((agnt_t *)b)->gdata;
     if (((((agntG_t *)paVar1)->flags3 & 0x40) == 0) || ('\x01' < (char)bVar3)) {
       paVar1 = ((agnt_t *)b)->gdata;
