@@ -7302,3 +7302,49 @@ the displacement.  Results:
 | `char_sheet_t+0x40`, `+0x64`, `+0x82` | no operand in the recovered code addresses them; the only `+0x64` hits are `LEA AX,[BP-0x64]` stack locals. |
 
 These stay unnamed rather than receiving invented labels.
+
+## Leader records in the shipped saves confirm the `char_sheet_t` layout
+
+The save files store each leader sheet verbatim (0xae bytes).  `game/STRONG.SAV/save.005`
+contains the byte string `Corak` at `0x112be`; reading 0xae bytes from there decodes as a
+`char_sheet_t`:
+
+| offset | field | value |
+|---|---|---|
+| +0x00 | `nameText` | `"Corak"` + NUL padding to 40 bytes |
+| +0x28 | `statMask` | `0x7F` |
+| +0x29 | `stats[6]` | `0B 12 12 0D 10 10` |
+| +0x2f | `cls` | `1` |
+| +0x30 | `race` | `6` |
+| +0x31 | `hp[2]` | `19 19` |
+| +0x33 | `alignment` | `2` |
+| +0x34 | `gender` | `0` |
+| +0x35 | `name` | far pointer `9C40:0000` |
+| +0x39 | `x` | `0x54` |
+| +0x3b | `y` | `0x0b` |
+| +0x3d | `active` | `1` |
+| +0x3e | `classStr` | `1` |
+| +0x3f | `excluded` | `0` |
+| +0x40 | `pad_40` | `0` |
+| +0x5a | (store target of `strongholdKind`) | `1` |
+| +0x64 | `pad_64` | `0` |
+| +0x82 | `pad_82` | `0` |
+
+The alignment is not assumed: `+0x3d == 1` (active), `+0x39 == 0x54`, `+0x3b == 0x0b` and
+`+0x28 == 0x7f` only line up at `0x112be` (eight bytes later, `+0x3d` would be 0), which fixes
+the record start.
+
+The same scan over every save finds further leader records by the same test (`active == 1`,
+`cls <= 0x20`, `race <= 0x10`, printable name at +0): **Corak**, **Xylonite**, **Ular**,
+**Sade**, **Thax**, **Neeva**, **Domac**, **Thorghilles**, **Lyzay**.  For every one of them
+`+0x40`, `+0x64` and `+0x82` are **zero**.
+
+Consequences for the three disputed fields: they carry no per-leader constant — they are
+runtime state that is zero in ordinary play (`+0x40` is written `1` by `ovc30_createLeader` yet
+is 0 after a save/load round trip, and `+0x64`/`+0x82` are only touched by
+`ovc22_textRingProt`/`upd_usesAlignUp4`).  That rules out "constant per leader" meanings such
+as race/class copies, and it is consistent with them being optional bonus/marker bytes, but it
+still does not name them.
+
+It also corroborates `strongholdKind`: `+0x5a` holds `1` in Corak's record, exactly the value
+`ovc18_checkFortressPlacement` stores on its non-fortress path.

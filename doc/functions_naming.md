@@ -1396,3 +1396,29 @@ decompiler had carved 1-byte locals out of the same stack slots, so widening nee
 first.  Left as recorded rather than force-fitted.
 
 Locals: 64 -> 63 (9.1%).  Gate: checked 71 failures 0.
+
+### Finishing the typing sweep (locals 63 -> 60)
+
+The two retypes that had failed with `VariableSizeException` are now applied.  The conflicting
+1-byte locals the decompiler had carved out of the same stack slots were deleted first with the
+new `RemoveVars.java` (it removes the *variable*, not just its symbol):
+
+```
+removed local_2c from ovc22_textRingProt
+removed local_30 from ovc22_textRingProt
+removed local_22 from ovc24_textKill
+typed 5087:056e local_32 int16_t[4]
+typed 5943:026e local_24 uint8_t[4]
+```
+
+`ovc24_textKill` now declares `uint8_t local_24 [4];` and indexes it directly.
+
+One more parameter came out of the widened-accessor scan (`param._1_1_` proves a 16-bit value
+behind an `undefined2` listing): `ovc22_textRingProt`'s `param_3` -> `uint16_t`.
+
+The sweep is now exhausted: re-running the two comparisons over all remaining `undefined1`/
+`undefined2`/`undefined4` variables yields no further mismatch — the survivors really are
+16-bit unknown words or 1-byte unknowns, and typing them further would be a guess about
+signedness rather than a reading of the code.
+
+Locals: 63 -> 60 (8.7%).  Gate: checked 71 failures 0.
