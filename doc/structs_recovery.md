@@ -7523,3 +7523,25 @@ both constants, each uses `0x95` for the class record and `0x94` as the map row 
 The field is typed `uint8_t` and named `reserved_94`.
 
 **Struct fields: 331 auto 4 -> 334 auto 0 (0.0%).**
+
+## Locals typed and named from their decompiler declarations (60 -> 49 auto)
+
+A fresh comparison of the listing's local type against the decompiler's own declaration found
+ten locals whose real type is larger than the one-byte listing entry.  Each was renamed from
+its use and retyped:
+
+| function | old | new | type | evidence |
+|---|---|---|---|---|
+| `agnt_usesAlignToSeg` | `local_c` | `mouseRect` | `brect_t` | `F_SCOPY(mouseSaveRect4, ...)` then `ovr_miceBlitRect(&mouseRect)` |
+| `ovc49_drawAgents` | `local_32` | `agentRect` | `brect_t` | copied from `agentClipRect`, then passed to `ovr_blitGfxRect`, `ovr_gfxRlePrepare(&...x)`, `ovr_agnt_drawSpriteFrame` and `ovr_ovc27_usesBlitGfxRect` |
+| `ovc22_usesRandBelow2` | `local_a`, `local_c` | `x`, `y` | `uint16_t` | `((unit_t*)GUnits)[...].x/.y` and `GLeaderSheets[partyIndex]+0x39/+0x3b`, then passed as the x/y of `createConstructionRecordFar`, `textTypeLen` and `searchCellsAround` |
+| `draw_toolbarLabels` | `local_32` | `textBuf` | `char[44]` | passed to `ovc45_compute9(buf, ...)` which returns a pointer into it |
+| `init_usesClearEntities` | `local_306` | `palette` | `uint8_t[768]` | `calcSeasonPalette(..., palette, ...)` then `vgaSetPalette8bit(palette)` (768 = 256 colours x 3) |
+| `manage_usesLitoa10` | `local_f6` | `textBuf` | `char[120]` | output buffer of `stsprintf` and every `litoa10` call in the function |
+| `ovc15_usesRandBelow` | `local_e` | `xOffsets` | `uint16_t[4]` | `F_SCOPY(sfxXOffsets, ...)` then `agnt->x = xOffsets[i]` |
+| `__scroll` | `local_a2` | `rowBuf` | `uint16_t[80]` | used by `_gettext`, `_zapline` and `_puttext` as an 80-cell text row |
+| `ovc22_textRingProt` | `local_32` | `resourceTotals` | `int16_t[4]` | indexed by `bldtp_t+0x131` (the resource class) and written into `ringBudgetIn` |
+| `ovc41_unitStatusText` | `local_3` | `pct` | `uint8_t` | its address is taken as `pctOut.ofs` and passed to `attact_compute3` |
+
+The remaining 49 auto locals have no contradicting declaration: their decompiled form is also
+`undefined1`, or they never appear in the decompiled body (phantom listing spills).

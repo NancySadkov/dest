@@ -2085,3 +2085,38 @@ Both call sites in `attact_usesEntities` push the callee's own `flagsOfs`/`flags
 so the 4-byte `param_4` is that far flags pointer (the body's `in_stack_0000000a == 0 && (int)param_4 == 0` is the both-words-zero test).  Renamed `flags`; the widths were left alone because a 4-byte parameter at relative offset 6 would be re-aligned by Ghidra and shift `x`/`y`.
 
 Parameters: auto 56 -> 55 (3.4%).  Gate: checked 71 failures 0.
+
+## Far out-pointers done with `far_t` (alignment 2), and the sixth arena argument (55 -> 53)
+
+### `attact_textArena`: the prototype omitted `[BP+0x10]`
+
+The body reads four words after the first two: `[BP+0xa]` (mode, loaded into `DI`), `[BP+0xc]`
+(party byte compared with the entity), `[BP+0xe]` (the `ovr_alignUp4` argument and the `dx`
+subtrahend at `3f0b:1a8f`) and `[BP+0x10]` (the `dy` subtrahend at `3f0b:1aaf`).  The old
+prototype ended at `x`, so the `dy` computation read a phantom `in_stack_0000000e`.  Corrected
+to `attact_textArena(uint16_t *foundIndexOut, uint16_t param_2, char mode, uint8_t partyIndex,
+uint16_t x, uint16_t y)`; storage `Stack[4]:2, [6]:2, [8]:1, [a]:1, [c]:2, [e]:2` matches
+`[BP+6..0x11]`, and the body now reads `entity.y - y`.
+
+### `attact_compute2/3`: `far_t` keeps the exact offsets
+
+The earlier attempt to type the far out-pointers as `*32` moved them: Ghidra aligns 4-byte
+*pointers* to a relative offset divisible by four.  `far_t` is a two-word structure, so its
+alignment is 2 and the layout is exact:
+
+```
+attact_compute2(uint16_t menuIndex, far_t pctOut, far_t remainderOut, far_t partOut)
+  Stack[4]:2, Stack[6]:4, Stack[a]:4, Stack[e]:4   = [BP+6],[BP+8..b],[BP+c..f],[BP+10..13]
+attact_compute3(far_t table, uint16_t index, far_t pctOut, far_t remainderOut, far_t partOut)
+  Stack[4]:4, Stack[8]:2, Stack[a]:4, Stack[e]:4, Stack[12]:4 = [BP+6..9],[BP+a],[BP+c..f],...
+```
+
+These offsets are exactly the `LES BX,[BP+8/0xc/0x10]` (compute2) and
+`LES BX,[BP+6/0xc/0x10/0x14]` (compute3) operands, and the decompiler renders the dereferences
+as `*(char *)pctOut`, `*(char *)partOut`, `*(char *)remainderOut` and (compute3) `table.ofs` /
+`table.seg`.  Body sizes stayed 177/168 bytes.
+
+This is the same 2-byte-alignment trick needed for any future 4-byte argument that does not
+start on a multiple of four.
+
+Parameters: auto 55 -> 53 (3.3%).  Gate: checked 71 failures 0.
