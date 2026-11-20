@@ -2441,3 +2441,22 @@ store guard bounds (`CMP SI,[BP+0x20]; JL`, `CMP SI,[BP+0x22]; JG`).  So
 `if (src[...] != 0 && clipTop <= y && y <= clipBottom)` and `y += yJump`.
 
 Parameters: auto 34 -> 28 (1.7%).  Gate: checked 71 failures 0.
+
+### `ovc22_usesLUDIV_at_` takes an `entity_t` (28 -> 27)
+
+Its only caller (`upd_usesAlignUp4`, `5087:36c8`) builds the argument from the entity array:
+
+```
+5087:36c8  MOV DX,0x37 / IMUL DX     ; entity_t is 55 = 0x37 bytes
+5087:36d2  MOV DX,ES:[0x908e]        ; Entities.ofs
+5087:36d7  ADD DX,AX
+5087:36d9  PUSH ES:[0x9090]          ; Entities.seg
+5087:36de  PUSH DX                   ; &Entities[index]
+5087:36e0  CALL 0x5000:2126
+```
+
+and the callee reads `+0xf` (base.level) and `+0x1a` (the party byte at entity+3):
+`entity_t *32 entity`.  The body now reads
+`*(byte *)((int)&(peVar5->base).entity + 3)` and `(peVar5->base).level` by name.
+
+Parameters: auto 28 -> 27 (1.7%).  Gate: checked 71 failures 0.
