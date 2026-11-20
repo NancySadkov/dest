@@ -2854,3 +2854,104 @@ Each of the 4 `manage_*` fragments sits between two functions that do end in `RE
 complete neighbour - the same `OverlappingFunctionException` reproduced earlier.
 
 BodyEnds: 137 -> 133.  BadBodies: 173 -> 171.  Multi-segment: 0.
+
+## Runtime trace of INT 66h: `midPlaySequence`'s argument is a sequence index (2 -> 1)
+
+The harness (`emulator/dosbox-x-mod.exe` with its socket instrumentation) was used as asked.
+The IVT entry for `INT 66h` reads `5DBC:1B7A` (linear `0x5F73A`), and the driver dispatches on
+`AX` through a jump table:
+
+```
+5DBC:1B7A  CMP AX,0x0700 / JB ...
+5DBC:1B82  CMP AX,0x0715 / JA ...
+5DBC:1B8A  SUB AX,0x0700
+5DBC:1B8B  SHL AX,1
+5DBC:1B8D  ADD AX,0x1B3A        ; table base
+5DBC:1B91  MOV BX,CS:[BX]
+5DBC:1B94  JMP word ptr CS:[0x1B6A]
+```
+
+Live table dump (22 entries) gives `AX=0702 -> CS:1C38`:
+
+```
+5DBC:1C38  PUSH DS / PUSH CS / POP DS
+5DBC:1C3B  PUSH BX              ; <- the caller's parameter
+5DBC:1C3C  CALL 0x150D
+5DBC:1C42  POP DS / IRET
+```
+
+`0x150D` builds an eight-word call, and in cdecl order the pushed `BX` is **argument 3**
+(`push ax=0, dx=0, [0x2E7F], [0x2E7D], [bp+4]=BX, [0x2E71], [0x2E6F], [0x2E77]`).  The chain
+then resolves by runtime values, not by assumption:
+
+```
+0x0232  near->far thunk -> 0x0A4C: MOV AX,0x97 / JMP 0x0470
+0x0470  MOV BX,SS:[BX+4]        ; argument 0 = driver slot (live value 0)
+0x0470  CALL 0x0438            ; per-driver operation-table lookup
+0x0438  table at CS:0x3AA, slot*4 -> 610F:002D
+610F:002D  ... code=0x0097 -> handler 610F:3206
+```
+
+The handler for operation `0x97` pushes its own arguments 3, 2, 1 into `610F:244D`, and the
+parser there consumes the value as `cx`:
+
+```
+610F:2456  MOV CX,[BP+0xa]      ; = the INT BX value
+610F:2459  INC CX               ; 1-based sequence counter
+610F:245D  CMP word ptr [SI],0x4143   ; 'CA'   \  IFF chunk walk
+610F:2463  CMP word ptr [SI+2],0x2054 ; 'T '
+610F:247D  CMP word ptr [SI+8],0x4D58 ; 'XM'  } FORM/XMID
+610F:2484  CMP word ptr [SI+0xa],0x4449 ; 'ID'
+610F:24F8  CMP CX,1 / JE success
+610F:2562  LOOP 0x2510          ; skip one more CAT sub-chunk
+```
+
+So `BX+1` is a **loop counter over the file's XMID sequences**: `BX=0` takes the first, `BX=1`
+the second, and so on.  The game's only caller passes `0`.  Renamed and typed:
+
+```
+void midPlaySequence(uint16_t sequence)
+```
+
+Parameters: auto 2 -> 1 (0.1%).
+
+## `__CHECKOVERLAY`: the hook is an empty stub and the routine is never called
+
+The emulator trace also settles the last parameter, negatively and with evidence.  The static
+overlay header gives the indirection:
+
+```
+1403:0002   5D 22        ; the word restored into DS
+1403:08d4   MOV DS,CS:[2]  -> DS = 0x225D
+1403:08d9   CALLF [0x86]  -> far pointer at 225D:0086
+```
+
+and `225D` is the Borland overlay runtime group:
+
+```
+225d:0000  __OVRGROUP (label)
+225d:0086  __OVRHOOK__ (label)
+```
+
+Reads under the harness segment map (`225D-0x7DD`), linear `0x1A886`, give the live pointer:
+
+```
+0x1A886: 37 08 23 08     -> 0823:0837  (linear 0x08A67)
+0x08A67: CB              -> RETF
+```
+
+The hook points at a one-byte `RETF` stub, so the call consumes nothing.  Consistently,
+`RefsIn 1403:0890` reports **refs=0** (the routine is dead code in the overlay), and a
+breakpoint attempt at its resident address failed to ever fire:
+
+```
+bp CAF0 -> OK bp 0000CAF0
+run     -> RESUMED
+14 key events over ~12 s, ping polled each time -> halted=0 throughout
+```
+
+(`0xCAF0` was confirmed to be the routine before arming: `55 8B EC 1E 2E 8E 1E 02 00 8E 46 08`
+= `push bp; mov bp,sp; push ds; mov ds,cs:[2]; mov es,[bp+8]`.)
+
+So the parameter has no reader, no caller and no callee behaviour to derive a name from.
+Parameters: auto 1 (0.1%).  Gate: checked 71 failures 0.

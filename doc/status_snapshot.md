@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn536/naming_summary.txt`.
+`tmp/auditn537/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -10,7 +10,7 @@ functions                1127
   no prototype            114
   weak return type        967
   has struct-typed arg    169
-parameters               1617   auto-named    2   (0.1%)
+parameters               1617   auto-named    1   (0.1%)
 locals                    659   auto-named    0   (0.0%)
 structs                    37
   struct fields           334   generated     0   (0.0%)
@@ -44,7 +44,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    `reserved_187`, `reserved_0845`, `reserved_ca7a`, `ovrHeaderReserved`,
    `callResultTemp`, `debugEmptyCellCount` and `debugStaleTickCount`, each with its
    store/read counts in `doc/globals_naming.md`.
-2. **2 parameters / 0 locals.** Call-site scanning is exhausted: the unanimous
+2. **1 parameter / 0 locals.** Call-site scanning is exhausted: the unanimous
    call-role rule yields 6 multi-site candidates, all inside the two functions whose
    decompilation Ghidra flags as unstable, and 10 single-site ones that the bodies
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in
@@ -150,9 +150,15 @@ alone; the reference scan then showed its two `CALL` sites (`farmalloc`, `malloc
 so the function, body and `void (void)` prototype were restored.  Deletions now require a
 `CALL`-free reference scan.
 
-## The two remaining auto parameters
+## The one remaining auto parameter
 
-| function | parameter | operand evidence | status |
+| function | parameter | runtime + static evidence | status |
 |---|---|---|---|
-| `__CHECKOVERLAY` | `param_1` | `1403:08c3 MOV BX,[BP+0x6]` then `1403:08d9 CALLF [0x86]` | `SymAt 2410:0086` = **NOSYM**; the cell sits between `__brklvl` (0x85) and `_heapbase` (0x87) and holds the runtime-installed overlay-loader pointer, so BX's role is only determined at run time.  The function also has **0 recorded callers** (it is entered through the overlay loader). |
-| `midPlaySequence` | `param_1` | `2d63:0769 MOV BX,[BP+0x6]` then `INT 66h AX=0702h` | The wrapper family fixes the register shape (`0701` no arg, `0702` BX, `0703` BX+CX, `0704` BX+CX+SI+DI), and the only caller pushes the literal `0` (`3a5b:0740`).  `assets/midpak.ad` is a 5248-byte resource directory (`id, offset` records) with no code and no `INT`; the handler in `assets/cmidpak.com` is packed (no `CMP AH,7`/`MOV AX,0702`; 6 `INT 66h` bytes), so BX's meaning is not in the binary. |
+| `__CHECKOVERLAY` | `param_1` | `1403:0002` = `0x225D`; `1403:08d4 MOV DS,CS:[2]`; `1403:08d9 CALLF [0x86]`;
+`225d:0086` is `__OVRHOOK__` and reads `0823:0837` live, where `0x0837` is a one-byte `RETF`
+stub; `RefsIn 1403:0890` = **0 refs**; a breakpoint at its resident `0xCAF0` never fired over 14
+key events | dead code calling an empty hook: nothing consumes the argument |
+
+`midPlaySequence(uint16_t sequence)` is now named from a full runtime trace of `INT 66h`
+(IVT `5DBC:1B7A` -> table `CS:0x1B3A` -> `AX=0702` handler `1C38` -> worker `150D` -> operation
+`0x97` -> parser `610F:244D`, where `CX = value+1` drives `LOOP 0x2510` over CAT sub-chunks).
