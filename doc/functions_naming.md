@@ -1903,3 +1903,36 @@ existing slots already sit at the right offsets (`skipLo` is `[BP+0xa]`, `skipHi
 was corrected to `filenameSeg` rather than re-typing the pair into one pointer.
 
 Parameters: auto 88 -> 87 (5.4%).  Gate: checked 71 failures 0.
+
+## DOS/CRT wrappers and the drawing helpers (15 parameters)
+
+| function | machine-code proof | corrected prototype |
+|---|---|---|
+| `_creattemp`, `_creatnew` | `PUSH [BP+8]; PUSH [BP+6]` (far path) then `PUSH [BP+0xa]` (attrib), `MOV AL,0x5a`/`0x5b` | `int16_t _creattemp(char *32 path, uint16_t attrib)` (same for `_creatnew`) |
+| `_setblock` | `MOV AH,0x4a; MOV BX,[BP+8]; MOV ES,[BP+6]; INT 21h` = DOS Resize Memory Block | `_setblock(uint16_t seg, uint16_t size)` |
+| `farfree` | callers push segment then offset; body compares only `[BP+8]` with `malloc__last`, and `malloc_FreeLastBlock` stores `brkSeg` there | `ofs` (unused) + `seg` |
+| `fseek` | `PUSH [BP+8]`/`PUSH [BP+6]` into `fflush` and `LES BX,[BP+6]` = far FILE; `MOV SI,[BP+0xe]` is checked against 1 (`SEEK_CUR`); `SUB [BP+0xa],AX; SBB [BP+0xc],DX` adjusts the 32-bit offset | `fseek(uint16_t *32 stream, uint16_t offsetLo, uint16_t offsetHi, uint16_t whence)` |
+| `drawLine2` | `LDS SI,[BP+6]` (RLE source), `LES DX,[BP+0xa]` (destination), `MOV DI,[BP+0xe]` = count; the single caller pushes 5 words and `ADD SP,0xa` | `int16_t drawLine2(char *32 src, char *32 dst, uint16_t count)` |
+| `countRunLength` | `LDS SI,[BP+6]` (far source), then `[BP+0xa]` vs `[BP+0xc]` choose the smaller as the scan bound | `int16_t countRunLength(char *32 src, uint16_t avail, uint16_t maxRun)` |
+| `driver_loop1` | `MOV ES,[BP+0xe]` sets the destination segment; `MOV AX,[BP+0xa]; XCHG AH,AL` computes `y*256 + y*64 = y*0x140` for `y < 256` | `(x1, x2, uint16_t y, colour, uint16_t dstSeg)` |
+| `stats_formatThousands` | `PUSH [BP+8]`/`PUSH [BP+6]` as one far text pointer; `[BP+0xa]`/`[BP+0xc]` is the 32-bit value passed to `litoa10`/`LDIV_at_` | `char * stats_formatThousands(char *32 text, uint32_t value)` |
+
+Two corrections are worth noting.  `fseek`'s previous `offsetHi`/`offsetLo` names sat one word
+too high: the 32-bit offset is adjusted at `[BP+0xa]`/`[BP+0xc]`, and `[BP+0xe]` (read into
+`SI`) is `whence`, tested against `1`.  `farfree`'s previous `ofs` was really the **segment**:
+the callers push segment first, and the value compared with `malloc__last` is the paragraph
+(`brkSeg`), while the offset half is never touched.
+
+### Refused with the model defect recorded
+
+* `blit_compute1`: the caller uses a **near** `CALL`, yet Ghidra stores the parameters with the
+  far layout, and the body's `LES BX,[BP+0xc]` does not line up with the 4-byte `param_4` at
+  `Stack[0xc]` (= `[BP+0xe]`).  Renaming from those offsets would shift every later argument.
+* `init_usesRandBelow`: its `param_4`/`param_5` are the offset/segment of one far out-pointer
+  (`&local_e` + `SS` at the caller), but the decompiler renders `[BP+0xe]` as a separate
+  `undefined1 in_stack_0000000e`, so the two slots cannot be merged safely.
+* `__INITEMSPAGE`: three words are genuinely pushed (`_OvrInitEms` at `1403:0963-096f`), but
+  the body only shows them being copied to the Borland EMS state (`[0x34]`/`[0x36]`) and used
+  as the `INT 67h AH=43h/47h/48h` argument; no name beyond the EMM call sequence is provable.
+
+Parameters: 1622 -> 1619 total, auto 87 -> 72 (4.4%).  Gate: checked 71 failures 0.

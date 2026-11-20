@@ -7458,3 +7458,68 @@ meaning of the three allowance inputs is itself proved.
 (`5087:122b MOV word ptr ES:[BX+0x82],AX` in the ring-of-protection recompute, preceded by
 `5087:... MOV word ptr ES:[BX+0x82],0`).  No instruction in the program reads it, and no
 table points at it, so it stays `pad_82`.
+
+## Last four struct fields closed: the direction/ring budget block and three reserved bytes
+
+### `char_sheet_t+0x64..+0x7d`: `dirBudgetIn`, `dirBudget`, `ringBudgetIn`, `ringBudget`
+
+The 26-byte `pad_64` decomposes into a per-turn **direction budget**: the three words at
+`+0x64`, the three at `+0x6a`, the three at `+0x70` and the four at `+0x76`.
+
+`upd_usesAlignUp4` clears and fills them:
+
+```
+5087:2a9c  PUSH 6 / PUSH 0 / sheet+0x6a     ; clear the 3-word inner-direction budget
+5087:2ac1  PUSH 6 / PUSH 0 / sheet+0x76     ; clear the 3-word ring budget
+5087:2b17  MOV AX,ES:[BX+0x64]              ; partition dirBudgetIn ...
+5087:2b2b  MOV ES:[BX+0x6a],AX             ; ... into dirBudget
+5087:2b41  MOV AX,ES:[BX+0x64]
+5087:2b55  MOV ES:[BX+0x6c],AX
+5087:2bdc  MOV AX,ES:[BX+0x68]
+5087:2bf0  ADD ES:[BX+0x6e],AX
+```
+
+The two consumers prove what the two budgets control:
+
+* `ovc22_usesEntities2` loops over the **three** `+0x6a` entries and, when it consumes one,
+  executes `dir = dir - dir%6 + ovc22_compute3(index)`, i.e. it picks the inner **6-way
+  direction**;
+* `ovc22_usesEntities3` loops over the **four** `+0x76` entries and, when it consumes one,
+  executes `dir = dir + ((dir/6)%6)*-6` then `dir += ovc22_compute3(group+1)*6`, i.e. it picks
+  the **ring** (the `dir/6` term).
+
+So `dirBudget`/`ringBudget` are per-turn counts consumed as units are oriented, and the `In`
+arrays are the values the ring-of-protection recompute supplies: `dirBudgetIn` is written at
+`5087:132b/1346/1361` from `[BP-0x28]`/`[BP-0x26]`/`[BP-0x24]` (a 6-byte buffer cleared by
+`_fmemset` at `5087:059d`), and `ringBudgetIn` from `local_32[1..3]` at `5087:1619-1623`.
+
+| offset | field | type |
+|---|---|---|
+| +100 | `dirBudgetIn` | `uint16_t[3]` |
+| +106 | `dirBudget` | `uint16_t[3]` |
+| +112 | `ringBudgetIn` | `uint16_t[3]` |
+| +118 | `ringBudget` | `uint16_t[4]` |
+
+### `+0x82` is `reserved_82`
+
+The only accesses are writes: the ring recompute stores 0 and then the word from `[BP-0x38]`
+(`5087:122b MOV word ptr ES:[BX+0x82],AX`).  No instruction reads it and no table points at
+it, so it is typed `uint16_t` and named `reserved_82`.
+
+### `agnt_t+0x2a` is `reserved_2a`
+
+No writer exists: a word store at `[BX+0x28]` covers only `0x28..0x29` (`screenY`), and
+`ScanDisp` over `0x2a` finds no store of any width.  Its single reader is the debug branch of
+`ovc49_agentIsActive` (`8699:1736 CMP byte ptr ES:[BX+0x2a],0x2`), which also requires the
+`BothFactions` debug toggle.  Agents are created zeroed, so the byte stays 0 and the `== 2`
+test is unreachable in normal play.
+
+### `agntG_t+0x94` is `reserved_94`
+
+The class records really are `0x95` bytes (`IMUL DX,0x95` before every indexed access), but
+nothing reads the last byte.  All displacement-`0x94` operands belong to
+`GMapCells`/`GMapFlags`, whose row stride is `148 = 0x94`: of the 17 functions that contain
+both constants, each uses `0x95` for the class record and `0x94` as the map row size.
+The field is typed `uint8_t` and named `reserved_94`.
+
+**Struct fields: 331 auto 4 -> 334 auto 0 (0.0%).**
