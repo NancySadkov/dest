@@ -1540,3 +1540,55 @@ The screen has 395 hits, but they are **not** all trimmable, and two classes mus
 A trim is only justified when a **call site** proves the arity, which is how `ovc22_textRingProt` was
 settled (one `PUSH`, `ADD SP,0x2` at all four call sites).  The tool is therefore a screening aid,
 with `TrimParams.java` applied only after that check.
+
+## The arity loop, and the typing defect it exposed
+
+I ran the screening loop (`UnusedParams.java` -> call-site check -> `TrimParams.java`) and fixed
+three modelling bugs it had:
+
+* byte parameters still occupy a **full word** on the 8086 stack, so a `char` argument advances the
+  offset by 2, not 1 (without this, `agnt_compute15`'s `level` looked unused although the body does
+  `MOV AL,byte ptr [BP + 0x8]`);
+* `[BP+off]` displacements are not exposed through `getOpObjects` in this program, so the offsets are
+  now parsed from the rendered instruction text;
+* the near/far base comes from the declared calling convention, not from scanning for `RET`/`RETF`
+  (for `ovc49_body1` the return sits outside the body ranges).
+
+### Why the loop still cannot be applied in bulk
+
+The screen keeps reporting parameters that *are* used, and one case shows why:
+
+```
+6257:0221  MOV AL,byte ptr [BP + 0xa]    ; is_printable's second argument
+```
+
+`is_printable` is declared `(char *buf, char c)`, both two-byte slots, which puts `c` at `[BP+8]`.
+The body reads `[BP+0xa]`, i.e. the first argument really occupies four bytes.  A parameter that is
+truly a far pointer but never loaded with `LES`/`LDS` cannot be told apart from a near one by this
+method, and it shifts every later offset, so "unused" verdicts built on that offset are unsound.
+`strcat` is the same story: `LES DI,[BP + 0x6]` proves `dst` is far, so `src` sits at `0xa`, not `8`.
+
+So trimming stays restricted to cases where a **call site** proves the arity (the
+`ovc22_textRingProt` case), and the screen is used only to suggest where to look.
+
+### What the investigation did fix: 74 near pointers that are really far
+
+`FarPtrParams.java` widens a parameter when the body loads it with `LES`/`LDS` from its own stack
+slot — direct machine-code proof that the argument is four bytes:
+
+```
+FAR strcat   #0 dst      : char * -> char *32     (LES DI,[BP+0x6])
+FAR memcmp   #0 s1       : char * -> char *32
+FAR read     #1 buf      : void * -> void *32
+FAR _zapline #2 dst      : undefined2 * -> undefined2 *32
+FAR __VRAM   #1 src      : uint * -> uint *32
+FAR driver_loop3 #1 param_2 : char * -> char *32
+...
+widened=74  (54 functions, 22 of them game code)
+```
+
+This corrects the argument widths and therefore the offsets of every following parameter, which is
+the precondition for any further name/type work on those signatures.  The C rendering often looks
+unchanged (`char *` either way) because Ghidra prints the `*32` size only in its type name.
+
+Parameters: unchanged at 123 (this batch retypes rather than renames).  Gate: checked 71 failures 0.
