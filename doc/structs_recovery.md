@@ -7348,3 +7348,113 @@ still does not name them.
 
 It also corroborates `strongholdKind`: `+0x5a` holds `1` in Corak's record, exactly the value
 `ovc18_checkFortressPlacement` stores on its non-fortress path.
+
+## `char_sheet_t+0x40`: the spy-report block, and `+0x3f` is the faction
+
+The 13 bytes at `+0x40..+0x4c` were a single `pad_40` array.  Reading the three functions
+that use them settles all eight fields, because they are computed and consumed as a tight
+turn-based report record.
+
+### `+0x40` = `spyReports` (the enable flag)
+
+Writers (every leader-sheet builder):
+
+```
+619c:0577  MOV byte ptr ES:[BX + 0x40],0x1      ; ovc30_createLeader
+43xx-style leader builders in ovc43_usesFmFreeAudio and stats_textRingProt store 1 too
+```
+
+Readers:
+
+```
+5b66:0b5a  CMP byte ptr ES:[BX + 0x40],0x0      ; ovc25_spyReportNotice
+5b66:1991  MOV AL,byte ptr ES:[BX + 0x40]; OR AX,AX; JNZ
+                                                ; ovc25_intelAttackingNotice
+5087:...   CMP byte ptr ES:[BX + 0x40],0x0      ; ovc23_textAdlibNone report loop
+```
+
+When it is zero the leader is skipped by the whole report pass; when it is nonzero the code
+computes `nearestEnemyLeader` and can emit
+"Spies report %s heading towards stronghold. (%d, %d)" or "Intelligence reports %s
+attacking."  The save files agree: `save.003` stores `1` in this byte for its leader records
+(e.g. the records at `0xb62f`, `0xb68d`, `0xb737` in the scan), while the older `save.005`
+stores `0`, so it is a live per-game flag rather than a constant.
+
+### The rest of the block is the report scratch state
+
+`ovc25_spyReportNotice` (`5b66:085d`) clears four words and then fills them:
+
+```
+*(uint16 *)(sheet + 0x41) = 0;   /* unitsNear      */
+*(uint16 *)(sheet + 0x43) = 0;   /* enemiesNear    */
+*(uint16 *)(sheet + 0x45) = 0;   /* unitCount      */
+*(uint16 *)(sheet + 0x47) = 0;   /* unitsOnTile    */
+...
+if (entity.party == leaderIndex) {
+    (*+0x45)++;                                  /* every own unit          */
+    if (|dx|/2 + |dy| < 10) (*+0x41)++;          /* own units within 10     */
+    if (entity.x == sheet->x && entity.y == sheet->y) (*+0x47)++;
+}
+else if (GMenuStrings[entity.gindex*0x95 + 0x1f] != sheet->faction) {
+    if (|dx|/2 + |dy| < 10) (*+0x43)++;          /* enemy units within 10   */
+}
+```
+
+| offset | field | type | evidence |
+|---|---|---|---|
+| +0x40 | `spyReports` | `uint8_t` | enable flag, writers/readers above |
+| +0x41 | `unitsNear` | `uint16_t` | incremented for own units under 10 tiles |
+| +0x43 | `enemiesNear` | `uint16_t` | incremented for enemy units under 10 tiles |
+| +0x45 | `unitCount` | `uint16_t` | incremented for every own unit; `ovc22_usesPlayerCount` divides it by 10 and `ovc22_textDecreaseMessageDelay` compares it with 0x23/0x4b/0x19 |
+| +0x47 | `unitsOnTile` | `uint16_t` | own units standing on the leader's tile |
+| +0x49 | `nearestEnemyLeader` | `uint8_t` | nearest leader with `faction != sheet->faction`, 0xff when none |
+| +0x4a | `reportState` | `uint8_t` | set 0/1/2 at the end of the three notice branches; `!= 2` suppresses a repeated spies report and `!= 0` suppresses a second entity report in `ovc25_usesAlignUp47` |
+| +0x4b | `nearestEnemy` | `uint16_t` | nearest enemy entity index, tested with `== -1` |
+
+All eight offsets are fixed by the instructions (`MOV word ptr ES:[BX+0x41]` ...
+`MOV word ptr ES:[BX+0x4b]`), and they exactly fill `0x40..0x4c`, the former `pad_40[13]`.
+
+### `+0x3f` is `faction`, not an "excluded" marker
+
+The field was named `excluded` after a temporary array one menu path builds from it.  The
+readers say it is the side id:
+
+```
+ovc30_createLeader:   sheet->faction = GMenuStrings[gindex*0x95 + 0x1f];
+enemy test:           GMenuStrings[entity.gindex*0x95 + 0x1f] != sheet->faction
+side mask:            0x1000 << (sheet->faction & 0x1f)      (ovc23_textConstructionAbandoned)
+per-side array:       partyCounts[sheet->faction]++          (ovc18_showLeaderView)
+```
+
+so it was retyped and renamed `faction`; `ovc30_createLeader` now decompiles as
+`pcStack_6->faction = *(uint8_t *)((int)(char **)GMenuStrings + (uint)gindex * 0x95 + 0x1f);`.
+
+### `+0x64` is not a current/previous snapshot
+
+The earlier hypothesis was that `+0x64` was copied to `+0x6a` and was therefore a
+current/previous pair.  Reading the whole sequence shows otherwise:
+
+```
+5087:2a9c  PUSH 6 / PUSH 0 / sheet+0x6a   ; _fmemset(sheet+0x6a, 0, 6)
+5087:2ac1  PUSH 6 / PUSH 0 / sheet+0x76   ; _fmemset(sheet+0x76, 0, 6)
+5087:2ae6  PUSH 0x64 / CALL randBelow     ; rand(100)
+5087:2b00  CMP AL, byte ptr ES:[BX+0xa9]  ; against a per-leader probability
+5087:2b17  MOV AX, ES:[BX+0x64]
+5087:2b2b  MOV ES:[BX+0x6a],AX           ; branch A: whole value into slot 0
+5087:2b41  MOV AX, ES:[BX+0x64]
+5087:2b55  MOV ES:[BX+0x6c],AX           ; branch B: into slot 1, then add +0x66/+0x68
+```
+
+So `+0x6a/+0x6c/+0x6e` and `+0x76..+0x7c` are per-turn working counters that
+`ovc22_usesEntities2`/`ovc22_usesEntities3` decrement as units act, while `+0x64/+0x66/+0x68`
+and `+0x70/+0x72/+0x74` are the inputs of a probability-weighted distribution into them
+(probability byte `+0xa9`).  That is not a snapshot of anything: it is a random partition of
+the leader's movement allowance across direction bands.  `+0x64` stays unnamed until the
+meaning of the three allowance inputs is itself proved.
+
+### `+0x82` remains write-only
+
+`ScanDisp` over displacement `0x82` reports six operands; only one touches a leader sheet
+(`5087:122b MOV word ptr ES:[BX+0x82],AX` in the ring-of-protection recompute, preceded by
+`5087:... MOV word ptr ES:[BX+0x82],0`).  No instruction in the program reads it, and no
+table points at it, so it stays `pad_82`.
