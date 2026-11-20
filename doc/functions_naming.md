@@ -1635,3 +1635,19 @@ After the retypes all three functions disappear from the `UnusedParams` screen (
 confirms the diagnosis: the "unused" verdict was a width error, not a dead argument.
 
 Nothing was trimmed in this batch.  Gate: checked 71 failures 0.
+
+**`fontChWidth`** (`302d:04eb`) — same story:
+
+```
+302d:0551  LES BX,[BP + 0x6]        ; widths is a far pointer
+302d:0559  PUSH AX                  ; one more word
+302d:055a  PUSH [BP + 0xc]
+302d:055d  PUSH [BP + 0xa]          ; the character
+302d:0564  ADD SP,0x6               ; 4 + 2 bytes
+```
+
+`widths` retyped `uint8_t *32`, so `ch` sits at `[BP+0xa]` where the body actually reads it; the
+function then leaves the screen as well (375 -> 374).
+
+Screen total across batch 1: **378 -> 374**, i.e. four of the ten examined "unused" parameters were
+width errors.  No parameter was trimmed in this batch.
