@@ -2638,3 +2638,58 @@ void ___exit(uint16_t status, uint16_t noTerminate, uint16_t skipCleanup)
 byte (`77eb:09e9`, `77eb:0a97`).
 
 Parameters: auto 9 -> 4 (0.2%).  Gate: checked 71 failures 0.
+
+## A truncated body hid a parameter: `attact_textArena` (4 -> 3)
+
+The function was 170 bytes long, but the instructions continue past `1ad9` and the next
+function starts at `1bfc`.  Re-applying the real body (`SetBody 3f0b:1a2f 3f0b:1bfb`, 461
+bytes) exposed `3f0b:1bd6 LES BX,[BP + 0x6]`, i.e. the first argument is a **far** output
+pointer, and its segment is the former `param_2`:
+
+```
+char * attact_textArena(uint16_t *32 foundIndexOut, char mode, uint8_t partyIndex,
+                        uint16_t x, uint16_t y)
+```
+
+The body now binds `*foundIndexOut = uVar8;` (before the fix it printed `_foundIndexOut` and
+declared the pointer as a near one).  The callers push `SS:&local` for it, matching the far
+pointer.
+
+### Body-boundary audit (`scripts/ghidra/BodyEnds.java`)
+
+The truncation was not unique, so every function was checked for a body that does not end in
+a return/jump:
+
+```
+bodies not ending in return/jump: 141 / 1590
+```
+
+Breakdown: 108 are the `DOS21::` pseudo-functions (no instructions by construction), 9 end in
+a call to a noreturn routine (`startx`, `_terminate`, `_abort`, `__OverlayHalt`, `exit`,
+`__exit`, `_cexit`, `__OvrUntrapJmpsAndStack`, `stExit`), 7 are the `N_*_at_` POP/PUSH
+far-call stubs whose body intentionally ends at the `PUSH`, leaving **17 genuine boundary
+defects**: `__vprinter_1000_0e74/0e7b/0eb3`, `malloc_JoinFreeBlocks`, `init_textFilename`,
+`saveui_configureMessageDelay`, `caseD_0`, `caseD_0_2`, `ovc23_usesAlignUp43`,
+`manage_textAllProperty`, `manage_textAllProperty2`, `manage_usesLitoa102`,
+`manage_usesCurSfxType3`, `manage_textTotalPopulation`, `bldng_selectBuildingType`,
+`ovc27_textTakesHalfDamage3`.
+
+`BadBodies.java` additionally reports **173 non-contiguous bodies**, of which **9 span two
+segments** (impossible for an overlay function):
+
+| function | foreign ranges |
+|---|---|
+| `init_textFilename` | `3d16:1e08-1e11` |
+| `saveui_configureMessageDelay` | `49fd:103c-1079` |
+| `4528:14b1` | `3f0b:0f59-1081` |
+| `ovc22_textPOPULATION` | `4d05:2fb2`, `4d05:3067-3249`, `4d05:32b8-330b` |
+| `ovc22_textRingProt` | `4d05:3290-32b7`, `5943:1fd6-1ffd` |
+| `55fe:0000` | `4d05:302a-3066` |
+| `ovc23_usesAlignUp43` | `5943:2039-205b` |
+| `55fe:0cdf` | `4d05:35f6-365a`, `4d05:3667-36b8` |
+| `6a8f:2084` | `67e7:0b9a-0be3` |
+
+These are overlay-resolution artifacts (two overlays share a runtime segment), and they are
+recorded rather than silently trimmed because the correct range set needs the overlay map.
+
+Parameters: auto 4 -> 3 (0.2%).  Gate: checked 71 failures 0.
