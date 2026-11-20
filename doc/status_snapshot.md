@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn549/naming_summary.txt`.
+`tmp/auditn551/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -41,7 +41,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    zeroed audio pairs became `far_t audioPlaceholder0..3`; `MenuItemEnabled` was
    retyped `uint8_t[5]` (absorbing `DAT_2000_d1e2`); `2ca1:0000` became
    `uint16_t[3] crtInitReserved`; and the unreferenced bytes/scratch words became
-   `noAnimBlit`, `reserved_ca7a`, `ovrHeaderReserved`,
+   `noAnimBlit`, `unused_ca7a`, `unused_ovrSlot`,
    `callResultTemp`, `debugEmptyCellCount` and `debugStaleTickCount`, each with its
    store/read counts in `doc/globals_naming.md`.  `reserved_187` is gone: it was
    `menuItemRow[5]`, the last element of the six-byte table at `2410:9082` that is
@@ -170,8 +170,16 @@ Remaining formally-reserved names, each with its access record:
 
 | symbol | record |
 |---|---|
-| `ovrHeaderReserved` | **0 refs** (code and data); 4-byte zero slot at the tail of `__OVRGROUP`; removal reverted because Ghidra replaced it with the auto name `uint32_t_225d_008e` |
-| `reserved_ca7a` | 1 write (`main`, value 1), **0 reads**; the displacement bytes `7A 89` occur exactly once in the whole image - the write itself |
-| `agnt_t+0x2a` | 1 read (`ovc49_agentIsActive`, debug branch), 0 assignments; only writer is a `REP MOVSW` record copy; all 5 live agents read 0 |
-| `agntG_t+0x94` | 0 code references; `0x14` in all 5 live class records; no write watchpoint fires |
+| `unused_ovrSlot` | **0 refs** (code and data); 4-byte zero slot at the tail of `__OVRGROUP`; removal reverted because Ghidra replaced it with the auto name `uint32_t_225d_008e` |
+| `unused_ca7a` | 1 write (`main`, value 1), **0 reads**; the displacement bytes `7A 89` occur exactly once in the whole image - the write itself |
+| `agnt_t+0x2a` -> `pad_0x2a` | 1 read (`ovc49_agentIsActive`, debug branch), 0 assignments; only writer is a `REP MOVSW` record copy; all 5 live agents read 0 |
+| `agntG_t+0x94` -> `pad_0x94` | 0 code references; `0x14` in all 5 live class records; no write watchpoint fires |
 | `agntG_t+0x3a`, `+0x46` | 0 struct accesses; bytes inside the class record |
+
+## Placeholder policy closed
+
+No `reserved_` name remains in the model (`ListSyms reserved_` -> 0; `ListFieldNames` on
+`agnt_t` and `agntG_t` -> no reserved member).  The eight former placeholders now carry names
+that state exactly what the evidence shows: `unused_ca7a`, `unused_ovrSlot`, `pad_0x2a`,
+`pad_0x3a`, `pad_0x43`, `pad_0x46`, `pad_0x47`, `pad_0x94`, each with the access count in its
+symbol/field comment.

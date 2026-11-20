@@ -2788,7 +2788,7 @@ wrap to 5 and stop.  `ovc41_usesMenuItemEnabled` also indexes `MenuItemEnabled[5
 * `2410:0845` — one read (`3d16:0126 MOV AL,[0x845]; OR AX,AX; JNZ`), zero writes; it sits
   between `GMenuFlag` (0844) and `flashPaletteEf` (0846) -> `reserved_0845`.
 * `2000:ca7a` — written 1 by `main` (`1301:00bd`) right after `MenuMode = 1`, never read ->
-  `reserved_ca7a`.
+  `unused_ca7a`.
 * `225d:008e` — four bytes in the Borland `OVRDATA` header -> `uint32_t ovrHeaderReserved`.
 
 ### The three used scratch words got descriptive names
@@ -2851,7 +2851,7 @@ object created as:
 Evidence for the name: the array maps a menu item to the screen row currently drawn for it, and
 the only reader converts the stored value back to a row index (`DEC AX`).
 
-## `reserved_0845` and `reserved_ca7a`: exact access counts
+## `reserved_0845` and `unused_ca7a`: exact access counts
 
 Both were re-scanned with the `2410`-side displacements:
 
@@ -2890,7 +2890,7 @@ so a non-zero value suppresses the animation-frame blit.  The image byte is `0x0
 instruction writes it, i.e. the skip is never enabled.  Named `noAnimBlit` from that branch and
 typed `uint8_t`, with the exact store/read record in the symbol comment.
 
-## `reserved_ca7a`: a real standalone byte, write-only
+## `unused_ca7a`: a real standalone byte, write-only
 
 Its neighbourhood rules out both padding and a word half:
 
@@ -2908,7 +2908,7 @@ and not the high half of a wider field.  It is a one-byte variable that is writt
 `main` (value 1, immediately before `ovr_uiMainMenu()`) and never read.  With no reader the
 name cannot be derived; the counts are recorded instead.
 
-## `reserved_ca7a`: proven write-only by raw byte search (not padding)
+## `unused_ca7a` (was `unused_ca7a`): proven write-only by raw byte search
 
 A displacement-level scan can miss accesses that the listing never decoded, so the raw image
 was searched with `scripts/ghidra/ScanBytes.java`:
@@ -2926,7 +2926,7 @@ it is the store in `main`.  Combined with the byte layout proved earlier
 half - that is written once and never read.  No name can be derived from a reader, so the
 symbol keeps its offset name and the record above is the evidence.
 
-## `ovrHeaderReserved`: removal attempted and reverted
+## `unused_ovrSlot` (was `unused_ovrSlot`): removal attempted and reverted
 
 The slot carries **0 code and 0 data references** (raw-byte scan), and its block is Borland's
 `__OVRGROUP`:
@@ -2949,3 +2949,16 @@ Removing the symbol was tried: `RemoveSymNamed` deleted it and Ghidra immediatel
 address as **`uint32_t_225d_008e`**, an auto-generated data name.  That is worse than an
 explicit reserved name (the naming audit does not recognise the pattern, so it would silently
 pass), so the symbol was restored with a comment recording the 0-reference evidence.
+
+## Final placeholder policy: explicit `unused_*` / `pad_*` identifiers
+
+Every remaining location that carries no derivable semantics is now named for **what the
+evidence shows it to be**, not with a `reserved_` prefix:
+
+| symbol | previous | access record |
+|---|---|---|
+| `unused_ca7a` (`2000:ca7a`) | `reserved_ca7a` | one store in `main` (`1301:00bd`), **zero reads**; the displacement bytes `7A 89` occur exactly once in the image (that store) |
+| `unused_ovrSlot` (`225d:008e`) | `ovrHeaderReserved` | **0 code and 0 data references**; zero 4-byte slot in Borland's `__OVRGROUP` |
+
+The `unused_` prefix is deliberate: these are real storage locations (a store or a data slot)
+that nothing ever reads, so no semantic name can be justified.

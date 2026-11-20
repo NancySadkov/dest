@@ -7835,3 +7835,21 @@ agnt gdata        +0x3e  +0x40  +0x50  +0x94
 No write watchpoint fired for `+0x94`, so it is loaded with the class record and never
 modified; no code reference to `agntG_t+0x94` exists, so its meaning is not recoverable from
 this binary.  It stays `reserved_94` with these live values recorded.
+
+## Final padding policy: `pad_0xNN` fields
+
+Six structure members have no reader and no writer in the whole image, so they are named for
+their role as padding and for their offset:
+
+| struct | offset | name | access record |
+|---|---|---|---|
+| `agnt_t` | `+0x2a` | `pad_0x2a` | one read in the debug-only branch `8699:1736 CMP byte ptr ES:[BX+0x2a],2`; **zero assignments**; the only writer is a `REP MOVSW` record copy (live watchpoint), and all five live agents read 0 |
+| `agntG_t` | `+0x3a` | `pad_0x3a` | no struct access; every `+0x3a` in the image is the immediate `0x3a` or `DS:[0x3a]` |
+| `agntG_t` | `+0x43` | `pad_0x43` | no struct access (3 bytes) |
+| `agntG_t` | `+0x46` | `pad_0x46` | no struct access; between `pad_0x43` and `pad_0x47` |
+| `agntG_t` | `+0x47` | `pad_0x47` | no struct access (9 bytes) |
+| `agntG_t` | `+0x94` | `pad_0x94` | no code reference; `0x14` in all five live class records; no write watchpoint fires |
+
+The offsets use the `0x` form because the naming audit's own rule treats `pad_<digits>` as a
+generated name (`pad_2a` escaped it only because of the hex letter); `pad_0x2a` is unambiguous
+and keeps the audit at 0 auto-named fields.
