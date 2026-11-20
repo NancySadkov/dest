@@ -3020,3 +3020,52 @@ the overlay), which leaves **no auto-named parameter anywhere**:
 ```
 parameters  1615  auto 0  (0.0%)
 ```
+
+## Body coverage: 9 bodies coalesced, 146 gaps are genuinely undefined
+
+`scripts/ghidra/CoalesceBodies.java` merges a body's ranges when every gap is small and every
+gap byte is **already part of a decoded instruction**:
+
+```
+coalesced=9  skipped=162  undecodedGaps=146
+```
+
+So 9 functions had ranges split by instruction bytes that were excluded from the body; the
+remaining 146 have gap bytes the listing never decoded.  Force-disassembling those would be a
+guess (a 3-byte gap such as `83 C4 02` is a valid `ADD SP,2`, but `EB 48` in the same position
+could equally be table data), so they were left untouched.
+
+`BadBodies`: 171 -> **162** non-contiguous bodies.  `BodyEnds` stays 130/1583, of which 108 are
+`DOS21::` pseudo-functions, 9 noreturn tails, 10 `PUSH` stubs/shared-entry helpers and the
+remaining handful are the overlap cases already documented.
+
+## Class-record loader: `agnt->gdata` is never stored directly
+
+`agnt->gdata` lives at `agnt_t+0x1d`.  A raw-byte scan for every base-register encoding of a
+store/load at that offset gives:
+
+```
+26 89 47 1D   ES:[BX+1d] <- AX      0 hits
+26 C7 47 1D   ES:[BX+1d] <- imm     0 hits
+26 88 47 1D   ES:[BX+1d] <- AL      0 hits
+89 47 1D      [BX+1d] <- AX         0 hits
+47 1D / 44 1D / 45 1D / 46 1D / 40 1D / 41 1D  (BX/SI/DI/BP/BX+SI/BX+DI)
+              the only real hit is 3b1d:0910
+```
+
+and that hit is a **reader**:
+
+```
+3b1d:0910  26 C4 5F 1D   LES BX,ES:[BX + 0x1d]      ; BX = agnt->gdata
+3b1d:0914  26 8A 47 1D   MOV AL,byte ptr ES:[BX+0x1d] ; AL = gdata->+0x1d
+3b1d:0918  98            CBW
+3b1d:0919  D1 F8         SAR AX,1                   ; halved, then compared
+```
+
+The `push 0x95` sites turned out to be `printf` calls: `0x1000:2747` is `printf`, and the
+pushed words are the format far pointer and `GGameState` (`DS:0x898e`), not an allocation size.
+
+Combined with the live `REP MOVSW` hit, the picture is that agent records (including the `gdata`
+pointer) are **copied from a template**; there is no per-agent store.  That means `agntG_t`
+fields are never written by name either, which is why `+0x3a`, `+0x46` and `+0x94` have no
+writer to observe and no reader in the listing.
