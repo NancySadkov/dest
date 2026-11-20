@@ -1592,3 +1592,46 @@ the precondition for any further name/type work on those signatures.  The C rend
 unchanged (`char *` either way) because Ghidra prints the `*32` size only in its type name.
 
 Parameters: unchanged at 123 (this batch retypes rather than renames).  Gate: checked 71 failures 0.
+
+## Arity loop, batch 1: call sites give the true argument widths
+
+For each candidate the call site is disassembled and the pushed word count is read off the
+`ADD SP,0xN` that follows.  Three functions turned out not to have unused parameters at all —
+their parameters were declared as two-byte pointers while the callers push far pointers, so every
+later offset was shifted and the screen called them unused.
+
+**`attact_usesEntityCount2` / `attact_usesAgntCount2`** (`3f0b:277b`, `3f0b:28eb`)
+
+```
+3f0b:2a9a  PUSH SS
+3f0b:2a9b  LEA AX,[BP - 0x1e] / PUSH AX       ; far pointer #1
+3f0b:2a9f  PUSH SS
+3f0b:2aa0  LEA AX,[BP - 0x1a] / PUSH AX       ; far pointer #2
+3f0b:2aa5  CALL 0x4000:182b
+3f0b:2aa8  ADD SP,0x8                          ; two 4-byte pointers
+```
+
+so both out-parameters are far pointers (`uint16_t *32`).  The body then decompiles through both
+instead of the previous `in_stack_00000008` garble:
+
+```
+((uint16_t *)param_2)[1] = 0;  *param_2 = 0;
+((uint16_t *)sum)[1]     = 0;  *sum     = 0;      /* the 32-bit accumulators */
+```
+
+**`copyGrayscalePalette`** (`317e:08ba`)
+
+```
+317e:0b7f  PUSH AX                     ; count
+317e:0b89  PUSH SS / PUSH DX           ; far destination
+317e:0b8c  CALL 0x3000:209a
+317e:0b8f  ADD SP,0x6                  ; 4-byte pointer + one word
+```
+
+so `dst` is a far pointer (`uint8_t *32`), not the two-byte pointer the listing had.
+
+`SetVarType.java` gained a ` *32` suffix for four-byte pointers so these could be applied directly.
+After the retypes all three functions disappear from the `UnusedParams` screen (378 -> 375), which
+confirms the diagnosis: the "unused" verdict was a width error, not a dead argument.
+
+Nothing was trimmed in this batch.  Gate: checked 71 failures 0.

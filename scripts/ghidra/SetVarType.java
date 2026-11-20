@@ -33,7 +33,11 @@ public class SetVarType extends GhidraScript {
                 DataType dt;
                 java.util.regex.Matcher am = java.util.regex.Pattern
                         .compile("^(.+)\\[(\\d+)\\]$").matcher(spec);
-                if (spec.endsWith(" *")) {
+                if (spec.endsWith(" *32")) {
+                    DataType base = dtm.getDataType(spec.substring(0, spec.length() - 4).trim());
+                    if (base == null) { println("NOTYPE " + spec); failed++; continue; }
+                    dt = new PointerDataType(base, 4, dtm);
+                } else if (spec.endsWith(" *")) {
                     DataType base = dtm.getDataType(spec.substring(0, spec.length() - 2).trim());
                     if (base == null) { println("NOTYPE " + spec); failed++; continue; }
                     dt = new PointerDataType(base, 2, dtm);
