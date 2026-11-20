@@ -2602,3 +2602,39 @@ The prologue reads `[BP+6]` (the value scaled by `LXMUL`) **and** `[BP+8]` (pass
 now calls `attact_countPartyUnits(partyIndex)`.
 
 Parameters: auto 13 -> 9 (0.6%).  Gate: checked 71 failures 0.
+
+## `___exit`'s protocol, and two table-index parameters (9 -> 4)
+
+### `___exit`: status + two word flags
+
+The four small wrappers around it give the meaning matrix directly:
+
+```
+1000:08fd exit(status):   PUSH 0; PUSH 0; PUSH [BP+6]; CALL   ; (status, 0, 0)
+1000:090c __exit(status): PUSH 1; PUSH 0; PUSH [BP+6]; CALL   ; (status, 0, 1)
+1000:091e _cexit():       PUSH 0; PUSH 1; PUSH 0;       CALL   ; (0, 1, 0)
+1000:092c (4th):          PUSH 1; PUSH 1; PUSH 0;       CALL   ; (0, 1, 1)
+```
+
+and the callee tests them as **words**: `MOV SI,[BP+8]` (skip the atexit loop and the stream
+flushes), `CMP word ptr [BP+6],0` (return instead of terminating), `PUSH [BP+4]` (the status
+handed to `_terminate`).  Typing the flags as bytes split each word into a byte parameter plus
+an `in_stack` leftover; as words the body binds:
+
+```
+void ___exit(uint16_t status, uint16_t noTerminate, uint16_t skipCleanup)
+```
+
+### `attact_usesLDIV_at_`: a menu-item index
+
+`MOV AL,[BP+6]; MOV BX,AX; MOV AL,ES:[BX+0x9082]` — the byte table at `0x9082` is the one
+`main` indexes with `GMenuItem` (`1301:07fb`, `1301:0858`) and `draw_usesFillRect2` writes
+(`2e25:0116`).  The only caller pushes `[0x8980]` = `GMenuItem`.  So `param_1` -> `menuIndex`.
+
+### `ovc45_usesLDIV_at_`: a party index
+
+`MOV AL,[BP+6]; SHL AX,2; LES BX,ES:[AX+0x217a]; CMP word ptr ES:[BX+0x87],0xa` — `0x217a` is
+`GLeaderSheets`, so `param_1` -> `partyIndex`.  Both direct callers forward their own incoming
+byte (`77eb:09e9`, `77eb:0a97`).
+
+Parameters: auto 9 -> 4 (0.2%).  Gate: checked 71 failures 0.
