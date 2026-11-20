@@ -2926,7 +2926,26 @@ it is the store in `main`.  Combined with the byte layout proved earlier
 half - that is written once and never read.  No name can be derived from a reader, so the
 symbol keeps its offset name and the record above is the evidence.
 
-`ovrHeaderReserved` (`225d:008e`) was removed: it carried **0 references** and sits in
-Borland's `__OVRGROUP` block, whose surrounding labels are inconsistent with the required
-4-byte `__OVRHOOK__` pointer at `0x86` (labels there advance by 2 while the far pointers need 4),
-so the tail label was not a real variable and removing it loses nothing.
+## `ovrHeaderReserved`: removal attempted and reverted
+
+The slot carries **0 code and 0 data references** (raw-byte scan), and its block is Borland's
+`__OVRGROUP`:
+
+```
+225d:0080  __CALLEXTEMSSWAP
+225d:0082  __CALLEXTEXIT
+225d:0084  __CALLEMSEXIT
+225d:0086  __OVRHOOK__        (4-byte far pointer; live value 0823:0837)
+225d:008a  __OVRBACKLINK__
+225d:008c  __OvrExepathBuf
+225d:008e  ovrHeaderReserved  (4 bytes, all zero)
+```
+
+The labels advance by 2 from `0x80` to `0x8a` while the pointer actually read by
+`CALLF [0x86]` needs 4 bytes, so the surrounding naming is inconsistent and no Borland name can
+be attributed to the tail slot.
+
+Removing the symbol was tried: `RemoveSymNamed` deleted it and Ghidra immediately re-created the
+address as **`uint32_t_225d_008e`**, an auto-generated data name.  That is worse than an
+explicit reserved name (the naming audit does not recognise the pattern, so it would silently
+pass), so the symbol was restored with a comment recording the 0-reference evidence.
