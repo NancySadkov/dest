@@ -1651,3 +1651,26 @@ function then leaves the screen as well (375 -> 374).
 
 Screen total across batch 1: **378 -> 374**, i.e. four of the ten examined "unused" parameters were
 width errors.  No parameter was trimmed in this batch.
+
+## Arity loop, batch 2: `blitGfx10`
+
+Call site `317e:0c4a` inside `blitGfxRect`:
+
+```
+317e:0c37  MOV AL,byte ptr [BP + 0x14]   ; type
+317e:0c3a  PUSH AX
+317e:0c3b  PUSH word ptr [BP + 0x10]     ; dst segment
+317e:0c3e  PUSH word ptr [BP + 0x0e]     ; dst offset
+317e:0c41  PUSH DI                       ; y
+317e:0c42  PUSH SI                       ; x
+317e:0c43  PUSH word ptr [BP + 0x08]     ; gfx segment
+317e:0c46  PUSH word ptr [BP + 0x06]     ; gfx offset
+317e:0c4d  ADD SP,0x0e                   ; 14 bytes
+```
+
+14 bytes decompose as `gfx` 4 + `x` 2 + `y` 2 + `dst` 4 + `type` 2, so `dst` is a far pointer
+(`brect_t *32`) and `type` sits at `[BP+0x12]`, not `[BP+0x10]` where the two-byte declaration put
+it.  With `dst` widened, `blitGfx10` leaves the `UnusedParams` screen (374 -> 373).
+
+Running totals for the arity loop: **378 -> 373** on the screen, and every resolved case has been a
+width error rather than a dead parameter.
