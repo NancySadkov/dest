@@ -31,10 +31,16 @@ public class SetVarType extends GhidraScript {
                 if (fn == null) { println("NOFUNC " + f[0]); missing++; continue; }
                 String spec = f[2].trim();
                 DataType dt;
+                java.util.regex.Matcher am = java.util.regex.Pattern
+                        .compile("^(.+)\\[(\\d+)\\]$").matcher(spec);
                 if (spec.endsWith(" *")) {
                     DataType base = dtm.getDataType(spec.substring(0, spec.length() - 2).trim());
                     if (base == null) { println("NOTYPE " + spec); failed++; continue; }
                     dt = new PointerDataType(base, 2, dtm);
+                } else if (am.matches()) {
+                    DataType base = dtm.getDataType(am.group(1).trim());
+                    if (base == null) { println("NOTYPE " + spec); failed++; continue; }
+                    dt = new ArrayDataType(base, Integer.parseInt(am.group(2)), base.getLength());
                 } else {
                     dt = dtm.getDataType(spec);
                     if (dt == null) { println("NOTYPE " + spec); failed++; continue; }
