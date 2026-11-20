@@ -2907,3 +2907,26 @@ Its neighbourhood rules out both padding and a word half:
 and not the high half of a wider field.  It is a one-byte variable that is written once in
 `main` (value 1, immediately before `ovr_uiMainMenu()`) and never read.  With no reader the
 name cannot be derived; the counts are recorded instead.
+
+## `reserved_ca7a`: proven write-only by raw byte search (not padding)
+
+A displacement-level scan can miss accesses that the listing never decoded, so the raw image
+was searched with `scripts/ghidra/ScanBytes.java`:
+
+```
+direct forms (A0/A1/A3/8B06/8906/C706/803E/8D.. 7A 89)   -> 0 hits except
+  C6 06 7A 89 xx   MOV byte ptr [0x897a], imm8            -> 1 hit  (the write)
+any occurrence of the displacement bytes 7A 89             -> 1 hit  (same instruction)
+```
+
+So across the whole program image there is exactly **one** instruction that names `0x897a`, and
+it is the store in `main`.  Combined with the byte layout proved earlier
+(`GGameExe` far_t at `0x8976-0x8979`, `0x897a` even-aligned byte, `CrossBlitCount2` at `0x897b`,
+`CrossBlitY` at `0x897c`), the object is a real standalone byte - not padding and not a word
+half - that is written once and never read.  No name can be derived from a reader, so the
+symbol keeps its offset name and the record above is the evidence.
+
+`ovrHeaderReserved` (`225d:008e`) was removed: it carried **0 references** and sits in
+Borland's `__OVRGROUP` block, whose surrounding labels are inconsistent with the required
+4-byte `__OVRHOOK__` pointer at `0x86` (labels there advance by 2 while the far pointers need 4),
+so the tail label was not a real variable and removing it loses nothing.

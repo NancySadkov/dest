@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn542/naming_summary.txt`.
+`tmp/auditn543/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -41,7 +41,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    zeroed audio pairs became `far_t audioPlaceholder0..3`; `MenuItemEnabled` was
    retyped `uint8_t[5]` (absorbing `DAT_2000_d1e2`); `2ca1:0000` became
    `uint16_t[3] crtInitReserved`; and the unreferenced bytes/scratch words became
-   `noAnimBlit`, `reserved_ca7a`, `ovrHeaderReserved`,
+   `noAnimBlit`, `reserved_ca7a`,
    `callResultTemp`, `debugEmptyCellCount` and `debugStaleTickCount`, each with its
    store/read counts in `doc/globals_naming.md`.  `reserved_187` is gone: it was
    `menuItemRow[5]`, the last element of the six-byte table at `2410:9082` that is
@@ -131,7 +131,7 @@ so the foreign ranges were overlay-resolution artifacts; `SetBody` dropped them
 `ovc23_usesAlignUp43`, `ovc23_textConstructionAbandoned`, `ovc41_textOnlyPlaceSingle`).
 The audit is unchanged by the rebuild, so nothing was hidden there.
 
-`BodyEnds.java`: 141 -> **130 / 1584**.  Breakdown: 108 `DOS21::` pseudo-functions, 9
+`BodyEnds.java`: 141 -> **130 / 1583**.  Breakdown: 108 `DOS21::` pseudo-functions, 9
 noreturn tails (`CALL`/`CALLF`/`INT`), 10 `PUSH` (7 `N_*_at_` far-call stubs + 3
 shared-frame fragments), and 6 instruction-level fragments (`MOV` 3, `XCHG`, `JNZ`).
 Three entries were proven false and deleted (`caseD_0`, `caseD_0_2` = jump tables;
@@ -170,8 +170,7 @@ Remaining formally-reserved names, each with its access record:
 
 | symbol | record |
 |---|---|
-| `reserved_ca7a` | 1 write (`main`, value 1), 0 reads; standalone byte (no word/dword covers it) |
-| `ovrHeaderReserved` | 0 references; 4-byte zero field at the end of Borland's `__OVRGROUP` block |
+| `reserved_ca7a` | 1 write (`main`, value 1), **0 reads**; the displacement bytes `7A 89` occur exactly once in the whole image - the write itself |
 | `agnt_t+0x2a` | 1 read (`ovc49_agentIsActive`, debug branch), 0 assignments; only writer is a `REP MOVSW` record copy; all 5 live agents read 0 |
 | `agntG_t+0x94` | 0 code references; `0x14` in all 5 live class records; no write watchpoint fires |
 | `agntG_t+0x3a`, `+0x46` | 0 struct accesses; bytes inside the class record |
