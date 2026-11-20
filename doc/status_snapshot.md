@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn545/naming_summary.txt`.
+`tmp/auditn549/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -14,7 +14,7 @@ parameters               1615   auto-named    0   (0.0%)
 locals                    659   auto-named    0   (0.0%)
 structs                    37
   struct fields           334   generated     0   (0.0%)
-globals                  2435   auto-named    0   (0.0%)
+globals                  2434   auto-named    0   (0.0%)
 ```
 
 Function names are complete: 1590 functions (including 460 thunks), 0 duplicates,

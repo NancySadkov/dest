@@ -3069,3 +3069,50 @@ Combined with the live `REP MOVSW` hit, the picture is that agent records (inclu
 pointer) are **copied from a template**; there is no per-agent store.  That means `agntG_t`
 fields are never written by name either, which is why `+0x3a`, `+0x46` and `+0x94` have no
 writer to observe and no reader in the listing.
+
+## Coverage: 340 gaps validated and filled, 148 bodies coalesced (BadBodies 162 -> 14)
+
+The 344 intra-function gaps were dumped with their bytes (`scripts/ghidra/DumpGaps.java`) and
+each was decoded with an independent disassembler before anything was committed:
+
+```
+gaps total: 344
+validated: 340   rejected: {'ascii/zero': 3, 'inexact': 0, 'invalid': 1}
+```
+
+The acceptance test was **exact consumption**: the decoded instruction stream had to end
+precisely on the gap's last byte, with no invalid opcode, and the bytes had to be less than 75%
+printable/zero (so table data and strings are rejected).  `inexact: 0` means every gap that was
+not data-like decoded as a whole number of instructions that filled it exactly.
+
+`scripts/ghidra/FillGaps.java` then decoded those ranges with `followFlow=false` (no function
+side effects), and `CoalesceBodies.java` re-applied the body ranges, skipping any new range that
+would overlap another function:
+
+```
+filled=340 failed=0
+coalesced=148 skipped=14 undecodedGaps=0
+BadBodies: 162 -> 14
+```
+
+### Regression caught: 35 `DAT_0000_*` globals
+
+The first audit after the fill reported `globals 2469 auto 35`.  All 35 were `DAT_0000_xxxx`
+labels in segment `0000` - the interrupt-vector/BIOS area - created because some newly decoded
+bytes held far pointers into that segment.  Removing the symbols alone did not help: Ghidra
+regenerated them from the references (`symsRemoved=0`).  `ClearRefsTo.java` deleted the 147
+references instead, which cleared the labels for good:
+
+```
+refsRemoved=147 symsRemoved=0
+globals 2434 auto 0 (0.0%)
+```
+
+## Workflow defect: `git checkout -- gpr` was reverting the project index
+
+`gpr/st.gpr` and 15 files under `gpr/st.rep/idata/` are tracked in git, while the rest of the
+Ghidra repository is not.  Running `git checkout -- gpr` after each doc commit therefore restored
+the old `st.gpr` index while the `.rep` kept newer data, and previously deleted functions
+(`caseD_0`, `caseD_0_2`, `ovc27_textCharmed`, `manage_usesLitoa102/103`,
+`manage_usesCurSfxType32`) reappeared in `ListFuncs` (1584 -> 1590 rows).  The revert is no
+longer performed; the project working tree is left in place between batches.

@@ -45,7 +45,12 @@ public class CoalesceBodies extends GhidraScript {
                 }
                 if (!ok) { skipped++; continue; }
                 AddressSet ns = new AddressSet(min, max);
-                f.setBody(ns);
+                boolean clash = false;
+                for (Function o : fm.getFunctions(ns, true)) {
+                    if (!o.equals(f)) { clash = true; break; }
+                }
+                if (clash) { skipped++; continue; }
+                try { f.setBody(ns); } catch (Exception e) { skipped++; continue; }
                 changed++;
             }
         } finally {
