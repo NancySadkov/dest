@@ -2609,3 +2609,28 @@ space at "have done", i.e. a split inside the string.  Retyped as `char[103]`
 **Globals: 49 -> 35.**  Remaining: 15 audio-driver copy words, the 6 `0000:08b8..08c0` computed-
 reference artifacts, 2 `DAT_2000_d1xx` artifacts, 3 `2ca1` words, `21b1` dwords, `225d:008e`
 overlay-header padding, `2410:0845`, `2000:ca7a`, `d114`, `d163/d165`, and `3381:168f`.
+
+### `21b1:0000` is `expThresholds`, `uint32_t[240]`
+
+The `21b1` data block is indexed by sixteen code sites (`MOV DX,0x21b1` + `MOV ES,DX`).  One of them
+shows the shape exactly (`6386:1d74`):
+
+```
+6386:1d74  SHL AX,0x2            ; index * 4
+6386:1d78  ADD BX,AX
+6386:1d7a  MOV AX,0x21b1 / MOV ES,AX
+6386:1d7f  MOV AX,ES:[BX + 0x0]
+6386:1d84  OR  AX,ES:[BX + 0x2]   ; test the whole dword for zero
+```
+
+so it is a table of 32-bit thresholds where `0` means "no entry".  The values are
+
+```
+0, 2000, 4000, 8000, 16000, 32000, 64000, 120000, 240000, 360000, 480000, 620000, 830000, 1050000 ...
+```
+
+the classic class-level experience ladder.  The entries run to `21b1:03BF` (240 dwords); the rest of
+the 1040-byte block is zero padding.  Retyped `uint32_t[240] expThresholds`; the two old auto labels
+were the two halves of entry 0.
+
+**Globals: 49 -> 33** across this sweep.
