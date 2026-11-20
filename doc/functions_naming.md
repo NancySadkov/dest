@@ -2354,3 +2354,26 @@ It derives the stack address space from an existing variable (the factory does n
 is what showed the `offset 2` rejection at first hand.
 
 Parameters: auto 37 -> 35 (2.2%).  Gate: checked 71 failures 0.
+
+### `ovc13_readPixel`'s third argument is a far `brect_t` (35 -> 34)
+
+The whole body is five instructions of indexing after loading a segment from the argument:
+
+```
+3d16:018a  MOV AX,[BP + 0x8]        ; screenY
+3d16:018d  MOV DX,0x140 / IMUL DX   ; y * 320
+3d16:0192  MOV BX,[BP + 0x6]        ; screenX
+3d16:0197  LES SI,[BP + 0xa]        ; far pointer
+3d16:019a  MOV ES,word ptr ES:[SI + 0x8]   ; the segment comes from field +8
+3d16:019e  MOV AL,byte ptr ES:[BX]  ; read the pixel
+```
+
+`brect_t` is exactly `{x, y, w, h, seg}` with `seg` at +8 (`ListFieldNames /stdint.h/brect_t`),
+and the only in-overlay caller pushes `2410:045e`, i.e. `BlitRects + 3*10` (`BlitRects` is a
+`brect_t[5]` at `2410:0440`), so the pointer is a blit rectangle whose `seg` field is the video
+segment being read.  Corrected to
+`undefined2 ovc13_readPixel(int16_t screenX, int16_t screenY, brect_t *32 surface)`.
+`FnGaps` keeps the 30-byte body; note the decompiler does not model `MOV ES,mem`, so the body
+still renders the read through the default segment.
+
+Parameters: auto 35 -> 34 (2.1%).  Gate: checked 71 failures 0.
