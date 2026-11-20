@@ -2693,3 +2693,86 @@ These are overlay-resolution artifacts (two overlays share a runtime segment), a
 recorded rather than silently trimmed because the correct range set needs the overlay map.
 
 Parameters: auto 4 -> 3 (0.2%).  Gate: checked 71 failures 0.
+
+## Body map: cross-segment ranges dropped, and the truncation classes (3 -> 2)
+
+### The 9 cross-segment bodies
+
+`scripts/ghidra/BodyCheck.java` (new) prints every range of a function whose body spans more
+than one segmented address, the last instruction of each range, and whether the home segment
+contains a return.  Before the fix it reported **9** functions; in all 9 `homeHasRet=true`, so
+the foreign ranges were dead overlay-resolution artifacts and safe to drop with `SetBody`:
+
+```
+init_textFilename, saveui_configureMessageDelay, uiMainMenuLoop, ovc22_textPOPULATION,
+ovc22_textRingProt, ovc23_textAdlibNone, ovc23_usesAlignUp43, ovc23_textConstructionAbandoned,
+ovc41_textOnlyPlaceSingle
+```
+
+After the rebuild `BodyCheck` reports **multi-segment functions: 0**, and `AuditNaming` is
+unchanged (parameters 1617, locals 657), so no variable was hidden in those ranges.
+
+### `bldng_selectBuildingType` was genuinely truncated
+
+`ExtendToRet` found a real `RET` at `676c:05ab` with the next function entry at `676c:05ac`
+and no interior entry, so the body was extended `676c:03dd-676c:05ab` (was ending at `054b`).
+The body now decompiles with named locals (`far_t entries`, `far_t hint`, `uint8_t
+buildTypes`, `uint8_t menuEntries`, `uint16_t count`) instead of stopping mid-setup.
+
+### The classes that remain (BodyEnds 141 -> 137)
+
+```
+CALL 8, INT 1, CALLF 1      -> noreturn tails (startx, _terminate, _abort, exit, stExit, ...)
+PUSH 12                     -> 7 N_*_at_ POP/PUSH far-call stubs + 5 shared-entry helpers
+NOINSN 108                  -> DOS21:: pseudo-functions
+MOV 3, XCHG 1, JNZ 1, AND 1, SBB 1 -> shared-entry / shared-tail fragments
+```
+
+Two of them are *not* truncation and cannot be expressed by Ghidra at all:
+
+**Overlapping entry points (`__vprinter_1000_0e74/0e7b/0eb3`).**  The bytes are
+
+```
+1000:0e74  MOV AL,DH
+1000:0e76  CALL 0x1000:0e7b      ; a CALL into the middle of the next entry
+1000:0e79  MOV AL,DL
+1000:0e7b  AAM 0x10              ; entry point, also the CALL target
+1000:0e7f  CALL 0x1000:0e84
+1000:0e84  ADD AL,0x90           ; entry point, also the CALL target
+1000:0e8b  RET
+```
+
+Three overlapping entry points share one 24-byte hexadecimal-print helper and its single
+`RET`.  Assigning all of them the full range is rejected:
+
+```
+OverlappingFunctionException: Unable to create function at 1000:0e7b due to overlap with
+range [1000:0e84,1000:0e8b]
+```
+
+so they stay at their current one-fragment bodies (no locals, no parameters).
+
+**A shared tail (`malloc_JoinFreeBlocks`).**  `malloc_FreeInnerBlock` is 91 bytes
+(`1000:165d-1000:16b7`) and ends exactly at the `RET` at `16b7`, but its last branch is
+`1000:16b5 JZ 0x1000:16b8` — a tail jump into `malloc_JoinFreeBlocks`, whose code then falls
+through into `malloc_PullFreeBlock` (`1000:16ce-1000:16f6`).  Both entries are real:
+
+```
+1000:16ce  refs: 1000:18a8 farmalloc, 1000:1629 malloc_FreeLastBlock   (2 CALL sites)
+1000:16b8  refs: 1000:16b5 malloc_FreeInnerBlock                        (tail JZ)
+```
+
+Extending `malloc_JoinFreeBlocks` over `malloc_PullFreeBlock` is the same overlap refusal, so
+the two-function split is kept.  **Integrity note:** an earlier attempt in this pass deleted
+`malloc_PullFreeBlock` on the strength of a fall-through alone; the reference scan then showed
+its two `CALL` sites, so the function, its body (`16ce-16f6`) and its `void (void)` prototype
+were restored.  Deletions are only made when the reference scan shows no `CALL`.
+
+### `ovc45_compute6.param_1` -> `value` (3 -> 2)
+
+The whole body is `CMP word ptr [BP+0x6],1` followed by a 0/1 return, so the only thing the
+binary states about the argument is that it is the word tested against 1.  Named `value`
+(typed `uint16_t`), matching the same convention used for
+`attact_textAbnormalProgramTermination(uint16_t value, ...)`.
+
+Parameters: auto 3 -> 2 (0.1%).  Gate: checked 71 failures 0.

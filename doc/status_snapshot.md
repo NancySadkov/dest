@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn528/naming_summary.txt`.
+`tmp/auditn532/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -10,7 +10,7 @@ functions                1130
   no prototype            114
   weak return type        970
   has struct-typed arg    169
-parameters               1617   auto-named    3   (0.2%)
+parameters               1617   auto-named    2   (0.1%)
 locals                    657   auto-named    0   (0.0%)
 structs                    37
   struct fields           334   generated     0   (0.0%)
@@ -44,7 +44,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    `reserved_187`, `reserved_0845`, `reserved_ca7a`, `ovrHeaderReserved`,
    `callResultTemp`, `debugEmptyCellCount` and `debugStaleTickCount`, each with its
    store/read counts in `doc/globals_naming.md`.
-2. **3 parameters / 0 locals.** Call-site scanning is exhausted: the unanimous
+2. **2 parameters / 0 locals.** Call-site scanning is exhausted: the unanimous
    call-role rule yields 6 multi-site candidates, all inside the two functions whose
    decompilation Ghidra flags as unstable, and 10 single-site ones that the bodies
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in
@@ -119,21 +119,36 @@ binding cannot be forced, so this is recorded rather than worked around.
 Each is typed (`uint8_t`/`uint16_t`/`uint32_t`) and named for what the binary proves (a reserved
 byte), because no reader or writer exists from which a domain name could be derived.
 
-## Model defects that can hide variables
+## Body map: measured, rebuilt, and the two cases Ghidra cannot express
 
-`BodyEnds.java`: 141/1590 bodies do not end in a return/jump — 108 DOS pseudo-functions,
-9 noreturn tails, 7 POP/PUSH stubs, and **17 genuine boundary defects** (listed in
-`doc/functions_naming.md`).  `BadBodies.java`: 173 non-contiguous bodies, **9 of them spanning
-two overlay segments** (`init_textFilename`, `saveui_configureMessageDelay`, `4528:14b1`,
-`ovc22_textPOPULATION`, `ovc22_textRingProt`, `55fe:0000`, `ovc23_usesAlignUp43`, `55fe:0cdf`,
-`6a8f:2084`).  This is the one way the 0-auto counts can be optimistic: variables that live in
-a body range Ghidra never modelled do not appear in the audit.  `attact_textArena` was such a
-case and is now fixed (far output pointer recovered).
+`BodyCheck.java` (new): **multi-segment functions 9 -> 0**.  All 9 had `homeHasRet=true`,
+so the foreign ranges were overlay-resolution artifacts; `SetBody` dropped them
+(`init_textFilename`, `saveui_configureMessageDelay`, `uiMainMenuLoop`,
+`ovc22_textPOPULATION`, `ovc22_textRingProt`, `ovc23_textAdlibNone`,
+`ovc23_usesAlignUp43`, `ovc23_textConstructionAbandoned`, `ovc41_textOnlyPlaceSingle`).
+The audit is unchanged by the rebuild, so nothing was hidden there.
 
-## The three remaining auto parameters
+`BodyEnds.java`: 141 -> **137 / 1590**.  Breakdown: 108 `DOS21::` pseudo-functions, 9
+noreturn tails (`CALL`/`CALLF`/`INT`), 12 `PUSH` (7 `N_*_at_` far-call stubs + 5
+shared-entry helpers), and 8 instruction-level fragments (`MOV` 3, `XCHG`, `JNZ`, `AND`,
+`SBB`).  Two classes are structural, not truncation, and are rejected by Ghidra:
+
+| case | evidence | why it stays split |
+|---|---|---|
+| `__vprinter_1000_0e74/0e7b/0eb3` | `CALL 0x1000:0e7b` and `CALL 0x1000:0e84` from inside the same 24-byte helper, one shared `RET` at `0e8b` | three overlapping entry points; `SetBody` returns `OverlappingFunctionException ... overlap with range [1000:0e84,1000:0e8b]` |
+| `malloc_JoinFreeBlocks` | `malloc_FreeInnerBlock` is 91 bytes (`165d-16b7`) ending at `RET 16b7`, but ends with `JZ 0x1000:16b8`; `16b8` falls through into `malloc_PullFreeBlock` (`16ce-16f6`, 2 `CALL` sites) | shared tail; the same overlap refusal |
+
+`bldng_selectBuildingType` was genuinely truncated: real `RET` at `676c:05ab`, next entry
+`676c:05ac`, no interior entry -> body extended to `676c:03dd-676c:05ab`.
+
+**Integrity note.** A merge attempt deleted `malloc_PullFreeBlock` on fall-through evidence
+alone; the reference scan then showed its two `CALL` sites (`farmalloc`, `malloc_FreeLastBlock`),
+so the function, body and `void (void)` prototype were restored.  Deletions now require a
+`CALL`-free reference scan.
+
+## The two remaining auto parameters
 
 | function | parameter | operand evidence | status |
 |---|---|---|---|
-| `__CHECKOVERLAY` | `param_1` | `1403:08c3 MOV BX,[BP+0x6]` then `1403:08d9 CALLF [0x86]` | the target is the runtime far pointer at `DS:0x86`; the CRT heap globals overlap that address, so its BX argument cannot be read statically |
-| `midPlaySequence` | `param_1` | `2d63:0769 MOV BX,[BP+0x6]`, `INT 66h AX=0702h` | `assets/midpak.ad` is a 5248-byte dispatch table with **no code and no INT instructions**; the handler lives in `assets/cmidpak.com` (13343 bytes) which is packed (no `CMP AH,7`/`MOV AX,0702` patterns, 6 `INT 66h` bytes). The only caller pushes literal `0` (`3a5b:0740`). |
-| `ovc45_compute6` | `param_1` | `77eb:1ba5 CMP word ptr [BP+0x6],1`, returns `param != 1` | the only call (`77eb:1f11`) passes a text pointer and discards the result; no reader of the compared value exists |
+| `__CHECKOVERLAY` | `param_1` | `1403:08c3 MOV BX,[BP+0x6]` then `1403:08d9 CALLF [0x86]` | `SymAt 2410:0086` = **NOSYM**; the cell sits between `__brklvl` (0x85) and `_heapbase` (0x87) and holds the runtime-installed overlay-loader pointer, so BX's role is only determined at run time.  The function also has **0 recorded callers** (it is entered through the overlay loader). |
+| `midPlaySequence` | `param_1` | `2d63:0769 MOV BX,[BP+0x6]` then `INT 66h AX=0702h` | The wrapper family fixes the register shape (`0701` no arg, `0702` BX, `0703` BX+CX, `0704` BX+CX+SI+DI), and the only caller pushes the literal `0` (`3a5b:0740`).  `assets/midpak.ad` is a 5248-byte resource directory (`id, offset` records) with no code and no `INT`; the handler in `assets/cmidpak.com` is packed (no `CMP AH,7`/`MOV AX,0702`; 6 `INT 66h` bytes), so BX's meaning is not in the binary. |
