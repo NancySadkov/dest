@@ -2547,3 +2547,35 @@ with `hnd` the word carried in SI and pushed as the only non-buffer argument of 
 Offsets: `Stack[4]:4, [8]:2, [a]:2, [c]:2` = `BP+6..9`, `BP+0xa`, `BP+0xc`, `BP+0xe`.
 
 Parameters: auto 19 -> 16 (1.0%).  Gate: checked 71 failures 0.
+
+## Three more from their operand maps (16 -> 13)
+
+### `ovc22_usesAlignUp42`: two far outputs, a class and a flag mask
+
+```
+5087:413e  LES BX,[BP + 0x6]     ; first output pointer (ofs/seg 0x6/0x8)
+5087:4147  LES BX,[BP + 0xa]     ; second output pointer (ofs/seg 0xa/0xc)
+5087:40d1  CMP AL,byte ptr [BP + 0xe]   ; compared with record+9
+5087:4139  TEST word ptr [BP + 0x10],DI ; mask test
+```
+
+with `*xOut = alignUp4(record+2)`, `*yOut = record+4`, `record[+9] == classIndex`,
+and `(blockedFlags & OR(GMapFlags[y][x-2..x+1])) == 0`.  Signature:
+`uint16_t ovc22_usesAlignUp42(uint16_t *32 xOut, uint16_t *32 yOut, uint8_t classIndex,
+uint16_t blockedFlags)`; the old `yOutOfs`/`yOutSeg` pair was the second pointer split.
+
+### `ovc23_usesAlignUp43`: the first argument is the x base
+
+`MOV SI,[BP+6]` / `MOV DI,[BP+8]` / `MOV AL,[BP+0xa]`, and the body computes
+`x + *(char *)(dir + 0x885)` and `unitIndex + *(char *)(dir + 0x889)` — the two half-step
+tables.  So `param_1` -> `x` (`int16_t`).  Note: after that first use the compiler reuses the
+same slot for a `GUnits` loop index (`puVar23[unitIndex]`), which is why one variable shows
+both roles.
+
+### `ovc18_textTypeLen`: the fourth word selects the label pair
+
+`if ((uint8_t)param_4 == 0)` takes `puStackY_22 = 0x906a`, otherwise `0x904a`; the value is
+then forwarded as `ovc18_spawnClassAgent`'s `mode` argument (`48ac:05cd-05e3`).  Renamed
+`textVariant` (`uint8_t`).
+
+Parameters: auto 16 -> 13 (0.8%).  Gate: checked 71 failures 0.

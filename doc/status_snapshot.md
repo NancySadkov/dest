@@ -1,16 +1,16 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn523/naming_summary.txt`.
+`tmp/auditn524/naming_summary.txt`.
 
 ## Where the model stands
 
 ```
 functions                1130
   no prototype            114
-  weak return type        972
+  weak return type        971
   has struct-typed arg    169
-parameters               1620   auto-named   16   (1.0%)
+parameters               1620   auto-named   13   (0.8%)
 locals                    657   auto-named    0   (0.0%)
 structs                    37
   struct fields           334   generated     0   (0.0%)
@@ -44,7 +44,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    `reserved_187`, `reserved_0845`, `reserved_ca7a`, `ovrHeaderReserved`,
    `callResultTemp`, `debugEmptyCellCount` and `debugStaleTickCount`, each with its
    store/read counts in `doc/globals_naming.md`.
-2. **16 parameters / 0 locals.** Call-site scanning is exhausted: the unanimous
+2. **13 parameters / 0 locals.** Call-site scanning is exhausted: the unanimous
    call-role rule yields 6 multi-site candidates, all inside the two functions whose
    decompilation Ghidra flags as unstable, and 10 single-site ones that the bodies
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in
@@ -92,3 +92,29 @@ word values as the static image.  It has also recorded `agntG_t+0x94`'s full val
 distribution (5/10/20/30/40 across the 42 types) and `agnt_t+0x11`'s writer predicate
 (animation-table shape, then `randBelow(2)`).  Neither is named yet: no exported reader
 exists for the first, and the second's vocabulary is still unstated.
+
+## Blocked symbols, with the operand counts that block them
+
+### Unbound prototype: `N_LUMOD_at_`
+
+`long dividend` / `long divisor` sit at `Stack[0xa]:4` / `Stack[0xe]:4`, which is the proven
+ABI (`MOV AX,[BP+0xa]`/`MOV DX,[BP+0xc]`, `MOV BX,[BP+0xe]`/`MOV CX,[BP+0x10]`; return in
+`DX:AX`).  The decompiler renders those four operand reads as `in_stack_00000002..08` because
+its frame maps `BP+0xa` to `Stack[2]`.  Placing the parameters there is rejected:
+`InvalidInputException: Variable contains invalid stack parameter offset: dividendLo offset 2`
+(parameters may not sit below the return address).  The prototype storage is exact; the body
+binding cannot be forced, so this is recorded rather than worked around.
+
+### Placeholder globals and fields
+
+| symbol | references | reason it has no proper name |
+|---|---|---|
+| `2410:0845` (`reserved_0845`) | **1 read, 0 writes**; image byte `00` | `MOV AL,[0x845]` guards a redraw (`==0 && !GPaused && mapViewActive`); no instruction sets it, so it is a constant-0 test |
+| `2000:ca7a` (`reserved_ca7a`) | **1 write, 0 reads** | `main` sets it to 1 between `MenuMode=1` and `ovr_uiMainMenu()`; never read |
+| `2000:d187` (`reserved_187`) | **0 live refs** | computed ref at `MenuItemEnabled[5]`, but every actual read is under `GMenuItem < 5`; the 5-byte table ends at `d186` |
+| `225d:008e` (`ovrHeaderReserved`) | **0 refs** | padding inside the Borland `OVRDATA` header |
+| `agnt_t+0x2a` (`reserved_2a`) | **1 read, 0 writes** | `CMP ES:[BX+0x2a],2` only, inside `BothFactions` debug branch of `ovc49_agentIsActive` |
+| `agntG_t+0x94` (`reserved_94`) | **0 reads, 0 writes** | last byte of the 0x95-byte class record; all `0x94` displacements are the `GMapCells` row stride (148) |
+
+Each is typed (`uint8_t`/`uint16_t`/`uint32_t`) and named for what the binary proves (a reserved
+byte), because no reader or writer exists from which a domain name could be derived.
