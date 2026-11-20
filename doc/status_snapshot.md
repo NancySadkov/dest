@@ -10,7 +10,7 @@ functions                1130
   no prototype            114
   weak return type        986
   has struct-typed arg    144
-parameters               1637   auto-named  123   (7.5%)
+parameters               1634   auto-named  122   (7.5%)
 locals                    689   auto-named   60   (8.7%)
 structs                    37
   struct fields           324   generated     5   (1.5%)
@@ -42,7 +42,7 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    meaning (`flashTickLo/Hi`, `destroyLatchSide0/1`, the audio-driver block pairs,
    the `StshNames` cut graphics); where only an equality or a lone write exists the
    result is a documented refusal.
-2. **123 parameters / 60 locals.** Call-site scanning is exhausted: the unanimous
+2. **122 parameters / 60 locals.** Call-site scanning is exhausted: the unanimous
    call-role rule yields 6 multi-site candidates, all inside the two functions whose
    decompilation Ghidra flags as unstable, and 10 single-site ones that the bodies
    contradict.  The locals axe is smaller still: the same rule finds 8 candidates in

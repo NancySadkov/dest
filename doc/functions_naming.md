@@ -1674,3 +1674,62 @@ it.  With `dst` widened, `blitGfx10` leaves the `UnusedParams` screen (374 -> 37
 
 Running totals for the arity loop: **378 -> 373** on the screen, and every resolved case has been a
 width error rather than a dead parameter.
+
+## The two reachable-but-unapplied cases (params 123 -> 122)
+
+### `init_textFilename` (`3381:08dc`): zero arguments
+
+Its whole body contains **no `[BP+off]` access at or above `[BP+4]` at all**:
+
+```
+3381:08dc  PUSH BP
+3381:08dd  MOV BP,SP
+3381:08df  SUB SP,0xa2
+3381:08e3  PUSH SI / PUSH DI
+3381:08e5  MOV byte ptr [BP - 0xd],0x0
+```
+
+and its only caller passes nothing:
+
+```
+3381:21e6  PUSH CS
+3381:21e7  CALL 0x3000:40ec          ; no ADD SP afterwards
+```
+
+The overlay thunk `22e3:002a` has **zero references**, so that call is the only one.  The
+`(undefined4 param_1, int16_t w)` declaration was pure inference and both are gone:
+`trimmed init_textFilename 2 -> 0`.
+
+### `alignToSeg` (`30e6:0000`): one far pointer, not a hidden return buffer
+
+The 0x24-byte body reads exactly two words at the start of the first slot:
+
+```
+30e6:0005  MOV SI,word ptr [BP + 0x8]   ; segment
+30e6:0008  MOV DI,word ptr [BP + 0x6]   ; offset
+30e6:000b  TEST DI,0xf
+30e6:000f  JZ ...
+30e6:0011  INC SI
+30e6:0012  AND DI,0xfff0
+30e6:0017  SHR AX,0x4
+30e6:001a  ADD SI,AX                    ; segment += offset >> 4
+30e6:001d  MOV DX,SI / XOR AX,AX        ; returns the aligned segment
+30e6:0023  RETF
+```
+
+That is one far pointer passed by value (its offset at `[BP+6]`, its segment at `[BP+8]`), and the
+caller `lbm_decode_body` pushes exactly two words (`PUSH [BX+0x306]` / `PUSH [BX+0x304]`,
+`ADD SP,0x4`).  The declared `(far_t *__return_storage_ptr__, far_t ptr)` described 8 bytes of
+arguments, so the hidden return-storage parameter was removed: `trimmed alignToSeg 2 -> 1`.
+
+Two tool limits were hit and are recorded rather than worked around:
+
+* the remaining parameter is Ghidra's auto **hidden return-storage pointer**, and
+  `Variable.setDataType` rejects it with `Auto-parameter may not be modified`, so it cannot be
+  renamed or retyped in place;
+* `SetReturn.java` fails with `NullPointerException: storage is null` because Ghidra's
+  `setReturn(DataType, VariableStorage, SourceType)` needs a real storage location when the current
+  return type is `far_t *` and goes through hidden storage.  Getting `uint16_t alignToSeg(far_t)`
+  needs a full `FunctionDefinitionDataType` rewrite, which is the next step for this function.
+
+Parameters: 1637 -> 1634 total, auto 123 -> 122 (7.5%).  Gate: checked 71 failures 0.
