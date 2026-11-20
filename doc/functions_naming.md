@@ -1733,3 +1733,36 @@ Two tool limits were hit and are recorded rather than worked around:
   needs a full `FunctionDefinitionDataType` rewrite, which is the next step for this function.
 
 Parameters: 1637 -> 1634 total, auto 123 -> 122 (7.5%).  Gate: checked 71 failures 0.
+
+## `ApplySig.java`: full-signature replacement, and the body it resets
+
+`SetReturn` could not change a far-pointer return (`NullPointerException: storage is null`) and
+`Variable.setDataType` refuses Ghidra's auto hidden return-storage parameter (`Auto-parameter may
+not be modified`).  `ApplySig.java` builds a `FunctionDefinitionDataType` and applies it with
+`ApplyFunctionSignatureCmd`, which replaces the whole prototype in one step:
+
+```
+ok alignToSeg : uint16_t alignToSeg(far_t ptr)
+applied=1 failed=0
+```
+
+That is the signature the body and the call site both require (`[BP+6]` offset, `[BP+8]` segment,
+caller `lbm_decode_body` pushes exactly two words with `ADD SP,0x4`).
+
+**Caveat discovered by measurement:** `ApplyFunctionSignatureCmd` also **resets the function body**
+to the single entry instruction.  `FnGaps` reported `alignToSeg bytes=1` immediately afterwards, so
+the body had to be restored explicitly:
+
+```
+SetBody 30e6:0000 30e6:0000 30e6:0023
+ok bytes=36 ranges=1
+```
+
+Any future use of `ApplySig` must capture the body ranges first and re-apply them after.  For
+`alignToSeg` the restored 36 bytes end in `RETF` at `0x0023` and cover the whole function, so nothing
+was lost.  The decompiler still prints `return 0;` because the `JZ` at `0x000f` carries a flow
+reference to `0x3000:0e75`, an address outside the function — a pre-existing flow defect, not a
+consequence of the signature change.
+
+`__return_storage_ptr__` never appears in the audit's auto-parameter count (it does not match the
+`param_\d+`/`in_stack_*` patterns), so this fix does not move the metric; it corrects the prototype.
