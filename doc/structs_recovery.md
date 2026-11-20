@@ -7555,3 +7555,63 @@ The remaining 49 auto locals have no contradicting declaration: their decompiled
 | `drawAgntStats` | `cStack_3` | `damage` | receives `ovr_agnt_compute16_2(agnt)`, is compared with 0, and is passed to `agntGetWeaponName` in the branches that print `\"damaged %s\"` / `\"+%d %s\"` |
 
 Locals: auto 49 -> 46 (6.7%).
+
+## Locals: 46 -> 6 by separating dead stack slots from real variables
+
+The stored stack variables and the decompiler's own declarations had drifted apart: 29
+named locals never occur in any decompiled body (some of them also had no operand at their
+stored offset), and one 55-byte buffer was typed as a single byte.  Two passes fixed this.
+
+### Removed: 29 locals that no instruction or decompiled body references
+
+Each was checked against the decompiled body of its own function (zero occurrences outside
+the declaration).  Examples of the strongest cases: `ovc22_textPOPULATION.local_e` and
+`local_106`, `ovc22_textRingProt.local_44`, `manage_settlementScreen.local_13/1f6/21e`,
+`constrct_buildInfoText.local_15/2f2`, `uiReadString.local_5b`, `chargen.local_9f`,
+`land_info.local_15`, `stshInitTxtFiles.local_8c`.  The whole set is listed in the commit
+message; `RemoveVars` removed them and the decompiled bodies were unaffected.
+
+### Typed and named from their readers (8)
+
+| function | old | new | type | evidence |
+|---|---|---|---|---|
+| `__LONGTOA` | `local_24` | `digits` | `uint8_t[34]` | the loop stores raw digit values and computes the output length as `pbVar - digits`, then emits the characters in reverse |
+| `init_usesRandBelow2` | `local_e` | `outFlag` | `uint8_t` | cleared, then its address is pushed as the far out-pointer of `init_usesRandBelow` |
+| `ovc22_textPOPULATION` | `local_14` | `suffix` | `char *` | assigned `"fighters" + 2`, `" unit"`, `""` and `"steam bath" + 6` as the message tail |
+| `ovc22_textRingProt` | `local_2a` | `animStep` | `int16_t` | `entity.animFrame - sheet->0xa4`, reduced through `sheet+0x92/0x90/0x8e`, then `animFrame = sheet->0xa4 + animStep` |
+| `ovc26_usesStExit` | `local_6e` | `pathDirs` | `uint8_t[80]` | one direction code per path step (`bStack_10 ^ 2`), count stored to `base.state`, codes packed 2 bits at a time into `base.owner` |
+| `ovc24_textKill` | `local_24` | `factionMax` | `uint8_t[4]` | max of `agnt_compute16_3` per faction in two slots, gated by class flags `0x8` and `0x20`, raised to 2 for flag `0x2` |
+| `ovc43_usesStExit` | `local_12` | `remainingLo` | `uint16_t` | low word of a 32-bit remaining count: `remainingLo < 0x10`, subtract 0x10 with borrow into `iStack_10`, pair passed by far pointer while non-zero |
+| `ovc49_textLongerParalyzed` | `local_a` | `dirY` | `uint8_t` | written through the far out-pointer `SS:[BP-0x8]` of the `CALLF 2000:3083` helper, then stored to the high byte of `paTarget->targetX` |
+
+### `ovc42_showAgentStats.local_78` is an `agnt_t` record, not a 13-byte buffer
+
+`_fmemset(dst = SS:BP-0x76, 0, 0x37)` at `6d7a:0398-03a1` fixes the extent at 55 bytes
+(52-byte `agnt_t` plus 3 bytes of stack padding).  Retyping it `agnt_t` made the stores land
+on named fields, which is the proof of the shape:
+
+```
+agntRec.gindex      = gindex;              /* +0xd  */
+agntRec.animFrame   = 1;                   /* +0xe  */
+agntRec.entity._3_1_ = partyIndex;         /* +0x1a, the party byte */
+agntRec.level       = ...;                 /* +0xf  */
+agntRec.health      = 0x64;                /* +0x12 */
+agntRec.animVariant = 0;                   /* +0x11 */
+```
+
+so the local is `agnt_t agntRec`.  (The decompiler keeps a second, older view of the same
+routine's stack as `agntTmp [23]` at BP-0x3e, which is what the final
+`ovr_drawAgntStats` call consumes; the two views do not overlap.)
+
+### The last six, with what blocks each
+
+| function | local | blocking evidence |
+|---|---|---|
+| `__INITEXT` | `local_1f` | 8-byte buffer read once and compared byte-by-byte with two data blobs; the function never writes it, so it is either a callee-filled buffer or an uninitialised comparand |
+| `init_usesRandBelow2` | `local_f` | written with 0 and never read; the neighbouring `outFlag` is the real out-parameter |
+| `ovc22_textRingProt` | `local_c` | one stack slot reused by the compiler for five unrelated loops (entity index, leader index, a y coordinate, an arithmetic temporary); the stored offset also disagrees with the disassembly, so a single name would be wrong |
+| `ovc22_textRingProt` | `local_6a` | the slot is not addressable in the disassembly at `BP-0x6a`; the code uses the adjacent `BP-0x68` area both as a `stsprintf` destination and as the base of a far-pointer table, so no single type is honest |
+| `ovc45_buildPlacementMessage` | `local_d` | byte set to 0 at `77eb:0d82`/`1412` and tested at `1698`; nothing in the function ever sets it non-zero |
+| `ovc49_textLongerParalyzed` | `local_4` | word out-parameter of `CALLF 2000:3083` (pushed as `SS:BP-0x2`), compared with 110/48/6; the helper lives in an overlay thunk (`2000:3083 -> 3000:bb0e`) that is not statically attributable to a named function |
+
+Locals: 657 total, auto 46 -> 6 (0.9%).  Gate: checked 71 failures 0.

@@ -2128,3 +2128,61 @@ Parameters: auto 55 -> 53 (3.3%).  Gate: checked 71 failures 0.
 `rect.y = ...`, `rect.h = ... + 0x28` in the same expression.  Renamed `row`.
 
 Parameters: auto 53 -> 52 (3.2%).  Gate: checked 71 failures 0.
+
+## `F_SCOPY`: length in CX, `RETF 8` — and the phantom locals it was creating
+
+`F_SCOPY` (`1000:094f`) was modelled with three 2-byte parameters, but its body is
+
+```
+1000:0955  LDS SI,[BP + 0x6]      ; far source
+1000:0958  LES DI,[BP + 0xa]      ; far destination
+1000:095c  SHR CX,0x1 / REP MOVSW ; count arrives in CX
+1000:0962  REP MOVSB
+1000:0968  RETF 0x8               ; the callee pops four argument words
+```
+
+so the correct prototype is `void F_SCOPY(far_t src, far_t dst)`, with the byte count in
+`CX` (a `__fastcall`-style helper, not a C argument).  The old three-word model left a
+two-byte stack drift after every call, which is why several functions carried stack
+variables at offsets no instruction touched.
+
+## Driver string/memory helpers: the far pointers were split in two
+
+| function | machine code | corrected prototype |
+|---|---|---|
+| `driver_unrleScreen` | `LDS SI,[BP+6]`, `LES DI,[BP+0xa]` | `(far_t src, far_t dst)` |
+| `driver_copyWords` | `LDS SI,[BP+6]`, `LES DI,[BP+0xa]`, `MOV CX,[BP+0xe]` | `(far_t src, far_t dst, uint16_t count)` |
+| `driver_zeroWords` | `LES DI,[BP+6]`, `MOV CX,[BP+0xa]` | `(far_t dst, uint16_t count)` |
+| `driver_loop3` | `LDS SI,[BP+6]`, `LES DI,[BP+0xa]` | `(far_t src, far_t dst)` |
+| `stash_loadFromStrongDat` | body uses `param_1._2_2_` as the segment | `(far_t entry)` |
+
+`stash_loadFromStrongDat` previously read the pointer as an `undefined4`, which made the
+segment arithmetic `param_1._2_2_`; with `far_t` it decompiles as
+`ovr_mkp((uint32_t *)entry.ofs, entry.seg, ...)`.
+
+### `__LONGTOA` keeps its split layout on purpose
+
+Typing `buf` as `far_t` puts it at `Stack[8]:4` (= `[BP+0xa..0xd]`), which matches
+`1000:0bbe LES DI,[BP+0xa]`.  The following 32-bit argument, however, is re-aligned by
+Ghidra to `Stack[0xe]:4` (`[BP+0x10]`), two bytes past its real slot `[BP+0xe]`, because a
+4-byte integer aligns to 4 relative to the argument-list start.  The exact model is the
+split one:
+
+```
+__LONGTOA(char alphaBase, char signFlag, uint16_t radix, char *buf, uint16_t bufSeg,
+         uint16_t valueLo)
+```
+
+with `buf`/`bufSeg` being the two halves of the far pointer and `valueLo` the low half of
+the 32-bit value (the high half is consumed by the compiler's own 32-bit sequence).
+
+Parameters: 52 -> 46 (2.8%).  Gate: checked 71 failures 0.
+
+### `ovc42_showAgentStats`'s second argument is the party byte (46 -> 45)
+
+After typing the temporary record as `agnt_t`, the store reads
+`agntRec.entity._3_1_ = param_2`, i.e. the byte at `agnt_t+0x1a`.  That is the same slot the
+entity code reads as the owning party (`*(byte *)((int)&entity + 3)`), so the argument is
+`partyIndex`.
+
+Parameters: auto 46 -> 45 (2.8%).  Gate: checked 71 failures 0.
