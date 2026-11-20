@@ -7621,3 +7621,39 @@ an offset out of date; and the overlay thunk `2000:3083` turned out to resolve t
 | `ovc22_textRingProt` | `local_6a` | `unitNameOfs` | `uint16_t` | entry i's offset is the word at `unitNameOfs + i*4`, its segment the word at `BP-0x68 + i*4`, and the pair is passed to `manage_applyUnitFilter` as the unit name; the same bottom-of-frame area doubles as the spy-report `stsprintf` buffer in another branch, so the two source variables share the slot with disjoint lifetimes |
 
 Locals: 657 total, auto 46 -> 0 (0.0%).  Gate: checked 71 failures 0.
+
+## Variable type audit: every parameter and local now has a concrete type
+
+`scripts/ghidra/AuditVarTypes.java` walks every function and flags parameters/locals whose
+declared type is still an unresolved form (`undefined`, `undefined1/2/4`, or a pointer/array
+of one).  Before this pass:
+
+```
+params=1622 unresolved=209 locals=657 unresolved=596 namedButUnresolved=791
+```
+
+The 805 entries were typed with `scripts/ghidra/TypeVarsByName.java` (addresses its input by
+function name, so thunks the naming audit skips are covered too).  Conversions are
+width-preserving, so no decompiled body changes shape:
+
+| stored type | new type | rule |
+|---|---|---|
+| `undefined2` | `uint16_t` | all word scalars (`x`, `y`, `ofs`, `seg`, `len`, `count`, ...) |
+| `undefined1` | `uint8_t` | byte scalars |
+| `undefined4` | `uint32_t` | 32-bit scalars (`remain`, `chnk_sz`, ...) |
+| `undefined4` (pointer-role name) | `far_t` | names carrying `dst/src/ps/pd/ptr/handle/gfx/table/entries/palette/...` |
+| `undefined1[N]` (text-role name) | `char[N]` | `msg/text/buf/line/label/name/...` |
+| `undefined1[N]` | `uint8_t[N]` | other byte arrays |
+| `undefined1 *` / `undefined2 *` | `uint8_t *` / `uint16_t *` | near pointer forms |
+
+Spot checks after the pass: `drawAgntStats` declares `char buf[80]` and `char palbuf[768]`,
+`blitTillAlpha` declares `far_t dst, far_t src` from its arguments, and `rand8`'s register
+temporaries keep their storage.  Re-running the audit:
+
+```
+params=1622 unresolved=0 locals=657 unresolved=0 namedButUnresolved=0
+```
+
+so every one of the 2279 parameters and locals has a concrete data type; the remaining
+37 auto-named parameters (35 by the name audit's own pattern) are a naming question, not a
+typing one.
