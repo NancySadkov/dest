@@ -1481,3 +1481,31 @@ bad instruction data" with an overlap at `ram:0x85000` — a jump to an address 
 program, so the remaining breakage is a bad control-flow target rather than undecoded bytes.
 
 Parameters: 131 -> 129 (7.9%).  Structures typed as arguments: 144 -> 145.  Gate: checked 71 failures 0.
+
+### Removing fabricated parameters when the call sites prove the real arity
+
+`ovc22_textRingProt` declared seven parameters but its 3248-byte body reads only `[BP+6]`.
+Checking the call sites settles it: all four push **one word** and clean up 2 bytes.
+
+```
+5087:1dec  MOV AL,byte ptr [BP - 0x14]      ; a leader index
+5087:1def  PUSH AX
+5087:1df1  CALL 0x5000:0dde                 ; ovc22_textRingProt
+5087:1df4  ADD SP,0x2                       ; exactly one argument
+```
+
+The three callers through the overlay thunk (`ovc18_checkFortressPlacement`
+`48ac:0ba9`, `manage_usesLitoa10` `4d05:07ce`, `ovc30_createLeader` `619c:0598`) are identical:
+one `PUSH AX` then `ADD SP,0x2`.  So the six extra parameters were invented by parameter
+inference; `TrimParams.java` removes them (highest ordinal first, then marks the signature
+user-defined):
+
+```
+trimmed ovc22_textRingProt 7 -> 1
+far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
+```
+
+This is safe with `__cdecl16far`: the caller performs the stack cleanup, so the callee's declared
+arity never changes call-site code, and the callee now matches what the callers actually push.
+
+Parameters: 129 -> 123 (7.5%).  Gate: checked 71 failures 0.
