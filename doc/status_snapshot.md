@@ -1,7 +1,7 @@
 # Recovery status snapshot
 
 Measured by `scripts/ghidra/AuditNaming.java`; the raw output quoted here is
-`tmp/auditn537/naming_summary.txt`.
+`tmp/auditn540/naming_summary.txt`.
 
 ## Where the model stands
 
@@ -41,9 +41,11 @@ every exported header (`// name @ addr [module]`) and in `doc/functions_renamed.
    zeroed audio pairs became `far_t audioPlaceholder0..3`; `MenuItemEnabled` was
    retyped `uint8_t[5]` (absorbing `DAT_2000_d1e2`); `2ca1:0000` became
    `uint16_t[3] crtInitReserved`; and the unreferenced bytes/scratch words became
-   `reserved_187`, `reserved_0845`, `reserved_ca7a`, `ovrHeaderReserved`,
+   `reserved_0845`, `reserved_ca7a`, `ovrHeaderReserved`,
    `callResultTemp`, `debugEmptyCellCount` and `debugStaleTickCount`, each with its
-   store/read counts in `doc/globals_naming.md`.
+   store/read counts in `doc/globals_naming.md`.  `reserved_187` is gone: it was
+   `menuItemRow[5]`, the last element of the six-byte table at `2410:9082` that is
+   indexed by `GMenuItem`.
 2. **1 parameter / 0 locals.** Call-site scanning is exhausted: the unanimous
    call-role rule yields 6 multi-site candidates, all inside the two functions whose
    decompilation Ghidra flags as unstable, and 10 single-site ones that the bodies
@@ -112,7 +114,7 @@ the bound slots are locals, not parameters.
 |---|---|---|
 | `2410:0845` (`reserved_0845`) | **1 read, 0 writes**; image byte `00` | `MOV AL,[0x845]` guards a redraw (`==0 && !GPaused && mapViewActive`); no instruction sets it, so it is a constant-0 test |
 | `2000:ca7a` (`reserved_ca7a`) | **1 write, 0 reads** | `main` sets it to 1 between `MenuMode=1` and `ovr_uiMainMenu()`; never read |
-| `2000:d187` (`reserved_187`) | **0 live refs** | computed ref at `MenuItemEnabled[5]`, but every actual read is under `GMenuItem < 5`; the 5-byte table ends at `d186` |
+| ~~`2000:d187`~~ | **resolved** | it is `menuItemRow[5]`: the six-byte table at `2410:9082` is indexed by `GMenuItem` (`0..5`), written at `2e25:0116` and read at `1301:07fb`; the symbol was replaced by `menuItemRow uint8_t[6]` |
 | `225d:008e` (`ovrHeaderReserved`) | **0 refs** | padding inside the Borland `OVRDATA` header |
 | `agnt_t+0x2a` (`reserved_2a`) | **1 read, 0 writes** | `CMP ES:[BX+0x2a],2` only, inside `BothFactions` debug branch of `ovc49_agentIsActive` |
 | `agntG_t+0x94` (`reserved_94`) | **0 reads, 0 writes** | last byte of the 0x95-byte class record; all `0x94` displacements are the `GMapCells` row stride (148) |

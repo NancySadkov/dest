@@ -2805,3 +2805,71 @@ wrap to 5 and stop.  `ovc41_usesMenuItemEnabled` also indexes `MenuItemEnabled[5
   `3f0b:10da`.
 
 **Globals: 25 auto -> 0 auto (2435 symbols).**
+
+## DGROUP aliasing: the same byte has two displacements
+
+The symbol table names most of DGROUP through segment `2000`, but the code addresses the same
+bytes through the program's real DGROUP segment `2410`:
+
+```
+2000:ca7a  ==  2410:897a      (0xca7a - 0x897a = 0x4100 = 0x410 << 4)
+2000:d187  ==  2410:9087
+```
+
+Earlier displacement scans searched for `0xca7a` / `0xd187` and found nothing, which made those
+bytes look unreferenced.  Scanning the `2410`-side offsets works.
+
+## `reserved_187` was element 5 of an array (resolved)
+
+`2410:9082` is a six-byte table with no symbol, and the code indexes it with `GMenuItem`:
+
+```
+2e25:0107  MOV AL,[0x8980]              ; GMenuItem
+2e25:010f  MOV BL,[BP+0x6]              ; the row being drawn
+2e25:0114  XCHG AX,BX
+2e25:0116  MOV byte ptr ES:[BX+0x9082],AL   ; table[GMenuItem] = row
+```
+
+and reads it back in `main`:
+
+```
+1301:07fb  MOV AL,byte ptr ES:[BX + 0x9082]
+1301:0802  DEC AX
+1301:0804  CALLF 0x2000:2bf3            ; consumes (row - 1)
+```
+
+`GMenuItem` takes the values `0..5` (`main` sets `5`, and `INC` wraps `6 -> 0`), and
+`0x9082..0x9087` is exactly six bytes ending at `StshSprIndex` (`0x9088`).  So the last byte is
+`table[5]`, not a standalone reserved byte.  `reserved_187` was deleted and the whole six-byte
+object created as:
+
+```
+2000:d182  menuItemRow  uint8_t[6]
+2000:d187  menuItemRow[5]
+```
+
+Evidence for the name: the array maps a menu item to the screen row currently drawn for it, and
+the only reader converts the stored value back to a row index (`DEC AX`).
+
+## `reserved_0845` and `reserved_ca7a`: exact access counts
+
+Both were re-scanned with the `2410`-side displacements:
+
+| byte | accesses in the whole program | verdict |
+|---|---|---|
+| `2410:0845` | **1** - `3d16:0126 MOV AL,[0x845]`, image byte `0x00` | never written; a guard that is always true (`AND GPaused`, `AND mapViewActive`, then blit the animation frame) |
+| `2410:897a` | **1** - `1301:00bd MOV byte ptr ES:[0x897a],1` | write-only dead store in `main`, between `GMenuItem = 5` and `ovr_uiMainMenu()`; never read |
+
+Both are single-byte objects with exactly one access each, and neither is part of a larger word
+(no word/dword access covers either offset).  They cannot be named from a reader, so they keep
+their reserved names with these counts.
+
+## Save-file scan for `agnt_t+0x2a` (inconclusive, recorded)
+
+`tmp/scan_agnt_sav.py` scored every offset of all six saves for a 24 x 0x34 agent array using
+gindex/faction/moveState/level/health/x/y plausibility.  It found tens of thousands of
+candidate bases per file because long zero-filled regions satisfy every bound, and the best
+hits had `gindex = 0` and `faction = 0` in all 24 records - i.e. padding, not agents.  The save
+format does not expose the runtime `agnt_t` array at stride 0x34 in a way this test can
+separate from zero fill, so `agnt_t+0x2a` still rests on the code evidence: exactly one reader
+(`8699:1736 CMP byte ptr ES:[BX+0x2a],2`) and no writer.
