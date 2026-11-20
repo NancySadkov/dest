@@ -1509,3 +1509,34 @@ This is safe with `__cdecl16far`: the caller performs the stack cleanup, so the 
 arity never changes call-site code, and the callee now matches what the callers actually push.
 
 Parameters: 129 -> 123 (7.5%).  Gate: checked 71 failures 0.
+
+### Screening tool for unused parameters, and its limits
+
+`UnusedParams.java` computes each parameter's stack offset and reports the trailing ones never
+touched as `[BP+off]` in the body.  Getting the offset base right matters: a **near** function has
+`[BP+0]` saved BP / `[BP+2]` return offset and its first argument at `[BP+4]`, while a **far**
+function adds the return segment and starts at `[BP+6]`.  The tool decides from the function's own
+return instruction.
+
+That distinction was visible directly in `__VPTR`:
+
+```
+1000:1352  MOV DX,word ptr [BP + 0x4]   ; row  (first argument)
+1000:135f  MOV DX,word ptr [BP + 0x6]   ; col  (second argument)
+1000:136c  RET 0x4                      ; the callee pops both words
+```
+
+so `__VPTR` is a near, callee-cleanup routine and the earlier `row`/`col` names sit on the right
+slots.
+
+The screen has 395 hits, but they are **not** all trimmable, and two classes must be discarded:
+
+* **register-based helpers** — `N_LDIV_at_`, `LXMUL_at_`, `LMOD_at_`, `PADD_at_`, `ovr_mkp` and
+  the other Borland long-math/pointer helpers take their operands in `DX:AX:BX:CX`, so nothing is
+  ever read via `[BP+off]`; their declared parameters document register usage, not stack slots.
+* **huge-model indirect thunks** — `miceHandler` and the `ovr_*` stubs read their arguments through
+  registers or a frame the heuristic does not model.
+
+A trim is only justified when a **call site** proves the arity, which is how `ovc22_textRingProt` was
+settled (one `PUSH`, `ADD SP,0x2` at all four call sites).  The tool is therefore a screening aid,
+with `TrimParams.java` applied only after that check.
