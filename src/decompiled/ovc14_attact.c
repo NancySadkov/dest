@@ -267,7 +267,7 @@ int __cdecl16far attact_countPartyUnits(byte menuIndex,...)
 
 /* [R2] string "Abnormal program termination\r\n" */
 
-uint16_t __cdecl16far attact_textAbnormalProgramTermination(uint16_t value,uint8_t partyIndex,...)
+uint16_t __cdecl16far attact_textAbnormalProgram_f621(uint16_t value,uint8_t partyIndex,...)
 
 {
   long *plVar1;

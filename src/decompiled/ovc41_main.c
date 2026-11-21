@@ -1607,7 +1607,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
   (*(uint8_t *)((uint8_t *)&(text2.seg) + 1)) = uStack0005;
   ovc40_usesBlitLabel(text1,text2,2,0xf2);
   ovc40_flushInput();
-  ovr_ovr_miceButton0PressStates_entry();
+  ovr_ovr_miceButton0PressSt_789c();
   uVar16 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   uVar13 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
   uVar21 = (undefined1)uVar16;

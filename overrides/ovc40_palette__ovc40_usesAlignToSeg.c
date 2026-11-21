@@ -292,7 +292,7 @@ ovc40_usesAlignToSeg
     ovc40_usesBlitLabel(text1_11,text2_10,bVar3,bVar13);
   }
   ovc40_flushInput();
-  ovr_ovr_miceButton0PressStates_entry();
+  ovr_ovr_miceButton0PressSt_789c();
   iStack_8 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   iVar9 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
   if (backdropIndex == '\x04') {

@@ -443,7 +443,12 @@ if __name__ == "__main__":
 import subprocess as _sp
 _HERE = os.path.dirname(os.path.abspath(__file__))
 for _name in ("fix_string_folds.py", "fix_raw_arrays.py", "fix_bda_far.py",
-              "fix_far_fields.py", "fix_field_access.py"):
+              "fix_far_fields.py", "fix_field_access.py",
+              "fix_long_identifiers.py"):
     _script = os.path.join(_HERE, _name)
     if os.path.isfile(_script):
         _sp.run([sys.executable, _script, "--apply"], check=False)
+
+# The globals TU is ~100 KB of data; Turbo C stops at 64 KB, so it is emitted as
+# st_globals.c + st_globals2.c (stage_build maps the second to glob2.c).
+_sp.run([sys.executable, os.path.join(_HERE, "split_globals.py")], check=False)

@@ -553,7 +553,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       return (far_t *)((char *)0x26510);
     case (uint16_t)0x1:
                     /* WARNING: Read-only address (ram,0x0002c58a) is written */
-      s_s_regenerates_3_hitpoints_to_a_total_of_d_hi[0x1e] = '\0';
+      s_s_regenerates_3_hitpoint_5ade[0x1e] = '\0';
       (unaff_SI + 0xec0)->ofs = (uint16_t)unaff_SI;
                     /* WARNING: Bad instruction - Truncating control flow here */
       halt_baddata();
@@ -562,7 +562,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       if (*(byte *)(*(int *)pbVar21 + 0x86) < 9) {
         pfVar18 = (far_t *)((uint)promotionCount * 0x32 + 0x32);
       }
-      s_s_regenerates_3_hitpoints_to_a_total_of_d_hi[0x1e] = 'a';
+      s_s_regenerates_3_hitpoint_5ade[0x1e] = 'a';
       return pfVar18;
     case (uint16_t)0x3:
       do {
@@ -2244,7 +2244,7 @@ switchD_6000_58bf_caseD_5:
       uVar18 = 0x24;
       bStack_3 = '\0';
       do {
-        bVar4 = ovr_draw_textProvidesMoreHousing();
+        bVar4 = ovr_draw_textProvidesMoreH_f381();
       } while (bVar4);
       while( true ) {
         uVar10 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
@@ -2255,9 +2255,9 @@ switchD_6000_58bf_caseD_5:
           InputEventTime.lo = uVar10;
           ovr_draw_usesPrintf();
         }
-        bStack_4 = ovr_draw_textProvidesMoreHousing();
+        bStack_4 = ovr_draw_textProvidesMoreH_f381();
         if ((bool)bStack_4) break;
-        puVar7 = ovr_attact_usesBDADailyTimeCounter
+        puVar7 = ovr_attact_usesBDADailyTim_8bbe
                            ((ulong *)TextBlitCycle,
                             CONCAT13(uVar18,CONCAT12(uVar17,(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)))),
                             (char)(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));

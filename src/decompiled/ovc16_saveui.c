@@ -22,7 +22,7 @@ uint16_t __cdecl16far uiReadKey2(void)
   int iStack_6;
   
   MiceUnkState = 0;
-  ovr_ovr_miceButton0PressStates_entry();
+  ovr_ovr_miceButton0PressSt_789c();
   MiceProcessed = 0;
   ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x2410);
   iVar3 = MouseY;
@@ -148,7 +148,7 @@ void __cdecl16far saveui_usesBlitLoadRleGfx2(far_t textTable,int rowIndex,int it
   uVar2 = textTable.seg;
   puVar1 = (undefined2 *)(textTable.ofs + (rowIndex + itemOffset) * 4);
   ovr_blitText((char *)*puVar1,(byte *)CONCAT22(Font03.ofs,(byte *)puVar1[1]),Font03.seg,0xde);
-  ovr_ovc28_usesBDADailyTimeCounter(3);
+  ovr_ovc28_usesBDADailyTime_8441(3);
   dst_00.seg = 0xa000;
   dst_00.ofs = rowIndex * 0x12c0 + 0x2096;
   gfx_00.seg = trianglsCut4Seg;

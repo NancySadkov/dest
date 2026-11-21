@@ -440,7 +440,7 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay,...)
   GDebug = false;
   do {
     in_stack_0000fff8 = in_stack_0000fff8 & 0xffff0000;
-    bVar2 = ovr_draw_textProvidesMoreHousing();
+    bVar2 = ovr_draw_textProvidesMoreH_f381();
   } while (bVar2);
   do {
     uVar7 = (uint)(in_stack_0000fff8 >> 0x10);
@@ -453,11 +453,11 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay,...)
       ovr_draw_usesBlitLoadRleGfx();
     }
     lVar6 = (ulong)uVar7 << 0x10;
-    bVar2 = ovr_draw_textProvidesMoreHousing();
+    bVar2 = ovr_draw_textProvidesMoreH_f381();
     uVar8 = (undefined2)(CONCAT13(bVar2,(int3)lVar6) >> 0x10);
     if (bVar2) break;
     in_stack_0000fff8 = CONCAT22(uVar8,(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));
-    puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)TextBlitCycle,in_stack_0000fff8);
+    puVar3 = ovr_attact_usesBDADailyTim_8bbe((ulong *)TextBlitCycle,in_stack_0000fff8);
     uVar8 = (undefined2)(in_stack_0000fff8 >> 0x10);
   } while ((uVar4 < (*(uint16_t *)((uint8_t *)&(msg_delay) + 2))) ||
           ((uVar4 == (*(uint16_t *)((uint8_t *)&(msg_delay) + 2)) && (puVar3 < (ulong *)msg_delay))));
@@ -487,7 +487,7 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay,...)
   undefined1 uStack_3;
   
   rightButtonLatch = 0;
-  uVar3 = ovr_ovr_midGetSequenceStatus_entry();
+  uVar3 = ovr_ovr_midGetSequenceStat_7665();
   if ((uVar3 & 0xff) == 0) {
     (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
     (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
@@ -503,10 +503,10 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay,...)
       bVar1 = true;
     }
     do {
-      bVar2 = ovr_draw_textProvidesMoreHousing();
+      bVar2 = ovr_draw_textProvidesMoreH_f381();
     } while (bVar2);
     do {
-      uVar3 = ovr_ovr_midGetSequenceStatus_entry();
+      uVar3 = ovr_ovr_midGetSequenceStat_7665();
       if ((char)uVar3 == '\0') break;
       if ((*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != InputEventTime.hi) ||
          (*(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) != InputEventTime.lo)) {
@@ -514,7 +514,7 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay,...)
         InputEventTime.lo = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
         ovr_draw_usesBlitLoadRleGfx();
       }
-      uStack_3 = ovr_draw_textProvidesMoreHousing();
+      uStack_3 = ovr_draw_textProvidesMoreH_f381();
       uVar3 = CONCAT11(extraout_AH,uStack_3);
     } while (!(bool)uStack_3);
     uVar5 = (undefined1)(uVar3 >> 8);

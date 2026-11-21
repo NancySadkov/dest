@@ -1095,7 +1095,7 @@ void ovc27_textTakesHalfDamage4(void)
     ovr_play_sfxU(0x4c,0,uVar6,0,(char)uVar6);
     uVar2 = ((agnt_t *)((unaff_BP + -10)))->gdata;
     if ((*(uint *)((int)uVar2 + 0x40) & 0x20) == 0) {
-      ovr_ovc28_usesBDADailyTimeCounter(6);
+      ovr_ovc28_usesBDADailyTime_8441(6);
       uVar2 = ((agnt_t *)((unaff_BP + 6)))->entity;
       bVar3 = ovr_manage_rollDice(*(char *)((int)uVar2 + 0xf),'\x06');
       uVar7 = bVar3 + 1;

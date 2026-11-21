@@ -304,7 +304,7 @@ L_attact_3f0b_26bd_2767:
                        CONCAT11(uVar18,uVar17));
             uVar17 = 0xdc;
             uVar18 = 0;
-            ovr_season_usesGPromotableCount2();
+            ovr_season_usesGPromotable_e11a();
             pcVar7 = ovr_stsprintf(acStackY_7e);
             manage_blitLabelRight
                       ((char *)CONCAT13((char)((uint)uVar13 >> 8),CONCAT12((char)uVar13,pcVar7)),

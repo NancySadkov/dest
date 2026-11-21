@@ -224,7 +224,7 @@ byte __cdecl16far init2_usesCFGMice(uint16_t *mouseX,uint16_t *mouseY,...)
 
 /* [R1] forwards to ovr_miceButton0PressStates */
 
-void __cdecl16far ovr_miceButton0PressStates_entry(void)
+void __cdecl16far ovr_miceButton0PressStates_2f0e(void)
 
 {
   rightButtonLatch = 0;

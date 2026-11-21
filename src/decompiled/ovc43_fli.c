@@ -181,7 +181,7 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
   tempScreenOfs = ovr_stshAlloc(0xfa0f);
   tempScreenSeg = in_DX;
   ovc43_usesStExit(CONCAT22(paletteSeg,paletteOfs),handle,(uint16_t)tempScreenOfs,in_DX);
-  ovr_ovr_miceButton0PressStates_entry();
+  ovr_ovr_miceButton0PressSt_789c();
   uStack_4 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   puVar4 = *(ulong **)BDA_DailyTimeCounter.ofs;   /* hand fix: the offset half is the address, not the far_t struct */
   cStack_7 = '\0';
@@ -204,7 +204,7 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
         cStack_7 = '\x02';
       }
       if (cStack_7 != '\0') goto L_OVC43_6fbe_01a9_02C7;
-      puVar3 = ovr_attact_usesBDADailyTimeCounter(puStack_6,CONCAT22(unaff_DI,uStack_4));
+      puVar3 = ovr_attact_usesBDADailyTim_8bbe(puStack_6,CONCAT22(unaff_DI,uStack_4));
     } while ((puVar4 == (ulong *)0x0) && (puVar4 = (ulong *)0x0, puVar3 < (ulong *)(uint)delayTicks)
             );
     uStack_4 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);

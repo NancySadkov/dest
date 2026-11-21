@@ -50,7 +50,7 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)&rect;
   F_SCOPY(far_from_u32((uint32_t)(0x24100858)),dst_00);
-  puVar1 = ovr_attact_usesBDADailyTimeCounter(flashTickLo,CONCAT22(in_stack_0000ffe2,flashTickHi));
+  puVar1 = ovr_attact_usesBDADailyTim_8bbe(flashTickLo,CONCAT22(in_stack_0000ffe2,flashTickHi));
   if ((in_DX == 0) && (puVar1 <= (byte *)__C0_ASM_CopyRight + 4)) {
     paletteOfs = (uint8_t *)0x0;
   }
@@ -65,7 +65,7 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
     ovr_vgaSetPalette(paletteOfs,paletteSeg,0xeb,1);
   }
   if ((((noAnimBlit == 0x0) && (GPaused == '\0')) && (mapViewActive == '\x01')) &&
-     ((puVar1 = ovr_attact_usesBDADailyTimeCounter
+     ((puVar1 = ovr_attact_usesBDADailyTim_8bbe
                           (blitFrameTickLo,CONCAT22(in_stack_0000ffe2,blitFrameTickHi)),
       paletteOfs != (uint8_t *)0x0 || ((ulong *)((int)(undefined4 *)&_DATA + 3U) < puVar1)))) {
     ovr_miceRestoreArea((brect_t *)&rect);

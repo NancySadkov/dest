@@ -118,7 +118,65 @@ public class ExportData extends GhidraScript {
         if (depth > 8) return "0";
         DataType dt = d.getDataType();
         String rep = d.getDefaultValueRepresentation();
-        if (rep != null && rep.trim().startsWith("\"")) return fixStringRep(rep.trim());
+        if (rep != null && rep.trim().startsWith("\"")) {
+            String r = fixStringRep(rep.trim());
+            // A char array whose bytes are a mix of text and numbers comes back as
+            // one representation: "$",04h,02h,...  That is not a C initialiser.
+            // Convert every quoted run to character constants and brace the list.
+            boolean charArray = false;
+            if (dt instanceof Array) {
+                String et = ((Array) dt).getDataType().getName().toLowerCase();
+                charArray = et.contains("char") || et.contains("byte");
+            }
+            if (charArray && r.indexOf("\"") >= 0 && r.substring(r.indexOf("\"") + 1).contains(",")) {
+                StringBuilder out = new StringBuilder("{ ");
+                int i = 0;
+                boolean first = true;
+                while (i < r.length()) {
+                    char c = r.charAt(i);
+                    if (c == '"') {
+                        int j = i + 1;
+                        StringBuilder body = new StringBuilder();
+                        while (j < r.length() && r.charAt(j) != '"') {
+                            if (r.charAt(j) == '\\' && j + 1 < r.length()) {
+                                body.append(r.charAt(j)).append(r.charAt(j + 1));
+                                j += 2;
+                            } else {
+                                body.append(r.charAt(j));
+                                j++;
+                            }
+                        }
+                        String bd = body.toString();
+                        int k = 0;
+                        while (k < bd.length()) {
+                            if (!first) out.append(", ");
+                            first = false;
+                            if (bd.charAt(k) == '\\' && k + 1 < bd.length()) {
+                                int L = escLen(bd, k);
+                                out.append("'").append(bd, k, k + L).append("'");
+                                k += L;
+                            } else {
+                                char ch = bd.charAt(k);
+                                if (ch == '\'') out.append("'\\''");
+                                else out.append("'").append(ch).append("'");
+                                k++;
+                            }
+                        }
+                        i = j + 1;
+                        continue;
+                    }
+                    if (c == ',' || c == ' ') { i++; continue; }
+                    int st = i;
+                    while (i < r.length() && r.charAt(i) != ',' && r.charAt(i) != ' ') i++;
+                    if (!first) out.append(", ");
+                    first = false;
+                    out.append(r, st, i);
+                }
+                out.append(" }");
+                return out.toString();
+            }
+            return r;
+        }
         if (dt instanceof Pointer) return toC(rep, dt);
         if (dt.getName().contains("String") && rep != null && rep.trim().startsWith("\""))
             return fixStringRep(rep.trim());
@@ -129,9 +187,35 @@ public class ExportData extends GhidraScript {
         if (n > 0) {
             if (d.isUnion()) return "{ " + initOf(d.getComponent(0), depth + 1) + " }";
             StringBuilder b = new StringBuilder("{ ");
+            String elemType = (dt instanceof Array)
+                    ? ((Array) dt).getDataType().getName().toLowerCase() : "";
+            boolean charArray = elemType.contains("char") || elemType.contains("byte");
             for (int i = 0; i < n; i++) {
                 if (i > 0) b.append(", ");
-                b.append(initOf(d.getComponent(i), depth + 1));
+                String el = initOf(d.getComponent(i), depth + 1);
+                // inside a char/byte array a quoted run is not a legal sibling of
+                // scalar elements; turn it into character constants
+                if (charArray && el.trim().startsWith("\"")) {
+                    String body = el.trim();
+                    body = body.substring(1, body.length() - 1);
+                    StringBuilder cb = new StringBuilder();
+                    int k = 0;
+                    while (k < body.length()) {
+                        if (cb.length() > 0) cb.append(", ");
+                        if (body.charAt(k) == '\\' && k + 1 < body.length()) {
+                            int L = escLen(body, k);
+                            cb.append("'").append(body, k, k + L).append("'");
+                            k += L;
+                        } else {
+                            char ch = body.charAt(k);
+                            if (ch == '\'') cb.append("'\\''");
+                            else cb.append("'").append(ch).append("'");
+                            k++;
+                        }
+                    }
+                    el = cb.toString();
+                }
+                b.append(el);
             }
             b.append(" }");
             return b.toString();
@@ -154,6 +238,77 @@ public class ExportData extends GhidraScript {
         java.util.regex.Pattern miss = java.util.regex.Pattern
                 .compile("(0x[0-9A-Fa-f]+)\\s+\"");
         return miss.matcher(r).replaceAll("$1, \"");
+    }
+
+    // Inside a braced byte list Ghidra emits quoted runs ("$", "\t", "\xff")
+    // which C does not allow next to scalar elements.  Convert them to character
+    // constants; a value that is a single string (the whole initialiser) is left
+    // alone so ordinary string globals stay readable.
+    private String stringsToChars(String init) {
+        if (init == null || init.trim().startsWith("\"")) return init;
+        StringBuilder out = new StringBuilder();
+        int i = 0;
+        while (i < init.length()) {
+            char c = init.charAt(i);
+            if (c != '"') {
+                out.append(c);
+                i++;
+                continue;
+            }
+            int j = i + 1;
+            StringBuilder lit = new StringBuilder();
+            while (j < init.length() && init.charAt(j) != '"') {
+                if (init.charAt(j) == '\\' && j + 1 < init.length()) {
+                    lit.append(init.charAt(j)).append(init.charAt(j + 1));
+                    j += 2;
+                } else {
+                    lit.append(init.charAt(j));
+                    j++;
+                }
+            }
+            if (j >= init.length()) {          // unterminated: leave it
+                out.append(init.substring(i));
+                break;
+            }
+            String body = lit.toString();
+            // split a multi-character run into one constant per byte
+            java.util.List<String> parts = new java.util.ArrayList<String>();
+            int k = 0;
+            while (k < body.length()) {
+                if (body.charAt(k) == '\\') {
+                    parts.add(body.substring(k, Math.min(k + 2, body.length())));
+                    k += 2;
+                } else {
+                    parts.add(String.valueOf(body.charAt(k)));
+                    k++;
+                }
+            }
+            for (String part : parts) {
+                if (out.length() > 0) out.append(", ");
+                if (part.startsWith("\\")) out.append("'").append(part).append("'");
+                else if (part.equals("'")) out.append("'\\''");
+                else out.append("'").append(part).append("'");
+            }
+            i = j + 1;
+        }
+        return out.toString();
+    }
+
+    private static int escLen(String s, int k) {
+        if (s.charAt(k) != '\\' || k + 1 >= s.length()) return 1;
+        char n = Character.toLowerCase(s.charAt(k + 1));
+        if (n == 'x') {
+            int j = k + 2;
+            int digits = 0;
+            while (j < s.length() && digits < 2
+                    && Character.digit(s.charAt(j), 16) >= 0) { j++; digits++; }
+            return j - k;
+        }
+        int j = k + 1;
+        int digits = 0;
+        while (j < s.length() && digits < 3
+                && s.charAt(j) >= '0' && s.charAt(j) <= '7') { j++; digits++; }
+        return Math.max(2, j - k);
     }
 
     private void writeWrapped(PrintWriter w, String text) {

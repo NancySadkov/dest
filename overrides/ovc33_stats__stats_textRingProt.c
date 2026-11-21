@@ -284,7 +284,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       return (far_t *)((char *)0x26510);
     case (uint16_t)0x1:
                     /* WARNING: Read-only address (ram,0x0002c58a) is written */
-      s_s_regenerates_3_hitpoints_to_a_total_of_d_hi[0x1e] = '\0';
+      s_s_regenerates_3_hitpoint_5ade[0x1e] = '\0';
       (unaff_SI + 0xec0)->ofs = (uint16_t)unaff_SI;
                     /* WARNING: Bad instruction - Truncating control flow here */
       halt_baddata();
@@ -293,7 +293,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       if (*(byte *)(*(int *)pbVar21 + 0x86) < 9) {
         pfVar18 = (far_t *)((uint)promotionCount * 0x32 + 0x32);
       }
-      s_s_regenerates_3_hitpoints_to_a_total_of_d_hi[0x1e] = 'a';
+      s_s_regenerates_3_hitpoint_5ade[0x1e] = 'a';
       return pfVar18;
     case (uint16_t)0x3:
       do {

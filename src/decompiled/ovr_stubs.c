@@ -98,7 +98,7 @@
 /* 22de:0025 -> miceBlitRect */
 /* 22de:002a -> miceInit */
 /* 22de:002f -> init2_usesCFGMice */
-/* 22de:0034 -> ovr_miceButton0PressStates_entry */
+/* 22de:0034 -> ovr_miceButton0PressStates_2f0e */
 /* 22de:0039 -> clearMiceProcessed */
 /* 22de:003e -> init2_updateMouseButtons */
 /* 22de:0043 -> miceUpdate */
@@ -190,7 +190,7 @@
 /* 2315:0034 -> attact_usesBDADailyTimeCounter */
 /* 2315:0039 -> attact_updateAttractEntry */
 /* 2315:003e -> attact_usesLDIV_at_ */
-/* 2315:0043 -> attact_textAbnormalProgramTermination */
+/* 2315:0043 -> attact_textAbnormalProgram_f621 */
 /* 2315:0048 -> attact_countPartyUnits */
 /* 2315:004d -> attact_compute2 */
 /* 2315:0052 -> attact_compute3 */

@@ -24,6 +24,8 @@ HEADERS = {
 def short_module(name):
     if name == "st_globals.c":
         return "glob.c"
+    if name == "st_globals2.c":
+        return "glob2.c"
     if name == "ovr_stubs.c":
         return "ovrstub.c"
     if name in ("crtl.c", "main.c", "mouse.c", "video.c", "ovl.c"):

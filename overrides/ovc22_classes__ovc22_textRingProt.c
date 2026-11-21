@@ -265,15 +265,15 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
               iVar30 = 1 - (*puVar3 & 3);
               *puVar3 = *puVar3 + (uint)(0 < iVar30) * iVar30;
               *(char *)puVar49 = (char)*puVar49 + '\x01';
-              uVar33 = CONCAT11(uVar19,(s_my_s_we_in_this_neighborhood_are_doing_well[0x4c] - 0x2fU)
+              uVar33 = CONCAT11(uVar19,(s_my_s_we_in_this_neighbor_b984[0x4c] - 0x2fU)
                                        + (0xe7U < (byte)
-                                                  s_my_s_we_in_this_neighborhood_are_doing_well
+                                                  s_my_s_we_in_this_neighbor_b984
                                                   [0x4c]));
               puVar3 = (uint *)((int)unaff_DI + (int)((int)&puVar38[-0xd8c].y + 1));
-              uVar22 = (uint)(0x46 < (byte)(s_my_s_we_in_this_neighborhood_are_doing_well[0x4c] +
+              uVar22 = (uint)(0x46 < (byte)(s_my_s_we_in_this_neighbor_b984[0x4c] +
                                            0x18U) ||
-                             CARRY1(s_my_s_we_in_this_neighborhood_are_doing_well[0x4c] - 0x2fU,
-                                    0xe7U < (byte)s_my_s_we_in_this_neighborhood_are_doing_well
+                             CARRY1(s_my_s_we_in_this_neighbor_b984[0x4c] - 0x2fU,
+                                    0xe7U < (byte)s_my_s_we_in_this_neighbor_b984
                                                   [0x4c]));
               uVar48 = (int)resourceTotals + (-0x1f - *puVar3);
               iVar30 = -uVar22;

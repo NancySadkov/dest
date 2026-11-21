@@ -639,7 +639,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                  CONCAT11(uVar13,uVar11));
       uVar11 = 0xdc;
       uVar13 = 0;
-      iVar7 = ovr_season_usesGPromotableCount2();
+      iVar7 = ovr_season_usesGPromotable_e11a();
       pcVar9 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4cd1,unaff_SS),
                              (char *)CONCAT13((char)((uint)iVar7 >> 8),CONCAT12((char)iVar7,0x2410))
                             );
@@ -1203,10 +1203,10 @@ char * __cdecl16far chargen_switch(uint16_t index)
     if (((uint)pcVar16 & 0xff) == 1) {
       pcVar22 = (char *)(PartyCount - 1);
       if (CurPartySlot == 1) {
-        ovr_ovc18_checkFortressPlacement('\x02');
+        ovr_ovc18_checkFortressPla_7e6f('\x02');
       }
       else {
-        ovr_ovc18_checkFortressPlacement('\x01');
+        ovr_ovc18_checkFortressPla_7e6f('\x01');
       }
       ovr_ovc41_usesGMenuItem();
     }
@@ -2047,10 +2047,10 @@ void __cdecl16far manage_textHalflingCastle(void)
   if (uStack_6 == 1) {
     iStack_4 = PartyCount - 1;
     if (CurPartySlot == 1) {
-      ovr_ovc18_checkFortressPlacement('\x02');
+      ovr_ovc18_checkFortressPla_7e6f('\x02');
     }
     else {
-      ovr_ovc18_checkFortressPlacement('\x01');
+      ovr_ovc18_checkFortressPla_7e6f('\x01');
     }
     ovr_ovc41_usesGMenuItem();
   }
