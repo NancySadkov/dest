@@ -1704,7 +1704,7 @@ ovc27_usesPlay_sfxU(uint16_t ptrOfs,uint16_t ptrSeg,agnt_t *agnt,uint8_t frames,
     uVar4 = CONCAT11((char)(unk >> 8),1);
   }
   else {
-    uVar4 = ovr_ovc41_settleAgentCombat((agnt_t *)ptrOfs,(agnt_t *)CONCAT22(agnt_00,ptrSeg),uVar6);
+    uVar4 = ovr_ovc41_settleAgentCombat((agnt_t *)ptrOfs,(agnt_t *)ptrSeg);
     uVar4 = uVar4 & 0xff00;
   }
   return uVar4;
