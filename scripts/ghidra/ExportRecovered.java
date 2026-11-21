@@ -643,6 +643,9 @@ public class ExportRecovered extends GhidraScript {
         ch.println("typedef double longdouble;");
         ch.println("code *swi(int vector);");
         ch.println("#define MK_FP(seg,ofs) ((void far *)(((uint32_t)(seg) << 16) | (uint16_t)(ofs)))");
+        // far_from_u32 returns a struct, but a 16-bit slot can only hold the
+        // offset half; this helper keeps exactly that word.
+        ch.println("#define far_ofs_u32(v) ((uint16_t)((uint32_t)(v)))");
         ch.println("#define CONCAT11(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint8_t)(b)))");
         ch.println("#define CONCAT12(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint16_t)(b)))");
         ch.println("#define CONCAT13(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint16_t)(b)))");

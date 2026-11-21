@@ -87,7 +87,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   uVar11 = SUB41(dst,0);
   uVar47 = (undefined1)((ulong)dst >> 8);
   if ((*(uint8_t *)((uint8_t *)&(dst) + 2)) == '\x01') {
-    src = far_from_u32((uint32_t)(uVar46));
+    src = far_ofs_u32((uint32_t)(uVar46));
     if ((char)term == '\0') {
       strcpy((char *)CONCAT13(uVar47,CONCAT12(uVar11,CONCAT11(in_stack_00000005,in_stack_00000004)))
              ,"");
@@ -101,7 +101,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
     return (far_t *)CONCAT11(in_stack_00000005,in_stack_00000004);
   }
   bVar28 = (char)src - (char)term;
-  src = far_from_u32((uint32_t)(CONCAT31(SUB43(uVar46,1),bVar28)));
+  src = far_ofs_u32((uint32_t)(CONCAT31(SUB43(uVar46,1),bVar28)));
   if ((*(uint8_t *)((uint8_t *)&(dst) + 2)) == '\x03') {
     uVar20 = (int)(char)bVar28 - 6;
     if (4 < uVar20) {
@@ -255,8 +255,8 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
     bVar10 = (byte)((uint)in_DX >> 8);
     uVar11 = (undefined1)unaff_SS;
     uVar47 = (undefined1)((uint)unaff_SS >> 8);
-    switch(pbVar21) {
-    case (byte *)0x0:
+    switch((uint16_t)pbVar21)   /* hand fix: case values are ints */ {
+    case (uint16_t)0x0:
       ovr_vgaSetPalette8bit(auStack_314);
       uVar11 = 0xa6;
       uVar47 = 0x22;
@@ -282,20 +282,20 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       CurMusicType = 0xff;
       ScreenMode = 0;
       return (far_t *)((char *)0x26510);
-    case (byte *)0x1:
+    case (uint16_t)0x1:
                     /* WARNING: Read-only address (ram,0x0002c58a) is written */
       s_s_regenerates_3_hitpoints_to_a_total_of_d_hi[0x1e] = '\0';
       (unaff_SI + 0xec0)->ofs = (uint16_t)unaff_SI;
                     /* WARNING: Bad instruction - Truncating control flow here */
       halt_baddata();
-    case (byte *)0x2:
+    case (uint16_t)0x2:
       pfVar18 = GPromotableCount;
       if (*(byte *)(*(int *)pbVar21 + 0x86) < 9) {
         pfVar18 = (far_t *)((uint)promotionCount * 0x32 + 0x32);
       }
       s_s_regenerates_3_hitpoints_to_a_total_of_d_hi[0x1e] = 'a';
       return pfVar18;
-    case (byte *)0x3:
+    case (uint16_t)0x3:
       do {
         uVar48 = uVar11;
         uVar49 = uVar47;
@@ -313,7 +313,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
             if (CONCAT11((*(uint8_t *)((uint8_t *)&(dst) + 3)),(*(uint8_t *)((uint8_t *)&(dst) + 2))) <= (int)unaff_SI) {
               if (goldPartyIndex != 0xff) {
                 pfVar18 = (far_t *)CONCAT11((char)((uint)pfVar18 >> 8),goldPartyIndex);
-                src = far_from_u32((uint32_t)(CONCAT22(pfVar18,0x22c4)));
+                src = far_ofs_u32((uint32_t)(CONCAT22(pfVar18,0x22c4)));
                 (*(uint8_t *)((uint8_t *)&(dst) + 2)) = 0xad;
                 (*(uint8_t *)((uint8_t *)&(dst) + 3)) = 7;
                 ovc28_drawGold(goldPartyIndex);
@@ -349,7 +349,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
           (*(uint8_t *)((uint8_t *)&(dst) + 3)) = (undefined1)(FontMain.seg >> 8);
           if (*(char *)CONCAT13(uVar49,CONCAT12(uVar48,in_DX)) == '%') break;
           if (*(char *)CONCAT13(uVar49,CONCAT12(uVar48,in_DX)) == '@') {
-            src = far_from_u32((uint32_t)(0xf013f));
+            src = far_ofs_u32((uint32_t)(0xf013f));
             (*(uint16_t *)((uint8_t *)&(dst))) =(uint16_t)( (char *)FontMain.ofs);
             in_stack_00000004 = 3;
             in_stack_00000005 = 0;
@@ -362,7 +362,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
             pbVar21 = unaff_DI;
           }
           else {
-            src = far_from_u32((uint32_t)(0xf013f));
+            src = far_ofs_u32((uint32_t)(0xf013f));
             (*(uint16_t *)((uint8_t *)&(dst))) =(uint16_t)( (char *)FontMain.ofs);
             in_stack_00000004 = 3;
             in_stack_00000005 = 0;
@@ -376,17 +376,17 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
           }
         }
         BlitLetterType = 2;
-        src = far_from_u32((uint32_t)(0xf013f));
+        src = far_ofs_u32((uint32_t)(0xf013f));
         (*(uint16_t *)((uint8_t *)&(dst))) =(uint16_t)( (char *)FontMain.ofs);
         in_stack_00000004 = 3;
         in_stack_00000005 = 0;
       } while( true );
-    case (byte *)0x4:
+    case (uint16_t)0x4:
       out(0,bVar28);
       pcVar1 = (char *)((int)*pasVar34 + 0x3b);
       *pcVar1 = *pcVar1 + bVar10;
       break;
-    case (byte *)0x5:
+    case (uint16_t)0x5:
       bVar26 = 9 < (bVar28 & 0xf) | in_AF;
       bVar27 = bVar28 + bVar26 * '\x06';
       cVar22 = ((char)bVar28 >> 7) + bVar26;
@@ -443,7 +443,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       uVar20 = CONCAT11(cVar22,*(undefined1 *)(ulong)((int)*pasVar34 + (uVar20 & 0xff)));
       (*pasVar34)[0] = CONCAT11(bVar23,bVar27);
       if (!CARRY1(bVar26,bVar28) && !CARRY1(bVar10,bVar12)) {
-        src = far_from_u32((uint32_t)(CONCAT22(0x6000,src)));
+        src = far_ofs_u32((uint32_t)(CONCAT22(0x6000,src)));
         pcVar7 = (code *)swi(3);
         pfVar18 = (far_t *)(*pcVar7)();
         return pfVar18;
@@ -689,7 +689,7 @@ L_OVC27_2288:
           if ((int)unaff_SI < 4) break;
           pfVar18 = (far_t *)CONCAT11(in_stack_0000fffb,in_stack_0000fffa);
           if (unaff_DI == (byte *)((int)&AgntAnms[0x38].halfWidth + 1)) {
-            GPromotableCount = (uint16_t)(((int)&GPromotableCount->ofs + 1));
+            GPromotableCount = (uint16_t)((int)&GPromotableCount + 1)   /* hand fix: scalar, no ->ofs */;
             pfVar18 = (far_t *)CONCAT11(in_stack_0000fffb,in_stack_0000fffa);
           }
           do {
@@ -720,8 +720,8 @@ L_OVC27_2288:
       } while( true );
     case (byte *)0x8:
       uVar30 = 0x217a;
-      if (*(uint *)((int)*(undefined4 *)pbVar21 + 0x54) <
-          (uint)-*(int *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2) + 0x4d)) {
+      if (((char_sheet_t *)(pbVar21))->income <
+          (uint)-((char_sheet_t *)(((uint)in_stack_00000004 << 2)))->population) {
         bVar28 = 5;
       }
       else {
