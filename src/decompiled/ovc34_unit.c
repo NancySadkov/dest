@@ -296,10 +296,6 @@ L_keyprocessor_6616_03bd_0684:
 
 
 /* 6616:0689 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R2] string "Define region to command %s loyal to %s." */
-
 void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
 
 {
@@ -406,8 +402,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
   ovr_alignToSeg(ptr);
   pbStack_2a = mouseX;
   pbStack_2c = mouseY;
-  cursorX = (byte *)((GfxRndSeed - Seed_2000_d110) * 2 + 7);
-  cursorY = (byte *)((GfxRndSeed2 - Seed_2000_d10e) * 3 + 8);
+  cursorX = (uint8_t)((GfxRndSeed - Seed_2000_d110) * 2 + 7);   /* hand fix: cursorX is a uint8_t cursor coordinate, not a pointer */
+  cursorY = (uint8_t)((GfxRndSeed2 - Seed_2000_d10e) * 3 + 8);   /* hand fix: cursorY is a uint8_t cursor coordinate, not a pointer */
   pbStack_32 = (byte *)0xffff;
   pbStack_34 = (byte *)0xffff;
   input = 0x0;
@@ -682,7 +678,6 @@ L_ui_unit_order_6616_0689_106E:
   ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x2410);
   return;
 }
-
 
 
 /* 6616:10d5 */
