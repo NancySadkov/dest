@@ -16,51 +16,49 @@ uint __cdecl16far ovc36_usesLDIV_at_(byte partyIndex,...)
 {
   long *plVar1;
   undefined2 uVar2;
-  undefined2 unaff_BP;
   undefined2 unaff_SI;
   int iVar3;
-  undefined2 unaff_DI;
+  uint unaff_DI;
   uint uVar4;
   long lVar5;
   long lVar6;
-  long lVar7;
-  byte in_stack_00000004;
-  ulong uVar8;
-  undefined2 in_stack_0000fffc;
-  uint uVar9;
+  long *plVar7;
+  undefined2 uVar8;
+  undefined2 uVar9;
+  undefined4 in_stack_0000fffa;
   int iVar10;
-  undefined2 uVar11;
   
-  lVar6 = CONCAT22(unaff_BP,in_stack_0000fffc);
-  lVar7 = CONCAT22(unaff_SI,unaff_DI);
-  if (*(int *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2) + 0x4d) == 0) {
-    uVar4 = (uint)(in_stack_00000004 >> 6) << 8;
+  lVar6 = CONCAT22((int)((ulong)in_stack_0000fffa >> 0x10),unaff_SI);
+  if (*(int *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d) == 0) {
+    uVar4 = (uint)(partyIndex >> 6) << 8;
   }
   else {
-    uVar8 = (ulong)*(uint *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2) + 0x4d);
+    uVar8 = 0;
+    plVar7 = (long *)*(undefined2 *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d);
     uVar2 = 0;
-    plVar1 = LXMUL_at_((long *)0x0,lVar7,lVar6);
-    lVar5 = LDIV_at_((long)CONCAT22(uVar2,plVar1),uVar8);
+    plVar1 = LXMUL_at_(plVar7,(ulong)unaff_DI << 0x10,lVar6);
+    lVar5 = LDIV_at_((long)CONCAT22(uVar2,plVar1),(long)CONCAT22(uVar8,plVar7));
     uVar4 = (uint)lVar5;
     if (200 < uVar4) {
       uVar4 = 200;
     }
-    uVar8 = (ulong)*(uint *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2) + 0x4d);
+    uVar8 = 0;
+    plVar7 = (long *)*(undefined2 *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d);
     uVar2 = 0;
-    plVar1 = LXMUL_at_((long *)0x0,lVar7,lVar6);
-    uVar11 = (undefined2)((ulong)lVar6 >> 0x10);
-    lVar6 = LDIV_at_((long)CONCAT22(uVar2,plVar1),uVar8);
-    uVar9 = (uint)lVar6;
-    if (200 < uVar9) {
-      uVar9 = 200;
+    plVar1 = LXMUL_at_(plVar7,(ulong)unaff_DI << 0x10,lVar6);
+    uVar9 = (undefined2)lVar6;
+    lVar6 = LDIV_at_((long)CONCAT22(uVar2,plVar1),(long)CONCAT22(uVar8,plVar7));
+    lVar5 = CONCAT22((uint)lVar6,uVar9);
+    if (200 < (uint)lVar6) {
+      lVar5 = CONCAT22(200,uVar9);
     }
-    lVar6 = CONCAT22(uVar11,uVar9);
-    uVar8 = (ulong)*(uint *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2) + 0x4d);
+    uVar8 = 0;
+    plVar7 = (long *)*(undefined2 *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d);
     uVar2 = 0;
-    plVar1 = LXMUL_at_((long *)0x0,lVar7,lVar6);
-    iVar10 = (int)lVar6;
-    lVar7 = LDIV_at_((long)CONCAT22(uVar2,plVar1),uVar8);
-    iVar3 = (int)lVar7;
+    plVar1 = LXMUL_at_(plVar7,(ulong)unaff_DI << 0x10,lVar5);
+    iVar10 = (int)((ulong)lVar5 >> 0x10);
+    lVar6 = LDIV_at_((long)CONCAT22(uVar2,plVar1),(long)CONCAT22(uVar8,plVar7));
+    iVar3 = (int)lVar6;
     if (iVar3 < 0) {
       iVar3 = 0;
     }

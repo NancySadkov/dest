@@ -49,7 +49,7 @@ public class FixFarParams extends GhidraScript {
                     if (ps.length == 0) break;
                     String cc = fn.getCallingConventionName();
                     boolean farcc = cc != null && cc.toLowerCase().contains("far");
-                    int cur = farcc ? 6 : 4;
+                    int cur = farcc ? 4 : 2;   // Stack[n] = BP+n+2
                     Map<Integer, Integer> at = new HashMap<>();
                     Map<Integer, Integer> startOf = new HashMap<>();
                     for (int k = 0; k < ps.length; k++) {

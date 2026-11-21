@@ -83,7 +83,7 @@ public class FixFarParamOffsets extends GhidraScript {
 
                 String cc = fn.getCallingConventionName();
                 boolean farcc = cc != null && cc.toLowerCase().contains("far");
-                int base = farcc ? 6 : 4;
+                int base = farcc ? 4 : 2;   // Stack[n] = BP+n+2
 
                 // pass 1: decide types and offsets
                 List<String> names = new ArrayList<>();

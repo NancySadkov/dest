@@ -36,12 +36,9 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
   uint8_t *psrc;
   int16_t line;
   uint16_t o;
-  uint unaff_DI;
+  int16_t unaff_DI;
   uint16_t m;
   undefined2 unaff_SS;
-  int in_stack_00000004;
-  long lVar2;
-  int16_t count;
   uint8_t widths [96];
   uint8_t dchofs [192];
   uint8_t schofs [192];
@@ -54,10 +51,10 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
   uint16_t xx;
   
   height = 0;
-  for (line = 320; *(char *)(in_stack_00000004 + line) != -1; line = line + 0x140) {
+  for (line = 320; *(char *)((int)&__return_storage_ptr__->ofs + line) != -1; line = line + 0x140) {
     if (height == 200) {
                     /* WARNING: Subroutine does not return */
-      ovr_stExit();
+      ovr_stExit(1);
     }
     height = height + 1;
   }
@@ -71,17 +68,13 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
       if (0x5f < i) {
         FontSize.lo = dofs + 0x121;
         FontSize.hi = 0;
-        lVar2 = (ulong)unaff_DI << 0x10;
-        pfVar1 = ovr_stshAlloc();
+        pfVar1 = ovr_stshAlloc((ulong)FontSize.lo);
         r = CONCAT22(in_DX,pfVar1);
         *(undefined1 *)r = (undefined1)height;
         for (i = 0; i < 0x60; i = i + 1) {
-          count = (int16_t)((ulong)lVar2 >> 0x10);
-          lVar2 = CONCAT22(count,height);
           stshCopyFontChar((uint8_t *)
-                           CONCAT22((int)&pfVar1[0x48].ofs + *(int *)(dchofs + i * 2) + 1,
-                                    __return_storage_ptr__),
-                           (uint8_t *)(ulong)CONCAT12(widths[i],in_DX),height,count);
+                           CONCAT22((int)&pfVar1[0x48].ofs + *(int *)(dchofs + i * 2) + 1,hndl.ofs),
+                           (uint8_t *)(ulong)CONCAT12(widths[i],in_DX),height,unaff_DI);
           *(undefined2 *)((int)&pfVar1->ofs + i * 2 + 1) = *(undefined2 *)(dchofs + i * 2);
           *(uint8_t *)((int)&pfVar1[0x30].ofs + i + 1) = widths[i];
         }
@@ -90,15 +83,15 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
       do {
         if (0x13f < m) {
           m = 0;
-          for (o = height * 0x140 + x + 0x280; x = o, *(char *)(in_stack_00000004 + o) != -1;
-              o = o + 0x140) {
+          for (o = height * 0x140 + x + 0x280; x = o,
+              *(char *)((int)&__return_storage_ptr__->ofs + o) != -1; o = o + 0x140) {
             if (64000 < o) {
                     /* WARNING: Subroutine does not return */
-              ovr_stExit();
+              ovr_stExit(2);
             }
           }
         }
-        for (; (*(char *)(in_stack_00000004 + o) != -1 && (m < 0x140)); m = m + 1) {
+        for (; (*(char *)((int)&__return_storage_ptr__->ofs + o) != -1 && (m < 0x140)); m = m + 1) {
           o = o + 1;
         }
       } while (0x13f < m);
@@ -106,7 +99,7 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
       *(uint16_t *)(dchofs + i * 2) = dofs;
       j = 2;
       while( true ) {
-        if (*(char *)(in_stack_00000004 + o + 1) == -1) break;
+        if (*(char *)((int)&__return_storage_ptr__->ofs + o + 1) == -1) break;
         j = j + 1;
         o = o + 1;
         m = m + 1;
@@ -120,10 +113,10 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
       i = i + 1;
     }
                     /* WARNING: Subroutine does not return */
-    ovr_stExit();
+    ovr_stExit(3);
   }
                     /* WARNING: Subroutine does not return */
-  ovr_stExit();
+  ovr_stExit(1);
 }
 
 
@@ -136,27 +129,25 @@ far_t * __cdecl16far stshProcessFont(far_t *__return_storage_ptr__,int16_t file_
   far_t handle;
   far_t handle_00;
   far_t hndl;
-  stg_tmp_t *n;
-  far_t *pfVar1;
+  stg_tmp_t *psVar1;
+  far_t *pfVar2;
   uint16_t in_DX;
-  uint16_t uVar2;
   
-  n = ovr_grabLbm();
-  if (n == (stg_tmp_t *)0x0 && in_DX == 0) {
+  psVar1 = ovr_grabLbm((int16_t)__return_storage_ptr__,0,0);
+  if (psVar1 == (stg_tmp_t *)0x0 && in_DX == 0) {
                     /* WARNING: Subroutine does not return */
-    ovr_stExit((int)n,6);
+    ovr_stExit(6);
   }
-  hndl.seg = in_DX;
-  hndl.ofs = (uint16_t)n;
-  uVar2 = in_DX;
-  pfVar1 = stshProcessFontSub((far_t *)(n->aptr).seg,hndl,(&n->aptr)->ofs);
-  handle.seg = (uint16_t)n;
-  handle.ofs = (n->bptr).seg;
-  ovr_stshFree(handle,(&n->bptr)->ofs,uVar2,pfVar1,in_DX);
-  handle_00.seg = (uint16_t)n;
-  handle_00.ofs = uVar2;
-  ovr_stshFree(handle_00,n);
-  return pfVar1;
+  hndl.seg = (uint16_t)psVar1;
+  hndl.ofs = (psVar1->aptr).seg;
+  pfVar2 = stshProcessFontSub((far_t *)(&psVar1->aptr)->ofs,hndl);
+  handle.seg = (psVar1->bptr).seg;
+  handle.ofs = (&psVar1->bptr)->ofs;
+  ovr_stshFree(handle);
+  handle_00.seg = in_DX;
+  handle_00.ofs = (uint16_t)psVar1;
+  ovr_stshFree(handle_00);
+  return pfVar2;
 }
 
 
@@ -166,49 +157,51 @@ far_t * __cdecl16far stshProcessFont(far_t *__return_storage_ptr__,int16_t file_
 void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
 
 {
+  far_t gfx;
+  far_t dst;
   uint8_t ch_index;
   uint uVar1;
   uint16_t letter_w;
   uint16_t ws;
   int iVar2;
-  uint16_t unaff_DI;
-  char in_stack_00000004;
-  far_t gfx;
-  far_t dst;
+  undefined2 uVar3;
+  undefined1 uStack0009;
+  byte in_stack_0000000a;
   uint uStack_e;
-  byte *pbStack_a;
+  undefined4 uStack_a;
   undefined4 uStack_6;
   
-  if (((in_stack_00000004 != '\r') && (in_stack_00000004 != '\n')) && (in_stack_00000004 != '\x1a'))
-  {
-    if (in_stack_00000004 == '\x7f') {
-      dst.seg = unaff_DI;
-      dst.ofs = TextBlitDstSeg;
-      gfx.seg = TextBlitY * 0x140 + TextBlitX + 0x140;
-      gfx.ofs = LbxButton2.seg;
-      ovr_blitLoadRleGfx(gfx,dst,LbxButton2.ofs);
+  widths = (byte *)CONCAT13(uStack0009,CONCAT12(term,widths));
+  if (((ch != '\r') && (ch != '\n')) && (ch != '\x1a')) {
+    if (ch == '\x7f') {
+      gfx.seg = LbxButton2.seg;
+      gfx.ofs = LbxButton2.ofs;
+      dst.seg = TextBlitDstSeg;
+      dst.ofs = TextBlitY * 0x140 + TextBlitX + 0x140;
+      ovr_blitLoadRleGfx(gfx,dst);
     }
     else {
-      ch_index = in_stack_00000004 + 0xe0;
+      ch_index = ch + 0xe0;
       if (ch_index < 0x61) {
-        uVar1 = (uint)*(byte *)CONCAT22((byte *)widths,ch);
-        letter_w = (uint16_t)ch[ch_index + 0xc1];
+        uVar1 = (uint)*widths;
+        uVar3 = (undefined2)((ulong)widths >> 0x10);
+        letter_w = (uint16_t)widths[ch_index + 0xc1];
         uStack_6 = (byte *)CONCAT22(TextBlitDstSeg,(byte *)(TextBlitX + TextBlitY * 0x140));
-        pbStack_a = (byte *)CONCAT22((byte *)widths,
-                                     ch + *(int *)(ch + (uint)ch_index * 2 + 1) + 0x121);
+        uStack_a = (byte *)CONCAT22(uVar3,widths + *(int *)(widths + (uint)ch_index * 2 + 1) + 0x121
+                                   );
         if (BlitLetterType == '\x02') {
           for (uStack_e = 0; uStack_e < uVar1; uStack_e = uStack_e + 1) {
             iVar2 = 0;
             while( true ) {
               if ((int)letter_w <= iVar2) break;
-              if ((*pbStack_a == 0x9f) || (*pbStack_a == 0x9b)) {
+              if ((*uStack_a == 0x9f) || (*uStack_a == 0x9b)) {
                 *uStack_6 = 0x92;
               }
-              else if (*pbStack_a != 0) {
-                *uStack_6 = *pbStack_a;
+              else if (*uStack_a != 0) {
+                *uStack_6 = *uStack_a;
               }
               uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 1);
-              pbStack_a = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(pbStack_a) + 2)),(byte *)pbStack_a + 1);
+              uStack_a = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_a) + 2)),(byte *)uStack_a + 1);
               iVar2 = iVar2 + 1;
             }
             uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + (0x140 - letter_w));
@@ -219,17 +212,17 @@ void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
             iVar2 = 0;
             while( true ) {
               if ((int)letter_w <= iVar2) break;
-              if (*pbStack_a == 1) {
+              if (*uStack_a == 1) {
                 *uStack_6 = 0xec;
               }
-              else if (*pbStack_a == 0xe) {
-                *uStack_6 = (*(uint8_t *)((uint8_t *)&(widths) + 2));
+              else if (*uStack_a == 0xe) {
+                *uStack_6 = in_stack_0000000a;
               }
-              else if (*pbStack_a != 0) {
-                *uStack_6 = *pbStack_a;
+              else if (*uStack_a != 0) {
+                *uStack_6 = *uStack_a;
               }
               uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 1);
-              pbStack_a = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(pbStack_a) + 2)),(byte *)pbStack_a + 1);
+              uStack_a = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_a) + 2)),(byte *)uStack_a + 1);
               iVar2 = iVar2 + 1;
             }
             uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + (0x140 - letter_w));
@@ -240,22 +233,22 @@ void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
             iVar2 = 0;
             while( true ) {
               if ((int)letter_w <= iVar2) break;
-              if (*pbStack_a == 1) {
+              if (*uStack_a == 1) {
                 *uStack_6 = 0xec;
               }
-              else if (*pbStack_a == 0xe) {
-                *uStack_6 = (*(uint8_t *)((uint8_t *)&(widths) + 2));
+              else if (*uStack_a == 0xe) {
+                *uStack_6 = in_stack_0000000a;
               }
-              else if ((*pbStack_a < 0xe4) || (0xe7 < *pbStack_a)) {
-                if (*pbStack_a != 0) {
-                  *uStack_6 = *pbStack_a;
+              else if ((*uStack_a < 0xe4) || (0xe7 < *uStack_a)) {
+                if (*uStack_a != 0) {
+                  *uStack_6 = *uStack_a;
                 }
               }
               else {
-                *uStack_6 = *pbStack_a | 0x10;
+                *uStack_6 = *uStack_a | 0x10;
               }
               uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 1);
-              pbStack_a = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(pbStack_a) + 2)),(byte *)pbStack_a + 1);
+              uStack_a = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_a) + 2)),(byte *)uStack_a + 1);
               iVar2 = iVar2 + 1;
             }
             uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + (0x140 - letter_w));
@@ -305,36 +298,31 @@ int __cdecl16far blitText(char *text,byte *widths,uint16_t seg,uint8_t term,...)
   uint16_t pt;
   uint uVar4;
   uint16_t index;
-  undefined2 unaff_DI;
-  char *in_stack_00000004;
+  undefined1 in_stack_0000000e;
   uint16_t bx;
   uint16_t snchars;
   
-  if (*(char *)CONCAT22((char *)text,in_stack_00000004) == '\0') {
+  if (*(char *)CONCAT22((byte *)widths,text) == '\0') {
     nchars = 0;
   }
   else {
     nchars = 0;
     snchars = 0;
-    bx = TextBlitX;
     uVar4 = 0;
-    while( true ) {
-      if (((in_stack_00000004[uVar4] == '\0') || (in_stack_00000004[uVar4] == '\n')) ||
-         (in_stack_00000004[uVar4] == '\x1a')) break;
-      ch_width = fontChWidth((uint8_t *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2))),in_stack_00000004[uVar4]
-                            );
-      if ((*(uint16_t *)((uint8_t *)&(widths) + 2)) + 1U < bx + ch_width) break;
-      if (in_stack_00000004[uVar4] == ' ') {
+    for (bx = TextBlitX;
+        (((text[uVar4] != '\0' && (text[uVar4] != '\n')) && (text[uVar4] != '\x1a')) &&
+        (ch_width = fontChWidth((byte *)CONCAT22(seg,(*(uint16_t *)((uint8_t *)&(widths) + 2))),text[uVar4]),
+        bx + ch_width <= term + 1U)); bx = bx + bVar1) {
+      if (text[uVar4] == ' ') {
         nchars = uVar4 + 1;
       }
       snchars = uVar4 + 1;
-      bVar1 = fontChWidth((uint8_t *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2))),in_stack_00000004[uVar4]);
-      bx = bx + bVar1;
+      bVar1 = fontChWidth((byte *)CONCAT22(seg,(*(uint16_t *)((uint8_t *)&(widths) + 2))),text[uVar4]);
       uVar4 = uVar4 + 1;
     }
-    uVar2 = (uint)(byte)in_stack_00000004[uVar4];
-    if (((uVar2 == 0) || (in_stack_00000004[uVar4] == '\n')) ||
-       ((in_stack_00000004[uVar4] == ' ' || (in_stack_00000004[uVar4] == '\x1a')))) {
+    uVar2 = (uint)(byte)text[uVar4];
+    if (((uVar2 == 0) || (text[uVar4] == '\n')) || ((text[uVar4] == ' ' || (text[uVar4] == '\x1a')))
+       ) {
       nchars = uVar4;
     }
     if (nchars == 0) {
@@ -342,21 +330,19 @@ int __cdecl16far blitText(char *text,byte *widths,uint16_t seg,uint8_t term,...)
     }
     for (index = 0; index < nchars; index = index + 1) {
       uVar3 = (undefined1)(uVar2 >> 8);
-      uVar2 = CONCAT11(uVar3,in_stack_00000004[index]);
-      blitLetter((char)((ulong)text >> 0x10),
-                 (byte *)CONCAT13(uVar3,CONCAT12((undefined1)seg,(byte *)widths)),(uint8_t)unaff_DI,
-                 uVar2,(undefined1)seg);
+      uVar2 = CONCAT11(uVar3,text[index]);
+      blitLetter(text[index],(*(uint16_t *)((uint8_t *)&(widths) + 2)),(uint8_t)seg,CONCAT11(uVar3,in_stack_0000000e));
     }
-    for (; in_stack_00000004[nchars] == '\r'; nchars = nchars + 1) {
+    for (; text[nchars] == '\r'; nchars = nchars + 1) {
     }
-    if (in_stack_00000004[nchars] == '\n') {
+    if (text[nchars] == '\n') {
       nchars = nchars + 1;
     }
     else {
-      for (; in_stack_00000004[nchars] == ' '; nchars = nchars + 1) {
+      for (; text[nchars] == ' '; nchars = nchars + 1) {
       }
     }
-    for (; in_stack_00000004[nchars] == '\x1a'; nchars = nchars + 1) {
+    for (; text[nchars] == '\x1a'; nchars = nchars + 1) {
     }
   }
   return nchars;
@@ -374,32 +360,29 @@ uint __cdecl16far blitLabel(char *text,uint8_t *widths,int16_t max_width,uint8_t
   uint16_t ptext;
   uint16_t j;
   uint16_t i;
-  undefined2 unaff_DI;
   uint16_t x;
   uint16_t w_seg;
-  char *in_stack_00000004;
+  undefined1 in_stack_0000000e;
   uint16_t width;
   
-  if (*(char *)CONCAT22((char *)text,in_stack_00000004) == '\0') {
+  if (*(char *)CONCAT22((uint8_t *)widths,text) == '\0') {
     width = 0;
   }
   else {
     width = 0;
     j = 0;
     for (x = TextBlitX;
-        ((in_stack_00000004[j] != '\0' && (in_stack_00000004[j] != '\n')) &&
-        (x + *(byte *)((*(uint16_t *)((uint8_t *)&(text) + 2)) + (uint)(byte)in_stack_00000004[j] + 0xa1) <= (*(uint16_t *)((uint8_t *)&(widths) + 2)) + 1U));
-        x = x + *(byte *)((*(uint16_t *)((uint8_t *)&(text) + 2)) + (uint)(byte)in_stack_00000004[j] + 0xa1)) {
+        ((text[j] != '\0' && (text[j] != '\n')) &&
+        (x + (*(uint16_t *)((uint8_t *)&(widths) + 2))[(byte)text[j] + 0xa1] <= term + 1U));
+        x = x + (*(uint16_t *)((uint8_t *)&(widths) + 2))[(byte)text[j] + 0xa1]) {
       width = j + 1;
       j = j + 1;
     }
     uVar1 = width;
     for (i = 0; i < width; i = i + 1) {
       uVar2 = (undefined1)(uVar1 >> 8);
-      uVar1 = CONCAT11(uVar2,in_stack_00000004[i]);
-      blitLetter((char)((ulong)text >> 0x10),
-                 (byte *)CONCAT22(CONCAT11(uVar2,(undefined1)max_width),(uint8_t *)widths),
-                 (uint8_t)unaff_DI,uVar1);
+      uVar1 = CONCAT11(uVar2,text[i]);
+      blitLetter(text[i],(*(uint16_t *)((uint8_t *)&(widths) + 2)),(uint8_t)max_width,CONCAT11(uVar2,in_stack_0000000e));
     }
   }
   return width;
@@ -417,16 +400,15 @@ int __cdecl16far font_textWidth(char *text,char *font,...)
 {
   int iVar1;
   int iVar2;
-  int in_stack_00000004;
+  undefined2 in_stack_0000000a;
   
-  if (in_stack_00000004 == 0 && (char *)text == (char *)0x0) {
+  if (text == (char *)0x0 && (char *)font == (char *)0x0) {
     iVar1 = 0;
   }
   else {
     iVar1 = 0;
-    for (iVar2 = 0; *(char *)(in_stack_00000004 + iVar2) != '\0'; iVar2 = iVar2 + 1) {
-      iVar1 = iVar1 + (uint)*(byte *)((*(uint16_t *)((uint8_t *)&(text) + 2)) + (uint)*(byte *)(in_stack_00000004 + iVar2) + 0xa1
-                                     );
+    for (iVar2 = 0; text[iVar2] != '\0'; iVar2 = iVar2 + 1) {
+      iVar1 = iVar1 + (uint)*(byte *)((*(uint16_t *)((uint8_t *)&(font) + 2)) + (uint)(byte)text[iVar2] + 0xa1);
     }
   }
   return iVar1;
@@ -440,27 +422,30 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay,...)
 
 {
   bool bVar1;
-  undefined1 uVar2;
+  bool bVar2;
   ulong *puVar3;
   uint16_t uVar4;
-  char cVar5;
-  ulong *in_stack_00000004;
-  undefined1 in_stack_0000fffa;
-  undefined1 in_stack_0000fffb;
-  undefined1 uVar6;
+  bool bVar5;
+  ulong in_stack_0000fff8;
+  uint uVar7;
+  long lVar6;
+  undefined2 uVar8;
+  undefined1 uVar9;
   
   rightButtonLatch = 0;
-  cVar5 = MiceNeedsUpdate != '\0';
-  if ((bool)cVar5) {
-    ovr_miceBlitRect((brect_t *)CONCAT13(in_stack_0000fffb,CONCAT12(in_stack_0000fffa,0x2410)),0x44a
-                    );
+  bVar5 = MiceNeedsUpdate != '\0';
+  if (bVar5) {
+    in_stack_0000fff8 = CONCAT22((int)(in_stack_0000fff8 >> 0x10),0x2410);
+    ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x2410);
   }
-  uVar6 = GDebug;
+  bVar1 = GDebug;
   GDebug = false;
   do {
-    bVar1 = ovr_draw_textProvidesMoreHousing();
-  } while (bVar1);
+    in_stack_0000fff8 = in_stack_0000fff8 & 0xffff0000;
+    bVar2 = ovr_draw_textProvidesMoreHousing();
+  } while (bVar2);
   do {
+    uVar7 = (uint)(in_stack_0000fff8 >> 0x10);
     uVar4 = *(uint16_t *)BDA_DailyTimeCounter;
     if ((*(uint16_t *)(BDA_DailyTimeCounter.ofs + 2) != InputEventTime.hi) ||
        (uVar4 != InputEventTime.lo)) {
@@ -469,16 +454,21 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay,...)
       InputEventTime.lo = uVar4;
       ovr_draw_usesBlitLoadRleGfx();
     }
-    uVar2 = ovr_draw_textProvidesMoreHousing();
-    if ((bool)uVar2) break;
-    puVar3 = ovr_attact_usesBDADailyTimeCounter((*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)),(undefined2)TextBlitCycle);
-  } while ((uVar4 < (uint)msg_delay) || ((uVar4 == (uint)msg_delay && (puVar3 < in_stack_00000004)))
-          );
-  if (cVar5 != '\0') {
-    ovr_miceRestoreArea((brect_t *)CONCAT13(uVar2,CONCAT12(in_stack_0000fffa,0x2410)),0x44a);
+    lVar6 = (ulong)uVar7 << 0x10;
+    bVar2 = ovr_draw_textProvidesMoreHousing();
+    uVar8 = (undefined2)(CONCAT13(bVar2,(int3)lVar6) >> 0x10);
+    if (bVar2) break;
+    in_stack_0000fff8 = CONCAT22(uVar8,(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));
+    puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)TextBlitCycle,in_stack_0000fff8);
+    uVar8 = (undefined2)(in_stack_0000fff8 >> 0x10);
+  } while ((uVar4 < (*(uint16_t *)((uint8_t *)&(msg_delay) + 2))) ||
+          ((uVar4 == (*(uint16_t *)((uint8_t *)&(msg_delay) + 2)) && (puVar3 < (ulong *)msg_delay))));
+  uVar9 = (undefined1)((uint)uVar8 >> 8);
+  if (bVar5) {
+    ovr_miceRestoreArea((brect_t *)(BlitRects + 1));
   }
-  GDebug = (bool)uVar6;
-  return CONCAT11(0x24,uVar2);
+  GDebug = bVar1;
+  return CONCAT11(0x24,uVar9);
 }
 
 
@@ -491,63 +481,51 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay,...)
 
 {
   bool bVar1;
-  uint uVar2;
-  uint16_t uVar3;
+  bool bVar2;
+  uint uVar3;
+  uint16_t uVar4;
   undefined1 extraout_AH;
-  undefined1 uVar4;
-  byte in_stack_00000004;
-  undefined4 in_stack_0000fffa;
-  uint uVar7;
-  brect_t *pbVar5;
-  long lVar6;
+  undefined1 uVar5;
+  undefined1 uStack_3;
   
   rightButtonLatch = 0;
-  uVar7 = (uint)((ulong)in_stack_0000fffa >> 0x10);
-  uVar2 = ovr_ovr_midGetSequenceStatus_entry();
-  if ((uVar2 & 0xff) == 0) {
+  uVar3 = ovr_ovr_midGetSequenceStatus_entry();
+  if ((uVar3 & 0xff) == 0) {
     (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
     (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
-    uVar3 = inputUpdate((ulong)uVar7 << 0x10,(uint)in_stack_00000004);
-    uVar2 = uVar3 & 0xff00;
+    uVar4 = inputUpdate((ulong)msgDelay);
+    uVar3 = uVar4 & 0xff00;
   }
   else {
     if (MiceNeedsUpdate == '\0') {
-      pbVar5 = (brect_t *)((ulong)(uVar7 >> 8) << 0x18);
+      bVar1 = false;
     }
     else {
-      pbVar5 = (brect_t *)CONCAT22(uVar7,(brect_t *)((char *)"puppetmaker" + 3));
-      ovr_miceBlitRect(pbVar5,0x44a);
-      pbVar5 = (brect_t *)CONCAT13((char)((ulong)pbVar5 >> 0x18),0x10000);
+      ovr_miceBlitRect((brect_t *)(BlitRects + 1));
+      bVar1 = true;
     }
     do {
-      pbVar5 = (brect_t *)((ulong)pbVar5 & 0xffff0000);
-      bVar1 = ovr_draw_textProvidesMoreHousing();
-    } while (bVar1);
+      bVar2 = ovr_draw_textProvidesMoreHousing();
+    } while (bVar2);
     do {
-      pbVar5 = (brect_t *)((ulong)pbVar5 & 0xffff0000);
-      uVar2 = ovr_ovr_midGetSequenceStatus_entry();
-      uVar7 = (uint)((ulong)pbVar5 >> 0x10);
-      if ((char)uVar2 == '\0') break;
+      uVar3 = ovr_ovr_midGetSequenceStatus_entry();
+      if ((char)uVar3 == '\0') break;
       if ((*(uint16_t *)(BDA_DailyTimeCounter.ofs + 2) != InputEventTime.hi) ||
          (*(uint16_t *)BDA_DailyTimeCounter != InputEventTime.lo)) {
         InputEventTime.hi = *(uint16_t *)(BDA_DailyTimeCounter.ofs + 2);
         InputEventTime.lo = *(uint16_t *)BDA_DailyTimeCounter;
         ovr_draw_usesBlitLoadRleGfx();
       }
-      lVar6 = (ulong)uVar7 << 0x10;
-      bVar1 = ovr_draw_textProvidesMoreHousing();
-      uVar2 = CONCAT11(extraout_AH,bVar1);
-      pbVar5 = (brect_t *)CONCAT13(bVar1,(int3)lVar6);
-    } while (!bVar1);
-    uVar4 = (undefined1)(uVar2 >> 8);
-    if ((char)((ulong)pbVar5 >> 0x10) != '\0') {
-      pbVar5 = (brect_t *)
-               CONCAT22((int)((ulong)pbVar5 >> 0x10),(brect_t *)((char *)"puppetmaker" + 3));
-      ovr_miceRestoreArea(pbVar5,0x44a);
+      uStack_3 = ovr_draw_textProvidesMoreHousing();
+      uVar3 = CONCAT11(extraout_AH,uStack_3);
+    } while (!(bool)uStack_3);
+    uVar5 = (undefined1)(uVar3 >> 8);
+    if (bVar1) {
+      ovr_miceRestoreArea((brect_t *)(BlitRects + 1));
     }
-    uVar2 = CONCAT11(uVar4,(char)((ulong)pbVar5 >> 0x18));
+    uVar3 = CONCAT11(uVar5,uStack_3);
   }
-  return uVar2;
+  return uVar3;
 }
 
 
@@ -557,31 +535,35 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay,...)
 void __cdecl16far drawTextAt(char *txt,uint16_t dst,...)
 
 {
+  far_t gfx;
   uint16_t ndrawn;
   uint16_t txtsz;
-  uint8_t unaff_DI;
-  char *in_stack_00000004;
+  uint16_t in_stack_00000008;
+  far_t dst_00;
   
   if (GameRunning) {
-    if ((*(uint16_t *)((uint8_t *)&(txt) + 2)) != 0xa000) {
-      ovr_blitRaw(0x9c,0xcf,199,0xa000,(*(uint16_t *)((uint8_t *)&(txt) + 2)),0x1d);
+    if (in_stack_00000008 != 0xa000) {
+      ovr_blitRaw(0x1d,0x9c,0xcf,199,0xa000,in_stack_00000008);
     }
   }
   else {
     TextBlitFlag = 1;
-    TextBlitDstSeg = (*(uint16_t *)((uint8_t *)&(txt) + 2));
+    TextBlitDstSeg = in_stack_00000008;
     (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
     (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
-    ovr_blitLoadRleGfx();
+    dst_00.seg = in_stack_00000008;
+    dst_00.ofs = 0xc31d;
+    gfx.seg = FontHandle.seg;
+    gfx.ofs = FontHandle.ofs;
+    ovr_blitLoadRleGfx(gfx,dst_00);
     for (TextBlitY = 0x9c; TextBlitX = 0x1d, TextBlitY + 9 < 200; TextBlitY = TextBlitY + 0xb) {
-      ndrawn = blitText((char *)CONCAT22(Font03.ofs,(char *)txt),(byte *)CONCAT22(0xcf,Font03.seg),
-                        0xed,unaff_DI,in_stack_00000004);
-      txtsz = strlen((char *)CONCAT22((char *)txt,in_stack_00000004));
+      ndrawn = blitText(txt,(byte *)CONCAT22(Font03.ofs,dst),Font03.seg,0xcf);
+      txtsz = strlen((char *)CONCAT22(dst,txt));
       if (txtsz <= ndrawn) {
         ovr_clean_ring_buffer();
         return;
       }
-      in_stack_00000004 = in_stack_00000004 + ndrawn;
+      txt = txt + ndrawn;
     }
   }
   return;
@@ -594,11 +576,10 @@ void __cdecl16far drawTextAt(char *txt,uint16_t dst,...)
 void __cdecl16far drawAnimTextAt(char *text,uint16_t dst)
 
 {
-  uint unaff_BP;
-  undefined2 in_stack_00000004;
+  char *in_stack_00000004;
   
-  inputUpdate((ulong)unaff_BP << 0x10,(uint)MessageDelay << 1);
-  drawTextAt(text,unaff_BP,in_stack_00000004);
+  inputUpdate((ulong)MessageDelay << 1);
+  drawTextAt(in_stack_00000004,(uint16_t)(char *)text);
   return;
 }
 
@@ -610,9 +591,9 @@ void __cdecl16far say(char *msg,...)
 
 {
   uint16_t unaff_BP;
-  undefined2 in_stack_00000004;
+  char *in_stack_00000006;
   
-  drawAnimTextAt((char *)CONCAT22(0xa000,(char *)msg),unaff_BP);
+  drawAnimTextAt((char *)CONCAT22(0xa000,in_stack_00000006),unaff_BP);
   return;
 }
 
@@ -637,24 +618,23 @@ void __cdecl16far resetTextBlitCycle(void)
 void __cdecl16far uiNotify(char *msg,uint16_t dst,...)
 
 {
-  uint unaff_SI;
   uint8_t mice_no_update;
-  undefined2 in_stack_00000004;
+  uint16_t in_stack_00000008;
   
-  inputUpdate((ulong)unaff_SI << 0x10,(uint)MessageDelay << 1);
+  inputUpdate((ulong)MessageDelay << 1);
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
-  BlitRects[4].seg = (*(uint16_t *)((uint8_t *)&(msg) + 2));
+  BlitRects[4].seg = in_stack_00000008;
   mice_no_update = MiceNeedsUpdate == '\0';
   if ((bool)mice_no_update) {
-    ovr_miceRestoreArea((brect_t *)CONCAT22(unaff_SI,(brect_t *)((char *)"puppetmaker" + 3)),0x468);
+    ovr_miceRestoreArea((brect_t *)(BlitRects + 4));
   }
-  drawTextAt(msg,unaff_SI,in_stack_00000004);
+  drawTextAt(msg,dst);
   if ((bool)mice_no_update) {
-    ovr_miceBlitRect((brect_t *)CONCAT22(unaff_SI,(brect_t *)((char *)"puppetmaker" + 3)),0x468);
+    ovr_miceBlitRect((brect_t *)(BlitRects + 4));
   }
-  if ((*(uint16_t *)((uint8_t *)&(msg) + 2)) != 0xa000) {
-    ovr_blitRect((brect_t *)CONCAT22(unaff_SI,(brect_t *)((char *)"puppetmaker" + 3)),0x468);
+  if (in_stack_00000008 != 0xa000) {
+    ovr_blitRect((brect_t *)(BlitRects + 4));
     ovr_miceUpdate();
   }
   BlitRects[4].seg = 0xa000;

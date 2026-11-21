@@ -121,21 +121,18 @@ bool __cdecl16far write_game_cfg(char sfx,char mus,char irq)
 char __cdecl16far read_cfg(int handle,...)
 
 {
-  int fd;
   uint16_t nread;
   int iVar1;
   uint16_t rdsz;
   uint unaff_SI;
   void *unaff_SS;
-  int in_stack_00000004;
   uint8_t tmp;
   char b;
   
-  fd = in_stack_00000004;
-  nread = read(in_stack_00000004,(void *)CONCAT22(1,unaff_SS),unaff_SI);
+  nread = read(handle,(void *)CONCAT22(1,unaff_SS),unaff_SI);
   if (nread == 1) {
     do {
-      iVar1 = read(fd,(void *)CONCAT22(1,unaff_SS),unaff_SI);
+      iVar1 = read(handle,(void *)CONCAT22(1,unaff_SS),unaff_SI);
       if (iVar1 != 1) goto return_zero;
     } while (tmp != 0xa);
   }
@@ -223,22 +220,22 @@ byte __cdecl16far init_strong_sav(void)
   uint16_t file;
   int handle;
   uint16_t result;
-  char *pcVar2;
-  char *in_DX;
-  int unaff_SI;
-  char *unaff_SS;
+  char *path;
+  undefined2 in_DX;
+  undefined2 unaff_SI;
+  undefined2 unaff_SS;
   char path_buffer [81];
   uint8_t b;
   
   do {
     file = file_open_rdonly((char *)CONCAT22(unaff_SI,(char *)"puppetmaker" + 3));
     if (-1 < (int)file) {
-      cVar1 = read_cfg(unaff_SI,file);
+      cVar1 = read_cfg(file);
       if ((((cVar1 == '\0') ||
            ((((cVar1 < '1' || ('9' < cVar1)) && ((cVar1 < 'A' || ('B' < cVar1)))) ||
-            (cVar1 = read_cfg(unaff_SI,file), cVar1 == '\0')))) ||
+            (cVar1 = read_cfg(file), cVar1 == '\0')))) ||
           (((cVar1 < '1' || ('9' < cVar1)) && ((cVar1 < 'A' || ('B' < cVar1)))))) ||
-         ((cVar1 = read_cfg(unaff_SI,file), cVar1 == '\0' ||
+         ((cVar1 = read_cfg(file), cVar1 == '\0' ||
           (((cVar1 < '0' || ('9' < cVar1)) && ((cVar1 < 'A' || ('F' < cVar1)))))))) {
         close(file);
 l_made_new_strong_sav:
@@ -263,8 +260,8 @@ l_made_new_strong_sav:
     clrscr();
     printf("Path to write game data:\n");
     input_folder_name((char *)CONCAT22(unaff_SS,path_buffer));
-    pcVar2 = ovr_path_strip_tail_slash((char *)CONCAT22(unaff_SI,unaff_SS),path_buffer);
-    ovr_chpath((char *)CONCAT22(unaff_SI,in_DX),pcVar2);
+    path = ovr_path_strip_tail_slash(path_buffer);
+    ovr_chpath(path,in_DX);
   } while( true );
 }
 
@@ -580,20 +577,19 @@ void __cdecl16far init_check_mem(void)
 {
   uint16_t smem;
   int iVar1;
-  char *unaff_SS;
+  undefined2 unaff_SS;
   far_t lmem_without_psp;
   char buf [80];
   long lmem;
   uint16_t himem;
   
   lmem_without_psp.seg = 0;
-  lmem_without_psp.ofs = (uint16_t)LXLSH_at_((long *)(*(uint16_t *)((uint8_t *)&(buf) + 2)),(*(uint32_t *)((uint8_t *)&(buf) + 4)),buf[8]);
+  lmem_without_psp.ofs = (uint16_t)LXLSH_at_((long *)(*(uint16_t *)((uint8_t *)&(buf))),(*(uint32_t *)((uint8_t *)&(buf) + 2)),buf[6]);
   iVar1 = lmem_without_psp.seg + (0xfeff < lmem_without_psp.ofs);
   if ((7 < iVar1) && ((iVar1 != 8 || (0xed27 < lmem_without_psp.ofs + 0x100)))) {
     return;
   }
-  ovr_litoa10((char *)CONCAT22(lmem_without_psp.ofs + 0x100,unaff_SS),CONCAT22((*(uint16_t *)((uint8_t *)&(buf))),iVar1),buf)
-  ;
+  ovr_litoa10(buf,CONCAT22(lmem_without_psp.ofs + 0x100,unaff_SS),iVar1);
   printf("Largest executable program size is only %s bytes.\n");
   printf("Stronghold requires 585,000 bytes.\n");
                     /* WARNING: Subroutine does not return */

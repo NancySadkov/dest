@@ -15,17 +15,16 @@ void __cdecl16far miceRestoreArea(brect_t *br,...)
   int dst_x;
   int dst_y;
   uint16_t pbr;
-  int *in_stack_00000004;
+  undefined2 in_stack_00000006;
   
-  if ((((CFG_Mice != 0) && (in_stack_00000004[4] == -0x6000)) &&
+  if ((((CFG_Mice != 0) && (br->seg == 0xa000)) &&
       (MiceNeedsUpdate = 1,
-      *(int *)CONCAT22((brect_t *)br,in_stack_00000004) <=
-      (int)((MiceX + *(int *)(MiceIndex * 2 + 0x4be)) - *(int *)(MiceIndex * 2 + 0x4ce)))) &&
-     (((in_stack_00000004[1] <=
-        (int)((MiceY + *(int *)(MiceIndex * 2 + 0x4c6)) - *(int *)(MiceIndex * 2 + 0x4d6)) &&
-       ((int)(MiceX - *(int *)(MiceIndex * 2 + 0x4ce)) <= in_stack_00000004[2])) &&
-      (((int)(MiceY - *(int *)(MiceIndex * 2 + 0x4d6)) <= in_stack_00000004[3] &&
-       (MiceFlag = 0, MiceProcessed != '\0')))))) {
+      br->x <= (int)((MiceX + *(int *)(MiceIndex * 2 + 0x4be)) - *(int *)(MiceIndex * 2 + 0x4ce))))
+     && (((br->y <= (int)((MiceY + *(int *)(MiceIndex * 2 + 0x4c6)) -
+                         *(int *)(MiceIndex * 2 + 0x4d6)) &&
+          ((int)(MiceX - *(int *)(MiceIndex * 2 + 0x4ce)) <= br->w)) &&
+         (((int)(MiceY - *(int *)(MiceIndex * 2 + 0x4d6)) <= br->h &&
+          (MiceFlag = 0, MiceProcessed != '\0')))))) {
     dst_x = MiceX - *(int *)(MiceIndex * 2 + 0x4ce);
     dst_y = MiceY - *(int *)(MiceIndex * 2 + 0x4d6);
     if (dst_x < 0) {
@@ -49,11 +48,11 @@ void __cdecl16far miceRestoreArea(brect_t *br,...)
 void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br,...)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   char *pcVar2;
   uint16_t pbr;
   uint16_t j;
-  uint in_stack_00000004;
+  undefined2 in_stack_0000000a;
   uint16_t src;
   uint16_t h;
   uint16_t w;
@@ -62,34 +61,34 @@ void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br,...)
   uint16_t sy;
   uint16_t sx;
   
-  if (*(uint *)CONCAT22((brect_t *)br,y) < in_stack_00000004) {
-    sx = in_stack_00000004;
+  if ((uint)br->x < x) {
+    sx = x;
   }
   else {
-    sx = *(uint16_t *)CONCAT22((brect_t *)br,y);
+    sx = br->x;
   }
-  if (*(uint *)(y + 2) < x) {
-    sy = x;
-  }
-  else {
-    sy = *(uint16_t *)(y + 2);
-  }
-  if (in_stack_00000004 + 0x10 < *(uint *)(y + 4)) {
-    iStack_8 = in_stack_00000004 + 0x10;
+  if ((uint)br->y < y) {
+    sy = y;
   }
   else {
-    iStack_8 = *(int *)(y + 4);
+    sy = br->y;
   }
-  if (x + 0x10 < *(uint *)(y + 6)) {
-    iStack_a = x + 0x10;
+  if (x + 0x10 < (uint)br->w) {
+    iStack_8 = x + 0x10;
   }
   else {
-    iStack_a = *(int *)(y + 6);
+    iStack_8 = br->w;
+  }
+  if (y + 0x10 < (uint)br->h) {
+    iStack_a = y + 0x10;
+  }
+  else {
+    iStack_a = br->h;
   }
   if (((int)sx <= iStack_8) && ((int)sy <= iStack_a)) {
     src = sx + sy * 0x140;
-    uVar1 = *(undefined2 *)(y + 8);
-    pcVar2 = (char *)(((sy - x) * 0x11 + sx) - in_stack_00000004);
+    uVar1 = br->seg;
+    pcVar2 = (char *)(((sy - y) * 0x11 + sx) - x);
     w = (iStack_8 - sx) + 1;
     h = (iStack_a - sy) + 1;
     if (0x11 < w) {
@@ -114,10 +113,8 @@ void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br,...)
 void __cdecl16far miceUpdate(void)
 
 {
-  uint16_t unaff_BP;
-  
   if (MiceNeedsUpdate != '\0') {
-    ovr_miceSetPosition(MiceY,unaff_BP,MiceX << 1);
+    ovr_miceSetPosition(MiceX << 1,MiceY);
     MiceNeedsUpdate = '\0';
   }
   return;
@@ -133,11 +130,11 @@ void __cdecl16far miceBlitRect(brect_t *br,...)
   uint16_t dst_x;
   uint16_t dst_y;
   uint16_t pbr;
-  int *in_stack_00000004;
+  undefined2 in_stack_00000006;
   far_t src;
   
   if (CFG_Mice != 0) {
-    if (in_stack_00000004[4] == -0x6000) {
+    if (br->seg == 0xa000) {
       miceUpdate();
       if (MiceProcessed == '\0') {
         videoMiceEvent(MiceX << 1,MiceY,0);
@@ -153,13 +150,12 @@ void __cdecl16far miceBlitRect(brect_t *br,...)
       if ((int)dst_y < 0) {
         dst_y = 0;
       }
-      if ((((*(int *)CONCAT22((brect_t *)br,in_stack_00000004) <= (int)(dst_x + 0x10)) &&
-           (in_stack_00000004[1] <= (int)(dst_y + 0x10))) && ((int)dst_x <= in_stack_00000004[2]))
-         && (((int)dst_y <= in_stack_00000004[3] && (MiceProcessed != '\0')))) {
-        miceSaveArea();
+      if ((((br->x <= (int)(dst_x + 0x10)) && (br->y <= (int)(dst_y + 0x10))) &&
+          ((int)dst_x <= br->w)) && (((int)dst_y <= br->h && (MiceProcessed != '\0')))) {
+        miceSaveArea(dst_x,dst_y,br,in_stack_00000006);
         src.seg = *(uint16_t *)((int)&MicePtrs.seg + MiceIndex * 4);
         src.ofs = ((far_t *)&MicePtrs + MiceIndex)->ofs;
-        miceBlitAtSeg(in_stack_00000004[4],src,dst_x,dst_y);
+        miceBlitAtSeg(br->seg,src,dst_x,dst_y);
       }
     }
   }
@@ -180,7 +176,7 @@ void __cdecl16far miceInit(void)
     error = miceInitDriver();
     if ((bool)error) {
                     /* WARNING: Subroutine does not return */
-      ovr_stExit();
+      ovr_stExit(0x84);
     }
     MiceX = 0;
     MiceY = 0;
@@ -199,7 +195,7 @@ byte __cdecl16far init2_usesCFGMice(uint16_t *mouseX,uint16_t *mouseY,...)
 {
   byte bVar1;
   uint uVar2;
-  uint16_t *in_stack_00000004;
+  undefined2 in_stack_0000000a;
   
   ovr_audio_usesLDIV_at_();
   if (CFG_Mice == 0) {
@@ -209,12 +205,12 @@ byte __cdecl16far init2_usesCFGMice(uint16_t *mouseX,uint16_t *mouseY,...)
     uVar2 = init2_updateMouseButtons();
     bVar1 = (byte)uVar2;
     if (MiceClick == '\0') {
-      *(uint16_t *)CONCAT22((uint16_t *)mouseX,in_stack_00000004) = MiceX;
-      *(uint16_t *)CONCAT22((uint16_t *)mouseY,(*(uint16_t *)((uint8_t *)&(mouseX) + 2))) = MiceY;
+      *(uint16_t *)CONCAT22((uint16_t *)mouseY,mouseX) = MiceX;
+      *(uint16_t *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(mouseY) + 2))) = MiceY;
     }
     else {
-      *(uint16_t *)CONCAT22((uint16_t *)mouseX,in_stack_00000004) = MiceClickX;
-      *(uint16_t *)CONCAT22((uint16_t *)mouseY,(*(uint16_t *)((uint8_t *)&(mouseX) + 2))) = MiceClickY;
+      *(uint16_t *)CONCAT22((uint16_t *)mouseY,mouseX) = MiceClickX;
+      *(uint16_t *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(mouseY) + 2))) = MiceClickY;
       bVar1 = bVar1 | 1;
       MiceClick = '\0';
     }

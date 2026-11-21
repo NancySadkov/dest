@@ -95,7 +95,7 @@ public class SetProtoSeq extends GhidraScript {
                     }
                     String cc = fn.getCallingConventionName();
                     boolean farcc = cc != null && cc.toLowerCase().contains("far");
-                    int cur = farcc ? 6 : 4;
+                    int cur = farcc ? 4 : 2;   // Stack[n] = BP+n+2, so the first far parameter is Stack[4]
                     for (int i = 0; i < names.size(); i++) {
                         DataType dt = types.get(i);
                         VariableStorage vs = new VariableStorage(currentProgram,

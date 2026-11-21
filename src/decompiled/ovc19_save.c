@@ -45,12 +45,16 @@ int __cdecl16far save_readBlock(int handle,void *buf,uint16_t bufSeg,uint count)
 void __cdecl16far save_usesCalcSeasonPalette(void)
 
 {
+  uint16_t in_DX;
   unit_t *puVar1;
   uint uVar2;
-  int unaff_DI;
   int iVar3;
   undefined2 uVar4;
+  uint16_t unaff_SS;
+  far_t handle;
   uint8_t palette;
+  stg_tmp_t *psStack_6;
+  uint16_t uStack_4;
   
   iVar3 = 0;
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
@@ -59,32 +63,38 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
       ((entity_t *)Entities)[uVar2].base.animFrame = 0xf;
       iVar3 = iVar3 + 1;
     }
+    in_DX = 0x2410;
   }
   if (iVar3 == 0) {
     for (uVar2 = 0xf8; uVar2 < GUnitCount; uVar2 = uVar2 + 1) {
       uVar4 = (undefined2)((ulong)GUnits >> 0x10);
       puVar1 = (unit_t *)GUnits;
+      in_DX = 0x195d;
       if ((*(byte *)((uint)(puVar1 + uVar2)->bldType * 0x27 + 0x11e) & 3) != 0) {
-        ovr_ovc23_rebuildDirectionFlags(puVar1[uVar2].y,unaff_DI,puVar1[uVar2].x);
+        ovr_ovc23_rebuildDirectionFlags(puVar1[uVar2].x,puVar1[uVar2].y);
         uVar4 = (undefined2)((ulong)GUnits >> 0x10);
         ovr_ovc23_rebuildDirectionFlags
-                  (((unit_t *)GUnits)[uVar2].y,unaff_DI,((unit_t *)GUnits)[uVar2].x + -1);
+                  (((unit_t *)GUnits)[uVar2].x + -1,((unit_t *)GUnits)[uVar2].y);
         uVar4 = (undefined2)((ulong)GUnits >> 0x10);
-        ovr_ovc23_rebuildDirectionFlags
-                  (((unit_t *)GUnits)[uVar2].y + 1,unaff_DI,((unit_t *)GUnits)[uVar2].x);
+        in_DX = 0x2410;
+        ovr_ovc23_rebuildDirectionFlags(((unit_t *)GUnits)[uVar2].x,((unit_t *)GUnits)[uVar2].y + 1)
+        ;
       }
     }
     ovr_attact_usesGMapFlags3();
     ovr_season_countPromotable();
-    ovr_stshLoadGfx();
-    ovr_calcSeasonPalette();
-    ovr_vgaSetPalette8bit();
+    handle.seg = Lbm_nwpanel1.seg;
+    handle.ofs = Lbm_nwpanel1.ofs;
+    psStack_6 = ovr_stshLoadGfx(handle);
+    uStack_4 = in_DX;
+    ovr_calcSeasonPalette(psStack_6->cmap,in_DX,&palette,unaff_SS);
+    ovr_vgaSetPalette8bit(&palette);
     ovr_manage_mapPartySlots();
     strongholdCheckPending = 0;
     return;
   }
                     /* WARNING: Subroutine does not return */
-  ovr_stExit(unaff_DI,0x4d);
+  ovr_stExit(0x4d);
 }
 
 
@@ -108,7 +118,7 @@ uint __cdecl16far stLoad(int handle)
   uint8_t header;
   
   ovr_stop_audio();
-  ovr_drawTextAt();
+  ovr_drawTextAt((char *)"Loading...",0x2410);
   if (-1 < handle) {
     SaveAuto = 0;
     AgntFlag1 = false;
@@ -142,7 +152,7 @@ uint __cdecl16far stLoad(int handle)
       if (((uVar1 & 0xff) != 0) &&
          (uVar1 = save_readBlock(-0x6f1a,(void *)0x12410,unaff_DI,unaff_SI), (uVar1 & 0xff) != 0)) {
         for (iVar2 = 0; iVar2 < (int)(uint)GLeaderCount; iVar2 = iVar2 + 1) {
-          pvVar3 = ovr_stshAlloc((ulong)unaff_DI << 0x10,0xae);
+          pvVar3 = ovr_stshAlloc(0xae);
           ((undefined2 *)(iVar2 * 4))[1] = uVar5;
           *(undefined2 *)(iVar2 * 4) = pvVar3;
           uVar1 = save_readBlock(*(int *)(iVar2 * 4),
@@ -230,7 +240,7 @@ uint __cdecl16far stLoad(int handle)
                                          unaff_SI), (uVar1 & 0xff) != 0)) &&
                 (iVar2 = strcmp((char *)CONCAT22(unaff_SS,&header),
                                 (char *)CONCAT22(SaveHeader.seg,SaveHeader.ofs)), iVar2 == 0)))))) {
-          ovr_drawTextAt();
+          ovr_drawTextAt((char *)"Load complete.",0x2410);
           uVar4 = (undefined1)((uint)iVar2 >> 8);
           SaveAuto = 1;
           ovr_ovc24_usesAlignUp4();
@@ -243,7 +253,7 @@ uint __cdecl16far stLoad(int handle)
 L_save_49fd_01da_0800:
   uVar1 = (uint)suppressLoadError;
   if (uVar1 == 0) {
-    ovr_drawTextAt();
+    ovr_drawTextAt((char *)"Load Error",0x2410);
   }
   return uVar1 & 0xff00;
 }
@@ -258,18 +268,16 @@ L_save_49fd_01da_0800:
 undefined1 __cdecl16far save_loadGameFile(void)
 
 {
-  char *pcVar1;
+  char *filename;
   int handle;
-  undefined2 uVar2;
-  char *in_DX;
-  undefined2 unaff_SI;
-  undefined1 in_stack_00000004;
+  undefined2 uVar1;
+  undefined2 in_DX;
   
-  pcVar1 = ovr_fmVsprintf((char *)0x8c6c2410,(char *)(ulong)CONCAT12(in_stack_00000004,0x2410));
-  handle = ovr_open_wait_unlock_and_disk((char *)CONCAT22(unaff_SI,in_DX),pcVar1);
-  uVar2 = stLoad(handle);
+  filename = ovr_fmVsprintf("%ssave.%03d",&GWorkDir);
+  handle = ovr_open_wait_unlock_and_disk(filename,in_DX);
+  uVar1 = stLoad(handle);
   close(handle);
-  return (char)uVar2;
+  return (char)uVar1;
 }
 
 
@@ -288,8 +296,7 @@ undefined1 __cdecl16far save_loadArchiveGame(void)
   
   handle = StshHandles[0];
   if (StshHandles[0] < 0) {
-    handle = ovr_open_wait_unlock_and_disk
-                       ((char *)CONCAT22(unaff_SI,(*(uint16_t *)((uint8_t *)&(StshNames[0]) + 2))),(char *)StshNames[0]);
+    handle = ovr_open_wait_unlock_and_disk((char *)StshNames[0]);
   }
   lseek(handle,(ulong)*(uint *)((int)_cred03Cut3Ofs + 3),unaff_SI);
   uVar1 = stLoad(handle);
@@ -342,16 +349,15 @@ int __cdecl16far stSave(void)
   uint uVar3;
   undefined1 uVar4;
   byte bVar5;
-  char *in_DX;
+  undefined2 in_DX;
   uint16_t unaff_SI;
   uint16_t unaff_DI;
   int iVar6;
-  undefined1 in_stack_00000004;
   
-  ovr_drawTextAt();
+  ovr_drawTextAt((char *)"Saving...",0x2410,0xa000);
   ovr_stop_audio();
-  pcVar1 = ovr_fmVsprintf((char *)0x8c6c2410,(char *)(ulong)CONCAT12(in_stack_00000004,0x2410));
-  iVar2 = ovr_creat_wait_unlock_and_disk((char *)CONCAT22(unaff_DI,in_DX),pcVar1);
+  pcVar1 = ovr_fmVsprintf("%ssave.%03d",&GWorkDir);
+  iVar2 = ovr_creat_wait_unlock_and_disk(pcVar1,in_DX);
   if (-1 < iVar2) {
     uVar3 = save_writeBlock(SaveHeader.ofs,(void *)CONCAT22(0x28,SaveHeader.seg),unaff_DI,unaff_SI);
     if ((((((uVar3 & 0xff) != 0) &&
@@ -369,13 +375,13 @@ int __cdecl16far stSave(void)
               (uVar3 & 0xff) != 0 &&
               (uVar3 = save_writeBlock(-0x6f69,(void *)0x22410,unaff_DI,unaff_SI),
               (uVar3 & 0xff) != 0)))) {
-      in_DX = (char *)((ulong)((long)EntityCount * 0x37) >> 0x10);
+      in_DX = (undefined2)((ulong)((long)EntityCount * 0x37) >> 0x10);
       uVar3 = save_writeBlock((int)(entity_t *)Entities,
                               (void *)CONCAT22((int)((long)EntityCount * 0x37),(*(uint16_t *)((uint8_t *)&(Entities) + 2))),
                               unaff_DI,unaff_SI);
       if (((uVar3 & 0xff) != 0) &&
          (uVar3 = save_writeBlock(0x881,(void *)0x22410,unaff_DI,unaff_SI), (uVar3 & 0xff) != 0)) {
-        in_DX = (char *)((ulong)((long)SquareRecCount * 0x13) >> 0x10);
+        in_DX = (undefined2)((ulong)((long)SquareRecCount * 0x13) >> 0x10);
         uVar3 = save_writeBlock(0,(void *)CONCAT22((int)((long)SquareRecCount * 0x13),
                                                    (void *)((int)&AgntAnms[0x7c].halfWidth + 1)),
                                 unaff_DI,unaff_SI);
@@ -396,14 +402,14 @@ int __cdecl16far stSave(void)
               (uVar3 & 0xff) != 0)) &&
              (uVar3 = save_writeBlock(-0x6e21,(void *)0x22410,unaff_DI,unaff_SI),
              (uVar3 & 0xff) != 0)) {
-            in_DX = (char *)((ulong)((long)GRecordCount * 0x12) >> 0x10);
+            in_DX = (undefined2)((ulong)((long)GRecordCount * 0x12) >> 0x10);
             uVar3 = save_writeBlock(0,(char *)CONCAT22((int)((long)GRecordCount * 0x12),
                                                        (char *)"manned n/s wall" + 0xd),unaff_DI,
                                     unaff_SI);
             if (((uVar3 & 0xff) != 0) &&
                (uVar3 = save_writeBlock(-0x7667,(void *)0x22410,unaff_DI,unaff_SI),
                (uVar3 & 0xff) != 0)) {
-              in_DX = (char *)((ulong)((long)GUnitCount * 9) >> 0x10);
+              in_DX = (undefined2)((ulong)((long)GUnitCount * 9) >> 0x10);
               uVar3 = save_writeBlock((int)(unit_t *)GUnits,
                                       (void *)CONCAT22((int)((long)GUnitCount * 9),(*(uint16_t *)((uint8_t *)&(GUnits) + 2))),
                                       unaff_DI,unaff_SI);
@@ -474,7 +480,7 @@ int __cdecl16far stSave(void)
                                                unaff_DI,unaff_SI), (uVar3 & 0xff) != 0)))))))))))) {
                 iVar2 = close(iVar2);
                 uVar4 = (undefined1)((uint)iVar2 >> 8);
-                ovr_drawTextAt();
+                ovr_drawTextAt((char *)"Save complete.",0x2410,0xa000);
                 return CONCAT11(uVar4,1);
               }
             }
@@ -484,11 +490,11 @@ int __cdecl16far stSave(void)
     }
 L_stSave_0EE6:
     close(iVar2);
-    pcVar1 = ovr_fmVsprintf((char *)0x8c6c2410,(char *)(ulong)CONCAT12(in_stack_00000004,0x2410));
+    pcVar1 = ovr_fmVsprintf("%ssave.%03d",&GWorkDir);
     iVar2 = unlink((char *)CONCAT22(in_DX,pcVar1));
   }
   bVar5 = (byte)((uint)iVar2 >> 8);
-  ovr_drawTextAt();
+  ovr_drawTextAt((char *)"Save Error",0x2410,0xa000);
   return (uint)bVar5 << 8;
 }
 
@@ -503,13 +509,11 @@ void __cdecl16far save_deleteGameFile(void)
 {
   char *pcVar1;
   undefined2 in_DX;
-  undefined1 in_stack_00000004;
   
-  ovr_drawTextAt();
-  pcVar1 = ovr_fmVsprintf((char *)0x8c6c2410,
-                          (char *)(ulong)CONCAT12(in_stack_00000004,(char *)"puppetmaker" + 3));
+  ovr_drawTextAt((char *)"Deleting...",0x2410,0xa000);
+  pcVar1 = ovr_fmVsprintf("%ssave.%03d",&GWorkDir);
   unlink((char *)CONCAT22(in_DX,pcVar1));
-  ovr_drawTextAt();
+  ovr_drawTextAt((char *)"Delete complete.",0x2410,0xa000);
   return;
 }
 

@@ -36,22 +36,26 @@ heapMemmove(uint8_t *dstOfs,uint16_t dstSeg,uint8_t *srcOfs,uint16_t srcSeg,uint
 
 {
   uint32_t *puVar1;
-  undefined2 in_DX;
-  undefined2 uVar2;
-  uint8_t *count;
-  uint32_t *in_stack_00000004;
+  uint32_t *puVar2;
+  uint16_t in_DX;
+  uint16_t uVar3;
+  uint16_t uVar4;
+  uint16_t unaff_SI;
+  uint count;
   
-  for (; (srcSeg != 0 || (srcOfs != (uint8_t *)0x0)); srcOfs = srcOfs + -(int)count) {
-    in_stack_00000004 = ovr_mkp();
-    uVar2 = in_DX;
-    puVar1 = ovr_mkp();
-    if ((srcSeg != 0) || (count = srcOfs, (uint8_t *)0xff00 < srcOfs)) {
-      count = (uint8_t *)0xff00;
+  for (; (uVar3 = in_DX, countLo != 0 || (srcSeg != 0)); srcSeg = srcSeg - count) {
+    puVar1 = ovr_mkp((uint32_t *)dstOfs,dstSeg,unaff_SI);
+    uVar4 = uVar3;
+    puVar2 = ovr_mkp((uint32_t *)srcOfs,(*(uint16_t *)((uint8_t *)&(srcOfs) + 2)),unaff_SI);
+    if ((countLo != 0) || (count = srcSeg, 0xff00 < srcSeg)) {
+      count = 0xff00;
     }
-    _fmemmove((char *)CONCAT22(in_DX,in_stack_00000004),(char *)CONCAT22(uVar2,puVar1),(word)count);
-    in_stack_00000004 = (uint32_t *)((int)in_stack_00000004 + (int)count);
-    srcSeg = srcSeg - (srcOfs < count);
-    in_DX = uVar2;
+    in_DX = uVar4;
+    _fmemmove((char *)CONCAT22(uVar3,puVar1),(char *)CONCAT22(uVar4,puVar2),count);
+    dstOfs = (uint8_t *)((int)puVar1 + count);
+    srcOfs = (uint8_t *)CONCAT22(uVar4,(uint8_t *)((int)puVar2 + count));
+    countLo = countLo - (srcSeg < count);
+    dstSeg = uVar3;
   }
   return;
 }
@@ -65,13 +69,14 @@ void __cdecl16far heapInit(void)
 {
   byte *pbVar1;
   int in_DX;
-  far_t *__return_storage_ptr__;
-  uint32_t in_stack_0000fff8;
+  undefined4 in_stack_0000fff6;
+  long *__return_storage_ptr__;
   
-  pbVar1 = (byte *)coreleft((long *)(in_stack_0000fff8 >> 0x10));
-  __return_storage_ptr__ = (far_t *)(in_DX - (uint)(pbVar1 < (byte *)__C0_ASM_CopyRight));
-  farmalloc(__return_storage_ptr__,in_stack_0000fff8);
-  HeapMin = (int)&__return_storage_ptr__->ofs + 1;
+  __return_storage_ptr__ = (long *)((ulong)in_stack_0000fff6 >> 0x10);
+  pbVar1 = (byte *)coreleft(__return_storage_ptr__);
+  in_DX = in_DX - (uint)(pbVar1 < (byte *)__C0_ASM_CopyRight);
+  farmalloc((far_t *)(pbVar1 + -4),CONCAT22(__return_storage_ptr__,in_DX));
+  HeapMin = in_DX + 1;
   *(int *)0x0 = *(int *)0x0 + -1;
   *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
   *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4) = HeapMin;
@@ -137,12 +142,14 @@ uint32_t * __cdecl16far heapAlloc(uint32_t *__return_storage_ptr__,uint32_t nbyt
 {
   long *plVar1;
   long *plVar2;
-  uint8_t unaff_BP;
-  long *unaff_SI;
+  undefined2 unaff_SI;
   uint16_t entry;
-  long in_stack_0000fffa;
+  long *unaff_DI;
+  undefined4 in_stack_0000fff8;
+  uint8_t in_stack_0000fffc;
   
-  plVar2 = LXRSH_at_(unaff_SI,in_stack_0000fffa,unaff_BP);
+  plVar2 = LXRSH_at_(unaff_DI,CONCAT22((int)((ulong)in_stack_0000fff8 >> 0x10),unaff_SI),
+                     in_stack_0000fffc);
   entry = 0;
   while( true ) {
     entry = heapValidate(entry);
@@ -181,23 +188,23 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
   long *plVar3;
   long *plVar4;
   int iVar5;
-  long *unaff_SI;
-  uint8_t *entry;
-  uint unaff_DI;
-  byte *in_stack_00000004;
-  long in_stack_0000fff2;
-  long i;
-  uint8_t in_stack_0000fff6;
+  undefined2 unaff_SI;
+  uint16_t entry;
+  long *unaff_DI;
+  undefined4 in_stack_0000fff0;
+  long lVar6;
+  uint8_t in_stack_0000fff4;
   byte s;
   
-  ptr.seg = (uint16_t)__return_storage_ptr__;
-  ptr.ofs = (uint16_t)in_stack_00000004;
+  lVar6 = CONCAT22((int)((ulong)in_stack_0000fff0 >> 0x10),unaff_SI);
+  ptr.seg = (uint16_t)block;
+  ptr.ofs = (uint16_t)__return_storage_ptr__;
   bVar2 = heapIsBadPtr(ptr);
   if (bVar2) {
-    in_stack_00000004 = (byte *)0x0;
+    __return_storage_ptr__ = (long *)0x0;
   }
   else {
-    plVar3 = LXRSH_at_(unaff_SI,in_stack_0000fff2,in_stack_0000fff6);
+    plVar3 = LXRSH_at_(unaff_DI,lVar6,in_stack_0000fff4);
     plVar4 = (long *)*(uint *)0x0;
     if (plVar3 != plVar4) {
       if (plVar3 < plVar4) {
@@ -208,33 +215,32 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
           *(int *)0x0 = (int)plVar4 - (int)plVar3;
         }
         *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
-        *(long **)((byte *)__C0_ASM_CopyRight + 4) = __return_storage_ptr__;
+        *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4) = (uint16_t)block;
         *(undefined2 *)0x0 = plVar3;
-        heapFreeSub((int)__return_storage_ptr__ + (int)plVar3);
+        heapFreeSub((uint16_t)block + (int)plVar3);
       }
       else {
         iVar5 = *(int *)0x0;
-        i = CONCAT22(plVar4,iVar5);
+        lVar6 = CONCAT22(iVar5,(int)lVar6);
         if ((*(int *)((int)(undefined4 *)&_DATA + 2) == 0) &&
            (plVar3 <= (long *)((int)plVar4 + iVar5))) {
           *(undefined2 *)0x0 = plVar3;
           if (plVar3 < (long *)((int)plVar4 + iVar5)) {
             *(int *)0x0 = (int)plVar4 + (iVar5 - (int)plVar3);
             *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
-            *(long **)((byte *)__C0_ASM_CopyRight + 4) = __return_storage_ptr__;
-            heapFreeSub((int)__return_storage_ptr__ + (int)plVar3);
+            *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4) = (uint16_t)block;
+            heapFreeSub((uint16_t)block + (int)plVar3);
           }
           else {
-            heapFreeSub((uint16_t)__return_storage_ptr__);
+            heapFreeSub((uint16_t)block);
           }
         }
         else {
-          entry = (uint8_t *)0x0;
-          plVar4 = __return_storage_ptr__;
+          entry = 0;
           do {
-            entry = (uint8_t *)heapValidate((int)entry);
+            entry = heapValidate(entry);
             s = (byte)plVar4;
-            if (entry == (uint8_t *)0x0) {
+            if (entry == 0) {
               return (long *)0x0;
             }
             if (HeapPtr <= entry) {
@@ -248,27 +254,28 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
           if (plVar3 < plVar1) {
             *(int *)0x0 = (int)plVar1 - (int)plVar3;
             *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
-            *(uint8_t **)((byte *)__C0_ASM_CopyRight + 4) = entry;
-            heapFreeSub((uint16_t)(entry + (int)plVar3));
+            *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4) = entry;
+            heapFreeSub(entry + (int)plVar3);
           }
           else {
-            heapFreeSub((uint16_t)entry);
+            heapFreeSub(entry);
           }
           iVar5 = 0;
-          plVar4 = LXLSH_at_(unaff_SI,i,s);
-          heapMemmove((uint8_t *)CONCAT22(in_stack_00000004,entry),(uint16_t)__return_storage_ptr__,
-                      (uint8_t *)(plVar4 + -1),
+          plVar4 = LXLSH_at_(unaff_DI,lVar6,s);
+          heapMemmove((byte *)__C0_ASM_CopyRight,entry,
+                      (uint8_t *)CONCAT22((uint16_t)block,__return_storage_ptr__),
+                      (uint16_t)(plVar4 + -1),
                       iVar5 + -1 + (uint)((long *)((int)(undefined4 *)&_DATA + 3U) < plVar4),
-                      unaff_DI,(int)unaff_SI,4);
-          ptr_00.seg = unaff_DI;
+                      (int)unaff_DI);
+          ptr_00.seg = (uint16_t)block;
           ptr_00.ofs = (uint16_t)__return_storage_ptr__;
-          heapFree(ptr_00,in_stack_00000004);
-          in_stack_00000004 = (byte *)__C0_ASM_CopyRight;
+          heapFree(ptr_00);
+          __return_storage_ptr__ = (long *)__C0_ASM_CopyRight;
         }
       }
     }
   }
-  return (long *)in_stack_00000004;
+  return __return_storage_ptr__;
 }
 
 
@@ -281,14 +288,16 @@ far_t * __cdecl16far heapMalloc(far_t *__return_storage_ptr__,uint32_t nbytes,..
   long *plVar1;
   long *plVar2;
   far_t *pfVar3;
-  long *unaff_SI;
+  undefined2 unaff_SI;
   uint16_t uVar4;
+  long *unaff_DI;
   uint16_t uVar5;
-  uint16_t entry;
-  long in_stack_0000fff4;
-  uint8_t in_stack_0000fff8;
+  undefined4 in_stack_0000fff2;
+  uint16_t uVar6;
+  uint8_t in_stack_0000fff6;
   
-  plVar2 = LXRSH_at_(unaff_SI,in_stack_0000fff4,in_stack_0000fff8);
+  plVar2 = LXRSH_at_(unaff_DI,CONCAT22((int)((ulong)in_stack_0000fff2 >> 0x10),unaff_SI),
+                     in_stack_0000fff6);
   uVar4 = 0;
   uVar5 = 0;
   while( true ) {
@@ -303,18 +312,18 @@ far_t * __cdecl16far heapMalloc(far_t *__return_storage_ptr__,uint32_t nbytes,..
   }
   else {
     plVar1 = (long *)*(uint *)0x0;
-    entry = uVar5;
-    uVar4 = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4);
+    uVar4 = uVar5;
+    uVar6 = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4);
     if (plVar2 < plVar1) {
       *(int *)0x0 = (int)plVar1 - (int)plVar2;
-      entry = (int)plVar1 + (uVar5 - (int)plVar2);
-      uVar4 = uVar5;
+      uVar4 = (int)plVar1 + (uVar5 - (int)plVar2);
+      uVar6 = uVar5;
     }
     *(undefined2 *)0x0 = plVar2;
-    *(uint16_t *)((int)(undefined4 *)&_DATA + 2) = uVar4;
-    heapFreeSub(entry);
-    if (entry < HeapPtr) {
-      HeapPtr = entry;
+    *(uint16_t *)((int)(undefined4 *)&_DATA + 2) = uVar6;
+    heapFreeSub(uVar4);
+    if (uVar4 < HeapPtr) {
+      HeapPtr = uVar4;
     }
     pfVar3 = (far_t *)__C0_ASM_CopyRight;
   }
@@ -350,18 +359,15 @@ void __cdecl16far heapFree(far_t ptr,...)
 
 {
   uint16_t uVar1;
-  far_t ptr_00;
   bool bVar2;
   uint16_t in_DX;
+  uint16_t unaff_DI;
   int iVar3;
-  uint16_t in_stack_00000004;
   uint16_t uStack_4;
   
-  ptr_00.seg = ptr.ofs;
-  ptr_00.ofs = in_stack_00000004;
-  bVar2 = heapIsBadPtr(ptr_00);
+  bVar2 = heapIsBadPtr(ptr);
   if (!bVar2) {
-    ovr_mkp();
+    ovr_mkp((uint32_t *)ptr.ofs,ptr.seg,unaff_DI);
     iVar3 = *(int *)0x0;
     uVar1 = *(uint16_t *)((int)(undefined4 *)&_DATA + 2);
     if (uVar1 == 0) {

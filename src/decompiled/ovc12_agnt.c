@@ -52,15 +52,13 @@ undefined2 __cdecl16far agnt_compute1(int y)
 int __cdecl16far agnt_clampX(int x,...)
 
 {
-  int in_stack_00000004;
-  
-  if (in_stack_00000004 < 0) {
-    in_stack_00000004 = 0;
+  if (x < 0) {
+    x = 0;
   }
-  if (0xd2 < in_stack_00000004) {
-    in_stack_00000004 = 0xd2;
+  if (0xd2 < x) {
+    x = 0xd2;
   }
-  return in_stack_00000004;
+  return x;
 }
 
 
@@ -74,15 +72,14 @@ undefined1 __cdecl16far agnt_compute3(agnt_t *agnt)
 {
   undefined1 uVar1;
   int iVar2;
-  agnt_t *paVar3;
-  undefined2 unaff_BP;
-  agnt_t *paVar4;
+  agnt_t *agnt_00;
+  undefined2 uVar3;
   
-  paVar4 = (agnt_t *)((ulong)agnt >> 0x10);
-  paVar3 = (agnt_t *)agnt;
-  if (((((int)paVar3->y < 0x15) || (paVar3->moveState == 0x1)) && ((int)agnt->x < 0xd3)) &&
+  uVar3 = (undefined2)((ulong)agnt >> 0x10);
+  agnt_00 = (agnt_t *)agnt;
+  if (((((int)agnt_00->y < 0x15) || (agnt_00->moveState == 0x1)) && ((int)agnt->x < 0xd3)) &&
      (-1 < (int)agnt->x)) {
-    iVar2 = ovr_ovc49_usesStExit((agnt_t *)CONCAT22(unaff_BP,paVar4),paVar3);
+    iVar2 = ovr_ovc49_usesStExit(agnt_00,uVar3);
     uVar1 = (undefined1)iVar2;
   }
   else {
@@ -100,9 +97,9 @@ undefined1 __cdecl16far agnt_compute3(agnt_t *agnt)
 bool __cdecl16far agnt_compute4(char *flag,...)
 
 {
-  char *in_stack_00000004;
+  undefined2 in_stack_00000006;
   
-  return *(char *)CONCAT22((char *)flag,in_stack_00000004) != '\0';
+  return *flag != '\0';
 }
 
 
@@ -114,15 +111,13 @@ bool __cdecl16far agnt_compute4(char *flag,...)
 undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,...)
 
 {
-  char cVar1;
-  int iVar2;
-  bool bVar3;
-  int iVar4;
-  int *piVar5;
-  uint unaff_DI;
-  int *in_stack_00000004;
-  uint8_t *flag;
-  undefined2 uVar6;
+  uint8_t uVar1;
+  undefined2 uVar2;
+  int iVar3;
+  bool bVar4;
+  int iVar5;
+  int *piVar6;
+  undefined2 in_stack_0000000a;
   char cStack_e;
   char cStack_d;
   int iStack_c;
@@ -130,38 +125,36 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,..
   int iStack_8;
   int iStack_6;
   
-  if (in_stack_00000004[1] < 0x15) {
-    cVar1 = *(char *)((int)in_stack_00000004 + 0x2f);
-    piVar5 = (int *)(*(int *)((int)in_stack_00000004 + 0x13) +
-                    (uint)*(byte *)(in_stack_00000004 + 9) * 4);
-    iVar4 = piVar5[1];
-    iVar2 = *piVar5;
-    iStack_6 = in_stack_00000004[1] >> 1;
+  if ((int)agnt->y < 0x15) {
+    uVar1 = agnt->faction;
+    uVar2 = *(undefined2 *)((int)&agnt->frames + 2);
+    piVar6 = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
+    iVar5 = piVar6[1];
+    iVar3 = *piVar6;
+    iStack_6 = (int)agnt->y >> 1;
     if (iStack_6 < 0) {
       iStack_6 = 0;
     }
     if (9 < iStack_6) {
       iStack_6 = 9;
     }
-    if (*(char *)((int)in_stack_00000004 + 0xf) == '\0') {
+    if (agnt->level == 0x0) {
       cStack_d = '\x01';
-      iStack_a = ((int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x21) +
-                  *(int *)(iVar2 + 0x17) + *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004) >> 1)
-                 + -1;
+      iStack_a = ((int)((int)(*(((agntG_t *)agnt->gdata)->extents + 2))[0] + *(int *)(iVar3 + 0x17)
+                       + ((agnt_t *)CONCAT22((uint8_t *)result,agnt))->x) >> 1) + -1;
       iStack_c = iStack_a +
-                 ((int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x22) -
-                  (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x21) >> 1);
+                 ((int)((agntG_t *)agnt->gdata)->extents[2][1] -
+                  (int)(*(((agntG_t *)agnt->gdata)->extents + 2))[0] >> 1);
     }
     else {
       cStack_d = -1;
-      iStack_a = ((-*(int *)(iVar2 + 0x17) -
-                  (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x21)) +
-                  *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004) >> 1) + 1;
+      iStack_a = ((int)((-*(int *)(iVar3 + 0x17) -
+                        (int)(*(((agntG_t *)agnt->gdata)->extents + 2))[0]) +
+                       ((agnt_t *)CONCAT22((uint8_t *)result,agnt))->x) >> 1) + 1;
       iStack_c = iStack_a -
-                 ((int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x22) -
-                  (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x21) >> 1);
+                 ((int)((agntG_t *)agnt->gdata)->extents[2][1] -
+                  (int)(*(((agntG_t *)agnt->gdata)->extents + 2))[0] >> 1);
     }
-    flag = (uint8_t *)((ulong)unaff_DI << 0x10);
     if (iStack_a < 0) {
       iStack_a = 0;
     }
@@ -175,37 +168,33 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,..
       iStack_c = 0x68;
     }
     while( true ) {
-      for (iStack_8 = 0;
-          iStack_8 <=
-          (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x23) >> 1;
+      for (iStack_8 = 0; iStack_8 <= (int)((agntG_t *)agnt->gdata)->extents[2][2] >> 1;
           iStack_8 = iStack_8 + 1) {
         cStack_e = -1;
         while (((cStack_e < '\x02' && (iStack_8 != 0)) || ((cStack_e == -1 && (iStack_8 == 0))))) {
-          uVar6 = (undefined2)((ulong)flag >> 0x10);
-          flag = (uint8_t *)CONCAT22(uVar6,(uint8_t *)(int)cStack_e);
-          iVar4 = iStack_6 + iStack_8 * cStack_e;
-          if ((-1 < iVar4) && (iVar4 < 10)) {
-            if ((*(char *)(iVar4 * 0x69 + iStack_a + 0x8fa) != '\0') &&
-               (((*(byte *)(iVar4 * 0x69 + iStack_a + 0x8fa) <= AgntCount &&
-                 (*(char *)((uint)*(byte *)(iVar4 * 0x69 + iStack_a + 0x8fa) * 0x34 + -5) != cVar1))
-                && (*(char *)((uint)*(byte *)(iVar4 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x10) ==
-                    '\0')))) {
-              *(undefined1 *)CONCAT22((uint8_t *)result,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) =
-                   *(undefined1 *)(iVar4 * 0x69 + iStack_a + 0x8fa);
-              flag = (uint8_t *)CONCAT22(uVar6,(uint8_t *)result);
-              bVar3 = agnt_compute4((char *)flag,(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
-              if (bVar3) {
-                return *(undefined1 *)CONCAT22((uint8_t *)result,(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
+          iVar5 = iStack_6 + iStack_8 * cStack_e;
+          if ((-1 < iVar5) && (iVar5 < 10)) {
+            if ((*(char *)(iVar5 * 0x69 + iStack_a + 0x8fa) != '\0') &&
+               (((*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) <= AgntCount &&
+                 (*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) * 0x34 + -5) !=
+                  uVar1)) &&
+                (*(char *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x10) == '\0')
+                ))) {
+              *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) =
+                   *(char *)(iVar5 * 0x69 + iStack_a + 0x8fa);
+              bVar4 = agnt_compute4((*(uint16_t *)((uint8_t *)&(result) + 2)),in_stack_0000000a);
+              if (bVar4) {
+                return *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2)));
               }
             }
-            if (((*(char *)(iVar4 * 0x69 + iStack_a + 0x4e0) != '\0') &&
-                (*(byte *)(iVar4 * 0x69 + iStack_a + 0x4e0) <= AgntCount)) &&
-               ((*(char *)((uint)*(byte *)(iVar4 * 0x69 + iStack_a + 0x4e0) * 0x34 + -5) != cVar1 &&
-                (*(char *)((uint)*(byte *)(iVar4 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x10) == '\0')
-                ))) {
-              *(undefined1 *)CONCAT22((uint8_t *)result,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) =
-                   *(undefined1 *)(iVar4 * 0x69 + iStack_a + 0x4e0);
-              return *(undefined1 *)CONCAT22((uint8_t *)result,(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
+            if (((*(char *)(iVar5 * 0x69 + iStack_a + 0x4e0) != '\0') &&
+                (*(byte *)(iVar5 * 0x69 + iStack_a + 0x4e0) <= AgntCount)) &&
+               ((*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x4e0) * 0x34 + -5) != uVar1
+                && (*(char *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x10) ==
+                    '\0')))) {
+              *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) =
+                   *(char *)(iVar5 * 0x69 + iStack_a + 0x4e0);
+              return *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2)));
             }
           }
           cStack_e = cStack_e + '\x02';
@@ -214,10 +203,10 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,..
       if (iStack_a == iStack_c) break;
       iStack_a = iStack_a + cStack_d;
     }
-    *(undefined1 *)CONCAT22((uint8_t *)result,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = 0;
+    *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) = '\0';
   }
   else {
-    *(undefined1 *)CONCAT22((uint8_t *)result,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = 0;
+    *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) = '\0';
   }
   return 0;
 }
@@ -232,17 +221,16 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,..
 undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out,...)
 
 {
-  char cVar1;
-  int iVar2;
-  undefined4 uVar3;
-  bool bVar4;
-  undefined1 uVar5;
-  int iVar6;
-  int *piVar7;
-  uint unaff_DI;
-  int *in_stack_00000004;
-  byte *flag;
-  uint uVar8;
+  uint8_t uVar1;
+  undefined2 uVar2;
+  int iVar3;
+  undefined4 uVar4;
+  bool bVar5;
+  undefined1 uVar6;
+  int iVar7;
+  int *piVar8;
+  undefined2 in_stack_0000000a;
+  char in_stack_0000000c;
   char cStack_e;
   char cStack_d;
   int iStack_c;
@@ -250,44 +238,40 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out,...)
   int iStack_8;
   int iStack_6;
   
-  if (((*(byte *)((int)in_stack_00000004 + 0x21) < *(byte *)(in_stack_00000004 + 0x11)) &&
-      ((*(uint *)((int)in_stack_00000004 + 0x2b) & 0x820) == 0)) &&
-     ((*(uint *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x3c) & 0x20) == 0)) {
-    *(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = (*(uint8_t *)((uint8_t *)&(out) + 2)) + 1;
-    uVar5 = 1;
+  if (((agnt->strength < agnt->strengthMax) && ((agnt->flags & 0x820) == 0)) &&
+     ((((agntG_t *)agnt->gdata)->flags & 0x20) == 0)) {
+    *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) = in_stack_0000000c + 1;
+    uVar6 = 1;
   }
   else {
-    cVar1 = *(char *)((int)in_stack_00000004 + 0x2f);
-    piVar7 = (int *)(*(int *)((int)in_stack_00000004 + 0x13) +
-                    (uint)*(byte *)(in_stack_00000004 + 9) * 4);
-    iVar6 = piVar7[1];
-    iVar2 = *piVar7;
-    iStack_6 = in_stack_00000004[1] >> 1;
+    uVar1 = agnt->faction;
+    uVar2 = *(undefined2 *)((int)&agnt->frames + 2);
+    piVar8 = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
+    iVar7 = piVar8[1];
+    iVar3 = *piVar8;
+    iStack_6 = (int)agnt->y >> 1;
     if (iStack_6 < 0) {
       iStack_6 = 0;
     }
     if (9 < iStack_6) {
       iStack_6 = 9;
     }
-    if (*(char *)((int)in_stack_00000004 + 0xf) == '\0') {
+    if (agnt->level == 0x0) {
       cStack_d = '\x01';
-      iStack_a = ((int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1b) +
-                  *(int *)(iVar2 + 0x17) + *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004) >> 1)
-                 + -1;
+      iStack_a = ((int)((int)(*((agntG_t *)agnt->gdata)->extents)[0] + *(int *)(iVar3 + 0x17) +
+                       ((agnt_t *)CONCAT22((byte *)out,agnt))->x) >> 1) + -1;
       iStack_c = iStack_a +
-                 ((int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1c) -
-                  (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1b) >> 1);
+                 ((int)((agntG_t *)agnt->gdata)->extents[0][1] -
+                  (int)(*((agntG_t *)agnt->gdata)->extents)[0] >> 1);
     }
     else {
       cStack_d = -1;
-      iStack_a = ((-*(int *)(iVar2 + 0x17) -
-                  (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1b)) +
-                  *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004) >> 1) + 1;
+      iStack_a = ((int)((-*(int *)(iVar3 + 0x17) - (int)(*((agntG_t *)agnt->gdata)->extents)[0]) +
+                       ((agnt_t *)CONCAT22((byte *)out,agnt))->x) >> 1) + 1;
       iStack_c = iStack_a -
-                 ((int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1c) -
-                  (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1b) >> 1);
+                 ((int)((agntG_t *)agnt->gdata)->extents[0][1] -
+                  (int)(*((agntG_t *)agnt->gdata)->extents)[0] >> 1);
     }
-    flag = (byte *)((ulong)unaff_DI << 0x10);
     if (iStack_a < 0) {
       iStack_a = 0;
     }
@@ -301,65 +285,60 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out,...)
       iStack_c = 0x68;
     }
     for (; iStack_a != iStack_c; iStack_a = iStack_a + cStack_d) {
-      for (iStack_8 = 0;
-          iStack_8 <=
-          (int)*(char *)((int)*(undefined4 *)((int)in_stack_00000004 + 0x1d) + 0x1d) >> 1;
+      for (iStack_8 = 0; iStack_8 <= (int)((agntG_t *)agnt->gdata)->extents[0][2] >> 1;
           iStack_8 = iStack_8 + 1) {
         cStack_e = -1;
         while (((cStack_e < '\x02' && (iStack_8 != 0)) || ((cStack_e == -1 && (iStack_8 == 0))))) {
-          uVar8 = (uint)((ulong)flag >> 0x10);
-          flag = (byte *)CONCAT22(uVar8,(byte *)(int)cStack_e);
-          iVar6 = iStack_6 + iStack_8 * cStack_e;
-          if ((-1 < iVar6) && (iVar6 < 10)) {
-            if ((*(char *)(iVar6 * 0x69 + iStack_a + 0x8fa) != '\0') &&
-               ((((*(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa) <= AgntCount &&
-                  (flag = (byte *)((ulong)uVar8 << 0x10),
-                  *(byte *)((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x13) <
-                  *(byte *)((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x12))) &&
-                 (*(char *)((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa) * 0x34 + -5) == cVar1))
-                && ((*(char *)*(undefined4 *)
-                               ((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x17) ==
-                     cVar1 && (uVar3 = *(undefined4 *)
-                                        ((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa) * 0x34 +
-                                        -0x17), (*(uint *)((int)uVar3 + 0x3c) & 0x20) == 0)))))) {
-              *(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = *(byte *)(iVar6 * 0x69 + iStack_a + 0x8fa)
-              ;
-              flag = (byte *)CONCAT22(uVar8,(byte *)out);
-              bVar4 = agnt_compute4((char *)flag,(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
-              if ((bVar4) &&
-                 ((flag = (byte *)((ulong)flag & 0xffff0000),
-                  *(byte *)((uint)*(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) * 0x34 + -0x13) <
-                  *(byte *)((uint)*(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) * 0x34 + -0x12) &&
-                  ((*(uint *)((uint)*(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) * 0x34 + -9) & 0x820)
-                   == 0)))) {
-                return *(undefined1 *)(iVar6 * 0x69 + iStack_a + 0x8fa);
+          iVar7 = iStack_6 + iStack_8 * cStack_e;
+          if ((-1 < iVar7) && (iVar7 < 10)) {
+            if ((*(char *)(iVar7 * 0x69 + iStack_a + 0x8fa) != '\0') &&
+               ((((*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) <= AgntCount &&
+                  (*(byte *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x13) <
+                   *(byte *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x12))) &&
+                 (*(uint8_t *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -5) ==
+                  uVar1)) &&
+                ((*(uint8_t *)
+                   *(undefined4 *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x17)
+                  == uVar1 &&
+                 (uVar4 = *(undefined4 *)
+                           ((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x17),
+                 (*(uint *)((int)uVar4 + 0x3c) & 0x20) == 0)))))) {
+              *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
+                   *(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa);
+              bVar5 = agnt_compute4((char *)(*(uint16_t *)((uint8_t *)&(out) + 2)),in_stack_0000000a);
+              if ((bVar5) &&
+                 ((*(byte *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -0x13) <
+                   *(byte *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -0x12) &&
+                  ((*(uint *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -9) &
+                   0x820) == 0)))) {
+                return *(undefined1 *)(iVar7 * 0x69 + iStack_a + 0x8fa);
               }
             }
-            if ((((*(char *)(iVar6 * 0x69 + iStack_a + 0x4e0) != '\0') &&
-                 (*(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0) <= AgntCount)) &&
-                (flag = (byte *)((ulong)flag & 0xffff0000),
-                *(byte *)((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x13) <
-                *(byte *)((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x12))) &&
-               (((*(char *)((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0) * 0x34 + -5) == cVar1
-                 && (*(char *)*(undefined4 *)
-                               ((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x17) ==
-                     cVar1)) &&
-                (uVar3 = *(undefined4 *)
-                          ((uint)*(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x17),
-                (*(uint *)((int)uVar3 + 0x3c) & 0x20) == 0)))) {
-              *(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = *(byte *)(iVar6 * 0x69 + iStack_a + 0x4e0)
-              ;
-              return *(undefined1 *)(iVar6 * 0x69 + iStack_a + 0x4e0);
+            if ((((*(char *)(iVar7 * 0x69 + iStack_a + 0x4e0) != '\0') &&
+                 (*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) <= AgntCount)) &&
+                (*(byte *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x13) <
+                 *(byte *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x12))) &&
+               (((*(uint8_t *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -5) ==
+                  uVar1 && (*(uint8_t *)
+                             *(undefined4 *)
+                              ((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x17) ==
+                            uVar1)) &&
+                (uVar4 = *(undefined4 *)
+                          ((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x17),
+                (*(uint *)((int)uVar4 + 0x3c) & 0x20) == 0)))) {
+              *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
+                   *(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0);
+              return *(undefined1 *)(iVar7 * 0x69 + iStack_a + 0x4e0);
             }
           }
           cStack_e = cStack_e + '\x02';
         }
       }
     }
-    *(byte *)CONCAT22((byte *)out,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = 0;
-    uVar5 = 0;
+    *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) = 0;
+    uVar6 = 0;
   }
-  return uVar5;
+  return uVar6;
 }
 
 
@@ -372,36 +351,35 @@ bool __cdecl16far
 agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distance,...)
 
 {
-  char cVar1;
+  uint8_t uVar1;
   uint uVar2;
   uint uVar3;
   undefined2 uVar4;
   uint uVar5;
   uint uVar6;
-  int unaff_DI;
-  int *in_stack_00000004;
+  undefined2 in_stack_00000012;
   byte bStack_4;
   
-  cVar1 = *(char *)((int)in_stack_00000004 + 0x2f);
-  *(uint *)CONCAT22((uint16_t *)distance,(*(uint16_t *)((uint8_t *)&(yDir) + 2))) = 0xffff;
+  uVar1 = agnt->faction;
+  *(uint *)CONCAT22(in_stack_00000012,(*(uint16_t *)((uint8_t *)&(distance) + 2))) = 0xffff;
   bStack_4 = 0;
   while( true ) {
     if (AgntCount <= bStack_4) break;
-    if ((*(char *)((uint)bStack_4 * 0x34 + 0x2f) != cVar1) &&
-       (uVar2 = *(int *)((uint)bStack_4 * 0x34) - *in_stack_00000004, uVar5 = (int)uVar2 >> 0xf,
-       uVar3 = *(int *)((uint)bStack_4 * 0x34 + 2) - in_stack_00000004[1], uVar6 = (int)uVar3 >> 0xf
-       , uVar2 = ((uVar2 ^ uVar5) - uVar5) + ((uVar3 ^ uVar6) - uVar6),
-       uVar2 < *(uint *)CONCAT22((uint16_t *)distance,(*(uint16_t *)((uint8_t *)&(yDir) + 2))))) {
-      *(uint *)CONCAT22((uint16_t *)distance,(*(uint16_t *)((uint8_t *)&(yDir) + 2))) = uVar2;
-      uVar4 = ovr_ovc07_signum(unaff_DI,*(int *)((uint)bStack_4 * 0x34) -
-                                        *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004));
-      *(undefined2 *)CONCAT22((uint16_t *)xDir,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = uVar4;
-      uVar4 = ovr_ovc07_signum(unaff_DI,*(int *)((uint)bStack_4 * 0x34 + 2) - in_stack_00000004[1]);
+    if ((*(uint8_t *)((uint)bStack_4 * 0x34 + 0x2f) != uVar1) &&
+       (uVar2 = *(int *)((uint)bStack_4 * 0x34) - agnt->x, uVar5 = (int)uVar2 >> 0xf,
+       uVar3 = *(int *)((uint)bStack_4 * 0x34 + 2) - agnt->y, uVar6 = (int)uVar3 >> 0xf,
+       uVar2 = ((uVar2 ^ uVar5) - uVar5) + ((uVar3 ^ uVar6) - uVar6),
+       uVar2 < *(uint *)CONCAT22(in_stack_00000012,(*(uint16_t *)((uint8_t *)&(distance) + 2))))) {
+      *(uint *)CONCAT22(in_stack_00000012,(*(uint16_t *)((uint8_t *)&(distance) + 2))) = uVar2;
+      uVar4 = ovr_ovc07_signum(*(int *)((uint)bStack_4 * 0x34) -
+                               ((agnt_t *)CONCAT22((uint16_t *)xDir,agnt))->x);
       *(undefined2 *)CONCAT22((uint16_t *)yDir,(*(uint16_t *)((uint8_t *)&(xDir) + 2))) = uVar4;
+      uVar4 = ovr_ovc07_signum(*(int *)((uint)bStack_4 * 0x34 + 2) - agnt->y);
+      *(undefined2 *)CONCAT22((uint16_t *)distance,(*(uint16_t *)((uint8_t *)&(yDir) + 2))) = uVar4;
     }
     bStack_4 = bStack_4 + 1;
   }
-  return *(uint *)CONCAT22((uint16_t *)distance,(*(uint16_t *)((uint8_t *)&(yDir) + 2))) != 0xffff;
+  return *(uint *)CONCAT22(in_stack_00000012,(*(uint16_t *)((uint8_t *)&(distance) + 2))) != 0xffff;
 }
 
 
@@ -413,14 +391,14 @@ agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distanc
 void __cdecl16far agnt_usesAnimFrame(agnt_t *agnt,...)
 
 {
-  int in_stack_00000004;
+  undefined2 in_stack_00000006;
   
-  *(undefined1 *)(in_stack_00000004 + 0xe) = 0xff;
-  *(undefined1 *)(in_stack_00000004 + 0xc) = 0xff;
-  *(undefined1 *)(in_stack_00000004 + 0x10) = 0;
-  *(undefined1 *)(in_stack_00000004 + 0xd) = 0;
-  *(uint *)(in_stack_00000004 + 0x2b) = *(uint *)(in_stack_00000004 + 0x2b) & 0xfff5;
-  *(undefined1 *)(in_stack_00000004 + 0x2e) = 0;
+  agnt->animFrame = 0xff;
+  agnt->target = 0xff;
+  agnt->health = 0x0;
+  agnt->gindex = 0x0;
+  agnt->flags = agnt->flags & 0xfff5;
+  agnt->variant = 0x0;
   animBranchCode = 0;
   return;
 }
@@ -448,11 +426,10 @@ void __cdecl16far agnt_compute5(agnt_t *agnt)
 void __cdecl16far agnt_advanceAnimFrame(agnt_t *agnt,...)
 
 {
-  undefined2 unaff_BP;
-  int in_stack_00000004;
+  undefined2 in_stack_00000006;
   
-  if ((*(uint *)((int)*(undefined4 *)(in_stack_00000004 + 0x1d) + 0x40) & 4) == 0) {
-    agnt_usesAnimFrame((agnt_t *)CONCAT22(unaff_BP,(agnt_t *)agnt),in_stack_00000004);
+  if ((((agntG_t *)agnt->gdata)->flags3 & 4) == 0) {
+    agnt_usesAnimFrame(agnt,in_stack_00000006);
   }
   return;
 }
@@ -467,80 +444,79 @@ char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
 
 {
   char *pcVar1;
-  int iVar2;
+  agntG_t *paVar2;
   undefined2 uVar3;
-  int in_stack_00000004;
+  char *in_stack_0000000a;
   
-  if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x20) == 0) {
-    if ((*(uint *)(in_stack_00000004 + 0x2b) & 4) == 0) {
-      if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x800) == 0) {
-        if ((*(uint *)((int)*(undefined4 *)(in_stack_00000004 + 0x17) + 0x14) & 1) == 0) {
-          if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x200) == 0) {
-            if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x80) == 0) {
-              if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x40) == 0) {
-                pcVar1 = (char *)*(undefined2 *)
-                                  ((int)*(undefined4 *)(in_stack_00000004 + 0x1d) + 0x24);
+  if ((agnt->flags & 0x20) == 0) {
+    if ((agnt->flags & 4) == 0) {
+      if ((agnt->flags & 0x800) == 0) {
+        if ((*(uint *)((int)&(((entity_t *)agnt->entity)->base).frames + 1) & 1) == 0) {
+          if ((agnt->flags & 0x200) == 0) {
+            if ((agnt->flags & 0x80) == 0) {
+              if ((agnt->flags & 0x40) == 0) {
+                    /* WARNING: Load size is inaccurate */
+                pcVar1 = ((agntG_t *)agnt->gdata)->name;
               }
               else {
-                uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
-                iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
-                pcVar1 = ovr_stsprintf((char *)CONCAT22(0x83c,(char *)text),
-                                       (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),
+                uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+                paVar2 = (agntG_t *)agnt->gdata;
+                pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x83c,in_stack_0000000a),
+                                       (char *)CONCAT22(*(undefined2 *)&paVar2->name,
                                                         (char *)"puppetmaker" + 3),
-                                       (char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
+                                       *(undefined2 *)((int)&paVar2->name + 2));
               }
             }
             else {
-              uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
-              iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
-              pcVar1 = ovr_stsprintf((char *)CONCAT22(0x830,(char *)text),
-                                     (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),
+              uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+              paVar2 = (agntG_t *)agnt->gdata;
+              pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x830,in_stack_0000000a),
+                                     (char *)CONCAT22(*(undefined2 *)&paVar2->name,
                                                       (char *)"puppetmaker" + 3),
-                                     (char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
+                                     *(undefined2 *)((int)&paVar2->name + 2));
             }
           }
           else {
-            uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
-            iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
-            pcVar1 = ovr_stsprintf((char *)CONCAT22(0x823,(char *)text),
-                                   (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),
+            uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+            paVar2 = (agntG_t *)agnt->gdata;
+            pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x823,in_stack_0000000a),
+                                   (char *)CONCAT22(*(undefined2 *)&paVar2->name,
                                                     (char *)"puppetmaker" + 3),
-                                   (char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
+                                   *(undefined2 *)((int)&paVar2->name + 2));
           }
         }
         else {
-          uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
-          iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
-          pcVar1 = ovr_stsprintf((char *)CONCAT22(0x817,(char *)text),
-                                 (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),
+          uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+          paVar2 = (agntG_t *)agnt->gdata;
+          pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x817,in_stack_0000000a),
+                                 (char *)CONCAT22(*(undefined2 *)&paVar2->name,
                                                   (char *)"puppetmaker" + 3),
-                                 (char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
+                                 *(undefined2 *)((int)&paVar2->name + 2));
         }
       }
       else {
-        uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
-        iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
-        pcVar1 = ovr_stsprintf((char *)CONCAT22(0x80d,(char *)text),
-                               (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),
+        uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+        paVar2 = (agntG_t *)agnt->gdata;
+        pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x80d,in_stack_0000000a),
+                               (char *)CONCAT22(*(undefined2 *)&paVar2->name,
                                                 (char *)"puppetmaker" + 3),
-                               (char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
+                               *(undefined2 *)((int)&paVar2->name + 2));
       }
     }
     else {
-      uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
-      iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
-      pcVar1 = ovr_stsprintf((char *)CONCAT22(0x803,(char *)text),
-                             (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),
-                                              (char *)"puppetmaker" + 3),
-                             (char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
+      uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+      paVar2 = (agntG_t *)agnt->gdata;
+      pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x803,in_stack_0000000a),
+                             (char *)CONCAT22(*(undefined2 *)&paVar2->name,(char *)"puppetmaker" + 3
+                                             ),*(undefined2 *)((int)&paVar2->name + 2));
     }
   }
   else {
-    uVar3 = (undefined2)((ulong)*(undefined4 *)(in_stack_00000004 + 0x1d) >> 0x10);
-    iVar2 = (int)*(undefined4 *)(in_stack_00000004 + 0x1d);
-    pcVar1 = ovr_stsprintf((char *)CONCAT22(0x7f8,(char *)text),
-                           (char *)CONCAT22(*(undefined2 *)(iVar2 + 0x24),(char *)"puppetmaker" + 3)
-                           ,(char *)*(undefined2 *)(iVar2 + 0x26),(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
+    uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+    paVar2 = (agntG_t *)agnt->gdata;
+    pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x7f8,in_stack_0000000a),
+                           (char *)CONCAT22(*(undefined2 *)&paVar2->name,(char *)"puppetmaker" + 3),
+                           *(undefined2 *)((int)&paVar2->name + 2));
   }
   return pcVar1;
 }
@@ -557,9 +533,8 @@ undefined2 __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex,.
 {
   byte bVar1;
   undefined2 uVar2;
-  byte in_stack_00000004;
   
-  bVar1 = *(byte *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2) + (uint)partyIndex + 0x29);
+  bVar1 = *(byte *)((int)*(undefined4 *)((uint)partyIndex << 2) + (uint)abilityIndex + 0x29);
   if (bVar1 < 4) {
     uVar2 = 0xfd;
   }
@@ -594,9 +569,9 @@ byte __cdecl16far agnt_compute8(agnt_t *agnt,...)
 
 {
   byte bVar1;
-  int in_stack_00000004;
+  undefined2 in_stack_00000006;
   
-  bVar1 = *(byte *)(in_stack_00000004 + 0x36) % 6;
+  bVar1 = (byte)agnt[1].y % 6;
   if (3 < bVar1) {
     bVar1 = bVar1 - 6;
   }
@@ -613,9 +588,9 @@ byte __cdecl16far agnt_compute9(agnt_t *agnt,...)
 
 {
   byte bVar1;
-  int in_stack_00000004;
+  undefined2 in_stack_00000006;
   
-  bVar1 = *(byte *)((int)*(undefined4 *)(in_stack_00000004 + 0x17) + 0x36) % 6;
+  bVar1 = ((entity_t *)agnt->entity)->dir % 6;
   if (3 < bVar1) {
     bVar1 = bVar1 - 6;
   }
@@ -632,9 +607,9 @@ byte __cdecl16far agnt_compute10(agnt_t *agnt,...)
 
 {
   byte bVar1;
-  int in_stack_00000004;
+  undefined2 in_stack_00000006;
   
-  bVar1 = (byte)(((ulong)*(byte *)(in_stack_00000004 + 0x36) / 6) % 6);
+  bVar1 = (byte)(((ulong)(byte)agnt[1].y / 6) % 6);
   if (4 < bVar1) {
     bVar1 = bVar1 - 6;
   }
@@ -651,9 +626,9 @@ byte __cdecl16far agnt_compute11(agnt_t *agnt,...)
 
 {
   byte bVar1;
-  int in_stack_00000004;
+  undefined2 in_stack_00000006;
   
-  bVar1 = (byte)(((ulong)*(byte *)((int)*(undefined4 *)(in_stack_00000004 + 0x17) + 0x36) / 6) % 6);
+  bVar1 = (byte)(((ulong)((entity_t *)agnt->entity)->dir / 6) % 6);
   if (4 < bVar1) {
     bVar1 = bVar1 - 6;
   }
@@ -670,13 +645,13 @@ undefined1 __cdecl16far agnt_usesAnimFrame2(agnt_t *agnt,...)
 
 {
   undefined1 uVar1;
-  int in_stack_00000004;
+  undefined2 in_stack_00000006;
   
-  if (*(char *)(in_stack_00000004 + 0xe) == -1) {
-    if (*(char *)(in_stack_00000004 + 0x10) < '\x02') {
+  if (agnt->animFrame == 0xff) {
+    if ((char)agnt->health < '\x02') {
       uVar1 = 1;
     }
-    else if (*(char *)(in_stack_00000004 + 0x10) == '\x04') {
+    else if (agnt->health == 0x4) {
       uVar1 = 1;
     }
     else {
@@ -699,18 +674,18 @@ uint __cdecl16far agnt_compute12(agnt_t *a,agnt_t *b,...)
 
 {
   uint uVar1;
-  uint *in_stack_00000004;
+  undefined2 in_stack_0000000a;
   
-  uVar1 = *(uint *)CONCAT22((agnt_t *)a,in_stack_00000004);
-  if ((int)uVar1 < *(int *)CONCAT22((agnt_t *)b,(*(uint16_t *)((uint8_t *)&(a) + 2)))) {
-    if (*(char *)((int)(*(uint16_t *)((uint8_t *)&(a) + 2)) + 0xf) != '\0') {
+  uVar1 = ((agnt_t *)CONCAT22((agnt_t *)b,a))->x;
+  if ((int)uVar1 < *(int *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(b) + 2)))) {
+    if (*(char *)((int)(*(uint16_t *)((uint8_t *)&(b) + 2)) + 0xf) != '\0') {
       return CONCAT11((char)(uVar1 >> 8),1);
     }
   }
   else {
-    uVar1 = (uint)*(char *)((int)(*(uint16_t *)((uint8_t *)&(a) + 2)) + 0xf);
+    uVar1 = (uint)*(char *)((int)(*(uint16_t *)((uint8_t *)&(b) + 2)) + 0xf);
     if (uVar1 == 0) {
-      return CONCAT11(*(char *)((int)(*(uint16_t *)((uint8_t *)&(a) + 2)) + 0xf) >> 7,1);
+      return CONCAT11(*(char *)((int)(*(uint16_t *)((uint8_t *)&(b) + 2)) + 0xf) >> 7,1);
     }
   }
   return uVar1 & 0xff00;
@@ -732,87 +707,80 @@ void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite,...
   uint uVar5;
   uint uVar6;
   int *piVar7;
-  agnt_t *in_stack_00000004;
+  undefined2 in_stack_0000000e;
   uint uStack_10;
   
-  iVar3 = (uint)in_stack_00000004->target * 0x34;
+  iVar3 = (uint)agnt->target * 0x34;
   piVar7 = (int *)(*(int *)(iVar3 + 0x13) + (uint)*(byte *)(iVar3 + 0x12) * 4);
   iVar1 = piVar7[1];
   iVar2 = *piVar7;
   if (iVar2 == 0 && iVar1 == 0) {
                     /* WARNING: Subroutine does not return */
-    ovr_stExit();
+    ovr_stExit(0x12);
   }
-  uVar4 = *(int *)(iVar3 + 0x26) - in_stack_00000004->destX;
-  uStack_10 = (*(int *)(iVar3 + 0x28) - (uint)(byte)in_stack_00000004->destY) -
-              (*(int *)(iVar2 + 0xd) >> 1);
+  uVar4 = *(int *)(iVar3 + 0x26) - agnt->destX;
+  uStack_10 = (*(int *)(iVar3 + 0x28) - (uint)(byte)agnt->destY) - (*(int *)(iVar2 + 0xd) >> 1);
   if (((int)((uVar4 ^ (int)uVar4 >> 0xf) - ((int)uVar4 >> 0xf)) < 4) &&
      ((int)((uStack_10 ^ (int)uStack_10 >> 0xf) - ((int)uStack_10 >> 0xf)) < 4)) {
-    ovr_ovc41_resolveSpecialAttack
-              ((agnt_t *)CONCAT22((agnt_t *)agnt,in_stack_00000004),(uint)in_stack_00000004->target)
-    ;
+    ovr_ovc41_resolveSpecialAttack((agnt_t *)CONCAT22((anm_t *)anim,agnt),(uint)agnt->target);
     animBranchCode = 3;
-    agnt_usesAnimFrame();
+    agnt_usesAnimFrame(agnt,(anm_t *)anim);
   }
   else {
-    if (-uStack_10 == *(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x11) || -*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x11) < (int)uStack_10)
+    if (-uStack_10 == *(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x11) || -*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x11) < (int)uStack_10)
     {
-      if (*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x11) < (int)uStack_10) {
-        uStack_10 = *(uint *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x11);
+      if (*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x11) < (int)uStack_10) {
+        uStack_10 = *(uint *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x11);
       }
     }
     else {
-      uStack_10 = -*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x11);
+      uStack_10 = -*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x11);
     }
-    if (*(char *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 5) != '\0') {
-      *(char *)&in_stack_00000004->destY = (char)in_stack_00000004->destY + (char)uStack_10;
+    if (*(char *)((*(uint16_t *)((uint8_t *)&(sprite) + 2)) + 5) != '\0') {
+      *(char *)&agnt->destY = (char)agnt->destY + (char)uStack_10;
     }
-    if (*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf) < (int)uVar4) {
-      uVar4 = *(uint *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf);
+    if (*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf) < (int)uVar4) {
+      uVar4 = *(uint *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf);
     }
-    else if (-uVar4 != *(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf) && (int)uVar4 <= -*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf)) {
-      uVar4 = -*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf);
+    else if (-uVar4 != *(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf) && (int)uVar4 <= -*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf)) {
+      uVar4 = -*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf);
     }
-    if (((*(byte *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x1c) & 4) == 0) &&
-       (((*(int *)(iVar3 + 0x28) - (uint)(byte)in_stack_00000004->destY !=
-          *(int *)(iVar2 + 0xd) >> 1 ||
-         ((*(char *)((int)&in_stack_00000004->destY + 1) == '\0' && ((int)uVar4 < 0)))) ||
-        ((*(char *)((int)&in_stack_00000004->destY + 1) != '\0' && (0 < (int)uVar4)))))) {
-      if (*(char *)((int)&in_stack_00000004->destY + 1) == '\0') {
-        uVar4 = *(uint *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf);
+    if (((*(byte *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x1c) & 4) == 0) &&
+       (((*(int *)(iVar3 + 0x28) - (uint)(byte)agnt->destY != *(int *)(iVar2 + 0xd) >> 1 ||
+         ((*(char *)((int)&agnt->destY + 1) == '\0' && ((int)uVar4 < 0)))) ||
+        ((*(char *)((int)&agnt->destY + 1) != '\0' && (0 < (int)uVar4)))))) {
+      if (*(char *)((int)&agnt->destY + 1) == '\0') {
+        uVar4 = *(uint *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf);
       }
       else {
-        uVar4 = -*(int *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0xf);
+        uVar4 = -*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf);
       }
     }
-    if (*(char *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 5) != '\0') {
-      in_stack_00000004->destX = in_stack_00000004->destX + uVar4;
+    if (*(char *)((*(uint16_t *)((uint8_t *)&(sprite) + 2)) + 5) != '\0') {
+      agnt->destX = agnt->destX + uVar4;
     }
-    uVar4 = *(int *)(iVar3 + 0x26) - in_stack_00000004->destX;
-    uVar5 = (*(int *)(iVar3 + 0x28) - (uint)(byte)in_stack_00000004->destY) -
-            (*(int *)(iVar2 + 0xd) >> 1);
+    uVar4 = *(int *)(iVar3 + 0x26) - agnt->destX;
+    uVar5 = (*(int *)(iVar3 + 0x28) - (uint)(byte)agnt->destY) - (*(int *)(iVar2 + 0xd) >> 1);
     uVar6 = (int)uVar4 >> 0xf;
     if (((int)((uVar4 ^ uVar6) - uVar6) < 4) &&
        (uVar4 = (int)uVar5 >> 0xf, (int)((uVar5 ^ uVar4) - uVar4) < 4)) {
-      ovr_ovc41_resolveSpecialAttack
-                ((agnt_t *)CONCAT22((agnt_t *)agnt,in_stack_00000004),
-                 (uint)in_stack_00000004->target);
+      ovr_ovc41_resolveSpecialAttack((agnt_t *)CONCAT22((anm_t *)anim,agnt),(uint)agnt->target);
       animBranchCode = 5;
-      agnt_usesAnimFrame();
+      agnt_usesAnimFrame(agnt,(anm_t *)anim);
     }
-    else if (((int)in_stack_00000004->destX < -0xe) || (0xe0 < (int)in_stack_00000004->destX)) {
+    else if (((int)agnt->destX < -0xe) || (0xe0 < (int)agnt->destX)) {
       animBranchCode = 4;
-      agnt_usesAnimFrame();
+      agnt_usesAnimFrame(agnt,(anm_t *)anim);
     }
     else {
-      in_stack_00000004->animFrame = in_stack_00000004->animFrame + 0x1;
-      if (*(byte *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x1b) <= in_stack_00000004->animFrame) {
-        if (*(char *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x1a) == -1) {
-          agnt_usesAnimFrame();
+      agnt->animFrame = agnt->animFrame + 0x1;
+      if (*(byte *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x1b) <= agnt->animFrame) {
+        if (*(char *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x1a) == -1) {
+          agnt_usesAnimFrame(agnt,(anm_t *)anim);
           animBranchCode = 6;
         }
         else {
-          in_stack_00000004->animFrame = *(uint8_t *)((*(uint16_t *)((uint8_t *)&(agnt) + 2)) + 0x1a);
+          agnt->animFrame = *(uint8_t *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x1a);
         }
       }
     }
@@ -829,71 +797,69 @@ void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite,...
 void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type,...)
 
 {
-  int iVar1;
+  char *pcVar1;
   int iVar2;
   int iVar3;
   int iVar4;
   int iVar5;
+  agnt_t *agnt;
   stg_tmp_t *psVar6;
-  int16_t x;
-  uint16_t uVar7;
-  int *piVar8;
-  int iVar9;
-  undefined2 unaff_SI;
-  byte in_stack_00000004;
+  stg_tmp_t *psVar7;
+  uint16_t uVar8;
+  stg_tmp_t *y;
+  int *piVar9;
+  int iVar10;
   far_t gfx;
-  undefined1 mirror;
-  undefined1 uVar10;
   uint16_t uStack_e;
   uint16_t uStack_c;
   
-  mirror = (undefined1)unaff_SI;
-  uVar10 = (undefined1)((uint)unaff_SI >> 8);
-  iVar5 = (uint)in_stack_00000004 * 0x34;
-  uStack_c = *(uint16_t *)(iVar5 + 0x15);
-  uStack_e = *(uint16_t *)(iVar5 + 0x13);
-  piVar8 = (int *)(uStack_e + (uint)*(byte *)(iVar5 + 0x12) * 4);
-  iVar1 = piVar8[1];
-  iVar2 = *piVar8;
-  piVar8 = (int *)(uStack_e + (uint)*(byte *)(iVar5 + 0x30) * 4);
-  if (*piVar8 == 0 && piVar8[1] == 0) {
+  agnt = (agnt_t *)((uint)index * 0x34);
+  uStack_c = *(uint16_t *)((int)&agnt->frames + 2);
+  uStack_e = *(uint16_t *)&agnt->frames;
+  piVar9 = (int *)(uStack_e + (uint)agnt->frameIndex * 4);
+  iVar2 = piVar9[1];
+  iVar3 = *piVar9;
+  piVar9 = (int *)(uStack_e + (uint)(byte)agnt->state * 4);
+  if (*piVar9 == 0 && piVar9[1] == 0) {
     uStack_e = SprProjectiles.ofs;
     uStack_c = SprProjectiles.seg;
   }
-  piVar8 = (int *)(uStack_e + (uint)*(byte *)(iVar5 + 0x30) * 4);
-  iVar3 = piVar8[1];
-  iVar4 = *piVar8;
-  uVar7 = 0x1726;
-  iVar9 = uStack_e + (uint)*(byte *)(iVar5 + 0x30) * 4;
+  piVar9 = (int *)(uStack_e + (uint)(byte)agnt->state * 4);
+  iVar4 = piVar9[1];
+  iVar5 = *piVar9;
+  uVar8 = 0x1726;
+  iVar10 = uStack_e + (uint)(byte)agnt->state * 4;
   psVar6 = ovr_stash_usesStExit
-                     ((stg_tmp_t *)
-                      CONCAT13((char)((uint)in_stack_00000004 * 0x34 >> 8),
-                               CONCAT12(*(undefined1 *)((uint)in_stack_00000004 * 0x34 + 0x31),
-                                        *(undefined2 *)(iVar9 + 0x5a))),
-                      *(undefined2 *)(iVar9 + 0x58));
-  if (*(char *)(iVar5 + 0x30) == '\r') {
-    x = *(int16_t *)(iVar5 + 0x28);
+                     ((stg_tmp_t *)*(undefined2 *)(iVar10 + 0x58),*(undefined2 *)(iVar10 + 0x5a),
+                      CONCAT11((char)((uint)index * 0x34 >> 8),
+                               *(undefined1 *)((uint)index * 0x34 + 0x31)));
+  if ((char)agnt->state == '\r') {
+    psVar7 = psVar6;
+    y = (stg_tmp_t *)agnt->screenY;
   }
-  else if (*(char *)(iVar5 + 0x30) == '\f') {
-    x = *(int *)(iVar5 + 0x28) - *(int *)(iVar2 + 0xd);
+  else if ((char)agnt->state == '\f') {
+    psVar7 = (stg_tmp_t *)(agnt->screenY - *(int *)(iVar3 + 0xd));
+    y = psVar7;
   }
   else {
-    x = *(int *)(iVar5 + 0x28) - (*(int *)(iVar2 + 0xd) >> 1);
+    psVar7 = (stg_tmp_t *)(*(int *)(iVar3 + 0xd) >> 1);
+    y = (stg_tmp_t *)(agnt->screenY - (int)psVar7);
   }
-  gfx.seg = *(uint16_t *)(iVar5 + 0x26);
-  gfx.ofs = uVar7;
-  ovr_blitGfxRect(gfx,x,index,(brect_t *)CONCAT22(0x10,(brect_t *)rect),*(uint8_t *)(iVar5 + 0x33),
-                  (bool)mirror,psVar6->cmap + 6,*(uint8_t *)(iVar5 + 0x33));
-  *(char *)(iVar5 + 0x31) = *(char *)(iVar5 + 0x31) + '\x01';
-  if (*(byte *)(iVar4 + 0x1b) <= *(byte *)(iVar5 + 0x31)) {
-    if (*(char *)(iVar4 + 0x1a) == -1) {
-      *(undefined1 *)(iVar5 + 0x30) = 0;
+  gfx.seg = uVar8;
+  gfx.ofs = (uint16_t)(psVar6->cmap + 6);
+  ovr_blitGfxRect(gfx,agnt->screenX,(int16_t)y,rect,(uint8_t)type,true,
+                  CONCAT11((char)((uint)psVar7 >> 8),*(undefined1 *)((int)&agnt->flags32 + 1)));
+  pcVar1 = (char *)((int)&agnt->state + 1);
+  *pcVar1 = *pcVar1 + '\x01';
+  if (*(byte *)(iVar5 + 0x1b) <= *(byte *)((int)&agnt->state + 1)) {
+    if (*(char *)(iVar5 + 0x1a) == -1) {
+      *(undefined1 *)&agnt->state = 0;
     }
     else {
-      *(undefined1 *)(iVar5 + 0x31) = *(undefined1 *)(iVar4 + 0x1a);
+      *(undefined1 *)((int)&agnt->state + 1) = *(undefined1 *)(iVar5 + 0x1a);
     }
   }
-  agnt_compute13((agnt_t *)CONCAT13(uVar10,CONCAT12(mirror,0x1726)),iVar5);
+  agnt_compute13(agnt,0x1726);
   return;
 }
 
@@ -906,18 +872,18 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type,..
 void __cdecl16far agnt_compute13(agnt_t *agnt,...)
 
 {
-  int in_stack_00000004;
+  undefined2 in_stack_00000006;
   
-  if (*(char *)(in_stack_00000004 + 0x30) == '\0') {
-    if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x100) == 0) {
-      if ((*(uint *)(in_stack_00000004 + 0x2b) & 0x80) != 0) {
-        *(undefined1 *)(in_stack_00000004 + 0x30) = 0xc;
-        *(undefined1 *)(in_stack_00000004 + 0x31) = 0;
+  if ((char)agnt->state == '\0') {
+    if ((agnt->flags & 0x100) == 0) {
+      if ((agnt->flags & 0x80) != 0) {
+        *(undefined1 *)&agnt->state = 0xc;
+        *(undefined1 *)((int)&agnt->state + 1) = 0;
       }
     }
     else {
-      *(undefined1 *)(in_stack_00000004 + 0x30) = 0xd;
-      *(undefined1 *)(in_stack_00000004 + 0x31) = 5;
+      *(undefined1 *)&agnt->state = 0xd;
+      *(undefined1 *)((int)&agnt->state + 1) = 5;
     }
   }
   return;
@@ -1027,13 +993,12 @@ void __cdecl16far agnt_usesAgntCount4(uint agntIndex,...)
   char *pcVar1;
   int iVar2;
   int iVar3;
-  uint in_stack_00000004;
   
   for (iVar3 = 0; iVar3 < 10; iVar3 = iVar3 + 1) {
     for (iVar2 = 0; iVar2 < 0x69; iVar2 = iVar2 + 1) {
       if ((AgntCount < *(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa)) ||
-         ((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) <= (int)in_stack_00000004)) {
-        if (*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) == in_stack_00000004) {
+         ((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) <= (int)agntIndex)) {
+        if (*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) == agntIndex) {
           *(undefined1 *)(iVar3 * 0x69 + iVar2 + 0x8fa) = 0;
         }
       }
@@ -1042,8 +1007,8 @@ void __cdecl16far agnt_usesAgntCount4(uint agntIndex,...)
         *pcVar1 = *pcVar1 + -1;
       }
       if ((AgntCount < *(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0)) ||
-         ((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) <= (int)in_stack_00000004)) {
-        if (*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) == in_stack_00000004) {
+         ((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) <= (int)agntIndex)) {
+        if (*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) == agntIndex) {
           *(undefined1 *)(iVar3 * 0x69 + iVar2 + 0x4e0) = 0;
         }
       }
@@ -1068,17 +1033,16 @@ void __cdecl16far agnt_usesAgntCount5(int agntIndex,...)
   char *pcVar1;
   int iVar2;
   int iVar3;
-  int in_stack_00000004;
   
   for (iVar3 = 0; iVar3 < 10; iVar3 = iVar3 + 1) {
     for (iVar2 = 0; iVar2 < 0x69; iVar2 = iVar2 + 1) {
       if ((*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) <= AgntCount) &&
-         (in_stack_00000004 <= (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa))) {
+         (agntIndex <= (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa))) {
         pcVar1 = (char *)(iVar3 * 0x69 + iVar2 + 0x8fa);
         *pcVar1 = *pcVar1 + '\x01';
       }
       if ((*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) <= AgntCount) &&
-         (in_stack_00000004 <= (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0))) {
+         (agntIndex <= (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0))) {
         pcVar1 = (char *)(iVar3 * 0x69 + iVar2 + 0x4e0);
         *pcVar1 = *pcVar1 + '\x01';
       }
@@ -1096,60 +1060,57 @@ void __cdecl16far agnt_usesAgntCount5(int agntIndex,...)
 uint __cdecl16far agnt_usesAgntSaved(int agntIndex,...)
 
 {
-  uint uVar1;
-  uint fromIndex;
   byte bVar3;
+  uint uVar1;
   void *pvVar2;
-  uint uVar5;
+  int iVar5;
+  int toIndex;
   undefined2 unaff_SS;
-  uint in_stack_00000004;
   agnt_t agntSaved;
   undefined1 uVar4;
   
-  fromIndex = in_stack_00000004;
-  if (((int)in_stack_00000004 < 1) ||
-     (uVar5 = in_stack_00000004,
-     *(int *)(in_stack_00000004 * 0x34 + -0x32) <= *(int *)(in_stack_00000004 * 0x34 + 2))) {
-    uVar5 = (uint)AgntCount;
-    if (((int)(in_stack_00000004 + 1) < (int)uVar5) &&
-       (uVar5 = *(uint *)(in_stack_00000004 * 0x34 + 2), uVar1 = in_stack_00000004,
-       *(int *)(in_stack_00000004 * 0x34 + 0x36) < (int)uVar5)) {
+  if ((agntIndex < 1) ||
+     (iVar5 = agntIndex, *(int *)(agntIndex * 0x34 + -0x32) <= *(int *)(agntIndex * 0x34 + 2))) {
+    uVar1 = (uint)AgntCount;
+    if ((agntIndex + 1 < (int)uVar1) &&
+       (uVar1 = *(uint *)(agntIndex * 0x34 + 2), iVar5 = agntIndex,
+       *(int *)(agntIndex * 0x34 + 0x36) < (int)uVar1)) {
       do {
-        uVar5 = uVar1 + 1;
-        if ((int)(uint)AgntCount <= (int)(uVar1 + 2)) break;
-        uVar1 = uVar5;
-      } while (*(int *)(uVar5 * 0x34 + 0x36) < *(int *)(in_stack_00000004 * 0x34 + 2));
+        toIndex = iVar5 + 1;
+        if ((int)(uint)AgntCount <= iVar5 + 2) break;
+        iVar5 = toIndex;
+      } while (*(int *)(toIndex * 0x34 + 0x36) < *(int *)(agntIndex * 0x34 + 2));
       memcpy((char *)CONCAT22(unaff_SS,&agntSaved),
-             (char *)CONCAT22(0x1726,(char *)(in_stack_00000004 * 0x34)),0x34);
-      _fmemmove((char *)CONCAT22(0x1726,(char *)(fromIndex * 0x34)),
-                (char *)CONCAT22(0x1726,(char *)(fromIndex * 0x34 + 0x34)),
-                (uVar5 - fromIndex) * 0x34);
-      pvVar2 = memcpy((char *)CONCAT22(0x1726,(char *)(uVar5 * 0x34)),
+             (char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34)),0x34);
+      _fmemmove((char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34)),
+                (char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34 + 0x34)),
+                (toIndex - agntIndex) * 0x34);
+      pvVar2 = memcpy((char *)CONCAT22(0x1726,(char *)(toIndex * 0x34)),
                       (char *)CONCAT22(unaff_SS,&agntSaved),0x34);
       uVar4 = (undefined1)((uint)pvVar2 >> 8);
-      agnt_remapGridRefs(fromIndex,uVar5);
-      uVar5 = CONCAT11(uVar4,1);
+      agnt_remapGridRefs(agntIndex,toIndex);
+      uVar1 = CONCAT11(uVar4,1);
     }
     else {
-      uVar5 = uVar5 & 0xff00;
+      uVar1 = uVar1 & 0xff00;
     }
   }
   else {
     do {
-      uVar5 = uVar5 - 1;
-      if ((int)uVar5 < 1) break;
-    } while (*(int *)(in_stack_00000004 * 0x34 + 2) < *(int *)(uVar5 * 0x34 + -0x32));
-    memcpy((char *)CONCAT22(unaff_SS,&agntSaved),
-           (char *)CONCAT22(0x1726,(char *)(in_stack_00000004 * 0x34)),0x34);
-    _fmemmove((char *)CONCAT22(0x1726,(char *)(uVar5 * 0x34 + 0x34)),
-              (char *)CONCAT22(0x1726,(char *)(uVar5 * 0x34)),(fromIndex - uVar5) * 0x34);
-    pvVar2 = memcpy((char *)CONCAT22(0x1726,(char *)(uVar5 * 0x34)),
+      iVar5 = iVar5 + -1;
+      if (iVar5 < 1) break;
+    } while (*(int *)(agntIndex * 0x34 + 2) < *(int *)(iVar5 * 0x34 + -0x32));
+    memcpy((char *)CONCAT22(unaff_SS,&agntSaved),(char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34))
+           ,0x34);
+    _fmemmove((char *)CONCAT22(0x1726,(char *)(iVar5 * 0x34 + 0x34)),
+              (char *)CONCAT22(0x1726,(char *)(iVar5 * 0x34)),(agntIndex - iVar5) * 0x34);
+    pvVar2 = memcpy((char *)CONCAT22(0x1726,(char *)(iVar5 * 0x34)),
                     (char *)CONCAT22(unaff_SS,&agntSaved),0x34);
     bVar3 = (byte)((uint)pvVar2 >> 8);
-    agnt_remapGridRefs(fromIndex,uVar5);
-    uVar5 = (uint)bVar3 << 8;
+    agnt_remapGridRefs(agntIndex,iVar5);
+    uVar1 = (uint)bVar3 << 8;
   }
-  return uVar5;
+  return uVar1;
 }
 
 
@@ -1162,11 +1123,11 @@ void __cdecl16far agnt_usesAgntCount6(entity_t *ptr,...)
 
 {
   uint16_t i;
-  int in_stack_00000004;
+  int in_stack_00000006;
   
   for (i = 0; (int)i < (int)(uint)AgntCount; i = i + 1) {
-    if (((entity_t *)*(int *)(i * 0x34 + 0x19) == ptr) &&
-       (*(int *)(i * 0x34 + 0x17) == in_stack_00000004)) {
+    if ((*(int *)(i * 0x34 + 0x19) == in_stack_00000006) &&
+       ((entity_t *)*(int *)(i * 0x34 + 0x17) == ptr)) {
       if (*(byte *)(i * 0x34 + 0x25) < 2) {
         *(undefined1 *)(i * 0x34 + 0x25) = 1;
       }
@@ -1187,36 +1148,36 @@ void __cdecl16far agnt_usesFmFreeAudio(void)
 {
   bool bVar1;
   undefined2 in_DX;
-  uint16_t unaff_BP;
-  int16_t in_stack_00000000;
+  int16_t unaff_BP;
+  far_t src;
+  far_t src_00;
   far_t handle;
   far_t handle_00;
   
   if (audioSaveCut1Ofs != (far_t *)0x0 || audioSaveCut1Seg != 0) {
-    handle.seg = unaff_BP;
-    handle.ofs = audioSaveCut1Seg;
-    ovr_stshFree(handle,audioSaveCut1Ofs);
-    unaff_BP = handle.seg;
+    handle.seg = audioSaveCut1Seg;
+    handle.ofs = (uint16_t)audioSaveCut1Ofs;
+    ovr_stshFree(handle);
   }
   if (audioSaveCut2Ofs != (far_t *)0x0 || audioSaveCut2Seg != 0) {
-    handle_00.seg = unaff_BP;
-    handle_00.ofs = audioSaveCut2Seg;
-    ovr_stshFree(handle_00,audioSaveCut2Ofs);
-    unaff_BP = handle_00.seg;
+    handle_00.seg = audioSaveCut2Seg;
+    handle_00.ofs = (uint16_t)audioSaveCut2Ofs;
+    ovr_stshFree(handle_00);
   }
   GGameState = 0x28;
   if (GameRunning == false) {
-    ovr_fmFreeAudio();
+    ovr_fmFreeAudio(1);
   }
   else {
-    ovr_fmFreeAudio();
+    ovr_fmFreeAudio(0);
   }
-  audioSaveCut1Ofs =
-       ovr_stshRleCut((far_t *)BlitRects[0].seg,far_from_u32((uint32_t)(0x7000c)),222,77,unaff_BP,in_stack_00000000,0);
+  src.seg = 0xc;
+  src.ofs = BlitRects[0].seg;
+  audioSaveCut1Ofs = ovr_stshRleCut((far_t *)0x0,src,7,222,77,unaff_BP);
+  src_00.seg = 0xc;
+  src_00.ofs = BlitRects[0].seg;
   audioSaveCut1Seg = in_DX;
-  audioSaveCut2Ofs =
-       ovr_stshRleCut((far_t *)BlitRects[0].seg,far_from_u32((uint32_t)(0x4e000c)),222,150,unaff_BP,in_stack_00000000,0
-                     );
+  audioSaveCut2Ofs = ovr_stshRleCut((far_t *)0x0,src_00,78,222,150,unaff_BP);
   GGameState = 0x29;
   audioSaveCut2Seg = in_DX;
   if (AgntFlag2 != false) {
@@ -1237,21 +1198,20 @@ void __cdecl16far agnt_usesFmFreeAudio(void)
 
 /* 3b1d:1ad8 */
 
-/* WARNING: Variable defined which should be unmapped: mouseRect */
 /* [R4] calls ovr_alignToSeg */
 
 void __cdecl16far agnt_usesAlignToSeg(void)
 
 {
+  bool bVar1;
+  uint16_t in_DX;
+  uint16_t unaff_SS;
   far_t dst;
   far_t ptr;
   far_t handle;
-  bool bVar1;
-  uint16_t in_DX;
-  brect_t *unaff_SS;
   brect_t mouseRect;
   
-  dst.seg = (uint16_t)unaff_SS;
+  dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&mouseRect;
   F_SCOPY(far_from_u32((uint32_t)(0x241007ec)),dst);
   constructionDirty = '\0';
@@ -1261,11 +1221,11 @@ void __cdecl16far agnt_usesAlignToSeg(void)
   }
   if (((AnimActive != '\0') && (GOngoingBattle == '\0')) &&
      (BattleDelay = BattleDelay + 1, 2 < BattleDelay)) {
-    tempScreenOfs = ovr_stshAlloc((ulong)(uint)mouseRect.x << 0x10,0xfa0f);
-    ptr.seg = mouseRect.x;
-    ptr.ofs = in_DX;
+    tempScreenOfs = ovr_stshAlloc(0xfa0f);
+    ptr.seg = in_DX;
+    ptr.ofs = (uint16_t)tempScreenOfs;
     tempScreenSeg = in_DX;
-    ovr_alignToSeg(ptr,tempScreenOfs);
+    ovr_alignToSeg(ptr);
     GSavedBlitSeg = in_DX;
     bVar1 = agnt_isAnimating();
     if (!bVar1) {
@@ -1274,12 +1234,12 @@ void __cdecl16far agnt_usesAlignToSeg(void)
     ovr_ovc49_drawAgents();
     BattleDelay = 0;
     agnt_blitCrossFrame();
-    ovr_miceBlitRect((brect_t *)CONCAT22(mouseRect.x,unaff_SS),&mouseRect);
-    ovr_blitRaw(7,0xde,0x96,GSavedBlitSeg,0xa000,mouseRect.x,0xc);
+    ovr_miceBlitRect(&mouseRect);
+    ovr_blitRaw(0xc,7,0xde,0x96,GSavedBlitSeg,0xa000);
     ovr_miceUpdate();
-    handle.seg = mouseRect.x;
-    handle.ofs = tempScreenSeg;
-    ovr_stshFree(handle,tempScreenOfs);
+    handle.seg = tempScreenSeg;
+    handle.ofs = (uint16_t)tempScreenOfs;
+    ovr_stshFree(handle);
     if (constructionDirty != '\0') {
       ovr_constr_usesBlitRect();
     }
@@ -1296,17 +1256,15 @@ void __cdecl16far agnt_usesAlignToSeg(void)
 byte __cdecl16far agnt_compute14(byte level,...)
 
 {
-  byte in_stack_00000004;
-  
-  if (8 < in_stack_00000004) {
-    if ((in_stack_00000004 < 9) || (0x10 < in_stack_00000004)) {
-      in_stack_00000004 = (char)((int)(in_stack_00000004 - 0x11) >> 2) + 0xd;
+  if (8 < level) {
+    if ((level < 9) || (0x10 < level)) {
+      level = (char)((int)(level - 0x11) >> 2) + 0xd;
     }
     else {
-      in_stack_00000004 = (char)((int)(in_stack_00000004 - 9) >> 1) + 9;
+      level = (char)((int)(level - 9) >> 1) + 9;
     }
   }
-  return in_stack_00000004;
+  return level;
 }
 
 
@@ -1321,13 +1279,12 @@ int __cdecl16far agnt_compute15(byte rank,uint8_t level)
   byte bVar1;
   int iVar2;
   byte bVar3;
-  byte unaff_BP;
   
   if (rank == 0) {
     iVar2 = 0;
   }
   else {
-    bVar1 = agnt_compute14(unaff_BP,(uint)level);
+    bVar1 = agnt_compute14(level);
     bVar3 = (byte)(bVar1 + 2 >> 8);
     if (bVar1 + 2 < (uint)rank) {
       iVar2 = (uint)bVar3 << 8;
@@ -1352,29 +1309,24 @@ uint __cdecl16far agnt_acquireTarget(agnt_t *agnt,char *agntIndex,...)
   uint in_AX;
   uint uVar2;
   int iVar3;
-  int iVar4;
-  int in_stack_00000004;
-  agnt_t *agnt_00;
+  uint16_t unk;
+  undefined2 in_stack_0000000a;
+  int iStack_4;
   
-  if ((*(uint *)(in_stack_00000004 + 0x2b) & 1) == 0) {
-    iVar4 = 0;
-    while( true ) {
-      if ((int)(uint)AgntCount <= iVar4) break;
-      if ((((*(char *)(iVar4 * 0x34 + 0x2f) != *(char *)(in_stack_00000004 + 0x2f)) &&
-           ((*(uint *)(iVar4 * 0x34 + 0x2b) & 0xae4) == 0)) &&
-          (*(char *)(iVar4 * 0x34 + 0x24) == '\0')) &&
-         (uVar1 = *(undefined4 *)(iVar4 * 0x34 + 0x1d),
+  if ((agnt->flags & 1) == 0) {
+    for (iStack_4 = 0; iStack_4 < (int)(uint)AgntCount; iStack_4 = iStack_4 + 1) {
+      if ((((*(uint8_t *)(iStack_4 * 0x34 + 0x2f) != agnt->faction) &&
+           ((*(uint *)(iStack_4 * 0x34 + 0x2b) & 0xae4) == 0)) &&
+          (*(char *)(iStack_4 * 0x34 + 0x24) == '\0')) &&
+         (uVar1 = *(undefined4 *)(iStack_4 * 0x34 + 0x1d),
          iVar3 = agnt_compute15(*(byte *)((int)uVar1 + 0x42),
-                                *(uint8_t *)((int)*(undefined4 *)(in_stack_00000004 + 0x17) + 0xf)),
-         (char)iVar3 != '\0')) {
-        *(uint *)(in_stack_00000004 + 0x2b) = *(uint *)(in_stack_00000004 + 0x2b) | 3;
-        *(char *)CONCAT22((char *)agntIndex,(*(uint16_t *)((uint8_t *)&(agnt) + 2))) = (char)iVar4 + '\x01';
-        agnt_00 = (agnt_t *)CONCAT22(iVar4,(agnt_t *)agnt);
-        iVar4 = ovr_audio_panFromX(agnt_00,in_stack_00000004);
-        ovr_play_sfxU(0,iVar4,(uint16_t)((ulong)agnt_00 >> 0x10),0x3b);
-        return CONCAT11((char)((uint)iVar4 >> 8),1);
+                                (((entity_t *)agnt->entity)->base).level), (char)iVar3 != '\0')) {
+        agnt->flags = agnt->flags | 3;
+        *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(agntIndex) + 2))) = (char)iStack_4 + '\x01';
+        unk = ovr_audio_panFromX(agnt,(char *)agntIndex);
+        ovr_play_sfxU(0x3b,0,unk);
+        return CONCAT11((char)(unk >> 8),1);
       }
-      iVar4 = iVar4 + 1;
     }
     uVar2 = 0;
   }
@@ -1394,16 +1346,15 @@ uint __cdecl16far agnt_acquireTarget(agnt_t *agnt,char *agntIndex,...)
 void __cdecl16far agnt_blitCrossFrame(void)
 
 {
-  uint16_t unaff_BP;
   far_t gfx;
   far_t dst;
   
   if (((CrossBlitFlag != '\0') && (CrossBlitCount != 0)) && (CrossBlitCount < 5)) {
-    dst.seg = unaff_BP;
-    dst.ofs = GSavedBlitSeg;
-    gfx.seg = CrossBlitX + CrossBlitY * 0x140;
-    gfx.ofs = *(uint16_t *)((uint)CrossBlitCount * 4 + -0x748d);
-    ovr_blitLoadRleGfx(gfx,dst,*(undefined2 *)((uint)CrossBlitCount * 4 + -0x748f));
+    dst.seg = GSavedBlitSeg;
+    dst.ofs = CrossBlitX + CrossBlitY * 0x140;
+    gfx.seg = *(uint16_t *)((uint)CrossBlitCount * 4 + -0x748d);
+    gfx.ofs = *(uint16_t *)((uint)CrossBlitCount * 4 + -0x748f);
+    ovr_blitLoadRleGfx(gfx,dst);
     CrossBlitCount = CrossBlitCount + 1;
     if (4 < CrossBlitCount) {
       CrossBlitCount = 0;
@@ -1424,19 +1375,16 @@ undefined1 __cdecl16far agnt_compute16(agnt_t *a,agnt_t *b)
   agntG_t *paVar1;
   undefined1 uVar2;
   byte bVar3;
-  agnt_t *paVar4;
-  undefined2 uVar5;
-  undefined4 in_stack_0000fffa;
+  undefined2 uVar4;
   
-  paVar4 = (agnt_t *)((ulong)a >> 0x10);
+  uVar4 = (undefined2)((ulong)a >> 0x10);
   paVar1 = ((agnt_t *)a)->gdata;
   if ((((agntG_t *)paVar1)->flags & 2) == 0) {
     uVar2 = 1;
   }
   else {
-    bVar3 = agnt_compute9((agnt_t *)CONCAT22((int)((ulong)in_stack_0000fffa >> 0x10),paVar4),
-                          (agnt_t *)a);
-    uVar5 = (undefined2)((ulong)b >> 0x10);
+    bVar3 = agnt_compute9((agnt_t *)a,uVar4);
+    uVar4 = (undefined2)((ulong)b >> 0x10);
     paVar1 = ((agnt_t *)b)->gdata;
     if (((((agntG_t *)paVar1)->flags3 & 0x40) == 0) || ('\x01' < (char)bVar3)) {
       paVar1 = ((agnt_t *)b)->gdata;

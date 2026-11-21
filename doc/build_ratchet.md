@@ -198,3 +198,53 @@ the decompiler resolved the rest as an `in_stack_` array and dropped the nested
 call's arguments.  Widening `br` to a far pointer was tried and does not help (it
 is used as the *segment* half there); it was reverted.  Recovering the missing
 parameters is per-function step-3 work, not a sweep.
+
+### Fourth pass: parameter slot off-by-two, and O08 recovered
+
+**A bug in my own tooling.** `SetProtoSeq` and `FixFarParamOffsets` treated the
+BP-relative offset as a Ghidra stack address.  The mapping is
+
+```
+Stack[n] = BP + n + 2      so a far function's first parameter is Stack[4] (BP+6)
+```
+
+Both scripts started at 6, so every prototype they rebuilt sat **two bytes too
+high**.  `blitRaw` is the witness: it was `x1 @ Stack[0x6]` while its body reads
+`[BP+6]`.  Both scripts now start at `4` (far) / `2` (near), the 308 + 28 + 1
+restored prototypes were re-applied, and `FixFarParamOffsets` re-widened 30 of them.
+
+`fmVsprintf` now sits at `Stack[0x4]` / `Stack[0x8]`, matching its
+`PUSH [BP+6]` / `PUSH [BP+8]` far pair.  `blitRaw` starts at `Stack[0x4]`.
+
+**`miceBlitRect` recovered as the first step-3 function.**  Its body reads exactly
+two words from `BP+6` and `BP+8`, and Ghidra paired them as
+`CONCAT22((brect_t *)br, in_stack_00000004)` - the two halves of **one far
+pointer** whose offset half was unclaimed.  Placing `brect_t *32 br` at
+`Stack[0x4]` (instead of `Stack[0x6]`) removes `in_stack_00000004` entirely and
+frees the nested call's arguments:
+
+```c
+/* before */  miceSaveArea();
+              if ((*(int *)CONCAT22((brect_t *)br,in_stack_00000004) <= ...
+
+/* after  */  miceSaveArea(dst_x,dst_y,br,in_stack_00000006);
+              miceBlitAtSeg(br->seg,src,dst_x,dst_y);
+```
+
+```
+$ python scripts/build_standalone.py --only o08
+compiled 1/1 modules
+```
+
+Ratchet after this pass:
+
+```
+modules compiled clean : 15 / 57   (was 10)
+total errors           : 617
+clean: main mouse o05 o07 o08 o10 o24 o25 o29 o31 o36 o39 o50 ovrstub video
+```
+
+`O07`, `O10`, `O24`, `O25` and `O08` all turned green in this pass; the
+`Too few parameters` class (91 before) no longer appears in the top eight.  A
+residual `in_stack_00000006` remains in `miceBlitRect`, i.e. one more word
+parameter at `BP+0xa` still to be recovered.

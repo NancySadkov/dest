@@ -12,18 +12,15 @@
 void __cdecl16far stExit(int n,...)
 
 {
-  int iVar1;
-  undefined2 unaff_SI;
-  int in_stack_00000004;
+  uint8_t unaff_SI;
   
-  iVar1 = in_stack_00000004;
-  if ((in_stack_00000004 != 0) && (in_stack_00000004 < 0x80)) {
+  if ((n != 0) && (n < 0x80)) {
     printf("\n\rError %d\n");
     ovr_biosReadKey();
   }
-  ovr_biosVideoCall();
-  if (iVar1 < 0x80) {
-    if (iVar1 != 0) {
+  ovr_biosVideoCall(0x3,unaff_SI);
+  if (n < 0x80) {
+    if (n != 0) {
       printf("Error %d %d.  (Give Cathryn BOTH numbers.)\n");
     }
   }
@@ -43,12 +40,12 @@ void __cdecl16far stExit(int n,...)
     audio_done(DIGHandle.seg);
   }
   if (-1 < StshStrongDatHnd) {
-    ovr_stshClose();
+    ovr_stshClose(StshStrongDatHnd);
   }
   xmsFree();
   emsFree();
-  ovr_chpath((char *)CONCAT22(unaff_SI,(char *)"puppetmaker" + 3),0x8c28);
-  if (iVar1 != 0) {
+  ovr_chpath((char *)GOriginalDir,0x2410);
+  if (n != 0) {
                     /* WARNING: Subroutine does not return */
     exit(0x80);
   }

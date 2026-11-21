@@ -16,87 +16,125 @@ void __cdecl16far audio_usesLDIV_at_(void)
 
 {
   bool bVar1;
-  uint uVar2;
-  ulong *puVar3;
+  uint8_t uVar2;
+  uint uVar3;
   uint16_t uVar4;
+  ulong *puVar5;
   int in_DX;
-  long lVar5;
+  long lVar6;
+  undefined2 uVar7;
+  undefined2 uVar8;
+  undefined1 in_stack_0000fffc;
   
   if (GameRunning) {
-    uVar2 = audio_isPlaying();
-    if ((uVar2 & 0xff) == 0) {
+    uVar3 = audio_isPlaying();
+    if ((uVar3 & 0xff) == 0) {
       GameRunning = false;
-      play_sfx();
+      play_sfx(46,0);
       GameRunning = true;
     }
   }
   else {
-    if (((MusRunning != '\0') && (CurMusicType != -1)) &&
-       (uVar2 = audio_isPlaying(), (uVar2 & 0xff) == 0)) {
-      play_sfx();
+    if (((MusRunning != '\0') && (CurMusicType != 0xff)) &&
+       (uVar3 = audio_isPlaying(), (uVar3 & 0xff) == 0)) {
+      play_sfx((uint)CurMusicType,0);
     }
     if (((SfxRunning != '\0') && (CurSfxType3 != 0xff)) && (bVar1 = ovr_digSoundPlaying(), !bVar1))
     {
+      uVar7 = 0;
       if (CurSfxType3 == 0x80) {
-        ovr_randBelow();
+        uVar4 = ovr_randBelow(3);
+        uVar2 = (char)uVar4 + 0x80;
+        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x83) {
-        ovr_randBelow();
+        uVar4 = ovr_randBelow(3);
+        uVar2 = (char)uVar4 + 0x83;
+        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x76) {
-        puVar3 = ovr_attact_usesBDADailyTimeCounter();
-        if ((in_DX == 0) && (puVar3 < SfxDeadline)) {
+        puVar5 = ovr_attact_usesBDADailyTimeCounter
+                           (sfxTickLo,CONCAT13(0x76,CONCAT12(in_stack_0000fffc,sfxTickHi)));
+        if ((in_DX == 0) && (puVar5 < SfxDeadline)) {
           return;
         }
-        ovr_randBelow();
-        lVar5 = 0x8000;
-        uVar2 = rand();
-        lVar5 = LDIV_at_(CONCAT22(((int)uVar2 >> 0xf) << 1 | (uint)((int)uVar2 < 0),uVar2 << 1),
-                         lVar5);
-        if ((int)lVar5 == 0) {
+        uVar4 = ovr_randBelow(4);
+        uVar2 = (char)uVar4 + 0x76;
+        uVar8 = 0;
+        uVar7 = 0x8000;
+        uVar3 = rand();
+        lVar6 = LDIV_at_(CONCAT22(((int)uVar3 >> 0xf) << 1 | (uint)((int)uVar3 < 0),uVar3 << 1),
+                         CONCAT22(uVar8,uVar7));
+        if ((int)lVar6 == 0) {
           SfxDeadline = (uint16_t)(0x0);
         }
         else {
-          uVar4 = ovr_randBelow();
+          uVar4 = ovr_randBelow(0x48);
           SfxDeadline = (uint16_t)(((uVar4 & 0xff) + 0x80));
         }
-        sfxTickHi = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-        sfxTickLo = *(undefined2 *)BDA_DailyTimeCounter;
+        uVar7 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+        sfxTickLo = *(ulong **)BDA_DailyTimeCounter;
+        sfxTickHi = uVar7;
       }
       else if (CurSfxType3 == 0x70) {
-        ovr_randBelow();
+        uVar4 = ovr_randBelow(3);
+        uVar2 = (char)uVar4 + 0x70;
+        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x86) {
-        ovr_randBelow();
+        uVar4 = ovr_randBelow(3);
+        uVar2 = (char)uVar4 + 0x86;
+        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x7a) {
-        ovr_randBelow();
+        uVar4 = ovr_randBelow(3);
+        uVar2 = (char)uVar4 + 0x7a;
+        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x7d) {
-        ovr_randBelow();
+        uVar4 = ovr_randBelow(3);
+        uVar2 = (char)uVar4 + 0x7d;
+        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x6a) {
-        ovr_randBelow();
+        uVar4 = ovr_randBelow(3);
+        uVar2 = (char)uVar4 + 0x6a;
+        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x64) {
-        ovr_randBelow();
+        uVar4 = ovr_randBelow(3);
+        uVar2 = (char)uVar4 + 0x64;
+        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x67) {
-        ovr_randBelow();
+        uVar4 = ovr_randBelow(3);
+        uVar2 = (char)uVar4 + 0x67;
+        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x5e) {
-        ovr_randBelow();
+        uVar4 = ovr_randBelow(3);
+        uVar2 = (char)uVar4 + 0x5e;
+        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x61) {
-        ovr_randBelow();
+        uVar4 = ovr_randBelow(6);
+        uVar2 = (char)uVar4 + 0x5e;
+        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x73) {
-        ovr_randBelow();
+        uVar4 = ovr_randBelow(6);
+        uVar2 = (char)uVar4 + 0x73;
+        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
-      else if (CurSfxType3 == 0x6f) {
-        ovr_randBelow();
+      else {
+        uVar2 = CurSfxType3;
+        if (CurSfxType3 == 0x6f) {
+          uVar4 = ovr_randBelow(3);
+          uVar2 = (char)uVar4 + 0x6d;
+          uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+        }
       }
-      play_sfx();
+      play_sfx(CONCAT11((char)((uint)uVar7 >> 8),uVar2),4);
     }
   }
   return;
@@ -106,64 +144,49 @@ void __cdecl16far audio_usesLDIV_at_(void)
 
 /* 3a5b:026f */
 
-/* WARNING: Variable defined which should be unmapped: result */
 /* Frees audio buffers, when we are out of space.
    Returns true on success. */
 
 bool __cdecl16far fmFreeAudio(uint16_t force,...)
 
 {
-  uint3 uVar1;
-  ulong uVar2;
-  bool bVar3;
-  uint uVar4;
-  char in_stack_00000004;
-  uint16_t uStack_6;
-  uint uStack_4;
+  bool bVar1;
+  uint uVar2;
+  far_t handle;
+  far_t handle_00;
   uint8_t result;
   
-  uVar1 = uStack_6;
-  uStack_6 = far_from_u32((uint32_t)(ulong))uStack_6;
-  if ((SfxRunning != '\0') && (DIGHandle.ofs != 0 || DIGHandle.seg != 0)) {
-    if (in_stack_00000004 == '\0') {
-      uStack_4 = (uint)(byte)(uVar1 >> 0x10);
-      uStack_6 = far_from_u32((uint32_t)(CONCAT22(uStack_4,0x3a5b)));
-      bVar3 = ovr_digSoundPlaying();
-      if (bVar3) goto L_fmFreeAudio_02D1;
+  result = 0x0;
+  if ((((SfxRunning != '\0') && (DIGHandle.ofs != 0 || DIGHandle.seg != 0)) &&
+      (((char)force != '\0' || (bVar1 = ovr_digSoundPlaying(), !bVar1)))) && (DIG_2410_07a8 == '\0')
+     ) {
+    bVar1 = ovr_digSoundPlaying();
+    if (bVar1) {
+      ovr_digStopCurrentSound();
     }
-    if (DIG_2410_07a8 == '\0') {
-      bVar3 = ovr_digSoundPlaying();
-      if (bVar3) {
-        ovr_digStopCurrentSound();
-      }
-      uStack_6 = DIGHandle.seg;
-      ovr_stshFree(uStack_6,DIGHandle.ofs);
-      DIGHandle.seg = 0;
-      DIGHandle.ofs = 0;
-      uStack_6 = far_from_u32((uint32_t)(CONCAT13(1,uStack_6)));
-    }
+    handle.seg = DIGHandle.seg;
+    handle.ofs = DIGHandle.ofs;
+    ovr_stshFree(handle);
+    DIGHandle.seg = 0;
+    DIGHandle.ofs = 0;
+    result = 0x1;
   }
-L_fmFreeAudio_02D1:
-  uVar2 = (ulong)uStack_6;
   if (((MusRunning != '\0') && (MUSHandle.ofs != 0 || MUSHandle.seg != 0)) &&
-     (uVar4 = (uint)MUS_2410_07a9, uVar4 == 0)) {
-    if (in_stack_00000004 == '\0') {
-      uStack_6 = far_from_u32((uint32_t)((ulong)uStack_6 & 0xffff0000));
-      ovr_midGetSequenceStatus();
-      if (uVar4 == 1) goto end;
+     (uVar2 = (uint)MUS_2410_07a9, uVar2 == 0)) {
+    if (((char)force == '\0') && (ovr_midGetSequenceStatus(), uVar2 == 1)) {
+      return (bool)result;
     }
-    uStack_4 = SUB42(uVar2,2);
     ovr_midGetSequenceStatus();
-    if (uVar4 == 1) {
+    if (uVar2 == 1) {
       ovr_midMidiStop();
     }
-    uStack_6 = MUSHandle.seg;
-    ovr_stshFree(uStack_6,MUSHandle.ofs);
+    handle_00.seg = MUSHandle.seg;
+    handle_00.ofs = MUSHandle.ofs;
+    ovr_stshFree(handle_00);
     MUSHandle.seg = 0;
     MUSHandle.ofs = 0;
-    uStack_6 = far_from_u32((uint32_t)(0x1000000));
+    result = 0x1;
   }
-end:
   return (bool)result;
 }
 
@@ -174,10 +197,8 @@ end:
 void __cdecl16far stop_audio(void)
 
 {
-  uint16_t unaff_BP;
-  
   if (!GameRunning) {
-    fmFreeAudio(unaff_BP,1);
+    fmFreeAudio(1);
     CurSfxType3 = 0xff;
   }
   return;
@@ -237,87 +258,74 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
   uint8_t *puVar2;
   uint16_t uVar3;
   uint16_t uVar4;
-  uint unaff_DI;
-  byte in_stack_00000004;
-  ulong uVar5;
-  undefined2 uVar6;
+  far_t entry;
   uint uStack_a;
   
-  uVar5 = (ulong)unaff_DI << 0x10;
-  if ((!GameRunning) && (in_stack_00000004 != 0xff)) {
-    if ((0x89 < in_stack_00000004) ||
-       (*(int *)((uint)in_stack_00000004 * 4) == 0 && ((int *)((uint)in_stack_00000004 * 4))[1] == 0
-       )) {
+  if ((!GameRunning) && (fid != 0xff)) {
+    if ((0x89 < fid) || (*(int *)((uint)fid * 4) == 0 && ((int *)((uint)fid * 4))[1] == 0)) {
                     /* WARNING: Subroutine does not return */
-      ovr_stExit();
+      ovr_stExit(0x22);
     }
-    if (*(int *)((uint)in_stack_00000004 * 2 + 0x114) == 0) {
-      audio_textMidiError(in_stack_00000004,fid);
+    if (*(int *)((uint)fid * 2 + 0x114) == 0) {
+      audio_textMidiError(fid,type);
     }
-    else if ((AudioAssetsReady1 != '\0') && (SfxRunning != '\0')) {
-      if ((CurrentlyPlayingSfx != in_stack_00000004) && (fid == 1)) {
-        uVar5 = CONCAT22(unaff_DI,0x3a5b);
+    else if ((((AudioAssetsReady1 != '\0') && (SfxRunning != '\0')) &&
+             ((CurrentlyPlayingSfx == fid ||
+              ((type != 1 || (bVar1 = ovr_digSoundPlaying(), !bVar1)))))) &&
+            (((CFG_Sfx != '1' && ((CFG_Sfx != '4' && (CFG_Sfx != '9')))) ||
+             ((type != 3 && (type != 4)))))) {
+      do {
+        if (type != 2) break;
         bVar1 = ovr_digSoundPlaying();
-        if (bVar1) {
-          return;
-        }
+      } while (bVar1);
+      bVar1 = ovr_digSoundPlaying();
+      if (bVar1) {
+        ovr_digStopCurrentSound();
       }
-      if ((((CFG_Sfx != '1') && (CFG_Sfx != '4')) && (CFG_Sfx != '9')) ||
-         ((fid != 3 && (fid != 4)))) {
-        do {
-          uVar6 = (undefined2)(uVar5 >> 0x10);
-          if (fid != 2) break;
-          uVar5 = uVar5 & 0xffff0000;
-          bVar1 = ovr_digSoundPlaying();
-          uVar6 = (undefined2)(uVar5 >> 0x10);
-        } while (bVar1);
-        bVar1 = ovr_digSoundPlaying();
-        if (bVar1) {
-          ovr_digStopCurrentSound();
-        }
-        DIG_2410_07a8 = 1;
-        audioBusy = 1;
-        if (DIGHandle.ofs != 0 || DIGHandle.seg != 0) {
-          ovr_stshFree();
-        }
-        DIGHandle.ofs = 0;
-        DIGHandle.seg = 0;
-        uVar3 = 0x1703;
-        DIGHandle.ofs = (uint16_t)ovr_stash_loadFromStrongDat();
-        DIGHandle.seg = uVar3;
-        audioBusy = 0;
-        if ((undefined1 *)DIGHandle.ofs != (undefined1 *)0x0 || uVar3 != 0) {
-          if (((CFG_Sfx == '1') || (CFG_Sfx == '4')) || (CFG_Sfx == '9')) {
-            uStack_a = *(uint *)(DIGHandle.ofs + 5);
-            if (30000 < uStack_a) {
-              uStack_a = 30000;
-            }
+      DIG_2410_07a8 = 1;
+      audioBusy = 1;
+      if (DIGHandle.ofs != 0 || DIGHandle.seg != 0) {
+        ovr_stshFree(DIGHandle);
+      }
+      DIGHandle.ofs = 0;
+      DIGHandle.seg = 0;
+      uVar3 = 0x1703;
+      entry.seg = ((uint16_t *)((uint)fid * 4))[1];
+      entry.ofs = *(uint16_t *)((uint)fid * 4);
+      DIGHandle.ofs = (uint16_t)ovr_stash_loadFromStrongDat(entry);
+      DIGHandle.seg = uVar3;
+      audioBusy = 0;
+      if ((undefined1 *)DIGHandle.ofs != (undefined1 *)0x0 || uVar3 != 0) {
+        if (((CFG_Sfx == '1') || (CFG_Sfx == '4')) || (CFG_Sfx == '9')) {
+          uStack_a = *(uint *)(DIGHandle.ofs + 5);
+          if (30000 < uStack_a) {
+            uStack_a = 30000;
           }
-          else {
-            uStack_a = *(uint *)(DIGHandle.ofs + 5);
-          }
-          uVar4 = uStack_a + 0xd;
-          puVar2 = ovr_stshRealloc(CONCAT22(uVar4,uVar3),
-                                   CONCAT22(uVar6,(uint)(0xfff1 < uStack_a) -
-                                                  (uint)(uStack_a == 0xfff2)),DIGHandle.ofs);
-          DIGHandle.seg = uVar4;
-          DIGHandle.ofs = (uint16_t)puVar2;
-          DIG_2410_07a8 = 0;
-          *(uint16_t *)(puVar2 + 3) = uVar4;
-          *(uint8_t **)(puVar2 + 1) = puVar2 + 0xd;
-          uVar4 = DIGHandle.seg;
-          uVar3 = DIGHandle.ofs;
-          *(undefined2 *)(uVar3 + 9) = (char *)"puppetmaker" + 3;
-          *(undefined2 *)(uVar3 + 7) = 0x8f92;
-          *(uint *)(DIGHandle.ofs + 5) = uStack_a;
-          ovr_digPreformatSound();
-          ovr_digPlayPreformatedSound();
-          ovr_digSetSterioPanning();
-          if (fid == 3) {
-            CurSfxType3 = in_stack_00000004;
-          }
-          CurrentlyPlayingSfx = in_stack_00000004;
         }
+        else {
+          uStack_a = *(uint *)(DIGHandle.ofs + 5);
+        }
+        uVar4 = uStack_a + 0xd;
+        puVar2 = ovr_stshRealloc((uint32_t)CONCAT22(uVar3,DIGHandle.ofs),
+                                 CONCAT22((uint)(0xfff1 < uStack_a) - (uint)(uStack_a == 0xfff2),
+                                          uVar4));
+        DIGHandle.seg = uVar4;
+        DIGHandle.ofs = (uint16_t)puVar2;
+        DIG_2410_07a8 = 0;
+        *(uint16_t *)(puVar2 + 3) = uVar4;
+        *(uint8_t **)(puVar2 + 1) = puVar2 + 0xd;
+        uVar4 = DIGHandle.seg;
+        uVar3 = DIGHandle.ofs;
+        *(undefined2 *)(uVar3 + 9) = (char *)"puppetmaker" + 3;
+        *(undefined2 *)(uVar3 + 7) = 0x8f92;
+        *(uint *)(DIGHandle.ofs + 5) = uStack_a;
+        ovr_digPreformatSound();
+        ovr_digPlayPreformatedSound();
+        ovr_digSetSterioPanning();
+        if (type == 3) {
+          CurSfxType3 = fid;
+        }
+        CurrentlyPlayingSfx = fid;
       }
     }
   }
@@ -331,11 +339,7 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
 void __cdecl16far play_sfx(int16_t track,int16_t type,...)
 
 {
-  undefined2 in_AX;
-  uint16_t unaff_BP;
-  undefined1 in_stack_00000004;
-  
-  play_sfxU((byte)track,0x40,unaff_BP,CONCAT11((char)((uint)in_AX >> 8),in_stack_00000004));
+  play_sfxU((byte)track,type,0x40);
   return;
 }
 
@@ -348,13 +352,11 @@ void __cdecl16far play_sfx(int16_t track,int16_t type,...)
 void __cdecl16far audio_textMidiError(byte track,int status)
 
 {
-  far_t handle;
-  far_t entry;
   char cVar1;
   uint uVar2;
   uint16_t uVar3;
-  uint16_t unaff_SI;
   bool bVar4;
+  far_t entry;
   
   if (((MusRunning != '\0') && (AudioAssetsReady2 != '\0')) &&
      ((uVar2 = (uint)CurrentTrack, CurrentTrack == track ||
@@ -369,16 +371,14 @@ void __cdecl16far audio_textMidiError(byte track,int status)
     audioBusy = 1;
     MUS_2410_07a9 = 1;
     if (MUSHandle.ofs != 0 || MUSHandle.seg != 0) {
-      handle.seg = unaff_SI;
-      handle.ofs = MUSHandle.seg;
-      ovr_stshFree(handle,MUSHandle.ofs);
+      ovr_stshFree(MUSHandle);
     }
     MUSHandle.ofs = 0;
     MUSHandle.seg = 0;
     uVar3 = 0x1703;
-    entry.seg = unaff_SI;
-    entry.ofs = ((undefined2 *)((uint)track * 4))[1];
-    MUSHandle.ofs = (uint16_t)ovr_stash_loadFromStrongDat(entry,*(undefined2 *)((uint)track * 4));
+    entry.seg = ((uint16_t *)((uint)track * 4))[1];
+    entry.ofs = *(uint16_t *)((uint)track * 4);
+    MUSHandle.ofs = (uint16_t)ovr_stash_loadFromStrongDat(entry);
     MUSHandle.seg = uVar3;
     audioBusy = 0;
     if ((undefined1 *)MUSHandle.ofs != (undefined1 *)0x0 || uVar3 != 0) {
@@ -390,7 +390,7 @@ void __cdecl16far audio_textMidiError(byte track,int status)
       }
       else {
         ovr_midSetRelativeValue();
-        ovr_midPlaySequence(unaff_SI,0);
+        ovr_midPlaySequence(0);
       }
       CurrentTrack = track;
     }
@@ -407,16 +407,20 @@ void __cdecl16far audio_textMidiError(byte track,int status)
 uint16_t __cdecl16far audio_usesAlignToSeg(uint8_t *ofs,uint16_t seg,int size)
 
 {
+  far_t ptr;
   uint16_t uVar1;
   char *in_stack_00000004;
   
   if (((uint)in_stack_00000004 & 0xf) == 0) {
-    uVar1 = ovr_alignToSeg();
+    ptr.seg = (uint16_t)(uint8_t *)ofs;
+    ptr.ofs = (uint16_t)in_stack_00000004;
+    uVar1 = ovr_alignToSeg(ptr);
   }
   else {
     _fmemmove((char *)((ulong)CONCAT22((uint8_t *)ofs + 1,in_stack_00000004) & 0xfffffff0),
               (char *)CONCAT22((uint8_t *)ofs,in_stack_00000004),(*(uint16_t *)((uint8_t *)&(ofs) + 2)) - 0xf);
-    uVar1 = ovr_alignToSeg();
+    uVar1 = ovr_alignToSeg(far_from_u32((uint32_t)((ulong)CONCAT22((uint8_t *)ofs + 1,in_stack_00000004) &
+                                  0xfffffff0)));
   }
   return uVar1;
 }
@@ -455,6 +459,7 @@ void __cdecl16far audio_parseHexDigit(char *driverData,char ch)
 void __cdecl16far sfxInit(void)
 
 {
+  far_t handle;
   bool bVar1;
   undefined1 extraout_AH;
   uint8_t *in_DX;
@@ -479,7 +484,10 @@ void __cdecl16far sfxInit(void)
     }
     if (((undefined2 *)&ibmsndComOfs)[unaff_SI * 2] != 0 ||
         ((undefined2 *)&ibmsndComSeg)[unaff_SI * 2] != 0) {
-      SfxGfxOfs = ovr_stshLoadGfx();
+      (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)((undefined2 *)&ibmsndComSeg)[unaff_SI * 2];
+      handle.ofs = ((undefined2 *)&ibmsndComOfs)[unaff_SI * 2];
+      (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)((undefined2 *)&ibmsndComSeg)[unaff_SI * 2] >> 8);
+      SfxGfxOfs = ovr_stshLoadGfx(handle);
       uVar3 = (undefined2)
               ((ulong)*(undefined4 *)((undefined2 *)&ibmsndComOfs + unaff_SI * 2) >> 0x10);
       iVar2 = (int)*(undefined4 *)((undefined2 *)&ibmsndComOfs + unaff_SI * 2);
@@ -490,13 +498,14 @@ void __cdecl16far sfxInit(void)
                       ,size);
       DIGHandle.seg = (uint16_t)in_DX;
       audio_parseHexDigit((char *)CONCAT22(in_DX,DIGHandle.ofs),CFG_Irq);
-      ovr_ovc20_compute1();
+      ovr_ovc20_compute1((char *)((undefined2 *)&ibmsndComOfs)[unaff_SI * 2],
+                         (char)((undefined2 *)&ibmsndComSeg)[unaff_SI * 2]);
       bVar1 = audio_init(DIGHandle.seg);
       if (CONCAT11(extraout_AH,bVar1) == 0) {
         DIGHandle.seg = 0;
         DIGHandle.ofs = 0;
                     /* WARNING: Subroutine does not return */
-        ovr_stExit();
+        ovr_stExit(0x81);
       }
       SfxRunning = 1;
     }
@@ -513,6 +522,8 @@ void __cdecl16far sfxInit(void)
 void __cdecl16far musInit(void)
 
 {
+  far_t handle;
+  far_t handle_00;
   bool bVar1;
   undefined1 extraout_AH;
   undefined1 extraout_AH_00;
@@ -535,16 +546,17 @@ void __cdecl16far musInit(void)
     }
     if (((undefined2 *)&musDriver0Ofs)[unaff_SI * 2] != 0 ||
         ((undefined2 *)&musDriver0Seg)[unaff_SI * 2] != 0) {
-      MidGfxOfs = ovr_stshLoadGfx();
-      uVar3 = (undefined2)((ulong)_cmidpakComOfs >> 0x10);
+      MidGfxOfs = ovr_stshLoadGfx(_cmidpakComOfs);
       MidGfxSeg = in_DX;
       MIDHandle.ofs =
            audio_usesAlignToSeg
-                     ((uint8_t *)CONCAT22(*(undefined2 *)((int)_cmidpakComOfs + 5),in_DX),
-                      *(uint16_t *)((int)_cmidpakComOfs + 7),size);
+                     ((uint8_t *)CONCAT22(*(undefined2 *)((char *)cmidpakComOfs + 5),in_DX),
+                      *(uint16_t *)((char *)cmidpakComOfs + 7),size);
       MIDHandle.seg = (uint16_t)in_DX;
-      ovr_ovc20_compute1();
-      MusGfxOfs = ovr_stshLoadGfx();
+      ovr_ovc20_compute1(cmidpakComOfs,_cmidpakComSeg);
+      handle.seg = ((undefined2 *)&musDriver0Seg)[unaff_SI * 2];
+      handle.ofs = ((undefined2 *)&musDriver0Ofs)[unaff_SI * 2];
+      MusGfxOfs = ovr_stshLoadGfx(handle);
       uVar3 = (undefined2)
               ((ulong)*(undefined4 *)((undefined2 *)&musDriver0Ofs + unaff_SI * 2) >> 0x10);
       iVar2 = (int)*(undefined4 *)((undefined2 *)&musDriver0Ofs + unaff_SI * 2);
@@ -553,16 +565,19 @@ void __cdecl16far musInit(void)
                             ((uint8_t *)CONCAT22(*(undefined2 *)(iVar2 + 5),in_DX),
                              *(uint16_t *)(iVar2 + 7),size);
       MusHandleSeg = in_DX;
-      ovr_ovc20_compute1();
-      MusDrvOfs = ovr_stshLoadGfx();
+      ovr_ovc20_compute1((char *)((undefined2 *)&musDriver0Ofs)[unaff_SI * 2],
+                         ((undefined2 *)&musDriver0Seg)[unaff_SI * 2]);
+      handle_00.seg = midpakAd.seg;
+      handle_00.ofs = midpakAd.ofs;
+      MusDrvOfs = ovr_stshLoadGfx(handle_00);
       MusDrvSeg = in_DX;
-      ovr_ovc20_compute1();
+      ovr_ovc20_compute1((char *)midpakAd.ofs,midpakAd.seg);
       bVar1 = audio_init(MIDHandle.seg);
       if (CONCAT11(extraout_AH_00,bVar1) == 0) {
         MIDHandle.seg = 0;
         MIDHandle.ofs = 0;
                     /* WARNING: Subroutine does not return */
-        ovr_stExit();
+        ovr_stExit(0x82);
       }
       ovr_midLoadDriver();
       MusRunning = 1;
@@ -585,10 +600,9 @@ int __cdecl16far audio_panFromX(agnt_t *agnt,...)
 
 {
   uint uVar1;
-  int *in_stack_00000004;
+  undefined2 in_stack_00000006;
   
-  uVar1 = (uint)(((long)*(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004) * 0x7f & 0xffffU) / 0xd2)
-  ;
+  uVar1 = (uint)(((long)(int)agnt->x * 0x7f & 0xffffU) / 0xd2);
   if (0x7f < uVar1) {
     uVar1 = 0x7f;
   }

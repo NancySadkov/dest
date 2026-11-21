@@ -112,7 +112,7 @@ crtl	1000:1838	malloc	10	ok	crtl.c	undefined2 __cdecl16far malloc(uint param_1);
 crtl	1000:1842	farmalloc	125	ok	crtl.c	far_t * __cdecl16far farmalloc(far_t *__return_storage_ptr__,uint32_t nbytes);
 crtl	1000:18bf	malloc_ExpandBlock	124	ok	crtl.c	far_t __cdecl16near malloc_ExpandBlock(void);
 crtl	1000:193b	malloc_ShrinkBlock	100	ok	crtl.c	undefined4 __cdecl16near malloc_ShrinkBlock(void);
-crtl	1000:199f	_realloc	7	ok	crtl.c	far_t * __cdecl16far _realloc(undefined2 param_1,uint16_t param_2,uint param_3);
+crtl	1000:199f	_realloc	7	ok	crtl.c	far_t * __cdecl16far _realloc(undefined2 param_1,uint16_t param_2,far_t *param_3);
 crtl	1000:19a6	farrealloc	122	ok	crtl.c	uint8_t __cdecl16far farrealloc(long oldblock,long nbytes);
 crtl	1000:1a20	_brk_normalize	118	ok	crtl.c	undefined2 _brk_normalize(uint16_t brkOfs,uint16_t brkSeg);
 crtl	1000:1a96	__brk	63	ok	crtl.c	undefined2 __cdecl16near __brk(uint16_t brkOfs,uint16_t brkSeg);
@@ -238,7 +238,7 @@ ovl	1403:11a6	__EXTCOPY	173	ok	ovl.c	int __cdecl16near __EXTCOPY(void);
 ovl	1403:1253	OvrExtEmsSwapStub	1	ok	ovl.c	void __cdecl16near OvrExtEmsSwapStub(void);
 ovl	1403:1254	OvrEmsExitStub	1	ok	ovl.c	void __cdecl16far OvrEmsExitStub(void);
 ovc01_driver	2d63:0000	mkp	22	ok	ovc01_driver.c	uint32_t * __cdecl16far mkp(uint32_t *__return_storage_ptr__,uint16_t ofs,uint16_t seg,...);
-ovc01_driver	2d63:0016	biosVideoCall	26	ok	ovc01_driver.c	uint16_t __cdecl16far biosVideoCall(int operation,uint8_t argument,...);
+ovc01_driver	2d63:0016	biosVideoCall	26	ok	ovc01_driver.c	uint16_t __cdecl16far biosVideoCall(uint8_t operation,uint8_t argument,...);
 ovc01_driver	2d63:0030	biosReadKey	9	ok	ovc01_driver.c	uint16_t __cdecl16far biosReadKey(void);
 ovc01_driver	2d63:0039	biosKeyAvail	17	ok	ovc01_driver.c	uint16_t __cdecl16far biosKeyAvail(void);
 ovc01_driver	2d63:004a	miceButtonsStates	19	ok	ovc01_driver.c	uint16_t __cdecl16far miceButtonsStates(void);
@@ -251,8 +251,8 @@ ovc01_driver	2d63:014b	driver_compute2	47	ok	ovc01_driver.c	char __cdecl16far dr
 ovc01_driver	2d63:017a	miceDisableHandler	22	ok	ovc01_driver.c	void __cdecl16far miceDisableHandler(void);
 ovc01_driver	2d63:0190	miceButton0PressStates	23	ok	ovc01_driver.c	uint16_t __cdecl16far miceButton0PressStates(void);
 ovc01_driver	2d63:01a7	miceSetPosition	24	ok	ovc01_driver.c	void __cdecl16far miceSetPosition(uint16_t col,uint16_t row,...);
-ovc01_driver	2d63:01bf	vgaSetPalette	32	ok	ovc01_driver.c	undefined1 __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int startIndex,...);
-ovc01_driver	2d63:01df	vgaSetPalette8bit	36	ok	ovc01_driver.c	undefined1 __cdecl16far vgaSetPalette8bit(uint8_t *pal,...);
+ovc01_driver	2d63:01bf	vgaSetPalette	32	ok	ovc01_driver.c	uint8_t __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int startIndex,...);
+ovc01_driver	2d63:01df	vgaSetPalette8bit	36	ok	ovc01_driver.c	uint8_t __cdecl16far vgaSetPalette8bit(uint8_t *pal,...);
 ovc01_driver	2d63:0203	unrle	62	ok	ovc01_driver.c	int __cdecl16far unrle(far_t src,far_t dst,uint16_t len,...);
 ovc01_driver	2d63:0241	rle_blit_decode	81	ok	ovc01_driver.c	int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz,...);
 ovc01_driver	2d63:0292	grabRemap	35	ok	ovc01_driver.c	void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor,...);
@@ -544,7 +544,7 @@ ovc15_sprite	4207:1f5b	ovc15_compute1	163	ok	ovc15_sprite.c	undefined2 __cdecl16
 ovc15_sprite	4207:1ffe	ovc15_usesRandBelow	771	ok	ovc15_sprite.c	int __cdecl16far ovc15_usesRandBelow(agnt_t *agnt,int xSide,char keepPos,char randomY);
 ovc15_sprite	4207:2301	ovc15_textArena	732	ok	ovc15_sprite.c	char * __cdecl16far ovc15_textArena(int owner,...);
 ovc15_sprite	4207:25dd	ovc15_textView	211	ok	ovc15_sprite.c	entity_t * __cdecl16far ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,undefined2 param_5,int *param_6,int *param_7,int *param_8,int *param_9);
-ovc15_sprite	4207:26bc	ovc15_textError	163	ok	ovc15_sprite.c	uint __cdecl16far ovc15_textError(undefined4 param_1,ulong param_2);
+ovc15_sprite	4207:26bc	ovc15_textError	163	ok	ovc15_sprite.c	agnt_t * __cdecl16far ovc15_textError(undefined4 param_1,agnt_t *param_2);
 ovc15_sprite	4207:288b	ovc15_usesAlignUp42	111	ok	ovc15_sprite.c	bool __cdecl16far ovc15_usesAlignUp42(void);
 ovc15_sprite	4207:28fa	ovc15_positionCrosshair	103	ok	ovc15_sprite.c	void __cdecl16far ovc15_positionCrosshair(void);
 ovc15_sprite	4207:2961	ovc15_selectLeftmostAgent	173	ok	ovc15_sprite.c	bool __cdecl16far ovc15_selectLeftmostAgent(void);
@@ -592,7 +592,7 @@ ovc17_stash	474a:0aa7	stshFilesize	127	ok	ovc17_stash.c	uint32_t * __cdecl16far 
 ovc17_stash	474a:0b26	randBelow	18	ok	ovc17_stash.c	uint16_t __cdecl16far randBelow(uint16_t n,...);
 ovc17_stash	474a:0b38	creat_wait_unlock_and_disk	56	ok	ovc17_stash.c	int __cdecl16far creat_wait_unlock_and_disk(char *path,...);
 ovc17_stash	474a:0b70	open_wait_unlock_and_disk	56	ok	ovc17_stash.c	int __cdecl16far open_wait_unlock_and_disk(char *filename,...);
-ovc17_stash	474a:0ba8	fmReadIntoHimem	336	ok	ovc17_stash.c	void __cdecl16far fmReadIntoHimem(char *filename,uint16_t filenameSeg,int skipLo,int skipHi,int useEms,uint16_t limitLo,uint16_t limitHi,...);
+ovc17_stash	474a:0ba8	fmReadIntoHimem	336	ok	ovc17_stash.c	void __cdecl16far fmReadIntoHimem(char *filename,uint16_t filenameSeg,int skipLo,int skipHi,char useEms,uint16_t limitLo,uint16_t limitHi,...);
 ovc17_stash	474a:0cf8	stshLoadGfx	419	ok	ovc17_stash.c	stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle,...);
 ovc17_stash	474a:0e9b	stash_loadFromStrongDat	529	ok	ovc17_stash.c	undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...);
 ovc17_stash	474a:10ac	stash_usesStExit	135	ok	ovc17_stash.c	stg_tmp_t * __cdecl16far stash_usesStExit(stg_tmp_t *gfxListOfs,...);
@@ -906,7 +906,7 @@ ovc40_palette	69c8:04c6	ovc40_usesAlignToSeg	1717	ok	ovc40_palette.c	char __cdec
 ovc41_main	6a8f:0000	ovc41_pluralSuffix	23	ok	ovc41_main.c	undefined2 __cdecl16far ovc41_pluralSuffix(int count,...);
 ovc41_main	6a8f:0017	ovc41_compute2	23	ok	ovc41_main.c	undefined2 __cdecl16far ovc41_compute2(int count);
 ovc41_main	6a8f:002e	ovc41_compute3	317	ok	ovc41_main.c	void __cdecl16far ovc41_compute3(uint32_t view,...);
-ovc41_main	6a8f:016b	ovc41_compute4	124	ok	ovc41_main.c	void __cdecl16far ovc41_compute4(agnt_t *agnt,byte flag,int pad,agnt_t *other,...);
+ovc41_main	6a8f:016b	ovc41_compute4	124	ok	ovc41_main.c	void __cdecl16far ovc41_compute4(agnt_t *agnt,byte flag,byte pad,agnt_t *other,...);
 ovc41_main	6a8f:01e7	ovc41_markAgentDead	66	ok	ovc41_main.c	void __cdecl16far ovc41_markAgentDead(agnt_t *agnt);
 ovc41_main	6a8f:0229	OVC41_6a8f_01e7_entry	29	ok	ovc41_main.c	void __cdecl16far OVC41_6a8f_01e7_entry(agnt_t *agnt,...);
 ovc41_main	6a8f:0246	ovc41_advanceAnimFrame	16	ok	ovc41_main.c	void __cdecl16far ovc41_advanceAnimFrame(agnt_t *agnt,...);
@@ -979,7 +979,7 @@ ovc45_unitinfo	77eb:0a02	ovc45_usesGPopulationLo	232	ok	ovc45_unitinfo.c	void __
 ovc45_unitinfo	77eb:0aea	ovc45_compute4	215	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_compute4(int x,uint16_t y,...);
 ovc45_unitinfo	77eb:0bc1	ovc45_compute5	117	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_compute5(void);
 ovc45_unitinfo	77eb:0c36	ovc45_textArena2	299	ok	ovc45_unitinfo.c	bool __cdecl16far ovc45_textArena2(byte bldType);
-ovc45_unitinfo	77eb:0d61	ovc45_buildPlacementMessage	1752	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_buildPlacementMessage(uint param_1,uint param_2,int param_3,undefined2 param_4,char param_5);
+ovc45_unitinfo	77eb:0d61	ovc45_buildPlacementMessage	1752	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_buildPlacementMessage(uint param_1,uint16_t param_2,int param_3,undefined2 param_4,char param_5);
 ovc45_unitinfo	77eb:16b2	ovc45_usesRandBelow	162	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_usesRandBelow(int entityIndex);
 ovc45_unitinfo	77eb:1754	ovc45_textDone	1102	ok	ovc45_unitinfo.c	void __cdecl16far ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t outFlag,uint16_t outFlagSeg,...);
 ovc45_unitinfo	77eb:1ba2	ovc45_compute6	17	ok	ovc45_unitinfo.c	bool __cdecl16far ovc45_compute6(uint16_t value,...);
@@ -1011,8 +1011,7 @@ ovc49_agents	8699:0849	ovc49_compute1	43	ok	ovc49_agents.c	uint __cdecl16far ovc
 ovc49_agents	8699:0874	ovc49_textLongerParalyzed	3741	ok	ovc49_agents.c	void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param);
 ovc49_agents	8699:1711	ovc49_agentIsActive	66	ok	ovc49_agents.c	undefined2 __cdecl16far ovc49_agentIsActive(agnt_t *agnt);
 ovc49_agents	8699:1753	ovc49_fillGridCells	369	ok	ovc49_agents.c	void * __cdecl16far ovc49_fillGridCells(byte count,agnt_t *agnt,...);
-ovc49_agents	8699:18c4	ovc49_body1	150	fail	ovc49_agents.c	
-Low-level Error: Unlinked join address
+ovc49_agents	8699:18c4	ovc49_body1	150	ok	ovc49_agents.c	uint __cdecl16far ovc49_body1(agnt_t *agnt,...);
 ovc49_agents	8699:1e09	ovc49_drawAgents	8643	ok	ovc49_agents.c	void __cdecl16far ovc49_drawAgents(void);
 ovc50_textui	8adb:0000	ovc50_usesBlitText	131	ok	ovc50_textui.c	void __cdecl16far ovc50_usesBlitText(char *text,uint16_t widths);
 ovc50_textui	8adb:0083	ovc50_usesStshLoadGfx	110	ok	ovc50_textui.c	void __cdecl16far ovc50_usesStshLoadGfx(byte gfxIndex);

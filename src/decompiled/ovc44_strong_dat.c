@@ -12,29 +12,27 @@
 far_t * __cdecl16far stshAllocStub(far_t *__return_storage_ptr__,...)
 
 {
-  uint32_t *puVar1;
-  int in_stack_0000fffa;
-  far_t *pfVar2;
-  uint16_t uVar3;
+  uint16_t uVar1;
+  uint16_t uVar2;
+  uint32_t *puVar3;
   
+  uVar2 = StshCtPtrCopy.seg;
+  uVar1 = StshCtPtrCopy.ofs;
   if (StshCount < 0xd93) {
     StshCount = StshCount + 1;
-    pfVar2 = (far_t *)StshCtPtrCopy.ofs;
-    uVar3 = StshCtPtrCopy.seg;
-    puVar1 = ovr_mkp((uint32_t *)StshCtPtrCopy.seg,StshCtPtrCopy.ofs,StshCtPtrCopy.seg,
-                     StshCtPtrCopy.ofs + 0x15);
+    puVar3 = ovr_mkp((uint32_t *)(StshCtPtrCopy.ofs + 0x15),StshCtPtrCopy.seg,StshCtPtrCopy.ofs);
     StshCtPtrCopy.seg = StshCtPtrCopy.ofs;
-    *(undefined2 *)((int)&pfVar2[4].seg + 1) = 0;
-    StshCtPtrCopy.ofs = (uint16_t)puVar1;
-    *(undefined2 *)((int)&pfVar2[4].ofs + 1) = 0;
-    *(undefined2 *)((int)&pfVar2[2].seg + 1) = 0;
-    *(undefined2 *)((int)&pfVar2[2].ofs + 1) = 0;
-    *(undefined2 *)((int)&pfVar2[3].seg + 1) = 0;
-    *(undefined2 *)((int)&pfVar2[3].ofs + 1) = 0;
-    return pfVar2;
+    *(undefined2 *)(uVar1 + 0x13) = 0;
+    StshCtPtrCopy.ofs = (uint16_t)puVar3;
+    *(undefined2 *)(uVar1 + 0x11) = 0;
+    *(undefined2 *)(uVar1 + 0xb) = 0;
+    *(undefined2 *)(uVar1 + 9) = 0;
+    *(undefined2 *)(uVar1 + 0xf) = 0;
+    *(undefined2 *)(uVar1 + 0xd) = 0;
+    return (far_t *)uVar1;
   }
                     /* WARNING: Subroutine does not return */
-  ovr_stExit(in_stack_0000fffa,0x24);
+  ovr_stExit(0x24);
 }
 
 
@@ -83,39 +81,36 @@ void __cdecl16far stshTR_S_stubify0(int index)
 void __cdecl16far stshStubifyBld(uint16_t index,...)
 
 {
-  int iVar1;
-  undefined4 uVar2;
-  int in_stack_00000004;
+  undefined4 uVar1;
   
-  iVar1 = in_stack_00000004;
-  stshTR_S_stubify0(in_stack_00000004);
-  uVar2 = func_0x0007ffe0(0x6ffe);
-  *(undefined2 *)((int)&BldGfxRuin[0].seg + iVar1 * 0xc) = (int)((ulong)uVar2 >> 0x10);
-  ((far_t *)BldGfxRuin + iVar1 * 3)->ofs = (uint16_t)uVar2;
-  uVar2 = func_0x0007ffe0(0x6ffe);
-  *(undefined2 *)((int)&BldGfxRuin[1].seg + iVar1 * 0xc) = (int)((ulong)uVar2 >> 0x10);
-  ((far_t *)(BldGfxRuin + 1) + iVar1 * 3)->ofs = (uint16_t)uVar2;
-  uVar2 = func_0x0007ffe0(0x6ffe);
-  *(undefined2 *)((int)&BldGfxRuin[2].seg + iVar1 * 0xc) = (int)((ulong)uVar2 >> 0x10);
-  ((far_t *)(BldGfxRuin + 2) + iVar1 * 3)->ofs = (uint16_t)uVar2;
-  uVar2 = func_0x0007ffe0(0x6ffe);
-  *(undefined2 *)((int)&BldGfxRuin[3].seg + iVar1 * 0xc) = (int)((ulong)uVar2 >> 0x10);
-  ((far_t *)(BldGfxRuin + 3) + iVar1 * 3)->ofs = (uint16_t)uVar2;
-  uVar2 = func_0x0007ffe0(0x6ffe);
-  *(undefined2 *)((int)&BldGfxRuin[4].seg + iVar1 * 0xc) = (int)((ulong)uVar2 >> 0x10);
-  ((far_t *)(BldGfxRuin + 4) + iVar1 * 3)->ofs = (uint16_t)uVar2;
-  uVar2 = func_0x0007ffe0(0x6ffe);
-  *(undefined2 *)((int)&BldGfxRuin[5].seg + iVar1 * 0xc) = (int)((ulong)uVar2 >> 0x10);
-  ((far_t *)(BldGfxRuin + 5) + iVar1 * 3)->ofs = (uint16_t)uVar2;
-  uVar2 = func_0x0007ffe0(0x6ffe);
-  *(undefined2 *)((int)&BldGfxRuin[6].seg + iVar1 * 0xc) = (int)((ulong)uVar2 >> 0x10);
-  ((far_t *)(BldGfxRuin + 6) + iVar1 * 3)->ofs = (uint16_t)uVar2;
-  uVar2 = func_0x0007ffe0(0x6ffe);
-  *(undefined2 *)((int)&BldGfxRuin[7].seg + iVar1 * 0xc) = (int)((ulong)uVar2 >> 0x10);
-  ((far_t *)(BldGfxRuin + 7) + iVar1 * 3)->ofs = (uint16_t)uVar2;
-  uVar2 = func_0x0007ffe0(0x6ffe);
-  *(undefined2 *)((int)&BldGfxRuin[8].seg + iVar1 * 0xc) = (int)((ulong)uVar2 >> 0x10);
-  ((far_t *)(BldGfxRuin + 8) + iVar1 * 3)->ofs = (uint16_t)uVar2;
+  stshTR_S_stubify0(index);
+  uVar1 = func_0x0007ffe0(0x6ffe);
+  *(undefined2 *)((int)&BldGfxRuin[0].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
+  ((far_t *)BldGfxRuin + index * 3)->ofs = (uint16_t)uVar1;
+  uVar1 = func_0x0007ffe0(0x6ffe);
+  *(undefined2 *)((int)&BldGfxRuin[1].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
+  ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs = (uint16_t)uVar1;
+  uVar1 = func_0x0007ffe0(0x6ffe);
+  *(undefined2 *)((int)&BldGfxRuin[2].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
+  ((far_t *)(BldGfxRuin + 2) + index * 3)->ofs = (uint16_t)uVar1;
+  uVar1 = func_0x0007ffe0(0x6ffe);
+  *(undefined2 *)((int)&BldGfxRuin[3].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
+  ((far_t *)(BldGfxRuin + 3) + index * 3)->ofs = (uint16_t)uVar1;
+  uVar1 = func_0x0007ffe0(0x6ffe);
+  *(undefined2 *)((int)&BldGfxRuin[4].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
+  ((far_t *)(BldGfxRuin + 4) + index * 3)->ofs = (uint16_t)uVar1;
+  uVar1 = func_0x0007ffe0(0x6ffe);
+  *(undefined2 *)((int)&BldGfxRuin[5].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
+  ((far_t *)(BldGfxRuin + 5) + index * 3)->ofs = (uint16_t)uVar1;
+  uVar1 = func_0x0007ffe0(0x6ffe);
+  *(undefined2 *)((int)&BldGfxRuin[6].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
+  ((far_t *)(BldGfxRuin + 6) + index * 3)->ofs = (uint16_t)uVar1;
+  uVar1 = func_0x0007ffe0(0x6ffe);
+  *(undefined2 *)((int)&BldGfxRuin[7].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
+  ((far_t *)(BldGfxRuin + 7) + index * 3)->ofs = (uint16_t)uVar1;
+  uVar1 = func_0x0007ffe0(0x6ffe);
+  *(undefined2 *)((int)&BldGfxRuin[8].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
+  ((far_t *)(BldGfxRuin + 8) + index * 3)->ofs = (uint16_t)uVar1;
   return;
 }
 
@@ -151,128 +146,126 @@ void __cdecl16far stshInitPtrs(void)
   far_t ptr_ofs_07;
   far_t ptr_ofs_08;
   uint32_t *puVar1;
-  uint16_t uVar3;
+  uint16_t uVar2;
   undefined2 unaff_BP;
-  long *unaff_SI;
-  uint uVar4;
-  uint16_t uVar5;
-  far_t fVar6;
-  undefined2 in_stack_00000000;
-  long *plVar7;
-  uint16_t uVar8;
+  uint16_t unaff_SI;
+  uint uVar3;
+  uint16_t uVar4;
+  far_t fVar5;
+  long *plVar6;
+  uint16_t uVar7;
   long *__return_storage_ptr__;
+  long *__return_storage_ptr___00;
   uint32_t *in_stack_0000fffa;
-  uint32_t *in_stack_0000fffc;
-  uint32_t *puVar2;
+  uint16_t in_stack_0000fffc;
   
-  uVar5 = StshCtPtr.seg;
-  uVar3 = StshCtPtr.ofs;
+  uVar2 = StshCtPtr.seg;
+  uVar7 = StshCtPtr.ofs;
   StshCtPtr2.seg = StshCtPtr.seg;
   StshCtPtr2.ofs = StshCtPtr.ofs;
   *(undefined2 *)(StshCtPtr.ofs + 0xf) = 0;
-  *(undefined2 *)(uVar3 + 0xd) = 0;
-  __return_storage_ptr__ =
+  *(undefined2 *)(uVar7 + 0xd) = 0;
+  __return_storage_ptr___00 =
        (long *)((char *)"%s casts %s on %s to heal %d hitpoint%s for a total of %d hitpoint%s." +
                0x13);
-  fVar6.seg = (uint16_t)unaff_SI;
-  fVar6.ofs = 0x6ffe;
-  ptr_ofs_08.seg = (uint16_t)in_stack_0000fffc;
+  fVar5.seg = unaff_SI;
+  fVar5.ofs = 0x6ffe;
+  ptr_ofs_08.seg = in_stack_0000fffc;
   ptr_ofs_08.ofs = (uint16_t)in_stack_0000fffa;
-  fVar6 = PADD_at_(fVar6,ptr_ofs_08);
-  puVar2 = (uint32_t *)fVar6.seg;
-  puVar1 = ovr_mkp(puVar2,(uint16_t)__return_storage_ptr__,(uint16_t)unaff_SI,fVar6.ofs);
-  uVar5 = StshCtPtr.seg;
-  uVar3 = StshCtPtr.ofs;
-  *(undefined2 *)(uVar3 + 0xb) = puVar2;
-  *(undefined2 *)(uVar3 + 9) = puVar1;
-  for (uVar4 = 1; uVar4 < StshCount - 1; uVar4 = uVar4 + 1) {
-    LXMUL_at_(unaff_SI,(long)CONCAT22(in_stack_0000fffc,in_stack_0000fffa),
-              CONCAT22(in_stack_00000000,unaff_BP));
-    uVar8 = 0x1000;
-    ptr_base_05.seg = (uint16_t)__return_storage_ptr__;
+  fVar5 = PADD_at_(fVar5,ptr_ofs_08);
+  uVar7 = fVar5.seg;
+  puVar1 = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)__return_storage_ptr___00);
+  uVar4 = StshCtPtr.seg;
+  uVar2 = StshCtPtr.ofs;
+  *(uint16_t *)(uVar2 + 0xb) = uVar7;
+  *(undefined2 *)(uVar2 + 9) = puVar1;
+  for (uVar3 = 1; uVar3 < StshCount - 1; uVar3 = uVar3 + 1) {
+    LXMUL_at_(__return_storage_ptr___00,CONCAT22(in_stack_0000fffa,unaff_SI),
+              CONCAT22(unaff_BP,in_stack_0000fffc));
+    __return_storage_ptr__ = (long *)((int)&AgntAnms[0x38].halfWidth + 1);
+    ptr_base_05.seg = (uint16_t)__return_storage_ptr___00;
     ptr_base_05.ofs = 0x1000;
     ptr_ofs_06.seg = (uint16_t)in_stack_0000fffa;
-    ptr_ofs_06.ofs = (uint16_t)unaff_SI;
-    fVar6 = PADD_at_(ptr_base_05,ptr_ofs_06);
-    in_stack_0000fffc = (uint32_t *)fVar6.seg;
-    in_stack_0000fffa = ovr_mkp(in_stack_0000fffc,uVar8,(uint16_t)__return_storage_ptr__,fVar6.ofs);
-    LXMUL_at_(__return_storage_ptr__,(long)CONCAT22(in_stack_0000fffa,unaff_SI),
-              (long)CONCAT22(unaff_BP,in_stack_0000fffc));
-    plVar7 = (long *)((int)&AgntAnms[0x38].halfWidth + 1);
-    ptr_base_03.seg = uVar8;
+    ptr_ofs_06.ofs = unaff_SI;
+    fVar5 = PADD_at_(ptr_base_05,ptr_ofs_06);
+    in_stack_0000fffc = fVar5.seg;
+    in_stack_0000fffa =
+         ovr_mkp((uint32_t *)fVar5.ofs,in_stack_0000fffc,(uint16_t)__return_storage_ptr__);
+    LXMUL_at_(__return_storage_ptr__,(long)CONCAT22(unaff_SI,__return_storage_ptr___00),
+              (long)CONCAT22(in_stack_0000fffc,in_stack_0000fffa));
+    uVar2 = 0x1000;
+    ptr_base_03.seg = (uint16_t)__return_storage_ptr__;
     ptr_base_03.ofs = 0x1000;
-    ptr_ofs_04.seg = (uint16_t)unaff_SI;
-    ptr_ofs_04.ofs = (uint16_t)__return_storage_ptr__;
+    ptr_ofs_04.seg = unaff_SI;
+    ptr_ofs_04.ofs = (uint16_t)__return_storage_ptr___00;
     PADD_at_(ptr_base_03,ptr_ofs_04);
-    uVar5 = 0x1000;
-    ptr_base_01.seg = (uint16_t)plVar7;
+    plVar6 = (long *)((int)&AgntAnms[0x38].halfWidth + 1);
+    ptr_base_01.seg = uVar2;
     ptr_base_01.ofs = 0x1000;
-    ptr_ofs_02.seg = (uint16_t)__return_storage_ptr__;
-    ptr_ofs_02.ofs = uVar8;
-    fVar6 = PADD_at_(ptr_base_01,ptr_ofs_02);
-    puVar2 = (uint32_t *)fVar6.seg;
-    puVar1 = ovr_mkp(puVar2,uVar5,(uint16_t)plVar7,fVar6.ofs);
-    *(undefined2 *)((int)in_stack_0000fffa + 0xb) = puVar2;
+    ptr_ofs_02.seg = (uint16_t)__return_storage_ptr___00;
+    ptr_ofs_02.ofs = (uint16_t)__return_storage_ptr__;
+    fVar5 = PADD_at_(ptr_base_01,ptr_ofs_02);
+    uVar7 = fVar5.seg;
+    puVar1 = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)plVar6);
+    *(uint16_t *)((int)in_stack_0000fffa + 0xb) = uVar7;
     *(undefined2 *)((int)in_stack_0000fffa + 9) = puVar1;
-    LXMUL_at_(plVar7,CONCAT22(__return_storage_ptr__,uVar8),
-              (long)CONCAT22(in_stack_0000fffa,unaff_SI));
-    uVar3 = 0x1000;
-    ptr_base.seg = uVar5;
+    LXMUL_at_(plVar6,CONCAT22(__return_storage_ptr__,uVar2),
+              (long)CONCAT22(unaff_SI,__return_storage_ptr___00));
+    ptr_base.seg = (uint16_t)plVar6;
     ptr_base.ofs = 0x1000;
-    ptr_ofs_00.seg = uVar8;
-    ptr_ofs_00.ofs = (uint16_t)plVar7;
+    ptr_ofs_00.seg = (uint16_t)__return_storage_ptr__;
+    ptr_ofs_00.ofs = uVar2;
     PADD_at_(ptr_base,ptr_ofs_00);
-    __return_storage_ptr__ = (long *)((int)&AgntAnms[0x38].halfWidth + 1);
-    ptr_base_07.seg = (uint16_t)unaff_SI;
+    __return_storage_ptr___00 = (long *)((int)&AgntAnms[0x38].halfWidth + 1);
+    ptr_base_07.seg = unaff_SI;
     ptr_base_07.ofs = 0x1000;
-    ptr_ofs.seg = (uint16_t)plVar7;
-    ptr_ofs.ofs = uVar5;
-    fVar6 = PADD_at_(ptr_base_07,ptr_ofs);
-    puVar2 = (uint32_t *)fVar6.seg;
-    puVar1 = ovr_mkp(puVar2,(uint16_t)__return_storage_ptr__,uVar3,fVar6.ofs);
-    *(undefined2 *)((int)in_stack_0000fffa + 0xf) = puVar2;
+    ptr_ofs.seg = uVar2;
+    ptr_ofs.ofs = (uint16_t)plVar6;
+    fVar5 = PADD_at_(ptr_base_07,ptr_ofs);
+    uVar7 = fVar5.seg;
+    puVar1 = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)__return_storage_ptr___00);
+    *(uint16_t *)((int)in_stack_0000fffa + 0xf) = uVar7;
     *(undefined2 *)((int)in_stack_0000fffa + 0xd) = puVar1;
   }
-  LXMUL_at_(unaff_SI,(long)CONCAT22(in_stack_0000fffc,in_stack_0000fffa),
-            CONCAT22(in_stack_00000000,unaff_BP));
-  plVar7 = (long *)((int)&AgntAnms[0x38].halfWidth + 1);
-  ptr_base_06.seg = (uint16_t)__return_storage_ptr__;
+  LXMUL_at_(__return_storage_ptr___00,CONCAT22(in_stack_0000fffa,unaff_SI),
+            CONCAT22(unaff_BP,in_stack_0000fffc));
+  uVar4 = 0x1000;
+  ptr_base_06.seg = (uint16_t)__return_storage_ptr___00;
   ptr_base_06.ofs = 0x1000;
   ptr_ofs_07.seg = (uint16_t)in_stack_0000fffa;
-  ptr_ofs_07.ofs = (uint16_t)unaff_SI;
+  ptr_ofs_07.ofs = unaff_SI;
   PADD_at_(ptr_base_06,ptr_ofs_07);
-  uVar8 = 0x1000;
-  ptr_base_04.seg = (uint16_t)plVar7;
+  plVar6 = (long *)((int)&AgntAnms[0x38].halfWidth + 1);
+  ptr_base_04.seg = uVar4;
   ptr_base_04.ofs = 0x1000;
-  ptr_ofs_05.seg = (uint16_t)unaff_SI;
-  ptr_ofs_05.ofs = (uint16_t)__return_storage_ptr__;
-  fVar6 = PADD_at_(ptr_base_04,ptr_ofs_05);
-  puVar2 = (uint32_t *)fVar6.seg;
-  puVar1 = ovr_mkp(puVar2,uVar8,(uint16_t)plVar7,fVar6.ofs);
-  Stsh_2410_47f6.seg = (uint16_t)puVar2;
+  ptr_ofs_05.seg = unaff_SI;
+  ptr_ofs_05.ofs = (uint16_t)__return_storage_ptr___00;
+  fVar5 = PADD_at_(ptr_base_04,ptr_ofs_05);
+  uVar7 = fVar5.seg;
+  puVar1 = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)plVar6);
+  Stsh_2410_47f6.seg = uVar7;
   Stsh_2410_47f6.ofs = (uint16_t)puVar1;
   *(undefined2 *)((int)puVar1 + 0xb) = 0;
   *(undefined2 *)((int)puVar1 + 9) = 0;
-  LXMUL_at_(plVar7,(long)CONCAT22(unaff_SI,__return_storage_ptr__),
-            (long)CONCAT22(in_stack_0000fffc,in_stack_0000fffa));
-  uVar5 = 0x1000;
-  ptr_base_02.seg = uVar8;
+  LXMUL_at_(plVar6,CONCAT22(__return_storage_ptr___00,uVar4),CONCAT22(in_stack_0000fffa,unaff_SI));
+  uVar7 = 0x1000;
+  ptr_base_02.seg = (uint16_t)plVar6;
   ptr_base_02.ofs = 0x1000;
-  ptr_ofs_03.seg = (uint16_t)__return_storage_ptr__;
-  ptr_ofs_03.ofs = (uint16_t)plVar7;
+  ptr_ofs_03.seg = (uint16_t)__return_storage_ptr___00;
+  ptr_ofs_03.ofs = uVar4;
   PADD_at_(ptr_base_02,ptr_ofs_03);
-  uVar3 = 0x1000;
-  ptr_base_00.seg = uVar5;
+  uVar2 = 0x1000;
+  ptr_base_00.seg = uVar7;
   ptr_base_00.ofs = 0x1000;
-  ptr_ofs_01.seg = (uint16_t)plVar7;
-  ptr_ofs_01.ofs = uVar8;
-  fVar6 = PADD_at_(ptr_base_00,ptr_ofs_01);
-  puVar2 = (uint32_t *)fVar6.seg;
-  puVar1 = ovr_mkp(puVar2,uVar3,uVar5,fVar6.ofs);
-  uVar5 = Stsh_2410_47f6.seg;
-  uVar3 = Stsh_2410_47f6.ofs;
-  *(undefined2 *)(uVar3 + 0xf) = puVar2;
-  *(undefined2 *)(uVar3 + 0xd) = puVar1;
+  ptr_ofs_01.seg = uVar4;
+  ptr_ofs_01.ofs = (uint16_t)plVar6;
+  fVar5 = PADD_at_(ptr_base_00,ptr_ofs_01);
+  uVar7 = fVar5.seg;
+  puVar1 = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,uVar2);
+  uVar4 = Stsh_2410_47f6.seg;
+  uVar2 = Stsh_2410_47f6.ofs;
+  *(uint16_t *)(uVar2 + 0xf) = uVar7;
+  *(undefined2 *)(uVar2 + 0xd) = puVar1;
   return;
 }
 

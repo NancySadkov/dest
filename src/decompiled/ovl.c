@@ -1549,18 +1549,17 @@ void __cdecl16far __OvrPrepare(void)
 {
   far_t *pfVar1;
   int iVar2;
-  far_t *__return_storage_ptr__;
   uint uVar3;
-  undefined2 unaff_DI;
+  far_t *pfVar4;
   
   __InitModules();
   uVar3 = __ovrbuffer;
   if (__ovrbuffer <= __OvrMinHeapSize) {
     uVar3 = __OvrMinHeapSize << 1;
   }
-  __return_storage_ptr__ = (far_t *)((ulong)(uVar3 + 1) * 0x10 >> 0x10);
-  pfVar1 = farmalloc(__return_storage_ptr__,CONCAT22(unaff_DI,uVar3 + 1));
-  if ((pfVar1 != (far_t *)0x0 || __return_storage_ptr__ != (far_t *)0x0) &&
+  pfVar4 = (far_t *)((ulong)(uVar3 + 1) * 0x10);
+  pfVar1 = farmalloc((far_t *)pfVar4,CONCAT22(uVar3 + 1,(int)((ulong)pfVar4 >> 0x10)));
+  if ((pfVar1 != (far_t *)0x0 || (int)((ulong)pfVar4 >> 0x10) != 0) &&
      (iVar2 = __OVRINIT(), iVar2 == 0)) {
     return;
   }

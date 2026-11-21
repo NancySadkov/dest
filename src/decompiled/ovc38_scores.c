@@ -14,6 +14,7 @@
 void __cdecl16far ovc38_loadHighScores(far_t entries)
 
 {
+  char *filename;
   int iVar1;
   undefined2 uVar2;
   undefined2 in_DX;
@@ -22,9 +23,9 @@ void __cdecl16far ovc38_loadHighScores(far_t entries)
   char *unaff_SS;
   uint8_t msg;
   
-  ovr_stsprintf((char *)CONCAT22(0x6a89,unaff_SS),(char *)0x8c6c2410,(char *)"puppetmaker" + 3,&msg)
+  filename = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6a89,unaff_SS),(char *)0x8c6c2410,0x2410)
   ;
-  iVar1 = ovr_open_wait_unlock_and_disk();
+  iVar1 = ovr_open_wait_unlock_and_disk(filename,in_DX);
   if (iVar1 < 0) {
     for (iVar1 = 0; iVar1 < 6; iVar1 = iVar1 + 1) {
       puVar3 = (undefined2 *)(entries.ofs + iVar1 * 4);
@@ -34,7 +35,7 @@ void __cdecl16far ovc38_loadHighScores(far_t entries)
   }
   else {
     for (iVar4 = 0; iVar4 < 6; iVar4 = iVar4 + 1) {
-      uVar2 = ovr_saveui_readLine();
+      uVar2 = ovr_saveui_readLine(iVar1);
       puVar3 = (undefined2 *)(entries.ofs + iVar4 * 4);
       puVar3[1] = in_DX;
       *puVar3 = uVar2;
@@ -53,20 +54,25 @@ void __cdecl16far ovc38_loadHighScores(far_t entries)
 void __cdecl16far ovc38_saveHighScores(far_t entries)
 
 {
+  char *path;
   int handle;
+  undefined2 in_DX;
   int *piVar1;
-  int iVar2;
+  undefined2 *puVar2;
+  int iVar3;
+  uint16_t uVar4;
   char *unaff_SS;
   uint8_t msg;
   
-  ovr_stsprintf((char *)CONCAT22(0x6a89,unaff_SS),(char *)0x8c6c2410,(char *)"puppetmaker" + 3,&msg)
-  ;
-  handle = ovr_creat_wait_unlock_and_disk();
+  path = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6a89,unaff_SS),(char *)0x8c6c2410,0x2410);
+  handle = ovr_creat_wait_unlock_and_disk(path,in_DX);
   if (-1 < handle) {
-    for (iVar2 = 0; iVar2 < 6; iVar2 = iVar2 + 1) {
-      piVar1 = (int *)(entries.ofs + iVar2 * 4);
+    for (iVar3 = 0; iVar3 < 6; iVar3 = iVar3 + 1) {
+      uVar4 = entries.seg;
+      piVar1 = (int *)(entries.ofs + iVar3 * 4);
       if (*piVar1 != 0 || piVar1[1] != 0) {
-        ovr_saveui_writeLine();
+        puVar2 = (undefined2 *)(entries.ofs + iVar3 * 4);
+        ovr_saveui_writeLine(handle,(char *)*puVar2,puVar2[1]);
       }
     }
     close(handle);
@@ -84,24 +90,20 @@ void __cdecl16far ovc38_usesStshFree(far_t handle)
 
 {
   int *piVar1;
-  undefined2 *puVar2;
-  uint unaff_SI;
+  uint16_t *puVar2;
   int iVar3;
   far_t handle_00;
-  far_t handle_01;
   
-  handle_00 = far_from_u32((uint32_t)((ulong)unaff_SI << 0x10));
   for (iVar3 = 0; iVar3 < 6; iVar3 = iVar3 + 1) {
     piVar1 = (int *)(handle.ofs + iVar3 * 4);
     if (*piVar1 != 0 || piVar1[1] != 0) {
-      puVar2 = (undefined2 *)(handle.ofs + iVar3 * 4);
-      handle_00.ofs = puVar2[1];
-      ovr_stshFree(handle_00,*puVar2);
+      puVar2 = (uint16_t *)(handle.ofs + iVar3 * 4);
+      handle_00.seg = puVar2[1];
+      handle_00.ofs = *puVar2;
+      ovr_stshFree(handle_00);
     }
   }
-  handle_01.seg = handle_00.seg;
-  handle_01.ofs = handle.seg;
-  ovr_stshFree(handle_01,handle.ofs);
+  ovr_stshFree(handle);
   return;
 }
 
@@ -115,16 +117,13 @@ void __cdecl16far ovc38_showAchievements(void)
 
 {
   far_t entries;
-  far_t items;
   uint16_t in_DX;
   int *piVar1;
   int iVar2;
-  uint unaff_DI;
+  uint16_t unaff_DI;
   int iVar3;
   uint16_t uVar4;
-  char *unaff_SS;
-  uint8_t term;
-  undefined1 uVar5;
+  byte *unaff_SS;
   uint8_t menuState;
   undefined2 uStack_66;
   undefined2 uStack_64;
@@ -132,9 +131,7 @@ void __cdecl16far ovc38_showAchievements(void)
   far_t fStack_a;
   undefined4 uStack_6;
   
-  term = (uint8_t)unaff_DI;
-  uVar5 = (undefined1)(unaff_DI >> 8);
-  fStack_a.ofs = (uint16_t)ovr_stshAlloc((ulong)unaff_DI << 0x10,0x18);
+  fStack_a.ofs = (uint16_t)ovr_stshAlloc(0x18);
   fStack_a.seg = in_DX;
   entries.seg = in_DX;
   entries.ofs = fStack_a.ofs;
@@ -142,15 +139,15 @@ void __cdecl16far ovc38_showAchievements(void)
   ovr_saveui_blitPanel();
   TextBlitX = 0x16;
   TextBlitY = 0xb;
-  ovr_blitText((char *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),
-               (byte *)CONCAT22(0xde,Font03.seg),7,term,0x6a94);
+  ovr_blitText((char *)"Great Achievements",(byte *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),
+               Font03.seg,0xde,0xde,7);
   TextBlitX = 0x16;
   TextBlitY = 0x1a;
-  ovr_blitText((char *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),
-               (byte *)CONCAT22(0xde,Font03.seg),7,term,0x6aa7);
+  ovr_blitText((char *)"Name",(byte *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),Font03.seg,0xde
+               ,0xde,7);
   TextBlitX = 0xae;
-  ovr_blitText((char *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),
-               (byte *)CONCAT22(0xde,Font03.seg),7,term,0x6aac);
+  ovr_blitText((char *)"Enemies",(byte *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),Font03.seg,
+               0xde,0xde,7);
   for (iVar3 = 0; iVar3 < 6; iVar3 = iVar3 + 1) {
     TextBlitX = 0x16;
     TextBlitY = iVar3 * 0xf + 0x2a;
@@ -166,22 +163,19 @@ void __cdecl16far ovc38_showAchievements(void)
         uStack_6 = (uint8_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(uint8_t *)uStack_6 + 1);
       }
       (&text)[iVar2] = 0x0;
-      ovr_blitText((char *)CONCAT22(Font03.ofs,unaff_SS),(byte *)CONCAT22(0xde,Font03.seg),8,term,
-                   &text);
+      ovr_blitText((char *)&text,(byte *)CONCAT22(Font03.ofs,unaff_SS),Font03.seg,0xde,0xde,8);
       TextBlitX = 0xc2;
       if (*uStack_6 == 0x40) {
         uStack_6 = (uint8_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(uint8_t *)uStack_6 + 1);
       }
-      ovr_blitText((char *)CONCAT22(Font03.ofs,(*(uint16_t *)((uint8_t *)&(uStack_6) + 2))),(byte *)CONCAT22(0xde,Font03.seg),8,
-                   term,(uint8_t *)uStack_6);
+      ovr_blitText((char *)(uint8_t *)uStack_6,(byte *)CONCAT22(Font03.ofs,(*(uint16_t *)((uint8_t *)&(uStack_6) + 2))),
+                   Font03.seg,0xde,0xde,8);
     }
   }
-  _fmemset((void *)ZEXT24(unaff_SS),0x28,CONCAT11(uVar5,term));
+  _fmemset((void *)ZEXT24(unaff_SS),0x28,unaff_DI);
   uStack_64 = 0x2410;
   uStack_66 = 0x6ab4;
-  items.seg = 8;
-  items.ofs = (uint16_t)unaff_SS;
-  ovr_uiMenu((char *)(ZEXT24(&menuState) << 0x10),items,0);
+  ovr_uiMenu((char *)0x0,far_from_u32((uint32_t)(ZEXT24(&menuState) << 0x10)));
   ovc38_usesStshFree(fStack_a);
   ovr_saveui_blitPanel();
   return;
@@ -252,40 +246,37 @@ void __cdecl16far ovc38_usesStshAlloc(void)
 
 {
   far_t entries;
-  far_t entries_00;
-  far_t handle;
-  far_t handle_00;
   int16_t iVar1;
   size_t sVar2;
   void *pvVar3;
   uint16_t in_DX;
   undefined2 uVar4;
   int iVar5;
-  uint unaff_DI;
   undefined2 *puVar6;
   undefined2 unaff_SS;
+  far_t handle;
+  far_t entries_00;
+  far_t handle_00;
   uint8_t msg;
   void *pvStack_8;
   uint16_t uStack_6;
   byte bStack_3;
   
   if ((GHighScoreSaved == '\0') && (bStack_3 = ovr_manage_findFirstLeader(), bStack_3 != 0xff)) {
-    pvStack_8 = ovr_stshAlloc((ulong)unaff_DI << 0x10,0x18);
+    pvStack_8 = ovr_stshAlloc(0x18);
     entries.seg = in_DX;
     entries.ofs = (uint16_t)pvStack_8;
     uStack_6 = in_DX;
     ovc38_loadHighScores(entries);
     if (*(int *)((int)pvStack_8 + 0x14) != 0 || *(int *)((int)pvStack_8 + 0x16) != 0) {
-      handle_00.seg = unaff_DI;
-      handle_00.ofs = *(uint16_t *)((int)pvStack_8 + 0x16);
-      ovr_stshFree(handle_00,*(undefined2 *)((int)pvStack_8 + 0x14));
+      handle.seg = *(uint16_t *)((int)pvStack_8 + 0x16);
+      handle.ofs = *(uint16_t *)((int)pvStack_8 + 0x14);
+      ovr_stshFree(handle);
     }
     ovr_manage_playerTitle
-              ((char_sheet_t *)
-               CONCAT22(*(undefined2 *)((uint)bStack_3 * 4),
-                        (char_sheet_t *)((undefined2 *)((uint)bStack_3 * 4))[1]),
-               *(undefined2 *)((uint)bStack_3 * 4),((undefined2 *)((uint)bStack_3 * 4))[1],
-               strongholdsDestroyed);
+              ((char_sheet_t *)*(undefined2 *)((uint)bStack_3 * 4),
+               ((undefined2 *)((uint)bStack_3 * 4))[1],*(undefined2 *)((uint)bStack_3 * 4),
+               ((undefined2 *)((uint)bStack_3 * 4))[1]);
     uVar4 = 0x217a;
     _sprintf((char *)CONCAT22(unaff_SS,&msg),"%c%s%s@%d");
     iVar5 = 5;
@@ -302,7 +293,7 @@ void __cdecl16far ovc38_usesStshAlloc(void)
       iVar5 = iVar5 + -1;
     }
     sVar2 = strlen((char *)CONCAT22(unaff_SS,&msg));
-    pvVar3 = ovr_stshAlloc((ulong)unaff_DI << 0x10,sVar2 + 1);
+    pvVar3 = ovr_stshAlloc((ulong)(sVar2 + 1));
     puVar6 = (undefined2 *)((int)pvStack_8 + iVar5 * 4);
     puVar6[1] = uVar4;
     *puVar6 = pvVar3;
@@ -311,9 +302,9 @@ void __cdecl16far ovc38_usesStshAlloc(void)
     entries_00.seg = uStack_6;
     entries_00.ofs = (uint16_t)pvStack_8;
     ovc38_saveHighScores(entries_00);
-    handle.seg = uStack_6;
-    handle.ofs = (uint16_t)pvStack_8;
-    ovc38_usesStshFree(handle);
+    handle_00.seg = uStack_6;
+    handle_00.ofs = (uint16_t)pvStack_8;
+    ovc38_usesStshFree(handle_00);
     GHighScoreSaved = '\x01';
   }
   return;

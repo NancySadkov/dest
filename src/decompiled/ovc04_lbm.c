@@ -29,12 +29,9 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
 
 {
   long lVar1;
-  far_t src_00;
-  far_t src_01;
-  far_t src_02;
   far_t dst_00;
   far_t dst_01;
-  far_t src_03;
+  far_t src_00;
   far_t dst_02;
   far_t dst_03;
   far_t ptr;
@@ -44,21 +41,26 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
   far_t ptr_ofs;
   uint16_t uVar2;
   uint16_t written;
-  uint16_t uVar3;
+  uint32_t *__return_storage_ptr__;
   uint16_t t;
   uint16_t unaff_SI;
-  uint uVar4;
+  uint uVar3;
   int16_t y;
   uint16_t unaff_DI;
-  word count;
+  word len;
   uint16_t dseg;
+  uint16_t uVar4;
   uint32_t buf;
   far_t dstline;
   far_t bsrcline;
   char *srcline;
   char in_stack_00000004;
   undefined1 in_stack_0000000d;
-  uint8_t nplanes_00;
+  far_t src_01;
+  far_t src_02;
+  undefined1 uVar5;
+  undefined1 uVar6;
+  undefined2 uVar7;
   uint16_t x;
   uint16_t npixels;
   uint16_t plane_sz;
@@ -71,12 +73,12 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
   uint16_t src_segS;
   uint16_t dst_seg;
   
-  (*(uint16_t *)((uint8_t *)&(buf))) = ovr_stshAlloc((ulong)unaff_DI << 0x10,0xf);
+  (*(uint16_t *)((uint8_t *)&(buf))) = ovr_stshAlloc(0xfa0f);
   *(undefined2 *)(src.seg + 0x306) = (*(uint16_t *)((uint8_t *)&(buf) + 2));
   *(undefined2 *)(src.seg + 0x304) = (void *)buf;
-  ptr.seg = unaff_DI;
-  ptr.ofs = *(uint16_t *)(src.seg + 0x306);
-  uVar2 = alignToSeg(ptr,(char)*(undefined2 *)(src.seg + 0x304));
+  ptr.seg = *(uint16_t *)(src.seg + 0x306);
+  ptr.ofs = *(uint16_t *)(src.seg + 0x304);
+  uVar2 = alignToSeg(ptr);
   *(undefined2 *)(src.seg + 0x302) = (*(uint16_t *)((uint8_t *)&(buf) + 2));
   *(uint16_t *)(src.seg + 0x300) = uVar2;
   _fmemset((void *)(ulong)*(uint *)(src.seg + 0x302),64000,unaff_DI);
@@ -96,14 +98,16 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
       }
     }
     dstline.seg = (uint16_t)((ulong)lVar1 >> 0x10);
-    count = (word)lVar1;
-    dstline.ofs = (uint16_t)ovr_stshAlloc((ulong)unaff_DI << 0x10,(char)(count + 0x80));
-    uVar3 = 0x2337;
+    len = (word)lVar1;
+    dstline.ofs = (uint16_t)ovr_stshAlloc((ulong)(len + 0x80));
+    uVar7 = 0;
+    uVar4 = 0x2337;
     bsrcline.seg = dstline.seg;
-    bsrcline.ofs = (uint16_t)ovr_stshAlloc((ulong)unaff_DI << 0x10,(char)(count + 0x80));
+    bsrcline.ofs = (uint16_t)ovr_stshAlloc((ulong)(len + 0x80));
     if (DebugVerbose != false) {
       printf("N %d W %u s %u \r");
-      uVar3 = 0x22a6;
+      uVar7 = 0x1000;
+      uVar4 = 0x22a6;
       ovr_biosReadKey();
     }
     if ((long)dst < 0) {
@@ -121,64 +125,57 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
     if (npixels != 0) {
       for (y = 0; ((uint)y < (uint)w && (y - sx < 200)); y = y + 1) {
         ptr_base.seg = unaff_SI;
-        ptr_base.ofs = uVar3;
+        ptr_base.ofs = uVar4;
         ptr_ofs.seg = x;
         ptr_ofs.ofs = unaff_SI;
-        unaff_DI = uVar3;
         srcline = (char *)PADD_at_(ptr_base,ptr_ofs);
+        uVar5 = (undefined1)dstline.seg;
+        uVar6 = (undefined1)(dstline.seg >> 8);
         if (format == LBM_PBM) {
-          uVar3 = 0x1000;
-          _fmemmove((char *)CONCAT22(dstline.seg,dstline.ofs),srcline,count);
+          uVar4 = 0x1000;
+          _fmemmove((char *)CONCAT22(dstline.seg,dstline.ofs),srcline,len);
         }
         else {
-          uVar3 = 0x22a6;
-          src_02.seg = dstline.ofs;
-          src_02.ofs = (uint16_t)((ulong)srcline >> 0x10);
-          (*(uint8_t *)((uint8_t *)&(dst_02.seg))) = (char)lVar1;
-          dst_02.ofs = dstline.seg;
-          (*(uint8_t *)((uint8_t *)&(dst_02.seg) + 1)) = (char)((ulong)lVar1 >> 8);
-          ovr_unrle(src_02,dst_02,unaff_DI,(char *)srcline,(char)lVar1);
+          uVar4 = 0x22a6;
+          (*(uint8_t *)((uint8_t *)&(dst_02.seg))) = uVar5;
+          dst_02.ofs = dstline.ofs;
+          (*(uint8_t *)((uint8_t *)&(dst_02.seg) + 1)) = uVar6;
+          ovr_unrle(far_from_u32((uint32_t)(srcline)),dst_02,len,uVar5,uVar7);
         }
         if (sx <= y) {
           if (in_stack_00000004 == '\0') {
-            uVar3 = 0x1000;
+            uVar4 = 0x1000;
             _fmemmove((char *)CONCAT22(uVar2,dst_ofs),
-                      (char *)CONCAT22(dstline.seg,(char *)(dstline.ofs + x)),npixels);
+                      (char *)CONCAT13(uVar6,CONCAT12(uVar5,dstline.ofs + x)),npixels);
+          }
+          else if (x == 0) {
+            src_01.seg = dstline.seg;
+            src_01.ofs = dstline.ofs;
+            uVar4 = 0x22a6;
+            dst_00.seg = uVar2;
+            dst_00.ofs = dst_ofs;
+            ovr_lbm_combine_bitplanes(src_01,dst_00,npixels,encoding,plane_sz,encoding);
           }
           else {
-            nplanes_00 = (uint8_t)plane_sz;
-            if (x == 0) {
-              uVar3 = 0x22a6;
-              src_00.seg = dst_ofs;
-              src_00.ofs = dstline.seg;
-              dst_00.seg = npixels;
-              dst_00.ofs = uVar2;
-              ovr_lbm_combine_bitplanes
-                        (src_00,dst_00,(uint)(byte)encoding,nplanes_00,unaff_DI,dstline.ofs,
-                         nplanes_00);
-            }
-            else {
-              src_01.seg = bsrcline.ofs;
-              src_01.ofs = dstline.seg;
-              dst_01.seg = sy;
-              dst_01.ofs = bsrcline.seg;
-              ovr_lbm_combine_bitplanes
-                        (src_01,dst_01,(uint)(byte)encoding,nplanes_00,unaff_DI,dstline.ofs,
-                         nplanes_00);
-              uVar3 = 0x1000;
-              _fmemmove((char *)CONCAT22(uVar2,dst_ofs),
-                        (char *)CONCAT22(bsrcline.seg,(char *)(bsrcline.ofs + x)),npixels);
-            }
+            src_02.seg = dstline.seg;
+            src_02.ofs = dstline.ofs;
+            dst_01.seg = bsrcline.seg;
+            dst_01.ofs = bsrcline.ofs;
+            ovr_lbm_combine_bitplanes(src_02,dst_01,sy,encoding,plane_sz,encoding);
+            uVar4 = 0x1000;
+            _fmemmove((char *)CONCAT22(uVar2,dst_ofs),
+                      (char *)CONCAT13((char)(bsrcline.seg >> 8),
+                                       CONCAT12((char)bsrcline.seg,bsrcline.ofs + x)),npixels);
           }
           dst_ofs = dst_ofs + 0x140;
         }
       }
-      handle.seg = unaff_DI;
-      handle.ofs = dstline.seg;
-      ovr_stshFree(handle,(char)dstline.ofs);
-      handle_00.seg = unaff_DI;
-      handle_00.ofs = bsrcline.seg;
-      ovr_stshFree(handle_00,(char)bsrcline.ofs);
+      handle.seg = dstline.seg;
+      handle.ofs = dstline.ofs;
+      ovr_stshFree(handle);
+      handle_00.seg = bsrcline.seg;
+      handle_00.ofs = bsrcline.ofs;
+      ovr_stshFree(handle_00);
     }
   }
   else {
@@ -187,16 +184,16 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
     if (200 < (uint)w) {
       w = 200;
     }
-    for (uVar4 = 0; uVar4 < (uint)w; uVar4 = uVar4 + 1) {
-      src_03.seg = dst_ofs;
-      src_03.ofs = src_seg;
-      dst_03.seg = 0x140;
-      dst_03.ofs = uVar2;
-      written = ovr_unrle(src_03,dst_03,unaff_DI,src_ofs,(char)uVar2);
-      uVar3 = src_ofs + written;
-      src_ofs = (uint16_t)ovr_mkp((uint32_t *)src_seg,unaff_DI,unaff_SI,(char)uVar3);
+    for (uVar3 = 0; uVar3 < (uint)w; uVar3 = uVar3 + 1) {
+      src_00.seg = src_seg;
+      src_00.ofs = src_ofs;
+      dst_03.seg = uVar2;
+      dst_03.ofs = dst_ofs;
+      written = ovr_unrle(src_00,dst_03,0x140,(char)dst_ofs);
+      __return_storage_ptr__ = (uint32_t *)(src_ofs + written);
+      src_ofs = (uint16_t)ovr_mkp(__return_storage_ptr__,src_seg,unaff_DI);
       dst_ofs = dst_ofs + 0x140;
-      src_seg = uVar3;
+      src_seg = (uint16_t)__return_storage_ptr__;
     }
   }
   return;
@@ -209,6 +206,9 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
 stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
 
 {
+  far_t handle;
+  far_t handle_00;
+  far_t handle_01;
   bool bVar1;
   uint16_t uVar2;
   uint16_t uVar3;
@@ -227,15 +227,13 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
   uint32_t *puVar15;
   uint16_t uVar16;
   uint16_t ppgfx;
-  uint16_t unaff_SI;
   uint16_t i;
-  uint32_t *unaff_DI;
+  uint16_t unaff_DI;
   undefined2 unaff_SS;
   bool bVar17;
   stg_tmp_t *dst;
   uint32_t remain;
   uint32_t cmszB;
-  undefined2 in_stack_00000004;
   far_t src;
   uint8_t cmap [768];
   lbm_bmhd_t hd;
@@ -273,14 +271,14 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
   uVar2 = IdFORM.hi;
   uVar16 = IdFORM.lo;
   (*(uint16_t *)((uint8_t *)&(dst) + 2)) = (stg_tmp_t *)IdPBM_.lo;
-  fid = ovr_stshOpen((uint16_t)unaff_DI,in_stack_00000004);
+  fid = ovr_stshOpen(file_id);
   if ((int)fid < 0) {
                     /* WARNING: Subroutine does not return */
-    ovr_stExit((int)unaff_DI,0x16);
+    ovr_stExit(0x16);
   }
-  (*(uint16_t *)((uint8_t *)&(dst))) = ovr_stshAlloc();
+  (*(uint16_t *)((uint8_t *)&(dst))) = ovr_stshAlloc(0x308);
   (*(uint16_t *)((uint8_t *)&(remain) + 2)) = (*(uint16_t *)((uint8_t *)&(dst) + 2));
-  _fmemset((void *)ZEXT24((*(uint16_t *)((uint8_t *)&(dst) + 2))),0x308,(uint16_t)unaff_DI);
+  _fmemset((void *)ZEXT24((*(uint16_t *)((uint8_t *)&(dst) + 2))),0x308,unaff_DI);
   (*(uint16_t *)((uint8_t *)&(remain))) = ovr_stshRead();
   if ((((int)remain == 0 && (*(uint16_t *)((uint8_t *)&(remain) + 2)) == (stg_tmp_t *)0x0) && (tmp.hi == uVar2)) &&
      (tmp.lo == uVar16)) {
@@ -294,16 +292,19 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
           bVar1 = true;
           uVar16 = tmp.lo;
           iVar13 = ovr_stshRead();
-          if ((((iVar13 != 0 || uVar16 != 0) || (puVar15 = ovr_be4(), uVar16 != 0)) ||
-              (puVar15 != (uint32_t *)((byte *)__C0_ASM_CopyRight + 0x10))) ||
-             (iVar13 = ovr_stshRead(), iVar13 != 0 || uVar16 != 0)) break;
-          w = ovr_be2((uint16_t)unaff_DI,hd.w);
-          h = ovr_be2((uint16_t)unaff_DI,hd.h);
+          if ((iVar13 != 0 || uVar16 != 0) ||
+             (((puVar15 = ovr_be4((uint32_t *)sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(sz) + 2)))), uVar16 != 0 ||
+               (puVar15 != (uint32_t *)((byte *)__C0_ASM_CopyRight + 0x10))) ||
+              (iVar13 = ovr_stshRead(), iVar13 != 0 || uVar16 != 0)))) break;
+          w = ovr_be2(hd.w);
+          h = ovr_be2(hd.h);
+          (*(uint16_t *)((uint8_t *)&(sz) + 2)) = 0;
+          (*(uint16_t *)((uint8_t *)&(sz))) = (uint32_t *)((byte *)__C0_ASM_CopyRight + 0x10);
         }
         else if ((tmp.hi == uVar10) && (tmp.lo == uVar9)) {
           (*(uint16_t *)((uint8_t *)&(cmszB) + 2)) = tmp.lo;
           ovr_stshRead();
-          (*(uint16_t *)((uint8_t *)&(cmszB))) = ovr_be4();
+          (*(uint16_t *)((uint8_t *)&(cmszB))) = ovr_be4((uint32_t *)sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(sz) + 2))));
           (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint32_t *)cmszB;
           (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = (*(uint16_t *)((uint8_t *)&(cmszB) + 2));
           if (((uint)(uint32_t *)cmszB & 1) != 0) {
@@ -322,8 +323,14 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
             if ((-1 < (int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2))) &&
                ((0 < (int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) || ((char *)"Error 4 %d \r" + 0xb < (uint32_t *)chnk_sz))))
             {
-              ovr_stshTell(unaff_DI,unaff_SI,fid);
-              ovr_stshSeek();
+              puVar15 = ovr_stshTell((uint32_t *)fid,unaff_DI);
+              ovr_stshSeek(fid,(long)CONCAT22(((int)puVar15 >> 0xf) + (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) +
+                                              (uint)CARRY2((uint)puVar15,(uint)(uint32_t *)chnk_sz)
+                                              + -1 + (uint)(" \r" < (char *)((int)puVar15 +
+                                                                            (int)(uint32_t *)chnk_sz
+                                                                            )),
+                                              (char *)((int)puVar15 + (int)(uint32_t *)chnk_sz) +
+                                              -0x300));
             }
           }
           i = 0;
@@ -334,7 +341,9 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
               puVar15 = (uint32_t *)((char *)"Error 4 %d \r" + 0xb);
               uVar16 = 0;
             }
-            if (((int)uVar16 < 1) && ((uVar16 != 0 || (puVar15 <= i)))) break;
+            if (((int)uVar16 < 1) &&
+               (((*(uint16_t *)((uint8_t *)&(sz))) = (uint32_t *)cmszB, (*(uint16_t *)((uint8_t *)&(sz) + 2)) = (*(uint16_t *)((uint8_t *)&(cmszB) + 2)), uVar16 != 0 || (puVar15 <= i)
+                ))) break;
             ((stg_tmp_t *)dst)->cmap[i] = (uint8_t)((int)(uint)cmap[i] >> 2);
             i = i + 1;
           }
@@ -343,45 +352,58 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
           if ((tmp.hi == uVar8) && (tmp.lo == uVar7)) {
             if (bVar1) {
               ovr_stshRead();
-              puVar15 = ovr_be4();
-              pvVar14 = ovr_stshAlloc();
+              puVar15 = ovr_be4((uint32_t *)sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(sz) + 2))));
+              (*(uint16_t *)((uint8_t *)&(chnk_sz))) = puVar15;
+              (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = tmp.lo;
+              if (((uint)puVar15 & 1) != 0) {
+                (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint32_t *)((int)puVar15 + 1);
+                (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = tmp.lo + ((uint32_t *)0xfffe < puVar15);
+              }
+              pvVar14 = ovr_stshAlloc((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)),(uint32_t *)chnk_sz));
               ovr_stshRead();
-              ovr_stshClose((uint16_t)unaff_DI,fid);
+              ovr_stshClose(fid);
               src.seg = (uint16_t)(stg_tmp_t *)dst;
               src.ofs = (uint16_t)puVar15;
               lbm_decode_body(hd.enc,hd.nplanes,hd.mask,(uint8_t)pvVar14,src,
-                              (stg_tmp_t *)CONCAT22(file_id,(*(uint16_t *)((uint8_t *)&(dst) + 2))),x,w,h,(int16_t)unaff_DI);
-              ovr_stshFree();
+                              (stg_tmp_t *)CONCAT22(x,(*(uint16_t *)((uint8_t *)&(dst) + 2))),y,w,h,unaff_DI);
+              handle.seg = (uint16_t)puVar15;
+              handle.ofs = (uint16_t)pvVar14;
+              ovr_stshFree(handle);
               return (stg_tmp_t *)dst;
             }
             break;
           }
-          (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = tmp.lo;
+          uVar16 = tmp.lo;
           ovr_stshRead();
-          (*(uint16_t *)((uint8_t *)&(chnk_sz))) = ovr_be4();
+          (*(uint16_t *)((uint8_t *)&(chnk_sz))) = ovr_be4((uint32_t *)chnk_sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2))));
+          (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = uVar16;
           if (((uint)(uint32_t *)chnk_sz & 1) != 0) {
             bVar17 = (uint32_t *)0xfffe < (uint32_t *)chnk_sz;
             (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint32_t *)((int)(uint32_t *)chnk_sz + 1);
-            (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) + bVar17;
+            (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = uVar16 + bVar17;
           }
-          puVar15 = ovr_stshTell(unaff_DI,unaff_SI,fid);
+          puVar15 = ovr_stshTell((uint32_t *)fid,unaff_DI);
           uVar16 = ((int)puVar15 >> 0xf) + (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) +
                    (uint)CARRY2((uint)puVar15,(uint)(uint32_t *)chnk_sz);
-          ovr_stshSeek();
+          ovr_stshSeek(fid,CONCAT22(uVar16,(int)puVar15 + (int)(uint32_t *)chnk_sz));
         }
       }
     }
   }
                     /* free the pixels pointer at the end */
   if ((&((stg_tmp_t *)dst)->bptr)->ofs != 0 || (((stg_tmp_t *)dst)->bptr).seg != 0) {
-    ovr_stshFree();
+    handle_00.seg = (((stg_tmp_t *)dst)->bptr).seg;
+    handle_00.ofs = (&((stg_tmp_t *)dst)->bptr)->ofs;
+    ovr_stshFree(handle_00);
   }
-  ovr_stshClose((uint16_t)unaff_DI,fid);
-  ovr_stshFree();
+  ovr_stshClose(fid);
+  handle_01.seg = (uint16_t)(*(uint16_t *)((uint8_t *)&(dst) + 2));
+  handle_01.ofs = (uint16_t)(stg_tmp_t *)dst;
+  ovr_stshFree(handle_01);
   printf("Filename %d %s  \r");
   ovr_biosReadKey();
                     /* WARNING: Subroutine does not return */
-  ovr_stExit((int)unaff_DI,0xd);
+  ovr_stExit(0xd);
 }
 
 
