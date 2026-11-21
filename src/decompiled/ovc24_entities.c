@@ -106,34 +106,33 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   uint uVar6;
   uint uVar7;
   long *plVar8;
-  uint16_t uVar9;
+  long *plVar9;
   uint16_t uVar10;
   uint16_t uVar11;
-  int iVar12;
-  char *pcVar13;
-  entity_t *peVar14;
+  uint16_t uVar12;
+  int iVar13;
+  char *pcVar14;
+  char *pcVar15;
+  entity_t *peVar16;
   undefined2 unaff_SI;
   uint entityIndex_00;
-  uint uVar15;
+  uint uVar17;
   int unaff_DI;
-  undefined2 uVar16;
+  undefined2 uVar18;
+  agnt_t *paVar19;
   uint unaff_SS;
-  long lVar17;
-  undefined1 uVar18;
-  undefined1 uVar19;
-  undefined1 uVar20;
+  long lVar20;
   undefined1 uVar21;
   undefined1 uVar22;
-  uint8_t *puVar23;
-  byte *pbVar24;
-  undefined1 uVar25;
-  undefined1 uVar26;
-  undefined1 uVar27;
+  undefined1 uVar23;
+  undefined1 uVar24;
+  uint8_t *puVar25;
+  byte *pbVar26;
+  undefined2 uVar27;
   long a;
-  undefined2 uVar28;
+  byte bVar29;
   long in_stack_0000ffd2;
-  byte bVar30;
-  ulong uVar29;
+  ulong uVar28;
   long *plStack_2a;
   undefined4 uStack_28;
   uint8_t factionMax [4];
@@ -145,242 +144,227 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   uint uStack_8;
   
   a = CONCAT22(unaff_SI,unaff_DI);
-  uVar16 = (undefined2)((ulong)Entities >> 0x10);
+  uVar18 = (undefined2)((ulong)Entities >> 0x10);
   uVar4 = ((entity_t *)Entities)[entityIndex].base.y;
-  uVar6 = alignUp4(unaff_DI,(char)(((entity_t *)Entities + entityIndex)->base).x);
+  uVar6 = alignUp4(unaff_DI,(((entity_t *)Entities + entityIndex)->base).x);
   _fmemset((void *)(ulong)unaff_SS,8,(uint16_t)a);
   _fmemset((void *)CONCAT13(0xff,CONCAT12(0x81,unaff_SS)),2,(uint16_t)a);
   _fmemset((void *)CONCAT13(0xff,CONCAT12(0x81,unaff_SS)),2,(uint16_t)a);
-  uVar15 = entityIndex;
+  uVar17 = entityIndex;
   do {
-    entityIndex_00 = uVar15;
-    uVar16 = (undefined2)((ulong)Entities >> 0x10);
-    bVar30 = ((entity_t *)Entities)[entityIndex_00].base.gindex;
+    entityIndex_00 = uVar17;
+    uVar18 = (undefined2)((ulong)Entities >> 0x10);
+    bVar29 = ((entity_t *)Entities)[entityIndex_00].base.gindex;
     *(undefined1 *)((int)&((entity_t *)Entities)[entityIndex_00].base.entity + 2) = 1;
-    bVar3 = *(byte *)((int)(char **)GMenuStrings + (uint)bVar30 * 0x95 + 0x1f);
+    bVar3 = *(byte *)((int)(char **)GMenuStrings + (uint)bVar29 * 0x95 + 0x1f);
     bVar5 = ovc24_usesEntities(entityIndex_00);
-    uVar16 = (undefined2)((ulong)Entities >> 0x10);
+    paVar19 = (agnt_t *)((ulong)Entities >> 0x10);
     uVar7 = (uint)bVar5 * (uint)bVar5 * (uint)((entity_t *)Entities)[entityIndex_00].base.animFrame;
     puVar1 = (uint *)(&stack0xffd4 + (uint)bVar3 * 4);
-    uVar15 = *puVar1;
+    uVar17 = *puVar1;
     *puVar1 = *puVar1 + uVar7;
     (&plStack_2a)[(uint)bVar3 * 2] =
          (long *)((int)(&plStack_2a)[(uint)bVar3 * 2] +
-                 (uint)CARRY2(uVar15,uVar7) + ((int)uVar7 >> 0xf));
-    if (((*(uint *)((int)&worldMenuLabels[6].seg + 1 + (uint)bVar30 * 0x95) & 8) == 0) &&
-       ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)bVar30 * 0x95) & 0x20) == 0)) {
-      puVar23 = factionMax + bVar3;
-      bVar5 = ovr_agnt_compute8((agnt_t *)
-                                CONCAT13((char)((uint)puVar23 >> 8),CONCAT12((char)puVar23,uVar16)),
+                 (uint)CARRY2(uVar17,uVar7) + ((int)uVar7 >> 0xf));
+    if (((*(uint *)((int)&worldMenuLabels[6].seg + 1 + (uint)bVar29 * 0x95) & 8) == 0) &&
+       ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)bVar29 * 0x95) & 0x20) == 0)) {
+      puVar25 = factionMax + bVar3;
+      bVar5 = ovr_agnt_compute8((agnt_t *)CONCAT22(puVar25,paVar19),
                                 (entity_t *)Entities + entityIndex_00);
-      if ((char)*puVar23 < (char)bVar5) {
-        pbVar24 = factionMax + bVar3;
-        bVar5 = ovr_agnt_compute8((agnt_t *)
-                                  CONCAT13((char)((uint)pbVar24 >> 8),
-                                           CONCAT12((char)pbVar24,(*(uint16_t *)((uint8_t *)&(Entities) + 2)))),
+      if ((char)*puVar25 < (char)bVar5) {
+        pbVar26 = factionMax + bVar3;
+        bVar5 = ovr_agnt_compute8((agnt_t *)CONCAT22(pbVar26,(*(uint16_t *)((uint8_t *)&(Entities) + 2))),
                                   (entity_t *)Entities + entityIndex_00);
-        *pbVar24 = bVar5;
+        *pbVar26 = bVar5;
       }
     }
-    if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + (uint)bVar30 * 0x95) & 8) == 0) {
-      puVar23 = factionMax + bVar3 + 2;
-      bVar5 = ovr_agnt_compute8((agnt_t *)
-                                CONCAT13((char)((uint)puVar23 >> 8),
-                                         CONCAT12((char)puVar23,(*(uint16_t *)((uint8_t *)&(Entities) + 2)))),
+    if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + (uint)bVar29 * 0x95) & 8) == 0) {
+      puVar25 = factionMax + bVar3 + 2;
+      bVar5 = ovr_agnt_compute8((agnt_t *)CONCAT22(puVar25,(*(uint16_t *)((uint8_t *)&(Entities) + 2))),
                                 (entity_t *)Entities + entityIndex_00);
-      if ((char)*puVar23 < (char)bVar5) {
-        pbVar24 = factionMax + bVar3 + 2;
-        bVar5 = ovr_agnt_compute8((agnt_t *)
-                                  CONCAT13((char)((uint)pbVar24 >> 8),
-                                           CONCAT12((char)pbVar24,(*(uint16_t *)((uint8_t *)&(Entities) + 2)))),
+      if ((char)*puVar25 < (char)bVar5) {
+        pbVar26 = factionMax + bVar3 + 2;
+        bVar5 = ovr_agnt_compute8((agnt_t *)CONCAT22(pbVar26,(*(uint16_t *)((uint8_t *)&(Entities) + 2))),
                                   (entity_t *)Entities + entityIndex_00);
-        *pbVar24 = bVar5;
+        *pbVar26 = bVar5;
       }
     }
     if (((char)factionMax[bVar3 + 2] < '\x02') &&
-       ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + (uint)bVar30 * 0x95) & 2) != 0)) {
+       ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + (uint)bVar29 * 0x95) & 2) != 0)) {
       factionMax[bVar3 + 2] = 0x2;
     }
-    uVar15 = entityIndex_00;
+    uVar17 = entityIndex_00;
     if ((((char)factionMax[bVar3] < '\x02') &&
-        ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + (uint)bVar30 * 0x95) & 2) != 0)) &&
+        ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + (uint)bVar29 * 0x95) & 2) != 0)) &&
        (4 < ((entity_t *)Entities)[entityIndex_00].base.level)) {
       factionMax[bVar3] = 0x2;
     }
     do {
-      uVar15 = uVar15 + 1;
-      if (EntityCount <= uVar15) break;
-      uVar16 = (undefined2)((ulong)Entities >> 0x10);
-    } while ((((entity_t *)Entities)[uVar15].base.y != uVar4) ||
-            (uVar7 = alignUp4((int)a,(char)(((entity_t *)Entities + uVar15)->base).x),
-            uVar7 != uVar6));
-  } while (uVar15 < EntityCount);
+      uVar17 = uVar17 + 1;
+      if (EntityCount <= uVar17) break;
+      uVar18 = (undefined2)((ulong)Entities >> 0x10);
+    } while ((((entity_t *)Entities)[uVar17].base.y != uVar4) ||
+            (uVar7 = alignUp4((int)a,(((entity_t *)Entities + uVar17)->base).x), uVar7 != uVar6));
+  } while (uVar17 < EntityCount);
   plStack_16 = (long *)0x0;
   uStack_18 = 200;
-  uVar15 = (uint)((ulong)in_stack_0000ffd2 >> 0x10);
-  if ((-1 < (int)plStack_2a) && ((0 < (int)plStack_2a || (200 < uVar15)))) {
+  uVar17 = (uint)((ulong)in_stack_0000ffd2 >> 0x10);
+  if ((-1 < (int)plStack_2a) && ((0 < (int)plStack_2a || (200 < uVar17)))) {
     plStack_16 = plStack_2a;
-    uStack_18 = uVar15;
+    uStack_18 = uVar17;
   }
   if (((int)plStack_16 <= (int)(*(uint16_t *)((uint8_t *)&(uStack_28) + 2))) &&
      (((int)plStack_16 < (int)(*(uint16_t *)((uint8_t *)&(uStack_28) + 2)) || (uStack_18 < (uint)uStack_28)))) {
     plStack_16 = (*(uint16_t *)((uint8_t *)&(uStack_28) + 2));
     uStack_18 = (uint)uStack_28;
   }
-  uVar20 = SUB21(plStack_16,0);
-  uVar25 = (undefined1)((uint)plStack_16 >> 8);
-  uVar18 = (undefined1)uStack_18;
-  uVar19 = (undefined1)(uStack_18 >> 8);
-  uVar16 = 0;
-  uVar22 = uVar18;
-  uVar27 = uVar19;
-  uVar21 = uVar20;
-  uVar26 = uVar25;
+  uVar21 = (undefined1)uStack_18;
+  uVar23 = (undefined1)(uStack_18 >> 8);
+  uVar18 = 0;
+  uVar22 = uVar21;
+  uVar24 = uVar23;
+  plVar9 = plStack_16;
   plVar8 = LXMUL_at_(plStack_16,a,in_stack_0000ffd2);
-  uVar28 = (undefined2)in_stack_0000ffd2;
-  lVar17 = LDIV_at_((long)CONCAT22(uVar16,plVar8),
-                    CONCAT13(uVar26,CONCAT12(uVar21,CONCAT11(uVar27,uVar22))));
-  plStack_2a = (long *)((ulong)(lVar17 + 0x14) >> 0x10);
-  lVar17 = CONCAT22((int)(lVar17 + 0x14),uVar28);
-  uVar16 = 0;
-  plVar8 = LXMUL_at_(plStack_16,a,lVar17);
-  uVar22 = (undefined1)((ulong)lVar17 >> 0x10);
-  uStack_28 = LDIV_at_((long)CONCAT22(uVar16,plVar8),
-                       CONCAT13(uVar25,CONCAT12(uVar20,CONCAT11(uVar19,uVar18))));
+  uVar27 = (undefined2)in_stack_0000ffd2;
+  lVar20 = LDIV_at_((long)CONCAT22(uVar18,plVar8),CONCAT22(plVar9,CONCAT11(uVar24,uVar22)));
+  plStack_2a = (long *)((ulong)(lVar20 + 0x14) >> 0x10);
+  lVar20 = CONCAT22((int)(lVar20 + 0x14),uVar27);
+  uVar18 = 0;
+  plVar9 = LXMUL_at_(plStack_16,a,lVar20);
+  uVar27 = (undefined2)((ulong)lVar20 >> 0x10);
+  uStack_28 = LDIV_at_((long)CONCAT22(uVar18,plVar9),CONCAT22(plStack_16,CONCAT11(uVar23,uVar21)));
   uStack_28 = uStack_28 + 0x14;
-  uVar9 = ovr_randBelow((uint16_t)a,uVar22);
-  uVar10 = ovr_randBelow((uint16_t)a,(char)uStack_28);
-  uVar11 = ovr_randBelow((uint16_t)a,uVar22);
-  uStack_8 = uVar11 & 0xff;
-  uVar11 = ovr_randBelow((uint16_t)a,(char)uStack_28);
-  uVar15 = uVar11 & 0xff;
-  if ((uVar10 & 0xff) < (uVar9 & 0xff)) {
-    uStack_8 = uStack_8 / (uVar15 + 1);
+  uVar10 = ovr_randBelow((uint16_t)a,uVar27);
+  uVar11 = ovr_randBelow((uint16_t)a,(uint)uStack_28);
+  uVar12 = ovr_randBelow((uint16_t)a,uVar27);
+  uStack_8 = uVar12 & 0xff;
+  uVar12 = ovr_randBelow((uint16_t)a,(uint)uStack_28);
+  uVar17 = uVar12 & 0xff;
+  if ((uVar11 & 0xff) < (uVar10 & 0xff)) {
+    uStack_8 = uStack_8 / (uVar17 + 1);
     bStack_10 = 1;
   }
   else {
-    if (uVar15 <= uStack_8) {
+    if (uVar17 <= uStack_8) {
       return;
     }
-    uStack_8 = uVar15 / (uStack_8 + 1);
+    uStack_8 = uVar17 / (uStack_8 + 1);
     bStack_10 = 0;
   }
   uStack_8 = uStack_8 + 1;
   if (2 < uStack_8) {
     uStack_8 = 2;
   }
-  uVar29 = 0xff00;
-  uVar15 = 0xffff;
+  uVar28 = 0xff00;
+  uVar17 = 0xffff;
   uStack_a = 0xffff;
   do {
-    uVar9 = (uint16_t)a;
+    uVar10 = (uint16_t)a;
     if ((int)entityIndex_00 < (int)entityIndex) {
       if (uStack_a != 0xffff) {
-        if (uVar15 == 0xffff) {
+        if (uVar17 == 0xffff) {
           ovr_attact_usesRandBelow
                     ((agnt_t *)
-                     CONCAT13((char)(uStack_a * 0x37 >> 8),
-                              CONCAT12(((entity_t *)Entities)[uStack_a].base.target,(*(uint16_t *)((uint8_t *)&(Entities) + 2))))
+                     CONCAT22(CONCAT11((char)(uStack_a * 0x37 >> 8),
+                                       ((entity_t *)Entities)[uStack_a].base.target),(*(uint16_t *)((uint8_t *)&(Entities) + 2)))
                      ,(byte)a,(entity_t *)Entities + uStack_a);
           ovr_attact_usesEntities();
-          uVar16 = (undefined2)((ulong)Entities >> 0x10);
-          peVar14 = (entity_t *)Entities;
-          bVar30 = peVar14[uStack_a].base.gindex;
-          if (*(char *)((int)(char **)GMenuStrings + (uint)bVar30 * 0x95 + 0x1f) == '\0') {
-            uVar22 = 0;
-            uVar27 = 0xa0;
-            uVar15 = alignUp4(peVar14[entityIndex].base.y,((peVar14 + entityIndex)->base).x);
-            iVar12 = (uint)bVar30 * 0x95;
-            uVar16 = 0x195d;
-            pcVar13 = ovr_fmVsprintf((char *)CONCAT22(*(undefined2 *)
-                                                       ((int)&worldMenuLabels[0].seg + 1 + iVar12),
+          uVar18 = (undefined2)((ulong)Entities >> 0x10);
+          peVar16 = (entity_t *)Entities;
+          bVar29 = peVar16[uStack_a].base.gindex;
+          if (*(char *)((int)(char **)GMenuStrings + (uint)bVar29 * 0x95 + 0x1f) == '\0') {
+            uVar27 = 0xa000;
+            uVar17 = alignUp4(peVar16[entityIndex].base.y,((peVar16 + entityIndex)->base).x);
+            iVar13 = (uint)bVar29 * 0x95;
+            pcVar15 = (char *)&AgntAnms[0x88].missileDy;
+            pcVar14 = ovr_fmVsprintf((char *)CONCAT22(*(undefined2 *)
+                                                       ((int)&worldMenuLabels[0].seg + 1 + iVar13),
                                                       (char *)"puppetmaker" + 3),
-                                     (char *)CONCAT22(uVar15,(char *)*(undefined2 *)
+                                     (char *)CONCAT22(uVar17,(char *)*(undefined2 *)
                                                                       ((int)&worldMenuLabels[1].ofs
-                                                                       + 1 + iVar12)));
-            ovr_uiNotify((char *)CONCAT13(uVar27,CONCAT12(uVar22,uVar16)),uVar9,pcVar13);
+                                                                       + 1 + iVar13)));
+            ovr_uiNotify((char *)CONCAT22(uVar27,pcVar15),uVar10,pcVar14);
           }
         }
         else {
-          if (((entity_t *)Entities)[uVar15].base.animFrame <= uStack_8) {
-            uStack_8 = (uint)((entity_t *)Entities)[uVar15].base.animFrame;
+          if (((entity_t *)Entities)[uVar17].base.animFrame <= uStack_8) {
+            uStack_8 = (uint)((entity_t *)Entities)[uVar17].base.animFrame;
           }
-          ((entity_t *)Entities)[uVar15].base.animFrame =
-               ((entity_t *)Entities)[uVar15].base.animFrame - (char)uStack_8;
+          ((entity_t *)Entities)[uVar17].base.animFrame =
+               ((entity_t *)Entities)[uVar17].base.animFrame - (char)uStack_8;
           ovr_ovc41_compute4();
           ovr_ovc25_attackingNotice
-                    ((byte)uVar9,
-                     *(undefined1 *)((int)&((entity_t *)Entities)[uVar15].base.entity + 3));
-          if (((entity_t *)Entities)[uVar15].base.animFrame != 0x0) {
-            ovc24_usesLDIV_at_(uVar15);
+                    ((byte)uVar10,
+                     CONCAT11((char)(uVar17 * 0x37 >> 8),
+                              *(undefined1 *)((int)&((entity_t *)Entities)[uVar17].base.entity + 3))
+                    );
+          if (((entity_t *)Entities)[uVar17].base.animFrame != 0x0) {
+            ovc24_usesLDIV_at_(uVar17);
             uVar6 = (uint)((ulong)Entities >> 0x10);
-            peVar14 = (entity_t *)Entities;
+            peVar16 = (entity_t *)Entities;
             if (((*(uint *)((int)&worldMenuLabels[7].ofs + 1 +
-                           (uint)peVar14[uStack_a].base.gindex * 0x95) & 4) != 0) &&
-               ((*(uint *)((int)&peVar14[uVar15].base.frames + 1) & 1) == 0)) {
-              uVar6 = ovr_ovc27_rollToHitAgent((ulong)uVar6,(byte)uVar9,peVar14 + uVar15);
+                           (uint)peVar16[uStack_a].base.gindex * 0x95) & 4) != 0) &&
+               ((*(uint *)((int)&peVar16[uVar17].base.frames + 1) & 1) == 0)) {
+              uVar6 = ovr_ovc27_rollToHitAgent((ulong)uVar6,(byte)uVar10,peVar16 + uVar17);
               if ((uVar6 & 0xff) == 0) {
-                puVar1 = (uint *)((int)&((entity_t *)Entities)[uVar15].base.frames + 1);
+                puVar1 = (uint *)((int)&((entity_t *)Entities)[uVar17].base.frames + 1);
                 *puVar1 = *puVar1 | 1;
-                uVar22 = 0;
-                uVar27 = 0xa0;
-                uVar16 = (undefined2)((ulong)Entities >> 0x10);
+                uVar27 = 0xa000;
+                uVar18 = (undefined2)((ulong)Entities >> 0x10);
                 uVar6 = alignUp4(((entity_t *)Entities)[entityIndex].base.y,
                                  (((entity_t *)Entities + entityIndex)->base).x);
-                iVar12 = (uint)((entity_t *)Entities)[uVar15].base.gindex * 0x95;
-                uVar16 = 0x195d;
-                pcVar13 = ovr_fmVsprintf((char *)CONCAT22(*(undefined2 *)
+                iVar13 = (uint)((entity_t *)Entities)[uVar17].base.gindex * 0x95;
+                pcVar15 = (char *)&AgntAnms[0x88].missileDy;
+                pcVar14 = ovr_fmVsprintf((char *)CONCAT22(*(undefined2 *)
                                                            ((int)&worldMenuLabels[0].seg + 1 +
-                                                           iVar12),(char *)"puppetmaker" + 3),
+                                                           iVar13),(char *)"puppetmaker" + 3),
                                          (char *)CONCAT22(uVar6,(char *)*(undefined2 *)
                                                                          ((int)&worldMenuLabels[1].
-                                                                                ofs + 1 + iVar12)));
-                ovr_uiNotify((char *)CONCAT13(uVar27,CONCAT12(uVar22,uVar16)),uVar9,pcVar13);
+                                                                                ofs + 1 + iVar13)));
+                ovr_uiNotify((char *)CONCAT22(uVar27,pcVar15),uVar10,pcVar14);
               }
             }
-            uVar16 = (undefined2)((ulong)Entities >> 0x10);
+            uVar18 = (undefined2)((ulong)Entities >> 0x10);
             if ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 +
                           (uint)((entity_t *)Entities)[uStack_a].base.gindex * 0x95) & 0xc00) != 0)
             {
               uVar6 = ovr_ovc27_rollToHitAgent
-                                ((ulong)CONCAT12(3,uVar16),(byte)uVar9,(entity_t *)Entities + uVar15
-                                );
+                                (CONCAT22(3,uVar18),(byte)uVar10,(entity_t *)Entities + uVar17);
               if ((uVar6 & 0xff) == 0) {
-                uVar16 = (undefined2)((ulong)Entities >> 0x10);
-                iVar12 = (uint)((entity_t *)Entities)[uStack_a].base.gindex * 0x95;
-                if ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + iVar12) & 0x800) == 0) {
+                uVar18 = (undefined2)((ulong)Entities >> 0x10);
+                iVar13 = (uint)((entity_t *)Entities)[uStack_a].base.gindex * 0x95;
+                if ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + iVar13) & 0x800) == 0) {
                   uStack_12 = 1;
                 }
                 else {
                   uStack_12 = 2;
                 }
-                uVar16 = ovr_ovc27_compute3(CONCAT13((char)((uint)iVar12 >> 8),
-                                                     CONCAT12(uStack_12,uVar16)),(char)uVar9,
-                                            (entity_t *)Entities + uVar15);
-                if ((char)uVar16 != '\0') {
+                uVar18 = ovr_ovc27_compute3(CONCAT22(CONCAT11((char)((uint)iVar13 >> 8),uStack_12),
+                                                     uVar18),(char)uVar10,
+                                            (entity_t *)Entities + uVar17);
+                if ((char)uVar18 != '\0') {
                   if (DebugVerbose != false) {
                     printf("kill 3\r");
                   }
-                  uVar16 = (undefined2)((ulong)Entities >> 0x10);
-                  if (((entity_t *)Entities)[uVar15].base.animFrame != 0x0) {
-                    puVar2 = &((entity_t *)Entities)[uVar15].base.animFrame;
+                  uVar18 = (undefined2)((ulong)Entities >> 0x10);
+                  if (((entity_t *)Entities)[uVar17].base.animFrame != 0x0) {
+                    puVar2 = &((entity_t *)Entities)[uVar17].base.animFrame;
                     *puVar2 = *puVar2 + 0xff;
                   }
                 }
-                uVar22 = 0;
-                uVar27 = 0xa0;
-                uVar16 = (undefined2)((ulong)Entities >> 0x10);
+                uVar27 = 0xa000;
+                uVar18 = (undefined2)((ulong)Entities >> 0x10);
                 uVar6 = alignUp4(((entity_t *)Entities)[entityIndex].base.y,
                                  (((entity_t *)Entities + entityIndex)->base).x);
-                iVar12 = (uint)((entity_t *)Entities)[uVar15].base.gindex * 0x95;
-                uVar16 = 0x195d;
-                pcVar13 = ovr_fmVsprintf((char *)CONCAT22(*(undefined2 *)
+                iVar13 = (uint)((entity_t *)Entities)[uVar17].base.gindex * 0x95;
+                pcVar15 = (char *)&AgntAnms[0x88].missileDy;
+                pcVar14 = ovr_fmVsprintf((char *)CONCAT22(*(undefined2 *)
                                                            ((int)&worldMenuLabels[0].seg + 1 +
-                                                           iVar12),(char *)"puppetmaker" + 3),
+                                                           iVar13),(char *)"puppetmaker" + 3),
                                          (char *)CONCAT22(uVar6,(char *)*(undefined2 *)
                                                                          ((int)&worldMenuLabels[1].
-                                                                                ofs + 1 + iVar12)));
-                ovr_uiNotify((char *)CONCAT13(uVar27,CONCAT12(uVar22,uVar16)),uVar9,pcVar13);
+                                                                                ofs + 1 + iVar13)));
+                ovr_uiNotify((char *)CONCAT22(uVar27,pcVar15),uVar10,pcVar14);
               }
             }
           }
@@ -389,40 +373,40 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
       return;
     }
     if (((entity_t *)Entities)[entityIndex].base.y == uVar4) {
-      uVar7 = alignUp4(uVar9,(char)(((entity_t *)Entities + entityIndex)->base).x);
+      uVar7 = alignUp4(uVar10,(((entity_t *)Entities + entityIndex)->base).x);
       if (uVar7 == uVar6) {
-        uVar16 = (undefined2)((ulong)Entities >> 0x10);
-        peVar14 = (entity_t *)Entities;
+        uVar18 = (undefined2)((ulong)Entities >> 0x10);
+        peVar16 = (entity_t *)Entities;
         if (*(byte *)((int)(char **)GMenuStrings +
-                     (uint)peVar14[entityIndex].base.gindex * 0x95 + 0x1f) == bStack_10) {
-          bVar30 = (byte)(uVar29 >> 8);
-          if (peVar14[entityIndex].base.level < bVar30) {
+                     (uint)peVar16[entityIndex].base.gindex * 0x95 + 0x1f) == bStack_10) {
+          bVar29 = (byte)(uVar28 >> 8);
+          if (peVar16[entityIndex].base.level < bVar29) {
 L_OVC24_5943_026e_0772:
-            uVar16 = (undefined2)((ulong)Entities >> 0x10);
-            bVar30 = ((entity_t *)Entities)[entityIndex].base.gindex;
-            if (((((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)bVar30 * 0x95) & 0x40) == 0)
+            uVar18 = (undefined2)((ulong)Entities >> 0x10);
+            bVar29 = ((entity_t *)Entities)[entityIndex].base.gindex;
+            if (((((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)bVar29 * 0x95) & 0x40) == 0)
                  || ('\x01' < (char)factionMax[(bStack_10 ^ 1) + 2])) &&
-                (((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)bVar30 * 0x95) & 8) == 0 ||
+                (((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)bVar29 * 0x95) & 8) == 0 ||
                  ('\0' < (char)factionMax[(bStack_10 ^ 1) + 2])))) &&
-               (((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)bVar30 * 0x95) & 0x10) == 0 ||
+               (((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)bVar29 * 0x95) & 0x10) == 0 ||
                 (-1 < (char)factionMax[bStack_10 ^ 1])))) {
-              uVar29 = (ulong)CONCAT11(((entity_t *)Entities)[entityIndex].base.level,(char)uVar29);
-              uVar15 = entityIndex;
+              uVar28 = (ulong)CONCAT11(((entity_t *)Entities)[entityIndex].base.level,(char)uVar28);
+              uVar17 = entityIndex;
             }
           }
-          else if (peVar14[entityIndex].base.level == bVar30) {
-            uVar9 = ovr_randBelow((uint16_t)a,3);
-            if ((uVar9 & 0xff) == 0) goto L_OVC24_5943_026e_0772;
+          else if (peVar16[entityIndex].base.level == bVar29) {
+            uVar10 = ovr_randBelow((uint16_t)a,3);
+            if ((uVar10 & 0xff) == 0) goto L_OVC24_5943_026e_0772;
           }
         }
-        else if ((byte)uVar29 < peVar14[entityIndex].base.level) {
+        else if ((byte)uVar28 < peVar16[entityIndex].base.level) {
 L_OVC24_5943_026e_088A:
-          uVar29 = CONCAT31((int3)(uVar29 >> 8),((entity_t *)Entities)[entityIndex].base.level);
+          uVar28 = CONCAT31((int3)(uVar28 >> 8),((entity_t *)Entities)[entityIndex].base.level);
           uStack_a = entityIndex;
         }
-        else if (peVar14[entityIndex].base.level == (byte)uVar29) {
-          uVar9 = ovr_randBelow((uint16_t)a,3);
-          if ((uVar9 & 0xff) == 0) goto L_OVC24_5943_026e_088A;
+        else if (peVar16[entityIndex].base.level == (byte)uVar28) {
+          uVar10 = ovr_randBelow((uint16_t)a,3);
+          if ((uVar10 & 0xff) == 0) goto L_OVC24_5943_026e_088A;
         }
       }
     }

@@ -1047,16 +1047,13 @@ uint8_t * __cdecl16far ovc15_usesStshRealloc(char *text,...)
   uint8_t *puVar3;
   undefined2 in_DX;
   uint unaff_BP;
-  undefined2 in_stack_00000004;
-  undefined1 uVar4;
+  char *in_stack_00000004;
   
-  uVar4 = (undefined1)((ulong)text >> 8);
-  sVar2 = strlen((char *)CONCAT13(uVar4,CONCAT12((char)text,in_stack_00000004)));
-  puVar3 = ovr_stshRealloc(CONCAT22(sVar2 + 1,upperTextSeg),(ulong)unaff_BP << 0x10,upperTextOfs,0);
+  sVar2 = strlen((char *)CONCAT22((char *)text,in_stack_00000004));
+  puVar3 = ovr_stshRealloc(CONCAT22(sVar2 + 1,upperTextSeg),(ulong)unaff_BP << 0x10,upperTextOfs);
   _upperTextOfs = (uint8_t *)CONCAT22(in_DX,puVar3);
-  strcpy((char *)CONCAT22(in_DX,puVar3),
-         (char *)CONCAT13(uVar4,CONCAT12((char)text,in_stack_00000004)));
-  uVar1 = toupper(*_upperTextOfs);
+  strcpy((char *)CONCAT22(in_DX,puVar3),(char *)CONCAT22((char *)text,in_stack_00000004));
+  uVar1 = toupper((int)(char)*_upperTextOfs);
   *_upperTextOfs = uVar1;
   puVar3 = upperTextOfs;
   return puVar3;
@@ -1077,7 +1074,7 @@ char * __cdecl16far ovc15_capitalize(char *text,...)
   
   strcpy((char *)CONCAT22((char *)text,in_stack_00000004),
          (char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(text) + 2))));
-  cVar1 = toupper(*(char *)CONCAT22((char *)text,in_stack_00000004));
+  cVar1 = toupper((int)*(char *)CONCAT22((char *)text,in_stack_00000004));
   *(char *)CONCAT22((char *)text,in_stack_00000004) = cVar1;
   return in_stack_00000004;
 }

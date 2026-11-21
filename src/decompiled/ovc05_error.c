@@ -21,7 +21,7 @@ void __cdecl16far stExit(int n,...)
     printf("\n\rError %d\n");
     ovr_biosReadKey();
   }
-  ovr_biosVideoCall((uint8_t)unaff_SI,0x3);
+  ovr_biosVideoCall();
   if (iVar1 < 0x80) {
     if (iVar1 != 0) {
       printf("Error %d %d.  (Give Cathryn BOTH numbers.)\n");

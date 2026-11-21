@@ -191,11 +191,11 @@ void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
     else {
       ch_index = in_stack_00000004 + 0xe0;
       if (ch_index < 0x61) {
-        uVar1 = (uint)*(byte *)CONCAT22((byte *)widths,_ch);
-        letter_w = (uint16_t)_ch[ch_index + 0xc1];
+        uVar1 = (uint)*(byte *)CONCAT22((byte *)widths,ch);
+        letter_w = (uint16_t)ch[ch_index + 0xc1];
         uStack_6 = (byte *)CONCAT22(TextBlitDstSeg,(byte *)(TextBlitX + TextBlitY * 0x140));
         pbStack_a = (byte *)CONCAT22((byte *)widths,
-                                     _ch + *(int *)(_ch + (uint)ch_index * 2 + 1) + 0x121);
+                                     ch + *(int *)(ch + (uint)ch_index * 2 + 1) + 0x121);
         if (BlitLetterType == '\x02') {
           for (uStack_e = 0; uStack_e < uVar1; uStack_e = uStack_e + 1) {
             iVar2 = 0;

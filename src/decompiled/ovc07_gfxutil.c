@@ -250,10 +250,10 @@ ovc07_usesLDIV_at_(int ofs1,int row1,int ofs2,int row2,uint8_t colour,brect_t *r
   char cVar14;
   
   a = CONCAT22(unaff_SI,unaff_DI);
-  iVar1 = *(int *)CONCAT22((brect_t *)rect,_colour);
-  puVar2 = (uint8_t *)_colour[1];
-  iVar3 = _colour[2];
-  puVar4 = (uint8_t *)_colour[3];
+  iVar1 = *(int *)CONCAT22((brect_t *)rect,colour);
+  puVar2 = (uint8_t *)colour[1];
+  iVar3 = colour[2];
+  puVar4 = (uint8_t *)colour[3];
   lVar9 = 0;
   if (in_stack_00000004 < iVar1) {
     lVar9 = 0x100;

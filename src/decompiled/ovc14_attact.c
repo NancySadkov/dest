@@ -985,7 +985,7 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force,...)
 /* [R2] string "arena" */
 
 bool __cdecl16far
-attact_textArena(uint16_t *foundIndexOut,char mode,uint8_t partyIndex,uint16_t x,uint16_t y)
+attact_textArena(uint16_t *foundIndexOut,int mode,uint8_t partyIndex,uint16_t x,uint16_t y)
 
 {
   uint uVar1;
@@ -997,7 +997,6 @@ attact_textArena(uint16_t *foundIndexOut,char mode,uint8_t partyIndex,uint16_t x
   uint uVar7;
   int unaff_DI;
   undefined2 uVar8;
-  undefined1 in_stack_00000009;
   uint uStack_4;
   
   uStack_4 = 0xffff;
@@ -1016,12 +1015,12 @@ attact_textArena(uint16_t *foundIndexOut,char mode,uint8_t partyIndex,uint16_t x
         peVar6 = (entity_t *)Entities;
         uVar8 = (undefined2)((ulong)Entities >> 0x10);
         if (((uVar3 != uVar1) || (peVar6[uVar7].base.destY != y)) &&
-           ((((_mode == 0 && ((*(byte *)((int)&peVar6[uVar7].base.flags32 + 1) & 2) == 0)) ||
-             ((_mode == 1 &&
+           ((((mode == 0 && ((*(byte *)((int)&peVar6[uVar7].base.flags32 + 1) & 2) == 0)) ||
+             ((mode == 1 &&
               (((peVar6[uVar7].base.destX == 0 && (peVar6[uVar7].base.destY == 0)) &&
                ((*(byte *)((int)&peVar6[uVar7].base.flags32 + 1) & 2) == 0)))))) ||
-            (((_mode == 2 && ((*(byte *)((int)&peVar6[uVar7].base.flags32 + 1) & 1) != 0)) ||
-             ((_mode == 3 && ((*(byte *)((int)&peVar6[uVar7].base.flags32 + 1) & 4) != 0)))))))) {
+            (((mode == 2 && ((*(byte *)((int)&peVar6[uVar7].base.flags32 + 1) & 1) != 0)) ||
+             ((mode == 3 && ((*(byte *)((int)&peVar6[uVar7].base.flags32 + 1) & 4) != 0)))))))) {
           *foundIndexOut = uVar7;
           uStack_4 = uVar2;
         }
@@ -1167,8 +1166,8 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
     bStack_3 = ((uint8_t *)MenuItemEnabled)[uVar8];
     if (*(byte *)((int)puVar6 + uVar8 + 0xe) != uVar7) {
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),'\x03',bStack_3,
-                                       *value,puVar6[1]), bVar3))) {
+             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),3,bStack_3,*value,
+                                       puVar6[1]), bVar3))) {
         *(undefined1 *)&((entity_t *)Entities)[uStack_6].base.state = 0;
         ((entity_t *)Entities)[uStack_6].base.destX = uStack_8;
         ((entity_t *)Entities)[uStack_6].base.destY = puVar6[1];
@@ -1177,33 +1176,32 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
         uVar7 = uVar7 + 1;
       }
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),'\x02',bStack_3,
-                                       *value,puVar6[1]), bVar3))) {
+             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),2,bStack_3,*value,
+                                       puVar6[1]), bVar3))) {
         *(undefined1 *)&((entity_t *)Entities)[uStack_6].base.state = 0;
         ((entity_t *)Entities)[uStack_6].base.destX = uStack_8;
         ((entity_t *)Entities)[uStack_6].base.destY = puVar6[1];
         uVar7 = uVar7 + 1;
       }
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),'\x01',bStack_3,
-                                       *value,puVar6[1]), bVar3))) {
+             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),1,bStack_3,*value,
+                                       puVar6[1]), bVar3))) {
         *(undefined1 *)&((entity_t *)Entities)[uStack_6].base.state = 0;
         ((entity_t *)Entities)[uStack_6].base.destX = uStack_8;
         ((entity_t *)Entities)[uStack_6].base.destY = puVar6[1];
         uVar7 = uVar7 + 1;
       }
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),'\0',bStack_3,*value
-                                       ,puVar6[1]), bVar3))) {
+             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),0,bStack_3,*value,
+                                       puVar6[1]), bVar3))) {
         *(undefined1 *)&((entity_t *)Entities)[uStack_6].base.state = 0;
         ((entity_t *)Entities)[uStack_6].base.destX = uStack_8;
         ((entity_t *)Entities)[uStack_6].base.destY = puVar6[1];
         uVar7 = uVar7 + 1;
       }
       while (((int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) < (int)uVar7 &&
-             (bVar3 = attact_textArena2((uint *)CONCAT13((char)((uint)unaff_SS >> 8),
-                                                         CONCAT12((char)unaff_SS,&uStack_6)),
-                                        (uint)bStack_3,*value), bVar3))) {
+             (bVar3 = attact_textArena2((uint *)CONCAT22(unaff_SS,&uStack_6),(uint)bStack_3,*value),
+             bVar3))) {
         *(undefined1 *)&((entity_t *)Entities)[uStack_6].base.state = 0;
         uVar10 = (undefined2)((ulong)Entities >> 0x10);
         ((entity_t *)Entities)[uStack_6].base.destX = ((entity_t *)Entities)[uStack_6].base.targetX;
@@ -1324,7 +1322,7 @@ attact_compute3(far_t table,uint16_t index,far_t pctOut,far_t remainderOut,far_t
 
 /* [R4] calls ovr_alignUp4 */
 
-uint __cdecl16far attact_usesAlignUp44(int *xPtr,byte y,uint8_t dir)
+uint __cdecl16far attact_usesAlignUp44(int *xPtr,int y,uint8_t dir)
 
 {
   uint uVar1;
@@ -1332,17 +1330,16 @@ uint __cdecl16far attact_usesAlignUp44(int *xPtr,byte y,uint8_t dir)
   uint value;
   int iVar3;
   int unaff_DI;
-  undefined1 in_stack_00000009;
   undefined1 in_stack_0000000c;
   
   uVar2 = 0x3f0b;
   if ((dir & 1) == 0) {
-    uVar1 = func_0x0004f32d(0x3f0b,*xPtr,_y,dir,in_stack_0000000c);
+    uVar1 = func_0x0004f32d(0x3f0b,*xPtr,y,dir,in_stack_0000000c);
   }
   else {
     iVar3 = *xPtr;
     do {
-      uVar2 = func_0x0004f32d(uVar2,*xPtr,_y,dir,in_stack_0000000c);
+      uVar2 = func_0x0004f32d(uVar2,*xPtr,y,dir,in_stack_0000000c);
       if ((char)uVar2 != '\0') {
         return CONCAT11((char)((uint)uVar2 >> 8),1);
       }
@@ -1387,8 +1384,8 @@ void __cdecl16far attact_usesRandBelow(agnt_t *agnt,byte dir,...)
     n = CONCAT11((*(uint8_t *)((uint8_t *)&(agnt) + 2)),(char)n);
     do {
       _agntX = *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004);
-      uVar2 = attact_usesAlignUp44
-                        ((int *)CONCAT22(unaff_SS,&agntX),(byte)in_stack_00000004[1],(*(uint8_t *)((uint8_t *)&(agnt) + 2)));
+      uVar2 = attact_usesAlignUp44((int *)CONCAT22(unaff_SS,&agntX),in_stack_00000004[1],(*(uint8_t *)((uint8_t *)&(agnt) + 2)))
+      ;
       if ((uVar2 & 0xff) == 0) goto L_attact_3f0b_2430_24BF;
       (*(uint8_t *)((uint8_t *)&(agnt) + 2)) = (*(uint8_t *)((uint8_t *)&(agnt) + 2)) + 1 & 3;
     } while ((*(uint8_t *)((uint8_t *)&(agnt) + 2)) != (byte)(n >> 8));

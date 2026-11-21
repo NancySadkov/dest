@@ -120,9 +120,9 @@ void __cdecl16far chpath(char *path,...)
   
   iVar2 = chdir((char *)CONCAT22((char *)path,in_stack_00000004));
   if (iVar2 == 0) {
-    c = toupper(*(char *)CONCAT22((char *)path,in_stack_00000004));
+    c = toupper((int)*(char *)CONCAT22((char *)path,in_stack_00000004));
     if (((in_stack_00000004[1] == ':') && ('@' < (char)c)) && ((char)c < '[')) {
-      cVar1 = toupper(c);
+      cVar1 = toupper((int)(char)c);
       setdisk(CONCAT11(extraout_AH,cVar1) + -0x41);
     }
   }
@@ -208,7 +208,7 @@ void __cdecl16far init_cfg(void)
                     /* WARNING: Subroutine does not return */
       ovr_stExit();
     }
-    uVar2 = toupper(c);
+    uVar2 = toupper((int)(char)c);
   }
   CFG_Sfx = uVar2;
   c = ovr_read_cfg();
@@ -222,7 +222,7 @@ void __cdecl16far init_cfg(void)
                     /* WARNING: Subroutine does not return */
       ovr_stExit();
     }
-    uVar2 = toupper(c);
+    uVar2 = toupper((int)(char)c);
   }
   CFG_Mus = uVar2;
   c = ovr_read_cfg();
@@ -285,13 +285,9 @@ void __cdecl16far init_game(void)
 
 {
   int iVar1;
-  undefined2 unaff_BP;
+  uint unaff_BP;
   uint8_t in_stack_00000000;
-  uint8_t operation;
-  undefined1 uVar2;
   
-  operation = (uint8_t)unaff_BP;
-  uVar2 = (undefined1)((uint)unaff_BP >> 8);
   _OvrInitExt(0,0);
   _OvrInitEms(0,0,0);
   ovr_init_base();
@@ -300,7 +296,7 @@ void __cdecl16far init_game(void)
   clrscr();
   srand8(CONCAT22(*(undefined2 *)(BDA_DailyTimeCounter.ofs + 2),*(undefined2 *)BDA_DailyTimeCounter)
         );
-  ovr_stshAlloc((ulong)CONCAT11(uVar2,operation) << 0x10,0xfa0f);
+  ovr_stshAlloc((ulong)unaff_BP << 0x10,0xfa0f);
   iVar1 = strcmp((char *)CONCAT22(GExeArg.seg,GExeArg.ofs),"debug");
   if (iVar1 == 0) {
     GDebug = true;
@@ -314,18 +310,18 @@ void __cdecl16far init_game(void)
     ovr_init_assets();
   }
   ovr_stshInit();
-  StshStrongDatHnd = ovr_stshOpen(CONCAT11(uVar2,operation),0);
+  StshStrongDatHnd = ovr_stshOpen(unaff_BP,0);
   ovr_sfxInit();
   ovr_musInit();
   ovr_gfxInitRand();
   ovr_miceInit();
-  ovr_biosVideoCall(operation,in_stack_00000000,0x13);
+  ovr_biosVideoCall(unaff_BP,in_stack_00000000,0x13);
   init_grayscale_palette();
   ovr_init_ui_gfxes();
   init_buffers();
   ovr_clean_ring_buffer();
   ovr_heapInit();
-  ovr_play_sfx(0,83);
+  ovr_play_sfx(0,unaff_BP,0x53);
   return;
 }
 

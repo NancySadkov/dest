@@ -1505,20 +1505,20 @@ L_OVC22_5087_0234_32B8:
               GRecordCount = GRecordCount + -1;
               _fmemset((void *)0x21f2,0x12,CONCAT11(in_stack_0000ffbf,in_stack_0000ffbe));
               *(byte *)(GRecordCount * 0x12 + 8) = in_stack_00000004;
-              *(uint16_t *)(GRecordCount * 0x12 + 2) = (uint16_t)_partyIndex;
+              *(uint16_t *)(GRecordCount * 0x12 + 2) = (uint16_t)partyIndex;
               *(undefined2 *)(GRecordCount * 0x12 + 4) = CONCAT11(uStack0009,bStack0008);
               *(byte *)(GRecordCount * 0x12 + 9) = in_stack_0000000e;
-              iVar72 = ovc23_isLargeBuilding((int)_partyIndex,CONCAT11(uStack0009,bStack0008));
+              iVar72 = ovc23_isLargeBuilding((int)partyIndex,CONCAT11(uStack0009,bStack0008));
               uVar52 = (undefined2)((ulong)GUnitGrid >> 0x10);
               uVar51 = (undefined2)((ulong)GUnits >> 0x10);
               if ((char)iVar72 == '\0') {
                 bVar16 = ((unit_t *)GUnits +
-                         (*(short (*) [148] [60])GUnitGrid)[(int)_partyIndex]
+                         (*(short (*) [148] [60])GUnitGrid)[(int)partyIndex]
                          [CONCAT11(uStack0009,bStack0008)])->bldType;
               }
               else {
                 bVar16 = ((unit_t *)GUnits +
-                         (*(short (*) [148] [60])GUnitGrid)[(int)((int)&_partyIndex[-1].seg + 1)]
+                         (*(short (*) [148] [60])GUnitGrid)[(int)((int)&partyIndex[-1].seg + 1)]
                          [CONCAT11(uStack0009,bStack0008)])->bldType;
               }
               cVar25 = *(char *)((uint)bVar16 * 0x27 + 0x11d);
@@ -1546,7 +1546,7 @@ L_OVC22_5087_0234_32B8:
                 *(undefined1 *)(GRecordCount * 0x12 + 0xc) = 1;
               }
               if (in_stack_00000004 == 0) {
-                iVar72 = ovc23_isLargeBuilding((int)_partyIndex,CONCAT11(uStack0009,bStack0008));
+                iVar72 = ovc23_isLargeBuilding((int)partyIndex,CONCAT11(uStack0009,bStack0008));
                 if ((char)iVar72 != '\0') {
                   piVar4 = (int *)(GRecordCount * 0x12 + 2);
                   *piVar4 = *piVar4 + -1;
@@ -1889,7 +1889,7 @@ switchD_5000_123d_caseD_2:
         uVar51 = (undefined2)((ulong)Entities >> 0x10);
       } while (((uint *)(((entity_t *)Entities + (int)puVar47)->base).x != unaff_DI) ||
               (pfVar19 = (far_t *)((entity_t *)Entities)[(int)puVar47].base.y,
-              pfVar19 != _partyIndex));
+              pfVar19 != partyIndex));
       pfVar19 = (far_t *)ovc23_findClearColumn();
       uStack_6 = (far_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),pfVar19);
       if ((int)pfVar19 < 0) break;
@@ -4721,7 +4721,7 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
       }
       uVar8 = (undefined1)((uint)puVar7 >> 8);
       ovr_createConstructionRecordFar
-                ((byte)x,y,_partyIndex,
+                ((byte)x,y,partyIndex,
                  (uint8_t *)CONCAT22(CONCAT11(uVar8,in_stack_00000004),outFlag),unaff_SI,(char)uVar6
                  ,CONCAT11(uVar8,(char)uVar6),x);
     }

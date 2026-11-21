@@ -252,10 +252,10 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
       ovr_stExit();
     }
     if (*(int *)((uint)in_stack_00000004 * 2 + 0x114) == 0) {
-      audio_textMidiError(in_stack_00000004,_fid);
+      audio_textMidiError(in_stack_00000004,fid);
     }
     else if ((AudioAssetsReady1 != '\0') && (SfxRunning != '\0')) {
-      if ((CurrentlyPlayingSfx != in_stack_00000004) && (_fid == 1)) {
+      if ((CurrentlyPlayingSfx != in_stack_00000004) && (fid == 1)) {
         uVar5 = CONCAT22(unaff_DI,0x3a5b);
         bVar1 = ovr_digSoundPlaying();
         if (bVar1) {
@@ -263,10 +263,10 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
         }
       }
       if ((((CFG_Sfx != '1') && (CFG_Sfx != '4')) && (CFG_Sfx != '9')) ||
-         ((_fid != 3 && (_fid != 4)))) {
+         ((fid != 3 && (fid != 4)))) {
         do {
           uVar6 = (undefined2)(uVar5 >> 0x10);
-          if (_fid != 2) break;
+          if (fid != 2) break;
           uVar5 = uVar5 & 0xffff0000;
           bVar1 = ovr_digSoundPlaying();
           uVar6 = (undefined2)(uVar5 >> 0x10);
@@ -313,7 +313,7 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
           ovr_digPreformatSound();
           ovr_digPlayPreformatedSound();
           ovr_digSetSterioPanning();
-          if (_fid == 3) {
+          if (fid == 3) {
             CurSfxType3 = in_stack_00000004;
           }
           CurrentlyPlayingSfx = in_stack_00000004;

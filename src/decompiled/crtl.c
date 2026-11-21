@@ -2120,18 +2120,21 @@ uint __cdecl16far tolower(uint c)
 
 /* 1000:0e30 */
 
-char __cdecl16far toupper(char c)
+char __cdecl16far toupper(int c)
 
 {
-  undefined1 in_stack_00000005;
+  char cVar1;
   
-  if (_c == -1) {
-    c = -1;
+  if (c == -1) {
+    cVar1 = -1;
   }
-  else if ((((byte *)_ctype + 1)[(byte)c] & 8) != 0) {
-    c = c + -0x20;
+  else {
+    cVar1 = (char)c;
+    if ((((byte *)_ctype + 1)[c & 0xff] & 8) != 0) {
+      cVar1 = cVar1 + -0x20;
+    }
   }
-  return c;
+  return cVar1;
 }
 
 

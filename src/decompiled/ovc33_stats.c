@@ -1656,13 +1656,13 @@ char * __cdecl16far stats_readyStatusText(byte agntIndex,char *text)
     pcVar3 = (char *)((int)&AgntAnms[0x75].halfWidth + 1);
     puVar2 = ovr_ovc15_usesStshRealloc();
     pcVar3 = ovr_stsprintf((char *)CONCAT22(0x638d,(char *)text),
-                           (char *)CONCAT22(puVar2,(char *)"puppetmaker" + 3),pcVar3,_agntIndex);
+                           (char *)CONCAT22(puVar2,(char *)"puppetmaker" + 3),pcVar3,agntIndex);
   }
   else {
     pcVar3 = (char *)((int)&AgntAnms[0x75].halfWidth + 1);
     puVar2 = ovr_ovc15_usesStshRealloc();
     pcVar3 = ovr_stsprintf((char *)CONCAT22(0x63a2,(char *)text),
-                           (char *)CONCAT22(puVar2,(char *)"puppetmaker" + 3),pcVar3,_agntIndex);
+                           (char *)CONCAT22(puVar2,(char *)"puppetmaker" + 3),pcVar3,agntIndex);
   }
   return pcVar3;
 }

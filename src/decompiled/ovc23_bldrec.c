@@ -2471,7 +2471,7 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
       ovc23_removeRecord(unaff_DI,uVar10);
     }
   }
-  iVar9 = ovc23_isLargeBuilding(_bldType,x);
+  iVar9 = ovc23_isLargeBuilding(bldType,x);
   if ((char)iVar9 != '\0') {
     ovc23_placeBuilding();
     uVar4 = ovr_ovc22_usesGOngoingBattle();
@@ -2518,17 +2518,17 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
     }
     _fmemset((void *)0x21f2,0x12,unaff_DI);
     *(byte *)(GRecordCount * 0x12 + 8) = in_stack_00000004;
-    *(int *)(GRecordCount * 0x12 + 2) = _bldType;
+    *(int *)(GRecordCount * 0x12 + 2) = bldType;
     *(int *)(GRecordCount * 0x12 + 4) = x;
     *(byte *)(GRecordCount * 0x12 + 9) = (*(uint8_t *)((uint8_t *)&(outFlag) + 2));
-    iVar9 = ovc23_isLargeBuilding(_bldType,x);
+    iVar9 = ovc23_isLargeBuilding(bldType,x);
     uVar4 = (undefined2)((ulong)GUnitGrid >> 0x10);
     uVar8 = (undefined2)((ulong)GUnits >> 0x10);
     if ((char)iVar9 == '\0') {
-      bStack_5 = ((unit_t *)GUnits + (*(short (*) [148] [60])GUnitGrid)[_bldType][x])->bldType;
+      bStack_5 = ((unit_t *)GUnits + (*(short (*) [148] [60])GUnitGrid)[bldType][x])->bldType;
     }
     else {
-      bStack_5 = ((unit_t *)GUnits + ((short (*) [148] [60])GUnitGrid)[-1][_bldType + 0x93][x])->
+      bStack_5 = ((unit_t *)GUnits + ((short (*) [148] [60])GUnitGrid)[-1][bldType + 0x93][x])->
                  bldType;
     }
     bStack_3 = *(byte *)((uint)bStack_5 * 0x27 + 0x11d);
@@ -2553,7 +2553,7 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
       *(undefined1 *)(GRecordCount * 0x12 + 0xc) = 1;
     }
     if (in_stack_00000004 == 0) {
-      iVar9 = ovc23_isLargeBuilding(_bldType,x);
+      iVar9 = ovc23_isLargeBuilding(bldType,x);
       if ((char)iVar9 != '\0') {
         piVar1 = (int *)(GRecordCount * 0x12 + 2);
         *piVar1 = *piVar1 + -1;

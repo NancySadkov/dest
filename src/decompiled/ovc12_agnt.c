@@ -882,7 +882,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type,..
   }
   gfx.seg = *(uint16_t *)(iVar5 + 0x26);
   gfx.ofs = uVar7;
-  ovr_blitGfxRect(gfx,x,_index,(brect_t *)CONCAT22(0x10,(brect_t *)rect),*(uint8_t *)(iVar5 + 0x33),
+  ovr_blitGfxRect(gfx,x,index,(brect_t *)CONCAT22(0x10,(brect_t *)rect),*(uint8_t *)(iVar5 + 0x33),
                   (bool)mirror,psVar6->cmap + 6,*(uint8_t *)(iVar5 + 0x33));
   *(char *)(iVar5 + 0x31) = *(char *)(iVar5 + 0x31) + '\x01';
   if (*(byte *)(iVar4 + 0x1b) <= *(byte *)(iVar5 + 0x31)) {

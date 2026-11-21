@@ -233,7 +233,7 @@ void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,
       if (*(byte *)((int)&((entity_t *)Entities)[_entityIndex].base.entity + 3) == in_stack_00000004
          ) {
         value = ovr_alignUp4(unaff_DI,((entity_t *)Entities)[_entityIndex].base.destX);
-        uVar2 = ovr_alignUp4(value,_count);
+        uVar2 = ovr_alignUp4(value,count);
         if ((value == uVar2) && (((entity_t *)Entities)[_entityIndex].base.destY == destX)) {
           iVar3 = iVar3 + 1;
         }
@@ -241,25 +241,25 @@ void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,
     }
     while ((iVar3 < (int)(uint)(byte)partyIndex &&
            (bVar1 = ovc25_textArena((uint *)CONCAT22(unaff_SS,&entityIndex),'\x02',
-                                    (uint)in_stack_00000004,_count), bVar1))) {
+                                    (uint)in_stack_00000004,count), bVar1))) {
       *(undefined1 *)&((entity_t *)Entities)[_entityIndex].base.state = 0;
-      ((entity_t *)Entities)[_entityIndex].base.destX = _count;
+      ((entity_t *)Entities)[_entityIndex].base.destX = count;
       ((entity_t *)Entities)[_entityIndex].base.destY = destX;
       iVar3 = iVar3 + 1;
     }
     while ((iVar3 < (int)(uint)(byte)partyIndex &&
            (bVar1 = ovc25_textArena((uint *)CONCAT22(unaff_SS,&entityIndex),'\x01',
-                                    (uint)in_stack_00000004,_count), bVar1))) {
+                                    (uint)in_stack_00000004,count), bVar1))) {
       *(undefined1 *)&((entity_t *)Entities)[_entityIndex].base.state = 0;
-      ((entity_t *)Entities)[_entityIndex].base.destX = _count;
+      ((entity_t *)Entities)[_entityIndex].base.destX = count;
       ((entity_t *)Entities)[_entityIndex].base.destY = destX;
       iVar3 = iVar3 + 1;
     }
     while ((iVar3 < (int)(uint)(byte)partyIndex &&
            (bVar1 = ovc25_textArena((uint *)CONCAT22(unaff_SS,&entityIndex),'\0',
-                                    (uint)in_stack_00000004,_count), bVar1))) {
+                                    (uint)in_stack_00000004,count), bVar1))) {
       *(undefined1 *)&((entity_t *)Entities)[_entityIndex].base.state = 0;
-      ((entity_t *)Entities)[_entityIndex].base.destX = _count;
+      ((entity_t *)Entities)[_entityIndex].base.destX = count;
       ((entity_t *)Entities)[_entityIndex].base.destY = destX;
       iVar3 = iVar3 + 1;
     }

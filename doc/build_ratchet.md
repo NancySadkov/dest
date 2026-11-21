@@ -111,3 +111,59 @@ segment and offset halves of the same far pointer are being taken from the wrong
 sources.  Sizing it precisely needs the operand provenance of the `CONCAT22`
 halves at a sample of those sites, which is the next investigation - not a blind
 retype.
+
+## Ratchet update: 2026-11-21 second pass
+
+```
+modules compiled clean : 10 / 57   (was 9)
+total errors           : 659       (was 675)
+```
+
+`O29` is the module that turned green.
+
+### Byte parameters: smaller than claimed
+
+`scripts/ghidra/FixByteParams.java` widens a one-byte parameter only when the
+body performs a word access on its own slot, and records the instruction as
+evidence.  Only **six** parameters in the whole program qualify:
+
+| function | parameter | witness |
+|---|---|---|
+| `toupper` | `c` | `1000:0e33 MOV DX,word ptr [BP + 0x6]` |
+| `biosVideoCall` | `operation` | `2d63:0021 MOV AX,word ptr [BP + 0x6]` |
+| `attact_textArena` | `mode` | `3f0b:1a37 MOV DI,word ptr [BP + 0xa]` |
+| `attact_usesAlignUp44` | `y` | `3f0b:23b0 MOV DI,word ptr [BP + 0xa]` |
+| `fmReadIntoHimem` | `useEms` | `474a:0c0d CMP DX,word ptr [BP + 0x10]` |
+| `ovc41_compute4` | `pad` | `6a8f:01c2 PUSH word ptr [BP + 0xc]` |
+
+They were applied with `SetVarType` to `/int`; the stack slot of a one-byte
+parameter is already two bytes, so nothing moved.  Measured effect: 675 -> 671.
+So byte width is **not** the explanation for the `_xxx` class - the earlier note
+in this document was wrong on that point.
+
+### What the `_xxx` class really is
+
+Not a width problem and not an untracked local: Ghidra **declares one name and
+uses another**.  In `ovc02_draw.c`, `draw_menuRowBar`:
+
+```c
+  undefined1 uStack0004;          /* declaration */
+  ...
+  if ((_uStack0004 < 5) && ...    /* use, one underscore later */
+```
+
+For parameters the pair is `count` / `_count`, `gfx_id` / `_gfx_id`,
+`shade1` / `_shade1`.  The underscore is Ghidra's disambiguator for a name that
+shadows something in scope, applied to the use but not to the declaration.
+
+`ExportRecovered.fixShadowedParamUses()` now rewrites `_x` to `x` **for
+parameter names only**, because Borland's runtime globals are also spelled with
+a leading underscore (`_drive`, `_c`) and must not be touched.  Parameters are
+exactly the `_count`/`_gfx_id`/`_shade1` pattern.
+
+Measured effect: `Undefined symbol` 85 -> 62, total 671 -> 659, and `O29`
+(`_gfx_id` in `animAdvance`) compiles clean.
+
+Locals printed this way (`_uStack0004`) are still undeclared; extending the rule
+to locally declared names needs the same care about Borland's `_`-prefixed
+globals, and is the next refinement.

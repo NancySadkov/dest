@@ -562,7 +562,7 @@ ovc40_usesAlignToSeg
     uVar11 = (undefined1)((uint)pcVar4 >> 8);
     uVar5 = in_DX;
     pcVar4 = ovr_stsprintf((char *)CONCAT22(uStack_58,unaff_SS),
-                           (char *)CONCAT22(_backdropIndex,pcStack_56),(char *)capTextOfs,&text2);
+                           (char *)CONCAT22(backdropIndex,pcStack_56),(char *)capTextOfs,&text2);
     text1_10.seg = in_DX;
     text1_10.ofs = (uint16_t)pcVar4;
     (*(uint8_t *)((uint8_t *)&(text2_09.ofs) + 1)) = uVar11;

@@ -52,7 +52,7 @@ void __cdecl16far animAdvance(uint16_t play_id,byte gfx_id,uint16_t x,uint16_t y
   puVar2 = (undefined2 *)
            ((int)*(undefined4 *)((undefined *)&GfxFramePtrs + (play_id & 0xff) * 4) + (uint)step * 4
            );
-  gfx.seg = _gfx_id;
+  gfx.seg = gfx_id;
   gfx.ofs = puVar2[1];
   ovr_blitGfxRect(gfx,x,y,(brect_t *)CONCAT22(0x10,dst.ofs),0x0,unaff_SI,*puVar2);
   ((undefined *)&GfxPlaySteps)[iVar1] = step + 0x1;

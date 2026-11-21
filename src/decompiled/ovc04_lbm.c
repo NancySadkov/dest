@@ -183,7 +183,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
   }
   else {
     src_seg = src.ofs;
-    src_ofs = _mask;
+    src_ofs = mask;
     if (200 < (uint)w) {
       w = 200;
     }

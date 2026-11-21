@@ -538,14 +538,13 @@ void __cdecl16far blitGfxN(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t ty
 
 /* [R4] calls ovr_randBelow */
 
-void __cdecl16far blit_usesRandBelow(byte *buf,char count,byte value,byte chance)
+void __cdecl16far blit_usesRandBelow(byte *buf,uint16_t count,byte value,byte chance)
 
 {
   uint16_t uVar1;
   uint16_t unaff_SI;
-  undefined1 in_stack_00000009;
   
-  while (_count != 0) {
+  while (count != 0) {
     if (*buf != 0) {
       uVar1 = ovr_randBelow(unaff_SI,0x100);
       if (chance < (byte)uVar1) {
@@ -556,7 +555,7 @@ void __cdecl16far blit_usesRandBelow(byte *buf,char count,byte value,byte chance
       }
     }
     buf = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(buf) + 2)),(byte *)buf + 1);
-    _count = _count + -1;
+    count = count - 1;
   }
   return;
 }
@@ -847,13 +846,13 @@ blit_usesBlitGfxN(far_t gfx,int16_t x,int y,byte shade1,int y2,byte shade2,brect
   
   iVar4 = y;
   iVar1 = x;
-  if (_shade1 < x) {
-    x = _shade1;
-    _shade1 = iVar1;
+  if (shade1 < x) {
+    x = shade1;
+    shade1 = iVar1;
     y = y2 & 0xff;
     y2 = iVar4 & 0xff;
   }
-  uVar2 = _shade1 - x >> 1;
+  uVar2 = shade1 - x >> 1;
   if (uVar2 == 0) {
     iStack_a = 0;
     iStack_c = 0;
@@ -865,12 +864,12 @@ blit_usesBlitGfxN(far_t gfx,int16_t x,int y,byte shade1,int y2,byte shade2,brect
     iStack_c = (uVar5 ^ uVar3) - uVar3;
   }
   uVar3 = ovr_ovc07_signum(unaff_DI,(y2 & 0xffU) - (y & 0xffU));
-  uVar6 = _shade1 - x >> 0xf;
+  uVar6 = shade1 - x >> 0xf;
   iVar4 = (int)((uVar2 ^ uVar6) - uVar6) >> 1;
   uVar5 = y & 0xff;
   uStack_4 = uVar5;
-  for (; x <= _shade1; x = x + 2) {
-    blitGfxN(gfx,x,_shade2,
+  for (; x <= shade1; x = x + 2) {
+    blitGfxN(gfx,x,shade2,
              (brect_t *)CONCAT22(CONCAT11((char)(uVar5 >> 8),(undefined1)uStack_4),(brect_t *)rect),
              0x0,SUB21(unaff_DI,0),in_stack_00000004);
     uStack_4 = uStack_4 + iStack_a;
@@ -990,9 +989,9 @@ blit_usesStExit(far_t gfx,int x1,int y1,byte shade1,int x2,int y2,byte shade2,in
   iVar3 = x1;
   uVar1 = gfx.seg;
   bVar2 = (byte)y1;
-  if ((int)_shade1 < (int)gfx.seg) {
-    gfx.seg = _shade1;
-    _shade1 = uVar1;
+  if ((int)shade1 < (int)gfx.seg) {
+    gfx.seg = shade1;
+    shade1 = uVar1;
     x1 = x2;
     x2 = iVar3;
     uStack_a = y1 & 0xff;
@@ -1023,11 +1022,11 @@ blit_usesStExit(far_t gfx,int x1,int y1,byte shade1,int x2,int y2,byte shade2,in
       uStack_12 = gfx.seg;
       uStack_c = 0;
     }
-    if (iStack_18 < (int)_shade1) {
+    if (iStack_18 < (int)shade1) {
       iVar3 = iStack_18 - uStack_12;
     }
     else {
-      iVar3 = _shade1 - uStack_12;
+      iVar3 = shade1 - uStack_12;
     }
     uStack_10 = iVar3 + 1;
     if (0 < (int)uStack_10) {
@@ -1046,7 +1045,7 @@ blit_usesStExit(far_t gfx,int x1,int y1,byte shade1,int x2,int y2,byte shade2,in
       pfStack_4 = (far_t *)0x22a6;
       puStack_28 = in_stack_00000004->cmap + 9;
       uStack_26 = gfx.ofs;
-      iStack_22 = _shade1 - gfx.seg;
+      iStack_22 = shade1 - gfx.seg;
       iStack_24 = (x2 - (*(int *)(in_stack_00000004->cmap + 7) * (uint)bStack_7 >> 4)) - iVar3;
       if (iStack_22 == 0) {
         iStack_1c = 0;
@@ -1140,7 +1139,7 @@ blit_usesBlitGfxN2(far_t gfx,far_t gfx_00,int x1,int y1,byte shade1,int x2,int y
   int iStack_6;
   byte *pbStack_4;
   
-  uVar2 = _shade1;
+  uVar2 = shade1;
   iVar4 = y1;
   iVar3 = x1 + ((int)((y1 & 0xffU) * 0x38) >> 4);
   x2 = x2 + ((int)((y2 & 0xffU) * 0x38) >> 4);
@@ -1148,7 +1147,7 @@ blit_usesBlitGfxN2(far_t gfx,far_t gfx_00,int x1,int y1,byte shade1,int x2,int y
   uVar8 = gfx_00.seg;
   x1 = iVar3;
   if (x2 < iVar3) {
-    _shade1 = gfx_00.seg;
+    shade1 = gfx_00.seg;
     y1 = y2 & 0xff;
     y2 = iVar4 & 0xff;
     uVar8 = uVar2;
@@ -1173,8 +1172,8 @@ blit_usesBlitGfxN2(far_t gfx,far_t gfx_00,int x1,int y1,byte shade1,int x2,int y
     iStack_16 = 0;
   }
   else {
-    iStack_14 = (int)(_shade1 - uVar8) / iVar3;
-    uVar6 = (int)(_shade1 - uVar8) % iVar3;
+    iStack_14 = (int)(shade1 - uVar8) / iVar3;
+    uVar6 = (int)(shade1 - uVar8) % iVar3;
     uVar7 = (int)uVar6 >> 0xf;
     iStack_16 = (uVar6 ^ uVar7) - uVar7;
   }
@@ -1192,7 +1191,7 @@ blit_usesBlitGfxN2(far_t gfx,far_t gfx_00,int x1,int y1,byte shade1,int x2,int y
       lVar9 = (ulong)uVar6 << 0x10;
       gfx_01.seg = uVar8 - 7;
       gfx_01.ofs = gfx.ofs;
-      blitGfxN(gfx_01,iStack_6 + -2,_shade2,
+      blitGfxN(gfx_01,iStack_6 + -2,shade2,
                (brect_t *)((ulong)CONCAT22(uStack_8,(brect_t *)rect) & 0xffffff),0x0,mirror,
                in_stack_00000004);
     }
@@ -1200,7 +1199,7 @@ blit_usesBlitGfxN2(far_t gfx,far_t gfx_00,int x1,int y1,byte shade1,int x2,int y
       lVar9 = (ulong)uVar6 << 0x10;
       gfx_02.seg = uVar8 - 7;
       gfx_02.ofs = gfx_00.ofs;
-      blitGfxN(gfx_02,iStack_6 + -2,_shade2,
+      blitGfxN(gfx_02,iStack_6 + -2,shade2,
                (brect_t *)((ulong)CONCAT22(uStack_8,(brect_t *)rect) & 0xffffff),0x0,mirror,gfx.seg)
       ;
     }

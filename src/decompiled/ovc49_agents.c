@@ -868,11 +868,11 @@ void * __cdecl16far ovc49_fillGridCells(byte count,agnt_t *agnt,...)
   undefined1 in_stack_00000004;
   int iStack_4;
   
-  piVar5 = (int *)(*(int *)((int)_count + 0x13) + (uint)*(byte *)(_count + 9) * 4);
+  piVar5 = (int *)(*(int *)((int)count + 0x13) + (uint)*(byte *)(count + 9) * 4);
   iVar1 = piVar5[1];
   iVar2 = *piVar5;
-  iVar3 = *_count - *(int *)(iVar2 + 0x17) >> 1;
-  iStack_4 = *_count + *(int *)(iVar2 + 0x17) >> 1;
+  iVar3 = *count - *(int *)(iVar2 + 0x17) >> 1;
+  iStack_4 = *count + *(int *)(iVar2 + 0x17) >> 1;
   if (iVar3 < 0) {
     iVar3 = 0;
   }
@@ -885,7 +885,7 @@ void * __cdecl16far ovc49_fillGridCells(byte count,agnt_t *agnt,...)
   if (0x68 < iStack_4) {
     iStack_4 = 0x68;
   }
-  if (*(char *)((int)_count + 0x11) == '\0') {
+  if (*(char *)((int)count + 0x11) == '\0') {
     _fmemset((void *)(ulong)CONCAT12(in_stack_00000004,(int)&AgntAnms[0x75].halfWidth + 1),
              (iStack_4 - iVar3) + 1,unaff_DI);
     pvVar4 = _fmemset((void *)(ulong)CONCAT12(in_stack_00000004,(int)&AgntAnms[0x75].halfWidth + 1),

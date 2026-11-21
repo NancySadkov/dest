@@ -52,8 +52,48 @@ public class ExportRecovered extends GhidraScript {
         return sanitizeIdent(n);
     }
 
-    private String typeDecl(DataType dt, String name) {
-        if (dt instanceof Array) {
+    // Ghidra declares a parameter as `x` but sometimes prints uses of it as `_x`
+    // (its disambiguator for a name that shadows something in scope).  The body
+    // then references an identifier that nothing declares, which is a compile
+    // error.  Rewrite `_x` back to `x` for parameter names only: Borland's
+    // runtime globals are also spelled with a leading underscore (_drive, _c),
+    // and those must be left alone.
+    private String fixShadowedParamUses(String body, String sig) {
+        if (body == null || sig == null) return body;
+        int lp = sig.indexOf('(');
+        int rp = sig.lastIndexOf(')');
+        if (lp < 0 || rp <= lp) return body;
+        String inner = sig.substring(lp + 1, rp);
+        Set<String> params = new HashSet<>();
+        StringBuilder cur = new StringBuilder();
+        int depth = 0;
+        for (int i = 0; i <= inner.length(); i++) {
+            char c = i < inner.length() ? inner.charAt(i) : ',';
+            if (c == '(' || c == '[') depth++;
+            if (c == ')' || c == ']') depth--;
+            if (c == ',' && depth == 0) {
+                String p = cur.toString().trim();
+                cur.setLength(0);
+                if (p.isEmpty() || p.equals("void") || p.startsWith("...")) continue;
+                java.util.regex.Matcher m =
+                        java.util.regex.Pattern.compile("([A-Za-z_]\\w*)\\s*$").matcher(p);
+                if (m.find() && !m.group(1).equals("void")) params.add(m.group(1));
+            } else {
+                cur.append(c);
+            }
+        }
+        if (params.isEmpty()) return body;
+        StringBuffer out = new StringBuffer();
+        java.util.regex.Matcher u =
+                java.util.regex.Pattern.compile("\\b_(\\w+)\\b").matcher(body);
+        while (u.find()) {
+            if (params.contains(u.group(1))) u.appendReplacement(out, u.group(1));
+        }
+        u.appendTail(out);
+        return out.toString();
+    }
+
+    private String typeDecl(DataType dt, String name) {        if (dt instanceof Array) {
             Array a = (Array) dt;
             return typeDecl(a.getDataType(), name + "[" + a.getNumElements() + "]");
         }
@@ -242,6 +282,7 @@ public class ExportRecovered extends GhidraScript {
                 if (good) {
                     String body = res.getDecompiledFunction().getC();
                     String sig = res.getDecompiledFunction().getSignature();
+                    body = fixShadowedParamUses(body, sig);
                     w.println(body);
                     if (emitted.add(name)) {
                         if (!sig.endsWith(";")) sig += ";";

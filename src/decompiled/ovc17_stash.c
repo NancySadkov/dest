@@ -270,14 +270,12 @@ void __cdecl16far stshInit(void)
     if (((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) <= (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2))) &&
        (((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) < (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) ||
         ((uint32_t *)StshSizes[0] < (uint32_t *)FMXmsHandle)))) {
-      stshInit_scan(CONCAT13((char)((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) >> 8),
-                             CONCAT12((char)(*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)),(uint32_t *)StshSizes[0])));
+      stshInit_scan((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)),(uint32_t *)StshSizes[0]));
       (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) = (*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2));
       (*(uint16_t *)((uint8_t *)&(FMXmsHandle))) = (uint32_t *)StshSizes[0];
     }
     fmReadIntoHimem((char *)ZEXT24((*(uint16_t *)((uint8_t *)&(StshNames[0]) + 2))),0,0,(int)(uint32_t *)FMXmsHandle,
-                    (char)(*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)),(uint16_t)unaff_DI,(uint16_t)unaff_SI,
-                    (char *)StshNames[0],(char)(*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)));
+                    (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)),(uint16_t)unaff_DI,(uint16_t)unaff_SI,(char *)StshNames[0]);
   }
   if ((((uint32_t *)FMEmsHandle == (uint32_t *)0x0 && (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) == 0) ||
       ((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) < (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)))) ||
@@ -301,12 +299,11 @@ void __cdecl16far stshInit(void)
       (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) =
            ((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) - (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2))) -
            (uint)((uint32_t *)StshSizes[0] < (uint32_t *)FMXmsHandle);
-      ems_realloc(CONCAT13((char)((*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) >> 8),
-                           CONCAT12((char)(*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)),(uint32_t *)FMEmsHandle)));
+      ems_realloc((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)),(uint32_t *)FMEmsHandle));
     }
     fmReadIntoHimem((char *)CONCAT22((uint32_t *)FMXmsHandle,(*(uint16_t *)((uint8_t *)&(StshNames[0]) + 2))),(*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)),1
-                    ,(int)(uint32_t *)FMEmsHandle,(char)(*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)),(uint16_t)unaff_DI,
-                    (uint16_t)unaff_SI,(char *)StshNames[0],(char)(*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)));
+                    ,(int)(uint32_t *)FMEmsHandle,(*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)),(uint16_t)unaff_DI,
+                    (uint16_t)unaff_SI,(char *)StshNames[0]);
   }
   return;
 }
@@ -702,7 +699,7 @@ int __cdecl16far open_wait_unlock_and_disk(char *filename,...)
 /* 474a:0ba8 */
 
 void __cdecl16far
-fmReadIntoHimem(char *filename,uint16_t filenameSeg,int skipLo,int skipHi,char useEms,
+fmReadIntoHimem(char *filename,uint16_t filenameSeg,int skipLo,int skipHi,int useEms,
                uint16_t limitLo,uint16_t limitHi,...)
 
 {
@@ -732,8 +729,8 @@ fmReadIntoHimem(char *filename,uint16_t filenameSeg,int skipLo,int skipHi,char u
       plStack_a = (long *)((int)plStack_a - (int)(*(uint16_t *)((uint8_t *)&(filename) + 2)));
       uStack_8 = (in_DX - filenameSeg) - (uint)bVar2;
     }
-    if ((_useEms <= uStack_8) && ((uStack_8 != _useEms || ((uint)skipHi < plStack_a)))) {
-      uStack_8 = _useEms;
+    if (((uint)useEms <= uStack_8) && ((uStack_8 != useEms || ((uint)skipHi < plStack_a)))) {
+      uStack_8 = useEms;
       plStack_a = (long *)skipHi;
     }
     plStack_4 = plStack_a;

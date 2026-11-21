@@ -458,7 +458,7 @@ ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textV
   uint16_t uVar10;
   
   uVar2 = partyIndex;
-  piVar1 = _destX;
+  piVar1 = destX;
   _uStack0004 = CONCAT13(uStack0007,CONCAT12(partyIndex,_uStack0004));
   uVar19 = SUB21(unaff_SI,0);
   uVar20 = (undefined1)((uint)unaff_SI >> 8);
@@ -536,7 +536,7 @@ ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textV
                     /* WARNING: Subroutine does not return */
         ovr_stExit();
       case 2:
-        uVar13 = _partyIndex + 1;
+        uVar13 = partyIndex + 1;
         piVar1 = (int *)(uVar5 * 2 + uVar13);
         *piVar1 = *piVar1 + 1;
         do {
@@ -558,7 +558,7 @@ L_attact_3f0b_26bd_2767:
       case 3:
                     /* WARNING: Read-only address (ram,0x000277ff) is written */
         s_cue9a_xmi_2410_36fe[1] = -0x58;
-        *(uint *)(&stack0x681c + _partyIndex) = *(uint *)(&stack0x681c + _partyIndex) & in_CX;
+        *(uint *)(&stack0x681c + partyIndex) = *(uint *)(&stack0x681c + partyIndex) & in_CX;
         ovr_blitLabel();
         uVar17 = 0xdc;
         uVar18 = 0;
@@ -720,7 +720,7 @@ L_attact_3f0b_26bd_2767:
                 iVar12 = *in_stack_0000001c;
                 iVar11 = *in_stack_00000020;
                 *piVar1 = *piVar1 - *in_stack_0000001c;
-                *_textVariant = *_textVariant - *in_stack_00000020;
+                *textVariant = *textVariant - *in_stack_00000020;
                 return (char *)(CONCAT11(uStack_3,uStack_4) - (iVar12 + iVar11));
               }
             } while ((*(uint8_t *)(destX * 0x12 + 9) != uStack0004) ||
@@ -756,7 +756,7 @@ L_attact_3f0b_26bd_2767:
   puVar6 = (uint8_t *)((uint)*(byte *)(CONCAT11(uVar22,uVar21) + 0x3e) * 0x95);
   if ((*(uint *)(puVar6 + 0x2714) & 0x8000) != 0) {
     puVar6 = ovc18_spawnClassAgent
-                       (CONCAT11(uVar26,uVar25),_partyIndex,destX,1,uStack0004,(uint8_t)destY,
+                       (CONCAT11(uVar26,uVar25),partyIndex,destX,1,uStack0004,(uint8_t)destY,
                         CONCAT11(uVar18,uVar17));
   }
   return (char *)puVar6;

@@ -307,7 +307,7 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
     iStack_10 = 0x32;
   }
   do {
-    if (_gindex == 0) {
+    if (gindex == 0) {
       return bStack_11;
     }
     if ((char)frames == '\x02') {
@@ -437,7 +437,7 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
                  bStack_11,(uint8_t)unaff_DI,uVar10 - 1);
       ovr_ovc23_placeBuilding(uStack_c,0,bStack_11,(uint8_t)unaff_DI,uVar10);
       (*(short (*) [148] [60])GUnitGrid)[uVar10][uStack_c] = 0;
-      _gindex = _gindex + -1;
+      gindex = gindex + -1;
       demoCenterY = uStack_c;
       demoCenterX = uVar10;
       uVar10 = ovr_randBelow(unaff_DI,100);

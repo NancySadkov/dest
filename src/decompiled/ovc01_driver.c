@@ -23,7 +23,7 @@ uint32_t * __cdecl16far mkp(uint32_t *__return_storage_ptr__,uint16_t ofs,uint16
 
 /* 2d63:0016 */
 
-uint16_t __cdecl16far biosVideoCall(uint8_t operation,uint8_t argument,...)
+uint16_t __cdecl16far biosVideoCall(int operation,uint8_t argument,...)
 
 {
   code *pcVar1;
@@ -147,7 +147,7 @@ lbm_combine_bitplanes(far_t src,far_t dst,uint16_t npixels,uint8_t nplanes,uint1
         pixel = pixel | bits;
       }
       bits = bits << 1 | (char)bits < '\0';
-      ps = ps + _nplanes;
+      ps = ps + nplanes;
     } while (bits != (byte)('\x01' << ((byte)npixels & 7) | 1U >> 8 - ((byte)npixels & 7)));
     pbVar1 = (byte *)src.seg;
     src.seg = src.seg + 1;
@@ -298,8 +298,8 @@ undefined1 __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int
     out(0x3c9,in_stack_00000004[1]);
     in_stack_00000004 = in_stack_00000004 + 3;
     out(0x3c9,*puVar1);
-    _paletteSeg = _paletteSeg + -1;
-  } while (_paletteSeg != 0);
+    paletteSeg = paletteSeg + -1;
+  } while (paletteSeg != 0);
   return *puVar1;
 }
 
@@ -801,7 +801,7 @@ driver_scan1(far_t buf,uint16_t count,uint8_t fill,uint8_t threshold,far_t patte
           return;
         }
       }
-      pbVar1 = (byte *)(pattern.seg + _threshold);
+      pbVar1 = (byte *)(pattern.seg + threshold);
       pattern.seg = pattern.seg + 1 & 0xff;
       if (fill <= *pbVar1) {
         cVar3 = '\0';
@@ -816,7 +816,7 @@ driver_scan1(far_t buf,uint16_t count,uint8_t fill,uint8_t threshold,far_t patte
     do {
       while (*in_stack_00000004 != '\0') {
         pattern.seg = pattern.seg + 1 & 0xff;
-        if (*(byte *)(pattern.seg + _threshold) < fill) {
+        if (*(byte *)(pattern.seg + threshold) < fill) {
           *in_stack_00000004 = (char)count;
           break;
         }
@@ -1292,12 +1292,12 @@ void __cdecl16far driver_compute5(uint16_t x1,byte y1,uint16_t x2,byte y2,uint16
   bVar1 = (byte)x1;
   if ((byte)x2 < (byte)x1) {
     (*(uint8_t *)((uint8_t *)&(x1))) = (byte)x2;
-    in_stack_00000004 = _y1;
+    in_stack_00000004 = y1;
     (*(uint8_t *)((uint8_t *)&(x2))) = bVar1;
   }
   bVar1 = (byte)x1;
   if ((byte)x3 < (byte)x1) {
-    in_stack_00000004 = _y2;
+    in_stack_00000004 = y2;
     bVar1 = (byte)x3;
     (*(uint8_t *)((uint8_t *)&(x3))) = (byte)x1;
   }
@@ -1393,16 +1393,16 @@ void __cdecl16far driver_fillSpan(int x1,int x2,byte y,uint8_t colour,int *rect,
     iVar3 = in_stack_00000004;
     in_stack_00000004 = x1;
   }
-  if (in_stack_00000004 < *(int *)CONCAT22((int *)rect,_colour)) {
-    in_stack_00000004 = *(int *)CONCAT22((int *)rect,_colour);
+  if (in_stack_00000004 < *(int *)CONCAT22((int *)rect,colour)) {
+    in_stack_00000004 = *(int *)CONCAT22((int *)rect,colour);
   }
-  if (_colour[2] < iVar3) {
-    iVar3 = _colour[2];
+  if (colour[2] < iVar3) {
+    iVar3 = colour[2];
   }
-  if (((in_stack_00000004 <= iVar3) && (*(byte *)(_colour + 1) <= (byte)x2)) &&
-     ((byte)x2 <= *(byte *)(_colour + 3))) {
+  if (((in_stack_00000004 <= iVar3) && (*(byte *)(colour + 1) <= (byte)x2)) &&
+     ((byte)x2 <= *(byte *)(colour + 3))) {
     pbVar4 = (byte *)(in_stack_00000004 + (x2 & 0xffU) * 0x140);
-    iVar2 = _colour[4];
+    iVar2 = colour[4];
     for (iVar3 = (iVar3 - in_stack_00000004) + 1; iVar3 != 0; iVar3 = iVar3 + -1) {
       pbVar1 = pbVar4;
       pbVar4 = pbVar4 + 1;

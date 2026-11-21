@@ -190,7 +190,6 @@ extern uint16_t in_stack_00000005;
 extern uint16_t in_stack_00000006;
 extern uint16_t in_stack_00000007;
 extern uint16_t in_stack_00000008;
-extern uint16_t in_stack_00000009;
 extern uint16_t in_stack_0000000a;
 extern uint16_t in_stack_0000000c;
 extern uint16_t in_stack_0000000d;
