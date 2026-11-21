@@ -110,9 +110,6 @@ void __cdecl16far ovc38_usesStshFree(far_t handle)
 
 
 /* 68ac:0148 */
-
-/* Shows the "Great Achievements" high-score screen. */
-
 void __cdecl16far ovc38_showAchievements(void)
 
 {
@@ -129,7 +126,7 @@ void __cdecl16far ovc38_showAchievements(void)
   undefined2 uStack_64;
   uint8_t text;
   far_t fStack_a;
-  undefined4 uStack_6;
+  undefined1 *uStack_6;   /* hand fix: dereferenced as *uStack_6 */
   
   fStack_a.ofs = (uint16_t)ovr_stshAlloc(0x18);
   fStack_a.seg = in_DX;
@@ -180,7 +177,6 @@ void __cdecl16far ovc38_showAchievements(void)
   ovr_saveui_blitPanel();
   return;
 }
-
 
 
 /* 68ac:0339 */
@@ -239,9 +235,6 @@ int16_t __cdecl16far ovc38_scan1(char *s1,char *s2)
 
 
 /* 68ac:03fc */
-
-/* [R4] calls ovr_stshAlloc */
-
 void __cdecl16far ovc38_usesStshAlloc(void)
 
 {
@@ -296,7 +289,7 @@ void __cdecl16far ovc38_usesStshAlloc(void)
     pvVar3 = ovr_stshAlloc((ulong)(sVar2 + 1));
     puVar6 = (undefined2 *)((int)pvStack_8 + iVar5 * 4);
     puVar6[1] = uVar4;
-    *puVar6 = pvVar3;
+    *puVar6 = (uint16_t)pvVar3;   /* hand fix: 2-byte slot */
     puVar6 = (undefined2 *)((int)pvStack_8 + iVar5 * 4);
     strcpy((char *)CONCAT22(puVar6[1],(char *)*puVar6),(char *)CONCAT22(unaff_SS,&msg));
     entries_00.seg = uStack_6;
@@ -309,5 +302,4 @@ void __cdecl16far ovc38_usesStshAlloc(void)
   }
   return;
 }
-
 

@@ -136,7 +136,6 @@ void __cdecl16far heapFreeSub(uint16_t entry)
 
 
 /* 6316:01ed */
-
 uint32_t * __cdecl16far heapAlloc(uint32_t *__return_storage_ptr__,uint32_t nbytes,...)
 
 {
@@ -159,7 +158,7 @@ uint32_t * __cdecl16far heapAlloc(uint32_t *__return_storage_ptr__,uint32_t nbyt
     if (HeapPtr <= entry) break;
     plVar1 = (long *)*(uint *)0x0;
     if ((*(int *)((int)(undefined4 *)&_DATA + 2) == 0) && (plVar2 <= plVar1)) {
-      *(undefined2 *)0x0 = plVar2;
+      *(undefined2 *)0x0 = (uint16_t)plVar2;   /* hand fix: 2-byte slot */
       *(undefined2 *)((int)(undefined4 *)&_DATA + 2) =
            *(undefined2 *)((byte *)__C0_ASM_CopyRight + 4);
       if (plVar2 < plVar1) {
@@ -175,9 +174,7 @@ uint32_t * __cdecl16far heapAlloc(uint32_t *__return_storage_ptr__,uint32_t nbyt
 }
 
 
-
 /* 6316:02a4 */
-
 long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nbytes,...)
 
 {
@@ -216,7 +213,7 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
         }
         *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
         *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4) = (uint16_t)block;
-        *(undefined2 *)0x0 = plVar3;
+        *(undefined2 *)0x0 = (uint16_t)plVar3;   /* hand fix: 2-byte slot */
         heapFreeSub((uint16_t)block + (int)plVar3);
       }
       else {
@@ -224,7 +221,7 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
         lVar6 = CONCAT22(iVar5,(int)lVar6);
         if ((*(int *)((int)(undefined4 *)&_DATA + 2) == 0) &&
            (plVar3 <= (long *)((int)plVar4 + iVar5))) {
-          *(undefined2 *)0x0 = plVar3;
+          *(undefined2 *)0x0 = (uint16_t)plVar3;   /* hand fix: 2-byte slot */
           if (plVar3 < (long *)((int)plVar4 + iVar5)) {
             *(int *)0x0 = (int)plVar4 + (iVar5 - (int)plVar3);
             *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
@@ -248,7 +245,7 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
             }
             plVar1 = (long *)*(uint *)0x0;
           } while ((*(int *)((int)(undefined4 *)&_DATA + 2) != 0) || (plVar1 < plVar3));
-          *(undefined2 *)0x0 = plVar3;
+          *(undefined2 *)0x0 = (uint16_t)plVar3;   /* hand fix: 2-byte slot */
           *(undefined2 *)((int)(undefined4 *)&_DATA + 2) =
                *(undefined2 *)((byte *)__C0_ASM_CopyRight + 4);
           if (plVar3 < plVar1) {
@@ -279,9 +276,7 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
 }
 
 
-
 /* 6316:04ec */
-
 far_t * __cdecl16far heapMalloc(far_t *__return_storage_ptr__,uint32_t nbytes,...)
 
 {
@@ -319,7 +314,7 @@ far_t * __cdecl16far heapMalloc(far_t *__return_storage_ptr__,uint32_t nbytes,..
       uVar4 = (int)plVar1 + (uVar5 - (int)plVar2);
       uVar6 = uVar5;
     }
-    *(undefined2 *)0x0 = plVar2;
+    *(undefined2 *)0x0 = (uint16_t)plVar2;   /* hand fix: 2-byte slot */
     *(uint16_t *)((int)(undefined4 *)&_DATA + 2) = uVar6;
     heapFreeSub(uVar4);
     if (uVar4 < HeapPtr) {
@@ -329,7 +324,6 @@ far_t * __cdecl16far heapMalloc(far_t *__return_storage_ptr__,uint32_t nbytes,..
   }
   return pfVar3;
 }
-
 
 
 /* 6316:05aa */
