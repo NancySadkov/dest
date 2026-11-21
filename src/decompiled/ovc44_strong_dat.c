@@ -122,7 +122,6 @@ void __cdecl16far stshStubifyBld(uint16_t index,...)
 undefined init_assets() { return 0; }
 
 /* 6ffe:733c */
-
 void __cdecl16far stshInitPtrs(void)
 
 {
@@ -178,7 +177,7 @@ void __cdecl16far stshInitPtrs(void)
   uVar4 = StshCtPtr.seg;
   uVar2 = StshCtPtr.ofs;
   *(uint16_t *)(uVar2 + 0xb) = uVar7;
-  *(undefined2 *)(uVar2 + 9) = puVar1;
+  *(undefined2 *)(uVar2 + 9) = (uint16_t)puVar1;   /* hand fix: 2-byte half */
   for (uVar3 = 1; uVar3 < StshCount - 1; uVar3 = uVar3 + 1) {
     LXMUL_at_(__return_storage_ptr___00,CONCAT22(in_stack_0000fffa,unaff_SI),
               CONCAT22(unaff_BP,in_stack_0000fffc));
@@ -208,7 +207,7 @@ void __cdecl16far stshInitPtrs(void)
     uVar7 = fVar5.seg;
     puVar1 = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)plVar6);
     *(uint16_t *)((int)in_stack_0000fffa + 0xb) = uVar7;
-    *(undefined2 *)((int)in_stack_0000fffa + 9) = puVar1;
+    *(undefined2 *)((int)in_stack_0000fffa + 9) = (uint16_t)puVar1;
     LXMUL_at_(plVar6,CONCAT22(__return_storage_ptr__,uVar2),
               (long)CONCAT22(unaff_SI,__return_storage_ptr___00));
     ptr_base.seg = (uint16_t)plVar6;
@@ -225,7 +224,7 @@ void __cdecl16far stshInitPtrs(void)
     uVar7 = fVar5.seg;
     puVar1 = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)__return_storage_ptr___00);
     *(uint16_t *)((int)in_stack_0000fffa + 0xf) = uVar7;
-    *(undefined2 *)((int)in_stack_0000fffa + 0xd) = puVar1;
+    *(undefined2 *)((int)in_stack_0000fffa + 0xd) = (uint16_t)puVar1;
   }
   LXMUL_at_(__return_storage_ptr___00,CONCAT22(in_stack_0000fffa,unaff_SI),
             CONCAT22(unaff_BP,in_stack_0000fffc));
@@ -265,8 +264,7 @@ void __cdecl16far stshInitPtrs(void)
   uVar4 = Stsh_2410_47f6.seg;
   uVar2 = Stsh_2410_47f6.ofs;
   *(uint16_t *)(uVar2 + 0xf) = uVar7;
-  *(undefined2 *)(uVar2 + 0xd) = puVar1;
+  *(undefined2 *)(uVar2 + 0xd) = (uint16_t)puVar1;
   return;
 }
-
 
