@@ -597,7 +597,7 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   gfx.seg = (uint16_t)&text;
   gfx.ofs = uVar8;
   saveui_usesBlitGfx10
-            (gfx,(char *)CONCAT22(&cursorX,unaff_SS),(byte *)CONCAT22(row,unaff_SS),uStack_5e,
+            (gfx,(char *)CONCAT22(&cursorX,unaff_SS),(byte *)CONCAT22(row,unaff_SS),(uint *)uStack_5e,
              in_stack_0000ffa6);
   uVar3 = row * 0x12c0 + 0x2096;
   gfx_02.seg = trianglsCut4Seg;
@@ -629,7 +629,7 @@ L_uiReadString_0DC9:
         gfx_00.ofs = uVar8;
         saveui_usesBlitGfx10
                   (gfx_00,(char *)CONCAT22(&cursorX,unaff_SS),(byte *)CONCAT22(row,unaff_SS),
-                   uStack_5e,in_stack_0000ffa6);
+                   (uint *)uStack_5e,in_stack_0000ffa6);
       }
       if (uStack_4 != 0x4b00) break;
 L_uiReadString_0ECE:
@@ -640,7 +640,7 @@ L_uiReadString_0ECE:
         gfx_01.ofs = uVar8;
         saveui_usesBlitGfx10
                   (gfx_01,(char *)CONCAT22(&cursorX,unaff_SS),(byte *)CONCAT22(row,unaff_SS),
-                   uStack_5e,in_stack_0000ffa6);
+                   (uint *)uStack_5e,in_stack_0000ffa6);
       }
     }
     if (uStack_4 < 0x4b01) {
@@ -935,7 +935,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   far_t items;
   uint8_t menuLabel;
   char *pcStack_22;
-  undefined4 uStack_1e;
+  entity_t *uStack_1e;   /* hand fix: ->base deref */
   undefined2 uStack_1a;
   undefined2 uStack_18;
   int iStack_16;
@@ -1895,7 +1895,7 @@ int __cdecl16far saveui_usesBlitText(char *prompt,int textSeg,int row)
   gfx.ofs = uVar4;
   saveui_usesBlitGfx10
             (gfx,(char *)CONCAT22(&cursorX,unaff_SS),(byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),unaff_SS),
-             uStack_5e,in_stack_0000ffa6);
+             (uint *)uStack_5e,in_stack_0000ffa6);
   ovr_ovc40_flushInput();
 L_saveui_4528_1d55_1E1D:
   do {
@@ -1919,7 +1919,7 @@ L_saveui_4528_1d55_1E1D:
         gfx_00.ofs = uVar4;
         saveui_usesBlitGfx10
                   (gfx_00,(char *)CONCAT22(&cursorX,unaff_SS),
-                   (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),unaff_SS),uStack_5e,in_stack_0000ffa6);
+                   (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),unaff_SS),(uint *)uStack_5e,in_stack_0000ffa6);
       }
       if (uStack_4 != 0x4b00) break;
 L_saveui_4528_1d55_1F0C:
@@ -1930,7 +1930,7 @@ L_saveui_4528_1d55_1F0C:
         gfx_01.ofs = uVar4;
         saveui_usesBlitGfx10
                   (gfx_01,(char *)CONCAT22(&cursorX,unaff_SS),
-                   (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),unaff_SS),uStack_5e,in_stack_0000ffa6);
+                   (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),unaff_SS),(uint *)uStack_5e,in_stack_0000ffa6);
       }
     }
     if (0x4b00 < uStack_4) {
