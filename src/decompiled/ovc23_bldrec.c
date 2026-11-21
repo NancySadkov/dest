@@ -11,6 +11,7 @@
 
 /* WARNING: Instruction at (ram,0x0005c484) overlaps instruction at (ram,0x0005c483)
     */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "               4. Adlib       5. None):" */
 
 byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t *agnt,...)
@@ -532,8 +533,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     if (CONCAT11(uVar32,uVar31) < iVar24) {
       if (uStack_a != -1) {
         if (iVar25 == -1) {
-          ovr_attact_usesRandBelow
-                    (&((entity_t *)Entities)[uStack_a].base,(byte)((ulong)Entities >> 0x10));
+          ovr_attact_usesRandBelow(&Entities[uStack_a].base,(byte)((ulong)Entities >> 0x10));
           ovr_attact_usesEntities(uStack_a);
           uVar26 = (undefined2)((ulong)Entities >> 0x10);
           bVar9 = ((entity_t *)Entities)[uStack_a].base.gindex;
@@ -552,14 +552,13 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
           }
         }
         else {
-          if ((byte *)(uint)((entity_t *)Entities)[iVar25].base.animFrame <= uStack_8) {
-            uStack_8 = (byte *)(uint)((entity_t *)Entities)[iVar25].base.animFrame;
+          if ((byte *)(uint)Entities[iVar25].base.animFrame <= uStack_8) {
+            uStack_8 = (byte *)(uint)Entities[iVar25].base.animFrame;
           }
-          ((entity_t *)Entities)[iVar25].base.animFrame =
-               ((entity_t *)Entities)[iVar25].base.animFrame - (byte)uStack_8;
-          ovr_ovc41_compute4(&((entity_t *)Entities)[iVar25].base,(byte)((ulong)Entities >> 0x10));
-          ovr_ovc25_attackingNotice(*(byte *)((int)&((entity_t *)Entities)[iVar25].base.entity + 3))
-          ;
+          Entities[iVar25].base.animFrame = Entities[iVar25].base.animFrame - (byte)uStack_8;
+          ovr_ovc41_compute4(&Entities[iVar25].base,(byte)((ulong)Entities >> 0x10));
+          ovr_ovc25_attackingNotice
+                    (*(byte *)((int)&((entity_t *)Entities)[iVar25].base.entity + 3));
           pbVar14 = (byte *)(iVar25 * 0x37);
           if (((entity_t *)Entities)[iVar25].base.animFrame != 0x0) {
             ovc24_usesLDIV_at_(iVar25);
@@ -595,8 +594,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
               pbVar14 = (byte *)(uVar15 & 0xff);
               if (pbVar14 == (byte *)0x0) {
                 if ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 +
-                              (uint)((entity_t *)Entities)[uStack_a].base.gindex * 0x95) & 0x800) ==
-                    0) {
+                              (uint)((entity_t *)Entities)[uStack_a].base.gindex * 0x95) & 0x800)
+                    == 0) {
                   cVar10 = '\x01';
                 }
                 else {
@@ -604,8 +603,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
                 }
                 uVar26 = ovr_ovc27_compute3(CONCAT13((char)((ulong)Entities >> 0x18),
                                                      CONCAT12((char)((ulong)Entities >> 0x10),
-                                                              (entity_t *)Entities + iVar25)),cVar10
-                                           );
+                                                              (entity_t *)Entities + iVar25)),
+                                            cVar10);
                 if ((char)uVar26 != '\0') {
                   if (DebugVerbose != false) {
                     printf("kill 3\r");
@@ -634,9 +633,9 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
       }
       return pbVar14;
     }
-    pbVar14 = (byte *)((entity_t *)Entities)[iVar24].base.y;
+    pbVar14 = (byte *)Entities[iVar24].base.y;
     if ((pbVar14 != (byte *)CONCAT11(uVar28,uVar27)) ||
-       (pbVar14 = (byte *)alignUp4((((entity_t *)Entities + iVar24)->base).x),
+       (pbVar14 = (byte *)alignUp4(((Entities + iVar24)->base).x),
        pbVar14 != (byte *)CONCAT11(uVar30,uVar29))) goto L_OVC24_5943_026e_08A7;
     uVar26 = (undefined2)((ulong)Entities >> 0x10);
     peVar22 = (entity_t *)Entities;
@@ -951,6 +950,7 @@ void __cdecl16far ovc23_usesGfxRndSeed2(int x,int y)
 /* WARNING: Control flow encountered bad instruction data */
 /* WARNING: Instruction at (ram,0x00053af7) overlaps instruction at (ram,0x00053af6)
     */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
 
 uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,...)
@@ -1755,14 +1755,14 @@ code_r0x00053afb:
         if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)(byte)((ulong)a >> 0x10) * 0x95) !=
              -1) && (bVar5 != 0xff)) {
           if ((*(char *)((int)*(undefined4 *)((uint)bVar5 << 2) + 0x3f) != '\0') ||
-             (((entity_t *)Entities)[uVar26].base.level <
-              *(byte *)((int)*(undefined4 *)((uint)bVar5 << 2) + 0x53))) {
+             (Entities[uVar26].base.level < *(byte *)((int)*(undefined4 *)((uint)bVar5 << 2) + 0x53)
+             )) {
             ovc22_usesLUDIV_at_((entity_t *)
                                 CONCAT13((char)((ulong)Entities >> 0x18),
-                                         CONCAT12((char)((ulong)Entities >> 0x10),
-                                                  (entity_t *)Entities + uVar26)));
+                                         CONCAT12((char)((ulong)Entities >> 0x10),Entities + uVar26
+                                                 )));
             LXMUL_at_((long *)pbVar13,a,b);
-            peVar22 = (entity_t *)Entities + uVar26;
+            peVar22 = Entities + uVar26;
             uVar30 = 0x89;
             uVar16 = 0x3f;
             uVar34 = ovr_ovc15_textError();
@@ -1778,7 +1778,7 @@ code_r0x00053afb:
             uVar17 = 0x23d5;
             ovr_ovc41_compute3(CONCAT13((char)((ulong)Entities >> 0x18),
                                         CONCAT12((char)((ulong)Entities >> 0x10),
-                                                 (entity_t *)Entities + CONCAT11(uVar16,uVar30))));
+                                                 Entities + CONCAT11(uVar16,uVar30))));
             uVar26 = CONCAT11(uVar16,uVar30);
           }
         }
@@ -3146,6 +3146,7 @@ int __cdecl16far ovc23_compute2(int x,uint16_t y,...)
 
 /* 55fe:2e4c */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Drowns the units at (x,y): marks the cell and reports each drowning. */
 
 void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
@@ -3161,7 +3162,7 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
   uint16_t uVar5;
   uint8_t text2;
   uint8_t text;
-  uint16_t uStack_6;
+  int iStack_6;
   byte bStack_3;
   
   puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x);
@@ -3169,12 +3170,12 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
   entityIndex = EntityCount;
   while (entityIndex = entityIndex - 1, -1 < (int)entityIndex) {
     uVar3 = (undefined2)((ulong)Entities >> 0x10);
-    if (((((entity_t *)Entities + entityIndex)->base).x == x) &&
-       (((entity_t *)Entities)[entityIndex].base.y == y)) {
-      uStack_6 = ovc23_findClearColumn(x,y);
+    if ((*(uint16_t *)((int)Entities + entityIndex * 0x37) == x) &&
+       (*(uint16_t *)((int)Entities + entityIndex * 0x37 + 2) == y)) {
+      iStack_6 = ovc23_findClearColumn(x,y);
       uVar3 = (undefined2)((ulong)Entities >> 0x10);
-      if ((int)uStack_6 < 0) {
-        bStack_3 = ((entity_t *)Entities)[entityIndex].base.gindex;
+      if (iStack_6 < 0) {
+        bStack_3 = *(byte *)((int)Entities + entityIndex * 0x37 + 0xd);
         if (*(char *)((int)(char **)GMenuStrings + (uint)bStack_3 * 0x95 + 0x1f) == '\0') {
           uVar3 = 0xa000;
           dst = 0x195d;
@@ -3189,7 +3190,7 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
         ovr_ovc15_removeEntity(entityIndex);
       }
       else {
-        (((entity_t *)Entities + entityIndex)->base).x = uStack_6;
+        *(int *)((int)Entities + entityIndex * 0x37) = iStack_6;
       }
     }
   }

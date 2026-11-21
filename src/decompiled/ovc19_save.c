@@ -40,6 +40,7 @@ int __cdecl16far save_readBlock(int handle,void *buf,uint16_t bufSeg,uint count)
 
 /* 49fd:0035 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_calcSeasonPalette */
 
 void __cdecl16far save_usesCalcSeasonPalette(void)
@@ -59,8 +60,8 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
   iVar3 = 0;
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
     uVar4 = (undefined2)((ulong)Entities >> 0x10);
-    if (100 < ((entity_t *)Entities)[uVar2].base.animFrame) {
-      ((entity_t *)Entities)[uVar2].base.animFrame = 0xf;
+    if (100 < *(byte *)((int)Entities + uVar2 * 0x37 + 0xe)) {
+      *(undefined1 *)((int)Entities + uVar2 * 0x37 + 0xe) = 0xf;
       iVar3 = iVar3 + 1;
     }
     in_DX = 0x2410;
@@ -101,6 +102,7 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
 
 /* 49fd:01da */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Loads a saved game: frees the game resources, then reads the magic, GUnitGrid, GMapFlags,
    GMapCells, the RNG seeds, EntityCount and Entities from the handle. */
 
@@ -140,9 +142,8 @@ uint __cdecl16far stLoad(int handle)
           ((uVar1 = save_readBlock(-0x7663,(void *)0x22410,unaff_DI,unaff_SI), (uVar1 & 0xff) != 0
            && (uVar1 = save_readBlock(-0x6f69,(void *)0x22410,unaff_DI,unaff_SI),
               (uVar1 & 0xff) != 0)))))) &&
-        ((uVar1 = save_readBlock((int)(entity_t *)Entities,
-                                 (void *)CONCAT22(EntityCount * 0x37,(*(uint16_t *)((uint8_t *)&(Entities) + 2))),unaff_DI,
-                                 unaff_SI), (uVar1 & 0xff) != 0 &&
+        ((uVar1 = save_readBlock((int)Entities,(void *)CONCAT22(EntityCount * 0x37,DAT_2000_d190),
+                                 unaff_DI,unaff_SI), (uVar1 & 0xff) != 0 &&
          (uVar1 = save_readBlock(0x881,(void *)0x22410,unaff_DI,unaff_SI), (uVar1 & 0xff) != 0))))))
     {
       uVar5 = (undefined2)((ulong)((long)SquareRecCount * 0x13) >> 0x10);
@@ -169,7 +170,7 @@ uint __cdecl16far stLoad(int handle)
                  (((uVar1 = save_readBlock(-0x6e21,(void *)0x22410,unaff_DI,unaff_SI),
                    (uVar1 & 0xff) != 0 &&
                    (uVar1 = save_readBlock(0,(char *)CONCAT22(GRecordCount * 0x12,
-                                                              (char *)0x262e5xd),
+                                                              (char *)"manned n/s wall" + 0xd),
                                            unaff_DI,unaff_SI), (uVar1 & 0xff) != 0)) &&
                   ((uVar1 = save_readBlock(-0x7667,(void *)0x22410,unaff_DI,unaff_SI),
                    (uVar1 & 0xff) != 0 &&
@@ -341,6 +342,8 @@ int __cdecl16far save_writeBlock(int handle,void *buf,uint16_t bufSeg,uint16_t c
 
 /* 49fd:090f */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
 int __cdecl16far stSave(void)
 
 {
@@ -376,8 +379,8 @@ int __cdecl16far stSave(void)
               (uVar3 = save_writeBlock(-0x6f69,(void *)0x22410,unaff_DI,unaff_SI),
               (uVar3 & 0xff) != 0)))) {
       in_DX = (undefined2)((ulong)((long)EntityCount * 0x37) >> 0x10);
-      uVar3 = save_writeBlock((int)(entity_t *)Entities,
-                              (void *)CONCAT22((int)((long)EntityCount * 0x37),(*(uint16_t *)((uint8_t *)&(Entities) + 2))),
+      uVar3 = save_writeBlock((int)Entities,
+                              (void *)CONCAT22((int)((long)EntityCount * 0x37),DAT_2000_d190),
                               unaff_DI,unaff_SI);
       if (((uVar3 & 0xff) != 0) &&
          (uVar3 = save_writeBlock(0x881,(void *)0x22410,unaff_DI,unaff_SI), (uVar3 & 0xff) != 0)) {
@@ -404,7 +407,7 @@ int __cdecl16far stSave(void)
              (uVar3 & 0xff) != 0)) {
             in_DX = (undefined2)((ulong)((long)GRecordCount * 0x12) >> 0x10);
             uVar3 = save_writeBlock(0,(char *)CONCAT22((int)((long)GRecordCount * 0x12),
-                                                       (char *)0x262e5xd),unaff_DI,
+                                                       (char *)"manned n/s wall" + 0xd),unaff_DI,
                                     unaff_SI);
             if (((uVar3 & 0xff) != 0) &&
                (uVar3 = save_writeBlock(-0x7667,(void *)0x22410,unaff_DI,unaff_SI),

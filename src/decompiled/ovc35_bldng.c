@@ -31,6 +31,7 @@ int __cdecl16far bldng_getClass(byte partyIndex,...)
 
 /* 676c:003d */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "arena" */
 
 bool __cdecl16far bldng_textArena(byte bldType,char partyIndex,...)
@@ -52,8 +53,8 @@ bool __cdecl16far bldng_textArena(byte bldType,char partyIndex,...)
     if ((*(byte *)((uint)bldType * 0x27 + 0x134) & 0x80) == 0) {
       for (uVar4 = 0; uVar4 < EntityCount; uVar4 = uVar4 + 1) {
         uVar5 = (undefined2)((ulong)Entities >> 0x10);
-        if ((*(char *)((int)&((entity_t *)Entities)[uVar4].base.entity + 3) == partyIndex) &&
-           (bVar1 <= ((entity_t *)Entities)[uVar4].base.level)) {
+        if ((*(char *)((int)Entities + uVar4 * 0x37 + 0x1a) == partyIndex) &&
+           (bVar1 <= *(byte *)((int)Entities + uVar4 * 0x37 + 0xf))) {
           return true;
         }
       }

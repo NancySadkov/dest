@@ -1321,12 +1321,12 @@ char * __cdecl16far chargen_switch(uint16_t index)
       cVar30 = 'T';
       uVar14 = ovr_blitLabel((char *)"Total population.");
       *unaff_SI = *unaff_SI + (char)(uVar14 >> 8) + ((undefined1 *)0xfff3 < &stack0xfff2);
-      *(undefined1 *)((int)&(((entity_t *)*(entity_t **)&Entities)->base).entity + uVar14 + 1) = 0;
+      *(undefined1 *)((int)*(undefined4 *)(entity_t **)&Entities + uVar14 + 0x18) = 0;
       uVar12 = (undefined2)((ulong)Entities >> 0x10);
       *(undefined1 *)((int)&((entity_t *)Entities)[(int)unaff_SI].base.state + 1) =
            (char)((entity_t *)Entities)[(int)unaff_SI].base.flags32;
       if (unaff_SI + 1 < EntityCount) {
-        pcVar16 = (char *)0x242e6;
+        pcVar16 = (char *)"thief" + 5;
         ovr_say((char *)"The damaged structures belonging to all leaders are highlighted in red.");
         return pcVar16;
       }
@@ -1549,7 +1549,7 @@ L_attact_3f0b_1082_1477:
           else {
             cVar9 = (char)((ulong)((in_stack_0000ffe2->base).animFrame + 0xf) / 0x10);
             while (cVar30 = cVar9 + -1, cVar9 != '\0') {
-              ovr_agnt_usesAgntCount6((entity_t *)Entities + (int)unaff_DI);
+              ovr_agnt_usesAgntCount6(Entities + (int)unaff_DI);
               cVar9 = cVar30;
             }
           }
@@ -1603,8 +1603,8 @@ L_attact_3f0b_1082_1477:
         mapDirty = 1;
         return (char *)"puppetmaker" + 3;
       }
-      peVar27 = (entity_t *)Entities + (int)unaff_DI;
-      unaff_ES = (*(uint16_t *)((uint8_t *)&(Entities) + 2));
+      peVar27 = Entities + (int)unaff_DI;
+      unaff_ES = DAT_2000_d190;
       uVar14 = ovr_alignUp4((peVar27->base).destX);
       uVar25 = (undefined1)uVar14;
       uVar32 = (undefined1)(uVar14 >> 8);
@@ -2222,6 +2222,7 @@ void __cdecl16far manage_4d05_22cf_entry(void)
 
 /* 4d05:22cf */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* WARNING: Unknown calling convention -- yet parameter storage is locked */
 /* [R6] touches Entities, GMenuStrings */
 
@@ -2229,7 +2230,7 @@ void manage_usesEntities(void)
 
 {
   char in_CL;
-  entity_t *peVar1;
+  int iVar1;
   int unaff_BP;
   int unaff_SI;
   undefined2 uVar2;
@@ -2240,14 +2241,15 @@ void manage_usesEntities(void)
     return;
   }
   uVar2 = (undefined2)((ulong)Entities >> 0x10);
-  peVar1 = (entity_t *)Entities;
-  if (((*(char *)((int)(char **)GMenuStrings + (uint)peVar1[unaff_SI].base.gindex * 0x95 + 0x1f) ==
-        '\0') && (*(byte *)(unaff_BP + 8) <= peVar1[unaff_SI].base.level)) &&
-     (peVar1[unaff_SI].base.level <= *(byte *)(unaff_BP + 10))) {
+  iVar1 = (int)Entities;
+  if (((*(char *)((int)(char **)GMenuStrings +
+                 (uint)*(byte *)(iVar1 + unaff_SI * 0x37 + 0xd) * 0x95 + 0x1f) == '\0') &&
+      (*(byte *)(unaff_BP + 8) <= *(byte *)(iVar1 + unaff_SI * 0x37 + 0xf))) &&
+     (*(byte *)(iVar1 + unaff_SI * 0x37 + 0xf) <= *(byte *)(unaff_BP + 10))) {
     *(int *)*(undefined4 *)(unaff_BP + 0xc) = *(int *)*(undefined4 *)(unaff_BP + 0xc) + 1;
     *(int *)*(undefined4 *)(unaff_BP + 0x10) =
          *(int *)*(undefined4 *)(unaff_BP + 0x10) +
-         (uint)((entity_t *)Entities)[unaff_SI].base.animFrame;
+         (uint)*(byte *)((int)Entities + unaff_SI * 0x37 + 0xe);
   }
   if (EntityCount <= unaff_SI + 1U) {
     return;
@@ -2260,27 +2262,28 @@ void manage_usesEntities(void)
 
 /* 4d05:2371 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R6] touches Entities, animFrame */
 
 void __cdecl16far manage_usesEntities2(void)
 
 {
   char in_CL;
-  entity_t *peVar1;
+  int iVar1;
   int unaff_BP;
   int unaff_SI;
   undefined2 uVar2;
   undefined2 unaff_SS;
   
   uVar2 = (undefined2)((ulong)Entities >> 0x10);
-  peVar1 = (entity_t *)Entities;
-  if (((*(char *)((int)&peVar1[unaff_SI].base.entity + 3) == in_CL) &&
-      (*(byte *)(unaff_BP + 8) <= peVar1[unaff_SI].base.level)) &&
-     (peVar1[unaff_SI].base.level <= *(byte *)(unaff_BP + 10))) {
+  iVar1 = (int)Entities;
+  if (((*(char *)(iVar1 + unaff_SI * 0x37 + 0x1a) == in_CL) &&
+      (*(byte *)(unaff_BP + 8) <= *(byte *)(iVar1 + unaff_SI * 0x37 + 0xf))) &&
+     (*(byte *)(iVar1 + unaff_SI * 0x37 + 0xf) <= *(byte *)(unaff_BP + 10))) {
     *(int *)*(undefined4 *)(unaff_BP + 0xc) = *(int *)*(undefined4 *)(unaff_BP + 0xc) + 1;
     *(int *)*(undefined4 *)(unaff_BP + 0x10) =
          *(int *)*(undefined4 *)(unaff_BP + 0x10) +
-         (uint)((entity_t *)Entities)[unaff_SI].base.animFrame;
+         (uint)*(byte *)((int)Entities + unaff_SI * 0x37 + 0xe);
   }
   if (unaff_SI + 1U < EntityCount) {
     manage_usesEntities();
@@ -3003,6 +3006,7 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
 
 /* WARNING: Instruction at (ram,0x0005ff51) overlaps instruction at (ram,0x0005ff50)
     */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "Total population." */
 
 char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sheet_t *sheet)
@@ -3127,7 +3131,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
       uVar6 = ovr_blitLabel((char *)"Total population.",
                             (uint8_t *)CONCAT22(Font02.ofs,(char *)"puppetmaker" + 3));
       *pcVar17 = *pcVar17 + (char)(uVar6 >> 8) + ((undefined1 *)0xfff3 < &stack0xfe3a);
-      *(undefined1 *)((int)&(((entity_t *)*(entity_t **)&Entities)->base).entity + uVar6 + 1) = 0;
+      *(undefined1 *)((int)*(undefined4 *)(entity_t **)&Entities + uVar6 + 0x18) = 0;
       uVar18 = (undefined2)((ulong)Entities >> 0x10);
       *(undefined1 *)((int)&((entity_t *)Entities)[(int)pcVar17].base.state + 1) =
            (char)((entity_t *)Entities)[(int)pcVar17].base.flags32;
@@ -3156,7 +3160,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
         ovr_OVC23_55fe_29a2_entry();
         return pcVar17;
       }
-      pcVar17 = (char *)0x242e6;
+      pcVar17 = (char *)"thief" + 5;
       ovr_say((char *)"The damaged structures belonging to all leaders are highlighted in red.");
       return pcVar17;
     }
@@ -3345,7 +3349,7 @@ L_attact_3f0b_1082_1477:
           cStack_1a = (char)((ulong)((((entity_t *)peStack_1e)->base).animFrame + 0xf) / 0x10);
           while (cStack_1a != '\0') {
             cStack_1a = cStack_1a + -1;
-            ovr_agnt_usesAgntCount6((entity_t *)Entities + (int)count);
+            ovr_agnt_usesAgntCount6(Entities + (int)count);
           }
           cStack_1a = -1;
         }
@@ -3404,8 +3408,8 @@ L_attact_3f0b_1082_1477:
         return (char *)"puppetmaker" + 3;
       }
       uVar18 = (undefined2)((ulong)Entities >> 0x10);
-      peStack_1e = (entity_t *)CONCAT22(uVar18,(entity_t *)Entities + (int)count);
-      uVar6 = ovr_alignUp4(((entity_t *)Entities)[(int)count].base.destX);
+      peStack_1e = (entity_t *)CONCAT22(uVar18,Entities + (int)count);
+      uVar6 = ovr_alignUp4(Entities[(int)count].base.destX);
       uVar7 = ovr_alignUp4((peStack_1e->base).x);
       if ((uVar6 == uVar7) &&
          (uVar18 = (undefined2)((ulong)peStack_1e >> 0x10),

@@ -1376,8 +1376,7 @@ L_OVC49_8699_18c4_1CA7:
       uVar33 = 0x19;
       if (((*(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x121) & 4) == 0) && (0xf7 < uStackY_26)) {
         uVar33 = 0x24;
-        if (*(char *)((int)&((entity_t *)Entities)[(*(uint16_t *)((uint8_t *)&(in_stack_00000008) + 2))].base.entity + 3) !=
-            (char)uStackY_24) {
+        if (*(char *)((int)Entities + (*(uint16_t *)((uint8_t *)&(in_stack_00000008) + 2)) * 0x37 + 0x1a) != (char)uStackY_24) {
           (&stack0xffec)[iVar14] = 6;
           auStackY_2f2[iVar14 * 2 + 1] = (char *)"puppetmaker" + 3;
           auStackY_2f2[iVar14 * 2] = (char *)"New Owner";
@@ -1494,7 +1493,7 @@ code_r0x00088b64:
                     uVar16 = ovr_randBelow(2);
                     *(undefined1 *)((int)uStackY_22 * 0x34 + 5) = (char)uVar16;
                   }
-                  pbVar29 = (brect_t *)((char *)0x292d6);
+                  pbVar29 = (brect_t *)((char *)"glassworks" + 9);
                   if (*(char *)((int)uStackY_22 * 0x34 + 4) == '\0') {
                     *(undefined1 *)((int)uStackY_22 * 0x34 + 5) = 0;
                   }
@@ -1527,7 +1526,7 @@ code_r0x00088b64:
                       *(char *)((int)uStackY_22 * 0x34 + 4) = -*(char *)((int)uStackY_22 * 0x34 + 4)
                       ;
                     }
-                    pbVar29 = (brect_t *)((char *)0x292d6);
+                    pbVar29 = (brect_t *)((char *)"glassworks" + 9);
                     uVar16 = ovr_randBelow(3);
                     *(char *)((int)uStackY_22 * 0x34 + 5) = (char)uVar16 + -1;
                   }
@@ -1558,7 +1557,7 @@ code_r0x00088b64:
                     }
                   }
                   else {
-                    pbVar29 = (brect_t *)((char *)0x292d6);
+                    pbVar29 = (brect_t *)((char *)"glassworks" + 9);
                     uVar16 = ovr_randBelow(2);
                     *(char *)((int)uStackY_22 * 0x34 + 4) = (char)uVar16 * '\x02' + -1;
                   }
@@ -1656,18 +1655,18 @@ L_OVC49_8699_1e09_29B9:
                                  (char *)CONCAT13((char)((uint)pcVar10 >> 8),
                                                   CONCAT12((char)pcVar10,(int)*(undefined4 *)pcVar26
                                                           )));
-        pcStack_8 = (char *)0x292d6;
+        pcStack_8 = (char *)"glassworks" + 9;
         in_stack_0000fff6 = (stg_tmp_t *)((char *)"choose" + 4);
         strcpy((char *)CONCAT13(uVar38,CONCAT12(bVar36,auStackY_2ca)),
                (char *)CONCAT22(pcVar10,pcVar21));
         break;
       case (cte_t *)0x3:
         SpecialColors[2] =
-             ((char *)0x2b516)[(in_stack_0000fff6->aptr).ofs];
+             ((char *)"If you lead with wisdom and cunning..." + 9)[(in_stack_0000fff6->aptr).ofs];
         SpecialColors[3] =
-             ((char *)0x29fbdx12)
+             ((char *)"ENTER: use previous configuration, SPACE: reconfigure, ESC: quit" + 0x12)
              [(in_stack_0000fff6->aptr).ofs];
-        SpecialColors[4] = ((char *)0x2b00fx10)[(in_stack_0000fff6->aptr).ofs];
+        SpecialColors[4] = ((char *)"%s turns %d undead." + 0x10)[(in_stack_0000fff6->aptr).ofs];
         SpecialColors[5] =
              *(uint8_t *)((int)&GStrangeTable[0x12].seg + 1 + (in_stack_0000fff6->aptr).ofs);
         SpecialColors[6] =
@@ -2938,7 +2937,7 @@ L_OVC49_8699_1e09_3BDE:
   GGameState = 0x38;
   pbVar19 = pbVar29;
   if (DebugVerbose != false) {
-    pbVar19 = (brect_t *)((char *)0x292d6);
+    pbVar19 = (brect_t *)((char *)"glassworks" + 9);
     printf("%d \r");
   }
   uVar16 = *(int *)((int)uStackY_22 * 0x34) + 0xc;
@@ -3430,9 +3429,9 @@ L_OVC49_8699_1e09_3CF7:
   uVar20 = EntityCount - 1;
   for (uVar15 = uVar20; -1 < (int)uVar15; uVar15 = uVar15 - 1) {
     uVar27 = (undefined2)((ulong)Entities >> 0x10);
-    uVar20 = (uint)((entity_t *)Entities)[uVar15].base.animFrame;
+    uVar20 = (uint)*(byte *)((int)Entities + uVar15 * 0x37 + 0xe);
     if ((uVar20 == 0) &&
-       (uVar20 = ovr_ovc23_isCursorAt((((entity_t *)Entities + uVar15)->base).x),
+       (uVar20 = ovr_ovc23_isCursorAt(*(uint16_t *)((int)Entities + uVar15 * 0x37)),
        (char)uVar20 != '\0')) {
       uVar20 = AgntCount - 1;
       uStackY_22 = (cte_t *)uVar20;
@@ -3455,6 +3454,7 @@ L_OVC49_8699_1e09_3CF7:
 
 /* 8699:1e09 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Per-frame agent pass: updates each agent's grid cells and AI state, resolves its animation and
    sprite, and draws it (also sets BothFactions and GGameState). */
 
@@ -3488,10 +3488,9 @@ void __cdecl16far ovc49_drawAgents(void)
   int iVar17;
   int *piVar18;
   uint16_t *puVar19;
-  entity_t *peVar20;
   uint16_t unaff_DI;
+  undefined2 uVar20;
   undefined2 uVar21;
-  undefined2 uVar22;
   uint unaff_SS;
   far_t gfx_03;
   far_t gfx_04;
@@ -3500,9 +3499,9 @@ void __cdecl16far ovc49_drawAgents(void)
   far_t gfx_07;
   far_t gfx_08;
   far_t gfx_09;
-  undefined1 uVar23;
+  undefined1 uVar22;
   uint8_t type;
-  undefined1 uVar24;
+  undefined1 uVar23;
   brect_t agentRect;
   int iStack_28;
   uint uStack_22;
@@ -3524,10 +3523,10 @@ void __cdecl16far ovc49_drawAgents(void)
   char cStack_3;
   
   type = (uint8_t)unaff_SS;
-  uVar24 = (undefined1)(unaff_SS >> 8);
+  uVar23 = (undefined1)(unaff_SS >> 8);
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = type;
   dst.ofs = (uint16_t)&agentRect;
-  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = uVar24;
+  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = uVar23;
   F_SCOPY(far_from_u32((uint32_t)(0x2410842c)),dst);
   AgentsChanged = '\0';
   agentRect.seg = GSavedBlitSeg;
@@ -3552,7 +3551,7 @@ void __cdecl16far ovc49_drawAgents(void)
   GGameState = 0x2c;
   (*(uint8_t *)((uint8_t *)&(dst_02.seg))) = type;
   dst_02.ofs = (uint16_t)&agentRect;
-  (*(uint8_t *)((uint8_t *)&(dst_02.seg) + 1)) = uVar24;
+  (*(uint8_t *)((uint8_t *)&(dst_02.seg) + 1)) = uVar23;
   ovr_ovc23_textBuildThfres01Lbm(dst_02);
   _fmemset((void *)(ulong)unaff_SS,2,unaff_DI);
   for (uStack_22 = 0; (int)uStack_22 < (int)(uint)AgntCount; uStack_22 = uStack_22 + 1) {
@@ -3575,10 +3574,10 @@ void __cdecl16far ovc49_drawAgents(void)
     ovc49_textLongerParalyzed
               ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,uStack_22 * 0x34)),(byte)uStack_22);
     uVar13 = *(undefined2 *)(uStack_22 * 0x34);
-    uVar22 = *(undefined2 *)(uStack_22 * 0x34 + 2);
+    uVar21 = *(undefined2 *)(uStack_22 * 0x34 + 2);
     uVar10 = ovc49_body1((agnt_t *)(uStack_22 * 0x34),0x26);
     bStack_1b = (byte)uVar10;
-    uVar21 = (undefined2)((ulong)uStack_a >> 0x10);
+    uVar20 = (undefined2)((ulong)uStack_a >> 0x10);
     puVar16 = (undefined2 *)((int)uStack_a + (uVar10 & 0xff) * 4);
     uStack_12 = CONCAT22(puVar16[1],*puVar16);
     uVar15 = 0x1726;
@@ -3661,7 +3660,7 @@ void __cdecl16far ovc49_drawAgents(void)
       if ((*(char *)(uStack_22 * 0x34 + 0x11) == '\0') &&
          (uVar10 = ovc49_compute1(*(int *)(uStack_22 * 0x34)), (char)uVar10 != '\0')) {
         *(undefined2 *)(uStack_22 * 0x34) = uVar13;
-        *(undefined2 *)(uStack_22 * 0x34 + 2) = uVar22;
+        *(undefined2 *)(uStack_22 * 0x34 + 2) = uVar21;
         if (*(char *)(uStack_22 * 0x34 + 4) == '\0') {
           uVar12 = ovr_randBelow(3);
           *(char *)(uStack_22 * 0x34 + 4) = (char)uVar12 + -1;
@@ -3698,7 +3697,7 @@ void __cdecl16far ovc49_drawAgents(void)
         iVar17 = ovc49_usesStExit((agnt_t *)(uStack_22 * 0x34),0x26);
         if ((char)iVar17 != '\0') {
           *(undefined2 *)(uStack_22 * 0x34) = uVar13;
-          *(undefined2 *)(uStack_22 * 0x34 + 2) = uVar22;
+          *(undefined2 *)(uStack_22 * 0x34 + 2) = uVar21;
           if ((*(char *)(uStack_22 * 0x34 + 0x11) == '\0') ||
              (*(char *)(uStack_22 * 0x34 + 4) != '\0')) {
             if (*(char *)(uStack_22 * 0x34 + 0x11) == '\0') {
@@ -3726,7 +3725,7 @@ void __cdecl16far ovc49_drawAgents(void)
       }
       else if (*(char *)(uStack_22 * 0x34 + 0x25) != '\x02') {
         *(undefined2 *)(uStack_22 * 0x34) = uVar13;
-        *(undefined2 *)(uStack_22 * 0x34 + 2) = uVar22;
+        *(undefined2 *)(uStack_22 * 0x34 + 2) = uVar21;
         if ((*(uint *)(uStack_22 * 0x34 + 0x2b) & 0xbc0) == 0) {
           if (*(char *)(uStack_22 * 0x34 + 4) == '\0') {
             uVar12 = ovr_randBelow(2);
@@ -3774,7 +3773,7 @@ void __cdecl16far ovc49_drawAgents(void)
       printf("%d \r");
     }
     uVar13 = 0x1726;
-    uVar22 = (undefined2)((ulong)uStack_a >> 0x10);
+    uVar21 = (undefined2)((ulong)uStack_a >> 0x10);
     iVar17 = (int)uStack_a + (uint)bStack_1b * 4;
     psVar11 = ovr_stash_usesStExit
                         ((stg_tmp_t *)*(undefined2 *)(iVar17 + 0x58),
@@ -3892,7 +3891,7 @@ void __cdecl16far ovc49_drawAgents(void)
         if (*(char *)(uStack_22 * 0x34 + 0xd) == '\0') {
           cVar9 = ovc49_usesFrameIndex2
                             ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,uStack_22 * 0x34)),
-                             (byte *)CONCAT13(uVar24,CONCAT12(type,&agntIndex)));
+                             (byte *)CONCAT13(uVar23,CONCAT12(type,&agntIndex)));
           if (cVar9 == '\0') {
             if ((*(char *)(uStack_22 * 0x34 + 0x12) == '\x03') ||
                (*(char *)(uStack_22 * 0x34 + 0x12) == '\x0f')) {
@@ -3909,7 +3908,7 @@ void __cdecl16far ovc49_drawAgents(void)
         else if (*(char *)(uStack_22 * 0x34 + 0xd) == '\x01') {
           cVar9 = ovc49_usesFrameIndex
                             ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,uStack_22 * 0x34)),
-                             (byte *)CONCAT13(uVar24,CONCAT12(type,&agntIndex)));
+                             (byte *)CONCAT13(uVar23,CONCAT12(type,&agntIndex)));
           if ((cVar9 == '\0') ||
              (uVar10 = ovr_ovc27_compute1((agnt_t *)(uStack_22 * 0x34),0x1726,0x26,agntIndex + 0xff)
              , (char)uVar10 == '\0')) {
@@ -3980,11 +3979,11 @@ void __cdecl16far ovc49_drawAgents(void)
         }
         else if (*(char *)(uStack_22 * 0x34 + 0xd) == '\x03') {
           iVar17 = (uint)agntIndex * 0x34 + -0x34;
-          uVar23 = (undefined1)iVar17;
+          uVar22 = (undefined1)iVar17;
           uVar10 = ovr_agnt_compute12((agnt_t *)(uStack_22 * 0x34),
                                       (agnt_t *)
-                                      CONCAT13((char)((uint)iVar17 >> 8),CONCAT12(uVar23,0x1726)),
-                                      0x26,uVar23,0x26);
+                                      CONCAT13((char)((uint)iVar17 >> 8),CONCAT12(uVar22,0x1726)),
+                                      0x26,uVar22,0x26);
           if (((char)uVar10 != '\0') && ((*(uint *)((uint)agntIndex * 0x34 + -9) & 0x800) == 0)) {
             uVar6 = *(undefined4 *)((uint)agntIndex * 0x34 + -0x1d);
             if (((*(uint *)((int)uVar6 + 0x14) & 2) == 0) ||
@@ -4083,7 +4082,7 @@ void __cdecl16far ovc49_drawAgents(void)
         uVar13 = (undefined2)((ulong)uStack_12 >> 0x10);
         iVar17 = (int)uStack_12;
         if ((*(byte *)(iVar17 + 0x1c) & 2) == 0) {
-          uVar22 = (undefined2)((ulong)psStack_18 >> 0x10);
+          uVar21 = (undefined2)((ulong)psStack_18 >> 0x10);
           if (*(char *)(uStack_22 * 0x34 + 0xb) == '\0') {
             piVar1 = (int *)(uStack_22 * 0x34 + 8);
             *piVar1 = *piVar1 + (int)(char)((stg_tmp_t *)psStack_18)->cmap[5];
@@ -4205,11 +4204,11 @@ L_OVC49_8699_1e09_3CF7:
         return;
       }
       uVar13 = (undefined2)((ulong)Entities >> 0x10);
-      peVar20 = (entity_t *)Entities;
-    } while ((peVar20[uVar10].base.animFrame != 0x0) ||
-            (uVar12 = peVar20[uVar10].base.y,
-            uVar13 = ovr_ovc23_isCursorAt(((peVar20 + uVar10)->base).x,uVar12,(char)uVar12),
-            (char)uVar13 == '\0'));
+      iVar17 = (int)Entities;
+    } while ((*(char *)(iVar17 + uVar10 * 0x37 + 0xe) != '\0') ||
+            (iVar14 = *(int *)(iVar17 + uVar10 * 0x37 + 2),
+            uVar13 = ovr_ovc23_isCursorAt(*(uint16_t *)(iVar17 + uVar10 * 0x37),iVar14,(char)iVar14)
+            , (char)uVar13 == '\0'));
     uStack_22 = (uint)AgntCount;
     do {
       uStack_22 = uStack_22 - 1;

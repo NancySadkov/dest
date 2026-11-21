@@ -46,7 +46,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
       if (rightButtonLatch != '\0') {
         return (char *)"woodcarver";
       }
-      return (char *)0x2a9cc;
+      return (char *)"arena" + 5;
     }
     prevTick = CONCAT22(uVar6,uVar1);
     puVar4 = ovr_attact_usesBDADailyTimeCounter(__return_storage_ptr__,prevTick);
@@ -172,23 +172,24 @@ void __cdecl16far ovc42_endDemo(char exitCode,int paletteOfs,int paletteSeg)
 
 /* 6d7a:02ab */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R6] touches EntityCount, Entities */
 
 void __cdecl16far ovc42_usesEntityCount(void)
 
 {
-  entity_t *peVar1;
+  int iVar1;
   uint uVar2;
   undefined2 uVar3;
   
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
     uVar3 = (undefined2)((ulong)Entities >> 0x10);
-    peVar1 = (entity_t *)Entities;
-    if ((*(char *)((int)&peVar1[uVar2].base.entity + 3) != -1) &&
-       (*(char *)((int)(char **)GMenuStrings + (uint)peVar1[uVar2].base.gindex * 0x95 + 0x1f) !=
-        '\0')) {
-      ((peVar1 + uVar2)->base).x = 0;
-      ((entity_t *)Entities)[uVar2].base.y = 0;
+    iVar1 = (int)Entities;
+    if ((*(char *)(iVar1 + uVar2 * 0x37 + 0x1a) != -1) &&
+       (*(char *)((int)(char **)GMenuStrings +
+                 (uint)*(byte *)(iVar1 + uVar2 * 0x37 + 0xd) * 0x95 + 0x1f) != '\0')) {
+      *(undefined2 *)(iVar1 + uVar2 * 0x37) = 0;
+      *(undefined2 *)((int)Entities + uVar2 * 0x37 + 2) = 0;
     }
   }
   return;
@@ -886,7 +887,7 @@ undefined2 __cdecl16far run_demo(void)
                                               bVar1 = ovr_ovc40_usesAlignToSeg
                                                                 ('\x04',(char *)"Demo cancelled." +
                                                                         0xf,0x2410,
-                                                                 (char *)0x2b265xf,
+                                                                 (char *)"Demo cancelled." + 0xf,
                                                                  0x2410,2,0x74,0x10,0x74,0x10);
                                               if (bVar1 < 2) {
                                                 ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10)

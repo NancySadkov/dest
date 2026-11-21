@@ -1185,6 +1185,8 @@ void __cdecl16far init_initGUnits(void)
 
 /* 3381:16ef */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
 void __cdecl16far init_buffers(void)
 
 {
@@ -1201,8 +1203,8 @@ void __cdecl16far init_buffers(void)
   (*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)) = in_DX;
   (*(uint16_t *)((uint8_t *)&(GMapCells))) = ovr_stshAlloc(0x22b0);
   (*(uint16_t *)((uint8_t *)&(GMapCells) + 2)) = in_DX;
-  (*(uint16_t *)((uint8_t *)&(Entities))) = ovr_stshAlloc(33000);
-  (*(uint16_t *)((uint8_t *)&(Entities) + 2)) = in_DX;
+  Entities = ovr_stshAlloc(33000);
+  DAT_2000_d190 = in_DX;
   (*(uint16_t *)((uint8_t *)&(FillGrid))) = ovr_stshAlloc(0x6541);
   (*(uint16_t *)((uint8_t *)&(FillGrid) + 2)) = in_DX;
   init_computeMaxSquares();

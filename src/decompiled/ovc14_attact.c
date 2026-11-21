@@ -227,12 +227,13 @@ uint __cdecl16far attact_usesSCARRY22(int x,int y,byte dir,char ignoreBlocked,ch
 
 /* 3f0b:0451 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Counts a party's entities that are off the cursor cell and unflagged, capped at 0x50. */
 
 int __cdecl16far attact_countPartyUnits(byte menuIndex,...)
 
 {
-  entity_t *peVar1;
+  int iVar1;
   uint uVar2;
   int iVar3;
   undefined2 uVar4;
@@ -244,12 +245,12 @@ int __cdecl16far attact_countPartyUnits(byte menuIndex,...)
   else {
     for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
       uVar4 = (undefined2)((ulong)Entities >> 0x10);
-      peVar1 = (entity_t *)Entities;
-      if (((*(uint8_t *)((int)&peVar1[uVar2].base.entity + 3) ==
-            ((uint8_t *)MenuItemEnabled)[menuIndex]) &&
-          (((((peVar1 + uVar2)->base).x < GfxRndSeed - 2U ||
-            (GfxRndSeed + 1U < ((peVar1 + uVar2)->base).x)) || (peVar1[uVar2].base.y != GfxRndSeed2)
-           ))) && ((*(byte *)((int)&peVar1[uVar2].base.flags32 + 1) & 2) == 0)) {
+      iVar1 = (int)Entities;
+      if (((*(uint8_t *)(iVar1 + uVar2 * 0x37 + 0x1a) == ((uint8_t *)MenuItemEnabled)[menuIndex]) &&
+          (((*(uint *)(iVar1 + uVar2 * 0x37) < GfxRndSeed - 2U ||
+            (GfxRndSeed + 1U < *(uint *)(iVar1 + uVar2 * 0x37))) ||
+           (*(int *)(iVar1 + uVar2 * 0x37 + 2) != GfxRndSeed2)))) &&
+         ((*(byte *)(iVar1 + uVar2 * 0x37 + 0x33) & 2) == 0)) {
         iVar3 = iVar3 + 1;
       }
     }
@@ -459,6 +460,7 @@ void __cdecl16far attact_decrementCounter(char *counter)
 
 /* 3f0b:0894 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R6] touches AgntCount, Entities */
 
 int __cdecl16far attact_usesAgntCount(int ownerIndex)
@@ -467,22 +469,22 @@ int __cdecl16far attact_usesAgntCount(int ownerIndex)
   uint uVar1;
   int iVar2;
   byte bVar3;
-  byte bStack_3;
+  undefined1 uStack_3;
   
-  bStack_3 = 0;
+  uStack_3 = 0;
   for (bVar3 = 0; bVar3 < AgntCount; bVar3 = bVar3 + 1) {
     if (((*(int *)((uint)bVar3 * 0x34 + 0x1b) == ownerIndex) &&
         (*(char *)((uint)bVar3 * 0x34 + 0x25) != '\x02')) &&
        ((*(uint *)((uint)bVar3 * 0x34 + 0x2b) & 0xae4) == 0)) {
-      bStack_3 = bStack_3 + 1;
+      uStack_3 = uStack_3 + 1;
     }
   }
-  uVar1 = (((entity_t *)Entities)[ownerIndex].base.animFrame + 0xf) / 0x10;
-  if (uVar1 < bStack_3) {
+  uVar1 = (*(byte *)((int)Entities + ownerIndex * 0x37 + 0xe) + 0xf) / 0x10;
+  if (uVar1 < uStack_3) {
     iVar2 = 0;
   }
   else {
-    iVar2 = uVar1 - bStack_3;
+    iVar2 = uVar1 - uStack_3;
   }
   return iVar2;
 }
@@ -491,6 +493,7 @@ int __cdecl16far attact_usesAgntCount(int ownerIndex)
 
 /* 3f0b:0941 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
 
 void __cdecl16far attact_usesAlignUp4(uint16_t x,uint16_t y,char partyIndex,uint32_t flags,...)
@@ -519,11 +522,11 @@ void __cdecl16far attact_usesAlignUp4(uint16_t x,uint16_t y,char partyIndex,uint
         }
         uStack_8 = 0;
         for (uVar4 = 0; uVar4 < EntityCount; uVar4 = uVar4 + 1) {
-          uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar4].base.destX);
+          uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar4 * 0x37 + 8));
           if (uVar2 == uVar1) {
             uVar5 = (undefined2)((ulong)Entities >> 0x10);
-            if ((((entity_t *)Entities)[uVar4].base.destY == y) &&
-               (*(char *)((int)&((entity_t *)Entities)[uVar4].base.entity + 3) == partyIndex)) {
+            if ((*(uint16_t *)((int)Entities + uVar4 * 0x37 + 10) == y) &&
+               (*(char *)((int)Entities + uVar4 * 0x37 + 0x1a) == partyIndex)) {
               uStack_8 = uStack_8 + 1;
             }
           }
@@ -550,6 +553,7 @@ void __cdecl16far attact_usesAlignUp4(uint16_t x,uint16_t y,char partyIndex,uint
 
 /* 3f0b:0ade */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R6] touches Entities, destX */
 
 void __cdecl16far
@@ -559,28 +563,28 @@ attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flags
 {
   uint16_t x;
   uint16_t y;
-  entity_t *peVar1;
+  int iVar1;
   undefined2 uVar2;
   
-  ((entity_t *)Entities)[entityIndex].base.faction = 0x0;
-  *(undefined1 *)&((entity_t *)Entities)[entityIndex].base.state = 0;
+  *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x2f) = 0;
+  *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x30) = 0;
   uVar2 = (undefined2)((ulong)Entities >> 0x10);
-  peVar1 = (entity_t *)Entities;
-  x = peVar1[entityIndex].base.destX;
-  y = peVar1[entityIndex].base.destY;
-  if ((((peVar1 + entityIndex)->base).x == destX) && (peVar1[entityIndex].base.y == destY)) {
+  iVar1 = (int)Entities;
+  x = *(uint16_t *)(iVar1 + entityIndex * 0x37 + 8);
+  y = *(uint16_t *)(iVar1 + entityIndex * 0x37 + 10);
+  if ((*(uint16_t *)(iVar1 + entityIndex * 0x37) == destX) &&
+     (*(uint16_t *)(iVar1 + entityIndex * 0x37 + 2) == destY)) {
     destX = 0;
     destY = 0;
   }
-  peVar1[entityIndex].base.destX = destX;
-  ((entity_t *)Entities)[entityIndex].base.destY = destY;
+  *(uint16_t *)(iVar1 + entityIndex * 0x37 + 8) = destX;
+  *(uint16_t *)((int)Entities + entityIndex * 0x37 + 10) = destY;
   if ((x != 0) || (y != 0)) {
-    attact_usesAlignUp4(x,y,*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3),
+    attact_usesAlignUp4(x,y,*(char *)((int)Entities + entityIndex * 0x37 + 0x1a),
                         CONCAT22(flagsSeg,flagsOfs));
   }
   if ((destX != 0) || (destY != 0)) {
-    attact_usesAlignUp4(destX,destY,
-                        *(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3),
+    attact_usesAlignUp4(destX,destY,*(char *)((int)Entities + entityIndex * 0x37 + 0x1a),
                         CONCAT22(flagsSeg,flagsOfs));
   }
   return;
@@ -590,24 +594,26 @@ attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flags
 
 /* 3f0b:0c2a */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R6] touches GMapFlags, EntityCount */
 
 void __stdcall16far attact_usesGMapFlags3(void)
 
 {
   uint *puVar1;
-  entity_t *peVar2;
+  int iVar2;
   uint uVar3;
   undefined2 uVar4;
   
   ovr_driver_clearMapFlagsRect((uint32_t)GMapFlags,0,0,0x93,0x3b,0xcfff);
   for (uVar3 = 0; uVar3 < EntityCount; uVar3 = uVar3 + 1) {
     uVar4 = (undefined2)((ulong)Entities >> 0x10);
-    peVar2 = (entity_t *)Entities;
-    puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[peVar2[uVar3].base.y] +
-                     ((peVar2 + uVar3)->base).x);
+    iVar2 = (int)Entities;
+    puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[*(int *)(iVar2 + uVar3 * 0x37 + 2)] +
+                     *(int *)(iVar2 + uVar3 * 0x37));
     *puVar1 = *puVar1 | 0x1000 << (*(byte *)((int)(char **)GMenuStrings +
-                                            (uint)peVar2[uVar3].base.gindex * 0x95 + 0x1f) & 0x1f);
+                                            (uint)*(byte *)(iVar2 + uVar3 * 0x37 + 0xd) * 0x95 +
+                                            0x1f) & 0x1f);
   }
   ovr_ovc15_usesAlignUp42();
   draw_textGoldProvidesHousing();
@@ -618,6 +624,7 @@ void __stdcall16far attact_usesGMapFlags3(void)
 
 /* 3f0b:1082 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
 
 void __cdecl16far attact_usesAlignUp42(void)
@@ -666,7 +673,7 @@ void __cdecl16far attact_usesAlignUp42(void)
   debugEmptyCellCount = 0;
   index = 0;
   do {
-    uVar4 = (*(uint16_t *)((uint8_t *)&(Entities) + 2));
+    uVar4 = DAT_2000_d190;
     if (EntityCount <= index) {
       GGameState = 0x3c;
       if (DebugVerbose != false) {
@@ -707,8 +714,8 @@ void __cdecl16far attact_usesAlignUp42(void)
       mapDirty = 1;
       return;
     }
-    peVar14 = (entity_t *)Entities + index;
-    uStack_1e = (entity_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(Entities) + 2)),peVar14);
+    peVar14 = Entities + index;
+    uStack_1e = (entity_t *)CONCAT22(DAT_2000_d190,peVar14);
     uVar8 = ovr_alignUp4((peVar14->base).destX);
     uVar15 = 0x2379;
     uVar9 = ovr_alignUp4((uStack_1e->base).x);
@@ -875,7 +882,7 @@ L_attact_3f0b_1082_1477:
               cStack_1a = (char)((ulong)((peVar14->base).animFrame + 0xf) / 0x10);
               while (cStack_1a != '\0') {
                 uVar15 = 0x22ff;
-                ovr_agnt_usesAgntCount6((entity_t *)Entities + index,(*(uint16_t *)((uint8_t *)&(Entities) + 2)));
+                ovr_agnt_usesAgntCount6(Entities + index,DAT_2000_d190);
                 cStack_1a = cStack_1a + -1;
               }
             }
@@ -966,6 +973,7 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force,...)
 
 /* 3f0b:1a2f */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "arena" */
 
 bool __cdecl16far
@@ -977,7 +985,7 @@ attact_textArena(uint16_t *foundIndexOut,int mode,uint8_t partyIndex,uint16_t x,
   uint uVar3;
   uint uVar4;
   uint uVar5;
-  entity_t *peVar6;
+  int iVar6;
   uint uVar7;
   undefined2 uVar8;
   uint uStack_4;
@@ -986,24 +994,25 @@ attact_textArena(uint16_t *foundIndexOut,int mode,uint8_t partyIndex,uint16_t x,
   uVar1 = ovr_alignUp4(x);
   for (uVar7 = 0; uVar7 < EntityCount; uVar7 = uVar7 + 1) {
     uVar8 = (undefined2)((ulong)Entities >> 0x10);
-    if (*(uint8_t *)((int)&((entity_t *)Entities)[uVar7].base.entity + 3) == partyIndex) {
-      uVar2 = ovr_alignUp4((((entity_t *)Entities + uVar7)->base).x);
+    if (*(uint8_t *)((int)Entities + uVar7 * 0x37 + 0x1a) == partyIndex) {
+      uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar7 * 0x37));
       uVar4 = (int)(uVar2 - uVar1) >> 0xf;
       uVar8 = (undefined2)((ulong)Entities >> 0x10);
-      uVar3 = ((entity_t *)Entities)[uVar7].base.y - y;
+      uVar3 = *(int *)((int)Entities + uVar7 * 0x37 + 2) - y;
       uVar5 = (int)uVar3 >> 0xf;
       uVar2 = ((uVar2 - uVar1 ^ uVar4) - uVar4) + ((uVar3 ^ uVar5) - uVar5) * 2;
       if ((uVar2 != 0) && (uVar2 < uStack_4)) {
-        uVar3 = ovr_alignUp4(((entity_t *)Entities)[uVar7].base.destX);
-        peVar6 = (entity_t *)Entities;
+        uVar3 = ovr_alignUp4(*(int *)((int)Entities + uVar7 * 0x37 + 8));
+        iVar6 = (int)Entities;
         uVar8 = (undefined2)((ulong)Entities >> 0x10);
-        if (((uVar3 != uVar1) || (peVar6[uVar7].base.destY != y)) &&
-           ((((mode == 0 && ((*(byte *)((int)&peVar6[uVar7].base.flags32 + 1) & 2) == 0)) ||
+        if (((uVar3 != uVar1) || (*(uint16_t *)(iVar6 + uVar7 * 0x37 + 10) != y)) &&
+           ((((mode == 0 && ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 2) == 0)) ||
              ((mode == 1 &&
-              (((peVar6[uVar7].base.destX == 0 && (peVar6[uVar7].base.destY == 0)) &&
-               ((*(byte *)((int)&peVar6[uVar7].base.flags32 + 1) & 2) == 0)))))) ||
-            (((mode == 2 && ((*(byte *)((int)&peVar6[uVar7].base.flags32 + 1) & 1) != 0)) ||
-             ((mode == 3 && ((*(byte *)((int)&peVar6[uVar7].base.flags32 + 1) & 4) != 0)))))))) {
+              (((*(int *)(iVar6 + uVar7 * 0x37 + 8) == 0 &&
+                (*(int *)(iVar6 + uVar7 * 0x37 + 10) == 0)) &&
+               ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 2) == 0)))))) ||
+            (((mode == 2 && ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 1) != 0)) ||
+             ((mode == 3 && ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 4) != 0)))))))) {
           *foundIndexOut = uVar7;
           uStack_4 = uVar2;
         }
@@ -1017,6 +1026,7 @@ attact_textArena(uint16_t *foundIndexOut,int mode,uint8_t partyIndex,uint16_t x,
 
 /* 3f0b:1bfc */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "arena" */
 
 bool __cdecl16far attact_textArena2(uint *foundIndexOut,uint16_t partyIndex,uint16_t x)
@@ -1029,23 +1039,23 @@ bool __cdecl16far attact_textArena2(uint *foundIndexOut,uint16_t partyIndex,uint
   uint uVar5;
   uint uVar6;
   undefined2 uVar7;
-  uint16_t in_stack_0000000c;
+  int in_stack_0000000c;
   uint uStack_4;
   
   uStack_4 = 0;
   uVar1 = ovr_alignUp4(x);
   for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
     uVar7 = (undefined2)((ulong)Entities >> 0x10);
-    if (*(char *)((int)&((entity_t *)Entities)[uVar6].base.entity + 3) == (char)partyIndex) {
-      uVar2 = ovr_alignUp4((((entity_t *)Entities + uVar6)->base).x);
+    if (*(char *)((int)Entities + uVar6 * 0x37 + 0x1a) == (char)partyIndex) {
+      uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar6 * 0x37));
       uVar4 = (int)(uVar2 - uVar1) >> 0xf;
       uVar7 = (undefined2)((ulong)Entities >> 0x10);
-      uVar3 = ((entity_t *)Entities)[uVar6].base.y - in_stack_0000000c;
+      uVar3 = *(int *)((int)Entities + uVar6 * 0x37 + 2) - in_stack_0000000c;
       uVar5 = (int)uVar3 >> 0xf;
       uVar2 = ((uVar2 - uVar1 ^ uVar4) - uVar4) + ((uVar3 ^ uVar5) - uVar5) * 2;
       if (((uStack_4 < uVar2) &&
-          (uVar3 = ovr_alignUp4(((entity_t *)Entities)[uVar6].base.destX), uVar3 == uVar1)) &&
-         (((entity_t *)Entities)[uVar6].base.destY == in_stack_0000000c)) {
+          (uVar3 = ovr_alignUp4(*(int *)((int)Entities + uVar6 * 0x37 + 8)), uVar3 == uVar1)) &&
+         (*(int *)((int)Entities + uVar6 * 0x37 + 10) == in_stack_0000000c)) {
         *foundIndexOut = uVar6;
         uStack_4 = uVar2;
       }
@@ -1058,6 +1068,7 @@ bool __cdecl16far attact_textArena2(uint *foundIndexOut,uint16_t partyIndex,uint
 
 /* 3f0b:1cfb */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "arena" */
 
 bool __cdecl16far attact_textArena3(uint *foundIndexOut,uint16_t partyIndex,int x)
@@ -1077,10 +1088,10 @@ bool __cdecl16far attact_textArena3(uint *foundIndexOut,uint16_t partyIndex,int 
   uVar1 = ovr_alignUp4(x);
   for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
     uVar7 = (undefined2)((ulong)Entities >> 0x10);
-    if (*(char *)((int)&((entity_t *)Entities)[uVar6].base.entity + 3) == (char)partyIndex) {
-      uVar2 = ovr_alignUp4((((entity_t *)Entities + uVar6)->base).x);
+    if (*(char *)((int)Entities + uVar6 * 0x37 + 0x1a) == (char)partyIndex) {
+      uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar6 * 0x37));
       uVar4 = (int)(uVar2 - uVar1) >> 0xf;
-      uVar3 = ((entity_t *)Entities)[uVar6].base.y - in_stack_0000000c;
+      uVar3 = *(int *)((int)Entities + uVar6 * 0x37 + 2) - in_stack_0000000c;
       uVar5 = (int)uVar3 >> 0xf;
       uVar2 = ((uVar2 - uVar1 ^ uVar4) - uVar4) + ((uVar3 ^ uVar5) - uVar5) * 2;
       if (uStack_4 < uVar2) {
@@ -1096,6 +1107,7 @@ bool __cdecl16far attact_textArena3(uint *foundIndexOut,uint16_t partyIndex,int 
 
 /* 3f0b:1db1 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
 
 void __cdecl16far attact_usesAlignUp43(uint16_t *value)
@@ -1135,11 +1147,11 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
     uVar7 = 0;
     for (uStack_6 = 0; uStack_6 < EntityCount; uStack_6 = uStack_6 + 1) {
       uVar10 = (undefined2)((ulong)Entities >> 0x10);
-      bStack_3 = *(byte *)((int)&((entity_t *)Entities)[uStack_6].base.entity + 3);
+      bStack_3 = *(byte *)((int)Entities + uStack_6 * 0x37 + 0x1a);
       if ((((bStack_3 != 0xff) &&
            (*(byte *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x89) == uVar8)) &&
-          (uVar5 = ovr_alignUp4(((entity_t *)Entities)[uStack_6].base.destX), uVar5 == uVar4)) &&
-         (((entity_t *)Entities)[uStack_6].base.destY == puVar6[1])) {
+          (uVar5 = ovr_alignUp4(*(int *)((int)Entities + uStack_6 * 0x37 + 8)), uVar5 == uVar4)) &&
+         (*(uint16_t *)((int)Entities + uStack_6 * 0x37 + 10) == puVar6[1])) {
         uVar7 = uVar7 + 1;
       }
     }
@@ -1148,45 +1160,47 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
              (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),3,bStack_3,*value,
                                        puVar6[1]), bVar3))) {
-        *(undefined1 *)&((entity_t *)Entities)[uStack_6].base.state = 0;
-        ((entity_t *)Entities)[uStack_6].base.destX = uStack_8;
-        ((entity_t *)Entities)[uStack_6].base.destY = puVar6[1];
-        pbVar1 = (byte *)((int)&((entity_t *)Entities)[uStack_6].base.flags32 + 1);
+        *(undefined1 *)((int)Entities + uStack_6 * 0x37 + 0x30) = 0;
+        *(uint16_t *)((int)Entities + uStack_6 * 0x37 + 8) = uStack_8;
+        *(uint16_t *)((int)Entities + uStack_6 * 0x37 + 10) = puVar6[1];
+        pbVar1 = (byte *)((int)Entities + uStack_6 * 0x37 + 0x33);
         *pbVar1 = *pbVar1 & 0xfb;
         uVar7 = uVar7 + 1;
       }
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
              (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),2,bStack_3,*value,
                                        puVar6[1]), bVar3))) {
-        *(undefined1 *)&((entity_t *)Entities)[uStack_6].base.state = 0;
-        ((entity_t *)Entities)[uStack_6].base.destX = uStack_8;
-        ((entity_t *)Entities)[uStack_6].base.destY = puVar6[1];
+        *(undefined1 *)((int)Entities + uStack_6 * 0x37 + 0x30) = 0;
+        *(uint16_t *)((int)Entities + uStack_6 * 0x37 + 8) = uStack_8;
+        *(uint16_t *)((int)Entities + uStack_6 * 0x37 + 10) = puVar6[1];
         uVar7 = uVar7 + 1;
       }
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
              (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),1,bStack_3,*value,
                                        puVar6[1]), bVar3))) {
-        *(undefined1 *)&((entity_t *)Entities)[uStack_6].base.state = 0;
-        ((entity_t *)Entities)[uStack_6].base.destX = uStack_8;
-        ((entity_t *)Entities)[uStack_6].base.destY = puVar6[1];
+        *(undefined1 *)((int)Entities + uStack_6 * 0x37 + 0x30) = 0;
+        *(uint16_t *)((int)Entities + uStack_6 * 0x37 + 8) = uStack_8;
+        *(uint16_t *)((int)Entities + uStack_6 * 0x37 + 10) = puVar6[1];
         uVar7 = uVar7 + 1;
       }
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
              (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),0,bStack_3,*value,
                                        puVar6[1]), bVar3))) {
-        *(undefined1 *)&((entity_t *)Entities)[uStack_6].base.state = 0;
-        ((entity_t *)Entities)[uStack_6].base.destX = uStack_8;
-        ((entity_t *)Entities)[uStack_6].base.destY = puVar6[1];
+        *(undefined1 *)((int)Entities + uStack_6 * 0x37 + 0x30) = 0;
+        *(uint16_t *)((int)Entities + uStack_6 * 0x37 + 8) = uStack_8;
+        *(uint16_t *)((int)Entities + uStack_6 * 0x37 + 10) = puVar6[1];
         uVar7 = uVar7 + 1;
       }
       while (((int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) < (int)uVar7 &&
              (bVar3 = attact_textArena2((uint *)CONCAT22(unaff_SS,&uStack_6),(uint)bStack_3,*value),
              bVar3))) {
-        *(undefined1 *)&((entity_t *)Entities)[uStack_6].base.state = 0;
+        *(undefined1 *)((int)Entities + uStack_6 * 0x37 + 0x30) = 0;
         uVar10 = (undefined2)((ulong)Entities >> 0x10);
-        ((entity_t *)Entities)[uStack_6].base.destX = ((entity_t *)Entities)[uStack_6].base.targetX;
+        *(undefined2 *)((int)Entities + uStack_6 * 0x37 + 8) =
+             *(undefined2 *)((int)Entities + uStack_6 * 0x37 + 4);
         uVar10 = (undefined2)((ulong)Entities >> 0x10);
-        ((entity_t *)Entities)[uStack_6].base.destY = ((entity_t *)Entities)[uStack_6].base.targetY;
+        *(undefined2 *)((int)Entities + uStack_6 * 0x37 + 10) =
+             *(undefined2 *)((int)Entities + uStack_6 * 0x37 + 6);
         uVar7 = uVar7 - 1;
       }
     }
@@ -1452,6 +1466,7 @@ void __cdecl16far attact_usesUpdSeason(void)
 
 /* 3f0b:26bd */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R6] touches EntityCount, Entities */
 
 void __cdecl16far attact_usesEntityCount(void)
@@ -1461,7 +1476,7 @@ void __cdecl16far attact_usesEntityCount(void)
   char *pcVar2;
   uint owner;
   undefined2 uVar3;
-  byte bStack_3;
+  undefined1 uStack_3;
   
   owner = 0;
   do {
@@ -1470,18 +1485,18 @@ void __cdecl16far attact_usesEntityCount(void)
     }
     uVar3 = (undefined2)((ulong)Entities >> 0x10);
     uVar3 = ovr_ovc23_isCursorAt
-                      ((((entity_t *)Entities + owner)->base).x,((entity_t *)Entities)[owner].base.y
-                      );
+                      (*(uint16_t *)((int)Entities + owner * 0x37),
+                       *(int *)((int)Entities + owner * 0x37 + 2));
     if ((char)uVar3 != '\0') {
       for (iVar1 = func_0x0004f944(0x236f,owner); iVar1 != 0; iVar1 = iVar1 + -1) {
         uVar3 = (undefined2)((ulong)Entities >> 0x10);
-        if ((((entity_t *)Entities)[owner].base.target & 1) == 0) {
-          bStack_3 = 0;
+        if ((*(byte *)((int)Entities + owner * 0x37 + 0xc) & 1) == 0) {
+          uStack_3 = 0;
         }
         else {
-          bStack_3 = ((entity_t *)Entities)[owner].base.target - 2;
+          uStack_3 = *(char *)((int)Entities + owner * 0x37 + 0xc) - 2;
         }
-        pcVar2 = ovr_ovc15_textArena(owner,(uint)bStack_3,0);
+        pcVar2 = ovr_ovc15_textArena(owner,(uint)uStack_3,0);
         if (((uint)pcVar2 & 0xff) == 0) break;
       }
     }
@@ -1493,6 +1508,7 @@ void __cdecl16far attact_usesEntityCount(void)
 
 /* 3f0b:277b */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R6] touches EntityCount, Entities */
 
 void __cdecl16far attact_usesEntityCount2(uint16_t *sum,uint16_t *enemySum)
@@ -1501,7 +1517,7 @@ void __cdecl16far attact_usesEntityCount2(uint16_t *sum,uint16_t *enemySum)
   uint16_t *puVar1;
   uint uVar2;
   uint uVar3;
-  entity_t *peVar4;
+  int iVar4;
   uint uVar5;
   undefined2 uVar6;
   undefined2 uVar7;
@@ -1516,23 +1532,25 @@ void __cdecl16far attact_usesEntityCount2(uint16_t *sum,uint16_t *enemySum)
   for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
     uVar8 = (undefined2)((ulong)Entities >> 0x10);
     uVar8 = ovr_ovc23_isCursorAt
-                      ((((entity_t *)Entities + uVar5)->base).x,((entity_t *)Entities)[uVar5].base.y
-                      );
+                      (*(uint16_t *)((int)Entities + uVar5 * 0x37),
+                       *(int *)((int)Entities + uVar5 * 0x37 + 2));
     if ((char)uVar8 != '\0') {
       uVar8 = (undefined2)((ulong)Entities >> 0x10);
-      peVar4 = (entity_t *)Entities;
-      if (*(char *)((int)(char **)GMenuStrings + (uint)peVar4[uVar5].base.gindex * 0x95 + 0x1f) ==
-          '\0') {
-        uVar3 = (uint)peVar4[uVar5].base.animFrame * (uint)peVar4[uVar5].base.level *
-                (uint)peVar4[uVar5].base.level;
+      iVar4 = (int)Entities;
+      if (*(char *)((int)(char **)GMenuStrings +
+                   (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0') {
+        uVar3 = (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xe) *
+                (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xf) *
+                (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xf);
         uVar2 = *sum;
         *sum = *sum + uVar3;
         puVar1 = (uint16_t *)sum + 1;
         *puVar1 = *puVar1 + ((int)uVar3 >> 0xf) + (uint)CARRY2(uVar2,uVar3);
       }
       else {
-        uVar3 = (uint)peVar4[uVar5].base.animFrame * (uint)peVar4[uVar5].base.level *
-                (uint)peVar4[uVar5].base.level;
+        uVar3 = (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xe) *
+                (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xf) *
+                (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xf);
         uVar2 = *enemySum;
         *enemySum = *enemySum + uVar3;
         puVar1 = (uint16_t *)enemySum + 1;

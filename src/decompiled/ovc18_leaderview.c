@@ -411,6 +411,7 @@ ovc18_spawnClassAgent
 
 /* 48ac:0382 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "type %d len %ld \r" */
 
 char * __cdecl16far
@@ -570,7 +571,7 @@ L_attact_3f0b_26bd_2767:
               if (EntityCount <= uVar11) {
                 return (char *)"puppetmaker" + 3;
               }
-              uVar13 = ovr_ovc23_isCursorAt((((entity_t *)Entities + uVar11)->base).x);
+              uVar13 = ovr_ovc23_isCursorAt(*(uint16_t *)((int)Entities + uVar11 * 0x37));
             } while ((char)uVar13 == '\0');
             destY = func_0x0004f944();
           }
@@ -800,6 +801,7 @@ L_attact_3f0b_26bd_2767:
 
 /* 48ac:05f2 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Checks a fortress site and reports the matching rejection message. */
 
 void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind,...)
@@ -832,13 +834,13 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind,...)
   for (uVar8 = 0; partyIndex = (char)unaff_DI, uVar8 < EntityCount; uVar8 = uVar8 + 1) {
     uVar10 = (undefined2)((ulong)Entities >> 0x10);
     if (*(char *)((int)(char **)GMenuStrings +
-                 (uint)((entity_t *)Entities)[uVar8].base.gindex * 0x95 + 0x1f) != '\0') {
-      uVar3 = ovr_alignUp4((((entity_t *)Entities + uVar8)->base).x);
+                 (uint)*(byte *)((int)Entities + uVar8 * 0x37 + 0xd) * 0x95 + 0x1f) != '\0') {
+      uVar3 = ovr_alignUp4(*(int *)((int)Entities + uVar8 * 0x37));
       uVar11 = (undefined1)uVar3;
       uVar12 = (undefined1)(uVar3 >> 8);
       uVar3 = ovr_alignUp4(GfxRndSeed);
       if ((CONCAT11(uVar12,uVar11) == uVar3) &&
-         (((entity_t *)Entities)[uVar8].base.y == GfxRndSeed2)) {
+         (*(uint16_t *)((int)Entities + uVar8 * 0x37 + 2) == GfxRndSeed2)) {
         ovr_stats_openCastlePanel();
         ovr_say((char *)"A fortress cannot be placed among enemy units.",0x10);
         MsgShown = 1;
@@ -1081,6 +1083,7 @@ uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,...
 
 /* 48ac:1022 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "arena" */
 
 bool __cdecl16far ovc18_textArena(uint16_t x,uint16_t y,...)
@@ -1096,8 +1099,8 @@ bool __cdecl16far ovc18_textArena(uint16_t x,uint16_t y,...)
     if (EntityCount <= uVar3) {
       return false;
     }
-    uVar2 = ovr_alignUp4((((entity_t *)Entities + uVar3)->base).x);
-    if ((uVar2 == uVar1) && (((entity_t *)Entities)[uVar3].base.y == y)) break;
+    uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar3 * 0x37));
+    if ((uVar2 == uVar1) && (*(uint16_t *)((int)Entities + uVar3 * 0x37 + 2) == y)) break;
     uVar3 = uVar3 + 1;
   }
   return true;
@@ -1107,6 +1110,7 @@ bool __cdecl16far ovc18_textArena(uint16_t x,uint16_t y,...)
 
 /* 48ac:1092 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
 
 uint __cdecl16far ovc18_usesAlignUp4(void)
@@ -1126,11 +1130,11 @@ uint __cdecl16far ovc18_usesAlignUp4(void)
     for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
       uVar7 = (undefined2)((ulong)Entities >> 0x10);
       if (*(char *)((int)(char **)GMenuStrings +
-                   (uint)((entity_t *)Entities)[uVar5].base.gindex * 0x95 + 0x1f) != '\0') {
-        uVar2 = ovr_alignUp4((((entity_t *)Entities + uVar5)->base).x);
+                   (uint)*(byte *)((int)Entities + uVar5 * 0x37 + 0xd) * 0x95 + 0x1f) != '\0') {
+        uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar5 * 0x37));
         uVar3 = ovr_alignUp4(GfxRndSeed);
-        if ((uVar2 == uVar3) && (uVar2 = ((entity_t *)Entities)[uVar5].base.y, uVar2 == GfxRndSeed2)
-           ) {
+        if ((uVar2 == uVar3) &&
+           (uVar2 = *(uint *)((int)Entities + uVar5 * 0x37 + 2), uVar2 == GfxRndSeed2)) {
           return uVar2 & 0xff00;
         }
       }

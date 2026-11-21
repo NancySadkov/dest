@@ -49,13 +49,14 @@ short __cdecl16far ovc45_getUnitIndex(int x,int y,...)
 
 /* 77eb:01bb */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
 
 uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIndexOut)
 
 {
   uint uVar1;
-  entity_t *peVar2;
+  int iVar2;
   uint uVar3;
   undefined2 uVar4;
   uint *in_stack_0000000a;
@@ -63,15 +64,16 @@ uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIn
   
   bStack_3 = 0xff;
   for (uVar3 = 0; uVar3 < EntityCount; uVar3 = uVar3 + 1) {
-    uVar1 = ovr_alignUp4((((entity_t *)Entities + uVar3)->base).x);
+    uVar1 = ovr_alignUp4(*(int *)((int)Entities + uVar3 * 0x37));
     if (uVar1 == x) {
       uVar4 = (undefined2)((ulong)Entities >> 0x10);
-      peVar2 = (entity_t *)Entities;
-      if ((((peVar2[uVar3].base.y == y) &&
-           (*(char *)((int)(char **)GMenuStrings + (uint)peVar2[uVar3].base.gindex * 0x95 + 0x1f) ==
-            '\0')) && (slotMin < (int)(uint)*(byte *)((int)&peVar2[uVar3].base.entity + 3))) &&
-         (*(byte *)((int)&peVar2[uVar3].base.entity + 3) < bStack_3)) {
-        bStack_3 = *(byte *)((int)&peVar2[uVar3].base.entity + 3);
+      iVar2 = (int)Entities;
+      if ((((*(uint16_t *)(iVar2 + uVar3 * 0x37 + 2) == y) &&
+           (*(char *)((int)(char **)GMenuStrings +
+                     (uint)*(byte *)(iVar2 + uVar3 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0')) &&
+          (slotMin < (int)(uint)*(byte *)(iVar2 + uVar3 * 0x37 + 0x1a))) &&
+         (*(byte *)(iVar2 + uVar3 * 0x37 + 0x1a) < bStack_3)) {
+        bStack_3 = *(byte *)(iVar2 + uVar3 * 0x37 + 0x1a);
         *(uint *)CONCAT22((uint *)entityIndexOut,in_stack_0000000a) = uVar3;
       }
     }
@@ -89,6 +91,7 @@ uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIn
 
 /* 77eb:02c1 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Finds the entity at (x,y) and writes its index and a found flag through the out pointers. */
 
 char * __cdecl16far
@@ -98,10 +101,9 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
   uint uVar1;
   uint uVar2;
   int iVar3;
-  entity_t *peVar4;
+  uint uVar4;
   uint uVar5;
-  uint uVar6;
-  undefined2 uVar7;
+  undefined2 uVar6;
   undefined1 uStack000f;
   char in_stack_00000010;
   uint uStack_6;
@@ -111,54 +113,55 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
   uVar1 = ovr_alignUp4(x);
   *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = 0xffff;
   uStack_6 = 0xffff;
-  uVar6 = 0xffff;
+  uVar5 = 0xffff;
   uStack_4 = 0xffff;
-  for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
-    uVar2 = ovr_alignUp4((((entity_t *)Entities + uVar5)->base).x);
+  for (uVar4 = 0; uVar4 < EntityCount; uVar4 = uVar4 + 1) {
+    uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar4 * 0x37));
     if (uVar2 == uVar1) {
-      uVar7 = (undefined2)((ulong)Entities >> 0x10);
-      peVar4 = (entity_t *)Entities;
-      if (peVar4[uVar5].base.y == y) {
-        uVar2 = (uint)peVar4[uVar5].base.gindex * 0x95;
+      uVar6 = (undefined2)((ulong)Entities >> 0x10);
+      iVar3 = (int)Entities;
+      if (*(uint16_t *)(iVar3 + uVar4 * 0x37 + 2) == y) {
+        uVar2 = (uint)*(byte *)(iVar3 + uVar4 * 0x37 + 0xd) * 0x95;
         if (*(char *)((int)(char **)GMenuStrings + uVar2 + 0x1f) != '\0') {
           return (char *)(uVar2 & 0xff00);
         }
-        if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)peVar4[uVar5].base.gindex * 0x95) !=
-             -1) && (*(char *)((int)&peVar4[uVar5].base.entity + 3) != -1)) {
-          if (*(char *)((int)&peVar4[uVar5].base.entity + 3) == in_stack_00000010) {
-            *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = uVar5;
+        if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 +
+                      (uint)*(byte *)(iVar3 + uVar4 * 0x37 + 0xd) * 0x95) != -1) &&
+           (*(char *)(iVar3 + uVar4 * 0x37 + 0x1a) != -1)) {
+          if (*(char *)(iVar3 + uVar4 * 0x37 + 0x1a) == in_stack_00000010) {
+            *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = uVar4;
           }
-          else if (*(char *)((int)&peVar4[uVar5].base.entity + 3) == selectedPartyIndex) {
-            uStack_6 = uVar5;
+          else if (*(char *)(iVar3 + uVar4 * 0x37 + 0x1a) == selectedPartyIndex) {
+            uStack_6 = uVar4;
           }
-          if ((uStack_4 != 0xffff) &&
-             (*(byte *)((int)&((entity_t *)Entities)[uVar5].base.entity + 3) != uStack_4)) {
+          if ((uStack_4 != 0xffff) && (*(byte *)((int)Entities + uVar4 * 0x37 + 0x1a) != uStack_4))
+          {
             *(undefined1 *)CONCAT13(uStack000f,CONCAT12(foundFlag,(*(uint16_t *)((uint8_t *)&(foundFlagOut) + 2)))) = 1;
           }
-          uStack_4 = (uint)*(byte *)((int)&((entity_t *)Entities)[uVar5].base.entity + 3);
-          uVar6 = uVar5;
+          uStack_4 = (uint)*(byte *)((int)Entities + uVar4 * 0x37 + 0x1a);
+          uVar5 = uVar4;
         }
       }
     }
   }
   if (*(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) == 0xffff) {
     if (uStack_6 == 0xffff) {
-      if (uVar6 == 0xffff) {
-        return (char *)0x2a9cb;
+      if (uVar5 == 0xffff) {
+        return (char *)"arena" + 4;
       }
-      *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = uVar6;
+      *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = uVar5;
     }
     else {
       *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = uStack_6;
     }
   }
-  uVar7 = (undefined2)((ulong)Entities >> 0x10);
-  iVar3 = (uint)((entity_t *)Entities)[*(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex)].base.
-                gindex * 0x95;
+  uVar6 = (undefined2)((ulong)Entities >> 0x10);
+  iVar3 = (uint)*(byte *)((int)Entities +
+                          *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) * 0x37 + 0xd) * 0x95
+  ;
   selectedPartyIndex =
        *(undefined1 *)
-        ((int)&((entity_t *)Entities)[*(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex)].base.
-               entity + 3);
+        ((int)Entities + *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) * 0x37 + 0x1a);
   return (char *)CONCAT11((char)((uint)iVar3 >> 8),
                           '\x01' << (*(byte *)((int)&worldMenuLabels[9].ofs + 1 + iVar3) & 0x1f));
 }
@@ -167,6 +170,7 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
 
 /* 77eb:04d8 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "Choose party to build for.  Now building" */
 
 undefined2 __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *entityIndexPtr,...)
@@ -204,14 +208,13 @@ undefined2 __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *en
   }
   if ((int)count < 2) {
     *entityIndexPtr = entityIndex;
-    iVar1 = (uint)((entity_t *)Entities)[*entityIndexPtr].base.gindex * 0x95;
+    iVar1 = (uint)*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0xd) * 0x95;
     uVar5 = CONCAT11((char)((uint)iVar1 >> 8),
                      '\x01' << (*(byte *)((int)&worldMenuLabels[9].ofs + 1 + iVar1) & 0x1f));
   }
   else {
-    ovr_ovc22_className(*(byte *)((int)&((entity_t *)Entities)[*entityIndexPtr].base.entity + 3));
-    puVar2 = (undefined2 *)
-             ((uint)*(byte *)((int)&((entity_t *)Entities)[*entityIndexPtr].base.entity + 3) * 4);
+    ovr_ovc22_className(*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0x1a));
+    puVar2 = (undefined2 *)((uint)*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0x1a) * 4);
     uVar5 = 0x217a;
     pcVar3 = ovr_fmVsprintf("Choose party to build for.  Now building for %s the %s.",
                             (char *)CONCAT22(puVar2[1],(char *)*puVar2));
@@ -229,9 +232,8 @@ undefined2 __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *en
     else {
       *entityIndexPtr = aiStack_2c[((uint)puVar4 & 0xff) - 0xc];
       uVar5 = (undefined2)((ulong)Entities >> 0x10);
-      selectedPartyIndex =
-           *(undefined1 *)((int)&((entity_t *)Entities)[*entityIndexPtr].base.entity + 3);
-      iVar1 = (uint)((entity_t *)Entities)[*entityIndexPtr].base.gindex * 0x95;
+      selectedPartyIndex = *(undefined1 *)((int)Entities + *entityIndexPtr * 0x37 + 0x1a);
+      iVar1 = (uint)*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0xd) * 0x95;
       uVar5 = CONCAT11((char)((uint)iVar1 >> 8),
                        '\x01' << (*(byte *)((int)&worldMenuLabels[9].ofs + 1 + iVar1) & 0x1f));
     }
@@ -620,6 +622,7 @@ bool __cdecl16far ovc45_textArena2(byte bldType)
 /* 77eb:0d61 */
 
 /* WARNING: Removing unreachable block (ram,0x00079554) */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Builds the building-placement verdict for a site: the 'It will cost ... gp.' line or the reason
    it cannot be placed (water, narrow, rank, outpost limit, walls, arena). */
 
@@ -922,7 +925,7 @@ ovc45_buildPlacementMessage
   bStack_13 = grab - ((char)uVar9 + -2);
   do {
     uStack_f = 0;
-    bStack_11 = *(byte *)((int)&((entity_t *)Entities)[param_3].base.entity + 3);
+    bStack_11 = *(byte *)((int)Entities + param_3 * 0x37 + 0x1a);
     uVar9 = ovr_bldng_usesGStrangeTable
                       (*(byte *)((int)*(undefined4 *)((uint)bStack_11 << 2) + 0x85));
     bStack_12 = (byte)uVar9;
@@ -1007,8 +1010,7 @@ ovc45_buildPlacementMessage
                 }
                 else {
                   uVar26 = 0x10;
-                  pcVar11 = ovr_ovc22_className(*(byte *)((int)&((entity_t *)Entities)[param_3].base
-                                                                .entity + 3),
+                  pcVar11 = ovr_ovc22_className(*(byte *)((int)Entities + param_3 * 0x37 + 0x1a),
                                                 (char)*(undefined2 *)
                                                        ((uint)bStack_12 * 0x27 + 0x125));
                   uVar16 = 0x217a;
@@ -3992,6 +3994,7 @@ L_init_assets_4EA5:
 
 /* 77eb:16b2 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_randBelow */
 
 uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
@@ -4005,12 +4008,11 @@ uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
   undefined2 uVar6;
   
   uVar6 = (undefined2)((ulong)Entities >> 0x10);
-  if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) == -1) {
+  if (*(char *)((int)Entities + entityIndex * 0x37 + 0x1a) == -1) {
     uVar3 = entityIndex * 0x37 & 0xff00;
   }
   else {
-    uVar2 = *(undefined4 *)
-             ((uint)*(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) << 2);
+    uVar2 = *(undefined4 *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) << 2);
     cVar1 = *(char *)((int)uVar2 + 0x2f);
     if (cVar1 == '\x04') {
       uVar4 = ovr_randBelow(5);
@@ -4050,6 +4052,7 @@ uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
 
 /* 77eb:1754 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "Done" */
 
 void __cdecl16far
@@ -4115,10 +4118,8 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
   cStack_16 = '\0';
   do {
     uVar11 = 0x10;
-    pcVar2 = ovr_ovc22_className(*(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3
-                                          ));
-    puVar3 = (undefined2 *)
-             ((uint)*(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) * 4);
+    pcVar2 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a));
+    puVar3 = (undefined2 *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
     uVar8 = 0x217a;
     iVar4 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar3,unaff_SS),
                            (char *)CONCAT13((char)(Font03.ofs >> 8),
@@ -4132,7 +4133,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
                             (char *)CONCAT22(uVar9,puVar5));
     strcpy((char *)CONCAT22(unaff_SS,&msg),
            (char *)CONCAT13((char)((uint)uVar9 >> 8),CONCAT12((char)uVar9,pcVar2)));
-    goldPartyIndex = *(undefined1 *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+    goldPartyIndex = *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x1a);
     uVar11 = SUB21(unaff_SS,0);
     uVar12 = (undefined1)((uint)unaff_SS >> 8);
     puVar5 = &menuItems;
@@ -4153,7 +4154,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
       if ((uVar6 & 0xff) == 0) {
         ovr_play_sfx(47,0,0);
         ovr_say((char *)"No minerals were found.",0x10);
-        bVar1 = *(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+        bVar1 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
         ovr_createConstructionRecordFar
                   (0,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,(char)unaff_DI,
                    (char)GfxRndSeed2,bVar1);
@@ -4163,7 +4164,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
         if ((uVar7 & 0xff) == 0) {
           ovr_play_sfx(42,0,0);
           ovr_say((char *)"Gems discovered.",0x10);
-          bVar1 = *(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+          bVar1 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
           ovr_createConstructionRecordFar
                     (0x72,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,
                      (char)unaff_DI,(char)GfxRndSeed2,bVar1);
@@ -4173,7 +4174,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
           if ((char)uVar7 == '\0') {
             ovr_play_sfx(43,0,0);
             ovr_say((char *)"Gold discovered.",0x10);
-            bVar1 = *(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+            bVar1 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
             ovr_createConstructionRecordFar
                       (0x71,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,
                        (char)unaff_DI,(char)GfxRndSeed2,bVar1);
@@ -4181,7 +4182,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
           else {
             ovr_play_sfx(42,0,0);
             ovr_say((char *)"Iron deposits discovered.",0x10);
-            bVar1 = *(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+            bVar1 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
             ovr_createConstructionRecordFar
                       (0x70,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,
                        (char)unaff_DI,(char)GfxRndSeed2,bVar1);
@@ -4214,7 +4215,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
       ovr_ovc28_compute2(entries_00,2,hint_00);
       cStack_15 = (char)puVar5;
       if (cStack_15 == '\x01') {
-        bVar1 = *(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+        bVar1 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
         ovr_createConstructionRecordFar
                   (0,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,(char)unaff_DI,
                    (char)GfxRndSeed2,bVar1);
@@ -4251,6 +4252,7 @@ bool __cdecl16far ovc45_compute6(uint16_t value,...)
 
 /* 77eb:1bb3 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "Done" */
 
 void __cdecl16far
@@ -4321,10 +4323,8 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
   cStack_e = '\0';
   do {
     uVar14 = 0x10;
-    pcVar4 = ovr_ovc22_className(*(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3
-                                          ));
-    puVar5 = (undefined2 *)
-             ((uint)*(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) * 4);
+    pcVar4 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a));
+    puVar5 = (undefined2 *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
     uVar15 = 0x7a;
     uVar8 = puVar5[1];
     iVar6 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar5,unaff_SS),
@@ -4343,7 +4343,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
     uVar15 = (undefined1)((uint)unaff_SS >> 8);
     strcpy((char *)CONCAT13(uVar15,CONCAT12(uVar14,&msg)),
            (char *)CONCAT13((char)((uint)uVar8 >> 8),CONCAT12((char)uVar8,pcVar4)));
-    goldPartyIndex = *(undefined1 *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+    goldPartyIndex = *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x1a);
     puVar7 = &menuLabels;
     (*(uint8_t *)((uint8_t *)&(entries.seg))) = uVar14;
     entries.ofs = (uint16_t)puVar7;
@@ -4361,7 +4361,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
       ovr_play_sfx(86,0,0);
       if (*(char *)((uint)bldType * 0x27 + 0x131) == '\0') {
         if (*(char *)((int)&worldMenuLabels[9].ofs + 1 +
-                     (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95) == '\x05') {
+                     (uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0xd) * 0x95) == '\x05') {
           bStack_11 = bldType + 0x18;
         }
         else {
@@ -4377,13 +4377,12 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
                 (bStack_11,agnt,GfxRndSeed2,(uint8_t *)outFlag,(char)outFlagSeg,(char)agnt,
                  (char)outFlag,(char)outFlagSeg,
                  CONCAT11((char)((uint)(entityIndex * 0x37) >> 8),
-                          *(undefined1 *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3)
-                         ),0);
+                          *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x1a)),0);
       *(undefined1 *)((uint)bStack_11 * 0x27 + 0x120) = (undefined1)uStack_14;
-      bVar3 = *(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+      bVar3 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
       pcStack_16 = ovr_ovc22_textPOPULATION(bStack_11,bVar3,(agnt_t *)agnt,bVar3,(char)GfxRndSeed2);
       uVar14 = 0x10;
-      partyIndex = *(uint8_t *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+      partyIndex = *(uint8_t *)((int)Entities + entityIndex * 0x37 + 0x1a);
       uStack_18 = ovr_ovc22_seasonalIncome(bStack_11,partyIndex,partyIndex,agnt,(char)GfxRndSeed2);
       ovc45_compute6((uint16_t)pcStack_16);
       pcVar4 = ovr_fmVsprintf("Forest claimed. This forest creates %d gold of income and feeds %d %s."
@@ -4395,12 +4394,12 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
     }
     else if (menuActions == 0x2) {
       ovr_play_sfx(48,0,0);
-      bVar3 = *(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+      bVar3 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
       ovr_createConstructionRecordFar
                 (0,agnt,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar3,(char)unaff_DI,
                  (char)GfxRndSeed2,(char)outFlag,bVar3);
       cStack_e = '\x01';
-      bStack_10 = *(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+      bStack_10 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
       uVar8 = (undefined2)((ulong)*(undefined4 *)((uint)bStack_10 << 2) >> 0x10);
       iVar6 = (int)*(undefined4 *)((uint)bStack_10 << 2);
       puVar1 = (uint *)(iVar6 + 0x56);

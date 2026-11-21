@@ -903,6 +903,7 @@ void __cdecl16far saveui_freeLines(far_t entries,uint count)
     */
 /* WARNING: Control flow encountered bad instruction data */
 /* WARNING: Variable defined which should be unmapped: menuLabel */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Edits the message delay, persists it to cflow4.txt and reports the new value. */
 
 char * __cdecl16far saveui_configureMessageDelay(void)
@@ -1001,7 +1002,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   switch(uVar9) {
   default:
     if (GMenuItem == '\0') {
-      pcVar11 = (char *)0x2a9cb;
+      pcVar11 = (char *)"arena" + 4;
     }
     else {
       pcVar11 = (char *)CONCAT11(0x24,GMenuItem + (char)uStack_6);
@@ -1066,9 +1067,9 @@ switchD_4000_6642_caseD_3:
       cVar6 = (char)uStack_1a;
       uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(char)uStack_1a + -1);
       if (cVar6 == '\0') break;
-      pcStack_22 = (char *)CONCAT22(menuLabel,(*(uint16_t *)((uint8_t *)&(Entities) + 2)));
+      pcStack_22 = (char *)CONCAT22(menuLabel,DAT_2000_d190);
       uVar19 = 0x22ff;
-      ovr_agnt_usesAgntCount6((entity_t *)Entities + unaff_DI);
+      ovr_agnt_usesAgntCount6(Entities + unaff_DI);
     }
   }
   else if (((char)uStack_18 != '\0') && ((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) != '\0')) {
@@ -1151,8 +1152,8 @@ switchD_4000_6642_caseD_3:
           mapDirty = 1;
           return (char *)"puppetmaker" + 3;
         }
-        uStack_1e = (entity_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(Entities) + 2)),(entity_t *)Entities + unaff_DI);
-        uVar8 = ovr_alignUp4(((entity_t *)Entities)[unaff_DI].base.destX);
+        uStack_1e = (entity_t *)CONCAT22(DAT_2000_d190,Entities + unaff_DI);
+        uVar8 = ovr_alignUp4(Entities[unaff_DI].base.destX);
         uVar19 = 0x2379;
         uVar9 = ovr_alignUp4((uStack_1e->base).x);
         if ((uVar8 == uVar9) &&
@@ -1465,7 +1466,7 @@ void __cdecl16far uiMainMenuLoop(void)
     items.ofs = 0x2410;
     uiMenu((char *)"Select an option:",items,unaff_SS,8);
     bStack_13 = (byte)pmenu;
-    ovr_say((char *)0x26832,0x2410);
+    ovr_say((char *)"<Empty>" + 7,0x2410);
     if (bStack_13 < 9) {
                     /* WARNING: Switch is manually overridden */
       switch((undefined4)

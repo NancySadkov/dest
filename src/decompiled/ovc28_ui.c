@@ -710,7 +710,7 @@ L_uiInputText_110E:
 L_uiInputText_10F1:
         if (menuBarShown != '\0') {
           GMenuFlag = 0;
-          return (char *)0x242e5;
+          return (char *)"thief" + 4;
         }
         goto L_uiInputText_1007;
       }
@@ -728,7 +728,7 @@ L_uiInputText_10F1:
         }
         if (menuBarShown != '\0') {
           GMenuFlag = 0;
-          return (char *)0x242e3;
+          return (char *)"thief" + 2;
         }
         goto L_uiInputText_1007;
       }
@@ -749,7 +749,7 @@ L_uiInputText_10F1:
       }
       if (menuBarShown != '\0') {
         GMenuFlag = 0;
-        return (char *)0x242e4;
+        return (char *)"thief" + 3;
       }
       goto L_uiInputText_1007;
     }
@@ -797,7 +797,7 @@ L_uiInputText_11EE:
       else if (uVar3 < 0x5001) {
         if (((uVar3 == 0x4900) || (uVar3 == 0x4939)) && ((flags & 1) != 0)) {
           GMenuFlag = 0;
-          return (char *)0x2a9cc;
+          return (char *)"arena" + 5;
         }
       }
       else if (uVar3 == 0x5032) goto L_uiInputText_11EE;
@@ -808,7 +808,7 @@ L_uiInputText_11EE:
 L_uiInputText_1348:
         ovc28_usesBlitLoadRleGfx();
         GMenuFlag = 0;
-        return (char *)0x2a9cb;
+        return (char *)"arena" + 4;
       }
       if (uVar3 == 0xffff) {
         uVar4 = ovc28_usesScreenMode(entries,count);

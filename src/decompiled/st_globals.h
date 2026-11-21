@@ -1575,6 +1575,7 @@ extern uint8_t menuItemRow[6];
 extern undefined2 StshSprIndex;
 extern spr_t *StshSprites;
 extern entity_t *Entities;
+extern undefined DAT_2000_d190;
 extern far_t SprProjectiles;
 extern bool AgntFlag1;
 extern undefined2 EntityCount;

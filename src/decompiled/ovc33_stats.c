@@ -819,7 +819,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       bVar27 = bVar28 - bVar12;
       bVar12 = bVar10 < bVar27 ||
                (byte)(bVar10 - bVar27) < ((byte)pbVar14 < (byte)pbVar31 || bVar28 < bVar12);
-      pbVar5 = (byte *)((char *)0x2b018 + (int)puVar39 + (int)piVar33);
+      pbVar5 = (byte *)((char *)"%s turns %d undead." + 9 + (int)puVar39 + (int)piVar33);
       bVar28 = *pbVar5;
       bVar10 = *pbVar5;
       *pbVar5 = (bVar10 - bVar25) - bVar12;
@@ -1428,7 +1428,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
     TextBlitX = 0x87;
     piVar8 = (int *)((uint)(byte)((agntG_t *)agnt->gdata)->shortName[3] * 0x94 +
                     (uint)(((entity_t *)agnt->entity)->base).level * 4);
-    puVar11 = (uint8_t *)((char *)0x262a2xf);
+    puVar11 = (uint8_t *)((char *)"sturdy e/w wall" + 0xf);
     uVar5 = (undefined1)Font02.seg;
     uVar15 = (undefined1)(Font02.seg >> 8);
     if (*piVar8 == 0 && piVar8[1] == 0) {
@@ -1449,7 +1449,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
       puVar9 = (undefined2 *)
                ((uint)(byte)((agntG_t *)agnt->gdata)->shortName[3] * 0x94 +
                (uint)(((entity_t *)agnt->entity)->base).level * 4);
-      puVar11 = (uint8_t *)((char *)0x262a2xf);
+      puVar11 = (uint8_t *)((char *)"sturdy e/w wall" + 0xf);
       uVar19 = Font02.ofs;
       pcVar6 = stats_formatThousands
                          ((char *)CONCAT13((char)((uint)unaff_SS >> 8),CONCAT12((char)unaff_SS,buf))
@@ -1646,6 +1646,7 @@ char * __cdecl16far stats_readyStatusText(byte agntIndex,char *text)
 
 /* 6386:1353 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R6] touches EntityCount, Entities */
 
 void __cdecl16far stats_usesEntityCount(char partyIndex)
@@ -1657,8 +1658,8 @@ void __cdecl16far stats_usesEntityCount(char partyIndex)
   
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
     uVar3 = (undefined2)((ulong)Entities >> 0x10);
-    if (*(char *)((int)&((entity_t *)Entities)[uVar2].base.entity + 3) == partyIndex) {
-      pbVar1 = (byte *)((int)&((entity_t *)Entities)[uVar2].base.flags32 + 1);
+    if (*(char *)((int)Entities + uVar2 * 0x37 + 0x1a) == partyIndex) {
+      pbVar1 = (byte *)((int)Entities + uVar2 * 0x37 + 0x33);
       *pbVar1 = *pbVar1 & 0xfb;
     }
   }
@@ -1746,6 +1747,7 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
 
 /* 6386:1572 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
 
 uint __cdecl16far stats_usesAlignUp4(int entityIndex)
@@ -1754,30 +1756,30 @@ uint __cdecl16far stats_usesAlignUp4(int entityIndex)
   uint uVar1;
   uint uVar2;
   byte bVar3;
-  entity_t *peVar4;
+  int iVar4;
   undefined2 uVar5;
   
   uVar5 = (undefined2)((ulong)Entities >> 0x10);
-  if ((*(byte *)((int)&((entity_t *)Entities)[entityIndex].base.flags32 + 1) & 2) == 0) {
+  if ((*(byte *)((int)Entities + entityIndex * 0x37 + 0x33) & 2) == 0) {
     uVar2 = 0;
   }
   else {
-    uVar1 = ovr_alignUp4((((entity_t *)Entities + entityIndex)->base).x);
+    uVar1 = ovr_alignUp4(*(int *)((int)Entities + entityIndex * 0x37));
     uVar2 = ovr_alignUp4(GfxRndSeed);
     if (uVar1 == uVar2) {
       uVar5 = (undefined2)((ulong)Entities >> 0x10);
-      uVar2 = ((entity_t *)Entities)[entityIndex].base.y;
+      uVar2 = *(uint *)((int)Entities + entityIndex * 0x37 + 2);
       if (uVar2 == GfxRndSeed2) {
-        uVar1 = ovr_alignUp4(((entity_t *)Entities)[entityIndex].base.targetX);
+        uVar1 = ovr_alignUp4(*(int *)((int)Entities + entityIndex * 0x37 + 4));
         uVar2 = ovr_alignUp4(GfxRndSeed);
         if (uVar1 == uVar2) {
           uVar5 = (undefined2)((ulong)Entities >> 0x10);
-          peVar4 = (entity_t *)Entities;
-          uVar2 = peVar4[entityIndex].base.targetY;
+          iVar4 = (int)Entities;
+          uVar2 = *(uint *)(iVar4 + entityIndex * 0x37 + 6);
           if (uVar2 == GfxRndSeed2) {
-            if (peVar4[entityIndex].base.destX == 0) {
+            if (*(int *)(iVar4 + entityIndex * 0x37 + 8) == 0) {
               bVar3 = (byte)((uint)(entityIndex * 0x37) >> 8);
-              if (peVar4[entityIndex].base.destY == 0) {
+              if (*(int *)(iVar4 + entityIndex * 0x37 + 10) == 0) {
                 uVar2 = CONCAT11(bVar3,1);
               }
               else {
@@ -1811,6 +1813,7 @@ uint __cdecl16far stats_usesAlignUp4(int entityIndex)
 
 /* 6386:16a2 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Sets the agent's entity position to the cursor cell and reports the new base. */
 
 void __cdecl16far stats_setAgentBase(byte agntIndex)
@@ -1818,9 +1821,10 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
 {
   byte *pbVar1;
   int entityIndex;
-  uint16_t uVar2;
+  int iVar2;
   uint8_t *puVar3;
   char *text;
+  uint16_t widths;
   undefined2 uVar4;
   char *unaff_SS;
   uint8_t msg;
@@ -1831,24 +1835,25 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   entityIndex = *(int *)((uint)agntIndex * 0x34 + 0x1b);
   uStack_a = *(undefined2 *)((uint)agntIndex * 0x34 + 0x1f);
   iStack_c = *(int *)((uint)agntIndex * 0x34 + 0x1d);
-  uVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
-  (((entity_t *)Entities + entityIndex)->base).x = uVar2;
-  ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
+  iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
+  *(int *)((int)Entities + entityIndex * 0x37) = iVar2;
+  *(uint16_t *)((int)Entities + entityIndex * 0x37 + 2) = GfxRndSeed2;
   uVar4 = (undefined2)((ulong)Entities >> 0x10);
-  ((entity_t *)Entities)[entityIndex].base.targetX = (((entity_t *)Entities + entityIndex)->base).x;
-  ((entity_t *)Entities)[entityIndex].base.targetY = GfxRndSeed2;
-  pbVar1 = (byte *)((int)&((entity_t *)Entities)[entityIndex].base.flags32 + 1);
+  *(undefined2 *)((int)Entities + entityIndex * 0x37 + 4) =
+       *(undefined2 *)((int)Entities + entityIndex * 0x37);
+  *(uint16_t *)((int)Entities + entityIndex * 0x37 + 6) = GfxRndSeed2;
+  pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
   *pbVar1 = *pbVar1 | 2;
-  uVar2 = 0x2410;
-  pbVar1 = (byte *)((int)&((entity_t *)Entities)[entityIndex].base.flags32 + 1);
+  widths = 0x2410;
+  pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
   *pbVar1 = *pbVar1 & 0xfa;
   ovr_attact_usesEntities(entityIndex,0,0,(uint16_t)&unitFlags,(uint16_t)unaff_SS);
   ovr_alignUp4(GfxRndSeed,GfxRndSeed2);
   puVar3 = ovr_ovc15_usesStshRealloc
                      ((char *)*(undefined2 *)(iStack_c + 0x24),*(undefined2 *)(iStack_c + 0x26));
   text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6406,unaff_SS),
-                       (char *)CONCAT22(puVar3,(char *)"puppetmaker" + 3),uVar2);
-  drawString(text,uVar2);
+                       (char *)CONCAT22(puVar3,(char *)"puppetmaker" + 3),widths);
+  drawString(text,widths);
   drawAgntStats((agnt_t *)((uint)agntIndex * 0x34),far_from_u32((uint32_t)(0x1726)),0);
   return;
 }
@@ -1857,6 +1862,7 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
 
 /* 6386:1837 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Formats the "%s can now be called away from home." notice. */
 
 void __cdecl16far stats_calledAwayNotice(byte agntIndex)
@@ -1864,9 +1870,10 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
 {
   byte *pbVar1;
   int entityIndex;
-  uint16_t uVar2;
+  int iVar2;
   uint8_t *puVar3;
   char *text;
+  uint16_t widths;
   undefined2 uVar4;
   char *unaff_SS;
   uint8_t msg;
@@ -1877,21 +1884,22 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
   entityIndex = *(int *)((uint)agntIndex * 0x34 + 0x1b);
   uStack_a = *(undefined2 *)((uint)agntIndex * 0x34 + 0x1f);
   iStack_c = *(int *)((uint)agntIndex * 0x34 + 0x1d);
-  uVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
-  (((entity_t *)Entities + entityIndex)->base).x = uVar2;
-  ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
+  iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
+  *(int *)((int)Entities + entityIndex * 0x37) = iVar2;
+  *(uint16_t *)((int)Entities + entityIndex * 0x37 + 2) = GfxRndSeed2;
   uVar4 = (undefined2)((ulong)Entities >> 0x10);
-  ((entity_t *)Entities)[entityIndex].base.targetX = (((entity_t *)Entities + entityIndex)->base).x;
-  ((entity_t *)Entities)[entityIndex].base.targetY = GfxRndSeed2;
-  uVar2 = 0x2410;
-  pbVar1 = (byte *)((int)&((entity_t *)Entities)[entityIndex].base.flags32 + 1);
+  *(undefined2 *)((int)Entities + entityIndex * 0x37 + 4) =
+       *(undefined2 *)((int)Entities + entityIndex * 0x37);
+  *(uint16_t *)((int)Entities + entityIndex * 0x37 + 6) = GfxRndSeed2;
+  widths = 0x2410;
+  pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
   *pbVar1 = *pbVar1 & 0xfd;
   ovr_attact_usesEntities(entityIndex,0,0,(uint16_t)&unitFlags,(uint16_t)unaff_SS);
   puVar3 = ovr_ovc15_usesStshRealloc
                      ((char *)*(undefined2 *)(iStack_c + 0x24),*(undefined2 *)(iStack_c + 0x26));
   text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x644e,unaff_SS),
-                       (char *)CONCAT22(puVar3,(char *)"puppetmaker" + 3),uVar2);
-  drawString(text,uVar2);
+                       (char *)CONCAT22(puVar3,(char *)"puppetmaker" + 3),widths);
+  drawString(text,widths);
   drawAgntStats((agnt_t *)((uint)agntIndex * 0x34),far_from_u32((uint32_t)(0x1726)),0);
   return;
 }
@@ -1963,6 +1971,7 @@ void __cdecl16far stats_compute5(byte agntIndex)
 
 /* 6386:1abe */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Opens the agent detail page: ScreenMode 2, drawAgntStats and the detail text. */
 
 void __cdecl16far stats_openAgentDetail(int agntIndex)
@@ -1977,7 +1986,7 @@ void __cdecl16far stats_openAgentDetail(int agntIndex)
   ScreenMode = 2;
   drawAgntStats((agnt_t *)(agntIndex * 0x34),far_from_u32((uint32_t)(0x1726)),0);
   drawString((char *)"short sword" + 0xb,0x2410);
-  bVar1 = ((entity_t *)Entities)[iVar2].base.gindex;
+  bVar1 = *(byte *)((int)Entities + iVar2 * 0x37 + 0xd);
   if (*(char *)((int)(char **)GMenuStrings + (uint)bVar1 * 0x95 + 0x1f) == '\0') {
     if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\0') ||
        (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\x04')) {
@@ -2020,6 +2029,7 @@ void __cdecl16far stats_openAgentDetail(int agntIndex)
 /* WARNING: Control flow encountered bad instruction data */
 /* WARNING: Instruction at (ram,0x0006f700) overlaps instruction at (ram,0x0006f6ff)
     */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
 
 byte __cdecl16far
@@ -2113,8 +2123,8 @@ L_stats_6386_1c9f_1E1D:
   iVar14 = *(int *)((uint)agntIndex * 0x34 + 0x1b);
   stats_openAgentDetail((uint)agntIndex);
   uVar16 = (undefined2)((ulong)Entities >> 0x10);
-  if (((entity_t *)Entities)[iVar14].base.targetY == GfxRndSeed2) {
-    uVar5 = ovr_alignUp4(((entity_t *)Entities)[iVar14].base.targetX);
+  if (*(int *)((int)Entities + iVar14 * 0x37 + 6) == GfxRndSeed2) {
+    uVar5 = ovr_alignUp4(*(int *)((int)Entities + iVar14 * 0x37 + 4));
     uVar17 = (undefined1)uVar5;
     uVar18 = (undefined1)(uVar5 >> 8);
     uVar5 = ovr_alignUp4(GfxRndSeed);
@@ -2309,8 +2319,8 @@ switchD_6000_58bf_caseD_5:
           iVar14 = *(int *)((uint)agntIndex * 0x34 + 0x1b);
           stats_openAgentDetail((uint)agntIndex);
           uVar16 = (undefined2)((ulong)Entities >> 0x10);
-          if (((entity_t *)Entities)[iVar14].base.targetY == GfxRndSeed2) {
-            uVar5 = ovr_alignUp4(((entity_t *)Entities)[iVar14].base.targetX);
+          if (*(int *)((int)Entities + iVar14 * 0x37 + 6) == GfxRndSeed2) {
+            uVar5 = ovr_alignUp4(*(int *)((int)Entities + iVar14 * 0x37 + 4));
             uVar17 = (undefined1)uVar5;
             uVar18 = (undefined1)(uVar5 >> 8);
             uVar5 = ovr_alignUp4(GfxRndSeed);

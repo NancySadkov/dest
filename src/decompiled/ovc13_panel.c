@@ -141,49 +141,48 @@ short __cdecl16far ovc13_usesSeedD1102(int x,int y)
 
 /* 3d16:0255 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Draws the entity markers inside the panel grid without a type filter. */
 
 void __cdecl16far ovc13_drawPanelEntitiesAll(void)
 
 {
-  uint16_t uVar1;
-  uint16_t uVar2;
+  int iVar1;
+  int iVar2;
   int iVar3;
   int iVar4;
-  int screenY;
-  entity_t *peVar5;
   uint entityIndex;
-  undefined2 uVar6;
+  undefined2 uVar5;
   byte y;
   int iStack_c;
   uint8_t uStack_3;
   
   for (entityIndex = 0; entityIndex < EntityCount; entityIndex = entityIndex + 1) {
-    uVar6 = (undefined2)((ulong)Entities >> 0x10);
-    peVar5 = (entity_t *)Entities;
-    uVar1 = ((peVar5 + entityIndex)->base).x;
-    uVar2 = peVar5[entityIndex].base.y;
-    iVar3 = uVar2 + 1;
-    if (((((*(char *)((int)&peVar5[entityIndex].base.entity + 1) != '\0') ||
+    uVar5 = (undefined2)((ulong)Entities >> 0x10);
+    iVar4 = (int)Entities;
+    iVar3 = *(int *)(iVar4 + entityIndex * 0x37);
+    iVar2 = *(int *)(iVar4 + entityIndex * 0x37 + 2);
+    iVar1 = iVar2 + 1;
+    if (((((*(char *)(iVar4 + entityIndex * 0x37 + 0x18) != '\0') ||
           (*(char *)((int)(char **)GMenuStrings + iStack_c * 0x95 + 0x1f) == '\0')) ||
-         (DebugVerbose != false)) || (((*(short (*) [60] [148])GMapFlags)[uVar2][uVar1] & 8U) != 0))
-       && (((iVar4 = ovc13_usesEntities(entityIndex), (char)iVar4 != '\0' &&
-            (PanelGridX <= (int)uVar1)) &&
-           (((int)uVar1 <= PanelGridX + 0x22 &&
-            ((PanelGridY <= iVar3 && (iVar3 <= PanelGridY + 0xf)))))))) {
-      screenY = (iVar3 - PanelGridY) * 3 + 7;
-      iVar3 = (uVar1 - PanelGridX) * 2;
-      iVar4 = iVar3 + 0xef;
-      uVar6 = ovc13_readPixel(iVar4,screenY,BlitRects + 3);
-      uStack_3 = (uint8_t)uVar6;
-      uVar6 = (undefined2)((ulong)Entities >> 0x10);
-      peVar5 = (entity_t *)Entities;
-      if (*(char *)((int)&peVar5[entityIndex].base.entity + 1) == '\0') {
-        if ((*(uint *)((int)&peVar5[entityIndex].base.frames + 1) & 1) == 0) {
-          if ((*(byte *)((int)&peVar5[entityIndex].base.flags32 + 1) & 1) == 0) {
+         (DebugVerbose != false)) || (((*(short (*) [60] [148])GMapFlags)[iVar2][iVar3] & 8U) != 0))
+       && (((iVar2 = ovc13_usesEntities(entityIndex), (char)iVar2 != '\0' && (PanelGridX <= iVar3))
+           && ((iVar3 <= PanelGridX + 0x22 && ((PanelGridY <= iVar1 && (iVar1 <= PanelGridY + 0xf)))
+               ))))) {
+      iVar1 = (iVar1 - PanelGridY) * 3 + 7;
+      iVar3 = (iVar3 - PanelGridX) * 2;
+      iVar2 = iVar3 + 0xef;
+      uVar5 = ovc13_readPixel(iVar2,iVar1,BlitRects + 3);
+      uStack_3 = (uint8_t)uVar5;
+      uVar5 = (undefined2)((ulong)Entities >> 0x10);
+      iVar4 = (int)Entities;
+      if (*(char *)(iVar4 + entityIndex * 0x37 + 0x18) == '\0') {
+        if ((*(uint *)(iVar4 + entityIndex * 0x37 + 0x14) & 1) == 0) {
+          if ((*(byte *)(iVar4 + entityIndex * 0x37 + 0x33) & 1) == 0) {
             if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
               if (*(char *)((int)(char **)GMenuStrings +
-                           (uint)peVar5[entityIndex].base.gindex * 0x95 + 0x1f) == '\0') {
+                           (uint)*(byte *)(iVar4 + entityIndex * 0x37 + 0xd) * 0x95 + 0x1f) == '\0')
+              {
                 uStack_3 = 0xff;
               }
               else {
@@ -202,8 +201,8 @@ void __cdecl16far ovc13_drawPanelEntitiesAll(void)
       else {
         uStack_3 = 0xef;
       }
-      y = (byte)screenY;
-      ovr_driver_fillSpan(iVar4,iVar4,y,uStack_3,&((brect_t *)(BlitRects + 3))->x);
+      y = (byte)iVar1;
+      ovr_driver_fillSpan(iVar2,iVar2,y,uStack_3,&((brect_t *)(BlitRects + 3))->x);
       ovr_driver_fillSpan(iVar3 + 0xf0,iVar3 + 0xf0,y,0xec,&((brect_t *)(BlitRects + 3))->x);
     }
   }
@@ -214,17 +213,16 @@ void __cdecl16far ovc13_drawPanelEntitiesAll(void)
 
 /* 3d16:0472 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Draws the entities inside the panel grid onto the panel minimap. */
 
 void __cdecl16far ovc13_drawPanelEntities(void)
 
 {
-  uint16_t uVar1;
-  uint16_t uVar2;
+  int iVar1;
+  int iVar2;
   int iVar3;
-  int screenX;
-  int screenY;
-  entity_t *peVar4;
+  int iVar4;
   uint uVar5;
   undefined2 uVar6;
   byte y;
@@ -233,28 +231,29 @@ void __cdecl16far ovc13_drawPanelEntities(void)
   if (unitTypeFilter == -1) {
     for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
       uVar6 = (undefined2)((ulong)Entities >> 0x10);
-      peVar4 = (entity_t *)Entities;
-      uVar1 = ((peVar4 + uVar5)->base).x;
-      uVar2 = peVar4[uVar5].base.y;
-      iVar3 = uVar2 + 1;
-      if (((((*(char *)((int)&peVar4[uVar5].base.entity + 1) != '\0') ||
-            (*(char *)((int)(char **)GMenuStrings + (uint)peVar4[uVar5].base.gindex * 0x95 + 0x1f)
-             == '\0')) || (((*(short (*) [60] [148])GMapFlags)[uVar2][uVar1] & 8U) != 0)) &&
-          ((PanelGridX <= (int)uVar1 && ((int)uVar1 <= PanelGridX + 0x22)))) &&
-         ((PanelGridY <= iVar3 && (iVar3 <= PanelGridY + 0xf)))) {
-        screenY = (iVar3 - PanelGridY) * 3 + 7;
-        iVar3 = (uVar1 - PanelGridX) * 2;
-        screenX = iVar3 + 0xef;
-        uVar6 = ovc13_readPixel(screenX,screenY,BlitRects + 3);
+      iVar4 = (int)Entities;
+      iVar2 = *(int *)(iVar4 + uVar5 * 0x37);
+      iVar3 = *(int *)(iVar4 + uVar5 * 0x37 + 2);
+      iVar1 = iVar3 + 1;
+      if (((((*(char *)(iVar4 + uVar5 * 0x37 + 0x18) != '\0') ||
+            (*(char *)((int)(char **)GMenuStrings +
+                      (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0')) ||
+           (((*(short (*) [60] [148])GMapFlags)[iVar3][iVar2] & 8U) != 0)) &&
+          ((PanelGridX <= iVar2 && (iVar2 <= PanelGridX + 0x22)))) &&
+         ((PanelGridY <= iVar1 && (iVar1 <= PanelGridY + 0xf)))) {
+        iVar1 = (iVar1 - PanelGridY) * 3 + 7;
+        iVar2 = (iVar2 - PanelGridX) * 2;
+        iVar3 = iVar2 + 0xef;
+        uVar6 = ovc13_readPixel(iVar3,iVar1,BlitRects + 3);
         uStack_3 = (uint8_t)uVar6;
         uVar6 = (undefined2)((ulong)Entities >> 0x10);
-        peVar4 = (entity_t *)Entities;
-        if (*(char *)((int)&peVar4[uVar5].base.entity + 1) == '\0') {
-          if ((*(uint *)((int)&peVar4[uVar5].base.frames + 1) & 1) == 0) {
-            if ((*(byte *)((int)&peVar4[uVar5].base.flags32 + 1) & 1) == 0) {
+        iVar4 = (int)Entities;
+        if (*(char *)(iVar4 + uVar5 * 0x37 + 0x18) == '\0') {
+          if ((*(uint *)(iVar4 + uVar5 * 0x37 + 0x14) & 1) == 0) {
+            if ((*(byte *)(iVar4 + uVar5 * 0x37 + 0x33) & 1) == 0) {
               if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
                 if (*(char *)((int)(char **)GMenuStrings +
-                             (uint)peVar4[uVar5].base.gindex * 0x95 + 0x1f) == '\0') {
+                             (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0') {
                   uStack_3 = 0xff;
                 }
                 else {
@@ -273,9 +272,9 @@ void __cdecl16far ovc13_drawPanelEntities(void)
         else {
           uStack_3 = 0xef;
         }
-        y = (byte)screenY;
-        ovr_driver_fillSpan(screenX,screenX,y,uStack_3,&((brect_t *)(BlitRects + 3))->x);
-        ovr_driver_fillSpan(iVar3 + 0xf0,iVar3 + 0xf0,y,0xec,&((brect_t *)(BlitRects + 3))->x);
+        y = (byte)iVar1;
+        ovr_driver_fillSpan(iVar3,iVar3,y,uStack_3,&((brect_t *)(BlitRects + 3))->x);
+        ovr_driver_fillSpan(iVar2 + 0xf0,iVar2 + 0xf0,y,0xec,&((brect_t *)(BlitRects + 3))->x);
       }
     }
   }
@@ -545,18 +544,18 @@ void __cdecl16far ovc13_drawPanelCell(int x,int y)
 
 /* 3d16:0e03 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R6] touches screenY, EntityCount */
 
 void __cdecl16far ovc13_usesScreenY2(void)
 
 {
   uint uVar1;
-  uint16_t uVar2;
-  uint uVar3;
-  int iVar4;
-  int x1;
+  uint uVar2;
+  int iVar3;
   int screenY;
-  entity_t *peVar5;
+  int iVar4;
+  int iVar5;
   uint uVar6;
   undefined2 uVar7;
   byte y;
@@ -565,30 +564,31 @@ void __cdecl16far ovc13_usesScreenY2(void)
   if (unitTypeFilter == -1) {
     for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
       uVar7 = (undefined2)((ulong)Entities >> 0x10);
-      peVar5 = (entity_t *)Entities;
-      uVar1 = ((peVar5 + uVar6)->base).x;
-      uVar2 = peVar5[uVar6].base.y;
-      uVar3 = uVar2 + 1;
-      if (((((*(char *)((int)&peVar5[uVar6].base.entity + 1) != '\0') ||
-            (*(char *)((int)(char **)GMenuStrings + (uint)peVar5[uVar6].base.gindex * 0x95 + 0x1f)
-             == '\0')) || (DebugVerbose != false)) ||
-          (((*(short (*) [60] [148])GMapFlags)[uVar2][uVar1] & 8U) != 0)) &&
+      iVar4 = (int)Entities;
+      uVar1 = *(uint *)(iVar4 + uVar6 * 0x37);
+      iVar3 = *(int *)(iVar4 + uVar6 * 0x37 + 2);
+      uVar2 = iVar3 + 1;
+      if (((((*(char *)(iVar4 + uVar6 * 0x37 + 0x18) != '\0') ||
+            (*(char *)((int)(char **)GMenuStrings +
+                      (uint)*(byte *)(iVar4 + uVar6 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0')) ||
+           (DebugVerbose != false)) ||
+          (((*(short (*) [60] [148])GMapFlags)[iVar3][uVar1] & 8U) != 0)) &&
          (((Seed_2000_d110 <= (int)uVar1 && (uVar1 <= Seed_2000_d110 + 0x69U)) &&
-          ((Seed_2000_d10e <= (int)uVar3 && (uVar3 <= Seed_2000_d10e + 0x2fU)))))) {
-        screenY = (uVar3 - Seed_2000_d10e) * 3 + 7;
+          ((Seed_2000_d10e <= (int)uVar2 && (uVar2 <= Seed_2000_d10e + 0x2fU)))))) {
+        screenY = (uVar2 - Seed_2000_d10e) * 3 + 7;
         iVar4 = (uVar1 - Seed_2000_d110) * 2;
-        x1 = iVar4 + 0xd;
+        iVar3 = iVar4 + 0xd;
         iVar4 = iVar4 + 0xc;
         uVar7 = ovc13_readPixel(iVar4,screenY,BlitRects);
         uStack_3 = (uint8_t)uVar7;
         uVar7 = (undefined2)((ulong)Entities >> 0x10);
-        peVar5 = (entity_t *)Entities;
-        if (*(char *)((int)&peVar5[uVar6].base.entity + 1) == '\0') {
-          if ((*(uint *)((int)&peVar5[uVar6].base.frames + 1) & 1) == 0) {
-            if ((*(byte *)((int)&peVar5[uVar6].base.flags32 + 1) & 1) == 0) {
+        iVar5 = (int)Entities;
+        if (*(char *)(iVar5 + uVar6 * 0x37 + 0x18) == '\0') {
+          if ((*(uint *)(iVar5 + uVar6 * 0x37 + 0x14) & 1) == 0) {
+            if ((*(byte *)(iVar5 + uVar6 * 0x37 + 0x33) & 1) == 0) {
               if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
                 if (*(char *)((int)(char **)GMenuStrings +
-                             (uint)peVar5[uVar6].base.gindex * 0x95 + 0x1f) == '\0') {
+                             (uint)*(byte *)(iVar5 + uVar6 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0') {
                   uStack_3 = 0xff;
                 }
                 else {
@@ -609,7 +609,7 @@ void __cdecl16far ovc13_usesScreenY2(void)
         }
         y = (byte)screenY;
         ovr_driver_fillSpan(iVar4,iVar4,y,uStack_3,&((brect_t *)BlitRects)->x);
-        ovr_driver_fillSpan(x1,x1,y,0xec,&((brect_t *)BlitRects)->x);
+        ovr_driver_fillSpan(iVar3,iVar3,y,0xec,&((brect_t *)BlitRects)->x);
       }
     }
   }
@@ -623,6 +623,7 @@ void __cdecl16far ovc13_usesScreenY2(void)
 
 /* 3d16:1045 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R6] touches Entities, L_OVC13_3d16_1045_10C4 */
 
 int __cdecl16far ovc13_usesEntities(int entityIndex)
@@ -630,16 +631,15 @@ int __cdecl16far ovc13_usesEntities(int entityIndex)
 {
   int iVar1;
   byte bVar2;
-  entity_t *peVar3;
-  undefined2 uVar4;
+  undefined2 uVar3;
   
-  peVar3 = (entity_t *)Entities;
-  uVar4 = (undefined2)((ulong)Entities >> 0x10);
+  iVar1 = (int)Entities;
+  uVar3 = (undefined2)((ulong)Entities >> 0x10);
   if (unitTypeFilter == 0xfe) {
 L_OVC13_3d16_1045_10C4:
     if (partyFilter == -1) {
-      if (*(char *)((int)(char **)GMenuStrings + (uint)peVar3[entityIndex].base.gindex * 0x95 + 0x1f
-                   ) == '\0') {
+      if (*(char *)((int)(char **)GMenuStrings +
+                   (uint)*(byte *)(iVar1 + entityIndex * 0x37 + 0xd) * 0x95 + 0x1f) == '\0') {
         iVar1 = 1;
       }
       else {
@@ -648,7 +648,7 @@ L_OVC13_3d16_1045_10C4:
     }
     else {
       bVar2 = (byte)((uint)(entityIndex * 0x37) >> 8);
-      if (*(char *)((int)&peVar3[entityIndex].base.entity + 3) == partyFilter) {
+      if (*(char *)(iVar1 + entityIndex * 0x37 + 0x1a) == partyFilter) {
         iVar1 = CONCAT11(bVar2,1);
       }
       else {
@@ -657,9 +657,10 @@ L_OVC13_3d16_1045_10C4:
     }
   }
   else {
-    if ((byte)((undefined1 *)&LevelRangeMin)[unitTypeFilter] <= peVar3[entityIndex].base.level) {
-      if (peVar3[entityIndex].base.level <= (byte)((undefined1 *)&LevelRangeMax)[unitTypeFilter])
-      goto L_OVC13_3d16_1045_10C4;
+    if ((byte)((undefined1 *)&LevelRangeMin)[unitTypeFilter] <=
+        *(byte *)(iVar1 + entityIndex * 0x37 + 0xf)) {
+      if (*(byte *)(iVar1 + entityIndex * 0x37 + 0xf) <=
+          (byte)((undefined1 *)&LevelRangeMax)[unitTypeFilter]) goto L_OVC13_3d16_1045_10C4;
     }
     iVar1 = 0;
   }
@@ -670,6 +671,7 @@ L_OVC13_3d16_1045_10C4:
 
 /* 3d16:113d */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Draws the entities inside the Seed_2000_d110/d10e window onto the panel, filtered by
    ovc13_usesEntities. */
 
@@ -677,45 +679,45 @@ void __cdecl16far ovc13_drawWindowEntities(void)
 
 {
   uint uVar1;
-  uint16_t uVar2;
-  uint uVar3;
+  uint uVar2;
+  int iVar3;
+  int screenY;
   int iVar4;
   int iVar5;
-  int screenY;
-  entity_t *peVar6;
   uint entityIndex;
-  undefined2 uVar7;
+  undefined2 uVar6;
   byte y;
   int iStack_c;
   uint8_t uStack_3;
   
   for (entityIndex = 0; entityIndex < EntityCount; entityIndex = entityIndex + 1) {
-    uVar7 = (undefined2)((ulong)Entities >> 0x10);
-    peVar6 = (entity_t *)Entities;
-    uVar1 = ((peVar6 + entityIndex)->base).x;
-    uVar2 = peVar6[entityIndex].base.y;
-    uVar3 = uVar2 + 1;
-    if (((((*(char *)((int)&peVar6[entityIndex].base.entity + 1) != '\0') ||
+    uVar6 = (undefined2)((ulong)Entities >> 0x10);
+    iVar4 = (int)Entities;
+    uVar1 = *(uint *)(iVar4 + entityIndex * 0x37);
+    iVar3 = *(int *)(iVar4 + entityIndex * 0x37 + 2);
+    uVar2 = iVar3 + 1;
+    if (((((*(char *)(iVar4 + entityIndex * 0x37 + 0x18) != '\0') ||
           (*(char *)((int)(char **)GMenuStrings + iStack_c * 0x95 + 0x1f) == '\0')) ||
-         (DebugVerbose != false)) || (((*(short (*) [60] [148])GMapFlags)[uVar2][uVar1] & 8U) != 0))
-       && (((iVar4 = ovc13_usesEntities(entityIndex), (char)iVar4 != '\0' &&
+         (DebugVerbose != false)) || (((*(short (*) [60] [148])GMapFlags)[iVar3][uVar1] & 8U) != 0))
+       && (((iVar3 = ovc13_usesEntities(entityIndex), (char)iVar3 != '\0' &&
             (Seed_2000_d110 <= (int)uVar1)) &&
            ((uVar1 <= Seed_2000_d110 + 0x69U &&
-            ((Seed_2000_d10e <= (int)uVar3 && (uVar3 <= Seed_2000_d10e + 0x2fU)))))))) {
-      screenY = (uVar3 - Seed_2000_d10e) * 3 + 7;
-      iVar5 = (uVar1 - Seed_2000_d110) * 2;
-      iVar4 = iVar5 + 0xd;
-      iVar5 = iVar5 + 0xc;
-      uVar7 = ovc13_readPixel(iVar5,screenY,BlitRects);
-      uStack_3 = (uint8_t)uVar7;
-      uVar7 = (undefined2)((ulong)Entities >> 0x10);
-      peVar6 = (entity_t *)Entities;
-      if (*(char *)((int)&peVar6[entityIndex].base.entity + 1) == '\0') {
-        if ((*(uint *)((int)&peVar6[entityIndex].base.frames + 1) & 1) == 0) {
-          if ((*(byte *)((int)&peVar6[entityIndex].base.flags32 + 1) & 1) == 0) {
+            ((Seed_2000_d10e <= (int)uVar2 && (uVar2 <= Seed_2000_d10e + 0x2fU)))))))) {
+      screenY = (uVar2 - Seed_2000_d10e) * 3 + 7;
+      iVar4 = (uVar1 - Seed_2000_d110) * 2;
+      iVar3 = iVar4 + 0xd;
+      iVar4 = iVar4 + 0xc;
+      uVar6 = ovc13_readPixel(iVar4,screenY,BlitRects);
+      uStack_3 = (uint8_t)uVar6;
+      uVar6 = (undefined2)((ulong)Entities >> 0x10);
+      iVar5 = (int)Entities;
+      if (*(char *)(iVar5 + entityIndex * 0x37 + 0x18) == '\0') {
+        if ((*(uint *)(iVar5 + entityIndex * 0x37 + 0x14) & 1) == 0) {
+          if ((*(byte *)(iVar5 + entityIndex * 0x37 + 0x33) & 1) == 0) {
             if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
               if (*(char *)((int)(char **)GMenuStrings +
-                           (uint)peVar6[entityIndex].base.gindex * 0x95 + 0x1f) == '\0') {
+                           (uint)*(byte *)(iVar5 + entityIndex * 0x37 + 0xd) * 0x95 + 0x1f) == '\0')
+              {
                 uStack_3 = 0xff;
               }
               else {
@@ -735,8 +737,8 @@ void __cdecl16far ovc13_drawWindowEntities(void)
         uStack_3 = 0xef;
       }
       y = (byte)screenY;
-      ovr_driver_fillSpan(iVar5,iVar5,y,uStack_3,&((brect_t *)BlitRects)->x);
-      ovr_driver_fillSpan(iVar4,iVar4,y,0xec,&((brect_t *)BlitRects)->x);
+      ovr_driver_fillSpan(iVar4,iVar4,y,uStack_3,&((brect_t *)BlitRects)->x);
+      ovr_driver_fillSpan(iVar3,iVar3,y,0xec,&((brect_t *)BlitRects)->x);
     }
   }
   return;

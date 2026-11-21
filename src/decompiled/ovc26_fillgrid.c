@@ -127,6 +127,7 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
 
 /* 5d45:031f */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_stExit */
 
 uint __cdecl16far ovc26_usesStExit(int entityIndex,...)
@@ -158,9 +159,9 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex,...)
   undefined4 uStack_a;
   char *pcStack_6;
   
-  uVar2 = (*(uint16_t *)((uint8_t *)&(Entities) + 2));
-  peVar11 = (entity_t *)Entities + entityIndex;
-  uStack_a = (entity_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(Entities) + 2)),peVar11);
+  uVar2 = DAT_2000_d190;
+  peVar11 = Entities + entityIndex;
+  uStack_a = (entity_t *)CONCAT22(DAT_2000_d190,peVar11);
   uVar5 = GameTick - peVar11->tick;
   if (uVar5 < 0x19) {
     uVar5 = uVar5 & 0xff00;
@@ -278,6 +279,7 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex,...)
 
 /* 5d45:06f0 */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_randBelow */
 
 uint __cdecl16far
@@ -286,89 +288,86 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
 
 {
   byte *pbVar1;
-  uint16_t uVar2;
-  uint16_t uVar3;
+  int iVar2;
+  int iVar3;
   uint16_t destX;
   uint16_t destY;
   byte bVar4;
   uint uVar5;
-  int iVar6;
-  short *psVar7;
-  uint16_t uVar8;
-  undefined1 uVar9;
-  entity_t *peVar10;
+  short *psVar6;
+  uint16_t uVar7;
+  undefined1 uVar8;
+  int iVar9;
   char unaff_DI;
-  undefined2 uVar11;
+  undefined2 uVar10;
   short *psStack_c;
   byte bStack_7;
   
-  uVar11 = (undefined2)((ulong)Entities >> 0x10);
-  peVar10 = (entity_t *)Entities;
-  if (*(char *)((int)(char **)GMenuStrings + (uint)peVar10[entityIndex].base.gindex * 0x95 + 0x1f)
-      == '\0') {
+  uVar10 = (undefined2)((ulong)Entities >> 0x10);
+  iVar9 = (int)Entities;
+  if (*(char *)((int)(char **)GMenuStrings +
+               (uint)*(byte *)(iVar9 + entityIndex * 0x37 + 0xd) * 0x95 + 0x1f) == '\0') {
     uVar5 = 0;
   }
   else {
-    uVar5 = (uint)peVar10[entityIndex].base.gindex * 0x95;
+    uVar5 = (uint)*(byte *)(iVar9 + entityIndex * 0x37 + 0xd) * 0x95;
     if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + uVar5) & 0x80) == 0) {
-      if (*(char *)((int)&peVar10[entityIndex].base.entity + 1) == '\0') {
-        uVar2 = ((peVar10 + entityIndex)->base).x;
-        uVar3 = peVar10[entityIndex].base.y;
-        destX = peVar10[entityIndex].base.destX;
-        destY = peVar10[entityIndex].base.destY;
-        iVar6 = ovr_ovc07_signum(peVar10[entityIndex].base.destX - uVar2);
-        psStack_c = (short *)ovr_ovc07_signum(((entity_t *)Entities)[entityIndex].base.destY - uVar3
-                                             );
-        psVar7 = psStack_c;
-        if ((iVar6 != 0) &&
-           (psVar7 = (*(short (*) [60] [148])GMapFlags)[uVar3] + uVar2 + iVar6,
-           (psVar7[0x94] & 3U) == 0)) {
-          iVar6 = 0;
+      if (*(char *)(iVar9 + entityIndex * 0x37 + 0x18) == '\0') {
+        iVar2 = *(int *)(iVar9 + entityIndex * 0x37);
+        iVar3 = *(int *)(iVar9 + entityIndex * 0x37 + 2);
+        destX = *(uint16_t *)(iVar9 + entityIndex * 0x37 + 8);
+        destY = *(uint16_t *)(iVar9 + entityIndex * 0x37 + 10);
+        iVar9 = ovr_ovc07_signum(*(int *)(iVar9 + entityIndex * 0x37 + 8) - iVar2);
+        psStack_c = (short *)ovr_ovc07_signum(*(int *)((int)Entities + entityIndex * 0x37 + 10) -
+                                              iVar3);
+        psVar6 = psStack_c;
+        if ((iVar9 != 0) &&
+           (psVar6 = (*(short (*) [60] [148])GMapFlags)[iVar3] + iVar2 + iVar9,
+           (psVar6[0x94] & 3U) == 0)) {
+          iVar9 = 0;
         }
         if ((psStack_c != (short *)0x0) &&
-           (psVar7 = (*(short (*) [60] [148])GMapFlags)[uVar3 + (int)psStack_c] + uVar2,
-           (psVar7[0x94] & 3U) == 0)) {
+           (psVar6 = (*(short (*) [60] [148])GMapFlags)[iVar3 + (int)psStack_c] + iVar2,
+           (psVar6[0x94] & 3U) == 0)) {
           psStack_c = (short *)0x0;
         }
-        if ((iVar6 == 0) && (psStack_c == (short *)0x0)) {
-          uVar5 = (uint)psVar7 & 0xff00;
+        if ((iVar9 == 0) && (psStack_c == (short *)0x0)) {
+          uVar5 = (uint)psVar6 & 0xff00;
         }
         else {
-          if ((iVar6 != 0) && (iVar6 != 0)) {
-            uVar8 = ovr_randBelow(2);
-            if ((uVar8 & 0xff) == 0) {
-              iVar6 = 0;
+          if ((iVar9 != 0) && (iVar9 != 0)) {
+            uVar7 = ovr_randBelow(2);
+            if ((uVar7 & 0xff) == 0) {
+              iVar9 = 0;
             }
             else {
               psStack_c = (short *)0x0;
             }
           }
-          if (iVar6 == 0) {
+          if (iVar9 == 0) {
             bStack_7 = 0xa1;
           }
           else {
             bStack_7 = 0xa0;
           }
-          bVar4 = ovr_ovc45_getUnitType(uVar2 + iVar6,uVar3 + (int)psStack_c);
+          bVar4 = ovr_ovc45_getUnitType(iVar2 + iVar9,iVar3 + (int)psStack_c);
           if ((*(byte *)((uint)bVar4 * 0x27 + 0x11e) & 0xc) == 0) {
             ovr_createConstructionRecordFar
-                      (bStack_7,uVar2 + iVar6,uVar3 + (int)psStack_c,
+                      (bStack_7,iVar2 + iVar9,iVar3 + (int)psStack_c,
                        (uint8_t *)CONCAT22(outFlagSeg,outFlag),
-                       *(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3),unaff_DI
-                      );
+                       *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),unaff_DI);
             ovr_attact_usesEntities
-                      (entityIndex,uVar2 + iVar6,uVar3 + (int)psStack_c,flagsOfs,flagsSeg);
-            ((entity_t *)Entities)[entityIndex].base.targetX = uVar2 + iVar6;
-            ((entity_t *)Entities)[entityIndex].base.targetY = uVar3 + (int)psStack_c;
-            pbVar1 = (byte *)((int)&((entity_t *)Entities)[entityIndex].base.flags32 + 1);
+                      (entityIndex,iVar2 + iVar9,iVar3 + (int)psStack_c,flagsOfs,flagsSeg);
+            *(int *)((int)Entities + entityIndex * 0x37 + 4) = iVar2 + iVar9;
+            *(int *)((int)Entities + entityIndex * 0x37 + 6) = iVar3 + (int)psStack_c;
+            pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
             *pbVar1 = *pbVar1 | 2;
-            pbVar1 = (byte *)((int)&((entity_t *)Entities)[entityIndex].base.flags32 + 1);
+            pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
             *pbVar1 = *pbVar1 & 0xfa;
-            uVar9 = (undefined1)((uint)(entityIndex * 0x37) >> 8);
+            uVar8 = (undefined1)((uint)(entityIndex * 0x37) >> 8);
             ovr_ovc25_usesAlignUp44
-                      (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3),1,destX,
-                       destY);
-            uVar5 = CONCAT11(uVar9,1);
+                      (*(char *)((int)Entities + entityIndex * 0x37 + 0x1a),1,destX,destY);
+            uVar5 = CONCAT11(uVar8,1);
           }
           else {
             uVar5 = 0;

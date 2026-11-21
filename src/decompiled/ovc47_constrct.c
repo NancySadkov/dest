@@ -35,6 +35,8 @@ void __cdecl16far constrct_usesGLeaderCount(void)
 
 /* 7e7c:004b */
 
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
 void __cdecl16far land_info(byte tileOffset,...)
 
 {
@@ -263,11 +265,8 @@ void __cdecl16far land_info(byte tileOffset,...)
       do {
         uVar11 = (undefined2)((ulong)Entities >> 0x10);
         if (bStack_1d == 0) {
-          pcVar4 = ovr_ovc22_className(*(byte *)((int)&((entity_t *)Entities)[entityIndex].base.
-                                                       entity + 3));
-          puVar5 = (undefined2 *)
-                   ((uint)*(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) * 4)
-          ;
+          pcVar4 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a));
+          puVar5 = (undefined2 *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
           uVar11 = 0x217a;
           iVar6 = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,unaff_SS),
                                      (char *)CONCAT13((char)(Font03.ofs >> 8),
@@ -287,11 +286,8 @@ void __cdecl16far land_info(byte tileOffset,...)
           strcpy((char *)CONCAT22(unaff_SS,&msg),(char *)CONCAT22(iVar9,pcVar4));
         }
         else {
-          pcVar4 = ovr_ovc22_className(*(byte *)((int)&((entity_t *)Entities)[entityIndex].base.
-                                                       entity + 3));
-          puVar5 = (undefined2 *)
-                   ((uint)*(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) * 4)
-          ;
+          pcVar4 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a));
+          puVar5 = (undefined2 *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
           uVar11 = 0x217a;
           iVar6 = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,unaff_SS),
                                      (char *)CONCAT13((char)(Font03.ofs >> 8),
@@ -316,8 +312,7 @@ void __cdecl16far land_info(byte tileOffset,...)
                                   (char *)CONCAT22(uVar11,puVar7));
           strcpy((char *)CONCAT22(unaff_SS,&msg),(char *)CONCAT22(uVar11,pcVar4));
         }
-        goldPartyIndex = *(undefined1 *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3)
-        ;
+        goldPartyIndex = *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x1a);
         hint_00.seg = (uint16_t)unaff_SS;
         hint_00.ofs = (uint16_t)&msg;
         puVar7 = &menuItems;
@@ -416,6 +411,7 @@ void constrct_buildInfoText(void) { /* failed */ }
 /* WARNING: Removing unreachable block (ram,0x00081597) */
 /* WARNING: Removing unreachable block (ram,0x000815cd) */
 /* WARNING: Removing unreachable block (ram,0x0008160f) */
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls LDIV_at_ */
 
 void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
@@ -447,7 +443,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
   undefined2 uStack_12;
   
   lVar17 = CONCAT22((int)((ulong)in_stack_0000ff5e >> 0x10),unaff_SI);
-  bVar3 = *(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+  bVar3 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
   if ((partyIndex != 0xff) && (bVar3 != 0xff)) {
     bVar4 = *(byte *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x3e);
     iVar9 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)bVar4 * 0x95);
@@ -456,11 +452,11 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     for (uVar12 = 0; uVar12 < EntityCount; uVar12 = uVar12 + 1) {
       uVar14 = (undefined2)((ulong)Entities >> 0x10);
       uVar14 = ovr_ovc23_isCursorAt
-                         ((((entity_t *)Entities + uVar12)->base).x,
-                          ((entity_t *)Entities)[uVar12].base.y);
+                         (*(uint16_t *)((int)Entities + uVar12 * 0x37),
+                          *(int *)((int)Entities + uVar12 * 0x37 + 2));
       if (((char)uVar14 != '\0') &&
          (*(char *)((int)(char **)GMenuStrings +
-                   (uint)((entity_t *)Entities)[uVar12].base.gindex * 0x95 + 0x1f) == '\0')) {
+                   (uint)*(byte *)((int)Entities + uVar12 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0')) {
         iVar13 = iVar13 + 1;
       }
     }
