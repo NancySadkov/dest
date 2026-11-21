@@ -1061,7 +1061,7 @@ uint16_t __cdecl16far draw_usesGameProcessKey(void)
     }
     uVar5 = ovr_biosKeyAvail();
     if ((char)uVar5 != '\0') break;
-    bVar4 = ovr_init2_usesCFGMice((uint16_t *)&MouseX,(uint16_t *)0xe62410,0x2410);
+    bVar4 = ovr_init2_usesCFGMice((uint16_t *)&MouseX,(uint16_t *)&MouseY,0x2410);
     if (CONCAT11(extraout_AH,bVar4) == 0) {
       bVar1 = true;
     }

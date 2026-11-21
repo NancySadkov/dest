@@ -77,7 +77,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
                 & 0x3000U;
   }
   cursorRecordFound = '\0';
-  _fmemset((void *)0xff2410,8,unaff_DI);
+  _fmemset((void *)&GUnitDescriptions[5].ofs,8,unaff_DI);
   uVar29 = 0;
   uVar30 = 0x10;
   uVar27 = 0x5e;

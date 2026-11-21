@@ -129,7 +129,7 @@ void __cdecl16far init_paths(void)
   undefined2 in_DX;
   size_t unaff_BP;
   
-  getcwd((char *)0x442410,unaff_BP);
+  getcwd((char *)MK_FP(0x2410, 0x44),unaff_BP);
   strcpy(&GWorkDir,GOriginalDir);
   ensure_tail_slash((char *)&GWorkDir,0x2410);
   strcat(&GWorkDir,"strong.sav\\");
@@ -181,7 +181,7 @@ void __cdecl16far init_cfg(void)
   
   crlf = GCrLf;
   bVar1 = false;
-  cfgPath = (uint16_t)ovr_stsprintf(lbuf,(char *)CONCAT22(0x5bc,unaff_SS),(char *)0x8c6c2410,0x2410)
+  cfgPath = (uint16_t)ovr_stsprintf(lbuf,(char *)CONCAT22(0x5bc,unaff_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410)
   ;
   fh = ovr_open_wait_unlock_and_disk((char *)cfgPath,in_DX);
   if ((int)fh < 0) {
@@ -243,7 +243,7 @@ void __cdecl16far init_cfg(void)
   }
   close(fh);
   if (bVar1) {
-    path = ovr_stsprintf(lbuf,(char *)CONCAT22(0x5bc,unaff_SS),(char *)0x8c6c2410,0x2410);
+    path = ovr_stsprintf(lbuf,(char *)CONCAT22(0x5bc,unaff_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410);
     iVar3 = ovr_creat_wait_unlock_and_disk(path,in_DX);
     if (iVar3 < 0) {
                     /* WARNING: Subroutine does not return */

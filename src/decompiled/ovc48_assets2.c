@@ -401,7 +401,7 @@ void __cdecl16far init_assets2(bool grab,...)
     SpecialColors[7] = *(uint8_t *)((psVar1->aptr).ofs + 0x936e);
     puVar8 = (uint8_t *)((char *)0x26510);
     specialColorsOfs =(uint16_t)(
-         (far_t *)ovr_stshWrite((uint32_t *)SpecialColors,(uint8_t *)0x82410,
+         (far_t *)ovr_stshWrite((uint32_t *)SpecialColors,(uint8_t *)MK_FP(0x2410, 0x8),
                                 ZEXT24(unaff_DI) << 0x10,0));
     src_01.seg = 0xea;
     src_01.ofs = (psVar1->aptr).seg;

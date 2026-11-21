@@ -23,7 +23,7 @@ void __cdecl16far ovc38_loadHighScores(far_t entries)
   char *unaff_SS;
   uint8_t msg;
   
-  filename = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6a89,unaff_SS),(char *)0x8c6c2410,0x2410)
+  filename = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6a89,unaff_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410)
   ;
   iVar1 = ovr_open_wait_unlock_and_disk(filename,in_DX);
   if (iVar1 < 0) {
@@ -64,7 +64,7 @@ void __cdecl16far ovc38_saveHighScores(far_t entries)
   char *unaff_SS;
   uint8_t msg;
   
-  path = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6a89,unaff_SS),(char *)0x8c6c2410,0x2410);
+  path = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6a89,unaff_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410);
   handle = ovr_creat_wait_unlock_and_disk(path,in_DX);
   if (-1 < handle) {
     for (iVar3 = 0; iVar3 < 6; iVar3 = iVar3 + 1) {

@@ -39,7 +39,7 @@ uint16_t __cdecl16far uiReadKey2(void)
     }
     uVar5 = ovr_biosKeyAvail();
     if ((char)uVar5 != '\0') break;
-    bVar4 = ovr_init2_usesCFGMice((uint16_t *)&MouseX,(uint16_t *)0xe62410,0x2410);
+    bVar4 = ovr_init2_usesCFGMice((uint16_t *)&MouseX,(uint16_t *)&MouseY,0x2410);
     if (CONCAT11(extraout_AH,bVar4) == 0) {
       bVar1 = true;
     }
@@ -1770,7 +1770,7 @@ void __cdecl16far saveui_configureNewWorld(void)
     saveui_blitPanel();
     if ((bStack_b != '\x05') && (bStack_b != '\0')) {
       if (bStack_b == '\x04') {
-        iStack_a = saveui_usesBlitText((char *)0x62410,worldItems,in_stack_0000ffae);
+        iStack_a = saveui_usesBlitText((char *)&__C0_ASM_CopyRight[2],worldItems,in_stack_0000ffae);
         saveui_blitPanel();
         if (iStack_a < 0) {
           if (inputCancelled != '\0') {
@@ -1778,7 +1778,7 @@ void __cdecl16far saveui_configureNewWorld(void)
           }
           iStack_a = 0;
         }
-        iStack_8 = saveui_usesBlitText((char *)0x62410,worldItems,in_stack_0000ffae);
+        iStack_8 = saveui_usesBlitText((char *)&__C0_ASM_CopyRight[2],worldItems,in_stack_0000ffae);
         saveui_blitPanel();
         if (iStack_8 < 0) {
           if (inputCancelled != '\0') {
@@ -1786,7 +1786,7 @@ void __cdecl16far saveui_configureNewWorld(void)
           }
           iStack_8 = 0;
         }
-        iStack_6 = saveui_usesBlitText((char *)0x62410,worldItems,in_stack_0000ffae);
+        iStack_6 = saveui_usesBlitText((char *)&__C0_ASM_CopyRight[2],worldItems,in_stack_0000ffae);
         saveui_blitPanel();
         if (iStack_6 < 0) {
           if (inputCancelled != '\0') {
@@ -1794,7 +1794,7 @@ void __cdecl16far saveui_configureNewWorld(void)
           }
           iStack_6 = 0;
         }
-        iStack_4 = saveui_usesBlitText((char *)0x62410,worldItems,in_stack_0000ffae);
+        iStack_4 = saveui_usesBlitText((char *)&__C0_ASM_CopyRight[2],worldItems,in_stack_0000ffae);
         saveui_blitPanel();
         if (iStack_4 < 0) {
           if (inputCancelled != '\0') {

@@ -398,7 +398,7 @@ void __cdecl16far init_assets(void)
   StshCtOfs.lo = 0;
   if (in_stack_00000004 == false) {
     StshFile = ovr_open_wait_unlock_and_disk((char *)"strong.dat",0x10);
-    read(StshFile,(void *)0x42410,(uint)unaff_DI);
+    read(StshFile,(void *)&__C0_ASM_CopyRight,(uint)unaff_DI);
     lseek(StshFile,(ulong)StshCtOfs.hi,(int)unaff_DI);
     dst.seg = StshCtPtr.seg;
     dst.ofs = StshCtPtr.ofs;

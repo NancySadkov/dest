@@ -283,7 +283,7 @@ void __cdecl16far init_base(void)
   uint8_t irq;
   
   init_check_mem();
-  getcwd((char *)0x502410,unaff_SI);
+  getcwd((char *)MK_FP(0x2410, 0x50),unaff_SI);
   bVar1 = init_strong_sav();
   if (bVar1 != 0) {
     while (uVar4 = ovr_biosKeyAvail(), (char)uVar4 != '\0') {
