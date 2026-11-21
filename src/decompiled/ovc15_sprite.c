@@ -469,8 +469,8 @@ void __cdecl16far ovc15_usesAgntIndex(void)
   for (uStack_4 = 0; uStack_4 < EntityCount; uStack_4 = uStack_4 + 1) {
     uVar4 = (undefined2)((ulong)Entities >> 0x10);
     iVar2 = (int)Entities;
-    if (((GfxRndSeed - 2U <= *(uint *)(iVar2 + uStack_4 * 0x37)) &&
-        (*(uint *)(iVar2 + uStack_4 * 0x37) <= GfxRndSeed + 1U)) &&
+    if (((GfxRndSeed - 2U <= *(uint *)((entity_t *)iVar2 + uStack_4)) &&
+        (*(uint *)((entity_t *)iVar2 + uStack_4) <= GfxRndSeed + 1U)) &&
        (*(int *)(iVar2 + uStack_4 * 0x37 + 2) == GfxRndSeed2)) {
       *(uint *)(&agentIndices + iStack_6 * 2) = uStack_4;
       iStack_6 = iStack_6 + 1;
@@ -2463,7 +2463,7 @@ L_manage_4d05_2d79_2EE8:
           uVar16 = ovr_blitLabel((char *)"Total population.",
                                  (uint8_t *)CONCAT13(uVar24,CONCAT12(uVar10,0x2410)));
           *pcVar30 = *pcVar30 + (char)(uVar16 >> 8) + ((undefined1 *)0xfff3 < &stack0xffe8);
-          *(undefined1 *)((int)*(undefined4 *)(entity_t **)&Entities + uVar16 + 0x18) = 0;
+          ((dos_psp_t *)((entity_t **)&Entities + uVar16))->jft[0] = 0;
           uVar17 = (int)pcVar30 * 0x37;
           goto switchD_4000_4790_caseD_3;
         }
@@ -3087,7 +3087,7 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
       iVar3 = (int)Entities;
       if ((*(byte *)(iVar3 + uVar4 * 0x37 + 0x1a) == bStack_9) &&
          (uVar2 = ovr_ovc23_isCursorAt
-                            (*(uint16_t *)(iVar3 + uVar4 * 0x37),*(int *)(iVar3 + uVar4 * 0x37 + 2))
+                            (*(uint16_t *)((entity_t *)iVar3 + uVar4),*(int *)(iVar3 + uVar4 * 0x37 + 2))
          , (uVar2 & 0xff) == 0)) {
         return uVar4;
       }
@@ -3105,7 +3105,7 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
       iVar3 = (int)Entities;
       if (((*(byte *)(iVar3 + uVar4 * 0x37 + 0x1a) == bStack_8) &&
           (uVar2 = ovr_ovc23_isCursorAt
-                             (*(uint16_t *)(iVar3 + uVar4 * 0x37),*(int *)(iVar3 + uVar4 * 0x37 + 2)
+                             (*(uint16_t *)((entity_t *)iVar3 + uVar4),*(int *)(iVar3 + uVar4 * 0x37 + 2)
                              ), (uVar2 & 0xff) == 0)) &&
          ((*(byte *)((int)Entities + uVar4 * 0x37 + 0x33) & 3) == 0)) {
         return uVar4;

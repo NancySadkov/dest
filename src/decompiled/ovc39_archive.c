@@ -371,18 +371,18 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex,...)
       bStack_e = 0;
     }
     pcVar4 = (char *)0x2627a;
-    if (((char_sheet_t *)(((uint)partyIndex << 2)))->income <
+    if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
         (uint)(((char_sheet_t *)(((uint)partyIndex << 2)))->population << 1)) {
       pcVar4 = (char *)((uint)partyIndex << 2);
-      if (((char_sheet_t *)(((uint)partyIndex << 2)))->income <
+      if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
           ((char_sheet_t *)(pcVar4))->population) {
         pcVar4 = (char *)0x2627a;
-        if (((char_sheet_t *)(((uint)partyIndex << 2)))->income <
+        if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
             ((char_sheet_t *)(((uint)partyIndex << 2)))->population >> 1) {
           pcVar4 = (char *)0x2627a;
-          if (((char_sheet_t *)(((uint)partyIndex << 2)))->income < 0) {
+          if (*(int *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) < 0) {
             pcVar4 = (char *)0x2627a;
-            if (((char_sheet_t *)(((uint)partyIndex << 2)))->income <
+            if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
                 (uint)-((char_sheet_t *)(((uint)partyIndex << 2)))->population) {
               bStack_d = 5;
             }

@@ -64,7 +64,7 @@ int main(int argc,str_t *argv,str_t *envp)
     }
     if (uVar4 == 0x2f56) {
 L_main_051D:
-      ovr_ovc41_cannotSeeTerrain_2c17();
+      ovr_ovc41_cannotSeeTerrainNotice();
     }
     else if (uVar4 < 0x2f57) {
       if (uVar4 == 0x1454) {
@@ -148,7 +148,7 @@ L_main_0741:
 L_main_066C:
         if (GMenuItem < 5) {
           if (GOngoingBattle == '\0') {
-            ovr_ovc41_cannotSeeTerrain_2c17();
+            ovr_ovc41_cannotSeeTerrainNotice();
           }
           ovr_ui_textDefineRegionCommand(GMenuItem);
         }
@@ -217,7 +217,7 @@ L_main_0780:
           if (GPaused != '\0') {
             GPaused = 0;
             ovr_update_pause_button();
-            ovr_ovc28_usesBDADailyTime_8441(3);
+            ovr_ovc28_usesBDADailyTimeCounter(3);
             GPaused = '\x01';
             ovr_update_pause_button();
           }

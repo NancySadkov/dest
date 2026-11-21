@@ -34,7 +34,7 @@ ovc25_usesAlignUp4(char partyIndex,uint16_t x,uint16_t y,uint16_t destX,uint16_t
     iVar4 = (int)Entities;
     if ((*(char *)(iVar4 + uVar5 * 0x37 + 0x1a) == partyIndex) &&
        ((*(byte *)(iVar4 + uVar5 * 0x37 + 0x33) & 2) == 0)) {
-      uVar3 = ovr_alignUp4(*(int *)(iVar4 + uVar5 * 0x37));
+      uVar3 = ovr_alignUp4(*(int *)((entity_t *)iVar4 + uVar5));
       uVar6 = (undefined2)((ulong)Entities >> 0x10);
       if ((uVar3 == uVar2) && (*(uint16_t *)((int)Entities + uVar5 * 0x37 + 2) == y)) {
         return uVar5;
@@ -395,7 +395,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
         iVar7 = (int)Entities;
         if (*(byte *)(iVar7 + uStack_c * 0x37 + 0x1a) == uStack_a) {
           uVar2 = ((char_sheet_t *)((uStack_a << 2)))->x -
-                  *(int *)(iVar7 + uStack_c * 0x37);
+                  *(int *)((entity_t *)iVar7 + uStack_c);
           uVar5 = (int)uVar2 >> 0xf;
           uVar3 = ((char_sheet_t *)((uStack_a << 2)))->y -
                   *(int *)(iVar7 + uStack_c * 0x37 + 2);
@@ -419,7 +419,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
                           (uint)*(byte *)(iVar7 + uStack_c * 0x37 + 0xd) * 0x95 + 0x1f) !=
                  *(char *)((int)*(undefined4 *)(uStack_a << 2) + 0x3f)) {
           uVar2 = ((char_sheet_t *)((uStack_a << 2)))->x -
-                  *(int *)(iVar7 + uStack_c * 0x37);
+                  *(int *)((entity_t *)iVar7 + uStack_c);
           uVar5 = (int)uVar2 >> 0xf;
           uVar3 = ((char_sheet_t *)((uStack_a << 2)))->y -
                   *(int *)(iVar7 + uStack_c * 0x37 + 2);
@@ -437,7 +437,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
       }
       ((char_sheet_t *)((uStack_a << 2)))->nearestEnemy = unaff_DI;
       uStack_16 = 0xff;
-      if (((char_sheet_t *)((uStack_a << 2)))->spyReports != '\0') {
+      if (*(char *)((int)*(undefined4 *)(uStack_a << 2) + 0x40) != '\0') {
         uStack_10 = 0xffff;
         for (uStack_c = 0; (int)uStack_c < (int)(uint)GLeaderCount; uStack_c = uStack_c + 1) {
           if ((*(char *)((int)*(undefined4 *)(uStack_c << 2) + 0x3f) !=
@@ -454,11 +454,11 @@ void __cdecl16far ovc25_spyReportNotice(void)
           }
         }
       }
-      ((char_sheet_t *)((uStack_a << 2)))->nearestEnemyLeader = uStack_16;
+      *(undefined1 *)((int)*(undefined4 *)(uStack_a << 2) + 0x49) = uStack_16;
     }
   }
   for (uStack_a = 0; (int)uStack_a < (int)(uint)GLeaderCount; uStack_a = uStack_a + 1) {
-    if ((((char_sheet_t *)((uStack_a << 2)))->spyReports != '\0') &&
+    if ((*(char *)((int)*(undefined4 *)(uStack_a << 2) + 0x40) != '\0') &&
        (((char_sheet_t *)((uStack_a << 2)))->active != '\0')) {
       ovc25_intelAttackingNotice((byte)uStack_a);
       if (((char_sheet_t *)((uStack_a << 2)))->nearestEnemy == -1) {
@@ -476,7 +476,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
         uStack_14 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((uVar3 ^ uVar6) - uVar6);
       }
       if ((((char_sheet_t *)((uStack_a << 2)))->enemiesNear == 0) || (9 < uStack_14)) {
-        if ((((char_sheet_t *)((uStack_a << 2)))->nearestEnemyLeader == -1) ||
+        if ((*(char *)((int)*(undefined4 *)(uStack_a << 2) + 0x49) == -1) ||
            ((((char_sheet_t *)((uStack_a << 2)))->flags5d & 1) == 0)) {
           if (((char_sheet_t *)((uStack_a << 2)))->unitsOnTile < 10) {
             ovc25_usesAlignUp43((byte)uStack_a,10,
@@ -513,7 +513,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
         }
         else {
           ovc25_usesEntityCount((byte)uStack_a);
-          bStack_15 = ((char_sheet_t *)((uStack_a << 2)))->nearestEnemyLeader;
+          bStack_15 = *(byte *)((int)*(undefined4 *)(uStack_a << 2) + 0x49);
           if (0xe < ((char_sheet_t *)((uStack_a << 2)))->unitsOnTile) {
             ovc25_usesAlignUp42((byte)uStack_a,10,
                                 ((char_sheet_t *)(((uint)bStack_15 << 2)))->x,
@@ -923,7 +923,7 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex,...)
   
   if (((partyIndex != 0xff) &&
       (*(char *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x3f) != '\0')) &&
-     (((char_sheet_t *)(((uint)partyIndex << 2)))->pad_5e[0] == 0)) {
+     (*(int *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x5e) == 0)) {
     bStack_3 = ((char_sheet_t *)(((uint)partyIndex << 2)))->classStr;
     uVar4 = (uint)*(byte *)((int)&worldMenuLabels[8].seg + (uint)bStack_3 * 0x95) +
             (uint)*(byte *)((int)&worldMenuLabels[8].ofs + 1 + (uint)bStack_3 * 0x95) +
@@ -931,7 +931,7 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex,...)
     if (((uVar4 < PlayerCount) &&
         ((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 1) == 0)) &&
        (uVar2 = ovr_randBelow(100), (int)(uVar2 & 0xff) < (int)(PlayerCount - uVar4))) {
-      ((char_sheet_t *)(((uint)partyIndex << 2)))->pad_5e[0] = 0x19;
+      *(undefined2 *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x5e) = 0x19;
       ovr_play_sfx(82,0);
       uVar2 = 0x217a;
       puVar3 = ovr_ovc15_usesStshRealloc
@@ -982,12 +982,12 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
   
   iStack_4 = ovc25_compute1(((char_sheet_t *)(((uint)partyIndex << 2)))->classStr);
   if ((((((iStack_4 < (int)(uint)PlayerCount) &&
-         (((char_sheet_t *)(((uint)partyIndex << 2)))->pad_5e[0] == 0)) &&
-        (((char_sheet_t *)(((uint)partyIndex << 2)))->spyReports != '\0')) &&
+         (*(int *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x5e) == 0)) &&
+        (*(char *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x40) != '\0')) &&
        (((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 1) == 0 &&
         (9 < ((char_sheet_t *)(((uint)partyIndex << 2)))->unitCount)))) &&
-      ((((char_sheet_t *)(((uint)partyIndex << 2)))->nearestEnemyLeader != -1 &&
-       ((bStack_5 = ((char_sheet_t *)(((uint)partyIndex << 2)))->nearestEnemyLeader,
+      ((*(char *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x49) != -1 &&
+       ((bStack_5 = *(byte *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x49),
         ((char_sheet_t *)(((uint)bStack_5 << 2)))->unitCount < 0x50 ||
         (uVar3 = ovr_randBelow(0x28), (char)uVar3 == '\0')))))) &&
      (8 < ((agnt_t *)(((uint)partyIndex << 2)))->teamCode)) {
@@ -1004,7 +1004,7 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
     }
     if (cVar2 == '\0') {
       ovr_play_sfx(82,0);
-      ((char_sheet_t *)(((uint)partyIndex << 2)))->pad_5e[0] = 0x19;
+      *(undefined2 *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x5e) = 0x19;
       uVar3 = 0x217a;
       puVar4 = ovr_ovc15_usesStshRealloc
                          ((char *)*(undefined2 *)((uint)partyIndex * 4),
@@ -1032,11 +1032,11 @@ void __cdecl16far ovc25_tickCountdown(int partyIndex,...)
   byte *pbVar2;
   
   if ((((*(char *)((int)*(undefined4 *)(partyIndex << 2) + 0x3f) != '\0') &&
-       (((char_sheet_t *)((partyIndex << 2)))->pad_5e[0] != 0)) &&
+       (*(int *)((int)*(undefined4 *)(partyIndex << 2) + 0x5e) != 0)) &&
       (piVar1 = (int *)((int)*(undefined4 *)(partyIndex << 2) + 0x5e), *piVar1 = *piVar1 + -1,
       (((char_sheet_t *)((partyIndex << 2)))->flags5d & 1) != 0)) &&
-     (((char_sheet_t *)((partyIndex << 2)))->pad_5e[0] == 0)) {
-    ((char_sheet_t *)((partyIndex << 2)))->pad_5e[0] = 10;
+     (*(int *)((int)*(undefined4 *)(partyIndex << 2) + 0x5e) == 0)) {
+    *(undefined2 *)((int)*(undefined4 *)(partyIndex << 2) + 0x5e) = 10;
     pbVar2 = (byte *)((int)*(undefined4 *)(partyIndex << 2) + 0x5d);
     *pbVar2 = *pbVar2 & 0xfe;
   }

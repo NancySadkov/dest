@@ -639,7 +639,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                  CONCAT11(uVar13,uVar11));
       uVar11 = 0xdc;
       uVar13 = 0;
-      iVar7 = ovr_season_usesGPromotable_e11a();
+      iVar7 = ovr_season_usesGPromotableCount2();
       pcVar9 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4cd1,unaff_SS),
                              (char *)CONCAT13((char)((uint)iVar7 >> 8),CONCAT12((char)iVar7,0x2410))
                             );
@@ -1312,7 +1312,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
       cVar30 = 'T';
       uVar14 = ovr_blitLabel((char *)"Total population.");
       *unaff_SI = *unaff_SI + (char)(uVar14 >> 8) + ((undefined1 *)0xfff3 < &stack0xfff2);
-      *(undefined1 *)((int)*(undefined4 *)(entity_t **)&Entities + uVar14 + 0x18) = 0;
+      ((dos_psp_t *)((entity_t **)&Entities + uVar14))->jft[0] = 0;
       uVar12 = (undefined2)((ulong)Entities >> 0x10);
       *(undefined1 *)((int)&((entity_t *)Entities)[(int)unaff_SI].base.state + 1) =
            (char)((entity_t *)Entities)[(int)unaff_SI].base.flags32;
@@ -1925,9 +1925,6 @@ void __cdecl16far manage_showSettlementScreen(uint8_t partySlot,...)
 
 
 /* 4d05:1835 */
-
-/* [R2] string "halfling castle" */
-
 void __cdecl16far manage_textHalflingCastle(void)
 
 {
@@ -2060,7 +2057,6 @@ void __cdecl16far manage_textHalflingCastle(void)
   }
   return;
 }
-
 
 
 /* 4d05:1b1d */
@@ -2669,10 +2665,6 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
 
 
 /* 4d05:277a */
-
-/* WARNING: Unknown calling convention -- yet parameter storage is locked */
-/* [R2] string "All property." */
-
 void manage_textAllProperty2(void)
 
 {
@@ -2864,7 +2856,6 @@ void manage_textAllProperty2(void)
 }
 
 
-
 /* 4d05:2b09 */
 
 /* [R6] touches CurSfxType3, __C0_ASM_CopyRight */
@@ -2993,12 +2984,6 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
 
 
 /* 4d05:2d79 */
-
-/* WARNING: Instruction at (ram,0x0005ff51) overlaps instruction at (ram,0x0005ff50)
-    */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R2] string "Total population." */
-
 char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sheet_t *sheet)
 
 {
@@ -3121,7 +3106,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
       uVar6 = ovr_blitLabel((char *)"Total population.",
                             (uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510));
       *pcVar17 = *pcVar17 + (char)(uVar6 >> 8) + ((undefined1 *)0xfff3 < &stack0xfe3a);
-      *(undefined1 *)((int)*(undefined4 *)(entity_t **)&Entities + uVar6 + 0x18) = 0;
+      ((dos_psp_t *)((entity_t **)&Entities + uVar6))->jft[0] = 0;
       uVar18 = (undefined2)((ulong)Entities >> 0x10);
       *(undefined1 *)((int)&((entity_t *)Entities)[(int)pcVar17].base.state + 1) =
            (char)((entity_t *)Entities)[(int)pcVar17].base.flags32;
@@ -3479,7 +3464,6 @@ L_attact_3f0b_1082_1477:
   }
   goto L_attact_3f0b_1082_1477;
 }
-
 
 
 /* 4d05:330c */

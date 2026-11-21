@@ -25,8 +25,6 @@ typedef unsigned long undefined3;
 typedef double longdouble;
 code *swi(int vector);
 #define MK_FP(seg,ofs) ((void far *)(((uint32_t)(seg) << 16) | (uint16_t)(ofs)))
-/* far_from_u32 returns a struct; a 16-bit slot can only hold the
-   offset half, so this keeps exactly that word. */
 #define far_ofs_u32(v) ((uint16_t)((uint32_t)(v)))
 #define CONCAT11(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint8_t)(b)))
 #define CONCAT12(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint16_t)(b)))

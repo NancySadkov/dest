@@ -247,8 +247,8 @@ int __cdecl16far attact_countPartyUnits(byte menuIndex,...)
       uVar4 = (undefined2)((ulong)Entities >> 0x10);
       iVar1 = (int)Entities;
       if (((*(uint8_t *)(iVar1 + uVar2 * 0x37 + 0x1a) == ((uint8_t *)MenuItemEnabled)[menuIndex]) &&
-          (((*(uint *)(iVar1 + uVar2 * 0x37) < GfxRndSeed - 2U ||
-            (GfxRndSeed + 1U < *(uint *)(iVar1 + uVar2 * 0x37))) ||
+          (((*(uint *)((entity_t *)iVar1 + uVar2) < GfxRndSeed - 2U ||
+            (GfxRndSeed + 1U < *(uint *)((entity_t *)iVar1 + uVar2))) ||
            (*(int *)(iVar1 + uVar2 * 0x37 + 2) != GfxRndSeed2)))) &&
          ((*(byte *)(iVar1 + uVar2 * 0x37 + 0x33) & 2) == 0)) {
         iVar3 = iVar3 + 1;
@@ -267,7 +267,7 @@ int __cdecl16far attact_countPartyUnits(byte menuIndex,...)
 
 /* [R2] string "Abnormal program termination\r\n" */
 
-uint16_t __cdecl16far attact_textAbnormalProgram_f621(uint16_t value,uint8_t partyIndex,...)
+uint16_t __cdecl16far attact_textAbnormalProgramTermination(uint16_t value,uint8_t partyIndex,...)
 
 {
   long *plVar1;
@@ -429,13 +429,13 @@ attact_usesBDADailyTimeCounter(ulong *__return_storage_ptr__,ulong prevTick,...)
   
   uVar1 = *(uint far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   if (((uint)prevTick < uVar1) ||
-     (((uint)prevTick == uVar1 && (__return_storage_ptr__ <= *(ulong **)BDA_DailyTimeCounter.ofs)))) {
+     (((uint)prevTick == uVar1 && (__return_storage_ptr__ <= *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs))))) {
     iVar2 = -(int)__return_storage_ptr__;
   }
   else {
     iVar2 = 0xb0 - (int)__return_storage_ptr__;
   }
-  return (ulong *)((int)*(ulong **)BDA_DailyTimeCounter.ofs + iVar2);
+  return (ulong *)((int)*(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) + iVar2);
 }
 
 
@@ -568,7 +568,7 @@ attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flags
   iVar1 = (int)Entities;
   x = *(uint16_t *)(iVar1 + entityIndex * 0x37 + 8);
   y = *(uint16_t *)(iVar1 + entityIndex * 0x37 + 10);
-  if ((*(uint16_t *)(iVar1 + entityIndex * 0x37) == destX) &&
+  if ((*(uint16_t *)((entity_t *)iVar1 + entityIndex) == destX) &&
      (*(uint16_t *)(iVar1 + entityIndex * 0x37 + 2) == destY)) {
     destX = 0;
     destY = 0;
@@ -606,7 +606,7 @@ void __stdcall16far attact_usesGMapFlags3(void)
     uVar4 = (undefined2)((ulong)Entities >> 0x10);
     iVar2 = (int)Entities;
     puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[*(int *)(iVar2 + uVar3 * 0x37 + 2)] +
-                     *(int *)(iVar2 + uVar3 * 0x37));
+                     *(int *)((entity_t *)iVar2 + uVar3));
     *puVar1 = *puVar1 | 0x1000 << (*(byte *)((int)(char **)GMenuStrings +
                                             (uint)*(byte *)(iVar2 + uVar3 * 0x37 + 0xd) * 0x95 +
                                             0x1f) & 0x1f);

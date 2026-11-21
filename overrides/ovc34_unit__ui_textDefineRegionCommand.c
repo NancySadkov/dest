@@ -223,8 +223,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
           uVar4 = (undefined2)((ulong)Entities >> 0x10);
           iVar10 = (int)Entities;
           if ((((*(byte *)(iVar10 + uVar11 * 0x37 + 0x1a) == bStack_3c) &&
-               (pbStack_22 <= (byte *)*(uint *)(iVar10 + uVar11 * 0x37))) &&
-              ((byte *)*(uint *)(iVar10 + uVar11 * 0x37) <= pbStack_26)) &&
+               (pbStack_22 <= (byte *)*(uint *)((entity_t *)iVar10 + uVar11))) &&
+              ((byte *)*(uint *)((entity_t *)iVar10 + uVar11) <= pbStack_26)) &&
              ((pbStack_24 <= (byte *)*(uint *)(iVar10 + uVar11 * 0x37 + 2) &&
               ((byte *)*(uint *)(iVar10 + uVar11 * 0x37 + 2) <= pbStack_28)))) {
             iStack_a = iStack_a + 1;
@@ -288,16 +288,16 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         iVar10 = (int)Entities;
         if (((*(byte *)(iVar10 + uVar11 * 0x37 + 0x1a) == bStack_3c) &&
             (pbVar8 = (byte *)((char *)0x2410),
-            pbStack_22 <= (byte *)*(uint *)(iVar10 + uVar11 * 0x37))) &&
+            pbStack_22 <= (byte *)*(uint *)((entity_t *)iVar10 + uVar11))) &&
            ((pbVar8 = (byte *)((char *)0x2410),
-            (byte *)*(uint *)(iVar10 + uVar11 * 0x37) <= pbStack_26 &&
+            (byte *)*(uint *)((entity_t *)iVar10 + uVar11) <= pbStack_26 &&
             ((pbVar8 = (byte *)((char *)0x2410),
              pbStack_24 <= (byte *)*(uint *)(iVar10 + uVar11 * 0x37 + 2) &&
              (pbVar8 = (byte *)((char *)0x2410),
              (byte *)*(uint *)(iVar10 + uVar11 * 0x37 + 2) <= pbStack_28)))))) {
           if (input < 2) {
             pbVar8 = (byte *)((char *)0x2410);
-            unit_usesAlignUp42(menuIndex,*(uint16_t *)(iVar10 + uVar11 * 0x37),
+            unit_usesAlignUp42(menuIndex,*(uint16_t *)((entity_t *)iVar10 + uVar11),
                                *(int *)(iVar10 + uVar11 * 0x37 + 2));
           }
           else {

@@ -308,7 +308,7 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
     uVar5 = (uint)*(byte *)(iVar9 + entityIndex * 0x37 + 0xd) * 0x95;
     if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + uVar5) & 0x80) == 0) {
       if (*(char *)(iVar9 + entityIndex * 0x37 + 0x18) == '\0') {
-        iVar2 = *(int *)(iVar9 + entityIndex * 0x37);
+        iVar2 = *(int *)((entity_t *)iVar9 + entityIndex);
         iVar3 = *(int *)(iVar9 + entityIndex * 0x37 + 2);
         destX = *(uint16_t *)(iVar9 + entityIndex * 0x37 + 8);
         destY = *(uint16_t *)(iVar9 + entityIndex * 0x37 + 10);

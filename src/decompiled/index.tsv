@@ -960,7 +960,7 @@ ovc43_fli	6fbe:035f	ovc43_playFli	75	ok	ovc43_fli.c	char __cdecl16far ovc43_play
 ovc44_strong_dat	6ffe:0000	stshAllocStub	155	ok	ovc44_strong_dat.c	far_t * __cdecl16far stshAllocStub(far_t *__return_storage_ptr__,...);
 ovc44_strong_dat	6ffe:009b	stshTR_S_stubify0	298	ok	ovc44_strong_dat.c	void __cdecl16far stshTR_S_stubify0(int index);
 ovc44_strong_dat	6ffe:01c5	stshStubifyBld	306	ok	ovc44_strong_dat.c	void __cdecl16far stshStubifyBld(uint16_t index,...);
-ovc44_strong_dat	6ffe:02f7	init_assets	28741	ok-hard	ovc44_strong_dat.c	relaxed retry
+ovc44_strong_dat	6ffe:02f7	init_assets	28741	ok	ovc44_strong_dat.c	void __cdecl16far init_assets(void);
 ovc44_strong_dat	6ffe:733c	stshInitPtrs	521	ok	ovc44_strong_dat.c	void __cdecl16far stshInitPtrs(void);
 ovc45_unitinfo	77eb:0121	ovc45_getUnitType	88	ok	ovc45_unitinfo.c	byte __cdecl16far ovc45_getUnitType(int x,int y,...);
 ovc45_unitinfo	77eb:0179	ovc45_getUnitIndex	66	ok	ovc45_unitinfo.c	short __cdecl16far ovc45_getUnitIndex(int x,int y,...);

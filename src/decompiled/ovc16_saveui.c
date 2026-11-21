@@ -22,7 +22,7 @@ uint16_t __cdecl16far uiReadKey2(void)
   int iStack_6;
   
   MiceUnkState = 0;
-  ovr_ovr_miceButton0PressSt_789c();
+  ovr_ovr_miceButton0PressStates_entry();
   MiceProcessed = 0;
   ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x2410);
   iVar3 = MouseY;
@@ -148,7 +148,7 @@ void __cdecl16far saveui_usesBlitLoadRleGfx2(far_t textTable,int rowIndex,int it
   uVar2 = textTable.seg;
   puVar1 = (undefined2 *)(textTable.ofs + (rowIndex + itemOffset) * 4);
   ovr_blitText((char *)*puVar1,(byte *)CONCAT22(Font03.ofs,(byte *)puVar1[1]),Font03.seg,0xde);
-  ovr_ovc28_usesBDADailyTime_8441(3);
+  ovr_ovc28_usesBDADailyTimeCounter(3);
   dst_00.seg = 0xa000;
   dst_00.ofs = rowIndex * 0x12c0 + 0x2096;
   gfx_00.seg = trianglsCut4Seg;
@@ -534,9 +534,6 @@ L_uiMenuSub_08AD:
 
 
 /* 4528:0c98 */
-
-/* WARNING: Variable defined which should be unmapped: text */
-
 char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,uint16_t gfxSeg,...)
 
 {
@@ -706,7 +703,6 @@ L_uiReadString_0FF7:
     }
   } while( true );
 }
-
 
 
 /* 4528:10a8 */
@@ -894,14 +890,6 @@ void __cdecl16far saveui_freeLines(far_t entries,uint count)
 
 
 /* 4528:1303 */
-
-/* WARNING: Instruction at (ram,0x0004072b) overlaps instruction at (ram,0x0004072a)
-    */
-/* WARNING: Control flow encountered bad instruction data */
-/* WARNING: Variable defined which should be unmapped: menuLabel */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* Edits the message delay, persists it to cflow4.txt and reports the new value. */
-
 char * __cdecl16far saveui_configureMessageDelay(void)
 
 {
@@ -1331,7 +1319,6 @@ L_attact_3f0b_1082_1477:
   uVar9 = (uint)bVar17;
   goto switchD_4000_6642_caseD_3;
 }
-
 
 
 /* 4528:144e */
@@ -1846,10 +1833,6 @@ int __cdecl16far saveui_parseNumber(char *str)
 
 
 /* 4528:1d55 */
-
-/* WARNING: Variable defined which should be unmapped: text */
-/* [R4] calls ovr_blitText */
-
 int __cdecl16far saveui_usesBlitText(char *prompt,int textSeg,int row)
 
 {
@@ -1963,5 +1946,4 @@ L_saveui_4528_1d55_1F59:
     }
   } while( true );
 }
-
 

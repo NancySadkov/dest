@@ -784,7 +784,7 @@ void __cdecl16far draw_usesPlay_sfx(void)
   puVar3 = ovr_attact_usesBDADailyTim_8bbe((ulong *)recordUpdateTick,prevTick);
   if ((in_DX != 0) || ((ulong *)((int)(undefined4 *)&_DATA + 1U) < puVar3)) {
     (*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)) = (uint16_t)*(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-    (*(uint16_t *)((uint8_t *)&(recordUpdateTick))) = (uint16_t)*(ulong **)BDA_DailyTimeCounter;
+    (*(uint16_t *)((uint8_t *)&(recordUpdateTick))) = (uint16_t)*(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
     outFlag = 0;
     for (uVar7 = 0; uVar6 = (uint)(prevTick >> 0x10), uVar7 < GRecordCount; uVar7 = uVar7 + 1) {
       *(int *)(uVar7 * 0x12) = *(int *)(uVar7 * 0x12) + 1;
@@ -885,7 +885,7 @@ void __cdecl16far draw_usesPrintf(void)
   ovr_agnt_usesAlignToSeg();
   if ((timePassing != '\0') ||
      (((GPaused == '\0' || ((bVar1 = ovr_ovc15_usesAlignUp42(), bVar1 && (GOngoingBattle == '\0'))))
-      && ((puVar2 = ovr_attact_usesBDADailyTim_8bbe
+      && ((puVar2 = ovr_attact_usesBDADailyTimeCounter
                               ((ulong *)GDailyTimeCounter,CONCAT22(unaff_BP,(*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)))
                               ), in_DX != 0 ||
           ((char *)0x2415a < puVar2)))))) {
@@ -963,7 +963,7 @@ uint16_t __cdecl16far gameProcessKey(void)
       VideoFlag_2410_0167 = 1;
       ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
       ovr_ovc40_usesAlignToSeg
-                ('\0',(char *)"WWWWWWWWWWWWWWWWWWWWWWWWWW_b071",0x2410,
+                ('\0',(char *)"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",0x2410,
                  (char *)"Archduchess",0x2410,0);
       ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
       VideoFlag_2410_0167 = 0;
@@ -1429,7 +1429,7 @@ void __cdecl16far draw_usesToggle_pause(void)
        ((((0xde < MouseX && (MouseX < 0xee)) && ((7 < MouseY && (MouseY < 0x33)))) ||
         ((((GOngoingBattle != '\0' && (0xee < MouseX)) && (MouseX < 0x135)) &&
          (((6 < MouseY && (MouseY < 0x37)) && (bVar1 = draw_textArena(), bVar1)))))))) {
-      ovr_ovc41_cannotSeeTerrain_2c17();
+      ovr_ovc41_cannotSeeTerrainNotice();
     }
     else if ((((MouseMoved != 0) || (MouseX < 0xef)) ||
              ((0x134 < MouseX || ((MouseY < 7 || (0x36 < MouseY)))))) ||
@@ -1534,7 +1534,7 @@ void __cdecl16far draw_usesToggle_pause(void)
           }
           else {
             dstSeg = -0x6000;
-            value = ovr_attact_textAbnormalPro_1585(MouseX - 0xea,GMenuItem);
+            value = ovr_attact_textAbnormalProgramTermination(MouseX - 0xea,GMenuItem);
             draw_usesFillRect2(value,dstSeg);
             if (MenuMode == '\x02') {
               ovr_attact_updateAttractEntry((uint)GMenuItem,0);

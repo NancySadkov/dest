@@ -99,17 +99,17 @@ void __cdecl16far stshLoadAudioDrivers(bool grab,...)
     sbp2fmAdvOfs = ovr_stshAllocStub(unaff_BP);
     sbp2fmAdvSeg =(uint16_t)( pfVar2);
     sbp1fmAdvOfs = ovr_stshAllocStub(unaff_BP);
-    sbp1fmAdvSeg = pfVar2;
+    sbp1fmAdvSeg =(uint16_t)( pfVar2);
     pasfmAdvOfs = ovr_stshAllocStub(unaff_BP);
-    pasfmAdvSeg = pfVar2;
+    pasfmAdvSeg =(uint16_t)( pfVar2);
     pasoplAdvOfs = ovr_stshAllocStub(unaff_BP);
-    pasoplAdvSeg = pfVar2;
+    pasoplAdvSeg =(uint16_t)( pfVar2);
     adlibAdvOfs = ovr_stshAllocStub(unaff_BP);
-    adlibAdvSeg = pfVar2;
+    adlibAdvSeg =(uint16_t)( pfVar2);
     adlibgAdvOfs = ovr_stshAllocStub(unaff_BP);
-    adlibgAdvSeg = pfVar2;
+    adlibgAdvSeg =(uint16_t)( pfVar2);
     mt32mpuAdvOfs = ovr_stshAllocStub(unaff_BP);
-    mt32mpuAdvSeg = pfVar2;
+    mt32mpuAdvSeg =(uint16_t)( pfVar2);
   }
   return;
 }

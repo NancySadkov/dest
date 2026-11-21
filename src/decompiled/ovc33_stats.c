@@ -177,7 +177,6 @@ void __cdecl16far stats_drawPortrait(agntG_t *gdata,byte portraitIndex,int palet
 
 
 /* 6386:02db */
-
 char * __cdecl16far agntCopyNthField(uint8_t filed_index,char *dst,char *src)
 
 {
@@ -223,7 +222,6 @@ char * __cdecl16far agntCopyNthField(uint8_t filed_index,char *dst,char *src)
   }
   return (char *)CONCAT11(in_stack_00000007,filed_index);
 }
-
 
 
 /* 6386:0367 */
@@ -890,24 +888,9 @@ code_r0x0006013c:
       puVar40 = puVar36;
 L_OVC27_2288:
       cVar22 = ((char)uVar20 + -0x20) - bVar12;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
-      pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
+      { int _rep0; for (_rep0 = 0; _rep0 < 18; _rep0++)
+          pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
+      }
       pbVar42[-0x75] = pbVar42[-0x75] + bVar28;
       in(uVar43);
       *(undefined2 *)((int)puVar40 + -6) =(uint16_t)( piVar33);
@@ -2244,7 +2227,7 @@ switchD_6000_58bf_caseD_5:
       uVar18 = 0x24;
       bStack_3 = '\0';
       do {
-        bVar4 = ovr_draw_textProvidesMoreH_f381();
+        bVar4 = ovr_draw_textProvidesMoreHousing();
       } while (bVar4);
       while( true ) {
         uVar10 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
@@ -2255,9 +2238,9 @@ switchD_6000_58bf_caseD_5:
           InputEventTime.lo = uVar10;
           ovr_draw_usesPrintf();
         }
-        bStack_4 = ovr_draw_textProvidesMoreH_f381();
+        bStack_4 = ovr_draw_textProvidesMoreHousing();
         if ((bool)bStack_4) break;
-        puVar7 = ovr_attact_usesBDADailyTim_8bbe
+        puVar7 = ovr_attact_usesBDADailyTimeCounter
                            ((ulong *)TextBlitCycle,
                             CONCAT13(uVar18,CONCAT12(uVar17,(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)))),
                             (char)(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));

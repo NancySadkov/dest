@@ -383,9 +383,15 @@ public class ExportData extends GhidraScript {
                 hl = hl.trim();
                 if (!hl.startsWith("extern ") || !hl.endsWith(";")) continue;
                 String d = hl.substring("extern ".length(), hl.length() - 1).trim();
+                // a pointer to an array is declared `T (far *name)[dims]`, where the
+                // identifier sits inside the parentheses, so the plain trailing-name
+                // pattern does not see it
+                java.util.regex.Matcher pa = java.util.regex.Pattern
+                        .compile("\\(\\s*(?:far\\s*)?\\*\\s*([A-Za-z_]\\w*)\\s*\\)").matcher(d);
                 java.util.regex.Matcher nm = java.util.regex.Pattern
                         .compile("^(.*?)([A-Za-z_]\\w*)\\s*(\\[[^\\]]*\\])?$").matcher(d);
-                if (nm.matches()) headerDecl.put(nm.group(2), d);
+                if (pa.find()) headerDecl.put(pa.group(1), d);
+                else if (nm.matches()) headerDecl.put(nm.group(2), d);
             }
             hr.close();
             println("header declarations: " + headerDecl.size());

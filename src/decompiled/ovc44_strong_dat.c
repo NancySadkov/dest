@@ -117,7 +117,6 @@ void __cdecl16far stshStubifyBld(uint16_t index,...)
 
 
 /* 6ffe:02f7 */
-/* recovered by relaxed-limit retry */
 void __cdecl16far init_assets(void)
 
 {

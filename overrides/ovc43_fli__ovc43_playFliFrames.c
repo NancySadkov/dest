@@ -26,7 +26,7 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
   ovc43_usesStExit(CONCAT22(paletteSeg,paletteOfs),handle,(uint16_t)tempScreenOfs,in_DX);
   ovr_ovr_miceButton0PressSt_789c();
   uStack_4 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-  puVar4 = *(ulong **)BDA_DailyTimeCounter.ofs;   /* hand fix: the offset half is the address, not the far_t struct */
+  puVar4 = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, not the far_t struct */
   cStack_7 = '\0';
   puStack_6 = puVar4;
   for (uVar5 = 0; uVar5 < iStack_82 - 1U; uVar5 = uVar5 + 1) {
@@ -51,7 +51,7 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
     } while ((puVar4 == (ulong *)0x0) && (puVar4 = (ulong *)0x0, puVar3 < (ulong *)(uint)delayTicks)
             );
     uStack_4 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-    puVar4 = *(ulong **)BDA_DailyTimeCounter.ofs;   /* hand fix: the offset half is the address, not the far_t struct */
+    puVar4 = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, not the far_t struct */
     puStack_6 = puVar4;
 L_OVC43_6fbe_01a9_02C7:
     if (cStack_7 != '\0') break;

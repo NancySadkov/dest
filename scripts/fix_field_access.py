@@ -75,7 +75,7 @@ def fields(name):
             n *= int(d)
         if s is None:
             return []
-        out.append((off, s * n, mm.group(2), s, n))
+        out.append((off, s * n, mm.group(2), s, n, bool(mm.group(3).strip())))
         off += s * n
     return out
 
@@ -86,11 +86,11 @@ def struct_size(name):
 
 by_off = {}
 for s in structs:
-    for off, sz, fname, elem, cnt in fields(s):
+    for off, sz, fname, elem, cnt, is_arr in fields(s):
         # pad_NN / unk_NN components are auto-generated filler, never a name
         if fname.startswith(("pad_", "unk_", "UNK")):
             continue
-        by_off.setdefault(off, []).append((s, fname, sz, elem, cnt))
+        by_off.setdefault(off, []).append((s, fname, sz, elem, cnt, is_arr))
 
 # *(TYPE *)((int)*(undefined4 *)(EXPR) + 0xNN)
 pat = re.compile(r"\*\(\s*(u?int\d+_t|undefined\d|byte|char|uint|int|ushort|word|dword)"
@@ -116,8 +116,8 @@ for p in files:
         if len(cands) != 1:
             skipped += 1
             return m.group(0)
-        sname, fname, _, _, cnt = cands[0]
-        if cnt > 1 or cands[0][2] != width:
+        sname, fname = cands[0][0], cands[0][1]
+        if cands[0][5]:
             fname = fname + "[0]"
         done += 1
         if len(samples) < 8:
@@ -128,6 +128,29 @@ for p in files:
     src = pat.sub(repl, src)
     if src != orig and apply:
         io.open(p, "w", encoding="utf-8", newline="\n").write(src)
+
+# a struct field declared as an array must never be used bare: `->buildType`
+# where buildType is `byte[1]` is neither assignable nor a scalar argument, so
+# every bare use becomes `->buildType[0]`.
+arr_fields = {}
+for sname in structs:
+    for off, sz, fname, elem, cnt, is_arr in fields(sname):
+        if is_arr and not fname.startswith(("pad_", "unk_", "UNK")):
+            arr_fields[fname] = True
+
+bare = 0
+if arr_fields:
+    names = "|".join(sorted(arr_fields, key=len, reverse=True))
+    BAREPAT = re.compile(r"->\\s*(" + names + r")(?![\\[\\w])")
+    for p in files:
+        t = io.open(p, encoding="utf-8", errors="ignore").read()
+        new, k = BAREPAT.subn(lambda m: "->%s[0]" % m.group(1), t)
+        if k:
+            bare += k
+            if apply:
+                io.open(p, "w", encoding="utf-8", newline="\n").write(new)
+
+print("array fields used bare:", bare)
 
 print("offset accesses found:", total, "named:", done, "ambiguous/skipped:", skipped)
 print("mode:", "APPLY" if apply else "dry run")

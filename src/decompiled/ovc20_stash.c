@@ -271,7 +271,6 @@ void __cdecl16far stshStubifyCopy1to0(int index,...)
 
 
 /* 4b0a:0721 */
-
 void __cdecl16far stshWriteFile(int fhandle,far_t buf,DW sz,...)
 
 {
@@ -299,9 +298,7 @@ void __cdecl16far stshWriteFile(int fhandle,far_t buf,DW sz,...)
 }
 
 
-
 /* 4b0a:077a */
-
 void __cdecl16far stshReadFile(int handle,far_t dst,DW nbytes,...)
 
 {
@@ -327,7 +324,6 @@ void __cdecl16far stshReadFile(int handle,far_t dst,DW nbytes,...)
   } while (uVar1 != 0 || nbytes.hi != 0);
   return;
 }
-
 
 
 /* 4b0a:07d3 */
@@ -441,9 +437,6 @@ undefined1 * __cdecl16far ovc20_allocBlock(far_t buf,DW sz)
 
 
 /* 4b0a:09ce */
-
-/* WARNING: Variable defined which should be unmapped: sz */
-
 cte_t * __cdecl16far stshStoreFile(uint8_t *data,...)
 
 {
@@ -536,7 +529,6 @@ cte_t * __cdecl16far stshStoreFile(uint8_t *data,...)
                     /* WARNING: Subroutine does not return */
   ovr_stExit(0x24);
 }
-
 
 
 /* 4b0a:0b75 */
@@ -730,7 +722,6 @@ long * __cdecl16far stshAlloc_2(long *__return_storage_ptr__,DW sz)
 
 
 /* 4b0a:0f95 */
-
 uint32_t * __cdecl16far stshWrite(uint32_t *__return_storage_ptr__,uint8_t *data,long sz,...)
 
 {
@@ -754,7 +745,6 @@ uint32_t * __cdecl16far stshWrite(uint32_t *__return_storage_ptr__,uint8_t *data
   puVar1 = (uint32_t *)stshAlloc_2((long *)(*(uint16_t *)((uint8_t *)&(data) + 2)),sz_01)   /* hand fix: hidden return-storage pointer */;
   return puVar1;
 }
-
 
 
 /* 4b0a:0fd0 */
@@ -896,7 +886,7 @@ void __cdecl16far init_ui_gfxes(void)
   handle.seg = Lbm_nwpanel1.seg;
   handle.ofs = Lbm_nwpanel1.ofs;
   psStack_a = ovr_stshLoadGfx(handle);
-  pcVar1 = (uint16_t)((char *)ovr_calcSeasonPalette(psStack_a->cmap,in_DX,&palette,unaff_SS,(char)&palette));
+  pcVar1 = (char *)ovr_calcSeasonPalette(psStack_a->cmap,in_DX,&palette,unaff_SS,(char)&palette);
   init_special_graphics((char *)CONCAT22(in_DX,pcVar1));
   ovr_vgaSetPalette8bit(&palette);
   init_special_graphics((char *)CONCAT22(Lbm_nwpanel1.seg,Lbm_nwpanel1.ofs));
@@ -1066,17 +1056,17 @@ void __cdecl16far stshLoadAudioDrivers(bool grab,...)
     sbp2fmAdvOfs = ovr_stshAllocStub(unaff_BP);
     sbp2fmAdvSeg =(uint16_t)( pfVar2);
     sbp1fmAdvOfs = ovr_stshAllocStub(unaff_BP);
-    sbp1fmAdvSeg = (uint16_t)(pfVar2);
+    sbp1fmAdvSeg =(uint16_t)( pfVar2);
     pasfmAdvOfs = ovr_stshAllocStub(unaff_BP);
-    pasfmAdvSeg = (uint16_t)(pfVar2);
+    pasfmAdvSeg =(uint16_t)( pfVar2);
     pasoplAdvOfs = ovr_stshAllocStub(unaff_BP);
-    pasoplAdvSeg = (uint16_t)(pfVar2);
+    pasoplAdvSeg =(uint16_t)( pfVar2);
     adlibAdvOfs = ovr_stshAllocStub(unaff_BP);
-    adlibAdvSeg = (uint16_t)(pfVar2);
+    adlibAdvSeg =(uint16_t)( pfVar2);
     adlibgAdvOfs = ovr_stshAllocStub(unaff_BP);
-    adlibgAdvSeg = (uint16_t)(pfVar2);
+    adlibgAdvSeg =(uint16_t)( pfVar2);
     mt32mpuAdvOfs = ovr_stshAllocStub(unaff_BP);
-    mt32mpuAdvSeg = (uint16_t)(pfVar2);
+    mt32mpuAdvSeg =(uint16_t)( pfVar2);
   }
   return;
 }

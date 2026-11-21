@@ -34,8 +34,10 @@ for line in io.open(TSV, encoding="utf-8", errors="replace"):
         sym.setdefault(int(off, 16), p[1])
 print("symbols in DGROUP:", len(sym))
 
-# already-symbolised form produced by an earlier run of this script
+# already-symbolised forms produced by earlier runs of this script
 OLD = re.compile(r"\(\s*([A-Za-z_]\w*)\s*\*\s*\)\s*\(\s*uint16_t\s*\)\s*&")
+# `(void *)&_DATA+2` parses as `((void *)&_DATA) + 2`; rebuild it as address arithmetic
+OLDP = re.compile(r"\(\s*([A-Za-z_]\w*)\s*\*\s*\)\s*&(\w+)\+([0-9A-Za-z]+)\b")
 PAT = re.compile(r"\(\s*([A-Za-z_]\w*(?:\s+[A-Za-z_]\w*)*)\s*\*\s*\)\s*"
                  r"0x([0-9a-fA-F]{5,8})\b")
 
@@ -79,9 +81,16 @@ def norm_repl(m):
     return "(%s *)&" % m.group(1)
 
 
+def norm_plus(m):
+    global norm
+    norm += 1
+    return "(%s *)((char *)&%s + %s)" % (m.group(1), m.group(2), m.group(3))
+
+
 for p in files:
     t = io.open(p, encoding="utf-8", errors="ignore").read()
-    new = OLD.sub(norm_repl, t)
+    new = OLDP.sub(norm_plus, t)
+    new = OLD.sub(norm_repl, new)
     new = PAT.sub(repl, new)
     if new != t and apply:
         io.open(p, "w", encoding="utf-8", newline="\n").write(new)

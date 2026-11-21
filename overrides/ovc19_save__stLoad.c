@@ -30,13 +30,13 @@ uint __cdecl16far stLoad(int handle)
           (uVar1 = save_readBlock((int)(byte (*) [59] [148])GMapCells,
                                   (void *)CONCAT22(0x22b0,(*(uint16_t *)((uint8_t *)&(GMapCells) + 2))),unaff_DI,unaff_SI),
           (uVar1 & 0xff) != 0)) &&
-         ((uVar1 = save_readBlock(-0x7661,(void *)&_DATA+2,unaff_DI,unaff_SI), (uVar1 & 0xff) != 0 &&
-          ((uVar1 = save_readBlock(-0x7663,(void *)&_DATA+2,unaff_DI,unaff_SI), (uVar1 & 0xff) != 0
-           && (uVar1 = save_readBlock(-0x6f69,(void *)&_DATA+2,unaff_DI,unaff_SI),
+         ((uVar1 = save_readBlock(-0x7661,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (uVar1 & 0xff) != 0 &&
+          ((uVar1 = save_readBlock(-0x7663,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (uVar1 & 0xff) != 0
+           && (uVar1 = save_readBlock(-0x6f69,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
               (uVar1 & 0xff) != 0)))))) &&
         ((uVar1 = save_readBlock((int)Entities,(void *)CONCAT22(EntityCount * 0x37,DAT_2000_d190),
                                  unaff_DI,unaff_SI), (uVar1 & 0xff) != 0 &&
-         (uVar1 = save_readBlock(0x881,(void *)&_DATA+2,unaff_DI,unaff_SI), (uVar1 & 0xff) != 0))))))
+         (uVar1 = save_readBlock(0x881,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (uVar1 & 0xff) != 0))))))
     {
       uVar5 = (undefined2)((ulong)((long)SquareRecCount * 0x13) >> 0x10);
       uVar1 = save_readBlock(0,(void *)CONCAT22((int)((long)SquareRecCount * 0x13),
@@ -59,12 +59,12 @@ uint __cdecl16far stLoad(int handle)
                    (uVar1 & 0xff) != 0)) &&
                   (uVar1 = save_readBlock(-0x6f1c,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
                   (uVar1 & 0xff) != 0)) &&
-                 (((uVar1 = save_readBlock(-0x6e21,(void *)&_DATA+2,unaff_DI,unaff_SI),
+                 (((uVar1 = save_readBlock(-0x6e21,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
                    (uVar1 & 0xff) != 0 &&
                    (uVar1 = save_readBlock(0,(char *)CONCAT22(GRecordCount * 0x12,
                                                               (char *)0x21f2),
                                            unaff_DI,unaff_SI), (uVar1 & 0xff) != 0)) &&
-                  ((uVar1 = save_readBlock(-0x7667,(void *)&_DATA+2,unaff_DI,unaff_SI),
+                  ((uVar1 = save_readBlock(-0x7667,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
                    (uVar1 & 0xff) != 0 &&
                    ((uVar1 = save_readBlock((int)(unit_t *)GUnits,
                                             (void *)CONCAT22(GUnitCount * 9,(*(uint16_t *)((uint8_t *)&(GUnits) + 2))),unaff_DI,
@@ -87,7 +87,7 @@ uint __cdecl16far stLoad(int handle)
                 (uVar1 & 0xff) != 0 &&
                 ((uVar1 = save_readBlock(0x2f4,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
                  (uVar1 & 0xff) != 0 &&
-                 (uVar1 = save_readBlock(-0x6f99,(void *)&_DATA+2,unaff_DI,unaff_SI),
+                 (uVar1 = save_readBlock(-0x6f99,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
                  (uVar1 & 0xff) != 0)))) &&
                (uVar1 = save_readBlock(-0x6f63,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
                (uVar1 & 0xff) != 0)))) &&
@@ -99,11 +99,11 @@ uint __cdecl16far stLoad(int handle)
                (uVar1 & 0xff) != 0)) &&
               (((uVar1 = save_readBlock(0x5de7,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
                 (uVar1 & 0xff) != 0 &&
-                (uVar1 = save_readBlock(-0x6d33,(void *)&_DATA+2,unaff_DI,unaff_SI),
+                (uVar1 = save_readBlock(-0x6d33,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
                 (uVar1 & 0xff) != 0)) &&
                ((uVar1 = save_readBlock(-0x6d34,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
                 (uVar1 & 0xff) != 0 &&
-                ((uVar1 = save_readBlock(0x6a86,(void *)&_DATA+2,unaff_DI,unaff_SI),
+                ((uVar1 = save_readBlock(0x6a86,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
                  (uVar1 & 0xff) != 0 &&
                  (uVar1 = save_readBlock(0x6a88,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
                  (uVar1 & 0xff) != 0)))))))))) &&
@@ -114,7 +114,7 @@ uint __cdecl16far stLoad(int handle)
                    (uVar1 & 0xff) != 0)) &&
                   (uVar1 = save_readBlock(0x693a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
                   (uVar1 & 0xff) != 0)) &&
-                 (((uVar1 = save_readBlock(-0x6d38,(void *)&_DATA+2,unaff_DI,unaff_SI),
+                 (((uVar1 = save_readBlock(-0x6d38,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
                    (uVar1 & 0xff) != 0 &&
                    (uVar1 = save_readBlock(0x744,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
                    (uVar1 & 0xff) != 0)) &&
@@ -122,7 +122,7 @@ uint __cdecl16far stLoad(int handle)
                    (uVar1 & 0xff) != 0 &&
                    ((uVar1 = save_readBlock(-0x6e1a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
                     (uVar1 & 0xff) != 0 &&
-                    (uVar1 = save_readBlock(-0x6e1c,(void *)&_DATA+2,unaff_DI,unaff_SI),
+                    (uVar1 = save_readBlock(-0x6e1c,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
                     (uVar1 & 0xff) != 0)))))))))))) &&
            ((uVar1 = save_readBlock(0x26df,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI), (uVar1 & 0xff) != 0
             && ((((uVar1 = save_readBlock(-0x6d3a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),

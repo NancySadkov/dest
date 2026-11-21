@@ -532,7 +532,7 @@ undefined2 __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex,.
   byte bVar1;
   undefined2 uVar2;
   
-  bVar1 = *(byte *)((int)*(undefined4 *)((uint)partyIndex << 2) + (uint)abilityIndex + 0x29);
+  bVar1 = ((char_sheet_t *)(((uint)partyIndex << 2) + (uint)abilityIndex))->stats[0];
   if (bVar1 < 4) {
     uVar2 = 0xfd;
   }

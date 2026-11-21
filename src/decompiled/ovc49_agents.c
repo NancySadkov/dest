@@ -3798,7 +3798,7 @@ void __cdecl16far ovc49_drawAgents(void)
         if ((*(uint *)(uStack_22 * 0x34 + 0x2b) & 100) != 0) {
           iVar14 = iStack_28 - *(int *)((int)uStack_12 + 0xd);
           bVar4 = *(byte *)(uStack_22 * 0x34 + 0x23);
-          pcVar2 = (uint16_t)((char *)(uStack_22 * 0x34 + 0x23));
+          pcVar2 = (char *)(uStack_22 * 0x34 + 0x23);
           *pcVar2 = *pcVar2 + -1;
           uVar10 = bVar4 & 3;
           gfx_05.seg = ((undefined2 *)&crossBlitType2Seg)[uVar10 * 2];
@@ -3821,7 +3821,7 @@ void __cdecl16far ovc49_drawAgents(void)
             *(undefined1 *)(uStack_22 * 0x34 + 0x24) = 0;
           }
           else {
-            pcVar2 = (uint16_t)((char *)(uStack_22 * 0x34 + 0x23));
+            pcVar2 = (char *)(uStack_22 * 0x34 + 0x23);
             *pcVar2 = *pcVar2 + -1;
           }
         }
@@ -3857,7 +3857,7 @@ void __cdecl16far ovc49_drawAgents(void)
             ovr_ovc41_paralyzeNearbyAgents(uStack_22);
           }
           else {
-            pcVar2 = (uint16_t)((char *)(uStack_22 * 0x34 + 0x23));
+            pcVar2 = (char *)(uStack_22 * 0x34 + 0x23);
             *pcVar2 = *pcVar2 + -1;
           }
         }
@@ -4198,7 +4198,7 @@ L_OVC49_8699_1e09_3CF7:
       iVar17 = (int)Entities;
     } while ((*(char *)(iVar17 + uVar10 * 0x37 + 0xe) != '\0') ||
             (iVar14 = *(int *)(iVar17 + uVar10 * 0x37 + 2),
-            uVar13 = ovr_ovc23_isCursorAt(*(uint16_t *)(iVar17 + uVar10 * 0x37),iVar14,(char)iVar14)
+            uVar13 = ovr_ovc23_isCursorAt(*(uint16_t *)((entity_t *)iVar17 + uVar10),iVar14,(char)iVar14)
             , (char)uVar13 == '\0'));
     uStack_22 = (uint)AgntCount;
     do {

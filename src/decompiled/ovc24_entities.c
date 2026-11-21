@@ -37,7 +37,7 @@ void __cdecl16far ovc24_usesAlignUp4(void)
     if (*(char *)(iVar4 + uVar7 * 0x37 + 0x18) == '\0') {
       cVar1 = *(char *)((int)(char **)GMenuStrings +
                        (uint)*(byte *)(iVar4 + uVar7 * 0x37 + 0xd) * 0x95 + 0x1f);
-      uVar2 = alignUp4(*(int *)(iVar4 + uVar7 * 0x37));
+      uVar2 = alignUp4(*(int *)((entity_t *)iVar4 + uVar7));
       iVar4 = *(int *)((int)Entities + uVar7 * 0x37 + 2);
       for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
         uVar8 = (undefined2)((ulong)Entities >> 0x10);
@@ -45,7 +45,7 @@ void __cdecl16far ovc24_usesAlignUp4(void)
         if (((*(int *)(iVar5 + uVar6 * 0x37 + 2) == iVar4) &&
             (*(char *)((int)(char **)GMenuStrings +
                       (uint)*(byte *)(iVar5 + uVar6 * 0x37 + 0xd) * 0x95 + 0x1f) != cVar1)) &&
-           (uVar3 = alignUp4(*(int *)(iVar5 + uVar6 * 0x37)), uVar3 == uVar2)) {
+           (uVar3 = alignUp4(*(int *)((entity_t *)iVar5 + uVar6)), uVar3 == uVar2)) {
           *(undefined1 *)((int)Entities + uVar7 * 0x37 + 0x18) = 1;
           *(undefined1 *)((int)Entities + uVar6 * 0x37 + 0x18) = 1;
           break;
@@ -444,7 +444,7 @@ void __cdecl16far ovc24_removeOtherEntities(uint8_t *reportedOut,...)
       if ((*(char *)(iVar3 + uVar4 * 0x37 + 0x18) != '\0') &&
          (*(char *)(iVar3 + uVar4 * 0x37 + 0x19) == '\0')) {
         if ((GOngoingBattle == '\0') && (*(int *)(iVar3 + uVar4 * 0x37 + 2) == GfxRndSeed2)) {
-          uVar1 = alignUp4(*(int *)(iVar3 + uVar4 * 0x37));
+          uVar1 = alignUp4(*(int *)((entity_t *)iVar3 + uVar4));
           uVar2 = alignUp4(GfxRndSeed);
           if (uVar1 == uVar2) goto L_OVC24_5943_0d5a_0E37;
         }
@@ -461,7 +461,7 @@ L_OVC24_5943_0d5a_0E37:
       if (*(char *)(iVar3 + uVar4 * 0x37 + 0xe) == '\0') {
         if ((GOngoingBattle == '\0') &&
            (uVar5 = ovr_ovc23_isCursorAt
-                              (*(uint16_t *)(iVar3 + uVar4 * 0x37),
+                              (*(uint16_t *)((entity_t *)iVar3 + uVar4),
                                *(int *)(iVar3 + uVar4 * 0x37 + 2)), (char)uVar5 != '\0')) {
           uVar1 = (uint)AgntCount;
           do {
@@ -947,7 +947,7 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
         uVar4 = uVar4 + 1;
       }
       if (uVar4 < EntityCount) {
-        alignUp4(*(int *)(iVar6 + entityIndex * 0x37),
+        alignUp4(*(int *)((entity_t *)iVar6 + entityIndex),
                  *(undefined2 *)(iVar6 + entityIndex * 0x37 + 2),0xa000);
         iVar6 = (uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0xd) * 0x95;
         uVar5 = 0x195d;

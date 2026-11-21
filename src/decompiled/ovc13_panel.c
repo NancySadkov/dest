@@ -151,7 +151,7 @@ void __cdecl16far ovc13_drawPanelEntitiesAll(void)
   for (entityIndex = 0; entityIndex < EntityCount; entityIndex = entityIndex + 1) {
     uVar5 = (undefined2)((ulong)Entities >> 0x10);
     iVar4 = (int)Entities;
-    iVar3 = *(int *)(iVar4 + entityIndex * 0x37);
+    iVar3 = *(int *)((entity_t *)iVar4 + entityIndex);
     iVar2 = *(int *)(iVar4 + entityIndex * 0x37 + 2);
     iVar1 = iVar2 + 1;
     if (((((*(char *)(iVar4 + entityIndex * 0x37 + 0x18) != '\0') ||
@@ -223,7 +223,7 @@ void __cdecl16far ovc13_drawPanelEntities(void)
     for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
       uVar6 = (undefined2)((ulong)Entities >> 0x10);
       iVar4 = (int)Entities;
-      iVar2 = *(int *)(iVar4 + uVar5 * 0x37);
+      iVar2 = *(int *)((entity_t *)iVar4 + uVar5);
       iVar3 = *(int *)(iVar4 + uVar5 * 0x37 + 2);
       iVar1 = iVar3 + 1;
       if (((((*(char *)(iVar4 + uVar5 * 0x37 + 0x18) != '\0') ||
@@ -552,7 +552,7 @@ void __cdecl16far ovc13_usesScreenY2(void)
     for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
       uVar7 = (undefined2)((ulong)Entities >> 0x10);
       iVar4 = (int)Entities;
-      uVar1 = *(uint *)(iVar4 + uVar6 * 0x37);
+      uVar1 = *(uint *)((entity_t *)iVar4 + uVar6);
       iVar3 = *(int *)(iVar4 + uVar6 * 0x37 + 2);
       uVar2 = iVar3 + 1;
       if (((((*(char *)(iVar4 + uVar6 * 0x37 + 0x18) != '\0') ||
@@ -680,7 +680,7 @@ void __cdecl16far ovc13_drawWindowEntities(void)
   for (entityIndex = 0; entityIndex < EntityCount; entityIndex = entityIndex + 1) {
     uVar6 = (undefined2)((ulong)Entities >> 0x10);
     iVar4 = (int)Entities;
-    uVar1 = *(uint *)(iVar4 + entityIndex * 0x37);
+    uVar1 = *(uint *)((entity_t *)iVar4 + entityIndex);
     iVar3 = *(int *)(iVar4 + entityIndex * 0x37 + 2);
     uVar2 = iVar3 + 1;
     if (((((*(char *)(iVar4 + entityIndex * 0x37 + 0x18) != '\0') ||

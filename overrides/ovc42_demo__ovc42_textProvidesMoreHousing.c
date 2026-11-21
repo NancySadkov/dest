@@ -13,7 +13,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
   
   prevTick = (ulong)unaff_SI << 0x10;
   uVar1 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-  __return_storage_ptr__ = *(ulong **)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
+  __return_storage_ptr__ = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
   MiceNeedsUpdate = 1;
   puVar5 = __return_storage_ptr__;
   do {
