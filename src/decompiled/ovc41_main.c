@@ -514,7 +514,7 @@ void __cdecl16far ovc41_usesXOfs(int agntIndex,...)
   
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&xOfs;
-  F_SCOPY(far_from_u32((uint32_t)(0x24106e00)),dst);
+  F_SCOPY((far_t)0x24106e00,dst);
   uVar1 = (uint)*(byte *)(agntIndex * 0x34 + 0xc);
   iStack_c = *(int *)(agntIndex * 0x34 + 6);
   if (2 < iStack_c) {
@@ -1845,17 +1845,17 @@ void __cdecl16far uiMainMenu(void)
   MenuModeSaved = MenuMode;
   gfx.seg = nwpanel1Cut2Seg;
   gfx.ofs = nwpanel1Cut2Ofs;
-  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000e249)));
+  ovr_blitLoadRleGfx(gfx,(far_t)0xa000e249);
   gfx_00.seg = trianglsCut6Seg;
   gfx_00.ofs = trianglsCut6Ofs;
-  ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa000e249)));
+  ovr_blitLoadRleGfx(gfx_00,(far_t)0xa000e249);
   ovr_uiMainMenuLoop();
   gfx_01.seg = nwpanel1Cut2Seg;
   gfx_01.ofs = nwpanel1Cut2Ofs;
-  ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa000e249)));
+  ovr_blitLoadRleGfx(gfx_01,(far_t)0xa000e249);
   gfx_02.seg = trianglsCut5Seg;
   gfx_02.ofs = trianglsCut5Ofs;
-  ovr_blitLoadRleGfx(gfx_02,far_from_u32((uint32_t)(0xa000e249)));
+  ovr_blitLoadRleGfx(gfx_02,(far_t)0xa000e249);
   ovc41_usesGMenuItem();
   return;
 }
@@ -2916,8 +2916,8 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
 void __cdecl16far ovc41_resolveSpecialAttack(agnt_t *agnt,uint16_t param)
 
 {
-  ovc41_specialAttack((agnt_t *)agnt,(*(uint16_t *)((uint8_t *)&(agnt) + 2)),param);
-  ovr_agnt_advanceAnimFrame((agnt_t *)agnt,(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
+  ovc41_specialAttack((agnt_t *)agnt,agnt._2_2_,param);
+  ovr_agnt_advanceAnimFrame((agnt_t *)agnt,agnt._2_2_);
   return;
 }
 
@@ -2959,7 +2959,7 @@ int __cdecl16far ovc41_growthForLevel(agnt_t *agnt,...)
   
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&growthMap;
-  F_SCOPY(far_from_u32((uint32_t)(0x24106e48)),dst);
+  F_SCOPY((far_t)0x24106e48,dst);
   bStack_3 = agnt->gindex;
   if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bStack_3 * 0x95) == -1) {
     iVar1 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)bStack_3 * 0x95);

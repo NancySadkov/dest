@@ -65,7 +65,7 @@ void __cdecl16far unit_usesAlignUp4(void)
   if (mapDirty != '\0') {
     mapDirty = '\0';
     ovr_driver_clearMapFlagsRect
-              ((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),(short (*) [60] [148])GMapFlags),0,0,0x93,0x3b,
+              ((uint32_t)CONCAT22(GMapFlags._2_2_,(short (*) [60] [148])GMapFlags),0,0,0x93,0x3b,
                0xfff7);
     for (uStack_c = 0; uStack_c < EntityCount; uStack_c = uStack_c + 1) {
       uVar6 = (undefined2)((ulong)Entities >> 0x10);
@@ -102,7 +102,7 @@ void __cdecl16far unit_usesAlignUp4(void)
           iStack_14 = 0x3b;
         }
         ovr_driver_setMapFlagsRect
-                  ((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),(short (*) [60] [148])GMapFlags),iStack_e,
+                  ((uint32_t)CONCAT22(GMapFlags._2_2_,(short (*) [60] [148])GMapFlags),iStack_e,
                    iStack_12,iStack_10,iStack_14,8);
       }
     }
@@ -134,7 +134,7 @@ void __cdecl16far unit_usesAlignUp4(void)
           iStack_14 = 0x3b;
         }
         ovr_driver_setMapFlagsRect
-                  ((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),(short (*) [60] [148])GMapFlags),iStack_e,
+                  ((uint32_t)CONCAT22(GMapFlags._2_2_,(short (*) [60] [148])GMapFlags),iStack_e,
                    iStack_12,iStack_10,iStack_14,8);
       }
     }

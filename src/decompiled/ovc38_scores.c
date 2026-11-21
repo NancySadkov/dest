@@ -192,8 +192,8 @@ int16_t __cdecl16far ovc38_scan1(char *s1,char *s2)
   uint uVar3;
   uint uVar5;
   
-  bVar4 = (byte)(((uint)(char *)s2 | (*(uint16_t *)((uint8_t *)&(s2) + 2))) >> 8);
-  if (((uint)(char *)s2 | (*(uint16_t *)((uint8_t *)&(s2) + 2))) == 0) {
+  bVar4 = (byte)(((uint)(char *)s2 | s2._2_2_) >> 8);
+  if (((uint)(char *)s2 | s2._2_2_) == 0) {
     iVar2 = 0;
   }
   else if ((byte)*s1 < (byte)*s2) {
@@ -204,16 +204,16 @@ int16_t __cdecl16far ovc38_scan1(char *s1,char *s2)
   }
   else {
     while ((*s2 != '\0' && (*s2 != '@'))) {
-      s2 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(s2) + 2)),(char *)s2 + 1);
+      s2 = (char *)CONCAT22(s2._2_2_,(char *)s2 + 1);
     }
     if (*s2 == '@') {
-      s2 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(s2) + 2)),(char *)s2 + 1);
+      s2 = (char *)CONCAT22(s2._2_2_,(char *)s2 + 1);
     }
     uVar3 = (uint)*s2;
     uVar5 = 0;
     if ((((byte *)_ctype + 1)[uVar3] & 2) != 0) {
       cVar1 = *s2;
-      s2 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(s2) + 2)),(char *)s2 + 1);
+      s2 = (char *)CONCAT22(s2._2_2_,(char *)s2 + 1);
       uVar3 = (uint)*s2;
       uVar5 = (int)cVar1 - 0x30U;
       if ((((byte *)_ctype + 1)[uVar3] & 2) != 0) {

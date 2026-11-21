@@ -512,34 +512,34 @@ void __cdecl16far constr_usesAgnt_clear(void)
   int iStack_6;
   undefined2 uStack_4;
   
-  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)unaff_SS;
+  dst.seg._0_1_ = (char)unaff_SS;
   dst.ofs = (uint16_t)&shades;
-  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)unaff_SS >> 8);
-  F_SCOPY(far_from_u32((uint32_t)(0x24100745)),dst);
+  dst.seg._1_1_ = (char)((uint)unaff_SS >> 8);
+  F_SCOPY((far_t)0x24100745,dst);
   if (GOngoingBattle == '\0') {
     ovr_ovc13_usesBlitRects();
     constr_usesSmoothPrev2();
-    ovr_ovc23_textAdlibNone(unaff_DI,unaff_SI,(agnt_t *)(*(uint16_t *)((uint8_t *)&(buf))));
+    ovr_ovc23_textAdlibNone(unaff_DI,unaff_SI,(agnt_t *)buf._0_2_);
     GGameState = 0x24;
     if (DebugVerbose != false) {
       printf("%d \r");
     }
     iStack_12 = GfxRndSeed >> 2;
     if (0xb < 0x14bU - iStack_12) {
-      (*(uint8_t *)((uint8_t *)&(gfx_06.seg))) =
+      gfx_06.seg._0_1_ =
            (char)((undefined2 *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       gfx_06.ofs = ((undefined2 *)&l1Cut1Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
-      (*(uint8_t *)((uint8_t *)&(gfx_06.seg) + 1)) =
+      gfx_06.seg._1_1_ =
            (char)((uint)((undefined2 *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
       ovr_blitGfxRect(gfx_06,0xc - iStack_12,7,(brect_t *)BlitRects,0x10,true,
                       (char)(0xc - iStack_12),7,0x40,0x10,0x10,0);
     }
     if (0x14cU - iStack_12 < 0xdf) {
-      (*(uint8_t *)((uint8_t *)&(gfx_07.seg))) =
+      gfx_07.seg._0_1_ =
            (char)((undefined2 *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       gfx_07.ofs = ((undefined2 *)&l1Cut3Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
-      (*(uint8_t *)((uint8_t *)&(gfx_07.seg) + 1)) =
+      gfx_07.seg._1_1_ =
            (char)((uint)((undefined2 *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
       ovr_blitGfxRect(gfx_07,0x14c - iStack_12,7,(brect_t *)BlitRects,0x10,true,
@@ -733,7 +733,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                       iStack_30 = (uint)*(byte *)(iVar10 + 0x728) - iStack_30;
                       iVar2 = *(int16_t *)(uVar11 * 2 + 0xa20);
                       iVar7 = iStack_e * 0xc + *(int *)(uVar11 * 2) * 4;
-                      (*(uint8_t *)((uint8_t *)&(gfx_10.seg))) =
+                      gfx_10.seg._0_1_ =
                            (char)*(undefined2 *)
                                   ((char *)
                                    "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -742,7 +742,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                                     ((char *)
                                      "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                                      + 0x2e + iVar7);
-                      (*(uint8_t *)((uint8_t *)&(gfx_10.seg) + 1)) =
+                      gfx_10.seg._1_1_ =
                            (char)((uint)*(undefined2 *)
                                          ((char *)
                                           "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -756,9 +756,9 @@ void __cdecl16far constr_usesAgnt_clear(void)
                       iVar2 = *(int16_t *)(uVar11 * 2 + 0xa20);
                       iVar8 = iStack_e * 0xc + *(int *)(uVar11 * 2) * 4;
                       uVar9 = *(undefined2 *)(iVar8 + 0x4232);
-                      (*(uint8_t *)((uint8_t *)&(gfx_09.seg))) = (char)uVar9;
+                      gfx_09.seg._0_1_ = (char)uVar9;
                       gfx_09.ofs = *(undefined2 *)(iVar8 + 0x4230);
-                      (*(uint8_t *)((uint8_t *)&(gfx_09.seg) + 1)) = (char)((uint)uVar9 >> 8);
+                      gfx_09.seg._1_1_ = (char)((uint)uVar9 >> 8);
                       ovr_blitGfxRect(gfx_09,iVar2,iVar7,(brect_t *)BlitRects,0x10,
                                       (bool)abStack_17[iVar10 + -1],(char)iVar2,(char)iVar7,0x40,
                                       0x10,abStack_17[iVar10 + -1],0);
@@ -784,7 +784,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                     iStack_30 = (uint)*(byte *)(iVar10 + 0x728) - iStack_30;
                     iVar2 = *(int16_t *)(uVar11 * 2 + 0xa20);
                     iVar7 = iStack_e * 0xc + (uint)GSeason * 4;
-                    (*(uint8_t *)((uint8_t *)&(gfx_08.seg))) =
+                    gfx_08.seg._0_1_ =
                          (char)*(undefined2 *)
                                 ((char *)
                                  "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -793,7 +793,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                                   ((char *)
                                    "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                                    + 0x2e + iVar7);
-                    (*(uint8_t *)((uint8_t *)&(gfx_08.seg) + 1)) =
+                    gfx_08.seg._1_1_ =
                          (char)((uint)*(undefined2 *)
                                        ((char *)
                                         "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -1172,24 +1172,24 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
   
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)&dst;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410074f)),dst_00);
+  F_SCOPY((far_t)0x2410074f,dst_00);
   bVar2 = ovr_draw_textArena();
   if (bVar2) {
     iStack_6 = GfxRndSeed * 6 >> 6;
     if (0xee < 0x166 - iStack_6) {
-      (*(uint8_t *)((uint8_t *)&(gfx_02.seg))) =
+      gfx_02.seg._0_1_ =
            (char)((undefined2 *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       gfx_02.ofs = ((undefined2 *)&l1Cut1Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
-      (*(uint8_t *)((uint8_t *)&(gfx_02.seg) + 1)) =
+      gfx_02.seg._1_1_ =
            (char)((uint)((undefined2 *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
       ovr_blitGfxRect(gfx_02,0xef - iStack_6,7,(brect_t *)(BlitRects + 3),0x10,true);
     }
     if (0x167 - iStack_6 < 0x135) {
-      (*(uint8_t *)((uint8_t *)&(gfx_03.seg))) =
+      gfx_03.seg._0_1_ =
            (char)((undefined2 *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       gfx_03.ofs = ((undefined2 *)&l1Cut3Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
-      (*(uint8_t *)((uint8_t *)&(gfx_03.seg) + 1)) =
+      gfx_03.seg._1_1_ =
            (char)((uint)((undefined2 *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
       ovr_blitGfxRect(gfx_03,0x22f - iStack_6,7,(brect_t *)(BlitRects + 3),0x10,true);
@@ -1328,7 +1328,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
               if (((*(int *)(iVar5 + 0x4230) == 0 && *(int *)(iVar5 + 0x4232) == 0) || (1 < dy)) ||
                  (7 < HighlightLevel)) {
                 iVar5 = iStack_e * 0xc + ((uint16_t *)squareSide)[uVar6] * 4;
-                (*(uint8_t *)((uint8_t *)&(gfx_06.seg))) =
+                gfx_06.seg._0_1_ =
                      (char)*(undefined2 *)
                             ((char *)
                              "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -1337,7 +1337,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
                               ((char *)
                                "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                                + 0x2e + iVar5);
-                (*(uint8_t *)((uint8_t *)&(gfx_06.seg) + 1)) =
+                gfx_06.seg._1_1_ =
                      (char)((uint)*(undefined2 *)
                                    ((char *)
                                     "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -1349,9 +1349,9 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
               else {
                 iVar5 = iStack_e * 0xc + ((uint16_t *)squareSide)[uVar6] * 4;
                 uVar1 = *(undefined2 *)(iVar5 + 0x4232);
-                (*(uint8_t *)((uint8_t *)&(gfx_05.seg))) = (char)uVar1;
+                gfx_05.seg._0_1_ = (char)uVar1;
                 gfx_05.ofs = *(undefined2 *)(iVar5 + 0x4230);
-                (*(uint8_t *)((uint8_t *)&(gfx_05.seg) + 1)) = (char)((uint)uVar1 >> 8);
+                gfx_05.seg._1_1_ = (char)((uint)uVar1 >> 8);
                 ovr_blitGfxRect(gfx_05,((uint16_t *)SquareLeftX)[uVar6],
                                 (uint)*(byte *)(dy + 0x74b) - iStack_26,(brect_t *)(BlitRects + 3),
                                 0x10,(&bStack_a)[dy]);
@@ -1374,7 +1374,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
             }
             else {
               iVar5 = iStack_e * 0xc + (uint)GSeason * 4;
-              (*(uint8_t *)((uint8_t *)&(gfx_04.seg))) =
+              gfx_04.seg._0_1_ =
                    (char)*(undefined2 *)
                           ((char *)
                            "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -1383,7 +1383,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
                             ((char *)
                              "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                              + 0x2e + iVar5);
-              (*(uint8_t *)((uint8_t *)&(gfx_04.seg) + 1)) =
+              gfx_04.seg._1_1_ =
                    (char)((uint)*(undefined2 *)
                                  ((char *)
                                   "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -1550,7 +1550,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
                    ,6,(brect_t *)(BlitRects + 3),0x2410,(char)((uint16_t *)SquareLeftX)[uVar7]);
       }
       if ((*(byte *)(iStack_e * 0x27 + 0x11e) & 1) != 0) {
-        (*(uint8_t *)((uint8_t *)&(gfx_07.seg))) =
+        gfx_07.seg._0_1_ =
              (char)*(undefined2 *)
                     ((char *)
                      "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -1559,7 +1559,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
                       ((char *)
                        "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                        + 0x36 + iStack_e * 0xc);
-        (*(uint8_t *)((uint8_t *)&(gfx_07.seg) + 1)) =
+        gfx_07.seg._1_1_ =
              (char)((uint)*(undefined2 *)
                            ((char *)
                             "You may raise a primary ability by trading two points of another ability. Select ability to increase."

@@ -37,7 +37,7 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
   iVar4 = x2;
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&yOffset;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410592a)),dst);
+  F_SCOPY((far_t)0x2410592a,dst);
   if (x2 < x1) {
     x2 = x1;
     x1 = iVar4;
@@ -128,13 +128,13 @@ void __cdecl16far ovc27_usesRandBelow(int x1,int y1,int x2,int y2,brect_t *rect,
   iVar2 = x2;
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&plane0;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410594a)),dst);
+  F_SCOPY((far_t)0x2410594a,dst);
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)&plane1;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410596a)),dst_00);
+  F_SCOPY((far_t)0x2410596a,dst_00);
   dst_01.seg = unaff_SS;
   dst_01.ofs = (uint16_t)&plane2;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410598a)),dst_01);
+  F_SCOPY((far_t)0x2410598a,dst_01);
   if (x2 < x1) {
     x2 = x1;
     x1 = iVar2;
@@ -308,10 +308,10 @@ uint __cdecl16far ovc27_usesRandBelow3(agnt_t *agnt,uint32_t reqRecord,int agntI
   
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&reqLevel1;
-  F_SCOPY(far_from_u32((uint32_t)(0x241059aa)),dst);
+  F_SCOPY((far_t)0x241059aa,dst);
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)&reqLevel2;
-  F_SCOPY(far_from_u32((uint32_t)(0x241059b4)),dst_00);
+  F_SCOPY((far_t)0x241059b4,dst_00);
   uVar2 = agntIndex * 0x34;
   uStack_10 = CONCAT22(0x1726,uVar2);
   uVar8 = (undefined2)(reqRecord >> 0x10);
@@ -1728,7 +1728,7 @@ ovc27_usesPlay_sfxU(uint16_t ptrOfs,uint16_t ptrSeg,agnt_t *agnt,uint8_t frames,
 /* WARNING: Unknown calling convention -- yet parameter storage is locked */
 /* duplicate name, disambiguated by address order */
 
-void switchD_6000_3cd8_caseD_0_3(void)
+void switchD_6000:3cd8::caseD_0_3(void)
 
 {
   int unaff_BP;

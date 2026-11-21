@@ -402,7 +402,7 @@ void __cdecl16far attact_usesAgntFlag1(void)
   else {
     iVar4 = memcmp((char *)&SquareRecX,(char *)0x24109074,0x13);
     if (iVar4 == 0) {
-      alignToSeg(far_from_u32((uint32_t)(0x24109074)));
+      alignToSeg((far_t)0x24109074);
       return;
     }
     if (299 < SquareRecCount) {
@@ -673,7 +673,7 @@ void __cdecl16far attact_usesAlignUp42(void)
   debugEmptyCellCount = 0;
   index = 0;
   do {
-    uVar4 = DAT_2000_d190;
+    uVar4 = _DAT_2000_d190;
     if (EntityCount <= index) {
       GGameState = 0x3c;
       if (DebugVerbose != false) {
@@ -715,7 +715,7 @@ void __cdecl16far attact_usesAlignUp42(void)
       return;
     }
     peVar14 = Entities + index;
-    uStack_1e = (entity_t *)CONCAT22(DAT_2000_d190,peVar14);
+    uStack_1e = (entity_t *)CONCAT22(_DAT_2000_d190,peVar14);
     uVar8 = ovr_alignUp4((peVar14->base).destX);
     uVar15 = 0x2379;
     uVar9 = ovr_alignUp4((uStack_1e->base).x);
@@ -882,7 +882,7 @@ L_attact_3f0b_1082_1477:
               cStack_1a = (char)((ulong)((peVar14->base).animFrame + 0xf) / 0x10);
               while (cStack_1a != '\0') {
                 uVar15 = 0x22ff;
-                ovr_agnt_usesAgntCount6(Entities + index,DAT_2000_d190);
+                ovr_agnt_usesAgntCount6(Entities + index,_DAT_2000_d190);
                 cStack_1a = cStack_1a + -1;
               }
             }
@@ -948,7 +948,7 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force,...)
         uVar2 = func_0x0004f501(0x236f,itemIndex & 0xff);
         callResultTemp = uVar2;
         if (uVar2 < uStack_6) {
-          (*(uint8_t *)((uint8_t *)&(uStack_6))) = (uint8_t)uVar2;
+          uStack_6._0_1_ = (uint8_t)uVar2;
           ((uint8_t *)menuItemRow)[itemIndex] = (uint8_t)uStack_6;
           uStack_6 = uVar2;
         }
@@ -1263,19 +1263,19 @@ attact_compute2(uint16_t menuIndex,far_t pctOut,far_t remainderOut,far_t partOut
 {
   int iVar1;
   
-  *(char *)MK_FP(pctOut.seg, pctOut.ofs) =
+  *(char *)pctOut =
        (char)(((0x1c - (char)((undefined *)&menuCursorY)[menuIndex & 0xff]) * 100) / 0x1c);
   iVar1 = (int)(char)((undefined *)&menuCursorY)[menuIndex & 0xff] << 1;
   if (iVar1 == 0) {
-    *(undefined1 *)MK_FP(partOut.seg, partOut.ofs) = 0;
-    *(undefined1 *)MK_FP(remainderOut.seg, remainderOut.ofs) = 0;
+    *(undefined1 *)partOut = 0;
+    *(undefined1 *)remainderOut = 0;
   }
   else {
-    *(char *)MK_FP(partOut.seg, partOut.ofs) =
-         (char)((int)((100 - (uint)*(byte *)MK_FP(pctOut.seg, pctOut.ofs)) *
+    *(char *)partOut =
+         (char)((int)((100 - (uint)*(byte *)pctOut) *
                      ((int)(char)((undefined *)&menuCursorX)[menuIndex & 0xff] + iVar1 / 2 + -0x1c))
                / iVar1);
-    *(char *)MK_FP(remainderOut.seg, remainderOut.ofs) = ('d' - *(char *)MK_FP(pctOut.seg, pctOut.ofs)) - *(char *)MK_FP(partOut.seg, partOut.ofs);
+    *(char *)remainderOut = ('d' - *(char *)pctOut) - *(char *)partOut;
   }
   return;
 }
@@ -1296,17 +1296,17 @@ attact_compute3(far_t table,uint16_t index,far_t pctOut,far_t remainderOut,far_t
   
   uVar3 = table.seg;
   uVar2 = table.ofs;
-  *(char *)MK_FP(pctOut.seg, pctOut.ofs) = (char)(((0x1c - *(char *)(uVar2 + (index & 0xff) + 9)) * 100) / 0x1c);
+  *(char *)pctOut = (char)(((0x1c - *(char *)(uVar2 + (index & 0xff) + 9)) * 100) / 0x1c);
   iVar1 = (int)*(char *)(uVar2 + (index & 0xff) + 9) << 1;
   if (iVar1 == 0) {
-    *(undefined1 *)MK_FP(partOut.seg, partOut.ofs) = 0;
-    *(undefined1 *)MK_FP(remainderOut.seg, remainderOut.ofs) = 0;
+    *(undefined1 *)partOut = 0;
+    *(undefined1 *)remainderOut = 0;
   }
   else {
-    *(char *)MK_FP(partOut.seg, partOut.ofs) =
-         (char)((int)((100 - (uint)*(byte *)MK_FP(pctOut.seg, pctOut.ofs)) *
+    *(char *)partOut =
+         (char)((int)((100 - (uint)*(byte *)pctOut) *
                      ((int)*(char *)(uVar2 + (index & 0xff) + 4) + iVar1 / 2 + -0x1c)) / iVar1);
-    *(char *)MK_FP(remainderOut.seg, remainderOut.ofs) = ('d' - *(char *)MK_FP(pctOut.seg, pctOut.ofs)) - *(char *)MK_FP(partOut.seg, partOut.ofs);
+    *(char *)remainderOut = ('d' - *(char *)pctOut) - *(char *)partOut;
   }
   return;
 }
@@ -1456,8 +1456,8 @@ void __cdecl16far attact_usesUpdSeason(void)
     bVar1 = 0xfffe < tickCountLo;
     tickCountLo = tickCountLo + 1;
     tickCountHi = tickCountHi + (uint)bVar1;
-    (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter))) = *(undefined2 *)BDA_DailyTimeCounter;
+    GDailyTimeCounter._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+    GDailyTimeCounter._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
   }
   return;
 }
@@ -1628,7 +1628,7 @@ void __cdecl16far attact_usesBlitLoadRleGfx(void)
   iVar1 = (int)(((long)(int)uVar2 * 0xc & 0xffffU) / 0xf);
   gfx.seg = *(uint16_t *)((int)&timeOfDayGfx[0].seg + iVar1 * 4);
   gfx.ofs = ((far_t *)timeOfDayGfx + iVar1)->ofs;
-  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c510)));
+  ovr_blitLoadRleGfx(gfx,(far_t)0xa000c510);
   ovr_ovc13_blitAnimFrame();
   return;
 }
@@ -1668,17 +1668,17 @@ void __cdecl16far attact_usesLDIV_at_2(void)
   lVar8 = CONCAT22((uint16_t)((ulong)in_stack_0000ffde >> 0x10),unaff_SI);
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&rect2;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410088d)),dst);
+  F_SCOPY((far_t)0x2410088d,dst);
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)&rect;
-  F_SCOPY(far_from_u32((uint32_t)(0x24100897)),dst_00);
+  F_SCOPY((far_t)0x24100897,dst_00);
   if (GameRunning == false) {
     cStack_17 = MiceNeedsUpdate == '\0';
     bVar1 = ovr_draw_textArena();
     if (bVar1) {
       attact_usesEntityCount2
                 ((uint16_t *)CONCAT22(unaff_SS,&sum),(uint16_t *)CONCAT22(unaff_SS,&stack0xffe0));
-      if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) ||
+      if (((uint)sum == 0 && sum._2_2_ == 0) ||
          ((uint16_t)((ulong)lVar8 >> 0x10) == 0 && iStack_1e == 0)) {
         if (cStack_17 != '\0') {
           ovr_miceRestoreArea((brect_t *)&rect);
@@ -1695,10 +1695,10 @@ void __cdecl16far attact_usesLDIV_at_2(void)
           }
           gfx.seg = nwpanel1Cut5Seg;
           gfx.ofs = nwpanel1Cut5Ofs;
-          ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c510)),0x10);
+          ovr_blitLoadRleGfx(gfx,(far_t)0xa000c510,0x10);
           gfx_00.seg = panel01Cut3Seg;
           gfx_00.ofs = panel01Cut3Ofs;
-          ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa000c51d)),0x1d);
+          ovr_blitLoadRleGfx(gfx_00,(far_t)0xa000c51d,0x1d);
           if (cStack_17 != '\0') {
             ovr_miceBlitRect((brect_t *)&rect);
           }
@@ -1708,12 +1708,12 @@ void __cdecl16far attact_usesLDIV_at_2(void)
         }
         mapViewActive = '\0';
         uVar5 = (uint)((ulong)lVar8 >> 0x10);
-        if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) && (uVar5 != 0 || iStack_1e != 0)) {
+        if (((uint)sum == 0 && sum._2_2_ == 0) && (uVar5 != 0 || iStack_1e != 0)) {
           uVar5 = 0;
         }
-        else if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) || (uVar5 != 0 || iStack_1e != 0)) {
+        else if (((uint)sum == 0 && sum._2_2_ == 0) || (uVar5 != 0 || iStack_1e != 0)) {
           plVar3 = (long *)(uVar5 + (uint)sum);
-          iVar6 = iStack_1e + (*(uint16_t *)((uint8_t *)&(sum) + 2)) + (uint)CARRY2(uVar5,(uint)sum);
+          iVar6 = iStack_1e + sum._2_2_ + (uint)CARRY2(uVar5,(uint)sum);
           uVar4 = 0;
           plVar2 = LXMUL_at_(plVar3,CONCAT22(unaff_DI,iVar6),lVar8);
           lVar7 = LDIV_at_((long)CONCAT22(uVar4,plVar2),(long)CONCAT22(iVar6,plVar3));
@@ -1727,13 +1727,13 @@ void __cdecl16far attact_usesLDIV_at_2(void)
                     ((uint16_t *)CONCAT22(unaff_SS,&sum),(uint16_t *)CONCAT22(unaff_SS,&stack0xffe0)
                     );
           uVar9 = (uint)((ulong)lVar8 >> 0x10);
-          if (((uint)sum != 0 || (*(uint16_t *)((uint8_t *)&(sum) + 2)) != 0) || (uVar9 != 0 || iStack_1e != 0)) {
-            if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) && (uVar9 != 0 || iStack_1e != 0)) {
+          if (((uint)sum != 0 || sum._2_2_ != 0) || (uVar9 != 0 || iStack_1e != 0)) {
+            if (((uint)sum == 0 && sum._2_2_ == 0) && (uVar9 != 0 || iStack_1e != 0)) {
               iVar6 = 0;
             }
-            else if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) || (uVar9 != 0 || iStack_1e != 0)) {
+            else if (((uint)sum == 0 && sum._2_2_ == 0) || (uVar9 != 0 || iStack_1e != 0)) {
               plVar3 = (long *)(uVar9 + (uint)sum);
-              iVar6 = iStack_1e + (*(uint16_t *)((uint8_t *)&(sum) + 2)) + (uint)CARRY2(uVar9,(uint)sum);
+              iVar6 = iStack_1e + sum._2_2_ + (uint)CARRY2(uVar9,(uint)sum);
               uVar4 = 0;
               plVar2 = LXMUL_at_(plVar3,CONCAT22(unaff_DI,iVar6),lVar8);
               lVar8 = LDIV_at_((long)CONCAT22(uVar4,plVar2),(long)CONCAT22(iVar6,plVar3));

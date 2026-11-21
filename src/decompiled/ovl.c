@@ -310,11 +310,11 @@ undefined2 __cdecl16near __InitModules(void)
       }
       else {
         ((byte *)__C0_ASM_CopyRight + 0x14)[0] = 0xc3;
-        uVar3 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 43));
+        uVar3 = GUnitDescriptions._43_2_;
         ((byte *)__C0_ASM_CopyRight + 0x14)[1] = 4;
         puVar1 = (uint *)__C0_ASM_CopyRight;
-        bVar7 = CARRY2(*puVar1,(*(uint16_t *)((uint8_t *)&(GUnitDescriptions[10]) + 1)));
-        *puVar1 = *puVar1 + (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[10]) + 1));
+        bVar7 = CARRY2(*puVar1,GUnitDescriptions[10]._1_2_);
+        *puVar1 = *puVar1 + GUnitDescriptions[10]._1_2_;
         *(uint *)((byte *)__C0_ASM_CopyRight + 2) =
              *(int *)((byte *)__C0_ASM_CopyRight + 2) + uVar3 + (uint)bVar7;
         __OvrCalcSize();
@@ -326,7 +326,7 @@ undefined2 __cdecl16near __InitModules(void)
     }
     pcVar5 = pcVar5 + 8;
   } while (pcVar5 < (char *)0x478);
-  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 47)) = uVar4 + 2;
+  GUnitDescriptions._47_2_ = uVar4 + 2;
   return 0;
 }
 
@@ -347,30 +347,30 @@ void __cdecl16near __OvrInitReadSegs(void)
   bool bVar6;
   undefined2 uVar7;
   
-  uVar7 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 59));
-  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 55));
-  iVar3 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 55));
-  iVar5 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 55));
-  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xe]) + 1));
+  uVar7 = GUnitDescriptions._59_2_;
+  GUnitDescriptions[0x10]._1_2_ = GUnitDescriptions._55_2_;
+  iVar3 = GUnitDescriptions._55_2_;
+  iVar5 = GUnitDescriptions._55_2_;
+  GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions[0xe]._1_2_;
   while ((iVar4 = iVar3, iVar3 = *(int *)((byte *)__C0_ASM_CopyRight + 0xe), iVar3 != 0 &&
          (uVar2 = (int)(CONCAT22((*(int *)((byte *)__C0_ASM_CopyRight + 2) -
                                  *(int *)((byte *)__C0_ASM_CopyRight + 2)) -
                                  (uint)(*(uint *)__C0_ASM_CopyRight < *(uint *)__C0_ASM_CopyRight),
                                  *(uint *)__C0_ASM_CopyRight - *(uint *)__C0_ASM_CopyRight) / 0x10)
-                  + (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)), uVar2 <= (uint)uVar7))) {
-    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
+                  + GUnitDescriptions[0xd]._1_2_, uVar2 <= (uint)uVar7))) {
+    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = GUnitDescriptions[0xd]._1_2_;
     *(int *)((byte *)__C0_ASM_CopyRight + 0x18) = iVar3;
     iVar5 = iVar4;
-    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = uVar2;
+    GUnitDescriptions[0xd]._1_2_ = uVar2;
   }
   ((byte *)__C0_ASM_CopyRight + 0x18)[0] = 0;
   ((byte *)__C0_ASM_CopyRight + 0x18)[1] = 0;
-  if ((*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) != (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xe]) + 1))) {
+  if (GUnitDescriptions[0xd]._1_2_ != GUnitDescriptions[0xe]._1_2_) {
     bVar6 = false;
     __OvrRead();
     if (!bVar6) {
       uVar7 = 0x2410;
-      iVar3 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
+      iVar3 = GUnitDescriptions[0x10]._1_2_;
       do {
         if (*(int *)((byte *)__C0_ASM_CopyRight + 6) != 0) {
           __OvrDoFixups();
@@ -572,7 +572,7 @@ void __cdecl16near __OvrAllocateSpace(void)
   undefined2 unaff_ES;
   byte in_CF;
   
-  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 63)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 63)) + 1;
+  GUnitDescriptions._63_2_ = GUnitDescriptions._63_2_ + 1;
   __OvrCalcSize();
   while( true ) {
     uVar2 = __OvrGetSegMemInfo();
@@ -582,19 +582,19 @@ void __cdecl16near __OvrAllocateSpace(void)
     }
     in_CF = 0;
     if (((byte *)__C0_ASM_CopyRight)[0x17] == 0) {
-      (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
+      GUnitDescriptions[0x10]._1_2_ = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
       __OvrAllocEvict();
       __OvrCalcCodeSz();
     }
     else {
       pbVar1 = (byte *)__C0_ASM_CopyRight + 0x17;
-      (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
+      GUnitDescriptions[0x10]._1_2_ = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
       *pbVar1 = *pbVar1 - 1;
       __OvrCompactHeap();
       __OvrAddToLoadList_2();
     }
   }
-  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
+  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = GUnitDescriptions[0xd]._1_2_;
   return;
 }
 
@@ -613,7 +613,7 @@ void __cdecl16near __OvrFixupTrap(void)
   int iVar4;
   undefined1 uVar5;
   
-  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xc]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xc]) + 1)) + 1;
+  GUnitDescriptions[0xc]._1_2_ = GUnitDescriptions[0xc]._1_2_ + 1;
   if (*(int *)((byte *)__C0_ASM_CopyRight + 0xc) == 0) {
     uVar5 = 0;
     ((byte *)__C0_ASM_CopyRight)[0x16] = ((byte *)__C0_ASM_CopyRight)[0x16] | 8;
@@ -634,9 +634,9 @@ void __cdecl16near __OvrFixupTrap(void)
   ((byte *)__C0_ASM_CopyRight)[0x17] =
        ((byte *)__C0_ASM_CopyRight)[0x17] + (((byte *)__C0_ASM_CopyRight)[0x16] & 3);
   uVar2 = __OvrGetSegMemInfo();
-  iVar4 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
+  iVar4 = GUnitDescriptions[0x10]._1_2_;
   for (; (iVar1 = *(int *)((byte *)__C0_ASM_CopyRight + 0x18), iVar1 != 0 &&
-         (uVar2 < (uint)(*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xb]) + 1)))); uVar2 = uVar3 + uVar2) {
+         (uVar2 < (uint)GUnitDescriptions[0xb]._1_2_)); uVar2 = uVar3 + uVar2) {
     if (((byte *)__C0_ASM_CopyRight)[0x17] == 0) {
       __OvrTrapJmpsAndStack();
       uVar3 = __OvrCalcCodeSz();
@@ -679,22 +679,22 @@ void __cdecl16near __OvrAddToLoadList(void)
   
   iVar2 = 0;
   do {
-    iVar4 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
+    iVar4 = GUnitDescriptions[0x10]._1_2_;
     iVar2 = iVar2 + 1;
-    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
-  } while ((*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) != 0);
-  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 59));
+    GUnitDescriptions[0x10]._1_2_ = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
+  } while (GUnitDescriptions[0x10]._1_2_ != 0);
+  GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions._59_2_;
   do {
     iVar3 = iVar2;
-    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
-    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = iVar4;
+    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18) = GUnitDescriptions[0x10]._1_2_;
+    GUnitDescriptions[0x10]._1_2_ = iVar4;
     uVar1 = __OvrCalcCodeSz();
-    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) - uVar1;
+    GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions[0xd]._1_2_ - uVar1;
     __OvrCompactHeap();
     iVar2 = iVar3 + -1;
     iVar4 = iVar3;
   } while (iVar2 != 0);
-  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xe]) + 1));
+  GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions[0xe]._1_2_;
   return;
 }
 
@@ -785,7 +785,7 @@ void __cdecl16near __OvrTrapJmpsAndStack(void)
     pbVar4 = (byte *)__C0_ASM_CopyRight + 0x1c;
     do {
       uVar2 = *(undefined2 *)(pbVar4 + 1);
-      *(undefined2 *)pbVar4 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[9]) + 1));
+      *(undefined2 *)pbVar4 = GUnitDescriptions[9]._1_2_;
       pbVar1 = pbVar4 + 4;
       *(undefined2 *)(pbVar4 + 2) = uVar2;
       pbVar4 = pbVar4 + 5;
@@ -814,9 +814,9 @@ undefined2 __cdecl16near __OvrCompactHeap(void)
   undefined2 unaff_ES;
   bool bVar9;
   
-  uVar3 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
+  uVar3 = GUnitDescriptions[0xd]._1_2_;
   uVar2 = *(uint *)((byte *)__C0_ASM_CopyRight + 0xc);
-  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
+  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = GUnitDescriptions[0xd]._1_2_;
   uVar4 = *(int *)((byte *)__C0_ASM_CopyRight + 4) + 1U >> 1;
   puVar6 = (undefined2 *)0x0;
   bVar9 = uVar2 <= (uint)uVar3;
@@ -860,7 +860,7 @@ void __cdecl16near __OvrAddToLoadList_2(void)
   undefined2 unaff_ES;
   
   uVar2 = __OvrCalcCodeSz();
-  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) + uVar2;
+  GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions[0xd]._1_2_ + uVar2;
   iVar1 = 0x226e;
   do {
     iVar3 = iVar1;
@@ -930,10 +930,10 @@ int __cdecl16near __OvrGetSegMemInfo(void)
 {
   int iVar1;
   
-  if (((*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) == 0) ||
-     (iVar1 = *(uint *)((byte *)__C0_ASM_CopyRight + 0xc) - (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)),
-     *(uint *)((byte *)__C0_ASM_CopyRight + 0xc) < (uint)(*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)))) {
-    iVar1 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 59)) - (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
+  if ((GUnitDescriptions[0x10]._1_2_ == 0) ||
+     (iVar1 = *(uint *)((byte *)__C0_ASM_CopyRight + 0xc) - GUnitDescriptions[0xd]._1_2_,
+     *(uint *)((byte *)__C0_ASM_CopyRight + 0xc) < (uint)GUnitDescriptions[0xd]._1_2_)) {
+    iVar1 = GUnitDescriptions._59_2_ - GUnitDescriptions[0xd]._1_2_;
   }
   return iVar1;
 }

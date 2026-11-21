@@ -404,23 +404,23 @@ void __cdecl16far ovc13_usesBlitRects(void)
   iStack_8 = 7;
   for (iStack_6 = 0; iStack_6 < 0x10; iStack_6 = iStack_6 + 1) {
     iVar7 = 0xef;
-    pbStack_10 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
+    pbStack_10 = (byte *)CONCAT22(GMapCells._2_2_,
                                    (*(byte (*) [59] [148])GMapCells)[PanelGridY + iStack_6 + 1] +
                                    PanelGridX);
     pbVar5 = (*(byte (*) [59] [148])GMapCells)[PanelGridY + iStack_6] + PanelGridX;
-    pbStack_14 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar5);
+    pbStack_14 = (byte *)CONCAT22(GMapCells._2_2_,pbVar5);
     psVar6 = (*(short (*) [60] [148])GMapFlags)[PanelGridY + iStack_6] + PanelGridX;
-    psStack_18 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar6);
+    psStack_18 = (uint *)CONCAT22(GMapFlags._2_2_,psVar6);
     if (PanelGridY + iStack_6 != 0 && SCARRY2(PanelGridY,iStack_6) == PanelGridY + iStack_6 < 0) {
       psVar6 = ((short (*) [60] [148])GMapFlags)[-1][PanelGridY + iStack_6 + 0x3b] + PanelGridX;
     }
-    psStack_1c = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar6);
+    psStack_1c = (uint *)CONCAT22(GMapFlags._2_2_,psVar6);
     cornerA = *pbStack_10;
-    pbStack_10 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
+    pbStack_10 = (byte *)CONCAT22(GMapCells._2_2_,
                                    (*(byte (*) [59] [148])GMapCells)[PanelGridY + iStack_6 + 1] +
                                    PanelGridX + 1);
     cornerC = *pbStack_14;
-    pbStack_14 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar5 + 1);
+    pbStack_14 = (byte *)CONCAT22(GMapCells._2_2_,pbVar5 + 1);
     for (iVar8 = 0; iVar8 < 0x23; iVar8 = iVar8 + 1) {
       cornerB = *pbStack_10;
       pbStack_10 = (byte *)CONCAT22(uStack_e,pbStack_10 + 1);
@@ -847,25 +847,25 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   iStack_18 = 7;
   for (iStack_16 = 0; iStack_16 < 0x30; iStack_16 = iStack_16 + 1) {
     iVar8 = 0xc;
-    pbStack_8 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
+    pbStack_8 = (byte *)CONCAT22(GMapCells._2_2_,
                                   (*(byte (*) [59] [148])GMapCells)[Seed_2000_d10e + iStack_16 + 1]
                                   + Seed_2000_d110);
     pbVar6 = (*(byte (*) [59] [148])GMapCells)[Seed_2000_d10e + iStack_16] + Seed_2000_d110;
-    pbStack_c = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar6);
+    pbStack_c = (byte *)CONCAT22(GMapCells._2_2_,pbVar6);
     psVar7 = (*(short (*) [60] [148])GMapFlags)[Seed_2000_d10e + iStack_16] + Seed_2000_d110;
-    psStack_10 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar7);
+    psStack_10 = (uint *)CONCAT22(GMapFlags._2_2_,psVar7);
     if (Seed_2000_d10e + iStack_16 != 0 &&
         SCARRY2(Seed_2000_d10e,iStack_16) == Seed_2000_d10e + iStack_16 < 0) {
       psVar7 = ((short (*) [60] [148])GMapFlags)[-1][Seed_2000_d10e + iStack_16 + 0x3b] +
                Seed_2000_d110;
     }
-    psStack_14 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar7);
+    psStack_14 = (uint *)CONCAT22(GMapFlags._2_2_,psVar7);
     iStack_1c = (int)(char)*pbStack_8;
-    pbStack_8 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
+    pbStack_8 = (byte *)CONCAT22(GMapCells._2_2_,
                                   (*(byte (*) [59] [148])GMapCells)[Seed_2000_d10e + iStack_16 + 1]
                                   + Seed_2000_d110 + 1);
     iStack_20 = (int)(char)*pbStack_c;
-    pbStack_c = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar6 + 1);
+    pbStack_c = (byte *)CONCAT22(GMapCells._2_2_,pbVar6 + 1);
     for (iVar9 = 0; iVar9 < 0x69; iVar9 = iVar9 + 1) {
       iStack_1a = iStack_1c;
       iVar2 = iStack_1a;
@@ -879,12 +879,12 @@ void __cdecl16far ovc13_usesAlignUp4(void)
       psStack_10 = (uint *)CONCAT22(uStack_e,psStack_10 + 1);
       uStack_2a = *psStack_14;
       psStack_14 = (uint *)CONCAT22(uStack_12,psStack_14 + 1);
-      (*(uint8_t *)((uint8_t *)&(iStack_1a))) = (uint8_t)iStack_1c;
+      iStack_1a._0_1_ = (uint8_t)iStack_1c;
       uVar3 = (uint8_t)iStack_1a;
       iStack_1c = (int)(char)cornerB;
       iStack_1a = iVar2;
       if ((uStack_28 & 4) == 0) {
-        (*(uint8_t *)((uint8_t *)&(iStack_1e))) = (uint8_t)iStack_20;
+        iStack_1e._0_1_ = (uint8_t)iStack_20;
         cornerC_00 = (uint8_t)iStack_1e;
         uVar11 = uStack_22;
         iStack_20 = (int)(char)cornerC;
@@ -975,7 +975,7 @@ void __cdecl16far ovc13_usesBlitLoadRleGfx2(int x,int y,char force,...)
   if (((force != '\0') || (GfxRndSeed != uVar1)) || (GfxRndSeed2 != iVar2)) {
     gfx.seg = FontHandle.seg;
     gfx.ofs = FontHandle.ofs;
-    ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)));
+    ovr_blitLoadRleGfx(gfx,(far_t)0xa000c31d);
     ovr_attact_usesAgntFlag1();
     AgntFlag1 = false;
     GfxRndSeed2 = iVar2;
@@ -1015,7 +1015,7 @@ void __cdecl16far ovc13_usesBlitLoadRleGfx3(int x,int y,char force,...)
   if (((force != '\0') || (GfxRndSeed != uVar1)) || (GfxRndSeed2 != iVar2)) {
     gfx.seg = FontHandle.seg;
     gfx.ofs = FontHandle.ofs;
-    ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)));
+    ovr_blitLoadRleGfx(gfx,(far_t)0xa000c31d);
     ovr_attact_usesAgntFlag1();
     AgntFlag1 = false;
     GfxRndSeed2 = iVar2;

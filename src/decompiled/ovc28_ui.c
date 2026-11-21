@@ -39,7 +39,7 @@ void __cdecl16far ovc28_usesBlitLoadRleGfx(void)
     ovr_ovc18_blitPanelIfNotRunning();
     gfx.seg = FontHandle.seg;
     gfx.ofs = FontHandle.ofs;
-    ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)));
+    ovr_blitLoadRleGfx(gfx,(far_t)0xa000c31d);
   }
   return;
 }
@@ -165,10 +165,10 @@ void __cdecl16far ovc28_textHalflingCastle(void)
   if (GameRunning == false) {
     gfx_00.seg = panel01Cut2Seg;
     gfx_00.ofs = panel01Cut2Ofs;
-    ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa0008fa4)));
+    ovr_blitLoadRleGfx(gfx_00,(far_t)0xa0008fa4);
     gfx_01.seg = trianglsCut5Seg;
     gfx_01.ofs = trianglsCut5Ofs;
-    ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa000e249)));
+    ovr_blitLoadRleGfx(gfx_01,(far_t)0xa000e249);
     for (iVar5 = 0; iVar5 < 5; iVar5 = iVar5 + 1) {
       if (((uint8_t *)MenuItemEnabled)[iVar5] != 0xff) {
         TextBlitX = 0xea;
@@ -410,7 +410,7 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
     uVar3 = Font01.ofs;
     uVar4 = Font01.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,unaff_SS),
-                                        (char *)CONCAT22(Font01.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),Font01.seg,'E',3);
+                                        (char *)CONCAT22(Font01.ofs,label._2_2_),Font01.seg,'E',3);
     ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
     BlitLetterType = 0;
   }
@@ -419,7 +419,7 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
     uVar3 = Font01.ofs;
     uVar4 = Font01.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,unaff_SS),
-                                        (char *)CONCAT22(Font01.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),Font01.seg,'E',3);
+                                        (char *)CONCAT22(Font01.ofs,label._2_2_),Font01.seg,'E',3);
     ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
   }
   else {
@@ -427,7 +427,7 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
     uVar3 = Font01.ofs;
     uVar4 = Font01.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label,unaff_SS),
-                                        (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
+                                        (char *)CONCAT22(FontMain.ofs,label._2_2_),FontMain.seg,'E',
                                         3);
     ovr_blitText(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
   }
@@ -446,7 +446,7 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
     uVar3 = FontMain.ofs;
     uVar4 = FontMain.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,unaff_SS),
-                                        (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
+                                        (char *)CONCAT22(FontMain.ofs,label._2_2_),FontMain.seg,'E',
                                         3);
     ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
     BlitLetterType = 0;
@@ -456,7 +456,7 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
     uVar3 = FontMain.ofs;
     uVar4 = FontMain.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,unaff_SS),
-                                        (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
+                                        (char *)CONCAT22(FontMain.ofs,label._2_2_),FontMain.seg,'E',
                                         3);
     ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
   }
@@ -465,7 +465,7 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
     uVar3 = FontMain.ofs;
     uVar4 = FontMain.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label,unaff_SS),
-                                        (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
+                                        (char *)CONCAT22(FontMain.ofs,label._2_2_),FontMain.seg,'E',
                                         3);
     ovr_blitText(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
   }
@@ -537,9 +537,9 @@ void __cdecl16far ovc28_startCrossBlit(void)
                       (char)CrossBlitY);
   dst.seg = 0xa000;
   dst.ofs = CrossBlitX + CrossBlitY * 0x140;
-  (*(uint8_t *)((uint8_t *)&(gfx.seg))) = (char)CrossBlitGfx.seg;
+  gfx.seg._0_1_ = (char)CrossBlitGfx.seg;
   gfx.ofs = CrossBlitGfx.ofs;
-  (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) = (char)(CrossBlitGfx.seg >> 8);
+  gfx.seg._1_1_ = (char)(CrossBlitGfx.seg >> 8);
   CrossBlitPtr.seg = in_DX;
   ovr_blitLoadRleGfx(gfx,dst);
   if (MouseMoved == 0) {

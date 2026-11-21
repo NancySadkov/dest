@@ -19,8 +19,8 @@ void __cdecl16far ovc07_swapWords(uint16_t *wordA,uint16_t *wordB)
   
   uVar1 = *(undefined2 *)CONCAT22((uint16_t *)wordA,in_stack_00000004);
   *(undefined2 *)CONCAT22((uint16_t *)wordA,in_stack_00000004) =
-       *(undefined2 *)CONCAT22((uint16_t *)wordB,(*(uint16_t *)((uint8_t *)&(wordA) + 2)));
-  *(undefined2 *)CONCAT22((uint16_t *)wordB,(*(uint16_t *)((uint8_t *)&(wordA) + 2))) = uVar1;
+       *(undefined2 *)CONCAT22((uint16_t *)wordB,wordA._2_2_);
+  *(undefined2 *)CONCAT22((uint16_t *)wordB,wordA._2_2_) = uVar1;
   return;
 }
 

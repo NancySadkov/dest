@@ -101,7 +101,7 @@ stg_tmp_t * __cdecl16far grabLbmTR(int16_t file_id,...)
   far_t pixels;
   far_t pixels_00;
   
-  (*(uint16_t *)((uint8_t *)&(r))) = ovr_grabLbm(file_id,0,0);
+  r._0_2_ = ovr_grabLbm(file_id,0,0);
   pixels.seg = (((stg_tmp_t *)r)->aptr).seg;
   pixels.ofs = (&((stg_tmp_t *)r)->aptr)->ofs;
   ovr_grabRemap(pixels,0x14,0x0);
@@ -285,15 +285,15 @@ void __cdecl16far stshWriteFile(int fhandle,far_t buf,DW sz,...)
     if ((0 < (int)sz.hi) || ((wrsz = sz.lo, -1 < (long)sz && (0xbfff < sz.lo)))) {
       wrsz = 0xc000;
     }
-    (*(uint16_t *)((uint8_t *)&(pbuf))) = ovr_mkp((uint32_t *)buf.ofs,buf.seg,unaff_DI);
-    uVar2 = (*(uint16_t *)((uint8_t *)&(pbuf) + 2));
-    write(fhandle,(uint32_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(pbuf) + 2)),(uint32_t *)pbuf),wrsz);
-    buf.seg = (*(uint16_t *)((uint8_t *)&(pbuf) + 2));
+    pbuf._0_2_ = ovr_mkp((uint32_t *)buf.ofs,buf.seg,unaff_DI);
+    uVar2 = pbuf._2_2_;
+    write(fhandle,(uint32_t *)CONCAT22(pbuf._2_2_,(uint32_t *)pbuf),wrsz);
+    buf.seg = pbuf._2_2_;
     buf.ofs = (int)(uint32_t *)pbuf + wrsz;
     uVar1 = sz.lo - wrsz;
     sz.hi = sz.hi - (sz.lo < wrsz);
     sz.lo = uVar1;
-    (*(uint16_t *)((uint8_t *)&(pbuf) + 2)) = uVar2;
+    pbuf._2_2_ = uVar2;
   } while (uVar1 != 0 || sz.hi != 0);
   return;
 }
@@ -357,7 +357,7 @@ spr_t * __cdecl16far stshSpriteStub(anm_t *anms,uint16_t nanims,...)
   if (StshSprIndex < 0x4f) {
     dst.seg = (uint16_t)((spr_t *)StshSprites + StshSprIndex);
     StshSprIndex = StshSprIndex + 1;
-    dst.ofs = (uint16_t)ovr_mkp((uint32_t *)dst.seg,(*(uint16_t *)((uint8_t *)&(StshSprites) + 2)),(uint16_t)unaff_DI);
+    dst.ofs = (uint16_t)ovr_mkp((uint32_t *)dst.seg,StshSprites._2_2_,(uint16_t)unaff_DI);
     _fsetmem((void *)CONCAT22(dst.seg,dst.ofs),0xb0,0);
     i = 0;
     while ((i < in_stack_00000008 && (anms[i].nframes != 0x0))) {
@@ -495,7 +495,7 @@ cte_t * __cdecl16far stshStoreFile(uint8_t *data,...)
     DStack_c.lo = 0x1000;
     fVar4.seg = uStack_6;
     fVar4.ofs = sz.hi;
-    fVar4 = PADD_at_(far_from_u32((uint32_t)(DStack_c)),fVar4);
+    fVar4 = PADD_at_((far_t)DStack_c,fVar4);
     ofs = fVar4.seg;
     psVar4 = (cte_t *)ovr_mkp((uint32_t *)fVar4.ofs,ofs,0x1000);
     (psVar4->sz).hi = sz.hi;
@@ -746,18 +746,18 @@ uint32_t * __cdecl16far stshWrite(uint32_t *__return_storage_ptr__,uint8_t *data
   uint32_t *puVar1;
   uint16_t unaff_BP;
   
-  if ((*(uint16_t *)((uint8_t *)&(data) + 2)) == (long *)0x0 && (uint16_t)sz == 0) {
+  if (data._2_2_ == (long *)0x0 && (uint16_t)sz == 0) {
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0x58);
   }
   buf.seg = (uint16_t)(uint8_t *)data;
   buf.ofs = (uint16_t)__return_storage_ptr__;
   sz_00.hi = (uint16_t)sz;
-  sz_00.lo = (uint16_t)(*(uint16_t *)((uint8_t *)&(data) + 2));
+  sz_00.lo = (uint16_t)data._2_2_;
   stshWriteFile(StshFile,buf,sz_00);
   sz_01.hi = unaff_BP;
   sz_01.lo = (uint16_t)sz;
-  puVar1 = (uint32_t *)stshAlloc_2((*(uint16_t *)((uint8_t *)&(data) + 2)),sz_01);
+  puVar1 = (uint32_t *)stshAlloc_2(data._2_2_,sz_01);
   return puVar1;
 }
 
@@ -790,7 +790,7 @@ far_t * __cdecl16far stshStoreFile_2(far_t *__return_storage_ptr__,char *filenam
     plStack_c = filelength(__return_storage_ptr___00,unaff_DI);
     len = (uint16_t)plStack_c;
     uStack_8 = in_DX;
-    if ((*(uint8_t *)((uint8_t *)&(filename) + 2)) != '\0') {
+    if (filename._2_1_ != '\0') {
       len = (int)plStack_c + 0xf;
       uStack_8 = in_DX + ((long *)0xfff0 < plStack_c);
     }
@@ -924,7 +924,7 @@ void __cdecl16far init_ui_gfxes(void)
   ovr_driver_fillRect(0,0,0x13f,199,0x0,in_DX,0);
   gfx.seg = gamfont1Cut1Seg;
   gfx.ofs = (uint16_t)gamfont1Cut1Ofs;
-  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)((ulong)in_DX << 0x10)),0);
+  ovr_blitLoadRleGfx(gfx,(far_t)((ulong)in_DX << 0x10),0);
   init_special_graphics((char *)CONCAT22(gamfont1Cut1Seg,gamfont1Cut1Ofs));
   hndl.seg = unaff_DI;
   hndl.ofs = in_DX;
@@ -933,7 +933,7 @@ void __cdecl16far init_ui_gfxes(void)
   ovr_driver_fillRect(0,0,0x13f,199,0x0,in_DX,0);
   gfx_00.seg = davfontCut1Seg;
   gfx_00.ofs = (uint16_t)davfontCut1Ofs;
-  ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)((ulong)in_DX << 0x10)),0);
+  ovr_blitLoadRleGfx(gfx_00,(far_t)((ulong)in_DX << 0x10),0);
   init_special_graphics((char *)CONCAT22(davfontCut1Seg,davfontCut1Ofs));
   hndl_00.seg = unaff_DI;
   hndl_00.ofs = in_DX;
@@ -942,7 +942,7 @@ void __cdecl16far init_ui_gfxes(void)
   ovr_driver_fillRect(0,0,0x13f,199,0x0,in_DX,0);
   gfx_01.seg = davfont2Cut1Seg;
   gfx_01.ofs = (uint16_t)davfont2Cut1Ofs;
-  ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)((ulong)in_DX << 0x10)),0);
+  ovr_blitLoadRleGfx(gfx_01,(far_t)((ulong)in_DX << 0x10),0);
   init_special_graphics((char *)CONCAT22(davfont2Cut1Seg,davfont2Cut1Ofs));
   hndl_01.seg = unaff_DI;
   hndl_01.ofs = in_DX;
@@ -955,7 +955,7 @@ void __cdecl16far init_ui_gfxes(void)
     ovr_driver_fillRect(0,0,0x11,0x11,0x0,in_DX,0);
     gfx_02.seg = *(uint16_t *)((int)&MiceCursors[0].seg + i * 4);
     gfx_02.ofs = ((far_t *)MiceCursors + i)->ofs;
-    ovr_blitLoadRleGfx(gfx_02,far_from_u32((uint32_t)((ulong)in_DX << 0x10)),0);
+    ovr_blitLoadRleGfx(gfx_02,(far_t)((ulong)in_DX << 0x10),0);
     init_special_graphics
               ((char *)CONCAT22(*(undefined2 *)((int)&MiceCursors[0].seg + i * 4),
                                 (char *)((far_t *)MiceCursors + i)->ofs));
@@ -1200,12 +1200,12 @@ void __cdecl16far grabBldLbm(int16_t file_normal,int16_t file_ruin,uint16_t inde
     pg = (uint16_t)grabLbmTR(file_ruin);
     pixels_08.seg = 0;
     pixels_08.ofs = *(uint *)(pg + 0x302);
-    (*(uint16_t *)((uint8_t *)&(p) + 2)) = uVar3;
-    (*(uint16_t *)((uint8_t *)&(p))) = ovr_stshRleType2((far_t *)*(undefined2 *)(pg + 0x300),pixels_08,130,99,194,26,-1,
+    p._2_2_ = uVar3;
+    p._0_2_ = ovr_stshRleType2((far_t *)*(undefined2 *)(pg + 0x300),pixels_08,130,99,194,26,-1,
                                unaff_DI);
-    pcVar2 = stshStoreFile((uint8_t *)(far_t *)p,(*(uint16_t *)((uint8_t *)&(p) + 2)));
+    pcVar2 = stshStoreFile((uint8_t *)(far_t *)p,p._2_2_);
     uVar4 = 0x195d;
-    *(undefined2 *)((int)&BldGfxRuin[0].seg + index * 0xc) = (*(uint16_t *)((uint8_t *)&(p) + 2));
+    *(undefined2 *)((int)&BldGfxRuin[0].seg + index * 0xc) = p._2_2_;
     ((far_t *)BldGfxRuin + index * 3)->ofs = (uint16_t)pcVar2;
     pixels_09.seg = 100;
     pixels_09.ofs = *(uint16_t *)(pg + 0x302);

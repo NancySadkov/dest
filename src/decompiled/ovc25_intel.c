@@ -290,7 +290,7 @@ uint __cdecl16far ovc25_findUnitCell(int *x,uint *y)
   uint uStack_8;
   
   iVar1 = *(int *)CONCAT22((int *)x,in_stack_00000004);
-  uVar2 = *(uint *)CONCAT22((uint *)y,(*(uint16_t *)((uint8_t *)&(x) + 2)));
+  uVar2 = *(uint *)CONCAT22((uint *)y,x._2_2_);
   uStack_8 = 0;
   uVar4 = uVar2;
   do {
@@ -307,7 +307,7 @@ uint __cdecl16far ovc25_findUnitCell(int *x,uint *y)
                               (iVar1 + uVar6 * (int)cStack_a,uVar2 + uVar5 * (int)cStack_a);
             if ((char)uVar3 != '\0') {
               *(uint *)CONCAT22((int *)x,in_stack_00000004) = iVar1 + uVar6 * (int)cStack_a;
-              *(uint *)CONCAT22((uint *)y,(*(uint16_t *)((uint8_t *)&(x) + 2))) = uVar2 + uVar5 * (int)cStack_a;
+              *(uint *)CONCAT22((uint *)y,x._2_2_) = uVar2 + uVar5 * (int)cStack_a;
               return CONCAT11((char)(uVar5 * (int)cStack_a >> 8),1);
             }
             cStack_a = cStack_a + '\x02';

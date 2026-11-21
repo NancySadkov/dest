@@ -33,7 +33,7 @@ void __cdecl16far miceRestoreArea(brect_t *br,...)
     if (dst_y < 0) {
       dst_y = 0;
     }
-    miceBlitAtSeg(0xa000,far_from_u32((uint32_t)(0x224a0000)),dst_x,dst_y);
+    miceBlitAtSeg(0xa000,(far_t)0x224a0000,dst_x,dst_y);
     MiceProcessed = '\0';
   }
   return;
@@ -206,11 +206,11 @@ byte __cdecl16far init2_usesCFGMice(uint16_t *mouseX,uint16_t *mouseY,...)
     bVar1 = (byte)uVar2;
     if (MiceClick == '\0') {
       *(uint16_t *)CONCAT22((uint16_t *)mouseY,mouseX) = MiceX;
-      *(uint16_t *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(mouseY) + 2))) = MiceY;
+      *(uint16_t *)CONCAT22(in_stack_0000000a,mouseY._2_2_) = MiceY;
     }
     else {
       *(uint16_t *)CONCAT22((uint16_t *)mouseY,mouseX) = MiceClickX;
-      *(uint16_t *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(mouseY) + 2))) = MiceClickY;
+      *(uint16_t *)CONCAT22(in_stack_0000000a,mouseY._2_2_) = MiceClickY;
       bVar1 = bVar1 | 1;
       MiceClick = '\0';
     }

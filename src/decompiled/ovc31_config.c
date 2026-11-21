@@ -240,12 +240,12 @@ byte __cdecl16far init_strong_sav(void)
         close(file);
 l_made_new_strong_sav:
                     /* Needs new game.cfg */
-        (*(uint8_t *)((uint8_t *)&(result))) = 0;
+        result._0_1_ = 0;
       }
       else {
         close(file);
                     /* Found previous game_cfg */
-        (*(uint8_t *)((uint8_t *)&(result))) = 1;
+        result._0_1_ = 1;
       }
       return (byte)result;
     }
@@ -584,7 +584,7 @@ void __cdecl16far init_check_mem(void)
   uint16_t himem;
   
   lmem_without_psp.seg = 0;
-  lmem_without_psp.ofs = (uint16_t)LXLSH_at_((long *)(*(uint16_t *)((uint8_t *)&(buf))),(*(uint32_t *)((uint8_t *)&(buf) + 2)),buf[6]);
+  lmem_without_psp.ofs = (uint16_t)LXLSH_at_((long *)buf._0_2_,buf._2_4_,buf[6]);
   iVar1 = lmem_without_psp.seg + (0xfeff < lmem_without_psp.ofs);
   if ((7 < iVar1) && ((iVar1 != 8 || (0xed27 < lmem_without_psp.ofs + 0x100)))) {
     return;

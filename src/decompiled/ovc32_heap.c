@@ -46,7 +46,7 @@ heapMemmove(uint8_t *dstOfs,uint16_t dstSeg,uint8_t *srcOfs,uint16_t srcSeg,uint
   for (; (uVar3 = in_DX, countLo != 0 || (srcSeg != 0)); srcSeg = srcSeg - count) {
     puVar1 = ovr_mkp((uint32_t *)dstOfs,dstSeg,unaff_SI);
     uVar4 = uVar3;
-    puVar2 = ovr_mkp((uint32_t *)srcOfs,(*(uint16_t *)((uint8_t *)&(srcOfs) + 2)),unaff_SI);
+    puVar2 = ovr_mkp((uint32_t *)srcOfs,srcOfs._2_2_,unaff_SI);
     if ((countLo != 0) || (count = srcSeg, 0xff00 < srcSeg)) {
       count = 0xff00;
     }

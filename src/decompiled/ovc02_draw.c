@@ -3573,13 +3573,13 @@ L_draw_2e25_025a_03D9:
   pcVar46 = pcVar46 + (int)pcVar49;
   *pcVar49 = *pcVar49 + cVar31;
                     /* WARNING: Read-only address (ram,0x00026001) is written */
-  (*(uint16_t *)((uint8_t *)&(s_halfling_lodge_2410_1efd) + 4)) = pcVar33 + 0x696c;
+  s_halfling_lodge_2410_1efd._4_2_ = pcVar33 + 0x696c;
   piVar50 = (int *)(pcVar49 + (int)pcVar46);
   cVar35 = cVar35 + cVar22;
   iVar14 = CONCAT11(cVar35,cVar31);
   *(char *)piVar5 = (char)*piVar5 + cVar18;
   *piVar50 = *piVar50 + CONCAT11(cVar22,cVar18);
-  (*(uint16_t *)((uint8_t *)&(AgntAnms[0x30]) + 9)) = (*(uint16_t *)((uint8_t *)&(AgntAnms[0x30]) + 9)) + CONCAT11(cVar22,cVar18);
+  AgntAnms[0x30]._9_2_ = AgntAnms[0x30]._9_2_ + CONCAT11(cVar22,cVar18);
   piVar2 = (int *)(iVar14 + (int)piVar5);
   *piVar2 = *piVar2 + CONCAT11(cVar26,cVar23);
   piVar2 = (int *)(iVar14 + (int)piVar50);
@@ -3722,16 +3722,16 @@ code_r0x000219ee:
     if (bVar55 != bVar54) {
       *(undefined1 **)(pbVar47 + (int)puVar25 + 1) =
            (undefined1 *)((int)piVar39 + (int)piVar5) + *(int *)(pbVar47 + (int)puVar25 + 1) + 0xc;
-      cVar9 = (*(uint8_t *)((uint8_t *)&(_DATA) + 1));
+      cVar9 = _DATA._1_1_;
       goto code_r0x000219f5;
     }
   }
   if (bVar55 == bVar54) {
     *(uint *)(pbVar32 + (int)puVar25) = *(int *)(pbVar32 + (int)puVar25) + uVar15;
-    cVar9 = (*(uint8_t *)((uint8_t *)&(_DATA) + 1));
+    cVar9 = _DATA._1_1_;
   }
 code_r0x000219f5:
-  (*(uint8_t *)((uint8_t *)&(_DATA) + 1)) = cVar9;
+  _DATA._1_1_ = cVar9;
   pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + cVar8;
   pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + cVar8;
   pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + cVar8;
@@ -4114,11 +4114,11 @@ void __cdecl16far draw_usesPlay_sfx(void)
   agnt_t *in_stack_0000fffa;
   byte bStack_4;
   
-  prevTick = CONCAT22(unaff_SI,(*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)));
+  prevTick = CONCAT22(unaff_SI,recordUpdateTick._2_2_);
   puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)recordUpdateTick,prevTick);
   if ((in_DX != 0) || ((ulong *)((int)(undefined4 *)&_DATA + 1U) < puVar3)) {
-    (*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    (*(uint16_t *)((uint8_t *)&(recordUpdateTick))) = *(ulong **)BDA_DailyTimeCounter;
+    recordUpdateTick._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+    recordUpdateTick._0_2_ = *(ulong **)BDA_DailyTimeCounter;
     outFlag = 0;
     for (uVar7 = 0; uVar6 = (uint)(prevTick >> 0x10), uVar7 < GRecordCount; uVar7 = uVar7 + 1) {
       *(int *)(uVar7 * 0x12) = *(int *)(uVar7 * 0x12) + 1;
@@ -4221,7 +4221,7 @@ void __cdecl16far draw_usesPrintf(void)
   if ((timePassing != '\0') ||
      (((GPaused == '\0' || ((bVar1 = ovr_ovc15_usesAlignUp42(), bVar1 && (GOngoingBattle == '\0'))))
       && ((puVar2 = ovr_attact_usesBDADailyTimeCounter
-                              ((ulong *)GDailyTimeCounter,CONCAT22(unaff_BP,(*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)))
+                              ((ulong *)GDailyTimeCounter,CONCAT22(unaff_BP,GDailyTimeCounter._2_2_)
                               ), in_DX != 0 ||
           ((char *)"Abnormal program termination\r\n" + 0x1d < puVar2)))))) {
     ovr_attact_usesUpdSeason();
@@ -5029,7 +5029,7 @@ void __stdcall16far draw_textGoldProvidesHousing(void)
   pbVar23 = (byte *)(uVar22 | (int)&uStack_4 + 1U);
   uVar6 = CONCAT11((byte)(uVar6 >> 8) | bVar9 | *(byte *)(uVar18 + uVar22),bVar5) | uVar19;
   uVar10 = CONCAT11((byte)(uVar10 >> 8) | bVar7 | *(byte *)CONCAT11(bVar16,bVar14),
-                    bVar8 | (*(uint8_t *)((uint8_t *)&(AgntAnms[0xe].y) + 1))) | uVar12;
+                    bVar8 | AgntAnms[0xe].y._1_1_) | uVar12;
   *(uint *)(pbVar23 + uVar18 + 0xb009) = *(uint *)(pbVar23 + uVar18 + 0xb009) | (uint)puVar20;
   puVar1 = (uint *)((int)puVar20 + uVar19 + 0x9809);
   *puVar1 = *puVar1 | uVar18;

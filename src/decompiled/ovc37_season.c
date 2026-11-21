@@ -332,16 +332,16 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
   
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&seasonPalette;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410693b)),dst);
+  F_SCOPY((far_t)0x2410693b,dst);
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)&colorA;
-  F_SCOPY(far_from_u32((uint32_t)(0x241069c2)),dst_00);
+  F_SCOPY((far_t)0x241069c2,dst_00);
   dst_01.seg = unaff_SS;
   dst_01.ofs = (uint16_t)&colorB;
-  F_SCOPY(far_from_u32((uint32_t)(0x241069c5)),dst_01);
+  F_SCOPY((far_t)0x241069c5,dst_01);
   dst_02.seg = unaff_SS;
   dst_02.ofs = (uint16_t)&colorC;
-  F_SCOPY(far_from_u32((uint32_t)(0x241069c8)),dst_02);
+  F_SCOPY((far_t)0x241069c8,dst_02);
   _fmemmove((char *)CONCAT22(dstSeg,dstOfs),(char *)CONCAT22(srcSeg,srcOfs),0x300);
   uStack_16 = ((undefined2 *)&l1Cut2Seg)[((uint)seasonGroupBase + (uint)GSeason) * 2];
   uVar1 = ((undefined2 *)&l1Cut2Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 2];
@@ -392,7 +392,7 @@ void __cdecl16far updSeason(void)
   
   dst.seg = (uint16_t)unaff_SS;
   dst.ofs = (uint16_t)snames;
-  F_SCOPY(far_from_u32((uint32_t)(0x241069cb)),dst);
+  F_SCOPY((far_t)0x241069cb,dst);
   seaon2 = GSeason;
   season = GSeason;
   GTimeLo = GTimeLo + 1;
@@ -527,10 +527,10 @@ void __cdecl16far season_repairBuildings(byte rank)
   uint8_t promoteThreshold;
   byte abStack_4 [2];
   
-  memcpy(&abStack_4, &((*(uint16_t *)((uint8_t *)&(PromoteThreshold) + 2))), 2);
-  promoteThreshold = (*(uint16_t *)((uint8_t *)&(PromoteThreshold)));
+  memcpy(&abStack_4, &(PromoteThreshold._2_2_), 2);
+  promoteThreshold = PromoteThreshold._0_2_;
   count = 0;
-  dst = (char *)(*(uint16_t *)((uint8_t *)&(PromoteThreshold)));
+  dst = (char *)PromoteThreshold._0_2_;
   for (bStack_7 = 0; bStack_7 < GLeaderCount; bStack_7 = bStack_7 + 1) {
     dst = (char *)((uint)bStack_7 << 2);
     if ((&promoteThreshold)[rank] <= *(byte *)((int)*(undefined4 *)dst + 0xa5)) {

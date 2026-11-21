@@ -15,9 +15,9 @@ void __cdecl16far stshCopyFontChar(uint8_t *src,uint8_t *dst,int16_t width,int16
   char *in_stack_00000004;
   
   while (width != 0) {
-    memcpy((char *)CONCAT22((uint8_t *)dst,(*(uint16_t *)((uint8_t *)&(src) + 2))),
-           (char *)CONCAT22((uint8_t *)src,in_stack_00000004),(*(uint16_t *)((uint8_t *)&(dst) + 2)));
-    src = (uint8_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(src) + 2)) + (*(uint16_t *)((uint8_t *)&(dst) + 2)),(uint8_t *)src);
+    memcpy((char *)CONCAT22((uint8_t *)dst,src._2_2_),
+           (char *)CONCAT22((uint8_t *)src,in_stack_00000004),dst._2_2_);
+    src = (uint8_t *)CONCAT22(src._2_2_ + dst._2_2_,(uint8_t *)src);
     in_stack_00000004 = in_stack_00000004 + 0x140;
     width = width + -1;
   }
@@ -200,11 +200,11 @@ void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
               else if (*uStack_a != 0) {
                 *uStack_6 = *uStack_a;
               }
-              uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 1);
-              uStack_a = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_a) + 2)),(byte *)uStack_a + 1);
+              uStack_6 = (byte *)CONCAT22(uStack_6._2_2_,(byte *)uStack_6 + 1);
+              uStack_a = (byte *)CONCAT22(uStack_a._2_2_,(byte *)uStack_a + 1);
               iVar2 = iVar2 + 1;
             }
-            uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + (0x140 - letter_w));
+            uStack_6 = (byte *)CONCAT22(uStack_6._2_2_,(byte *)uStack_6 + (0x140 - letter_w));
           }
         }
         else if (BlitLetterType == '\0') {
@@ -221,11 +221,11 @@ void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
               else if (*uStack_a != 0) {
                 *uStack_6 = *uStack_a;
               }
-              uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 1);
-              uStack_a = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_a) + 2)),(byte *)uStack_a + 1);
+              uStack_6 = (byte *)CONCAT22(uStack_6._2_2_,(byte *)uStack_6 + 1);
+              uStack_a = (byte *)CONCAT22(uStack_a._2_2_,(byte *)uStack_a + 1);
               iVar2 = iVar2 + 1;
             }
-            uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + (0x140 - letter_w));
+            uStack_6 = (byte *)CONCAT22(uStack_6._2_2_,(byte *)uStack_6 + (0x140 - letter_w));
           }
         }
         else {
@@ -247,11 +247,11 @@ void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
               else {
                 *uStack_6 = *uStack_a | 0x10;
               }
-              uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 1);
-              uStack_a = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_a) + 2)),(byte *)uStack_a + 1);
+              uStack_6 = (byte *)CONCAT22(uStack_6._2_2_,(byte *)uStack_6 + 1);
+              uStack_a = (byte *)CONCAT22(uStack_a._2_2_,(byte *)uStack_a + 1);
               iVar2 = iVar2 + 1;
             }
-            uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + (0x140 - letter_w));
+            uStack_6 = (byte *)CONCAT22(uStack_6._2_2_,(byte *)uStack_6 + (0x140 - letter_w));
           }
         }
         TextBlitX = TextBlitX + letter_w;
@@ -311,13 +311,13 @@ int __cdecl16far blitText(char *text,byte *widths,uint16_t seg,uint8_t term,...)
     uVar4 = 0;
     for (bx = TextBlitX;
         (((text[uVar4] != '\0' && (text[uVar4] != '\n')) && (text[uVar4] != '\x1a')) &&
-        (ch_width = fontChWidth((byte *)CONCAT22(seg,(*(uint16_t *)((uint8_t *)&(widths) + 2))),text[uVar4]),
+        (ch_width = fontChWidth((byte *)CONCAT22(seg,widths._2_2_),text[uVar4]),
         bx + ch_width <= term + 1U)); bx = bx + bVar1) {
       if (text[uVar4] == ' ') {
         nchars = uVar4 + 1;
       }
       snchars = uVar4 + 1;
-      bVar1 = fontChWidth((byte *)CONCAT22(seg,(*(uint16_t *)((uint8_t *)&(widths) + 2))),text[uVar4]);
+      bVar1 = fontChWidth((byte *)CONCAT22(seg,widths._2_2_),text[uVar4]);
       uVar4 = uVar4 + 1;
     }
     uVar2 = (uint)(byte)text[uVar4];
@@ -331,7 +331,7 @@ int __cdecl16far blitText(char *text,byte *widths,uint16_t seg,uint8_t term,...)
     for (index = 0; index < nchars; index = index + 1) {
       uVar3 = (undefined1)(uVar2 >> 8);
       uVar2 = CONCAT11(uVar3,text[index]);
-      blitLetter(text[index],(*(uint16_t *)((uint8_t *)&(widths) + 2)),(uint8_t)seg,CONCAT11(uVar3,in_stack_0000000e));
+      blitLetter(text[index],widths._2_2_,(uint8_t)seg,CONCAT11(uVar3,in_stack_0000000e));
     }
     for (; text[nchars] == '\r'; nchars = nchars + 1) {
     }
@@ -373,8 +373,8 @@ uint __cdecl16far blitLabel(char *text,uint8_t *widths,int16_t max_width,uint8_t
     j = 0;
     for (x = TextBlitX;
         ((text[j] != '\0' && (text[j] != '\n')) &&
-        (x + (*(uint16_t *)((uint8_t *)&(widths) + 2))[(byte)text[j] + 0xa1] <= term + 1U));
-        x = x + (*(uint16_t *)((uint8_t *)&(widths) + 2))[(byte)text[j] + 0xa1]) {
+        (x + widths._2_2_[(byte)text[j] + 0xa1] <= term + 1U));
+        x = x + widths._2_2_[(byte)text[j] + 0xa1]) {
       width = j + 1;
       j = j + 1;
     }
@@ -382,7 +382,7 @@ uint __cdecl16far blitLabel(char *text,uint8_t *widths,int16_t max_width,uint8_t
     for (i = 0; i < width; i = i + 1) {
       uVar2 = (undefined1)(uVar1 >> 8);
       uVar1 = CONCAT11(uVar2,text[i]);
-      blitLetter(text[i],(*(uint16_t *)((uint8_t *)&(widths) + 2)),(uint8_t)max_width,CONCAT11(uVar2,in_stack_0000000e));
+      blitLetter(text[i],widths._2_2_,(uint8_t)max_width,CONCAT11(uVar2,in_stack_0000000e));
     }
   }
   return width;
@@ -408,7 +408,7 @@ int __cdecl16far font_textWidth(char *text,char *font,...)
   else {
     iVar1 = 0;
     for (iVar2 = 0; text[iVar2] != '\0'; iVar2 = iVar2 + 1) {
-      iVar1 = iVar1 + (uint)*(byte *)((*(uint16_t *)((uint8_t *)&(font) + 2)) + (uint)(byte)text[iVar2] + 0xa1);
+      iVar1 = iVar1 + (uint)*(byte *)(font._2_2_ + (uint)(byte)text[iVar2] + 0xa1);
     }
   }
   return iVar1;
@@ -458,11 +458,11 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay,...)
     bVar2 = ovr_draw_textProvidesMoreHousing();
     uVar8 = (undefined2)(CONCAT13(bVar2,(int3)lVar6) >> 0x10);
     if (bVar2) break;
-    in_stack_0000fff8 = CONCAT22(uVar8,(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));
+    in_stack_0000fff8 = CONCAT22(uVar8,TextBlitCycle._2_2_);
     puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)TextBlitCycle,in_stack_0000fff8);
     uVar8 = (undefined2)(in_stack_0000fff8 >> 0x10);
-  } while ((uVar4 < (*(uint16_t *)((uint8_t *)&(msg_delay) + 2))) ||
-          ((uVar4 == (*(uint16_t *)((uint8_t *)&(msg_delay) + 2)) && (puVar3 < (ulong *)msg_delay))));
+  } while ((uVar4 < msg_delay._2_2_) ||
+          ((uVar4 == msg_delay._2_2_ && (puVar3 < (ulong *)msg_delay))));
   uVar9 = (undefined1)((uint)uVar8 >> 8);
   if (bVar5) {
     ovr_miceRestoreArea((brect_t *)(BlitRects + 1));
@@ -491,8 +491,8 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay,...)
   rightButtonLatch = 0;
   uVar3 = ovr_ovr_midGetSequenceStatus_entry();
   if ((uVar3 & 0xff) == 0) {
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+    TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+    TextBlitCycle._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
     uVar4 = inputUpdate((ulong)msgDelay);
     uVar3 = uVar4 & 0xff00;
   }
@@ -549,8 +549,8 @@ void __cdecl16far drawTextAt(char *txt,uint16_t dst,...)
   else {
     TextBlitFlag = 1;
     TextBlitDstSeg = in_stack_00000008;
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+    TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+    TextBlitCycle._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
     dst_00.seg = in_stack_00000008;
     dst_00.ofs = 0xc31d;
     gfx.seg = FontHandle.seg;
@@ -606,8 +606,8 @@ void __cdecl16far say(char *msg,...)
 void __cdecl16far resetTextBlitCycle(void)
 
 {
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = 0;
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = 0;
+  TextBlitCycle._2_2_ = 0;
+  TextBlitCycle._0_2_ = 0;
   return;
 }
 
@@ -622,8 +622,8 @@ void __cdecl16far uiNotify(char *msg,uint16_t dst,...)
   uint16_t in_stack_00000008;
   
   inputUpdate((ulong)MessageDelay << 1);
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+  TextBlitCycle._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+  TextBlitCycle._0_2_ = *(undefined2 *)BDA_DailyTimeCounter;
   BlitRects[4].seg = in_stack_00000008;
   mice_no_update = MiceNeedsUpdate == '\0';
   if ((bool)mice_no_update) {

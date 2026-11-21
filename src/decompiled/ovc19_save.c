@@ -20,13 +20,13 @@ int __cdecl16far save_readBlock(int handle,void *buf,uint16_t bufSeg,uint count)
   uint unaff_SI;
   int in_stack_00000004;
   
-  if ((*(uint16_t *)((uint8_t *)&(buf) + 2)) == 0) {
+  if (buf._2_2_ == 0) {
     iVar1 = CONCAT11((char)((uint)in_AX >> 8),1);
   }
   else {
     iVar1 = read(in_stack_00000004,buf,unaff_SI);
     bVar2 = (byte)((uint)iVar1 >> 8);
-    if (iVar1 == (*(uint16_t *)((uint8_t *)&(buf) + 2))) {
+    if (iVar1 == buf._2_2_) {
       iVar1 = CONCAT11(bVar2,1);
     }
     else {
@@ -316,13 +316,13 @@ int __cdecl16far save_writeBlock(int handle,void *buf,uint16_t bufSeg,uint16_t c
   byte bVar3;
   int in_stack_00000004;
   
-  if ((*(uint16_t *)((uint8_t *)&(buf) + 2)) == 0) {
+  if (buf._2_2_ == 0) {
     iVar1 = CONCAT11((char)((uint)in_AX >> 8),1);
   }
   else {
-    uVar2 = write(in_stack_00000004,(void *)CONCAT22((void *)buf,handle),(*(uint16_t *)((uint8_t *)&(buf) + 2)));
+    uVar2 = write(in_stack_00000004,(void *)CONCAT22((void *)buf,handle),buf._2_2_);
     bVar3 = (byte)(uVar2 >> 8);
-    if (uVar2 == (*(uint16_t *)((uint8_t *)&(buf) + 2))) {
+    if (uVar2 == buf._2_2_) {
       iVar1 = CONCAT11(bVar3,1);
     }
     else {
@@ -359,13 +359,13 @@ int __cdecl16far stSave(void)
     uVar3 = save_writeBlock(SaveHeader.ofs,(void *)CONCAT22(0x28,SaveHeader.seg),unaff_DI,unaff_SI);
     if ((((((uVar3 & 0xff) != 0) &&
           (uVar3 = save_writeBlock((int)(short (*) [148] [60])GUnitGrid,
-                                   (void *)CONCAT22(0x4560,(*(uint16_t *)((uint8_t *)&(GUnitGrid) + 2))),unaff_DI,unaff_SI),
+                                   (void *)CONCAT22(0x4560,GUnitGrid._2_2_),unaff_DI,unaff_SI),
           (uVar3 & 0xff) != 0)) &&
          (uVar3 = save_writeBlock((int)(short (*) [60] [148])GMapFlags,
-                                  (void *)CONCAT22(0x4560,(*(uint16_t *)((uint8_t *)&(GMapFlags) + 2))),unaff_DI,unaff_SI),
+                                  (void *)CONCAT22(0x4560,GMapFlags._2_2_),unaff_DI,unaff_SI),
          (uVar3 & 0xff) != 0)) &&
         ((uVar3 = save_writeBlock((int)(byte (*) [59] [148])GMapCells,
-                                  (void *)CONCAT22(0x22b0,(*(uint16_t *)((uint8_t *)&(GMapCells) + 2))),unaff_DI,unaff_SI),
+                                  (void *)CONCAT22(0x22b0,GMapCells._2_2_),unaff_DI,unaff_SI),
          (uVar3 & 0xff) != 0 &&
          (uVar3 = save_writeBlock(-0x7661,(void *)0x22410,unaff_DI,unaff_SI), (uVar3 & 0xff) != 0)))
         ) && ((uVar3 = save_writeBlock(-0x7663,(void *)0x22410,unaff_DI,unaff_SI),
@@ -374,7 +374,7 @@ int __cdecl16far stSave(void)
               (uVar3 & 0xff) != 0)))) {
       in_DX = (undefined2)((ulong)((long)EntityCount * 0x37) >> 0x10);
       uVar3 = save_writeBlock((int)Entities,
-                              (void *)CONCAT22((int)((long)EntityCount * 0x37),DAT_2000_d190),
+                              (void *)CONCAT22((int)((long)EntityCount * 0x37),_DAT_2000_d190),
                               unaff_DI,unaff_SI);
       if (((uVar3 & 0xff) != 0) &&
          (uVar3 = save_writeBlock(0x881,(void *)0x22410,unaff_DI,unaff_SI), (uVar3 & 0xff) != 0)) {
@@ -408,7 +408,7 @@ int __cdecl16far stSave(void)
                (uVar3 & 0xff) != 0)) {
               in_DX = (undefined2)((ulong)((long)GUnitCount * 9) >> 0x10);
               uVar3 = save_writeBlock((int)(unit_t *)GUnits,
-                                      (void *)CONCAT22((int)((long)GUnitCount * 9),(*(uint16_t *)((uint8_t *)&(GUnits) + 2))),
+                                      (void *)CONCAT22((int)((long)GUnitCount * 9),GUnits._2_2_),
                                       unaff_DI,unaff_SI);
               if ((((uVar3 & 0xff) != 0) &&
                   ((uVar3 = save_writeBlock(0x2f3,(void *)0x12410,unaff_DI,unaff_SI),

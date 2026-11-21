@@ -411,9 +411,9 @@ uint16_t __cdecl16far audio_usesAlignToSeg(uint8_t *ofs,uint16_t seg,int size)
   }
   else {
     _fmemmove((char *)((ulong)CONCAT22((uint8_t *)ofs + 1,in_stack_00000004) & 0xfffffff0),
-              (char *)CONCAT22((uint8_t *)ofs,in_stack_00000004),(*(uint16_t *)((uint8_t *)&(ofs) + 2)) - 0xf);
-    uVar1 = ovr_alignToSeg(far_from_u32((uint32_t)((ulong)CONCAT22((uint8_t *)ofs + 1,in_stack_00000004) &
-                                  0xfffffff0)));
+              (char *)CONCAT22((uint8_t *)ofs,in_stack_00000004),ofs._2_2_ - 0xf);
+    uVar1 = ovr_alignToSeg((far_t)((ulong)CONCAT22((uint8_t *)ofs + 1,in_stack_00000004) &
+                                  0xfffffff0));
   }
   return uVar1;
 }

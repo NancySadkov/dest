@@ -18,7 +18,7 @@ void __cdecl16far ovc18_blitTriangles(void)
   
   gfx.seg = trianglsCut4Seg;
   gfx.ofs = trianglsCut4Ofs;
-  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c306)));
+  ovr_blitLoadRleGfx(gfx,(far_t)0xa000c306);
   trianglesShown = 1;
   return;
 }
@@ -37,7 +37,7 @@ void __cdecl16far ovc18_blitPanelIfNotRunning(void)
   if (!GameRunning) {
     gfx.seg = nwpanel1Cut4Seg;
     gfx.ofs = nwpanel1Cut4Ofs;
-    ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c306)));
+    ovr_blitLoadRleGfx(gfx,(far_t)0xa000c306);
   }
   return;
 }
@@ -505,13 +505,13 @@ ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textV
           StshCount = StshCount + 1;
           LXMUL_at_(unaff_DI,CONCAT13(uVar22,CONCAT12(uVar21,unaff_SI)),
                     CONCAT13((char)((uint)iVar10 >> 8),CONCAT12((char)iVar10,uVar8)));
-          (*(uint8_t *)((uint8_t *)&(fVar16.seg))) = uVar17;
+          fVar16.seg._0_1_ = uVar17;
           fVar16.ofs = 0x1000;
-          (*(uint8_t *)((uint8_t *)&(fVar16.seg) + 1)) = uVar18;
-          (*(uint8_t *)((uint8_t *)&(ptr_ofs.ofs) + 1)) = uVar20;
-          (*(uint8_t *)((uint8_t *)&(ptr_ofs.ofs))) = uVar19;
-          (*(uint8_t *)((uint8_t *)&(ptr_ofs.seg))) = uVar21;
-          (*(uint8_t *)((uint8_t *)&(ptr_ofs.seg) + 1)) = uVar22;
+          fVar16.seg._1_1_ = uVar18;
+          ptr_ofs.ofs._1_1_ = uVar20;
+          ptr_ofs.ofs._0_1_ = uVar19;
+          ptr_ofs.seg._0_1_ = uVar21;
+          ptr_ofs.seg._1_1_ = uVar22;
           fVar16 = PADD_at_(fVar16,ptr_ofs);
           uVar12 = fVar16.seg;
           puVar6 = ovr_mkp((uint32_t *)fVar16.ofs);
@@ -548,9 +548,9 @@ ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textV
           buf.seg = destX;
           buf.ofs = partyIndex;
           stshWriteFile(StshFile,buf);
-          (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)destX;
+          handle.seg._0_1_ = (char)destX;
           handle.ofs = partyIndex;
-          (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)(destX >> 8);
+          handle.seg._1_1_ = (char)(destX >> 8);
           ovr_stshFree(handle);
           return (char *)CONCAT11(uStack_5,uVar17);
         }
@@ -827,10 +827,10 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind,...)
   uint8_t uStack_5;
   uint uStack_4;
   
-  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)unaff_SS;
+  dst.seg._0_1_ = (char)unaff_SS;
   dst.ofs = (uint16_t)auStack_12;
-  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)unaff_SS >> 8);
-  F_SCOPY(far_from_u32((uint32_t)(0x241045b9)),dst);
+  dst.seg._1_1_ = (char)((uint)unaff_SS >> 8);
+  F_SCOPY((far_t)0x241045b9,dst);
   for (uVar8 = 0; partyIndex = (char)unaff_DI, uVar8 < EntityCount; uVar8 = uVar8 + 1) {
     uVar10 = (undefined2)((ulong)Entities >> 0x10);
     if (*(char *)((int)(char **)GMenuStrings +
