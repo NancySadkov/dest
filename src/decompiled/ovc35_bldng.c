@@ -98,9 +98,6 @@ bool __cdecl16far bldng_textArena(byte bldType,char partyIndex,...)
 
 
 /* 676c:01b0 */
-
-/* Builds the building-selection menu entries (names and prices) for the candidate types. */
-
 void __cdecl16far
 bldng_buildMenuEntries(uint32_t bldTypes,far_t entries,int count,uint8_t partyIndex)
 
@@ -121,7 +118,7 @@ bldng_buildMenuEntries(uint32_t bldTypes,far_t entries,int count,uint8_t partyIn
   uint8_t partyIndex_00;
   undefined1 *puVar16;
   uint uStack_e;
-  undefined4 uStack_c;
+  undefined1 *uStack_c;   /* hand fix: assigned a byte pointer and dereferenced as *uStack_c */
   uint16_t uVar11;
   uint16_t uVar15;
   
@@ -184,7 +181,6 @@ L_bldng_676c_01b0_037F:
     iVar12 = iVar12 + 1;
   } while( true );
 }
-
 
 
 /* 676c:0393 */
@@ -319,18 +315,14 @@ undefined2 __cdecl16far bldng_usesGStrangeTable(byte typeIndex,...)
 
 
 /* 676c:05c3 */
-
-/* [R4] calls ovr_randBelow */
-
 undefined2 __cdecl16far bldng_usesRandBelow(byte typeIndex,...)
 
 {
   uint16_t uVar1;
   int iVar2;
   
-  uVar1 = ovr_randBelow((uint)*(byte *)((far_t *)GStrangeTable)[typeIndex]);
+  uVar1 = ovr_randBelow((uint)*(byte *)MK_FP(((far_t *)GStrangeTable)[typeIndex].seg,((far_t *)GStrangeTable)[typeIndex].ofs))   /* hand fix: the entry is a far pointer, not a far_t value */;
   iVar2 = (uVar1 & 0xff) + ((far_t *)GStrangeTable + typeIndex)->ofs;
   return CONCAT11((char)((uint)iVar2 >> 8),*(undefined1 *)(iVar2 + 1));
 }
-
 
