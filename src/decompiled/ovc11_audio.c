@@ -546,14 +546,14 @@ void __cdecl16far musInit(void)
     }
     if (((undefined2 *)&musDriver0Ofs)[unaff_SI * 2] != 0 ||
         ((undefined2 *)&musDriver0Seg)[unaff_SI * 2] != 0) {
-      MidGfxOfs = ovr_stshLoadGfx(_cmidpakComOfs);
+      MidGfxOfs = ovr_stshLoadGfx(cmidpakComOfs);
       MidGfxSeg = in_DX;
       MIDHandle.ofs =
            audio_usesAlignToSeg
                      ((uint8_t *)CONCAT22(*(undefined2 *)((char *)cmidpakComOfs + 5),in_DX),
                       *(uint16_t *)((char *)cmidpakComOfs + 7),size);
       MIDHandle.seg = (uint16_t)in_DX;
-      ovr_ovc20_compute1(cmidpakComOfs,_cmidpakComSeg);
+      ovr_ovc20_compute1(cmidpakComOfs,cmidpakComSeg);
       handle.seg = ((undefined2 *)&musDriver0Seg)[unaff_SI * 2];
       handle.ofs = ((undefined2 *)&musDriver0Ofs)[unaff_SI * 2];
       MusGfxOfs = ovr_stshLoadGfx(handle);

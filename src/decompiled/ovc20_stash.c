@@ -941,9 +941,9 @@ void __cdecl16far init_ui_gfxes(void)
   Font02.seg = uVar4;
   ovr_driver_fillRect(0,0,0x13f,199,0x0,in_DX,0);
   gfx_01.seg = davfont2Cut1Seg;
-  gfx_01.ofs = (uint16_t)_davfont2Cut1Ofs;
+  gfx_01.ofs = (uint16_t)davfont2Cut1Ofs;
   ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)((ulong)in_DX << 0x10)),0);
-  init_special_graphics((char *)CONCAT22(davfont2Cut1Seg,_davfont2Cut1Ofs));
+  init_special_graphics((char *)CONCAT22(davfont2Cut1Seg,davfont2Cut1Ofs));
   hndl_01.seg = unaff_DI;
   hndl_01.ofs = in_DX;
   pfVar2 = ovr_stshProcessFontSub((far_t *)0x0,hndl_01);
@@ -991,7 +991,7 @@ void __cdecl16far stshLoadAudioDrivers(bool grab,...)
     ;
     midpakAd.seg = in_DX;
     cmidpakComOfs = stshStoreFile_2((far_t *)"cmidpak.com",(char *)0x12410,(uint16_t)unaff_BP);
-    _cmidpakComSeg = in_DX;
+    cmidpakComSeg = in_DX;
     ibmsndComOfs = stshStoreFile_2((far_t *)"ibmsnd.com",(char *)0x12410,(uint16_t)unaff_BP);
     ibmsndComSeg = in_DX;
     sblasterComOfs = stshStoreFile_2((far_t *)"sblaster.com",(char *)0x12410,(uint16_t)unaff_BP);
@@ -1043,7 +1043,7 @@ void __cdecl16far stshLoadAudioDrivers(bool grab,...)
     midpakAd.ofs = (uint16_t)ovr_stshAllocStub(unaff_BP);
     midpakAd.seg = in_DX;
     cmidpakComOfs = ovr_stshAllocStub(unaff_BP);
-    _cmidpakComSeg = in_DX;
+    cmidpakComSeg = in_DX;
     ibmsndComOfs = ovr_stshAllocStub(unaff_BP);
     ibmsndComSeg = in_DX;
     sblasterComOfs = ovr_stshAllocStub(unaff_BP);

@@ -298,7 +298,7 @@ undefined1 __cdecl16far save_loadArchiveGame(void)
   if (StshHandles[0] < 0) {
     handle = ovr_open_wait_unlock_and_disk((char *)StshNames[0]);
   }
-  lseek(handle,(ulong)*(uint *)((int)_cred03Cut3Ofs + 3),unaff_SI);
+  lseek(handle,(ulong)*(uint *)((int)cred03Cut3Ofs + 3),unaff_SI);
   uVar1 = stLoad(handle);
   if (StshHandles[0] < 0) {
     close(handle);

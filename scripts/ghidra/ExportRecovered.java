@@ -60,6 +60,7 @@ public class ExportRecovered extends GhidraScript {
     // Borland's runtime globals are also spelled with a leading underscore
     // (_drive, _c, _argv).
     private Set<String> allSymbolNames = null;
+    private Set<String> allDataSymbolNames = null;
 
     private Set<String> symbolNames() {
         if (allSymbolNames == null) {
@@ -115,18 +116,39 @@ public class ExportRecovered extends GhidraScript {
         declaredLocals(body, names);
         if (names.isEmpty()) return body;
         Set<String> syms = symbolNames();
+        Set<String> dataSyms = dataSymbolNames();
         StringBuffer out = new StringBuffer();
         java.util.regex.Matcher u =
                 java.util.regex.Pattern.compile("\\b_(\\w+)\\b").matcher(body);
         while (u.find()) {
             String base = u.group(1);
-            if (!names.contains(base)) continue;
             String prefixed = "_" + base;
-            if (names.contains(prefixed) || syms.contains(prefixed)) continue;
-            u.appendReplacement(out, base);
+            if (names.contains(base)) {
+                // A name this function declares: Ghidra prefixed the use, not the
+                // declaration.  Safe unless the prefixed spelling is itself real.
+                if (names.contains(prefixed) || syms.contains(prefixed)) continue;
+                u.appendReplacement(out, base);
+            } else if (dataSyms.contains(base) && !names.contains(base)
+                    && !syms.contains(prefixed)) {
+                // A global that Ghidra also printed with a leading underscore.  Only
+                // when nothing in this function shadows the plain name, so the use
+                // cannot be redirected to a local.
+                u.appendReplacement(out, base);
+            }
         }
         u.appendTail(out);
         return out.toString();
+    }
+
+    private Set<String> dataSymbolNames() {
+        if (allDataSymbolNames == null) {
+            allDataSymbolNames = new HashSet<>();
+            for (ghidra.program.model.symbol.Symbol s
+                    : currentProgram.getSymbolTable().getAllSymbols(false))
+                if (s.getSymbolType() != ghidra.program.model.symbol.SymbolType.FUNCTION)
+                    allDataSymbolNames.add(s.getName());
+        }
+        return allDataSymbolNames;
     }
 
     private String typeDecl(DataType dt, String name) {        if (dt instanceof Array) {

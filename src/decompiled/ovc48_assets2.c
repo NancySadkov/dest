@@ -1055,7 +1055,7 @@ void __cdecl16far init_assets2(bool grab,...)
     src_19.ofs = (psVar1->aptr).seg;
     puVar7 = puVar9;
     pfVar2 = ovr_stshRleCut((far_t *)(&psVar1->aptr)->ofs,src_19,0,319,27,(int16_t)unaff_DI,0x1b);
-    _davfont2Cut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)puVar7);
+    davfont2Cut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)puVar7);
     davfont2Cut1Seg = puVar7;
     ovr_stgFreeTmp(psVar1,(char)puVar9);
     psVar1 = ovr_grabLbm(411,0,0,0);
@@ -1552,7 +1552,7 @@ void __cdecl16far init_assets2(bool grab,...)
     gamfont1Cut1Seg = puVar9;
     davfontCut1Ofs = (uint16_t)(ovr_stshAllocStub(unaff_DI));
     davfontCut1Seg = puVar9;
-    _davfont2Cut1Ofs = (cte_t *)ovr_stshAllocStub(unaff_DI);
+    davfont2Cut1Ofs = (cte_t *)ovr_stshAllocStub(unaff_DI);
     davfont2Cut1Seg = puVar9;
     demfont1FontOfs = ovr_stshAllocStub(unaff_DI);
     demfont1FontSeg = puVar9;

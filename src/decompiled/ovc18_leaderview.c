@@ -305,7 +305,7 @@ ovc18_spawnClassAgent
       midpakAd.ofs = (uint16_t)stshStoreFile_2(unaff_DI,filename,unaff_BP);
       midpakAd.seg = uVar10;
       cmidpakComOfs = stshStoreFile_2((far_t *)"cmidpak.com",(char *)0x12410,unaff_BP);
-      _cmidpakComSeg = uVar10;
+      cmidpakComSeg = uVar10;
       ibmsndComOfs = stshStoreFile_2((far_t *)"ibmsnd.com",(char *)0x12410,unaff_BP);
       ibmsndComSeg = uVar10;
       sblasterComOfs = stshStoreFile_2((far_t *)"sblaster.com",(char *)0x12410,unaff_BP);

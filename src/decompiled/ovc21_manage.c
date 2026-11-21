@@ -1039,7 +1039,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
     midpakAd.ofs = (uint16_t)stshStoreFile_2(unaff_BP,in_stack_00000000,index);
     midpakAd.seg = uVar13;
     cmidpakComOfs = stshStoreFile_2((far_t *)"cmidpak.com",(char *)0x12410,index);
-    _cmidpakComSeg = uVar13;
+    cmidpakComSeg = uVar13;
     ibmsndComOfs = stshStoreFile_2((far_t *)"ibmsnd.com",(char *)0x12410,index);
     ibmsndComSeg = uVar13;
     sblasterComOfs = stshStoreFile_2((far_t *)"sblaster.com",(char *)0x12410,index);

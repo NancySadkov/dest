@@ -2210,7 +2210,7 @@ L_OVC49_8699_1e09_29B9:
           gamfont1Cut1Seg = pcVar10;
           davfontCut1Ofs = (uint16_t)(ovr_stshAllocStub((far_t *)in_stack_0000fff6));
           davfontCut1Seg = pcVar10;
-          _davfont2Cut1Ofs = (cte_t *)ovr_stshAllocStub((far_t *)in_stack_0000fff6);
+          davfont2Cut1Ofs = (cte_t *)ovr_stshAllocStub((far_t *)in_stack_0000fff6);
           davfont2Cut1Seg = pcVar10;
           demfont1FontOfs = ovr_stshAllocStub((far_t *)in_stack_0000fff6);
           demfont1FontSeg = pcVar10;
@@ -2256,7 +2256,7 @@ code_r0x00083f6a:
           ovr_stgFreeTmp(psVar17);
           psVar17 = ovr_grabLbm(140);
           pfVar13 = ovr_stshRleCut((far_t *)(&psVar17->aptr)->ofs);
-          _davfont2Cut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar13);
+          davfont2Cut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar13);
           davfont2Cut1Seg = pcVar10;
           ovr_stgFreeTmp(psVar17);
           psVar17 = ovr_grabLbm(411);

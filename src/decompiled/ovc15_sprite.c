@@ -1012,11 +1012,11 @@ uint8_t * __cdecl16far ovc15_usesStshRealloc(char *text,...)
   undefined2 in_stack_00000006;
   
   sVar2 = strlen((char *)CONCAT22(in_stack_00000006,text));
-  puVar3 = ovr_stshRealloc((uint32_t)_upperTextOfs,(ulong)(sVar2 + 1));
-  _upperTextOfs = (uint8_t *)CONCAT22(in_DX,puVar3);
+  puVar3 = ovr_stshRealloc((uint32_t)upperTextOfs,(ulong)(sVar2 + 1));
+  upperTextOfs = (uint16_t)(CONCAT22(in_DX,puVar3));
   strcpy((char *)CONCAT22(in_DX,puVar3),(char *)CONCAT22(in_stack_00000006,text));
-  uVar1 = toupper((int)(char)*_upperTextOfs);
-  *_upperTextOfs = uVar1;
+  uVar1 = toupper((int)(char)*upperTextOfs);
+  *upperTextOfs = uVar1;
   puVar3 = upperTextOfs;
   return puVar3;
 }

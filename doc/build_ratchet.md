@@ -248,3 +248,39 @@ clean: main mouse o05 o07 o08 o10 o24 o25 o29 o31 o36 o39 o50 ovrstub video
 `Too few parameters` class (91 before) no longer appears in the top eight.  A
 residual `in_stack_00000006` remains in `miceBlitRect`, i.e. one more word
 parameter at `BP+0xa` still to be recovered.
+
+### Fifth pass: globals printed with a leading underscore
+
+Ghidra prefixes `_` to some **globals** as well as locals: `st_globals.h`
+declares `cred03Cut3Ofs`, while `save_loadArchiveGame` uses `_cred03Cut3Ofs`.
+`fixShadowedParamUses()` now also rewrites `_X` to `X` when
+
+* `X` is a declared **data** symbol (not a function), and
+* nothing in that function declares `X` (so the use cannot be redirected to a
+  local), and
+* `_X` is not a symbol itself.
+
+That is deliberately narrower than the local rule: rewriting a genuinely
+shadowed global reference would silently change which object is touched.
+
+```
+total errors : 615 -> 611
+Undefined symbol class : gone from the top eight
+modules clean : 16 / 57 (unchanged)
+```
+
+### The cheap-module route is now exhausted
+
+The remaining low-error modules fail on **expression-level typing**, not parameter
+lists, so they cannot be fixed by rebuilding a prototype:
+
+| module | last error | what it is |
+|---|---|---|
+| `o37` | `abStack_4 = (byte [2])(*(uint16_t *)(...));` | Ghidra assigns to an array-typed local; only 3 such sites exist in the tree |
+| `o26` | `uStack_a->base.x` | local declared `undefined4`, used as a pointer; a decompiler high-variable, not a model variable |
+| `o34` | `cursorX = (byte *)((GfxRndSeed - Seed_2000_d110) * 2 + 7);` | integer expression assigned to a `byte *` local |
+| `o19` | `*(undefined2 *)(iVar2 * 4) = pvVar3;` | pointer stored through an `undefined2` slot |
+
+None of these is a `[BP+d]` parameter-list defect.  Moving the clean count from
+here needs either per-function decompiler work (step 3 proper) or a deliberate
+normalisation pass over the decompiler's expression types - not another sweep.
