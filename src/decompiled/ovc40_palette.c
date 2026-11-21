@@ -47,9 +47,6 @@ void __cdecl16far ovc40_usesBlitLabel(far_t text1,far_t text2,byte row,byte term
 
 
 /* 69c8:011e */
-
-/* [R4] calls ovr_vgaSetPalette8bit */
-
 void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette,...)
 
 {
@@ -61,7 +58,7 @@ void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette,...)
   int iStack_4;
   
   iStack_4 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-  iStack_6 = *(int *)BDA_DailyTimeCounter;
+  iStack_6 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
   iVar2 = 10;
   do {
     if (iVar2 < 0) {
@@ -75,17 +72,15 @@ void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette,...)
     ovr_vgaSetPalette8bit(&pal);
     do {
       if (*(int *)(BDA_DailyTimeCounter.ofs + 2) != iStack_4) break;
-    } while (*(int *)BDA_DailyTimeCounter == iStack_6);
+    } while (*(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */ == iStack_6);
     iStack_4 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-    iStack_6 = *(int *)BDA_DailyTimeCounter;
+    iStack_6 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
     iVar2 = iVar2 + -1;
   } while( true );
 }
 
 
-
 /* 69c8:01ac */
-
 void __cdecl16far setSeasonPalette(far_t palette,...)
 
 {
@@ -97,7 +92,7 @@ void __cdecl16far setSeasonPalette(far_t palette,...)
   int iStack_4;
   
   iStack_4 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-  iStack_6 = *(int *)BDA_DailyTimeCounter;
+  iStack_6 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
   uVar2 = 0;
   do {
     if (10 < uVar2) {
@@ -111,13 +106,12 @@ void __cdecl16far setSeasonPalette(far_t palette,...)
     ovr_vgaSetPalette8bit(&pal);
     do {
       if (*(int *)(BDA_DailyTimeCounter.ofs + 2) != iStack_4) break;
-    } while (*(int *)BDA_DailyTimeCounter == iStack_6);
+    } while (*(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */ == iStack_6);
     iStack_4 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-    iStack_6 = *(int *)BDA_DailyTimeCounter;
+    iStack_6 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
     uVar2 = uVar2 + 1;
   } while( true );
 }
-
 
 
 /* 69c8:023a */
@@ -268,9 +262,6 @@ void __cdecl16far ovc40_flushInput(void)
 
 
 /* 69c8:04c6 */
-
-/* [R4] calls ovr_alignToSeg */
-
 char __cdecl16far
 ovc40_usesAlignToSeg
           (char backdropIndex,char *capTextOfs,uint16_t capTextSeg,char *textOfs,uint16_t textSeg,
@@ -567,7 +558,7 @@ ovc40_usesAlignToSeg
   ovc40_flushInput();
   ovr_ovr_miceButton0PressStates_entry();
   iStack_8 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-  iVar9 = *(int *)BDA_DailyTimeCounter;
+  iVar9 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
   if (backdropIndex == '\x04') {
     iStack_a = iVar9;
     uVar5 = ovr_inputUpdate(0xb4);
@@ -625,9 +616,9 @@ ovc40_usesAlignToSeg
       do {
         ovr_audio_usesLDIV_at_();
         if (*(int *)(BDA_DailyTimeCounter.ofs + 2) != iStack_8) break;
-      } while (*(int *)BDA_DailyTimeCounter == iStack_a);
+      } while (*(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */ == iStack_a);
       iStack_8 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-      iVar9 = *(int *)BDA_DailyTimeCounter;
+      iVar9 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
       scrollOffset = scrollOffset + cStack_1f;
     }
     if (cStack_1f < '\x01') {
@@ -640,7 +631,7 @@ ovc40_usesAlignToSeg
     rightButtonLatch = '\0';
     if ((formatIndex == 2) || (formatIndex == 3)) {
       (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-      iVar9 = *(int *)BDA_DailyTimeCounter;
+      iVar9 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
       (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = iVar9;
       if (cStack_1d == '\0') {
         uVar5 = ovr_inputUpdate(0x48);
@@ -700,5 +691,4 @@ L_OVC40_69c8_04c6_0AF0:
   ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
   return cStack_1d;
 }
-
 
