@@ -289,7 +289,30 @@ public class ExportRecovered extends GhidraScript {
         }
         if (dt instanceof Pointer) {
             Pointer p = (Pointer) dt;
-            return typeDecl(p.getDataType(), "*" + name);
+            DataType base = p.getDataType();
+            if (base instanceof Array) {
+                // pointer to an array is not an array of pointers: a global typed
+                // `short[148][60] *32` must read `short (far *name)[148][60]`,
+                // otherwise `name[i][j]` indexes an array of far pointers.
+                // a pointer to `T[d1][d2]` is a pointer to rows of d2, so the
+                // outer dimension must be dropped: `T (*p)[d2]`, and p[i][j] is
+                // then a single T (which is how the recovered code uses it).
+                StringBuilder dims = new StringBuilder();
+                DataType el = base;
+                boolean first = true;
+                while (el instanceof Array) {
+                    if (first) {
+                        first = false;      // drop the outermost dimension
+                    } else {
+                        dims.append("[").append(((Array) el).getNumElements()).append("]");
+                    }
+                    el = ((Array) el).getDataType();
+                }
+                String baseName = el.getName();
+                String farword = (p.getLength() == 4) ? "far " : "";
+                return baseName + " (" + farword + "*" + name + ")" + dims;
+            }
+            return typeDecl(base, "*" + name);
         }
         if (dt instanceof TypeDef) {
             return dt.getName() + " " + name;

@@ -1342,7 +1342,7 @@ extern undefined2 nwpanel1Cut1Seg;
 extern far_t FontHandle;
 extern byte *GMapCells[59][148];
 extern short *GMapFlags[60][148];
-extern short *GUnitGrid[148][60];
+extern short (far *GUnitGrid)[60];
 extern undefined2 trianglsCut2Ofs;
 extern undefined2 trianglsCut2Seg;
 extern far_t FontMain;
