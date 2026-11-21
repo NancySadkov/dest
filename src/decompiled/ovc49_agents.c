@@ -89,7 +89,7 @@ undefined1 __cdecl16far ovc49_usesFrameIndex(agnt_t *agnt,byte *out)
                 (*(char *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x10) == '\0')
                 ))) {
               *out = *(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa);
-              bVar4 = ovr_agnt_compute4((char *)(byte *)out,(*(uint16_t *)((uint8_t *)&(out) + 2)));
+              bVar4 = ovr_agnt_compute4((char *)out);
               if (bVar4) {
                 return *out;
               }
@@ -196,7 +196,7 @@ undefined1 __cdecl16far ovc49_usesFrameIndex2(agnt_t *agnt,byte *out)
                 (*(char *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x10) == '\0')
                 ))) {
               *out = *(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa);
-              bVar4 = ovr_agnt_compute4((char *)(byte *)out,(*(uint16_t *)((uint8_t *)&(out) + 2)));
+              bVar4 = ovr_agnt_compute4((char *)out);
               if (bVar4) {
                 return *out;
               }
@@ -949,8 +949,7 @@ uint __cdecl16far ovc49_body1(agnt_t *agnt,...)
   byte in_AF;
   long lVar30;
   undefined2 in_stack_00000006;
-  char *pcStack0008;
-  int iStack000a;
+  char *in_stack_00000008;
   char in_stack_00000010;
   undefined2 auStackY_2f2 [20];
   undefined1 auStackY_2ca [664];
@@ -1377,8 +1376,8 @@ L_OVC49_8699_18c4_1CA7:
       uVar33 = 0x19;
       if (((*(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x121) & 4) == 0) && (0xf7 < uStackY_26)) {
         uVar33 = 0x24;
-        if (*(char *)((int)&((entity_t *)Entities)[iStack000a].base.entity + 3) != (char)uStackY_24)
-        {
+        if (*(char *)((int)&((entity_t *)Entities)[(*(uint16_t *)((uint8_t *)&(in_stack_00000008) + 2))].base.entity + 3) !=
+            (char)uStackY_24) {
           (&stack0xffec)[iVar14] = 6;
           auStackY_2f2[iVar14 * 2 + 1] = (char *)"puppetmaker" + 3;
           auStackY_2f2[iVar14 * 2] = (char *)"New Owner";
@@ -2883,7 +2882,7 @@ L_OVC49_8699_0000_0121:
   }
   do {
     if (uVar15 == uVar37) {
-      *pcStack0008 = '\0';
+      *in_stack_00000008 = '\0';
                     /* WARNING: Read-only address (ram,0x0002db84) is written */
       return uVar20 & 0xff00;
     }
@@ -2901,10 +2900,10 @@ L_OVC49_8699_0000_0121:
                 in_stack_0000fffd)) &&
               (*(char *)((uint)*(byte *)(iVar14 * 0x69 + uVar15 + 0x8fa) * 0x34 + -0x10) == '\0'))))
           {
-            *pcStack0008 = *(char *)(iVar14 * 0x69 + uVar15 + 0x8fa);
-            bVar5 = ovr_agnt_compute4(pcStack0008);
+            *in_stack_00000008 = *(char *)(iVar14 * 0x69 + uVar15 + 0x8fa);
+            bVar5 = ovr_agnt_compute4(in_stack_00000008);
             if (bVar5) {
-              return CONCAT11(extraout_AH,*pcStack0008);
+              return CONCAT11(extraout_AH,*in_stack_00000008);
             }
           }
           if (((*(char *)(iVar14 * 0x69 + uVar15 + 0x4e0) != '\0') &&
@@ -2913,8 +2912,8 @@ L_OVC49_8699_0000_0121:
                in_stack_0000fffd &&
               (*(char *)((uint)*(byte *)(iVar14 * 0x69 + uVar15 + 0x4e0) * 0x34 + -0x10) == '\0'))))
           {
-            *pcStack0008 = *(char *)(iVar14 * 0x69 + uVar15 + 0x4e0);
-            return CONCAT11((char)((uint)(iVar14 * 0x69) >> 8),*pcStack0008);
+            *in_stack_00000008 = *(char *)(iVar14 * 0x69 + uVar15 + 0x4e0);
+            return CONCAT11((char)((uint)(iVar14 * 0x69) >> 8),*in_stack_00000008);
           }
         }
         cVar6 = cVar6 + '\x02';

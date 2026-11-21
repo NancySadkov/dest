@@ -97,8 +97,6 @@ undefined1 __cdecl16far agnt_compute3(agnt_t *agnt)
 bool __cdecl16far agnt_compute4(char *flag,...)
 
 {
-  undefined2 in_stack_00000006;
-  
   return *flag != '\0';
 }
 
@@ -182,7 +180,7 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,..
                 ))) {
               *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) =
                    *(char *)(iVar5 * 0x69 + iStack_a + 0x8fa);
-              bVar4 = agnt_compute4((*(uint16_t *)((uint8_t *)&(result) + 2)),in_stack_0000000a);
+              bVar4 = agnt_compute4((char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))));
               if (bVar4) {
                 return *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2)));
               }
@@ -305,7 +303,7 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out,...)
                  (*(uint *)((int)uVar4 + 0x3c) & 0x20) == 0)))))) {
               *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
                    *(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa);
-              bVar5 = agnt_compute4((char *)(*(uint16_t *)((uint8_t *)&(out) + 2)),in_stack_0000000a);
+              bVar5 = agnt_compute4((char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))));
               if ((bVar5) &&
                  ((*(byte *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -0x13) <
                    *(byte *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -0x12) &&
