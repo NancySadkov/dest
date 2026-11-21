@@ -402,7 +402,7 @@ public class ExportRecovered extends GhidraScript {
                         ok++;
                     } else {
                         w.println("/* DECOMPILATION FAILED: " + msg.replace("*/", "* /") + " */");
-                        w.println("void " + sanitizeIdent(name) + "(void) { /* failed */ }");
+                        w.println("undefined " + sanitizeIdent(name) + "() { return 0; }");
                         idx.println(mod + "\t" + f.getEntryPoint() + "\t" + name + "\t"
                                 + fsize + "\tfail\t" + mod + ".c\t" + msg.replace('\t',' '));
                         failed.add(mod + " " + f.getEntryPoint() + " " + name + " : " + msg);

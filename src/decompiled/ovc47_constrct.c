@@ -401,7 +401,7 @@ int __cdecl16far constrct_compute1(void)
 /* 7e7c:0b9c */
 /* DECOMPILATION FAILED: Exception while decompiling 7e7c:0b9c: process: timeout
  */
-void constrct_buildInfoText(void) { /* failed */ }
+undefined constrct_buildInfoText() { return 0; }
 
 /* 7e7c:2b4c */
 

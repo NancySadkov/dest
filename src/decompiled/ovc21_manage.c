@@ -2141,7 +2141,7 @@ undefined2 __cdecl16far manage_usesGLeaderCount3(byte partyIndex)
 /* 4d05:1bee */
 /* DECOMPILATION FAILED: Exception while decompiling 4d05:1bee: Response buffer size exceeded for: st.exe
  */
-void manage_settlementScreen(void) { /* failed */ }
+undefined manage_settlementScreen() { return 0; }
 
 /* 4d05:217a */
 

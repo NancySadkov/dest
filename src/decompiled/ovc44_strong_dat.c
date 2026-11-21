@@ -119,7 +119,7 @@ void __cdecl16far stshStubifyBld(uint16_t index,...)
 /* 6ffe:02f7 */
 /* DECOMPILATION FAILED: Exception while decompiling 6ffe:02f7: process: timeout
  */
-void init_assets(void) { /* failed */ }
+undefined init_assets() { return 0; }
 
 /* 6ffe:733c */
 
