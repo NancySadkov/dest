@@ -1474,8 +1474,8 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
       if ((0xee < (int)((uint16_t *)SquareRightX)[uVar11]) &&
          ((int)((uint16_t *)SquareLeftX)[uVar11] < 0x135)) {
         uVar10 = ((uint16_t *)squareColumn)[uVar11];
-        _cornerTL = constr_getCellAtOffset(uVar10,-2);
-        _cornerTR = constr_getCellAtOffset(uVar10 + 1,-2);
+        cornerTL = constr_getCellAtOffset(uVar10,-2);
+        cornerTR = constr_getCellAtOffset(uVar10 + 1,-2);
         iStack_10 = constr_usesSmoothPrev(0xffff,(int)&cornerBL,(char)uVar10,(char)&cornerBL);
         iStack_10 = iStack_10 / 3;
         iStack_12 = constr_usesSmoothPrev(0xffff,(int)&cornerBR,(char)(uVar10 + 1),(char)&cornerBR);

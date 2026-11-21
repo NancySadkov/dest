@@ -119,7 +119,7 @@ void __cdecl16far init_assets2(bool grab,...)
   ovr_stshStubifyCopy1to0(CONCAT11(uVar9,grab_00),0xe9);
   if (in_stack_00000004 != '\0') {
     psVar1 = ovr_grabLbmTR(CONCAT11(uVar9,grab_00),0x20f);
-    _psStack_a = (stg_tmp_t *)CONCAT22(in_DX,psVar1);
+    psStack_a = (stg_tmp_t *)CONCAT22(in_DX,psVar1);
   }
   for (iVar8 = 0; iVar8 < 3; iVar8 = iVar8 + 1) {
     if (in_stack_00000004 == '\0') {
@@ -151,7 +151,7 @@ void __cdecl16far init_assets2(bool grab,...)
   }
   if (in_stack_00000004 != '\0') {
     psVar1 = ovr_grabLbmTR(CONCAT11(uVar9,grab_00),0x210);
-    _psStack_a = (stg_tmp_t *)CONCAT22(in_DX,psVar1);
+    psStack_a = (stg_tmp_t *)CONCAT22(in_DX,psVar1);
   }
   for (iVar8 = 0; iVar8 < 3; iVar8 = iVar8 + 1) {
     if (in_stack_00000004 == '\0') {
@@ -206,7 +206,7 @@ void __cdecl16far init_assets2(bool grab,...)
   }
   else {
     psVar1 = ovr_grabLbmTR(CONCAT11(uVar9,grab_00),0x211);
-    _psStack_a = (stg_tmp_t *)CONCAT22(in_DX,psVar1);
+    psStack_a = (stg_tmp_t *)CONCAT22(in_DX,psVar1);
     uVar5 = in_DX;
     pfVar2 = ovr_stshRleType2((far_t *)(psVar1->aptr).seg,far_from_u32((uint32_t)(0x820000)),99,194,26,-1,
                               (&psVar1->aptr)->ofs);
@@ -280,7 +280,7 @@ void __cdecl16far init_assets2(bool grab,...)
   }
   else {
     psVar1 = ovr_grabLbmTR(CONCAT11(uVar9,grab_00),10);
-    _psStack_a = (stg_tmp_t *)CONCAT22(uVar6,psVar1);
+    psStack_a = (stg_tmp_t *)CONCAT22(uVar6,psVar1);
     uVar5 = uVar6;
     pfVar2 = ovr_stshRleType2((far_t *)(psVar1->aptr).seg,far_from_u32((uint32_t)(0x7000c)),222,150,-12,-7,
                               (&psVar1->aptr)->ofs);
@@ -310,7 +310,7 @@ void __cdecl16far init_assets2(bool grab,...)
   }
   else {
     psVar1 = ovr_grabLbmTR(CONCAT11(uVar9,grab_00),0xe);
-    _psStack_a = (stg_tmp_t *)CONCAT22(uVar5,psVar1);
+    psStack_a = (stg_tmp_t *)CONCAT22(uVar5,psVar1);
     SpecialColors[0] = *(uint8_t *)((int)&GStrangeTable[0x12].ofs + 1 + (psVar1->aptr).ofs);
     SpecialColors[1] = ((char *)"%s turns %d undead." + 0x12)[(psVar1->aptr).ofs];
     SpecialColors[2] = ((char *)"If you lead with wisdom and cunning..." + 9)[(psVar1->aptr).ofs];
@@ -355,7 +355,7 @@ void __cdecl16far init_assets2(bool grab,...)
   }
   else {
     psVar1 = ovr_grabLbmTR(CONCAT11(uVar9,grab_00),0x7f);
-    _psStack_a = (stg_tmp_t *)CONCAT22(uVar6,psVar1);
+    psStack_a = (stg_tmp_t *)CONCAT22(uVar6,psVar1);
     uVar5 = uVar6;
     pfVar2 = ovr_stshRleCut();
     panel01Cut1Ofs = ovr_stshStoreFile((uint8_t *)CONCAT13(uVar9,CONCAT12(grab_00,uVar5)),pfVar2);
@@ -389,7 +389,7 @@ void __cdecl16far init_assets2(bool grab,...)
   }
   else {
     psVar1 = ovr_grabLbm();
-    _psStack_a = (stg_tmp_t *)CONCAT22(uVar5,psVar1);
+    psStack_a = (stg_tmp_t *)CONCAT22(uVar5,psVar1);
     uVar6 = uVar5;
     Lbm_nwpanel1.ofs = (uint16_t)ovr_stshWrite();
     Lbm_nwpanel1.seg = uVar6;
@@ -429,7 +429,7 @@ void __cdecl16far init_assets2(bool grab,...)
   }
   else {
     psVar1 = ovr_grabLbm();
-    _psStack_a = (stg_tmp_t *)CONCAT22(uVar6,psVar1);
+    psStack_a = (stg_tmp_t *)CONCAT22(uVar6,psVar1);
     uVar5 = uVar6;
     for (iVar8 = 0; iVar8 < 4; iVar8 = iVar8 + 1) {
       uVar4 = (undefined2)((ulong)((long)iVar8 * 0xe) >> 0x10);
@@ -744,7 +744,7 @@ void __cdecl16far init_assets2(bool grab,...)
     }
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(uVar9,CONCAT12(grab_00,uVar6)),psVar1);
     psVar1 = ovr_grabLbm();
-    _psStack_a = (stg_tmp_t *)CONCAT22(uVar7,psVar1);
+    psStack_a = (stg_tmp_t *)CONCAT22(uVar7,psVar1);
     uVar5 = uVar7;
     for (iVar8 = 0; iVar8 < 7; iVar8 = iVar8 + 1) {
       uVar5 = (uint16_t)((ulong)((long)iVar8 * 0x1b) >> 0x10);
@@ -845,7 +845,7 @@ void __cdecl16far init_assets2(bool grab,...)
   }
   if (in_stack_00000004 != '\0') {
     psVar1 = ovr_grabLbm();
-    _psStack_a = (stg_tmp_t *)CONCAT22(uVar5,psVar1);
+    psStack_a = (stg_tmp_t *)CONCAT22(uVar5,psVar1);
   }
   for (iVar8 = 0; iVar8 < 4; iVar8 = iVar8 + 1) {
     if (in_stack_00000004 == '\0') {

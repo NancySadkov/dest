@@ -419,10 +419,10 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
   (*(uint8_t *)((uint8_t *)&(ptr.seg) + 1)) = uVar18;
   uStack_4 = uVar6;
   ovr_alignToSeg(ptr,pvStack_6);
-  pbStack_2a = _mouseX;
-  pbStack_2c = _mouseY;
-  _cursorX = (byte *)((GfxRndSeed - Seed_2000_d110) * 2 + 7);
-  _cursorY = (byte *)((GfxRndSeed2 - Seed_2000_d10e) * 3 + 8);
+  pbStack_2a = mouseX;
+  pbStack_2c = mouseY;
+  cursorX = (byte *)((GfxRndSeed - Seed_2000_d110) * 2 + 7);
+  cursorY = (byte *)((GfxRndSeed2 - Seed_2000_d10e) * 3 + 8);
   pbStack_32 = (byte *)0xffff;
   pbStack_34 = (byte *)0xffff;
   input = 0x0;
@@ -434,11 +434,11 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
                        (uint16_t *)CONCAT13(uVar16,CONCAT12(uVar14,&cursorY)),
                        (uint8_t *)CONCAT13(uVar16,CONCAT12(uVar14,&input)));
     if ((char)uVar4 != '\0') goto L_ui_unit_order_6616_0689_1054;
-    if ((_cursorX != pbStack_32) || (_cursorY != pbStack_34)) {
-      pbStack_32 = _cursorX;
-      pbStack_1c = _cursorX;
-      pbStack_34 = _cursorY;
-      pbStack_1e = _cursorY;
+    if ((cursorX != pbStack_32) || (cursorY != pbStack_34)) {
+      pbStack_32 = cursorX;
+      pbStack_1c = cursorX;
+      pbStack_34 = cursorY;
+      pbStack_1e = cursorY;
       uStack_e = uStack_8;
       gfx_00.seg = 0x8cc;
       gfx_00.ofs = uStack_18;
@@ -446,10 +446,10 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
       dst.ofs = uStack_8;
       (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = uVar18;
       ovr_blitLoadRleGfx(gfx_00,dst,(char)pfStack_1a,(char)uStack_8);
-      gfx.seg = (uint16_t)(_cursorX + -6);
+      gfx.seg = (uint16_t)(cursorX + -6);
       gfx.ofs = MiceCursors[3].seg;
-      ovr_blitGfx10(gfx,(uint16_t)(_cursorY + -5),(uint16_t)&saveArea,(brect_t *)ZEXT24(unaff_SS),
-                    (bool)type,MiceCursors[3].ofs,(char)(_cursorY + -5),(char)&saveArea,0);
+      ovr_blitGfx10(gfx,(uint16_t)(cursorY + -5),(uint16_t)&saveArea,(brect_t *)ZEXT24(unaff_SS),
+                    (bool)type,MiceCursors[3].ofs,(char)(cursorY + -5),(char)&saveArea,0);
       ovr_miceBlitRect((brect_t *)CONCAT13(uVar18,CONCAT12(type,unaff_SS)),&saveArea);
       ovr_blitRect((brect_t *)CONCAT13(uVar18,CONCAT12(type,unaff_SS)),&saveArea);
       ovr_miceUpdate();
@@ -458,11 +458,11 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
       input = ovr_init2_usesCFGMice((uint16_t *)CONCAT22(&mouseY,unaff_SS),(char)&mouseX);
     }
     if (rightButtonLatch != '\0') goto L_ui_unit_order_6616_0689_1054;
-    if ((_mouseX != pbStack_2a) || (_mouseY != pbStack_2c)) {
-      pbStack_2a = _mouseX;
-      pbStack_1c = _mouseX;
-      pbStack_2c = _mouseY;
-      pbStack_1e = _mouseY;
+    if ((mouseX != pbStack_2a) || (mouseY != pbStack_2c)) {
+      pbStack_2a = mouseX;
+      pbStack_1c = mouseX;
+      pbStack_2c = mouseY;
+      pbStack_1e = mouseY;
     }
   } while (input == 0x0);
   if ((((0xb < (int)pbStack_1c) && ((int)pbStack_1c < 0xdf)) && (6 < (int)pbStack_1e)) &&
@@ -481,11 +481,11 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
                          (uint16_t *)CONCAT13(uVar16,CONCAT12(uVar14,&cursorY)),
                          (uint8_t *)CONCAT13(uVar16,CONCAT12(uVar14,&input)));
       if ((char)uVar4 != '\0') goto L_ui_unit_order_6616_0689_1054;
-      if ((_cursorX != pbStack_32) || (_cursorY != pbStack_34)) {
-        pbStack_32 = _cursorX;
-        pbStack_34 = _cursorY;
-        pbStack_20 = _cursorY;
-        pbVar13 = _cursorX;
+      if ((cursorX != pbStack_32) || (cursorY != pbStack_34)) {
+        pbStack_32 = cursorX;
+        pbStack_34 = cursorY;
+        pbStack_20 = cursorY;
+        pbVar13 = cursorX;
       }
       if ((int)pbVar13 < 0xc) {
         pbVar13 = (byte *)__C0_ASM_CopyRight + 8;
@@ -570,11 +570,11 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         input = ovr_init2_usesCFGMice((uint16_t *)CONCAT22(&mouseY,unaff_SS),(char)&mouseX);
       }
       if (rightButtonLatch != '\0') goto L_ui_unit_order_6616_0689_1054;
-      if ((_mouseX != pbStack_2a) || (_mouseY != pbStack_2c)) {
-        pbStack_2a = _mouseX;
-        pbStack_2c = _mouseY;
-        pbStack_20 = _mouseY;
-        pbVar13 = _mouseX;
+      if ((mouseX != pbStack_2a) || (mouseY != pbStack_2c)) {
+        pbStack_2a = mouseX;
+        pbStack_2c = mouseY;
+        pbStack_20 = mouseY;
+        pbVar13 = mouseX;
       }
     } while (input == 0x0);
     ovr_miceRestoreArea((brect_t *)CONCAT13(uVar18,CONCAT12(type,0x2410)),0x44a);
@@ -730,7 +730,7 @@ L_unit_6616_10d5_1152:
       if (SquareRecCount <= uVar4) {
         memcpy((char *)CONCAT22(unaff_SS,&rec),(char *)&SquareRecX,0x13);
       }
-      _rec = GfxRndSeed;
+      rec = GfxRndSeed;
       iStack_14 = GfxRndSeed2;
       (&savedCursorX)[menuIndex] = ((undefined *)&menuCursorX)[menuIndex];
       (&savedCursorY)[menuIndex] = ((undefined *)&menuCursorY)[menuIndex];
@@ -757,7 +757,7 @@ L_unit_6616_10d5_1152:
         }
       }
       iStack_14 = y;
-      _rec = uVar1;
+      rec = uVar1;
       memcpy((char *)CONCAT22(0x17f8,(char *)(SquareRecCount * 0x13)),
              (char *)CONCAT22(unaff_SS,&rec),0x13);
       SquareRecCount = SquareRecCount + 1;

@@ -1,27 +1,6 @@
 /* Declarations for Ghidra decompiler RAM/register pseudo-variables. */
 #ifndef ST_ARTIFACTS_H
 #define ST_ARTIFACTS_H
-extern uint32_t _auStack_6;
-extern uint32_t _bStack_6;
-extern uint32_t _iStack_12;
-extern uint32_t _iStack_8;
-extern uint32_t _iStack_e;
-extern uint32_t _pbStack_10;
-extern uint32_t _pbStack_14;
-extern uint32_t _pbStack_8;
-extern uint32_t _pbStack_c;
-extern uint32_t _piStack_1a;
-extern uint32_t _piStack_1e;
-extern uint32_t _psStack_10;
-extern uint32_t _psStack_14;
-extern uint32_t _psStack_18;
-extern uint32_t _psStack_1c;
-extern uint32_t _psStack_a;
-extern uint32_t _puStack_6;
-extern uint32_t _uStack_10;
-extern uint32_t _uStack_12;
-extern uint32_t _uStack_6;
-extern uint32_t _uStack_c;
 extern uint16_t abStack_16;
 extern uint16_t abStack_1d;
 extern uint16_t abStack_4;

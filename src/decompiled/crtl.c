@@ -1130,7 +1130,7 @@ int __cdecl16far getdisk(void)
   uint8_t drive;
   
   _dos_getdrive((uint *)CONCAT22(unaff_SS,&drive));
-  return _drive - 1;
+  return drive - 1;
 }
 
 
@@ -3912,15 +3912,15 @@ void bios(int width,uint16_t *vramOfs)
   uint8_t vramScreenOfs;
   uint8_t srcScreenOfs;
   
-  _cursorPos = _wherexy();
+  cursorPos = _wherexy();
   bVar4 = in_stack_0000000a == (*(uint16_t *)((uint8_t *)&(_video.displayptr) + 1));
   if (bVar4) {
-    _srcScreenOfs = screenpos((uint)(*(uint16_t *)((uint8_t *)&(vramOfs) + 2)));
+    srcScreenOfs = screenpos((uint)(*(uint16_t *)((uint8_t *)&(vramOfs) + 2)));
   }
   bVar5 = (uint16_t *)vramOfs == (uint16_t *)(*(uint16_t *)((uint8_t *)&(_video.displayptr) + 1));
   puVar1 = vramOfs;
   if (bVar5) {
-    _vramScreenOfs = screenpos((uint)in_stack_00000004);
+    vramScreenOfs = screenpos((uint)in_stack_00000004);
   }
   while( true ) {
     (*(uint16_t *)((uint8_t *)&(vramOfs) + 2)) = (undefined2 *)((ulong)puVar1 >> 0x10);
@@ -5571,7 +5571,7 @@ uint16_t __cdecl16far __write(uint fd,char *bufOfs,uint16_t bufSeg,uint16_t coun
         puStack_e = (uint8_t *)CONCAT22((char *)bufOfs,fd);
         uStack_8 = (*(uint16_t *)((uint8_t *)&(bufOfs) + 2));
         do {
-          _puStack_6 = (uint8_t *)CONCAT22(unaff_SS,&buf);
+          puStack_6 = (uint8_t *)CONCAT22(unaff_SS,&buf);
           do {
             puVar3 = puStack_e;
             if (uStack_8 == 0) {
@@ -5590,14 +5590,14 @@ uint16_t __cdecl16far __write(uint fd,char *bufOfs,uint16_t bufSeg,uint16_t coun
             puStack_e = (uint8_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(puStack_e) + 2)),(uint8_t *)puStack_e + 1);
             uStack_9 = *puVar3;
             if (uStack_9 == 0xa) {
-              *_puStack_6 = 0xd;
-              uVar6 = (undefined2)((ulong)_puStack_6 >> 0x10);
-              _puStack_6 = (uint8_t *)CONCAT22(uVar6,puStack_6 + 1);
+              *puStack_6 = 0xd;
+              uVar6 = (undefined2)((ulong)puStack_6 >> 0x10);
+              puStack_6 = (uint8_t *)CONCAT22(uVar6,puStack_6 + 1);
             }
-            *_puStack_6 = uStack_9;
+            *puStack_6 = uStack_9;
             puVar1 = puStack_6 + 1;
-            uVar6 = (undefined2)((ulong)_puStack_6 >> 0x10);
-            _puStack_6 = (uint8_t *)CONCAT22(uVar6,puVar1);
+            uVar6 = (undefined2)((ulong)puStack_6 >> 0x10);
+            puStack_6 = (uint8_t *)CONCAT22(uVar6,puVar1);
             uVar2 = (uint)(puVar1 < &buf);
           } while (((int)-uVar2 < 0) || ((uVar2 == 0 && ((uint)((int)puVar1 - (int)&buf) < 0x80))));
           uVar4 = (int)puVar1 - (int)&buf;

@@ -55,39 +55,75 @@ public class ExportRecovered extends GhidraScript {
     // Ghidra declares a parameter as `x` but sometimes prints uses of it as `_x`
     // (its disambiguator for a name that shadows something in scope).  The body
     // then references an identifier that nothing declares, which is a compile
-    // error.  Rewrite `_x` back to `x` for parameter names only: Borland's
-    // runtime globals are also spelled with a leading underscore (_drive, _c),
-    // and those must be left alone.
+    // error.  Rewrite `_x` back to `x` for names this function declares itself -
+    // parameters and locals.  Names that are real program symbols are left alone:
+    // Borland's runtime globals are also spelled with a leading underscore
+    // (_drive, _c, _argv).
+    private Set<String> allSymbolNames = null;
+
+    private Set<String> symbolNames() {
+        if (allSymbolNames == null) {
+            allSymbolNames = new HashSet<>();
+            for (ghidra.program.model.symbol.Symbol s
+                    : currentProgram.getSymbolTable().getAllSymbols(false))
+                allSymbolNames.add(s.getName());
+        }
+        return allSymbolNames;
+    }
+
+    // Names declared by the body's own declaration block, e.g. "  undefined1 uStack0004;"
+    private void declaredLocals(String body, Set<String> out) {
+        for (String line : body.split("\n")) {
+            String t = line.trim();
+            if (t.isEmpty() || t.startsWith("/*") || t.startsWith("*") || t.startsWith("#"))
+                continue;
+            if (!t.endsWith(";") || t.contains("(") || t.contains("=")) continue;
+            t = t.substring(0, t.length() - 1).trim();
+            int br = t.indexOf('[');
+            if (br >= 0) t = t.substring(0, br).trim();
+            java.util.regex.Matcher m =
+                    java.util.regex.Pattern.compile("([A-Za-z_]\\w*)$").matcher(t);
+            if (m.find()) out.add(m.group(1));
+        }
+    }
+
     private String fixShadowedParamUses(String body, String sig) {
         if (body == null || sig == null) return body;
         int lp = sig.indexOf('(');
         int rp = sig.lastIndexOf(')');
-        if (lp < 0 || rp <= lp) return body;
-        String inner = sig.substring(lp + 1, rp);
-        Set<String> params = new HashSet<>();
-        StringBuilder cur = new StringBuilder();
-        int depth = 0;
-        for (int i = 0; i <= inner.length(); i++) {
-            char c = i < inner.length() ? inner.charAt(i) : ',';
-            if (c == '(' || c == '[') depth++;
-            if (c == ')' || c == ']') depth--;
-            if (c == ',' && depth == 0) {
-                String p = cur.toString().trim();
-                cur.setLength(0);
-                if (p.isEmpty() || p.equals("void") || p.startsWith("...")) continue;
-                java.util.regex.Matcher m =
-                        java.util.regex.Pattern.compile("([A-Za-z_]\\w*)\\s*$").matcher(p);
-                if (m.find() && !m.group(1).equals("void")) params.add(m.group(1));
-            } else {
-                cur.append(c);
+        Set<String> names = new HashSet<>();
+        if (lp >= 0 && rp > lp) {
+            String inner = sig.substring(lp + 1, rp);
+            StringBuilder cur = new StringBuilder();
+            int depth = 0;
+            for (int i = 0; i <= inner.length(); i++) {
+                char c = i < inner.length() ? inner.charAt(i) : ',';
+                if (c == '(' || c == '[') depth++;
+                if (c == ')' || c == ']') depth--;
+                if (c == ',' && depth == 0) {
+                    String p = cur.toString().trim();
+                    cur.setLength(0);
+                    if (p.isEmpty() || p.equals("void") || p.startsWith("...")) continue;
+                    java.util.regex.Matcher m =
+                            java.util.regex.Pattern.compile("([A-Za-z_]\\w*)\\s*$").matcher(p);
+                    if (m.find() && !m.group(1).equals("void")) names.add(m.group(1));
+                } else {
+                    cur.append(c);
+                }
             }
         }
-        if (params.isEmpty()) return body;
+        declaredLocals(body, names);
+        if (names.isEmpty()) return body;
+        Set<String> syms = symbolNames();
         StringBuffer out = new StringBuffer();
         java.util.regex.Matcher u =
                 java.util.regex.Pattern.compile("\\b_(\\w+)\\b").matcher(body);
         while (u.find()) {
-            if (params.contains(u.group(1))) u.appendReplacement(out, u.group(1));
+            String base = u.group(1);
+            if (!names.contains(base)) continue;
+            String prefixed = "_" + base;
+            if (names.contains(prefixed) || syms.contains(prefixed)) continue;
+            u.appendReplacement(out, base);
         }
         u.appendTail(out);
         return out.toString();

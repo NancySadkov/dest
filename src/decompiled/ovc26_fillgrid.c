@@ -47,35 +47,35 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
   iVar8 = 0x50 - x;
   iVar9 = 0x50 - y;
   iStack_a = 1;
-  _piStack_1a = (int *)CONCAT22(unaff_SS,&fillQueueX);
-  _piStack_1e = (int *)CONCAT22(unaff_SS,&fillQueueY);
+  piStack_1a = (int *)CONCAT22(unaff_SS,&fillQueueX);
+  piStack_1e = (int *)CONCAT22(unaff_SS,&fillQueueY);
   piStack_e = (int *)&nextQueueX;
   piStack_12 = (int *)&nextQueueY;
   *(undefined1 *)((int)FillGrid + (x + iVar8) * 0xa1 + y + iVar9) = 1;
-  *_piStack_1a = x;
-  *_piStack_1e = y;
+  *piStack_1a = x;
+  *piStack_1e = y;
   bStack_1f = 2;
   uVar14 = unaff_SS;
   while( true ) {
     piVar7 = piStack_e;
     piVar6 = piStack_12;
-    piVar4 = _piStack_1a;
+    piVar4 = piStack_1a;
     if (0x50 < bStack_1f) {
       return;
     }
     iVar11 = 0;
     iStack_8 = 0;
     while( true ) {
-      piVar2 = _piStack_1e;
+      piVar2 = piStack_1e;
       piStack_1a = (int *)piVar4;
       uVar13 = (undefined2)((ulong)piVar4 >> 0x10);
       uVar5 = uVar13;
-      uVar12 = (undefined2)((ulong)_piStack_1e >> 0x10);
+      uVar12 = (undefined2)((ulong)piStack_1e >> 0x10);
       uVar3 = uVar12;
       if (iStack_a <= iStack_8) break;
       iVar1 = piStack_1a[iStack_8];
       x_00 = piStack_1e[iStack_8];
-      _piStack_1e = piVar2;
+      piStack_1e = piVar2;
       if (((*(char *)((iVar1 + iVar8) * 0xa1 + (int)FillGrid + x_00 + iVar9 + -0xa1) == '\0') &&
           (uVar10 = ovr_attact_usesSCARRY2(x_00,3,ignoreBlocked,(char)unaff_DI,iVar1),
           (uVar10 & 0xff) == 0)) && (iVar11 < 300)) {
@@ -112,9 +112,9 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
     }
     if (iVar11 == 0) break;
     piStack_e = piStack_1a;
-    _piStack_1a = (int *)CONCAT22(unaff_SS,piVar7);
+    piStack_1a = (int *)CONCAT22(unaff_SS,piVar7);
     piStack_12 = piStack_1e;
-    _piStack_1e = (int *)CONCAT22(uVar14,piVar6);
+    piStack_1e = (int *)CONCAT22(uVar14,piVar6);
     bStack_1f = bStack_1f + 1;
     iStack_a = iVar11;
     unaff_SS = uVar5;

@@ -69,7 +69,7 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex,...)
   }
   uVar1 = ((int *)((uint)bStack_3 * 4))[1];
   iVar2 = *(int *)((uint)bStack_3 * 4);
-  _iStack_8 = CONCAT22(uVar1,iVar2);
+  iStack_8 = CONCAT22(uVar1,iVar2);
   if (8 < *(byte *)(iVar2 + 0x86)) {
     return uVar1 & 0xff00;
   }
@@ -119,33 +119,33 @@ L_season_67e7_004d_0199:
   if (cStack_4 == '\0') {
     pcVar6 = (char *)CONCAT11(uVar8,in_stack_00000004);
     puVar10 = &text;
-    pcVar7 = ovr_ovc15_capitalize((char *)CONCAT22((int)_iStack_8,unaff_SS),&text2,uStack_6);
+    pcVar7 = ovr_ovc15_capitalize((char *)CONCAT22((int)iStack_8,unaff_SS),&text2,uStack_6);
     ovr_ovc40_usesAlignToSeg
-              ((char)pcVar7,(char *)CONCAT22(puVar10,puVar9),(uint16_t)unaff_SS,pcVar6,_text,
+              ((char)pcVar7,(char *)CONCAT22(puVar10,puVar9),(uint16_t)unaff_SS,pcVar6,text,
                in_stack_0000ff5a,0,pcVar7);
     uVar8 = extraout_AH_03;
   }
   else {
     pcVar6 = (char *)CONCAT11(uVar8,in_stack_00000004);
     puVar10 = &text;
-    pcVar7 = ovr_ovc15_capitalize((char *)CONCAT22((int)_iStack_8,unaff_SS),&text2,uStack_6);
+    pcVar7 = ovr_ovc15_capitalize((char *)CONCAT22((int)iStack_8,unaff_SS),&text2,uStack_6);
     ovr_ovc40_usesAlignToSeg
-              ((char)pcVar7,(char *)CONCAT22(puVar10,puVar9),(uint16_t)unaff_SS,pcVar6,_text,
+              ((char)pcVar7,(char *)CONCAT22(puVar10,puVar9),(uint16_t)unaff_SS,pcVar6,text,
                in_stack_0000ff5a,2,pcVar7);
     uVar8 = extraout_AH_02;
   }
   if (cStack_4 != '\0') {
     ovr_stop_audio();
     CurMusicType = 0x54;
-    ovr_play_sfx(0,_text,0x54);
+    ovr_play_sfx(0,text,0x54);
     ovr_ovc38_usesStshAlloc();
-    ovr_miceRestoreArea((brect_t *)CONCAT22(_text,(brect_t *)((char *)"puppetmaker" + 3)),0x44a);
+    ovr_miceRestoreArea((brect_t *)CONCAT22(text,(brect_t *)((char *)"puppetmaker" + 3)),0x44a);
     ovr_stats_drawStatsPanel();
-    ovr_say((char *)CONCAT22(_text,(char *)"puppetmaker" + 3),0x69db);
+    ovr_say((char *)CONCAT22(text,(char *)"puppetmaker" + 3),0x69db);
     ovr_ovc38_showAchievements();
     ovr_ovc28_textHalflingCastle();
     ovr_ovc41_usesGMenuItem();
-    ovr_miceBlitRect((brect_t *)CONCAT22(_text,(brect_t *)((char *)"puppetmaker" + 3)),0x44a);
+    ovr_miceBlitRect((brect_t *)CONCAT22(text,(brect_t *)((char *)"puppetmaker" + 3)),0x44a);
     ovr_stop_audio();
     uVar8 = 0x24;
     CurMusicType = 0xff;
@@ -371,7 +371,7 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
             (char *)CONCAT22((uint8_t *)srcOfs,in_stack_00000004),0x300);
   uStack_16 = ((undefined2 *)&l1Cut2Seg)[((uint)seasonGroupBase + (uint)GSeason) * 2];
   uVar1 = ((undefined2 *)&l1Cut2Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 2];
-  handle.seg = _seasonPalette;
+  handle.seg = seasonPalette;
   handle.ofs = uStack_16;
   uStack_18 = uVar1;
   psStack_6 = ovr_stshLoadGfx(handle,uVar1);
@@ -569,7 +569,7 @@ void __cdecl16far season_repairBuildings(byte rank)
   byte abStack_4 [2];
   
   abStack_4 = (byte  [2])(*(uint16_t *)((uint8_t *)&(PromoteThreshold) + 2));
-  _promoteThreshold = (*(uint16_t *)((uint8_t *)&(PromoteThreshold)));
+  promoteThreshold = (*(uint16_t *)((uint8_t *)&(PromoteThreshold)));
   iVar4 = 0;
   pcVar3 = (char *)(*(uint16_t *)((uint8_t *)&(PromoteThreshold)));
   for (bStack_7 = 0; bStack_7 < GLeaderCount; bStack_7 = bStack_7 + 1) {

@@ -2370,7 +2370,7 @@ switchD_6000_ca06_caseD_1:
         if (rightButtonLatch != '\0') goto L_ui_unit_order_6616_0689_1054;
         if ((pbStack_2e != pbStack_2a) || (pbStack_30 != pbStack_2c)) {
           pbStack_2a = pbStack_2e;
-          _agnt = pbStack_2e;
+          agnt = pbStack_2e;
           pbStack_2c = pbStack_30;
           pbStack_1e = pbStack_30;
         }
@@ -2382,7 +2382,7 @@ switchD_6000_ca06_caseD_1:
         if ((char)uVar18 != '\0') goto L_ui_unit_order_6616_0689_1054;
         if ((pbStack_36 != pbStack_32) || (pbStack_38 != pbStack_34)) {
           pbStack_32 = pbStack_36;
-          _agnt = pbStack_36;
+          agnt = pbStack_36;
           pbStack_34 = pbStack_38;
           pbStack_1e = pbStack_38;
           iStack_e = uStack_8;
@@ -2394,7 +2394,7 @@ switchD_6000_ca06_caseD_1:
         }
         if (bStack_3b == 0) goto switchD_6000_ca06_caseD_1;
       }
-      if (((((int)_agnt < 0xc) || (0xde < (int)_agnt)) || ((int)pbStack_1e < 7)) ||
+      if (((((int)agnt < 0xc) || (0xde < (int)agnt)) || ((int)pbStack_1e < 7)) ||
          (0x96 < (int)pbStack_1e)) goto L_ui_unit_order_6616_0689_1054;
       do {
         bVar7 = ovr_init2_usesCFGMice();
@@ -2403,7 +2403,7 @@ switchD_6000_ca06_caseD_1:
       pbStack_28 = (byte *)0xffff;
       pbStack_20 = pbStack_1e;
       bStack_3b = 0;
-      pbVar9 = _agnt;
+      pbVar9 = agnt;
       do {
         uVar18 = keyprocessor_usesBiosKeyAvail
                            ((uint16_t *)CONCAT22(unaff_SS,&pbStack_36),
@@ -2441,7 +2441,7 @@ switchD_6000_ca06_caseD_1:
           pbVar8 = (byte *)((int)(pbStack_20 + -9) / 3 + Seed_2000_d10e);
           pbVar12 = (byte *)(Seed_2000_d110 + ((uint)(pbVar9 + -0xc) >> 1) + 2 & 0xfffc);
           pbStack_24 = (byte *)((int)(pbStack_1e + -9) / 3 + Seed_2000_d10e);
-          pbStack_22 = (byte *)(Seed_2000_d110 + ((uint)(_agnt + -0xc) >> 1) + 2 & 0xfffc);
+          pbStack_22 = (byte *)(Seed_2000_d110 + ((uint)(agnt + -0xc) >> 1) + 2 & 0xfffc);
           pbStack_26 = pbVar12;
           if ((int)pbVar12 < (int)pbStack_22) {
             pbStack_26 = pbStack_22;
@@ -2497,7 +2497,7 @@ L_ui_unit_order_6616_0689_1054:
         pbVar8 = (byte *)((int)(pbStack_20 + -9) / 3 + Seed_2000_d10e);
         pbVar12 = (byte *)(Seed_2000_d110 + ((uint)(pbVar9 + -0xc) >> 1) + 2 & 0xfffc);
         pbVar9 = (byte *)((int)(pbStack_1e + -9) / 3 + Seed_2000_d10e);
-        uVar13 = Seed_2000_d110 + ((uint)(_agnt + -0xc) >> 1) + 2;
+        uVar13 = Seed_2000_d110 + ((uint)(agnt + -0xc) >> 1) + 2;
         pbStack_22 = (byte *)(uVar13 & 0xfffc);
         pbStack_26 = pbVar12;
         if ((int)pbVar12 < (int)pbStack_22) {

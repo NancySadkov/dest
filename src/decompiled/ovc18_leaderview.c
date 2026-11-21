@@ -459,12 +459,12 @@ ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textV
   
   uVar2 = partyIndex;
   piVar1 = destX;
-  _uStack0004 = CONCAT13(uStack0007,CONCAT12(partyIndex,_uStack0004));
+  uStack0004 = CONCAT13(uStack0007,CONCAT12(partyIndex,uStack0004));
   uVar19 = SUB21(unaff_SI,0);
   uVar20 = (undefined1)((uint)unaff_SI >> 8);
   uVar17 = (undefined1)unaff_DI;
   uVar18 = (undefined1)((uint)unaff_DI >> 8);
-  piVar4 = (int *)((_uStack0004 & 0xff) * 4);
+  piVar4 = (int *)((uStack0004 & 0xff) * 4);
   iVar12 = piVar4[1];
   iVar11 = *piVar4;
   uVar23 = (undefined1)iVar12;
@@ -584,13 +584,13 @@ L_attact_3f0b_26bd_2767:
                   ((char *)CONCAT13((char)((uint)iVar11 >> 8),CONCAT12((char)iVar11,pcVar8)),
                    CONCAT11(uVar18,uVar17));
         TextBlitY = TextBlitY + 0xf;
-        if (*(int *)(_uStack0004 + 0xa0) != 0) {
+        if (*(int *)(uStack0004 + 0xa0) != 0) {
           TextBlitX = 0x37;
-          if (*(int *)(_uStack0004 + 0xa2) < 0) {
+          if (*(int *)(uStack0004 + 0xa2) < 0) {
             ovr_blitLabel();
             uVar17 = 0x7d;
             uVar18 = 0;
-            iVar12 = -*(int *)(_uStack0004 + 0xa2) >> 0xf;
+            iVar12 = -*(int *)(uStack0004 + 0xa2) >> 0xf;
             pcVar8 = litoa10();
             manage_blitLabelRight
                       ((char *)CONCAT13((char)((uint)iVar12 >> 8),CONCAT12((char)iVar12,pcVar8)),
@@ -600,7 +600,7 @@ L_attact_3f0b_26bd_2767:
             ovr_blitLabel();
             uVar17 = 0x7d;
             uVar18 = 0;
-            iVar12 = *(int *)(_uStack0004 + 0xa2) >> 0xf;
+            iVar12 = *(int *)(uStack0004 + 0xa2) >> 0xf;
             pcVar8 = litoa10();
             manage_blitLabelRight
                       ((char *)CONCAT13((char)((uint)iVar12 >> 8),CONCAT12((char)iVar12,pcVar8)),
@@ -620,7 +620,7 @@ L_attact_3f0b_26bd_2767:
         ovr_blitLabel();
         uVar17 = 0xdc;
         uVar18 = 0;
-        iVar12 = *(int *)(_uStack0004 + 0x54) >> 0xf;
+        iVar12 = *(int *)(uStack0004 + 0x54) >> 0xf;
         pcVar8 = litoa10();
         manage_blitLabelRight
                   ((char *)CONCAT13((char)((uint)iVar12 >> 8),CONCAT12((char)iVar12,pcVar8)),
@@ -665,7 +665,7 @@ L_attact_3f0b_26bd_2767:
         bVar3 = manage_findFirstLeader();
         pcVar8 = (char *)"puppetmaker" + 3;
         TextBlitY = TextBlitY + 0xf;
-        if ((*(char *)(_uStack0004 + 0x86) != '\0') && (bVar3 != 0xff)) {
+        if ((*(char *)(uStack0004 + 0x86) != '\0') && (bVar3 != 0xff)) {
           pcVar8 = (char *)((uint)bVar3 << 2);
           uVar14 = 0x217a;
           if (*(byte *)((int)*(undefined4 *)pcVar8 + 0x86) < 9) {

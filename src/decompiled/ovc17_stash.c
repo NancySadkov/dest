@@ -141,7 +141,7 @@ uint __cdecl16far stshRead(void)
         (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) = (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)) + uStack_a + (uint)bVar7;
         uStack_10 = in_stack_0000000a - uStack_c;
         uStack_e = (in_stack_0000000c - uStack_a) - (uint)(in_stack_0000000a < uStack_c);
-        puVar4 = LXURSH_at_(unaff_SI,_pbuf,in_stack_0000ffee);
+        puVar4 = LXURSH_at_(unaff_SI,pbuf,in_stack_0000ffee);
         in_stack_00000008 = (uint32_t *)((int)puVar4 + (int)in_stack_00000008);
         in_stack_00000006 = (uint32_t *)((int)in_stack_00000006 + (uStack_c & 0xf));
       }
@@ -180,7 +180,7 @@ uint __cdecl16far stshRead(void)
           bVar7 = uStack_10 < uStack_c;
           uStack_10 = uStack_10 - uStack_c;
           uStack_e = (uStack_e - uStack_a) - (uint)bVar7;
-          puVar4 = LXURSH_at_(unaff_SI,_pbuf,in_stack_0000ffee);
+          puVar4 = LXURSH_at_(unaff_SI,pbuf,in_stack_0000ffee);
           in_stack_00000008 = (uint32_t *)((int)puVar4 + (int)in_stack_00000008);
           in_stack_00000006 = (uint32_t *)((int)in_stack_00000006 + (uStack_c & 0xf));
         }
@@ -395,7 +395,7 @@ void * __cdecl16far stshAlloc(uint32_t nbytes,...)
   if (((far_t *)nbytes == (far_t *)0x0) && (in_stack_00000004 == -0x5f1)) {
     (*(uint16_t *)((uint8_t *)&(r))) = (far_t *)StshBuf.ofs;
     if (StshBuf.ofs == 0 && StshBuf.seg == 0) {
-      (*(uint16_t *)((uint8_t *)&(r))) = farmalloc((far_t *)0x0,(uint32_t)_ofs);
+      (*(uint16_t *)((uint8_t *)&(r))) = farmalloc((far_t *)0x0,(uint32_t)ofs);
       StshBuf.ofs = (uint16_t)(far_t *)r;
       StshBuf.seg = (*(uint16_t *)((uint8_t *)&(r) + 2));
     }
@@ -408,12 +408,12 @@ void * __cdecl16far stshAlloc(uint32_t nbytes,...)
     }
     do {
       if (HeapReady == '\0') {
-        pfVar1 = farmalloc((far_t *)nbytes,(uint32_t)_ofs);
-        _ofs = (far_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(r) + 2)),pfVar1);
+        pfVar1 = farmalloc((far_t *)nbytes,(uint32_t)ofs);
+        ofs = (far_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(r) + 2)),pfVar1);
       }
       else {
         pfVar1 = (far_t *)ovr_heapAlloc();
-        _ofs = (far_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(r) + 2)),pfVar1);
+        ofs = (far_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(r) + 2)),pfVar1);
       }
       if ((ofs == 0 && seg == 0) &&
          (uVar2 = fmOutOfMemory(CONCAT22((far_t *)nbytes,in_stack_00000004)), (uVar2 & 0xff) == 0))
@@ -577,7 +577,7 @@ void __cdecl16far clean_ring_buffer(void)
     if (((far_t *)FMRingBuf + i)->ofs != 0 || *(int *)((int)&FMRingBuf[0].seg + (uint)i * 4) != 0) {
       uVar1 = (uint)i;
       uStack_6 = *(uint16_t *)((int)&FMRingBuf[0].seg + uVar1 * 4);
-      stshFree(_uStack_6,((far_t *)FMRingBuf + uVar1)->ofs);
+      stshFree(uStack_6,((far_t *)FMRingBuf + uVar1)->ofs);
     }
     *(undefined2 *)((int)&FMRingBuf[0].seg + (uint)i * 4) = 0;
     ((far_t *)FMRingBuf + i)->ofs = 0;

@@ -167,3 +167,34 @@ Measured effect: `Undefined symbol` 85 -> 62, total 671 -> 659, and `O29`
 Locals printed this way (`_uStack0004`) are still undeclared; extending the rule
 to locally declared names needs the same care about Borland's `_`-prefixed
 globals, and is the next refinement.
+
+### Third pass: shadow rewrite extended to locals
+
+`ExportRecovered.fixShadowedParamUses()` now covers names the function declares
+**itself**, not just parameters, with the same guard: a name is only rewritten
+when the *unprefixed* spelling is declared in this body and the prefixed spelling
+is not a program symbol (so Borland's `_drive`, `_c`, `_argv` are untouched).
+
+```
+modules compiled clean : 10 / 57   (unchanged)
+total errors           : 609       (was 659)
+_uStack0004 occurrences: 0
+Undefined symbol class : no longer in the top eight
+```
+
+Measured effect: 659 -> 609, a 50-error drop, with the clean count unchanged --
+the modules that had these names have other errors left.
+
+### O08 is not a quick win: the caller's parameter list is under-modelled
+
+`miceBlitRect` is declared `void miceBlitRect(brect_t *br, ...)` and calls
+`miceSaveArea()` with no arguments, while `miceSaveArea` reads `[BP+6]`, `[BP+8]`
+and `LES [BP+0xa]`, so it really does take three arguments.
+
+The caller's body reads **six words** from `BP+6` (`in_stack_00000004[0..4]` plus
+`br`), and Ghidra represents the first two as
+`CONCAT22((brect_t *)br, in_stack_00000004)`.  Only one parameter is modelled, so
+the decompiler resolved the rest as an `in_stack_` array and dropped the nested
+call's arguments.  Widening `br` to a far pointer was tried and does not help (it
+is used as the *segment* half there); it was reverted.  Recovering the missing
+parameters is per-function step-3 work, not a sweep.

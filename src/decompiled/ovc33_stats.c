@@ -1715,8 +1715,8 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
   undefined2 uStack_4;
   
   uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
-  uVar4 = _text;
-  pcStack_d4 = (char *)(CONCAT22(_text,(uint)*(byte *)((int)uVar2 + 0x33)) ^ 1);
+  uVar4 = text;
+  pcStack_d4 = (char *)(CONCAT22(text,(uint)*(byte *)((int)uVar2 + 0x33)) ^ 1);
   uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
   *(undefined1 *)((int)uVar2 + 0x33) = (char)pcStack_d4;
   uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
@@ -1727,13 +1727,13 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
   }
   else {
     uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
-    _text = uVar4;
+    text = uVar4;
     stats_usesEntityCount(*(char *)((int)uVar2 + 0x1a));
     uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
     pbVar1 = (byte *)((int)uVar2 + 0x33);
     *pbVar1 = *pbVar1 | 4;
     uStack_4 = *(undefined2 *)((uint)agnt_id * 0x34 + 0x1b);
-    pcStack_d4 = (char *)CONCAT22(_text,unaff_SS);
+    pcStack_d4 = (char *)CONCAT22(text,unaff_SS);
     ovr_attact_usesEntities();
   }
   uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
@@ -1748,15 +1748,15 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
     puVar5 = ovr_ovc15_usesStshRealloc();
     ovr_stsprintf((char *)CONCAT22(0x63b1,unaff_SS),
                   (char *)CONCAT22(puVar5,(char *)"puppetmaker" + 3),pcVar7,&msg);
-    pcStack_d4 = (char *)CONCAT22(_text,pcVar7);
+    pcStack_d4 = (char *)CONCAT22(text,pcVar7);
     drawString();
   }
   else {
-    pcStack_d4 = (char *)CONCAT22(_text,unaff_SS);
+    pcStack_d4 = (char *)CONCAT22(text,unaff_SS);
     pcVar6 = stats_readyStatusText((byte)&text,pcStack_d4);
     ovr_stsprintf((char *)CONCAT22(0x63c8,unaff_SS),
                   (char *)CONCAT22(pcVar6,(char *)"puppetmaker" + 3),pcVar7,&msg);
-    pcStack_d4 = (char *)CONCAT22(_text,pcVar7);
+    pcStack_d4 = (char *)CONCAT22(text,pcVar7);
     drawString();
   }
   return;
@@ -2162,11 +2162,11 @@ L_stats_6386_1c9f_1ECD:
   cVar2 = stats_prevAgentByOwner(agntIndex);
   if (cVar2 == -1) {
     uStack_36 = 0;
-    _entries = 0;
+    entries = 0;
   }
   else {
     uStack_36 = 0x2410;
-    _entries = 0x6473;
+    entries = 0x6473;
   }
   uStack_10 = 4;
   cVar2 = stats_nextAgentByOwner(agntIndex);
@@ -2479,7 +2479,7 @@ void __cdecl16far stats_openCastlePanel(void)
   ovr_alignToSeg(ptr,pvStack_6);
   uStack_e = 7;
   uStack_a = 0xc2;
-  _dst = 8;
+  dst = 8;
   uStack_c = 0xe2;
   ovr_driver_fillRect(7,0xe2,0xc2,0,(uint8_t)in_DX,8);
   gfx_00.seg = 0;
@@ -2494,7 +2494,7 @@ void __cdecl16far stats_openCastlePanel(void)
   (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = uVar1;
   psStack_14 = ovr_stshLoadGfx(handle,Lbm_nwpanel1.ofs);
   ovr_calcSeasonPalette((uint8_t *)CONCAT22(&palette,in_DX),(uint16_t)psStack_14);
-  ovr_driver_fillRect(uStack_e,uStack_c,uStack_a,0,0x0,_dst);
+  ovr_driver_fillRect(uStack_e,uStack_c,uStack_a,0,0x0,dst);
   ovr_vgaSetPalette8bit((uint8_t *)CONCAT13(uVar1,CONCAT12(type,unaff_SS)),&palette);
   ovr_blitRect((brect_t *)CONCAT13(uVar1,CONCAT12(type,unaff_SS)),&dst);
   TextBlitDstSeg = 0xa000;
@@ -2547,7 +2547,7 @@ void __cdecl16far drawString(char *text,uint16_t widths,...)
       uStack_6 = 0x96;
     }
   }
-  _rect = 0x13;
+  rect = 0x13;
   uStack_8 = 0xd7;
   TextBlitFlag = 1;
   TextBlitDstSeg = 0xa000;

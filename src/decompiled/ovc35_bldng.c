@@ -277,10 +277,10 @@ void bldng_selectBuildingType(byte partyIndex)
                                  (uint)*(byte *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2)
                                                 + 0x3e) * 0x95) & 0x1f);
   uVar9 = (ulong)unaff_DI << 0x10;
-  _buildTypes = bldng_getClass();
-  _buildTypes = _buildTypes & 0xff;
-  uVar3 = *(uint *)((int)&GStrangeTable[0x31].seg + _buildTypes * 4);
-  _menuEntries = ((far_t *)(GStrangeTable + 0x31) + _buildTypes)->ofs;
+  buildTypes = bldng_getClass();
+  buildTypes = buildTypes & 0xff;
+  uVar3 = *(uint *)((int)&GStrangeTable[0x31].seg + buildTypes * 4);
+  menuEntries = ((far_t *)(GStrangeTable + 0x31) + buildTypes)->ofs;
   puVar4 = (uint16_t *)&menuEntries;
   count_00 = 1;
   iStack_6 = 7;

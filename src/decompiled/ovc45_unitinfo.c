@@ -195,7 +195,7 @@ undefined2 __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *en
   
   entityIndexOut = (uint *)CONCAT22(unaff_DI,in_stack_00000004);
   in_stack_00000004 = (uint *)ovr_alignUp4();
-  _entityIndex = *(undefined2 *)CONCAT22((int *)entityIndexPtr,y);
+  entityIndex = *(undefined2 *)CONCAT22((int *)entityIndexPtr,y);
   slotMin = 0xffff;
   for (uVar6 = 0; uVar8 = (uint16_t)((ulong)entityIndexOut >> 0x10), (int)uVar6 < 10;
       uVar6 = uVar6 + 1) {
@@ -203,13 +203,13 @@ undefined2 __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *en
     slotMin = ovc45_usesAlignUp4(slotMin,(int)in_stack_00000004,x,entityIndexOut);
     uVar8 = (uint16_t)((ulong)entityIndexOut >> 0x10);
     if (slotMin == 0xffff) break;
-    *(undefined2 *)(&foundEntities + uVar6 * 2) = _entityIndex;
+    *(undefined2 *)(&foundEntities + uVar6 * 2) = entityIndex;
     uVar7 = *(undefined2 *)(slotMin * 4);
     auStack_2c[uVar6 * 2] = ((undefined2 *)(slotMin * 4))[1];
     *(undefined2 *)(&menuItems + uVar6 * 4) = uVar7;
   }
   if ((int)uVar6 < 2) {
-    *(undefined2 *)CONCAT22((int *)entityIndexPtr,y) = _entityIndex;
+    *(undefined2 *)CONCAT22((int *)entityIndexPtr,y) = entityIndex;
     iVar1 = (uint)((entity_t *)Entities)[*(int *)CONCAT22((int *)entityIndexPtr,y)].base.gindex *
             0x95;
     uVar7 = CONCAT11((char)((uint)iVar1 >> 8),
@@ -946,7 +946,7 @@ ovc45_buildPlacementMessage(uint param_1,uint param_2,int param_3,undefined2 par
       in_stack_0000fc0f = 0x24;
       in_stack_0000fc0c = 0x85;
       in_stack_0000fc0d = 0x76;
-      _uStack_c = (stg_tmp_t *)CONCAT31(stack0xfff5,1);
+      uStack_c = (stg_tmp_t *)CONCAT31(stack0xfff5,1);
       iVar9 = 1;
     }
 L_OVC45_77eb_0d61_1379:
@@ -1012,7 +1012,7 @@ code_r0x00072658:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(puVar10,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(puVar10,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x820064)),199,194,26,
                               (&psVar4->aptr)->ofs,100,199,0xc2);
     pcVar6 = ovr_stshStoreFile((uint8_t *)
@@ -1021,18 +1021,18 @@ code_r0x00072658:
     uVar15 = 0x195d;
     *(uint16_t *)((int)&BldInstances[0].seg + iVar9 * 0xc) = (uint16_t)puVar10;
     ((bld_inst_t *)BldInstances + iVar9)->ofs = (short)pcVar6;
-    uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x410064)),199,129,
-                              26,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,100,199,0x81);
+    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x410064)),199,129,
+                              26,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,100,199,0x81);
     pcVar6 = ovr_stshStoreFile((uint8_t *)
                                CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),pfVar5
                               );
     uVar16 = 0x195d;
     *(undefined2 *)((int)&BldInstances[0].seg + (iVar9 + 1) * 0xc) = uVar15;
     ((bld_inst_t *)BldInstances + iVar9 + 1)->ofs = (short)pcVar6;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x64)),199,64,26,
-                              (&((stg_tmp_t *)_uStack_c)->aptr)->ofs,100,199,0x40);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x64)),199,64,26,
+                              (&((stg_tmp_t *)uStack_c)->aptr)->ofs,100,199,0x40);
     pcVar6 = ovr_stshStoreFile((uint8_t *)
                                CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar16)),pfVar5
                               );
@@ -1073,12 +1073,12 @@ code_r0x00072658:
       else {
         puVar10 = (uint8_t *)((ulong)((long)iStack_4 * 0x17) >> 0x10);
         iVar9 = (int)((long)iStack_4 * 0x17) + 6;
-        uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+        uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
         (*(uint8_t *)((uint8_t *)&(src.seg))) = 0x15;
         src.ofs = iVar9;
         (*(uint8_t *)((uint8_t *)&(src.seg) + 1)) = 0;
-        pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,src,
-                                iStack_4 * 0x17 + 0x1b,(char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,
+        pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,src,
+                                iStack_4 * 0x17 + 0x1b,(char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,
                                 (char)iVar9,0x15);
         pcVar6 = ovr_stshStoreFile((uint8_t *)
                                    CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puVar10)),
@@ -1830,7 +1830,7 @@ code_r0x00072658:
       ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                      uStack_c);
       psVar4 = ovr_grabLbmTR();
-      _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+      uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
       pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x440009)),92,182,-4,
                                 (&psVar4->aptr)->ofs,9,0x5c,0xb6);
       BldGfxRuin[0x4c].ofs =
@@ -1838,19 +1838,19 @@ code_r0x00072658:
            ovr_stshStoreFile((uint8_t *)
                              CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14)),pfVar5);
       uVar20 = 0x195d;
-      uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
       BldGfxRuin[0x4c].seg = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x44006c)),191,
-                                182,-3,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x6c,0xbf,0xb6);
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x44006c)),191,
+                                182,-3,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x6c,0xbf,0xb6);
       BldGfxRuin[0x4f].ofs =
            (uint16_t)
            ovr_stshStoreFile((uint8_t *)
                              CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20)),pfVar5);
       uVar21 = 0x195d;
-      uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
       BldGfxRuin[0x4f].seg = uVar20;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4400d0)),291,
-                                182,-1,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0xd0,0x23,0xb6);
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4400d0)),291,
+                                182,-1,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0xd0,0x23,0xb6);
       BldGfxRuin[0x52].ofs =
            (uint16_t)
            ovr_stshStoreFile((uint8_t *)
@@ -1863,7 +1863,7 @@ code_r0x00072658:
     ovr_stshStubifyCopy1to0();
     if (cVar25 != '\0') {
       psVar4 = ovr_grabLbmTR();
-      _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+      uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     }
     iStack_4 = 0;
     while( true ) {
@@ -1902,7 +1902,7 @@ code_r0x00072658:
       ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                      uStack_c);
       psVar4 = ovr_grabLbmTR();
-      _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+      uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     }
     iStack_4 = 0;
     while( true ) {
@@ -1944,7 +1944,7 @@ code_r0x00072658:
     iVar9 = 0x1f;
     if (cVar25 != '\0') {
       psVar4 = ovr_grabLbmTR();
-      _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+      uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
       pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x820064)),199,194,26,
                                 (&psVar4->aptr)->ofs,100,199,0xc2);
       BldGfxNormal[0x5e].ofs =
@@ -1952,19 +1952,19 @@ code_r0x00072658:
            ovr_stshStoreFile((uint8_t *)
                              CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14)),pfVar5);
       uVar20 = 0x195d;
-      uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
       BldGfxNormal[0x5e].seg = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x410064)),199,
-                                129,26,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,100,199,0x81);
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x410064)),199,
+                                129,26,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,100,199,0x81);
       BldGfxNormal[0x61].ofs =
            (uint16_t)
            ovr_stshStoreFile((uint8_t *)
                              CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20)),pfVar5);
       uVar14 = 0x195d;
-      uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
       BldGfxNormal[0x61].seg = uVar20;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x64)),199,64,26,
-                                (&((stg_tmp_t *)_uStack_c)->aptr)->ofs,100,199,0x40);
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x64)),199,64,26,
+                                (&((stg_tmp_t *)uStack_c)->aptr)->ofs,100,199,0x40);
       BldGfxNormal[100].ofs =
            (uint16_t)
            ovr_stshStoreFile((uint8_t *)
@@ -2152,7 +2152,7 @@ code_r0x00072658:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x820000)),99,194,26,
                               (&psVar4->aptr)->ofs,0,99,0xc2);
     BldGfxNormal[0x8b].ofs =
@@ -2160,46 +2160,46 @@ code_r0x00072658:
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x8b].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x820064)),199,194,
-                              26,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,100,199,0xc2);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x820064)),199,194,
+                              26,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,100,199,0xc2);
     BldGfxNormal[0x8e].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x8e].seg = uVar20;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x8200c8)),299,194,
-                              26,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,200,0x2b,0xc2);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x8200c8)),299,194,
+                              26,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,200,0x2b,0xc2);
     BldGfxNormal[0x91].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x91].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x410000)),99,129,
-                              26,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0,99,0x81);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x410000)),99,129,
+                              26,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0,99,0x81);
     BldGfxNormal[0x94].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x94].seg = uVar20;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x410064)),199,129,
-                              26,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,100,199,0x81);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x410064)),199,129,
+                              26,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,100,199,0x81);
     BldGfxNormal[0x97].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x97].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4100c8)),299,129,
-                              26,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,200,0x2b,0x81);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4100c8)),299,129,
+                              26,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,200,0x2b,0x81);
     BldGfxNormal[0x9a].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
@@ -2254,7 +2254,7 @@ code_r0x00072658:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x8d003a)),134,199,-4,
                               (&psVar4->aptr)->ofs,0x3a,0x86,199);
     BldGfxRuin[0xaf].ofs =
@@ -2262,19 +2262,19 @@ code_r0x00072658:
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxRuin[0xaf].seg = uVar20;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x54003a)),134,142,
-                              -4,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x3a,0x86,0x8e);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x54003a)),134,142,
+                              -4,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x3a,0x86,0x8e);
     BldGfxRuin[0xb2].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxRuin[0xb2].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x19003a)),134,83,
-                              -4,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x3a,0x86,0x53);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x19003a)),134,83,
+                              -4,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x3a,0x86,0x53);
     BldGfxRuin[0xb5].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
@@ -2287,7 +2287,7 @@ code_r0x00072658:
   ovr_stshStubifyCopy1to0();
   if (cVar25 != '\0') {
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
   }
   iVar9 = 0;
   while( true ) {
@@ -2319,11 +2319,11 @@ code_r0x00072658:
       iVar19 = iVar9 * 0x30 + 0x32;
       uVar15 = (undefined2)((ulong)((long)iVar9 * 0x30) >> 0x10);
       uVar14 = (int)((long)iVar9 * 0x30) + 3;
-      uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
       pixels_02.seg = 0x3e;
       pixels_02.ofs = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_02,iVar19,116,0
-                                ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_02,iVar19,116,0
+                                ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
                                 0x74);
       pcVar6 = ovr_stshStoreFile((uint8_t *)
                                  CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -2333,11 +2333,11 @@ code_r0x00072658:
       iVar19 = iVar9 * 0x30 + 0x32;
       uVar15 = (undefined2)((ulong)((long)iVar9 * 0x30) >> 0x10);
       uVar14 = (int)((long)iVar9 * 0x30) + 3;
-      uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
       pixels_03.seg = 0x3e;
       pixels_03.ofs = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_03,iVar19,116,0
-                                ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_03,iVar19,116,0
+                                ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
                                 0x74);
       pcVar6 = ovr_stshStoreFile((uint8_t *)
                                  CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -2352,7 +2352,7 @@ code_r0x00072658:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
   }
   iVar9 = 0;
   while( true ) {
@@ -2384,11 +2384,11 @@ code_r0x00072658:
       iVar19 = iVar9 * 0x30 + 0x32;
       uVar15 = (undefined2)((ulong)((long)iVar9 * 0x30) >> 0x10);
       uVar14 = (int)((long)iVar9 * 0x30) + 3;
-      uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
       pixels_05.seg = 0x3e;
       pixels_05.ofs = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_05,iVar19,116,0
-                                ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_05,iVar19,116,0
+                                ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
                                 0x74);
       pcVar6 = ovr_stshStoreFile((uint8_t *)
                                  CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -2398,11 +2398,11 @@ code_r0x00072658:
       iVar19 = iVar9 * 0x30 + 0x32;
       uVar15 = (undefined2)((ulong)((long)iVar9 * 0x30) >> 0x10);
       uVar14 = (int)((long)iVar9 * 0x30) + 3;
-      uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
       pixels_06.seg = 0x3e;
       pixels_06.ofs = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_06,iVar19,116,0
-                                ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_06,iVar19,116,0
+                                ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
                                 0x74);
       pcVar6 = ovr_stshStoreFile((uint8_t *)
                                  CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -2417,7 +2417,7 @@ code_r0x00072658:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
   }
   iVar9 = 0;
   while( true ) {
@@ -2449,11 +2449,11 @@ code_r0x00072658:
       iVar19 = iVar9 * 0x30 + 0x32;
       uVar15 = (undefined2)((ulong)((long)iVar9 * 0x30) >> 0x10);
       uVar14 = (int)((long)iVar9 * 0x30) + 3;
-      uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
       pixels_08.seg = 0x3e;
       pixels_08.ofs = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_08,iVar19,116,0
-                                ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_08,iVar19,116,0
+                                ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
                                 0x74);
       pcVar6 = ovr_stshStoreFile((uint8_t *)
                                  CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -2463,11 +2463,11 @@ code_r0x00072658:
       iVar19 = iVar9 * 0x30 + 0x32;
       uVar15 = (undefined2)((ulong)((long)iVar9 * 0x30) >> 0x10);
       uVar14 = (int)((long)iVar9 * 0x30) + 3;
-      uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
       pixels_09.seg = 0x3e;
       pixels_09.ofs = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_09,iVar19,116,0
-                                ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_09,iVar19,116,0
+                                ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
                                 0x74);
       pcVar6 = ovr_stshStoreFile((uint8_t *)
                                  CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -2482,7 +2482,7 @@ code_r0x00072658:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
   }
   iVar9 = 0;
   while( true ) {
@@ -2514,11 +2514,11 @@ code_r0x00072658:
       iVar19 = iVar9 * 0x30 + 0x32;
       uVar15 = (undefined2)((ulong)((long)iVar9 * 0x30) >> 0x10);
       uVar14 = (int)((long)iVar9 * 0x30) + 3;
-      uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
       pixels_11.seg = 0x3e;
       pixels_11.ofs = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_11,iVar19,116,0
-                                ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_11,iVar19,116,0
+                                ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
                                 0x74);
       pcVar6 = ovr_stshStoreFile((uint8_t *)
                                  CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -2528,11 +2528,11 @@ code_r0x00072658:
       iVar19 = iVar9 * 0x30 + 0x32;
       uVar15 = (undefined2)((ulong)((long)iVar9 * 0x30) >> 0x10);
       uVar14 = (int)((long)iVar9 * 0x30) + 3;
-      uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
       pixels_12.seg = 0x3e;
       pixels_12.ofs = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_12,iVar19,116,0
-                                ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_12,iVar19,116,0
+                                ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
                                 0x74);
       pcVar6 = ovr_stshStoreFile((uint8_t *)
                                  CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -2547,7 +2547,7 @@ code_r0x00072658:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
   }
   iVar9 = 0;
   while( true ) {
@@ -2579,11 +2579,11 @@ code_r0x00072658:
       iVar19 = iVar9 * 0x30 + 0x32;
       uVar15 = (undefined2)((ulong)((long)iVar9 * 0x30) >> 0x10);
       uVar14 = (int)((long)iVar9 * 0x30) + 3;
-      uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
       pixels_14.seg = 0x3e;
       pixels_14.ofs = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_14,iVar19,116,0
-                                ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_14,iVar19,116,0
+                                ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
                                 0x74);
       pcVar6 = ovr_stshStoreFile((uint8_t *)
                                  CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -2593,11 +2593,11 @@ code_r0x00072658:
       iVar19 = iVar9 * 0x30 + 0x32;
       uVar15 = (undefined2)((ulong)((long)iVar9 * 0x30) >> 0x10);
       uVar14 = (int)((long)iVar9 * 0x30) + 3;
-      uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
       pixels_15.seg = 0x3e;
       pixels_15.ofs = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_15,iVar19,116,0
-                                ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_15,iVar19,116,0
+                                ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
                                 0x74);
       pcVar6 = ovr_stshStoreFile((uint8_t *)
                                  CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -2612,7 +2612,7 @@ code_r0x00072658:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
   }
   iVar9 = 0;
   while( true ) {
@@ -2644,11 +2644,11 @@ code_r0x00072658:
       iVar19 = iVar9 * 0x30 + 0x32;
       uVar15 = (undefined2)((ulong)((long)iVar9 * 0x30) >> 0x10);
       uVar14 = (int)((long)iVar9 * 0x30) + 3;
-      uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
       pixels_17.seg = 0x3e;
       pixels_17.ofs = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_17,iVar19,116,0
-                                ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_17,iVar19,116,0
+                                ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
                                 0x74);
       pcVar6 = ovr_stshStoreFile((uint8_t *)
                                  CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -2658,11 +2658,11 @@ code_r0x00072658:
       iVar19 = iVar9 * 0x30 + 0x32;
       uVar15 = (undefined2)((ulong)((long)iVar9 * 0x30) >> 0x10);
       uVar14 = (int)((long)iVar9 * 0x30) + 3;
-      uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
       pixels_18.seg = 0x3e;
       pixels_18.ofs = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_18,iVar19,116,0
-                                ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_18,iVar19,116,0
+                                ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)uVar14,(char)iVar19,
                                 0x74);
       pcVar6 = ovr_stshStoreFile((uint8_t *)
                                  CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -2682,7 +2682,7 @@ code_r0x00072658:
   }
   if (cVar25 != '\0') {
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
   }
   for (iVar9 = 0; iVar9 < 3; iVar9 = iVar9 + 1) {
     for (iStack_4 = 0; iStack_4 < 3; iStack_4 = iStack_4 + 1) {
@@ -2698,11 +2698,11 @@ code_r0x00072658:
         iVar18 = iStack_4 * 100 + 99;
         lVar1 = (long)iStack_4 * 100;
         uVar15 = (undefined2)((ulong)lVar1 >> 0x10);
-        uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+        uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
         pixels_19.seg = iVar9 * 0x41;
         pixels_19.ofs = (uint16_t)lVar1;
-        pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_19,iVar18,
-                                  iVar19,30,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)lVar1,
+        pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_19,iVar18,
+                                  iVar19,30,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)lVar1,
                                   (char)iVar18,(char)iVar19);
         pcVar6 = ovr_stshStoreFile((uint8_t *)
                                    CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -2732,7 +2732,7 @@ code_r0x00072658:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0xc00a7)),206,32,-4,
                               (&psVar4->aptr)->ofs,0xa7,0xce,0x20);
     pcVar6 = ovr_stshStoreFile((uint8_t *)
@@ -2747,9 +2747,9 @@ code_r0x00072658:
     BldGfxNormal[0x154] = far_from_u32((uint32_t)(func_0x0007ffe0()));
   }
   else {
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x2d00a7)),206,65,
-                              -4,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0xa7,0xce,0x41);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x2d00a7)),206,65,
+                              -4,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0xa7,0xce,0x41);
     pcVar6 = ovr_stshStoreFile((uint8_t *)
                                CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14)),pfVar5
                               );
@@ -2762,9 +2762,9 @@ code_r0x00072658:
     BldGfxNormal[0x157] = far_from_u32((uint32_t)(func_0x0007ffe0()));
   }
   else {
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4e00a7)),206,98,
-                              -4,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0xa7,0xce,0x62);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4e00a7)),206,98,
+                              -4,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0xa7,0xce,0x62);
     pcVar6 = ovr_stshStoreFile((uint8_t *)
                                CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14)),pfVar5
                               );
@@ -2801,8 +2801,8 @@ code_r0x00072658:
   else {
     iStack_4 = 0;
     while( true ) {
-      psVar4 = (stg_tmp_t *)_uStack_c;
-      uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+      psVar4 = (stg_tmp_t *)uStack_c;
+      uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
       if (5 < iStack_4) break;
       iVar9 = iStack_4 * 0x21 + 0x20;
       uVar16 = (undefined2)((ulong)((long)iStack_4 * 0x21) >> 0x10);
@@ -2819,11 +2819,11 @@ code_r0x00072658:
       *puVar17 = pcVar6;
       iVar9 = iStack_4 * 0x21 + 0x20;
       uVar14 = (uint16_t)((ulong)((long)iStack_4 * 0x21) >> 0x10);
-      uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+      uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
       pixels_21.seg = (int)((long)iStack_4 * 0x21) + 0x14;
       pixels_21.ofs = 0x5f;
-      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_21,98,iVar9,-22
-                                ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x5f,0x62,(char)iVar9);
+      pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_21,98,iVar9,-22
+                                ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x5f,0x62,(char)iVar9);
       pcVar6 = ovr_stshStoreFile((uint8_t *)
                                  CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14)),
                                  pfVar5);
@@ -2842,9 +2842,9 @@ code_r0x00072658:
     uVar20 = AnimSeqPtr[1].ofs;
     *(uint16_t *)(uVar20 + 0x1a) = uVar14;
     *(undefined2 *)(uVar20 + 0x18) = pcVar6;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x14007d)),128,32,
-                              -22,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x7d,0x80,0x20);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x14007d)),128,32,
+                              -22,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x7d,0x80,0x20);
     pcVar6 = ovr_stshStoreFile((uint8_t *)
                                CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14)),pfVar5
                               );
@@ -2895,7 +2895,7 @@ code_r0x00072658:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x560002)),85,180,-2,
                               (&psVar4->aptr)->ofs,2,0x55,0xb4);
     BldGfxRuin[0x15a].ofs =
@@ -2903,19 +2903,19 @@ code_r0x00072658:
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxRuin[0x15a].seg = uVar20;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x56006c)),191,180,
-                              -2,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x6c,0xbf,0xb4);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x56006c)),191,180,
+                              -2,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x6c,0xbf,0xb4);
     BldGfxRuin[0x15d].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxRuin[0x15d].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x5600d0)),298,180,
-                              0,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0xd0,0x2a,0xb4);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x5600d0)),298,180,
+                              0,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0xd0,0x2a,0xb4);
     BldGfxRuin[0x160].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
@@ -2965,7 +2965,7 @@ code_r0x00072658:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x4a0004)),91,180,-3,
                               (&psVar4->aptr)->ofs,4,0x5b,0xb4);
     BldGfxRuin[0x163].ofs =
@@ -2973,19 +2973,19 @@ code_r0x00072658:
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxRuin[0x163].seg = uVar20;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a006e)),195,180,
-                              -3,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x6e,0xc3,0xb4);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a006e)),195,180,
+                              -3,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x6e,0xc3,0xb4);
     BldGfxRuin[0x166].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxRuin[0x166].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a00cc)),299,180,
-                              3,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0xcc,0x2b,0xb4);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a00cc)),299,180,
+                              3,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0xcc,0x2b,0xb4);
     BldGfxRuin[0x169].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
@@ -3038,7 +3038,7 @@ code_r0x00072658:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x460002)),86,180,0,
                               (&psVar4->aptr)->ofs,2,0x56,0xb4);
     BldGfxRuin[0x186].ofs =
@@ -3046,19 +3046,19 @@ code_r0x00072658:
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxRuin[0x186].seg = uVar20;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x46006c)),191,180,
-                              0,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x6c,0xbf,0xb4);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x46006c)),191,180,
+                              0,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x6c,0xbf,0xb4);
     BldGfxRuin[0x187].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxRuin[0x187].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4600d7)),298,180,
-                              0,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0xd7,0x2a,0xb4);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4600d7)),298,180,
+                              0,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0xd7,0x2a,0xb4);
     BldGfxRuin[0x188].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
@@ -3111,7 +3111,7 @@ code_r0x00074dd0:
   ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                  uStack_c);
   psVar4 = ovr_grabLbmTR();
-  _uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
+  uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
   pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x460002)),86,180,0,
                             (&psVar4->aptr)->ofs,2,0x56,0xb4);
   BldGfxRuin[0x189].ofs =
@@ -3119,19 +3119,19 @@ code_r0x00074dd0:
        ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20)),
                          pfVar5);
   uVar14 = 0x195d;
-  uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+  uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
   BldGfxRuin[0x189].seg = uVar20;
-  pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x46006c)),191,180,0,
-                            (&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x6c,0xbf,0xb4);
+  pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x46006c)),191,180,0,
+                            (&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x6c,0xbf,0xb4);
   BldGfxRuin[0x18a].ofs =
        (uint16_t)
        ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14)),
                          pfVar5);
   uVar20 = 0x195d;
-  uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+  uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
   BldGfxRuin[0x18a].seg = uVar14;
-  pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4600d7)),298,180,0,
-                            (&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0xd7,0x2a,0xb4);
+  pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4600d7)),298,180,0,
+                            (&((stg_tmp_t *)uStack_c)->aptr)->ofs,0xd7,0x2a,0xb4);
   BldGfxRuin[0x18b].ofs =
        (uint16_t)
        ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20)),
@@ -3159,7 +3159,7 @@ L_init_assets_4EA5:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x46006c)),191,180,0,
                               (&psVar4->aptr)->ofs,0x6c,0xbf,0xb4);
     BldGfxRuin[0x18d].ofs =
@@ -3259,7 +3259,7 @@ L_init_assets_4EA5:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x46006c)),191,180,0,
                               (&psVar4->aptr)->ofs,0x6c,0xbf,0xb4);
     BldGfxRuin[0x193].ofs =
@@ -3297,7 +3297,7 @@ L_init_assets_4EA5:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x46006c)),191,180,0,
                               (&psVar4->aptr)->ofs,0x6c,0xbf,0xb4);
     BldGfxRuin[0x196].ofs =
@@ -3359,7 +3359,7 @@ L_init_assets_4EA5:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x570052)),222,181,22,
                               (&psVar4->aptr)->ofs,0x52,0xde,0xb5);
     BldGfxRuin[0x199].ofs =
@@ -3438,7 +3438,7 @@ L_init_assets_4EA5:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x460000)),319,193,60,
                               (&psVar4->aptr)->ofs,0,0x3f,0xc1);
     BldGfxRuin[0x1a2].ofs =
@@ -3491,7 +3491,7 @@ L_init_assets_4EA5:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x320008)),110,154,-4,
                               (&psVar4->aptr)->ofs,8,0x6e,0x9a);
     BldGfxRuin[0x1ae].ofs =
@@ -3499,19 +3499,19 @@ L_init_assets_4EA5:
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxRuin[0x1ae].seg = uVar20;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x32006f)),212,154,
-                              -4,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x6f,0xd4,0x9a);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x32006f)),212,154,
+                              -4,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x6f,0xd4,0x9a);
     BldGfxRuin[0x1b1].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxRuin[0x1b1].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x3200d5)),313,154,
-                              -4,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0xd5,0x39,0x9a);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x3200d5)),313,154,
+                              -4,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0xd5,0x39,0x9a);
     BldGfxRuin[0x1b4].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
@@ -3525,7 +3525,7 @@ L_init_assets_4EA5:
   iVar9 = 0x92;
   if (cVar25 != '\0') {
     psVar4 = ovr_grabLbm(0,0x11);
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     pixels_24.seg = 0xff;
     pixels_24.ofs = (psVar4->aptr).seg;
     ovr_grabRemap(pixels_24,0x0,(uint8_t)(&psVar4->aptr)->ofs);
@@ -3543,11 +3543,11 @@ L_init_assets_4EA5:
           sx = iStack_4 * 0x87 + 0x86;
           lVar1 = (long)iStack_4 * 0x87;
           uVar15 = (undefined2)((ulong)lVar1 >> 0x10);
-          uVar16 = (undefined2)((ulong)_uStack_c >> 0x10);
+          uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
           pixels_23.seg = iVar19 * 0x41;
           pixels_23.ofs = (uint16_t)lVar1;
-          pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,pixels_23,sx,
-                                    iVar18,30,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,(char)lVar1,
+          pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,pixels_23,sx,
+                                    iVar18,30,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,(char)lVar1,
                                     (char)sx,(char)iVar18);
           pcVar6 = ovr_stshStoreFile((uint8_t *)
                                      CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar15)),
@@ -3576,7 +3576,7 @@ L_init_assets_4EA5:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     pfVar5 = ovr_stshRleCut((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x120000)),200,
                             (char)(&psVar4->aptr)->ofs,0,0x12);
     BldGfxNormal[0x1c5].ofs =
@@ -3584,19 +3584,19 @@ L_init_assets_4EA5:
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x1c5].seg = uVar14;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a0083)),179,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x83,0x4a);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a0083)),179,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x83,0x4a);
     BldGfxNormal[0x1c6].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x1c6].seg = uVar20;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x31001f)),79,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x1f,0x31);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x31001f)),79,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x1f,0x31);
     pcVar6 = ovr_stshStoreFile((uint8_t *)
                                CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14)),pfVar5
                               );
@@ -3615,28 +3615,28 @@ L_init_assets_4EA5:
     BldGfxNormal[0x1d0] = far_from_u32((uint32_t)(func_0x0007ffe0()));
   }
   else {
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     uVar14 = BldGfxNormal[0x1c7].ofs;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x310000)),200,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0,0x31);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x310000)),200,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0,0x31);
     BldGfxNormal[0x1ce].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x1ce].seg = uVar14;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a001f)),79,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x1f,0x4a);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a001f)),79,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x1f,0x4a);
     BldGfxNormal[0x1cf].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x1cf].seg = uVar20;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x310083)),179,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x83,0x31);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x310083)),179,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x83,0x31);
     pcVar6 = ovr_stshStoreFile((uint8_t *)
                                CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14)),pfVar5
                               );
@@ -3653,10 +3653,10 @@ L_init_assets_4EA5:
     BldGfxNormal[0x1d7] = far_from_u32((uint32_t)(func_0x0007ffe0()));
   }
   else {
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     uVar14 = BldGfxNormal[0x1d0].ofs;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x10000)),200,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0,1);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x10000)),200,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0,1);
     pcVar6 = ovr_stshStoreFile((uint8_t *)
                                CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14)),pfVar5
                               );
@@ -3669,10 +3669,10 @@ L_init_assets_4EA5:
     BldGfxNormal[0x1d9] = far_from_u32((uint32_t)(func_0x0007ffe0()));
   }
   else {
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     uVar14 = BldGfxNormal[0x1d2].seg;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x3100e7)),279,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0xe7,0x31);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x3100e7)),279,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0xe7,0x31);
     pcVar6 = ovr_stshStoreFile((uint8_t *)
                                CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14)),pfVar5
                               );
@@ -3697,7 +3697,7 @@ L_init_assets_4EA5:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     pfVar5 = ovr_stshRleCut((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x310083)),219,
                             (char)(&psVar4->aptr)->ofs,0x83,0x31);
     BldGfxNormal[0x1e0].ofs =
@@ -3705,19 +3705,19 @@ L_init_assets_4EA5:
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x1e0].seg = uVar14;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a0083)),179,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x83,0x4a);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a0083)),179,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x83,0x4a);
     BldGfxNormal[0x1e1].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x1e1].seg = uVar20;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x3b0083)),179,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x83,0x3b);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x3b0083)),179,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x83,0x3b);
     BldGfxNormal[0x1e2].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
@@ -3746,7 +3746,7 @@ L_init_assets_4EA5:
   else {
     uVar14 = BldGfxNormal[0x1e2].seg;
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     pfVar5 = ovr_stshRleCut((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x330000)),200,
                             (char)(&psVar4->aptr)->ofs,0,0x33);
     BldGfxNormal[0x1e6].ofs =
@@ -3754,73 +3754,73 @@ L_init_assets_4EA5:
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x1e6].seg = uVar14;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a001f)),79,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x1f,0x4a);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a001f)),79,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x1f,0x4a);
     BldGfxNormal[0x1e7].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x1e7].seg = uVar20;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x330000)),48,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0,0x33);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x330000)),48,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0,0x33);
     BldGfxNormal[0x1e8].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x1e8].seg = uVar14;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0xe0000)),200,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0,0xe);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0xe0000)),200,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0,0xe);
     BldGfxNormal[0x1ec].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x1ec].seg = uVar20;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a0083)),179,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x83,0x4a);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a0083)),179,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x83,0x4a);
     BldGfxNormal[0x1ed].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x1ed].seg = uVar14;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0xe0000)),48,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0,0xe);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0xe0000)),48,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0,0xe);
     BldGfxNormal[0x1ee].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x1ee].seg = uVar20;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0xa80000)),200,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0,0xa8);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0xa80000)),200,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0,0xa8);
     BldGfxNormal[0x1f2].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[0x1f2].seg = uVar14;
-    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a00e7)),279,
-                            (char)(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0xe7,0x4a);
+    pfVar5 = ovr_stshRleCut((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x4a00e7)),279,
+                            (char)(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0xe7,0x4a);
     BldGfxNormal[499].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxNormal[499].seg = uVar20;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0xa80000)),48,187,0
-                              ,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0,0x30,0xbb);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0xa80000)),48,187,0
+                              ,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0,0x30,0xbb);
     BldGfxNormal[500].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
@@ -3883,7 +3883,7 @@ L_init_assets_4EA5:
     ovr_stgFreeTmp((stg_tmp_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,puStack_a)),
                    uStack_c);
     psVar4 = ovr_grabLbmTR();
-    _uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
+    uStack_c = (stg_tmp_t *)CONCAT22(uVar20,psVar4);
     pfVar5 = ovr_stshRleType2((far_t *)(psVar4->aptr).seg,far_from_u32((uint32_t)(0x1c000d)),96,119,0,
                               (&psVar4->aptr)->ofs,0xd,0x60,0x77);
     BldGfxRuin[0x1f9].ofs =
@@ -3891,19 +3891,19 @@ L_init_assets_4EA5:
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
                            ,pfVar5);
     uVar14 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxRuin[0x1f9].seg = uVar20;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x1c0077)),202,119,
-                              0,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0x77,0xca,0x77);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x1c0077)),202,119,
+                              0,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0x77,0xca,0x77);
     BldGfxRuin[0x1fc].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar14))
                            ,pfVar5);
     uVar20 = 0x195d;
-    uVar15 = (undefined2)((ulong)_uStack_c >> 0x10);
+    uVar15 = (undefined2)((ulong)uStack_c >> 0x10);
     BldGfxRuin[0x1fc].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)_uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x1c00e2)),309,119,
-                              0,(&((stg_tmp_t *)_uStack_c)->aptr)->ofs,0xe2,0x35,0x77);
+    pfVar5 = ovr_stshRleType2((far_t *)(((stg_tmp_t *)uStack_c)->aptr).seg,far_from_u32((uint32_t)(0x1c00e2)),309,119,
+                              0,(&((stg_tmp_t *)uStack_c)->aptr)->ofs,0xe2,0x35,0x77);
     BldGfxRuin[0x1ff].ofs =
          (uint16_t)
          ovr_stshStoreFile((uint8_t *)CONCAT13(in_stack_0000fc0f,CONCAT12(in_stack_0000fc0e,uVar20))
@@ -4042,7 +4042,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
   partyIndex = (byte)unaff_DI;
   uVar13 = (undefined1)((uint)unaff_DI >> 8);
   auStack_28e[0] = 0x2410;
-  _menuItems = 0x7706;
+  menuItems = 0x7706;
   acStack_d[1] = 1;
   if (*(int *)((uint)(byte)foundFlag * 0x27 + 0x116) == 0 &&
       *(int *)((uint)(byte)foundFlag * 0x27 + 0x118) == 0) {
@@ -4129,7 +4129,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
     }
     else if (cStack_15 == '\x02') {
       uStack_12 = 0x2410;
-      _menuLabel = 0x770f;
+      menuLabel = 0x770f;
       cStack_e = '\x10';
       acStack_d[0] = '$';
       uStack_10 = 0x77ba;
@@ -4241,7 +4241,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
   uVar19 = (undefined1)((uint)unaff_DI >> 8);
   uStack_1a = *(uint *)((uint)(byte)foundFlag * 0x27 + 0x125) / 10;
   auStack_290[0] = 0x2410;
-  _menuLabels = 0x77f0;
+  menuLabels = 0x77f0;
   auStack_c[0] = 1;
   if (*(int *)((uint)(byte)foundFlag * 0x27 + 0x116) == 0 &&
       *(int *)((uint)(byte)foundFlag * 0x27 + 0x118) == 0) {

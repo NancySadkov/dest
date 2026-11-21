@@ -441,32 +441,32 @@ void __cdecl16far ovc13_usesBlitRects(void)
   iStack_8 = 7;
   for (iStack_6 = 0; iStack_6 < 0x10; iStack_6 = iStack_6 + 1) {
     iVar8 = 0xef;
-    _pbStack_10 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
+    pbStack_10 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
                                    (*(byte (*) [59] [148])GMapCells)[PanelGridY + iStack_6 + 1] +
                                    PanelGridX);
     pbVar6 = (*(byte (*) [59] [148])GMapCells)[PanelGridY + iStack_6] + PanelGridX;
-    _pbStack_14 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar6);
+    pbStack_14 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar6);
     psVar7 = (*(short (*) [60] [148])GMapFlags)[PanelGridY + iStack_6] + PanelGridX;
-    _psStack_18 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar7);
+    psStack_18 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar7);
     if (PanelGridY + iStack_6 != 0 && SCARRY2(PanelGridY,iStack_6) == PanelGridY + iStack_6 < 0) {
       psVar7 = ((short (*) [60] [148])GMapFlags)[-1][PanelGridY + iStack_6 + 0x3b] + PanelGridX;
     }
-    _psStack_1c = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar7);
-    cornerB = *_pbStack_10;
-    _pbStack_10 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
+    psStack_1c = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar7);
+    cornerB = *pbStack_10;
+    pbStack_10 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
                                    (*(byte (*) [59] [148])GMapCells)[PanelGridY + iStack_6 + 1] +
                                    PanelGridX + 1);
-    cornerB_00 = *_pbStack_14;
-    _pbStack_14 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar6 + 1);
+    cornerB_00 = *pbStack_14;
+    pbStack_14 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar6 + 1);
     for (iVar9 = 0; iVar9 < 0x23; iVar9 = iVar9 + 1) {
-      cornerA = *_pbStack_10;
-      _pbStack_10 = (byte *)CONCAT22(uStack_e,pbStack_10 + 1);
-      cornerA_00 = *_pbStack_14;
-      _pbStack_14 = (byte *)CONCAT22(uStack_12,pbStack_14 + 1);
-      uVar1 = *_psStack_18;
-      _psStack_18 = (uint *)CONCAT22(uStack_16,psStack_18 + 1);
-      uVar2 = *_psStack_1c;
-      _psStack_1c = (uint *)CONCAT22(uStack_1a,psStack_1c + 1);
+      cornerA = *pbStack_10;
+      pbStack_10 = (byte *)CONCAT22(uStack_e,pbStack_10 + 1);
+      cornerA_00 = *pbStack_14;
+      pbStack_14 = (byte *)CONCAT22(uStack_12,pbStack_14 + 1);
+      uVar1 = *psStack_18;
+      psStack_18 = (uint *)CONCAT22(uStack_16,psStack_18 + 1);
+      uVar2 = *psStack_1c;
+      psStack_1c = (uint *)CONCAT22(uStack_1a,psStack_1c + 1);
       bVar5 = (byte)(uVar2 >> 8);
       uVar3 = (undefined2)((ulong)lVar10 >> 0x10);
       uStack_26 = (uint8_t)uVar1;
@@ -917,36 +917,36 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   iStack_18 = 7;
   for (iStack_16 = 0; iStack_16 < 0x30; iStack_16 = iStack_16 + 1) {
     x = 0xc;
-    _pbStack_8 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
+    pbStack_8 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
                                   (*(byte (*) [59] [148])GMapCells)
                                   [(int)(Seed_2000_d10e + iStack_16 + 1)] + Seed_2000_d110);
     pbVar4 = (*(byte (*) [59] [148])GMapCells)[(int)(Seed_2000_d10e + iStack_16)] + Seed_2000_d110;
-    _pbStack_c = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar4);
+    pbStack_c = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar4);
     psVar5 = (*(short (*) [60] [148])GMapFlags)[(int)(Seed_2000_d10e + iStack_16)] + Seed_2000_d110;
-    _psStack_10 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar5);
+    psStack_10 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar5);
     if (Seed_2000_d10e + iStack_16 != (byte *)0x0 &&
         SCARRY2((int)Seed_2000_d10e,iStack_16) == (int)(Seed_2000_d10e + iStack_16) < 0) {
       psVar5 = ((short (*) [60] [148])GMapFlags)[-1][(int)(Seed_2000_d10e + iStack_16 + 0x3b)] +
                Seed_2000_d110;
     }
-    _psStack_14 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar5);
-    iStack_1c = (int)(char)*_pbStack_8;
-    _pbStack_8 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
+    psStack_14 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar5);
+    iStack_1c = (int)(char)*pbStack_8;
+    pbStack_8 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
                                   (*(byte (*) [59] [148])GMapCells)
                                   [(int)(Seed_2000_d10e + iStack_16 + 1)] + Seed_2000_d110 + 1);
-    iStack_20 = (int)(char)*_pbStack_c;
-    _pbStack_c = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar4 + 1);
+    iStack_20 = (int)(char)*pbStack_c;
+    pbStack_c = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar4 + 1);
     for (iVar6 = 0; iVar6 < 0x69; iVar6 = iVar6 + 1) {
       iStack_1a = iStack_1c;
       iStack_1e = iStack_20;
-      iStack_1c = (int)(char)*_pbStack_8;
-      _pbStack_8 = (byte *)CONCAT22(uStack_6,pbStack_8 + 1);
-      iStack_20 = (int)(char)*_pbStack_c;
-      _pbStack_c = (byte *)CONCAT22(uStack_a,pbStack_c + 1);
-      uStack_28 = *_psStack_10;
-      _psStack_10 = (uint *)CONCAT22(uStack_e,psStack_10 + 1);
-      uStack_2a = *_psStack_14;
-      _psStack_14 = (uint *)CONCAT22(uStack_12,psStack_14 + 1);
+      iStack_1c = (int)(char)*pbStack_8;
+      pbStack_8 = (byte *)CONCAT22(uStack_6,pbStack_8 + 1);
+      iStack_20 = (int)(char)*pbStack_c;
+      pbStack_c = (byte *)CONCAT22(uStack_a,pbStack_c + 1);
+      uStack_28 = *psStack_10;
+      psStack_10 = (uint *)CONCAT22(uStack_e,psStack_10 + 1);
+      uStack_2a = *psStack_14;
+      psStack_14 = (uint *)CONCAT22(uStack_12,psStack_14 + 1);
       if ((uStack_28 & 4) == 0) {
         uVar1 = ovr_constr_compute1();
         uVar3 = (undefined1)((uint)uVar1 >> 8);

@@ -244,7 +244,7 @@ void __cdecl16far saveui_usesBlitGfx10(far_t gfx,char *text,byte *widths,uint *c
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&rect;
   F_SCOPY(far_from_u32((uint32_t)(0x241026ad)),dst);
-  _rect = *(uint *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2)));
+  rect = *(uint *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2)));
   iStack_a = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
   iStack_6 = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x28;
   gfx_00.seg = 0x16;
@@ -256,7 +256,7 @@ void __cdecl16far saveui_usesBlitGfx10(far_t gfx,char *text,byte *widths,uint *c
   ovr_blitText((char *)CONCAT22(Font03.ofs,(char *)text),(byte *)CONCAT22(0xde,Font03.seg),0xf,
                unaff_SI,gfx.seg,(char)Font03.seg);
   if (TextBlitX < *(uint *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2)))) {
-    _rect = TextBlitX;
+    rect = TextBlitX;
     gfx_01.seg = 0x16;
     gfx_01.ofs = gfx.ofs;
     ovr_blitGfx10(gfx_01,(*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d,(uint16_t)&rect,(brect_t *)(ulong)unaff_SS,
@@ -594,7 +594,7 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   pfVar2 = ovr_stshRleCut((far_t *)0xa000,src,222,(*(uint16_t *)((uint8_t *)&(textOfs) + 2)) * 0xf + 0x29,0);
   TextBlitX = 0x2a;
   TextBlitY = (*(uint16_t *)((uint8_t *)&(textOfs) + 2)) * 0xf + 0x1d;
-  _cursorX = 0;
+  cursorX = 0;
   gfx.seg = (uint16_t)&text;
   gfx.ofs = uVar7;
   saveui_usesBlitGfx10
@@ -966,15 +966,15 @@ char * __cdecl16far saveui_configureMessageDelay(void)
     ovr_resetTextBlitCycle();
     saveui_blitPanel();
     ovr_fmVsprintf((char *)(ulong)CONCAT12(MessageDelay,0x2410),
-                   (char *)CONCAT22(peStack_1e,_menuLabel));
+                   (char *)CONCAT22(peStack_1e,menuLabel));
     ovr_say();
     if (MessageDelay == 0) {
       peStack_1e = (entity_t *)0x0;
-      _menuLabel = (char *)0x0;
+      menuLabel = (char *)0x0;
     }
     else {
       peStack_1e = (entity_t *)((char *)"puppetmaker" + 3);
-      _menuLabel = (char *)"Decrease message delay";
+      menuLabel = (char *)"Decrease message delay";
     }
     if (MessageDelay < 0x28) {
       uStack_1a = 0x2410;
@@ -995,7 +995,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
     items.seg = 4;
     items.ofs = unaff_SS;
     uiMenuSub((char *)CONCAT22(puVar12,(char *)"puppetmaker" + 3),items,CONCAT11(0x24,GMenuItem),
-              (uint16_t)_menuLabel);
+              (uint16_t)menuLabel);
     bStack_4 = (byte)puVar12;
     uVar8 = (uint)puVar12 & 0xff;
     if (uVar8 < 5) break;
@@ -1713,7 +1713,7 @@ void __cdecl16far saveui_configureNewWorld(void)
   puVar1 = &worldItems;
   items.seg = 7;
   items.ofs = unaff_SS;
-  uiMenu((char *)CONCAT22(puVar1,(char *)"puppetmaker" + 3),items,_worldItems,0x2979);
+  uiMenu((char *)CONCAT22(puVar1,(char *)"puppetmaker" + 3),items,worldItems,0x2979);
   bStack_b = (byte)puVar1;
   saveui_blitPanel();
   if ((bStack_b != 8) && (bStack_b != 0)) {
@@ -1734,12 +1734,12 @@ void __cdecl16far saveui_configureNewWorld(void)
     puVar1 = &hostilityItems;
     items_00.seg = 5;
     items_00.ofs = unaff_SS;
-    uiMenu((char *)CONCAT22(puVar1,(char *)"puppetmaker" + 3),items_00,_worldItems,0x298a);
+    uiMenu((char *)CONCAT22(puVar1,(char *)"puppetmaker" + 3),items_00,worldItems,0x298a);
     bStack_b = (byte)puVar1;
     saveui_blitPanel();
     if ((bStack_b != '\x05') && (bStack_b != '\0')) {
       if (bStack_b == '\x04') {
-        iStack_a = saveui_usesBlitText((char *)0x62410,_worldItems,in_stack_0000ffae);
+        iStack_a = saveui_usesBlitText((char *)0x62410,worldItems,in_stack_0000ffae);
         saveui_blitPanel();
         if (iStack_a < 0) {
           if (inputCancelled != '\0') {
@@ -1747,7 +1747,7 @@ void __cdecl16far saveui_configureNewWorld(void)
           }
           iStack_a = 0;
         }
-        iStack_8 = saveui_usesBlitText((char *)0x62410,_worldItems,in_stack_0000ffae);
+        iStack_8 = saveui_usesBlitText((char *)0x62410,worldItems,in_stack_0000ffae);
         saveui_blitPanel();
         if (iStack_8 < 0) {
           if (inputCancelled != '\0') {
@@ -1755,7 +1755,7 @@ void __cdecl16far saveui_configureNewWorld(void)
           }
           iStack_8 = 0;
         }
-        iStack_6 = saveui_usesBlitText((char *)0x62410,_worldItems,in_stack_0000ffae);
+        iStack_6 = saveui_usesBlitText((char *)0x62410,worldItems,in_stack_0000ffae);
         saveui_blitPanel();
         if (iStack_6 < 0) {
           if (inputCancelled != '\0') {
@@ -1763,7 +1763,7 @@ void __cdecl16far saveui_configureNewWorld(void)
           }
           iStack_6 = 0;
         }
-        iStack_4 = saveui_usesBlitText((char *)0x62410,_worldItems,in_stack_0000ffae);
+        iStack_4 = saveui_usesBlitText((char *)0x62410,worldItems,in_stack_0000ffae);
         saveui_blitPanel();
         if (iStack_4 < 0) {
           if (inputCancelled != '\0') {
@@ -1772,7 +1772,7 @@ void __cdecl16far saveui_configureNewWorld(void)
           iStack_4 = 0;
         }
         if (0x3c < iStack_a + iStack_8 + iStack_6 + iStack_4) {
-          ovr_say((char *)CONCAT22(_worldItems,(char *)"puppetmaker" + 3),0x2a02);
+          ovr_say((char *)CONCAT22(worldItems,(char *)"puppetmaker" + 3),0x2a02);
           return;
         }
         lowIntelEnemies = (undefined1)iStack_a;
@@ -1782,9 +1782,9 @@ void __cdecl16far saveui_configureNewWorld(void)
       }
       Difficulty = bStack_b;
       worldIndex = cStack_c;
-      ovr_say((char *)CONCAT22(_worldItems,(char *)"puppetmaker" + 3),0x2a28);
+      ovr_say((char *)CONCAT22(worldItems,(char *)"puppetmaker" + 3),0x2a28);
       ovr_init_usesClearEntities();
-      ovr_say((char *)CONCAT22(_worldItems,(char *)"puppetmaker" + 3),0x2a3a);
+      ovr_say((char *)CONCAT22(worldItems,(char *)"puppetmaker" + 3),0x2a3a);
     }
   }
   return;
@@ -1860,7 +1860,7 @@ int __cdecl16far saveui_usesBlitText(char *prompt,int textSeg,int row)
   pfVar1 = ovr_stshRleCut((far_t *)0xa000,src,222,(*(uint16_t *)((uint8_t *)&(prompt) + 2)) * 0xf + 0x27,0);
   TextBlitX = 0x2a;
   TextBlitY = (*(uint16_t *)((uint8_t *)&(prompt) + 2)) * 0xf + 0x1d;
-  _cursorX = 0;
+  cursorX = 0;
   gfx.seg = (uint16_t)&text;
   gfx.ofs = uVar4;
   saveui_usesBlitGfx10

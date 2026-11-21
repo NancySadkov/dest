@@ -104,21 +104,21 @@ uint __cdecl16far attact_isTerrainFlat(int x,int y)
   else {
     uVar6 = (undefined2)((ulong)GMapCells >> 0x10);
     paabVar3 = (byte (*) [59] [148])GMapCells;
-    _cornerHeights = (int)(char)(*paabVar3)[y][x];
+    cornerHeights = (int)(char)(*paabVar3)[y][x];
     iStack_8 = (int)(char)(*paabVar3)[y][x + 1];
     iStack_6 = (int)(char)(*paabVar3)[y + 1][x];
     iStack_4 = (int)(char)(*paabVar3)[y + 1][x + 1];
-    iVar5 = _cornerHeights;
+    iVar5 = cornerHeights;
     for (iVar4 = 1; iVar4 < 4; iVar4 = iVar4 + 1) {
       if (*(int *)(&cornerHeights + iVar4 * 2) < iVar5) {
         iVar5 = *(int *)(&cornerHeights + iVar4 * 2);
       }
-      if (_cornerHeights < *(int *)(&cornerHeights + iVar4 * 2)) {
-        _cornerHeights = *(int *)(&cornerHeights + iVar4 * 2);
+      if (cornerHeights < *(int *)(&cornerHeights + iVar4 * 2)) {
+        cornerHeights = *(int *)(&cornerHeights + iVar4 * 2);
       }
     }
-    bVar2 = (byte)((uint)(_cornerHeights - iVar5) >> 8);
-    if (_cornerHeights - iVar5 < 0x3c) {
+    bVar2 = (byte)((uint)(cornerHeights - iVar5) >> 8);
+    if (cornerHeights - iVar5 < 0x3c) {
       uVar1 = CONCAT11(bVar2,1);
     }
     else {
@@ -948,7 +948,7 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force,...)
     if (bStack_4 != 0xff) {
       iVar1 = ovr_ovc23_findClearColumn();
       if (iVar1 < 0) {
-        ovr_drawTextAt((char *)0xa0002410,_msg,0x8f6);
+        ovr_drawTextAt((char *)0xa0002410,msg,0x8f6);
         ((uint8_t *)menuItemRow)[in_stack_00000004] = 0x0;
       }
       else {
@@ -970,7 +970,7 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force,...)
                                  (char *)callResultTemp,&msg,
                                  *(undefined2 *)((uint)bStack_3 * 4 + 0x13f),
                                  *(undefined2 *)((uint)bStack_3 * 4 + 0x141),uVar3,uVar5);
-          ovr_drawTextAt((char *)CONCAT22(uVar7,pcVar6),_msg,pcVar4);
+          ovr_drawTextAt((char *)CONCAT22(uVar7,pcVar6),msg,pcVar4);
         }
       }
     }
@@ -1383,7 +1383,7 @@ void __cdecl16far attact_usesRandBelow(agnt_t *agnt,byte dir,...)
     (*(uint8_t *)((uint8_t *)&(agnt) + 2)) = (byte)uVar1;
     n = CONCAT11((*(uint8_t *)((uint8_t *)&(agnt) + 2)),(char)n);
     do {
-      _agntX = *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004);
+      agntX = *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004);
       uVar2 = attact_usesAlignUp44((int *)CONCAT22(unaff_SS,&agntX),in_stack_00000004[1],(*(uint8_t *)((uint8_t *)&(agnt) + 2)))
       ;
       if ((uVar2 & 0xff) == 0) goto L_attact_3f0b_2430_24BF;
@@ -1391,13 +1391,13 @@ void __cdecl16far attact_usesRandBelow(agnt_t *agnt,byte dir,...)
     } while ((*(uint8_t *)((uint8_t *)&(agnt) + 2)) != (byte)(n >> 8));
   }
   else {
-    _agntX = *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004);
+    agntX = *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004);
     (*(uint8_t *)((uint8_t *)&(agnt) + 2)) = (*(uint8_t *)((uint8_t *)&(agnt) + 2)) ^ 2;
 L_attact_3f0b_2430_24BF:
     iStack_4 = *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004);
     iStack_6 = in_stack_00000004[1];
     in_stack_00000004[1] = in_stack_00000004[1] + (int)*(char *)((*(uint8_t *)((uint8_t *)&(agnt) + 2)) + 0x889);
-    iVar3 = ovr_ovc23_compute2(in_stack_00000004[1],n,_agntX + *(char *)((*(uint8_t *)((uint8_t *)&(agnt) + 2)) + 0x885));
+    iVar3 = ovr_ovc23_compute2(in_stack_00000004[1],n,agntX + *(char *)((*(uint8_t *)((uint8_t *)&(agnt) + 2)) + 0x885));
     *(int *)CONCAT22((agnt_t *)agnt,in_stack_00000004) = iVar3;
     func_0x0004fcda(0x236f);
     constructionDirty = 1;

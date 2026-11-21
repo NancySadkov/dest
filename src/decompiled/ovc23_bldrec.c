@@ -181,7 +181,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   uVar31 = 0xca;
   uVar32 = 99;
   uVar18 = ovr_constr_usesGMapFlags2();
-  uVar16 = _uStack0004;
+  uVar16 = uStack0004;
   pbVar15 = (byte *)(uVar18 & 0xff);
   if ((byte *)__C0_ASM_CopyRight < pbVar15) {
     return pbVar15;
@@ -281,8 +281,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     }
     return (byte *)((char *)"puppetmaker" + 3);
   case (byte *)0x2:
-    pbVar15 = (byte *)(_uStack0004 * 0x37);
-    if (*(char *)((int)&((entity_t *)Entities)[_uStack0004].base.entity + 3) != -1) {
+    pbVar15 = (byte *)(uStack0004 * 0x37);
+    if (*(char *)((int)&((entity_t *)Entities)[uStack0004].base.entity + 3) != -1) {
       bVar10 = ovr_agnt_compute10();
       (*(uint32_t *)((uint8_t *)&(uStack_6))) = (uint3)bVar10 << 8;
       uVar31 = *(undefined1 *)((int)&((entity_t *)Entities)[uVar16].base.entity + 3);
@@ -427,12 +427,12 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
       uStack_c = ((unit_t *)GUnits)[*(int *)(((uint)uStack_8 & 0xff) * 2 + -0x6d44)].y;
     }
     else {
-      uVar6 = *(undefined4 *)((_uStack0004 & 0xff) << 2);
+      uVar6 = *(undefined4 *)((uStack0004 & 0xff) << 2);
       uStack_a = *(uint16_t *)((int)uVar6 + 0x39);
-      uVar6 = *(undefined4 *)((_uStack0004 & 0xff) << 2);
+      uVar6 = *(undefined4 *)((uStack0004 & 0xff) << 2);
       uStack_c = *(uint16_t *)((int)uVar6 + 0x3b);
     }
-    uVar6 = *(undefined4 *)((_uStack0004 & 0xff) << 2);
+    uVar6 = *(undefined4 *)((uStack0004 & 0xff) << 2);
     uVar26 = (undefined2)((ulong)uVar6 >> 0x10);
     iVar25 = (int)uVar6;
     iVar24 = *(int *)(iVar25 + 0x58);
@@ -442,7 +442,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     else {
       (*(uint32_t *)((uint8_t *)&(uStack_6))) = ZEXT23((byte *)uStack_6);
     }
-    uVar6 = *(undefined4 *)((_uStack0004 & 0xff) << 2);
+    uVar6 = *(undefined4 *)((uStack0004 & 0xff) << 2);
     if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + (uint)*(byte *)((int)uVar6 + 0x3e) * 0x95) &
         0x80) == 0) {
       uStack_6 = (byte *)(ulong)(uint3)uStack_6;
@@ -450,11 +450,11 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     else {
       uStack_6 = (byte *)CONCAT13(3,(uint3)uStack_6);
     }
-    uVar6 = *(undefined4 *)((_uStack0004 & 0xff) << 2);
+    uVar6 = *(undefined4 *)((uStack0004 & 0xff) << 2);
     if ((*(byte *)((int)uVar6 + 0x5d) & 2) != 0) {
       uStack_6 = (byte *)((ulong)uStack_6 | 0x1000000);
     }
-    puVar14 = (undefined4 *)((_uStack0004 & 0xff) << 2);
+    puVar14 = (undefined4 *)((uStack0004 & 0xff) << 2);
     uVar6 = *puVar14;
     if ((*(byte *)((int)uVar6 + 0x5d) & 4) != 0) {
       uStack_6 = (byte *)((ulong)uStack_6 | 0x2000000);
@@ -469,22 +469,22 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
       if (pbVar15 != (byte *)((int)(undefined4 *)&_DATA + 1U)) {
         return pbVar15;
       }
-      uVar16 = ovc22_usesRandBelow((byte)_uStack0004,uStack_a,uStack_c);
+      uVar16 = ovc22_usesRandBelow((byte)uStack0004,uStack_a,uStack_c);
       if (uVar16 == 0) {
-        uVar6 = *(undefined4 *)((_uStack0004 & 0xff) << 2);
+        uVar6 = *(undefined4 *)((uStack0004 & 0xff) << 2);
         uStack_a = *(uint16_t *)((int)uVar6 + 0x39);
-        uVar6 = *(undefined4 *)((_uStack0004 & 0xff) << 2);
+        uVar6 = *(undefined4 *)((uStack0004 & 0xff) << 2);
         uStack_c = *(uint16_t *)((int)uVar6 + 0x3b);
       }
       else {
         if ((*(uint *)(uVar16 * 0x27 + 0x121) & 0x60) == 0) {
-          uVar6 = *(undefined4 *)((_uStack0004 & 0xff) << 2);
+          uVar6 = *(undefined4 *)((uStack0004 & 0xff) << 2);
           uVar26 = (undefined2)((ulong)uVar6 >> 0x10);
           iVar25 = (int)uVar6;
           iVar24 = *(int *)(iVar25 + 0x58);
           if ((iVar24 < 0) ||
              ((iVar24 == 0 && (*(uint *)(iVar25 + 0x56) < *(uint *)(uVar16 * 0x27 + 0x125))))) {
-            uVar6 = *(undefined4 *)((_uStack0004 & 0xff) << 2);
+            uVar6 = *(undefined4 *)((uStack0004 & 0xff) << 2);
             uVar26 = (undefined2)((ulong)uVar6 >> 0x10);
             iVar24 = (int)uVar6;
             *(undefined2 *)(iVar24 + 0x58) = 0;
@@ -492,7 +492,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
           }
           else {
             uVar18 = *(uint *)(uVar16 * 0x27 + 0x125);
-            uVar6 = *(undefined4 *)((_uStack0004 & 0xff) << 2);
+            uVar6 = *(undefined4 *)((uStack0004 & 0xff) << 2);
             uVar26 = (undefined2)((ulong)uVar6 >> 0x10);
             iVar24 = (int)uVar6;
             puVar1 = (uint *)(iVar24 + 0x56);
@@ -505,10 +505,10 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
         ovr_createConstructionRecordFar();
       }
     }
-    uVar6 = *(undefined4 *)((_uStack0004 & 0xff) << 2);
+    uVar6 = *(undefined4 *)((uStack0004 & 0xff) << 2);
     if (*(char *)((int)uVar6 + 0x3f) == '\0') {
-      uVar6 = *(undefined4 *)((_uStack0004 & 0xff) << 2);
-      uVar7 = *(undefined4 *)((_uStack0004 & 0xff) << 2);
+      uVar6 = *(undefined4 *)((uStack0004 & 0xff) << 2);
+      uVar7 = *(undefined4 *)((uStack0004 & 0xff) << 2);
       if (*(uint *)((int)uVar6 + 0x5b) < *(uint *)((int)uVar7 + 0x4d)) {
         pbVar15 = (byte *)ovr_ovc18_textTypeLen();
       }

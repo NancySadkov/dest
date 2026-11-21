@@ -154,17 +154,17 @@ stg_tmp_t * __cdecl16far ovc40_usesStshLoadGfx(byte backdropIndex)
   _fmemmove((char *)CONCAT22(unaff_SS,&cmapBackupA),(char *)CONCAT22(in_DX,psStack_6->cmap + 0x2ac),
             0xc);
   if (backdropIndex == 4) {
-    uStack_d8 = CONCAT22(_cmapBackupB,youlose1Cut1Seg);
+    uStack_d8 = CONCAT22(cmapBackupB,youlose1Cut1Seg);
     psStack_6 = ovr_stshLoadGfx();
     uStack_4 = in_DX;
   }
   else {
     uVar1 = 0x2410;
-    uStack_d8 = CONCAT22(_cmapBackupB,((undefined2 *)&back03Cut1Seg)[(uint)backdropIndex * 2]);
+    uStack_d8 = CONCAT22(cmapBackupB,((undefined2 *)&back03Cut1Seg)[(uint)backdropIndex * 2]);
     psStack_6 = ovr_stshLoadGfx();
     uStack_4 = uVar1;
   }
-  uStack_d8 = CONCAT22(_cmapBackupB,0xcf);
+  uStack_d8 = CONCAT22(cmapBackupB,0xcf);
   _fmemmove((char *)CONCAT22(uStack_4,psStack_6->cmap + 0x231),
             (char *)CONCAT22(unaff_SS,&cmapBackupB),0xcf);
   return psStack_6;
@@ -189,13 +189,13 @@ void __cdecl16far ovc40_usesCalcSeasonPalette(char useVgaPalette,...)
   uint16_t in_stack_0000fcfc;
   
   psVar1 = ovr_stshLoadGfx();
-  ovr_calcSeasonPalette((uint8_t *)CONCAT22(&pal,in_DX),unaff_SS,_pal,in_stack_0000fcfc,psVar1);
+  ovr_calcSeasonPalette((uint8_t *)CONCAT22(&pal,in_DX),unaff_SS,pal,in_stack_0000fcfc,psVar1);
   if (in_stack_00000004 == '\0') {
-    uStack_308 = CONCAT22(_pal,unaff_SS);
+    uStack_308 = CONCAT22(pal,unaff_SS);
     ovc40_usesVgaSetPalette8bit();
   }
   else {
-    uStack_308 = CONCAT22(_pal,unaff_SS);
+    uStack_308 = CONCAT22(pal,unaff_SS);
     setSeasonPalette();
   }
   return;
@@ -551,9 +551,9 @@ ovc40_usesAlignToSeg
   }
   else {
     text1_09.seg = uStack_5a;
-    text1_09.ofs = _rankMsg;
+    text1_09.ofs = rankMsg;
     text2_08.seg = uStack_5a;
-    text2_08.ofs = _rankMsg;
+    text2_08.ofs = rankMsg;
     ovc40_usesBlitLabel(text1_09,text2_08,0,0xf2);
     bVar13 = 0xf2;
     bVar3 = 1;
@@ -693,8 +693,8 @@ ovc40_usesAlignToSeg
                             ((uint16_t *)
                              CONCAT13((char)((uint)&clickY >> 8),CONCAT12((char)&clickY,unaff_SS)),
                              (char)&clickX);
-          if ((((CONCAT11(extraout_AH,bVar3) != 0) && (0x87 < _clickX)) && (0xb9 < _clickY)) &&
-             ((_clickX < 0xd6 && (_clickY < 0xc6)))) goto L_OVC40_69c8_04c6_0AF0;
+          if ((((CONCAT11(extraout_AH,bVar3) != 0) && (0x87 < clickX)) && (0xb9 < clickY)) &&
+             ((clickX < 0xd6 && (clickY < 0xc6)))) goto L_OVC40_69c8_04c6_0AF0;
           if (rightButtonLatch != '\0') {
             cStack_1d = '\x02';
             goto L_OVC40_69c8_04c6_0AF0;

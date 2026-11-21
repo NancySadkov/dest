@@ -309,7 +309,7 @@ uint __cdecl16far ovc27_usesRandBelow3(agnt_t *agnt,uint32_t reqRecord,int agntI
   dst_00.ofs = (uint16_t)&reqLevel2;
   F_SCOPY(far_from_u32((uint32_t)(0x241059b4)),dst_00);
   uVar2 = agntIndex * 0x34;
-  _uStack_10 = CONCAT22(0x1726,uVar2);
+  uStack_10 = CONCAT22(0x1726,uVar2);
   uVar8 = (undefined2)(reqRecord >> 0x10);
   iVar6 = (int)reqRecord;
   paVar7 = (agnt_t *)agnt;
@@ -559,7 +559,7 @@ uint __cdecl16far ovc27_usesRandBelow5(agnt_t *agnt)
     uVar1 = in_AX & 0xff00;
   }
   else {
-    _fmemset((void *)(ulong)unaff_SS,0xf,_indexMap);
+    _fmemset((void *)(ulong)unaff_SS,0xf,indexMap);
     bStack_3 = 0;
     for (bStack_4 = 0; bStack_4 < 0xf; bStack_4 = bStack_4 + 1) {
       uVar2 = ovc27_usesRandBelow3
@@ -574,7 +574,7 @@ uint __cdecl16far ovc27_usesRandBelow5(agnt_t *agnt)
       uVar1 = 0;
     }
     else {
-      uVar3 = ovr_randBelow(_indexMap,(uint)bStack_3);
+      uVar3 = ovr_randBelow(indexMap,(uint)bStack_3);
       uVar1 = CONCAT11((char)((uint)(&indexMap + (uVar3 & 0xff)) >> 8),(&indexMap)[uVar3 & 0xff]);
     }
   }
@@ -632,10 +632,10 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex,...)
          (uVar2 = uStack_8, (*(uint *)((int)*(undefined4 *)(iStack_a + 0x1d) + 0x3e) & 0x10) == 0))
         && ((uStack_8 = uVar11, (*(uint *)((int)*(undefined4 *)(iStack_a + 0x1d) + 0x3e) & 8) == 0
             || (bVar3 = ovr_agnt_compute9((agnt_t *)
-                                          CONCAT22(_text,(agnt_t *)
+                                          CONCAT22(text,(agnt_t *)
                                                          ((int)&AgntAnms[0x75].halfWidth + 1)),
                                           (char)paStack_6), uVar2 = uStack_8, '\0' < (char)bVar3))))
-       && (uVar4 = ovr_randBelow(_text,2), uVar2 = uStack_8, (uVar4 & 0xff) == 0)) {
+       && (uVar4 = ovr_randBelow(text,2), uVar2 = uStack_8, (uVar4 & 0xff) == 0)) {
       return 0;
     }
     uStack_8 = uVar2;
@@ -643,7 +643,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex,...)
     bStack_13 = (byte)uVar5;
     uVar5 = uVar5 & 0xff;
     if (uVar5 == 0) {
-      ovr_agnt_usesAnimFrame((agnt_t *)CONCAT22(_text,paStack_4),(char)paStack_6);
+      ovr_agnt_usesAnimFrame((agnt_t *)CONCAT22(text,paStack_4),(char)paStack_6);
       uVar5 = uVar5 & 0xff00;
     }
     else {
@@ -652,18 +652,18 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex,...)
       puVar6 = ovr_ovc15_usesStshRealloc();
       pcVar7 = ovr_stsprintf((char *)CONCAT22(0x5ba4,unaff_SS),
                              (char *)CONCAT22(puVar6,(char *)"puppetmaker" + 3),arg1,&text);
-      ovr_uiNotify((char *)CONCAT22(uVar11,arg1),_text,pcVar7);
+      ovr_uiNotify((char *)CONCAT22(uVar11,arg1),text,pcVar7);
       paStack_6->variant = bStack_13;
       if (*(char *)((uint)bStack_13 * 0x21 + -0x17) == '9') {
-        iVar8 = ovr_audio_panFromX((agnt_t *)CONCAT22(_text,paStack_4),(char)paStack_6);
+        iVar8 = ovr_audio_panFromX((agnt_t *)CONCAT22(text,paStack_4),(char)paStack_6);
         bVar3 = 0;
         uVar4 = ovr_randBelow(0,2);
-        ovr_play_sfxU(bVar3,iVar8,_text,CONCAT11((char)(uVar4 >> 8),(char)uVar4 + '9'));
+        ovr_play_sfxU(bVar3,iVar8,text,CONCAT11((char)(uVar4 >> 8),(char)uVar4 + '9'));
       }
       else {
-        iVar8 = ovr_audio_panFromX((agnt_t *)CONCAT22(_text,paStack_4),(char)paStack_6);
+        iVar8 = ovr_audio_panFromX((agnt_t *)CONCAT22(text,paStack_4),(char)paStack_6);
         puVar9 = (undefined1 *)((uint)bStack_13 * 0x21 + -0x17);
-        ovr_play_sfxU(0,iVar8,_text,CONCAT11((char)((uint)puVar9 >> 8),*puVar9));
+        ovr_play_sfxU(0,iVar8,text,CONCAT11((char)((uint)puVar9 >> 8),*puVar9));
       }
       if (*(char *)((uint)bStack_13 * 0x21 + -0x16) == '\0') {
         paStack_6->animFrame = 0xf5;
@@ -671,14 +671,14 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex,...)
       }
       else {
         uVar11 = *(undefined2 *)((int)&paStack_6->frames + 2);
-        _iStack_12 = CONCAT22(uVar11,*(int *)&paStack_6->frames);
+        iStack_12 = CONCAT22(uVar11,*(int *)&paStack_6->frames);
         piVar10 = (int *)(*(int *)&paStack_6->frames + (uint)paStack_6->frameIndex * 4);
         iVar8 = piVar10[1];
         iVar1 = *piVar10;
-        _iStack_e = CONCAT22(iVar8,iVar1);
+        iStack_e = CONCAT22(iVar8,iVar1);
         if (iVar1 == 0 && iVar8 == 0) {
                     /* WARNING: Subroutine does not return */
-          ovr_stExit(_text,0x42);
+          ovr_stExit(text,0x42);
         }
         paStack_6->animFrame = 0x0;
         *(char *)&paStack_6->destY = *(char *)(iVar1 + 0x15) + (char)paStack_6->screenY;

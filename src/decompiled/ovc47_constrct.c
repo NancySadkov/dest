@@ -96,7 +96,7 @@ void __cdecl16far land_info(byte tileOffset,...)
   bVar17 = (byte)unaff_DI;
   uVar18 = (undefined1)((uint)unaff_DI >> 8);
   uStack_16 = far_t_2410_78e4.seg;
-  _gfxOfs = far_t_2410_78e4.ofs;
+  gfxOfs = far_t_2410_78e4.ofs;
   ovr_attact_usesAgntFlag1();
   savedMenuItem = GMenuItem;
   outFlag = 0x0;
@@ -109,10 +109,10 @@ void __cdecl16far land_info(byte tileOffset,...)
   }
   bStack_21 = 0xff;
   bStack_24 = 0xff;
-  _tileX = GfxRndSeed + (char)in_stack_00000004 + -2;
+  tileX = GfxRndSeed + (char)in_stack_00000004 + -2;
   uVar2 = ovr_ovc45_usesGfxRndSeed2((int *)CONCAT13(uVar18,CONCAT12(bVar17,unaff_SS)),(char)&tileX);
   bStack_1d = (byte)uVar2;
-  uVar2 = ovr_ovc45_getUnitIndex(GfxRndSeed2,(char)_tileX);
+  uVar2 = ovr_ovc45_getUnitIndex(GfxRndSeed2,(char)tileX);
   uVar12 = (undefined2)((ulong)GUnits >> 0x10);
   if (((unit_t *)GUnits)[uVar2].unitType != 0xff) {
     bStack_24 = ((unit_t *)GUnits)[uVar2].unitType;
@@ -138,7 +138,7 @@ void __cdecl16far land_info(byte tileOffset,...)
     ovr_ovc41_enterLeaderView();
   }
   else {
-    uVar14 = (undefined1)_tileX;
+    uVar14 = (undefined1)tileX;
     if (cStack_1c == '\0') {
       if (bStack_21 == 0xff) {
         uVar12 = (undefined2)((ulong)GUnits >> 0x10);
@@ -245,7 +245,7 @@ void __cdecl16far land_info(byte tileOffset,...)
       ovr_ovc28_compute2(entries,(uint16_t)&msg,hint,cStack_1b,(char)&msg);
     }
     else if (bStack_21 == 0xff) {
-      bVar17 = (byte)_entityIndex;
+      bVar17 = (byte)entityIndex;
       if (((*(uint *)((uint)bStack_1d * 0x27 + 0x121) & 2) == 0) || (0xf7 < uVar2)) {
         if (((*(uint *)((uint)bStack_1d * 0x27 + 0x121) & 0x20) == 0) || (0xf7 < uVar2)) {
           if (bStack_1d == 0) {
@@ -259,13 +259,13 @@ void __cdecl16far land_info(byte tileOffset,...)
           }
         }
         else {
-          ovr_ovc45_textDone2(bStack_1d,bVar17,_tileX,(uint16_t)&outFlag,(uint16_t)unaff_SS,
+          ovr_ovc45_textDone2(bStack_1d,bVar17,tileX,(uint16_t)&outFlag,(uint16_t)unaff_SS,
                               CONCAT11((char)((uint)&outFlag >> 8),foundFlag),bVar17,uVar14,
                               (char)&outFlag);
         }
       }
       else {
-        ovr_ovc45_textDone(bStack_1d,bVar17,_tileX,(uint16_t)&outFlag,(uint16_t)unaff_SS,
+        ovr_ovc45_textDone(bStack_1d,bVar17,tileX,(uint16_t)&outFlag,(uint16_t)unaff_SS,
                            CONCAT11((char)((uint)&outFlag >> 8),foundFlag),bVar17,uVar14,
                            (char)&outFlag);
       }
@@ -274,7 +274,7 @@ void __cdecl16far land_info(byte tileOffset,...)
       bStack_1d = *(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 + 8);
       if (bStack_1d != 0) {
         auStack_24c[0] = 0x2410;
-        _menuItems = 0x7969;
+        menuItems = 0x7969;
         auStack_14[0] = 1;
       }
       uVar2 = (uint)(bStack_1d != 0);
@@ -292,12 +292,12 @@ void __cdecl16far land_info(byte tileOffset,...)
         uVar12 = (undefined2)((ulong)Entities >> 0x10);
         if (bStack_1d == 0) {
           uVar9 = 0x2410;
-          pcVar4 = ovr_ovc22_className(bVar17,CONCAT11((char)((uint)(_entityIndex * 0x37) >> 8),
+          pcVar4 = ovr_ovc22_className(bVar17,CONCAT11((char)((uint)(entityIndex * 0x37) >> 8),
                                                        *(undefined1 *)
-                                                        ((int)&((entity_t *)Entities)[_entityIndex].
+                                                        ((int)&((entity_t *)Entities)[entityIndex].
                                                                base.entity + 3)));
           puVar5 = (undefined2 *)
-                   ((uint)*(byte *)((int)&((entity_t *)Entities)[_entityIndex].base.entity + 3) * 4)
+                   ((uint)*(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) * 4)
           ;
           uVar14 = 0x7a;
           iVar6 = ovr_ovc45_compute9((char *)CONCAT22(*puVar5,unaff_SS),
@@ -321,12 +321,12 @@ void __cdecl16far land_info(byte tileOffset,...)
         }
         else {
           uVar9 = 0x2410;
-          pcVar4 = ovr_ovc22_className(bVar17,CONCAT11((char)((uint)(_entityIndex * 0x37) >> 8),
+          pcVar4 = ovr_ovc22_className(bVar17,CONCAT11((char)((uint)(entityIndex * 0x37) >> 8),
                                                        *(undefined1 *)
-                                                        ((int)&((entity_t *)Entities)[_entityIndex].
+                                                        ((int)&((entity_t *)Entities)[entityIndex].
                                                                base.entity + 3)));
           puVar5 = (undefined2 *)
-                   ((uint)*(byte *)((int)&((entity_t *)Entities)[_entityIndex].base.entity + 3) * 4)
+                   ((uint)*(byte *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) * 4)
           ;
           uVar14 = 0x7a;
           iVar6 = ovr_ovc45_compute9((char *)CONCAT22(*puVar5,unaff_SS),
@@ -352,7 +352,7 @@ void __cdecl16far land_info(byte tileOffset,...)
                                   (char *)CONCAT22(iVar10,pcVar8));
           strcpy((char *)CONCAT13(uVar15,CONCAT12(uVar13,&msg)),(char *)CONCAT22(pcVar8,pcVar4));
         }
-        goldPartyIndex = *(undefined1 *)((int)&((entity_t *)Entities)[_entityIndex].base.entity + 3)
+        goldPartyIndex = *(undefined1 *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3)
         ;
         puVar7 = &menuItems;
         (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = (char)(uVar2 + 1);
@@ -369,7 +369,7 @@ void __cdecl16far land_info(byte tileOffset,...)
         }
         if (cStack_1b == '\x01') {
           uStack_8 = auStack_24c[0];
-          _menuLabel = _menuItems;
+          menuLabel = menuItems;
           uStack_4 = 0x2410;
           uStack_6 = 0x7a02;
           uVar12 = 0x195d;

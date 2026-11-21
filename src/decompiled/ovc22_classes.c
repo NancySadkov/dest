@@ -301,7 +301,7 @@ code_r0x0005ff56:
             }
             puStack_12 = (uint8_t *)CONCAT11((char)((uint)&suffix >> 8),in_stack_00000004);
             suffix = (char *)"steam bath" + 6;
-            _labelOfs = 0x1b7;
+            labelOfs = 0x1b7;
             func_0x0005f303();
             puStack_12 = "";
             ovr_stsprintf();
@@ -324,7 +324,7 @@ code_r0x0005ff56:
           CurSfxType3 = 0x3c;
           puStack_12 = &menuItems;
           suffix = (char *)"steam bath" + 6;
-          _labelOfs = 0x327;
+          labelOfs = 0x327;
           uVar6 = ovr_ovc28_usesUiInputText();
           cVar4 = (char)uVar6;
           keyboardInputMode = 0;
@@ -4761,10 +4761,10 @@ void __cdecl16far ovc22_spawnForLeaders(void)
   uint8_t outFlag;
   int iStack_4;
   
-  _bStack_6 = (uint)bStack_6;
+  bStack_6 = (uint)bStack_6;
   for (iStack_4 = 0; iStack_4 < (int)(uint)GLeaderCount; iStack_4 = iStack_4 + 1) {
     if (((*(char *)((int)*(undefined4 *)(iStack_4 << 2) + 0x3d) != '\0') &&
-        (uVar1 = ovr_randBelow(_bStack_6,
+        (uVar1 = ovr_randBelow(bStack_6,
                                (uint)(byte)((char *)"Decrease message delay" + 5)
                                            [(uint)*(byte *)((int)*(undefined4 *)(iStack_4 << 2) +
                                                            0x3e) * 0x95]),
@@ -4774,55 +4774,55 @@ void __cdecl16far ovc22_spawnForLeaders(void)
          *(uint *)((int)*(undefined4 *)(iStack_4 << 2) + 0x5b))))) {
       if (EntityCount < 0x21c) {
         ovc22_usesRandBelow2
-                  ((byte)&outFlag,unaff_SS,_bStack_6,
+                  ((byte)&outFlag,unaff_SS,bStack_6,
                    CONCAT11((char)((uint)&outFlag >> 8),(undefined1)iStack_4));
       }
       else if (*(char *)((int)*(undefined4 *)(iStack_4 << 2) + 0x3f) == '\0') {
         if (*(uint *)((int)*(undefined4 *)(iStack_4 << 2) + 0x45) < 0x23) {
           ovc22_usesRandBelow2
-                    ((byte)&outFlag,unaff_SS,_bStack_6,
+                    ((byte)&outFlag,unaff_SS,bStack_6,
                      CONCAT11((char)((uint)&outFlag >> 8),(undefined1)iStack_4));
         }
         else if (*(uint *)((int)*(undefined4 *)(iStack_4 << 2) + 0x45) < 0x4b) {
-          uVar1 = ovr_randBelow(_bStack_6,8);
+          uVar1 = ovr_randBelow(bStack_6,8);
           if ((uVar1 & 0xff) == 0) {
             ovc22_usesRandBelow2
-                      ((byte)&outFlag,unaff_SS,_bStack_6,
+                      ((byte)&outFlag,unaff_SS,bStack_6,
                        CONCAT11((char)((uint)&outFlag >> 8),(undefined1)iStack_4));
           }
         }
         else {
-          uVar1 = ovr_randBelow(_bStack_6,0x10);
+          uVar1 = ovr_randBelow(bStack_6,0x10);
           if ((uVar1 & 0xff) == 0) {
             ovc22_usesRandBelow2
-                      ((byte)&outFlag,unaff_SS,_bStack_6,
+                      ((byte)&outFlag,unaff_SS,bStack_6,
                        CONCAT11((char)((uint)&outFlag >> 8),(undefined1)iStack_4));
           }
         }
       }
       else if (*(int *)((int)*(undefined4 *)(iStack_4 << 2) + 0x47) == 0) {
         ovc22_usesRandBelow2
-                  ((byte)&outFlag,unaff_SS,_bStack_6,
+                  ((byte)&outFlag,unaff_SS,bStack_6,
                    CONCAT11((char)((uint)&outFlag >> 8),(undefined1)iStack_4));
       }
       else if (*(uint *)((int)*(undefined4 *)(iStack_4 << 2) + 0x45) < 0x19) {
         ovc22_usesRandBelow2
-                  ((byte)&outFlag,unaff_SS,_bStack_6,
+                  ((byte)&outFlag,unaff_SS,bStack_6,
                    CONCAT11((char)((uint)&outFlag >> 8),(undefined1)iStack_4));
       }
       else if (*(uint *)((int)*(undefined4 *)(iStack_4 << 2) + 0x45) < 0x32) {
-        uVar1 = ovr_randBelow(_bStack_6,8);
+        uVar1 = ovr_randBelow(bStack_6,8);
         if ((uVar1 & 0xff) == 0) {
           ovc22_usesRandBelow2
-                    ((byte)&outFlag,unaff_SS,_bStack_6,
+                    ((byte)&outFlag,unaff_SS,bStack_6,
                      CONCAT11((char)((uint)&outFlag >> 8),(undefined1)iStack_4));
         }
       }
       else {
-        uVar1 = ovr_randBelow(_bStack_6,0x10);
+        uVar1 = ovr_randBelow(bStack_6,0x10);
         if ((uVar1 & 0xff) == 0) {
           ovc22_usesRandBelow2
-                    ((byte)&outFlag,unaff_SS,_bStack_6,
+                    ((byte)&outFlag,unaff_SS,bStack_6,
                      CONCAT11((char)((uint)&outFlag >> 8),(undefined1)iStack_4));
         }
       }

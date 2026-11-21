@@ -122,12 +122,12 @@ bool __cdecl16far fmFreeAudio(uint16_t force,...)
   uint uStack_4;
   uint8_t result;
   
-  uVar1 = _uStack_6;
-  _uStack_6 = far_from_u32((uint32_t)(ulong))_uStack_6;
+  uVar1 = uStack_6;
+  uStack_6 = far_from_u32((uint32_t)(ulong))uStack_6;
   if ((SfxRunning != '\0') && (DIGHandle.ofs != 0 || DIGHandle.seg != 0)) {
     if (in_stack_00000004 == '\0') {
       uStack_4 = (uint)(byte)(uVar1 >> 0x10);
-      _uStack_6 = far_from_u32((uint32_t)(CONCAT22(uStack_4,0x3a5b)));
+      uStack_6 = far_from_u32((uint32_t)(CONCAT22(uStack_4,0x3a5b)));
       bVar3 = ovr_digSoundPlaying();
       if (bVar3) goto L_fmFreeAudio_02D1;
     }
@@ -137,18 +137,18 @@ bool __cdecl16far fmFreeAudio(uint16_t force,...)
         ovr_digStopCurrentSound();
       }
       uStack_6 = DIGHandle.seg;
-      ovr_stshFree(_uStack_6,DIGHandle.ofs);
+      ovr_stshFree(uStack_6,DIGHandle.ofs);
       DIGHandle.seg = 0;
       DIGHandle.ofs = 0;
-      _uStack_6 = far_from_u32((uint32_t)(CONCAT13(1,_uStack_6)));
+      uStack_6 = far_from_u32((uint32_t)(CONCAT13(1,uStack_6)));
     }
   }
 L_fmFreeAudio_02D1:
-  uVar2 = (ulong)_uStack_6;
+  uVar2 = (ulong)uStack_6;
   if (((MusRunning != '\0') && (MUSHandle.ofs != 0 || MUSHandle.seg != 0)) &&
      (uVar4 = (uint)MUS_2410_07a9, uVar4 == 0)) {
     if (in_stack_00000004 == '\0') {
-      _uStack_6 = far_from_u32((uint32_t)((ulong)_uStack_6 & 0xffff0000));
+      uStack_6 = far_from_u32((uint32_t)((ulong)uStack_6 & 0xffff0000));
       ovr_midGetSequenceStatus();
       if (uVar4 == 1) goto end;
     }
@@ -158,10 +158,10 @@ L_fmFreeAudio_02D1:
       ovr_midMidiStop();
     }
     uStack_6 = MUSHandle.seg;
-    ovr_stshFree(_uStack_6,MUSHandle.ofs);
+    ovr_stshFree(uStack_6,MUSHandle.ofs);
     MUSHandle.seg = 0;
     MUSHandle.ofs = 0;
-    _uStack_6 = far_from_u32((uint32_t)(0x1000000));
+    uStack_6 = far_from_u32((uint32_t)(0x1000000));
   }
 end:
   return (bool)result;

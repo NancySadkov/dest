@@ -139,9 +139,9 @@ undefined2 __cdecl16far ovc30_usesRandBelow(byte band)
   byte abStack_4 [2];
   
   abStack_4 = (byte  [2])(*(uint16_t *)((uint8_t *)&(LevelBandMin) + 2));
-  _bandMin = (*(uint16_t *)((uint8_t *)&(LevelBandMin)));
+  bandMin = (*(uint16_t *)((uint8_t *)&(LevelBandMin)));
   abStack_8 = (byte  [2])(*(uint16_t *)((uint8_t *)&(LevelBandMax) + 2));
-  _bandMax = (*(uint16_t *)((uint8_t *)&(LevelBandMax)));
+  bandMax = (*(uint16_t *)((uint8_t *)&(LevelBandMax)));
   if (band == 4) {
     uVar2 = CONCAT11(SUB21((*(uint16_t *)((uint8_t *)&(LevelBandMax) + 2)),1),0x29);
   }

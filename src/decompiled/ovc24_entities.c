@@ -661,11 +661,11 @@ L_OVC24_5943_112e_1255:
         if (bStack_7 == 0) {
           iVar6 = (uint)*(byte *)((int)*(undefined4 *)(uStack_6 << 2) + 0x3e) * 0x95;
                     /* WARNING: Load size is inaccurate */
-          _bVar10 = *(byte *)((int)&worldMenuLabels[0].seg + 1 + iVar6);
+          bVar10 = *(byte *)((int)&worldMenuLabels[0].seg + 1 + iVar6);
           ovr_ovc40_usesAlignToSeg
-                    ((byte)_bVar10,
+                    ((byte)bVar10,
                      (char *)(ulong)*(uint *)((int)&worldMenuLabels[1].ofs + 1 + iVar6),0,
-                     (char *)(byte *)__C0_ASM_CopyRight,1,_bVar10,4);
+                     (char *)(byte *)__C0_ASM_CopyRight,1,bVar10,4);
         }
         else {
           uVar5 = ovr_season_checkEndGame(msgDelay,(byte)uStack_6);
@@ -684,20 +684,20 @@ L_OVC24_5943_112e_1255:
             if (cStack_4 == '\0') {
               iVar6 = (uint)*(byte *)((int)*(undefined4 *)(uStack_6 << 2) + 0x3e) * 0x95;
                     /* WARNING: Load size is inaccurate */
-              _bVar10 = *(byte *)((int)&worldMenuLabels[0].seg + 1 + iVar6);
+              bVar10 = *(byte *)((int)&worldMenuLabels[0].seg + 1 + iVar6);
               ovr_ovc40_usesAlignToSeg
-                        ((byte)_bVar10,
+                        ((byte)bVar10,
                          (char *)(ulong)*(uint *)((int)&worldMenuLabels[1].ofs + 1 + iVar6),0,
-                         (char *)((byte *)__C0_ASM_CopyRight + 2),3,_bVar10,6);
+                         (char *)((byte *)__C0_ASM_CopyRight + 2),3,bVar10,6);
             }
             else {
               iVar6 = (uint)*(byte *)((int)*(undefined4 *)(uStack_6 << 2) + 0x3e) * 0x95;
                     /* WARNING: Load size is inaccurate */
-              _bVar10 = *(byte *)((int)&worldMenuLabels[0].seg + 1 + iVar6);
+              bVar10 = *(byte *)((int)&worldMenuLabels[0].seg + 1 + iVar6);
               ovr_ovc40_usesAlignToSeg
-                        ((byte)_bVar10,
+                        ((byte)bVar10,
                          (char *)(ulong)*(uint *)((int)&worldMenuLabels[1].ofs + 1 + iVar6),0,
-                         (char *)((byte *)__C0_ASM_CopyRight + 1),2,_bVar10,5);
+                         (char *)((byte *)__C0_ASM_CopyRight + 1),2,bVar10,5);
             }
           }
         }

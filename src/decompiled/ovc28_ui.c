@@ -398,7 +398,7 @@ void __cdecl16far ovc28_drawGold(byte partyIndex)
     uVar1 = ovr_font_textWidth();
     uVar5 = 0x10e - (uVar1 >> 1);
     TextBlitY = 0xbd;
-    uStack_54 = CONCAT22(_numText,0xed);
+    uStack_54 = CONCAT22(numText,0xed);
     TextBlitX = uVar5;
     uVar4 = Font03.ofs;
     uVar3 = ovr_ovc45_usesLDIV_at_((uint8_t)Font03.ofs,CONCAT11(0x24,partyIndex));
@@ -883,7 +883,7 @@ ovc28_usesUiInputText(far_t entries,uint16_t count,far_t hint,uint8_t *pageOut,.
   else {
     while( true ) {
       auStack_34[0] = 0x2410;
-      _menuEntries = 0x5db9;
+      menuEntries = 0x5db9;
       uStack_10 = 0x2410;
       uStack_12 = 0x5dc2;
       if (*(char *)CONCAT22((uint8_t *)pageOut,hint.seg) == '\0') {
