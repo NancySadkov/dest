@@ -8,10 +8,6 @@
 
 
 /* 3a5b:0000 */
-
-/* WARNING: Removing unreachable block (ram,0x0003a69a) */
-/* [R4] calls LDIV_at_ */
-
 void __cdecl16far audio_usesLDIV_at_(void)
 
 {
@@ -73,7 +69,7 @@ void __cdecl16far audio_usesLDIV_at_(void)
           SfxDeadline = (uint16_t)(((uVar4 & 0xff) + 0x80));
         }
         uVar7 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-        sfxTickLo = *(ulong **)BDA_DailyTimeCounter;
+        sfxTickLo = *(undefined2 *)BDA_DailyTimeCounter.ofs;   /* hand fix: the offset half is the address, and sfxTickLo is 16-bit */
         sfxTickHi = uVar7;
       }
       else if (CurSfxType3 == 0x70) {
@@ -139,7 +135,6 @@ void __cdecl16far audio_usesLDIV_at_(void)
   }
   return;
 }
-
 
 
 /* 3a5b:026f */
@@ -250,7 +245,6 @@ uint __cdecl16far ovr_midGetSequenceStatus_entry(void)
 
 
 /* 3a5b:039a */
-
 void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
 
 {
@@ -316,7 +310,7 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
         *(uint8_t **)(puVar2 + 1) = puVar2 + 0xd;
         uVar4 = DIGHandle.seg;
         uVar3 = DIGHandle.ofs;
-        *(undefined2 *)(uVar3 + 9) = (char *)"puppetmaker" + 3;
+        *(undefined2 *)(uVar3 + 9) = 0x2410;   /* hand fix: 2-byte segment-half slot; the literal offset is that DGROUP segment value */
         *(undefined2 *)(uVar3 + 7) = 0x8f92;
         *(uint *)(DIGHandle.ofs + 5) = uStack_a;
         ovr_digPreformatSound();
@@ -331,7 +325,6 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
   }
   return;
 }
-
 
 
 /* 3a5b:0633 */
@@ -455,7 +448,6 @@ void __cdecl16far audio_parseHexDigit(char *driverData,char ch)
 
 
 /* 3a5b:081e */
-
 void __cdecl16far sfxInit(void)
 
 {
@@ -491,7 +483,7 @@ void __cdecl16far sfxInit(void)
       uVar3 = (undefined2)
               ((ulong)*(undefined4 *)((undefined2 *)&ibmsndComOfs + unaff_SI * 2) >> 0x10);
       iVar2 = (int)*(undefined4 *)((undefined2 *)&ibmsndComOfs + unaff_SI * 2);
-      SfxGfxSeg = in_DX;
+      SfxGfxSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
       DIGHandle.ofs =
            audio_usesAlignToSeg
                      ((uint8_t *)CONCAT22(*(undefined2 *)(iVar2 + 5),in_DX),*(uint16_t *)(iVar2 + 7)
@@ -514,11 +506,7 @@ void __cdecl16far sfxInit(void)
 }
 
 
-
 /* 3a5b:0956 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 void __cdecl16far musInit(void)
 
 {
@@ -547,7 +535,7 @@ void __cdecl16far musInit(void)
     if (((undefined2 *)&musDriver0Ofs)[unaff_SI * 2] != 0 ||
         ((undefined2 *)&musDriver0Seg)[unaff_SI * 2] != 0) {
       MidGfxOfs = ovr_stshLoadGfx(cmidpakComOfs);
-      MidGfxSeg = in_DX;
+      MidGfxSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
       MIDHandle.ofs =
            audio_usesAlignToSeg
                      ((uint8_t *)CONCAT22(*(undefined2 *)((char *)cmidpakComOfs + 5),in_DX),
@@ -560,17 +548,17 @@ void __cdecl16far musInit(void)
       uVar3 = (undefined2)
               ((ulong)*(undefined4 *)((undefined2 *)&musDriver0Ofs + unaff_SI * 2) >> 0x10);
       iVar2 = (int)*(undefined4 *)((undefined2 *)&musDriver0Ofs + unaff_SI * 2);
-      MusGfxSeg = in_DX;
+      MusGfxSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
       MusHandle = audio_usesAlignToSeg
                             ((uint8_t *)CONCAT22(*(undefined2 *)(iVar2 + 5),in_DX),
                              *(uint16_t *)(iVar2 + 7),size);
-      MusHandleSeg = in_DX;
+      MusHandleSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
       ovr_ovc20_compute1((char *)((undefined2 *)&musDriver0Ofs)[unaff_SI * 2],
                          ((undefined2 *)&musDriver0Seg)[unaff_SI * 2]);
       handle_00.seg = midpakAd.seg;
       handle_00.ofs = midpakAd.ofs;
       MusDrvOfs = ovr_stshLoadGfx(handle_00);
-      MusDrvSeg = in_DX;
+      MusDrvSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
       ovr_ovc20_compute1((char *)midpakAd.ofs,midpakAd.seg);
       bVar1 = audio_init(MIDHandle.seg);
       if (CONCAT11(extraout_AH_00,bVar1) == 0) {
@@ -588,7 +576,6 @@ void __cdecl16far musInit(void)
   }
   return;
 }
-
 
 
 /* 3a5b:0afd */
