@@ -3444,7 +3444,6 @@ far_t * __cdecl16far farmalloc(far_t *__return_storage_ptr__,uint32_t nbytes)
 
 
 /* 1000:18bf */
-
 far_t __cdecl16near malloc_ExpandBlock(void)
 
 {
@@ -3470,7 +3469,7 @@ far_t __cdecl16near malloc_ExpandBlock(void)
   uint16_t seg;
   
   nbytes = CONCAT22(in_BX,malloc_save_hi);
-  fVar15.ofs = farmalloc(malloc_save_lo,nbytes);
+  fVar15.ofs = (uint16_t)farmalloc((far_t *)malloc_save_lo,nbytes);   /* hand fix: first argument is the hidden return pointer; result is the offset half */
   if (in_DX == 0) {
     fVar15.seg = 0;
     return fVar15;
@@ -3515,7 +3514,6 @@ far_t __cdecl16near malloc_ExpandBlock(void)
   fVar16.ofs = 4;
   return fVar16;
 }
-
 
 
 /* 1000:193b */
@@ -5054,7 +5052,6 @@ uint16_t __cdecl16near __fputn(far_t stream,uint16_t count,far_t buf)
 
 
 /* 1000:2b24 */
-
 undefined2 __cdecl16far setvbuf(FILE *stream,uint8_t *bufOfs,uint mode)
 
 {
@@ -5090,7 +5087,7 @@ undefined2 __cdecl16far setvbuf(FILE *stream,uint8_t *bufOfs,uint mode)
       _exitbuf.seg = 0x1000;
       _exitbuf.ofs = 0x2fe4;
       if (bufOfs == (uint8_t *)0x0) {
-        puVar1 = (uint8_t *)malloc();
+        puVar1 = (uint8_t *)malloc(0);   /* hand fix: size argument was lost by the decompiler */
         bufOfs = (uint8_t *)CONCAT22(puVar2,puVar1);
         if (puVar1 == (uint8_t *)0x0 && puVar2 == (uint8_t *)0x0) goto L_setvbuf_2B46;
         pFVar3->flags = pFVar3->flags | 4;
@@ -5112,7 +5109,6 @@ L_setvbuf_2B46:
   }
   return uVar4;
 }
-
 
 
 /* 1000:2c3f */
@@ -5410,7 +5406,6 @@ char * __cdecl16far __fstrncpy(char *dst,char *src,uint16_t n)
 
 
 /* 1000:2deb */
-
 char * __cdecl16far _fstrstr(char *haystack,char *needle)
 
 {
@@ -5451,11 +5446,11 @@ char * __cdecl16far _fstrstr(char *haystack,char *needle)
         if (uVar2 == 0) break;
         uVar2 = uVar2 - 1;
         pcVar1 = (char *)haystack;
-        (*(uint16_t *)((uint8_t *)&(haystack))) = (char *)haystack + 1;
+        (*(uint16_t *)((uint8_t *)&(haystack))) = (uint16_t)(char *)haystack + 1;
         bVar9 = *needle == *pcVar1;
       } while (!bVar9);
       if ((!bVar9) || (uVar2 < uVar4)) {
-        (*(uint16_t *)((uint8_t *)&(haystack))) = (char *)((int)(undefined4 *)&_DATA + 1);
+        (*(uint16_t *)((uint8_t *)&(haystack))) = (uint16_t)(char *)((int)(undefined4 *)&_DATA + 1);
         break;
       }
       if (uVar4 == 0) break;
@@ -5472,11 +5467,10 @@ char * __cdecl16far _fstrstr(char *haystack,char *needle)
         bVar9 = *pcVar5 == *pcVar1;
       } while (bVar9);
     } while (!bVar9);
-    (*(uint16_t *)((uint8_t *)&(haystack))) = (char *)haystack + -1;
+    (*(uint16_t *)((uint8_t *)&(haystack))) = (uint16_t)(char *)haystack + -1;
   }
   return (char *)haystack;
 }
-
 
 
 /* 1000:2e59 */
