@@ -262,7 +262,7 @@ char __cdecl16far ovc43_playFli(uint16_t fileId,uint16_t paletteOfs,uint16_t pal
   uint16_t handle;
   
   handle = ovr_stshOpen(fileId);
-  if (*(int *)((char *)0x2a9d6 + handle * 2) < 0) {
+  if (*(int *)((char *)0x2a9d5 + handle * 2) < 0) {
     cVar1 = '\x01';
   }
   else {

@@ -797,7 +797,7 @@ L_uiInputText_11EE:
       else if (uVar3 < 0x5001) {
         if (((uVar3 == 0x4900) || (uVar3 == 0x4939)) && ((flags & 1) != 0)) {
           GMenuFlag = 0;
-          return (char *)0x2a9cd;
+          return (char *)0x2a9cc;
         }
       }
       else if (uVar3 == 0x5032) goto L_uiInputText_11EE;
@@ -808,7 +808,7 @@ L_uiInputText_11EE:
 L_uiInputText_1348:
         ovc28_usesBlitLoadRleGfx();
         GMenuFlag = 0;
-        return (char *)0x2a9cc;
+        return (char *)0x2a9cb;
       }
       if (uVar3 == 0xffff) {
         uVar4 = ovc28_usesScreenMode(entries,count);

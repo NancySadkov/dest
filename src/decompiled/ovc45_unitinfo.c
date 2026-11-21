@@ -144,7 +144,7 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
   if (*(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) == 0xffff) {
     if (uStack_6 == 0xffff) {
       if (uVar6 == 0xffff) {
-        return (char *)0x2a9cc;
+        return (char *)0x2a9cb;
       }
       *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = uVar6;
     }

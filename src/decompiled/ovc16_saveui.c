@@ -1001,7 +1001,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   switch(uVar9) {
   default:
     if (GMenuItem == '\0') {
-      pcVar11 = (char *)0x2a9cc;
+      pcVar11 = (char *)0x2a9cb;
     }
     else {
       pcVar11 = (char *)CONCAT11(0x24,GMenuItem + (char)uStack_6);

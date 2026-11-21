@@ -46,7 +46,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
       if (rightButtonLatch != '\0') {
         return (char *)"woodcarver";
       }
-      return (char *)0x2a9cd;
+      return (char *)0x2a9cc;
     }
     prevTick = CONCAT22(uVar6,uVar1);
     puVar4 = ovr_attact_usesBDADailyTimeCounter(__return_storage_ptr__,prevTick);

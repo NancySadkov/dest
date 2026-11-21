@@ -1477,7 +1477,7 @@ char * __cdecl16far ovc15_textArena(int owner,...)
                                          '\0',in_stack_00000008);
   }
   else {
-    pcVar4 = (char *)0x2a9cc;
+    pcVar4 = (char *)0x2a9cb;
   }
   return pcVar4;
 }

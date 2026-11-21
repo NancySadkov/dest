@@ -1008,7 +1008,7 @@ L_OVC22_5087_0234_323C:
               iVar29 = *(int *)(uVar33 + 8);
               if ((((iVar30 < 0) || (iVar29 < 0)) || (0x93 < iVar30 + 1)) || (0x3b < iVar29 + 1)) {
                 placementStatus = 2;
-                pfVar20 = (far_t *)((char *)0x2a9cc);
+                pfVar20 = (far_t *)((char *)0x2a9cb);
               }
               else {
                 uVar53 = (undefined2)((ulong)GMapFlags >> 0x10);
@@ -1029,7 +1029,7 @@ L_OVC22_5087_0234_323C:
                   uVar23 = *(int *)(uVar33 - 2) - iVar30;
                   if ((int)uVar23 < 9) {
                     placementStatus = 3;
-                    pfVar20 = (far_t *)((char *)0x2a9cd);
+                    pfVar20 = (far_t *)((char *)0x2a9cc);
                   }
                   else {
                     pfVar20 = (far_t *)(uVar23 & 0xff00);
@@ -1037,7 +1037,7 @@ L_OVC22_5087_0234_323C:
                 }
                 else {
                   placementStatus = 1;
-                  pfVar20 = (far_t *)((char *)0x2a9cc);
+                  pfVar20 = (far_t *)((char *)0x2a9cb);
                 }
               }
               return pfVar20;
