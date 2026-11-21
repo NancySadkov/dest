@@ -29,12 +29,12 @@ uint __cdecl16far ovc36_usesLDIV_at_(byte partyIndex,...)
   int iVar10;
   
   lVar6 = CONCAT22((int)((ulong)in_stack_0000fffa >> 0x10),unaff_SI);
-  if (*(int *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d) == 0) {
+  if (((char_sheet_t *)(((uint)partyIndex << 2)))->population == 0) {
     uVar4 = (uint)(partyIndex >> 6) << 8;
   }
   else {
     uVar8 = 0;
-    plVar7 = (long *)*(undefined2 *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d);
+    plVar7 = (long *)((char_sheet_t *)(((uint)partyIndex << 2)))->population;
     uVar2 = 0;
     plVar1 = LXMUL_at_(plVar7,(ulong)unaff_DI << 0x10,lVar6);
     lVar5 = LDIV_at_((long)CONCAT22(uVar2,plVar1),(long)CONCAT22(uVar8,plVar7));
@@ -43,7 +43,7 @@ uint __cdecl16far ovc36_usesLDIV_at_(byte partyIndex,...)
       uVar4 = 200;
     }
     uVar8 = 0;
-    plVar7 = (long *)*(undefined2 *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d);
+    plVar7 = (long *)((char_sheet_t *)(((uint)partyIndex << 2)))->population;
     uVar2 = 0;
     plVar1 = LXMUL_at_(plVar7,(ulong)unaff_DI << 0x10,lVar6);
     uVar9 = (undefined2)lVar6;
@@ -53,7 +53,7 @@ uint __cdecl16far ovc36_usesLDIV_at_(byte partyIndex,...)
       lVar5 = CONCAT22(200,uVar9);
     }
     uVar8 = 0;
-    plVar7 = (long *)*(undefined2 *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d);
+    plVar7 = (long *)((char_sheet_t *)(((uint)partyIndex << 2)))->population;
     uVar2 = 0;
     plVar1 = LXMUL_at_(plVar7,(ulong)unaff_DI << 0x10,lVar5);
     iVar10 = (int)((ulong)lVar5 >> 0x10);

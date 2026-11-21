@@ -20,9 +20,9 @@ void __cdecl16far manage_mapPartySlots(void)
     ((uint8_t *)MenuItemEnabled)[iVar1] = 0xff;
   }
   for (iVar1 = 0; iVar1 < (int)(uint)GLeaderCount; iVar1 = iVar1 + 1) {
-    if ((*(char *)((int)*(undefined4 *)(iVar1 << 2) + 0x3d) != '\0') &&
-       (*(char *)((int)*(undefined4 *)(iVar1 << 2) + 0x89) != -1)) {
-      ((uint8_t *)MenuItemEnabled)[*(byte *)((int)*(undefined4 *)(iVar1 << 2) + 0x89)] =
+    if ((((char_sheet_t *)((iVar1 << 2)))->active != '\0') &&
+       (((char_sheet_t *)((iVar1 << 2)))->partySlot != -1)) {
+      ((uint8_t *)MenuItemEnabled)[((char_sheet_t *)((iVar1 << 2)))->partySlot] =
            (uint8_t)iVar1;
     }
   }
@@ -309,9 +309,9 @@ uint __cdecl16far manage_usesGLeaderCount(void)
   uVar3 = 0;
   bVar1 = 0;
   for (iVar2 = 0; iVar2 < (int)(uint)GLeaderCount; iVar2 = iVar2 + 1) {
-    if ((*(char *)((int)*(undefined4 *)(iVar2 << 2) + 0x3d) != '\0') &&
+    if ((((char_sheet_t *)((iVar2 << 2)))->active != '\0') &&
        (*(char *)((int)*(undefined4 *)(iVar2 << 2) + 0x3f) == '\0')) {
-      uVar3 = uVar3 + *(byte *)((int)*(undefined4 *)(iVar2 << 2) + 0x84);
+      uVar3 = uVar3 + ((char_sheet_t *)((iVar2 << 2)))->popularity;
       bVar1 = bVar1 + 1;
     }
   }
@@ -602,7 +602,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     bStack_5 = manage_findFirstLeader();
     TextBlitY = TextBlitY + 0xf;
     if (((sheet_00->titleIndex != 0) && (bStack_5 != 0xff)) &&
-       (uVar4 = 0x217a, *(byte *)((int)*(undefined4 *)((uint)bStack_5 << 2) + 0x86) < 9)) {
+       (uVar4 = 0x217a, ((char_sheet_t *)(((uint)bStack_5 << 2)))->titleIndex < 9)) {
       manage_usesBlitLabel2("popularity",0x7d);
       manage_usesBlitLabel2("city blocks",0xdc);
       TextBlitY = TextBlitY + 10;
@@ -1112,9 +1112,9 @@ char * __cdecl16far chargen_switch(uint16_t index)
     return unaff_SI;
   case 3:
     for (iVar23 = 0; iVar23 < (int)(uint)GLeaderCount; iVar23 = iVar23 + 1) {
-      if (((*(char *)((int)*(undefined4 *)(iVar23 << 2) + 0x3d) != '\0') &&
-          (uVar13 = 0x2410, *(int *)((int)*(undefined4 *)(iVar23 << 2) + 0x39) == GfxRndSeed)) &&
-         (uVar13 = 0x2410, *(uint16_t *)((int)*(undefined4 *)(iVar23 << 2) + 0x3b) == GfxRndSeed2))
+      if (((((char_sheet_t *)((iVar23 << 2)))->active != '\0') &&
+          (uVar13 = 0x2410, ((char_sheet_t *)((iVar23 << 2)))->x == GfxRndSeed)) &&
+         (uVar13 = 0x2410, ((char_sheet_t *)((iVar23 << 2)))->y == GfxRndSeed2))
       {
         if (GCharLevelsInc != '\0') {
           uVar12 = (undefined2)((ulong)*(undefined4 *)(iVar23 << 2) >> 0x10);
@@ -1152,7 +1152,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
       }
       iVar23 = 0;
       while ((iVar23 < (int)(uint)GLeaderCount &&
-             (*(char *)((int)*(undefined4 *)(iVar23 << 2) + 0x28) != '\0'))) {
+             (((char_sheet_t *)((iVar23 << 2)))->statMask != '\0'))) {
         iVar23 = iVar23 + 1;
       }
       if (iVar23 < (int)(uint)GLeaderCount) {
@@ -1965,9 +1965,9 @@ void __cdecl16far manage_textHalflingCastle(void)
   TextBlitDstSeg = 0xa000;
   for (iStack_4 = 0; iStack_10 = 0x2410, iStack_4 < (int)(uint)GLeaderCount; iStack_4 = iStack_4 + 1
       ) {
-    if (((*(char *)((int)*(undefined4 *)(iStack_4 << 2) + 0x3d) != '\0') &&
-        (*(int *)((int)*(undefined4 *)(iStack_4 << 2) + 0x39) == GfxRndSeed)) &&
-       (*(int *)((int)*(undefined4 *)(iStack_4 << 2) + 0x3b) == GfxRndSeed2)) {
+    if (((((char_sheet_t *)((iStack_4 << 2)))->active != '\0') &&
+        (((char_sheet_t *)((iStack_4 << 2)))->x == GfxRndSeed)) &&
+       (((char_sheet_t *)((iStack_4 << 2)))->y == GfxRndSeed2)) {
       if (GCharLevelsInc != '\0') {
         uVar6 = (undefined2)((ulong)*(undefined4 *)(iStack_4 << 2) >> 0x10);
         iVar5 = (int)*(undefined4 *)(iStack_4 << 2);
@@ -1998,7 +1998,7 @@ void __cdecl16far manage_textHalflingCastle(void)
     }
     iStack_4 = 0;
     while ((iStack_4 < (int)(uint)GLeaderCount &&
-           (*(char *)((int)*(undefined4 *)(iStack_4 << 2) + 0x28) != '\0'))) {
+           (((char_sheet_t *)((iStack_4 << 2)))->statMask != '\0'))) {
       iStack_4 = iStack_4 + 1;
     }
     if (iStack_4 < (int)(uint)GLeaderCount) {
@@ -2077,7 +2077,7 @@ byte __cdecl16far manage_findFirstLeader(void)
     if (GLeaderCount <= bVar1) {
       return 0xff;
     }
-    if (*(char *)((int)*(undefined4 *)((uint)bVar1 << 2) + 0x86) != '\0') break;
+    if (((char_sheet_t *)(((uint)bVar1 << 2)))->titleIndex != '\0') break;
     bVar1 = bVar1 + 1;
   }
   return bVar1;

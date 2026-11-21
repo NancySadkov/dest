@@ -371,12 +371,6 @@ void __cdecl16far init_rebuildMapFlags(void)
 
 
 /* 3381:08dc */
-
-/* WARNING: Instruction at (ram,0x00039a04) overlaps instruction at (ram,0x00039a03)
-    */
-/* WARNING: Control flow encountered bad instruction data */
-/* [R2] string "Filename %d %s  \r" */
-
 stg_tmp_t * __cdecl16far init_textFilename(void)
 
 {
@@ -763,10 +757,10 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                   (bVar4 = (*paabVar13)[iVar15][iVar16 + 1],
                   psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(iVar15 * 0x94) >> 8),bVar4),
                   (char)bVar4 <= (char)(*paabVar13)[iVar15 + 1][iVar16 + 1])))))))) {
-              uVar17 = init_getMapFlags(iVar16);
+              uVar17 = ovr_init_getMapFlags(iVar16);
               psVar9 = (stg_tmp_t *)(uVar17 & 0xff);
               if (psVar9 == (stg_tmp_t *)0x0) {
-                uVar17 = init_getMapFlags(iVar16 + -1);
+                uVar17 = ovr_init_getMapFlags(iVar16 + -1);
                 psVar9 = (stg_tmp_t *)(uVar17 & 0xff);
                 if ((psVar9 == (stg_tmp_t *)0x0) &&
                    (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags2(iVar16), (char)psVar9 == '\x02')
@@ -805,7 +799,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
           psVar9->cmap[iVar15 + 0x94] != 0 &&
           (psVar9 = (stg_tmp_t *)(*paabVar13 + (int)__return_storage_ptr__),
           psVar9->cmap[iVar15 + 0x94] != 0)))) {
-        uVar17 = init_getMapFlags(iVar15);
+        uVar17 = ovr_init_getMapFlags(iVar15);
         psVar9 = (stg_tmp_t *)(uVar17 & 0xff);
         if (psVar9 == (stg_tmp_t *)0x0) {
           uStack_c = (uint)(char)(*(byte (*) [59] [148])GMapCells)[(int)__return_storage_ptr__]
@@ -839,13 +833,13 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                   else {
                     uVar7 = ovr_randBelow(4);
                     psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
-                    switch(psVar9) {
-                    case (stg_tmp_t *)0x0:
+                    switch((uint16_t)psVar9)   /* hand fix: case values are ints */ {
+                    case (uint16_t)0x0:
                       func_0x000318f5();
                       bStack_2b = 0;
                       uVar17 = extraout_DX;
                       goto L_grabLbm_0445;
-                    case (stg_tmp_t *)0x1:
+                    case (uint16_t)0x1:
                       while( true ) {
                         pbStack_18 = psVar9->cmap + (int)pbStack_18;
                         psVar9 = (stg_tmp_t *)(iVar15 + (int)__return_storage_ptr__);
@@ -868,11 +862,11 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                         psVar9 = (stg_tmp_t *)ovr_unrle(src_00);
                       }
                       return psVar9;
-                    case (stg_tmp_t *)0x2:
+                    case (uint16_t)0x2:
                       *__return_storage_ptr__ = (long)in_ST0;
                     /* WARNING: Bad instruction - Truncating control flow here */
                       halt_baddata();
-                    case (stg_tmp_t *)0x3:
+                    case (uint16_t)0x3:
                       goto switchD_3000_4a6e_caseD_3;
                     }
                   }
@@ -969,7 +963,7 @@ switchD_3000_4a6e_caseD_3:
     puStack_2a = (uint32_t *)(uVar17 & 0xff);
     ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareRightX)[(int)__return_storage_ptr__]);
     while( true ) {
-      uVar17 = constr_usesGMapFlags(uStack_24 + GfxRndSeed);
+      uVar17 = ovr_constr_usesGMapFlags(uStack_24 + GfxRndSeed);
       if ((char)uVar17 != '\0') {
         ovr_ovc07_usesLDIV_at_
                   (((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__],RowScreenY[0] - uStack_10)
@@ -981,10 +975,10 @@ switchD_3000_4a6e_caseD_3:
         if ((int)rowBandSquareEnd[0] <= (int)__return_storage_ptr__) {
           for (; (int)uVar7 < (int)rowBandSquareEnd[0]; uVar7 = uVar7 + 1) {
             uStack_24 = ((uint16_t *)squareColumn)[uVar7];
-            bVar4 = constr_setHighlightAtOffset(uStack_24);
+            bVar4 = ovr_constr_setHighlightAtOffset(uStack_24);
             uStack_e = CONCAT11(extraout_AH_00,bVar4);
             if ((*(byte *)((uint8_t *)&BuildingTypes[uStack_e] + 16) & 2) != 0) {
-              iVar15 = constr_usesSmoothPrev(uStack_24);
+              iVar15 = ovr_constr_usesSmoothPrev(uStack_24);
               uStack_10 = iVar15 / 3;
               (*(uint8_t *)((uint8_t *)&(gfx.seg))) =
                    (char)*(undefined2 *)
@@ -1012,9 +1006,9 @@ switchD_3000_4a6e_caseD_3:
       uStack_24 = ((uint16_t *)squareColumn)[(int)__return_storage_ptr__];
       puStack_1c = (uint32_t *)constr_getCellAtOffset(uStack_24,-2);
       pvStack_1e = (void *)constr_getCellAtOffset(uStack_24 + 1,-2);
-      iVar16 = constr_usesSmoothPrev(uStack_24);
+      iVar16 = ovr_constr_usesSmoothPrev(uStack_24);
       uStack_10 = iVar16 / 3;
-      iVar16 = constr_usesSmoothPrev(uStack_24 + 1);
+      iVar16 = ovr_constr_usesSmoothPrev(uStack_24 + 1);
       uStack_12 = iVar16 / 3;
       psVar9 = (stg_tmp_t *)constr_getFlagsAtOffset(uStack_24,-1);
       bStack_2b = (byte)psVar9;
@@ -1151,7 +1145,6 @@ bad_lbm:
   }
   goto L_grabLbm_0445;
 }
-
 
 
 /* 3381:1697 */
@@ -2083,7 +2076,6 @@ void __cdecl16far init_normalizeName(uint32_t s)
 
 
 /* 3381:2ee2 */
-
 void __cdecl16far copyProtectionCheck(void)
 
 {
@@ -2097,7 +2089,7 @@ void __cdecl16far copyProtectionCheck(void)
   uint8_t msg;
   uint16_t input;
   byte *pbStack_a;
-  undefined4 uStack_8;
+  char *uStack_8;   /* hand fix: *uStack_8 deref */
   uint8_t attempts;
   uint8_t codes;
   
@@ -2168,5 +2160,4 @@ void __cdecl16far copyProtectionCheck(void)
   }
   return;
 }
-
 

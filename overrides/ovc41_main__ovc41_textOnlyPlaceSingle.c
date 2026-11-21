@@ -140,8 +140,8 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
         uVar22 = *(undefined2 *)(&stack0xfeda + (int)unaff_DI);
         *(undefined2 *)(&stack0xfeda + (int)unaff_DI) = uVar22;
         if (iVar12 == 1 || cVar13 == '\0') {
-          s_constructing_2410_06a4[10] = -0x6b;
-          s_constructing_2410_06a4[0xb] = '\x06';
+          ((char *)0x06a4)[10] = -0x6b;
+          ((char *)0x06a4)[0xb] = '\x06';
                     /* WARNING: Read-only address (ram,0x000247ae) is written */
         }
         uVar2 = in(&stack0xfed8 + (int)unaff_DI +

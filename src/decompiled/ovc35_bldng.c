@@ -65,7 +65,7 @@ bool __cdecl16far bldng_textArena(byte bldType,char partyIndex,...)
       if (bVar3 == 0xff) {
         bVar2 = false;
       }
-      else if (*(byte *)((int)*(undefined4 *)((uint)bVar3 << 2) + 0x86) < bVar1) {
+      else if (((char_sheet_t *)(((uint)bVar3 << 2)))->titleIndex < bVar1) {
         bVar2 = false;
       }
       else if (*(char *)((uint)bldType * 0x27 + 0x133) == '\x12') {
@@ -76,7 +76,7 @@ bool __cdecl16far bldng_textArena(byte bldType,char partyIndex,...)
           }
         }
         if (bStack_6 < 5) {
-          if ((uint)*(byte *)((int)*(undefined4 *)((uint)bVar3 << 2) + 0x86) < bStack_6 + 4) {
+          if ((uint)((char_sheet_t *)(((uint)bVar3 << 2)))->titleIndex < bStack_6 + 4) {
             bVar2 = false;
           }
           else {
@@ -245,8 +245,7 @@ void bldng_selectBuildingType(byte partyIndex)
   byte bStack_3;
   
   bStack_3 = '\x01' << (*(byte *)((int)&worldMenuLabels[9].ofs + 1 +
-                                 (uint)*(byte *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2)
-                                                + 0x3e) * 0x95) & 0x1f);
+                                 (uint)((char_sheet_t *)(((uint)in_stack_00000004 << 2)))->classStr * 0x95) & 0x1f);
   buildTypes = bldng_getClass(in_stack_00000004);
   buildTypes = buildTypes & 0xff;
   auStack_190[0] = *(undefined2 *)((int)&GStrangeTable[0x31].seg + buildTypes * 4);
@@ -276,7 +275,7 @@ void bldng_selectBuildingType(byte partyIndex)
   bldng_buildMenuEntries
             ((uint32_t)CONCAT22(unaff_SS,&buildTypes),entries_00,count,in_stack_00000004);
   uVar2 = bldng_usesGStrangeTable
-                    (*(byte *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2) + 0x85));
+                    (((char_sheet_t *)(((uint)in_stack_00000004 << 2)))->buildType[0]);
   iVar4 = (uVar2 & 0xff) * 0x27;
   uVar7 = 0x195d;
   uVar3 = *(undefined2 *)(iVar4 + 0x10e);
@@ -293,7 +292,7 @@ void bldng_selectBuildingType(byte partyIndex)
   ovr_ovc28_compute2(entries,count,hint,(char)pcVar5);
   cStack_4 = (char)puVar6;
   if ((char)puVar6 != '\0') {
-    *(undefined1 *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2) + 0x85) =
+    ((char_sheet_t *)(((uint)in_stack_00000004 << 2)))->buildType[0] =
          (&stack0xfe0a)[((uint)puVar6 & 0xff) * 2];
   }
   return;

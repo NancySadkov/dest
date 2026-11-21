@@ -671,14 +671,14 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
     else {
       iStack_a = (uint)agnt_00->target * 0x34;
       uStack_8 = 0x1726;
-      bStack_6 = *(byte *)((int)*(undefined4 *)(iStack_a + 0x1d) + 0x42);
+      bStack_6 = ((agntG_t *)((iStack_a + 0x1d)))->rank;
       if (bStack_6 == 0) {
         iVar5 = 0;
       }
       else {
         cVar2 = ovr_manage_rollDice('\x02','\x06');
         uVar6 = CONCAT11(extraout_AH,cVar2);
-        uVar3 = ovc41_compute6(*(byte *)((int)*(undefined4 *)(iStack_a + 0x1d) + 0x42),
+        uVar3 = ovc41_compute6(((agntG_t *)((iStack_a + 0x1d)))->rank,
                                (((entity_t *)agnt_00->entity)->base).level);
         if ((byte)uVar6 < (byte)uVar3) {
           pcVar10 = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
@@ -694,11 +694,11 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
           iVar5 = CONCAT11(uVar8,1);
         }
         else {
-          bVar7 = *(byte *)((int)*(undefined4 *)(iStack_a + 0x1d) + 0x42);
+          bVar7 = ((agntG_t *)((iStack_a + 0x1d)))->rank;
           uVar9 = (uint)bVar7;
           ovc41_rollStatDice(bVar7,(((entity_t *)agnt_00->entity)->base).level);
           uVar9 = uVar9 & 0xff;
-          iVar5 = ovc41_compute8(*(byte *)((int)*(undefined4 *)(iStack_a + 0x1d) + 0x42),
+          iVar5 = ovc41_compute8(((agntG_t *)((iStack_a + 0x1d)))->rank,
                                  (((entity_t *)agnt_00->entity)->base).level);
           cStack_4 = (char)iVar5;
           bStack_5 = 0;
@@ -1408,7 +1408,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
               if (*(uint *)((int)uVar1 + 0x54) < (uint)(*(int *)((int)uVar2 + 0x4d) << 1)) {
                 uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
                 pcVar12 = (char *)(((uint)_backdropIndex & 0xff) << 2);
-                if (*(uint *)((int)uVar1 + 0x54) < *(uint *)((int)*(undefined4 *)pcVar12 + 0x4d)) {
+                if (*(uint *)((int)uVar1 + 0x54) < ((char_sheet_t *)(pcVar12))->population) {
                   uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
                   pcVar12 = (char *)0x217a;
                   uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
@@ -2251,8 +2251,8 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
         uVar22 = *(undefined2 *)(&stack0xfeda + (int)unaff_DI);
         *(undefined2 *)(&stack0xfeda + (int)unaff_DI) = uVar22;
         if (iVar12 == 1 || cVar13 == '\0') {
-          s_constructing_2410_06a4[10] = -0x6b;
-          s_constructing_2410_06a4[0xb] = '\x06';
+          ((char *)0x06a4)[10] = -0x6b;
+          ((char *)0x06a4)[0xb] = '\x06';
                     /* WARNING: Read-only address (ram,0x000247ae) is written */
         }
         uVar2 = in(&stack0xfed8 + (int)unaff_DI +

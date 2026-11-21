@@ -627,7 +627,7 @@ void __cdecl16far stshInitAudioAssets(char grab,...)
                     /* WARNING: Subroutine does not return */
           ovr_stExit(0x20);
         }
-        *(undefined2 *)((int)*(undefined4 *)(i << 2) + 0xb) = 0;
+        ((anm_t *)((i << 2)))->x = 0;
       }
       else {
         file_id = ovr_stshOpen(*(uint16_t *)(i * 2));
@@ -669,7 +669,7 @@ void __cdecl16far stshInitAudioAssets(char grab,...)
         }
         freq = stshDecVocSampleRate(voc.freq);
         iVar10 = 0x1703;
-        *(uint16_t *)((int)*(undefined4 *)(i << 2) + 0xb) = freq;
+        ((anm_t *)((i << 2)))->x = freq;
       }
       ovr_stshClose(file_id);
       pcVar6 = stshStoreFile((uint8_t *)*(undefined2 *)(i * 4),(char)((undefined2 *)(i * 4))[1]);

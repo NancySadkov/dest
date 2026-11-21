@@ -98,8 +98,10 @@ for line in list(io.open("tmp/dg12.tsv", encoding="utf-8", errors="replace"))[1:
 
 print("string symbols with an encoded address:", len(addr))
 
+SYMARR = re.compile(r"\bs_[A-Za-z0-9_]*?_([0-9a-fA-F]{4})_([0-9a-fA-F]{4})\b(?=\[[^\]]+\])")
+
 apply = "--apply" in sys.argv
-total = fixed = zero = miss = 0
+total = fixed = zero = miss = symdone = 0
 samples = []
 unres = []
 
@@ -195,12 +197,23 @@ for path in files:
         out.append(text[pos:])
         text = "".join(out)
 
+    # pass 3: a string symbol used as an array.  Ghidra prints `s_<text>_<seg>_<ofs>[i]`
+    # for a byte access at that address, but string symbols are not declared as
+    # variables, so the name does not compile.  The address is in the name.
+    def repl_sym(m):
+        global symdone
+        symdone += 1
+        return "((char *)0x%s)" % m.group(2)
+
+    text = SYMARR.sub(repl_sym, text)
+
     if text != orig and apply:
         io.open(path, "w", encoding="utf-8", newline="\n").write(text)
 
 print("files:", len(files))
 print("folds:", total, "rewritten:", fixed, "simplified(+0):", zero,
       "unresolved:", miss)
+print("symbol-as-array rewrites:", symdone)
 print("mode:", "APPLY" if apply else "dry run")
 for n, a, b in samples:
     print("   %-40s %-46s -> %s" % (n[-40:], a, b))

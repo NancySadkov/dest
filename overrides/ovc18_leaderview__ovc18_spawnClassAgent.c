@@ -61,8 +61,8 @@ ovc18_spawnClassAgent
     pfVar8 = (far_t *)(uVar6 & 0xff);
     pfVar12 = (far_t *)0x0;
     pfVar5 = in_stack_00000004;
-    switch(pfVar8) {
-    case (far_t *)0x0:
+    switch((uint16_t)pfVar8)   /* hand fix: case values are ints */ {
+    case (uint16_t)0x0:
       do {
         if (199 < iVar14 + (uint)*(byte *)(y + (int)pfVar8 * uVar10 + 10)) {
           filename = (char *)CONCAT22((int)((ulong)filename >> 0x10) +
@@ -165,7 +165,7 @@ ovc18_spawnClassAgent
         uVar10 = 0x1e;
         pfVar5 = pfVar8;
       } while( true );
-    case (far_t *)0x1:
+    case (uint16_t)0x1:
       uVar1 = in(uVar10);
       *(undefined1 *)x = uVar1;
       midpakAd.ofs = (uint16_t)stshStoreFile_2(unaff_DI,filename,unaff_BP);
@@ -214,12 +214,12 @@ ovc18_spawnClassAgent
       pasoplAdvSeg =(uint16_t)( pfVar12);
       adlibAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlib.adv",(char *)0x12410,unaff_BP));
       adlibAdvSeg =(uint16_t)( pfVar12);
-      adlibgAdvOfs = stshStoreFile_2((far_t *)"adlibg.adv",(char *)0x12410,unaff_BP);
-      adlibgAdvSeg = pfVar12;
-      mt32mpuAdvOfs = stshStoreFile_2((far_t *)"mt32mpu.adv",(char *)0x12410,unaff_BP);
-      mt32mpuAdvSeg = pfVar12;
+      adlibgAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlibg.adv",(char *)0x12410,unaff_BP));
+      adlibgAdvSeg =(uint16_t)( pfVar12);
+      mt32mpuAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"mt32mpu.adv",(char *)0x12410,unaff_BP));
+      mt32mpuAdvSeg =(uint16_t)( pfVar12);
       return (uint8_t *)mt32mpuAdvOfs;
-    case (far_t *)0x2:
+    case (uint16_t)0x2:
       iVar14 = ovr_ovc23_findClearColumn(GfxRndSeed,GfxRndSeed2);
       if (iVar14 < 0) {
         ovr_drawTextAt((char *)"You cannot attract units to this location.",0x2410);
@@ -249,12 +249,12 @@ ovc18_spawnClassAgent
         }
       }
       return txt;
-    case (far_t *)0x3:
+    case (uint16_t)0x3:
       ((int *)StshHandles)[(int)in_stack_00000004] = (int)pfVar8;
       *(undefined2 *)((int)(long *)StshPtrs + (int)in_stack_00000004 * 4 + 2) = 0;
       *(undefined2 *)((long *)StshPtrs + (int)in_stack_00000004) = 0;
       return (uint8_t *)in_stack_00000004;
-    case (far_t *)0x4:
+    case (uint16_t)0x4:
       smm_restore_state();
       return (uint8_t *)pfVar8;
     default:

@@ -406,8 +406,8 @@ int __cdecl16far ovc45_rankPercent(byte partyIndex,...)
 {
   int iVar1;
   
-  if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x87) < 0xb) {
-    iVar1 = *(int *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x87) * 10;
+  if (((char_sheet_t *)(((uint)partyIndex << 2)))->rank < 0xb) {
+    iVar1 = ((char_sheet_t *)(((uint)partyIndex << 2)))->rank * 10;
   }
   else {
     iVar1 = 100;
@@ -570,7 +570,7 @@ uint __cdecl16far ovc45_compute5(void)
     if (*(byte *)((int)uVar1 + 0x86) < 4) {
       uVar3 = CONCAT11((char)(((uint)bVar2 << 2) >> 8),4);
     }
-    else if (*(byte *)((int)*(undefined4 *)((uint)bVar2 << 2) + 0x86) < 9) {
+    else if (((char_sheet_t *)(((uint)bVar2 << 2)))->titleIndex < 9) {
       uVar1 = *(undefined4 *)((uint)bVar2 << 2);
       uVar3 = CONCAT11((char)(((uint)bVar2 << 2) >> 8),*(char *)((int)uVar1 + 0x86) + '\x01');
     }
@@ -921,7 +921,7 @@ ovc45_buildPlacementMessage
     uStack_f = 0;
     bStack_11 = *(byte *)((int)Entities + param_3 * 0x37 + 0x1a);
     uVar9 = ovr_bldng_usesGStrangeTable
-                      (*(byte *)((int)*(undefined4 *)((uint)bStack_11 << 2) + 0x85));
+                      (((char_sheet_t *)(((uint)bStack_11 << 2)))->buildType);
     bStack_12 = (byte)uVar9;
     iVar10 = (uVar9 & 0xff) * 0x27;
     uVar23 = SUB21(unaff_SS,0);

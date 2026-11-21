@@ -1140,7 +1140,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
       uVar10 = (undefined2)((ulong)Entities >> 0x10);
       bStack_3 = *(byte *)((int)Entities + uStack_6 * 0x37 + 0x1a);
       if ((((bStack_3 != 0xff) &&
-           (*(byte *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x89) == uVar8)) &&
+           (((char_sheet_t *)(((uint)bStack_3 << 2)))->partySlot == uVar8)) &&
           (uVar5 = ovr_alignUp4(*(int *)((int)Entities + uStack_6 * 0x37 + 8)), uVar5 == uVar4)) &&
          (*(uint16_t *)((int)Entities + uStack_6 * 0x37 + 10) == puVar6[1])) {
         uVar7 = uVar7 + 1;

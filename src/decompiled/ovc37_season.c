@@ -21,7 +21,7 @@ bool __cdecl16far season_textMainCastle(void)
     if ((int)(uint)GLeaderCount <= iVar1) {
       return true;
     }
-    if ((*(char *)((int)*(undefined4 *)(iVar1 << 2) + 0x3d) != '\0') &&
+    if ((((char_sheet_t *)((iVar1 << 2)))->active != '\0') &&
        (*(char *)((int)*(undefined4 *)(iVar1 << 2) + 0x3f) != '\0')) break;
     iVar1 = iVar1 + 1;
   }
@@ -80,14 +80,14 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex,...)
       if ((GHighScoreSaved == '\0') &&
          ((((1 < PlayerIndex &&
             (capTextSeg = (uint8_t *)((char *)0x2627a),
-            *(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\x02')) &&
+            ((char_sheet_t *)(((uint)bStack_3 << 2)))->alignment == '\x02')) &&
            (bVar2 = season_textMainCastle(), bVar2)) ||
           ((capTextSeg = (uint8_t *)((char *)0x2627a),
-           8 < *(byte *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x86) &&
+           8 < ((char_sheet_t *)(((uint)bStack_3 << 2)))->titleIndex &&
            ((capTextSeg = (uint8_t *)((char *)0x2627a),
-            *(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\0' ||
+            ((char_sheet_t *)(((uint)bStack_3 << 2)))->alignment == '\0' ||
             ((capTextSeg = (uint8_t *)((char *)0x2627a),
-             *(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\x01' &&
+             ((char_sheet_t *)(((uint)bStack_3 << 2)))->alignment == '\x01' &&
              (bVar2 = season_textMainCastle(), bVar2)))))))))) {
         cStack_4 = '\x01';
       }
@@ -154,8 +154,7 @@ uint __cdecl16far season_checkEndGame(byte leaderIndex,...)
   }
   else {
     bVar1 = ovr_ovc30_compute1(*(byte *)((int)&worldMenuLabels[0xc].seg +
-                                        (uint)*(byte *)((int)*(undefined4 *)((uint)leaderIndex << 2)
-                                                       + 0x3e) * 0x95));
+                                        (uint)((char_sheet_t *)(((uint)leaderIndex << 2)))->classStr * 0x95));
     if (bVar1 < 2) {
       if (((byte *)promotionBandUsed)[bVar1] != 0) {
         return 0;
@@ -220,7 +219,7 @@ void __cdecl16far season_usesGPromotableCount(void)
   
   season_countPromotable();
   bVar1 = ovr_manage_findFirstLeader();
-  if ((bVar1 != 0xff) && (*(byte *)((int)*(undefined4 *)((uint)bVar1 << 2) + 0x86) < 9)) {
+  if ((bVar1 != 0xff) && (((char_sheet_t *)(((uint)bVar1 << 2)))->titleIndex < 9)) {
     uVar2 = ovr_manage_usesGLeaderCount();
     bVar1 = season_usesDifficulty();
     if (bVar1 <= uVar2) {

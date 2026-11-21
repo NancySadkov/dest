@@ -117,13 +117,13 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   }
   uStack_6 = (byte *)((ulong)uStack_6 & 0xffffff);
   iVar24 = 0;
-  (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t) (byte *)CONCAT11(0xff,(char)uStack_6);
-  uStack_8 =(uint16_t) (byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_8) + 1)) << 8);
+  (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)(unsigned long)(byte *)CONCAT11(0xff,(char)uStack_6);
+  uStack_8 =(uint16_t)(unsigned long)(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_8) + 1)) << 8);
   for (iVar25 = -2; cVar10 = (char)unaff_DI, iVar25 < 2; iVar25 = iVar25 + 1) {
     uVar15 = ovr_ovc45_getUnitIndex(GfxRndSeed + iVar25);
     bVar11 = ovr_ovc45_getUnitType(GfxRndSeed + iVar25);
     uVar7 = (ulong)uStack_6;
-    uStack_8 =(uint16_t) (byte *)CONCAT11(bVar11,(byte)uStack_8);
+    uStack_8 =(uint16_t)(unsigned long)(byte *)CONCAT11(bVar11,(byte)(uint16_t)(unsigned long)(uStack_8));
     uVar26 = (undefined2)((ulong)GUnits >> 0x10);
     puVar23 = (unit_t *)GUnits;
     bVar9 = puVar23[uVar15].unitType;
@@ -136,7 +136,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
         ((*(uint8_t *)((uint8_t *)&(uStack_6) + 1)) = SUB41(uVar7,1), bVar4 = puVar23[uVar15].level <= (*(uint8_t *)((uint8_t *)&(uStack_6) + 1)), bVar4))))
     {
       (*(uint8_t *)((uint8_t *)&(uStack_6))) = (char)uVar7;
-      (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t) (byte *)CONCAT11(puVar23[uVar15].level,(char)uStack_6);
+      (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)(unsigned long)(byte *)CONCAT11(puVar23[uVar15].level,(char)uStack_6);
       uStack_6 = (byte *)(ulong)CONCAT12(bVar9,(byte *)uStack_6);
     }
     uVar7 = (ulong)uStack_6;
@@ -148,8 +148,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     uStack_6 = (byte *)CONCAT13(cVar10,(uint3)uStack_6);
     in_DX = 0x2410;
     if (((5 < puVar23[uVar15].level) && (cVar10 == -0x7a)) &&
-       ((*(uint8_t *)((uint8_t *)&(uStack_8))) = (byte)uStack_8 + 1, uStack_8 = (byte *)CONCAT11(bVar11,(byte)uStack_8),
-       (byte)uStack_8 < 2)) {
+       ((*(uint8_t *)((uint8_t *)&(uStack_8))) = (byte)(uint16_t)(unsigned long)(uStack_8) + 1, uStack_8 = (uint16_t)(unsigned long)(byte *)CONCAT11(bVar11,(byte)(uint16_t)(unsigned long)(uStack_8)),
+       (byte)(uint16_t)(unsigned long)(uStack_8) < 2)) {
       uStack_6 = (byte *)uVar7;
     }
     if ((*(uint8_t *)((uint8_t *)&(uStack_6) + 3)) != 0x0) {
@@ -184,8 +184,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   if ((byte *)__C0_ASM_CopyRight < pbVar14) {
     return pbVar14;
   }
-  switch(pbVar14) {
-  case (byte *)0x0:
+  switch((uint16_t)pbVar14)   /* hand fix: case values are ints */ {
+  case (uint16_t)0x0:
     *(char *)((int)pbVar14 * 2) = *(char *)((int)pbVar14 * 2) + (char)(in_DX >> 8);
     uStack_c = (uint)(byte)((byte)uVar15 & (byte)*(undefined2 *)(&stack0x02c2 + iVar24));
     uVar16 = ovr_randBelow(in_stack_0000ffd8);
@@ -209,7 +209,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     pbVar14 = (byte *)(uVar15 + 1);
     uStack_8 =(uint16_t) pbVar14;
     if ((byte *)((int)(undefined4 *)&_DATA + 2) < pbVar14) {
-      uStack_8 =(uint16_t) (byte *)((int)(undefined4 *)&_DATA + 2);
+      uStack_8 =(uint16_t)(unsigned long)(byte *)((int)(undefined4 *)&_DATA + 2);
     }
     bStackY_2d = 0xff;
     bStackY_2e = 0;
@@ -217,7 +217,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     uStack_a = -1;
     iVar24 = CONCAT11(uVar34,uVar33);
     break;
-  case (byte *)0x1:
+  case (uint16_t)0x1:
     TextBlitX = in_DX - (int)pbVar14;
     ovr_blitLabel((char *)"UNITS");
     iVar25 = ovr_font_textWidth((char *)"POPULATION");
@@ -326,36 +326,36 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     return pbVar14;
   case (byte *)0x3:
     do {
-      if (*(uint *)((int)*(undefined4 *)(uStack_a << 2) + 0x47) < 10) {
+      if (((char_sheet_t *)((uStack_a << 2)))->unitsOnTile < 10) {
         ovc25_usesAlignUp43((byte)uStack_a,10,
-                            *(uint16_t *)((int)*(undefined4 *)(uStack_a << 2) + 0x39),
-                            *(uint16_t *)((int)*(undefined4 *)(uStack_a << 2) + 0x3b),'\0');
-        *(undefined1 *)((int)*(undefined4 *)(uStack_a << 2) + 0x4a) = 0;
+                            ((char_sheet_t *)((uStack_a << 2)))->x,
+                            ((char_sheet_t *)((uStack_a << 2)))->y,'\0');
+        ((char_sheet_t *)((uStack_a << 2)))->reportState = 0;
       }
       else {
-        *(undefined1 *)((int)*(undefined4 *)(uStack_a << 2) + 0x4a) = 0;
-        iVar25 = ovc25_compute1(*(byte *)((int)*(undefined4 *)(uStack_a << 2) + 0x3e));
+        ((char_sheet_t *)((uStack_a << 2)))->reportState = 0;
+        iVar25 = ovc25_compute1(((char_sheet_t *)((uStack_a << 2)))->classStr);
         uStack_6 = (byte *)CONCAT22(iVar25,(byte *)uStack_6);
         if ((int)(uint)PlayerCount < iVar25) {
           uVar16 = ovr_randBelow(0x28);
-          iVar25 = *(int *)((int)*(undefined4 *)(uStack_a << 2) + 0x39) + -0x14 + (uVar16 & 0xff);
-          (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t) (byte *)iVar25;
+          iVar25 = ((char_sheet_t *)((uStack_a << 2)))->x + -0x14 + (uVar16 & 0xff);
+          (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)(unsigned long)(byte *)iVar25;
           if (iVar25 < 4) {
-            (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t) (byte *)0x4;
+            (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)(unsigned long)(byte *)0x4;
           }
           if (0x8c < (int)(byte *)uStack_6) {
             uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),0x8b);
           }
           uVar16 = ovr_randBelow(0x14);
-          uStack_8 =(uint16_t)( (byte *)(*(int *)((int)*(undefined4 *)(uStack_a << 2) + 0x3b) + -10 +
+          uStack_8 =(uint16_t)( (byte *)(((char_sheet_t *)((uStack_a << 2)))->y + -10 +
                              (uVar16 & 0xff)));
           if ((int)uStack_8 < 1) {
-            uStack_8 =(uint16_t) (byte *)0x1;
+            uStack_8 =(uint16_t)(unsigned long)(byte *)0x1;
           }
           if (0x3a < (int)uStack_8) {
-            uStack_8 =(uint16_t) (byte *)0x3a;
+            uStack_8 =(uint16_t)(unsigned long)(byte *)0x3a;
           }
-          ovc25_usesAlignUp44((char)uStack_a,1);
+          ovr_ovc25_usesAlignUp44((char)uStack_a,1);
         }
       }
       while( true ) {
@@ -367,47 +367,47 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
               ovc25_clearEntityFlags();
               return pbVar14;
             }
-          } while ((*(char *)((int)*(undefined4 *)(uStack_a * 4) + 0x40) == '\0') ||
-                  (*(char *)((int)*(undefined4 *)(uStack_a * 4) + 0x3d) == '\0'));
+          } while ((((char_sheet_t *)((uStack_a * 4)))->spyReports == '\0') ||
+                  (((char_sheet_t *)((uStack_a * 4)))->active == '\0'));
           ovc25_intelAttackingNotice((byte)uStack_a);
-          if (*(int *)((int)*(undefined4 *)(uStack_a << 2) + 0x4b) == -1) {
+          if (((char_sheet_t *)((uStack_a << 2)))->nearestEnemy == -1) {
             uVar15 = 0xffff;
           }
           else {
-            iVar24 = *(int *)((int)*(undefined4 *)(uStack_a << 2) + 0x4b);
+            iVar24 = ((char_sheet_t *)((uStack_a << 2)))->nearestEnemy;
             uVar26 = (undefined2)((ulong)Entities >> 0x10);
-            uVar15 = *(int *)((int)*(undefined4 *)(uStack_a << 2) + 0x39) -
+            uVar15 = ((char_sheet_t *)((uStack_a << 2)))->x -
                      (((entity_t *)Entities + iVar24)->base).x;
             uVar20 = (int)uVar15 >> 0xf;
-            uVar18 = *(int *)((int)*(undefined4 *)(uStack_a << 2) + 0x3b) -
+            uVar18 = ((char_sheet_t *)((uStack_a << 2)))->y -
                      ((entity_t *)Entities)[iVar24].base.y;
             uVar21 = (int)uVar18 >> 0xf;
             uVar15 = (int)((uVar15 ^ uVar20) - uVar20) / 2 + ((uVar18 ^ uVar21) - uVar21);
           }
-          if ((*(int *)((int)*(undefined4 *)(uStack_a << 2) + 0x43) == 0) || (9 < uVar15)) break;
+          if ((((char_sheet_t *)((uStack_a << 2)))->enemiesNear == 0) || (9 < uVar15)) break;
           ovc25_usesEntityCount((byte)uStack_a);
-          if (9 < *(uint *)((int)*(undefined4 *)(uStack_a << 2) + 0x47)) {
+          if (9 < ((char_sheet_t *)((uStack_a << 2)))->unitsOnTile) {
             uVar26 = (undefined2)((ulong)Entities >> 0x10);
             ovc25_usesAlignUp43((byte)uStack_a,5,(((entity_t *)Entities + iVar24)->base).x,
                                 ((entity_t *)Entities)[iVar24].base.y,'\x01');
           }
           ovc25_usesAlignUp43((byte)uStack_a,10,
-                              *(uint16_t *)((int)*(undefined4 *)(uStack_a << 2) + 0x39),
-                              *(uint16_t *)((int)*(undefined4 *)(uStack_a << 2) + 0x3b),'\0');
-          *(undefined1 *)((int)*(undefined4 *)(uStack_a << 2) + 0x4a) = 1;
+                              ((char_sheet_t *)((uStack_a << 2)))->x,
+                              ((char_sheet_t *)((uStack_a << 2)))->y,'\0');
+          ((char_sheet_t *)((uStack_a << 2)))->reportState = 1;
         }
-        if ((*(char *)((int)*(undefined4 *)(uStack_a << 2) + 0x49) == -1) ||
-           ((*(byte *)((int)*(undefined4 *)(uStack_a << 2) + 0x5d) & 1) == 0)) break;
+        if ((((char_sheet_t *)((uStack_a << 2)))->nearestEnemyLeader == -1) ||
+           ((((char_sheet_t *)((uStack_a << 2)))->flags5d & 1) == 0)) break;
         ovc25_usesEntityCount((byte)uStack_a);
-        bVar9 = *(byte *)((int)*(undefined4 *)(uStack_a << 2) + 0x49);
-        if (0xe < *(uint *)((int)*(undefined4 *)(uStack_a << 2) + 0x47)) {
+        bVar9 = ((char_sheet_t *)((uStack_a << 2)))->nearestEnemyLeader;
+        if (0xe < ((char_sheet_t *)((uStack_a << 2)))->unitsOnTile) {
           ovc25_usesAlignUp42((byte)uStack_a,10,
-                              *(uint16_t *)((int)*(undefined4 *)((uint)bVar9 << 2) + 0x39),
-                              *(uint16_t *)((int)*(undefined4 *)((uint)bVar9 << 2) + 0x3b),
-                              *(uint16_t *)((int)*(undefined4 *)(uStack_a << 2) + 0x39),
-                              *(uint16_t *)((int)*(undefined4 *)(uStack_a << 2) + 0x3b));
-          if (*(char *)((int)*(undefined4 *)(uStack_a << 2) + 0x4a) != '\x02') {
-            ovr_alignUp4(*(int *)((int)*(undefined4 *)((uint)bVar9 << 2) + 0x39));
+                              ((char_sheet_t *)(((uint)bVar9 << 2)))->x,
+                              ((char_sheet_t *)(((uint)bVar9 << 2)))->y,
+                              ((char_sheet_t *)((uStack_a << 2)))->x,
+                              ((char_sheet_t *)((uStack_a << 2)))->y);
+          if (((char_sheet_t *)((uStack_a << 2)))->reportState != '\x02') {
+            ovr_alignUp4(((char_sheet_t *)(((uint)bVar9 << 2)))->x);
             uStackY_2a = 0x2379;
             uStackY_2c = 0xc5d4;
             pcVar19 = ovr_stsprintf(acStackY_68,(char *)CONCAT22(0x58c0,unaff_SS));
@@ -415,9 +415,9 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
           }
         }
         ovc25_usesAlignUp43((byte)uStack_a,0xf,
-                            *(uint16_t *)((int)*(undefined4 *)(uStack_a << 2) + 0x39),
-                            *(uint16_t *)((int)*(undefined4 *)(uStack_a << 2) + 0x3b),'\0');
-        *(undefined1 *)((int)*(undefined4 *)(uStack_a << 2) + 0x4a) = 2;
+                            ((char_sheet_t *)((uStack_a << 2)))->x,
+                            ((char_sheet_t *)((uStack_a << 2)))->y,'\0');
+        ((char_sheet_t *)((uStack_a << 2)))->reportState = 2;
       }
     } while( true );
   case (byte *)0x4:
@@ -547,7 +547,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
         }
         else {
           if ((byte *)(uint)Entities[iVar25].base.animFrame <= uStack_8) {
-            uStack_8 =(uint16_t) (byte *)(uint)Entities[iVar25].base.animFrame;
+            uStack_8 =(uint16_t)(unsigned long)(byte *)(uint)Entities[iVar25].base.animFrame;
           }
           Entities[iVar25].base.animFrame = Entities[iVar25].base.animFrame - (byte)uStack_8;
           ovr_ovc41_compute4(&Entities[iVar25].base,(byte)((ulong)Entities >> 0x10));
@@ -1082,18 +1082,18 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
       printf("%d \r");
     }
     for (uVar26 = 0; (int)uVar26 < (int)(uint)GLeaderCount; uVar26 = uVar26 + 1) {
-      if (*(char *)((int)*(undefined4 *)(uVar26 << 2) + 0x3d) != '\0') {
-        *(undefined2 *)((int)*(undefined4 *)(uVar26 << 2) + 0xa2) = 0;
+      if (((char_sheet_t *)((uVar26 << 2)))->active != '\0') {
+        ((char_sheet_t *)((uVar26 << 2)))->foodSold = 0;
         cVar11 = *(char *)((int)*(undefined4 *)(uVar26 << 2) + 0x3f);
         if ((cVar11 == '\0') &&
-           (*(uint *)((int)*(undefined4 *)(uVar26 << 2) + 0x4f) <
-            *(uint *)((int)*(undefined4 *)(uVar26 << 2) + 0x4d) >> 1)) {
+           (((char_sheet_t *)((uVar26 << 2)))->foodProd <
+            ((char_sheet_t *)((uVar26 << 2)))->population >> 1)) {
           bVar8 = true;
         }
         else {
           bVar8 = false;
         }
-        uVar15 = *(uint *)((int)*(undefined4 *)(uVar26 << 2) + 0x54);
+        uVar15 = ((char_sheet_t *)((uVar26 << 2)))->income;
         uVar17 = (undefined2)((ulong)*(undefined4 *)(uVar26 << 2) >> 0x10);
         iVar18 = (int)*(undefined4 *)(uVar26 << 2);
         iVar18 = *(int *)(iVar18 + 0x58) + ((int)uVar15 >> 0xf) +
@@ -1159,8 +1159,8 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
           *(undefined2 *)(iVar18 + 0x56) = 0;
         }
         else {
-          if ((cVar11 == '\0') && (0 < *(int *)((int)*(undefined4 *)(uVar26 << 2) + 0x54))) {
-            uVar15 = *(int *)((int)*(undefined4 *)(uVar26 << 2) + 0x54) / 10;
+          if ((cVar11 == '\0') && (0 < ((char_sheet_t *)((uVar26 << 2)))->income)) {
+            uVar15 = ((char_sheet_t *)((uVar26 << 2)))->income / 10;
           }
           else {
             uVar15 = 0;
@@ -1168,7 +1168,7 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
           bVar29 = CARRY2(GPopulationLo,uVar15);
           GPopulationLo = GPopulationLo + uVar15;
           GPopulationHi = GPopulationHi + ((int)uVar15 >> 0xf) + (uint)bVar29;
-          uVar15 = *(int *)((int)*(undefined4 *)(uVar26 << 2) + 0x54) - uVar15;
+          uVar15 = ((char_sheet_t *)((uVar26 << 2)))->income - uVar15;
           uVar17 = (undefined2)((ulong)*(undefined4 *)(uVar26 << 2) >> 0x10);
           iVar18 = (int)*(undefined4 *)(uVar26 << 2);
           puVar3 = (uint *)(iVar18 + 0x56);
@@ -1178,12 +1178,12 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
           *piVar2 = *piVar2 + ((int)uVar15 >> 0xf) + (uint)CARRY2(uVar25,uVar15);
         }
         if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                      (uint)*(byte *)((int)*(undefined4 *)(uVar26 << 2) + 0x3e) * 0x95) & 0x100) ==
+                      (uint)((char_sheet_t *)((uVar26 << 2)))->classStr * 0x95) & 0x100) ==
             0) {
-          if (*(uint *)((int)*(undefined4 *)(uVar26 << 2) + 0x4f) <
-              *(uint *)((int)*(undefined4 *)(uVar26 << 2) + 0x4d)) {
-            uVar15 = *(int *)((int)*(undefined4 *)(uVar26 << 2) + 0x4d) -
-                     *(int *)((int)*(undefined4 *)(uVar26 << 2) + 0x4f);
+          if (((char_sheet_t *)((uVar26 << 2)))->foodProd <
+              ((char_sheet_t *)((uVar26 << 2)))->population) {
+            uVar15 = ((char_sheet_t *)((uVar26 << 2)))->population -
+                     ((char_sheet_t *)((uVar26 << 2)))->foodProd;
             uVar17 = (undefined2)((ulong)*(undefined4 *)(uVar26 << 2) >> 0x10);
             iVar21 = (int)*(undefined4 *)(uVar26 << 2);
             iVar18 = *(int *)(iVar21 + 0x62);
@@ -1210,8 +1210,8 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
             else {
               uVar30 = (undefined1)uVar15;
               uVar16 = (undefined1)(uVar15 >> 8);
-              if (*(uint *)((int)*(undefined4 *)(uVar26 << 2) + 0xa0) < uVar15) {
-                uVar17 = *(undefined2 *)((int)*(undefined4 *)(uVar26 << 2) + 0xa0);
+              if (((char_sheet_t *)((uVar26 << 2)))->maxTrade < uVar15) {
+                uVar17 = ((char_sheet_t *)((uVar26 << 2)))->maxTrade;
                 uVar30 = (undefined1)uVar17;
                 uVar16 = (undefined1)((uint)uVar17 >> 8);
               }
@@ -1232,12 +1232,12 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
               piVar2 = (int *)(iVar18 + 0x58);
               *piVar2 = *piVar2 - (uint)(uVar25 < CONCAT11(uVar16,uVar30));
               uVar15 = uVar15 - CONCAT11(uVar16,uVar30);
-              *(undefined2 *)((int)*(undefined4 *)(uVar26 << 2) + 0xa2) = CONCAT11(uVar16,uVar30);
+              ((char_sheet_t *)((uVar26 << 2)))->foodSold = CONCAT11(uVar16,uVar30);
             }
             if (cVar11 == '\0') {
               for (iVar18 = 0; (uVar15 != 0 && (iVar18 < (int)(uint)GLeaderCount));
                   iVar18 = iVar18 + 1) {
-                if ((*(char *)((int)*(undefined4 *)(iVar18 << 2) + 0x3d) != '\0') &&
+                if ((((char_sheet_t *)((iVar18 << 2)))->active != '\0') &&
                    ((*(char *)((int)*(undefined4 *)(iVar18 << 2) + 0x3f) == '\0' &&
                     (uVar17 = (undefined2)((ulong)*(undefined4 *)(iVar18 << 2) >> 0x10),
                     iVar21 = (int)*(undefined4 *)(iVar18 << 2),
@@ -1283,8 +1283,8 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
             }
           }
           else {
-            uVar25 = *(int *)((int)*(undefined4 *)(uVar26 << 2) + 0x4f) -
-                     *(int *)((int)*(undefined4 *)(uVar26 << 2) + 0x4d);
+            uVar25 = ((char_sheet_t *)((uVar26 << 2)))->foodProd -
+                     ((char_sheet_t *)((uVar26 << 2)))->population;
             uVar17 = (undefined2)((ulong)*(undefined4 *)(uVar26 << 2) >> 0x10);
             iVar18 = (int)*(undefined4 *)(uVar26 << 2);
             puVar3 = (uint *)(iVar18 + 0x60);
@@ -1312,14 +1312,14 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
           uVar31 = *(int *)(iVar18 + 0x62) - *(int *)(iVar21 + 0x80);
           if (((int)(uVar31 - uVar25) < 0) ||
              ((uVar31 == uVar25 &&
-              (uVar15 - *puVar3 <= *(uint *)((int)*(undefined4 *)(uVar26 << 2) + 0xa0))))) {
+              (uVar15 - *puVar3 <= ((char_sheet_t *)((uVar26 << 2)))->maxTrade)))) {
             uVar15 = *(int *)((int)*(undefined4 *)(uVar26 << 2) + 0x60) -
                      *(int *)((int)*(undefined4 *)(uVar26 << 2) + 0x7e);
           }
           else {
-            uVar15 = *(uint *)((int)*(undefined4 *)(uVar26 << 2) + 0xa0);
+            uVar15 = ((char_sheet_t *)((uVar26 << 2)))->maxTrade;
           }
-          *(int *)((int)*(undefined4 *)(uVar26 << 2) + 0xa2) = -uVar15;
+          ((char_sheet_t *)((uVar26 << 2)))->foodSold = -uVar15;
           uVar17 = (undefined2)((ulong)*(undefined4 *)(uVar26 << 2) >> 0x10);
           iVar18 = (int)*(undefined4 *)(uVar26 << 2);
           puVar3 = (uint *)(iVar18 + 0x56);
@@ -1335,13 +1335,13 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
           *(undefined2 *)(iVar21 + 0x62) = *(undefined2 *)(iVar18 + 0x80);
           *(undefined2 *)(iVar21 + 0x60) = uVar17;
         }
-        if ((*(uint *)((int)*(undefined4 *)(uVar26 << 2) + 0x5b) <
-             *(uint *)((int)*(undefined4 *)(uVar26 << 2) + 0x4d)) &&
+        if ((((char_sheet_t *)((uVar26 << 2)))->housing <
+             ((char_sheet_t *)((uVar26 << 2)))->population) &&
            ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                      (uint)*(byte *)((int)*(undefined4 *)(uVar26 << 2) + 0x3e) * 0x95) & 0x80) == 0
+                      (uint)((char_sheet_t *)((uVar26 << 2)))->classStr * 0x95) & 0x80) == 0
            )) {
-          iVar18 = *(int *)((int)*(undefined4 *)(uVar26 << 2) + 0x4d) -
-                   *(int *)((int)*(undefined4 *)(uVar26 << 2) + 0x5b);
+          iVar18 = ((char_sheet_t *)((uVar26 << 2)))->population -
+                   ((char_sheet_t *)((uVar26 << 2)))->housing;
           uVar15 = 0;
           while ((uVar15 < EntityCount && (iVar18 != 0))) {
             uVar17 = (undefined2)((ulong)Entities >> 0x10);
@@ -1436,11 +1436,11 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
             if ((iVar21 <= iVar18) &&
                ((iVar18 != iVar21 || (*(uint *)(iVar20 + 0x8a) <= *(uint *)(iVar19 + 0x56)))))
             break;
-            if ((*(char *)((int)*(undefined4 *)(uVar25 << 2) + 0x3d) != '\0') &&
-               (((0 < *(int *)((int)*(undefined4 *)(uVar25 << 2) + 0x54) &&
+            if ((((char_sheet_t *)((uVar25 << 2)))->active != '\0') &&
+               (((0 < ((char_sheet_t *)((uVar25 << 2)))->income &&
                  (*(char *)((int)*(undefined4 *)(uVar25 << 2) + 0x3f) == '\0')) &&
                 (uVar25 != uVar26)))) {
-              uStackY_2e = (uint)(((long)*(int *)((int)*(undefined4 *)(uVar25 << 2) + 0x54) *
+              uStackY_2e = (uint)(((long)((char_sheet_t *)((uVar25 << 2)))->income *
                                    (long)(int)uVar15 & 0xffffU) / 100);
               iStackY_2c = 0;
               uVar17 = (undefined2)((ulong)*(undefined4 *)(uVar26 << 2) >> 0x10);
@@ -1587,7 +1587,7 @@ code_r0x00053afb:
   if (EntityCount <= EntityScanPos) {
     EntityScanPos = 0;
     for (iVar18 = 0; iVar18 < (int)(uint)GLeaderCount; iVar18 = iVar18 + 1) {
-      if (*(char *)((int)*(undefined4 *)(iVar18 << 2) + 0x3d) != '\0') {
+      if (((char_sheet_t *)((iVar18 << 2)))->active != '\0') {
         iVar21 = ((int *)(iVar18 * 4))[1];
         uVar30 = 0x95;
         uVar16 = 0x3b;
@@ -1606,11 +1606,11 @@ code_r0x00053afb:
   if ((bVar10 == 0xff) || (GCanPromote == '\0')) {
     pbVar13 = (byte *)0x0;
   }
-  else if (*(byte *)((int)*(undefined4 *)((uint)bVar10 << 2) + 0x86) < 5) {
+  else if (((char_sheet_t *)(((uint)bVar10 << 2)))->titleIndex < 5) {
     pbVar13 = (byte *)__C0_ASM_CopyRight + 0x24;
   }
   else {
-    pbVar13 = (byte *)((uint)*(byte *)((int)*(undefined4 *)((uint)bVar10 << 2) + 0x86) * 4 + 0x14);
+    pbVar13 = (byte *)((uint)((char_sheet_t *)(((uint)bVar10 << 2)))->titleIndex * 4 + 0x14);
   }
   for (; uVar26 < EntityCount; uVar26 = uVar26 + 1) {
     uVar28 = (undefined2)((ulong)Entities >> 0x10);
@@ -1627,7 +1627,7 @@ code_r0x00053afb:
         bVar29 = true;
       }
       else {
-        bVar10 = *(byte *)((int)*(undefined4 *)((uint)bVar5 << 2) + 0x89);
+        bVar10 = ((char_sheet_t *)(((uint)bVar5 << 2)))->partySlot;
         uStackY_1c = CONCAT11(bVar10,(char)uStackY_1c);
         if (bVar10 < 5) {
           uVar34 = peVar22[uVar26].base.y;
@@ -1868,12 +1868,6 @@ code_r0x00053afb:
 
 
 /* 55fe:0cdf */
-
-/* WARNING: Instruction at (ram,0x00056a00) overlaps instruction at (ram,0x000569fe)
-    */
-/* WARNING: Unable to track spacebase fully for stack */
-/* [R2] string "Construction abandoned." */
-
 bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte dir)
 
 {
@@ -1941,11 +1935,11 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
      (puVar19 = (undefined4 *)(uint)dir, puVar19 <= (undefined4 *)((int)(undefined4 *)&_DATA + 3)))
   {
     iVar28 = (int)puVar19 * 2;
-    switch(puVar19) {
-    case (undefined4 *)0x0:
+    switch((uint16_t)(uint)puVar19)   /* hand fix: int switch */ {
+    case (uint16_t)0x0:
       (**(code **)(pcVar12 + iVar28 + -0x70))();
       break;
-    case (undefined4 *)0x2:
+    case (uint16_t)0x2:
       uVar18 = 0x1000 << (*(byte *)((int)*puVar19 + 0x3f) & 0x1f);
       uVar10 = *(undefined4 *)((uint)(byte)(uVar43 >> 0x10) << 2);
       uVar33 = 0x1000 << ((*(byte *)((int)uVar10 + 0x3f) ^ 1) & 0x1f);
@@ -1982,7 +1976,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
         pbVar20 = ovc23_textAdlibNone(uVar18,unaff_SI,in_stack_0000fffc);
       }
       return SUB21(pbVar20,0);
-    case (undefined4 *)0x3:
+    case (uint16_t)0x3:
       pcVar24 = pcVar24 + -1;
       bVar23 = (byte)iVar28;
       bVar15 = bVar23 - AgntAnms[0xf].frmid;
@@ -2190,7 +2184,6 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
   }
   return false;
 }
-
 
 
 /* 55fe:0f39 */

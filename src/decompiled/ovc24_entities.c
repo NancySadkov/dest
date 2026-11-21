@@ -518,8 +518,8 @@ undefined2 __cdecl16far ovc24_unitAtLeader(byte leaderIndex)
   short sVar5;
   undefined2 uVar6;
   
-  iVar3 = *(int *)((int)*(undefined4 *)((uint)leaderIndex << 2) + 0x39);
-  iVar1 = *(int *)((int)*(undefined4 *)((uint)leaderIndex << 2) + 0x3b);
+  iVar3 = ((char_sheet_t *)(((uint)leaderIndex << 2)))->x;
+  iVar1 = ((char_sheet_t *)(((uint)leaderIndex << 2)))->y;
   bVar2 = ovr_manage_findFirstLeader();
   uVar6 = (undefined2)((ulong)GUnitGrid >> 0x10);
   if (leaderIndex == bVar2) {
@@ -590,13 +590,13 @@ void __cdecl16far ovc24_checkStrongholds(void)
     cStack_a = '\0';
     bVar1 = false;
     for (uStack_6 = 0; (int)uStack_6 < (int)(uint)GLeaderCount; uStack_6 = uStack_6 + 1) {
-      if (*(char *)((int)*(undefined4 *)(uStack_6 << 2) + 0x3d) != '\0') {
-        bStack_9 = *(byte *)((int)*(undefined4 *)(uStack_6 << 2) + 0x3e);
+      if (((char_sheet_t *)((uStack_6 << 2)))->active != '\0') {
+        bStack_9 = ((char_sheet_t *)((uStack_6 << 2)))->classStr;
         bStack_7 = *(byte *)((int)*(undefined4 *)(uStack_6 << 2) + 0x3f);
         uStack_c = 0x1000 << (1U - (bStack_7 != 0) & 0x1f);
         bStack_8 = '\0' << (bStack_7 & 0x1f);
-        uStack_e = alignUp4(*(int *)((int)*(undefined4 *)(uStack_6 << 2) + 0x39));
-        uVar6 = *(uint *)((int)*(undefined4 *)(uStack_6 << 2) + 0x3b);
+        uStack_e = alignUp4(((char_sheet_t *)((uStack_6 << 2)))->x);
+        uVar6 = ((char_sheet_t *)((uStack_6 << 2)))->y;
         uStack_10 = 0;
         for (iVar8 = -2; iVar8 < 2; iVar8 = iVar8 + 1) {
           uStack_10 = uStack_10 | (*(short (*) [60] [148])GMapFlags)[uVar6][uStack_e + iVar8];
@@ -625,7 +625,7 @@ L_OVC24_5943_112e_1255:
         }
         uVar7 = 0x195d;
         if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)bStack_9 * 0x95) & 0x800) == 0) {
-          uVar4 = alignUp4(*(int *)((int)*(undefined4 *)(uStack_6 << 2) + 0x39),uVar6,0);
+          uVar4 = alignUp4(((char_sheet_t *)((uStack_6 << 2)))->x,uVar6,0);
           uVar7 = 0x195d;
           pcVar5 = ovr_ovc15_capitalize((char *)&text);
           pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x578d,unaff_SS),
@@ -633,29 +633,29 @@ L_OVC24_5943_112e_1255:
           ovr_uiNotify(pcVar5,uVar7);
         }
         else {
-          uVar4 = alignUp4(*(int *)((int)*(undefined4 *)(uStack_6 << 2) + 0x39),uVar6,0);
+          uVar4 = alignUp4(((char_sheet_t *)((uStack_6 << 2)))->x,uVar6,0);
           pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x576a,unaff_SS),
                                  (char *)CONCAT22(uVar4,(char *)0x26510));
           ovr_uiNotify(pcVar5,uVar7);
         }
         if (bStack_3 == uStack_6) {
           ovr_createConstructionRecordFar
-                    (0,*(int *)((int)*(undefined4 *)(uStack_6 << 2) + 0x39) + -2,uVar6,
+                    (0,((char_sheet_t *)((uStack_6 << 2)))->x + -2,uVar6,
                      (uint8_t *)CONCAT22(unaff_SS,&outFlag),0xff,(char)unaff_DI,0xff);
         }
         else {
           ovr_createConstructionRecordFar
-                    (0,*(int *)((int)*(undefined4 *)(uStack_6 << 2) + 0x39) + -1,uVar6,
+                    (0,((char_sheet_t *)((uStack_6 << 2)))->x + -1,uVar6,
                      (uint8_t *)CONCAT22(unaff_SS,&outFlag),0xff,(char)unaff_DI,0xff);
         }
         CurSfxType3 = 0xff;
-        *(undefined1 *)((int)*(undefined4 *)(uStack_6 << 2) + 0x3d) = 0;
+        ((char_sheet_t *)((uStack_6 << 2)))->active = 0;
         bVar1 = true;
         ovr_manage_mapPartySlots();
         ovr_font_usesMiceBlitRect(0x5a);
         _fmemset((void *)ZEXT24(unaff_SS),2,unaff_DI);
         if (bStack_7 == 0) {
-          iVar8 = (uint)*(byte *)((int)*(undefined4 *)(uStack_6 << 2) + 0x3e) * 0x95;
+          iVar8 = (uint)((char_sheet_t *)((uStack_6 << 2)))->classStr * 0x95;
           ovr_ovc40_usesAlignToSeg
                     ('\x01',(char *)*(undefined2 *)((int)&worldMenuLabels[0].seg + 1 + iVar8),
                      *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + iVar8),(char *)0x0,0,4);
@@ -664,24 +664,24 @@ L_OVC24_5943_112e_1255:
           uVar6 = ovr_season_checkEndGame((byte)uStack_6);
           if ((uVar6 & 0xff) == 0) {
             for (iVar8 = 0; iVar8 < (int)(uint)GLeaderCount; iVar8 = iVar8 + 1) {
-              if (*(char *)((int)*(undefined4 *)(iVar8 << 2) + 0x3d) != '\0') {
+              if (((char_sheet_t *)((iVar8 << 2)))->active != '\0') {
                 (&excludedFlags)[*(byte *)((int)*(undefined4 *)(iVar8 << 2) + 0x3f)] = 0x1;
               }
             }
             if ((((cStack_11 == '\0') && (1 < PlayerIndex)) && (GHighScoreSaved == '\0')) &&
-               ((*(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\x02' ||
-                ((*(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\x01' &&
-                 (8 < *(byte *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x86))))))) {
+               ((((char_sheet_t *)(((uint)bStack_3 << 2)))->alignment == '\x02' ||
+                ((((char_sheet_t *)(((uint)bStack_3 << 2)))->alignment == '\x01' &&
+                 (8 < ((char_sheet_t *)(((uint)bStack_3 << 2)))->titleIndex)))))) {
               cStack_4 = '\x01';
             }
             if (cStack_4 == '\0') {
-              iVar8 = (uint)*(byte *)((int)*(undefined4 *)(uStack_6 << 2) + 0x3e) * 0x95;
+              iVar8 = (uint)((char_sheet_t *)((uStack_6 << 2)))->classStr * 0x95;
               ovr_ovc40_usesAlignToSeg
                         ('\x03',(char *)*(undefined2 *)((int)&worldMenuLabels[0].seg + 1 + iVar8),
                          *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + iVar8),(char *)0x0,0,6);
             }
             else {
-              iVar8 = (uint)*(byte *)((int)*(undefined4 *)(uStack_6 << 2) + 0x3e) * 0x95;
+              iVar8 = (uint)((char_sheet_t *)((uStack_6 << 2)))->classStr * 0x95;
               ovr_ovc40_usesAlignToSeg
                         ('\x02',(char *)*(undefined2 *)((int)&worldMenuLabels[0].seg + 1 + iVar8),
                          *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + iVar8),(char *)0x0,0,5);
@@ -696,12 +696,12 @@ L_OVC24_5943_112e_15E7:
       bStack_3 = ovr_manage_findFirstLeader();
       _fmemset((void *)ZEXT24(unaff_SS),2,unaff_DI);
       for (uStack_6 = 0; (int)uStack_6 < (int)(uint)GLeaderCount; uStack_6 = uStack_6 + 1) {
-        if (*(char *)((int)*(undefined4 *)(uStack_6 << 2) + 0x3d) != '\0') {
+        if (((char_sheet_t *)((uStack_6 << 2)))->active != '\0') {
           (&excludedFlags)[*(byte *)((int)*(undefined4 *)(uStack_6 << 2) + 0x3f)] = 0x1;
         }
       }
       if ((bStack_3 == 0xff) ||
-         (*(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x3d) == '\0')) {
+         (((char_sheet_t *)(((uint)bStack_3 << 2)))->active == '\0')) {
         ovr_play_sfx(68,0,0);
         CurMusicType = 0x44;
         ovr_uiNotify((char *)"Your main stronghold has been destroyed. Game over.",0x2410,0);
@@ -821,14 +821,14 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
   bStack_6 = 0xff;
   if (*(char *)((int)*(undefined4 *)((uint)leaderIndex << 2) + 0x3f) == '\0') {
     for (bVar3 = 0; bVar3 < GLeaderCount; bVar3 = bVar3 + 1) {
-      if (((*(char *)((int)*(undefined4 *)((uint)bVar3 << 2) + 0x3d) != '\0') &&
+      if (((((char_sheet_t *)(((uint)bVar3 << 2)))->active != '\0') &&
           (*(char *)((int)*(undefined4 *)((uint)bVar3 << 2) + 0x3f) ==
            *(char *)((int)*(undefined4 *)((uint)leaderIndex << 2) + 0x3f))) &&
-         (uVar1 = *(int *)((int)*(undefined4 *)((uint)bVar3 << 2) + 0x39) -
-                  *(int *)((int)*(undefined4 *)((uint)leaderIndex << 2) + 0x39),
+         (uVar1 = ((char_sheet_t *)(((uint)bVar3 << 2)))->x -
+                  ((char_sheet_t *)(((uint)leaderIndex << 2)))->x,
          uVar4 = (int)uVar1 >> 0xf,
-         uVar2 = *(int *)((int)*(undefined4 *)((uint)bVar3 << 2) + 0x3b) -
-                 *(int *)((int)*(undefined4 *)((uint)leaderIndex << 2) + 0x3b),
+         uVar2 = ((char_sheet_t *)(((uint)bVar3 << 2)))->y -
+                 ((char_sheet_t *)(((uint)leaderIndex << 2)))->y,
          uVar5 = (int)uVar2 >> 0xf, uVar1 = ((uVar1 ^ uVar4) - uVar4) + ((uVar2 ^ uVar5) - uVar5),
          uVar1 < uStack_8)) {
         uStack_8 = uVar1;
@@ -838,13 +838,13 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
   }
   else {
     for (bVar3 = 0; bVar3 < GLeaderCount; bVar3 = bVar3 + 1) {
-      if (((*(char *)((int)*(undefined4 *)((uint)bVar3 << 2) + 0x3d) != '\0') &&
+      if (((((char_sheet_t *)(((uint)bVar3 << 2)))->active != '\0') &&
           (*(char *)((int)*(undefined4 *)((uint)bVar3 << 2) + 0x3f) == '\0')) &&
-         (uVar1 = *(int *)((int)*(undefined4 *)((uint)bVar3 << 2) + 0x39) -
-                  *(int *)((int)*(undefined4 *)((uint)leaderIndex << 2) + 0x39),
+         (uVar1 = ((char_sheet_t *)(((uint)bVar3 << 2)))->x -
+                  ((char_sheet_t *)(((uint)leaderIndex << 2)))->x,
          uVar4 = (int)uVar1 >> 0xf,
-         uVar2 = *(int *)((int)*(undefined4 *)((uint)bVar3 << 2) + 0x3b) -
-                 *(int *)((int)*(undefined4 *)((uint)leaderIndex << 2) + 0x3b),
+         uVar2 = ((char_sheet_t *)(((uint)bVar3 << 2)))->y -
+                 ((char_sheet_t *)(((uint)leaderIndex << 2)))->y,
          uVar5 = (int)uVar2 >> 0xf,
          uVar1 = ((uVar1 ^ uVar4) - uVar4) + ((uVar2 ^ uVar5) - uVar5) * 2, uVar1 < uStack_a)) {
         uStack_a = uVar1;
@@ -857,9 +857,9 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
     if ((*(byte *)((int)Entities + uVar1 * 0x37 + 0x1a) == leaderIndex) &&
        (*(byte *)((int)Entities + uVar1 * 0x37 + 0x1a) = bStack_5, bStack_6 != 0xff)) {
       *(undefined2 *)((int)Entities + uVar1 * 0x37 + 8) =
-           *(undefined2 *)((int)*(undefined4 *)((uint)bStack_6 << 2) + 0x39);
+           ((char_sheet_t *)(((uint)bStack_6 << 2)))->x;
       *(undefined2 *)((int)Entities + uVar1 * 0x37 + 10) =
-           *(undefined2 *)((int)*(undefined4 *)((uint)bStack_6 << 2) + 0x3b);
+           ((char_sheet_t *)(((uint)bStack_6 << 2)))->y;
     }
   }
   for (uStack_4 = 0xf8; uStack_4 < GUnitCount; uStack_4 = uStack_4 + 1) {

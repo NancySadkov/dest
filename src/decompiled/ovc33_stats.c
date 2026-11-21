@@ -989,8 +989,8 @@ L_OVC27_2288:
       } while( true );
     case (byte *)0x8:
       uVar30 = 0x217a;
-      if (*(uint *)((int)*(undefined4 *)pbVar21 + 0x54) <
-          (uint)-*(int *)((int)*(undefined4 *)((uint)in_stack_00000004 << 2) + 0x4d)) {
+      if (((char_sheet_t *)(pbVar21))->income <
+          (uint)-((char_sheet_t *)(((uint)in_stack_00000004 << 2)))->population) {
         bVar28 = 5;
       }
       else {

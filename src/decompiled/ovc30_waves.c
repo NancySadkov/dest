@@ -208,7 +208,7 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
   uint uStack_4;
   
   count = 0;
-  while ((count < GLeaderCount && (*(char *)((int)*(undefined4 *)(count << 2) + 0x28) != '\0'))) {
+  while ((count < GLeaderCount && (((char_sheet_t *)((count << 2)))->statMask != '\0'))) {
     count = count + 1;
   }
   if (count < GLeaderCount) {
@@ -341,22 +341,22 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
         uStack_c = ovr_randBelow(0x3a);
         uStack_c = uStack_c & 0xff;
         for (iVar4 = 0; iVar4 < (int)(uint)GLeaderCount; iVar4 = iVar4 + 1) {
-          if (((*(char *)((int)*(undefined4 *)(iVar4 << 2) + 0x3d) != '\0') &&
+          if (((((char_sheet_t *)((iVar4 << 2)))->active != '\0') &&
               (*(char *)((int)*(undefined4 *)(iVar4 << 2) + 0x3f) != '\0')) &&
-             (uVar6 = *(int *)((int)*(undefined4 *)(iVar4 << 2) + 0x39) - uVar8,
+             (uVar6 = ((char_sheet_t *)((iVar4 << 2)))->x - uVar8,
              uVar9 = (int)uVar6 >> 0xf,
-             uVar7 = *(int *)((int)*(undefined4 *)(iVar4 << 2) + 0x3b) - uStack_c,
+             uVar7 = ((char_sheet_t *)((iVar4 << 2)))->y - uStack_c,
              uVar10 = (int)uVar7 >> 0xf,
              (int)((int)((uVar6 ^ uVar9) - uVar9) / 2 + ((uVar7 ^ uVar10) - uVar10)) < 10)) {
             bVar3 = true;
             bStack_13 = bStack_13 + 1;
             break;
           }
-          if (((*(char *)((int)*(undefined4 *)(iVar4 << 2) + 0x3d) != '\0') &&
+          if (((((char_sheet_t *)((iVar4 << 2)))->active != '\0') &&
               (*(char *)((int)*(undefined4 *)(iVar4 << 2) + 0x3f) == '\0')) &&
-             (uVar6 = *(int *)((int)*(undefined4 *)(iVar4 << 2) + 0x39) - uVar8,
+             (uVar6 = ((char_sheet_t *)((iVar4 << 2)))->x - uVar8,
              uVar9 = (int)uVar6 >> 0xf,
-             uVar7 = *(int *)((int)*(undefined4 *)(iVar4 << 2) + 0x3b) - uStack_c,
+             uVar7 = ((char_sheet_t *)((iVar4 << 2)))->y - uStack_c,
              uVar10 = (int)uVar7 >> 0xf,
              (int)((int)((uVar6 ^ uVar9) - uVar9) / 2 + ((uVar7 ^ uVar10) - uVar10)) < iStack_10)) {
             bVar3 = true;
