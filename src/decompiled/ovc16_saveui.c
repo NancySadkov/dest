@@ -619,7 +619,7 @@ L_uiReadString_0DC9:
                                                     CONCAT12((char)Font03.ofs,unaff_SS)),
                                    (char)Font03.ofs,Font03.seg);
         iVar5 = ovr_font_textWidth((char *)"_",
-                                   (char *)CONCAT22(Font03.ofs,(char *)0x2410),
+                                   (char *)CONCAT22(Font03.ofs,(char *)0x26510),
                                    (char)Font03.seg);
         if (iVar4 + iVar5 + 0x2aU < 0xe0) {
           bStack_5 = bStack_5 + 1;
@@ -988,7 +988,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
     uStackY_2c = 0x279d;
     uStackY_2e = 0x22c4;
     uStackY_30 = 0x662e;
-    uiMenuSub((char *)CONCAT22(puVar12,(char *)0x2410),items,CONCAT11(0x24,GMenuItem),
+    uiMenuSub((char *)CONCAT22(puVar12,(char *)0x26510),items,CONCAT11(0x24,GMenuItem),
               uVar10);
     bStack_4 = (byte)puVar12;
     uVar9 = (uint)puVar12 & 0xff;
@@ -1024,8 +1024,8 @@ char * __cdecl16far saveui_configureMessageDelay(void)
     iVar16 = CONCAT11(bVar17,(byte)puVar15);
     pbVar4 = (byte *)(iVar16 + -0x51f8);
     *pbVar4 = *pbVar4 | bVar17;
-    ((char *)0x8408)[unaff_DI] =
-         ((char *)0x8408)[unaff_DI] | (byte)in_DX | (byte)puVar15;
+    ((char *)0x2c508)[unaff_DI] =
+         ((char *)0x2c508)[unaff_DI] | (byte)in_DX | (byte)puVar15;
     unaff_SI[iVar16 + 8] = unaff_SI[iVar16 + 8] | bVar17;
     (&stack0x0007)[(int)unaff_SI] = (&stack0x0007)[(int)unaff_SI] | (byte)puVar12;
                     /* WARNING: Bad instruction - Truncating control flow here */
@@ -1150,7 +1150,7 @@ switchD_4000_6642_caseD_3:
           ovr_ovc24_checkStrongholds();
           GGameState = 0xe;
           mapDirty = 1;
-          return (char *)0x2410;
+          return (char *)0x26510;
         }
         uStack_1e = (entity_t *)CONCAT22(DAT_2000_d190,Entities + unaff_DI);
         uVar8 = ovr_alignUp4(Entities[unaff_DI].base.destX);
@@ -1365,7 +1365,7 @@ void __cdecl16far saveui_drawCancel(void)
   saveui_usesBlitLoadRleGfx4();
   TextBlitX = 0x1d;
   TextBlitY = 0xb7;
-  ovr_blitText((char *)"Cancel",(byte *)CONCAT22(Font03.ofs,(char *)0x2410),Font03.seg,
+  ovr_blitText((char *)"Cancel",(byte *)CONCAT22(Font03.ofs,(char *)0x26510),Font03.seg,
                0xcf,0xf);
   return;
 }
@@ -1466,11 +1466,11 @@ void __cdecl16far uiMainMenuLoop(void)
     items.ofs = 0x2410;
     uiMenu((char *)"Select an option:",items,unaff_SS,8);
     bStack_13 = (byte)pmenu;
-    ovr_say((char *)0x2741,0x2410);
+    ovr_say((char *)0x26832,0x2410);
     if (bStack_13 < 9) {
                     /* WARNING: Switch is manually overridden */
       switch((undefined4)
-             *(undefined2 *)((char *)0x1ad6 + (uint)bStack_13 * 2)) {
+             *(undefined2 *)((char *)0x25bd6 + (uint)bStack_13 * 2)) {
       case 288826:
         saveui_blitPanel();
         bVar1 = false;
@@ -1915,7 +1915,7 @@ L_saveui_4528_1d55_1E1D:
                                                     CONCAT12((char)Font03.ofs,unaff_SS)),
                                    (char)Font03.ofs,Font03.seg);
         iVar2 = ovr_font_textWidth((char *)"_",
-                                   (char *)CONCAT22(Font03.ofs,(char *)0x2410),
+                                   (char *)CONCAT22(Font03.ofs,(char *)0x26510),
                                    (char)Font03.seg);
         if (iVar3 + iVar2 + 0x2aU < 0xe0) {
           bStack_5 = bStack_5 + 1;

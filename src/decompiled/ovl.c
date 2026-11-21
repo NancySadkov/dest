@@ -299,7 +299,7 @@ undefined2 __cdecl16near __InitModules(void)
                     /* WARNING: Read-only address (ram,0x0001000b) is written */
   uVar6 = 0x226e;
   uVar4 = 0;
-  pcVar5 = (char *)0x1a0;
+  pcVar5 = (char *)0x242a0;
   do {
     if (((*(uint *)(pcVar5 + 4) & 2) != 0) && (*(int *)(pcVar5 + 2) != 0)) {
       uVar2 = *(undefined2 *)pcVar5;
@@ -1451,7 +1451,7 @@ char * __cdecl16near OVRSWAP_1403_0cd2(void)
   char *pcVar4;
   char *pcVar5;
   
-  pcVar5 = (char *)0x2410;
+  pcVar5 = (char *)0x26510;
   pcVar4 = (char *)0x0;
   while( true ) {
     pcVar5 = *(char **)((byte *)__C0_ASM_CopyRight + 10);

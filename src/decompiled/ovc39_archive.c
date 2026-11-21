@@ -152,12 +152,12 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex,...)
           uVar7 = (undefined2)((ulong)GUnits >> 0x10);
           puVar5 = (unit_t *)GUnits;
           bStack_9 = (puVar5 + iVar2)->bldType;
-          pcVar4 = (char *)0x2410;
+          pcVar4 = (char *)0x26510;
           bStack_a = puVar5[iVar2].unitType;
           if ((((bStack_b == 0) &&
-               (pcVar4 = (char *)0x217a,
+               (pcVar4 = (char *)0x2627a,
                *(char *)((int)*(undefined4 *)((uint)bStack_a << 2) + 0x3f) == '\0')) &&
-              (0xf7 < iVar2)) && (pcVar4 = (char *)0x2410, puVar5[iVar2].level < 8)) {
+              (0xf7 < iVar2)) && (pcVar4 = (char *)0x26510, puVar5[iVar2].level < 8)) {
             pcVar4 = (char *)&AgntAnms[0x88].missileDy;
             if ((*(uint *)((uint)bStack_9 * 0x27 + 0x121) & 0x80) == 0) {
               iStack_6 = ovc39_loadArchiveEntry(8);
@@ -370,18 +370,18 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex,...)
     else {
       bStack_e = 0;
     }
-    pcVar4 = (char *)0x217a;
+    pcVar4 = (char *)0x2627a;
     if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
         (uint)(*(int *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d) << 1)) {
       pcVar4 = (char *)((uint)partyIndex << 2);
       if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
           *(uint *)((int)*(undefined4 *)pcVar4 + 0x4d)) {
-        pcVar4 = (char *)0x217a;
+        pcVar4 = (char *)0x2627a;
         if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
             *(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d) >> 1) {
-          pcVar4 = (char *)0x217a;
+          pcVar4 = (char *)0x2627a;
           if (*(int *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) < 0) {
-            pcVar4 = (char *)0x217a;
+            pcVar4 = (char *)0x2627a;
             if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
                 (uint)-*(int *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d)) {
               bStack_d = 5;

@@ -228,7 +228,7 @@ byte __cdecl16far init_strong_sav(void)
   uint8_t b;
   
   do {
-    file = file_open_rdonly((char *)CONCAT22(unaff_SI,(char *)0x2410));
+    file = file_open_rdonly((char *)CONCAT22(unaff_SI,(char *)0x26510));
     if (-1 < (int)file) {
       cVar1 = read_cfg(file);
       if ((((cVar1 == '\0') ||
@@ -251,7 +251,7 @@ l_made_new_strong_sav:
     }
                     /* create new folder */
     mkdir("strong.sav");
-    handle = creat_wait_unlock((char *)CONCAT22(unaff_SI,(char *)0x2410));
+    handle = creat_wait_unlock((char *)CONCAT22(unaff_SI,(char *)0x26510));
     if (-1 < handle) {
       close(handle);
       unlink("strong.sav\\strong.$$$");

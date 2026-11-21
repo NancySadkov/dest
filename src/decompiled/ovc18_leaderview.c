@@ -357,7 +357,7 @@ ovc18_spawnClassAgent
       iVar14 = ovr_ovc23_findClearColumn(GfxRndSeed,GfxRndSeed2);
       if (iVar14 < 0) {
         ovr_drawTextAt((char *)"You cannot attract units to this location.",0x2410);
-        txt = (uint8_t *)((char *)0x2410);
+        txt = (uint8_t *)((char *)0x26510);
         *(undefined1 *)&in_stack_00000004[-0x1be0].seg = 0;
       }
       else {
@@ -378,7 +378,7 @@ ovc18_spawnClassAgent
           uStackY_24 = (uint8_t *)CONCAT22(0xad0,(uint8_t *)uStackY_24);
           txt = (uint8_t *)
                 ovr_stsprintf(acStackY_56,(char *)CONCAT22(0x921,unaff_SS),
-                              (char *)CONCAT22(pcVar15,(char *)0x2410));
+                              (char *)CONCAT22(pcVar15,(char *)0x26510));
           ovr_drawTextAt((char *)txt,uVar10);
         }
       }
@@ -569,7 +569,7 @@ L_attact_3f0b_26bd_2767:
             do {
               uVar11 = uVar11 + 1;
               if (EntityCount <= uVar11) {
-                return (char *)0x2410;
+                return (char *)0x26510;
               }
               uVar13 = ovr_ovc23_isCursorAt(*(uint16_t *)((int)Entities + uVar11 * 0x37));
             } while ((char)uVar13 == '\0');
@@ -684,7 +684,7 @@ L_attact_3f0b_26bd_2767:
                   ((char *)CONCAT13((char)((uint)iVar10 >> 8),CONCAT12((char)iVar10,pcVar7)),
                    CONCAT11(uVar18,uVar17));
         bVar2 = manage_findFirstLeader();
-        pcVar7 = (char *)0x2410;
+        pcVar7 = (char *)0x26510;
         TextBlitY = TextBlitY + 0xf;
         if ((*(char *)(partyIndex + 0x86) != '\0') && (bVar2 != 0xff)) {
           pcVar7 = (char *)((uint)bVar2 << 2);
@@ -962,7 +962,7 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind,...)
     ovr_manage_mapPartySlots();
     ovr_stats_openCastlePanel();
     ovr_unit_usesAlignUp4();
-    ovr_say((char *)0x45cd,0x10);
+    ovr_say((char *)0x286cd,0x10);
     if (PlayerIndex == '\0') {
       ovr_ovc30_nextWave(2);
     }

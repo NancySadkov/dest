@@ -99,7 +99,7 @@ def extract(text_lines, fn):
     return None if end is None else (start, end)
 
 
-os.makedirs("src/decompiled/hard", exist_ok=True)
+os.makedirs("overrides", exist_ok=True)
 for fn, items in changed.items():
     span = extract(lines, fn)
     if span is None:
@@ -107,6 +107,6 @@ for fn, items in changed.items():
         continue
     start, end = span
     body = "\n".join(lines[start:end + 1])
-    out = "src/decompiled/hard/%s__%s.c" % (srcname[:-2], fn)
+    out = "overrides/%s__%s.c" % (srcname[:-2], fn)
     io.open(out, "w", encoding="utf-8", newline="\n").write(body + "\n")
     print("%-24s cast=%d  -> %s" % (fn, len(items), out))

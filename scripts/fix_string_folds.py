@@ -14,7 +14,7 @@ false string reference.
 A zero delta is left as the literal itself, only the noise ` + 0` is dropped
 (`"lit" + 0` -> `"lit"`), which is the same address and type.
 
-Both the exported tree and the committed overrides (hard/) are swept, otherwise a
+Both the exported tree and the committed overrides (overrides/) are swept, otherwise a
 hard override would reintroduce the folds on every export.
 
 Dry run unless --apply.
@@ -64,6 +64,24 @@ for line in list(io.open("tmp/dg12.tsv", encoding="utf-8", errors="replace"))[1:
 for k in dup:
     addr.pop(k, None)
 print("ambiguous (same text, two addresses) skipped:", len(dup))
+
+# Manual overrides: when the same text exists twice, the address has to come
+# from the instruction that uses it.  scripts/fold_addresses.tsv records those
+# with their evidence.
+forced = 0
+try:
+    for line in io.open("scripts/fold_addresses.tsv", encoding="utf-8"):
+        if line.startswith("#") or not line.strip():
+            continue
+        f = line.rstrip("\n").split("\t")
+        if len(f) < 3:
+            continue
+        addr[norm(f[0])] = (int(f[1], 16), int(f[2], 16))
+        dup.discard(norm(f[0]))
+        forced += 1
+except FileNotFoundError:
+    pass
+print("manual fold addresses:", forced)
 
 for line in list(io.open("tmp/dg12.tsv", encoding="utf-8", errors="replace"))[1:]:
     q = line.rstrip("\n").split("\t")

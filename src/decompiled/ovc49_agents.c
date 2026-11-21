@@ -635,7 +635,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                       pcVar5 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,param_00));
                       puVar6 = ovr_ovc15_usesStshRealloc(pcVar5,(char)uVar4,uVar12,uVar8);
                       pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x846c,unaff_SS),
-                                             (char *)CONCAT22(puVar6,(char *)0x2410),
+                                             (char *)CONCAT22(puVar6,(char *)0x26510),
                                              (char)uVar4);
                       ovr_uiNotify(pcVar5,uVar4,(char)uVar4);
                     }
@@ -1330,7 +1330,7 @@ L_OVC49_8699_18c4_1CA7:
         uVar15 = ovr_ovc45_compute8(((unit_t *)GUnits)[uStackY_26].unitType);
         if (((char)uVar15 != '\0') && (*(char *)(((uint)uStackY_22 >> 8) * 0x27 + 300) != '\0')) {
           (&stack0xffec)[iVar14] = 3;
-          auStackY_2f2[iVar14 * 2 + 1] = (char *)0x2410;
+          auStackY_2f2[iVar14 * 2 + 1] = (char *)0x26510;
           auStackY_2f2[iVar14 * 2] = (char *)"Upgrade";
           iVar14 = iVar14 + 1;
           uVar27 = 0x195d;
@@ -1349,7 +1349,7 @@ L_OVC49_8699_18c4_1CA7:
       }
       else {
         (&stack0xffec)[iVar14] = 2;
-        auStackY_2f2[iVar14 * 2 + 1] = (char *)0x2410;
+        auStackY_2f2[iVar14 * 2 + 1] = (char *)0x26510;
         auStackY_2f2[iVar14 * 2] = (char *)"Repair";
         iVar14 = iVar14 + 1;
         uVar15 = *(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x125);
@@ -1369,7 +1369,7 @@ L_OVC49_8699_18c4_1CA7:
       if ((((*(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x121) & 0x400) == 0) && (bVar9 != 0xff)) &&
          (*(char *)((int)*(undefined4 *)((uint)bVar9 << 2) + 0x3f) == '\0')) {
         (&stack0xffec)[iVar14] = 7;
-        auStackY_2f2[iVar14 * 2 + 1] = (char *)0x2410;
+        auStackY_2f2[iVar14 * 2 + 1] = (char *)0x26510;
         auStackY_2f2[iVar14 * 2] = (char *)"Information";
         iVar14 = iVar14 + 1;
       }
@@ -1378,19 +1378,19 @@ L_OVC49_8699_18c4_1CA7:
         uVar33 = 0x24;
         if (*(char *)((int)Entities + (*(uint16_t *)((uint8_t *)&(in_stack_00000008) + 2)) * 0x37 + 0x1a) != (char)uStackY_24) {
           (&stack0xffec)[iVar14] = 6;
-          auStackY_2f2[iVar14 * 2 + 1] = (char *)0x2410;
+          auStackY_2f2[iVar14 * 2 + 1] = (char *)0x26510;
           auStackY_2f2[iVar14 * 2] = (char *)"New Owner";
           iVar14 = iVar14 + 1;
         }
       }
       if (in_stack_00000010 != '\0') {
         (&stack0xffec)[iVar14] = 4;
-        auStackY_2f2[iVar14 * 2 + 1] = (char *)0x2410;
+        auStackY_2f2[iVar14 * 2 + 1] = (char *)0x26510;
         auStackY_2f2[iVar14 * 2] = (char *)"Change Party";
         iVar14 = iVar14 + 1;
       }
       (&stack0xffec)[iVar14] = 5;
-      auStackY_2f2[iVar14 * 2 + 1] = (char *)0x2410;
+      auStackY_2f2[iVar14 * 2 + 1] = (char *)0x26510;
       auStackY_2f2[iVar14 * 2] = (char *)"Done";
       pcVar26 = (char *)(iVar14 + 1);
       pcVar10 = (char *)CONCAT11(uVar33,(byte)uStackY_22);
@@ -1656,23 +1656,23 @@ L_OVC49_8699_1e09_29B9:
                                                   CONCAT12((char)pcVar10,(int)*(undefined4 *)pcVar26
                                                           )));
         pcStack_8 = (char *)0x2337;
-        in_stack_0000fff6 = (stg_tmp_t *)((char *)0x5fd);
+        in_stack_0000fff6 = (stg_tmp_t *)((char *)0x246fd);
         strcpy((char *)CONCAT13(uVar38,CONCAT12(bVar36,auStackY_2ca)),
                (char *)CONCAT22(pcVar10,pcVar21));
         break;
       case (cte_t *)0x3:
         SpecialColors[2] =
-             ((char *)0x7416)[(in_stack_0000fff6->aptr).ofs];
+             ((char *)0x2b516)[(in_stack_0000fff6->aptr).ofs];
         SpecialColors[3] =
-             ((char *)0x5ecf)
+             ((char *)0x29fcf)
              [(in_stack_0000fff6->aptr).ofs];
-        SpecialColors[4] = ((char *)0x6f1f)[(in_stack_0000fff6->aptr).ofs];
+        SpecialColors[4] = ((char *)0x2b01f)[(in_stack_0000fff6->aptr).ofs];
         SpecialColors[5] =
              *(uint8_t *)((int)&GStrangeTable[0x12].seg + 1 + (in_stack_0000fff6->aptr).ofs);
         SpecialColors[6] =
              *(uint8_t *)((int)(char **)&youlose1Cut1Seg + (in_stack_0000fff6->aptr).ofs);
         SpecialColors[7] = *(uint8_t *)((in_stack_0000fff6->aptr).ofs + 0x936e);
-        pcVar10 = (char *)0x2410;
+        pcVar10 = (char *)0x26510;
         SpecialColors[1] = bVar9;
         specialColorsOfs = ovr_stshWrite((uint32_t *)SpecialColors);
         specialColorsSeg = pcVar10;
@@ -2963,7 +2963,7 @@ L_OVC49_8699_1e09_3BDE:
       GGameState = 0x32;
       pbVar19 = &bStackY_32;
       in_stack_0000ffe4 = 0x22ff;
-      pbVar28 = (brect_t *)((char *)0x22d3);
+      pbVar28 = (brect_t *)((char *)0x263d3);
       gfx.seg = uVar16;
       gfx.ofs = (uint16_t)(psVar17->cmap + 6);
       bVar9 = bVar36;
@@ -2977,7 +2977,7 @@ L_OVC49_8699_1e09_3BDE:
         *pcVar1 = *pcVar1 + -1;
         uVar15 = bVar9 & 3;
         in_stack_0000ffe4 = 0x22d3;
-        pbVar28 = (brect_t *)((char *)0x22d3);
+        pbVar28 = (brect_t *)((char *)0x263d3);
         gfx_00.seg = ((undefined2 *)&crossBlitType2Seg)[uVar15 * 2];
         gfx_00.ofs = ((undefined2 *)&crossBlitType2Ofs)[uVar15 * 2];
         bVar9 = bVar36;
@@ -2994,7 +2994,7 @@ L_OVC49_8699_1e09_3BDE:
         pbVar19 = &bStackY_32;
         uVar15 = *(byte *)((int)uStackY_22 * 0x34 + 0x23) & 3;
         in_stack_0000ffe4 = 0x22d3;
-        pbVar28 = (brect_t *)((char *)0x22d3);
+        pbVar28 = (brect_t *)((char *)0x263d3);
         gfx_03.seg = ((undefined2 *)&crossBlitType2Seg)[uVar15 * 2];
         gfx_03.ofs = ((undefined2 *)&crossBlitType2Ofs)[uVar15 * 2];
         bVar9 = bVar36;
@@ -3011,7 +3011,7 @@ L_OVC49_8699_1e09_3BDE:
       else {
         pbVar19 = &bStackY_32;
         in_stack_0000ffe4 = 0x22ff;
-        pbVar28 = (brect_t *)((char *)0x22d3);
+        pbVar28 = (brect_t *)((char *)0x263d3);
         gfx_01.seg = uVar16;
         gfx_01.ofs = (uint16_t)(psVar17->cmap + 6);
         bVar9 = bVar36;
@@ -3027,7 +3027,7 @@ L_OVC49_8699_1e09_3BDE:
       if ((char)(in_stack_0000ffe4 >> 8) == '\x12') {
         pbVar19 = &bStackY_32;
         in_stack_0000ffe4 = 0x22ff;
-        pbVar28 = (brect_t *)((char *)0x22d3);
+        pbVar28 = (brect_t *)((char *)0x263d3);
         gfx_04.seg = uVar16;
         gfx_04.ofs = (uint16_t)(psVar17->cmap + 6);
         bVar9 = bVar36;
@@ -3052,7 +3052,7 @@ L_OVC49_8699_1e09_3BDE:
         gfx_09.seg = (uint16_t)unaff_SS;
         gfx_09.ofs = (uint16_t)&bStackY_32.h;
         uStackY_22 = (cte_t *)0x2337;
-        pbVar28 = (brect_t *)((char *)0x22d3);
+        pbVar28 = (brect_t *)((char *)0x263d3);
         uStackY_26 = CONCAT22(0x98d2,uStackY_26);
         in_stack_0000ffe4 = uVar16;
         ovr_gfxRlePrepare(gfx_09,uVar16);
@@ -3079,7 +3079,7 @@ L_OVC49_8699_1e09_3BDE:
     gfx_08.seg = (uint16_t)unaff_SS;
     gfx_08.ofs = (uint16_t)&bStackY_32.h;
     uStackY_22 = (cte_t *)0x22ff;
-    pbVar28 = (brect_t *)((char *)0x22d3);
+    pbVar28 = (brect_t *)((char *)0x263d3);
     uStackY_26 = CONCAT22(0x95e4,uStackY_26);
     in_stack_0000ffe4 = uVar16;
     ovr_gfxRlePrepare(gfx_08,uVar16);
@@ -3121,7 +3121,7 @@ L_OVC49_8699_1e09_3BDE:
                           ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
                            (byte *)CONCAT13(uVar38,CONCAT12(bVar36,&stack0xffe4)));
         if (cVar8 != '\0') {
-          pbVar29 = (brect_t *)((char *)0x2389);
+          pbVar29 = (brect_t *)((char *)0x26489);
           uVar15 = ovr_ovc27_compute1((agnt_t *)((int)uStackY_22 * 0x34));
           if ((char)uVar15 != '\0') {
             *(char *)((int)uStackY_22 * 0x34 + 0xc) = cVar6 + -1;
@@ -3160,7 +3160,7 @@ L_OVC49_8699_1e09_3310:
         ovr_agnt_advanceAnimFrame((agnt_t *)((int)uStackY_22 * 0x34));
       }
       else if (*(char *)((int)uStackY_22 * 0x34 + 0xd) == '\x01') {
-        pbVar29 = (brect_t *)((char *)0x2389);
+        pbVar29 = (brect_t *)((char *)0x26489);
         uVar15 = ovr_ovc27_spellNotice((int)uStackY_22);
         if ((uVar15 & 0xff) == 0) {
           animBranchCode = 0xf;
@@ -3176,7 +3176,7 @@ L_OVC49_8699_1e09_3310:
         uVar34 = (undefined1)((uint)iVar18 >> 8);
         bVar9 = *(byte *)(iVar35 + 0x1d);
         iVar18 = 0x22f8;
-        pbVar29 = (brect_t *)((char *)0x22f8);
+        pbVar29 = (brect_t *)((char *)0x263f8);
         ovr_play_sfxU(bVar9);
         *(undefined1 *)((int)uStackY_22 * 0x34 + 0xe) = 0;
         *(undefined1 *)((int)uStackY_22 * 0x34 + 0x2e) = 0;
@@ -3230,7 +3230,7 @@ L_OVC49_8699_1e09_3310:
       else if (*(char *)((int)uStackY_22 * 0x34 + 0xd) == '\x05') {
         iVar18 = -0x5edf;
         ovr_audio_panFromX((agnt_t *)((int)uStackY_22 * 0x34));
-        pbVar29 = (brect_t *)((char *)0x22f8);
+        pbVar29 = (brect_t *)((char *)0x263f8);
         ovr_play_sfxU(*(byte *)(iVar18 + 0x1d));
         *(undefined1 *)((int)uStackY_22 * 0x34 + 0xe) = 0xf5;
         *(undefined1 *)((int)uStackY_22 * 0x34 + 0x2e) = 1;
@@ -3307,7 +3307,7 @@ L_OVC49_8699_1e09_3310:
       cVar6 = (char)(uVar16 >> 8);
       puVar32 = psVar17->cmap + 6;
       in_stack_0000ffe4 = 0x2337;
-      pbVar29 = (brect_t *)((char *)0x22d3);
+      pbVar29 = (brect_t *)((char *)0x263d3);
       gfx_05.seg = uVar16;
       gfx_05.ofs = (uint16_t)puVar32;
       bVar9 = bVar36;
@@ -3327,7 +3327,7 @@ L_OVC49_8699_1e09_3310:
         puVar32 = puVar32 + 1;
         if ((undefined1 *)(*(byte *)((int)&pbVar19[2].w + 1) + 1) == puVar32) {
           agnt_00 = (agnt_t *)((int)uStackY_22 * 0x34);
-          pbVar19 = (brect_t *)((char *)0x22d3);
+          pbVar19 = (brect_t *)((char *)0x263d3);
           pbVar29 = (brect_t *)((char *)0x23d5);
           ovr_ovc41_specialAttack(agnt_00);
         }
@@ -3346,7 +3346,7 @@ L_OVC49_8699_1e09_3310:
       }
     }
     else {
-      pbVar29 = (brect_t *)((char *)0x2389);
+      pbVar29 = (brect_t *)((char *)0x26489);
       ovr_ovc27_usesBlitGfxRect((int)uStackY_22);
     }
   }

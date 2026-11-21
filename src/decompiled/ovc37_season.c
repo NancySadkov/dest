@@ -79,14 +79,14 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex,...)
       capTextSeg[sVar4 - 1] = 0x0;
       if ((GHighScoreSaved == '\0') &&
          ((((1 < PlayerIndex &&
-            (capTextSeg = (uint8_t *)((char *)0x217a),
+            (capTextSeg = (uint8_t *)((char *)0x2627a),
             *(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\x02')) &&
            (bVar2 = season_textMainCastle(), bVar2)) ||
-          ((capTextSeg = (uint8_t *)((char *)0x217a),
+          ((capTextSeg = (uint8_t *)((char *)0x2627a),
            8 < *(byte *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x86) &&
-           ((capTextSeg = (uint8_t *)((char *)0x217a),
+           ((capTextSeg = (uint8_t *)((char *)0x2627a),
             *(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\0' ||
-            ((capTextSeg = (uint8_t *)((char *)0x217a),
+            ((capTextSeg = (uint8_t *)((char *)0x2627a),
              *(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\x01' &&
              (bVar2 = season_textMainCastle(), bVar2)))))))))) {
         cStack_4 = '\x01';
@@ -435,7 +435,7 @@ void __cdecl16far updSeason(void)
       in_DX = snames;
       msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6a50,unaff_SS),
                           (char *)CONCAT22(*(undefined2 *)(in_DX + (uint)season * 4),
-                                           (char *)0x2410),
+                                           (char *)0x26510),
                           *(undefined2 *)(snames + (uint)season * 4 + 2));
       ovr_uiNotify(msg,(uint16_t)in_DX);
     }
@@ -535,14 +535,14 @@ void __cdecl16far season_repairBuildings(byte rank)
     dst = (char *)((uint)bStack_7 << 2);
     if ((&promoteThreshold)[rank] <= *(byte *)((int)*(undefined4 *)dst + 0xa5)) {
       for (unitIndex = 0xf8; unitIndex < GUnitCount; unitIndex = unitIndex + 1) {
-        dst = (char *)0x2410;
+        dst = (char *)0x26510;
         uVar2 = (undefined2)((ulong)GUnits >> 0x10);
         if (((unit_t *)GUnits)[unitIndex].unitType == bStack_7) {
-          dst = (char *)0x2410;
+          dst = (char *)0x26510;
           if (((unit_t *)GUnits)[unitIndex].level < 8) {
             iVar1 = season_usesAlignUp42(unitIndex,bStack_7);
             if ((char)iVar1 != '\0') {
-              dst = (char *)0x2410;
+              dst = (char *)0x26510;
               ((unit_t *)GUnits)[unitIndex].level = 8;
               count = count + 1;
             }
@@ -555,7 +555,7 @@ void __cdecl16far season_repairBuildings(byte rank)
     ovr_inputUpdate(0x24);
     uVar2 = ovr_ovc41_pluralSuffix(count);
     msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6a6e,unaff_SS),
-                        (char *)CONCAT22(count,(char *)0x2410),uVar2,dst);
+                        (char *)CONCAT22(count,(char *)0x26510),uVar2,dst);
     ovr_uiNotify(msg,(uint16_t)dst);
   }
   return;

@@ -3227,8 +3227,8 @@ void __cdecl16near malloc_InsertFreeBlock(void)
   (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight))) = __farmalloc_rover;
   if (__farmalloc_rover != 0) {
     uVar1 = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 2);
-    *(char **)((byte *)__C0_ASM_CopyRight + 2) = (char *)0x2410;
-    *(char **)(byte *)__C0_ASM_CopyRight = (char *)0x2410;
+    *(char **)((byte *)__C0_ASM_CopyRight + 2) = (char *)0x26510;
+    *(char **)(byte *)__C0_ASM_CopyRight = (char *)0x26510;
     __C0_ASM_CopyRight[2] = (byte)uVar1;
     __C0_ASM_CopyRight[3] = SUB21(uVar1,1);
     return;
@@ -4968,7 +4968,7 @@ void __cdecl16far fputchar(uint16_t c)
 {
   undefined2 unaff_BP;
   
-  fputc((byte)c,(int *)CONCAT22(unaff_BP,(char *)0x2410));
+  fputc((byte)c,(int *)CONCAT22(unaff_BP,(char *)0x26510));
   return;
 }
 

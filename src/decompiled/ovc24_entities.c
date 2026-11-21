@@ -629,13 +629,13 @@ L_OVC24_5943_112e_1255:
           uVar7 = 0x195d;
           pcVar5 = ovr_ovc15_capitalize((char *)&text);
           pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x578d,unaff_SS),
-                                 (char *)CONCAT22(pcVar5,(char *)0x2410),uVar7,uVar4);
+                                 (char *)CONCAT22(pcVar5,(char *)0x26510),uVar7,uVar4);
           ovr_uiNotify(pcVar5,uVar7);
         }
         else {
           uVar4 = alignUp4(*(int *)((int)*(undefined4 *)(uStack_6 << 2) + 0x39),uVar6,0);
           pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x576a,unaff_SS),
-                                 (char *)CONCAT22(uVar4,(char *)0x2410));
+                                 (char *)CONCAT22(uVar4,(char *)0x26510));
           ovr_uiNotify(pcVar5,uVar7);
         }
         if (bStack_3 == uStack_6) {

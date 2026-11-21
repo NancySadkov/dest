@@ -285,7 +285,7 @@ uint16_t __cdecl16far attact_textAbnormalProgramTermination(uint16_t value,uint8
   uVar6 = 0;
   uVar4 = 0x51;
   uVar2 = 0;
-  plVar1 = LXMUL_at_((long *)((char *)0x51),
+  plVar1 = LXMUL_at_((long *)((char *)0x24151),
                      (ulong)in_stack_0000fffc << 0x10,CONCAT22(in_stack_00000000,unaff_BP));
   lVar3 = LDIV_at_((long)CONCAT22(uVar2,plVar1),CONCAT13(uVar6,CONCAT12(uVar5,uVar4)));
   return (uint16_t)lVar3;
@@ -949,7 +949,7 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force,...)
           uVar3 = ovr_ovc41_pluralSuffix(uStack_6,0xa000);
           dst = 0x2410;
           txt = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x921,unaff_SS),
-                              (char *)CONCAT22(uStack_6,(char *)0x2410),callResultTemp,
+                              (char *)CONCAT22(uStack_6,(char *)0x26510),callResultTemp,
                               *(undefined2 *)((uint)bStack_3 * 4 + 0x13f),
                               *(undefined2 *)((uint)bStack_3 * 4 + 0x141),uVar3,uVar4);
           ovr_drawTextAt(txt,dst);

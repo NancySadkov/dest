@@ -1,0 +1,11 @@
+# Manual address overrides for string-fold literals whose text occurs more than
+# once in the image.  The generic resolver refuses those (picking either copy
+# would put a wrong number in the tree), so the address has to be read from the
+# code that uses it.
+#
+# columns: literal text <TAB> segment <TAB> offset <TAB> evidence
+#
+# "short sword": s_short_sword_2410_2526 and s_short_sword_2410_6204 both exist;
+# 6386:1b08 is `PUSH 0x620f` in drawString(...short sword + 11...), and
+# 0x6204 + 0xb = 0x620f, so the 6204 copy is the one used.
+short sword	2410	6204	ovc33_stats 6386:1b08 PUSH 0x620f (= 6204 + 0xb)

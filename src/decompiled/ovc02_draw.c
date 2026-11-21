@@ -4207,7 +4207,7 @@ void __cdecl16far draw_usesPrintf(void)
       && ((puVar2 = ovr_attact_usesBDADailyTimeCounter
                               ((ulong *)GDailyTimeCounter,CONCAT22(unaff_BP,(*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)))
                               ), in_DX != 0 ||
-          ((char *)0x5a < puVar2)))))) {
+          ((char *)0x2415a < puVar2)))))) {
     ovr_attact_usesUpdSeason();
   }
   if (GGameInProgress == '\0') {
@@ -4312,7 +4312,7 @@ uint16_t __cdecl16far gameProcessKey(void)
     }
     else if (key == 0x2300) {
       pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x286,unaff_SS),
-                             (char *)CONCAT22(GSeed,(char *)0x2410),(char)SeedHi);
+                             (char *)CONCAT22(GSeed,(char *)0x26510),(char)SeedHi);
       ovr_say(pcVar2,in_DL);
     }
     else if (key == 0x2400) {
@@ -4559,7 +4559,7 @@ void __cdecl16far draw_toolbarLabels(void)
       ovr_blitLoadRleGfx(gfx_00,dst_00);
       TextBlitX = 0xea;
       TextBlitY = 0x62;
-      ovr_blitText((char *)"Movement",(byte *)CONCAT22(Font03.ofs,(char *)0x2410),
+      ovr_blitText((char *)"Movement",(byte *)CONCAT22(Font03.ofs,(char *)0x26510),
                    Font03.seg,0x3f);
     }
     else if ((GMenuItem < 5) && (((uint8_t *)MenuItemEnabled)[GMenuItem] != 0xff)) {
@@ -4570,21 +4570,21 @@ void __cdecl16far draw_toolbarLabels(void)
       ovr_blitLoadRleGfx(gfx_01,dst_01);
       TextBlitX = 0xe6;
       TextBlitY = 0x3e;
-      ovr_blitText((char *)"Recruit",(byte *)CONCAT22(Font02.ofs,(char *)0x2410),
+      ovr_blitText((char *)"Recruit",(byte *)CONCAT22(Font02.ofs,(char *)0x26510),
                    Font02.seg,0x3f);
       TextBlitX = 0x11e;
       TextBlitY = 0x3e;
-      ovr_blitText((char *)"Train",(byte *)CONCAT22(Font02.ofs,(char *)0x2410),Font02.seg
+      ovr_blitText((char *)"Train",(byte *)CONCAT22(Font02.ofs,(char *)0x26510),Font02.seg
                    ,0x3f);
       TextBlitX = 0x104;
       TextBlitY = 0x5b;
-      ovr_blitText((char *)"Build",(byte *)CONCAT22(Font02.ofs,(char *)0x2410),Font02.seg
+      ovr_blitText((char *)"Build",(byte *)CONCAT22(Font02.ofs,(char *)0x26510),Font02.seg
                    ,0x3f);
       TextBlitX = 0xea;
       TextBlitY = 0x62;
       term = 0x3f;
       puVar2 = (undefined2 *)((uint)((uint8_t *)MenuItemEnabled)[GMenuItem] * 4);
-      pbVar4 = (byte *)((char *)0x217a);
+      pbVar4 = (byte *)((char *)0x2627a);
       uVar3 = Font03.ofs;
       seg = Font03.seg;
       text = (char *)ovr_ovc45_compute9(textBuf,(char *)CONCAT22(*puVar2,unaff_SS),
@@ -4976,8 +4976,7 @@ void __stdcall16far draw_textGoldProvidesHousing(void)
   uVar10 = in_CX | uVar6;
   puVar21 = (undefined1 *)(unaff_DI | *(uint *)(unaff_BP + unaff_SI + -0x59f5));
   puVar15 = (uint *)(in_BX | unaff_DI |
-                    *(uint *)((char *)
-                              (char *)0x820b + unaff_BP));
+                    *(uint *)((char *)0x2c30b + unaff_BP));
   uVar19 = unaff_SI | *(uint *)(unaff_BP + 0xb);
   uVar3 = in(in_DX);
   *puVar21 = uVar3;
@@ -4994,7 +4993,7 @@ void __stdcall16far draw_textGoldProvidesHousing(void)
   bVar9 = *(byte *)(uVar18 + uVar22 + -0x69f6);
   bVar8 = bVar7 | bVar5 |
           *(byte *)((int)puVar20 +
-                   (int)((char *)0x8072 + uVar18));
+                   (int)((char *)0x2c10a + uVar18));
   bVar13 = (byte)(uVar12 >> 8) | *(byte *)((int)puVar20 + CONCAT11(bVar16,bVar14) + 10);
   puVar1 = (uint *)(uVar18 + (int)puVar20);
   iVar4 = (bVar8 & 3) - (*puVar1 & 3);

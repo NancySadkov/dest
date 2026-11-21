@@ -395,16 +395,16 @@ void __cdecl16far init_assets2(bool grab,...)
     ovr_stgFreeTmp(psVar1,(char)puVar9);
     psVar1 = ovr_grabLbmTR(14);
     SpecialColors[0] = *(uint8_t *)((int)&GStrangeTable[0x12].ofs + 1 + (psVar1->aptr).ofs);
-    SpecialColors[1] = ((char *)0x6f21)[(psVar1->aptr).ofs];
-    SpecialColors[2] = ((char *)0x7416)[(psVar1->aptr).ofs];
+    SpecialColors[1] = ((char *)0x2b021)[(psVar1->aptr).ofs];
+    SpecialColors[2] = ((char *)0x2b516)[(psVar1->aptr).ofs];
     SpecialColors[3] =
-         ((char *)0x5ecf)
+         ((char *)0x29fcf)
          [(psVar1->aptr).ofs];
-    SpecialColors[4] = ((char *)0x6f1f)[(psVar1->aptr).ofs];
+    SpecialColors[4] = ((char *)0x2b01f)[(psVar1->aptr).ofs];
     SpecialColors[5] = *(uint8_t *)((int)&GStrangeTable[0x12].seg + 1 + (psVar1->aptr).ofs);
     SpecialColors[6] = *(uint8_t *)((int)(undefined2 *)&youlose1Cut1Seg + (psVar1->aptr).ofs);
     SpecialColors[7] = *(uint8_t *)((psVar1->aptr).ofs + 0x936e);
-    puVar8 = (uint8_t *)((char *)0x2410);
+    puVar8 = (uint8_t *)((char *)0x26510);
     specialColorsOfs =
          (far_t *)ovr_stshWrite((uint32_t *)SpecialColors,(uint8_t *)0x82410,
                                 ZEXT24(unaff_DI) << 0x10,0);

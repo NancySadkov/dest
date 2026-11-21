@@ -863,9 +863,9 @@ void __cdecl16far ovc23_textBuildThfres01Lbm(far_t dst,...)
     if ((-3 < (int)play_id) && ((int)play_id < 2)) {
       bVar2 = ovr_constr_setHighlightAtOffset(play_id,0);
       iVar3 = CONCAT11(extraout_AH,bVar2);
-      if (((char *)0x3f48)[iVar3 * 3 + *(int *)(uVar5 * 2)] != '\0') {
+      if (((char *)0x28048)[iVar3 * 3 + *(int *)(uVar5 * 2)] != '\0') {
         iVar4 = ovc23_usesCornerBR(play_id,iVar3);
-        ovr_animAdvance(play_id,((char *)0x3f48)
+        ovr_animAdvance(play_id,((char *)0x28048)
                                 [iVar3 * 3 + *(int *)(uVar5 * 2)],*(uint16_t *)(&mapSquareLeftX[uVar5]),
                         (uint)bandOrigin[0] - iVar4,dst);
         bVar1 = true;
@@ -1039,7 +1039,7 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
           pcVar12 = (char *)0x24d;
         }
         else {
-          pcVar12 = (char *)0x5dc;
+          pcVar12 = (char *)0x246dc;
         }
         fmt = (char *)CONCAT22((int)((ulong)fmt >> 0x10),pcVar12);
         if (((unit_t *)GUnits)[unitIndex].level != 0) {
@@ -1827,9 +1827,9 @@ code_r0x00053afb:
   mapDirty = 1;
   ovr_unit_usesAlignUp4();
   GGameState = 0x44;
-  msg = (uint *)((char *)0x2410);
+  msg = (uint *)((char *)0x26510);
   if (DebugVerbose != false) {
-    msg = (uint *)((char *)0x2410);
+    msg = (uint *)((char *)0x26510);
     printf("%d \r");
   }
   if ((*(uint8_t *)((uint8_t *)&(uStackY_1e) + 1)) != '\0') {
@@ -2123,7 +2123,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
       *piVar1 = *piVar1 - (int)(puVar30 + 1);
       bVar22 = in(uVar18);
       uVar33 = uVar33 & uVar18;
-      puVar2 = (uint *)((int)puVar27 + (int)((char *)0x6221 + uVar33));
+      puVar2 = (uint *)((int)puVar27 + (int)((char *)0x2a321 + uVar33));
       *puVar2 = *puVar2 & uVar34;
       *(uint *)(uVar34 + 0x21) = *(uint *)(uVar34 + 0x21) & (uint)puVar27;
       *puVar27 = *puVar27 & uVar34;
@@ -2157,14 +2157,14 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
             in_stack_00000000 = (brect_t *)((ulong)in_stack_00000000 & 0xffff0000);
             bVar22 = ovr_constr_setHighlightAtOffset(play_id,0);
             iVar28 = CONCAT11(extraout_AH,bVar22);
-            if (((char *)0x3f48)[iVar28 * 3 + *(int *)((int)puVar35 * 2)] !=
+            if (((char *)0x28048)[iVar28 * 3 + *(int *)((int)puVar35 * 2)] !=
                 '\0') {
               uVar18 = (uint)((ulong)in_stack_00000000 >> 0x10);
               iVar17 = ovc23_usesCornerBR(play_id,iVar28);
               dst.seg = (uint16_t)seg;
               dst.ofs = (uint16_t)ofs;
               in_stack_00000000 = (brect_t *)((ulong)uVar18 << 0x10);
-              ovr_animAdvance(play_id,((char *)0x3f48)
+              ovr_animAdvance(play_id,((char *)0x28048)
                                       [iVar28 * 3 + *(int *)((int)puVar35 * 2)],
                               *(uint16_t *)((int)puVar35 * 2 + 0xa20),(uint)bandOrigin[0] - iVar17,
                               dst);
@@ -3176,7 +3176,7 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
           uVar5 = y;
           pcVar2 = ovr_ovc15_capitalize((char *)&text2);
           pcVar2 = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5665,unaff_SS),
-                                 (char *)CONCAT22(pcVar2,(char *)0x2410),dst,uVar4,uVar5,
+                                 (char *)CONCAT22(pcVar2,(char *)0x26510),dst,uVar4,uVar5,
                                  uVar3);
           ovr_uiNotify(pcVar2,dst);
         }

@@ -92,7 +92,7 @@ it is intended to be refined module by module into compilable C.
 ### 4.3 Stubborn functions
 
 Six functions defeated the default decompiler settings. All but one are now
-recovered and integrated through `src/decompiled/hard/`:
+recovered and integrated through `overrides/` (repo root, outside the generated tree):
 
 | module | function | resolution |
 |---|---|---|
@@ -197,7 +197,7 @@ trampoline table's original `ofs` fields are destroyed by untrapping. The tool
 was rebuilt and tested against `STRONG.EXE` (merge and `-r 0x10000` paths). The
 game contains **zero** `FIXUP_FUNREF` fixups, so the last decompiler failure is
 not an mzap bug: `OVC23_55fe_0000` trips a Ghidra tracked-register/overlay
-address canonicalization bug. This is documented in `hard/README.md`.
+address canonicalization bug. This is documented in the overrides store.
 
 ### Step 2 — exact global initialisers
 `ExportData.java` now converts Ghidra literals to C (Borland `h` suffixes,

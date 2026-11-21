@@ -135,7 +135,7 @@ void __cdecl16far init_paths(void)
   strcat(&GWorkDir,"strong.sav\\");
   full_path = (uint16_t)
               append_name_to_path((char *)CONCAT22(0x5bb,GGameExe.seg),
-                                  (char *)CONCAT22(unaff_BP,(char *)0x2410));
+                                  (char *)CONCAT22(unaff_BP,(char *)0x26510));
   p = (uint16_t)path_strip_tail_slash((char *)full_path,in_DX);
   chpath((char *)p,in_DX);
   return;
@@ -474,7 +474,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   uStack_c = 0;
   uStack_a = 0;
   _fsetmem(GUnitGrid,0x4560,0);
-  psVar9 = (stg_tmp_t *)((char *)0x2410);
+  psVar9 = (stg_tmp_t *)((char *)0x26510);
   _fsetmem(GMapFlags,0x4560,0);
   for (uVar17 = 0; (int)uVar17 < 0x3c; uVar17 = uVar17 + 1) {
     if ((uVar17 & 1) == 0) {
@@ -988,29 +988,24 @@ switchD_3000_4a6e_caseD_3:
               uStack_10 = iVar15 / 3;
               (*(uint8_t *)((uint8_t *)&(gfx.seg))) =
                    (char)*(undefined2 *)
-                          ((char *)
-                           (char *)0x4dd6 + uStack_e * 0xc);
+                          ((char *)0x28ed6 + uStack_e * 0xc);
               gfx.ofs = *(undefined2 *)
-                         ((char *)
-                          (char *)0x4dd4 + uStack_e * 0xc);
+                         ((char *)0x28ed4 + uStack_e * 0xc);
               (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) =
                    (char)((uint)*(undefined2 *)
-                                 ((char *)
-                                  (char *)0x4dd6 + uStack_e * 0xc) >> 8);
+                                 ((char *)0x28ed6 + uStack_e * 0xc) >> 8);
               ovr_blit_usesBlitGfxN
                         (gfx,((uint16_t *)SquareLeftX)[uVar7],rowBandOrigin[0] - uStack_10,6);
             }
             if ((*(byte *)((uint8_t *)&BuildingTypes[uStack_e] + 16) & 1) != 0) {
               gfx_00.seg = *(uint16_t *)
-                            ((char *)
-                             (char *)0x4dda + uStack_e * 0xc);
+                            ((char *)0x28eda + uStack_e * 0xc);
               gfx_00.ofs = *(uint16_t *)
-                            ((char *)
-                             (char *)0x4dd8 + uStack_e * 0xc);
+                            ((char *)0x28ed8 + uStack_e * 0xc);
               ovr_blitGfxRect(gfx_00,((uint16_t *)SquareLeftX)[uVar7]);
             }
           }
-          return (stg_tmp_t *)((char *)0x2410);
+          return (stg_tmp_t *)((char *)0x26510);
         }
       } while (((int)((uint16_t *)SquareRightX)[(int)__return_storage_ptr__] < 0xef) ||
               (0x134 < (int)((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__]));
@@ -1078,7 +1073,7 @@ bad_lbm:
       puStack_26 = (uint32_t *)((int)puStack_2a + 1);
       uStack_24 = uVar17 + ((uint32_t *)0xfffe < puStack_2a);
     }
-    if (((int)uStack_24 < 0) || ((uStack_24 == 0 && (puStack_26 < (char *)0x300))))
+    if (((int)uStack_24 < 0) || ((uStack_24 == 0 && (puStack_26 < (char *)0x24400))))
     {
       if ((-1 < (int)uStack_24) && ((0 < (int)uStack_24 || (puStack_26 != (uint32_t *)0x0)))) {
         ovr_stshRead();
@@ -1087,7 +1082,7 @@ bad_lbm:
     else {
       ovr_stshRead();
       if ((-1 < (int)uStack_24) &&
-         ((0 < (int)uStack_24 || ((char *)0x300 < puStack_26)))) {
+         ((0 < (int)uStack_24 || ((char *)0x24400 < puStack_26)))) {
         ovr_stshTell(__return_storage_ptr__,unaff_SI);
         ovr_stshSeek((uint16_t)__return_storage_ptr__);
       }
@@ -1096,8 +1091,8 @@ bad_lbm:
     while( true ) {
       if ((0 < (int)uStack_28) ||
          ((puVar5 = puStack_2a, uVar17 = uStack_28, uStack_28 == 0 &&
-          ((char *)0x300 < puStack_2a)))) {
-        puVar5 = (uint32_t *)((char *)0x300);
+          ((char *)0x24400 < puStack_2a)))) {
+        puVar5 = (uint32_t *)((char *)0x24400);
         uVar17 = 0;
       }
       if (((int)uVar17 < 1) && ((uVar17 != 0 || (puVar5 <= puVar6)))) break;
@@ -2122,7 +2117,7 @@ void __cdecl16far copyProtectionCheck(void)
       TextBlitX = 0x16;
       TextBlitY = 0xc;
       ovr_blitText((char *)"Stronghold copy protection.",
-                   (byte *)CONCAT22(Font03.ofs,(char *)0x2410),Font03.seg,0xde);
+                   (byte *)CONCAT22(Font03.ofs,(char *)0x26510),Font03.seg,0xde);
       TextBlitX = 0x16;
       TextBlitY = 0x2f;
       uVar4 = 0xde;
@@ -2142,7 +2137,7 @@ void __cdecl16far copyProtectionCheck(void)
       TextBlitX = 0x16;
       TextBlitY = 0x57;
       ovr_blitText((char *)"Enter the first word.",
-                   (byte *)CONCAT22(Font03.ofs,(char *)0x2410),Font03.seg,0xde);
+                   (byte *)CONCAT22(Font03.ofs,(char *)0x26510),Font03.seg,0xde);
       pbStack_a = (byte *)0x0;
       input = 0;
       pcVar2 = ovr_stshAlloc(2);

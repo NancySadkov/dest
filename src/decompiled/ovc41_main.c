@@ -344,7 +344,7 @@ void __cdecl16far ovc41_unitStatusText(byte menuIndex,...)
     dst = 0x217a;
     uVar3 = ovc41_pluralSuffix(count,*puVar2,puVar2[1],pcVar1,uVar3,uVar5,uVar6);
     pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6e86,unaff_SS),
-                           (char *)CONCAT22(count,(char *)0x2410),uVar3,dst);
+                           (char *)CONCAT22(count,(char *)0x26510),uVar3,dst);
     ovr_drawTextAt(pcVar1,dst);
   }
   return;
@@ -768,7 +768,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
               pcVar10 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,pcVar10));
               puVar4 = ovr_ovc15_usesStshRealloc(pcVar10,(char)uVar6,uVar11);
               pcVar10 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6f0f,unaff_SS),
-                                      (char *)CONCAT22(puVar4,(char *)0x2410),(char)uVar6
+                                      (char *)CONCAT22(puVar4,(char *)0x26510),(char)uVar6
                                      );
               ovr_uiNotify(pcVar10,uVar6);
             }
@@ -777,7 +777,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
               pcVar10 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,pcVar10));
               puVar4 = ovr_ovc15_usesStshRealloc(pcVar10,(char)uVar6,uVar11);
               pcVar10 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ef8,unaff_SS),
-                                      (char *)CONCAT22(puVar4,(char *)0x2410),(char)uVar6
+                                      (char *)CONCAT22(puVar4,(char *)0x26510),(char)uVar6
                                      );
               ovr_uiNotify(pcVar10,uVar6);
             }
@@ -821,7 +821,7 @@ void __cdecl16far ovc41_buildingNotice(char delta,...)
     ovr_constr_flushDirtyRects();
     uVar2 = 0x195d;
     msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6f23,unaff_SS),
-                        (char *)(ulong)CONCAT12(bStack_3,(char *)0x2410),
+                        (char *)(ulong)CONCAT12(bStack_3,(char *)0x26510),
                         *(undefined2 *)((uint)bStack_3 * 0x27 + 0x10e),
                         *(undefined2 *)((uint)bStack_3 * 0x27 + 0x110));
     ovr_say(msg,uVar2);
@@ -2006,7 +2006,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t *source,agnt_t *victim,uint s
       pcVar2 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&sourceName,pcVar6));
       puVar4 = ovr_ovc15_usesStshRealloc(pcVar2,in_DX,uVar8,uVar5,uVar9);
       pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6f63,unaff_SS),
-                             (char *)CONCAT22(puVar4,(char *)0x2410),in_DX);
+                             (char *)CONCAT22(puVar4,(char *)0x26510),in_DX);
       ovr_uiNotify(pcVar2,in_DX);
       uVar5 = ovr_audio_panFromX(agnt,uVar10);
       ovr_play_sfxU(3,0,uVar5,(char)uVar5);
@@ -2026,7 +2026,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t *source,agnt_t *victim,uint s
       pcVar2 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&sourceName,pcVar6));
       puVar4 = ovr_ovc15_usesStshRealloc(pcVar2,in_DX,uVar8,uVar5,uVar9);
       pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6f7a,unaff_SS),
-                             (char *)CONCAT22(puVar4,(char *)0x2410),in_DX);
+                             (char *)CONCAT22(puVar4,(char *)0x26510),in_DX);
       ovr_uiNotify(pcVar2,in_DX);
       agnt->flags = agnt->flags | 0x800;
       uVar5 = ovr_audio_panFromX(agnt,uVar10);

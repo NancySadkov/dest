@@ -927,7 +927,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
             (iStack_24 + 9,iStack_26,iStack_24 + 9,iStack_26 + 4,0xe0,(brect_t *)BlitRects,0x2410);
   ovc13_usesScreenY2();
   uStack_4 = TextBlitDstSeg;
-  pbVar6 = (byte *)((char *)0x2410);
+  pbVar6 = (byte *)((char *)0x26510);
   TextBlitDstSeg = BlitRects[0].seg;
   TextBlitX = 0xb6;
   TextBlitY = 10;
@@ -938,7 +938,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
     uVar10 = Font02.ofs;
     uVar5 = ovr_alignUp4(GfxRndSeed,GfxRndSeed2);
     text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x864,unaff_SS),
-                         (char *)CONCAT22(uVar5,(char *)0x2410));
+                         (char *)CONCAT22(uVar5,(char *)0x26510));
     ovr_blitText(text,(byte *)CONCAT22(uVar10,pbVar6),uVar11,uVar3,uVar4);
   }
   TextBlitDstSeg = uStack_4;

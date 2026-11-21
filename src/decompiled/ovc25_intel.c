@@ -529,7 +529,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
               msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58c0,unaff_SS),
                                   (char *)CONCAT22(*(undefined2 *)
                                                     ((int)&worldMenuLabels[0].seg + 1 + iVar7),
-                                                   (char *)0x2410),
+                                                   (char *)0x26510),
                                   *(undefined2 *)((int)&worldMenuLabels[1].ofs + 1 + iVar7),uVar2);
               ovr_uiNotify(msg,uVar4);
             }
@@ -939,7 +939,7 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex,...)
                          ((char *)*(undefined2 *)((uint)partyIndex * 4),
                           ((undefined2 *)((uint)partyIndex * 4))[1],GSavedBlitSeg);
       msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58f5,unaff_SS),
-                          (char *)CONCAT22(puVar3,(char *)0x2410),uVar2);
+                          (char *)CONCAT22(puVar3,(char *)0x26510),uVar2);
       ovr_uiNotify(msg,uVar2);
       pbVar1 = (byte *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x5d);
       *pbVar1 = *pbVar1 | 1;
@@ -1011,7 +1011,7 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
                          ((char *)*(undefined2 *)((uint)partyIndex * 4),
                           ((undefined2 *)((uint)partyIndex * 4))[1],GSavedBlitSeg);
       msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5906,unaff_SS),
-                          (char *)CONCAT22(puVar4,(char *)0x2410),uVar3);
+                          (char *)CONCAT22(puVar4,(char *)0x26510),uVar3);
       ovr_uiNotify(msg,uVar3);
       pbVar1 = (byte *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x5d);
       *pbVar1 = *pbVar1 | 1;

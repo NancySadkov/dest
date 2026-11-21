@@ -461,7 +461,7 @@ char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
                 paVar2 = (agntG_t *)agnt->gdata;
                 pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x83c,in_stack_0000000a),
                                        (char *)CONCAT22(*(undefined2 *)&paVar2->name,
-                                                        (char *)0x2410),
+                                                        (char *)0x26510),
                                        *(undefined2 *)((int)&paVar2->name + 2));
               }
             }
@@ -470,7 +470,7 @@ char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
               paVar2 = (agntG_t *)agnt->gdata;
               pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x830,in_stack_0000000a),
                                      (char *)CONCAT22(*(undefined2 *)&paVar2->name,
-                                                      (char *)0x2410),
+                                                      (char *)0x26510),
                                      *(undefined2 *)((int)&paVar2->name + 2));
             }
           }
@@ -479,7 +479,7 @@ char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
             paVar2 = (agntG_t *)agnt->gdata;
             pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x823,in_stack_0000000a),
                                    (char *)CONCAT22(*(undefined2 *)&paVar2->name,
-                                                    (char *)0x2410),
+                                                    (char *)0x26510),
                                    *(undefined2 *)((int)&paVar2->name + 2));
           }
         }
@@ -488,7 +488,7 @@ char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
           paVar2 = (agntG_t *)agnt->gdata;
           pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x817,in_stack_0000000a),
                                  (char *)CONCAT22(*(undefined2 *)&paVar2->name,
-                                                  (char *)0x2410),
+                                                  (char *)0x26510),
                                  *(undefined2 *)((int)&paVar2->name + 2));
         }
       }
@@ -497,7 +497,7 @@ char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
         paVar2 = (agntG_t *)agnt->gdata;
         pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x80d,in_stack_0000000a),
                                (char *)CONCAT22(*(undefined2 *)&paVar2->name,
-                                                (char *)0x2410),
+                                                (char *)0x26510),
                                *(undefined2 *)((int)&paVar2->name + 2));
       }
     }
@@ -505,7 +505,7 @@ char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
       uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
       paVar2 = (agntG_t *)agnt->gdata;
       pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x803,in_stack_0000000a),
-                             (char *)CONCAT22(*(undefined2 *)&paVar2->name,(char *)0x2410
+                             (char *)CONCAT22(*(undefined2 *)&paVar2->name,(char *)0x26510
                                              ),*(undefined2 *)((int)&paVar2->name + 2));
     }
   }
@@ -513,7 +513,7 @@ char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
     uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
     paVar2 = (agntG_t *)agnt->gdata;
     pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x7f8,in_stack_0000000a),
-                           (char *)CONCAT22(*(undefined2 *)&paVar2->name,(char *)0x2410),
+                           (char *)CONCAT22(*(undefined2 *)&paVar2->name,(char *)0x26510),
                            *(undefined2 *)((int)&paVar2->name + 2));
   }
   return pcVar1;

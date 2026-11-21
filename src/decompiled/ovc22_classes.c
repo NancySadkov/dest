@@ -284,7 +284,7 @@ code_r0x0005ff56:
               pcVar10 = pcVar10 + 1) {
             TextBlitX = 0x11;
             if (((int)pcVar10 < 5) || (cVar3 == '\0')) {
-              suffix = (char *)0x198;
+              suffix = (char *)0x24298;
               ovr_blitLabel(*(char **)(&labelPtrs + (int)pcVar10 * 4));
             }
             else {
@@ -294,13 +294,13 @@ code_r0x0005ff56:
                                      (uint)*(byte *)((int)*(undefined4 *)((uint)bldType << 2) + 0x2f
                                                     ) * 8]);
             }
-            suffix = (char *)0x22c4;
+            suffix = (char *)0x263c4;
             labelOfs = 0x1b7;
             func_0x0005f303();
             ovr_stsprintf((char *)&numBuf);
             iVar4 = ovr_font_textWidth((char *)&numBuf);
             TextBlitX = 0x89 - iVar4;
-            suffix = (char *)0x21a;
+            suffix = (char *)0x2431a;
             ovr_blitLabel((char *)&numBuf);
             ovr_stsprintf((char *)&numBuf);
             iVar4 = ovr_font_textWidth((char *)&numBuf);
@@ -314,20 +314,20 @@ code_r0x0005ff56:
           CurSfxType3 = 0x3c;
           entries.seg = unaff_SS;
           entries.ofs = (uint16_t)&menuItems;
-          suffix = (char *)0x22c4;
+          suffix = (char *)0x263c4;
           labelOfs = 0x327;
           uVar5 = ovr_ovc28_usesUiInputText(entries);
           cVar3 = (char)uVar5;
           keyboardInputMode = 0;
           if (((cVar3 != '\0') && (cVar3 != '\x01')) && (cVar3 != -2)) {
             (&stack0xbac4)[unaff_DI] = (&stack0xbac4)[unaff_DI] + in_CL;
-            pcVar6 = (char *)0x2410;
+            pcVar6 = (char *)0x26510;
             goto code_r0x0005ff56;
           }
           if (cVar3 == -2) {
             Cancelled = 1;
           }
-          return (char *)0x2410;
+          return (char *)0x26510;
         }
       }
       if (GSeason == '\x01') {
@@ -853,7 +853,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
               *(int *)(iVar30 + uVar22) = *(int *)(iVar30 + uVar22) - (int)(puVar45 + 1);
               bVar17 = in(uVar23);
               uVar22 = uVar22 & uVar23;
-              puVar3 = (uint *)((int)puVar49 + (int)((char *)0x6221 + uVar22));
+              puVar3 = (uint *)((int)puVar49 + (int)((char *)0x2a321 + uVar22));
               *puVar3 = *puVar3 & uVar32;
               *(uint *)(uVar32 + 0x21) = *(uint *)(uVar32 + 0x21) & (uint)puVar49;
               *puVar49 = *puVar49 & uVar32;
@@ -938,8 +938,8 @@ L_OVC22_5087_0234_323C:
                        ^ uVar23;
               puVar3 = (uint *)((int)unaff_DI + uVar32 + 0xa231);
               *puVar3 = *puVar3 ^ uVar48;
-              *(uint *)((char *)0x805d + uVar32) =
-                   *(uint *)((char *)0x805d + uVar32) ^
+              *(uint *)((char *)0x2c131 + uVar32) =
+                   *(uint *)((char *)0x2c131 + uVar32) ^
                    uVar22;
               puVar3 = (uint *)(uVar33 + uVar48 + 0x31);
               *puVar3 = *puVar3 ^ (uint)unaff_DI;
@@ -1207,9 +1207,9 @@ L_OVC22_5087_4975_4ABE:
             case (far_t *)0xe:
               puVar38->bldType = puVar38->bldType | bVar16;
               if (uVar23 != 0) {
-                pfVar20 = (far_t *)*(far_t **)((char *)0x651);
+                pfVar20 = (far_t *)*(far_t **)((char *)0x24751);
               }
-              *(uint *)((char *)0x621) = *(uint *)((char *)0x621) ^ (uint)pfVar20;
+              *(uint *)((char *)0x24721) = *(uint *)((char *)0x24721) ^ (uint)pfVar20;
               uVar19 = in(5);
               if (((uint)pfVar20 | 0x606) == 0) {
                 *unaff_DI = *unaff_DI +
@@ -1483,7 +1483,7 @@ L_OVC22_5087_0234_32B8:
               keyboardInputMode = 0;
               if (((cVar14 != '\0') && (cVar14 != '\x01')) && (cVar14 != -2)) {
                 (&stack0xbac4)[(int)unaff_DI] = (&stack0xbac4)[(int)unaff_DI] + cVar25;
-                puVar50 = (uint *)((char *)0x2410);
+                puVar50 = (uint *)((char *)0x26510);
                 do {
                   iVar30 = (int)puVar50 * (int)puVar28;
                   puVar50 = puVar49;
@@ -1506,17 +1506,17 @@ L_OVC22_5087_0234_32B8:
                     *(undefined1 *)((int)puVar50 * 0x34 + 0x22) = (char)((far_t *)uStack_6)[0xc].seg
                     ;
                   }
-                  puVar28 = (uint16_t *)((char *)0x34);
+                  puVar28 = (uint16_t *)((char *)0x24134);
                   puVar49 = puVar50;
                 } while( true );
               }
               if (cVar14 != -2) {
                 keyboardInputMode = 0;
-                return (far_t *)((char *)0x2410);
+                return (far_t *)((char *)0x26510);
               }
               Cancelled = 1;
               keyboardInputMode = 0;
-              return (far_t *)((char *)0x2410);
+              return (far_t *)((char *)0x26510);
             case (far_t *)0x11:
               GRecordCount = GRecordCount + -1;
               _fmemset((void *)0x21f2,0x12,in_stack_0000ffbe);
@@ -1694,7 +1694,7 @@ L_OVC22_5087_0234_32B8:
               (*(uint8_t *)((uint8_t *)&(gfx_10.seg) + 1)) =
                    (char)((uint)((undefined2 *)&tmstrsSprites1Seg)[((uint)unaff_DI % 5) * 2] >> 8);
               ovr_blitGfxRect(gfx_10);
-              pfVar20 = (far_t *)((char *)0x2410);
+              pfVar20 = (far_t *)((char *)0x26510);
               (*(uint8_t *)((uint8_t *)&(gfx_11.seg))) = (char)((undefined2 *)&tmstrsSprites1Seg)[((uint)unaff_DI % 5) * 2];
               gfx_11.ofs = ((undefined2 *)&tmstrsSprites1Ofs)[((uint)unaff_DI % 5) * 2];
               (*(uint8_t *)((uint8_t *)&(gfx_11.seg) + 1)) =
@@ -2561,7 +2561,7 @@ L_upd_units_5087_1d7d_202C:
           uVar31 = 0x2410;
           if (((*(short (*) [60] [148])GMapFlags)[uStack_1a][uStack_18] & 8U) == 0) {
             uStack_1e = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1e) + 1)),0x22);
-            uStack_20 = (byte *)((char *)0x2122);
+            uStack_20 = (byte *)((char *)0x26222);
           }
           else {
             puVar51 = &uStack_1e;
@@ -2595,7 +2595,7 @@ L_upd_units_5087_1d7d_202C:
         }
         else {
           uStack_1e = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1e) + 1)),0x22);
-          uStack_20 = (byte *)((char *)0x2122);
+          uStack_20 = (byte *)((char *)0x26222);
         }
         uVar31 = ovr_randBelow(100);
         if ((byte)uVar31 < (byte)uStack_1e) {
@@ -2714,9 +2714,9 @@ L_upd_units_5087_1d7d_202C:
   mapDirty = 1;
   ovr_unit_usesAlignUp4();
   GGameState = 0x44;
-  pfVar20 = (far_t *)((char *)0x2410);
+  pfVar20 = (far_t *)((char *)0x26510);
   if (DebugVerbose != false) {
-    pfVar20 = (far_t *)((char *)0x2410);
+    pfVar20 = (far_t *)((char *)0x26510);
     printf("%d \r");
   }
   if ((*(uint8_t *)((uint8_t *)&(uStack_1e) + 1)) != '\0') {
@@ -4777,7 +4777,7 @@ void __cdecl16far ovc22_spawnForLeaders(void)
   outFlag = 0x0;
   for (iStack_4 = 0; iStack_4 < (int)(uint)GLeaderCount; iStack_4 = iStack_4 + 1) {
     if (((*(char *)((int)*(undefined4 *)(iStack_4 << 2) + 0x3d) != '\0') &&
-        (uVar1 = ovr_randBelow((uint)(byte)((char *)0x276a)
+        (uVar1 = ovr_randBelow((uint)(byte)((char *)0x2686a)
                                            [(uint)*(byte *)((int)*(undefined4 *)(iStack_4 << 2) +
                                                            0x3e) * 0x95]),
         (byte)uVar1 < *(byte *)((int)*(undefined4 *)(iStack_4 << 2) + 0x2e))) &&
