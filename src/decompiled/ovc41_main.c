@@ -198,9 +198,6 @@ void __cdecl16far ovc41_advanceAnimFrame(agnt_t *agnt,...)
 
 
 /* 6a8f:0256 */
-
-/* Removes an agent record from Agnts, fixes the +0xc references and memmoves the tail down. */
-
 void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,...)
 
 {
@@ -211,7 +208,7 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,...)
   uint16_t uVar4;
   bool bVar5;
   uint uVar6;
-  undefined4 uStack_8;
+  entity_t *uStack_8;   /* hand fix: dereferenced as uStack_8->x */
   
   uVar2 = *(undefined2 *)(agntIndex * 0x34 + 0x19);
   agnt = (agnt_t *)*(undefined2 *)(agntIndex * 0x34 + 0x17);
@@ -248,7 +245,6 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,...)
   }
   return;
 }
-
 
 
 /* 6a8f:0422 */
@@ -470,9 +466,6 @@ void __cdecl16far ovc41_usesPlay_sfxU(void)
 
 
 /* 6a8f:0807 */
-
-/* Rolls a paralysis check against every agent within 50 pixels when the source type allows it. */
-
 void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex,...)
 
 {
@@ -482,7 +475,7 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex,...)
   int iVar4;
   uint uVar5;
   int iVar6;
-  undefined4 uStack_6;
+  entity_t *uStack_6;   /* hand fix: dereferenced as uStack_6->x */
   
   paVar2 = (agnt_t *)(agntIndex * 0x34);
   uStack_6 = (agnt_t *)CONCAT22(0x1726,paVar2);
@@ -504,7 +497,6 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex,...)
   }
   return;
 }
-
 
 
 /* 6a8f:08c2 */
@@ -1012,17 +1004,10 @@ void __cdecl16far ovc41_enterLeaderView(void)
 
 
 /* 6a8f:15a0 */
-
-/* WARNING: Instruction at (ram,0x00068912) overlaps instruction at (ram,0x0006890f)
-    */
-/* WARNING: Unable to track spacebase fully for stack */
-/* WARNING: This function may have set the stack pointer */
-/* WARNING: Removing unreachable block (ram,0x00068915) */
-/* [R4] calls ovr_biosKeyAvail */
-
 char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
 
 {
+  extern undefined1 _backdropIndex;   /* hand fix: no symbol exists */
   undefined4 uVar1;
   undefined4 uVar2;
   bool bVar3;
@@ -1115,7 +1100,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
     pcVar12 = (char *)((uint)_backdropIndex & 0xff);
     pbVar9 = (byte *)((uint)_backdropIndex & 0xff);
     if (pbVar9 < (byte *)__C0_ASM_CopyRight) {
-      switch(pbVar9) {
+      switch((int)pbVar9) {
       case (byte *)0x0:
         return (char *)((int)(undefined4 *)&_DATA + 1);
       case (byte *)0x1:
@@ -1143,9 +1128,9 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
     }
     ovc41_usesAgnt_clear('\x01');
     GGameState = 0x35;
-    pcVar12 = (char *)"puppetmaker" + 3;
+    pcVar12 = 0x2410;   /* hand fix: segment-half slot */
     if (DebugVerbose != false) {
-      pcVar12 = (char *)"puppetmaker" + 3;
+      pcVar12 = 0x2410;   /* hand fix: segment-half slot */
       printf("%d \r");
     }
     return pcVar12;
@@ -1153,7 +1138,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
   uVar16 = 0x6000;
   uVar10 = (undefined1)unaff_SS;
   uVar23 = (undefined1)(unaff_SS >> 8);
-  switch(pcVar12) {
+  switch((int)pcVar12) {
   case (char *)0x1:
     cVar4 = *(char *)((int)pcVar12 * 2 + 0x3f);
     do {
@@ -1542,18 +1527,18 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
       if ((byte)(&stack0xfffa)[(uint)_backdropIndex & 0xff] <=
           *(byte *)((int)*(undefined4 *)pcVar12 + 0xa5)) {
         for (uVar11 = 0xf8; uVar11 < GUnitCount; uVar11 = uVar11 + 1) {
-          pcVar12 = (char *)"puppetmaker" + 3;
+          pcVar12 = 0x2410;   /* hand fix: segment-half slot */
           uVar16 = (undefined2)((ulong)GUnits >> 0x10);
           if (((unit_t *)GUnits)[uVar11].unitType == bVar22) {
-            pcVar12 = (char *)"puppetmaker" + 3;
+            pcVar12 = 0x2410;   /* hand fix: segment-half slot */
             if (((unit_t *)GUnits)[uVar11].level < 8) {
-              *(undefined2 *)(iVar14 + -4) = CONCAT11((char)(uVar11 * 9 >> 8),bVar22);
+              *(undefined2 *)(iVar14 + -4) = (uint16_t)(CONCAT11((char)(uVar11 * 9 >> 8),bVar22));
               *(uint *)(iVar14 + -6) = uVar11;
-              *(undefined2 *)(iVar14 + -8) = 0x6000;
-              *(undefined2 *)(iVar14 + -10) = 0x8958;
+              *(undefined2 *)(iVar14 + -8) = (uint16_t)(0x6000);
+              *(undefined2 *)(iVar14 + -10) = (uint16_t)(0x8958);
               iVar5 = season_usesAlignUp42(*(int *)(iVar14 + -6),*(byte *)(iVar14 + -4));
               if ((char)iVar5 != '\0') {
-                pcVar12 = (char *)"puppetmaker" + 3;
+                pcVar12 = 0x2410;   /* hand fix: segment-half slot */
                 ((unit_t *)GUnits)[uVar11].level = 8;
                 iVar15 = iVar15 + 1;
               }
@@ -1563,32 +1548,32 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
       }
     }
     if (iVar15 != 0) {
-      *(undefined2 *)(iVar14 + -4) = 0;
-      *(undefined2 *)(iVar14 + -6) = 0x24;
-      *(undefined2 *)(iVar14 + -8) = 0x6000;
-      *(undefined2 *)(iVar14 + -10) = (uint8_t *)SpecialColors + 5;
+      *(undefined2 *)(iVar14 + -4) = (uint16_t)(0);
+      *(undefined2 *)(iVar14 + -6) = (uint16_t)(0x24);
+      *(undefined2 *)(iVar14 + -8) = (uint16_t)(0x6000);
+      *(undefined2 *)(iVar14 + -10) = (uint16_t)((uint8_t *)SpecialColors + 5);
       ovr_inputUpdate(*(ulong *)(iVar14 + -6));
-      *(undefined2 *)(iVar14 + -4) = 0xa000;
+      *(undefined2 *)(iVar14 + -4) = (uint16_t)(0xa000);
       *(int *)(iVar14 + -6) = iVar15;
-      *(undefined2 *)(iVar14 + -8) = (char *)"steam bath" + 6;
-      *(undefined2 *)(iVar14 + -10) = 0x89b2;
+      *(undefined2 *)(iVar14 + -8) = (uint16_t)(0x2410);   /* hand fix: segment-half slot */
+      *(undefined2 *)(iVar14 + -10) = (uint16_t)(0x89b2);
       uVar16 = ovr_ovc41_pluralSuffix(*(int *)(iVar14 + -6));
-      *(undefined2 *)(iVar14 + -6) = pcVar12;
-      *(undefined2 *)(iVar14 + -8) = uVar16;
+      *(undefined2 *)(iVar14 + -6) = (uint16_t)(pcVar12);
+      *(undefined2 *)(iVar14 + -8) = (uint16_t)(uVar16);
       *(int *)(iVar14 + -10) = iVar15;
-      *(undefined2 *)(iVar14 + -0xc) = (char *)"puppetmaker" + 3;
-      *(undefined2 *)(iVar14 + -0xe) = (char *)"%d building%s repaired.";
+      *(undefined2 *)(iVar14 + -0xc) = (uint16_t)(0x2410);   /* hand fix: segment-half slot */
+      *(undefined2 *)(iVar14 + -0xe) = (uint16_t)((char *)"%d building%s repaired.");
       *(uint16_t *)(iVar14 + -0x10) = unaff_SS;
       *(int *)(iVar14 + -0x12) = (int)auStack_80;
-      *(char **)((code *)init_textFilename + iVar14) = (char *)"builder\'s hall" + 8;
-      *(undefined2 *)(iVar14 + -0x16) = 0x89c6;
+      *(char **)((char *)init_textFilename + iVar14) = (char *)"builder\'s hall" + 8;
+      *(undefined2 *)(iVar14 + -0x16) = (uint16_t)(0x89c6);
       pcVar6 = ovr_stsprintf((char *)*(undefined2 *)(iVar14 + -0x12),
                              (char *)*(undefined4 *)(iVar14 + -0x10),
                              (char *)*(undefined4 *)(iVar14 + -0xc));
-      *(undefined2 *)(iVar14 + -6) = pcVar12;
-      *(undefined2 *)(iVar14 + -8) = pcVar6;
-      *(undefined2 *)(iVar14 + -10) = (char *)"glassworks" + 9;
-      *(undefined2 *)(iVar14 + -0xc) = 0x89d0;
+      *(undefined2 *)(iVar14 + -6) = (uint16_t)(pcVar12);
+      *(undefined2 *)(iVar14 + -8) = (uint16_t)(pcVar6);
+      *(undefined2 *)(iVar14 + -10) = (uint16_t)((char *)"glassworks" + 9);
+      *(undefined2 *)(iVar14 + -0xc) = (uint16_t)(0x89d0);
       ovr_uiNotify((char *)*(undefined2 *)(iVar14 + -8),*(uint16_t *)(iVar14 + -6));
     }
     return pcVar6;
@@ -1624,7 +1609,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
   ovc40_flushInput();
   ovr_ovr_miceButton0PressStates_entry();
   uVar16 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  uVar13 = *(undefined2 *)BDA_DailyTimeCounter;
+  uVar13 = *(undefined2 *)BDA_DailyTimeCounter.ofs;
   uVar21 = (undefined1)uVar16;
   uVar24 = (undefined1)((uint)uVar16 >> 8);
   uVar18 = (undefined1)uVar13;
@@ -1700,9 +1685,9 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
       do {
         ovr_audio_usesLDIV_at_();
         if (*(int *)(BDA_DailyTimeCounter.ofs + 2) != CONCAT11(uVar24,uVar21)) break;
-      } while (*(int *)BDA_DailyTimeCounter == CONCAT11(uVar20,uVar18));
+      } while (*(int *)BDA_DailyTimeCounter.ofs == CONCAT11(uVar20,uVar18));
       uVar16 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-      uVar13 = *(undefined2 *)BDA_DailyTimeCounter;
+      uVar13 = *(undefined2 *)BDA_DailyTimeCounter.ofs;
       uVar21 = (undefined1)uVar16;
       uVar24 = (undefined1)((uint)uVar16 >> 8);
       uVar18 = (undefined1)uVar13;
@@ -1719,7 +1704,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
     rightButtonLatch = '\0';
     if ((in_stack_0000000e == '\x02') || (in_stack_0000000e == '\x03')) {
       (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-      uVar13 = *(undefined2 *)BDA_DailyTimeCounter;
+      uVar13 = *(undefined2 *)BDA_DailyTimeCounter.ofs;
       (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = uVar13;
       if (cStack_1d == '\0') {
         uVar7 = ovr_inputUpdate(0x48);
@@ -1784,7 +1769,6 @@ L_OVC40_69c8_04c6_0AF0:
 }
 
 
-
 /* 6a8f:1847 */
 
 /* Prints the "You cannot see the terrain here." notice. */
@@ -1817,9 +1801,6 @@ void __cdecl16far ovc41_cannotSeeTerrainNotice(void)
 
 
 /* 6a8f:18c6 */
-
-/* [R6] touches GMenuItem, MenuMode */
-
 void __cdecl16far ovc41_usesGMenuItem(void)
 
 {
@@ -1843,10 +1824,9 @@ void __cdecl16far ovc41_usesGMenuItem(void)
   }
   ovr_draw_textTalkwin9Lbm();
   (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter))) = *(undefined2 *)BDA_DailyTimeCounter;
+  (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter))) = *(undefined2 *)BDA_DailyTimeCounter.ofs;
   return;
 }
-
 
 
 /* 6a8f:199c */
@@ -2129,14 +2109,6 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t *source,agnt_t *victim,uint s
 
 
 /* 6a8f:2084 */
-
-/* WARNING: Instruction at (ram,0x00066a51) overlaps instruction at (ram,0x00066a50)
-    */
-/* WARNING: Unable to track spacebase fully for stack */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* WARNING: Restarted to delay deadcode elimination for space: stack */
-/* [R2] string " You can only place a single arena." */
-
 byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
 
 {
@@ -2299,7 +2271,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
           TextBlitDstSeg = 0xa000;
           TextBlitX = uStack_8 + 6;
           TextBlitY = (uint16_t)(unaff_DI + 1);
-          (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)(&paVar17->x + unaff_SI * 2)[1];
+          (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)(&paVar17->x + unaff_SI * 2)[1];
           puVar14 = (uint8_t *)(&paVar17->x)[unaff_SI * 2];
           fStack_6.seg = (uint16_t)(agnt_t *)uStack_132;
           fStack_6.ofs = (uint16_t)puVar14;
@@ -2327,7 +2299,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
           else {
             uVar22 = 0x13f;
             (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = FontMain.ofs;
-            (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)(&paVar17->x + unaff_SI * 2)[1];
+            (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)(&paVar17->x + unaff_SI * 2)[1];
             pcVar7 = (char *)ovr_ovc45_compute9(acStack_80,
                                                 (char *)CONCAT22((&paVar17->x)[unaff_SI * 2],
                                                                  unaff_SS),
@@ -2366,7 +2338,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
 switchD_6000_ca06_caseD_1:
       (&stack0xfffe)[(int)unaff_DI] = (&stack0xfffe)[(int)unaff_DI] + (char)iVar12;
       *(undefined1 *)((int)unaff_DI + 0x15) = 0;
-      (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)0x6a64;
+      (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x6a64;
       (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iVar20;
       bStack_3b = ovr_init2_usesCFGMice
                             ((uint16_t *)&paStack_2e,
@@ -2377,13 +2349,13 @@ switchD_6000_ca06_caseD_1:
         if (rightButtonLatch != '\0') goto L_ui_unit_order_6616_0689_1054;
         if ((paStack_2e != paStack_2a) || (paStack_30 != paStack_2c)) {
           paStack_2a = paStack_2e;
-          agnt = paStack_2e;
+          agnt = (agnt_t *)paStack_2e;
           paStack_2c = paStack_30;
           paStack_1e = paStack_30;
         }
         if (bStack_3b != 0) break;
         (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = 0x22de;
-        (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)0x69b5;
+        (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x69b5;
         uVar22 = keyprocessor_usesBiosKeyAvail
                            ((uint16_t *)CONCAT13(uVar21,CONCAT12(type,&paStack_36)),
                             (uint16_t *)CONCAT22(unaff_SS,&paStack_38),
@@ -2391,7 +2363,7 @@ switchD_6000_ca06_caseD_1:
         if ((char)uVar22 != '\0') goto L_ui_unit_order_6616_0689_1054;
         if ((paStack_36 != paStack_32) || (paStack_38 != paStack_34)) {
           paStack_32 = paStack_36;
-          agnt = paStack_36;
+          agnt = (agnt_t *)paStack_36;
           paStack_34 = paStack_38;
           paStack_1e = paStack_38;
           bStack_16.seg = uStack_8;
@@ -2417,7 +2389,7 @@ switchD_6000_ca06_caseD_1:
          (0x96 < (int)paStack_1e)) goto L_ui_unit_order_6616_0689_1054;
       do {
         iVar12 = 0x22de;
-        (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)0x6ae3;
+        (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x6ae3;
         bVar6 = ovr_init2_usesCFGMice
                           ((uint16_t *)&paStack_2e,(uint16_t *)CONCAT22(&paStack_30,unaff_SS));
       } while (CONCAT11(extraout_AH,bVar6) != 0);
@@ -2427,7 +2399,7 @@ switchD_6000_ca06_caseD_1:
       bStack_3b = 0;
       paVar9 = agnt;
       do {
-        (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)0x6b14;
+        (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x6b14;
         (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iVar12;
         uVar22 = keyprocessor_usesBiosKeyAvail
                            ((uint16_t *)CONCAT13(uVar21,CONCAT12(type,&paStack_36)),
@@ -2518,7 +2490,7 @@ switchD_6000_ca06_caseD_1:
         paStack_26 = paVar9;
         if (bStack_3b == 0) {
           iVar12 = 0x22de;
-          (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)0x6e04;
+          (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x6e04;
           bStack_3b = ovr_init2_usesCFGMice
                                 ((uint16_t *)&paStack_2e,(uint16_t *)CONCAT22(&paStack_30,unaff_SS))
           ;
@@ -2589,13 +2561,13 @@ L_ui_unit_order_6616_0689_1054:
         }
         ovr_constr_flushDirtyRects();
         (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = 0x22ef;
-        (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)0x7063;
+        (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x7063;
         ovr_resetTextBlitCycle();
         if (bStack_3b == 1) {
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = 0x7071;
           ovr_ovc41_pluralSuffix(iStack_a);
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iStack_a;
-          (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)0x2410;
+          (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x6522,unaff_SS),
                                   (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
           ovr_say(pcVar19);
@@ -2604,7 +2576,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = 0x70bf;
           ovr_ovc41_pluralSuffix(iStack_a);
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iStack_a;
-          (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)0x2410;
+          (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x6543,unaff_SS),
                                   (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
           ovr_say(pcVar19);
@@ -2613,7 +2585,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = 0x710d;
           ovr_ovc41_pluralSuffix(iStack_a);
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iStack_a;
-          (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)0x2410;
+          (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x6557,unaff_SS),
                                   (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
           ovr_say(pcVar19);
@@ -2622,7 +2594,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = 0x715a;
           ovr_ovc41_pluralSuffix(iStack_a);
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iStack_a;
-          (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)0x2410;
+          (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x6568,unaff_SS),
                                   (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
           ovr_say(pcVar19);
@@ -2664,7 +2636,7 @@ L_ui_unit_order_6616_0689_1054:
       ovc41_pluralSuffix((uint)paStack_c->strength);
       ovc41_pluralSuffix((uint)paStack_c->strength - (uint)(*(uint8_t *)((uint8_t *)&(uStack_8) + 1)));
       (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = 0x22f8;
-      (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)0xcb5a;
+      (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0xcb5a;
       ovr_agnt_statusText(paStack_c,
                           (char *)CONCAT13((char)((uint)&stack0xfecc >> 8),
                                            CONCAT12((char)&stack0xfecc,iStack_a)));
@@ -2673,7 +2645,7 @@ L_ui_unit_order_6616_0689_1054:
       pcVar19 = ovr_agnt_statusText(paVar17,(char *)CONCAT22(&text,pcVar19));
       puVar11 = ovr_ovc15_usesStshRealloc(pcVar19);
       (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = 0x2322;
-      (*(uint16_t *)((uint8_t *)&(uStack_132))) = (agnt_t *)0xcba4;
+      (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0xcba4;
       paVar9 = (agnt_t *)
                ovr_stsprintf((char *)&msg,(char *)CONCAT13(0x6f,CONCAT12(0xeb,unaff_SS)),
                              (char *)CONCAT22(puVar11,(char *)"puppetmaker" + 3));
@@ -2682,7 +2654,6 @@ L_ui_unit_order_6616_0689_1054:
   }
   return (byte *)paVar9;
 }
-
 
 
 /* 6a8f:22cb */
