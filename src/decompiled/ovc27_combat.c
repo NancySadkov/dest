@@ -1699,12 +1699,13 @@ ovc27_usesPlay_sfxU(uint16_t ptrOfs,uint16_t ptrSeg,agnt_t *agnt,uint8_t frames,
         }
       }
     }
-    unk = ovr_audio_panFromX(agnt_00,uVar6);
-    ovr_play_sfxU(0x1c,0,unk);
+    unk = ovr_audio_panFromX(agnt_00,(char)((ulong)agnt >> 0x10));
+    ovr_play_sfxU(0x1c,0,unk,(char)unk);
     uVar4 = CONCAT11((char)(unk >> 8),1);
   }
   else {
-    uVar4 = ovr_ovc41_settleAgentCombat((agnt_t *)ptrOfs,(agnt_t *)ptrSeg);
+    uVar4 = ovr_ovc41_settleAgentCombat
+                      ((agnt_t *)CONCAT13((char)(ptrSeg >> 8),CONCAT12((char)ptrSeg,ptrOfs)),agnt);
     uVar4 = uVar4 & 0xff00;
   }
   return uVar4;
