@@ -12,7 +12,7 @@
 /* WARNING: Removing unreachable block (ram,0x0003a69a) */
 /* [R4] calls LDIV_at_ */
 
-void __cdecl16far audio_usesLDIV_at_(void...)
+void __cdecl16far audio_usesLDIV_at_(void)
 
 {
   bool bVar1;
@@ -171,7 +171,7 @@ end:
 
 /* 3a5b:032e */
 
-void __cdecl16far stop_audio(void...)
+void __cdecl16far stop_audio(void)
 
 {
   uint16_t unaff_BP;
@@ -189,7 +189,7 @@ void __cdecl16far stop_audio(void...)
 
 /* Returns whether a sound effect or the music sequence is currently playing. */
 
-uint __cdecl16far audio_isPlaying(void...)
+uint __cdecl16far audio_isPlaying(void)
 
 {
   bool bVar1;
@@ -215,7 +215,7 @@ uint __cdecl16far audio_isPlaying(void...)
 
 /* [R1] forwards to ovr_midGetSequenceStatus */
 
-uint __cdecl16far ovr_midGetSequenceStatus_entry(void...)
+uint __cdecl16far ovr_midGetSequenceStatus_entry(void)
 
 {
   uint in_AX;
@@ -312,15 +312,7 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
           *(uint *)(DIGHandle.ofs + 5) = uStack_a;
           ovr_digPreformatSound();
           ovr_digPlayPreformatedSound();
-          if (((uint)type < 0x3d) || (0x3f < (uint)type)) {
-            if ((0x3f < (uint)type) && ((uint)type < 0x43)) {
-              type = 0x43;
-            }
-          }
-          else {
-            type = 0x3c;
-          }
-          ovr_digSetSterioPanning(type);
+          ovr_digSetSterioPanning();
           if (_fid == 3) {
             CurSfxType3 = in_stack_00000004;
           }
@@ -358,20 +350,20 @@ void __cdecl16far audio_textMidiError(byte track,int status)
 {
   far_t handle;
   far_t entry;
-  uint uVar1;
-  undefined1 *puVar2;
+  char cVar1;
+  uint uVar2;
   uint16_t uVar3;
   uint16_t unaff_SI;
   bool bVar4;
   
   if (((MusRunning != '\0') && (AudioAssetsReady2 != '\0')) &&
-     ((uVar1 = (uint)CurrentTrack, CurrentTrack == track ||
-      ((status != 1 || (ovr_midGetSequenceStatus(), uVar1 != 1)))))) {
+     ((uVar2 = (uint)CurrentTrack, CurrentTrack == track ||
+      ((status != 1 || (ovr_midGetSequenceStatus(), uVar2 != 1)))))) {
     do {
       if (status != 2) break;
       ovr_midGetSequenceStatus();
-      bVar4 = uVar1 == 1;
-      uVar1 = 1;
+      bVar4 = uVar2 == 1;
+      uVar2 = 1;
     } while (bVar4);
     ovr_midMidiStop();
     audioBusy = 1;
@@ -391,13 +383,13 @@ void __cdecl16far audio_textMidiError(byte track,int status)
     audioBusy = 0;
     if ((undefined1 *)MUSHandle.ofs != (undefined1 *)0x0 || uVar3 != 0) {
       MUS_2410_07a9 = 0;
-      puVar2 = (undefined1 *)(MUSHandle.ofs + 0xd);
-      ovr_midRegisterXMIDI(puVar2,uVar3,*(undefined2 *)(MUSHandle.ofs + 5),0);
-      if ((char)puVar2 == '\0') {
+      cVar1 = (char)MUSHandle.ofs + '\r';
+      ovr_midRegisterXMIDI();
+      if (cVar1 == '\0') {
         printf("Midi error\r");
       }
       else {
-        ovr_midSetRelativeValue(100,0);
+        ovr_midSetRelativeValue();
         ovr_midPlaySequence(unaff_SI,0);
       }
       CurrentTrack = track;
@@ -460,7 +452,7 @@ void __cdecl16far audio_parseHexDigit(char *driverData,char ch)
 
 /* 3a5b:081e */
 
-void __cdecl16far sfxInit(void...)
+void __cdecl16far sfxInit(void)
 
 {
   bool bVar1;
@@ -518,7 +510,7 @@ void __cdecl16far sfxInit(void...)
 
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 
-void __cdecl16far musInit(void...)
+void __cdecl16far musInit(void)
 
 {
   bool bVar1;
@@ -572,7 +564,7 @@ void __cdecl16far musInit(void...)
                     /* WARNING: Subroutine does not return */
         ovr_stExit();
       }
-      ovr_midLoadDriver(MusHandle,MusHandleSeg,MusDrvOfs,MusDrvSeg);
+      ovr_midLoadDriver();
       MusRunning = 1;
     }
   }

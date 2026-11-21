@@ -3067,7 +3067,7 @@ void __cdecl16far ovc23_abandonConstruction(int recordIndex)
 
 /* [R1] forwards to OVC23_55fe_29a2 */
 
-void __cdecl16far OVC23_55fe_29a2_entry(void...)
+void __cdecl16far OVC23_55fe_29a2_entry(void)
 
 {
   int recordIndex;

@@ -378,7 +378,7 @@ void __cdecl16far ovc41_unitStatusText(byte menuIndex,...)
 
 /* [R6] touches DebugVerbose */
 
-void __cdecl16far ovc41_usesDebugVerbose(void...)
+void __cdecl16far ovc41_usesDebugVerbose(void)
 
 {
   int iVar1;
@@ -474,7 +474,7 @@ uint __cdecl16far ovc41_settleAgentCombat(agnt_t *a,agnt_t *b,...)
 
 /* [R4] calls ovr_play_sfxU */
 
-void __cdecl16far ovc41_usesPlay_sfxU(void...)
+void __cdecl16far ovc41_usesPlay_sfxU(void)
 
 {
   uint *puVar1;
@@ -932,7 +932,7 @@ void __cdecl16far ovc41_buildingNotice(char delta,...)
 
 /* 6a8f:108a */
 
-void __cdecl16far dbgPromoteEnemy(void...)
+void __cdecl16far dbgPromoteEnemy(void)
 
 {
   uint8_t *puVar1;
@@ -1081,7 +1081,7 @@ void __cdecl16far ovc41_usesAgnt_clear(char playSound,...)
 
 /* Clears the agents, redraws the five menu bars and opens the leader view. */
 
-void __cdecl16far ovc41_enterLeaderView(void...)
+void __cdecl16far ovc41_enterLeaderView(void)
 
 {
   uint16_t unaff_SI;
@@ -1824,7 +1824,7 @@ L_OVC40_69c8_04c6_0AF0:
 
 /* Prints the "You cannot see the terrain here." notice. */
 
-void __cdecl16far ovc41_cannotSeeTerrainNotice(void...)
+void __cdecl16far ovc41_cannotSeeTerrainNotice(void)
 
 {
   bool bVar1;
@@ -1856,7 +1856,7 @@ void __cdecl16far ovc41_cannotSeeTerrainNotice(void...)
 
 /* [R6] touches GMenuItem, MenuMode */
 
-void __cdecl16far ovc41_usesGMenuItem(void...)
+void __cdecl16far ovc41_usesGMenuItem(void)
 
 {
   char unaff_BP;
@@ -1889,7 +1889,7 @@ void __cdecl16far ovc41_usesGMenuItem(void...)
 
 /* 6a8f:199c */
 
-void __cdecl16far uiMainMenu(void...)
+void __cdecl16far uiMainMenu(void)
 
 {
   uint16_t unaff_BP;
@@ -2881,7 +2881,7 @@ void __cdecl16far ovc41_resolveSpecialAttack(agnt_t *agnt,uint16_t param)
 
 /* [R6] touches AgntCount */
 
-void __cdecl16far ovc41_usesAgntCount3(void...)
+void __cdecl16far ovc41_usesAgntCount3(void)
 
 {
   uint unaff_SI;

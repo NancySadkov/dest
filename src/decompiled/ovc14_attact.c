@@ -301,7 +301,7 @@ uint16_t __cdecl16far attact_textAbnormalProgramTermination(uint16_t value,uint8
 
 /* resets SquareRecCount to 0 */
 
-void __cdecl16far clearSquareRecords(void...)
+void __cdecl16far clearSquareRecords(void)
 
 {
   SquareRecCount = 0;
@@ -337,7 +337,7 @@ int __cdecl16far attact_usesSquareRecCount(int x,int y,...)
 
 /* [R6] touches SquareRecCount, SquareRecX */
 
-void __cdecl16far attact_usesSquareRecCount2(void...)
+void __cdecl16far attact_usesSquareRecCount2(void)
 
 {
   uint uVar1;
@@ -366,7 +366,7 @@ void __cdecl16far attact_usesSquareRecCount2(void...)
 
 /* [R6] touches AgntFlag1, AgntCount */
 
-void __cdecl16far attact_usesAgntFlag1(void...)
+void __cdecl16far attact_usesAgntFlag1(void)
 
 {
   undefined4 uVar1;
@@ -614,7 +614,7 @@ attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flags
 
 /* [R6] touches GMapFlags, EntityCount */
 
-void __stdcall16far attact_usesGMapFlags3(void...)
+void __stdcall16far attact_usesGMapFlags3(void)
 
 {
   uint *puVar1;
@@ -1414,7 +1414,7 @@ L_attact_3f0b_2430_24BF:
 
 /* [R4] calls ovr_updSeason */
 
-void __cdecl16far attact_usesUpdSeason(void...)
+void __cdecl16far attact_usesUpdSeason(void)
 
 {
   bool bVar1;
@@ -1480,7 +1480,7 @@ void __cdecl16far attact_usesUpdSeason(void...)
 
 /* [R6] touches EntityCount, Entities */
 
-void __cdecl16far attact_usesEntityCount(void...)
+void __cdecl16far attact_usesEntityCount(void)
 
 {
   int iVar1;
@@ -1653,7 +1653,7 @@ void __cdecl16far attact_usesBlitLoadRleGfx(void)
 
 /* [R4] calls LDIV_at_ */
 
-void __cdecl16far attact_usesLDIV_at_2(void...)
+void __cdecl16far attact_usesLDIV_at_2(void)
 
 {
   far_t gfx;

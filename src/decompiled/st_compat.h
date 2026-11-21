@@ -19,6 +19,9 @@
 #endif
 typedef unsigned short code();
 typedef unsigned short blitfn_t();
+typedef unsigned long int3;
+typedef unsigned long uint3;
+typedef unsigned long undefined3;
 code *swi(int vector);
 #define MK_FP(seg,ofs) ((void far *)(((uint32_t)(seg) << 16) | (uint16_t)(ofs)))
 #define CONCAT11(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint8_t)(b)))

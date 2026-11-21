@@ -167,7 +167,7 @@ uint __cdecl16far draw_compute3(int x,...)
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "talkwin9.lbm" */
 
-void __cdecl16far draw_textTalkwin9Lbm(void...)
+void __cdecl16far draw_textTalkwin9Lbm(void)
 
 {
   byte *pbVar1;
@@ -4031,7 +4031,7 @@ code_r0x000219f5:
 /* WARNING: Variable defined which should be unmapped: rect */
 /* [R4] calls ovr_blitLoadRleGfx */
 
-void __cdecl16far draw_usesBlitLoadRleGfx(void...)
+void __cdecl16far draw_usesBlitLoadRleGfx(void)
 
 {
   uint16_t uVar1;
@@ -4070,7 +4070,7 @@ void __cdecl16far draw_usesBlitLoadRleGfx(void...)
 
 /* [R4] calls ovr_blitLoadRleGfx */
 
-void __cdecl16far draw_usesBlitLoadRleGfx2(void...)
+void __cdecl16far draw_usesBlitLoadRleGfx2(void)
 
 {
   uint16_t unaff_BP;
@@ -4181,7 +4181,7 @@ void __cdecl16far draw_usesPlay_sfx(void)
 
 /* [R4] calls printf */
 
-void __cdecl16far draw_usesPrintf(void...)
+void __cdecl16far draw_usesPrintf(void)
 
 {
   bool bVar1;
@@ -4249,7 +4249,7 @@ void __cdecl16far draw_usesResetTextBlitCycle(void)
 
 /* WARNING: Variable defined which should be unmapped: msg */
 
-uint16_t __cdecl16far gameProcessKey(void...)
+uint16_t __cdecl16far gameProcessKey(void)
 
 {
   uint16_t key;
@@ -4350,7 +4350,7 @@ uint16_t __cdecl16far gameProcessKey(void...)
 
 /* [R4] calls gameProcessKey */
 
-uint16_t __cdecl16far draw_usesGameProcessKey(void...)
+uint16_t __cdecl16far draw_usesGameProcessKey(void)
 
 {
   bool bVar1;
@@ -4535,7 +4535,7 @@ void __cdecl16far draw_menuCursor(int x,int y,...)
 /* WARNING: Variable defined which should be unmapped: textBuf */
 /* Blits the Build/Recruit/Train/Movement labels at their fixed toolbar positions. */
 
-void __cdecl16far draw_toolbarLabels(void...)
+void __cdecl16far draw_toolbarLabels(void)
 
 {
   undefined2 *puVar1;
@@ -4592,7 +4592,7 @@ void __cdecl16far draw_toolbarLabels(void...)
 
 /* [R2] string "arena" */
 
-bool __cdecl16far draw_textArena(void...)
+bool __cdecl16far draw_textArena(void)
 
 {
   bool bVar1;
@@ -4625,7 +4625,7 @@ bool __cdecl16far draw_textArena(void...)
 
 /* Frees the audioSaveCut1/2 ring buffers, clears their handles and cleans the ring buffer. */
 
-void __cdecl16far draw_freeRingBuffers(void...)
+void __cdecl16far draw_freeRingBuffers(void)
 
 {
   uint16_t unaff_BP;
@@ -4712,7 +4712,7 @@ undefined2 __cdecl16far draw_compute4(byte type)
 
 /* [R4] calls ovr_toggle_pause */
 
-void __cdecl16far draw_usesToggle_pause(void...)
+void __cdecl16far draw_usesToggle_pause(void)
 
 {
   bool bVar1;
@@ -4872,7 +4872,7 @@ void __cdecl16far draw_usesToggle_pause(void...)
 
 /* [R2] string "%s: provides more housing." */
 
-bool __cdecl16far draw_textProvidesMoreHousing(void...)
+bool __cdecl16far draw_textProvidesMoreHousing(void)
 
 {
   undefined1 uVar1;

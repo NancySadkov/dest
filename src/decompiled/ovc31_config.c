@@ -216,7 +216,7 @@ void __cdecl16far input_folder_name(char *result)
 
 /* 6257:0345 */
 
-byte __cdecl16far init_strong_sav(void...)
+byte __cdecl16far init_strong_sav(void)
 
 {
   char cVar1;
@@ -272,7 +272,7 @@ l_made_new_strong_sav:
 
 /* 6257:046a */
 
-void __cdecl16far init_base(void...)
+void __cdecl16far init_base(void)
 
 {
   byte bVar1;

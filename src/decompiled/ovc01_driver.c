@@ -38,7 +38,7 @@ uint16_t __cdecl16far biosVideoCall(uint8_t operation,uint8_t argument,...)
 
 /* 2d63:0030 */
 
-uint16_t __cdecl16far biosReadKey(void...)
+uint16_t __cdecl16far biosReadKey(void)
 
 {
   code *pcVar1;
@@ -53,7 +53,7 @@ uint16_t __cdecl16far biosReadKey(void...)
 
 /* 2d63:0039 */
 
-uint16_t __cdecl16far biosKeyAvail(void...)
+uint16_t __cdecl16far biosKeyAvail(void)
 
 {
   code *pcVar1;
@@ -68,7 +68,7 @@ uint16_t __cdecl16far biosKeyAvail(void...)
 
 /* 2d63:004a */
 
-uint16_t __cdecl16far miceButtonsStates(void...)
+uint16_t __cdecl16far miceButtonsStates(void)
 
 {
   code *pcVar1;
@@ -242,7 +242,7 @@ char __cdecl16far driver_compute2(char cornerA,byte cornerB,char cornerC,...)
 
 /* 2d63:017a */
 
-void __cdecl16far miceDisableHandler(void...)
+void __cdecl16far miceDisableHandler(void)
 
 {
   code *pcVar1;
@@ -256,7 +256,7 @@ void __cdecl16far miceDisableHandler(void...)
 
 /* 2d63:0190 */
 
-uint16_t __cdecl16far miceButton0PressStates(void...)
+uint16_t __cdecl16far miceButton0PressStates(void)
 
 {
   code *pcVar1;
@@ -1039,7 +1039,7 @@ driver_compute4(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg,.
 
 /* 2d63:06bf */
 
-bool __cdecl16far digSoundPlaying(void...)
+bool __cdecl16far digSoundPlaying(void)
 
 {
   code *pcVar1;
@@ -1054,7 +1054,7 @@ bool __cdecl16far digSoundPlaying(void...)
 
 /* 2d63:06d1 */
 
-void __cdecl16far digPlayPreformatedSound(void...)
+void __cdecl16far digPlayPreformatedSound(void)
 
 {
   code *pcVar1;
@@ -1082,7 +1082,7 @@ void __cdecl16far digPlayPreformatedData(void)
 
 /* 2d63:06fb */
 
-void __cdecl16far digStopCurrentSound(void...)
+void __cdecl16far digStopCurrentSound(void)
 
 {
   code *pcVar1;
@@ -1096,7 +1096,7 @@ void __cdecl16far digStopCurrentSound(void...)
 
 /* 2d63:070d */
 
-void __cdecl16far digPreformatSound(void...)
+void __cdecl16far digPreformatSound(void)
 
 {
   code *pcVar1;
@@ -1116,7 +1116,7 @@ void __cdecl16far digPreformatSound(void...)
    the latter case, call AX=0701h to determine whether IBMSND is
    installed) */
 
-bool __cdecl16far digIsInstalled(void...)
+bool __cdecl16far digIsInstalled(void)
 
 {
   code *pcVar1;
@@ -1175,7 +1175,7 @@ void __cdecl16far midSegueSequence(void)
 
 /* 2d63:078c */
 
-void __cdecl16far midRegisterXMIDI(void...)
+void __cdecl16far midRegisterXMIDI(void)
 
 {
   code *pcVar1;
@@ -1189,7 +1189,7 @@ void __cdecl16far midRegisterXMIDI(void...)
 
 /* 2d63:07aa */
 
-void __cdecl16far midMidiStop(void...)
+void __cdecl16far midMidiStop(void)
 
 {
   code *pcVar1;
@@ -1203,7 +1203,7 @@ void __cdecl16far midMidiStop(void...)
 
 /* 2d63:07bc */
 
-void __cdecl16far midGetSequenceStatus(void...)
+void __cdecl16far midGetSequenceStatus(void)
 
 {
   code *pcVar1;
@@ -1217,7 +1217,7 @@ void __cdecl16far midGetSequenceStatus(void...)
 
 /* 2d63:07ce */
 
-bool __cdecl16far midIsLoaded(void...)
+bool __cdecl16far midIsLoaded(void)
 
 {
   bool bVar1;
@@ -1239,7 +1239,7 @@ bool __cdecl16far midIsLoaded(void...)
 
 /* 2d63:07fb */
 
-void __cdecl16far midLoadDriver(void...)
+void __cdecl16far midLoadDriver(void)
 
 {
   code *pcVar1;
@@ -1253,7 +1253,7 @@ void __cdecl16far midLoadDriver(void...)
 
 /* 2d63:0819 */
 
-void __cdecl16far digSetSterioPanning(void...)
+void __cdecl16far digSetSterioPanning(void)
 
 {
   code *pcVar1;
@@ -1267,7 +1267,7 @@ void __cdecl16far digSetSterioPanning(void...)
 
 /* 2d63:082e */
 
-void __cdecl16far midSetRelativeValue(void...)
+void __cdecl16far midSetRelativeValue(void)
 
 {
   code *pcVar1;
@@ -1416,7 +1416,7 @@ void __cdecl16far driver_fillSpan(int x1,int x2,byte y,uint8_t colour,int *rect,
 
 /* 2d63:0a18 */
 
-uint8_t __cdecl16far vda_query(void...)
+uint8_t __cdecl16far vda_query(void)
 
 {
   code *pcVar1;

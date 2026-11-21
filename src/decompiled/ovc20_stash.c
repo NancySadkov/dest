@@ -59,7 +59,7 @@ void __cdecl16far stshUniqueColorsRemap(stg_tmp_t *gfx,...)
 
 /* [R2] string "uc%lx %d len %ld loc %ld \r" */
 
-void __cdecl16far ovc20_textLenLoc(void...)
+void __cdecl16far ovc20_textLenLoc(void)
 
 {
   uint16_t *puVar1;
@@ -578,18 +578,17 @@ uint16_t __cdecl16far stshDecVocSampleRate(uint8_t encfreq)
 void __cdecl16far stshInitAudioAssets(char grab,...)
 
 {
-  char *pcVar1;
-  long *plVar2;
+  undefined1 uVar1;
+  char *pcVar2;
+  long *plVar3;
   uint16_t freq;
-  uint32_t *puVar3;
-  void *pvVar4;
-  uint16_t uVar5;
-  cte_t *pcVar6;
-  far_t *pfVar7;
-  uint uVar8;
+  uint32_t *puVar4;
+  void *pvVar5;
+  cte_t *pcVar7;
+  far_t *pfVar8;
   uint uVar9;
-  int in_DX;
   uint uVar10;
+  int in_DX;
   int iVar11;
   undefined2 *puVar12;
   uint uVar13;
@@ -598,13 +597,15 @@ void __cdecl16far stshInitAudioAssets(char grab,...)
   uint16_t i;
   uint32_t *unaff_DI;
   undefined2 uVar15;
+  bool bVar16;
   char in_stack_00000004;
-  uint8_t uVar16;
-  undefined1 uVar17;
+  uint8_t uVar17;
+  undefined1 uVar18;
   voc_t voc;
   uint uStack_a;
   uint uStack_8;
   uint32_t sz;
+  uint16_t uVar6;
   
   AudioAssetsReady1 = 1;
   AudioAssetsReady2 = 1;
@@ -617,35 +618,36 @@ void __cdecl16far stshInitAudioAssets(char grab,...)
       return;
     }
     puVar12 = (undefined2 *)(*(int *)(i * 2) * 4);
-    pcVar1 = _fstrstr((char *)CONCAT22(puVar12[1],(char *)*puVar12),".xmi");
-    if (pcVar1 == (char *)0x0 && in_DX == 0) {
+    pcVar2 = _fstrstr((char *)CONCAT22(puVar12[1],(char *)*puVar12),".xmi");
+    if (pcVar2 == (char *)0x0 && in_DX == 0) {
       *(undefined2 *)(i * 2 + 0x114) = 1;
     }
     else {
       *(undefined2 *)(i * 2 + 0x114) = 0;
     }
     if (in_stack_00000004 == '\0') {
-      pfVar7 = ovr_stshAllocStub();
+      pfVar8 = ovr_stshAllocStub();
       ((undefined2 *)(i * 4))[1] = in_DX;
-      *(undefined2 *)(i * 4) = pfVar7;
+      *(undefined2 *)(i * 4) = pfVar8;
       iVar11 = in_DX;
     }
     else {
       if (*(int *)(i * 2 + 0x114) == 0) {
-        puVar3 = ovr_stshFilesize(unaff_DI,unaff_SI,(char)*(undefined2 *)(i * 2));
-        iVar11 = (int)puVar3 + 0xd;
-        pvVar4 = ovr_stshAlloc(CONCAT22(unaff_DI,in_DX + (uint)((uint32_t *)0xfff2 < puVar3)),iVar11
+        puVar4 = ovr_stshFilesize(unaff_DI,unaff_SI,(char)*(undefined2 *)(i * 2));
+        iVar11 = (int)puVar4 + 0xd;
+        pvVar5 = ovr_stshAlloc(CONCAT22(unaff_DI,in_DX + (uint)((uint32_t *)0xfff2 < puVar4)),iVar11
                               );
         ((undefined2 *)(i * 4))[1] = iVar11;
-        *(undefined2 *)(i * 4) = pvVar4;
+        *(undefined2 *)(i * 4) = pvVar5;
         *(undefined1 *)*(undefined4 *)(i << 2) = 3;
         uVar15 = (undefined2)((ulong)*(undefined4 *)(i << 2) >> 0x10);
         iVar14 = (int)*(undefined4 *)(i << 2);
         *(undefined2 *)(iVar14 + 3) = 0;
         *(undefined2 *)(iVar14 + 1) = 0;
-        *(undefined2 *)((int)*(undefined4 *)(i << 2) + 5) = puVar3;
-        uVar5 = ovr_stshOpen((uint16_t)unaff_DI,(char)*(undefined2 *)(i * 2));
-        iVar14 = ovr_stshRead(uVar5,*(int *)(i * 4) + 0xd,((int *)(i * 4))[1],puVar3,(char)in_DX);
+        *(undefined2 *)((int)*(undefined4 *)(i << 2) + 5) = puVar4;
+        uVar6 = ovr_stshOpen((uint16_t)unaff_DI,(char)*(undefined2 *)(i * 2));
+        uVar1 = (undefined1)uVar6;
+        iVar14 = ovr_stshRead();
         if (iVar14 != 0 || iVar11 != 0) {
                     /* WARNING: Subroutine does not return */
           ovr_stExit((int)unaff_DI,0x20);
@@ -653,38 +655,39 @@ void __cdecl16far stshInitAudioAssets(char grab,...)
         *(undefined2 *)((int)*(undefined4 *)(i << 2) + 0xb) = 0;
       }
       else {
-        uVar5 = ovr_stshOpen((uint16_t)unaff_DI,(char)*(undefined2 *)(i * 2));
-        iVar11 = ovr_stshRead(uVar5,&voc);
+        uVar6 = ovr_stshOpen((uint16_t)unaff_DI,(char)*(undefined2 *)(i * 2));
+        uVar1 = (undefined1)uVar6;
+        iVar11 = ovr_stshRead();
         if (iVar11 != 0 || in_DX != 0) {
                     /* WARNING: Subroutine does not return */
           ovr_stExit((int)unaff_DI,0x20);
         }
-        uVar17 = 0;
+        uVar18 = 0;
         iVar14 = 0;
         iVar11 = 0;
-        uVar16 = voc.blksz[0];
-        plVar2 = LXLSH_at_((long *)(uint)voc.blksz[0],(long)CONCAT22(unaff_SI,unaff_DI),voc.id[0]);
-        uVar8 = CONCAT11(uVar17,uVar16) + (int)plVar2;
-        uVar9 = uVar8 - 2;
-        uVar13 = (iVar14 + iVar11 + (uint)CARRY2(CONCAT11(uVar17,uVar16),(uint)plVar2) +
-                 (uint)voc.blksz[2]) - (uint)(uVar8 < 2);
-        iVar11 = uVar8 + 0xb;
-        pvVar4 = ovr_stshAlloc(CONCAT22(unaff_DI,uVar13 + (0xfff2 < uVar9)),iVar11);
+        uVar17 = voc.blksz[0];
+        plVar3 = LXLSH_at_((long *)(uint)voc.blksz[0],(long)CONCAT22(unaff_SI,unaff_DI),voc.id[0]);
+        uVar9 = CONCAT11(uVar18,uVar17) + (int)plVar3;
+        uVar10 = uVar9 - 2;
+        uVar13 = (iVar14 + iVar11 + (uint)CARRY2(CONCAT11(uVar18,uVar17),(uint)plVar3) +
+                 (uint)voc.blksz[2]) - (uint)(uVar9 < 2);
+        iVar11 = uVar9 + 0xb;
+        pvVar5 = ovr_stshAlloc(CONCAT22(unaff_DI,uVar13 + (0xfff2 < uVar10)),iVar11);
         ((undefined2 *)(i * 4))[1] = iVar11;
-        *(undefined2 *)(i * 4) = pvVar4;
+        *(undefined2 *)(i * 4) = pvVar5;
         *(undefined1 *)*(undefined4 *)(i << 2) = 3;
         uVar15 = (undefined2)((ulong)*(undefined4 *)(i << 2) >> 0x10);
         iVar11 = (int)*(undefined4 *)(i << 2);
         *(undefined2 *)(iVar11 + 3) = 0;
         *(undefined2 *)(iVar11 + 1) = 0;
-        *(uint *)((int)*(undefined4 *)(i << 2) + 5) = uVar9;
-        uVar10 = uVar9;
-        if ((uStack_8 <= uVar13) && ((uVar13 != uStack_8 || (uStack_a <= uVar9)))) {
-          uVar10 = uVar8 + 0xb;
-          uStack_8 = uVar13 + (0xfff2 < uVar9);
+        *(uint *)((int)*(undefined4 *)(i << 2) + 5) = uVar10;
+        if ((uStack_8 <= uVar13) && ((uVar13 != uStack_8 || (uStack_a <= uVar10)))) {
+          bVar16 = 0xfff2 < uVar10;
+          uVar10 = uVar9 + 0xb;
+          uStack_8 = uVar13 + bVar16;
           uStack_a = uVar10;
         }
-        iVar11 = ovr_stshRead(uVar5,*(int *)(i * 4) + 0xd,((int *)(i * 4))[1],uVar9,(char)uVar13);
+        iVar11 = ovr_stshRead();
         if (iVar11 != 0 || uVar10 != 0) {
                     /* WARNING: Subroutine does not return */
           ovr_stExit((int)unaff_DI,0x20);
@@ -693,11 +696,11 @@ void __cdecl16far stshInitAudioAssets(char grab,...)
         iVar11 = 0x1703;
         *(uint16_t *)((int)*(undefined4 *)(i << 2) + 0xb) = freq;
       }
-      ovr_stshClose((uint16_t)unaff_DI,(char)uVar5);
-      pcVar6 = stshStoreFile((uint8_t *)CONCAT22(unaff_DI,(uint8_t *)((undefined2 *)(i * 4))[1]),
+      ovr_stshClose((uint16_t)unaff_DI,uVar1);
+      pcVar7 = stshStoreFile((uint8_t *)CONCAT22(unaff_DI,(uint8_t *)((undefined2 *)(i * 4))[1]),
                              *(undefined2 *)(i * 4));
       ((undefined2 *)(i * 4))[1] = iVar11;
-      *(undefined2 *)(i * 4) = pcVar6;
+      *(undefined2 *)(i * 4) = pcVar7;
     }
     i = i + 1;
     in_DX = iVar11;
@@ -894,7 +897,7 @@ void __cdecl16far ovc20_compute1(char *gfxBlock,...)
 
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 
-void __cdecl16far init_ui_gfxes(void...)
+void __cdecl16far init_ui_gfxes(void)
 
 {
   undefined2 uVar1;

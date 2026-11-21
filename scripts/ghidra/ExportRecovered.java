@@ -335,6 +335,12 @@ public class ExportRecovered extends GhidraScript {
         ch.println("#endif");
         ch.println("typedef unsigned short code();");
         ch.println("typedef unsigned short blitfn_t();");
+        // Ghidra names its 3-byte working types int3/uint3/undefined3.  C has no
+        // 3-byte integer; CONCAT13/31 and SUB41/42 cast their operand to the
+        // width they need, so a 32-bit carrier is enough to compile.
+        ch.println("typedef unsigned long int3;");
+        ch.println("typedef unsigned long uint3;");
+        ch.println("typedef unsigned long undefined3;");
         ch.println("code *swi(int vector);");
         ch.println("#define MK_FP(seg,ofs) ((void far *)(((uint32_t)(seg) << 16) | (uint16_t)(ofs)))");
         ch.println("#define CONCAT11(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint8_t)(b)))");

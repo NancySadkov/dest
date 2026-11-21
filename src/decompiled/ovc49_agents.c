@@ -914,7 +914,7 @@ void ovc49_body1(void) { /* failed */ }
 /* Per-frame agent pass: updates each agent's grid cells and AI state, resolves its animation and
    sprite, and draws it (also sets BothFactions and GGameState). */
 
-void __cdecl16far ovc49_drawAgents(void...)
+void __cdecl16far ovc49_drawAgents(void)
 
 {
   int *piVar1;

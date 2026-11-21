@@ -11,7 +11,7 @@
 
 /* Builds MenuItemEnabled: partySlot -> leader index for the active leaders, 0xff elsewhere. */
 
-void __cdecl16far manage_mapPartySlots(void...)
+void __cdecl16far manage_mapPartySlots(void)
 
 {
   int iVar1;
@@ -37,7 +37,7 @@ void __cdecl16far manage_mapPartySlots(void...)
 /* Opens the talk window: sets ScreenMode, installs the talkwin9 palette, fills the panel and blits
    the three window cuts. */
 
-void __cdecl16far manage_openTalkWindow(void...)
+void __cdecl16far manage_openTalkWindow(void)
 
 {
   long lVar1;
@@ -324,7 +324,7 @@ void * __cdecl16far manage_playerTitle(char_sheet_t *sheet,...)
 
 /* [R6] touches GLeaderCount */
 
-uint __cdecl16far manage_usesGLeaderCount(void...)
+uint __cdecl16far manage_usesGLeaderCount(void)
 
 {
   byte bVar1;
@@ -575,7 +575,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     manage_blitLabelRight((char *)CONCAT22(iVar6,pcVar2),CONCAT11(uVar9,uVar10));
     bStack_5 = manage_findFirstLeader();
     TextBlitY = TextBlitY + 0xf;
-    if (((pcVar5->level != 0) && (bStack_5 != 0xff)) &&
+    if (((pcVar5->titleIndex != 0) && (bStack_5 != 0xff)) &&
        (uVar4 = 0x217a, *(byte *)((int)*(undefined4 *)((uint)bStack_5 << 2) + 0x86) < 9)) {
       manage_usesBlitLabel2("popularity",0x7d);
       manage_usesBlitLabel2("city blocks",0xdc);
@@ -1865,7 +1865,7 @@ void __cdecl16far manage_showSettlementScreen(uint8_t partySlot,...)
 
 /* [R2] string "halfling castle" */
 
-void __cdecl16far manage_textHalflingCastle(void...)
+void __cdecl16far manage_textHalflingCastle(void)
 
 {
   uint *puVar1;
@@ -2011,7 +2011,7 @@ void __cdecl16far manage_textHalflingCastle(void...)
 
 /* Returns the index of the first leader with a non-zero level, or 0xff. */
 
-byte __cdecl16far manage_findFirstLeader(void...)
+byte __cdecl16far manage_findFirstLeader(void)
 
 {
   byte bVar1;

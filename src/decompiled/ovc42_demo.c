@@ -427,7 +427,7 @@ void __cdecl16far ovc42_usesBlitLabel(char *text,byte row,...)
 
 /* 6d7a:08df */
 
-undefined2 __cdecl16far run_demo(void...)
+undefined2 __cdecl16far run_demo(void)
 
 {
   far_t gfx;

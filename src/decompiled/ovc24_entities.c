@@ -11,7 +11,7 @@
 
 /* [R4] calls alignUp4 */
 
-void __cdecl16far ovc24_usesAlignUp4(void...)
+void __cdecl16far ovc24_usesAlignUp4(void)
 
 {
   char cVar1;
@@ -560,7 +560,7 @@ undefined2 __cdecl16far ovc24_unitAtLeader(byte leaderIndex)
 
 /* Checks every side's stronghold each turn and reports destruction, defeat or victory. */
 
-void __cdecl16far ovc24_checkStrongholds(void...)
+void __cdecl16far ovc24_checkStrongholds(void)
 
 {
   byte bVar10;

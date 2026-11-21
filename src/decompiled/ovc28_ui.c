@@ -57,7 +57,7 @@ void __cdecl16far ovc28_usesBlitLoadRleGfx(void)
 
 /* 6018:007e */
 
-void __cdecl16far update_pause_button(void...)
+void __cdecl16far update_pause_button(void)
 
 {
   bool bVar1;
@@ -91,7 +91,7 @@ void __cdecl16far update_pause_button(void...)
 
 /* Blits the button1Cut3 toolbar button at (223,8) and updates the daily-time counter. */
 
-void __cdecl16far ovc28_blitButton(void...)
+void __cdecl16far ovc28_blitButton(void)
 
 {
   int unaff_BP;
@@ -111,7 +111,7 @@ void __cdecl16far ovc28_blitButton(void...)
 
 /* [R4] calls ovr_blitGfxRect */
 
-void __cdecl16far ovc28_usesBlitGfxRect2(void...)
+void __cdecl16far ovc28_usesBlitGfxRect2(void)
 
 {
   bool bVar1;
@@ -147,7 +147,7 @@ void __cdecl16far ovc28_usesBlitGfxRect2(void...)
 
 /* [R2] string "halfling castle" */
 
-void __cdecl16far ovc28_textHalflingCastle(void...)
+void __cdecl16far ovc28_textHalflingCastle(void)
 
 {
   undefined4 uVar1;
@@ -224,7 +224,7 @@ void __cdecl16far ovc28_textHalflingCastle(void...)
 
 /* 6018:03d3 */
 
-void __cdecl16far toggle_pause(void...)
+void __cdecl16far toggle_pause(void)
 
 {
   bool bVar1;

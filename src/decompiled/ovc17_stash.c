@@ -53,7 +53,7 @@ void __cdecl16far stshClose(uint16_t file_id,...)
 /* WARNING: Restarted to delay deadcode elimination for space: ram */
 /* Returns number of remaining bytes */
 
-uint __cdecl16far stshRead(void...)
+uint __cdecl16far stshRead(void)
 
 {
   uint *puVar1;
@@ -134,7 +134,7 @@ uint __cdecl16far stshRead(void...)
         srcHi = (*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2));
         countLo = uStack_c;
         uVar8 = uStack_a;
-        puVar4 = ovr_mkp(in_stack_00000008,(uint)StshPtrs[0],(*(uint16_t *)((uint8_t *)&(StshPtrs[0]) + 2)),in_stack_00000006);
+        puVar4 = ovr_mkp();
         xms_usesXmsHandle((int)puVar4,uVar5,uVar6,srcHi,countLo,uVar8);
         bVar7 = CARRY2((uint)StshPtrs[0],uStack_c);
         (*(uint16_t *)((uint8_t *)&(StshPtrs[0]))) = (uint)StshPtrs[0] + uStack_c;
@@ -228,7 +228,7 @@ next_iteration:
 
 /* 474a:0470 */
 
-void __cdecl16far stshInit(void...)
+void __cdecl16far stshInit(void)
 
 {
   int handle;
@@ -567,7 +567,7 @@ char * __cdecl16far stsprintf(char *buf,char *fmt,char *arg1,...)
 
 /* WARNING: Variable defined which should be unmapped: i */
 
-void __cdecl16far clean_ring_buffer(void...)
+void __cdecl16far clean_ring_buffer(void)
 
 {
   uint uVar1;
@@ -593,7 +593,7 @@ void __cdecl16far clean_ring_buffer(void...)
 
 /* 474a:0a6a */
 
-void __cdecl16far initStshTables(void...)
+void __cdecl16far initStshTables(void)
 
 {
   uint16_t unaff_SI;
@@ -840,10 +840,7 @@ stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle,...)
       stshSeek(*(uint16_t *)(in_stack_00000004->cmap + 1),
                CONCAT22(in_stack_0000fff6,*(undefined2 *)(in_stack_00000004->cmap + 3)),
                StshStrongDatHnd);
-      stshRead(StshStrongDatHnd,*(undefined2 *)(in_stack_00000004->cmap + 0x11),
-               *(undefined2 *)(in_stack_00000004->cmap + 0x13),
-               *(undefined2 *)(in_stack_00000004->cmap + 5),
-               *(undefined2 *)(in_stack_00000004->cmap + 7));
+      stshRead();
     }
     in_stack_00000004 = *(stg_tmp_t **)(in_stack_00000004->cmap + 0x11);
   }
@@ -886,8 +883,7 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
           *(int *)((int)&in_stack_00000004[4].seg + 1) == 0) {
         uVar7 = uVar6;
         stshSeek();
-        stshRead(StshStrongDatHnd,pfVar4,uVar6,*(undefined2 *)((int)&in_stack_00000004[1].ofs + 1),
-                 *(undefined2 *)((int)&in_stack_00000004[1].seg + 1));
+        stshRead();
         pfVar5 = ovr_heapMalloc();
         *(uint16_t *)((int)&in_stack_00000004[4].seg + 1) = uVar7;
         *(undefined2 *)((int)&in_stack_00000004[4].ofs + 1) = pfVar5;
@@ -989,7 +985,7 @@ stg_tmp_t * __cdecl16far stash_usesStExit(stg_tmp_t *gfxListOfs,...)
 
 /* 474a:1133 */
 
-void __cdecl16far fmRewindHeapPtr(void...)
+void __cdecl16far fmRewindHeapPtr(void)
 
 {
   uint16_t *puVar1;
@@ -1074,7 +1070,7 @@ int __cdecl16far fmMallocRecover(void)
 
 /* 474a:1254 */
 
-void __cdecl16far fmFree(void...)
+void __cdecl16far fmFree(void)
 
 {
   uint16_t *puVar1;

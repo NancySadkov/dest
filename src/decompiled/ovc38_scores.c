@@ -111,7 +111,7 @@ void __cdecl16far ovc38_usesStshFree(far_t handle)
 
 /* Shows the "Great Achievements" high-score screen. */
 
-void __cdecl16far ovc38_showAchievements(void...)
+void __cdecl16far ovc38_showAchievements(void)
 
 {
   far_t entries;
@@ -248,7 +248,7 @@ int16_t __cdecl16far ovc38_scan1(char *s1,char *s2)
 
 /* [R4] calls ovr_stshAlloc */
 
-void __cdecl16far ovc38_usesStshAlloc(void...)
+void __cdecl16far ovc38_usesStshAlloc(void)
 
 {
   far_t entries;

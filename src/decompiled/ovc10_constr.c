@@ -237,7 +237,7 @@ void __cdecl16far constr_blitRawToScreen(brect_t *rect)
 
 /* [R4] calls blitRect */
 
-void __cdecl16far constr_usesBlitRect(void...)
+void __cdecl16far constr_usesBlitRect(void)
 
 {
   bool bVar1;
@@ -1033,7 +1033,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
 
 /* Blits the two dirty rects with mouse save/restore and frees the staging block. */
 
-void __cdecl16far constr_flushDirtyRects(void...)
+void __cdecl16far constr_flushDirtyRects(void)
 
 {
   void *pvVar1;
@@ -1122,7 +1122,7 @@ void __cdecl16far constr_usesBlitRect3(void)
 
 /* [R4] calls blitRect */
 
-void __cdecl16far constr_usesBlitRect4(void...)
+void __cdecl16far constr_usesBlitRect4(void)
 
 {
   void *pvVar1;

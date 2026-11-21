@@ -191,7 +191,7 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
   int iStack_6;
   ulong *puStack_4;
   
-  ovr_stshRead(handle);
+  ovr_stshRead();
   if (iStack_84 != -0x50ef) {
                     /* WARNING: Subroutine does not return */
     ovr_stExit(unaff_DI,0x47);

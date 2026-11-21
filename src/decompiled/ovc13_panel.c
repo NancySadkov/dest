@@ -11,7 +11,7 @@
 
 /* Cycles BlitFrame 0..5 and blits that frame graphic to the screen, latching the BDA tick. */
 
-void __cdecl16far ovc13_blitAnimFrame(void...)
+void __cdecl16far ovc13_blitAnimFrame(void)
 
 {
   uint16_t unaff_BP;
@@ -41,7 +41,7 @@ void __cdecl16far ovc13_blitAnimFrame(void...)
 /* WARNING: Removing unreachable block (ram,0x0003d1f7) */
 /* [R4] calls ovr_miceBlitRect */
 
-void __cdecl16far ovc13_usesMiceBlitRect(void...)
+void __cdecl16far ovc13_usesMiceBlitRect(void)
 
 {
   far_t dst;
@@ -387,7 +387,7 @@ void __cdecl16far ovc13_compute2(int x,int y,byte upperMask,byte lowerMask,uint1
 
 /* [R6] touches BlitRects, PanelGridX */
 
-void __cdecl16far ovc13_usesBlitRects(void...)
+void __cdecl16far ovc13_usesBlitRects(void)
 
 {
   byte cornerB;
@@ -865,7 +865,7 @@ void __cdecl16far ovc13_drawPanelHighlight(void)
 
 /* [R4] calls ovr_alignUp4 */
 
-void __cdecl16far ovc13_usesAlignUp4(void...)
+void __cdecl16far ovc13_usesAlignUp4(void)
 
 {
   undefined2 uVar1;
@@ -1095,7 +1095,7 @@ void __cdecl16far ovc13_usesBlitLoadRleGfx3(int x,int y,char force,...)
 
 /* [R4] calls ovr_blitRect */
 
-void __cdecl16far ovc13_usesBlitRect(void...)
+void __cdecl16far ovc13_usesBlitRect(void)
 
 {
   undefined4 in_stack_0000fffa;

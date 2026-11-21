@@ -2351,151 +2351,148 @@ undefined2 __vprinter_func_start(void)
 {
   code *pcVar1;
   code cVar2;
-  byte *pbVar3;
+  char *pcVar3;
   uint *puVar4;
-  char *pcVar5;
-  undefined1 *puVar6;
-  uint uVar7;
-  int *piVar8;
-  byte bVar9;
-  uint uVar10;
-  byte bVar13;
-  int iVar11;
+  undefined1 *puVar5;
+  int *piVar6;
+  char cVar7;
+  uint uVar8;
+  byte bVar11;
+  int iVar9;
+  int iVar10;
+  char alphaBase;
+  char cVar13;
   int iVar12;
-  char cVar14;
-  char cVar16;
-  int iVar15;
   int unaff_BP;
-  byte *pbVar17;
-  byte *pbVar18;
-  char *pcVar19;
-  byte *pbVar20;
-  int *piVar21;
-  undefined1 *puVar22;
-  uint *puVar23;
-  int *piVar24;
-  undefined2 uVar25;
-  int iVar26;
+  char *pcVar14;
+  char *pcVar15;
+  char *pcVar16;
+  int *piVar17;
+  undefined1 *puVar18;
+  uint *puVar19;
+  int *piVar20;
+  undefined2 uVar21;
+  int iVar22;
   int unaff_SS;
-  bool bVar27;
+  bool bVar23;
   
   *(int *)(unaff_BP + -4) = unaff_BP + -0x96;
 L__vprinter_func_start_0EF9:
-  pbVar20 = (byte *)*(undefined2 *)(unaff_BP + -4);
+  pcVar16 = (char *)*(undefined2 *)(unaff_BP + -4);
 L__vprinter_func_start_0EFC:
-  uVar25 = (undefined2)((ulong)*(undefined4 *)(unaff_BP + 6) >> 0x10);
-  pbVar17 = (byte *)(byte *)*(undefined4 *)(unaff_BP + 6);
+  uVar21 = (undefined2)((ulong)*(undefined4 *)(unaff_BP + 6) >> 0x10);
+  pcVar14 = (char *)(char *)*(undefined4 *)(unaff_BP + 6);
 L__vprinter_func_start_0EFF:
-  pbVar18 = pbVar17 + 1;
-  bVar9 = *pbVar17;
-  if (bVar9 == 0) goto L__vprinter_func_start_12FA;
-  if (bVar9 == 0x25) {
-    *(int *)(unaff_BP + -0x10) = (int)pbVar18;
-    pbVar3 = pbVar18;
-    pbVar18 = pbVar17 + 2;
-    bVar9 = *pbVar3;
-    if (bVar9 != 0x25) goto code_r0x00010f23;
+  pcVar15 = pcVar14 + 1;
+  cVar7 = *pcVar14;
+  if (cVar7 == '\0') goto L__vprinter_func_start_12FA;
+  if (cVar7 == '%') {
+    *(int *)(unaff_BP + -0x10) = (int)pcVar15;
+    pcVar3 = pcVar15;
+    pcVar15 = pcVar14 + 2;
+    cVar7 = *pcVar3;
+    if (cVar7 != '%') goto code_r0x00010f23;
   }
-  *pbVar20 = bVar9;
-  pbVar20 = pbVar20 + 1;
+  *pcVar16 = cVar7;
+  pcVar16 = pcVar16 + 1;
   pcVar1 = (code *)init_textFilename + unaff_BP;
   cVar2 = *pcVar1;
   *pcVar1 = (code)((char)*pcVar1 + -1);
-  pbVar17 = pbVar18;
+  pcVar14 = pcVar15;
   if (*pcVar1 == (code)0x0 || SBORROW1((char)cVar2,'\x01') != (char)*pcVar1 < '\0') {
     __vprinter_1000_0ebc();
   }
   goto L__vprinter_func_start_0EFF;
 code_r0x00010f23:
-  *(undefined2 *)(unaff_BP + -4) = pbVar20;
-  uVar10 = 0;
+  *(undefined2 *)(unaff_BP + -4) = pcVar16;
+  uVar8 = 0;
   *(undefined2 *)(unaff_BP + -0xe) = 0;
   *(undefined2 *)(unaff_BP + -2) = 0x20;
   *(undefined1 *)(unaff_BP + -0xb) = 0;
   *(undefined2 *)(unaff_BP + -8) = 0xffff;
   *(undefined2 *)(unaff_BP + -10) = 0xffff;
   do {
-    if (0x5f < (byte)(bVar9 - 0x20)) goto switchD_1000_0f5d_caseD_13;
-    cVar14 = ((uint8_t *)vprinter_printCtype)[(byte)(bVar9 - 0x20)] * '\x02';
-    bVar13 = (byte)(uVar10 >> 8);
-    iVar26 = unaff_SS;
-    switch(((uint8_t *)vprinter_printCtype)[(byte)(bVar9 - 0x20)]) {
+    if (0x5f < (byte)(cVar7 - 0x20U)) goto switchD_1000_0f5d_caseD_13;
+    alphaBase = ((uint8_t *)vprinter_printCtype)[(byte)(cVar7 - 0x20U)] * '\x02';
+    bVar11 = (byte)(uVar8 >> 8);
+    iVar22 = unaff_SS;
+    switch(((uint8_t *)vprinter_printCtype)[(byte)(cVar7 - 0x20U)]) {
     case '\0':
-      if (bVar13 != 0) goto switchD_1000_0f5d_caseD_13;
+      if (bVar11 != 0) goto switchD_1000_0f5d_caseD_13;
       if (*(char *)(unaff_BP + -0xb) != '+') {
-        *(byte *)(unaff_BP + -0xb) = bVar9;
+        *(char *)(unaff_BP + -0xb) = cVar7;
       }
       break;
     case '\x01':
-      if (bVar13 != 0) goto switchD_1000_0f5d_caseD_13;
+      if (bVar11 != 0) goto switchD_1000_0f5d_caseD_13;
       *(uint *)(unaff_BP + -2) = *(uint *)(unaff_BP + -2) | 1;
       break;
     case '\x02':
-      iVar26 = *(int *)*(undefined2 *)(unaff_BP + 4);
+      iVar22 = *(int *)*(undefined2 *)(unaff_BP + 4);
       *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 2;
-      if (bVar13 < 2) {
-        if (iVar26 < 0) {
-          iVar26 = -iVar26;
+      if (bVar11 < 2) {
+        if (iVar22 < 0) {
+          iVar22 = -iVar22;
           *(uint *)(unaff_BP + -2) = *(uint *)(unaff_BP + -2) | 2;
         }
-        *(int *)(unaff_BP + -8) = iVar26;
-        uVar10 = 0x300;
+        *(int *)(unaff_BP + -8) = iVar22;
+        uVar8 = 0x300;
       }
       else {
-        if (bVar13 != 4) goto switchD_1000_0f5d_caseD_13;
-        *(int *)(unaff_BP + -10) = iVar26;
-        uVar10 = 0x500;
+        if (bVar11 != 4) goto switchD_1000_0f5d_caseD_13;
+        *(int *)(unaff_BP + -10) = iVar22;
+        uVar8 = 0x500;
       }
       break;
     case '\x03':
-      if (bVar13 != 0) goto switchD_1000_0f5d_caseD_13;
+      if (bVar11 != 0) goto switchD_1000_0f5d_caseD_13;
       *(uint *)(unaff_BP + -2) = *(uint *)(unaff_BP + -2) | 2;
       break;
     case '\x04':
-      if (3 < bVar13) goto switchD_1000_0f5d_caseD_13;
-      uVar10 = 0x400;
+      if (3 < bVar11) goto switchD_1000_0f5d_caseD_13;
+      uVar8 = 0x400;
       *(int *)(unaff_BP + -10) = *(int *)(unaff_BP + -10) + 1;
       break;
     case '\x05':
 switchD_1000_0f5d_caseD_5:
-      if (bVar13 < 3) {
-        uVar10 = 0x200;
+      if (bVar11 < 3) {
+        uVar8 = 0x200;
         LOCK();
-        iVar26 = *(int *)(unaff_BP + -8);
-        *(int *)(unaff_BP + -8) = (int)(char)(bVar9 - 0x30);
+        iVar22 = *(int *)(unaff_BP + -8);
+        *(int *)(unaff_BP + -8) = (int)(char)(cVar7 + -0x30);
         UNLOCK();
-        if (-1 < iVar26) {
-          *(int *)(unaff_BP + -8) = *(int *)(unaff_BP + -8) + iVar26 * 10;
+        if (-1 < iVar22) {
+          *(int *)(unaff_BP + -8) = *(int *)(unaff_BP + -8) + iVar22 * 10;
         }
       }
       else {
-        if (bVar13 != 4) {
+        if (bVar11 != 4) {
 switchD_1000_0f5d_caseD_13:
-          pcVar19 = (char *)*(undefined2 *)(unaff_BP + -0x10);
-          uVar25 = *(undefined2 *)(unaff_BP + 8);
+          pcVar16 = (char *)*(undefined2 *)(unaff_BP + -0x10);
+          uVar21 = *(undefined2 *)(unaff_BP + 8);
           do {
             __vprinter_1000_0eb3();
-            pcVar5 = pcVar19;
-            pcVar19 = pcVar19 + 1;
-          } while (*pcVar5 != '\0');
+            pcVar3 = pcVar16;
+            pcVar16 = pcVar16 + 1;
+          } while (*pcVar3 != '\0');
 L__vprinter_func_start_12FA:
           if ((char)((code *)init_textFilename)[unaff_BP] < 'P') {
             __vprinter_1000_0ebc();
           }
           if (*(int *)(unaff_BP + -0x16) == 0) {
-            uVar25 = *(undefined2 *)(unaff_BP + -0x12);
+            uVar21 = *(undefined2 *)(unaff_BP + -0x12);
           }
           else {
-            uVar25 = 0xffff;
+            uVar21 = 0xffff;
           }
-          return uVar25;
+          return uVar21;
         }
         LOCK();
-        iVar26 = *(int *)(unaff_BP + -10);
-        *(int *)(unaff_BP + -10) = (int)(char)(bVar9 - 0x30);
+        iVar22 = *(int *)(unaff_BP + -10);
+        *(int *)(unaff_BP + -10) = (int)(char)(cVar7 + -0x30);
         UNLOCK();
-        if (iVar26 != 0) {
-          *(int *)(unaff_BP + -10) = *(int *)(unaff_BP + -10) + iVar26 * 10;
+        if (iVar22 != 0) {
+          *(int *)(unaff_BP + -10) = *(int *)(unaff_BP + -10) + iVar22 * 10;
         }
       }
       break;
@@ -2508,122 +2505,119 @@ L__vprinter_func_start_12FA:
       *(uint *)(unaff_BP + -2) = *(uint *)(unaff_BP + -2) & 0xffef;
       goto L__vprinter_func_start_0F95;
     case '\t':
-      if (bVar13 != 0) goto switchD_1000_0f5d_caseD_5;
+      if (bVar11 != 0) goto switchD_1000_0f5d_caseD_5;
       if ((*(uint *)(unaff_BP + -2) & 2) == 0) {
         *(uint *)(unaff_BP + -2) = *(uint *)(unaff_BP + -2) | 8;
-        uVar10 = 0x100;
+        uVar8 = 0x100;
       }
       break;
     case '\n':
       goto switchD_1000_0f5d_caseD_a;
     case '\v':
-      cVar16 = '\b';
+      cVar13 = '\b';
       goto L__vprinter_func_start_104A;
     case '\f':
-      cVar16 = '\n';
+      cVar13 = '\n';
       goto L__vprinter_func_start_104E;
     case '\r':
-      cVar14 = bVar9 - 0x17;
-      cVar16 = '\x10';
+      alphaBase = cVar7 + -0x17;
+      cVar13 = '\x10';
 L__vprinter_func_start_104A:
       *(undefined1 *)(unaff_BP + -0xb) = 0;
 L__vprinter_func_start_104E:
-      *(byte *)(unaff_BP + -5) = bVar9;
-      iVar11 = 0;
+      *(char *)(unaff_BP + -5) = cVar7;
+      iVar9 = 0;
       *(undefined1 *)(unaff_BP + -6) = 0;
-      piVar24 = (int *)*(undefined2 *)(unaff_BP + 4);
-      iVar15 = *piVar24;
+      piVar20 = (int *)*(undefined2 *)(unaff_BP + 4);
+      iVar12 = *piVar20;
       goto L__vprinter_func_start_106E;
     case '\x0e':
-      *(byte *)(unaff_BP + -5) = bVar9;
-      *(undefined2 *)(unaff_BP + 6) = pbVar18;
-      puVar22 = (undefined1 *)(unaff_BP + -0x46);
-      iVar15 = *(int *)(unaff_BP + 4);
-      *(int *)(unaff_BP + 4) = iVar15 + 2;
+      *(char *)(unaff_BP + -5) = cVar7;
+      *(undefined2 *)(unaff_BP + 6) = pcVar15;
+      puVar18 = (undefined1 *)(unaff_BP + -0x46);
+      iVar12 = *(int *)(unaff_BP + 4);
+      *(int *)(unaff_BP + 4) = iVar12 + 2;
       if ((*(uint *)(unaff_BP + -2) & 0x20) != 0) {
-        *(int *)(unaff_BP + 4) = iVar15 + 4;
+        *(int *)(unaff_BP + 4) = iVar12 + 4;
         __vprinter_1000_0e74();
-        puVar6 = puVar22;
-        puVar22 = (undefined1 *)(unaff_BP + -0x45);
-        *puVar6 = 0x3a;
+        puVar5 = puVar18;
+        puVar18 = (undefined1 *)(unaff_BP + -0x45);
+        *puVar5 = 0x3a;
       }
       __vprinter_1000_0e74();
-      *puVar22 = 0;
+      *puVar18 = 0;
       *(undefined1 *)(unaff_BP + -6) = 0;
       *(uint *)(unaff_BP + -2) = *(uint *)(unaff_BP + -2) & 0xfffb;
-      puVar23 = (uint *)(unaff_BP + -0x46);
-      uVar10 = (int)puVar22 - (int)puVar23;
+      puVar19 = (uint *)(unaff_BP + -0x46);
+      uVar8 = (int)puVar18 - (int)puVar19;
       goto L__vprinter_func_start_11AA;
     case '\x0f':
-      *(undefined2 *)(unaff_BP + 6) = pbVar18;
-      *(byte *)(unaff_BP + -5) = bVar9;
-      uVar10 = *(uint *)(unaff_BP + -10);
-      if ((int)uVar10 < 0) {
-        uVar10 = 6;
+      *(undefined2 *)(unaff_BP + 6) = pcVar15;
+      *(char *)(unaff_BP + -5) = cVar7;
+      uVar8 = *(uint *)(unaff_BP + -10);
+      if ((int)uVar8 < 0) {
+        uVar8 = 6;
       }
-      uVar7 = *(uint *)(unaff_BP + -2);
       if ((*(uint *)(unaff_BP + -2) & 0x100) == 0) {
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 8;
-        uVar25 = 6;
       }
       else {
-        uVar25 = 8;
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 10;
       }
-      ovr__FakRealCvt(uVar25,uVar7 & 1,(uint)bVar9,unaff_BP + -0x45);
-      puVar23 = (uint *)(unaff_BP + -0x45);
+      ovr__FakRealCvt();
+      puVar19 = (uint *)(unaff_BP + -0x45);
       goto L__vprinter_func_start_11AA;
     case '\x10':
-      *(undefined2 *)(unaff_BP + 6) = pbVar18;
-      *(byte *)(unaff_BP + -5) = bVar9;
-      uVar10 = *(uint *)*(undefined2 *)(unaff_BP + 4);
+      *(undefined2 *)(unaff_BP + 6) = pcVar15;
+      *(char *)(unaff_BP + -5) = cVar7;
+      uVar8 = *(uint *)*(undefined2 *)(unaff_BP + 4);
       *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 2;
-      puVar23 = (uint *)(unaff_BP + -0x45);
-      *puVar23 = uVar10 & 0xff;
-      uVar10 = 1;
+      puVar19 = (uint *)(unaff_BP + -0x45);
+      *puVar19 = uVar8 & 0xff;
+      uVar8 = 1;
       goto L__vprinter_func_start_11ED;
     case '\x11':
-      *(undefined2 *)(unaff_BP + 6) = pbVar18;
-      *(byte *)(unaff_BP + -5) = bVar9;
+      *(undefined2 *)(unaff_BP + 6) = pcVar15;
+      *(char *)(unaff_BP + -5) = cVar7;
       if ((*(uint *)(unaff_BP + -2) & 0x20) == 0) {
-        puVar23 = *(uint **)(undefined4 *)*(undefined2 *)(unaff_BP + 4);
+        puVar19 = *(uint **)(undefined4 *)*(undefined2 *)(unaff_BP + 4);
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 2;
-        iVar26 = 0x2410;
-        bVar27 = puVar23 == (uint *)0x0;
+        iVar22 = 0x2410;
+        bVar23 = puVar19 == (uint *)0x0;
       }
       else {
         puVar4 = (uint *)*(undefined4 *)*(undefined2 *)(unaff_BP + 4);
-        iVar26 = (int)((ulong)puVar4 >> 0x10);
-        puVar23 = (uint *)puVar4;
+        iVar22 = (int)((ulong)puVar4 >> 0x10);
+        puVar19 = (uint *)puVar4;
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 4;
-        bVar27 = iVar26 == 0 && puVar23 == (uint *)0x0;
+        bVar23 = iVar22 == 0 && puVar19 == (uint *)0x0;
       }
-      if (bVar27) {
-        iVar26 = 0x2410;
-        puVar23 = (uint *)"(null)";
+      if (bVar23) {
+        iVar22 = 0x2410;
+        puVar19 = (uint *)"(null)";
       }
       __vprinter_1000_0ea6();
-      if (*(uint *)(unaff_BP + -10) < uVar10) {
-        uVar10 = *(uint *)(unaff_BP + -10);
+      if (*(uint *)(unaff_BP + -10) < uVar8) {
+        uVar8 = *(uint *)(unaff_BP + -10);
       }
       goto L__vprinter_func_start_11ED;
     case '\x12':
-      *(undefined2 *)(unaff_BP + 6) = pbVar18;
+      *(undefined2 *)(unaff_BP + 6) = pcVar15;
       if ((*(uint *)(unaff_BP + -2) & 0x20) == 0) {
-        piVar24 = *(int **)(undefined4 *)*(undefined2 *)(unaff_BP + 4);
+        piVar20 = *(int **)(undefined4 *)*(undefined2 *)(unaff_BP + 4);
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 2;
-        uVar25 = 0x2410;
+        uVar21 = 0x2410;
       }
       else {
-        piVar8 = (int *)*(undefined4 *)*(undefined2 *)(unaff_BP + 4);
-        uVar25 = (undefined2)((ulong)piVar8 >> 0x10);
-        piVar24 = (int *)piVar8;
+        piVar6 = (int *)*(undefined4 *)*(undefined2 *)(unaff_BP + 4);
+        uVar21 = (undefined2)((ulong)piVar6 >> 0x10);
+        piVar20 = (int *)piVar6;
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 4;
       }
-      *piVar24 = (uint)(byte)(0x50 - (char)((code *)init_textFilename)[unaff_BP]) +
+      *piVar20 = (uint)(byte)(0x50 - (char)((code *)init_textFilename)[unaff_BP]) +
                  *(int *)(unaff_BP + -0x12);
       if ((*(uint *)(unaff_BP + -2) & 0x10) != 0) {
-        piVar24[1] = 0;
+        piVar20[1] = 0;
       }
       goto L__vprinter_func_start_0EF9;
     default:
@@ -2634,86 +2628,86 @@ L__vprinter_func_start_104E:
     case '\x17':
       *(uint *)(unaff_BP + -2) = *(uint *)(unaff_BP + -2) | 0x20;
 L__vprinter_func_start_0F95:
-      uVar10 = 0x500;
+      uVar8 = 0x500;
     }
-    pbVar3 = pbVar18;
-    pbVar18 = pbVar18 + 1;
-    bVar9 = *pbVar3;
+    pcVar3 = pcVar15;
+    pcVar15 = pcVar15 + 1;
+    cVar7 = *pcVar3;
   } while( true );
 switchD_1000_0f5d_caseD_a:
-  cVar16 = '\n';
+  cVar13 = '\n';
   *(undefined1 *)(unaff_BP + -6) = 1;
-  *(byte *)(unaff_BP + -5) = bVar9;
-  piVar24 = (int *)*(undefined2 *)(unaff_BP + 4);
-  iVar15 = *piVar24;
-  iVar11 = iVar15 >> 0xf;
+  *(char *)(unaff_BP + -5) = cVar7;
+  piVar20 = (int *)*(undefined2 *)(unaff_BP + 4);
+  iVar12 = *piVar20;
+  iVar9 = iVar12 >> 0xf;
 L__vprinter_func_start_106E:
-  piVar21 = piVar24 + 1;
-  *(undefined2 *)(unaff_BP + 6) = pbVar18;
+  piVar17 = piVar20 + 1;
+  *(undefined2 *)(unaff_BP + 6) = pcVar15;
   if ((*(uint *)(unaff_BP + -2) & 0x10) != 0) {
-    iVar11 = *piVar21;
-    piVar21 = piVar24 + 2;
+    iVar9 = *piVar17;
+    piVar17 = piVar20 + 2;
   }
-  *(undefined2 *)(unaff_BP + 4) = piVar21;
-  puVar23 = (uint *)(unaff_BP + -0x45);
-  if ((iVar15 == 0) && (iVar11 == 0)) {
+  *(undefined2 *)(unaff_BP + 4) = piVar17;
+  puVar19 = (uint *)(unaff_BP + -0x45);
+  if ((iVar12 == 0) && (iVar9 == 0)) {
     if (*(int *)(unaff_BP + -10) == 0) goto L__vprinter_func_start_0EF9;
   }
   else {
     *(uint *)(unaff_BP + -2) = *(uint *)(unaff_BP + -2) | 4;
   }
-  __LONGTOA(cVar14,*(char *)(unaff_BP + -6),(int)cVar16,(char *)CONCAT22(unaff_SS,puVar23),
-            CONCAT22(iVar11,iVar15));
-  iVar15 = *(int *)(unaff_BP + -10);
-  if (iVar15 < 0) {
+  __LONGTOA(alphaBase,*(char *)(unaff_BP + -6),(int)cVar13,(char *)CONCAT22(unaff_SS,puVar19),
+            CONCAT22(iVar9,iVar12));
+  iVar12 = *(int *)(unaff_BP + -10);
+  if (iVar12 < 0) {
 L__vprinter_func_start_11AA:
-    if (((*(uint *)(unaff_BP + -2) & 8) != 0) && (iVar15 = *(int *)(unaff_BP + -8), 0 < iVar15))
+    if (((*(uint *)(unaff_BP + -2) & 8) != 0) && (iVar12 = *(int *)(unaff_BP + -8), 0 < iVar12))
     goto L__vprinter_func_start_11B8;
   }
   else {
 L__vprinter_func_start_11B8:
     __vprinter_1000_0ea6();
-    if ((byte)*puVar23 == 0x2d) {
-      uVar10 = uVar10 - 1;
+    if ((char)*puVar19 == '-') {
+      uVar8 = uVar8 - 1;
     }
-    if (iVar15 - uVar10 != 0 && (int)uVar10 <= iVar15) {
-      *(int *)(unaff_BP + -0xe) = iVar15 - uVar10;
+    if (iVar12 - uVar8 != 0 && (int)uVar8 <= iVar12) {
+      *(int *)(unaff_BP + -0xe) = iVar12 - uVar8;
     }
   }
-  if ((byte)*puVar23 != 0x2d) {
-    if (*(byte *)(unaff_BP + -0xb) == 0) goto L__vprinter_func_start_11EA;
-    puVar23 = (uint *)((int)puVar23 + -1);
-    *(byte *)puVar23 = *(byte *)(unaff_BP + -0xb);
+  if ((char)*puVar19 != '-') {
+    if (*(char *)(unaff_BP + -0xb) == '\0') goto L__vprinter_func_start_11EA;
+    puVar19 = (uint *)((int)puVar19 + -1);
+    *(char *)puVar19 = *(char *)(unaff_BP + -0xb);
   }
-  if ((0 < *(int *)(unaff_BP + -0xe)) && (uVar10 = *(uint *)(unaff_BP + -10), (int)uVar10 < 0)) {
+  if ((0 < *(int *)(unaff_BP + -0xe)) && (uVar8 = *(uint *)(unaff_BP + -10), (int)uVar8 < 0)) {
     *(int *)(unaff_BP + -0xe) = *(int *)(unaff_BP + -0xe) + -1;
   }
 L__vprinter_func_start_11EA:
   __vprinter_1000_0ea6();
 L__vprinter_func_start_11ED:
-  pbVar20 = (byte *)*(undefined2 *)(unaff_BP + -4);
-  iVar15 = *(int *)(unaff_BP + -8);
+  pcVar16 = (char *)*(undefined2 *)(unaff_BP + -4);
+  iVar12 = *(int *)(unaff_BP + -8);
   if ((*(uint *)(unaff_BP + -2) & 5) == 5) {
-    cVar14 = *(char *)(unaff_BP + -5);
-    if (cVar14 == 'o') {
+    cVar7 = *(char *)(unaff_BP + -5);
+    if (cVar7 == 'o') {
       if (*(int *)(unaff_BP + -0xe) < 1) {
         *(undefined2 *)(unaff_BP + -0xe) = 1;
       }
     }
-    else if ((cVar14 == 'x') || (cVar14 == 'X')) {
+    else if ((cVar7 == 'x') || (cVar7 == 'X')) {
       *(uint *)(unaff_BP + -2) = *(uint *)(unaff_BP + -2) | 0x40;
-      iVar15 = iVar15 + -2;
-      piVar8 = (int *)(unaff_BP + -0xe);
-      iVar11 = *piVar8;
-      *piVar8 = *piVar8 + -2;
-      if (SBORROW2(iVar11,2) != *piVar8 < 0) {
+      iVar12 = iVar12 + -2;
+      piVar6 = (int *)(unaff_BP + -0xe);
+      iVar9 = *piVar6;
+      *piVar6 = *piVar6 + -2;
+      if (SBORROW2(iVar9,2) != *piVar6 < 0) {
         *(undefined2 *)(unaff_BP + -0xe) = 0;
       }
     }
   }
-  iVar11 = uVar10 + *(int *)(unaff_BP + -0xe);
+  iVar9 = uVar8 + *(int *)(unaff_BP + -0xe);
   if ((*(uint *)(unaff_BP + -2) & 2) == 0) {
-    for (; iVar11 < iVar15; iVar15 = iVar15 + -1) {
+    for (; iVar9 < iVar12; iVar12 = iVar12 + -1) {
       __vprinter_1000_0eb3();
     }
   }
@@ -2721,42 +2715,42 @@ L__vprinter_func_start_11ED:
     __vprinter_1000_0eb3();
     __vprinter_1000_0eb3();
   }
-  iVar12 = *(int *)(unaff_BP + -0xe);
-  if (0 < iVar12) {
-    iVar11 = iVar11 - iVar12;
-    iVar15 = iVar15 - iVar12;
-    bVar9 = (byte)*puVar23;
-    if (((bVar9 == 0x2d) || (bVar9 == 0x20)) || (bVar9 == 0x2b)) {
-      puVar23 = (uint *)((int)puVar23 + 1);
+  iVar10 = *(int *)(unaff_BP + -0xe);
+  if (0 < iVar10) {
+    iVar9 = iVar9 - iVar10;
+    iVar12 = iVar12 - iVar10;
+    cVar7 = (char)*puVar19;
+    if (((cVar7 == '-') || (cVar7 == ' ')) || (cVar7 == '+')) {
+      puVar19 = (uint *)((int)puVar19 + 1);
       __vprinter_1000_0eb3();
-      iVar11 = iVar11 + -1;
-      iVar15 = iVar15 + -1;
+      iVar9 = iVar9 + -1;
+      iVar12 = iVar12 + -1;
     }
-    for (; iVar12 != 0; iVar12 = iVar12 + -1) {
+    for (; iVar10 != 0; iVar10 = iVar10 + -1) {
       __vprinter_1000_0eb3();
     }
   }
-  if (iVar11 != 0) {
-    iVar15 = iVar15 - iVar11;
+  if (iVar9 != 0) {
+    iVar12 = iVar12 - iVar9;
     do {
-      puVar4 = puVar23;
-      puVar23 = (uint *)((int)puVar23 + 1);
-      *pbVar20 = (byte)*puVar4;
-      pbVar20 = pbVar20 + 1;
+      puVar4 = puVar19;
+      puVar19 = (uint *)((int)puVar19 + 1);
+      *pcVar16 = (char)*puVar4;
+      pcVar16 = pcVar16 + 1;
       pcVar1 = (code *)init_textFilename + unaff_BP;
       cVar2 = *pcVar1;
       *pcVar1 = (code)((char)*pcVar1 + -1);
       if (*pcVar1 == (code)0x0 || SBORROW1((char)cVar2,'\x01') != (char)*pcVar1 < '\0') {
         __vprinter_1000_0ebc();
       }
-      iVar11 = iVar11 + -1;
-    } while (iVar11 != 0);
+      iVar9 = iVar9 + -1;
+    } while (iVar9 != 0);
   }
-  if (0 < iVar15) {
+  if (0 < iVar12) {
     do {
       __vprinter_1000_0eb3();
-      iVar15 = iVar15 + -1;
-    } while (iVar15 != 0);
+      iVar12 = iVar12 + -1;
+    } while (iVar12 != 0);
   }
   goto L__vprinter_func_start_0EFC;
 }
@@ -3066,7 +3060,7 @@ L__crtinit_159A:
 
 /* WARNING: Unknown calling convention */
 
-void _FakRealCvt(void...)
+void _FakRealCvt(void)
 
 {
   code *pcVar1;

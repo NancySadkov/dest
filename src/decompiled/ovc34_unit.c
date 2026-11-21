@@ -50,7 +50,7 @@ int __cdecl16far unit_usesGUnits(int unitIndex,...)
 
 /* [R4] calls ovr_alignUp4 */
 
-void __cdecl16far unit_usesAlignUp4(void...)
+void __cdecl16far unit_usesAlignUp4(void)
 
 {
   byte bVar1;

@@ -658,8 +658,7 @@ bool __cdecl16far ovc45_textArena2(byte bldType)
    it cannot be placed (water, narrow, rank, outpost limit, walls, arena). */
 
 uint __cdecl16far
-ovc45_buildPlacementMessage
-          (uint param_1,uint param_2,int param_3,undefined2 param_4,char param_5,...)
+ovc45_buildPlacementMessage(uint param_1,uint param_2,int param_3,undefined2 param_4,char param_5)
 
 {
   long lVar1;

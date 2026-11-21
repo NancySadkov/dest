@@ -193,7 +193,7 @@ uint __cdecl16far season_checkEndGame(byte leaderIndex,...)
 
 /* Recomputes GPromotableCount by counting the units whose four map-flag words OR to 0x1000. */
 
-void __cdecl16far season_countPromotable(void...)
+void __cdecl16far season_countPromotable(void)
 
 {
   undefined4 uVar1;
@@ -233,7 +233,7 @@ void __cdecl16far season_countPromotable(void...)
 
 /* [R6] touches GPromotableCount */
 
-void __cdecl16far season_usesGPromotableCount(void...)
+void __cdecl16far season_usesGPromotableCount(void)
 
 {
   byte bVar1;
@@ -264,7 +264,7 @@ void __cdecl16far season_usesGPromotableCount(void...)
 
 /* [R6] touches GPromotableCount */
 
-int __cdecl16far season_usesGPromotableCount2(void...)
+int __cdecl16far season_usesGPromotableCount2(void)
 
 {
   byte bVar1;
@@ -289,7 +289,7 @@ int __cdecl16far season_usesGPromotableCount2(void...)
 
 /* [R6] touches Difficulty */
 
-char __cdecl16far season_usesDifficulty(void...)
+char __cdecl16far season_usesDifficulty(void)
 
 {
   int iVar1;
@@ -398,7 +398,7 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
 
 /* WARNING: Variable defined which should be unmapped: palette */
 
-void __cdecl16far updSeason(void...)
+void __cdecl16far updSeason(void)
 
 {
   far_t dst;

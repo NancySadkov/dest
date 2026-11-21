@@ -622,7 +622,7 @@ void __cdecl16far say(char *msg,...)
 
 /* clears the TextBlitCycle timestamp */
 
-void __cdecl16far resetTextBlitCycle(void...)
+void __cdecl16far resetTextBlitCycle(void)
 
 {
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = 0;

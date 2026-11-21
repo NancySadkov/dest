@@ -258,7 +258,7 @@ void __cdecl16far ovc40_usesBlitGfx10(byte backdropIndex,int scrollOffset,brect_
 
 /* Drains pending keyboard and mouse input, then clears the mouse-button flags. */
 
-void __cdecl16far ovc40_flushInput(void...)
+void __cdecl16far ovc40_flushInput(void)
 
 {
   uint16_t uVar1;

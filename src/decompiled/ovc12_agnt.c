@@ -1182,7 +1182,7 @@ void __cdecl16far agnt_usesAgntCount6(entity_t *ptr,...)
 
 /* [R4] calls ovr_fmFreeAudio */
 
-void __cdecl16far agnt_usesFmFreeAudio(void...)
+void __cdecl16far agnt_usesFmFreeAudio(void)
 
 {
   bool bVar1;
@@ -1240,7 +1240,7 @@ void __cdecl16far agnt_usesFmFreeAudio(void...)
 /* WARNING: Variable defined which should be unmapped: mouseRect */
 /* [R4] calls ovr_alignToSeg */
 
-void __cdecl16far agnt_usesAlignToSeg(void...)
+void __cdecl16far agnt_usesAlignToSeg(void)
 
 {
   far_t dst;

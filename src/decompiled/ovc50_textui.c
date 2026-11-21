@@ -72,7 +72,7 @@ void __cdecl16far ovc50_usesStshLoadGfx(byte gfxIndex)
 /* WARNING: Variable defined which should be unmapped: tabPtrs */
 /* [R4] calls ovr_uiInputText */
 
-void __cdecl16far ovc50_usesUiInputText(void...)
+void __cdecl16far ovc50_usesUiInputText(void)
 
 {
   far_t entries;

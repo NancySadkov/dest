@@ -11,7 +11,7 @@
 
 /* [R4] calls ovr_blitGfxRect */
 
-void __cdecl16far init_usesBlitGfxRect(void...)
+void __cdecl16far init_usesBlitGfxRect(void)
 
 {
   uint16_t unaff_BP;
@@ -133,7 +133,7 @@ void __cdecl16far chpath(char *path,...)
 
 /* 3381:01c8 */
 
-void __cdecl16far init_paths(void...)
+void __cdecl16far init_paths(void)
 
 {
   uint16_t full_path;
@@ -157,7 +157,7 @@ void __cdecl16far init_paths(void...)
 
 /* 3381:023c */
 
-void __cdecl16far init_cfg_mice(void...)
+void __cdecl16far init_cfg_mice(void)
 
 {
   CFG_Mice = 1;
@@ -168,7 +168,7 @@ void __cdecl16far init_cfg_mice(void...)
 
 /* 3381:024d */
 
-void __cdecl16far init_cfg(void...)
+void __cdecl16far init_cfg(void)
 
 {
   bool bVar1;
@@ -281,7 +281,7 @@ void __cdecl16far init_cfg(void...)
 
 /* 3381:0579 */
 
-void __cdecl16far init_game(void...)
+void __cdecl16far init_game(void)
 
 {
   int iVar1;
@@ -308,10 +308,10 @@ void __cdecl16far init_game(void...)
   iVar1 = strcmp((char *)CONCAT22(GExeArg.seg,GExeArg.ofs),"grab");
   if (iVar1 == 0) {
     GDebug = true;
-    ovr_init_assets(1);
+    ovr_init_assets();
   }
   else {
-    ovr_init_assets(0);
+    ovr_init_assets();
   }
   ovr_stshInit();
   StshStrongDatHnd = ovr_stshOpen(CONCAT11(uVar2,operation),0);
@@ -335,7 +335,7 @@ void __cdecl16far init_game(void...)
 
 /* Rebuilds the whole GMapFlags array from GMapCells (bits 0/1/2 per cell triple). */
 
-void __cdecl16far init_rebuildMapFlags(void...)
+void __cdecl16far init_rebuildMapFlags(void)
 
 {
   uint *puVar1;
@@ -392,7 +392,7 @@ void __cdecl16far init_rebuildMapFlags(void...)
 /* WARNING: Control flow encountered bad instruction data */
 /* [R2] string "Filename %d %s  \r" */
 
-stg_tmp_t * __cdecl16far init_textFilename(void...)
+stg_tmp_t * __cdecl16far init_textFilename(void)
 
 {
   far_t src;
@@ -1098,7 +1098,7 @@ bad_lbm:
 
 /* Initialises the 0xf8 GUnits records (bldType = index, level/unitType = 0xff). */
 
-void __cdecl16far init_initGUnits(void...)
+void __cdecl16far init_initGUnits(void)
 
 {
   int iVar1;
@@ -1159,7 +1159,7 @@ void __cdecl16far init_buffers(void)
 /* Computes the maximum square counts (GMaxSquare/GSMaxSquare) from the scale table and range-checks
    them. */
 
-void __cdecl16far init_computeMaxSquares(void...)
+void __cdecl16far init_computeMaxSquares(void)
 
 {
   far_t dst;
@@ -1386,7 +1386,7 @@ uint __cdecl16far init_usesGMapCells(int x,int y,...)
 
 /* resets EntityCount to 0 */
 
-void __cdecl16far clearEntities(void...)
+void __cdecl16far clearEntities(void)
 
 {
   EntityCount = 0;
@@ -1399,7 +1399,7 @@ void __cdecl16far clearEntities(void...)
 
 /* frees every leader sheet and the cached graphics blocks, then zeroes GLeaderCount */
 
-void __cdecl16far freeLeaderData(void...)
+void __cdecl16far freeLeaderData(void)
 
 {
   uint unaff_SI;
@@ -1458,7 +1458,7 @@ void __cdecl16far freeLeaderData(void...)
 
 /* frees the audio tracks and the leader data when the game is unloaded */
 
-void __cdecl16far freeGameResources(void...)
+void __cdecl16far freeGameResources(void)
 
 {
   uint16_t unaff_BP;
@@ -1475,7 +1475,7 @@ void __cdecl16far freeGameResources(void...)
 /* WARNING: Variable defined which should be unmapped: palette */
 /* [R4] calls clearEntities */
 
-void __cdecl16far init_usesClearEntities(void...)
+void __cdecl16far init_usesClearEntities(void)
 
 {
   uint16_t uVar1;
@@ -1823,7 +1823,7 @@ void __cdecl16far init_usesGMapFlags3(int x,int y)
 
 /* [R4] calls ovr_randBelow */
 
-void __cdecl16far init_usesRandBelow2(void...)
+void __cdecl16far init_usesRandBelow2(void)
 
 {
   uint *puVar1;
@@ -1974,7 +1974,7 @@ void __cdecl16far init_usesRandBelow2(void...)
 
 /* Rebuilds the four direction bits for every map cell. */
 
-void __cdecl16far init_rebuildAllDirectionFlags(void...)
+void __cdecl16far init_rebuildAllDirectionFlags(void)
 
 {
   uint *puVar1;
@@ -2004,7 +2004,7 @@ void __cdecl16far init_rebuildAllDirectionFlags(void...)
 
 /* 3381:2d9e */
 
-void __cdecl16far init_grayscale_palette(void...)
+void __cdecl16far init_grayscale_palette(void)
 
 {
   far_t dst;
@@ -2076,7 +2076,7 @@ void __cdecl16far init_normalizeName(uint32_t s)
 
 /* WARNING: Variable defined which should be unmapped: msg */
 
-void __cdecl16far copyProtectionCheck(void...)
+void __cdecl16far copyProtectionCheck(void)
 
 {
   far_t handle;
@@ -2104,7 +2104,7 @@ void __cdecl16far copyProtectionCheck(void...)
     while( true ) {
       if (3 < attempts) {
         if (SaveAuto != '\0') {
-          ovr_stSave(0);
+          ovr_stSave();
         }
                     /* WARNING: Subroutine does not return */
         ovr_stExit(CONCAT11(uStack_5b,msg),0);
@@ -2147,7 +2147,7 @@ void __cdecl16far copyProtectionCheck(void...)
       init_normalizeName((uint32_t)CONCAT22(in_DX,pcVar3));
       if (UserWantsExit != '\0') {
         if (SaveAuto != '\0') {
-          ovr_stSave(0);
+          ovr_stSave();
         }
                     /* WARNING: Subroutine does not return */
         ovr_stExit(CONCAT11(uStack_5b,msg),0);

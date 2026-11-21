@@ -198,7 +198,7 @@ stshSprite(far_t *__return_storage_ptr__,int16_t file_id,anm_t *anms,uint16_t na
 
 /* 4207:0462 */
 
-void __cdecl16far allocSprSeqs(void...)
+void __cdecl16far allocSprSeqs(void)
 
 {
   undefined2 in_DX;
@@ -427,7 +427,7 @@ void __cdecl16far stshInitSprites(bool grab,...)
 
 /* 4207:0b05 */
 
-void __cdecl16far agnt_clear(void...)
+void __cdecl16far agnt_clear(void)
 
 {
   if (!AgntFlag1) {
@@ -465,7 +465,7 @@ void __cdecl16far ovc15_fillGridColumn(uint vramOfs,...)
 
 /* Clears the visited byte (agnt_t+0x2d) on every agent. */
 
-void __cdecl16far ovc15_clearVisited(void...)
+void __cdecl16far ovc15_clearVisited(void)
 
 {
   int iVar1;
@@ -482,7 +482,7 @@ void __cdecl16far ovc15_clearVisited(void...)
 
 /* [R6] touches agntIndex, EntityCount */
 
-void __cdecl16far ovc15_usesAgntIndex(void...)
+void __cdecl16far ovc15_usesAgntIndex(void)
 
 {
   uint uVar1;
@@ -1550,7 +1550,7 @@ char * __cdecl16far ovc15_textArena(int owner,...)
 
 entity_t * __cdecl16far
 ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,undefined2 param_5,
-              int *param_6,int *param_7,int *param_8,int *param_9,...)
+              int *param_6,int *param_7,int *param_8,int *param_9)
 
 {
   uint8_t *puVar1;
@@ -1976,7 +1976,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
     */
 /* [R2] string "Error 4 %d \r" */
 
-uint __cdecl16far ovc15_textError(undefined4 param_1,ulong param_2,...)
+uint __cdecl16far ovc15_textError(undefined4 param_1,ulong param_2)
 
 {
   uint *puVar1;
@@ -2862,7 +2862,7 @@ L_attact_3f0b_1082_130A:
 
 /* [R4] calls ovr_alignUp4 */
 
-bool __cdecl16far ovc15_usesAlignUp42(void...)
+bool __cdecl16far ovc15_usesAlignUp42(void)
 
 {
   uint uVar1;

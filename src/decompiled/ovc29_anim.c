@@ -9,7 +9,7 @@
 
 /* 6190:0000 */
 
-void __cdecl16far animInitSeqs(void...)
+void __cdecl16far animInitSeqs(void)
 
 {
   uint unaff_SI;

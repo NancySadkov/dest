@@ -196,7 +196,7 @@ struct char_sheet_t {
     uint16_t reserved_82; /* Two-byte scratch: the ring-of-protection recompute stores 0 at 5087:... and the word from [BP-0x38] at 5087:122b (MOV word ptr ES:[BX+0x82],AX).  No instruction reads it and no table points at it. */
     byte popularity;
     byte buildType[1]; /* Building type this party's leader is placing: bldng_textBuildingNowSelect stores the value picked from the "Select type of building." list here, and callers index the bldtp_t table at 195d:010e with it (stride 0x27). */
-    byte level;
+    byte titleIndex; /* GUESS: byte at +0x86, read only by title code (manage_playerTitle 4d05:03d0/03db, manage_usesLitoa10 4d05:0c24/0c4c) and compared with 0 and 8; manage_playerTitle uses it to choose between the GPlayerTitles and GStatsLabels tables. Renamed from a second field called level, which duplicated +0x52 and does not compile.\n */
     short rank;
     byte partySlot;
     long vaultStorage;

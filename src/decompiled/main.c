@@ -37,7 +37,7 @@ int main(int argc,str_t *argv,str_t *envp)
     uVar3 = ovr_run_demo();
   } while ((uVar3 & 0xff) == 0);
   suppressLoadError = 1;
-  ovr_save_loadGameFile(0);
+  ovr_save_loadGameFile();
   suppressLoadError = 0;
   GOngoingBattle = '\0';
   GBattleMode = 0;

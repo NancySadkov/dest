@@ -11,7 +11,7 @@
 
 /* [R6] touches GLeaderCount */
 
-void __cdecl16far constrct_usesGLeaderCount(void...)
+void __cdecl16far constrct_usesGLeaderCount(void)
 
 {
   uint16_t unaff_SI;

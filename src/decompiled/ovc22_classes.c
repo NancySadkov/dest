@@ -3066,7 +3066,7 @@ uint16_t __cdecl16far ovc22_usesLUDIV_at_2(uint16_t valueLo,uint16_t valueHi,int
 
 /* [R4] calls ovr_alignUp4 */
 
-void __cdecl16far upd_usesAlignUp4(void...)
+void __cdecl16far upd_usesAlignUp4(void)
 
 {
   byte *pbVar1;
@@ -4752,7 +4752,7 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
 /* WARNING: Variable defined which should be unmapped: outFlag */
 /* Runs the per-leader random spawn chance and spawns through ovc22_usesRandBelow2. */
 
-void __cdecl16far ovc22_spawnForLeaders(void...)
+void __cdecl16far ovc22_spawnForLeaders(void)
 
 {
   uint16_t uVar1;

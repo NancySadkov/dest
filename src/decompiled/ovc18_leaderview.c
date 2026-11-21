@@ -33,7 +33,7 @@ void __cdecl16far ovc18_blitTriangles(void)
 
 /* Blits the nwpanel1Cut4 panel to the screen when GameRunning is clear. */
 
-void __cdecl16far ovc18_blitPanelIfNotRunning(void...)
+void __cdecl16far ovc18_blitPanelIfNotRunning(void)
 
 {
   uint16_t unaff_BP;
@@ -56,7 +56,7 @@ void __cdecl16far ovc18_blitPanelIfNotRunning(void...)
 
 /* Shows the "View %s." description and graphics for the leader standing on the cursor cell. */
 
-void __cdecl16far ovc18_showLeaderView(void...)
+void __cdecl16far ovc18_showLeaderView(void)
 
 {
   bool bVar1;

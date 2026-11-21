@@ -255,7 +255,7 @@ L_save_49fd_01da_0800:
 /* Loads the save slot named save.NNN: builds the filename, opens it, runs stLoad on the handle and
    closes it. */
 
-undefined1 __cdecl16far save_loadGameFile(void...)
+undefined1 __cdecl16far save_loadGameFile(void)
 
 {
   char *pcVar1;
@@ -279,7 +279,7 @@ undefined1 __cdecl16far save_loadGameFile(void...)
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Loads the save embedded in the archive at the offset recorded in the cred03Cut3 record. */
 
-undefined1 __cdecl16far save_loadArchiveGame(void...)
+undefined1 __cdecl16far save_loadArchiveGame(void)
 
 {
   int handle;
@@ -334,7 +334,7 @@ int __cdecl16far save_writeBlock(int handle,void *buf,uint16_t bufSeg,uint16_t c
 
 /* 49fd:090f */
 
-int __cdecl16far stSave(void...)
+int __cdecl16far stSave(void)
 
 {
   char *pcVar1;
@@ -498,7 +498,7 @@ L_stSave_0EE6:
 
 /* Deletes the save slot file save.NNN after the "Deleting..." prompt. */
 
-void __cdecl16far save_deleteGameFile(void...)
+void __cdecl16far save_deleteGameFile(void)
 
 {
   char *pcVar1;

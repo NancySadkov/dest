@@ -111,7 +111,7 @@ void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br,...)
 
 /* 3338:0225 */
 
-void __cdecl16far miceUpdate(void...)
+void __cdecl16far miceUpdate(void)
 
 {
   uint16_t unaff_BP;
@@ -170,7 +170,7 @@ void __cdecl16far miceBlitRect(brect_t *br,...)
 
 /* 3338:034a */
 
-void __cdecl16far miceInit(void...)
+void __cdecl16far miceInit(void)
 
 {
   uint8_t error;
@@ -228,7 +228,7 @@ byte __cdecl16far init2_usesCFGMice(uint16_t *mouseX,uint16_t *mouseY,...)
 
 /* [R1] forwards to ovr_miceButton0PressStates */
 
-void __cdecl16far ovr_miceButton0PressStates_entry(void...)
+void __cdecl16far ovr_miceButton0PressStates_entry(void)
 
 {
   rightButtonLatch = 0;
@@ -243,7 +243,7 @@ void __cdecl16far ovr_miceButton0PressStates_entry(void...)
 
 /* Latches the secondary mouse buttons into their flags and returns the primary button state. */
 
-uint __cdecl16far init2_updateMouseButtons(void...)
+uint __cdecl16far init2_updateMouseButtons(void)
 
 {
   uint16_t uVar1;
@@ -264,7 +264,7 @@ uint __cdecl16far init2_updateMouseButtons(void...)
 
 /* resets MiceProcessed to 0 */
 
-void __cdecl16far clearMiceProcessed(void...)
+void __cdecl16far clearMiceProcessed(void)
 
 {
   MiceProcessed = 0;

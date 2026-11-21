@@ -77,7 +77,7 @@ uint8_t __cdecl16far stats_compute2(agnt_t *agnt)
 
 /* Blits the full-screen stats background and the nwpanel1Cut3 panel. */
 
-void __cdecl16far stats_drawStatsPanel(void...)
+void __cdecl16far stats_drawStatsPanel(void)
 
 {
   far_t gfx;
@@ -2445,7 +2445,7 @@ bool __cdecl16far stats_selectAgentAt(uint16_t x,uint16_t y,...)
 /* WARNING: Variable defined which should be unmapped: palette */
 /* Opens the castle status panel with its palette and five menu bars. */
 
-void __cdecl16far stats_openCastlePanel(void...)
+void __cdecl16far stats_openCastlePanel(void)
 
 {
   far_t gfx;

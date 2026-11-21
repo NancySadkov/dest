@@ -60,7 +60,7 @@ heapMemmove(uint8_t *dstOfs,uint16_t dstSeg,uint8_t *srcOfs,uint16_t srcSeg,uint
 
 /* 6316:00b1 */
 
-void __cdecl16far heapInit(void...)
+void __cdecl16far heapInit(void)
 
 {
   byte *pbVar1;
@@ -325,7 +325,7 @@ far_t * __cdecl16far heapMalloc(far_t *__return_storage_ptr__,uint32_t nbytes,..
 
 /* 6316:05aa */
 
-void __cdecl16far heapValidateAll(void...)
+void __cdecl16far heapValidateAll(void)
 
 {
   uint16_t entry;

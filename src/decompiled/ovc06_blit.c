@@ -1088,7 +1088,7 @@ blit_usesStExit(far_t gfx,int x1,int y1,byte shade1,int x2,int y2,byte shade2,in
 
 /* 317e:11f0 */
 
-void __cdecl16far gfxInitRand(void...)
+void __cdecl16far gfxInitRand(void)
 
 {
   uint uVar1;

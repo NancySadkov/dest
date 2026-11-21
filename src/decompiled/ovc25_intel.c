@@ -352,7 +352,7 @@ void __cdecl16far ovc25_usesEntityCount(char partyIndex)
 
 /* Emits the spy report for a party heading towards a stronghold. */
 
-void __cdecl16far ovc25_spyReportNotice(void...)
+void __cdecl16far ovc25_spyReportNotice(void)
 
 {
   int *piVar1;

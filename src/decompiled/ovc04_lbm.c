@@ -281,29 +281,28 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
   (*(uint16_t *)((uint8_t *)&(dst))) = ovr_stshAlloc();
   (*(uint16_t *)((uint8_t *)&(remain) + 2)) = (*(uint16_t *)((uint8_t *)&(dst) + 2));
   _fmemset((void *)ZEXT24((*(uint16_t *)((uint8_t *)&(dst) + 2))),0x308,(uint16_t)unaff_DI);
-  (*(uint16_t *)((uint8_t *)&(remain))) = ovr_stshRead(fid);
+  (*(uint16_t *)((uint8_t *)&(remain))) = ovr_stshRead();
   if ((((int)remain == 0 && (*(uint16_t *)((uint8_t *)&(remain) + 2)) == (stg_tmp_t *)0x0) && (tmp.hi == uVar2)) &&
      (tmp.lo == uVar16)) {
     bVar1 = false;
-    ovr_stshRead(fid);
-    ovr_stshRead(fid);
+    ovr_stshRead();
+    ovr_stshRead();
     uVar16 = tmp.lo;
     if (((tmp.hi == uVar12) && (tmp.lo == uVar11)) || ((tmp.hi == uVar4 && (tmp.lo == uVar3)))) {
-      while (iVar13 = ovr_stshRead(fid), iVar13 == 0 && uVar16 == 0) {
+      while (iVar13 = ovr_stshRead(), iVar13 == 0 && uVar16 == 0) {
         if ((tmp.hi == uVar6) && (tmp.lo == uVar5)) {
           bVar1 = true;
           uVar16 = tmp.lo;
-          iVar13 = ovr_stshRead(fid);
-          if ((iVar13 != 0 || uVar16 != 0) ||
-             (((puVar15 = ovr_be4(), uVar16 != 0 ||
-               (puVar15 != (uint32_t *)((byte *)__C0_ASM_CopyRight + 0x10))) ||
-              (iVar13 = ovr_stshRead(fid), iVar13 != 0 || uVar16 != 0)))) break;
+          iVar13 = ovr_stshRead();
+          if ((((iVar13 != 0 || uVar16 != 0) || (puVar15 = ovr_be4(), uVar16 != 0)) ||
+              (puVar15 != (uint32_t *)((byte *)__C0_ASM_CopyRight + 0x10))) ||
+             (iVar13 = ovr_stshRead(), iVar13 != 0 || uVar16 != 0)) break;
           w = ovr_be2((uint16_t)unaff_DI,hd.w);
           h = ovr_be2((uint16_t)unaff_DI,hd.h);
         }
         else if ((tmp.hi == uVar10) && (tmp.lo == uVar9)) {
           (*(uint16_t *)((uint8_t *)&(cmszB) + 2)) = tmp.lo;
-          ovr_stshRead(fid);
+          ovr_stshRead();
           (*(uint16_t *)((uint8_t *)&(cmszB))) = ovr_be4();
           (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint32_t *)cmszB;
           (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = (*(uint16_t *)((uint8_t *)&(cmszB) + 2));
@@ -315,11 +314,11 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
              (((*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) == 0 && ((uint32_t *)chnk_sz < (char *)"Error 4 %d \r" + 0xb)))) {
             if ((-1 < (int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2))) &&
                ((0 < (int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) || ((uint32_t *)chnk_sz != (uint32_t *)0x0)))) {
-              ovr_stshRead(fid);
+              ovr_stshRead();
             }
           }
           else {
-            ovr_stshRead(fid);
+            ovr_stshRead();
             if ((-1 < (int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2))) &&
                ((0 < (int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) || ((char *)"Error 4 %d \r" + 0xb < (uint32_t *)chnk_sz))))
             {
@@ -343,16 +342,10 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
         else {
           if ((tmp.hi == uVar8) && (tmp.lo == uVar7)) {
             if (bVar1) {
-              ovr_stshRead(fid);
+              ovr_stshRead();
               puVar15 = ovr_be4();
-              (*(uint16_t *)((uint8_t *)&(chnk_sz))) = puVar15;
-              (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = tmp.lo;
-              if (((uint)puVar15 & 1) != 0) {
-                (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint32_t *)((int)puVar15 + 1);
-                (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = tmp.lo + ((uint32_t *)0xfffe < puVar15);
-              }
               pvVar14 = ovr_stshAlloc();
-              ovr_stshRead(fid,pvVar14,puVar15,(uint32_t *)chnk_sz,(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)));
+              ovr_stshRead();
               ovr_stshClose((uint16_t)unaff_DI,fid);
               src.seg = (uint16_t)(stg_tmp_t *)dst;
               src.ofs = (uint16_t)puVar15;
@@ -364,7 +357,7 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
             break;
           }
           (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = tmp.lo;
-          ovr_stshRead(fid);
+          ovr_stshRead();
           (*(uint16_t *)((uint8_t *)&(chnk_sz))) = ovr_be4();
           if (((uint)(uint32_t *)chnk_sz & 1) != 0) {
             bVar17 = (uint32_t *)0xfffe < (uint32_t *)chnk_sz;
