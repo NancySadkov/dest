@@ -8,15 +8,6 @@
 
 
 /* 1403:000d */
-
-/* WARNING: Removing unreachable block (ram,0x000140eb) */
-/* WARNING: Removing unreachable block (ram,0x000140fa) */
-/* WARNING: Removing unreachable block (ram,0x0001414b) */
-/* WARNING: Removing unreachable block (ram,0x00014158) */
-/* WARNING: Removing unreachable block (ram,0x00014145) */
-/* WARNING: Removing unreachable block (ram,0x000140f2) */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 undefined2 __stdcall16far __OVRINIT(void)
 
 {
@@ -28,7 +19,7 @@ undefined2 __stdcall16far __OVRINIT(void)
   uint in_stack_00000006;
   int iStack_16;
   
-  uVar2 = startx;
+  uVar2 = (uint)startx;   /* hand fix: startx is a function */
   bVar3 = false;
   if (*(int *)((int)&GUnitDescriptions[9].ofs + 1) == 0) {
     uVar2 = 0;
@@ -57,7 +48,6 @@ undefined2 __stdcall16far __OVRINIT(void)
   }
   return uVar2;
 }
-
 
 
 /* 1403:013d */
@@ -96,16 +86,13 @@ void __cdecl16far __OvrResetInterruptVector(void)
 
 
 /* 1403:0190 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 void __cdecl16far __OVREXIT(void)
 
 {
   undefined2 uVar1;
   undefined2 uVar2;
   
-  uVar1 = startx;
+  uVar1 = (uint)startx;   /* hand fix: startx is a function */
   uVar2 = 0x2410;
   if (*(int *)((int)&GUnitDescriptions[0xf].ofs + 1) != 0) {
     __OvrResetInterruptVector();
@@ -114,7 +101,6 @@ void __cdecl16far __OVREXIT(void)
   (*(code *)*(undefined2 *)&__CALLEXTEXIT)(0x1000);
   return;
 }
-
 
 
 /* 1403:01b2 */
@@ -666,9 +652,6 @@ void __cdecl16near __OvrFixupTrap(void)
 
 
 /* 1403:061c */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 void __cdecl16near __OvrAllocEvict(void)
 
 {
@@ -676,13 +659,12 @@ void __cdecl16near __OvrAllocEvict(void)
   
   __OvrTrapJmpsAndStack();
   if (*(int *)((byte *)__C0_ASM_CopyRight + 0x14) == 0x4c3) {
-    (*ram0x00024180)();
+    (*(code **)&ram0x00024180)();
   }
   ((byte *)__C0_ASM_CopyRight + 0xc)[0] = 0;
   ((byte *)__C0_ASM_CopyRight + 0xc)[1] = 0;
   return;
 }
-
 
 
 /* 1403:0634 */
@@ -1056,9 +1038,6 @@ void __cdecl16far __CHECKSTACK(void)
 
 
 /* 1403:08e8 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 int __cdecl16far _OvrInitEms(uint16_t emsHandle,uint16_t firstPage,uint16_t pages)
 
 {
@@ -1069,7 +1048,7 @@ int __cdecl16far _OvrInitEms(uint16_t emsHandle,uint16_t firstPage,uint16_t page
   uint16_t uVar5;
   undefined2 uVar6;
   
-  uVar3 = startx;
+  uVar3 = (uint)startx;   /* hand fix: startx is a function */
   if ((((byte *)__C0_ASM_CopyRight)[0xc] & 1) == 0) {
     if (emsHandle == 0) {
       uVar4 = __INITEMS();
@@ -1124,11 +1103,7 @@ int __cdecl16far _OvrInitEms(uint16_t emsHandle,uint16_t firstPage,uint16_t page
 }
 
 
-
 /* 1403:09c8 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 void __cdecl16near OVRSWAP_1403_09c8(void)
 
 {
@@ -1153,7 +1128,7 @@ void __cdecl16near OVRSWAP_1403_09c8(void)
   if ((bool)in_CF) {
     return;
   }
-  (*ram0x00024186)(0x1403,in_DX,in_CX,in_BX,uVar5);
+  (*(code **)&ram0x00024186)(0x1403,in_DX,in_CX,in_BX,uVar5);
   puVar8 = (undefined1 *)(undefined1 *)(CONCAT22(in_CX,in_BX) % 0x4000);
   pcVar3 = (code *)swi(0x67);
   iVar6 = (*pcVar3)();
@@ -1191,7 +1166,6 @@ L_OVRSWAP_1403_09c8_0A34:
   __OverlayHalt();
   return;
 }
-
 
 
 /* 1403:0a48 */
@@ -1254,9 +1228,6 @@ void __cdecl16near OVRSWAP_1403_0a48(void)
 
 
 /* 1403:0ab2 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 int __cdecl16far _OvrInitExt(uint32_t startAddress,uint32_t length)
 
 {
@@ -1267,7 +1238,7 @@ int __cdecl16far _OvrInitExt(uint32_t startAddress,uint32_t length)
   int in_DX;
   uint sizeHi;
   
-  uVar2 = startx;
+  uVar2 = (uint)startx;   /* hand fix: startx is a function */
   if ((*(byte *)&OvrFlags & 2) == 0) {
     bVar1 = false;
     iVar3 = __INITEXT();
@@ -1337,11 +1308,7 @@ L__OvrInitExt_0AD7:
 }
 
 
-
 /* 1403:0bcc */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 void __cdecl16near OVRSWAP_1403_0bcc(void)
 
 {
@@ -1356,7 +1323,7 @@ void __cdecl16near OVRSWAP_1403_0bcc(void)
   uVar1 = 0x2270;
   OVRSWAP_1403_0c2b();
   if (!(bool)in_CF) {
-    (*ram0x00024186)(0x1403,in_DX,in_CX,in_BX,uVar1);
+    (*(code **)&ram0x00024186)(0x1403,in_DX,in_CX,in_BX,uVar1);
     bVar2 = (int)((ulong)*(uint *)((byte *)__C0_ASM_CopyRight + 0xc) * 0x10 >> 0x10) != 0;
     __EXTCOPY();
     if (bVar2) {
@@ -1366,7 +1333,6 @@ void __cdecl16near OVRSWAP_1403_0bcc(void)
   }
   return;
 }
-
 
 
 /* 1403:0bfb */
@@ -1570,9 +1536,6 @@ void __cdecl16far __OvrPrepare(void)
 
 
 /* 1403:0d88 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 int __cdecl16far __INITEMS(void)
 
 {
@@ -1625,7 +1588,7 @@ int __cdecl16far __INITEMS(void)
     (*pcVar1)();
   }
   else {
-    unaff_SI = startx;
+    unaff_SI = (uint)startx;   /* hand fix: startx is a function */
     if ((((char *)"Divide error\r\n")[9] & 2U) != 0) {
       return *(int *)((char *)"Divide error\r\n" + 7);
     }
@@ -1645,11 +1608,7 @@ L__INITEMS_0E2A:
 }
 
 
-
 /* 1403:0e3a */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 uint16_t __stdcall16far __INITEMSPAGE(uint16_t pageCount,uint16_t frameSeg,uint16_t handle)
 
 {
@@ -1660,7 +1619,7 @@ uint16_t __stdcall16far __INITEMSPAGE(uint16_t pageCount,uint16_t frameSeg,uint1
   undefined1 extraout_AH_01;
   uint16_t extraout_DX;
   
-  uVar2 = startx;
+  uVar2 = (uint)startx;   /* hand fix: startx is a function */
   if ((((char *)"Divide error\r\n")[9] & 1U) != 0) {
     if ((((char *)"Divide error\r\n")[9] & 2U) != 0) {
       return 0;
@@ -1690,18 +1649,14 @@ uint16_t __stdcall16far __INITEMSPAGE(uint16_t pageCount,uint16_t frameSeg,uint1
 }
 
 
-
 /* 1403:0e9f */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 void __cdecl16far __EXITEMS(void)
 
 {
   code *pcVar1;
   undefined2 uVar2;
   
-  uVar2 = startx;
+  uVar2 = (uint)startx;   /* hand fix: startx is a function */
   if (((((char *)"Divide error\r\n")[9] & 4U) != 0) &&
      (*(int *)((char *)"Divide error\r\n" + 3) != -1)) {
     pcVar1 = (code *)swi(0x67);
@@ -1714,11 +1669,7 @@ void __cdecl16far __EXITEMS(void)
 }
 
 
-
 /* 1403:0eca */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 int __cdecl16far __INITEXT(void)
 
 {
@@ -1746,7 +1697,7 @@ int __cdecl16far __INITEXT(void)
   uint uStack_17;
   uint uStack_f;
   
-  uVar7 = startx;
+  uVar7 = (uint)startx;   /* hand fix: startx is a function */
   if ((((char *)"Abnormal program termination\r\n")[5] & 1U) == 0) {
     ((char *)"Abnormal program termination\r\n")[5] = '\x01';
 L__INITEXT_0EEC:
@@ -1760,8 +1711,8 @@ L__INITEXT_0EEC:
     ((char *)"Abnormal program termination\r\n" + 3)[1] = '\0';
     pcVar5 = (code *)swi(0x21);
     uVar9 = (*pcVar5)();
-    if (((((byte)uVar9 < 10) && (data_mem_FFFE < 0xfd)) && (data_mem_FFFE != 0xfb)) &&
-       (data_mem_FFFE != 0xf9)) {
+    if (((((byte)uVar9 < 10) && ((*(byte *)0xFFFE) < 0xfd)) && ((*(byte *)0xFFFE) != 0xfb)) &&
+       ((*(byte *)0xFFFE) != 0xf9)) {
       if (0x30 < CONCAT11((byte)uVar9,(char)((uint)uVar9 >> 8))) {
         pcVar5 = (code *)swi(0x2f);
         cVar8 = (*pcVar5)();
@@ -1875,11 +1826,7 @@ L__INITEXT_105D:
 }
 
 
-
 /* 1403:107a */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 undefined2 __stdcall16far __INITEXTMEM(uint sizeLo,int sizeHi,uint baseLo,int baseHi)
 
 {
@@ -1889,7 +1836,7 @@ undefined2 __stdcall16far __INITEXTMEM(uint sizeLo,int sizeHi,uint baseLo,int ba
   uint uVar4;
   undefined4 uVar5;
   
-  uVar1 = startx;
+  uVar1 = (uint)startx;   /* hand fix: startx is a function */
   if ((((char *)"Abnormal program termination\r\n")[5] & 1U) != 0) {
     if ((((char *)"Abnormal program termination\r\n")[5] & 2U) != 0) {
       return 0;
@@ -1936,17 +1883,13 @@ L__INITEXTMEM_113B:
 }
 
 
-
 /* 1403:1152 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 void __cdecl16far __EXITEXT(void)
 
 {
   undefined2 uVar1;
   
-  uVar1 = startx;
+  uVar1 = (uint)startx;   /* hand fix: startx is a function */
   if (((char *)"Abnormal program termination\r\n")[5] != '\0') {
     if (*(int *)((char *)"Abnormal program termination\r\n" + 10) == 0) {
       if (iRam00000066 == 0x2272) {
@@ -1964,11 +1907,7 @@ void __cdecl16far __EXITEXT(void)
 }
 
 
-
 /* 1403:11a6 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 int __cdecl16near __EXTCOPY(void)
 
 {
@@ -1986,7 +1925,7 @@ int __cdecl16near __EXTCOPY(void)
   bool bVar6;
   byte bVar7;
   
-  uVar2 = startx;
+  uVar2 = (uint)startx;   /* hand fix: startx is a function */
   if (*(int *)((char *)"Abnormal program termination\r\n" + 10) == 0) {
     bVar7 = false;
     ((far_t *)(GSTARTX_SavedVectors + 1))->ofs = in_AX;
@@ -2039,7 +1978,6 @@ int __cdecl16near __EXTCOPY(void)
   }
   return -(uint)bVar7;
 }
-
 
 
 /* 1403:1253 */
