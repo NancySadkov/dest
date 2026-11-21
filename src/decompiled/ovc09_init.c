@@ -989,29 +989,24 @@ switchD_3000_4a6e_caseD_3:
               (*(uint8_t *)((uint8_t *)&(gfx.seg))) =
                    (char)*(undefined2 *)
                           ((char *)
-                           "You may raise a primary ability by trading two points of another ability. Select ability to increase."
-                           + 0x34 + uStack_e * 0xc);
+                           (char *)0x4dd6 + uStack_e * 0xc);
               gfx.ofs = *(undefined2 *)
                          ((char *)
-                          "You may raise a primary ability by trading two points of another ability. Select ability to increase."
-                          + 0x32 + uStack_e * 0xc);
+                          (char *)0x4dd4 + uStack_e * 0xc);
               (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) =
                    (char)((uint)*(undefined2 *)
                                  ((char *)
-                                  "You may raise a primary ability by trading two points of another ability. Select ability to increase."
-                                  + 0x34 + uStack_e * 0xc) >> 8);
+                                  (char *)0x4dd6 + uStack_e * 0xc) >> 8);
               ovr_blit_usesBlitGfxN
                         (gfx,((uint16_t *)SquareLeftX)[uVar7],rowBandOrigin[0] - uStack_10,6);
             }
             if ((*(byte *)((uint8_t *)&BuildingTypes[uStack_e] + 16) & 1) != 0) {
               gfx_00.seg = *(uint16_t *)
                             ((char *)
-                             "You may raise a primary ability by trading two points of another ability. Select ability to increase."
-                             + 0x38 + uStack_e * 0xc);
+                             (char *)0x4dda + uStack_e * 0xc);
               gfx_00.ofs = *(uint16_t *)
                             ((char *)
-                             "You may raise a primary ability by trading two points of another ability. Select ability to increase."
-                             + 0x36 + uStack_e * 0xc);
+                             (char *)0x4dd8 + uStack_e * 0xc);
               ovr_blitGfxRect(gfx_00,((uint16_t *)SquareLeftX)[uVar7]);
             }
           }
@@ -1083,7 +1078,7 @@ bad_lbm:
       puStack_26 = (uint32_t *)((int)puStack_2a + 1);
       uStack_24 = uVar17 + ((uint32_t *)0xfffe < puStack_2a);
     }
-    if (((int)uStack_24 < 0) || ((uStack_24 == 0 && (puStack_26 < (char *)"Error 4 %d \r" + 0xb))))
+    if (((int)uStack_24 < 0) || ((uStack_24 == 0 && (puStack_26 < (char *)0x300))))
     {
       if ((-1 < (int)uStack_24) && ((0 < (int)uStack_24 || (puStack_26 != (uint32_t *)0x0)))) {
         ovr_stshRead();
@@ -1092,7 +1087,7 @@ bad_lbm:
     else {
       ovr_stshRead();
       if ((-1 < (int)uStack_24) &&
-         ((0 < (int)uStack_24 || ((char *)"Error 4 %d \r" + 0xb < puStack_26)))) {
+         ((0 < (int)uStack_24 || ((char *)0x300 < puStack_26)))) {
         ovr_stshTell(__return_storage_ptr__,unaff_SI);
         ovr_stshSeek((uint16_t)__return_storage_ptr__);
       }
@@ -1101,8 +1096,8 @@ bad_lbm:
     while( true ) {
       if ((0 < (int)uStack_28) ||
          ((puVar5 = puStack_2a, uVar17 = uStack_28, uStack_28 == 0 &&
-          ((char *)"Error 4 %d \r" + 0xb < puStack_2a)))) {
-        puVar5 = (uint32_t *)((char *)"Error 4 %d \r" + 0xb);
+          ((char *)0x300 < puStack_2a)))) {
+        puVar5 = (uint32_t *)((char *)0x300);
         uVar17 = 0;
       }
       if (((int)uVar17 < 1) && ((uVar17 != 0 || (puVar5 <= puVar6)))) break;

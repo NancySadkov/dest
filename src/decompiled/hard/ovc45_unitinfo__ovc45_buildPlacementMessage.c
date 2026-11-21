@@ -468,24 +468,24 @@ ovc45_buildPlacementMessage
         if (*(char *)((uint)bStack_12 * 0x27 + 0x11e) == '\0') goto L_OVC45_77eb_0d61_1379;
       }
       uVar26 = uVar28;
-      in_stack_0000fc0e = (long *)((char *)"puppetmaker" + 3);
+      in_stack_0000fc0e = (long *)((char *)0x2410);
       in_stack_0000fc0c = 0x85;
       in_stack_0000fc0d = 0x76;
       uStack_c = (stg_tmp_t *)CONCAT31(stack0xfff5,1);
       iVar10 = 1;
     }
 L_OVC45_77eb_0d61_1379:
-    *(char **)(&stack0xfc0e + iVar10 * 4) = (char *)"puppetmaker" + 3;
+    *(char **)(&stack0xfc0e + iVar10 * 4) = (char *)0x2410;
     *(char **)(&stack0xfc0c + iVar10 * 4) = (char *)"Change Building";
     *(undefined1 *)((int)&uStack_c + iVar10) = 2;
     iVar18 = iVar10 + 1;
     if (param_5 != '\0') {
-      *(char **)(&stack0xfc0e + iVar18 * 4) = (char *)"puppetmaker" + 3;
+      *(char **)(&stack0xfc0e + iVar18 * 4) = (char *)0x2410;
       *(char **)(&stack0xfc0c + iVar18 * 4) = (char *)"Change Party";
       *(undefined1 *)((int)&uStack_c + iVar10 + 1) = 3;
       iVar18 = iVar10 + 2;
     }
-    *(char **)(&stack0xfc0e + iVar18 * 4) = (char *)"puppetmaker" + 3;
+    *(char **)(&stack0xfc0e + iVar18 * 4) = (char *)0x2410;
     *(char **)(&stack0xfc0c + iVar18 * 4) = (char *)"Done";
     *(undefined1 *)((int)&uStack_c + iVar18) = 4;
     uVar19 = iVar18 + 1;

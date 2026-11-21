@@ -938,8 +938,8 @@ L_OVC22_5087_0234_323C:
                        ^ uVar23;
               puVar3 = (uint *)((int)unaff_DI + uVar32 + 0xa231);
               *puVar3 = *puVar3 ^ uVar48;
-              *(uint *)((char *)"%s: %s %d gold. Provides housing for %d %s." + 3 + uVar32) =
-                   *(uint *)((char *)"%s: %s %d gold. Provides housing for %d %s." + 3 + uVar32) ^
+              *(uint *)((char *)0x7ff5 + uVar32) =
+                   *(uint *)((char *)0x7ff5 + uVar32) ^
                    uVar22;
               puVar3 = (uint *)(uVar33 + uVar48 + 0x31);
               *puVar3 = *puVar3 ^ (uint)unaff_DI;

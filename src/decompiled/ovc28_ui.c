@@ -183,7 +183,7 @@ void __cdecl16far ovc28_textHalflingCastle(void)
         }
         term = 0x3f;
         puVar2 = (undefined2 *)((uint)((uint8_t *)MenuItemEnabled)[iVar5] * 4);
-        pbVar4 = (byte *)((char *)"halfling castle" + 0xc);
+        pbVar4 = (byte *)((char *)0x217a);
         uVar6 = Font03.ofs;
         seg = Font03.seg;
         iVar3 = ovr_ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar2,unaff_SS),

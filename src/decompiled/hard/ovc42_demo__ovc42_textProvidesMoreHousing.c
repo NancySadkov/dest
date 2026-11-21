@@ -25,7 +25,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
         return (char *)((int)&GUnitDescriptions[5].seg + 1);
       }
       if (uVar2 == 0x1c0d) {
-        return (char *)"%s: provides more housing." + 0x17;
+        return (char *)0x1c01;
       }
     }
     uVar3 = ovr_init2_updateMouseButtons();
@@ -33,7 +33,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
       if (rightButtonLatch != '\0') {
         return (char *)"woodcarver";
       }
-      return (char *)"arena" + 5;
+      return (char *)0x2401;
     }
     prevTick = CONCAT22(uVar6,uVar1);
     puVar4 = ovr_attact_usesBDADailyTimeCounter(__return_storage_ptr__,prevTick);

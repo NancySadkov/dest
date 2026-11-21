@@ -36,16 +36,16 @@ L__OvrInitExt_0AD7:
           sizeLo = (uint)length;
           sizeHi = (*(uint16_t *)((uint8_t *)&(length) + 2));
         }
-        if ((*(uint *)((char *)"Your may continue playing, but your score will not be recorded." + 9
+        if ((*(uint *)((char *)0x69e4
                       ) <= sizeHi) &&
-           ((*(uint *)((char *)"Your may continue playing, but your score will not be recorded." + 9
+           ((*(uint *)((char *)0x69e4
                       ) < sizeHi ||
-            (*(uint *)((char *)"Your may continue playing, but your score will not be recorded." + 7
+            (*(uint *)((char *)0x69e2
                       ) < sizeLo)))) {
           sizeHi = *(uint *)((char *)
-                             "Your may continue playing, but your score will not be recorded." + 9);
+                             (char *)0x69e4);
           sizeLo = *(uint *)((char *)
-                             "Your may continue playing, but your score will not be recorded." + 7);
+                             (char *)0x69e2);
         }
         length = CONCAT22(sizeHi,sizeLo);
         if ((sizeHi == 0) && (sizeLo >> 4 < *(uint *)&__OvrMinHeapSize)) goto L__OvrInitExt_0AD7;

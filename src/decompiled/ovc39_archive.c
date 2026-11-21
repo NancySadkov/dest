@@ -155,7 +155,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex,...)
           pcVar4 = (char *)0x2410;
           bStack_a = puVar5[iVar2].unitType;
           if ((((bStack_b == 0) &&
-               (pcVar4 = (char *)"halfling castle" + 0xc,
+               (pcVar4 = (char *)0x217a,
                *(char *)((int)*(undefined4 *)((uint)bStack_a << 2) + 0x3f) == '\0')) &&
               (0xf7 < iVar2)) && (pcVar4 = (char *)0x2410, puVar5[iVar2].level < 8)) {
             pcVar4 = (char *)&AgntAnms[0x88].missileDy;
@@ -370,18 +370,18 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex,...)
     else {
       bStack_e = 0;
     }
-    pcVar4 = (char *)"halfling castle" + 0xc;
+    pcVar4 = (char *)0x217a;
     if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
         (uint)(*(int *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d) << 1)) {
       pcVar4 = (char *)((uint)partyIndex << 2);
       if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
           *(uint *)((int)*(undefined4 *)pcVar4 + 0x4d)) {
-        pcVar4 = (char *)"halfling castle" + 0xc;
+        pcVar4 = (char *)0x217a;
         if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
             *(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d) >> 1) {
-          pcVar4 = (char *)"halfling castle" + 0xc;
+          pcVar4 = (char *)0x217a;
           if (*(int *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) < 0) {
-            pcVar4 = (char *)"halfling castle" + 0xc;
+            pcVar4 = (char *)0x217a;
             if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
                 (uint)-*(int *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x4d)) {
               bStack_d = 5;

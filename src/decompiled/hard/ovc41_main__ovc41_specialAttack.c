@@ -90,7 +90,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
                 pcVar7 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex));
                 puVar8 = ovr_ovc15_usesStshRealloc(pcVar7,uVar10,uVar12,uVar15,uVar16);
                 pcVar7 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x70b5,unaff_SS),
-                                       (char *)CONCAT22(puVar8,(char *)"puppetmaker" + 3),uVar10);
+                                       (char *)CONCAT22(puVar8,(char *)0x2410),uVar10);
                 ovr_uiNotify(pcVar7,uVar10,(char)uVar10);
                 uVar9 = ovr_audio_panFromX(agnt,uVar13);
                 ovr_play_sfxU(0x55,0,uVar9,0,(char)uVar9);
@@ -113,7 +113,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
                   pcVar7 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex));
                   puVar8 = ovr_ovc15_usesStshRealloc(pcVar7,uVar10,uVar13,uVar14,uVar12);
                   pcVar7 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x70c4,unaff_SS),
-                                         (char *)CONCAT22(puVar8,(char *)"puppetmaker" + 3),uVar10);
+                                         (char *)CONCAT22(puVar8,(char *)0x2410),uVar10);
                   ovr_uiNotify(pcVar7,uVar10,(char)uVar10);
                   uVar9 = ovr_audio_panFromX((agnt_t *)uStack_8,(char)((ulong)uStack_8 >> 0x10));
                   ovr_play_sfxU(5,0,uVar9,0,(char)uVar9);
@@ -139,7 +139,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
                   pcVar7 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex));
                   puVar8 = ovr_ovc15_usesStshRealloc(pcVar7,uVar10,uVar14,uVar12,uVar13);
                   pcVar7 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x7107,unaff_SS),
-                                         (char *)CONCAT22(puVar8,(char *)"puppetmaker" + 3),uVar10);
+                                         (char *)CONCAT22(puVar8,(char *)0x2410),uVar10);
                   ovr_uiNotify(pcVar7,uVar10,(char)uVar10);
                 }
                 else {
@@ -152,7 +152,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
                   pcVar7 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex));
                   puVar8 = ovr_ovc15_usesStshRealloc(pcVar7,uVar10,uVar14,uVar12,uVar13);
                   pcVar7 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x70ec,unaff_SS),
-                                         (char *)CONCAT22(puVar8,(char *)"puppetmaker" + 3),uVar10);
+                                         (char *)CONCAT22(puVar8,(char *)0x2410),uVar10);
                   ovr_uiNotify(pcVar7,uVar10,(char)uVar10);
                 }
               }
@@ -173,7 +173,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
                   pcVar7 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex));
                   puVar8 = ovr_ovc15_usesStshRealloc(pcVar7,uVar10,uVar14,uVar12,uVar13);
                   pcVar7 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x7107,unaff_SS),
-                                         (char *)CONCAT22(puVar8,(char *)"puppetmaker" + 3),uVar10);
+                                         (char *)CONCAT22(puVar8,(char *)0x2410),uVar10);
                   ovr_uiNotify(pcVar7,uVar10,(char)uVar10);
                 }
                 else {
@@ -186,7 +186,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
                   pcVar7 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex));
                   puVar8 = ovr_ovc15_usesStshRealloc(pcVar7,uVar10,uVar14,uVar12,uVar13);
                   pcVar7 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x7125,unaff_SS),
-                                         (char *)CONCAT22(puVar8,(char *)"puppetmaker" + 3),uVar10);
+                                         (char *)CONCAT22(puVar8,(char *)0x2410),uVar10);
                   ovr_uiNotify(pcVar7,uVar10,(char)uVar10);
                 }
               }

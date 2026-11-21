@@ -870,9 +870,9 @@ void __cdecl16far ovc23_textBuildThfres01Lbm(far_t dst,...)
     if ((-3 < (int)play_id) && ((int)play_id < 2)) {
       bVar2 = ovr_constr_setHighlightAtOffset(play_id,0);
       iVar3 = CONCAT11(extraout_AH,bVar2);
-      if (((char *)"build\\thfres01.lbm" + 0x10)[iVar3 * 3 + *(int *)(uVar5 * 2)] != '\0') {
+      if (((char *)0x3f48)[iVar3 * 3 + *(int *)(uVar5 * 2)] != '\0') {
         iVar4 = ovc23_usesCornerBR(play_id,iVar3);
-        ovr_animAdvance(play_id,((char *)"build\\thfres01.lbm" + 0x10)
+        ovr_animAdvance(play_id,((char *)0x3f48)
                                 [iVar3 * 3 + *(int *)(uVar5 * 2)],*(uint16_t *)(&mapSquareLeftX[uVar5]),
                         (uint)bandOrigin[0] - iVar4,dst);
         bVar1 = true;
@@ -1563,9 +1563,9 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
     puVar3 = (uint *)(&puVar24->bldType + unitIndex);
     *puVar3 = *puVar3 >> 7 | *puVar3 << 9;
     *(uint *)(&puVar24->timer +
-             (int)((char *)"%s: Costs %d gold of income and provides storage for %u food." + x)) =
+             (int)((char *)0x7f01 + x)) =
          *(uint *)(&puVar24->timer +
-                  (int)((char *)"%s: Costs %d gold of income and provides storage for %u food." + x)
+                  (int)((char *)0x7f01 + x)
                   ) | (uint)&stack0xfff8;
     *(uint *)(&puVar24[1].bldType + x) = *(uint *)(&puVar24[1].bldType + x) | (uint)&stack0xfffe;
     AgntAnms[0x7d].x = AgntAnms[0x7d].x | (uint)&stack0xfff8;
@@ -2164,14 +2164,14 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
             in_stack_00000000 = (brect_t *)((ulong)in_stack_00000000 & 0xffff0000);
             bVar22 = ovr_constr_setHighlightAtOffset(play_id,0);
             iVar28 = CONCAT11(extraout_AH,bVar22);
-            if (((char *)"build\\thfres01.lbm" + 0x10)[iVar28 * 3 + *(int *)((int)puVar35 * 2)] !=
+            if (((char *)0x3f48)[iVar28 * 3 + *(int *)((int)puVar35 * 2)] !=
                 '\0') {
               uVar18 = (uint)((ulong)in_stack_00000000 >> 0x10);
               iVar17 = ovc23_usesCornerBR(play_id,iVar28);
               dst.seg = (uint16_t)seg;
               dst.ofs = (uint16_t)ofs;
               in_stack_00000000 = (brect_t *)((ulong)uVar18 << 0x10);
-              ovr_animAdvance(play_id,((char *)"build\\thfres01.lbm" + 0x10)
+              ovr_animAdvance(play_id,((char *)0x3f48)
                                       [iVar28 * 3 + *(int *)((int)puVar35 * 2)],
                               *(uint16_t *)((int)puVar35 * 2 + 0xa20),(uint)bandOrigin[0] - iVar17,
                               dst);

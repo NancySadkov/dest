@@ -79,14 +79,14 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex,...)
       capTextSeg[sVar4 - 1] = 0x0;
       if ((GHighScoreSaved == '\0') &&
          ((((1 < PlayerIndex &&
-            (capTextSeg = (uint8_t *)((char *)"halfling castle" + 0xc),
+            (capTextSeg = (uint8_t *)((char *)0x217a),
             *(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\x02')) &&
            (bVar2 = season_textMainCastle(), bVar2)) ||
-          ((capTextSeg = (uint8_t *)((char *)"halfling castle" + 0xc),
+          ((capTextSeg = (uint8_t *)((char *)0x217a),
            8 < *(byte *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x86) &&
-           ((capTextSeg = (uint8_t *)((char *)"halfling castle" + 0xc),
+           ((capTextSeg = (uint8_t *)((char *)0x217a),
             *(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\0' ||
-            ((capTextSeg = (uint8_t *)((char *)"halfling castle" + 0xc),
+            ((capTextSeg = (uint8_t *)((char *)0x217a),
              *(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x33) == '\x01' &&
              (bVar2 = season_textMainCastle(), bVar2)))))))))) {
         cStack_4 = '\x01';

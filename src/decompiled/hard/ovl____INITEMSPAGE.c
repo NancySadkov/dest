@@ -14,8 +14,8 @@ uint16_t __stdcall16far __INITEMSPAGE(uint16_t pageCount,uint16_t frameSeg,uint1
       return 0;
     }
     ((char *)"Divide error\r\n")[9] = ((char *)"Divide error\r\n")[9] | 2;
-    *(uint16_t *)((char *)"Divide error\r\n" + 5) = frameSeg;
-    *(uint16_t *)((char *)"Divide error\r\n" + 7) = pageCount;
+    *(uint16_t *)((char *)0x34) = frameSeg;
+    *(uint16_t *)((char *)0x36) = pageCount;
     if (handle == 0) {
       pcVar1 = (code *)swi(0x67);
       (*pcVar1)();
@@ -25,7 +25,7 @@ uint16_t __stdcall16far __INITEMSPAGE(uint16_t pageCount,uint16_t frameSeg,uint1
       ((char *)"Divide error\r\n")[9] = ((char *)"Divide error\r\n")[9] | 4;
       handle = extraout_DX;
     }
-    *(uint16_t *)((char *)"Divide error\r\n" + 3) = handle;
+    *(uint16_t *)((char *)0x32) = handle;
     pcVar1 = (code *)swi(0x67);
     (*pcVar1)();
     if (extraout_AH_00 == '\0') {

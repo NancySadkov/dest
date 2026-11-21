@@ -1330,7 +1330,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
       cVar3 = 'V';
       puVar9 = (undefined2 *)
                ((uint)*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) * 4);
-      in_DX = (uint8_t *)((char *)"halfling castle" + 0xc);
+      in_DX = (uint8_t *)((char *)0x217a);
       uVar19 = Font02.ofs;
       uVar20 = uVar14;
       uVar22 = uVar16;
@@ -1349,7 +1349,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
       cVar3 = 'V';
       puVar9 = (undefined2 *)
                ((uint)*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) * 4);
-      in_DX = (uint8_t *)((char *)"halfling castle" + 0xc);
+      in_DX = (uint8_t *)((char *)0x217a);
       uVar19 = Font02.ofs;
       uVar20 = uVar14;
       uVar22 = uVar16;
@@ -1428,7 +1428,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
     TextBlitX = 0x87;
     piVar8 = (int *)((uint)(byte)((agntG_t *)agnt->gdata)->shortName[3] * 0x94 +
                     (uint)(((entity_t *)agnt->entity)->base).level * 4);
-    puVar11 = (uint8_t *)((char *)"sturdy e/w wall" + 0xf);
+    puVar11 = (uint8_t *)((char *)0x21b1);
     uVar5 = (undefined1)Font02.seg;
     uVar15 = (undefined1)(Font02.seg >> 8);
     if (*piVar8 == 0 && piVar8[1] == 0) {
@@ -1449,7 +1449,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
       puVar9 = (undefined2 *)
                ((uint)(byte)((agntG_t *)agnt->gdata)->shortName[3] * 0x94 +
                (uint)(((entity_t *)agnt->entity)->base).level * 4);
-      puVar11 = (uint8_t *)((char *)"sturdy e/w wall" + 0xf);
+      puVar11 = (uint8_t *)((char *)0x21b1);
       uVar19 = Font02.ofs;
       pcVar6 = stats_formatThousands
                          ((char *)CONCAT13((char)((uint)unaff_SS >> 8),CONCAT12((char)unaff_SS,buf))
@@ -1985,7 +1985,7 @@ void __cdecl16far stats_openAgentDetail(int agntIndex)
   ovr_manage_openTalkWindow();
   ScreenMode = 2;
   drawAgntStats((agnt_t *)(agntIndex * 0x34),far_from_u32((uint32_t)(0x1726)),0);
-  drawString((char *)"short sword" + 0xb,0x2410);
+  drawString((char *)0x2531,0x2410);
   bVar1 = *(byte *)((int)Entities + iVar2 * 0x37 + 0xd);
   if (*(char *)((int)(char **)GMenuStrings + (uint)bVar1 * 0x95 + 0x1f) == '\0') {
     if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\0') ||

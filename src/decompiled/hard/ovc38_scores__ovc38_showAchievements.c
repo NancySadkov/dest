@@ -24,14 +24,14 @@ void __cdecl16far ovc38_showAchievements(void)
   ovr_saveui_blitPanel();
   TextBlitX = 0x16;
   TextBlitY = 0xb;
-  ovr_blitText((char *)"Great Achievements",(byte *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),
+  ovr_blitText((char *)"Great Achievements",(byte *)CONCAT22(Font03.ofs,(char *)0x2410),
                Font03.seg,0xde,0xde,7);
   TextBlitX = 0x16;
   TextBlitY = 0x1a;
-  ovr_blitText((char *)"Name",(byte *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),Font03.seg,0xde
+  ovr_blitText((char *)"Name",(byte *)CONCAT22(Font03.ofs,(char *)0x2410),Font03.seg,0xde
                ,0xde,7);
   TextBlitX = 0xae;
-  ovr_blitText((char *)"Enemies",(byte *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),Font03.seg,
+  ovr_blitText((char *)"Enemies",(byte *)CONCAT22(Font03.ofs,(char *)0x2410),Font03.seg,
                0xde,0xde,7);
   for (iVar3 = 0; iVar3 < 6; iVar3 = iVar3 + 1) {
     TextBlitX = 0x16;

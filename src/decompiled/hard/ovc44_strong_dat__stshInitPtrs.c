@@ -41,8 +41,7 @@ void __cdecl16far stshInitPtrs(void)
   *(undefined2 *)(StshCtPtr.ofs + 0xf) = 0;
   *(undefined2 *)(uVar7 + 0xd) = 0;
   __return_storage_ptr___00 =
-       (long *)((char *)"%s casts %s on %s to heal %d hitpoint%s for a total of %d hitpoint%s." +
-               0x13);
+       (long *)((char *)0x6ffe);
   fVar5.seg = unaff_SI;
   fVar5.ofs = 0x6ffe;
   ptr_ofs_08.seg = in_stack_0000fffc;

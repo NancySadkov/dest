@@ -16,7 +16,7 @@ ovc43_usesFmFreeAudio(uint32_t gindex,char_sheet_t *sheet,uint16_t sheetSeg)
   byte bStack_8;
   char_sheet_t *uStack_6;   /* hand fix: used as uStack_6->nameText and (char_sheet_t *)uStack_6 */
   
-  pcVar4 = (char_sheet_t *)((char *)"puppetmaker" + 3);
+  pcVar4 = (char_sheet_t *)((char *)0x2410);
   TextBlitDstSeg = 0xa000;
   iVar7 = 0;
   while( true ) {

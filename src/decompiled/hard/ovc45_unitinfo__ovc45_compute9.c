@@ -12,12 +12,12 @@ int __cdecl16far ovc45_compute9(char *dest,char *src,char *font,uint maxWidth,ch
   if (mode < uVar2) {
     if (in_stack_00000012 == '\x02') {
       iStack_4 = ovr_font_textWidth((char *)"..",
-                                    (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(font) + 2)),(char *)"puppetmaker" + 3),maxWidth)
+                                    (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(font) + 2)),(char *)0x2410),maxWidth)
       ;
     }
     else {
       iStack_4 = ovr_font_textWidth((char *)"...",
-                                    (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(font) + 2)),(char *)"puppetmaker" + 3),maxWidth)
+                                    (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(font) + 2)),(char *)0x2410),maxWidth)
       ;
     }
     iVar3 = 0;

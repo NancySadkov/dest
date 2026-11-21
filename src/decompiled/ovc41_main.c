@@ -1403,21 +1403,21 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
               }
               bVar17 = 0;
               uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-              pcVar12 = (char *)"halfling castle" + 0xc;
+              pcVar12 = (char *)0x217a;
               uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
               if (*(uint *)((int)uVar1 + 0x54) < (uint)(*(int *)((int)uVar2 + 0x4d) << 1)) {
                 uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
                 pcVar12 = (char *)(((uint)_backdropIndex & 0xff) << 2);
                 if (*(uint *)((int)uVar1 + 0x54) < *(uint *)((int)*(undefined4 *)pcVar12 + 0x4d)) {
                   uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                  pcVar12 = (char *)"halfling castle" + 0xc;
+                  pcVar12 = (char *)0x217a;
                   uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
                   if (*(uint *)((int)uVar1 + 0x54) < *(uint *)((int)uVar2 + 0x4d) >> 1) {
-                    pcVar12 = (char *)"halfling castle" + 0xc;
+                    pcVar12 = (char *)0x217a;
                     uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
                     if (*(int *)((int)uVar1 + 0x54) < 0) {
                       uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                      pcVar12 = (char *)"halfling castle" + 0xc;
+                      pcVar12 = (char *)0x217a;
                       uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
                       if (*(uint *)((int)uVar1 + 0x54) < (uint)-*(int *)((int)uVar2 + 0x4d)) {
                         bVar17 = 5;
@@ -1515,8 +1515,8 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
     } while( true );
   case (char *)0x2:
     LOCK();
-    iVar14 = *(int *)((char *)"Too many construction sites." + 0x17 + unaff_DI);
-    *(undefined1 **)((char *)"Too many construction sites." + 0x17 + unaff_DI) = &stack0xfffe;
+    iVar14 = *(int *)((char *)0x81c9 + unaff_DI);
+    *(undefined1 **)((char *)0x81c9 + unaff_DI) = &stack0xfffe;
     UNLOCK();
     *(int *)(iVar14 + -2) = unaff_DI;
     iVar15 = 0;
@@ -2230,8 +2230,8 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
         cVar3 = *(char *)(uVar16 * 2 + unaff_SI);
         puVar18 = &stack0xfffe + unaff_SI;
         iVar20 = uVar16 * 3;
-        *(undefined1 **)((char *)" You can only place a single arena." + 0xd + iVar20) =
-             puVar18 + *(int *)((char *)" You can only place a single arena." + 0xd + iVar20);
+        *(undefined1 **)((char *)0x7501 + iVar20) =
+             puVar18 + *(int *)((char *)0x7501 + iVar20);
         *(int *)(&stack0xffff + (int)puVar18) = *(int *)(&stack0xffff + (int)puVar18) + iVar20;
         *(int *)(&stack0xfffe + (int)unaff_DI) = *(int *)(&stack0xfffe + (int)unaff_DI) + iVar20;
                     /* WARNING: Read-only address (ram,0x00033501) is written */
@@ -2548,7 +2548,7 @@ L_ui_unit_order_6616_0689_1054:
                                  *(int *)(iVar12 + uVar16 * 0x37 + 2));
             }
             else {
-              pcStack_13e = (char *)"cure critical wounds" + 0x12;
+              pcStack_13e = (char *)0x6fdf;
               unit_usesEntities(bStack_3b,uVar16,(uint16_t)acStack_42,(uint16_t)unaff_SS);
             }
             iStack_a = iStack_a + 1;

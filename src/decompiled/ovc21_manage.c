@@ -2030,7 +2030,7 @@ void __cdecl16far manage_textHalflingCastle(void)
     pcStack_12->statMask = pcStack_12->statMask | 0x40;
     pcStack_12->charIndex = PartyCount - 1;
     uVar3 = (uint)PartyCount;
-    widths = (char_sheet_t *)((char *)"halfling castle" + 0xc);
+    widths = (char_sheet_t *)((char *)0x217a);
     *(int *)(uVar3 * 4 + -2) = iStack_10;
     *(undefined2 *)(uVar3 * 4 + -4) = pcStack_12;
     if (CurPartySlot == 0) {

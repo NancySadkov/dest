@@ -1266,16 +1266,16 @@ L__OvrInitExt_0AD7:
           sizeLo = (uint)length;
           sizeHi = (*(uint16_t *)((uint8_t *)&(length) + 2));
         }
-        if ((*(uint *)((char *)"Your may continue playing, but your score will not be recorded." + 9
+        if ((*(uint *)((char *)0x69e4
                       ) <= sizeHi) &&
-           ((*(uint *)((char *)"Your may continue playing, but your score will not be recorded." + 9
+           ((*(uint *)((char *)0x69e4
                       ) < sizeHi ||
-            (*(uint *)((char *)"Your may continue playing, but your score will not be recorded." + 7
+            (*(uint *)((char *)0x69e2
                       ) < sizeLo)))) {
           sizeHi = *(uint *)((char *)
-                             "Your may continue playing, but your score will not be recorded." + 9);
+                             (char *)0x69e4);
           sizeLo = *(uint *)((char *)
-                             "Your may continue playing, but your score will not be recorded." + 7);
+                             (char *)0x69e2);
         }
         length = CONCAT22(sizeHi,sizeLo);
         if ((sizeHi == 0) && (sizeLo >> 4 < *(uint *)&__OvrMinHeapSize)) goto L__OvrInitExt_0AD7;
@@ -1701,10 +1701,10 @@ int __cdecl16far __INITEXT(void)
   if ((((char *)"Abnormal program termination\r\n")[5] & 1U) == 0) {
     ((char *)"Abnormal program termination\r\n")[5] = '\x01';
 L__INITEXT_0EEC:
-    ((char *)"Divide error\r\n" + 0xb)[0] = '\0';
-    ((char *)"Divide error\r\n" + 0xb)[1] = '\0';
-    ((char *)"Divide error\r\n" + 0xd)[0] = '\x10';
-    ((char *)"Divide error\r\n" + 0xd)[1] = '\0';
+    ((char *)0x3a)[0] = '\0';
+    ((char *)0x3a)[1] = '\0';
+    ((char *)0x3c)[0] = '\x10';
+    ((char *)0x3c)[1] = '\0';
     ((char *)0x3e)[0] = '\0';
     ((char *)0x3e)[1] = '\0';
     ((char *)0x40)[0] = '\x10';
@@ -1732,13 +1732,13 @@ L__INITEXT_0EEC:
                      (int)((ulong)uVar17 >> 0x10);
                 uVar17 = (**(code **)((char *)0x43))();
                 if ((int)uVar17 != 0) {
-                  *(undefined2 *)((char *)"Divide error\r\n" + 0xb) = in_BX;
-                  *(int *)((char *)"Divide error\r\n" + 0xd) = (int)((ulong)uVar17 >> 0x10);
+                  *(undefined2 *)((char *)0x3a) = in_BX;
+                  *(int *)((char *)0x3c) = (int)((ulong)uVar17 >> 0x10);
                   uVar10 = (uint)((ulong)uVar11 * 0x400);
-                  uVar4 = *(uint *)((char *)"Divide error\r\n" + 0xb);
-                  iVar12 = *(int *)((char *)"Divide error\r\n" + 0xd);
+                  uVar4 = *(uint *)((char *)0x3a);
+                  iVar12 = *(int *)((char *)0x3c);
                   *(uint *)((char *)0x3e) =
-                       uVar10 + *(uint *)((char *)"Divide error\r\n" + 0xb);
+                       uVar10 + *(uint *)((char *)0x3a);
                   *(uint *)((char *)0x40) =
                        (int)((ulong)uVar11 * 0x400 >> 0x10) + iVar12 + (uint)CARRY2(uVar10,uVar4);
                 }
@@ -1762,8 +1762,8 @@ L__INITEXT_0EEC:
         if (*(int *)((char *)0x43) != 0 ||
             *(int *)((char *)0x45) != 0) {
           ((char *)"Divide error\r\n")[0xd] = '\x11';
-          ((char *)"Divide error\r\n" + 0xb)[0] = '\0';
-          ((char *)"Divide error\r\n" + 0xb)[1] = '\0';
+          ((char *)0x3a)[0] = '\0';
+          ((char *)0x3a)[1] = '\0';
         }
         bVar15 = false;
         uVar16 = 1;
@@ -1782,7 +1782,7 @@ L__INITEXT_0EEC:
             uVar16 = *pbVar1 == *pbVar2;
           } while ((bool)uVar16);
           if ((bool)uVar16) {
-            *(int *)((char *)"Divide error\r\n" + 0xb) = (int)((ulong)uStack_17 * (ulong)uStack_f);
+            *(int *)((char *)0x3a) = (int)((ulong)uStack_17 * (ulong)uStack_f);
             ((char *)"Divide error\r\n")[0xd] =
                  (char)((ulong)uStack_17 * (ulong)uStack_f >> 0x10) + '\x10';
           }
@@ -1803,9 +1803,9 @@ L__INITEXT_0EEC:
             bVar3 = ((byte *)__C0_ASM_CopyRight)[0x2a];
             if (((byte)((char *)"Divide error\r\n")[0xd] <= bVar3) &&
                ((bVar3 != ((char *)"Divide error\r\n")[0xd] ||
-                (*(uint *)((char *)"Divide error\r\n" + 0xb) <
+                (*(uint *)((char *)0x3a) <
                  *(uint *)((byte *)__C0_ASM_CopyRight + 0x28))))) {
-              *(uint *)((char *)"Divide error\r\n" + 0xb) =
+              *(uint *)((char *)0x3a) =
                    *(uint *)((byte *)__C0_ASM_CopyRight + 0x28);
               ((char *)"Divide error\r\n")[0xd] = bVar3;
             }
@@ -1820,7 +1820,7 @@ L__INITEXT_0EEC:
     if ((((char *)"Abnormal program termination\r\n")[5] & 2U) == 0) goto L__INITEXT_0EEC;
 L__INITEXT_105D:
     iVar12 = *(int *)((char *)0x3e) -
-             *(int *)((char *)"Divide error\r\n" + 0xb);
+             *(int *)((char *)0x3a);
   }
   return iVar12;
 }
@@ -1845,8 +1845,8 @@ undefined2 __stdcall16far __INITEXTMEM(uint sizeLo,int sizeHi,uint baseLo,int ba
          ((char *)"Abnormal program termination\r\n")[5] | 2;
     if (*(int *)((char *)0x43) == 0 &&
         *(int *)((char *)0x45) == 0) {
-      *(uint *)((char *)"Divide error\r\n" + 0xb) = baseLo;
-      *(int *)((char *)"Divide error\r\n" + 0xd) = baseHi;
+      *(uint *)((char *)0x3a) = baseLo;
+      *(int *)((char *)0x3c) = baseHi;
       _BootHandlerCode = uRam00000064;
       Int19Seg = uRam00000066;
       uRam00000064 = 0x3f;
@@ -1869,10 +1869,10 @@ L__INITEXTMEM_113B:
       uVar5 = (**(code **)((char *)0x43))(0x1000);
       iVar3 = (int)((ulong)uVar5 >> 0x10);
       if ((int)uVar5 != 0) {
-        *(uint *)((char *)"Divide error\r\n" + 0xb) = uVar4;
-        *(int *)((char *)"Divide error\r\n" + 0xd) = iVar3;
-        *(uint *)((char *)"Abnormal program termination\r\n" + 0xc) = uVar4;
-        *(int *)((char *)"Abnormal program termination\r\n" + 0xe) = iVar3;
+        *(uint *)((char *)0x3a) = uVar4;
+        *(int *)((char *)0x3c) = iVar3;
+        *(uint *)((char *)0x49) = uVar4;
+        *(int *)((char *)0x4b) = iVar3;
         iVar2 = uVar4 + sizeLo;
         iVar3 = iVar3 + sizeHi + (uint)CARRY2(uVar4,sizeLo);
         goto L__INITEXTMEM_113B;
@@ -1939,36 +1939,36 @@ int __cdecl16near __EXTCOPY(void)
     }
   }
   else {
-    *(uint *)((char *)"Abnormal program termination\r\n" + 0x10) = unaff_SI + 1 & 0xfffe;
-    *(uint *)((char *)"Abnormal program termination\r\n" + 0x12) =
+    *(uint *)((char *)0x4d) = unaff_SI + 1 & 0xfffe;
+    *(uint *)((char *)0x4f) =
          unaff_DI + (uint)(0xfffe < unaff_SI);
     if ((byte)in_DX < 0x10) {
-      ((char *)"Abnormal program termination\r\n" + 0x14)[0] = '\0';
-      ((char *)"Abnormal program termination\r\n" + 0x14)[1] = '\0';
+      ((char *)0x51)[0] = '\0';
+      ((char *)0x51)[1] = '\0';
       uVar5 = in_DX >> 4 | in_DX << 0xc;
     }
     else {
-      *(undefined2 *)((char *)"Abnormal program termination\r\n" + 0x14) =
+      *(undefined2 *)((char *)0x51) =
            *(undefined2 *)((char *)0x47);
-      bVar6 = in_AX < *(uint *)((char *)"Abnormal program termination\r\n" + 0xc);
-      in_AX = in_AX - *(uint *)((char *)"Abnormal program termination\r\n" + 0xc);
-      uVar5 = (in_DX - *(int *)((char *)"Abnormal program termination\r\n" + 0xe)) - (uint)bVar6;
+      bVar6 = in_AX < *(uint *)((char *)0x49);
+      in_AX = in_AX - *(uint *)((char *)0x49);
+      uVar5 = (in_DX - *(int *)((char *)0x4b)) - (uint)bVar6;
     }
-    *(uint *)((char *)"Abnormal program termination\r\n" + 0x16) = in_AX;
-    *(uint *)((char *)"Abnormal program termination\r\n" + 0x18) = uVar5;
+    *(uint *)((char *)0x53) = in_AX;
+    *(uint *)((char *)0x55) = uVar5;
     if ((byte)in_CX < 0x10) {
-      ((char *)"Abnormal program termination\r\n" + 0x1a)[0] = '\0';
-      ((char *)"Abnormal program termination\r\n" + 0x1a)[1] = '\0';
+      ((char *)0x57)[0] = '\0';
+      ((char *)0x57)[1] = '\0';
       uVar4 = in_CX >> 4 | in_CX << 0xc;
     }
     else {
-      *(undefined2 *)((char *)"Abnormal program termination\r\n" + 0x1a) =
+      *(undefined2 *)((char *)0x57) =
            *(undefined2 *)((char *)0x47);
-      bVar6 = in_BX < *(uint *)((char *)"Abnormal program termination\r\n" + 0xc);
-      in_BX = in_BX - *(uint *)((char *)"Abnormal program termination\r\n" + 0xc);
-      uVar4 = (in_CX - *(int *)((char *)"Abnormal program termination\r\n" + 0xe)) - (uint)bVar6;
+      bVar6 = in_BX < *(uint *)((char *)0x49);
+      in_BX = in_BX - *(uint *)((char *)0x49);
+      uVar4 = (in_CX - *(int *)((char *)0x4b)) - (uint)bVar6;
     }
-    *(uint *)((char *)"Abnormal program termination\r\n" + 0x1c) = in_BX;
+    *(uint *)((char *)0x59) = in_BX;
     ((far_t *)GSTARTX_SavedVectors)->ofs = uVar4;
     iVar3 = (**(code **)((char *)0x43))(0x1000);
     if (iVar3 != 0) {

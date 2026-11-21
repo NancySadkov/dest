@@ -1,13 +1,21 @@
-"""De-symbolize `(char *)"literal" + N`.
+"""De-symbolize `"literal" + N` (with or without a `(char *)` cast).
 
 Ghidra renders a 16-bit constant by picking the nearest string symbol, so a
-segment value such as 0x2410 prints as `(char *)"puppetmaker" + 3` because the
-building-name table entry "puppetmaker" sits at DGROUP 0x240d.
+segment value such as 0x2410 prints as `(char *)"puppetmaker" + 3` (or, when the
+target is already char *, as a bare `"puppetmaker" + 3`) because the building-name
+table entry "puppetmaker" sits at DGROUP 0x240d.  The delta may be printed in
+decimal or in hex (`+ 0xd`).
 
 The symbol dump (tmp/dg12.tsv) names these symbols s_<text>_<seg>_<ofs>, so the
 address is recoverable exactly:  address = ofs, and the literal's value is
 ofs + N.  Rewriting to that number keeps the value identical and removes the
 false string reference.
+
+A zero delta is left as the literal itself, only the noise ` + 0` is dropped
+(`"lit" + 0` -> `"lit"`), which is the same address and type.
+
+Both the exported tree and the committed overrides (hard/) are swept, otherwise a
+hard override would reintroduce the folds on every export.
 
 Dry run unless --apply.
 """
@@ -16,8 +24,14 @@ import os
 import re
 import sys
 
-LIT = re.compile(r'\(char \*\)"([^"]*)" \+ (\d+)')
+LIT = re.compile(r'(?P<cast>\(char \*\))?(?P<q>"(?:[^"\\\n]|\\.)*")'
+                 r'(?P<ws>\s*\+\s*)(?P<delta>0[xX][0-9a-fA-F]+|\d+)\b')
+# a constant base with a variable offset keeps the variable: Ghidra prints
+# `"lit" + i` for `CONST + i`, where the literal is only standing in for CONST
+VAR = re.compile(r'(?P<cast>\(char \*\))?(?P<q>"(?:[^"\\\n]|\\.)*")'
+                 r'\s*\+\s*(?P<var>[A-Za-z_]\w*)\b')
 NAME = re.compile(r"^s_(.+)_([0-9a-fA-F]{4})_([0-9a-fA-F]{4})$")
+
 
 def norm(t):
     """Collapse escapes and punctuation so a literal matches its symbol text."""
@@ -55,46 +69,110 @@ for line in list(io.open("tmp/dg12.tsv", encoding="utf-8", errors="replace"))[1:
 print("string symbols with an encoded address:", len(addr))
 
 apply = "--apply" in sys.argv
-total = fixed = miss = 0
+total = fixed = zero = miss = 0
 samples = []
+unres = []
+
+files = []
 for name in sorted(os.listdir("src/decompiled")):
-    if not name.endswith(".c"):
-        continue
-    path = os.path.join("src/decompiled", name)
-    text = io.open(path, encoding="utf-8", errors="ignore").read()
+    if name.endswith(".c"):
+        files.append(os.path.join("src/decompiled", name))
+hard = os.path.join("src/decompiled", "hard")
+if os.path.isdir(hard):
+    for name in sorted(os.listdir(hard)):
+        if name.endswith(".c"):
+            files.append(os.path.join(hard, name))
+
+def resolve(lit):
+    """Address of a string symbol by its printed text, tolerating truncation."""
+    key = norm(lit)
+    hit = addr.get(key)
+    if hit is None and len(key) >= 8:
+        # the printed literal can be truncated; accept the symbol whose text
+        # extends it, when every such candidate has the same address
+        cands = {v for k, v in addr.items()
+                 if k.startswith(key) and len(k) > len(key)}
+        if len(cands) == 1:
+            hit = next(iter(cands))
+    if hit is None and len(key) >= 8:
+        # ... or the symbol text is truncated in the dump.  Take the longest
+        # matching symbol text, which is the most specific one
+        hits = [(k, v) for k, v in addr.items()
+                if len(k) >= 8 and key.startswith(k)]
+        if hits:
+            best = max(len(k) for k, _ in hits)
+            cands = {v for k, v in hits if len(k) == best}
+            if len(cands) == 1:
+                hit = next(iter(cands))
+    return hit
+
+
+for path in files:
+    rel = path.replace("\\", "/")
+    orig = io.open(path, encoding="utf-8", errors="ignore").read()
+    text = orig
+
+    # pass 1: constant delta
     out, pos = [], 0
     for m in LIT.finditer(text):
         total += 1
-        lit, delta = m.group(1), int(m.group(2))
+        lit = m.group("q")[1:-1]
+        delta = int(m.group("delta"), 0)
         if delta == 0:
-            miss += 1
-            continue          # zero delta is a genuine string reference
-        hit = addr.get(norm(lit))
-        if hit is None:
-            # the printed literal can be truncated; accept the shortest symbol
-            # whose text starts with it
-            key = norm(lit)
-            cands = [v for k, v in addr.items() if k.startswith(key) and len(k) > len(key)]
-            if len(cands) == 1:
-                hit = cands[0]
+            # same address and same type, just drop the "+ 0" noise
+            out.append(text[pos:m.start()])
+            out.append((m.group("cast") or "") + m.group("q"))
+            pos = m.end()
+            zero += 1
+            continue
+        hit = resolve(lit)
         if hit is None:
             miss += 1
+            if len(unres) < 12:
+                unres.append((rel, m.group(0)[:60].replace("\n", " ")))
             continue
         seg, ofs = hit
-        value = ofs + delta
-        repl = "(char *)0x%x" % value
+        repl = "(char *)0x%x" % (ofs + delta)
         out.append(text[pos:m.start()])
         out.append(repl)
         pos = m.end()
         fixed += 1
         if len(samples) < 6:
-            samples.append((name, m.group(0)[:46], repl))
+            samples.append((rel, m.group(0)[:46].replace("\n", " "), repl))
     if out:
         out.append(text[pos:])
-        if apply:
-            io.open(path, "w", encoding="utf-8", newline="\n").write("".join(out))
+        text = "".join(out)
 
-print("folds:", total, "rewritten:", fixed, "unresolved:", miss)
+    # pass 2: variable offset -- keep the offset, replace the false base
+    out, pos = [], 0
+    for m in VAR.finditer(text):
+        total += 1
+        hit = resolve(m.group("q")[1:-1])
+        if hit is None:
+            miss += 1
+            if len(unres) < 12:
+                unres.append((rel, m.group(0)[:60].replace("\n", " ")))
+            continue
+        seg, ofs = hit
+        repl = "(char *)0x%x + %s" % (ofs, m.group("var"))
+        out.append(text[pos:m.start()])
+        out.append(repl)
+        pos = m.end()
+        fixed += 1
+        if len(samples) < 8:
+            samples.append((rel, m.group(0)[:46].replace("\n", " "), repl))
+    if out:
+        out.append(text[pos:])
+        text = "".join(out)
+
+    if text != orig and apply:
+        io.open(path, "w", encoding="utf-8", newline="\n").write(text)
+
+print("files:", len(files))
+print("folds:", total, "rewritten:", fixed, "simplified(+0):", zero,
+      "unresolved:", miss)
 print("mode:", "APPLY" if apply else "dry run")
 for n, a, b in samples:
-    print("   %-22s %-46s -> %s" % (n, a, b))
+    print("   %-40s %-46s -> %s" % (n[-40:], a, b))
+for n, a in unres:
+    print("   UNRESOLVED %-34s %s" % (n[-34:], a))

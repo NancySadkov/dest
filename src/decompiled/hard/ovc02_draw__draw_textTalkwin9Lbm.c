@@ -82,7 +82,7 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
   if (CrossBlitPtr.ofs != 0 || CrossBlitPtr.seg != 0) {
     *(uint16_t *)(iVar37 + -4) = CrossBlitPtr.seg;
     *(uint16_t *)(iVar37 + -6) = CrossBlitPtr.ofs;
-    *(undefined2 *)(iVar37 + -8) = (uint16_t)(char *)"talkwin9.lbm" + 0xb;
+    *(undefined2 *)(iVar37 + -8) = (uint16_t)(char *)0x2e25;
     uVar52 = 0x2337;
     puVar38 = (undefined1 *)(iVar37 + -10);
     *(undefined2 *)(iVar37 + -10) = (uint16_t)0xe4f0;

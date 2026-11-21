@@ -14,10 +14,10 @@ undefined2 __stdcall16far __INITEXTMEM(uint sizeLo,int sizeHi,uint baseLo,int ba
     }
     ((char *)"Abnormal program termination\r\n")[5] =
          ((char *)"Abnormal program termination\r\n")[5] | 2;
-    if (*(int *)((char *)"Abnormal program termination\r\n" + 6) == 0 &&
-        *(int *)((char *)"Abnormal program termination\r\n" + 8) == 0) {
-      *(uint *)((char *)"Divide error\r\n" + 0xb) = baseLo;
-      *(int *)((char *)"Divide error\r\n" + 0xd) = baseHi;
+    if (*(int *)((char *)0x43) == 0 &&
+        *(int *)((char *)0x45) == 0) {
+      *(uint *)((char *)0x3a) = baseLo;
+      *(int *)((char *)0x3c) = baseHi;
       _BootHandlerCode = uRam00000064;
       Int19Seg = uRam00000066;
       uRam00000064 = 0x3f;
@@ -29,21 +29,21 @@ undefined2 __stdcall16far __INITEXTMEM(uint sizeLo,int sizeHi,uint baseLo,int ba
       vdiskEndHi = (undefined1)iVar3;
       vdiskEndOfs = iVar2;
 L__INITEXTMEM_113B:
-      *(int *)((char *)"Abnormal program termination\r\n" + 1) = iVar2;
-      *(int *)((char *)"Abnormal program termination\r\n" + 3) = iVar3;
+      *(int *)((char *)0x3e) = iVar2;
+      *(int *)((char *)0x40) = iVar3;
       return 0;
     }
     uVar4 = 0x400;
-    uVar5 = (**(code **)((char *)"Abnormal program termination\r\n" + 6))(0x1000);
+    uVar5 = (**(code **)((char *)0x43))(0x1000);
     if ((int)uVar5 != 0) {
-      *(int *)((char *)"Abnormal program termination\r\n" + 10) = (int)((ulong)uVar5 >> 0x10);
-      uVar5 = (**(code **)((char *)"Abnormal program termination\r\n" + 6))(0x1000);
+      *(int *)((char *)0x47) = (int)((ulong)uVar5 >> 0x10);
+      uVar5 = (**(code **)((char *)0x43))(0x1000);
       iVar3 = (int)((ulong)uVar5 >> 0x10);
       if ((int)uVar5 != 0) {
-        *(uint *)((char *)"Divide error\r\n" + 0xb) = uVar4;
-        *(int *)((char *)"Divide error\r\n" + 0xd) = iVar3;
-        *(uint *)((char *)"Abnormal program termination\r\n" + 0xc) = uVar4;
-        *(int *)((char *)"Abnormal program termination\r\n" + 0xe) = iVar3;
+        *(uint *)((char *)0x3a) = uVar4;
+        *(int *)((char *)0x3c) = iVar3;
+        *(uint *)((char *)0x49) = uVar4;
+        *(int *)((char *)0x4b) = iVar3;
         iVar2 = uVar4 + sizeLo;
         iVar3 = iVar3 + sizeHi + (uint)CARRY2(uVar4,sizeLo);
         goto L__INITEXTMEM_113B;

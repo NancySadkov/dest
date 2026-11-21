@@ -2186,7 +2186,7 @@ agnt_t * __cdecl16far ovc15_textError(undefined4 param_1,agnt_t *param_2)
                 in_stack_0000fffc = (uint8_t)gfx;
                 bVar44 = (byte)((uint)gfx >> 8);
                 ovr_stshUniqueColorsRemap(gfx);
-                pfVar12 = ovr_stshRleType2(*(far_t **)((char *)"Error 4 %d \r" + 0xb));
+                pfVar12 = ovr_stshRleType2(*(far_t **)((char *)0x300));
                 pcVar13 = ovr_stshStoreFile((uint8_t *)pfVar12);
                 iVar20 = (int)pcVar30 * 0x95 + iVar39 * 4;
                 uVar32 = 0x195d;

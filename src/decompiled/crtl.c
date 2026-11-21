@@ -4115,7 +4115,7 @@ Processing:
           uVar12 = __setargv_SavedDS;
           goto SetArgvX;
         }
-        *(char **)(&stack0x0000 + iVar8) = (char *)"cleric castle" + 0xd;
+        *(char **)(&stack0x0000 + iVar8) = (char *)0x20af;
         iVar5 = NextChar();
         bVar3 = (byte)iVar5;
       } while (!bVar14 && !(bool)uVar15);

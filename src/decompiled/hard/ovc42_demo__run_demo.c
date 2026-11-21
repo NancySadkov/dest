@@ -432,9 +432,8 @@ undefined2 __cdecl16far run_demo(void)
                                               (*(uint8_t *)((uint8_t *)&(palette_11.seg) + 1)) = uVar9;
                                               ovr_ovc40_usesVgaSetPalette8bit(palette_11);
                                               bVar1 = ovr_ovc40_usesAlignToSeg
-                                                                ('\x04',(char *)"Demo cancelled." +
-                                                                        0xf,0x2410,
-                                                                 (char *)"Demo cancelled." + 0xf,
+                                                                ('\x04',(char *)0x7174,0x2410,
+                                                                 (char *)0x7174,
                                                                  0x2410,2,0x74,0x10,0x74,0x10);
                                               if (bVar1 < 2) {
                                                 ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10)

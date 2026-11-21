@@ -224,7 +224,7 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
   if (CrossBlitPtr.ofs != 0 || CrossBlitPtr.seg != 0) {
     *(uint16_t *)(iVar37 + -4) = CrossBlitPtr.seg;
     *(uint16_t *)(iVar37 + -6) = CrossBlitPtr.ofs;
-    *(undefined2 *)(iVar37 + -8) = (uint16_t)(char *)"talkwin9.lbm" + 0xb;
+    *(undefined2 *)(iVar37 + -8) = (uint16_t)(char *)0x2e25;
     uVar52 = 0x2337;
     puVar38 = (undefined1 *)(iVar37 + -10);
     *(undefined2 *)(iVar37 + -10) = (uint16_t)0xe4f0;
@@ -4207,7 +4207,7 @@ void __cdecl16far draw_usesPrintf(void)
       && ((puVar2 = ovr_attact_usesBDADailyTimeCounter
                               ((ulong *)GDailyTimeCounter,CONCAT22(unaff_BP,(*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)))
                               ), in_DX != 0 ||
-          ((char *)"Abnormal program termination\r\n" + 0x1d < puVar2)))))) {
+          ((char *)0x5a < puVar2)))))) {
     ovr_attact_usesUpdSeason();
   }
   if (GGameInProgress == '\0') {
@@ -4584,7 +4584,7 @@ void __cdecl16far draw_toolbarLabels(void)
       TextBlitY = 0x62;
       term = 0x3f;
       puVar2 = (undefined2 *)((uint)((uint8_t *)MenuItemEnabled)[GMenuItem] * 4);
-      pbVar4 = (byte *)((char *)"halfling castle" + 0xc);
+      pbVar4 = (byte *)((char *)0x217a);
       uVar3 = Font03.ofs;
       seg = Font03.seg;
       text = (char *)ovr_ovc45_compute9(textBuf,(char *)CONCAT22(*puVar2,unaff_SS),
@@ -4977,8 +4977,7 @@ void __stdcall16far draw_textGoldProvidesHousing(void)
   puVar21 = (undefined1 *)(unaff_DI | *(uint *)(unaff_BP + unaff_SI + -0x59f5));
   puVar15 = (uint *)(in_BX | unaff_DI |
                     *(uint *)((char *)
-                              "%ld experience obtained. %ld experience given to each unit. %ld gold recovered."
-                              + 0x2f + unaff_BP));
+                              (char *)0x820b + unaff_BP));
   uVar19 = unaff_SI | *(uint *)(unaff_BP + 0xb);
   uVar3 = in(in_DX);
   *puVar21 = uVar3;
@@ -4995,8 +4994,7 @@ void __stdcall16far draw_textGoldProvidesHousing(void)
   bVar9 = *(byte *)(uVar18 + uVar22 + -0x69f6);
   bVar8 = bVar7 | bVar5 |
           *(byte *)((int)puVar20 +
-                   (int)((char *)"%s: %s %d gold. provides housing for %d %s and feeds %d %s." +
-                         0x18 + uVar18));
+                   (int)((char *)0x800a + uVar18));
   bVar13 = (byte)(uVar12 >> 8) | *(byte *)((int)puVar20 + CONCAT11(bVar16,bVar14) + 10);
   puVar1 = (uint *)(uVar18 + (int)puVar20);
   iVar4 = (bVar8 & 3) - (*puVar1 & 3);

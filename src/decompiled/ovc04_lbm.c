@@ -307,7 +307,7 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
             (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = (*(uint16_t *)((uint8_t *)&(cmszB) + 2)) + ((uint32_t *)0xfffe < (uint32_t *)cmszB);
           }
           if (((int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) < 0) ||
-             (((*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) == 0 && ((uint32_t *)chnk_sz < (char *)"Error 4 %d \r" + 0xb)))) {
+             (((*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) == 0 && ((uint32_t *)chnk_sz < (char *)0x300)))) {
             if ((-1 < (int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2))) &&
                ((0 < (int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) || ((uint32_t *)chnk_sz != (uint32_t *)0x0)))) {
               ovr_stshRead();
@@ -316,7 +316,7 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
           else {
             ovr_stshRead();
             if ((-1 < (int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2))) &&
-               ((0 < (int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) || ((char *)"Error 4 %d \r" + 0xb < (uint32_t *)chnk_sz))))
+               ((0 < (int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) || ((char *)0x300 < (uint32_t *)chnk_sz))))
             {
               puVar15 = ovr_stshTell((uint32_t *)fid,unaff_DI);
               ovr_stshSeek(fid,(long)CONCAT22(((int)puVar15 >> 0xf) + (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) +
@@ -332,8 +332,8 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
           while( true ) {
             if ((0 < (int)(*(uint16_t *)((uint8_t *)&(cmszB) + 2))) ||
                ((puVar15 = (uint32_t *)cmszB, uVar16 = (*(uint16_t *)((uint8_t *)&(cmszB) + 2)), (*(uint16_t *)((uint8_t *)&(cmszB) + 2)) == 0 &&
-                ((char *)"Error 4 %d \r" + 0xb < (uint32_t *)cmszB)))) {
-              puVar15 = (uint32_t *)((char *)"Error 4 %d \r" + 0xb);
+                ((char *)0x300 < (uint32_t *)cmszB)))) {
+              puVar15 = (uint32_t *)((char *)0x300);
               uVar16 = 0;
             }
             if (((int)uVar16 < 1) &&

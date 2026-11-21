@@ -285,7 +285,7 @@ uint16_t __cdecl16far attact_textAbnormalProgramTermination(uint16_t value,uint8
   uVar6 = 0;
   uVar4 = 0x51;
   uVar2 = 0;
-  plVar1 = LXMUL_at_((long *)((char *)"Abnormal program termination\r\n" + 0x14),
+  plVar1 = LXMUL_at_((long *)((char *)0x51),
                      (ulong)in_stack_0000fffc << 0x10,CONCAT22(in_stack_00000000,unaff_BP));
   lVar3 = LDIV_at_((long)CONCAT22(uVar2,plVar1),CONCAT13(uVar6,CONCAT12(uVar5,uVar4)));
   return (uint16_t)lVar3;
@@ -420,9 +420,6 @@ void __cdecl16far attact_usesAgntFlag1(void)
 
 
 /* 3f0b:082f */
-
-/* [R6] touches BDA_DailyTimeCounter */
-
 ulong * __cdecl16far
 attact_usesBDADailyTimeCounter(ulong *__return_storage_ptr__,ulong prevTick,...)
 
@@ -432,15 +429,14 @@ attact_usesBDADailyTimeCounter(ulong *__return_storage_ptr__,ulong prevTick,...)
   
   uVar1 = *(uint *)(BDA_DailyTimeCounter.ofs + 2);
   if (((uint)prevTick < uVar1) ||
-     (((uint)prevTick == uVar1 && (__return_storage_ptr__ <= *(ulong **)BDA_DailyTimeCounter)))) {
+     (((uint)prevTick == uVar1 && (__return_storage_ptr__ <= *(ulong **)BDA_DailyTimeCounter.ofs)))) {
     iVar2 = -(int)__return_storage_ptr__;
   }
   else {
     iVar2 = 0xb0 - (int)__return_storage_ptr__;
   }
-  return (ulong *)((int)*(ulong **)BDA_DailyTimeCounter + iVar2);
+  return (ulong *)((int)*(ulong **)BDA_DailyTimeCounter.ofs + iVar2);
 }
-
 
 
 /* 3f0b:0880 */
@@ -623,10 +619,6 @@ void __stdcall16far attact_usesGMapFlags3(void)
 
 
 /* 3f0b:1082 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R4] calls ovr_alignUp4 */
-
 void __cdecl16far attact_usesAlignUp42(void)
 
 {
@@ -648,7 +640,7 @@ void __cdecl16far attact_usesAlignUp42(void)
   uint16_t index;
   undefined2 uVar15;
   uint unaff_SS;
-  undefined4 uStack_1e;
+  entity_t *uStack_1e;   /* hand fix: dereferenced as uStack_1e->base */
   char cStack_1a;
   uint8_t reported;
   int iStack_16;
@@ -909,7 +901,6 @@ L_attact_3f0b_1082_1477:
     index = index + 1;
   } while( true );
 }
-
 
 
 /* 3f0b:18fe */

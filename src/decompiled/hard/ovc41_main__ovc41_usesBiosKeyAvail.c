@@ -397,21 +397,21 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
               }
               bVar17 = 0;
               uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-              pcVar12 = (char *)"halfling castle" + 0xc;
+              pcVar12 = (char *)0x217a;
               uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
               if (*(uint *)((int)uVar1 + 0x54) < (uint)(*(int *)((int)uVar2 + 0x4d) << 1)) {
                 uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
                 pcVar12 = (char *)(((uint)_backdropIndex & 0xff) << 2);
                 if (*(uint *)((int)uVar1 + 0x54) < *(uint *)((int)*(undefined4 *)pcVar12 + 0x4d)) {
                   uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                  pcVar12 = (char *)"halfling castle" + 0xc;
+                  pcVar12 = (char *)0x217a;
                   uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
                   if (*(uint *)((int)uVar1 + 0x54) < *(uint *)((int)uVar2 + 0x4d) >> 1) {
-                    pcVar12 = (char *)"halfling castle" + 0xc;
+                    pcVar12 = (char *)0x217a;
                     uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
                     if (*(int *)((int)uVar1 + 0x54) < 0) {
                       uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                      pcVar12 = (char *)"halfling castle" + 0xc;
+                      pcVar12 = (char *)0x217a;
                       uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
                       if (*(uint *)((int)uVar1 + 0x54) < (uint)-*(int *)((int)uVar2 + 0x4d)) {
                         bVar17 = 5;
@@ -509,8 +509,8 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
     } while( true );
   case (char *)0x2:
     LOCK();
-    iVar14 = *(int *)((char *)"Too many construction sites." + 0x17 + unaff_DI);
-    *(undefined1 **)((char *)"Too many construction sites." + 0x17 + unaff_DI) = &stack0xfffe;
+    iVar14 = *(int *)((char *)0x81c9 + unaff_DI);
+    *(undefined1 **)((char *)0x81c9 + unaff_DI) = &stack0xfffe;
     UNLOCK();
     *(int *)(iVar14 + -2) = unaff_DI;
     iVar15 = 0;
@@ -559,14 +559,14 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
       *(undefined2 *)(iVar14 + -0xe) = (uint16_t)((char *)"%d building%s repaired.");
       *(uint16_t *)(iVar14 + -0x10) = unaff_SS;
       *(int *)(iVar14 + -0x12) = (int)auStack_80;
-      *(char **)((char *)init_textFilename + iVar14) = (char *)"builder\'s hall" + 8;
+      *(char **)((char *)init_textFilename + iVar14) = (char *)0x23d5;
       *(undefined2 *)(iVar14 + -0x16) = (uint16_t)(0x89c6);
       pcVar6 = ovr_stsprintf((char *)*(undefined2 *)(iVar14 + -0x12),
                              (char *)*(undefined4 *)(iVar14 + -0x10),
                              (char *)*(undefined4 *)(iVar14 + -0xc));
       *(undefined2 *)(iVar14 + -6) = (uint16_t)(pcVar12);
       *(undefined2 *)(iVar14 + -8) = (uint16_t)(pcVar6);
-      *(undefined2 *)(iVar14 + -10) = (uint16_t)((char *)"glassworks" + 9);
+      *(undefined2 *)(iVar14 + -10) = (uint16_t)((char *)0x2337);
       *(undefined2 *)(iVar14 + -0xc) = (uint16_t)(0x89d0);
       ovr_uiNotify((char *)*(undefined2 *)(iVar14 + -8),*(uint16_t *)(iVar14 + -6));
     }

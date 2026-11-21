@@ -62,7 +62,7 @@ uint __cdecl16far stLoad(int handle)
                  (((uVar1 = save_readBlock(-0x6e21,(void *)0x22410,unaff_DI,unaff_SI),
                    (uVar1 & 0xff) != 0 &&
                    (uVar1 = save_readBlock(0,(char *)CONCAT22(GRecordCount * 0x12,
-                                                              (char *)"manned n/s wall" + 0xd),
+                                                              (char *)0x21f2),
                                            unaff_DI,unaff_SI), (uVar1 & 0xff) != 0)) &&
                   ((uVar1 = save_readBlock(-0x7667,(void *)0x22410,unaff_DI,unaff_SI),
                    (uVar1 & 0xff) != 0 &&

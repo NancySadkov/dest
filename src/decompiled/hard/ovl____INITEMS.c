@@ -41,7 +41,7 @@ int __cdecl16far __INITEMS(void)
           pcVar1 = (code *)swi(0x67);
           (*pcVar1)();
           if (extraout_AH_00 != '\0') goto L__INITEMS_0E2A;
-          *(int *)((char *)"Divide error\r\n" + 1) = in_BX;
+          *(int *)((char *)0x30) = in_BX;
           goto L__INITEMS_0E14;
         }
       }
@@ -52,15 +52,15 @@ int __cdecl16far __INITEMS(void)
   else {
     unaff_SI = (uint)startx;   /* hand fix: startx is a function */
     if ((((char *)"Divide error\r\n")[9] & 2U) != 0) {
-      return *(int *)((char *)"Divide error\r\n" + 7);
+      return *(int *)((char *)0x36);
     }
 L__INITEMS_0E14:
     pcVar1 = (code *)swi(0x67);
     (*pcVar1)();
     if (extraout_AH_01 == '\0') {
-      *(int *)((char *)"Divide error\r\n" + 7) = in_BX;
-      ((char *)"Divide error\r\n" + 3)[0] = -1;
-      ((char *)"Divide error\r\n" + 3)[1] = -1;
+      *(int *)((char *)0x36) = in_BX;
+      ((char *)0x32)[0] = -1;
+      ((char *)0x32)[1] = -1;
       return in_BX;
     }
   }

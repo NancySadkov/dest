@@ -1664,9 +1664,9 @@ L_OVC49_8699_1e09_29B9:
         SpecialColors[2] =
              ((char *)0x7416)[(in_stack_0000fff6->aptr).ofs];
         SpecialColors[3] =
-             ((char *)"ENTER: use previous configuration, SPACE: reconfigure, ESC: quit" + 0x12)
+             ((char *)0x5ecf)
              [(in_stack_0000fff6->aptr).ofs];
-        SpecialColors[4] = ((char *)"%s turns %d undead." + 0x10)[(in_stack_0000fff6->aptr).ofs];
+        SpecialColors[4] = ((char *)0x6f1f)[(in_stack_0000fff6->aptr).ofs];
         SpecialColors[5] =
              *(uint8_t *)((int)&GStrangeTable[0x12].seg + 1 + (in_stack_0000fff6->aptr).ofs);
         SpecialColors[6] =
@@ -3176,7 +3176,7 @@ L_OVC49_8699_1e09_3310:
         uVar34 = (undefined1)((uint)iVar18 >> 8);
         bVar9 = *(byte *)(iVar35 + 0x1d);
         iVar18 = 0x22f8;
-        pbVar29 = (brect_t *)((char *)"stonemasonry" + 0xc);
+        pbVar29 = (brect_t *)((char *)0x22f8);
         ovr_play_sfxU(bVar9);
         *(undefined1 *)((int)uStackY_22 * 0x34 + 0xe) = 0;
         *(undefined1 *)((int)uStackY_22 * 0x34 + 0x2e) = 0;
@@ -3230,7 +3230,7 @@ L_OVC49_8699_1e09_3310:
       else if (*(char *)((int)uStackY_22 * 0x34 + 0xd) == '\x05') {
         iVar18 = -0x5edf;
         ovr_audio_panFromX((agnt_t *)((int)uStackY_22 * 0x34));
-        pbVar29 = (brect_t *)((char *)"stonemasonry" + 0xc);
+        pbVar29 = (brect_t *)((char *)0x22f8);
         ovr_play_sfxU(*(byte *)(iVar18 + 0x1d));
         *(undefined1 *)((int)uStackY_22 * 0x34 + 0xe) = 0xf5;
         *(undefined1 *)((int)uStackY_22 * 0x34 + 0x2e) = 1;

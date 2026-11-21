@@ -81,7 +81,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
   far_t fStack_6;
   
   iVar12 = 0x10;
-  pcStack_13e = (char *)"%shigh.txt" + 6;
+  pcStack_13e = (char *)0x6a8f;
   uStack_140 = 0xc98c;
   dst.seg = (uint16_t)unaff_SS;
   dst.ofs = (uint16_t)&agnt;
@@ -119,8 +119,8 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
         cVar3 = *(char *)(uVar16 * 2 + unaff_SI);
         puVar18 = &stack0xfffe + unaff_SI;
         iVar20 = uVar16 * 3;
-        *(undefined1 **)((char *)" You can only place a single arena." + 0xd + iVar20) =
-             puVar18 + *(int *)((char *)" You can only place a single arena." + 0xd + iVar20);
+        *(undefined1 **)((char *)0x7501 + iVar20) =
+             puVar18 + *(int *)((char *)0x7501 + iVar20);
         *(int *)(&stack0xffff + (int)puVar18) = *(int *)(&stack0xffff + (int)puVar18) + iVar20;
         *(int *)(&stack0xfffe + (int)unaff_DI) = *(int *)(&stack0xfffe + (int)unaff_DI) + iVar20;
                     /* WARNING: Read-only address (ram,0x00033501) is written */
@@ -173,7 +173,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
                                                 (char *)CONCAT22(FontMain.ofs,(agnt_t *)uStack_132),
                                                 FontMain.seg,'E');
             ovr_blitLabel(pcVar7,(uint8_t *)CONCAT22(uVar22,puVar14),15,uStack_120);
-            pbVar8 = (byte *)((char *)"puppetmaker" + 3);
+            pbVar8 = (byte *)((char *)0x2410);
             BlitLetterType = 0;
           }
           else if (*(uint8_t *)MK_FP(fStack_6.seg, fStack_6.ofs) == 0x40) {
@@ -311,7 +311,7 @@ switchD_6000_ca06_caseD_1:
           paStack_20 = (agnt_t *)((byte *)__C0_ASM_CopyRight + 3);
         }
         if (0x96 < (int)paStack_20) {
-          paStack_20 = (agnt_t *)((char *)"%d \r" + 1);
+          paStack_20 = (agnt_t *)((char *)0x96);
         }
         if ((paStack_26 != paVar9) || (paStack_28 != paStack_20)) {
           bStack_16.seg = uStack_8;
@@ -371,7 +371,7 @@ switchD_6000_ca06_caseD_1:
           ovr_ovc41_pluralSuffix(iStack_a);
           uVar10 = 0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x64b8,unaff_SS),
-                                  (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
+                                  (char *)CONCAT22(iStack_a,(char *)0x2410));
           iVar12 = 0x22c4;
           ovr_uiNotify(pcVar19,uVar10);
         }
@@ -437,7 +437,7 @@ L_ui_unit_order_6616_0689_1054:
                                  *(int *)(iVar12 + uVar16 * 0x37 + 2));
             }
             else {
-              pcStack_13e = (char *)"cure critical wounds" + 0x12;
+              pcStack_13e = (char *)0x6fdf;
               unit_usesEntities(bStack_3b,uVar16,(uint16_t)acStack_42,(uint16_t)unaff_SS);
             }
             iStack_a = iStack_a + 1;
@@ -458,7 +458,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iStack_a;
           (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x6522,unaff_SS),
-                                  (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
+                                  (char *)CONCAT22(iStack_a,(char *)0x2410));
           ovr_say(pcVar19);
         }
         else if (bStack_3b == 2) {
@@ -467,7 +467,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iStack_a;
           (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x6543,unaff_SS),
-                                  (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
+                                  (char *)CONCAT22(iStack_a,(char *)0x2410));
           ovr_say(pcVar19);
         }
         else if (bStack_3b == 3) {
@@ -476,7 +476,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iStack_a;
           (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x6557,unaff_SS),
-                                  (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
+                                  (char *)CONCAT22(iStack_a,(char *)0x2410));
           ovr_say(pcVar19);
         }
         else if (bStack_3b == 4) {
@@ -485,7 +485,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iStack_a;
           (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x6568,unaff_SS),
-                                  (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
+                                  (char *)CONCAT22(iStack_a,(char *)0x2410));
           ovr_say(pcVar19);
         }
         ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x24));
@@ -537,7 +537,7 @@ L_ui_unit_order_6616_0689_1054:
       (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0xcba4;
       paVar9 = (agnt_t *)
                ovr_stsprintf((char *)&msg,(char *)CONCAT13(0x6f,CONCAT12(0xeb,unaff_SS)),
-                             (char *)CONCAT22(puVar11,(char *)"puppetmaker" + 3));
+                             (char *)CONCAT22(puVar11,(char *)0x2410));
       ovr_uiNotify((char *)paVar9,(uint16_t)puVar14);
     }
   }
