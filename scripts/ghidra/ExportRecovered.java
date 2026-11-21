@@ -185,6 +185,24 @@ public class ExportRecovered extends GhidraScript {
     // are the single value 2410:2410 - the DGROUP segment constant 0x2410 in the
     // offset half of a far pointer whose segment the decompiler does not know.
     // Print the number instead of a fabricated string offset.
+    // A Ghidra symbol can be namespace-qualified (switchD_6000:3cd8::caseD_0_3),
+    // which is not a C identifier and breaks every module that includes the
+    // generated header.  Replace the colons inside such a token only: the pattern
+    // needs a word character after each ':' so strings like "%s: %d" and ternaries
+    // "a ? b : c" are untouched.
+    private static final java.util.regex.Pattern QUALIFIED_NAME =
+            java.util.regex.Pattern.compile("[A-Za-z_]\\w*(?::+\\w+)+");
+
+    private String sanitizeColons(String s) {
+        if (s == null || s.indexOf(':') < 0) return s;
+        java.util.regex.Matcher m = QUALIFIED_NAME.matcher(s);
+        StringBuffer out = new StringBuffer();
+        while (m.find())
+            m.appendReplacement(out, m.group(0).replace(':', '_'));
+        m.appendTail(out);
+        return out.toString();
+    }
+
     private String typeDecl(DataType dt, String name) {        if (dt instanceof Array) {
             Array a = (Array) dt;
             return typeDecl(a.getDataType(), name + "[" + a.getNumElements() + "]");
@@ -374,6 +392,12 @@ public class ExportRecovered extends GhidraScript {
                 if (good) {
                     String body = res.getDecompiledFunction().getC();
                     String sig = res.getDecompiledFunction().getSignature();
+                    // A symbol whose name contains ':' (a namespace qualifier such as
+                    // switchD_6000:3cd8::caseD_0_3) is not a C identifier and breaks
+                    // every module that includes the header.  Sanitise the exact name
+                    // in both the body and the signature so they stay consistent.
+                    body = sanitizeColons(body);
+                    sig = sanitizeColons(sig);
                     // A hand-corrected body wins over the decompiler's.  This is the
                     // escape hatch for functions whose code the decompiler gets
                     // structurally wrong and no model type can repair - the written
@@ -435,13 +459,13 @@ public class ExportRecovered extends GhidraScript {
             if (fb == null || !fb.isExecute()) continue;
             if (fb.getName().startsWith("DOS21") || fb.getName().contains("FakeVdisk")) continue;
             if (emitted.add(f.getName()))
-                protos.println("undefined " + f.getName() + "();");
+                protos.println("undefined " + sanitizeColons(f.getName()) + "();");
         }
         // overlay thunk prototypes (calls in recovered code go through these)
         for (Function f : fm.getFunctions(true)) {
             if (!f.isThunk()) continue;
             if (emitted.add(f.getName()))
-                protos.println("undefined " + f.getName() + "();");
+                protos.println("undefined " + sanitizeColons(f.getName()) + "();");
         }
         protos.println("/* helper for Ghidra's (far_t) scalar casts */");
         protos.println("far_t far_from_u32(uint32_t v);");
