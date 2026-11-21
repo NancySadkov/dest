@@ -702,7 +702,7 @@ L_uiInputText_110E:
 L_uiInputText_10F1:
         if (menuBarShown != '\0') {
           GMenuFlag = 0;
-          return (char *)0x181;
+          return (char *)0x1e5;
         }
         goto L_uiInputText_1007;
       }
@@ -720,7 +720,7 @@ L_uiInputText_10F1:
         }
         if (menuBarShown != '\0') {
           GMenuFlag = 0;
-          return (char *)0x17f;
+          return (char *)0x1e3;
         }
         goto L_uiInputText_1007;
       }
@@ -741,7 +741,7 @@ L_uiInputText_10F1:
       }
       if (menuBarShown != '\0') {
         GMenuFlag = 0;
-        return (char *)0x180;
+        return (char *)0x1e4;
       }
       goto L_uiInputText_1007;
     }

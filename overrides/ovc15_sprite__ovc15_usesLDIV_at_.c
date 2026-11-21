@@ -102,7 +102,7 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
         (*(byte *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95) < 5)) &&
        (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) != -1)) {
       while (((entity_t *)Entities)[EntityCount].base.level < 5) {
-        cVar4 =(uint16_t)( ovc15_textView());
+        cVar4 =(uint16_t)( ovr_ovc15_textView()   /* hand fix: args lost by the decompiler */);
         uVar8 = (undefined2)((ulong)Entities >> 0x10);
         *(char *)((int)&((entity_t *)Entities)[EntityCount].base.state + 1) =
              *(char *)((int)&((entity_t *)Entities)[EntityCount].base.state + 1) + cVar4;

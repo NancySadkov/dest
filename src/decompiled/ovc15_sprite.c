@@ -8,7 +8,6 @@
 
 
 /* 4207:0000 */
-
 spr_t * __cdecl16far stshRleAnims(uint8_t *src,anm_t *anms,uint16_t nanims)
 
 {
@@ -138,9 +137,7 @@ spr_t * __cdecl16far stshRleAnims(uint8_t *src,anm_t *anms,uint16_t nanims)
 }
 
 
-
 /* 4207:03ac */
-
 far_t * __cdecl16far
 stshSprite(far_t *__return_storage_ptr__,int16_t file_id,anm_t *anms,uint16_t nanims,bool grab)
 
@@ -179,7 +176,6 @@ stshSprite(far_t *__return_storage_ptr__,int16_t file_id,anm_t *anms,uint16_t na
 }
 
 
-
 /* 4207:0462 */
 
 void __cdecl16far allocSprSeqs(void)
@@ -195,7 +191,6 @@ void __cdecl16far allocSprSeqs(void)
 
 
 /* 4207:047b */
-
 void __cdecl16far stshInitSprites(bool grab,...)
 
 {
@@ -397,7 +392,6 @@ void __cdecl16far stshInitSprites(bool grab,...)
 }
 
 
-
 /* 4207:0b05 */
 
 void __cdecl16far agnt_clear(void)
@@ -543,11 +537,6 @@ void __cdecl16far ovc15_usesAgntIndex(void)
 
 
 /* 4207:0e17 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* Removes an entity record: kills its agents when AgntFlag1 is set, compacts the Entities array,
-   fixes every agent's owner index/entity pointer, and decrements EntityCount. */
-
 void __cdecl16far ovc15_removeEntity(uint entityIndex,...)
 
 {
@@ -601,7 +590,6 @@ void __cdecl16far ovc15_removeEntity(uint entityIndex,...)
 }
 
 
-
 /* 4207:0ff0 */
 
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
@@ -645,10 +633,6 @@ uint __cdecl16far ovc15_usesAlignUp4(uint16_t x,uint16_t y)
 
 
 /* 4207:10a3 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R4] calls LDIV_at_ */
-
 entity_t * __cdecl16far
 ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gindex,uint8_t animFrame
                   ,byte partyIndex,...)
@@ -753,7 +737,7 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
         (*(byte *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95) < 5)) &&
        (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) != -1)) {
       while (((entity_t *)Entities)[EntityCount].base.level < 5) {
-        cVar4 =(uint16_t)( ovc15_textView());
+        cVar4 =(uint16_t)( ovr_ovc15_textView()   /* hand fix: args lost by the decompiler */);
         uVar8 = (undefined2)((ulong)Entities >> 0x10);
         *(char *)((int)&((entity_t *)Entities)[EntityCount].base.state + 1) =
              *(char *)((int)&((entity_t *)Entities)[EntityCount].base.state + 1) + cVar4;
@@ -810,7 +794,6 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
                     /* WARNING: Subroutine does not return */
   ovr_stExit(0x26);
 }
-
 
 
 /* 4207:16a5 */
@@ -946,10 +929,6 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
 
 
 /* 4207:1aae */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R4] calls ovr_stExit */
-
 void __cdecl16far ovc15_usesStExit(int entityIndex,...)
 
 {
@@ -1000,7 +979,6 @@ void __cdecl16far ovc15_usesStExit(int entityIndex,...)
 }
 
 
-
 /* 4207:1c16 */
 
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
@@ -1009,20 +987,20 @@ void __cdecl16far ovc15_usesStExit(int entityIndex,...)
 uint8_t * __cdecl16far ovc15_usesStshRealloc(char *text,...)
 
 {
-  uint8_t uVar1;
+  byte bVar1;
   size_t sVar2;
-  uint8_t *puVar3;
+  byte *pbVar3;
   undefined2 in_DX;
   undefined2 in_stack_00000006;
   
   sVar2 = strlen((char *)CONCAT22(in_stack_00000006,text));
-  puVar3 = ovr_stshRealloc((uint32_t)upperTextOfs,(ulong)(sVar2 + 1));
-  upperTextOfs = (uint16_t)(CONCAT22(in_DX,puVar3));
-  strcpy((char *)CONCAT22(in_DX,puVar3),(char *)CONCAT22(in_stack_00000006,text));
-  uVar1 = toupper((int)(char)*upperTextOfs);
-  *upperTextOfs = uVar1;
-  puVar3 = upperTextOfs;
-  return puVar3;
+  pbVar3 = ovr_stshRealloc((uint32_t)upperTextOfs,(ulong)(sVar2 + 1));
+  upperTextOfs = (byte *)CONCAT22(in_DX,pbVar3);
+  strcpy((char *)CONCAT22(in_DX,pbVar3),(char *)CONCAT22(in_stack_00000006,text));
+  bVar1 = toupper((int)(char)*upperTextOfs);
+  *upperTextOfs = bVar1;
+  pbVar3 = upperTextOfs;
+  return pbVar3;
 }
 
 
@@ -1049,7 +1027,6 @@ char * __cdecl16far ovc15_capitalize(char *text,...)
 
 
 /* 4207:1cae */
-
 void __cdecl16far stshStoreSprite(spr_t *spr,anm_t *anms,int16_t nanims)
 
 {
@@ -1107,7 +1084,6 @@ void __cdecl16far stshStoreSprite(spr_t *spr,anm_t *anms,int16_t nanims)
 }
 
 
-
 /* 4207:1d87 */
 
 /* [R4] calls ovr_stExit */
@@ -1120,7 +1096,8 @@ undefined2 __cdecl16far ovc15_usesStExit2(byte agntIndex)
   int iVar3;
   int *piVar4;
   int iVar5;
-  undefined4 uStack_12;
+  int *uStack_12;
+  undefined2 uStack_10;
   int iStack_6;
   int iStack_4;
   
@@ -1206,7 +1183,8 @@ undefined2 __cdecl16far ovc15_compute1(uint16_t *agnt)
   uint16_t *puVar6;
   undefined2 uVar7;
   undefined1 uStack_c;
-  undefined4 uStack_6;
+  int *uStack_6;
+  undefined2 uStack_4;
   
   uVar7 = (undefined2)((ulong)agnt >> 0x10);
   puVar6 = (uint16_t *)agnt;
@@ -1366,10 +1344,6 @@ L_OVC15_4207_1ffe_2193:
 
 
 /* 4207:2301 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R2] string "arena" */
-
 char * __cdecl16far ovc15_textArena(int owner,...)
 
 {
@@ -1488,13 +1462,7 @@ char * __cdecl16far ovc15_textArena(int owner,...)
 }
 
 
-
 /* 4207:25dd */
-
-/* WARNING: Control flow encountered bad instruction data */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R2] string "View %s." */
-
 entity_t * __cdecl16far
 ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,undefined2 param_5,
               int *param_6,int *param_7,int *param_8,int *param_9)
@@ -1749,7 +1717,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
     } while( true );
   case 2:
     do {
-      cVar4 =(uint16_t)( ovc15_textView());
+      cVar4 =(uint16_t)( ovr_ovc15_textView())   /* hand fix: self-call, args lost */;
       uVar10 = (undefined2)((ulong)Entities >> 0x10);
       *(char *)((int)&((entity_t *)Entities)[EntityCount].base.state + 1) =
            *(char *)((int)&((entity_t *)Entities)[EntityCount].base.state + 1) + cVar4;
@@ -1809,7 +1777,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
     ovr_createConstructionRecordFar
               (*(byte *)((int)(far_t *)(worldMenuLabels + 0xb) +
                         (uint)*(byte *)((int)uVar2 + 0x3e) * 0x95),GfxRndSeed + -1);
-    ovc18_textTypeLen(PartyCount - 1);
+    ovr_ovc18_textTypeLen(PartyCount - 1)   /* hand fix: prototype has 4 params */;
     if (2 < Difficulty) {
       ovr_ovc22_usesRandBelow2(PartyCount - 1);
     }
@@ -1933,14 +1901,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
 }
 
 
-
 /* 4207:26bc */
-
-/* WARNING: Instruction at (ram,0x0005ff51) overlaps instruction at (ram,0x0005ff50)
-    */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R2] string "Error 4 %d \r" */
-
 agnt_t * __cdecl16far ovc15_textError(undefined4 param_1,agnt_t *param_2)
 
 {
@@ -2911,7 +2872,6 @@ L_attact_3f0b_1082_130A:
     (((entity_t *)in_stack_0000ffe2)->base).target = 0x2 - cVar6;
   } while( true );
 }
-
 
 
 /* 4207:288b */

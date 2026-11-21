@@ -49,7 +49,7 @@ P_OFFSET = re.compile(r"\*\(\s*" + TYPES + r"\s*\*\s*\)\s*\(\s*" + NAME + r"\.of
 P_DIRECT = re.compile(r"\*\(\s*" + TYPES + r"\s*\*\s*\)\s*" + NAME + r"(\.ofs)?\b")
 
 apply = "--apply" in sys.argv
-files = sorted(glob.glob("src/decompiled/*.c")) + sorted(glob.glob("src/decompiled/hard/*.c"))
+files = sorted(glob.glob("src/decompiled/*.c")) + sorted(glob.glob("overrides/*.c"))
 counts = {"direct": 0, "offset": 0}
 samples = []
 

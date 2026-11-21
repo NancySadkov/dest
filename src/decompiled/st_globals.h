@@ -363,7 +363,7 @@ extern char s__s__adds_to_crop_va_2410_1c88[];
 extern char s_Chop_Down_2410_1cec[];
 extern char s_Remove_2410_1cf6[];
 extern char s_Fill_in_2410_1cfd[];
-extern undefined2 upperTextOfs;
+extern byte *upperTextOfs;
 extern undefined2 upperTextSeg;
 extern undefined sfxXOffsets;
 extern char s_undeveloped_land_2410_1d11[];

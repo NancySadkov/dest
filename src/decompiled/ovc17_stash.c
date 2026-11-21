@@ -801,9 +801,6 @@ stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle,...)
 
 
 /* 474a:0e9b */
-
-/* Loads an archive entry from strong.dat into a heap block and caches it. */
-
 undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
 
 {
@@ -902,7 +899,6 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
   }
   return (undefined1 *)pfVar4;
 }
-
 
 
 /* 474a:10ac */

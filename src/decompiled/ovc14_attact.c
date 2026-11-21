@@ -1342,9 +1342,6 @@ uint __cdecl16far attact_usesAlignUp44(int *xPtr,int y,uint8_t dir)
 
 
 /* 3f0b:2430 */
-
-/* [R4] calls ovr_randBelow */
-
 void __cdecl16far attact_usesRandBelow(agnt_t *agnt,byte dir,...)
 
 {
@@ -1386,7 +1383,6 @@ L_attact_3f0b_2430_24BF:
   }
   return;
 }
-
 
 
 /* 3f0b:251d */

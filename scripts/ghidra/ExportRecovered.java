@@ -185,6 +185,86 @@ public class ExportRecovered extends GhidraScript {
     // are the single value 2410:2410 - the DGROUP segment constant 0x2410 in the
     // offset half of a far pointer whose segment the decompiler does not know.
     // Print the number instead of a fabricated string offset.
+    // ---- fold de-symbolizer -------------------------------------------------
+    // Ghidra renders a 16-bit constant by picking the nearest string symbol, so
+    // the DGROUP segment 0x2410 prints as `(char *)"puppetmaker" + 3` when the
+    // name-table entry happens to sit at 0x240d.  The value is exactly
+    // <symbol address> + N, so replacing the whole expression with that number
+    // is lossless and removes a false string reference.  Doing it inside the
+    // exporter (not only in fix_recovered.py) means a partially written export
+    // never shows the bogus form at all.
+    private final Map<String, Long> foldAddr = new HashMap<String, Long>();
+
+    private void buildFoldMap() {
+        DataIterator it = currentProgram.getListing().getDefinedData(true);
+        while (it.hasNext()) {
+            Data d = it.next();
+            try {
+                Object v = d.getValue();
+                if (!(v instanceof String)) continue;
+                String k = foldKey((String) v);
+                if (k.length() >= 4) {
+                    Long prev = foldAddr.put(k, d.getAddress().getOffset());
+                    // the same text at two addresses: Ghidra may have picked
+                    // either one, so this key must not be rewritten blindly
+                    if (prev != null) foldAddr.put(k, Long.valueOf(-1L));
+                }
+            } catch (Throwable t) {
+                // unreadable data: skip it
+            }
+        }
+    }
+
+    private String foldKey(String t) {
+        t = t.replace("\\r", " ").replace("\\n", " ").replace("\\t", " ");
+        t = t.replace("\\'", "'").replace("\\\"", "\"");
+        StringBuilder b = new StringBuilder();
+        for (int i = 0; i < t.length(); i++) {
+            char ch = t.charAt(i);
+            b.append((Character.isLetterOrDigit(ch) || ch == ' ') ? ch : ' ');
+        }
+        String s = b.toString().toLowerCase();
+        while (s.contains("  ")) s = s.replace("  ", " ");
+        return s.trim();
+    }
+
+    private static final java.util.regex.Pattern FOLD =
+            java.util.regex.Pattern.compile(
+                "(?:\\(\\s*char\\s*\\*\\s*\\)\\s*)?\"((?:[^\"\\\\\\n]|\\\\.)*)\""
+                + "\\s*\\+\\s*(0[xX][0-9a-fA-F]+|\\d+)\\b");
+
+    private String desymbolizeFolds(String body) {
+        if (body == null || foldAddr.isEmpty()) return body;
+        java.util.regex.Matcher m = FOLD.matcher(body);
+        StringBuffer out = new StringBuffer();
+        int hits = 0;
+        while (m.find()) {
+            String dig = m.group(2);
+            long delta;
+            try {
+                delta = (dig.startsWith("0x") || dig.startsWith("0X"))
+                        ? Long.parseLong(dig.substring(2), 16) : Long.parseLong(dig);
+            } catch (Exception e) {
+                m.appendReplacement(out, java.util.regex.Matcher.quoteReplacement(m.group(0)));
+                continue;
+            }
+            Long base = delta == 0 ? null : foldAddr.get(foldKey(m.group(1)));
+            if (base == null || base.longValue() < 0) {
+                // a genuine string reference keeps its literal (and any + 0)
+                m.appendReplacement(out, java.util.regex.Matcher.quoteReplacement(m.group(0)));
+                continue;
+            }
+            m.appendReplacement(out, java.util.regex.Matcher.quoteReplacement(
+                    "(char *)0x" + Long.toHexString(base.longValue() + delta)));
+            hits++;
+        }
+        m.appendTail(out);
+        if (hits > 0) foldsRewritten += hits;
+        return out.toString();
+    }
+
+    private int foldsRewritten = 0;
+
     // A Ghidra symbol can be namespace-qualified (switchD_6000:3cd8::caseD_0_3),
     // which is not a C identifier and breaks every module that includes the
     // generated header.  Replace the colons inside such a token only: the pattern
@@ -312,11 +392,23 @@ public class ExportRecovered extends GhidraScript {
         String filter = args.length > 1 ? args[1] : "";
         File dir = new File(outdir);
         dir.mkdirs();
+        // Hand-corrected function bodies live outside the generated tree, so
+        // src/decompiled stays one flat folder of module .c files.  The store is
+        // <repo>/overrides; a legacy <outdir>/hard is still honoured.
+        File ovrDir = new File(dir.getAbsoluteFile().getParentFile().getParentFile(),
+                               "overrides");
+        if (!ovrDir.isDirectory() && new File(dir, "hard").isDirectory())
+            ovrDir = new File(dir, "hard");
+        println("overrides: " + ovrDir);
 
         // types
         writeTypes(new File(dir, "st_types.h"));
         // globals
         writeGlobals(dir);
+
+        // string symbol address table, used to de-symbolize `"lit" + N`
+        buildFoldMap();
+        println("fold symbols: " + foldAddr.size());
 
         DecompInterface ifc = new DecompInterface();
         ifc.openProgram(currentProgram);
@@ -403,7 +495,7 @@ public class ExportRecovered extends GhidraScript {
                     // structurally wrong and no model type can repair - the written
                     // body keeps the decompiler's signature line, so the header and
                     // the definition still agree.
-                    File ovr = new File(dir, "hard/" + mod + "__" + sanitizeIdent(name) + ".c");
+                    File ovr = new File(ovrDir, mod + "__" + sanitizeIdent(name) + ".c");
                     if (ovr.isFile()) {
                         StringBuilder ob = new StringBuilder();
                         BufferedReader orr = new BufferedReader(new FileReader(ovr));
@@ -411,9 +503,9 @@ public class ExportRecovered extends GhidraScript {
                         while ((ol = orr.readLine()) != null) ob.append(ol).append('\n');
                         orr.close();
                         body = ob.toString();
-                        println("override " + mod + " " + name + " <- hard/" + ovr.getName());
+                        println("override " + mod + " " + name + " <- " + ovr.getName());
                     }
-                    body = fixUncompilableIdioms(fixShadowedParamUses(body, sig));
+                    body = fixUncompilableIdioms(desymbolizeFolds(fixShadowedParamUses(body, sig)));
                     w.println(body);
                     if (emitted.add(name)) {
                         if (!sig.endsWith(";")) sig += ";";
@@ -425,7 +517,7 @@ public class ExportRecovered extends GhidraScript {
                 } else {
                     if (msg.isEmpty()) msg = res == null ? "null" : res.getErrorMessage();
                     if (msg == null) msg = "unknown";
-                    File hard = new File(dir, "hard/" + mod + "__" + sanitizeIdent(name) + ".c");
+                    File hard = new File(ovrDir, mod + "__" + sanitizeIdent(name) + ".c");
                     if (hard.isFile()) {
                         StringBuilder sb = new StringBuilder();
                         BufferedReader hr = new BufferedReader(new FileReader(hard));
@@ -452,7 +544,7 @@ public class ExportRecovered extends GhidraScript {
             w.close();
         }
         // Fallback prototypes for functions that failed in this run (a relaxed
-        // retry may still provide the body from hard/).
+        // retry may still provide the body from overrides/).
         for (Function f : fm.getFunctions(true)) {
             if (f.isThunk()) continue;
             MemoryBlock fb = currentProgram.getMemory().getBlock(f.getEntryPoint());
@@ -575,6 +667,7 @@ public class ExportRecovered extends GhidraScript {
             for (String s : failed) man.println("- " + s);
         }
         man.close();
-        println("recovered modules=" + mods.size() + " ok=" + ok + " fail=" + fail + " thunks=" + nth);
+        println("recovered modules=" + mods.size() + " ok=" + ok + " fail=" + fail + " thunks=" + nth
+                + " folds-rewritten=" + foldsRewritten);
     }
 }

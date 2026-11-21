@@ -252,7 +252,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
     } while( true );
   case 2:
     do {
-      cVar4 =(uint16_t)( ovc15_textView());
+      cVar4 =(uint16_t)( ovr_ovc15_textView())   /* hand fix: self-call, args lost */;
       uVar10 = (undefined2)((ulong)Entities >> 0x10);
       *(char *)((int)&((entity_t *)Entities)[EntityCount].base.state + 1) =
            *(char *)((int)&((entity_t *)Entities)[EntityCount].base.state + 1) + cVar4;
@@ -312,7 +312,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
     ovr_createConstructionRecordFar
               (*(byte *)((int)(far_t *)(worldMenuLabels + 0xb) +
                         (uint)*(byte *)((int)uVar2 + 0x3e) * 0x95),GfxRndSeed + -1);
-    ovc18_textTypeLen(PartyCount - 1);
+    ovr_ovc18_textTypeLen(PartyCount - 1)   /* hand fix: prototype has 4 params */;
     if (2 < Difficulty) {
       ovr_ovc22_usesRandBelow2(PartyCount - 1);
     }

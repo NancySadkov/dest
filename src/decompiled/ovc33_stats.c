@@ -1985,7 +1985,7 @@ void __cdecl16far stats_openAgentDetail(int agntIndex)
   ovr_manage_openTalkWindow();
   ScreenMode = 2;
   drawAgntStats((agnt_t *)(agntIndex * 0x34),far_from_u32((uint32_t)(0x1726)),0);
-  drawString((char *)0x2531,0x2410);
+  drawString((char *)"short sword" + 0xb,0x2410);
   bVar1 = *(byte *)((int)Entities + iVar2 * 0x37 + 0xd);
   if (*(char *)((int)(char **)GMenuStrings + (uint)bVar1 * 0x95 + 0x1f) == '\0') {
     if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\0') ||

@@ -288,7 +288,6 @@ uint8_t __cdecl16far fontChWidth(uint8_t *widths,char ch)
 
 
 /* 302d:050a */
-
 int __cdecl16far blitText(char *text,byte *widths,uint16_t seg,uint8_t term,...)
 
 {
@@ -351,9 +350,7 @@ int __cdecl16far blitText(char *text,byte *widths,uint16_t seg,uint8_t term,...)
 }
 
 
-
 /* 302d:0634 */
-
 uint __cdecl16far blitLabel(char *text,uint8_t *widths,int16_t max_width,uint8_t term,...)
 
 {
@@ -389,7 +386,6 @@ uint __cdecl16far blitLabel(char *text,uint8_t *widths,int16_t max_width,uint8_t
   }
   return width;
 }
-
 
 
 /* 302d:06ea */

@@ -8,12 +8,6 @@
 
 
 /* 55fe:0000 */
-
-/* WARNING: Instruction at (ram,0x0005c484) overlaps instruction at (ram,0x0005c483)
-    */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R2] string "               4. Adlib       5. None):" */
-
 byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t *agnt,...)
 
 {
@@ -687,7 +681,6 @@ L_OVC24_5943_026e_08A7:
 }
 
 
-
 /* 55fe:0487 */
 
 /* Stamps GameTick on the records overlapping a column and counts down their timers. */
@@ -1043,7 +1036,7 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
         bVar10 = ((unit_t *)GUnits)[unitIndex].unitType;
         if ((bVar10 == 0xff) ||
            (uVar7 = *(undefined4 *)((uint)bVar10 << 2), *(char *)((int)uVar7 + 0x3f) == '\0')) {
-          pcVar12 = (char *)0x96;
+          pcVar12 = (char *)0x24d;
         }
         else {
           pcVar12 = (char *)0x5dc;

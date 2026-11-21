@@ -47,6 +47,7 @@ def norm(t):
 
 
 addr = {}
+dup = set()
 for line in list(io.open("tmp/dg12.tsv", encoding="utf-8", errors="replace"))[1:]:
     p = line.rstrip("\n").split("\t")
     if len(p) < 4:
@@ -55,7 +56,14 @@ for line in list(io.open("tmp/dg12.tsv", encoding="utf-8", errors="replace"))[1:
     if not m:
         continue
     text = norm(m.group(1))
-    addr.setdefault(text, (int(m.group(2), 16), int(m.group(3), 16)))
+    val = (int(m.group(2), 16), int(m.group(3), 16))
+    if text in addr and addr[text] != val:
+        dup.add(text)          # same text at two addresses: ambiguous
+    else:
+        addr[text] = val
+for k in dup:
+    addr.pop(k, None)
+print("ambiguous (same text, two addresses) skipped:", len(dup))
 
 for line in list(io.open("tmp/dg12.tsv", encoding="utf-8", errors="replace"))[1:]:
     q = line.rstrip("\n").split("\t")
@@ -64,7 +72,11 @@ for line in list(io.open("tmp/dg12.tsv", encoding="utf-8", errors="replace"))[1:
     if NAME.match(q[1]):
         continue
     seg, off = q[0].split(":")
-    addr.setdefault(norm(q[1][2:]), (int(seg, 16), int(off, 16)))
+    text = norm(q[1][2:])
+    val = (int(seg, 16), int(off, 16))
+    if text in addr and addr[text] != val:
+        continue
+    addr.setdefault(text, val)
 
 print("string symbols with an encoded address:", len(addr))
 
@@ -77,7 +89,7 @@ files = []
 for name in sorted(os.listdir("src/decompiled")):
     if name.endswith(".c"):
         files.append(os.path.join("src/decompiled", name))
-hard = os.path.join("src/decompiled", "hard")
+hard = "overrides"   # hand-corrected bodies, outside the generated tree
 if os.path.isdir(hard):
     for name in sorted(os.listdir(hard)):
         if name.endswith(".c"):

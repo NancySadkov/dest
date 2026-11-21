@@ -1466,7 +1466,7 @@ void __cdecl16far uiMainMenuLoop(void)
     items.ofs = 0x2410;
     uiMenu((char *)"Select an option:",items,unaff_SS,8);
     bStack_13 = (byte)pmenu;
-    ovr_say((char *)0x2732,0x2410);
+    ovr_say((char *)0x2741,0x2410);
     if (bStack_13 < 9) {
                     /* WARNING: Switch is manually overridden */
       switch((undefined4)

@@ -4665,13 +4665,13 @@ void __cdecl16far draw_freeRingBuffers(void)
   }
   audioSaveCut2Seg = 0;
   audioSaveCut2Ofs = 0;
-  if (upperTextOfs != 0 || upperTextSeg != 0) {
+  if (upperTextOfs != (byte *)0x0 || upperTextSeg != 0) {
     handle_01.seg = upperTextSeg;
-    handle_01.ofs = upperTextOfs;
+    handle_01.ofs = (uint16_t)upperTextOfs;
     ovr_stshFree(handle_01);
   }
   upperTextSeg = 0;
-  upperTextOfs = 0;
+  upperTextOfs = (byte *)0x0;
   ovr_clean_ring_buffer();
   if (CrossBlitPtr.ofs != 0 || CrossBlitPtr.seg != 0) {
     handle_02.seg = CrossBlitPtr.seg;
@@ -4994,7 +4994,7 @@ void __stdcall16far draw_textGoldProvidesHousing(void)
   bVar9 = *(byte *)(uVar18 + uVar22 + -0x69f6);
   bVar8 = bVar7 | bVar5 |
           *(byte *)((int)puVar20 +
-                   (int)((char *)0x800a + uVar18));
+                   (int)((char *)0x8072 + uVar18));
   bVar13 = (byte)(uVar12 >> 8) | *(byte *)((int)puVar20 + CONCAT11(bVar16,bVar14) + 10);
   puVar1 = (uint *)(uVar18 + (int)puVar20);
   iVar4 = (bVar8 & 3) - (*puVar1 & 3);

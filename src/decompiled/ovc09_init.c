@@ -1479,13 +1479,13 @@ void __cdecl16far freeLeaderData(void)
     handle_01.ofs = audioSaveCut2Ofs;
     ovr_stshFree(handle_01);
   }
-  if (upperTextOfs != 0 || upperTextSeg != 0) {
+  if (upperTextOfs != (byte *)0x0 || upperTextSeg != 0) {
     handle_02.seg = upperTextSeg;
-    handle_02.ofs = upperTextOfs;
+    handle_02.ofs = (uint16_t)upperTextOfs;
     ovr_stshFree(handle_02);
   }
   upperTextSeg = 0;
-  upperTextOfs = 0;
+  upperTextOfs = (byte *)0x0;
   audioSaveCut1Seg = 0;
   audioSaveCut1Ofs = 0;
   audioSaveCut2Seg = 0;

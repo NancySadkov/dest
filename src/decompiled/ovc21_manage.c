@@ -1326,7 +1326,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
       *(undefined1 *)((int)&((entity_t *)Entities)[(int)unaff_SI].base.state + 1) =
            (char)((entity_t *)Entities)[(int)unaff_SI].base.flags32;
       if (unaff_SI + 1 < EntityCount) {
-        pcVar16 = (char *)0x182;
+        pcVar16 = (char *)0x1e6;
         ovr_say((char *)"The damaged structures belonging to all leaders are highlighted in red.");
         return pcVar16;
       }
@@ -3160,7 +3160,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
         ovr_OVC23_55fe_29a2_entry();
         return pcVar17;
       }
-      pcVar17 = (char *)0x182;
+      pcVar17 = (char *)0x1e6;
       ovr_say((char *)"The damaged structures belonging to all leaders are highlighted in red.");
       return pcVar17;
     }
