@@ -1,7 +1,7 @@
 void __cdecl16near __vprinter_1000_0eb3(void)
 
 {
-  code *pcVar1;
+  char *pcVar1;   /* hand fix: the bytes are read as chars */
   undefined1 in_AL;
   int iVar2;
   int unaff_BP;

@@ -2287,7 +2287,7 @@ void __cdecl16near __vprinter_1000_0ea6(void)
 void __cdecl16near __vprinter_1000_0eb3(void)
 
 {
-  code *pcVar1;
+  char *pcVar1;   /* hand fix: the bytes are read as chars */
   undefined1 in_AL;
   int iVar2;
   int unaff_BP;
@@ -2339,7 +2339,7 @@ void __cdecl16near __vprinter_1000_0ebc(void)
 undefined2 __vprinter_func_start(void)
 
 {
-  code *pcVar1;
+  char *pcVar1;   /* hand fix: the bytes are read as chars */
   code cVar2;
   char *pcVar3;
   uint *puVar4;
@@ -3552,46 +3552,15 @@ undefined4 __cdecl16near malloc_ShrinkBlock(void)
 
 
 /* 1000:199f */
-
-far_t * __cdecl16far _realloc(undefined2 param_1,uint16_t param_2,far_t *param_3)
+void __cdecl16far ems_realloc(uint32_t handle)
 
 {
-  undefined1 *puVar1;
-  uint uVar2;
-  far_t *pfVar3;
-  uint unaff_DI;
-  far_t *pfVar4;
-  far_t fVar5;
+  code *pcVar1;
   
-  __farmalloc_data_seg = 0x2410;
-  malloc_save_hi = 0;
-  malloc_save_lo = param_3;
-  if (param_2 == 0) {
-    pfVar3 = farmalloc(param_3,(ulong)unaff_DI << 0x10);
-  }
-  else if (param_3 == (far_t *)0x0) {
-    farfree(0,param_2);
-    pfVar3 = (far_t *)0x0;
-  }
-  else {
-    puVar1 = (undefined1 *)((int)&param_3[4].seg + 1);
-    uVar2 = CONCAT11((byte)((uint)puVar1 >> 0xc) | ((far_t *)init_textFilename < param_3) << 4,
-                     (char)((uint)puVar1 >> 4));
-    if (*(uint *)0x0 < uVar2) {
-      fVar5 = malloc_ExpandBlock();
-      pfVar3 = (far_t *)fVar5.ofs;
-    }
-    else if (*(uint *)0x0 == uVar2) {
-      pfVar3 = (far_t *)__C0_ASM_CopyRight;
-    }
-    else {
-      pfVar4 = (far_t *)malloc_ShrinkBlock();
-      pfVar3 = (far_t *)pfVar4;
-    }
-  }
-  return pfVar3;
+  pcVar1 = (code *)swi(0x67);
+  (*pcVar1)();
+  return;
 }
-
 
 
 /* 1000:19a6 */
@@ -3882,7 +3851,6 @@ void __cdecl16near moveto(uint16_t *curPos,uint16_t *nextPos)
 
 
 /* 1000:1d59 */
-
 void bios(int width,uint16_t *vramOfs)
 
 {
@@ -3909,8 +3877,8 @@ void bios(int width,uint16_t *vramOfs)
     vramScreenOfs = screenpos((uint)in_stack_00000004);
   }
   while( true ) {
-    (*(uint16_t *)((uint8_t *)&(vramOfs) + 2)) = (undefined2 *)((ulong)puVar1 >> 0x10);
-    (*(uint16_t *)((uint8_t *)&(vramOfs))) = (uint16_t *)puVar1;
+    (*(uint16_t *)((uint8_t *)&(vramOfs) + 2)) = (uint16_t)(undefined2 *)((ulong)puVar1 >> 0x10);
+    (*(uint16_t *)((uint8_t *)&(vramOfs))) = (uint16_t)(uint16_t *)puVar1;
     if (width == 0) break;
     if (bVar5) {
       puVar2 = (uint16_t *)&cursorPos;
@@ -3937,7 +3905,6 @@ void bios(int width,uint16_t *vramOfs)
   _VideoInt();
   return;
 }
-
 
 
 /* 1000:1e23 */
@@ -4035,11 +4002,6 @@ void __scroll(uchar dir,uchar x1,uchar y1,uchar x2,uchar y2,uchar lines)
 
 
 /* 1000:2032 */
-
-/* WARNING (jumptable): Unable to track spacebase fully for stack */
-/* WARNING: Unable to track spacebase fully for stack */
-/* WARNING: Unknown calling convention -- yet parameter storage is locked */
-
 void __setargv(uint savedES)
 
 {
@@ -4124,7 +4086,7 @@ Processing:
           iVar8 = uVar6 + 1;
           piVar9 = (int *)(&stack0x0004 + iVar8 * -2);
           if (&stack0x0004 < (undefined1 *)(iVar8 * 4)) goto code_r0x000120eb;
-          *(undefined2 *)&_argv_at_ = piVar9;
+          *(undefined2 *)&_argv_at_ = (uint16_t)piVar9;   /* hand fix: 2-byte slot */
           *(int *)&_argv_at__2 = unaff_SS;
           uVar12 = __setargv_SavedDS;
           goto SetArgvX;
@@ -4174,7 +4136,6 @@ SetArgvX:
   (*(code *)*(undefined2 *)&__setargv_SavedReturn)();
   return;
 }
-
 
 
 /* 1000:20c1 */
@@ -4526,7 +4487,6 @@ int __cdecl16far flushall(void)
 
 
 /* 1000:240e */
-
 int fseek_Displacement(uint *stream)
 
 {
@@ -4538,7 +4498,7 @@ int fseek_Displacement(uint *stream)
   uint *puVar6;
   int iVar7;
   undefined2 uVar8;
-  undefined4 uStack_6;
+  undefined1 *uStack_6;   /* hand fix: dereferenced as *uStack_6 */
   
   uVar8 = (undefined2)((ulong)stream >> 0x10);
   puVar6 = (uint *)stream;
@@ -4574,7 +4534,6 @@ int fseek_Displacement(uint *stream)
   }
   return iVar7;
 }
-
 
 
 /* 1000:2490 */
