@@ -1,0 +1,10 @@
+# agnt_t is 46 bytes in the model but every array of agents uses stride 0x34
+# (52).  The six missing bytes are the tail at 0x2e..0x33, and each one is
+# addressed individually by the original code (see doc/struct_stride_audit.md).
+# Append them in ascending offset order so each insert lands at the current end.
+agnt_t	0x2e	1	/byte	unk2e	read as a byte and compared with 4 (ovc27_combat), set to 0 (ovc49_agents 8699); the 0x34 array stride proves this byte exists
+agnt_t	0x2f	1	/byte	unk2f	read as a char and compared with 0 (ovc14_attact), also set to 0 there
+agnt_t	0x30	1	/byte	unk30	written 0 as *(undefined1 *)((int)Entities + i*0x37 + 0x30) (ovc14_attact)
+agnt_t	0x31	1	/byte	unk31	read as *(undefined1 *)(index*0x34 + 0x31) (ovc12_agnt)
+agnt_t	0x32	1	/byte	unk32	compared with another record's same byte and stored into it (ovc15_sprite)
+agnt_t	0x33	1	/byte	unk33	bit 0 tested (ovc13_panel), incremented (ovc02_draw), set to 2 (ovc25_intel)
