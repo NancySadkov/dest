@@ -422,7 +422,6 @@ int __cdecl16far unrle(far_t src,far_t dst,uint16_t len,...)
 
 
 /* 2d63:0241 */
-
 int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz,...)
 
 {
@@ -454,7 +453,7 @@ int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz,...)
         pcVar1 = (char *)s;
         s = s + 1;
         if (*pcVar1 != '\0') {
-          *(*(uint16_t *)((uint8_t *)&(dst) + 2)) = *pcVar1;
+          *(byte *)(*(uint16_t *)((uint8_t *)&(dst) + 2))   /* hand fix: the segment half is used as an address; make the indirection legal */ = *pcVar1;
         }
         (*(uint16_t *)((uint8_t *)&(dst) + 2)) = (*(uint16_t *)((uint8_t *)&(dst) + 2)) + 1;
         uVar5 = uVar5 - 1;
@@ -482,7 +481,6 @@ int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz,...)
 }
 
 
-
 /* 2d63:0292 */
 
 void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor,...)
@@ -506,7 +504,6 @@ void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor,...)
 
 
 /* 2d63:02b5 */
-
 void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_sz,uint mask,...)
 
 {
@@ -521,8 +518,8 @@ void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_
   for (; (dst < edst && ((*(uint16_t *)((uint8_t *)&(src) + 2)) < erc)); (*(uint16_t *)((uint8_t *)&(src) + 2)) = (*(uint16_t *)((uint8_t *)&(src) + 2)) + 1) {
     if ((in_stack_00000012 & 1) != 0) {
       if (src_sz == 0) {
-        if (*(*(uint16_t *)((uint8_t *)&(src) + 2)) != '\0') {
-          *dst = *(*(uint16_t *)((uint8_t *)&(src) + 2));
+        if (*(byte *)(*(uint16_t *)((uint8_t *)&(src) + 2))   /* hand fix */ != '\0') {
+          *dst = *(byte *)(*(uint16_t *)((uint8_t *)&(src) + 2))   /* hand fix */;
         }
         dst = dst + 1;
       }
@@ -534,7 +531,6 @@ void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_
   }
   return;
 }
-
 
 
 /* 2d63:02fe */
@@ -1309,9 +1305,6 @@ void __cdecl16far driver_compute5(uint16_t x1,byte y1,uint16_t x2,byte y2,uint16
 
 
 /* 2d63:098a */
-
-/* [R7] body shape: scan */
-
 void __cdecl16near driver_scan2(void)
 
 {
@@ -1360,13 +1353,12 @@ void __cdecl16near driver_scan2(void)
     bVar7 = bVar7 - bVar3;
     if (bVar9) {
       unaff_DI = unaff_DI + *(int *)(unaff_BP + -0x12);
-      bVar7 = bVar7 + (char)((code *)init_textFilename)[unaff_BP];
+      bVar7 = bVar7 + (char)((char *)init_textFilename   /* hand fix: indexing a code* has unknown size; the bytes are read as chars */)[unaff_BP];
     }
     in_CX = in_CX + -1;
   } while (in_CX != 0);
   return;
 }
-
 
 
 /* 2d63:09c9 */
