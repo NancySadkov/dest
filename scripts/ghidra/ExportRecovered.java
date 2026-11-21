@@ -605,6 +605,11 @@ public class ExportRecovered extends GhidraScript {
         ch.println("typedef unsigned long int3;");
         ch.println("typedef unsigned long uint3;");
         ch.println("typedef unsigned long undefined3;");
+        // Ghidra's x87 register type.  Turbo C 2.0 has no 80-bit float, and the
+        // recovered code only ever assigns/copies these, so a double carrier is
+        // enough; without it every declaration after the first `longdouble` is
+        // reported as "Declaration is not allowed here" (23 such cascades in o09).
+        ch.println("typedef double longdouble;");
         ch.println("code *swi(int vector);");
         ch.println("#define MK_FP(seg,ofs) ((void far *)(((uint32_t)(seg) << 16) | (uint16_t)(ofs)))");
         ch.println("#define CONCAT11(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint8_t)(b)))");
