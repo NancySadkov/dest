@@ -8,11 +8,6 @@
 
 
 /* 6fbe:0000 */
-
-/* WARNING: Instruction at (ram,0x00061dad) overlaps instruction at (ram,0x00061dac)
-    */
-/* [R4] calls ovr_fmFreeAudio */
-
 char_sheet_t * __cdecl16far
 ovc43_usesFmFreeAudio(uint32_t gindex,char_sheet_t *sheet,uint16_t sheetSeg)
 
@@ -29,7 +24,7 @@ ovc43_usesFmFreeAudio(uint32_t gindex,char_sheet_t *sheet,uint16_t sheetSeg)
   int unaff_DI;
   undefined2 uVar8;
   byte bStack_8;
-  undefined4 uStack_6;
+  char_sheet_t *uStack_6;   /* hand fix: used as uStack_6->nameText and (char_sheet_t *)uStack_6 */
   
   pcVar4 = (char_sheet_t *)((char *)"puppetmaker" + 3);
   TextBlitDstSeg = 0xa000;
@@ -78,8 +73,8 @@ L_OVC30_619c_0339_03CE:
     uStack_6 = (char_sheet_t *)CONCAT22(pcVar5,pcVar4);
     bStack_8 = GLeaderCount;
     uVar6 = (uint)GLeaderCount;
-    ((undefined2 *)(uVar6 * 4))[1] = pcVar5;
-    *(undefined2 *)(uVar6 * 4) = pcVar4;
+    ((undefined2 *)(uVar6 * 4))[1] = (uint16_t)pcVar5;   /* hand fix: segment half into a 2-byte slot */
+    *(undefined2 *)(uVar6 * 4) = (uint16_t)pcVar4;   /* hand fix: offset half into a 2-byte slot */
     GLeaderCount = GLeaderCount + 1;
     break;
   case 5:
@@ -95,7 +90,7 @@ L_OVC30_619c_0339_03CE:
                                    ((int)&worldMenuLabels[0].seg + 1 + (uint)(byte)gindex * 0x95)));
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x3d) = 1;
   *(undefined2 *)((int)(char_sheet_t *)uStack_6 + 0x39) = uVar8;
-  *(undefined2 *)((int)(char_sheet_t *)uStack_6 + 0x3b) = sheet;
+  *(undefined2 *)((int)(char_sheet_t *)uStack_6 + 0x3b) = (uint16_t)sheet;   /* hand fix: only the offset half is stored */
   *(byte *)((int)(char_sheet_t *)uStack_6 + 0x3e) = (byte)gindex;
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x2f) = 0xff;
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x30) = 3;
@@ -126,7 +121,6 @@ code_r0x00061e64:
   pfVar3 = ovr_ovc22_textRingProt(bStack_8);
   return (char_sheet_t *)CONCAT11((char)((uint)pfVar3 >> 8),bStack_8);
 }
-
 
 
 /* 6fbe:013a */
@@ -161,11 +155,6 @@ void __cdecl16far ovc43_usesStExit(uint32_t gindex,uint16_t hnd,uint16_t sheetOf
 
 
 /* 6fbe:01a9 */
-
-/* Plays FLI frames from an already-open handle: allocates a 320x200 frame buffer, presents one
-   frame per iteration with the given palette, delays param_4 ticks, and returns 1 (ENTER/mouse) or
-   2 (ESC). */
-
 char __cdecl16far
 ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte delayTicks)
 
@@ -194,7 +183,7 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
   ovc43_usesStExit(CONCAT22(paletteSeg,paletteOfs),handle,(uint16_t)tempScreenOfs,in_DX);
   ovr_ovr_miceButton0PressStates_entry();
   uStack_4 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  puVar4 = *(ulong **)BDA_DailyTimeCounter;
+  puVar4 = *(ulong **)BDA_DailyTimeCounter.ofs;   /* hand fix: the offset half is the address, not the far_t struct */
   cStack_7 = '\0';
   puStack_6 = puVar4;
   for (uVar5 = 0; uVar5 < iStack_82 - 1U; uVar5 = uVar5 + 1) {
@@ -219,7 +208,7 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
     } while ((puVar4 == (ulong *)0x0) && (puVar4 = (ulong *)0x0, puVar3 < (ulong *)(uint)delayTicks)
             );
     uStack_4 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    puVar4 = *(ulong **)BDA_DailyTimeCounter;
+    puVar4 = *(ulong **)BDA_DailyTimeCounter.ofs;   /* hand fix: the offset half is the address, not the far_t struct */
     puStack_6 = puVar4;
 L_OVC43_6fbe_01a9_02C7:
     if (cStack_7 != '\0') break;
@@ -231,7 +220,6 @@ L_OVC43_6fbe_01a9_02C7:
   ovr_stshFree(handle_00);
   return cStack_7;
 }
-
 
 
 /* 6fbe:0322 */
