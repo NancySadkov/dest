@@ -1516,9 +1516,6 @@ int __cdecl16far ovc27_usesAgntCount(agnt_t *agnt,byte recIndex,byte maxLevel,in
 
 
 /* 5ded:1c94 */
-
-/* Rolls to hit using the entity's level and the type record's faction ramp. */
-
 int __cdecl16far ovc27_rollToHitEntity(uint32_t agnt,byte column,...)
 
 {
@@ -1530,7 +1527,7 @@ int __cdecl16far ovc27_rollToHitEntity(uint32_t agnt,byte column,...)
   byte bStack_9;
   byte bStack_8;
   byte bStack_7;
-  undefined4 uStack_6;
+  undefined1 *uStack_6;   /* hand fix: dereferenced as *uStack_6, compared with 0xff */
   
   uVar5 = (undefined2)(agnt >> 0x10);
   iVar4 = (int)agnt;
@@ -1562,11 +1559,7 @@ int __cdecl16far ovc27_rollToHitEntity(uint32_t agnt,byte column,...)
 }
 
 
-
 /* 5ded:1d8e */
-
-/* Rolls to hit using the agent's own level and type-record ramp. */
-
 int __cdecl16far ovc27_rollToHitAgent(uint32_t agnt,byte column,...)
 
 {
@@ -1578,7 +1571,7 @@ int __cdecl16far ovc27_rollToHitAgent(uint32_t agnt,byte column,...)
   byte bStack_9;
   byte bStack_8;
   byte bStack_7;
-  undefined4 uStack_6;
+  undefined1 *uStack_6;   /* hand fix: same idiom */
   
   uVar5 = (undefined2)(agnt >> 0x10);
   iVar4 = (int)agnt;
@@ -1611,7 +1604,6 @@ int __cdecl16far ovc27_rollToHitAgent(uint32_t agnt,byte column,...)
   }
   return iVar4;
 }
-
 
 
 /* 5ded:1eb7 */

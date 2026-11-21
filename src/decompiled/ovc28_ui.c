@@ -8,9 +8,6 @@
 
 
 /* 6018:0000 */
-
-/* [R6] touches BDA_DailyTimeCounter */
-
 void __cdecl16far ovc28_usesBDADailyTimeCounter(int ticks,...)
 
 {
@@ -24,10 +21,9 @@ void __cdecl16far ovc28_usesBDADailyTimeCounter(int ticks,...)
     do {
       ticks = iVar1;
       if (*(int *)(BDA_DailyTimeCounter.ofs + 2) != *(int *)(BDA_DailyTimeCounter.ofs + 2)) break;
-    } while (*(int *)BDA_DailyTimeCounter == *(int *)BDA_DailyTimeCounter);
+    } while (*(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */ == *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */);
   } while( true );
 }
-
 
 
 /* 6018:0048 */
@@ -237,9 +233,6 @@ void __cdecl16far toggle_pause(void)
 
 
 /* 6018:0456 */
-
-/* [R4] calls ovr_blitGfx10 */
-
 void __cdecl16far ovc28_usesBlitGfx10(far_t entries,int count)
 
 {
@@ -259,7 +252,7 @@ void __cdecl16far ovc28_usesBlitGfx10(far_t entries,int count)
   far_t dst;
   uint8_t text;
   int iStack_8;
-  undefined4 uStack_6;
+  undefined1 *uStack_6;   /* hand fix: dereferenced as *uStack_6 */
   
   gfx_00.seg = fullScreenGfxSeg;
   gfx_00.ofs = fullScreenGfxOfs;
@@ -321,7 +314,6 @@ void __cdecl16far ovc28_usesBlitGfx10(far_t entries,int count)
   }
   return;
 }
-
 
 
 /* 6018:0634 */
