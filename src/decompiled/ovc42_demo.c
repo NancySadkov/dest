@@ -8,9 +8,6 @@
 
 
 /* 6d7a:0000 */
-
-/* [R2] string "%s: provides more housing." */
-
 char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
 
 {
@@ -26,7 +23,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
   
   prevTick = (ulong)unaff_SI << 0x10;
   uVar1 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  __return_storage_ptr__ = *(ulong **)BDA_DailyTimeCounter;
+  __return_storage_ptr__ = *(ulong **)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
   MiceNeedsUpdate = 1;
   puVar5 = __return_storage_ptr__;
   do {
@@ -56,11 +53,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
 }
 
 
-
 /* 6d7a:009b */
-
-/* [R4] calls ovr_miceBlitRect */
-
 undefined2 __cdecl16far ovc42_usesMiceBlitRect(byte timeoutTicks)
 
 {
@@ -72,7 +65,7 @@ undefined2 __cdecl16far ovc42_usesMiceBlitRect(byte timeoutTicks)
   ulong prevTick;
   
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(ulong **)BDA_DailyTimeCounter;
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
   rightButtonLatch = 0;
   if (MiceNeedsUpdate == '\0') {
     prevTick = 0;
@@ -87,11 +80,11 @@ undefined2 __cdecl16far ovc42_usesMiceBlitRect(byte timeoutTicks)
   } while (bVar1);
   while( true ) {
     uVar3 = (undefined1)(prevTick >> 0x18);
-    uVar4 = *(uint16_t *)BDA_DailyTimeCounter;
+    uVar4 = *(uint16_t *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
     if ((*(uint16_t *)(BDA_DailyTimeCounter.ofs + 2) != InputEventTime.hi) ||
        (uVar4 != InputEventTime.lo)) {
       InputEventTime.hi = *(uint16_t *)(BDA_DailyTimeCounter.ofs + 2);
-      uVar4 = *(uint16_t *)BDA_DailyTimeCounter;
+      uVar4 = *(uint16_t *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
       InputEventTime.lo = uVar4;
       ovr_draw_usesPrintf();
     }
@@ -110,7 +103,6 @@ undefined2 __cdecl16far ovc42_usesMiceBlitRect(byte timeoutTicks)
   }
   return CONCAT11(uVar3,(char)(prevTick >> 0x10));
 }
-
 
 
 /* 6d7a:0190 */
@@ -382,9 +374,6 @@ void __cdecl16far ovc42_copy1(char *buf)
 
 
 /* 6d7a:078f */
-
-/* Draws one row of text at y = row*0xd + 0x9e in demfont1, with the background at row 0. */
-
 void __cdecl16far ovc42_drawTextRow(char *text,byte row)
 
 {
@@ -415,16 +404,12 @@ void __cdecl16far ovc42_drawTextRow(char *text,byte row)
   iStack_4 = max_width;
   ovr_blitLabel((char *)text,(uint8_t *)CONCAT22(psStack_6,(*(uint16_t *)((uint8_t *)&(text) + 2))),max_width,0x3f);
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
   return;
 }
 
 
-
 /* 6d7a:0850 */
-
-/* [R4] calls ovr_blitLabel */
-
 void __cdecl16far ovc42_usesBlitLabel(char *text,byte row,...)
 
 {
@@ -442,15 +427,13 @@ void __cdecl16far ovc42_usesBlitLabel(char *text,byte row,...)
   psVar1 = ovr_stshLoadGfx(handle);
   ovr_blitLabel(text,(uint8_t *)CONCAT22(psVar1,row),max_width,0x3f);
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
   BlitLetterType = 0;
   return;
 }
 
 
-
 /* 6d7a:08df */
-
 undefined2 __cdecl16far run_demo(void)
 
 {
@@ -690,7 +673,7 @@ undefined2 __cdecl16far run_demo(void)
                       ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                       MiceUnkState = 0;
                       (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                      (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+                      (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
                       uVar6 = ovr_inputUpdate(0x3c);
                       if ((byte)uVar6 < 2) {
                         ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -704,7 +687,7 @@ undefined2 __cdecl16far run_demo(void)
                         ovc42_showAgentStats(3,bStack_5,'\x01',cmap_00,0);
                         ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                         (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                        (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+                        (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
                         uVar6 = ovr_inputUpdate(0x32);
                         if ((byte)uVar6 < 2) {
                           ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -718,7 +701,7 @@ undefined2 __cdecl16far run_demo(void)
                           ovc42_showAgentStats(8,bStack_6,'\x01',cmap_01,0);
                           ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                           (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                          (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+                          (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
                           uVar6 = ovr_inputUpdate(0x32);
                           if ((byte)uVar6 < 2) {
                             ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -732,7 +715,7 @@ undefined2 __cdecl16far run_demo(void)
                             ovc42_showAgentStats(1,bStack_6,'\0',cmap_02,0xc);
                             ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                             (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                            (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+                            (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
                             uVar6 = ovr_inputUpdate(0x32);
                             if ((byte)uVar6 < 2) {
                               ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -749,7 +732,7 @@ undefined2 __cdecl16far run_demo(void)
                               ovc42_showAgentStats(0x15,bStack_3,'\x01',cmap_03,0);
                               ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                               (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                              (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+                              (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
                               uVar6 = ovr_inputUpdate(0x32);
                               if ((byte)uVar6 < 2) {
                                 ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -763,7 +746,7 @@ undefined2 __cdecl16far run_demo(void)
                                 ovc42_showAgentStats(0x24,bStack_3,'\x01',cmap_04,0);
                                 ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                                 (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                                (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+                                (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
                                 uVar6 = ovr_inputUpdate(0x32);
                                 if ((byte)uVar6 < 2) {
                                   ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -778,7 +761,7 @@ undefined2 __cdecl16far run_demo(void)
                                   ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                        *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-                                  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+                                  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
                                   uVar6 = ovr_inputUpdate(0x32);
                                   if ((byte)uVar6 < 2) {
                                     ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -957,7 +940,7 @@ undefined2 __cdecl16far run_demo(void)
                                                       (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                                            *(undefined2 *)
                                                             (BDA_DailyTimeCounter.ofs + 2);
-                                                      uVar3 = *(undefined2 *)BDA_DailyTimeCounter;
+                                                      uVar3 = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
                                                       (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = uVar3;
                                                       pcVar2 = ovc42_textProvidesMoreHousing(0x30);
                                                       if ((byte)pcVar2 < 2) {
@@ -990,7 +973,7 @@ undefined2 __cdecl16far run_demo(void)
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                                        *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2)
                                                   ;
-                                                  uVar3 = *(undefined2 *)BDA_DailyTimeCounter;
+                                                  uVar3 = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = uVar3;
                                                   uVar6 = ovr_inputUpdate(0xb4);
                                                   if ((byte)uVar6 < 2) {
@@ -1023,7 +1006,7 @@ undefined2 __cdecl16far run_demo(void)
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                                        *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2)
                                                   ;
-                                                  uVar3 = *(undefined2 *)BDA_DailyTimeCounter;
+                                                  uVar3 = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = uVar3;
                                                   uVar6 = ovr_inputUpdate(0xb4);
                                                   if ((byte)uVar6 < 2) {
@@ -1057,7 +1040,7 @@ undefined2 __cdecl16far run_demo(void)
                                                        *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2)
                                                   ;
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) =
-                                                       *(undefined2 *)BDA_DailyTimeCounter;
+                                                       *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
                                                   uVar6 = ovr_inputUpdate(0xb4);
                                                   if ((byte)uVar6 < 2) {
                                                     ovc42_endDemo('\0',(int)&palette,unaff_SS);
@@ -1241,7 +1224,6 @@ undefined2 __cdecl16far run_demo(void)
   }
   return uVar3;
 }
-
 
 
 /* 6d7a:1f25 */
