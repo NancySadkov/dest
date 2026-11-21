@@ -9,7 +9,7 @@ uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes,...)
   uint32_t r;
   
   if (oldblock == 0) {
-    (*(uint16_t *)((uint8_t *)&(r))) = stshAlloc(nbytes);
+    (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) stshAlloc(nbytes);
   }
   else {
     ovr_fmFreeAudio(0);
@@ -20,7 +20,7 @@ uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes,...)
     do {
       if (HeapReady == '\0') {
         uVar1 = farrealloc(oldblock,nbytes);
-        (*(uint16_t *)((uint8_t *)&(r))) = (long *)CONCAT11(extraout_AH,uVar1);
+        (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) (long *)CONCAT11(extraout_AH,uVar1);
         iVar3 = in_DX;
       }
       else {

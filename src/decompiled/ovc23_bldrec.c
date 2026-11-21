@@ -123,13 +123,13 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   }
   uStack_6 = (byte *)((ulong)uStack_6 & 0xffffff);
   iVar24 = 0;
-  (*(uint16_t *)((uint8_t *)&(uStack_6))) = (byte *)CONCAT11(0xff,(char)uStack_6);
-  uStack_8 = (byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_8) + 1)) << 8);
+  (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t) (byte *)CONCAT11(0xff,(char)uStack_6);
+  uStack_8 =(uint16_t) (byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_8) + 1)) << 8);
   for (iVar25 = -2; cVar10 = (char)unaff_DI, iVar25 < 2; iVar25 = iVar25 + 1) {
     uVar15 = ovr_ovc45_getUnitIndex(GfxRndSeed + iVar25);
     bVar11 = ovr_ovc45_getUnitType(GfxRndSeed + iVar25);
     uVar7 = (ulong)uStack_6;
-    uStack_8 = (byte *)CONCAT11(bVar11,(byte)uStack_8);
+    uStack_8 =(uint16_t) (byte *)CONCAT11(bVar11,(byte)uStack_8);
     uVar26 = (undefined2)((ulong)GUnits >> 0x10);
     puVar23 = (unit_t *)GUnits;
     bVar9 = puVar23[uVar15].unitType;
@@ -142,7 +142,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
         ((*(uint8_t *)((uint8_t *)&(uStack_6) + 1)) = SUB41(uVar7,1), bVar4 = puVar23[uVar15].level <= (*(uint8_t *)((uint8_t *)&(uStack_6) + 1)), bVar4))))
     {
       (*(uint8_t *)((uint8_t *)&(uStack_6))) = (char)uVar7;
-      (*(uint16_t *)((uint8_t *)&(uStack_6))) = (byte *)CONCAT11(puVar23[uVar15].level,(char)uStack_6);
+      (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t) (byte *)CONCAT11(puVar23[uVar15].level,(char)uStack_6);
       uStack_6 = (byte *)(ulong)CONCAT12(bVar9,(byte *)uStack_6);
     }
     uVar7 = (ulong)uStack_6;
@@ -213,9 +213,9 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
       uStack_10 = 0;
     }
     pbVar14 = (byte *)(uVar15 + 1);
-    uStack_8 = pbVar14;
+    uStack_8 =(uint16_t) pbVar14;
     if ((byte *)((int)(undefined4 *)&_DATA + 2) < pbVar14) {
-      uStack_8 = (byte *)((int)(undefined4 *)&_DATA + 2);
+      uStack_8 =(uint16_t) (byte *)((int)(undefined4 *)&_DATA + 2);
     }
     bStackY_2d = 0xff;
     bStackY_2e = 0;
@@ -345,9 +345,9 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
         if ((int)(uint)PlayerCount < iVar25) {
           uVar16 = ovr_randBelow(0x28);
           iVar25 = *(int *)((int)*(undefined4 *)(uStack_a << 2) + 0x39) + -0x14 + (uVar16 & 0xff);
-          (*(uint16_t *)((uint8_t *)&(uStack_6))) = (byte *)iVar25;
+          (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t) (byte *)iVar25;
           if (iVar25 < 4) {
-            (*(uint16_t *)((uint8_t *)&(uStack_6))) = (byte *)0x4;
+            (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t) (byte *)0x4;
           }
           if (0x8c < (int)(byte *)uStack_6) {
             uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),0x8b);
@@ -356,10 +356,10 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
           uStack_8 = (byte *)(*(int *)((int)*(undefined4 *)(uStack_a << 2) + 0x3b) + -10 +
                              (uVar16 & 0xff));
           if ((int)uStack_8 < 1) {
-            uStack_8 = (byte *)0x1;
+            uStack_8 =(uint16_t) (byte *)0x1;
           }
           if (0x3a < (int)uStack_8) {
-            uStack_8 = (byte *)0x3a;
+            uStack_8 =(uint16_t) (byte *)0x3a;
           }
           ovc25_usesAlignUp44((char)uStack_a,1);
         }
@@ -553,7 +553,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
         }
         else {
           if ((byte *)(uint)Entities[iVar25].base.animFrame <= uStack_8) {
-            uStack_8 = (byte *)(uint)Entities[iVar25].base.animFrame;
+            uStack_8 =(uint16_t) (byte *)(uint)Entities[iVar25].base.animFrame;
           }
           Entities[iVar25].base.animFrame = Entities[iVar25].base.animFrame - (byte)uStack_8;
           ovr_ovc41_compute4(&Entities[iVar25].base,(byte)((ulong)Entities >> 0x10));

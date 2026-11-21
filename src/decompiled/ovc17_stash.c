@@ -242,7 +242,7 @@ void __cdecl16far stshInit(void)
       szlo = 0;
     }
     else {
-      (*(uint16_t *)((uint8_t *)&(flen))) = filelength(__return_storage_ptr__,(int)unaff_DI);
+      (*(uint16_t *)((uint8_t *)&(flen))) =(uint16_t) filelength(__return_storage_ptr__,(int)unaff_DI);
       close((int)__return_storage_ptr__);
       szlo = (uint16_t)(long *)flen;
       szhi = (*(uint16_t *)((uint8_t *)&(flen) + 2));
@@ -253,9 +253,9 @@ void __cdecl16far stshInit(void)
     *(undefined2 *)((long *)StshPtrs + file_id) = 0;
     (*(uint16_t *)((uint8_t *)&(flen) + 2)) = szhi;
   }
-  (*(uint16_t *)((uint8_t *)&(FMXmsHandle))) = xms_init(unaff_DI);
+  (*(uint16_t *)((uint8_t *)&(FMXmsHandle))) =(uint16_t) xms_init(unaff_DI);
   (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) = (*(uint16_t *)((uint8_t *)&(flen) + 2));
-  (*(uint16_t *)((uint8_t *)&(FMEmsHandle))) = ems_init(unaff_DI);
+  (*(uint16_t *)((uint8_t *)&(FMEmsHandle))) =(uint16_t) ems_init(unaff_DI);
   (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) = (*(uint16_t *)((uint8_t *)&(flen) + 2));
   if ((uint32_t *)FMXmsHandle != (uint32_t *)0x0 || (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) != 0) {
     if (((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) <= (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2))) &&
@@ -263,7 +263,7 @@ void __cdecl16far stshInit(void)
         ((uint32_t *)StshSizes[0] < (uint32_t *)FMXmsHandle)))) {
       stshInit_scan((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)),(uint32_t *)StshSizes[0]));
       (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) = (*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2));
-      (*(uint16_t *)((uint8_t *)&(FMXmsHandle))) = (uint32_t *)StshSizes[0];
+      (*(uint16_t *)((uint8_t *)&(FMXmsHandle))) =(uint16_t) (uint32_t *)StshSizes[0];
     }
     fmReadIntoHimem((char *)StshNames[0],(*(uint16_t *)((uint8_t *)&(StshNames[0]) + 2)),0,0,'\0',
                     (uint16_t)(uint32_t *)FMXmsHandle,(*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)),0);
@@ -276,7 +276,7 @@ void __cdecl16far stshInit(void)
       ems_realloc(0);
     }
     (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) = 0;
-    (*(uint16_t *)((uint8_t *)&(FMEmsHandle))) = (uint32_t *)0x0;
+    (*(uint16_t *)((uint8_t *)&(FMEmsHandle))) =(uint16_t) (uint32_t *)0x0;
   }
   else {
     uVar1 = (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) + (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) +
@@ -285,7 +285,7 @@ void __cdecl16far stshInit(void)
        (((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) < uVar1 ||
         ((uint32_t *)StshSizes[0] <
          (uint32_t *)((int)(uint32_t *)FMXmsHandle + (int)(uint32_t *)FMEmsHandle))))) {
-      (*(uint16_t *)((uint8_t *)&(FMEmsHandle))) = (uint32_t *)((int)(uint32_t *)StshSizes[0] - (int)(uint32_t *)FMXmsHandle)
+      (*(uint16_t *)((uint8_t *)&(FMEmsHandle))) = (uint16_t)((uint32_t *)((int)(uint32_t *)StshSizes[0] - (int)(uint32_t *)FMXmsHandle))
       ;
       (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) =
            ((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) - (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2))) -
@@ -366,9 +366,9 @@ void * __cdecl16far stshAlloc(uint32_t nbytes,...)
   uint32_t newbuf;
   
   if (nbytes == 0xfa0f) {
-    (*(uint16_t *)((uint8_t *)&(r))) = (far_t *)StshBuf.ofs;
+    (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) (far_t *)StshBuf.ofs;
     if (StshBuf.ofs == 0 && StshBuf.seg == 0) {
-      (*(uint16_t *)((uint8_t *)&(r))) = farmalloc((far_t *)0xfa0f,(ulong)ofs << 0x10);
+      (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) farmalloc((far_t *)0xfa0f,(ulong)ofs << 0x10);
       StshBuf.ofs = (uint16_t)(far_t *)r;
       StshBuf.seg = (*(uint16_t *)((uint8_t *)&(r) + 2));
     }
@@ -393,7 +393,7 @@ void * __cdecl16far stshAlloc(uint32_t nbytes,...)
         return (void *)0x0;
       }
     } while (ofs == 0 && ofs_00 == 0);
-    (*(uint16_t *)((uint8_t *)&(r))) = (far_t *)ovr_mkp((uint32_t *)ofs,ofs_00,ofs);
+    (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) (far_t *)ovr_mkp((uint32_t *)ofs,ofs_00,ofs);
   }
   return (far_t *)r;
 }
@@ -411,7 +411,7 @@ uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes,...)
   uint32_t r;
   
   if (oldblock == 0) {
-    (*(uint16_t *)((uint8_t *)&(r))) = stshAlloc(nbytes);
+    (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) stshAlloc(nbytes);
   }
   else {
     ovr_fmFreeAudio(0);
@@ -422,7 +422,7 @@ uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes,...)
     do {
       if (HeapReady == '\0') {
         uVar1 = farrealloc(oldblock,nbytes);
-        (*(uint16_t *)((uint8_t *)&(r))) = (long *)CONCAT11(extraout_AH,uVar1);
+        (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) (long *)CONCAT11(extraout_AH,uVar1);
         iVar3 = in_DX;
       }
       else {
@@ -845,7 +845,7 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
                                                   *(undefined2 *)
                                                    ((int)&((far_t *)(entry.ofs + 4))->seg + 1))));
         *(uint16_t *)((int)&((far_t *)(entry.ofs + 0x10))->seg + 1) = uVar7;
-        *(undefined2 *)((int)&((far_t *)(entry.ofs + 0x10))->ofs + 1) = pfVar5;
+        *(undefined2 *)((int)&((far_t *)(entry.ofs + 0x10))->ofs + 1) =(uint16_t) pfVar5;
         if (*(int *)((int)&((far_t *)(entry.ofs + 0x10))->ofs + 1) == 0 &&
             *(int *)((int)&((far_t *)(entry.ofs + 0x10))->seg + 1) == 0) {
           bVar3 = false;
