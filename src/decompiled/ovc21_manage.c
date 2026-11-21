@@ -1073,10 +1073,10 @@ char * __cdecl16far chargen_switch(uint16_t index)
     pasoplAdvSeg =(uint16_t)( pfVar18);
     adlibAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlib.adv",(char *)0x12410,index));
     adlibAdvSeg =(uint16_t)( pfVar18);
-    adlibgAdvOfs = stshStoreFile_2((far_t *)"adlibg.adv",(char *)0x12410,index);
-    adlibgAdvSeg = pfVar18;
-    mt32mpuAdvOfs = stshStoreFile_2((far_t *)"mt32mpu.adv",(char *)0x12410,index);
-    mt32mpuAdvSeg = pfVar18;
+    adlibgAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlibg.adv",(char *)0x12410,index));
+    adlibgAdvSeg =(uint16_t)( pfVar18);
+    mt32mpuAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"mt32mpu.adv",(char *)0x12410,index));
+    mt32mpuAdvSeg =(uint16_t)( pfVar18);
     return (char *)mt32mpuAdvOfs;
   case 1:
     iVar23 = ovr_ovc23_findClearColumn(GfxRndSeed);
@@ -1218,8 +1218,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
   case 5:
     puVar17 = ovr_mkp((uint32_t *)unaff_BP,(uint16_t)(char *)in_stack_00000000,
                       (uint16_t)((ulong)in_stack_00000000 >> 0x10));
-    index = (uint32_t *)CONCAT22(uVar13,puVar17);
-    if ((char)*index == '\0') {
+    index = (uint16_t)CONCAT22(uVar13,puVar17);   /* hand fix: 16-bit slot keeps the offset */
+    if ((char)*(uint8_t *)(uint)index == '\0') {   /* hand fix: deref the offset */
       uVar28 = CONCAT22((int)((ulong)in_stack_00000000 >> 0x10),*(undefined2 *)((int)puVar17 + 7));
       uVar26 = uVar13;
       pfVar18 = fmMalloc((far_t *)*(undefined2 *)((int)puVar17 + 5),uVar28);
@@ -1240,7 +1240,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
           pfVar18 = ovr_heapMalloc((far_t *)*(undefined2 *)((int)puVar17 + 5),uVar28);
           uVar29 = (uint16_t)(uVar28 >> 0x10);
           *(uint16_t *)((int)puVar17 + 0x13) = uVar26;
-          *(undefined2 *)((int)puVar17 + 0x11) = pfVar18;
+          *(undefined2 *)((int)puVar17 + 0x11) =(uint16_t)( pfVar18);
           if (*(int *)((int)puVar17 + 0x11) == 0 && *(int *)((int)puVar17 + 0x13) == 0) {
             bVar10 = false;
           }
@@ -1289,7 +1289,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
             *(undefined2 *)((int)puVar17 + 0xb) = 0;
             *(undefined2 *)((int)puVar17 + 9) = 0;
             *(uint16_t far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  0xb) = uVar13;
-            *(undefined2 far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  9) = puVar17;
+            *(undefined2 far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  9) =(uint16_t)( puVar17);
             Stsh_2410_47f6.seg = uVar13;
             Stsh_2410_47f6.ofs = (uint16_t)puVar17;
           }
@@ -2022,7 +2022,7 @@ void __cdecl16far manage_textHalflingCastle(void)
     uVar3 = (uint)PartyCount;
     widths = (char_sheet_t *)((char *)0x2627a);
     *(int *)(uVar3 * 4 + -2) = iStack_10;
-    *(undefined2 *)(uVar3 * 4 + -4) = pcStack_12;
+    *(undefined2 *)(uVar3 * 4 + -4) =(uint16_t)( pcStack_12);
     if (CurPartySlot == 0) {
       pcStack_12->titleIndex = 1;
     }
@@ -2717,7 +2717,7 @@ void manage_textAllProperty2(void)
     puVar2 = (undefined2 *)((uint)*(byte *)(unaff_BP + 6) * 4);
     puVar6 = (uint8_t *)*puVar2;
     *(undefined2 *)(unaff_BP + -2) = puVar2[1];
-    *(undefined2 *)(unaff_BP + -4) = puVar6;
+    *(undefined2 *)(unaff_BP + -4) =(uint16_t)( puVar6);
     uVar7 = 0x50;
     term = 0xde;
     uVar11 = (undefined1)Font02.seg;
@@ -2771,12 +2771,12 @@ void manage_textAllProperty2(void)
                          (int *)CONCAT22(unaff_SS,(int *)(unaff_BP + -8)),
                          (int *)CONCAT22(unaff_SS,(int *)(unaff_BP + -10)),
                          (int *)CONCAT22(unaff_SS,(int *)(unaff_BP + -0xc)));
-      *(int *)((code *)init_textFilename + unaff_BP) = iVar4;
+      *(int *)((char *)init_textFilename + unaff_BP) = iVar4;
       if (*(int *)(unaff_BP + -0xc) == 0) {
         iVar4 = 100;
-        uVar11 = (undefined1)*(undefined2 *)((code *)init_textFilename + unaff_BP);
+        uVar11 = (undefined1)*(undefined2 *)((char *)init_textFilename + unaff_BP);
         pcVar5 = litoa10((char *)(unaff_BP + -0x66),
-                         CONCAT13((char)((uint)*(undefined2 *)((code *)init_textFilename + unaff_BP)
+                         CONCAT13((char)((uint)*(undefined2 *)((char *)init_textFilename + unaff_BP)
                                         >> 8),CONCAT12(uVar11,unaff_SS)),uVar11,0);
         manage_blitLabelRight
                   ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);
@@ -3049,7 +3049,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
   undefined2 uStack_10;
   char acStack_e [6];
   uint16_t uStack_8;
-  undefined1 auStack_6 [2];
+  uint32_t auStack_6;   /* hand fix: CONCAT12/13/22 target, read as uint3 */
   undefined2 uStack_4;
   
   dst.seg = (uint16_t)unaff_SS;
@@ -3154,7 +3154,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
       ovr_say((char *)"The damaged structures belonging to all leaders are highlighted in red.");
       return pcVar17;
     }
-    uStack_10 = (char *)((int *)((uint)charIndex * 4))[1];
+    uStack_10 =(uint16_t)( (char *)((int *)((uint)charIndex * 4))[1]);
     iStack_12 = *(int *)((uint)charIndex * 4);
     uVar5 = Font02.ofs;
     ovr_ovc45_compute9(acStack_1b6,(char *)CONCAT22(iStack_12,unaff_SS),

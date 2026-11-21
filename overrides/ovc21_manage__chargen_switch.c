@@ -123,10 +123,10 @@ char * __cdecl16far chargen_switch(uint16_t index)
     pasoplAdvSeg =(uint16_t)( pfVar18);
     adlibAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlib.adv",(char *)0x12410,index));
     adlibAdvSeg =(uint16_t)( pfVar18);
-    adlibgAdvOfs = stshStoreFile_2((far_t *)"adlibg.adv",(char *)0x12410,index);
-    adlibgAdvSeg = pfVar18;
-    mt32mpuAdvOfs = stshStoreFile_2((far_t *)"mt32mpu.adv",(char *)0x12410,index);
-    mt32mpuAdvSeg = pfVar18;
+    adlibgAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlibg.adv",(char *)0x12410,index));
+    adlibgAdvSeg =(uint16_t)( pfVar18);
+    mt32mpuAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"mt32mpu.adv",(char *)0x12410,index));
+    mt32mpuAdvSeg =(uint16_t)( pfVar18);
     return (char *)mt32mpuAdvOfs;
   case 1:
     iVar23 = ovr_ovc23_findClearColumn(GfxRndSeed);
@@ -162,9 +162,9 @@ char * __cdecl16far chargen_switch(uint16_t index)
     return unaff_SI;
   case 3:
     for (iVar23 = 0; iVar23 < (int)(uint)GLeaderCount; iVar23 = iVar23 + 1) {
-      if (((*(char *)((int)*(undefined4 *)(iVar23 << 2) + 0x3d) != '\0') &&
-          (uVar13 = 0x2410, *(int *)((int)*(undefined4 *)(iVar23 << 2) + 0x39) == GfxRndSeed)) &&
-         (uVar13 = 0x2410, *(uint16_t *)((int)*(undefined4 *)(iVar23 << 2) + 0x3b) == GfxRndSeed2))
+      if (((((char_sheet_t *)((iVar23 << 2)))->active != '\0') &&
+          (uVar13 = 0x2410, ((char_sheet_t *)((iVar23 << 2)))->x == GfxRndSeed)) &&
+         (uVar13 = 0x2410, ((char_sheet_t *)((iVar23 << 2)))->y == GfxRndSeed2))
       {
         if (GCharLevelsInc != '\0') {
           uVar12 = (undefined2)((ulong)*(undefined4 *)(iVar23 << 2) >> 0x10);
@@ -202,7 +202,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
       }
       iVar23 = 0;
       while ((iVar23 < (int)(uint)GLeaderCount &&
-             (*(char *)((int)*(undefined4 *)(iVar23 << 2) + 0x28) != '\0'))) {
+             (((char_sheet_t *)((iVar23 << 2)))->statMask != '\0'))) {
         iVar23 = iVar23 + 1;
       }
       if (iVar23 < (int)(uint)GLeaderCount) {
@@ -268,8 +268,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
   case 5:
     puVar17 = ovr_mkp((uint32_t *)unaff_BP,(uint16_t)(char *)in_stack_00000000,
                       (uint16_t)((ulong)in_stack_00000000 >> 0x10));
-    index = (uint32_t *)CONCAT22(uVar13,puVar17);
-    if ((char)*index == '\0') {
+    index = (uint16_t)CONCAT22(uVar13,puVar17);   /* hand fix: 16-bit slot keeps the offset */
+    if ((char)*(uint8_t *)(uint)index == '\0') {   /* hand fix: deref the offset */
       uVar28 = CONCAT22((int)((ulong)in_stack_00000000 >> 0x10),*(undefined2 *)((int)puVar17 + 7));
       uVar26 = uVar13;
       pfVar18 = fmMalloc((far_t *)*(undefined2 *)((int)puVar17 + 5),uVar28);
@@ -290,7 +290,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
           pfVar18 = ovr_heapMalloc((far_t *)*(undefined2 *)((int)puVar17 + 5),uVar28);
           uVar29 = (uint16_t)(uVar28 >> 0x10);
           *(uint16_t *)((int)puVar17 + 0x13) = uVar26;
-          *(undefined2 *)((int)puVar17 + 0x11) = pfVar18;
+          *(undefined2 *)((int)puVar17 + 0x11) =(uint16_t)( pfVar18);
           if (*(int *)((int)puVar17 + 0x11) == 0 && *(int *)((int)puVar17 + 0x13) == 0) {
             bVar10 = false;
           }
@@ -339,7 +339,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
             *(undefined2 *)((int)puVar17 + 0xb) = 0;
             *(undefined2 *)((int)puVar17 + 9) = 0;
             *(uint16_t far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  0xb) = uVar13;
-            *(undefined2 far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  9) = puVar17;
+            *(undefined2 far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  9) =(uint16_t)( puVar17);
             Stsh_2410_47f6.seg = uVar13;
             Stsh_2410_47f6.ofs = (uint16_t)puVar17;
           }
