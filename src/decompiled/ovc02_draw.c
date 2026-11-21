@@ -4027,8 +4027,8 @@ void __cdecl16far draw_usesBlitLoadRleGfx(void)
         (CrossBlitCount2 = 0, CrossBlitCount != 0)) && (CrossBlitCount < 5)) {
       rect = CrossBlitX;
       iStack_a = CrossBlitY;
-      iStack_8 = CrossBlitX + *(int *)(CrossBlitPtr.ofs + 5) + -1;
-      iStack_6 = CrossBlitY + *(int *)(CrossBlitPtr.ofs + 7) + -1;
+      iStack_8 = CrossBlitX + *(int far *)((uint8_t far *)MK_FP(CrossBlitPtr.seg, CrossBlitPtr.ofs) +  5) + -1;
+      iStack_6 = CrossBlitY + *(int far *)((uint8_t far *)MK_FP(CrossBlitPtr.seg, CrossBlitPtr.ofs) +  7) + -1;
       uStack_4 = 0xa000;
       ovr_miceRestoreArea((brect_t *)&rect);
       dst.seg = 0xa000;
@@ -4102,7 +4102,7 @@ void __cdecl16far draw_usesPlay_sfx(void)
   prevTick = CONCAT22(unaff_SI,(*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)));
   puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)recordUpdateTick,prevTick);
   if ((in_DX != 0) || ((ulong *)((int)(undefined4 *)&_DATA + 1U) < puVar3)) {
-    (*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)) = (uint16_t)*(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+    (*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)) = (uint16_t)*(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
     (*(uint16_t *)((uint8_t *)&(recordUpdateTick))) = (uint16_t)*(ulong **)BDA_DailyTimeCounter;
     outFlag = 0;
     for (uVar7 = 0; uVar6 = (uint)(prevTick >> 0x10), uVar7 < GRecordCount; uVar7 = uVar7 + 1) {
@@ -4367,10 +4367,10 @@ uint16_t __cdecl16far draw_usesGameProcessKey(void)
   bVar1 = false;
   MouseMoved = 0;
   while( true ) {
-    if ((*(int *)(BDA_DailyTimeCounter.ofs + 2) != iStack_8) ||
-       (*(int *)BDA_DailyTimeCounter != iStack_a)) {
-      iStack_8 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-      iStack_a = *(int *)BDA_DailyTimeCounter;
+    if ((*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != iStack_8) ||
+       (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) != iStack_a)) {
+      iStack_8 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      iStack_a = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
       draw_usesPrintf();
       if (GGameInProgress != '\0') {
         ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x2410);

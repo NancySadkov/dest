@@ -44,13 +44,13 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
       audioBusy = 0;
       if ((undefined1 *)DIGHandle.ofs != (undefined1 *)0x0 || uVar3 != 0) {
         if (((CFG_Sfx == '1') || (CFG_Sfx == '4')) || (CFG_Sfx == '9')) {
-          uStack_a = *(uint *)(DIGHandle.ofs + 5);
+          uStack_a = *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5);
           if (30000 < uStack_a) {
             uStack_a = 30000;
           }
         }
         else {
-          uStack_a = *(uint *)(DIGHandle.ofs + 5);
+          uStack_a = *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5);
         }
         uVar4 = uStack_a + 0xd;
         puVar2 = ovr_stshRealloc((uint32_t)CONCAT22(uVar3,DIGHandle.ofs),
@@ -65,7 +65,7 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
         uVar3 = DIGHandle.ofs;
         *(undefined2 *)(uVar3 + 9) = 0x2410;   /* hand fix: 2-byte segment-half slot; the literal offset is that DGROUP segment value */
         *(undefined2 *)(uVar3 + 7) = 0x8f92;
-        *(uint *)(DIGHandle.ofs + 5) = uStack_a;
+        *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5) = uStack_a;
         ovr_digPreformatSound();
         ovr_digPlayPreformatedSound();
         ovr_digSetSterioPanning();

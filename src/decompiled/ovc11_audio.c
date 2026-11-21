@@ -68,8 +68,8 @@ void __cdecl16far audio_usesLDIV_at_(void)
           uVar4 = ovr_randBelow(0x48);
           SfxDeadline = (uint16_t)(((uVar4 & 0xff) + 0x80));
         }
-        uVar7 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-        sfxTickLo = *(undefined2 *)BDA_DailyTimeCounter.ofs;   /* hand fix: the offset half is the address, and sfxTickLo is 16-bit */
+        uVar7 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+        sfxTickLo = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, and sfxTickLo is 16-bit */
         sfxTickHi = uVar7;
       }
       else if (CurSfxType3 == 0x70) {
@@ -291,13 +291,13 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
       audioBusy = 0;
       if ((undefined1 *)DIGHandle.ofs != (undefined1 *)0x0 || uVar3 != 0) {
         if (((CFG_Sfx == '1') || (CFG_Sfx == '4')) || (CFG_Sfx == '9')) {
-          uStack_a = *(uint *)(DIGHandle.ofs + 5);
+          uStack_a = *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5);
           if (30000 < uStack_a) {
             uStack_a = 30000;
           }
         }
         else {
-          uStack_a = *(uint *)(DIGHandle.ofs + 5);
+          uStack_a = *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5);
         }
         uVar4 = uStack_a + 0xd;
         puVar2 = ovr_stshRealloc((uint32_t)CONCAT22(uVar3,DIGHandle.ofs),
@@ -312,7 +312,7 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
         uVar3 = DIGHandle.ofs;
         *(undefined2 *)(uVar3 + 9) = 0x2410;   /* hand fix: 2-byte segment-half slot; the literal offset is that DGROUP segment value */
         *(undefined2 *)(uVar3 + 7) = 0x8f92;
-        *(uint *)(DIGHandle.ofs + 5) = uStack_a;
+        *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5) = uStack_a;
         ovr_digPreformatSound();
         ovr_digPlayPreformatedSound();
         ovr_digSetSterioPanning();

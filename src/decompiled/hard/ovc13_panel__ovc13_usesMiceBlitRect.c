@@ -24,8 +24,8 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
     paletteOfs = (uint8_t *)0x0;
   }
   else {
-    flashTickHi = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    flashTickLo = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t */;
+    flashTickHi = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    flashTickLo = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t */;
     FlashToggle = 1 - (FlashToggle != 0);
     paletteSeg = (uint8_t)unaff_SS;
     ovr_vgaSetPalette(&stack0xffe2 + (uint)FlashToggle * 3,paletteSeg,0xef,1);

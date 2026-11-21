@@ -499,7 +499,7 @@ void __cdecl16far copyGrayscalePalette(uint8_t *dst,int count)
 
 {
   while (count != 0) {
-    *dst = *(uint8_t *)(GrayscalePalette.ofs + (uint)*dst);
+    *dst = *(uint8_t far *)((uint8_t far *)MK_FP(GrayscalePalette.seg, GrayscalePalette.ofs) +  (uint)*dst);
     dst = (uint8_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(dst) + 2)),(uint8_t *)dst + 1);
     count = count + -1;
   }

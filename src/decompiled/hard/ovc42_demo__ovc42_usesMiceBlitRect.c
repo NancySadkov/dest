@@ -8,8 +8,8 @@ undefined2 __cdecl16far ovc42_usesMiceBlitRect(byte timeoutTicks)
   uint16_t uVar4;
   ulong prevTick;
   
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
   rightButtonLatch = 0;
   if (MiceNeedsUpdate == '\0') {
     prevTick = 0;
@@ -24,11 +24,11 @@ undefined2 __cdecl16far ovc42_usesMiceBlitRect(byte timeoutTicks)
   } while (bVar1);
   while( true ) {
     uVar3 = (undefined1)(prevTick >> 0x18);
-    uVar4 = *(uint16_t *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
-    if ((*(uint16_t *)(BDA_DailyTimeCounter.ofs + 2) != InputEventTime.hi) ||
+    uVar4 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+    if ((*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != InputEventTime.hi) ||
        (uVar4 != InputEventTime.lo)) {
-      InputEventTime.hi = *(uint16_t *)(BDA_DailyTimeCounter.ofs + 2);
-      uVar4 = *(uint16_t *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
+      InputEventTime.hi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      uVar4 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
       InputEventTime.lo = uVar4;
       ovr_draw_usesPrintf();
     }

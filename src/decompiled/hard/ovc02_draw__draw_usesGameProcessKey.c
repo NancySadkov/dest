@@ -19,10 +19,10 @@ uint16_t __cdecl16far draw_usesGameProcessKey(void)
   bVar1 = false;
   MouseMoved = 0;
   while( true ) {
-    if ((*(int *)(BDA_DailyTimeCounter.ofs + 2) != iStack_8) ||
-       (*(int *)BDA_DailyTimeCounter != iStack_a)) {
-      iStack_8 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-      iStack_a = *(int *)BDA_DailyTimeCounter;
+    if ((*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != iStack_8) ||
+       (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) != iStack_a)) {
+      iStack_8 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      iStack_a = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
       draw_usesPrintf();
       if (GGameInProgress != '\0') {
         ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x2410);

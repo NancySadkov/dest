@@ -924,13 +924,13 @@ L_OVC27_2288:
         if (iVar29 == 0) {
           return (far_t *)0x0;
         }
-        uVar30 = *(undefined2 *)BDA_DailyTimeCounter;
-        *(undefined2 *)(puVar39 + -2) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+        uVar30 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+        *(undefined2 *)(puVar39 + -2) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
         *(undefined2 *)(puVar39 + -4) = uVar30;
         do {
           iVar29 = iVar41;
-          if (*(int *)(BDA_DailyTimeCounter.ofs + 2) != *(int *)(puVar39 + -2)) break;
-        } while (*(int *)BDA_DailyTimeCounter == *(int *)(puVar39 + -4));
+          if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != *(int *)(puVar39 + -2)) break;
+        } while (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) == *(int *)(puVar39 + -4));
       } while( true );
     case (byte *)0x6:
       *(byte *)(*pasVar34 + 0x15) = bVar28;
@@ -2255,11 +2255,11 @@ switchD_6000_58bf_caseD_5:
         bVar4 = ovr_draw_textProvidesMoreHousing();
       } while (bVar4);
       while( true ) {
-        uVar10 = *(uint16_t *)BDA_DailyTimeCounter;
-        if ((*(uint16_t *)(BDA_DailyTimeCounter.ofs + 2) != InputEventTime.hi) ||
+        uVar10 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+        if ((*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != InputEventTime.hi) ||
            (uVar10 != InputEventTime.lo)) {
-          InputEventTime.hi = *(uint16_t *)(BDA_DailyTimeCounter.ofs + 2);
-          uVar10 = *(uint16_t *)BDA_DailyTimeCounter;
+          InputEventTime.hi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+          uVar10 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
           InputEventTime.lo = uVar10;
           ovr_draw_usesPrintf();
         }

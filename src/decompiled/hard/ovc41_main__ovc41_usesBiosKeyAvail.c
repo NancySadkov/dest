@@ -602,8 +602,8 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
   ovc40_usesBlitLabel(text1,text2,2,0xf2);
   ovc40_flushInput();
   ovr_ovr_miceButton0PressStates_entry();
-  uVar16 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  uVar13 = *(undefined2 *)BDA_DailyTimeCounter.ofs;
+  uVar16 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  uVar13 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
   uVar21 = (undefined1)uVar16;
   uVar24 = (undefined1)((uint)uVar16 >> 8);
   uVar18 = (undefined1)uVar13;
@@ -678,10 +678,10 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
       }
       do {
         ovr_audio_usesLDIV_at_();
-        if (*(int *)(BDA_DailyTimeCounter.ofs + 2) != CONCAT11(uVar24,uVar21)) break;
-      } while (*(int *)BDA_DailyTimeCounter.ofs == CONCAT11(uVar20,uVar18));
-      uVar16 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-      uVar13 = *(undefined2 *)BDA_DailyTimeCounter.ofs;
+        if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != CONCAT11(uVar24,uVar21)) break;
+      } while (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) == CONCAT11(uVar20,uVar18));
+      uVar16 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      uVar13 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
       uVar21 = (undefined1)uVar16;
       uVar24 = (undefined1)((uint)uVar16 >> 8);
       uVar18 = (undefined1)uVar13;
@@ -697,8 +697,8 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
     ovc40_flushInput();
     rightButtonLatch = '\0';
     if ((in_stack_0000000e == '\x02') || (in_stack_0000000e == '\x03')) {
-      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-      uVar13 = *(undefined2 *)BDA_DailyTimeCounter.ofs;
+      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      uVar13 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
       (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = uVar13;
       if (cStack_1d == '\0') {
         uVar7 = ovr_inputUpdate(0x48);

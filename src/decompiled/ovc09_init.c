@@ -283,7 +283,7 @@ void __cdecl16far init_game(void)
   init_paths();
   init_cfg();
   clrscr();
-  srand8(CONCAT22(*(undefined2 *)(BDA_DailyTimeCounter.ofs + 2),*(undefined2 *)BDA_DailyTimeCounter)
+  srand8(CONCAT22(*(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2),*(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs))
         );
   ovr_stshAlloc(0xfa0f);
   iVar1 = strcmp((char *)CONCAT22(GExeArg.seg,GExeArg.ofs),"debug");
@@ -2044,7 +2044,7 @@ void __cdecl16far init_grayscale_palette(void)
   handle.seg = Lbm_nwpanel1.seg;
   handle.ofs = Lbm_nwpanel1.ofs;
   psVar1 = ovr_stshLoadGfx(handle);
-  *(undefined1 *)GrayscalePalette = 0;
+  *(undefined1 far *)MK_FP(GrayscalePalette.seg, GrayscalePalette.ofs) = 0;
   for (i = 1; (int)i < 0x100; i = i + 1) {
     max_c = (uint16_t)psVar1->cmap[i * 3];
     if (max_c < psVar1->cmap[i * 3 + 1]) {
@@ -2053,7 +2053,7 @@ void __cdecl16far init_grayscale_palette(void)
     if (max_c < psVar1->cmap[i * 3 + 2]) {
       max_c = (uint16_t)psVar1->cmap[i * 3 + 2];
     }
-    *(char *)(GrayscalePalette.ofs + i) = buf[max_c * 0xb >> 6];
+    *(char far *)((uint8_t far *)MK_FP(GrayscalePalette.seg, GrayscalePalette.ofs) +  i) = buf[max_c * 0xb >> 6];
   }
   return;
 }

@@ -168,8 +168,10 @@ void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
   undefined1 uStack0009;
   byte in_stack_0000000a;
   uint uStack_e;
-  undefined4 uStack_a;
-  undefined4 uStack_6;
+  byte *uStack_a;
+  undefined2 uStack_8;
+  byte *uStack_6;
+  uint16_t uStack_4;
   
   widths = (byte *)CONCAT13(uStack0009,CONCAT12(term,widths));
   if (((ch != '\r') && (ch != '\n')) && (ch != '\x1a')) {
@@ -187,8 +189,8 @@ void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
         uVar3 = (undefined2)((ulong)widths >> 0x10);
         letter_w = (uint16_t)widths[ch_index + 0xc1];
         uStack_6 = (byte *)CONCAT22(TextBlitDstSeg,(byte *)(TextBlitX + TextBlitY * 0x140));
-        uStack_a = (byte *)CONCAT22(uVar3,widths + *(int *)(widths + (uint)ch_index * 2 + 1) + 0x121
-                                   );
+        uStack_a = (byte *)CONCAT22(uVar3,widths + *(int *)(widths + (uint)ch_index * 2 + 1) +
+                                                    0x121);
         if (BlitLetterType == '\x02') {
           for (uStack_e = 0; uStack_e < uVar1; uStack_e = uStack_e + 1) {
             iVar2 = 0;
@@ -200,11 +202,11 @@ void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
               else if (*uStack_a != 0) {
                 *uStack_6 = *uStack_a;
               }
-              uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 1);
-              uStack_a = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_a) + 2)),(byte *)uStack_a + 1);
+              uStack_6 = (byte *)CONCAT22(uStack_4,uStack_6 + 1);
+              uStack_a = (byte *)CONCAT22(uStack_8,uStack_a + 1);
               iVar2 = iVar2 + 1;
             }
-            uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + (0x140 - letter_w));
+            uStack_6 = (byte *)CONCAT22(uStack_4,uStack_6 + (0x140 - letter_w));
           }
         }
         else if (BlitLetterType == '\0') {
@@ -221,11 +223,11 @@ void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
               else if (*uStack_a != 0) {
                 *uStack_6 = *uStack_a;
               }
-              uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 1);
-              uStack_a = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_a) + 2)),(byte *)uStack_a + 1);
+              uStack_6 = (byte *)CONCAT22(uStack_4,uStack_6 + 1);
+              uStack_a = (byte *)CONCAT22(uStack_8,uStack_a + 1);
               iVar2 = iVar2 + 1;
             }
-            uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + (0x140 - letter_w));
+            uStack_6 = (byte *)CONCAT22(uStack_4,uStack_6 + (0x140 - letter_w));
           }
         }
         else {
@@ -247,11 +249,11 @@ void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
               else {
                 *uStack_6 = *uStack_a | 0x10;
               }
-              uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 1);
-              uStack_a = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_a) + 2)),(byte *)uStack_a + 1);
+              uStack_6 = (byte *)CONCAT22(uStack_4,uStack_6 + 1);
+              uStack_a = (byte *)CONCAT22(uStack_8,uStack_a + 1);
               iVar2 = iVar2 + 1;
             }
-            uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + (0x140 - letter_w));
+            uStack_6 = (byte *)CONCAT22(uStack_4,uStack_6 + (0x140 - letter_w));
           }
         }
         TextBlitX = TextBlitX + letter_w;
@@ -331,7 +333,7 @@ int __cdecl16far blitText(char *text,byte *widths,uint16_t seg,uint8_t term,...)
     for (index = 0; index < nchars; index = index + 1) {
       uVar3 = (undefined1)(uVar2 >> 8);
       uVar2 = CONCAT11(uVar3,text[index]);
-      blitLetter(text[index],(*(uint16_t *)((uint8_t *)&(widths) + 2)),(uint8_t)seg,CONCAT11(uVar3,in_stack_0000000e));
+      blitLetter(text[index],(byte *)seg,   /* hand fix: slot after widths == seg */(uint8_t)seg,CONCAT11(uVar3,in_stack_0000000e));
     }
     for (; text[nchars] == '\r'; nchars = nchars + 1) {
     }
@@ -373,8 +375,8 @@ uint __cdecl16far blitLabel(char *text,uint8_t *widths,int16_t max_width,uint8_t
     j = 0;
     for (x = TextBlitX;
         ((text[j] != '\0' && (text[j] != '\n')) &&
-        (x + (*(uint16_t *)((uint8_t *)&(widths) + 2))[(byte)text[j] + 0xa1] <= term + 1U));
-        x = x + (*(uint16_t *)((uint8_t *)&(widths) + 2))[(byte)text[j] + 0xa1]) {
+        (x + ((uint16_t *)max_width)[(byte)text[j] + 0xa1] <= term + 1U));
+        x = x + ((uint16_t *)max_width)[(byte)text[j] + 0xa1]) {
       width = j + 1;
       j = j + 1;
     }
@@ -382,7 +384,7 @@ uint __cdecl16far blitLabel(char *text,uint8_t *widths,int16_t max_width,uint8_t
     for (i = 0; i < width; i = i + 1) {
       uVar2 = (undefined1)(uVar1 >> 8);
       uVar1 = CONCAT11(uVar2,text[i]);
-      blitLetter(text[i],(*(uint16_t *)((uint8_t *)&(widths) + 2)),(uint8_t)max_width,CONCAT11(uVar2,in_stack_0000000e));
+      blitLetter(text[i],(byte *)max_width,   /* hand fix: slot after widths */(uint8_t)max_width,CONCAT11(uVar2,in_stack_0000000e));
     }
   }
   return width;
@@ -446,11 +448,11 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay,...)
   } while (bVar2);
   do {
     uVar7 = (uint)(in_stack_0000fff8 >> 0x10);
-    uVar4 = *(uint16_t *)BDA_DailyTimeCounter;
-    if ((*(uint16_t *)(BDA_DailyTimeCounter.ofs + 2) != InputEventTime.hi) ||
+    uVar4 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+    if ((*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != InputEventTime.hi) ||
        (uVar4 != InputEventTime.lo)) {
-      InputEventTime.hi = *(uint16_t *)(BDA_DailyTimeCounter.ofs + 2);
-      uVar4 = *(uint16_t *)BDA_DailyTimeCounter;
+      InputEventTime.hi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      uVar4 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
       InputEventTime.lo = uVar4;
       ovr_draw_usesBlitLoadRleGfx();
     }
@@ -491,8 +493,8 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay,...)
   rightButtonLatch = 0;
   uVar3 = ovr_ovr_midGetSequenceStatus_entry();
   if ((uVar3 & 0xff) == 0) {
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+    (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
     uVar4 = inputUpdate((ulong)msgDelay);
     uVar3 = uVar4 & 0xff00;
   }
@@ -510,10 +512,10 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay,...)
     do {
       uVar3 = ovr_ovr_midGetSequenceStatus_entry();
       if ((char)uVar3 == '\0') break;
-      if ((*(uint16_t *)(BDA_DailyTimeCounter.ofs + 2) != InputEventTime.hi) ||
-         (*(uint16_t *)BDA_DailyTimeCounter != InputEventTime.lo)) {
-        InputEventTime.hi = *(uint16_t *)(BDA_DailyTimeCounter.ofs + 2);
-        InputEventTime.lo = *(uint16_t *)BDA_DailyTimeCounter;
+      if ((*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != InputEventTime.hi) ||
+         (*(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) != InputEventTime.lo)) {
+        InputEventTime.hi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+        InputEventTime.lo = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
         ovr_draw_usesBlitLoadRleGfx();
       }
       uStack_3 = ovr_draw_textProvidesMoreHousing();
@@ -549,8 +551,8 @@ void __cdecl16far drawTextAt(char *txt,uint16_t dst,...)
   else {
     TextBlitFlag = 1;
     TextBlitDstSeg = in_stack_00000008;
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+    (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
     dst_00.seg = in_stack_00000008;
     dst_00.ofs = 0xc31d;
     gfx.seg = FontHandle.seg;
@@ -622,8 +624,8 @@ void __cdecl16far uiNotify(char *msg,uint16_t dst,...)
   uint16_t in_stack_00000008;
   
   inputUpdate((ulong)MessageDelay << 1);
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
   BlitRects[4].seg = in_stack_00000008;
   mice_no_update = MiceNeedsUpdate == '\0';
   if ((bool)mice_no_update) {

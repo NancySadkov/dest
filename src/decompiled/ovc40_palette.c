@@ -57,8 +57,8 @@ void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette,...)
   int iStack_6;
   int iStack_4;
   
-  iStack_4 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-  iStack_6 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
+  iStack_4 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  iStack_6 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
   iVar2 = 10;
   do {
     if (iVar2 < 0) {
@@ -71,10 +71,10 @@ void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette,...)
     }
     ovr_vgaSetPalette8bit(&pal);
     do {
-      if (*(int *)(BDA_DailyTimeCounter.ofs + 2) != iStack_4) break;
-    } while (*(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */ == iStack_6);
-    iStack_4 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-    iStack_6 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
+      if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != iStack_4) break;
+    } while (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */ == iStack_6);
+    iStack_4 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    iStack_6 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
     iVar2 = iVar2 + -1;
   } while( true );
 }
@@ -91,8 +91,8 @@ void __cdecl16far setSeasonPalette(far_t palette,...)
   int iStack_6;
   int iStack_4;
   
-  iStack_4 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-  iStack_6 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
+  iStack_4 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  iStack_6 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
   uVar2 = 0;
   do {
     if (10 < uVar2) {
@@ -105,10 +105,10 @@ void __cdecl16far setSeasonPalette(far_t palette,...)
     }
     ovr_vgaSetPalette8bit(&pal);
     do {
-      if (*(int *)(BDA_DailyTimeCounter.ofs + 2) != iStack_4) break;
-    } while (*(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */ == iStack_6);
-    iStack_4 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-    iStack_6 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
+      if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != iStack_4) break;
+    } while (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */ == iStack_6);
+    iStack_4 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    iStack_6 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
     uVar2 = uVar2 + 1;
   } while( true );
 }
@@ -557,8 +557,8 @@ ovc40_usesAlignToSeg
   }
   ovc40_flushInput();
   ovr_ovr_miceButton0PressStates_entry();
-  iStack_8 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-  iVar9 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
+  iStack_8 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  iVar9 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
   if (backdropIndex == '\x04') {
     iStack_a = iVar9;
     uVar5 = ovr_inputUpdate(0xb4);
@@ -615,10 +615,10 @@ ovc40_usesAlignToSeg
       }
       do {
         ovr_audio_usesLDIV_at_();
-        if (*(int *)(BDA_DailyTimeCounter.ofs + 2) != iStack_8) break;
-      } while (*(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */ == iStack_a);
-      iStack_8 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-      iVar9 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
+        if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != iStack_8) break;
+      } while (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */ == iStack_a);
+      iStack_8 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      iVar9 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
       scrollOffset = scrollOffset + cStack_1f;
     }
     if (cStack_1f < '\x01') {
@@ -630,8 +630,8 @@ ovc40_usesAlignToSeg
     ovc40_flushInput();
     rightButtonLatch = '\0';
     if ((formatIndex == 2) || (formatIndex == 3)) {
-      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-      iVar9 = *(int *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t struct */;
+      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      iVar9 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
       (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = iVar9;
       if (cStack_1d == '\0') {
         uVar5 = ovr_inputUpdate(0x48);

@@ -770,8 +770,8 @@ stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle,...)
       (((stg_tmp_t *)handle.ofs)->cmap + 0xb)[1] = 0x0;
       (((stg_tmp_t *)handle.ofs)->cmap + 9)[0] = 0x0;
       (((stg_tmp_t *)handle.ofs)->cmap + 9)[1] = 0x0;
-      *(uint16_t *)(Stsh_2410_47f6.ofs + 0xb) = in_DX;
-      *(undefined2 *)(Stsh_2410_47f6.ofs + 9) = handle.ofs;
+      *(uint16_t far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  0xb) = in_DX;
+      *(undefined2 far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  9) = handle.ofs;
       Stsh_2410_47f6.seg = in_DX;
       Stsh_2410_47f6.ofs = handle.ofs;
       uVar5 = in_DX;
@@ -892,8 +892,8 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
           *(uint16_t *)((int)&((far_t *)(entry.ofs + 0xc))->ofs + 1) = uVar6;
           *(undefined2 *)((int)&((far_t *)(entry.ofs + 8))->seg + 1) = 0;
           *(undefined2 *)((int)&((far_t *)(entry.ofs + 8))->ofs + 1) = 0;
-          *(uint16_t *)(Stsh_2410_47f6.ofs + 0xb) = in_DX;
-          *(undefined2 *)(Stsh_2410_47f6.ofs + 9) = entry.ofs;
+          *(uint16_t far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  0xb) = in_DX;
+          *(undefined2 far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  9) = entry.ofs;
           Stsh_2410_47f6.seg = in_DX;
           Stsh_2410_47f6.ofs = entry.ofs;
         }

@@ -786,7 +786,7 @@ void __cdecl16far ovc27_usesBlitGfxRect(int agntIndex,brect_t *rect,uint16_t typ
                               paVar3->animFrame << 1);
         }
         if (0xf8 < paVar3->animFrame) {
-          psVar7 = ovr_stash_usesStExit((stg_tmp_t *)*(undefined2 *)(SprProjectiles.ofs + 0x8c));
+          psVar7 = ovr_stash_usesStExit((stg_tmp_t *)*(undefined2 far *)((uint8_t far *)MK_FP(SprProjectiles.seg, SprProjectiles.ofs) +  0x8c));
           gfx_00.seg = uVar8;
           gfx_00.ofs = (uint16_t)(psVar7->cmap + 6);
           ovr_blitGfxRect(gfx_00,*(int16_t *)(iVar4 + 0x26),*(int16_t *)(iVar4 + 0x28),rect,

@@ -117,9 +117,7 @@ void __cdecl16far stshStubifyBld(uint16_t index,...)
 
 
 /* 6ffe:02f7 */
-
-/* WARNING: Variable defined which should be unmapped: tg */
-
+/* recovered by relaxed-limit retry */
 void __cdecl16far init_assets(void)
 
 {
@@ -2925,7 +2923,6 @@ void __cdecl16far init_assets(void)
 }
 
 
-
 /* 6ffe:733c */
 void __cdecl16far stshInitPtrs(void)
 
@@ -2967,7 +2964,7 @@ void __cdecl16far stshInitPtrs(void)
   uVar7 = StshCtPtr.ofs;
   StshCtPtr2.seg = StshCtPtr.seg;
   StshCtPtr2.ofs = StshCtPtr.ofs;
-  *(undefined2 *)(StshCtPtr.ofs + 0xf) = 0;
+  *(undefined2 far *)((uint8_t far *)MK_FP(StshCtPtr.seg, StshCtPtr.ofs) +  0xf) = 0;
   *(undefined2 *)(uVar7 + 0xd) = 0;
   __return_storage_ptr___00 =
        (long *)((char *)0x6ffe);

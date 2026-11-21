@@ -4,8 +4,8 @@ void __cdecl16far ovc13_blitAnimFrame(void)
   far_t gfx;
   
   if (GMenuFlag == '\0') {
-    blitFrameTickHi = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    blitFrameTickLo = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t */;
+    blitFrameTickHi = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    blitFrameTickLo = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t */;
     if (5 < BlitFrame) {
       BlitFrame = 0;
     }

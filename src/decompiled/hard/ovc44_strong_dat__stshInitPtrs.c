@@ -38,7 +38,7 @@ void __cdecl16far stshInitPtrs(void)
   uVar7 = StshCtPtr.ofs;
   StshCtPtr2.seg = StshCtPtr.seg;
   StshCtPtr2.ofs = StshCtPtr.ofs;
-  *(undefined2 *)(StshCtPtr.ofs + 0xf) = 0;
+  *(undefined2 far *)((uint8_t far *)MK_FP(StshCtPtr.seg, StshCtPtr.ofs) +  0xf) = 0;
   *(undefined2 *)(uVar7 + 0xd) = 0;
   __return_storage_ptr___00 =
        (long *)((char *)0x6ffe);

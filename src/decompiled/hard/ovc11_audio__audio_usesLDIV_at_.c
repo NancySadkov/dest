@@ -58,8 +58,8 @@ void __cdecl16far audio_usesLDIV_at_(void)
           uVar4 = ovr_randBelow(0x48);
           SfxDeadline = (uint16_t)(((uVar4 & 0xff) + 0x80));
         }
-        uVar7 = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-        sfxTickLo = *(undefined2 *)BDA_DailyTimeCounter.ofs;   /* hand fix: the offset half is the address, and sfxTickLo is 16-bit */
+        uVar7 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+        sfxTickLo = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, and sfxTickLo is 16-bit */
         sfxTickHi = uVar7;
       }
       else if (CurSfxType3 == 0x70) {

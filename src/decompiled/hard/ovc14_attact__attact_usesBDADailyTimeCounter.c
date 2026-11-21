@@ -5,7 +5,7 @@ attact_usesBDADailyTimeCounter(ulong *__return_storage_ptr__,ulong prevTick,...)
   uint uVar1;
   int iVar2;
   
-  uVar1 = *(uint *)(BDA_DailyTimeCounter.ofs + 2);
+  uVar1 = *(uint far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   if (((uint)prevTick < uVar1) ||
      (((uint)prevTick == uVar1 && (__return_storage_ptr__ <= *(ulong **)BDA_DailyTimeCounter.ofs)))) {
     iVar2 = -(int)__return_storage_ptr__;

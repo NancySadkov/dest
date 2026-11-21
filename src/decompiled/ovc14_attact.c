@@ -427,7 +427,7 @@ attact_usesBDADailyTimeCounter(ulong *__return_storage_ptr__,ulong prevTick,...)
   uint uVar1;
   int iVar2;
   
-  uVar1 = *(uint *)(BDA_DailyTimeCounter.ofs + 2);
+  uVar1 = *(uint far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   if (((uint)prevTick < uVar1) ||
      (((uint)prevTick == uVar1 && (__return_storage_ptr__ <= *(ulong **)BDA_DailyTimeCounter.ofs)))) {
     iVar2 = -(int)__return_storage_ptr__;
@@ -1447,8 +1447,8 @@ void __cdecl16far attact_usesUpdSeason(void)
     bVar1 = 0xfffe < tickCountLo;
     tickCountLo = tickCountLo + 1;
     tickCountHi = tickCountHi + (uint)bVar1;
-    (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter))) = *(undefined2 *)BDA_DailyTimeCounter;
+    (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
   }
   return;
 }

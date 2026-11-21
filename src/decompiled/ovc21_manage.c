@@ -1297,8 +1297,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
             *(uint16_t *)((int)puVar17 + 0xd) = uVar26;
             *(undefined2 *)((int)puVar17 + 0xb) = 0;
             *(undefined2 *)((int)puVar17 + 9) = 0;
-            *(uint16_t *)(Stsh_2410_47f6.ofs + 0xb) = uVar13;
-            *(undefined2 *)(Stsh_2410_47f6.ofs + 9) = puVar17;
+            *(uint16_t far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  0xb) = uVar13;
+            *(undefined2 far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  9) = puVar17;
             Stsh_2410_47f6.seg = uVar13;
             Stsh_2410_47f6.ofs = (uint16_t)puVar17;
           }
@@ -1731,8 +1731,8 @@ char_sheet_t * __cdecl16far chargen(void)
       pcStack_16->charIndex = 0xff;
       while( true ) {
         if (TimerSeed.lo == 0 && TimerSeed.hi == 0) {
-          TimerSeed.hi = *(uint16_t *)(BDA_DailyTimeCounter.ofs + 2);
-          TimerSeed.lo = *(uint16_t *)BDA_DailyTimeCounter;
+          TimerSeed.hi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+          TimerSeed.lo = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
         }
         srand8(CONCAT13((char)(TimerSeed.hi >> 8),CONCAT12((char)TimerSeed.hi,TimerSeed.lo)));
         manage_openTalkWindow();

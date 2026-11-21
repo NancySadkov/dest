@@ -30,10 +30,10 @@ uint16_t __cdecl16far uiReadKey2(void)
   bVar1 = false;
   MouseMoved = 0;
   while( true ) {
-    if ((*(int *)(BDA_DailyTimeCounter.ofs + 2) != iStack_6) ||
-       (*(int *)BDA_DailyTimeCounter != iStack_8)) {
-      iStack_6 = *(int *)(BDA_DailyTimeCounter.ofs + 2);
-      iStack_8 = *(int *)BDA_DailyTimeCounter;
+    if ((*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != iStack_6) ||
+       (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) != iStack_8)) {
+      iStack_6 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      iStack_8 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
       ovr_draw_usesBlitLoadRleGfx();
       ovr_ovc13_usesMiceBlitRect();
     }
@@ -1755,8 +1755,8 @@ void __cdecl16far saveui_configureNewWorld(void)
   saveui_blitPanel();
   if ((bStack_b != 8) && (bStack_b != 0)) {
     if (bStack_b == 7) {
-      SeedHi = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-      GSeed = *(undefined2 *)BDA_DailyTimeCounter;
+      SeedHi = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      GSeed = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
     }
     else {
       if (bStack_b == 1) {
