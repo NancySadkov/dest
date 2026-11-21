@@ -34,9 +34,6 @@ void __cdecl16far constrct_usesGLeaderCount(void)
 
 
 /* 7e7c:004b */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 void __cdecl16far land_info(byte tileOffset,...)
 
 {
@@ -253,12 +250,12 @@ void __cdecl16far land_info(byte tileOffset,...)
       }
       uVar2 = (uint)(bStack_1d != 0);
       if (foundFlag != 0x0) {
-        auStack_24c[uVar2 * 2] = (char *)"puppetmaker" + 3;
+        auStack_24c[uVar2 * 2] = 0x2410;   /* hand fix: this slot holds the DGROUP segment half, exactly as auStack_24c[0] = 0x2410 above; the literal offset Ghidra printed is that same value */
         *(char **)(&menuItems + uVar2 * 4) = (char *)"Change party";
         auStack_14[uVar2] = 2;
         uVar2 = uVar2 + 1;
       }
-      auStack_24c[uVar2 * 2] = (char *)"puppetmaker" + 3;
+      auStack_24c[uVar2 * 2] = 0x2410;   /* hand fix: this slot holds the DGROUP segment half, exactly as auStack_24c[0] = 0x2410 above; the literal offset Ghidra printed is that same value */
       *(char **)(&menuItems + uVar2 * 4) = (char *)"Done";
       auStack_14[uVar2] = 3;
       cStack_23 = '\0';
@@ -372,7 +369,6 @@ void __cdecl16far land_info(byte tileOffset,...)
 }
 
 
-
 /* 7e7c:0b40 */
 
 /* [R7] body shape: compute */
@@ -404,16 +400,6 @@ int __cdecl16far constrct_compute1(void)
 undefined constrct_buildInfoText() { return 0; }
 
 /* 7e7c:2b4c */
-
-/* WARNING: Removing unreachable block (ram,0x00081559) */
-/* WARNING: Removing unreachable block (ram,0x00081610) */
-/* WARNING: Removing unreachable block (ram,0x0008155e) */
-/* WARNING: Removing unreachable block (ram,0x00081597) */
-/* WARNING: Removing unreachable block (ram,0x000815cd) */
-/* WARNING: Removing unreachable block (ram,0x0008160f) */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R4] calls LDIV_at_ */
-
 void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
 
 {
@@ -502,12 +488,11 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     GPopulationHi = (undefined2)((ulong)lVar17 >> 0x10);
     GPopulationLo = (undefined2)lVar17;
     (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter;
+    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 *)BDA_DailyTimeCounter.ofs;   /* hand fix: the offset half is the address, not the far_t struct */
     ovr_inputUpdate(0x36);
   }
   return;
 }
-
 
 
 /* 7e7c:2e8e */
