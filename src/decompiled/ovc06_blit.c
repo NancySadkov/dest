@@ -8,7 +8,6 @@
 
 
 /* 317e:0000 */
-
 far_t * __cdecl16far
 stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,uint16_t ex,
           uint16_t ey,int16_t hdrsz,...)
@@ -25,7 +24,7 @@ stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,ui
   uint32_t r;
   uint16_t dst;
   uint16_t prow;
-  undefined4 uStack_6;
+  undefined1 *uStack_6;   /* hand fix: assigned a byte pointer and dereferenced as *uStack_6 */
   uint16_t src_seg;
   uint16_t dseg;
   
@@ -52,14 +51,13 @@ stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,ui
     *(uint16_t *)((int)(void *)block + hdrsz + -5) = width;
     *(int *)((int)(void *)block + hdrsz + -3) = (ey - sy) + 1;
     *uStack_6 = 1;
-    (*(uint16_t *)((uint8_t *)&(r))) = (far_t *)ovr_stshRealloc((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(block) + 2)),(void *)block),
+    (*(uint16_t *)((uint8_t *)&(r))) = (uint16_t)(far_t *)ovr_stshRealloc((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(block) + 2)),(void *)block),
                                        (ulong)((written + hdrsz) - 1));
     return (far_t *)r;
   }
                     /* WARNING: Subroutine does not return */
   ovr_stExit(5);
 }
-
 
 
 /* 317e:0148 */
@@ -80,7 +78,6 @@ stshRleCut(far_t *__return_storage_ptr__,far_t src,int16_t sx,int16_t sy,int16_t
 
 
 /* 317e:0168 */
-
 far_t * __cdecl16far
 stshRleType2(far_t *__return_storage_ptr__,far_t pixels,int16_t sx,int16_t sy,int16_t ex,int16_t ey,
             int16_t ox,int16_t oy,...)
@@ -88,7 +85,7 @@ stshRleType2(far_t *__return_storage_ptr__,far_t pixels,int16_t sx,int16_t sy,in
 {
   far_t *pfVar1;
   undefined2 in_DX;
-  undefined4 uStack_6;
+  far_t *uStack_6;   /* hand fix: assigned a far_t pointer and used as uStack_6->ofs */
   
   pfVar1 = stshRleSub(__return_storage_ptr__,(uint8_t *)pixels.ofs,pixels.seg,sx,sy,ex,15);
   uStack_6 = (far_t *)CONCAT22(in_DX,pfVar1);
@@ -97,7 +94,6 @@ stshRleType2(far_t *__return_storage_ptr__,far_t pixels,int16_t sx,int16_t sy,in
   *(undefined1 *)&uStack_6->ofs = 2;
   return pfVar1;
 }
-
 
 
 /* 317e:01b2 */
@@ -168,9 +164,6 @@ void __cdecl16far drawGfx(far_t gfx,far_t dst,bool type)
 
 
 /* 317e:02a9 */
-
-/* Blits the graphics on screen */
-
 void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool type,...)
 
 {
@@ -217,7 +210,7 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
                     /* WARNING: Subroutine does not return */
       ovr_stExit(0x1a);
     }
-    dst_x = *dst;
+    dst_x = dst->x;   /* hand fix: read the first field; *dst is the whole structure */
     uVar3 = (undefined2)((ulong)dst >> 0x10);
     dst_y = dst->y;
     dst_w = dst->w;
@@ -283,7 +276,6 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
   }
   return;
 }
-
 
 
 /* 317e:04c2 */
