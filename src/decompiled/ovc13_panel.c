@@ -8,9 +8,6 @@
 
 
 /* 3d16:0000 */
-
-/* Cycles BlitFrame 0..5 and blits that frame graphic to the screen, latching the BDA tick. */
-
 void __cdecl16far ovc13_blitAnimFrame(void)
 
 {
@@ -18,7 +15,7 @@ void __cdecl16far ovc13_blitAnimFrame(void)
   
   if (GMenuFlag == '\0') {
     blitFrameTickHi = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    blitFrameTickLo = *(undefined2 *)BDA_DailyTimeCounter;
+    blitFrameTickLo = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t */;
     if (5 < BlitFrame) {
       BlitFrame = 0;
     }
@@ -31,12 +28,7 @@ void __cdecl16far ovc13_blitAnimFrame(void)
 }
 
 
-
 /* 3d16:005b */
-
-/* WARNING: Removing unreachable block (ram,0x0003d1f7) */
-/* [R4] calls ovr_miceBlitRect */
-
 void __cdecl16far ovc13_usesMiceBlitRect(void)
 
 {
@@ -64,7 +56,7 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
   }
   else {
     flashTickHi = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    flashTickLo = *(ulong **)BDA_DailyTimeCounter;
+    flashTickLo = *(undefined2 *)BDA_DailyTimeCounter.ofs   /* hand fix: the offset half is the address, not the far_t */;
     FlashToggle = 1 - (FlashToggle != 0);
     paletteSeg = (uint8_t)unaff_SS;
     ovr_vgaSetPalette(&stack0xffe2 + (uint)FlashToggle * 3,paletteSeg,0xef,1);
@@ -82,7 +74,6 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
   }
   return;
 }
-
 
 
 /* 3d16:0186 */
@@ -337,14 +328,11 @@ void __cdecl16far ovc13_drawPanelLeaders(void)
 
 
 /* 3d16:0883 */
-
-/* [R7] body shape: compute */
-
 void __cdecl16far ovc13_compute2(int x,int y,byte upperMask,byte lowerMask,uint16_t seg)
 
 {
   undefined1 *puVar1;
-  undefined4 uStack_6;
+  undefined1 *uStack_6;   /* hand fix: assigned a byte pointer and dereferenced as *uStack_6 */
   
   puVar1 = (undefined1 *)(x + y * 0x140);
   uStack_6 = (undefined1 *)CONCAT22(seg,puVar1);
@@ -361,7 +349,6 @@ void __cdecl16far ovc13_compute2(int x,int y,byte upperMask,byte lowerMask,uint1
   }
   return;
 }
-
 
 
 /* 3d16:08ee */
