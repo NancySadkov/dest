@@ -198,7 +198,6 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
 
 
 /* 30e6:0321 */
-
 stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
 
 {
@@ -266,7 +265,7 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
   uVar3 = IdILBM.lo;
   uVar2 = IdFORM.hi;
   uVar16 = IdFORM.lo;
-  (*(uint16_t *)((uint8_t *)&(dst) + 2)) = (stg_tmp_t *)IdPBM_.lo;
+  (*(uint16_t *)((uint8_t *)&(dst) + 2)) = (uint16_t)(stg_tmp_t *)IdPBM_.lo;
   fid = ovr_stshOpen(file_id);
   if ((int)fid < 0) {
                     /* WARNING: Subroutine does not return */
@@ -295,16 +294,16 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
           w = ovr_be2(hd.w);
           h = ovr_be2(hd.h);
           (*(uint16_t *)((uint8_t *)&(sz) + 2)) = 0;
-          (*(uint16_t *)((uint8_t *)&(sz))) = (uint32_t *)((byte *)__C0_ASM_CopyRight + 0x10);
+          (*(uint16_t *)((uint8_t *)&(sz))) = (uint16_t)(uint32_t *)((byte *)__C0_ASM_CopyRight + 0x10);
         }
         else if ((tmp.hi == uVar10) && (tmp.lo == uVar9)) {
           (*(uint16_t *)((uint8_t *)&(cmszB) + 2)) = tmp.lo;
           ovr_stshRead();
           (*(uint16_t *)((uint8_t *)&(cmszB))) = ovr_be4((uint32_t *)sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(sz) + 2))));
-          (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint32_t *)cmszB;
+          (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint16_t)(uint32_t *)cmszB;
           (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = (*(uint16_t *)((uint8_t *)&(cmszB) + 2));
           if (((uint)(uint32_t *)cmszB & 1) != 0) {
-            (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint32_t *)((int)(uint32_t *)cmszB + 1);
+            (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint16_t)(uint32_t *)((int)(uint32_t *)cmszB + 1);
             (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = (*(uint16_t *)((uint8_t *)&(cmszB) + 2)) + ((uint32_t *)0xfffe < (uint32_t *)cmszB);
           }
           if (((int)(*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) < 0) ||
@@ -338,7 +337,7 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
               uVar16 = 0;
             }
             if (((int)uVar16 < 1) &&
-               (((*(uint16_t *)((uint8_t *)&(sz))) = (uint32_t *)cmszB, (*(uint16_t *)((uint8_t *)&(sz) + 2)) = (*(uint16_t *)((uint8_t *)&(cmszB) + 2)), uVar16 != 0 || (puVar15 <= i)
+               (((*(uint16_t *)((uint8_t *)&(sz))) = (uint16_t)(uint32_t *)cmszB, (*(uint16_t *)((uint8_t *)&(sz) + 2)) = (*(uint16_t *)((uint8_t *)&(cmszB) + 2)), uVar16 != 0 || (puVar15 <= i)
                 ))) break;
             ((stg_tmp_t *)dst)->cmap[i] = (uint8_t)((int)(uint)cmap[i] >> 2);
             i = i + 1;
@@ -349,10 +348,10 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
             if (bVar1) {
               ovr_stshRead();
               puVar15 = ovr_be4((uint32_t *)sz,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(sz) + 2))));
-              (*(uint16_t *)((uint8_t *)&(chnk_sz))) = puVar15;
+              (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint16_t)puVar15;
               (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = tmp.lo;
               if (((uint)puVar15 & 1) != 0) {
-                (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint32_t *)((int)puVar15 + 1);
+                (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint16_t)(uint32_t *)((int)puVar15 + 1);
                 (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = tmp.lo + ((uint32_t *)0xfffe < puVar15);
               }
               pvVar14 = ovr_stshAlloc((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)),(uint32_t *)chnk_sz));
@@ -375,7 +374,7 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
           (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = uVar16;
           if (((uint)(uint32_t *)chnk_sz & 1) != 0) {
             bVar17 = (uint32_t *)0xfffe < (uint32_t *)chnk_sz;
-            (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint32_t *)((int)(uint32_t *)chnk_sz + 1);
+            (*(uint16_t *)((uint8_t *)&(chnk_sz))) = (uint16_t)(uint32_t *)((int)(uint32_t *)chnk_sz + 1);
             (*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)) = uVar16 + bVar17;
           }
           puVar15 = ovr_stshTell((uint32_t *)fid,unaff_DI);
@@ -401,5 +400,4 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
                     /* WARNING: Subroutine does not return */
   ovr_stExit(0xd);
 }
-
 
