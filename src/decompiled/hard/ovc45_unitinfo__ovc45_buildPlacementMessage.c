@@ -2279,7 +2279,7 @@ code_r0x00072658:
       uVar19 = AnimSeqPtr[1].seg;
       puVar17 = (undefined2 *)(AnimSeqPtr[1].ofs + iStack_4 * 4);
       puVar17[1] = uVar20;
-      *puVar17 = pcVar6;
+      *puVar17 = (uint16_t)pcVar6;   /* hand fix: 2-byte slot */
       uVar19 = (uint16_t)((ulong)((long)iStack_4 * 0x21) >> 0x10);
       iVar10 = (int)((long)iStack_4 * 0x21) + 0x14;
       uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
@@ -2292,7 +2292,7 @@ code_r0x00072658:
       uVar14 = AnimSeqPtr[2].seg;
       puVar17 = (undefined2 *)(AnimSeqPtr[2].ofs + iStack_4 * 4);
       puVar17[1] = uVar19;
-      *puVar17 = pcVar6;
+      *puVar17 = (uint16_t)pcVar6;   /* hand fix: 2-byte slot */
       iStack_4 = iStack_4 + 1;
     }
     (*(uint8_t *)((uint8_t *)&(pixels_x00139.seg))) = 0x2b;
@@ -2304,7 +2304,7 @@ code_r0x00072658:
     uVar21 = AnimSeqPtr[1].seg;
     uVar14 = AnimSeqPtr[1].ofs;
     *(uint16_t *)(uVar14 + 0x1a) = uVar19;
-    *(undefined2 *)(uVar14 + 0x18) = pcVar6;
+    *(undefined2 *)(uVar14 + 0x18) = (uint16_t)pcVar6;   /* hand fix */
     uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00140.seg))) = 0x7d;
     pixels_x00140.ofs = *(undefined2 *)((int)uStack_c + 0x302);
@@ -2315,7 +2315,7 @@ code_r0x00072658:
     uVar21 = AnimSeqPtr[2].seg;
     uVar14 = AnimSeqPtr[2].ofs;
     *(uint16_t *)(uVar14 + 0x1a) = uVar19;
-    *(undefined2 *)(uVar14 + 0x18) = pcVar6;
+    *(undefined2 *)(uVar14 + 0x18) = (uint16_t)pcVar6;   /* hand fix */
     ovr_stgFreeTmp(uStack_c);
   }
   builtin_memcpy(&ram0x0000d528 + 0x153,"\x02\x02\x02\x03\x03\x03",6);
@@ -2793,7 +2793,7 @@ L_init_assets_4EA5:
       uVar14 = AnimSeqPtr[0].seg;
       puVar17 = (undefined2 *)(AnimSeqPtr[0].ofs + iStack_4 * 4);
       puVar17[1] = uVar19;
-      *puVar17 = pcVar6;
+      *puVar17 = (uint16_t)pcVar6;   /* hand fix: 2-byte slot */
     }
     (*(uint8_t *)((uint8_t *)&(pixels_x00178.seg))) = 0x52;
     pixels_x00178.ofs = (uStack_c->aptr).seg;

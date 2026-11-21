@@ -2901,7 +2901,7 @@ code_r0x00072658:
       uVar19 = AnimSeqPtr[1].seg;
       puVar17 = (undefined2 *)(AnimSeqPtr[1].ofs + iStack_4 * 4);
       puVar17[1] = uVar20;
-      *puVar17 = pcVar6;
+      *puVar17 = (uint16_t)pcVar6;   /* hand fix: 2-byte slot */
       uVar19 = (uint16_t)((ulong)((long)iStack_4 * 0x21) >> 0x10);
       iVar10 = (int)((long)iStack_4 * 0x21) + 0x14;
       uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
@@ -2914,7 +2914,7 @@ code_r0x00072658:
       uVar14 = AnimSeqPtr[2].seg;
       puVar17 = (undefined2 *)(AnimSeqPtr[2].ofs + iStack_4 * 4);
       puVar17[1] = uVar19;
-      *puVar17 = pcVar6;
+      *puVar17 = (uint16_t)pcVar6;   /* hand fix: 2-byte slot */
       iStack_4 = iStack_4 + 1;
     }
     (*(uint8_t *)((uint8_t *)&(pixels_x00139.seg))) = 0x2b;
@@ -2926,7 +2926,7 @@ code_r0x00072658:
     uVar21 = AnimSeqPtr[1].seg;
     uVar14 = AnimSeqPtr[1].ofs;
     *(uint16_t *)(uVar14 + 0x1a) = uVar19;
-    *(undefined2 *)(uVar14 + 0x18) = pcVar6;
+    *(undefined2 *)(uVar14 + 0x18) = (uint16_t)pcVar6;   /* hand fix */
     uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00140.seg))) = 0x7d;
     pixels_x00140.ofs = *(undefined2 *)((int)uStack_c + 0x302);
@@ -2937,7 +2937,7 @@ code_r0x00072658:
     uVar21 = AnimSeqPtr[2].seg;
     uVar14 = AnimSeqPtr[2].ofs;
     *(uint16_t *)(uVar14 + 0x1a) = uVar19;
-    *(undefined2 *)(uVar14 + 0x18) = pcVar6;
+    *(undefined2 *)(uVar14 + 0x18) = (uint16_t)pcVar6;   /* hand fix */
     ovr_stgFreeTmp(uStack_c);
   }
   builtin_memcpy(&ram0x0000d528 + 0x153,"\x02\x02\x02\x03\x03\x03",6);
@@ -3415,7 +3415,7 @@ L_init_assets_4EA5:
       uVar14 = AnimSeqPtr[0].seg;
       puVar17 = (undefined2 *)(AnimSeqPtr[0].ofs + iStack_4 * 4);
       puVar17[1] = uVar19;
-      *puVar17 = pcVar6;
+      *puVar17 = (uint16_t)pcVar6;   /* hand fix: 2-byte slot */
     }
     (*(uint8_t *)((uint8_t *)&(pixels_x00178.seg))) = 0x52;
     pixels_x00178.ofs = (uStack_c->aptr).seg;
@@ -4044,10 +4044,6 @@ uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
 
 
 /* 77eb:1754 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R2] string "Done" */
-
 void __cdecl16far
 ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t outFlag,
               uint16_t outFlagSeg,...)
@@ -4105,7 +4101,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
     acStack_d[3] = 3;
     iVar10 = 3;
   }
-  auStack_28e[iVar10 * 2] = (char *)"puppetmaker" + 3;
+  auStack_28e[iVar10 * 2] = 0x2410;   /* hand fix: segment-half array; this function already stores 0x2410 in auStack_28e[0],[2],[4] */
   *(char **)(&menuItems + iVar10 * 4) = (char *)"Done";
   acStack_d[iVar10 + 1] = '\x04';
   cStack_16 = '\0';
@@ -4230,7 +4226,6 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
 }
 
 
-
 /* 77eb:1ba2 */
 
 /* [R7] body shape: compute */
@@ -4244,10 +4239,6 @@ bool __cdecl16far ovc45_compute6(uint16_t value,...)
 
 
 /* 77eb:1bb3 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R2] string "Done" */
-
 void __cdecl16far
 ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t outFlag,
                uint16_t outFlagSeg,...)
@@ -4310,7 +4301,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
     auStack_c[2] = 3;
     iVar12 = 3;
   }
-  auStack_290[iVar12 * 2] = (char *)"puppetmaker" + 3;
+  auStack_290[iVar12 * 2] = 0x2410;   /* hand fix: segment-half array, same value as the sibling stores in this function */
   *(char **)(&menuLabels + iVar12 * 4) = (char *)"Done";
   auStack_c[iVar12] = 4;
   cStack_e = '\0';
@@ -4434,7 +4425,6 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
   } while (cStack_e == '\0');
   return;
 }
-
 
 
 /* 77eb:20e8 */
@@ -4595,9 +4585,6 @@ char * __cdecl16far ovc45_costOrIncomeLabel(int amount,...)
 
 
 /* 77eb:226e */
-
-/* [R7] body shape: compute */
-
 int __cdecl16far ovc45_compute9(char *dest,char *src,char *font,uint maxWidth,char mode,...)
 
 {
@@ -4622,11 +4609,11 @@ int __cdecl16far ovc45_compute9(char *dest,char *src,char *font,uint maxWidth,ch
     }
     iVar3 = 0;
     for (iVar4 = 0;
-        ((*(uint16_t *)((uint8_t *)&(src) + 2))[iVar3] != '\0' &&
-        ((int)(iStack_4 + iVar4 + (uint)*(byte *)((*(uint16_t *)((uint8_t *)&(font) + 2)) + (*(uint16_t *)((uint8_t *)&(src) + 2))[iVar3] + 0xa1)) <=
+        (((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   iVar3] != '\0' &&
+        ((int)(iStack_4 + iVar4 + (uint)*(byte *)((*(uint16_t *)((uint8_t *)&(font) + 2)) + ((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   iVar3] + 0xa1)) <=
          (int)mode)); iVar4 = iVar4 + (uint)bVar1) {
-      bVar1 = *(byte *)((*(uint16_t *)((uint8_t *)&(font) + 2)) + (*(uint16_t *)((uint8_t *)&(src) + 2))[iVar3] + 0xa1);
-      dest[iVar3] = (*(uint16_t *)((uint8_t *)&(src) + 2))[iVar3];
+      bVar1 = *(byte *)((*(uint16_t *)((uint8_t *)&(font) + 2)) + ((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   iVar3] + 0xa1);
+      dest[iVar3] = ((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   iVar3];
       iVar3 = iVar3 + 1;
     }
     dest[iVar3] = '.';
@@ -4637,11 +4624,10 @@ int __cdecl16far ovc45_compute9(char *dest,char *src,char *font,uint maxWidth,ch
       iVar4 = iVar3 + 3;
     }
     dest[iVar4] = '\0';
-    (*(uint16_t *)((uint8_t *)&(src) + 2)) = dest;
+    (*(uint16_t *)((uint8_t *)&(src) + 2)) = (uint16_t)dest;   /* hand fix: 2-byte segment half */
   }
   return (int)(*(uint16_t *)((uint8_t *)&(src) + 2));
 }
-
 
 
 /* 77eb:234a */
