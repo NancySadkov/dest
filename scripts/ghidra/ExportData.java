@@ -163,6 +163,27 @@ public class ExportData extends GhidraScript {
         syms.sort(new Comparator<Symbol>() {
             public int compare(Symbol a, Symbol b) { return a.getAddress().compareTo(b.getAddress()); }
         });
+        // Reuse the declarations from st_globals.h so the definition and the
+        // extern declaration can never disagree (two independent typeDecl
+        // copies used to disagree for strings and a few pointer globals).
+        Map<String, String> headerDecl = new HashMap<String, String>();
+        File hdr = new File(out).getParentFile() == null ? null
+                : new File(new File(out).getParentFile(), "st_globals.h");
+        if (hdr != null && hdr.isFile()) {
+            BufferedReader hr = new BufferedReader(new FileReader(hdr));
+            String hl;
+            while ((hl = hr.readLine()) != null) {
+                hl = hl.trim();
+                if (!hl.startsWith("extern ") || !hl.endsWith(";")) continue;
+                String d = hl.substring("extern ".length(), hl.length() - 1).trim();
+                java.util.regex.Matcher nm = java.util.regex.Pattern
+                        .compile("^(.*?)([A-Za-z_]\\w*)\\s*(\\[[^\\]]*\\])?$").matcher(d);
+                if (nm.matches()) headerDecl.put(nm.group(2), d);
+            }
+            hr.close();
+            println("header declarations: " + headerDecl.size());
+        }
+
         int n = 0;
         for (Symbol s : syms) {
             String name = s.getName();
@@ -173,13 +194,20 @@ public class ExportData extends GhidraScript {
             if (d == null) continue;
             MemoryBlock b = currentProgram.getMemory().getBlock(s.getAddress());
             if (b == null) continue;
-            String decl = typeDecl(d.getDataType(), name);
+            String decl = headerDecl.get(name);
+            if (decl == null) decl = typeDecl(d.getDataType(), name);
             if (decl == null) continue;
             seen.add(name);
             seenAddr.add(key);
             if (b.isInitialized()) {
                 try {
-                    w.println(decl + " = " + initOf(d, 0) + ";");
+                    String init = initOf(d, 0);
+                    // a string literal needs an array declaration; typeDecl can
+                    // return `undefined name[]` for a char datum, which then
+                    // clashes with the `extern char name[]` in the header
+                    if (init.trim().startsWith("\"") && !headerDecl.containsKey(name))
+                        decl = "char " + name + "[]";
+                    w.println(decl + " = " + init + ";");
                 } catch (Throwable t) {
                     w.println(decl + ";");
                 }
