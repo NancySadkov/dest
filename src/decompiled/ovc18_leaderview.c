@@ -127,11 +127,6 @@ void __cdecl16far ovc18_showLeaderView(void)
 
 
 /* 48ac:0251 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* Spawns an agent for a party slot with a gindex derived from the party sheet's classStr (6/19/25
-   or a random case), forwarding x/y/destX/destY to ovc15_usesLDIV_at_. */
-
 uint8_t * __cdecl16far
 ovc18_spawnClassAgent
           (uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,uint8_t classStr,uint8_t partyIndex,
@@ -406,7 +401,6 @@ ovc18_spawnClassAgent
   }
   return (uint8_t *)peVar7;
 }
-
 
 
 /* 48ac:0382 */

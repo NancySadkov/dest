@@ -553,7 +553,6 @@ uint16_t __cdecl16far stshDecVocSampleRate(uint8_t encfreq)
 
 
 /* 4b0a:0b9c */
-
 void __cdecl16far stshInitAudioAssets(char grab,...)
 
 {
@@ -683,11 +682,7 @@ void __cdecl16far stshInitAudioAssets(char grab,...)
 }
 
 
-
 /* 4b0a:0eda */
-
-/* duplicate name, disambiguated by address order */
-
 long * __cdecl16far stshAlloc_2(long *__return_storage_ptr__,DW sz)
 
 {
@@ -732,7 +727,6 @@ long * __cdecl16far stshAlloc_2(long *__return_storage_ptr__,DW sz)
                     /* WARNING: Subroutine does not return */
   ovr_stExit(0x24);
 }
-
 
 
 /* 4b0a:0f95 */
@@ -871,9 +865,6 @@ void __cdecl16far ovc20_compute1(char *gfxBlock,...)
 
 
 /* 4b0a:1150 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 void __cdecl16far init_ui_gfxes(void)
 
 {
@@ -973,11 +964,7 @@ void __cdecl16far init_ui_gfxes(void)
 }
 
 
-
 /* 4b0a:13d3 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 void __cdecl16far stshLoadAudioDrivers(bool grab,...)
 
 {
@@ -1093,7 +1080,6 @@ void __cdecl16far stshLoadAudioDrivers(bool grab,...)
   }
   return;
 }
-
 
 
 /* 4b0a:1820 */

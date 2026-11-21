@@ -392,15 +392,6 @@ uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,...)
 
 
 /* 5087:056e */
-
-/* WARNING: Instruction at (ram,0x0005ff51) overlaps instruction at (ram,0x0005ff50)
-    */
-/* WARNING: Control flow encountered bad instruction data */
-/* WARNING: Unable to track spacebase fully for stack */
-/* WARNING: Type propagation algorithm not settling */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R2] string "+%d ring of prot." */
-
 far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
 
 {
@@ -2750,7 +2741,6 @@ L_upd_units_5087_1d7d_202C:
   }
   return pfVar20;
 }
-
 
 
 /* 5087:1470 */

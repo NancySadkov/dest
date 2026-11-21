@@ -852,14 +852,6 @@ void * __cdecl16far ovc49_fillGridCells(byte count,agnt_t *agnt,...)
 
 
 /* 8699:18c4 */
-
-/* WARNING: Control flow encountered bad instruction data */
-/* WARNING: Instruction at (ram,0x00088b74) overlaps instruction at (ram,0x00088b73)
-    */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* WARNING: Restarted to delay deadcode elimination for space: stack */
-/* [R7] no exported body */
-
 uint __cdecl16far ovc49_body1(agnt_t *agnt,...)
 
 {
@@ -3449,7 +3441,6 @@ L_OVC49_8699_1e09_3CF7:
   ovr_ovc41_usesDebugVerbose();
   return uVar20;
 }
-
 
 
 /* 8699:1e09 */

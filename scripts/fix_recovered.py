@@ -442,7 +442,8 @@ if __name__ == "__main__":
 # Sweeps that must run inside the pipeline so a re-export cannot wipe them.
 import subprocess as _sp
 _HERE = os.path.dirname(os.path.abspath(__file__))
-for _name in ("fix_string_folds.py", "fix_raw_arrays.py", "fix_bda_far.py"):
+for _name in ("fix_string_folds.py", "fix_raw_arrays.py", "fix_bda_far.py",
+              "fix_far_fields.py"):
     _script = os.path.join(_HERE, _name)
     if os.path.isfile(_script):
         _sp.run([sys.executable, _script, "--apply"], check=False)

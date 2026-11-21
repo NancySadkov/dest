@@ -8,7 +8,6 @@
 
 
 /* 81b9:0000 */
-
 void __cdecl16far stshInitTxtFiles(char grab,...)
 
 {
@@ -42,11 +41,7 @@ void __cdecl16far stshInitTxtFiles(char grab,...)
 }
 
 
-
 /* 81b9:0086 */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 void __cdecl16far init_assets2(bool grab,...)
 
 {
@@ -1798,7 +1793,6 @@ void __cdecl16far init_assets2(bool grab,...)
   }
   return;
 }
-
 
 
 /* 81b9:3e84 */

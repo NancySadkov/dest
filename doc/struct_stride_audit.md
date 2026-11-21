@@ -58,6 +58,50 @@ its internal offsets disagree with the comments already in the model
 (`dmgBonus` cited at +0x39 but laid out at 0x2a), so the missing bytes are
 *inside* that struct, not at its end.
 
+## Complete table
+
+`tmp/stride_full.py` prints all 52 strides against every recovered struct size.
+Everything above the line matches a struct exactly; the record strides that match
+nothing are:
+
+```
+0x34  897  agent record            agnt_t is 46, stride 52
+0x37  506  entity record           entity_t is 49, stride 55
+0x95  420  generic-agent record    agntG_t is 131, stride 149
+0x27  290  39-byte record          no struct has size 39; the code even casts
+                                   an index*0x27 to stg_tmp_t*, which is 776
+                                   bytes, so that cast is a decompiler artefact
+0x30  112  48-byte record          no struct has size 48
+0x69  110  105-byte record         no struct has size 105
+0x3d   76  61-byte record          no struct has size 61
+0x48   73  72-byte record          no struct has size 72
+```
+
+The last five are not yet attributed; they are either record types that were
+never recovered as structs, or table strides of char data (the 0x69 one is used
+as `*(char *)(i*0x69 + a + 0x8fa)`, which looks like a text grid rather than a
+struct array).
+
+## Status after the far-pointer export fix
+
+`DataTypeWriter` prints a bare `*` for every pointer, so a struct that embeds a
+4-byte pointer came out 2 bytes short per far field. `ExportRecovered` now writes
+`st_far_fields.tsv` from the model and `scripts/fix_far_fields.py` rewrites those
+declarations to `T far *`; the compiler runs with `-a-` so no implicit padding
+shifts the fields. Result (`tmp/structsizes2.py` on the generated header):
+
+```
+agnt_t     52  0x34   == the 0x34 array stride
+entity_t   55  0x37   == the 0x37 entity stride
+agntG_t   149  0x95   == the 0x95 generic-agent stride
+bldtp_t    39  0x27   == the 0x27 table stride
+```
+
+All four record strides now agree with the model, which is the acceptance test
+above. `frm_t` (20) and `spr_t` (176) have no stride sites of their own
+(`grep 'frm_t.*0x1[24]'` is empty), so their sizes are not contradicted by any
+access in the tree.
+
 ## Planned fixes (in the Ghidra project, not the dump)
 
 1. `agnt_t`: append six byte fields at 0x2e..0x33 (`unk2e`..`unk33`, each with

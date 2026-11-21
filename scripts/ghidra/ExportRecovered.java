@@ -335,6 +335,37 @@ public class ExportRecovered extends GhidraScript {
         }
         r.close();
         tmp.delete();
+
+        // A 4-byte pointer must be written `T far *`; DataTypeWriter prints a bare
+        // `*` for both sizes, which silently shortens every struct that embeds a
+        // far pointer (agnt_t loses 6 bytes to frames/entity/gdata and is then 46
+        // against the 0x34 array stride).  Record the far fields for the
+        // post-pass that rewrites them, since the writer cannot express `far`.
+        PrintWriter ftab = new PrintWriter(new FileWriter(
+                new File(f.getParentFile(), "st_far_fields.tsv")));
+        ftab.println("struct\tfield");
+        int farFields = 0;
+        java.util.Iterator<DataType> all = currentProgram.getDataTypeManager().getAllDataTypes();
+        while (all.hasNext()) {
+            DataType t = all.next();
+            if (!(t instanceof Structure)) continue;
+            Structure st = (Structure) t;
+            for (DataTypeComponent c : st.getComponents()) {
+                DataType cd = c.getDataType();
+                boolean farField = cd instanceof Pointer && cd.getLength() == 4;
+                if (!farField && cd instanceof Array) {
+                    DataType el = ((Array) cd).getDataType();
+                    farField = el instanceof Pointer && el.getLength() == 4;
+                }
+                if (farField && c.getFieldName() != null) {
+                    ftab.println(st.getName() + "\t" + c.getFieldName());
+                    farFields++;
+                }
+            }
+        }
+        ftab.close();
+        println("far struct fields: " + farFields);
+
         PrintWriter out = new PrintWriter(new FileWriter(f));
         out.print(sb.toString());
         out.close();

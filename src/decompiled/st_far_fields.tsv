@@ -1,0 +1,13 @@
+struct	field
+agnt_t	frames
+agnt_t	entity
+agnt_t	gdata
+agntG_t	sprs
+agntG_t	name
+agntG_t	anms
+agntG_t	wpn_name
+bldtp_t	name
+bldtp_t	description
+bldtp_t	action
+frm_t	next
+spr_t	anm

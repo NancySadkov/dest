@@ -97,14 +97,31 @@ public class ExportData extends GhidraScript {
         return rep;
     }
 
+    // Ghidra renders a char array whose text is followed by a non-printable byte
+    // as  "Auto-build    ",7Fh  -- Borland assembly syntax, not C.  Turn the
+    // suffix into an adjacent string literal so the bytes are unchanged:
+    //   "Auto-build    " "\x7f"
+    private static final java.util.regex.Pattern STR_TAIL =
+            java.util.regex.Pattern.compile("^([0-9A-Fa-f]{1,2})h$");
+
+    private String fixStringRep(String rep) {
+        if (rep == null) return null;
+        int comma = rep.lastIndexOf(',');
+        if (comma < 0) return rep;
+        java.util.regex.Matcher m = STR_TAIL.matcher(rep.substring(comma + 1).trim());
+        if (!m.matches()) return rep;
+        int v = Integer.parseInt(m.group(1), 16);
+        return rep.substring(0, comma) + " \"\\x" + String.format("%02x", v) + "\"";
+    }
+
     private String initOf(Data d, int depth) throws Exception {
         if (depth > 8) return "0";
         DataType dt = d.getDataType();
         String rep = d.getDefaultValueRepresentation();
-        if (rep != null && rep.trim().startsWith("\"")) return rep.trim();
+        if (rep != null && rep.trim().startsWith("\"")) return fixStringRep(rep.trim());
         if (dt instanceof Pointer) return toC(rep, dt);
         if (dt.getName().contains("String") && rep != null && rep.trim().startsWith("\""))
-            return rep.trim();
+            return fixStringRep(rep.trim());
         if (dt instanceof Dynamic) return "{ " + toC(rep, null) + " }";
         if (dt instanceof Array && d.getNumComponents() == 0)
             return "{ " + toC(rep, ((Array) dt).getDataType()) + " }";

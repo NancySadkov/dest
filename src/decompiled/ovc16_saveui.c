@@ -787,9 +787,6 @@ char * __cdecl16far saveui_readLine(int fd,...)
 
 
 /* 4528:1175 */
-
-/* Reads the save-slot list from saves.txt. */
-
 uint __cdecl16far saveui_readSavesList(int entries,uint16_t entriesSeg)
 
 {
@@ -823,7 +820,6 @@ uint __cdecl16far saveui_readSavesList(int entries,uint16_t entriesSeg)
   }
   return uStack_4;
 }
-
 
 
 /* 4528:120d */
@@ -1373,7 +1369,6 @@ void __cdecl16far saveui_drawCancel(void)
 
 
 /* 4528:14b1 */
-
 void __cdecl16far uiMainMenuLoop(void)
 
 {
@@ -1706,7 +1701,6 @@ void __cdecl16far uiMainMenuLoop(void)
   ovr_ovc28_textHalflingCastle();
   return;
 }
-
 
 
 /* 4528:1ae8 */

@@ -267,13 +267,6 @@ agntGetWeaponName(char *dst,uint8_t atype,bool magical,uint8_t field_index,int32
 
 
 /* 6386:0411 */
-
-/* WARNING: Instruction at (ram,0x0006014c) overlaps instruction at (ram,0x0006014b)
-    */
-/* WARNING: Control flow encountered bad instruction data */
-/* WARNING: Unable to track spacebase fully for stack */
-/* [R2] string "+%d ring of prot." */
-
 far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far_t ringValue)
 
 {
@@ -626,7 +619,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
           if (*(char *)CONCAT13(uVar49,CONCAT12(uVar48,in_DX)) == '%') break;
           if (*(char *)CONCAT13(uVar49,CONCAT12(uVar48,in_DX)) == '@') {
             src = far_from_u32((uint32_t)(0xf013f));
-            (*(uint16_t *)((uint8_t *)&(dst))) = (char *)FontMain.ofs;
+            (*(uint16_t *)((uint8_t *)&(dst))) =(uint16_t)( (char *)FontMain.ofs);
             in_stack_00000004 = 3;
             in_stack_00000005 = 0;
             uVar48 = uVar11;
@@ -639,7 +632,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
           }
           else {
             src = far_from_u32((uint32_t)(0xf013f));
-            (*(uint16_t *)((uint8_t *)&(dst))) = (char *)FontMain.ofs;
+            (*(uint16_t *)((uint8_t *)&(dst))) =(uint16_t)( (char *)FontMain.ofs);
             in_stack_00000004 = 3;
             in_stack_00000005 = 0;
             uVar48 = uVar11;
@@ -653,7 +646,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
         }
         BlitLetterType = 2;
         src = far_from_u32((uint32_t)(0xf013f));
-        (*(uint16_t *)((uint8_t *)&(dst))) = (char *)FontMain.ofs;
+        (*(uint16_t *)((uint8_t *)&(dst))) =(uint16_t)( (char *)FontMain.ofs);
         in_stack_00000004 = 3;
         in_stack_00000005 = 0;
       } while( true );
@@ -917,7 +910,7 @@ L_OVC27_2288:
       pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
       pbVar42[-0x75] = pbVar42[-0x75] + bVar28;
       in(uVar43);
-      *(undefined2 *)((int)puVar40 + -6) = piVar33;
+      *(undefined2 *)((int)puVar40 + -6) =(uint16_t)( piVar33);
       iVar29 = *(int *)(puVar39 + 6);
       do {
         iVar41 = iVar29 + -1;
@@ -1092,7 +1085,6 @@ L_OVC28_6018_0c76_0EAD:
                     /* WARNING: Read-only address (ram,0x0002c58a) is written */
   return pfVar18;
 }
-
 
 
 /* 6386:05d3 */

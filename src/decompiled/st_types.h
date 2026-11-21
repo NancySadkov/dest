@@ -51,10 +51,10 @@ struct agntG_t { /* generic agent data, which can be shared by several agents */
     byte ai; /* 0 = player controlled, 1 = computer */
     byte type;
     sbyte nanims;
-    struct spr_t *sprs[6]; /* sprite stash handles */
+    struct spr_t far *sprs[6]; /* sprite stash handles */
     sbyte extents[3][3]; /* three (left,right,height) triples, one per draw path */
-    char *name;
-    struct anm_t *anms; /* animation definitions */
+    char far *name;
+    struct anm_t far *anms; /* animation definitions */
     short sprfls[6]; /* sprite file ids */
     uint8_t dmgDice; /* number of damage dice rolled */
     uint8_t dmgSides; /* sides per die, passed to randBelow */
@@ -72,12 +72,12 @@ struct agntG_t { /* generic agent data, which can be shared by several agents */
     short prtfls[6]; /* portrait file ids */
     struct far_t prts[6]; /* portrait stash handles */
     struct far_t prtpals[6]; /* portrait palettes */
-    char *wpn_name;
+    char far *wpn_name;
     uint8_t wpnAmmo; /* GUESS: last byte of the class record, directly after the wpn_name far pointer (+0x90..0x93); holds 0x14 (20) in all five live class records, consistent with a per-class ammunition count. No code reads or writes it. */
 };
 
 struct spr_t {
-    struct anm_t *anm; /* animation table for this sprite */
+    struct anm_t far *anm; /* animation table for this sprite */
     struct far_t frames[43]; /* far pointers to the 43 frame records */
 };
 
@@ -95,10 +95,10 @@ struct agnt_t {
     uint8_t health; /* hit points, initialised to 100 and per type */
     uint8_t animVariant;
     uint8_t frameIndex; /* index into the frame table pointed to by agnt_t+0x13 */
-    struct far_t *frames; /* CONCAT22(*(u16*)(i*0x34+0x15), *(u16*)(i*0x34+0x13)) is indexed by a frame id ((int)p + id*4) */
-    struct entity_t *entity; /* far pointer to this agent's entity record */
+    struct far_t far *frames; /* CONCAT22(*(u16*)(i*0x34+0x15), *(u16*)(i*0x34+0x13)) is indexed by a frame id ((int)p + id*4) */
+    struct entity_t far *entity; /* far pointer to this agent's entity record */
     uint16_t owner; /* index of the entity that owns this agent */
-    struct agntG_t *gdata; /* far pointer to this agent's generic record */
+    struct agntG_t far *gdata; /* far pointer to this agent's generic record */
     uint8_t strength; /* per-agent combat strength, summed per faction by attact_3f0b_28eb */
     uint8_t strengthMax; /* upper bound applied to strength */
     uint8_t timer; /* countdown: reset to 5 or 10, decremented per tick */
@@ -252,7 +252,7 @@ typedef ulong uint32_t;
 
 struct frm_t { /* animation frame */
     int8_t type4; /* always 4 */
-    struct frm_t *next; /* next frm_t or 0 */
+    struct frm_t far *next; /* next frm_t or 0 */
     uint8_t ow;
     int8_t type2; /* always 2 */
     int16_t x;
@@ -275,9 +275,9 @@ struct stg_t {
 typedef struct bldtp_t bldtp_t, *Pbldtp_t;
 
 struct bldtp_t { /* building type */
-    char *name;
-    char *description;
-    char *action;
+    char far *name;
+    char far *description;
+    char far *action;
     uint8_t kind;
     uint8_t size;
     uint8_t minBuildTime;

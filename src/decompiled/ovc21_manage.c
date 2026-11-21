@@ -677,9 +677,6 @@ byte __cdecl16far manage_statSelectable(byte statIndex,char_sheet_t *sheet)
 
 
 /* 4d05:0dbe */
-
-/* WARNING: Variable defined which should be unmapped: menuItems */
-
 undefined2 __cdecl16far abilitiesDlg(char_sheet_t *sheet)
 
 {
@@ -800,7 +797,6 @@ undefined2 __cdecl16far abilitiesDlg(char_sheet_t *sheet)
   }
   return 1;
 }
-
 
 
 /* 4d05:1095 */
@@ -952,11 +948,6 @@ void __cdecl16far manage_rollHitPoints(char_sheet_t *sheet)
 
 
 /* 4d05:125c */
-
-/* WARNING: Instruction at (ram,0x0004ff54) overlaps instruction at (ram,0x0004ff53)
-    */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-
 char * __cdecl16far chargen_switch(uint16_t index)
 
 {
@@ -1682,7 +1673,6 @@ switchD_4000_e2bf_caseD_6:
   }
   goto L_attact_3f0b_1082_1477;
 }
-
 
 
 /* 4d05:1296 */
