@@ -139,6 +139,58 @@ public class ExportData extends GhidraScript {
         return toC(rep, dt);
     }
 
+    // Turbo C has a small maximum logical-line length; one 34 KB line for
+    // agntG_t AgntGs[42] produced ", expected" / "Declaration syntax error" /
+    // "Unexpected }" at that line even though the text is well formed.  Break the
+    // initialiser at commas so no physical line is long.
+    // Ghidra renders runs of raw bytes inside a char array in assembler style:
+    //   "$",04h,02h ... 82h,E9h "\xff"
+    // C needs `0x` prefixes, and the byte before a quoted run is missing its
+    // comma.  Both are text-level fixes on the emitted initialiser.
+    private String sanitizeAsmBytes(String t) {
+        java.util.regex.Pattern h = java.util.regex.Pattern
+                .compile("(?<![0-9A-Za-z_])([0-9A-Fa-f]{1,2})h(?![0-9A-Za-z_])");
+        String r = h.matcher(t).replaceAll("0x$1");
+        java.util.regex.Pattern miss = java.util.regex.Pattern
+                .compile("(0x[0-9A-Fa-f]+)\\s+\"");
+        return miss.matcher(r).replaceAll("$1, \"");
+    }
+
+    private void writeWrapped(PrintWriter w, String text) {
+        int limit = 100;
+        StringBuilder line = new StringBuilder();
+        boolean inStr = false, inChr = false, esc = false;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            line.append(c);
+            if (esc) {
+                esc = false;
+                continue;
+            }
+            if (c == '\\' && (inStr || inChr)) {
+                esc = true;
+                continue;
+            }
+            if (inStr) {
+                if (c == '"') inStr = false;
+                continue;
+            }
+            if (inChr) {
+                if (c == '\'') inChr = false;
+                continue;
+            }
+            if (c == '"') { inStr = true; continue; }
+            if (c == '\'') { inChr = true; continue; }
+            // never split inside a literal; break after a comma once the line is long
+            if (line.length() >= limit && c == ',') {
+                w.println(line.toString());
+                line.setLength(0);
+                line.append("    ");
+            }
+        }
+        if (line.length() > 0) w.println(line.toString());
+    }
+
     @Override
     public void run() throws Exception {
         String[] args = getScriptArgs();
@@ -207,7 +259,7 @@ public class ExportData extends GhidraScript {
                     // clashes with the `extern char name[]` in the header
                     if (init.trim().startsWith("\"") && !headerDecl.containsKey(name))
                         decl = "char " + name + "[]";
-                    w.println(decl + " = " + init + ";");
+                    writeWrapped(w, sanitizeAsmBytes(decl + " = " + init + ";"));
                 } catch (Throwable t) {
                     w.println(decl + ";");
                 }
