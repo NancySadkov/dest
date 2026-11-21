@@ -81,3 +81,33 @@ while the model stores it as `Stack[0x8]:1`.  The fix is to give one-byte
 parameters **two-byte stack storage** (keeping the `char` type), which should
 also remove the `Too few parameters`/`Type mismatch` residuals that come from the
 same overlapping-variable confusion.
+
+## Sizing the `"puppetmaker" + 3` fold class
+
+`tmp/size_segclass.py` and `tmp/size_puppet.py` classify every occurrence of the
+constant `0x2410` that the decompiler renders as `(char *)"puppetmaker" + 3`
+(the string starts at DGROUP `0x240d`, so `+3` is `0x2410`).
+
+```
+total folds                                 324
+  inside CONCAT22(<unassigned segment>, ...)  29   9%
+  inside CONCAT22(<some variable>, ...)      295  91%
+```
+
+So the earlier explanation - an untracked segment local - accounts for only 29 of
+them, in 19 functions across 11 modules (`ovc13_panel` 10, `ovc16_saveui` 4,
+`ovc18_leaderview` 3, ...).  The dominant form is
+
+```c
+CONCAT22(GSeed, (char *)"puppetmaker" + 3)
+CONCAT22(uVar7, (char *)"puppetmaker" + 3)
+```
+
+i.e. a **variable segment half paired with the constant `0x2410` as the offset
+half**, 146 of them as call arguments and 178 in assignments and nested casts.
+
+That makes the class a register-pair problem, not a stack-local problem: the
+segment and offset halves of the same far pointer are being taken from the wrong
+sources.  Sizing it precisely needs the operand provenance of the `CONCAT22`
+halves at a sample of those sites, which is the next investigation - not a blind
+retype.
