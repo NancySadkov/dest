@@ -140,20 +140,10 @@ uint __cdecl16far draw_compute3(int x,...)
 
 
 /* 2e25:025a */
-
-/* WARNING: Control flow encountered bad instruction data */
-/* WARNING: Instruction at (ram,0x000219f3) overlaps instruction at (ram,0x000219f2)
-    */
-/* WARNING: Stack frame is not setup normally: Input value of stackpointer is not used */
-/* WARNING: Removing unreachable block (ram,0x000219da) */
-/* WARNING: Removing unreachable block (ram,0x000219dd) */
-/* WARNING: Switch with 1 destination removed at 0x0002e528 : 7 cases all go to same destination */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R2] string "talkwin9.lbm" */
-
 void __cdecl16far draw_textTalkwin9Lbm(void)
 
 {
+  extern undefined2 _resetTextBlitCycle;   /* hand fix: no symbol exists */
   byte *pbVar1;
   int *piVar2;
   uint *puVar3;
@@ -224,7 +214,7 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
   iVar37 = (int)in_ESP;
   uVar51 = (undefined2)((ulong)in_ESP >> 0x10);
   piVar39 = (int16_t *)(iVar37 + -2);
-  *(undefined2 *)(iVar37 + -2) = unaff_BP;
+  *(undefined2 *)(iVar37 + -2) = (uint16_t)unaff_BP;
   if (GameRunning != false) {
     return;
   }
@@ -234,10 +224,10 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
   if (CrossBlitPtr.ofs != 0 || CrossBlitPtr.seg != 0) {
     *(uint16_t *)(iVar37 + -4) = CrossBlitPtr.seg;
     *(uint16_t *)(iVar37 + -6) = CrossBlitPtr.ofs;
-    *(undefined2 *)(iVar37 + -8) = (char *)"talkwin9.lbm" + 0xb;
+    *(undefined2 *)(iVar37 + -8) = (uint16_t)(char *)"talkwin9.lbm" + 0xb;
     uVar52 = 0x2337;
     puVar38 = (undefined1 *)(iVar37 + -10);
-    *(undefined2 *)(iVar37 + -10) = 0xe4f0;
+    *(undefined2 *)(iVar37 + -10) = (uint16_t)0xe4f0;
     ovr_stshFree(*(far_t *)(iVar37 + -6));
     piVar39 = (int16_t *)(puVar38 + 8);
   }
@@ -251,11 +241,11 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
         CrossBlitY = 0x73;
       }
       else {
-        *(undefined2 *)((int)piVar39 + -2) = CONCAT11(0x24,GMenuItem);
-        *(undefined2 *)((int)piVar39 + -4) = uVar52;
+        *(undefined2 *)((int)piVar39 + -2) = (uint16_t)CONCAT11(0x24,GMenuItem);
+        *(undefined2 *)((int)piVar39 + -4) = (uint16_t)uVar52;
         uVar52 = 0x2315;
         puVar40 = (undefined1 *)((int)piVar39 + -6);
-        *(undefined2 *)((int)piVar39 + -6) = 0xe5d2;
+        *(undefined2 *)((int)piVar39 + -6) = (uint16_t)0xe5d2;
         uVar15 = ovr_attact_usesLDIV_at_(*(uint8_t *)((int)piVar39 + -2));
         piVar39 = (int16_t *)(puVar40 + 6);
         CrossBlitX = (uVar15 & 0xff) + 0xe4;
@@ -268,9 +258,9 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
     }
     else if (GMenuItem < 5) {
       *(uint *)((int)piVar39 + -2) = (uint)GMenuItem;
-      *(undefined2 *)((int)piVar39 + -4) = uVar52;
+      *(undefined2 *)((int)piVar39 + -4) = (uint16_t)uVar52;
       puVar41 = (undefined2 *)((int)piVar39 + -6);
-      *(undefined2 *)((int)piVar39 + -6) = 0xe60d;
+      *(undefined2 *)((int)piVar39 + -6) = (uint16_t)0xe60d;
       iVar14 = draw_compute1(*(int *)((int)piVar39 + -2));
       CrossBlitX = iVar14 + -6;
       puVar41[2] = (uint)GMenuItem;
@@ -296,28 +286,28 @@ L_draw_2e25_025a_03D9:
            ovr_stshRleCut((far_t *)piVar39[-6],*(far_t *)(piVar39 + -5),piVar39[-3],piVar39[-2],
                           piVar39[-1],*piVar39);
       CrossBlitPtr.seg = in_DX;
-      *(undefined2 *)((int)piVar42 + 0xe) = 0xa000;
+      *(undefined2 *)((int)piVar42 + 0xe) = (uint16_t)0xa000;
       *(int *)((int)piVar42 + 0xc) = CrossBlitX + CrossBlitY * 0x140;
       *(uint16_t *)((int)piVar42 + 10) = CrossBlitGfx.seg;
       *(uint16_t *)((int)piVar42 + 8) = CrossBlitGfx.ofs;
-      *(undefined2 *)((int)piVar42 + 6) = (char *)0x22d3;
+      *(undefined2 *)((int)piVar42 + 6) = (uint16_t)(char *)0x22d3;
       uVar52 = 0x22d3;
       puVar43 = (undefined1 *)((int)piVar42 + 4);
-      *(undefined2 *)((int)piVar42 + 4) = 0xe689;
+      *(undefined2 *)((int)piVar42 + 4) = (uint16_t)0xe689;
       ovr_blitLoadRleGfx(*(far_t *)((int)piVar42 + 8),*(far_t *)((int)piVar42 + 0xc));
       piVar39 = (int16_t *)(puVar43 + 0xc);
     }
     if (MouseMoved == 0) {
       *(int *)((int)piVar39 + -2) = CrossBlitX;
-      *(undefined2 *)((int)piVar39 + -4) = uVar52;
+      *(undefined2 *)((int)piVar39 + -4) = (uint16_t)uVar52;
       pbVar44 = (byte *)((int)piVar39 + -6);
-      *(undefined2 *)((int)piVar39 + -6) = 0xe69b;
+      *(undefined2 *)((int)piVar39 + -6) = (uint16_t)0xe69b;
       uVar15 = draw_compute3(*(int *)((int)piVar39 + -2));
       *(uint *)(pbVar44 + 4) = uVar15;
-      *(undefined2 *)(pbVar44 + 2) = 1;
+      *(undefined2 *)(pbVar44 + 2) = (uint16_t)1;
       *(undefined2 *)pbVar44 = 0;
-      *(undefined2 *)(pbVar44 + -2) = uVar52;
-      *(undefined2 *)(pbVar44 + -4) = 0xe6a8;
+      *(undefined2 *)(pbVar44 + -2) = (uint16_t)uVar52;
+      *(undefined2 *)(pbVar44 + -4) = (uint16_t)0xe6a8;
       ovr_play_sfxU(*pbVar44,*(int *)(pbVar44 + 2),*(uint16_t *)(pbVar44 + 4));
     }
                     /* WARNING: Read-only address (ram,0x00026001) is written */
@@ -3544,7 +3534,7 @@ L_draw_2e25_025a_03D9:
   cVar35 = (char)(in_CX + -1);
   pcVar46[(int)unaff_SI] = pcVar46[(int)unaff_SI] + cVar35;
   *pcVar33 = *pcVar33 + (char)((uint)iVar14 >> 8);
-  *(undefined2 *)((int)piVar39 + -2) = (char *)0x24ae;
+  *(undefined2 *)((int)piVar39 + -2) = (uint16_t)(char *)0x24ae;
   cVar8 = (char)((uint)(in_CX + -1) >> 8);
   pcVar46[(int)unaff_SI] = pcVar46[(int)unaff_SI] + cVar8;
   _resetTextBlitCycle = *(int *)(pcVar33 + (int)unaff_SI) * 0x6c;
@@ -3573,13 +3563,13 @@ L_draw_2e25_025a_03D9:
   pcVar46 = pcVar46 + (int)pcVar49;
   *pcVar49 = *pcVar49 + cVar31;
                     /* WARNING: Read-only address (ram,0x00026001) is written */
-  (*(uint16_t *)((uint8_t *)&(s_halfling_lodge_2410_1efd) + 4)) = pcVar33 + 0x696c;
+  (*(uint16_t *)((uint8_t *)&(s_halfling_lodge_2410_1efd) + 4)) = (uint16_t)pcVar33 + 0x696c;
   piVar50 = (int *)(pcVar49 + (int)pcVar46);
   cVar35 = cVar35 + cVar22;
   iVar14 = CONCAT11(cVar35,cVar31);
   *(char *)piVar5 = (char)*piVar5 + cVar18;
   *piVar50 = *piVar50 + CONCAT11(cVar22,cVar18);
-  (*(uint16_t *)((uint8_t *)&(AgntAnms[0x30]) + 9)) = (*(uint16_t *)((uint8_t *)&(AgntAnms[0x30]) + 9)) + CONCAT11(cVar22,cVar18);
+  (*(uint16_t *)((uint8_t *)&(AgntAnms[0x30]) + 9)) = (uint16_t)(*(uint16_t *)((uint8_t *)&(AgntAnms[0x30]) + 9)) + CONCAT11(cVar22,cVar18);
   piVar2 = (int *)(iVar14 + (int)piVar5);
   *piVar2 = *piVar2 + CONCAT11(cVar26,cVar23);
   piVar2 = (int *)(iVar14 + (int)piVar50);
@@ -3950,7 +3940,7 @@ code_r0x000219f5:
   } while (iVar20 != 0 && bVar11 != 0);
   iVar14 = CONCAT11((byte)((uint)iVar20 >> 9),(byte)iVar20);
   iVar36 = (int)uVar45;
-  *(undefined2 *)(iVar36 + -2) = uVar51;
+  *(undefined2 *)(iVar36 + -2) = (uint16_t)uVar51;
   bVar10 = bVar11 * '\x02';
   *(uint *)(pbVar32 + (int)puVar25) =
        *(uint *)(pbVar32 + (int)puVar25) |
@@ -3966,12 +3956,12 @@ code_r0x000219f5:
   uVar15 = CONCAT11(bVar17 | (byte)((uint)uVar51 >> 8),cVar9 + CARRY1(bVar29,bVar28));
   *(uint *)(iVar36 + -4) = uVar15;
   *(int *)(iVar36 + -6) = iVar14;
-  *(undefined2 *)(iVar36 + -8) = CONCAT11(bVar28,bVar24);
-  *(undefined2 *)(iVar36 + -10) = pbVar32;
+  *(undefined2 *)(iVar36 + -8) = (uint16_t)CONCAT11(bVar28,bVar24);
+  *(undefined2 *)(iVar36 + -10) = (uint16_t)pbVar32;
   *(int *)(iVar36 + -0xc) = iVar36 + -2;
-  *(undefined2 *)(iVar36 + -0xe) = pbVar47;
+  *(undefined2 *)(iVar36 + -0xe) = (uint16_t)pbVar47;
   *(uint *)(iVar36 + -0x10) = (uint)puVar25;
-  *(undefined2 *)(iVar36 + -0x12) = piVar50;
+  *(undefined2 *)(iVar36 + -0x12) = (uint16_t)piVar50;
   if (iVar14 != 0) {
     pbVar1 = pbVar32 + (int)puVar25 + 0x2d;
     bVar29 = *pbVar1;
@@ -3992,12 +3982,12 @@ code_r0x000219f5:
       (pbVar32 + (int)puVar25)[0x38] = (pbVar32 + (int)puVar25)[0x38] + bVar29;
       *(int *)(iVar36 + -0x14) = iVar13;
       *(int *)(iVar36 + -0x16) = iVar14;
-      *(undefined2 *)(iVar36 + -0x18) = CONCAT11(bVar29,bVar24);
-      *(undefined2 *)(iVar36 + -0x1a) = pbVar32;
+      *(undefined2 *)(iVar36 + -0x18) = (uint16_t)CONCAT11(bVar29,bVar24);
+      *(undefined2 *)(iVar36 + -0x1a) = (uint16_t)pbVar32;
       *(int *)(iVar36 + -0x1c) = iVar36 + -0x12;
-      *(undefined2 *)(iVar36 + -0x1e) = pbVar47;
+      *(undefined2 *)(iVar36 + -0x1e) = (uint16_t)pbVar47;
       *(uint *)(iVar36 + -0x20) = (uint)puVar25;
-      *(undefined2 *)(iVar36 + -0x22) = piVar50;
+      *(undefined2 *)(iVar36 + -0x22) = (uint16_t)piVar50;
       *(int *)(iVar36 + -0x24) = iVar13;
       pcVar7 = (code *)swi(3);
       (*pcVar7)();
@@ -4013,7 +4003,6 @@ code_r0x000219f5:
                     /* WARNING: Bad instruction - Truncating control flow here */
   halt_baddata();
 }
-
 
 
 /* 2e25:046b */
@@ -4091,10 +4080,6 @@ void __cdecl16far draw_usesBlitLoadRleGfx2(void)
 
 
 /* 2e25:05e9 */
-
-/* WARNING: Removing unreachable block (ram,0x0002e856) */
-/* [R4] calls ovr_play_sfx */
-
 void __cdecl16far draw_usesPlay_sfx(void)
 
 {
@@ -4117,20 +4102,20 @@ void __cdecl16far draw_usesPlay_sfx(void)
   prevTick = CONCAT22(unaff_SI,(*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)));
   puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)recordUpdateTick,prevTick);
   if ((in_DX != 0) || ((ulong *)((int)(undefined4 *)&_DATA + 1U) < puVar3)) {
-    (*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    (*(uint16_t *)((uint8_t *)&(recordUpdateTick))) = *(ulong **)BDA_DailyTimeCounter;
+    (*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)) = (uint16_t)*(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+    (*(uint16_t *)((uint8_t *)&(recordUpdateTick))) = (uint16_t)*(ulong **)BDA_DailyTimeCounter;
     outFlag = 0;
     for (uVar7 = 0; uVar6 = (uint)(prevTick >> 0x10), uVar7 < GRecordCount; uVar7 = uVar7 + 1) {
       *(int *)(uVar7 * 0x12) = *(int *)(uVar7 * 0x12) + 1;
       if (20000 < *(uint *)(uVar7 * 0x12)) {
-        *(undefined2 *)(uVar7 * 0x12) = 0x14;
+        *(undefined2 *)(uVar7 * 0x12) = (uint16_t)0x14;
       }
       cVar2 = *(char *)(uVar7 * 0x12 + 0xe);
       if (cVar2 == '\0') {
         uVar4 = *(byte *)(uVar7 * 0x12 + 0x11) + 1;
         prevTick = CONCAT22(uVar6,uVar4);
         if ((uVar4 < *(byte *)(uVar7 * 0x12 + 6)) && (0x13 < *(uint *)(uVar7 * 0x12))) {
-          *(undefined2 *)(uVar7 * 0x12) = 0;
+          *(undefined2 *)(uVar7 * 0x12) = (uint16_t)0;
           pcVar1 = (char *)(uVar7 * 0x12 + 0x11);
           *pcVar1 = *pcVar1 + '\x01';
         }
@@ -4140,7 +4125,7 @@ void __cdecl16far draw_usesPlay_sfx(void)
         prevTick = CONCAT22(uVar6,uVar4);
         if (uVar4 < *(byte *)(uVar7 * 0x12 + 6)) {
           if (0x13 < *(uint *)(uVar7 * 0x12)) {
-            *(undefined2 *)(uVar7 * 0x12) = 0;
+            *(undefined2 *)(uVar7 * 0x12) = (uint16_t)0;
             pcVar1 = (char *)(uVar7 * 0x12 + 0x11);
             *pcVar1 = *pcVar1 + '\x01';
           }
@@ -4167,7 +4152,7 @@ void __cdecl16far draw_usesPlay_sfx(void)
                       (x,(int)in_stack_0000fffa,*(byte *)(uVar7 * 0x12 + 8),
                        *(uint8_t *)(uVar7 * 0x12 + 9));
           }
-          *(undefined2 *)(uVar7 * 0x12) = 0;
+          *(undefined2 *)(uVar7 * 0x12) = (uint16_t)0;
         }
       }
       else if ((cVar2 == '\x02') && (9 < *(uint *)(uVar7 * 0x12))) {
@@ -4191,7 +4176,6 @@ void __cdecl16far draw_usesPlay_sfx(void)
   }
   return;
 }
-
 
 
 /* 2e25:0938 */
@@ -4362,9 +4346,6 @@ uint16_t __cdecl16far gameProcessKey(void)
 
 
 /* 2e25:0d35 */
-
-/* [R4] calls gameProcessKey */
-
 uint16_t __cdecl16far draw_usesGameProcessKey(void)
 
 {
@@ -4435,7 +4416,6 @@ uint16_t __cdecl16far draw_usesGameProcessKey(void)
   printf("%d \r");
   return uVar5;
 }
-
 
 
 /* 2e25:0efd */
