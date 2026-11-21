@@ -71,7 +71,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
   agnt_t *paStack_22;
   agnt_t *paStack_20;
   agnt_t *paStack_1e;
-  uint8_t agnt;
+  agnt_t *agnt;   /* hand fix: assigned from agnt_t * paStack_N and indexed */
   uint16_t uStack_1a;
   uint16_t uStack_18;
   brect_t bStack_16;
@@ -238,7 +238,7 @@ switchD_6000_ca06_caseD_1:
         if (rightButtonLatch != '\0') goto L_ui_unit_order_6616_0689_1054;
         if ((paStack_2e != paStack_2a) || (paStack_30 != paStack_2c)) {
           paStack_2a = paStack_2e;
-          agnt = (agnt_t *)paStack_2e;
+          agnt = paStack_2e;
           paStack_2c = paStack_30;
           paStack_1e = paStack_30;
         }
@@ -252,7 +252,7 @@ switchD_6000_ca06_caseD_1:
         if ((char)uVar22 != '\0') goto L_ui_unit_order_6616_0689_1054;
         if ((paStack_36 != paStack_32) || (paStack_38 != paStack_34)) {
           paStack_32 = paStack_36;
-          agnt = (agnt_t *)paStack_36;
+          agnt = paStack_36;
           paStack_34 = paStack_38;
           paStack_1e = paStack_38;
           bStack_16.seg = uStack_8;

@@ -208,7 +208,7 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,...)
   uint16_t uVar4;
   bool bVar5;
   uint uVar6;
-  entity_t *uStack_8;   /* hand fix: dereferenced as uStack_8->x */
+  entity_t *uStack_8;   /* hand fix: dereferenced as uStack_8->base.x */
   
   uVar2 = *(undefined2 *)(agntIndex * 0x34 + 0x19);
   agnt = (agnt_t *)*(undefined2 *)(agntIndex * 0x34 + 0x17);
@@ -237,7 +237,7 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,...)
   }
   AgntCount = AgntCount - 1;
   if ((((notify != 0) && (!bVar5)) && (agnt->y == GfxRndSeed2)) &&
-     ((GfxRndSeed - 2U <= uStack_8->x && (GfxRndSeed - 2U <= uStack_8->x)))) {
+     ((GfxRndSeed - 2U <= uStack_8->base.x && (GfxRndSeed - 2U <= uStack_8->base.x)))) {
     agnt->destX = agnt->targetX;
     uVar4 = agnt->targetY;
     agnt->destY = uVar4;
@@ -475,14 +475,14 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex,...)
   int iVar4;
   uint uVar5;
   int iVar6;
-  entity_t *uStack_6;   /* hand fix: dereferenced as uStack_6->x */
+  entity_t *uStack_6;   /* hand fix: dereferenced as uStack_6->base.x */
   
   paVar2 = (agnt_t *)(agntIndex * 0x34);
   uStack_6 = (agnt_t *)CONCAT22(0x1726,paVar2);
   if ((((agntG_t *)paVar2->gdata)->flags2 & 4) != 0) {
     for (iVar6 = 0; iVar6 < (int)(uint)AgntCount; iVar6 = iVar6 + 1) {
       if ((iVar6 != agntIndex) &&
-         (uVar3 = uStack_6->x - *(int *)(iVar6 * 0x34), uVar5 = (int)uVar3 >> 0xf,
+         (uVar3 = uStack_6->base.x - *(int *)(iVar6 * 0x34), uVar5 = (int)uVar3 >> 0xf,
          (int)((uVar3 ^ uVar5) - uVar5) < 0x32)) {
         bVar1 = ovr_manage_rollDice('\x06','\x06');
         uVar3 = (uint)bVar1;
@@ -2182,7 +2182,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
   agnt_t *paStack_22;
   agnt_t *paStack_20;
   agnt_t *paStack_1e;
-  uint8_t agnt;
+  agnt_t *agnt;   /* hand fix: assigned from agnt_t * paStack_N and indexed */
   uint16_t uStack_1a;
   uint16_t uStack_18;
   brect_t bStack_16;
@@ -2349,7 +2349,7 @@ switchD_6000_ca06_caseD_1:
         if (rightButtonLatch != '\0') goto L_ui_unit_order_6616_0689_1054;
         if ((paStack_2e != paStack_2a) || (paStack_30 != paStack_2c)) {
           paStack_2a = paStack_2e;
-          agnt = (agnt_t *)paStack_2e;
+          agnt = paStack_2e;
           paStack_2c = paStack_30;
           paStack_1e = paStack_30;
         }
@@ -2363,7 +2363,7 @@ switchD_6000_ca06_caseD_1:
         if ((char)uVar22 != '\0') goto L_ui_unit_order_6616_0689_1054;
         if ((paStack_36 != paStack_32) || (paStack_38 != paStack_34)) {
           paStack_32 = paStack_36;
-          agnt = (agnt_t *)paStack_36;
+          agnt = paStack_36;
           paStack_34 = paStack_38;
           paStack_1e = paStack_38;
           bStack_16.seg = uStack_8;
@@ -2657,9 +2657,6 @@ L_ui_unit_order_6616_0689_1054:
 
 
 /* 6a8f:22cb */
-
-/* Resolves an agent's special attack (poison, blast spore disease, energy drain) and reports it. */
-
 void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
 
 {
@@ -2735,7 +2732,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
             uVar5 = (undefined2)((ulong)uStack_8 >> 0x10);
             paVar2 = ((agnt_t *)uStack_8)->gdata;
             if (((((agntG_t *)paVar2)->flags2 & 0x10) == 0) || (agnt->gindex != 0x2)) {
-              cStack_3 = ovc41_textParalyzed((agnt_t *)CONCAT22(targetIndex,agnt),uStack_8,uVar11,
+              cStack_3 = ovc41_textParalyzed((agnt_t *)CONCAT22(targetIndex,agnt),(agnt_t *)uStack_8,uVar11,
                                              (char)uStack_8,(char)((ulong)uStack_8 >> 0x10),
                                              (char)uVar11);
               if ((cStack_3 == '\0') &&
@@ -2757,7 +2754,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
                 uVar9 = ovr_audio_panFromX(agnt,uVar13);
                 ovr_play_sfxU(0x55,0,uVar9,0,(char)uVar9);
                 ovc41_settleAgentCombat
-                          ((agnt_t *)CONCAT13(uVar14,CONCAT12(uVar13,agnt)),uStack_8,(char)uStack_8)
+                          ((agnt_t *)CONCAT13(uVar14,CONCAT12(uVar13,agnt)),(agnt_t *)uStack_8,(char)uStack_8)
                 ;
                 cStack_3 = '\x01';
               }
@@ -2910,7 +2907,6 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
   }
   return;
 }
-
 
 
 /* 6a8f:297d */

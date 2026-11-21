@@ -8,7 +8,7 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,...)
   uint16_t uVar4;
   bool bVar5;
   uint uVar6;
-  entity_t *uStack_8;   /* hand fix: dereferenced as uStack_8->x */
+  entity_t *uStack_8;   /* hand fix: dereferenced as uStack_8->base.x */
   
   uVar2 = *(undefined2 *)(agntIndex * 0x34 + 0x19);
   agnt = (agnt_t *)*(undefined2 *)(agntIndex * 0x34 + 0x17);
@@ -37,7 +37,7 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,...)
   }
   AgntCount = AgntCount - 1;
   if ((((notify != 0) && (!bVar5)) && (agnt->y == GfxRndSeed2)) &&
-     ((GfxRndSeed - 2U <= uStack_8->x && (GfxRndSeed - 2U <= uStack_8->x)))) {
+     ((GfxRndSeed - 2U <= uStack_8->base.x && (GfxRndSeed - 2U <= uStack_8->base.x)))) {
     agnt->destX = agnt->targetX;
     uVar4 = agnt->targetY;
     agnt->destY = uVar4;
