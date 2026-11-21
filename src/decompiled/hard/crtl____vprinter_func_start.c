@@ -1,9 +1,9 @@
 undefined2 __vprinter_func_start(void)
 
 {
-  char *pcVar1;   /* hand fix: the bytes are read as chars */
-  code cVar2;
+    char cVar2;   /* hand fix: it holds a character, not code */
   char *pcVar3;
+  char *pcVar1;   /* hand fix: the bytes are read as chars */
   uint *puVar4;
   undefined1 *puVar5;
   int *piVar6;
