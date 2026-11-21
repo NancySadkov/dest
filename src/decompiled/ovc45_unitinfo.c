@@ -620,12 +620,6 @@ bool __cdecl16far ovc45_textArena2(byte bldType)
 
 
 /* 77eb:0d61 */
-
-/* WARNING: Removing unreachable block (ram,0x00079554) */
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* Builds the building-placement verdict for a site: the 'It will cost ... gp.' line or the reason
-   it cannot be placed (water, narrow, rank, outpost limit, walls, arena). */
-
 uint __cdecl16far
 ovc45_buildPlacementMessage
           (uint param_1,uint16_t param_2,int param_3,undefined2 param_4,char param_5)
@@ -914,7 +908,7 @@ ovc45_buildPlacementMessage
   undefined1 uStack_f;
   char cStack_e;
   uint8_t unusedFlag;
-  undefined2 uStack_c;
+  stg_tmp_t *uStack_c;   /* hand fix: assigned (stg_tmp_t *) and used as uStack_c->aptr */
   uint8_t *puStack_a;
   int iStack_4;
   
@@ -1250,7 +1244,7 @@ code_r0x00072658:
       if (grab == false) {
         uVar22 = func_0x0007ffe0();
         puVar15 = (uint8_t *)((ulong)uVar22 >> 0x10);
-        ((undefined2 *)&blitFrameSeg)[iStack_4 * 2] = puVar15;
+        ((undefined2 *)&blitFrameSeg)[iStack_4 * 2] = (uint16_t)puVar15;   /* hand fix: 2-byte segment/offset half */
         ((undefined2 *)&blitFrameOfs)[iStack_4 * 2] = (int)uVar22;
       }
       else {
@@ -1265,8 +1259,8 @@ code_r0x00072658:
         pfVar5 = ovr_stshRleCut((far_t *)(&uStack_c->aptr)->ofs,src_00,72,iVar10,(char)uVar19,uVar25
                                 ,(char)iVar10);
         pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-        ((undefined2 *)&blitFrameSeg)[iStack_4 * 2] = puVar15;
-        ((undefined2 *)&blitFrameOfs)[iStack_4 * 2] = pcVar6;
+        ((undefined2 *)&blitFrameSeg)[iStack_4 * 2] = (uint16_t)puVar15;   /* hand fix: 2-byte segment/offset half */
+        ((undefined2 *)&blitFrameOfs)[iStack_4 * 2] = (uint16_t)pcVar6;   /* hand fix: 2-byte segment/offset half */
       }
       iStack_4 = iStack_4 + 1;
     }
@@ -3989,7 +3983,6 @@ L_init_assets_4EA5:
   stshInitPtrs();
   return param_1;
 }
-
 
 
 /* 77eb:16b2 */

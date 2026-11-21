@@ -32,7 +32,10 @@ REPORT = os.path.join(ROOT, "tmp", "build_report.tsv")
 
 # TC 3.0 flags: large model (all pointers far, matching the original), 80186
 # instructions, and the same optimisation level recorded in doc/flat_build.md.
-CFLAGS = "-ml -1 -G -O -c -I."
+# -w- : warnings are not errors.  TC caps messages per function, so a function
+# with many harmless warnings hits "Too many error or warning messages" before
+# its real errors are printed; suppressing warnings makes the report accurate.
+CFLAGS = "-ml -1 -G -O -c -w- -I."
 
 
 def stage():
