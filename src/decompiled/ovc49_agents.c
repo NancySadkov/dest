@@ -1236,7 +1236,7 @@ L_OVC49_8699_18c4_1CA7:
           printf("%d \r");
         }
         pbVar29 = (brect_t *)((int)&AgntAnms[0x38].halfWidth + 1);
-        uStackY_22 = (cte_t *)0x0;
+        uStackY_22 =(uint16_t)( (cte_t *)0x0);
         goto L_OVC49_8699_1e09_29B9;
       case 3:
         in_AF = 9 < (byte)uVar15 | in_AF;
@@ -1330,8 +1330,8 @@ L_OVC49_8699_18c4_1CA7:
         uVar15 = ovr_ovc45_compute8(((unit_t *)GUnits)[uStackY_26].unitType);
         if (((char)uVar15 != '\0') && (*(char *)(((uint)uStackY_22 >> 8) * 0x27 + 300) != '\0')) {
           (&stack0xffec)[iVar14] = 3;
-          auStackY_2f2[iVar14 * 2 + 1] = (char *)0x26510;
-          auStackY_2f2[iVar14 * 2] = (char *)"Upgrade";
+          auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)( (char *)0x26510);
+          auStackY_2f2[iVar14 * 2] =(uint16_t)( (char *)"Upgrade");
           iVar14 = iVar14 + 1;
           uVar27 = 0x195d;
           pcVar10 = (char *)*(uint *)(((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) +
@@ -1349,8 +1349,8 @@ L_OVC49_8699_18c4_1CA7:
       }
       else {
         (&stack0xffec)[iVar14] = 2;
-        auStackY_2f2[iVar14 * 2 + 1] = (char *)0x26510;
-        auStackY_2f2[iVar14 * 2] = (char *)"Repair";
+        auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)( (char *)0x26510);
+        auStackY_2f2[iVar14 * 2] =(uint16_t)( (char *)"Repair");
         iVar14 = iVar14 + 1;
         uVar15 = *(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x125);
         uVar20 = uVar15 % 5;
@@ -1369,8 +1369,8 @@ L_OVC49_8699_18c4_1CA7:
       if ((((*(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x121) & 0x400) == 0) && (bVar9 != 0xff)) &&
          (*(char *)((int)*(undefined4 *)((uint)bVar9 << 2) + 0x3f) == '\0')) {
         (&stack0xffec)[iVar14] = 7;
-        auStackY_2f2[iVar14 * 2 + 1] = (char *)0x26510;
-        auStackY_2f2[iVar14 * 2] = (char *)"Information";
+        auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)( (char *)0x26510);
+        auStackY_2f2[iVar14 * 2] =(uint16_t)( (char *)"Information");
         iVar14 = iVar14 + 1;
       }
       uVar33 = 0x19;
@@ -1378,20 +1378,20 @@ L_OVC49_8699_18c4_1CA7:
         uVar33 = 0x24;
         if (*(char *)((int)Entities + (*(uint16_t *)((uint8_t *)&(in_stack_00000008) + 2)) * 0x37 + 0x1a) != (char)uStackY_24) {
           (&stack0xffec)[iVar14] = 6;
-          auStackY_2f2[iVar14 * 2 + 1] = (char *)0x26510;
-          auStackY_2f2[iVar14 * 2] = (char *)"New Owner";
+          auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)( (char *)0x26510);
+          auStackY_2f2[iVar14 * 2] =(uint16_t)( (char *)"New Owner");
           iVar14 = iVar14 + 1;
         }
       }
       if (in_stack_00000010 != '\0') {
         (&stack0xffec)[iVar14] = 4;
-        auStackY_2f2[iVar14 * 2 + 1] = (char *)0x26510;
-        auStackY_2f2[iVar14 * 2] = (char *)"Change Party";
+        auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)( (char *)0x26510);
+        auStackY_2f2[iVar14 * 2] =(uint16_t)( (char *)"Change Party");
         iVar14 = iVar14 + 1;
       }
       (&stack0xffec)[iVar14] = 5;
-      auStackY_2f2[iVar14 * 2 + 1] = (char *)0x26510;
-      auStackY_2f2[iVar14 * 2] = (char *)"Done";
+      auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)( (char *)0x26510);
+      auStackY_2f2[iVar14 * 2] =(uint16_t)( (char *)"Done");
       pcVar26 = (char *)(iVar14 + 1);
       pcVar10 = (char *)CONCAT11(uVar33,(byte)uStackY_22);
       goldPartyIndex = (byte)uStackY_22;
@@ -1596,7 +1596,7 @@ L_OVC49_8699_1e09_29B9:
                 pbVar29 = (brect_t *)((int)&AgntAnms[0x38].halfWidth + 1);
                 printf("%d \r");
               }
-              uStackY_22 = (cte_t *)0x0;
+              uStackY_22 =(uint16_t)( (cte_t *)0x0);
               goto L_OVC49_8699_1e09_3BDE;
             }
             uVar27 = *(undefined2 *)((int)uStackY_22 * 0x34 + 0x15);
@@ -1675,56 +1675,56 @@ L_OVC49_8699_1e09_29B9:
         pcVar10 = (char *)0x26510;
         SpecialColors[1] = bVar9;
         specialColorsOfs = ovr_stshWrite((uint32_t *)SpecialColors);
-        specialColorsSeg = pcVar10;
+        specialColorsSeg =(uint16_t)( pcVar10);
         pfVar13 = ovr_stshRleCut((far_t *)(&in_stack_0000fff6->aptr)->ofs);
         trianglsCut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar13);
-        trianglsCut1Seg = pcVar10;
+        trianglsCut1Seg =(uint16_t)( pcVar10);
         pfVar13 = ovr_stshRleCut((far_t *)(&in_stack_0000fff6->aptr)->ofs);
         trianglsCut2Ofs = ovr_stshStoreFile((uint8_t *)pfVar13);
-        trianglsCut2Seg = pcVar10;
+        trianglsCut2Seg =(uint16_t)( pcVar10);
         pfVar13 = ovr_stshRleCut((far_t *)(&in_stack_0000fff6->aptr)->ofs);
         trianglsCut3Ofs = ovr_stshStoreFile((uint8_t *)pfVar13);
-        trianglsCut3Seg = pcVar10;
+        trianglsCut3Seg =(uint16_t)( pcVar10);
         pfVar13 = ovr_stshRleCut((far_t *)(&in_stack_0000fff6->aptr)->ofs);
         trianglsCut4Ofs = ovr_stshStoreFile((uint8_t *)pfVar13);
-        trianglsCut4Seg = pcVar10;
+        trianglsCut4Seg =(uint16_t)( pcVar10);
         pfVar13 = ovr_stshRleCut((far_t *)(&in_stack_0000fff6->aptr)->ofs);
         trianglsCut5Ofs = ovr_stshStoreFile((uint8_t *)pfVar13);
-        trianglsCut5Seg = pcVar10;
+        trianglsCut5Seg =(uint16_t)( pcVar10);
         pfVar13 = ovr_stshRleCut((far_t *)(&in_stack_0000fff6->aptr)->ofs);
         trianglsCut6Ofs = ovr_stshStoreFile((uint8_t *)pfVar13);
-        trianglsCut6Seg = pcVar10;
+        trianglsCut6Seg =(uint16_t)( pcVar10);
         ovr_stgFreeTmp(in_stack_0000fff6);
         if ((*(uint8_t *)((uint8_t *)&(agnt))) == false) {
           panel01Cut1Ofs = (uint16_t)(ovr_stshAllocStub((far_t *)in_stack_0000fff6));
-          panel01Cut1Seg = pcVar10;
+          panel01Cut1Seg =(uint16_t)( pcVar10);
           panel01Cut2Ofs = (uint16_t)(ovr_stshAllocStub((far_t *)in_stack_0000fff6));
-          panel01Cut2Seg = pcVar10;
+          panel01Cut2Seg =(uint16_t)( pcVar10);
           panel01Cut3Ofs = (uint16_t)(ovr_stshAllocStub((far_t *)in_stack_0000fff6));
-          panel01Cut3Seg = pcVar10;
+          panel01Cut3Seg =(uint16_t)( pcVar10);
           Lbm_nwpanel1.ofs = (uint16_t)ovr_stshAllocStub((far_t *)in_stack_0000fff6);
           Lbm_nwpanel1.seg = (uint16_t)pcVar10;
           nwpanel1Cut1Ofs = (uint16_t)(ovr_stshAllocStub((far_t *)in_stack_0000fff6));
-          nwpanel1Cut1Seg = pcVar10;
+          nwpanel1Cut1Seg =(uint16_t)( pcVar10);
           fullScreenGfxOfs = (uint16_t)(ovr_stshAllocStub((far_t *)in_stack_0000fff6));
-          fullScreenGfxSeg = pcVar10;
+          fullScreenGfxSeg =(uint16_t)( pcVar10);
           FontHandle.ofs = (uint16_t)ovr_stshAllocStub((far_t *)in_stack_0000fff6);
           FontHandle.seg = (uint16_t)pcVar10;
           nwpanel1Cut2Ofs = (uint16_t)(ovr_stshAllocStub((far_t *)in_stack_0000fff6));
-          nwpanel1Cut2Seg = pcVar10;
+          nwpanel1Cut2Seg =(uint16_t)( pcVar10);
           nwpanel1Cut3Ofs = (uint16_t)(ovr_stshAllocStub((far_t *)in_stack_0000fff6));
-          nwpanel1Cut3Seg = pcVar10;
+          nwpanel1Cut3Seg =(uint16_t)( pcVar10);
           nwpanel1Cut4Ofs = (uint16_t)(ovr_stshAllocStub((far_t *)in_stack_0000fff6));
-          nwpanel1Cut4Seg = pcVar10;
+          nwpanel1Cut4Seg =(uint16_t)( pcVar10);
           nwpanel1Cut5Ofs = (uint16_t)(ovr_stshAllocStub((far_t *)in_stack_0000fff6));
-          nwpanel1Cut5Seg = pcVar10;
+          nwpanel1Cut5Seg =(uint16_t)( pcVar10);
           for (iVar14 = 0; iVar14 < 4; iVar14 = iVar14 + 1) {
             pfVar13 = ovr_stshAllocStub((far_t *)in_stack_0000fff6);
             *(int *)((int)&CrossBlitGfx.seg + iVar14 * 4) = (int)pcVar10;
             ((far_t *)&CrossBlitGfx + iVar14)->ofs = (uint16_t)pfVar13;
             pfVar13 = ovr_stshAllocStub((far_t *)in_stack_0000fff6);
-            ((undefined2 *)&crossBlitType2Seg)[iVar14 * 2] = pcVar10;
-            ((undefined2 *)&crossBlitType2Ofs)[iVar14 * 2] = pfVar13;
+            ((undefined2 *)&crossBlitType2Seg)[iVar14 * 2] =(uint16_t)( pcVar10);
+            ((undefined2 *)&crossBlitType2Ofs)[iVar14 * 2] =(uint16_t)( pfVar13);
           }
         }
         else {
@@ -1732,13 +1732,13 @@ L_OVC49_8699_1e09_29B9:
           pcVar21 = pcVar10;
           pfVar13 = ovr_stshRleCut((far_t *)(&psVar17->aptr)->ofs);
           panel01Cut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar13);
-          panel01Cut1Seg = pcVar21;
+          panel01Cut1Seg =(uint16_t)( pcVar21);
           pfVar13 = ovr_stshRleCut((far_t *)(&psVar17->aptr)->ofs);
           panel01Cut2Ofs = ovr_stshStoreFile((uint8_t *)pfVar13);
-          panel01Cut2Seg = pcVar21;
+          panel01Cut2Seg =(uint16_t)( pcVar21);
           pfVar13 = ovr_stshRleCut((far_t *)(&psVar17->aptr)->ofs);
           panel01Cut3Ofs = ovr_stshStoreFile((uint8_t *)pfVar13);
-          panel01Cut3Seg = pcVar21;
+          panel01Cut3Seg =(uint16_t)( pcVar21);
           ovr_stgFreeTmp(psVar17);
           psVar17 = ovr_grabLbm(15);
           pcStack_8 = pcVar21;
@@ -1746,7 +1746,7 @@ L_OVC49_8699_1e09_29B9:
           Lbm_nwpanel1.seg = (uint16_t)pcStack_8;
           pfVar13 = ovr_stshRleCut((far_t *)(&psVar17->aptr)->ofs);
           nwpanel1Cut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar13);
-          nwpanel1Cut1Seg = pcStack_8;
+          nwpanel1Cut1Seg =(uint16_t)( pcStack_8);
           pfVar13 = ovr_stshRleCut((far_t *)(&psVar17->aptr)->ofs);
           fullScreenGfxOfs = ovr_stshStoreFile((uint8_t *)pfVar13);
           fullScreenGfxSeg = pcStack_8;

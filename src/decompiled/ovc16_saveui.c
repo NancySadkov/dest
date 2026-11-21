@@ -814,7 +814,7 @@ uint __cdecl16far saveui_readSavesList(int entries,uint16_t entriesSeg)
     handle.ofs = (uint16_t)pcVar1;
     ovr_stshFree(handle);
     for (uVar5 = 0; uVar5 < uStack_4; uVar5 = uVar5 + 1) {
-      uVar2 = saveui_readLine(fd);
+      uVar2 =(uint16_t)( saveui_readLine(fd));
       puVar4 = (undefined2 *)(entries + uVar5 * 4);
       puVar4[1] = uVar3;
       *puVar4 = uVar2;
@@ -1536,7 +1536,7 @@ void __cdecl16far uiMainMenuLoop(void)
             pcVar9 = uiReadString((char *)"Name this save:  (Esc to cancel)",0x2410,0,(char *)0x0,0)
             ;
             *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = uVar10;
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) = pcVar9;
+            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) =(uint16_t)( pcVar9);
             saveui_usesBlitLoadRleGfx4();
           }
           else {
@@ -1546,7 +1546,7 @@ void __cdecl16far uiMainMenuLoop(void)
                                   (char *)*(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4),
                                   *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2));
             *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = uVar10;
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) = pcVar9;
+            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) =(uint16_t)( pcVar9);
             saveui_usesBlitLoadRleGfx4();
           }
           if ((*(int *)((int)entries_05 + (uint)bVar5 * 4 + -4) != 0 ||

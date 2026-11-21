@@ -52,10 +52,37 @@ def statement_end(lines, ln):
 
 changed = {}
 skipped = 0
+CONTROL = ("for", "if", "while", "switch", "do", "return", "else")
+
+
+def depth_at(line, i):
+    d = 0
+    for ch in line[:i]:
+        if ch == "(":
+            d += 1
+        elif ch == ")":
+            d -= 1
+    return d
+
+
+def balanced(text):
+    d = 0
+    for ch in text:
+        if ch == "(":
+            d += 1
+        elif ch == ")":
+            d -= 1
+    return d == 0
+
+
 for n, fnn in sorted(targets.items()):
     line = lines[n - 1]
+    word = line.lstrip().split(" ", 1)[0].rstrip("(")
     ms = [m.start() for m in ASSIGN.finditer(line)]
-    if not ms:
+    # only a statement-level assignment is a half-slot store; an assignment in a
+    # for/if/while header or inside nested parens must never be cast here
+    ms = [i for i in ms if depth_at(line, i) == 0]
+    if not ms or word in CONTROL:
         skipped += 1
         continue
     i = ms[-1]
@@ -71,12 +98,24 @@ for n, fnn in sorted(targets.items()):
     tail = line[i + 1:]
     if end == n - 1:
         semi = tail.rfind(";")
-        lines[n - 1] = head + tail[:semi] + ")" + tail[semi:]
+        cand = head + tail[:semi] + ")" + tail[semi:]
+        if not balanced(cand):
+            print("  SKIP unbalanced line", n)
+            skipped += 1
+            continue
+        lines[n - 1] = cand
         changed.setdefault(fnn, []).append(n)
     else:
-        lines[n - 1] = head + tail
+        cand_head = head + tail
         semi = lines[end].rfind(";")
-        lines[end] = lines[end][:semi] + ")" + lines[end][semi:]
+        cand_tail = lines[end][:semi] + ")" + lines[end][semi:]
+        stmt = "\n".join([cand_head] + lines[n:end] + [cand_tail])
+        if not balanced(stmt):
+            print("  SKIP unbalanced stmt at", n)
+            skipped += 1
+            continue
+        lines[n - 1] = cand_head
+        lines[end] = cand_tail
         changed.setdefault(fnn, []).append(n)
 
 print("statements wrapped:", sum(len(v) for v in changed.values()),
@@ -90,7 +129,9 @@ io.open(SRC, "w", encoding="utf-8", newline="\n").write("\n".join(lines))
 def extract(text_lines, fn):
     idx = None
     for k, l in enumerate(text_lines):
-        if re.search(r"(?<![\w])" + re.escape(fn) + r"\(", l):
+        # the decompiler puts long signatures on several lines, sometimes with
+        # the function name alone on its own line
+        if re.search(r"(?<![\w])" + re.escape(fn) + r"\(", l) or l.strip() == fn:
             for j in range(k + 1, min(k + 12, len(text_lines))):
                 t = text_lines[j].strip()
                 if not t:
@@ -126,7 +167,10 @@ def extract(text_lines, fn):
 
 
 os.makedirs("overrides", exist_ok=True)
-for fn, items in changed.items():
+# every function that contained a target line gets an override, even if this
+# pass added nothing (the line may already be cast from an earlier pass)
+for fn in sorted(set(targets.values())):
+    items = changed.get(fn, [])
     span = extract(lines, fn)
     if span is None:
         print("MISSING", fn)

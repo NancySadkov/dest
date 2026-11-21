@@ -337,8 +337,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
             uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),0x8b);
           }
           uVar16 = ovr_randBelow(0x14);
-          uStack_8 = (byte *)(*(int *)((int)*(undefined4 *)(uStack_a << 2) + 0x3b) + -10 +
-                             (uVar16 & 0xff));
+          uStack_8 =(uint16_t)( (byte *)(*(int *)((int)*(undefined4 *)(uStack_a << 2) + 0x3b) + -10 +
+                             (uVar16 & 0xff)));
           if ((int)uStack_8 < 1) {
             uStack_8 =(uint16_t) (byte *)0x1;
           }

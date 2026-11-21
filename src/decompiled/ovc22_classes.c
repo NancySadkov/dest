@@ -552,7 +552,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
     uVar67 = 0;
     uVar69 = 0;
     iStack_22 = 0;
-    uStack_20 = (byte *)__C0_ASM_CopyRight + 6;
+    uStack_20 =(uint16_t)( (byte *)__C0_ASM_CopyRight + 6);
     cVar14 = (char)unaff_SS;
     uVar65 = (undefined1)((uint)unaff_SS >> 8);
     _fmemset((void *)ZEXT24(unaff_SS),6,(uint16_t)unaff_DI);
@@ -573,14 +573,14 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
     uStack_34 = 0;
     iStack_3c = 0;
     _fmemset((void *)ZEXT24(unaff_SS),8,CONCAT11(uVar68,cVar25));
-    uStack_14 = (far_t *)&GUnitDescriptions[3].ofs;
+    uStack_14 =(uint16_t)( (far_t *)&GUnitDescriptions[3].ofs);
     while (uStack_14 = (far_t *)((int)uStack_14 + 1), uStack_14 < GUnitCount) {
       pbVar2 = &((unit_t *)GUnits)[(int)uStack_14].flags;
       *pbVar2 = *pbVar2 & 0xfd;
     }
     bVar17 = *(byte *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x3f);
     uVar23 = CONCAT11(uVar19,bVar17);
-    uStack_e = (uint *)(0x1000 << (bVar17 & 0x1f));
+    uStack_e =(uint16_t)( (uint *)(0x1000 << (bVar17 & 0x1f)));
     *(undefined1 *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0xad) = 0;
     _fmemset((void *)(ulong)*(uint *)((uint)partyIndex * 4 + 2),3,CONCAT11(uVar68,cVar25));
     iVar30 = CONCAT11(uVar69,uVar67);
@@ -599,7 +599,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
     *(undefined1 *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0xa5) = 0;
     *(undefined1 *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0xa9) = 0;
     bVar17 = *(byte *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x3e);
-    (*(uint16_t *)((uint8_t *)&(uStack_6))) = (far_t *)CONCAT11(bVar17,(byte)uStack_6);
+    (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)( (far_t *)CONCAT11(bVar17,(byte)uStack_6));
     if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar17 * 0x95) == '\x01') {
       (*(uint32_t *)((uint8_t *)&(uStack_6))) = CONCAT12(1,(far_t *)uStack_6);
       uVar12 = (uint3)uStack_6;
@@ -624,7 +624,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
       puVar37 = (unit_t *)GUnits;
       if (puVar37[(int)puVar49].unitType == partyIndex) {
         (*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) = (puVar37 + (int)puVar49)->bldType;
-        uStack_16 = (far_t *)ovr_alignUp4(puVar37[(int)puVar49].x);
+        uStack_16 =(uint16_t)( (far_t *)ovr_alignUp4(puVar37[(int)puVar49].x));
         uVar53 = (undefined2)((ulong)GUnits >> 0x10);
         uStack_18 = ((unit_t *)GUnits)[(int)puVar49].y;
         puStack_10 = (uint *)0x0;
@@ -738,7 +738,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
               puVar50 = (uint *)*puVar3;
               uVar23 = *puVar3;
               *puVar3 = (uVar23 - (int)puVar36) - uVar22;
-              *(undefined2 *)(uVar48 + iVar30 + -2) = unaff_DI;
+              *(undefined2 *)(uVar48 + iVar30 + -2) =(uint16_t)( unaff_DI);
                     /* WARNING: Read-only address (ram,0x00026a19) is written */
               uVar23 = (uint)(puVar50 < puVar36 || uVar23 - (int)puVar36 < uVar22);
               (*(uint16_t *)((uint8_t *)&(s_Peaceful_2410_2915) + 4)) = (0x6665U - (int)unaff_DI) - uVar23;
@@ -788,7 +788,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
                 uVar23 = *puVar3;
                 bVar43 = (byte)*puVar3 - bVar26;
                 *(byte *)puVar3 = bVar43 - bVar57;
-                *(undefined2 *)(uVar22 + iVar30 + -2) = puVar36;
+                *(undefined2 *)(uVar22 + iVar30 + -2) =(uint16_t)( puVar36);
                 ((char *)((int)puVar47 + (int)puVar49))[0x18] =
                      (((char *)((int)puVar47 + (int)puVar49))[0x18] - bVar17) -
                      ((byte)uVar23 < bVar26 || bVar43 < bVar57);
@@ -1047,7 +1047,7 @@ L_OVC22_5087_0234_323C:
               do {
                 ovc22_textRingProt((byte)pfVar20);
                 do {
-                  uStack_16 = (far_t *)((int)uStack_16 + 1);
+                  uStack_16 =(uint16_t)( (far_t *)((int)uStack_16 + 1));
                   if ((int)(uint)GLeaderCount <= (int)uStack_16) {
                     GGameState = 0x3e;
                     if (DebugVerbose != false) {
@@ -1070,7 +1070,7 @@ L_OVC22_5087_0234_323C:
                 if (puVar37[iVar30].unitType == partyIndex) {
                   if ((byte)uStack_6 == (*(uint8_t *)((uint8_t *)&(uStack_6) + 1))) {
 L_OVC22_5087_4975_4ABE:
-                    (*(uint16_t *)((uint8_t *)&(uStack_6))) = pfVar20;
+                    (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)( pfVar20);
                     if ((byte)uStack_8 < ListCount) {
                       puStack_a = (uint *)puVar37[*(int *)((uStack_8 & 0xff) * 2 + -0x6d44)].x;
                       scratch = puVar37[*(int *)((uStack_8 & 0xff) * 2 + -0x6d44)].y;
@@ -1115,8 +1115,8 @@ L_OVC22_5087_4975_4ABE:
                       if (pfVar20 != (far_t *)((int)(undefined4 *)&_DATA + 1U)) {
                         return pfVar20;
                       }
-                      uStack_e = (uint *)ovc22_usesRandBelow(partyIndex,(uint16_t)puStack_a,scratch)
-                      ;
+                      uStack_e =(uint16_t)( (uint *)ovc22_usesRandBelow(partyIndex,(uint16_t)puStack_a,scratch)
+                      );
                       if (uStack_e == (uint *)0x0) {
                         puStack_a = (uint *)*(uint16_t *)
                                              ((int)*(undefined4 *)((uint)partyIndex << 2) + 0x39);
@@ -1234,7 +1234,7 @@ L_OVC22_5087_4975_4ABE:
                 puVar49 = (uint *)((int)((uVar23 ^ uVar32) - uVar32) / 2 +
                                   ((uVar22 ^ uVar33) - uVar33));
                 if (puVar49 < uStack_e) {
-                  uStack_e = puVar49;
+                  uStack_e =(uint16_t)( puVar49);
                   unaff_DI = (uint *)scratch;
                 }
                 if (puVar49 < (byte *)__C0_ASM_CopyRight + 6) {
@@ -1245,8 +1245,8 @@ L_OVC22_5087_4975_4ABE:
                   while( true ) {
                     scratch = scratch + 1;
                     while (EntityCount <= scratch) {
-                      *(undefined2 *)((int)*(undefined4 *)((int)puStack_a << 2) + 0x4b) = unaff_DI;
-                      uStack_16 = (far_t *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_16) + 1)),0xff);
+                      *(undefined2 *)((int)*(undefined4 *)((int)puStack_a << 2) + 0x4b) =(uint16_t)( unaff_DI);
+                      uStack_16 =(uint16_t)( (far_t *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_16) + 1)),0xff));
                       if (*(char *)((int)*(undefined4 *)((int)puStack_a << 2) + 0x40) != '\0') {
                         puStack_10 = (uint *)0xffff;
                         for (scratch = 0; (int)scratch < (int)(uint)GLeaderCount;
@@ -1262,7 +1262,7 @@ L_OVC22_5087_4975_4ABE:
                              puVar49 = (uint *)((int)((uVar23 ^ uVar32) - uVar32) / 2 +
                                                ((uVar22 ^ uVar33) - uVar33)), puVar49 < puStack_10))
                           {
-                            uStack_16 = (far_t *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_16) + 1)),(char)scratch);
+                            uStack_16 =(uint16_t)( (far_t *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_16) + 1)),(char)scratch));
                             puStack_10 = puVar49;
                           }
                         }
@@ -1281,7 +1281,7 @@ L_OVC22_5087_4975_4ABE:
                               ovc25_intelAttackingNotice((byte)puStack_a);
                               if (*(int *)((int)*(undefined4 *)((int)puStack_a << 2) + 0x4b) == -1)
                               {
-                                uStack_14 = (far_t *)0xffff;
+                                uStack_14 =(uint16_t)( (far_t *)0xffff);
                               }
                               else {
                                 unaff_DI = (uint *)*(undefined2 *)
@@ -1294,8 +1294,8 @@ L_OVC22_5087_4975_4ABE:
                                 uVar22 = *(int *)((int)*(undefined4 *)((int)puStack_a << 2) + 0x3b)
                                          - ((entity_t *)Entities)[(int)unaff_DI].base.y;
                                 uVar33 = (int)uVar22 >> 0xf;
-                                uStack_14 = (far_t *)((int)((uVar23 ^ uVar32) - uVar32) / 2 +
-                                                     ((uVar22 ^ uVar33) - uVar33));
+                                uStack_14 =(uint16_t)( (far_t *)((int)((uVar23 ^ uVar32) - uVar32) / 2 +
+                                                     ((uVar22 ^ uVar33) - uVar33)));
                               }
                               if ((*(int *)((int)*(undefined4 *)((int)puStack_a << 2) + 0x43) == 0)
                                  || ((byte *)__C0_ASM_CopyRight + 6 <= uStack_14)) {
@@ -1327,12 +1327,12 @@ L_OVC22_5087_4975_4ABE:
                                       pfVar20 = (far_t *)(*(int *)((int)*(undefined4 *)
                                                                          ((int)puStack_a << 2) +
                                                                   0x39) + -0x14 + (uVar31 & 0xff));
-                                      (*(uint16_t *)((uint8_t *)&(uStack_6))) = pfVar20;
+                                      (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)( pfVar20);
                                       if ((int)pfVar20 < 4) {
-                                        (*(uint16_t *)((uint8_t *)&(uStack_6))) = (far_t *)__C0_ASM_CopyRight;
+                                        (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)( (far_t *)__C0_ASM_CopyRight);
                                       }
                                       if (0x8c < (int)(far_t *)uStack_6) {
-                                        (*(uint16_t *)((uint8_t *)&(uStack_6))) = (far_t *)&_brklvl;
+                                        (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)( (far_t *)&_brklvl);
                                       }
                                       uVar31 = ovr_randBelow(0x14);
                                       uStack_8 = *(int *)((int)*(undefined4 *)((int)puStack_a << 2)
@@ -1351,7 +1351,7 @@ L_OVC22_5087_4975_4ABE:
                                   ovc25_usesEntityCount((byte)puStack_a);
                                   bVar17 = *(byte *)((int)*(undefined4 *)((int)puStack_a << 2) +
                                                     0x49);
-                                  uStack_16 = (far_t *)CONCAT11(bVar17,(undefined1)uStack_16);
+                                  uStack_16 =(uint16_t)( (far_t *)CONCAT11(bVar17,(undefined1)uStack_16));
                                   if (0xe < *(uint *)((int)*(undefined4 *)((int)puStack_a << 2) +
                                                      0x47)) {
                                     ovc25_usesAlignUp42((byte)puStack_a,10,
@@ -1418,7 +1418,7 @@ L_OVC22_5087_4975_4ABE:
                       *(undefined2 *)((int)*(undefined4 *)((int)puStack_a * 4) + 0x41) = 0;
                       *(undefined2 *)((int)*(undefined4 *)((int)puStack_a * 4) + 0x43) = 0;
                       *(undefined2 *)((int)*(undefined4 *)((int)puStack_a * 4) + 0x45) = 0;
-                      uStack_e = (uint *)0xffff;
+                      uStack_e =(uint16_t)( (uint *)0xffff);
                       unaff_DI = (uint *)0xffff;
                       puStack_12 = (uint *)ovr_alignUp4(*(int *)((int)*(undefined4 *)
                                                                        ((int)puStack_a * 4) + 0x39))
@@ -1479,7 +1479,7 @@ L_OVC22_5087_0234_32B8:
               (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = uVar65;
               uVar53 = ovr_ovc28_usesUiInputText(entries);
               cVar14 = (char)uVar53;
-              uStack_e = (uint *)CONCAT11(cVar14,(byte)uStack_e);
+              uStack_e =(uint16_t)( (uint *)CONCAT11(cVar14,(byte)uStack_e));
               keyboardInputMode = 0;
               if (((cVar14 != '\0') && (cVar14 != '\x01')) && (cVar14 != -2)) {
                 (&stack0xbac4)[(int)unaff_DI] = (&stack0xbac4)[(int)unaff_DI] + cVar25;
