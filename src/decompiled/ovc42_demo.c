@@ -46,7 +46,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
       if (rightButtonLatch != '\0') {
         return (char *)"woodcarver";
       }
-      return (char *)"arena" + 5;
+      return (char *)0x2a9cd;
     }
     prevTick = CONCAT22(uVar6,uVar1);
     puVar4 = ovr_attact_usesBDADailyTimeCounter(__return_storage_ptr__,prevTick);
@@ -886,7 +886,7 @@ undefined2 __cdecl16far run_demo(void)
                                               bVar1 = ovr_ovc40_usesAlignToSeg
                                                                 ('\x04',(char *)"Demo cancelled." +
                                                                         0xf,0x2410,
-                                                                 (char *)"Demo cancelled." + 0xf,
+                                                                 (char *)0x2b265xf,
                                                                  0x2410,2,0x74,0x10,0x74,0x10);
                                               if (bVar1 < 2) {
                                                 ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10)

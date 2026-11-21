@@ -527,7 +527,7 @@ void __cdecl16far season_repairBuildings(byte rank)
   uint8_t promoteThreshold;
   byte abStack_4 [2];
   
-  abStack_4 = (byte  [2])(*(uint16_t *)((uint8_t *)&(PromoteThreshold) + 2));
+  memcpy(&abStack_4, &((*(uint16_t *)((uint8_t *)&(PromoteThreshold) + 2))), 2);
   promoteThreshold = (*(uint16_t *)((uint8_t *)&(PromoteThreshold)));
   count = 0;
   dst = (char *)(*(uint16_t *)((uint8_t *)&(PromoteThreshold)));

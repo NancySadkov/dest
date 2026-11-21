@@ -169,7 +169,7 @@ uint __cdecl16far stLoad(int handle)
                  (((uVar1 = save_readBlock(-0x6e21,(void *)0x22410,unaff_DI,unaff_SI),
                    (uVar1 & 0xff) != 0 &&
                    (uVar1 = save_readBlock(0,(char *)CONCAT22(GRecordCount * 0x12,
-                                                              (char *)"manned n/s wall" + 0xd),
+                                                              (char *)0x262e5xd),
                                            unaff_DI,unaff_SI), (uVar1 & 0xff) != 0)) &&
                   ((uVar1 = save_readBlock(-0x7667,(void *)0x22410,unaff_DI,unaff_SI),
                    (uVar1 & 0xff) != 0 &&
@@ -404,7 +404,7 @@ int __cdecl16far stSave(void)
              (uVar3 & 0xff) != 0)) {
             in_DX = (undefined2)((ulong)((long)GRecordCount * 0x12) >> 0x10);
             uVar3 = save_writeBlock(0,(char *)CONCAT22((int)((long)GRecordCount * 0x12),
-                                                       (char *)"manned n/s wall" + 0xd),unaff_DI,
+                                                       (char *)0x262e5xd),unaff_DI,
                                     unaff_SI);
             if (((uVar3 & 0xff) != 0) &&
                (uVar3 = save_writeBlock(-0x7667,(void *)0x22410,unaff_DI,unaff_SI),

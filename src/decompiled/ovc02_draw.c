@@ -3544,7 +3544,7 @@ L_draw_2e25_025a_03D9:
   cVar35 = (char)(in_CX + -1);
   pcVar46[(int)unaff_SI] = pcVar46[(int)unaff_SI] + cVar35;
   *pcVar33 = *pcVar33 + (char)((uint)iVar14 >> 8);
-  *(undefined2 *)((int)piVar39 + -2) = (char *)"@magic mill" + 9;
+  *(undefined2 *)((int)piVar39 + -2) = (char *)0x2aa00;
   cVar8 = (char)((uint)(in_CX + -1) >> 8);
   pcVar46[(int)unaff_SI] = pcVar46[(int)unaff_SI] + cVar8;
   _resetTextBlitCycle = *(int *)(pcVar33 + (int)unaff_SI) * 0x6c;
@@ -3628,7 +3628,7 @@ L_draw_2e25_025a_03D9:
   *(undefined1 **)(pbVar32 + 1) =
        (undefined1 *)CONCAT22(uVar51,(undefined1 *)((int)piVar39 + (int)piVar5) + 0xe) +
        *(long *)(pbVar32 + 1);
-  *(char **)((undefined1 *)((int)piVar39 + (int)piVar5) + 0xc) = (char *)"@magic mill" + 10;
+  *(char **)((undefined1 *)((int)piVar39 + (int)piVar5) + 0xc) = (char *)0x2aa01;
   *(byte **)(pbVar47 + (int)puVar48 + 1) = pbVar47 + *(int *)(pbVar47 + (int)puVar48 + 1);
   uVar15 = *(int *)(pbVar32 + (int)piVar50) * 0x6c;
   *(int *)((int)piVar50 + 1) = (int)(pbVar47 + *(int *)((int)piVar50 + 1));

@@ -960,7 +960,6 @@ char __cdecl16far ovc43_playFli(uint16_t fileId,uint16_t paletteOfs,uint16_t pal
 far_t * __cdecl16far stshAllocStub(far_t *__return_storage_ptr__,...);
 void __cdecl16far stshTR_S_stubify0(int index);
 void __cdecl16far stshStubifyBld(uint16_t index,...);
-void __cdecl16far init_assets(void);
 void __cdecl16far stshInitPtrs(void);
 byte __cdecl16far ovc45_getUnitType(int x,int y,...);
 short __cdecl16far ovc45_getUnitIndex(int x,int y,...);
@@ -1014,6 +1013,7 @@ void __cdecl16far ovc50_usesBlitText(char *text,uint16_t widths);
 void __cdecl16far ovc50_usesStshLoadGfx(byte gfxIndex);
 void __cdecl16far ovc50_usesUiInputText(void);
 undefined manage_settlementScreen();
+undefined init_assets();
 undefined constrct_buildInfoText();
 undefined ovr__FakRealCvt();
 undefined ovr_miceButtonsStates();

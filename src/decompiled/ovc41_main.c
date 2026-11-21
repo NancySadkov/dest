@@ -1535,8 +1535,8 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
     } while( true );
   case (char *)0x2:
     LOCK();
-    iVar14 = *(int *)((char *)"Too many construction sites." + 0x17 + unaff_DI);
-    *(undefined1 **)((char *)"Too many construction sites." + 0x17 + unaff_DI) = &stack0xfffe;
+    iVar14 = *(int *)((char *)0x2b7e9x17 + unaff_DI);
+    *(undefined1 **)((char *)0x2b7e9x17 + unaff_DI) = &stack0xfffe;
     UNLOCK();
     *(int *)(iVar14 + -2) = unaff_DI;
     iVar15 = 0;
@@ -1592,7 +1592,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
                              (char *)*(undefined4 *)(iVar14 + -0xc));
       *(undefined2 *)(iVar14 + -6) = pcVar12;
       *(undefined2 *)(iVar14 + -8) = pcVar6;
-      *(undefined2 *)(iVar14 + -10) = (char *)"glassworks" + 9;
+      *(undefined2 *)(iVar14 + -10) = (char *)0x292d6;
       *(undefined2 *)(iVar14 + -0xc) = 0x89d0;
       ovr_uiNotify((char *)*(undefined2 *)(iVar14 + -8),*(uint16_t *)(iVar14 + -6));
     }
@@ -2215,7 +2215,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
   far_t fStack_6;
   
   iVar12 = 0x10;
-  pcStack_13e = (char *)"%shigh.txt" + 6;
+  pcStack_13e = (char *)0x2ab8f;
   uStack_140 = 0xc98c;
   dst.seg = (uint16_t)unaff_SS;
   dst.ofs = (uint16_t)&agnt;
@@ -2253,8 +2253,8 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
         cVar3 = *(char *)(uVar16 * 2 + unaff_SI);
         puVar19 = &stack0xfffe + unaff_SI;
         iVar21 = uVar16 * 3;
-        *(undefined1 **)((char *)" You can only place a single arena." + 0xd + iVar21) =
-             puVar19 + *(int *)((char *)" You can only place a single arena." + 0xd + iVar21);
+        *(undefined1 **)((char *)0x2b5f4xd + iVar21) =
+             puVar19 + *(int *)((char *)0x2b5f4xd + iVar21);
         *(int *)(&stack0xffff + (int)puVar19) = *(int *)(&stack0xffff + (int)puVar19) + iVar21;
         *(int *)(&stack0xfffe + (int)unaff_DI) = *(int *)(&stack0xfffe + (int)unaff_DI) + iVar21;
                     /* WARNING: Read-only address (ram,0x00033501) is written */

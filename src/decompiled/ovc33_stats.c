@@ -819,7 +819,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       bVar27 = bVar28 - bVar12;
       bVar12 = bVar10 < bVar27 ||
                (byte)(bVar10 - bVar27) < ((byte)pbVar14 < (byte)pbVar31 || bVar28 < bVar12);
-      pbVar5 = (byte *)((char *)"%s turns %d undead." + 9 + (int)puVar39 + (int)piVar33);
+      pbVar5 = (byte *)((char *)0x2b018 + (int)puVar39 + (int)piVar33);
       bVar28 = *pbVar5;
       bVar10 = *pbVar5;
       *pbVar5 = (bVar10 - bVar25) - bVar12;
@@ -1428,7 +1428,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
     TextBlitX = 0x87;
     piVar8 = (int *)((uint)(byte)((agntG_t *)agnt->gdata)->shortName[3] * 0x94 +
                     (uint)(((entity_t *)agnt->entity)->base).level * 4);
-    puVar11 = (uint8_t *)((char *)"sturdy e/w wall" + 0xf);
+    puVar11 = (uint8_t *)((char *)0x262a2xf);
     uVar5 = (undefined1)Font02.seg;
     uVar15 = (undefined1)(Font02.seg >> 8);
     if (*piVar8 == 0 && piVar8[1] == 0) {
@@ -1449,7 +1449,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
       puVar9 = (undefined2 *)
                ((uint)(byte)((agntG_t *)agnt->gdata)->shortName[3] * 0x94 +
                (uint)(((entity_t *)agnt->entity)->base).level * 4);
-      puVar11 = (uint8_t *)((char *)"sturdy e/w wall" + 0xf);
+      puVar11 = (uint8_t *)((char *)0x262a2xf);
       uVar19 = Font02.ofs;
       pcVar6 = stats_formatThousands
                          ((char *)CONCAT13((char)((uint)unaff_SS >> 8),CONCAT12((char)unaff_SS,buf))

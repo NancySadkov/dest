@@ -1001,7 +1001,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   switch(uVar9) {
   default:
     if (GMenuItem == '\0') {
-      pcVar11 = (char *)"arena" + 4;
+      pcVar11 = (char *)0x2a9cc;
     }
     else {
       pcVar11 = (char *)CONCAT11(0x24,GMenuItem + (char)uStack_6);
@@ -1465,7 +1465,7 @@ void __cdecl16far uiMainMenuLoop(void)
     items.ofs = 0x2410;
     uiMenu((char *)"Select an option:",items,unaff_SS,8);
     bStack_13 = (byte)pmenu;
-    ovr_say((char *)"<Empty>" + 7,0x2410);
+    ovr_say((char *)0x26832,0x2410);
     if (bStack_13 < 9) {
                     /* WARNING: Switch is manually overridden */
       switch((undefined4)

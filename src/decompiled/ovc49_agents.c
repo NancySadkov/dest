@@ -1494,7 +1494,7 @@ code_r0x00088b64:
                     uVar16 = ovr_randBelow(2);
                     *(undefined1 *)((int)uStackY_22 * 0x34 + 5) = (char)uVar16;
                   }
-                  pbVar29 = (brect_t *)((char *)"glassworks" + 9);
+                  pbVar29 = (brect_t *)((char *)0x292d6);
                   if (*(char *)((int)uStackY_22 * 0x34 + 4) == '\0') {
                     *(undefined1 *)((int)uStackY_22 * 0x34 + 5) = 0;
                   }
@@ -1527,7 +1527,7 @@ code_r0x00088b64:
                       *(char *)((int)uStackY_22 * 0x34 + 4) = -*(char *)((int)uStackY_22 * 0x34 + 4)
                       ;
                     }
-                    pbVar29 = (brect_t *)((char *)"glassworks" + 9);
+                    pbVar29 = (brect_t *)((char *)0x292d6);
                     uVar16 = ovr_randBelow(3);
                     *(char *)((int)uStackY_22 * 0x34 + 5) = (char)uVar16 + -1;
                   }
@@ -1558,7 +1558,7 @@ code_r0x00088b64:
                     }
                   }
                   else {
-                    pbVar29 = (brect_t *)((char *)"glassworks" + 9);
+                    pbVar29 = (brect_t *)((char *)0x292d6);
                     uVar16 = ovr_randBelow(2);
                     *(char *)((int)uStackY_22 * 0x34 + 4) = (char)uVar16 * '\x02' + -1;
                   }
@@ -1656,18 +1656,18 @@ L_OVC49_8699_1e09_29B9:
                                  (char *)CONCAT13((char)((uint)pcVar10 >> 8),
                                                   CONCAT12((char)pcVar10,(int)*(undefined4 *)pcVar26
                                                           )));
-        pcStack_8 = (char *)"glassworks" + 9;
+        pcStack_8 = (char *)0x292d6;
         in_stack_0000fff6 = (stg_tmp_t *)((char *)"choose" + 4);
         strcpy((char *)CONCAT13(uVar38,CONCAT12(bVar36,auStackY_2ca)),
                (char *)CONCAT22(pcVar10,pcVar21));
         break;
       case (cte_t *)0x3:
         SpecialColors[2] =
-             ((char *)"If you lead with wisdom and cunning..." + 9)[(in_stack_0000fff6->aptr).ofs];
+             ((char *)0x2b516)[(in_stack_0000fff6->aptr).ofs];
         SpecialColors[3] =
-             ((char *)"ENTER: use previous configuration, SPACE: reconfigure, ESC: quit" + 0x12)
+             ((char *)0x29fbdx12)
              [(in_stack_0000fff6->aptr).ofs];
-        SpecialColors[4] = ((char *)"%s turns %d undead." + 0x10)[(in_stack_0000fff6->aptr).ofs];
+        SpecialColors[4] = ((char *)0x2b00fx10)[(in_stack_0000fff6->aptr).ofs];
         SpecialColors[5] =
              *(uint8_t *)((int)&GStrangeTable[0x12].seg + 1 + (in_stack_0000fff6->aptr).ofs);
         SpecialColors[6] =
@@ -2938,7 +2938,7 @@ L_OVC49_8699_1e09_3BDE:
   GGameState = 0x38;
   pbVar19 = pbVar29;
   if (DebugVerbose != false) {
-    pbVar19 = (brect_t *)((char *)"glassworks" + 9);
+    pbVar19 = (brect_t *)((char *)0x292d6);
     printf("%d \r");
   }
   uVar16 = *(int *)((int)uStackY_22 * 0x34) + 0xc;

@@ -2303,8 +2303,8 @@ void __cdecl16near __vprinter_1000_0eb3(void)
   
   *unaff_DI = in_AL;
   pcVar1 = (code *)init_textFilename + unaff_BP;
-  *pcVar1 = (code)((char)*pcVar1 + -1);
-  if (*pcVar1 == (code)0x0) {
+  *pcVar1 = (unsigned short)((char)*pcVar1 + -1);
+  if (*pcVar1 == (unsigned short)0x0) {
     iVar2 = (*(code *)*(undefined2 *)(unaff_BP + 0xe))
                       (*(undefined2 *)(unaff_BP + 10),*(undefined2 *)(unaff_BP + 0xc),
                        unaff_DI + (1 - (unaff_BP + -0x96)),unaff_BP + -0x96);
@@ -2400,9 +2400,9 @@ L__vprinter_func_start_0EFF:
   pcVar16 = pcVar16 + 1;
   pcVar1 = (code *)init_textFilename + unaff_BP;
   cVar2 = *pcVar1;
-  *pcVar1 = (code)((char)*pcVar1 + -1);
+  *pcVar1 = (unsigned short)((char)*pcVar1 + -1);
   pcVar14 = pcVar15;
-  if (*pcVar1 == (code)0x0 || SBORROW1((char)cVar2,'\x01') != (char)*pcVar1 < '\0') {
+  if (*pcVar1 == (unsigned short)0x0 || SBORROW1((char)cVar2,'\x01') != (char)*pcVar1 < '\0') {
     __vprinter_1000_0ebc();
   }
   goto L__vprinter_func_start_0EFF;
@@ -2742,8 +2742,8 @@ L__vprinter_func_start_11ED:
       pcVar16 = pcVar16 + 1;
       pcVar1 = (code *)init_textFilename + unaff_BP;
       cVar2 = *pcVar1;
-      *pcVar1 = (code)((char)*pcVar1 + -1);
-      if (*pcVar1 == (code)0x0 || SBORROW1((char)cVar2,'\x01') != (char)*pcVar1 < '\0') {
+      *pcVar1 = (unsigned short)((char)*pcVar1 + -1);
+      if (*pcVar1 == (unsigned short)0x0 || SBORROW1((char)cVar2,'\x01') != (char)*pcVar1 < '\0') {
         __vprinter_1000_0ebc();
       }
       iVar9 = iVar9 + -1;

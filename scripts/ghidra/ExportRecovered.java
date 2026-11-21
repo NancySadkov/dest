@@ -151,6 +151,87 @@ public class ExportRecovered extends GhidraScript {
         return allDataSymbolNames;
     }
 
+    // Two idioms Ghidra emits that C rejects, both rewritten to an exactly
+    // equivalent legal form.  Kept deliberately narrow so nothing else changes.
+    private static final java.util.regex.Pattern ARRAY_ASSIGN =
+            java.util.regex.Pattern.compile(
+                    "^(\\s*)([A-Za-z_]\\w*)\\s*=\\s*\\(\\s*byte\\s*\\[\\s*2\\s*\\]\\s*\\)\\s*\\(?(.*?)\\)?;\\s*$");
+
+    private String fixUncompilableIdioms(String body) {
+        if (body == null) return body;
+        // `code` is a function type (needed by `(code *)swi(0x21)`), so the six
+        // integral casts Ghidra emits against it are illegal.  The value is a
+        // 16-bit quantity, so the cast becomes (unsigned short).
+        body = body.replace("(code)", "(unsigned short)");
+        // `x = (byte [2])(<lvalue>);` assigns an array.  Copy the two bytes.
+        StringBuilder out = new StringBuilder();
+        for (String line : body.split("\n", -1)) {
+            java.util.regex.Matcher m = ARRAY_ASSIGN.matcher(line);
+            if (m.matches()) {
+                out.append(m.group(1)).append("memcpy(&").append(m.group(2))
+                   .append(", &(").append(m.group(3)).append("), 2);");
+            } else {
+                out.append(line);
+            }
+            out.append('\n');
+        }
+        String s = out.toString();
+        return s.endsWith("\n") ? s.substring(0, s.length() - 1) : s;
+    }
+
+    // `(char *)"literal" + N` is never string arithmetic: the value is
+    // <address of the literal> + N, and Ghidra picked the nearest string symbol
+    // to render a plain number.  Measured on this program, 211 of 452 such folds
+    // are the single value 2410:2410 - the DGROUP segment constant 0x2410 in the
+    // offset half of a far pointer whose segment the decompiler does not know.
+    // Print the number instead of a fabricated string offset.
+    private java.util.Map<String, Long> stringAddrs = null;
+
+    private java.util.Map<String, Long> stringAddresses() {
+        if (stringAddrs == null) {
+            stringAddrs = new java.util.HashMap<>();
+            for (ghidra.program.model.symbol.Symbol s
+                    : currentProgram.getSymbolTable().getAllSymbols(false)) {
+                String n = s.getName();
+                if (!n.startsWith("s_") && !n.startsWith("str_")) continue;
+                long a = s.getAddress().getOffset();
+                StringBuilder sb = new StringBuilder();
+                try {
+                    for (int i = 0; i < 200; i++) {
+                        byte b = currentProgram.getMemory().getByte(s.getAddress().add(i));
+                        if (b == 0) break;
+                        sb.append((char) (b & 0xff));
+                    }
+                } catch (Exception e) {
+                    continue;
+                }
+                if (sb.length() == 0) continue;
+                String full = sb.toString();
+                for (int k = 0; k < 3 && k < full.length(); k++) {
+                    String kk = full.substring(k);
+                    if (kk.length() < 3) break;
+                    if (!stringAddrs.containsKey(kk)) stringAddrs.put(kk, a + k);
+                }
+            }
+        }
+        return stringAddrs;
+    }
+
+    private String deSymbolizeStringOffsets(String body) {
+        if (body == null) return body;
+        java.util.regex.Matcher m = java.util.regex.Pattern
+                .compile("\\(char \\*\\)\"([^\"]*)\" \\+ (\\d+)").matcher(body);
+        StringBuffer out = new StringBuffer();
+        while (m.find()) {
+            Long base = stringAddresses().get(m.group(1));
+            if (base == null) continue;
+            long v = base + Long.parseLong(m.group(2));
+            m.appendReplacement(out, "(char *)0x" + Long.toHexString(v));
+        }
+        m.appendTail(out);
+        return out.toString();
+    }
+
     private String typeDecl(DataType dt, String name) {        if (dt instanceof Array) {
             Array a = (Array) dt;
             return typeDecl(a.getDataType(), name + "[" + a.getNumElements() + "]");
@@ -340,7 +421,8 @@ public class ExportRecovered extends GhidraScript {
                 if (good) {
                     String body = res.getDecompiledFunction().getC();
                     String sig = res.getDecompiledFunction().getSignature();
-                    body = fixShadowedParamUses(body, sig);
+                    body = fixUncompilableIdioms(
+                        deSymbolizeStringOffsets(fixShadowedParamUses(body, sig)));
                     w.println(body);
                     if (emitted.add(name)) {
                         if (!sig.endsWith(";")) sig += ";";

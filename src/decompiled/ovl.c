@@ -313,7 +313,7 @@ undefined2 __cdecl16near __InitModules(void)
                     /* WARNING: Read-only address (ram,0x0001000b) is written */
   uVar6 = 0x226e;
   uVar4 = 0;
-  pcVar5 = (char *)"mages" + 1;
+  pcVar5 = (char *)0x242a0;
   do {
     if (((*(uint *)(pcVar5 + 4) & 2) != 0) && (*(int *)(pcVar5 + 2) != 0)) {
       uVar2 = *(undefined2 *)pcVar5;
@@ -1295,11 +1295,11 @@ L__OvrInitExt_0AD7:
           sizeLo = (uint)length;
           sizeHi = (*(uint16_t *)((uint8_t *)&(length) + 2));
         }
-        if ((*(uint *)((char *)"Your may continue playing, but your score will not be recorded." + 9
+        if ((*(uint *)((char *)0x2aae4
                       ) <= sizeHi) &&
-           ((*(uint *)((char *)"Your may continue playing, but your score will not be recorded." + 9
+           ((*(uint *)((char *)0x2aae4
                       ) < sizeHi ||
-            (*(uint *)((char *)"Your may continue playing, but your score will not be recorded." + 7
+            (*(uint *)((char *)0x2aae2
                       ) < sizeLo)))) {
           sizeHi = *(uint *)((char *)
                              "Your may continue playing, but your score will not be recorded." + 9);

@@ -188,7 +188,7 @@ uint __cdecl16far stshRead(void)
         return uVar3 - in_stack_0000000a;
       }
     }
-    fd = *(int *)((char *)"toymaker" + 7 + in_stack_00000004 * 2);
+    fd = *(int *)((char *)0x2a9d6 + in_stack_00000004 * 2);
     pbuf = (uint16_t)in_stack_00000006;
     while( true ) {
       if ((uStack_e == 0) && (uStack_10 == 0)) goto next_iteration;
@@ -318,7 +318,7 @@ void __cdecl16far stshSeek(uint16_t fid,long ofs,...)
     }
   }
   else {
-    lseek(*(int *)((char *)"toymaker" + 7 + fid * 2),(ulong)(*(uint16_t *)((uint8_t *)&(ofs) + 2)),unaff_SI);
+    lseek(*(int *)((char *)0x2a9d6 + fid * 2),(ulong)(*(uint16_t *)((uint8_t *)&(ofs) + 2)),unaff_SI);
   }
   *(uint *)((int)&AgntAnms[0x53].maxDx + 1 + fid * 4) = (*(uint16_t *)((uint8_t *)&(ofs) + 2));
   *(undefined2 *)((int)&AgntAnms[0x53].y + 1 + fid * 4) = (undefined2)ofs;

@@ -283,7 +283,7 @@ code_r0x0005ff56:
               pcVar10 = pcVar10 + 1) {
             TextBlitX = 0x11;
             if (((int)pcVar10 < 5) || (cVar3 == '\0')) {
-              suffix = (char *)"fighters" + 2;
+              suffix = (char *)0x24298;
               ovr_blitLabel(*(char **)(&labelPtrs + (int)pcVar10 * 4));
             }
             else {
@@ -299,14 +299,14 @@ code_r0x0005ff56:
             ovr_stsprintf((char *)&numBuf);
             iVar4 = ovr_font_textWidth((char *)&numBuf);
             TextBlitX = 0x89 - iVar4;
-            suffix = (char *)"clerical unit" + 9;
+            suffix = (char *)0x2431a;
             ovr_blitLabel((char *)&numBuf);
             ovr_stsprintf((char *)&numBuf);
             iVar4 = ovr_font_textWidth((char *)&numBuf);
             uVar9 = 0xd4 - iVar4;
             cVar3 = (char)Font02.ofs;
             bVar11 = (byte)(Font02.ofs >> 8);
-            suffix = (char *)"Archduchess" + 3;
+            suffix = (char *)0x2437d;
             TextBlitX = uVar9;
             ovr_blitLabel((char *)&numBuf);
           }
@@ -1008,7 +1008,7 @@ L_OVC22_5087_0234_323C:
               iVar29 = *(int *)(uVar33 + 8);
               if ((((iVar30 < 0) || (iVar29 < 0)) || (0x93 < iVar30 + 1)) || (0x3b < iVar29 + 1)) {
                 placementStatus = 2;
-                pfVar20 = (far_t *)((char *)"arena" + 4);
+                pfVar20 = (far_t *)((char *)0x2a9cc);
               }
               else {
                 uVar53 = (undefined2)((ulong)GMapFlags >> 0x10);
@@ -1029,7 +1029,7 @@ L_OVC22_5087_0234_323C:
                   uVar23 = *(int *)(uVar33 - 2) - iVar30;
                   if ((int)uVar23 < 9) {
                     placementStatus = 3;
-                    pfVar20 = (far_t *)((char *)"arena" + 5);
+                    pfVar20 = (far_t *)((char *)0x2a9cd);
                   }
                   else {
                     pfVar20 = (far_t *)(uVar23 & 0xff00);
@@ -1037,7 +1037,7 @@ L_OVC22_5087_0234_323C:
                 }
                 else {
                   placementStatus = 1;
-                  pfVar20 = (far_t *)((char *)"arena" + 4);
+                  pfVar20 = (far_t *)((char *)0x2a9cc);
                 }
               }
               return pfVar20;
@@ -4769,7 +4769,7 @@ void __cdecl16far ovc22_spawnForLeaders(void)
   outFlag = 0x0;
   for (iStack_4 = 0; iStack_4 < (int)(uint)GLeaderCount; iStack_4 = iStack_4 + 1) {
     if (((*(char *)((int)*(undefined4 *)(iStack_4 << 2) + 0x3d) != '\0') &&
-        (uVar1 = ovr_randBelow((uint)(byte)((char *)"Decrease message delay" + 5)
+        (uVar1 = ovr_randBelow((uint)(byte)((char *)0x2686a)
                                            [(uint)*(byte *)((int)*(undefined4 *)(iStack_4 << 2) +
                                                            0x3e) * 0x95]),
         (byte)uVar1 < *(byte *)((int)*(undefined4 *)(iStack_4 << 2) + 0x2e))) &&
