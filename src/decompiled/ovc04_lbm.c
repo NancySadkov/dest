@@ -20,9 +20,6 @@ uint16_t __cdecl16far alignToSeg(far_t ptr,...)
 
 
 /* 30e6:0024 */
-
-/* WARNING: Variable defined which should be unmapped: x */
-
 void __cdecl16far
 lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,far_t src,
                stg_tmp_t *dst,int16_t sx,int16_t sy,int16_t w,int16_t h)
@@ -75,7 +72,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
   
   (*(uint16_t *)((uint8_t *)&(buf))) = ovr_stshAlloc(0xfa0f);
   *(undefined2 *)(src.seg + 0x306) = (*(uint16_t *)((uint8_t *)&(buf) + 2));
-  *(undefined2 *)(src.seg + 0x304) = (void *)buf;
+  *(undefined2 *)(src.seg + 0x304) = (uint16_t)(void *)buf;   /* hand fix: 2-byte slot */
   ptr.seg = *(uint16_t *)(src.seg + 0x306);
   ptr.ofs = *(uint16_t *)(src.seg + 0x304);
   uVar2 = alignToSeg(ptr);
@@ -128,7 +125,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
         ptr_base.ofs = uVar4;
         ptr_ofs.seg = x;
         ptr_ofs.ofs = unaff_SI;
-        srcline = (char *)PADD_at_(ptr_base,ptr_ofs);
+        *(far_t *)&srcline = PADD_at_(ptr_base,ptr_ofs);   /* hand fix: PADD_at_ returns a far_t struct; assign the 4 bytes through the pointer */
         uVar5 = (undefined1)dstline.seg;
         uVar6 = (undefined1)(dstline.seg >> 8);
         if (format == LBM_PBM) {
@@ -198,7 +195,6 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
   }
   return;
 }
-
 
 
 /* 30e6:0321 */
