@@ -110,9 +110,9 @@ void __cdecl16far saveui_startCrossBlit(void)
                       (char)CrossBlitY);
   dst.seg = 0xa000;
   dst.ofs = CrossBlitX + CrossBlitY * 0x140;
-  gfx.seg._0_1_ = (char)CrossBlitGfx.seg;
+  (*(uint8_t *)((uint8_t *)&(gfx.seg))) = (char)CrossBlitGfx.seg;
   gfx.ofs = CrossBlitGfx.ofs;
-  gfx.seg._1_1_ = (char)(CrossBlitGfx.seg >> 8);
+  (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) = (char)(CrossBlitGfx.seg >> 8);
   CrossBlitPtr.seg = in_DX;
   ovr_blitLoadRleGfx(gfx,dst);
   if (MouseMoved == 0) {
@@ -239,27 +239,27 @@ void __cdecl16far saveui_usesBlitGfx10(far_t gfx,char *text,byte *widths,uint *c
   
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&rect;
-  F_SCOPY((far_t)0x241026ad,dst);
-  rect = *(uint *)CONCAT22((byte *)widths,text._2_2_);
-  iStack_a = widths._2_2_ * 0xf + 0x1d;
-  iStack_6 = widths._2_2_ * 0xf + 0x28;
-  uVar1 = widths._2_2_ * 0xf + 0x1d;
+  F_SCOPY(far_from_u32((uint32_t)(0x241026ad)),dst);
+  rect = *(uint *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2)));
+  iStack_a = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
+  iStack_6 = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x28;
+  uVar1 = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
   gfx_00.seg = gfx.ofs;
   gfx_00.ofs = in_stack_00000004;
   ovr_blitGfx10(gfx_00,0x16,uVar1,(brect_t *)&rect,SUB21(unaff_SS,0),(char)uVar1);
   TextBlitX = 0x2a;
-  TextBlitY = widths._2_2_ * 0xf + 0x1d;
+  TextBlitY = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
   ovr_blitText((char *)gfx.seg,
                (byte *)CONCAT13((char)(Font03.ofs >> 8),CONCAT12((char)Font03.ofs,(char *)text)),
                Font03.seg,0xde,(char)Font03.ofs);
-  if (TextBlitX < *(uint *)CONCAT22((byte *)widths,text._2_2_)) {
+  if (TextBlitX < *(uint *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2)))) {
     rect = TextBlitX;
-    uVar1 = widths._2_2_ * 0xf + 0x1d;
+    uVar1 = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
     gfx_01.seg = gfx.ofs;
     gfx_01.ofs = in_stack_00000004;
     ovr_blitGfx10(gfx_01,0x16,uVar1,(brect_t *)&rect,SUB21(unaff_SS,0),(char)uVar1);
   }
-  *(uint16_t *)CONCAT22((byte *)widths,text._2_2_) = TextBlitX;
+  *(uint16_t *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2))) = TextBlitX;
   ovr_blitLetter('_',(byte *)Font03.ofs,(uint8_t)Font03.seg);
   return;
 }
@@ -344,7 +344,7 @@ void __cdecl16far uiMenuSub(char *title,far_t items,uint16_t nitems,uint16_t def
     sz = 8;
   }
   for (readed = 0x0; (int)(uint)readed < (int)sz; readed = readed + 0x1) {
-    puVar5 = (undefined2 *)(title._2_2_ + (uint)readed * 4);
+    puVar5 = (undefined2 *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + (uint)readed * 4);
     uVar3 = *puVar5;
     uVar4 = (uint)readed;
     auStack_26[uVar4 * 2] = puVar5[1];
@@ -356,9 +356,9 @@ void __cdecl16far uiMenuSub(char *title,far_t items,uint16_t nitems,uint16_t def
   }
   uVar6 = (undefined1)unaff_SS;
   uVar7 = (undefined1)(unaff_SS >> 8);
-  entries.seg._0_1_ = uVar6;
+  (*(uint8_t *)((uint8_t *)&(entries.seg))) = uVar6;
   entries.ofs = (uint16_t)&dest;
-  entries.seg._1_1_ = uVar7;
+  (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = uVar7;
   saveui_usesBlitLoadRleGfx3(entries,sz);
   GMenuItem = (byte)nitems;
   while (((int)(uint)GMenuItem <= (int)sz &&
@@ -420,7 +420,7 @@ L_uiMenuSub_0B46:
               _fsetmem((uint8_t *)CONCAT22(unaff_SS,&dest),0x1c,0);
               for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
                   readed = readed + 0x1) {
-                puVar5 = (undefined2 *)(title._2_2_ + ((uint)readed + iStack_6) * 4);
+                puVar5 = (undefined2 *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
                 uVar3 = *puVar5;
                 uVar4 = (uint)readed;
                 auStack_26[uVar4 * 2] = puVar5[1];
@@ -433,9 +433,9 @@ L_uiMenuSub_0B46:
                 ovr_blitText(in_stack_00000004,(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg
                              ,0xde,0xde,7);
               }
-              entries_02.seg._0_1_ = uVar6;
+              (*(uint8_t *)((uint8_t *)&(entries_02.seg))) = uVar6;
               entries_02.ofs = (uint16_t)&dest;
-              entries_02.seg._1_1_ = uVar7;
+              (*(uint8_t *)((uint8_t *)&(entries_02.seg) + 1)) = uVar7;
               saveui_usesBlitLoadRleGfx3(entries_02,8);
               saveui_startCrossBlit();
             }
@@ -455,7 +455,7 @@ L_uiMenuSub_0B46:
         _fsetmem((uint8_t *)CONCAT22(unaff_SS,&dest),0x1c,0);
         for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
             readed = readed + 0x1) {
-          puVar5 = (undefined2 *)(title._2_2_ + ((uint)readed + iStack_6) * 4);
+          puVar5 = (undefined2 *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
           uVar3 = *puVar5;
           uVar4 = (uint)readed;
           auStack_26[uVar4 * 2] = puVar5[1];
@@ -468,9 +468,9 @@ L_uiMenuSub_0B46:
           ovr_blitText(in_stack_00000004,(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg,0xde,
                        0xde,7);
         }
-        entries_01.seg._0_1_ = uVar6;
+        (*(uint8_t *)((uint8_t *)&(entries_01.seg))) = uVar6;
         entries_01.ofs = (uint16_t)&dest;
-        entries_01.seg._1_1_ = uVar7;
+        (*(uint8_t *)((uint8_t *)&(entries_01.seg) + 1)) = uVar7;
         saveui_usesBlitLoadRleGfx3(entries_01,8);
         GMenuItem = 8;
         saveui_startCrossBlit();
@@ -508,7 +508,7 @@ L_uiMenuSub_08AD:
       _fsetmem((uint8_t *)CONCAT22(unaff_SS,&dest),0x1c,0);
       for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
           readed = readed + 0x1) {
-        puVar5 = (undefined2 *)(title._2_2_ + ((uint)readed + iStack_6) * 4);
+        puVar5 = (undefined2 *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
         uVar3 = *puVar5;
         uVar4 = (uint)readed;
         auStack_26[uVar4 * 2] = puVar5[1];
@@ -521,9 +521,9 @@ L_uiMenuSub_08AD:
         ovr_blitText(in_stack_00000004,(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg,0xde,
                      0xde,7);
       }
-      entries_00.seg._0_1_ = uVar6;
+      (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = uVar6;
       entries_00.ofs = (uint16_t)&dest;
-      entries_00.seg._1_1_ = uVar7;
+      (*(uint8_t *)((uint8_t *)&(entries_00.seg) + 1)) = uVar7;
       saveui_usesBlitLoadRleGfx3(entries_00,8);
       GMenuItem = 8;
       saveui_startCrossBlit();
@@ -589,7 +589,7 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   sVar1 = strlen((char *)CONCAT22(unaff_SS,&text));
   bStack_5 = (byte)sVar1;
   uVar8 = (uint16_t)((ulong)((long)row * 0xf) >> 0x10);
-  pfVar2 = ovr_stshRleCut((far_t *)0x0,(far_t)0x16a000,(int)((long)row * 0xf) + 0x1d,222,
+  pfVar2 = ovr_stshRleCut((far_t *)0x0,far_from_u32((uint32_t)(0x16a000)),(int)((long)row * 0xf) + 0x1d,222,
                           row * 0xf + 0x29,(int16_t)ey,0xde);
   TextBlitX = 0x2a;
   TextBlitY = row * 0xf + 0x1d;
@@ -619,7 +619,7 @@ L_uiReadString_0DC9:
                                                     CONCAT12((char)Font03.ofs,unaff_SS)),
                                    (char)Font03.ofs,Font03.seg);
         iVar5 = ovr_font_textWidth((char *)"_",
-                                   (char *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),
+                                   (char *)CONCAT22(Font03.ofs,(char *)0x2410),
                                    (char)Font03.seg);
         if (iVar4 + iVar5 + 0x2aU < 0xe0) {
           bStack_5 = bStack_5 + 1;
@@ -720,7 +720,7 @@ void __cdecl16far uiMenu(char *title,far_t items,int nitems,...)
   
   items_00.seg = in_stack_0000000c;
   items_00.ofs = nitems;
-  uiMenuSub((char *)items,items_00,1,unaff_BP);
+  uiMenuSub((char *)MK_FP(items.seg, items.ofs),items_00,1,unaff_BP);
   return;
 }
 
@@ -988,7 +988,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
     uStackY_2c = 0x279d;
     uStackY_2e = 0x22c4;
     uStackY_30 = 0x662e;
-    uiMenuSub((char *)CONCAT22(puVar12,(char *)"puppetmaker" + 3),items,CONCAT11(0x24,GMenuItem),
+    uiMenuSub((char *)CONCAT22(puVar12,(char *)0x2410),items,CONCAT11(0x24,GMenuItem),
               uVar10);
     bStack_4 = (byte)puVar12;
     uVar9 = (uint)puVar12 & 0xff;
@@ -1002,7 +1002,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   switch(uVar9) {
   default:
     if (GMenuItem == '\0') {
-      pcVar11 = (char *)"arena" + 4;
+      pcVar11 = (char *)0x2400;
     }
     else {
       pcVar11 = (char *)CONCAT11(0x24,GMenuItem + (char)uStack_6);
@@ -1019,13 +1019,13 @@ char * __cdecl16far saveui_configureMessageDelay(void)
     *puVar1 = *puVar1 | unaff_DI;
     *puVar15 = *puVar15 | (uint)&stack0xffff;
                     /* WARNING: Read-only address (ram,0x00025f09) is written */
-    s_fighters__residence_2410_1e09._0_2_ = (uint)&stack0xffde | 0x6966;
+    (*(uint16_t *)((uint8_t *)&(s_fighters__residence_2410_1e09))) = (uint)&stack0xffde | 0x6966;
     bVar17 = (byte)((uint)puVar15 >> 8) | (byte)in_CX | bVar17 | (byte)unaff_DI;
     iVar16 = CONCAT11(bVar17,(byte)puVar15);
     pbVar4 = (byte *)(iVar16 + -0x51f8);
     *pbVar4 = *pbVar4 | bVar17;
-    ((char *)"cflow4.txt" + 7)[unaff_DI] =
-         ((char *)"cflow4.txt" + 7)[unaff_DI] | (byte)in_DX | (byte)puVar15;
+    ((char *)0x8408)[unaff_DI] =
+         ((char *)0x8408)[unaff_DI] | (byte)in_DX | (byte)puVar15;
     unaff_SI[iVar16 + 8] = unaff_SI[iVar16 + 8] | bVar17;
     (&stack0x0007)[(int)unaff_SI] = (&stack0x0007)[(int)unaff_SI] | (byte)puVar12;
                     /* WARNING: Bad instruction - Truncating control flow here */
@@ -1045,7 +1045,7 @@ switchD_4000_6642_caseD_3:
     ovr_ovc15_clearVisited();
     uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
     peVar14 = (entity_t *)uStack_1e;
-    uStack_1a = CONCAT11(uStack_1a._1_1_,(char)((ulong)((peVar14->base).animFrame + 0xf) / 0x10));
+    uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(char)((ulong)((peVar14->base).animFrame + 0xf) / 0x10));
     if (((peVar14->base).target & 1) == 0) {
       iStack_16 = 0;
     }
@@ -1055,27 +1055,27 @@ switchD_4000_6642_caseD_3:
     while( true ) {
       uVar19 = 0x2322;
       cVar6 = (char)uStack_1a;
-      uStack_1a = CONCAT11(uStack_1a._1_1_,(char)uStack_1a + -1);
+      uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(char)uStack_1a + -1);
       if (cVar6 == '\0') break;
       pcStack_22 = (char *)((ulong)pcStack_22 & 0xffff0000);
       ovr_ovc15_textArena(unaff_DI);
     }
   }
-  else if (uStack_1a._1_1_ == '\0') {
+  else if ((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) == '\0') {
     uStack_1a = (uint)(byte)((ulong)((((entity_t *)uStack_1e)->base).animFrame + 0xf) / 0x10);
     while( true ) {
       cVar6 = (char)uStack_1a;
-      uStack_1a = CONCAT11(uStack_1a._1_1_,(char)uStack_1a + -1);
+      uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(char)uStack_1a + -1);
       if (cVar6 == '\0') break;
-      pcStack_22 = (char *)CONCAT22(menuLabel,_DAT_2000_d190);
+      pcStack_22 = (char *)CONCAT22(menuLabel,DAT_2000_d190);
       uVar19 = 0x22ff;
       ovr_agnt_usesAgntCount6(Entities + unaff_DI);
     }
   }
-  else if (((char)uStack_18 != '\0') && (uStack_1a._1_1_ != '\0')) {
+  else if (((char)uStack_18 != '\0') && ((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) != '\0')) {
     pcStack_22 = (char *)CONCAT22(menuLabel,unaff_DI);
     uVar7 = func_0x0004f944();
-    uStack_1a = CONCAT11(uStack_1a._1_1_,uVar7);
+    uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),uVar7);
     while ((char)uStack_1a != '\0') {
       uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
       if (((((entity_t *)uStack_1e)->base).target & 1) == 0) {
@@ -1088,7 +1088,7 @@ switchD_4000_6642_caseD_3:
       uVar19 = 0x2322;
       pcVar11 = ovr_ovc15_textArena(unaff_DI);
       if (((uint)pcVar11 & 0xff) == 0) break;
-      uStack_1a = CONCAT11(uStack_1a._1_1_,(char)uStack_1a + -1);
+      uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(char)uStack_1a + -1);
     }
   }
   do {
@@ -1122,7 +1122,7 @@ switchD_4000_6642_caseD_3:
           uVar19 = 0x2379;
           ovr_ovc24_removeOtherEntities((uint8_t *)((int)&uStack_18 + 1));
           GGameState = 0x1f;
-          if (uStack_18._1_1_ != '\0') {
+          if ((*(uint8_t *)((uint8_t *)&(uStack_18) + 1)) != '\0') {
             uVar19 = 0x22ef;
             ovr_constr_usesBlitRect();
             GGameState = 0x13;
@@ -1150,9 +1150,9 @@ switchD_4000_6642_caseD_3:
           ovr_ovc24_checkStrongholds();
           GGameState = 0xe;
           mapDirty = 1;
-          return (char *)"puppetmaker" + 3;
+          return (char *)0x2410;
         }
-        uStack_1e = (entity_t *)CONCAT22(_DAT_2000_d190,Entities + unaff_DI);
+        uStack_1e = (entity_t *)CONCAT22(DAT_2000_d190,Entities + unaff_DI);
         uVar8 = ovr_alignUp4(Entities[unaff_DI].base.destX);
         uVar19 = 0x2379;
         uVar9 = ovr_alignUp4((uStack_1e->base).x);
@@ -1330,7 +1330,7 @@ L_attact_3f0b_1082_1477:
     else {
       bVar17 = 1;
     }
-    uStack_18 = CONCAT11(uStack_18._1_1_,bVar17);
+    uStack_18 = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_18) + 1)),bVar17);
   } while (bVar17 == 0 && cVar6 == '\0');
   uVar9 = (uint)bVar17;
   goto switchD_4000_6642_caseD_3;
@@ -1349,7 +1349,7 @@ void __cdecl16far saveui_usesBlitLoadRleGfx4(void)
   
   gfx.seg = FontHandle.seg;
   gfx.ofs = FontHandle.ofs;
-  ovr_blitLoadRleGfx(gfx,(far_t)0xa000c31d);
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)));
   return;
 }
 
@@ -1365,7 +1365,7 @@ void __cdecl16far saveui_drawCancel(void)
   saveui_usesBlitLoadRleGfx4();
   TextBlitX = 0x1d;
   TextBlitY = 0xb7;
-  ovr_blitText((char *)"Cancel",(byte *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),Font03.seg,
+  ovr_blitText((char *)"Cancel",(byte *)CONCAT22(Font03.ofs,(char *)0x2410),Font03.seg,
                0xcf,0xf);
   return;
 }
@@ -1429,14 +1429,14 @@ void __cdecl16far uiMainMenuLoop(void)
   
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&menu;
-  F_SCOPY((far_t)0x241026b7,dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x241026b7)),dst);
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)yesno;
-  F_SCOPY((far_t)0x241026d7,dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x241026d7)),dst_00);
   ovr_say((char *)"Stronghold V 1.00",0x2410);
   gfx.seg = GMenuGfxSeg;
   gfx.ofs = GMenuGfxOfs;
-  ovr_blitLoadRleGfx(gfx,(far_t)0xa00009af);
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa00009af)));
   ovr_stats_drawStatsPanel();
   saveui_blitPanel();
   entries_05 = ovr_stshAlloc(400);
@@ -1466,11 +1466,11 @@ void __cdecl16far uiMainMenuLoop(void)
     items.ofs = 0x2410;
     uiMenu((char *)"Select an option:",items,unaff_SS,8);
     bStack_13 = (byte)pmenu;
-    ovr_say((char *)"<Empty>" + 7,0x2410);
+    ovr_say((char *)0x2732,0x2410);
     if (bStack_13 < 9) {
                     /* WARNING: Switch is manually overridden */
       switch((undefined4)
-             *(undefined2 *)((char *)"%s: provides for food trade." + 1 + (uint)bStack_13 * 2)) {
+             *(undefined2 *)((char *)0x1ad6 + (uint)bStack_13 * 2)) {
       case 288826:
         saveui_blitPanel();
         bVar1 = false;
@@ -1740,13 +1740,13 @@ void __cdecl16far saveui_configureNewWorld(void)
   
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)&dst;
-  F_SCOPY((far_t)0x241026e3,dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x241026e3)),dst_00);
   dst_01.seg = unaff_SS;
   dst_01.ofs = (uint16_t)&hostilityItems;
-  F_SCOPY((far_t)0x241026f7,dst_01);
+  F_SCOPY(far_from_u32((uint32_t)(0x241026f7)),dst_01);
   dst_02.seg = unaff_SS;
   dst_02.ofs = (uint16_t)&worldItems;
-  F_SCOPY((far_t)0x2410270b,dst_02);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410270b)),dst_02);
   puVar1 = &worldItems;
   items.seg = (uint16_t)puVar1;
   items.ofs = 0x2410;
@@ -1844,7 +1844,7 @@ int __cdecl16far saveui_parseNumber(char *str)
     if ((((byte *)_ctype + 1)[*str] & 2) != 0) {
       iVar1 = (int)*str + iVar1 * 10 + -0x30;
     }
-    str = (char *)CONCAT22(str._2_2_,(char *)str + 1);
+    str = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(str) + 2)),(char *)str + 1);
   }
   return iVar1;
 }
@@ -1891,16 +1891,16 @@ int __cdecl16far saveui_usesBlitText(char *prompt,int textSeg,int row)
   bStack_5 = 0;
   ey = (uint)uStack_5e;
   uStack_5e = (uint3)(uint)uStack_5e;
-  uVar4 = (uint16_t)((ulong)((long)prompt._2_2_ * 0xf) >> 0x10);
-  pfVar1 = ovr_stshRleCut((far_t *)0x0,(far_t)0x16a000,(int)((long)prompt._2_2_ * 0xf) + 0x1d,222,
-                          prompt._2_2_ * 0xf + 0x27,ey,0xde);
+  uVar4 = (uint16_t)((ulong)((long)(*(uint16_t *)((uint8_t *)&(prompt) + 2)) * 0xf) >> 0x10);
+  pfVar1 = ovr_stshRleCut((far_t *)0x0,far_from_u32((uint32_t)(0x16a000)),(int)((long)(*(uint16_t *)((uint8_t *)&(prompt) + 2)) * 0xf) + 0x1d,222,
+                          (*(uint16_t *)((uint8_t *)&(prompt) + 2)) * 0xf + 0x27,ey,0xde);
   TextBlitX = 0x2a;
-  TextBlitY = prompt._2_2_ * 0xf + 0x1d;
+  TextBlitY = (*(uint16_t *)((uint8_t *)&(prompt) + 2)) * 0xf + 0x1d;
   cursorX = 0;
   gfx.seg = (uint16_t)&text;
   gfx.ofs = uVar4;
   saveui_usesBlitGfx10
-            (gfx,(char *)CONCAT22(&cursorX,unaff_SS),(byte *)CONCAT22(prompt._2_2_,unaff_SS),
+            (gfx,(char *)CONCAT22(&cursorX,unaff_SS),(byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),unaff_SS),
              uStack_5e,in_stack_0000ffa6);
   ovr_ovc40_flushInput();
 L_saveui_4528_1d55_1E1D:
@@ -1915,7 +1915,7 @@ L_saveui_4528_1d55_1E1D:
                                                     CONCAT12((char)Font03.ofs,unaff_SS)),
                                    (char)Font03.ofs,Font03.seg);
         iVar2 = ovr_font_textWidth((char *)"_",
-                                   (char *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),
+                                   (char *)CONCAT22(Font03.ofs,(char *)0x2410),
                                    (char)Font03.seg);
         if (iVar3 + iVar2 + 0x2aU < 0xe0) {
           bStack_5 = bStack_5 + 1;
@@ -1925,7 +1925,7 @@ L_saveui_4528_1d55_1E1D:
         gfx_00.ofs = uVar4;
         saveui_usesBlitGfx10
                   (gfx_00,(char *)CONCAT22(&cursorX,unaff_SS),
-                   (byte *)CONCAT22(prompt._2_2_,unaff_SS),uStack_5e,in_stack_0000ffa6);
+                   (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),unaff_SS),uStack_5e,in_stack_0000ffa6);
       }
       if (uStack_4 != 0x4b00) break;
 L_saveui_4528_1d55_1F0C:
@@ -1936,7 +1936,7 @@ L_saveui_4528_1d55_1F0C:
         gfx_01.ofs = uVar4;
         saveui_usesBlitGfx10
                   (gfx_01,(char *)CONCAT22(&cursorX,unaff_SS),
-                   (byte *)CONCAT22(prompt._2_2_,unaff_SS),uStack_5e,in_stack_0000ffa6);
+                   (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),unaff_SS),uStack_5e,in_stack_0000ffa6);
       }
     }
     if (0x4b00 < uStack_4) {

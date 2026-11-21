@@ -19,21 +19,21 @@ void __cdecl16far miceRestoreArea(brect_t *br,...)
   
   if ((((CFG_Mice != 0) && (br->seg == 0xa000)) &&
       (MiceNeedsUpdate = 1,
-      br->x <= (int)((MiceX + *(int *)(MiceIndex * 2 + 0x4be)) - *(int *)(MiceIndex * 2 + 0x4ce))))
+      br->x <= (int)((MiceX + *(int *)(MiceIndex * 2 + 0x4be)) - *(int *)(&MiceOfsX[MiceIndex]))))
      && (((br->y <= (int)((MiceY + *(int *)(MiceIndex * 2 + 0x4c6)) -
-                         *(int *)(MiceIndex * 2 + 0x4d6)) &&
-          ((int)(MiceX - *(int *)(MiceIndex * 2 + 0x4ce)) <= br->w)) &&
-         (((int)(MiceY - *(int *)(MiceIndex * 2 + 0x4d6)) <= br->h &&
+                         *(int *)(&MiceOfsY[MiceIndex])) &&
+          ((int)(MiceX - *(int *)(&MiceOfsX[MiceIndex])) <= br->w)) &&
+         (((int)(MiceY - *(int *)(&MiceOfsY[MiceIndex])) <= br->h &&
           (MiceFlag = 0, MiceProcessed != '\0')))))) {
-    dst_x = MiceX - *(int *)(MiceIndex * 2 + 0x4ce);
-    dst_y = MiceY - *(int *)(MiceIndex * 2 + 0x4d6);
+    dst_x = MiceX - *(int *)(&MiceOfsX[MiceIndex]);
+    dst_y = MiceY - *(int *)(&MiceOfsY[MiceIndex]);
     if (dst_x < 0) {
       dst_x = 0;
     }
     if (dst_y < 0) {
       dst_y = 0;
     }
-    miceBlitAtSeg(0xa000,(far_t)0x224a0000,dst_x,dst_y);
+    miceBlitAtSeg(0xa000,far_from_u32((uint32_t)(0x224a0000)),dst_x,dst_y);
     MiceProcessed = '\0';
   }
   return;
@@ -142,8 +142,8 @@ void __cdecl16far miceBlitRect(brect_t *br,...)
     }
     else {
       MiceNeedsUpdate = 1;
-      dst_x = MiceX - *(int *)(MiceIndex * 2 + 0x4ce);
-      dst_y = MiceY - *(int *)(MiceIndex * 2 + 0x4d6);
+      dst_x = MiceX - *(int *)(&MiceOfsX[MiceIndex]);
+      dst_y = MiceY - *(int *)(&MiceOfsY[MiceIndex]);
       if ((int)dst_x < 0) {
         dst_x = 0;
       }
@@ -206,11 +206,11 @@ byte __cdecl16far init2_usesCFGMice(uint16_t *mouseX,uint16_t *mouseY,...)
     bVar1 = (byte)uVar2;
     if (MiceClick == '\0') {
       *(uint16_t *)CONCAT22((uint16_t *)mouseY,mouseX) = MiceX;
-      *(uint16_t *)CONCAT22(in_stack_0000000a,mouseY._2_2_) = MiceY;
+      *(uint16_t *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(mouseY) + 2))) = MiceY;
     }
     else {
       *(uint16_t *)CONCAT22((uint16_t *)mouseY,mouseX) = MiceClickX;
-      *(uint16_t *)CONCAT22(in_stack_0000000a,mouseY._2_2_) = MiceClickY;
+      *(uint16_t *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(mouseY) + 2))) = MiceClickY;
       bVar1 = bVar1 | 1;
       MiceClick = '\0';
     }

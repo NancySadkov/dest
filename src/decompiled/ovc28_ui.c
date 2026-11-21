@@ -39,7 +39,7 @@ void __cdecl16far ovc28_usesBlitLoadRleGfx(void)
     ovr_ovc18_blitPanelIfNotRunning();
     gfx.seg = FontHandle.seg;
     gfx.ofs = FontHandle.ofs;
-    ovr_blitLoadRleGfx(gfx,(far_t)0xa000c31d);
+    ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)));
   }
   return;
 }
@@ -63,7 +63,7 @@ void __cdecl16far update_pause_button(void)
     ovr_blitGfxRect(gfx_00,235,116,(brect_t *)(BlitRects + 1),0x10,true,0);
     TextBlitY = 0x76;
     TextBlitX = 0xf1;
-    ovr_blitLabel((char *)"Resume",(uint8_t *)CONCAT22(FontMain.ofs,(char *)"puppetmaker" + 3),
+    ovr_blitLabel((char *)"Resume",(uint8_t *)CONCAT22(FontMain.ofs,(char *)0x2410),
                   FontMain.seg,0x3f,0xe0);
     return;
   }
@@ -72,7 +72,7 @@ void __cdecl16far update_pause_button(void)
   ovr_blitGfxRect(gfx,235,116,(brect_t *)(BlitRects + 1),0x10,true,0);
   TextBlitY = 0x76;
   TextBlitX = 0xf0;
-  ovr_blitLabel((char *)"Pause",(uint8_t *)CONCAT22(Font01.ofs,(char *)"puppetmaker" + 3),Font01.seg
+  ovr_blitLabel((char *)"Pause",(uint8_t *)CONCAT22(Font01.ofs,(char *)0x2410),Font01.seg
                 ,0x3f,0xe0);
   return;
 }
@@ -165,10 +165,10 @@ void __cdecl16far ovc28_textHalflingCastle(void)
   if (GameRunning == false) {
     gfx_00.seg = panel01Cut2Seg;
     gfx_00.ofs = panel01Cut2Ofs;
-    ovr_blitLoadRleGfx(gfx_00,(far_t)0xa0008fa4);
+    ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa0008fa4)));
     gfx_01.seg = trianglsCut5Seg;
     gfx_01.ofs = trianglsCut5Ofs;
-    ovr_blitLoadRleGfx(gfx_01,(far_t)0xa000e249);
+    ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa000e249)));
     for (iVar5 = 0; iVar5 < 5; iVar5 = iVar5 + 1) {
       if (((uint8_t *)MenuItemEnabled)[iVar5] != 0xff) {
         TextBlitX = 0xea;
@@ -334,11 +334,11 @@ void __cdecl16far ovc28_drawGold(byte partyIndex)
   undefined2 uVar7;
   uint8_t numText;
   
-  uVar1 = ovr_font_textWidth((char *)"Gold",(char *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),
+  uVar1 = ovr_font_textWidth((char *)"Gold",(char *)CONCAT22(Font03.ofs,(char *)0x2410),
                              Font03.seg);
   TextBlitX = 0x10e - (uVar1 >> 1);
   TextBlitY = 0x9c;
-  ovr_blitText((char *)"Gold",(byte *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),Font03.seg,0x3f
+  ovr_blitText((char *)"Gold",(byte *)CONCAT22(Font03.ofs,(char *)0x2410),Font03.seg,0x3f
                ,0xed);
   uVar5 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
   iVar4 = (int)*(undefined4 *)((uint)partyIndex << 2);
@@ -351,12 +351,12 @@ void __cdecl16far ovc28_drawGold(byte partyIndex)
   ovr_blitText((char *)&numText,(byte *)CONCAT22(Font03.ofs,unaff_SS),Font03.seg,0x3f,0xed);
   iVar4 = ovr_ovc45_usesLDIV_at_(partyIndex);
   if (iVar4 != 0 || uVar2 != 0) {
-    uVar1 = ovr_font_textWidth((char *)"Fund",(char *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3)
+    uVar1 = ovr_font_textWidth((char *)"Fund",(char *)CONCAT22(Font03.ofs,(char *)0x2410)
                                ,Font03.seg);
     uVar2 = 0x10e - (uVar1 >> 1);
     TextBlitY = 0xb2;
     TextBlitX = uVar2;
-    ovr_blitText((char *)"Fund",(byte *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),Font03.seg,
+    ovr_blitText((char *)"Fund",(byte *)CONCAT22(Font03.ofs,(char *)0x2410),Font03.seg,
                  0x3f,0xed);
     uVar5 = ovr_ovc45_usesLDIV_at_(partyIndex);
     ovr_litoa10((char *)&numText,(long)CONCAT22(uVar5,unaff_SS),uVar2);
@@ -403,14 +403,14 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
   ovr_blitLoadRleGfx(gfx,dst);
   TextBlitX = x + 6;
   TextBlitY = y + 2;
-  pbVar2 = (byte *)((char *)"puppetmaker" + 3);
+  pbVar2 = (byte *)((char *)0x2410);
   if (*label == '%') {
     BlitLetterType = 2;
     uVar5 = 0x3f;
     uVar3 = Font01.ofs;
     uVar4 = Font01.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,unaff_SS),
-                                        (char *)CONCAT22(Font01.ofs,label._2_2_),Font01.seg,'E',3);
+                                        (char *)CONCAT22(Font01.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),Font01.seg,'E',3);
     ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
     BlitLetterType = 0;
   }
@@ -419,7 +419,7 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
     uVar3 = Font01.ofs;
     uVar4 = Font01.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,unaff_SS),
-                                        (char *)CONCAT22(Font01.ofs,label._2_2_),Font01.seg,'E',3);
+                                        (char *)CONCAT22(Font01.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),Font01.seg,'E',3);
     ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
   }
   else {
@@ -427,7 +427,7 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
     uVar3 = Font01.ofs;
     uVar4 = Font01.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label,unaff_SS),
-                                        (char *)CONCAT22(FontMain.ofs,label._2_2_),FontMain.seg,'E',
+                                        (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
     ovr_blitText(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
   }
@@ -439,14 +439,14 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
   ovr_blitLoadRleGfx(gfx_00,dst_00);
   TextBlitX = x + 6;
   TextBlitY = y + 2;
-  pbVar2 = (byte *)((char *)"puppetmaker" + 3);
+  pbVar2 = (byte *)((char *)0x2410);
   if (*label == '%') {
     BlitLetterType = 2;
     uVar5 = 0x3f;
     uVar3 = FontMain.ofs;
     uVar4 = FontMain.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,unaff_SS),
-                                        (char *)CONCAT22(FontMain.ofs,label._2_2_),FontMain.seg,'E',
+                                        (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
     ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
     BlitLetterType = 0;
@@ -456,7 +456,7 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
     uVar3 = FontMain.ofs;
     uVar4 = FontMain.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,unaff_SS),
-                                        (char *)CONCAT22(FontMain.ofs,label._2_2_),FontMain.seg,'E',
+                                        (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
     ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
   }
@@ -465,7 +465,7 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
     uVar3 = FontMain.ofs;
     uVar4 = FontMain.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label,unaff_SS),
-                                        (char *)CONCAT22(FontMain.ofs,label._2_2_),FontMain.seg,'E',
+                                        (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
     ovr_blitText(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
   }
@@ -537,9 +537,9 @@ void __cdecl16far ovc28_startCrossBlit(void)
                       (char)CrossBlitY);
   dst.seg = 0xa000;
   dst.ofs = CrossBlitX + CrossBlitY * 0x140;
-  gfx.seg._0_1_ = (char)CrossBlitGfx.seg;
+  (*(uint8_t *)((uint8_t *)&(gfx.seg))) = (char)CrossBlitGfx.seg;
   gfx.ofs = CrossBlitGfx.ofs;
-  gfx.seg._1_1_ = (char)(CrossBlitGfx.seg >> 8);
+  (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) = (char)(CrossBlitGfx.seg >> 8);
   CrossBlitPtr.seg = in_DX;
   ovr_blitLoadRleGfx(gfx,dst);
   if (MouseMoved == 0) {
@@ -702,7 +702,7 @@ L_uiInputText_110E:
 L_uiInputText_10F1:
         if (menuBarShown != '\0') {
           GMenuFlag = 0;
-          return (char *)"thief" + 4;
+          return (char *)0x181;
         }
         goto L_uiInputText_1007;
       }
@@ -720,7 +720,7 @@ L_uiInputText_10F1:
         }
         if (menuBarShown != '\0') {
           GMenuFlag = 0;
-          return (char *)"thief" + 2;
+          return (char *)0x17f;
         }
         goto L_uiInputText_1007;
       }
@@ -741,7 +741,7 @@ L_uiInputText_10F1:
       }
       if (menuBarShown != '\0') {
         GMenuFlag = 0;
-        return (char *)"thief" + 3;
+        return (char *)0x180;
       }
       goto L_uiInputText_1007;
     }
@@ -789,7 +789,7 @@ L_uiInputText_11EE:
       else if (uVar3 < 0x5001) {
         if (((uVar3 == 0x4900) || (uVar3 == 0x4939)) && ((flags & 1) != 0)) {
           GMenuFlag = 0;
-          return (char *)"arena" + 5;
+          return (char *)0x2401;
         }
       }
       else if (uVar3 == 0x5032) goto L_uiInputText_11EE;
@@ -800,7 +800,7 @@ L_uiInputText_11EE:
 L_uiInputText_1348:
         ovc28_usesBlitLoadRleGfx();
         GMenuFlag = 0;
-        return (char *)"arena" + 4;
+        return (char *)0x2400;
       }
       if (uVar3 == 0xffff) {
         uVar4 = ovc28_usesScreenMode(entries,count);

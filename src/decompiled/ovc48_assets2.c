@@ -396,7 +396,7 @@ void __cdecl16far init_assets2(bool grab,...)
     psVar1 = ovr_grabLbmTR(14);
     SpecialColors[0] = *(uint8_t *)((int)&GStrangeTable[0x12].ofs + 1 + (psVar1->aptr).ofs);
     SpecialColors[1] = ((char *)"%s turns %d undead." + 0x12)[(psVar1->aptr).ofs];
-    SpecialColors[2] = ((char *)"If you lead with wisdom and cunning..." + 9)[(psVar1->aptr).ofs];
+    SpecialColors[2] = ((char *)0x7416)[(psVar1->aptr).ofs];
     SpecialColors[3] =
          ((char *)"ENTER: use previous configuration, SPACE: reconfigure, ESC: quit" + 0x12)
          [(psVar1->aptr).ofs];
@@ -404,7 +404,7 @@ void __cdecl16far init_assets2(bool grab,...)
     SpecialColors[5] = *(uint8_t *)((int)&GStrangeTable[0x12].seg + 1 + (psVar1->aptr).ofs);
     SpecialColors[6] = *(uint8_t *)((int)(undefined2 *)&youlose1Cut1Seg + (psVar1->aptr).ofs);
     SpecialColors[7] = *(uint8_t *)((psVar1->aptr).ofs + 0x936e);
-    puVar8 = (uint8_t *)((char *)"puppetmaker" + 3);
+    puVar8 = (uint8_t *)((char *)0x2410);
     specialColorsOfs =
          (far_t *)ovr_stshWrite((uint32_t *)SpecialColors,(uint8_t *)0x82410,
                                 ZEXT24(unaff_DI) << 0x10,0);

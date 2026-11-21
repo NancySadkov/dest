@@ -26,7 +26,7 @@ ovc43_usesFmFreeAudio(uint32_t gindex,char_sheet_t *sheet,uint16_t sheetSeg)
   byte bStack_8;
   char_sheet_t *uStack_6;   /* hand fix: used as uStack_6->nameText and (char_sheet_t *)uStack_6 */
   
-  pcVar4 = (char_sheet_t *)((char *)"puppetmaker" + 3);
+  pcVar4 = (char_sheet_t *)((char *)0x2410);
   TextBlitDstSeg = 0xa000;
   iVar7 = 0;
   while( true ) {
@@ -250,7 +250,7 @@ char __cdecl16far ovc43_playFli(uint16_t fileId,uint16_t paletteOfs,uint16_t pal
   uint16_t handle;
   
   handle = ovr_stshOpen(fileId);
-  if (*(int *)((char *)"toymaker" + 7 + handle * 2) < 0) {
+  if (*(int *)((char *)0x2420 + handle * 2) < 0) {
     cVar1 = '\x01';
   }
   else {

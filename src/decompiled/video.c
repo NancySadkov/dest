@@ -219,19 +219,19 @@ void __cdecl16far videoMiceEvent(uint16_t x,uint16_t y,uint16_t mask)
          (bVar3 != MiceIndex)) {
         MiceFlag = 1;
         if (MiceProcessed != '\0') {
-          dst_x = uVar2 - *(int *)(MiceIndex * 2 + 0x4ce);
-          dst_y = uVar1 - *(int *)(MiceIndex * 2 + 0x4d6);
+          dst_x = uVar2 - *(int *)(&MiceOfsX[MiceIndex]);
+          dst_y = uVar1 - *(int *)(&MiceOfsY[MiceIndex]);
           if (dst_x < 0) {
             dst_x = 0;
           }
           if (dst_y < 0) {
             dst_y = 0;
           }
-          miceBlitAtSeg(0xa000,(far_t)0x224a0000,dst_x,dst_y);
+          miceBlitAtSeg(0xa000,far_from_u32((uint32_t)(0x224a0000)),dst_x,dst_y);
         }
         MiceIndex = (uint)bVar3;
-        dx = MiceX - *(int *)(MiceIndex * 2 + 0x4ce);
-        dy = MiceY - *(int *)(MiceIndex * 2 + 0x4d6);
+        dx = MiceX - *(int *)(&MiceOfsX[MiceIndex]);
+        dy = MiceY - *(int *)(&MiceOfsY[MiceIndex]);
         if ((int)dx < 0) {
           dx = 0;
         }

@@ -287,9 +287,9 @@ void bldng_selectBuildingType(byte partyIndex)
   puVar6 = &menuEntries;
   entries.seg = (uint16_t)unaff_SS;
   entries.ofs = (uint16_t)puVar6;
-  hint.seg._0_1_ = (char)uVar7;
+  (*(uint8_t *)((uint8_t *)&(hint.seg))) = (char)uVar7;
   hint.ofs = (uint16_t)pcVar5;
-  hint.seg._1_1_ = (char)((uint)uVar7 >> 8);
+  (*(uint8_t *)((uint8_t *)&(hint.seg) + 1)) = (char)((uint)uVar7 >> 8);
   ovr_ovc28_compute2(entries,count,hint,(char)pcVar5);
   cStack_4 = (char)puVar6;
   if ((char)puVar6 != '\0') {

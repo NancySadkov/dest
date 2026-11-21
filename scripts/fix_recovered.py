@@ -437,3 +437,12 @@ if __name__ == "__main__":
     print("rewrote files:", n, "far casts:", f, "ptr->word:", w,
           "overlay files:", o, "overlay refs:", ot, "renamed globals:", gr,
           "global files:", gc, "artifact declarations:", a)
+
+
+# Sweeps that must run inside the pipeline so a re-export cannot wipe them.
+import subprocess as _sp
+_HERE = os.path.dirname(os.path.abspath(__file__))
+for _name in ("fix_string_folds.py", "fix_raw_arrays.py"):
+    _script = os.path.join(_HERE, _name)
+    if os.path.isfile(_script):
+        _sp.run([sys.executable, _script, "--apply"], check=False)

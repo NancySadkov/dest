@@ -299,7 +299,7 @@ undefined2 __cdecl16near __InitModules(void)
                     /* WARNING: Read-only address (ram,0x0001000b) is written */
   uVar6 = 0x226e;
   uVar4 = 0;
-  pcVar5 = (char *)"mages" + 1;
+  pcVar5 = (char *)0x1a0;
   do {
     if (((*(uint *)(pcVar5 + 4) & 2) != 0) && (*(int *)(pcVar5 + 2) != 0)) {
       uVar2 = *(undefined2 *)pcVar5;
@@ -310,11 +310,11 @@ undefined2 __cdecl16near __InitModules(void)
       }
       else {
         ((byte *)__C0_ASM_CopyRight + 0x14)[0] = 0xc3;
-        uVar3 = GUnitDescriptions._43_2_;
+        uVar3 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 43));
         ((byte *)__C0_ASM_CopyRight + 0x14)[1] = 4;
         puVar1 = (uint *)__C0_ASM_CopyRight;
-        bVar7 = CARRY2(*puVar1,GUnitDescriptions[10]._1_2_);
-        *puVar1 = *puVar1 + GUnitDescriptions[10]._1_2_;
+        bVar7 = CARRY2(*puVar1,(*(uint16_t *)((uint8_t *)&(GUnitDescriptions[10]) + 1)));
+        *puVar1 = *puVar1 + (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[10]) + 1));
         *(uint *)((byte *)__C0_ASM_CopyRight + 2) =
              *(int *)((byte *)__C0_ASM_CopyRight + 2) + uVar3 + (uint)bVar7;
         __OvrCalcSize();
@@ -326,7 +326,7 @@ undefined2 __cdecl16near __InitModules(void)
     }
     pcVar5 = pcVar5 + 8;
   } while (pcVar5 < (char *)0x478);
-  GUnitDescriptions._47_2_ = uVar4 + 2;
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 47)) = uVar4 + 2;
   return 0;
 }
 
@@ -347,30 +347,30 @@ void __cdecl16near __OvrInitReadSegs(void)
   bool bVar6;
   undefined2 uVar7;
   
-  uVar7 = GUnitDescriptions._59_2_;
-  GUnitDescriptions[0x10]._1_2_ = GUnitDescriptions._55_2_;
-  iVar3 = GUnitDescriptions._55_2_;
-  iVar5 = GUnitDescriptions._55_2_;
-  GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions[0xe]._1_2_;
+  uVar7 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 59));
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 55));
+  iVar3 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 55));
+  iVar5 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 55));
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xe]) + 1));
   while ((iVar4 = iVar3, iVar3 = *(int *)((byte *)__C0_ASM_CopyRight + 0xe), iVar3 != 0 &&
          (uVar2 = (int)(CONCAT22((*(int *)((byte *)__C0_ASM_CopyRight + 2) -
                                  *(int *)((byte *)__C0_ASM_CopyRight + 2)) -
                                  (uint)(*(uint *)__C0_ASM_CopyRight < *(uint *)__C0_ASM_CopyRight),
                                  *(uint *)__C0_ASM_CopyRight - *(uint *)__C0_ASM_CopyRight) / 0x10)
-                  + GUnitDescriptions[0xd]._1_2_, uVar2 <= (uint)uVar7))) {
-    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = GUnitDescriptions[0xd]._1_2_;
+                  + (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)), uVar2 <= (uint)uVar7))) {
+    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
     *(int *)((byte *)__C0_ASM_CopyRight + 0x18) = iVar3;
     iVar5 = iVar4;
-    GUnitDescriptions[0xd]._1_2_ = uVar2;
+    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = uVar2;
   }
   ((byte *)__C0_ASM_CopyRight + 0x18)[0] = 0;
   ((byte *)__C0_ASM_CopyRight + 0x18)[1] = 0;
-  if (GUnitDescriptions[0xd]._1_2_ != GUnitDescriptions[0xe]._1_2_) {
+  if ((*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) != (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xe]) + 1))) {
     bVar6 = false;
     __OvrRead();
     if (!bVar6) {
       uVar7 = 0x2410;
-      iVar3 = GUnitDescriptions[0x10]._1_2_;
+      iVar3 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
       do {
         if (*(int *)((byte *)__C0_ASM_CopyRight + 6) != 0) {
           __OvrDoFixups();
@@ -392,7 +392,7 @@ void __cdecl16near __OvrInitReadSegs(void)
 
 /* 1403:03d8 */
 
-/* rotates the DX:AX dword right by four bits */
+/* rotates the DX_AX dword right by four bits */
 
 uint __cdecl16near ovl_rotateRight4(void)
 
@@ -572,7 +572,7 @@ void __cdecl16near __OvrAllocateSpace(void)
   undefined2 unaff_ES;
   byte in_CF;
   
-  GUnitDescriptions._63_2_ = GUnitDescriptions._63_2_ + 1;
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 63)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 63)) + 1;
   __OvrCalcSize();
   while( true ) {
     uVar2 = __OvrGetSegMemInfo();
@@ -582,19 +582,19 @@ void __cdecl16near __OvrAllocateSpace(void)
     }
     in_CF = 0;
     if (((byte *)__C0_ASM_CopyRight)[0x17] == 0) {
-      GUnitDescriptions[0x10]._1_2_ = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
+      (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
       __OvrAllocEvict();
       __OvrCalcCodeSz();
     }
     else {
       pbVar1 = (byte *)__C0_ASM_CopyRight + 0x17;
-      GUnitDescriptions[0x10]._1_2_ = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
+      (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
       *pbVar1 = *pbVar1 - 1;
       __OvrCompactHeap();
       __OvrAddToLoadList_2();
     }
   }
-  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = GUnitDescriptions[0xd]._1_2_;
+  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
   return;
 }
 
@@ -613,7 +613,7 @@ void __cdecl16near __OvrFixupTrap(void)
   int iVar4;
   undefined1 uVar5;
   
-  GUnitDescriptions[0xc]._1_2_ = GUnitDescriptions[0xc]._1_2_ + 1;
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xc]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xc]) + 1)) + 1;
   if (*(int *)((byte *)__C0_ASM_CopyRight + 0xc) == 0) {
     uVar5 = 0;
     ((byte *)__C0_ASM_CopyRight)[0x16] = ((byte *)__C0_ASM_CopyRight)[0x16] | 8;
@@ -634,9 +634,9 @@ void __cdecl16near __OvrFixupTrap(void)
   ((byte *)__C0_ASM_CopyRight)[0x17] =
        ((byte *)__C0_ASM_CopyRight)[0x17] + (((byte *)__C0_ASM_CopyRight)[0x16] & 3);
   uVar2 = __OvrGetSegMemInfo();
-  iVar4 = GUnitDescriptions[0x10]._1_2_;
+  iVar4 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
   for (; (iVar1 = *(int *)((byte *)__C0_ASM_CopyRight + 0x18), iVar1 != 0 &&
-         (uVar2 < (uint)GUnitDescriptions[0xb]._1_2_)); uVar2 = uVar3 + uVar2) {
+         (uVar2 < (uint)(*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xb]) + 1)))); uVar2 = uVar3 + uVar2) {
     if (((byte *)__C0_ASM_CopyRight)[0x17] == 0) {
       __OvrTrapJmpsAndStack();
       uVar3 = __OvrCalcCodeSz();
@@ -679,22 +679,22 @@ void __cdecl16near __OvrAddToLoadList(void)
   
   iVar2 = 0;
   do {
-    iVar4 = GUnitDescriptions[0x10]._1_2_;
+    iVar4 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
     iVar2 = iVar2 + 1;
-    GUnitDescriptions[0x10]._1_2_ = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
-  } while (GUnitDescriptions[0x10]._1_2_ != 0);
-  GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions._59_2_;
+    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
+  } while ((*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) != 0);
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 59));
   do {
     iVar3 = iVar2;
-    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18) = GUnitDescriptions[0x10]._1_2_;
-    GUnitDescriptions[0x10]._1_2_ = iVar4;
+    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
+    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = iVar4;
     uVar1 = __OvrCalcCodeSz();
-    GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions[0xd]._1_2_ - uVar1;
+    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) - uVar1;
     __OvrCompactHeap();
     iVar2 = iVar3 + -1;
     iVar4 = iVar3;
   } while (iVar2 != 0);
-  GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions[0xe]._1_2_;
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xe]) + 1));
   return;
 }
 
@@ -785,7 +785,7 @@ void __cdecl16near __OvrTrapJmpsAndStack(void)
     pbVar4 = (byte *)__C0_ASM_CopyRight + 0x1c;
     do {
       uVar2 = *(undefined2 *)(pbVar4 + 1);
-      *(undefined2 *)pbVar4 = GUnitDescriptions[9]._1_2_;
+      *(undefined2 *)pbVar4 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[9]) + 1));
       pbVar1 = pbVar4 + 4;
       *(undefined2 *)(pbVar4 + 2) = uVar2;
       pbVar4 = pbVar4 + 5;
@@ -814,9 +814,9 @@ undefined2 __cdecl16near __OvrCompactHeap(void)
   undefined2 unaff_ES;
   bool bVar9;
   
-  uVar3 = GUnitDescriptions[0xd]._1_2_;
+  uVar3 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
   uVar2 = *(uint *)((byte *)__C0_ASM_CopyRight + 0xc);
-  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = GUnitDescriptions[0xd]._1_2_;
+  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
   uVar4 = *(int *)((byte *)__C0_ASM_CopyRight + 4) + 1U >> 1;
   puVar6 = (undefined2 *)0x0;
   bVar9 = uVar2 <= (uint)uVar3;
@@ -860,7 +860,7 @@ void __cdecl16near __OvrAddToLoadList_2(void)
   undefined2 unaff_ES;
   
   uVar2 = __OvrCalcCodeSz();
-  GUnitDescriptions[0xd]._1_2_ = GUnitDescriptions[0xd]._1_2_ + uVar2;
+  (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) + uVar2;
   iVar1 = 0x226e;
   do {
     iVar3 = iVar1;
@@ -930,10 +930,10 @@ int __cdecl16near __OvrGetSegMemInfo(void)
 {
   int iVar1;
   
-  if ((GUnitDescriptions[0x10]._1_2_ == 0) ||
-     (iVar1 = *(uint *)((byte *)__C0_ASM_CopyRight + 0xc) - GUnitDescriptions[0xd]._1_2_,
-     *(uint *)((byte *)__C0_ASM_CopyRight + 0xc) < (uint)GUnitDescriptions[0xd]._1_2_)) {
-    iVar1 = GUnitDescriptions._59_2_ - GUnitDescriptions[0xd]._1_2_;
+  if (((*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) == 0) ||
+     (iVar1 = *(uint *)((byte *)__C0_ASM_CopyRight + 0xc) - (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)),
+     *(uint *)((byte *)__C0_ASM_CopyRight + 0xc) < (uint)(*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)))) {
+    iVar1 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 59)) - (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
   }
   return iVar1;
 }
@@ -1451,7 +1451,7 @@ char * __cdecl16near OVRSWAP_1403_0cd2(void)
   char *pcVar4;
   char *pcVar5;
   
-  pcVar5 = (char *)"puppetmaker" + 3;
+  pcVar5 = (char *)0x2410;
   pcVar4 = (char *)0x0;
   while( true ) {
     pcVar5 = *(char **)((byte *)__C0_ASM_CopyRight + 10);
@@ -1579,7 +1579,7 @@ int __cdecl16far __INITEMS(void)
           pcVar1 = (code *)swi(0x67);
           (*pcVar1)();
           if (extraout_AH_00 != '\0') goto L__INITEMS_0E2A;
-          *(int *)((char *)"Divide error\r\n" + 1) = in_BX;
+          *(int *)((char *)0x30) = in_BX;
           goto L__INITEMS_0E14;
         }
       }
@@ -1590,15 +1590,15 @@ int __cdecl16far __INITEMS(void)
   else {
     unaff_SI = (uint)startx;   /* hand fix: startx is a function */
     if ((((char *)"Divide error\r\n")[9] & 2U) != 0) {
-      return *(int *)((char *)"Divide error\r\n" + 7);
+      return *(int *)((char *)0x36);
     }
 L__INITEMS_0E14:
     pcVar1 = (code *)swi(0x67);
     (*pcVar1)();
     if (extraout_AH_01 == '\0') {
-      *(int *)((char *)"Divide error\r\n" + 7) = in_BX;
-      ((char *)"Divide error\r\n" + 3)[0] = -1;
-      ((char *)"Divide error\r\n" + 3)[1] = -1;
+      *(int *)((char *)0x36) = in_BX;
+      ((char *)0x32)[0] = -1;
+      ((char *)0x32)[1] = -1;
       return in_BX;
     }
   }
@@ -1625,8 +1625,8 @@ uint16_t __stdcall16far __INITEMSPAGE(uint16_t pageCount,uint16_t frameSeg,uint1
       return 0;
     }
     ((char *)"Divide error\r\n")[9] = ((char *)"Divide error\r\n")[9] | 2;
-    *(uint16_t *)((char *)"Divide error\r\n" + 5) = frameSeg;
-    *(uint16_t *)((char *)"Divide error\r\n" + 7) = pageCount;
+    *(uint16_t *)((char *)0x34) = frameSeg;
+    *(uint16_t *)((char *)0x36) = pageCount;
     if (handle == 0) {
       pcVar1 = (code *)swi(0x67);
       (*pcVar1)();
@@ -1636,7 +1636,7 @@ uint16_t __stdcall16far __INITEMSPAGE(uint16_t pageCount,uint16_t frameSeg,uint1
       ((char *)"Divide error\r\n")[9] = ((char *)"Divide error\r\n")[9] | 4;
       handle = extraout_DX;
     }
-    *(uint16_t *)((char *)"Divide error\r\n" + 3) = handle;
+    *(uint16_t *)((char *)0x32) = handle;
     pcVar1 = (code *)swi(0x67);
     (*pcVar1)();
     if (extraout_AH_00 == '\0') {
@@ -1658,11 +1658,11 @@ void __cdecl16far __EXITEMS(void)
   
   uVar2 = (uint)startx;   /* hand fix: startx is a function */
   if (((((char *)"Divide error\r\n")[9] & 4U) != 0) &&
-     (*(int *)((char *)"Divide error\r\n" + 3) != -1)) {
+     (*(int *)((char *)0x32) != -1)) {
     pcVar1 = (code *)swi(0x67);
     (*pcVar1)();
-    ((char *)"Divide error\r\n" + 3)[0] = -1;
-    ((char *)"Divide error\r\n" + 3)[1] = -1;
+    ((char *)0x32)[0] = -1;
+    ((char *)0x32)[1] = -1;
     ((char *)"Divide error\r\n")[9] = '\0';
   }
   return;
@@ -1705,10 +1705,10 @@ L__INITEXT_0EEC:
     ((char *)"Divide error\r\n" + 0xb)[1] = '\0';
     ((char *)"Divide error\r\n" + 0xd)[0] = '\x10';
     ((char *)"Divide error\r\n" + 0xd)[1] = '\0';
-    ((char *)"Abnormal program termination\r\n" + 1)[0] = '\0';
-    ((char *)"Abnormal program termination\r\n" + 1)[1] = '\0';
-    ((char *)"Abnormal program termination\r\n" + 3)[0] = '\x10';
-    ((char *)"Abnormal program termination\r\n" + 3)[1] = '\0';
+    ((char *)0x3e)[0] = '\0';
+    ((char *)0x3e)[1] = '\0';
+    ((char *)0x40)[0] = '\x10';
+    ((char *)0x40)[1] = '\0';
     pcVar5 = (code *)swi(0x21);
     uVar9 = (*pcVar5)();
     if (((((byte)uVar9 < 10) && ((*(byte *)0xFFFE) < 0xfd)) && ((*(byte *)0xFFFE) != 0xfb)) &&
@@ -1719,33 +1719,33 @@ L__INITEXT_0EEC:
         if (cVar8 == -0x80) {
           pcVar5 = (code *)swi(0x2f);
           (*pcVar5)();
-          *(undefined2 *)((char *)"Abnormal program termination\r\n" + 6) = in_BX;
-          ((char *)"Abnormal program termination\r\n" + 8)[0] = '\0';
-          ((char *)"Abnormal program termination\r\n" + 8)[1] = -0x10;
-          (**(code **)((char *)"Abnormal program termination\r\n" + 6))();
+          *(undefined2 *)((char *)0x43) = in_BX;
+          ((char *)0x45)[0] = '\0';
+          ((char *)0x45)[1] = -0x10;
+          (**(code **)((char *)0x43))();
           if (1 < extraout_AH) {
-            uVar11 = (**(code **)((char *)"Abnormal program termination\r\n" + 6))();
+            uVar11 = (**(code **)((char *)0x43))();
             if (uVar11 != 0) {
-              uVar17 = (**(code **)((char *)"Abnormal program termination\r\n" + 6))();
+              uVar17 = (**(code **)((char *)0x43))();
               if ((int)uVar17 != 0) {
-                *(int *)((char *)"Abnormal program termination\r\n" + 10) =
+                *(int *)((char *)0x47) =
                      (int)((ulong)uVar17 >> 0x10);
-                uVar17 = (**(code **)((char *)"Abnormal program termination\r\n" + 6))();
+                uVar17 = (**(code **)((char *)0x43))();
                 if ((int)uVar17 != 0) {
                   *(undefined2 *)((char *)"Divide error\r\n" + 0xb) = in_BX;
                   *(int *)((char *)"Divide error\r\n" + 0xd) = (int)((ulong)uVar17 >> 0x10);
                   uVar10 = (uint)((ulong)uVar11 * 0x400);
                   uVar4 = *(uint *)((char *)"Divide error\r\n" + 0xb);
                   iVar12 = *(int *)((char *)"Divide error\r\n" + 0xd);
-                  *(uint *)((char *)"Abnormal program termination\r\n" + 1) =
+                  *(uint *)((char *)0x3e) =
                        uVar10 + *(uint *)((char *)"Divide error\r\n" + 0xb);
-                  *(uint *)((char *)"Abnormal program termination\r\n" + 3) =
+                  *(uint *)((char *)0x40) =
                        (int)((ulong)uVar11 * 0x400 >> 0x10) + iVar12 + (uint)CARRY2(uVar10,uVar4);
                 }
-                (**(code **)((char *)"Abnormal program termination\r\n" + 6))();
-                (**(code **)((char *)"Abnormal program termination\r\n" + 6))();
-                ((char *)"Abnormal program termination\r\n" + 10)[0] = '\0';
-                ((char *)"Abnormal program termination\r\n" + 10)[1] = '\0';
+                (**(code **)((char *)0x43))();
+                (**(code **)((char *)0x43))();
+                ((char *)0x47)[0] = '\0';
+                ((char *)0x47)[1] = '\0';
               }
             }
             goto L__INITEXT_105D;
@@ -1756,11 +1756,11 @@ L__INITEXT_0EEC:
       uVar11 = (*pcVar5)();
       if (uVar11 != 0) {
         lVar6 = (ulong)uVar11 * 0x400;
-        *(int *)((char *)"Abnormal program termination\r\n" + 1) = (int)lVar6;
-        *(uint *)((char *)"Abnormal program termination\r\n" + 3) =
+        *(int *)((char *)0x3e) = (int)lVar6;
+        *(uint *)((char *)0x40) =
              CONCAT11((char)((ulong)lVar6 >> 0x18),(char)((ulong)lVar6 >> 0x10) + '\x10');
-        if (*(int *)((char *)"Abnormal program termination\r\n" + 6) != 0 ||
-            *(int *)((char *)"Abnormal program termination\r\n" + 8) != 0) {
+        if (*(int *)((char *)0x43) != 0 ||
+            *(int *)((char *)0x45) != 0) {
           ((char *)"Divide error\r\n")[0xd] = '\x11';
           ((char *)"Divide error\r\n" + 0xb)[0] = '\0';
           ((char *)"Divide error\r\n" + 0xb)[1] = '\0';
@@ -1819,7 +1819,7 @@ L__INITEXT_0EEC:
   else {
     if ((((char *)"Abnormal program termination\r\n")[5] & 2U) == 0) goto L__INITEXT_0EEC;
 L__INITEXT_105D:
-    iVar12 = *(int *)((char *)"Abnormal program termination\r\n" + 1) -
+    iVar12 = *(int *)((char *)0x3e) -
              *(int *)((char *)"Divide error\r\n" + 0xb);
   }
   return iVar12;
@@ -1843,8 +1843,8 @@ undefined2 __stdcall16far __INITEXTMEM(uint sizeLo,int sizeHi,uint baseLo,int ba
     }
     ((char *)"Abnormal program termination\r\n")[5] =
          ((char *)"Abnormal program termination\r\n")[5] | 2;
-    if (*(int *)((char *)"Abnormal program termination\r\n" + 6) == 0 &&
-        *(int *)((char *)"Abnormal program termination\r\n" + 8) == 0) {
+    if (*(int *)((char *)0x43) == 0 &&
+        *(int *)((char *)0x45) == 0) {
       *(uint *)((char *)"Divide error\r\n" + 0xb) = baseLo;
       *(int *)((char *)"Divide error\r\n" + 0xd) = baseHi;
       _BootHandlerCode = uRam00000064;
@@ -1858,15 +1858,15 @@ undefined2 __stdcall16far __INITEXTMEM(uint sizeLo,int sizeHi,uint baseLo,int ba
       vdiskEndHi = (undefined1)iVar3;
       vdiskEndOfs = iVar2;
 L__INITEXTMEM_113B:
-      *(int *)((char *)"Abnormal program termination\r\n" + 1) = iVar2;
-      *(int *)((char *)"Abnormal program termination\r\n" + 3) = iVar3;
+      *(int *)((char *)0x3e) = iVar2;
+      *(int *)((char *)0x40) = iVar3;
       return 0;
     }
     uVar4 = 0x400;
-    uVar5 = (**(code **)((char *)"Abnormal program termination\r\n" + 6))(0x1000);
+    uVar5 = (**(code **)((char *)0x43))(0x1000);
     if ((int)uVar5 != 0) {
-      *(int *)((char *)"Abnormal program termination\r\n" + 10) = (int)((ulong)uVar5 >> 0x10);
-      uVar5 = (**(code **)((char *)"Abnormal program termination\r\n" + 6))(0x1000);
+      *(int *)((char *)0x47) = (int)((ulong)uVar5 >> 0x10);
+      uVar5 = (**(code **)((char *)0x43))(0x1000);
       iVar3 = (int)((ulong)uVar5 >> 0x10);
       if ((int)uVar5 != 0) {
         *(uint *)((char *)"Divide error\r\n" + 0xb) = uVar4;
@@ -1891,7 +1891,7 @@ void __cdecl16far __EXITEXT(void)
   
   uVar1 = (uint)startx;   /* hand fix: startx is a function */
   if (((char *)"Abnormal program termination\r\n")[5] != '\0') {
-    if (*(int *)((char *)"Abnormal program termination\r\n" + 10) == 0) {
+    if (*(int *)((char *)0x47) == 0) {
       if (iRam00000066 == 0x2272) {
         uRam00000064 = _BootHandlerCode;
         iRam00000066 = Int19Seg;
@@ -1899,8 +1899,8 @@ void __cdecl16far __EXITEXT(void)
       }
     }
     else {
-      (**(code **)((char *)"Abnormal program termination\r\n" + 6))(0x1000,0x2410);
-      (**(code **)((char *)"Abnormal program termination\r\n" + 6))(0x1000);
+      (**(code **)((char *)0x43))(0x1000,0x2410);
+      (**(code **)((char *)0x43))(0x1000);
     }
   }
   return;
@@ -1926,7 +1926,7 @@ int __cdecl16near __EXTCOPY(void)
   byte bVar7;
   
   uVar2 = (uint)startx;   /* hand fix: startx is a function */
-  if (*(int *)((char *)"Abnormal program termination\r\n" + 10) == 0) {
+  if (*(int *)((char *)0x47) == 0) {
     bVar7 = false;
     ((far_t *)(GSTARTX_SavedVectors + 1))->ofs = in_AX;
     *(byte *)&GSTARTX_SavedVectors[1].seg = (byte)in_DX;
@@ -1949,7 +1949,7 @@ int __cdecl16near __EXTCOPY(void)
     }
     else {
       *(undefined2 *)((char *)"Abnormal program termination\r\n" + 0x14) =
-           *(undefined2 *)((char *)"Abnormal program termination\r\n" + 10);
+           *(undefined2 *)((char *)0x47);
       bVar6 = in_AX < *(uint *)((char *)"Abnormal program termination\r\n" + 0xc);
       in_AX = in_AX - *(uint *)((char *)"Abnormal program termination\r\n" + 0xc);
       uVar5 = (in_DX - *(int *)((char *)"Abnormal program termination\r\n" + 0xe)) - (uint)bVar6;
@@ -1963,14 +1963,14 @@ int __cdecl16near __EXTCOPY(void)
     }
     else {
       *(undefined2 *)((char *)"Abnormal program termination\r\n" + 0x1a) =
-           *(undefined2 *)((char *)"Abnormal program termination\r\n" + 10);
+           *(undefined2 *)((char *)0x47);
       bVar6 = in_BX < *(uint *)((char *)"Abnormal program termination\r\n" + 0xc);
       in_BX = in_BX - *(uint *)((char *)"Abnormal program termination\r\n" + 0xc);
       uVar4 = (in_CX - *(int *)((char *)"Abnormal program termination\r\n" + 0xe)) - (uint)bVar6;
     }
     *(uint *)((char *)"Abnormal program termination\r\n" + 0x1c) = in_BX;
     ((far_t *)GSTARTX_SavedVectors)->ofs = uVar4;
-    iVar3 = (**(code **)((char *)"Abnormal program termination\r\n" + 6))(0x1000);
+    iVar3 = (**(code **)((char *)0x43))(0x1000);
     if (iVar3 != 0) {
       return 0;
     }

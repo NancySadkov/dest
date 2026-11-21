@@ -789,7 +789,7 @@ ovc27_combat	5ded:1c94	ovc27_rollToHitEntity	250	ok	ovc27_combat.c	int __cdecl16
 ovc27_combat	5ded:1d8e	ovc27_rollToHitAgent	297	ok	ovc27_combat.c	int __cdecl16far ovc27_rollToHitAgent(uint32_t agnt,byte column,...);
 ovc27_combat	5ded:1eb7	ovc27_compute3	298	ok	ovc27_combat.c	undefined2 __cdecl16far ovc27_compute3(uint32_t view,char frames,...);
 ovc27_combat	5ded:1fe1	ovc27_usesPlay_sfxU	293	ok	ovc27_combat.c	uint __cdecl16far ovc27_usesPlay_sfxU(uint16_t ptrOfs,uint16_t ptrSeg,agnt_t *agnt,uint8_t frames,...);
-ovc27_combat	5ded:218c	caseD_0_3	3	ok	ovc27_combat.c	void switchD_6000:3cd8::caseD_0_3(void);
+ovc27_combat	5ded:218c	caseD_0_3	3	ok	ovc27_combat.c	void switchD_6000_3cd8__caseD_0_3(void);
 ovc28_ui	6018:0000	ovc28_usesBDADailyTimeCounter	72	ok	ovc28_ui.c	void __cdecl16far ovc28_usesBDADailyTimeCounter(int ticks,...);
 ovc28_ui	6018:0048	ovc28_usesBlitLoadRleGfx	54	ok	ovc28_ui.c	void __cdecl16far ovc28_usesBlitLoadRleGfx(void);
 ovc28_ui	6018:007e	update_pause_button	248	ok	ovc28_ui.c	void __cdecl16far update_pause_button(void);
@@ -978,4 +978,41 @@ ovc45_unitinfo	77eb:09c1	ovc45_compute3	65	ok	ovc45_unitinfo.c	int __cdecl16far 
 ovc45_unitinfo	77eb:0a02	ovc45_usesGPopulationLo	232	ok	ovc45_unitinfo.c	void __cdecl16far ovc45_usesGPopulationLo(byte partyIndex,uint goldLo,int goldHi,...);
 ovc45_unitinfo	77eb:0aea	ovc45_compute4	215	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_compute4(int x,uint16_t y,...);
 ovc45_unitinfo	77eb:0bc1	ovc45_compute5	117	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_compute5(void);
-ovc45_unitinfo	77eb:0c36	ovc45_textArena2	299	ok	ovc45_unitinfo.c	bool __cdecl1
+ovc45_unitinfo	77eb:0c36	ovc45_textArena2	299	ok	ovc45_unitinfo.c	bool __cdecl16far ovc45_textArena2(byte bldType);
+ovc45_unitinfo	77eb:0d61	ovc45_buildPlacementMessage	1752	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_buildPlacementMessage(uint param_1,uint16_t param_2,int param_3,undefined2 param_4,char param_5);
+ovc45_unitinfo	77eb:16b2	ovc45_usesRandBelow	162	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_usesRandBelow(int entityIndex);
+ovc45_unitinfo	77eb:1754	ovc45_textDone	1102	ok	ovc45_unitinfo.c	void __cdecl16far ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t outFlag,uint16_t outFlagSeg,...);
+ovc45_unitinfo	77eb:1ba2	ovc45_compute6	17	ok	ovc45_unitinfo.c	bool __cdecl16far ovc45_compute6(uint16_t value,...);
+ovc45_unitinfo	77eb:1bb3	ovc45_textDone2	1333	ok	ovc45_unitinfo.c	void __cdecl16far ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t outFlag,uint16_t outFlagSeg,...);
+ovc45_unitinfo	77eb:20e8	ovc45_usesGfxRndSeed2	114	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_usesGfxRndSeed2(int *x,...);
+ovc45_unitinfo	77eb:215a	ovc45_usesGMapFlags4	121	ok	ovc45_unitinfo.c	int __cdecl16far ovc45_usesGMapFlags4(int x,int y,...);
+ovc45_unitinfo	77eb:21d3	ovc45_compute7	30	ok	ovc45_unitinfo.c	undefined2 __cdecl16far ovc45_compute7(byte a,byte b,...);
+ovc45_unitinfo	77eb:21f1	ovc45_showLandInfo	53	ok	ovc45_unitinfo.c	bool __cdecl16far ovc45_showLandInfo(int screenX,uint16_t y,...);
+ovc45_unitinfo	77eb:2226	ovc45_compute8	49	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_compute8(byte partyIndex,...);
+ovc45_unitinfo	77eb:2257	ovc45_costOrIncomeLabel	23	ok	ovc45_unitinfo.c	char * __cdecl16far ovc45_costOrIncomeLabel(int amount,...);
+ovc45_unitinfo	77eb:226e	ovc45_compute9	220	ok	ovc45_unitinfo.c	int __cdecl16far ovc45_compute9(char *dest,char *src,char *font,uint maxWidth,char mode,...);
+ovc45_unitinfo	77eb:234a	ovc45_usesGMapFlags5	285	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_usesGMapFlags5(char mode,uint x,int y);
+ovc46_assets	7a57:0000	init_assets1	15626	ok	ovc46_assets.c	void __cdecl16far init_assets1(bool grab,...);
+ovc47_constrct	7e7c:0000	constrct_usesGLeaderCount	75	ok	ovc47_constrct.c	void __cdecl16far constrct_usesGLeaderCount(void);
+ovc47_constrct	7e7c:004b	land_info	2805	ok	ovc47_constrct.c	void __cdecl16far land_info(byte tileOffset,...);
+ovc47_constrct	7e7c:0b40	constrct_compute1	92	ok	ovc47_constrct.c	int __cdecl16far constrct_compute1(void);
+ovc47_constrct	7e7c:0b9c	constrct_buildInfoText	6106	fail	ovc47_constrct.c	Exception while decompiling 7e7c:0b9c: process: timeout
+
+ovc47_constrct	7e7c:2b4c	constrct_usesLDIV_at_	834	ok	ovc47_constrct.c	void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex);
+ovc47_constrct	7e7c:2e8e	constrct_unitFlagsClear	224	ok	ovc47_constrct.c	uint __cdecl16far constrct_unitFlagsClear(int unitIndex);
+ovc48_assets2	81b9:0000	stshInitTxtFiles	134	ok	ovc48_assets2.c	void __cdecl16far stshInitTxtFiles(char grab,...);
+ovc48_assets2	81b9:0086	init_assets2	15870	ok	ovc48_assets2.c	void __cdecl16far init_assets2(bool grab,...);
+ovc48_assets2	81b9:3e84	grabBldLbm2	1389	ok	ovc48_assets2.c	void __cdecl16far grabBldLbm2(int16_t index,int16_t normal,int16_t ruin,...);
+ovc48_assets2	81b9:43f1	stshAllocBldStubs2	604	ok	ovc48_assets2.c	void __cdecl16far stshAllocBldStubs2(int16_t index,...);
+ovc49_agents	8699:0000	ovc49_usesFrameIndex	878	ok	ovc49_agents.c	undefined1 __cdecl16far ovc49_usesFrameIndex(agnt_t *agnt,byte *out);
+ovc49_agents	8699:036e	ovc49_usesFrameIndex2	878	ok	ovc49_agents.c	undefined1 __cdecl16far ovc49_usesFrameIndex2(agnt_t *agnt,byte *out);
+ovc49_agents	8699:06dc	ovc49_usesStExit	365	ok	ovc49_agents.c	int __cdecl16far ovc49_usesStExit(agnt_t *agnt,...);
+ovc49_agents	8699:0849	ovc49_compute1	43	ok	ovc49_agents.c	uint __cdecl16far ovc49_compute1(int x,...);
+ovc49_agents	8699:0874	ovc49_textLongerParalyzed	3741	ok	ovc49_agents.c	void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param);
+ovc49_agents	8699:1711	ovc49_agentIsActive	66	ok	ovc49_agents.c	undefined2 __cdecl16far ovc49_agentIsActive(agnt_t *agnt);
+ovc49_agents	8699:1753	ovc49_fillGridCells	369	ok	ovc49_agents.c	void * __cdecl16far ovc49_fillGridCells(byte count,agnt_t *agnt,...);
+ovc49_agents	8699:18c4	ovc49_body1	150	ok	ovc49_agents.c	uint __cdecl16far ovc49_body1(agnt_t *agnt,...);
+ovc49_agents	8699:1e09	ovc49_drawAgents	8643	ok	ovc49_agents.c	void __cdecl16far ovc49_drawAgents(void);
+ovc50_textui	8adb:0000	ovc50_usesBlitText	131	ok	ovc50_textui.c	void __cdecl16far ovc50_usesBlitText(char *text,uint16_t widths);
+ovc50_textui	8adb:0083	ovc50_usesStshLoadGfx	110	ok	ovc50_textui.c	void __cdecl16far ovc50_usesStshLoadGfx(byte gfxIndex);
+ovc50_textui	8adb:00f1	ovc50_usesUiInputText	111	ok	ovc50_textui.c	void __cdecl16far ovc50_usesUiInputText(void);

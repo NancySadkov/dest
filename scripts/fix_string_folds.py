@@ -19,6 +19,19 @@ import sys
 LIT = re.compile(r'\(char \*\)"([^"]*)" \+ (\d+)')
 NAME = re.compile(r"^s_(.+)_([0-9a-fA-F]{4})_([0-9a-fA-F]{4})$")
 
+def norm(t):
+    """Collapse escapes and punctuation so a literal matches its symbol text."""
+    t = t.replace("\\r", " ").replace("\\n", " ").replace("\\t", " ")
+    t = t.replace("\\'", "'").replace('\\"', '"')
+    out = []
+    for ch in t:
+        out.append(ch if (ch.isalnum() or ch == " ") else " ")
+    t = "".join(out)
+    while "  " in t:
+        t = t.replace("  ", " ")
+    return t.strip().lower()
+
+
 addr = {}
 for line in list(io.open("tmp/dg12.tsv", encoding="utf-8", errors="replace"))[1:]:
     p = line.rstrip("\n").split("\t")
@@ -27,8 +40,17 @@ for line in list(io.open("tmp/dg12.tsv", encoding="utf-8", errors="replace"))[1:
     m = NAME.match(p[1])
     if not m:
         continue
-    text = m.group(1).replace("_", " ")
+    text = norm(m.group(1))
     addr.setdefault(text, (int(m.group(2), 16), int(m.group(3), 16)))
+
+for line in list(io.open("tmp/dg12.tsv", encoding="utf-8", errors="replace"))[1:]:
+    q = line.rstrip("\n").split("\t")
+    if len(q) < 4 or ":" not in q[0] or not q[1].startswith("s_"):
+        continue
+    if NAME.match(q[1]):
+        continue
+    seg, off = q[0].split(":")
+    addr.setdefault(norm(q[1][2:]), (int(seg, 16), int(off, 16)))
 
 print("string symbols with an encoded address:", len(addr))
 
@@ -47,7 +69,14 @@ for name in sorted(os.listdir("src/decompiled")):
         if delta == 0:
             miss += 1
             continue          # zero delta is a genuine string reference
-        hit = addr.get(lit)
+        hit = addr.get(norm(lit))
+        if hit is None:
+            # the printed literal can be truncated; accept the shortest symbol
+            # whose text starts with it
+            key = norm(lit)
+            cands = [v for k, v in addr.items() if k.startswith(key) and len(k) > len(key)]
+            if len(cands) == 1:
+                hit = cands[0]
         if hit is None:
             miss += 1
             continue

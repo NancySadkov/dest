@@ -635,7 +635,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                       pcVar5 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,param_00));
                       puVar6 = ovr_ovc15_usesStshRealloc(pcVar5,(char)uVar4,uVar12,uVar8);
                       pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x846c,unaff_SS),
-                                             (char *)CONCAT22(puVar6,(char *)"puppetmaker" + 3),
+                                             (char *)CONCAT22(puVar6,(char *)0x2410),
                                              (char)uVar4);
                       ovr_uiNotify(pcVar5,uVar4,(char)uVar4);
                     }
@@ -1330,7 +1330,7 @@ L_OVC49_8699_18c4_1CA7:
         uVar15 = ovr_ovc45_compute8(((unit_t *)GUnits)[uStackY_26].unitType);
         if (((char)uVar15 != '\0') && (*(char *)(((uint)uStackY_22 >> 8) * 0x27 + 300) != '\0')) {
           (&stack0xffec)[iVar14] = 3;
-          auStackY_2f2[iVar14 * 2 + 1] = (char *)"puppetmaker" + 3;
+          auStackY_2f2[iVar14 * 2 + 1] = (char *)0x2410;
           auStackY_2f2[iVar14 * 2] = (char *)"Upgrade";
           iVar14 = iVar14 + 1;
           uVar27 = 0x195d;
@@ -1349,7 +1349,7 @@ L_OVC49_8699_18c4_1CA7:
       }
       else {
         (&stack0xffec)[iVar14] = 2;
-        auStackY_2f2[iVar14 * 2 + 1] = (char *)"puppetmaker" + 3;
+        auStackY_2f2[iVar14 * 2 + 1] = (char *)0x2410;
         auStackY_2f2[iVar14 * 2] = (char *)"Repair";
         iVar14 = iVar14 + 1;
         uVar15 = *(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x125);
@@ -1369,7 +1369,7 @@ L_OVC49_8699_18c4_1CA7:
       if ((((*(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x121) & 0x400) == 0) && (bVar9 != 0xff)) &&
          (*(char *)((int)*(undefined4 *)((uint)bVar9 << 2) + 0x3f) == '\0')) {
         (&stack0xffec)[iVar14] = 7;
-        auStackY_2f2[iVar14 * 2 + 1] = (char *)"puppetmaker" + 3;
+        auStackY_2f2[iVar14 * 2 + 1] = (char *)0x2410;
         auStackY_2f2[iVar14 * 2] = (char *)"Information";
         iVar14 = iVar14 + 1;
       }
@@ -1378,19 +1378,19 @@ L_OVC49_8699_18c4_1CA7:
         uVar33 = 0x24;
         if (*(char *)((int)Entities + (*(uint16_t *)((uint8_t *)&(in_stack_00000008) + 2)) * 0x37 + 0x1a) != (char)uStackY_24) {
           (&stack0xffec)[iVar14] = 6;
-          auStackY_2f2[iVar14 * 2 + 1] = (char *)"puppetmaker" + 3;
+          auStackY_2f2[iVar14 * 2 + 1] = (char *)0x2410;
           auStackY_2f2[iVar14 * 2] = (char *)"New Owner";
           iVar14 = iVar14 + 1;
         }
       }
       if (in_stack_00000010 != '\0') {
         (&stack0xffec)[iVar14] = 4;
-        auStackY_2f2[iVar14 * 2 + 1] = (char *)"puppetmaker" + 3;
+        auStackY_2f2[iVar14 * 2 + 1] = (char *)0x2410;
         auStackY_2f2[iVar14 * 2] = (char *)"Change Party";
         iVar14 = iVar14 + 1;
       }
       (&stack0xffec)[iVar14] = 5;
-      auStackY_2f2[iVar14 * 2 + 1] = (char *)"puppetmaker" + 3;
+      auStackY_2f2[iVar14 * 2 + 1] = (char *)0x2410;
       auStackY_2f2[iVar14 * 2] = (char *)"Done";
       pcVar26 = (char *)(iVar14 + 1);
       pcVar10 = (char *)CONCAT11(uVar33,(byte)uStackY_22);
@@ -1449,18 +1449,18 @@ code_r0x00088b64:
             uVar31 = CONCAT31(CONCAT21(uVar27,cVar8),uVar7);
             if (*(char *)((int)uStackY_22 * 0x34 + 0x11) == '\0') {
               iVar14 = ovr_agnt_clampX(*(int *)((int)uStackY_22 * 0x34));
-              iStackY_28 = *(int *)(iVar14 * 2 + 0x34c) + *(int *)((int)uStackY_22 * 0x34 + 2) + 3;
+              iStackY_28 = *(int *)(&columnScreenY[iVar14]) + *(int *)((int)uStackY_22 * 0x34 + 2) + 3;
             }
             else {
               iVar14 = ovr_agnt_clampX(*(int *)((int)uStackY_22 * 0x34));
-              iStackY_28 = *(int *)(iVar14 * 2 + 0x34c) + *(int *)((int)uStackY_22 * 0x34 + 2) +
+              iStackY_28 = *(int *)(&columnScreenY[iVar14]) + *(int *)((int)uStackY_22 * 0x34 + 2) +
                            -0x16;
             }
-            pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+            pbVar29 = (brect_t *)((char *)0x22ff);
             *(int *)((int)uStackY_22 * 0x34 + 0x28) = iStackY_28;
             if ((*(char *)((int)uStackY_22 * 0x34 + 0x10) == '\x05') &&
                (*(char *)((int)uStackY_22 * 0x34 + 0xc) != -1)) {
-              pbVar29 = (brect_t *)((char *)"builder\'s hall" + 8);
+              pbVar29 = (brect_t *)((char *)0x23d5);
               ovr_ovc41_usesXOfs((int)uStackY_22);
             }
             uVar27 = ovc49_agentIsActive((agnt_t *)
@@ -1493,7 +1493,7 @@ code_r0x00088b64:
                     uVar16 = ovr_randBelow(2);
                     *(undefined1 *)((int)uStackY_22 * 0x34 + 5) = (char)uVar16;
                   }
-                  pbVar29 = (brect_t *)((char *)"glassworks" + 9);
+                  pbVar29 = (brect_t *)((char *)0x2337);
                   if (*(char *)((int)uStackY_22 * 0x34 + 4) == '\0') {
                     *(undefined1 *)((int)uStackY_22 * 0x34 + 5) = 0;
                   }
@@ -1526,7 +1526,7 @@ code_r0x00088b64:
                       *(char *)((int)uStackY_22 * 0x34 + 4) = -*(char *)((int)uStackY_22 * 0x34 + 4)
                       ;
                     }
-                    pbVar29 = (brect_t *)((char *)"glassworks" + 9);
+                    pbVar29 = (brect_t *)((char *)0x2337);
                     uVar16 = ovr_randBelow(3);
                     *(char *)((int)uStackY_22 * 0x34 + 5) = (char)uVar16 + -1;
                   }
@@ -1557,7 +1557,7 @@ code_r0x00088b64:
                     }
                   }
                   else {
-                    pbVar29 = (brect_t *)((char *)"glassworks" + 9);
+                    pbVar29 = (brect_t *)((char *)0x2337);
                     uVar16 = ovr_randBelow(2);
                     *(char *)((int)uStackY_22 * 0x34 + 4) = (char)uVar16 * '\x02' + -1;
                   }
@@ -1581,7 +1581,7 @@ L_OVC49_8699_1e09_2982:
             cVar6 = (char)((ulong)uVar31 >> 0x18);
             ovc49_fillGridCells((byte)uStackY_22 + 1);
             if (cVar6 != '\0') {
-              pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+              pbVar29 = (brect_t *)((char *)0x22ff);
               uVar27 = ovr_agnt_usesAgntSaved((int)uStackY_22);
               if ((char)uVar27 != '\0') {
                 uStackY_22 = (cte_t *)(uStackY_22[-1].info + 0xb);
@@ -1655,14 +1655,14 @@ L_OVC49_8699_1e09_29B9:
                                  (char *)CONCAT13((char)((uint)pcVar10 >> 8),
                                                   CONCAT12((char)pcVar10,(int)*(undefined4 *)pcVar26
                                                           )));
-        pcStack_8 = (char *)"glassworks" + 9;
-        in_stack_0000fff6 = (stg_tmp_t *)((char *)"choose" + 4);
+        pcStack_8 = (char *)0x2337;
+        in_stack_0000fff6 = (stg_tmp_t *)((char *)0x5fd);
         strcpy((char *)CONCAT13(uVar38,CONCAT12(bVar36,auStackY_2ca)),
                (char *)CONCAT22(pcVar10,pcVar21));
         break;
       case (cte_t *)0x3:
         SpecialColors[2] =
-             ((char *)"If you lead with wisdom and cunning..." + 9)[(in_stack_0000fff6->aptr).ofs];
+             ((char *)0x7416)[(in_stack_0000fff6->aptr).ofs];
         SpecialColors[3] =
              ((char *)"ENTER: use previous configuration, SPACE: reconfigure, ESC: quit" + 0x12)
              [(in_stack_0000fff6->aptr).ofs];
@@ -1672,7 +1672,7 @@ L_OVC49_8699_1e09_29B9:
         SpecialColors[6] =
              *(uint8_t *)((int)(char **)&youlose1Cut1Seg + (in_stack_0000fff6->aptr).ofs);
         SpecialColors[7] = *(uint8_t *)((in_stack_0000fff6->aptr).ofs + 0x936e);
-        pcVar10 = (char *)"puppetmaker" + 3;
+        pcVar10 = (char *)0x2410;
         SpecialColors[1] = bVar9;
         specialColorsOfs = ovr_stshWrite((uint32_t *)SpecialColors);
         specialColorsSeg = pcVar10;
@@ -2937,7 +2937,7 @@ L_OVC49_8699_1e09_3BDE:
   GGameState = 0x38;
   pbVar19 = pbVar29;
   if (DebugVerbose != false) {
-    pbVar19 = (brect_t *)((char *)"glassworks" + 9);
+    pbVar19 = (brect_t *)((char *)0x2337);
     printf("%d \r");
   }
   uVar16 = *(int *)((int)uStackY_22 * 0x34) + 0xc;
@@ -2945,17 +2945,17 @@ L_OVC49_8699_1e09_3BDE:
     bVar9 = 0x3e;
     uVar33 = 0x95;
     iVar18 = ovr_agnt_clampX(*(int *)((int)uStackY_22 * 0x34));
-    iStackY_28 = *(int *)(iVar18 * 2 + 0x34c) + *(int *)((int)uStackY_22 * 0x34 + 2) + 3;
+    iStackY_28 = *(int *)(&columnScreenY[iVar18]) + *(int *)((int)uStackY_22 * 0x34 + 2) + 3;
   }
   else {
     bVar9 = 0xd9;
     uVar33 = 0x94;
     iVar18 = ovr_agnt_clampX(*(int *)((int)uStackY_22 * 0x34));
     uVar31 = *(undefined4 *)((int)uStackY_22 * 0x34 + 0x1d);
-    iStackY_28 = *(int *)(iVar18 * 2 + 0x34c) + *(int *)((int)uStackY_22 * 0x34 + 2) +
+    iStackY_28 = *(int *)(&columnScreenY[iVar18]) + *(int *)((int)uStackY_22 * 0x34 + 2) +
                  (int)*(char *)((int)uVar31 + 0x52) + -0x16;
   }
-  pbVar28 = (brect_t *)((char *)"mason\'s hall" + 6);
+  pbVar28 = (brect_t *)((char *)0x22ff);
   *(uint16_t *)((int)uStackY_22 * 0x34 + 0x26) = uVar16;
   *(int *)((int)uStackY_22 * 0x34 + 0x28) = iStackY_28;
   if ((*(uint *)((int)uStackY_22 * 0x34 + 0x2b) & 0x800) == 0) {
@@ -2963,7 +2963,7 @@ L_OVC49_8699_1e09_3BDE:
       GGameState = 0x32;
       pbVar19 = &bStackY_32;
       in_stack_0000ffe4 = 0x22ff;
-      pbVar28 = (brect_t *)((char *)"bath house" + 10);
+      pbVar28 = (brect_t *)((char *)0x22d3);
       gfx.seg = uVar16;
       gfx.ofs = (uint16_t)(psVar17->cmap + 6);
       bVar9 = bVar36;
@@ -2977,7 +2977,7 @@ L_OVC49_8699_1e09_3BDE:
         *pcVar1 = *pcVar1 + -1;
         uVar15 = bVar9 & 3;
         in_stack_0000ffe4 = 0x22d3;
-        pbVar28 = (brect_t *)((char *)"bath house" + 10);
+        pbVar28 = (brect_t *)((char *)0x22d3);
         gfx_00.seg = ((undefined2 *)&crossBlitType2Seg)[uVar15 * 2];
         gfx_00.ofs = ((undefined2 *)&crossBlitType2Ofs)[uVar15 * 2];
         bVar9 = bVar36;
@@ -2994,7 +2994,7 @@ L_OVC49_8699_1e09_3BDE:
         pbVar19 = &bStackY_32;
         uVar15 = *(byte *)((int)uStackY_22 * 0x34 + 0x23) & 3;
         in_stack_0000ffe4 = 0x22d3;
-        pbVar28 = (brect_t *)((char *)"bath house" + 10);
+        pbVar28 = (brect_t *)((char *)0x22d3);
         gfx_03.seg = ((undefined2 *)&crossBlitType2Seg)[uVar15 * 2];
         gfx_03.ofs = ((undefined2 *)&crossBlitType2Ofs)[uVar15 * 2];
         bVar9 = bVar36;
@@ -3011,7 +3011,7 @@ L_OVC49_8699_1e09_3BDE:
       else {
         pbVar19 = &bStackY_32;
         in_stack_0000ffe4 = 0x22ff;
-        pbVar28 = (brect_t *)((char *)"bath house" + 10);
+        pbVar28 = (brect_t *)((char *)0x22d3);
         gfx_01.seg = uVar16;
         gfx_01.ofs = (uint16_t)(psVar17->cmap + 6);
         bVar9 = bVar36;
@@ -3027,7 +3027,7 @@ L_OVC49_8699_1e09_3BDE:
       if ((char)(in_stack_0000ffe4 >> 8) == '\x12') {
         pbVar19 = &bStackY_32;
         in_stack_0000ffe4 = 0x22ff;
-        pbVar28 = (brect_t *)((char *)"bath house" + 10);
+        pbVar28 = (brect_t *)((char *)0x22d3);
         gfx_04.seg = uVar16;
         gfx_04.ofs = (uint16_t)(psVar17->cmap + 6);
         bVar9 = bVar36;
@@ -3036,7 +3036,7 @@ L_OVC49_8699_1e09_3BDE:
         if ((int)(uint)*(byte *)((int)&pbVar19[2].h + 1) <= *(int *)((int)uStackY_22 * 0x34 + 6) + 1
            ) {
           *(undefined1 *)((int)uStackY_22 * 0x34 + 0x25) = 2;
-          pbVar28 = (brect_t *)((char *)"builder\'s hall" + 8);
+          pbVar28 = (brect_t *)((char *)0x23d5);
           bVar9 = 0x9a;
           uVar33 = 0x99;
           ovr_ovc41_paralyzeNearbyAgents((int)uStackY_22);
@@ -3052,13 +3052,13 @@ L_OVC49_8699_1e09_3BDE:
         gfx_09.seg = (uint16_t)unaff_SS;
         gfx_09.ofs = (uint16_t)&bStackY_32.h;
         uStackY_22 = (cte_t *)0x2337;
-        pbVar28 = (brect_t *)((char *)"bath house" + 10);
+        pbVar28 = (brect_t *)((char *)0x22d3);
         uStackY_26 = CONCAT22(0x98d2,uStackY_26);
         in_stack_0000ffe4 = uVar16;
         ovr_gfxRlePrepare(gfx_09,uVar16);
         if (*(char *)((int)uStackY_22 * 0x34 + 0x23) == '\0') {
           *(undefined1 *)((int)uStackY_22 * 0x34 + 0x25) = 2;
-          pbVar28 = (brect_t *)((char *)"builder\'s hall" + 8);
+          pbVar28 = (brect_t *)((char *)0x23d5);
           bVar9 = 0x20;
           uVar33 = 0x99;
           ovr_ovc41_paralyzeNearbyAgents((int)uStackY_22);
@@ -3079,7 +3079,7 @@ L_OVC49_8699_1e09_3BDE:
     gfx_08.seg = (uint16_t)unaff_SS;
     gfx_08.ofs = (uint16_t)&bStackY_32.h;
     uStackY_22 = (cte_t *)0x22ff;
-    pbVar28 = (brect_t *)((char *)"bath house" + 10);
+    pbVar28 = (brect_t *)((char *)0x22d3);
     uStackY_26 = CONCAT22(0x95e4,uStackY_26);
     in_stack_0000ffe4 = uVar16;
     ovr_gfxRlePrepare(gfx_08,uVar16);
@@ -3087,7 +3087,7 @@ L_OVC49_8699_1e09_3BDE:
   pbVar29 = pbVar28;
   if (*(char *)((int)uStackY_22 * 0x34 + 0x30) != '\0') {
     uVar33 = (undefined1)((uint)&bStackY_32 >> 8);
-    pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+    pbVar29 = (brect_t *)((char *)0x22ff);
     bVar9 = (byte)uStackY_22;
     ovr_agnt_drawSpriteFrame((byte)uStackY_22);
     pbVar19 = pbVar28;
@@ -3109,7 +3109,7 @@ L_OVC49_8699_1e09_3BDE:
             ovr_play_sfxU(0x33);
           }
           animBranchCode = 9;
-          pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+          pbVar29 = (brect_t *)((char *)0x22ff);
           ovr_agnt_advanceAnimFrame((agnt_t *)((int)uStackY_22 * 0x34));
         }
         else {
@@ -3121,7 +3121,7 @@ L_OVC49_8699_1e09_3BDE:
                           ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
                            (byte *)CONCAT13(uVar38,CONCAT12(bVar36,&stack0xffe4)));
         if (cVar8 != '\0') {
-          pbVar29 = (brect_t *)((char *)"elf outpost" + 8);
+          pbVar29 = (brect_t *)((char *)0x2389);
           uVar15 = ovr_ovc27_compute1((agnt_t *)((int)uStackY_22 * 0x34));
           if ((char)uVar15 != '\0') {
             *(char *)((int)uStackY_22 * 0x34 + 0xc) = cVar6 + -1;
@@ -3129,17 +3129,17 @@ L_OVC49_8699_1e09_3BDE:
           }
         }
         animBranchCode = 10;
-        pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+        pbVar29 = (brect_t *)((char *)0x22ff);
         ovr_agnt_advanceAnimFrame((agnt_t *)((int)uStackY_22 * 0x34));
       }
       else if (((*(char *)((int)uStackY_22 * 0x34 + 0xd) == '\x02') ||
                (*(char *)((int)uStackY_22 * 0x34 + 0xd) == '\x04')) ||
               (*(char *)((int)uStackY_22 * 0x34 + 0xd) == '\x05')) {
-        pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+        pbVar29 = (brect_t *)((char *)0x22ff);
         cVar8 = ovr_agnt_computeFrameExtents((agnt_t *)((int)uStackY_22 * 0x34));
         if (cVar8 == '\0') {
           animBranchCode = 0xb;
-          pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+          pbVar29 = (brect_t *)((char *)0x22ff);
           ovr_agnt_advanceAnimFrame((agnt_t *)((int)uStackY_22 * 0x34));
         }
         else {
@@ -3156,15 +3156,15 @@ L_OVC49_8699_1e09_3310:
           ((0x14 < *(int *)((int)uStackY_22 * 0x34 + 2) ||
            (0x14 < *(int *)((uint)bVar9 * 0x34 + -0x32))))))) {
         animBranchCode = 0xc;
-        pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+        pbVar29 = (brect_t *)((char *)0x22ff);
         ovr_agnt_advanceAnimFrame((agnt_t *)((int)uStackY_22 * 0x34));
       }
       else if (*(char *)((int)uStackY_22 * 0x34 + 0xd) == '\x01') {
-        pbVar29 = (brect_t *)((char *)"elf outpost" + 8);
+        pbVar29 = (brect_t *)((char *)0x2389);
         uVar15 = ovr_ovc27_spellNotice((int)uStackY_22);
         if ((uVar15 & 0xff) == 0) {
           animBranchCode = 0xf;
-          pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+          pbVar29 = (brect_t *)((char *)0x22ff);
           ovr_agnt_advanceAnimFrame((agnt_t *)((int)uStackY_22 * 0x34));
         }
       }
@@ -3196,7 +3196,7 @@ L_OVC49_8699_1e09_3310:
         iVar18 = -0x60d4;
         ovr_audio_panFromX((agnt_t *)((int)uStackY_22 * 0x34));
         ovr_play_sfxU(*(byte *)(iVar18 + 0x1d));
-        pbVar29 = (brect_t *)((char *)"builder\'s hall" + 8);
+        pbVar29 = (brect_t *)((char *)0x23d5);
         ovr_ovc41_resolveSpecialAttack
                   ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
                    (uint)*(byte *)((int)uStackY_22 * 0x34 + 0xc));
@@ -3224,7 +3224,7 @@ L_OVC49_8699_1e09_3310:
           }
         }
         animBranchCode = 0xd;
-        pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+        pbVar29 = (brect_t *)((char *)0x22ff);
         ovr_agnt_advanceAnimFrame((agnt_t *)((int)uStackY_22 * 0x34));
       }
       else if (*(char *)((int)uStackY_22 * 0x34 + 0xd) == '\x05') {
@@ -3239,20 +3239,20 @@ L_OVC49_8699_1e09_3310:
         iVar18 = -0x5e71;
         ovr_audio_panFromX((agnt_t *)((int)uStackY_22 * 0x34));
         ovr_play_sfxU(*(byte *)(iVar18 + 0x1d));
-        pbVar29 = (brect_t *)((char *)"builder\'s hall" + 8);
+        pbVar29 = (brect_t *)((char *)0x23d5);
         ovr_ovc41_resolveSpecialAttack
                   ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
                    (uint)*(byte *)((int)uStackY_22 * 0x34 + 0xc));
       }
       else {
         animBranchCode = 0xe;
-        pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+        pbVar29 = (brect_t *)((char *)0x22ff);
         ovr_agnt_advanceAnimFrame((agnt_t *)((int)uStackY_22 * 0x34));
       }
     }
   }
   else {
-    pbVar29 = (brect_t *)((char *)"builder\'s hall" + 8);
+    pbVar29 = (brect_t *)((char *)0x23d5);
     ovr_ovc41_resolveSpecialAttack
               ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
                (uint)*(byte *)((int)uStackY_22 * 0x34 + 0xc));
@@ -3266,7 +3266,7 @@ L_OVC49_8699_1e09_3310:
   *piVar2 = *piVar2 + 1;
   if (*(char *)((int)uStackY_22 * 0x34 + 0xe) != -1) {
     if (*(char *)((int)uStackY_22 * 0x34 + 0xc) == -1) {
-      pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+      pbVar29 = (brect_t *)((char *)0x22ff);
       ovr_agnt_usesAnimFrame((agnt_t *)((int)uStackY_22 * 0x34));
       animBranchCode = 7;
     }
@@ -3307,7 +3307,7 @@ L_OVC49_8699_1e09_3310:
       cVar6 = (char)(uVar16 >> 8);
       puVar32 = psVar17->cmap + 6;
       in_stack_0000ffe4 = 0x2337;
-      pbVar29 = (brect_t *)((char *)"bath house" + 10);
+      pbVar29 = (brect_t *)((char *)0x22d3);
       gfx_05.seg = uVar16;
       gfx_05.ofs = (uint16_t)puVar32;
       bVar9 = bVar36;
@@ -3327,8 +3327,8 @@ L_OVC49_8699_1e09_3310:
         puVar32 = puVar32 + 1;
         if ((undefined1 *)(*(byte *)((int)&pbVar19[2].w + 1) + 1) == puVar32) {
           agnt_00 = (agnt_t *)((int)uStackY_22 * 0x34);
-          pbVar19 = (brect_t *)((char *)"bath house" + 10);
-          pbVar29 = (brect_t *)((char *)"builder\'s hall" + 8);
+          pbVar19 = (brect_t *)((char *)0x22d3);
+          pbVar29 = (brect_t *)((char *)0x23d5);
           ovr_ovc41_specialAttack(agnt_00);
         }
         if ((int)puVar32 < (int)(uint)*(byte *)((int)&pbVar19[2].h + 1)) {
@@ -3336,17 +3336,17 @@ L_OVC49_8699_1e09_3310:
         }
         else {
           animBranchCode = 8;
-          pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+          pbVar29 = (brect_t *)((char *)0x22ff);
           ovr_agnt_usesAnimFrame((agnt_t *)((int)uStackY_22 * 0x34));
         }
       }
       else {
-        pbVar29 = (brect_t *)((char *)"mason\'s hall" + 6);
+        pbVar29 = (brect_t *)((char *)0x22ff);
         ovr_agnt_usesStExit((agnt_t *)((int)uStackY_22 * 0x34));
       }
     }
     else {
-      pbVar29 = (brect_t *)((char *)"elf outpost" + 8);
+      pbVar29 = (brect_t *)((char *)0x2389);
       ovr_ovc27_usesBlitGfxRect((int)uStackY_22);
     }
   }
@@ -3640,11 +3640,11 @@ void __cdecl16far ovc49_drawAgents(void)
     }
     if (*(char *)(uStack_22 * 0x34 + 0x11) == '\0') {
       iVar17 = ovr_agnt_clampX(*(int *)(uStack_22 * 0x34));
-      iStack_28 = *(int *)(iVar17 * 2 + 0x34c) + *(int *)(uStack_22 * 0x34 + 2) + 3;
+      iStack_28 = *(int *)(&columnScreenY[iVar17]) + *(int *)(uStack_22 * 0x34 + 2) + 3;
     }
     else {
       iVar17 = ovr_agnt_clampX(*(int *)(uStack_22 * 0x34));
-      iStack_28 = *(int *)(iVar17 * 2 + 0x34c) + *(int *)(uStack_22 * 0x34 + 2) + -0x16;
+      iStack_28 = *(int *)(&columnScreenY[iVar17]) + *(int *)(uStack_22 * 0x34 + 2) + -0x16;
     }
     *(int *)(uStack_22 * 0x34 + 0x28) = iStack_28;
     if ((*(char *)(uStack_22 * 0x34 + 0x10) == '\x05') && (*(char *)(uStack_22 * 0x34 + 0xc) != -1))
@@ -3787,12 +3787,12 @@ void __cdecl16far ovc49_drawAgents(void)
     iVar17 = *(int *)(uStack_22 * 0x34) + 0xc;
     if (*(char *)(uStack_22 * 0x34 + 0x11) == '\0') {
       iVar14 = ovr_agnt_clampX(*(int *)(uStack_22 * 0x34));
-      iStack_28 = *(int *)(iVar14 * 2 + 0x34c) + *(int *)(uStack_22 * 0x34 + 2) + 3;
+      iStack_28 = *(int *)(&columnScreenY[iVar14]) + *(int *)(uStack_22 * 0x34 + 2) + 3;
     }
     else {
       iVar14 = ovr_agnt_clampX(*(int *)(uStack_22 * 0x34));
       uVar6 = *(undefined4 *)(uStack_22 * 0x34 + 0x1d);
-      iStack_28 = *(int *)(iVar14 * 2 + 0x34c) + *(int *)(uStack_22 * 0x34 + 2) +
+      iStack_28 = *(int *)(&columnScreenY[iVar14]) + *(int *)(uStack_22 * 0x34 + 2) +
                   (int)*(char *)((int)uVar6 + 0x52) + -0x16;
     }
     *(int *)(uStack_22 * 0x34 + 0x26) = iVar17;

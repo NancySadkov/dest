@@ -452,7 +452,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     plVar6 = LXMUL_at_(unaff_DI,lVar17,in_stack_0000ff62);
     uStack_12 = (undefined2)(lVar16 + 1);
     msg = ovr_stsprintf(&stack0xff60,(char *)CONCAT22(0x81dc,unaff_SS),
-                        (char *)CONCAT22(plVar6,(char *)"puppetmaker" + 3),uVar14,uStack_12,uVar7,
+                        (char *)CONCAT22(plVar6,(char *)0x2410),uVar14,uStack_12,uVar7,
                         uVar5);
     ovr_say(msg);
     lVar17 = LDIV_at_((ulong)uVar5,10);

@@ -344,7 +344,7 @@ void __cdecl16far ovc41_unitStatusText(byte menuIndex,...)
     dst = 0x217a;
     uVar3 = ovc41_pluralSuffix(count,*puVar2,puVar2[1],pcVar1,uVar3,uVar5,uVar6);
     pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6e86,unaff_SS),
-                           (char *)CONCAT22(count,(char *)"puppetmaker" + 3),uVar3,dst);
+                           (char *)CONCAT22(count,(char *)0x2410),uVar3,dst);
     ovr_drawTextAt(pcVar1,dst);
   }
   return;
@@ -514,7 +514,7 @@ void __cdecl16far ovc41_usesXOfs(int agntIndex,...)
   
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&xOfs;
-  F_SCOPY((far_t)0x24106e00,dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24106e00)),dst);
   uVar1 = (uint)*(byte *)(agntIndex * 0x34 + 0xc);
   iStack_c = *(int *)(agntIndex * 0x34 + 6);
   if (2 < iStack_c) {
@@ -768,7 +768,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
               pcVar10 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,pcVar10));
               puVar4 = ovr_ovc15_usesStshRealloc(pcVar10,(char)uVar6,uVar11);
               pcVar10 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6f0f,unaff_SS),
-                                      (char *)CONCAT22(puVar4,(char *)"puppetmaker" + 3),(char)uVar6
+                                      (char *)CONCAT22(puVar4,(char *)0x2410),(char)uVar6
                                      );
               ovr_uiNotify(pcVar10,uVar6);
             }
@@ -777,7 +777,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
               pcVar10 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,pcVar10));
               puVar4 = ovr_ovc15_usesStshRealloc(pcVar10,(char)uVar6,uVar11);
               pcVar10 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ef8,unaff_SS),
-                                      (char *)CONCAT22(puVar4,(char *)"puppetmaker" + 3),(char)uVar6
+                                      (char *)CONCAT22(puVar4,(char *)0x2410),(char)uVar6
                                      );
               ovr_uiNotify(pcVar10,uVar6);
             }
@@ -821,7 +821,7 @@ void __cdecl16far ovc41_buildingNotice(char delta,...)
     ovr_constr_flushDirtyRects();
     uVar2 = 0x195d;
     msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6f23,unaff_SS),
-                        (char *)(ulong)CONCAT12(bStack_3,(char *)"puppetmaker" + 3),
+                        (char *)(ulong)CONCAT12(bStack_3,(char *)0x2410),
                         *(undefined2 *)((uint)bStack_3 * 0x27 + 0x10e),
                         *(undefined2 *)((uint)bStack_3 * 0x27 + 0x110));
     ovr_say(msg,uVar2);
@@ -1565,14 +1565,14 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
       *(undefined2 *)(iVar14 + -0xe) = (uint16_t)((char *)"%d building%s repaired.");
       *(uint16_t *)(iVar14 + -0x10) = unaff_SS;
       *(int *)(iVar14 + -0x12) = (int)auStack_80;
-      *(char **)((char *)init_textFilename + iVar14) = (char *)"builder\'s hall" + 8;
+      *(char **)((char *)init_textFilename + iVar14) = (char *)0x23d5;
       *(undefined2 *)(iVar14 + -0x16) = (uint16_t)(0x89c6);
       pcVar6 = ovr_stsprintf((char *)*(undefined2 *)(iVar14 + -0x12),
                              (char *)*(undefined4 *)(iVar14 + -0x10),
                              (char *)*(undefined4 *)(iVar14 + -0xc));
       *(undefined2 *)(iVar14 + -6) = (uint16_t)(pcVar12);
       *(undefined2 *)(iVar14 + -8) = (uint16_t)(pcVar6);
-      *(undefined2 *)(iVar14 + -10) = (uint16_t)((char *)"glassworks" + 9);
+      *(undefined2 *)(iVar14 + -10) = (uint16_t)((char *)0x2337);
       *(undefined2 *)(iVar14 + -0xc) = (uint16_t)(0x89d0);
       ovr_uiNotify((char *)*(undefined2 *)(iVar14 + -8),*(uint16_t *)(iVar14 + -6));
     }
@@ -1845,17 +1845,17 @@ void __cdecl16far uiMainMenu(void)
   MenuModeSaved = MenuMode;
   gfx.seg = nwpanel1Cut2Seg;
   gfx.ofs = nwpanel1Cut2Ofs;
-  ovr_blitLoadRleGfx(gfx,(far_t)0xa000e249);
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000e249)));
   gfx_00.seg = trianglsCut6Seg;
   gfx_00.ofs = trianglsCut6Ofs;
-  ovr_blitLoadRleGfx(gfx_00,(far_t)0xa000e249);
+  ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa000e249)));
   ovr_uiMainMenuLoop();
   gfx_01.seg = nwpanel1Cut2Seg;
   gfx_01.ofs = nwpanel1Cut2Ofs;
-  ovr_blitLoadRleGfx(gfx_01,(far_t)0xa000e249);
+  ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa000e249)));
   gfx_02.seg = trianglsCut5Seg;
   gfx_02.ofs = trianglsCut5Ofs;
-  ovr_blitLoadRleGfx(gfx_02,(far_t)0xa000e249);
+  ovr_blitLoadRleGfx(gfx_02,far_from_u32((uint32_t)(0xa000e249)));
   ovc41_usesGMenuItem();
   return;
 }
@@ -2006,7 +2006,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t *source,agnt_t *victim,uint s
       pcVar2 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&sourceName,pcVar6));
       puVar4 = ovr_ovc15_usesStshRealloc(pcVar2,in_DX,uVar8,uVar5,uVar9);
       pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6f63,unaff_SS),
-                             (char *)CONCAT22(puVar4,(char *)"puppetmaker" + 3),in_DX);
+                             (char *)CONCAT22(puVar4,(char *)0x2410),in_DX);
       ovr_uiNotify(pcVar2,in_DX);
       uVar5 = ovr_audio_panFromX(agnt,uVar10);
       ovr_play_sfxU(3,0,uVar5,(char)uVar5);
@@ -2026,7 +2026,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t *source,agnt_t *victim,uint s
       pcVar2 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&sourceName,pcVar6));
       puVar4 = ovr_ovc15_usesStshRealloc(pcVar2,in_DX,uVar8,uVar5,uVar9);
       pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6f7a,unaff_SS),
-                             (char *)CONCAT22(puVar4,(char *)"puppetmaker" + 3),in_DX);
+                             (char *)CONCAT22(puVar4,(char *)0x2410),in_DX);
       ovr_uiNotify(pcVar2,in_DX);
       agnt->flags = agnt->flags | 0x800;
       uVar5 = ovr_audio_panFromX(agnt,uVar10);
@@ -2192,7 +2192,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
   far_t fStack_6;
   
   iVar12 = 0x10;
-  pcStack_13e = (char *)"%shigh.txt" + 6;
+  pcStack_13e = (char *)0x6a8f;
   uStack_140 = 0xc98c;
   dst.seg = (uint16_t)unaff_SS;
   dst.ofs = (uint16_t)&agnt;
@@ -2284,7 +2284,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
                                                 (char *)CONCAT22(FontMain.ofs,(agnt_t *)uStack_132),
                                                 FontMain.seg,'E');
             ovr_blitLabel(pcVar7,(uint8_t *)CONCAT22(uVar22,puVar14),15,uStack_120);
-            pbVar8 = (byte *)((char *)"puppetmaker" + 3);
+            pbVar8 = (byte *)((char *)0x2410);
             BlitLetterType = 0;
           }
           else if (*(uint8_t *)MK_FP(fStack_6.seg, fStack_6.ofs) == 0x40) {
@@ -2422,7 +2422,7 @@ switchD_6000_ca06_caseD_1:
           paStack_20 = (agnt_t *)((byte *)__C0_ASM_CopyRight + 3);
         }
         if (0x96 < (int)paStack_20) {
-          paStack_20 = (agnt_t *)((char *)"%d \r" + 1);
+          paStack_20 = (agnt_t *)((char *)0x96);
         }
         if ((paStack_26 != paVar9) || (paStack_28 != paStack_20)) {
           bStack_16.seg = uStack_8;
@@ -2482,7 +2482,7 @@ switchD_6000_ca06_caseD_1:
           ovr_ovc41_pluralSuffix(iStack_a);
           uVar10 = 0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x64b8,unaff_SS),
-                                  (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
+                                  (char *)CONCAT22(iStack_a,(char *)0x2410));
           iVar12 = 0x22c4;
           ovr_uiNotify(pcVar19,uVar10);
         }
@@ -2569,7 +2569,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iStack_a;
           (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x6522,unaff_SS),
-                                  (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
+                                  (char *)CONCAT22(iStack_a,(char *)0x2410));
           ovr_say(pcVar19);
         }
         else if (bStack_3b == 2) {
@@ -2578,7 +2578,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iStack_a;
           (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x6543,unaff_SS),
-                                  (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
+                                  (char *)CONCAT22(iStack_a,(char *)0x2410));
           ovr_say(pcVar19);
         }
         else if (bStack_3b == 3) {
@@ -2587,7 +2587,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iStack_a;
           (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x6557,unaff_SS),
-                                  (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
+                                  (char *)CONCAT22(iStack_a,(char *)0x2410));
           ovr_say(pcVar19);
         }
         else if (bStack_3b == 4) {
@@ -2596,7 +2596,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iStack_a;
           (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&uStack_132,(char *)CONCAT22(0x6568,unaff_SS),
-                                  (char *)CONCAT22(iStack_a,(char *)"puppetmaker" + 3));
+                                  (char *)CONCAT22(iStack_a,(char *)0x2410));
           ovr_say(pcVar19);
         }
         ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x24));
@@ -2648,7 +2648,7 @@ L_ui_unit_order_6616_0689_1054:
       (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0xcba4;
       paVar9 = (agnt_t *)
                ovr_stsprintf((char *)&msg,(char *)CONCAT13(0x6f,CONCAT12(0xeb,unaff_SS)),
-                             (char *)CONCAT22(puVar11,(char *)"puppetmaker" + 3));
+                             (char *)CONCAT22(puVar11,(char *)0x2410));
       ovr_uiNotify((char *)paVar9,(uint16_t)puVar14);
     }
   }
@@ -2749,7 +2749,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
                 pcVar7 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex));
                 puVar8 = ovr_ovc15_usesStshRealloc(pcVar7,uVar10,uVar12,uVar15,uVar16);
                 pcVar7 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x70b5,unaff_SS),
-                                       (char *)CONCAT22(puVar8,(char *)"puppetmaker" + 3),uVar10);
+                                       (char *)CONCAT22(puVar8,(char *)0x2410),uVar10);
                 ovr_uiNotify(pcVar7,uVar10,(char)uVar10);
                 uVar9 = ovr_audio_panFromX(agnt,uVar13);
                 ovr_play_sfxU(0x55,0,uVar9,0,(char)uVar9);
@@ -2772,7 +2772,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
                   pcVar7 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex));
                   puVar8 = ovr_ovc15_usesStshRealloc(pcVar7,uVar10,uVar13,uVar14,uVar12);
                   pcVar7 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x70c4,unaff_SS),
-                                         (char *)CONCAT22(puVar8,(char *)"puppetmaker" + 3),uVar10);
+                                         (char *)CONCAT22(puVar8,(char *)0x2410),uVar10);
                   ovr_uiNotify(pcVar7,uVar10,(char)uVar10);
                   uVar9 = ovr_audio_panFromX((agnt_t *)uStack_8,(char)((ulong)uStack_8 >> 0x10));
                   ovr_play_sfxU(5,0,uVar9,0,(char)uVar9);
@@ -2798,7 +2798,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
                   pcVar7 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex));
                   puVar8 = ovr_ovc15_usesStshRealloc(pcVar7,uVar10,uVar14,uVar12,uVar13);
                   pcVar7 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x7107,unaff_SS),
-                                         (char *)CONCAT22(puVar8,(char *)"puppetmaker" + 3),uVar10);
+                                         (char *)CONCAT22(puVar8,(char *)0x2410),uVar10);
                   ovr_uiNotify(pcVar7,uVar10,(char)uVar10);
                 }
                 else {
@@ -2811,7 +2811,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
                   pcVar7 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex));
                   puVar8 = ovr_ovc15_usesStshRealloc(pcVar7,uVar10,uVar14,uVar12,uVar13);
                   pcVar7 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x70ec,unaff_SS),
-                                         (char *)CONCAT22(puVar8,(char *)"puppetmaker" + 3),uVar10);
+                                         (char *)CONCAT22(puVar8,(char *)0x2410),uVar10);
                   ovr_uiNotify(pcVar7,uVar10,(char)uVar10);
                 }
               }
@@ -2832,7 +2832,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
                   pcVar7 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex));
                   puVar8 = ovr_ovc15_usesStshRealloc(pcVar7,uVar10,uVar14,uVar12,uVar13);
                   pcVar7 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x7107,unaff_SS),
-                                         (char *)CONCAT22(puVar8,(char *)"puppetmaker" + 3),uVar10);
+                                         (char *)CONCAT22(puVar8,(char *)0x2410),uVar10);
                   ovr_uiNotify(pcVar7,uVar10,(char)uVar10);
                 }
                 else {
@@ -2845,7 +2845,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
                   pcVar7 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex));
                   puVar8 = ovr_ovc15_usesStshRealloc(pcVar7,uVar10,uVar14,uVar12,uVar13);
                   pcVar7 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x7125,unaff_SS),
-                                         (char *)CONCAT22(puVar8,(char *)"puppetmaker" + 3),uVar10);
+                                         (char *)CONCAT22(puVar8,(char *)0x2410),uVar10);
                   ovr_uiNotify(pcVar7,uVar10,(char)uVar10);
                 }
               }
@@ -2916,8 +2916,8 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
 void __cdecl16far ovc41_resolveSpecialAttack(agnt_t *agnt,uint16_t param)
 
 {
-  ovc41_specialAttack((agnt_t *)agnt,agnt._2_2_,param);
-  ovr_agnt_advanceAnimFrame((agnt_t *)agnt,agnt._2_2_);
+  ovc41_specialAttack((agnt_t *)agnt,(*(uint16_t *)((uint8_t *)&(agnt) + 2)),param);
+  ovr_agnt_advanceAnimFrame((agnt_t *)agnt,(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
   return;
 }
 
@@ -2959,7 +2959,7 @@ int __cdecl16far ovc41_growthForLevel(agnt_t *agnt,...)
   
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&growthMap;
-  F_SCOPY((far_t)0x24106e48,dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24106e48)),dst);
   bStack_3 = agnt->gindex;
   if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bStack_3 * 0x95) == -1) {
     iVar1 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)bStack_3 * 0x95);

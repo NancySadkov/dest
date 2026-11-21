@@ -51,7 +51,7 @@ void __cdecl16far ovc50_usesStshLoadGfx(byte gfxIndex)
   char *pcVar3;
   undefined2 unaff_SI;
   
-  pcVar3 = (char *)"puppetmaker" + 3;
+  pcVar3 = (char *)0x2410;
   handle.seg = *(uint16_t *)((uint)gfxIndex * 4 + -0x6c6e);
   handle.ofs = *(uint16_t *)((uint)gfxIndex * 4 + -0x6c70);
   widths = ovr_stshLoadGfx(handle);

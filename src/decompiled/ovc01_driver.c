@@ -164,13 +164,13 @@ lbm_combine_bitplanes(far_t src,far_t dst,uint16_t npixels,uint8_t nplanes,uint1
 
 /* 2d63:00eb */
 
-/* Loads big-endian 32bit integer into DX:AX pair
+/* Loads big-endian 32bit integer into DX_AX pair
    NOTE: the function has a bug (high order bytes are swapped) */
 
 uint32_t * __cdecl16far be4(uint32_t *__return_storage_ptr__,uint32_t be,...)
 
 {
-  return (uint32_t *)CONCAT11((undefined1)be,be._1_1_);
+  return (uint32_t *)CONCAT11((undefined1)be,(*(uint8_t *)((uint8_t *)&(be) + 1)));
 }
 
 
@@ -182,7 +182,7 @@ uint32_t * __cdecl16far be4(uint32_t *__return_storage_ptr__,uint32_t be,...)
 uint16_t __cdecl16far be2(uint16_t w,...)
 
 {
-  return CONCAT11((undefined1)w,w._1_1_);
+  return CONCAT11((undefined1)w,(*(uint8_t *)((uint8_t *)&(w) + 1)));
 }
 
 
@@ -404,7 +404,7 @@ int __cdecl16far unrle(far_t src,far_t dst,uint16_t len,...)
       }
     }
     else {
-      i._0_1_ = (bVar2 ^ 0xff) + 2;
+      (*(uint8_t *)((uint8_t *)&(i))) = (bVar2 ^ 0xff) + 2;
       puVar1 = (undefined1 *)s;
       s = pps + 2;
       uVar3 = *puVar1;
@@ -577,7 +577,7 @@ int __cdecl16far rle_line(uint8_t *src,uint8_t *dst,uint16_t npixels,...)
   
   end = in_stack_0000000c + (int)src;
   ps = (uint16_t)src;
-  pd = (uint16_t)dst._2_2_;
+  pd = (uint16_t)(*(uint16_t *)((uint8_t *)&(dst) + 2));
 L_rle_line_0343:
   do {
     uVar3 = end - ps;
@@ -619,7 +619,7 @@ L_rle_line_0343:
     }
     ps = (uint16_t)src;
     if (end <= src) {
-      return pd - (int)dst._2_2_;
+      return pd - (int)(*(uint16_t *)((uint8_t *)&(dst) + 2));
     }
   } while( true );
 }
@@ -679,7 +679,7 @@ int __cdecl16far unrle_mirror(byte *src,byte *dst,int len,...)
   uint32_t ps;
   uint8_t b;
   
-  pdst = (int)dst._2_2_ + in_stack_0000000c + -1;
+  pdst = (int)(*(uint16_t *)((uint8_t *)&(dst) + 2)) + in_stack_0000000c + -1;
   pbVar5 = src;
   do {
     do {
@@ -710,7 +710,7 @@ int __cdecl16far unrle_mirror(byte *src,byte *dst,int len,...)
       }
     }
     pbVar5 = (byte *)psrc;
-  } while (dst._2_2_ <= pdst);
+  } while ((*(uint16_t *)((uint8_t *)&(dst) + 2)) <= pdst);
   return psrc - (int)src;
 }
 
@@ -729,7 +729,7 @@ int16_t __cdecl16far drawLine2(char *src,char *dst,uint16_t count,...)
   byte *pbVar6;
   int in_stack_0000000c;
   
-  pbVar6 = dst._2_2_ + in_stack_0000000c + -1;
+  pbVar6 = (*(uint16_t *)((uint8_t *)&(dst) + 2)) + in_stack_0000000c + -1;
   pbVar5 = (byte *)src;
   do {
     do {
@@ -765,7 +765,7 @@ int16_t __cdecl16far drawLine2(char *src,char *dst,uint16_t count,...)
         }
       }
     }
-  } while (dst._2_2_ <= pbVar6);
+  } while ((*(uint16_t *)((uint8_t *)&(dst) + 2)) <= pbVar6);
   return (int)pbVar5 - (int)src;
 }
 
@@ -1749,7 +1749,7 @@ void __cdecl16far driver_loop3(far_t src,far_t dst)
   uVar8 = src.seg;
   pcVar7 = (char *)dst.ofs;
   pcVar6 = (char *)(src.ofs + 2);
-  iVar2 = *(int *)src;
+  iVar2 = *(int *)MK_FP(src.seg, src.ofs);
   for (iVar5 = iVar2; iVar5 != 0; iVar5 = iVar5 + -1) {
     pcVar1 = pcVar6;
     pcVar6 = pcVar6 + 1;

@@ -147,12 +147,12 @@ undefined2 __cdecl16far ovc30_usesRandBelow(byte band)
   uint8_t bandMin;
   byte abStack_4 [2];
   
-  memcpy(&abStack_4, &(LevelBandMin._2_2_), 2);
-  bandMin = LevelBandMin._0_2_;
-  memcpy(&abStack_8, &(LevelBandMax._2_2_), 2);
-  bandMax = LevelBandMax._0_2_;
+  memcpy(&abStack_4, &((*(uint16_t *)((uint8_t *)&(LevelBandMin) + 2))), 2);
+  bandMin = (*(uint16_t *)((uint8_t *)&(LevelBandMin)));
+  memcpy(&abStack_8, &((*(uint16_t *)((uint8_t *)&(LevelBandMax) + 2))), 2);
+  bandMax = (*(uint16_t *)((uint8_t *)&(LevelBandMax)));
   if (band == 4) {
-    uVar1 = CONCAT11(SUB21(LevelBandMax._2_2_,1),0x29);
+    uVar1 = CONCAT11(SUB21((*(uint16_t *)((uint8_t *)&(LevelBandMax) + 2)),1),0x29);
   }
   else {
     do {

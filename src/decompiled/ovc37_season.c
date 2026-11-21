@@ -332,16 +332,16 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
   
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&seasonPalette;
-  F_SCOPY((far_t)0x2410693b,dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410693b)),dst);
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)&colorA;
-  F_SCOPY((far_t)0x241069c2,dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x241069c2)),dst_00);
   dst_01.seg = unaff_SS;
   dst_01.ofs = (uint16_t)&colorB;
-  F_SCOPY((far_t)0x241069c5,dst_01);
+  F_SCOPY(far_from_u32((uint32_t)(0x241069c5)),dst_01);
   dst_02.seg = unaff_SS;
   dst_02.ofs = (uint16_t)&colorC;
-  F_SCOPY((far_t)0x241069c8,dst_02);
+  F_SCOPY(far_from_u32((uint32_t)(0x241069c8)),dst_02);
   _fmemmove((char *)CONCAT22(dstSeg,dstOfs),(char *)CONCAT22(srcSeg,srcOfs),0x300);
   uStack_16 = ((undefined2 *)&l1Cut2Seg)[((uint)seasonGroupBase + (uint)GSeason) * 2];
   uVar1 = ((undefined2 *)&l1Cut2Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 2];
@@ -392,7 +392,7 @@ void __cdecl16far updSeason(void)
   
   dst.seg = (uint16_t)unaff_SS;
   dst.ofs = (uint16_t)snames;
-  F_SCOPY((far_t)0x241069cb,dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x241069cb)),dst);
   seaon2 = GSeason;
   season = GSeason;
   GTimeLo = GTimeLo + 1;
@@ -435,7 +435,7 @@ void __cdecl16far updSeason(void)
       in_DX = snames;
       msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6a50,unaff_SS),
                           (char *)CONCAT22(*(undefined2 *)(in_DX + (uint)season * 4),
-                                           (char *)"puppetmaker" + 3),
+                                           (char *)0x2410),
                           *(undefined2 *)(snames + (uint)season * 4 + 2));
       ovr_uiNotify(msg,(uint16_t)in_DX);
     }
@@ -527,22 +527,22 @@ void __cdecl16far season_repairBuildings(byte rank)
   uint8_t promoteThreshold;
   byte abStack_4 [2];
   
-  memcpy(&abStack_4, &(PromoteThreshold._2_2_), 2);
-  promoteThreshold = PromoteThreshold._0_2_;
+  memcpy(&abStack_4, &((*(uint16_t *)((uint8_t *)&(PromoteThreshold) + 2))), 2);
+  promoteThreshold = (*(uint16_t *)((uint8_t *)&(PromoteThreshold)));
   count = 0;
-  dst = (char *)PromoteThreshold._0_2_;
+  dst = (char *)(*(uint16_t *)((uint8_t *)&(PromoteThreshold)));
   for (bStack_7 = 0; bStack_7 < GLeaderCount; bStack_7 = bStack_7 + 1) {
     dst = (char *)((uint)bStack_7 << 2);
     if ((&promoteThreshold)[rank] <= *(byte *)((int)*(undefined4 *)dst + 0xa5)) {
       for (unitIndex = 0xf8; unitIndex < GUnitCount; unitIndex = unitIndex + 1) {
-        dst = (char *)"puppetmaker" + 3;
+        dst = (char *)0x2410;
         uVar2 = (undefined2)((ulong)GUnits >> 0x10);
         if (((unit_t *)GUnits)[unitIndex].unitType == bStack_7) {
-          dst = (char *)"puppetmaker" + 3;
+          dst = (char *)0x2410;
           if (((unit_t *)GUnits)[unitIndex].level < 8) {
             iVar1 = season_usesAlignUp42(unitIndex,bStack_7);
             if ((char)iVar1 != '\0') {
-              dst = (char *)"puppetmaker" + 3;
+              dst = (char *)0x2410;
               ((unit_t *)GUnits)[unitIndex].level = 8;
               count = count + 1;
             }
@@ -555,7 +555,7 @@ void __cdecl16far season_repairBuildings(byte rank)
     ovr_inputUpdate(0x24);
     uVar2 = ovr_ovc41_pluralSuffix(count);
     msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6a6e,unaff_SS),
-                        (char *)CONCAT22(count,(char *)"puppetmaker" + 3),uVar2,dst);
+                        (char *)CONCAT22(count,(char *)0x2410),uVar2,dst);
     ovr_uiNotify(msg,(uint16_t)dst);
   }
   return;

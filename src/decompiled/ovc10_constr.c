@@ -334,8 +334,8 @@ void __cdecl16far constr_usesScreenOriginY(uint16_t rect,uint16_t type,...)
   
   for (uVar5 = rowMapSquareFirst[0]; uVar6 = rowMapSquareFirst[0],
       (int)uVar5 < (int)rowMapSquareEnd[0]; uVar5 = uVar5 + 1) {
-    if ((0xb < *(int *)(uVar5 * 2 + 0x6c0)) && (*(int *)(uVar5 * 2 + 0xa20) < 0xdf)) {
-      uVar6 = *(uint16_t *)(uVar5 * 2 + 0x360);
+    if ((0xb < *(int *)(&mapSquareRightX[uVar5])) && (*(int *)(&mapSquareLeftX[uVar5]) < 0xdf)) {
+      uVar6 = *(uint16_t *)(&mapSquareColumn[uVar5]);
       iStack_6 = constr_getCellAtOffset(uVar6,-2);
       iStack_8 = constr_getCellAtOffset(uVar6 + 1,-2);
       iVar2 = constr_usesSmoothPrev(uVar6,-1,(int *)&cell);
@@ -346,47 +346,47 @@ void __cdecl16far constr_usesScreenOriginY(uint16_t rect,uint16_t type,...)
         uStack_12 = constr_compute2(cell,cellNext,(uint8_t)iStack_8,bVar1,2);
         uStack_12 = uStack_12 & 0xff;
         ovr_ovc07_usesBiosReadKey
-                  (*(int *)(uVar5 * 2 + 0xa20),ScreenOriginY[0] - iVar2,*(int *)(uVar5 * 2 + 0x6c0),
-                   ScreenOriginY[0] - iVar3,*(int *)(uVar5 * 2 + 0x6c0),0x96,uStack_12,
+                  (*(int *)(&mapSquareLeftX[uVar5]),ScreenOriginY[0] - iVar2,*(int *)(&mapSquareRightX[uVar5]),
+                   ScreenOriginY[0] - iVar3,*(int *)(&mapSquareRightX[uVar5]),0x96,uStack_12,
                    (brect_t *)CONCAT22(type,rect));
         uVar4 = constr_compute2((uint8_t)iStack_6,(uint8_t)iStack_8,cell,bVar1,1);
         ovr_ovc07_usesBiosReadKey
-                  (*(int *)(uVar5 * 2 + 0xa20),ScreenOriginY[0] - iVar2,*(int *)(uVar5 * 2 + 0xa20),
-                   0x96,*(int *)(uVar5 * 2 + 0x6c0),0x96,uVar4 & 0xff,(brect_t *)CONCAT22(type,rect)
+                  (*(int *)(&mapSquareLeftX[uVar5]),ScreenOriginY[0] - iVar2,*(int *)(&mapSquareLeftX[uVar5]),
+                   0x96,*(int *)(&mapSquareRightX[uVar5]),0x96,uVar4 & 0xff,(brect_t *)CONCAT22(type,rect)
                   );
       }
       else {
         uStack_12 = constr_compute2(cell,cellNext,(uint8_t)iStack_6,bVar1,1);
         uStack_12 = uStack_12 & 0xff;
         ovr_ovc07_usesBiosReadKey
-                  (*(int *)(uVar5 * 2 + 0xa20),ScreenOriginY[0] - iVar2,*(int *)(uVar5 * 2 + 0x6c0),
-                   ScreenOriginY[0] - iVar3,*(int *)(uVar5 * 2 + 0xa20),0x96,uStack_12,
+                  (*(int *)(&mapSquareLeftX[uVar5]),ScreenOriginY[0] - iVar2,*(int *)(&mapSquareRightX[uVar5]),
+                   ScreenOriginY[0] - iVar3,*(int *)(&mapSquareLeftX[uVar5]),0x96,uStack_12,
                    (brect_t *)CONCAT22(type,rect));
         uVar4 = constr_compute2((uint8_t)iStack_6,(uint8_t)iStack_8,cellNext,bVar1,2);
         ovr_ovc07_usesBiosReadKey
-                  (*(int *)(uVar5 * 2 + 0x6c0),ScreenOriginY[0] - iVar3,*(int *)(uVar5 * 2 + 0xa20),
-                   0x96,*(int *)(uVar5 * 2 + 0x6c0),0x96,uVar4 & 0xff,(brect_t *)CONCAT22(type,rect)
+                  (*(int *)(&mapSquareRightX[uVar5]),ScreenOriginY[0] - iVar3,*(int *)(&mapSquareLeftX[uVar5]),
+                   0x96,*(int *)(&mapSquareRightX[uVar5]),0x96,uVar4 & 0xff,(brect_t *)CONCAT22(type,rect)
                   );
       }
       uVar4 = constr_usesGMapFlags(uVar6 + GfxRndSeed,GfxRndSeed2);
       if ((char)uVar4 != '\0') {
         ovr_ovc07_usesLDIV_at_
-                  (*(int *)(uVar5 * 2 + 0xa20),ScreenOriginY[0] - iVar2,*(int *)(uVar5 * 2 + 0x6c0),
+                  (*(int *)(&mapSquareLeftX[uVar5]),ScreenOriginY[0] - iVar2,*(int *)(&mapSquareRightX[uVar5]),
                    ScreenOriginY[0] - iVar3,(char)uStack_12 + 0xfe,(brect_t *)rect);
         ovr_ovc07_usesLDIV_at_
-                  (*(int *)(uVar5 * 2 + 0xa20),(ScreenOriginY[0] - iVar2) + 1,
-                   *(int *)(uVar5 * 2 + 0x6c0),(ScreenOriginY[0] - iVar3) + 1,(char)uStack_12 + 0xff
+                  (*(int *)(&mapSquareLeftX[uVar5]),(ScreenOriginY[0] - iVar2) + 1,
+                   *(int *)(&mapSquareRightX[uVar5]),(ScreenOriginY[0] - iVar3) + 1,(char)uStack_12 + 0xff
                    ,(brect_t *)rect);
       }
     }
   }
   for (; (int)uVar6 < (int)rowMapSquareEnd[0]; uVar6 = uVar6 + 1) {
-    uVar5 = *(uint16_t *)(uVar6 * 2 + 0x360);
+    uVar5 = *(uint16_t *)(&mapSquareColumn[uVar6]);
     bVar1 = constr_setHighlightAtOffset(uVar5,0);
     iStack_4 = CONCAT11(extraout_AH,bVar1);
     if ((iStack_4 != 0) &&
        (iVar2 = constr_usesSmoothPrev(uVar5,-1,(int *)&cell),
-       (*(byte *)(iStack_4 * 0x27 + 0x11e) & 2) != 0)) {
+       (*(byte *)((uint8_t *)&BuildingTypes[iStack_4] + 16) & 2) != 0)) {
       gfx.seg = *(uint16_t *)
                  ((char *)
                   "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -396,9 +396,9 @@ void __cdecl16far constr_usesScreenOriginY(uint16_t rect,uint16_t type,...)
                   "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                   + 0x32 + iStack_4 * 0xc);
       ovr_blit_usesBlitGfxN
-                (gfx,*(int16_t *)(uVar6 * 2 + 0xa20),(uint)bandOrigin[0] - iVar2,0x10,99,0x10,
+                (gfx,*(int16_t *)(&mapSquareLeftX[uVar6]),(uint)bandOrigin[0] - iVar2,0x10,99,0x10,
                  (brect_t *)rect,type);
-      ovr_ovc15_fillGridColumn(*(int *)(uVar6 * 2 + 0xa20) - 0xc);
+      ovr_ovc15_fillGridColumn(*(int *)(&mapSquareLeftX[uVar6]) - 0xc);
     }
   }
   return;
@@ -421,7 +421,7 @@ void __cdecl16far constr_blitRowObjects(brect_t *rect,uint16_t type,...)
   far_t gfx;
   
   for (uVar3 = rowMapSquareFirst[0]; (int)uVar3 < (int)rowMapSquareEnd[0]; uVar3 = uVar3 + 1) {
-    iVar2 = *(int *)(uVar3 * 2 + 0x360);
+    iVar2 = *(int *)(&mapSquareColumn[uVar3]);
     if ((0xb < iVar2 + 0x2f) && (iVar2 < 0xdf)) {
       bVar1 = constr_setHighlightAtOffset(iVar2,0);
       if ((*(byte *)(CONCAT11(extraout_AH,bVar1) * 0x27 + 0x11e) & 5) != 0) {
@@ -434,7 +434,7 @@ void __cdecl16far constr_blitRowObjects(brect_t *rect,uint16_t type,...)
                    ((char *)
                     "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                     + 0x36 + iVar2);
-        ovr_blitGfxRect(gfx,*(int16_t *)(uVar3 * 2 + 0xa20),144,rect,(uint8_t)type,true,0);
+        ovr_blitGfxRect(gfx,*(int16_t *)(&mapSquareLeftX[uVar3]),144,rect,(uint8_t)type,true,0);
       }
     }
   }
@@ -512,34 +512,34 @@ void __cdecl16far constr_usesAgnt_clear(void)
   int iStack_6;
   undefined2 uStack_4;
   
-  dst.seg._0_1_ = (char)unaff_SS;
+  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)unaff_SS;
   dst.ofs = (uint16_t)&shades;
-  dst.seg._1_1_ = (char)((uint)unaff_SS >> 8);
-  F_SCOPY((far_t)0x24100745,dst);
+  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)unaff_SS >> 8);
+  F_SCOPY(far_from_u32((uint32_t)(0x24100745)),dst);
   if (GOngoingBattle == '\0') {
     ovr_ovc13_usesBlitRects();
     constr_usesSmoothPrev2();
-    ovr_ovc23_textAdlibNone(unaff_DI,unaff_SI,(agnt_t *)buf._0_2_);
+    ovr_ovc23_textAdlibNone(unaff_DI,unaff_SI,(agnt_t *)(*(uint16_t *)((uint8_t *)&(buf))));
     GGameState = 0x24;
     if (DebugVerbose != false) {
       printf("%d \r");
     }
     iStack_12 = GfxRndSeed >> 2;
     if (0xb < 0x14bU - iStack_12) {
-      gfx_06.seg._0_1_ =
+      (*(uint8_t *)((uint8_t *)&(gfx_06.seg))) =
            (char)((undefined2 *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       gfx_06.ofs = ((undefined2 *)&l1Cut1Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
-      gfx_06.seg._1_1_ =
+      (*(uint8_t *)((uint8_t *)&(gfx_06.seg) + 1)) =
            (char)((uint)((undefined2 *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
       ovr_blitGfxRect(gfx_06,0xc - iStack_12,7,(brect_t *)BlitRects,0x10,true,
                       (char)(0xc - iStack_12),7,0x40,0x10,0x10,0);
     }
     if (0x14cU - iStack_12 < 0xdf) {
-      gfx_07.seg._0_1_ =
+      (*(uint8_t *)((uint8_t *)&(gfx_07.seg))) =
            (char)((undefined2 *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       gfx_07.ofs = ((undefined2 *)&l1Cut3Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
-      gfx_07.seg._1_1_ =
+      (*(uint8_t *)((uint8_t *)&(gfx_07.seg) + 1)) =
            (char)((uint)((undefined2 *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
       ovr_blitGfxRect(gfx_07,0x14c - iStack_12,7,(brect_t *)BlitRects,0x10,true,
@@ -554,7 +554,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
     for (iVar10 = 8; -1 < iVar10; iVar10 = iVar10 + -1) {
       for (uVar11 = ((uint16_t *)rowMapSquareFirst)[iVar10]; uVar12 = (undefined1)iVar10,
           (int)uVar11 < (int)((uint16_t *)rowMapSquareEnd)[iVar10]; uVar11 = uVar11 + 1) {
-        uVar1 = *(uint16_t *)(uVar11 * 2 + 0x360);
+        uVar1 = *(uint16_t *)(&mapSquareColumn[uVar11]);
         iStack_1e = constr_usesSmoothPrev
                               (uVar1,iVar10 + -1,(int *)&cornerTL,(char)(iVar10 + -1),
                                (char)&cornerTL);
@@ -570,9 +570,9 @@ void __cdecl16far constr_usesAgnt_clear(void)
             uVar4 = constr_compute1(cornerTL,cornerTR,cornerBL,bStack_b,1,cornerTR,cornerBL,bStack_b
                                    );
             iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
-            iVar7 = *(int *)(uVar11 * 2 + 0x6c0);
+            iVar7 = *(int *)(&mapSquareRightX[uVar11]);
             iVar6 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
-            iVar8 = *(int *)(uVar11 * 2 + 0xa20);
+            iVar8 = *(int *)(&mapSquareLeftX[uVar11]);
             ovr_ovc07_usesBiosReadKey
                       (*(int *)((int)&AgntAnms[0x5d].sx + 1 + uVar11 * 2),
                        ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,iVar7,iVar5,
@@ -581,9 +581,9 @@ void __cdecl16far constr_usesAgnt_clear(void)
             uVar4 = constr_compute1(cornerBL,cornerBR,cornerTR,bStack_b,2,cornerBR,cornerTR,bStack_b
                                    );
             iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
-            iVar7 = *(int *)(uVar11 * 2 + 0x6c0);
+            iVar7 = *(int *)(&mapSquareRightX[uVar11]);
             iVar6 = ((uint16_t *)ScreenOriginX)[iVar10] - iStack_24;
-            iVar8 = *(int *)(uVar11 * 2 + 0xd80);
+            iVar8 = *(int *)(&mapSquareBottomY[uVar11]);
             ovr_ovc07_usesBiosReadKey
                       (*(int *)((int)&AgntAnms[0x5d].sx + 1 + uVar11 * 2),
                        ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,iVar7,iVar5,
@@ -594,9 +594,9 @@ void __cdecl16far constr_usesAgnt_clear(void)
             uVar4 = constr_compute1(cornerBL,cornerBR,cornerTR,bStack_b,2,cornerBR,cornerTR,bStack_b
                                    );
             iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
-            iVar7 = *(int *)(uVar11 * 2 + 0x6c0);
+            iVar7 = *(int *)(&mapSquareRightX[uVar11]);
             iVar6 = ((uint16_t *)ScreenOriginX)[iVar10] - iStack_24;
-            iVar8 = *(int *)(uVar11 * 2 + 0xd80);
+            iVar8 = *(int *)(&mapSquareBottomY[uVar11]);
             ovr_ovc07_usesBiosReadKey
                       (*(int *)((int)&AgntAnms[0x5d].sx + 1 + uVar11 * 2),
                        ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,iVar7,iVar5,
@@ -605,9 +605,9 @@ void __cdecl16far constr_usesAgnt_clear(void)
             uVar4 = constr_compute1(cornerTL,cornerTR,cornerBL,bStack_b,1,cornerTR,cornerBL,bStack_b
                                    );
             iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
-            iVar7 = *(int *)(uVar11 * 2 + 0x6c0);
+            iVar7 = *(int *)(&mapSquareRightX[uVar11]);
             iVar6 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
-            iVar8 = *(int *)(uVar11 * 2 + 0xa20);
+            iVar8 = *(int *)(&mapSquareLeftX[uVar11]);
             ovr_ovc07_usesBiosReadKey
                       (*(int *)((int)&AgntAnms[0x5d].sx + 1 + uVar11 * 2),
                        ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,iVar7,iVar5,
@@ -618,9 +618,9 @@ void __cdecl16far constr_usesAgnt_clear(void)
         else if ((int)uVar1 < 0) {
           uVar4 = constr_compute1(cornerBL,cornerBR,cornerTL,bStack_b,1,cornerBR,cornerTL,bStack_b);
           iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
-          iVar7 = *(int *)(uVar11 * 2 + 0xa20);
+          iVar7 = *(int *)(&mapSquareLeftX[uVar11]);
           iVar6 = ((uint16_t *)ScreenOriginX)[iVar10] - iStack_24;
-          iVar8 = *(int *)(uVar11 * 2 + 0xd80);
+          iVar8 = *(int *)(&mapSquareBottomY[uVar11]);
           ovr_ovc07_usesBiosReadKey
                     (*(int *)((int)&AgntAnms[0x5d].sx + 1 + uVar11 * 2),
                      ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,iVar7,iVar5,
@@ -628,29 +628,29 @@ void __cdecl16far constr_usesAgnt_clear(void)
                      (char)uVar4,0x40);
           uVar4 = constr_compute1(cornerTL,cornerTR,cornerBR,bStack_b,2,cornerTR,cornerBR,bStack_b);
           iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
-          iVar7 = *(int *)(uVar11 * 2 + 0x6c0);
+          iVar7 = *(int *)(&mapSquareRightX[uVar11]);
           iVar6 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
-          iVar8 = *(int *)(uVar11 * 2 + 0xa20);
+          iVar8 = *(int *)(&mapSquareLeftX[uVar11]);
           ovr_ovc07_usesBiosReadKey
-                    (*(int *)(uVar11 * 2 + 0xd80),((uint16_t *)ScreenOriginX)[iVar10] - iStack_24,
+                    (*(int *)(&mapSquareBottomY[uVar11]),((uint16_t *)ScreenOriginX)[iVar10] - iStack_24,
                      iVar8,iVar6,iVar7,iVar5,uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,
                      (char)iVar7,(char)iVar5,(char)uVar4,0x40);
         }
         else {
           uVar4 = constr_compute1(cornerTL,cornerTR,cornerBR,bStack_b,2,cornerTR,cornerBR,bStack_b);
           iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
-          iVar7 = *(int *)(uVar11 * 2 + 0x6c0);
+          iVar7 = *(int *)(&mapSquareRightX[uVar11]);
           iVar6 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
-          iVar8 = *(int *)(uVar11 * 2 + 0xa20);
+          iVar8 = *(int *)(&mapSquareLeftX[uVar11]);
           ovr_ovc07_usesBiosReadKey
-                    (*(int *)(uVar11 * 2 + 0xd80),((uint16_t *)ScreenOriginX)[iVar10] - iStack_24,
+                    (*(int *)(&mapSquareBottomY[uVar11]),((uint16_t *)ScreenOriginX)[iVar10] - iStack_24,
                      iVar8,iVar6,iVar7,iVar5,uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,
                      (char)iVar7,(char)iVar5,(char)uVar4,0x40);
           uVar4 = constr_compute1(cornerBL,cornerBR,cornerTL,bStack_b,1,cornerBR,cornerTL,bStack_b);
           iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
-          iVar7 = *(int *)(uVar11 * 2 + 0xa20);
+          iVar7 = *(int *)(&mapSquareLeftX[uVar11]);
           iVar6 = ((uint16_t *)ScreenOriginX)[iVar10] - iStack_24;
-          iVar8 = *(int *)(uVar11 * 2 + 0xd80);
+          iVar8 = *(int *)(&mapSquareBottomY[uVar11]);
           ovr_ovc07_usesBiosReadKey
                     (*(int *)((int)&AgntAnms[0x5d].sx + 1 + uVar11 * 2),
                      ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,iVar7,iVar5,
@@ -662,7 +662,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
         for (bStack_3b = 0; bStack_3b < 2; bStack_3b = bStack_3b + 1) {
           for (uVar11 = ((uint16_t *)rowMapSquareFirst)[iVar10];
               (int)uVar11 < (int)((uint16_t *)rowMapSquareEnd)[iVar10]; uVar11 = uVar11 + 1) {
-            uVar1 = *(uint16_t *)(uVar11 * 2 + 0x360);
+            uVar1 = *(uint16_t *)(&mapSquareColumn[uVar11]);
             bVar3 = constr_setHighlightAtOffset(uVar1,iVar10,uVar12);
             iStack_e = CONCAT11(extraout_AH,bVar3);
             GGameState = 0x37;
@@ -671,9 +671,9 @@ void __cdecl16far constr_usesAgnt_clear(void)
             }
             if (iStack_e < 0xf8) {
               if ((iStack_e != 0) &&
-                 (((bStack_3b == 0 && ((*(uint *)(iStack_e * 0x27 + 0x121) & 0x800) != 0)) ||
-                  ((bStack_3b != 0 && ((*(uint *)(iStack_e * 0x27 + 0x121) & 0x800) == 0)))))) {
-                if (*(byte *)(iStack_e * 0x27 + 0x11b) < 2) {
+                 (((bStack_3b == 0 && ((*(uint *)((uint8_t *)&BuildingTypes[iStack_e] + 19) & 0x800) != 0)) ||
+                  ((bStack_3b != 0 && ((*(uint *)((uint8_t *)&BuildingTypes[iStack_e] + 19) & 0x800) == 0)))))) {
+                if (*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 13) < 2) {
                   iStack_1e = constr_usesSmoothPrev
                                         (uVar1,iVar10 + -1,(int *)&cornerTL,(char)(iVar10 + -1),
                                          (char)&cornerTL);
@@ -685,7 +685,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                   iStack_24 = constr_usesSmoothPrev
                                         (uVar1 + 1,iVar10,(int *)&cornerBR,uVar12,(char)&cornerBR);
                 }
-                else if (*(byte *)(iStack_e * 0x27 + 0x11b) < 3) {
+                else if (*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 13) < 3) {
                   iStack_1e = constr_usesSmoothPrev
                                         (uVar1,iVar10 + -1,(int *)&cornerTL,(char)(iVar10 + -1),
                                          (char)&cornerTL);
@@ -725,15 +725,15 @@ void __cdecl16far constr_usesAgnt_clear(void)
                     iStack_30 = iStack_20 - uStack_10;
                   }
                 }
-                if (*(char *)(iStack_e * 0x27 + 0x11e) == '\0') {
-                  if ((*(uint *)(iStack_e * 0x27 + 0x121) & 0x20) == 0) {
+                if (*(char *)((uint8_t *)&BuildingTypes[iStack_e] + 16) == '\0') {
+                  if ((*(uint *)((uint8_t *)&BuildingTypes[iStack_e] + 19) & 0x20) == 0) {
                     iVar7 = iStack_e * 0xc + *(int *)(uVar11 * 2) * 4;
                     if (((*(int *)(iVar7 + 0x4230) == 0 && *(int *)(iVar7 + 0x4232) == 0) ||
                         (2 < iVar10)) || (7 < HighlightLevel)) {
                       iStack_30 = (uint)*(byte *)(iVar10 + 0x728) - iStack_30;
-                      iVar2 = *(int16_t *)(uVar11 * 2 + 0xa20);
+                      iVar2 = *(int16_t *)(&mapSquareLeftX[uVar11]);
                       iVar7 = iStack_e * 0xc + *(int *)(uVar11 * 2) * 4;
-                      gfx_10.seg._0_1_ =
+                      (*(uint8_t *)((uint8_t *)&(gfx_10.seg))) =
                            (char)*(undefined2 *)
                                   ((char *)
                                    "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -742,7 +742,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                                     ((char *)
                                      "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                                      + 0x2e + iVar7);
-                      gfx_10.seg._1_1_ =
+                      (*(uint8_t *)((uint8_t *)&(gfx_10.seg) + 1)) =
                            (char)((uint)*(undefined2 *)
                                          ((char *)
                                           "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -753,12 +753,12 @@ void __cdecl16far constr_usesAgnt_clear(void)
                     }
                     else {
                       iVar7 = (uint)*(byte *)(iVar10 + 0x728) - iStack_30;
-                      iVar2 = *(int16_t *)(uVar11 * 2 + 0xa20);
+                      iVar2 = *(int16_t *)(&mapSquareLeftX[uVar11]);
                       iVar8 = iStack_e * 0xc + *(int *)(uVar11 * 2) * 4;
                       uVar9 = *(undefined2 *)(iVar8 + 0x4232);
-                      gfx_09.seg._0_1_ = (char)uVar9;
+                      (*(uint8_t *)((uint8_t *)&(gfx_09.seg))) = (char)uVar9;
                       gfx_09.ofs = *(undefined2 *)(iVar8 + 0x4230);
-                      gfx_09.seg._1_1_ = (char)((uint)uVar9 >> 8);
+                      (*(uint8_t *)((uint8_t *)&(gfx_09.seg) + 1)) = (char)((uint)uVar9 >> 8);
                       ovr_blitGfxRect(gfx_09,iVar2,iVar7,(brect_t *)BlitRects,0x10,
                                       (bool)abStack_17[iVar10 + -1],(char)iVar2,(char)iVar7,0x40,
                                       0x10,abStack_17[iVar10 + -1],0);
@@ -772,7 +772,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                                       ((char *)
                                        "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                                        + 0x2e + iVar7);
-                        ovr_gfxRlePrepare(gfx_00,*(int *)(uVar11 * 2 + 0xa20),
+                        ovr_gfxRlePrepare(gfx_00,*(int *)(&mapSquareLeftX[uVar11]),
                                           (uint)*(byte *)(iVar10 + 0x728) - iStack_30,
                                           &((brect_t *)BlitRects)->x,'\x10',abStack_17[iVar10 + -1],
                                           0x40,0x10,abStack_17[iVar10 + -1],0,0,
@@ -782,9 +782,9 @@ void __cdecl16far constr_usesAgnt_clear(void)
                   }
                   else {
                     iStack_30 = (uint)*(byte *)(iVar10 + 0x728) - iStack_30;
-                    iVar2 = *(int16_t *)(uVar11 * 2 + 0xa20);
+                    iVar2 = *(int16_t *)(&mapSquareLeftX[uVar11]);
                     iVar7 = iStack_e * 0xc + (uint)GSeason * 4;
-                    gfx_08.seg._0_1_ =
+                    (*(uint8_t *)((uint8_t *)&(gfx_08.seg))) =
                          (char)*(undefined2 *)
                                 ((char *)
                                  "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -793,7 +793,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                                   ((char *)
                                    "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                                    + 0x2e + iVar7);
-                    gfx_08.seg._1_1_ =
+                    (*(uint8_t *)((uint8_t *)&(gfx_08.seg) + 1)) =
                          (char)((uint)*(undefined2 *)
                                        ((char *)
                                         "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -804,13 +804,13 @@ void __cdecl16far constr_usesAgnt_clear(void)
                   }
                 }
                 else {
-                  if ((*(byte *)(iStack_e * 0x27 + 0x11e) & 0x10) != 0) {
+                  if ((*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 16) & 0x10) != 0) {
                     for (iStack_6 = 0; iStack_6 < 6; iStack_6 = iStack_6 + 1) {
                       iVar7 = (int)(((uint)*(byte *)(iVar10 + 0x729) - iStack_22) * (5 - iStack_6))
                               / 5 + (int)(((uint)*(byte *)(iVar10 + 0x729) - iStack_24) * iStack_6)
                                     / 5;
                       iVar8 = (*(int *)((int)&AgntAnms[0x5d].sx + 1 + uVar11 * 2) * (5 - iStack_6))
-                              / 5 + (*(int *)(uVar11 * 2 + 0xd80) * iStack_6) / 5;
+                              / 5 + (*(int *)(&mapSquareBottomY[uVar11]) * iStack_6) / 5;
                       gfx.seg = *(uint16_t *)
                                  ((char *)
                                   "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -823,8 +823,8 @@ void __cdecl16far constr_usesAgnt_clear(void)
                       gfx_00_00.ofs = ((bld_inst_t *)BldInstances + iStack_e)->ofs;
                       ovr_blit_usesBlitGfxN2
                                 (gfx,gfx_00_00,
-                                 (*(int *)(uVar11 * 2 + 0xa20) * (5 - iStack_6)) / 5 +
-                                 (*(int *)(uVar11 * 2 + 0x6c0) * iStack_6) / 5,
+                                 (*(int *)(&mapSquareLeftX[uVar11]) * (5 - iStack_6)) / 5 +
+                                 (*(int *)(&mapSquareRightX[uVar11]) * iStack_6) / 5,
                                  (int)(((uint)*(byte *)(iVar10 + 0x728) - iStack_1e) *
                                       (5 - iStack_6)) / 5 +
                                  (int)(((uint)*(byte *)(iVar10 + 0x728) - iStack_20) * iStack_6) / 5
@@ -834,12 +834,12 @@ void __cdecl16far constr_usesAgnt_clear(void)
                                  0x40,0x10);
                     }
                   }
-                  if ((*(byte *)(iStack_e * 0x27 + 0x11e) & 10) != 0) {
-                    if (*(int *)(uVar11 * 2 + 0xa20) ==
+                  if ((*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 16) & 10) != 0) {
+                    if (*(int *)(&mapSquareLeftX[uVar11]) ==
                         *(int *)((int)&AgntAnms[0x5d].sx + 1 + uVar11 * 2)) {
                       iVar7 = (uint)*(byte *)(iVar10 + 0x729) - iStack_22;
                       iVar8 = (uint)*(byte *)(iVar10 + 0x728) - iStack_1e;
-                      iVar2 = *(int16_t *)(uVar11 * 2 + 0xa20);
+                      iVar2 = *(int16_t *)(&mapSquareLeftX[uVar11]);
                       gfx_04.seg = *(uint16_t *)
                                     ((char *)
                                      "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -864,18 +864,18 @@ void __cdecl16far constr_usesAgnt_clear(void)
                                     ((char *)
                                      "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                                      + 0x2e + iStack_e * 0xc);
-                      ovr_blit_usesStExit(gfx_01,*(int *)(uVar11 * 2 + 0xa20),
+                      ovr_blit_usesStExit(gfx_01,*(int *)(&mapSquareLeftX[uVar11]),
                                           ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e,
                                           abStack_17[iVar10 + -1],iVar7,iVar8,abStack_17[iVar10],
                                           &((brect_t *)BlitRects)->x,abStack_17[iVar10 + -1],
                                           (char)iVar7,(char)iVar8,abStack_17[iVar10],0x40,0x10,0);
                     }
                   }
-                  if ((*(byte *)(iStack_e * 0x27 + 0x11e) & 8) != 0) {
-                    if (*(int *)(uVar11 * 2 + 0xd80) == *(int *)(uVar11 * 2 + 0x6c0)) {
+                  if ((*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 16) & 8) != 0) {
+                    if (*(int *)(&mapSquareBottomY[uVar11]) == *(int *)(&mapSquareRightX[uVar11])) {
                       iVar7 = (uint)*(byte *)(iVar10 + 0x729) - iStack_24;
                       iVar8 = (uint)*(byte *)(iVar10 + 0x728) - iStack_20;
-                      iVar2 = *(int16_t *)(uVar11 * 2 + 0x6c0);
+                      iVar2 = *(int16_t *)(&mapSquareRightX[uVar11]);
                       gfx_05.seg = *(uint16_t *)
                                     ((char *)
                                      "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -891,7 +891,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                     }
                     else {
                       iVar8 = ((uint16_t *)ScreenOriginX)[iVar10] - iStack_24;
-                      iVar7 = *(int *)(uVar11 * 2 + 0xd80);
+                      iVar7 = *(int *)(&mapSquareBottomY[uVar11]);
                       gfx_02.seg = *(uint16_t *)
                                     ((char *)
                                      "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -900,17 +900,17 @@ void __cdecl16far constr_usesAgnt_clear(void)
                                     ((char *)
                                      "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                                      + 0x2e + iStack_e * 0xc);
-                      ovr_blit_usesStExit(gfx_02,*(int *)(uVar11 * 2 + 0x6c0),
+                      ovr_blit_usesStExit(gfx_02,*(int *)(&mapSquareRightX[uVar11]),
                                           ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20,
                                           abStack_17[iVar10 + -1],iVar7,iVar8,abStack_17[iVar10],
                                           &((brect_t *)BlitRects)->x,abStack_17[iVar10 + -1],
                                           (char)iVar7,(char)iVar8,abStack_17[iVar10],0x40,0x10,0);
                     }
                   }
-                  if (((*(byte *)(iStack_e * 0x27 + 0x11e) & 4) != 0) ||
-                     (((*(byte *)(iStack_e * 0x27 + 0x11e) & 1) != 0 && (iVar10 != 0)))) {
+                  if (((*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 16) & 4) != 0) ||
+                     (((*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 16) & 1) != 0 && (iVar10 != 0)))) {
                     iVar8 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
-                    iVar7 = *(int *)(uVar11 * 2 + 0x6c0);
+                    iVar7 = *(int *)(&mapSquareRightX[uVar11]);
                     gfx_03.seg = *(uint16_t *)
                                   ((char *)
                                    "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -919,7 +919,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                                   ((char *)
                                    "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                                    + 0x2e + iStack_e * 0xc);
-                    ovr_blit_usesStExit(gfx_03,*(int *)(uVar11 * 2 + 0xa20),
+                    ovr_blit_usesStExit(gfx_03,*(int *)(&mapSquareLeftX[uVar11]),
                                         ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e,
                                         abStack_17[iVar10 + -1],iVar7,iVar8,abStack_17[iVar10 + -1],
                                         &((brect_t *)BlitRects)->x,abStack_17[iVar10 + -1],
@@ -946,20 +946,20 @@ void __cdecl16far constr_usesAgnt_clear(void)
     iStack_a = 0;
     for (uVar11 = rowMapSquareFirst[0]; (int)uVar11 < (int)rowMapSquareEnd[0]; uVar11 = uVar11 + 1)
     {
-      if ((0xb < *(int *)(uVar11 * 2 + 0x6c0)) && (*(int *)(uVar11 * 2 + 0xa20) < 0xdf)) {
-        uVar1 = *(uint16_t *)(uVar11 * 2 + 0x360);
+      if ((0xb < *(int *)(&mapSquareRightX[uVar11])) && (*(int *)(&mapSquareLeftX[uVar11]) < 0xdf)) {
+        uVar1 = *(uint16_t *)(&mapSquareColumn[uVar11]);
         iStack_1a = constr_usesSmoothPrev(uVar1,-1,(int *)&cornerBL,0xff,(char)&cornerBL);
         iStack_1c = constr_usesSmoothPrev(uVar1 + 1,-1,(int *)&cornerBR,0xff,(char)&cornerBR);
         uVar4 = constr_getFlagsAtOffset(uVar1,-1);
         bStack_b = (byte)uVar4;
         iVar8 = ScreenOriginY[0] - iStack_1a;
-        iVar10 = *(int *)(uVar11 * 2 + 0x6c0);
-        iVar7 = *(int *)(uVar11 * 2 + 0xa20);
-        for (iStack_34 = *(int *)(uVar11 * 2 + 0xa20); iStack_34 <= *(int *)(uVar11 * 2 + 0x6c0);
+        iVar10 = *(int *)(&mapSquareRightX[uVar11]);
+        iVar7 = *(int *)(&mapSquareLeftX[uVar11]);
+        for (iStack_34 = *(int *)(&mapSquareLeftX[uVar11]); iStack_34 <= *(int *)(&mapSquareRightX[uVar11]);
             iStack_34 = iStack_34 + 1) {
           if ((0xb < iStack_34) && (iStack_34 < 0xdf)) {
             *(int *)((iStack_34 + -0xc) * 2 + 0x34c) =
-                 iVar8 + ((iStack_1a - iStack_1c) * (iStack_34 - *(int *)(uVar11 * 2 + 0xa20))) /
+                 iVar8 + ((iStack_1a - iStack_1c) * (iStack_34 - *(int *)(&mapSquareLeftX[uVar11]))) /
                          (iVar10 - iVar7);
             *(int *)((iStack_34 + -0xc) * 2 + 0x1a6) = -(iStack_1a - iStack_1c);
             if ((uVar4 & 3) == 0) {
@@ -1172,24 +1172,24 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
   
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)&dst;
-  F_SCOPY((far_t)0x2410074f,dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410074f)),dst_00);
   bVar2 = ovr_draw_textArena();
   if (bVar2) {
     iStack_6 = GfxRndSeed * 6 >> 6;
     if (0xee < 0x166 - iStack_6) {
-      gfx_02.seg._0_1_ =
+      (*(uint8_t *)((uint8_t *)&(gfx_02.seg))) =
            (char)((undefined2 *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       gfx_02.ofs = ((undefined2 *)&l1Cut1Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
-      gfx_02.seg._1_1_ =
+      (*(uint8_t *)((uint8_t *)&(gfx_02.seg) + 1)) =
            (char)((uint)((undefined2 *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
       ovr_blitGfxRect(gfx_02,0xef - iStack_6,7,(brect_t *)(BlitRects + 3),0x10,true);
     }
     if (0x167 - iStack_6 < 0x135) {
-      gfx_03.seg._0_1_ =
+      (*(uint8_t *)((uint8_t *)&(gfx_03.seg))) =
            (char)((undefined2 *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       gfx_03.ofs = ((undefined2 *)&l1Cut3Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
-      gfx_03.seg._1_1_ =
+      (*(uint8_t *)((uint8_t *)&(gfx_03.seg) + 1)) =
            (char)((uint)((undefined2 *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
       ovr_blitGfxRect(gfx_03,0x22f - iStack_6,7,(brect_t *)(BlitRects + 3),0x10,true);
@@ -1288,13 +1288,13 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
           iStack_14 = iStack_14 / 3;
           iStack_18 = constr_usesSmoothPrev(uVar7,dy,(int *)&cornerBL);
           iStack_18 = iStack_18 / 3;
-          if (*(byte *)(iStack_e * 0x27 + 0x11b) < 2) {
+          if (*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 13) < 2) {
             iStack_16 = constr_usesSmoothPrev(uVar7 + 1,dy + -1,(int *)&cornerTR);
             iStack_16 = iStack_16 / 3;
             iStack_1a = constr_usesSmoothPrev(uVar7 + 1,dy,(int *)&cornerBR);
             iStack_1a = iStack_1a / 3;
           }
-          else if (*(byte *)(iStack_e * 0x27 + 0x11b) < 3) {
+          else if (*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 13) < 3) {
             iStack_16 = constr_usesSmoothPrev(uVar7 + 2,dy + -1,(int *)&cornerTR);
             iStack_16 = iStack_16 / 3;
             iStack_1a = constr_usesSmoothPrev(uVar7 + 2,dy,(int *)&cornerBR);
@@ -1322,13 +1322,13 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
               iStack_26 = iStack_16 - uStack_4;
             }
           }
-          if (*(char *)(iStack_e * 0x27 + 0x11e) == '\0') {
-            if ((*(uint *)(iStack_e * 0x27 + 0x121) & 0x20) == 0) {
+          if (*(char *)((uint8_t *)&BuildingTypes[iStack_e] + 16) == '\0') {
+            if ((*(uint *)((uint8_t *)&BuildingTypes[iStack_e] + 19) & 0x20) == 0) {
               iVar5 = iStack_e * 0xc + ((uint16_t *)squareSide)[uVar6] * 4;
               if (((*(int *)(iVar5 + 0x4230) == 0 && *(int *)(iVar5 + 0x4232) == 0) || (1 < dy)) ||
                  (7 < HighlightLevel)) {
                 iVar5 = iStack_e * 0xc + ((uint16_t *)squareSide)[uVar6] * 4;
-                gfx_06.seg._0_1_ =
+                (*(uint8_t *)((uint8_t *)&(gfx_06.seg))) =
                      (char)*(undefined2 *)
                             ((char *)
                              "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -1337,7 +1337,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
                               ((char *)
                                "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                                + 0x2e + iVar5);
-                gfx_06.seg._1_1_ =
+                (*(uint8_t *)((uint8_t *)&(gfx_06.seg) + 1)) =
                      (char)((uint)*(undefined2 *)
                                    ((char *)
                                     "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -1349,9 +1349,9 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
               else {
                 iVar5 = iStack_e * 0xc + ((uint16_t *)squareSide)[uVar6] * 4;
                 uVar1 = *(undefined2 *)(iVar5 + 0x4232);
-                gfx_05.seg._0_1_ = (char)uVar1;
+                (*(uint8_t *)((uint8_t *)&(gfx_05.seg))) = (char)uVar1;
                 gfx_05.ofs = *(undefined2 *)(iVar5 + 0x4230);
-                gfx_05.seg._1_1_ = (char)((uint)uVar1 >> 8);
+                (*(uint8_t *)((uint8_t *)&(gfx_05.seg) + 1)) = (char)((uint)uVar1 >> 8);
                 ovr_blitGfxRect(gfx_05,((uint16_t *)SquareLeftX)[uVar6],
                                 (uint)*(byte *)(dy + 0x74b) - iStack_26,(brect_t *)(BlitRects + 3),
                                 0x10,(&bStack_a)[dy]);
@@ -1374,7 +1374,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
             }
             else {
               iVar5 = iStack_e * 0xc + (uint)GSeason * 4;
-              gfx_04.seg._0_1_ =
+              (*(uint8_t *)((uint8_t *)&(gfx_04.seg))) =
                    (char)*(undefined2 *)
                           ((char *)
                            "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -1383,7 +1383,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
                             ((char *)
                              "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                              + 0x2e + iVar5);
-              gfx_04.seg._1_1_ =
+              (*(uint8_t *)((uint8_t *)&(gfx_04.seg) + 1)) =
                    (char)((uint)*(undefined2 *)
                                  ((char *)
                                   "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -1394,7 +1394,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
             }
           }
           else {
-            if ((*(byte *)(iStack_e * 0x27 + 0x11e) & 10) != 0) {
+            if ((*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 16) & 10) != 0) {
               if (((uint16_t *)SquareLeftX)[uVar6] == ((uint16_t *)SquareTopY)[uVar6]) {
                 gfx.seg = *(uint16_t *)
                            ((char *)
@@ -1427,7 +1427,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
                                     &((brect_t *)(BlitRects + 3))->x,(&bStack_a)[dy],0x2410);
               }
             }
-            if ((*(byte *)(iStack_e * 0x27 + 0x11e) & 8) != 0) {
+            if ((*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 16) & 8) != 0) {
               if (((uint16_t *)SquareBottomY)[uVar6] == ((uint16_t *)SquareRightX)[uVar6]) {
                 gfx_00.seg = *(uint16_t *)
                               ((char *)
@@ -1460,8 +1460,8 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
                                     &((brect_t *)(BlitRects + 3))->x,(&bStack_a)[dy],0x2410);
               }
             }
-            if (((*(byte *)(iStack_e * 0x27 + 0x11e) & 4) != 0) ||
-               (((*(byte *)(iStack_e * 0x27 + 0x11e) & 1) != 0 && (dy != 0)))) {
+            if (((*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 16) & 4) != 0) ||
+               (((*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 16) & 1) != 0 && (dy != 0)))) {
               gfx_11.seg = *(uint16_t *)
                             ((char *)
                              "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -1534,7 +1534,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
       uVar6 = ((uint16_t *)squareColumn)[uVar7];
       bVar3 = constr_setHighlightAtOffset(uVar6,0);
       iStack_e = CONCAT11(extraout_AH_00,bVar3);
-      if ((*(byte *)(iStack_e * 0x27 + 0x11e) & 2) != 0) {
+      if ((*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 16) & 2) != 0) {
         iStack_10 = constr_usesSmoothPrev(uVar6,-1,(int *)&cornerBL);
         iStack_10 = iStack_10 / 3;
         gfx_01.seg = *(uint16_t *)
@@ -1549,8 +1549,8 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
                   (gfx_01,((uint16_t *)SquareLeftX)[uVar7],(uint)rowBandOrigin[0] - iStack_10,6,0x27
                    ,6,(brect_t *)(BlitRects + 3),0x2410,(char)((uint16_t *)SquareLeftX)[uVar7]);
       }
-      if ((*(byte *)(iStack_e * 0x27 + 0x11e) & 1) != 0) {
-        gfx_07.seg._0_1_ =
+      if ((*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 16) & 1) != 0) {
+        (*(uint8_t *)((uint8_t *)&(gfx_07.seg))) =
              (char)*(undefined2 *)
                     ((char *)
                      "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -1559,7 +1559,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
                       ((char *)
                        "You may raise a primary ability by trading two points of another ability. Select ability to increase."
                        + 0x36 + iStack_e * 0xc);
-        gfx_07.seg._1_1_ =
+        (*(uint8_t *)((uint8_t *)&(gfx_07.seg) + 1)) =
              (char)((uint)*(undefined2 *)
                            ((char *)
                             "You may raise a primary ability by trading two points of another ability. Select ability to increase."

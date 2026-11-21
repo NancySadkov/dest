@@ -300,7 +300,7 @@ L_draw_2e25_025a_03D9:
       *(int *)((int)piVar42 + 0xc) = CrossBlitX + CrossBlitY * 0x140;
       *(uint16_t *)((int)piVar42 + 10) = CrossBlitGfx.seg;
       *(uint16_t *)((int)piVar42 + 8) = CrossBlitGfx.ofs;
-      *(undefined2 *)((int)piVar42 + 6) = (char *)"bath house" + 10;
+      *(undefined2 *)((int)piVar42 + 6) = (char *)0x22d3;
       uVar52 = 0x22d3;
       puVar43 = (undefined1 *)((int)piVar42 + 4);
       *(undefined2 *)((int)piVar42 + 4) = 0xe689;
@@ -3544,7 +3544,7 @@ L_draw_2e25_025a_03D9:
   cVar35 = (char)(in_CX + -1);
   pcVar46[(int)unaff_SI] = pcVar46[(int)unaff_SI] + cVar35;
   *pcVar33 = *pcVar33 + (char)((uint)iVar14 >> 8);
-  *(undefined2 *)((int)piVar39 + -2) = (char *)"@magic mill" + 9;
+  *(undefined2 *)((int)piVar39 + -2) = (char *)0x24ae;
   cVar8 = (char)((uint)(in_CX + -1) >> 8);
   pcVar46[(int)unaff_SI] = pcVar46[(int)unaff_SI] + cVar8;
   _resetTextBlitCycle = *(int *)(pcVar33 + (int)unaff_SI) * 0x6c;
@@ -3573,13 +3573,13 @@ L_draw_2e25_025a_03D9:
   pcVar46 = pcVar46 + (int)pcVar49;
   *pcVar49 = *pcVar49 + cVar31;
                     /* WARNING: Read-only address (ram,0x00026001) is written */
-  s_halfling_lodge_2410_1efd._4_2_ = pcVar33 + 0x696c;
+  (*(uint16_t *)((uint8_t *)&(s_halfling_lodge_2410_1efd) + 4)) = pcVar33 + 0x696c;
   piVar50 = (int *)(pcVar49 + (int)pcVar46);
   cVar35 = cVar35 + cVar22;
   iVar14 = CONCAT11(cVar35,cVar31);
   *(char *)piVar5 = (char)*piVar5 + cVar18;
   *piVar50 = *piVar50 + CONCAT11(cVar22,cVar18);
-  AgntAnms[0x30]._9_2_ = AgntAnms[0x30]._9_2_ + CONCAT11(cVar22,cVar18);
+  (*(uint16_t *)((uint8_t *)&(AgntAnms[0x30]) + 9)) = (*(uint16_t *)((uint8_t *)&(AgntAnms[0x30]) + 9)) + CONCAT11(cVar22,cVar18);
   piVar2 = (int *)(iVar14 + (int)piVar5);
   *piVar2 = *piVar2 + CONCAT11(cVar26,cVar23);
   piVar2 = (int *)(iVar14 + (int)piVar50);
@@ -3628,7 +3628,7 @@ L_draw_2e25_025a_03D9:
   *(undefined1 **)(pbVar32 + 1) =
        (undefined1 *)CONCAT22(uVar51,(undefined1 *)((int)piVar39 + (int)piVar5) + 0xe) +
        *(long *)(pbVar32 + 1);
-  *(char **)((undefined1 *)((int)piVar39 + (int)piVar5) + 0xc) = (char *)"@magic mill" + 10;
+  *(char **)((undefined1 *)((int)piVar39 + (int)piVar5) + 0xc) = (char *)0x24af;
   *(byte **)(pbVar47 + (int)puVar48 + 1) = pbVar47 + *(int *)(pbVar47 + (int)puVar48 + 1);
   uVar15 = *(int *)(pbVar32 + (int)piVar50) * 0x6c;
   *(int *)((int)piVar50 + 1) = (int)(pbVar47 + *(int *)((int)piVar50 + 1));
@@ -3722,16 +3722,16 @@ code_r0x000219ee:
     if (bVar55 != bVar54) {
       *(undefined1 **)(pbVar47 + (int)puVar25 + 1) =
            (undefined1 *)((int)piVar39 + (int)piVar5) + *(int *)(pbVar47 + (int)puVar25 + 1) + 0xc;
-      cVar9 = _DATA._1_1_;
+      cVar9 = (*(uint8_t *)((uint8_t *)&(_DATA) + 1));
       goto code_r0x000219f5;
     }
   }
   if (bVar55 == bVar54) {
     *(uint *)(pbVar32 + (int)puVar25) = *(int *)(pbVar32 + (int)puVar25) + uVar15;
-    cVar9 = _DATA._1_1_;
+    cVar9 = (*(uint8_t *)((uint8_t *)&(_DATA) + 1));
   }
 code_r0x000219f5:
-  _DATA._1_1_ = cVar9;
+  (*(uint8_t *)((uint8_t *)&(_DATA) + 1)) = cVar9;
   pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + cVar8;
   pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + cVar8;
   pbVar32[(int)puVar25] = pbVar32[(int)puVar25] + cVar8;
@@ -4114,11 +4114,11 @@ void __cdecl16far draw_usesPlay_sfx(void)
   agnt_t *in_stack_0000fffa;
   byte bStack_4;
   
-  prevTick = CONCAT22(unaff_SI,recordUpdateTick._2_2_);
+  prevTick = CONCAT22(unaff_SI,(*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)));
   puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)recordUpdateTick,prevTick);
   if ((in_DX != 0) || ((ulong *)((int)(undefined4 *)&_DATA + 1U) < puVar3)) {
-    recordUpdateTick._2_2_ = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
-    recordUpdateTick._0_2_ = *(ulong **)BDA_DailyTimeCounter;
+    (*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)) = *(undefined2 *)(BDA_DailyTimeCounter.ofs + 2);
+    (*(uint16_t *)((uint8_t *)&(recordUpdateTick))) = *(ulong **)BDA_DailyTimeCounter;
     outFlag = 0;
     for (uVar7 = 0; uVar6 = (uint)(prevTick >> 0x10), uVar7 < GRecordCount; uVar7 = uVar7 + 1) {
       *(int *)(uVar7 * 0x12) = *(int *)(uVar7 * 0x12) + 1;
@@ -4221,7 +4221,7 @@ void __cdecl16far draw_usesPrintf(void)
   if ((timePassing != '\0') ||
      (((GPaused == '\0' || ((bVar1 = ovr_ovc15_usesAlignUp42(), bVar1 && (GOngoingBattle == '\0'))))
       && ((puVar2 = ovr_attact_usesBDADailyTimeCounter
-                              ((ulong *)GDailyTimeCounter,CONCAT22(unaff_BP,GDailyTimeCounter._2_2_)
+                              ((ulong *)GDailyTimeCounter,CONCAT22(unaff_BP,(*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)))
                               ), in_DX != 0 ||
           ((char *)"Abnormal program termination\r\n" + 0x1d < puVar2)))))) {
     ovr_attact_usesUpdSeason();
@@ -4328,7 +4328,7 @@ uint16_t __cdecl16far gameProcessKey(void)
     }
     else if (key == 0x2300) {
       pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x286,unaff_SS),
-                             (char *)CONCAT22(GSeed,(char *)"puppetmaker" + 3),(char)SeedHi);
+                             (char *)CONCAT22(GSeed,(char *)0x2410),(char)SeedHi);
       ovr_say(pcVar2,in_DL);
     }
     else if (key == 0x2400) {
@@ -4579,7 +4579,7 @@ void __cdecl16far draw_toolbarLabels(void)
       ovr_blitLoadRleGfx(gfx_00,dst_00);
       TextBlitX = 0xea;
       TextBlitY = 0x62;
-      ovr_blitText((char *)"Movement",(byte *)CONCAT22(Font03.ofs,(char *)"puppetmaker" + 3),
+      ovr_blitText((char *)"Movement",(byte *)CONCAT22(Font03.ofs,(char *)0x2410),
                    Font03.seg,0x3f);
     }
     else if ((GMenuItem < 5) && (((uint8_t *)MenuItemEnabled)[GMenuItem] != 0xff)) {
@@ -4590,15 +4590,15 @@ void __cdecl16far draw_toolbarLabels(void)
       ovr_blitLoadRleGfx(gfx_01,dst_01);
       TextBlitX = 0xe6;
       TextBlitY = 0x3e;
-      ovr_blitText((char *)"Recruit",(byte *)CONCAT22(Font02.ofs,(char *)"puppetmaker" + 3),
+      ovr_blitText((char *)"Recruit",(byte *)CONCAT22(Font02.ofs,(char *)0x2410),
                    Font02.seg,0x3f);
       TextBlitX = 0x11e;
       TextBlitY = 0x3e;
-      ovr_blitText((char *)"Train",(byte *)CONCAT22(Font02.ofs,(char *)"puppetmaker" + 3),Font02.seg
+      ovr_blitText((char *)"Train",(byte *)CONCAT22(Font02.ofs,(char *)0x2410),Font02.seg
                    ,0x3f);
       TextBlitX = 0x104;
       TextBlitY = 0x5b;
-      ovr_blitText((char *)"Build",(byte *)CONCAT22(Font02.ofs,(char *)"puppetmaker" + 3),Font02.seg
+      ovr_blitText((char *)"Build",(byte *)CONCAT22(Font02.ofs,(char *)0x2410),Font02.seg
                    ,0x3f);
       TextBlitX = 0xea;
       TextBlitY = 0x62;
@@ -5029,7 +5029,7 @@ void __stdcall16far draw_textGoldProvidesHousing(void)
   pbVar23 = (byte *)(uVar22 | (int)&uStack_4 + 1U);
   uVar6 = CONCAT11((byte)(uVar6 >> 8) | bVar9 | *(byte *)(uVar18 + uVar22),bVar5) | uVar19;
   uVar10 = CONCAT11((byte)(uVar10 >> 8) | bVar7 | *(byte *)CONCAT11(bVar16,bVar14),
-                    bVar8 | AgntAnms[0xe].y._1_1_) | uVar12;
+                    bVar8 | (*(uint8_t *)((uint8_t *)&(AgntAnms[0xe].y) + 1))) | uVar12;
   *(uint *)(pbVar23 + uVar18 + 0xb009) = *(uint *)(pbVar23 + uVar18 + 0xb009) | (uint)puVar20;
   puVar1 = (uint *)((int)puVar20 + uVar19 + 0x9809);
   *puVar1 = *puVar1 | uVar18;

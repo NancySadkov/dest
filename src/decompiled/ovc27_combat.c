@@ -37,7 +37,7 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
   iVar4 = x2;
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&yOffset;
-  F_SCOPY((far_t)0x2410592a,dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410592a)),dst);
   if (x2 < x1) {
     x2 = x1;
     x1 = iVar4;
@@ -128,13 +128,13 @@ void __cdecl16far ovc27_usesRandBelow(int x1,int y1,int x2,int y2,brect_t *rect,
   iVar2 = x2;
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&plane0;
-  F_SCOPY((far_t)0x2410594a,dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410594a)),dst);
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)&plane1;
-  F_SCOPY((far_t)0x2410596a,dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410596a)),dst_00);
   dst_01.seg = unaff_SS;
   dst_01.ofs = (uint16_t)&plane2;
-  F_SCOPY((far_t)0x2410598a,dst_01);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410598a)),dst_01);
   if (x2 < x1) {
     x2 = x1;
     x1 = iVar2;
@@ -308,10 +308,10 @@ uint __cdecl16far ovc27_usesRandBelow3(agnt_t *agnt,uint32_t reqRecord,int agntI
   
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&reqLevel1;
-  F_SCOPY((far_t)0x241059aa,dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x241059aa)),dst);
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)&reqLevel2;
-  F_SCOPY((far_t)0x241059b4,dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x241059b4)),dst_00);
   uVar2 = agntIndex * 0x34;
   uStack_10 = CONCAT22(0x1726,uVar2);
   uVar8 = (undefined2)(reqRecord >> 0x10);
@@ -654,7 +654,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex,...)
                           *(undefined2 *)(iVar5 + -0x1d),*(undefined2 *)(iVar5 + -0x1b),
                           *(undefined2 *)(iVar8 + 0x24),*(undefined2 *)(iVar8 + 0x26));
       msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5ba4,unaff_SS),
-                          (char *)CONCAT22(puVar7,(char *)"puppetmaker" + 3),uVar2);
+                          (char *)CONCAT22(puVar7,(char *)0x2410),uVar2);
       ovr_uiNotify(msg,uVar2);
       paStack_6->variant = bStack_13;
       if (*(char *)((uint)bStack_13 * 0x21 + -0x17) == '9') {
@@ -840,7 +840,7 @@ uint __cdecl16far ovc27_spellHalfDamage(agnt_t *agnt)
     pcVar3 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,pcVar3));
     puVar1 = ovr_ovc15_usesStshRealloc(pcVar3,in_DX,uVar4);
     pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5bbf,unaff_SS),
-                           (char *)CONCAT22(puVar1,(char *)"puppetmaker" + 3),in_DX);
+                           (char *)CONCAT22(puVar1,(char *)0x2410),in_DX);
     ovr_uiNotify(pcVar3,in_DX);
     uVar2 = CONCAT11((char)((uint)pcVar3 >> 8),1);
   }
@@ -878,7 +878,7 @@ uint __cdecl16far ovc27_breathHalfDamage(agnt_t *agnt,...)
     pcVar1 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text,in_stack_00000006));
     puVar2 = ovr_ovc15_usesStshRealloc(pcVar1,in_DX,uVar4);
     pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5be1,unaff_SS),
-                           (char *)CONCAT22(puVar2,(char *)"puppetmaker" + 3),in_DX);
+                           (char *)CONCAT22(puVar2,(char *)0x2410),in_DX);
     ovr_uiNotify(pcVar1,in_DX);
     uVar3 = CONCAT11((char)((uint)pcVar1 >> 8),1);
   }
@@ -1005,7 +1005,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,...
       pcVar6 = ovr_agnt_statusText(paStack_c,(char *)CONCAT22(&text2,pcStack_a));
       puVar7 = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11);
       pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,unaff_SS),
-                             (char *)CONCAT22(puVar7,(char *)"puppetmaker" + 3),uVar8);
+                             (char *)CONCAT22(puVar7,(char *)0x2410),uVar8);
       ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
       ovr_OVC41_6a8f_01e7_entry(paStack_c,(char)pcStack_a);
       paStack_c->faction = agnt->faction;
@@ -1024,7 +1024,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,...
     pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text2,agntIndex));
     puVar7 = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11);
     pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c44,unaff_SS),
-                           (char *)CONCAT22(puVar7,(char *)"puppetmaker" + 3),uVar8);
+                           (char *)CONCAT22(puVar7,(char *)0x2410),uVar8);
     ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
     paStack_c->flags = paStack_c->flags | 0x400;
     emptyFunction();
@@ -1048,7 +1048,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,...
     pcVar6 = ovr_agnt_statusText(paStack_c,(char *)CONCAT22(&text2,pcStack_a));
     puVar7 = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11);
     pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,unaff_SS),
-                           (char *)CONCAT22(puVar7,(char *)"puppetmaker" + 3),uVar8);
+                           (char *)CONCAT22(puVar7,(char *)0x2410),uVar8);
     ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
     paStack_c->faction = agnt->faction;
     ovr_OVC41_6a8f_01e7_entry(paStack_c,(char)pcStack_a);
@@ -1183,7 +1183,7 @@ void ovc27_textTakesHalfDamage4(void)
                                                       (char *)*(undefined2 *)(unaff_BP + -8)));
         puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,uVar12);
         pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c90,unaff_SS),
-                               (char *)CONCAT22(puVar9,(char *)"puppetmaker" + 3),(char)in_DX);
+                               (char *)CONCAT22(puVar9,(char *)0x2410),(char)in_DX);
         ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
         ovr_OVC41_6a8f_01e7_entry
                   ((agnt_t *)*(undefined2 *)(unaff_BP + -10),(char)*(undefined2 *)(unaff_BP + -8));
@@ -1224,7 +1224,7 @@ void ovc27_textTakesHalfDamage4(void)
                                                       (char *)*(undefined2 *)(unaff_BP + -8)));
         puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar11,uVar12,uVar10);
         pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5ca2,unaff_SS),
-                               (char *)CONCAT22(puVar9,(char *)"puppetmaker" + 3),(char)in_DX);
+                               (char *)CONCAT22(puVar9,(char *)0x2410),(char)in_DX);
         ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
         ovr_OVC41_6a8f_01e7_entry
                   ((agnt_t *)*(undefined2 *)(unaff_BP + -10),(char)*(undefined2 *)(unaff_BP + -8));
@@ -1262,7 +1262,7 @@ void ovc27_textTakesHalfDamage4(void)
                                                     (char *)*(undefined2 *)(unaff_BP + -8)));
       puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar11,uVar12,uVar10);
       pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5cbc,unaff_SS),
-                             (char *)CONCAT22(puVar9,(char *)"puppetmaker" + 3),(char)in_DX);
+                             (char *)CONCAT22(puVar9,(char *)0x2410),(char)in_DX);
       ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
       *(undefined1 *)((int)*(undefined4 *)(unaff_BP + -10) + 0x33) =
            *(undefined1 *)((int)*(undefined4 *)(unaff_BP + 6) + 0x32);
@@ -1302,7 +1302,7 @@ void ovc27_textTakesHalfDamage4(void)
                                                     (char *)*(undefined2 *)(unaff_BP + -8)));
       puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,uVar12);
       pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c90,unaff_SS),
-                             (char *)CONCAT22(puVar9,(char *)"puppetmaker" + 3),(char)in_DX);
+                             (char *)CONCAT22(puVar9,(char *)0x2410),(char)in_DX);
       ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
       ovr_OVC41_6a8f_01e7_entry
                 ((agnt_t *)*(undefined2 *)(unaff_BP + -10),(char)*(undefined2 *)(unaff_BP + -8));
@@ -1448,7 +1448,7 @@ void ovc27_textTakesHalfDamage4(void)
                                                     (char *)*(undefined2 *)(unaff_BP + -8)));
       puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,uVar12);
       pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c2f,unaff_SS),
-                             (char *)CONCAT22(puVar9,(char *)"puppetmaker" + 3),(char)in_DX);
+                             (char *)CONCAT22(puVar9,(char *)0x2410),(char)in_DX);
       ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
       ovr_OVC41_6a8f_01e7_entry
                 ((agnt_t *)*(undefined2 *)(unaff_BP + -10),(char)*(undefined2 *)(unaff_BP + -8));
@@ -1728,7 +1728,7 @@ ovc27_usesPlay_sfxU(uint16_t ptrOfs,uint16_t ptrSeg,agnt_t *agnt,uint8_t frames,
 /* WARNING: Unknown calling convention -- yet parameter storage is locked */
 /* duplicate name, disambiguated by address order */
 
-void switchD_6000:3cd8::caseD_0_3(void)
+void switchD_6000_3cd8__caseD_0_3(void)
 
 {
   int unaff_BP;

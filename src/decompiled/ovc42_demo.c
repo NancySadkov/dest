@@ -43,7 +43,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
       if (rightButtonLatch != '\0') {
         return (char *)"woodcarver";
       }
-      return (char *)"arena" + 5;
+      return (char *)0x2401;
     }
     prevTick = CONCAT22(uVar6,uVar1);
     puVar4 = ovr_attact_usesBDADailyTimeCounter(__return_storage_ptr__,prevTick);
@@ -127,9 +127,9 @@ void __cdecl16far ovc42_endDemo(char exitCode,int paletteOfs,int paletteSeg)
       ovr_ovc40_usesCalcSeasonPalette('\0');
     }
     else {
-      palette.seg._0_1_ = (char)paletteSeg;
+      (*(uint8_t *)((uint8_t *)&(palette.seg))) = (char)paletteSeg;
       palette.ofs = paletteOfs;
-      palette.seg._1_1_ = (char)((uint)paletteSeg >> 8);
+      (*(uint8_t *)((uint8_t *)&(palette.seg) + 1)) = (char)((uint)paletteSeg >> 8);
       ovr_ovc40_usesVgaSetPalette8bit(palette);
     }
   }
@@ -139,14 +139,14 @@ void __cdecl16far ovc42_endDemo(char exitCode,int paletteOfs,int paletteSeg)
   gfx_01.seg = nwpanel2Cut1Seg;
   gfx_01.ofs = nwpanel2Cut1Ofs;
   ovr_blitGfxRect(gfx_01,0,0,(brect_t *)(BlitRects + 1),0x10,true,0x10,0x10,0);
-  gfx.seg._0_1_ = (char)GMenuGfxSeg;
+  (*(uint8_t *)((uint8_t *)&(gfx.seg))) = (char)GMenuGfxSeg;
   gfx.ofs = GMenuGfxOfs;
-  gfx.seg._1_1_ = (char)((uint)GMenuGfxSeg >> 8);
-  ovr_blitLoadRleGfx(gfx,(far_t)0xa00009af,0xaf);
-  gfx_00.seg._0_1_ = (char)panel01Cut3Seg;
+  (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) = (char)((uint)GMenuGfxSeg >> 8);
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa00009af)),0xaf);
+  (*(uint8_t *)((uint8_t *)&(gfx_00.seg))) = (char)panel01Cut3Seg;
   gfx_00.ofs = panel01Cut3Ofs;
-  gfx_00.seg._1_1_ = (char)((uint)panel01Cut3Seg >> 8);
-  ovr_blitLoadRleGfx(gfx_00,(far_t)0xa000c51d,0x1d);
+  (*(uint8_t *)((uint8_t *)&(gfx_00.seg) + 1)) = (char)((uint)panel01Cut3Seg >> 8);
+  ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa000c51d)),0x1d);
   mapViewActive = 0;
   SaveAuto = 0;
   AgntFlag1 = false;
@@ -219,9 +219,9 @@ ovc42_showAgentStats(byte gindex,uint8_t partyIndex,char flag,far_t cmap,byte le
   peStack_29 = (entity_t *)&agntRec;
   agntRec.gindex = gindex;
   agntRec.animFrame = 0x1;
-  agntRec.entity._3_1_ = partyIndex;
+  (*(uint8_t *)((uint8_t *)&(agntRec.entity) + 3)) = partyIndex;
   if (flag != '\0') {
-    agntRec._22_2_ = agntRec._22_2_ | 1;
+    (*(uint16_t *)((uint8_t *)&(agntRec) + 22)) = (*(uint16_t *)((uint8_t *)&(agntRec) + 22)) | 1;
   }
   if (level == 0) {
     agntRec.level = *(uint8_t *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95);
@@ -230,17 +230,17 @@ ovc42_showAgentStats(byte gindex,uint8_t partyIndex,char flag,far_t cmap,byte le
     agntRec.level = level;
   }
   if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) == -1) {
-    agntRec._18_2_ = *(undefined2 *)((uint)agntRec.level * 4 + -2);
-    agntRec._16_2_ = *(undefined2 *)((uint)agntRec.level * 4 + -4);
+    (*(uint16_t *)((uint8_t *)&(agntRec) + 18)) = *(undefined2 *)((uint)agntRec.level * 4 + -2);
+    (*(uint16_t *)((uint8_t *)&(agntRec) + 16)) = *(undefined2 *)((uint)agntRec.level * 4 + -4);
   }
   else {
     iVar1 = (uint)*(byte *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) * 0x94 +
             (uint)agntRec.level * 4;
-    agntRec._18_2_ = *(undefined2 *)(iVar1 + -2);
-    agntRec._16_2_ = *(undefined2 *)(iVar1 + -4);
+    (*(uint16_t *)((uint8_t *)&(agntRec) + 18)) = *(undefined2 *)(iVar1 + -2);
+    (*(uint16_t *)((uint8_t *)&(agntRec) + 16)) = *(undefined2 *)(iVar1 + -4);
   }
-  if (agntRec._16_2_ == 0 && agntRec._18_2_ == 0) {
-    agntRec._18_2_ = 0;
+  if ((*(uint16_t *)((uint8_t *)&(agntRec) + 16)) == 0 && (*(uint16_t *)((uint8_t *)&(agntRec) + 18)) == 0) {
+    (*(uint16_t *)((uint8_t *)&(agntRec) + 18)) = 0;
     agntRec.health = 0x64;
     agntRec.animVariant = 0x0;
   }
@@ -275,10 +275,10 @@ void __cdecl16far ovc42_populateArea(byte partyIndex)
   
   dst.seg = unaff_SS;
   dst.ofs = (uint16_t)&unitTypeMap;
-  F_SCOPY((far_t)0x24107145,dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24107145)),dst);
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)&spawnGindexMap;
-  F_SCOPY((far_t)0x24107153,dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x24107153)),dst_00);
   iStack_4 = -0x14;
   do {
     if (10 < iStack_4) {
@@ -360,8 +360,8 @@ void __cdecl16far ovc42_copy1(char *buf)
   byte bVar1;
   byte *pbVar2;
   
-  _fmemmove((char *)CONCAT22(buf._2_2_,(char *)buf + 0x210),
-            (char *)CONCAT22(buf._2_2_,(char *)buf + 0xf0),0xf0);
+  _fmemmove((char *)CONCAT22((*(uint16_t *)((uint8_t *)&(buf) + 2)),(char *)buf + 0x210),
+            (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(buf) + 2)),(char *)buf + 0xf0),0xf0);
   for (pbVar2 = (byte *)0x0; pbVar2 < (byte *)0xfa00; pbVar2 = pbVar2 + 1) {
     bVar1 = *pbVar2;
     if ((0x4f < bVar1) && (bVar1 < 0xa0)) {

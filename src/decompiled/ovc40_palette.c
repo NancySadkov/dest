@@ -215,7 +215,7 @@ void __cdecl16far ovc40_usesBlitGfx10(byte backdropIndex,int scrollOffset,brect_
   dst = (brect_t *)rect;
   gfx_03.seg = ((undefined2 *)&back03Cut2Seg)[(uint)backdropIndex * 2];
   gfx_03.ofs = ((undefined2 *)&back03Cut2Ofs)[(uint)backdropIndex * 2];
-  ovr_blitLoadRleGfx(gfx_03,(far_t)((ulong)dst->seg << 0x10));
+  ovr_blitLoadRleGfx(gfx_03,far_from_u32((uint32_t)((ulong)dst->seg << 0x10)));
   gfx.seg = ((undefined2 *)&midgrnd5Cut1Seg)[(uint)backdropIndex * 2];
   gfx.ofs = ((undefined2 *)&midgrnd5Cut1Ofs)[(uint)backdropIndex * 2];
   type = SUB41((ulong)rect >> 0x10,0);

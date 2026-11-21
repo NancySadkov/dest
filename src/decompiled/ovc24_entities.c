@@ -72,7 +72,7 @@ char __cdecl16far ovc24_usesEntities(int entityIndex)
   undefined2 uVar4;
   char cStack_3;
   
-  bVar1 = ovr_agnt_compute8(&Entities[entityIndex].base,_DAT_2000_d190);
+  bVar1 = ovr_agnt_compute8(&Entities[entityIndex].base,DAT_2000_d190);
   uVar4 = (undefined2)((ulong)Entities >> 0x10);
   peVar3 = (entity_t *)Entities;
   cStack_3 = peVar3[entityIndex].base.level + bVar1 +
@@ -203,14 +203,14 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   } while (uVar16 < EntityCount);
   iStack_16 = 0;
   plStack_18 = (long *)"Time passes...";
-  if ((-1 < uStack_2c._2_2_) &&
-     ((0 < uStack_2c._2_2_ || ((long *)"Time passes..." < (long *)uStack_2c)))) {
-    iStack_16 = uStack_2c._2_2_;
+  if ((-1 < (*(uint16_t *)((uint8_t *)&(uStack_2c) + 2))) &&
+     ((0 < (*(uint16_t *)((uint8_t *)&(uStack_2c) + 2)) || ((long *)"Time passes..." < (long *)uStack_2c)))) {
+    iStack_16 = (*(uint16_t *)((uint8_t *)&(uStack_2c) + 2));
     plStack_18 = (long *)uStack_2c;
   }
-  if ((iStack_16 <= uStack_28._2_2_) &&
-     ((iStack_16 < uStack_28._2_2_ || (plStack_18 < (long *)uStack_28)))) {
-    iStack_16 = uStack_28._2_2_;
+  if ((iStack_16 <= (*(uint16_t *)((uint8_t *)&(uStack_28) + 2))) &&
+     ((iStack_16 < (*(uint16_t *)((uint8_t *)&(uStack_28) + 2)) || (plStack_18 < (long *)uStack_28)))) {
+    iStack_16 = (*(uint16_t *)((uint8_t *)&(uStack_28) + 2));
     plStack_18 = (long *)uStack_28;
   }
   uVar23 = (undefined1)iStack_16;
@@ -629,13 +629,13 @@ L_OVC24_5943_112e_1255:
           uVar7 = 0x195d;
           pcVar5 = ovr_ovc15_capitalize((char *)&text);
           pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x578d,unaff_SS),
-                                 (char *)CONCAT22(pcVar5,(char *)"puppetmaker" + 3),uVar7,uVar4);
+                                 (char *)CONCAT22(pcVar5,(char *)0x2410),uVar7,uVar4);
           ovr_uiNotify(pcVar5,uVar7);
         }
         else {
           uVar4 = alignUp4(*(int *)((int)*(undefined4 *)(uStack_6 << 2) + 0x39),uVar6,0);
           pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x576a,unaff_SS),
-                                 (char *)CONCAT22(uVar4,(char *)"puppetmaker" + 3));
+                                 (char *)CONCAT22(uVar4,(char *)0x2410));
           ovr_uiNotify(pcVar5,uVar7);
         }
         if (bStack_3 == uStack_6) {

@@ -290,7 +290,7 @@ uint __cdecl16far ovc25_findUnitCell(int *x,uint *y)
   uint uStack_8;
   
   iVar1 = *(int *)CONCAT22((int *)x,in_stack_00000004);
-  uVar2 = *(uint *)CONCAT22((uint *)y,x._2_2_);
+  uVar2 = *(uint *)CONCAT22((uint *)y,(*(uint16_t *)((uint8_t *)&(x) + 2)));
   uStack_8 = 0;
   uVar4 = uVar2;
   do {
@@ -307,7 +307,7 @@ uint __cdecl16far ovc25_findUnitCell(int *x,uint *y)
                               (iVar1 + uVar6 * (int)cStack_a,uVar2 + uVar5 * (int)cStack_a);
             if ((char)uVar3 != '\0') {
               *(uint *)CONCAT22((int *)x,in_stack_00000004) = iVar1 + uVar6 * (int)cStack_a;
-              *(uint *)CONCAT22((uint *)y,x._2_2_) = uVar2 + uVar5 * (int)cStack_a;
+              *(uint *)CONCAT22((uint *)y,(*(uint16_t *)((uint8_t *)&(x) + 2))) = uVar2 + uVar5 * (int)cStack_a;
               return CONCAT11((char)(uVar5 * (int)cStack_a >> 8),1);
             }
             cStack_a = cStack_a + '\x02';
@@ -529,7 +529,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
               msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58c0,unaff_SS),
                                   (char *)CONCAT22(*(undefined2 *)
                                                     ((int)&worldMenuLabels[0].seg + 1 + iVar7),
-                                                   (char *)"puppetmaker" + 3),
+                                                   (char *)0x2410),
                                   *(undefined2 *)((int)&worldMenuLabels[1].ofs + 1 + iVar7),uVar2);
               ovr_uiNotify(msg,uVar4);
             }
@@ -939,7 +939,7 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex,...)
                          ((char *)*(undefined2 *)((uint)partyIndex * 4),
                           ((undefined2 *)((uint)partyIndex * 4))[1],GSavedBlitSeg);
       msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58f5,unaff_SS),
-                          (char *)CONCAT22(puVar3,(char *)"puppetmaker" + 3),uVar2);
+                          (char *)CONCAT22(puVar3,(char *)0x2410),uVar2);
       ovr_uiNotify(msg,uVar2);
       pbVar1 = (byte *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x5d);
       *pbVar1 = *pbVar1 | 1;
@@ -1011,7 +1011,7 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
                          ((char *)*(undefined2 *)((uint)partyIndex * 4),
                           ((undefined2 *)((uint)partyIndex * 4))[1],GSavedBlitSeg);
       msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5906,unaff_SS),
-                          (char *)CONCAT22(puVar4,(char *)"puppetmaker" + 3),uVar3);
+                          (char *)CONCAT22(puVar4,(char *)0x2410),uVar3);
       ovr_uiNotify(msg,uVar3);
       pbVar1 = (byte *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x5d);
       *pbVar1 = *pbVar1 | 1;
