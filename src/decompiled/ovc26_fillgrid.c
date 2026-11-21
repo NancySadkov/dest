@@ -126,10 +126,6 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
 
 
 /* 5d45:031f */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* [R4] calls ovr_stExit */
-
 uint __cdecl16far ovc26_usesStExit(int entityIndex,...)
 
 {
@@ -156,7 +152,7 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex,...)
   byte bStack_10;
   byte bStack_f;
   uint uStack_c;
-  undefined4 uStack_a;
+  entity_t *uStack_a;   /* hand fix: holds a far entity pointer; written as two 2-byte halves by the original code */
   char *pcStack_6;
   
   uVar2 = DAT_2000_d190;
@@ -274,7 +270,6 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex,...)
   }
   return uVar5;
 }
-
 
 
 /* 5d45:06f0 */

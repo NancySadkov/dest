@@ -374,6 +374,21 @@ public class ExportRecovered extends GhidraScript {
                 if (good) {
                     String body = res.getDecompiledFunction().getC();
                     String sig = res.getDecompiledFunction().getSignature();
+                    // A hand-corrected body wins over the decompiler's.  This is the
+                    // escape hatch for functions whose code the decompiler gets
+                    // structurally wrong and no model type can repair - the written
+                    // body keeps the decompiler's signature line, so the header and
+                    // the definition still agree.
+                    File ovr = new File(dir, "hard/" + mod + "__" + sanitizeIdent(name) + ".c");
+                    if (ovr.isFile()) {
+                        StringBuilder ob = new StringBuilder();
+                        BufferedReader orr = new BufferedReader(new FileReader(ovr));
+                        String ol;
+                        while ((ol = orr.readLine()) != null) ob.append(ol).append('\n');
+                        orr.close();
+                        body = ob.toString();
+                        println("override " + mod + " " + name + " <- hard/" + ovr.getName());
+                    }
                     body = fixUncompilableIdioms(fixShadowedParamUses(body, sig));
                     w.println(body);
                     if (emitted.add(name)) {
