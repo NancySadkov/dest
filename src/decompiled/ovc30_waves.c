@@ -194,9 +194,6 @@ undefined1 __cdecl16far ovc30_compute1(byte level,...)
 
 
 /* 619c:0339 */
-
-/* Finds or allocates a free leader record in the party-sheet table. */
-
 uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
 
 {
@@ -230,7 +227,7 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
     count = (uint)GLeaderCount;
     uVar2 = (uint)GLeaderCount;
     ((undefined2 *)(uVar2 * 4))[1] = in_DX;
-    *(undefined2 *)(uVar2 * 4) = pcStack_6;
+    *(undefined2 *)(uVar2 * 4) = (uint16_t)pcStack_6;   /* hand fix: store of the far pointer's offset half */
     GLeaderCount = GLeaderCount + 1;
     uStack_4 = in_DX;
   }
@@ -269,7 +266,6 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
   pfVar4 = ovr_ovc22_textRingProt(partyIndex);
   return CONCAT11((char)((uint)pfVar4 >> 8),partyIndex);
 }
-
 
 
 /* 619c:05a5 */

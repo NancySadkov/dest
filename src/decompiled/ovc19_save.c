@@ -101,11 +101,6 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
 
 
 /* 49fd:01da */
-
-/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* Loads a saved game: frees the game resources, then reads the magic, GUnitGrid, GMapFlags,
-   GMapCells, the RNG seeds, EntityCount and Entities from the handle. */
-
 uint __cdecl16far stLoad(int handle)
 
 {
@@ -155,7 +150,7 @@ uint __cdecl16far stLoad(int handle)
         for (iVar2 = 0; iVar2 < (int)(uint)GLeaderCount; iVar2 = iVar2 + 1) {
           pvVar3 = ovr_stshAlloc(0xae);
           ((undefined2 *)(iVar2 * 4))[1] = uVar5;
-          *(undefined2 *)(iVar2 * 4) = pvVar3;
+          *(undefined2 *)(iVar2 * 4) = (uint16_t)pvVar3;   /* hand fix: store of the far pointer's offset half */
           uVar1 = save_readBlock(*(int *)(iVar2 * 4),
                                  (void *)CONCAT22(0xae,(void *)((int *)(iVar2 * 4))[1]),unaff_DI,
                                  unaff_SI);
@@ -258,7 +253,6 @@ L_save_49fd_01da_0800:
   }
   return uVar1 & 0xff00;
 }
-
 
 
 /* 49fd:081e */
