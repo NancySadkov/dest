@@ -122,8 +122,7 @@ void __cdecl16far ovc38_showAchievements(void)
   uint16_t uVar4;
   byte *unaff_SS;
   uint8_t menuState;
-  uint16_t uStack_66;
-  uint16_t uStack_64;
+  far_t menuItems[10];   /* the SS:[BP-0x80] menu array */
   uint8_t text;
   far_t fStack_a;
   undefined1 *uStack_6;   /* hand fix: dereferenced as *uStack_6 */
@@ -169,10 +168,10 @@ void __cdecl16far ovc38_showAchievements(void)
                    Font03.seg,0xde,0xde,8);
     }
   }
-  _fmemset((void *)ZEXT24(unaff_SS),0x28,unaff_DI);
-  uStack_64 = 0x2410;
-  uStack_66 = 0x6ab4;
-  ovr_uiMenu((char *)0x0,far_from_u32((uint32_t)(ZEXT24(&menuState) << 0x10)),0,0);
+  _fmemset(MK_FP(_SS, menuItems), 0, 0x28);
+  menuItems[7].ofs = (uint16_t)s_done;        /* 0x6AB4 */
+  menuItems[7].seg = (uint16_t)_DS;
+  ovr_uiMenu(0, 0, (uint16_t)menuItems, (uint16_t)_SS, 8);
   ovc38_usesStshFree(fStack_a);
   ovr_saveui_blitPanel();
   return;
