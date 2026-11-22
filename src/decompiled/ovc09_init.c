@@ -1204,188 +1204,187 @@ void __cdecl16far init_computeMaxSquares(void)
 
 {
   far_t dst;
-  int iVar1;
-  int iVar2;
-  uint uVar3;
-  uint16_t uVar4;
+  int topY;
+  int colDown;
+  uint sqColUp;
+  uint16_t sqColDown;
   uint16_t unaff_SS;
-  uint8_t scaleMap;
-  byte abStack_1d [9];
-  uint uStack_14;
-  uint uStack_12;
-  char cStack_f;
-  uint uStack_e;
-  int iStack_c;
-  int iStack_a;
-  int iStack_8;
-  uint uStack_6;
-  uint uStack_4;
+  uint8_t scaleRow[10];
+  uint yOffset;
+  uint xOffset;
+  char row;
+  uint colUp;
+  int mapTopY;
+  int mapLeftX;
+  int leftX;
+  uint yStep;
+  uint xStep;
   
   dst.seg = unaff_SS;
-  dst.ofs = (uint16_t)&scaleMap;
+  dst.ofs = (uint16_t)&scaleRow;
   F_SCOPY(far_from_u32((uint32_t)(0x241004e8)),dst);
   GMaxSquare = 0;
-  cStack_f = '\b';
+  row = '\b';
   do {
-    if (cStack_f < '\0') {
+    if (row < '\0') {
       if (GMaxSquare != 0x1b0) {
         printf("NEW MAXSQUARE %d \r");
         ovr_gameProcessKey();
       }
       GSMaxSquare = 0;
-      cStack_f = '\x02';
+      row = '\x02';
       do {
-        if (cStack_f < '\0') {
+        if (row < '\0') {
           if (GSMaxSquare != 0x24) {
             printf("NEW SMAXSQUARE %d \r");
             ovr_gameProcessKey();
           }
           return;
         }
-        ((uint16_t *)rowBandSquareFirst)[cStack_f] = GSMaxSquare;
-        uStack_4 = ((uint)abStack_1d[cStack_f + -1] * 0x30) / 0x30;
-        uStack_6 = ((uint)abStack_1d[cStack_f] * 0x30) / 0x30;
-        ((uint16_t *)RowScreenX)[cStack_f] =
-             (uint)*(byte *)(cStack_f + 0x74c) + ((uint)abStack_1d[cStack_f] * 0x3c) / 0x30;
-        ((uint16_t *)RowScreenY)[cStack_f] =
-             (uint)*(byte *)(cStack_f + 0x74b) + ((uint)abStack_1d[cStack_f + -1] * 0x3c) / 0x30;
-        uStack_14 = ((uint)abStack_1d[cStack_f + -1] * 0x27) / 0x30;
-        uStack_12 = ((uint)abStack_1d[cStack_f] * 0x27) / 0x30;
-        iStack_8 = 0x111 - uStack_14;
-        uVar3 = 0;
-        for (iVar1 = 0x111 - uStack_12; 0xee < (int)((iVar1 - uStack_6) + uStack_12 + uStack_6);
-            iVar1 = iVar1 - uStack_6) {
-          iStack_8 = iStack_8 - uStack_4;
-          uVar3 = uVar3 - 1;
+        ((uint16_t *)rowBandSquareFirst)[row] = GSMaxSquare;
+        xStep = ((uint)scaleRow[row + -1] * 0x30) / 0x30;
+        yStep = ((uint)scaleRow[row] * 0x30) / 0x30;
+        ((uint16_t *)RowScreenX)[row] =
+             (uint)*(byte *)(row + 0x74c) + ((uint)scaleRow[row] * 0x3c) / 0x30;
+        ((uint16_t *)RowScreenY)[row] =
+             (uint)*(byte *)(row + 0x74b) + ((uint)scaleRow[row + -1] * 0x3c) / 0x30;
+        yOffset = ((uint)scaleRow[row + -1] * 0x27) / 0x30;
+        xOffset = ((uint)scaleRow[row] * 0x27) / 0x30;
+        leftX = 0x111 - yOffset;
+        sqColUp = 0;
+        for (topY = 0x111 - xOffset; 0xee < (int)((topY - yStep) + xOffset + yStep);
+            topY = topY - yStep) {
+          leftX = leftX - xStep;
+          sqColUp = sqColUp - 1;
         }
-        for (; 0x7fff < uVar3; uVar3 = uVar3 + 1) {
+        for (; 0x7fff < sqColUp; sqColUp = sqColUp + 1) {
           if (0x23 < (int)GSMaxSquare) {
                     /* WARNING: Subroutine does not return */
             ovr_stExit(8);
           }
-          ((uint16_t *)SquareTopY)[GSMaxSquare] = iVar1 + uStack_12;
+          ((uint16_t *)SquareTopY)[GSMaxSquare] = topY + xOffset;
           ((uint16_t *)SquareBottomY)[GSMaxSquare] =
-               ((uint16_t *)SquareTopY)[GSMaxSquare] + uStack_6;
-          ((uint16_t *)SquareLeftX)[GSMaxSquare] = iStack_8 + uStack_14;
+               ((uint16_t *)SquareTopY)[GSMaxSquare] + yStep;
+          ((uint16_t *)SquareLeftX)[GSMaxSquare] = leftX + yOffset;
           ((uint16_t *)SquareRightX)[GSMaxSquare] =
-               ((uint16_t *)SquareLeftX)[GSMaxSquare] + uStack_4;
-          ((uint16_t *)squareColumn)[GSMaxSquare] = uVar3;
-          if ((int)uVar3 < -1) {
+               ((uint16_t *)SquareLeftX)[GSMaxSquare] + xStep;
+          ((uint16_t *)squareColumn)[GSMaxSquare] = sqColUp;
+          if ((int)sqColUp < -1) {
             ((uint16_t *)squareSide)[GSMaxSquare] = 0;
           }
           else {
             ((uint16_t *)squareSide)[GSMaxSquare] = 1;
           }
           GSMaxSquare = GSMaxSquare + 1;
-          iStack_8 = iStack_8 + uStack_4;
-          iVar1 = iVar1 + uStack_6;
+          leftX = leftX + xStep;
+          topY = topY + yStep;
         }
-        iStack_8 = 0x111 - uStack_14;
-        uVar4 = 0;
-        for (iVar1 = 0x111 - uStack_12; (int)(uStack_6 + iVar1 + uStack_12) < 0x135;
-            iVar1 = iVar1 + uStack_6) {
-          iStack_8 = iStack_8 + uStack_4;
-          uVar4 = uVar4 + 1;
+        leftX = 0x111 - yOffset;
+        sqColDown = 0;
+        for (topY = 0x111 - xOffset; (int)(yStep + topY + xOffset) < 0x135;
+            topY = topY + yStep) {
+          leftX = leftX + xStep;
+          sqColDown = sqColDown + 1;
         }
-        for (; -1 < (int)uVar4; uVar4 = uVar4 - 1) {
+        for (; -1 < (int)sqColDown; sqColDown = sqColDown - 1) {
           if (0x23 < (int)GSMaxSquare) {
                     /* WARNING: Subroutine does not return */
             ovr_stExit(8);
           }
-          ((uint16_t *)SquareTopY)[GSMaxSquare] = iVar1 + uStack_12;
+          ((uint16_t *)SquareTopY)[GSMaxSquare] = topY + xOffset;
           ((uint16_t *)SquareBottomY)[GSMaxSquare] =
-               ((uint16_t *)SquareTopY)[GSMaxSquare] + uStack_6;
-          ((uint16_t *)SquareLeftX)[GSMaxSquare] = iStack_8 + uStack_14;
+               ((uint16_t *)SquareTopY)[GSMaxSquare] + yStep;
+          ((uint16_t *)SquareLeftX)[GSMaxSquare] = leftX + yOffset;
           ((uint16_t *)SquareRightX)[GSMaxSquare] =
-               ((uint16_t *)SquareLeftX)[GSMaxSquare] + uStack_4;
-          ((uint16_t *)squareColumn)[GSMaxSquare] = uVar4;
-          if ((int)uVar4 < 1) {
+               ((uint16_t *)SquareLeftX)[GSMaxSquare] + xStep;
+          ((uint16_t *)squareColumn)[GSMaxSquare] = sqColDown;
+          if ((int)sqColDown < 1) {
             ((uint16_t *)squareSide)[GSMaxSquare] = 1;
           }
           else {
             ((uint16_t *)squareSide)[GSMaxSquare] = 2;
           }
           GSMaxSquare = GSMaxSquare + 1;
-          iStack_8 = iStack_8 - uStack_4;
-          iVar1 = iVar1 - uStack_6;
+          leftX = leftX - xStep;
+          topY = topY - yStep;
         }
-        ((uint16_t *)rowBandSquareEnd)[cStack_f] = GSMaxSquare;
-        cStack_f = cStack_f + -1;
+        ((uint16_t *)rowBandSquareEnd)[row] = GSMaxSquare;
+        row = row + -1;
       } while( true );
     }
-    ((uint16_t *)rowMapSquareFirst)[cStack_f] = GMaxSquare;
-    uStack_4 = ((uint)abStack_1d[cStack_f + -1] * 0x30) / 0x10;
-    uStack_6 = ((uint)abStack_1d[cStack_f] * 0x30) / 0x10;
-    ((uint16_t *)ScreenOriginX)[cStack_f] =
-         (uint)*(byte *)(cStack_f + 0x729) + ((uint)abStack_1d[cStack_f] * 0x38) / 0x10;
-    ((uint16_t *)ScreenOriginY)[cStack_f] =
-         (uint)*(byte *)(cStack_f + 0x728) + ((uint)abStack_1d[cStack_f + -1] * 0x38) / 0x10;
-    uStack_14 = ((uint)abStack_1d[cStack_f + -1] * 0x27) / 0x10;
-    uStack_12 = ((uint)abStack_1d[cStack_f] * 0x27) / 0x10;
-    iStack_a = 0x75 - uStack_14;
-    uStack_e = 0;
-    for (iStack_c = 0x75 - uStack_12; 0xb < (int)((iStack_c - uStack_6) + uStack_12 + uStack_6);
-        iStack_c = iStack_c - uStack_6) {
-      iStack_a = iStack_a - uStack_4;
-      uStack_e = uStack_e - 1;
+    ((uint16_t *)rowMapSquareFirst)[row] = GMaxSquare;
+    xStep = ((uint)scaleRow[row + -1] * 0x30) / 0x10;
+    yStep = ((uint)scaleRow[row] * 0x30) / 0x10;
+    ((uint16_t *)ScreenOriginX)[row] =
+         (uint)*(byte *)(row + 0x729) + ((uint)scaleRow[row] * 0x38) / 0x10;
+    ((uint16_t *)ScreenOriginY)[row] =
+         (uint)*(byte *)(row + 0x728) + ((uint)scaleRow[row + -1] * 0x38) / 0x10;
+    yOffset = ((uint)scaleRow[row + -1] * 0x27) / 0x10;
+    xOffset = ((uint)scaleRow[row] * 0x27) / 0x10;
+    mapLeftX = 0x75 - yOffset;
+    colUp = 0;
+    for (mapTopY = 0x75 - xOffset; 0xb < (int)((mapTopY - yStep) + xOffset + yStep);
+        mapTopY = mapTopY - yStep) {
+      mapLeftX = mapLeftX - xStep;
+      colUp = colUp - 1;
     }
-    *(uint *)(cStack_f * 2 + -0x73ed) = uStack_e;
-    iStack_8 = 0x75 - uStack_14;
-    iVar2 = 0;
-    for (iVar1 = 0x75 - uStack_12; (int)(uStack_6 + iVar1 + uStack_12) < 0xdf;
-        iVar1 = iVar1 + uStack_6) {
-      iStack_8 = iStack_8 + uStack_4;
-      iVar2 = iVar2 + 1;
+    *(uint *)(row * 2 + -0x73ed) = colUp;
+    leftX = 0x75 - yOffset;
+    colDown = 0;
+    for (topY = 0x75 - xOffset; (int)(yStep + topY + xOffset) < 0xdf;
+        topY = topY + yStep) {
+      leftX = leftX + xStep;
+      colDown = colDown + 1;
     }
-    *(int *)(cStack_f * 2 + -0x73ff) = iVar2;
-    while ((0x7fff < uStack_e || (-1 < iVar2))) {
-      if ((int)uStack_e < 0) {
+    *(int *)(row * 2 + -0x73ff) = colDown;
+    while ((0x7fff < colUp || (-1 < colDown))) {
+      if ((int)colUp < 0) {
         if (0x1af < (int)GMaxSquare) {
                     /* WARNING: Subroutine does not return */
           ovr_stExit(7);
         }
-        *(int *)((int)&AgntAnms[0x5d].sx + 1 + GMaxSquare * 2) = iStack_c + uStack_12;
+        *(int *)((int)&AgntAnms[0x5d].sx + 1 + GMaxSquare * 2) = mapTopY + xOffset;
         *(int *)(&mapSquareBottomY[GMaxSquare]) =
-             *(int *)((int)&AgntAnms[0x5d].sx + 1 + GMaxSquare * 2) + uStack_6;
-        *(int *)(&mapSquareLeftX[GMaxSquare]) = iStack_a + uStack_14;
-        *(int *)(&mapSquareRightX[GMaxSquare]) = *(int *)(&mapSquareLeftX[GMaxSquare]) + uStack_4;
-        *(uint *)(&mapSquareColumn[GMaxSquare]) = uStack_e;
-        if ((int)uStack_e < -1) {
+             *(int *)((int)&AgntAnms[0x5d].sx + 1 + GMaxSquare * 2) + yStep;
+        *(int *)(&mapSquareLeftX[GMaxSquare]) = mapLeftX + yOffset;
+        *(int *)(&mapSquareRightX[GMaxSquare]) = *(int *)(&mapSquareLeftX[GMaxSquare]) + xStep;
+        *(uint *)(&mapSquareColumn[GMaxSquare]) = colUp;
+        if ((int)colUp < -1) {
           *(uint16_t *)(GMaxSquare * 2) = 0;
         }
         else {
           *(uint16_t *)(GMaxSquare * 2) = 1;
         }
         GMaxSquare = GMaxSquare + 1;
-        iStack_a = iStack_a + uStack_4;
-        iStack_c = iStack_c + uStack_6;
-        uStack_e = uStack_e + 1;
+        mapLeftX = mapLeftX + xStep;
+        mapTopY = mapTopY + yStep;
+        colUp = colUp + 1;
       }
-      if (-1 < iVar2) {
+      if (-1 < colDown) {
         if (0x1af < (int)GMaxSquare) {
                     /* WARNING: Subroutine does not return */
           ovr_stExit(7);
         }
-        *(int *)((int)&AgntAnms[0x5d].sx + 1 + GMaxSquare * 2) = iVar1 + uStack_12;
+        *(int *)((int)&AgntAnms[0x5d].sx + 1 + GMaxSquare * 2) = topY + xOffset;
         *(int *)(&mapSquareBottomY[GMaxSquare]) =
-             *(int *)((int)&AgntAnms[0x5d].sx + 1 + GMaxSquare * 2) + uStack_6;
-        *(int *)(&mapSquareLeftX[GMaxSquare]) = iStack_8 + uStack_14;
-        *(int *)(&mapSquareRightX[GMaxSquare]) = *(int *)(&mapSquareLeftX[GMaxSquare]) + uStack_4;
-        *(int *)(&mapSquareColumn[GMaxSquare]) = iVar2;
-        if (iVar2 < 1) {
+             *(int *)((int)&AgntAnms[0x5d].sx + 1 + GMaxSquare * 2) + yStep;
+        *(int *)(&mapSquareLeftX[GMaxSquare]) = leftX + yOffset;
+        *(int *)(&mapSquareRightX[GMaxSquare]) = *(int *)(&mapSquareLeftX[GMaxSquare]) + xStep;
+        *(int *)(&mapSquareColumn[GMaxSquare]) = colDown;
+        if (colDown < 1) {
           *(uint16_t *)(GMaxSquare * 2) = 1;
         }
         else {
           *(uint16_t *)(GMaxSquare * 2) = 2;
         }
         GMaxSquare = GMaxSquare + 1;
-        iStack_8 = iStack_8 - uStack_4;
-        iVar1 = iVar1 - uStack_6;
-        iVar2 = iVar2 + -1;
+        leftX = leftX - xStep;
+        topY = topY - yStep;
+        colDown = colDown + -1;
       }
     }
-    ((uint16_t *)rowMapSquareEnd)[cStack_f] = GMaxSquare;
-    cStack_f = cStack_f + -1;
+    ((uint16_t *)rowMapSquareEnd)[row] = GMaxSquare;
+    row = row + -1;
   } while( true );
 }
 
