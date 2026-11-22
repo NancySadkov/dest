@@ -371,20 +371,22 @@ void __cdecl16far ovc13_usesBlitRects(void)
   int y1;
   byte *pbVar5;
   short *psVar6;
-  int iVar7;
-  int iVar8;
+  int destX;
+  int offY;
+  int col;
+  int offX;
   uint16_t uVar9;
-  byte bStack_26;
-  short *psStack_1c;
+  byte flagsLo;
+  short *flagsAbove;
   undefined2 uStack_1a;
-  short *psStack_18;
+  short *flagsHere;
   undefined2 uStack_16;
-  byte *pbStack_14;
+  byte *cellsHere;
   undefined2 uStack_12;
-  byte *pbStack_10;
+  byte *cellsBelow;
   undefined2 uStack_e;
-  int iStack_8;
-  int iStack_6;
+  int destY;
+  int row;
   undefined2 uVar4;
   
   seg = BlitRects[3].seg;
@@ -402,70 +404,70 @@ void __cdecl16far ovc13_usesBlitRects(void)
   if (0x3a < PanelGridY + 0xf) {
     PanelGridY = 0x2b;
   }
-  iStack_8 = 7;
-  for (iStack_6 = 0; iStack_6 < 0x10; iStack_6 = iStack_6 + 1) {
-    iVar7 = 0xef;
-    pbStack_10 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
-                                   (*(byte (*) [59] [148])GMapCells)[PanelGridY + iStack_6 + 1] +
+  destY = 7;
+  for (row = 0; row < 0x10; row = row + 1) {
+    destX = 0xef;
+    cellsBelow = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
+                                   (*(byte (*) [59] [148])GMapCells)[PanelGridY + row + 1] +
                                    PanelGridX);
-    pbVar5 = (*(byte (*) [59] [148])GMapCells)[PanelGridY + iStack_6] + PanelGridX;
-    pbStack_14 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar5);
-    psVar6 = (*(short (*) [60] [148])GMapFlags)[PanelGridY + iStack_6] + PanelGridX;
-    psStack_18 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar6);
-    if (PanelGridY + iStack_6 != 0 && SCARRY2(PanelGridY,iStack_6) == PanelGridY + iStack_6 < 0) {
-      psVar6 = ((short (*) [60] [148])GMapFlags)[-1][PanelGridY + iStack_6 + 0x3b] + PanelGridX;
+    pbVar5 = (*(byte (*) [59] [148])GMapCells)[PanelGridY + row] + PanelGridX;
+    cellsHere = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar5);
+    psVar6 = (*(short (*) [60] [148])GMapFlags)[PanelGridY + row] + PanelGridX;
+    flagsHere = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar6);
+    if (PanelGridY + row != 0 && SCARRY2(PanelGridY,row) == PanelGridY + row < 0) {
+      psVar6 = ((short (*) [60] [148])GMapFlags)[-1][PanelGridY + row + 0x3b] + PanelGridX;
     }
-    psStack_1c = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar6);
-    cornerA = *pbStack_10;
-    pbStack_10 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
-                                   (*(byte (*) [59] [148])GMapCells)[PanelGridY + iStack_6 + 1] +
+    flagsAbove = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar6);
+    cornerA = *cellsBelow;
+    cellsBelow = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
+                                   (*(byte (*) [59] [148])GMapCells)[PanelGridY + row + 1] +
                                    PanelGridX + 1);
-    cornerC = *pbStack_14;
-    pbStack_14 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar5 + 1);
-    for (iVar8 = 0; iVar8 < 0x23; iVar8 = iVar8 + 1) {
-      cornerB = *pbStack_10;
-      pbStack_10 = (byte *)CONCAT22(uStack_e,pbStack_10 + 1);
-      cornerB_00 = *pbStack_14;
-      pbStack_14 = (byte *)CONCAT22(uStack_12,pbStack_14 + 1);
-      uVar1 = *psStack_18;
-      psStack_18 = (uint *)CONCAT22(uStack_16,psStack_18 + 1);
-      uVar2 = *psStack_1c;
-      psStack_1c = (uint *)CONCAT22(uStack_1a,psStack_1c + 1);
-      bStack_26 = (byte)uVar1;
+    cornerC = *cellsHere;
+    cellsHere = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar5 + 1);
+    for (col = 0; col < 0x23; col = col + 1) {
+      cornerB = *cellsBelow;
+      cellsBelow = (byte *)CONCAT22(uStack_e,cellsBelow + 1);
+      cornerB_00 = *cellsHere;
+      cellsHere = (byte *)CONCAT22(uStack_12,cellsHere + 1);
+      uVar1 = *flagsHere;
+      flagsHere = (uint *)CONCAT22(uStack_16,flagsHere + 1);
+      uVar2 = *flagsAbove;
+      flagsAbove = (uint *)CONCAT22(uStack_1a,flagsAbove + 1);
+      flagsLo = (byte)uVar1;
       if ((uVar1 & 4) == 0) {
         uVar9 = seg;
-        uVar4 = ovr_constr_compute1(cornerA,cornerB,cornerC,bStack_26,1);
+        uVar4 = ovr_constr_compute1(cornerA,cornerB,cornerC,flagsLo,1);
         uVar3 = (uint8_t)uVar4;
-        uVar4 = ovr_constr_compute1(cornerC,cornerB_00,cornerB,bStack_26,2);
-        ovr_driver_compute4(iVar7,(byte)iStack_8,(uint8_t)uVar4,uVar3,uVar9);
+        uVar4 = ovr_constr_compute1(cornerC,cornerB_00,cornerB,flagsLo,2);
+        ovr_driver_compute4(destX,(byte)destY,(uint8_t)uVar4,uVar3,uVar9);
       }
       else {
         uVar9 = seg;
-        uVar4 = ovr_constr_compute1(cornerA,cornerB,cornerB_00,bStack_26,2);
+        uVar4 = ovr_constr_compute1(cornerA,cornerB,cornerB_00,flagsLo,2);
         uVar3 = (uint8_t)uVar4;
-        uVar4 = ovr_constr_compute1(cornerC,cornerB_00,cornerA,bStack_26,1);
-        ovr_driver_compute3(iVar7,(byte)iStack_8,(uint8_t)uVar4,uVar3,uVar9);
+        uVar4 = ovr_constr_compute1(cornerC,cornerB_00,cornerA,flagsLo,1);
+        ovr_driver_compute3(destX,(byte)destY,(uint8_t)uVar4,uVar3,uVar9);
       }
       if (((uVar1 | uVar2) & 0xc000) != 0) {
-        ovc13_compute2(iVar7,iStack_8,(byte)(uVar2 >> 0xe),(byte)(uVar1 >> 0xe),seg);
+        ovc13_compute2(destX,destY,(byte)(uVar2 >> 0xe),(byte)(uVar1 >> 0xe),seg);
       }
-      iVar7 = iVar7 + 2;
+      destX = destX + 2;
       cornerC = cornerB_00;
       cornerA = cornerB;
     }
-    iStack_8 = iStack_8 + 3;
+    destY = destY + 3;
   }
   ovc13_drawPanelLeaders();
-  iVar8 = (GfxRndSeed - PanelGridX) * 2;
-  x1 = iVar8 + 0xea;
-  iVar7 = (GfxRndSeed2 - PanelGridY) * 3;
-  y1 = iVar7 + 8;
-  ovr_driver_fillSpan(x1,iVar8 + 0xf3,(byte)y1,0xe0,&((brect_t *)(BlitRects + 3))->x,0x2410);
-  ovr_driver_fillSpan(x1,iVar8 + 0xf3,(char)iVar7 + 0xc,0xe0,&((brect_t *)(BlitRects + 3))->x,0x2410
+  offX = (GfxRndSeed - PanelGridX) * 2;
+  x1 = offX + 0xea;
+  offY = (GfxRndSeed2 - PanelGridY) * 3;
+  y1 = offY + 8;
+  ovr_driver_fillSpan(x1,offX + 0xf3,(byte)y1,0xe0,&((brect_t *)(BlitRects + 3))->x,0x2410);
+  ovr_driver_fillSpan(x1,offX + 0xf3,(char)offY + 0xc,0xe0,&((brect_t *)(BlitRects + 3))->x,0x2410
                      );
-  ovr_ovc07_usesFillRect(x1,y1,x1,iVar7 + 0xc,0xe0,(brect_t *)(BlitRects + 3),0x2410);
+  ovr_ovc07_usesFillRect(x1,y1,x1,offY + 0xc,0xe0,(brect_t *)(BlitRects + 3),0x2410);
   ovr_ovc07_usesFillRect
-            (iVar8 + 0xf3,y1,iVar8 + 0xf3,iVar7 + 0xc,0xe0,(brect_t *)(BlitRects + 3),0x2410);
+            (offX + 0xf3,y1,offX + 0xf3,offY + 0xc,0xe0,(brect_t *)(BlitRects + 3),0x2410);
   ovc13_drawPanelEntities();
   return;
 }

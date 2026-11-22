@@ -1,6 +1,7 @@
 """Run the AGENTS.md section-5 grep checks over the exported tree.
 
-The regexes mirror the shell greps (BRE translated to Python).  Run after every
+One row per grep in AGENTS.md, in the same order, plus one extra row that the list
+does not cover (`bStack_` is not in the `[iusc]` character class).  Run after every
 export: this table is the progress ratchet for "properly decompiled code".
 """
 import glob
@@ -17,12 +18,11 @@ CHECKS = [
     ("arg_", r"arg_[a-za-z]"),
     ("ram0x", r"ram0x"),
     ("in_REG", r"in_(?:AX|BX|CX|DX|EAX|EBX|ECX|EDX|CF|ECF)\b"),
-    ("p[iusbc]VarN", r"p[iusbc]Var[_0-9]"),
+    ("[iusbc]Var", r"[iusbc]Var[_0-9]"),
+    ("p[iusbc]Var", r"p[iusbc]Var[_0-9]"),
     ("p[iusc]Stack_", r"p[iusc]Stack_"),
-    ("uStack_", r"uStack_"),
-    ("iStack_", r"iStack_"),
-    ("bStack_", r"bStack_"),
-    ("cStack_", r"cStack_"),
+    ("[iusc]Stack_", r"[iusc]Stack_"),
+    ("bStack_ (not in list)", r"bStack_"),
     ("in_stack_", r"in_stack_[_0-9A-Za-z+]"),
     ("unaff_SS", r"unaff_SS"),
     ("unaff_ES", r"unaff_ES"),
@@ -32,10 +32,6 @@ CHECKS = [
     ("valueN", r"value[0-9]"),
     ("numN", r"num[_0-9]"),
     ("ptrN", r"ptr[_0-9]"),
-    ("uVarN", r"uVar[_0-9]"),
-    ("iVarN", r"iVar[_0-9]"),
-    ("bVarN", r"bVar[_0-9]"),
-    ("cVarN", r"cVar[_0-9]"),
     ("(A) idx*stride", r"\(\([_0-9A-Za-z]*\)[0-9A-Za-z]* \+ [_0-9A-Za-z]* \* 0x[0-9A-Za-z]\)"),
     ("(B) idx*stride", r"\([0-9A-Za-z]* \+ [_0-9A-Za-z]* \* 0x[0-9A-Za-z]\)"),
     ("(C) idx*stride", r"\([_0-9A-Za-z]*[0-9A-Za-z]* \+ [_0-9A-Za-z]* \* 0x[0-9A-Za-z]"),
@@ -60,7 +56,7 @@ def main():
                 worst.append((c, os.path.basename(p)))
         worst.sort(reverse=True)
         total += n
-        print("%-16s %7d   %s" % (label, n,
+        print("%-22s %7d   %s" % (label, n,
               ", ".join("%s=%d" % (f, c) for c, f in worst[:3])))
     print("TOTAL %d" % total)
 
