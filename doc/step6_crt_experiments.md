@@ -137,3 +137,45 @@ Next step, in order:
   1. move the game helpers (lines above) into a resident module of their own;
   2. map the remaining RTL names onto CM.LIB;
   3. drop crtl.c from uild_skip/the link and re-measure the exit code.
+
+## 7. The split, actually attempted: what the linker says
+
+Ran the documented plan (scripts/split_rthelp.py, crtl.c dropped from the build,
+29 helpers copied into a resident rthelp.c, library names for the rest).
+Measured steps:
+
+* CM.LIB resolves sprintf, tol, _fstrncpy, bort under those names
+  (tmp/rtl_names.py).  The recovered _sprintf / _atol / __fstrncpy are
+  Ghidra's names, so the call sites moved onto the library ones.
+* With crtl.c out and 
+thelp.c in, the link has **0 undefined symbols**.
+* The libraries must be listed **before** TLINK's /o, otherwise their members
+  land in overlay segments and VPRINTER's near fixup to __REALCVT overflows
+  (Fixup overflow at _TEXT:0323).
+* With the runtime resident, TLINK reports exactly 15 duplicates - the original
+  CRT data that the recovered DGROUP still carries:
+
+  `
+  __atexitcnt __atexittbl __ctype __doserrortosv __exitbuf __exitfopen
+  __exitopen __fmode __nfile __openfd __realcvt __streams __video   (GLOB5.C)
+  _setjmp _longjmp                                                  (library SETJMP)
+  `
+
+  Withholding the 12 globals leaves __DOSERRORTOSV and the two setjmp symbols,
+  and then:
+
+  `
+  Error: Segment _TEXT exceeds 64K
+  `
+
+  The whole medium-model runtime cannot be resident in a single _TEXT
+  segment, and putting the library after /o instead produces the near-fixup
+  overflow above.  So dropping CRTL.OBJ for CM.LIB is not a rename problem:
+  it needs either a different memory model for the runtime (-ml/far segments)
+  or a curated subset of the library, i.e. a project larger than one pass.
+
+* Reverted the build to the working configuration (crtl.c in, rthelp.c out) so
+  the tree keeps compiling and linking; scripts/split_rthelp.py is kept as
+  the mechanical half of the split.
+
+Measured exit code with the working configuration: still 3.

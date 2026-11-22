@@ -14,20 +14,20 @@
 undefined1 __cdecl16far ovc49_usesFrameIndex(agnt_t *agnt,byte *out)
 
 {
-  uint8_t uVar1;
+  uint8_t faction;
   undefined2 uVar2;
   int iVar3;
-  bool bVar4;
+  bool ok;
   int iVar5;
   agnt_t *paVar6;
   int *piVar7;
   undefined2 uVar8;
-  char cStack_e;
-  char cStack_d;
-  int iStack_c;
-  int iStack_a;
-  int iStack_8;
-  int iStack_6;
+  char side;
+  char step;
+  int xEnd;
+  int x;
+  int radius;
+  int row;
   
   uVar8 = (undefined2)((ulong)agnt >> 0x10);
   paVar6 = (agnt_t *)agnt;
@@ -35,75 +35,75 @@ undefined1 __cdecl16far ovc49_usesFrameIndex(agnt_t *agnt,byte *out)
     *out = 0;
   }
   else {
-    uVar1 = paVar6->faction;
+    faction = paVar6->faction;
     uVar2 = *(undefined2 *)((int)&paVar6->frames + 2);
     piVar7 = (int *)(*(int *)&paVar6->frames + (uint)paVar6->frameIndex * 4);
     iVar5 = piVar7[1];
     iVar3 = *piVar7;
-    iStack_6 = (int)paVar6->y >> 1;
-    if (iStack_6 < 0) {
-      iStack_6 = 0;
+    row = (int)paVar6->y >> 1;
+    if (row < 0) {
+      row = 0;
     }
-    if (9 < iStack_6) {
-      iStack_6 = 9;
+    if (9 < row) {
+      row = 9;
     }
     if (paVar6->level == 0x0) {
-      cStack_d = '\x01';
-      iStack_a = ((int)((int)(*(((agntG_t *)paVar6->gdata)->extents + 1))[0] +
+      step = '\x01';
+      x = ((int)((int)(*(((agntG_t *)paVar6->gdata)->extents + 1))[0] +
                         *(int *)(iVar3 + 0x17) + agnt->x) >> 1) + -1;
-      iStack_c = iStack_a +
+      xEnd = x +
                  ((int)((agntG_t *)paVar6->gdata)->extents[1][1] -
                   (int)(*(((agntG_t *)paVar6->gdata)->extents + 1))[0] >> 1);
     }
     else {
-      cStack_d = -1;
-      iStack_a = ((int)((-*(int *)(iVar3 + 0x17) -
+      step = -1;
+      x = ((int)((-*(int *)(iVar3 + 0x17) -
                         (int)(*(((agntG_t *)paVar6->gdata)->extents + 1))[0]) + agnt->x) >> 1) + 1;
-      iStack_c = iStack_a -
+      xEnd = x -
                  ((int)((agntG_t *)paVar6->gdata)->extents[1][1] -
                   (int)(*(((agntG_t *)paVar6->gdata)->extents + 1))[0] >> 1);
     }
-    if (iStack_a < 0) {
-      iStack_a = 0;
+    if (x < 0) {
+      x = 0;
     }
-    if (iStack_c < 0) {
-      iStack_c = 0;
+    if (xEnd < 0) {
+      xEnd = 0;
     }
-    if (0x68 < iStack_a) {
-      iStack_a = 0x68;
+    if (0x68 < x) {
+      x = 0x68;
     }
-    if (0x68 < iStack_c) {
-      iStack_c = 0x68;
+    if (0x68 < xEnd) {
+      xEnd = 0x68;
     }
-    for (; iStack_a != iStack_c; iStack_a = iStack_a + cStack_d) {
-      for (iStack_8 = 0; iStack_8 <= (int)((agntG_t *)paVar6->gdata)->extents[1][2] >> 1;
-          iStack_8 = iStack_8 + 1) {
-        cStack_e = -1;
-        while (((cStack_e < '\x02' && (iStack_8 != 0)) || ((cStack_e == -1 && (iStack_8 == 0))))) {
-          iVar5 = iStack_6 + iStack_8 * cStack_e;
+    for (; x != xEnd; x = x + step) {
+      for (radius = 0; radius <= (int)((agntG_t *)paVar6->gdata)->extents[1][2] >> 1;
+          radius = radius + 1) {
+        side = -1;
+        while (((side < '\x02' && (radius != 0)) || ((side == -1 && (radius == 0))))) {
+          iVar5 = row + radius * side;
           if ((-1 < iVar5) && (iVar5 < 10)) {
-            if ((*(char *)(iVar5 * 0x69 + iStack_a + 0x8fa) != '\0') &&
-               (((*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) <= AgntCount &&
-                 (*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) * 0x34 + -5) !=
-                  uVar1)) &&
-                (*(char *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x10) == '\0')
+            if ((*(char *)(iVar5 * 0x69 + x + 0x8fa) != '\0') &&
+               (((*(byte *)(iVar5 * 0x69 + x + 0x8fa) <= AgntCount &&
+                 (*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + x + 0x8fa) * 0x34 + -5) !=
+                  faction)) &&
+                (*(char *)((uint)*(byte *)(iVar5 * 0x69 + x + 0x8fa) * 0x34 + -0x10) == '\0')
                 ))) {
-              *out = *(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa);
-              bVar4 = ovr_agnt_compute4((char *)out);
-              if (bVar4) {
+              *out = *(byte *)(iVar5 * 0x69 + x + 0x8fa);
+              ok = ovr_agnt_compute4((char *)out);
+              if (ok) {
                 return *out;
               }
             }
-            if (((*(char *)(iVar5 * 0x69 + iStack_a + 0x4e0) != '\0') &&
-                (*(byte *)(iVar5 * 0x69 + iStack_a + 0x4e0) <= AgntCount)) &&
-               ((*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x4e0) * 0x34 + -5) != uVar1
-                && (*(char *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x10) ==
+            if (((*(char *)(iVar5 * 0x69 + x + 0x4e0) != '\0') &&
+                (*(byte *)(iVar5 * 0x69 + x + 0x4e0) <= AgntCount)) &&
+               ((*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + x + 0x4e0) * 0x34 + -5) != faction
+                && (*(char *)((uint)*(byte *)(iVar5 * 0x69 + x + 0x4e0) * 0x34 + -0x10) ==
                     '\0')))) {
-              *out = *(byte *)(iVar5 * 0x69 + iStack_a + 0x4e0);
+              *out = *(byte *)(iVar5 * 0x69 + x + 0x4e0);
               return *out;
             }
           }
-          cStack_e = cStack_e + '\x02';
+          side = side + '\x02';
         }
       }
     }
