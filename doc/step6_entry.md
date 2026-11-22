@@ -210,3 +210,29 @@ code, in data, or in the IVT.
    experiment above shows it works.
 3. Initialise VROOMM: call `__OVRPREPARE` before anything else.  It has the
    same relocation problem, so this needs option 2 for at least that one call.
+
+### Implemented: post-link relocation patch
+
+`scripts/link_standalone.py` now calls `add_missing_relocations()` after TLINK
+runs.  It reads the segment table from `REBUILT.MAP`, keeps the ranges of the
+`CODE` segments, and scans the image for `9A` (far call) / `EA` (far jump)
+instructions whose operand word is the paragraph of a code segment and whose
+offset lies inside it.  When capstone is importable the byte offset must also be
+a real instruction start (linear sweep per segment), which keeps data bytes out
+of the set.  Every such word that has no relocation entry gets one appended, and
+`e_crlc` is bumped.  When the spare gap between the relocation table and the
+image is too small the header is grown by whole paragraphs.
+
+Current result: **194 entries** added, and the image still links with 0 errors.
+
+One pitfall found and fixed: `e_cp`/`e_cblp` describe the **resident load
+image** (140,800 bytes here), not the file size - the tail of the file holds the
+overlay segments.  Writing the file size into them made DOS refuse to load the
+EXE (it printed an error and the batch saw exit code 0, which looked like a
+successful run).
+
+With the header fixed the image loads and runs (an entry-point `exit 7` probe
+reports 7), but `startx` still hangs before the first milestone marker (right
+after `SaveVectors`), so `main` is still not reached.  The next step is to
+instrument `startx` again *with* the relocations in place, since the earlier
+ladder was measured on unrelocated code.

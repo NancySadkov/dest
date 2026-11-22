@@ -16,6 +16,97 @@ BUILDSRC = os.path.join(ROOT, "tmp", "buildsrc")
 TC = os.path.join(ROOT, "tools", "BC30")   # TLINK + libs from BC++ 3.0
 
 
+def add_missing_relocations(exe, mapf):
+    """Relocate far transfers whose segment word TLINK left unrelocated.
+
+    With -V (VROOMM) TLINK encodes cross-segment calls as VROOMM fixups and
+    omits the DOS relocation, expecting the overlay manager to patch them at
+    startup.  Our startup never initialises it, so those calls jump to segment 0
+    (the interrupt vector table) and the program hangs.  This appends the missing
+    (offset, 0) entries so the DOS loader adds the load segment.
+
+    Returns the number of entries added.
+    """
+    import struct
+    b = bytearray(open(exe, "rb").read())
+    img = struct.unpack("<H", b[8:10])[0] * 16
+    nrel = struct.unpack("<H", b[6:8])[0]
+    relofs = struct.unpack("<H", b[0x18:0x1a])[0]
+    rel = set(struct.unpack("<H", b[relofs + 4 * i: relofs + 4 * i + 2])[0]
+              for i in range(nrel))
+
+    # segment table: paragraph -> (start, length, class)
+    segs = {}
+    for line in open(mapf, encoding="latin-1", errors="replace"):
+        m = re.match(r"^\s*([0-9A-F]{5})H\s+([0-9A-F]{5})H\s+([0-9A-F]{5})H\s+(\S+)\s+(\S+)", line)
+        if m:
+            start, length = int(m.group(1), 16), int(m.group(3), 16)
+            segs[start >> 4] = (start, length, m.group(5))
+
+    code = list(segs.items())
+    ranges = [(s, s + l) for p, (s, l, c) in code if c == "CODE" and l]
+
+    # instruction starts, when a disassembler is available
+    starts = None
+    try:
+        import capstone
+        md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_16)
+        starts = set()
+        for s, l, c in segs.values():
+            if c != "CODE" or not l:
+                continue
+            for ins in md.disasm(bytes(b[img + s:img + s + l]), s):
+                starts.add(ins.address)
+    except Exception:
+        starts = None
+
+    hits = []
+    body = b[img:]
+    for i in range(len(body) - 5):
+        if body[i] not in (0x9A, 0xEA):
+            continue
+        if starts is not None and i not in starts:
+            continue
+        off, seg = struct.unpack("<HH", body[i + 1:i + 5])
+        if seg not in segs:
+            continue
+        tstart, tlen, tclass = segs[seg]
+        if tclass != "CODE" or off >= tlen:
+            continue
+        if not any(s <= i < e for s, e in ranges):
+            continue
+        if (i + 3) in rel:
+            continue
+        rel.add(i + 3)
+        hits.append(i + 3)
+    if not hits:
+        return 0
+
+    # e_cp/e_cblp describe the *resident load image*, not the file size: the
+    # tail of the file holds the overlay segments.  Only the header growth is
+    # added to the load image.
+    need = 4 * len(hits)
+    spare = img - (relofs + 4 * nrel)
+    grow = 0 if need <= spare else ((need - spare + 15) // 16) * 16
+    old_load = (struct.unpack("<H", b[4:6])[0] - 1) * 512 + struct.unpack("<H", b[2:4])[0]
+    head = bytearray(b[:relofs])
+    table = b[relofs:relofs + 4 * nrel]
+    table += b"".join(struct.pack("<HH", o, 0) for o in hits)
+    table += b"\0" * (grow + spare - need)
+    image = bytes(b[img:])
+    new_img = relofs + len(table)
+    new_img = (new_img + 15) // 16 * 16
+    table += b"\0" * (new_img - (relofs + len(table)))
+    out = bytearray(head + table + image)
+    struct.pack_into("<H", out, 6, nrel + len(hits))          # e_crlc
+    struct.pack_into("<H", out, 8, new_img // 16)             # e_cparhdr
+    load = old_load + (new_img - img)                         # resident image
+    struct.pack_into("<H", out, 4, (load + 511) // 512)       # e_cp
+    struct.pack_into("<H", out, 2, load - ((load - 1) // 512) * 512)  # e_cblp
+    open(exe, "wb").write(out)
+    return len(hits)
+
+
 def main():
     skip = set(a.upper() for a in sys.argv[1:] if a.startswith("--skip=") is False)
     objs = sorted(n for n in os.listdir(BUILDSRC) if n.lower().endswith(".obj"))
@@ -110,6 +201,8 @@ def main():
     exe = os.path.join(BUILDSRC, "REBUILT.EXE")
     mapf = os.path.join(BUILDSRC, "REBUILT.MAP")
     if os.path.exists(exe) and os.path.exists(mapf):
+        n = add_missing_relocations(exe, mapf)
+        print("relocations added for cross-segment far transfers:", n)
         m = re.search(r"^\s*([0-9A-F]{4}):([0-9A-F]{4})\s+(?:idle\s+)?_STARTX\s*$",
                       open(mapf, encoding="latin-1", errors="replace").read(), re.M)
         if m:
