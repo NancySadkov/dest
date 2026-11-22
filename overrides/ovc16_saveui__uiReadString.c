@@ -33,7 +33,7 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   byte bStack_5;
   uint16_t uStack_4;
   
-  uStack_5e = (uint *)CONCAT22(text,unaff_SI);
+  uStack_5e = (uint16_t)CONCAT22(text,unaff_SI);
   UserWantsExit = 0;
   inputCancelled = 0;
   if (textOfs != (char *)0x0 || textSeg != 0) {

@@ -56,7 +56,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   uint uStack_c;
   uint16_t uStack_a;
   undefined2 uStack_8;
-  undefined4 uStack_6;
+  byte far *uStack_6;   /* was undefined4: assigned byte * values */
   
   uStack_10 = 0;
   uStack_a = ovr_alignUp4(GfxRndSeed);

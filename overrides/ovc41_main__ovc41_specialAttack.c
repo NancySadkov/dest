@@ -23,7 +23,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
   uint8_t actorName;
   uint8_t targetName;
   uint8_t msg;
-  undefined4 uStack_8;
+  agnt_t far *uStack_8;   /* was undefined4: assigned agnt_t * values */
   char cStack_3;
   
   uVar13 = (undefined1)targetIndex;

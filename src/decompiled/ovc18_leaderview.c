@@ -154,7 +154,7 @@ ovc18_spawnClassAgent
   char acStackY_56 [46];
   uint8_t *puStackY_28;
   undefined2 uStackY_26;
-  undefined4 uStackY_24;
+  uint8_t far *uStackY_24;   /* was undefined4: assigned uint8_t * values */
   far_t far *pfStackY_20;
   far_t far *pfVar13;
   far_t far *in_stack_0000ffe8;

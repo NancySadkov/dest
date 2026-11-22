@@ -138,7 +138,7 @@ far_t far * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
   uint16_t scratch;
   uint *puStack_a;
   uint16_t uStack_8;
-  undefined4 uStack_6;
+  far_t far *uStack_6;   /* was undefined4: assigned far_t * values */
   byte bVar44;
   
   uVar19 = (undefined1)((uint)in_CX >> 8);

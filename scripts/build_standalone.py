@@ -35,7 +35,7 @@ REPORT = os.path.join(ROOT, "tmp", "build_report.tsv")
 # -w- : warnings are not errors.  TC caps messages per function, so a function
 # with many harmless warnings hits "Too many error or warning messages" before
 # its real errors are printed; suppressing warnings makes the report accurate.
-CFLAGS = "-ml -1 -G -O -c -w- -a- -I."   # see doc/pointer_model.md: -ms matches the model but needs 59 fixes   # -a-: byte-align structs, offsets must match the model
+CFLAGS = "-mc -1 -G -O -c -w- -a- -I."   # see doc/pointer_model.md: -ms matches the model but needs 59 fixes   # -a-: byte-align structs, offsets must match the model
 
 
 def stage():

@@ -2640,7 +2640,7 @@ L_ui_unit_order_6616_0689_1054:
                           (char *)CONCAT13((char)((uint)&stack0xfecc >> 8),
                                            CONCAT12((char)&stack0xfecc,iStack_a)));
       puVar14 = &agnt;
-      uStack_132 = agntPtr;
+      uStack_132 = (uint16_t)agntPtr;
       pcVar19 = ovr_agnt_statusText(paVar17,(char *)CONCAT22(&text,pcVar19));
       puVar11 = ovr_ovc15_usesStshRealloc(pcVar19);
       (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = 0x2322;
@@ -2681,7 +2681,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
   uint8_t actorName;
   uint8_t targetName;
   uint8_t msg;
-  undefined4 uStack_8;
+  agnt_t far *uStack_8;   /* was undefined4: assigned agnt_t * values */
   char cStack_3;
   
   uVar13 = (undefined1)targetIndex;

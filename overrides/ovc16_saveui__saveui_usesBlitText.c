@@ -22,7 +22,7 @@ int __cdecl16far saveui_usesBlitText(char *prompt,int textSeg,int row)
   byte bStack_5;
   uint16_t uStack_4;
   
-  uStack_5e = (uint *)CONCAT22(text,unaff_SI);
+  uStack_5e = (uint16_t)CONCAT22(text,unaff_SI);
   inputCancelled = 0;
   if (in_stack_00000004 != (char *)0x0 || (char *)prompt != (char *)0x0) {
     TextBlitX = 0x16;

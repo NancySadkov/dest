@@ -58,7 +58,7 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex,...)
     if (pcVar12[iVar7 + iVar6 * 0xa1] == '\0') {
       debugEmptyCellCount = debugEmptyCellCount + 1;
       uStack_c = 0xffff;
-      pcStack_6 = FillGrid;
+      pcStack_6 = (uint16_t)FillGrid;
       for (iVar6 = 0; iVar6 < 0xa1; iVar6 = iVar6 + 1) {
         for (iVar7 = 0; pcVar3 = pcStack_6, iVar7 < 0xa1; iVar7 = iVar7 + 1) {
           pcStack_6 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(pcStack_6) + 2)),(char *)pcStack_6 + 1);
