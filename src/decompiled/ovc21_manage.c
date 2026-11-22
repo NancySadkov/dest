@@ -1717,7 +1717,7 @@ char_sheet_t * __cdecl16far chargen(void)
   uStack_14 = in_DX;
   do {
     while( true ) {
-      _fmemset((void *)(ulong)uStack_14,0xae,unaff_SI);
+      _fmemset(MK_FP(uStack_14, (uint16_t)pcStack_16), 0, 0xae);
       pcStack_16->charIndex = 0xff;
       while( true ) {
         if (TimerSeed.lo == 0 && TimerSeed.hi == 0) {
