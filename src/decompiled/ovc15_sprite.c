@@ -183,8 +183,7 @@ void __cdecl16far allocSprSeqs(void)
 {
   uint16_t in_DX;
   
-  (*(uint16_t *)((uint8_t *)&(StshSprites))) = ovr_stshAlloc(0x3650);
-  (*(uint16_t *)((uint8_t *)&(StshSprites) + 2)) = in_DX;
+  StshSprites = ovr_stshAlloc(0x3650);
   return;
 }
 

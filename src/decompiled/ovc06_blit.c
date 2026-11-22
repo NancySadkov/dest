@@ -29,7 +29,7 @@ stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,ui
   
   sz = ((ex - sx) + ((ex - sx) + 1 >> 7) + 2) * ((ey - sy) + 1);
   (*(uint16_t *)((uint8_t *)&(block) + 2)) = (sz + hdrsz) - 1;
-  (*(uint16_t *)((uint8_t *)&(block))) = ovr_stshAlloc(CONCAT22((CARRY2(sz,hdrsz) - 1) + (uint)(sz + hdrsz != 0),(*(uint16_t *)((uint8_t *)&(block) + 2)))
+  (*(uint16_t *)((uint8_t *)&(block))) = (uint16_t)(uint32_t)ovr_stshAlloc(CONCAT22((CARRY2(sz,hdrsz) - 1) + (uint)(sz + hdrsz != 0),(*(uint16_t *)((uint8_t *)&(block) + 2)))
                              );
   uStack_6 = (undefined1 *)CONCAT22((*(uint16_t *)((uint8_t *)&(block) + 2)),(undefined1 *)((int)(void *)block + hdrsz + -10));
   prow = (int)&__return_storage_ptr__[sy * 0x50].ofs + sx;

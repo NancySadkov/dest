@@ -121,3 +121,34 @@ Fixed:
 Build note: `st_compat.h` must keep CRLF line endings.  Rewriting that header
 with LF-only endings made BCC 3.0 report `Illegal character '#'` at its first
 `#if`, which is why the edit is now done in place before the final `#endif`.
+
+## The allocator returns a far pointer: `ovr_stshAlloc` is `void far *`
+
+`undefined` is `unsigned char` in `st_types.h`, and `ovr_stshAlloc` was declared
+`undefined ovr_stshAlloc();`.  Every one of its 362 call sites therefore used
+only **AL** of the returned `DX:AX`, and the segment was recovered by Ghidra as
+a separate `in_DX` local that our rebuild never assigns - so the high half of
+every such pointer was garbage.
+
+Declaring `void far *ovr_stshAlloc();` fixes the ABI at all call sites: the
+compiler now keeps `DX:AX`.  Seven sites needed real edits because they wrote
+the two halves by hand:
+
+| site | now |
+|---|---|
+| `ovc09_init.init_buffers` | `GUnits/GUnitGrid/GMapFlags/GMapCells/Entities = ovr_stshAlloc(...)`, `FillGrid = (uint32_t)ovr_stshAlloc(...)`; the `in_DX` stores are gone |
+| `ovc15_sprite.allocSprSeqs` | `StshSprites = ovr_stshAlloc(0x3650)`, and `StshSprites` is now `spr_t far *` |
+| `ovc04_lbm.lbm_decode_body` | `buf = (uint32_t)ovr_stshAlloc(0xfa0f)` (the slot already had two halves) |
+| `ovc29_anim.animInitSeqs` | `p = (uint32_t)ovr_stshAlloc(...)` |
+| `ovc43_fli` / `ovc12_agnt` | `tempScreenOfs/tempScreenSeg` and `ptr` split from the far result with `ST_OFF`/`ST_SEG` |
+| `ovc06_blit.stshRleSub` | keeps the size in the high word, so only the offset is stored (cast) |
+| `ovc20_stash.stshStoreFile_2` | `void far *p = ovr_stshAlloc(...)`; `_fmemset(p,0,v)`, `read(fd,p,v)`, `buf.seg = ST_SEG(p)` |
+
+`read` also takes a far buffer now (`void far *buf`), which is what the DOS
+handle read needs; the recovered definition in `crtl.c` was updated with the
+prototype.
+
+`ovc20_stash.stshStoreFile_2` is the one this session set out to fix: it had
+`_fmemset((void *)ZEXT24(plStack_c), v, unaff_DI)` where `plStack_c` is the
+*file length*, plus `read(fd, CONCAT22(v, plStack_c), ...)` and
+`buf.seg = (uint16_t)plStack_c`.  All three now use the allocator's pointer.

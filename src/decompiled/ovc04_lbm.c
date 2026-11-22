@@ -80,7 +80,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
   uint16_t src_segS;
   uint16_t dst_seg;
   
-  (*(uint16_t *)((uint8_t *)&(buf))) = ovr_stshAlloc(0xfa0f);
+  buf = (uint32_t)ovr_stshAlloc(0xfa0f);
   *(uint16_t *)(src.seg + 0x306) = (*(uint16_t *)((uint8_t *)&(buf) + 2));
   *(uint16_t *)(src.seg + 0x304) = (uint16_t)(void *)buf;   /* hand fix: 2-byte slot */
   ptr.seg = *(uint16_t *)(src.seg + 0x306);
@@ -281,7 +281,7 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_t ar
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0x16);
   }
-  (*(uint16_t *)((uint8_t *)&(dst))) = ovr_stshAlloc(0x308);
+  (*(uint16_t *)((uint8_t *)&(dst))) = (uint16_t)(uint32_t)ovr_stshAlloc(0x308);
   (*(uint16_t *)((uint8_t *)&(remain) + 2)) = (*(uint16_t *)((uint8_t *)&(dst) + 2));
   _fmemset((void *)ZEXT24((*(uint16_t *)((uint8_t *)&(dst) + 2))),0x308,unaff_DI);
   (*(uint16_t *)((uint8_t *)&(remain))) = ovr_stshRead();

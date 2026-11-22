@@ -1171,21 +1171,15 @@ void __cdecl16far init_buffers(void)
 {
   uint16_t in_DX;
   
-  (*(uint16_t *)((uint8_t *)&(GUnits))) = ovr_stshAlloc(0x2a30);
-  (*(uint16_t *)((uint8_t *)&(GUnits) + 2)) = in_DX;
-  _fsetmem((unit_t *)CONCAT22(in_DX,(unit_t *)GUnits),0x2a30,0);
+  GUnits = ovr_stshAlloc(0x2a30);
+  _fsetmem(GUnits, 0x2a30, 0);
   init_initGUnits();
   GUnitCount = 0xf8;
-  (*(uint16_t *)((uint8_t *)&(GUnitGrid))) = ovr_stshAlloc(0x4560);
-  (*(uint16_t *)((uint8_t *)&(GUnitGrid) + 2)) = in_DX;
-  (*(uint16_t *)((uint8_t *)&(GMapFlags))) = ovr_stshAlloc(0x4560);
-  (*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)) = in_DX;
-  (*(uint16_t *)((uint8_t *)&(GMapCells))) = ovr_stshAlloc(0x22b0);
-  (*(uint16_t *)((uint8_t *)&(GMapCells) + 2)) = in_DX;
+  GUnitGrid = ovr_stshAlloc(0x4560);
+  GMapFlags = ovr_stshAlloc(0x4560);
+  GMapCells = ovr_stshAlloc(0x22b0);
   Entities = ovr_stshAlloc(33000);
-  DAT_2000_d190 = in_DX;
-  (*(uint16_t *)((uint8_t *)&(FillGrid))) = ovr_stshAlloc(0x6541);
-  (*(uint16_t *)((uint8_t *)&(FillGrid) + 2)) = in_DX;
+  FillGrid = (uint32_t)ovr_stshAlloc(0x6541);
   init_computeMaxSquares();
   GLeaderCount = 0;
   GWantsExit2 = 0;

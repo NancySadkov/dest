@@ -1218,10 +1218,13 @@ void __cdecl16far agnt_usesAlignToSeg(void)
   }
   if (((AnimActive != '\0') && (GOngoingBattle == '\0')) &&
      (BattleDelay = BattleDelay + 1, 2 < BattleDelay)) {
-    tempScreenOfs = ovr_stshAlloc(0xfa0f);
-    ptr.seg = in_DX;
-    ptr.ofs = (uint16_t)tempScreenOfs;
-    tempScreenSeg = in_DX;
+    {
+      void far *p = ovr_stshAlloc(0xfa0f);
+      ptr.ofs = ST_OFF(p);
+      ptr.seg = ST_SEG(p);
+    }
+    tempScreenOfs = ptr.ofs;
+    tempScreenSeg = ptr.seg;
     ovr_alignToSeg(ptr);
     GSavedBlitSeg = in_DX;
     bVar1 = agnt_isAnimating();

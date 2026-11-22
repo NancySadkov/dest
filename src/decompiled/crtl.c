@@ -2194,7 +2194,7 @@ uint __cdecl16far rand(void)
 
 /* 1000:0d07 */
 
-int __cdecl16far read(int fd,void *buf,uint len)
+int __cdecl16far read(int fd,void far *buf,uint len)
 
 {
   code *pcVar1;

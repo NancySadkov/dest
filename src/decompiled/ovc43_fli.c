@@ -178,9 +178,12 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0x47);
   }
-  tempScreenOfs = ovr_stshAlloc(0xfa0f);
-  tempScreenSeg = in_DX;
-  ovc43_usesStExit(CONCAT22(paletteSeg,paletteOfs),handle,(uint16_t)tempScreenOfs,in_DX);
+  {
+    void far *p = ovr_stshAlloc(0xfa0f);
+    tempScreenOfs = ST_OFF(p);
+    tempScreenSeg = ST_SEG(p);
+  }
+  ovc43_usesStExit(CONCAT22(paletteSeg,paletteOfs),handle,tempScreenOfs,tempScreenSeg);
   ovr_ovr_miceButton0PressStates_entry();
   uStack_4 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   puVar4 = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, not the far_t struct */

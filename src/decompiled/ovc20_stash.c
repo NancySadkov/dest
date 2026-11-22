@@ -764,6 +764,7 @@ far_t * __cdecl16far stshStoreFile_2(far_t *__return_storage_ptr__,char *filenam
   uint v;
   uint16_t unaff_DI;
   uint16_t pbuf;
+  void far *p;   /* buffer returned by ovr_stshAlloc (DX:AX) */
   long *plStack_c;
   uint16_t len;
   uint16_t uStack_8;
@@ -782,19 +783,20 @@ far_t * __cdecl16far stshStoreFile_2(far_t *__return_storage_ptr__,char *filenam
     sz_00.lo = uStack_8;
     pfVar1 = (far_t *)stshAlloc_2((long *)len,sz_00);
     if (((int)uStack_8 < 0) || ((uStack_8 == 0 && (len < 0xc000)))) {
-      pbuf = (uint16_t)ovr_stshAlloc(CONCAT22(uStack_8,len));
+      p = ovr_stshAlloc(CONCAT22(uStack_8,len));
     }
     else {
-      pbuf = (uint16_t)ovr_stshAlloc(0xc000);
+      p = ovr_stshAlloc(0xc000);
     }
+    pbuf = ST_OFF(p);
     for (; len != 0 || uStack_8 != 0; len = len - v) {
       v = len;
       if ((-1 < (int)uStack_8) && ((uStack_8 != 0 || (0xbfff < len)))) {
         v = 0xc000;
       }
-      _fmemset((void *)ZEXT24(plStack_c),v,unaff_DI);
-      read((int)__return_storage_ptr___00,(long *)CONCAT22(v,plStack_c),unaff_DI);
-      buf.seg = (uint16_t)plStack_c;
+      _fmemset(p, 0, v);
+      read((int)__return_storage_ptr___00,p,v);
+      buf.seg = ST_SEG(p);
       buf.ofs = pbuf;
       sz.hi = 0;
       sz.lo = v;
