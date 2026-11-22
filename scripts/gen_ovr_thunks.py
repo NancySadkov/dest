@@ -50,22 +50,42 @@ have_body = [(t, g) for t, g in thunks if t in defined]
 thunks = [(t, g) for t, g in thunks if t not in defined]
 print("thunks with a recovered body (not generated):", len(have_body))
 
-# Turbo Assembler truncates identifiers at 31 characters, and so does Turbo C.
-# Truncate identically instead of dropping the thunk, otherwise the caller's
-# reference (itself truncated) stays undefined.
-skipped = []
-thunks = [(("_" + t)[:31], ("_" + g)[:31]) for t, g in thunks]
+# Turbo C keeps 31 significant characters of an identifier and then prefixes the
+# underscore, so a 34-character C name becomes a 32-character external:
+#
+#     ovr_ovc28_usesBDADailyTimeCounter  ->  _ovr_ovc28_usesBDADailyTimeCounte
+#     ovr_attact_textAbnormalProgramTermination -> _ovr_attact_textAbnormalProgramTe
+#
+# (read out of the caller's own object file).  The thunk must therefore be named
+# "_" + name[:31]; TASM and TLINK both accept the result.  Truncating the symbol
+# to 31 instead leaves it one character short and the call stays undefined.
+# Two spellings of the same entry show up in the objects: the full name, and the
+# 32-character form that Turbo C keeps when the name is longer than that
+# (read out of the callers' object files: o16 references
+#  ovr_ovr_miceButton0PressStates_e, o02 references the full name of others).
+# Export a thunk under BOTH spellings so either caller resolves.  A spelling is
+# claimed once; two different targets that truncate to the same symbol cannot both
+# be served and are reported.
+base = [("_" + t, "_" + g) for t, g in thunks]
 seen = {}
 uniq = []
-for t, g in thunks:
-    if t == g:
-        print("  WARNING: thunk symbol equals its target:", t)
-        continue
-    if t in seen:
-        print("  note: %s collides with %s after truncation" % (t, seen[t]))
-        continue
-    seen[t] = g
-    uniq.append((t, g))
+for t, g in base:
+    variants = [t]
+    # Measured with tmp/probe_identlen.py: Turbo C keeps 32 significant
+    # characters of an identifier (33..39 all collapse to 32), then the assembler
+    # adds the leading underscore.
+    if len(t) > 33:
+        variants.append("_" + t[1:33])
+    for v in variants:
+        if v == g:
+            print("  WARNING: thunk symbol equals its target:", v)
+            continue
+        if v in seen:
+            if seen[v] != g:
+                print("  note: %s is claimed by %s and %s" % (v, seen[v], g))
+            continue
+        seen[v] = g
+        uniq.append((v, g))
 thunks = uniq
 
 out = [

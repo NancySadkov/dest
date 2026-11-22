@@ -1203,10 +1203,10 @@ char * __cdecl16far chargen_switch(uint16_t index)
     if (((uint)pcVar16 & 0xff) == 1) {
       pcVar22 = (char *)(PartyCount - 1);
       if (CurPartySlot == 1) {
-        ovr_ovc18_checkFortressPla_7e6f('\x02');
+        ovr_ovc18_checkFortressPlacement('\x02');
       }
       else {
-        ovr_ovc18_checkFortressPla_7e6f('\x01');
+        ovr_ovc18_checkFortressPlacement('\x01');
       }
       ovr_ovc41_usesGMenuItem();
     }
@@ -2044,10 +2044,10 @@ void __cdecl16far manage_textHalflingCastle(void)
   if (uStack_6 == 1) {
     iStack_4 = PartyCount - 1;
     if (CurPartySlot == 1) {
-      ovr_ovc18_checkFortressPla_7e6f('\x02');
+      ovr_ovc18_checkFortressPlacement('\x02');
     }
     else {
-      ovr_ovc18_checkFortressPla_7e6f('\x01');
+      ovr_ovc18_checkFortressPlacement('\x01');
     }
     ovr_ovc41_usesGMenuItem();
   }

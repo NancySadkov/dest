@@ -39,7 +39,7 @@ void __cdecl16far audio_usesLDIV_at_(void)
         uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x76) {
-        puVar5 = ovr_attact_usesBDADailyTim_8bbe
+        puVar5 = ovr_attact_usesBDADailyTimeCounter
                            (sfxTickLo,CONCAT13(0x76,CONCAT12(in_stack_0000fffc,sfxTickHi)));
         if ((in_DX == 0) && (puVar5 < SfxDeadline)) {
           return;

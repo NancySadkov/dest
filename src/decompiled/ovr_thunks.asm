@@ -99,7 +99,8 @@
     extrn _miceBlitRect:far
     extrn _miceInit:far
     extrn _init2_usesCFGMice:far
-    extrn _ovr_miceButton0PressStates_ent:far
+    extrn _ovr_miceButton0PressStates_entry:far
+    extrn _ovr_miceButton0PressStates_entry:far
     extrn _clearMiceProcessed:far
     extrn _init2_updateMouseButtons:far
     extrn _miceUpdate:far
@@ -117,6 +118,7 @@
     extrn _init_computeMaxSquares:far
     extrn _init_usesRandBelow2:far
     extrn _init_getMapFlags:far
+    extrn _init_rebuildAllDirectionFlags:far
     extrn _init_rebuildAllDirectionFlags:far
     extrn _ensure_tail_slash:far
     extrn _init_paths:far
@@ -147,6 +149,7 @@
     extrn _audio_isPlaying:far
     extrn _fmFreeAudio:far
     extrn _audio_usesLDIV_at_:far
+    extrn _ovr_midGetSequenceStatus_entry:far
     extrn _ovr_midGetSequenceStatus_entry:far
     extrn _audio_panFromX:far
     extrn _musInit:far
@@ -189,9 +192,11 @@
     extrn _clearSquareRecords:far
     extrn _attact_usesUpdSeason:far
     extrn _attact_usesBDADailyTimeCounter:far
+    extrn _attact_usesBDADailyTimeCounter:far
     extrn _attact_updateAttractEntry:far
     extrn _attact_usesLDIV_at_:far
-    extrn _attact_textAbnormalProgramTerm:far
+    extrn _attact_textAbnormalProgramTermination:far
+    extrn _attact_textAbnormalProgramTermination:far
     extrn _attact_countPartyUnits:far
     extrn _attact_compute2:far
     extrn _attact_compute3:far
@@ -347,6 +352,7 @@
     extrn _ovc28_blitButton:far
     extrn _ovc28_usesUiInputText:far
     extrn _ovc28_usesBDADailyTimeCounter:far
+    extrn _ovc28_usesBDADailyTimeCounter:far
     extrn _update_pause_button:far
     extrn _ovc28_textHalflingCastle:far
     extrn _animInitSeqs:far
@@ -385,6 +391,7 @@
     extrn _calcSeasonPalette:far
     extrn _season_countPromotable:far
     extrn _season_usesDifficulty:far
+    extrn _season_usesGPromotableCount:far
     extrn _updSeason:far
     extrn _ovc38_usesStshAlloc:far
     extrn _ovc38_showAchievements:far
@@ -724,10 +731,10 @@ _ovr_draw_textArena proc far
     jmp _draw_textArena
 _ovr_draw_textArena endp
 
-    public _ovr_draw_textProvidesMoreHousi
-_ovr_draw_textProvidesMoreHousi proc far
+    public _ovr_draw_textProvidesMoreHousing
+_ovr_draw_textProvidesMoreHousing proc far
     jmp _draw_textProvidesMoreHousing
-_ovr_draw_textProvidesMoreHousi endp
+_ovr_draw_textProvidesMoreHousing endp
 
     public _ovr_draw_freeRingBuffers
 _ovr_draw_freeRingBuffers proc far
@@ -954,10 +961,15 @@ _ovr_init2_usesCFGMice proc far
     jmp _init2_usesCFGMice
 _ovr_init2_usesCFGMice endp
 
-    public _ovr_ovr_miceButton0PressStates
-_ovr_ovr_miceButton0PressStates proc far
-    jmp _ovr_miceButton0PressStates_ent
-_ovr_ovr_miceButton0PressStates endp
+    public _ovr_ovr_miceButton0PressStates_entry
+_ovr_ovr_miceButton0PressStates_entry proc far
+    jmp _ovr_miceButton0PressStates_entry
+_ovr_ovr_miceButton0PressStates_entry endp
+
+    public _ovr_ovr_miceButton0PressStates_e
+_ovr_ovr_miceButton0PressStates_e proc far
+    jmp _ovr_miceButton0PressStates_entry
+_ovr_ovr_miceButton0PressStates_e endp
 
     public _ovr_clearMiceProcessed
 _ovr_clearMiceProcessed proc far
@@ -1044,10 +1056,15 @@ _ovr_init_getMapFlags proc far
     jmp _init_getMapFlags
 _ovr_init_getMapFlags endp
 
-    public _ovr_init_rebuildAllDirectionFl
-_ovr_init_rebuildAllDirectionFl proc far
+    public _ovr_init_rebuildAllDirectionFlags
+_ovr_init_rebuildAllDirectionFlags proc far
     jmp _init_rebuildAllDirectionFlags
-_ovr_init_rebuildAllDirectionFl endp
+_ovr_init_rebuildAllDirectionFlags endp
+
+    public _ovr_init_rebuildAllDirectionFlag
+_ovr_init_rebuildAllDirectionFlag proc far
+    jmp _init_rebuildAllDirectionFlags
+_ovr_init_rebuildAllDirectionFlag endp
 
     public _ovr_ensure_tail_slash
 _ovr_ensure_tail_slash proc far
@@ -1154,10 +1171,10 @@ _ovr_constr_usesSmoothPrev proc far
     jmp _constr_usesSmoothPrev
 _ovr_constr_usesSmoothPrev endp
 
-    public _ovr_constr_setHighlightAtOffse
-_ovr_constr_setHighlightAtOffse proc far
+    public _ovr_constr_setHighlightAtOffset
+_ovr_constr_setHighlightAtOffset proc far
     jmp _constr_setHighlightAtOffset
-_ovr_constr_setHighlightAtOffse endp
+_ovr_constr_setHighlightAtOffset endp
 
     public _ovr_play_sfx
 _ovr_play_sfx proc far
@@ -1194,10 +1211,15 @@ _ovr_audio_usesLDIV_at_ proc far
     jmp _audio_usesLDIV_at_
 _ovr_audio_usesLDIV_at_ endp
 
-    public _ovr_ovr_midGetSequenceStatus_e
-_ovr_ovr_midGetSequenceStatus_e proc far
+    public _ovr_ovr_midGetSequenceStatus_entry
+_ovr_ovr_midGetSequenceStatus_entry proc far
     jmp _ovr_midGetSequenceStatus_entry
-_ovr_ovr_midGetSequenceStatus_e endp
+_ovr_ovr_midGetSequenceStatus_entry endp
+
+    public _ovr_ovr_midGetSequenceStatus_ent
+_ovr_ovr_midGetSequenceStatus_ent proc far
+    jmp _ovr_midGetSequenceStatus_entry
+_ovr_ovr_midGetSequenceStatus_ent endp
 
     public _ovr_audio_panFromX
 _ovr_audio_panFromX proc far
@@ -1399,10 +1421,15 @@ _ovr_attact_usesUpdSeason proc far
     jmp _attact_usesUpdSeason
 _ovr_attact_usesUpdSeason endp
 
-    public _ovr_attact_usesBDADailyTimeCou
-_ovr_attact_usesBDADailyTimeCou proc far
+    public _ovr_attact_usesBDADailyTimeCounter
+_ovr_attact_usesBDADailyTimeCounter proc far
     jmp _attact_usesBDADailyTimeCounter
-_ovr_attact_usesBDADailyTimeCou endp
+_ovr_attact_usesBDADailyTimeCounter endp
+
+    public _ovr_attact_usesBDADailyTimeCount
+_ovr_attact_usesBDADailyTimeCount proc far
+    jmp _attact_usesBDADailyTimeCounter
+_ovr_attact_usesBDADailyTimeCount endp
 
     public _ovr_attact_updateAttractEntry
 _ovr_attact_updateAttractEntry proc far
@@ -1414,10 +1441,15 @@ _ovr_attact_usesLDIV_at_ proc far
     jmp _attact_usesLDIV_at_
 _ovr_attact_usesLDIV_at_ endp
 
-    public _ovr_attact_textAbnormalProgram
-_ovr_attact_textAbnormalProgram proc far
-    jmp _attact_textAbnormalProgramTerm
-_ovr_attact_textAbnormalProgram endp
+    public _ovr_attact_textAbnormalProgramTermination
+_ovr_attact_textAbnormalProgramTermination proc far
+    jmp _attact_textAbnormalProgramTermination
+_ovr_attact_textAbnormalProgramTermination endp
+
+    public _ovr_attact_textAbnormalProgramTe
+_ovr_attact_textAbnormalProgramTe proc far
+    jmp _attact_textAbnormalProgramTermination
+_ovr_attact_textAbnormalProgramTe endp
 
     public _ovr_attact_countPartyUnits
 _ovr_attact_countPartyUnits proc far
@@ -1719,10 +1751,10 @@ _ovr_ovc18_showLeaderView proc far
     jmp _ovc18_showLeaderView
 _ovr_ovc18_showLeaderView endp
 
-    public _ovr_ovc18_checkFortressPlaceme
-_ovr_ovc18_checkFortressPlaceme proc far
+    public _ovr_ovc18_checkFortressPlacement
+_ovr_ovc18_checkFortressPlacement proc far
     jmp _ovc18_checkFortressPlacement
-_ovr_ovc18_checkFortressPlaceme endp
+_ovr_ovc18_checkFortressPlacement endp
 
     public _ovr_ovc18_textTypeLen
 _ovr_ovc18_textTypeLen proc far
@@ -1739,10 +1771,10 @@ _ovr_ovc18_usesRandBelow proc far
     jmp _ovc18_usesRandBelow
 _ovr_ovc18_usesRandBelow endp
 
-    public _ovr_ovc18_blitPanelIfNotRunnin
-_ovr_ovc18_blitPanelIfNotRunnin proc far
+    public _ovr_ovc18_blitPanelIfNotRunning
+_ovr_ovc18_blitPanelIfNotRunning proc far
     jmp _ovc18_blitPanelIfNotRunning
-_ovr_ovc18_blitPanelIfNotRunnin endp
+_ovr_ovc18_blitPanelIfNotRunning endp
 
     public _ovr_save_loadGameFile
 _ovr_save_loadGameFile proc far
@@ -1909,10 +1941,10 @@ _ovr_manage_mapPartySlots proc far
     jmp _manage_mapPartySlots
 _ovr_manage_mapPartySlots endp
 
-    public _ovr_manage_showSettlementScree
-_ovr_manage_showSettlementScree proc far
+    public _ovr_manage_showSettlementScreen
+_ovr_manage_showSettlementScreen proc far
     jmp _manage_showSettlementScreen
-_ovr_manage_showSettlementScree endp
+_ovr_manage_showSettlementScreen endp
 
     public _ovr_manage_rollDice
 _ovr_manage_rollDice proc far
@@ -1979,10 +2011,10 @@ _ovr_ovc23_textAdlibNone proc far
     jmp _ovc23_textAdlibNone
 _ovr_ovc23_textAdlibNone endp
 
-    public _ovr_createConstructionRecordFa
-_ovr_createConstructionRecordFa proc far
+    public _ovr_createConstructionRecordFar
+_ovr_createConstructionRecordFar proc far
     jmp _createConstructionRecordFar
-_ovr_createConstructionRecordFa endp
+_ovr_createConstructionRecordFar endp
 
     public _ovr_ovc23_removeRecord
 _ovr_ovc23_removeRecord proc far
@@ -2004,10 +2036,10 @@ _ovr_createConstructionRecord proc far
     jmp _createConstructionRecord
 _ovr_createConstructionRecord endp
 
-    public _ovr_ovc23_rebuildDirectionFlag
-_ovr_ovc23_rebuildDirectionFlag proc far
+    public _ovr_ovc23_rebuildDirectionFlags
+_ovr_ovc23_rebuildDirectionFlags proc far
     jmp _ovc23_rebuildDirectionFlags
-_ovr_ovc23_rebuildDirectionFlag endp
+_ovr_ovc23_rebuildDirectionFlags endp
 
     public _ovr_ovc23_usesAlignUp43
 _ovr_ovc23_usesAlignUp43 proc far
@@ -2189,10 +2221,15 @@ _ovr_ovc28_usesUiInputText proc far
     jmp _ovc28_usesUiInputText
 _ovr_ovc28_usesUiInputText endp
 
-    public _ovr_ovc28_usesBDADailyTimeCoun
-_ovr_ovc28_usesBDADailyTimeCoun proc far
+    public _ovr_ovc28_usesBDADailyTimeCounter
+_ovr_ovc28_usesBDADailyTimeCounter proc far
     jmp _ovc28_usesBDADailyTimeCounter
-_ovr_ovc28_usesBDADailyTimeCoun endp
+_ovr_ovc28_usesBDADailyTimeCounter endp
+
+    public _ovr_ovc28_usesBDADailyTimeCounte
+_ovr_ovc28_usesBDADailyTimeCounte proc far
+    jmp _ovc28_usesBDADailyTimeCounter
+_ovr_ovc28_usesBDADailyTimeCounte endp
 
     public _ovr_update_pause_button
 _ovr_update_pause_button proc far
@@ -2364,10 +2401,10 @@ _ovr_season_textHalflingCastle proc far
     jmp _season_textHalflingCastle
 _ovr_season_textHalflingCastle endp
 
-    public _ovr_season_usesGPromotableCoun
-_ovr_season_usesGPromotableCoun proc far
+    public _ovr_season_usesGPromotableCount2
+_ovr_season_usesGPromotableCount2 proc far
     jmp _season_usesGPromotableCount2
-_ovr_season_usesGPromotableCoun endp
+_ovr_season_usesGPromotableCount2 endp
 
     public _ovr_calcSeasonPalette
 _ovr_calcSeasonPalette proc far
@@ -2383,6 +2420,11 @@ _ovr_season_countPromotable endp
 _ovr_season_usesDifficulty proc far
     jmp _season_usesDifficulty
 _ovr_season_usesDifficulty endp
+
+    public _ovr_season_usesGPromotableCount
+_ovr_season_usesGPromotableCount proc far
+    jmp _season_usesGPromotableCount
+_ovr_season_usesGPromotableCount endp
 
     public _ovr_updSeason
 _ovr_updSeason proc far
@@ -2414,15 +2456,15 @@ _ovr_setSeasonPalette proc far
     jmp _setSeasonPalette
 _ovr_setSeasonPalette endp
 
-    public _ovr_ovc40_usesVgaSetPalette8bi
-_ovr_ovc40_usesVgaSetPalette8bi proc far
+    public _ovr_ovc40_usesVgaSetPalette8bit
+_ovr_ovc40_usesVgaSetPalette8bit proc far
     jmp _ovc40_usesVgaSetPalette8bit
-_ovr_ovc40_usesVgaSetPalette8bi endp
+_ovr_ovc40_usesVgaSetPalette8bit endp
 
-    public _ovr_ovc40_usesCalcSeasonPalett
-_ovr_ovc40_usesCalcSeasonPalett proc far
+    public _ovr_ovc40_usesCalcSeasonPalette
+_ovr_ovc40_usesCalcSeasonPalette proc far
     jmp _ovc40_usesCalcSeasonPalette
-_ovr_ovc40_usesCalcSeasonPalett endp
+_ovr_ovc40_usesCalcSeasonPalette endp
 
     public _ovr_ovc40_flushInput
 _ovr_ovc40_flushInput proc far
@@ -2504,10 +2546,10 @@ _ovr_ovc41_usesBiosKeyAvail proc far
     jmp _ovc41_usesBiosKeyAvail
 _ovr_ovc41_usesBiosKeyAvail endp
 
-    public _ovr_ovc41_cannotSeeTerrainNoti
-_ovr_ovc41_cannotSeeTerrainNoti proc far
+    public _ovr_ovc41_cannotSeeTerrainNotice
+_ovr_ovc41_cannotSeeTerrainNotice proc far
     jmp _ovc41_cannotSeeTerrainNotice
-_ovr_ovc41_cannotSeeTerrainNoti endp
+_ovr_ovc41_cannotSeeTerrainNotice endp
 
     public _ovr_ovc41_usesGMenuItem
 _ovr_ovc41_usesGMenuItem proc far
@@ -2649,10 +2691,10 @@ _ovr_ovc45_compute4 proc far
     jmp _ovc45_compute4
 _ovr_ovc45_compute4 endp
 
-    public _ovr_ovc45_buildPlacementMessag
-_ovr_ovc45_buildPlacementMessag proc far
+    public _ovr_ovc45_buildPlacementMessage
+_ovr_ovc45_buildPlacementMessage proc far
     jmp _ovc45_buildPlacementMessage
-_ovr_ovc45_buildPlacementMessag endp
+_ovr_ovc45_buildPlacementMessage endp
 
     public _ovr_ovc45_textDone
 _ovr_ovc45_textDone proc far

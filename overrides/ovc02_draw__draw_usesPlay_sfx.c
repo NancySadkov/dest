@@ -18,7 +18,7 @@ void __cdecl16far draw_usesPlay_sfx(void)
   byte bStack_4;
   
   prevTick = CONCAT22(unaff_SI,(*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)));
-  puVar3 = ovr_attact_usesBDADailyTim_8bbe((ulong *)recordUpdateTick,prevTick);
+  puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)recordUpdateTick,prevTick);
   if ((in_DX != 0) || ((ulong *)((int)(undefined4 *)&_DATA + 1U) < puVar3)) {
     (*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)) = (uint16_t)*(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
     (*(uint16_t *)((uint8_t *)&(recordUpdateTick))) = (uint16_t)*(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);

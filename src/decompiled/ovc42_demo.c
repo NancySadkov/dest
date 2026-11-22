@@ -46,7 +46,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
       return (char *)0x2401;
     }
     prevTick = CONCAT22(uVar6,uVar1);
-    puVar4 = ovr_attact_usesBDADailyTim_8bbe(__return_storage_ptr__,prevTick);
+    puVar4 = ovr_attact_usesBDADailyTimeCounter(__return_storage_ptr__,prevTick);
   } while ((puVar5 < (*(uint16_t *)((uint8_t *)&(timeoutTicks) + 2))) ||
           ((puVar5 == (*(uint16_t *)((uint8_t *)&(timeoutTicks) + 2)) && (puVar4 < (ulong *)timeoutTicks))));
   return (char *)((uint)puVar4 & 0xff00);
@@ -76,7 +76,7 @@ undefined2 __cdecl16far ovc42_usesMiceBlitRect(byte timeoutTicks)
   }
   do {
     prevTick = prevTick & 0xffff0000;
-    bVar1 = ovr_draw_textProvidesMoreH_f381();
+    bVar1 = ovr_draw_textProvidesMoreHousing();
   } while (bVar1);
   while( true ) {
     uVar3 = (undefined1)(prevTick >> 0x18);
@@ -88,12 +88,12 @@ undefined2 __cdecl16far ovc42_usesMiceBlitRect(byte timeoutTicks)
       InputEventTime.lo = uVar4;
       ovr_draw_usesPrintf();
     }
-    bVar1 = ovr_draw_textProvidesMoreH_f381();
+    bVar1 = ovr_draw_textProvidesMoreHousing();
     puVar2 = (ulong *)CONCAT11(extraout_AH,bVar1);
     prevTick = (ulong)CONCAT11(uVar3,bVar1) << 0x10;
     if (bVar1) break;
     prevTick = CONCAT22(CONCAT11(uVar3,bVar1),(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));
-    puVar2 = ovr_attact_usesBDADailyTim_8bbe((ulong *)TextBlitCycle,prevTick);
+    puVar2 = ovr_attact_usesBDADailyTimeCounter((ulong *)TextBlitCycle,prevTick);
     if ((uVar4 != 0) || ((ulong *)(uint)timeoutTicks <= puVar2)) break;
   }
   uVar3 = (undefined1)((uint)puVar2 >> 8);

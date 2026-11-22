@@ -36,7 +36,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
       return (char *)0x2401;
     }
     prevTick = CONCAT22(uVar6,uVar1);
-    puVar4 = ovr_attact_usesBDADailyTim_8bbe(__return_storage_ptr__,prevTick);
+    puVar4 = ovr_attact_usesBDADailyTimeCounter(__return_storage_ptr__,prevTick);
   } while ((puVar5 < (*(uint16_t *)((uint8_t *)&(timeoutTicks) + 2))) ||
           ((puVar5 == (*(uint16_t *)((uint8_t *)&(timeoutTicks) + 2)) && (puVar4 < (ulong *)timeoutTicks))));
   return (char *)((uint)puVar4 & 0xff00);
