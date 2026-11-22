@@ -555,7 +555,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
     uStack_20 =(uint16_t)( (byte *)__C0_ASM_CopyRight + 6);
     cVar14 = (char)unaff_SS;
     uVar65 = (undefined1)((uint)unaff_SS >> 8);
-    _fmemset((void *)ZEXT24(unaff_SS),6,(uint16_t)unaff_DI);
+    _fmemset(MK_FP(_SS, &uStack_28), 0, 6);
     _fmemset((void *)ZEXT24(unaff_SS),6,CONCAT11(uVar68,cVar25));
     _fmemset(MK_FP(GUnitDescriptions[partyIndex].seg, GUnitDescriptions[partyIndex].ofs + 0x9a), 0, 3);
     _fmemset((void *)ZEXT24(unaff_SS),6,CONCAT11(uVar68,cVar25));
