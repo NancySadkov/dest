@@ -17,7 +17,7 @@ smm_restore_state	function	body not recovered
 DOS_GetInterruptHandler	function	body not recovered
 DOS_SetInterruptHandler	function	body not recovered
 ovr_season_usesGPromotable_e11a	function	body not recovered
-swi	function	returns a stub code pointer
+swi	function	returns a no-op code pointer; every (*swi(n))() is therefore a no-op (startx DOS calls, SaveVectors, ErrorDisplay). Root cause of the startup flow being register-dependent - see doc/step6_entry.md
 _emu	data	Borland FP runtime
 _fperror	data	Borland FP runtime
 F_FTOL@	function	asm stub in ovr_thunks.asm (identifier has '@')

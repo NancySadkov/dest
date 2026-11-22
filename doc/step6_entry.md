@@ -1,4 +1,60 @@
-# Step 6: from "exit 3 before main" to "main is entered"
+# Step 6: from "exit 3 before main" to "startx runs"
+
+## Status correction (latest measurement)
+
+The entry-point fix is real and repeatable: the rebuilt image now starts at
+`startx`, runs the PSP/environment/memory setup, and no longer aborts in C0's
+`_startup`.  What is **not** yet reproducible is `main` itself.
+
+An instrumented build (distinct exit codes planted in `startx`, NOP-ed in the
+image) reached the pre-`main` milestone and a marker inside `main` fired.  With
+the same source but without those marker instructions the committed image exits
+**115**, and re-running the milestone probe on later layouts changes the reported
+stage (5, 121, 115).  The startup is therefore *register- and layout-dependent*,
+and the "main entered" result must be treated as measured-once, not parity.
+
+## Root cause of the instability: `swi()` is a no-op
+
+`st_compat.h` declares `code *swi(int vector);`, and `src/decompiled/st_stubs.c`
+implements it as a GUESS stub:
+
+```c
+static unsigned short st_swi_target(void) { return 0; }
+code *swi(int vector) { (void)vector; return (code *)st_swi_target; }
+```
+
+Every recovered `pcVar3 = (code *)swi(0x21); (*pcVar3)();` therefore calls a
+function that does nothing.  Verified in the built image: `swi` returns the far
+pointer `0779:0084`, and that address is
+
+```
+7814 push bp / mov bp,sp / xor ax,ax / pop bp / retf
+```
+
+So in `startx` the DOS version call, the `INT 21h AH=4Ah` memory resize, the
+DOS 4+ handle-count / UMB block and the `INT 1Ah` time call **never execute**.
+Their "results" (and the carry-flag tests that decide whether `_abort` runs) are
+whatever the registers happen to hold at that point, which is exactly why the
+observed exit code changes with code layout.
+
+This also applies to `SaveVectors`, `__restorezero` and `ErrorDisplay`, which
+use the same idiom.
+
+### Next step (concrete)
+
+Rewrite the DOS calls in `startx` (and the three small routines above) from the
+disassembly using `int86x` / `geninterrupt` with explicit `AH`, `BX`, `ES`,
+instead of the `(*swi(n))()` idiom:
+
+| original | call |
+|---|---|
+| `MOV AH,0x30 / INT 21h` | DOS version -> `DosVersion` |
+| `MOV AH,0x4A / ES=psp / BX=paras` | resize memory block |
+| `AX=0x5801, BX=2` / `AH=0x67` / `AH=0x48,BX=1` / `AH=0x49` / `AX=0x5801,BX=0` | UMB + handle count |
+| `MOV AH,0, INT 1Ah` | system time -> `_StartTime`, BDA midnight flag |
+
+Once those are real interrupts, the startup flow stops depending on leftover
+registers and the milestone ladder can be re-measured reliably.
 
 ## Summary
 
@@ -7,10 +63,11 @@ not the game code: **TLINK's entry point was Borland's `C0M.OBJ` startup
 (`_startup`), not the program's own `startx`**, and that startup aborts with
 `__exit(3)`.
 
-`startx` (CRTL) is now the entry.  With it, the whole startup sequence runs -
-PSP and environment scan, memory resize, the DOS 4+ handle-count/UMB block,
-system time - and `main` is entered.  `main` then exits with code **115**
-instead of 3.
+`startx` (CRTL) is now the entry.  With it, the PSP/environment scan, the memory
+resize and the rest of the startup sequence run, and the committed image exits
+**115** instead of 3.  Whether that 115 is `main` returning or the startup
+falling through is not settled - see "Status correction" above, and the
+`swi()` finding that makes the flow register-dependent.
 
 ## How the entry was identified
 
@@ -42,7 +99,7 @@ verifiable change; removing C0 remains the cleaner end state.
 Distinct `exit()` codes were planted in `startx` and read back with a batch that
 reports the exact `errorlevel`:
 
-| milestone | code |
+| milestone | code (measured once, marker build) |
 |---|---|
 | entered `startx` | 4 |
 | after `SaveVectors` (environment scan) | 5 / 10 |
@@ -53,8 +110,9 @@ reports the exact `errorlevel`:
 | after `_c0crtinit()` | 14 |
 | `main` entered | 66 (marker inside `main`) |
 
-So every stage of the dynamic startup works, including the four `INT 21h`
-calls that the decompiled C had rendered as bare `swi(0x21)` calls.
+The ladder is not stable across layouts (5, 121 and 115 were observed for the
+same stage after edits that only move code), because the `INT 21h` calls behind
+those milestones are no-ops - see "Root cause" above.
 
 ## The one stage that had to be replaced
 
