@@ -231,8 +231,8 @@ void __cdecl16far stshInit(void)
   uint16_t szlo;
   uint16_t szhi;
   
-  _fmemset((void *)0xffff1ef4,0x440,(uint16_t)unaff_DI);
-  _fmemset((void *)0x1ef4,0x220,(uint16_t)unaff_DI);
+  _fmemset(MK_FP(0x1ef4, 0x2420), 0xFFFF, 0x440);
+  _fmemset(MK_FP(0x1ef4, 0x0880), 0, 0x220);
   for (file_id = 0; (int)file_id < 0x220; file_id = file_id + 1) {
     __return_storage_ptr__ =
          (long *)open_wait_unlock_and_disk
@@ -562,7 +562,7 @@ void __cdecl16far initStshTables(void)
   uint16_t unaff_SI;
   uint16_t i;
   
-  _fmemset((void *)0x1ef4,0x220,unaff_SI);
+  _fmemset(MK_FP(0x1ef4, 0x0880), 0, 0x220);
   for (i = 0; (int)i < 0x220; i = i + 1) {
     *(uint16_t *)((uint8_t *)&StshSizes[i] + 2) = 0x7fff;
     *(uint16_t *)(&StshSizes[i]) = 0xffff;
