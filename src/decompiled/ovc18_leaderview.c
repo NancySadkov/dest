@@ -1108,17 +1108,17 @@ bool __cdecl16far ovc18_textArena(uint16_t x,uint16_t y,...)
 uint __cdecl16far ovc18_usesAlignUp4(void)
 
 {
-  bool bVar1;
+  bool inArena;
   uint uVar2;
   uint uVar3;
   uint uVar4;
   uint uVar5;
-  int iVar6;
+  int leaderIdx;
   undefined2 uVar7;
-  uint uStack_4;
+  uint bestDist;
   
-  bVar1 = ovr_draw_textArena();
-  if (bVar1) {
+  inArena = ovr_draw_textArena();
+  if (inArena) {
     for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
       uVar7 = (undefined2)((ulong)Entities >> 0x10);
       if (*(char *)((int)(char **)GMenuStrings +
@@ -1131,10 +1131,10 @@ uint __cdecl16far ovc18_usesAlignUp4(void)
         }
       }
     }
-    for (iVar6 = 0; iVar6 < (int)(uint)GLeaderCount; iVar6 = iVar6 + 1) {
-      if (((((char_sheet_t *)((iVar6 << 2)))->active != '\0') &&
-          (((char_sheet_t *)((iVar6 << 2)))->x == GfxRndSeed)) &&
-         (uVar5 = ((char_sheet_t *)((iVar6 << 2)))->y, uVar5 == GfxRndSeed2)) {
+    for (leaderIdx = 0; leaderIdx < (int)(uint)GLeaderCount; leaderIdx = leaderIdx + 1) {
+      if (((((char_sheet_t *)((leaderIdx << 2)))->active != '\0') &&
+          (((char_sheet_t *)((leaderIdx << 2)))->x == GfxRndSeed)) &&
+         (uVar5 = ((char_sheet_t *)((leaderIdx << 2)))->y, uVar5 == GfxRndSeed2)) {
         return uVar5 & 0xff00;
       }
     }
@@ -1152,19 +1152,19 @@ uint __cdecl16far ovc18_usesAlignUp4(void)
     else {
       uVar5 = 0x2410;
       if (1 < CurPartySlot) {
-        uStack_4 = 0xffff;
-        for (iVar6 = 0; uVar5 = (uint)GLeaderCount, iVar6 < (int)uVar5; iVar6 = iVar6 + 1) {
-          if (((((char_sheet_t *)((iVar6 << 2)))->active != '\0') &&
-              (*(char *)((int)*(undefined4 *)(iVar6 << 2) + 0x3f) == '\0')) &&
-             (uVar5 = ((char_sheet_t *)((iVar6 << 2)))->x - GfxRndSeed,
+        bestDist = 0xffff;
+        for (leaderIdx = 0; uVar5 = (uint)GLeaderCount, leaderIdx < (int)uVar5; leaderIdx = leaderIdx + 1) {
+          if (((((char_sheet_t *)((leaderIdx << 2)))->active != '\0') &&
+              (*(char *)((int)*(undefined4 *)(leaderIdx << 2) + 0x3f) == '\0')) &&
+             (uVar5 = ((char_sheet_t *)((leaderIdx << 2)))->x - GfxRndSeed,
              uVar3 = (int)uVar5 >> 0xf,
-             uVar2 = ((char_sheet_t *)((iVar6 << 2)))->y - GfxRndSeed2,
+             uVar2 = ((char_sheet_t *)((leaderIdx << 2)))->y - GfxRndSeed2,
              uVar4 = (int)uVar2 >> 0xf,
-             uVar5 = ((uVar5 ^ uVar3) - uVar3) + ((uVar2 ^ uVar4) - uVar4), uVar5 < uStack_4)) {
-            uStack_4 = uVar5;
+             uVar5 = ((uVar5 ^ uVar3) - uVar3) + ((uVar2 ^ uVar4) - uVar4), uVar5 < bestDist)) {
+            bestDist = uVar5;
           }
         }
-        if (0x1e < uStack_4) {
+        if (0x1e < bestDist) {
           return 0;
         }
       }
