@@ -14,25 +14,25 @@
 void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
 
 {
-  int x_00;
-  int y_00;
+  int cellX;
+  int cellY;
   int *piVar1;
   uint16_t uVar2;
   int *piVar3;
   uint16_t uVar4;
   int *piVar5;
   int *piVar6;
-  int iVar7;
-  int iVar8;
-  uint uVar9;
-  int iVar10;
+  int xOfs;
+  int yOfs;
+  uint blockedFlag;
+  int nextCount;
   uint16_t unaff_DI;
   uint16_t unaff_SS;
   uint8_t nextQueueY;
   uint8_t nextQueueX;
   uint8_t fillQueueY;
   uint8_t fillQueueX;
-  byte bStack_1f;
+  byte depth;
   int *piStack_1e;
   uint16_t uVar11;
   int *piStack_1a;
@@ -40,31 +40,31 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
   int *piStack_12;
   uint16_t uVar13;
   int *piStack_e;
-  int iStack_a;
-  int iStack_8;
+  int queueLen;
+  int queueIndex;
   
   _fmemset(MK_FP((uint16_t)(FillGrid >> 16), (uint16_t)FillGrid), 0, 0x6541);
-  iVar7 = 0x50 - x;
-  iVar8 = 0x50 - y;
-  iStack_a = 1;
+  xOfs = 0x50 - x;
+  yOfs = 0x50 - y;
+  queueLen = 1;
   piStack_1a = (int *)CONCAT22(unaff_SS,&fillQueueX);
   piStack_1e = (int *)CONCAT22(unaff_SS,&fillQueueY);
   piStack_e = (int *)&nextQueueX;
   piStack_12 = (int *)&nextQueueY;
-  *(undefined1 *)((int)FillGrid + (x + iVar7) * 0xa1 + y + iVar8) = 1;
+  *(undefined1 *)((int)FillGrid + (x + xOfs) * 0xa1 + y + yOfs) = 1;
   *piStack_1a = x;
   *piStack_1e = y;
-  bStack_1f = 2;
+  depth = 2;
   uVar13 = unaff_SS;
   while( true ) {
     piVar6 = piStack_e;
     piVar5 = piStack_12;
     piVar3 = piStack_1a;
-    if (0x50 < bStack_1f) {
+    if (0x50 < depth) {
       return;
     }
-    iVar10 = 0;
-    iStack_8 = 0;
+    nextCount = 0;
+    queueIndex = 0;
     while( true ) {
       piVar1 = piStack_1e;
       piStack_1a = (int *)piVar3;
@@ -72,51 +72,51 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
       uVar4 = uVar12;
       uVar11 = (uint16_t)((ulong)piStack_1e >> 0x10);
       uVar2 = uVar11;
-      if (iStack_a <= iStack_8) break;
-      x_00 = piStack_1a[iStack_8];
-      y_00 = piStack_1e[iStack_8];
+      if (queueLen <= queueIndex) break;
+      cellX = piStack_1a[queueIndex];
+      cellY = piStack_1e[queueIndex];
       piStack_1e = piVar1;
-      if (((*(char *)((x_00 + iVar7) * 0xa1 + (int)FillGrid + y_00 + iVar8 + -0xa1) == '\0') &&
-          (uVar9 = ovr_attact_usesSCARRY2(x_00,y_00,3,ignoreBlocked,0,0), (uVar9 & 0xff) == 0)) &&
-         (iVar10 < 300)) {
-        *(byte *)((x_00 + iVar7) * 0xa1 + (int)FillGrid + y_00 + iVar8 + -0xa1) = bStack_1f;
-        piStack_e[iVar10] = x_00 + -1;
-        piStack_12[iVar10] = y_00;
-        iVar10 = iVar10 + 1;
+      if (((*(char *)((cellX + xOfs) * 0xa1 + (int)FillGrid + cellY + yOfs + -0xa1) == '\0') &&
+          (blockedFlag = ovr_attact_usesSCARRY2(cellX,cellY,3,ignoreBlocked,0,0), (blockedFlag & 0xff) == 0)) &&
+         (nextCount < 300)) {
+        *(byte *)((cellX + xOfs) * 0xa1 + (int)FillGrid + cellY + yOfs + -0xa1) = depth;
+        piStack_e[nextCount] = cellX + -1;
+        piStack_12[nextCount] = cellY;
+        nextCount = nextCount + 1;
       }
-      if (((*(char *)((x_00 + iVar7) * 0xa1 + (int)FillGrid + y_00 + iVar8 + 0xa1) == '\0') &&
-          (uVar9 = ovr_attact_usesSCARRY2(x_00,y_00,1,ignoreBlocked,0,0), (uVar9 & 0xff) == 0)) &&
-         (iVar10 < 300)) {
-        *(byte *)((x_00 + iVar7) * 0xa1 + (int)FillGrid + y_00 + iVar8 + 0xa1) = bStack_1f;
-        piStack_e[iVar10] = x_00 + 1;
-        piStack_12[iVar10] = y_00;
-        iVar10 = iVar10 + 1;
+      if (((*(char *)((cellX + xOfs) * 0xa1 + (int)FillGrid + cellY + yOfs + 0xa1) == '\0') &&
+          (blockedFlag = ovr_attact_usesSCARRY2(cellX,cellY,1,ignoreBlocked,0,0), (blockedFlag & 0xff) == 0)) &&
+         (nextCount < 300)) {
+        *(byte *)((cellX + xOfs) * 0xa1 + (int)FillGrid + cellY + yOfs + 0xa1) = depth;
+        piStack_e[nextCount] = cellX + 1;
+        piStack_12[nextCount] = cellY;
+        nextCount = nextCount + 1;
       }
-      if (((*(char *)((int)FillGrid + (x_00 + iVar7) * 0xa1 + y_00 + iVar8 + -1) == '\0') &&
-          (uVar9 = ovr_attact_usesSCARRY2(x_00,y_00,0,ignoreBlocked,0,0), (uVar9 & 0xff) == 0)) &&
-         (iVar10 < 300)) {
-        *(byte *)((int)FillGrid + (x_00 + iVar7) * 0xa1 + y_00 + iVar8 + -1) = bStack_1f;
-        piStack_e[iVar10] = x_00;
-        piStack_12[iVar10] = y_00 + -1;
-        iVar10 = iVar10 + 1;
+      if (((*(char *)((int)FillGrid + (cellX + xOfs) * 0xa1 + cellY + yOfs + -1) == '\0') &&
+          (blockedFlag = ovr_attact_usesSCARRY2(cellX,cellY,0,ignoreBlocked,0,0), (blockedFlag & 0xff) == 0)) &&
+         (nextCount < 300)) {
+        *(byte *)((int)FillGrid + (cellX + xOfs) * 0xa1 + cellY + yOfs + -1) = depth;
+        piStack_e[nextCount] = cellX;
+        piStack_12[nextCount] = cellY + -1;
+        nextCount = nextCount + 1;
       }
-      if (((*(char *)((int)FillGrid + (x_00 + iVar7) * 0xa1 + y_00 + iVar8 + 1) == '\0') &&
-          (uVar9 = ovr_attact_usesSCARRY2(x_00,y_00,2,ignoreBlocked,0,0), (uVar9 & 0xff) == 0)) &&
-         (iVar10 < 300)) {
-        *(byte *)((int)FillGrid + (x_00 + iVar7) * 0xa1 + y_00 + iVar8 + 1) = bStack_1f;
-        piStack_e[iVar10] = x_00;
-        piStack_12[iVar10] = y_00 + 1;
-        iVar10 = iVar10 + 1;
+      if (((*(char *)((int)FillGrid + (cellX + xOfs) * 0xa1 + cellY + yOfs + 1) == '\0') &&
+          (blockedFlag = ovr_attact_usesSCARRY2(cellX,cellY,2,ignoreBlocked,0,0), (blockedFlag & 0xff) == 0)) &&
+         (nextCount < 300)) {
+        *(byte *)((int)FillGrid + (cellX + xOfs) * 0xa1 + cellY + yOfs + 1) = depth;
+        piStack_e[nextCount] = cellX;
+        piStack_12[nextCount] = cellY + 1;
+        nextCount = nextCount + 1;
       }
-      iStack_8 = iStack_8 + 1;
+      queueIndex = queueIndex + 1;
     }
-    if (iVar10 == 0) break;
+    if (nextCount == 0) break;
     piStack_e = piStack_1a;
     piStack_1a = (int *)CONCAT22(unaff_SS,piVar6);
     piStack_12 = piStack_1e;
     piStack_1e = (int *)CONCAT22(uVar13,piVar5);
-    bStack_1f = bStack_1f + 1;
-    iStack_a = iVar10;
+    depth = depth + 1;
+    queueLen = nextCount;
     unaff_SS = uVar4;
     uVar13 = uVar2;
   }
