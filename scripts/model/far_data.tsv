@@ -1,0 +1,42 @@
+# Data that lives OUTSIDE DGROUP in the original image.
+#
+# ProjectInfo block list (psrc=mz) names one data segment per source module:
+#
+#   1539_DATA_game1   6048    17f8_DATA_game4   5712    1726_DATA_agent.c  3360
+#   195d_DATA_entity.c 22896  1ef4_DATA_stash.c 10336   1703_DATA_audio.c   560
+#   224a_DATA_mice.c    304   225d_OVRDATA_      272   2270_DATA_EmsRec      16
+#
+# The flattened export put every one of those bytes into _DATA, which is why the
+# link reported "Segment _DATA exceeds 64K" (76,158 bytes).  Their symbols are
+# declared `far`, so they are emitted into _FARDATA (a separate segment, reached
+# through a far pointer) exactly as the original did, and _DATA only keeps the
+# real DGROUP variables (segment 2410).
+#
+# name <TAB> original segment <TAB> note
+BuildingTypes	195d	DATA_entity.c, 248 x bldtp_t
+AgntGs	195d	DATA_entity.c, 42 x agntG_t
+BldGfxRuin	195d	DATA_entity.c, 744 x far_t
+BldGfxNormal	195d	DATA_entity.c, 744 x far_t
+StshSizes	195d	DATA_entity.c, 544 x uint32_t
+StshPtrs	195d	DATA_entity.c, 544 x long
+StshHandles	195d	DATA_entity.c, 544 x int
+StshBytes	195d	DATA_entity.c, 544 x uint8_t
+expThresholds	195d	DATA_entity.c, 240 x uint32_t
+BldFlags	195d	DATA_entity.c, 744 x uint8_t
+AudioHandles	195d	DATA_entity.c, 140 x DW
+AudioSeg	195d	DATA_entity.c, 138 x int16_t
+EntityTypeSeg	195d	DATA_entity.c, 9 x anm_t
+GLeaderSheets	195d	DATA_entity.c, 80 x char_sheet_t *
+miceTileTail	195d	DATA_entity.c, 15 x uint8_t
+GRecords	195d	DATA_entity.c, 1 x grec_t
+SquareRecs	17f8	DATA_game4, 300 x squarerec_t
+mapSquareSide	1539	DATA_game1, 432 x uint16_t
+mapSquareColumn	1539	DATA_game1, 432 x uint16_t
+mapSquareRightX	1539	DATA_game1, 432 x uint16_t
+mapSquareLeftX	1539	DATA_game1, 432 x uint16_t
+mapSquareBottomY	1539	DATA_game1, 432 x uint16_t
+mapSquareTopY	1539	DATA_game1, 432 x uint16_t
+columnScreenY	1539	DATA_game1, 211 x uint16_t
+Agnts	1539	DATA_game1, 24 x agnt_t
+AgntArrayA	1539	DATA_game1, 1050 x uint8_t
+AgntArrayB	1539	DATA_game1, 1050 x uint8_t

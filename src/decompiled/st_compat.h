@@ -1,11 +1,17 @@
 /* Compatibility shims for Ghidra's decompiler output. */
 #ifndef ST_COMPAT_H
 #define ST_COMPAT_H
-#ifdef __BORLANDC__
+/* Turbo C++ 3.0 defines __TURBOC__, not __BORLANDC__, so testing only the latter
+   made every `far` in the tree an empty macro (checked with `#ifdef far`): far
+   pointers degraded to near ones and MK_FP produced near addresses.
+
+   Turbo C++ in C mode also spells the calling conventions `cdecl` / `pascal`,
+   not BC++'s `__cdecl` / `__pascal`, and cdecl is the default anyway. */
+#if defined(__BORLANDC__) || defined(__TURBOC__)
 #define __cdecl16far
-#define __cdecl16near __cdecl
-#define __stdcall16far __pascal
-#define __stdcall16near __pascal
+#define __cdecl16near
+#define __stdcall16far
+#define __stdcall16near
 #else
 #define __cdecl16far
 #define __cdecl16near

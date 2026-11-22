@@ -26,7 +26,10 @@ def main():
     bat = ["@echo off", "set PATH=D:\\BIN", "set LIB=D:\\LIB"]
     # TLINK syntax: <objs>,<exe>,<map>,<libs>  -- the comma after the last object
     # is what separates inputs from outputs
-    rsp = "D:\\LIB\\C0L.OBJ " + " ".join(objs) + ",REBUILT.EXE,REBUILT.MAP,E:\\LIB\\CL.LIB"
+    # printf("%f") pulls in the floating-point printer, which needs the emulator
+    # library; without it TLINK reports a fixup overflow on __REALCVT.
+    rsp = ("D:\\LIB\\C0L.OBJ " + " ".join(objs) +
+           ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\EMU.LIB E:\\LIB\\CM.LIB")
     with open(os.path.join(BUILDSRC, "LINK.RSP"), "w", encoding="ascii",
               newline="\r\n") as f:
         f.write(rsp + "\n")
