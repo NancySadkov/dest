@@ -1370,8 +1370,8 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
           }
         }
         ovr_ovc25_tickCountdown(uVar27);
-        _fmemset((void *)(ulong)*(uint *)(uVar27 * 4 + 2),6,(uint16_t)(char *)fmt);
-        _fmemset((void *)(ulong)*(uint *)(uVar27 * 4 + 2),6,(uint16_t)(char *)fmt);
+        _fmemset((char far *)GLeaderSheets[uVar27] + 0x6a, 0, 6);
+        _fmemset((char far *)GLeaderSheets[uVar27] + 0x76, 0, 6);
         uVar35 = ovr_randBelow(100,0);
         if ((byte)uVar35 < *(byte *)((int)*(uint32_t *)(uVar27 << 2) + 0xa9)) {
           *(uint16_t *)((int)*(uint32_t *)(uVar27 << 2) + 0x6c) =

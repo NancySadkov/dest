@@ -214,7 +214,7 @@ ovc42_showAgentStats(byte gindex,uint8_t partyIndex,char flag,far_t cmap,byte le
   gfx.seg = talkwin9Cut1Seg;
   gfx.ofs = talkwin9Cut1Ofs;
   ovr_blitGfxRect(gfx,0,0,(brect_t *)&rect,(uint8_t)unaff_SS,true,0,0,0,0,0,0);
-  _fmemset((void *)(ulong)unaff_SS,0x34,agntRec.x);
+  _fmemset(MK_FP(_SS, &agntRec), 0, 0x34);
   _fmemset((void *)(ulong)unaff_SS,0x37,agntRec.x);
   peStack_29 = (entity_t *)&agntRec;
   agntRec.gindex = gindex;
