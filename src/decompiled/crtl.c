@@ -3388,29 +3388,29 @@ undefined2 __cdecl16far malloc(uint size)
 
 /* 1000:1842 */
 
-far_t * __cdecl16far farmalloc(far_t *__return_storage_ptr__,uint32_t nbytes)
+far_t far * __cdecl16far farmalloc(far_t far *__return_storage_ptr__,uint32_t nbytes)
 
 {
   byte *pbVar1;
   undefined1 *puVar2;
   uint uVar3;
-  far_t *pfVar4;
+  far_t far *pfVar4;
   uint uVar5;
   int iVar6;
   
   __farmalloc_data_seg = 0x2410;
-  if (__return_storage_ptr__ != (far_t *)0x0 || (uint)nbytes != 0) {
+  if (__return_storage_ptr__ != (far_t far *)0x0 || (uint)nbytes != 0) {
     puVar2 = (undefined1 *)((int)&__return_storage_ptr__[4].seg + 1);
-    uVar3 = (uint)((far_t *)init_textFilename < __return_storage_ptr__);
+    uVar3 = (uint)((far_t far *)init_textFilename < __return_storage_ptr__);
     uVar5 = (uint)nbytes + uVar3;
     if ((CARRY2((uint)nbytes,uVar3)) || ((uVar5 & 0xfff0) != 0)) {
-      __return_storage_ptr__ = (far_t *)0x0;
+      __return_storage_ptr__ = (far_t far *)0x0;
     }
     else {
       uVar3 = CONCAT11((byte)((uint)puVar2 >> 0xc) | (char)uVar5 * '\x10',(char)((uint)puVar2 >> 4))
       ;
       if (__farmalloc_first == 0) {
-        __return_storage_ptr__ = (far_t *)malloc_CreateHeap();
+        __return_storage_ptr__ = (far_t far *)malloc_CreateHeap();
       }
       else {
         iVar6 = __farmalloc_rover;
@@ -3421,16 +3421,16 @@ far_t * __cdecl16far farmalloc(far_t *__return_storage_ptr__,uint32_t nbytes)
                 malloc_PullFreeBlock();
                 *(undefined2 *)((int)(undefined4 *)&_DATA + 2) =
                      *(undefined2 *)((byte *)__C0_ASM_CopyRight + 4);
-                return (far_t *)__C0_ASM_CopyRight;
+                return (far_t far *)__C0_ASM_CopyRight;
               }
-              pfVar4 = (far_t *)malloc_AllocatePartialBlock();
+              pfVar4 = (far_t far *)malloc_AllocatePartialBlock();
               return pfVar4;
             }
             pbVar1 = (byte *)__C0_ASM_CopyRight + 2;
             iVar6 = *(int *)pbVar1;
           } while (*(int *)pbVar1 != __farmalloc_rover);
         }
-        __return_storage_ptr__ = (far_t *)malloc_ExtendHeap();
+        __return_storage_ptr__ = (far_t far *)malloc_ExtendHeap();
       }
     }
   }
@@ -3465,7 +3465,7 @@ far_t __cdecl16near malloc_ExpandBlock(void)
   uint16_t seg;
   
   nbytes = CONCAT22(in_BX,malloc_save_hi);
-  fVar15.ofs = (uint16_t)farmalloc((far_t *)malloc_save_lo,nbytes);   /* hand fix: first argument is the hidden return pointer; result is the offset half */
+  fVar15.ofs = (uint16_t)farmalloc((far_t far *)malloc_save_lo,nbytes);   /* hand fix: first argument is the hidden return pointer; result is the offset half */
   if (in_DX == 0) {
     fVar15.seg = 0;
     return fVar15;
@@ -3546,14 +3546,14 @@ undefined4 __cdecl16near malloc_ShrinkBlock(void)
 
 
 /* 1000:199f */
-far_t * __cdecl16far _realloc(undefined2 param_1,uint16_t param_2,far_t *param_3)
+far_t far * __cdecl16far _realloc(undefined2 param_1,uint16_t param_2,far_t far *param_3)
 
 {
   undefined1 *puVar1;
   uint uVar2;
-  far_t *pfVar3;
+  far_t far *pfVar3;
   uint unaff_DI;
-  far_t *pfVar4;
+  far_t far *pfVar4;
   far_t fVar5;
   
   __farmalloc_data_seg = 0x2410;
@@ -3562,24 +3562,24 @@ far_t * __cdecl16far _realloc(undefined2 param_1,uint16_t param_2,far_t *param_3
   if (param_2 == 0) {
     pfVar3 = farmalloc(param_3,(ulong)unaff_DI << 0x10);
   }
-  else if (param_3 == (far_t *)0x0) {
+  else if (param_3 == (far_t far *)0x0) {
     farfree(0,param_2);
-    pfVar3 = (far_t *)0x0;
+    pfVar3 = (far_t far *)0x0;
   }
   else {
     puVar1 = (undefined1 *)((int)&param_3[4].seg + 1);
-    uVar2 = CONCAT11((byte)((uint)puVar1 >> 0xc) | ((far_t *)init_textFilename < param_3) << 4,
+    uVar2 = CONCAT11((byte)((uint)puVar1 >> 0xc) | ((far_t far *)init_textFilename < param_3) << 4,
                      (char)((uint)puVar1 >> 4));
     if (*(uint *)0x0 < uVar2) {
       fVar5 = malloc_ExpandBlock();
-      pfVar3 = (far_t *)fVar5.ofs;
+      pfVar3 = (far_t far *)fVar5.ofs;
     }
     else if (*(uint *)0x0 == uVar2) {
-      pfVar3 = (far_t *)__C0_ASM_CopyRight;
+      pfVar3 = (far_t far *)__C0_ASM_CopyRight;
     }
     else {
-      pfVar4 = (far_t *)malloc_ShrinkBlock();
-      pfVar3 = (far_t *)pfVar4;
+      pfVar4 = (far_t far *)malloc_ShrinkBlock();
+      pfVar3 = (far_t far *)pfVar4;
     }
   }
   return pfVar3;
@@ -3594,7 +3594,7 @@ uint8_t __cdecl16far farrealloc(long oldblock,long nbytes)
   ulong uVar1;
   uint8_t uVar2;
   uint uVar3;
-  far_t *pfVar4;
+  far_t far *pfVar4;
   undefined2 unaff_DI;
   undefined4 uVar5;
   far_t fVar6;
@@ -3603,7 +3603,7 @@ uint8_t __cdecl16far farrealloc(long oldblock,long nbytes)
   malloc_save_hi = (*(uint16_t *)((uint8_t *)&(nbytes) + 2));
   malloc_save_lo = (uint16_t)(nbytes);
   if ((*(uint16_t *)((uint8_t *)&(oldblock) + 2)) == 0) {
-    pfVar4 = farmalloc((far_t *)nbytes,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(nbytes) + 2))));
+    pfVar4 = farmalloc((far_t far *)nbytes,CONCAT22(unaff_DI,(*(uint16_t *)((uint8_t *)&(nbytes) + 2))));
     uVar2 = (uint8_t)pfVar4;
   }
   else {
@@ -3612,7 +3612,7 @@ uint8_t __cdecl16far farrealloc(long oldblock,long nbytes)
     }
     else {
       uVar1 = nbytes + 0x13;
-      if ((!CARRY2((*(uint16_t *)((uint8_t *)&(nbytes) + 2)),(uint)((far_t *)init_textFilename < (far_t *)nbytes))) &&
+      if ((!CARRY2((*(uint16_t *)((uint8_t *)&(nbytes) + 2)),(uint)((far_t far *)init_textFilename < (far_t far *)nbytes))) &&
          ((uVar1 & 0xfff00000) == 0)) {
         uVar3 = CONCAT11((byte)(uVar1 >> 8) >> 4 | (char)(uVar1 >> 0x10) * '\x10',
                          (char)((uint)uVar1 >> 4));

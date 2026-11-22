@@ -8,8 +8,8 @@
 
 
 /* 317e:0000 */
-far_t * __cdecl16far
-stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,uint16_t ex,
+far_t far * __cdecl16far
+stshRleSub(far_t far *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,uint16_t ex,
           uint16_t ey,int16_t hdrsz,...)
 
 {
@@ -51,9 +51,9 @@ stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,ui
     *(uint16_t *)((int)(void *)block + hdrsz + -5) = width;
     *(int *)((int)(void *)block + hdrsz + -3) = (ey - sy) + 1;
     *uStack_6 = 1;
-    (*(uint16_t *)((uint8_t *)&(r))) = (uint16_t)(far_t *)ovr_stshRealloc((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(block) + 2)),(void *)block),
+    (*(uint16_t *)((uint8_t *)&(r))) = (uint16_t)(far_t far *)ovr_stshRealloc((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(block) + 2)),(void *)block),
                                        (ulong)((written + hdrsz) - 1));
-    return (far_t *)r;
+    return (far_t far *)r;
   }
                     /* WARNING: Subroutine does not return */
   ovr_stExit(5);
@@ -65,11 +65,11 @@ stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,ui
 /* Cuts X,Y,W,H rect out of 8bit pixels pointed by src.
    returns ptrr to stg_t struct */
 
-far_t * __cdecl16far
-stshRleCut(far_t *__return_storage_ptr__,far_t src,int16_t sx,int16_t sy,int16_t ex,int16_t ey,...)
+far_t far * __cdecl16far
+stshRleCut(far_t far *__return_storage_ptr__,far_t src,int16_t sx,int16_t sy,int16_t ex,int16_t ey,...)
 
 {
-  far_t *pfVar1;
+  far_t far *pfVar1;
   
   pfVar1 = stshRleSub(__return_storage_ptr__,(uint8_t *)src.ofs,src.seg,sx,sy,ex,10);
   return pfVar1;
@@ -78,17 +78,17 @@ stshRleCut(far_t *__return_storage_ptr__,far_t src,int16_t sx,int16_t sy,int16_t
 
 
 /* 317e:0168 */
-far_t * __cdecl16far
-stshRleType2(far_t *__return_storage_ptr__,far_t pixels,int16_t sx,int16_t sy,int16_t ex,int16_t ey,
+far_t far * __cdecl16far
+stshRleType2(far_t far *__return_storage_ptr__,far_t pixels,int16_t sx,int16_t sy,int16_t ex,int16_t ey,
             int16_t ox,int16_t oy,...)
 
 {
-  far_t *pfVar1;
+  far_t far *pfVar1;
   undefined2 in_DX;
-  far_t *uStack_6;   /* hand fix: assigned a far_t pointer and used as uStack_6->ofs */
+  far_t far *uStack_6;   /* hand fix: assigned a far_t pointer and used as uStack_6->ofs */
   
   pfVar1 = stshRleSub(__return_storage_ptr__,(uint8_t *)pixels.ofs,pixels.seg,sx,sy,ex,15);
-  uStack_6 = (far_t *)CONCAT22(in_DX,pfVar1);
+  uStack_6 = (far_t far *)CONCAT22(in_DX,pfVar1);
   *(int16_t *)((int)&pfVar1->ofs + 1) = ey;
   *(int16_t *)((int)&pfVar1->seg + 1) = ox;
   *(undefined1 *)&uStack_6->ofs = 2;
@@ -539,8 +539,8 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
   uint uStack_c;
   uint uStack_a;
   uint uStack_8;
-  far_t *pfStack_6;
-  far_t *pfStack_4;
+  far_t far *pfStack_6;
+  far_t far *pfStack_4;
   
   rectOfs = (int *)CONCAT13(uStack000f,CONCAT12(scale,rectOfs));
   uVar5 = 0x317e;
@@ -584,12 +584,12 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
       pcStack_18 = (char *)rectOfs[4];
       uVar3 = 1;
       if (in_stack_00000012 == '\0') {
-        pfStack_6 = (far_t *)(GUnitDescriptions + 0x12);
+        pfStack_6 = (far_t far *)(GUnitDescriptions + 0x12);
       }
       else {
-        pfStack_6 = (far_t *)&GUnitDescriptions[0xf].seg;
+        pfStack_6 = (far_t far *)&GUnitDescriptions[0xf].seg;
       }
-      pfStack_4 = (far_t *)0x22a6;
+      pfStack_4 = (far_t far *)0x22a6;
       iStack_1e = gfx.ofs + 0xe;
       uStack_1c = gfx.seg;
       pcStack_e = pcStack_1a;
@@ -875,8 +875,8 @@ blit_usesStExit(far_t gfx,int x1,int y1,byte shade1,int x2,int y2,byte shade2,in
   uint16_t uStack_c;
   uint uStack_a;
   byte bStack_7;
-  far_t *pfStack_6;
-  far_t *pfStack_4;
+  far_t far *pfStack_6;
+  far_t far *pfStack_4;
   
   bVar1 = shade1;
   iVar3 = y1;
@@ -928,12 +928,12 @@ blit_usesStExit(far_t gfx,int x1,int y1,byte shade1,int x2,int y2,byte shade2,in
       iVar2 = y1 - (*(int *)(uVar5 + 7) * (uint)bStack_7 >> 4);
       uVar6 = 1;
       if (in_stack_00000018 == '\0') {
-        pfStack_6 = (far_t *)(GUnitDescriptions + 0x12);
+        pfStack_6 = (far_t far *)(GUnitDescriptions + 0x12);
       }
       else {
-        pfStack_6 = (far_t *)&GUnitDescriptions[0xf].seg;
+        pfStack_6 = (far_t far *)&GUnitDescriptions[0xf].seg;
       }
-      pfStack_4 = (far_t *)0x22a6;
+      pfStack_4 = (far_t far *)0x22a6;
       iStack_28 = uVar5 + 9;
       iStack_22 = x2 - x1;
       iStack_24 = (y2 - (*(int *)(uVar5 + 7) * (uint)bStack_7 >> 4)) - iVar2;

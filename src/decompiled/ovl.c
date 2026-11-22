@@ -1513,19 +1513,19 @@ void __cdecl16near __SwapOverlay(void)
 void __cdecl16far __OvrPrepare(void)
 
 {
-  far_t *pfVar1;
+  far_t far *pfVar1;
   int iVar2;
   uint uVar3;
-  far_t *pfVar4;
+  far_t far *pfVar4;
   
   __InitModules();
   uVar3 = __ovrbuffer;
   if (__ovrbuffer <= __OvrMinHeapSize) {
     uVar3 = __OvrMinHeapSize << 1;
   }
-  pfVar4 = (far_t *)((ulong)(uVar3 + 1) * 0x10);
-  pfVar1 = farmalloc((far_t *)pfVar4,CONCAT22(uVar3 + 1,(int)((ulong)pfVar4 >> 0x10)));
-  if ((pfVar1 != (far_t *)0x0 || (int)((ulong)pfVar4 >> 0x10) != 0) &&
+  pfVar4 = (far_t far *)((ulong)(uVar3 + 1) * 0x10);
+  pfVar1 = farmalloc((far_t far *)pfVar4,CONCAT22(uVar3 + 1,(int)((ulong)pfVar4 >> 0x10)));
+  if ((pfVar1 != (far_t far *)0x0 || (int)((ulong)pfVar4 >> 0x10) != 0) &&
      (iVar2 = __OVRINIT(), iVar2 == 0)) {
     return;
   }
@@ -1928,9 +1928,9 @@ int __cdecl16near __EXTCOPY(void)
   uVar2 = (uint)startx;   /* hand fix: startx is a function */
   if (*(int *)((char *)0x47) == 0) {
     bVar7 = false;
-    ((far_t *)(GSTARTX_SavedVectors + 1))->ofs = in_AX;
+    ((far_t far *)(GSTARTX_SavedVectors + 1))->ofs = in_AX;
     *(byte *)&GSTARTX_SavedVectors[1].seg = (byte)in_DX;
-    ((far_t *)(GSTARTX_SavedVectors + 3))->ofs = in_BX;
+    ((far_t far *)(GSTARTX_SavedVectors + 3))->ofs = in_BX;
     *(byte *)&GSTARTX_SavedVectors[3].seg = (byte)in_CX;
     pcVar1 = (code *)swi(0x15);
     (*pcVar1)(0x2410);
@@ -1969,7 +1969,7 @@ int __cdecl16near __EXTCOPY(void)
       uVar4 = (in_CX - *(int *)((char *)0x4b)) - (uint)bVar6;
     }
     *(uint *)((char *)0x59) = in_BX;
-    ((far_t *)GSTARTX_SavedVectors)->ofs = uVar4;
+    ((far_t far *)GSTARTX_SavedVectors)->ofs = uVar4;
     iVar3 = (**(code **)((char *)0x43))(0x1000);
     if (iVar3 != 0) {
       return 0;

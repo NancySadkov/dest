@@ -1,5 +1,5 @@
-far_t * __cdecl16far
-stshSprite(far_t *__return_storage_ptr__,int16_t file_id,anm_t *anms,uint16_t nanims,bool grab)
+far_t far * __cdecl16far
+stshSprite(far_t far *__return_storage_ptr__,int16_t file_id,anm_t *anms,uint16_t nanims,bool grab)
 
 {
   far_t handle;
@@ -32,5 +32,5 @@ stshSprite(far_t *__return_storage_ptr__,int16_t file_id,anm_t *anms,uint16_t na
     stshStoreSprite((spr_t *)CONCAT22(file_id,seg),anms,unaff_SI);
     (*(uint16_t *)((uint8_t *)&(spr))) =(uint16_t)( (spr_t *)ofs);
   }
-  return (far_t *)(spr_t *)spr;
+  return (far_t far *)(spr_t *)spr;
 }

@@ -1,5 +1,5 @@
-far_t * __cdecl16far
-stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,uint16_t ex,
+far_t far * __cdecl16far
+stshRleSub(far_t far *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,uint16_t ex,
           uint16_t ey,int16_t hdrsz,...)
 
 {
@@ -41,9 +41,9 @@ stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,ui
     *(uint16_t *)((int)(void *)block + hdrsz + -5) = width;
     *(int *)((int)(void *)block + hdrsz + -3) = (ey - sy) + 1;
     *uStack_6 = 1;
-    (*(uint16_t *)((uint8_t *)&(r))) = (uint16_t)(far_t *)ovr_stshRealloc((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(block) + 2)),(void *)block),
+    (*(uint16_t *)((uint8_t *)&(r))) = (uint16_t)(far_t far *)ovr_stshRealloc((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(block) + 2)),(void *)block),
                                        (ulong)((written + hdrsz) - 1));
-    return (far_t *)r;
+    return (far_t far *)r;
   }
                     /* WARNING: Subroutine does not return */
   ovr_stExit(5);

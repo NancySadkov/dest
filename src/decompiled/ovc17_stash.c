@@ -366,10 +366,10 @@ void * __cdecl16far stshAlloc(uint32_t nbytes,...)
   uint32_t newbuf;
   
   if (nbytes == 0xfa0f) {
-    (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) (far_t *)StshBuf.ofs;
+    (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) (far_t far *)StshBuf.ofs;
     if (StshBuf.ofs == 0 && StshBuf.seg == 0) {
-      (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) farmalloc((far_t *)0xfa0f,(ulong)ofs << 0x10);
-      StshBuf.ofs = (uint16_t)(far_t *)r;
+      (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) farmalloc((far_t far *)0xfa0f,(ulong)ofs << 0x10);
+      StshBuf.ofs = (uint16_t)(far_t far *)r;
       StshBuf.seg = (*(uint16_t *)((uint8_t *)&(r) + 2));
     }
   }
@@ -381,11 +381,11 @@ void * __cdecl16far stshAlloc(uint32_t nbytes,...)
     }
     do {
       if (HeapReady == '\0') {
-        ofs = (uint16_t)farmalloc((far_t *)nbytes,CONCAT22(ofs,(*(uint16_t *)((uint8_t *)&(nbytes) + 2))));
+        ofs = (uint16_t)farmalloc((far_t far *)nbytes,CONCAT22(ofs,(*(uint16_t *)((uint8_t *)&(nbytes) + 2))));
         ofs_00 = (*(uint16_t *)((uint8_t *)&(r) + 2));
       }
       else {
-        ofs = (uint16_t)ovr_heapAlloc((uint32_t *)(far_t *)nbytes,CONCAT22(ofs,(*(uint16_t *)((uint8_t *)&(nbytes) + 2))));
+        ofs = (uint16_t)ovr_heapAlloc((uint32_t *)(far_t far *)nbytes,CONCAT22(ofs,(*(uint16_t *)((uint8_t *)&(nbytes) + 2))));
         ofs_00 = (*(uint16_t *)((uint8_t *)&(r) + 2));
       }
       (*(uint16_t *)((uint8_t *)&(r) + 2)) = ofs_00;
@@ -393,9 +393,9 @@ void * __cdecl16far stshAlloc(uint32_t nbytes,...)
         return (void *)0x0;
       }
     } while (ofs == 0 && ofs_00 == 0);
-    (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) (far_t *)ovr_mkp((uint32_t *)ofs,ofs_00,ofs);
+    (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) (far_t far *)ovr_mkp((uint32_t *)ofs,ofs_00,ofs);
   }
-  return (far_t *)r;
+  return (far_t far *)r;
 }
 
 
@@ -443,10 +443,10 @@ uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes,...)
 
 /* 474a:08d1 */
 
-far_t * __cdecl16far fmMalloc(far_t *__return_storage_ptr__,uint32_t nbytes)
+far_t far * __cdecl16far fmMalloc(far_t far *__return_storage_ptr__,uint32_t nbytes)
 
 {
-  far_t *pfVar1;
+  far_t far *pfVar1;
   uint uVar2;
   int in_DX;
   int iVar3;
@@ -456,7 +456,7 @@ far_t * __cdecl16far fmMalloc(far_t *__return_storage_ptr__,uint32_t nbytes)
   
   uVar4 = in_stack_0000fff8 & 0xffff0000;
   ovr_fmFreeAudio(0);
-  if (__return_storage_ptr__ == (far_t *)0x0 && (int)nbytes == 0) {
+  if (__return_storage_ptr__ == (far_t far *)0x0 && (int)nbytes == 0) {
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0x1c);
   }
@@ -472,15 +472,15 @@ far_t * __cdecl16far fmMalloc(far_t *__return_storage_ptr__,uint32_t nbytes)
     }
     uVar4 = ZEXT24(pfVar1) << 0x10;
     in_DX = iVar3;
-    if (pfVar1 == (far_t *)0x0 && iVar3 == 0) {
+    if (pfVar1 == (far_t far *)0x0 && iVar3 == 0) {
       uVar4 = ZEXT24(pfVar1) << 0x10;
       uVar2 = fmMallocRecover();
       if ((uVar2 & 0xff) == 0) {
-        return (far_t *)0x0;
+        return (far_t far *)0x0;
       }
     }
-    pfVar1 = (far_t *)(uVar4 >> 0x10);
-  } while (pfVar1 == (far_t *)0x0 && iVar3 == 0);
+    pfVar1 = (far_t far *)(uVar4 >> 0x10);
+  } while (pfVar1 == (far_t far *)0x0 && iVar3 == 0);
   return pfVar1;
 }
 
@@ -509,13 +509,13 @@ char * __cdecl16far fmVsprintf(char *fmt,char *arg)
   src = (uint8_t *)CONCAT22(unaff_SS,&buf);
   iVar3 = iStack_8 + 1 >> 0xf;
   puVar1 = stshRealloc(CONCAT22(*(undefined2 *)((int)&FMRingBuf[0].seg + (uint)FMRingIndex * 4),
-                                ((far_t *)FMRingBuf + FMRingIndex)->ofs),(long)(iStack_8 + 1));
+                                ((far_t far *)FMRingBuf + FMRingIndex)->ofs),(long)(iStack_8 + 1));
                     /* Copy sprintfed string to dst */
   pcVar2 = strcpy((char *)CONCAT22(iVar3,puVar1),(char *)src);
   uVar4 = (uint)FMRingIndex;
   *(int *)((int)&FMRingBuf[0].seg + uVar4 * 4) = iVar3;
-  ((far_t *)FMRingBuf + uVar4)->ofs = (uint16_t)pcVar2;
-  return (char *)((far_t *)FMRingBuf + FMRingIndex)->ofs;
+  ((far_t far *)FMRingBuf + uVar4)->ofs = (uint16_t)pcVar2;
+  return (char *)((far_t far *)FMRingBuf + FMRingIndex)->ofs;
 }
 
 
@@ -541,13 +541,13 @@ void __cdecl16far clean_ring_buffer(void)
   uint8_t i;
   
   for (i = 0x0; i < 8; i = i + 0x1) {
-    if (((far_t *)FMRingBuf + i)->ofs != 0 || *(int *)((int)&FMRingBuf[0].seg + (uint)i * 4) != 0) {
+    if (((far_t far *)FMRingBuf + i)->ofs != 0 || *(int *)((int)&FMRingBuf[0].seg + (uint)i * 4) != 0) {
       handle.seg = *(uint16_t *)((int)&FMRingBuf[0].seg + (uint)i * 4);
-      handle.ofs = ((far_t *)FMRingBuf + i)->ofs;
+      handle.ofs = ((far_t far *)FMRingBuf + i)->ofs;
       stshFree(handle);
     }
     *(undefined2 *)((int)&FMRingBuf[0].seg + (uint)i * 4) = 0;
-    ((far_t *)FMRingBuf + i)->ofs = 0;
+    ((far_t far *)FMRingBuf + i)->ofs = 0;
   }
   return;
 }
@@ -735,7 +735,7 @@ stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle,...)
   int iVar1;
   uint16_t uVar2;
   stg_tmp_t *psVar3;
-  far_t *pfVar4;
+  far_t far *pfVar4;
   uint16_t in_DX;
   uint16_t uVar5;
   uint16_t in_stack_0000fff6;
@@ -778,11 +778,11 @@ stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle,...)
     }
     if (*(int *)(((stg_tmp_t *)handle.ofs)->cmap + 0x11) == 0 &&
         *(int *)(((stg_tmp_t *)handle.ofs)->cmap + 0x13) == 0) {
-      pfVar4 = fmMalloc(*(far_t **)(((stg_tmp_t *)handle.ofs)->cmap + 5),
+      pfVar4 = fmMalloc(*(far_t far **)(((stg_tmp_t *)handle.ofs)->cmap + 5),
                         CONCAT22(in_stack_0000fff6,
                                  *(undefined2 *)(((stg_tmp_t *)handle.ofs)->cmap + 7)));
       *(uint16_t *)(((stg_tmp_t *)handle.ofs)->cmap + 0x13) = uVar5;
-      *(far_t **)(((stg_tmp_t *)handle.ofs)->cmap + 0x11) = pfVar4;
+      *(far_t far **)(((stg_tmp_t *)handle.ofs)->cmap + 0x11) = pfVar4;
       if (*(int *)(((stg_tmp_t *)handle.ofs)->cmap + 0x11) == 0 &&
           *(int *)(((stg_tmp_t *)handle.ofs)->cmap + 0x13) == 0) {
                     /* WARNING: Subroutine does not return */
@@ -807,8 +807,8 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
   int iVar1;
   int iVar2;
   bool bVar3;
-  far_t *pfVar4;
-  far_t *pfVar5;
+  far_t far *pfVar4;
+  far_t far *pfVar5;
   uint16_t in_DX;
   uint16_t uVar6;
   uint16_t uVar7;
@@ -817,61 +817,61 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
   
   entry.ofs = (uint16_t)ovr_mkp((uint32_t *)entry.ofs,entry.seg);
   entry.seg = in_DX;
-  pfVar4 = (far_t *)entry.ofs;
+  pfVar4 = (far_t far *)entry.ofs;
   if (*(char *)MK_FP(entry.seg, entry.ofs) == '\0') {
     uVar6 = in_DX;
-    pfVar4 = fmMalloc((far_t *)*(undefined2 *)((int)&((far_t *)(entry.ofs + 4))->ofs + 1),
+    pfVar4 = fmMalloc((far_t far *)*(undefined2 *)((int)&((far_t far *)(entry.ofs + 4))->ofs + 1),
                       CONCAT13(in_stack_0000fff1,
                                CONCAT12(in_stack_0000fff0,
-                                        *(undefined2 *)((int)&((far_t *)(entry.ofs + 4))->seg + 1)))
+                                        *(undefined2 *)((int)&((far_t far *)(entry.ofs + 4))->seg + 1)))
                      );
-    if (pfVar4 == (far_t *)0x0 && uVar6 == 0) {
-      pfVar4 = (far_t *)0x0;
+    if (pfVar4 == (far_t far *)0x0 && uVar6 == 0) {
+      pfVar4 = (far_t far *)0x0;
     }
     else {
-      if (*(int *)((int)&((far_t *)(entry.ofs + 0x10))->ofs + 1) == 0 &&
-          *(int *)((int)&((far_t *)(entry.ofs + 0x10))->seg + 1) == 0) {
+      if (*(int *)((int)&((far_t far *)(entry.ofs + 0x10))->ofs + 1) == 0 &&
+          *(int *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1) == 0) {
         uVar7 = uVar6;
         stshSeek(StshStrongDatHnd,
-                 CONCAT22(*(undefined2 *)((int)&((far_t *)entry.ofs)->seg + 1),
-                          *(undefined2 *)((int)&((far_t *)entry.ofs)->ofs + 1)));
+                 CONCAT22(*(undefined2 *)((int)&((far_t far *)entry.ofs)->seg + 1),
+                          *(undefined2 *)((int)&((far_t far *)entry.ofs)->ofs + 1)));
         stshRead();
-        pfVar5 = ovr_heapMalloc((far_t *)*(undefined2 *)((int)&((far_t *)(entry.ofs + 4))->ofs + 1),
+        pfVar5 = ovr_heapMalloc((far_t far *)*(undefined2 *)((int)&((far_t far *)(entry.ofs + 4))->ofs + 1),
                                 CONCAT13(in_stack_0000fff1,
                                          CONCAT12(in_stack_0000fff0,
                                                   *(undefined2 *)
-                                                   ((int)&((far_t *)(entry.ofs + 4))->seg + 1))));
-        *(uint16_t *)((int)&((far_t *)(entry.ofs + 0x10))->seg + 1) = uVar7;
-        *(undefined2 *)((int)&((far_t *)(entry.ofs + 0x10))->ofs + 1) =(uint16_t) pfVar5;
-        if (*(int *)((int)&((far_t *)(entry.ofs + 0x10))->ofs + 1) == 0 &&
-            *(int *)((int)&((far_t *)(entry.ofs + 0x10))->seg + 1) == 0) {
+                                                   ((int)&((far_t far *)(entry.ofs + 4))->seg + 1))));
+        *(uint16_t *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1) = uVar7;
+        *(undefined2 *)((int)&((far_t far *)(entry.ofs + 0x10))->ofs + 1) =(uint16_t) pfVar5;
+        if (*(int *)((int)&((far_t far *)(entry.ofs + 0x10))->ofs + 1) == 0 &&
+            *(int *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1) == 0) {
           bVar3 = false;
         }
         else {
-          memcpy((char *)CONCAT22(*(undefined2 *)((int)&((far_t *)(entry.ofs + 0x10))->seg + 1),
+          memcpy((char *)CONCAT22(*(undefined2 *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1),
                                   (char *)*(undefined2 *)
-                                           ((int)&((far_t *)(entry.ofs + 0x10))->ofs + 1)),
-                 (char *)CONCAT22(uVar6,pfVar4),*(word *)((int)&((far_t *)(entry.ofs + 4))->ofs + 1)
+                                           ((int)&((far_t far *)(entry.ofs + 0x10))->ofs + 1)),
+                 (char *)CONCAT22(uVar6,pfVar4),*(word *)((int)&((far_t far *)(entry.ofs + 4))->ofs + 1)
                 );
           bVar3 = true;
         }
       }
       else {
         memcpy((char *)CONCAT22(uVar6,pfVar4),
-               (char *)CONCAT22(*(undefined2 *)((int)&((far_t *)(entry.ofs + 0x10))->seg + 1),
+               (char *)CONCAT22(*(undefined2 *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1),
                                 (char *)*(undefined2 *)
-                                         ((int)&((far_t *)(entry.ofs + 0x10))->ofs + 1)),
-               *(word *)((int)&((far_t *)(entry.ofs + 4))->ofs + 1));
+                                         ((int)&((far_t far *)(entry.ofs + 0x10))->ofs + 1)),
+               *(word *)((int)&((far_t far *)(entry.ofs + 4))->ofs + 1));
         bVar3 = true;
         uVar7 = uVar6;
       }
       if (bVar3) {
-        pfVar5 = (far_t *)ovr_mkp((uint32_t *)Stsh_2410_47f6.ofs,Stsh_2410_47f6.seg);
-        if ((uVar7 != in_DX) || (pfVar5 != (far_t *)entry.ofs)) {
-          iVar1 = *(int *)((int)&((far_t *)(entry.ofs + 0xc))->seg + 1);
-          iVar2 = *(int *)((int)&((far_t *)(entry.ofs + 0xc))->ofs + 1);
-          uVar6 = *(uint16_t *)((int)&((far_t *)(entry.ofs + 8))->seg + 1);
-          uVar7 = *(uint16_t *)((int)&((far_t *)(entry.ofs + 8))->ofs + 1);
+        pfVar5 = (far_t far *)ovr_mkp((uint32_t *)Stsh_2410_47f6.ofs,Stsh_2410_47f6.seg);
+        if ((uVar7 != in_DX) || (pfVar5 != (far_t far *)entry.ofs)) {
+          iVar1 = *(int *)((int)&((far_t far *)(entry.ofs + 0xc))->seg + 1);
+          iVar2 = *(int *)((int)&((far_t far *)(entry.ofs + 0xc))->ofs + 1);
+          uVar6 = *(uint16_t *)((int)&((far_t far *)(entry.ofs + 8))->seg + 1);
+          uVar7 = *(uint16_t *)((int)&((far_t far *)(entry.ofs + 8))->ofs + 1);
           if (uVar7 != 0 || uVar6 != 0) {
             *(int *)(uVar7 + 0xf) = iVar1;
             *(int *)(uVar7 + 0xd) = iVar2;
@@ -885,10 +885,10 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
           StshCtPtr2.seg = uVar6;
           StshCtPtr2.ofs = uVar7;
           uVar6 = Stsh_2410_47f6.ofs;
-          *(uint16_t *)((int)&((far_t *)(entry.ofs + 0xc))->seg + 1) = Stsh_2410_47f6.seg;
-          *(uint16_t *)((int)&((far_t *)(entry.ofs + 0xc))->ofs + 1) = uVar6;
-          *(undefined2 *)((int)&((far_t *)(entry.ofs + 8))->seg + 1) = 0;
-          *(undefined2 *)((int)&((far_t *)(entry.ofs + 8))->ofs + 1) = 0;
+          *(uint16_t *)((int)&((far_t far *)(entry.ofs + 0xc))->seg + 1) = Stsh_2410_47f6.seg;
+          *(uint16_t *)((int)&((far_t far *)(entry.ofs + 0xc))->ofs + 1) = uVar6;
+          *(undefined2 *)((int)&((far_t far *)(entry.ofs + 8))->seg + 1) = 0;
+          *(undefined2 *)((int)&((far_t far *)(entry.ofs + 8))->ofs + 1) = 0;
           *(uint16_t far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  0xb) = in_DX;
           *(undefined2 far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  9) = entry.ofs;
           Stsh_2410_47f6.seg = in_DX;

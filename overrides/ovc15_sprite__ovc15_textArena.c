@@ -7,7 +7,7 @@ char * __cdecl16far ovc15_textArena(int owner,...)
   char *pcVar4;
   entity_t *peVar5;
   agntG_t *paVar6;
-  far_t *pfVar7;
+  far_t far *pfVar7;
   uint16_t unaff_DI;
   undefined2 uVar8;
   undefined2 uVar9;
@@ -64,24 +64,24 @@ char * __cdecl16far ovc15_textArena(int owner,...)
     if ((peVar5->base).level < 10) {
       if ((peVar5->base).level < 4) {
         agntCopy.frames =
-             (far_t *)CONCAT22(*(undefined2 *)((int)paVar6->sprs + (uint)bVar1 * 0xc + 2),
-                               *(far_t **)(paVar6->sprs + (uint)bVar1 * 3));
+             (far_t far *)CONCAT22(*(undefined2 *)((int)paVar6->sprs + (uint)bVar1 * 0xc + 2),
+                               *(far_t far **)(paVar6->sprs + (uint)bVar1 * 3));
       }
       else {
         agntCopy.frames =
-             (far_t *)CONCAT22(*(undefined2 *)((int)paVar6->sprs + (uint)bVar1 * 0xc + 6),
-                               *(far_t **)(paVar6->sprs + (uint)bVar1 * 3 + 1));
+             (far_t far *)CONCAT22(*(undefined2 *)((int)paVar6->sprs + (uint)bVar1 * 0xc + 6),
+                               *(far_t far **)(paVar6->sprs + (uint)bVar1 * 3 + 1));
       }
     }
     else {
       agntCopy.frames =
-           (far_t *)CONCAT22(*(undefined2 *)((int)paVar6->sprs + (uint)bVar1 * 0xc + 10),
-                             *(far_t **)(paVar6->sprs + (uint)bVar1 * 3 + 2));
+           (far_t far *)CONCAT22(*(undefined2 *)((int)paVar6->sprs + (uint)bVar1 * 0xc + 10),
+                             *(far_t far **)(paVar6->sprs + (uint)bVar1 * 3 + 2));
     }
     agntCopy.animFrame = 0xff;
     agntCopy.faction = (agntCopy.gdata)->ai;
     uVar9 = (undefined2)((ulong)agntCopy.frames >> 0x10);
-    pfVar7 = (far_t *)agntCopy.frames;
+    pfVar7 = (far_t far *)agntCopy.frames;
     if (((pfVar7 + 0x1a)->ofs == 0 && pfVar7[0x1a].seg == 0) ||
        ((pfVar7 + 0x16)->ofs == 0 && pfVar7[0x16].seg == 0)) {
       if ((pfVar7 + 0x1a)->ofs != 0 || pfVar7[0x1a].seg != 0) {

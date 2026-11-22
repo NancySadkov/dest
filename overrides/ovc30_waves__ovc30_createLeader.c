@@ -4,7 +4,7 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
   undefined2 uVar1;
   uint uVar2;
   uint16_t uVar3;
-  far_t *pfVar4;
+  far_t far *pfVar4;
   uint in_DX;
   byte partyIndex;
   uint count;
@@ -59,7 +59,7 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
     pcStack_6->stats[4] = 0x12;
   }
   pcStack_6->faction = *(uint8_t *)((int)(char **)GMenuStrings + (uint)gindex * 0x95 + 0x1f);
-  pcStack_6->alignment = *(byte *)((int)(far_t *)(worldMenuLabels + 9) + (uint)gindex * 0x95);
+  pcStack_6->alignment = *(byte *)((int)(far_t far *)(worldMenuLabels + 9) + (uint)gindex * 0x95);
   pcStack_6->hp[0] = *(byte *)((int)&worldMenuLabels[6].seg + (uint)gindex * 0x95);
   pcStack_6->hp[1] = pcStack_6->hp[0];
   pcStack_6->statMask = pcStack_6->statMask | 0x16;

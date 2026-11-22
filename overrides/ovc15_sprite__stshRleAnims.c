@@ -11,7 +11,7 @@ spr_t * __cdecl16far stshRleAnims(uint8_t *src,anm_t *anms,uint16_t nanims)
   uint16_t count;
   far_t dst;
   frm_t *frm;
-  far_t *in_stack_00000004;
+  far_t far *in_stack_00000004;
   uint16_t pdst;
   uint16_t sdst;
   uint32_t prev_next;

@@ -13,7 +13,7 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   far_t handle_03;
   far_t handle_04;
   size_t sVar1;
-  far_t *pfVar2;
+  far_t far *pfVar2;
   uint16_t uVar3;
   int iVar4;
   int iVar5;
@@ -50,7 +50,7 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   sVar1 = strlen((char *)CONCAT22(unaff_SS,&text));
   bStack_5 = (byte)sVar1;
   uVar8 = (uint16_t)((ulong)((long)row * 0xf) >> 0x10);
-  pfVar2 = ovr_stshRleCut((far_t *)0x0,far_from_u32((uint32_t)(0x16a000)),(int)((long)row * 0xf) + 0x1d,222,
+  pfVar2 = ovr_stshRleCut((far_t far *)0x0,far_from_u32((uint32_t)(0x16a000)),(int)((long)row * 0xf) + 0x1d,222,
                           row * 0xf + 0x29,(int16_t)ey,0xde);
   TextBlitX = 0x2a;
   TextBlitY = row * 0xf + 0x1d;

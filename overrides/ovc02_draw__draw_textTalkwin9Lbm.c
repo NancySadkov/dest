@@ -86,7 +86,7 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
     uVar52 = 0x2337;
     puVar38 = (undefined1 *)(iVar37 + -10);
     *(undefined2 *)(iVar37 + -10) = (uint16_t)0xe4f0;
-    ovr_stshFree(*(far_t *)(iVar37 + -6));
+    ovr_stshFree(*(far_t far *)(iVar37 + -6));
     piVar39 = (int16_t *)(puVar38 + 8);
   }
   bVar29 = bigcompFrame;
@@ -141,7 +141,7 @@ L_draw_2e25_025a_03D9:
       piVar39[-8] = 0xe652;
       CrossBlitPtr.ofs =
            (uint16_t)
-           ovr_stshRleCut((far_t *)piVar39[-6],*(far_t *)(piVar39 + -5),piVar39[-3],piVar39[-2],
+           ovr_stshRleCut((far_t far *)piVar39[-6],*(far_t far *)(piVar39 + -5),piVar39[-3],piVar39[-2],
                           piVar39[-1],*piVar39);
       CrossBlitPtr.seg = in_DX;
       *(undefined2 *)((int)piVar42 + 0xe) = (uint16_t)0xa000;
@@ -152,7 +152,7 @@ L_draw_2e25_025a_03D9:
       uVar52 = 0x22d3;
       puVar43 = (undefined1 *)((int)piVar42 + 4);
       *(undefined2 *)((int)piVar42 + 4) = (uint16_t)0xe689;
-      ovr_blitLoadRleGfx(*(far_t *)((int)piVar42 + 8),*(far_t *)((int)piVar42 + 0xc));
+      ovr_blitLoadRleGfx(*(far_t far *)((int)piVar42 + 8),*(far_t far *)((int)piVar42 + 0xc));
       piVar39 = (int16_t *)(puVar43 + 0xc);
     }
     if (MouseMoved == 0) {

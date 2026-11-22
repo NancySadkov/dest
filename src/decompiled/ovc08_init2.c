@@ -154,7 +154,7 @@ void __cdecl16far miceBlitRect(brect_t *br,...)
           ((int)dst_x <= br->w)) && (((int)dst_y <= br->h && (MiceProcessed != '\0')))) {
         miceSaveArea(dst_x,dst_y,br,in_stack_00000006);
         src.seg = *(uint16_t *)((int)&MicePtrs.seg + MiceIndex * 4);
-        src.ofs = ((far_t *)&MicePtrs + MiceIndex)->ofs;
+        src.ofs = ((far_t far *)&MicePtrs + MiceIndex)->ofs;
         miceBlitAtSeg(br->seg,src,dst_x,dst_y);
       }
     }

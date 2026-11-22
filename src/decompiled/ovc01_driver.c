@@ -844,7 +844,7 @@ void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,
   int iVar2;
   int iVar3;
   undefined2 unaff_ES;
-  far_t *pfStack_8;
+  far_t far *pfStack_8;
   
   iVar3 = row1;
   iVar2 = (int)ofs2 - (int)ofs1;
@@ -877,9 +877,9 @@ void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,
       if (iVar3 < 0) {
         iVar3 = -iVar3;
       }
-      pfStack_8 = (far_t *)(CPKeys + 5);
+      pfStack_8 = (far_t far *)(CPKeys + 5);
       if (iVar2 < iVar3) {
-        pfStack_8 = (far_t *)(CPKeys + 0xb);
+        pfStack_8 = (far_t far *)(CPKeys + 0xb);
       }
       driver_drawLine_compute();
                     /* WARNING: Could not recover jumptable at 0x0002db51. Too many branches */

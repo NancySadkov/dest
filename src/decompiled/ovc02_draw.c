@@ -228,7 +228,7 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
     uVar52 = 0x2337;
     puVar38 = (undefined1 *)(iVar37 + -10);
     *(undefined2 *)(iVar37 + -10) = (uint16_t)0xe4f0;
-    ovr_stshFree(*(far_t *)(iVar37 + -6));
+    ovr_stshFree(*(far_t far *)(iVar37 + -6));
     piVar39 = (int16_t *)(puVar38 + 8);
   }
   bVar29 = bigcompFrame;
@@ -283,7 +283,7 @@ L_draw_2e25_025a_03D9:
       piVar39[-8] = 0xe652;
       CrossBlitPtr.ofs =
            (uint16_t)
-           ovr_stshRleCut((far_t *)piVar39[-6],*(far_t *)(piVar39 + -5),piVar39[-3],piVar39[-2],
+           ovr_stshRleCut((far_t far *)piVar39[-6],*(far_t far *)(piVar39 + -5),piVar39[-3],piVar39[-2],
                           piVar39[-1],*piVar39);
       CrossBlitPtr.seg = in_DX;
       *(undefined2 *)((int)piVar42 + 0xe) = (uint16_t)0xa000;
@@ -294,7 +294,7 @@ L_draw_2e25_025a_03D9:
       uVar52 = 0x22d3;
       puVar43 = (undefined1 *)((int)piVar42 + 4);
       *(undefined2 *)((int)piVar42 + 4) = (uint16_t)0xe689;
-      ovr_blitLoadRleGfx(*(far_t *)((int)piVar42 + 8),*(far_t *)((int)piVar42 + 0xc));
+      ovr_blitLoadRleGfx(*(far_t far *)((int)piVar42 + 8),*(far_t far *)((int)piVar42 + 0xc));
       piVar39 = (int16_t *)(puVar43 + 0xc);
     }
     if (MouseMoved == 0) {
@@ -719,7 +719,7 @@ void __cdecl16far draw_usesBlitLoadRleGfx(void)
         dst_00.seg = 0xa000;
         dst_00.ofs = CrossBlitX + CrossBlitY * 0x140;
         gfx.seg = *(uint16_t *)((int)&CrossBlitGfx.seg + (uint)CrossBlitCount * 4);
-        gfx.ofs = ((far_t *)&CrossBlitGfx + CrossBlitCount)->ofs;
+        gfx.ofs = ((far_t far *)&CrossBlitGfx + CrossBlitCount)->ofs;
         ovr_blitLoadRleGfx(gfx,dst_00);
       }
       ovr_miceBlitRect((brect_t *)&rect);
@@ -1181,11 +1181,11 @@ void __cdecl16far draw_menuCursor(int x,int y,...)
                       TextBlitDstSeg);
   ovr_driver_compute5(x + 0xf3,(char)y + 0x3b,0xf3,0x57,299,0x57,(uint)SpecialColors[2],
                       TextBlitDstSeg);
-  ovr_driver_drawLine((uint8_t *)(far_t *)(GUnitDescriptions + 9),0x3b,(uint8_t *)(x + 0xf3),
+  ovr_driver_drawLine((uint8_t *)(far_t far *)(GUnitDescriptions + 9),0x3b,(uint8_t *)(x + 0xf3),
                       y + 0x3b,SpecialColors[3],TextBlitDstSeg);
-  ovr_driver_drawLine((uint8_t *)(x + 0xf3),y + 0x3b,(uint8_t *)(far_t *)(GUnitDescriptions + 0x10),
+  ovr_driver_drawLine((uint8_t *)(x + 0xf3),y + 0x3b,(uint8_t *)(far_t far *)(GUnitDescriptions + 0x10),
                       0x57,SpecialColors[4],TextBlitDstSeg);
-  ovr_driver_drawLine((uint8_t *)(x + 0xf3),y + 0x3b,(uint8_t *)(far_t *)(GUnitDescriptions + 2),
+  ovr_driver_drawLine((uint8_t *)(x + 0xf3),y + 0x3b,(uint8_t *)(far_t far *)(GUnitDescriptions + 2),
                       0x57,SpecialColors[5],TextBlitDstSeg);
   ovr_driver_fillRect(x + 0xf3,y + 0x3b,x + 0xf3,y + 0x3b,0x6c,TextBlitDstSeg);
   draw_usesBlitLoadRleGfx3((uint)GMenuItem);
@@ -1236,7 +1236,7 @@ void __cdecl16far draw_toolbarLabels(void)
       dst_00.seg = TextBlitDstSeg;
       dst_00.ofs = 0x4975;
       gfx_00.seg = *(uint16_t *)((int)&LbmBigcomp50x42.seg + (uint)bigcompFrame * 4);
-      gfx_00.ofs = ((far_t *)&LbmBigcomp50x42 + bigcompFrame)->ofs;
+      gfx_00.ofs = ((far_t far *)&LbmBigcomp50x42 + bigcompFrame)->ofs;
       ovr_blitLoadRleGfx(gfx_00,dst_00);
       TextBlitX = 0xea;
       TextBlitY = 0x62;

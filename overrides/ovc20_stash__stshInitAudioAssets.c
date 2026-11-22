@@ -9,7 +9,7 @@ void __cdecl16far stshInitAudioAssets(char grab,...)
   void *pvVar5;
   uint16_t file_id;
   cte_t *pcVar6;
-  far_t *pfVar7;
+  far_t far *pfVar7;
   uint uVar8;
   uint uVar9;
   int in_DX;
@@ -18,7 +18,7 @@ void __cdecl16far stshInitAudioAssets(char grab,...)
   uint uVar12;
   undefined2 unaff_SI;
   uint16_t i;
-  far_t *unaff_DI;
+  far_t far *unaff_DI;
   undefined2 uVar13;
   bool bVar14;
   uint8_t uVar15;

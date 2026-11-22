@@ -287,7 +287,7 @@ void * __cdecl16far manage_playerTitle(char_sheet_t *sheet,...)
     }
   }
   else {
-    pcVar1 = (char *)((far_t *)(GStatsLabels + 4) +
+    pcVar1 = (char *)((far_t far *)(GStatsLabels + 4) +
                      (uint)sheet->gender + (uint)sheet->titleIndex * 2)->ofs;
   }
   return pcVar1;
@@ -396,7 +396,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     for (iVar7 = 0; iVar7 < 6; iVar7 = iVar7 + 1) {
       TextBlitX = 0x15;
       TextBlitY = uVar8;
-      ovr_blitLabel((char *)((far_t *)GStatsLabels + iVar7)->ofs,
+      ovr_blitLabel((char *)((far_t far *)GStatsLabels + iVar7)->ofs,
                     (uint8_t *)
                     CONCAT22(Font02.ofs,
                              (uint8_t *)*(undefined2 *)((int)&GStatsLabels[0].seg + iVar7 * 4)),
@@ -435,7 +435,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     pcVar3 = ovr_fmVsprintf("%s ",(char *)CONCAT22(*(undefined2 *)
                                                     ((int)&GAlignmentsNames[0].seg +
                                                     (uint)sheet_00->alignment * 4),
-                                                   (char *)((far_t *)GAlignmentsNames +
+                                                   (char *)((far_t far *)GAlignmentsNames +
                                                            sheet_00->alignment)->ofs));
     ovr_blitLabel(pcVar3,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,uVar12,uVar12,uVar11);
   }
@@ -722,7 +722,7 @@ undefined2 __cdecl16far abilitiesDlg(char_sheet_t *sheet)
                        (char_sheet_t *)CONCAT22(0x4d9b,(*(uint16_t *)((uint8_t *)&(sheet) + 2))));
     if (bVar2 != 0) {
       abStack_17[bStack_19] = (&classStatMap1)[((char_sheet_t *)sheet)->cls];
-      uVar1 = ((far_t *)GStatsLabels + (&classStatMap1)[((char_sheet_t *)sheet)->cls])->ofs;
+      uVar1 = ((far_t far *)GStatsLabels + (&classStatMap1)[((char_sheet_t *)sheet)->cls])->ofs;
       uVar5 = (uint)bStack_19;
       auStack_28[uVar5 * 2] =
            *(undefined2 *)
@@ -742,7 +742,7 @@ undefined2 __cdecl16far abilitiesDlg(char_sheet_t *sheet)
                  *(undefined2 *)
                   ((int)&GStatsLabels[0].seg +
                   (uint)(&classStatMap2)[((char_sheet_t *)sheet)->cls] * 4);
-        uVar1 = ((far_t *)GStatsLabels + (&classStatMap2)[((char_sheet_t *)sheet)->cls])->ofs;
+        uVar1 = ((far_t far *)GStatsLabels + (&classStatMap2)[((char_sheet_t *)sheet)->cls])->ofs;
         uVar5 = (uint)bStack_19;
         auStack_28[uVar5 * 2] =(uint16_t)( puVar3);
         *(uint16_t *)(&menuItems + uVar5 * 4) = uVar1;
@@ -772,7 +772,7 @@ undefined2 __cdecl16far abilitiesDlg(char_sheet_t *sheet)
     for (statIndex = 0x0; statIndex < 3; statIndex = statIndex + 0x1) {
       if ((10 < ((char_sheet_t *)sheet)->stats[statIndex]) && (abStack_17[0] != statIndex)) {
         abStack_17[bStack_19] = statIndex;
-        uVar1 = ((far_t *)GStatsLabels + statIndex)->ofs;
+        uVar1 = ((far_t far *)GStatsLabels + statIndex)->ofs;
         uVar5 = (uint)bStack_19;
         auStack_28[uVar5 * 2] = *(undefined2 *)((int)&GStatsLabels[0].seg + (uint)statIndex * 4);
         *(uint16_t *)(&menuItems + uVar5 * 4) = uVar1;
@@ -836,7 +836,7 @@ undefined2 __cdecl16far alignmentDlg(char_sheet_t *sheet)
       return 1;
     }
     widths = *(uint16_t *)((int)&GAlignmentString.seg + uVar3 * 4);
-    ovr_drawString((char *)((far_t *)&GAlignmentString + uVar3)->ofs,widths,(char)widths);
+    ovr_drawString((char *)((far_t far *)&GAlignmentString + uVar3)->ofs,widths,(char)widths);
     entries.seg = unaff_SS;
     entries.ofs = (uint16_t)&inputBuf;
     pcVar2 = ovr_uiInputText(entries,2,far_from_u32((uint32_t)(0x0)),0x0);
@@ -971,9 +971,9 @@ char * __cdecl16far chargen_switch(uint16_t index)
   uint uVar15;
   char *pcVar16;
   uint32_t *puVar17;
-  far_t *pfVar18;
+  far_t far *pfVar18;
   uint32_t *puVar19;
-  far_t *pfVar20;
+  far_t far *pfVar20;
   char_sheet_t *pcVar21;
   char *pcVar22;
   int iVar23;
@@ -983,7 +983,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
   uint16_t uVar26;
   undefined2 in_DX;
   entity_t *peVar27;
-  far_t *unaff_BP;
+  far_t far *unaff_BP;
   char *unaff_SI;
   char *unaff_DI;
   undefined2 unaff_ES;
@@ -1029,53 +1029,53 @@ char * __cdecl16far chargen_switch(uint16_t index)
     *unaff_DI = cVar9;
     midpakAd.ofs = (uint16_t)stshStoreFile_2(unaff_BP,in_stack_00000000,index);
     midpakAd.seg = uVar13;
-    cmidpakComOfs =(uint16_t)( stshStoreFile_2((far_t *)"cmidpak.com",(char *)MK_FP(0x2410, 0x1),index));
+    cmidpakComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"cmidpak.com",(char *)MK_FP(0x2410, 0x1),index));
     cmidpakComSeg = uVar13;
-    ibmsndComOfs =(uint16_t)( stshStoreFile_2((far_t *)"ibmsnd.com",(char *)MK_FP(0x2410, 0x1),index));
+    ibmsndComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"ibmsnd.com",(char *)MK_FP(0x2410, 0x1),index));
     ibmsndComSeg = uVar13;
-    sblasterComOfs =(uint16_t)( stshStoreFile_2((far_t *)"sblaster.com",(char *)MK_FP(0x2410, 0x1),index));
+    sblasterComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"sblaster.com",(char *)MK_FP(0x2410, 0x1),index));
     audioPlaceholder2.seg = 0;
     audioPlaceholder2.ofs = 0;
     sblasterComSeg = uVar13;
-    fibmbakComOfs =(uint16_t)( stshStoreFile_2((far_t *)"fibmbak.com",(char *)MK_FP(0x2410, 0x1),index));
+    fibmbakComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"fibmbak.com",(char *)MK_FP(0x2410, 0x1),index));
     fibmbakComSeg = uVar13;
-    pfVar20 = stshStoreFile_2((far_t *)"sbpro.com",(char *)MK_FP(0x2410, 0x1),index);
+    pfVar20 = stshStoreFile_2((far_t far *)"sbpro.com",(char *)MK_FP(0x2410, 0x1),index);
     sbproComOfs =(uint16_t)( pfVar20);
     sbproComSeg = uVar13;
     sbproComCopyOfs =(uint16_t)( pfVar20);
     sbproComCopySeg = uVar13;
-    paudioComOfs =(uint16_t)( stshStoreFile_2((far_t *)"paudio.com",(char *)MK_FP(0x2410, 0x1),index));
+    paudioComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"paudio.com",(char *)MK_FP(0x2410, 0x1),index));
     sblasterComCopySeg = sblasterComSeg;
     sblasterComCopyOfs = sblasterComOfs;
     pfVar18 = sblasterComOfs;
     paudioComSeg =(uint16_t)( pfVar20);
-    adlibComOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlib.com",(char *)MK_FP(0x2410, 0x1),index));
+    adlibComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"adlib.com",(char *)MK_FP(0x2410, 0x1),index));
     adlibComSeg =(uint16_t)( pfVar18);
-    adlibgComOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlibg.com",(char *)MK_FP(0x2410, 0x1),index));
+    adlibgComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"adlibg.com",(char *)MK_FP(0x2410, 0x1),index));
     audioPlaceholder3.seg = 0;
     audioPlaceholder3.ofs = 0;
     musDriver0Seg = 0;
     musDriver0Ofs = 0;
     adlibgComSeg =(uint16_t)( pfVar18);
-    sbfmAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"sbfm.adv",(char *)MK_FP(0x2410, 0x1),index));
+    sbfmAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"sbfm.adv",(char *)MK_FP(0x2410, 0x1),index));
     audioPlaceholder0.seg = 0;
     audioPlaceholder0.ofs = 0;
     audioPlaceholder1.seg = 0;
     audioPlaceholder1.ofs = 0;
     sbfmAdvSeg =(uint16_t)( pfVar18);
-    sbp2fmAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"sbp2fm.adv",(char *)MK_FP(0x2410, 0x1),index));
+    sbp2fmAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"sbp2fm.adv",(char *)MK_FP(0x2410, 0x1),index));
     sbp2fmAdvSeg =(uint16_t)( pfVar18);
-    sbp1fmAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"sbp1fm.adv",(char *)MK_FP(0x2410, 0x1),index));
+    sbp1fmAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"sbp1fm.adv",(char *)MK_FP(0x2410, 0x1),index));
     sbp1fmAdvSeg =(uint16_t)( pfVar18);
-    pasfmAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"pasfm.adv",(char *)MK_FP(0x2410, 0x1),index));
+    pasfmAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"pasfm.adv",(char *)MK_FP(0x2410, 0x1),index));
     pasfmAdvSeg =(uint16_t)( pfVar18);
-    pasoplAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"pasopl.adv",(char *)MK_FP(0x2410, 0x1),index));
+    pasoplAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"pasopl.adv",(char *)MK_FP(0x2410, 0x1),index));
     pasoplAdvSeg =(uint16_t)( pfVar18);
-    adlibAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlib.adv",(char *)MK_FP(0x2410, 0x1),index));
+    adlibAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"adlib.adv",(char *)MK_FP(0x2410, 0x1),index));
     adlibAdvSeg =(uint16_t)( pfVar18);
-    adlibgAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlibg.adv",(char *)MK_FP(0x2410, 0x1),index));
+    adlibgAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"adlibg.adv",(char *)MK_FP(0x2410, 0x1),index));
     adlibgAdvSeg =(uint16_t)( pfVar18);
-    mt32mpuAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"mt32mpu.adv",(char *)MK_FP(0x2410, 0x1),index));
+    mt32mpuAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"mt32mpu.adv",(char *)MK_FP(0x2410, 0x1),index));
     mt32mpuAdvSeg =(uint16_t)( pfVar18);
     return (char *)mt32mpuAdvOfs;
   case 1:
@@ -1222,10 +1222,10 @@ char * __cdecl16far chargen_switch(uint16_t index)
     if ((char)*(uint8_t *)(uint)index == '\0') {   /* hand fix: deref the offset */
       uVar28 = CONCAT22((int)((ulong)in_stack_00000000 >> 0x10),*(undefined2 *)((int)puVar17 + 7));
       uVar26 = uVar13;
-      pfVar18 = fmMalloc((far_t *)*(undefined2 *)((int)puVar17 + 5),uVar28);
+      pfVar18 = fmMalloc((far_t far *)*(undefined2 *)((int)puVar17 + 5),uVar28);
       uVar25 = SUB21(pfVar18,0);
       uVar32 = (undefined1)((uint)pfVar18 >> 8);
-      if (pfVar18 == (far_t *)0x0 && uVar26 == 0) {
+      if (pfVar18 == (far_t far *)0x0 && uVar26 == 0) {
         puVar17 = (uint32_t *)0x0;
       }
       else {
@@ -1237,7 +1237,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
           uVar34 = 0x83;
           stshRead();
           uVar28 = CONCAT22(uVar29,*(undefined2 *)((int)puVar17 + 7));
-          pfVar18 = ovr_heapMalloc((far_t *)*(undefined2 *)((int)puVar17 + 5),uVar28);
+          pfVar18 = ovr_heapMalloc((far_t far *)*(undefined2 *)((int)puVar17 + 5),uVar28);
           uVar29 = (uint16_t)(uVar28 >> 0x10);
           *(uint16_t *)((int)puVar17 + 0x13) = uVar26;
           *(undefined2 *)((int)puVar17 + 0x11) =(uint16_t)( pfVar18);

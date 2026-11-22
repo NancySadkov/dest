@@ -20,7 +20,7 @@ int __cdecl16far ovc27_rollToHitEntity(uint32_t agnt,byte column,...)
     bStack_7 = bStack_7 >> 1;
   }
   uStack_6 = (byte *)CONCAT22(*(undefined2 *)((int)&RampTables[0].seg + (uint)bStack_8 * 4),
-                              (byte *)((far_t *)RampTables + bStack_8)->ofs);
+                              (byte *)((far_t far *)RampTables + bStack_8)->ofs);
   while ((*uStack_6 != 0xff && (*uStack_6 < bStack_7))) {
     uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 6);
   }

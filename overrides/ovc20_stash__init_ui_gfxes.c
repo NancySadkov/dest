@@ -13,7 +13,7 @@ void __cdecl16far init_ui_gfxes(void)
   far_t hndl_00;
   far_t hndl_01;
   char *pcVar1;
-  far_t *pfVar2;
+  far_t far *pfVar2;
   void *pvVar3;
   uint16_t in_DX;
   uint16_t uVar4;
@@ -52,7 +52,7 @@ void __cdecl16far init_ui_gfxes(void)
   init_special_graphics((char *)CONCAT22(gamfont1Cut1Seg,gamfont1Cut1Ofs));
   hndl.seg = unaff_DI;
   hndl.ofs = in_DX;
-  Font03.ofs = (uint16_t)ovr_stshProcessFontSub((far_t *)0x0,hndl);
+  Font03.ofs = (uint16_t)ovr_stshProcessFontSub((far_t far *)0x0,hndl);
   Font03.seg = uVar4;
   ovr_driver_fillRect(0,0,0x13f,199,0x0,in_DX,0);
   gfx_00.seg = davfontCut1Seg;
@@ -61,7 +61,7 @@ void __cdecl16far init_ui_gfxes(void)
   init_special_graphics((char *)CONCAT22(davfontCut1Seg,davfontCut1Ofs));
   hndl_00.seg = unaff_DI;
   hndl_00.ofs = in_DX;
-  Font02.ofs = (uint16_t)ovr_stshProcessFontSub((far_t *)0x0,hndl_00);
+  Font02.ofs = (uint16_t)ovr_stshProcessFontSub((far_t far *)0x0,hndl_00);
   Font02.seg = uVar4;
   ovr_driver_fillRect(0,0,0x13f,199,0x0,in_DX,0);
   gfx_01.seg = davfont2Cut1Seg;
@@ -70,7 +70,7 @@ void __cdecl16far init_ui_gfxes(void)
   init_special_graphics((char *)CONCAT22(davfont2Cut1Seg,davfont2Cut1Ofs));
   hndl_01.seg = unaff_DI;
   hndl_01.ofs = in_DX;
-  pfVar2 = ovr_stshProcessFontSub((far_t *)0x0,hndl_01);
+  pfVar2 = ovr_stshProcessFontSub((far_t far *)0x0,hndl_01);
   FontMain.ofs = (uint16_t)pfVar2;
   FontMain.seg = uVar4;
   Font01.ofs = (uint16_t)pfVar2;
@@ -78,17 +78,17 @@ void __cdecl16far init_ui_gfxes(void)
   for (i = 0; (int)i < 4; i = i + 1) {
     ovr_driver_fillRect(0,0,0x11,0x11,0x0,in_DX,0);
     gfx_02.seg = *(uint16_t *)((int)&MiceCursors[0].seg + i * 4);
-    gfx_02.ofs = ((far_t *)MiceCursors + i)->ofs;
+    gfx_02.ofs = ((far_t far *)MiceCursors + i)->ofs;
     ovr_blitLoadRleGfx(gfx_02,far_from_u32((uint32_t)((ulong)in_DX << 0x10)),0);
     init_special_graphics
               ((char *)CONCAT22(*(undefined2 *)((int)&MiceCursors[0].seg + i * 4),
-                                (char *)((far_t *)MiceCursors + i)->ofs));
+                                (char *)((far_t far *)MiceCursors + i)->ofs));
     video_copyScreenTile(in_DX,0,0);
     pvVar3 = ovr_stshAlloc(0x121);
     *(undefined2 *)((int)&MicePtrs.seg + i * 4) =(uint16_t)( pfVar2);
-    ((far_t *)&MicePtrs + i)->ofs = (uint16_t)pvVar3;
+    ((far_t far *)&MicePtrs + i)->ofs = (uint16_t)pvVar3;
     memcpy((char *)CONCAT22(*(undefined2 *)((int)&MicePtrs.seg + i * 4),
-                            (char *)((far_t *)&MicePtrs + i)->ofs),(char *)MiceSaveArea,0x121);
+                            (char *)((far_t far *)&MicePtrs + i)->ofs),(char *)MiceSaveArea,0x121);
   }
   handle_01.seg = uStack_4;
   handle_01.ofs = (uint16_t)pvStack_6;

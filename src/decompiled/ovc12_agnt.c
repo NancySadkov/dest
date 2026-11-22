@@ -1152,12 +1152,12 @@ void __cdecl16far agnt_usesFmFreeAudio(void)
   far_t handle;
   far_t handle_00;
   
-  if (audioSaveCut1Ofs != (far_t *)0x0 || audioSaveCut1Seg != 0) {
+  if (audioSaveCut1Ofs != (far_t far *)0x0 || audioSaveCut1Seg != 0) {
     handle.seg = audioSaveCut1Seg;
     handle.ofs = (uint16_t)audioSaveCut1Ofs;
     ovr_stshFree(handle);
   }
-  if (audioSaveCut2Ofs != (far_t *)0x0 || audioSaveCut2Seg != 0) {
+  if (audioSaveCut2Ofs != (far_t far *)0x0 || audioSaveCut2Seg != 0) {
     handle_00.seg = audioSaveCut2Seg;
     handle_00.ofs = (uint16_t)audioSaveCut2Ofs;
     ovr_stshFree(handle_00);
@@ -1171,11 +1171,11 @@ void __cdecl16far agnt_usesFmFreeAudio(void)
   }
   src.seg = 0xc;
   src.ofs = BlitRects[0].seg;
-  audioSaveCut1Ofs = ovr_stshRleCut((far_t *)0x0,src,7,222,77,unaff_BP);
+  audioSaveCut1Ofs = ovr_stshRleCut((far_t far *)0x0,src,7,222,77,unaff_BP);
   src_00.seg = 0xc;
   src_00.ofs = BlitRects[0].seg;
   audioSaveCut1Seg = in_DX;
-  audioSaveCut2Ofs = ovr_stshRleCut((far_t *)0x0,src_00,78,222,150,unaff_BP);
+  audioSaveCut2Ofs = ovr_stshRleCut((far_t far *)0x0,src_00,78,222,150,unaff_BP);
   GGameState = 0x29;
   audioSaveCut2Seg = in_DX;
   if (AgntFlag2 != false) {

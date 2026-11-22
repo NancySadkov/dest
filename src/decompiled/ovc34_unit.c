@@ -350,7 +350,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
   byte *pbStack_20;
   byte *pbStack_1e;
   byte *pbStack_1c;
-  far_t *pfStack_1a;
+  far_t far *pfStack_1a;
   uint16_t uStack_18;
   uint8_t saveArea;
   uint16_t uStack_e;
@@ -392,7 +392,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
   memcpy((char *)CONCAT13(uVar13,CONCAT12(type,&saveArea)),(char *)BlitRects,10);
   uStack_e = 0xa000;
   ovr_miceRestoreArea((brect_t *)&saveArea);
-  pfStack_1a = ovr_stshRleCut((far_t *)0x0,far_from_u32((uint32_t)(0xca000)),7,222,150,unaff_DI,0xc,7,0xde);
+  pfStack_1a = ovr_stshRleCut((far_t far *)0x0,far_from_u32((uint32_t)(0xca000)),7,222,150,unaff_DI,0xc,7,0xde);
   uStack_18 = uVar6;
   ovr_miceBlitRect((brect_t *)&saveArea);
   pvStack_6 = ovr_stshAlloc(0xfa0f);

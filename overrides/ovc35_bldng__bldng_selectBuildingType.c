@@ -28,7 +28,7 @@ void bldng_selectBuildingType(byte partyIndex)
   buildTypes = bldng_getClass(in_stack_00000004);
   buildTypes = buildTypes & 0xff;
   auStack_190[0] = *(undefined2 *)((int)&GStrangeTable[0x31].seg + buildTypes * 4);
-  menuEntries = ((far_t *)(GStrangeTable + 0x31) + buildTypes)->ofs;
+  menuEntries = ((far_t far *)(GStrangeTable + 0x31) + buildTypes)->ofs;
   count = 1;
   iStack_6 = 7;
   while( true ) {
@@ -40,7 +40,7 @@ void bldng_selectBuildingType(byte partyIndex)
         uVar3 = bldng_compute2((uint8_t)iStack_6,in_stack_00000004);
         if ((char)uVar3 != '\0') {
           *(int *)(&buildTypes + count * 2) = iStack_6;
-          uVar1 = ((far_t *)(GStrangeTable + 0x31) + iStack_6)->ofs;
+          uVar1 = ((far_t far *)(GStrangeTable + 0x31) + iStack_6)->ofs;
           auStack_190[count * 2] = *(undefined2 *)((int)&GStrangeTable[0x31].seg + iStack_6 * 4);
           *(uint16_t *)(&menuEntries + count * 4) = uVar1;
           count = count + 1;

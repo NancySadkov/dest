@@ -533,7 +533,7 @@ void __cdecl16far ovc28_startCrossBlit(void)
   src.ofs = 0xa000;
   CrossBlitPtr.ofs =
        (uint16_t)
-       ovr_stshRleCut((far_t *)0x0,src,CrossBlitY,CrossBlitX + 0xd,CrossBlitY + 9,unaff_BP,
+       ovr_stshRleCut((far_t far *)0x0,src,CrossBlitY,CrossBlitX + 0xd,CrossBlitY + 9,unaff_BP,
                       (char)CrossBlitY);
   dst.seg = 0xa000;
   dst.ofs = CrossBlitX + CrossBlitY * 0x140;

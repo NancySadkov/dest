@@ -125,7 +125,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
         ptr_base.ofs = uVar4;
         ptr_ofs.seg = x;
         ptr_ofs.ofs = unaff_SI;
-        *(far_t *)&srcline = PADD_at_(ptr_base,ptr_ofs);   /* hand fix: PADD_at_ returns a far_t struct; assign the 4 bytes through the pointer */
+        *(far_t far *)&srcline = PADD_at_(ptr_base,ptr_ofs);   /* hand fix: PADD_at_ returns a far_t struct; assign the 4 bytes through the pointer */
         uVar5 = (undefined1)dstline.seg;
         uVar6 = (undefined1)(dstline.seg >> 8);
         if (format == LBM_PBM) {

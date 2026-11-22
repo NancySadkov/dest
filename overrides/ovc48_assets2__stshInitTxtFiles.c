@@ -1,11 +1,11 @@
 void __cdecl16far stshInitTxtFiles(char grab,...)
 
 {
-  far_t *pfVar1;
+  far_t far *pfVar1;
   undefined1 *in_DX;
   uint16_t unaff_SS;
   far_t dst;
-  far_t *in_stack_0000ff74;
+  far_t far *in_stack_0000ff74;
   uint auStack_8a [67];
   uint8_t i;
   
@@ -20,7 +20,7 @@ void __cdecl16far stshInitTxtFiles(char grab,...)
     }
     else {
       in_DX = &stack0xff74;
-      pfVar1 = ovr_stshStoreFile_2(*(far_t **)(in_DX + (uint)i * 4),
+      pfVar1 = ovr_stshStoreFile_2(*(far_t far **)(in_DX + (uint)i * 4),
                                    (char *)(ulong)auStack_8a[(uint)i * 2],
                                    (uint16_t)in_stack_0000ff74);
       *(int *)((uint)i * 4 + -0x6c6e) = (int)in_DX;

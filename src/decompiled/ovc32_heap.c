@@ -75,7 +75,7 @@ void __cdecl16far heapInit(void)
   __return_storage_ptr__ = (long *)((ulong)in_stack_0000fff6 >> 0x10);
   pbVar1 = (byte *)coreleft(__return_storage_ptr__);
   in_DX = in_DX - (uint)(pbVar1 < (byte *)__C0_ASM_CopyRight);
-  farmalloc((far_t *)(pbVar1 + -4),CONCAT22(__return_storage_ptr__,in_DX));
+  farmalloc((far_t far *)(pbVar1 + -4),CONCAT22(__return_storage_ptr__,in_DX));
   HeapMin = in_DX + 1;
   *(int *)0x0 = *(int *)0x0 + -1;
   *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
@@ -277,12 +277,12 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
 
 
 /* 6316:04ec */
-far_t * __cdecl16far heapMalloc(far_t *__return_storage_ptr__,uint32_t nbytes,...)
+far_t far * __cdecl16far heapMalloc(far_t far *__return_storage_ptr__,uint32_t nbytes,...)
 
 {
   long *plVar1;
   long *plVar2;
-  far_t *pfVar3;
+  far_t far *pfVar3;
   undefined2 unaff_SI;
   uint16_t uVar4;
   long *unaff_DI;
@@ -303,7 +303,7 @@ far_t * __cdecl16far heapMalloc(far_t *__return_storage_ptr__,uint32_t nbytes,..
     }
   }
   if (uVar5 == 0) {
-    pfVar3 = (far_t *)0x0;
+    pfVar3 = (far_t far *)0x0;
   }
   else {
     plVar1 = (long *)*(uint *)0x0;
@@ -320,7 +320,7 @@ far_t * __cdecl16far heapMalloc(far_t *__return_storage_ptr__,uint32_t nbytes,..
     if (uVar4 < HeapPtr) {
       HeapPtr = uVar4;
     }
-    pfVar3 = (far_t *)__C0_ASM_CopyRight;
+    pfVar3 = (far_t far *)__C0_ASM_CopyRight;
   }
   return pfVar3;
 }

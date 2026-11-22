@@ -9,7 +9,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
   far_t handle_00;
   undefined4 *puVar3;
   char cVar4;
-  far_t *pfVar5;
+  far_t far *pfVar5;
   stg_tmp_t *gfx;
   cte_t *pcVar6;
   uint32_t *puVar7;
@@ -85,7 +85,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
           }
           else {
             uVar10 = 0x195d;
-            pfVar5 = stshSprite((far_t *)*(undefined2 *)
+            pfVar5 = stshSprite((far_t far *)*(undefined2 *)
                                           ((int)AgntGs[0].sprfls + 6 + unaff_SI * 0x95 + iVar17 * 2)
                                 ,*(int16_t *)((int)&AgntGs[0].anms + unaff_SI * 0x95),
                                 (anm_t *)(ulong)CONCAT12(*(undefined1 *)
@@ -104,12 +104,12 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
           uVar10 = 0x195d;
           if (*(int *)((int)AgntGs[0].prtfls + unaff_SI * 0x95 + iVar17 * 2) != 0) {
             if ((char)param_1 == '\0') {
-              pfVar5 = ovr_stshAllocStub((far_t *)CONCAT11(in_stack_0000fff9,in_stack_0000fff8));
+              pfVar5 = ovr_stshAllocStub((far_t far *)CONCAT11(in_stack_0000fff9,in_stack_0000fff8));
               iVar8 = unaff_SI * 0x95 + iVar17 * 4;
               uVar12 = 0x195d;
               *(undefined2 *)((int)AgntGs[0].prts + 2 + iVar8) = uVar10;
               *(undefined2 *)((int)AgntGs[0].prts + iVar8) =(uint16_t)( pfVar5);
-              pfVar5 = ovr_stshAllocStub((far_t *)CONCAT11(in_stack_0000fff9,in_stack_0000fff8));
+              pfVar5 = ovr_stshAllocStub((far_t far *)CONCAT11(in_stack_0000fff9,in_stack_0000fff8));
               iVar8 = unaff_SI * 0x95 + iVar17 * 4;
               *(undefined2 *)((int)AgntGs[0].prtpals + 2 + iVar8) = uVar12;
               *(undefined2 *)((int)AgntGs[0].prtpals + iVar8) =(uint16_t)( pfVar5);
@@ -121,7 +121,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
               ovr_stshUniqueColorsRemap(gfx);
               pixels.seg = 0;
               pixels.ofs = (gfx->aptr).seg;
-              pfVar5 = ovr_stshRleType2((far_t *)(&gfx->aptr)->ofs,pixels,0,114);
+              pfVar5 = ovr_stshRleType2((far_t far *)(&gfx->aptr)->ofs,pixels,0,114);
               pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
               iVar8 = unaff_SI * 0x95 + iVar17 * 4;
               uVar10 = 0x195d;
@@ -202,7 +202,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
           return peVar13;
         }
         uVar10 = 0x195d;
-        pfVar5 = stshSprite((far_t *)*(undefined2 *)((int)AgntGs[0].sprfls + unaff_SI * 0x95),
+        pfVar5 = stshSprite((far_t far *)*(undefined2 *)((int)AgntGs[0].sprfls + unaff_SI * 0x95),
                             *(int16_t *)((int)&AgntGs[0].anms + unaff_SI * 0x95),
                             (anm_t *)(ulong)CONCAT12(*(undefined1 *)
                                                       ((int)&AgntGs[0].nanims + unaff_SI * 0x95),
@@ -220,7 +220,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
         }
         else {
           uVar10 = 0x195d;
-          pfVar5 = stshSprite((far_t *)*(undefined2 *)((int)AgntGs[0].sprfls + 2 + unaff_SI * 0x95),
+          pfVar5 = stshSprite((far_t far *)*(undefined2 *)((int)AgntGs[0].sprfls + 2 + unaff_SI * 0x95),
                               *(int16_t *)((int)&AgntGs[0].anms + unaff_SI * 0x95),
                               (anm_t *)(ulong)CONCAT12(*(undefined1 *)
                                                         ((int)&AgntGs[0].nanims + unaff_SI * 0x95),
@@ -234,7 +234,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
         }
         if (*(int *)((int)AgntGs[0].sprfls + 4 + unaff_SI * 0x95) == 0) break;
         uVar10 = 0x195d;
-        pfVar5 = stshSprite((far_t *)*(undefined2 *)((int)AgntGs[0].sprfls + 4 + unaff_SI * 0x95),
+        pfVar5 = stshSprite((far_t far *)*(undefined2 *)((int)AgntGs[0].sprfls + 4 + unaff_SI * 0x95),
                             *(int16_t *)((int)&AgntGs[0].anms + unaff_SI * 0x95),
                             (anm_t *)(ulong)CONCAT12(*(undefined1 *)
                                                       ((int)&AgntGs[0].nanims + unaff_SI * 0x95),
@@ -310,7 +310,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
   case 4:
     uVar2 = *(undefined4 *)((uint)PartyCount * 4 + -4);
     ovr_createConstructionRecordFar
-              (*(byte *)((int)(far_t *)(worldMenuLabels + 0xb) +
+              (*(byte *)((int)(far_t far *)(worldMenuLabels + 0xb) +
                         (uint)*(byte *)((int)uVar2 + 0x3e) * 0x95),GfxRndSeed + -1);
     ovr_ovc18_textTypeLen(PartyCount - 1)   /* hand fix: prototype has 4 params */;
     if (2 < Difficulty) {

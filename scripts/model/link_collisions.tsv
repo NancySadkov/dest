@@ -1,0 +1,9 @@
+# Two data labels collide with recovered *functions* at link time, because TLINK
+# uppercases external names even though C is case-sensitive.
+#
+#   224a:0000 MiceSaveArea (data)      vs miceSaveArea (function, 3338:00fe)
+#   2410:7489 StshFileSize (data)      vs stshFilesize (function, 474a:0aa7)
+#
+# Both pairs are distinct objects at distinct addresses; the data side is renamed.
+224a:0000	MiceSaveBuf	GUESS: the data buffer copied from MicePtrs (0x121 bytes); renamed to stop the TLINK case collision with the miceSaveArea function
+2410:7489	StshFileSizeVar	GUESS: the data variable written with the stash file size; renamed to stop the TLINK case collision with the stshFilesize function

@@ -43,7 +43,7 @@ undefined2 __cdecl16far abilitiesDlg(char_sheet_t *sheet)
                        (char_sheet_t *)CONCAT22(0x4d9b,(*(uint16_t *)((uint8_t *)&(sheet) + 2))));
     if (bVar2 != 0) {
       abStack_17[bStack_19] = (&classStatMap1)[((char_sheet_t *)sheet)->cls];
-      uVar1 = ((far_t *)GStatsLabels + (&classStatMap1)[((char_sheet_t *)sheet)->cls])->ofs;
+      uVar1 = ((far_t far *)GStatsLabels + (&classStatMap1)[((char_sheet_t *)sheet)->cls])->ofs;
       uVar5 = (uint)bStack_19;
       auStack_28[uVar5 * 2] =
            *(undefined2 *)
@@ -63,7 +63,7 @@ undefined2 __cdecl16far abilitiesDlg(char_sheet_t *sheet)
                  *(undefined2 *)
                   ((int)&GStatsLabels[0].seg +
                   (uint)(&classStatMap2)[((char_sheet_t *)sheet)->cls] * 4);
-        uVar1 = ((far_t *)GStatsLabels + (&classStatMap2)[((char_sheet_t *)sheet)->cls])->ofs;
+        uVar1 = ((far_t far *)GStatsLabels + (&classStatMap2)[((char_sheet_t *)sheet)->cls])->ofs;
         uVar5 = (uint)bStack_19;
         auStack_28[uVar5 * 2] =(uint16_t)( puVar3);
         *(uint16_t *)(&menuItems + uVar5 * 4) = uVar1;
@@ -93,7 +93,7 @@ undefined2 __cdecl16far abilitiesDlg(char_sheet_t *sheet)
     for (statIndex = 0x0; statIndex < 3; statIndex = statIndex + 0x1) {
       if ((10 < ((char_sheet_t *)sheet)->stats[statIndex]) && (abStack_17[0] != statIndex)) {
         abStack_17[bStack_19] = statIndex;
-        uVar1 = ((far_t *)GStatsLabels + statIndex)->ofs;
+        uVar1 = ((far_t far *)GStatsLabels + statIndex)->ofs;
         uVar5 = (uint)bStack_19;
         auStack_28[uVar5 * 2] = *(undefined2 *)((int)&GStatsLabels[0].seg + (uint)statIndex * 4);
         *(uint16_t *)(&menuItems + uVar5 * 4) = uVar1;

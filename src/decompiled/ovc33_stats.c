@@ -265,7 +265,7 @@ agntGetWeaponName(char *dst,uint8_t atype,bool magical,uint8_t field_index,int32
 
 
 /* 6386:0411 */
-far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far_t ringValue)
+far_t far * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far_t ringValue)
 
 {
   char *pcVar1;
@@ -292,13 +292,13 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   byte bVar23;
   uint uVar16;
   char *pcVar17;
-  far_t *pfVar18;
+  far_t far *pfVar18;
   uint16_t uVar19;
   uint uVar20;
   byte *pbVar21;
   byte bVar25;
-  far_t *in_CX;
-  far_t *pfVar24;
+  far_t far *in_CX;
+  far_t far *pfVar24;
   byte bVar26;
   byte bVar27;
   byte bVar28;
@@ -315,7 +315,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   undefined1 *puVar39;
   uint *puVar40;
   int iVar41;
-  far_t *unaff_SI;
+  far_t far *unaff_SI;
   byte *pbVar42;
   byte *unaff_DI;
   undefined2 unaff_ES;
@@ -365,7 +365,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
                     (char *)CONCAT13(0x62,CONCAT12(0x20,(char *)dst)));
     }
                     /* WARNING: Read-only address (ram,0x0002c58a) is written */
-    return (far_t *)CONCAT11(in_stack_00000005,in_stack_00000004);
+    return (far_t far *)CONCAT11(in_stack_00000005,in_stack_00000004);
   }
   bVar28 = (char)src - (char)term;
   src = far_ofs_u32((uint32_t)(CONCAT31(SUB43(uVar46,1),bVar28)));
@@ -374,10 +374,10 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
     if (4 < uVar20) {
       strcpy((char *)CONCAT13(uVar47,CONCAT12(uVar11,CONCAT11(in_stack_00000005,in_stack_00000004)))
              ,"+2 leather armor");
-      return (far_t *)CONCAT11(in_stack_00000005,in_stack_00000004);
+      return (far_t far *)CONCAT11(in_stack_00000005,in_stack_00000004);
     }
     cVar22 = '`';
-    pfVar18 = (far_t *)(uVar20 * 2);
+    pfVar18 = (far_t far *)(uVar20 * 2);
     switch(uVar20) {
     case 0:
       (&stack0xfffe)[(int)unaff_SI] = (&stack0xfffe)[(int)unaff_SI] + '\x01';
@@ -386,48 +386,48 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       } while( true );
     case 1:
       pcVar7 = (code *)swi(1);
-      pfVar18 = (far_t *)(*pcVar7)();
+      pfVar18 = (far_t far *)(*pcVar7)();
       return pfVar18;
     case 2:
       do {
-        pfVar18 = (far_t *)(uint)(byte)(pfVar18 + -0x1db1)->ofs;
+        pfVar18 = (far_t far *)(uint)(byte)(pfVar18 + -0x1db1)->ofs;
         if (pfVar18 == unaff_SI) {
-          if ((far_t *)(uint)(byte)(unaff_SI + -0x1db1)->ofs == unaff_SI) {
-            pfVar18 = (far_t *)((char *)0x26510);
+          if ((far_t far *)(uint)(byte)(unaff_SI + -0x1db1)->ofs == unaff_SI) {
+            pfVar18 = (far_t far *)((char *)0x26510);
             *(char *)&(in_CX + -0x1db1)->ofs = (char)in_CX;
           }
           else {
             uVar11 = (undefined1)(unaff_SI + -0x1db1)->ofs;
-            pfVar18 = (far_t *)CONCAT11(0x24,uVar11);
+            pfVar18 = (far_t far *)CONCAT11(0x24,uVar11);
             *(undefined1 *)&(in_CX + -0x1db1)->ofs = uVar11;
           }
         }
         do {
           pfVar24 = in_CX;
-          in_CX = (far_t *)((int)&pfVar24->ofs + 1);
+          in_CX = (far_t far *)((int)&pfVar24->ofs + 1);
           if (0xb < (int)in_CX) {
             return pfVar18;
           }
         } while (in_CX == unaff_SI);
         uVar11 = SUB21(in_CX,0);
-        if ((far_t *)(uint)*(byte *)((int)&pfVar24[-0x1da8].ofs + 1) == unaff_SI) {
-          if ((far_t *)(uint)(byte)(unaff_SI + -0x1da8)->ofs == unaff_SI) {
+        if ((far_t far *)(uint)*(byte *)((int)&pfVar24[-0x1da8].ofs + 1) == unaff_SI) {
+          if ((far_t far *)(uint)(byte)(unaff_SI + -0x1da8)->ofs == unaff_SI) {
             *(undefined1 *)((int)&pfVar24[-0x1da8].ofs + 1) = uVar11;
           }
           else {
             *(undefined1 *)((int)&pfVar24[-0x1da8].ofs + 1) = (char)(unaff_SI + -0x1da8)->ofs;
           }
         }
-        if ((far_t *)(uint)*(byte *)((int)&pfVar24[-0x1dab].ofs + 1) == unaff_SI) {
-          if ((far_t *)(uint)(byte)(unaff_SI + -0x1dab)->ofs == unaff_SI) {
+        if ((far_t far *)(uint)*(byte *)((int)&pfVar24[-0x1dab].ofs + 1) == unaff_SI) {
+          if ((far_t far *)(uint)(byte)(unaff_SI + -0x1dab)->ofs == unaff_SI) {
             *(undefined1 *)((int)&pfVar24[-0x1dab].ofs + 1) = uVar11;
           }
           else {
             *(undefined1 *)((int)&pfVar24[-0x1dab].ofs + 1) = (char)(unaff_SI + -0x1dab)->ofs;
           }
         }
-        if ((far_t *)(uint)*(byte *)((int)&pfVar24[-0x1dae].ofs + 1) == unaff_SI) {
-          if ((far_t *)(uint)(byte)(unaff_SI + -0x1dae)->ofs == unaff_SI) {
+        if ((far_t far *)(uint)*(byte *)((int)&pfVar24[-0x1dae].ofs + 1) == unaff_SI) {
+          if ((far_t far *)(uint)(byte)(unaff_SI + -0x1dae)->ofs == unaff_SI) {
             *(undefined1 *)((int)&pfVar24[-0x1dae].ofs + 1) = uVar11;
           }
           else {
@@ -466,8 +466,8 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       }
       clrscr();
       bVar12 = write_game_cfg(sfx,cVar22,cVar22);
-      if ((far_t *)(uint)bVar12 != (far_t *)0x0) {
-        return (far_t *)(uint)bVar12;
+      if ((far_t far *)(uint)bVar12 != (far_t far *)0x0) {
+        return (far_t far *)(uint)bVar12;
       }
                     /* WARNING: Subroutine does not return */
       exit(0x83);
@@ -477,7 +477,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
     *(char *)&unaff_SI->ofs = (char)unaff_SI->ofs + (char)(uVar20 >> 8);
     if (((*(int *)&MouseMoved == 0) && (8 < MouseX)) &&
        ((MouseX < 0x19 && ((0xb4 < MouseY && ((MouseY < 0xb6 | 0xeU) != 0)))))) {
-      return (far_t *)0x0;
+      return (far_t far *)0x0;
     }
     if ((((MouseMoved == 0) && (0xea < MouseX)) && (0x3b < MouseY)) && (MouseX < 0x139)) {
       uVar20 = (MouseY - 0x3c) / 0xe;
@@ -491,7 +491,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
         (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = uVar47;
         ovc28_blitMenuEntry(entries,uVar20);
         GMenuItem = cVar22 + '\x01';
-        return (far_t *)CONCAT11(0x24,cVar22 + '\x01');
+        return (far_t far *)CONCAT11(0x24,cVar22 + '\x01');
       }
     }
     uVar11 = 0x24;
@@ -502,7 +502,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       uVar11 = (undefined1)((MouseX - 0x10) / 0x44 >> 8);
       if ((uVar20 < 3) && ((MouseX - 0x10) % 0x44 < 0x43)) {
         GMenuItem = (char)uVar20 + -4;
-        return (far_t *)CONCAT11(0x24,GMenuItem);
+        return (far_t far *)CONCAT11(0x24,GMenuItem);
       }
     }
     if ((((keyboardInputMode == '\0') || (uVar11 = 0x24, MouseMoved != 0)) ||
@@ -515,7 +515,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
     if ((byte *)__C0_ASM_CopyRight + 4 < pbVar21) {
       strcpy((char *)CONCAT13(uVar47,CONCAT12(uVar11,CONCAT11(in_stack_00000005,in_stack_00000004)))
              ,"no armor");
-      return (far_t *)CONCAT11(in_stack_00000005,in_stack_00000004);
+      return (far_t far *)CONCAT11(in_stack_00000005,in_stack_00000004);
     }
     pasVar34 = (short (*) [148])((int)pbVar21 * 2);
     uVar30 = 0x6000;
@@ -548,7 +548,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       ovr_stop_audio();
       CurMusicType = 0xff;
       ScreenMode = 0;
-      return (far_t *)((char *)0x26510);
+      return (far_t far *)((char *)0x26510);
     case (uint16_t)0x1:
                     /* WARNING: Read-only address (ram,0x0002c58a) is written */
       s_s_regenerates_3_hitpoint_5ade[0x1e] = '\0';
@@ -558,7 +558,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
     case (uint16_t)0x2:
       pfVar18 = GPromotableCount;
       if (*(byte *)(*(int *)pbVar21 + 0x86) < 9) {
-        pfVar18 = (far_t *)((uint)promotionCount * 0x32 + 0x32);
+        pfVar18 = (far_t far *)((uint)promotionCount * 0x32 + 0x32);
       }
       s_s_regenerates_3_hitpoint_5ade[0x1e] = 'a';
       return pfVar18;
@@ -570,16 +570,16 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
         in_stack_00000004 = (byte)in_DX;
         in_stack_00000005 = (undefined1)((uint)in_DX >> 8);
         ovr_blitLabel(pcVar17);
-        pfVar18 = (far_t *)((char *)0x26510);
+        pfVar18 = (far_t far *)((char *)0x26510);
         BlitLetterType = 0;
         pbVar21 = unaff_DI;
         while( true ) {
           while( true ) {
             unaff_DI = pbVar21 + 0xe;
-            unaff_SI = (far_t *)((int)&unaff_SI->ofs + 1);
+            unaff_SI = (far_t far *)((int)&unaff_SI->ofs + 1);
             if (CONCAT11((*(uint8_t *)((uint8_t *)&(dst) + 3)),(*(uint8_t *)((uint8_t *)&(dst) + 2))) <= (int)unaff_SI) {
               if (goldPartyIndex != 0xff) {
-                pfVar18 = (far_t *)CONCAT11((char)((uint)pfVar18 >> 8),goldPartyIndex);
+                pfVar18 = (far_t far *)CONCAT11((char)((uint)pfVar18 >> 8),goldPartyIndex);
                 src = far_ofs_u32((uint32_t)(CONCAT22(pfVar18,0x22c4)));
                 (*(uint8_t *)((uint8_t *)&(dst) + 2)) = 0xad;
                 (*(uint8_t *)((uint8_t *)&(dst) + 3)) = 7;
@@ -589,7 +589,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
             }
             piVar33 = (int *)(CONCAT11(in_stack_00000005,in_stack_00000004) + (int)unaff_SI * 4);
             if (*piVar33 != 0 || piVar33[1] != 0) break;
-            pfVar18 = (far_t *)0x0;
+            pfVar18 = (far_t far *)0x0;
             pbVar21 = unaff_DI;
           }
           term = 0xa000;
@@ -625,7 +625,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
             pcVar17 = (char *)ovr_ovc45_compute9(acStack_80);
             in_stack_00000004 = (byte)in_DX;
             in_stack_00000005 = (undefined1)((uint)in_DX >> 8);
-            pfVar18 = (far_t *)ovr_blitLabel(pcVar17);
+            pfVar18 = (far_t far *)ovr_blitLabel(pcVar17);
             pbVar21 = unaff_DI;
           }
           else {
@@ -638,7 +638,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
             pcVar17 = (char *)ovr_ovc45_compute9(acStack_80);
             in_stack_00000004 = (byte)in_DX;
             in_stack_00000005 = (undefined1)((uint)in_DX >> 8);
-            pfVar18 = (far_t *)ovr_blitLabel(pcVar17);
+            pfVar18 = (far_t far *)ovr_blitLabel(pcVar17);
             pbVar21 = unaff_DI;
           }
         }
@@ -712,7 +712,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       if (!CARRY1(bVar26,bVar28) && !CARRY1(bVar10,bVar12)) {
         src = far_ofs_u32((uint32_t)(CONCAT22(0x6000,src)));
         pcVar7 = (code *)swi(3);
-        pfVar18 = (far_t *)(*pcVar7)();
+        pfVar18 = (far_t far *)(*pcVar7)();
         return pfVar18;
       }
       iVar29 = (bVar27 & 3) - (AgntAnms[0x6e].maxDy & 3U);
@@ -769,7 +769,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       uVar13 = (uint)(uVar16 < *(uint *)(pbVar31 + uVar20 + 0x5c1b) || uVar15 < uVar13);
       uVar15 = (int)in_CX - *(uint *)(puVar39 + 0x1b);
       iVar29 = uVar15 - uVar13;
-      uVar13 = (uint)(in_CX < *(far_t **)(puVar39 + 0x1b) || uVar15 < uVar13);
+      uVar13 = (uint)(in_CX < *(far_t far **)(puVar39 + 0x1b) || uVar15 < uVar13);
       uVar15 = uVar20 - *(uint *)(pbVar31 + uVar20);
       puVar40 = (uint *)(uVar15 - uVar13);
       uVar20 = (uint)(uVar20 < *(uint *)(pbVar31 + uVar20) || uVar15 < uVar13);
@@ -898,7 +898,7 @@ L_OVC27_2288:
       do {
         iVar41 = iVar29 + -1;
         if (iVar29 == 0) {
-          return (far_t *)0x0;
+          return (far_t far *)0x0;
         }
         uVar30 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
         *(undefined2 *)(puVar39 + -2) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
@@ -917,7 +917,7 @@ L_OVC27_2288:
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x3f) =
            *(undefined1 *)((int)(char **)GMenuStrings + (uint)in_stack_00000004 * 0x95 + 0x1f);
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x33) =
-           *(undefined1 *)((int)(far_t *)(worldMenuLabels + 9) + (uint)in_stack_00000004 * 0x95);
+           *(undefined1 *)((int)(far_t far *)(worldMenuLabels + 9) + (uint)in_stack_00000004 * 0x95);
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x31) =
            *(undefined1 *)((int)&worldMenuLabels[6].seg + (uint)in_stack_00000004 * 0x95);
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x32) =
@@ -932,20 +932,20 @@ L_OVC27_2288:
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x89) = 0xff;
       uVar11 = 0x5d;
       pfVar18 = ovr_ovc22_textRingProt(in_stack_0000fff8);
-      return (far_t *)CONCAT11((char)((uint)pfVar18 >> 8),uVar11);
+      return (far_t far *)CONCAT11((char)((uint)pfVar18 >> 8),uVar11);
     case (byte *)0x7:
       do {
         unaff_DI = (byte *)((uint)unaff_DI | *(uint *)(pbVar21 + (int)(*pasVar34 + -2)) & 0x3000);
-        unaff_SI = (far_t *)((int)&unaff_SI->ofs + 1);
+        unaff_SI = (far_t far *)((int)&unaff_SI->ofs + 1);
         while( true ) {
           if ((int)unaff_SI < 4) break;
-          pfVar18 = (far_t *)CONCAT11(in_stack_0000fffb,in_stack_0000fffa);
+          pfVar18 = (far_t far *)CONCAT11(in_stack_0000fffb,in_stack_0000fffa);
           if (unaff_DI == (byte *)((int)&AgntAnms[0x38].halfWidth + 1)) {
             GPromotableCount = (uint16_t)((int)&GPromotableCount + 1)   /* hand fix: scalar, no ->ofs */;
-            pfVar18 = (far_t *)CONCAT11(in_stack_0000fffb,in_stack_0000fffa);
+            pfVar18 = (far_t far *)CONCAT11(in_stack_0000fffb,in_stack_0000fffa);
           }
           do {
-            pfVar18 = (far_t *)((int)&pfVar18->ofs + 1);
+            pfVar18 = (far_t far *)((int)&pfVar18->ofs + 1);
             if (GUnitCount <= pfVar18) {
               return GUnitCount;
             }
@@ -963,7 +963,7 @@ L_OVC27_2288:
           in_stack_0000fff9 = (undefined1)(uVar20 >> 8);
           in_stack_0000fff6 = ((unit_t *)GUnits)[CONCAT11(in_stack_0000fffb,in_stack_0000fffa)].y;
           unaff_DI = (byte *)0x0;
-          unaff_SI = (far_t *)0x0;
+          unaff_SI = (far_t far *)0x0;
         }
         unaff_ES = (undefined2)((ulong)GMapFlags >> 0x10);
         pasVar34 = *(short (*) [60] [148])GMapFlags + in_stack_0000fff6;
@@ -986,7 +986,7 @@ L_OVC27_2288:
             ovc39_lordOrLady();
             iStack_10 = 24576;
             uStack_12 = 0x9bb1;
-            pfVar18 = (far_t *)ovr_stsprintf(acStack_2cc);
+            pfVar18 = (far_t far *)ovr_stsprintf(acStack_2cc);
             ovr_drawString((char *)pfVar18);
           }
           else {
@@ -994,7 +994,7 @@ L_OVC27_2288:
             ovc39_lordOrLady();
             iStack_10 = 24576;
             uStack_12 = 0x9b7b;
-            pfVar18 = (far_t *)ovr_stsprintf(acStack_2cc);
+            pfVar18 = (far_t far *)ovr_stsprintf(acStack_2cc);
             uVar48 = (undefined1)uVar30;
             uVar49 = (undefined1)((uint)uVar30 >> 8);
             uVar11 = SUB21(pfVar18,0);
@@ -1012,7 +1012,7 @@ L_OVC27_2288:
           ovc39_lordOrLady();
           iStack_10 = 24576;
           uStack_12 = 0x9b2e;
-          pfVar18 = (far_t *)ovr_stsprintf(acStack_2cc);
+          pfVar18 = (far_t far *)ovr_stsprintf(acStack_2cc);
           uVar48 = (undefined1)uVar30;
           uVar49 = (undefined1)((uint)uVar30 >> 8);
           uVar11 = SUB21(pfVar18,0);
@@ -1030,7 +1030,7 @@ L_OVC27_2288:
         ovc39_lordOrLady();
         iStack_10 = 24576;
         uStack_12 = 0x9ad8;
-        pfVar18 = (far_t *)ovr_stsprintf(acStack_2cc);
+        pfVar18 = (far_t far *)ovr_stsprintf(acStack_2cc);
         uVar48 = (undefined1)uVar30;
         uVar49 = (undefined1)((uint)uVar30 >> 8);
         uVar11 = SUB21(pfVar18,0);
@@ -1050,20 +1050,20 @@ L_OVC27_2288:
     ovc28_textHalflingCastle();
     uVar20 = MouseX - 0xc >> 1;
     ovr_ovc13_usesBlitLoadRleGfx2(CONCAT11((byte)(MouseX - 0xc >> 9),(char)uVar20));
-    return (far_t *)CONCAT11((char)(uVar20 >> 8),0xfe);
+    return (far_t far *)CONCAT11((char)(uVar20 >> 8),0xfe);
   }
 L_OVC28_6018_0c76_0EAD:
   if (((keyboardInputMode == '\0') || (uVar11 = 0x24, MouseMoved != 0)) ||
      (((uVar11 = 0x24, MouseX < 0xef ||
        ((uVar11 = 0x24, 0x134 < MouseX || (uVar11 = 0x24, MouseY < 7)))) ||
       (uVar11 = 0x24, 0x36 < MouseY)))) {
-    pfVar18 = (far_t *)CONCAT11(uVar11,0xff);
+    pfVar18 = (far_t far *)CONCAT11(uVar11,0xff);
   }
   else {
     ovc28_textHalflingCastle();
     uVar20 = MouseX - 0xef >> 1;
     ovr_ovc13_usesBlitLoadRleGfx3(CONCAT11((byte)(MouseX - 0xef >> 9),(char)uVar20));
-    pfVar18 = (far_t *)CONCAT11((char)(uVar20 >> 8),0xfe);
+    pfVar18 = (far_t far *)CONCAT11((char)(uVar20 >> 8),0xfe);
   }
                     /* WARNING: Read-only address (ram,0x0002c58a) is written */
   return pfVar18;
@@ -1146,7 +1146,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
   int *piVar8;
   undefined2 *puVar9;
   int iVar10;
-  far_t *text_00;
+  far_t far *text_00;
   uint8_t *in_DX;
   uint8_t *puVar11;
   uint16_t agnt_o;
@@ -1376,7 +1376,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
      (*(char *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) == -1)) {
     uVar7 = (uint)(byte)((agntG_t *)agnt->gdata)->shortName[2];
     puVar11 = (uint8_t *)((char *)0x26510);
-    ovr_blitLabel((char *)((far_t *)GAlignmentsNames + uVar7)->ofs,
+    ovr_blitLabel((char *)((far_t far *)GAlignmentsNames + uVar7)->ofs,
                   (uint8_t *)
                   CONCAT22(Font02.ofs,
                            (uint8_t *)*(undefined2 *)((int)&GAlignmentsNames[0].seg + uVar7 * 4)),
@@ -1387,7 +1387,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
              ((uint)*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) << 2);
     uVar7 = (uint)*(byte *)((int)uVar1 + 0x33);
     puVar11 = (uint8_t *)((char *)0x26510);
-    ovr_blitLabel((char *)((far_t *)GAlignmentsNames + uVar7)->ofs,
+    ovr_blitLabel((char *)((far_t far *)GAlignmentsNames + uVar7)->ofs,
                   (uint8_t *)
                   CONCAT22(Font02.ofs,
                            (uint8_t *)*(undefined2 *)((int)&GAlignmentsNames[0].seg + uVar7 * 4)),

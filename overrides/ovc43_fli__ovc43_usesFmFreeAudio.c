@@ -4,7 +4,7 @@ ovc43_usesFmFreeAudio(uint32_t gindex,char_sheet_t *sheet,uint16_t sheetSeg)
 {
   char *pcVar1;
   uint16_t uVar2;
-  far_t *pfVar3;
+  far_t far *pfVar3;
   char_sheet_t *pcVar4;
   undefined2 in_CX;
   char_sheet_t *pcVar5;
@@ -99,7 +99,7 @@ code_r0x00061e64:
   ((char_sheet_t *)uStack_6)->faction =
        *(uint8_t *)((int)(char **)GMenuStrings + (uint)(byte)gindex * 0x95 + 0x1f);
   ((char_sheet_t *)uStack_6)->alignment =
-       *(byte *)((int)(far_t *)(worldMenuLabels + 9) + (uint)(byte)gindex * 0x95);
+       *(byte *)((int)(far_t far *)(worldMenuLabels + 9) + (uint)(byte)gindex * 0x95);
   ((char_sheet_t *)uStack_6)->hp[0] =
        *(byte *)((int)&worldMenuLabels[6].seg + (uint)(byte)gindex * 0x95);
   ((char_sheet_t *)uStack_6)->hp[1] = ((char_sheet_t *)uStack_6)->hp[0];

@@ -15,8 +15,14 @@ TC = os.path.join(ROOT, "tools", "TC30")
 
 
 def main():
+    skip = set(a.upper() for a in sys.argv[1:] if a.startswith("--skip=") is False)
     objs = sorted(n for n in os.listdir(BUILDSRC) if n.lower().endswith(".obj"))
-    print("objects:", len(objs))
+    # Our tree contains a recovered CRT (crtl.c).  Linking Turbo C's C0L startup
+    # and CL.LIB as well duplicates it, so the first link excludes the recovered
+    # CRT object and lets the library provide those symbols.
+    if "--with-crtl" not in sys.argv:
+        objs = [o for o in objs if o.upper() != "CRTL.OBJ"]
+    print("objects:", len(objs), "(crtl excluded)" if "--with-crtl" not in sys.argv else "")
     bat = ["@echo off", "set PATH=D:\\BIN", "set LIB=D:\\LIB"]
     # TLINK syntax: <objs>,<exe>,<map>,<libs>  -- the comma after the last object
     # is what separates inputs from outputs

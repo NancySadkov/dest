@@ -17,7 +17,7 @@ agnt_t * __cdecl16far ovc15_textError(undefined4 param_1,agnt_t *param_2)
   undefined1 uVar23;
   undefined1 uVar24;
   uint16_t uVar11;
-  far_t *pfVar12;
+  far_t far *pfVar12;
   cte_t *pcVar13;
   undefined2 *puVar14;
   long *plVar15;
@@ -211,7 +211,7 @@ agnt_t * __cdecl16far ovc15_textError(undefined4 param_1,agnt_t *param_2)
     *puVar28 = *puVar28;
     do {
       uVar32 = 0x195d;
-      pfVar12 = stshSprite((far_t *)*(undefined2 *)
+      pfVar12 = stshSprite((far_t far *)*(undefined2 *)
                                      ((int)AgntGs[0].sprfls + 6 +
                                      (int)pcVar30 * 0x95 + (int)unaff_DI * 2),
                            *(int16_t *)(puVar28 + 0x26fe),
@@ -227,12 +227,12 @@ agnt_t * __cdecl16far ovc15_textError(undefined4 param_1,agnt_t *param_2)
             uVar32 = 0x195d;
             if (*(int *)((int)AgntGs[0].prtfls + (int)pcVar30 * 0x95 + iVar39 * 2) != 0) {
               if ((byte)param_1 == 0) {
-                pfVar12 = ovr_stshAllocStub((far_t *)CONCAT11(bVar44,in_stack_0000fffc));
+                pfVar12 = ovr_stshAllocStub((far_t far *)CONCAT11(bVar44,in_stack_0000fffc));
                 iVar20 = (int)pcVar30 * 0x95 + iVar39 * 4;
                 uVar34 = 0x195d;
                 *(undefined2 *)((int)AgntGs[0].prts + 2 + iVar20) = uVar32;
                 *(undefined2 *)((int)AgntGs[0].prts + iVar20) =(uint16_t)( pfVar12);
-                pfVar12 = ovr_stshAllocStub((far_t *)CONCAT11(bVar44,in_stack_0000fffc));
+                pfVar12 = ovr_stshAllocStub((far_t far *)CONCAT11(bVar44,in_stack_0000fffc));
                 iVar20 = (int)pcVar30 * 0x95 + iVar39 * 4;
                 *(undefined2 *)((int)AgntGs[0].prtpals + 2 + iVar20) = uVar34;
                 *(undefined2 *)((int)AgntGs[0].prtpals + iVar20) =(uint16_t)( pfVar12);
@@ -243,7 +243,7 @@ agnt_t * __cdecl16far ovc15_textError(undefined4 param_1,agnt_t *param_2)
                 in_stack_0000fffc = (uint8_t)gfx;
                 bVar44 = (byte)((uint)gfx >> 8);
                 ovr_stshUniqueColorsRemap(gfx);
-                pfVar12 = ovr_stshRleType2(*(far_t **)((char *)0x300));
+                pfVar12 = ovr_stshRleType2(*(far_t far **)((char *)0x300));
                 pcVar13 = ovr_stshStoreFile((uint8_t *)pfVar12);
                 iVar20 = (int)pcVar30 * 0x95 + iVar39 * 4;
                 uVar32 = 0x195d;
@@ -326,7 +326,7 @@ agnt_t * __cdecl16far ovc15_textError(undefined4 param_1,agnt_t *param_2)
             return paVar19;
           }
           uVar32 = 0x195d;
-          pfVar12 = stshSprite((far_t *)*(undefined2 *)((int)AgntGs[0].sprfls + (int)pcVar30 * 0x95)
+          pfVar12 = stshSprite((far_t far *)*(undefined2 *)((int)AgntGs[0].sprfls + (int)pcVar30 * 0x95)
                                ,*(int16_t *)((int)&AgntGs[0].anms + (int)pcVar30 * 0x95),
                                (anm_t *)(ulong)CONCAT12(*(undefined1 *)
                                                          ((int)&AgntGs[0].nanims +
@@ -346,7 +346,7 @@ agnt_t * __cdecl16far ovc15_textError(undefined4 param_1,agnt_t *param_2)
           }
           else {
             uVar32 = 0x195d;
-            pfVar12 = stshSprite((far_t *)*(undefined2 *)
+            pfVar12 = stshSprite((far_t far *)*(undefined2 *)
                                            ((int)AgntGs[0].sprfls + 2 + (int)pcVar30 * 0x95),
                                  *(int16_t *)((int)&AgntGs[0].anms + (int)pcVar30 * 0x95),
                                  (anm_t *)(ulong)CONCAT12(*(undefined1 *)
@@ -368,7 +368,7 @@ agnt_t * __cdecl16far ovc15_textError(undefined4 param_1,agnt_t *param_2)
           }
           else {
             uVar32 = 0x195d;
-            pfVar12 = stshSprite((far_t *)*(undefined2 *)
+            pfVar12 = stshSprite((far_t far *)*(undefined2 *)
                                            ((int)AgntGs[0].sprfls + 4 + (int)pcVar30 * 0x95),
                                  *(int16_t *)((int)&AgntGs[0].anms + (int)pcVar30 * 0x95),
                                  (anm_t *)(ulong)CONCAT12(*(undefined1 *)
