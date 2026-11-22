@@ -397,9 +397,20 @@ public class ExportData extends GhidraScript {
             println("header declarations: " + headerDecl.size());
         }
 
+        // Symbols the C runtime startup (C0.ASM) already defines.  Emitting our
+        // own copy makes TLINK report "defined in module C0.ASM is duplicated in
+        // module GLOB2.C" and the link fails.
+        // Names as they appear in the recovered tree.  TLINK uppercases and
+        // prefixes them, which is why it reports __PSP / _ERRNO / __HEAPBASE:
+        // `_psp`->__PSP is the startup's, ours is `_pspseg` (a different symbol).
+        Set<String> startupOwned = new HashSet<String>(Arrays.asList(
+                "errno", "_doserrno", "_StartTime", "_heapbase", "_brklvl", "_heaptop",
+                "MUSHandle", "_MUSHandle", "__TERMINATE", "__termFuncs"));
+
         int n = 0;
         for (Symbol s : syms) {
             String name = s.getName();
+            if (startupOwned.contains(name)) continue;
             if (seen.contains(name)) continue;
             long key = s.getAddress().getOffset();
             if (seenAddr.contains(key)) continue;
