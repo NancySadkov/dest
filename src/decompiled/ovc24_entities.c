@@ -650,7 +650,7 @@ L_OVC24_5943_112e_1255:
         bVar1 = true;
         ovr_manage_mapPartySlots();
         ovr_font_usesMiceBlitRect(0x5a);
-        _fmemset((void *)ZEXT24(unaff_SS),2,unaff_DI);
+        _fmemset(MK_FP(_SS, &uStack_10), 0, 2);
         if (bStack_7 == 0) {
           iVar8 = (uint)((char_sheet_t *)((uStack_6 << 2)))->classStr * 0x95;
           ovr_ovc40_usesAlignToSeg
@@ -688,7 +688,7 @@ L_OVC24_5943_112e_15E7:
     }
     if (bVar1) {
       bStack_3 = ovr_manage_findFirstLeader();
-      _fmemset((void *)ZEXT24(unaff_SS),2,unaff_DI);
+      _fmemset(MK_FP(_SS, &uStack_10), 0, 2);
       for (uStack_6 = 0; (int)uStack_6 < (int)(uint)GLeaderCount; uStack_6 = uStack_6 + 1) {
         if (((char_sheet_t *)((uStack_6 << 2)))->active != '\0') {
           (&excludedFlags)[*(byte *)((int)*(uint32_t *)(uStack_6 << 2) + 0x3f)] = 0x1;
