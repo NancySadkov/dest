@@ -511,14 +511,29 @@ char s_sleeping_s[] = "sleeping %s";
 char s_held_s[] = "held %s";
 undefined1 GMenuFlag = 0x00;
 uint8_t noAnimBlit = 0x0;
-undefined flashPaletteEf = 0x3F;
-undefined mouseSaveRect1 = 0xD3;
+/* 0846: eighteen palette bytes */
+uint8_t flashPaletteEf[18] = { 0x3F, 0x00, 0x00, 0x3F, 0x3F, 0x3F, 0x20, 0x20, 0x20,
+    0x3F, 0x3F, 0x3F, 0x3F, 0x28, 0x00, 0x3F, 0x30, 0x00 };
+/* 0858: a mouse save rectangle (10-byte brect_t) */
+brect_t mouseSaveRect1 = { 211, 175, 223, 178, 0xA000 };
 undefined1 Highlight1 = 0xFF;
+/* GUESS: 0x863, a second Highlight1-labelled byte in the original; only
+   the scalar is used by the code. */
+uint8_t highlight1Extra = 0xFF;
+/* 0864: a second "(%d, %d)" copy */
+char s_d_d_2410_0864[] = "(%d, %d)";
 uint16_t SquareRecX = 0x0000;
+/* 0870: the code uses SquareRecY as a scalar; the original symbol spans 17
+   bytes, so the remaining 15 are kept as unnamed data. */
 uint16_t SquareRecY = 0x0000;
+uint8_t squareRecYExtra[15] = { 0x1C, 0x1C, 0x1C, 0x1C, 0x1C, 0x0E, 0x0E, 0x0E,
+    0x0E, 0x0E, 0x00, 0x00, 0x00, 0x00, 0x00 };
 uint16_t SquareRecCount = 0x0000;
 uint16_t SquareRecIndex = 0x0000;
-undefined mouseSaveRect3 = 0xDF;
+/* GUESS: 0x885, eight unnamed bytes after the index scalar */
+uint8_t squareRecIndexExtra[8] = { 0x00, 0x01, 0x00, 0xFF, 0xFF, 0x00, 0x01, 0x00 };
+/* 088d: a mouse save rectangle (10-byte brect_t) */
+brect_t mouseSaveRect3 = { 223, 159, 226, 196, 0xA000 };
 undefined mouseSaveRect2 = 0xD0;
 char s_intelligence_reports_s_u_11b5[] = "Intelligence reports %s unit engaged in combat. (%d, %d)";
 char s_d_d_d[] = "%d %d %d \r";

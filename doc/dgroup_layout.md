@@ -264,3 +264,24 @@ Layout runs **132 -> 127 -> 126**; the constant delta now spans 154 symbols from
 `mouseSaveRect1` (0x858), `-9` at `Highlight1` (0x862), `-11` at `SquareRecX`
 (0x86e), `-15` at `SquareRecCount` (0x881) - the same "record declared as a
 scalar" pattern.
+
+## Eighth pass: 0x846..0x88d
+
+```
+0846 18  flashPaletteEf {3F,00,00,3F,3F,3F,20,20,20,3F,3F,3F,3F,28,00,3F,30,00}
+0858 10  mouseSaveRect1 = {211,175,223,178,0xA000}       (brect_t)
+0862  1  Highlight1 (the scalar the code uses)
+0863  1  a second byte also labelled Highlight1 in the original
+0864 10  a second "(%d, %d)" copy
+0870 17  SquareRecY - the code uses it as a scalar, so 2 bytes stay named and
+         15 are unnamed data
+0883  2  SquareRecIndex (scalar) + 8 unnamed bytes
+088d 10  mouseSaveRect3 = {223,159,226,196,0xA000}       (brect_t)
+```
+
+One attempt went the wrong way and was corrected by the compiler:
+`SquareRecY` declared as `uint8_t[17]` broke `attact_usesSquareRecCount2`
+("Lvalue required"), which proves the code stores to it as a scalar.  It is a
+scalar plus 15 unnamed bytes now.
+
+Layout runs **126 -> 121**, and the rebuilt image links and runs as before.
