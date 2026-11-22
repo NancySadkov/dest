@@ -129,29 +129,29 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
 uint __cdecl16far ovc26_usesStExit(int entityIndex)
 
 {
-  byte *pbVar1;
+  byte *flagByte;
   char *pcVar3;
-  byte bVar4;
+  byte bits;
   uint uVar5;
-  int iVar6;
-  int iVar7;
-  uint uVar8;
-  uint uVar9;
-  uint uVar10;
+  int row;
+  int col;
+  uint dy;
+  uint dxSign;
+  uint dySign;
   entity_t far *peVar11;
-  char *pcVar12;
+  char *fillGrid;
   uint16_t unaff_DI;
-  uint16_t uVar13;
+  uint16_t fillGridSeg;
   uint16_t unaff_SS;
   uint8_t pathDirs [80];
-  int iStack_1e;
-  int iStack_1c;
-  int iStack_1a;
-  int iStack_18;
-  byte bStack_10;
-  byte bStack_f;
-  uint uStack_c;
-  char *pcStack_6;
+  int dirPos;
+  int bitPos;
+  int bestCol;
+  int bestRow;
+  byte dirIndex;
+  byte dirCount;
+  uint bestDist;
+  char *cellPtr;
   
   peVar11 = Entities + entityIndex;
   uVar5 = GameTick - peVar11->tick;
@@ -163,44 +163,44 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex)
     ovc26_usesFillGrid((peVar11->base).x,(peVar11->base).y,
                        *(uint8_t *)
                         ((int)(char **)GMenuStrings + (uint)(peVar11->base).gindex * 0x95 + 0x1f));
-    iVar6 = (peVar11->base).destX - ((peVar11->base).x - 0x50);
-    if (iVar6 < 0) {
-      iVar6 = 0;
+    row = (peVar11->base).destX - ((peVar11->base).x - 0x50);
+    if (row < 0) {
+      row = 0;
     }
-    if (0xa0 < iVar6) {
-      iVar6 = 0xa0;
+    if (0xa0 < row) {
+      row = 0xa0;
     }
-    iVar7 = (peVar11->base).destY - ((peVar11->base).y - 0x50);
-    if (iVar7 < 0) {
-      iVar7 = 0;
+    col = (peVar11->base).destY - ((peVar11->base).y - 0x50);
+    if (col < 0) {
+      col = 0;
     }
-    if (0xa0 < iVar7) {
-      iVar7 = 0xa0;
+    if (0xa0 < col) {
+      col = 0xa0;
     }
-    uVar13 = (uint16_t)((ulong)FillGrid >> 0x10);
-    pcVar12 = (char *)FillGrid;
-    if (pcVar12[iVar7 + iVar6 * 0xa1] == '\0') {
+    fillGridSeg = (uint16_t)((ulong)FillGrid >> 0x10);
+    fillGrid = (char *)FillGrid;
+    if (fillGrid[col + row * 0xa1] == '\0') {
       debugEmptyCellCount = debugEmptyCellCount + 1;
-      uStack_c = 0xffff;
-      pcStack_6 = (uint16_t)FillGrid;
-      for (iVar6 = 0; iVar6 < 0xa1; iVar6 = iVar6 + 1) {
-        for (iVar7 = 0; pcVar3 = pcStack_6, iVar7 < 0xa1; iVar7 = iVar7 + 1) {
-          pcStack_6 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(pcStack_6) + 2)),(char *)pcStack_6 + 1);
+      bestDist = 0xffff;
+      cellPtr = (uint16_t)FillGrid;
+      for (row = 0; row < 0xa1; row = row + 1) {
+        for (col = 0; pcVar3 = cellPtr, col < 0xa1; col = col + 1) {
+          cellPtr = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(cellPtr) + 2)),(char *)cellPtr + 1);
           if ((*pcVar3 != '\0') &&
-             (uVar5 = (((peVar11->base).x - 0x50) - (peVar11->base).destX) + iVar6,
-             uVar9 = (int)uVar5 >> 0xf,
-             uVar8 = (((peVar11->base).y - 0x50) - (peVar11->base).destY) + iVar7,
-             uVar10 = (int)uVar8 >> 0xf,
-             uVar5 = ((uVar5 ^ uVar9) - uVar9) + ((uVar8 ^ uVar10) - uVar10), uVar5 < uStack_c)) {
-            iStack_1a = iVar7;
-            iStack_18 = iVar6;
-            uStack_c = uVar5;
+             (uVar5 = (((peVar11->base).x - 0x50) - (peVar11->base).destX) + row,
+             dxSign = (int)uVar5 >> 0xf,
+             dy = (((peVar11->base).y - 0x50) - (peVar11->base).destY) + col,
+             dySign = (int)dy >> 0xf,
+             uVar5 = ((uVar5 ^ dxSign) - dxSign) + ((dy ^ dySign) - dySign), uVar5 < bestDist)) {
+            bestCol = col;
+            bestRow = row;
+            bestDist = uVar5;
           }
         }
       }
-      iVar7 = iStack_1a;
-      iVar6 = iStack_18;
-      if (uStack_c == 0xffff) {
+      col = bestCol;
+      row = bestRow;
+      if (bestDist == 0xffff) {
         (peVar11->base).faction = 0x0;
         *(undefined1 *)&(peVar11->base).state = 0;
         uVar5 = GameTick;
@@ -208,7 +208,7 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex)
         return uVar5 & 0xff00;
       }
     }
-    if ((iVar6 == 0x50) && (iVar7 == 0x50)) {
+    if ((row == 0x50) && (col == 0x50)) {
       (peVar11->base).faction = 0x0;
       *(undefined1 *)&(peVar11->base).state = 0;
       uVar5 = GameTick;
@@ -216,31 +216,31 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex)
       uVar5 = uVar5 & 0xff00;
     }
     else {
-      bStack_f = 0;
-      while (pcVar12[iVar7 + iVar6 * 0xa1] != '\x01') {
-        bStack_10 = 0;
-        while ((bStack_10 < 4 &&
-               ((((SCARRY2(iVar6,(int)*(char *)(bStack_10 + 0x885)) !=
-                   iVar6 + *(char *)(bStack_10 + 0x885) < 0 ||
-                  (0xa0 < iVar6 + *(char *)(bStack_10 + 0x885))) ||
-                 (SCARRY2(iVar7,(int)*(char *)(bStack_10 + 0x889)) !=
-                  iVar7 + *(char *)(bStack_10 + 0x889) < 0)) ||
-                ((0xa0 < iVar7 + *(char *)(bStack_10 + 0x889) ||
-                 ((byte)pcVar12[(int)*(char *)(bStack_10 + 0x889) +
-                                iVar7 + (iVar6 + *(char *)(bStack_10 + 0x885)) * 0xa1] + 1 !=
-                  (uint)(byte)pcVar12[iVar7 + iVar6 * 0xa1]))))))) {
-          bStack_10 = bStack_10 + 1;
+      dirCount = 0;
+      while (fillGrid[col + row * 0xa1] != '\x01') {
+        dirIndex = 0;
+        while ((dirIndex < 4 &&
+               ((((SCARRY2(row,(int)*(char *)(dirIndex + 0x885)) !=
+                   row + *(char *)(dirIndex + 0x885) < 0 ||
+                  (0xa0 < row + *(char *)(dirIndex + 0x885))) ||
+                 (SCARRY2(col,(int)*(char *)(dirIndex + 0x889)) !=
+                  col + *(char *)(dirIndex + 0x889) < 0)) ||
+                ((0xa0 < col + *(char *)(dirIndex + 0x889) ||
+                 ((byte)fillGrid[(int)*(char *)(dirIndex + 0x889) +
+                                col + (row + *(char *)(dirIndex + 0x885)) * 0xa1] + 1 !=
+                  (uint)(byte)fillGrid[col + row * 0xa1]))))))) {
+          dirIndex = dirIndex + 1;
         }
-        if (3 < bStack_10) {
+        if (3 < dirIndex) {
                     /* WARNING: Subroutine does not return */
           ovr_stExit(0x19);
         }
-        pathDirs[bStack_f] = bStack_10 ^ 2;
-        bStack_f = bStack_f + 1;
-        iVar6 = iVar6 + *(char *)(bStack_10 + 0x885);
-        iVar7 = iVar7 + *(char *)(bStack_10 + 0x889);
+        pathDirs[dirCount] = dirIndex ^ 2;
+        dirCount = dirCount + 1;
+        row = row + *(char *)(dirIndex + 0x885);
+        col = col + *(char *)(dirIndex + 0x889);
       }
-      if (bStack_f == 0) {
+      if (dirCount == 0) {
         (peVar11->base).faction = 0x0;
         *(undefined1 *)&(peVar11->base).state = 0;
         uVar5 = GameTick;
@@ -249,18 +249,18 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex)
       }
       else {
         _fmemset(MK_FP(ST_SEG(peVar11), ST_OFF(peVar11) + 0x1b), 0, 0x14);
-        *(byte *)&(peVar11->base).state = bStack_f;
-        iStack_1c = 0;
-        iVar6 = bStack_f - 1;
-        for (iStack_1e = iVar6; -1 < iStack_1e; iStack_1e = iStack_1e + -1) {
-          bVar4 = pathDirs[iStack_1e] << (((byte)iStack_1c & 3) << 1);
-          iVar6 = CONCAT11((char)((uint)pathDirs >> 8),bVar4);
-          pbVar1 = (byte *)((int)&(peVar11->base).owner + (iStack_1c >> 2));
-          *pbVar1 = *pbVar1 | bVar4;
-          iStack_1c = iStack_1c + 1;
+        *(byte *)&(peVar11->base).state = dirCount;
+        bitPos = 0;
+        row = dirCount - 1;
+        for (dirPos = row; -1 < dirPos; dirPos = dirPos + -1) {
+          bits = pathDirs[dirPos] << (((byte)bitPos & 3) << 1);
+          row = CONCAT11((char)((uint)pathDirs >> 8),bits);
+          flagByte = (byte *)((int)&(peVar11->base).owner + (bitPos >> 2));
+          *flagByte = *flagByte | bits;
+          bitPos = bitPos + 1;
         }
         (peVar11->base).faction = 0x0;
-        uVar5 = CONCAT11((char)((uint)iVar6 >> 8),1);
+        uVar5 = CONCAT11((char)((uint)row >> 8),1);
       }
     }
   }
