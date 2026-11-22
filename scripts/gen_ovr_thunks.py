@@ -101,8 +101,8 @@ for thunk, target in thunks:
     out.append("    extrn %s:far" % target)
 out += [
     "",
-    "OVRT_TEXT segment byte public 'CODE'",
-    "    assume cs:OVRT_TEXT",
+    "THUNKS_TEXT segment byte public 'CODE'",
+    "    assume cs:THUNKS_TEXT",
     "",
 ]
 for thunk, target in thunks:
@@ -137,7 +137,7 @@ for _fp in ("FIDRQQ", "FIWRQQ"):
         "",
     ]
 
-out += ["OVRT_TEXT ends", "    end", ""]
+out += ["THUNKS_TEXT ends", "    end", ""]
 
 if apply:
     io.open(OUT, "w", encoding="ascii", newline="").write("\r\n".join(out))

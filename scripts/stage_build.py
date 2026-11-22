@@ -65,8 +65,12 @@ def main():
         s = s.replace('#include "recovered.h"', '#include "st.h"')
         # each module gets its own code segment (far code model): the recovered
         # program is ~250 KB of code, far more than one 64 KB segment can hold
-        seg = re.sub(r"[^A-Za-z0-9_]", "_", short.rsplit(".", 1)[0]).upper()
-        s = s.replace('#include "st.h"', '#include "st.h"\n#pragma codeseg %s_SEG' % seg, 1)
+        # With VROOMM (-V) TLINK overlays each module's *default* code segment, so
+        # the per-module codeseg must be suppressible.
+        if not os.environ.get("SUPPRESS_CODESEG"):
+            seg = re.sub(r"[^A-Za-z0-9_]", "_", short.rsplit(".", 1)[0]).upper()
+            s = s.replace('#include "st.h"',
+                          '#include "st.h"\n#pragma codeseg %s_SEG' % seg, 1)
         with open(os.path.join(OUT, short), "w", encoding="ascii", errors="replace") as f:
             f.write(s)
     with open(os.path.join(OUT, "MAP.TXT"), "w", encoding="ascii") as f:

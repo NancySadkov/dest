@@ -463,8 +463,8 @@
     extrn _ovc50_usesUiInputText:far
     extrn _EXT_FUN_8000_f2fa:far
 
-OVRT_TEXT segment byte public 'CODE'
-    assume cs:OVRT_TEXT
+THUNKS_TEXT segment byte public 'CODE'
+    assume cs:THUNKS_TEXT
 
     public _ovr__FakRealCvt
 _ovr__FakRealCvt proc far
@@ -2792,5 +2792,5 @@ FIWRQQ proc far
     ret
 FIWRQQ endp
 
-OVRT_TEXT ends
+THUNKS_TEXT ends
     end

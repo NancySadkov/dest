@@ -33,11 +33,11 @@ def main():
     # C0M is the medium-model startup and must match -mm on the objects
     # (C0L is the large-model one).
     rsp = ("D:\\LIB\\C0M.OBJ " + " ".join(objs) +
-           ",REBUILT.EXE,REBUILT.MAP,E:\\LIB\\CM.LIB")
+           ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\OVERLAY.LIB E:\\LIB\\CM.LIB")
     with open(os.path.join(BUILDSRC, "LINK.RSP"), "w", encoding="ascii",
               newline="\r\n") as f:
         f.write(rsp + "\n")
-    bat.append("D:\\BIN\\TLINK.EXE @LINK.RSP > LINK.LOG")
+    bat.append("D:\\BIN\\TLINK.EXE /o @LINK.RSP > LINK.LOG")   # /o: VROOMM overlays
     if os.path.exists(os.path.join(BUILDSRC, "LINK.LOG")):
         os.remove(os.path.join(BUILDSRC, "LINK.LOG"))
     for name in ("REBUILT.EXE", "REBUILT.MAP", "DONE.FLG"):
