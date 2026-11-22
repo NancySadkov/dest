@@ -240,6 +240,13 @@ int __cdecl16far ovc49_usesStExit(agnt_t *agnt,uint16_t arg2)
   int iStack_4;
   
   uVar1 = *(uint16_t *)((int)&agnt->frames + 2);
+  /* 8699:1793: the row is (agnt+2)>>1 clamped to 0..7 */
+  if ((int16_t)uVar1 < 0) {
+    uVar1 = 0;
+  }
+  if (7 < (int16_t)uVar1) {
+    uVar1 = 7;
+  }
   piVar7 = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
   iVar4 = piVar7[1];
   iVar2 = *piVar7;
@@ -804,47 +811,47 @@ uint16_t __cdecl16far ovc49_agentIsActive(agnt_t *agnt)
 void * __cdecl16far ovc49_fillGridCells(byte count,agnt_t *agnt,uint16_t arg3,uint16_t arg4)
 
 {
-  uint16_t uVar1;
+  uint16_t row;
   int iVar2;
   int iVar3;
-  int iVar4;
+  int colStart;
   void *pvVar5;
   int *piVar6;
   uint16_t unaff_DI;
   uint16_t in_stack_00000008;
-  int iStack_4;
+  int colEnd;
   
-  uVar1 = *(uint16_t *)((int)&agnt->frames + 2);
+  row = *(uint16_t *)((int)&agnt->frames + 2);
   piVar6 = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
   iVar2 = piVar6[1];
   iVar3 = *piVar6;
-  iVar4 = (int)(agnt->x - *(int *)(iVar3 + 0x17)) >> 1;
-  iStack_4 = (int)(agnt->x + *(int *)(iVar3 + 0x17)) >> 1;
-  if (iVar4 < 0) {
-    iVar4 = 0;
+  colStart = (int)(agnt->x - *(int *)(iVar3 + 0x17)) >> 1;
+  colEnd = (int)(agnt->x + *(int *)(iVar3 + 0x17)) >> 1;
+  if (colStart < 0) {
+    colStart = 0;
   }
-  if (iStack_4 < 0) {
-    iStack_4 = 0;
+  if (colEnd < 0) {
+    colEnd = 0;
   }
-  if (0x68 < iVar4) {
-    iVar4 = 0x68;
+  if (0x68 < colStart) {
+    colStart = 0x68;
   }
-  if (0x68 < iStack_4) {
-    iStack_4 = 0x68;
+  if (0x68 < colEnd) {
+    colEnd = 0x68;
   }
   if (agnt->animVariant == 0x0) {
-    _fmemset((void *)(ulong)CONCAT12(count,(int)&AgntAnms[0x75].halfWidth + 1),
-             (iStack_4 - iVar4) + 1,unaff_DI);
-    pvVar5 = _fmemset((void *)(ulong)CONCAT12(count,(int)&AgntAnms[0x75].halfWidth + 1),
-                      (iStack_4 - iVar4) + 1,unaff_DI);
+    _fmemset(MK_FP(0x1726, row * 0x69 + colStart + 0x8fa),
+             count,(colEnd - colStart) + 1);
+    pvVar5 = _fmemset(MK_FP(0x1726, row * 0x69 + colStart + 0x963),
+                      count,(colEnd - colStart) + 1);
   }
   else {
-    _fmemset((void *)(ulong)CONCAT12(count,(int)&AgntAnms[0x75].halfWidth + 1),
-             (iStack_4 - iVar4) + 1,unaff_DI);
-    _fmemset((void *)(ulong)CONCAT12(count,(int)&AgntAnms[0x75].halfWidth + 1),
-             (iStack_4 - iVar4) + 1,unaff_DI);
-    pvVar5 = _fmemset((void *)(ulong)CONCAT12(count,(int)&AgntAnms[0x75].halfWidth + 1),
-                      (iStack_4 - iVar4) + 1,unaff_DI);
+    _fmemset(MK_FP(0x1726, row * 0x69 + colStart + 0x4e0),
+             count,(colEnd - colStart) + 1);
+    _fmemset(MK_FP(0x1726, row * 0x69 + colStart + 0x549),
+             count,(colEnd - colStart) + 1);
+    pvVar5 = _fmemset(MK_FP(0x1726, row * 0x69 + colStart + 0x5b2),
+                      count,(colEnd - colStart) + 1);
   }
   return pvVar5;
 }
