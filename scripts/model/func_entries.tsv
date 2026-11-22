@@ -1,0 +1,9 @@
+1000:0264	audio_init_data
+1000:0268	fp_audio_done
+4d05:224c	L_OVC21_manage_c_224C
+4d05:263f	L_manage_4d05_2543_263F
+4d05:26e5	L_manage_4d05_2543_26E5
+4d05:28e0	manage_usesLitoa102
+4d05:2c89	L_manage_4d05_2bc4_2C89
+6ffe:166e	L_OVC44_strong_dat_166E
+7e7c:1820	L_OVC47_constrct_c_1820
