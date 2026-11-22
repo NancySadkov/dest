@@ -2253,8 +2253,8 @@ L_upd_units_5087_1d7d_202C:
         }
       }
       ovr_ovc25_tickCountdown((int)uStack_16);
-      _fmemset((void *)(ulong)*(uint *)((int)uStack_16 * 4 + 2),6,CONCAT11(uVar68,cVar25));
-      _fmemset((void *)(ulong)*(uint *)((int)uStack_16 * 4 + 2),6,CONCAT11(uVar68,cVar25));
+      _fmemset((char far *)GLeaderSheets[(int)uStack_16] + 0x6a, 0, 6);
+      _fmemset((char far *)GLeaderSheets[(int)uStack_16] + 0x76, 0, 6);
       uVar31 = ovr_randBelow(100,0);
       if ((byte)uVar31 < *(byte *)((int)*(uint32_t *)((int)uStack_16 << 2) + 0xa9)) {
         *(uint16_t *)((int)*(uint32_t *)((int)uStack_16 << 2) + 0x6c) =
@@ -3466,8 +3466,8 @@ void __cdecl16far upd_usesAlignUp4(void)
           }
         }
         ovr_ovc25_tickCountdown(uStack_16);
-        _fmemset((void *)(ulong)*(uint *)(uStack_16 * 4 + 2),6,(uint16_t)a);
-        _fmemset((void *)(ulong)*(uint *)(uStack_16 * 4 + 2),6,(uint16_t)a);
+        _fmemset((char far *)GLeaderSheets[uStack_16] + 0x6a, 0, 6);
+        _fmemset((char far *)GLeaderSheets[uStack_16] + 0x76, 0, 6);
         uVar11 = ovr_randBelow(100,0);
         if ((byte)uVar11 < *(byte *)((int)*(uint32_t *)(uStack_16 << 2) + 0xa9)) {
           *(uint16_t *)((int)*(uint32_t *)(uStack_16 << 2) + 0x6c) =

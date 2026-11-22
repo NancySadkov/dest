@@ -152,3 +152,38 @@ prototype.
 `_fmemset((void *)ZEXT24(plStack_c), v, unaff_DI)` where `plStack_c` is the
 *file length*, plus `read(fd, CONCAT22(v, plStack_c), ...)` and
 `buf.seg = (uint16_t)plStack_c`.  All three now use the allocator's pointer.
+
+## `GLeaderSheets` is the table behind `*(u16*)(i*4+2)` (four sites)
+
+The remaining table-indexed memsets were identified with a new Ghidra pass,
+`scripts/ghidra/ListMemsetCalls.java`, which lists **every** `_fmemset` call
+site with its containing function and the arguments pushed before it.  That
+also proved the C contains 52 calls where the original has only 43 - nine are
+duplicated by Ghidra's merged bodies.
+
+The two in `upd_usesAlignUp4` (`5087:2AB9` and `5087:2ADE`) push
+
+```
+6A 06        push 6            ; count
+6A 00        push 0            ; value
+8B 5E EC     mov bx,[bp-0x14]  ; leader index
+C1 E3 02     shl bx,2
+B8 7A 21     mov ax,217Ah      ; segment
+8E C0        mov es,ax
+26 ...       mov ax,es:[bx]    ; sheet offset
+05 6A 00     add ax,0x6A       ; / 0x76 in the second call
+26 ...       push es:[bx+2]    ; sheet segment
+```
+
+`217Ah` is the segment of `GLeaderSheets` in `audit/symbols.tsv`
+(`217a_DATA_game7`), whose DGROUP declaration in this tree was an array of
+*near* pointers.  `GLeaderSheets` is now `char_sheet_t far *GLeaderSheets[80]`,
+and the four calls (two in each merged copy) are
+
+```c
+_fmemset((char far *)GLeaderSheets[idx] + 0x6a, 0, 6);
+_fmemset((char far *)GLeaderSheets[idx] + 0x76, 0, 6);
+```
+
+Note the segment is a link-time constant with a relocation, not a literal: a
+hard-coded `0x217A` would move with nothing at run time.
