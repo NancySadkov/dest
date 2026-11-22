@@ -384,14 +384,14 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
   undefined1 uVar13;
   char textBuf [120];
   uint8_t msg;
-  byte bStack_6;
-  byte bStack_5;
-  int iStack_4;
+  byte statMask;
+  byte firstLeader;
+  int textWidth;
   
   pcVar9 = (char *)((ulong)sheet >> 0x10);
   sheet_00 = (char_sheet_t *)sheet;
-  bStack_6 = sheet_00->statMask;
-  if ((bStack_6 & 0x20) != 0) {
+  statMask = sheet_00->statMask;
+  if ((statMask & 0x20) != 0) {
     uVar8 = 0x1b;
     for (iVar7 = 0; iVar7 < 6; iVar7 = iVar7 + 1) {
       TextBlitX = 0x15;
@@ -409,15 +409,15 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     }
   }
   TextBlitY = 0xc;
-  if ((bStack_6 & 2) != 0) {
+  if ((statMask & 2) != 0) {
     TextBlitX = 0x15;
     uVar11 = (undefined1)Font02.ofs;
     uVar13 = (undefined1)(Font02.ofs >> 8);
     pcVar3 = manage_playerTitle(sheet_00,pcVar9,uVar11,(char)Font02.seg);
-    iStack_4 = ovr_font_textWidth(pcVar3,(char *)CONCAT13(uVar13,CONCAT12(uVar11,in_DX)));
+    textWidth = ovr_font_textWidth(pcVar3,(char *)CONCAT13(uVar13,CONCAT12(uVar11,in_DX)));
     uVar11 = 0x50;
     uVar12 = 0xde;
-    cVar1 = (char)(0x7d - iStack_4);
+    cVar1 = (char)(0x7d - textWidth);
     uVar8 = Font02.ofs;
     uVar10 = Font02.seg;
     iVar7 = ovr_ovc45_compute9((char *)&msg,(char *)CONCAT22(sheet_00,unaff_SS),
@@ -427,7 +427,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                            (char *)CONCAT22(pvVar2,(char *)0x26510),in_DX);
     ovr_blitLabel(pcVar3,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,uVar12,uVar12,uVar11);
   }
-  if ((bStack_6 & 4) != 0) {
+  if ((statMask & 4) != 0) {
     uVar11 = 0x50;
     uVar12 = 0xde;
     uVar8 = Font02.ofs;
@@ -439,7 +439,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                                                            sheet_00->alignment)->ofs));
     ovr_blitLabel(pcVar3,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,uVar12,uVar12,uVar11);
   }
-  if ((bStack_6 & 1) != 0) {
+  if ((statMask & 1) != 0) {
     uVar11 = 0x50;
     uVar12 = 0xde;
     iVar7 = (uint)sheet_00->cls * 4;
@@ -451,7 +451,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     ovr_blitLabel(pcVar3,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,uVar12,uVar12,uVar11);
   }
   TextBlitY = TextBlitY + 10;
-  if (((bStack_6 & 0x40) != 0) || (DebugVerbose != false)) {
+  if (((statMask & 0x40) != 0) || (DebugVerbose != false)) {
     TextBlitX = 0x37;
     ovr_blitLabel((char *)"Population",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                   Font02.seg,0xde,0xde,0xe0);
@@ -599,10 +599,10 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     manage_blitLabelRight
               ((char *)CONCAT13((char)((uint)iVar6 >> 8),CONCAT12((char)iVar6,pcVar3)),
                CONCAT11(uVar13,uVar11));
-    bStack_5 = manage_findFirstLeader();
+    firstLeader = manage_findFirstLeader();
     TextBlitY = TextBlitY + 0xf;
-    if (((sheet_00->titleIndex != 0) && (bStack_5 != 0xff)) &&
-       (uVar4 = 0x217a, ((char_sheet_t *)(((uint)bStack_5 << 2)))->titleIndex < 9)) {
+    if (((sheet_00->titleIndex != 0) && (firstLeader != 0xff)) &&
+       (uVar4 = 0x217a, ((char_sheet_t *)(((uint)firstLeader << 2)))->titleIndex < 9)) {
       manage_usesBlitLabel2("popularity",0x7d);
       manage_usesBlitLabel2("city blocks",0xdc);
       TextBlitY = TextBlitY + 10;

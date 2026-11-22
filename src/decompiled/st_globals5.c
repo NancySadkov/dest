@@ -985,11 +985,14 @@ char s_create_baron_or_baroness[] = "Create baron or baroness.";
 char s_create_party_member[] = "Create party member.";
 char s_Strongholds_cannot__2410_461f[] = "Strongholds cannot be placed on rivers.";
 char s_Strongholds_cannot__2410_4647[] = "Strongholds cannot be placed over seas.";
+/* 466f: "The ground is too steep.." (26 bytes) */
+char s_The_ground_is_too_ste_2410_466f[] = "The ground is too steep..";
 char s_a_fortress_cannot_be_pla_caf6[] = "A fortress cannot be placed among enemy units.";
 char s_cannot_place_another_for_4fbc[] = "Cannot place another fortress here.";
 char s_this_location_is_unsuita_f1c7[] = "This location is unsuitable for a main stronghold.  %s";
 char s_this_location_is_unsuitable_s[] = "This location is unsuitable.  %s";
-char s_your_stronghold_is_too_f_6cb9[] = "Your stronghold is too far away.";
+/* 4734: 34 bytes - one padding NUL after the literal */
+char s_your_stronghold_is_too_f_6cb9[34] = "Your stronghold is too far away.";
 undefined1 SaveAuto = 0x00;
 undefined1 suppressLoadError = 0x00;
 far_t SaveHeader = { 0x475C, 0x2410 };
@@ -1003,6 +1006,9 @@ char s_ssave_03d_2410_47a9[] = "%ssave.%03d";
 char s_Saving_2410_47b5[] = "Saving...";
 char s_Save_complete_2410_47bf[] = "Save complete.";
 char s_Save_Error_2410_47ce[] = "Save Error";
+/* 47d9/47e5: delete progress messages */
+char s_Deleting_2410_47d9[] = "Deleting...";
+char s_Delete_complete_2410_47e5[] = "Delete complete.";
 far_t Stsh_2410_47f6 = { 0x0, 0x0 };
 far_t StshCtPtr2 = { 0x0, 0x0 };
 DW StshCtOfs = { 0x0, 0x0 };
