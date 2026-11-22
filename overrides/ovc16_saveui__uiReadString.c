@@ -20,7 +20,7 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   char *pcVar6;
   uint8_t *puVar7;
   uint16_t uVar8;
-  undefined2 uVar9;
+  uint16_t uVar9;
   uint *unaff_SI;
   byte *unaff_SS;
   uint8_t *puVar10;

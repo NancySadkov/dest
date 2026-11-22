@@ -14,13 +14,13 @@ void __cdecl16far ovc13_blitAnimFrame(void)
   far_t gfx;
   
   if (GMenuFlag == '\0') {
-    blitFrameTickHi = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-    blitFrameTickLo = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t far */;
+    blitFrameTickHi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    blitFrameTickLo = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t far */;
     if (5 < BlitFrame) {
       BlitFrame = 0;
     }
-    gfx.seg = ((undefined2 *)&blitFrameSeg)[(uint)BlitFrame * 2];
-    gfx.ofs = ((undefined2 *)&blitFrameOfs)[(uint)BlitFrame * 2];
+    gfx.seg = ((uint16_t *)&blitFrameSeg)[(uint)BlitFrame * 2];
+    gfx.ofs = ((uint16_t *)&blitFrameOfs)[(uint)BlitFrame * 2];
     ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000db93)));
     BlitFrame = BlitFrame + 1;
   }
@@ -40,7 +40,7 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
   uint8_t *paletteOfs;
   uint16_t unaff_SS;
   uint8_t paletteSeg;
-  undefined2 in_stack_0000ffe2;
+  uint16_t in_stack_0000ffe2;
   uint8_t flashPalette1;
   uint8_t flashPalette2;
   uint8_t rect;
@@ -56,8 +56,8 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
     paletteOfs = (uint8_t *)0x0;
   }
   else {
-    flashTickHi = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-    flashTickLo = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t far */;
+    flashTickHi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    flashTickLo = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t far */;
     FlashToggle = 1 - (FlashToggle != 0);
     paletteSeg = (uint8_t)unaff_SS;
     ovr_vgaSetPalette(&stk_ffe2 + (uint)FlashToggle * 3,paletteSeg,0xef,1);
@@ -68,7 +68,7 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
   if ((((noAnimBlit == 0x0) && (GPaused == '\0')) && (mapViewActive == '\x01')) &&
      ((puVar1 = ovr_attact_usesBDADailyTimeCounter
                           (blitFrameTickLo,CONCAT22(in_stack_0000ffe2,blitFrameTickHi)),
-      paletteOfs != (uint8_t *)0x0 || ((ulong *)((int)(undefined4 *)&_DATA + 3U) < puVar1)))) {
+      paletteOfs != (uint8_t *)0x0 || ((ulong *)((int)(uint32_t *)&_DATA + 3U) < puVar1)))) {
     ovr_miceRestoreArea((brect_t *)&rect);
     ovc13_blitAnimFrame();
     ovr_miceBlitRect((brect_t *)&rect);
@@ -81,7 +81,7 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
 
 /* Reads the screen byte at (screenX, screenY) and returns it packed with the offset high byte. */
 
-undefined2 __cdecl16far ovc13_readPixel(int16_t screenX,int16_t screenY,brect_t *surface)
+uint16_t __cdecl16far ovc13_readPixel(int16_t screenX,int16_t screenY,brect_t *surface)
 
 {
   return CONCAT11((char)((uint)(screenY * 0x140) >> 8),*(undefined1 *)(screenX + screenY * 0x140));
@@ -144,13 +144,13 @@ void __cdecl16far ovc13_drawPanelEntitiesAll(void)
   int iVar3;
   int iVar4;
   uint entityIndex;
-  undefined2 uVar5;
+  uint16_t uVar5;
   byte y;
   int iStack_c;
   uint8_t uStack_3;
   
   for (entityIndex = 0; entityIndex < EntityCount; entityIndex = entityIndex + 1) {
-    uVar5 = (undefined2)((ulong)Entities >> 0x10);
+    uVar5 = (uint16_t)((ulong)Entities >> 0x10);
     iVar4 = (int)Entities;
     iVar3 = *(int *)((entity_t *)iVar4 + entityIndex);
     iVar2 = ((entity_t *)iVar4)[entityIndex].base.y;
@@ -166,7 +166,7 @@ void __cdecl16far ovc13_drawPanelEntitiesAll(void)
       iVar2 = iVar3 + 0xef;
       uVar5 = ovc13_readPixel(iVar2,iVar1,BlitRects + 3);
       uStack_3 = (uint8_t)uVar5;
-      uVar5 = (undefined2)((ulong)Entities >> 0x10);
+      uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       iVar4 = (int)Entities;
       if (*(char *)(iVar4 + entityIndex * 0x37 + 0x18) == '\0') {
         if ((*(uint *)(iVar4 + entityIndex * 0x37 + 0x14) & 1) == 0) {
@@ -216,13 +216,13 @@ void __cdecl16far ovc13_drawPanelEntities(void)
   int iVar3;
   int iVar4;
   uint uVar5;
-  undefined2 uVar6;
+  uint16_t uVar6;
   byte y;
   uint8_t uStack_3;
   
   if (unitTypeFilter == -1) {
     for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
-      uVar6 = (undefined2)((ulong)Entities >> 0x10);
+      uVar6 = (uint16_t)((ulong)Entities >> 0x10);
       iVar4 = (int)Entities;
       iVar2 = *(int *)((entity_t *)iVar4 + uVar5);
       iVar3 = ((entity_t *)iVar4)[uVar5].base.y;
@@ -238,7 +238,7 @@ void __cdecl16far ovc13_drawPanelEntities(void)
         iVar3 = iVar2 + 0xef;
         uVar6 = ovc13_readPixel(iVar3,iVar1,BlitRects + 3);
         uStack_3 = (uint8_t)uVar6;
-        uVar6 = (undefined2)((ulong)Entities >> 0x10);
+        uVar6 = (uint16_t)((ulong)Entities >> 0x10);
         iVar4 = (int)Entities;
         if (*(char *)(iVar4 + uVar5 * 0x37 + 0x18) == '\0') {
           if ((*(uint *)(iVar4 + uVar5 * 0x37 + 0x14) & 1) == 0) {
@@ -296,7 +296,7 @@ void __cdecl16far ovc13_drawPanelLeaders(void)
     if (((char_sheet_t *)(((uint)bStack_3 << 2)))->active != '\0') {
       iVar3 = ((char_sheet_t *)(((uint)bStack_3 << 2)))->x;
       iVar4 = ((char_sheet_t *)(((uint)bStack_3 << 2)))->y;
-      if ((((*(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x3f) == '\0') ||
+      if ((((*(char *)((int)*(uint32_t *)((uint)bStack_3 << 2) + 0x3f) == '\0') ||
            (DebugVerbose != false)) ||
           (((*(short (*) [60] [148])GMapFlags)[iVar4][iVar3] & 8U) != 0)) &&
          (((PanelGridX <= iVar3 && (iVar3 <= PanelGridX + 0x22)) &&
@@ -378,16 +378,16 @@ void __cdecl16far ovc13_usesBlitRects(void)
   uint16_t uVar9;
   byte flagsLo;
   short *flagsAbove;
-  undefined2 uStack_1a;
+  uint16_t uStack_1a;
   short *flagsHere;
-  undefined2 uStack_16;
+  uint16_t uStack_16;
   byte *cellsHere;
-  undefined2 uStack_12;
+  uint16_t uStack_12;
   byte *cellsBelow;
-  undefined2 uStack_e;
+  uint16_t uStack_e;
   int destY;
   int row;
-  undefined2 uVar4;
+  uint16_t uVar4;
   
   seg = BlitRects[3].seg;
   PanelGridX = GfxRndSeed + -0x11;
@@ -490,7 +490,7 @@ void __cdecl16far ovc13_drawPanelCell(int x,int y)
   int iVar5;
   int iVar6;
   uint uVar7;
-  undefined2 uVar8;
+  uint16_t uVar8;
   uint8_t uStack_a;
   uint8_t uStack_8;
   uint8_t uStack_6;
@@ -547,13 +547,13 @@ void __cdecl16far ovc13_usesScreenY2(void)
   int iVar4;
   int iVar5;
   uint uVar6;
-  undefined2 uVar7;
+  uint16_t uVar7;
   byte y;
   uint8_t uStack_3;
   
   if (unitTypeFilter == -1) {
     for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
-      uVar7 = (undefined2)((ulong)Entities >> 0x10);
+      uVar7 = (uint16_t)((ulong)Entities >> 0x10);
       iVar4 = (int)Entities;
       uVar1 = *(uint *)((entity_t *)iVar4 + uVar6);
       iVar3 = ((entity_t *)iVar4)[uVar6].base.y;
@@ -571,7 +571,7 @@ void __cdecl16far ovc13_usesScreenY2(void)
         iVar4 = iVar4 + 0xc;
         uVar7 = ovc13_readPixel(iVar4,screenY,BlitRects);
         uStack_3 = (uint8_t)uVar7;
-        uVar7 = (undefined2)((ulong)Entities >> 0x10);
+        uVar7 = (uint16_t)((ulong)Entities >> 0x10);
         iVar5 = (int)Entities;
         if (*(char *)(iVar5 + uVar6 * 0x37 + 0x18) == '\0') {
           if ((*(uint *)(iVar5 + uVar6 * 0x37 + 0x14) & 1) == 0) {
@@ -621,10 +621,10 @@ int __cdecl16far ovc13_usesEntities(int entityIndex)
 {
   int iVar1;
   byte bVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   
   iVar1 = (int)Entities;
-  uVar3 = (undefined2)((ulong)Entities >> 0x10);
+  uVar3 = (uint16_t)((ulong)Entities >> 0x10);
   if (unitTypeFilter == 0xfe) {
 L_OVC13_3d16_1045_10C4:
     if (partyFilter == -1) {
@@ -675,13 +675,13 @@ void __cdecl16far ovc13_drawWindowEntities(void)
   int iVar4;
   int iVar5;
   uint entityIndex;
-  undefined2 uVar6;
+  uint16_t uVar6;
   byte y;
   int iStack_c;
   uint8_t uStack_3;
   
   for (entityIndex = 0; entityIndex < EntityCount; entityIndex = entityIndex + 1) {
-    uVar6 = (undefined2)((ulong)Entities >> 0x10);
+    uVar6 = (uint16_t)((ulong)Entities >> 0x10);
     iVar4 = (int)Entities;
     uVar1 = *(uint *)((entity_t *)iVar4 + entityIndex);
     iVar3 = ((entity_t *)iVar4)[entityIndex].base.y;
@@ -699,7 +699,7 @@ void __cdecl16far ovc13_drawWindowEntities(void)
       iVar4 = iVar4 + 0xc;
       uVar6 = ovc13_readPixel(iVar4,screenY,BlitRects);
       uStack_3 = (uint8_t)uVar6;
-      uVar6 = (undefined2)((ulong)Entities >> 0x10);
+      uVar6 = (uint16_t)((ulong)Entities >> 0x10);
       iVar5 = (int)Entities;
       if (*(char *)(iVar5 + entityIndex * 0x37 + 0x18) == '\0') {
         if ((*(uint *)(iVar5 + entityIndex * 0x37 + 0x14) & 1) == 0) {
@@ -757,7 +757,7 @@ void __cdecl16far ovc13_drawPanelHighlight(void)
       if (((char_sheet_t *)(((uint)bStack_3 << 2)))->active != '\0') {
         uVar1 = ((char_sheet_t *)(((uint)bStack_3 << 2)))->x;
         uVar2 = ((char_sheet_t *)(((uint)bStack_3 << 2)))->y;
-        if ((((*(char *)((int)*(undefined4 *)((uint)bStack_3 << 2) + 0x3f) == '\0') ||
+        if ((((*(char *)((int)*(uint32_t *)((uint)bStack_3 << 2) + 0x3f) == '\0') ||
              (DebugVerbose != false)) ||
             (((*(short (*) [60] [148])GMapFlags)[uVar2][uVar1] & 8U) != 0)) &&
            (((Seed_2000_d110 <= (int)uVar1 && (uVar1 <= Seed_2000_d110 + 0x69U)) &&
@@ -822,15 +822,15 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   int iStack_18;
   int iStack_16;
   short *psStack_14;
-  undefined2 uStack_12;
+  uint16_t uStack_12;
   short *psStack_10;
-  undefined2 uStack_e;
+  uint16_t uStack_e;
   byte *pbStack_c;
-  undefined2 uStack_a;
+  uint16_t uStack_a;
   byte *pbStack_8;
-  undefined2 uStack_6;
-  undefined2 uStack_4;
-  undefined2 uVar4;
+  uint16_t uStack_6;
+  uint16_t uStack_4;
+  uint16_t uVar4;
   
   Seed_2000_d110 = GfxRndSeed + -0x35;
   Seed_2000_d10e = GfxRndSeed2 + -0x18;
@@ -1067,20 +1067,20 @@ void __cdecl16far ovc13_drawHighlightedUnits(void)
 {
   uint uVar1;
   uint uVar2;
-  undefined4 uVar3;
+  uint32_t uVar3;
   char cVar4;
   int x1;
   int iVar5;
   unit_t *puVar6;
   uint uVar7;
-  undefined2 uVar8;
+  uint16_t uVar8;
   
   if (Highlight1 != -1) {
     for (uVar7 = 0xf8; uVar7 < GUnitCount; uVar7 = uVar7 + 1) {
-      uVar8 = (undefined2)((ulong)GUnits >> 0x10);
+      uVar8 = (uint16_t)((ulong)GUnits >> 0x10);
       puVar6 = (unit_t *)GUnits;
       if (((puVar6[uVar7].unitType != 0xff) &&
-          (uVar3 = *(undefined4 *)((uint)puVar6[uVar7].unitType << 2),
+          (uVar3 = *(uint32_t *)((uint)puVar6[uVar7].unitType << 2),
           *(char *)((int)uVar3 + 0x3f) == '\0')) &&
          ((puVar6[uVar7].unitType == Highlight1 || (Highlight1 == 0xff)))) {
         uVar1 = puVar6[uVar7].x;

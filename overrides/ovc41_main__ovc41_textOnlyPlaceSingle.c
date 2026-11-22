@@ -2,7 +2,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
 
 {
   char *pcVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   char cVar3;
   agnt_t *paVar4;
   code *pcVar5;
@@ -32,19 +32,19 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
   agnt_t *paVar17;
   undefined1 *puVar18;
   int unaff_SI;
-  undefined2 *unaff_DI;
+  uint16_t *unaff_DI;
   char *pcVar19;
   int iVar20;
   uint16_t *unaff_SS;
   char acStack_1aa [104];
-  undefined2 uStack_142;
-  undefined2 uStack_140;
+  uint16_t uStack_142;
+  uint16_t uStack_140;
   char *pcStack_13e;
   uint16_t *count;
-  undefined4 uStack_132;
+  uint32_t uStack_132;
   bool type;
   undefined1 uVar21;
-  undefined2 uVar22;
+  uint16_t uVar22;
   uint8_t uStack_120;
   undefined1 uStack_11f;
   undefined1 uStack_11e;
@@ -77,7 +77,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
   brect_t bStack_16;
   agnt_t *paStack_c;
   int iStack_a;
-  undefined2 uStack_8;
+  uint16_t uStack_8;
   far_t fStack_6;
   
   iVar12 = 0x10;
@@ -114,7 +114,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
       iVar20 = 0x6000;
       switch(uVar16) {
       case 0:
-        return (byte *)((int)(undefined4 *)&_DATA + 1);
+        return (byte *)((int)(uint32_t *)&_DATA + 1);
       case 2:
         cVar3 = *(char *)(uVar16 * 2 + unaff_SI);
         puVar18 = &stack0xfffe + unaff_SI;
@@ -132,13 +132,13 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
         (&stack0x6ffe)[(int)puVar18] = (&stack0x6ffe)[(int)puVar18];
         pcVar1 = pcVar19;
         *pcVar1 = *pcVar1 + cVar13;
-        *(undefined2 *)(&stack0xfed6 + (int)unaff_DI) = 0x6000;
+        *(uint16_t *)(&stack0xfed6 + (int)unaff_DI) = 0x6000;
         pcVar1 = pcVar19 + -0x61f9;
         *pcVar1 = *pcVar1;
         cVar13 = *pcVar1;
         *(undefined1 **)(&stack0xfeda + (int)unaff_DI) = &stack0xfedc + (int)unaff_DI;
-        uVar22 = *(undefined2 *)(&stack0xfeda + (int)unaff_DI);
-        *(undefined2 *)(&stack0xfeda + (int)unaff_DI) = uVar22;
+        uVar22 = *(uint16_t *)(&stack0xfeda + (int)unaff_DI);
+        *(uint16_t *)(&stack0xfeda + (int)unaff_DI) = uVar22;
         if (iVar12 == 1 || cVar13 == '\0') {
           ((char *)0x06a4)[10] = -0x6b;
           ((char *)0x06a4)[0xb] = '\x06';
@@ -147,11 +147,11 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
         uVar2 = in(&stack0xfed8 + (int)unaff_DI +
                    CONCAT11((char)((ulong)paVar4 >> 0x18),(char)((ulong)paVar4 >> 0x10) + cVar3));
         *unaff_DI = uVar2;
-        *(undefined2 *)(&stack0xfed8 + (int)unaff_DI) = uVar22;
-        *(undefined2 *)(&stack0xfed6 + (int)unaff_DI) = uVar22;
-        *(undefined2 *)(&stack0xfed4 + (int)unaff_DI) = uVar22;
-        *(undefined2 *)(&stack0xfed4 + (int)unaff_DI) =
-             *(undefined2 *)(&stack0xfed4 + (int)unaff_DI);
+        *(uint16_t *)(&stack0xfed8 + (int)unaff_DI) = uVar22;
+        *(uint16_t *)(&stack0xfed6 + (int)unaff_DI) = uVar22;
+        *(uint16_t *)(&stack0xfed4 + (int)unaff_DI) = uVar22;
+        *(uint16_t *)(&stack0xfed4 + (int)unaff_DI) =
+             *(uint16_t *)(&stack0xfed4 + (int)unaff_DI);
         pcVar5 = (code *)swi(1);
         pbVar8 = (byte *)(*pcVar5)();
         return pbVar8;
@@ -352,7 +352,7 @@ switchD_6000_ca06_caseD_1:
           }
           iStack_a = 0;
           for (uVar16 = 0; uVar16 < EntityCount; uVar16 = uVar16 + 1) {
-            uVar22 = (undefined2)((ulong)Entities >> 0x10);
+            uVar22 = (uint16_t)((ulong)Entities >> 0x10);
             iVar12 = (int)Entities;
             if ((((*(byte *)(iVar12 + uVar16 * 0x37 + 0x1a) == bStack_3c) &&
                  (paStack_22 <= (agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
@@ -364,9 +364,9 @@ switchD_6000_ca06_caseD_1:
           }
           ovr_resetTextBlitCycle();
           ovr_ovc45_compute9(acStack_1aa,
-                             (char *)CONCAT22(*(undefined2 *)((uint)bStack_3c * 4),unaff_SS),
+                             (char *)CONCAT22(*(uint16_t *)((uint)bStack_3c * 4),unaff_SS),
                              (char *)CONCAT22(Font03.ofs,
-                                              (char *)((undefined2 *)((uint)bStack_3c * 4))[1]),
+                                              (char *)((uint16_t *)((uint)bStack_3c * 4))[1]),
                              Font03.seg,'C');
           ovr_ovc41_pluralSuffix(iStack_a);
           uVar10 = 0x2410;
@@ -425,7 +425,7 @@ L_ui_unit_order_6616_0689_1054:
         _fmemset((void *)ZEXT24(unaff_SS),5,(uint16_t)count);
         iStack_a = 0;
         for (uVar16 = 0; uVar16 < EntityCount; uVar16 = uVar16 + 1) {
-          uVar22 = (undefined2)((ulong)Entities >> 0x10);
+          uVar22 = (uint16_t)((ulong)Entities >> 0x10);
           iVar12 = (int)Entities;
           if (((*(byte *)(iVar12 + uVar16 * 0x37 + 0x1a) == bStack_3c) &&
               (paStack_22 <= (agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16))) &&

@@ -3,8 +3,8 @@ void __cdecl16far attact_usesAlignUp42(void)
 {
   uint16_t *puVar1;
   uint8_t *puVar2;
-  undefined4 uVar3;
-  undefined2 uVar4;
+  uint32_t uVar3;
+  uint16_t uVar4;
   char cVar5;
   bool bVar6;
   bool bVar7;
@@ -17,7 +17,7 @@ void __cdecl16far attact_usesAlignUp42(void)
   entity_t *peVar14;
   uint16_t unaff_DI;
   uint16_t index;
-  undefined2 uVar15;
+  uint16_t uVar15;
   uint unaff_SS;
   entity_t *uStack_1e;   /* hand fix: dereferenced as uStack_1e->base */
   char cStack_1a;
@@ -197,7 +197,7 @@ L_attact_3f0b_1082_1477:
           bStack_4 = 0xff;
         }
         else {
-          uVar3 = *(undefined4 *)((uint)*(byte *)((int)&(peVar14->base).entity + 3) << 2);
+          uVar3 = *(uint32_t *)((uint)*(byte *)((int)&(peVar14->base).entity + 3) << 2);
           bStack_4 = *(byte *)((int)uVar3 + 0x89);
         }
         if (bStack_4 != 0xff) {

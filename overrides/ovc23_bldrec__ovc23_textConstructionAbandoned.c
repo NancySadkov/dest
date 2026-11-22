@@ -10,8 +10,8 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
   uint16_t play_id;
   undefined1 *puVar8;
   undefined1 *puVar9;
-  undefined4 uVar10;
-  undefined2 uVar11;
+  uint32_t uVar10;
+  uint16_t uVar11;
   char *pcVar12;
   byte bVar13;
   byte bVar14;
@@ -21,7 +21,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
   undefined1 extraout_AH;
   int iVar17;
   uint uVar18;
-  undefined4 *puVar19;
+  uint32_t *puVar19;
   byte *pbVar20;
   undefined1 *in_CX;
   byte bVar22;
@@ -32,15 +32,15 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
   uint *puVar27;
   int iVar28;
   uint *puVar30;
-  undefined2 *puVar31;
-  undefined2 *puVar32;
+  uint16_t *puVar31;
+  uint16_t *puVar32;
   char *unaff_BP;
   uint uVar33;
   uint unaff_SI;
   uint uVar34;
   uint8_t *puVar35;
-  undefined2 unaff_SS;
-  undefined2 uVar36;
+  uint16_t unaff_SS;
+  uint16_t uVar36;
   bool bVar37;
   bool bVar38;
   bool bVar39;
@@ -62,7 +62,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
   uVar43 = CONCAT22(pcVar24,0x55fe);
   uVar18 = ovr_attact_usesGUnits((int)pcVar24,(int)(seg + *(char *)(dir + 0x889)));
   if (((uVar18 & 0xff) != 0) &&
-     (puVar19 = (undefined4 *)(uint)dir, puVar19 <= (undefined4 *)((int)(undefined4 *)&_DATA + 3)))
+     (puVar19 = (uint32_t *)(uint)dir, puVar19 <= (uint32_t *)((int)(uint32_t *)&_DATA + 3)))
   {
     iVar28 = (int)puVar19 * 2;
     switch((uint16_t)(uint)puVar19)   /* hand fix: int switch */ {
@@ -71,7 +71,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
       break;
     case (uint16_t)0x2:
       uVar18 = 0x1000 << (*(byte *)((int)*puVar19 + 0x3f) & 0x1f);
-      uVar10 = *(undefined4 *)((uint)(byte)(uVar43 >> 0x10) << 2);
+      uVar10 = *(uint32_t *)((uint)(byte)(uVar43 >> 0x10) << 2);
       uVar33 = 0x1000 << ((*(byte *)((int)uVar10 + 0x3f) ^ 1) & 0x1f);
       uVar34 = 0;
       for (uVar43 = uVar43 & 0xffffff; bVar22 = (byte)(uVar43 >> 0x18), bVar22 < 4;
@@ -82,7 +82,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
                           0x3000U;
       }
       if ((((*(byte *)((int)pcVar12 * 0x12 + 0xd) & 3) != 1) || (uVar34 != uVar33)) ||
-         (uVar10 = *(undefined4 *)((uint)(byte)(uVar43 >> 0x10) << 2),
+         (uVar10 = *(uint32_t *)((uint)(byte)(uVar43 >> 0x10) << 2),
          bVar37 = ovr_ovc24_textArena((uint16_t)in_stack_0000fffc,unaff_SI,
                                       *(char *)((int)uVar10 + 0x3f)), bVar37)) {
         bVar22 = *(byte *)((int)pcVar12 * 0x12 + 0xd);
@@ -115,10 +115,10 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
       bVar29 = bVar22 - (bVar23 < AgntAnms[0xf].frmid);
       puVar26 = (uint *)CONCAT11(bVar29,bVar15);
       puVar8 = (undefined1 *)(uint)(bVar13 < dir || bVar22 < (bVar23 < AgntAnms[0xf].frmid));
-      puVar31 = (undefined2 *)(&stack0xfffe + -(int)in_CX + -(int)puVar8);
+      puVar31 = (uint16_t *)(&stack0xfffe + -(int)in_CX + -(int)puVar8);
       puVar2 = (uint *)(puVar35 + -0x57e7);
       uVar33 = (uint)(&stack0xfffe < in_CX || &stack0xfffe + -(int)in_CX < puVar8);
-      puVar32 = (undefined2 *)*puVar2;
+      puVar32 = (uint16_t *)*puVar2;
       uVar18 = *puVar2;
       *puVar2 = (uVar18 - (int)puVar31) - uVar33;
       puVar2 = (uint *)((int)puVar31 + 0x7419);
@@ -192,7 +192,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
              *(uint *)((int)puVar26 + (int)pcVar12) | (uint)puVar26;
         *(char *)((int)puVar26 + (int)pcVar12) = *(char *)((int)puVar26 + (int)pcVar12) + bVar15;
         *puVar26 = ~*puVar26;
-        puVar32 = (undefined2 *)*puVar31;
+        puVar32 = (uint16_t *)*puVar31;
         uVar18 = CONCAT11(bVar21,dir - 0x18) & 0x9e1f;
         bVar41 = (int)uVar18 < 0;
         bVar40 = uVar18 == 0;
@@ -295,7 +295,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
               cVar44 = '\x01';
             }
           } while (*(int *)(play_id * 2 + -0x6e25) == -1);
-          uVar36 = (undefined2)((ulong)in_stack_00000000 >> 0x10);
+          uVar36 = (uint16_t)((ulong)in_stack_00000000 >> 0x10);
           if (*(char *)(play_id + 0x90ec) != '\0') break;
           iVar28 = 0x6964;
           ovc23_usesCornerBR2(play_id,(uint)*(byte *)(*(int *)(play_id * 2 + -0x6e25) * 0x12 + 7));

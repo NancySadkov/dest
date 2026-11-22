@@ -7,20 +7,20 @@ int __cdecl16far __INITEXT(void)
   uint uVar4;
   code *pcVar5;
   long lVar6;
-  undefined2 uVar7;
+  uint16_t uVar7;
   char cVar8;
-  undefined2 uVar9;
+  uint16_t uVar9;
   byte extraout_AH;
   uint uVar10;
   uint uVar11;
   int iVar12;
-  undefined2 in_BX;
+  uint16_t in_BX;
   byte *pbVar13;
   byte *pbVar14;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   bool bVar15;
   undefined1 uVar16;
-  undefined4 uVar17;
+  uint32_t uVar17;
   uint8_t cmpBuf [8];
   uint uStack_17;
   uint uStack_f;
@@ -47,7 +47,7 @@ L__INITEXT_0EEC:
         if (cVar8 == -0x80) {
           pcVar5 = (code *)swi(0x2f);
           (*pcVar5)();
-          *(undefined2 *)((char *)0x43) = in_BX;
+          *(uint16_t *)((char *)0x43) = in_BX;
           ((char *)0x45)[0] = '\0';
           ((char *)0x45)[1] = -0x10;
           (**(code **)((char *)0x43))();
@@ -60,7 +60,7 @@ L__INITEXT_0EEC:
                      (int)((ulong)uVar17 >> 0x10);
                 uVar17 = (**(code **)((char *)0x43))();
                 if ((int)uVar17 != 0) {
-                  *(undefined2 *)((char *)0x3a) = in_BX;
+                  *(uint16_t *)((char *)0x3a) = in_BX;
                   *(int *)((char *)0x3c) = (int)((ulong)uVar17 >> 0x10);
                   uVar10 = (uint)((ulong)uVar11 * 0x400);
                   uVar4 = *(uint *)((char *)0x3a);

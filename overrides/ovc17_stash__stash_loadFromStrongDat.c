@@ -17,10 +17,10 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
   pfVar4 = (far_t far *)entry.ofs;
   if (*(char *)MK_FP(entry.seg, entry.ofs) == '\0') {
     uVar6 = in_DX;
-    pfVar4 = fmMalloc((far_t *)*(undefined2 *)((int)&((far_t *)(entry.ofs + 4))->ofs + 1),
+    pfVar4 = fmMalloc((far_t *)*(uint16_t *)((int)&((far_t *)(entry.ofs + 4))->ofs + 1),
                       CONCAT13(in_stack_0000fff1,
                                CONCAT12(in_stack_0000fff0,
-                                        *(undefined2 *)((int)&((far_t far *)(entry.ofs + 4))->seg + 1)))
+                                        *(uint16_t *)((int)&((far_t far *)(entry.ofs + 4))->seg + 1)))
                      );
     if (pfVar4 == (far_t far *)0x0 && uVar6 == 0) {
       pfVar4 = (far_t far *)0x0;
@@ -30,23 +30,23 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
           *(int *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1) == 0) {
         uVar7 = uVar6;
         stshSeek(StshStrongDatHnd,
-                 CONCAT22(*(undefined2 *)((int)&((far_t far *)entry.ofs)->seg + 1),
-                          *(undefined2 *)((int)&((far_t far *)entry.ofs)->ofs + 1)));
+                 CONCAT22(*(uint16_t *)((int)&((far_t far *)entry.ofs)->seg + 1),
+                          *(uint16_t *)((int)&((far_t far *)entry.ofs)->ofs + 1)));
         stshRead();
-        pfVar5 = ovr_heapMalloc((far_t far *)*(undefined2 *)((int)&((far_t far *)(entry.ofs + 4))->ofs + 1),
+        pfVar5 = ovr_heapMalloc((far_t far *)*(uint16_t *)((int)&((far_t far *)(entry.ofs + 4))->ofs + 1),
                                 CONCAT13(in_stack_0000fff1,
                                          CONCAT12(in_stack_0000fff0,
-                                                  *(undefined2 *)
+                                                  *(uint16_t *)
                                                    ((int)&((far_t far *)(entry.ofs + 4))->seg + 1))));
         *(uint16_t *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1) = uVar7;
-        *(undefined2 *)((int)&((far_t far *)(entry.ofs + 0x10))->ofs + 1) =(uint16_t) pfVar5;
+        *(uint16_t *)((int)&((far_t far *)(entry.ofs + 0x10))->ofs + 1) =(uint16_t) pfVar5;
         if (*(int *)((int)&((far_t far *)(entry.ofs + 0x10))->ofs + 1) == 0 &&
             *(int *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1) == 0) {
           bVar3 = false;
         }
         else {
-          memcpy((char *)CONCAT22(*(undefined2 *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1),
-                                  (char *)*(undefined2 *)
+          memcpy((char *)CONCAT22(*(uint16_t *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1),
+                                  (char *)*(uint16_t *)
                                            ((int)&((far_t far *)(entry.ofs + 0x10))->ofs + 1)),
                  (char *)CONCAT22(uVar6,pfVar4),*(word *)((int)&((far_t far *)(entry.ofs + 4))->ofs + 1)
                 );
@@ -55,8 +55,8 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
       }
       else {
         memcpy((char *)CONCAT22(uVar6,pfVar4),
-               (char *)CONCAT22(*(undefined2 *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1),
-                                (char *)*(undefined2 *)
+               (char *)CONCAT22(*(uint16_t *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1),
+                                (char *)*(uint16_t *)
                                          ((int)&((far_t far *)(entry.ofs + 0x10))->ofs + 1)),
                *(word *)((int)&((far_t far *)(entry.ofs + 4))->ofs + 1));
         bVar3 = true;
@@ -84,10 +84,10 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
           uVar6 = Stsh_2410_47f6.ofs;
           *(uint16_t *)((int)&((far_t far *)(entry.ofs + 0xc))->seg + 1) = Stsh_2410_47f6.seg;
           *(uint16_t *)((int)&((far_t far *)(entry.ofs + 0xc))->ofs + 1) = uVar6;
-          *(undefined2 *)((int)&((far_t far *)(entry.ofs + 8))->seg + 1) = 0;
-          *(undefined2 *)((int)&((far_t far *)(entry.ofs + 8))->ofs + 1) = 0;
+          *(uint16_t *)((int)&((far_t far *)(entry.ofs + 8))->seg + 1) = 0;
+          *(uint16_t *)((int)&((far_t far *)(entry.ofs + 8))->ofs + 1) = 0;
           *(uint16_t far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  0xb) = in_DX;
-          *(undefined2 far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  9) = entry.ofs;
+          *(uint16_t far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  9) = entry.ofs;
           Stsh_2410_47f6.seg = in_DX;
           Stsh_2410_47f6.ofs = entry.ofs;
         }

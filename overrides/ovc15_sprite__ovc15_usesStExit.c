@@ -6,17 +6,17 @@ void __cdecl16far ovc15_usesStExit(int entityIndex,...)
   entity_t *peVar3;
   int iVar4;
   uint uVar5;
-  undefined2 uVar6;
+  uint16_t uVar6;
   char cStack_5;
   
   if (EntityCount < 0x259) {
     if (EntityCount != 600) {
       memcpy((char *)CONCAT22(DAT_2000_d190,Entities + EntityCount),
              (char *)CONCAT22(DAT_2000_d190,Entities + entityIndex),0x37);
-      uVar6 = (undefined2)((ulong)Entities >> 0x10);
+      uVar6 = (uint16_t)((ulong)Entities >> 0x10);
       ((entity_t *)Entities)[EntityCount].base.animFrame =
            (uint8_t)((int)(uint)((entity_t *)Entities)[entityIndex].base.animFrame >> 1);
-      uVar6 = (undefined2)((ulong)Entities >> 0x10);
+      uVar6 = (uint16_t)((ulong)Entities >> 0x10);
       puVar1 = &((entity_t *)Entities)[entityIndex].base.animFrame;
       *puVar1 = *puVar1 - ((entity_t *)Entities)[EntityCount].base.animFrame;
       uVar2 = EntityCount;
@@ -31,8 +31,8 @@ void __cdecl16far ovc15_usesStExit(int entityIndex,...)
             if (cStack_5 == '\0') {
               *(uint *)(iVar4 * 0x34 + 0x1b) = uVar2;
               peVar3 = Entities + uVar2;
-              *(undefined2 *)(iVar4 * 0x34 + 0x19) = DAT_2000_d190;
-              *(undefined2 *)(iVar4 * 0x34 + 0x17) =(uint16_t)( peVar3);
+              *(uint16_t *)(iVar4 * 0x34 + 0x19) = DAT_2000_d190;
+              *(uint16_t *)(iVar4 * 0x34 + 0x17) =(uint16_t)( peVar3);
               uVar5 = uVar5 - 1;
             }
             cStack_5 = '\x01' - (cStack_5 != '\0');

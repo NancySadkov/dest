@@ -2,7 +2,7 @@ uint16_t __stdcall16far __INITEMSPAGE(uint16_t pageCount,uint16_t frameSeg,uint1
 
 {
   code *pcVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   char extraout_AH;
   char extraout_AH_00;
   undefined1 extraout_AH_01;

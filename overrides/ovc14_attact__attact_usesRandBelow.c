@@ -4,8 +4,8 @@ void __cdecl16far attact_usesRandBelow(agnt_t *agnt,byte dir,...)
   uint16_t uVar1;
   uint uVar2;
   int iVar3;
-  undefined2 uVar4;
-  undefined2 unaff_SS;
+  uint16_t uVar4;
+  uint16_t unaff_SS;
   undefined1 uStack0007;
   byte in_stack_00000008;
   uint16_t agntX;   /* hand fix: [BP-6] is a WORD copy of agnt->x (3f0b:246f) */
@@ -13,7 +13,7 @@ void __cdecl16far attact_usesRandBelow(agnt_t *agnt,byte dir,...)
   int iStack_4;
   
   agnt = (int *)CONCAT13(uStack0007,CONCAT12(dir,agnt));
-  uVar4 = (undefined2)((ulong)agnt >> 0x10);
+  uVar4 = (uint16_t)((ulong)agnt >> 0x10);
   if (in_stack_00000008 == 0xff) {
     uVar1 = ovr_randBelow(4,*(undefined1 *)
                              ((int)(char **)GMenuStrings + (uint)agnt->gindex * 0x95 + 0x1f));

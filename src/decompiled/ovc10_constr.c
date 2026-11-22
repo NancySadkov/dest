@@ -33,11 +33,11 @@ int __cdecl16far constr_getCellAtOffset(int dx,int dy)
 
 /* Returns the map-flag byte at the cursor offset (dx,dy), or 3 outside the map. */
 
-undefined2 __cdecl16far constr_getFlagsAtOffset(int dx,int dy)
+uint16_t __cdecl16far constr_getFlagsAtOffset(int dx,int dy)
 
 {
   int iVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   
   iVar1 = 0x2410;
   if ((((dx + GfxRndSeed < 0x94) && (iVar1 = 0x2410, SCARRY2(dx,GfxRndSeed) == dx + GfxRndSeed < 0))
@@ -63,7 +63,7 @@ int __cdecl16far constr_usesSmoothPrev(uint16_t dx,int dy,int *cell,...)
 
 {
   int iVar1;
-  undefined2 in_stack_0000000a;
+  uint16_t in_stack_0000000a;
   
   iVar1 = constr_getCellAtOffset(dx,dy);
   *cell = iVar1;
@@ -89,13 +89,13 @@ byte __cdecl16far constr_setHighlightAtOffset(int dx,int dy,...)
 
 {
   byte bVar1;
-  undefined2 uVar2;
-  undefined2 uVar3;
+  uint16_t uVar2;
+  uint16_t uVar3;
   
   if ((((dx + GfxRndSeed < 0x94) && (SCARRY2(dx,GfxRndSeed) == dx + GfxRndSeed < 0)) &&
       (GfxRndSeed2 - dy < 0x3c)) && (dy <= GfxRndSeed2)) {
-    uVar2 = (undefined2)((ulong)GUnitGrid >> 0x10);
-    uVar3 = (undefined2)((ulong)GUnits >> 0x10);
+    uVar2 = (uint16_t)((ulong)GUnitGrid >> 0x10);
+    uVar3 = (uint16_t)((ulong)GUnits >> 0x10);
     HighlightLevel =
          (uint)((unit_t *)GUnits)
                [*(int *)((int)(short (*) [148] [60])GUnitGrid +
@@ -183,7 +183,7 @@ void __cdecl16far blitRect(brect_t *br,...)
 
 {
   uint16_t pbr;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   ovr_blitRaw(br->x,br->y,br->w,br->h,br->seg,0xa000);
   return;
@@ -200,9 +200,9 @@ void __cdecl16far constr_blitRawToScreen(brect_t *rect)
 {
   uint16_t dstSeg;
   brect_t *br;
-  undefined2 uVar1;
+  uint16_t uVar1;
   
-  uVar1 = (undefined2)((ulong)rect >> 0x10);
+  uVar1 = (uint16_t)((ulong)rect >> 0x10);
   br = (brect_t *)rect;
   dstSeg = br->seg;
   br->seg = 0xa000;
@@ -264,13 +264,13 @@ L_constr_36ce_03a6_0489:
 
 /* [R7] body shape: compute */
 
-undefined2 __cdecl16far
+uint16_t __cdecl16far
 constr_compute1(uint8_t cornerA,uint8_t cornerB,uint8_t cornerC,byte flags,byte bit,...)
 
 {
   char cVar1;
-  undefined2 in_AX;
-  undefined2 uVar2;
+  uint16_t in_AX;
+  uint16_t uVar2;
   undefined1 extraout_AH;
   
   if ((flags & bit) == 0) {
@@ -289,13 +289,13 @@ constr_compute1(uint8_t cornerA,uint8_t cornerB,uint8_t cornerC,byte flags,byte 
 
 /* [R7] body shape: compute */
 
-undefined2 __cdecl16far
+uint16_t __cdecl16far
 constr_compute2(uint8_t cornerA,uint8_t cornerB,uint8_t cornerC,byte flags,byte bit)
 
 {
   char cVar1;
-  undefined2 in_AX;
-  undefined2 uVar2;
+  uint16_t in_AX;
+  uint16_t uVar2;
   undefined1 extraout_AH;
   
   if ((flags & bit) == 0) {
@@ -467,7 +467,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
   int iVar7;
   int iVar8;
   char *text;
-  undefined2 uVar9;
+  uint16_t uVar9;
   uint16_t unaff_SI;
   int iVar10;
   uint unaff_DI;
@@ -502,7 +502,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
   int iStack_a;
   int iStack_8;
   int iStack_6;
-  undefined2 uStack_4;
+  uint16_t uStack_4;
   
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)unaff_SS;
   dst.ofs = (uint16_t)&shades;
@@ -519,20 +519,20 @@ void __cdecl16far constr_usesAgnt_clear(void)
     iStack_12 = GfxRndSeed >> 2;
     if (0xb < 0x14bU - iStack_12) {
       (*(uint8_t *)((uint8_t *)&(gfx_06.seg))) =
-           (char)((undefined2 *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
-      gfx_06.ofs = ((undefined2 *)&l1Cut1Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
+           (char)((uint16_t *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
+      gfx_06.ofs = ((uint16_t *)&l1Cut1Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       (*(uint8_t *)((uint8_t *)&(gfx_06.seg) + 1)) =
-           (char)((uint)((undefined2 *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
+           (char)((uint)((uint16_t *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
       ovr_blitGfxRect(gfx_06,0xc - iStack_12,7,(brect_t *)BlitRects,0x10,true,
                       (char)(0xc - iStack_12),7,0x40,0x10,0x10,0);
     }
     if (0x14cU - iStack_12 < 0xdf) {
       (*(uint8_t *)((uint8_t *)&(gfx_07.seg))) =
-           (char)((undefined2 *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
-      gfx_07.ofs = ((undefined2 *)&l1Cut3Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
+           (char)((uint16_t *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
+      gfx_07.ofs = ((uint16_t *)&l1Cut3Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       (*(uint8_t *)((uint8_t *)&(gfx_07.seg) + 1)) =
-           (char)((uint)((undefined2 *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
+           (char)((uint)((uint16_t *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
       ovr_blitGfxRect(gfx_07,0x14c - iStack_12,7,(brect_t *)BlitRects,0x10,true,
                       (char)(0x14c - iStack_12),7,0x40,0x10,0x10,0);
@@ -726,12 +726,12 @@ void __cdecl16far constr_usesAgnt_clear(void)
                       iVar2 = *(int16_t *)(&mapSquareLeftX[uVar11]);
                       iVar7 = iStack_e * 0xc + *(int *)(uVar11 * 2) * 4;
                       (*(uint8_t *)((uint8_t *)&(gfx_10.seg))) =
-                           (char)*(undefined2 *)
+                           (char)*(uint16_t *)
                                   ((char *)0x28ed2 + iVar7);
-                      gfx_10.ofs = *(undefined2 *)
+                      gfx_10.ofs = *(uint16_t *)
                                     ((char *)0x28ed0 + iVar7);
                       (*(uint8_t *)((uint8_t *)&(gfx_10.seg) + 1)) =
-                           (char)((uint)*(undefined2 *)
+                           (char)((uint)*(uint16_t *)
                                          ((char *)0x28ed2 + iVar7) >> 8);
                       ovr_blitGfxRect(gfx_10,iVar2,iStack_30,(brect_t *)BlitRects,0x10,
                                       (bool)abStack_17[iVar10 + -1],(char)iVar2,(char)iStack_30,0x40
@@ -741,9 +741,9 @@ void __cdecl16far constr_usesAgnt_clear(void)
                       iVar7 = (uint)*(byte *)(iVar10 + 0x728) - iStack_30;
                       iVar2 = *(int16_t *)(&mapSquareLeftX[uVar11]);
                       iVar8 = iStack_e * 0xc + *(int *)(uVar11 * 2) * 4;
-                      uVar9 = *(undefined2 *)(iVar8 + 0x4232);
+                      uVar9 = *(uint16_t *)(iVar8 + 0x4232);
                       (*(uint8_t *)((uint8_t *)&(gfx_09.seg))) = (char)uVar9;
-                      gfx_09.ofs = *(undefined2 *)(iVar8 + 0x4230);
+                      gfx_09.ofs = *(uint16_t *)(iVar8 + 0x4230);
                       (*(uint8_t *)((uint8_t *)&(gfx_09.seg) + 1)) = (char)((uint)uVar9 >> 8);
                       ovr_blitGfxRect(gfx_09,iVar2,iVar7,(brect_t *)BlitRects,0x10,
                                       (bool)abStack_17[iVar10 + -1],(char)iVar2,(char)iVar7,0x40,
@@ -767,12 +767,12 @@ void __cdecl16far constr_usesAgnt_clear(void)
                     iVar2 = *(int16_t *)(&mapSquareLeftX[uVar11]);
                     iVar7 = iStack_e * 0xc + (uint)GSeason * 4;
                     (*(uint8_t *)((uint8_t *)&(gfx_08.seg))) =
-                         (char)*(undefined2 *)
+                         (char)*(uint16_t *)
                                 ((char *)0x28ed2 + iVar7);
-                    gfx_08.ofs = *(undefined2 *)
+                    gfx_08.ofs = *(uint16_t *)
                                   ((char *)0x28ed0 + iVar7);
                     (*(uint8_t *)((uint8_t *)&(gfx_08.seg) + 1)) =
-                         (char)((uint)*(undefined2 *)
+                         (char)((uint)*(uint16_t *)
                                        ((char *)0x28ed2 + iVar7) >> 8);
                     ovr_blitGfxRect(gfx_08,iVar2,iStack_30,(brect_t *)BlitRects,0x10,
                                     (bool)abStack_17[iVar10 + -1],(char)iVar2,(char)iStack_30,0x40,
@@ -915,10 +915,10 @@ void __cdecl16far constr_usesAgnt_clear(void)
                          (iVar10 - iVar7);
             *(int *)((iStack_34 + -0xc) * 2 + 0x1a6) = -(iStack_1a - iStack_1c);
             if ((uVar4 & 3) == 0) {
-              *(undefined2 *)((iStack_34 + -0xc) * 2) = 1;
+              *(uint16_t *)((iStack_34 + -0xc) * 2) = 1;
             }
             else {
-              *(undefined2 *)((iStack_34 + -0xc) * 2) = 0;
+              *(uint16_t *)((iStack_34 + -0xc) * 2) = 0;
               if ((uVar4 & 3) != 0) {
                 iStack_a = iStack_a + 1;
               }
@@ -1076,7 +1076,7 @@ void __cdecl16far constr_usesBlitRect4(void)
 void __cdecl16far constr_usesBlitGfxRect2(void)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   far_t gfx;
   far_t gfx_00;
   far_t gfx_01;
@@ -1130,19 +1130,19 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
     iStack_6 = GfxRndSeed * 6 >> 6;
     if (0xee < 0x166 - iStack_6) {
       (*(uint8_t *)((uint8_t *)&(gfx_02.seg))) =
-           (char)((undefined2 *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
-      gfx_02.ofs = ((undefined2 *)&l1Cut1Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
+           (char)((uint16_t *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
+      gfx_02.ofs = ((uint16_t *)&l1Cut1Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       (*(uint8_t *)((uint8_t *)&(gfx_02.seg) + 1)) =
-           (char)((uint)((undefined2 *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
+           (char)((uint)((uint16_t *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
       ovr_blitGfxRect(gfx_02,0xef - iStack_6,7,(brect_t *)(BlitRects + 3),0x10,true);
     }
     if (0x167 - iStack_6 < 0x135) {
       (*(uint8_t *)((uint8_t *)&(gfx_03.seg))) =
-           (char)((undefined2 *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
-      gfx_03.ofs = ((undefined2 *)&l1Cut3Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
+           (char)((uint16_t *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
+      gfx_03.ofs = ((uint16_t *)&l1Cut3Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       (*(uint8_t *)((uint8_t *)&(gfx_03.seg) + 1)) =
-           (char)((uint)((undefined2 *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
+           (char)((uint)((uint16_t *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
       ovr_blitGfxRect(gfx_03,0x22f - iStack_6,7,(brect_t *)(BlitRects + 3),0x10,true);
     }
@@ -1281,12 +1281,12 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
                  (7 < HighlightLevel)) {
                 iVar5 = iStack_e * 0xc + ((uint16_t *)squareSide)[uVar6] * 4;
                 (*(uint8_t *)((uint8_t *)&(gfx_06.seg))) =
-                     (char)*(undefined2 *)
+                     (char)*(uint16_t *)
                             ((char *)0x28ed2 + iVar5);
-                gfx_06.ofs = *(undefined2 *)
+                gfx_06.ofs = *(uint16_t *)
                               ((char *)0x28ed0 + iVar5);
                 (*(uint8_t *)((uint8_t *)&(gfx_06.seg) + 1)) =
-                     (char)((uint)*(undefined2 *)
+                     (char)((uint)*(uint16_t *)
                                    ((char *)0x28ed2 + iVar5) >> 8);
                 ovr_blitGfxRect(gfx_06,((uint16_t *)SquareLeftX)[uVar6],
                                 (uint)*(byte *)(dy + 0x74b) - iStack_26,(brect_t *)(BlitRects + 3),
@@ -1294,9 +1294,9 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
               }
               else {
                 iVar5 = iStack_e * 0xc + ((uint16_t *)squareSide)[uVar6] * 4;
-                uVar1 = *(undefined2 *)(iVar5 + 0x4232);
+                uVar1 = *(uint16_t *)(iVar5 + 0x4232);
                 (*(uint8_t *)((uint8_t *)&(gfx_05.seg))) = (char)uVar1;
-                gfx_05.ofs = *(undefined2 *)(iVar5 + 0x4230);
+                gfx_05.ofs = *(uint16_t *)(iVar5 + 0x4230);
                 (*(uint8_t *)((uint8_t *)&(gfx_05.seg) + 1)) = (char)((uint)uVar1 >> 8);
                 ovr_blitGfxRect(gfx_05,((uint16_t *)SquareLeftX)[uVar6],
                                 (uint)*(byte *)(dy + 0x74b) - iStack_26,(brect_t *)(BlitRects + 3),
@@ -1317,12 +1317,12 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
             else {
               iVar5 = iStack_e * 0xc + (uint)GSeason * 4;
               (*(uint8_t *)((uint8_t *)&(gfx_04.seg))) =
-                   (char)*(undefined2 *)
+                   (char)*(uint16_t *)
                           ((char *)0x28ed2 + iVar5);
-              gfx_04.ofs = *(undefined2 *)
+              gfx_04.ofs = *(uint16_t *)
                             ((char *)0x28ed0 + iVar5);
               (*(uint8_t *)((uint8_t *)&(gfx_04.seg) + 1)) =
-                   (char)((uint)*(undefined2 *)
+                   (char)((uint)*(uint16_t *)
                                  ((char *)0x28ed2 + iVar5) >> 8);
               ovr_blitGfxRect(gfx_04,((uint16_t *)SquareLeftX)[uVar6],
                               (uint)*(byte *)(dy + 0x74b) - iStack_26,(brect_t *)(BlitRects + 3),
@@ -1463,12 +1463,12 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
       }
       if ((*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 16) & 1) != 0) {
         (*(uint8_t *)((uint8_t *)&(gfx_07.seg))) =
-             (char)*(undefined2 *)
+             (char)*(uint16_t *)
                     ((char *)0x28eda + iStack_e * 0xc);
-        gfx_07.ofs = *(undefined2 *)
+        gfx_07.ofs = *(uint16_t *)
                       ((char *)0x28ed8 + iStack_e * 0xc);
         (*(uint8_t *)((uint8_t *)&(gfx_07.seg) + 1)) =
-             (char)((uint)*(undefined2 *)
+             (char)((uint)*(uint16_t *)
                            ((char *)0x28eda + iStack_e * 0xc) >> 8);
         ovr_blitGfxRect(gfx_07,((uint16_t *)SquareLeftX)[uVar7],51,(brect_t *)(BlitRects + 3),0x10,
                         bStack_a);
@@ -1496,7 +1496,7 @@ uint __cdecl16far constr_usesGMapFlags(int x,int y,...)
   int iVar3;
   byte bVar4;
   int iVar5;
-  undefined2 uVar6;
+  uint16_t uVar6;
   int iStack_4;
   
   if ((((x < 0) || (y < 0)) || (in_AX = x + 1, 0x93 < (int)in_AX)) ||
@@ -1505,7 +1505,7 @@ uint __cdecl16far constr_usesGMapFlags(int x,int y,...)
     uVar1 = in_AX & 0xff00;
   }
   else {
-    uVar6 = (undefined2)((ulong)GMapFlags >> 0x10);
+    uVar6 = (uint16_t)((ulong)GMapFlags >> 0x10);
     psVar2 = (short *)(x * 2);
     if ((((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) == 0) &&
        (psVar2 = (*(short (*) [60] [148])GMapFlags)[y] + x, (psVar2[0x94] & 3U) == 0)) {
@@ -1554,11 +1554,11 @@ uint __cdecl16far constr_usesGMapFlags2(int x,int y,...)
   undefined1 extraout_AH_00;
   undefined1 uVar3;
   short (*paasVar4) [60] [148];
-  undefined2 uVar5;
+  uint16_t uVar5;
   byte bStack_4;
   byte bStack_3;
   
-  uVar5 = (undefined2)((ulong)GMapFlags >> 0x10);
+  uVar5 = (uint16_t)((ulong)GMapFlags >> 0x10);
   paasVar4 = (short (*) [60] [148])GMapFlags;
   uVar1 = (*paasVar4)[y][x];
   if ((uVar1 & 3) == 0) {

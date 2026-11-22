@@ -10,8 +10,8 @@ void __cdecl16far ovc38_showAchievements(void)
   uint16_t uVar4;
   byte *unaff_SS;
   uint8_t menuState;
-  undefined2 uStack_66;
-  undefined2 uStack_64;
+  uint16_t uStack_66;
+  uint16_t uStack_64;
   uint8_t text;
   far_t fStack_a;
   undefined1 *uStack_6;   /* hand fix: dereferenced as *uStack_6 */

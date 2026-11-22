@@ -8,12 +8,12 @@
 
 
 /* 1403:000d */
-undefined2 __stdcall16far __OVRINIT(void)
+uint16_t __stdcall16far __OVRINIT(void)
 
 {
   code *pcVar1;
   uint in_AX;
-  undefined2 uVar2;
+  uint16_t uVar2;
   bool bVar3;
   uint in_stack_00000004;
   uint in_stack_00000006;
@@ -58,27 +58,27 @@ void __cdecl16far __OvrResetInterruptVector(void)
 
 {
   code *pcVar1;
-  undefined2 uVar2;
-  undefined2 in_BX;
-  undefined2 unaff_ES;
-  undefined2 in_stack_00000000;
-  undefined2 in_stack_00000002;
+  uint16_t uVar2;
+  uint16_t in_BX;
+  uint16_t unaff_ES;
+  uint16_t in_stack_00000000;
+  uint16_t in_stack_00000002;
   
   pcVar1 = (code *)swi(0x21);
   (*pcVar1)();
   pcVar1 = (code *)swi(0x21);
   (*pcVar1)(in_BX);
-  *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = in_stack_00000000;
-  *(undefined2 *)(byte *)__C0_ASM_CopyRight = in_stack_00000002;
+  *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = in_stack_00000000;
+  *(uint16_t *)(byte *)__C0_ASM_CopyRight = in_stack_00000002;
   if (*(int *)((int)&GUnitDescriptions[0xf].ofs + 1) == 0) {
     pcVar1 = (code *)swi(0x21);
     uVar2 = (*pcVar1)();
-    *(undefined2 *)((int)&GUnitDescriptions[0xf].ofs + 1) = uVar2;
+    *(uint16_t *)((int)&GUnitDescriptions[0xf].ofs + 1) = uVar2;
   }
   else {
     pcVar1 = (code *)swi(0x21);
     (*pcVar1)();
-    *(undefined2 *)((int)&GUnitDescriptions[0xf].ofs + 1) = 0;
+    *(uint16_t *)((int)&GUnitDescriptions[0xf].ofs + 1) = 0;
   }
   return;
 }
@@ -89,16 +89,16 @@ void __cdecl16far __OvrResetInterruptVector(void)
 void __cdecl16far __OVREXIT(void)
 
 {
-  undefined2 uVar1;
-  undefined2 uVar2;
+  uint16_t uVar1;
+  uint16_t uVar2;
   
   uVar1 = (uint)startx;   /* hand fix: startx is a function */
   uVar2 = 0x2410;
   if (*(int *)((int)&GUnitDescriptions[0xf].ofs + 1) != 0) {
     __OvrResetInterruptVector();
   }
-  (*(code *)*(undefined2 *)&__CALLEMSEXIT)(0x1000,uVar2);
-  (*(code *)*(undefined2 *)&__CALLEXTEXIT)(0x1000);
+  (*(code *)*(uint16_t *)&__CALLEMSEXIT)(0x1000,uVar2);
+  (*(code *)*(uint16_t *)&__CALLEXTEXIT)(0x1000);
   return;
 }
 
@@ -122,11 +122,11 @@ void __cdecl16near __OvrExeOpenEnv(void)
   char *pcVar1;
   char cVar2;
   code *pcVar3;
-  undefined2 uVar4;
+  uint16_t uVar4;
   byte bVar5;
   char *pcVar6;
   char *pcVar7;
-  undefined2 uStack0002;
+  uint16_t uStack0002;
   
   pcVar3 = (code *)swi(0x21);
   bVar5 = (*pcVar3)();
@@ -168,7 +168,7 @@ void __cdecl16near __OvrExeOpenEnvPath(void)
   byte *pbVar2;
   byte bVar3;
   byte *pbVar4;
-  undefined2 uVar5;
+  uint16_t uVar5;
   byte bVar6;
   int iVar7;
   byte *pbVar8;
@@ -240,12 +240,12 @@ void __cdecl16near OvrDoOpenFile(void)
   int unaff_BP;
   char *pcVar5;
   char *unaff_DI;
-  undefined2 unaff_ES;
-  undefined2 unaff_SS;
+  uint16_t unaff_ES;
+  uint16_t unaff_SS;
   int iVar6;
   
-  iVar6 = (int)((ulong)*(undefined4 *)(unaff_BP + 6) >> 0x10);
-  pcVar5 = (char *)(char *)*(undefined4 *)(unaff_BP + 6);
+  iVar6 = (int)((ulong)*(uint32_t *)(unaff_BP + 6) >> 0x10);
+  pcVar5 = (char *)(char *)*(uint32_t *)(unaff_BP + 6);
   if (iVar6 != 0 || pcVar5 != (char *)0x0) {
     iVar4 = 0xc;
     do {
@@ -284,15 +284,15 @@ void __cdecl16near __OvrReadHeader(void)
 
 /* 1403:0298 */
 
-undefined2 __cdecl16near __InitModules(void)
+uint16_t __cdecl16near __InitModules(void)
 
 {
   uint *puVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   uint uVar3;
   uint uVar4;
   char *pcVar5;
-  undefined2 uVar6;
+  uint16_t uVar6;
   bool bVar7;
   
   iRam0001000b = _psp + 0x10;
@@ -302,8 +302,8 @@ undefined2 __cdecl16near __InitModules(void)
   pcVar5 = (char *)0x242a0;
   do {
     if (((*(uint *)(pcVar5 + 4) & 2) != 0) && (*(int *)(pcVar5 + 2) != 0)) {
-      uVar2 = *(undefined2 *)pcVar5;
-      *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xe) = uVar2;
+      uVar2 = *(uint16_t *)pcVar5;
+      *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0xe) = uVar2;
       if (((byte *)__C0_ASM_CopyRight)[0x16] == 0xff) {
         ((byte *)__C0_ASM_CopyRight + 0xe)[0] = 0;
         ((byte *)__C0_ASM_CopyRight + 0xe)[1] = 0;
@@ -339,13 +339,13 @@ undefined2 __cdecl16near __InitModules(void)
 void __cdecl16near __OvrInitReadSegs(void)
 
 {
-  undefined2 *puVar1;
+  uint16_t *puVar1;
   uint uVar2;
   int iVar3;
   int iVar4;
   int iVar5;
   bool bVar6;
-  undefined2 uVar7;
+  uint16_t uVar7;
   
   uVar7 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 59));
   (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 55));
@@ -358,7 +358,7 @@ void __cdecl16near __OvrInitReadSegs(void)
                                  (uint)(*(uint *)__C0_ASM_CopyRight < *(uint *)__C0_ASM_CopyRight),
                                  *(uint *)__C0_ASM_CopyRight - *(uint *)__C0_ASM_CopyRight) / 0x10)
                   + (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)), uVar2 <= (uint)uVar7))) {
-    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
+    *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0xc) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
     *(int *)((byte *)__C0_ASM_CopyRight + 0x18) = iVar3;
     iVar5 = iVar4;
     (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = uVar2;
@@ -379,7 +379,7 @@ void __cdecl16near __OvrInitReadSegs(void)
           __OvrUntrapJmps();
         }
         *(int *)((byte *)__C0_ASM_CopyRight + 10) = iVar3;
-        puVar1 = (undefined2 *)((int)(uint16_t *)&__brklvl + 1);
+        puVar1 = (uint16_t *)((int)(uint16_t *)&__brklvl + 1);
         (*(code *)*puVar1)(0x1000,iVar3,uVar7);
         iVar3 = *(int *)((byte *)__C0_ASM_CopyRight + 0x18);
       } while (iVar3 != 0);
@@ -416,7 +416,7 @@ void __cdecl16near __OvrRead(void)
   uint unaff_SI;
   int unaff_DI;
   bool bVar4;
-  undefined2 uStack0002;
+  uint16_t uStack0002;
   
   pcVar1 = (code *)swi(0x21);
   (*pcVar1)();
@@ -450,16 +450,16 @@ void __cdecl16near __OvrDoFixups(void)
 
 {
   uint uVar1;
-  undefined2 *puVar2;
+  uint16_t *puVar2;
   int iVar3;
   uint uVar4;
   uint in_CX;
   uint uVar5;
-  undefined2 *puVar6;
-  undefined2 unaff_ES;
+  uint16_t *puVar6;
+  uint16_t unaff_ES;
   
   uVar1 = *(uint *)((byte *)__C0_ASM_CopyRight + 4);
-  puVar6 = (undefined2 *)(uVar1 & 0xf);
+  puVar6 = (uint16_t *)(uVar1 & 0xf);
   iVar3 = *(int *)((byte *)__C0_ASM_CopyRight + 0xc);
   uVar5 = in_CX >> 1;
   do {
@@ -485,10 +485,10 @@ void __cdecl16near __OvrFixupFunref(void)
   uint uVar1;
   uint uVar2;
   int iVar3;
-  undefined2 in_DX;
+  uint16_t in_DX;
   int in_BX;
   int iVar4;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   
   uVar1 = CONCAT11(*(undefined1 *)(in_BX + -1),*(undefined1 *)(in_BX + -1)) & 0xf807;
   if (((((char)(uVar1 >> 8) == -0x48) &&
@@ -517,7 +517,7 @@ void __cdecl16near __OvrFixupFunref(void)
 void __cdecl16near __ReadOvrDisk(void)
 
 {
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   bool bVar1;
   
   bVar1 = false;
@@ -536,12 +536,12 @@ void __cdecl16near __ReadOvrDisk(void)
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* WARNING: Unknown calling convention -- yet parameter storage is locked */
 
-undefined2 __OvrTrapHandler(void)
+uint16_t __OvrTrapHandler(void)
 
 {
-  undefined2 *puVar1;
-  undefined2 in_AX;
-  undefined4 in_stack_00000000;
+  uint16_t *puVar1;
+  uint16_t in_AX;
+  uint32_t in_stack_00000000;
   
   if ((int)in_stack_00000000 == 2) {
     __OvrFixupTrap();
@@ -554,7 +554,7 @@ undefined2 __OvrTrapHandler(void)
     UNLOCK();
   }
   ((byte *)__C0_ASM_CopyRight)[0x16] = ((byte *)__C0_ASM_CopyRight)[0x16] & 0xf7;
-  puVar1 = (undefined2 *)((int)(uint16_t *)&__brklvl + 1);
+  puVar1 = (uint16_t *)((int)(uint16_t *)&__brklvl + 1);
   (*(code *)*puVar1)(0x1000);
   return in_AX;
 }
@@ -569,7 +569,7 @@ void __cdecl16near __OvrAllocateSpace(void)
   byte *pbVar1;
   uint uVar2;
   uint in_DX;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   byte in_CF;
   
   (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 63)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 63)) + 1;
@@ -582,19 +582,19 @@ void __cdecl16near __OvrAllocateSpace(void)
     }
     in_CF = 0;
     if (((byte *)__C0_ASM_CopyRight)[0x17] == 0) {
-      (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
+      (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0x18);
       __OvrAllocEvict();
       __OvrCalcCodeSz();
     }
     else {
       pbVar1 = (byte *)__C0_ASM_CopyRight + 0x17;
-      (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
+      (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0x18);
       *pbVar1 = *pbVar1 - 1;
       __OvrCompactHeap();
       __OvrAddToLoadList_2();
     }
   }
-  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
+  *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0xc) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
   return;
 }
 
@@ -609,7 +609,7 @@ void __cdecl16near __OvrFixupTrap(void)
   int in_AX;
   uint uVar2;
   uint uVar3;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   int iVar4;
   undefined1 uVar5;
   
@@ -618,7 +618,7 @@ void __cdecl16near __OvrFixupTrap(void)
     uVar5 = 0;
     ((byte *)__C0_ASM_CopyRight)[0x16] = ((byte *)__C0_ASM_CopyRight)[0x16] | 8;
     __OvrAllocateSpace();
-    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 10) = unaff_ES;
+    *(uint16_t *)((byte *)__C0_ASM_CopyRight + 10) = unaff_ES;
     (**(code **)((byte *)__C0_ASM_CopyRight + 0x14))();
     if ((bool)uVar5) {
       __OverlayHalt();
@@ -655,7 +655,7 @@ void __cdecl16near __OvrFixupTrap(void)
 void __cdecl16near __OvrAllocEvict(void)
 
 {
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   
   __OvrTrapJmpsAndStack();
   if (*(int *)((byte *)__C0_ASM_CopyRight + 0x14) == 0x4c3) {
@@ -681,12 +681,12 @@ void __cdecl16near __OvrAddToLoadList(void)
   do {
     iVar4 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
     iVar2 = iVar2 + 1;
-    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18);
+    (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0x18);
   } while ((*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) != 0);
   (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions) + 59));
   do {
     iVar3 = iVar2;
-    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
+    *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0x18) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1));
     (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0x10]) + 1)) = iVar4;
     uVar1 = __OvrCalcCodeSz();
     (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) - uVar1;
@@ -706,29 +706,29 @@ void __cdecl16near __OvrUntrapJmpsAndStack(void)
 
 {
   byte *pbVar1;
-  undefined2 uVar2;
-  undefined2 uVar3;
+  uint16_t uVar2;
+  uint16_t uVar3;
   int iVar4;
   byte *pbVar5;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   
   if (*(int *)((byte *)__C0_ASM_CopyRight + 8) == 0) {
     return;
   }
   if (((byte *)__C0_ASM_CopyRight)[0x1c] != 0xea) {
-    if (*(int *)((int)(undefined4 *)&_DATA + 2) != 0) {
+    if (*(int *)((int)(uint32_t *)&_DATA + 2) != 0) {
       __OvrPatchStack();
     }
-    uVar2 = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc);
+    uVar2 = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0xc);
     iVar4 = *(int *)((byte *)__C0_ASM_CopyRight + 8);
     pbVar5 = (byte *)__C0_ASM_CopyRight + 0x1c;
     do {
-      uVar3 = *(undefined2 *)(pbVar5 + 2);
+      uVar3 = *(uint16_t *)(pbVar5 + 2);
       *pbVar5 = 0xea;
       pbVar1 = pbVar5 + 3;
-      *(undefined2 *)(pbVar5 + 1) = uVar3;
+      *(uint16_t *)(pbVar5 + 1) = uVar3;
       pbVar5 = pbVar5 + 5;
-      *(undefined2 *)pbVar1 = uVar2;
+      *(uint16_t *)pbVar1 = uVar2;
       iVar4 = iVar4 + -1;
     } while (iVar4 != 0);
   }
@@ -743,22 +743,22 @@ void __cdecl16near __OvrUntrapJmps(void)
 
 {
   byte *pbVar1;
-  undefined2 uVar2;
-  undefined2 uVar3;
+  uint16_t uVar2;
+  uint16_t uVar3;
   int iVar4;
   byte *pbVar5;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   
-  uVar2 = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc);
+  uVar2 = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0xc);
   iVar4 = *(int *)((byte *)__C0_ASM_CopyRight + 8);
   pbVar5 = (byte *)__C0_ASM_CopyRight + 0x1c;
   do {
-    uVar3 = *(undefined2 *)(pbVar5 + 2);
+    uVar3 = *(uint16_t *)(pbVar5 + 2);
     *pbVar5 = 0xea;
     pbVar1 = pbVar5 + 3;
-    *(undefined2 *)(pbVar5 + 1) = uVar3;
+    *(uint16_t *)(pbVar5 + 1) = uVar3;
     pbVar5 = pbVar5 + 5;
-    *(undefined2 *)pbVar1 = uVar2;
+    *(uint16_t *)pbVar1 = uVar2;
     iVar4 = iVar4 + -1;
   } while (iVar4 != 0);
   return;
@@ -772,22 +772,22 @@ void __cdecl16near __OvrTrapJmpsAndStack(void)
 
 {
   byte *pbVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   int iVar3;
   byte *pbVar4;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   
   if (((byte *)__C0_ASM_CopyRight)[0x1c] != 0xcd) {
     uVar2 = 0;
     __OvrPatchStack();
-    *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = uVar2;
+    *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = uVar2;
     iVar3 = *(int *)((byte *)__C0_ASM_CopyRight + 8);
     pbVar4 = (byte *)__C0_ASM_CopyRight + 0x1c;
     do {
-      uVar2 = *(undefined2 *)(pbVar4 + 1);
-      *(undefined2 *)pbVar4 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[9]) + 1));
+      uVar2 = *(uint16_t *)(pbVar4 + 1);
+      *(uint16_t *)pbVar4 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[9]) + 1));
       pbVar1 = pbVar4 + 4;
-      *(undefined2 *)(pbVar4 + 2) = uVar2;
+      *(uint16_t *)(pbVar4 + 2) = uVar2;
       pbVar4 = pbVar4 + 5;
       *pbVar1 = 0;
       iVar3 = iVar3 + -1;
@@ -800,29 +800,29 @@ void __cdecl16near __OvrTrapJmpsAndStack(void)
 
 /* 1403:06e1 */
 
-undefined2 __cdecl16near __OvrCompactHeap(void)
+uint16_t __cdecl16near __OvrCompactHeap(void)
 
 {
-  undefined2 *puVar1;
+  uint16_t *puVar1;
   uint uVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   uint uVar4;
   int iVar5;
-  undefined2 *puVar6;
-  undefined2 *puVar7;
+  uint16_t *puVar6;
+  uint16_t *puVar7;
   byte *pbVar8;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   bool bVar9;
   
   uVar3 = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
   uVar2 = *(uint *)((byte *)__C0_ASM_CopyRight + 0xc);
-  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
+  *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0xc) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1));
   uVar4 = *(int *)((byte *)__C0_ASM_CopyRight + 4) + 1U >> 1;
-  puVar6 = (undefined2 *)0x0;
+  puVar6 = (uint16_t *)0x0;
   bVar9 = uVar2 <= (uint)uVar3;
   puVar7 = puVar6;
   if (bVar9) {
-    puVar6 = (undefined2 *)((uVar4 - 1) * 2);
+    puVar6 = (uint16_t *)((uVar4 - 1) * 2);
     puVar7 = puVar6;
   }
   for (; uVar4 != 0; uVar4 = uVar4 - 1) {
@@ -831,13 +831,13 @@ undefined2 __cdecl16near __OvrCompactHeap(void)
     *puVar7 = *puVar1;
     puVar7 = puVar7 + (uint)bVar9 * -2 + 1;
   }
-  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 10) = unaff_ES;
+  *(uint16_t *)((byte *)__C0_ASM_CopyRight + 10) = unaff_ES;
   if (((byte *)__C0_ASM_CopyRight)[0x1c] != 0xcd) {
     __OvrPatchStack_2();
     iVar5 = *(int *)((byte *)__C0_ASM_CopyRight + 8);
     pbVar8 = (byte *)__C0_ASM_CopyRight + 0x1f;
     do {
-      *(undefined2 *)pbVar8 = uVar3;
+      *(uint16_t *)pbVar8 = uVar3;
       pbVar8 = pbVar8 + 5;
       iVar5 = iVar5 + -1;
     } while (iVar5 != 0);
@@ -857,7 +857,7 @@ void __cdecl16near __OvrAddToLoadList_2(void)
   int iVar1;
   uint uVar2;
   int iVar3;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   
   uVar2 = __OvrCalcCodeSz();
   (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) = (*(uint16_t *)((uint8_t *)&(GUnitDescriptions[0xd]) + 1)) + uVar2;
@@ -866,7 +866,7 @@ void __cdecl16near __OvrAddToLoadList_2(void)
     iVar3 = iVar1;
     iVar1 = *(int *)((byte *)__C0_ASM_CopyRight + 0x18);
   } while (*(int *)((byte *)__C0_ASM_CopyRight + 0x18) != 0);
-  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x18) = unaff_ES;
+  *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0x18) = unaff_ES;
   ((byte *)__C0_ASM_CopyRight + 0x18)[0] = 0;
   ((byte *)__C0_ASM_CopyRight + 0x18)[1] = 0;
   return;
@@ -879,14 +879,14 @@ void __cdecl16near __OvrAddToLoadList_2(void)
 void __cdecl16near __OvrPatchStack(void)
 
 {
-  undefined2 in_CX;
+  uint16_t in_CX;
   int in_BX;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   
   __OvrPatchStack_2();
   if (in_BX != 0) {
     LOCK();
-    *(undefined2 *)(in_BX + 2) = in_CX;
+    *(uint16_t *)(in_BX + 2) = in_CX;
     UNLOCK();
   }
   return;
@@ -906,7 +906,7 @@ void __cdecl16near __OvrPatchStack_2(void)
   uint in_DX;
   uint *puVar2;
   uint *unaff_BP;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   
   puVar2 = (uint *)0x0;
   while( true ) {
@@ -945,7 +945,7 @@ int __cdecl16near __OvrGetSegMemInfo(void)
 uint __cdecl16near __OvrCalcCodeSz(void)
 
 {
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   
   return *(int *)((byte *)__C0_ASM_CopyRight + 4) + 0x11U >> 4;
 }
@@ -966,15 +966,15 @@ void __cdecl16near __OvrCalcSize(void)
 
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 
-undefined2 __cdecl16far __ISOVERLAYMOD(void)
+uint16_t __cdecl16far __ISOVERLAYMOD(void)
 
 {
   uint in_AX;
-  undefined2 uVar1;
+  uint16_t uVar1;
   
   if ((((in_AX < *(uint *)((int)&GUnitDescriptions[0xe].ofs + 1)) ||
        (*(uint *)((int)&GUnitDescriptions[0xe].seg + 1) <= in_AX)) ||
-      (uVar1 = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 10),
+      (uVar1 = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 10),
       *(int *)((int)&GUnitDescriptions[9].ofs + 1) != *(int *)0x0)) ||
      (in_AX != *(uint *)((byte *)__C0_ASM_CopyRight + 0xc))) {
     uVar1 = 0;
@@ -1000,7 +1000,7 @@ void __cdecl16far __CHECKSTACK(void)
   uint *in_CX;
   uint *puVar6;
   uint uVar7;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   
   bVar5 = false;
   iVar2 = *(int *)((int)&GUnitDescriptions[9].ofs + 1);
@@ -1012,7 +1012,7 @@ void __cdecl16far __CHECKSTACK(void)
     if (((((*puVar6 & 1) == 0) && (uVar4 = puVar6[2], uVar4 < uVar3)) && (puVar6[1] == 0)) &&
        (*(int *)0x0 == iVar2)) {
       bVar5 = true;
-      *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
+      *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = 0;
     }
     puVar6 = (uint *)(uVar7 << 1);
   }
@@ -1022,9 +1022,9 @@ void __cdecl16far __CHECKSTACK(void)
       if (uVar7 == 0) break;
       if ((((*puVar6 & 1) == 0) && (uVar4 = puVar6[2], uVar4 < uVar3)) &&
          ((puVar6[1] != 0 &&
-          ((*(int *)0x0 == iVar2 && (*(int *)((int)(undefined4 *)&_DATA + 2) == 0)))))) {
+          ((*(int *)0x0 == iVar2 && (*(int *)((int)(uint32_t *)&_DATA + 2) == 0)))))) {
         LOCK();
-        puVar1 = (uint *)((int)(undefined4 *)&_DATA + 2);
+        puVar1 = (uint *)((int)(uint32_t *)&_DATA + 2);
         uVar4 = *puVar1;
         *puVar1 = puVar6[1];
         UNLOCK();
@@ -1044,10 +1044,10 @@ int __cdecl16far _OvrInitEms(uint16_t emsHandle,uint16_t firstPage,uint16_t page
 {
   long lVar1;
   long lVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   uint uVar4;
   uint16_t uVar5;
-  undefined2 uVar6;
+  uint16_t uVar6;
   
   uVar3 = (uint)startx;   /* hand fix: startx is a function */
   if ((((byte *)__C0_ASM_CopyRight)[0xc] & 1) == 0) {
@@ -1081,20 +1081,20 @@ int __cdecl16far _OvrInitEms(uint16_t emsHandle,uint16_t firstPage,uint16_t page
       uVar5 = __INITEMSPAGE(pages,firstPage,emsHandle);
       if (uVar5 == 0) {
         lVar1 = (ulong)firstPage * 0x4000;
-        uVar6 = (undefined2)((ulong)lVar1 >> 0x10);
-        *(undefined2 *)((int)&GUnitDescriptions[0x15].ofs + 1) = (int)lVar1;
-        *(undefined2 *)((int)&GUnitDescriptions[0x15].seg + 1) = uVar6;
+        uVar6 = (uint16_t)((ulong)lVar1 >> 0x10);
+        *(uint16_t *)((int)&GUnitDescriptions[0x15].ofs + 1) = (int)lVar1;
+        *(uint16_t *)((int)&GUnitDescriptions[0x15].seg + 1) = uVar6;
         lVar2 = (ulong)pages * 0x4000 + lVar1;
-        *(undefined2 *)((int)&GUnitDescriptions[0x16].ofs + 1) = (int)lVar2;
-        *(undefined2 *)((int)&GUnitDescriptions[0x16].seg + 1) = (int)((ulong)lVar2 >> 0x10);
-        *(undefined2 *)((int)&GUnitDescriptions[0x17].ofs + 1) = (int)lVar1;
-        *(undefined2 *)((int)&GUnitDescriptions[0x17].seg + 1) = uVar6;
-        *(undefined2 *)((int)&GUnitDescriptions[0x18].ofs + 1) = 0xa48;
-        *(undefined2 *)((int)&GUnitDescriptions[0x18].seg + 1) = 0;
-        *(undefined2 *)((int)&GUnitDescriptions[9].seg + 1) = 1;
+        *(uint16_t *)((int)&GUnitDescriptions[0x16].ofs + 1) = (int)lVar2;
+        *(uint16_t *)((int)&GUnitDescriptions[0x16].seg + 1) = (int)((ulong)lVar2 >> 0x10);
+        *(uint16_t *)((int)&GUnitDescriptions[0x17].ofs + 1) = (int)lVar1;
+        *(uint16_t *)((int)&GUnitDescriptions[0x17].seg + 1) = uVar6;
+        *(uint16_t *)((int)&GUnitDescriptions[0x18].ofs + 1) = 0xa48;
+        *(uint16_t *)((int)&GUnitDescriptions[0x18].seg + 1) = 0;
+        *(uint16_t *)((int)&GUnitDescriptions[9].seg + 1) = 1;
         ((byte *)__C0_ASM_CopyRight)[0xc] = ((byte *)__C0_ASM_CopyRight)[0xc] | 2;
-        *(undefined2 *)((int)(uint32_t *)&_StartTime + 3) = 0xe9f;
-        *(undefined2 *)((int)(int *)&errno + 1) = 0xd0e;
+        *(uint16_t *)((int)(uint32_t *)&_StartTime + 3) = 0xe9f;
+        *(uint16_t *)((int)(int *)&errno + 1) = 0xd0e;
         return 0;
       }
       return uVar5;
@@ -1112,16 +1112,16 @@ void __cdecl16near OVRSWAP_1403_09c8(void)
   undefined1 *puVar2;
   code *pcVar3;
   bool bVar4;
-  undefined2 uVar5;
+  uint16_t uVar5;
   int iVar6;
-  undefined2 in_CX;
+  uint16_t in_CX;
   uint uVar7;
-  undefined2 in_DX;
+  uint16_t in_DX;
   undefined1 *puVar8;
   uint uVar9;
-  undefined2 in_BX;
+  uint16_t in_BX;
   undefined1 *puVar10;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   undefined1 in_CF;
   
   uVar5 = 0x2271;
@@ -1146,7 +1146,7 @@ void __cdecl16near OVRSWAP_1403_09c8(void)
       iVar6 = (*pcVar3)();
       bVar4 = true;
       if (iVar6 < 0) goto L_OVRSWAP_1403_09c8_0A34;
-      uVar5 = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc);
+      uVar5 = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0xc);
       for (; uVar7 != 0; uVar7 = uVar7 - 1) {
         puVar2 = puVar8;
         puVar8 = puVar8 + 1;
@@ -1174,7 +1174,7 @@ L_OVRSWAP_1403_09c8_0A34:
 void __cdecl16near OVRSWAP_1403_0a48(void)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   undefined1 *puVar2;
   undefined1 *puVar3;
   code *pcVar4;
@@ -1184,15 +1184,15 @@ void __cdecl16near OVRSWAP_1403_0a48(void)
   undefined1 *puVar8;
   uint uVar9;
   undefined1 *puVar10;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   
   pcVar4 = (code *)swi(0x67);
   iVar6 = (*pcVar4)();
   if (-1 < iVar6) {
     puVar8 = (undefined1 *)
              (undefined1 *)
-             (CONCAT22(*(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x12),
-                       *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x10)) % 0x4000);
+             (CONCAT22(*(uint16_t *)((byte *)__C0_ASM_CopyRight + 0x12),
+                       *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0x10)) % 0x4000);
     uVar9 = *(uint *)((byte *)__C0_ASM_CopyRight + 4);
     puVar10 = (undefined1 *)0x0;
     do {
@@ -1205,7 +1205,7 @@ void __cdecl16near OVRSWAP_1403_0a48(void)
       iVar6 = (*pcVar4)();
       bVar5 = true;
       if (iVar6 < 0) break;
-      uVar1 = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc);
+      uVar1 = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0xc);
       for (; uVar7 != 0; uVar7 = uVar7 - 1) {
         puVar3 = puVar10;
         puVar10 = puVar10 + 1;
@@ -1233,7 +1233,7 @@ int __cdecl16far _OvrInitExt(uint32_t startAddress,uint32_t length)
 
 {
   bool bVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   int iVar3;
   uint sizeLo;
   int in_DX;
@@ -1293,12 +1293,12 @@ L__OvrInitExt_0AD7:
         if (bVar1) break;
         bVar1 = true;
       }
-      *(undefined2 *)0x13c = 0xbfb;
-      *(undefined2 *)0x13e = 0;
-      *(undefined2 *)0x112 = 1;
+      *(uint16_t *)0x13c = 0xbfb;
+      *(uint16_t *)0x13e = 0;
+      *(uint16_t *)0x112 = 1;
       *(byte *)&OvrFlags = *(byte *)&OvrFlags | 1;
-      *(undefined2 *)&__CALLEXTEXIT = 0x1152;
-      *(undefined2 *)&__CALLEXTEMSSWAP = 0xd0e;
+      *(uint16_t *)&__CALLEXTEXIT = 0x1152;
+      *(uint16_t *)&__CALLEXTEMSSWAP = 0xd0e;
       iVar3 = 0;
     }
   }
@@ -1313,11 +1313,11 @@ L__OvrInitExt_0AD7:
 void __cdecl16near OVRSWAP_1403_0bcc(void)
 
 {
-  undefined2 uVar1;
-  undefined2 in_CX;
-  undefined2 in_DX;
-  undefined2 in_BX;
-  undefined2 unaff_ES;
+  uint16_t uVar1;
+  uint16_t in_CX;
+  uint16_t in_DX;
+  uint16_t in_BX;
+  uint16_t unaff_ES;
   undefined1 in_CF;
   bool bVar2;
   
@@ -1341,7 +1341,7 @@ void __cdecl16near OVRSWAP_1403_0bcc(void)
 void __cdecl16near OVRSWAP_1403_0bfb(void)
 
 {
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   bool bVar1;
   
   OVRSWAP_1403_0c1f();
@@ -1372,19 +1372,19 @@ void __cdecl16near OVRSWAP_1403_0c2b(void)
 
 {
   uint *puVar1;
-  undefined2 in_AX;
+  uint16_t in_AX;
   uint uVar2;
   uint uVar3;
   char *pcVar4;
-  undefined2 uVar5;
+  uint16_t uVar5;
   int iVar6;
   uint uVar7;
   uint uVar8;
-  undefined2 uVar9;
+  uint16_t uVar9;
   uint uVar10;
   uint unaff_SI;
   uint unaff_DI;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   
   uVar10 = *(uint *)((byte *)__C0_ASM_CopyRight + 4);
   uVar2 = *(uint *)__C0_ASM_CopyRight - uVar10;
@@ -1397,17 +1397,17 @@ void __cdecl16near OVRSWAP_1403_0c2b(void)
   if (uVar8 < unaff_DI || uVar8 - unaff_DI < (uint)(uVar3 < unaff_SI)) {
     pcVar4 = OVRSWAP_1403_0cd2();
     if (pcVar4 != (char *)0x0) {
-      uVar5 = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 10);
-      *(undefined2 *)((byte *)__C0_ASM_CopyRight + 10) =
-           *(undefined2 *)((byte *)__C0_ASM_CopyRight + 10);
+      uVar5 = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 10);
+      *(uint16_t *)((byte *)__C0_ASM_CopyRight + 10) =
+           *(uint16_t *)((byte *)__C0_ASM_CopyRight + 10);
       ((byte *)__C0_ASM_CopyRight + 10)[0] = 0;
       ((byte *)__C0_ASM_CopyRight + 10)[1] = 0;
       OVRSWAP_1403_0d01();
-      *(undefined2 *)((byte *)__C0_ASM_CopyRight + 10) = uVar5;
+      *(uint16_t *)((byte *)__C0_ASM_CopyRight + 10) = uVar5;
     }
     uVar10 = *(uint *)0x0;
     *(uint *)((byte *)__C0_ASM_CopyRight + 4) = uVar10;
-    iVar6 = *(int *)((int)(undefined4 *)&_DATA + 2);
+    iVar6 = *(int *)((int)(uint32_t *)&_DATA + 2);
     *(int *)((byte *)__C0_ASM_CopyRight + 6) = iVar6;
     OVRSWAP_1403_0c1f();
     unaff_SI = uVar2;
@@ -1415,8 +1415,8 @@ void __cdecl16near OVRSWAP_1403_0c2b(void)
   }
   pcVar4 = OVRSWAP_1403_0cd2();
   if (pcVar4 != (char *)0x0) {
-    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 10) =
-         *(undefined2 *)((byte *)__C0_ASM_CopyRight + 10);
+    *(uint16_t *)((byte *)__C0_ASM_CopyRight + 10) =
+         *(uint16_t *)((byte *)__C0_ASM_CopyRight + 10);
   }
   puVar1 = (uint *)((byte *)__C0_ASM_CopyRight + 4);
   uVar3 = *puVar1;
@@ -1425,12 +1425,12 @@ void __cdecl16near OVRSWAP_1403_0c2b(void)
        *(int *)((byte *)__C0_ASM_CopyRight + 6) + unaff_DI + (uint)CARRY2(uVar3,unaff_SI);
   *(uint *)((byte *)__C0_ASM_CopyRight + 0x10) = uVar10;
   *(int *)((byte *)__C0_ASM_CopyRight + 0x12) = iVar6;
-  uVar5 = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 8);
-  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x14) = uVar5;
+  uVar5 = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 8);
+  *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0x14) = uVar5;
   uVar9 = unaff_ES;
   OVRSWAP_1403_0d01();
-  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 10) = uVar9;
-  *(undefined2 *)((byte *)__C0_ASM_CopyRight + 10) = uVar5;
+  *(uint16_t *)((byte *)__C0_ASM_CopyRight + 10) = uVar9;
+  *(uint16_t *)((byte *)__C0_ASM_CopyRight + 10) = uVar5;
   return;
 }
 
@@ -1446,7 +1446,7 @@ char * __cdecl16near OVRSWAP_1403_0cd2(void)
   uint in_CX;
   uint uVar3;
   uint in_BX;
-  undefined2 unaff_BP;
+  uint16_t unaff_BP;
   uint unaff_SI;
   uint unaff_DI;
   char *pcVar4;
@@ -1468,7 +1468,7 @@ char * __cdecl16near OVRSWAP_1403_0cd2(void)
     {
       return pcVar4;
     }
-    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0x14) = unaff_BP;
+    *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0x14) = unaff_BP;
     pcVar4 = pcVar5;
   }
   return pcVar4;
@@ -1543,12 +1543,12 @@ int __cdecl16far __INITEMS(void)
   code *pcVar1;
   char cVar2;
   char extraout_AH;
-  undefined2 uVar3;
+  uint16_t uVar3;
   char extraout_AH_00;
   char extraout_AH_01;
   uint extraout_DX;
   int in_BX;
-  undefined2 unaff_SI;
+  uint16_t unaff_SI;
   int unaff_ES;
   bool bVar4;
   
@@ -1614,7 +1614,7 @@ uint16_t __stdcall16far __INITEMSPAGE(uint16_t pageCount,uint16_t frameSeg,uint1
 
 {
   code *pcVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   char extraout_AH;
   char extraout_AH_00;
   undefined1 extraout_AH_01;
@@ -1655,7 +1655,7 @@ void __cdecl16far __EXITEMS(void)
 
 {
   code *pcVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   
   uVar2 = (uint)startx;   /* hand fix: startx is a function */
   if (((((char *)"Divide error\r\n")[9] & 4U) != 0) &&
@@ -1680,20 +1680,20 @@ int __cdecl16far __INITEXT(void)
   uint uVar4;
   code *pcVar5;
   long lVar6;
-  undefined2 uVar7;
+  uint16_t uVar7;
   char cVar8;
-  undefined2 uVar9;
+  uint16_t uVar9;
   byte extraout_AH;
   uint uVar10;
   uint uVar11;
   int iVar12;
-  undefined2 in_BX;
+  uint16_t in_BX;
   byte *pbVar13;
   byte *pbVar14;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   bool bVar15;
   undefined1 uVar16;
-  undefined4 uVar17;
+  uint32_t uVar17;
   uint8_t cmpBuf [8];
   uint uStack_17;
   uint uStack_f;
@@ -1720,7 +1720,7 @@ L__INITEXT_0EEC:
         if (cVar8 == -0x80) {
           pcVar5 = (code *)swi(0x2f);
           (*pcVar5)();
-          *(undefined2 *)((char *)0x43) = in_BX;
+          *(uint16_t *)((char *)0x43) = in_BX;
           ((char *)0x45)[0] = '\0';
           ((char *)0x45)[1] = -0x10;
           (**(code **)((char *)0x43))();
@@ -1733,7 +1733,7 @@ L__INITEXT_0EEC:
                      (int)((ulong)uVar17 >> 0x10);
                 uVar17 = (**(code **)((char *)0x43))();
                 if ((int)uVar17 != 0) {
-                  *(undefined2 *)((char *)0x3a) = in_BX;
+                  *(uint16_t *)((char *)0x3a) = in_BX;
                   *(int *)((char *)0x3c) = (int)((ulong)uVar17 >> 0x10);
                   uVar10 = (uint)((ulong)uVar11 * 0x400);
                   uVar4 = *(uint *)((char *)0x3a);
@@ -1828,14 +1828,14 @@ L__INITEXT_105D:
 
 
 /* 1403:107a */
-undefined2 __stdcall16far __INITEXTMEM(uint sizeLo,int sizeHi,uint baseLo,int baseHi)
+uint16_t __stdcall16far __INITEXTMEM(uint sizeLo,int sizeHi,uint baseLo,int baseHi)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   int iVar2;
   int iVar3;
   uint uVar4;
-  undefined4 uVar5;
+  uint32_t uVar5;
   
   uVar1 = (uint)startx;   /* hand fix: startx is a function */
   if ((((char *)"Abnormal program termination\r\n")[5] & 1U) != 0) {
@@ -1888,7 +1888,7 @@ L__INITEXTMEM_113B:
 void __cdecl16far __EXITEXT(void)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   
   uVar1 = (uint)startx;   /* hand fix: startx is a function */
   if (((char *)"Abnormal program termination\r\n")[5] != '\0') {
@@ -1913,7 +1913,7 @@ int __cdecl16near __EXTCOPY(void)
 
 {
   code *pcVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   uint in_AX;
   int iVar3;
   uint in_CX;
@@ -1949,8 +1949,8 @@ int __cdecl16near __EXTCOPY(void)
       uVar5 = in_DX >> 4 | in_DX << 0xc;
     }
     else {
-      *(undefined2 *)((char *)0x51) =
-           *(undefined2 *)((char *)0x47);
+      *(uint16_t *)((char *)0x51) =
+           *(uint16_t *)((char *)0x47);
       bVar6 = in_AX < *(uint *)((char *)0x49);
       in_AX = in_AX - *(uint *)((char *)0x49);
       uVar5 = (in_DX - *(int *)((char *)0x4b)) - (uint)bVar6;
@@ -1963,8 +1963,8 @@ int __cdecl16near __EXTCOPY(void)
       uVar4 = in_CX >> 4 | in_CX << 0xc;
     }
     else {
-      *(undefined2 *)((char *)0x57) =
-           *(undefined2 *)((char *)0x47);
+      *(uint16_t *)((char *)0x57) =
+           *(uint16_t *)((char *)0x47);
       bVar6 = in_BX < *(uint *)((char *)0x49);
       in_BX = in_BX - *(uint *)((char *)0x49);
       uVar4 = (in_CX - *(int *)((char *)0x4b)) - (uint)bVar6;

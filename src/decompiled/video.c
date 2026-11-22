@@ -12,10 +12,10 @@
 /* Returns 1 when the screen point (x,y) falls inside the region recorded for that column in the
    button table at 0x34c. */
 
-undefined2 __cdecl16far video_pointInButton(int x,int y)
+uint16_t __cdecl16far video_pointInButton(int x,int y)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   
   if ((((y + 7U < *(uint *)((x + -0xc) * 2 + 0x34c)) &&
        (*(uint *)((x + -0xc) * 2 + 0x34c) <= y + 0x39U)) && (8 < x)) && (x < 0xc9)) {
@@ -36,7 +36,7 @@ undefined2 __cdecl16far video_pointInButton(int x,int y)
 int __cdecl16far video_findAgentAt(int x,int y)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   int iVar2;
   int iVar3;
   int *piVar4;
@@ -47,7 +47,7 @@ int __cdecl16far video_findAgentAt(int x,int y)
     if ((int)(uint)AgntCount <= iVar5) {
       return -1;
     }
-    uVar1 = *(undefined2 *)(iVar5 * 0x34 + 0x15);
+    uVar1 = *(uint16_t *)(iVar5 * 0x34 + 0x15);
     piVar4 = (int *)(*(int *)(iVar5 * 0x34 + 0x13) + (uint)*(byte *)(iVar5 * 0x34 + 0x12) * 4);
     iVar2 = piVar4[1];
     iVar3 = *piVar4;
@@ -71,7 +71,7 @@ uint8_t __cdecl16far video_usesMiceUnkState(void)
 {
   uint8_t uVar1;
   int iVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   
   if (MiceUnkState == '\0') {
     uVar1 = 0x0;

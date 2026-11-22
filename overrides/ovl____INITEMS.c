@@ -4,12 +4,12 @@ int __cdecl16far __INITEMS(void)
   code *pcVar1;
   char cVar2;
   char extraout_AH;
-  undefined2 uVar3;
+  uint16_t uVar3;
   char extraout_AH_00;
   char extraout_AH_01;
   uint extraout_DX;
   int in_BX;
-  undefined2 unaff_SI;
+  uint16_t unaff_SI;
   int unaff_ES;
   bool bVar4;
   

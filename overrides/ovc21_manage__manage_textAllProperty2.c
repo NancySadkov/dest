@@ -4,12 +4,12 @@ void manage_textAllProperty2(void)
   long lVar1;
   far_t gfx;
   far_t entries;
-  undefined2 *puVar2;
+  uint16_t *puVar2;
   void *pvVar3;
   int iVar4;
   char *pcVar5;
   uint8_t *puVar6;
-  undefined2 uVar7;
+  uint16_t uVar7;
   int unaff_BP;
   int iVar8;
   int iVar9;
@@ -39,21 +39,21 @@ void manage_textAllProperty2(void)
                   Font02.seg,0xde,(char)Font02.seg,0xde,0x50);
   }
   else {
-    puVar2 = (undefined2 *)((uint)*(byte *)(unaff_BP + 6) * 4);
+    puVar2 = (uint16_t *)((uint)*(byte *)(unaff_BP + 6) * 4);
     puVar6 = (uint8_t *)*puVar2;
-    *(undefined2 *)(unaff_BP + -2) = puVar2[1];
-    *(undefined2 *)(unaff_BP + -4) =(uint16_t)( puVar6);
+    *(uint16_t *)(unaff_BP + -2) = puVar2[1];
+    *(uint16_t *)(unaff_BP + -4) =(uint16_t)( puVar6);
     uVar7 = 0x50;
     term = 0xde;
     uVar11 = (undefined1)Font02.seg;
     uVar12 = (undefined1)(Font02.seg >> 8);
     uVar10 = Font02.ofs;
     iVar9 = ovr_ovc45_compute9((char *)(unaff_BP + -0x66),
-                               (char *)CONCAT22(*(undefined2 *)(unaff_BP + -4),unaff_SS),
-                               (char *)CONCAT22(Font02.ofs,(char *)*(undefined2 *)(unaff_BP + -2)),
+                               (char *)CONCAT22(*(uint16_t *)(unaff_BP + -4),unaff_SS),
+                               (char *)CONCAT22(Font02.ofs,(char *)*(uint16_t *)(unaff_BP + -2)),
                                Font02.seg,'i',0x69,3);
-    pvVar3 = manage_playerTitle((char_sheet_t *)*(undefined2 *)(unaff_BP + -4),
-                                *(undefined2 *)(unaff_BP + -2),(char)iVar9,puVar6);
+    pvVar3 = manage_playerTitle((char_sheet_t *)*(uint16_t *)(unaff_BP + -4),
+                                *(uint16_t *)(unaff_BP + -2),(char)iVar9,puVar6);
     pcVar5 = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52a1,unaff_SS),
                            (char *)CONCAT22(pvVar3,(char *)0x26510),puVar6);
     ovr_blitLabel(pcVar5,(uint8_t *)CONCAT22(uVar10,puVar6),CONCAT11(uVar12,uVar11),term,uVar11,term
@@ -83,13 +83,13 @@ void manage_textAllProperty2(void)
     if (iVar8 + iVar9 < 0x1e) {
       TextBlitX = 0x11;
       iVar4 = (iVar8 + iVar9) * 6;
-      ovr_blitLabel((char *)*(undefined2 *)((int)&GStructures[0].name + iVar4),
+      ovr_blitLabel((char *)*(uint16_t *)((int)&GStructures[0].name + iVar4),
                     (uint8_t *)
                     CONCAT22(Font02.ofs,
-                             (uint8_t *)*(undefined2 *)((int)&GStructures[0].name + 2 + iVar4)),
+                             (uint8_t *)*(uint16_t *)((int)&GStructures[0].name + 2 + iVar4)),
                     Font02.seg,0xde,(char)Font02.seg,0xde,0xe0);
       lVar1 = (long)(iVar8 + iVar9) * 6;
-      uVar7 = (undefined2)((ulong)lVar1 >> 0x10);
+      uVar7 = (uint16_t)((ulong)lVar1 >> 0x10);
       iVar4 = manage_usesGUnitCount
                         (*(char *)(unaff_BP + 6),(&((unk01_t *)GStructures)->type)[(int)lVar1],
                          (int *)CONCAT22(unaff_SS,(int *)(unaff_BP + -6)),
@@ -99,9 +99,9 @@ void manage_textAllProperty2(void)
       *(int *)((char *)init_textFilename + unaff_BP) = iVar4;
       if (*(int *)(unaff_BP + -0xc) == 0) {
         iVar4 = 100;
-        uVar11 = (undefined1)*(undefined2 *)((char *)init_textFilename + unaff_BP);
+        uVar11 = (undefined1)*(uint16_t *)((char *)init_textFilename + unaff_BP);
         pcVar5 = litoa10((char *)(unaff_BP + -0x66),
-                         CONCAT13((char)((uint)*(undefined2 *)((char *)init_textFilename + unaff_BP)
+                         CONCAT13((char)((uint)*(uint16_t *)((char *)init_textFilename + unaff_BP)
                                         >> 8),CONCAT12(uVar11,unaff_SS)),uVar11,0);
         manage_blitLabelRight
                   ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);
@@ -113,13 +113,13 @@ void manage_textAllProperty2(void)
                   ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);
       }
       lVar1 = (long)(iVar8 + iVar9) * 6;
-      uVar7 = (undefined2)((ulong)lVar1 >> 0x10);
+      uVar7 = (uint16_t)((ulong)lVar1 >> 0x10);
       if (*(char *)((int)&GStructures[0].pad + (int)lVar1) != '\0') {
         if (*(int *)(unaff_BP + -0xe) == 0) {
           iVar4 = 0x8c;
-          uVar11 = (undefined1)*(undefined2 *)(unaff_BP + -6);
+          uVar11 = (undefined1)*(uint16_t *)(unaff_BP + -6);
           pcVar5 = litoa10((char *)(unaff_BP + -0x66),
-                           CONCAT13((char)((uint)*(undefined2 *)(unaff_BP + -6) >> 8),
+                           CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + -6) >> 8),
                                     CONCAT12(uVar11,unaff_SS)),uVar11,0);
           manage_blitLabelRight
                     ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);
@@ -132,9 +132,9 @@ void manage_textAllProperty2(void)
         }
         if (*(int *)(unaff_BP + -0x10) == 0) {
           iVar4 = 0xb4;
-          uVar11 = (undefined1)*(undefined2 *)(unaff_BP + -8);
+          uVar11 = (undefined1)*(uint16_t *)(unaff_BP + -8);
           pcVar5 = litoa10((char *)(unaff_BP + -0x66),
-                           CONCAT13((char)((uint)*(undefined2 *)(unaff_BP + -8) >> 8),
+                           CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + -8) >> 8),
                                     CONCAT12(uVar11,unaff_SS)),uVar11,0);
           manage_blitLabelRight
                     ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);
@@ -147,9 +147,9 @@ void manage_textAllProperty2(void)
         }
         if (*(int *)(unaff_BP + -0x12) == 0) {
           iVar4 = 0xdc;
-          uVar11 = (undefined1)*(undefined2 *)(unaff_BP + -10);
+          uVar11 = (undefined1)*(uint16_t *)(unaff_BP + -10);
           pcVar5 = litoa10((char *)(unaff_BP + -0x66),
-                           CONCAT13((char)((uint)*(undefined2 *)(unaff_BP + -10) >> 8),
+                           CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + -10) >> 8),
                                     CONCAT12(uVar11,unaff_SS)),uVar11,0);
           manage_blitLabelRight
                     ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);

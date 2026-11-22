@@ -10,28 +10,28 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
   far_t hint_00;
   uint16_t x_00;
   char *pcVar2;
-  undefined2 *puVar3;
+  uint16_t *puVar3;
   int iVar4;
   uint8_t *puVar5;
   uint uVar6;
   uint16_t uVar7;
-  undefined2 uVar8;
-  undefined2 uVar9;
+  uint16_t uVar8;
+  uint16_t uVar9;
   int iVar10;
-  undefined2 unaff_DI;
+  uint16_t unaff_DI;
   char *unaff_SS;
   undefined1 uVar11;
   undefined1 uVar12;
   uint8_t menuItems;
-  undefined2 auStack_28e [19];
+  uint16_t auStack_28e [19];
   uint8_t msg;
   uint8_t text;
   char cStack_17;
   char cStack_16;
   char cStack_15;
   uint8_t menuLabel;
-  undefined2 uStack_12;
-  undefined2 uStack_10;
+  uint16_t uStack_12;
+  uint16_t uStack_10;
   char cStack_e;
   char acStack_d [11];
   
@@ -44,8 +44,8 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
     auStack_28e[1] = 0x770f;
   }
   else {
-    auStack_28e[2] = *(undefined2 *)((uint)bldType * 0x27 + 0x118);
-    auStack_28e[1] = *(undefined2 *)((uint)bldType * 0x27 + 0x116);
+    auStack_28e[2] = *(uint16_t *)((uint)bldType * 0x27 + 0x118);
+    auStack_28e[1] = *(uint16_t *)((uint)bldType * 0x27 + 0x116);
   }
   acStack_d[2] = 2;
   iVar10 = 2;
@@ -62,7 +62,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
   do {
     uVar11 = 0x10;
     pcVar2 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a));
-    puVar3 = (undefined2 *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
+    puVar3 = (uint16_t *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
     uVar8 = 0x217a;
     iVar4 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar3,unaff_SS),
                            (char *)CONCAT13((char)(Font03.ofs >> 8),
@@ -70,8 +70,8 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
                            (char)Font03.ofs,0x55,3,pcVar2,uVar11);
     uVar9 = 0x195d;
     puVar5 = ovr_ovc15_usesStshRealloc
-                       ((char *)*(undefined2 *)((uint)bldType * 0x27 + 0x10e),
-                        *(undefined2 *)((uint)bldType * 0x27 + 0x110),(char)iVar4,uVar8);
+                       ((char *)*(uint16_t *)((uint)bldType * 0x27 + 0x10e),
+                        *(uint16_t *)((uint)bldType * 0x27 + 0x110),(char)iVar4,uVar8);
     pcVar2 = ovr_fmVsprintf("%s: Search this location for minerals?  Active party is %s the %s.",
                             (char *)CONCAT22(uVar9,puVar5));
     strcpy((char *)CONCAT22(unaff_SS,&msg),
@@ -142,11 +142,11 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
       acStack_d[0] = '$';
       uStack_10 = 0x77ba;
       uVar9 = 0x195d;
-      uVar8 = *(undefined2 *)((uint)bldType * 0x27 + 0x110);
+      uVar8 = *(uint16_t *)((uint)bldType * 0x27 + 0x110);
       pcVar2 = ovr_fmVsprintf("Remove %s permanently. Are you sure?",
                               (char *)CONCAT13((char)((uint)uVar8 >> 8),
                                                CONCAT12((char)uVar8,
-                                                        *(undefined2 *)
+                                                        *(uint16_t *)
                                                          ((uint)bldType * 0x27 + 0x10e))));
       puVar5 = &menuLabel;
       (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = uVar11;

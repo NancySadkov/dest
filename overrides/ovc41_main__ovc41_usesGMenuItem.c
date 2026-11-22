@@ -20,7 +20,7 @@ void __cdecl16far ovc41_usesGMenuItem(void)
     ovr_draw_toolbarLabels();
   }
   ovr_draw_textTalkwin9Lbm();
-  (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-  (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+  (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  (*(uint16_t *)((uint8_t *)&(GDailyTimeCounter))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
   return;
 }

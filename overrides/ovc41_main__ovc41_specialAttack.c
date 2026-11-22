@@ -5,7 +5,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
   agntG_t *paVar2;
   entity_t *peVar3;
   byte bVar4;
-  undefined2 uVar5;
+  uint16_t uVar5;
   agnt_t *agnt_00;
   int iVar6;
   char *pcVar7;
@@ -23,7 +23,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
   uint8_t actorName;
   uint8_t targetName;
   uint8_t msg;
-  agnt_t far *uStack_8;   /* was undefined4: assigned agnt_t * values */
+  agnt_t far *uStack_8;   /* was uint32_t: assigned agnt_t * values */
   char cStack_3;
   
   uVar13 = (undefined1)targetIndex;
@@ -70,7 +70,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
           paVar2 = ((agnt_t *)uStack_8)->gdata;
           if (((((agntG_t *)paVar2)->flags3 & 0x40) == 0) ||
              (bVar4 = ovr_agnt_compute9(agnt,uVar13), '\x01' < (char)bVar4)) {
-            uVar5 = (undefined2)((ulong)uStack_8 >> 0x10);
+            uVar5 = (uint16_t)((ulong)uStack_8 >> 0x10);
             paVar2 = ((agnt_t *)uStack_8)->gdata;
             if (((((agntG_t *)paVar2)->flags2 & 0x10) == 0) || (agnt->gindex != 0x2)) {
               cStack_3 = ovc41_textParalyzed((agnt_t *)CONCAT22(targetIndex,agnt),(agnt_t *)uStack_8,uVar11,
@@ -101,7 +101,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,...)
               }
               if (((cStack_3 == '\0') && ((((agntG_t *)agnt->gdata)->flags2 & 4) != 0)) &&
                  (uVar11 = ovr_ovc27_rollToHitEntity((uint32_t)uStack_8,0), (uVar11 & 0xff) == 0)) {
-                uVar5 = (undefined2)((ulong)uStack_8 >> 0x10);
+                uVar5 = (uint16_t)((ulong)uStack_8 >> 0x10);
                 peVar3 = ((agnt_t *)uStack_8)->entity;
                 if ((*(uint *)((int)&(((entity_t *)peVar3)->base).frames + 1) & 1) == 0) {
                   uVar12 = (undefined1)GSavedBlitSeg;

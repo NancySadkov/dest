@@ -1,4 +1,4 @@
-far_t * __cdecl16far _realloc(undefined2 param_1,uint16_t param_2,far_t *param_3)
+far_t * __cdecl16far _realloc(uint16_t param_1,uint16_t param_2,far_t *param_3)
 
 {
   undefined1 *puVar1;

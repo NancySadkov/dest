@@ -31,7 +31,7 @@ bool __cdecl16far agnt_isAnimating(void)
 
 /* [R7] body shape: compute */
 
-undefined2 __cdecl16far agnt_compute1(int y)
+uint16_t __cdecl16far agnt_compute1(int y)
 
 {
   if (y < 0xc) {
@@ -40,7 +40,7 @@ undefined2 __cdecl16far agnt_compute1(int y)
   if (0xde < y) {
     y = 0xde;
   }
-  return *(undefined2 *)((y + -0xc) * 2 + 0x34c);
+  return *(uint16_t *)((y + -0xc) * 2 + 0x34c);
 }
 
 
@@ -73,9 +73,9 @@ undefined1 __cdecl16far agnt_compute3(agnt_t *agnt)
   undefined1 uVar1;
   int iVar2;
   agnt_t *agnt_00;
-  undefined2 uVar3;
+  uint16_t uVar3;
   
-  uVar3 = (undefined2)((ulong)agnt >> 0x10);
+  uVar3 = (uint16_t)((ulong)agnt >> 0x10);
   agnt_00 = (agnt_t *)agnt;
   if (((((int)agnt_00->y < 0x15) || (agnt_00->moveState == 0x1)) && ((int)agnt->x < 0xd3)) &&
      (-1 < (int)agnt->x)) {
@@ -110,12 +110,12 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,..
 
 {
   uint8_t uVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   int iVar3;
   bool bVar4;
   int iVar5;
   int *piVar6;
-  undefined2 in_stack_0000000a;
+  uint16_t in_stack_0000000a;
   char cStack_e;
   char cStack_d;
   int iStack_c;
@@ -125,7 +125,7 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,..
   
   if ((int)agnt->y < 0x15) {
     uVar1 = agnt->faction;
-    uVar2 = *(undefined2 *)((int)&agnt->frames + 2);
+    uVar2 = *(uint16_t *)((int)&agnt->frames + 2);
     piVar6 = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
     iVar5 = piVar6[1];
     iVar3 = *piVar6;
@@ -220,14 +220,14 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out,...)
 
 {
   uint8_t uVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   int iVar3;
-  undefined4 uVar4;
+  uint32_t uVar4;
   bool bVar5;
   undefined1 uVar6;
   int iVar7;
   int *piVar8;
-  undefined2 in_stack_0000000a;
+  uint16_t in_stack_0000000a;
   char in_stack_0000000c;
   char cStack_e;
   char cStack_d;
@@ -243,7 +243,7 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out,...)
   }
   else {
     uVar1 = agnt->faction;
-    uVar2 = *(undefined2 *)((int)&agnt->frames + 2);
+    uVar2 = *(uint16_t *)((int)&agnt->frames + 2);
     piVar8 = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
     iVar7 = piVar8[1];
     iVar3 = *piVar8;
@@ -296,9 +296,9 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out,...)
                  (*(uint8_t *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -5) ==
                   uVar1)) &&
                 ((*(uint8_t *)
-                   *(undefined4 *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x17)
+                   *(uint32_t *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x17)
                   == uVar1 &&
-                 (uVar4 = *(undefined4 *)
+                 (uVar4 = *(uint32_t *)
                            ((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x17),
                  (*(uint *)((int)uVar4 + 0x3c) & 0x20) == 0)))))) {
               *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
@@ -318,10 +318,10 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out,...)
                  *(byte *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x12))) &&
                (((*(uint8_t *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -5) ==
                   uVar1 && (*(uint8_t *)
-                             *(undefined4 *)
+                             *(uint32_t *)
                               ((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x17) ==
                             uVar1)) &&
-                (uVar4 = *(undefined4 *)
+                (uVar4 = *(uint32_t *)
                           ((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x17),
                 (*(uint *)((int)uVar4 + 0x3c) & 0x20) == 0)))) {
               *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
@@ -352,10 +352,10 @@ agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distanc
   uint8_t uVar1;
   uint uVar2;
   uint uVar3;
-  undefined2 uVar4;
+  uint16_t uVar4;
   uint uVar5;
   uint uVar6;
-  undefined2 in_stack_00000012;
+  uint16_t in_stack_00000012;
   byte bStack_4;
   
   uVar1 = agnt->faction;
@@ -371,9 +371,9 @@ agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distanc
       *(uint *)CONCAT22(in_stack_00000012,(*(uint16_t *)((uint8_t *)&(distance) + 2))) = uVar2;
       uVar4 = ovr_ovc07_signum(*(int *)((uint)bStack_4 * 0x34) -
                                ((agnt_t *)CONCAT22((uint16_t *)xDir,agnt))->x);
-      *(undefined2 *)CONCAT22((uint16_t *)yDir,(*(uint16_t *)((uint8_t *)&(xDir) + 2))) = uVar4;
+      *(uint16_t *)CONCAT22((uint16_t *)yDir,(*(uint16_t *)((uint8_t *)&(xDir) + 2))) = uVar4;
       uVar4 = ovr_ovc07_signum(*(int *)((uint)bStack_4 * 0x34 + 2) - agnt->y);
-      *(undefined2 *)CONCAT22((uint16_t *)distance,(*(uint16_t *)((uint8_t *)&(yDir) + 2))) = uVar4;
+      *(uint16_t *)CONCAT22((uint16_t *)distance,(*(uint16_t *)((uint8_t *)&(yDir) + 2))) = uVar4;
     }
     bStack_4 = bStack_4 + 1;
   }
@@ -389,7 +389,7 @@ agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distanc
 void __cdecl16far agnt_usesAnimFrame(agnt_t *agnt,...)
 
 {
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   agnt->animFrame = 0xff;
   agnt->target = 0xff;
@@ -424,7 +424,7 @@ void __cdecl16far agnt_compute5(agnt_t *agnt)
 void __cdecl16far agnt_advanceAnimFrame(agnt_t *agnt,...)
 
 {
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   if ((((agntG_t *)agnt->gdata)->flags3 & 4) == 0) {
     agnt_usesAnimFrame(agnt,in_stack_00000006);
@@ -443,7 +443,7 @@ char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
 {
   char *pcVar1;
   agntG_t *paVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   char *in_stack_0000000a;
   
   if ((agnt->flags & 0x20) == 0) {
@@ -457,64 +457,64 @@ char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
                 pcVar1 = ((agntG_t *)agnt->gdata)->name;
               }
               else {
-                uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+                uVar3 = (uint16_t)((ulong)agnt->gdata >> 0x10);
                 paVar2 = (agntG_t *)agnt->gdata;
                 pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x83c,in_stack_0000000a),
-                                       (char *)CONCAT22(*(undefined2 *)&paVar2->name,
+                                       (char *)CONCAT22(*(uint16_t *)&paVar2->name,
                                                         (char *)0x26510),
-                                       *(undefined2 *)((int)&paVar2->name + 2));
+                                       *(uint16_t *)((int)&paVar2->name + 2));
               }
             }
             else {
-              uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+              uVar3 = (uint16_t)((ulong)agnt->gdata >> 0x10);
               paVar2 = (agntG_t *)agnt->gdata;
               pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x830,in_stack_0000000a),
-                                     (char *)CONCAT22(*(undefined2 *)&paVar2->name,
+                                     (char *)CONCAT22(*(uint16_t *)&paVar2->name,
                                                       (char *)0x26510),
-                                     *(undefined2 *)((int)&paVar2->name + 2));
+                                     *(uint16_t *)((int)&paVar2->name + 2));
             }
           }
           else {
-            uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+            uVar3 = (uint16_t)((ulong)agnt->gdata >> 0x10);
             paVar2 = (agntG_t *)agnt->gdata;
             pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x823,in_stack_0000000a),
-                                   (char *)CONCAT22(*(undefined2 *)&paVar2->name,
+                                   (char *)CONCAT22(*(uint16_t *)&paVar2->name,
                                                     (char *)0x26510),
-                                   *(undefined2 *)((int)&paVar2->name + 2));
+                                   *(uint16_t *)((int)&paVar2->name + 2));
           }
         }
         else {
-          uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+          uVar3 = (uint16_t)((ulong)agnt->gdata >> 0x10);
           paVar2 = (agntG_t *)agnt->gdata;
           pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x817,in_stack_0000000a),
-                                 (char *)CONCAT22(*(undefined2 *)&paVar2->name,
+                                 (char *)CONCAT22(*(uint16_t *)&paVar2->name,
                                                   (char *)0x26510),
-                                 *(undefined2 *)((int)&paVar2->name + 2));
+                                 *(uint16_t *)((int)&paVar2->name + 2));
         }
       }
       else {
-        uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+        uVar3 = (uint16_t)((ulong)agnt->gdata >> 0x10);
         paVar2 = (agntG_t *)agnt->gdata;
         pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x80d,in_stack_0000000a),
-                               (char *)CONCAT22(*(undefined2 *)&paVar2->name,
+                               (char *)CONCAT22(*(uint16_t *)&paVar2->name,
                                                 (char *)0x26510),
-                               *(undefined2 *)((int)&paVar2->name + 2));
+                               *(uint16_t *)((int)&paVar2->name + 2));
       }
     }
     else {
-      uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+      uVar3 = (uint16_t)((ulong)agnt->gdata >> 0x10);
       paVar2 = (agntG_t *)agnt->gdata;
       pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x803,in_stack_0000000a),
-                             (char *)CONCAT22(*(undefined2 *)&paVar2->name,(char *)0x26510
-                                             ),*(undefined2 *)((int)&paVar2->name + 2));
+                             (char *)CONCAT22(*(uint16_t *)&paVar2->name,(char *)0x26510
+                                             ),*(uint16_t *)((int)&paVar2->name + 2));
     }
   }
   else {
-    uVar3 = (undefined2)((ulong)agnt->gdata >> 0x10);
+    uVar3 = (uint16_t)((ulong)agnt->gdata >> 0x10);
     paVar2 = (agntG_t *)agnt->gdata;
     pcVar1 = ovr_stsprintf((*(uint16_t *)((uint8_t *)&(text) + 2)),(char *)CONCAT22(0x7f8,in_stack_0000000a),
-                           (char *)CONCAT22(*(undefined2 *)&paVar2->name,(char *)0x26510),
-                           *(undefined2 *)((int)&paVar2->name + 2));
+                           (char *)CONCAT22(*(uint16_t *)&paVar2->name,(char *)0x26510),
+                           *(uint16_t *)((int)&paVar2->name + 2));
   }
   return pcVar1;
 }
@@ -526,11 +526,11 @@ char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
 /* Returns the ability modifier of a party sheet's stat (same thresholds as manage_abilityModifier).
     */
 
-undefined2 __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex,...)
+uint16_t __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex,...)
 
 {
   byte bVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   
   bVar1 = ((char_sheet_t *)(((uint)partyIndex << 2) + (uint)abilityIndex))->stats[0];
   if (bVar1 < 4) {
@@ -567,7 +567,7 @@ byte __cdecl16far agnt_compute8(agnt_t *agnt,...)
 
 {
   byte bVar1;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   bVar1 = (byte)agnt[1].y % 6;
   if (3 < bVar1) {
@@ -586,7 +586,7 @@ byte __cdecl16far agnt_compute9(agnt_t *agnt,...)
 
 {
   byte bVar1;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   bVar1 = ((entity_t *)agnt->entity)->dir % 6;
   if (3 < bVar1) {
@@ -605,7 +605,7 @@ byte __cdecl16far agnt_compute10(agnt_t *agnt,...)
 
 {
   byte bVar1;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   bVar1 = (byte)(((ulong)(byte)agnt[1].y / 6) % 6);
   if (4 < bVar1) {
@@ -624,7 +624,7 @@ byte __cdecl16far agnt_compute11(agnt_t *agnt,...)
 
 {
   byte bVar1;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   bVar1 = (byte)(((ulong)((entity_t *)agnt->entity)->dir / 6) % 6);
   if (4 < bVar1) {
@@ -643,7 +643,7 @@ undefined1 __cdecl16far agnt_usesAnimFrame2(agnt_t *agnt,...)
 
 {
   undefined1 uVar1;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   if (agnt->animFrame == 0xff) {
     if ((char)agnt->health < '\x02') {
@@ -672,7 +672,7 @@ uint __cdecl16far agnt_compute12(agnt_t *a,agnt_t *b,...)
 
 {
   uint uVar1;
-  undefined2 in_stack_0000000a;
+  uint16_t in_stack_0000000a;
   
   uVar1 = ((agnt_t *)CONCAT22((agnt_t *)b,a))->x;
   if ((int)uVar1 < *(int *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(b) + 2)))) {
@@ -705,7 +705,7 @@ void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite,...
   uint uVar5;
   uint uVar6;
   int *piVar7;
-  undefined2 in_stack_0000000e;
+  uint16_t in_stack_0000000e;
   uint uStack_10;
   
   iVar3 = (uint)agnt->target * 0x34;
@@ -828,7 +828,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type,..
   uVar8 = 0x1726;
   iVar10 = uStack_e + (uint)(byte)agnt->state * 4;
   psVar6 = ovr_stash_usesStExit
-                     ((stg_tmp_t *)*(undefined2 *)(iVar10 + 0x58),*(undefined2 *)(iVar10 + 0x5a),
+                     ((stg_tmp_t *)*(uint16_t *)(iVar10 + 0x58),*(uint16_t *)(iVar10 + 0x5a),
                       CONCAT11((char)((uint)index * 0x34 >> 8),
                                *(undefined1 *)((uint)index * 0x34 + 0x31)));
   if ((char)agnt->state == '\r') {
@@ -870,7 +870,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type,..
 void __cdecl16far agnt_compute13(agnt_t *agnt,...)
 
 {
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   if ((char)agnt->state == '\0') {
     if ((agnt->flags & 0x100) == 0) {
@@ -900,7 +900,7 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
   char *pcVar1;
   int iVar2;
   int iVar3;
-  undefined2 uStack_4;
+  uint16_t uStack_4;
   
   if ((int)fromIndex < toIndex) {
     for (iVar3 = 0; iVar3 < 10; iVar3 = iVar3 + 1) {
@@ -1063,7 +1063,7 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex,...)
   void *pvVar2;
   int iVar5;
   int toIndex;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   agnt_t agntSaved;
   undefined1 uVar4;
   
@@ -1145,7 +1145,7 @@ void __cdecl16far agnt_usesFmFreeAudio(void)
 
 {
   bool bVar1;
-  undefined2 in_DX;
+  uint16_t in_DX;
   int16_t unaff_BP;
   far_t src;
   far_t src_00;
@@ -1303,12 +1303,12 @@ int __cdecl16far agnt_compute15(byte rank,uint8_t level)
 uint __cdecl16far agnt_acquireTarget(agnt_t *agnt,char *agntIndex,...)
 
 {
-  undefined4 uVar1;
+  uint32_t uVar1;
   uint in_AX;
   uint uVar2;
   int iVar3;
   uint16_t unk;
-  undefined2 in_stack_0000000a;
+  uint16_t in_stack_0000000a;
   int iStack_4;
   
   if ((agnt->flags & 1) == 0) {
@@ -1316,7 +1316,7 @@ uint __cdecl16far agnt_acquireTarget(agnt_t *agnt,char *agntIndex,...)
       if ((((*(uint8_t *)(iStack_4 * 0x34 + 0x2f) != agnt->faction) &&
            ((*(uint *)(iStack_4 * 0x34 + 0x2b) & 0xae4) == 0)) &&
           (*(char *)(iStack_4 * 0x34 + 0x24) == '\0')) &&
-         (uVar1 = *(undefined4 *)(iStack_4 * 0x34 + 0x1d),
+         (uVar1 = *(uint32_t *)(iStack_4 * 0x34 + 0x1d),
          iVar3 = agnt_compute15(*(byte *)((int)uVar1 + 0x42),
                                 (((entity_t *)agnt->entity)->base).level), (char)iVar3 != '\0')) {
         agnt->flags = agnt->flags | 3;
@@ -1373,16 +1373,16 @@ undefined1 __cdecl16far agnt_compute16(agnt_t *a,agnt_t *b)
   agntG_t *paVar1;
   undefined1 uVar2;
   byte bVar3;
-  undefined2 uVar4;
+  uint16_t uVar4;
   
-  uVar4 = (undefined2)((ulong)a >> 0x10);
+  uVar4 = (uint16_t)((ulong)a >> 0x10);
   paVar1 = ((agnt_t *)a)->gdata;
   if ((((agntG_t *)paVar1)->flags & 2) == 0) {
     uVar2 = 1;
   }
   else {
     bVar3 = agnt_compute9((agnt_t *)a,uVar4);
-    uVar4 = (undefined2)((ulong)b >> 0x10);
+    uVar4 = (uint16_t)((ulong)b >> 0x10);
     paVar1 = ((agnt_t *)b)->gdata;
     if (((((agntG_t *)paVar1)->flags3 & 0x40) == 0) || ('\x01' < (char)bVar3)) {
       paVar1 = ((agnt_t *)b)->gdata;

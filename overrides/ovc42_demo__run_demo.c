@@ -1,4 +1,4 @@
-undefined2 __cdecl16far run_demo(void)
+uint16_t __cdecl16far run_demo(void)
 
 {
   far_t gfx;
@@ -40,7 +40,7 @@ undefined2 __cdecl16far run_demo(void)
   far_t palette_17;
   byte bVar1;
   char *pcVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   undefined1 extraout_AH;
   undefined1 uVar5;
   uint8_t *puVar4;
@@ -72,17 +72,17 @@ undefined2 __cdecl16far run_demo(void)
   bStack_4 = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
   GfxRndSeed = demoCenterX;
   GfxRndSeed2 = demoCenterY;
-  uVar3 = ((undefined2 *)((uint)bStack_4 * 4))[1];
+  uVar3 = ((uint16_t *)((uint)bStack_4 * 4))[1];
   strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
-                          CONCAT12((char)uVar3,*(undefined2 *)((uint)bStack_4 * 4))),"Nasher");
+                          CONCAT12((char)uVar3,*(uint16_t *)((uint)bStack_4 * 4))),"Nasher");
   bStack_5 = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
-  uVar3 = ((undefined2 *)((uint)bStack_5 * 4))[1];
+  uVar3 = ((uint16_t *)((uint)bStack_5 * 4))[1];
   strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
-                          CONCAT12((char)uVar3,*(undefined2 *)((uint)bStack_5 * 4))),"Fordor");
+                          CONCAT12((char)uVar3,*(uint16_t *)((uint)bStack_5 * 4))),"Fordor");
   bStack_6 = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
-  uVar3 = ((undefined2 *)((uint)bStack_6 * 4))[1];
+  uVar3 = ((uint16_t *)((uint)bStack_6 * 4))[1];
   strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
-                          CONCAT12((char)uVar3,*(undefined2 *)((uint)bStack_6 * 4))),"Kaunas");
+                          CONCAT12((char)uVar3,*(uint16_t *)((uint)bStack_6 * 4))),"Kaunas");
   ovc42_populateArea(bStack_4);
   for (iVar8 = -2; iVar8 < 3; iVar8 = iVar8 + 1) {
     for (iVar7 = -1; iVar7 < 1; iVar7 = iVar7 + 1) {
@@ -97,9 +97,9 @@ undefined2 __cdecl16far run_demo(void)
   ovr_ovc30_textDivideError(4,1,'\x01',100,1,1);
   bStack_3 = ovr_ovc30_textDivideError(0x1a,1,'\x01',100,1,1);
   uVar6 = 0x217a;
-  uVar3 = ((undefined2 *)((uint)bStack_3 * 4))[1];
+  uVar3 = ((uint16_t *)((uint)bStack_3 * 4))[1];
   strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
-                          CONCAT12((char)uVar3,*(undefined2 *)((uint)bStack_3 * 4))),"Mindark");
+                          CONCAT12((char)uVar3,*(uint16_t *)((uint)bStack_3 * 4))),"Mindark");
   ovr_ovc15_usesLDIV_at_(0x48,0x24,0x48,0x24,1,0x1,1,0x48,0x24,1,1);
   ovr_ovc15_usesLDIV_at_(0x48,0x24,0x48,0x24,2,0x1,1,0x48,0x24,2,1);
   ovr_ovc15_usesLDIV_at_(0x48,0x24,0x48,0x24,2,0x1,1,0x48,0x24,2,1);
@@ -236,8 +236,8 @@ undefined2 __cdecl16far run_demo(void)
                       ovc42_showAgentStats(0,bStack_4,'\0',cmap,0);
                       ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                       MiceUnkState = 0;
-                      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-                      (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+                      (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
                       uVar6 = ovr_inputUpdate(0x3c);
                       if ((byte)uVar6 < 2) {
                         ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -250,8 +250,8 @@ undefined2 __cdecl16far run_demo(void)
                         (*(uint8_t *)((uint8_t *)&(cmap_00.seg) + 1)) = uVar9;
                         ovc42_showAgentStats(3,bStack_5,'\x01',cmap_00,0);
                         ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                        (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-                        (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                        (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+                        (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
                         uVar6 = ovr_inputUpdate(0x32);
                         if ((byte)uVar6 < 2) {
                           ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -264,8 +264,8 @@ undefined2 __cdecl16far run_demo(void)
                           (*(uint8_t *)((uint8_t *)&(cmap_01.seg) + 1)) = uVar9;
                           ovc42_showAgentStats(8,bStack_6,'\x01',cmap_01,0);
                           ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                          (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-                          (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                          (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+                          (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
                           uVar6 = ovr_inputUpdate(0x32);
                           if ((byte)uVar6 < 2) {
                             ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -278,8 +278,8 @@ undefined2 __cdecl16far run_demo(void)
                             (*(uint8_t *)((uint8_t *)&(cmap_02.seg) + 1)) = uVar9;
                             ovc42_showAgentStats(1,bStack_6,'\0',cmap_02,0xc);
                             ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                            (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-                            (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                            (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+                            (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
                             uVar6 = ovr_inputUpdate(0x32);
                             if ((byte)uVar6 < 2) {
                               ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -295,8 +295,8 @@ undefined2 __cdecl16far run_demo(void)
                               (*(uint8_t *)((uint8_t *)&(cmap_03.seg) + 1)) = uVar9;
                               ovc42_showAgentStats(0x15,bStack_3,'\x01',cmap_03,0);
                               ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                              (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-                              (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                              (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+                              (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
                               uVar6 = ovr_inputUpdate(0x32);
                               if ((byte)uVar6 < 2) {
                                 ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -309,8 +309,8 @@ undefined2 __cdecl16far run_demo(void)
                                 (*(uint8_t *)((uint8_t *)&(cmap_04.seg) + 1)) = uVar9;
                                 ovc42_showAgentStats(0x24,bStack_3,'\x01',cmap_04,0);
                                 ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-                                (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-                                (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                                (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+                                (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
                                 uVar6 = ovr_inputUpdate(0x32);
                                 if ((byte)uVar6 < 2) {
                                   ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -324,8 +324,8 @@ undefined2 __cdecl16far run_demo(void)
                                   ovc42_showAgentStats(0xe,bStack_3,'\x01',cmap_05,0);
                                   ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
-                                       *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-                                  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                                       *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+                                  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
                                   uVar6 = ovr_inputUpdate(0x32);
                                   if ((byte)uVar6 < 2) {
                                     ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
@@ -501,8 +501,8 @@ undefined2 __cdecl16far run_demo(void)
                                                                (char)&palette);
                                                     if (bVar1 < 2) {
                                                       (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
-                                                           *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-                                                      uVar3 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                                                           *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+                                                      uVar3 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
                                                       (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = uVar3;
                                                       pcVar2 = ovc42_textProvidesMoreHousing(0x30);
                                                       if ((byte)pcVar2 < 2) {
@@ -533,9 +533,9 @@ undefined2 __cdecl16far run_demo(void)
                                                   (*(uint8_t *)((uint8_t *)&(palette_13.seg) + 1)) = uVar9;
                                                   ovr_setSeasonPalette(palette_13);
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
-                                                       *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2)
+                                                       *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2)
                                                   ;
-                                                  uVar3 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                                                  uVar3 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = uVar3;
                                                   uVar6 = ovr_inputUpdate(0xb4);
                                                   if ((byte)uVar6 < 2) {
@@ -566,9 +566,9 @@ undefined2 __cdecl16far run_demo(void)
                                                   (*(uint8_t *)((uint8_t *)&(palette_15.seg) + 1)) = uVar9;
                                                   ovr_setSeasonPalette(palette_15);
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
-                                                       *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2)
+                                                       *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2)
                                                   ;
-                                                  uVar3 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                                                  uVar3 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = uVar3;
                                                   uVar6 = ovr_inputUpdate(0xb4);
                                                   if ((byte)uVar6 < 2) {
@@ -599,10 +599,10 @@ undefined2 __cdecl16far run_demo(void)
                                                   (*(uint8_t *)((uint8_t *)&(palette_17.seg) + 1)) = uVar9;
                                                   ovr_setSeasonPalette(palette_17);
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
-                                                       *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2)
+                                                       *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2)
                                                   ;
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) =
-                                                       *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+                                                       *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
                                                   uVar6 = ovr_inputUpdate(0xb4);
                                                   if ((byte)uVar6 < 2) {
                                                     ovc42_endDemo('\0',(int)&palette,unaff_SS);

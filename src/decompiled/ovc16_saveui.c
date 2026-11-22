@@ -133,7 +133,7 @@ void __cdecl16far saveui_usesBlitLoadRleGfx2(far_t textTable,int rowIndex,int it
 {
   far_t gfx;
   far_t gfx_00;
-  undefined2 *puVar1;
+  uint16_t *puVar1;
   uint16_t uVar2;
   far_t dst;
   far_t dst_00;
@@ -146,7 +146,7 @@ void __cdecl16far saveui_usesBlitLoadRleGfx2(far_t textTable,int rowIndex,int it
   TextBlitX = 0x2a;
   TextBlitY = rowIndex * 0xf + 0x1d;
   uVar2 = textTable.seg;
-  puVar1 = (undefined2 *)(textTable.ofs + (rowIndex + itemOffset) * 4);
+  puVar1 = (uint16_t *)(textTable.ofs + (rowIndex + itemOffset) * 4);
   ovr_blitText((char *)*puVar1,(byte *)CONCAT22(Font03.ofs,(byte *)puVar1[1]),Font03.seg,0xde);
   ovr_ovc28_usesBDADailyTimeCounter(3);
   dst_00.seg = 0xa000;
@@ -156,7 +156,7 @@ void __cdecl16far saveui_usesBlitLoadRleGfx2(far_t textTable,int rowIndex,int it
   ovr_blitLoadRleGfx(gfx_00,dst_00);
   TextBlitX = 0x2a;
   TextBlitY = rowIndex * 0xf + 0x1d;
-  puVar1 = (undefined2 *)(textTable.ofs + (rowIndex + itemOffset) * 4);
+  puVar1 = (uint16_t *)(textTable.ofs + (rowIndex + itemOffset) * 4);
   ovr_blitText((char *)*puVar1,(byte *)CONCAT22(Font03.ofs,(byte *)puVar1[1]),Font03.seg,0xde);
   return;
 }
@@ -167,10 +167,10 @@ void __cdecl16far saveui_usesBlitLoadRleGfx2(far_t textTable,int rowIndex,int it
 
 /* [R6] touches MouseMoved, MouseX */
 
-undefined2 __cdecl16far saveui_usesMouseMoved(far_t textTable,int rowLimit,int itemOffset)
+uint16_t __cdecl16far saveui_usesMouseMoved(far_t textTable,int rowLimit,int itemOffset)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   uint uVar2;
   uint rowIndex;
   int *piVar3;
@@ -275,7 +275,7 @@ void __cdecl16far saveui_usesBlitLoadRleGfx3(far_t entries,int count)
 {
   far_t gfx;
   int *piVar1;
-  undefined2 *puVar2;
+  uint16_t *puVar2;
   int iVar3;
   uint16_t uVar4;
   far_t dst;
@@ -291,7 +291,7 @@ void __cdecl16far saveui_usesBlitLoadRleGfx3(far_t entries,int count)
       ovr_blitLoadRleGfx(gfx,dst);
       TextBlitX = 0x2a;
       TextBlitY = iVar3 * 0xf + 0x1d;
-      puVar2 = (undefined2 *)(entries.ofs + iVar3 * 4);
+      puVar2 = (uint16_t *)(entries.ofs + iVar3 * 4);
       ovr_blitText((char *)*puVar2,(byte *)CONCAT22(Font03.ofs,(byte *)puVar2[1]),Font03.seg,0xde);
     }
   }
@@ -315,17 +315,17 @@ void __cdecl16far uiMenuSub(char *title,far_t items,uint16_t nitems,uint16_t def
   far_t entries_02;
   byte bVar1;
   uint16_t uVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   uint uVar4;
-  undefined2 *puVar5;
+  uint16_t *puVar5;
   uint16_t unaff_SS;
   char *in_stack_00000004;
   undefined1 uVar6;
   undefined1 uVar7;
   uint8_t dest;
-  undefined2 auStack_26 [13];
-  undefined2 uStack_c;
-  undefined2 uStack_a;
+  uint16_t auStack_26 [13];
+  uint16_t uStack_c;
+  uint16_t uStack_a;
   uint16_t sz;
   int iStack_6;
   uint8_t readed;
@@ -346,11 +346,11 @@ void __cdecl16far uiMenuSub(char *title,far_t items,uint16_t nitems,uint16_t def
     sz = 8;
   }
   for (readed = 0x0; (int)(uint)readed < (int)sz; readed = readed + 0x1) {
-    puVar5 = (undefined2 *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + (uint)readed * 4);
+    puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + (uint)readed * 4);
     uVar3 = *puVar5;
     uVar4 = (uint)readed;
     auStack_26[uVar4 * 2] = puVar5[1];
-    *(undefined2 *)(&dest + uVar4 * 4) = uVar3;
+    *(uint16_t *)(&dest + uVar4 * 4) = uVar3;
   }
   if (8 < (int)items.seg) {
     uStack_a = 0x2410;
@@ -422,11 +422,11 @@ L_uiMenuSub_0B46:
               _fsetmem((uint8_t *)CONCAT22(unaff_SS,&dest),0x1c,0);
               for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
                   readed = readed + 0x1) {
-                puVar5 = (undefined2 *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
+                puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
                 uVar3 = *puVar5;
                 uVar4 = (uint)readed;
                 auStack_26[uVar4 * 2] = puVar5[1];
-                *(undefined2 *)(&dest + uVar4 * 4) = uVar3;
+                *(uint16_t *)(&dest + uVar4 * 4) = uVar3;
               }
               saveui_blitPanel();
               if (in_stack_00000004 != (char *)0x0 || (char *)title != (char *)0x0) {
@@ -457,11 +457,11 @@ L_uiMenuSub_0B46:
         _fsetmem((uint8_t *)CONCAT22(unaff_SS,&dest),0x1c,0);
         for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
             readed = readed + 0x1) {
-          puVar5 = (undefined2 *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
+          puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
           uVar3 = *puVar5;
           uVar4 = (uint)readed;
           auStack_26[uVar4 * 2] = puVar5[1];
-          *(undefined2 *)(&dest + uVar4 * 4) = uVar3;
+          *(uint16_t *)(&dest + uVar4 * 4) = uVar3;
         }
         saveui_blitPanel();
         if (in_stack_00000004 != (char *)0x0 || (char *)title != (char *)0x0) {
@@ -510,11 +510,11 @@ L_uiMenuSub_08AD:
       _fsetmem((uint8_t *)CONCAT22(unaff_SS,&dest),0x1c,0);
       for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
           readed = readed + 0x1) {
-        puVar5 = (undefined2 *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
+        puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
         uVar3 = *puVar5;
         uVar4 = (uint)readed;
         auStack_26[uVar4 * 2] = puVar5[1];
-        *(undefined2 *)(&dest + uVar4 * 4) = uVar3;
+        *(uint16_t *)(&dest + uVar4 * 4) = uVar3;
       }
       saveui_blitPanel();
       if (in_stack_00000004 != (char *)0x0 || (char *)title != (char *)0x0) {
@@ -558,7 +558,7 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   char *pcVar6;
   uint8_t *puVar7;
   uint16_t uVar8;
-  undefined2 uVar9;
+  uint16_t uVar9;
   uint *unaff_SI;
   byte *unaff_SS;
   uint8_t *puVar10;
@@ -790,10 +790,10 @@ uint __cdecl16far saveui_readSavesList(int entries,uint16_t entriesSeg)
 {
   char *pcVar1;
   int fd;
-  undefined2 uVar2;
+  uint16_t uVar2;
   uint16_t in_DX;
   uint16_t uVar3;
-  undefined2 *puVar4;
+  uint16_t *puVar4;
   uint uVar5;
   far_t handle;
   uint16_t uStack_4;
@@ -810,7 +810,7 @@ uint __cdecl16far saveui_readSavesList(int entries,uint16_t entriesSeg)
     ovr_stshFree(handle);
     for (uVar5 = 0; uVar5 < uStack_4; uVar5 = uVar5 + 1) {
       uVar2 =(uint16_t)( saveui_readLine(fd));
-      puVar4 = (undefined2 *)(entries + uVar5 * 4);
+      puVar4 = (uint16_t *)(entries + uVar5 * 4);
       puVar4[1] = uVar3;
       *puVar4 = uVar2;
     }
@@ -829,8 +829,8 @@ void __cdecl16far saveui_writeSavesList(far_t entries,uint count)
 {
   char *path;
   int handle;
-  undefined2 in_DX;
-  undefined2 *puVar1;
+  uint16_t in_DX;
+  uint16_t *puVar1;
   uint uVar2;
   int unaff_SS;
   uint8_t msg;
@@ -841,7 +841,7 @@ void __cdecl16far saveui_writeSavesList(far_t entries,uint count)
     _sprintf((char *)CONCAT22(unaff_SS,&msg),"%u");
     saveui_writeLine(handle,(char *)&msg,unaff_SS);
     for (uVar2 = 0; uVar2 < count; uVar2 = uVar2 + 1) {
-      puVar1 = (undefined2 *)(entries.ofs + uVar2 * 4);
+      puVar1 = (uint16_t *)(entries.ofs + uVar2 * 4);
       saveui_writeLine(handle,(char *)*puVar1,puVar1[1]);
     }
     close(handle);
@@ -861,7 +861,7 @@ void __cdecl16far saveui_freeLines(far_t entries,uint count)
   int iVar1;
   uint16_t uVar2;
   int *piVar3;
-  undefined2 *puVar4;
+  uint16_t *puVar4;
   uint16_t *puVar5;
   uint uVar6;
   uint16_t uVar7;
@@ -872,7 +872,7 @@ void __cdecl16far saveui_freeLines(far_t entries,uint count)
     uVar2 = entries.ofs;
     piVar3 = (int *)(uVar2 + uVar6 * 4);
     if (*piVar3 != 0 || piVar3[1] != 0) {
-      puVar4 = (undefined2 *)(uVar2 + uVar6 * 4);
+      puVar4 = (uint16_t *)(uVar2 + uVar6 * 4);
       iVar1 = strcmp((char *)CONCAT22(puVar4[1],(char *)*puVar4),
                      (char *)CONCAT22(GSPEmpty.seg,GSPEmpty.ofs));
       if (iVar1 != 0) {
@@ -882,7 +882,7 @@ void __cdecl16far saveui_freeLines(far_t entries,uint count)
         ovr_stshFree(handle);
       }
     }
-    puVar4 = (undefined2 *)(uVar2 + uVar6 * 4);
+    puVar4 = (uint16_t *)(uVar2 + uVar6 * 4);
     puVar4[1] = 0;
     *puVar4 = 0;
   }
@@ -902,7 +902,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   uint16_t *puVar2;
   uint8_t *puVar3;
   byte *pbVar4;
-  undefined4 uVar5;
+  uint32_t uVar5;
   char cVar6;
   undefined1 uVar7;
   uint uVar8;
@@ -912,25 +912,25 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   uint8_t *puVar12;
   int in_CX;
   sbyte sVar13;
-  undefined2 in_DX;
+  uint16_t in_DX;
   entity_t *peVar14;
   uint *puVar15;
   int iVar16;
   byte *unaff_SI;
   uint unaff_DI;
-  undefined2 uVar18;
-  undefined2 uVar19;
+  uint16_t uVar18;
+  uint16_t uVar19;
   uint16_t unaff_SS;
   byte abStackY_15bc [5516];
-  undefined2 uStackY_30;
-  undefined2 uStackY_2e;
-  undefined2 uStackY_2c;
+  uint16_t uStackY_30;
+  uint16_t uStackY_2e;
+  uint16_t uStackY_2c;
   far_t items;
   uint8_t menuLabel;
   char *pcStack_22;
   entity_t *uStack_1e;   /* hand fix: ->base deref */
-  undefined2 uStack_1a;
-  undefined2 uStack_18;
+  uint16_t uStack_1a;
+  uint16_t uStack_18;
   int iStack_16;
   int iStack_14;
   int iStack_12;
@@ -1032,7 +1032,7 @@ switchD_4000_6642_caseD_3:
   if (uVar9 == 0) {
     pcStack_22 = (char *)CONCAT22(menuLabel,uVar19);
     ovr_ovc15_clearVisited();
-    uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+    uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
     peVar14 = (entity_t *)uStack_1e;
     uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(char)((ulong)((peVar14->base).animFrame + 0xf) / 0x10));
     if (((peVar14->base).target & 1) == 0) {
@@ -1066,7 +1066,7 @@ switchD_4000_6642_caseD_3:
     uVar7 = manage_usesLitoa103();
     uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),uVar7);
     while ((char)uStack_1a != '\0') {
-      uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+      uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
       if (((((entity_t *)uStack_1e)->base).target & 1) == 0) {
         iStack_16 = 0;
       }
@@ -1146,14 +1146,14 @@ switchD_4000_6642_caseD_3:
         uVar19 = 0x2379;
         uVar9 = ovr_alignUp4((uStack_1e->base).x);
         if ((uVar8 == uVar9) &&
-           (uVar18 = (undefined2)((ulong)uStack_1e >> 0x10),
+           (uVar18 = (uint16_t)((ulong)uStack_1e >> 0x10),
            (((entity_t *)uStack_1e)->base).destY == (((entity_t *)uStack_1e)->base).y)) {
           pcStack_22 = (char *)CONCAT22(menuLabel,unaff_SS);
           uStackY_2c = 0x2379;
           uStackY_2e = 0x204;
           manage_usesCurSfxType32();
         }
-        uVar18 = (undefined2)((ulong)uStack_1e >> 0x10);
+        uVar18 = (uint16_t)((ulong)uStack_1e >> 0x10);
         peVar14 = (entity_t *)uStack_1e;
       } while (((peVar14->base).destX == 0 && (peVar14->base).destY == 0) ||
               (*(char *)((int)&(peVar14->base).entity + 1) != '\0'));
@@ -1172,7 +1172,7 @@ switchD_4000_6642_caseD_3:
         uStackY_2c = 0x2e4;
         cVar6 = func_0x0004f32d();
         peVar14 = (entity_t *)uStack_1e;
-        uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+        uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
         if (cVar6 == '\0') {
           (uStack_1e->base).x = (uStack_1e->base).x + (int)*(char *)((peVar14->base).target + 0x885)
           ;
@@ -1188,7 +1188,7 @@ switchD_4000_6642_caseD_3:
       }
       else {
         iStack_12 = ovr_ovc07_signum((peVar14->base).destX - (uStack_1e->base).x);
-        uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+        uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
         uVar18 = 0x22da;
         iStack_14 = ovr_ovc07_signum((((entity_t *)uStack_1e)->base).destY -
                                      (((entity_t *)uStack_1e)->base).y);
@@ -1211,7 +1211,7 @@ switchD_4000_6642_caseD_3:
           uStackY_2c = uVar18;
           cVar6 = sub_OVC21_manage_c_23C2();
           if (cVar6 == '\0') {
-            uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+            uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
             puVar2 = &(((entity_t *)uStack_1e)->base).y;
             *puVar2 = *puVar2 + iStack_14;
             (((entity_t *)uStack_1e)->base).target = (char)iStack_14 + 0x1;
@@ -1243,7 +1243,7 @@ switchD_4000_6642_caseD_3:
           }
         }
         else {
-          uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+          uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
           peVar14 = (entity_t *)uStack_1e;
           sVar13 = ((peVar14->base).faction & 3) << 1;
           in_CX = CONCAT11((char)((uint)in_CX >> 8),sVar13);
@@ -1253,7 +1253,7 @@ switchD_4000_6642_caseD_3:
           uStackY_2c = 0x48f;
           cVar6 = func_0x0004f32d();
           if (cVar6 == '\0') {
-            uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+            uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
             peVar14 = (entity_t *)uStack_1e;
             (uStack_1e->base).x =
                  (uStack_1e->base).x + (int)*(char *)((peVar14->base).target + 0x885);
@@ -1269,7 +1269,7 @@ L_attact_3f0b_1082_1477:
       uVar8 = ovr_alignUp4((((entity_t *)uStack_1e)->base).destX);
       uVar9 = ovr_alignUp4((uStack_1e->base).x);
       if (uVar8 == uVar9) {
-        uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+        uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
         peVar14 = (entity_t *)uStack_1e;
         if ((peVar14->base).destY == (peVar14->base).y) {
           (peVar14->base).destX = 0;
@@ -1278,7 +1278,7 @@ L_attact_3f0b_1082_1477:
             bStack_4 = 0xff;
           }
           else {
-            uVar5 = *(undefined4 *)((uint)*(byte *)((int)&(peVar14->base).entity + 3) << 2);
+            uVar5 = *(uint32_t *)((uint)*(byte *)((int)&(peVar14->base).entity + 3) << 2);
             bStack_4 = *(byte *)((int)uVar5 + 0x89);
           }
           if (bStack_4 != 0xff) {
@@ -1399,17 +1399,17 @@ void __cdecl16far uiMainMenuLoop(void)
   uint16_t uVar10;
   uint *puVar11;
   uint16_t *puVar12;
-  undefined2 *puVar13;
+  uint16_t *puVar13;
   int *piVar14;
   uint uVar15;
   uint uVar16;
   uint16_t unaff_SS;
-  undefined2 uVar17;
+  uint16_t uVar17;
   uint32_t menu;
-  undefined2 uStack_30;
-  undefined2 uStack_2e;
-  undefined2 uStack_18;
-  undefined2 uStack_16;
+  uint16_t uStack_30;
+  uint16_t uStack_2e;
+  uint16_t uStack_18;
+  uint16_t uStack_16;
   byte bStack_13;
   char yesno [9];
   uint8_t yes_picked;
@@ -1456,8 +1456,8 @@ void __cdecl16far uiMainMenuLoop(void)
     ovr_say((char *)0x26832,0x2410);
     if (bStack_13 < 9) {
                     /* WARNING: Switch is manually overridden */
-      switch((undefined4)
-             *(undefined2 *)((char *)0x25bd6 + (uint)bStack_13 * 2)) {
+      switch((uint32_t)
+             *(uint16_t *)((char *)0x25bd6 + (uint)bStack_13 * 2)) {
       case 288826:
         saveui_blitPanel();
         bVar1 = false;
@@ -1513,8 +1513,8 @@ void __cdecl16far uiMainMenuLoop(void)
         uiMenu((char *)"Save Game:",items_01,in_DX,uVar15);
         saveui_usesBlitLoadRleGfx4();
         if (bVar5 != 0) {
-          iVar8 = strcmp((char *)CONCAT22(*(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -2),
-                                          (char *)*(undefined2 *)
+          iVar8 = strcmp((char *)CONCAT22(*(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2),
+                                          (char *)*(uint16_t *)
                                                    ((int)entries_05 + (uint)bVar5 * 4 + -4)),
                          (char *)CONCAT22(GSPEmpty.seg,GSPEmpty.ofs));
           if (iVar8 == 0) {
@@ -1523,48 +1523,48 @@ void __cdecl16far uiMainMenuLoop(void)
             pcVar9 = uiReadString((char *)"Name this save:  (Esc to cancel)",0x2410,0,(char *)0x0,0)
             ;
             *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = uVar10;
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) =(uint16_t)( pcVar9);
+            *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4) =(uint16_t)( pcVar9);
             saveui_usesBlitLoadRleGfx4();
           }
           else {
             saveui_blitPanel();
             saveui_drawCancel();
             pcVar9 = uiReadString((char *)"Name for this save:  (Esc to cancel)",0x2410,0,
-                                  (char *)*(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4),
+                                  (char *)*(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4),
                                   *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2));
             *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = uVar10;
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) =(uint16_t)( pcVar9);
+            *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4) =(uint16_t)( pcVar9);
             saveui_usesBlitLoadRleGfx4();
           }
           if ((*(int *)((int)entries_05 + (uint)bVar5 * 4 + -4) != 0 ||
                *(int *)((int)entries_05 + (uint)bVar5 * 4 + -2) != 0) &&
-             (iVar8 = strcmp((char *)CONCAT22(*(undefined2 *)
+             (iVar8 = strcmp((char *)CONCAT22(*(uint16_t *)
                                                ((int)entries_05 + (uint)bVar5 * 4 + -2),
-                                              (char *)*(undefined2 *)
+                                              (char *)*(uint16_t *)
                                                        ((int)entries_05 + (uint)bVar5 * 4 + -4)),
                              (char *)CONCAT22(GSPEmpty.seg,GSPEmpty.ofs)), iVar8 == 0)) {
             handle.seg = *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2);
             handle.ofs = *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4);
             ovr_stshFree(handle);
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -2) = 0;
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) = 0;
+            *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = 0;
+            *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4) = 0;
           }
           if (*(int *)((int)entries_05 + (uint)bVar5 * 4 + -4) != 0 ||
               *(int *)((int)entries_05 + (uint)bVar5 * 4 + -2) != 0) {
             uVar17 = ovr_stSave();
             if ((char)uVar17 == '\0') {
-              *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -2) = 0;
-              *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) = 0;
+              *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = 0;
+              *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4) = 0;
             }
             else {
               GWantsExit2 = '\0';
             }
             for (uVar16 = 0; uVar16 < uVar15; uVar16 = uVar16 + 1) {
-              puVar13 = (undefined2 *)((int)entries_05 + uVar16 * 4);
+              puVar13 = (uint16_t *)((int)entries_05 + uVar16 * 4);
               iVar8 = strcmp((char *)CONCAT22(puVar13[1],(char *)*puVar13),
                              (char *)CONCAT22(GSPEmpty.seg,GSPEmpty.ofs));
               if (iVar8 == 0) {
-                puVar13 = (undefined2 *)((int)entries_05 + uVar16 * 4);
+                puVar13 = (uint16_t *)((int)entries_05 + uVar16 * 4);
                 puVar13[1] = 0;
                 *puVar13 = 0;
               }
@@ -1636,9 +1636,9 @@ void __cdecl16far uiMainMenuLoop(void)
           pcVar9 = yesno;
           uVar7 = unaff_SS;
           title = ovr_fmVsprintf("Delete %s: Are you sure?",
-                                 (char *)CONCAT22(*(undefined2 *)
+                                 (char *)CONCAT22(*(uint16_t *)
                                                    ((int)entries_05 + (uint)bVar5 * 4 + -2),
-                                                  (char *)*(undefined2 *)
+                                                  (char *)*(uint16_t *)
                                                            ((int)entries_05 + (uint)bVar5 * 4 + -4))
                                 );
           items_05.seg = (uint16_t)pcVar9;
@@ -1649,8 +1649,8 @@ void __cdecl16far uiMainMenuLoop(void)
             handle_00.seg = *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2);
             handle_00.ofs = *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4);
             ovr_stshFree(handle_00);
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -2) = 0;
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) = 0;
+            *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = 0;
+            *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4) = 0;
             while ((uVar15 != 0 &&
                    (piVar14 = (int *)((int)entries_05 + (uVar15 - 1) * 4),
                    *piVar14 == 0 && piVar14[1] == 0))) {
@@ -1715,7 +1715,7 @@ void __cdecl16far saveui_configureNewWorld(void)
   int in_stack_0000ffae;
   uint8_t hostilityItems;
   uint8_t seedTable;
-  undefined2 auStack_26 [3];
+  uint16_t auStack_26 [3];
   uint8_t dst;
   char cStack_c;
   byte bStack_b;
@@ -1741,8 +1741,8 @@ void __cdecl16far saveui_configureNewWorld(void)
   saveui_blitPanel();
   if ((bStack_b != 8) && (bStack_b != 0)) {
     if (bStack_b == 7) {
-      SeedHi = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-      GSeed = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+      SeedHi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      GSeed = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
     }
     else {
       if (bStack_b == 1) {
@@ -1750,7 +1750,7 @@ void __cdecl16far saveui_configureNewWorld(void)
         return;
       }
       SeedHi = auStack_26[(uint)bStack_b * 2];
-      GSeed = *(undefined2 *)(&seedTable + (uint)bStack_b * 4);
+      GSeed = *(uint16_t *)(&seedTable + (uint)bStack_b * 4);
     }
     srand8(CONCAT22(SeedHi,GSeed));
     cStack_c = bStack_b - 1;
@@ -1851,7 +1851,7 @@ int __cdecl16far saveui_usesBlitText(char *prompt,int textSeg,int row)
   int iVar2;
   int iVar3;
   uint16_t uVar4;
-  undefined2 unaff_SI;
+  uint16_t unaff_SI;
   byte *unaff_SS;
   char *in_stack_00000004;
   uint3 uStack_5e;

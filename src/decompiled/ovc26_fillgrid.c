@@ -17,9 +17,9 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
   int x_00;
   int y_00;
   int *piVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   int *piVar3;
-  undefined2 uVar4;
+  uint16_t uVar4;
   int *piVar5;
   int *piVar6;
   int iVar7;
@@ -27,18 +27,18 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
   uint uVar9;
   int iVar10;
   uint16_t unaff_DI;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   uint8_t nextQueueY;
   uint8_t nextQueueX;
   uint8_t fillQueueY;
   uint8_t fillQueueX;
   byte bStack_1f;
   int *piStack_1e;
-  undefined2 uVar11;
+  uint16_t uVar11;
   int *piStack_1a;
-  undefined2 uVar12;
+  uint16_t uVar12;
   int *piStack_12;
-  undefined2 uVar13;
+  uint16_t uVar13;
   int *piStack_e;
   int iStack_a;
   int iStack_8;
@@ -68,9 +68,9 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
     while( true ) {
       piVar1 = piStack_1e;
       piStack_1a = (int *)piVar3;
-      uVar12 = (undefined2)((ulong)piVar3 >> 0x10);
+      uVar12 = (uint16_t)((ulong)piVar3 >> 0x10);
       uVar4 = uVar12;
-      uVar11 = (undefined2)((ulong)piStack_1e >> 0x10);
+      uVar11 = (uint16_t)((ulong)piStack_1e >> 0x10);
       uVar2 = uVar11;
       if (iStack_a <= iStack_8) break;
       x_00 = piStack_1a[iStack_8];
@@ -142,8 +142,8 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex,...)
   entity_t *peVar11;
   char *pcVar12;
   uint16_t unaff_DI;
-  undefined2 uVar13;
-  undefined2 unaff_SS;
+  uint16_t uVar13;
+  uint16_t unaff_SS;
   uint8_t pathDirs [80];
   int iStack_1e;
   int iStack_1c;
@@ -181,7 +181,7 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex,...)
     if (0xa0 < iVar7) {
       iVar7 = 0xa0;
     }
-    uVar13 = (undefined2)((ulong)FillGrid >> 0x10);
+    uVar13 = (uint16_t)((ulong)FillGrid >> 0x10);
     pcVar12 = (char *)FillGrid;
     if (pcVar12[iVar7 + iVar6 * 0xa1] == '\0') {
       debugEmptyCellCount = debugEmptyCellCount + 1;
@@ -294,11 +294,11 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
   undefined1 uVar8;
   int iVar9;
   char unaff_DI;
-  undefined2 uVar10;
+  uint16_t uVar10;
   short *psStack_c;
   byte bStack_7;
   
-  uVar10 = (undefined2)((ulong)Entities >> 0x10);
+  uVar10 = (uint16_t)((ulong)Entities >> 0x10);
   iVar9 = (int)Entities;
   if (*(char *)((int)(char **)GMenuStrings +
                (uint)((entity_t *)iVar9)[entityIndex].base.gindex * 0x95 + 0x1f) == '\0') {

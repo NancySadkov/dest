@@ -3,10 +3,10 @@ int __cdecl16far _OvrInitEms(uint16_t emsHandle,uint16_t firstPage,uint16_t page
 {
   long lVar1;
   long lVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   uint uVar4;
   uint16_t uVar5;
-  undefined2 uVar6;
+  uint16_t uVar6;
   
   uVar3 = (uint)startx;   /* hand fix: startx is a function */
   if ((((byte *)__C0_ASM_CopyRight)[0xc] & 1) == 0) {
@@ -40,20 +40,20 @@ int __cdecl16far _OvrInitEms(uint16_t emsHandle,uint16_t firstPage,uint16_t page
       uVar5 = __INITEMSPAGE(pages,firstPage,emsHandle);
       if (uVar5 == 0) {
         lVar1 = (ulong)firstPage * 0x4000;
-        uVar6 = (undefined2)((ulong)lVar1 >> 0x10);
-        *(undefined2 *)((int)&GUnitDescriptions[0x15].ofs + 1) = (int)lVar1;
-        *(undefined2 *)((int)&GUnitDescriptions[0x15].seg + 1) = uVar6;
+        uVar6 = (uint16_t)((ulong)lVar1 >> 0x10);
+        *(uint16_t *)((int)&GUnitDescriptions[0x15].ofs + 1) = (int)lVar1;
+        *(uint16_t *)((int)&GUnitDescriptions[0x15].seg + 1) = uVar6;
         lVar2 = (ulong)pages * 0x4000 + lVar1;
-        *(undefined2 *)((int)&GUnitDescriptions[0x16].ofs + 1) = (int)lVar2;
-        *(undefined2 *)((int)&GUnitDescriptions[0x16].seg + 1) = (int)((ulong)lVar2 >> 0x10);
-        *(undefined2 *)((int)&GUnitDescriptions[0x17].ofs + 1) = (int)lVar1;
-        *(undefined2 *)((int)&GUnitDescriptions[0x17].seg + 1) = uVar6;
-        *(undefined2 *)((int)&GUnitDescriptions[0x18].ofs + 1) = 0xa48;
-        *(undefined2 *)((int)&GUnitDescriptions[0x18].seg + 1) = 0;
-        *(undefined2 *)((int)&GUnitDescriptions[9].seg + 1) = 1;
+        *(uint16_t *)((int)&GUnitDescriptions[0x16].ofs + 1) = (int)lVar2;
+        *(uint16_t *)((int)&GUnitDescriptions[0x16].seg + 1) = (int)((ulong)lVar2 >> 0x10);
+        *(uint16_t *)((int)&GUnitDescriptions[0x17].ofs + 1) = (int)lVar1;
+        *(uint16_t *)((int)&GUnitDescriptions[0x17].seg + 1) = uVar6;
+        *(uint16_t *)((int)&GUnitDescriptions[0x18].ofs + 1) = 0xa48;
+        *(uint16_t *)((int)&GUnitDescriptions[0x18].seg + 1) = 0;
+        *(uint16_t *)((int)&GUnitDescriptions[9].seg + 1) = 1;
         ((byte *)__C0_ASM_CopyRight)[0xc] = ((byte *)__C0_ASM_CopyRight)[0xc] | 2;
-        *(undefined2 *)((int)(uint32_t *)&_StartTime + 3) = 0xe9f;
-        *(undefined2 *)((int)(int *)&errno + 1) = 0xd0e;
+        *(uint16_t *)((int)(uint32_t *)&_StartTime + 3) = 0xe9f;
+        *(uint16_t *)((int)(int *)&errno + 1) = 0xd0e;
         return 0;
       }
       return uVar5;

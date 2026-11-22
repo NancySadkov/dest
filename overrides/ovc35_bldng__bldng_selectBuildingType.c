@@ -6,18 +6,18 @@ void bldng_selectBuildingType(byte partyIndex)
   far_t entries_00;
   far_t hint;
   uint uVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   int iVar4;
   char *pcVar5;
   uint8_t *puVar6;
-  undefined2 uVar7;
+  uint16_t uVar7;
   uint16_t count;
   char *unaff_SS;
   byte in_stack_00000004;
   undefined1 uVar8;
   uint8_t buildTypes;
   uint8_t menuEntries;
-  undefined2 auStack_190 [97];
+  uint16_t auStack_190 [97];
   char acStack_ce [200];
   int iStack_6;
   char cStack_4;
@@ -27,7 +27,7 @@ void bldng_selectBuildingType(byte partyIndex)
                                  (uint)((char_sheet_t *)(((uint)in_stack_00000004 << 2)))->classStr * 0x95) & 0x1f);
   buildTypes = bldng_getClass(in_stack_00000004);
   buildTypes = buildTypes & 0xff;
-  auStack_190[0] = *(undefined2 *)((int)&GStrangeTable[0x31].seg + buildTypes * 4);
+  auStack_190[0] = *(uint16_t *)((int)&GStrangeTable[0x31].seg + buildTypes * 4);
   menuEntries = ((far_t far *)(GStrangeTable + 0x31) + buildTypes)->ofs;
   count = 1;
   iStack_6 = 7;
@@ -41,7 +41,7 @@ void bldng_selectBuildingType(byte partyIndex)
         if ((char)uVar3 != '\0') {
           *(int *)(&buildTypes + count * 2) = iStack_6;
           uVar1 = ((far_t far *)(GStrangeTable + 0x31) + iStack_6)->ofs;
-          auStack_190[count * 2] = *(undefined2 *)((int)&GStrangeTable[0x31].seg + iStack_6 * 4);
+          auStack_190[count * 2] = *(uint16_t *)((int)&GStrangeTable[0x31].seg + iStack_6 * 4);
           *(uint16_t *)(&menuEntries + count * 4) = uVar1;
           count = count + 1;
         }
@@ -57,11 +57,11 @@ void bldng_selectBuildingType(byte partyIndex)
                     (((char_sheet_t *)(((uint)in_stack_00000004 << 2)))->buildType[0]);
   iVar4 = (uVar2 & 0xff) * 0x27;
   uVar7 = 0x195d;
-  uVar3 = *(undefined2 *)(iVar4 + 0x10e);
+  uVar3 = *(uint16_t *)(iVar4 + 0x10e);
   uVar8 = (undefined1)uVar3;
   pcVar5 = ovr_stsprintf(acStack_ce,(char *)CONCAT22(0x690b,unaff_SS),
                          (char *)CONCAT13((char)((uint)uVar3 >> 8),CONCAT12(uVar8,0x2410)),uVar8,
-                         (char)*(undefined2 *)(iVar4 + 0x110));
+                         (char)*(uint16_t *)(iVar4 + 0x110));
   puVar6 = &menuEntries;
   entries.seg = (uint16_t)unaff_SS;
   entries.ofs = (uint16_t)puVar6;

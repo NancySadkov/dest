@@ -14,13 +14,13 @@
 int __cdecl16far ovc39_loadArchiveEntry(byte fileId)
 
 {
-  undefined4 uVar1;
+  uint32_t uVar1;
   far_t handle;
   stg_tmp_t *psVar2;
   stg_tmp_t *in_DX;
-  undefined2 uVar3;
+  uint16_t uVar3;
   int iVar4;
-  undefined2 uVar5;
+  uint16_t uVar5;
   bool bVar6;
   word wStack_e;
   int iStack_c;
@@ -32,8 +32,8 @@ int __cdecl16far ovc39_loadArchiveEntry(byte fileId)
     handle.seg = *(uint16_t *)((uint)fileId * 4 + -0x6c6e);
     handle.ofs = *(uint16_t *)((uint)fileId * 4 + -0x6c70);
     psVar2 = ovr_stshLoadGfx(handle);
-    uVar1 = *(undefined4 *)((uint)fileId * 4 + -0x6c70);
-    uVar5 = (undefined2)((ulong)uVar1 >> 0x10);
+    uVar1 = *(uint32_t *)((uint)fileId * 4 + -0x6c70);
+    uVar5 = (uint16_t)((ulong)uVar1 >> 0x10);
     iVar4 = (int)uVar1;
     iStack_c = *(int *)(iVar4 + 7);
     wStack_e = *(uint *)(iVar4 + 5);
@@ -84,7 +84,7 @@ char * __cdecl16far ovc39_lordOrLady(void)
 /* Finds the building covering (x,y) by scanning left up to four columns for a unit whose
    bldtp_t.size spans it. */
 
-undefined2 __cdecl16far ovc39_findBuildingAt(int x,uint16_t y)
+uint16_t __cdecl16far ovc39_findBuildingAt(int x,uint16_t y)
 
 {
   byte bVar1;
@@ -127,7 +127,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex,...)
   char *pcVar4;
   unit_t *puVar5;
   int iVar6;
-  undefined2 uVar7;
+  uint16_t uVar7;
   char *unaff_SS;
   uint8_t msg;
   byte bStack_f;
@@ -142,21 +142,21 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex,...)
   char *pcStack_4;
   
   if ((partyIndex != 0xff) &&
-     (*(char *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x3f) == '\0')) {
+     (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0')) {
     uStack_8 = ovr_alignUp4(GfxRndSeed);
     for (bStack_b = 0; bStack_b < 4; bStack_b = bStack_b + 1) {
       for (iVar6 = -2; iVar6 < 2; iVar6 = iVar6 + 1) {
         uVar1 = ovr_ovc23_findRecordAt(uStack_8 + iVar6,GfxRndSeed2,(char)GfxRndSeed2);
         if (uVar1 == 0xffff) {
           iVar2 = ovc39_findBuildingAt(uStack_8 + iVar6,GfxRndSeed2);
-          uVar7 = (undefined2)((ulong)GUnits >> 0x10);
+          uVar7 = (uint16_t)((ulong)GUnits >> 0x10);
           puVar5 = (unit_t *)GUnits;
           bStack_9 = (puVar5 + iVar2)->bldType;
           pcVar4 = (char *)0x26510;
           bStack_a = puVar5[iVar2].unitType;
           if ((((bStack_b == 0) &&
                (pcVar4 = (char *)0x2627a,
-               *(char *)((int)*(undefined4 *)((uint)bStack_a << 2) + 0x3f) == '\0')) &&
+               *(char *)((int)*(uint32_t *)((uint)bStack_a << 2) + 0x3f) == '\0')) &&
               (0xf7 < iVar2)) && (pcVar4 = (char *)0x26510, puVar5[iVar2].level < 8)) {
             pcVar4 = (char *)&AgntAnms[0x88].missileDy;
             if ((*(uint *)((uint)bStack_9 * 0x27 + 0x121) & 0x80) == 0) {
@@ -239,14 +239,14 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex,...)
         }
       }
     }
-    uVar7 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-    iVar6 = (int)*(undefined4 *)((uint)partyIndex << 2);
+    uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+    iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
     if (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
         (uint)(*(int *)(iVar6 + 0x4d) * 2 + *(int *)(iVar6 + 0x4d)) >> 1) {
       if (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
           ((char_sheet_t *)(((uint)partyIndex << 2)))->population) {
-        uVar7 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-        iVar6 = (int)*(undefined4 *)((uint)partyIndex << 2);
+        uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+        iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
         if (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
             (uint)(*(int *)(iVar6 + 0x4d) * 2 + *(int *)(iVar6 + 0x4d)) >> 2) {
           if (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
@@ -274,37 +274,37 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex,...)
     else {
       bStack_c = 0;
     }
-    uVar7 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-    iVar2 = (int)*(undefined4 *)((uint)partyIndex << 2);
+    uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+    iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
     iVar6 = *(int *)(iVar2 + 0x62);
     if ((iVar6 < 0) ||
        ((iVar6 == 0 &&
         (*(uint *)(iVar2 + 0x60) <
          (uint)(((char_sheet_t *)(((uint)partyIndex << 2)))->population * 0x28))))) {
-      uVar7 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-      iVar2 = (int)*(undefined4 *)((uint)partyIndex << 2);
+      uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+      iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
       iVar6 = *(int *)(iVar2 + 0x62);
       if ((iVar6 < 0) ||
          ((iVar6 == 0 &&
           (*(uint *)(iVar2 + 0x60) <
            (uint)(((char_sheet_t *)(((uint)partyIndex << 2)))->population * 0x14))))) {
-        uVar7 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-        iVar2 = (int)*(undefined4 *)((uint)partyIndex << 2);
+        uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+        iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
         iVar6 = *(int *)(iVar2 + 0x62);
         if ((iVar6 < 0) ||
            ((iVar6 == 0 &&
             (*(uint *)(iVar2 + 0x60) <
              (uint)(((char_sheet_t *)(((uint)partyIndex << 2)))->population * 0x3c) >> 2)))) {
-          uVar7 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-          iVar2 = (int)*(undefined4 *)((uint)partyIndex << 2);
+          uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+          iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
           iVar6 = *(int *)(iVar2 + 0x62);
           if ((iVar6 < 0) ||
              ((iVar6 == 0 &&
               (*(uint *)(iVar2 + 0x60) <
                (uint)(((char_sheet_t *)(((uint)partyIndex << 2)))->population * 0x14) >> 1))))
           {
-            uVar7 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-            iVar2 = (int)*(undefined4 *)((uint)partyIndex << 2);
+            uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+            iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
             iVar6 = *(int *)(iVar2 + 0x62);
             if ((iVar6 < 0) ||
                ((iVar6 == 0 &&
@@ -335,14 +335,14 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex,...)
     if (bStack_f < bStack_c) {
       bStack_c = bStack_f;
     }
-    uVar7 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-    iVar6 = (int)*(undefined4 *)((uint)partyIndex << 2);
+    uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+    iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
     if (((char_sheet_t *)(((uint)partyIndex << 2)))->housing <
         (uint)(*(int *)(iVar6 + 0x4d) * 2 + *(int *)(iVar6 + 0x4d)) >> 1) {
       if (((char_sheet_t *)(((uint)partyIndex << 2)))->housing <
           ((char_sheet_t *)(((uint)partyIndex << 2)))->population) {
-        uVar7 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-        iVar6 = (int)*(undefined4 *)((uint)partyIndex << 2);
+        uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+        iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
         if (((char_sheet_t *)(((uint)partyIndex << 2)))->housing <
             (uint)(*(int *)(iVar6 + 0x4d) * 2 + *(int *)(iVar6 + 0x4d)) >> 2) {
           if (((char_sheet_t *)(((uint)partyIndex << 2)))->housing <
@@ -371,18 +371,18 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex,...)
       bStack_e = 0;
     }
     pcVar4 = (char *)0x2627a;
-    if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
+    if (*(uint *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) <
         (uint)(((char_sheet_t *)(((uint)partyIndex << 2)))->population << 1)) {
       pcVar4 = (char *)((uint)partyIndex << 2);
-      if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
+      if (*(uint *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) <
           ((char_sheet_t *)(pcVar4))->population) {
         pcVar4 = (char *)0x2627a;
-        if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
+        if (*(uint *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) <
             ((char_sheet_t *)(((uint)partyIndex << 2)))->population >> 1) {
           pcVar4 = (char *)0x2627a;
-          if (*(int *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) < 0) {
+          if (*(int *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) < 0) {
             pcVar4 = (char *)0x2627a;
-            if (*(uint *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x54) <
+            if (*(uint *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) <
                 (uint)-((char_sheet_t *)(((uint)partyIndex << 2)))->population) {
               bStack_d = 5;
             }

@@ -1,11 +1,11 @@
-undefined2 __stdcall16far __INITEXTMEM(uint sizeLo,int sizeHi,uint baseLo,int baseHi)
+uint16_t __stdcall16far __INITEXTMEM(uint sizeLo,int sizeHi,uint baseLo,int baseHi)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   int iVar2;
   int iVar3;
   uint uVar4;
-  undefined4 uVar5;
+  uint32_t uVar5;
   
   uVar1 = (uint)startx;   /* hand fix: startx is a function */
   if ((((char *)"Abnormal program termination\r\n")[5] & 1U) != 0) {

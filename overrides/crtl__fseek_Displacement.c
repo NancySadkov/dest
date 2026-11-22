@@ -8,10 +8,10 @@ int fseek_Displacement(uint *stream)
   uint uVar5;
   uint *puVar6;
   int iVar7;
-  undefined2 uVar8;
+  uint16_t uVar8;
   undefined1 *uStack_6;   /* hand fix: dereferenced as *uStack_6 */
   
-  uVar8 = (undefined2)((ulong)stream >> 0x10);
+  uVar8 = (uint16_t)((ulong)stream >> 0x10);
   puVar6 = (uint *)stream;
   if ((int)*stream < 0) {
     iVar2 = puVar6[3] + *stream + 1;

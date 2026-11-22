@@ -18,12 +18,12 @@ ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textV
   int iVar9;
   int iVar10;
   uint uVar11;
-  undefined2 unaff_SI;
+  uint16_t unaff_SI;
   long *unaff_DI;
   uint16_t uVar12;
-  undefined2 uVar13;
-  undefined2 uVar14;
-  undefined2 unaff_SS;
+  uint16_t uVar13;
+  uint16_t uVar14;
+  uint16_t unaff_SS;
   bool bVar15;
   far_t fVar16;
   undefined1 uStack000b;
@@ -34,8 +34,8 @@ ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textV
   int *in_stack_00000020;
   char acStackY_f6 [120];
   char acStackY_7e [92];
-  undefined2 uStackY_22;
-  undefined2 uStackY_20;
+  uint16_t uStackY_22;
+  uint16_t uStackY_20;
   undefined1 in_stack_0000ffef;
   undefined1 uVar17;
   undefined1 uVar18;
@@ -68,7 +68,7 @@ ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textV
   y = *(uint16_t *)(iVar9 + 0x3b);
   uVar25 = (undefined1)y;
   uVar26 = (undefined1)(y >> 8);
-  uVar13 = (undefined2)(CONCAT13(uVar24,CONCAT12(uVar23,iVar9)) >> 0x10);
+  uVar13 = (uint16_t)(CONCAT13(uVar24,CONCAT12(uVar23,iVar9)) >> 0x10);
   uVar4 = (uint)*(byte *)(iVar9 + 0x2f);
   if (uVar4 == 4) {
     uStackY_20 = 0x48ac;
@@ -103,26 +103,26 @@ ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textV
           uStack_3 = (undefined1)(uVar12 >> 8);
           uVar17 = SUB21(puVar6,0);
           uStack_5 = (undefined1)((uint)puVar6 >> 8);
-          uVar13 = (undefined2)(CONCAT13(uStack_3,CONCAT12(uStack_4,puVar6)) >> 0x10);
+          uVar13 = (uint16_t)(CONCAT13(uStack_3,CONCAT12(uStack_4,puVar6)) >> 0x10);
           *(int *)((int)puVar6 + 7) = iVar10;
           *(uint *)((int)puVar6 + 5) = uVar8;
           *(undefined1 *)CONCAT13(uStack_3,CONCAT12(uStack_4,puVar6)) = 0;
           uVar12 = StshCtOfs.lo;
-          uVar13 = (undefined2)(CONCAT13(uStack_3,CONCAT12(uStack_4,puVar6)) >> 0x10);
+          uVar13 = (uint16_t)(CONCAT13(uStack_3,CONCAT12(uStack_4,puVar6)) >> 0x10);
           *(uint16_t *)((int)puVar6 + 3) = StshCtOfs.hi;
           *(uint16_t *)((int)puVar6 + 1) = uVar12;
-          uVar13 = (undefined2)(CONCAT13(uStack_3,CONCAT12(uStack_4,puVar6)) >> 0x10);
-          *(undefined2 *)((int)puVar6 + 0x13) = 0;
-          *(undefined2 *)((int)puVar6 + 0x11) = 0;
+          uVar13 = (uint16_t)(CONCAT13(uStack_3,CONCAT12(uStack_4,puVar6)) >> 0x10);
+          *(uint16_t *)((int)puVar6 + 0x13) = 0;
+          *(uint16_t *)((int)puVar6 + 0x11) = 0;
           bVar15 = CARRY2(StshCtOfs.lo,uVar8);
           StshCtOfs.lo = StshCtOfs.lo + uVar8;
           StshCtOfs.hi = StshCtOfs.hi + iVar10 + (uint)bVar15;
-          uVar13 = (undefined2)(CONCAT13(uStack_3,CONCAT12(uStack_4,puVar6)) >> 0x10);
-          *(undefined2 *)((int)puVar6 + 0xb) = 0;
-          *(undefined2 *)((int)puVar6 + 9) = 0;
-          uVar13 = (undefined2)(CONCAT13(uStack_3,CONCAT12(uStack_4,puVar6)) >> 0x10);
-          *(undefined2 *)((int)puVar6 + 0xf) = 0;
-          *(undefined2 *)((int)puVar6 + 0xd) = 0;
+          uVar13 = (uint16_t)(CONCAT13(uStack_3,CONCAT12(uStack_4,puVar6)) >> 0x10);
+          *(uint16_t *)((int)puVar6 + 0xb) = 0;
+          *(uint16_t *)((int)puVar6 + 9) = 0;
+          uVar13 = (uint16_t)(CONCAT13(uStack_3,CONCAT12(uStack_4,puVar6)) >> 0x10);
+          *(uint16_t *)((int)puVar6 + 0xf) = 0;
+          *(uint16_t *)((int)puVar6 + 0xd) = 0;
           if (DebugVerbose != false) {
             uStackY_20 = 0xbbd4;
             printf("type %d len %ld \r");
@@ -273,7 +273,7 @@ L_attact_3f0b_26bd_2767:
         if ((*(char *)(partyIndex + 0x86) != '\0') && (bVar2 != 0xff)) {
           pcVar7 = (char *)((uint)bVar2 << 2);
           uVar13 = 0x217a;
-          if (*(byte *)((int)*(undefined4 *)pcVar7 + 0x86) < 9) {
+          if (*(byte *)((int)*(uint32_t *)pcVar7 + 0x86) < 9) {
             manage_usesBlitLabel2("popularity",0x7d);
             manage_usesBlitLabel2("city blocks",0xdc);
             TextBlitY = TextBlitY + 10;

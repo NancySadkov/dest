@@ -1,4 +1,4 @@
-undefined2 __cdecl16far bldng_usesRandBelow(byte typeIndex,...)
+uint16_t __cdecl16far bldng_usesRandBelow(byte typeIndex,...)
 
 {
   uint16_t uVar1;

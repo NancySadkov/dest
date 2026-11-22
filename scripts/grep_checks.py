@@ -16,6 +16,7 @@ CHECKS = [
     ('" + [0-9a-bA-Z]', r'" \+ [0-9a-bA-Z]'),
     ("argN_", r"arg[0-9]_"),
     ("arg_", r"arg_[a-za-z]"),
+    ("undefined[24]", r"undefined[24]"),
     ("ram0x", r"ram0x"),
     ("in_REG", r"in_(?:AX|BX|CX|DX|ST|EAX|EBX|ECX|EDX|CF|ECF)"),
     ("[iusbc]Var", r"[iusbc]Var[_0-9]"),

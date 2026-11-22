@@ -14,7 +14,7 @@ void __cdecl16far stshInit(void)
   for (file_id = 0; (int)file_id < 0x220; file_id = file_id + 1) {
     __return_storage_ptr__ =
          (long *)open_wait_unlock_and_disk
-                           ((char *)*(undefined2 *)(file_id * 4),((undefined2 *)(file_id * 4))[1]);
+                           ((char *)*(uint16_t *)(file_id * 4),((uint16_t *)(file_id * 4))[1]);
     if ((int)__return_storage_ptr__ < 0) {
       szhi = 0;
       szlo = 0;
@@ -27,8 +27,8 @@ void __cdecl16far stshInit(void)
     }
     *(uint16_t *)((uint8_t *)&StshSizes[file_id] + 2) = szhi;
     *(uint16_t *)(&StshSizes[file_id]) = szlo;
-    *(undefined2 *)((int)(long *)StshPtrs + file_id * 4 + 2) = 0;
-    *(undefined2 *)((long *)StshPtrs + file_id) = 0;
+    *(uint16_t *)((int)(long *)StshPtrs + file_id * 4 + 2) = 0;
+    *(uint16_t *)((long *)StshPtrs + file_id) = 0;
     (*(uint16_t *)((uint8_t *)&(flen) + 2)) = szhi;
   }
   (*(uint16_t *)((uint8_t *)&(FMXmsHandle))) =(uint16_t) xms_init(unaff_DI);

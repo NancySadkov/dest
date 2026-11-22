@@ -2,8 +2,8 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
 
 {
   extern undefined1 _backdropIndex;   /* hand fix: no symbol exists */
-  undefined4 uVar1;
-  undefined4 uVar2;
+  uint32_t uVar1;
+  uint32_t uVar2;
   bool bVar3;
   far_t text2;
   far_t gfx;
@@ -33,13 +33,13 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
   byte *pbVar9;
   uint uVar11;
   char *pcVar12;
-  undefined2 uVar13;
-  undefined2 in_DX;
+  uint16_t uVar13;
+  uint16_t in_DX;
   int iVar14;
-  undefined2 *unaff_SI;
+  uint16_t *unaff_SI;
   int iVar15;
   int unaff_DI;
-  undefined2 uVar16;
+  uint16_t uVar16;
   uint16_t unaff_SS;
   far_t text1;
   far_t text1_00;
@@ -52,8 +52,8 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
   undefined1 auStack_1f6 [100];
   char acStack_192 [274];
   undefined1 auStack_80 [56];
-  undefined2 uStack_48;
-  undefined2 uStack_46;
+  uint16_t uStack_48;
+  uint16_t uStack_46;
   uint16_t uStack_38;
   uint16_t uStack_36;
   uint16_t uStack_34;
@@ -66,12 +66,12 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
   char cStack_1e;
   char cStack_1d;
   stg_tmp_t *psStack_1c;
-  undefined2 uStack_1a;
-  undefined2 uStack_18;
-  undefined2 uStack_16;
+  uint16_t uStack_1a;
+  uint16_t uStack_18;
+  uint16_t uStack_16;
   undefined1 auStack_14 [2];
-  undefined2 uStack_12;
-  undefined2 uStack_10;
+  uint16_t uStack_12;
+  uint16_t uStack_10;
   byte bVar17;
   undefined1 uVar18;
   byte bVar19;
@@ -96,7 +96,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
     if (pbVar9 < (byte *)__C0_ASM_CopyRight) {
       switch((int)pbVar9) {
       case (byte *)0x0:
-        return (char *)((int)(undefined4 *)&_DATA + 1);
+        return (char *)((int)(uint32_t *)&_DATA + 1);
       case (byte *)0x1:
         ovr_ovc15_usesStExit(*(int *)((int)pbVar9 * 2 + 0x1b));
         return (char *)pbVar9;
@@ -110,7 +110,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
     }
   }
   pcVar12 = (char *)((uint)_backdropIndex & 0xff);
-  if ((char *)((int)(undefined4 *)&_DATA + 3U) < pcVar12) {
+  if ((char *)((int)(uint32_t *)&_DATA + 3U) < pcVar12) {
     if (TextBlitFlag != '\0') {
       ovr_say((char *)0x6e74);
     }
@@ -244,26 +244,26 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
             if (unaff_DI < 2) break;
             bVar22 = bVar22 + 1;
             if (3 < bVar22) {
-              uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-              uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-              uVar13 = (undefined2)((ulong)uVar2 >> 0x10);
+              uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+              uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+              uVar13 = (uint16_t)((ulong)uVar2 >> 0x10);
               iVar14 = (int)uVar2;
               if (*(uint *)((int)uVar1 + 0x4f) <
                   (uint)(*(int *)(iVar14 + 0x4d) * 2 + *(int *)(iVar14 + 0x4d)) >> 1) {
-                uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                 if (*(uint *)((int)uVar1 + 0x4f) < *(uint *)((int)uVar2 + 0x4d)) {
-                  uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                  uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                  uVar13 = (undefined2)((ulong)uVar2 >> 0x10);
+                  uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                  uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                  uVar13 = (uint16_t)((ulong)uVar2 >> 0x10);
                   iVar14 = (int)uVar2;
                   if (*(uint *)((int)uVar1 + 0x4f) <
                       (uint)(*(int *)(iVar14 + 0x4d) * 2 + *(int *)(iVar14 + 0x4d)) >> 2) {
-                    uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                    uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                    uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                    uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                     if (*(uint *)((int)uVar1 + 0x4f) < *(uint *)((int)uVar2 + 0x4d) >> 1) {
-                      uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                      uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                      uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                      uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                       if (*(uint *)((int)uVar1 + 0x4f) < *(uint *)((int)uVar2 + 0x4d) >> 2) {
                         bVar22 = 5;
                       }
@@ -286,44 +286,44 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
               else {
                 bVar22 = 0;
               }
-              uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-              uVar13 = (undefined2)((ulong)uVar1 >> 0x10);
+              uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+              uVar13 = (uint16_t)((ulong)uVar1 >> 0x10);
               iVar15 = (int)uVar1;
-              uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+              uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
               iVar14 = *(int *)(iVar15 + 0x62);
               if ((iVar14 < 0) ||
                  ((iVar14 == 0 &&
                   (*(uint *)(iVar15 + 0x60) < (uint)(*(int *)((int)uVar1 + 0x4d) * 0x28))))) {
-                uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                uVar13 = (undefined2)((ulong)uVar1 >> 0x10);
+                uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                uVar13 = (uint16_t)((ulong)uVar1 >> 0x10);
                 iVar15 = (int)uVar1;
-                uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                 iVar14 = *(int *)(iVar15 + 0x62);
                 if ((iVar14 < 0) ||
                    ((iVar14 == 0 &&
                     (*(uint *)(iVar15 + 0x60) < (uint)(*(int *)((int)uVar1 + 0x4d) * 0x14))))) {
-                  uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                  uVar13 = (undefined2)((ulong)uVar1 >> 0x10);
+                  uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                  uVar13 = (uint16_t)((ulong)uVar1 >> 0x10);
                   iVar15 = (int)uVar1;
-                  uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                  uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                   iVar14 = *(int *)(iVar15 + 0x62);
                   if ((iVar14 < 0) ||
                      ((iVar14 == 0 &&
                       (*(uint *)(iVar15 + 0x60) < (uint)(*(int *)((int)uVar1 + 0x4d) * 0x3c) >> 2)))
                      ) {
-                    uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                    uVar13 = (undefined2)((ulong)uVar1 >> 0x10);
+                    uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                    uVar13 = (uint16_t)((ulong)uVar1 >> 0x10);
                     iVar15 = (int)uVar1;
-                    uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                    uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                     iVar14 = *(int *)(iVar15 + 0x62);
                     if ((iVar14 < 0) ||
                        ((iVar14 == 0 &&
                         (*(uint *)(iVar15 + 0x60) < (uint)(*(int *)((int)uVar1 + 0x4d) * 0x14) >> 1)
                         ))) {
-                      uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                      uVar13 = (undefined2)((ulong)uVar1 >> 0x10);
+                      uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                      uVar13 = (uint16_t)((ulong)uVar1 >> 0x10);
                       iVar15 = (int)uVar1;
-                      uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                      uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                       iVar14 = *(int *)(iVar15 + 0x62);
                       if ((iVar14 < 0) ||
                          ((iVar14 == 0 &&
@@ -353,26 +353,26 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
               if ((*(uint8_t *)((uint8_t *)&(uStack_10) + 1)) < bVar22) {
                 bVar22 = (*(uint8_t *)((uint8_t *)&(uStack_10) + 1));
               }
-              uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-              uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-              uVar13 = (undefined2)((ulong)uVar2 >> 0x10);
+              uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+              uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+              uVar13 = (uint16_t)((ulong)uVar2 >> 0x10);
               iVar14 = (int)uVar2;
               if (*(uint *)((int)uVar1 + 0x5b) <
                   (uint)(*(int *)(iVar14 + 0x4d) * 2 + *(int *)(iVar14 + 0x4d)) >> 1) {
-                uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                 if (*(uint *)((int)uVar1 + 0x5b) < *(uint *)((int)uVar2 + 0x4d)) {
-                  uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                  uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                  uVar13 = (undefined2)((ulong)uVar2 >> 0x10);
+                  uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                  uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                  uVar13 = (uint16_t)((ulong)uVar2 >> 0x10);
                   iVar14 = (int)uVar2;
                   if (*(uint *)((int)uVar1 + 0x5b) <
                       (uint)(*(int *)(iVar14 + 0x4d) * 2 + *(int *)(iVar14 + 0x4d)) >> 2) {
-                    uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                    uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                    uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                    uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                     if (*(uint *)((int)uVar1 + 0x5b) < *(uint *)((int)uVar2 + 0x4d) >> 1) {
-                      uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
-                      uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                      uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
+                      uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                       if (*(uint *)((int)uVar1 + 0x5b) < *(uint *)((int)uVar2 + 0x4d) >> 2) {
                         bVar19 = 5;
                       }
@@ -396,23 +396,23 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
                 bVar19 = 0;
               }
               bVar17 = 0;
-              uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+              uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
               pcVar12 = (char *)0x217a;
-              uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+              uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
               if (*(uint *)((int)uVar1 + 0x54) < (uint)(*(int *)((int)uVar2 + 0x4d) << 1)) {
-                uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                 pcVar12 = (char *)(((uint)_backdropIndex & 0xff) << 2);
-                if (*(uint *)((int)uVar1 + 0x54) < *(uint *)((int)*(undefined4 *)pcVar12 + 0x4d)) {
-                  uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                if (*(uint *)((int)uVar1 + 0x54) < *(uint *)((int)*(uint32_t *)pcVar12 + 0x4d)) {
+                  uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                   pcVar12 = (char *)0x217a;
-                  uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                  uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                   if (*(uint *)((int)uVar1 + 0x54) < *(uint *)((int)uVar2 + 0x4d) >> 1) {
                     pcVar12 = (char *)0x217a;
-                    uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                    uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                     if (*(int *)((int)uVar1 + 0x54) < 0) {
-                      uVar1 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                      uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                       pcVar12 = (char *)0x217a;
-                      uVar2 = *(undefined4 *)(((uint)_backdropIndex & 0xff) << 2);
+                      uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                       if (*(uint *)((int)uVar1 + 0x54) < (uint)-*(int *)((int)uVar2 + 0x4d)) {
                         bVar17 = 5;
                       }
@@ -495,16 +495,16 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
         } while (uVar11 != 0xffff);
         uVar18 = 0x6f;
         uVar20 = 0x23;
-        unaff_SI = (undefined2 *)
+        unaff_SI = (uint16_t *)
                    ovc39_findBuildingAt(CONCAT11(uVar23,uVar10) + unaff_DI,GfxRndSeed2);
         uVar7 = CONCAT11(uVar20,uVar18);
-        uVar13 = (undefined2)((ulong)GUnits >> 0x10);
+        uVar13 = (uint16_t)((ulong)GUnits >> 0x10);
         in_DX = 0x2410;
         bVar19 = ((unit_t *)GUnits)[(int)unaff_SI].unitType;
         uVar11 = CONCAT11(((unit_t *)GUnits + (int)unaff_SI)->bldType,bVar19);
       } while (bVar22 != 0);
       in_DX = 0x217a;
-      uVar1 = *(undefined4 *)((uint)bVar19 << 2);
+      uVar1 = *(uint32_t *)((uint)bVar19 << 2);
       cVar4 = *(char *)((int)uVar1 + 0x3f);
     } while( true );
   case (char *)0x2:
@@ -519,17 +519,17 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
         bVar22 = bVar22 + 1) {
       pcVar12 = (char *)((uint)bVar22 << 2);
       if ((byte)(&stack0xfffa)[(uint)_backdropIndex & 0xff] <=
-          *(byte *)((int)*(undefined4 *)pcVar12 + 0xa5)) {
+          *(byte *)((int)*(uint32_t *)pcVar12 + 0xa5)) {
         for (uVar11 = 0xf8; uVar11 < GUnitCount; uVar11 = uVar11 + 1) {
           pcVar12 = 0x2410;   /* hand fix: segment-half slot */
-          uVar16 = (undefined2)((ulong)GUnits >> 0x10);
+          uVar16 = (uint16_t)((ulong)GUnits >> 0x10);
           if (((unit_t *)GUnits)[uVar11].unitType == bVar22) {
             pcVar12 = 0x2410;   /* hand fix: segment-half slot */
             if (((unit_t *)GUnits)[uVar11].level < 8) {
-              *(undefined2 *)(iVar14 + -4) = (uint16_t)(CONCAT11((char)(uVar11 * 9 >> 8),bVar22));
+              *(uint16_t *)(iVar14 + -4) = (uint16_t)(CONCAT11((char)(uVar11 * 9 >> 8),bVar22));
               *(uint *)(iVar14 + -6) = uVar11;
-              *(undefined2 *)(iVar14 + -8) = (uint16_t)(0x6000);
-              *(undefined2 *)(iVar14 + -10) = (uint16_t)(0x8958);
+              *(uint16_t *)(iVar14 + -8) = (uint16_t)(0x6000);
+              *(uint16_t *)(iVar14 + -10) = (uint16_t)(0x8958);
               iVar5 = season_usesAlignUp42(*(int *)(iVar14 + -6),*(byte *)(iVar14 + -4));
               if ((char)iVar5 != '\0') {
                 pcVar12 = 0x2410;   /* hand fix: segment-half slot */
@@ -542,33 +542,33 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
       }
     }
     if (iVar15 != 0) {
-      *(undefined2 *)(iVar14 + -4) = (uint16_t)(0);
-      *(undefined2 *)(iVar14 + -6) = (uint16_t)(0x24);
-      *(undefined2 *)(iVar14 + -8) = (uint16_t)(0x6000);
-      *(undefined2 *)(iVar14 + -10) = (uint16_t)((uint8_t *)SpecialColors + 5);
+      *(uint16_t *)(iVar14 + -4) = (uint16_t)(0);
+      *(uint16_t *)(iVar14 + -6) = (uint16_t)(0x24);
+      *(uint16_t *)(iVar14 + -8) = (uint16_t)(0x6000);
+      *(uint16_t *)(iVar14 + -10) = (uint16_t)((uint8_t *)SpecialColors + 5);
       ovr_inputUpdate(*(ulong *)(iVar14 + -6));
-      *(undefined2 *)(iVar14 + -4) = (uint16_t)(0xa000);
+      *(uint16_t *)(iVar14 + -4) = (uint16_t)(0xa000);
       *(int *)(iVar14 + -6) = iVar15;
-      *(undefined2 *)(iVar14 + -8) = (uint16_t)(0x2410);   /* hand fix: segment-half slot */
-      *(undefined2 *)(iVar14 + -10) = (uint16_t)(0x89b2);
+      *(uint16_t *)(iVar14 + -8) = (uint16_t)(0x2410);   /* hand fix: segment-half slot */
+      *(uint16_t *)(iVar14 + -10) = (uint16_t)(0x89b2);
       uVar16 = ovr_ovc41_pluralSuffix(*(int *)(iVar14 + -6));
-      *(undefined2 *)(iVar14 + -6) = (uint16_t)(pcVar12);
-      *(undefined2 *)(iVar14 + -8) = (uint16_t)(uVar16);
+      *(uint16_t *)(iVar14 + -6) = (uint16_t)(pcVar12);
+      *(uint16_t *)(iVar14 + -8) = (uint16_t)(uVar16);
       *(int *)(iVar14 + -10) = iVar15;
-      *(undefined2 *)(iVar14 + -0xc) = (uint16_t)(0x2410);   /* hand fix: segment-half slot */
-      *(undefined2 *)(iVar14 + -0xe) = (uint16_t)((char *)"%d building%s repaired.");
+      *(uint16_t *)(iVar14 + -0xc) = (uint16_t)(0x2410);   /* hand fix: segment-half slot */
+      *(uint16_t *)(iVar14 + -0xe) = (uint16_t)((char *)"%d building%s repaired.");
       *(uint16_t *)(iVar14 + -0x10) = unaff_SS;
       *(int *)(iVar14 + -0x12) = (int)auStack_80;
       *(char **)((char *)init_textFilename + iVar14) = (char *)0x23d5;
-      *(undefined2 *)(iVar14 + -0x16) = (uint16_t)(0x89c6);
-      pcVar6 = ovr_stsprintf((char *)*(undefined2 *)(iVar14 + -0x12),
-                             (char *)*(undefined4 *)(iVar14 + -0x10),
-                             (char *)*(undefined4 *)(iVar14 + -0xc));
-      *(undefined2 *)(iVar14 + -6) = (uint16_t)(pcVar12);
-      *(undefined2 *)(iVar14 + -8) = (uint16_t)(pcVar6);
-      *(undefined2 *)(iVar14 + -10) = (uint16_t)((char *)0x2337);
-      *(undefined2 *)(iVar14 + -0xc) = (uint16_t)(0x89d0);
-      ovr_uiNotify((char *)*(undefined2 *)(iVar14 + -8),*(uint16_t *)(iVar14 + -6));
+      *(uint16_t *)(iVar14 + -0x16) = (uint16_t)(0x89c6);
+      pcVar6 = ovr_stsprintf((char *)*(uint16_t *)(iVar14 + -0x12),
+                             (char *)*(uint32_t *)(iVar14 + -0x10),
+                             (char *)*(uint32_t *)(iVar14 + -0xc));
+      *(uint16_t *)(iVar14 + -6) = (uint16_t)(pcVar12);
+      *(uint16_t *)(iVar14 + -8) = (uint16_t)(pcVar6);
+      *(uint16_t *)(iVar14 + -10) = (uint16_t)((char *)0x2337);
+      *(uint16_t *)(iVar14 + -0xc) = (uint16_t)(0x89d0);
+      ovr_uiNotify((char *)*(uint16_t *)(iVar14 + -8),*(uint16_t *)(iVar14 + -6));
     }
     return pcVar6;
   case (char *)0x3:
@@ -583,7 +583,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
       uVar10 = auStack_1f6[((uint)pcVar12 & 0xff) * 2];
       pcVar12 = (char *)CONCAT11((char)((uint)(auStack_1f6 + ((uint)pcVar12 & 0xff) * 2) >> 8),
                                  uVar10);
-      uVar1 = *(undefined4 *)((uVar11 & 0xff) << 2);
+      uVar1 = *(uint32_t *)((uVar11 & 0xff) << 2);
       *(undefined1 *)((int)uVar1 + 0x85) = uVar10;
     }
     return pcVar12;
@@ -602,8 +602,8 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
   ovc40_usesBlitLabel(text1,text2,2,0xf2);
   ovc40_flushInput();
   ovr_ovr_miceButton0PressStates_entry();
-  uVar16 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-  uVar13 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+  uVar16 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  uVar13 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
   uVar21 = (undefined1)uVar16;
   uVar24 = (undefined1)((uint)uVar16 >> 8);
   uVar18 = (undefined1)uVar13;
@@ -680,8 +680,8 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
         ovr_audio_usesLDIV_at_();
         if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != CONCAT11(uVar24,uVar21)) break;
       } while (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) == CONCAT11(uVar20,uVar18));
-      uVar16 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-      uVar13 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+      uVar16 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      uVar13 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
       uVar21 = (undefined1)uVar16;
       uVar24 = (undefined1)((uint)uVar16 >> 8);
       uVar18 = (undefined1)uVar13;
@@ -697,8 +697,8 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
     ovc40_flushInput();
     rightButtonLatch = '\0';
     if ((in_stack_0000000e == '\x02') || (in_stack_0000000e == '\x03')) {
-      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-      uVar13 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      uVar13 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
       (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = uVar13;
       if (cStack_1d == '\0') {
         uVar7 = ovr_inputUpdate(0x48);

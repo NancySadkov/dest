@@ -8,13 +8,13 @@ undefined1 __cdecl16far ovc49_usesFrameIndex(agnt_t *agnt,byte *out)
 
 {
   uint8_t faction;
-  undefined2 uVar2;
+  uint16_t uVar2;
   int iVar3;
   bool ok;
   int iVar5;
   agnt_t *paVar6;
   int *piVar7;
-  undefined2 uVar8;
+  uint16_t uVar8;
   char side;
   char step;
   int xEnd;
@@ -22,14 +22,14 @@ undefined1 __cdecl16far ovc49_usesFrameIndex(agnt_t *agnt,byte *out)
   int radius;
   int row;
   
-  uVar8 = (undefined2)((ulong)agnt >> 0x10);
+  uVar8 = (uint16_t)((ulong)agnt >> 0x10);
   paVar6 = (agnt_t *)agnt;
   if (((agntG_t *)paVar6->gdata)->extents[1][1] == 0) {
     *out = 0;
   }
   else {
     faction = paVar6->faction;
-    uVar2 = *(undefined2 *)((int)&paVar6->frames + 2);
+    uVar2 = *(uint16_t *)((int)&paVar6->frames + 2);
     piVar7 = (int *)(*(int *)&paVar6->frames + (uint)paVar6->frameIndex * 4);
     iVar5 = piVar7[1];
     iVar3 = *piVar7;

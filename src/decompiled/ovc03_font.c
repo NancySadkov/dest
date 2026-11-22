@@ -32,13 +32,13 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
 
 {
   far_t *pfVar1;
-  undefined2 in_DX;
+  uint16_t in_DX;
   uint8_t *psrc;
   int16_t line;
   uint16_t o;
   int16_t unaff_DI;
   uint16_t m;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   uint8_t widths [96];
   uint8_t dchofs [192];
   uint8_t schofs [192];
@@ -75,7 +75,7 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
           stshCopyFontChar((uint8_t *)
                            CONCAT22((int)&pfVar1[0x48].ofs + *(int *)(dchofs + i * 2) + 1,hndl.ofs),
                            (uint8_t *)(ulong)CONCAT12(widths[i],in_DX),height,unaff_DI);
-          *(undefined2 *)((int)&pfVar1->ofs + i * 2 + 1) = *(undefined2 *)(dchofs + i * 2);
+          *(uint16_t *)((int)&pfVar1->ofs + i * 2 + 1) = *(uint16_t *)(dchofs + i * 2);
           *(uint8_t *)((int)&pfVar1[0x30].ofs + i + 1) = widths[i];
         }
         return pfVar1;
@@ -106,7 +106,7 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
       }
       if (0x13f < m + 1) break;
       widths[i] = (uint8_t)j;
-      in_DX = (undefined2)((ulong)((long)(int)j * (long)(int)height) >> 0x10);
+      in_DX = (uint16_t)((ulong)((long)(int)j * (long)(int)height) >> 0x10);
       dofs = dofs + (int)((long)(int)j * (long)(int)height);
       m = m + 2;
       o = o + 2;
@@ -375,7 +375,7 @@ int __cdecl16far font_textWidth(char *text,char *font,...)
 {
   int iVar1;
   int iVar2;
-  undefined2 in_stack_0000000a;
+  uint16_t in_stack_0000000a;
   
   if (text == (char *)0x0 && (char *)font == (char *)0x0) {
     iVar1 = 0;
@@ -404,7 +404,7 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay,...)
   ulong in_stack_0000fff8;
   uint uVar7;
   long lVar6;
-  undefined2 uVar8;
+  uint16_t uVar8;
   undefined1 uVar9;
   
   rightButtonLatch = 0;
@@ -431,11 +431,11 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay,...)
     }
     lVar6 = (ulong)uVar7 << 0x10;
     bVar2 = ovr_draw_textProvidesMoreHousing();
-    uVar8 = (undefined2)(CONCAT13(bVar2,(int3)lVar6) >> 0x10);
+    uVar8 = (uint16_t)(CONCAT13(bVar2,(int3)lVar6) >> 0x10);
     if (bVar2) break;
     in_stack_0000fff8 = CONCAT22(uVar8,(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));
     puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)TextBlitCycle,in_stack_0000fff8);
-    uVar8 = (undefined2)(in_stack_0000fff8 >> 0x10);
+    uVar8 = (uint16_t)(in_stack_0000fff8 >> 0x10);
   } while ((uVar4 < (*(uint16_t *)((uint8_t *)&(msg_delay) + 2))) ||
           ((uVar4 == (*(uint16_t *)((uint8_t *)&(msg_delay) + 2)) && (puVar3 < (ulong *)msg_delay))));
   uVar9 = (undefined1)((uint)uVar8 >> 8);
@@ -466,8 +466,8 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay,...)
   rightButtonLatch = 0;
   uVar3 = ovr_ovr_midGetSequenceStatus_entry();
   if ((uVar3 & 0xff) == 0) {
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+    (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
     uVar4 = inputUpdate((ulong)msgDelay);
     uVar3 = uVar4 & 0xff00;
   }
@@ -524,8 +524,8 @@ void __cdecl16far drawTextAt(char *txt,uint16_t dst,...)
   else {
     TextBlitFlag = 1;
     TextBlitDstSeg = in_stack_00000008;
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+    (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
     dst_00.seg = in_stack_00000008;
     dst_00.ofs = 0xc31d;
     gfx.seg = FontHandle.seg;
@@ -598,8 +598,8 @@ void __cdecl16far uiNotify(char *msg,uint16_t dst,...)
   uint16_t in_stack_00000008;
   
   inputUpdate((ulong)MessageDelay << 1);
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
   BlitRects[4].seg = in_stack_00000008;
   mice_no_update = MiceNeedsUpdate == '\0';
   if ((bool)mice_no_update) {

@@ -3,11 +3,11 @@ void bios(int width,uint16_t *vramOfs)
 {
   uint16_t *puVar1;
   uint16_t *puVar2;
-  undefined2 uVar3;
-  undefined2 unaff_SS;
+  uint16_t uVar3;
+  uint16_t unaff_SS;
   bool bVar4;
   bool bVar5;
-  undefined2 *in_stack_00000004;
+  uint16_t *in_stack_00000004;
   int in_stack_0000000a;
   uint8_t cursorPos;
   uint8_t vramScreenOfs;
@@ -24,7 +24,7 @@ void bios(int width,uint16_t *vramOfs)
     vramScreenOfs = screenpos((uint)in_stack_00000004);
   }
   while( true ) {
-    (*(uint16_t *)((uint8_t *)&(vramOfs) + 2)) = (uint16_t)(undefined2 *)((ulong)puVar1 >> 0x10);
+    (*(uint16_t *)((uint8_t *)&(vramOfs) + 2)) = (uint16_t)(uint16_t *)((ulong)puVar1 >> 0x10);
     (*(uint16_t *)((uint8_t *)&(vramOfs))) = (uint16_t)(uint16_t *)puVar1;
     if (width == 0) break;
     if (bVar5) {
@@ -34,7 +34,7 @@ void bios(int width,uint16_t *vramOfs)
       _VideoInt();
     }
     else {
-      uVar3 = *(undefined2 *)CONCAT22((uint16_t *)vramOfs,in_stack_00000004);
+      uVar3 = *(uint16_t *)CONCAT22((uint16_t *)vramOfs,in_stack_00000004);
       in_stack_00000004 = in_stack_00000004 + 1;
     }
     if (bVar4) {
@@ -44,7 +44,7 @@ void bios(int width,uint16_t *vramOfs)
       width = width + -1;
     }
     else {
-      *(undefined2 *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(vramOfs) + 2))) = uVar3;
+      *(uint16_t *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(vramOfs) + 2))) = uVar3;
       puVar1 = (uint16_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(vramOfs) + 2)) + 1,(uint16_t *)vramOfs);
       width = width + -1;
     }

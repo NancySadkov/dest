@@ -24,7 +24,7 @@ uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes,...)
         iVar3 = in_DX;
       }
       else {
-        (*(uint16_t *)((uint8_t *)&(r))) = ovr_heapRealloc((long *)oldblock,CONCAT22((undefined2)nbytes,(*(uint16_t *)((uint8_t *)&(oldblock) + 2))),
+        (*(uint16_t *)((uint8_t *)&(r))) = ovr_heapRealloc((long *)oldblock,CONCAT22((uint16_t)nbytes,(*(uint16_t *)((uint8_t *)&(oldblock) + 2))),
                                   CONCAT22((long *)r,(*(uint16_t *)((uint8_t *)&(nbytes) + 2))));
         iVar3 = in_DX;
       }

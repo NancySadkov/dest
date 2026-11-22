@@ -11,7 +11,7 @@ int __cdecl16far saveui_usesBlitText(char *prompt,int textSeg,int row)
   int iVar2;
   int iVar3;
   uint16_t uVar4;
-  undefined2 unaff_SI;
+  uint16_t unaff_SI;
   byte *unaff_SS;
   char *in_stack_00000004;
   uint3 uStack_5e;

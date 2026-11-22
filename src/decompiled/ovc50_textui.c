@@ -45,17 +45,17 @@ void __cdecl16far ovc50_usesStshLoadGfx(byte gfxIndex)
 
 {
   int iVar1;
-  undefined4 uVar2;
+  uint32_t uVar2;
   far_t handle;
   stg_tmp_t *widths;
   char *pcVar3;
-  undefined2 unaff_SI;
+  uint16_t unaff_SI;
   
   pcVar3 = (char *)0x26510;
   handle.seg = *(uint16_t *)((uint)gfxIndex * 4 + -0x6c6e);
   handle.ofs = *(uint16_t *)((uint)gfxIndex * 4 + -0x6c70);
   widths = ovr_stshLoadGfx(handle);
-  uVar2 = *(undefined4 *)((uint)gfxIndex * 4 + -0x6c70);
+  uVar2 = *(uint32_t *)((uint)gfxIndex * 4 + -0x6c70);
   iVar1 = *(int *)((int)uVar2 + 5);
   if (iVar1 != 0) {
     widths->cmap[iVar1 + -1] = 0x0;

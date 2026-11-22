@@ -52,7 +52,7 @@ void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette,...)
 {
   int iVar1;
   int iVar2;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   uint8_t pal;
   int iStack_6;
   int iStack_4;
@@ -86,7 +86,7 @@ void __cdecl16far setSeasonPalette(far_t palette,...)
 {
   uint uVar1;
   uint uVar2;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   uint8_t pal;
   int iStack_6;
   int iStack_4;
@@ -125,13 +125,13 @@ stg_tmp_t * __cdecl16far ovc40_usesStshLoadGfx(byte backdropIndex)
   far_t handle_00;
   far_t handle_01;
   far_t handle_02;
-  undefined2 in_DX;
-  undefined2 uVar1;
-  undefined2 unaff_SS;
+  uint16_t in_DX;
+  uint16_t uVar1;
+  uint16_t unaff_SS;
   uint8_t cmapBackupB;
   uint8_t cmapBackupA;
   stg_tmp_t *psStack_6;
-  undefined2 uStack_4;
+  uint16_t uStack_4;
   
   handle.seg = marbleCut1Seg;
   handle.ofs = marbleCut1Ofs;
@@ -151,8 +151,8 @@ stg_tmp_t * __cdecl16far ovc40_usesStshLoadGfx(byte backdropIndex)
   }
   else {
     uVar1 = 0x2410;
-    handle_02.seg = ((undefined2 *)&back03Cut1Seg)[(uint)backdropIndex * 2];
-    handle_02.ofs = ((undefined2 *)&back03Cut1Ofs)[(uint)backdropIndex * 2];
+    handle_02.seg = ((uint16_t *)&back03Cut1Seg)[(uint)backdropIndex * 2];
+    handle_02.ofs = ((uint16_t *)&back03Cut1Ofs)[(uint)backdropIndex * 2];
     psStack_6 = ovr_stshLoadGfx(handle_02);
     uStack_4 = uVar1;
   }
@@ -213,21 +213,21 @@ void __cdecl16far ovc40_usesBlitGfx10(byte backdropIndex,int scrollOffset,brect_
   bool type;
   
   dst = (brect_t *)rect;
-  gfx_03.seg = ((undefined2 *)&back03Cut2Seg)[(uint)backdropIndex * 2];
-  gfx_03.ofs = ((undefined2 *)&back03Cut2Ofs)[(uint)backdropIndex * 2];
+  gfx_03.seg = ((uint16_t *)&back03Cut2Seg)[(uint)backdropIndex * 2];
+  gfx_03.ofs = ((uint16_t *)&back03Cut2Ofs)[(uint)backdropIndex * 2];
   ovr_blitLoadRleGfx(gfx_03,far_from_u32((uint32_t)((ulong)dst->seg << 0x10)));
-  gfx.seg = ((undefined2 *)&midgrnd5Cut1Seg)[(uint)backdropIndex * 2];
-  gfx.ofs = ((undefined2 *)&midgrnd5Cut1Ofs)[(uint)backdropIndex * 2];
+  gfx.seg = ((uint16_t *)&midgrnd5Cut1Seg)[(uint)backdropIndex * 2];
+  gfx.ofs = ((uint16_t *)&midgrnd5Cut1Ofs)[(uint)backdropIndex * 2];
   type = SUB41((ulong)rect >> 0x10,0);
   ovr_blitGfx10(gfx,-(scrollOffset >> 1),0,dst,type);
-  gfx_00.seg = ((undefined2 *)&midgrnd5Cut2Seg)[(uint)backdropIndex * 2];
-  gfx_00.ofs = ((undefined2 *)&midgrnd5Cut2Ofs)[(uint)backdropIndex * 2];
+  gfx_00.seg = ((uint16_t *)&midgrnd5Cut2Seg)[(uint)backdropIndex * 2];
+  gfx_00.ofs = ((uint16_t *)&midgrnd5Cut2Ofs)[(uint)backdropIndex * 2];
   ovr_blitGfx10(gfx_00,0xdc - (scrollOffset >> 1),0,dst,type);
-  gfx_01.seg = ((undefined2 *)&strong4Cut1Seg)[(uint)backdropIndex * 2];
-  gfx_01.ofs = ((undefined2 *)&strong4Cut1Ofs)[(uint)backdropIndex * 2];
+  gfx_01.seg = ((uint16_t *)&strong4Cut1Seg)[(uint)backdropIndex * 2];
+  gfx_01.ofs = ((uint16_t *)&strong4Cut1Ofs)[(uint)backdropIndex * 2];
   ovr_blitGfx10(gfx_01,-scrollOffset,0,dst,type);
-  gfx_02.seg = ((undefined2 *)&strong4Cut2Seg)[(uint)backdropIndex * 2];
-  gfx_02.ofs = ((undefined2 *)&strong4Cut2Ofs)[(uint)backdropIndex * 2];
+  gfx_02.seg = ((uint16_t *)&strong4Cut2Seg)[(uint)backdropIndex * 2];
+  gfx_02.ofs = ((uint16_t *)&strong4Cut2Ofs)[(uint)backdropIndex * 2];
   ovr_blitGfx10(gfx_02,0x118 - scrollOffset,0,dst,type);
   ovr_blitRect(dst);
   return;
@@ -329,13 +329,13 @@ ovc40_usesAlignToSeg
   uint8_t text1;
   uint8_t text2;
   uint8_t dst;
-  undefined2 uStack_68;
-  undefined2 uStack_66;
+  uint16_t uStack_68;
+  uint16_t uStack_66;
   uint8_t format1;
-  undefined2 auStack_62 [3];
+  uint16_t auStack_62 [3];
   uint8_t rankMsg;
   uint16_t uStack_5a;
-  undefined2 uStack_58;
+  uint16_t uStack_58;
   char *pcStack_56;
   uint8_t format2;
   uint16_t auStack_52 [4];
@@ -354,7 +354,7 @@ ovc40_usesAlignToSeg
   uint16_t uStack_32;
   uint16_t uStack_30;
   uint16_t uStack_2e;
-  undefined2 uStack_2c;
+  uint16_t uStack_2c;
   char *pcStack_2a;
   uint16_t uStack_28;
   uint16_t uStack_26;
@@ -535,7 +535,7 @@ ovc40_usesAlignToSeg
     bVar3 = 2;
     puVar7 = &format1;
     pcVar4 = ovr_stsprintf((char *)&text1,
-                           (char *)CONCAT22(*(undefined2 *)(puVar7 + (uint)formatIndex * 4),unaff_SS
+                           (char *)CONCAT22(*(uint16_t *)(puVar7 + (uint)formatIndex * 4),unaff_SS
                                            ),
                            (char *)CONCAT13((char)((uint)textOfs >> 8),
                                             CONCAT12((char)textOfs,auStack_62[(uint)formatIndex * 2]
@@ -544,7 +544,7 @@ ovc40_usesAlignToSeg
     uVar11 = (undefined1)((uint)pcVar4 >> 8);
     puVar8 = &format2;
     pcVar4 = ovr_stsprintf((char *)&text2,
-                           (char *)CONCAT22(*(undefined2 *)(puVar8 + (uint)formatIndex * 4),unaff_SS
+                           (char *)CONCAT22(*(uint16_t *)(puVar8 + (uint)formatIndex * 4),unaff_SS
                                            ),
                            (char *)CONCAT22(textOfs,(char *)auStack_52[(uint)formatIndex * 2]),
                            textSeg);
@@ -630,7 +630,7 @@ ovc40_usesAlignToSeg
     ovc40_flushInput();
     rightButtonLatch = '\0';
     if ((formatIndex == 2) || (formatIndex == 3)) {
-      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
       iVar9 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
       (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = iVar9;
       if (cStack_1d == '\0') {

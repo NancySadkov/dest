@@ -16,13 +16,13 @@ ovc43_usesFmFreeAudio(uint32_t gindex,char_sheet_t *sheet,uint16_t sheetSeg)
   uint16_t uVar2;
   far_t far *pfVar3;
   char_sheet_t *pcVar4;
-  undefined2 in_CX;
+  uint16_t in_CX;
   char_sheet_t *pcVar5;
   uint uVar6;
   uint16_t unaff_SI;
   int iVar7;
   int unaff_DI;
-  undefined2 uVar8;
+  uint16_t uVar8;
   byte bStack_8;
   char_sheet_t *uStack_6;   /* hand fix: used as uStack_6->nameText and (char_sheet_t *)uStack_6 */
   
@@ -30,7 +30,7 @@ ovc43_usesFmFreeAudio(uint32_t gindex,char_sheet_t *sheet,uint16_t sheetSeg)
   TextBlitDstSeg = 0xa000;
   iVar7 = 0;
   while( true ) {
-    uVar8 = (undefined2)(gindex >> 0x10);
+    uVar8 = (uint16_t)(gindex >> 0x10);
     if (*(int *)((int)gindex + 6) <= iVar7) {
       return pcVar4;
     }
@@ -73,8 +73,8 @@ L_OVC30_619c_0339_03CE:
     uStack_6 = (char_sheet_t *)CONCAT22(pcVar5,pcVar4);
     bStack_8 = GLeaderCount;
     uVar6 = (uint)GLeaderCount;
-    ((undefined2 *)(uVar6 * 4))[1] = (uint16_t)pcVar5;   /* hand fix: segment half into a 2-byte slot */
-    *(undefined2 *)(uVar6 * 4) = (uint16_t)pcVar4;   /* hand fix: offset half into a 2-byte slot */
+    ((uint16_t *)(uVar6 * 4))[1] = (uint16_t)pcVar5;   /* hand fix: segment half into a 2-byte slot */
+    *(uint16_t *)(uVar6 * 4) = (uint16_t)pcVar4;   /* hand fix: offset half into a 2-byte slot */
     GLeaderCount = GLeaderCount + 1;
     break;
   case 5:
@@ -84,13 +84,13 @@ L_OVC30_619c_0339_03CE:
   }
   _fmemset((void *)(ulong)(*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),0xae,unaff_SI);
   strcpy(uStack_6->nameText,
-         (char *)CONCAT22(*(undefined2 *)
+         (char *)CONCAT22(*(uint16_t *)
                            ((int)&worldMenuLabels[1].ofs + 1 + (uint)(byte)gindex * 0x95),
-                          (char *)*(undefined2 *)
+                          (char *)*(uint16_t *)
                                    ((int)&worldMenuLabels[0].seg + 1 + (uint)(byte)gindex * 0x95)));
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x3d) = 1;
-  *(undefined2 *)((int)(char_sheet_t *)uStack_6 + 0x39) = uVar8;
-  *(undefined2 *)((int)(char_sheet_t *)uStack_6 + 0x3b) = (uint16_t)sheet;   /* hand fix: only the offset half is stored */
+  *(uint16_t *)((int)(char_sheet_t *)uStack_6 + 0x39) = uVar8;
+  *(uint16_t *)((int)(char_sheet_t *)uStack_6 + 0x3b) = (uint16_t)sheet;   /* hand fix: only the offset half is stored */
   *(byte *)((int)(char_sheet_t *)uStack_6 + 0x3e) = (byte)gindex;
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x2f) = 0xff;
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x30) = 3;
@@ -98,7 +98,7 @@ L_OVC30_619c_0339_03CE:
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x34) = (char)uVar2;
 code_r0x00061e64:
   ovr_manage_rollStats((char_sheet_t *)uStack_6);
-  uVar8 = (undefined2)((ulong)uStack_6 >> 0x10);
+  uVar8 = (uint16_t)((ulong)uStack_6 >> 0x10);
   if (*(char *)((int)&worldMenuLabels[0xc].seg + (uint)(byte)gindex * 0x95) != -1) {
     ((char_sheet_t *)uStack_6)->stats[1] =
          *(byte *)((int)&worldMenuLabels[0xc].seg + (uint)(byte)gindex * 0x95);
@@ -115,8 +115,8 @@ code_r0x00061e64:
   ((char_sheet_t *)uStack_6)->hp[1] = ((char_sheet_t *)uStack_6)->hp[0];
   ((char_sheet_t *)uStack_6)->statMask = ((char_sheet_t *)uStack_6)->statMask | 0x16;
   ((char_sheet_t *)uStack_6)->spyReports = 0x1;
-  *(undefined2 *)((int)&((char_sheet_t *)uStack_6)->gold + 2) = 0;
-  *(undefined2 *)&((char_sheet_t *)uStack_6)->gold = 100;
+  *(uint16_t *)((int)&((char_sheet_t *)uStack_6)->gold + 2) = 0;
+  *(uint16_t *)&((char_sheet_t *)uStack_6)->gold = 100;
   ((char_sheet_t *)uStack_6)->partySlot = 0xff;
   pfVar3 = ovr_ovc22_textRingProt(bStack_8);
   return (char_sheet_t *)CONCAT11((char)((uint)pfVar3 >> 8),bStack_8);
@@ -130,7 +130,7 @@ code_r0x00061e64:
 void __cdecl16far ovc43_usesStExit(uint32_t gindex,uint16_t hnd,uint16_t sheetOfs,uint16_t sheetSeg)
 
 {
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   bool bVar1;
   uint16_t remainingLo;
   int iStack_10;
@@ -165,13 +165,13 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
   ulong *puVar3;
   uint16_t in_DX;
   ulong *puVar4;
-  undefined2 unaff_DI;
+  uint16_t unaff_DI;
   uint uVar5;
   int iStack_84;
   int iStack_82;
   char cStack_7;
   ulong *puStack_6;
-  undefined2 uStack_4;
+  uint16_t uStack_4;
   
   ovr_stshRead();
   if (iStack_84 != -0x50ef) {
@@ -182,7 +182,7 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
   tempScreenSeg = in_DX;
   ovc43_usesStExit(CONCAT22(paletteSeg,paletteOfs),handle,(uint16_t)tempScreenOfs,in_DX);
   ovr_ovr_miceButton0PressStates_entry();
-  uStack_4 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  uStack_4 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   puVar4 = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, not the far_t struct */
   cStack_7 = '\0';
   puStack_6 = puVar4;
@@ -207,7 +207,7 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
       puVar3 = ovr_attact_usesBDADailyTimeCounter(puStack_6,CONCAT22(unaff_DI,uStack_4));
     } while ((puVar4 == (ulong *)0x0) && (puVar4 = (ulong *)0x0, puVar3 < (ulong *)(uint)delayTicks)
             );
-    uStack_4 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    uStack_4 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
     puVar4 = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, not the far_t struct */
     puStack_6 = puVar4;
 L_OVC43_6fbe_01a9_02C7:
@@ -230,7 +230,7 @@ void __cdecl16far
 ovc43_playArchiveFli(far_t gfx,uint16_t paletteOfs,uint16_t paletteSeg,uint8_t delayTicks,...)
 
 {
-  ovr_stshSeek(StshStrongDatHnd,CONCAT22(*(undefined2 *)(gfx.ofs + 3),*(undefined2 *)(gfx.ofs + 1)))
+  ovr_stshSeek(StshStrongDatHnd,CONCAT22(*(uint16_t *)(gfx.ofs + 3),*(uint16_t *)(gfx.ofs + 1)))
   ;
   ovc43_playFliFrames(StshStrongDatHnd,paletteOfs,paletteSeg,delayTicks);
   return;

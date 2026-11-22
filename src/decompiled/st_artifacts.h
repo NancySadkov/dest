@@ -91,7 +91,7 @@ extern uint16_t in_stack_0000fffa;
 extern uint16_t in_stack_0000fffb;
 extern uint16_t in_stack_0000fffc;
 extern uint16_t in_stack_0000fffd;
-#define puRam00010106 (*(undefined2 * far *)MK_FP(0x1010, 0x0006))
+#define puRam00010106 (*(uint16_t * far *)MK_FP(0x1010, 0x0006))
 #define ram0x0000d528 (*(undefined1 far *)MK_FP(0x0d52, 0x0008))
 #define ram0x00024180 (*(undefined1 far *)MK_FP(ST_DGROUP_SEG, 0x0080))
 #define ram0x00024186 (*(undefined1 far *)MK_FP(ST_DGROUP_SEG, 0x0086))
@@ -147,19 +147,19 @@ extern undefined1 stack0xfffa;
 extern undefined1 stack0xfffc;
 extern undefined1 stack0xfffe;
 extern undefined1 stack0xffff;
-#define uRam00000064 (*(undefined2 far *)MK_FP(0x0000, 0x0064))
-#define uRam00000066 (*(undefined2 far *)MK_FP(0x0000, 0x0066))
-#define uRam000000fa (*(undefined2 far *)MK_FP(0x0000, 0x00fa))
-#define uRam000000fc (*(undefined2 far *)MK_FP(0x0000, 0x00fc))
-#define uRam000000fe (*(undefined2 far *)MK_FP(0x0000, 0x00fe))
-#define uRam000100f6 (*(undefined2 far *)MK_FP(0x100f, 0x0006))
-#define uRam000100f8 (*(undefined2 far *)MK_FP(0x100f, 0x0008))
-#define uRam000100fa (*(undefined2 far *)MK_FP(0x100f, 0x000a))
-#define uRam000100fc (*(undefined2 far *)MK_FP(0x100f, 0x000c))
-#define uRam000100fe (*(undefined2 far *)MK_FP(0x100f, 0x000e))
-#define uRam00010102 (*(undefined2 far *)MK_FP(0x1010, 0x0002))
-#define uRam00010104 (*(undefined2 far *)MK_FP(0x1010, 0x0004))
-#define uRam0002db84 (*(undefined2 far *)MK_FP(ST_DGROUP_SEG, 0x9a84))
+#define uRam00000064 (*(uint16_t far *)MK_FP(0x0000, 0x0064))
+#define uRam00000066 (*(uint16_t far *)MK_FP(0x0000, 0x0066))
+#define uRam000000fa (*(uint16_t far *)MK_FP(0x0000, 0x00fa))
+#define uRam000000fc (*(uint16_t far *)MK_FP(0x0000, 0x00fc))
+#define uRam000000fe (*(uint16_t far *)MK_FP(0x0000, 0x00fe))
+#define uRam000100f6 (*(uint16_t far *)MK_FP(0x100f, 0x0006))
+#define uRam000100f8 (*(uint16_t far *)MK_FP(0x100f, 0x0008))
+#define uRam000100fa (*(uint16_t far *)MK_FP(0x100f, 0x000a))
+#define uRam000100fc (*(uint16_t far *)MK_FP(0x100f, 0x000c))
+#define uRam000100fe (*(uint16_t far *)MK_FP(0x100f, 0x000e))
+#define uRam00010102 (*(uint16_t far *)MK_FP(0x1010, 0x0002))
+#define uRam00010104 (*(uint16_t far *)MK_FP(0x1010, 0x0004))
+#define uRam0002db84 (*(uint16_t far *)MK_FP(ST_DGROUP_SEG, 0x9a84))
 extern uint16_t unaff_BP;
 extern uint16_t unaff_DI;
 extern uint32_t unaff_ES;

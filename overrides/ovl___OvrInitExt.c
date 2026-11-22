@@ -2,7 +2,7 @@ int __cdecl16far _OvrInitExt(uint32_t startAddress,uint32_t length)
 
 {
   bool bVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   int iVar3;
   uint sizeLo;
   int in_DX;
@@ -62,12 +62,12 @@ L__OvrInitExt_0AD7:
         if (bVar1) break;
         bVar1 = true;
       }
-      *(undefined2 *)0x13c = 0xbfb;
-      *(undefined2 *)0x13e = 0;
-      *(undefined2 *)0x112 = 1;
+      *(uint16_t *)0x13c = 0xbfb;
+      *(uint16_t *)0x13e = 0;
+      *(uint16_t *)0x112 = 1;
       *(byte *)&OvrFlags = *(byte *)&OvrFlags | 1;
-      *(undefined2 *)&__CALLEXTEXIT = 0x1152;
-      *(undefined2 *)&__CALLEXTEMSSWAP = 0xd0e;
+      *(uint16_t *)&__CALLEXTEXIT = 0x1152;
+      *(uint16_t *)&__CALLEXTEMSSWAP = 0xd0e;
       iVar3 = 0;
     }
   }

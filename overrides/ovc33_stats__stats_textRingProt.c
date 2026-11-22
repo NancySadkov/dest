@@ -4,7 +4,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   char *pcVar1;
   uint *puVar2;
   int *piVar3;
-  undefined2 *puVar4;
+  uint16_t *puVar4;
   byte *pbVar5;
   long lVar6;
   code *pcVar7;
@@ -36,10 +36,10 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   byte bVar27;
   byte bVar28;
   int iVar29;
-  undefined2 in_DX;
-  undefined2 uVar30;
+  uint16_t in_DX;
+  uint16_t uVar30;
   byte *pbVar31;
-  undefined2 *puVar32;
+  uint16_t *puVar32;
   int *piVar33;
   short (*pasVar34) [148];
   unit_t *puVar35;
@@ -51,21 +51,21 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   far_t far *unaff_SI;
   byte *pbVar42;
   byte *unaff_DI;
-  undefined2 unaff_ES;
-  undefined2 uVar43;
-  undefined2 unaff_SS;
-  undefined2 uVar44;
+  uint16_t unaff_ES;
+  uint16_t uVar43;
+  uint16_t unaff_SS;
+  uint16_t uVar44;
   bool bVar45;
   byte in_AF;
   longdouble in_ST0;
-  undefined4 uVar46;
-  undefined2 in_stack_00000002;
+  uint32_t uVar46;
+  uint16_t in_stack_00000002;
   byte in_stack_00000004;
   undefined1 in_stack_00000005;
   uint8_t auStack_314 [72];
   char acStack_2cc [588];
   char acStack_80 [110];
-  undefined2 uStack_12;
+  uint16_t uStack_12;
   int16_t iStack_10;
   byte in_stack_0000fff2;
   byte in_stack_0000fff4;
@@ -339,7 +339,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
           TextBlitDstSeg = 0xa000;
           TextBlitX = CONCAT11(uVar49,uVar48) + 6;
           TextBlitY = (uint16_t)(pbVar21 + 0x10);
-          puVar32 = (undefined2 *)
+          puVar32 = (uint16_t *)
                     (CONCAT11(in_stack_00000005,in_stack_00000004) + (int)unaff_SI * 4);
           uVar30 = puVar32[1];
           in_DX = *puVar32;
@@ -411,7 +411,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       bVar12 = CARRY2(uVar16,*(uint *)(unaff_DI + (int)*pasVar34));
       iVar29 = uVar16 + *(uint *)(unaff_DI + (int)*pasVar34);
       *(double *)((int)&unaff_SI->ofs + (int)*pasVar34) = (double)in_ST0;
-      puVar4 = (undefined2 *)((int)&unaff_SI->ofs + (int)*pasVar34);
+      puVar4 = (uint16_t *)((int)&unaff_SI->ofs + (int)*pasVar34);
       bVar10 = ((byte)in_CX & 0x1f) % 0x11;
       uVar9 = CONCAT12(bVar12,*puVar4);
       uVar8 = (ulong)uVar9 << bVar10 | (ulong)(uVar9 >> 0x11 - bVar10);
@@ -457,7 +457,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       UNLOCK();
       pbVar31 = (byte *)((int)*pasVar34 + 1);
       *unaff_DI = *unaff_DI & bVar28;
-      *(undefined2 *)0xa813 = in_stack_00000002;
+      *(uint16_t *)0xa813 = in_stack_00000002;
       iVar29 = uVar13 + 0x2b64 + (uint)(0xea39 < uVar13) +
                (uint)(0xea61 < uVar13 + 0x15c6 || CARRY2(uVar13 + 0x2b64,(uint)(0xea39 < uVar13))) +
                0x2a2f;
@@ -560,11 +560,11 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       *pbVar5 = (bVar10 - bVar27) - bVar45;
       uVar30 = CONCAT11(bVar25,(bVar26 - bVar27) -
                                (bVar28 < bVar27 || (byte)(bVar10 - bVar27) < bVar45));
-      uVar44 = *(undefined2 *)(uVar15 + iVar41 + 2);
+      uVar44 = *(uint16_t *)(uVar15 + iVar41 + 2);
       puVar36 = (uint *)(uVar15 + iVar41 + 4);
       pcVar7 = (code *)swi(0x1e);
       uVar46 = (*pcVar7)();
-      uVar43 = (undefined2)((ulong)uVar46 >> 0x10);
+      uVar43 = (uint16_t)((ulong)uVar46 >> 0x10);
       uVar20 = (uint)uVar46;
       uVar13 = *puVar36;
       *puVar36 = uVar44;
@@ -641,16 +641,16 @@ L_OVC27_2288:
       pbVar31[(int)piVar33] = pbVar31[(int)piVar33] + cVar22;
       pbVar42[-0x75] = pbVar42[-0x75] + bVar28;
       in(uVar43);
-      *(undefined2 *)((int)puVar40 + -6) =(uint16_t)( piVar33);
+      *(uint16_t *)((int)puVar40 + -6) =(uint16_t)( piVar33);
       iVar29 = *(int *)(puVar39 + 6);
       do {
         iVar41 = iVar29 + -1;
         if (iVar29 == 0) {
           return (far_t far *)0x0;
         }
-        uVar30 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
-        *(undefined2 *)(puVar39 + -2) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-        *(undefined2 *)(puVar39 + -4) = uVar30;
+        uVar30 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+        *(uint16_t *)(puVar39 + -2) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+        *(uint16_t *)(puVar39 + -4) = uVar30;
         do {
           iVar29 = iVar41;
           if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != *(int *)(puVar39 + -2)) break;
@@ -674,9 +674,9 @@ L_OVC27_2288:
       *pbVar5 = *pbVar5 | 0x16;
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x40) = 1;
       iVar29 = CONCAT11(in_stack_0000fffb,in_stack_0000fffa);
-      uVar30 = (undefined2)(CONCAT13(in_stack_0000fffd,CONCAT12(in_stack_0000fffc,iVar29)) >> 0x10);
-      *(undefined2 *)(iVar29 + 0x58) = 0;
-      *(undefined2 *)(iVar29 + 0x56) = 100;
+      uVar30 = (uint16_t)(CONCAT13(in_stack_0000fffd,CONCAT12(in_stack_0000fffc,iVar29)) >> 0x10);
+      *(uint16_t *)(iVar29 + 0x58) = 0;
+      *(uint16_t *)(iVar29 + 0x56) = 100;
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x89) = 0xff;
       uVar11 = 0x5d;
       pfVar18 = ovr_ovc22_textRingProt(in_stack_0000fff8);
@@ -697,11 +697,11 @@ L_OVC27_2288:
             if (GUnitCount <= pfVar18) {
               return GUnitCount;
             }
-            uVar43 = (undefined2)((ulong)GUnits >> 0x10);
+            uVar43 = (uint16_t)((ulong)GUnits >> 0x10);
             puVar35 = (unit_t *)GUnits;
           } while ((((*(uint *)((uint)(puVar35 + (int)pfVar18)->bldType * 0x27 + 0x121) & 0x60) != 0
                     ) || (puVar35[(int)pfVar18].unitType == 0xff)) ||
-                  (uVar46 = *(undefined4 *)((uint)puVar35[(int)pfVar18].unitType << 2),
+                  (uVar46 = *(uint32_t *)((uint)puVar35[(int)pfVar18].unitType << 2),
                   *(char *)((int)uVar46 + 0x3f) != '\0'));
           in_stack_0000fffa = (undefined1)uVar30;
           in_stack_0000fffb = (char)((uint)uVar30 >> 8);
@@ -713,7 +713,7 @@ L_OVC27_2288:
           unaff_DI = (byte *)0x0;
           unaff_SI = (far_t far *)0x0;
         }
-        unaff_ES = (undefined2)((ulong)GMapFlags >> 0x10);
+        unaff_ES = (uint16_t)((ulong)GMapFlags >> 0x10);
         pasVar34 = *(short (*) [60] [148])GMapFlags + in_stack_0000fff6;
         pbVar21 = (byte *)((int)((int)&unaff_SI->ofs + CONCAT11(in_stack_0000fff9,in_stack_0000fff8)
                                 ) * 2);

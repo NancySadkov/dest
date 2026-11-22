@@ -22,7 +22,7 @@ bool __cdecl16far season_textMainCastle(void)
       return true;
     }
     if ((((char_sheet_t *)((iVar1 << 2)))->active != '\0') &&
-       (*(char *)((int)*(undefined4 *)(iVar1 << 2) + 0x3f) != '\0')) break;
+       (*(char *)((int)*(uint32_t *)(iVar1 << 2) + 0x3f) != '\0')) break;
     iVar1 = iVar1 + 1;
   }
   return false;
@@ -47,7 +47,7 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex,...)
   undefined1 extraout_AH_01;
   undefined1 uVar6;
   uint8_t *capTextSeg;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   uint8_t *puVar7;
   ulong uVar8;
   uint8_t text;
@@ -68,7 +68,7 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex,...)
     if (*(byte *)(iVar1 + 0x86) < 9) {
       *(char *)(iVar1 + 0x86) = *(char *)(iVar1 + 0x86) + '\x01';
       strcpy((char *)CONCAT22(unaff_SS,&text),
-             (char *)CONCAT22(*(undefined2 *)
+             (char *)CONCAT22(*(uint16_t *)
                                ((int)&GStatsLabels[4].seg +
                                (uint)*(byte *)(iVar1 + 0x86) * 8 + (uint)*(byte *)(iVar1 + 0x34) * 4
                                ),(char *)((far_t *)(GStatsLabels + 4) +
@@ -149,7 +149,7 @@ uint __cdecl16far season_checkEndGame(byte leaderIndex,...)
   byte bVar1;
   uint uVar2;
   
-  if (*(char *)((int)*(undefined4 *)((uint)leaderIndex << 2) + 0x3f) == '\0') {
+  if (*(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f) == '\0') {
     uVar2 = 0;
   }
   else {
@@ -175,21 +175,21 @@ uint __cdecl16far season_checkEndGame(byte leaderIndex,...)
 void __cdecl16far season_countPromotable(void)
 
 {
-  undefined4 uVar1;
+  uint32_t uVar1;
   uint uVar2;
   unit_t *puVar3;
   int iVar4;
   uint uVar5;
-  undefined2 uVar6;
+  uint16_t uVar6;
   uint uStack_6;
   
   GPromotableCount = 0;
   for (uStack_6 = 0xf8; uStack_6 < GUnitCount; uStack_6 = uStack_6 + 1) {
-    uVar6 = (undefined2)((ulong)GUnits >> 0x10);
+    uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
     puVar3 = (unit_t *)GUnits;
     if ((((*(uint *)((uint)(puVar3 + uStack_6)->bldType * 0x27 + 0x121) & 0x60) == 0) &&
         (puVar3[uStack_6].unitType != 0xff)) &&
-       (uVar1 = *(undefined4 *)((uint)puVar3[uStack_6].unitType << 2),
+       (uVar1 = *(uint32_t *)((uint)puVar3[uStack_6].unitType << 2),
        *(char *)((int)uVar1 + 0x3f) == '\0')) {
       uVar2 = ovr_alignUp4(puVar3[uStack_6].x);
       uVar5 = 0;
@@ -342,8 +342,8 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
   dst_02.ofs = (uint16_t)&colorC;
   F_SCOPY(far_from_u32((uint32_t)(0x241069c8)),dst_02);
   _fmemmove((char *)CONCAT22(dstSeg,dstOfs),(char *)CONCAT22(srcSeg,srcOfs),0x300);
-  uStack_16 = ((undefined2 *)&l1Cut2Seg)[((uint)seasonGroupBase + (uint)GSeason) * 2];
-  uVar1 = ((undefined2 *)&l1Cut2Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 2];
+  uStack_16 = ((uint16_t *)&l1Cut2Seg)[((uint)seasonGroupBase + (uint)GSeason) * 2];
+  uVar1 = ((uint16_t *)&l1Cut2Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 2];
   handle.seg = uStack_16;
   handle.ofs = uVar1;
   uStack_18 = uVar1;
@@ -433,9 +433,9 @@ void __cdecl16far updSeason(void)
     else {
       in_DX = snames;
       msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6a50,unaff_SS),
-                          (char *)CONCAT22(*(undefined2 *)(in_DX + (uint)season * 4),
+                          (char *)CONCAT22(*(uint16_t *)(in_DX + (uint)season * 4),
                                            (char *)0x26510),
-                          *(undefined2 *)(snames + (uint)season * 4 + 2));
+                          *(uint16_t *)(snames + (uint)season * 4 + 2));
       ovr_uiNotify(msg,(uint16_t)in_DX);
     }
     handle_00.seg = Lbm_nwpanel1.seg;
@@ -494,7 +494,7 @@ int __cdecl16far season_usesAlignUp42(int unitIndex,byte partyIndex)
     uVar4 = uVar4 | ((short (*) [60] [148])GMapFlags)[-1][((unit_t *)GUnits)[unitIndex].y + 0x3b]
                     [uVar1 + iVar3 + 0x92] & 0x3000U;
   }
-  uVar1 = 0x1000 << (*(byte *)((int)*(undefined4 *)((uint)partyIndex << 2) + 0x3f) & 0x1f);
+  uVar1 = 0x1000 << (*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) & 0x1f);
   bVar2 = (byte)(uVar1 >> 8);
   if (uVar1 == uVar4) {
     iVar3 = CONCAT11(bVar2,1);
@@ -519,7 +519,7 @@ void __cdecl16far season_repairBuildings(byte rank)
   char *dst;
   uint unitIndex;
   int count;
-  undefined2 uVar2;
+  uint16_t uVar2;
   char *unaff_SS;
   uint8_t text;
   byte bStack_7;
@@ -532,10 +532,10 @@ void __cdecl16far season_repairBuildings(byte rank)
   dst = (char *)(*(uint16_t *)((uint8_t *)&(PromoteThreshold)));
   for (bStack_7 = 0; bStack_7 < GLeaderCount; bStack_7 = bStack_7 + 1) {
     dst = (char *)((uint)bStack_7 << 2);
-    if ((&promoteThreshold)[rank] <= *(byte *)((int)*(undefined4 *)dst + 0xa5)) {
+    if ((&promoteThreshold)[rank] <= *(byte *)((int)*(uint32_t *)dst + 0xa5)) {
       for (unitIndex = 0xf8; unitIndex < GUnitCount; unitIndex = unitIndex + 1) {
         dst = (char *)0x26510;
-        uVar2 = (undefined2)((ulong)GUnits >> 0x10);
+        uVar2 = (uint16_t)((ulong)GUnits >> 0x10);
         if (((unit_t *)GUnits)[unitIndex].unitType == bStack_7) {
           dst = (char *)0x26510;
           if (((unit_t *)GUnits)[unitIndex].level < 8) {

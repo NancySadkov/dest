@@ -2,7 +2,7 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,...)
 
 {
   char *pcVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   agnt_t *agnt;
   int iVar3;
   uint16_t uVar4;
@@ -10,8 +10,8 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,...)
   uint uVar6;
   entity_t *uStack_8;   /* hand fix: dereferenced as uStack_8->base.x */
   
-  uVar2 = *(undefined2 *)(agntIndex * 0x34 + 0x19);
-  agnt = (agnt_t *)*(undefined2 *)(agntIndex * 0x34 + 0x17);
+  uVar2 = *(uint16_t *)(agntIndex * 0x34 + 0x19);
+  agnt = (agnt_t *)*(uint16_t *)(agntIndex * 0x34 + 0x17);
   uStack_8 = (agnt_t *)CONCAT22(uVar2,agnt);
   iVar3 = *(int *)(agntIndex * 0x34 + 0x1b);
   ovr_agnt_usesAgntCount4(agntIndex + 1);

@@ -63,8 +63,8 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
         *(uint8_t **)(puVar2 + 1) = puVar2 + 0xd;
         uVar4 = DIGHandle.seg;
         uVar3 = DIGHandle.ofs;
-        *(undefined2 *)(uVar3 + 9) = 0x2410;   /* hand fix: 2-byte segment-half slot; the literal offset is that DGROUP segment value */
-        *(undefined2 *)(uVar3 + 7) = 0x8f92;
+        *(uint16_t *)(uVar3 + 9) = 0x2410;   /* hand fix: 2-byte segment-half slot; the literal offset is that DGROUP segment value */
+        *(uint16_t *)(uVar3 + 7) = 0x8f92;
         *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5) = uStack_a;
         ovr_digPreformatSound();
         ovr_digPlayPreformatedSound();

@@ -3,10 +3,10 @@ uint __cdecl16far saveui_readSavesList(int entries,uint16_t entriesSeg)
 {
   char *pcVar1;
   int fd;
-  undefined2 uVar2;
+  uint16_t uVar2;
   uint16_t in_DX;
   uint16_t uVar3;
-  undefined2 *puVar4;
+  uint16_t *puVar4;
   uint uVar5;
   far_t handle;
   uint16_t uStack_4;
@@ -23,7 +23,7 @@ uint __cdecl16far saveui_readSavesList(int entries,uint16_t entriesSeg)
     ovr_stshFree(handle);
     for (uVar5 = 0; uVar5 < uStack_4; uVar5 = uVar5 + 1) {
       uVar2 =(uint16_t)( saveui_readLine(fd));
-      puVar4 = (undefined2 *)(entries + uVar5 * 4);
+      puVar4 = (uint16_t *)(entries + uVar5 * 4);
       puVar4[1] = uVar3;
       *puVar4 = uVar2;
     }

@@ -1,23 +1,23 @@
 char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   ulong *__return_storage_ptr__;
   uint16_t uVar2;
   uint uVar3;
   ulong *puVar4;
   ulong *puVar5;
   uint unaff_SI;
-  undefined2 uVar6;
+  uint16_t uVar6;
   ulong prevTick;
   
   prevTick = (ulong)unaff_SI << 0x10;
-  uVar1 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  uVar1 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   __return_storage_ptr__ = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
   MiceNeedsUpdate = 1;
   puVar5 = __return_storage_ptr__;
   do {
-    uVar6 = (undefined2)(prevTick >> 0x10);
+    uVar6 = (uint16_t)(prevTick >> 0x10);
     uVar2 = ovr_biosKeyAvail();
     if ((char)uVar2 != '\0') {
       uVar2 = ovr_gameProcessKey();

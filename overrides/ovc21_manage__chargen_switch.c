@@ -6,8 +6,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
   uint *puVar3;
   int *piVar4;
   byte *pbVar5;
-  undefined2 uVar6;
-  undefined4 uVar7;
+  uint16_t uVar6;
+  uint32_t uVar7;
   far_t entries;
   far_t entries_00;
   far_t handle;
@@ -15,7 +15,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
   char cVar9;
   bool bVar10;
   bool bVar11;
-  undefined2 uVar12;
+  uint16_t uVar12;
   uint16_t uVar13;
   uint uVar14;
   uint uVar15;
@@ -29,30 +29,30 @@ char * __cdecl16far chargen_switch(uint16_t index)
   int iVar23;
   int iVar24;
   undefined1 uVar25;
-  undefined2 in_CX;
+  uint16_t in_CX;
   uint16_t uVar26;
-  undefined2 in_DX;
+  uint16_t in_DX;
   entity_t *peVar27;
   far_t far *unaff_BP;
   char *unaff_SI;
   char *unaff_DI;
-  undefined2 unaff_ES;
-  undefined2 unaff_SS;
+  uint16_t unaff_ES;
+  uint16_t unaff_SS;
   uint32_t uVar28;
   uint16_t uVar29;
   char *in_stack_00000000;
   agnt_t *paStack0008;
-  undefined2 uStack000a;
+  uint16_t uStack000a;
   char acStack_1b6 [120];
   char acStack_13e [36];
-  undefined2 auStack_11a [66];
-  undefined2 auStack_96 [24];
+  uint16_t auStack_11a [66];
+  uint16_t auStack_96 [24];
   undefined1 auStack_66 [16];
   char acStack_56 [52];
-  undefined2 uStack_22;
-  undefined2 uStack_20;
+  uint16_t uStack_22;
+  uint16_t uStack_20;
   entity_t *in_stack_0000ffe2;
-  undefined2 in_stack_0000ffe4;
+  uint16_t in_stack_0000ffe4;
   char cVar30;
   uint8_t uVar31;
   undefined1 uVar32;
@@ -145,7 +145,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
         uVar25 = (undefined1)(callResultTemp >> 8);
         ((uint8_t *)menuItemRow)[index] = uVar31;
       }
-      uVar7 = *(undefined4 *)((uint)bVar38 << 2);
+      uVar7 = *(uint32_t *)((uint)bVar38 << 2);
       cVar9 = *(char *)((int)uVar7 + 0x2f);
       pcVar16 = (char *)CONCAT11((char)(((uint)bVar38 << 2) >> 8),cVar9);
       if (cVar9 != -1) {
@@ -157,8 +157,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
     return pcVar16;
   case 2:
     ((int *)StshHandles)[(int)unaff_SI] = uVar14;
-    *(undefined2 *)((int)(long *)StshPtrs + (int)unaff_SI * 4 + 2) = 0;
-    *(undefined2 *)((long *)StshPtrs + (int)unaff_SI) = 0;
+    *(uint16_t *)((int)(long *)StshPtrs + (int)unaff_SI * 4 + 2) = 0;
+    *(uint16_t *)((long *)StshPtrs + (int)unaff_SI) = 0;
     return unaff_SI;
   case 3:
     for (iVar23 = 0; iVar23 < (int)(uint)GLeaderCount; iVar23 = iVar23 + 1) {
@@ -167,8 +167,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
          (uVar13 = 0x2410, ((char_sheet_t *)((iVar23 << 2)))->y == GfxRndSeed2))
       {
         if (GCharLevelsInc != '\0') {
-          uVar12 = (undefined2)((ulong)*(undefined4 *)(iVar23 << 2) >> 0x10);
-          iVar24 = (int)*(undefined4 *)(iVar23 << 2);
+          uVar12 = (uint16_t)((ulong)*(uint32_t *)(iVar23 << 2) >> 0x10);
+          iVar24 = (int)*(uint32_t *)(iVar23 << 2);
           puVar3 = (uint *)(iVar24 + 0x56);
           uVar14 = *puVar3;
           *puVar3 = *puVar3 + 10000;
@@ -207,9 +207,9 @@ char * __cdecl16far chargen_switch(uint16_t index)
       }
       if (iVar23 < (int)(uint)GLeaderCount) {
         PartyCount = (char)iVar23 + 1;
-        uVar12 = *(undefined2 *)((uint)PartyCount * 4 + -2);
+        uVar12 = *(uint16_t *)((uint)PartyCount * 4 + -2);
         (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)uVar12;
-        handle.ofs = *(undefined2 *)((uint)PartyCount * 4 + -4);
+        handle.ofs = *(uint16_t *)((uint)PartyCount * 4 + -4);
         (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)uVar12 >> 8);
         ovr_stshFree(handle);
       }
@@ -225,8 +225,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
       *pbVar5 = *pbVar5 | 0x40;
       *(char *)(CONCAT11(uVar32,uVar25) + 0x51) = PartyCount - 1;
       uVar14 = (uint)PartyCount;
-      *(undefined2 *)(uVar14 * 4 + -2) = CONCAT11(uVar34,uVar33);
-      *(undefined2 *)(uVar14 * 4 + -4) = CONCAT11(uVar32,uVar25);
+      *(uint16_t *)(uVar14 * 4 + -2) = CONCAT11(uVar34,uVar33);
+      *(uint16_t *)(uVar14 * 4 + -4) = CONCAT11(uVar32,uVar25);
       if (CurPartySlot == 0) {
         *(undefined1 *)(CONCAT11(uVar32,uVar25) + 0x86) = 1;
       }
@@ -234,8 +234,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
     }
     else {
       manage_openTalkWindow();
-      uVar12 = *(undefined2 *)((uint)PartyCount * 4 + -2);
-      uVar6 = *(undefined2 *)((uint)PartyCount * 4 + -4);
+      uVar12 = *(uint16_t *)((uint)PartyCount * 4 + -2);
+      uVar6 = *(uint16_t *)((uint)PartyCount * 4 + -4);
       uVar33 = (undefined1)uVar12;
       uVar34 = (undefined1)((uint)uVar12 >> 8);
       uVar25 = (undefined1)uVar6;
@@ -270,9 +270,9 @@ char * __cdecl16far chargen_switch(uint16_t index)
                       (uint16_t)((ulong)in_stack_00000000 >> 0x10));
     index = (uint16_t)CONCAT22(uVar13,puVar17);   /* hand fix: 16-bit slot keeps the offset */
     if ((char)*(uint8_t *)(uint)index == '\0') {   /* hand fix: deref the offset */
-      uVar28 = CONCAT22((int)((ulong)in_stack_00000000 >> 0x10),*(undefined2 *)((int)puVar17 + 7));
+      uVar28 = CONCAT22((int)((ulong)in_stack_00000000 >> 0x10),*(uint16_t *)((int)puVar17 + 7));
       uVar26 = uVar13;
-      pfVar18 = fmMalloc((far_t *)*(undefined2 *)((int)puVar17 + 5),uVar28);
+      pfVar18 = fmMalloc((far_t *)*(uint16_t *)((int)puVar17 + 5),uVar28);
       uVar25 = SUB21(pfVar18,0);
       uVar32 = (undefined1)((uint)pfVar18 >> 8);
       if (pfVar18 == (far_t far *)0x0 && uVar26 == 0) {
@@ -282,22 +282,22 @@ char * __cdecl16far chargen_switch(uint16_t index)
         uVar29 = (uint16_t)(uVar28 >> 0x10);
         if (*(int *)((int)puVar17 + 0x11) == 0 && *(int *)((int)puVar17 + 0x13) == 0) {
           stshSeek(StshStrongDatHnd,
-                   CONCAT22(*(undefined2 *)((int)puVar17 + 3),*(undefined2 *)((int)puVar17 + 1)));
+                   CONCAT22(*(uint16_t *)((int)puVar17 + 3),*(uint16_t *)((int)puVar17 + 1)));
           uVar33 = 0xfd;
           uVar34 = 0x83;
           stshRead();
-          uVar28 = CONCAT22(uVar29,*(undefined2 *)((int)puVar17 + 7));
-          pfVar18 = ovr_heapMalloc((far_t far *)*(undefined2 *)((int)puVar17 + 5),uVar28);
+          uVar28 = CONCAT22(uVar29,*(uint16_t *)((int)puVar17 + 7));
+          pfVar18 = ovr_heapMalloc((far_t far *)*(uint16_t *)((int)puVar17 + 5),uVar28);
           uVar29 = (uint16_t)(uVar28 >> 0x10);
           *(uint16_t *)((int)puVar17 + 0x13) = uVar26;
-          *(undefined2 *)((int)puVar17 + 0x11) =(uint16_t)( pfVar18);
+          *(uint16_t *)((int)puVar17 + 0x11) =(uint16_t)( pfVar18);
           if (*(int *)((int)puVar17 + 0x11) == 0 && *(int *)((int)puVar17 + 0x13) == 0) {
             bVar10 = false;
           }
           else {
-            memcpy((char *)CONCAT13((char)((uint)*(undefined2 *)((int)puVar17 + 0x13) >> 8),
-                                    CONCAT12((char)*(undefined2 *)((int)puVar17 + 0x13),
-                                             *(undefined2 *)((int)puVar17 + 0x11))),
+            memcpy((char *)CONCAT13((char)((uint)*(uint16_t *)((int)puVar17 + 0x13) >> 8),
+                                    CONCAT12((char)*(uint16_t *)((int)puVar17 + 0x13),
+                                             *(uint16_t *)((int)puVar17 + 0x11))),
                    (char *)CONCAT22(CONCAT11(uVar34,uVar33),(char *)CONCAT11(uVar32,uVar25)),
                    *(word *)((int)puVar17 + 5));
             bVar10 = true;
@@ -305,8 +305,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
         }
         else {
           memcpy((char *)CONCAT13((char)(uVar26 >> 8),CONCAT12((char)uVar26,pfVar18)),
-                 (char *)CONCAT22(*(undefined2 *)((int)puVar17 + 0x13),
-                                  (char *)*(undefined2 *)((int)puVar17 + 0x11)),
+                 (char *)CONCAT22(*(uint16_t *)((int)puVar17 + 0x13),
+                                  (char *)*(uint16_t *)((int)puVar17 + 0x11)),
                  *(word *)((int)puVar17 + 5));
           bVar10 = true;
         }
@@ -318,13 +318,13 @@ char * __cdecl16far chargen_switch(uint16_t index)
             uVar26 = *(uint16_t *)((int)puVar17 + 0xb);
             uVar29 = *(uint16_t *)((int)puVar17 + 9);
             if (uVar29 != 0 || uVar26 != 0) {
-              uVar12 = (undefined2)
+              uVar12 = (uint16_t)
                        (CONCAT13((char)(uVar26 >> 8),CONCAT12((char)uVar26,uVar29)) >> 0x10);
               *(int *)(uVar29 + 0xf) = iVar23;
               *(int *)(uVar29 + 0xd) = iVar24;
             }
             if (iVar24 != 0 || iVar23 != 0) {
-              uVar12 = (undefined2)
+              uVar12 = (uint16_t)
                        (CONCAT13((char)((uint)iVar23 >> 8),CONCAT12((char)iVar23,iVar24)) >> 0x10);
               *(uint16_t *)(iVar24 + 0xb) = uVar26;
               *(uint16_t *)(iVar24 + 9) = uVar29;
@@ -336,10 +336,10 @@ char * __cdecl16far chargen_switch(uint16_t index)
             uVar26 = Stsh_2410_47f6.ofs;
             *(uint16_t *)((int)puVar17 + 0xf) = Stsh_2410_47f6.seg;
             *(uint16_t *)((int)puVar17 + 0xd) = uVar26;
-            *(undefined2 *)((int)puVar17 + 0xb) = 0;
-            *(undefined2 *)((int)puVar17 + 9) = 0;
+            *(uint16_t *)((int)puVar17 + 0xb) = 0;
+            *(uint16_t *)((int)puVar17 + 9) = 0;
             *(uint16_t far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  0xb) = uVar13;
-            *(undefined2 far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  9) =(uint16_t)( puVar17);
+            *(uint16_t far *)((uint8_t far *)MK_FP(Stsh_2410_47f6.seg, Stsh_2410_47f6.ofs) +  9) =(uint16_t)( puVar17);
             Stsh_2410_47f6.seg = uVar13;
             Stsh_2410_47f6.ofs = (uint16_t)puVar17;
           }
@@ -362,8 +362,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
       cVar30 = 'T';
       uVar14 = ovr_blitLabel((char *)"Total population.");
       *unaff_SI = *unaff_SI + (char)(uVar14 >> 8) + ((undefined1 *)0xfff3 < &stack0xfff2);
-      *(undefined1 *)((int)*(undefined4 *)(entity_t **)&Entities + uVar14 + 0x18) = 0;
-      uVar12 = (undefined2)((ulong)Entities >> 0x10);
+      *(undefined1 *)((int)*(uint32_t *)(entity_t **)&Entities + uVar14 + 0x18) = 0;
+      uVar12 = (uint16_t)((ulong)Entities >> 0x10);
       *(undefined1 *)((int)&((entity_t *)Entities)[(int)unaff_SI].base.state + 1) =
            (char)((entity_t *)Entities)[(int)unaff_SI].base.flags32;
       if (unaff_SI + 1 < EntityCount) {
@@ -421,7 +421,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
         ovr_blitLabel((char *)auStack_96[iVar23 * 2]);
       }
       else {
-        uVar7 = *(undefined4 *)((index & 0xff) << 2);
+        uVar7 = *(uint32_t *)((index & 0xff) << 2);
         ovr_blitLabel((char *)auStack_11a[iVar23 * 2 + (uint)*(byte *)((int)uVar7 + 0x2f) * 8]);
       }
       ovc27_textCharmed();
@@ -519,7 +519,7 @@ L_attact_3f0b_1082_1477:
         cVar9 = -1;
       }
       else {
-        uVar7 = *(undefined4 *)((uint)*(byte *)((int)&(in_stack_0000ffe2->base).entity + 3) << 2);
+        uVar7 = *(uint32_t *)((uint)*(byte *)((int)&(in_stack_0000ffe2->base).entity + 3) << 2);
         cVar9 = *(char *)((int)uVar7 + 0x89);
       }
       uVar14 = CONCAT11(uVar34,uVar33);

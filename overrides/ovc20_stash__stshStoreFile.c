@@ -5,7 +5,7 @@ cte_t * __cdecl16far stshStoreFile(uint8_t *data,...)
   uint16_t uVar1;
   uint16_t uVar2;
   cte_t *psVar4;
-  undefined2 unaff_BP;
+  uint16_t unaff_BP;
   bool bVar3;
   far_t fVar4;
   uint16_t in_stack_00000006;
@@ -14,7 +14,7 @@ cte_t * __cdecl16far stshStoreFile(uint8_t *data,...)
   DW DStack_c;
   DW sz;
   uint16_t uStack_6;
-  undefined2 in_stack_0000fffc;
+  uint16_t in_stack_0000fffc;
   uint16_t ofs_lo;
   uint16_t ofs;
   
@@ -23,7 +23,7 @@ cte_t * __cdecl16far stshStoreFile(uint8_t *data,...)
     ovr_stExit(0x18);
   }
                     /* WARNING: Switch is manually overridden */
-  switch((undefined4)*(undefined2 *)((uint)*data * 2 + 0xb69)) {
+  switch((uint32_t)*(uint16_t *)((uint)*data * 2 + 0xb69)) {
   case 0x4ba94:
     return (cte_t *)data;
   case 0x4ba9d:

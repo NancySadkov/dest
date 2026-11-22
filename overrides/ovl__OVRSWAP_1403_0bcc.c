@@ -1,11 +1,11 @@
 void __cdecl16near OVRSWAP_1403_0bcc(void)
 
 {
-  undefined2 uVar1;
-  undefined2 in_CX;
-  undefined2 in_DX;
-  undefined2 in_BX;
-  undefined2 unaff_ES;
+  uint16_t uVar1;
+  uint16_t in_CX;
+  uint16_t in_DX;
+  uint16_t in_BX;
+  uint16_t unaff_ES;
   undefined1 in_CF;
   bool bVar2;
   

@@ -10,7 +10,7 @@ void __cdecl16far ovc28_usesBlitGfx10(far_t entries,int count)
   uint8_t *puVar2;
   uint16_t uVar3;
   int *piVar4;
-  undefined2 *puVar5;
+  uint16_t *puVar5;
   int idx;
   int y;
   uint16_t uVar8;
@@ -41,7 +41,7 @@ void __cdecl16far ovc28_usesBlitGfx10(far_t entries,int count)
       TextBlitDstSeg = 0xa000;
       TextBlitX = x + 6;
       TextBlitY = y + 2;
-      puVar5 = (undefined2 *)(uVar3 + idx * 4);
+      puVar5 = (uint16_t *)(uVar3 + idx * 4);
       pcVar1 = (char *)puVar5[1];
       puVar2 = (uint8_t *)*puVar5;
       uStack_6 = (uint8_t *)CONCAT22(pcVar1,puVar2);
@@ -67,7 +67,7 @@ void __cdecl16far ovc28_usesBlitGfx10(far_t entries,int count)
       }
       else {
         uVar9 = 0x3f;
-        puVar5 = (undefined2 *)(uVar3 + idx * 4);
+        puVar5 = (uint16_t *)(uVar3 + idx * 4);
         uVar3 = FontMain.ofs;
         max_width = FontMain.seg;
         pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar5,unaff_SS),

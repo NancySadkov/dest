@@ -7,8 +7,8 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
   uint16_t in_DX;
   uint16_t pdst;
   int iVar2;
-  undefined2 uVar3;
-  undefined2 uVar4;
+  uint16_t uVar3;
+  uint16_t uVar4;
   uint16_t unaff_SS;
   undefined1 uStack000f;
   bool in_stack_00000010;
@@ -45,7 +45,7 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
       ovr_stExit(0x1a);
     }
     dst_x = dst->x;   /* hand fix: read the first field; *dst is the whole structure */
-    uVar3 = (undefined2)((ulong)dst >> 0x10);
+    uVar3 = (uint16_t)((ulong)dst >> 0x10);
     dst_y = dst->y;
     dst_w = dst->w;
     dst_h = dst->h;

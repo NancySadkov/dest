@@ -36,17 +36,17 @@ void __cdecl16far uiMainMenuLoop(void)
   uint16_t uVar10;
   uint *puVar11;
   uint16_t *puVar12;
-  undefined2 *puVar13;
+  uint16_t *puVar13;
   int *piVar14;
   uint uVar15;
   uint uVar16;
   uint16_t unaff_SS;
-  undefined2 uVar17;
+  uint16_t uVar17;
   uint32_t menu;
-  undefined2 uStack_30;
-  undefined2 uStack_2e;
-  undefined2 uStack_18;
-  undefined2 uStack_16;
+  uint16_t uStack_30;
+  uint16_t uStack_2e;
+  uint16_t uStack_18;
+  uint16_t uStack_16;
   byte bStack_13;
   char yesno [9];
   uint8_t yes_picked;
@@ -93,8 +93,8 @@ void __cdecl16far uiMainMenuLoop(void)
     ovr_say((char *)0x26832,0x2410);
     if (bStack_13 < 9) {
                     /* WARNING: Switch is manually overridden */
-      switch((undefined4)
-             *(undefined2 *)((char *)0x25bd6 + (uint)bStack_13 * 2)) {
+      switch((uint32_t)
+             *(uint16_t *)((char *)0x25bd6 + (uint)bStack_13 * 2)) {
       case 288826:
         saveui_blitPanel();
         bVar1 = false;
@@ -150,8 +150,8 @@ void __cdecl16far uiMainMenuLoop(void)
         uiMenu((char *)"Save Game:",items_01,in_DX,uVar15);
         saveui_usesBlitLoadRleGfx4();
         if (bVar5 != 0) {
-          iVar8 = strcmp((char *)CONCAT22(*(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -2),
-                                          (char *)*(undefined2 *)
+          iVar8 = strcmp((char *)CONCAT22(*(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2),
+                                          (char *)*(uint16_t *)
                                                    ((int)entries_05 + (uint)bVar5 * 4 + -4)),
                          (char *)CONCAT22(GSPEmpty.seg,GSPEmpty.ofs));
           if (iVar8 == 0) {
@@ -160,48 +160,48 @@ void __cdecl16far uiMainMenuLoop(void)
             pcVar9 = uiReadString((char *)"Name this save:  (Esc to cancel)",0x2410,0,(char *)0x0,0)
             ;
             *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = uVar10;
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) =(uint16_t)( pcVar9);
+            *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4) =(uint16_t)( pcVar9);
             saveui_usesBlitLoadRleGfx4();
           }
           else {
             saveui_blitPanel();
             saveui_drawCancel();
             pcVar9 = uiReadString((char *)"Name for this save:  (Esc to cancel)",0x2410,0,
-                                  (char *)*(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4),
+                                  (char *)*(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4),
                                   *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2));
             *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = uVar10;
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) =(uint16_t)( pcVar9);
+            *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4) =(uint16_t)( pcVar9);
             saveui_usesBlitLoadRleGfx4();
           }
           if ((*(int *)((int)entries_05 + (uint)bVar5 * 4 + -4) != 0 ||
                *(int *)((int)entries_05 + (uint)bVar5 * 4 + -2) != 0) &&
-             (iVar8 = strcmp((char *)CONCAT22(*(undefined2 *)
+             (iVar8 = strcmp((char *)CONCAT22(*(uint16_t *)
                                                ((int)entries_05 + (uint)bVar5 * 4 + -2),
-                                              (char *)*(undefined2 *)
+                                              (char *)*(uint16_t *)
                                                        ((int)entries_05 + (uint)bVar5 * 4 + -4)),
                              (char *)CONCAT22(GSPEmpty.seg,GSPEmpty.ofs)), iVar8 == 0)) {
             handle.seg = *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2);
             handle.ofs = *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4);
             ovr_stshFree(handle);
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -2) = 0;
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) = 0;
+            *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = 0;
+            *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4) = 0;
           }
           if (*(int *)((int)entries_05 + (uint)bVar5 * 4 + -4) != 0 ||
               *(int *)((int)entries_05 + (uint)bVar5 * 4 + -2) != 0) {
             uVar17 = ovr_stSave();
             if ((char)uVar17 == '\0') {
-              *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -2) = 0;
-              *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) = 0;
+              *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = 0;
+              *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4) = 0;
             }
             else {
               GWantsExit2 = '\0';
             }
             for (uVar16 = 0; uVar16 < uVar15; uVar16 = uVar16 + 1) {
-              puVar13 = (undefined2 *)((int)entries_05 + uVar16 * 4);
+              puVar13 = (uint16_t *)((int)entries_05 + uVar16 * 4);
               iVar8 = strcmp((char *)CONCAT22(puVar13[1],(char *)*puVar13),
                              (char *)CONCAT22(GSPEmpty.seg,GSPEmpty.ofs));
               if (iVar8 == 0) {
-                puVar13 = (undefined2 *)((int)entries_05 + uVar16 * 4);
+                puVar13 = (uint16_t *)((int)entries_05 + uVar16 * 4);
                 puVar13[1] = 0;
                 *puVar13 = 0;
               }
@@ -273,9 +273,9 @@ void __cdecl16far uiMainMenuLoop(void)
           pcVar9 = yesno;
           uVar7 = unaff_SS;
           title = ovr_fmVsprintf("Delete %s: Are you sure?",
-                                 (char *)CONCAT22(*(undefined2 *)
+                                 (char *)CONCAT22(*(uint16_t *)
                                                    ((int)entries_05 + (uint)bVar5 * 4 + -2),
-                                                  (char *)*(undefined2 *)
+                                                  (char *)*(uint16_t *)
                                                            ((int)entries_05 + (uint)bVar5 * 4 + -4))
                                 );
           items_05.seg = (uint16_t)pcVar9;
@@ -286,8 +286,8 @@ void __cdecl16far uiMainMenuLoop(void)
             handle_00.seg = *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2);
             handle_00.ofs = *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4);
             ovr_stshFree(handle_00);
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -2) = 0;
-            *(undefined2 *)((int)entries_05 + (uint)bVar5 * 4 + -4) = 0;
+            *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = 0;
+            *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4) = 0;
             while ((uVar15 != 0 &&
                    (piVar14 = (int *)((int)entries_05 + (uVar15 - 1) * 4),
                    *piVar14 == 0 && piVar14[1] == 0))) {

@@ -55,14 +55,14 @@ spr_t * __cdecl16far stshRleAnims(uint8_t *src,anm_t *anms,uint16_t nanims)
     p_ow = 0;
     j = 0;
     while( true ) {
-      (*(uint16_t *)((uint8_t *)&(frm) + 2)) = (undefined2)((ulong)((long)(int)i * 0x1e) >> 0x10);
+      (*(uint16_t *)((uint8_t *)&(frm) + 2)) = (uint16_t)((ulong)((long)(int)i * 0x1e) >> 0x10);
       if (*(byte *)((*(uint16_t *)((uint8_t *)&(src) + 2)) + (int)((long)(int)i * 0x1e) + 0x1b) <= j) break;
       (*(uint16_t *)((uint8_t *)&(frm))) =(uint16_t)( (frm_t *)ovr_stshRleSub(in_stack_00000004,(uint8_t *)src,sx,sy,ex,ey,21));
       pfStack_20 = (frm_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(frm) + 2)),(frm_t *)frm);
       ((frm_t *)frm)->type2 = 2;
       ((frm_t *)frm)->x = *(int16_t *)((*(uint16_t *)((uint8_t *)&(src) + 2)) + i * 0x1e + 0xb);
       ((frm_t *)frm)->y = *(int16_t *)((*(uint16_t *)((uint8_t *)&(src) + 2)) + i * 0x1e + 0xd);
-      *(undefined2 *)((int)prev_next + 2) = (*(uint16_t *)((uint8_t *)&(frm) + 2));
+      *(uint16_t *)((int)prev_next + 2) = (*(uint16_t *)((uint8_t *)&(frm) + 2));
       *(frm_t **)prev_next = (frm_t *)frm;
       prev_next = CONCAT22((*(uint16_t *)((uint8_t *)&(frm) + 2)),&((frm_t *)frm)->next);
       if ((*(byte *)((*(uint16_t *)((uint8_t *)&(src) + 2)) + i * 0x1e + 0x1c) & 1) == 0) {
@@ -104,8 +104,8 @@ spr_t * __cdecl16far stshRleAnims(uint8_t *src,anm_t *anms,uint16_t nanims)
         }
       }
       pfStack_20->type4 = 4;
-      *(undefined2 *)((int)&((frm_t *)frm)->next + 2) = 0;
-      *(undefined2 *)&((frm_t *)frm)->next = 0;
+      *(uint16_t *)((int)&((frm_t *)frm)->next + 2) = 0;
+      *(uint16_t *)&((frm_t *)frm)->next = 0;
       sy = sy + *(byte *)((*(uint16_t *)((uint8_t *)&(src) + 2)) + i * 0x1e + 10);
       ey = ey + *(byte *)((*(uint16_t *)((uint8_t *)&(src) + 2)) + i * 0x1e + 10);
       if (199 < ey) {

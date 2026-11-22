@@ -6,13 +6,13 @@ ovc43_usesFmFreeAudio(uint32_t gindex,char_sheet_t *sheet,uint16_t sheetSeg)
   uint16_t uVar2;
   far_t far *pfVar3;
   char_sheet_t *pcVar4;
-  undefined2 in_CX;
+  uint16_t in_CX;
   char_sheet_t *pcVar5;
   uint uVar6;
   uint16_t unaff_SI;
   int iVar7;
   int unaff_DI;
-  undefined2 uVar8;
+  uint16_t uVar8;
   byte bStack_8;
   char_sheet_t *uStack_6;   /* hand fix: used as uStack_6->nameText and (char_sheet_t *)uStack_6 */
   
@@ -20,7 +20,7 @@ ovc43_usesFmFreeAudio(uint32_t gindex,char_sheet_t *sheet,uint16_t sheetSeg)
   TextBlitDstSeg = 0xa000;
   iVar7 = 0;
   while( true ) {
-    uVar8 = (undefined2)(gindex >> 0x10);
+    uVar8 = (uint16_t)(gindex >> 0x10);
     if (*(int *)((int)gindex + 6) <= iVar7) {
       return pcVar4;
     }
@@ -63,8 +63,8 @@ L_OVC30_619c_0339_03CE:
     uStack_6 = (char_sheet_t *)CONCAT22(pcVar5,pcVar4);
     bStack_8 = GLeaderCount;
     uVar6 = (uint)GLeaderCount;
-    ((undefined2 *)(uVar6 * 4))[1] = (uint16_t)pcVar5;   /* hand fix: segment half into a 2-byte slot */
-    *(undefined2 *)(uVar6 * 4) = (uint16_t)pcVar4;   /* hand fix: offset half into a 2-byte slot */
+    ((uint16_t *)(uVar6 * 4))[1] = (uint16_t)pcVar5;   /* hand fix: segment half into a 2-byte slot */
+    *(uint16_t *)(uVar6 * 4) = (uint16_t)pcVar4;   /* hand fix: offset half into a 2-byte slot */
     GLeaderCount = GLeaderCount + 1;
     break;
   case 5:
@@ -74,13 +74,13 @@ L_OVC30_619c_0339_03CE:
   }
   _fmemset((void *)(ulong)(*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),0xae,unaff_SI);
   strcpy(uStack_6->nameText,
-         (char *)CONCAT22(*(undefined2 *)
+         (char *)CONCAT22(*(uint16_t *)
                            ((int)&worldMenuLabels[1].ofs + 1 + (uint)(byte)gindex * 0x95),
-                          (char *)*(undefined2 *)
+                          (char *)*(uint16_t *)
                                    ((int)&worldMenuLabels[0].seg + 1 + (uint)(byte)gindex * 0x95)));
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x3d) = 1;
-  *(undefined2 *)((int)(char_sheet_t *)uStack_6 + 0x39) = uVar8;
-  *(undefined2 *)((int)(char_sheet_t *)uStack_6 + 0x3b) = (uint16_t)sheet;   /* hand fix: only the offset half is stored */
+  *(uint16_t *)((int)(char_sheet_t *)uStack_6 + 0x39) = uVar8;
+  *(uint16_t *)((int)(char_sheet_t *)uStack_6 + 0x3b) = (uint16_t)sheet;   /* hand fix: only the offset half is stored */
   *(byte *)((int)(char_sheet_t *)uStack_6 + 0x3e) = (byte)gindex;
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x2f) = 0xff;
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x30) = 3;
@@ -88,7 +88,7 @@ L_OVC30_619c_0339_03CE:
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x34) = (char)uVar2;
 code_r0x00061e64:
   ovr_manage_rollStats((char_sheet_t *)uStack_6);
-  uVar8 = (undefined2)((ulong)uStack_6 >> 0x10);
+  uVar8 = (uint16_t)((ulong)uStack_6 >> 0x10);
   if (*(char *)((int)&worldMenuLabels[0xc].seg + (uint)(byte)gindex * 0x95) != -1) {
     ((char_sheet_t *)uStack_6)->stats[1] =
          *(byte *)((int)&worldMenuLabels[0xc].seg + (uint)(byte)gindex * 0x95);
@@ -105,8 +105,8 @@ code_r0x00061e64:
   ((char_sheet_t *)uStack_6)->hp[1] = ((char_sheet_t *)uStack_6)->hp[0];
   ((char_sheet_t *)uStack_6)->statMask = ((char_sheet_t *)uStack_6)->statMask | 0x16;
   ((char_sheet_t *)uStack_6)->spyReports = 0x1;
-  *(undefined2 *)((int)&((char_sheet_t *)uStack_6)->gold + 2) = 0;
-  *(undefined2 *)&((char_sheet_t *)uStack_6)->gold = 100;
+  *(uint16_t *)((int)&((char_sheet_t *)uStack_6)->gold + 2) = 0;
+  *(uint16_t *)&((char_sheet_t *)uStack_6)->gold = 100;
   ((char_sheet_t *)uStack_6)->partySlot = 0xff;
   pfVar3 = ovr_ovc22_textRingProt(bStack_8);
   return (char_sheet_t *)CONCAT11((char)((uint)pfVar3 >> 8),bStack_8);

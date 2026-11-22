@@ -6,11 +6,11 @@ void __cdecl16far draw_usesPlay_sfx(void)
   uint16_t x;
   ulong *puVar3;
   uint uVar4;
-  undefined2 uVar5;
+  uint16_t uVar5;
   uint uVar6;
   word count;
   int in_DX;
-  undefined2 unaff_SI;
+  uint16_t unaff_SI;
   uint uVar7;
   ulong prevTick;
   uint16_t outFlag;
@@ -19,21 +19,21 @@ void __cdecl16far draw_usesPlay_sfx(void)
   
   prevTick = CONCAT22(unaff_SI,(*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)));
   puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)recordUpdateTick,prevTick);
-  if ((in_DX != 0) || ((ulong *)((int)(undefined4 *)&_DATA + 1U) < puVar3)) {
-    (*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)) = (uint16_t)*(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  if ((in_DX != 0) || ((ulong *)((int)(uint32_t *)&_DATA + 1U) < puVar3)) {
+    (*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)) = (uint16_t)*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
     (*(uint16_t *)((uint8_t *)&(recordUpdateTick))) = (uint16_t)*(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
     outFlag = 0;
     for (uVar7 = 0; uVar6 = (uint)(prevTick >> 0x10), uVar7 < GRecordCount; uVar7 = uVar7 + 1) {
       *(int *)(uVar7 * 0x12) = *(int *)(uVar7 * 0x12) + 1;
       if (20000 < *(uint *)(uVar7 * 0x12)) {
-        *(undefined2 *)(uVar7 * 0x12) = (uint16_t)0x14;
+        *(uint16_t *)(uVar7 * 0x12) = (uint16_t)0x14;
       }
       cVar2 = *(char *)(uVar7 * 0x12 + 0xe);
       if (cVar2 == '\0') {
         uVar4 = *(byte *)(uVar7 * 0x12 + 0x11) + 1;
         prevTick = CONCAT22(uVar6,uVar4);
         if ((uVar4 < *(byte *)(uVar7 * 0x12 + 6)) && (0x13 < *(uint *)(uVar7 * 0x12))) {
-          *(undefined2 *)(uVar7 * 0x12) = (uint16_t)0;
+          *(uint16_t *)(uVar7 * 0x12) = (uint16_t)0;
           pcVar1 = (char *)(uVar7 * 0x12 + 0x11);
           *pcVar1 = *pcVar1 + '\x01';
         }
@@ -43,7 +43,7 @@ void __cdecl16far draw_usesPlay_sfx(void)
         prevTick = CONCAT22(uVar6,uVar4);
         if (uVar4 < *(byte *)(uVar7 * 0x12 + 6)) {
           if (0x13 < *(uint *)(uVar7 * 0x12)) {
-            *(undefined2 *)(uVar7 * 0x12) = (uint16_t)0;
+            *(uint16_t *)(uVar7 * 0x12) = (uint16_t)0;
             pcVar1 = (char *)(uVar7 * 0x12 + 0x11);
             *pcVar1 = *pcVar1 + '\x01';
           }
@@ -70,7 +70,7 @@ void __cdecl16far draw_usesPlay_sfx(void)
                       (x,(int)in_stack_0000fffa,*(byte *)(uVar7 * 0x12 + 8),
                        *(uint8_t *)(uVar7 * 0x12 + 9));
           }
-          *(undefined2 *)(uVar7 * 0x12) = (uint16_t)0;
+          *(uint16_t *)(uVar7 * 0x12) = (uint16_t)0;
         }
       }
       else if ((cVar2 == '\x02') && (9 < *(uint *)(uVar7 * 0x12))) {

@@ -15,13 +15,13 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
   char *pcVar2;
   undefined1 extraout_AH;
   uint16_t uVar3;
-  undefined2 uVar4;
+  uint16_t uVar4;
   undefined1 extraout_AH_00;
   byte *pbVar5;
   uint16_t uVar6;
   byte *pbVar7;
   byte *pbVar8;
-  undefined2 uVar9;
+  uint16_t uVar9;
   int iVar10;
   uint uVar11;
   uint16_t unaff_DI;
@@ -70,18 +70,18 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
   if (bStack_3c == 0xff) {
     return;
   }
-  bStack_3d = *(byte *)((int)*(undefined4 *)((uint)bStack_3c << 2) + 0x2f);
+  bStack_3d = *(byte *)((int)*(uint32_t *)((uint)bStack_3c << 2) + 0x2f);
   if (bStack_3d == 0xff) {
     return;
   }
   uVar6 = 0x2410;
-  uVar4 = *(undefined2 *)((uint)bStack_3d * 4 + 0x107);
+  uVar4 = *(uint16_t *)((uint)bStack_3d * 4 + 0x107);
   uVar13 = (undefined1)uVar4;
   pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x648f,unaff_SS),
                          (char *)CONCAT13((char)((uint)uVar4 >> 8),CONCAT12(uVar13,0x2410)),uVar13,
-                         (char)*(undefined2 *)((uint)bStack_3d * 4 + 0x109),
-                         (char)*(undefined2 *)((uint)bStack_3c * 4),
-                         ((undefined2 *)((uint)bStack_3c * 4))[1]);
+                         (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x109),
+                         (char)*(uint16_t *)((uint)bStack_3c * 4),
+                         ((uint16_t *)((uint)bStack_3c * 4))[1]);
   ovr_say(pcVar2,uVar6);
   do {
     type = SUB21(unaff_SS,0);
@@ -220,7 +220,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         }
         iStack_a = 0;
         for (uVar11 = 0; uVar11 < EntityCount; uVar11 = uVar11 + 1) {
-          uVar4 = (undefined2)((ulong)Entities >> 0x10);
+          uVar4 = (uint16_t)((ulong)Entities >> 0x10);
           iVar10 = (int)Entities;
           if ((((*(byte *)(iVar10 + uVar11 * 0x37 + 0x1a) == bStack_3c) &&
                (pbStack_22 <= (byte *)*(uint *)((entity_t *)iVar10 + uVar11))) &&
@@ -233,17 +233,17 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         ovr_resetTextBlitCycle();
         uVar14 = 0x7a;
         iVar10 = ovr_ovc45_compute9((char *)&text,
-                                    (char *)CONCAT22(*(undefined2 *)((uint)bStack_3c * 4),unaff_SS),
+                                    (char *)CONCAT22(*(uint16_t *)((uint)bStack_3c * 4),unaff_SS),
                                     (char *)CONCAT22(Font03.ofs,
-                                                     (char *)((undefined2 *)((uint)bStack_3c * 4))
+                                                     (char *)((uint16_t *)((uint)bStack_3c * 4))
                                                              [1]),Font03.seg,'C',(char)Font03.seg,
                                     0x43,3,0xa000);
         uVar4 = ovr_ovc41_pluralSuffix(iStack_a,(char)iVar10,uVar14);
         uVar6 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x64b8,unaff_SS),
                                (char *)CONCAT22(iStack_a,(char *)0x2410),
-                               *(undefined2 *)((uint)bStack_3d * 4 + 0x13f),
-                               *(undefined2 *)((uint)bStack_3d * 4 + 0x141),uVar4,uVar14);
+                               *(uint16_t *)((uint)bStack_3d * 4 + 0x13f),
+                               *(uint16_t *)((uint)bStack_3d * 4 + 0x141),uVar4,uVar14);
         ovr_uiNotify(pcVar2,uVar6,(char)uVar6);
       }
       pbStack_28 = pbStack_20;
@@ -284,7 +284,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
       iStack_a = 0;
       for (uVar11 = 0; uVar11 < EntityCount; uVar11 = uVar11 + 1) {
         pbVar8 = (byte *)((char *)0x2410);
-        uVar4 = (undefined2)((ulong)Entities >> 0x10);
+        uVar4 = (uint16_t)((ulong)Entities >> 0x10);
         iVar10 = (int)Entities;
         if (((*(byte *)(iVar10 + uVar11 * 0x37 + 0x1a) == bStack_3c) &&
             (pbVar8 = (byte *)((char *)0x2410),
@@ -318,8 +318,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6522,unaff_SS),
                                (char *)CONCAT22(iStack_a,(char *)0x2410),
-                               (char)*(undefined2 *)((uint)bStack_3d * 4 + 0x13f),
-                               (char)*(undefined2 *)((uint)bStack_3d * 4 + 0x141),(char)uVar4,pbVar8
+                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x13f),
+                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x141),(char)uVar4,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
@@ -328,8 +328,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6543,unaff_SS),
                                (char *)CONCAT22(iStack_a,(char *)0x2410),
-                               (char)*(undefined2 *)((uint)bStack_3d * 4 + 0x13f),
-                               (char)*(undefined2 *)((uint)bStack_3d * 4 + 0x141),(char)uVar4,pbVar8
+                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x13f),
+                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x141),(char)uVar4,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
@@ -338,8 +338,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6557,unaff_SS),
                                (char *)CONCAT22(iStack_a,(char *)0x2410),
-                               (char)*(undefined2 *)((uint)bStack_3d * 4 + 0x13f),
-                               (char)*(undefined2 *)((uint)bStack_3d * 4 + 0x141),(char)uVar4,pbVar8
+                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x13f),
+                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x141),(char)uVar4,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
@@ -348,8 +348,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6568,unaff_SS),
                                (char *)CONCAT22(iStack_a,(char *)0x2410),
-                               (char)*(undefined2 *)((uint)bStack_3d * 4 + 0x13f),
-                               (char)*(undefined2 *)((uint)bStack_3d * 4 + 0x141),(char)uVar4,pbVar8
+                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x13f),
+                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x141),(char)uVar4,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }

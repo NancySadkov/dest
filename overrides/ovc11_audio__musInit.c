@@ -9,7 +9,7 @@ void __cdecl16far musInit(void)
   uint8_t *in_DX;
   int iVar2;
   int unaff_SI;
-  undefined2 uVar3;
+  uint16_t uVar3;
   int size;
   
   size = unaff_SI;
@@ -23,29 +23,29 @@ void __cdecl16far musInit(void)
     else {
       unaff_SI = CFG_Mus + -0x31;
     }
-    if (((undefined2 *)&musDriver0Ofs)[unaff_SI * 2] != 0 ||
-        ((undefined2 *)&musDriver0Seg)[unaff_SI * 2] != 0) {
+    if (((uint16_t *)&musDriver0Ofs)[unaff_SI * 2] != 0 ||
+        ((uint16_t *)&musDriver0Seg)[unaff_SI * 2] != 0) {
       MidGfxOfs = ovr_stshLoadGfx(cmidpakComOfs);
       MidGfxSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
       MIDHandle.ofs =
            audio_usesAlignToSeg
-                     ((uint8_t *)CONCAT22(*(undefined2 *)((char *)cmidpakComOfs + 5),in_DX),
+                     ((uint8_t *)CONCAT22(*(uint16_t *)((char *)cmidpakComOfs + 5),in_DX),
                       *(uint16_t *)((char *)cmidpakComOfs + 7),size);
       MIDHandle.seg = (uint16_t)in_DX;
       ovr_ovc20_compute1(cmidpakComOfs,cmidpakComSeg);
-      handle.seg = ((undefined2 *)&musDriver0Seg)[unaff_SI * 2];
-      handle.ofs = ((undefined2 *)&musDriver0Ofs)[unaff_SI * 2];
+      handle.seg = ((uint16_t *)&musDriver0Seg)[unaff_SI * 2];
+      handle.ofs = ((uint16_t *)&musDriver0Ofs)[unaff_SI * 2];
       MusGfxOfs = ovr_stshLoadGfx(handle);
-      uVar3 = (undefined2)
-              ((ulong)*(undefined4 *)((undefined2 *)&musDriver0Ofs + unaff_SI * 2) >> 0x10);
-      iVar2 = (int)*(undefined4 *)((undefined2 *)&musDriver0Ofs + unaff_SI * 2);
+      uVar3 = (uint16_t)
+              ((ulong)*(uint32_t *)((uint16_t *)&musDriver0Ofs + unaff_SI * 2) >> 0x10);
+      iVar2 = (int)*(uint32_t *)((uint16_t *)&musDriver0Ofs + unaff_SI * 2);
       MusGfxSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
       MusHandle = audio_usesAlignToSeg
-                            ((uint8_t *)CONCAT22(*(undefined2 *)(iVar2 + 5),in_DX),
+                            ((uint8_t *)CONCAT22(*(uint16_t *)(iVar2 + 5),in_DX),
                              *(uint16_t *)(iVar2 + 7),size);
       MusHandleSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
-      ovr_ovc20_compute1((char *)((undefined2 *)&musDriver0Ofs)[unaff_SI * 2],
-                         ((undefined2 *)&musDriver0Seg)[unaff_SI * 2]);
+      ovr_ovc20_compute1((char *)((uint16_t *)&musDriver0Ofs)[unaff_SI * 2],
+                         ((uint16_t *)&musDriver0Seg)[unaff_SI * 2]);
       handle_00.seg = midpakAd.seg;
       handle_00.ofs = midpakAd.ofs;
       MusDrvOfs = ovr_stshLoadGfx(handle_00);

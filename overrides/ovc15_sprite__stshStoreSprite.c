@@ -32,14 +32,14 @@ void __cdecl16far stshStoreSprite(spr_t *spr,anm_t *anms,int16_t nanims)
         if (pframe.ofs == 0 && pframe.seg == 0) break;
         uVar1 = *(uint16_t *)(pframe.ofs + 3);
         uVar2 = *(uint16_t *)(pframe.ofs + 1);
-        *(undefined2 *)(pframe.ofs + 3) = 0;
-        *(undefined2 *)(pframe.ofs + 1) = 0;
+        *(uint16_t *)(pframe.ofs + 3) = 0;
+        *(uint16_t *)(pframe.ofs + 1) = 0;
         if (bVar3) {
           (*(uint16_t *)((uint8_t *)&(cte) + 2)) = uVar2;
           (*(uint16_t *)((uint8_t *)&(cte))) = ovr_stshStoreFile((uint8_t *)pframe.ofs,pframe.seg);
           iVar4 = in_stack_00000004 + index * 4;
           *(uint16_t *)(iVar4 + 0x5a) = (*(uint16_t *)((uint8_t *)&(cte) + 2));
-          *(undefined2 *)(iVar4 + 0x58) =(uint16_t)( (cte_t *)cte);
+          *(uint16_t *)(iVar4 + 0x58) =(uint16_t)( (cte_t *)cte);
         }
         else {
           ovr_stshStoreFile((uint8_t *)pframe.ofs,pframe.seg);

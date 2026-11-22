@@ -63,7 +63,7 @@ bool __cdecl16far ovc31_fileExists(char *filename)
 
 {
   int handle;
-  undefined2 unaff_SI;
+  uint16_t unaff_SI;
   
   handle = file_open_rdonly((char *)CONCAT22(unaff_SI,(char *)filename));
   if (-1 < handle) {
@@ -221,9 +221,9 @@ byte __cdecl16far init_strong_sav(void)
   int handle;
   uint16_t result;
   char *path;
-  undefined2 in_DX;
-  undefined2 unaff_SI;
-  undefined2 unaff_SS;
+  uint16_t in_DX;
+  uint16_t unaff_SI;
+  uint16_t unaff_SS;
   char path_buffer [81];
   uint8_t b;
   
@@ -576,7 +576,7 @@ void __cdecl16far init_check_mem(void)
 {
   uint16_t smem;
   int iVar1;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   far_t lmem_without_psp;
   char buf [80];
   long lmem;

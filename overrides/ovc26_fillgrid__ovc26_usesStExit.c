@@ -14,8 +14,8 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex,...)
   entity_t *peVar11;
   char *pcVar12;
   uint16_t unaff_DI;
-  undefined2 uVar13;
-  undefined2 unaff_SS;
+  uint16_t uVar13;
+  uint16_t unaff_SS;
   uint8_t pathDirs [80];
   int iStack_1e;
   int iStack_1c;
@@ -53,7 +53,7 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex,...)
     if (0xa0 < iVar7) {
       iVar7 = 0xa0;
     }
-    uVar13 = (undefined2)((ulong)FillGrid >> 0x10);
+    uVar13 = (uint16_t)((ulong)FillGrid >> 0x10);
     pcVar12 = (char *)FillGrid;
     if (pcVar12[iVar7 + iVar6 * 0xa1] == '\0') {
       debugEmptyCellCount = debugEmptyCellCount + 1;

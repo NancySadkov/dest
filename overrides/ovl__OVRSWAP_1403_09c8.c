@@ -5,16 +5,16 @@ void __cdecl16near OVRSWAP_1403_09c8(void)
   undefined1 *puVar2;
   code *pcVar3;
   bool bVar4;
-  undefined2 uVar5;
+  uint16_t uVar5;
   int iVar6;
-  undefined2 in_CX;
+  uint16_t in_CX;
   uint uVar7;
-  undefined2 in_DX;
+  uint16_t in_DX;
   undefined1 *puVar8;
   uint uVar9;
-  undefined2 in_BX;
+  uint16_t in_BX;
   undefined1 *puVar10;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   undefined1 in_CF;
   
   uVar5 = 0x2271;
@@ -39,7 +39,7 @@ void __cdecl16near OVRSWAP_1403_09c8(void)
       iVar6 = (*pcVar3)();
       bVar4 = true;
       if (iVar6 < 0) goto L_OVRSWAP_1403_09c8_0A34;
-      uVar5 = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 0xc);
+      uVar5 = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 0xc);
       for (; uVar7 != 0; uVar7 = uVar7 - 1) {
         puVar2 = puVar8;
         puVar8 = puVar8 + 1;

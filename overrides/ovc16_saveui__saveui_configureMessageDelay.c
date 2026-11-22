@@ -5,7 +5,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   uint16_t *puVar2;
   uint8_t *puVar3;
   byte *pbVar4;
-  undefined4 uVar5;
+  uint32_t uVar5;
   char cVar6;
   undefined1 uVar7;
   uint uVar8;
@@ -15,25 +15,25 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   uint8_t *puVar12;
   int in_CX;
   sbyte sVar13;
-  undefined2 in_DX;
+  uint16_t in_DX;
   entity_t *peVar14;
   uint *puVar15;
   int iVar16;
   byte *unaff_SI;
   uint unaff_DI;
-  undefined2 uVar18;
-  undefined2 uVar19;
+  uint16_t uVar18;
+  uint16_t uVar19;
   uint16_t unaff_SS;
   byte abStackY_15bc [5516];
-  undefined2 uStackY_30;
-  undefined2 uStackY_2e;
-  undefined2 uStackY_2c;
+  uint16_t uStackY_30;
+  uint16_t uStackY_2e;
+  uint16_t uStackY_2c;
   far_t items;
   uint8_t menuLabel;
   char *pcStack_22;
   entity_t *uStack_1e;   /* hand fix: ->base deref */
-  undefined2 uStack_1a;
-  undefined2 uStack_18;
+  uint16_t uStack_1a;
+  uint16_t uStack_18;
   int iStack_16;
   int iStack_14;
   int iStack_12;
@@ -135,7 +135,7 @@ switchD_4000_6642_caseD_3:
   if (uVar9 == 0) {
     pcStack_22 = (char *)CONCAT22(menuLabel,uVar19);
     ovr_ovc15_clearVisited();
-    uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+    uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
     peVar14 = (entity_t *)uStack_1e;
     uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(char)((ulong)((peVar14->base).animFrame + 0xf) / 0x10));
     if (((peVar14->base).target & 1) == 0) {
@@ -169,7 +169,7 @@ switchD_4000_6642_caseD_3:
     uVar7 = manage_usesLitoa103();
     uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),uVar7);
     while ((char)uStack_1a != '\0') {
-      uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+      uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
       if (((((entity_t *)uStack_1e)->base).target & 1) == 0) {
         iStack_16 = 0;
       }
@@ -249,14 +249,14 @@ switchD_4000_6642_caseD_3:
         uVar19 = 0x2379;
         uVar9 = ovr_alignUp4((uStack_1e->base).x);
         if ((uVar8 == uVar9) &&
-           (uVar18 = (undefined2)((ulong)uStack_1e >> 0x10),
+           (uVar18 = (uint16_t)((ulong)uStack_1e >> 0x10),
            (((entity_t *)uStack_1e)->base).destY == (((entity_t *)uStack_1e)->base).y)) {
           pcStack_22 = (char *)CONCAT22(menuLabel,unaff_SS);
           uStackY_2c = 0x2379;
           uStackY_2e = 0x204;
           manage_usesCurSfxType32();
         }
-        uVar18 = (undefined2)((ulong)uStack_1e >> 0x10);
+        uVar18 = (uint16_t)((ulong)uStack_1e >> 0x10);
         peVar14 = (entity_t *)uStack_1e;
       } while (((peVar14->base).destX == 0 && (peVar14->base).destY == 0) ||
               (*(char *)((int)&(peVar14->base).entity + 1) != '\0'));
@@ -275,7 +275,7 @@ switchD_4000_6642_caseD_3:
         uStackY_2c = 0x2e4;
         cVar6 = func_0x0004f32d();
         peVar14 = (entity_t *)uStack_1e;
-        uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+        uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
         if (cVar6 == '\0') {
           (uStack_1e->base).x = (uStack_1e->base).x + (int)*(char *)((peVar14->base).target + 0x885)
           ;
@@ -291,7 +291,7 @@ switchD_4000_6642_caseD_3:
       }
       else {
         iStack_12 = ovr_ovc07_signum((peVar14->base).destX - (uStack_1e->base).x);
-        uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+        uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
         uVar18 = 0x22da;
         iStack_14 = ovr_ovc07_signum((((entity_t *)uStack_1e)->base).destY -
                                      (((entity_t *)uStack_1e)->base).y);
@@ -314,7 +314,7 @@ switchD_4000_6642_caseD_3:
           uStackY_2c = uVar18;
           cVar6 = sub_OVC21_manage_c_23C2();
           if (cVar6 == '\0') {
-            uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+            uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
             puVar2 = &(((entity_t *)uStack_1e)->base).y;
             *puVar2 = *puVar2 + iStack_14;
             (((entity_t *)uStack_1e)->base).target = (char)iStack_14 + 0x1;
@@ -346,7 +346,7 @@ switchD_4000_6642_caseD_3:
           }
         }
         else {
-          uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+          uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
           peVar14 = (entity_t *)uStack_1e;
           sVar13 = ((peVar14->base).faction & 3) << 1;
           in_CX = CONCAT11((char)((uint)in_CX >> 8),sVar13);
@@ -356,7 +356,7 @@ switchD_4000_6642_caseD_3:
           uStackY_2c = 0x48f;
           cVar6 = func_0x0004f32d();
           if (cVar6 == '\0') {
-            uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+            uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
             peVar14 = (entity_t *)uStack_1e;
             (uStack_1e->base).x =
                  (uStack_1e->base).x + (int)*(char *)((peVar14->base).target + 0x885);
@@ -372,7 +372,7 @@ L_attact_3f0b_1082_1477:
       uVar8 = ovr_alignUp4((((entity_t *)uStack_1e)->base).destX);
       uVar9 = ovr_alignUp4((uStack_1e->base).x);
       if (uVar8 == uVar9) {
-        uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
+        uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
         peVar14 = (entity_t *)uStack_1e;
         if ((peVar14->base).destY == (peVar14->base).y) {
           (peVar14->base).destX = 0;
@@ -381,7 +381,7 @@ L_attact_3f0b_1082_1477:
             bStack_4 = 0xff;
           }
           else {
-            uVar5 = *(undefined4 *)((uint)*(byte *)((int)&(peVar14->base).entity + 3) << 2);
+            uVar5 = *(uint32_t *)((uint)*(byte *)((int)&(peVar14->base).entity + 3) << 2);
             bStack_4 = *(byte *)((int)uVar5 + 0x89);
           }
           if (bStack_4 != 0xff) {

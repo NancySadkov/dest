@@ -35,7 +35,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
   far_t src_02;
   undefined1 uVar5;
   undefined1 uVar6;
-  undefined2 uVar7;
+  uint16_t uVar7;
   uint16_t x;
   uint16_t npixels;
   uint16_t plane_sz;
@@ -49,12 +49,12 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
   uint16_t dst_seg;
   
   (*(uint16_t *)((uint8_t *)&(buf))) = ovr_stshAlloc(0xfa0f);
-  *(undefined2 *)(src.seg + 0x306) = (*(uint16_t *)((uint8_t *)&(buf) + 2));
-  *(undefined2 *)(src.seg + 0x304) = (uint16_t)(void *)buf;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(src.seg + 0x306) = (*(uint16_t *)((uint8_t *)&(buf) + 2));
+  *(uint16_t *)(src.seg + 0x304) = (uint16_t)(void *)buf;   /* hand fix: 2-byte slot */
   ptr.seg = *(uint16_t *)(src.seg + 0x306);
   ptr.ofs = *(uint16_t *)(src.seg + 0x304);
   uVar2 = alignToSeg(ptr);
-  *(undefined2 *)(src.seg + 0x302) = (*(uint16_t *)((uint8_t *)&(buf) + 2));
+  *(uint16_t *)(src.seg + 0x302) = (*(uint16_t *)((uint8_t *)&(buf) + 2));
   *(uint16_t *)(src.seg + 0x300) = uVar2;
   _fmemset((void *)(ulong)*(uint *)(src.seg + 0x302),64000,unaff_DI);
   uVar2 = *(uint16_t *)(src.seg + 0x302);

@@ -16,9 +16,9 @@ void __cdecl16far ovc38_loadHighScores(far_t entries)
 {
   char *filename;
   int iVar1;
-  undefined2 uVar2;
-  undefined2 in_DX;
-  undefined2 *puVar3;
+  uint16_t uVar2;
+  uint16_t in_DX;
+  uint16_t *puVar3;
   int iVar4;
   char *unaff_SS;
   uint8_t msg;
@@ -28,7 +28,7 @@ void __cdecl16far ovc38_loadHighScores(far_t entries)
   iVar1 = ovr_open_wait_unlock_and_disk(filename,in_DX);
   if (iVar1 < 0) {
     for (iVar1 = 0; iVar1 < 6; iVar1 = iVar1 + 1) {
-      puVar3 = (undefined2 *)(entries.ofs + iVar1 * 4);
+      puVar3 = (uint16_t *)(entries.ofs + iVar1 * 4);
       puVar3[1] = 0;
       *puVar3 = 0;
     }
@@ -36,7 +36,7 @@ void __cdecl16far ovc38_loadHighScores(far_t entries)
   else {
     for (iVar4 = 0; iVar4 < 6; iVar4 = iVar4 + 1) {
       uVar2 = ovr_saveui_readLine(iVar1);
-      puVar3 = (undefined2 *)(entries.ofs + iVar4 * 4);
+      puVar3 = (uint16_t *)(entries.ofs + iVar4 * 4);
       puVar3[1] = in_DX;
       *puVar3 = uVar2;
     }
@@ -56,9 +56,9 @@ void __cdecl16far ovc38_saveHighScores(far_t entries)
 {
   char *path;
   int handle;
-  undefined2 in_DX;
+  uint16_t in_DX;
   int *piVar1;
-  undefined2 *puVar2;
+  uint16_t *puVar2;
   int iVar3;
   uint16_t uVar4;
   char *unaff_SS;
@@ -71,7 +71,7 @@ void __cdecl16far ovc38_saveHighScores(far_t entries)
       uVar4 = entries.seg;
       piVar1 = (int *)(entries.ofs + iVar3 * 4);
       if (*piVar1 != 0 || piVar1[1] != 0) {
-        puVar2 = (undefined2 *)(entries.ofs + iVar3 * 4);
+        puVar2 = (uint16_t *)(entries.ofs + iVar3 * 4);
         ovr_saveui_writeLine(handle,(char *)*puVar2,puVar2[1]);
       }
     }
@@ -122,8 +122,8 @@ void __cdecl16far ovc38_showAchievements(void)
   uint16_t uVar4;
   byte *unaff_SS;
   uint8_t menuState;
-  undefined2 uStack_66;
-  undefined2 uStack_64;
+  uint16_t uStack_66;
+  uint16_t uStack_64;
   uint8_t text;
   far_t fStack_a;
   undefined1 *uStack_6;   /* hand fix: dereferenced as *uStack_6 */
@@ -243,10 +243,10 @@ void __cdecl16far ovc38_usesStshAlloc(void)
   size_t sVar2;
   void *pvVar3;
   uint16_t in_DX;
-  undefined2 uVar4;
+  uint16_t uVar4;
   int iVar5;
-  undefined2 *puVar6;
-  undefined2 unaff_SS;
+  uint16_t *puVar6;
+  uint16_t unaff_SS;
   far_t handle;
   far_t entries_00;
   far_t handle_00;
@@ -267,30 +267,30 @@ void __cdecl16far ovc38_usesStshAlloc(void)
       ovr_stshFree(handle);
     }
     ovr_manage_playerTitle
-              ((char_sheet_t *)*(undefined2 *)((uint)bStack_3 * 4),
-               ((undefined2 *)((uint)bStack_3 * 4))[1],*(undefined2 *)((uint)bStack_3 * 4),
-               ((undefined2 *)((uint)bStack_3 * 4))[1]);
+              ((char_sheet_t *)*(uint16_t *)((uint)bStack_3 * 4),
+               ((uint16_t *)((uint)bStack_3 * 4))[1],*(uint16_t *)((uint)bStack_3 * 4),
+               ((uint16_t *)((uint)bStack_3 * 4))[1]);
     uVar4 = 0x217a;
     _sprintf((char *)CONCAT22(unaff_SS,&msg),"%c%s%s@%d");
     iVar5 = 5;
     while ((0 < iVar5 &&
            (iVar1 = ovc38_scan1((char *)CONCAT22(unaff_SS,&msg),
-                                (char *)CONCAT22(*(undefined2 *)((int)pvStack_8 + iVar5 * 4 + -2),
-                                                 (char *)*(undefined2 *)
+                                (char *)CONCAT22(*(uint16_t *)((int)pvStack_8 + iVar5 * 4 + -2),
+                                                 (char *)*(uint16_t *)
                                                           ((int)pvStack_8 + iVar5 * 4 + -4))),
            (char)iVar1 == '\0'))) {
-      uVar4 = *(undefined2 *)((int)pvStack_8 + iVar5 * 4 + -4);
-      puVar6 = (undefined2 *)((int)pvStack_8 + iVar5 * 4);
-      puVar6[1] = *(undefined2 *)((int)pvStack_8 + iVar5 * 4 + -2);
+      uVar4 = *(uint16_t *)((int)pvStack_8 + iVar5 * 4 + -4);
+      puVar6 = (uint16_t *)((int)pvStack_8 + iVar5 * 4);
+      puVar6[1] = *(uint16_t *)((int)pvStack_8 + iVar5 * 4 + -2);
       *puVar6 = uVar4;
       iVar5 = iVar5 + -1;
     }
     sVar2 = strlen((char *)CONCAT22(unaff_SS,&msg));
     pvVar3 = ovr_stshAlloc((ulong)(sVar2 + 1));
-    puVar6 = (undefined2 *)((int)pvStack_8 + iVar5 * 4);
+    puVar6 = (uint16_t *)((int)pvStack_8 + iVar5 * 4);
     puVar6[1] = uVar4;
     *puVar6 = (uint16_t)pvVar3;   /* hand fix: 2-byte slot */
-    puVar6 = (undefined2 *)((int)pvStack_8 + iVar5 * 4);
+    puVar6 = (uint16_t *)((int)pvStack_8 + iVar5 * 4);
     strcpy((char *)CONCAT22(puVar6[1],(char *)*puVar6),(char *)CONCAT22(unaff_SS,&msg));
     entries_00.seg = uStack_6;
     entries_00.ofs = (uint16_t)pvStack_8;

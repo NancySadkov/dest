@@ -15,17 +15,17 @@ uint __cdecl16far ovc36_usesLDIV_at_(byte partyIndex,...)
 
 {
   long *plVar1;
-  undefined2 uVar2;
-  undefined2 unaff_SI;
+  uint16_t uVar2;
+  uint16_t unaff_SI;
   int iVar3;
   uint unaff_DI;
   uint uVar4;
   long lVar5;
   long lVar6;
   long *plVar7;
-  undefined2 uVar8;
-  undefined2 uVar9;
-  undefined4 in_stack_0000fffa;
+  uint16_t uVar8;
+  uint16_t uVar9;
+  uint32_t in_stack_0000fffa;
   int iVar10;
   
   lVar6 = CONCAT22((int)((ulong)in_stack_0000fffa >> 0x10),unaff_SI);
@@ -46,7 +46,7 @@ uint __cdecl16far ovc36_usesLDIV_at_(byte partyIndex,...)
     plVar7 = (long *)((char_sheet_t *)(((uint)partyIndex << 2)))->population;
     uVar2 = 0;
     plVar1 = LXMUL_at_(plVar7,(ulong)unaff_DI << 0x10,lVar6);
-    uVar9 = (undefined2)lVar6;
+    uVar9 = (uint16_t)lVar6;
     lVar6 = LDIV_at_((long)CONCAT22(uVar2,plVar1),(long)CONCAT22(uVar8,plVar7));
     lVar5 = CONCAT22((uint)lVar6,uVar9);
     if (200 < (uint)lVar6) {

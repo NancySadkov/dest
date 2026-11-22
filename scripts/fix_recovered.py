@@ -473,6 +473,9 @@ _sp.run([sys.executable, os.path.join(_HERE, "fix_far_data.py"), "--apply"],
 # the prototypes the export just produced.
 _sp.run([sys.executable, os.path.join(_HERE, "fix_override_signatures.py")],
         check=False)
+# Ghidra's unknown-integer placeholders become the concrete C types
+_sp.run([sys.executable, os.path.join(_HERE, "fix_undefined_types.py"), "--apply"],
+        check=False)
 
 # The decompiler sometimes unrolls a loop thousands of times, which trips Turbo C's
 # table limit (o02 draw_textTalkwin9Lbm).

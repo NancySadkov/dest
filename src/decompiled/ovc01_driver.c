@@ -280,13 +280,13 @@ uint8_t __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int st
 
 {
   uint8_t *puVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   undefined1 uStack0007;
   int in_stack_0000000a;
   
   paletteOfs = CONCAT13(uStack0007,CONCAT12(paletteSeg,paletteOfs));
   out(0x3c8,(undefined1)startIndex);
-  uVar2 = (undefined2)((ulong)paletteOfs >> 0x10);
+  uVar2 = (uint16_t)((ulong)paletteOfs >> 0x10);
   do {
     out(0x3c9,*paletteOfs);
     puVar1 = paletteOfs + 2;
@@ -307,7 +307,7 @@ uint8_t __cdecl16far vgaSetPalette8bit(uint8_t *pal,...)
 {
   uint8_t *puVar1;
   int iVar2;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   out(0x3c8,0);
   iVar2 = 0x100;
@@ -843,7 +843,7 @@ void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,
   uint8_t *puVar1;
   int iVar2;
   int iVar3;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   far_t *pfStack_8;
   
   iVar3 = row1;
@@ -903,13 +903,13 @@ void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,
 
 /* [R5] only caller driver_drawLine */
 
-undefined2 __cdecl16near driver_drawLine_compute(void)
+uint16_t __cdecl16near driver_drawLine_compute(void)
 
 {
   int unaff_BP;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   
-  return *(undefined2 *)(unaff_BP + 0x10);
+  return *(uint16_t *)(unaff_BP + 0x10);
 }
 
 
@@ -947,13 +947,13 @@ void __cdecl16far driver_loop1(uint x1,uint x2,uint16_t y,uint8_t colour,uint16_
 
 /* fills the rectangle (x1,y1)-(x2,y2) with one colour */
 
-undefined2 __cdecl16far
+uint16_t __cdecl16far
 driver_fillRect(uint x1,uint y1,uint x2,uint y2,uint8_t colour,uint16_t dstSeg,...)
 
 {
   uint8_t *puVar1;
   uint uVar2;
-  undefined2 in_AX;
+  uint16_t in_AX;
   uint uVar3;
   int iVar4;
   int iVar5;
@@ -998,9 +998,9 @@ void __cdecl16far
 driver_compute3(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg,...)
 
 {
-  undefined2 *puVar1;
+  uint16_t *puVar1;
   
-  puVar1 = (undefined2 *)(ofs + (uint)y * 0x140);
+  puVar1 = (uint16_t *)(ofs + (uint)y * 0x140);
   *puVar1 = CONCAT11(colour1,colour1);
   *(uint8_t *)(puVar1 + 0xa0) = colour1;
   *(uint8_t *)((int)puVar1 + 0x141) = colour2;
@@ -1018,9 +1018,9 @@ void __cdecl16far
 driver_compute4(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg,...)
 
 {
-  undefined2 *puVar1;
+  uint16_t *puVar1;
   
-  puVar1 = (undefined2 *)(ofs + (uint)y * 0x140);
+  puVar1 = (uint16_t *)(ofs + (uint)y * 0x140);
   *puVar1 = CONCAT11(colour1,colour1);
   *(uint8_t *)((int)puVar1 + 0x141) = colour1;
   *(uint8_t *)(puVar1 + 0xa0) = colour2;
@@ -1115,9 +1115,9 @@ bool __cdecl16far digIsInstalled(void)
   code *pcVar1;
   bool bVar2;
   int iVar3;
-  undefined2 uVar4;
+  uint16_t uVar4;
   
-  uVar4 = (undefined2)((ulong)DriverEntry >> 0x10);
+  uVar4 = (uint16_t)((ulong)DriverEntry >> 0x10);
   iVar3 = (int)DriverEntry;
   if (iVar3 == 0) {
 return_false:
@@ -1215,9 +1215,9 @@ bool __cdecl16far midIsLoaded(void)
 {
   bool bVar1;
   int iVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   
-  uVar3 = (undefined2)((ulong)DriverEntry >> 0x10);
+  uVar3 = (uint16_t)((ulong)DriverEntry >> 0x10);
   iVar2 = (int)DriverEntry;
   if (((iVar2 == 0) || (*(int *)(iVar2 + -6) != 0x494d)) || (*(int *)(iVar2 + -4) != 0x4944)) {
     bVar1 = false;
@@ -1320,8 +1320,8 @@ void __cdecl16near driver_scan2(void)
   undefined1 *unaff_SI;
   int unaff_DI;
   undefined1 *puVar8;
-  undefined2 unaff_ES;
-  undefined2 unaff_SS;
+  uint16_t unaff_ES;
+  uint16_t unaff_SS;
   bool bVar9;
   
   bVar2 = *(byte *)(unaff_BP + -6);
@@ -1372,7 +1372,7 @@ void __cdecl16far driver_fillSpan(int x1,int x2,byte y,uint8_t colour,int *rect,
   int iVar2;
   int iVar3;
   uint8_t *puVar4;
-  undefined2 in_stack_0000000e;
+  uint16_t in_stack_0000000e;
   
   iVar3 = x2;
   if (x2 < x1) {
@@ -1561,9 +1561,9 @@ void __cdecl16far driver_unrleSprite(int *spr,far_t dst)
   byte *pbVar9;
   byte *pbVar10;
   byte *pbVar11;
-  undefined2 uVar12;
+  uint16_t uVar12;
   
-  uVar12 = (undefined2)((ulong)spr >> 0x10);
+  uVar12 = (uint16_t)((ulong)spr >> 0x10);
   pbVar10 = (byte *)(dst.ofs + *spr * 0x140);
   pbVar9 = (byte *)((int *)spr + 2);
   iVar8 = ((int *)spr)[1];
@@ -1619,9 +1619,9 @@ int __cdecl16far vgaDoSomethingWithPalette(int *paletteData)
   int *piVar7;
   int iVar8;
   int iVar9;
-  undefined2 uVar10;
+  uint16_t uVar10;
   
-  uVar10 = (undefined2)((ulong)paletteData >> 0x10);
+  uVar10 = (uint16_t)((ulong)paletteData >> 0x10);
   iVar8 = 0;
   piVar7 = (int *)paletteData + 1;
   iVar3 = *paletteData;
@@ -1690,13 +1690,13 @@ uint __cdecl16far lowNibble(uint value,...)
 void __cdecl16far driver_copyWords(far_t src,far_t dst,uint16_t count)
 
 {
-  undefined2 *puVar1;
-  undefined2 *puVar2;
-  undefined2 *puVar3;
-  undefined2 *puVar4;
+  uint16_t *puVar1;
+  uint16_t *puVar2;
+  uint16_t *puVar3;
+  uint16_t *puVar4;
   
-  puVar3 = (undefined2 *)src.ofs;
-  puVar4 = (undefined2 *)dst.ofs;
+  puVar3 = (uint16_t *)src.ofs;
+  puVar4 = (uint16_t *)dst.ofs;
   for (; count != 0; count = count - 1) {
     puVar2 = puVar4;
     puVar4 = puVar4 + 1;
@@ -1716,10 +1716,10 @@ void __cdecl16far driver_copyWords(far_t src,far_t dst,uint16_t count)
 void __cdecl16far driver_zeroWords(far_t dst,uint16_t count)
 
 {
-  undefined2 *puVar1;
-  undefined2 *puVar2;
+  uint16_t *puVar1;
+  uint16_t *puVar2;
   
-  puVar2 = (undefined2 *)dst.ofs;
+  puVar2 = (uint16_t *)dst.ofs;
   for (; count != 0; count = count - 1) {
     puVar1 = puVar2;
     puVar2 = puVar2 + 1;

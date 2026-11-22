@@ -61,7 +61,7 @@ uint __cdecl16far ovc49_body1(agnt_t *agnt,...)
   char cVar8;
   byte bVar9;
   char *pcVar10;
-  undefined2 *puVar11;
+  uint16_t *puVar11;
   cte_t *pcVar12;
   far_t far *pfVar13;
   undefined1 extraout_AH;
@@ -74,30 +74,30 @@ uint __cdecl16far ovc49_body1(agnt_t *agnt,...)
   agnt_t *agnt_00;
   uint uVar20;
   char *pcVar21;
-  undefined2 uVar22;
+  uint16_t uVar22;
   unit_t *puVar23;
   int *piVar24;
   uint *puVar25;
   char *pcVar26;
   int unaff_SI;
-  undefined2 uVar27;
+  uint16_t uVar27;
   brect_t *pbVar28;
   brect_t *pbVar29;
   brect_t *unaff_SS;
   byte in_AF;
   long lVar30;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   char *in_stack_00000008;
   char in_stack_00000010;
-  undefined2 auStackY_2f2 [20];
+  uint16_t auStackY_2f2 [20];
   undefined1 auStackY_2ca [664];
   brect_t bStackY_32;
   int iStackY_28;
   uint uStackY_26;
-  undefined2 uStackY_24;
+  uint16_t uStackY_24;
   cte_t *uStackY_22;   /* hand fix: indexed and ->ofs/-info deref */
   char *in_stack_0000ffe0;
-  undefined4 uVar31;
+  uint32_t uVar31;
   far_t gfx_08;
   far_t gfx_09;
   uint16_t in_stack_0000ffe4;
@@ -119,7 +119,7 @@ uint __cdecl16far ovc49_body1(agnt_t *agnt,...)
   byte in_stack_0000fffd;
   
   paVar4 = agnt;
-  uVar27 = *(undefined2 *)((int)&agnt->frames + 2);
+  uVar27 = *(uint16_t *)((int)&agnt->frames + 2);
   pcStack_8 = *(char **)&agnt->frames;
   uVar39 = (undefined1)uVar27;
   uVar41 = (undefined1)((uint)uVar27 >> 8);
@@ -128,11 +128,11 @@ uint __cdecl16far ovc49_body1(agnt_t *agnt,...)
   uVar33 = 0x78;
   cVar6 = -0x7e;
   iVar14 = ovr_agnt_clampX(agnt->x);
-  uVar27 = (undefined2)((ulong)in_stack_0000ffe0 >> 0x10);
+  uVar27 = (uint16_t)((ulong)in_stack_0000ffe0 >> 0x10);
   iVar14 = *(int *)(iVar14 * 2 + 0x1a6);
   if (agnt->combatState != 0x1) {
     if (agnt->combatState == 0x2) {
-      uVar27 = (undefined2)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
+      uVar27 = (uint16_t)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
       if (*(int *)(pcStack_8 + 0xa0) == 0 && *(int *)(pcStack_8 + 0xa2) == 0) {
         if (agnt->animVariant == 0x0) {
           in_stack_0000fffd = 0;
@@ -222,12 +222,12 @@ uint __cdecl16far ovc49_body1(agnt_t *agnt,...)
       if (agnt->animVariant == 0x0) {
         if (agnt->health == 0x2) {
           if ((agnt->gindex == 0x1) &&
-             (uVar27 = (undefined2)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10),
+             (uVar27 = (uint16_t)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10),
              *(int *)(pcStack_8 + 0x74) != 0 || *(int *)(pcStack_8 + 0x76) != 0)) {
             in_stack_0000fffd = 7;
           }
           else if ((agnt->gindex == 0x2) &&
-                  (uVar27 = (undefined2)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10),
+                  (uVar27 = (uint16_t)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10),
                   *(int *)(pcStack_8 + 0xa8) != 0 || *(int *)(pcStack_8 + 0xaa) != 0)) {
             in_stack_0000fffd = 0x14;
           }
@@ -236,7 +236,7 @@ uint __cdecl16far ovc49_body1(agnt_t *agnt,...)
           }
         }
         else if (agnt->health == 0x3) {
-          uVar27 = (undefined2)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
+          uVar27 = (uint16_t)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
           if (*(int *)(pcStack_8 + 0x74) == 0 && *(int *)(pcStack_8 + 0x76) == 0) {
             in_stack_0000fffd = 3;
           }
@@ -245,19 +245,19 @@ uint __cdecl16far ovc49_body1(agnt_t *agnt,...)
           }
         }
         else if (agnt->health == 0x1) {
-          uVar27 = (undefined2)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
+          uVar27 = (uint16_t)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
           if (*(int *)(pcStack_8 + 0x9c) != 0 || *(int *)(pcStack_8 + 0x9e) != 0) {
             in_stack_0000fffd = 0x11;
           }
         }
         else if (agnt->health == 0x4) {
-          uVar27 = (undefined2)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
+          uVar27 = (uint16_t)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
           if (*(int *)(pcStack_8 + 0xa4) != 0 || *(int *)(pcStack_8 + 0xa6) != 0) {
             in_stack_0000fffd = 0x13;
           }
         }
         else if (((agnt->health == 0x5) || (agnt->health == 0x6)) &&
-                (uVar27 = (undefined2)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10),
+                (uVar27 = (uint16_t)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10),
                 *(int *)(pcStack_8 + 0xac) != 0 || *(int *)(pcStack_8 + 0xae) != 0)) {
           in_stack_0000fffd = 0x15;
         }
@@ -270,7 +270,7 @@ uint __cdecl16far ovc49_body1(agnt_t *agnt,...)
         else if (agnt->health == 0x1) {
           in_stack_0000fffd = 5;
         }
-        uVar27 = (undefined2)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
+        uVar27 = (uint16_t)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
         if (*(int *)(pcStack_8 + (uint)in_stack_0000fffd * 4 + 0x58) == 0 &&
             *(int *)(pcStack_8 + (uint)in_stack_0000fffd * 4 + 0x5a) == 0) {
           in_stack_0000fffd = 4;
@@ -278,7 +278,7 @@ uint __cdecl16far ovc49_body1(agnt_t *agnt,...)
       }
     }
 L_OVC49_8699_18c4_1CA7:
-    uVar27 = (undefined2)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
+    uVar27 = (uint16_t)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
     if (*(int *)(pcStack_8 + (uint)in_stack_0000fffd * 4 + 0x58) == 0 &&
         *(int *)(pcStack_8 + (uint)in_stack_0000fffd * 4 + 0x5a) == 0) {
       if (agnt->animVariant == 0x0) {
@@ -294,7 +294,7 @@ L_OVC49_8699_18c4_1CA7:
     }
     agnt->level = in_stack_0000fffc;
     agnt->frameIndex = in_stack_0000fffd;
-    uVar27 = (undefined2)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
+    uVar27 = (uint16_t)(CONCAT13(uVar41,CONCAT12(uVar39,pcStack_8)) >> 0x10);
     iVar14 = *(int *)((int)(pcStack_8 + (uint)in_stack_0000fffd * 4) + 2);
     iVar18 = *(int *)(pcStack_8 + (uint)in_stack_0000fffd * 4);
     uVar33 = (undefined1)iVar18;
@@ -423,7 +423,7 @@ L_OVC49_8699_18c4_1CA7:
     do {
       uVar7 = (undefined1)in_stack_0000ffe4;
       iVar14 = 0;
-      uVar27 = (undefined2)((ulong)GUnits >> 0x10);
+      uVar27 = (uint16_t)((ulong)GUnits >> 0x10);
       puVar23 = (unit_t *)GUnits;
       pcVar10 = (char *)((int)(((long)*(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x125) *
                                 (long)(int)(uint)puVar23[uStackY_26].level & 0xffffU) / 0x18) + 1);
@@ -435,7 +435,7 @@ L_OVC49_8699_18c4_1CA7:
            (uVar22 = 0x195d, (*(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x121) & 4) != 0)) {
           if ((((*(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x121) & 4) == 0) ||
               (puVar23[uStackY_26].unitType == 0xff)) ||
-             (uVar31 = *(undefined4 *)((uint)puVar23[uStackY_26].unitType << 2),
+             (uVar31 = *(uint32_t *)((uint)puVar23[uStackY_26].unitType << 2),
              *(char *)((int)uVar31 + 0x3f) != '\0')) {
             auStackY_2f2[1] = 0x2410;
             auStackY_2f2[0] = 0x808a;
@@ -456,13 +456,13 @@ L_OVC49_8699_18c4_1CA7:
         }
       }
       else {
-        auStackY_2f2[1] = *(undefined2 *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x118);
-        auStackY_2f2[0] = *(undefined2 *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x116);
+        auStackY_2f2[1] = *(uint16_t *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x118);
+        auStackY_2f2[0] = *(uint16_t *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x116);
         iVar14 = 1;
       }
       uVar22 = 0x23f1;
       uVar15 = ovr_ovc45_compute8(((unit_t *)GUnits)[uStackY_26].unitType);
-      uVar27 = (undefined2)((ulong)GUnits >> 0x10);
+      uVar27 = (uint16_t)((ulong)GUnits >> 0x10);
       if (((char)uVar15 == '\0') || (7 < ((unit_t *)GUnits)[uStackY_26].level)) {
         uVar22 = 0x23f1;
         uVar15 = ovr_ovc45_compute8(((unit_t *)GUnits)[uStackY_26].unitType);
@@ -505,7 +505,7 @@ L_OVC49_8699_18c4_1CA7:
       bVar9 = ((unit_t *)GUnits)[uStackY_26].unitType;
       uStackY_24 = CONCAT11((*(uint8_t *)((uint8_t *)&(uStackY_24) + 1)),bVar9);
       if ((((*(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x121) & 0x400) == 0) && (bVar9 != 0xff)) &&
-         (*(char *)((int)*(undefined4 *)((uint)bVar9 << 2) + 0x3f) == '\0')) {
+         (*(char *)((int)*(uint32_t *)((uint)bVar9 << 2) + 0x3f) == '\0')) {
         (&stack0xffec)[iVar14] = 7;
         auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)(unsigned long)(unsigned long)( (char *)0x26510);
         auStackY_2f2[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( (char *)"Information");
@@ -564,7 +564,7 @@ L_OVC49_8699_18c4_1CA7:
           }
 L_OVC49_8699_1e09_21A5:
           do {
-            uVar27 = (undefined2)((ulong)in_stack_0000ffe0 >> 0x10);
+            uVar27 = (uint16_t)((ulong)in_stack_0000ffe0 >> 0x10);
             if ((*(int *)((int)uStackY_22 * 0x34) < 0) || (0xd2 < *(int *)((int)uStackY_22 * 0x34)))
             {
 L_OVC49_8699_1e09_2229:
@@ -611,8 +611,8 @@ code_r0x00088b64:
               if (*(char *)((int)uStackY_22 * 0x34 + 0x11) == '\0') {
                 uVar15 = ovc49_compute1(*(int *)((int)uStackY_22 * 0x34));
                 if ((char)uVar15 != '\0') {
-                  *(undefined2 *)((int)uStackY_22 * 0x34) = uStackY_24;
-                  *(undefined2 *)((int)uStackY_22 * 0x34 + 2) = uStackY_26;
+                  *(uint16_t *)((int)uStackY_22 * 0x34) = uStackY_24;
+                  *(uint16_t *)((int)uStackY_22 * 0x34 + 2) = uStackY_26;
                   if (*(char *)((int)uStackY_22 * 0x34 + 4) == '\0') {
                     uVar16 = ovr_randBelow(3);
                     *(char *)((int)uStackY_22 * 0x34 + 4) = (char)uVar16 + -1;
@@ -642,7 +642,7 @@ code_r0x00088b64:
                     *(undefined1 *)((int)uStackY_22 * 0x34 + 0x10) = 1;
                   }
                   uVar31 = 0;
-                  *(undefined2 *)((int)uStackY_22 * 0x34 + 6) = 0;
+                  *(uint16_t *)((int)uStackY_22 * 0x34 + 6) = 0;
                   ovc49_body1((agnt_t *)((int)uStackY_22 * 0x34));
                   goto L_OVC49_8699_1e09_2982;
                 }
@@ -653,8 +653,8 @@ code_r0x00088b64:
                                                 CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34))
                                                ), (uVar15 & 0xff) == 0)))) {
                 if (*(char *)((int)uStackY_22 * 0x34 + 0x25) != '\x02') {
-                  *(undefined2 *)((int)uStackY_22 * 0x34) = uStackY_24;
-                  *(undefined2 *)((int)uStackY_22 * 0x34 + 2) = uStackY_26;
+                  *(uint16_t *)((int)uStackY_22 * 0x34) = uStackY_24;
+                  *(uint16_t *)((int)uStackY_22 * 0x34 + 2) = uStackY_26;
                   if ((*(uint *)((int)uStackY_22 * 0x34 + 0x2b) & 0xbc0) == 0) {
                     if (*(char *)((int)uStackY_22 * 0x34 + 4) == '\0') {
                       uVar16 = ovr_randBelow(2);
@@ -675,15 +675,15 @@ code_r0x00088b64:
                     *(undefined1 *)((int)uStackY_22 * 0x34 + 0x10) = 1;
                   }
                   uVar31 = 0;
-                  *(undefined2 *)((int)uStackY_22 * 0x34 + 6) = 0;
+                  *(uint16_t *)((int)uStackY_22 * 0x34 + 6) = 0;
                   ovc49_body1((agnt_t *)((int)uStackY_22 * 0x34));
                 }
               }
               else {
                 iVar14 = ovc49_usesStExit((agnt_t *)((int)uStackY_22 * 0x34));
                 if ((char)iVar14 != '\0') {
-                  *(undefined2 *)((int)uStackY_22 * 0x34) = uStackY_24;
-                  *(undefined2 *)((int)uStackY_22 * 0x34 + 2) = uStackY_26;
+                  *(uint16_t *)((int)uStackY_22 * 0x34) = uStackY_24;
+                  *(uint16_t *)((int)uStackY_22 * 0x34 + 2) = uStackY_26;
                   if ((*(char *)((int)uStackY_22 * 0x34 + 0x11) == '\0') ||
                      (*(char *)((int)uStackY_22 * 0x34 + 4) != '\0')) {
                     if (*(char *)((int)uStackY_22 * 0x34 + 0x11) == '\0') {
@@ -700,7 +700,7 @@ code_r0x00088b64:
                     *(char *)((int)uStackY_22 * 0x34 + 4) = (char)uVar16 * '\x02' + -1;
                   }
                   *(undefined1 *)((int)uStackY_22 * 0x34 + 5) = 0;
-                  *(undefined2 *)((int)uStackY_22 * 0x34 + 6) = 0;
+                  *(uint16_t *)((int)uStackY_22 * 0x34 + 6) = 0;
                   if ((('\0' < *(char *)((int)uStackY_22 * 0x34 + 4)) &&
                       (*(char *)((int)uStackY_22 * 0x34 + 0xf) != '\0')) ||
                      ((*(char *)((int)uStackY_22 * 0x34 + 4) < '\0' &&
@@ -737,18 +737,18 @@ L_OVC49_8699_1e09_29B9:
               uStackY_22 =(uint16_t)(unsigned long)(unsigned long)( (cte_t *)0x0);
               goto L_OVC49_8699_1e09_3BDE;
             }
-            uVar27 = *(undefined2 *)((int)uStackY_22 * 0x34 + 0x15);
+            uVar27 = *(uint16_t *)((int)uStackY_22 * 0x34 + 0x15);
             iVar14 = *(int *)((int)uStackY_22 * 0x34 + 0x13);
             ovr_ovc49_fillGridCells(0);
             ovc49_textLongerParalyzed
                       ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
                        (byte)uStackY_22);
-            uStackY_26 = CONCAT22(*(undefined2 *)((int)uStackY_22 * 0x34),
-                                   *(undefined2 *)((int)uStackY_22 * 0x34 + 2));
+            uStackY_26 = CONCAT22(*(uint16_t *)((int)uStackY_22 * 0x34),
+                                   *(uint16_t *)((int)uStackY_22 * 0x34 + 2));
             uVar15 = ovc49_body1((agnt_t *)((int)uStackY_22 * 0x34));
             in_stack_0000ffe4 = (uint16_t)bVar9;
             uVar22 = 0x1726;
-            psVar17 = (stg_tmp_t *)*(undefined2 *)(iVar14 + (uVar15 & 0xff) * 4 + 0x58);
+            psVar17 = (stg_tmp_t *)*(uint16_t *)(iVar14 + (uVar15 & 0xff) * 4 + 0x58);
             uVar7 = SUB21(psVar17,0);
             uVar34 = (undefined1)((uint)psVar17 >> 8);
             in_stack_0000ffe8 = ovr_stash_usesStExit(psVar17);
@@ -791,7 +791,7 @@ L_OVC49_8699_1e09_29B9:
       case (cte_t *)0x2:
         pcVar21 = ovr_fmVsprintf("%s: %s %d gold. Feeds %d %s.",
                                  (char *)CONCAT13((char)((uint)pcVar10 >> 8),
-                                                  CONCAT12((char)pcVar10,(int)*(undefined4 *)pcVar26
+                                                  CONCAT12((char)pcVar10,(int)*(uint32_t *)pcVar26
                                                           )));
         pcStack_8 = (uint16_t)((char *)0x2337);
         in_stack_0000fff6 = (stg_tmp_t *)((char *)0x246fd);
@@ -861,8 +861,8 @@ L_OVC49_8699_1e09_29B9:
             *(int *)((int)&CrossBlitGfx.seg + iVar14 * 4) = (int)pcVar10;
             ((far_t far *)&CrossBlitGfx + iVar14)->ofs = (uint16_t)pfVar13;
             pfVar13 = ovr_stshAllocStub((far_t far *)in_stack_0000fff6);
-            ((undefined2 *)&crossBlitType2Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&crossBlitType2Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
+            ((uint16_t *)&crossBlitType2Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&crossBlitType2Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
           }
         }
         else {
@@ -909,9 +909,9 @@ L_OVC49_8699_1e09_29B9:
           for (iVar14 = 0; iVar14 < 4; iVar14 = iVar14 + 1) {
             lVar30 = (long)iVar14 * 0xe;
             pfVar13 = ovr_stshRleCut((far_t far *)(&in_stack_0000fff6->aptr)->ofs);
-            uVar27 = (undefined2)((ulong)lVar30 >> 0x10);
+            uVar27 = (uint16_t)((ulong)lVar30 >> 0x10);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            *(undefined2 *)((int)&CrossBlitGfx.seg + iVar14 * 4) = uVar27;
+            *(uint16_t *)((int)&CrossBlitGfx.seg + iVar14 * 4) = uVar27;
             ((far_t far *)&CrossBlitGfx + iVar14)->ofs = (uint16_t)pcVar12;
             lVar30 = (long)iVar14 * 0xe;
             pcVar10 = (uint16_t)((char *)((ulong)lVar30 >> 0x10));
@@ -920,56 +920,56 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels.seg) + 1)) = (char)((ulong)lVar30 >> 8);
             pfVar13 = ovr_stshRleType2((far_t far *)(&in_stack_0000fff6->aptr)->ofs,pixels);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&crossBlitType2Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&crossBlitType2Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&crossBlitType2Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&crossBlitType2Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           ovr_stgFreeTmp(in_stack_0000fff6);
         }
         if ((*(uint8_t *)((uint8_t *)&(agnt))) == false) {
           for (iVar14 = 0; iVar14 < 0x17; iVar14 = iVar14 + 1) {
             pfVar13 = ovr_stshAllocStub((far_t far *)in_stack_0000fff6);
-            ((undefined2 *)&csite1Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&csite1Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
+            ((uint16_t *)&csite1Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&csite1Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
           }
           for (iVar14 = 0; iVar14 < 0x18; iVar14 = iVar14 + 1) {
             pfVar13 = ovr_stshAllocStub((far_t far *)in_stack_0000fff6);
-            ((undefined2 *)&csite2Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&csite2Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
+            ((uint16_t *)&csite2Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&csite2Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
           }
           for (iVar14 = 0; iVar14 < 0x20; iVar14 = iVar14 + 1) {
             pfVar13 = ovr_stshAllocStub((far_t far *)in_stack_0000fff6);
-            ((undefined2 *)&csite5Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&csite5Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
+            ((uint16_t *)&csite5Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&csite5Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
           }
           for (iVar14 = 0; iVar14 < 0xe; iVar14 = iVar14 + 1) {
             pfVar13 = ovr_stshAllocStub((far_t far *)in_stack_0000fff6);
-            ((undefined2 *)&tmstrsSprites6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
+            ((uint16_t *)&tmstrsSprites6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
           }
           for (iVar14 = 0; iVar14 < 0x11; iVar14 = iVar14 + 1) {
             pfVar13 = ovr_stshAllocStub((far_t far *)in_stack_0000fff6);
-            ((undefined2 *)&tmstrsSprites5Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites5Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
+            ((uint16_t *)&tmstrsSprites5Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites5Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
           }
           for (iVar14 = 0; iVar14 < 7; iVar14 = iVar14 + 1) {
             pfVar13 = ovr_stshAllocStub((far_t far *)in_stack_0000fff6);
-            ((undefined2 *)&tmstrsSprites4Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites4Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
+            ((uint16_t *)&tmstrsSprites4Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites4Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
           }
           for (iVar14 = 0; iVar14 < 7; iVar14 = iVar14 + 1) {
             pfVar13 = ovr_stshAllocStub((far_t far *)in_stack_0000fff6);
-            ((undefined2 *)&tmstrsSprites3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
+            ((uint16_t *)&tmstrsSprites3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
           }
           for (iVar14 = 0; iVar14 < 8; iVar14 = iVar14 + 1) {
             pfVar13 = ovr_stshAllocStub((far_t far *)in_stack_0000fff6);
-            ((undefined2 *)&tmstrsSprites2Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites2Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
+            ((uint16_t *)&tmstrsSprites2Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites2Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
           }
           for (iVar14 = 0; iVar14 < 5; iVar14 = iVar14 + 1) {
             pfVar13 = ovr_stshAllocStub((far_t far *)in_stack_0000fff6);
-            ((undefined2 *)&tmstrsSprites1Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites1Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
+            ((uint16_t *)&tmstrsSprites1Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites1Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
           }
         }
         else {
@@ -981,8 +981,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_00.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_00);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite1Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
-            ((undefined2 *)&csite1Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite1Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
+            ((uint16_t *)&csite1Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 6; iVar14 = iVar14 + 1) {
             (*(uint8_t *)((uint8_t *)&(pixels_01.seg))) = 0x55;
@@ -990,8 +990,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_01.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_01);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite1_6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
-            ((undefined2 *)&csite1_6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite1_6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
+            ((uint16_t *)&csite1_6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 6; iVar14 = iVar14 + 1) {
             (*(uint8_t *)((uint8_t *)&(pixels_02.seg))) = 0x9f;
@@ -999,8 +999,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_02.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_02);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite1_12Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
-            ((undefined2 *)&csite1_12Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite1_12Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
+            ((uint16_t *)&csite1_12Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 5; iVar14 = iVar14 + 1) {
             (*(uint8_t *)((uint8_t *)&(pixels_03.seg))) = 0xe5;
@@ -1008,8 +1008,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_03.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_03);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite1_18Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
-            ((undefined2 *)&csite1_18Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite1_18Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
+            ((uint16_t *)&csite1_18Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           ovr_stgFreeTmp(psVar17);
           psVar17 = ovr_grabLbm(94);
@@ -1020,8 +1020,8 @@ L_OVC49_8699_1e09_29B9:
             pixels_04.ofs = (psVar17->aptr).seg;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_04);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite2Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&csite2Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite2Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&csite2Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 3; iVar14 = iVar14 + 1) {
             pcVar10 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x3d) >> 0x10));
@@ -1030,8 +1030,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_05.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_05);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite2_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&csite2_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite2_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&csite2_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 3; iVar14 = iVar14 + 1) {
             pcVar10 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x3d) >> 0x10));
@@ -1040,8 +1040,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_06.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_06);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite2_6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&csite2_6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite2_6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&csite2_6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           ovr_stgFreeTmp(psVar17);
           psVar17 = ovr_grabLbm(95);
@@ -1052,8 +1052,8 @@ L_OVC49_8699_1e09_29B9:
             pixels_07.ofs = (psVar17->aptr).seg;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_07);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
-            ((undefined2 *)&csite3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
+            ((uint16_t *)&csite3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 3; iVar14 = iVar14 + 1) {
             pcVar21 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x3d) >> 0x10));
@@ -1062,8 +1062,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_08.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_08);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite3_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
-            ((undefined2 *)&csite3_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite3_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
+            ((uint16_t *)&csite3_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           ovr_stgFreeTmp(psVar17);
           psVar17 = ovr_grabLbm(96);
@@ -1074,8 +1074,8 @@ L_OVC49_8699_1e09_29B9:
             pixels_09.ofs = (psVar17->aptr).seg;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_09);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite4Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&csite4Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite4Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&csite4Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 3; iVar14 = iVar14 + 1) {
             pcVar10 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x3d) >> 0x10));
@@ -1084,8 +1084,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_10.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_10);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite4_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&csite4_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite4_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&csite4_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 3; iVar14 = iVar14 + 1) {
             pcVar10 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x3d) >> 0x10));
@@ -1094,8 +1094,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_11.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_11);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite4_6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&csite4_6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite4_6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&csite4_6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           ovr_stgFreeTmp(psVar17);
           psVar17 = ovr_grabLbm(531);
@@ -1107,8 +1107,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_12.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_12);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite5Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
-            ((undefined2 *)&csite5Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite5Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
+            ((uint16_t *)&csite5Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 3; iVar14 = iVar14 + 1) {
             pcVar21 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x3d) >> 0x10));
@@ -1117,8 +1117,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_13.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_13);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite5_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
-            ((undefined2 *)&csite5_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite5_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
+            ((uint16_t *)&csite5_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 3; iVar14 = iVar14 + 1) {
             pcVar21 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x3d) >> 0x10));
@@ -1127,8 +1127,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_14.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_14);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite5_6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
-            ((undefined2 *)&csite5_6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite5_6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
+            ((uint16_t *)&csite5_6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           ovr_stgFreeTmp(psVar17);
           psVar17 = ovr_grabLbm(532);
@@ -1140,8 +1140,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_15.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_15);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&csite6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&csite6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 3; iVar14 = iVar14 + 1) {
             pcVar10 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x3d) >> 0x10));
@@ -1150,8 +1150,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_16.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_16);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite6_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&csite6_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite6_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&csite6_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 3; iVar14 = iVar14 + 1) {
             pcVar10 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x3d) >> 0x10));
@@ -1160,8 +1160,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_17.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_17);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite6_6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&csite6_6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite6_6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&csite6_6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           ovr_stgFreeTmp(psVar17);
           psVar17 = ovr_grabLbm(533);
@@ -1173,8 +1173,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_18.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_18);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite7Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
-            ((undefined2 *)&csite7Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite7Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
+            ((uint16_t *)&csite7Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 3; iVar14 = iVar14 + 1) {
             pcVar21 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x3d) >> 0x10));
@@ -1183,8 +1183,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_19.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_19);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite7_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
-            ((undefined2 *)&csite7_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite7_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
+            ((uint16_t *)&csite7_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 3; iVar14 = iVar14 + 1) {
             pcVar21 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x3d) >> 0x10));
@@ -1193,8 +1193,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_20.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_20);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite7_6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
-            ((undefined2 *)&csite7_6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite7_6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar21);
+            ((uint16_t *)&csite7_6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           ovr_stgFreeTmp(psVar17);
           psVar17 = ovr_grabLbm(534);
@@ -1206,8 +1206,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_21.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_21);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite8Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcStack_8);
-            ((undefined2 *)&csite8Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite8Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcStack_8);
+            ((uint16_t *)&csite8Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 2; iVar14 = iVar14 + 1) {
             pcStack_8 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x3d) >> 0x10));
@@ -1216,8 +1216,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_22.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&psVar17->aptr)->ofs,pixels_22);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&csite8_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcStack_8);
-            ((undefined2 *)&csite8_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&csite8_3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcStack_8);
+            ((uint16_t *)&csite8_3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           ovr_stgFreeTmp(psVar17);
           in_stack_0000fff6 = ovr_grabLbm(535);
@@ -1229,8 +1229,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_23.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&in_stack_0000fff6->aptr)->ofs,pixels_23);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&tmstrsSprites6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&tmstrsSprites6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 7; iVar14 = iVar14 + 1) {
             pcVar10 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x1b) >> 0x10));
@@ -1239,8 +1239,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_24.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&in_stack_0000fff6->aptr)->ofs,pixels_24);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&tmstrsSprites9Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites9Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&tmstrsSprites9Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites9Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 7; iVar14 = iVar14 + 1) {
             pcVar10 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x1b) >> 0x10));
@@ -1249,8 +1249,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_25.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&in_stack_0000fff6->aptr)->ofs,pixels_25);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&tmstrsSprites5Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites5Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&tmstrsSprites5Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites5Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 7; iVar14 = iVar14 + 1) {
             pcVar10 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x1b) >> 0x10));
@@ -1259,8 +1259,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_26.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&in_stack_0000fff6->aptr)->ofs,pixels_26);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&tmstrsSprites6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&tmstrsSprites6Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites6Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 3; iVar14 = iVar14 + 1) {
             pcVar10 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x1b) >> 0x10));
@@ -1269,8 +1269,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_27.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&in_stack_0000fff6->aptr)->ofs,pixels_27);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&tmstrsSprites7Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites7Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&tmstrsSprites7Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites7Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 7; iVar14 = iVar14 + 1) {
             pcVar10 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x1b) >> 0x10));
@@ -1279,8 +1279,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_28.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&in_stack_0000fff6->aptr)->ofs,pixels_28);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&tmstrsSprites4Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites4Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&tmstrsSprites4Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites4Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 7; iVar14 = iVar14 + 1) {
             pcVar10 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x1b) >> 0x10));
@@ -1289,8 +1289,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_29.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&in_stack_0000fff6->aptr)->ofs,pixels_29);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&tmstrsSprites3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&tmstrsSprites3Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites3Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           for (iVar14 = 0; iVar14 < 7; iVar14 = iVar14 + 1) {
             pcVar10 = (uint16_t)((char *)((ulong)((long)iVar14 * 0x1b) >> 0x10));
@@ -1299,8 +1299,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_30.seg) + 1)) = 0;
             pfVar13 = ovr_stshRleType2((far_t far *)(&in_stack_0000fff6->aptr)->ofs,pixels_30);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&tmstrsSprites2Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites2Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&tmstrsSprites2Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites2Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           (*(uint8_t *)((uint8_t *)&(pixels_31.seg))) = 0xeb;
           pixels_31.ofs = (in_stack_0000fff6->aptr).seg;
@@ -1315,8 +1315,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_32.seg) + 1)) = 1;
             pfVar13 = ovr_stshRleType2((far_t far *)(&in_stack_0000fff6->aptr)->ofs,pixels_32);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&tmstrsSprites1Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&tmstrsSprites1Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&tmstrsSprites1Seg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&tmstrsSprites1Ofs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
           ovr_stgFreeTmp(in_stack_0000fff6);
         }
@@ -1327,8 +1327,8 @@ L_OVC49_8699_1e09_29B9:
         for (iVar14 = 0; iVar14 < 4; iVar14 = iVar14 + 1) {
           if ((*(uint8_t *)((uint8_t *)&(agnt))) == false) {
             pfVar13 = ovr_stshAllocStub((far_t far *)in_stack_0000fff6);
-            ((undefined2 *)&boltSpritesSeg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&boltSpritesOfs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
+            ((uint16_t *)&boltSpritesSeg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&boltSpritesOfs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pfVar13);
           }
           else {
             lVar30 = (long)iVar14 * 0x16;
@@ -1338,8 +1338,8 @@ L_OVC49_8699_1e09_29B9:
             (*(uint8_t *)((uint8_t *)&(pixels_33.seg) + 1)) = (char)((ulong)lVar30 >> 8);
             pfVar13 = ovr_stshRleType2((far_t far *)(&in_stack_0000fff6->aptr)->ofs,pixels_33);
             pcVar12 = ovr_stshStoreFile((uint8_t *)pfVar13);
-            ((undefined2 *)&boltSpritesSeg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
-            ((undefined2 *)&boltSpritesOfs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
+            ((uint16_t *)&boltSpritesSeg)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar10);
+            ((uint16_t *)&boltSpritesOfs)[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( pcVar12);
           }
         }
         if ((*(uint8_t *)((uint8_t *)&(agnt))) == false) {
@@ -2061,7 +2061,7 @@ L_OVC49_8699_0000_0121:
   } while( true );
 L_OVC49_8699_1e09_3BDE:
   if ((int)(uint)AgntCount <= (int)uStackY_22) goto L_OVC49_8699_1e09_3BF1;
-  uVar27 = *(undefined2 *)((int)uStackY_22 * 0x34 + 0x15);
+  uVar27 = *(uint16_t *)((int)uStackY_22 * 0x34 + 0x15);
   iVar14 = *(int *)((int)uStackY_22 * 0x34 + 0x13);
   in_stack_0000ffe4 =
        CONCAT11(*(undefined1 *)((int)uStackY_22 * 0x34 + 0x12),(char)in_stack_0000ffe4);
@@ -2071,7 +2071,7 @@ L_OVC49_8699_1e09_3BDE:
     printf("%d \r");
   }
   psVar17 = ovr_stash_usesStExit
-                      ((stg_tmp_t *)*(undefined2 *)(iVar14 + (in_stack_0000ffe4 >> 8) * 4 + 0x58));
+                      ((stg_tmp_t *)*(uint16_t *)(iVar14 + (in_stack_0000ffe4 >> 8) * 4 + 0x58));
   GGameState = 0x38;
   pbVar19 = (uint16_t)(pbVar29);
   if (DebugVerbose != false) {
@@ -2089,7 +2089,7 @@ L_OVC49_8699_1e09_3BDE:
     bVar9 = 0xd9;
     uVar33 = 0x94;
     iVar18 = ovr_agnt_clampX(*(int *)((int)uStackY_22 * 0x34));
-    uVar31 = *(undefined4 *)((int)uStackY_22 * 0x34 + 0x1d);
+    uVar31 = *(uint32_t *)((int)uStackY_22 * 0x34 + 0x1d);
     iStackY_28 = *(int *)(&columnScreenY[iVar18]) + *(int *)((int)uStackY_22 * 0x34 + 2) +
                  (int)*(char *)((int)uVar31 + 0x52) + -0x16;
   }
@@ -2116,15 +2116,15 @@ L_OVC49_8699_1e09_3BDE:
         uVar15 = bVar9 & 3;
         in_stack_0000ffe4 = 0x22d3;
         pbVar28 = (brect_t *)((char *)0x263d3);
-        gfx_00.seg = ((undefined2 *)&crossBlitType2Seg)[uVar15 * 2];
-        gfx_00.ofs = ((undefined2 *)&crossBlitType2Ofs)[uVar15 * 2];
+        gfx_00.seg = ((uint16_t *)&crossBlitType2Seg)[uVar15 * 2];
+        gfx_00.ofs = ((uint16_t *)&crossBlitType2Ofs)[uVar15 * 2];
         bVar9 = bVar36;
         uVar33 = uVar38;
         ovr_blitGfxRect(gfx_00);
       }
     }
     else if (*(char *)((int)uStackY_22 * 0x34 + 0x24) == '\x01') {
-      uVar31 = *(undefined4 *)((int)uStackY_22 * 0x34 + 0x1d);
+      uVar31 = *(uint32_t *)((int)uStackY_22 * 0x34 + 0x1d);
       if ((*(uint *)((int)uVar31 + 0x40) & 2) == 0) {
         gfx_02.seg = uVar16;
         gfx_02.ofs = (uint16_t)(psVar17->cmap + 6);
@@ -2133,8 +2133,8 @@ L_OVC49_8699_1e09_3BDE:
         uVar15 = *(byte *)((int)uStackY_22 * 0x34 + 0x23) & 3;
         in_stack_0000ffe4 = 0x22d3;
         pbVar28 = (brect_t *)((char *)0x263d3);
-        gfx_03.seg = ((undefined2 *)&crossBlitType2Seg)[uVar15 * 2];
-        gfx_03.ofs = ((undefined2 *)&crossBlitType2Ofs)[uVar15 * 2];
+        gfx_03.seg = ((uint16_t *)&crossBlitType2Seg)[uVar15 * 2];
+        gfx_03.ofs = ((uint16_t *)&crossBlitType2Ofs)[uVar15 * 2];
         bVar9 = bVar36;
         uVar33 = uVar38;
         ovr_blitGfxRect(gfx_03);
@@ -2329,7 +2329,7 @@ L_OVC49_8699_1e09_3310:
              *(undefined1 *)((int)uStackY_22 * 0x34 + 0xf);
       }
       else if ((*(char *)((int)uStackY_22 * 0x34 + 0xd) == '\0') &&
-              (uVar31 = *(undefined4 *)((int)uStackY_22 * 0x34 + 0x1d),
+              (uVar31 = *(uint32_t *)((int)uStackY_22 * 0x34 + 0x1d),
               (*(uint *)((int)uVar31 + 0x3c) & 8) == 0)) {
         iVar18 = -0x60d4;
         ovr_audio_panFromX((agnt_t *)((int)uStackY_22 * 0x34));
@@ -2343,7 +2343,7 @@ L_OVC49_8699_1e09_3310:
         uVar15 = ovr_agnt_compute12((agnt_t *)((int)uStackY_22 * 0x34));
         if (((char)uVar15 != '\0') &&
            ((*(uint *)((in_stack_0000ffe4 & 0xff) * 0x34 + -9) & 0x800) == 0)) {
-          uVar31 = *(undefined4 *)((in_stack_0000ffe4 & 0xff) * 0x34 + -0x1d);
+          uVar31 = *(uint32_t *)((in_stack_0000ffe4 & 0xff) * 0x34 + -0x1d);
           if (((*(uint *)((int)uVar31 + 0x14) & 2) == 0) ||
              ((uVar16 = ovr_randBelow(2), (uVar16 & 0xff) != 0 ||
               ((*(uint *)((int)uStackY_22 * 0x34 + 0x2b) & 0x800) == 0)))) {
@@ -2420,7 +2420,7 @@ L_OVC49_8699_1e09_3310:
       else {
         bVar9 = *(byte *)((uint)*(byte *)((int)uStackY_22 * 0x34 + 0x2e) * 0x21 + -0x16);
       }
-      uVar27 = (undefined2)(CONCAT13(uVar39,CONCAT12(uVar34,iVar14)) >> 0x10);
+      uVar27 = (uint16_t)(CONCAT13(uVar39,CONCAT12(uVar34,iVar14)) >> 0x10);
       piVar24 = (int *)(iVar14 + (uint)bVar9 * 4);
       if (*piVar24 == 0 && piVar24[1] == 0) {
         uVar34 = (undefined1)SprProjectiles.seg;
@@ -2428,7 +2428,7 @@ L_OVC49_8699_1e09_3310:
         uVar33 = (undefined1)SprProjectiles.ofs;
         uVar7 = (undefined1)(SprProjectiles.ofs >> 8);
       }
-      uVar27 = (undefined2)(CONCAT13(uVar39,CONCAT12(uVar34,CONCAT11(uVar7,uVar33))) >> 0x10);
+      uVar27 = (uint16_t)(CONCAT13(uVar39,CONCAT12(uVar34,CONCAT11(uVar7,uVar33))) >> 0x10);
       puVar25 = (uint *)(CONCAT11(uVar7,uVar33) + (uint)bVar9 * 4);
       uVar15 = *puVar25 | puVar25[1];
       if (uVar15 == 0) {
@@ -2437,7 +2437,7 @@ L_OVC49_8699_1e09_3310:
       }
       psVar17 = ovr_stash_usesStExit
                           ((stg_tmp_t *)
-                           *(undefined2 *)(CONCAT11(uVar7,uVar33) + (uint)bVar9 * 4 + 0x58));
+                           *(uint16_t *)(CONCAT11(uVar7,uVar33) + (uint)bVar9 * 4 + 0x58));
       GGameState = 0x30;
       pbVar19 = &bStackY_32;
       uVar16 = *(uint16_t *)((int)uStackY_22 * 0x34 + 8);
@@ -2538,12 +2538,12 @@ L_OVC49_8699_1e09_3CF7:
       cVar40 = '\x01';
       *(undefined1 *)((int)uStackY_22 * 0x34 + 0x30) = 0;
       if ((((*(uint *)((int)uStackY_22 * 0x34 + 0x2b) & 0x800) == 0) &&
-          ((*(char *)*(undefined4 *)((int)uStackY_22 * 0x34 + 0x1d) == '\0' || (cVar6 != '\0')))) &&
-         ((*(char *)*(undefined4 *)((int)uStackY_22 * 0x34 + 0x1d) != '\0' || (cVar8 != '\0')))) {
+          ((*(char *)*(uint32_t *)((int)uStackY_22 * 0x34 + 0x1d) == '\0' || (cVar6 != '\0')))) &&
+         ((*(char *)*(uint32_t *)((int)uStackY_22 * 0x34 + 0x1d) != '\0' || (cVar8 != '\0')))) {
         puVar3 = (uint *)((int)uStackY_22 * 0x34 + 0x2b);
         *puVar3 = *puVar3 & 0xf51b;
         *(undefined1 *)((int)uStackY_22 * 0x34 + 0x2f) =
-             *(undefined1 *)*(undefined4 *)((int)uStackY_22 * 0x34 + 0x1d);
+             *(undefined1 *)*(uint32_t *)((int)uStackY_22 * 0x34 + 0x1d);
         ovr_ovc41_advanceAnimFrame((agnt_t *)((int)uStackY_22 * 0x34));
       }
       else {
@@ -2552,7 +2552,7 @@ L_OVC49_8699_1e09_3CF7:
         *(undefined1 *)((int)uStackY_22 * 0x34 + 0x21) = 0;
         *(undefined1 *)((int)uStackY_22 * 0x34 + 0x23) = 10;
         *(undefined1 *)((int)uStackY_22 * 0x34 + 0x24) = 2;
-        *(undefined2 *)((int)uStackY_22 * 0x34 + 6) = 0;
+        *(uint16_t *)((int)uStackY_22 * 0x34 + 6) = 0;
       }
       AgentsChanged = '\x01';
     }
@@ -2566,7 +2566,7 @@ L_OVC49_8699_1e09_3CF7:
   }
   uVar20 = EntityCount - 1;
   for (uVar15 = uVar20; -1 < (int)uVar15; uVar15 = uVar15 - 1) {
-    uVar27 = (undefined2)((ulong)Entities >> 0x10);
+    uVar27 = (uint16_t)((ulong)Entities >> 0x10);
     uVar20 = (uint)*(byte *)((int)Entities + uVar15 * 0x37 + 0xe);
     if ((uVar20 == 0) &&
        (uVar20 = ovr_ovc23_isCursorAt(*(uint16_t *)((int)Entities + uVar15 * 0x37)),

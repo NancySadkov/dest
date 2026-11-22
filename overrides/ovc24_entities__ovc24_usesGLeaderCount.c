@@ -11,7 +11,7 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
   byte leaderIdx;
   uint uVar4;
   uint uVar5;
-  undefined2 uVar6;
+  uint16_t uVar6;
   uint bestOtherDist;
   uint bestDist;
   byte bestOtherIdx;
@@ -22,11 +22,11 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
   bestOtherDist = 0xffff;
   bestSameIdx = 0xff;
   bestOtherIdx = 0xff;
-  if (*(char *)((int)*(undefined4 *)((uint)leaderIndex << 2) + 0x3f) == '\0') {
+  if (*(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f) == '\0') {
     for (leaderIdx = 0; leaderIdx < GLeaderCount; leaderIdx = leaderIdx + 1) {
       if (((((char_sheet_t *)(((uint)leaderIdx << 2)))->active != '\0') &&
-          (*(char *)((int)*(undefined4 *)((uint)leaderIdx << 2) + 0x3f) ==
-           *(char *)((int)*(undefined4 *)((uint)leaderIndex << 2) + 0x3f))) &&
+          (*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3f) ==
+           *(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f))) &&
          (uVar1 = ((char_sheet_t *)(((uint)leaderIdx << 2)))->x -
                   ((char_sheet_t *)(((uint)leaderIndex << 2)))->x,
          uVar4 = (int)uVar1 >> 0xf,
@@ -42,7 +42,7 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
   else {
     for (leaderIdx = 0; leaderIdx < GLeaderCount; leaderIdx = leaderIdx + 1) {
       if (((((char_sheet_t *)(((uint)leaderIdx << 2)))->active != '\0') &&
-          (*(char *)((int)*(undefined4 *)((uint)leaderIdx << 2) + 0x3f) == '\0')) &&
+          (*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3f) == '\0')) &&
          (uVar1 = ((char_sheet_t *)(((uint)leaderIdx << 2)))->x -
                   ((char_sheet_t *)(((uint)leaderIndex << 2)))->x,
          uVar4 = (int)uVar1 >> 0xf,
@@ -56,17 +56,17 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
     }
   }
   for (uVar1 = 0; uVar1 < EntityCount; uVar1 = uVar1 + 1) {
-    uVar6 = (undefined2)((ulong)Entities >> 0x10);
+    uVar6 = (uint16_t)((ulong)Entities >> 0x10);
     if ((*(byte *)((int)Entities + uVar1 * 0x37 + 0x1a) == leaderIndex) &&
        (*(byte *)((int)Entities + uVar1 * 0x37 + 0x1a) = bestSameIdx, bestOtherIdx != 0xff)) {
-      *(undefined2 *)((int)Entities + uVar1 * 0x37 + 8) =
+      *(uint16_t *)((int)Entities + uVar1 * 0x37 + 8) =
            ((char_sheet_t *)(((uint)bestOtherIdx << 2)))->x;
-      *(undefined2 *)((int)Entities + uVar1 * 0x37 + 10) =
+      *(uint16_t *)((int)Entities + uVar1 * 0x37 + 10) =
            ((char_sheet_t *)(((uint)bestOtherIdx << 2)))->y;
     }
   }
   for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
-    uVar6 = (undefined2)((ulong)GUnits >> 0x10);
+    uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
     if (((unit_t *)GUnits)[unitIdx].unitType == leaderIndex) {
       ((unit_t *)GUnits)[unitIdx].unitType = 0xff;
     }

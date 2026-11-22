@@ -2,9 +2,9 @@ far_t __cdecl16near malloc_ExpandBlock(void)
 
 {
   byte *pbVar1;
-  undefined2 *puVar2;
+  uint16_t *puVar2;
   byte *pbVar3;
-  undefined2 *puVar4;
+  uint16_t *puVar4;
   int iVar5;
   int iVar6;
   uint uVar7;
@@ -13,9 +13,9 @@ far_t __cdecl16near malloc_ExpandBlock(void)
   uint uVar9;
   uint16_t in_BX;
   byte *pbVar10;
-  undefined2 *puVar11;
+  uint16_t *puVar11;
   byte *pbVar12;
-  undefined2 *puVar13;
+  uint16_t *puVar13;
   bool bVar14;
   far_t fVar15;
   far_t fVar16;
@@ -37,14 +37,14 @@ far_t __cdecl16near malloc_ExpandBlock(void)
     pbVar12 = pbVar12 + 2;
     pbVar1 = pbVar10;
     pbVar10 = pbVar10 + 2;
-    *(undefined2 *)pbVar3 = *(undefined2 *)pbVar1;
+    *(uint16_t *)pbVar3 = *(uint16_t *)pbVar1;
   }
   if (uVar9 != 0) {
     iVar6 = in_DX + 1;
     iVar5 = seg + 1;
     while( true ) {
-      puVar13 = (undefined2 *)0x0;
-      puVar11 = (undefined2 *)0x0;
+      puVar13 = (uint16_t *)0x0;
+      puVar11 = (uint16_t *)0x0;
       uVar7 = uVar9;
       if (0x1000 < uVar9) {
         uVar7 = 0x1000;

@@ -1,17 +1,17 @@
 int __cdecl16far ovc27_rollToHitAgent(uint32_t agnt,byte column,...)
 
 {
-  undefined4 uVar1;
+  uint32_t uVar1;
   char cVar2;
   uint16_t uVar3;
   int iVar4;
-  undefined2 uVar5;
+  uint16_t uVar5;
   byte bStack_9;
   byte bStack_8;
   byte bStack_7;
   undefined1 *uStack_6;   /* hand fix: same idiom */
   
-  uVar5 = (undefined2)(agnt >> 0x10);
+  uVar5 = (uint16_t)(agnt >> 0x10);
   iVar4 = (int)agnt;
   bStack_7 = *(byte *)(iVar4 + 0xf);
   bStack_8 = *(byte *)((int)&worldMenuLabels[9].ofs + 1 + (uint)*(byte *)(iVar4 + 0xd) * 0x95);
@@ -20,16 +20,16 @@ int __cdecl16far ovc27_rollToHitAgent(uint32_t agnt,byte column,...)
      *(byte *)((int)&worldMenuLabels[0xc].seg + (uint)*(byte *)(iVar4 + 0xd) * 0x95) < 4)) {
     bStack_7 = bStack_7 >> 1;
   }
-  uStack_6 = (byte *)CONCAT22(*(undefined2 *)((int)&RampTables[0].seg + (uint)bStack_8 * 4),
+  uStack_6 = (byte *)CONCAT22(*(uint16_t *)((int)&RampTables[0].seg + (uint)bStack_8 * 4),
                               (byte *)((far_t far *)RampTables + bStack_8)->ofs);
   while ((*uStack_6 != 0xff && (*uStack_6 < bStack_7))) {
     uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 6);
   }
   bStack_9 = ((byte *)uStack_6)[column + 1];
   if ((column == 3) && (*(char *)(iVar4 + 0x1a) != -1)) {
-    uVar1 = *(undefined4 *)((uint)*(byte *)(iVar4 + 0x1a) << 2);
+    uVar1 = *(uint32_t *)((uint)*(byte *)(iVar4 + 0x1a) << 2);
     *(undefined1 *)((int)uVar1 + 0x2b) = 0x12;
-    uVar1 = *(undefined4 *)((uint)*(byte *)(iVar4 + 0x1a) << 2);
+    uVar1 = *(uint32_t *)((uint)*(byte *)(iVar4 + 0x1a) << 2);
     cVar2 = ovr_manage_abilityModifier(*(byte *)((int)uVar1 + 0x2b));
     bStack_9 = bStack_9 - cVar2;
   }

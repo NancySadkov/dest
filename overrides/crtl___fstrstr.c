@@ -7,12 +7,12 @@ char * __cdecl16far _fstrstr(char *haystack,char *needle)
   uint uVar4;
   char *pcVar5;
   char *pcVar6;
-  undefined2 uVar7;
-  undefined2 uVar8;
+  uint16_t uVar7;
+  uint16_t uVar8;
   bool bVar9;
   
   if (*needle != '\0') {
-    uVar7 = (undefined2)((ulong)haystack >> 0x10);
+    uVar7 = (uint16_t)((ulong)haystack >> 0x10);
     uVar2 = 0xffff;
     pcVar5 = (char *)haystack;
     do {
@@ -22,7 +22,7 @@ char * __cdecl16far _fstrstr(char *haystack,char *needle)
       pcVar5 = pcVar5 + 1;
     } while (*pcVar1 != '\0');
     uVar2 = ~uVar2;
-    uVar8 = (undefined2)((ulong)needle >> 0x10);
+    uVar8 = (uint16_t)((ulong)needle >> 0x10);
     iVar3 = -1;
     pcVar5 = (char *)needle;
     do {
@@ -42,7 +42,7 @@ char * __cdecl16far _fstrstr(char *haystack,char *needle)
         bVar9 = *needle == *pcVar1;
       } while (!bVar9);
       if ((!bVar9) || (uVar2 < uVar4)) {
-        (*(uint16_t *)((uint8_t *)&(haystack))) = (uint16_t)(char *)((int)(undefined4 *)&_DATA + 1);
+        (*(uint16_t *)((uint8_t *)&(haystack))) = (uint16_t)(char *)((int)(uint32_t *)&_DATA + 1);
         break;
       }
       if (uVar4 == 0) break;

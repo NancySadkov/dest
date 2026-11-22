@@ -1,4 +1,4 @@
-undefined2 __vprinter_func_start(void)
+uint16_t __vprinter_func_start(void)
 
 {
     char cVar2;   /* hand fix: it holds a character, not code */
@@ -23,17 +23,17 @@ undefined2 __vprinter_func_start(void)
   undefined1 *puVar18;
   uint *puVar19;
   int *piVar20;
-  undefined2 uVar21;
+  uint16_t uVar21;
   int iVar22;
   int unaff_SS;
   bool bVar23;
   
   *(int *)(unaff_BP + -4) = unaff_BP + -0x96;
 L__vprinter_func_start_0EF9:
-  pcVar16 = (char *)*(undefined2 *)(unaff_BP + -4);
+  pcVar16 = (char *)*(uint16_t *)(unaff_BP + -4);
 L__vprinter_func_start_0EFC:
-  uVar21 = (undefined2)((ulong)*(undefined4 *)(unaff_BP + 6) >> 0x10);
-  pcVar14 = (char *)(char *)*(undefined4 *)(unaff_BP + 6);
+  uVar21 = (uint16_t)((ulong)*(uint32_t *)(unaff_BP + 6) >> 0x10);
+  pcVar14 = (char *)(char *)*(uint32_t *)(unaff_BP + 6);
 L__vprinter_func_start_0EFF:
   pcVar15 = pcVar14 + 1;
   cVar7 = *pcVar14;
@@ -56,13 +56,13 @@ L__vprinter_func_start_0EFF:
   }
   goto L__vprinter_func_start_0EFF;
 code_r0x00010f23:
-  *(undefined2 *)(unaff_BP + -4) = (uint16_t)pcVar16;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + -4) = (uint16_t)pcVar16;   /* hand fix: 2-byte slot */
   uVar8 = 0;
-  *(undefined2 *)(unaff_BP + -0xe) = (uint16_t)0;   /* hand fix: 2-byte slot */
-  *(undefined2 *)(unaff_BP + -2) = (uint16_t)0x20;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + -0xe) = (uint16_t)0;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + -2) = (uint16_t)0x20;   /* hand fix: 2-byte slot */
   *(undefined1 *)(unaff_BP + -0xb) = 0;
-  *(undefined2 *)(unaff_BP + -8) = (uint16_t)0xffff;   /* hand fix: 2-byte slot */
-  *(undefined2 *)(unaff_BP + -10) = (uint16_t)0xffff;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + -8) = (uint16_t)0xffff;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + -10) = (uint16_t)0xffff;   /* hand fix: 2-byte slot */
   do {
     if (0x5f < (byte)(cVar7 - 0x20U)) goto switchD_1000_0f5d_caseD_13;
     alphaBase = ((uint8_t *)vprinter_printCtype)[(byte)(cVar7 - 0x20U)] * '\x02';
@@ -80,7 +80,7 @@ code_r0x00010f23:
       *(uint *)(unaff_BP + -2) = *(uint *)(unaff_BP + -2) | 1;
       break;
     case '\x02':
-      iVar22 = *(int *)*(undefined2 *)(unaff_BP + 4);
+      iVar22 = *(int *)*(uint16_t *)(unaff_BP + 4);
       *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 2;
       if (bVar11 < 2) {
         if (iVar22 < 0) {
@@ -120,8 +120,8 @@ switchD_1000_0f5d_caseD_5:
       else {
         if (bVar11 != 4) {
 switchD_1000_0f5d_caseD_13:
-          pcVar16 = (char *)*(undefined2 *)(unaff_BP + -0x10);
-          uVar21 = *(undefined2 *)(unaff_BP + 8);
+          pcVar16 = (char *)*(uint16_t *)(unaff_BP + -0x10);
+          uVar21 = *(uint16_t *)(unaff_BP + 8);
           do {
             __vprinter_1000_0eb3();
             pcVar3 = pcVar16;
@@ -132,7 +132,7 @@ L__vprinter_func_start_12FA:
             __vprinter_1000_0ebc();
           }
           if (*(int *)(unaff_BP + -0x16) == 0) {
-            uVar21 = *(undefined2 *)(unaff_BP + -0x12);
+            uVar21 = *(uint16_t *)(unaff_BP + -0x12);
           }
           else {
             uVar21 = 0xffff;
@@ -180,12 +180,12 @@ L__vprinter_func_start_104E:
       *(char *)(unaff_BP + -5) = cVar7;
       iVar9 = 0;
       *(undefined1 *)(unaff_BP + -6) = 0;
-      piVar20 = (int *)*(undefined2 *)(unaff_BP + 4);
+      piVar20 = (int *)*(uint16_t *)(unaff_BP + 4);
       iVar12 = *piVar20;
       goto L__vprinter_func_start_106E;
     case '\x0e':
       *(char *)(unaff_BP + -5) = cVar7;
-      *(undefined2 *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
+      *(uint16_t *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
       puVar18 = (undefined1 *)(unaff_BP + -0x46);
       iVar12 = *(int *)(unaff_BP + 4);
       *(int *)(unaff_BP + 4) = iVar12 + 2;
@@ -204,7 +204,7 @@ L__vprinter_func_start_104E:
       uVar8 = (int)puVar18 - (int)puVar19;
       goto L__vprinter_func_start_11AA;
     case '\x0f':
-      *(undefined2 *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
+      *(uint16_t *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
       *(char *)(unaff_BP + -5) = cVar7;
       uVar8 = *(uint *)(unaff_BP + -10);
       if ((int)uVar8 < 0) {
@@ -220,25 +220,25 @@ L__vprinter_func_start_104E:
       puVar19 = (uint *)(unaff_BP + -0x45);
       goto L__vprinter_func_start_11AA;
     case '\x10':
-      *(undefined2 *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
+      *(uint16_t *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
       *(char *)(unaff_BP + -5) = cVar7;
-      uVar8 = *(uint *)*(undefined2 *)(unaff_BP + 4);
+      uVar8 = *(uint *)*(uint16_t *)(unaff_BP + 4);
       *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 2;
       puVar19 = (uint *)(unaff_BP + -0x45);
       *puVar19 = uVar8 & 0xff;
       uVar8 = 1;
       goto L__vprinter_func_start_11ED;
     case '\x11':
-      *(undefined2 *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
+      *(uint16_t *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
       *(char *)(unaff_BP + -5) = cVar7;
       if ((*(uint *)(unaff_BP + -2) & 0x20) == 0) {
-        puVar19 = *(uint **)(undefined4 *)*(undefined2 *)(unaff_BP + 4);
+        puVar19 = *(uint **)(uint32_t *)*(uint16_t *)(unaff_BP + 4);
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 2;
         iVar22 = 0x2410;
         bVar23 = puVar19 == (uint *)0x0;
       }
       else {
-        puVar4 = (uint *)*(undefined4 *)*(undefined2 *)(unaff_BP + 4);
+        puVar4 = (uint *)*(uint32_t *)*(uint16_t *)(unaff_BP + 4);
         iVar22 = (int)((ulong)puVar4 >> 0x10);
         puVar19 = (uint *)puVar4;
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 4;
@@ -254,15 +254,15 @@ L__vprinter_func_start_104E:
       }
       goto L__vprinter_func_start_11ED;
     case '\x12':
-      *(undefined2 *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
+      *(uint16_t *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
       if ((*(uint *)(unaff_BP + -2) & 0x20) == 0) {
-        piVar20 = *(int **)(undefined4 *)*(undefined2 *)(unaff_BP + 4);
+        piVar20 = *(int **)(uint32_t *)*(uint16_t *)(unaff_BP + 4);
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 2;
         uVar21 = 0x2410;
       }
       else {
-        piVar6 = (int *)*(undefined4 *)*(undefined2 *)(unaff_BP + 4);
-        uVar21 = (undefined2)((ulong)piVar6 >> 0x10);
+        piVar6 = (int *)*(uint32_t *)*(uint16_t *)(unaff_BP + 4);
+        uVar21 = (uint16_t)((ulong)piVar6 >> 0x10);
         piVar20 = (int *)piVar6;
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 4;
       }
@@ -290,17 +290,17 @@ switchD_1000_0f5d_caseD_a:
   cVar13 = '\n';
   *(undefined1 *)(unaff_BP + -6) = 1;
   *(char *)(unaff_BP + -5) = cVar7;
-  piVar20 = (int *)*(undefined2 *)(unaff_BP + 4);
+  piVar20 = (int *)*(uint16_t *)(unaff_BP + 4);
   iVar12 = *piVar20;
   iVar9 = iVar12 >> 0xf;
 L__vprinter_func_start_106E:
   piVar17 = piVar20 + 1;
-  *(undefined2 *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
   if ((*(uint *)(unaff_BP + -2) & 0x10) != 0) {
     iVar9 = *piVar17;
     piVar17 = piVar20 + 2;
   }
-  *(undefined2 *)(unaff_BP + 4) = (uint16_t)piVar17;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + 4) = (uint16_t)piVar17;   /* hand fix: 2-byte slot */
   puVar19 = (uint *)(unaff_BP + -0x45);
   if ((iVar12 == 0) && (iVar9 == 0)) {
     if (*(int *)(unaff_BP + -10) == 0) goto L__vprinter_func_start_0EF9;
@@ -337,13 +337,13 @@ L__vprinter_func_start_11B8:
 L__vprinter_func_start_11EA:
   __vprinter_1000_0ea6();
 L__vprinter_func_start_11ED:
-  pcVar16 = (char *)*(undefined2 *)(unaff_BP + -4);
+  pcVar16 = (char *)*(uint16_t *)(unaff_BP + -4);
   iVar12 = *(int *)(unaff_BP + -8);
   if ((*(uint *)(unaff_BP + -2) & 5) == 5) {
     cVar7 = *(char *)(unaff_BP + -5);
     if (cVar7 == 'o') {
       if (*(int *)(unaff_BP + -0xe) < 1) {
-        *(undefined2 *)(unaff_BP + -0xe) = (uint16_t)1;   /* hand fix: 2-byte slot */
+        *(uint16_t *)(unaff_BP + -0xe) = (uint16_t)1;   /* hand fix: 2-byte slot */
       }
     }
     else if ((cVar7 == 'x') || (cVar7 == 'X')) {
@@ -353,7 +353,7 @@ L__vprinter_func_start_11ED:
       iVar9 = *piVar6;
       *piVar6 = *piVar6 + -2;
       if (SBORROW2(iVar9,2) != *piVar6 < 0) {
-        *(undefined2 *)(unaff_BP + -0xe) = (uint16_t)0;   /* hand fix: 2-byte slot */
+        *(uint16_t *)(unaff_BP + -0xe) = (uint16_t)0;   /* hand fix: 2-byte slot */
       }
     }
   }

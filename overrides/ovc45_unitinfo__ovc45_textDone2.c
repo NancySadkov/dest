@@ -11,21 +11,21 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
   far_t hint;
   uint16_t agnt;
   char *pcVar4;
-  undefined2 *puVar5;
+  uint16_t *puVar5;
   int iVar6;
   uint8_t *puVar7;
-  undefined2 uVar8;
+  uint16_t uVar8;
   uint uVar9;
   int iVar10;
   int iVar11;
   int iVar12;
-  undefined2 unaff_DI;
-  undefined2 uVar13;
+  uint16_t unaff_DI;
+  uint16_t uVar13;
   char *unaff_SS;
   undefined1 uVar14;
   undefined1 uVar15;
   uint8_t menuLabels;
-  undefined2 auStack_290 [19];
+  uint16_t auStack_290 [19];
   uint8_t msg;
   uint8_t text;
   uint uStack_1a;
@@ -49,8 +49,8 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
     auStack_290[1] = 0x77f6;
   }
   else {
-    auStack_290[2] = *(undefined2 *)((uint)bldType * 0x27 + 0x118);
-    auStack_290[1] = *(undefined2 *)((uint)bldType * 0x27 + 0x116);
+    auStack_290[2] = *(uint16_t *)((uint)bldType * 0x27 + 0x118);
+    auStack_290[1] = *(uint16_t *)((uint)bldType * 0x27 + 0x116);
   }
   auStack_c[1] = 2;
   iVar12 = 2;
@@ -67,7 +67,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
   do {
     uVar14 = 0x10;
     pcVar4 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a));
-    puVar5 = (undefined2 *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
+    puVar5 = (uint16_t *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
     uVar15 = 0x7a;
     uVar8 = puVar5[1];
     iVar6 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar5,unaff_SS),
@@ -76,8 +76,8 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
                            pcVar4,uVar14);
     uVar8 = 0x195d;
     puVar7 = ovr_ovc15_usesStshRealloc
-                       ((char *)*(undefined2 *)((uint)bldType * 0x27 + 0x10e),
-                        (char)*(undefined2 *)((uint)bldType * 0x27 + 0x110),uStack_1a,(char)iVar6,
+                       ((char *)*(uint16_t *)((uint)bldType * 0x27 + 0x10e),
+                        (char)*(uint16_t *)((uint)bldType * 0x27 + 0x110),uStack_1a,(char)iVar6,
                         uVar15);
     pcVar4 = ovr_fmVsprintf("%s: Claim this tree? Harvest value is %d gold. Active party is %s the %s."
                             ,(char *)CONCAT13((char)((uint)uVar8 >> 8),CONCAT12((char)uVar8,puVar7))
@@ -143,27 +143,27 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
                  (char)GfxRndSeed2,(char)outFlag,bVar3);
       cStack_e = '\x01';
       bStack_10 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
-      uVar8 = (undefined2)((ulong)*(undefined4 *)((uint)bStack_10 << 2) >> 0x10);
-      iVar6 = (int)*(undefined4 *)((uint)bStack_10 << 2);
+      uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+      iVar6 = (int)*(uint32_t *)((uint)bStack_10 << 2);
       puVar1 = (uint *)(iVar6 + 0x56);
       uVar9 = *puVar1;
       *puVar1 = *puVar1 + uStack_1a;
       piVar2 = (int *)(iVar6 + 0x58);
       *piVar2 = *piVar2 + (uint)CARRY2(uVar9,uStack_1a);
-      uVar8 = (undefined2)((ulong)*(undefined4 *)((uint)bStack_10 << 2) >> 0x10);
-      iVar10 = (int)*(undefined4 *)((uint)bStack_10 << 2);
+      uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+      iVar10 = (int)*(uint32_t *)((uint)bStack_10 << 2);
       iVar6 = *(int *)(iVar10 + 0x58);
       uVar9 = *(uint *)(iVar10 + 0x56);
-      uVar8 = (undefined2)((ulong)*(undefined4 *)((uint)bStack_10 << 2) >> 0x10);
-      iVar11 = (int)*(undefined4 *)((uint)bStack_10 << 2);
+      uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+      iVar11 = (int)*(uint32_t *)((uint)bStack_10 << 2);
       iVar10 = *(int *)(iVar11 + 0x8c);
       if ((iVar10 <= iVar6) && ((iVar10 < iVar6 || (*(uint *)(iVar11 + 0x8a) < uVar9)))) {
-        uVar8 = (undefined2)((ulong)*(undefined4 *)((uint)bStack_10 << 2) >> 0x10);
-        iVar6 = (int)*(undefined4 *)((uint)bStack_10 << 2);
+        uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+        iVar6 = (int)*(uint32_t *)((uint)bStack_10 << 2);
         uVar9 = *(uint *)(iVar6 + 0x8a);
-        uVar13 = (undefined2)((ulong)*(undefined4 *)((uint)bStack_10 << 2) >> 0x10);
-        iVar10 = (int)*(undefined4 *)((uint)bStack_10 << 2);
-        *(undefined2 *)(iVar10 + 0x58) = *(undefined2 *)(iVar6 + 0x8c);
+        uVar13 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+        iVar10 = (int)*(uint32_t *)((uint)bStack_10 << 2);
+        *(uint16_t *)(iVar10 + 0x58) = *(uint16_t *)(iVar6 + 0x8c);
         *(uint *)(iVar10 + 0x56) = uVar9;
       }
       uVar14 = (undefined1)uVar9;

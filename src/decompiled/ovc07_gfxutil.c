@@ -14,13 +14,13 @@
 void __cdecl16far ovc07_swapWords(uint16_t *wordA,uint16_t *wordB)
 
 {
-  undefined2 uVar1;
-  undefined2 *in_stack_00000004;
+  uint16_t uVar1;
+  uint16_t *in_stack_00000004;
   
-  uVar1 = *(undefined2 *)CONCAT22((uint16_t *)wordA,in_stack_00000004);
-  *(undefined2 *)CONCAT22((uint16_t *)wordA,in_stack_00000004) =
-       *(undefined2 *)CONCAT22((uint16_t *)wordB,(*(uint16_t *)((uint8_t *)&(wordA) + 2)));
-  *(undefined2 *)CONCAT22((uint16_t *)wordB,(*(uint16_t *)((uint8_t *)&(wordA) + 2))) = uVar1;
+  uVar1 = *(uint16_t *)CONCAT22((uint16_t *)wordA,in_stack_00000004);
+  *(uint16_t *)CONCAT22((uint16_t *)wordA,in_stack_00000004) =
+       *(uint16_t *)CONCAT22((uint16_t *)wordB,(*(uint16_t *)((uint8_t *)&(wordA) + 2)));
+  *(uint16_t *)CONCAT22((uint16_t *)wordB,(*(uint16_t *)((uint8_t *)&(wordA) + 2))) = uVar1;
   return;
 }
 
@@ -30,10 +30,10 @@ void __cdecl16far ovc07_swapWords(uint16_t *wordA,uint16_t *wordB)
 
 /* Returns the sign of its argument (-1, 0 or 1). */
 
-undefined2 __cdecl16far ovc07_signum(int value,...)
+uint16_t __cdecl16far ovc07_signum(int value,...)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   
   if (value < 0) {
     uVar1 = 0xffff;
@@ -67,7 +67,7 @@ ovc07_usesBiosReadKey(int x1,int y1,int x2,int y2,int x3,int y3,uint16_t rectSeg
   brect_t *rect_00;
   int iVar8;
   int iVar9;
-  undefined2 uVar10;
+  uint16_t uVar10;
   int iStack_1a;
   int iStack_18;
   int iStack_16;
@@ -82,7 +82,7 @@ ovc07_usesBiosReadKey(int x1,int y1,int x2,int y2,int x3,int y3,uint16_t rectSeg
   iVar4 = y2;
   iVar9 = x1;
   iVar5 = rect->x;
-  uVar10 = (undefined2)((ulong)rect >> 0x10);
+  uVar10 = (uint16_t)((ulong)rect >> 0x10);
   rect_00 = (brect_t *)rect;
   iVar1 = rect_00->y;
   iVar2 = rect_00->w;
@@ -207,7 +207,7 @@ void __cdecl16far ovc07_usesFillRect(int x1,int y1,int x2,int y2,uint16_t colour
 {
   int iVar1;
   int iVar2;
-  undefined2 in_stack_00000010;
+  uint16_t in_stack_00000010;
   
   iVar2 = y2;
   iVar1 = x2;
@@ -258,10 +258,10 @@ ovc07_usesLDIV_at_(int ofs1,int row1,int ofs2,int row2,uint8_t colour,brect_t *r
   int iVar9;
   int iVar10;
   uint unaff_SI;
-  undefined2 unaff_DI;
+  uint16_t unaff_DI;
   bool bVar11;
   long lVar12;
-  undefined2 in_stack_00000010;
+  uint16_t in_stack_00000010;
   uint3 uVar13;
   byte bVar15;
   ulong b;

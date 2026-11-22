@@ -36,7 +36,7 @@ stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,ui
   }
   written = dst - uVar1;
   if (written <= sz) {
-    *(undefined2 *)((int)(void *)block + hdrsz + -7) = 0;
+    *(uint16_t *)((int)(void *)block + hdrsz + -7) = 0;
     *(uint16_t *)((int)(void *)block + hdrsz + -9) = written;
     *(uint16_t *)((int)(void *)block + hdrsz + -5) = width;
     *(int *)((int)(void *)block + hdrsz + -3) = (ey - sy) + 1;

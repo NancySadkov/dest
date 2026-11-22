@@ -53,7 +53,7 @@ def main():
     res = [o for o in objs if is_resident(o)]
     ovl = [o for o in objs if not is_resident(o)]
     rsp = ("D:\\LIB\\C0M.OBJ " + " ".join(res) + " /o " + " ".join(ovl) +
-           ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\OVERLAY.LIB D:\\LIB\\CM.LIB")
+           " /m /s" + ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\OVERLAY.LIB D:\\LIB\\CM.LIB")
     with open(os.path.join(BUILDSRC, "LINK.RSP"), "w", encoding="ascii",
               newline="\r\n") as f:
         f.write(rsp + "\n")

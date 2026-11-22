@@ -8,7 +8,7 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
   uint8_t *paletteOfs;
   uint16_t unaff_SS;
   uint8_t paletteSeg;
-  undefined2 in_stack_0000ffe2;
+  uint16_t in_stack_0000ffe2;
   uint8_t flashPalette1;
   uint8_t flashPalette2;
   uint8_t rect;
@@ -24,8 +24,8 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
     paletteOfs = (uint8_t *)0x0;
   }
   else {
-    flashTickHi = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-    flashTickLo = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t far */;
+    flashTickHi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    flashTickLo = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t far */;
     FlashToggle = 1 - (FlashToggle != 0);
     paletteSeg = (uint8_t)unaff_SS;
     ovr_vgaSetPalette(&stack0xffe2 + (uint)FlashToggle * 3,paletteSeg,0xef,1);
@@ -36,7 +36,7 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
   if ((((noAnimBlit == 0x0) && (GPaused == '\0')) && (mapViewActive == '\x01')) &&
      ((puVar1 = ovr_attact_usesBDADailyTimeCounter
                           (blitFrameTickLo,CONCAT22(in_stack_0000ffe2,blitFrameTickHi)),
-      paletteOfs != (uint8_t *)0x0 || ((ulong *)((int)(undefined4 *)&_DATA + 3U) < puVar1)))) {
+      paletteOfs != (uint8_t *)0x0 || ((ulong *)((int)(uint32_t *)&_DATA + 3U) < puVar1)))) {
     ovr_miceRestoreArea((brect_t *)&rect);
     ovc13_blitAnimFrame();
     ovr_miceBlitRect((brect_t *)&rect);

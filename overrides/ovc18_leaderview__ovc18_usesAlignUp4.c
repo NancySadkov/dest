@@ -12,13 +12,13 @@ uint __cdecl16far ovc18_usesAlignUp4(void)
   uint uVar4;
   uint uVar5;
   int leaderIdx;
-  undefined2 uVar7;
+  uint16_t uVar7;
   uint bestDist;
   
   inArena = ovr_draw_textArena();
   if (inArena) {
     for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
-      uVar7 = (undefined2)((ulong)Entities >> 0x10);
+      uVar7 = (uint16_t)((ulong)Entities >> 0x10);
       if (*(char *)((int)(char **)GMenuStrings +
                    (uint)((entity_t *)Entities)[uVar5].base.gindex * 0x95 + 0x1f) != '\0') {
         uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar5 * 0x37));
@@ -53,7 +53,7 @@ uint __cdecl16far ovc18_usesAlignUp4(void)
         bestDist = 0xffff;
         for (leaderIdx = 0; uVar5 = (uint)GLeaderCount, leaderIdx < (int)uVar5; leaderIdx = leaderIdx + 1) {
           if (((((char_sheet_t *)((leaderIdx << 2)))->active != '\0') &&
-              (*(char *)((int)*(undefined4 *)(leaderIdx << 2) + 0x3f) == '\0')) &&
+              (*(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x3f) == '\0')) &&
              (uVar5 = ((char_sheet_t *)((leaderIdx << 2)))->x - GfxRndSeed,
              uVar3 = (int)uVar5 >> 0xf,
              uVar2 = ((char_sheet_t *)((leaderIdx << 2)))->y - GfxRndSeed2,

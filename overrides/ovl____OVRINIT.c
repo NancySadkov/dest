@@ -1,9 +1,9 @@
-undefined2 __stdcall16far __OVRINIT(void)
+uint16_t __stdcall16far __OVRINIT(void)
 
 {
   code *pcVar1;
   uint in_AX;
-  undefined2 uVar2;
+  uint16_t uVar2;
   bool bVar3;
   uint in_stack_00000004;
   uint in_stack_00000006;

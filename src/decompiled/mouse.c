@@ -17,9 +17,9 @@ miceHandler(uint16_t mask,uint16_t buttons,uint16_t x,uint16_t y,uint16_t dx,uin
 {
   undefined1 stk_fff0;   /* stack slot fff0 */
   uint in_AX;
-  undefined2 in_CX;
-  undefined2 in_DX;
-  undefined2 unaff_SS;
+  uint16_t in_CX;
+  uint16_t in_DX;
+  uint16_t unaff_SS;
   
                     /* Mask bits:
                         0 call if mouse moves

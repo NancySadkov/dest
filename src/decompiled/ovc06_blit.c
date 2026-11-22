@@ -46,7 +46,7 @@ stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,ui
   }
   written = dst - uVar1;
   if (written <= sz) {
-    *(undefined2 *)((int)(void *)block + hdrsz + -7) = 0;
+    *(uint16_t *)((int)(void *)block + hdrsz + -7) = 0;
     *(uint16_t *)((int)(void *)block + hdrsz + -9) = written;
     *(uint16_t *)((int)(void *)block + hdrsz + -5) = width;
     *(int *)((int)(void *)block + hdrsz + -3) = (ey - sy) + 1;
@@ -84,7 +84,7 @@ stshRleType2(far_t *__return_storage_ptr__,far_t pixels,int16_t sx,int16_t sy,in
 
 {
   far_t far *pfVar1;
-  undefined2 in_DX;
+  uint16_t in_DX;
   far_t far *uStack_6;   /* hand fix: assigned a far_t pointer and used as uStack_6->ofs */
   
   pfVar1 = stshRleSub(__return_storage_ptr__,(uint8_t *)pixels.ofs,pixels.seg,sx,sy,ex,15);
@@ -173,8 +173,8 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
   uint16_t in_DX;
   uint16_t pdst;
   int iVar2;
-  undefined2 uVar3;
-  undefined2 uVar4;
+  uint16_t uVar3;
+  uint16_t uVar4;
   uint16_t unaff_SS;
   undefined1 uStack000f;
   bool in_stack_00000010;
@@ -211,7 +211,7 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
       ovr_stExit(0x1a);
     }
     dst_x = dst->x;   /* hand fix: read the first field; *dst is the whole structure */
-    uVar3 = (undefined2)((ulong)dst >> 0x10);
+    uVar3 = (uint16_t)((ulong)dst >> 0x10);
     dst_y = dst->y;
     dst_w = dst->w;
     dst_h = dst->h;
@@ -287,29 +287,29 @@ void __cdecl16far blit_usesDrawGfx(far_t gfx,int x,int y,brect_t *rect)
 {
   far_t dst;
   far_t dst_00;
-  int iVar1;
+  int rowLen;
   uint16_t in_DX;
-  brect_t *pbVar2;
-  int iVar3;
-  undefined2 uVar4;
+  brect_t *rectP;
+  int row;
+  uint16_t uVar4;
   uint16_t unaff_SS;
   far_t src;
   uint8_t rowBuf;
-  int iStack_20;
-  int iStack_1e;
-  int iStack_1c;
-  int iStack_1a;
-  uint16_t uStack_18;
-  uint16_t uStack_16;
-  char *pcStack_14;
-  uint16_t uStack_12;
-  int iStack_10;
-  word wStack_e;
-  int iStack_c;
-  int iStack_a;
-  int iStack_8;
-  int iStack_6;
-  int iStack_4;
+  int rectH;
+  int rectW;
+  int rectY;
+  int rectX;
+  uint16_t srcOfs;
+  uint16_t srcSeg;
+  char *dstOfs;
+  uint16_t dstSeg;
+  int copyH;
+  word copyW;
+  int xSkip;
+  int clipY1;
+  int clipX1;
+  int clipY0;
+  int clipX0;
   
   if (gfx.ofs != 0 || gfx.seg != 0) {
     if (*(char *)MK_FP(gfx.seg, gfx.ofs) == '\0') {
@@ -320,58 +320,58 @@ void __cdecl16far blit_usesDrawGfx(far_t gfx,int x,int y,brect_t *rect)
                     /* WARNING: Subroutine does not return */
       ovr_stExit(0x1a);
     }
-    iStack_1a = rect->x;
-    uVar4 = (undefined2)((ulong)rect >> 0x10);
-    pbVar2 = (brect_t *)rect;
-    iStack_1c = pbVar2->y;
-    iStack_1e = pbVar2->w;
-    iStack_20 = pbVar2->h;
-    if ((((x < iStack_1a) || (y < iStack_1c)) || (iStack_1e < x + *(int *)(gfx.ofs + 5) + -1)) ||
-       (iStack_20 < y + *(int *)(gfx.ofs + 7) + -1)) {
-      if ((iStack_1a <= x + *(int *)(gfx.ofs + 5) + -1) && (x <= iStack_1e)) {
-        if (x < iStack_1a) {
-          iStack_c = iStack_1a - x;
-          iStack_4 = iStack_1a;
+    rectX = rect->x;
+    uVar4 = (uint16_t)((ulong)rect >> 0x10);
+    rectP = (brect_t *)rect;
+    rectY = rectP->y;
+    rectW = rectP->w;
+    rectH = rectP->h;
+    if ((((x < rectX) || (y < rectY)) || (rectW < x + *(int *)(gfx.ofs + 5) + -1)) ||
+       (rectH < y + *(int *)(gfx.ofs + 7) + -1)) {
+      if ((rectX <= x + *(int *)(gfx.ofs + 5) + -1) && (x <= rectW)) {
+        if (x < rectX) {
+          xSkip = rectX - x;
+          clipX0 = rectX;
         }
         else {
-          iStack_4 = x;
-          iStack_c = 0;
+          clipX0 = x;
+          xSkip = 0;
         }
-        iStack_8 = iStack_1e;
-        if (x + *(int *)(gfx.ofs + 5) + -1 <= iStack_1e) {
-          iStack_8 = x + *(int *)(gfx.ofs + 5) + -1;
+        clipX1 = rectW;
+        if (x + *(int *)(gfx.ofs + 5) + -1 <= rectW) {
+          clipX1 = x + *(int *)(gfx.ofs + 5) + -1;
         }
-        wStack_e = (iStack_8 - iStack_4) + 1;
-        iStack_6 = iStack_1c;
-        if (iStack_1c <= y) {
-          iStack_6 = y;
+        copyW = (clipX1 - clipX0) + 1;
+        clipY0 = rectY;
+        if (rectY <= y) {
+          clipY0 = y;
         }
-        iStack_a = iStack_20;
-        if (y + *(int *)(gfx.ofs + 7) + -1 <= iStack_20) {
-          iStack_a = y + *(int *)(gfx.ofs + 7) + -1;
+        clipY1 = rectH;
+        if (y + *(int *)(gfx.ofs + 7) + -1 <= rectH) {
+          clipY1 = y + *(int *)(gfx.ofs + 7) + -1;
         }
-        iStack_10 = (iStack_a - y) + 1;
-        pcStack_14 = (char *)(iStack_4 + iStack_6 * 0x140);
-        uStack_12 = pbVar2->seg;
-        uStack_18 = gfx.ofs + 9;
-        uStack_16 = gfx.seg;
-        for (iVar3 = 0; (iVar3 < iStack_10 && (iVar3 + y <= iStack_20)); iVar3 = iVar3 + 1) {
-          src.seg = uStack_16;
-          src.ofs = uStack_18;
+        copyH = (clipY1 - y) + 1;
+        dstOfs = (char *)(clipX0 + clipY0 * 0x140);
+        dstSeg = rectP->seg;
+        srcOfs = gfx.ofs + 9;
+        srcSeg = gfx.seg;
+        for (row = 0; (row < copyH && (row + y <= rectH)); row = row + 1) {
+          src.seg = srcSeg;
+          src.ofs = srcOfs;
           dst_00.seg = unaff_SS;
           dst_00.ofs = (uint16_t)&rowBuf;
-          iVar1 = ovr_unrle(src,dst_00,*(uint16_t *)(gfx.ofs + 5),(char)*(uint16_t *)(gfx.ofs + 5));
-          uStack_18 = uStack_18 + iVar1;
-          if (iStack_1c <= iVar3 + y) {
-            memcpy((char *)CONCAT22(uStack_12,pcStack_14),
-                   (char *)CONCAT22(unaff_SS,&rowBuf + iStack_c),wStack_e);
-            pcStack_14 = pcStack_14 + 0x140;
+          rowLen = ovr_unrle(src,dst_00,*(uint16_t *)(gfx.ofs + 5),(char)*(uint16_t *)(gfx.ofs + 5));
+          srcOfs = srcOfs + rowLen;
+          if (rectY <= row + y) {
+            memcpy((char *)CONCAT22(dstSeg,dstOfs),
+                   (char *)CONCAT22(unaff_SS,&rowBuf + xSkip),copyW);
+            dstOfs = dstOfs + 0x140;
           }
         }
       }
     }
     else {
-      dst.seg = pbVar2->seg;
+      dst.seg = rectP->seg;
       dst.ofs = x + y * 0x140;
       drawGfx(gfx,dst,false);
     }
@@ -518,8 +518,8 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
   int iVar2;
   uint16_t in_DX;
   uint uVar3;
-  undefined2 uVar4;
-  undefined2 uVar5;
+  uint16_t uVar4;
+  uint16_t uVar5;
   uint16_t unaff_SS;
   undefined1 uStack000f;
   char in_stack_00000012;
@@ -555,7 +555,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
       ovr_stExit(0x1a);
     }
     iStack_10 = *rectOfs;
-    uVar4 = (undefined2)((ulong)rectOfs >> 0x10);
+    uVar4 = (uint16_t)((ulong)rectOfs >> 0x10);
     uStack_12 = rectOfs[1];
     iStack_14 = rectOfs[2];
     uStack_16 = rectOfs[3];
@@ -606,7 +606,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
               uVar5 = 0x22a6;
               ovr_masked_memcpy(pcStack_1a,(char *)CONCAT22(&skip,pcStack_18),unaff_SS,uStack_a,
                                 *(int *)(gfx.ofs + 10),uStack_c,
-                                *(undefined2 *)((uint)(byte)flip * 2 + 0x470));
+                                *(uint16_t *)((uint)(byte)flip * 2 + 0x470));
             }
             pcStack_1a = pcStack_1a + 0x140;
             uVar1 = uVar1 + 1;
@@ -635,7 +635,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
               uVar5 = 0x22a6;
               ovr_masked_memcpy(pcStack_1a,(char *)CONCAT22(&skip,pcStack_18),unaff_SS,uStack_a,
                                 *(int *)(gfx.ofs + 10),uStack_c,
-                                *(undefined2 *)((uint)(byte)flip * 2 + 0x470));
+                                *(uint16_t *)((uint)(byte)flip * 2 + 0x470));
             }
             pcStack_1a = pcStack_1a + 0x140;
             uVar1 = uVar1 + 1;
@@ -738,9 +738,9 @@ blit_usesBlitGfxN(far_t gfx,int16_t x,int y,byte shade1,int y2,byte shade2,brect
   int iVar4;
   uint uVar5;
   uint uVar6;
-  undefined2 uStack_c;
-  undefined2 uStack_a;
-  undefined2 uStack_4;
+  uint16_t uStack_c;
+  uint16_t uStack_a;
+  uint16_t uStack_4;
   
   bVar1 = shade1;
   iVar3 = y;
@@ -854,7 +854,7 @@ blit_usesStExit(far_t gfx,int x1,int y1,byte shade1,int x2,int y2,byte shade2,in
   uint uVar6;
   uint16_t uVar7;
   uint16_t unaff_SS;
-  undefined2 in_stack_00000016;
+  uint16_t in_stack_00000016;
   char in_stack_00000018;
   far_t src;
   uint8_t rowBuf;

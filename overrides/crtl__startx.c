@@ -9,9 +9,9 @@ void startx(void)
   int iVar6;
   byte bVar7;
   uint uVar8;
-  undefined2 uVar9;
-  undefined2 extraout_DX;
-  undefined2 extraout_DX_00;
+  uint16_t uVar9;
+  uint16_t extraout_DX;
+  uint16_t extraout_DX_00;
   int iVar10;
   undefined1 *puVar11;
   int *piVar12;
@@ -19,10 +19,10 @@ void startx(void)
   char *pcVar14;
   undefined1 *puVar15;
   uint32_t *puVar16;
-  undefined2 unaff_ES;
-  undefined2 uVar17;
+  uint16_t unaff_ES;
+  uint16_t uVar17;
   bool bVar18;
-  undefined4 uVar19;
+  uint32_t uVar19;
   
   puVar11 = (undefined1 *)((int)(int *)&errno + 1);
   DGROUP_at__at_ = 0x2410;
@@ -30,15 +30,15 @@ void startx(void)
   uVar19 = (*pcVar3)();
   uVar17 = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 40));
   iVar10 = (*(uint16_t *)((uint8_t *)&(_DATA) + 2));
-  uVar9 = (undefined2)((ulong)uVar19 >> 0x10);
+  uVar9 = (uint16_t)((ulong)uVar19 >> 0x10);
   *(uint16_t *)&DosVersion = SUB42(uVar19,0);   /* hand fix: write the 2 bytes of the struct */
-  *(undefined2 *)&_psp = unaff_ES;
-  *(undefined2 *)(byte *)&_envseg_at_ = uVar17;
+  *(uint16_t *)&_psp = unaff_ES;
+  *(uint16_t *)(byte *)&_envseg_at_ = uVar17;
   *(int *)&_heaptop.seg = iVar10;
-  *(undefined2 *)(puVar11 + -2) = 0x28;
+  *(uint16_t *)(puVar11 + -2) = 0x28;
   SaveVectors();
-  pcVar4 = (char *)*(undefined4 *)&_env;
-  uVar17 = (undefined2)((ulong)pcVar4 >> 0x10);
+  pcVar4 = (char *)*(uint32_t *)&_env;
+  uVar17 = (uint16_t)((ulong)pcVar4 >> 0x10);
   pcVar13 = (char *)pcVar4;
   uVar8 = 0x7fff;
   pcVar14 = pcVar13;
@@ -112,24 +112,24 @@ L_startx_007B:
 L_startx_0109:
   pcVar3 = (code *)swi(0x1a);
   cVar5 = (*pcVar3)();
-  *(undefined2 *)(uint32_t *)&_StartTime = extraout_DX_00;
+  *(uint16_t *)(uint32_t *)&_StartTime = extraout_DX_00;
   *(int *)((int)(uint32_t *)&_StartTime + 2) = iVar10;
   if (cVar5 != '\0') {
     bda_midnight = 1;
   }
-  *(undefined2 *)(puVar15 + -2) = 0x135;
+  *(uint16_t *)(puVar15 + -2) = 0x135;
   StartExit();
-  *(undefined2 *)(puVar15 + -2) = *(undefined2 *)&__C0environ_2;
-  *(undefined2 *)(puVar15 + -4) = *(undefined2 *)&__C0environ;
-  *(undefined2 *)(puVar15 + -6) = *(undefined2 *)&__C0argv_2;
-  *(undefined2 *)(puVar15 + -8) = *(undefined2 *)&__C0argv;
-  *(undefined2 *)(puVar15 + -10) = *(undefined2 *)&__C0argc;
-  *(undefined2 *)(puVar15 + -0xc) = 0x1000;
-  *(undefined2 *)(puVar15 + -0xe) = 0x14e;
+  *(uint16_t *)(puVar15 + -2) = *(uint16_t *)&__C0environ_2;
+  *(uint16_t *)(puVar15 + -4) = *(uint16_t *)&__C0environ;
+  *(uint16_t *)(puVar15 + -6) = *(uint16_t *)&__C0argv_2;
+  *(uint16_t *)(puVar15 + -8) = *(uint16_t *)&__C0argv;
+  *(uint16_t *)(puVar15 + -10) = *(uint16_t *)&__C0argc;
+  *(uint16_t *)(puVar15 + -0xc) = 0x1000;
+  *(uint16_t *)(puVar15 + -0xe) = 0x14e;
   iVar10 = main(*(int *)(puVar15 + -0xc),*(str_t **)(puVar15 + -10),*(str_t **)(puVar15 + -8));
   *(int *)(puVar15 + -8) = iVar10;
-  *(undefined2 *)(puVar15 + -10) = 0x1301;
+  *(uint16_t *)(puVar15 + -10) = 0x1301;
                     /* WARNING: Subroutine does not return */
-  *(undefined2 *)(puVar15 + -0xc) = 0x154;
+  *(uint16_t *)(puVar15 + -0xc) = 0x154;
   exit(*(int *)(puVar15 + -8));
 }

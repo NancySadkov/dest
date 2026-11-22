@@ -64,7 +64,7 @@ char * __cdecl16far path_strip_tail_slash(char *s,...)
 
 {
   uint16_t l;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   l = strlen((char *)CONCAT22(in_stack_00000006,s));
   if ((3 < (int)l) && (s[l - 1] == '\\')) {
@@ -81,7 +81,7 @@ char * __cdecl16far ensure_tail_slash(char *s,...)
 
 {
   uint16_t l;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   l = strlen((char *)CONCAT22(in_stack_00000006,s));
   if ((l == 0) || (s[l - 1] != '\\')) {
@@ -104,7 +104,7 @@ void __cdecl16far chpath(char *path,...)
   char cVar1;
   int iVar2;
   undefined1 extraout_AH;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   iVar2 = chdir((char *)CONCAT22(in_stack_00000006,path));
   if (iVar2 == 0) {
@@ -126,7 +126,7 @@ void __cdecl16far init_paths(void)
 {
   uint16_t full_path;
   uint16_t p;
-  undefined2 in_DX;
+  uint16_t in_DX;
   size_t unaff_BP;
   
   getcwd((char *)MK_FP(0x2410, 0x44),unaff_BP);
@@ -170,7 +170,7 @@ void __cdecl16far init_cfg(void)
   int iVar5;
   int iVar6;
   int iVar7;
-  undefined2 in_DX;
+  uint16_t in_DX;
   char *unaff_SS;
   char lbuf [80];
   uint8_t goterr;
@@ -283,7 +283,7 @@ void __cdecl16far init_game(void)
   init_paths();
   init_cfg();
   clrscr();
-  srand8(CONCAT22(*(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2),*(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs))
+  srand8(CONCAT22(*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2),*(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs))
         );
   ovr_stshAlloc(0xfa0f);
   iVar1 = strcmp((char *)CONCAT22(GExeArg.seg,GExeArg.ofs),"debug");
@@ -328,11 +328,11 @@ void __cdecl16far init_rebuildMapFlags(void)
   byte (*paabVar3) [59] [148];
   int iVar4;
   int iVar5;
-  undefined2 uVar6;
+  uint16_t uVar6;
   
   for (iVar5 = 0; iVar5 < 0x3b; iVar5 = iVar5 + 1) {
     for (iVar4 = 0; iVar4 < 0x93; iVar4 = iVar4 + 1) {
-      uVar6 = (undefined2)((ulong)GMapFlags >> 0x10);
+      uVar6 = (uint16_t)((ulong)GMapFlags >> 0x10);
       paasVar2 = (short (*) [60] [148])GMapFlags;
       if (((*paasVar2)[iVar5][iVar4] & 4U) == 0) {
         if ((((*(byte (*) [59] [148])GMapCells)[iVar5][iVar4] == 0) &&
@@ -341,7 +341,7 @@ void __cdecl16far init_rebuildMapFlags(void)
           puVar1 = (uint *)((*paasVar2)[iVar5] + iVar4);
           *puVar1 = *puVar1 | 1;
         }
-        uVar6 = (undefined2)((ulong)GMapCells >> 0x10);
+        uVar6 = (uint16_t)((ulong)GMapCells >> 0x10);
         paabVar3 = (byte (*) [59] [148])GMapCells;
         if ((((*paabVar3)[iVar5][iVar4] == 0) && ((*paabVar3)[iVar5 + 1][iVar4 + 1] == 0)) &&
            ((*paabVar3)[iVar5][iVar4 + 1] == 0)) {
@@ -405,17 +405,17 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   byte unaff_DI;
   uint uVar17;
   uint32_t *__return_storage_ptr__;
-  undefined2 uVar18;
-  undefined2 unaff_SS;
+  uint16_t uVar18;
+  uint16_t unaff_SS;
   bool bVar19;
   longdouble in_ST0;
-  undefined4 in_stack_00000004;
+  uint32_t in_stack_00000004;
   int16_t in_stack_00000008;
   byte abStackY_348 [488];
   undefined1 auStackY_160 [158];
-  undefined2 uStackY_c2;
-  undefined2 uStackY_c0;
-  undefined2 uStackY_be;
+  uint16_t uStackY_c2;
+  uint16_t uStackY_c0;
+  uint16_t uStackY_be;
   char acStack_a4 [92];
   uint16_t uStack_48;
   uint16_t uStack_46;
@@ -439,7 +439,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   uint uStack_16;
   uint uStack_14;
   uint uStack_12;
-  undefined2 uStack_10;
+  uint16_t uStack_10;
   uint16_t uStack_e;
   uint uStack_c;
   uint uStack_a;
@@ -695,13 +695,13 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   }
   for (iVar15 = 0; iVar15 < 0x3c; iVar15 = iVar15 + 1) {
     for (iVar16 = 0; iVar16 < 0x94; iVar16 = iVar16 + 1) {
-      uVar18 = (undefined2)((ulong)GMapCells >> 0x10);
+      uVar18 = (uint16_t)((ulong)GMapCells >> 0x10);
       if ((char)(*(byte (*) [59] [148])GMapCells)[iVar15][iVar16] < '\0') {
         (*(byte (*) [59] [148])GMapCells)[iVar15][iVar16] = 0;
       }
       psVar9 = (stg_tmp_t *)(iVar15 * 0x94);
       if ((iVar16 != 0x93) && (iVar15 != 0x3c)) {
-        uVar18 = (undefined2)((ulong)GMapCells >> 0x10);
+        uVar18 = (uint16_t)((ulong)GMapCells >> 0x10);
         paabVar13 = (byte (*) [59] [148])GMapCells;
         uVar17 = (int)(char)(*paabVar13)[iVar15 + 1][iVar16] -
                  (int)(char)(*paabVar13)[iVar15][iVar16 + 1];
@@ -730,7 +730,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
           psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
           if (psVar9 == (stg_tmp_t *)0x0) {
             psVar9 = (stg_tmp_t *)(iVar15 * 0x94);
-            uVar18 = (undefined2)((ulong)GMapCells >> 0x10);
+            uVar18 = (uint16_t)((ulong)GMapCells >> 0x10);
             paabVar13 = (byte (*) [59] [148])GMapCells;
             if ((((((psVar9->cmap[(int)(*paabVar13 + -1) + 0x93 + iVar16] != 0) &&
                    (psVar9 = (stg_tmp_t *)(*paabVar13 + iVar15), psVar9->cmap[iVar16 + 0x93] != 0))
@@ -791,7 +791,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
     }
     for (iVar15 = 0; iVar15 < 0x93; iVar15 = iVar15 + 1) {
       psVar9 = (stg_tmp_t *)((int)__return_storage_ptr__ * 0x94);
-      uVar18 = (undefined2)((ulong)GMapCells >> 0x10);
+      uVar18 = (uint16_t)((ulong)GMapCells >> 0x10);
       paabVar13 = (byte (*) [59] [148])GMapCells;
       if (((psVar9->cmap[(int)((*paabVar13)[0] + iVar15)] != 0) &&
           (psVar9 = (stg_tmp_t *)((int)__return_storage_ptr__ * 0x94),
@@ -812,13 +812,13 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                   if ((int)uStack_c < 0x16) {
                     uVar7 = ovr_randBelow(4);
                     psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
-                    if (psVar9 == (stg_tmp_t *)((int)(undefined4 *)&_DATA + 2)) {
+                    if (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 2)) {
                       uVar7 = ovr_randBelow(6);
                       psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x3d);
                       (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
                            (short)psVar9;
                     }
-                    else if ((psVar9 == (stg_tmp_t *)((int)(undefined4 *)&_DATA + 3)) &&
+                    else if ((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
                             (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15),
                             (char)psVar9 != '\0')) {
                       uVar7 = ovr_randBelow(2);
@@ -875,13 +875,13 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                 else {
                   uVar7 = ovr_randBelow(4);
                   psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
-                  if (psVar9 == (stg_tmp_t *)((int)(undefined4 *)&_DATA + 1)) {
+                  if (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 1)) {
                     uVar7 = ovr_randBelow(6);
                     psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x3d);
                     (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
                          (short)psVar9;
                   }
-                  else if ((psVar9 == (stg_tmp_t *)((int)(undefined4 *)&_DATA + 3)) &&
+                  else if ((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
                           (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15),
                           (char)psVar9 != '\0')) {
                     uVar7 = ovr_randBelow(9);
@@ -894,7 +894,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
               else {
                 uVar7 = ovr_randBelow(4);
                 psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
-                if (((psVar9 == (stg_tmp_t *)((int)(undefined4 *)&_DATA + 3)) &&
+                if (((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
                     (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15), (char)psVar9 != '\0'))
                    && (psVar9 = (stg_tmp_t *)ovr_randBelow(2), (char)psVar9 != '\0')) {
                   uVar7 = ovr_randBelow(9);
@@ -907,7 +907,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
             else {
               uVar7 = ovr_randBelow(4);
               psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
-              if (psVar9 == (stg_tmp_t *)((int)(undefined4 *)&_DATA + 1)) {
+              if (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 1)) {
                 psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15);
                 if ((char)psVar9 != '\0') {
                   uVar7 = ovr_randBelow(2);
@@ -925,7 +925,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                   }
                 }
               }
-              else if ((psVar9 == (stg_tmp_t *)((int)(undefined4 *)&_DATA + 3)) &&
+              else if ((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
                       (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15), (char)psVar9 != '\0')
                       ) {
                 uVar7 = ovr_randBelow(9);
@@ -938,8 +938,8 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
           else {
             uVar7 = ovr_randBelow(4);
             psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
-            if (((psVar9 == (stg_tmp_t *)((int)(undefined4 *)&_DATA + 2)) ||
-                (psVar9 == (stg_tmp_t *)((int)(undefined4 *)&_DATA + 3))) &&
+            if (((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 2)) ||
+                (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3))) &&
                (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15), (char)psVar9 != '\0')) {
               uVar7 = ovr_randBelow(9);
               psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
@@ -982,16 +982,16 @@ switchD_3000_4a6e_caseD_3:
               iVar15 = ovr_constr_usesSmoothPrev(uStack_24);
               uStack_10 = iVar15 / 3;
               (*(uint8_t *)((uint8_t *)&(gfx.seg))) =
-                   (char)*(undefined2 *)((char *)0x28ed6 + uStack_e * 0xc);
-              gfx.ofs = *(undefined2 *)(undefined2 *)((char *)0x28ed4 + uStack_e * 0xc);
+                   (char)*(uint16_t *)((char *)0x28ed6 + uStack_e * 0xc);
+              gfx.ofs = *(uint16_t *)(uint16_t *)((char *)0x28ed4 + uStack_e * 0xc);
               (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) =
-                   (char)((uint)*(undefined2 *)(undefined2 *)((char *)0x28ed6 + uStack_e * 0xc) >> 8);
+                   (char)((uint)*(uint16_t *)(uint16_t *)((char *)0x28ed6 + uStack_e * 0xc) >> 8);
               ovr_blit_usesBlitGfxN
                         (gfx,((uint16_t *)SquareLeftX)[uVar7],rowBandOrigin[0] - uStack_10,6);
             }
             if ((*(byte *)((uint8_t *)&BuildingTypes[uStack_e] + 16) & 1) != 0) {
-              gfx_00.seg = *(uint16_t *)(undefined2 *)((char *)0x28eda + uStack_e * 0xc);
-              gfx_00.ofs = *(uint16_t *)(undefined2 *)((char *)0x28ed8 + uStack_e * 0xc);
+              gfx_00.seg = *(uint16_t *)(uint16_t *)((char *)0x28eda + uStack_e * 0xc);
+              gfx_00.ofs = *(uint16_t *)(uint16_t *)((char *)0x28ed8 + uStack_e * 0xc);
               ovr_blitGfxRect(gfx_00,((uint16_t *)SquareLeftX)[uVar7]);
             }
           }
@@ -1169,7 +1169,7 @@ void __cdecl16far init_initGUnits(void)
 void __cdecl16far init_buffers(void)
 
 {
-  undefined2 in_DX;
+  uint16_t in_DX;
   
   (*(uint16_t *)((uint8_t *)&(GUnits))) = ovr_stshAlloc(0x2a30);
   (*(uint16_t *)((uint8_t *)&(GUnits) + 2)) = in_DX;
@@ -1351,10 +1351,10 @@ void __cdecl16far init_computeMaxSquares(void)
         *(int *)(&mapSquareRightX[GMaxSquare]) = *(int *)(&mapSquareLeftX[GMaxSquare]) + uStack_4;
         *(uint *)(&mapSquareColumn[GMaxSquare]) = uStack_e;
         if ((int)uStack_e < -1) {
-          *(undefined2 *)(GMaxSquare * 2) = 0;
+          *(uint16_t *)(GMaxSquare * 2) = 0;
         }
         else {
-          *(undefined2 *)(GMaxSquare * 2) = 1;
+          *(uint16_t *)(GMaxSquare * 2) = 1;
         }
         GMaxSquare = GMaxSquare + 1;
         iStack_a = iStack_a + uStack_4;
@@ -1373,10 +1373,10 @@ void __cdecl16far init_computeMaxSquares(void)
         *(int *)(&mapSquareRightX[GMaxSquare]) = *(int *)(&mapSquareLeftX[GMaxSquare]) + uStack_4;
         *(int *)(&mapSquareColumn[GMaxSquare]) = iVar2;
         if (iVar2 < 1) {
-          *(undefined2 *)(GMaxSquare * 2) = 1;
+          *(uint16_t *)(GMaxSquare * 2) = 1;
         }
         else {
-          *(undefined2 *)(GMaxSquare * 2) = 2;
+          *(uint16_t *)(GMaxSquare * 2) = 2;
         }
         GMaxSquare = GMaxSquare + 1;
         iStack_8 = iStack_8 - uStack_4;
@@ -1401,10 +1401,10 @@ uint __cdecl16far init_usesGMapCells(int x,int y,...)
   byte (*pabVar1) [148];
   uint uVar2;
   byte (*paabVar3) [59] [148];
-  undefined2 uVar4;
+  uint16_t uVar4;
   
   pabVar1 = (byte (*) [148])(y * 0x94);
-  uVar4 = (undefined2)((ulong)GMapCells >> 0x10);
+  uVar4 = (uint16_t)((ulong)GMapCells >> 0x10);
   paabVar3 = (byte (*) [59] [148])GMapCells;
   if (((((*paabVar3)[0][(int)(*pabVar1 + x)] == 0) ||
        (pabVar1 = (byte (*) [148])(y * 0x94), (*paabVar3)[0][(int)(*pabVar1 + x + 1)] == 0)) ||
@@ -1667,7 +1667,7 @@ int __cdecl16far init_sumMapCells2x2(int x,int y)
 
 /* [R7] body shape: compute */
 
-undefined2 __cdecl16far init_compute2(int x,int y,byte direction)
+uint16_t __cdecl16far init_compute2(int x,int y,byte direction)
 
 {
   uint in_AX;
@@ -1704,7 +1704,7 @@ init_usesRandBelow(int16_t x,int16_t y,uint8_t dir,uint8_t *lastDir,uint8_t *sam
   undefined1 uVar7;
   uint uVar5;
   uint uVar6;
-  undefined2 in_stack_00000010;
+  uint16_t in_stack_00000010;
   uint uStack_e;
   uint uStack_c;
   byte bStack_8;
@@ -1795,9 +1795,9 @@ void __cdecl16far init_usesGMapFlags3(int x,int y)
   uint *puVar1;
   short (*paasVar2) [60] [148];
   byte (*paabVar3) [59] [148];
-  undefined2 uVar4;
+  uint16_t uVar4;
   
-  uVar4 = (undefined2)((ulong)GMapFlags >> 0x10);
+  uVar4 = (uint16_t)((ulong)GMapFlags >> 0x10);
   paasVar2 = (short (*) [60] [148])GMapFlags;
   if (((*paasVar2)[y][x] & 4U) == 0) {
     if ((((*(byte (*) [59] [148])GMapCells)[y][x] == 0) &&
@@ -1806,7 +1806,7 @@ void __cdecl16far init_usesGMapFlags3(int x,int y)
       puVar1 = (uint *)((*paasVar2)[y] + x);
       *puVar1 = *puVar1 | 1;
     }
-    uVar4 = (undefined2)((ulong)GMapCells >> 0x10);
+    uVar4 = (uint16_t)((ulong)GMapCells >> 0x10);
     paabVar3 = (byte (*) [59] [148])GMapCells;
     if ((((*paabVar3)[y][x] == 0) && ((*paabVar3)[y + 1][x + 1] == 0)) &&
        ((*paabVar3)[y][x + 1] == 0)) {
@@ -1850,7 +1850,7 @@ void __cdecl16far init_usesRandBelow2(void)
   short (*paasVar6) [60] [148];
   uint x;
   uint y;
-  undefined2 uVar7;
+  uint16_t uVar7;
   uint8_t *unaff_SS;
   undefined1 uVar8;
   uint8_t edgeMasks;
@@ -1921,11 +1921,11 @@ void __cdecl16far init_usesRandBelow2(void)
     bStack_13 = (byte)uVar2;
     for (; ((((int)x < 0x93 && (-1 < (int)x)) && ((int)y < 0x3b)) && (-1 < (int)y));
         y = y + (int)*(char *)(bStack_14 + 0x889)) {
-      uVar7 = (undefined2)((ulong)GMapCells >> 0x10);
+      uVar7 = (uint16_t)((ulong)GMapCells >> 0x10);
       paabVar5 = (byte (*) [59] [148])GMapCells;
       if ((((*paabVar5)[y][x] == 0) && ((*paabVar5)[y][x + 1] == 0)) &&
          (((*paabVar5)[y + 1][x] == 0 && ((*paabVar5)[y + 1][x + 1] == 0)))) break;
-      uVar7 = (undefined2)((ulong)GMapFlags >> 0x10);
+      uVar7 = (uint16_t)((ulong)GMapFlags >> 0x10);
       paasVar6 = (short (*) [60] [148])GMapFlags;
       if (((*paasVar6)[y][x] & 3U) == 3) break;
       if (((*paasVar6)[y][x] & 3U) != 0) {
@@ -2130,7 +2130,7 @@ void __cdecl16far copyProtectionCheck(void)
       input = 0;
       pcVar2 = ovr_stshAlloc(2);
       uStack_8 = (char *)CONCAT22(in_DX,pcVar2);
-      *uStack_8 = *(char *)*(undefined4 *)((uint)codes * 4 + 0x54c);
+      *uStack_8 = *(char *)*(uint32_t *)((uint)codes * 4 + 0x54c);
       pcVar2[1] = '\0';
       input = (uint16_t)ovr_uiReadString((char *)0x0,0,6,pcVar2,(uint16_t)in_DX);
       pbStack_a = in_DX;
@@ -2146,8 +2146,8 @@ void __cdecl16far copyProtectionCheck(void)
       attempts = attempts + 0x1;
     }
     _fstricmp((char *)CONCAT22(pbStack_a,input),
-              (char *)CONCAT22(*(undefined2 *)((uint)codes * 4 + 0x54e),
-                               (char *)*(undefined2 *)((uint)codes * 4 + 0x54c)));
+              (char *)CONCAT22(*(uint16_t *)((uint)codes * 4 + 0x54e),
+                               (char *)*(uint16_t *)((uint)codes * 4 + 0x54c)));
     handle.seg = (uint16_t)pbStack_a;
     handle.ofs = input;
     ovr_stshFree(handle);

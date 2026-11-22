@@ -8,10 +8,10 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
   long *plVar3;
   long *plVar4;
   int iVar5;
-  undefined2 unaff_SI;
+  uint16_t unaff_SI;
   uint16_t entry;
   long *unaff_DI;
-  undefined4 in_stack_0000fff0;
+  uint32_t in_stack_0000fff0;
   long lVar6;
   uint8_t in_stack_0000fff4;
   byte s;
@@ -28,26 +28,26 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
     plVar4 = (long *)*(uint *)0x0;
     if (plVar3 != plVar4) {
       if (plVar3 < plVar4) {
-        if (*(int *)((int)(undefined4 *)&_DATA + 2) == 0) {
+        if (*(int *)((int)(uint32_t *)&_DATA + 2) == 0) {
           *(int *)0x0 = (int)plVar4 + (*(int *)0x0 - (int)plVar3);
         }
         else {
           *(int *)0x0 = (int)plVar4 - (int)plVar3;
         }
-        *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
+        *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = 0;
         *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4) = (uint16_t)block;
-        *(undefined2 *)0x0 = (uint16_t)plVar3;   /* hand fix: 2-byte slot */
+        *(uint16_t *)0x0 = (uint16_t)plVar3;   /* hand fix: 2-byte slot */
         heapFreeSub((uint16_t)block + (int)plVar3);
       }
       else {
         iVar5 = *(int *)0x0;
         lVar6 = CONCAT22(iVar5,(int)lVar6);
-        if ((*(int *)((int)(undefined4 *)&_DATA + 2) == 0) &&
+        if ((*(int *)((int)(uint32_t *)&_DATA + 2) == 0) &&
            (plVar3 <= (long *)((int)plVar4 + iVar5))) {
-          *(undefined2 *)0x0 = (uint16_t)plVar3;   /* hand fix: 2-byte slot */
+          *(uint16_t *)0x0 = (uint16_t)plVar3;   /* hand fix: 2-byte slot */
           if (plVar3 < (long *)((int)plVar4 + iVar5)) {
             *(int *)0x0 = (int)plVar4 + (iVar5 - (int)plVar3);
-            *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
+            *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = 0;
             *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4) = (uint16_t)block;
             heapFreeSub((uint16_t)block + (int)plVar3);
           }
@@ -67,13 +67,13 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
               return (long *)0x0;
             }
             plVar1 = (long *)*(uint *)0x0;
-          } while ((*(int *)((int)(undefined4 *)&_DATA + 2) != 0) || (plVar1 < plVar3));
-          *(undefined2 *)0x0 = (uint16_t)plVar3;   /* hand fix: 2-byte slot */
-          *(undefined2 *)((int)(undefined4 *)&_DATA + 2) =
-               *(undefined2 *)((byte *)__C0_ASM_CopyRight + 4);
+          } while ((*(int *)((int)(uint32_t *)&_DATA + 2) != 0) || (plVar1 < plVar3));
+          *(uint16_t *)0x0 = (uint16_t)plVar3;   /* hand fix: 2-byte slot */
+          *(uint16_t *)((int)(uint32_t *)&_DATA + 2) =
+               *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4);
           if (plVar3 < plVar1) {
             *(int *)0x0 = (int)plVar1 - (int)plVar3;
-            *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
+            *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = 0;
             *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4) = entry;
             heapFreeSub(entry + (int)plVar3);
           }
@@ -85,7 +85,7 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
           heapMemmove((byte *)__C0_ASM_CopyRight,entry,
                       (uint8_t *)CONCAT22((uint16_t)block,__return_storage_ptr__),
                       (uint16_t)(plVar4 + -1),
-                      iVar5 + -1 + (uint)((long *)((int)(undefined4 *)&_DATA + 3U) < plVar4),
+                      iVar5 + -1 + (uint)((long *)((int)(uint32_t *)&_DATA + 3U) < plVar4),
                       (int)unaff_DI);
           ptr_00.seg = (uint16_t)block;
           ptr_00.ofs = (uint16_t)__return_storage_ptr__;

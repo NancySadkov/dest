@@ -140,11 +140,11 @@ void __cdecl16far ovc28_usesBlitGfxRect2(void)
 void __cdecl16far ovc28_textHalflingCastle(void)
 
 {
-  undefined4 uVar1;
+  uint32_t uVar1;
   far_t gfx;
   far_t gfx_00;
   far_t gfx_01;
-  undefined2 *puVar2;
+  uint16_t *puVar2;
   int iVar3;
   char *text_00;
   byte *pbVar4;
@@ -173,16 +173,16 @@ void __cdecl16far ovc28_textHalflingCastle(void)
       if (((uint8_t *)MenuItemEnabled)[iVar5] != 0xff) {
         TextBlitX = 0xea;
         TextBlitY = iVar5 * 0xd + 0x87;
-        uVar1 = *(undefined4 *)((uint)((uint8_t *)MenuItemEnabled)[iVar5] << 2);
+        uVar1 = *(uint32_t *)((uint)((uint8_t *)MenuItemEnabled)[iVar5] << 2);
         bStack_3 = *(byte *)((int)uVar1 + 0x2f);
         if (bStack_3 == 0xff) {
           cStack_4 = 'F';
         }
         else {
-          cStack_4 = *(char *)*(undefined4 *)((uint)bStack_3 * 4 + 0xeb);
+          cStack_4 = *(char *)*(uint32_t *)((uint)bStack_3 * 4 + 0xeb);
         }
         term = 0x3f;
-        puVar2 = (undefined2 *)((uint)((uint8_t *)MenuItemEnabled)[iVar5] * 4);
+        puVar2 = (uint16_t *)((uint)((uint8_t *)MenuItemEnabled)[iVar5] * 4);
         pbVar4 = (byte *)((char *)0x2627a);
         uVar6 = Font03.ofs;
         seg = Font03.seg;
@@ -241,7 +241,7 @@ void __cdecl16far ovc28_usesBlitGfx10(far_t entries,int count)
   uint8_t *puVar2;
   uint16_t uVar3;
   int *piVar4;
-  undefined2 *puVar5;
+  uint16_t *puVar5;
   int idx;
   int y;
   uint16_t uVar8;
@@ -272,7 +272,7 @@ void __cdecl16far ovc28_usesBlitGfx10(far_t entries,int count)
       TextBlitDstSeg = 0xa000;
       TextBlitX = x + 6;
       TextBlitY = y + 2;
-      puVar5 = (undefined2 *)(uVar3 + idx * 4);
+      puVar5 = (uint16_t *)(uVar3 + idx * 4);
       pcVar1 = (char *)puVar5[1];
       puVar2 = (uint8_t *)*puVar5;
       uStack_6 = (uint8_t *)CONCAT22(pcVar1,puVar2);
@@ -298,7 +298,7 @@ void __cdecl16far ovc28_usesBlitGfx10(far_t entries,int count)
       }
       else {
         uVar9 = 0x3f;
-        puVar5 = (undefined2 *)(uVar3 + idx * 4);
+        puVar5 = (uint16_t *)(uVar3 + idx * 4);
         uVar3 = FontMain.ofs;
         max_width = FontMain.seg;
         pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar5,unaff_SS),
@@ -328,10 +328,10 @@ void __cdecl16far ovc28_drawGold(byte partyIndex)
   uint16_t uVar2;
   byte *pbVar3;
   int iVar4;
-  undefined2 uVar5;
+  uint16_t uVar5;
   byte *unaff_SS;
-  undefined4 uVar6;
-  undefined2 uVar7;
+  uint32_t uVar6;
+  uint16_t uVar7;
   uint8_t numText;
   
   uVar1 = ovr_font_textWidth((char *)"Gold",(char *)CONCAT22(Font03.ofs,(char *)0x26510),
@@ -340,10 +340,10 @@ void __cdecl16far ovc28_drawGold(byte partyIndex)
   TextBlitY = 0x9c;
   ovr_blitText((char *)"Gold",(byte *)CONCAT22(Font03.ofs,(char *)0x26510),Font03.seg,0x3f
                ,0xed);
-  uVar5 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-  iVar4 = (int)*(undefined4 *)((uint)partyIndex << 2);
-  ovr_litoa10((char *)&numText,(long)CONCAT22(*(undefined2 *)(iVar4 + 0x56),unaff_SS),
-              *(undefined2 *)(iVar4 + 0x58));
+  uVar5 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+  iVar4 = (int)*(uint32_t *)((uint)partyIndex << 2);
+  ovr_litoa10((char *)&numText,(long)CONCAT22(*(uint16_t *)(iVar4 + 0x56),unaff_SS),
+              *(uint16_t *)(iVar4 + 0x58));
   uVar1 = ovr_font_textWidth((char *)&numText,(char *)CONCAT22(Font03.ofs,unaff_SS),Font03.seg);
   uVar2 = 0x10e - (uVar1 >> 1);
   TextBlitY = 0xa7;
@@ -481,10 +481,10 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
 void __cdecl16far ovc28_blitMenuEntry(far_t entries,int index)
 
 {
-  undefined2 *puVar1;
+  uint16_t *puVar1;
   
   if (index < 0xfa) {
-    puVar1 = (undefined2 *)(entries.ofs + index * 4);
+    puVar1 = (uint16_t *)(entries.ofs + index * 4);
     ovc28_drawButton(0xeb,index * 0xe + 0x3c,(char *)CONCAT22(puVar1[1],(char *)*puVar1));
   }
   return;
@@ -555,10 +555,10 @@ void __cdecl16far ovc28_startCrossBlit(void)
 
 /* [R6] touches ScreenMode, MouseMoved */
 
-undefined2 __cdecl16far ovc28_usesScreenMode(far_t entries,uint count)
+uint16_t __cdecl16far ovc28_usesScreenMode(far_t entries,uint count)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   uint uVar2;
   undefined1 uVar3;
   int *piVar4;
@@ -630,7 +630,7 @@ char * __cdecl16far uiInputText(far_t entries,uint16_t count,far_t hint,uint8_t 
   uint uVar2;
   undefined1 uVar5;
   uint16_t uVar3;
-  undefined2 uVar4;
+  uint16_t uVar4;
   
   UserWantsExit = 0;
   if (hint.ofs != 0 || hint.seg != 0) {
@@ -824,19 +824,19 @@ char * __cdecl16far
 ovc28_usesUiInputText(far_t entries,uint16_t count,far_t hint,uint8_t *pageOut,...)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   char *pcVar2;
   uint uVar3;
-  undefined2 *puVar4;
+  uint16_t *puVar4;
   uint uVar5;
   uint16_t unaff_SS;
-  undefined2 in_stack_00000010;
+  uint16_t in_stack_00000010;
   far_t entries_00;
   far_t hint_00;
   uint8_t menuEntries;
-  undefined2 auStack_34 [17];
-  undefined2 uStack_12;
-  undefined2 uStack_10;
+  uint16_t auStack_34 [17];
+  uint16_t uStack_12;
+  uint16_t uStack_10;
   uint16_t uStack_e;
   uint16_t uStack_c;
   byte bStack_9;
@@ -880,12 +880,12 @@ ovc28_usesUiInputText(far_t entries,uint16_t count,far_t hint,uint8_t *pageOut,.
         uStack_8 = 0x1;
       }
       for (bStack_7 = 0; bStack_7 < bStack_5; bStack_7 = bStack_7 + 1) {
-        puVar4 = (undefined2 *)(entries.ofs + ((uint)bStack_6 + (uint)bStack_7) * 4);
+        puVar4 = (uint16_t *)(entries.ofs + ((uint)bStack_6 + (uint)bStack_7) * 4);
         uVar1 = *puVar4;
         uVar5 = (uint)bStack_4;
         uVar3 = (uint)bStack_7;
         auStack_34[(uVar5 + uVar3) * 2] = puVar4[1];
-        *(undefined2 *)(&menuEntries + (uVar5 + uVar3) * 4) = uVar1;
+        *(uint16_t *)(&menuEntries + (uVar5 + uVar3) * 4) = uVar1;
       }
       hint_00.seg = uStack_c;
       hint_00.ofs = uStack_e;

@@ -16,7 +16,7 @@ void __cdecl16far stshInitTxtFiles(char grab,...)
     if (grab == '\0') {
       pfVar1 = ovr_stshAllocStub(in_stack_0000ff74);
       *(int *)((uint)i * 4 + -0x6c6e) = (int)in_DX;
-      *(undefined2 *)((uint)i * 4 + -0x6c70) =(uint16_t)( pfVar1);
+      *(uint16_t *)((uint)i * 4 + -0x6c70) =(uint16_t)( pfVar1);
     }
     else {
       in_DX = &stack0xff74;
@@ -24,7 +24,7 @@ void __cdecl16far stshInitTxtFiles(char grab,...)
                                    (char *)(ulong)auStack_8a[(uint)i * 2],
                                    (uint16_t)in_stack_0000ff74);
       *(int *)((uint)i * 4 + -0x6c6e) = (int)in_DX;
-      *(undefined2 *)((uint)i * 4 + -0x6c70) =(uint16_t)( pfVar1);
+      *(uint16_t *)((uint)i * 4 + -0x6c70) =(uint16_t)( pfVar1);
     }
   }
   return;

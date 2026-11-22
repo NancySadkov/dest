@@ -16,9 +16,9 @@ char __cdecl16far stats_compute1(agnt_t *agnt)
 {
   char cVar1;
   agnt_t *paVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   
-  uVar3 = (undefined2)((ulong)agnt >> 0x10);
+  uVar3 = (uint16_t)((ulong)agnt >> 0x10);
   paVar2 = (agnt_t *)agnt;
   if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x04') &&
      (0xb < (((entity_t *)paVar2->entity)->base).level)) {
@@ -49,9 +49,9 @@ uint8_t __cdecl16far stats_compute2(agnt_t *agnt)
 {
   uint8_t uVar1;
   agnt_t *paVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   
-  uVar3 = (undefined2)((ulong)agnt >> 0x10);
+  uVar3 = (uint16_t)((ulong)agnt >> 0x10);
   paVar2 = (agnt_t *)agnt;
   if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x04') &&
      (0xc < (((entity_t *)paVar2->entity)->base).level)) {
@@ -103,9 +103,9 @@ undefined1 __cdecl16far stats_compute3(agnt_t *agnt)
 {
   undefined1 uVar1;
   agnt_t *paVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   
-  uVar3 = (undefined2)((ulong)agnt >> 0x10);
+  uVar3 = (uint16_t)((ulong)agnt >> 0x10);
   paVar2 = (agnt_t *)agnt;
   if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x04') &&
      (0xb < (((entity_t *)paVar2->entity)->base).level)) {
@@ -139,7 +139,7 @@ void __cdecl16far stats_drawPortrait(agntG_t *gdata,byte portraitIndex,int palet
   stg_tmp_t *psVar1;
   uint16_t in_DX;
   agntG_t *paVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   uint16_t in_stack_0000000c;
   far_t gfx;
   undefined1 uVar4;
@@ -149,7 +149,7 @@ void __cdecl16far stats_drawPortrait(agntG_t *gdata,byte portraitIndex,int palet
   psVar1 = ovr_stshLoadGfx(handle);
   ovr_calcSeasonPalette
             (psVar1->cmap,in_DX,(uint8_t *)palette,in_stack_0000000c,(char)in_DX,(char)palette);
-  uVar3 = (undefined2)((ulong)gdata >> 0x10);
+  uVar3 = (uint16_t)((ulong)gdata >> 0x10);
   paVar2 = (agntG_t *)gdata;
   if (((paVar2->prts + portraitIndex)->ofs != 0 || paVar2->prts[portraitIndex].seg != 0) &&
      ((paVar2->prtpals + portraitIndex)->ofs != 0 || paVar2->prtpals[portraitIndex].seg != 0)) {
@@ -230,9 +230,9 @@ char * __cdecl16far
 agntGetWeaponName(char *dst,uint8_t atype,bool magical,uint8_t field_index,int32_t agent)
 
 {
-  undefined4 uVar1;
+  uint32_t uVar1;
   uint16_t tofs;
-  undefined2 unaff_BP;
+  uint16_t unaff_BP;
   char *in_stack_00000004;
   undefined1 in_stack_0000000f;
   
@@ -246,13 +246,13 @@ agntGetWeaponName(char *dst,uint8_t atype,bool magical,uint8_t field_index,int32
     }
   }
   else {
-    uVar1 = *(undefined4 *)(CONCAT11(in_stack_0000000f,field_index) + 0x1d);
+    uVar1 = *(uint32_t *)(CONCAT11(in_stack_0000000f,field_index) + 0x1d);
     if ((*(uint *)((int)uVar1 + 0x40) & 0x4000) == 0) {
       tofs = (uint)(*(uint8_t *)((uint8_t *)&(dst) + 2)) * 0x95;
       agntCopyNthField((uint8_t)in_stack_00000004,
-                       (char *)CONCAT22(*(undefined2 *)((int)&AgntGs[0].wpn_name + tofs),(char *)dst
+                       (char *)CONCAT22(*(uint16_t *)((int)&AgntGs[0].wpn_name + tofs),(char *)dst
                                        ),
-                       (char *)CONCAT22(unaff_BP,(char *)*(undefined2 *)
+                       (char *)CONCAT22(unaff_BP,(char *)*(uint16_t *)
                                                           ((int)&AgntGs[0].wpn_name + 2 + tofs)));
     }
     else {
@@ -272,7 +272,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   char *pcVar1;
   uint *puVar2;
   int *piVar3;
-  undefined2 *puVar4;
+  uint16_t *puVar4;
   byte *pbVar5;
   long lVar6;
   code *pcVar7;
@@ -304,10 +304,10 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   byte bVar27;
   byte bVar28;
   int iVar29;
-  undefined2 in_DX;
-  undefined2 uVar30;
+  uint16_t in_DX;
+  uint16_t uVar30;
   byte *pbVar31;
-  undefined2 *puVar32;
+  uint16_t *puVar32;
   int *piVar33;
   short (*pasVar34) [148];
   unit_t *puVar35;
@@ -319,21 +319,21 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   far_t far *unaff_SI;
   byte *pbVar42;
   byte *unaff_DI;
-  undefined2 unaff_ES;
-  undefined2 uVar43;
-  undefined2 unaff_SS;
-  undefined2 uVar44;
+  uint16_t unaff_ES;
+  uint16_t uVar43;
+  uint16_t unaff_SS;
+  uint16_t uVar44;
   bool bVar45;
   byte in_AF;
   longdouble in_ST0;
-  undefined4 uVar46;
-  undefined2 in_stack_00000002;
+  uint32_t uVar46;
+  uint16_t in_stack_00000002;
   byte in_stack_00000004;
   undefined1 in_stack_00000005;
   uint8_t auStack_314 [72];
   char acStack_2cc [588];
   char acStack_80 [110];
-  undefined2 uStack_12;
+  uint16_t uStack_12;
   int16_t iStack_10;
   byte in_stack_0000fff2;
   byte in_stack_0000fff4;
@@ -607,7 +607,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
           TextBlitDstSeg = 0xa000;
           TextBlitX = CONCAT11(uVar49,uVar48) + 6;
           TextBlitY = (uint16_t)(pbVar21 + 0x10);
-          puVar32 = (undefined2 *)
+          puVar32 = (uint16_t *)
                     (CONCAT11(in_stack_00000005,in_stack_00000004) + (int)unaff_SI * 4);
           uVar30 = puVar32[1];
           in_DX = *puVar32;
@@ -679,7 +679,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       bVar12 = CARRY2(uVar16,*(uint *)(unaff_DI + (int)*pasVar34));
       iVar29 = uVar16 + *(uint *)(unaff_DI + (int)*pasVar34);
       (void)0;
-      puVar4 = (undefined2 *)((int)&unaff_SI->ofs + (int)*pasVar34);
+      puVar4 = (uint16_t *)((int)&unaff_SI->ofs + (int)*pasVar34);
       bVar10 = ((byte)in_CX & 0x1f) % 0x11;
       uVar9 = CONCAT12(bVar12,*puVar4);
       uVar8 = (ulong)uVar9 << bVar10 | (ulong)(uVar9 >> 0x11 - bVar10);
@@ -725,7 +725,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       UNLOCK();
       pbVar31 = (byte *)((int)*pasVar34 + 1);
       *unaff_DI = *unaff_DI & bVar28;
-      *(undefined2 *)0xa813 = in_stack_00000002;
+      *(uint16_t *)0xa813 = in_stack_00000002;
       iVar29 = uVar13 + 0x2b64 + (uint)(0xea39 < uVar13) +
                (uint)(0xea61 < uVar13 + 0x15c6 || CARRY2(uVar13 + 0x2b64,(uint)(0xea39 < uVar13))) +
                0x2a2f;
@@ -828,11 +828,11 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       *pbVar5 = (bVar10 - bVar27) - bVar45;
       uVar30 = CONCAT11(bVar25,(bVar26 - bVar27) -
                                (bVar28 < bVar27 || (byte)(bVar10 - bVar27) < bVar45));
-      uVar44 = *(undefined2 *)(uVar15 + iVar41 + 2);
+      uVar44 = *(uint16_t *)(uVar15 + iVar41 + 2);
       puVar36 = (uint *)(uVar15 + iVar41 + 4);
       pcVar7 = (code *)swi(0x1e);
       uVar46 = (*pcVar7)();
-      uVar43 = (undefined2)((ulong)uVar46 >> 0x10);
+      uVar43 = (uint16_t)((ulong)uVar46 >> 0x10);
       uVar20 = (uint)uVar46;
       uVar13 = *puVar36;
       *puVar36 = uVar44;
@@ -894,16 +894,16 @@ L_OVC27_2288:
       }
       pbVar42[-0x75] = pbVar42[-0x75] + bVar28;
       in(uVar43);
-      *(undefined2 *)((int)puVar40 + -6) =(uint16_t)( piVar33);
+      *(uint16_t *)((int)puVar40 + -6) =(uint16_t)( piVar33);
       iVar29 = *(int *)(puVar39 + 6);
       do {
         iVar41 = iVar29 + -1;
         if (iVar29 == 0) {
           return (far_t far *)0x0;
         }
-        uVar30 = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
-        *(undefined2 *)(puVar39 + -2) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-        *(undefined2 *)(puVar39 + -4) = uVar30;
+        uVar30 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+        *(uint16_t *)(puVar39 + -2) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+        *(uint16_t *)(puVar39 + -4) = uVar30;
         do {
           iVar29 = iVar41;
           if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != *(int *)(puVar39 + -2)) break;
@@ -927,9 +927,9 @@ L_OVC27_2288:
       *pbVar5 = *pbVar5 | 0x16;
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x40) = 1;
       iVar29 = CONCAT11(in_stack_0000fffb,in_stack_0000fffa);
-      uVar30 = (undefined2)(CONCAT13(in_stack_0000fffd,CONCAT12(in_stack_0000fffc,iVar29)) >> 0x10);
-      *(undefined2 *)(iVar29 + 0x58) = 0;
-      *(undefined2 *)(iVar29 + 0x56) = 100;
+      uVar30 = (uint16_t)(CONCAT13(in_stack_0000fffd,CONCAT12(in_stack_0000fffc,iVar29)) >> 0x10);
+      *(uint16_t *)(iVar29 + 0x58) = 0;
+      *(uint16_t *)(iVar29 + 0x56) = 100;
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x89) = 0xff;
       uVar11 = 0x5d;
       pfVar18 = ovr_ovc22_textRingProt(in_stack_0000fff8);
@@ -950,11 +950,11 @@ L_OVC27_2288:
             if (GUnitCount <= pfVar18) {
               return GUnitCount;
             }
-            uVar43 = (undefined2)((ulong)GUnits >> 0x10);
+            uVar43 = (uint16_t)((ulong)GUnits >> 0x10);
             puVar35 = (unit_t *)GUnits;
           } while ((((*(uint *)((uint)(puVar35 + (int)pfVar18)->bldType * 0x27 + 0x121) & 0x60) != 0
                     ) || (puVar35[(int)pfVar18].unitType == 0xff)) ||
-                  (uVar46 = *(undefined4 *)((uint)puVar35[(int)pfVar18].unitType << 2),
+                  (uVar46 = *(uint32_t *)((uint)puVar35[(int)pfVar18].unitType << 2),
                   *(char *)((int)uVar46 + 0x3f) != '\0'));
           in_stack_0000fffa = (undefined1)uVar30;
           in_stack_0000fffb = (char)((uint)uVar30 >> 8);
@@ -966,7 +966,7 @@ L_OVC27_2288:
           unaff_DI = (byte *)0x0;
           unaff_SI = (far_t far *)0x0;
         }
-        unaff_ES = (undefined2)((ulong)GMapFlags >> 0x10);
+        unaff_ES = (uint16_t)((ulong)GMapFlags >> 0x10);
         pasVar34 = *(short (*) [60] [148])GMapFlags + in_stack_0000fff6;
         pbVar21 = (byte *)((int)((int)&unaff_SI->ofs + CONCAT11(in_stack_0000fff9,in_stack_0000fff8)
                                 ) * 2);
@@ -1081,8 +1081,8 @@ char __cdecl16far stats_compute4(agnt_t *agnt,...)
   byte bVar1;
   byte bVar2;
   char cVar3;
-  undefined2 uVar4;
-  undefined2 in_stack_00000006;
+  uint16_t uVar4;
+  uint16_t in_stack_00000006;
   
   bVar1 = agnt->gindex;
   if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == -1) {
@@ -1111,7 +1111,7 @@ char * __cdecl16far stats_formatThousands(char *text,uint32_t value)
   long lVar2;
   
   if ((long)value < 1000000) {
-    (*(uint16_t *)((uint8_t *)&(text))) = ovr_litoa10((char *)text,CONCAT22((undefined2)value,(*(uint16_t *)((uint8_t *)&(text) + 2))),(*(uint16_t *)((uint8_t *)&(value) + 2)));
+    (*(uint16_t *)((uint8_t *)&(text))) = ovr_litoa10((char *)text,CONCAT22((uint16_t)value,(*(uint16_t *)((uint8_t *)&(text) + 2))),(*(uint16_t *)((uint8_t *)&(value) + 2)));
   }
   else {
     lVar2 = LDIV_at_(value,1000);
@@ -1130,7 +1130,7 @@ char * __cdecl16far stats_formatThousands(char *text,uint32_t value)
 void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
 
 {
-  undefined4 uVar1;
+  uint32_t uVar1;
   far_t gfx;
   far_t fVar2;
   far_t gfx_00;
@@ -1145,7 +1145,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
   char *pcVar6;
   uint uVar7;
   int *piVar8;
-  undefined2 *puVar9;
+  uint16_t *puVar9;
   int iVar10;
   far_t *text_00;
   uint8_t *in_DX;
@@ -1153,7 +1153,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
   uint16_t agnt_o;
   entity_t *peVar12;
   uint16_t agnt_s;
-  undefined2 uVar13;
+  uint16_t uVar13;
   char *unaff_SS;
   char *in_stack_0000000a;
   undefined1 uVar14;
@@ -1167,8 +1167,8 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
   undefined1 uVar22;
   uint8_t uVar23;
   uint8_t uVar24;
-  undefined2 uVar25;
-  undefined2 uVar26;
+  uint16_t uVar25;
+  uint16_t uVar26;
   char palbuf [768];
   char buf [80];
   uint8_t text;
@@ -1195,7 +1195,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
     bStack_4 = field_index + 4;
   }
                     /* WARNING: Load size is inaccurate */
-  stats_drawPortrait((agntG_t *)CONCAT22(*(undefined2 *)((int)&agnt->gdata + 2),agnt->gdata),
+  stats_drawPortrait((agntG_t *)CONCAT22(*(uint16_t *)((int)&agnt->gdata + 2),agnt->gdata),
                      bStack_4,cmap.seg);
   TextBlitY = 10;
   TextBlitX = 0x87;
@@ -1288,7 +1288,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
   TextBlitY = 0x1b;
   TextBlitX = 0x87;
   if (*(char *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) != -1) {
-    puVar9 = (undefined2 *)
+    puVar9 = (uint16_t *)
              ((uint)*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) * 4);
     uVar25 = puVar9[1];
     uVar7 = ovr_font_textWidth((char *)*puVar9,
@@ -1304,7 +1304,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
       uVar23 = 0xde;
       uVar25 = 3;
       cVar3 = 'V';
-      puVar9 = (undefined2 *)
+      puVar9 = (uint16_t *)
                ((uint)*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) * 4);
       in_DX = (uint8_t *)((char *)0x2627a);
       uVar19 = Font02.ofs;
@@ -1323,7 +1323,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
       uVar23 = 0xde;
       uVar25 = 3;
       cVar3 = 'V';
-      puVar9 = (undefined2 *)
+      puVar9 = (uint16_t *)
                ((uint)*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) * 4);
       in_DX = (uint8_t *)((char *)0x2627a);
       uVar19 = Font02.ofs;
@@ -1380,18 +1380,18 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
     ovr_blitLabel((char *)((far_t *)GAlignmentsNames + uVar7)->ofs,
                   (uint8_t *)
                   CONCAT22(Font02.ofs,
-                           (uint8_t *)*(undefined2 *)((int)&GAlignmentsNames[0].seg + uVar7 * 4)),
+                           (uint8_t *)*(uint16_t *)((int)&GAlignmentsNames[0].seg + uVar7 * 4)),
                   Font02.seg,0xde,(char)Font02.seg,0xde,0xe0);
   }
   else {
-    uVar1 = *(undefined4 *)
+    uVar1 = *(uint32_t *)
              ((uint)*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) << 2);
     uVar7 = (uint)*(byte *)((int)uVar1 + 0x33);
     puVar11 = (uint8_t *)((char *)0x26510);
     ovr_blitLabel((char *)((far_t *)GAlignmentsNames + uVar7)->ofs,
                   (uint8_t *)
                   CONCAT22(Font02.ofs,
-                           (uint8_t *)*(undefined2 *)((int)&GAlignmentsNames[0].seg + uVar7 * 4)),
+                           (uint8_t *)*(uint16_t *)((int)&GAlignmentsNames[0].seg + uVar7 * 4)),
                   Font02.seg,0xde,(char)Font02.seg,0xde,0xe0);
   }
   TextBlitY = 0x2f;
@@ -1422,7 +1422,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
     else {
       uVar26 = 0xe0;
       uVar23 = 0xde;
-      puVar9 = (undefined2 *)
+      puVar9 = (uint16_t *)
                ((uint)(byte)((agntG_t *)agnt->gdata)->shortName[3] * 0x94 +
                (uint)(((entity_t *)agnt->entity)->base).level * 4);
       puVar11 = (uint8_t *)((char *)0x262b1);
@@ -1431,14 +1431,14 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
                          ((char *)CONCAT13((char)((uint)unaff_SS >> 8),CONCAT12((char)unaff_SS,buf))
                           ,CONCAT22(puVar9[1],*puVar9));
       uVar17 = SUB21(pcVar6,0);
-      uVar13 = (undefined2)((ulong)agnt->entity >> 0x10);
+      uVar13 = (uint16_t)((ulong)agnt->entity >> 0x10);
       peVar12 = (entity_t *)agnt->entity;
-      uVar25 = *(undefined2 *)&(peVar12->base).frameIndex;
+      uVar25 = *(uint16_t *)&(peVar12->base).frameIndex;
       puVar18 = puVar11;
       pcVar6 = stats_formatThousands
                          ((char *)CONCAT22(unaff_SS,&text),
                           CONCAT13((char)((uint)uVar25 >> 8),
-                                   CONCAT12((char)uVar25,*(undefined2 *)&(peVar12->base).health)));
+                                   CONCAT12((char)uVar25,*(uint16_t *)&(peVar12->base).health)));
       pcVar6 = ovr_stsprintf((char *)&line,(char *)CONCAT22(0x6342,unaff_SS),
                              (char *)CONCAT13((char)((uint)pcVar6 >> 8),
                                               CONCAT12((char)pcVar6,0x2410)),(char)pcVar6,
@@ -1454,7 +1454,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
     uVar15 = (undefined1)(Font02.seg >> 8);
     uVar19 = Font02.ofs;
     iVar10 = ovr_ovc41_growthForLevel
-                       (*(agnt_t **)&agnt->entity,*(undefined2 *)((int)&agnt->entity + 2));
+                       (*(agnt_t **)&agnt->entity,*(uint16_t *)((int)&agnt->entity + 2));
     pcVar6 = ovr_stsprintf((char *)&line,(char *)CONCAT13(99,CONCAT12(0x48,unaff_SS)),
                            (char *)CONCAT13((char)((uint)iVar10 >> 8),CONCAT12((char)iVar10,0x2410))
                            ,0x48,0x10,(char)iVar10,puVar11);
@@ -1537,7 +1537,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
   uVar5 = (undefined1)Font02.seg;
   uVar15 = (undefined1)(Font02.seg >> 8);
   uVar19 = Font02.ofs;
-  stats_compute4(*(agnt_t **)&agnt->entity,*(undefined2 *)((int)&agnt->entity + 2));
+  stats_compute4(*(agnt_t **)&agnt->entity,*(uint16_t *)((int)&agnt->entity + 2));
   pcVar6 = ovr_stsprintf((char *)&line);
   ovr_blitLabel(pcVar6,(uint8_t *)CONCAT22(uVar19,puVar11),CONCAT11(uVar15,uVar5),uVar23,uVar5,
                 uVar23,uVar25);
@@ -1585,33 +1585,33 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
 char * __cdecl16far stats_readyStatusText(byte agntIndex,char *text)
 
 {
-  undefined4 uVar1;
+  uint32_t uVar1;
   uint8_t *puVar2;
   char *pcVar3;
-  undefined2 uVar4;
+  uint16_t uVar4;
   int iVar5;
-  undefined2 uVar6;
+  uint16_t uVar6;
   byte in_stack_00000004;
   undefined1 in_stack_00000007;
   
-  uVar1 = *(undefined4 *)((uint)in_stack_00000004 * 0x34 + 0x17);
+  uVar1 = *(uint32_t *)((uint)in_stack_00000004 * 0x34 + 0x17);
   if ((*(byte *)((int)uVar1 + 0x33) & 1) == 0) {
     uVar4 = 0x1726;
-    uVar1 = *(undefined4 *)((uint)in_stack_00000004 * 0x34 + 0x1d);
-    uVar6 = (undefined2)((ulong)uVar1 >> 0x10);
+    uVar1 = *(uint32_t *)((uint)in_stack_00000004 * 0x34 + 0x1d);
+    uVar6 = (uint16_t)((ulong)uVar1 >> 0x10);
     iVar5 = (int)uVar1;
     puVar2 = ovr_ovc15_usesStshRealloc
-                       ((char *)*(undefined2 *)(iVar5 + 0x24),*(undefined2 *)(iVar5 + 0x26));
+                       ((char *)*(uint16_t *)(iVar5 + 0x24),*(uint16_t *)(iVar5 + 0x26));
     pcVar3 = ovr_stsprintf(agntIndex,(char *)CONCAT22(0x638d,(char *)text),
                            (char *)CONCAT22(puVar2,(char *)0x26510),uVar4);
   }
   else {
     uVar4 = 0x1726;
-    uVar1 = *(undefined4 *)((uint)in_stack_00000004 * 0x34 + 0x1d);
-    uVar6 = (undefined2)((ulong)uVar1 >> 0x10);
+    uVar1 = *(uint32_t *)((uint)in_stack_00000004 * 0x34 + 0x1d);
+    uVar6 = (uint16_t)((ulong)uVar1 >> 0x10);
     iVar5 = (int)uVar1;
     puVar2 = ovr_ovc15_usesStshRealloc
-                       ((char *)*(undefined2 *)(iVar5 + 0x24),*(undefined2 *)(iVar5 + 0x26));
+                       ((char *)*(uint16_t *)(iVar5 + 0x24),*(uint16_t *)(iVar5 + 0x26));
     pcVar3 = ovr_stsprintf(agntIndex,(char *)CONCAT22(0x63a2,(char *)text),
                            (char *)CONCAT22(puVar2,(char *)0x26510),uVar4);
   }
@@ -1630,10 +1630,10 @@ void __cdecl16far stats_usesEntityCount(char partyIndex)
 {
   byte *pbVar1;
   uint uVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
-    uVar3 = (undefined2)((ulong)Entities >> 0x10);
+    uVar3 = (uint16_t)((ulong)Entities >> 0x10);
     if (*(char *)((int)Entities + uVar2 * 0x37 + 0x1a) == partyIndex) {
       pbVar1 = (byte *)((int)Entities + uVar2 * 0x37 + 0x33);
       *pbVar1 = *pbVar1 & 0xfb;
@@ -1653,13 +1653,13 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
 
 {
   byte *pbVar1;
-  undefined4 uVar2;
-  undefined4 uVar3;
+  uint32_t uVar2;
+  uint32_t uVar3;
   uint8_t *puVar4;
   char *pcVar5;
   uint16_t uVar6;
   int iVar7;
-  undefined2 uVar8;
+  uint16_t uVar8;
   char *unaff_SS;
   uint8_t text;
   char *pcStack_d4;
@@ -1667,42 +1667,42 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
   uint8_t unitFlags;
   int iStack_4;
   
-  uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
+  uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
   uVar8 = text;
   pcStack_d4 = (char *)(CONCAT22(text,(uint)*(byte *)((int)uVar2 + 0x33)) ^ 1);
-  uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
+  uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
   *(undefined1 *)((int)uVar2 + 0x33) = (char)pcStack_d4;
-  uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
+  uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
   if ((*(byte *)((int)uVar2 + 0x33) & 1) == 0) {
-    uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
+    uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
     pbVar1 = (byte *)((int)uVar2 + 0x33);
     *pbVar1 = *pbVar1 & 0xfb;
   }
   else {
-    uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
+    uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
     text = uVar8;
     stats_usesEntityCount(*(char *)((int)uVar2 + 0x1a));
-    uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
+    uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
     pbVar1 = (byte *)((int)uVar2 + 0x33);
     *pbVar1 = *pbVar1 | 4;
     iStack_4 = *(int *)((uint)agnt_id * 0x34 + 0x1b);
     pcStack_d4 = (char *)CONCAT22(text,unaff_SS);
     ovr_attact_usesEntities(iStack_4,0,0,(uint16_t)&unitFlags,(uint16_t)unaff_SS);
   }
-  uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
-  uVar3 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
+  uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+  uVar3 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
   *(byte *)((int)uVar3 + 0x33) = *(byte *)((int)uVar2 + 0x33) & 0xfd;
   pcStack_d4 = (char *)((ulong)pcStack_d4 & 0xffff0000);
   drawAgntStats((agnt_t *)((uint)agnt_id * 0x34),far_from_u32((uint32_t)(0x1726)),0);
   uVar6 = 0x1726;
-  uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x17);
+  uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
   if ((*(byte *)((int)uVar2 + 0x33) & 1) == 0) {
     uVar6 = 0x1726;
-    uVar2 = *(undefined4 *)((uint)agnt_id * 0x34 + 0x1d);
-    uVar8 = (undefined2)((ulong)uVar2 >> 0x10);
+    uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x1d);
+    uVar8 = (uint16_t)((ulong)uVar2 >> 0x10);
     iVar7 = (int)uVar2;
     puVar4 = ovr_ovc15_usesStshRealloc
-                       ((char *)*(undefined2 *)(iVar7 + 0x24),*(undefined2 *)(iVar7 + 0x26));
+                       ((char *)*(uint16_t *)(iVar7 + 0x24),*(uint16_t *)(iVar7 + 0x26));
     pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x63b1,unaff_SS),
                            (char *)CONCAT22(puVar4,(char *)0x26510),uVar6);
     pcStack_d4 = (char *)CONCAT22(text,uVar6);
@@ -1733,9 +1733,9 @@ uint __cdecl16far stats_usesAlignUp4(int entityIndex)
   uint uVar2;
   byte bVar3;
   int iVar4;
-  undefined2 uVar5;
+  uint16_t uVar5;
   
-  uVar5 = (undefined2)((ulong)Entities >> 0x10);
+  uVar5 = (uint16_t)((ulong)Entities >> 0x10);
   if ((*(byte *)((int)Entities + entityIndex * 0x37 + 0x33) & 2) == 0) {
     uVar2 = 0;
   }
@@ -1743,13 +1743,13 @@ uint __cdecl16far stats_usesAlignUp4(int entityIndex)
     uVar1 = ovr_alignUp4(*(int *)((int)Entities + entityIndex * 0x37));
     uVar2 = ovr_alignUp4(GfxRndSeed);
     if (uVar1 == uVar2) {
-      uVar5 = (undefined2)((ulong)Entities >> 0x10);
+      uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       uVar2 = ((entity_t *)Entities)[entityIndex].base.y;
       if (uVar2 == GfxRndSeed2) {
         uVar1 = ovr_alignUp4(((entity_t *)Entities)[entityIndex].base.targetX);
         uVar2 = ovr_alignUp4(GfxRndSeed);
         if (uVar1 == uVar2) {
-          uVar5 = (undefined2)((ulong)Entities >> 0x10);
+          uVar5 = (uint16_t)((ulong)Entities >> 0x10);
           iVar4 = (int)Entities;
           uVar2 = ((entity_t *)iVar4)[entityIndex].base.targetY;
           if (uVar2 == GfxRndSeed2) {
@@ -1801,22 +1801,22 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   uint8_t *puVar3;
   char *text;
   uint16_t widths;
-  undefined2 uVar4;
+  uint16_t uVar4;
   char *unaff_SS;
   uint8_t msg;
   int iStack_c;
-  undefined2 uStack_a;
+  uint16_t uStack_a;
   uint8_t unitFlags;
   
   entityIndex = *(int *)((uint)agntIndex * 0x34 + 0x1b);
-  uStack_a = *(undefined2 *)((uint)agntIndex * 0x34 + 0x1f);
+  uStack_a = *(uint16_t *)((uint)agntIndex * 0x34 + 0x1f);
   iStack_c = *(int *)((uint)agntIndex * 0x34 + 0x1d);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
   *(int *)((int)Entities + entityIndex * 0x37) = iVar2;
   ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
-  uVar4 = (undefined2)((ulong)Entities >> 0x10);
+  uVar4 = (uint16_t)((ulong)Entities >> 0x10);
   ((entity_t *)Entities)[entityIndex].base.targetX =
-       *(undefined2 *)((int)Entities + entityIndex * 0x37);
+       *(uint16_t *)((int)Entities + entityIndex * 0x37);
   ((entity_t *)Entities)[entityIndex].base.targetY = GfxRndSeed2;
   pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
   *pbVar1 = *pbVar1 | 2;
@@ -1826,7 +1826,7 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   ovr_attact_usesEntities(entityIndex,0,0,(uint16_t)&unitFlags,(uint16_t)unaff_SS);
   ovr_alignUp4(GfxRndSeed,GfxRndSeed2);
   puVar3 = ovr_ovc15_usesStshRealloc
-                     ((char *)*(undefined2 *)(iStack_c + 0x24),*(undefined2 *)(iStack_c + 0x26));
+                     ((char *)*(uint16_t *)(iStack_c + 0x24),*(uint16_t *)(iStack_c + 0x26));
   text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6406,unaff_SS),
                        (char *)CONCAT22(puVar3,(char *)0x26510),widths);
   drawString(text,widths);
@@ -1850,29 +1850,29 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
   uint8_t *puVar3;
   char *text;
   uint16_t widths;
-  undefined2 uVar4;
+  uint16_t uVar4;
   char *unaff_SS;
   uint8_t msg;
   int iStack_c;
-  undefined2 uStack_a;
+  uint16_t uStack_a;
   uint8_t unitFlags;
   
   entityIndex = *(int *)((uint)agntIndex * 0x34 + 0x1b);
-  uStack_a = *(undefined2 *)((uint)agntIndex * 0x34 + 0x1f);
+  uStack_a = *(uint16_t *)((uint)agntIndex * 0x34 + 0x1f);
   iStack_c = *(int *)((uint)agntIndex * 0x34 + 0x1d);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
   *(int *)((int)Entities + entityIndex * 0x37) = iVar2;
   ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
-  uVar4 = (undefined2)((ulong)Entities >> 0x10);
+  uVar4 = (uint16_t)((ulong)Entities >> 0x10);
   ((entity_t *)Entities)[entityIndex].base.targetX =
-       *(undefined2 *)((int)Entities + entityIndex * 0x37);
+       *(uint16_t *)((int)Entities + entityIndex * 0x37);
   ((entity_t *)Entities)[entityIndex].base.targetY = GfxRndSeed2;
   widths = 0x2410;
   pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
   *pbVar1 = *pbVar1 & 0xfd;
   ovr_attact_usesEntities(entityIndex,0,0,(uint16_t)&unitFlags,(uint16_t)unaff_SS);
   puVar3 = ovr_ovc15_usesStshRealloc
-                     ((char *)*(undefined2 *)(iStack_c + 0x24),*(undefined2 *)(iStack_c + 0x26));
+                     ((char *)*(uint16_t *)(iStack_c + 0x24),*(uint16_t *)(iStack_c + 0x26));
   text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x644e,unaff_SS),
                        (char *)CONCAT22(puVar3,(char *)0x26510),widths);
   drawString(text,widths);
@@ -2012,7 +2012,7 @@ byte __cdecl16far
 stats_usesAlignUp42(byte agntIndex,byte gfxIndex,int16_t x,int16_t y,brect_t *rect,uint16_t type)
 
 {
-  undefined4 uVar1;
+  uint32_t uVar1;
   far_t gfx;
   far_t entries_00;
   far_t gfx_00;
@@ -2031,23 +2031,23 @@ stats_usesAlignUp42(byte agntIndex,byte gfxIndex,int16_t x,int16_t y,brect_t *re
   uint16_t uVar10;
   uint16_t *puVar11;
   int *piVar12;
-  undefined2 *puVar13;
+  uint16_t *puVar13;
   int iVar14;
-  undefined2 uVar15;
-  undefined2 uVar16;
+  uint16_t uVar15;
+  uint16_t uVar16;
   uint16_t unaff_SS;
   undefined1 uVar17;
   undefined1 uVar18;
   uint8_t entries;
-  undefined2 uStack_36;
-  undefined2 uStack_34;
-  undefined2 uStack_32;
-  undefined2 uStack_30;
-  undefined2 uStack_2e;
-  undefined2 uStack_2c;
-  undefined2 uStack_2a;
-  undefined2 uStack_28;
-  undefined2 uStack_26;
+  uint16_t uStack_36;
+  uint16_t uStack_34;
+  uint16_t uStack_32;
+  uint16_t uStack_30;
+  uint16_t uStack_2e;
+  uint16_t uStack_2c;
+  uint16_t uStack_2a;
+  uint16_t uStack_28;
+  uint16_t uStack_26;
   uint8_t permTable;
   undefined1 uStack_10;
   undefined1 uStack_f;
@@ -2074,38 +2074,38 @@ stats_usesAlignUp42(byte agntIndex,byte gfxIndex,int16_t x,int16_t y,brect_t *re
   CurMusicType = 0xff;
 L_stats_6386_1c9f_1E1D:
   for (; GCharLevelsInc != '\0'; GCharLevelsInc = GCharLevelsInc + -1) {
-    uVar1 = *(undefined4 *)((uint)agntIndex * 0x34 + 0x1d);
+    uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x1d);
     bStack_3 = *(byte *)((int)uVar1 + 0x46);
     if (bStack_3 == 0xff) {
       bStack_3 = 0;
     }
-    uVar1 = *(undefined4 *)((uint)agntIndex * 0x34 + 0x17);
+    uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
     piVar12 = (int *)((uint)bStack_3 * 0x94 + (uint)*(byte *)((int)uVar1 + 0xf) * 4);
     if (*piVar12 != 0 || piVar12[1] != 0) {
-      uVar1 = *(undefined4 *)((uint)agntIndex * 0x34 + 0x17);
-      puVar13 = (undefined2 *)((uint)bStack_3 * 0x94 + (uint)*(byte *)((int)uVar1 + 0xf) * 4);
+      uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
+      puVar13 = (uint16_t *)((uint)bStack_3 * 0x94 + (uint)*(byte *)((int)uVar1 + 0xf) * 4);
       uVar16 = *puVar13;
-      uVar1 = *(undefined4 *)((uint)agntIndex * 0x34 + 0x17);
-      uVar15 = (undefined2)((ulong)uVar1 >> 0x10);
+      uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
+      uVar15 = (uint16_t)((ulong)uVar1 >> 0x10);
       iVar14 = (int)uVar1;
-      *(undefined2 *)(iVar14 + 0x12) = puVar13[1];
-      *(undefined2 *)(iVar14 + 0x10) = uVar16;
-      uVar16 = *(undefined2 *)((uint)agntIndex * 0x34 + 0x19);
+      *(uint16_t *)(iVar14 + 0x12) = puVar13[1];
+      *(uint16_t *)(iVar14 + 0x10) = uVar16;
+      uVar16 = *(uint16_t *)((uint)agntIndex * 0x34 + 0x19);
       ovr_ovc41_compute3(CONCAT13((char)((uint)uVar16 >> 8),
                                   CONCAT12((char)uVar16,
-                                           *(undefined2 *)((uint)agntIndex * 0x34 + 0x17))));
+                                           *(uint16_t *)((uint)agntIndex * 0x34 + 0x17))));
     }
   }
   iVar14 = *(int *)((uint)agntIndex * 0x34 + 0x1b);
   stats_openAgentDetail((uint)agntIndex);
-  uVar16 = (undefined2)((ulong)Entities >> 0x10);
+  uVar16 = (uint16_t)((ulong)Entities >> 0x10);
   if (((entity_t *)Entities)[iVar14].base.targetY == GfxRndSeed2) {
     uVar5 = ovr_alignUp4(((entity_t *)Entities)[iVar14].base.targetX);
     uVar17 = (undefined1)uVar5;
     uVar18 = (undefined1)(uVar5 >> 8);
     uVar5 = ovr_alignUp4(GfxRndSeed);
     if (CONCAT11(uVar18,uVar17) == uVar5) {
-      uVar1 = *(undefined4 *)((uint)agntIndex * 0x34 + 0x17);
+      uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
       ovr_ovc39_textHalflingCastle(*(byte *)((int)uVar1 + 0x1a));
     }
   }
@@ -2131,7 +2131,7 @@ L_stats_6386_1c9f_1ECD:
   }
   uStack_f = 5;
   uStack_e = 7;
-  uVar1 = *(undefined4 *)((uint)agntIndex * 0x34 + 0x17);
+  uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
   if (*(char *)((int)uVar1 + 0x1a) == -1) {
     uStack_2e = 0;
     uStack_30 = 0;
@@ -2147,7 +2147,7 @@ L_stats_6386_1c9f_1ECD:
   uStack_26 = 0x2410;
   uStack_28 = 0x6401;
   puVar9 = (uint8_t *)((int)&AgntAnms[0x75].halfWidth + 1);
-  if (*(char *)*(undefined4 *)((uint)agntIndex * 0x34 + 0x1d) == '\0') {
+  if (*(char *)*(uint32_t *)((uint)agntIndex * 0x34 + 0x1d) == '\0') {
     menuBarShown = 1;
   }
   entries_00.seg = unaff_SS;
@@ -2187,35 +2187,35 @@ L_stats_6386_1c9f_1ECD:
             ovr_agnt_usesAlignToSeg();
             return bVar3;
           }
-          uVar1 = *(undefined4 *)(uVar5 * 0x34 + 0x1d);
+          uVar1 = *(uint32_t *)(uVar5 * 0x34 + 0x1d);
           uVar8 = uVar5;
           if (*(char *)((int)uVar1 + 1) == '\x02') break;
-          uVar1 = *(undefined4 *)(uVar5 * 0x34 + 0x1d);
+          uVar1 = *(uint32_t *)(uVar5 * 0x34 + 0x1d);
           if (*(char *)((int)uVar1 + 1) == '\x01') {
-            *(undefined2 *)(uVar5 * 0x34) = 0x3d;
-            *(undefined2 *)(uVar5 * 0x34 + 2) = 0x12;
+            *(uint16_t *)(uVar5 * 0x34) = 0x3d;
+            *(uint16_t *)(uVar5 * 0x34 + 2) = 0x12;
           }
           else {
-            uVar1 = *(undefined4 *)(uVar5 * 0x34 + 0x1d);
+            uVar1 = *(uint32_t *)(uVar5 * 0x34 + 0x1d);
             if (*(char *)((int)uVar1 + 1) == '\v') {
-              *(undefined2 *)(uVar5 * 0x34) = 0x56;
-              *(undefined2 *)(uVar5 * 0x34 + 2) = 0x14;
+              *(uint16_t *)(uVar5 * 0x34) = 0x56;
+              *(uint16_t *)(uVar5 * 0x34 + 2) = 0x14;
             }
           }
         }
 switchD_6000_58bf_caseD_5:
-        *(undefined2 *)(uVar5 * 0x34) = 0x6e;
-        *(undefined2 *)(uVar8 * 0x34 + 2) = 0xb;
+        *(uint16_t *)(uVar5 * 0x34) = 0x6e;
+        *(uint16_t *)(uVar8 * 0x34 + 2) = 0xb;
         uVar5 = uVar8;
       } while( true );
     case 1:
                     /* WARNING: Bad instruction - Truncating control flow here */
       halt_baddata();
     case 2:
-      uVar16 = (undefined2)
-               ((ulong)*(undefined4 *)((undefined *)&GfxFramePtrs + (uint)gfxIndex * 4) >> 0x10);
+      uVar16 = (uint16_t)
+               ((ulong)*(uint32_t *)((undefined *)&GfxFramePtrs + (uint)gfxIndex * 4) >> 0x10);
       puVar11 = (uint16_t *)
-                ((int)*(undefined4 *)((undefined *)&GfxFramePtrs + (uint)gfxIndex * 4) +
+                ((int)*(uint32_t *)((undefined *)&GfxFramePtrs + (uint)gfxIndex * 4) +
                 (uint)bStack_3 * 4);
       gfx.seg = puVar11[1];
       gfx.ofs = *puVar11;
@@ -2278,30 +2278,30 @@ switchD_6000_58bf_caseD_5:
     }
   }
   else if (uVar5 == 0xfc) {
-    uVar1 = *(undefined4 *)((uint)agntIndex * 0x34 + 0x17);
+    uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
     if ((*(byte *)((int)uVar1 + 0x33) & 1) == 0) {
       stats_unreadyNotice(agntIndex);
     }
   }
   else if (uVar5 < 0xfd) {
     if (uVar5 == 7) {
-      uVar1 = *(undefined4 *)((uint)agntIndex * 0x34 + 0x17);
+      uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
       if (*(char *)((int)uVar1 + 0x1a) != -1) {
         ovr_stop_audio();
         CurMusicType = 0xff;
-        uVar1 = *(undefined4 *)((uint)agntIndex * 0x34 + 0x17);
+        uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
         ovr_manage_settlementScreen(*(byte *)((int)uVar1 + 0x1a));
         if (Cancelled == 0) {
           iVar14 = *(int *)((uint)agntIndex * 0x34 + 0x1b);
           stats_openAgentDetail((uint)agntIndex);
-          uVar16 = (undefined2)((ulong)Entities >> 0x10);
+          uVar16 = (uint16_t)((ulong)Entities >> 0x10);
           if (((entity_t *)Entities)[iVar14].base.targetY == GfxRndSeed2) {
             uVar5 = ovr_alignUp4(((entity_t *)Entities)[iVar14].base.targetX);
             uVar17 = (undefined1)uVar5;
             uVar18 = (undefined1)(uVar5 >> 8);
             uVar5 = ovr_alignUp4(GfxRndSeed);
             if (CONCAT11(uVar18,uVar17) == uVar5) {
-              uVar1 = *(undefined4 *)((uint)agntIndex * 0x34 + 0x17);
+              uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
               ovr_ovc39_textHalflingCastle(*(byte *)((int)uVar1 + 0x1a));
             }
           }
@@ -2327,7 +2327,7 @@ L_stats_6386_1c9f_20C5:
     }
   }
   else if (uVar5 == 0xfe) {
-    uVar1 = *(undefined4 *)((uint)agntIndex * 0x34 + 0x17);
+    uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
     if ((*(byte *)((int)uVar1 + 0x33) & 1) != 0) {
       stats_unreadyNotice(agntIndex);
     }
@@ -2449,7 +2449,7 @@ void __cdecl16far drawString(char *text,uint16_t widths,...)
 {
   uint uVar1;
   size_t sVar2;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   far_t gfx;
   uint8_t rect;
   uint16_t uStack_a;

@@ -4,7 +4,7 @@ stshRleType2(far_t *__return_storage_ptr__,far_t pixels,int16_t sx,int16_t sy,in
 
 {
   far_t far *pfVar1;
-  undefined2 in_DX;
+  uint16_t in_DX;
   far_t far *uStack_6;   /* hand fix: assigned a far_t pointer and used as uStack_6->ofs */
   
   pfVar1 = stshRleSub(__return_storage_ptr__,(uint8_t *)pixels.ofs,pixels.seg,sx,sy,ex,15);

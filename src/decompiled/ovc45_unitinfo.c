@@ -58,7 +58,7 @@ uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIn
   uint uVar1;
   int iVar2;
   uint uVar3;
-  undefined2 uVar4;
+  uint16_t uVar4;
   uint *in_stack_0000000a;
   byte bStack_3;
   
@@ -66,7 +66,7 @@ uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIn
   for (uVar3 = 0; uVar3 < EntityCount; uVar3 = uVar3 + 1) {
     uVar1 = ovr_alignUp4(*(int *)((int)Entities + uVar3 * 0x37));
     if (uVar1 == x) {
-      uVar4 = (undefined2)((ulong)Entities >> 0x10);
+      uVar4 = (uint16_t)((ulong)Entities >> 0x10);
       iVar2 = (int)Entities;
       if ((((((entity_t *)iVar2)[uVar3].base.y == y) &&
            (*(char *)((int)(char **)GMenuStrings +
@@ -103,7 +103,7 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
   int iVar3;
   uint uVar4;
   uint uVar5;
-  undefined2 uVar6;
+  uint16_t uVar6;
   undefined1 uStack000f;
   char in_stack_00000010;
   uint uStack_6;
@@ -118,7 +118,7 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
   for (uVar4 = 0; uVar4 < EntityCount; uVar4 = uVar4 + 1) {
     uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar4 * 0x37));
     if (uVar2 == uVar1) {
-      uVar6 = (undefined2)((ulong)Entities >> 0x10);
+      uVar6 = (uint16_t)((ulong)Entities >> 0x10);
       iVar3 = (int)Entities;
       if (((entity_t *)iVar3)[uVar4].base.y == y) {
         uVar2 = (uint)((entity_t *)iVar3)[uVar4].base.gindex * 0x95;
@@ -155,7 +155,7 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
       *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = uStack_6;
     }
   }
-  uVar6 = (undefined2)((ulong)Entities >> 0x10);
+  uVar6 = (uint16_t)((ulong)Entities >> 0x10);
   iVar3 = (uint)*(byte *)((int)Entities +
                           *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) * 0x37 + 0xd) * 0x95
   ;
@@ -173,22 +173,22 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "Choose party to build for.  Now building" */
 
-undefined2 __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *entityIndexPtr,...)
+uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *entityIndexPtr,...)
 
 {
   far_t entries;
   far_t hint;
   uint x_00;
   int iVar1;
-  undefined2 *puVar2;
+  uint16_t *puVar2;
   char *pcVar3;
   uint8_t *puVar4;
-  undefined2 uVar5;
+  uint16_t uVar5;
   uint16_t count;
-  undefined2 unaff_DI;
+  uint16_t unaff_DI;
   uint slotMin;
   uint *unaff_SS;
-  undefined2 in_stack_0000000a;
+  uint16_t in_stack_0000000a;
   uint8_t foundEntities;
   uint8_t menuItems;
   int aiStack_2c [19];
@@ -202,9 +202,9 @@ undefined2 __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *en
     slotMin = ovc45_usesAlignUp4(slotMin,x_00,y,(uint *)CONCAT22(unaff_DI,unaff_SS));
     if (slotMin == 0xffff) break;
     *(int *)(&foundEntities + count * 2) = entityIndex;
-    uVar5 = *(undefined2 *)(slotMin * 4);
-    aiStack_2c[count * 2] = ((undefined2 *)(slotMin * 4))[1];
-    *(undefined2 *)(&menuItems + count * 4) = uVar5;
+    uVar5 = *(uint16_t *)(slotMin * 4);
+    aiStack_2c[count * 2] = ((uint16_t *)(slotMin * 4))[1];
+    *(uint16_t *)(&menuItems + count * 4) = uVar5;
   }
   if ((int)count < 2) {
     *entityIndexPtr = entityIndex;
@@ -214,7 +214,7 @@ undefined2 __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *en
   }
   else {
     ovr_ovc22_className(*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0x1a));
-    puVar2 = (undefined2 *)((uint)*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0x1a) * 4);
+    puVar2 = (uint16_t *)((uint)*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0x1a) * 4);
     uVar5 = 0x217a;
     pcVar3 = ovr_fmVsprintf("Choose party to build for.  Now building for %s the %s.",
                             (char *)CONCAT22(puVar2[1],(char *)*puVar2));
@@ -231,7 +231,7 @@ undefined2 __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *en
     }
     else {
       *entityIndexPtr = aiStack_2c[((uint)puVar4 & 0xff) - 0xc];
-      uVar5 = (undefined2)((ulong)Entities >> 0x10);
+      uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       selectedPartyIndex = *(undefined1 *)((int)Entities + *entityIndexPtr * 0x37 + 0x1a);
       iVar1 = (uint)*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0xd) * 0x95;
       uVar5 = CONCAT11((char)((uint)iVar1 >> 8),
@@ -375,15 +375,15 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
 
 /* [R4] calls LDIV_at_ */
 
-undefined2 __cdecl16far ovc45_usesLDIV_at_(uint8_t partyIndex,...)
+uint16_t __cdecl16far ovc45_usesLDIV_at_(uint8_t partyIndex,...)
 
 {
   long *plVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   uint unaff_SI;
   long lVar3;
-  undefined2 uVar4;
-  undefined2 uVar5;
+  uint16_t uVar4;
+  uint16_t uVar5;
   long in_stack_0000fffa;
   
   uVar5 = 0;
@@ -425,13 +425,13 @@ int __cdecl16far ovc45_compute3(byte partyIndex,...)
 
 {
   int iVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   int iVar3;
   
-  uVar2 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-  iVar1 = (int)*(undefined4 *)((uint)partyIndex << 2);
+  uVar2 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+  iVar1 = (int)*(uint32_t *)((uint)partyIndex << 2);
   iVar3 = *(int *)(iVar1 + 0x56);
-  iVar1 = ovc45_usesLDIV_at_(partyIndex,iVar3,*(undefined2 *)(iVar1 + 0x58));
+  iVar1 = ovc45_usesLDIV_at_(partyIndex,iVar3,*(uint16_t *)(iVar1 + 0x58));
   return iVar3 + iVar1;
 }
 
@@ -451,23 +451,23 @@ void __cdecl16far ovc45_usesGPopulationLo(byte partyIndex,uint goldLo,int goldHi
   int iVar5;
   int iVar6;
   int iVar7;
-  undefined2 uVar8;
+  uint16_t uVar8;
   bool bVar9;
   
-  uVar8 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-  iVar5 = (int)*(undefined4 *)((uint)partyIndex << 2);
+  uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+  iVar5 = (int)*(uint32_t *)((uint)partyIndex << 2);
   iVar6 = *(int *)(iVar5 + 0x58);
   if ((iVar6 < goldHi) || ((iVar6 == goldHi && (*(uint *)(iVar5 + 0x56) < goldLo)))) {
-    uVar8 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-    iVar6 = (int)*(undefined4 *)((uint)partyIndex << 2);
+    uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+    iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
     uVar4 = *(uint *)(iVar6 + 0x56);
     uVar3 = goldLo - uVar4;
     iVar6 = (goldHi - *(int *)(iVar6 + 0x58)) - (uint)(goldLo < uVar4);
     iVar5 = 0x217a;
-    uVar8 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-    iVar7 = (int)*(undefined4 *)((uint)partyIndex << 2);
-    *(undefined2 *)(iVar7 + 0x58) = 0;
-    *(undefined2 *)(iVar7 + 0x56) = 0;
+    uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+    iVar7 = (int)*(uint32_t *)((uint)partyIndex << 2);
+    *(uint16_t *)(iVar7 + 0x58) = 0;
+    *(uint16_t *)(iVar7 + 0x56) = 0;
     uVar4 = ovc45_usesLDIV_at_(partyIndex);
     if ((iVar6 < iVar5) || ((iVar6 == iVar5 && (uVar3 < uVar4)))) {
       bVar9 = GPopulationLo < uVar3;
@@ -481,8 +481,8 @@ void __cdecl16far ovc45_usesGPopulationLo(byte partyIndex,uint goldLo,int goldHi
     }
   }
   else {
-    uVar8 = (undefined2)((ulong)*(undefined4 *)((uint)partyIndex << 2) >> 0x10);
-    iVar6 = (int)*(undefined4 *)((uint)partyIndex << 2);
+    uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+    iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
     puVar1 = (uint *)(iVar6 + 0x56);
     uVar3 = *puVar1;
     *puVar1 = *puVar1 - goldLo;
@@ -556,7 +556,7 @@ uint __cdecl16far ovc45_compute4(int x,uint16_t y,...)
 uint __cdecl16far ovc45_compute5(void)
 
 {
-  undefined4 uVar1;
+  uint32_t uVar1;
   byte bVar2;
   byte extraout_AH;
   uint uVar3;
@@ -566,12 +566,12 @@ uint __cdecl16far ovc45_compute5(void)
     uVar3 = (uint)extraout_AH << 8;
   }
   else {
-    uVar1 = *(undefined4 *)((uint)bVar2 << 2);
+    uVar1 = *(uint32_t *)((uint)bVar2 << 2);
     if (*(byte *)((int)uVar1 + 0x86) < 4) {
       uVar3 = CONCAT11((char)(((uint)bVar2 << 2) >> 8),4);
     }
     else if (((char_sheet_t *)(((uint)bVar2 << 2)))->titleIndex < 9) {
-      uVar1 = *(undefined4 *)((uint)bVar2 << 2);
+      uVar1 = *(uint32_t *)((uint)bVar2 << 2);
       uVar3 = CONCAT11((char)(((uint)bVar2 << 2) >> 8),*(char *)((int)uVar1 + 0x86) + '\x01');
     }
     else {
@@ -591,17 +591,17 @@ bool __cdecl16far ovc45_textArena2(byte bldType)
 
 {
   byte bVar1;
-  undefined4 uVar2;
+  uint32_t uVar2;
   uint uVar3;
-  undefined2 uVar4;
+  uint16_t uVar4;
   
   if (*(char *)((uint)bldType * 0x27 + 0x133) == '\x17') {
     for (uVar3 = 0xf8; uVar3 < GUnitCount; uVar3 = uVar3 + 1) {
-      uVar4 = (undefined2)((ulong)GUnits >> 0x10);
+      uVar4 = (uint16_t)((ulong)GUnits >> 0x10);
       bVar1 = ((unit_t *)GUnits)[uVar3].unitType;
       if (((*(char *)((uint)((unit_t *)GUnits + uVar3)->bldType * 0x27 + 0x133) == '\x17') &&
           (bVar1 != 0xff)) &&
-         (uVar2 = *(undefined4 *)((uint)bVar1 << 2), *(char *)((int)uVar2 + 0x3f) == '\0')) {
+         (uVar2 = *(uint32_t *)((uint)bVar1 << 2), *(char *)((int)uVar2 + 0x3f) == '\0')) {
         return true;
       }
     }
@@ -609,7 +609,7 @@ bool __cdecl16far ovc45_textArena2(byte bldType)
       bVar1 = *(byte *)(uVar3 * 0x12 + 9);
       if (((*(char *)((uint)*(byte *)(uVar3 * 0x12 + 8) * 0x27 + 0x133) == '\x17') &&
           (bVar1 != 0xff)) &&
-         (uVar2 = *(undefined4 *)((uint)bVar1 << 2), *(char *)((int)uVar2 + 0x3f) == '\0')) {
+         (uVar2 = *(uint32_t *)((uint)bVar1 << 2), *(char *)((int)uVar2 + 0x3f) == '\0')) {
         return true;
       }
     }
@@ -622,7 +622,7 @@ bool __cdecl16far ovc45_textArena2(byte bldType)
 /* 77eb:0d61 */
 uint __cdecl16far
 ovc45_buildPlacementMessage
-          (uint x,uint16_t y,int entityIndex,undefined2 reserved,char flag)
+          (uint x,uint16_t y,int entityIndex,uint16_t reserved,char flag)
 
 {
   undefined1 stk_fc0c;   /* stack slot fc0c */
@@ -877,16 +877,16 @@ ovc45_buildPlacementMessage
   undefined1 *puVar13;
   uint16_t uVar14;
   uint8_t *puVar15;
-  undefined2 uVar16;
-  undefined2 *puVar17;
-  undefined2 unaff_SI;
+  uint16_t uVar16;
+  uint16_t *puVar17;
+  uint16_t unaff_SI;
   int iVar18;
   uint16_t uVar19;
   int unaff_DI;
-  undefined2 uVar20;
+  uint16_t uVar20;
   uint16_t uVar21;
   char *unaff_SS;
-  undefined4 uVar22;
+  uint32_t uVar22;
   undefined1 uVar23;
   undefined1 uVar24;
   undefined1 uVar25;
@@ -934,13 +934,13 @@ ovc45_buildPlacementMessage
       iVar10 = (uVar9 & 0xff) * 0x27;
       uVar26 = 0x19;
       ovr_ovc15_usesStshRealloc
-                ((char *)*(undefined2 *)(iVar10 + 0x10e),(char)*(undefined2 *)(iVar10 + 0x110));
+                ((char *)*(uint16_t *)(iVar10 + 0x10e),(char)*(uint16_t *)(iVar10 + 0x110));
       ovr_stsprintf((char *)&msg);
     }
     else {
       iVar10 = (uVar9 & 0xff) * 0x27;
       ovr_ovc15_usesStshRealloc
-                ((char *)*(undefined2 *)(iVar10 + 0x10e),(char)*(undefined2 *)(iVar10 + 0x110));
+                ((char *)*(uint16_t *)(iVar10 + 0x10e),(char)*(uint16_t *)(iVar10 + 0x110));
       uVar26 = 0x19;
       ovr_stsprintf((char *)&msg);
     }
@@ -1009,14 +1009,14 @@ ovc45_buildPlacementMessage
                 else {
                   uVar26 = 0x10;
                   pcVar11 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),
-                                                (char)*(undefined2 *)
+                                                (char)*(uint16_t *)
                                                        ((uint)bStack_12 * 0x27 + 0x125));
                   uVar16 = 0x217a;
                   iVar18 = ovc45_compute9((char *)&text,
-                                          (char *)CONCAT22(*(undefined2 *)((uint)bStack_11 * 4),
+                                          (char *)CONCAT22(*(uint16_t *)((uint)bStack_11 * 4),
                                                            unaff_SS),
                                           (char *)CONCAT22(Font03.ofs,
-                                                           (char *)((undefined2 *)
+                                                           (char *)((uint16_t *)
                                                                    ((uint)bStack_11 * 4))[1]),
                                           Font03.seg,'U',0x55,3,(char)pcVar11,uVar26);
                   pcVar11 = ovr_stsprintf((char *)&reqMsg,(char *)CONCAT22(0x7665,unaff_SS),
@@ -1143,22 +1143,22 @@ L_OVC45_77eb_0d61_1379:
 code_r0x00074dd2:
     BldGfxNormal[100] = fVar2;
     *(int *)((int)&BldGfxNormal[0].seg + uVar9) = unaff_DI;
-    *(undefined2 *)((int)&((far_t far *)BldGfxNormal)->ofs + uVar9) = CONCAT11(uVar31,uVar25);
+    *(uint16_t *)((int)&((far_t far *)BldGfxNormal)->ofs + uVar9) = CONCAT11(uVar31,uVar25);
     uVar22 = func_0x0007ffe0(uVar23);
-    *(undefined2 *)((int)&BldGfxNormal[1].seg + uVar19 * 0xc) = (int)((ulong)uVar22 >> 0x10);
+    *(uint16_t *)((int)&BldGfxNormal[1].seg + uVar19 * 0xc) = (int)((ulong)uVar22 >> 0x10);
     ((far_t far *)(BldGfxNormal + 1) + uVar19 * 3)->ofs = (uint16_t)uVar22;
     uVar22 = func_0x0007ffe0(uVar23);
-    *(undefined2 *)((int)&BldGfxNormal[2].seg + uVar19 * 0xc) = (int)((ulong)uVar22 >> 0x10);
+    *(uint16_t *)((int)&BldGfxNormal[2].seg + uVar19 * 0xc) = (int)((ulong)uVar22 >> 0x10);
     ((far_t far *)(BldGfxNormal + 2) + uVar19 * 3)->ofs = (uint16_t)uVar22;
     uVar22 = func_0x0007ffe0(uVar23);
-    *(undefined2 *)((int)&BldGfxRuin[0].seg + uVar19 * 0xc) = (int)((ulong)uVar22 >> 0x10);
+    *(uint16_t *)((int)&BldGfxRuin[0].seg + uVar19 * 0xc) = (int)((ulong)uVar22 >> 0x10);
     ((far_t far *)BldGfxRuin + uVar19 * 3)->ofs = (uint16_t)uVar22;
     uVar22 = func_0x0007ffe0(uVar23);
-    *(undefined2 *)((int)&BldGfxRuin[1].seg + uVar19 * 0xc) = (int)((ulong)uVar22 >> 0x10);
+    *(uint16_t *)((int)&BldGfxRuin[1].seg + uVar19 * 0xc) = (int)((ulong)uVar22 >> 0x10);
     ((far_t far *)(BldGfxRuin + 1) + uVar19 * 3)->ofs = (uint16_t)uVar22;
     uVar22 = func_0x0007ffe0(uVar23);
     uVar14 = 0x195d;
-    *(undefined2 *)((int)&BldGfxRuin[2].seg + uVar19 * 0xc) = (int)((ulong)uVar22 >> 0x10);
+    *(uint16_t *)((int)&BldGfxRuin[2].seg + uVar19 * 0xc) = (int)((ulong)uVar22 >> 0x10);
     ((far_t far *)(BldGfxRuin + 2) + uVar19 * 3)->ofs = (uint16_t)uVar22;
     goto L_init_assets_4EA5;
   case 1:
@@ -1175,25 +1175,25 @@ code_r0x00072658:
     uVar16 = 0x195d;
     *(uint16_t *)((int)&BldInstances[0].seg + uVar19 * 0xc) = (uint16_t)puVar15;
     ((bld_inst_t *)BldInstances + uVar19)->ofs = (short)pcVar6;
-    uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_83.seg))) = 100;
-    pixels_83.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_83.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_83.seg) + 1)) = 0;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_83,65,199,129,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_83,65,199,129,
                               26,100,0x41,199,0x1a);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar20 = 0x195d;
-    *(undefined2 *)((int)&BldInstances[0].seg + (uVar19 + 1) * 0xc) = uVar16;
+    *(uint16_t *)((int)&BldInstances[0].seg + (uVar19 + 1) * 0xc) = uVar16;
     ((bld_inst_t *)BldInstances + uVar19 + 1)->ofs = (short)pcVar6;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_84.seg))) = 100;
-    pixels_84.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_84.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_84.seg) + 1)) = 0;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_84,0,199,64,26
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_84,0,199,64,26
                               ,100,0,199,0x1a);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    *(undefined2 *)((int)&BldInstances[0].seg + (uVar19 + 2) * 0xc) = uVar20;
+    *(uint16_t *)((int)&BldInstances[0].seg + (uVar19 + 2) * 0xc) = uVar20;
     ((bld_inst_t *)BldInstances + uVar19 + 2)->ofs = (short)pcVar6;
     ovr_stgFreeTmp(uStack_c);
     break;
@@ -1230,12 +1230,12 @@ code_r0x00072658:
         puVar15 = (uint8_t *)((ulong)((long)iStack_4 * 0x17) >> 0x10);
         iVar18 = (int)((long)iStack_4 * 0x17) + 6;
         uVar25 = (undefined1)iVar18;
-        uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
-        uVar16 = *(undefined2 *)((int)uStack_c + 0x302);
+        uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
+        uVar16 = *(uint16_t *)((int)uStack_c + 0x302);
         (*(uint8_t *)((uint8_t *)&(src.seg))) = uVar25;
         src.ofs = uVar16;
         (*(uint8_t *)((uint8_t *)&(src.seg) + 1)) = (char)((uint)iVar18 >> 8);
-        pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src,21,iVar10,
+        pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src,21,iVar10,
                                 (char)uVar16,uVar25,(char)iVar10);
         pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
         *(uint16_t *)((int)&timeOfDayGfx[0].seg + iStack_4 * 4) = (uint16_t)puVar15;
@@ -1248,8 +1248,8 @@ code_r0x00072658:
       if (grab == false) {
         uVar22 = func_0x0007ffe0();
         puVar15 = (uint8_t *)((ulong)uVar22 >> 0x10);
-        ((undefined2 *)&blitFrameSeg)[iStack_4 * 2] = (uint16_t)puVar15;   /* hand fix: 2-byte segment/offset half */
-        ((undefined2 *)&blitFrameOfs)[iStack_4 * 2] = (int)uVar22;
+        ((uint16_t *)&blitFrameSeg)[iStack_4 * 2] = (uint16_t)puVar15;   /* hand fix: 2-byte segment/offset half */
+        ((uint16_t *)&blitFrameOfs)[iStack_4 * 2] = (int)uVar22;
       }
       else {
         iVar10 = iStack_4 * 0x17 + 0x16;
@@ -1263,8 +1263,8 @@ code_r0x00072658:
         pfVar5 = ovr_stshRleCut((far_t far *)(&uStack_c->aptr)->ofs,src_00,72,iVar10,(char)uVar19,uVar25
                                 ,(char)iVar10);
         pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-        ((undefined2 *)&blitFrameSeg)[iStack_4 * 2] = (uint16_t)puVar15;   /* hand fix: 2-byte segment/offset half */
-        ((undefined2 *)&blitFrameOfs)[iStack_4 * 2] = (uint16_t)pcVar6;   /* hand fix: 2-byte segment/offset half */
+        ((uint16_t *)&blitFrameSeg)[iStack_4 * 2] = (uint16_t)puVar15;   /* hand fix: 2-byte segment/offset half */
+        ((uint16_t *)&blitFrameOfs)[iStack_4 * 2] = (uint16_t)pcVar6;   /* hand fix: 2-byte segment/offset half */
       }
       iStack_4 = iStack_4 + 1;
     }
@@ -1957,21 +1957,21 @@ code_r0x00072658:
                                 0xfc);
       BldGfxRuin[0x4c].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
       uVar14 = 0x195d;
-      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_75.seg))) = 0x6c;
-      pixels_75.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_75.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_75.seg) + 1)) = 0;
       BldGfxRuin[0x4c].seg = uVar19;
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_75,68,191,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_75,68,191,
                                 182,-3,0x6c,0x44,0xbf,0xfd);
       BldGfxRuin[0x4f].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
       uVar19 = 0x195d;
-      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_76.seg))) = 0xd0;
-      pixels_76.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_76.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_76.seg) + 1)) = 0;
       BldGfxRuin[0x4f].seg = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_76,68,291,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_76,68,291,
                                 182,-1,0xd0,0x44,0x23,0xff);
       BldGfxRuin[0x52].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
       uVar14 = 0x195d;
@@ -1988,13 +1988,13 @@ code_r0x00072658:
       if (2 < iStack_4) break;
       if (grab == false) {
         uVar22 = func_0x0007ffe0();
-        *(undefined2 *)((int)&BldGfxNormal[1].seg + (iStack_4 + 0x1c) * 0xc) =
+        *(uint16_t *)((int)&BldGfxNormal[1].seg + (iStack_4 + 0x1c) * 0xc) =
              (int)((ulong)uVar22 >> 0x10);
         ((far_t far *)(BldGfxNormal + 1) + (iStack_4 + 0x1c) * 3)->ofs = (uint16_t)uVar22;
       }
       else {
         iVar10 = iStack_4 * 100 + 99;
-        uVar16 = (undefined2)((ulong)((long)iStack_4 * 100) >> 0x10);
+        uVar16 = (uint16_t)((ulong)((long)iStack_4 * 100) >> 0x10);
         iVar18 = (int)((long)iStack_4 * 100) + 0x14;
         uVar25 = (undefined1)iVar18;
         (*(uint8_t *)((uint8_t *)&(pixels_77.seg))) = uVar25;
@@ -2003,12 +2003,12 @@ code_r0x00072658:
         pfVar5 = ovr_stshRleType2((far_t far *)(&uStack_c->aptr)->ofs,pixels_77,33,iVar10,116,8,uVar25,
                                   0x21,(char)iVar10,8);
         pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-        *(undefined2 *)((int)&BldGfxNormal[1].seg + (iStack_4 + 0x1c) * 0xc) = uVar16;
+        *(uint16_t *)((int)&BldGfxNormal[1].seg + (iStack_4 + 0x1c) * 0xc) = uVar16;
         ((far_t far *)(BldGfxNormal + 1) + (iStack_4 + 0x1c) * 3)->ofs = (uint16_t)pcVar6;
       }
       uVar19 = ((far_t far *)(BldGfxNormal + 1) + (iStack_4 + 0x1c) * 3)->ofs;
-      *(undefined2 *)((int)&BldGfxNormal[0].seg + (iStack_4 + 0x1c) * 0xc) =
-           *(undefined2 *)((int)&BldGfxNormal[1].seg + (iStack_4 + 0x1c) * 0xc);
+      *(uint16_t *)((int)&BldGfxNormal[0].seg + (iStack_4 + 0x1c) * 0xc) =
+           *(uint16_t *)((int)&BldGfxNormal[1].seg + (iStack_4 + 0x1c) * 0xc);
       ((far_t far *)BldGfxNormal + (iStack_4 + 0x1c) * 3)->ofs = uVar19;
       uVar14 = *(uint16_t *)((int)&BldGfxNormal[1].seg + (iStack_4 + 0x1c) * 0xc);
       uVar19 = ((far_t far *)(BldGfxNormal + 1) + (iStack_4 + 0x1c) * 3)->ofs;
@@ -2026,13 +2026,13 @@ code_r0x00072658:
       if (2 < iStack_4) break;
       if (grab == false) {
         uVar22 = func_0x0007ffe0();
-        *(undefined2 *)((int)&BldGfxRuin[1].seg + (iStack_4 + 0x1c) * 0xc) =
+        *(uint16_t *)((int)&BldGfxRuin[1].seg + (iStack_4 + 0x1c) * 0xc) =
              (int)((ulong)uVar22 >> 0x10);
         ((far_t far *)(BldGfxRuin + 1) + (iStack_4 + 0x1c) * 3)->ofs = (uint16_t)uVar22;
       }
       else {
         iVar10 = iStack_4 * 100 + 99;
-        uVar16 = (undefined2)((ulong)((long)iStack_4 * 100) >> 0x10);
+        uVar16 = (uint16_t)((ulong)((long)iStack_4 * 100) >> 0x10);
         iVar18 = (int)((long)iStack_4 * 100) + 0x14;
         uVar25 = (undefined1)iVar18;
         (*(uint8_t *)((uint8_t *)&(pixels_78.seg))) = uVar25;
@@ -2041,12 +2041,12 @@ code_r0x00072658:
         pfVar5 = ovr_stshRleType2((far_t far *)(&uStack_c->aptr)->ofs,pixels_78,33,iVar10,116,8,uVar25,
                                   0x21,(char)iVar10,8);
         pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-        *(undefined2 *)((int)&BldGfxRuin[1].seg + (iStack_4 + 0x1c) * 0xc) = uVar16;
+        *(uint16_t *)((int)&BldGfxRuin[1].seg + (iStack_4 + 0x1c) * 0xc) = uVar16;
         ((far_t far *)(BldGfxRuin + 1) + (iStack_4 + 0x1c) * 3)->ofs = (uint16_t)pcVar6;
       }
       uVar19 = ((far_t far *)(BldGfxRuin + 1) + (iStack_4 + 0x1c) * 3)->ofs;
-      *(undefined2 *)((int)&BldGfxRuin[0].seg + (iStack_4 + 0x1c) * 0xc) =
-           *(undefined2 *)((int)&BldGfxRuin[1].seg + (iStack_4 + 0x1c) * 0xc);
+      *(uint16_t *)((int)&BldGfxRuin[0].seg + (iStack_4 + 0x1c) * 0xc) =
+           *(uint16_t *)((int)&BldGfxRuin[1].seg + (iStack_4 + 0x1c) * 0xc);
       ((far_t far *)BldGfxRuin + (iStack_4 + 0x1c) * 3)->ofs = uVar19;
       uVar14 = *(uint16_t *)((int)&BldGfxRuin[1].seg + (iStack_4 + 0x1c) * 0xc);
       uVar19 = ((far_t far *)(BldGfxRuin + 1) + (iStack_4 + 0x1c) * 3)->ofs;
@@ -2068,21 +2068,21 @@ code_r0x00072658:
                                 0x1a);
       BldGfxNormal[0x5e].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
       uVar21 = 0x195d;
-      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_80.seg))) = 100;
-      pixels_80.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_80.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_80.seg) + 1)) = 0;
       BldGfxNormal[0x5e].seg = uVar14;
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_80,65,199,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_80,65,199,
                                 129,26,100,0x41,199,0x1a);
       BldGfxNormal[0x61].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
       uVar14 = 0x195d;
-      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_81.seg))) = 100;
-      pixels_81.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_81.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_81.seg) + 1)) = 0;
       BldGfxNormal[0x61].seg = uVar21;
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_81,0,199,64,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_81,0,199,64,
                                 26,100,0,199,0x1a);
       BldGfxNormal[100].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
       puVar15 = (uint8_t *)&AgntAnms[0x88].missileDy;
@@ -2272,47 +2272,47 @@ code_r0x00072658:
                               0x1a);
     BldGfxNormal[0x8b].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00104.seg))) = 100;
-    pixels_x00104.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00104.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00104.seg) + 1)) = 0;
     BldGfxNormal[0x8b].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00104,130,199
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00104,130,199
                               ,194,26,100,0x82,199,0x1a);
     BldGfxNormal[0x8e].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00105.seg))) = 200;
-    pixels_x00105.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00105.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00105.seg) + 1)) = 0;
     BldGfxNormal[0x8e].seg = uVar19;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00105,130,299
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00105,130,299
                               ,194,26,200,0x82,0x2b,0x1a);
     BldGfxNormal[0x91].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     pixels_x00106.seg = 0;
     pixels_x00106.ofs = *(uint *)((int)uStack_c + 0x302);
     BldGfxNormal[0x91].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00106,65,99,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00106,65,99,
                               129,26,0,0x41,99,0x1a);
     BldGfxNormal[0x94].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00107.seg))) = 100;
-    pixels_x00107.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00107.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00107.seg) + 1)) = 0;
     BldGfxNormal[0x94].seg = uVar19;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00107,65,199,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00107,65,199,
                               129,26,100,0x41,199,0x1a);
     BldGfxNormal[0x97].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar21 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00108.seg))) = 200;
-    pixels_x00108.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00108.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00108.seg) + 1)) = 0;
     BldGfxNormal[0x97].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00108,65,299,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00108,65,299,
                               129,26,200,0x41,0x2b,0x1a);
     BldGfxNormal[0x9a].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
@@ -2371,21 +2371,21 @@ code_r0x00072658:
                               0x86,0xfc);
     BldGfxRuin[0xaf].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00113.seg))) = 0x3a;
-    pixels_x00113.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00113.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00113.seg) + 1)) = 0;
     BldGfxRuin[0xaf].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00113,84,134,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00113,84,134,
                               142,-4,0x3a,0x54,0x86,0xfc);
     BldGfxRuin[0xb2].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00114.seg))) = 0x3a;
-    pixels_x00114.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00114.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00114.seg) + 1)) = 0;
     BldGfxRuin[0xb2].seg = uVar19;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00114,25,134,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00114,25,134,
                               83,-4,0x3a,0x19,0x86,0xfc);
     BldGfxRuin[0xb5].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
@@ -2402,18 +2402,18 @@ code_r0x00072658:
     if (3 < iVar10) break;
     if (grab == false) {
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xb7].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xb7].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xb7) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xb8].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xb8].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xb8) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xb9].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xb9].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xb9) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
     }
     else {
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
       (*(uint8_t *)((uint8_t *)&(pixels_x00115.seg))) = uVar25;
@@ -2422,33 +2422,33 @@ code_r0x00072658:
       pfVar5 = ovr_stshRleType2((far_t far *)(&uStack_c->aptr)->ofs,pixels_x00115,0,iVar18,54,0,uVar25,0
                                 ,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xb7].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xb7].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xb7) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
-      uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_x00116.seg))) = uVar25;
-      pixels_x00116.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_x00116.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00116.seg) + 1)) = (char)((uint)iVar7 >> 8);
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00116,62,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00116,62,
                                 iVar18,116,0,uVar25,0x3e,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xb8].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xb8].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xb8) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
-      uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_x00117.seg))) = uVar25;
-      pixels_x00117.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_x00117.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00117.seg) + 1)) = (char)((uint)iVar7 >> 8);
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00117,62,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00117,62,
                                 iVar18,116,0,uVar25,0x3e,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xb9].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xb9].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xb9) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
     }
     uVar19 = 0x195d;
@@ -2464,18 +2464,18 @@ code_r0x00072658:
     if (3 < iVar10) break;
     if (grab == false) {
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xba].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xba].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xba) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xbb].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xbb].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xbb) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xbc].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xbc].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xbc) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
     }
     else {
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
       (*(uint8_t *)((uint8_t *)&(pixels_x00118.seg))) = uVar25;
@@ -2484,33 +2484,33 @@ code_r0x00072658:
       pfVar5 = ovr_stshRleType2((far_t far *)(&uStack_c->aptr)->ofs,pixels_x00118,0,iVar18,54,0,uVar25,0
                                 ,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xba].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xba].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xba) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
-      uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_x00119.seg))) = uVar25;
-      pixels_x00119.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_x00119.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00119.seg) + 1)) = (char)((uint)iVar7 >> 8);
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00119,62,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00119,62,
                                 iVar18,116,0,uVar25,0x3e,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xbb].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xbb].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xbb) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
-      uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_x00120.seg))) = uVar25;
-      pixels_x00120.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_x00120.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00120.seg) + 1)) = (char)((uint)iVar7 >> 8);
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00120,62,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00120,62,
                                 iVar18,116,0,uVar25,0x3e,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xbc].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xbc].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xbc) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
     }
     uVar19 = 0x195d;
@@ -2526,18 +2526,18 @@ code_r0x00072658:
     if (3 < iVar10) break;
     if (grab == false) {
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xbd].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xbd].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xbd) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xbe].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xbe].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xbe) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xbf].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xbf].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xbf) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
     }
     else {
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
       (*(uint8_t *)((uint8_t *)&(pixels_x00121.seg))) = uVar25;
@@ -2546,33 +2546,33 @@ code_r0x00072658:
       pfVar5 = ovr_stshRleType2((far_t far *)(&uStack_c->aptr)->ofs,pixels_x00121,0,iVar18,54,0,uVar25,0
                                 ,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xbd].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xbd].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xbd) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
-      uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_x00122.seg))) = uVar25;
-      pixels_x00122.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_x00122.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00122.seg) + 1)) = (char)((uint)iVar7 >> 8);
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00122,62,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00122,62,
                                 iVar18,116,0,uVar25,0x3e,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xbe].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xbe].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xbe) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
-      uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_x00123.seg))) = uVar25;
-      pixels_x00123.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_x00123.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00123.seg) + 1)) = (char)((uint)iVar7 >> 8);
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00123,62,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00123,62,
                                 iVar18,116,0,uVar25,0x3e,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xbf].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xbf].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xbf) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
     }
     uVar19 = 0x195d;
@@ -2588,18 +2588,18 @@ code_r0x00072658:
     if (3 < iVar10) break;
     if (grab == false) {
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xc0].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xc0].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xc0) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xc1].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xc1].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xc1) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xc2].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xc2].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xc2) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
     }
     else {
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
       (*(uint8_t *)((uint8_t *)&(pixels_x00124.seg))) = uVar25;
@@ -2608,33 +2608,33 @@ code_r0x00072658:
       pfVar5 = ovr_stshRleType2((far_t far *)(&uStack_c->aptr)->ofs,pixels_x00124,0,iVar18,54,0,uVar25,0
                                 ,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xc0].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xc0].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xc0) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
-      uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_x00125.seg))) = uVar25;
-      pixels_x00125.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_x00125.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00125.seg) + 1)) = (char)((uint)iVar7 >> 8);
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00125,62,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00125,62,
                                 iVar18,116,0,uVar25,0x3e,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xc1].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xc1].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xc1) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
-      uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_x00126.seg))) = uVar25;
-      pixels_x00126.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_x00126.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00126.seg) + 1)) = (char)((uint)iVar7 >> 8);
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00126,62,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00126,62,
                                 iVar18,116,0,uVar25,0x3e,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xc2].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xc2].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xc2) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
     }
     uVar19 = 0x195d;
@@ -2650,18 +2650,18 @@ code_r0x00072658:
     if (3 < iVar10) break;
     if (grab == false) {
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xc3].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xc3].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xc3) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xc4].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xc4].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xc4) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xc5].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xc5].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xc5) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
     }
     else {
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
       (*(uint8_t *)((uint8_t *)&(pixels_x00127.seg))) = uVar25;
@@ -2670,33 +2670,33 @@ code_r0x00072658:
       pfVar5 = ovr_stshRleType2((far_t far *)(&uStack_c->aptr)->ofs,pixels_x00127,0,iVar18,54,0,uVar25,0
                                 ,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xc3].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xc3].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xc3) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
-      uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_x00128.seg))) = uVar25;
-      pixels_x00128.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_x00128.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00128.seg) + 1)) = (char)((uint)iVar7 >> 8);
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00128,62,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00128,62,
                                 iVar18,116,0,uVar25,0x3e,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xc4].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xc4].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xc4) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
-      uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_x00129.seg))) = uVar25;
-      pixels_x00129.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_x00129.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00129.seg) + 1)) = (char)((uint)iVar7 >> 8);
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00129,62,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00129,62,
                                 iVar18,116,0,uVar25,0x3e,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xc5].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xc5].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xc5) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
     }
     uVar19 = 0x195d;
@@ -2712,18 +2712,18 @@ code_r0x00072658:
     if (3 < iVar10) break;
     if (grab == false) {
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[0xc6].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[0xc6].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 0xc6) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[199].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[199].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 199) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
       uVar22 = func_0x0007ffe0();
-      *(undefined2 *)((int)&BldGfxNormal[200].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
+      *(uint16_t *)((int)&BldGfxNormal[200].seg + iVar10 * 0x48) = (int)((ulong)uVar22 >> 0x10);
       ((far_t far *)(BldGfxNormal + 200) + iVar10 * 0x12)->ofs = (uint16_t)uVar22;
     }
     else {
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
       (*(uint8_t *)((uint8_t *)&(pixels_x00130.seg))) = uVar25;
@@ -2732,33 +2732,33 @@ code_r0x00072658:
       pfVar5 = ovr_stshRleType2((far_t far *)(&uStack_c->aptr)->ofs,pixels_x00130,0,iVar18,54,0,uVar25,0
                                 ,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[0xc6].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[0xc6].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xc6) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
-      uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_x00131.seg))) = uVar25;
-      pixels_x00131.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_x00131.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00131.seg) + 1)) = (char)((uint)iVar7 >> 8);
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00131,62,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00131,62,
                                 iVar18,116,0,uVar25,0x3e,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[199].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[199].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 199) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
       iVar18 = iVar10 * 0x30 + 0x32;
-      uVar16 = (undefined2)((ulong)((long)iVar10 * 0x30) >> 0x10);
+      uVar16 = (uint16_t)((ulong)((long)iVar10 * 0x30) >> 0x10);
       iVar7 = (int)((long)iVar10 * 0x30) + 3;
       uVar25 = (undefined1)iVar7;
-      uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_x00132.seg))) = uVar25;
-      pixels_x00132.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_x00132.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00132.seg) + 1)) = (char)((uint)iVar7 >> 8);
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00132,62,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00132,62,
                                 iVar18,116,0,uVar25,0x3e,(char)iVar18,0);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-      *(undefined2 *)((int)&BldGfxNormal[200].seg + iVar10 * 0x48) = uVar16;
+      *(uint16_t *)((int)&BldGfxNormal[200].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 200) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
     }
     uVar19 = 0x195d;
@@ -2779,31 +2779,31 @@ code_r0x00072658:
       if (grab == false) {
         uVar22 = func_0x0007ffe0();
         iVar18 = iVar10 * 3 + iStack_4;
-        *(undefined2 *)((int)&BldGfxNormal[0x135].seg + iVar18 * 0xc) = (int)((ulong)uVar22 >> 0x10)
+        *(uint16_t *)((int)&BldGfxNormal[0x135].seg + iVar18 * 0xc) = (int)((ulong)uVar22 >> 0x10)
         ;
         ((far_t far *)(BldGfxNormal + 0x135) + iVar18 * 3)->ofs = (uint16_t)uVar22;
       }
       else {
         iVar18 = iStack_4 * 100 + 99;
         lVar1 = (long)iStack_4 * 100;
-        uVar16 = (undefined2)((ulong)lVar1 >> 0x10);
-        uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+        uVar16 = (uint16_t)((ulong)lVar1 >> 0x10);
+        uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
         (*(uint8_t *)((uint8_t *)&(pixels_x00133.seg))) = (char)lVar1;
-        pixels_x00133.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+        pixels_x00133.ofs = *(uint16_t *)((int)uStack_c + 0x302);
         (*(uint8_t *)((uint8_t *)&(pixels_x00133.seg) + 1)) = (char)((ulong)lVar1 >> 8);
-        pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00133,
+        pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00133,
                                   iVar10 * 0x41,iVar18,iVar10 * 0x41 + 0x40,30,(char)lVar1,
                                   (char)(iVar10 * 0x41),(char)iVar18,0x1e);
         pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
         iVar18 = iVar10 * 3 + iStack_4;
-        *(undefined2 *)((int)&BldGfxNormal[0x135].seg + iVar18 * 0xc) = uVar16;
+        *(uint16_t *)((int)&BldGfxNormal[0x135].seg + iVar18 * 0xc) = uVar16;
         ((far_t far *)(BldGfxNormal + 0x135) + iVar18 * 3)->ofs = (uint16_t)pcVar6;
       }
       iVar18 = iVar10 * 3 + iStack_4;
       uVar19 = ((far_t far *)(BldGfxNormal + 0x135) + iVar18 * 3)->ofs;
       iVar7 = iVar10 * 3 + iStack_4;
-      *(undefined2 *)((int)&BldGfxNormal[0x136].seg + iVar7 * 0xc) =
-           *(undefined2 *)((int)&BldGfxNormal[0x135].seg + iVar18 * 0xc);
+      *(uint16_t *)((int)&BldGfxNormal[0x136].seg + iVar7 * 0xc) =
+           *(uint16_t *)((int)&BldGfxNormal[0x135].seg + iVar18 * 0xc);
       ((far_t far *)(BldGfxNormal + 0x136) + iVar7 * 3)->ofs = uVar19;
       iVar18 = iVar10 * 3 + iStack_4;
       uVar19 = *(uint16_t *)((int)&BldGfxNormal[0x135].seg + iVar18 * 0xc);
@@ -2835,11 +2835,11 @@ code_r0x00072658:
     BldGfxNormal[0x154] = far_from_u32((uint32_t)(func_0x0007ffe0()));
   }
   else {
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00135.seg))) = 0xa7;
-    pixels_x00135.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00135.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00135.seg) + 1)) = 0;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00135,45,206,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00135,45,206,
                               65,-4,0xa7,0x2d,0xce,0xfc);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
     BldGfxNormal[0x154].seg = uVar19;
@@ -2851,11 +2851,11 @@ code_r0x00072658:
     BldGfxNormal[0x157] = far_from_u32((uint32_t)(func_0x0007ffe0()));
   }
   else {
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00136.seg))) = 0xa7;
-    pixels_x00136.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00136.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00136.seg) + 1)) = 0;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00136,78,206,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00136,78,206,
                               98,-4,0xa7,0x4e,0xce,0xfc);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
     BldGfxNormal[0x157].seg = uVar19;
@@ -2867,81 +2867,81 @@ code_r0x00072658:
     for (iStack_4 = 0; iStack_4 < 6; iStack_4 = iStack_4 + 1) {
       uVar22 = func_0x0007ffe0();
       uVar19 = AnimSeqPtr[1].seg;
-      puVar17 = (undefined2 *)(AnimSeqPtr[1].ofs + iStack_4 * 4);
+      puVar17 = (uint16_t *)(AnimSeqPtr[1].ofs + iStack_4 * 4);
       puVar17[1] = (int)((ulong)uVar22 >> 0x10);
       *puVar17 = (int)uVar22;
       uVar22 = func_0x0007ffe0();
       uVar19 = AnimSeqPtr[2].seg;
-      puVar17 = (undefined2 *)(AnimSeqPtr[2].ofs + iStack_4 * 4);
+      puVar17 = (uint16_t *)(AnimSeqPtr[2].ofs + iStack_4 * 4);
       puVar17[1] = (int)((ulong)uVar22 >> 0x10);
       *puVar17 = (int)uVar22;
     }
     uVar22 = func_0x0007ffe0();
     uVar14 = AnimSeqPtr[1].seg;
     uVar19 = AnimSeqPtr[1].ofs;
-    *(undefined2 *)(uVar19 + 0x1a) = (int)((ulong)uVar22 >> 0x10);
-    *(undefined2 *)(uVar19 + 0x18) = (int)uVar22;
+    *(uint16_t *)(uVar19 + 0x1a) = (int)((ulong)uVar22 >> 0x10);
+    *(uint16_t *)(uVar19 + 0x18) = (int)uVar22;
     uVar22 = func_0x0007ffe0();
     uVar19 = (uint16_t)((ulong)uVar22 >> 0x10);
     uVar21 = AnimSeqPtr[2].seg;
     uVar14 = AnimSeqPtr[2].ofs;
     *(uint16_t *)(uVar14 + 0x1a) = uVar19;
-    *(undefined2 *)(uVar14 + 0x18) = (int)uVar22;
+    *(uint16_t *)(uVar14 + 0x18) = (int)uVar22;
   }
   else {
     iStack_4 = 0;
     while( true ) {
       iVar10 = (int)uStack_c;
-      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
       if (5 < iStack_4) break;
-      uVar20 = (undefined2)((ulong)((long)iStack_4 * 0x21) >> 0x10);
+      uVar20 = (uint16_t)((ulong)((long)iStack_4 * 0x21) >> 0x10);
       iVar18 = (int)((long)iStack_4 * 0x21) + 0x14;
       (*(uint8_t *)((uint8_t *)&(pixels_x00137.seg))) = 0xd;
-      pixels_x00137.ofs = *(undefined2 *)(iVar10 + 0x302);
+      pixels_x00137.ofs = *(uint16_t *)(iVar10 + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00137.seg) + 1)) = 0;
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)(iVar10 + 0x300),pixels_x00137,iVar18,16,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)(iVar10 + 0x300),pixels_x00137,iVar18,16,
                                 iStack_4 * 0x21 + 0x20,-22,0xd,(char)iVar18,0x10,0xea);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
       uVar19 = AnimSeqPtr[1].seg;
-      puVar17 = (undefined2 *)(AnimSeqPtr[1].ofs + iStack_4 * 4);
+      puVar17 = (uint16_t *)(AnimSeqPtr[1].ofs + iStack_4 * 4);
       puVar17[1] = uVar20;
       *puVar17 = (uint16_t)pcVar6;   /* hand fix: 2-byte slot */
       uVar19 = (uint16_t)((ulong)((long)iStack_4 * 0x21) >> 0x10);
       iVar10 = (int)((long)iStack_4 * 0x21) + 0x14;
-      uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+      uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_x00138.seg))) = 0x5f;
-      pixels_x00138.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+      pixels_x00138.ofs = *(uint16_t *)((int)uStack_c + 0x302);
       (*(uint8_t *)((uint8_t *)&(pixels_x00138.seg) + 1)) = 0;
-      pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00138,
+      pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00138,
                                 iVar10,98,iStack_4 * 0x21 + 0x20,-22,0x5f,(char)iVar10,0x62,0xea);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
       uVar14 = AnimSeqPtr[2].seg;
-      puVar17 = (undefined2 *)(AnimSeqPtr[2].ofs + iStack_4 * 4);
+      puVar17 = (uint16_t *)(AnimSeqPtr[2].ofs + iStack_4 * 4);
       puVar17[1] = uVar19;
       *puVar17 = (uint16_t)pcVar6;   /* hand fix: 2-byte slot */
       iStack_4 = iStack_4 + 1;
     }
     (*(uint8_t *)((uint8_t *)&(pixels_x00139.seg))) = 0x2b;
-    pixels_x00139.ofs = *(undefined2 *)(iVar10 + 0x302);
+    pixels_x00139.ofs = *(uint16_t *)(iVar10 + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00139.seg) + 1)) = 0;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)(iVar10 + 0x300),pixels_x00139,20,46,32,-22,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)(iVar10 + 0x300),pixels_x00139,20,46,32,-22,
                               0x2b,0x14,0x2e,0xea);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar21 = AnimSeqPtr[1].seg;
     uVar14 = AnimSeqPtr[1].ofs;
     *(uint16_t *)(uVar14 + 0x1a) = uVar19;
-    *(undefined2 *)(uVar14 + 0x18) = (uint16_t)pcVar6;   /* hand fix */
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    *(uint16_t *)(uVar14 + 0x18) = (uint16_t)pcVar6;   /* hand fix */
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00140.seg))) = 0x7d;
-    pixels_x00140.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00140.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00140.seg) + 1)) = 0;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00140,20,128,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00140,20,128,
                               32,-22,0x7d,0x14,0x80,0xea);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar21 = AnimSeqPtr[2].seg;
     uVar14 = AnimSeqPtr[2].ofs;
     *(uint16_t *)(uVar14 + 0x1a) = uVar19;
-    *(undefined2 *)(uVar14 + 0x18) = (uint16_t)pcVar6;   /* hand fix */
+    *(uint16_t *)(uVar14 + 0x18) = (uint16_t)pcVar6;   /* hand fix */
     ovr_stgFreeTmp(uStack_c);
   }
   builtin_memcpy(&ram0x0000d528 + 0x153,"\x02\x02\x02\x03\x03\x03",6);
@@ -2991,21 +2991,21 @@ code_r0x00072658:
                               0xfe);
     BldGfxRuin[0x15a].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00145.seg))) = 0x6c;
-    pixels_x00145.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00145.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00145.seg) + 1)) = 0;
     BldGfxRuin[0x15a].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00145,86,191,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00145,86,191,
                               180,-2,0x6c,0x56,0xbf,0xfe);
     BldGfxRuin[0x15d].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00146.seg))) = 0xd0;
-    pixels_x00146.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00146.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00146.seg) + 1)) = 0;
     BldGfxRuin[0x15d].seg = uVar19;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00146,86,298,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00146,86,298,
                               180,0,0xd0,0x56,0x2a,0);
     BldGfxRuin[0x160].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
@@ -3059,21 +3059,21 @@ code_r0x00072658:
                               0xfd);
     BldGfxRuin[0x163].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00151.seg))) = 0x6e;
-    pixels_x00151.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00151.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00151.seg) + 1)) = 0;
     BldGfxRuin[0x163].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00151,74,195,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00151,74,195,
                               180,-3,0x6e,0x4a,0xc3,0xfd);
     BldGfxRuin[0x166].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00152.seg))) = 0xcc;
-    pixels_x00152.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00152.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00152.seg) + 1)) = 0;
     BldGfxRuin[0x166].seg = uVar19;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00152,74,299,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00152,74,299,
                               180,3,0xcc,0x4a,0x2b,3);
     BldGfxRuin[0x169].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
@@ -3130,21 +3130,21 @@ code_r0x00072658:
     ;
     BldGfxRuin[0x186].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00157.seg))) = 0x6c;
-    pixels_x00157.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00157.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00157.seg) + 1)) = 0;
     BldGfxRuin[0x186].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00157,70,191,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00157,70,191,
                               180,0,0x6c,0x46,0xbf,0);
     BldGfxRuin[0x187].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00158.seg))) = 0xd7;
-    pixels_x00158.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00158.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00158.seg) + 1)) = 0;
     BldGfxRuin[0x187].seg = uVar19;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00158,70,298,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00158,70,298,
                               180,0,0xd7,0x46,0x2a,0);
     BldGfxRuin[0x188].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar21 = 0x195d;
@@ -3201,21 +3201,21 @@ code_r0x00074dd0:
   pfVar5 = ovr_stshRleType2((far_t far *)(&psVar4->aptr)->ofs,pixels_x00162,70,86,180,0,2,0x46,0x56,0);
   BldGfxRuin[0x189].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
   uVar14 = 0x195d;
-  uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+  uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
   (*(uint8_t *)((uint8_t *)&(pixels_x00163.seg))) = 0x6c;
-  pixels_x00163.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+  pixels_x00163.ofs = *(uint16_t *)((int)uStack_c + 0x302);
   (*(uint8_t *)((uint8_t *)&(pixels_x00163.seg) + 1)) = 0;
   BldGfxRuin[0x189].seg = uVar19;
-  pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00163,70,191,
+  pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00163,70,191,
                             180,0,0x6c,0x46,0xbf,0);
   BldGfxRuin[0x18a].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
   uVar19 = 0x195d;
-  uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+  uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
   (*(uint8_t *)((uint8_t *)&(pixels_x00164.seg))) = 0xd7;
-  pixels_x00164.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+  pixels_x00164.ofs = *(uint16_t *)((int)uStack_c + 0x302);
   (*(uint8_t *)((uint8_t *)&(pixels_x00164.seg) + 1)) = 0;
   BldGfxRuin[0x18a].seg = uVar14;
-  pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00164,70,298,
+  pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00164,70,298,
                             180,0,0xd7,0x46,0x2a,0);
   BldGfxRuin[0x18b].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
   uVar14 = 0x195d;
@@ -3250,7 +3250,7 @@ L_init_assets_4EA5:
     for (iStack_4 = 0; iStack_4 < 5; iStack_4 = iStack_4 + 1) {
       uVar22 = func_0x0007ffe0();
       uVar19 = AnimSeqPtr[0].seg;
-      puVar17 = (undefined2 *)(AnimSeqPtr[0].ofs + iStack_4 * 4);
+      puVar17 = (uint16_t *)(AnimSeqPtr[0].ofs + iStack_4 * 4);
       puVar17[1] = (int)((ulong)uVar22 >> 0x10);
       *puVar17 = (int)uVar22;
     }
@@ -3417,7 +3417,7 @@ L_init_assets_4EA5:
                                 uVar25,0x27,(char)iVar10,0xbc);
       pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
       uVar14 = AnimSeqPtr[0].seg;
-      puVar17 = (undefined2 *)(AnimSeqPtr[0].ofs + iStack_4 * 4);
+      puVar17 = (uint16_t *)(AnimSeqPtr[0].ofs + iStack_4 * 4);
       puVar17[1] = uVar19;
       *puVar17 = (uint16_t)pcVar6;   /* hand fix: 2-byte slot */
     }
@@ -3559,21 +3559,21 @@ L_init_assets_4EA5:
                               0xfc);
     BldGfxRuin[0x1ae].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00190.seg))) = 0x6f;
-    pixels_x00190.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00190.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00190.seg) + 1)) = 0;
     BldGfxRuin[0x1ae].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00190,50,212,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00190,50,212,
                               154,-4,0x6f,0x32,0xd4,0xfc);
     BldGfxRuin[0x1b1].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00191.seg))) = 0xd5;
-    pixels_x00191.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00191.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00191.seg) + 1)) = 0;
     BldGfxRuin[0x1b1].seg = uVar19;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00191,50,313,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00191,50,313,
                               154,-4,0xd5,0x32,0x39,0xfc);
     BldGfxRuin[0x1b4].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
@@ -3594,27 +3594,27 @@ L_init_assets_4EA5:
       if ((iStack_4 != 0) || (iVar18 != 0)) {
         if (grab == false) {
           uVar22 = func_0x0007ffe0();
-          *(undefined2 *)((int)&BldGfxNormal[0].seg + iVar10 * 0xc) = (int)((ulong)uVar22 >> 0x10);
+          *(uint16_t *)((int)&BldGfxNormal[0].seg + iVar10 * 0xc) = (int)((ulong)uVar22 >> 0x10);
           ((far_t far *)BldGfxNormal + iVar10 * 3)->ofs = (uint16_t)uVar22;
         }
         else {
           iVar7 = iStack_4 * 0x87 + 0x86;
           lVar1 = (long)iStack_4 * 0x87;
-          uVar16 = (undefined2)((ulong)lVar1 >> 0x10);
-          uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
+          uVar16 = (uint16_t)((ulong)lVar1 >> 0x10);
+          uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
           (*(uint8_t *)((uint8_t *)&(pixels_x00192.seg))) = (char)lVar1;
-          pixels_x00192.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+          pixels_x00192.ofs = *(uint16_t *)((int)uStack_c + 0x302);
           (*(uint8_t *)((uint8_t *)&(pixels_x00192.seg) + 1)) = (char)((ulong)lVar1 >> 8);
-          pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00192,
+          pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00192,
                                     iVar18 * 0x41,iVar7,iVar18 * 0x41 + 0x40,30,(char)lVar1,
                                     (char)(iVar18 * 0x41),(char)iVar7,0x1e);
           pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
-          *(undefined2 *)((int)&BldGfxNormal[0].seg + iVar10 * 0xc) = uVar16;
+          *(uint16_t *)((int)&BldGfxNormal[0].seg + iVar10 * 0xc) = uVar16;
           ((far_t far *)BldGfxNormal + iVar10 * 3)->ofs = (uint16_t)pcVar6;
         }
         uVar19 = ((far_t far *)BldGfxNormal + iVar10 * 3)->ofs;
-        *(undefined2 *)((int)&BldGfxNormal[1].seg + iVar10 * 0xc) =
-             *(undefined2 *)((int)&BldGfxNormal[0].seg + iVar10 * 0xc);
+        *(uint16_t *)((int)&BldGfxNormal[1].seg + iVar10 * 0xc) =
+             *(uint16_t *)((int)&BldGfxNormal[0].seg + iVar10 * 0xc);
         ((far_t far *)(BldGfxNormal + 1) + iVar10 * 3)->ofs = uVar19;
         uVar19 = *(uint16_t *)((int)&BldGfxNormal[0].seg + iVar10 * 0xc);
         uVar14 = ((far_t far *)BldGfxNormal + iVar10 * 3)->ofs;
@@ -3639,23 +3639,23 @@ L_init_assets_4EA5:
     pfVar5 = ovr_stshRleCut((far_t far *)(&psVar4->aptr)->ofs,src_07,18,200,(char)uVar9,0,200);
     BldGfxNormal[0x1c5].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
-    uVar16 = *(undefined2 *)((int)uStack_c + 0x302);
+    uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
+    uVar16 = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(src_08.seg))) = 0x83;
     src_08.ofs = uVar16;
     (*(uint8_t *)((uint8_t *)&(src_08.seg) + 1)) = 0;
     BldGfxNormal[0x1c5].seg = uVar19;
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_08,74,179,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_08,74,179,
                             (char)uVar16,0x83,0xb3);
     BldGfxNormal[0x1c6].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
-    uVar16 = *(undefined2 *)((int)uStack_c + 0x302);
+    uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
+    uVar16 = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(src_09.seg))) = 0x1f;
     src_09.ofs = uVar16;
     (*(uint8_t *)((uint8_t *)&(src_09.seg) + 1)) = 0;
     BldGfxNormal[0x1c6].seg = uVar14;
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_09,49,79,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_09,49,79,
                             (char)uVar16,0x1f,0x4f);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
     BldGfxNormal[0x1c7].seg = uVar19;
@@ -3673,32 +3673,32 @@ L_init_assets_4EA5:
     BldGfxNormal[0x1d0] = far_from_u32((uint32_t)(func_0x0007ffe0()));
   }
   else {
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     uVar9 = *(uint *)((int)uStack_c + 0x302);
     src_10.seg = 0;
     src_10.ofs = uVar9;
     uVar19 = BldGfxNormal[0x1c7].ofs;
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_10,49,200,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_10,49,200,
                             (char)uVar9,0,200);
     BldGfxNormal[0x1ce].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
-    uVar16 = *(undefined2 *)((int)uStack_c + 0x302);
+    uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
+    uVar16 = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(src_11.seg))) = 0x1f;
     src_11.ofs = uVar16;
     (*(uint8_t *)((uint8_t *)&(src_11.seg) + 1)) = 0;
     BldGfxNormal[0x1ce].seg = uVar19;
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_11,74,79,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_11,74,79,
                             (char)uVar16,0x1f,0x4f);
     BldGfxNormal[0x1cf].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
-    uVar16 = *(undefined2 *)((int)uStack_c + 0x302);
+    uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
+    uVar16 = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(src_12.seg))) = 0x83;
     src_12.ofs = uVar16;
     (*(uint8_t *)((uint8_t *)&(src_12.seg) + 1)) = 0;
     BldGfxNormal[0x1cf].seg = uVar14;
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_12,49,179,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_12,49,179,
                             (char)uVar16,0x83,0xb3);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
     BldGfxNormal[0x1d0].seg = uVar19;
@@ -3716,23 +3716,23 @@ L_init_assets_4EA5:
     BldGfxNormal[0x1d9] = far_from_u32((uint32_t)(func_0x0007ffe0()));
   }
   else {
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     uVar9 = *(uint *)((int)uStack_c + 0x302);
     src_13.seg = 0;
     src_13.ofs = uVar9;
     uVar19 = BldGfxNormal[0x1d0].ofs;
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_13,1,200,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_13,1,200,
                             (char)uVar9,0,200);
     BldGfxNormal[0x1d7].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
-    uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
-    uVar16 = *(undefined2 *)((int)uStack_c + 0x302);
+    uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
+    uVar16 = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(src_14.seg))) = 0xe7;
     src_14.ofs = uVar16;
     (*(uint8_t *)((uint8_t *)&(src_14.seg) + 1)) = 0;
     uVar14 = BldGfxNormal[0x1d2].seg;
     BldGfxNormal[0x1d7].seg = uVar19;
     BldGfxNormal[0x1d8] = BldGfxNormal[0x1d2];
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_14,49,279,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_14,49,279,
                             (char)uVar16,0xe7,0x17);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5);
     BldGfxNormal[0x1d9].seg = uVar14;
@@ -3805,77 +3805,77 @@ L_init_assets_4EA5:
     pfVar5 = ovr_stshRleCut((far_t far *)(&psVar4->aptr)->ofs,src_18,51,200,(char)uVar9,0,200);
     BldGfxNormal[0x1e6].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
-    uVar16 = *(undefined2 *)((int)uStack_c + 0x302);
+    uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
+    uVar16 = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(src_19.seg))) = 0x1f;
     src_19.ofs = uVar16;
     (*(uint8_t *)((uint8_t *)&(src_19.seg) + 1)) = 0;
     BldGfxNormal[0x1e6].seg = uVar19;
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_19,74,79,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_19,74,79,
                             (char)uVar16,0x1f,0x4f);
     BldGfxNormal[0x1e7].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     uVar9 = *(uint *)((int)uStack_c + 0x302);
     src_20.seg = 0;
     src_20.ofs = uVar9;
     BldGfxNormal[0x1e7].seg = uVar14;
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_20,51,48,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_20,51,48,
                             (char)uVar9,0,0x30);
     BldGfxNormal[0x1e8].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     uVar9 = *(uint *)((int)uStack_c + 0x302);
     src_21.seg = 0;
     src_21.ofs = uVar9;
     BldGfxNormal[0x1e8].seg = uVar19;
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_21,14,200,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_21,14,200,
                             (char)uVar9,0,200);
     BldGfxNormal[0x1ec].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
-    uVar16 = *(undefined2 *)((int)uStack_c + 0x302);
+    uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
+    uVar16 = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(src_22.seg))) = 0x83;
     src_22.ofs = uVar16;
     (*(uint8_t *)((uint8_t *)&(src_22.seg) + 1)) = 0;
     BldGfxNormal[0x1ec].seg = uVar14;
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_22,74,179,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_22,74,179,
                             (char)uVar16,0x83,0xb3);
     BldGfxNormal[0x1ed].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     uVar9 = *(uint *)((int)uStack_c + 0x302);
     src_23.seg = 0;
     src_23.ofs = uVar9;
     BldGfxNormal[0x1ed].seg = uVar19;
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_23,14,48,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_23,14,48,
                             (char)uVar9,0,0x30);
     BldGfxNormal[0x1ee].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     uVar9 = *(uint *)((int)uStack_c + 0x302);
     src_24.seg = 0;
     src_24.ofs = uVar9;
     BldGfxNormal[0x1ee].seg = uVar14;
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_24,168,200,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_24,168,200,
                             (char)uVar9,0,200);
     BldGfxNormal[0x1f2].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar20 = (undefined2)((ulong)uStack_c >> 0x10);
-    uVar16 = *(undefined2 *)((int)uStack_c + 0x302);
+    uVar20 = (uint16_t)((ulong)uStack_c >> 0x10);
+    uVar16 = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(src_25.seg))) = 0xe7;
     src_25.ofs = uVar16;
     (*(uint8_t *)((uint8_t *)&(src_25.seg) + 1)) = 0;
     BldGfxNormal[0x1f2].seg = uVar19;
-    pfVar5 = ovr_stshRleCut((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),src_25,74,279,
+    pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),src_25,74,279,
                             (char)uVar16,0xe7,0x17);
     BldGfxNormal[499].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     pixels_x00193.seg = 0;
     pixels_x00193.ofs = *(uint *)((int)uStack_c + 0x302);
     BldGfxNormal[499].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00193,168,48,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00193,168,48,
                               187,0,0,0xa8,0x30,0);
     BldGfxNormal[500].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     BldGfxNormal[500].seg = uVar19;
@@ -3942,21 +3942,21 @@ L_init_assets_4EA5:
                               0);
     BldGfxRuin[0x1f9].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar19 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00198.seg))) = 0x77;
-    pixels_x00198.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00198.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00198.seg) + 1)) = 0;
     BldGfxRuin[0x1f9].seg = uVar14;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00198,28,202,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00198,28,202,
                               119,0,0x77,0x1c,0xca,0);
     BldGfxRuin[0x1fc].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     uVar14 = 0x195d;
-    uVar16 = (undefined2)((ulong)uStack_c >> 0x10);
+    uVar16 = (uint16_t)((ulong)uStack_c >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00199.seg))) = 0xe2;
-    pixels_x00199.ofs = *(undefined2 *)((int)uStack_c + 0x302);
+    pixels_x00199.ofs = *(uint16_t *)((int)uStack_c + 0x302);
     (*(uint8_t *)((uint8_t *)&(pixels_x00199.seg) + 1)) = 0;
     BldGfxRuin[0x1fc].seg = uVar19;
-    pfVar5 = ovr_stshRleType2((far_t far *)*(undefined2 *)((int)uStack_c + 0x300),pixels_x00199,28,309,
+    pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)uStack_c + 0x300),pixels_x00199,28,309,
                               119,0,0xe2,0x1c,0x35,0);
     BldGfxRuin[0x1ff].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar5);
     BldGfxRuin[0x1ff].seg = uVar14;
@@ -3998,18 +3998,18 @@ uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
 
 {
   char cVar1;
-  undefined4 uVar2;
+  uint32_t uVar2;
   uint uVar3;
   byte bVar5;
   uint16_t uVar4;
-  undefined2 uVar6;
+  uint16_t uVar6;
   
-  uVar6 = (undefined2)((ulong)Entities >> 0x10);
+  uVar6 = (uint16_t)((ulong)Entities >> 0x10);
   if (*(char *)((int)Entities + entityIndex * 0x37 + 0x1a) == -1) {
     uVar3 = entityIndex * 0x37 & 0xff00;
   }
   else {
-    uVar2 = *(undefined4 *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) << 2);
+    uVar2 = *(uint32_t *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) << 2);
     cVar1 = *(char *)((int)uVar2 + 0x2f);
     if (cVar1 == '\x04') {
       uVar4 = ovr_randBelow(5);
@@ -4060,28 +4060,28 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
   far_t hint_00;
   uint16_t x_00;
   char *pcVar2;
-  undefined2 *puVar3;
+  uint16_t *puVar3;
   int iVar4;
   uint8_t *puVar5;
   uint uVar6;
   uint16_t uVar7;
-  undefined2 uVar8;
-  undefined2 uVar9;
+  uint16_t uVar8;
+  uint16_t uVar9;
   int iVar10;
-  undefined2 unaff_DI;
+  uint16_t unaff_DI;
   char *unaff_SS;
   undefined1 uVar11;
   undefined1 uVar12;
   uint8_t menuItems;
-  undefined2 auStack_28e [19];
+  uint16_t auStack_28e [19];
   uint8_t msg;
   uint8_t text;
   char cStack_17;
   char cStack_16;
   char cStack_15;
   uint8_t menuLabel;
-  undefined2 uStack_12;
-  undefined2 uStack_10;
+  uint16_t uStack_12;
+  uint16_t uStack_10;
   char cStack_e;
   char acStack_d [11];
   
@@ -4094,8 +4094,8 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
     auStack_28e[1] = 0x770f;
   }
   else {
-    auStack_28e[2] = *(undefined2 *)((uint)bldType * 0x27 + 0x118);
-    auStack_28e[1] = *(undefined2 *)((uint)bldType * 0x27 + 0x116);
+    auStack_28e[2] = *(uint16_t *)((uint)bldType * 0x27 + 0x118);
+    auStack_28e[1] = *(uint16_t *)((uint)bldType * 0x27 + 0x116);
   }
   acStack_d[2] = 2;
   iVar10 = 2;
@@ -4112,7 +4112,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
   do {
     uVar11 = 0x10;
     pcVar2 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a));
-    puVar3 = (undefined2 *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
+    puVar3 = (uint16_t *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
     uVar8 = 0x217a;
     iVar4 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar3,unaff_SS),
                            (char *)CONCAT13((char)(Font03.ofs >> 8),
@@ -4120,8 +4120,8 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
                            (char)Font03.ofs,0x55,3,pcVar2,uVar11);
     uVar9 = 0x195d;
     puVar5 = ovr_ovc15_usesStshRealloc
-                       ((char *)*(undefined2 *)((uint)bldType * 0x27 + 0x10e),
-                        *(undefined2 *)((uint)bldType * 0x27 + 0x110),(char)iVar4,uVar8);
+                       ((char *)*(uint16_t *)((uint)bldType * 0x27 + 0x10e),
+                        *(uint16_t *)((uint)bldType * 0x27 + 0x110),(char)iVar4,uVar8);
     pcVar2 = ovr_fmVsprintf("%s: Search this location for minerals?  Active party is %s the %s.",
                             (char *)CONCAT22(uVar9,puVar5));
     strcpy((char *)CONCAT22(unaff_SS,&msg),
@@ -4192,11 +4192,11 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
       acStack_d[0] = '$';
       uStack_10 = 0x77ba;
       uVar9 = 0x195d;
-      uVar8 = *(undefined2 *)((uint)bldType * 0x27 + 0x110);
+      uVar8 = *(uint16_t *)((uint)bldType * 0x27 + 0x110);
       pcVar2 = ovr_fmVsprintf("Remove %s permanently. Are you sure?",
                               (char *)CONCAT13((char)((uint)uVar8 >> 8),
                                                CONCAT12((char)uVar8,
-                                                        *(undefined2 *)
+                                                        *(uint16_t *)
                                                          ((uint)bldType * 0x27 + 0x10e))));
       puVar5 = &menuLabel;
       (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = uVar11;
@@ -4256,21 +4256,21 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
   far_t hint;
   uint16_t agnt;
   char *pcVar4;
-  undefined2 *puVar5;
+  uint16_t *puVar5;
   int iVar6;
   uint8_t *puVar7;
-  undefined2 uVar8;
+  uint16_t uVar8;
   uint uVar9;
   int iVar10;
   int iVar11;
   int iVar12;
-  undefined2 unaff_DI;
-  undefined2 uVar13;
+  uint16_t unaff_DI;
+  uint16_t uVar13;
   char *unaff_SS;
   undefined1 uVar14;
   undefined1 uVar15;
   uint8_t menuLabels;
-  undefined2 auStack_290 [19];
+  uint16_t auStack_290 [19];
   uint8_t msg;
   uint8_t text;
   uint uStack_1a;
@@ -4294,8 +4294,8 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
     auStack_290[1] = 0x77f6;
   }
   else {
-    auStack_290[2] = *(undefined2 *)((uint)bldType * 0x27 + 0x118);
-    auStack_290[1] = *(undefined2 *)((uint)bldType * 0x27 + 0x116);
+    auStack_290[2] = *(uint16_t *)((uint)bldType * 0x27 + 0x118);
+    auStack_290[1] = *(uint16_t *)((uint)bldType * 0x27 + 0x116);
   }
   auStack_c[1] = 2;
   iVar12 = 2;
@@ -4312,7 +4312,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
   do {
     uVar14 = 0x10;
     pcVar4 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a));
-    puVar5 = (undefined2 *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
+    puVar5 = (uint16_t *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
     uVar15 = 0x7a;
     uVar8 = puVar5[1];
     iVar6 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar5,unaff_SS),
@@ -4321,8 +4321,8 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
                            pcVar4,uVar14);
     uVar8 = 0x195d;
     puVar7 = ovr_ovc15_usesStshRealloc
-                       ((char *)*(undefined2 *)((uint)bldType * 0x27 + 0x10e),
-                        (char)*(undefined2 *)((uint)bldType * 0x27 + 0x110),uStack_1a,(char)iVar6,
+                       ((char *)*(uint16_t *)((uint)bldType * 0x27 + 0x10e),
+                        (char)*(uint16_t *)((uint)bldType * 0x27 + 0x110),uStack_1a,(char)iVar6,
                         uVar15);
     pcVar4 = ovr_fmVsprintf("%s: Claim this tree? Harvest value is %d gold. Active party is %s the %s."
                             ,(char *)CONCAT13((char)((uint)uVar8 >> 8),CONCAT12((char)uVar8,puVar7))
@@ -4388,27 +4388,27 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
                  (char)GfxRndSeed2,(char)outFlag,bVar3);
       cStack_e = '\x01';
       bStack_10 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
-      uVar8 = (undefined2)((ulong)*(undefined4 *)((uint)bStack_10 << 2) >> 0x10);
-      iVar6 = (int)*(undefined4 *)((uint)bStack_10 << 2);
+      uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+      iVar6 = (int)*(uint32_t *)((uint)bStack_10 << 2);
       puVar1 = (uint *)(iVar6 + 0x56);
       uVar9 = *puVar1;
       *puVar1 = *puVar1 + uStack_1a;
       piVar2 = (int *)(iVar6 + 0x58);
       *piVar2 = *piVar2 + (uint)CARRY2(uVar9,uStack_1a);
-      uVar8 = (undefined2)((ulong)*(undefined4 *)((uint)bStack_10 << 2) >> 0x10);
-      iVar10 = (int)*(undefined4 *)((uint)bStack_10 << 2);
+      uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+      iVar10 = (int)*(uint32_t *)((uint)bStack_10 << 2);
       iVar6 = *(int *)(iVar10 + 0x58);
       uVar9 = *(uint *)(iVar10 + 0x56);
-      uVar8 = (undefined2)((ulong)*(undefined4 *)((uint)bStack_10 << 2) >> 0x10);
-      iVar11 = (int)*(undefined4 *)((uint)bStack_10 << 2);
+      uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+      iVar11 = (int)*(uint32_t *)((uint)bStack_10 << 2);
       iVar10 = *(int *)(iVar11 + 0x8c);
       if ((iVar10 <= iVar6) && ((iVar10 < iVar6 || (*(uint *)(iVar11 + 0x8a) < uVar9)))) {
-        uVar8 = (undefined2)((ulong)*(undefined4 *)((uint)bStack_10 << 2) >> 0x10);
-        iVar6 = (int)*(undefined4 *)((uint)bStack_10 << 2);
+        uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+        iVar6 = (int)*(uint32_t *)((uint)bStack_10 << 2);
         uVar9 = *(uint *)(iVar6 + 0x8a);
-        uVar13 = (undefined2)((ulong)*(undefined4 *)((uint)bStack_10 << 2) >> 0x10);
-        iVar10 = (int)*(undefined4 *)((uint)bStack_10 << 2);
-        *(undefined2 *)(iVar10 + 0x58) = *(undefined2 *)(iVar6 + 0x8c);
+        uVar13 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
+        iVar10 = (int)*(uint32_t *)((uint)bStack_10 << 2);
+        *(uint16_t *)(iVar10 + 0x58) = *(uint16_t *)(iVar6 + 0x8c);
         *(uint *)(iVar10 + 0x56) = uVar9;
       }
       uVar14 = (undefined1)uVar9;
@@ -4442,7 +4442,7 @@ uint __cdecl16far ovc45_usesGfxRndSeed2(int *x,...)
   uint in_AX;
   undefined1 extraout_AH;
   uint uVar2;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   byte bStack_4;
   byte bStack_3;
   
@@ -4480,13 +4480,13 @@ int __cdecl16far ovc45_usesGMapFlags4(int x,int y,...)
   int in_AX;
   int iVar1;
   byte bVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   
   if ((((x < 0) || (y < 0)) || (in_AX = x + 1, 0x93 < in_AX)) || (in_AX = y + 1, 0x3b < in_AX)) {
     iVar1 = CONCAT11((char)((uint)in_AX >> 8),2);
   }
   else {
-    uVar3 = (undefined2)((ulong)GMapFlags >> 0x10);
+    uVar3 = (uint16_t)((ulong)GMapFlags >> 0x10);
     if (((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) == 3) {
       iVar1 = 2;
     }
@@ -4509,7 +4509,7 @@ int __cdecl16far ovc45_usesGMapFlags4(int x,int y,...)
 
 /* [R7] body shape: compute */
 
-undefined2 __cdecl16far ovc45_compute7(byte a,byte b,...)
+uint16_t __cdecl16far ovc45_compute7(byte a,byte b,...)
 
 {
   return CONCAT11((byte)((uint)a * (uint)b >> 0xb),(char)((uint)a * (uint)b >> 3));
@@ -4525,7 +4525,7 @@ undefined2 __cdecl16far ovc45_compute7(byte a,byte b,...)
 bool __cdecl16far ovc45_showLandInfo(int screenX,uint16_t y,...)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   bool bVar2;
   
   uVar1 = video_pointInButton(screenX,y);
@@ -4545,7 +4545,7 @@ bool __cdecl16far ovc45_showLandInfo(int screenX,uint16_t y,...)
 uint __cdecl16far ovc45_compute8(byte partyIndex,...)
 
 {
-  undefined4 uVar1;
+  uint32_t uVar1;
   uint in_AX;
   uint uVar2;
   byte bVar3;
@@ -4554,7 +4554,7 @@ uint __cdecl16far ovc45_compute8(byte partyIndex,...)
     uVar2 = in_AX & 0xff00;
   }
   else {
-    uVar1 = *(undefined4 *)((uint)partyIndex << 2);
+    uVar1 = *(uint32_t *)((uint)partyIndex << 2);
     bVar3 = (byte)(((uint)partyIndex << 2) >> 8);
     if (*(char *)((int)uVar1 + 0x3f) == '\0') {
       uVar2 = CONCAT11(bVar3,1);

@@ -3,7 +3,7 @@ void __cdecl16far setSeasonPalette(far_t palette,...)
 {
   uint uVar1;
   uint uVar2;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   uint8_t pal;
   int iStack_6;
   int iStack_4;

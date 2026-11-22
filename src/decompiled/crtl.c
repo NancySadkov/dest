@@ -19,9 +19,9 @@ void startx(void)
   int iVar6;
   byte bVar7;
   uint uVar8;
-  undefined2 uVar9;
-  undefined2 extraout_DX;
-  undefined2 extraout_DX_00;
+  uint16_t uVar9;
+  uint16_t extraout_DX;
+  uint16_t extraout_DX_00;
   int iVar10;
   undefined1 *puVar11;
   int *piVar12;
@@ -29,10 +29,10 @@ void startx(void)
   char *pcVar14;
   undefined1 *puVar15;
   uint32_t *puVar16;
-  undefined2 unaff_ES;
-  undefined2 uVar17;
+  uint16_t unaff_ES;
+  uint16_t uVar17;
   bool bVar18;
-  undefined4 uVar19;
+  uint32_t uVar19;
   
   puVar11 = (undefined1 *)((int)(int *)&errno + 1);
   DGROUP_at__at_ = 0x2410;
@@ -40,15 +40,15 @@ void startx(void)
   uVar19 = (*pcVar3)();
   uVar17 = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 40));
   iVar10 = (*(uint16_t *)((uint8_t *)&(_DATA) + 2));
-  uVar9 = (undefined2)((ulong)uVar19 >> 0x10);
+  uVar9 = (uint16_t)((ulong)uVar19 >> 0x10);
   *(uint16_t *)&DosVersion = SUB42(uVar19,0);   /* hand fix: write the 2 bytes of the struct */
-  *(undefined2 *)&_psp = unaff_ES;
-  *(undefined2 *)(byte *)&_envseg_at_ = uVar17;
+  *(uint16_t *)&_psp = unaff_ES;
+  *(uint16_t *)(byte *)&_envseg_at_ = uVar17;
   *(int *)&_heaptop.seg = iVar10;
-  *(undefined2 *)(puVar11 + -2) = 0x28;
+  *(uint16_t *)(puVar11 + -2) = 0x28;
   SaveVectors();
-  pcVar4 = (char *)*(undefined4 *)&_env;
-  uVar17 = (undefined2)((ulong)pcVar4 >> 0x10);
+  pcVar4 = (char *)*(uint32_t *)&_env;
+  uVar17 = (uint16_t)((ulong)pcVar4 >> 0x10);
   pcVar13 = (char *)pcVar4;
   uVar8 = 0x7fff;
   pcVar14 = pcVar13;
@@ -122,25 +122,25 @@ L_startx_007B:
 L_startx_0109:
   pcVar3 = (code *)swi(0x1a);
   cVar5 = (*pcVar3)();
-  *(undefined2 *)(uint32_t *)&_StartTime = extraout_DX_00;
+  *(uint16_t *)(uint32_t *)&_StartTime = extraout_DX_00;
   *(int *)((int)(uint32_t *)&_StartTime + 2) = iVar10;
   if (cVar5 != '\0') {
     bda_midnight = 1;
   }
-  *(undefined2 *)(puVar15 + -2) = 0x135;
+  *(uint16_t *)(puVar15 + -2) = 0x135;
   StartExit();
-  *(undefined2 *)(puVar15 + -2) = *(undefined2 *)&__C0environ_2;
-  *(undefined2 *)(puVar15 + -4) = *(undefined2 *)&__C0environ;
-  *(undefined2 *)(puVar15 + -6) = *(undefined2 *)&__C0argv_2;
-  *(undefined2 *)(puVar15 + -8) = *(undefined2 *)&__C0argv;
-  *(undefined2 *)(puVar15 + -10) = *(undefined2 *)&__C0argc;
-  *(undefined2 *)(puVar15 + -0xc) = 0x1000;
-  *(undefined2 *)(puVar15 + -0xe) = 0x14e;
+  *(uint16_t *)(puVar15 + -2) = *(uint16_t *)&__C0environ_2;
+  *(uint16_t *)(puVar15 + -4) = *(uint16_t *)&__C0environ;
+  *(uint16_t *)(puVar15 + -6) = *(uint16_t *)&__C0argv_2;
+  *(uint16_t *)(puVar15 + -8) = *(uint16_t *)&__C0argv;
+  *(uint16_t *)(puVar15 + -10) = *(uint16_t *)&__C0argc;
+  *(uint16_t *)(puVar15 + -0xc) = 0x1000;
+  *(uint16_t *)(puVar15 + -0xe) = 0x14e;
   iVar10 = main(*(int *)(puVar15 + -0xc),*(str_t **)(puVar15 + -10),*(str_t **)(puVar15 + -8));
   *(int *)(puVar15 + -8) = iVar10;
-  *(undefined2 *)(puVar15 + -10) = 0x1301;
+  *(uint16_t *)(puVar15 + -10) = 0x1301;
                     /* WARNING: Subroutine does not return */
-  *(undefined2 *)(puVar15 + -0xc) = 0x154;
+  *(uint16_t *)(puVar15 + -0xc) = 0x154;
   exit(*(int *)(puVar15 + -8));
 }
 
@@ -254,7 +254,7 @@ void __cdecl16near StartExit(void)
   boinit_t *pbVar5;
   boinit_t *unaff_SI;
   boinit_t *unaff_DI;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   bool bVar6;
   
   while( true ) {
@@ -360,7 +360,7 @@ uint32_t * __cdecl16far xms_init(uint32_t *__return_storage_ptr__)
   char cVar2;
   code *in_BX;
   uint16_t unaff_ES;
-  undefined4 uVar3;
+  uint32_t uVar3;
   
   pcVar1 = (code *)swi(0x2f);
   cVar2 = (*pcVar1)();
@@ -485,7 +485,7 @@ void __cdecl16far stshInit_scan(uint32_t handle)
   uVar1 = handle + 0x3ff;
   iVar2 = 10;
   do {
-    xms_handle = (undefined2)(CONCAT12((uVar1 & 0x10000) != 0,(int)uVar1) >> 1);
+    xms_handle = (uint16_t)(CONCAT12((uVar1 & 0x10000) != 0,(int)uVar1) >> 1);
     uVar1 = CONCAT22((uint)(uVar1 >> 0x11),xms_handle);
     iVar2 = iVar2 + -1;
   } while (iVar2 != 0);
@@ -504,12 +504,12 @@ uint32_t * __cdecl16far ems_init(uint32_t *__return_storage_ptr__)
   char cVar2;
   uint32_t *puVar3;
   char extraout_AH;
-  undefined2 uVar4;
+  uint16_t uVar4;
   char extraout_AH_00;
   char extraout_AH_01;
   int iVar5;
   uint extraout_DX;
-  undefined2 extraout_DX_00;
+  uint16_t extraout_DX_00;
   undefined1 in_CF;
   bool bVar6;
   
@@ -579,11 +579,11 @@ int __cdecl16far ems_init2(void)
   char cVar2;
   int iVar3;
   char extraout_AH;
-  undefined2 uVar4;
+  uint16_t uVar4;
   char extraout_AH_00;
   char extraout_AH_01;
   uint extraout_DX;
-  undefined2 extraout_DX_00;
+  uint16_t extraout_DX_00;
   undefined1 in_CF;
   bool bVar5;
   int iStack000e;
@@ -808,13 +808,13 @@ void __cdecl16far ioErrorHndlrInstall(void)
 
 /* WARNING: Unknown calling convention -- yet parameter storage is locked */
 
-undefined2 ioErrorHndlr(void)
+uint16_t ioErrorHndlr(void)
 
 {
   code *pcVar1;
   undefined1 uVar3;
-  undefined2 uVar2;
-  undefined2 in_stack_00000002;
+  uint16_t uVar2;
+  uint16_t in_stack_00000002;
   
   pcVar1 = (code *)swi(0x21);
   GIOErrorCode = (*pcVar1)(0x2410);
@@ -1057,15 +1057,15 @@ long * __cdecl16far LXMUL_at_(long *__return_storage_ptr__,long a,long b)
 void __cdecl16far F_SCOPY(far_t src,far_t dst)
 
 {
-  undefined2 *puVar1;
-  undefined2 *puVar2;
+  uint16_t *puVar1;
+  uint16_t *puVar2;
   uint in_CX;
   uint uVar3;
-  undefined2 *puVar4;
-  undefined2 *puVar5;
+  uint16_t *puVar4;
+  uint16_t *puVar5;
   
-  puVar4 = (undefined2 *)src.ofs;
-  puVar5 = (undefined2 *)dst.ofs;
+  puVar4 = (uint16_t *)src.ofs;
+  puVar5 = (uint16_t *)dst.ofs;
   for (uVar3 = in_CX >> 1; uVar3 != 0; uVar3 = uVar3 - 1) {
     puVar2 = puVar5;
     puVar5 = puVar5 + 1;
@@ -1075,9 +1075,9 @@ void __cdecl16far F_SCOPY(far_t src,far_t dst)
   }
   for (uVar3 = (uint)((in_CX & 1) != 0); uVar3 != 0; uVar3 = uVar3 - 1) {
     puVar2 = puVar5;
-    puVar5 = (undefined2 *)((int)puVar5 + 1);
+    puVar5 = (uint16_t *)((int)puVar5 + 1);
     puVar1 = puVar4;
-    puVar4 = (undefined2 *)((int)puVar4 + 1);
+    puVar4 = (uint16_t *)((int)puVar4 + 1);
     *(undefined1 *)puVar2 = *(undefined1 *)puVar1;
   }
   return;
@@ -1112,7 +1112,7 @@ int __cdecl16far getcurdir(int drive,char *direc)
 int __cdecl16far getdisk(void)
 
 {
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   uint8_t drive;
   
   _dos_getdrive((uint *)CONCAT22(unaff_SS,&drive));
@@ -1335,7 +1335,7 @@ int N_LUDIV_at_(uint dividendLo,uint dividendHi,uint divisorLo)
 /* WARNING: Removing unreachable block (ram,0x00010a49) */
 /* WARNING: Removing unreachable block (ram,0x00010a55) */
 
-undefined4 __stdcall16far LUDIV_at_(int dividendLo,uint dividendHi,uint divisorLo,uint divisorHi)
+uint32_t __stdcall16far LUDIV_at_(int dividendLo,uint dividendHi,uint divisorLo,uint divisorHi)
 
 {
   ulong uVar1;
@@ -1516,7 +1516,7 @@ long __stdcall16far LMOD_at_(long dividend,long divisor)
 /* WARNING: Removing unreachable block (ram,0x00010a15) */
 /* WARNING: Removing unreachable block (ram,0x00010a55) */
 
-undefined4 __cdecl16far N_LUMOD_at_(void)
+uint32_t __cdecl16far N_LUMOD_at_(void)
 
 {
   ulong uVar1;
@@ -1786,7 +1786,7 @@ int __cdecl16far N_PSBP_at_(void)
 
 /* 1000:0b59 */
 
-undefined2 __IOerror(int dosErr)
+uint16_t __IOerror(int dosErr)
 
 {
   if (dosErr < 0) {
@@ -1847,11 +1847,11 @@ char * __cdecl16near __LONGTOA(char alphaBase,char signFlag,uint16_t radix,char 
   byte *pbVar8;
   char *pcVar9;
   char *pcVar10;
-  undefined2 uVar11;
-  undefined2 unaff_SS;
+  uint16_t uVar11;
+  uint16_t unaff_SS;
   uint8_t digits [34];
   
-  uVar11 = (undefined2)((ulong)buf >> 0x10);
+  uVar11 = (uint16_t)((ulong)buf >> 0x10);
   pcVar9 = (char *)buf;
   pcVar10 = pcVar9;
   if ((radix < 0x25) && (1 < (byte)radix)) {
@@ -1956,7 +1956,7 @@ int __cdecl16far mkdir(char *path)
 
 /* 1000:0c98 */
 
-undefined4 __cdecl16near N_LXMUL_at_(void)
+uint32_t __cdecl16near N_LXMUL_at_(void)
 
 {
   uint in_AX;
@@ -2170,7 +2170,7 @@ void __vprinter_1000_0e74(void)
   byte bVar4;
   byte in_DL;
   char *unaff_DI;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   byte in_AF;
   
   __vprinter_1000_0e7b();
@@ -2202,7 +2202,7 @@ void __vprinter_1000_0e7b(void)
   byte bVar3;
   byte bVar4;
   char *unaff_DI;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   byte in_AF;
   
   bVar2 = in_AL % 0x10;
@@ -2231,7 +2231,7 @@ void __cdecl16near __vprinter_1000_0e84(void)
   byte bVar4;
   byte bVar5;
   char *unaff_DI;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   byte in_AF;
   bool bVar2;
   
@@ -2269,7 +2269,7 @@ void __cdecl16near __vprinter_1000_0ea6(void)
   char *pcVar1;
   int iVar2;
   char *unaff_DI;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   
   iVar2 = -1;
   do {
@@ -2294,19 +2294,19 @@ void __cdecl16near __vprinter_1000_0eb3(void)
   int iVar2;
   int unaff_BP;
   undefined1 *unaff_DI;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   
   *unaff_DI = in_AL;
   pcVar1 = (char *)init_textFilename + unaff_BP;
   *pcVar1 = (unsigned short)((char)*pcVar1 + -1);
   if (*pcVar1 == (unsigned short)0x0) {
-    iVar2 = (*(code *)*(undefined2 *)(unaff_BP + 0xe))
-                      (*(undefined2 *)(unaff_BP + 10),*(undefined2 *)(unaff_BP + 0xc),
+    iVar2 = (*(code *)*(uint16_t *)(unaff_BP + 0xe))
+                      (*(uint16_t *)(unaff_BP + 10),*(uint16_t *)(unaff_BP + 0xc),
                        unaff_DI + (1 - (unaff_BP + -0x96)),unaff_BP + -0x96);
     if (iVar2 == 0) {
-      *(undefined2 *)(unaff_BP + -0x16) = 1;
+      *(uint16_t *)(unaff_BP + -0x16) = 1;
     }
-    *(undefined2 *)((char *)init_textFilename + unaff_BP) = 0x50;
+    *(uint16_t *)((char *)init_textFilename + unaff_BP) = 0x50;
     *(int *)(unaff_BP + -0x12) =
          (int)(unaff_DI + (1 - (unaff_BP + -0x96)) + *(int *)(unaff_BP + -0x12));
   }
@@ -2322,23 +2322,23 @@ void __cdecl16near __vprinter_1000_0ebc(void)
   int unaff_BP;
   int unaff_DI;
   int iVar2;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   
   iVar2 = unaff_DI - (unaff_BP + -0x96);
-  iVar1 = (*(code *)*(undefined2 *)(unaff_BP + 0xe))
-                    (*(undefined2 *)(unaff_BP + 10),*(undefined2 *)(unaff_BP + 0xc),iVar2,
+  iVar1 = (*(code *)*(uint16_t *)(unaff_BP + 0xe))
+                    (*(uint16_t *)(unaff_BP + 10),*(uint16_t *)(unaff_BP + 0xc),iVar2,
                      unaff_BP + -0x96);
   if (iVar1 == 0) {
-    *(undefined2 *)(unaff_BP + -0x16) = 1;
+    *(uint16_t *)(unaff_BP + -0x16) = 1;
   }
-  *(undefined2 *)((char *)init_textFilename + unaff_BP) = 0x50;
+  *(uint16_t *)((char *)init_textFilename + unaff_BP) = 0x50;
   *(int *)(unaff_BP + -0x12) = *(int *)(unaff_BP + -0x12) + iVar2;
   return;
 }
 
 
 /* 1000:0ef0 */
-undefined2 __vprinter_func_start(void)
+uint16_t __vprinter_func_start(void)
 
 {
     char cVar2;   /* hand fix: it holds a character, not code */
@@ -2363,17 +2363,17 @@ undefined2 __vprinter_func_start(void)
   undefined1 *puVar18;
   uint *puVar19;
   int *piVar20;
-  undefined2 uVar21;
+  uint16_t uVar21;
   int iVar22;
   int unaff_SS;
   bool bVar23;
   
   *(int *)(unaff_BP + -4) = unaff_BP + -0x96;
 L__vprinter_func_start_0EF9:
-  pcVar16 = (char *)*(undefined2 *)(unaff_BP + -4);
+  pcVar16 = (char *)*(uint16_t *)(unaff_BP + -4);
 L__vprinter_func_start_0EFC:
-  uVar21 = (undefined2)((ulong)*(undefined4 *)(unaff_BP + 6) >> 0x10);
-  pcVar14 = (char *)(char *)*(undefined4 *)(unaff_BP + 6);
+  uVar21 = (uint16_t)((ulong)*(uint32_t *)(unaff_BP + 6) >> 0x10);
+  pcVar14 = (char *)(char *)*(uint32_t *)(unaff_BP + 6);
 L__vprinter_func_start_0EFF:
   pcVar15 = pcVar14 + 1;
   cVar7 = *pcVar14;
@@ -2396,13 +2396,13 @@ L__vprinter_func_start_0EFF:
   }
   goto L__vprinter_func_start_0EFF;
 code_r0x00010f23:
-  *(undefined2 *)(unaff_BP + -4) = (uint16_t)pcVar16;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + -4) = (uint16_t)pcVar16;   /* hand fix: 2-byte slot */
   uVar8 = 0;
-  *(undefined2 *)(unaff_BP + -0xe) = (uint16_t)0;   /* hand fix: 2-byte slot */
-  *(undefined2 *)(unaff_BP + -2) = (uint16_t)0x20;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + -0xe) = (uint16_t)0;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + -2) = (uint16_t)0x20;   /* hand fix: 2-byte slot */
   *(undefined1 *)(unaff_BP + -0xb) = 0;
-  *(undefined2 *)(unaff_BP + -8) = (uint16_t)0xffff;   /* hand fix: 2-byte slot */
-  *(undefined2 *)(unaff_BP + -10) = (uint16_t)0xffff;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + -8) = (uint16_t)0xffff;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + -10) = (uint16_t)0xffff;   /* hand fix: 2-byte slot */
   do {
     if (0x5f < (byte)(cVar7 - 0x20U)) goto switchD_1000_0f5d_caseD_13;
     alphaBase = ((uint8_t *)vprinter_printCtype)[(byte)(cVar7 - 0x20U)] * '\x02';
@@ -2420,7 +2420,7 @@ code_r0x00010f23:
       *(uint *)(unaff_BP + -2) = *(uint *)(unaff_BP + -2) | 1;
       break;
     case '\x02':
-      iVar22 = *(int *)*(undefined2 *)(unaff_BP + 4);
+      iVar22 = *(int *)*(uint16_t *)(unaff_BP + 4);
       *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 2;
       if (bVar11 < 2) {
         if (iVar22 < 0) {
@@ -2460,8 +2460,8 @@ switchD_1000_0f5d_caseD_5:
       else {
         if (bVar11 != 4) {
 switchD_1000_0f5d_caseD_13:
-          pcVar16 = (char *)*(undefined2 *)(unaff_BP + -0x10);
-          uVar21 = *(undefined2 *)(unaff_BP + 8);
+          pcVar16 = (char *)*(uint16_t *)(unaff_BP + -0x10);
+          uVar21 = *(uint16_t *)(unaff_BP + 8);
           do {
             __vprinter_1000_0eb3();
             pcVar3 = pcVar16;
@@ -2472,7 +2472,7 @@ L__vprinter_func_start_12FA:
             __vprinter_1000_0ebc();
           }
           if (*(int *)(unaff_BP + -0x16) == 0) {
-            uVar21 = *(undefined2 *)(unaff_BP + -0x12);
+            uVar21 = *(uint16_t *)(unaff_BP + -0x12);
           }
           else {
             uVar21 = 0xffff;
@@ -2520,12 +2520,12 @@ L__vprinter_func_start_104E:
       *(char *)(unaff_BP + -5) = cVar7;
       iVar9 = 0;
       *(undefined1 *)(unaff_BP + -6) = 0;
-      piVar20 = (int *)*(undefined2 *)(unaff_BP + 4);
+      piVar20 = (int *)*(uint16_t *)(unaff_BP + 4);
       iVar12 = *piVar20;
       goto L__vprinter_func_start_106E;
     case '\x0e':
       *(char *)(unaff_BP + -5) = cVar7;
-      *(undefined2 *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
+      *(uint16_t *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
       puVar18 = (undefined1 *)(unaff_BP + -0x46);
       iVar12 = *(int *)(unaff_BP + 4);
       *(int *)(unaff_BP + 4) = iVar12 + 2;
@@ -2544,7 +2544,7 @@ L__vprinter_func_start_104E:
       uVar8 = (int)puVar18 - (int)puVar19;
       goto L__vprinter_func_start_11AA;
     case '\x0f':
-      *(undefined2 *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
+      *(uint16_t *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
       *(char *)(unaff_BP + -5) = cVar7;
       uVar8 = *(uint *)(unaff_BP + -10);
       if ((int)uVar8 < 0) {
@@ -2560,25 +2560,25 @@ L__vprinter_func_start_104E:
       puVar19 = (uint *)(unaff_BP + -0x45);
       goto L__vprinter_func_start_11AA;
     case '\x10':
-      *(undefined2 *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
+      *(uint16_t *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
       *(char *)(unaff_BP + -5) = cVar7;
-      uVar8 = *(uint *)*(undefined2 *)(unaff_BP + 4);
+      uVar8 = *(uint *)*(uint16_t *)(unaff_BP + 4);
       *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 2;
       puVar19 = (uint *)(unaff_BP + -0x45);
       *puVar19 = uVar8 & 0xff;
       uVar8 = 1;
       goto L__vprinter_func_start_11ED;
     case '\x11':
-      *(undefined2 *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
+      *(uint16_t *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
       *(char *)(unaff_BP + -5) = cVar7;
       if ((*(uint *)(unaff_BP + -2) & 0x20) == 0) {
-        puVar19 = *(uint **)(undefined4 *)*(undefined2 *)(unaff_BP + 4);
+        puVar19 = *(uint **)(uint32_t *)*(uint16_t *)(unaff_BP + 4);
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 2;
         iVar22 = 0x2410;
         bVar23 = puVar19 == (uint *)0x0;
       }
       else {
-        puVar4 = (uint *)*(undefined4 *)*(undefined2 *)(unaff_BP + 4);
+        puVar4 = (uint *)*(uint32_t *)*(uint16_t *)(unaff_BP + 4);
         iVar22 = (int)((ulong)puVar4 >> 0x10);
         puVar19 = (uint *)puVar4;
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 4;
@@ -2594,15 +2594,15 @@ L__vprinter_func_start_104E:
       }
       goto L__vprinter_func_start_11ED;
     case '\x12':
-      *(undefined2 *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
+      *(uint16_t *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
       if ((*(uint *)(unaff_BP + -2) & 0x20) == 0) {
-        piVar20 = *(int **)(undefined4 *)*(undefined2 *)(unaff_BP + 4);
+        piVar20 = *(int **)(uint32_t *)*(uint16_t *)(unaff_BP + 4);
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 2;
         uVar21 = 0x2410;
       }
       else {
-        piVar6 = (int *)*(undefined4 *)*(undefined2 *)(unaff_BP + 4);
-        uVar21 = (undefined2)((ulong)piVar6 >> 0x10);
+        piVar6 = (int *)*(uint32_t *)*(uint16_t *)(unaff_BP + 4);
+        uVar21 = (uint16_t)((ulong)piVar6 >> 0x10);
         piVar20 = (int *)piVar6;
         *(int *)(unaff_BP + 4) = *(int *)(unaff_BP + 4) + 4;
       }
@@ -2630,17 +2630,17 @@ switchD_1000_0f5d_caseD_a:
   cVar13 = '\n';
   *(undefined1 *)(unaff_BP + -6) = 1;
   *(char *)(unaff_BP + -5) = cVar7;
-  piVar20 = (int *)*(undefined2 *)(unaff_BP + 4);
+  piVar20 = (int *)*(uint16_t *)(unaff_BP + 4);
   iVar12 = *piVar20;
   iVar9 = iVar12 >> 0xf;
 L__vprinter_func_start_106E:
   piVar17 = piVar20 + 1;
-  *(undefined2 *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + 6) = (uint16_t)pcVar15;   /* hand fix: 2-byte slot */
   if ((*(uint *)(unaff_BP + -2) & 0x10) != 0) {
     iVar9 = *piVar17;
     piVar17 = piVar20 + 2;
   }
-  *(undefined2 *)(unaff_BP + 4) = (uint16_t)piVar17;   /* hand fix: 2-byte slot */
+  *(uint16_t *)(unaff_BP + 4) = (uint16_t)piVar17;   /* hand fix: 2-byte slot */
   puVar19 = (uint *)(unaff_BP + -0x45);
   if ((iVar12 == 0) && (iVar9 == 0)) {
     if (*(int *)(unaff_BP + -10) == 0) goto L__vprinter_func_start_0EF9;
@@ -2677,13 +2677,13 @@ L__vprinter_func_start_11B8:
 L__vprinter_func_start_11EA:
   __vprinter_1000_0ea6();
 L__vprinter_func_start_11ED:
-  pcVar16 = (char *)*(undefined2 *)(unaff_BP + -4);
+  pcVar16 = (char *)*(uint16_t *)(unaff_BP + -4);
   iVar12 = *(int *)(unaff_BP + -8);
   if ((*(uint *)(unaff_BP + -2) & 5) == 5) {
     cVar7 = *(char *)(unaff_BP + -5);
     if (cVar7 == 'o') {
       if (*(int *)(unaff_BP + -0xe) < 1) {
-        *(undefined2 *)(unaff_BP + -0xe) = (uint16_t)1;   /* hand fix: 2-byte slot */
+        *(uint16_t *)(unaff_BP + -0xe) = (uint16_t)1;   /* hand fix: 2-byte slot */
       }
     }
     else if ((cVar7 == 'x') || (cVar7 == 'X')) {
@@ -2693,7 +2693,7 @@ L__vprinter_func_start_11ED:
       iVar9 = *piVar6;
       *piVar6 = *piVar6 + -2;
       if (SBORROW2(iVar9,2) != *piVar6 < 0) {
-        *(undefined2 *)(unaff_BP + -0xe) = (uint16_t)0;   /* hand fix: 2-byte slot */
+        *(uint16_t *)(unaff_BP + -0xe) = (uint16_t)0;   /* hand fix: 2-byte slot */
       }
     }
   }
@@ -2750,7 +2750,7 @@ L__vprinter_func_start_11ED:
 
 /* 1000:134a */
 
-undefined4 __VPTR(int row,int col)
+uint32_t __VPTR(int row,int col)
 
 {
   return CONCAT22((*(uint16_t *)((uint8_t *)&(_video.displayptr) + 1)),
@@ -2911,7 +2911,7 @@ void __cdecl16near _VideoInt(void)
 {
   code *pcVar1;
   char cVar2;
-  undefined2 in_AX;
+  uint16_t in_AX;
   
   cVar2 = (char)((uint)in_AX >> 8);
   if (cVar2 == '\0') {
@@ -3101,9 +3101,9 @@ L_malloc_FreeLastBlock_1638:
     __farmalloc_rover = 0;
   }
   else {
-    brkSeg = *(uint16_t *)((int)(undefined4 *)&_DATA + 2);
+    brkSeg = *(uint16_t *)((int)(uint32_t *)&_DATA + 2);
     malloc__last = brkSeg;
-    if (*(int *)((int)(undefined4 *)&_DATA + 2) == 0) {
+    if (*(int *)((int)(uint32_t *)&_DATA + 2) == 0) {
       in_DX = __farmalloc_first;
       if (brkSeg != __farmalloc_first) {
         malloc__last = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4);
@@ -3128,15 +3128,15 @@ L_malloc_FreeLastBlock_1656:
 void __cdecl16near malloc_FreeInnerBlock(void)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   int in_DX;
   int iVar2;
   int iStack_2;
   
-  iStack_2 = *(int *)((int)(undefined4 *)&_DATA + 2);
-  *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = 0;
+  iStack_2 = *(int *)((int)(uint32_t *)&_DATA + 2);
+  *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = 0;
   *(int *)((byte *)__C0_ASM_CopyRight + 4) = iStack_2;
-  if ((in_DX == __farmalloc_first) || (*(int *)((int)(undefined4 *)&_DATA + 2) != 0)) {
+  if ((in_DX == __farmalloc_first) || (*(int *)((int)(uint32_t *)&_DATA + 2) != 0)) {
     malloc_InsertFreeBlock();
     iStack_2 = in_DX;
   }
@@ -3144,24 +3144,24 @@ void __cdecl16near malloc_FreeInnerBlock(void)
     iVar2 = *(int *)0x0;
     *(int *)0x0 = *(int *)0x0 + iVar2;
     iVar2 = in_DX + iVar2;
-    if (*(int *)((int)(undefined4 *)&_DATA + 2) == 0) {
+    if (*(int *)((int)(uint32_t *)&_DATA + 2) == 0) {
       *(int *)((byte *)__C0_ASM_CopyRight + 4) = iStack_2;
     }
     else {
-      *(int *)((int)(undefined4 *)&_DATA + 2) = iStack_2;
+      *(int *)((int)(uint32_t *)&_DATA + 2) = iStack_2;
     }
   }
   iVar2 = iStack_2 + *(int *)0x0;
-  if (*(int *)((int)(undefined4 *)&_DATA + 2) != 0) {
+  if (*(int *)((int)(uint32_t *)&_DATA + 2) != 0) {
     return;
   }
   *(int *)0x0 = *(int *)0x0 + *(int *)0x0;
-  *(int *)((int)(undefined4 *)&_DATA + 2) = iStack_2;
+  *(int *)((int)(uint32_t *)&_DATA + 2) = iStack_2;
   if (iVar2 != *(int *)((byte *)__C0_ASM_CopyRight + 2)) {
-    uVar1 = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 2);
-    __farmalloc_rover = *(undefined2 *)(byte *)__C0_ASM_CopyRight;
-    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 2) = uVar1;
-    *(undefined2 *)(byte *)__C0_ASM_CopyRight = __farmalloc_rover;
+    uVar1 = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 2);
+    __farmalloc_rover = *(uint16_t *)(byte *)__C0_ASM_CopyRight;
+    *(uint16_t *)((byte *)__C0_ASM_CopyRight + 2) = uVar1;
+    *(uint16_t *)(byte *)__C0_ASM_CopyRight = __farmalloc_rover;
     return;
   }
   __farmalloc_rover = 0;
@@ -3177,17 +3177,17 @@ void __cdecl16near malloc_FreeInnerBlock(void)
 void malloc_JoinFreeBlocks(void)
 
 {
-  undefined2 uVar1;
-  undefined2 uVar2;
-  undefined2 unaff_ES;
+  uint16_t uVar1;
+  uint16_t uVar2;
+  uint16_t unaff_ES;
   
   *(int *)0x0 = *(int *)0x0 + (int)_DATA;
-  *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = unaff_ES;
+  *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = unaff_ES;
   uVar2 = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 2));
   uVar1 = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight)));
   if ((*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 2)) != 0x2410) {
-    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 2) = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 2));
-    *(undefined2 *)(byte *)__C0_ASM_CopyRight = uVar1;
+    *(uint16_t *)((byte *)__C0_ASM_CopyRight + 2) = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 2));
+    *(uint16_t *)(byte *)__C0_ASM_CopyRight = uVar1;
     uVar2 = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight)));
     __C0_ASM_CopyRight[0] = (byte)uVar1;
     __C0_ASM_CopyRight[1] = SUB21(uVar1,1);
@@ -3207,13 +3207,13 @@ void malloc_JoinFreeBlocks(void)
 void __cdecl16far malloc_PullFreeBlock(void)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   
   uVar1 = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 2));
   __farmalloc_rover = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight)));
   if ((*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 2)) != 0x2410) {
-    *(undefined2 *)((byte *)__C0_ASM_CopyRight + 2) = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 2));
-    *(undefined2 *)(byte *)__C0_ASM_CopyRight = __farmalloc_rover;
+    *(uint16_t *)((byte *)__C0_ASM_CopyRight + 2) = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 2));
+    *(uint16_t *)(byte *)__C0_ASM_CopyRight = __farmalloc_rover;
     return;
   }
   __farmalloc_rover = 0;
@@ -3227,11 +3227,11 @@ void __cdecl16far malloc_PullFreeBlock(void)
 void __cdecl16near malloc_InsertFreeBlock(void)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   
   (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight))) = __farmalloc_rover;
   if (__farmalloc_rover != 0) {
-    uVar1 = *(undefined2 *)((byte *)__C0_ASM_CopyRight + 2);
+    uVar1 = *(uint16_t *)((byte *)__C0_ASM_CopyRight + 2);
     *(char **)((byte *)__C0_ASM_CopyRight + 2) = (char *)0x26510;
     *(char **)(byte *)__C0_ASM_CopyRight = (char *)0x26510;
     __C0_ASM_CopyRight[2] = (byte)uVar1;
@@ -3269,25 +3269,25 @@ void __cdecl16far farfree(uint16_t ofs,uint16_t seg)
 
 /* 1000:1757 */
 
-undefined2 __cdecl16near malloc_CreateHeap(void)
+uint16_t __cdecl16near malloc_CreateHeap(void)
 
 {
   uint in_AX;
-  undefined2 uVar1;
+  uint16_t uVar1;
   ulong uVar2;
-  undefined4 uVar3;
+  uint32_t uVar3;
   
   uVar2 = __sbrk(0,0);
   if ((uVar2 & 0xf) != 0) {
     __sbrk(0x10 - ((uint)uVar2 & 0xf),0);
   }
   uVar3 = __sbrk(in_AX << 4,in_AX >> 0xc);
-  uVar1 = (undefined2)((ulong)uVar3 >> 0x10);
+  uVar1 = (uint16_t)((ulong)uVar3 >> 0x10);
   if ((int)uVar3 != -1) {
     __farmalloc_first = uVar1;
     malloc__last = uVar1;
     *(uint *)0x0 = in_AX;
-    *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = uVar1;
+    *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = uVar1;
     return 4;
   }
   return 0;
@@ -3297,14 +3297,14 @@ undefined2 __cdecl16near malloc_CreateHeap(void)
 
 /* 1000:17bb */
 
-undefined2 __cdecl16near malloc_ExtendHeap(void)
+uint16_t __cdecl16near malloc_ExtendHeap(void)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   uint in_AX;
   int iVar2;
   ulong uVar3;
-  undefined4 uVar4;
+  uint32_t uVar4;
   
   uVar3 = __sbrk(in_AX << 4,in_AX >> 0xc);
   iVar2 = (int)(uVar3 >> 0x10);
@@ -3321,7 +3321,7 @@ undefined2 __cdecl16near malloc_ExtendHeap(void)
   uVar1 = malloc__last;
   malloc__last = iVar2;
   *(uint *)0x0 = in_AX;
-  *(undefined2 *)((int)(undefined4 *)&_DATA + 2) = uVar1;
+  *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = uVar1;
   return 4;
 }
 
@@ -3329,7 +3329,7 @@ undefined2 __cdecl16near malloc_ExtendHeap(void)
 
 /* 1000:1815 */
 
-undefined2 __cdecl16near malloc_AllocatePartialBlock(void)
+uint16_t __cdecl16near malloc_AllocatePartialBlock(void)
 
 {
   int in_AX;
@@ -3339,8 +3339,8 @@ undefined2 __cdecl16near malloc_AllocatePartialBlock(void)
   (*(uint16_t *)((uint8_t *)&(_DATA))) = (int)_DATA - in_AX;
   iVar1 = in_DX + (int)_DATA;
   *(int *)0x0 = in_AX;
-  *(int *)((int)(undefined4 *)&_DATA + 2) = in_DX;
-  *(int *)((int)(undefined4 *)&_DATA + 2) = iVar1;
+  *(int *)((int)(uint32_t *)&_DATA + 2) = in_DX;
+  *(int *)((int)(uint32_t *)&_DATA + 2) = iVar1;
   return 4;
 }
 
@@ -3350,12 +3350,12 @@ undefined2 __cdecl16near malloc_AllocatePartialBlock(void)
 
 /* WARNING: Removing unreachable block (ram,0x000118a1) */
 
-undefined2 __cdecl16far malloc(uint size)
+uint16_t __cdecl16far malloc(uint size)
 
 {
   byte *pbVar1;
   uint uVar2;
-  undefined2 uVar3;
+  uint16_t uVar3;
   int iVar4;
   
   __farmalloc_data_seg = 0x2410;
@@ -3372,8 +3372,8 @@ undefined2 __cdecl16far malloc(uint size)
           if (uVar2 <= *(uint *)0x0) {
             if (*(uint *)0x0 <= uVar2) {
               malloc_PullFreeBlock();
-              *(undefined2 *)((int)(undefined4 *)&_DATA + 2) =
-                   *(undefined2 *)((byte *)__C0_ASM_CopyRight + 4);
+              *(uint16_t *)((int)(uint32_t *)&_DATA + 2) =
+                   *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4);
               return 4;
             }
             uVar3 = malloc_AllocatePartialBlock();
@@ -3424,8 +3424,8 @@ far_t * __cdecl16far farmalloc(far_t *__return_storage_ptr__,uint32_t nbytes)
             if (uVar3 <= *(uint *)0x0) {
               if (*(uint *)0x0 <= uVar3) {
                 malloc_PullFreeBlock();
-                *(undefined2 *)((int)(undefined4 *)&_DATA + 2) =
-                     *(undefined2 *)((byte *)__C0_ASM_CopyRight + 4);
+                *(uint16_t *)((int)(uint32_t *)&_DATA + 2) =
+                     *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4);
                 return (far_t *)__C0_ASM_CopyRight;
               }
               pfVar4 = (far_t *)malloc_AllocatePartialBlock();
@@ -3449,9 +3449,9 @@ far_t __cdecl16near malloc_ExpandBlock(void)
 
 {
   byte *pbVar1;
-  undefined2 *puVar2;
+  uint16_t *puVar2;
   byte *pbVar3;
-  undefined2 *puVar4;
+  uint16_t *puVar4;
   int iVar5;
   int iVar6;
   uint uVar7;
@@ -3460,9 +3460,9 @@ far_t __cdecl16near malloc_ExpandBlock(void)
   uint uVar9;
   uint16_t in_BX;
   byte *pbVar10;
-  undefined2 *puVar11;
+  uint16_t *puVar11;
   byte *pbVar12;
-  undefined2 *puVar13;
+  uint16_t *puVar13;
   bool bVar14;
   far_t fVar15;
   far_t fVar16;
@@ -3484,14 +3484,14 @@ far_t __cdecl16near malloc_ExpandBlock(void)
     pbVar12 = pbVar12 + 2;
     pbVar1 = pbVar10;
     pbVar10 = pbVar10 + 2;
-    *(undefined2 *)pbVar3 = *(undefined2 *)pbVar1;
+    *(uint16_t *)pbVar3 = *(uint16_t *)pbVar1;
   }
   if (uVar9 != 0) {
     iVar6 = in_DX + 1;
     iVar5 = seg + 1;
     while( true ) {
-      puVar13 = (undefined2 *)0x0;
-      puVar11 = (undefined2 *)0x0;
+      puVar13 = (uint16_t *)0x0;
+      puVar11 = (uint16_t *)0x0;
       uVar7 = uVar9;
       if (0x1000 < uVar9) {
         uVar7 = 0x1000;
@@ -3519,7 +3519,7 @@ far_t __cdecl16near malloc_ExpandBlock(void)
 
 /* 1000:193b */
 
-undefined4 __cdecl16near malloc_ShrinkBlock(void)
+uint32_t __cdecl16near malloc_ShrinkBlock(void)
 
 {
   uint16_t in_AX;
@@ -3531,14 +3531,14 @@ undefined4 __cdecl16near malloc_ShrinkBlock(void)
   if (in_BX != malloc__last) {
     seg = in_BX + in_AX;
     *(int *)0x0 = in_CX - in_AX;
-    *(int *)((int)(undefined4 *)&_DATA + 2) = in_BX;
+    *(int *)((int)(uint32_t *)&_DATA + 2) = in_BX;
     *(uint16_t *)0x0 = in_AX;
     iVar1 = in_BX + in_CX;
-    if (*(int *)((int)(undefined4 *)&_DATA + 2) == 0) {
+    if (*(int *)((int)(uint32_t *)&_DATA + 2) == 0) {
       *(uint16_t *)((byte *)__C0_ASM_CopyRight + 4) = seg;
     }
     else {
-      *(uint16_t *)((int)(undefined4 *)&_DATA + 2) = seg;
+      *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = seg;
     }
     farfree(in_AX,seg);
     return CONCAT22(in_BX,4);
@@ -3551,7 +3551,7 @@ undefined4 __cdecl16near malloc_ShrinkBlock(void)
 
 
 /* 1000:199f */
-far_t * __cdecl16far _realloc(undefined2 param_1,uint16_t param_2,far_t *param_3)
+far_t * __cdecl16far _realloc(uint16_t param_1,uint16_t param_2,far_t *param_3)
 
 {
   undefined1 *puVar1;
@@ -3600,8 +3600,8 @@ uint8_t __cdecl16far farrealloc(long oldblock,long nbytes)
   uint8_t uVar2;
   uint uVar3;
   far_t *pfVar4;
-  undefined2 unaff_DI;
-  undefined4 uVar5;
+  uint16_t unaff_DI;
+  uint32_t uVar5;
   far_t fVar6;
   
   __farmalloc_data_seg = 0x2410;
@@ -3642,7 +3642,7 @@ uint8_t __cdecl16far farrealloc(long oldblock,long nbytes)
 
 /* 1000:1a20 */
 
-undefined2 _brk_normalize(uint16_t brkOfs,uint16_t brkSeg)
+uint16_t _brk_normalize(uint16_t brkOfs,uint16_t brkSeg)
 
 {
   int iVar1;
@@ -3671,7 +3671,7 @@ undefined2 _brk_normalize(uint16_t brkOfs,uint16_t brkSeg)
 
 /* 1000:1a96 */
 
-undefined2 __cdecl16near __brk(uint16_t brkOfs,uint16_t brkSeg)
+uint16_t __cdecl16near __brk(uint16_t brkOfs,uint16_t brkSeg)
 
 {
   int iVar1;
@@ -3690,7 +3690,7 @@ undefined2 __cdecl16near __brk(uint16_t brkOfs,uint16_t brkSeg)
 
 /* 1000:1ad5 */
 
-undefined4 __cdecl16near __sbrk(uint incrLo,int incrHi)
+uint32_t __cdecl16near __sbrk(uint incrLo,int incrHi)
 
 {
   uint uVar1;
@@ -3737,7 +3737,7 @@ uint __cdecl16far _farcoreleft(void)
 
 {
   uint16_t uVar1;
-  undefined2 uStack_6;
+  uint16_t uStack_6;
   
   uVar1 = _heaptop.seg;
   uStack_6 = N_PSBP_at_();
@@ -3751,13 +3751,13 @@ uint __cdecl16far _farcoreleft(void)
 
 /* 1000:1bb3 */
 
-undefined2 __cdecl16far _gettext(int x1,int y1,int x2,int y2,int buf,uint16_t bufSeg)
+uint16_t __cdecl16far _gettext(int x1,int y1,int x2,int y2,int buf,uint16_t bufSeg)
 
 {
   int iVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   uint16_t width;
-  undefined4 uVar3;
+  uint32_t uVar3;
   uint16_t dstOfs;
   uint16_t dstSeg;
   
@@ -3783,11 +3783,11 @@ undefined2 __cdecl16far _gettext(int x1,int y1,int x2,int y2,int buf,uint16_t bu
 
 /* 1000:1c09 */
 
-undefined2 __cdecl16far _puttext(int x1,int y1,int x2,int y2,int buf,uint16_t bufSeg)
+uint16_t __cdecl16far _puttext(int x1,int y1,int x2,int y2,int buf,uint16_t bufSeg)
 
 {
   uint16_t width;
-  undefined4 uVar1;
+  uint32_t uVar1;
   
   width = (x2 - x1) + 1;
   for (; y1 <= y2; y1 = y1 + 1) {
@@ -3802,13 +3802,13 @@ undefined2 __cdecl16far _puttext(int x1,int y1,int x2,int y2,int buf,uint16_t bu
 
 /* 1000:1c4c */
 
-undefined2 __cdecl16far _movetext(int x1,int y1,int x2,int y2,int dstX,int dstY)
+uint16_t __cdecl16far _movetext(int x1,int y1,int x2,int y2,int dstX,int dstY)
 
 {
   int iVar1;
-  undefined2 uVar2;
-  undefined4 uVar3;
-  undefined4 uVar4;
+  uint16_t uVar2;
+  uint32_t uVar3;
+  uint32_t uVar4;
   int iStack_6;
   int iStack_4;
   
@@ -3841,7 +3841,7 @@ undefined2 __cdecl16far _movetext(int x1,int y1,int x2,int y2,int dstX,int dstY)
 
 /* 1000:1ced */
 
-undefined2 screenpos(uint vramOfs)
+uint16_t screenpos(uint vramOfs)
 
 {
   char cVar1;
@@ -3884,11 +3884,11 @@ void bios(int width,uint16_t *vramOfs)
 {
   uint16_t *puVar1;
   uint16_t *puVar2;
-  undefined2 uVar3;
-  undefined2 unaff_SS;
+  uint16_t uVar3;
+  uint16_t unaff_SS;
   bool bVar4;
   bool bVar5;
-  undefined2 *in_stack_00000004;
+  uint16_t *in_stack_00000004;
   int in_stack_0000000a;
   uint8_t cursorPos;
   uint8_t vramScreenOfs;
@@ -3905,7 +3905,7 @@ void bios(int width,uint16_t *vramOfs)
     vramScreenOfs = screenpos((uint)in_stack_00000004);
   }
   while( true ) {
-    (*(uint16_t *)((uint8_t *)&(vramOfs) + 2)) = (uint16_t)(undefined2 *)((ulong)puVar1 >> 0x10);
+    (*(uint16_t *)((uint8_t *)&(vramOfs) + 2)) = (uint16_t)(uint16_t *)((ulong)puVar1 >> 0x10);
     (*(uint16_t *)((uint8_t *)&(vramOfs))) = (uint16_t)(uint16_t *)puVar1;
     if (width == 0) break;
     if (bVar5) {
@@ -3915,7 +3915,7 @@ void bios(int width,uint16_t *vramOfs)
       _VideoInt();
     }
     else {
-      uVar3 = *(undefined2 *)CONCAT22((uint16_t *)vramOfs,in_stack_00000004);
+      uVar3 = *(uint16_t *)CONCAT22((uint16_t *)vramOfs,in_stack_00000004);
       in_stack_00000004 = in_stack_00000004 + 1;
     }
     if (bVar4) {
@@ -3925,7 +3925,7 @@ void bios(int width,uint16_t *vramOfs)
       width = width + -1;
     }
     else {
-      *(undefined2 *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(vramOfs) + 2))) = uVar3;
+      *(uint16_t *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(vramOfs) + 2))) = uVar3;
       puVar1 = (uint16_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(vramOfs) + 2)) + 1,(uint16_t *)vramOfs);
       width = width + -1;
     }
@@ -3955,10 +3955,10 @@ void __SCREENIO(uint16_t width,uint16_t srcOfs,uint16_t srcSeg,uint16_t dstOfs,u
 
 /* 1000:1e5f */
 
-undefined2 __VALIDATEXY(uint y2,uint x2,uint y1,uint x1)
+uint16_t __VALIDATEXY(uint y2,uint x2,uint y1,uint x1)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   
   if ((((_video.screenwidth < x1) || (_video.screenwidth < x2)) || ((int)x2 < (int)x1)) ||
      (((_video.screenheight < y1 || (_video.screenheight < y2)) || ((int)y2 < (int)y1)))) {
@@ -4044,16 +4044,16 @@ void __setargv(uint savedES)
   uint in_BX;
   int iVar8;
   int *piVar9;
-  undefined2 unaff_SI;
+  uint16_t unaff_SI;
   char *pcVar10;
-  undefined2 unaff_DI;
+  uint16_t unaff_DI;
   char *pcVar11;
-  undefined2 uVar12;
+  uint16_t uVar12;
   int unaff_SS;
-  undefined2 uVar13;
+  uint16_t uVar13;
   bool bVar14;
   undefined1 uVar15;
-  undefined2 in_stack_00000000;
+  uint16_t in_stack_00000000;
   uint in_stack_00000004;
   int iVar5;
   
@@ -4085,10 +4085,10 @@ void __setargv(uint savedES)
   iVar8 = -(int)puVar4;
   pcVar11 = (char *)((int)&stk_0004 + iVar8);
   if (puVar4 <= &stk_0004) {
-    *(undefined2 *)((int)&savedES + iVar8) = uVar12;
-    uVar13 = *(undefined2 *)((int)&savedES + iVar8);
+    *(uint16_t *)((int)&savedES + iVar8) = uVar12;
+    uVar13 = *(uint16_t *)((int)&savedES + iVar8);
     *(int *)((int)&savedES + iVar8) = unaff_SS;
-    uVar12 = *(undefined2 *)((int)&savedES + iVar8);
+    uVar12 = *(uint16_t *)((int)&savedES + iVar8);
     *(uint *)((int)&savedES + iVar8) = uVar6;
     while (uVar6 - 1 != 0) {
       pcVar2 = pcVar11;
@@ -4116,7 +4116,7 @@ Processing:
           iVar8 = uVar6 + 1;
           piVar9 = (int *)(&stk_0004 + iVar8 * -2);
           if (&stk_0004 < (undefined1 *)(iVar8 * 4)) goto code_r0x000120eb;
-          *(undefined2 *)&_argv_at_ = (uint16_t)piVar9;   /* hand fix: 2-byte slot */
+          *(uint16_t *)&_argv_at_ = (uint16_t)piVar9;   /* hand fix: 2-byte slot */
           *(int *)&_argv_at__2 = unaff_SS;
           uVar12 = __setargv_SavedDS;
           goto SetArgvX;
@@ -4156,14 +4156,14 @@ SetArgvX:
   }
   *piVar9 = 0;
   piVar9[1] = 0;
-  (&savedES)[iVar8 * -2] = *(undefined2 *)&__setargv_SavedReturn2;
-  *(undefined2 *)(&stk_0000 + iVar8 * -4) = *(undefined2 *)&__setargv_SavedES;
-  *(undefined2 *)&__C0argc = *(undefined2 *)&_argc_at_;
-  *(undefined2 *)&__C0argv_2 = *(undefined2 *)&_argv_at__2;
-  *(undefined2 *)&__C0argv = *(undefined2 *)&_argv_at_;
+  (&savedES)[iVar8 * -2] = *(uint16_t *)&__setargv_SavedReturn2;
+  *(uint16_t *)(&stk_0000 + iVar8 * -4) = *(uint16_t *)&__setargv_SavedES;
+  *(uint16_t *)&__C0argc = *(uint16_t *)&_argc_at_;
+  *(uint16_t *)&__C0argv_2 = *(uint16_t *)&_argv_at__2;
+  *(uint16_t *)&__C0argv = *(uint16_t *)&_argv_at_;
                     /* WARNING: Could not recover jumptable at 0x00012153. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-  (*(code *)*(undefined2 *)&__setargv_SavedReturn)();
+  (*(code *)*(uint16_t *)&__setargv_SavedReturn)();
   return;
 }
 
@@ -4180,7 +4180,7 @@ int __cdecl16near NextChar(void)
   int in_CX;
   char *unaff_SI;
   undefined1 *unaff_DI;
-  undefined2 unaff_ES;
+  uint16_t unaff_ES;
   
   uVar2 = (undefined1)in_AX;
   if (in_AX != 0) {
@@ -4224,10 +4224,10 @@ uint16_t __cdecl16far _setblock(uint16_t seg,uint16_t size)
 
 /* 1000:2173 */
 
-undefined2 __cdecl16near _wherexy(void)
+uint16_t __cdecl16near _wherexy(void)
 
 {
-  undefined2 in_DX;
+  uint16_t in_DX;
   
   _VideoInt();
   return in_DX;
@@ -4272,9 +4272,9 @@ uint16_t __cdecl16far _atol(char *s)
   uint uVar4;
   byte bVar5;
   byte *pbVar6;
-  undefined2 uVar7;
+  uint16_t uVar7;
   
-  uVar7 = (undefined2)((ulong)s >> 0x10);
+  uVar7 = (uint16_t)((ulong)s >> 0x10);
   pbVar6 = (byte *)s;
   uVar3 = 0;
   do {
@@ -4353,7 +4353,7 @@ int CreateFile(uint16_t mode)
 {
   code *pcVar1;
   int dosErr;
-  undefined2 unaff_BP;
+  uint16_t unaff_BP;
   undefined1 in_CF;
   
   pcVar1 = (code *)swi(0x21);
@@ -4410,7 +4410,7 @@ int16_t __cdecl16far _creatnew(char *path,uint16_t attrib)
 
 /* 1000:22be */
 
-undefined2 __cdecl16far fflush(int *stream)
+uint16_t __cdecl16far fflush(int *stream)
 
 {
   int iVar1;
@@ -4527,10 +4527,10 @@ int fseek_Displacement(uint *stream)
   uint uVar5;
   uint *puVar6;
   int iVar7;
-  undefined2 uVar8;
+  uint16_t uVar8;
   undefined1 *uStack_6;   /* hand fix: dereferenced as *uStack_6 */
   
-  uVar8 = (undefined2)((ulong)stream >> 0x10);
+  uVar8 = (uint16_t)((ulong)stream >> 0x10);
   puVar6 = (uint *)stream;
   if ((int)*stream < 0) {
     iVar2 = puVar6[3] + *stream + 1;
@@ -4641,7 +4641,7 @@ char * __cdecl16far getcwd(char *__buf,size_t __size)
   int iVar1;
   size_t sVar2;
   char *in_DX;
-  undefined2 unaff_SI;
+  uint16_t unaff_SI;
   char *unaff_SS;
   char *in_stack_00000004;
   char cwd [68];
@@ -4683,15 +4683,15 @@ int16_t __cdecl16far memcmp(char *s1,char *s2,uint16_t n)
   uint uVar4;
   char *pcVar5;
   char *pcVar6;
-  undefined2 uVar7;
-  undefined2 uVar8;
+  uint16_t uVar7;
+  uint16_t uVar8;
   
   uVar3 = 0;
   uVar4 = 0;
   if (n != 0) {
-    uVar8 = (undefined2)((ulong)s1 >> 0x10);
+    uVar8 = (uint16_t)((ulong)s1 >> 0x10);
     pcVar5 = (char *)s1;
-    uVar7 = (undefined2)((ulong)s2 >> 0x10);
+    uVar7 = (uint16_t)((ulong)s2 >> 0x10);
     pcVar6 = (char *)s2;
     do {
       if (n == 0) break;
@@ -4719,11 +4719,11 @@ void * __cdecl16far memcpy(char *dst,char *src,word size)
   uint uVar3;
   char *pcVar4;
   char *pcVar5;
-  undefined2 uVar6;
-  undefined2 uVar7;
+  uint16_t uVar6;
+  uint16_t uVar7;
   
-  uVar6 = (undefined2)((ulong)dst >> 0x10);
-  uVar7 = (undefined2)((ulong)src >> 0x10);
+  uVar6 = (uint16_t)((ulong)dst >> 0x10);
+  uVar7 = (uint16_t)((ulong)src >> 0x10);
   pcVar4 = (char *)src;
   pcVar5 = (char *)dst;
   for (uVar3 = size >> 1; uVar3 != 0; uVar3 = uVar3 - 1) {
@@ -4731,7 +4731,7 @@ void * __cdecl16far memcpy(char *dst,char *src,word size)
     pcVar5 = pcVar5 + 2;
     pcVar1 = pcVar4;
     pcVar4 = pcVar4 + 2;
-    *(undefined2 *)pcVar2 = *(undefined2 *)pcVar1;
+    *(uint16_t *)pcVar2 = *(uint16_t *)pcVar1;
   }
   if ((size & 1) != 0) {
     *pcVar5 = *pcVar4;
@@ -4746,18 +4746,18 @@ void * __cdecl16far memcpy(char *dst,char *src,word size)
 void __cdecl16far _fsetmem(void *dest,uint16_t len,uint16_t val)
 
 {
-  undefined2 *puVar1;
+  uint16_t *puVar1;
   uint uVar2;
-  undefined2 *puVar3;
-  undefined2 uVar4;
+  uint16_t *puVar3;
+  uint16_t uVar4;
   
-  uVar4 = (undefined2)((ulong)dest >> 0x10);
-  puVar3 = (undefined2 *)dest;
+  uVar4 = (uint16_t)((ulong)dest >> 0x10);
+  puVar3 = (uint16_t *)dest;
   if (((ulong)dest & 1) != 0) {
     if (len == 0) {
       return;
     }
-    puVar3 = (undefined2 *)((int)puVar3 + 1);
+    puVar3 = (uint16_t *)((int)puVar3 + 1);
     *(undefined1 *)dest = (undefined1)val;
     len = len - 1;
   }
@@ -4779,7 +4779,7 @@ void __cdecl16far _fsetmem(void *dest,uint16_t len,uint16_t val)
 void * __cdecl16far _fmemset(void *ptr,uint16_t v,uint16_t count)
 
 {
-  undefined2 in_AX;
+  uint16_t in_AX;
   void *in_stack_00000004;
   
   _fsetmem((void *)CONCAT22((void *)ptr,in_stack_00000004),v,
@@ -4800,15 +4800,15 @@ void * __cdecl16far __fmovmem(char *src,char *dst,word count)
   uint uVar4;
   char *pcVar5;
   char *pcVar6;
-  undefined2 uVar7;
-  undefined2 uVar8;
+  uint16_t uVar7;
+  uint16_t uVar8;
   byte in_CF;
   
   N_PCMP_at_();
   pvVar3 = (void *)(uint)in_CF;
-  uVar8 = (undefined2)((ulong)src >> 0x10);
+  uVar8 = (uint16_t)((ulong)src >> 0x10);
   pcVar5 = (char *)src;
-  uVar7 = (undefined2)((ulong)dst >> 0x10);
+  uVar7 = (uint16_t)((ulong)dst >> 0x10);
   pcVar6 = (char *)dst;
   if (pvVar3 != (void *)0x0) {
     pcVar5 = pcVar5 + (count - 1);
@@ -4832,7 +4832,7 @@ void * __cdecl16far __fmovmem(char *src,char *dst,word count)
     pcVar6 = pcVar6 + ((uint)in_CF * -2 + 1) * 2;
     pcVar1 = pcVar5;
     pcVar5 = pcVar5 + ((uint)in_CF * -2 + 1) * 2;
-    *(undefined2 *)pcVar2 = *(undefined2 *)pcVar1;
+    *(uint16_t *)pcVar2 = *(uint16_t *)pcVar1;
   }
   if ((count & 1) != 0) {
     pcVar6[(int)pvVar3] = pcVar5[(int)pvVar3];
@@ -4860,7 +4860,7 @@ int __cdecl16far _open(char *pathname,int access)
 {
   code *pcVar1;
   int dosErr;
-  undefined2 unaff_BP;
+  uint16_t unaff_BP;
   bool bVar2;
   
   bVar2 = false;
@@ -4893,7 +4893,7 @@ void __cdecl16far printf(char *fmt,...)
 void __cdecl16far _fputc(char c,int *stream)
 
 {
-  undefined2 unaff_BP;
+  uint16_t unaff_BP;
   int *in_stack_00000006;
   
   *(int *)CONCAT22((int *)stream,in_stack_00000006) =
@@ -4972,7 +4972,7 @@ L_fputc_2909:
 void __cdecl16far fputchar(uint16_t c)
 
 {
-  undefined2 unaff_BP;
+  uint16_t unaff_BP;
   
   fputc((byte)c,(int *)CONCAT22(unaff_BP,(char *)0x26510));
   return;
@@ -4988,7 +4988,7 @@ uint16_t __cdecl16near __fputn(far_t stream,uint16_t count,far_t buf)
 
 {
   byte bVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   byte *pbVar3;
   far_t fVar4;
   uint uVar5;
@@ -5016,8 +5016,8 @@ uint16_t __cdecl16near __fputn(far_t stream,uint16_t count,far_t buf)
             _fputc(*(char *)MK_FP(buf.seg, buf.ofs),(int *)CONCAT22(unaff_DI,piVar9));
           }
           else {
-            uVar2 = *(undefined2 *)(uVar7 + 0xe);
-            pbVar3 = (byte *)*(undefined2 *)(uVar7 + 0xc);
+            uVar2 = *(uint16_t *)(uVar7 + 0xe);
+            pbVar3 = (byte *)*(uint16_t *)(uVar7 + 0xc);
             *(int *)(uVar7 + 0xc) = *(int *)(uVar7 + 0xc) + 1;
             bVar1 = *(byte *)MK_FP(buf.seg, buf.ofs);
             *pbVar3 = bVar1;
@@ -5049,7 +5049,7 @@ uint16_t __cdecl16near __fputn(far_t stream,uint16_t count,far_t buf)
             }
           }
         }
-        memcpy((char *)CONCAT22(*(undefined2 *)(uVar7 + 0xe),(char *)*(undefined2 *)(uVar7 + 0xc)),
+        memcpy((char *)CONCAT22(*(uint16_t *)(uVar7 + 0xe),(char *)*(uint16_t *)(uVar7 + 0xc)),
                (char *)MK_FP(buf.seg, buf.ofs),count);
         *(uint16_t *)MK_FP(stream.seg, stream.ofs) = *(int *)MK_FP(stream.seg, stream.ofs) + count;
         *(int *)(uVar7 + 0xc) = *(int *)(uVar7 + 0xc) + count;
@@ -5084,16 +5084,16 @@ uint16_t __cdecl16near __fputn(far_t stream,uint16_t count,far_t buf)
 
 
 /* 1000:2b24 */
-undefined2 __cdecl16far setvbuf(FILE *stream,uint8_t *bufOfs,uint mode)
+uint16_t __cdecl16far setvbuf(FILE *stream,uint8_t *bufOfs,uint mode)
 
 {
   uint8_t *puVar1;
   uint8_t *puVar2;
   FILE *pFVar3;
-  undefined2 uVar4;
+  uint16_t uVar4;
   uint in_stack_0000000e;
   
-  uVar4 = (undefined2)((ulong)stream >> 0x10);
+  uVar4 = (uint16_t)((ulong)stream >> 0x10);
   pFVar3 = (FILE *)stream;
   if ((((FILE *)pFVar3->token == pFVar3) && ((int)mode < 3)) && (in_stack_0000000e < 0x8000)) {
     if ((_stdoutStarted == 0) && (pFVar3 == (FILE *)(_streams + 1))) {
@@ -5111,9 +5111,9 @@ undefined2 __cdecl16far setvbuf(FILE *stream,uint8_t *bufOfs,uint mode)
     pFVar3->flags = pFVar3->flags & 0xfff3;
     pFVar3->bsize = 0;
     puVar2 = &pFVar3->hold;
-    *(undefined2 *)((int)&pFVar3->buffer + 2) = uVar4;
+    *(uint16_t *)((int)&pFVar3->buffer + 2) = uVar4;
     *(uint8_t **)&pFVar3->buffer = puVar2;
-    *(undefined2 *)((int)&pFVar3->curp + 2) = uVar4;
+    *(uint16_t *)((int)&pFVar3->curp + 2) = uVar4;
     *(uint8_t **)&pFVar3->curp = puVar2;
     if ((mode != 2) && (in_stack_0000000e != 0)) {
       _exitbuf.seg = 0x1000;
@@ -5124,9 +5124,9 @@ undefined2 __cdecl16far setvbuf(FILE *stream,uint8_t *bufOfs,uint mode)
         if (puVar1 == (uint8_t *)0x0 && puVar2 == (uint8_t *)0x0) goto L_setvbuf_2B46;
         pFVar3->flags = pFVar3->flags | 4;
       }
-      *(undefined2 *)((int)&pFVar3->curp + 2) = (*(uint16_t *)((uint8_t *)&(bufOfs) + 2));
+      *(uint16_t *)((int)&pFVar3->curp + 2) = (*(uint16_t *)((uint8_t *)&(bufOfs) + 2));
       *(uint8_t **)&pFVar3->curp = (uint8_t *)bufOfs;
-      *(undefined2 *)((int)&pFVar3->buffer + 2) = (*(uint16_t *)((uint8_t *)&(bufOfs) + 2));
+      *(uint16_t *)((int)&pFVar3->buffer + 2) = (*(uint16_t *)((uint8_t *)&(bufOfs) + 2));
       *(uint8_t **)&pFVar3->buffer = (uint8_t *)bufOfs;
       pFVar3->bsize = in_stack_0000000e;
       if (mode == 1) {
@@ -5148,10 +5148,10 @@ L_setvbuf_2B46:
 uint16_t __cdecl16near sprintf_strputn(char *dest,char *src,uint16_t n)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   
-  uVar1 = (undefined2)((ulong)dest >> 0x10);
-  memcpy((char *)CONCAT22(*(undefined2 *)((char *)dest + 2),*(char **)dest),
+  uVar1 = (uint16_t)((ulong)dest >> 0x10);
+  memcpy((char *)CONCAT22(*(uint16_t *)((char *)dest + 2),*(char **)dest),
          (char *)CONCAT22(n,(*(uint16_t *)((uint8_t *)&(src) + 2))),(word)(char *)src);
   *(char **)dest = (char *)src + *(int *)dest;
   **(undefined1 **)dest = 0;
@@ -5241,7 +5241,7 @@ char * __cdecl16far strcat(char *dst,char *src)
     pcVar8 = pcVar8 + 2;
     pcVar1 = pcVar7;
     pcVar7 = pcVar7 + 2;
-    *(undefined2 *)pcVar2 = *(undefined2 *)pcVar1;
+    *(uint16_t *)pcVar2 = *(uint16_t *)pcVar1;
   }
   if ((uVar4 & 1) != 0) {
     *pcVar8 = *pcVar7;
@@ -5261,10 +5261,10 @@ int __cdecl16far strcmp(char *a,char *b)
   uint uVar3;
   char *pcVar4;
   char *pcVar5;
-  undefined2 uVar6;
-  undefined2 uVar7;
+  uint16_t uVar6;
+  uint16_t uVar7;
   
-  uVar6 = (undefined2)((ulong)b >> 0x10);
+  uVar6 = (uint16_t)((ulong)b >> 0x10);
   pcVar5 = (char *)b;
   uVar3 = 0xffff;
   pcVar4 = pcVar5;
@@ -5275,7 +5275,7 @@ int __cdecl16far strcmp(char *a,char *b)
     pcVar4 = pcVar4 + 1;
   } while (*pcVar1 != '\0');
   uVar3 = ~uVar3;
-  uVar7 = (undefined2)((ulong)a >> 0x10);
+  uVar7 = (uint16_t)((ulong)a >> 0x10);
   pcVar4 = (char *)a;
   do {
     if (uVar3 == 0) break;
@@ -5300,9 +5300,9 @@ char * __cdecl16far strcpy(char *dst,char *src)
   uint uVar3;
   char *pcVar4;
   char *pcVar5;
-  undefined2 uVar6;
+  uint16_t uVar6;
   
-  uVar6 = (undefined2)((ulong)src >> 0x10);
+  uVar6 = (uint16_t)((ulong)src >> 0x10);
   pcVar4 = (char *)src;
   uVar3 = 0xffff;
   pcVar5 = pcVar4;
@@ -5337,10 +5337,10 @@ int __cdecl16far _fstricmp(char *str1,char *str2)
   uint uVar5;
   byte *pbVar6;
   byte *pbVar7;
-  undefined2 uVar8;
+  uint16_t uVar8;
   
   pbVar6 = (byte *)str1;
-  uVar8 = (undefined2)((ulong)str2 >> 0x10);
+  uVar8 = (uint16_t)((ulong)str2 >> 0x10);
   pbVar7 = (byte *)str2;
   do {
     do {
@@ -5405,10 +5405,10 @@ char * __cdecl16far __fstrncpy(char *dst,char *src,uint16_t n)
   int iVar4;
   char *pcVar5;
   char *pcVar6;
-  undefined2 uVar7;
-  undefined2 uVar8;
+  uint16_t uVar7;
+  uint16_t uVar8;
   
-  uVar7 = (undefined2)((ulong)src >> 0x10);
+  uVar7 = (uint16_t)((ulong)src >> 0x10);
   pcVar5 = (char *)src;
   uVar3 = n;
   pcVar6 = pcVar5;
@@ -5418,7 +5418,7 @@ char * __cdecl16far __fstrncpy(char *dst,char *src,uint16_t n)
     pcVar1 = pcVar6;
     pcVar6 = pcVar6 + 1;
   } while (*pcVar1 != '\0');
-  uVar8 = (undefined2)((ulong)dst >> 0x10);
+  uVar8 = (uint16_t)((ulong)dst >> 0x10);
   pcVar6 = (char *)dst;
   for (iVar4 = n - uVar3; iVar4 != 0; iVar4 = iVar4 + -1) {
     pcVar2 = pcVar6;
@@ -5447,12 +5447,12 @@ char * __cdecl16far _fstrstr(char *haystack,char *needle)
   uint uVar4;
   char *pcVar5;
   char *pcVar6;
-  undefined2 uVar7;
-  undefined2 uVar8;
+  uint16_t uVar7;
+  uint16_t uVar8;
   bool bVar9;
   
   if (*needle != '\0') {
-    uVar7 = (undefined2)((ulong)haystack >> 0x10);
+    uVar7 = (uint16_t)((ulong)haystack >> 0x10);
     uVar2 = 0xffff;
     pcVar5 = (char *)haystack;
     do {
@@ -5462,7 +5462,7 @@ char * __cdecl16far _fstrstr(char *haystack,char *needle)
       pcVar5 = pcVar5 + 1;
     } while (*pcVar1 != '\0');
     uVar2 = ~uVar2;
-    uVar8 = (undefined2)((ulong)needle >> 0x10);
+    uVar8 = (uint16_t)((ulong)needle >> 0x10);
     iVar3 = -1;
     pcVar5 = (char *)needle;
     do {
@@ -5482,7 +5482,7 @@ char * __cdecl16far _fstrstr(char *haystack,char *needle)
         bVar9 = *needle == *pcVar1;
       } while (!bVar9);
       if ((!bVar9) || (uVar2 < uVar4)) {
-        (*(uint16_t *)((uint8_t *)&(haystack))) = (uint16_t)(char *)((int)(undefined4 *)&_DATA + 1);
+        (*(uint16_t *)((uint8_t *)&(haystack))) = (uint16_t)(char *)((int)(uint32_t *)&_DATA + 1);
         break;
       }
       if (uVar4 == 0) break;
@@ -5516,14 +5516,14 @@ uint16_t __cdecl16far __write(uint fd,char *bufOfs,uint16_t bufSeg,uint16_t coun
   uint16_t uVar4;
   uint16_t uVar5;
   int unaff_DI;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   uint in_stack_00000004;
   uint8_t buf;
   uint8_t *puStack_e;
   uint8_t uStack_9;
   uint16_t uStack_8;
   uint8_t *puStack_6;
-  undefined2 uVar6;
+  uint16_t uVar6;
   
   if (in_stack_00000004 < _nfile) {
     if ((*(uint16_t *)((uint8_t *)&(bufOfs) + 2)) + 1 < 2) {
@@ -5562,12 +5562,12 @@ uint16_t __cdecl16far __write(uint fd,char *bufOfs,uint16_t bufSeg,uint16_t coun
             uStack_9 = *puVar3;
             if (uStack_9 == 0xa) {
               *puStack_6 = 0xd;
-              uVar6 = (undefined2)((ulong)puStack_6 >> 0x10);
+              uVar6 = (uint16_t)((ulong)puStack_6 >> 0x10);
               puStack_6 = (uint8_t *)CONCAT22(uVar6,puStack_6 + 1);
             }
             *puStack_6 = uStack_9;
             puVar1 = puStack_6 + 1;
-            uVar6 = (undefined2)((ulong)puStack_6 >> 0x10);
+            uVar6 = (uint16_t)((ulong)puStack_6 >> 0x10);
             puStack_6 = (uint8_t *)CONCAT22(uVar6,puVar1);
             uVar2 = (uint)(puVar1 < &buf);
           } while (((int)-uVar2 < 0) || ((uVar2 == 0 && ((uint)((int)puVar1 - (int)&buf) < 0x80))));
@@ -5602,7 +5602,7 @@ int __cdecl16far write(int handle,void *buf,uint16_t len)
   code *pcVar1;
   bool bVar2;
   int iVar3;
-  undefined2 uVar4;
+  uint16_t uVar4;
   
   bVar2 = false;
   if ((((uint16_t *)_openfd)[handle] & 1) == 0) {

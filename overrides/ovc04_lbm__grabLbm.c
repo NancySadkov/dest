@@ -24,7 +24,7 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
   uint16_t ppgfx;
   uint16_t i;
   uint16_t unaff_DI;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   bool bVar17;
   stg_tmp_t *dst;
   uint32_t remain;

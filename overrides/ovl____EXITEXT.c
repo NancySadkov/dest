@@ -1,7 +1,7 @@
 void __cdecl16far __EXITEXT(void)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   
   uVar1 = (uint)startx;   /* hand fix: startx is a function */
   if (((char *)"Abnormal program termination\r\n")[5] != '\0') {

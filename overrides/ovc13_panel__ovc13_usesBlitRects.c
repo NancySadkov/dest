@@ -26,16 +26,16 @@ void __cdecl16far ovc13_usesBlitRects(void)
   uint16_t uVar9;
   byte flagsLo;
   short *flagsAbove;
-  undefined2 uStack_1a;
+  uint16_t uStack_1a;
   short *flagsHere;
-  undefined2 uStack_16;
+  uint16_t uStack_16;
   byte *cellsHere;
-  undefined2 uStack_12;
+  uint16_t uStack_12;
   byte *cellsBelow;
-  undefined2 uStack_e;
+  uint16_t uStack_e;
   int destY;
   int row;
-  undefined2 uVar4;
+  uint16_t uVar4;
   
   seg = BlitRects[3].seg;
   PanelGridX = GfxRndSeed + -0x11;

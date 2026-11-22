@@ -56,7 +56,7 @@ void __cdecl16far copyProtectionCheck(void)
       input = 0;
       pcVar2 = ovr_stshAlloc(2);
       uStack_8 = (char *)CONCAT22(in_DX,pcVar2);
-      *uStack_8 = *(char *)*(undefined4 *)((uint)codes * 4 + 0x54c);
+      *uStack_8 = *(char *)*(uint32_t *)((uint)codes * 4 + 0x54c);
       pcVar2[1] = '\0';
       input = (uint16_t)ovr_uiReadString((char *)0x0,0,6,pcVar2,(uint16_t)in_DX);
       pbStack_a = in_DX;
@@ -72,8 +72,8 @@ void __cdecl16far copyProtectionCheck(void)
       attempts = attempts + 0x1;
     }
     _fstricmp((char *)CONCAT22(pbStack_a,input),
-              (char *)CONCAT22(*(undefined2 *)((uint)codes * 4 + 0x54e),
-                               (char *)*(undefined2 *)((uint)codes * 4 + 0x54c)));
+              (char *)CONCAT22(*(uint16_t *)((uint)codes * 4 + 0x54e),
+                               (char *)*(uint16_t *)((uint)codes * 4 + 0x54c)));
     handle.seg = (uint16_t)pbStack_a;
     handle.ofs = input;
     ovr_stshFree(handle);

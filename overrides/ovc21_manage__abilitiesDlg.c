@@ -1,4 +1,4 @@
-undefined2 __cdecl16far abilitiesDlg(char_sheet_t *sheet)
+uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
 
 {
   uint16_t uVar1;
@@ -15,7 +15,7 @@ undefined2 __cdecl16far abilitiesDlg(char_sheet_t *sheet)
   undefined1 uVar6;
   undefined1 uVar7;
   uint8_t menuItems;
-  undefined2 auStack_28 [7];
+  uint16_t auStack_28 [7];
   char cStack_1a;
   byte bStack_19;
   uint8_t statIndex;
@@ -46,7 +46,7 @@ undefined2 __cdecl16far abilitiesDlg(char_sheet_t *sheet)
       uVar1 = ((far_t far *)GStatsLabels + (&classStatMap1)[((char_sheet_t *)sheet)->cls])->ofs;
       uVar5 = (uint)bStack_19;
       auStack_28[uVar5 * 2] =
-           *(undefined2 *)
+           *(uint16_t *)
             ((int)&GStatsLabels[0].seg + (uint)(&classStatMap1)[((char_sheet_t *)sheet)->cls] * 4);
       *(uint16_t *)(&menuItems + uVar5 * 4) = uVar1;
       bStack_19 = bStack_19 + 1;
@@ -60,7 +60,7 @@ undefined2 __cdecl16far abilitiesDlg(char_sheet_t *sheet)
       if (bVar2 != 0) {
         abStack_17[bStack_19] = (&classStatMap2)[((char_sheet_t *)sheet)->cls];
         puVar3 = (uint8_t *)
-                 *(undefined2 *)
+                 *(uint16_t *)
                   ((int)&GStatsLabels[0].seg +
                   (uint)(&classStatMap2)[((char_sheet_t *)sheet)->cls] * 4);
         uVar1 = ((far_t far *)GStatsLabels + (&classStatMap2)[((char_sheet_t *)sheet)->cls])->ofs;
@@ -95,7 +95,7 @@ undefined2 __cdecl16far abilitiesDlg(char_sheet_t *sheet)
         abStack_17[bStack_19] = statIndex;
         uVar1 = ((far_t far *)GStatsLabels + statIndex)->ofs;
         uVar5 = (uint)bStack_19;
-        auStack_28[uVar5 * 2] = *(undefined2 *)((int)&GStatsLabels[0].seg + (uint)statIndex * 4);
+        auStack_28[uVar5 * 2] = *(uint16_t *)((int)&GStatsLabels[0].seg + (uint)statIndex * 4);
         *(uint16_t *)(&menuItems + uVar5 * 4) = uVar1;
         bStack_19 = bStack_19 + 1;
       }

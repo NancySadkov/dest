@@ -5,7 +5,7 @@ uint __cdecl16far stLoad(int handle)
   int iVar2;
   void *pvVar3;
   undefined1 uVar4;
-  undefined2 uVar5;
+  uint16_t uVar5;
   uint unaff_SI;
   uint16_t unaff_DI;
   void *unaff_SS;
@@ -38,7 +38,7 @@ uint __cdecl16far stLoad(int handle)
                                  unaff_DI,unaff_SI), (uVar1 & 0xff) != 0 &&
          (uVar1 = save_readBlock(0x881,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (uVar1 & 0xff) != 0))))))
     {
-      uVar5 = (undefined2)((ulong)((long)SquareRecCount * 0x13) >> 0x10);
+      uVar5 = (uint16_t)((ulong)((long)SquareRecCount * 0x13) >> 0x10);
       uVar1 = save_readBlock(0,(void *)CONCAT22((int)((long)SquareRecCount * 0x13),
                                                 (void *)((int)&AgntAnms[0x7c].halfWidth + 1)),
                              unaff_DI,unaff_SI);
@@ -46,8 +46,8 @@ uint __cdecl16far stLoad(int handle)
          (uVar1 = save_readBlock(-0x6f1a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI), (uVar1 & 0xff) != 0)) {
         for (iVar2 = 0; iVar2 < (int)(uint)GLeaderCount; iVar2 = iVar2 + 1) {
           pvVar3 = ovr_stshAlloc(0xae);
-          ((undefined2 *)(iVar2 * 4))[1] = uVar5;
-          *(undefined2 *)(iVar2 * 4) = (uint16_t)pvVar3;   /* hand fix: store of the far pointer's offset half */
+          ((uint16_t *)(iVar2 * 4))[1] = uVar5;
+          *(uint16_t *)(iVar2 * 4) = (uint16_t)pvVar3;   /* hand fix: store of the far pointer's offset half */
           uVar1 = save_readBlock(*(int *)(iVar2 * 4),
                                  (void *)CONCAT22(0xae,(void *)((int *)(iVar2 * 4))[1]),unaff_DI,
                                  unaff_SI);

@@ -6,17 +6,17 @@ ovc18_spawnClassAgent
 {
   undefined1 uVar1;
   char cVar2;
-  undefined4 uVar3;
-  undefined4 *puVar4;
+  uint32_t uVar3;
+  uint32_t *puVar4;
   uint8_t *txt;
   far_t far *pfVar5;
   uint16_t uVar6;
   entity_t *peVar7;
   far_t far *pfVar8;
-  undefined2 uVar9;
+  uint16_t uVar9;
   uint16_t uVar10;
   uint16_t unaff_BP;
-  undefined2 unaff_SI;
+  uint16_t unaff_SI;
   uint uVar11;
   far_t far *unaff_DI;
   far_t far *pfVar12;
@@ -24,8 +24,8 @@ ovc18_spawnClassAgent
   far_t far *in_stack_00000004;
   char acStackY_56 [46];
   uint8_t *puStackY_28;
-  undefined2 uStackY_26;
-  uint8_t far *uStackY_24;   /* was undefined4: assigned uint8_t * values */
+  uint16_t uStackY_26;
+  uint8_t far *uStackY_24;   /* was uint32_t: assigned uint8_t * values */
   far_t far *pfStackY_20;
   far_t far *pfVar13;
   far_t far *in_stack_0000ffe8;
@@ -35,10 +35,10 @@ ovc18_spawnClassAgent
   char *filename;
   char *pcVar15;
   far_t far *pfVar16;
-  undefined4 in_stack_0000fffa;
+  uint32_t in_stack_0000fffa;
   byte bVar17;
   
-  bVar17 = *(byte *)((int)*(undefined4 *)((uint)classStr << 2) + 0x3e);
+  bVar17 = *(byte *)((int)*(uint32_t *)((uint)classStr << 2) + 0x3e);
   filename = (char *)CONCAT13((char)((ulong)in_stack_0000fffa >> 0x18),CONCAT12(bVar17,unaff_SI));
   uVar10 = 0x195d;
   if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)bVar17 * 0x95) & 0x800) == 0) {
@@ -53,7 +53,7 @@ ovc18_spawnClassAgent
     }
     peVar7 = ovr_ovc15_usesLDIV_at_
                        ((uint16_t)in_stack_00000004,x,y,destX,bVar17,
-                        *(uint8_t *)((int)*(undefined4 *)((uint)classStr << 2) + 0xa4),classStr);
+                        *(uint8_t *)((int)*(uint32_t *)((uint)classStr << 2) + 0xa4),classStr);
   }
   else {
     iVar14 = 5;
@@ -78,7 +78,7 @@ ovc18_spawnClassAgent
         }
         uVar11 = in_stack_0000ffec + 1;
         pfVar8 = pfVar5;
-        while (uVar9 = (undefined2)((ulong)((long)(int)pfVar8 * 0x1e) >> 0x10),
+        while (uVar9 = (uint16_t)((ulong)((long)(int)pfVar8 * 0x1e) >> 0x10),
               *(byte *)(y + (int)((long)(int)pfVar8 * 0x1e) + 0x1b) <= uVar11) {
           if ((char *)in_stack_0000ffee != (char *)0x0 ||
               (int)((ulong)in_stack_0000ffee >> 0x10) != 0) {
@@ -93,7 +93,7 @@ ovc18_spawnClassAgent
           *(uint16_t *)((int)(puStackY_28 + uVar11 * 4) + 2) = destX;
           *(uint16_t *)(puStackY_28 + uVar11 * 4) = y + (int)pfVar8 * 0x1e;
           pcVar15 = (char *)*(int *)(y + (int)pfVar8 * 0x1e + 3);
-          filename = (char *)CONCAT22(*(undefined2 *)(y + (int)pfVar8 * 0x1e + 1),pcVar15);
+          filename = (char *)CONCAT22(*(uint16_t *)(y + (int)pfVar8 * 0x1e + 1),pcVar15);
           unaff_DI = (far_t far *)*(uint16_t *)(y + (int)pfVar8 * 0x1e + 5);
           if (*(int *)(y + (int)pfVar8 * 0x1e + 7) - (int)pcVar15 < 0) {
                     /* WARNING: Subroutine does not return */
@@ -112,9 +112,9 @@ ovc18_spawnClassAgent
                                 (uint16_t)(char *)filename,(uint16_t)unaff_DI,0x15,21);
         pfStackY_20 = (far_t far *)CONCAT22(uVar9,pfVar5);
         *(undefined1 *)&pfVar5[1].seg = 2;
-        *(undefined2 *)((int)&pfVar5[1].seg + 1) = *(undefined2 *)(y + (int)pfVar8 * 0x1e + 0xb);
-        *(undefined2 *)((int)&pfVar5[2].ofs + 1) = *(undefined2 *)(y + (int)pfVar8 * 0x1e + 0xd);
-        *(undefined2 *)((uint8_t *)uStackY_24 + 2) = uVar9;
+        *(uint16_t *)((int)&pfVar5[1].seg + 1) = *(uint16_t *)(y + (int)pfVar8 * 0x1e + 0xb);
+        *(uint16_t *)((int)&pfVar5[2].ofs + 1) = *(uint16_t *)(y + (int)pfVar8 * 0x1e + 0xd);
+        *(uint16_t *)((uint8_t *)uStackY_24 + 2) = uVar9;
         *(far_t far **)uStackY_24 = pfVar5;
         uStackY_24 = (uint8_t *)CONCAT22(uVar9,(uint8_t *)((int)&pfVar5->ofs + 1));
         pfVar16 = (far_t far *)((ulong)filename >> 0x10);
@@ -158,8 +158,8 @@ ovc18_spawnClassAgent
           }
         }
         *(undefined1 *)&pfStackY_20->ofs = 4;
-        *(undefined2 *)((int)&pfVar5->seg + 1) = 0;
-        *(undefined2 *)((int)&pfVar5->ofs + 1) = 0;
+        *(uint16_t *)((int)&pfVar5->seg + 1) = 0;
+        *(uint16_t *)((int)&pfVar5->ofs + 1) = 0;
         filename = (char *)CONCAT22(pfVar16,(char *)filename +
                                             *(byte *)(y + (int)pfVar8 * 0x1e + 10));
         uVar10 = 0x1e;
@@ -232,7 +232,7 @@ ovc18_spawnClassAgent
           filename = (char *)CONCAT22((int)((ulong)filename >> 0x10),callResultTemp);
           *(char *)&in_stack_00000004[-0x1be0].seg = (char)callResultTemp;
         }
-        puVar4 = (undefined4 *)((uint)(byte)((ulong)filename >> 0x10) << 2);
+        puVar4 = (uint32_t *)((uint)(byte)((ulong)filename >> 0x10) << 2);
         uVar3 = *puVar4;
         cVar2 = *(char *)((int)uVar3 + 0x2f);
         txt = (uint8_t *)CONCAT11((char)((uint)puVar4 >> 8),cVar2);
@@ -251,8 +251,8 @@ ovc18_spawnClassAgent
       return txt;
     case (uint16_t)0x3:
       ((int *)StshHandles)[(int)in_stack_00000004] = (int)pfVar8;
-      *(undefined2 *)((int)(long *)StshPtrs + (int)in_stack_00000004 * 4 + 2) = 0;
-      *(undefined2 *)((long *)StshPtrs + (int)in_stack_00000004) = 0;
+      *(uint16_t *)((int)(long *)StshPtrs + (int)in_stack_00000004 * 4 + 2) = 0;
+      *(uint16_t *)((long *)StshPtrs + (int)in_stack_00000004) = 0;
       return (uint8_t *)in_stack_00000004;
     case (uint16_t)0x4:
       smm_restore_state();
@@ -265,7 +265,7 @@ ovc18_spawnClassAgent
       else {
         peVar7 = ovr_ovc15_usesLDIV_at_
                            ((uint16_t)in_stack_00000004,x,y,destX,bVar17,
-                            *(uint8_t *)((int)*(undefined4 *)((uint)classStr << 2) + 0xa4),classStr)
+                            *(uint8_t *)((int)*(uint32_t *)((uint)classStr << 2) + 0xa4),classStr)
         ;
       }
     }

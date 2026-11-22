@@ -15,7 +15,7 @@ void __cdecl16far miceRestoreArea(brect_t *br,...)
   int dst_x;
   int dst_y;
   uint16_t pbr;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   if ((((CFG_Mice != 0) && (br->seg == 0xa000)) &&
       (MiceNeedsUpdate = 1,
@@ -52,7 +52,7 @@ void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br,...)
   char *pcVar2;
   uint16_t pbr;
   uint16_t j;
-  undefined2 in_stack_0000000a;
+  uint16_t in_stack_0000000a;
   uint16_t src;
   uint16_t h;
   uint16_t w;
@@ -130,7 +130,7 @@ void __cdecl16far miceBlitRect(brect_t *br,...)
   uint16_t dst_x;
   uint16_t dst_y;
   uint16_t pbr;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   far_t src;
   
   if (CFG_Mice != 0) {
@@ -195,7 +195,7 @@ byte __cdecl16far init2_usesCFGMice(uint16_t *mouseX,uint16_t *mouseY,...)
 {
   byte bVar1;
   uint uVar2;
-  undefined2 in_stack_0000000a;
+  uint16_t in_stack_0000000a;
   
   ovr_audio_usesLDIV_at_();
   if (CFG_Mice == 0) {

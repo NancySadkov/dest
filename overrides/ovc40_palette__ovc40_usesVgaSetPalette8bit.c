@@ -3,7 +3,7 @@ void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette,...)
 {
   int iVar1;
   int iVar2;
-  undefined2 unaff_SS;
+  uint16_t unaff_SS;
   uint8_t pal;
   int iStack_6;
   int iStack_4;

@@ -2,7 +2,7 @@ void __cdecl16far __EXITEMS(void)
 
 {
   code *pcVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   
   uVar2 = (uint)startx;   /* hand fix: startx is a function */
   if (((((char *)"Divide error\r\n")[9] & 4U) != 0) &&

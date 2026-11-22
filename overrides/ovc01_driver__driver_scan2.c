@@ -13,8 +13,8 @@ void __cdecl16near driver_scan2(void)
   undefined1 *unaff_SI;
   int unaff_DI;
   undefined1 *puVar8;
-  undefined2 unaff_ES;
-  undefined2 unaff_SS;
+  uint16_t unaff_ES;
+  uint16_t unaff_SS;
   bool bVar9;
   
   bVar2 = *(byte *)(unaff_BP + -6);

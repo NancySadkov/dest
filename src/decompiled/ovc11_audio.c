@@ -18,8 +18,8 @@ void __cdecl16far audio_usesLDIV_at_(void)
   ulong *puVar5;
   int in_DX;
   long lVar6;
-  undefined2 uVar7;
-  undefined2 uVar8;
+  uint16_t uVar7;
+  uint16_t uVar8;
   undefined1 in_stack_0000fffc;
   
   if (GameRunning) {
@@ -68,8 +68,8 @@ void __cdecl16far audio_usesLDIV_at_(void)
           uVar4 = ovr_randBelow(0x48);
           SfxDeadline = (uint16_t)(((uVar4 & 0xff) + 0x80));
         }
-        uVar7 = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-        sfxTickLo = *(undefined2 far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, and sfxTickLo is 16-bit */
+        uVar7 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+        sfxTickLo = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, and sfxTickLo is 16-bit */
         sfxTickHi = uVar7;
       }
       else if (CurSfxType3 == 0x70) {
@@ -310,8 +310,8 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
         *(uint8_t **)(puVar2 + 1) = puVar2 + 0xd;
         uVar4 = DIGHandle.seg;
         uVar3 = DIGHandle.ofs;
-        *(undefined2 *)(uVar3 + 9) = 0x2410;   /* hand fix: 2-byte segment-half slot; the literal offset is that DGROUP segment value */
-        *(undefined2 *)(uVar3 + 7) = 0x8f92;
+        *(uint16_t *)(uVar3 + 9) = 0x2410;   /* hand fix: 2-byte segment-half slot; the literal offset is that DGROUP segment value */
+        *(uint16_t *)(uVar3 + 7) = 0x8f92;
         *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5) = uStack_a;
         ovr_digPreformatSound();
         ovr_digPlayPreformatedSound();
@@ -428,10 +428,10 @@ uint16_t __cdecl16far audio_usesAlignToSeg(uint8_t *ofs,uint16_t seg,int size)
 void __cdecl16far audio_parseHexDigit(char *driverData,char ch)
 
 {
-  undefined2 uVar1;
+  uint16_t uVar1;
   
   if (ch != '0') {
-    uVar1 = (undefined2)((ulong)driverData >> 0x10);
+    uVar1 = (uint16_t)((ulong)driverData >> 0x10);
     if (((char *)driverData)[0x108] != -1) {
       if ((((byte *)_ctype + 1)[ch] & 2) == 0) {
         ((char *)driverData)[0x108] = ch + -0x37;
@@ -457,7 +457,7 @@ void __cdecl16far sfxInit(void)
   uint8_t *in_DX;
   int iVar2;
   int unaff_SI;
-  undefined2 uVar3;
+  uint16_t uVar3;
   int size;
   
   size = unaff_SI;
@@ -474,24 +474,24 @@ void __cdecl16far sfxInit(void)
     else {
       unaff_SI = CFG_Sfx + -0x31;
     }
-    if (((undefined2 *)&ibmsndComOfs)[unaff_SI * 2] != 0 ||
-        ((undefined2 *)&ibmsndComSeg)[unaff_SI * 2] != 0) {
-      (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)((undefined2 *)&ibmsndComSeg)[unaff_SI * 2];
-      handle.ofs = ((undefined2 *)&ibmsndComOfs)[unaff_SI * 2];
-      (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)((undefined2 *)&ibmsndComSeg)[unaff_SI * 2] >> 8);
+    if (((uint16_t *)&ibmsndComOfs)[unaff_SI * 2] != 0 ||
+        ((uint16_t *)&ibmsndComSeg)[unaff_SI * 2] != 0) {
+      (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)((uint16_t *)&ibmsndComSeg)[unaff_SI * 2];
+      handle.ofs = ((uint16_t *)&ibmsndComOfs)[unaff_SI * 2];
+      (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)((uint16_t *)&ibmsndComSeg)[unaff_SI * 2] >> 8);
       SfxGfxOfs = ovr_stshLoadGfx(handle);
-      uVar3 = (undefined2)
-              ((ulong)*(undefined4 *)((undefined2 *)&ibmsndComOfs + unaff_SI * 2) >> 0x10);
-      iVar2 = (int)*(undefined4 *)((undefined2 *)&ibmsndComOfs + unaff_SI * 2);
+      uVar3 = (uint16_t)
+              ((ulong)*(uint32_t *)((uint16_t *)&ibmsndComOfs + unaff_SI * 2) >> 0x10);
+      iVar2 = (int)*(uint32_t *)((uint16_t *)&ibmsndComOfs + unaff_SI * 2);
       SfxGfxSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
       DIGHandle.ofs =
            audio_usesAlignToSeg
-                     ((uint8_t *)CONCAT22(*(undefined2 *)(iVar2 + 5),in_DX),*(uint16_t *)(iVar2 + 7)
+                     ((uint8_t *)CONCAT22(*(uint16_t *)(iVar2 + 5),in_DX),*(uint16_t *)(iVar2 + 7)
                       ,size);
       DIGHandle.seg = (uint16_t)in_DX;
       audio_parseHexDigit((char *)CONCAT22(in_DX,DIGHandle.ofs),CFG_Irq);
-      ovr_ovc20_compute1((char *)((undefined2 *)&ibmsndComOfs)[unaff_SI * 2],
-                         (char)((undefined2 *)&ibmsndComSeg)[unaff_SI * 2]);
+      ovr_ovc20_compute1((char *)((uint16_t *)&ibmsndComOfs)[unaff_SI * 2],
+                         (char)((uint16_t *)&ibmsndComSeg)[unaff_SI * 2]);
       bVar1 = audio_init(DIGHandle.seg);
       if (CONCAT11(extraout_AH,bVar1) == 0) {
         DIGHandle.seg = 0;
@@ -518,7 +518,7 @@ void __cdecl16far musInit(void)
   uint8_t *in_DX;
   int iVar2;
   int unaff_SI;
-  undefined2 uVar3;
+  uint16_t uVar3;
   int size;
   
   size = unaff_SI;
@@ -532,29 +532,29 @@ void __cdecl16far musInit(void)
     else {
       unaff_SI = CFG_Mus + -0x31;
     }
-    if (((undefined2 *)&musDriver0Ofs)[unaff_SI * 2] != 0 ||
-        ((undefined2 *)&musDriver0Seg)[unaff_SI * 2] != 0) {
+    if (((uint16_t *)&musDriver0Ofs)[unaff_SI * 2] != 0 ||
+        ((uint16_t *)&musDriver0Seg)[unaff_SI * 2] != 0) {
       MidGfxOfs = ovr_stshLoadGfx(cmidpakComOfs);
       MidGfxSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
       MIDHandle.ofs =
            audio_usesAlignToSeg
-                     ((uint8_t *)CONCAT22(*(undefined2 *)((char *)cmidpakComOfs + 5),in_DX),
+                     ((uint8_t *)CONCAT22(*(uint16_t *)((char *)cmidpakComOfs + 5),in_DX),
                       *(uint16_t *)((char *)cmidpakComOfs + 7),size);
       MIDHandle.seg = (uint16_t)in_DX;
       ovr_ovc20_compute1(cmidpakComOfs,cmidpakComSeg);
-      handle.seg = ((undefined2 *)&musDriver0Seg)[unaff_SI * 2];
-      handle.ofs = ((undefined2 *)&musDriver0Ofs)[unaff_SI * 2];
+      handle.seg = ((uint16_t *)&musDriver0Seg)[unaff_SI * 2];
+      handle.ofs = ((uint16_t *)&musDriver0Ofs)[unaff_SI * 2];
       MusGfxOfs = ovr_stshLoadGfx(handle);
-      uVar3 = (undefined2)
-              ((ulong)*(undefined4 *)((undefined2 *)&musDriver0Ofs + unaff_SI * 2) >> 0x10);
-      iVar2 = (int)*(undefined4 *)((undefined2 *)&musDriver0Ofs + unaff_SI * 2);
+      uVar3 = (uint16_t)
+              ((ulong)*(uint32_t *)((uint16_t *)&musDriver0Ofs + unaff_SI * 2) >> 0x10);
+      iVar2 = (int)*(uint32_t *)((uint16_t *)&musDriver0Ofs + unaff_SI * 2);
       MusGfxSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
       MusHandle = audio_usesAlignToSeg
-                            ((uint8_t *)CONCAT22(*(undefined2 *)(iVar2 + 5),in_DX),
+                            ((uint8_t *)CONCAT22(*(uint16_t *)(iVar2 + 5),in_DX),
                              *(uint16_t *)(iVar2 + 7),size);
       MusHandleSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
-      ovr_ovc20_compute1((char *)((undefined2 *)&musDriver0Ofs)[unaff_SI * 2],
-                         ((undefined2 *)&musDriver0Seg)[unaff_SI * 2]);
+      ovr_ovc20_compute1((char *)((uint16_t *)&musDriver0Ofs)[unaff_SI * 2],
+                         ((uint16_t *)&musDriver0Seg)[unaff_SI * 2]);
       handle_00.seg = midpakAd.seg;
       handle_00.ofs = midpakAd.ofs;
       MusDrvOfs = ovr_stshLoadGfx(handle_00);
@@ -587,7 +587,7 @@ int __cdecl16far audio_panFromX(agnt_t *agnt,...)
 
 {
   uint uVar1;
-  undefined2 in_stack_00000006;
+  uint16_t in_stack_00000006;
   
   uVar1 = (uint)(((long)(int)agnt->x * 0x7f & 0xffffU) / 0xd2);
   if (0x7f < uVar1) {

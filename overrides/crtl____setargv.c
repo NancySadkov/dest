@@ -10,16 +10,16 @@ void __setargv(uint savedES)
   uint in_BX;
   int iVar8;
   int *piVar9;
-  undefined2 unaff_SI;
+  uint16_t unaff_SI;
   char *pcVar10;
-  undefined2 unaff_DI;
+  uint16_t unaff_DI;
   char *pcVar11;
-  undefined2 uVar12;
+  uint16_t uVar12;
   int unaff_SS;
-  undefined2 uVar13;
+  uint16_t uVar13;
   bool bVar14;
   undefined1 uVar15;
-  undefined2 in_stack_00000000;
+  uint16_t in_stack_00000000;
   uint in_stack_00000004;
   int iVar5;
   
@@ -51,10 +51,10 @@ void __setargv(uint savedES)
   iVar8 = -(int)puVar4;
   pcVar11 = (char *)((int)&stack0x0004 + iVar8);
   if (puVar4 <= &stack0x0004) {
-    *(undefined2 *)((int)&savedES + iVar8) = uVar12;
-    uVar13 = *(undefined2 *)((int)&savedES + iVar8);
+    *(uint16_t *)((int)&savedES + iVar8) = uVar12;
+    uVar13 = *(uint16_t *)((int)&savedES + iVar8);
     *(int *)((int)&savedES + iVar8) = unaff_SS;
-    uVar12 = *(undefined2 *)((int)&savedES + iVar8);
+    uVar12 = *(uint16_t *)((int)&savedES + iVar8);
     *(uint *)((int)&savedES + iVar8) = uVar6;
     while (uVar6 - 1 != 0) {
       pcVar2 = pcVar11;
@@ -82,7 +82,7 @@ Processing:
           iVar8 = uVar6 + 1;
           piVar9 = (int *)(&stack0x0004 + iVar8 * -2);
           if (&stack0x0004 < (undefined1 *)(iVar8 * 4)) goto code_r0x000120eb;
-          *(undefined2 *)&_argv_at_ = (uint16_t)piVar9;   /* hand fix: 2-byte slot */
+          *(uint16_t *)&_argv_at_ = (uint16_t)piVar9;   /* hand fix: 2-byte slot */
           *(int *)&_argv_at__2 = unaff_SS;
           uVar12 = __setargv_SavedDS;
           goto SetArgvX;
@@ -122,13 +122,13 @@ SetArgvX:
   }
   *piVar9 = 0;
   piVar9[1] = 0;
-  (&savedES)[iVar8 * -2] = *(undefined2 *)&__setargv_SavedReturn2;
-  *(undefined2 *)(&stack0x0000 + iVar8 * -4) = *(undefined2 *)&__setargv_SavedES;
-  *(undefined2 *)&__C0argc = *(undefined2 *)&_argc_at_;
-  *(undefined2 *)&__C0argv_2 = *(undefined2 *)&_argv_at__2;
-  *(undefined2 *)&__C0argv = *(undefined2 *)&_argv_at_;
+  (&savedES)[iVar8 * -2] = *(uint16_t *)&__setargv_SavedReturn2;
+  *(uint16_t *)(&stack0x0000 + iVar8 * -4) = *(uint16_t *)&__setargv_SavedES;
+  *(uint16_t *)&__C0argc = *(uint16_t *)&_argc_at_;
+  *(uint16_t *)&__C0argv_2 = *(uint16_t *)&_argv_at__2;
+  *(uint16_t *)&__C0argv = *(uint16_t *)&_argv_at_;
                     /* WARNING: Could not recover jumptable at 0x00012153. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-  (*(code *)*(undefined2 *)&__setargv_SavedReturn)();
+  (*(code *)*(uint16_t *)&__setargv_SavedReturn)();
   return;
 }

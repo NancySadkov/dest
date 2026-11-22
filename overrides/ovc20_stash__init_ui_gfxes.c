@@ -81,13 +81,13 @@ void __cdecl16far init_ui_gfxes(void)
     gfx_02.ofs = ((far_t far *)MiceCursors + i)->ofs;
     ovr_blitLoadRleGfx(gfx_02,far_from_u32((uint32_t)((ulong)in_DX << 0x10)),0);
     init_special_graphics
-              ((char *)CONCAT22(*(undefined2 *)((int)&MiceCursors[0].seg + i * 4),
+              ((char *)CONCAT22(*(uint16_t *)((int)&MiceCursors[0].seg + i * 4),
                                 (char *)((far_t far *)MiceCursors + i)->ofs));
     video_copyScreenTile(in_DX,0,0);
     pvVar3 = ovr_stshAlloc(0x121);
-    *(undefined2 *)((int)&MicePtrs.seg + i * 4) =(uint16_t)( pfVar2);
+    *(uint16_t *)((int)&MicePtrs.seg + i * 4) =(uint16_t)( pfVar2);
     ((far_t far *)&MicePtrs + i)->ofs = (uint16_t)pvVar3;
-    memcpy((char *)CONCAT22(*(undefined2 *)((int)&MicePtrs.seg + i * 4),
+    memcpy((char *)CONCAT22(*(uint16_t *)((int)&MicePtrs.seg + i * 4),
                             (char *)((far_t far *)&MicePtrs + i)->ofs),(char *)MiceSaveBuf,0x121);
   }
   handle_01.seg = uStack_4;

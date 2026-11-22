@@ -17,10 +17,10 @@ int main(int argc,str_t *argv,str_t *envp)
   uint uVar3;
   uint16_t uVar4;
   str_t *psVar5;
-  undefined2 uVar6;
+  uint16_t uVar6;
   byte bStack_6;
   
-  uVar6 = (undefined2)((ulong)envp >> 0x10);
+  uVar6 = (uint16_t)((ulong)envp >> 0x10);
   psVar5 = (str_t *)envp;
   GGameExe.seg = psVar5->seg;
   GGameExe.ofs = (uint16_t)envp->ptr;

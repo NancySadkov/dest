@@ -2,7 +2,7 @@ int __cdecl16near __EXTCOPY(void)
 
 {
   code *pcVar1;
-  undefined2 uVar2;
+  uint16_t uVar2;
   uint in_AX;
   int iVar3;
   uint in_CX;
@@ -38,8 +38,8 @@ int __cdecl16near __EXTCOPY(void)
       uVar5 = in_DX >> 4 | in_DX << 0xc;
     }
     else {
-      *(undefined2 *)((char *)0x51) =
-           *(undefined2 *)((char *)0x47);
+      *(uint16_t *)((char *)0x51) =
+           *(uint16_t *)((char *)0x47);
       bVar6 = in_AX < *(uint *)((char *)0x49);
       in_AX = in_AX - *(uint *)((char *)0x49);
       uVar5 = (in_DX - *(int *)((char *)0x4b)) - (uint)bVar6;
@@ -52,8 +52,8 @@ int __cdecl16near __EXTCOPY(void)
       uVar4 = in_CX >> 4 | in_CX << 0xc;
     }
     else {
-      *(undefined2 *)((char *)0x57) =
-           *(undefined2 *)((char *)0x47);
+      *(uint16_t *)((char *)0x57) =
+           *(uint16_t *)((char *)0x47);
       bVar6 = in_BX < *(uint *)((char *)0x49);
       in_BX = in_BX - *(uint *)((char *)0x49);
       uVar4 = (in_CX - *(int *)((char *)0x4b)) - (uint)bVar6;

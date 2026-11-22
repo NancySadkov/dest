@@ -65,13 +65,13 @@ ovc40_usesAlignToSeg
   uint8_t text1;
   uint8_t text2;
   uint8_t dst;
-  undefined2 uStack_68;
-  undefined2 uStack_66;
+  uint16_t uStack_68;
+  uint16_t uStack_66;
   uint8_t format1;
-  undefined2 auStack_62 [3];
+  uint16_t auStack_62 [3];
   uint8_t rankMsg;
   uint16_t uStack_5a;
-  undefined2 uStack_58;
+  uint16_t uStack_58;
   char *pcStack_56;
   uint8_t format2;
   uint16_t auStack_52 [4];
@@ -90,7 +90,7 @@ ovc40_usesAlignToSeg
   uint16_t uStack_32;
   uint16_t uStack_30;
   uint16_t uStack_2e;
-  undefined2 uStack_2c;
+  uint16_t uStack_2c;
   char *pcStack_2a;
   uint16_t uStack_28;
   uint16_t uStack_26;
@@ -271,7 +271,7 @@ ovc40_usesAlignToSeg
     bVar3 = 2;
     puVar7 = &format1;
     pcVar4 = ovr_stsprintf((char *)&text1,
-                           (char *)CONCAT22(*(undefined2 *)(puVar7 + (uint)formatIndex * 4),unaff_SS
+                           (char *)CONCAT22(*(uint16_t *)(puVar7 + (uint)formatIndex * 4),unaff_SS
                                            ),
                            (char *)CONCAT13((char)((uint)textOfs >> 8),
                                             CONCAT12((char)textOfs,auStack_62[(uint)formatIndex * 2]
@@ -280,7 +280,7 @@ ovc40_usesAlignToSeg
     uVar11 = (undefined1)((uint)pcVar4 >> 8);
     puVar8 = &format2;
     pcVar4 = ovr_stsprintf((char *)&text2,
-                           (char *)CONCAT22(*(undefined2 *)(puVar8 + (uint)formatIndex * 4),unaff_SS
+                           (char *)CONCAT22(*(uint16_t *)(puVar8 + (uint)formatIndex * 4),unaff_SS
                                            ),
                            (char *)CONCAT22(textOfs,(char *)auStack_52[(uint)formatIndex * 2]),
                            textSeg);
@@ -366,7 +366,7 @@ ovc40_usesAlignToSeg
     ovc40_flushInput();
     rightButtonLatch = '\0';
     if ((formatIndex == 2) || (formatIndex == 3)) {
-      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(undefined2 far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
       iVar9 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
       (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = iVar9;
       if (cStack_1d == '\0') {
