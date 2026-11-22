@@ -1,48 +1,43 @@
-int __cdecl16far blitText(char *text,byte *widths,uint16_t seg,uint8_t term,...)
+/* 302d:050a */
+
+int __cdecl16far blitText(char far *text,byte far *widths,uint16_t term,uint8_t color)
 
 {
-  byte bVar1;
   uint8_t ch_width;
   uint16_t nchars;
-  undefined1 uVar3;
-  uint uVar2;
-  uint16_t pt;
-  uint uVar4;
-  uint16_t index;
-  undefined1 in_stack_0000000e;
+  uint8_t chval;
+  uint16_t i;
   uint16_t bx;
   uint16_t snchars;
-  
-  if (*(char *)CONCAT22((byte *)widths,text) == '\0') {
+
+  if (*text == '\0') {
     nchars = 0;
   }
   else {
     nchars = 0;
     snchars = 0;
-    uVar4 = 0;
+    i = 0;
     for (bx = TextBlitX;
-        (((text[uVar4] != '\0' && (text[uVar4] != '\n')) && (text[uVar4] != '\x1a')) &&
-        (ch_width = fontChWidth((byte *)CONCAT22(seg,(*(uint16_t *)((uint8_t *)&(widths) + 2))),text[uVar4]),
-        bx + ch_width <= term + 1U)); bx = bx + bVar1) {
-      if (text[uVar4] == ' ') {
-        nchars = uVar4 + 1;
+        (((text[i] != '\0' && (text[i] != '\n')) && (text[i] != '\x1a')) &&
+        (ch_width = fontChWidth(widths,text[i]), bx + ch_width <= term + 1U));
+        bx = bx + ch_width) {
+      if (text[i] == ' ') {
+        snchars = i + 1;
+        nchars = i + 1;
       }
-      snchars = uVar4 + 1;
-      bVar1 = fontChWidth((byte *)CONCAT22(seg,(*(uint16_t *)((uint8_t *)&(widths) + 2))),text[uVar4]);
-      uVar4 = uVar4 + 1;
+      ch_width = fontChWidth(widths,text[i]);
+      i = i + 1;
     }
-    uVar2 = (uint)(byte)text[uVar4];
-    if (((uVar2 == 0) || (text[uVar4] == '\n')) || ((text[uVar4] == ' ' || (text[uVar4] == '\x1a')))
-       ) {
-      nchars = uVar4;
+    chval = (uint8_t)text[i];
+    if (((chval == 0) || (text[i] == '\n')) || ((text[i] == ' ') || (text[i] == '\x1a')))
+    {
+      nchars = i;
     }
     if (nchars == 0) {
       nchars = snchars;
     }
-    for (index = 0; index < nchars; index = index + 1) {
-      uVar3 = (undefined1)(uVar2 >> 8);
-      uVar2 = CONCAT11(uVar3,text[index]);
-      blitLetter(text[index],(byte *)seg,   /* hand fix: slot after widths == seg */(uint8_t)seg,CONCAT11(uVar3,in_stack_0000000e));
+    for (i = 0; i < nchars; i = i + 1) {
+      blitLetter(text[i],widths,color);
     }
     for (; text[nchars] == '\r'; nchars = nchars + 1) {
     }

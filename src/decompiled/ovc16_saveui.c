@@ -260,7 +260,7 @@ void __cdecl16far saveui_usesBlitGfx10(far_t gfx,char *text,byte *widths,uint *c
     ovr_blitGfx10(gfx_01,0x16,uVar1,(brect_t *)&rect,SUB21(unaff_SS,0),(char)uVar1);
   }
   *(uint16_t *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2))) = TextBlitX;
-  ovr_blitLetter('_',(byte *)Font03.ofs,(uint8_t)Font03.seg);
+  ovr_blitLetter('_',(byte *)Font03.ofs,(uint8_t)Font03.seg,0xf);
   return;
 }
 

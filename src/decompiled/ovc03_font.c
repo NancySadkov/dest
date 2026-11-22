@@ -154,112 +154,101 @@ far_t * __cdecl16far stshProcessFont(far_t *__return_storage_ptr__,int16_t file_
 
 /* 302d:028c */
 
-void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
+/* Blit one character: ch is turned into a glyph index by adding 0xe0, rows is
+   widths[0], the glyph width is widths[ch_index + 0xc1], and the glyph data
+   starts at widths + word[ch_index*2 + 1] + 0x121 in the same segment.
+   Zero pixels leave the destination alone; 0x9f/0x9b (type 2) become 0x92,
+   1 becomes 0xec, 0xe becomes the caller's color, and in type 1 the run
+   0xe4..0xe7 is ORed with 0x10. */
+
+void __cdecl16far blitLetter(char ch,byte far *widths,uint8_t color)
 
 {
-  far_t gfx;
-  far_t dst;
-  uint8_t ch_index;
-  uint uVar1;
+  byte far *dst;
+  byte far *src;
+  uint16_t rows;
   uint16_t letter_w;
-  uint16_t ws;
-  int iVar2;
-  undefined2 uVar3;
-  undefined1 uStack0009;
-  byte in_stack_0000000a;
-  uint uStack_e;
-  byte *uStack_a;
-  undefined2 uStack_8;
-  byte *uStack_6;
-  uint16_t uStack_4;
-  
-  widths = (byte *)CONCAT13(uStack0009,CONCAT12(term,widths));
+  uint16_t row;
+  uint16_t col;
+  uint8_t ch_index;
+  far_t gfx;
+  far_t rle_dst;
+
   if (((ch != '\r') && (ch != '\n')) && (ch != '\x1a')) {
     if (ch == '\x7f') {
       gfx.seg = LbxButton2.seg;
       gfx.ofs = LbxButton2.ofs;
-      dst.seg = TextBlitDstSeg;
-      dst.ofs = TextBlitY * 0x140 + TextBlitX + 0x140;
-      ovr_blitLoadRleGfx(gfx,dst);
+      rle_dst.seg = TextBlitDstSeg;
+      rle_dst.ofs = TextBlitY * 0x140 + TextBlitX + 0x140;
+      ovr_blitLoadRleGfx(gfx,rle_dst);
     }
     else {
       ch_index = ch + 0xe0;
       if (ch_index < 0x61) {
-        uVar1 = (uint)*widths;
-        uVar3 = (undefined2)((ulong)widths >> 0x10);
-        letter_w = (uint16_t)widths[ch_index + 0xc1];
-        uStack_6 = (byte *)CONCAT22(TextBlitDstSeg,(byte *)(TextBlitX + TextBlitY * 0x140));
-        uStack_a = (byte *)CONCAT22(uVar3,widths + *(int *)(widths + (uint)ch_index * 2 + 1) +
-                                                    0x121);
+        rows = *widths;
+        letter_w = widths[ch_index + 0xc1];
+        dst = (byte far *)MK_FP(TextBlitDstSeg,TextBlitX + TextBlitY * 0x140);
+        src = widths + *(int far *)(widths + (uint)ch_index * 2 + 1) + 0x121;
         if (BlitLetterType == '\x02') {
-          for (uStack_e = 0; uStack_e < uVar1; uStack_e = uStack_e + 1) {
-            iVar2 = 0;
-            while( true ) {
-              if ((int)letter_w <= iVar2) break;
-              if ((*uStack_a == 0x9f) || (*uStack_a == 0x9b)) {
-                *uStack_6 = 0x92;
+          for (row = 0; row < rows; row = row + 1) {
+            for (col = 0; col < letter_w; col = col + 1) {
+              if ((*src == 0x9f) || (*src == 0x9b)) {
+                *dst = 0x92;
               }
-              else if (*uStack_a != 0) {
-                *uStack_6 = *uStack_a;
+              else if (*src != 0) {
+                *dst = *src;
               }
-              uStack_6 = (byte *)CONCAT22(uStack_4,uStack_6 + 1);
-              uStack_a = (byte *)CONCAT22(uStack_8,uStack_a + 1);
-              iVar2 = iVar2 + 1;
+              dst = dst + 1;
+              src = src + 1;
             }
-            uStack_6 = (byte *)CONCAT22(uStack_4,uStack_6 + (0x140 - letter_w));
+            dst = dst + (0x140 - letter_w);
           }
         }
         else if (BlitLetterType == '\0') {
-          for (uStack_e = 0; uStack_e < uVar1; uStack_e = uStack_e + 1) {
-            iVar2 = 0;
-            while( true ) {
-              if ((int)letter_w <= iVar2) break;
-              if (*uStack_a == 1) {
-                *uStack_6 = 0xec;
+          for (row = 0; row < rows; row = row + 1) {
+            for (col = 0; col < letter_w; col = col + 1) {
+              if (*src == 1) {
+                *dst = 0xec;
               }
-              else if (*uStack_a == 0xe) {
-                *uStack_6 = in_stack_0000000a;
+              else if (*src == 0xe) {
+                *dst = color;
               }
-              else if (*uStack_a != 0) {
-                *uStack_6 = *uStack_a;
+              else if (*src != 0) {
+                *dst = *src;
               }
-              uStack_6 = (byte *)CONCAT22(uStack_4,uStack_6 + 1);
-              uStack_a = (byte *)CONCAT22(uStack_8,uStack_a + 1);
-              iVar2 = iVar2 + 1;
+              dst = dst + 1;
+              src = src + 1;
             }
-            uStack_6 = (byte *)CONCAT22(uStack_4,uStack_6 + (0x140 - letter_w));
+            dst = dst + (0x140 - letter_w);
           }
         }
         else {
-          for (uStack_e = 0; uStack_e < uVar1; uStack_e = uStack_e + 1) {
-            iVar2 = 0;
-            while( true ) {
-              if ((int)letter_w <= iVar2) break;
-              if (*uStack_a == 1) {
-                *uStack_6 = 0xec;
+          for (row = 0; row < rows; row = row + 1) {
+            for (col = 0; col < letter_w; col = col + 1) {
+              if (*src == 1) {
+                *dst = 0xec;
               }
-              else if (*uStack_a == 0xe) {
-                *uStack_6 = in_stack_0000000a;
+              else if (*src == 0xe) {
+                *dst = color;
               }
-              else if ((*uStack_a < 0xe4) || (0xe7 < *uStack_a)) {
-                if (*uStack_a != 0) {
-                  *uStack_6 = *uStack_a;
+              else if ((*src < 0xe4) || (0xe7 < *src)) {
+                if (*src != 0) {
+                  *dst = *src;
                 }
               }
               else {
-                *uStack_6 = *uStack_a | 0x10;
+                *dst = *src | 0x10;
               }
-              uStack_6 = (byte *)CONCAT22(uStack_4,uStack_6 + 1);
-              uStack_a = (byte *)CONCAT22(uStack_8,uStack_a + 1);
-              iVar2 = iVar2 + 1;
+              dst = dst + 1;
+              src = src + 1;
             }
-            uStack_6 = (byte *)CONCAT22(uStack_4,uStack_6 + (0x140 - letter_w));
+            dst = dst + (0x140 - letter_w);
           }
         }
         TextBlitX = TextBlitX + letter_w;
       }
       else {
-        printf("Error 4 %d \r");
+        printf("Error 4 %d \r",ch_index);
         ovr_biosReadKey();
       }
     }
@@ -271,16 +260,16 @@ void __cdecl16far blitLetter(char ch,byte *widths,uint8_t term,...)
 
 /* 302d:04eb */
 
-uint8_t __cdecl16far fontChWidth(uint8_t *widths,char ch)
+uint8_t __cdecl16far fontChWidth(uint8_t far *widths,char ch)
 
 {
   uint8_t width;
-  
+
   if ((byte)ch < 0x20) {
     width = 0x0;
   }
   else {
-    width = ((uint8_t *)widths)[(byte)ch + 0xa1];
+    width = widths[(byte)ch + 0xa1];
   }
   return width;
 }
@@ -288,51 +277,46 @@ uint8_t __cdecl16far fontChWidth(uint8_t *widths,char ch)
 
 
 /* 302d:050a */
-int __cdecl16far blitText(char *text,byte *widths,uint16_t seg,uint8_t term,...)
+/* 302d:050a */
+
+int __cdecl16far blitText(char far *text,byte far *widths,uint16_t term,uint8_t color)
 
 {
-  byte bVar1;
   uint8_t ch_width;
   uint16_t nchars;
-  undefined1 uVar3;
-  uint uVar2;
-  uint16_t pt;
-  uint uVar4;
-  uint16_t index;
-  undefined1 in_stack_0000000e;
+  uint8_t chval;
+  uint16_t i;
   uint16_t bx;
   uint16_t snchars;
-  
-  if (*(char *)CONCAT22((byte *)widths,text) == '\0') {
+
+  if (*text == '\0') {
     nchars = 0;
   }
   else {
     nchars = 0;
     snchars = 0;
-    uVar4 = 0;
+    i = 0;
     for (bx = TextBlitX;
-        (((text[uVar4] != '\0' && (text[uVar4] != '\n')) && (text[uVar4] != '\x1a')) &&
-        (ch_width = fontChWidth((byte *)CONCAT22(seg,(*(uint16_t *)((uint8_t *)&(widths) + 2))),text[uVar4]),
-        bx + ch_width <= term + 1U)); bx = bx + bVar1) {
-      if (text[uVar4] == ' ') {
-        nchars = uVar4 + 1;
+        (((text[i] != '\0' && (text[i] != '\n')) && (text[i] != '\x1a')) &&
+        (ch_width = fontChWidth(widths,text[i]), bx + ch_width <= term + 1U));
+        bx = bx + ch_width) {
+      if (text[i] == ' ') {
+        snchars = i + 1;
+        nchars = i + 1;
       }
-      snchars = uVar4 + 1;
-      bVar1 = fontChWidth((byte *)CONCAT22(seg,(*(uint16_t *)((uint8_t *)&(widths) + 2))),text[uVar4]);
-      uVar4 = uVar4 + 1;
+      ch_width = fontChWidth(widths,text[i]);
+      i = i + 1;
     }
-    uVar2 = (uint)(byte)text[uVar4];
-    if (((uVar2 == 0) || (text[uVar4] == '\n')) || ((text[uVar4] == ' ' || (text[uVar4] == '\x1a')))
-       ) {
-      nchars = uVar4;
+    chval = (uint8_t)text[i];
+    if (((chval == 0) || (text[i] == '\n')) || ((text[i] == ' ') || (text[i] == '\x1a')))
+    {
+      nchars = i;
     }
     if (nchars == 0) {
       nchars = snchars;
     }
-    for (index = 0; index < nchars; index = index + 1) {
-      uVar3 = (undefined1)(uVar2 >> 8);
-      uVar2 = CONCAT11(uVar3,text[index]);
-      blitLetter(text[index],(byte *)seg,   /* hand fix: slot after widths == seg */(uint8_t)seg,CONCAT11(uVar3,in_stack_0000000e));
+    for (i = 0; i < nchars; i = i + 1) {
+      blitLetter(text[i],widths,color);
     }
     for (; text[nchars] == '\r'; nchars = nchars + 1) {
     }
@@ -351,20 +335,17 @@ int __cdecl16far blitText(char *text,byte *widths,uint16_t seg,uint8_t term,...)
 
 
 /* 302d:0634 */
-uint __cdecl16far blitLabel(char *text,uint8_t *widths,int16_t max_width,uint8_t term,...)
+/* 302d:0634 */
+
+uint __cdecl16far blitLabel(char far *text,byte far *widths,uint16_t term,uint8_t color)
 
 {
-  undefined1 uVar2;
-  uint16_t uVar1;
-  uint16_t ptext;
-  uint16_t j;
+  uint16_t width;
   uint16_t i;
   uint16_t x;
-  uint16_t w_seg;
-  undefined1 in_stack_0000000e;
-  uint16_t width;
-  
-  if (*(char *)CONCAT22((uint8_t *)widths,text) == '\0') {
+  uint16_t j;
+
+  if (*text == '\0') {
     width = 0;
   }
   else {
@@ -372,16 +353,12 @@ uint __cdecl16far blitLabel(char *text,uint8_t *widths,int16_t max_width,uint8_t
     j = 0;
     for (x = TextBlitX;
         ((text[j] != '\0' && (text[j] != '\n')) &&
-        (x + ((uint16_t *)max_width)[(byte)text[j] + 0xa1] <= term + 1U));
-        x = x + ((uint16_t *)max_width)[(byte)text[j] + 0xa1]) {
+        (x + widths[(byte)text[j] + 0xa1] <= term + 1U));
+        x = x + widths[(byte)text[j] + 0xa1], j = j + 1) {
       width = j + 1;
-      j = j + 1;
     }
-    uVar1 = width;
     for (i = 0; i < width; i = i + 1) {
-      uVar2 = (undefined1)(uVar1 >> 8);
-      uVar1 = CONCAT11(uVar2,text[i]);
-      blitLetter(text[i],(byte *)max_width,   /* hand fix: slot after widths */(uint8_t)max_width,CONCAT11(uVar2,in_stack_0000000e));
+      blitLetter(text[i],widths,color);
     }
   }
   return width;
@@ -555,7 +532,8 @@ void __cdecl16far drawTextAt(char *txt,uint16_t dst,...)
     gfx.ofs = FontHandle.ofs;
     ovr_blitLoadRleGfx(gfx,dst_00);
     for (TextBlitY = 0x9c; TextBlitX = 0x1d, TextBlitY + 9 < 200; TextBlitY = TextBlitY + 0xb) {
-      ndrawn = blitText(txt,(byte *)CONCAT22(Font03.ofs,dst),Font03.seg,0xcf);
+      ndrawn = blitText((char far *)CONCAT22(in_stack_00000008,txt),
+                      (byte far *)CONCAT22(Font03.seg,Font03.ofs),0xcf,0xed);
       txtsz = strlen((char *)CONCAT22(dst,txt));
       if (txtsz <= ndrawn) {
         ovr_clean_ring_buffer();

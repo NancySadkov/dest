@@ -33,3 +33,26 @@
 1000:2747	void __cdecl16far printf(char *fmt,...)
 # _sprintf (1000:1f1d): variadic; the recovered prototype dropped the ellipsis.
 1000:1f1d	void __cdecl16far _sprintf(char *buf,char *fmt,...)
+
+# --- font text-blitting family (302d) -------------------------------------------------
+# Proven from the callees' frames and from every call site (see
+# overrides/ovc03_font__*.c for the bodies and tmp/asm_*.txt for the disassembly):
+#
+#   blitLetter  (302d:028c)  ch @6, widths far @8 (ofs),@a (seg), color @c
+#                            CALL sites: 302d:05e1/0989 style -
+#                            PUSH color; PUSH widths.seg; PUSH widths.ofs; PUSH ch
+#   blitText    (302d:050a)  text far @6, widths far @a, term word @e, color byte @10
+#                            302d:0989: PUSH 0xed; PUSH 0xcf; PUSH Font03.seg;
+#                            PUSH Font03.ofs; PUSH text.seg; PUSH text.ofs
+#   blitLabel   (302d:0634)  same frame as blitText
+#   fontChWidth (302d:04eb)  widths far @6, ch @a
+#                            4528:0646: PUSH 0xf; PUSH Font03.seg; PUSH Font03.ofs; PUSH '_'
+#
+# The Ghidra model still splits far pointers into an offset parameter plus a
+# segment parameter, so these are applied in the tree/overrides rather than by
+# ApplyProto.  When the model gains far-pointer support, the signatures are:
+#   void      blitLetter (char ch, byte far *widths, uint8_t color)
+#   int       blitText   (char far *text, byte far *widths, uint16_t term, uint8_t color)
+#   uint      blitLabel  (char far *text, byte far *widths, uint16_t term, uint8_t color)
+#   uint8_t   fontChWidth(uint8_t far *widths, char ch)
+# -------------------------------------------------------------------------------------

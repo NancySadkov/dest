@@ -1,17 +1,14 @@
-uint __cdecl16far blitLabel(char *text,uint8_t *widths,int16_t max_width,uint8_t term,...)
+/* 302d:0634 */
+
+uint __cdecl16far blitLabel(char far *text,byte far *widths,uint16_t term,uint8_t color)
 
 {
-  undefined1 uVar2;
-  uint16_t uVar1;
-  uint16_t ptext;
-  uint16_t j;
+  uint16_t width;
   uint16_t i;
   uint16_t x;
-  uint16_t w_seg;
-  undefined1 in_stack_0000000e;
-  uint16_t width;
-  
-  if (*(char *)CONCAT22((uint8_t *)widths,text) == '\0') {
+  uint16_t j;
+
+  if (*text == '\0') {
     width = 0;
   }
   else {
@@ -19,16 +16,12 @@ uint __cdecl16far blitLabel(char *text,uint8_t *widths,int16_t max_width,uint8_t
     j = 0;
     for (x = TextBlitX;
         ((text[j] != '\0' && (text[j] != '\n')) &&
-        (x + ((uint16_t *)max_width)[(byte)text[j] + 0xa1] <= term + 1U));
-        x = x + ((uint16_t *)max_width)[(byte)text[j] + 0xa1]) {
+        (x + widths[(byte)text[j] + 0xa1] <= term + 1U));
+        x = x + widths[(byte)text[j] + 0xa1], j = j + 1) {
       width = j + 1;
-      j = j + 1;
     }
-    uVar1 = width;
     for (i = 0; i < width; i = i + 1) {
-      uVar2 = (undefined1)(uVar1 >> 8);
-      uVar1 = CONCAT11(uVar2,text[i]);
-      blitLetter(text[i],(byte *)max_width,   /* hand fix: slot after widths */(uint8_t)max_width,CONCAT11(uVar2,in_stack_0000000e));
+      blitLetter(text[i],widths,color);
     }
   }
   return width;
