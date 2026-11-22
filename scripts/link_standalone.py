@@ -20,9 +20,11 @@ def main():
     # Our tree contains a recovered CRT (crtl.c).  Linking Turbo C's C0L startup
     # and CL.LIB as well duplicates it, so the first link excludes the recovered
     # CRT object and lets the library provide those symbols.
-    if "--with-crtl" not in sys.argv:
+    # The recovered CRT (crtl.c) is the program's own runtime, so it is linked by
+    # default; --without-crtl reproduces the older, startup-only link.
+    if "--without-crtl" in sys.argv:
         objs = [o for o in objs if o.upper() != "CRTL.OBJ"]
-    print("objects:", len(objs), "(crtl excluded)" if "--with-crtl" not in sys.argv else "")
+    print("objects:", len(objs), "(crtl excluded)" if "--without-crtl" in sys.argv else "")
     bat = ["@echo off", "set PATH=D:\\BIN", "set LIB=D:\\LIB"]
     # TLINK syntax: <objs>,<exe>,<map>,<libs>  -- the comma after the last object
     # is what separates inputs from outputs
