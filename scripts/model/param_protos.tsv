@@ -18,3 +18,13 @@
 #               (uint)(byte)partyIndex << 2 to index a 4-byte table
 #   agnt        an agnt_t far pointer, returned unchanged on the error path
 4207:26bc	agnt_t * __cdecl16far ovc15_textError(undefined4 partyIndex,agnt_t *agnt)
+
+# SUB_5b66_1d94 (5b66:1d94): grid coordinates and a direction flag.
+#   param_1/param_2 index FillGrid as row*0xa1 + column,
+#   param_3 is the ignoreBlocked argument of attact_usesSCARRY2.
+5b66:1d94	undefined2 __cdecl16far SUB_5b66_1d94(int gridX,int gridY,char ignoreBlocked)
+
+# manage_usesLitoa103 (4d05:28f4): the segment half of a far string pointer.
+#   CONCAT22(param_1, in_stack_00000002) builds the far pointer, and the only
+#   call site passes (0x236f, owner).
+4d05:28f4	undefined2 __cdecl16far manage_usesLitoa103(uint16_t textSeg,uint16_t owner)

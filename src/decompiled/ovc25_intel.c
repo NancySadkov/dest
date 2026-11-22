@@ -1050,10 +1050,10 @@ void __cdecl16far ovc25_tickCountdown(int partyIndex,...)
 /* WARNING: Instruction at (ram,0x0005d43a) overlaps instruction at (ram,0x0005d438)
     */
 
-undefined2 __cdecl16far SUB_5b66_1d94(param_1,param_2,param_3)
-int param_1;
-int param_2;
-char param_3;
+undefined2 __cdecl16far SUB_5b66_1d94(gridX,gridY,ignoreBlocked)
+int gridX;
+int gridY;
+char ignoreBlocked;
 
 {
   uint *puVar1;
@@ -1215,16 +1215,16 @@ char param_3;
   pbVar32[iVar21] = pbVar32[iVar21] + cVar4;
   pbVar32[iVar21] = pbVar32[iVar21] + cVar4;
   _fmemset((void *)(ulong)*(uint *)((int)(undefined4 *)&FillGrid + 2),0x6541,(uint16_t)count);
-  iVar21 = 0x50 - param_1;
-  iVar23 = 0x50 - param_2;
+  iVar21 = 0x50 - gridX;
+  iVar23 = 0x50 - gridY;
   iStack_a = 1;
   piStack_1a = (int *)CONCAT22(unaff_SS,aiStack_278);
   piStack_1e = (int *)CONCAT22(unaff_SS,aiStack_4d0);
   piStack_e = aiStack_728;
   piStack_12 = aiStack_980;
-  *(undefined1 *)((int)*(undefined4 *)&FillGrid + (param_1 + iVar21) * 0xa1 + param_2 + iVar23) = 1;
-  *piStack_1a = param_1;
-  *piStack_1e = param_2;
+  *(undefined1 *)((int)*(undefined4 *)&FillGrid + (gridX + iVar21) * 0xa1 + gridY + iVar23) = 1;
+  *piStack_1a = gridX;
+  *piStack_1e = gridY;
   bStack_1f = 2;
   uVar35 = unaff_SS;
   while( true ) {
@@ -1248,7 +1248,7 @@ char param_3;
       y = piStack_1e[iStack_8];
       piStack_1e = piVar8;
       if (((*(char *)((x + iVar21) * 0xa1 + *(int *)&FillGrid + y + iVar23 + -0xa1) == '\0') &&
-          (uVar15 = ovr_attact_usesSCARRY2(x,y,3,param_3,count,pbVar32), (uVar15 & 0xff) == 0)) &&
+          (uVar15 = ovr_attact_usesSCARRY2(x,y,3,ignoreBlocked,count,pbVar32), (uVar15 & 0xff) == 0)) &&
          (iVar26 < 300)) {
         *(byte *)((x + iVar21) * 0xa1 + *(int *)&FillGrid + y + iVar23 + -0xa1) = bStack_1f;
         piStack_e[iVar26] = x + -1;
@@ -1256,7 +1256,7 @@ char param_3;
         iVar26 = iVar26 + 1;
       }
       if (((*(char *)((x + iVar21) * 0xa1 + *(int *)&FillGrid + y + iVar23 + 0xa1) == '\0') &&
-          (uVar15 = ovr_attact_usesSCARRY2(x,y,1,param_3,count,pbVar32), (uVar15 & 0xff) == 0)) &&
+          (uVar15 = ovr_attact_usesSCARRY2(x,y,1,ignoreBlocked,count,pbVar32), (uVar15 & 0xff) == 0)) &&
          (iVar26 < 300)) {
         *(byte *)((x + iVar21) * 0xa1 + *(int *)&FillGrid + y + iVar23 + 0xa1) = bStack_1f;
         piStack_e[iVar26] = x + 1;
@@ -1264,7 +1264,7 @@ char param_3;
         iVar26 = iVar26 + 1;
       }
       if (((*(char *)((int)*(undefined4 *)&FillGrid + (x + iVar21) * 0xa1 + y + iVar23 + -1) == '\0'
-           ) && (uVar15 = ovr_attact_usesSCARRY2(x,y,0,param_3), (uVar15 & 0xff) == 0)) &&
+           ) && (uVar15 = ovr_attact_usesSCARRY2(x,y,0,ignoreBlocked), (uVar15 & 0xff) == 0)) &&
          (iVar26 < 300)) {
         *(byte *)((int)*(undefined4 *)&FillGrid + (x + iVar21) * 0xa1 + y + iVar23 + -1) = bStack_1f
         ;
@@ -1273,7 +1273,7 @@ char param_3;
         iVar26 = iVar26 + 1;
       }
       if (((*(char *)((int)*(undefined4 *)&FillGrid + (x + iVar21) * 0xa1 + y + iVar23 + 1) == '\0')
-          && (uVar15 = ovr_attact_usesSCARRY2(x,y,2,param_3), (uVar15 & 0xff) == 0)) &&
+          && (uVar15 = ovr_attact_usesSCARRY2(x,y,2,ignoreBlocked), (uVar15 & 0xff) == 0)) &&
          (iVar26 < 300)) {
         *(byte *)((int)*(undefined4 *)&FillGrid + (x + iVar21) * 0xa1 + y + iVar23 + 1) = bStack_1f;
         piStack_e[iVar26] = x;

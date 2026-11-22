@@ -2971,9 +2971,9 @@ void manage_textAllProperty2(void)
 
 /* [R4] calls litoa10 */
 
-undefined2 __cdecl16far manage_usesLitoa103(param_1,param_2)
-undefined2 param_1;
-int param_2;
+undefined2 __cdecl16far manage_usesLitoa103(textSeg,owner)
+undefined2 textSeg;
+int owner;
 
 {
   long lVar1;
@@ -2989,7 +2989,7 @@ int param_2;
   undefined1 uStack0006;
   undefined1 uStack0007;
   
-  manage_usesBlitLabel2((char *)CONCAT22(param_1,in_stack_00000002),uStack0006);
+  manage_usesBlitLabel2((char *)CONCAT22(textSeg,in_stack_00000002),uStack0006);
   manage_usesBlitLabel2("Level 3",0xdc);
   TextBlitY = TextBlitY + 0xc;
   if (*(char *)(unaff_BP + -0x15) == '\x04') {
