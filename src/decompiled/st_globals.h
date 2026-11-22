@@ -1816,7 +1816,7 @@ extern uint16_t GGameState;
 extern undefined1 GGameInProgress;
 extern uint16_t GPopulationLo;
 extern uint16_t GPopulationHi;
-extern unit_t *GUnits;
+extern unit_t far *GUnits;
 extern uint16_t GUnitCount;
 extern undefined1 GBattleMode;
 extern undefined1 GOngoingBattle;

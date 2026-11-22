@@ -1830,7 +1830,8 @@ uint16_t GGameState = 0x0000;
 undefined1 GGameInProgress = 0x00;
 uint16_t GPopulationLo = 0x0000;
 uint16_t GPopulationHi = 0x0000;
-unit_t *GUnits = (void far *)(0x00000000UL + 0x0000UL);
+/* 8995: a FAR pointer (4 bytes) - the original item is 4 bytes wide */
+unit_t far *GUnits = (unit_t far *)(0x00000000UL + 0x0000UL);
 uint16_t GUnitCount = 0x0000;
 undefined1 GBattleMode = 0x00;
 undefined1 GOngoingBattle = 0x00;

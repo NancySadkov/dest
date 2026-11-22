@@ -67,7 +67,131 @@ WIDTH = {
     "far_t": 4, "brect_t": 10, "dosver_t": 2,
 }
 
-DECL = re.compile(r"^([A-Za-z_][\w ]*?)\s+([A-Za-z_]\w*)\s*(?:\[(\d*)\])?\s*=\s*([^;]*);",
+STRUCTS = {}
+
+
+def _field_layout(ty):
+    ty = ty.strip()
+    if "*" in ty:
+        return 4 if "far" in ty else 2
+    base = ty.split()[-1]
+    if base in WIDTH:
+        return WIDTH[base]
+    if base in STRUCTS:
+        return list(STRUCTS[base])
+    return None
+
+
+def depth_of(layout):
+    if isinstance(layout, list):
+        return sum(depth_of(x) for x in layout)
+    return layout
+
+
+def load_structs(path="src/decompiled/st_types.h"):
+    text = io.open(path, encoding="latin-1").read()
+    defs = list(re.finditer(r"struct (\w+) \{(.*?)\};", text, re.S))
+    # far_t first, since other structs embed it
+    for m in defs:
+        if m.group(1) != "far_t":
+            continue
+        STRUCTS["far_t"] = [2, 2]
+    for m in defs:
+        name, body = m.group(1), m.group(2)
+        if name in STRUCTS:
+            continue
+        fields = []
+        ok = True
+        for fm in re.finditer(r"([\w \*]+?)\s+(\w+)\s*(?:\[(\d+)\])?\s*;", body):
+            lay = _field_layout(fm.group(1))
+            if lay is None:
+                ok = False
+                break
+            n = int(fm.group(3)) if fm.group(3) else 1
+            fields.extend([lay] * n)
+        if ok and fields:
+            STRUCTS[name] = fields
+
+
+load_structs()
+if "brect_t" not in STRUCTS:
+    STRUCTS["brect_t"] = [2, 2, 2, 2, 2]
+
+
+def _tokens(text):
+    """Brace-aware token list: numbers/strings and '{' / '}' markers."""
+    out = []
+    i = 0
+    while i < len(text):
+        c = text[i]
+        if c in "{}":
+            out.append(c)
+            i += 1
+            continue
+        if c == '"':
+            j = i + 1
+            while j < len(text) and (text[j] != '"' or text[j - 1] == "\\"):
+                j += 1
+            out.append(text[i:j + 1])
+            i = j + 1
+            continue
+        m = re.match(r"-?(?:0x[0-9A-Fa-f]+|\d+)", text[i:])
+        if m:
+            out.append(m.group(0))
+            i += len(m.group(0))
+            continue
+        i += 1
+    return out
+
+
+def _pack(tok, width):
+    if tok.startswith('"'):
+        data = decode_c(tok[1:-1]) + b"\0"
+        return data[:width].ljust(width, b"\0")
+    v = int(tok, 0)
+    if width == 1:
+        return bytes([v & 0xFF])
+    if width == 2:
+        return struct.pack("<H", v & 0xFFFF)
+    return struct.pack("<I", v & 0xFFFFFFFF)
+
+
+def _walk(tokens, pos, layout):
+    """Consume one brace group into bytes, following the nested layout."""
+    out = bytearray()
+    i = pos
+    if i < len(tokens) and tokens[i] == "{":
+        i += 1
+    for field in layout:
+        if i >= len(tokens):
+            out += b"\0" * depth_of(field)
+            continue
+        if isinstance(field, list):
+            if tokens[i] == "{":
+                sub = _walk(tokens, i, field)
+                out += sub
+                depth = 0
+                while i < len(tokens):
+                    if tokens[i] == "{":
+                        depth += 1
+                    elif tokens[i] == "}":
+                        depth -= 1
+                        if depth == 0:
+                            i += 1
+                            break
+                    i += 1
+            else:
+                out += b"\0" * depth_of(field)
+            continue
+        if tokens[i] == "}":
+            out += b"\0" * field
+            continue
+        out += _pack(tokens[i], field)
+        i += 1
+    return bytes(out)
+
+
+DECL = re.compile(r"^([A-Za-z_][\w ]*?\*?)\s*([A-Za-z_]\w*)\s*(?:\[(\d*)\])?\s*=\s*([^;]*);",
                   re.M | re.S)
 
 
@@ -85,7 +209,17 @@ def bytes_from(th, init, size):
         size = size if size else len(data)
         return data[:size] + b"\0" * max(0, size - len(data))
     if not init.startswith("{"):
-        v = num(init)
+        try:
+            v = num(init)
+        except ValueError:
+            nums = re.findall(r"0x[0-9A-Fa-f]+|\d+", init)
+            if not nums:
+                return b""
+            v = sum(int(x, 0) for x in nums)
+        if th == "far_ptr":
+            return struct.pack("<HH", v & 0xFFFF, (v >> 16) & 0xFFFF)
+        if th == "near_ptr":
+            return struct.pack("<H", v & 0xFFFF)
         w = WIDTH.get(th, 2)
         return struct.pack("<I", v & 0xFFFFFFFF)[:w] if w <= 4 else b""
     body = init.strip()[1:-1].strip()
@@ -104,6 +238,17 @@ def bytes_from(th, init, size):
             cur += ch
     if cur.strip():
         items.append(cur)
+    if th in STRUCTS and items and items[0].strip().startswith("{"):
+        out = bytearray()
+        try:
+            for it in items:
+                toks = _tokens(it)
+                out += _walk(toks, 0, STRUCTS[th])
+        except Exception:
+            return b""
+        if size:
+            out = out[:size] + b"\0" * max(0, size - len(out))
+        return bytes(out)
     out = bytearray()
     for it in items:
         it = it.strip()
@@ -124,8 +269,18 @@ def bytes_from(th, init, size):
         try:
             v = num(it)
         except ValueError:
-            continue
+            m2 = re.search(r"0x[0-9A-Fa-f]+|\d+", it)
+            if not m2:
+                continue
+            total = sum(int(x, 0) for x in re.findall(r"0x[0-9A-Fa-f]+|\d+", it))
+            v = total if th == "far_ptr" else total & 0xFFFF
         w = WIDTH.get(th, 1)
+        if th == "far_ptr":
+            out += struct.pack("<HH", v & 0xFFFF, (v >> 16) & 0xFFFF)
+            continue
+        if th == "near_ptr":
+            out += struct.pack("<H", v & 0xFFFF)
+            continue
         if th == "far_t":
             out += struct.pack("<H", v & 0xFFFF)
         elif w == 1:
@@ -147,12 +302,18 @@ for path in sorted(glob.glob("src/decompiled/st_globals*.c")):
         name = m.group(2)
         count = m.group(3)
         init = m.group(4).strip()
-        if th not in WIDTH:
+        if th in WIDTH:
+            w = WIDTH[th]
+        elif th in STRUCTS:
+            w = sum(STRUCTS[th])
+        elif "*" in m.group(1):
+            if "far" in m.group(1):
+                w, th = 4, "far_ptr"
+            else:
+                w, th = 2, "near_ptr"
+        else:
             continue
-        w = WIDTH[th]
         size = int(count) * w if count else None
-        if init.startswith("{") and th in ("far_t", "brect_t") and count:
-            size = int(count) * w
         data = bytes_from(th, init, size)
         if data:
             ours[name] = data
@@ -199,12 +360,15 @@ STARTUP = re.compile(
     r"_heaptop|_StartTime|GSTARTX|__DOSERROR|_streams|_ctype|_fmode|_nfile|"
     r"_openfd|_exitbuf|_exitfopen|_exitopen|_atexit|_realcvt|_video|_doserrno|"
     r"__Init|__CleanUp|CtrlBreak|_osmajor|_osminor|_version|__argc|__argv|"
-    r"__stklen|__brkbuf)", re.I)
+    r"__stklen|__brkbuf|_video|VIDEOREC)", re.I)
 for row in rows:
     off = int(row["offset"], 16)
     name = row["name"]
     length = int(row["length"])
     want = IMG[off:off + length]
+    if STARTUP.match(name):
+        startup += 1
+        continue
     decl = None
     an = by_addr.get(off)
     if an:
@@ -244,9 +408,6 @@ for row in rows:
             renamed += 1
             same += 1
             continue
-        if STARTUP.match(name):
-            startup += 1
-            continue
         missing += 1
         missing_list.append((off, name, length))
         continue
@@ -263,6 +424,17 @@ print("DIFFERENT state:    %d" % differ)
 print("recovered (renamed):%d" % renamed)
 print("startup-owned:      %d" % startup)
 print("genuinely missing:  %d" % missing)
+if "--bytes" in sys.argv:
+    for off, name, length, want, got in diffs:
+        print("\n%04x %s len=%d (ours %d)" % (off, name, length, len(got)))
+        n = min(length, len(got), 64)
+        for i in range(n):
+            if want[i] != got[i]:
+                print("  first diff at +%d: want %02x got %02x" % (i, want[i], got[i]))
+                break
+        print("  want %s" % want[:32].hex())
+        print("  got  %s" % got[:32].hex())
+
 print("\nstate differences (first %d):" % MAX)
 for off, name, length, want, got in diffs[:MAX]:
     print("  %04x %-34s len=%-3d want=%-20s got=%s"
