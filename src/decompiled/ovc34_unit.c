@@ -312,7 +312,10 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   char *pcVar2;
   undefined1 extraout_AH;
   uint16_t uVar3;
-  uint16_t uVar4;
+  uint16_t sheetEntry;   /* sheetByte record +0x107 */
+  uint16_t keyPressed;   /* keyprocessor_usesBiosKeyAvail result */
+  uint16_t entitiesSeg;  /* (uint16_t)((ulong)Entities >> 16) */
+  uint16_t suffix;       /* ovr_ovc41_pluralSuffix result */
   undefined1 extraout_AH_00;
   byte *pbVar5;
   uint16_t uVar6;
@@ -373,10 +376,10 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
     return;
   }
   uVar6 = 0x2410;
-  uVar4 = *(uint16_t *)((uint)sheetByte * 4 + 0x107);
-  uVar13 = (undefined1)uVar4;
+  sheetEntry = *(uint16_t *)((uint)sheetByte * 4 + 0x107);
+  uVar13 = (undefined1)sheetEntry;
   pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x648f,unaff_SS),
-                         (char *)CONCAT13((char)((uint)uVar4 >> 8),CONCAT12(uVar13,0x2410)),uVar13,
+                         (char *)CONCAT13((char)((uint)sheetEntry >> 8),CONCAT12(uVar13,0x2410)),uVar13,
                          (char)*(uint16_t *)((uint)sheetByte * 4 + 0x109),
                          (char)*(uint16_t *)((uint)partyIdx * 4),
                          ((uint16_t *)((uint)partyIdx * 4))[1]);
@@ -410,11 +413,11 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   rightButtonLatch = '\0';
   uStack_8 = uVar6;
   do {
-    uVar4 = keyprocessor_usesBiosKeyAvail
+    keyPressed = keyprocessor_usesBiosKeyAvail
                       ((uint16_t *)CONCAT22(unaff_SS,&cursorX),
                        (uint16_t *)CONCAT13(uVar13,CONCAT12(type,&cursorY)),
                        (uint8_t *)CONCAT22(unaff_SS,&input));
-    if ((char)uVar4 != '\0') goto L_ui_unit_order_6616_0689_1054;
+    if ((char)keyPressed != '\0') goto L_ui_unit_order_6616_0689_1054;
     if ((cursorX != pbStack_32) || (cursorY != pbStack_34)) {
       pbStack_32 = cursorX;
       pbStack_1c = cursorX;
@@ -457,11 +460,11 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
     input = 0x0;
     pbVar12 = pbStack_1c;
     do {
-      uVar4 = keyprocessor_usesBiosKeyAvail
+      keyPressed = keyprocessor_usesBiosKeyAvail
                         ((uint16_t *)CONCAT22(unaff_SS,&cursorX),
                          (uint16_t *)CONCAT13(uVar13,CONCAT12(type,&cursorY)),
                          (uint8_t *)CONCAT22(unaff_SS,&input));
-      if ((char)uVar4 != '\0') goto L_ui_unit_order_6616_0689_1054;
+      if ((char)keyPressed != '\0') goto L_ui_unit_order_6616_0689_1054;
       if ((cursorX != pbStack_32) || (cursorY != pbStack_34)) {
         pbStack_32 = cursorX;
         pbStack_34 = cursorY;
@@ -518,7 +521,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         }
         matchCount = 0;
         for (entityIdx = 0; entityIdx < EntityCount; entityIdx = entityIdx + 1) {
-          uVar4 = (uint16_t)((ulong)Entities >> 0x10);
+          entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
           entitiesOfs = (int)Entities;
           if ((((*(byte *)(entitiesOfs + entityIdx * 0x37 + 0x1a) == partyIdx) &&
                (pbStack_22 <= (byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx))) &&
@@ -536,12 +539,12 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
                                                      (char *)((uint16_t *)((uint)partyIdx * 4))
                                                              [1]),Font03.seg,'C',(char)Font03.seg,
                                     0x43,3,0xa000);
-        uVar4 = ovr_ovc41_pluralSuffix(matchCount,(char)textWidth,uVar14);
+        suffix = ovr_ovc41_pluralSuffix(matchCount,(char)textWidth,uVar14);
         uVar6 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x64b8,unaff_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                *(uint16_t *)((uint)sheetByte * 4 + 0x13f),
-                               *(uint16_t *)((uint)sheetByte * 4 + 0x141),uVar4,uVar14);
+                               *(uint16_t *)((uint)sheetByte * 4 + 0x141),suffix,uVar14);
         ovr_uiNotify(pcVar2,uVar6,(char)uVar6);
       }
       pbStack_28 = pbStack_20;
@@ -582,7 +585,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       matchCount = 0;
       for (entityIdx = 0; entityIdx < EntityCount; entityIdx = entityIdx + 1) {
         pbVar8 = (byte *)((char *)0x2410);
-        uVar4 = (uint16_t)((ulong)Entities >> 0x10);
+        entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
         entitiesOfs = (int)Entities;
         if (((*(byte *)(entitiesOfs + entityIdx * 0x37 + 0x1a) == partyIdx) &&
             (pbVar8 = (byte *)((char *)0x2410),
@@ -612,42 +615,42 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       ovr_constr_flushDirtyRects();
       ovr_resetTextBlitCycle();
       if (input == 0x1) {
-        uVar4 = ovr_ovc41_pluralSuffix(matchCount);
+        suffix = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6522,unaff_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
-                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)uVar4,pbVar8
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
       else if (input == 0x2) {
-        uVar4 = ovr_ovc41_pluralSuffix(matchCount);
+        suffix = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6543,unaff_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
-                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)uVar4,pbVar8
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
       else if (input == 0x3) {
-        uVar4 = ovr_ovc41_pluralSuffix(matchCount);
+        suffix = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6557,unaff_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
-                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)uVar4,pbVar8
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
       else if (input == 0x4) {
-        uVar4 = ovr_ovc41_pluralSuffix(matchCount);
+        suffix = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6568,unaff_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
-                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)uVar4,pbVar8
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
