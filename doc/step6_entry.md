@@ -246,3 +246,45 @@ the callers only call the returned pointer to make the INT happen.
 The image still hangs before the first milestone.  The next diagnostic is the
 AH values: the decompiled call sites pass no register setup to \swi()\, so the
 interrupt that now really executes may be doing something unintended.
+
+## Done: startx now runs up to `_setupio`
+
+Setting the registers at the `swi()` sites (as the original disassembly shows)
+plus three bugs found on the way moved the startup past the environment scan,
+the memory resize, the UMB block and the system-time call.  The milestone ladder
+(exit-code markers, NOP-ed in the image) now reads:
+
+```
+0x30 after the DOS version      fires
+0x31 inside SaveVectors         fires  (after the four AH=35h calls)
+0x0A after SaveVectors          fires
+0x32/0x33/0x34 stack block      fire
+0x0C before _setupio            fires
+0x0D after _setupio             does not fire  <- next blocker
+```
+
+What was fixed, and why:
+
+* **`DS` was never set to DGROUP.**  DOS enters with `DS = ES = PSP`, and the
+  original startup does `MOV DX,DGROUP / MOV DS,DX` before touching anything.
+  Our version wrote every global through `DS` = PSP - the PSP was being
+  overwritten at offset 0x90 and every recovered global read garbage.  One
+  inline `mov ax, seg DosVersion / mov ds, ax` fixes it.
+* **CM.LIB's `int86`/`int86x` hang in this link.**  They are far calls into a
+  VROOMM-encoded segment and never return here (`crtl.c` now issues the
+  interrupts directly).  This was also what made the ladder stop at SaveVectors.
+* **`SaveVectors` / `__restorezero` / `ErrorDisplay`** are rewritten from the
+  disassembly: `AH=35h` for vectors 0,4,5,6 into `GSTARTX_SavedVectors`, vector 0
+  := `CS:ZeroDivision` via `AH=25h`; the restore does `LDS DX,saved` + `AH=25h`;
+  the error display is `AH=40h, BX=2`.
+* **The UMB block and `INT 1Ah`** now set `AX/BX/ES` explicitly and capture the
+  carry with `mov ax,0 / adc ax,0` into a local; the midnight flag is written to
+  `0040:0070` as the original does instead of to a DGROUP byte.
+* **The SS:SP switch is deferred.**  After `mov ss,dx; mov sp,di` every
+  BP-relative local in the C function resolves in the new stack segment, so the
+  code after the switch read the wrong frame.  The DOS stack is still inside the
+  block that was just resized, so the switch can wait until `startx` is rewritten
+  as a naked assembly routine.
+
+Next blocker: `_setupio()` calls `_isatty()` and `setvbuf()` from CM.LIB - the
+same class of far call that made `int86` hang - so it never returns.

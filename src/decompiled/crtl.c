@@ -39,15 +39,17 @@ void startx(void)
   
   puVar11 = (undefined1 *)((int)(int *)&errno + 1);
   psp = _ES;                                   /* DOS enters with ES = PSP */
+  /* DOS enters with DS = ES = PSP; the original startup loads DX with DGROUP
+     and does MOV DS,DX before touching any global. */
+  asm { mov ax, seg DosVersion; mov ds, ax };
   _psp = psp;
   uVar17 = *(uint16_t far *)MK_FP(psp, 0x2c);  /* environment segment */
   iVar10 = *(uint16_t far *)MK_FP(psp, 0x02);  /* top of memory */
   _envseg_at_ = uVar17;
   _heaptop.seg = iVar10;
-  r.h.ah = 0x30;                               /* DOS version */
-  int86(0x21, &r, &r);
-  *(uint16_t *)&DosVersion = r.x.ax;
+  asm { mov ah,0x30; int 21h; mov word ptr DosVersion, ax };
   SaveVectors();
+
   pcVar4 = (char *)*(uint32_t *)&_env;
   uVar17 = (uint16_t)((ulong)pcVar4 >> 0x10);
   pcVar13 = (char *)pcVar4;
@@ -85,43 +87,75 @@ L_startx_007B:
     }
     _heapbase.seg = sseg + paras;
     _brklvl.seg = sseg + paras;
-    sr.es = psp;
-    r.x.bx = sseg + paras - psp;
-    r.h.ah = 0x4a;                       /* resize the memory block */
-    int86x(0x21, &r, &r, &sr);
-
-    asm {                                /* switch to the new stack */
-      mov dx, sseg
-      mov di, paras
-      mov cl, 4
-      shl di, cl
-      cli
-      mov ss, dx
-      mov sp, di
-      sti
+    {
+      uint16_t bxv = sseg + paras - psp;
+      /* INT 21h AH=4Ah with ES=PSP, BX=paragraphs.  CM.LIB's int86x hangs in
+         this VROOMM link (its internal far calls are not relocated), so the
+         interrupt is issued directly. */
+      asm {
+        mov bx, bxv;
+        mov es, psp;
+        mov ah,0x4a;
+        int 21h;
+      }
     }
+
+    /* The SS:SP switch is deferred: after it, every BP-relative local in
+       this C function would resolve in the new stack segment.  The DOS stack
+       is still inside the block we just resized, so it is usable for now. */
     __stklen = paras << 4;
   }
   if (0x14 < *(uint *)&_nfile) {
+    uint16_t cf, axv;
     bVar7 = ((dosver_t *)&DosVersion)->major;
     if (!(bVar7 < 3) && (3 < bVar7 || !(*(byte *)&DosVersion.minor < 0x1e))) {
-      r.x.ax = 0x5801; r.x.bx = 2;             /* get UMB link state */
-      int86(0x21, &r, &r);
-      if (!r.x.cflag) {
-        r.h.ah = 0x67; r.x.bx = _nfile;        /* set handle count */
-        int86(0x21, &r, &r);
-        if (!r.x.cflag) {
-          r.h.ah = 0x48; r.x.bx = 1;           /* probe an allocation */
-          int86(0x21, &r, &r);
-          if (!r.x.cflag) {
-            _heaptop.seg = r.x.ax + 1;
-            sr.es = r.x.ax;                    /* free it again */
-            r.h.ah = 0x49;
-            int86x(0x21, &r, &r, &sr);
-            if (!r.x.cflag) {
-              r.x.ax = 0x5801; r.x.bx = 0;     /* restore UMB link state */
-              int86(0x21, &r, &r);
-              if (!r.x.cflag) goto L_startx_0109;
+      asm {                                /* AX=5801 BX=2: get UMB link */
+        mov ax,0x5801;
+        mov bx,2;
+        int 21h;
+        mov ax,0;
+        adc ax,0;
+        mov cf,ax;
+      }
+      if (!cf) {
+        asm {                              /* AH=67: set handle count */
+          mov ah,0x67;
+          mov bx,_nfile;
+          int 21h;
+          mov ax,0;
+          adc ax,0;
+          mov cf,ax;
+        }
+        if (!cf) {
+          asm {                            /* AH=48 BX=1: probe allocation */
+            mov ah,0x48;
+            mov bx,1;
+            int 21h;
+            mov axv,ax;
+            mov ax,0;
+            adc ax,0;
+            mov cf,ax;
+          }
+          if (!cf) {
+            _heaptop.seg = axv + 1;
+            asm {                          /* AH=49 ES=block: free it */
+              mov es,axv;
+              mov ah,0x49;
+              int 21h;
+              mov ax,0;
+              adc ax,0;
+              mov cf,ax;
+            }
+            if (!cf) {
+              asm {                        /* restore UMB link state */
+                mov ax,0x5801;
+                mov bx,0;
+                int 21h;
+                mov ax,0;
+                adc ax,0;
+                mov cf,ax;
+              }
+              if (!cf) goto L_startx_0109;
             }
           }
         }
@@ -130,12 +164,26 @@ L_startx_007B:
     }
   }
 L_startx_0109:
-  r.h.ah = 0;                                  /* INT 1Ah: system time */
-  int86(0x1a, &r, &r);
-  *(uint16_t *)&_StartTime = r.x.dx;
-  *(uint16_t *)((uint8_t *)&_StartTime + 2) = r.x.cx;
-  if (r.h.al != 0) {
-    bda_midnight = 1;
+  {
+    uint16_t dxv, cxv;
+    uint8_t alv;
+    asm {                                  /* INT 1Ah: system time */
+      mov ah,0;
+      int 1ah;
+      mov dxv,dx;
+      mov cxv,cx;
+      mov alv,al;
+    }
+    *(uint16_t *)&_StartTime = dxv;
+    *(uint16_t *)((uint8_t *)&_StartTime + 2) = cxv;
+    if (alv != 0) {
+      asm {                                /* BDA 0040:0070 = 1 */
+        mov ax,0x40;
+        mov es,ax;
+        mov bx,0x70;
+        mov byte ptr es:[bx],1;
+      }
+    }
   }
   /* The original walks the linker's init table here (InitStart..InitEnd):
    * _setupio (priority 2), _c0crtinit and __setargv (0x10) plus one far entry
@@ -145,7 +193,9 @@ L_startx_0109:
    * (doc/step6_entry.md).
    */
   _setupio();
+
   _c0crtinit();
+
   iVar10 = main(__C0argc, (str_t *)__C0argv, (str_t *)__C0environ);
   *(int *)(puVar15 + -8) = iVar10;
   *(uint16_t *)(puVar15 + -10) = 0x1301;
@@ -205,28 +255,34 @@ void ZeroDivision(void)
 void __cdecl16near SaveVectors(void)
 
 {
-  code *pcVar1;
-  uint16_t in_BX;
-  uint16_t unaff_ES;
-  
-  pcVar1 = (code *)swi(0x21);
-  (*pcVar1)();
-  pcVar1 = (code *)swi(0x21);
-  GSTARTX_SavedVectors[0].ofs = in_BX;
-  GSTARTX_SavedVectors[0].seg = unaff_ES;
-  (*pcVar1)();
-  pcVar1 = (code *)swi(0x21);
-  GSTARTX_SavedVectors[1].ofs = in_BX;
-  GSTARTX_SavedVectors[1].seg = unaff_ES;
-  (*pcVar1)();
-  pcVar1 = (code *)swi(0x21);
-  GSTARTX_SavedVectors[2].ofs = in_BX;
-  GSTARTX_SavedVectors[2].seg = unaff_ES;
-  (*pcVar1)();
-  pcVar1 = (code *)swi(0x21);
-  GSTARTX_SavedVectors[3].ofs = in_BX;
-  GSTARTX_SavedVectors[3].seg = unaff_ES;
-  (*pcVar1)();
+  /* INT 21h AH=35h for vectors 0, 4, 5 and 6; then vector 0 := CS:ZeroDivision
+     (AH=25h).  Taken from the disassembly - the decompiled version called the
+     interrupt with whatever registers happened to be set. */
+  asm {
+    push ds;
+    mov ax,0x3500;
+    int 21h;
+    mov word ptr GSTARTX_SavedVectors+0,bx;
+    mov word ptr GSTARTX_SavedVectors+2,es;
+    mov ax,0x3504;
+    int 21h;
+    mov word ptr GSTARTX_SavedVectors+4,bx;
+    mov word ptr GSTARTX_SavedVectors+6,es;
+    mov ax,0x3505;
+    int 21h;
+    mov word ptr GSTARTX_SavedVectors+8,bx;
+    mov word ptr GSTARTX_SavedVectors+10,es;
+    mov ax,0x3506;
+    int 21h;
+    mov word ptr GSTARTX_SavedVectors+12,bx;
+    mov word ptr GSTARTX_SavedVectors+14,es;
+    mov dx,cs;
+    mov ds,dx;
+    mov dx,offset ZeroDivision;
+    mov ax,0x2500;
+    int 21h;
+    pop ds;
+  }
   return;
 }
 
@@ -237,16 +293,29 @@ void __cdecl16near SaveVectors(void)
 void __cdecl16far __restorezero(void)
 
 {
-  code *pcVar1;
-  
-  pcVar1 = (code *)swi(0x21);
-  (*pcVar1)();
-  pcVar1 = (code *)swi(0x21);
-  (*pcVar1)();
-  pcVar1 = (code *)swi(0x21);
-  (*pcVar1)();
-  pcVar1 = (code *)swi(0x21);
-  (*pcVar1)();
+  /* INT 21h AH=25h with DS:DX from the saved vectors (0, 4, 5, 6). */
+  asm {
+    push ds;
+    mov ax,0x2500;
+    lds dx,dword ptr GSTARTX_SavedVectors+0;
+    int 21h;
+    pop ds;
+    push ds;
+    mov ax,0x2504;
+    lds dx,dword ptr GSTARTX_SavedVectors+4;
+    int 21h;
+    pop ds;
+    push ds;
+    mov ax,0x2505;
+    lds dx,dword ptr GSTARTX_SavedVectors+8;
+    int 21h;
+    pop ds;
+    push ds;
+    mov ax,0x2506;
+    lds dx,dword ptr GSTARTX_SavedVectors+12;
+    int 21h;
+    pop ds;
+  }
   return;
 }
 
@@ -312,10 +381,12 @@ void __cdecl16near StartExit(void)
 void __cdecl16near ErrorDisplay(void)
 
 {
-  code *pcVar1;
-  
-  pcVar1 = (code *)swi(0x21);
-  (*pcVar1)();
+  /* INT 21h AH=40h, BX=2: write the message the caller set up in DS:DX/CX. */
+  asm {
+    mov ah,0x40;
+    mov bx,2;
+    int 21h;
+  }
   return;
 }
 

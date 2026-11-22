@@ -201,7 +201,7 @@ def main():
     exe = os.path.join(BUILDSRC, "REBUILT.EXE")
     mapf = os.path.join(BUILDSRC, "REBUILT.MAP")
     if os.path.exists(exe) and os.path.exists(mapf):
-        n = add_missing_relocations(exe, mapf)
+        n = 0 if os.environ.get("NO_RELOC_FIX") else add_missing_relocations(exe, mapf)
         print("relocations added for cross-segment far transfers:", n)
         m = re.search(r"^\s*([0-9A-F]{4}):([0-9A-F]{4})\s+(?:idle\s+)?_STARTX\s*$",
                       open(mapf, encoding="latin-1", errors="replace").read(), re.M)
