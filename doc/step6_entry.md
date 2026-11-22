@@ -236,3 +236,13 @@ reports 7), but `startx` still hangs before the first milestone marker (right
 after `SaveVectors`), so `main` is still not reached.  The next step is to
 instrument `startx` again *with* the relocations in place, since the earlier
 ladder was measured on unrelocated code.
+
+Second absolute pointer found: \swi()\ returned \(code *)st_swi_target\ where the
+target was a *near* static function, so BCC emitted \mov dx,0779 / mov ax,0084with the link-time segment as an immediate.  Every \pc = swi(n); (*pc)()\ then
+called absolute 0779:0084.  \st_swi_target\ is now a \ar\ function (whose
+address is relocated normally) and \swi()\ performs the interrupt itself, since
+the callers only call the returned pointer to make the INT happen.
+
+The image still hangs before the first milestone.  The next diagnostic is the
+AH values: the decompiled call sites pass no register setup to \swi()\, so the
+interrupt that now really executes may be doing something unintended.

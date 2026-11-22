@@ -107,15 +107,23 @@ int ovr_season_usesGPromotable_e11a()
   return 0;
 }
 
-/* GUESS: swi() is called through, so return a real code pointer, not null */
-static unsigned short st_swi_target(void)
+/* Ghidra renders an inline \INT n\ as \pc = swi(n); (*pc)();\.  The callers
+   have already set AH/BX/ES, so the interrupt is performed here and the pointer
+   returned only has to be callable.  It is a FAR function: taking its address
+   then emits a normal relocation, whereas casting a near function baked the
+   link-time segment in as an immediate (absolute memory once DOS loads). */
+static void far st_swi_target(void)
 {
-  return 0;
 }
 
 code *swi(int vector)
 {
-  (void)vector;
+  if (vector == 0x1a) {
+    asm int 1ah;
+  }
+  else {
+    asm int 21h;
+  }
   return (code *)st_swi_target;
 }
 
