@@ -374,14 +374,18 @@ char s_minotaur_2410_267f[] = "minotaur";
 char s_axe_2410_2688[] = "axe";
 char s_cockatrice_2410_268c[] = "cockatrice";
 char s_vampire_2410_2697[] = "vampire";
-char s_Mindark_2410_269f[] = "Mindark";
+/* 269f: 9 bytes - "Mindark" plus a padding NUL */
+char s_Mindark_2410_269f[9] = "Mindark";
 undefined1 ScreenMode = 0x00;
 far_t GSPEmpty = { 0x272B, 0x2410 };
-undefined promptRect = 0x16;
-char *GMenuStrings[8] = { (void far *)(0x24100000UL + 0x27ebUL), (void far *)(0x24100000UL + 0x27f4UL),
-     (void far *)(0x24100000UL + 0x27feUL), (void far *)(0x24100000UL + 0x2808UL), (void far *)(0x24100000UL + 0x2814UL),
-     (void far *)(0x24100000UL + 0x281eUL), (void far *)(0x24100000UL + 0x282cUL), (void far *)(0x24100000UL + 0x283fUL) };
-char *GYesNo[2] = { (void far *)(0x24100000UL + 0x284aUL), (void far *)(0x24100000UL + 0x284eUL) };
+/* 26ad: a prompt rectangle (10-byte brect_t) */
+brect_t promptRect = { 0x16, 0x1D, 0xDE, 0x27, 0xA000 };
+/* 26b7: eight FAR pointers (4 bytes each) */
+char far *GMenuStrings[8] = { (char far *)(0x24100000UL + 0x27ebUL), (char far *)(0x24100000UL + 0x27f4UL),
+     (char far *)(0x24100000UL + 0x27feUL), (char far *)(0x24100000UL + 0x2808UL), (char far *)(0x24100000UL + 0x2814UL),
+     (char far *)(0x24100000UL + 0x281eUL), (char far *)(0x24100000UL + 0x282cUL), (char far *)(0x24100000UL + 0x283fUL) };
+/* 26d7: two FAR pointers */
+char far *GYesNo[2] = { (char far *)(0x24100000UL + 0x284aUL), (char far *)(0x24100000UL + 0x284eUL) };
 uint16_t GSeed = 0x0000;
 uint16_t SeedHi = 0x0000;
 far_t worldMenuLabels[13] = { { 0x2915, 0x2410 }, { 0x291E, 0x2410 }, { 0x2929, 0x2410 }, { 0x2931, 0x2410 },

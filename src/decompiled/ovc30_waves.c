@@ -257,99 +257,99 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
   uint16_t uVar8;
   uint uVar9;
   uint uVar10;
-  byte bStack_13;
-  byte bStack_11;
-  int iStack_10;
-  uint16_t uStack_c;
-  int iStack_a;
-  int iStack_8;
-  int iStack_6;
-  int iStack_4;
+  byte retries;
+  byte leaderIndex;
+  int maxDist;
+  uint16_t spawnY;
+  int maxBound;
+  int minBound;
+  int tries;
+  int count;
   
-  iStack_6 = 1;
-  bStack_11 = 0xff;
+  tries = 1;
+  leaderIndex = 0xff;
   iVar4 = ovr_ovc25_compute1(gindex);
-  iStack_10 = iVar4 * 3 + 0xf;
-  if (0x31 < iStack_10) {
-    iStack_10 = 0x32;
+  maxDist = iVar4 * 3 + 0xf;
+  if (0x31 < maxDist) {
+    maxDist = 0x32;
   }
   do {
     if (frames == 0) {
-      return bStack_11;
+      return leaderIndex;
     }
     if (mode == '\x02') {
-      uStack_c = demoCenterY;
+      spawnY = demoCenterY;
       mode = '\x01';
       uVar8 = demoCenterX;
     }
     else if (mode == '\0') {
-      iStack_8 = demoCenterX + iStack_6 * -8;
-      iStack_a = demoCenterX + iStack_6 * 8;
-      if (iStack_8 < 8) {
-        iStack_8 = 8;
+      minBound = demoCenterX + tries * -8;
+      maxBound = demoCenterX + tries * 8;
+      if (minBound < 8) {
+        minBound = 8;
       }
-      if (0x8c < iStack_a) {
-        iStack_a = 0x8c;
+      if (0x8c < maxBound) {
+        maxBound = 0x8c;
       }
-      uVar8 = ovr_randBelow((iStack_a - iStack_8) + 1);
-      uVar8 = (uVar8 & 0xff) + iStack_8 & 0xfffc;
-      iStack_8 = demoCenterY + iStack_6 * -4;
-      iStack_a = demoCenterY + iStack_6 * 4;
-      if (iStack_8 < 8) {
-        iStack_8 = 8;
+      uVar8 = ovr_randBelow((maxBound - minBound) + 1);
+      uVar8 = (uVar8 & 0xff) + minBound & 0xfffc;
+      minBound = demoCenterY + tries * -4;
+      maxBound = demoCenterY + tries * 4;
+      if (minBound < 8) {
+        minBound = 8;
       }
-      if (0x34 < iStack_a) {
-        iStack_a = 0x34;
+      if (0x34 < maxBound) {
+        maxBound = 0x34;
       }
-      uVar5 = ovr_randBelow((iStack_a - iStack_8) + 1);
-      uStack_c = (uVar5 & 0xff) + iStack_8;
+      uVar5 = ovr_randBelow((maxBound - minBound) + 1);
+      spawnY = (uVar5 & 0xff) + minBound;
     }
     else {
-      bStack_13 = 0;
+      retries = 0;
       do {
         bVar3 = false;
         uVar8 = ovr_randBelow(0x8c);
         uVar8 = (uVar8 & 0xff) + 4 & 0xfffc;
-        uStack_c = ovr_randBelow(0x3a);
-        uStack_c = uStack_c & 0xff;
+        spawnY = ovr_randBelow(0x3a);
+        spawnY = spawnY & 0xff;
         for (iVar4 = 0; iVar4 < (int)(uint)GLeaderCount; iVar4 = iVar4 + 1) {
           if (((((char_sheet_t *)((iVar4 << 2)))->active != '\0') &&
               (*(char *)((int)*(uint32_t *)(iVar4 << 2) + 0x3f) != '\0')) &&
              (uVar6 = ((char_sheet_t *)((iVar4 << 2)))->x - uVar8,
              uVar9 = (int)uVar6 >> 0xf,
-             uVar7 = ((char_sheet_t *)((iVar4 << 2)))->y - uStack_c,
+             uVar7 = ((char_sheet_t *)((iVar4 << 2)))->y - spawnY,
              uVar10 = (int)uVar7 >> 0xf,
              (int)((int)((uVar6 ^ uVar9) - uVar9) / 2 + ((uVar7 ^ uVar10) - uVar10)) < 10)) {
             bVar3 = true;
-            bStack_13 = bStack_13 + 1;
+            retries = retries + 1;
             break;
           }
           if (((((char_sheet_t *)((iVar4 << 2)))->active != '\0') &&
               (*(char *)((int)*(uint32_t *)(iVar4 << 2) + 0x3f) == '\0')) &&
              (uVar6 = ((char_sheet_t *)((iVar4 << 2)))->x - uVar8,
              uVar9 = (int)uVar6 >> 0xf,
-             uVar7 = ((char_sheet_t *)((iVar4 << 2)))->y - uStack_c,
+             uVar7 = ((char_sheet_t *)((iVar4 << 2)))->y - spawnY,
              uVar10 = (int)uVar7 >> 0xf,
-             (int)((int)((uVar6 ^ uVar9) - uVar9) / 2 + ((uVar7 ^ uVar10) - uVar10)) < iStack_10)) {
+             (int)((int)((uVar6 ^ uVar9) - uVar9) / 2 + ((uVar7 ^ uVar10) - uVar10)) < maxDist)) {
             bVar3 = true;
-            bStack_13 = bStack_13 + 1;
+            retries = retries + 1;
             break;
           }
         }
-      } while ((bVar3) && (bStack_13 < 100));
+      } while ((bVar3) && (retries < 100));
     }
-    uVar6 = ovr_constr_usesGMapFlags(uVar8 - 1,uStack_c);
+    uVar6 = ovr_constr_usesGMapFlags(uVar8 - 1,spawnY);
     if ((((char)uVar6 == '\0') ||
-        (uVar6 = ovr_constr_usesGMapFlags(uVar8,uStack_c), (char)uVar6 == '\0')) ||
-       (bVar3 = ovr_ovc18_textArena(uVar8,uStack_c), bVar3)) {
-      iStack_6 = iStack_6 + 1;
-      if (500 < iStack_6) {
-        return bStack_11;
+        (uVar6 = ovr_constr_usesGMapFlags(uVar8,spawnY), (char)uVar6 == '\0')) ||
+       (bVar3 = ovr_ovc18_textArena(uVar8,spawnY), bVar3)) {
+      tries = tries + 1;
+      if (500 < tries) {
+        return leaderIndex;
       }
     }
     else {
-      uVar6 = ovc30_createLeader(gindex,uVar8,uStack_c);
-      bStack_11 = (byte)uVar6;
+      uVar6 = ovc30_createLeader(gindex,uVar8,spawnY);
+      leaderIndex = (byte)uVar6;
       if (1 < PlayerIndex) {
         uVar2 = *(uint32_t *)((uVar6 & 0xff) << 2);
         pbVar1 = (byte *)((int)uVar2 + 0x5d);
@@ -359,42 +359,42 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
         if (PlayerIndex < 2) {
           uVar2 = *(uint32_t *)((uVar6 & 0xff) << 2);
           ovr_ovc15_usesLDIV_at_
-                    (uVar8,uStack_c,uVar8,uStack_c,gindex,*(uint8_t *)((int)uVar2 + 0xa4),bStack_11)
+                    (uVar8,spawnY,uVar8,spawnY,gindex,*(uint8_t *)((int)uVar2 + 0xa4),leaderIndex)
           ;
         }
         else {
-          for (iStack_4 = 0; uVar7 = ovc30_difficultyFactor(), iStack_4 < (int)(uVar7 & 0xff);
-              iStack_4 = iStack_4 + 1) {
-            ovr_ovc15_usesLDIV_at_(uVar8,uStack_c,uVar8,uStack_c,gindex,0xa,bStack_11);
+          for (count = 0; uVar7 = ovc30_difficultyFactor(), count < (int)(uVar7 & 0xff);
+              count = count + 1) {
+            ovr_ovc15_usesLDIV_at_(uVar8,spawnY,uVar8,spawnY,gindex,0xa,leaderIndex);
           }
         }
       }
       else {
-        ovr_ovc15_usesLDIV_at_(uVar8,uStack_c,uVar8,uStack_c,gindex,0x1,bStack_11);
-        for (iStack_4 = 0; uVar7 = ovc30_difficultyFactor(), iVar4 = (uVar7 & 0xff) * 2,
-            iVar4 - iStack_4 != 0 && iStack_4 <= iVar4; iStack_4 = iStack_4 + 1) {
-          ovr_ovc18_textTypeLen(bStack_11,uVar8,uStack_c,0x2);
+        ovr_ovc15_usesLDIV_at_(uVar8,spawnY,uVar8,spawnY,gindex,0x1,leaderIndex);
+        for (count = 0; uVar7 = ovc30_difficultyFactor(), iVar4 = (uVar7 & 0xff) * 2,
+            iVar4 - count != 0 && count <= iVar4; count = count + 1) {
+          ovr_ovc18_textTypeLen(leaderIndex,uVar8,spawnY,0x2);
         }
       }
       if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)gindex * 0x95) & 0x1000) != 0) {
-        ovc30_usesRandBelow2(uVar8,uStack_c);
+        ovc30_usesRandBelow2(uVar8,spawnY);
       }
       uVar2 = *(uint32_t *)((uVar6 & 0xff) << 2);
       *(undefined1 *)((int)uVar2 + 0x5a) = 0;
-      ((short (*) [148] [60])GUnitGrid)[-1][uVar8 + 0x93][uStack_c] =
+      ((short (*) [148] [60])GUnitGrid)[-1][uVar8 + 0x93][spawnY] =
            (uint)*(byte *)((int)(far_t *)(worldMenuLabels + 0xb) + (uint)gindex * 0x95);
       ovr_ovc23_placeBuilding
-                (uVar8 - 1,uStack_c,
-                 *(byte *)(((short (*) [148] [60])GUnitGrid)[-1][uVar8 + 0x93] + uStack_c),bStack_11
+                (uVar8 - 1,spawnY,
+                 *(byte *)(((short (*) [148] [60])GUnitGrid)[-1][uVar8 + 0x93] + spawnY),leaderIndex
                 );
-      ovr_ovc23_placeBuilding(uVar8,uStack_c,0,bStack_11);
-      (*(short (*) [148] [60])GUnitGrid)[uVar8][uStack_c] = 0;
+      ovr_ovc23_placeBuilding(uVar8,spawnY,0,leaderIndex);
+      (*(short (*) [148] [60])GUnitGrid)[uVar8][spawnY] = 0;
       frames = frames + -1;
-      demoCenterY = uStack_c;
+      demoCenterY = spawnY;
       demoCenterX = uVar8;
       uVar8 = ovr_randBelow(100);
       mode = (byte)uVar8 < percent;
-      iStack_6 = 0;
+      tries = 0;
     }
   } while( true );
 }
