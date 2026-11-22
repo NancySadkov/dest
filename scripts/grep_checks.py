@@ -13,6 +13,7 @@ import sys
 TREE = sys.argv[1] if len(sys.argv) > 1 else "src/decompiled"
 
 CHECKS = [
+    ("char [N] = \"\"", r'char [_0-9A-Za-z]*\[[0-9]*\] = "'),
     ('" + [0-9a-bA-Z]', r'" \+ [0-9a-bA-Z]'),
     ("argN_", r"arg[0-9]_"),
     ("arg_", r"arg_[a-za-z]"),
@@ -25,6 +26,7 @@ CHECKS = [
     ("[iusc]Stack_", r"[iusc]Stack_"),
     ("bStack_ (not in list)", r"bStack_"),
     ("in_stack_", r"in_stack_[_0-9A-Za-z+]"),
+    ("stack0x", r"stack0x"),
     ("unaff_SS", r"unaff_SS"),
     ("unaff_ES", r"unaff_ES"),
     ("unaff_DI", r"unaff_DI"),

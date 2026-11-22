@@ -1,6 +1,10 @@
 uint __cdecl16far ovc49_body1(agnt_t *agnt,...)
 
 {
+  undefined1 stk_02c2;   /* stack slot 02c2 */
+  undefined1 stk_ffe4;   /* stack slot ffe4 */
+  undefined1 stk_ffeb;   /* stack slot ffeb */
+  undefined1 stk_ffec;   /* stack slot ffec */
   char *pcVar1;
   int *piVar2;
   uint *puVar3;
@@ -361,7 +365,7 @@ L_OVC49_8699_18c4_1CA7:
         _fmemset((void *)ZEXT24(unaff_SS),2,(uint16_t)in_stack_0000fff6);
         for (uStackY_22 = (cte_t *)0x0; (int)uStackY_22 < (int)(uint)AgntCount;
             uStackY_22 = (cte_t *)((int)uStackY_22 + 1)) {
-          (&stack0xffec)[*(byte *)((int)uStackY_22 * 0x34 + 0x2f)] = 1;
+          (&stk_ffec)[*(byte *)((int)uStackY_22 * 0x34 + 0x2f)] = 1;
         }
         if ((cVar6 == '\0') || (cVar8 == '\0')) {
           BothFactions = 0;
@@ -379,7 +383,7 @@ L_OVC49_8699_18c4_1CA7:
       case 3:
         in_AF = 9 < (byte)uVar15 | in_AF;
         uVar15 = CONCAT11(in_AF,(byte)uVar15 + in_AF * '\x06') & 0xff0f &
-                 *(uint *)(&stack0x02c2 + iVar14);
+                 *(uint *)(&stk_02c2 + iVar14);
         cVar6 = (char)uVar15 * '\x02' + -1;
         uVar15 = CONCAT11((char)(uVar15 >> 8),cVar6);
         *(char *)&agnt->targetX = cVar6;
@@ -467,7 +471,7 @@ L_OVC49_8699_18c4_1CA7:
         uVar22 = 0x23f1;
         uVar15 = ovr_ovc45_compute8(((unit_t *)GUnits)[uStackY_26].unitType);
         if (((char)uVar15 != '\0') && (*(char *)(((uint)uStackY_22 >> 8) * 0x27 + 300) != '\0')) {
-          (&stack0xffec)[iVar14] = 3;
+          (&stk_ffec)[iVar14] = 3;
           auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)(unsigned long)(unsigned long)( (char *)0x26510);
           auStackY_2f2[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( (char *)"Upgrade");
           iVar14 = iVar14 + 1;
@@ -486,7 +490,7 @@ L_OVC49_8699_18c4_1CA7:
         }
       }
       else {
-        (&stack0xffec)[iVar14] = 2;
+        (&stk_ffec)[iVar14] = 2;
         auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)(unsigned long)(unsigned long)( (char *)0x26510);
         auStackY_2f2[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( (char *)"Repair");
         iVar14 = iVar14 + 1;
@@ -506,7 +510,7 @@ L_OVC49_8699_18c4_1CA7:
       uStackY_24 = CONCAT11((*(uint8_t *)((uint8_t *)&(uStackY_24) + 1)),bVar9);
       if ((((*(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x121) & 0x400) == 0) && (bVar9 != 0xff)) &&
          (*(char *)((int)*(uint32_t *)((uint)bVar9 << 2) + 0x3f) == '\0')) {
-        (&stack0xffec)[iVar14] = 7;
+        (&stk_ffec)[iVar14] = 7;
         auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)(unsigned long)(unsigned long)( (char *)0x26510);
         auStackY_2f2[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( (char *)"Information");
         iVar14 = iVar14 + 1;
@@ -515,19 +519,19 @@ L_OVC49_8699_18c4_1CA7:
       if (((*(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x121) & 4) == 0) && (0xf7 < uStackY_26)) {
         uVar33 = 0x24;
         if (*(char *)((int)Entities + (*(uint16_t *)((uint8_t *)&(in_stack_00000008) + 2)) * 0x37 + 0x1a) != (char)uStackY_24) {
-          (&stack0xffec)[iVar14] = 6;
+          (&stk_ffec)[iVar14] = 6;
           auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)(unsigned long)(unsigned long)( (char *)0x26510);
           auStackY_2f2[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( (char *)"New Owner");
           iVar14 = iVar14 + 1;
         }
       }
       if (in_stack_00000010 != '\0') {
-        (&stack0xffec)[iVar14] = 4;
+        (&stk_ffec)[iVar14] = 4;
         auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)(unsigned long)(unsigned long)( (char *)0x26510);
         auStackY_2f2[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( (char *)"Change Party");
         iVar14 = iVar14 + 1;
       }
-      (&stack0xffec)[iVar14] = 5;
+      (&stk_ffec)[iVar14] = 5;
       auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)(unsigned long)(unsigned long)( (char *)0x26510);
       auStackY_2f2[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( (char *)"Done");
       pcVar26 = (uint16_t)((char *)(iVar14 + 1));
@@ -545,7 +549,7 @@ L_OVC49_8699_18c4_1CA7:
       goldPartyIndex = 0xff;
       bVar9 = 0;
       if ((char)puVar11 != '\0') {
-        pcVar10 = &stack0xffeb;
+        pcVar10 = &stk_ffeb;
         bVar9 = pcVar10[(uint)puVar11 & 0xff];
       }
       in_stack_0000ffe4 = CONCAT11(bVar9,uVar7);
@@ -2239,7 +2243,7 @@ L_OVC49_8699_1e09_3BDE:
       if (*(char *)((int)uStackY_22 * 0x34 + 0xd) == '\0') {
         cVar8 = ovc49_usesFrameIndex2
                           ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
-                           (byte *)CONCAT13(uVar38,CONCAT12(bVar36,&stack0xffe4)));
+                           (byte *)CONCAT13(uVar38,CONCAT12(bVar36,&stk_ffe4)));
         if (cVar8 == '\0') {
           if ((*(char *)((int)uStackY_22 * 0x34 + 0x12) == '\x03') ||
              (*(char *)((int)uStackY_22 * 0x34 + 0x12) == '\x0f')) {
@@ -2257,7 +2261,7 @@ L_OVC49_8699_1e09_3BDE:
       else if (*(char *)((int)uStackY_22 * 0x34 + 0xd) == '\x01') {
         cVar8 = ovc49_usesFrameIndex
                           ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
-                           (byte *)CONCAT13(uVar38,CONCAT12(bVar36,&stack0xffe4)));
+                           (byte *)CONCAT13(uVar38,CONCAT12(bVar36,&stk_ffe4)));
         if (cVar8 != '\0') {
           pbVar29 = (brect_t *)((char *)0x26489);
           uVar15 = ovr_ovc27_compute1((agnt_t *)((int)uStackY_22 * 0x34));
@@ -2567,7 +2571,7 @@ L_OVC49_8699_1e09_3CF7:
   uVar20 = EntityCount - 1;
   for (uVar15 = uVar20; -1 < (int)uVar15; uVar15 = uVar15 - 1) {
     uVar27 = (uint16_t)((ulong)Entities >> 0x10);
-    uVar20 = (uint)*(byte *)((int)Entities + uVar15 * 0x37 + 0xe);
+    uVar20 = (uint)((entity_t *)Entities)[uVar15].base.animFrame;
     if ((uVar20 == 0) &&
        (uVar20 = ovr_ovc23_isCursorAt(*(uint16_t *)((int)Entities + uVar15 * 0x37)),
        (char)uVar20 != '\0')) {

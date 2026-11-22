@@ -40,10 +40,10 @@ void __cdecl16far musInit(void)
               ((ulong)*(uint32_t *)((uint16_t *)&musDriver0Ofs + unaff_SI * 2) >> 0x10);
       iVar2 = (int)*(uint32_t *)((uint16_t *)&musDriver0Ofs + unaff_SI * 2);
       MusGfxSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
-      MusHandle = audio_usesAlignToSeg
+      MusHandle_07ca = audio_usesAlignToSeg
                             ((uint8_t *)CONCAT22(*(uint16_t *)(iVar2 + 5),in_DX),
                              *(uint16_t *)(iVar2 + 7),size);
-      MusHandleSeg = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
+      MusHandleSeg_07cc = (uint16_t)in_DX;   /* hand fix: segment is 16-bit */
       ovr_ovc20_compute1((char *)((uint16_t *)&musDriver0Ofs)[unaff_SI * 2],
                          ((uint16_t *)&musDriver0Seg)[unaff_SI * 2]);
       handle_00.seg = midpakAd.seg;

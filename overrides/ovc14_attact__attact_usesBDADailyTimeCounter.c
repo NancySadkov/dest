@@ -1,4 +1,3 @@
-ulong * __cdecl16far
 attact_usesBDADailyTimeCounter(ulong *__return_storage_ptr__,ulong prevTick,...)
 
 {

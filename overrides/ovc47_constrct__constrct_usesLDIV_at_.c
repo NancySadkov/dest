@@ -1,6 +1,7 @@
 void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
 
 {
+  undefined1 stk_ff60;   /* stack slot ff60 */
   uint *puVar1;
   int *piVar2;
   byte bVar3;
@@ -29,7 +30,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
   lVar17 = CONCAT22((int)((ulong)in_stack_0000ff5e >> 0x10),unaff_SI);
   bVar3 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
   if ((partyIndex != 0xff) && (bVar3 != 0xff)) {
-    bVar4 = *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3e);
+    bVar4 = ((char_sheet_t *)(((uint)partyIndex << 2)))->classStr;
     iVar9 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)bVar4 * 0x95);
     uVar5 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)bVar4 * 0x95) * 0xf;
     iVar13 = 0;
@@ -37,10 +38,10 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
       uVar14 = (uint16_t)((ulong)Entities >> 0x10);
       uVar14 = ovr_ovc23_isCursorAt
                          (*(uint16_t *)((int)Entities + uVar12 * 0x37),
-                          *(int *)((int)Entities + uVar12 * 0x37 + 2));
+                          ((entity_t *)Entities)[uVar12].base.y);
       if (((char)uVar14 != '\0') &&
          (*(char *)((int)(char **)GMenuStrings +
-                   (uint)*(byte *)((int)Entities + uVar12 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0')) {
+                   (uint)((entity_t *)Entities)[uVar12].base.gindex * 0x95 + 0x1f) == '\0')) {
         iVar13 = iVar13 + 1;
       }
     }
@@ -49,7 +50,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     uVar14 = uVar7;
     plVar6 = LXMUL_at_(unaff_DI,lVar17,in_stack_0000ff62);
     uStack_12 = (uint16_t)(lVar16 + 1);
-    msg = ovr_stsprintf(&stack0xff60,(char *)CONCAT22(0x81dc,unaff_SS),
+    msg = ovr_stsprintf(&stk_ff60,(char *)CONCAT22(0x81dc,unaff_SS),
                         (char *)CONCAT22(plVar6,(char *)0x2410),uVar14,uStack_12,uVar7,
                         uVar5);
     ovr_say(msg);

@@ -1,5 +1,4 @@
 /* 302d:050a */
-
 int __cdecl16far blitText(char far *text,byte far *widths,uint16_t term,uint8_t color)
 
 {

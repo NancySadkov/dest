@@ -1,5 +1,4 @@
 /* 302d:0634 */
-
 uint __cdecl16far blitLabel(char far *text,byte far *widths,uint16_t term,uint8_t color)
 
 {

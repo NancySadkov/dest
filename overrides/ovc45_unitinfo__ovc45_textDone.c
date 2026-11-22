@@ -1,4 +1,3 @@
-void __cdecl16far
 ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t outFlag,
               uint16_t outFlagSeg,...)
 

@@ -59,9 +59,9 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
     uVar6 = (uint16_t)((ulong)Entities >> 0x10);
     if ((*(byte *)((int)Entities + uVar1 * 0x37 + 0x1a) == leaderIndex) &&
        (*(byte *)((int)Entities + uVar1 * 0x37 + 0x1a) = bestSameIdx, bestOtherIdx != 0xff)) {
-      *(uint16_t *)((int)Entities + uVar1 * 0x37 + 8) =
+      ((entity_t *)Entities)[uVar1].base.destX =
            ((char_sheet_t *)(((uint)bestOtherIdx << 2)))->x;
-      *(uint16_t *)((int)Entities + uVar1 * 0x37 + 10) =
+      ((entity_t *)Entities)[uVar1].base.destY =
            ((char_sheet_t *)(((uint)bestOtherIdx << 2)))->y;
     }
   }

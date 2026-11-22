@@ -1,6 +1,7 @@
 void __cdecl16far ovc13_usesMiceBlitRect(void)
 
 {
+  undefined1 stk_ffe2;   /* stack slot ffe2 */
   far_t dst;
   far_t dst_00;
   ulong *puVar1;
@@ -14,7 +15,7 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
   uint8_t rect;
   
   dst.seg = unaff_SS;
-  dst.ofs = (uint16_t)&stack0xffe2;
+  dst.ofs = (uint16_t)&stk_ffe2;
   F_SCOPY(far_from_u32((uint32_t)(0x24100846)),dst);
   dst_00.seg = unaff_SS;
   dst_00.ofs = (uint16_t)&rect;
@@ -28,7 +29,7 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
     flashTickLo = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t far */;
     FlashToggle = 1 - (FlashToggle != 0);
     paletteSeg = (uint8_t)unaff_SS;
-    ovr_vgaSetPalette(&stack0xffe2 + (uint)FlashToggle * 3,paletteSeg,0xef,1);
+    ovr_vgaSetPalette(&stk_ffe2 + (uint)FlashToggle * 3,paletteSeg,0xef,1);
     ovr_vgaSetPalette(&flashPalette1 + (uint)FlashToggle * 3,paletteSeg,0xee,1);
     paletteOfs = &flashPalette2 + (uint)FlashToggle * 3;
     ovr_vgaSetPalette(paletteOfs,paletteSeg,0xeb,1);

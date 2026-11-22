@@ -1,12 +1,4 @@
 /* 302d:028c */
-
-/* Blit one character: ch is turned into a glyph index by adding 0xe0, rows is
-   widths[0], the glyph width is widths[ch_index + 0xc1], and the glyph data
-   starts at widths + word[ch_index*2 + 1] + 0x121 in the same segment.
-   Zero pixels leave the destination alone; 0x9f/0x9b (type 2) become 0x92,
-   1 becomes 0xec, 0xe becomes the caller's color, and in type 1 the run
-   0xe4..0xe7 is ORed with 0x10. */
-
 void __cdecl16far blitLetter(char ch,byte far *widths,uint8_t color)
 
 {

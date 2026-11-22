@@ -12,7 +12,7 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
   uint uStack_4;
   
   count = 0;
-  while ((count < GLeaderCount && (*(char *)((int)*(uint32_t *)(count << 2) + 0x28) != '\0'))) {
+  while ((count < GLeaderCount && (((char_sheet_t *)((count << 2)))->statMask != '\0'))) {
     count = count + 1;
   }
   if (count < GLeaderCount) {

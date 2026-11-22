@@ -1,5 +1,4 @@
 /* 302d:04eb */
-
 uint8_t __cdecl16far fontChWidth(uint8_t far *widths,char ch)
 
 {

@@ -1,8 +1,8 @@
-entity_t * __cdecl16far
 ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint16_t param_5,
               int *param_6,int *param_7,int *param_8,int *param_9)
 
 {
+  undefined1 stk_02c2;   /* stack slot 02c2 */
   uint8_t *puVar1;
   uint32_t uVar2;
   far_t handle;
@@ -357,7 +357,7 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
       bVar18 = *(char *)((uint)bVar22 * 0x27 + 0x131) == '\x03';
     } while( true );
   }
-  if (((byte)uVar9 & (&stack0x02c2)[unaff_DI]) == 0) {
+  if (((byte)uVar9 & (&stk_02c2)[unaff_DI]) == 0) {
     iVar17 = iVar17 + (uint)(0xffec < uVar14);
     plVar11 = LXRSH_at_((long *)CONCAT11(in_stack_0000fff9,in_stack_0000fff8),CONCAT22(iVar8,uVar16)
                         ,unaff_BP);

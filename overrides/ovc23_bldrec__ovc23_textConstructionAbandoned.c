@@ -1,6 +1,8 @@
 bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte dir)
 
 {
+  undefined1 stk_fff6;   /* stack slot fff6 */
+  undefined1 stk_fffe;   /* stack slot fffe */
   int *piVar1;
   uint *puVar2;
   byte *pbVar3;
@@ -115,9 +117,9 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
       bVar29 = bVar22 - (bVar23 < AgntAnms[0xf].frmid);
       puVar26 = (uint *)CONCAT11(bVar29,bVar15);
       puVar8 = (undefined1 *)(uint)(bVar13 < dir || bVar22 < (bVar23 < AgntAnms[0xf].frmid));
-      puVar31 = (uint16_t *)(&stack0xfffe + -(int)in_CX + -(int)puVar8);
+      puVar31 = (uint16_t *)(&stk_fffe + -(int)in_CX + -(int)puVar8);
       puVar2 = (uint *)(puVar35 + -0x57e7);
-      uVar33 = (uint)(&stack0xfffe < in_CX || &stack0xfffe + -(int)in_CX < puVar8);
+      uVar33 = (uint)(&stk_fffe < in_CX || &stk_fffe + -(int)in_CX < puVar8);
       puVar32 = (uint16_t *)*puVar2;
       uVar18 = *puVar2;
       *puVar2 = (uVar18 - (int)puVar31) - uVar33;
@@ -139,8 +141,8 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
       uVar33 = AgntAnms[6].y - (int)pcVar24;
       AgntAnms[6].y = uVar33 - uVar18;
       puVar8 = (undefined1 *)(uint)(bVar37 || uVar33 < uVar18);
-      puVar9 = &stack0xfff6 + -(int)puVar35;
-      bVar37 = &stack0xfff6 < puVar35 || puVar9 < puVar8;
+      puVar9 = &stk_fff6 + -(int)puVar35;
+      bVar37 = &stk_fff6 < puVar35 || puVar9 < puVar8;
       iVar28 = -(int)puVar8;
       puVar30 = (uint *)(puVar9 + iVar28);
       bVar13 = (byte)((uint)in_CX >> 8);

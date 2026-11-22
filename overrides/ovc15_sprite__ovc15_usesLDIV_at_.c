@@ -1,4 +1,3 @@
-entity_t * __cdecl16far
 ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gindex,uint8_t animFrame
                   ,byte partyIndex,...)
 
@@ -98,7 +97,7 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
     }
     ((entity_t *)Entities)[EntityCount].base.level =
          *(uint8_t *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95);
-    if ((((*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d) & 0x10) != 0) &&
+    if ((((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 0x10) != 0) &&
         (*(byte *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95) < 5)) &&
        (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) != -1)) {
       while (((entity_t *)Entities)[EntityCount].base.level < 5) {

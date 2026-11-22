@@ -1,4 +1,3 @@
-uint8_t * __cdecl16far
 ovc18_spawnClassAgent
           (uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,uint8_t classStr,uint8_t partyIndex,
           uint16_t mode)
@@ -38,7 +37,7 @@ ovc18_spawnClassAgent
   uint32_t in_stack_0000fffa;
   byte bVar17;
   
-  bVar17 = *(byte *)((int)*(uint32_t *)((uint)classStr << 2) + 0x3e);
+  bVar17 = ((char_sheet_t *)(((uint)classStr << 2)))->classStr;
   filename = (char *)CONCAT13((char)((ulong)in_stack_0000fffa >> 0x18),CONCAT12(bVar17,unaff_SI));
   uVar10 = 0x195d;
   if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)bVar17 * 0x95) & 0x800) == 0) {

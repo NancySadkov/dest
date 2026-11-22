@@ -91,75 +91,24 @@ extern uint16_t in_stack_0000fffa;
 extern uint16_t in_stack_0000fffb;
 extern uint16_t in_stack_0000fffc;
 extern uint16_t in_stack_0000fffd;
-#define puRam00010106 (*(uint16_t * far *)MK_FP(0x1010, 0x0006))
+#define puRam00010106 (*(undefined2 * far *)MK_FP(0x1010, 0x0006))
 #define ram0x0000d528 (*(undefined1 far *)MK_FP(0x0d52, 0x0008))
 #define ram0x00024180 (*(undefined1 far *)MK_FP(ST_DGROUP_SEG, 0x0080))
 #define ram0x00024186 (*(undefined1 far *)MK_FP(ST_DGROUP_SEG, 0x0086))
 #define ram0x0002c9bb (*(undefined1 far *)MK_FP(ST_DGROUP_SEG, 0x88bb))
-extern undefined1 stack0x0000;
-extern undefined1 stack0x0004;
-extern undefined1 stack0x0007;
-extern undefined1 stack0x0035;
-extern undefined1 stack0x02c2;
-extern undefined1 stack0x681c;
-extern undefined1 stack0x6ffe;
-extern undefined1 stack0x8d06;
-extern undefined1 stack0x8ed6;
-extern undefined1 stack0xbac4;
-extern undefined1 stack0xc1dd;
-extern undefined1 stack0xd744;
-extern undefined1 stack0xfc0c;
-extern undefined1 stack0xfc0e;
-extern undefined1 stack0xfe0a;
-extern undefined1 stack0xfe3a;
-extern undefined1 stack0xfecc;
-extern undefined1 stack0xfed4;
-extern undefined1 stack0xfed6;
-extern undefined1 stack0xfed8;
-extern undefined1 stack0xfeda;
-extern undefined1 stack0xfedc;
-extern undefined1 stack0xfef4;
-extern undefined1 stack0xff60;
-extern undefined1 stack0xff61;
-extern undefined1 stack0xff74;
-extern undefined1 stack0xffaa;
-extern undefined1 stack0xffaf;
-extern undefined1 stack0xffb4;
-extern undefined1 stack0xffbc;
-extern undefined1 stack0xffd4;
-extern undefined1 stack0xffd6;
-extern undefined1 stack0xffdc;
-extern undefined1 stack0xffde;
-extern undefined1 stack0xffe0;
-extern undefined1 stack0xffe2;
-extern undefined1 stack0xffe4;
-extern undefined1 stack0xffe8;
-extern undefined1 stack0xffe9;
-extern undefined1 stack0xffea;
-extern undefined1 stack0xffeb;
-extern undefined1 stack0xffec;
-extern undefined1 stack0xfff0;
-extern undefined1 stack0xfff2;
-extern undefined1 stack0xfff5;
-extern undefined1 stack0xfff6;
-extern undefined1 stack0xfff8;
-extern undefined1 stack0xfffa;
-extern undefined1 stack0xfffc;
-extern undefined1 stack0xfffe;
-extern undefined1 stack0xffff;
-#define uRam00000064 (*(uint16_t far *)MK_FP(0x0000, 0x0064))
-#define uRam00000066 (*(uint16_t far *)MK_FP(0x0000, 0x0066))
-#define uRam000000fa (*(uint16_t far *)MK_FP(0x0000, 0x00fa))
-#define uRam000000fc (*(uint16_t far *)MK_FP(0x0000, 0x00fc))
-#define uRam000000fe (*(uint16_t far *)MK_FP(0x0000, 0x00fe))
-#define uRam000100f6 (*(uint16_t far *)MK_FP(0x100f, 0x0006))
-#define uRam000100f8 (*(uint16_t far *)MK_FP(0x100f, 0x0008))
-#define uRam000100fa (*(uint16_t far *)MK_FP(0x100f, 0x000a))
-#define uRam000100fc (*(uint16_t far *)MK_FP(0x100f, 0x000c))
-#define uRam000100fe (*(uint16_t far *)MK_FP(0x100f, 0x000e))
-#define uRam00010102 (*(uint16_t far *)MK_FP(0x1010, 0x0002))
-#define uRam00010104 (*(uint16_t far *)MK_FP(0x1010, 0x0004))
-#define uRam0002db84 (*(uint16_t far *)MK_FP(ST_DGROUP_SEG, 0x9a84))
+#define uRam00000064 (*(undefined2 far *)MK_FP(0x0000, 0x0064))
+#define uRam00000066 (*(undefined2 far *)MK_FP(0x0000, 0x0066))
+#define uRam000000fa (*(undefined2 far *)MK_FP(0x0000, 0x00fa))
+#define uRam000000fc (*(undefined2 far *)MK_FP(0x0000, 0x00fc))
+#define uRam000000fe (*(undefined2 far *)MK_FP(0x0000, 0x00fe))
+#define uRam000100f6 (*(undefined2 far *)MK_FP(0x100f, 0x0006))
+#define uRam000100f8 (*(undefined2 far *)MK_FP(0x100f, 0x0008))
+#define uRam000100fa (*(undefined2 far *)MK_FP(0x100f, 0x000a))
+#define uRam000100fc (*(undefined2 far *)MK_FP(0x100f, 0x000c))
+#define uRam000100fe (*(undefined2 far *)MK_FP(0x100f, 0x000e))
+#define uRam00010102 (*(undefined2 far *)MK_FP(0x1010, 0x0002))
+#define uRam00010104 (*(undefined2 far *)MK_FP(0x1010, 0x0004))
+#define uRam0002db84 (*(undefined2 far *)MK_FP(ST_DGROUP_SEG, 0x9a84))
 extern uint16_t unaff_BP;
 extern uint16_t unaff_DI;
 extern uint32_t unaff_ES;

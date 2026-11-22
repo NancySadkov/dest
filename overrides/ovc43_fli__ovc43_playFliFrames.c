@@ -1,4 +1,3 @@
-char __cdecl16far
 ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte delayTicks)
 
 {

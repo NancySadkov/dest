@@ -1,7 +1,7 @@
-char * __cdecl16far
 ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textVariant,...)
 
 {
+  undefined1 stk_681c;   /* stack slot 681c */
   int *piVar1;
   uint16_t y;
   far_t buf;
@@ -163,7 +163,7 @@ L_attact_3f0b_26bd_2767:
       case 3:
                     /* WARNING: Read-only address (ram,0x000277ff) is written */
         ((char *)0x36fe)[1] = -0x58;
-        *(uint *)(&stack0x681c + destX) = *(uint *)(&stack0x681c + destX) & in_CX;
+        *(uint *)(&stk_681c + destX) = *(uint *)(&stk_681c + destX) & in_CX;
         ovr_blitLabel((char *)CONCAT11(uVar17,in_stack_0000ffef));
         uVar17 = 0xdc;
         uVar18 = 0;
@@ -273,7 +273,7 @@ L_attact_3f0b_26bd_2767:
         if ((*(char *)(partyIndex + 0x86) != '\0') && (bVar2 != 0xff)) {
           pcVar7 = (char *)((uint)bVar2 << 2);
           uVar13 = 0x217a;
-          if (*(byte *)((int)*(uint32_t *)pcVar7 + 0x86) < 9) {
+          if (((char_sheet_t *)(pcVar7))->titleIndex < 9) {
             manage_usesBlitLabel2("popularity",0x7d);
             manage_usesBlitLabel2("city blocks",0xdc);
             TextBlitY = TextBlitY + 10;

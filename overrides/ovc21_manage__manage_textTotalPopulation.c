@@ -1,6 +1,8 @@
 char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sheet_t *sheet)
 
 {
+  undefined1 stk_bac4;   /* stack slot bac4 */
+  undefined1 stk_fe3a;   /* stack slot fe3a */
   uint16_t *puVar1;
   uint8_t *puVar2;
   uint32_t uVar3;
@@ -119,8 +121,8 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
     if (charIndex == 0xff) {
       uVar6 = ovr_blitLabel((char *)"Total population.",
                             (uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510));
-      *pcVar17 = *pcVar17 + (char)(uVar6 >> 8) + ((undefined1 *)0xfff3 < &stack0xfe3a);
-      *(undefined1 *)((int)*(uint32_t *)(entity_t **)&Entities + uVar6 + 0x18) = 0;
+      *pcVar17 = *pcVar17 + (char)(uVar6 >> 8) + ((undefined1 *)0xfff3 < &stk_fe3a);
+      ((dos_psp_t *)((entity_t **)&Entities + uVar6))->jft[0] = 0;
       uVar18 = (uint16_t)((ulong)Entities >> 0x10);
       *(undefined1 *)((int)&((entity_t *)Entities)[(int)pcVar17].base.state + 1) =
            (char)((entity_t *)Entities)[(int)pcVar17].base.flags32;
@@ -208,7 +210,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
     acStack_e[1] = (char)uVar18;
     keyboardInputMode = 0;
     if (((acStack_e[1] != '\0') && (acStack_e[1] != '\x01')) && (acStack_e[1] != -2)) {
-      (&stack0xbac4)[(int)count] = (&stack0xbac4)[(int)count] + cVar4;
+      (&stk_bac4)[(int)count] = (&stk_bac4)[(int)count] + cVar4;
       iVar10 = 0x2410;
       do {
         iVar11 = iVar10 * uVar5;

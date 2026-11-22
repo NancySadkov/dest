@@ -1,4 +1,3 @@
-char __cdecl16far
 ovc40_usesAlignToSeg
           (char backdropIndex,char *capTextOfs,uint16_t capTextSeg,char *textOfs,uint16_t textSeg,
           byte formatIndex,...)

@@ -1,6 +1,9 @@
 char * __cdecl16far chargen_switch(uint16_t index)
 
 {
+  undefined1 stk_bac4;   /* stack slot bac4 */
+  undefined1 stk_ffe9;   /* stack slot ffe9 */
+  undefined1 stk_fff2;   /* stack slot fff2 */
   uint16_t *puVar1;
   uint8_t *puVar2;
   uint *puVar3;
@@ -246,7 +249,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
                              (char *)CONCAT13(uVar34,CONCAT12(uVar33,CONCAT11(uVar32,uVar25))));
     ovr_drawString(pcVar16);
     (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = cVar9;
-    entries_00.ofs = (uint16_t)&stack0xfff2;
+    entries_00.ofs = (uint16_t)&stk_fff2;
     (*(uint8_t *)((uint8_t *)&(entries_00.seg) + 1)) = bVar38;
     pcVar16 = ovr_uiInputText(entries_00,2);
     pcVar22 = (char *)((uint)pcVar16 & 0xff);
@@ -361,8 +364,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
       cVar9 = -8;
       cVar30 = 'T';
       uVar14 = ovr_blitLabel((char *)"Total population.");
-      *unaff_SI = *unaff_SI + (char)(uVar14 >> 8) + ((undefined1 *)0xfff3 < &stack0xfff2);
-      *(undefined1 *)((int)*(uint32_t *)(entity_t **)&Entities + uVar14 + 0x18) = 0;
+      *unaff_SI = *unaff_SI + (char)(uVar14 >> 8) + ((undefined1 *)0xfff3 < &stk_fff2);
+      ((dos_psp_t *)((entity_t **)&Entities + uVar14))->jft[0] = 0;
       uVar12 = (uint16_t)((ulong)Entities >> 0x10);
       *(undefined1 *)((int)&((entity_t *)Entities)[(int)unaff_SI].base.state + 1) =
            (char)((entity_t *)Entities)[(int)unaff_SI].base.flags32;
@@ -439,7 +442,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
       iVar23 = iVar23 + 1;
     }
     CurSfxType3 = 0x3c;
-    puVar36 = &stack0xfff2;
+    puVar36 = &stk_fff2;
     (*(uint8_t *)((uint8_t *)&(entries.seg))) = cVar9;
     entries.ofs = (uint16_t)auStack_66;
     (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = bVar38;
@@ -447,7 +450,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
     cVar9 = (char)uVar12;
     keyboardInputMode = 0;
     if (((cVar9 != '\0') && (cVar9 != '\x01')) && (cVar9 != -2)) {
-      (&stack0xbac4)[(int)unaff_DI] = (&stack0xbac4)[(int)unaff_DI] + cVar8;
+      (&stk_bac4)[(int)unaff_DI] = (&stk_bac4)[(int)unaff_DI] + cVar8;
       iVar24 = 0x2410;
       do {
         bVar38 = *(byte *)(iVar24 * uVar13 + 0x21);
@@ -552,7 +555,7 @@ L_attact_3f0b_1082_1477:
               uVar15 = ovr_alignUp4(GfxRndSeed);
               uVar14 = CONCAT11(uVar34,uVar33);
               if (CONCAT11(uVar37,bVar38) == uVar15) {
-                (&stack0xfff2)[bVar38] = 1;
+                (&stk_fff2)[bVar38] = 1;
                 uVar14 = CONCAT11(uVar34,uVar33);
               }
             }
@@ -622,7 +625,7 @@ L_attact_3f0b_1082_1477:
         if (DebugVerbose != false) {
           printf("%d %d %d  \r");
         }
-        ovr_ovc24_removeOtherEntities(&stack0xffe9);
+        ovr_ovc24_removeOtherEntities(&stk_ffe9);
         GGameState = 0x1f;
         if (uVar31 != 0x0) {
           ovr_constr_usesBlitRect();
@@ -631,7 +634,7 @@ L_attact_3f0b_1082_1477:
         func_0x0004f68f();
         GGameState = 0x1d;
         for (uVar14 = 0; (int)uVar14 < 5; uVar14 = uVar14 + 1) {
-          if ((&stack0xfff2)[uVar14] != '\0') {
+          if ((&stk_fff2)[uVar14] != '\0') {
             ovr_ovc41_usesMiceBlitRect(uVar14);
           }
         }
@@ -676,7 +679,7 @@ L_attact_3f0b_1082_1477:
       if ((CONCAT11(uVar32,cVar30) == 0) || (cVar9 = sub_OVC21_manage_c_23C2(), cVar9 != '\0')) {
         uVar14 = ovr_ovc26_usesStExit((int)unaff_DI);
         if ((char)uVar14 == '\0') {
-          uVar14 = ovr_ovc26_usesRandBelow((int)unaff_DI,(uint16_t)&stack0xffe9);
+          uVar14 = ovr_ovc26_usesRandBelow((int)unaff_DI,(uint16_t)&stk_ffe9);
           if ((uVar14 & 0xff) == 0) {
             peVar27 = (entity_t *)((uint)(in_stack_0000ffe2->base).gindex * 0x95);
             uVar13 = 0x195d;

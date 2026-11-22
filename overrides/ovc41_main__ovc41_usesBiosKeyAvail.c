@@ -1,7 +1,10 @@
 char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
 
 {
-  extern undefined1 _backdropIndex;   /* hand fix: no symbol exists */
+  undefined1 stk_fffa;   /* stack slot fffa */
+  undefined1 stk_fffc;   /* stack slot fffc */
+  undefined1 stk_fffe;   /* stack slot fffe */
+  undefined1 _backdropIndex;   /* local lost by the decompiler */
   uint32_t uVar1;
   uint32_t uVar2;
   bool bVar3;
@@ -402,7 +405,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
               if (*(uint *)((int)uVar1 + 0x54) < (uint)(*(int *)((int)uVar2 + 0x4d) << 1)) {
                 uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                 pcVar12 = (char *)(((uint)_backdropIndex & 0xff) << 2);
-                if (*(uint *)((int)uVar1 + 0x54) < *(uint *)((int)*(uint32_t *)pcVar12 + 0x4d)) {
+                if (*(uint *)((int)uVar1 + 0x54) < ((char_sheet_t *)(pcVar12))->population) {
                   uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                   pcVar12 = (char *)0x217a;
                   uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
@@ -510,7 +513,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
   case (char *)0x2:
     LOCK();
     iVar14 = *(int *)((char *)0x81c9 + unaff_DI);
-    *(undefined1 **)((char *)0x81c9 + unaff_DI) = &stack0xfffe;
+    *(undefined1 **)((char *)0x81c9 + unaff_DI) = &stk_fffe;
     UNLOCK();
     *(int *)(iVar14 + -2) = unaff_DI;
     iVar15 = 0;
@@ -518,7 +521,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
     for (bVar22 = 0; pcVar6 = (char *)CONCAT11(0x24,GLeaderCount), bVar22 < GLeaderCount;
         bVar22 = bVar22 + 1) {
       pcVar12 = (char *)((uint)bVar22 << 2);
-      if ((byte)(&stack0xfffa)[(uint)_backdropIndex & 0xff] <=
+      if ((byte)(&stk_fffa)[(uint)_backdropIndex & 0xff] <=
           *(byte *)((int)*(uint32_t *)pcVar12 + 0xa5)) {
         for (uVar11 = 0xf8; uVar11 < GUnitCount; uVar11 = uVar11 + 1) {
           pcVar12 = 0x2410;   /* hand fix: segment-half slot */
@@ -717,7 +720,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
       do {
         do {
           ovr_audio_usesLDIV_at_();
-          bVar22 = ovr_init2_usesCFGMice((uint16_t *)&stack0xfffc);
+          bVar22 = ovr_init2_usesCFGMice((uint16_t *)&stk_fffc);
           if ((((CONCAT11(extraout_AH,bVar22) != 0) && (0x87 < CONCAT11(uVar26,uVar25))) &&
               (0xb9 < uVar11)) && ((CONCAT11(uVar26,uVar25) < 0xd6 && (uVar11 < 0xc6))))
           goto L_OVC40_69c8_04c6_0AF0;

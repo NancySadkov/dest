@@ -1,4 +1,3 @@
-void __cdecl16far
 lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,far_t src,
                stg_tmp_t *dst,int16_t sx,int16_t sy,int16_t w,int16_t h)
 

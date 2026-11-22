@@ -1,6 +1,16 @@
 byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
 
 {
+  undefined1 stk_6ffe;   /* stack slot 6ffe */
+  undefined1 stk_fecc;   /* stack slot fecc */
+  undefined1 stk_fed4;   /* stack slot fed4 */
+  undefined1 stk_fed6;   /* stack slot fed6 */
+  undefined1 stk_fed8;   /* stack slot fed8 */
+  undefined1 stk_feda;   /* stack slot feda */
+  undefined1 stk_fedc;   /* stack slot fedc */
+  undefined1 stk_fef4;   /* stack slot fef4 */
+  undefined1 stk_fffe;   /* stack slot fffe */
+  undefined1 stk_ffff;   /* stack slot ffff */
   char *pcVar1;
   uint16_t uVar2;
   char cVar3;
@@ -117,41 +127,41 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
         return (byte *)((int)(uint32_t *)&_DATA + 1);
       case 2:
         cVar3 = *(char *)(uVar16 * 2 + unaff_SI);
-        puVar18 = &stack0xfffe + unaff_SI;
+        puVar18 = &stk_fffe + unaff_SI;
         iVar20 = uVar16 * 3;
         *(undefined1 **)((char *)0x7501 + iVar20) =
              puVar18 + *(int *)((char *)0x7501 + iVar20);
-        *(int *)(&stack0xffff + (int)puVar18) = *(int *)(&stack0xffff + (int)puVar18) + iVar20;
-        *(int *)(&stack0xfffe + (int)unaff_DI) = *(int *)(&stack0xfffe + (int)unaff_DI) + iVar20;
+        *(int *)(&stk_ffff + (int)puVar18) = *(int *)(&stk_ffff + (int)puVar18) + iVar20;
+        *(int *)(&stk_fffe + (int)unaff_DI) = *(int *)(&stk_fffe + (int)unaff_DI) + iVar20;
                     /* WARNING: Read-only address (ram,0x00033501) is written */
         iRam00033501 = uVar16 + 0x8b26;
-        cVar13 = (char)(&stack0xfed8 + (int)unaff_DI +
+        cVar13 = (char)(&stk_fed8 + (int)unaff_DI +
                        CONCAT11((char)((ulong)paVar4 >> 0x18),(char)((ulong)paVar4 >> 0x10) + cVar3)
                        );
         pcVar19 = (char *)(uint)(byte)((char)iVar20 + cVar13);
-        (&stack0x6ffe)[(int)puVar18] = (&stack0x6ffe)[(int)puVar18];
+        (&stk_6ffe)[(int)puVar18] = (&stk_6ffe)[(int)puVar18];
         pcVar1 = pcVar19;
         *pcVar1 = *pcVar1 + cVar13;
-        *(uint16_t *)(&stack0xfed6 + (int)unaff_DI) = 0x6000;
+        *(uint16_t *)(&stk_fed6 + (int)unaff_DI) = 0x6000;
         pcVar1 = pcVar19 + -0x61f9;
         *pcVar1 = *pcVar1;
         cVar13 = *pcVar1;
-        *(undefined1 **)(&stack0xfeda + (int)unaff_DI) = &stack0xfedc + (int)unaff_DI;
-        uVar22 = *(uint16_t *)(&stack0xfeda + (int)unaff_DI);
-        *(uint16_t *)(&stack0xfeda + (int)unaff_DI) = uVar22;
+        *(undefined1 **)(&stk_feda + (int)unaff_DI) = &stk_fedc + (int)unaff_DI;
+        uVar22 = *(uint16_t *)(&stk_feda + (int)unaff_DI);
+        *(uint16_t *)(&stk_feda + (int)unaff_DI) = uVar22;
         if (iVar12 == 1 || cVar13 == '\0') {
           ((char *)0x06a4)[10] = -0x6b;
           ((char *)0x06a4)[0xb] = '\x06';
                     /* WARNING: Read-only address (ram,0x000247ae) is written */
         }
-        uVar2 = in(&stack0xfed8 + (int)unaff_DI +
+        uVar2 = in(&stk_fed8 + (int)unaff_DI +
                    CONCAT11((char)((ulong)paVar4 >> 0x18),(char)((ulong)paVar4 >> 0x10) + cVar3));
         *unaff_DI = uVar2;
-        *(uint16_t *)(&stack0xfed8 + (int)unaff_DI) = uVar22;
-        *(uint16_t *)(&stack0xfed6 + (int)unaff_DI) = uVar22;
-        *(uint16_t *)(&stack0xfed4 + (int)unaff_DI) = uVar22;
-        *(uint16_t *)(&stack0xfed4 + (int)unaff_DI) =
-             *(uint16_t *)(&stack0xfed4 + (int)unaff_DI);
+        *(uint16_t *)(&stk_fed8 + (int)unaff_DI) = uVar22;
+        *(uint16_t *)(&stk_fed6 + (int)unaff_DI) = uVar22;
+        *(uint16_t *)(&stk_fed4 + (int)unaff_DI) = uVar22;
+        *(uint16_t *)(&stk_fed4 + (int)unaff_DI) =
+             *(uint16_t *)(&stk_fed4 + (int)unaff_DI);
         pcVar5 = (code *)swi(1);
         pbVar8 = (byte *)(*pcVar5)();
         return pbVar8;
@@ -225,7 +235,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
         } while( true );
       }
 switchD_6000_ca06_caseD_1:
-      (&stack0xfffe)[(int)unaff_DI] = (&stack0xfffe)[(int)unaff_DI] + (char)iVar12;
+      (&stk_fffe)[(int)unaff_DI] = (&stk_fffe)[(int)unaff_DI] + (char)iVar12;
       *(undefined1 *)((int)unaff_DI + 0x15) = 0;
       (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x6a64;
       (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iVar20;
@@ -357,8 +367,8 @@ switchD_6000_ca06_caseD_1:
             if ((((*(byte *)(iVar12 + uVar16 * 0x37 + 0x1a) == bStack_3c) &&
                  (paStack_22 <= (agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
                 ((agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26)) &&
-               ((paStack_24 <= (agnt_t *)*(uint *)(iVar12 + uVar16 * 0x37 + 2) &&
-                ((agnt_t *)*(uint *)(iVar12 + uVar16 * 0x37 + 2) <= paStack_28)))) {
+               ((paStack_24 <= (agnt_t *)((entity_t *)iVar12)[uVar16].base.y &&
+                ((agnt_t *)((entity_t *)iVar12)[uVar16].base.y <= paStack_28)))) {
               iStack_a = iStack_a + 1;
             }
           }
@@ -430,11 +440,11 @@ L_ui_unit_order_6616_0689_1054:
           if (((*(byte *)(iVar12 + uVar16 * 0x37 + 0x1a) == bStack_3c) &&
               (paStack_22 <= (agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
              (((agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26 &&
-              ((paStack_24 <= (agnt_t *)*(uint *)(iVar12 + uVar16 * 0x37 + 2) &&
-               ((agnt_t *)*(uint *)(iVar12 + uVar16 * 0x37 + 2) <= paStack_28)))))) {
+              ((paStack_24 <= (agnt_t *)((entity_t *)iVar12)[uVar16].base.y &&
+               ((agnt_t *)((entity_t *)iVar12)[uVar16].base.y <= paStack_28)))))) {
             if (bStack_3b < 2) {
               unit_usesAlignUp42((byte)agntPtr,*(uint16_t *)((entity_t *)iVar12 + uVar16),
-                                 *(int *)(iVar12 + uVar16 * 0x37 + 2));
+                                 ((entity_t *)iVar12)[uVar16].base.y);
             }
             else {
               pcStack_13e = (char *)0x6fdf;
@@ -503,7 +513,7 @@ L_ui_unit_order_6616_0689_1054:
       br = &bStack_16;
       ovr_blitRect(br);
       ovr_miceUpdate();
-      stack0xfef4 = uStack_18;
+      stk_fef4 = uStack_18;
       uStack_10e = uStack_1a;
       ovr_stshFree(uStack_10e);
       ovr_stshFree(fStack_6);
@@ -527,8 +537,8 @@ L_ui_unit_order_6616_0689_1054:
       (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = 0x22f8;
       (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0xcb5a;
       ovr_agnt_statusText(paStack_c,
-                          (char *)CONCAT13((char)((uint)&stack0xfecc >> 8),
-                                           CONCAT12((char)&stack0xfecc,iStack_a)));
+                          (char *)CONCAT13((char)((uint)&stk_fecc >> 8),
+                                           CONCAT12((char)&stk_fecc,iStack_a)));
       puVar14 = &agnt;
       uStack_132 = (uint16_t)agntPtr;
       pcVar19 = ovr_agnt_statusText(paVar17,(char *)CONCAT22(&text,pcVar19));

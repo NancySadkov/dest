@@ -1,4 +1,3 @@
-void __cdecl16far
 ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t outFlag,
                uint16_t outFlagSeg,...)
 
@@ -104,7 +103,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
       ovr_play_sfx(86,0,0);
       if (*(char *)((uint)bldType * 0x27 + 0x131) == '\0') {
         if (*(char *)((int)&worldMenuLabels[9].ofs + 1 +
-                     (uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0xd) * 0x95) == '\x05') {
+                     (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95) == '\x05') {
           bStack_11 = bldType + 0x18;
         }
         else {

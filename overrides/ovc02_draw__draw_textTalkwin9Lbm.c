@@ -1,7 +1,7 @@
 void __cdecl16far draw_textTalkwin9Lbm(void)
 
 {
-  extern uint16_t _resetTextBlitCycle;   /* hand fix: no symbol exists */
+  uint16_t _resetTextBlitCycle;   /* local lost by the decompiler */
   byte *pbVar1;
   int *piVar2;
   uint *puVar3;

@@ -1,12 +1,4 @@
 /* 619c:004e */
-
-/* Starts the next enemy wave.  On the first wave (PlayerIndex becomes 1) it
-   spawns the low, medium and high bands, each of size
-   enemyBase*[Difficulty] + randBelow(*IntelEnemies[Difficulty] + 1); on the
-   second wave it spawns the elite band only, plus one more unit when
-   Difficulty > 1, and announces the wave.  flags bit 0 asks for the
-   "All enemies destroyed." notice, bit 1 suppresses the blit-rect update. */
-
 void __cdecl16far ovc30_nextWave(byte flags)
 
 {

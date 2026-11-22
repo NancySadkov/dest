@@ -1,6 +1,12 @@
 agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt)
 
 {
+  undefined1 stk_02c2;   /* stack slot 02c2 */
+  undefined1 stk_bac4;   /* stack slot bac4 */
+  undefined1 stk_c1dd;   /* stack slot c1dd */
+  undefined1 stk_ffe8;   /* stack slot ffe8 */
+  undefined1 stk_ffe9;   /* stack slot ffe9 */
+  undefined1 stk_fff2;   /* stack slot fff2 */
   uint *puVar1;
   uint16_t *puVar2;
   uint8_t *puVar3;
@@ -110,7 +116,7 @@ agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt)
   puVar28 = (undefined1 *)(uVar17 * 2);
   switch(uVar17) {
   case 0:
-    if ((bVar44 & (&stack0x02c2)[(int)unaff_DI]) == 0) {
+    if ((bVar44 & (&stk_02c2)[(int)unaff_DI]) == 0) {
       iVar39 = (int)puVar33 + (uint)(0xffec < uVar27);
       uVar34 = 0x1000;
       plVar15 = LXRSH_at_((long *)unaff_SI,CONCAT22(uVar11,uVar32),in_stack_0000fffc);
@@ -528,7 +534,7 @@ L_manage_4d05_2d79_2EE8:
             cVar8 = (char)uVar32;
             keyboardInputMode = 0;
             if (((cVar8 != '\0') && (cVar8 != '\x01')) && (cVar8 != -2)) {
-              (&stack0xbac4)[(int)unaff_DI] = (&stack0xbac4)[(int)unaff_DI] + cVar6;
+              (&stk_bac4)[(int)unaff_DI] = (&stk_bac4)[(int)unaff_DI] + cVar6;
               iVar20 = 0x2410;
               do {
                 iVar21 = iVar20 * uVar25;
@@ -558,8 +564,8 @@ L_manage_4d05_2d79_2EE8:
           }
           uVar16 = ovr_blitLabel((char *)"Total population.",
                                  (uint8_t *)CONCAT13(uVar24,CONCAT12(uVar10,0x2410)));
-          *pcVar30 = *pcVar30 + (char)(uVar16 >> 8) + ((undefined1 *)0xfff3 < &stack0xffe8);
-          *(undefined1 *)((int)*(uint32_t *)(entity_t **)&Entities + uVar16 + 0x18) = 0;
+          *pcVar30 = *pcVar30 + (char)(uVar16 >> 8) + ((undefined1 *)0xfff3 < &stk_ffe8);
+          ((dos_psp_t *)((entity_t **)&Entities + uVar16))->jft[0] = 0;
           uVar17 = (int)pcVar30 * 0x37;
           goto switchD_4000_4790_caseD_3;
         }
@@ -578,7 +584,7 @@ L_manage_4d05_2d79_2EE8:
       in_CX = &eStackY_66;
     } while( true );
   case 5:
-    puVar1 = (uint *)(&stack0xc1dd + (int)unaff_DI);
+    puVar1 = (uint *)(&stk_c1dd + (int)unaff_DI);
     uVar16 = *puVar1;
     *puVar1 = *puVar1 - 1;
     if (in_CX == (entity_t *)0x0) {
@@ -748,7 +754,7 @@ L_attact_3f0b_1082_1477:
                 uVar40 = (undefined1)(uVar16 >> 8);
                 uVar16 = ovr_alignUp4(GfxRndSeed);
                 if (CONCAT11(uVar40,uVar24) == uVar16) {
-                  (&stack0xfff2)[bVar44] = 1;
+                  (&stk_fff2)[bVar44] = 1;
                 }
               }
               break;
@@ -836,7 +842,7 @@ L_attact_3f0b_1082_1477:
           uVar38 = 0x23;
           printf("%d %d %d  \r");
         }
-        ovr_ovc24_removeOtherEntities(&stack0xffe9);
+        ovr_ovc24_removeOtherEntities(&stk_ffe9);
         GGameState = 0x1f;
         if (uVar38 != 0x0) {
           ovr_constr_usesBlitRect();
@@ -845,7 +851,7 @@ L_attact_3f0b_1082_1477:
         func_0x0004f68f();
         GGameState = 0x1d;
         for (uVar16 = 0; (int)uVar16 < 5; uVar16 = uVar16 + 1) {
-          if ((&stack0xfff2)[uVar16] != '\0') {
+          if ((&stk_fff2)[uVar16] != '\0') {
             ovr_ovc41_usesMiceBlitRect(uVar16);
           }
         }

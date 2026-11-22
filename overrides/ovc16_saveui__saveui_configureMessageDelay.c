@@ -1,6 +1,9 @@
 char * __cdecl16far saveui_configureMessageDelay(void)
 
 {
+  undefined1 stk_0007;   /* stack slot 0007 */
+  undefined1 stk_ffde;   /* stack slot ffde */
+  undefined1 stk_ffff;   /* stack slot ffff */
   uint *puVar1;
   uint16_t *puVar2;
   uint8_t *puVar3;
@@ -105,13 +108,13 @@ char * __cdecl16far saveui_configureMessageDelay(void)
     bVar17 = *unaff_SI;
     *(uint *)((byte *)((int)puVar15 + (int)unaff_SI) + -0x6af7) =
          *(uint *)((byte *)((int)puVar15 + (int)unaff_SI) + -0x6af7) | unaff_DI;
-    *(uint *)(&stack0x0007 + (int)unaff_SI) =
-         *(uint *)(&stack0x0007 + (int)unaff_SI) | (uint)unaff_SI;
-    puVar1 = (uint *)(&stack0xffff + unaff_DI);
+    *(uint *)(&stk_0007 + (int)unaff_SI) =
+         *(uint *)(&stk_0007 + (int)unaff_SI) | (uint)unaff_SI;
+    puVar1 = (uint *)(&stk_ffff + unaff_DI);
     *puVar1 = *puVar1 | unaff_DI;
-    *puVar15 = *puVar15 | (uint)&stack0xffff;
+    *puVar15 = *puVar15 | (uint)&stk_ffff;
                     /* WARNING: Read-only address (ram,0x00025f09) is written */
-    (*(uint16_t *)((uint8_t *)&(s_fighters__residence_2410_1e09))) = (uint)&stack0xffde | 0x6966;
+    (*(uint16_t *)((uint8_t *)&(s_fighters__residence_2410_1e09))) = (uint)&stk_ffde | 0x6966;
     bVar17 = (byte)((uint)puVar15 >> 8) | (byte)in_CX | bVar17 | (byte)unaff_DI;
     iVar16 = CONCAT11(bVar17,(byte)puVar15);
     pbVar4 = (byte *)(iVar16 + -0x51f8);
@@ -119,7 +122,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
     ((char *)0x2c508)[unaff_DI] =
          ((char *)0x2c508)[unaff_DI] | (byte)in_DX | (byte)puVar15;
     unaff_SI[iVar16 + 8] = unaff_SI[iVar16 + 8] | bVar17;
-    (&stack0x0007)[(int)unaff_SI] = (&stack0x0007)[(int)unaff_SI] | (byte)puVar12;
+    (&stk_0007)[(int)unaff_SI] = (&stk_0007)[(int)unaff_SI] | (byte)puVar12;
                     /* WARNING: Bad instruction - Truncating control flow here */
     halt_baddata();
   case 2:
