@@ -385,3 +385,25 @@ Options for the next session:
 The rest of the ladder is green: `startx` -> DOS version -> `SaveVectors` ->
 environment scan -> resize -> UMB block -> `INT 1Ah` -> `_setupio` ->
 `_c0crtinit` -> argv -> the `main` call.
+
+## Tried: main in `_TEXT` instead of its own code segment
+
+`scripts/stage_build.py` gained `NO_CODESEG_MODULES` (comma-separated module
+names) which stages those modules with `#pragma codeseg _TEXT` instead of
+`<MOD>_SEG`.  With `NO_CODESEG_MODULES=main.c` the map moves `_MAIN` from
+`0644:0005` to `0000:0297`, and the call becomes `lcall 0:0x297` with the
+segment word relocated - i.e. exactly the resident-to-resident form that works
+elsewhere.
+
+It did not help.  The ladder still stops the same way:
+
+* marker 0x20 (immediately before `main(...)`) fires;
+* replacing the `lcall` instruction itself at image 0x10A3 with
+  `mov ax,4c21; int 21h`, with every earlier marker NOP-ed, still hangs;
+* patching `main`'s entry (image 0x297) to `mov ax,4c21; int 21h` also hangs.
+
+So execution does not reach the call site at all, despite the marker 0x20 eleven
+bytes earlier firing.  That contradicts the static picture and means blind
+rebuilds are no longer productive: the next step needs a real trace (DOSBox
+breakpoints on the marker address and on the call site, or a small TSR logger),
+not another layout experiment.

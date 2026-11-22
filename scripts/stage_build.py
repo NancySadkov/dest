@@ -80,7 +80,12 @@ def main():
         # program is ~250 KB of code, far more than one 64 KB segment can hold
         # With VROOMM (-V) TLINK overlays each module's *default* code segment, so
         # the per-module codeseg must be suppressible.
-        if not os.environ.get("SUPPRESS_CODESEG"):
+        no_seg = set(x.strip().lower() for x in
+                     os.environ.get("NO_CODESEG_MODULES", "").split(",") if x.strip())
+        if name.lower() in no_seg:
+            s = s.replace('#include "st.h"',
+                          '#include "st.h"\n#pragma codeseg _TEXT', 1)
+        elif not os.environ.get("SUPPRESS_CODESEG"):
             seg = re.sub(r"[^A-Za-z0-9_]", "_", short.rsplit(".", 1)[0]).upper()
             s = s.replace('#include "st.h"',
                           '#include "st.h"\n#pragma codeseg %s_SEG' % seg, 1)
