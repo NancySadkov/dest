@@ -170,17 +170,9 @@ void __cdecl16far __checknull(void)
 
 /* WARNING: Unknown calling convention -- yet parameter storage is locked */
 
-void _terminate(void)
+/* _terminate: body supplied by the startup (C0.ASM defines the CRT terminate routine); the recovered copy would duplicate it. */
+void _terminate(void);
 
-{
-  code *pcVar1;
-  
-  pcVar1 = (code *)swi(0x21);
-  (*pcVar1)();
-  ErrorDisplay();
-                    /* WARNING: Subroutine does not return */
-  __exit(3);
-}
 
 
 

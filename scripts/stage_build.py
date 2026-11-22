@@ -41,6 +41,9 @@ def main():
     mapping = {}
     for src, dst in HEADERS.items():
         shutil.copyfile(os.path.join(SRC, src), os.path.join(OUT, dst))
+    asm = os.path.join(SRC, "ovr_thunks.asm")
+    if os.path.isfile(asm):
+        shutil.copyfile(asm, os.path.join(OUT, "ovr.asm"))
     with open(os.path.join(OUT, "st.h"), "w", encoding="ascii") as f:
         f.write("/* DOS/TC30 staging aggregate header. */\n")
         f.write("#ifndef ST_AGGREGATE_H\n#define ST_AGGREGATE_H\n")

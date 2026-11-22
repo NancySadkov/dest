@@ -52,6 +52,9 @@ def write_batch(mods):
     for m in mods:
         stem = m[:-2]
         bat.append('D:\\BIN\\TCC.EXE %s %s > %s.log' % (CFLAGS, m, stem))
+    # overlay thunks are assembly (jmp far to the resident routine)
+    if os.path.isfile(os.path.join(BUILDSRC, "ovr.asm")):
+        bat.append('E:\\BIN\\TASM.EXE /zi /m2 ovr.asm > ovr.log')
     bat.append("echo done > DONE.FLG")
     with open(os.path.join(BUILDSRC, "BUILD.BAT"), "w", encoding="ascii",
               newline="\r\n") as f:
@@ -64,6 +67,7 @@ def write_batch(mods):
         "[autoexec]",
         "mount c " + BUILDSRC,
         "mount d " + os.path.join(TC),
+        "mount e " + os.path.join(ROOT, "tools", "BC30"),
         "c:",
         "call BUILD.BAT",
     ]
