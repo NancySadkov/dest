@@ -3345,7 +3345,7 @@ undefined2 __cdecl16near malloc_AllocatePartialBlock(void)
 
 /* WARNING: Removing unreachable block (ram,0x000118a1) */
 
-undefined2 __cdecl16far malloc(uint param_1)
+undefined2 __cdecl16far malloc(uint size)
 
 {
   byte *pbVar1;
@@ -3355,9 +3355,8 @@ undefined2 __cdecl16far malloc(uint param_1)
   
   __farmalloc_data_seg = 0x2410;
   uVar3 = 0;
-  if (param_1 != 0) {
-    uVar2 = CONCAT11((byte)(param_1 + 0x13 >> 0xc) | (0xffec < param_1) << 4,
-                     (char)(param_1 + 0x13 >> 4));
+  if (size != 0) {
+    uVar2 = CONCAT11((byte)(size + 0x13 >> 0xc) | (0xffec < size) << 4,(char)(size + 0x13 >> 4));
     if (__farmalloc_first == 0) {
       uVar3 = malloc_CreateHeap();
     }

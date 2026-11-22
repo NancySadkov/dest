@@ -1,0 +1,17 @@
+# Rename parameters whose role is proven by their uses.
+#
+# ovc45_buildPlacementMessage (77eb:0d61):
+#   param_1  used as `param_1 - 1`, `param_1 + 1`, alignUp4(param_1) -> map x
+#   param_2  used as `&stack0xfffe + param_2` and cellBelowBlocked(..., param_2) -> map y
+#   param_3  used as `Entities + param_3 * 0x37 + 0x1a` -> entity index
+#   param_4  never referenced in the body -> reserved (kept for the ABI)
+#   param_5  only `if (param_5 != '\0')` -> flag
+#
+# malloc (1000:1838):
+#   param_1  sized as `param_1 + 0x13` and compared against a block length -> size
+77eb:0d61	param_1	x
+77eb:0d61	param_2	y
+77eb:0d61	param_3	entityIndex
+77eb:0d61	param_4	reserved
+77eb:0d61	param_5	flag
+1000:1838	param_1	size

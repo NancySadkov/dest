@@ -11,6 +11,9 @@ echo === Sanitizing symbol names ===
 call "%GHIDRA%" "%PROJECT%" st -process st.exe -noanalysis -scriptPath "%SCRIPTDIR%" -postScript SanitizeSymbols.java
 if errorlevel 1 goto :eof
 
+echo === Applying recovered prototypes (parameter names) ===
+if exist "%SCRIPTDIR%\..\model\param_protos.tsv" call "%GHIDRA%" "%PROJECT%" st -process st.exe -noanalysis -scriptPath "%SCRIPTDIR%" -postScript ApplyProto.java "%SCRIPTDIR%\..\model\param_protos.tsv"
+
 echo === Exporting recovered source tree ===
 call "%GHIDRA%" "%PROJECT%" st -process st.exe -noanalysis -scriptPath "%SCRIPTDIR%" -postScript ExportRecovered.java "%OUTDIR%"
 if errorlevel 1 goto :eof

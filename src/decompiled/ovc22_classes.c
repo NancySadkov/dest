@@ -3073,6 +3073,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint16_t index;
   uint16_t uVar14;
   long *plVar15;
+  agnt_t *valueLo;
   unit_t *puVar16;
   int iVar17;
   int iVar18;
@@ -3786,10 +3787,10 @@ void __cdecl16far upd_usesAlignUp4(void)
               uVar23 = 0;
               plVar15 = LXMUL_at_((long *)CONCAT11(uVar33,uVar34),a,in_stack_0000ffd2);
               peVar20 = Entities + uStack_16;
-              uVar11 = ovr_ovc15_textError(peVar20,DAT_2000_d190,
-                                           (int)(CONCAT12((uVar23 & 1) != 0,plVar15) >> 1),
-                                           (char)((int)uVar23 >> 1));
-              uVar12 = ovc22_usesLUDIV_at_2(uVar11,(uint16_t)peVar20,CONCAT11(uVar33,uVar34));
+              valueLo = ovr_ovc15_textError((entity_t *)CONCAT22(DAT_2000_d190,peVar20),
+                                            (agnt_t *)(CONCAT12((uVar23 & 1) != 0,plVar15) >> 1));
+              uVar12 = ovc22_usesLUDIV_at_2
+                                 ((uint16_t)valueLo,(uint16_t)peVar20,CONCAT11(uVar33,uVar34));
               uVar24 = (undefined2)((ulong)Entities >> 0x10);
               peVar22 = (entity_t *)Entities;
               uVar23 = *(uint *)&peVar22[uStack_16].base.health;

@@ -1,6 +1,6 @@
 uint __cdecl16far
 ovc45_buildPlacementMessage
-          (uint param_1,uint16_t param_2,int param_3,undefined2 param_4,char param_5)
+          (uint x,uint16_t y,int entityIndex,undefined2 reserved,char flag)
 
 {
   long lVar1;
@@ -292,12 +292,12 @@ ovc45_buildPlacementMessage
   
   uVar25 = (undefined1)unaff_SI;
   uVar31 = (undefined1)((uint)unaff_SI >> 8);
-  grab = SUB21(param_1,0);
-  uVar9 = ovr_alignUp4(param_1);
+  grab = SUB21(x,0);
+  uVar9 = ovr_alignUp4(x);
   bStack_13 = grab - ((char)uVar9 + -2);
   do {
     uStack_f = 0;
-    bStack_11 = *(byte *)((int)Entities + param_3 * 0x37 + 0x1a);
+    bStack_11 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
     uVar9 = ovr_bldng_usesGStrangeTable
                       (*(byte *)((int)*(undefined4 *)((uint)bStack_11 << 2) + 0x85));
     bStack_12 = (byte)uVar9;
@@ -321,13 +321,13 @@ ovc45_buildPlacementMessage
     iVar10 = 0;
     cStack_e = '\0';
     bVar3 = ovc45_textArena2(bStack_12);
-    uVar28 = (undefined1)param_2;
+    uVar28 = (undefined1)y;
     if (bVar3) {
       strcat((char *)CONCAT13(uVar24,CONCAT12(uVar23,&msg))," You can only place a single arena.");
       cStack_e = '\x01';
     }
     else {
-      uVar9 = ovc45_compute1(bStack_12,param_1,param_2);
+      uVar9 = ovc45_compute1(bStack_12,x,y);
       if ((uVar9 & 0xff) == 0) {
         strcat((char *)CONCAT13(uVar24,CONCAT12(uVar23,&msg))," Bridges must be near water\'s edge."
               );
@@ -337,12 +337,12 @@ ovc45_buildPlacementMessage
         bVar3 = ovr_bldng_textArena(bStack_12,bStack_11);
         if (bVar3) {
           if ((*(char *)((uint)bStack_12 * 0x27 + 0x11b) == '\x04') &&
-             ((((uVar9 = ovc45_compute4(param_1 - bStack_13,param_2,uVar28), (uVar9 & 0xff) == 0 ||
-                (uVar9 = ovc45_compute4((param_1 - bStack_13) + 1,param_2,uVar28),
+             ((((uVar9 = ovc45_compute4(x - bStack_13,y,uVar28), (uVar9 & 0xff) == 0 ||
+                (uVar9 = ovc45_compute4((x - bStack_13) + 1,y,uVar28),
                 (uVar9 & 0xff) == 0)) ||
-               (uVar9 = ovc45_compute4((param_1 - bStack_13) + 2,param_2,uVar28),
+               (uVar9 = ovc45_compute4((x - bStack_13) + 2,y,uVar28),
                (uVar9 & 0xff) == 0)) ||
-              (uVar9 = ovc45_compute4((param_1 - bStack_13) + 3,param_2,uVar28), (uVar9 & 0xff) == 0
+              (uVar9 = ovc45_compute4((x - bStack_13) + 3,y,uVar28), (uVar9 & 0xff) == 0
               )))) {
             uVar16 = 0x195d;
             pcVar11 = ovr_stsprintf((char *)&reqMsg);
@@ -353,9 +353,9 @@ ovc45_buildPlacementMessage
           }
           else if (((*(char *)((uint)bStack_12 * 0x27 + 0x11b) == '\x02') &&
                    ((bStack_13 == 3 ||
-                    (uVar9 = ovc45_compute4(param_1 + 1,param_2,uVar28), (char)uVar9 == '\0')))) &&
+                    (uVar9 = ovc45_compute4(x + 1,y,uVar28), (char)uVar9 == '\0')))) &&
                   ((bStack_13 == 0 ||
-                   (uVar9 = ovc45_compute4(param_1 - 1,param_2,uVar28), (char)uVar9 == '\0')))) {
+                   (uVar9 = ovc45_compute4(x - 1,y,uVar28), (char)uVar9 == '\0')))) {
             uVar16 = 0x195d;
             pcVar11 = ovr_stsprintf((char *)&reqMsg);
             strcat((char *)CONCAT13(uVar24,CONCAT12(uVar23,&msg)),
@@ -365,14 +365,14 @@ ovc45_buildPlacementMessage
           }
           else {
             uVar26 = 0x19;
-            uVar9 = ovc45_usesGMapFlags5(*(char *)((uint)bStack_12 * 0x27 + 0x11e),param_1,param_2);
+            uVar9 = ovc45_usesGMapFlags5(*(char *)((uint)bStack_12 * 0x27 + 0x11e),x,y);
             if ((char)uVar9 == '\0') {
               if (((*(char *)((uint)bStack_12 * 0x27 + 0x11a) == '\x02') ||
                   (*(char *)((uint)bStack_12 * 0x27 + 0x11e) == '\x01')) ||
                  ((uVar26 = 0x19, *(char *)((uint)bStack_12 * 0x27 + 0x11e) == '\x02' ||
-                  (uVar9 = ovr_attact_usesGMapFlags(param_1,param_2,uVar28), (uVar9 & 0xff) != 0))))
+                  (uVar9 = ovr_attact_usesGMapFlags(x,y,uVar28), (uVar9 & 0xff) != 0))))
               {
-                uVar9 = ovr_constr_usesGMapFlags(param_1,param_2,uVar28);
+                uVar9 = ovr_constr_usesGMapFlags(x,y,uVar28);
                 if ((((char)uVar9 == '\0') &&
                     ((*(uint *)((uint)bStack_12 * 0x27 + 0x121) & 0x20) == 0)) &&
                    (uVar26 = 0x19, *(char *)((uint)bStack_12 * 0x27 + 0x11e) == '\0')) {
@@ -382,7 +382,7 @@ ovc45_buildPlacementMessage
                 }
                 else {
                   uVar26 = 0x10;
-                  pcVar11 = ovr_ovc22_className(*(byte *)((int)Entities + param_3 * 0x37 + 0x1a),
+                  pcVar11 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),
                                                 (char)*(undefined2 *)
                                                        ((uint)bStack_12 * 0x27 + 0x125));
                   uVar16 = 0x217a;
@@ -459,7 +459,7 @@ ovc45_buildPlacementMessage
       }
     }
     if (cStack_e == '\0') {
-      uVar9 = ovr_constr_usesGMapFlags(param_1,param_2,uVar28);
+      uVar9 = ovr_constr_usesGMapFlags(x,y,uVar28);
       uVar28 = uVar26;
       if (((char)uVar9 == '\0') &&
          (uVar28 = 0x19, (*(uint *)((uint)bStack_12 * 0x27 + 0x121) & 0x20) == 0)) {
@@ -479,7 +479,7 @@ L_OVC45_77eb_0d61_1379:
     *(char **)(&stack0xfc0c + iVar10 * 4) = (char *)"Change Building";
     *(undefined1 *)((int)&uStack_c + iVar10) = 2;
     iVar18 = iVar10 + 1;
-    if (param_5 != '\0') {
+    if (flag != '\0') {
       *(char **)(&stack0xfc0e + iVar18 * 4) = (char *)0x2410;
       *(char **)(&stack0xfc0c + iVar18 * 4) = (char *)"Change Party";
       *(undefined1 *)((int)&uStack_c + iVar10 + 1) = 3;
@@ -574,7 +574,7 @@ code_r0x00072658:
   case 2:
     uVar9 = ovc45_cellBelowBlocked(uVar9 - 1,unaff_DI);
     if (((uVar9 & 0xff) == 0) &&
-       (uVar9 = ovc45_cellBelowBlocked(iVar18 + 2,param_2), (uVar9 & 0xff) == 0)) {
+       (uVar9 = ovc45_cellBelowBlocked(iVar18 + 2,y), (uVar9 & 0xff) == 0)) {
       uVar9 = 0;
     }
     else {
@@ -590,7 +590,7 @@ code_r0x00072658:
     strcpy((char *)CONCAT22(unaff_DI,(char *)(uint)bStack_10),
            (char *)CONCAT13(in_stack_0000fc0d,CONCAT12(in_stack_0000fc0c,CONCAT11(uVar31,uVar25))));
     LOCK();
-    *(uint16_t *)(&stack0xfffe + param_2) = uVar19;
+    *(uint16_t *)(&stack0xfffe + y) = uVar19;
     UNLOCK();
     while (iStack_4 = iStack_4 + 1, iStack_4 < 0xc) {
       if (grab == false) {
@@ -3338,7 +3338,7 @@ L_init_assets_4EA5:
   }
   ovr_stshStubifyCopy1to0(0xa8);
   ovr_init_assets1(grab);
-  param_1 = param_1 & 0xff;
+  x = x & 0xff;
   ovr_init_assets2(grab);
   if (grab != false) {
     uVar16 = 0;
@@ -3352,12 +3352,12 @@ L_init_assets_4EA5:
     lseek(StshFile,0,(int)in_stack_0000fc0e);
     write(StshFile,&StshCtOfs,4);
     close(StshFile);
-    param_1 = 0x2410;
+    x = 0x2410;
     if (StshCount != 0xd93) {
       printf("getcache %d  SIZESTASH %d  \r");
-      param_1 = ovr_biosReadKey();
+      x = ovr_biosReadKey();
     }
   }
   stshInitPtrs();
-  return param_1;
+  return x;
 }

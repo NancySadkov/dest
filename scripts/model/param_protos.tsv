@@ -1,0 +1,20 @@
+# Prototypes whose parameter names are proven by the body.
+#
+# ovc45_buildPlacementMessage (77eb:0d61):
+#   x            used as x-1, x+1 and alignUp4(x)
+#   y            used as `&stack0xfffe + y` and cellBelowBlocked(..., y)
+#   entityIndex  used as `Entities + entityIndex * 0x37 + 0x1a`
+#   reserved     never referenced in the body; kept for the ABI
+#   flag         only `if (flag != '\0')`
+#
+# malloc (1000:1838):
+#   size         the requested byte count: `size + 0x13` is compared with a block
+#                length before the block is split
+77eb:0d61	uint __cdecl16far ovc45_buildPlacementMessage(uint x,uint16_t y,int entityIndex,undefined2 reserved,char flag)
+1000:1838	undefined2 __cdecl16far malloc(uint size)
+
+# ovc15_textError (4207:26bc):
+#   partyIndex  read as (byte)partyIndex, compared with 0 and 0xff, and used as
+#               (uint)(byte)partyIndex << 2 to index a 4-byte table
+#   agnt        an agnt_t far pointer, returned unchanged on the error path
+4207:26bc	agnt_t * __cdecl16far ovc15_textError(undefined4 partyIndex,agnt_t *agnt)

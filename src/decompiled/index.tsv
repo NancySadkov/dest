@@ -108,7 +108,7 @@ crtl	1000:172e	farfree	41	ok	crtl.c	void __cdecl16far farfree(uint16_t ofs,uint1
 crtl	1000:1757	malloc_CreateHeap	100	ok	crtl.c	undefined2 __cdecl16near malloc_CreateHeap(void);
 crtl	1000:17bb	malloc_ExtendHeap	90	ok	crtl.c	undefined2 __cdecl16near malloc_ExtendHeap(void);
 crtl	1000:1815	malloc_AllocatePartialBlock	35	ok	crtl.c	undefined2 __cdecl16near malloc_AllocatePartialBlock(void);
-crtl	1000:1838	malloc	10	ok	crtl.c	undefined2 __cdecl16far malloc(uint param_1);
+crtl	1000:1838	malloc	10	ok	crtl.c	undefined2 __cdecl16far malloc(uint size);
 crtl	1000:1842	farmalloc	125	ok	crtl.c	far_t * __cdecl16far farmalloc(far_t *__return_storage_ptr__,uint32_t nbytes);
 crtl	1000:18bf	malloc_ExpandBlock	124	ok	crtl.c	far_t __cdecl16near malloc_ExpandBlock(void);
 crtl	1000:193b	malloc_ShrinkBlock	100	ok	crtl.c	undefined4 __cdecl16near malloc_ShrinkBlock(void);
@@ -544,7 +544,7 @@ ovc15_sprite	4207:1f5b	ovc15_compute1	163	ok	ovc15_sprite.c	undefined2 __cdecl16
 ovc15_sprite	4207:1ffe	ovc15_usesRandBelow	771	ok	ovc15_sprite.c	int __cdecl16far ovc15_usesRandBelow(agnt_t *agnt,int xSide,char keepPos,char randomY);
 ovc15_sprite	4207:2301	ovc15_textArena	732	ok	ovc15_sprite.c	char * __cdecl16far ovc15_textArena(int owner,...);
 ovc15_sprite	4207:25dd	ovc15_textView	211	ok	ovc15_sprite.c	entity_t * __cdecl16far ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,undefined2 param_5,int *param_6,int *param_7,int *param_8,int *param_9);
-ovc15_sprite	4207:26bc	ovc15_textError	163	ok	ovc15_sprite.c	agnt_t * __cdecl16far ovc15_textError(undefined4 param_1,agnt_t *param_2);
+ovc15_sprite	4207:26bc	ovc15_textError	163	ok	ovc15_sprite.c	agnt_t * __cdecl16far ovc15_textError(undefined4 partyIndex,agnt_t *agnt);
 ovc15_sprite	4207:288b	ovc15_usesAlignUp42	111	ok	ovc15_sprite.c	bool __cdecl16far ovc15_usesAlignUp42(void);
 ovc15_sprite	4207:28fa	ovc15_positionCrosshair	103	ok	ovc15_sprite.c	void __cdecl16far ovc15_positionCrosshair(void);
 ovc15_sprite	4207:2961	ovc15_selectLeftmostAgent	173	ok	ovc15_sprite.c	bool __cdecl16far ovc15_selectLeftmostAgent(void);
@@ -978,7 +978,7 @@ ovc45_unitinfo	77eb:0a02	ovc45_usesGPopulationLo	232	ok	ovc45_unitinfo.c	void __
 ovc45_unitinfo	77eb:0aea	ovc45_compute4	215	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_compute4(int x,uint16_t y,...);
 ovc45_unitinfo	77eb:0bc1	ovc45_compute5	117	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_compute5(void);
 ovc45_unitinfo	77eb:0c36	ovc45_textArena2	299	ok	ovc45_unitinfo.c	bool __cdecl16far ovc45_textArena2(byte bldType);
-ovc45_unitinfo	77eb:0d61	ovc45_buildPlacementMessage	1752	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_buildPlacementMessage(uint param_1,uint16_t param_2,int param_3,undefined2 param_4,char param_5);
+ovc45_unitinfo	77eb:0d61	ovc45_buildPlacementMessage	1752	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_buildPlacementMessage(uint x,uint16_t y,int entityIndex,undefined2 reserved,char flag);
 ovc45_unitinfo	77eb:16b2	ovc45_usesRandBelow	162	ok	ovc45_unitinfo.c	uint __cdecl16far ovc45_usesRandBelow(int entityIndex);
 ovc45_unitinfo	77eb:1754	ovc45_textDone	1102	ok	ovc45_unitinfo.c	void __cdecl16far ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t outFlag,uint16_t outFlagSeg,...);
 ovc45_unitinfo	77eb:1ba2	ovc45_compute6	17	ok	ovc45_unitinfo.c	bool __cdecl16far ovc45_compute6(uint16_t value,...);
