@@ -436,3 +436,35 @@ cause.
 Also kept from this round: the minimal DGROUP argv (`arg0 = "STRONG.EXE"` plus a
 terminator) assigned to `__C0argc/__C0argv/__C0environ`, which makes the
 pre-`main` marker fire with a real vector.
+
+### Byte-level check of the pre-`main` sequence
+
+Raw bytes from the marker build:
+
+```
+0x953  b8 20 4c cd 21        mov ax,4c20 / int 21h      (marker)
+0x958  ff 36 dd 09           push word ptr [0x9dd]
+0x95c  ff 36 d9 09           push word ptr [0x9d9]
+0x960  ff 36 d7 09           push word ptr [0x9d7]
+0x964  9a 0d 00 48 06        lcall 0x648:0x000d
+0x969  83 c4 06              add sp,6
+```
+
+So the offsets used by the bisection were exact (5/9/13/17).  The `lcall`
+segment word at 0x967 is in the relocation table with frame 0, and
+`0x648:0x000d` is image 0x648d, which is `main`'s prologue
+(`55 8B EC 83 EC 08 56 57`).
+
+Stack check: an exit patched over the marker as `mov ax,sp / mov ah,4Ch /
+int 21h` returns exit code 16, i.e. `SP & 0xFF = 0x10`, so `SP = 0x1410` - exactly
+the top of the resized block.  The stack is correct.
+
+Forcing `mov sp,0x100` over the third push and putting the exit at the `lcall`
+still hangs, and `int 20h` there does not terminate either.  So the failure is
+not the offset, not the stack, not the target address and not the relocation:
+the bytes at 0x960..0x964 do not execute as they are decoded from the file.
+Only the loader can rewrite them (relocation processing) or the overlay
+manager - and the next entry point we now know is a VROOMM fixup at 0x96F with
+frame 108, which DOS relocates too.
+
+This needs a single-step trace; further static reasoning has been exhausted.
