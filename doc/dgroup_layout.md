@@ -149,3 +149,28 @@ Result: layout runs **181 -> 178**, and no run starts at `BlitRects`,
 `GCharLevelsInc` (0x163) and `-10` at `MouseX` (0xe4), then the string-ordering
 swings at `s_mage`/`s_thief`/`s_dwarf` (-100/+88/-88), which look like a
 different order of the class-name table rather than lost bytes.
+
+## Fourth pass: 0x0da and 0x161
+
+`-10` at `MouseX` (0xe4) and `-1` at `GCharLevelsInc` (0x163).  The image:
+
+```
+0d8  00                                 bigcompFrame
+0d9  00                                 TextBlitFlag
+0da  86 00 93 00 A0 00 AD 00 BA 00      a 5-word table, ZERO references
+0e4  02 00                              MouseX
+...
+161  00 00                              timePassing - a word, not a byte
+163  00                                 GCharLevelsInc
+```
+
+`RefsToAddrs` on 2410:00da reports **0 references** (dead data), and on 2410:0161
+reports **3** (main, draw_usesPrintf, attact_usesUpdSeason), so `timePassing` is
+a word while the export had it as `undefined1`.
+
+Fixes (`scripts/fix_dgroup_00da.py`): `textBlitTable[5]` (GUESS name, dead data,
+emitted only to keep `MouseX` and everything after at the original addresses)
+and `timePassing` as `uint16_t` (its uses store/compare 0 and 1, so behaviour is
+unchanged).
+
+Result: layout runs **178 -> 177**, with no run at `MouseX` or `GCharLevelsInc`.

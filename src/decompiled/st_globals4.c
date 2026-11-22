@@ -258,6 +258,9 @@ char s_sorry_you_may_not_pass_t_059e[] = "Sorry, you may not pass time during a 
 char s_time_passes[] = "Time passes...";
 undefined1 bigcompFrame = 0x00;
 undefined1 TextBlitFlag = 0x00;
+/* GUESS: 0x0da, 5 words with no references in the image; emitted so the
+   addresses after it (MouseX at 0x0e4) stay exact. */
+uint16_t textBlitTable[5] = { 0x0086, 0x0093, 0x00A0, 0x00AD, 0x00BA };
 uint16_t MouseX = 0xFFFF;
 uint16_t MouseY = 0xFFFF;
 uint16_t MouseMoved = 0x0000;
@@ -271,7 +274,8 @@ far_t GUnitDescriptions[28] = { { 0x169, 0x2410 }, { 0x171, 0x2410 }, { 0x176, 0
 far_t BDA_DailyTimeCounter = { 0x6C, 0x40 };
 undefined1 CrossBlitCount = 0x00;
 undefined1 DrawBusy = 0x00;
-undefined1 timePassing = 0x00;
+/* 0161: a 2-byte flag (three code references, word sized) */
+uint16_t timePassing = 0x0000;
 undefined1 GCharLevelsInc = 0x00;
 undefined1 destroyLatchSide1 = 0x00;
 undefined1 destroyLatchSide0 = 0x00;

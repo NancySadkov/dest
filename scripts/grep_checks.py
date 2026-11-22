@@ -38,6 +38,7 @@ CHECKS = [
     ("(C) idx*stride", r"\([_0-9A-Za-z]*\)[0-9A-Za-z]* \+ [_0-9A-Za-z]* \* 0x[0-9A-Za-z]"),
     ("(D) far const", r"[0-9a-b] \* 0x[0-9a-b]....[0-9a-b]"),
     ("LAB_", r"LAB_"),
+    ("->pad_... + 0x", r"->pad_\w* \+ 0x"),
 ]
 
 

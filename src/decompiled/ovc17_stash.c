@@ -1069,8 +1069,8 @@ void __cdecl16far fmFree(void)
 uint16_t __cdecl16far fmOutOfMemory(uint32_t nbytes)
 
 {
-  uint16_t *puVar1;
-  bool bVar2;
+  uint16_t *nextSegPtr;
+  bool freed;
   undefined1 extraout_AH;
   long *plVar3;
   uint uVar4;
@@ -1082,20 +1082,20 @@ uint16_t __cdecl16far fmOutOfMemory(uint32_t nbytes)
   long *unaff_DI;
   uint uVar8;
   uint16_t uVar9;
-  far_t handle;
-  far_t handle_00;
-  uint16_t in_stack_0000ffee;
-  uint8_t in_stack_0000fff0;
-  undefined1 uStack_f;
-  uint uStack_a;
-  uint16_t uStack_6;
-  uint16_t uStack_4;
+  far_t block;
+  far_t bestBlock;
+  uint16_t bestOfs;
+  uint8_t bestSegLo;
+  undefined1 bestSegHi;
+  uint bestSize;
+  uint16_t nodeOfs;
+  uint16_t nodeSeg;
   
-  bVar2 = ovr_fmFreeAudio(0);
+  freed = ovr_fmFreeAudio(0);
   uVar5 = extraout_AH;
-  if (!bVar2) {
+  if (!freed) {
     iVar6 = (*(uint16_t *)((uint8_t *)&(nbytes) + 2)) + (uint)(0xffec < (uint)nbytes);
-    plVar3 = LXRSH_at_(unaff_DI,CONCAT22(in_stack_0000ffee,unaff_SI),in_stack_0000fff0);
+    plVar3 = LXRSH_at_(unaff_DI,CONCAT22(bestOfs,unaff_SI),bestSegLo);
     uVar4 = (int)plVar3 + HeapPtr;
     iVar6 = iVar6 + (uint)CARRY2((uint)plVar3,HeapPtr);
     uVar8 = uVar4;
@@ -1106,46 +1106,46 @@ uint16_t __cdecl16far fmOutOfMemory(uint32_t nbytes)
        ((DIGHandle.ofs != 0 || DIGHandle.seg != 0 && ((iVar6 != 0 || (MUSHandle.seg < uVar4)))))) {
       ovr_fmFreeAudio(1);
     }
-    uStack_a = 0xffff;
+    bestSize = 0xffff;
     HeapPtr = 0xffff;
-    bVar2 = false;
-    uStack_4 = StshCtPtr2.seg;
-    uStack_6 = StshCtPtr2.ofs;
+    freed = false;
+    nodeSeg = StshCtPtr2.seg;
+    nodeOfs = StshCtPtr2.ofs;
     uVar4 = 0xffff;
-    while (uStack_6 != 0 || uStack_4 != 0) {
+    while (nodeOfs != 0 || nodeSeg != 0) {
       uVar7 = uVar4;
-      if (*(int *)(uStack_6 + 0x11) != 0 || *(int *)(uStack_6 + 0x13) != 0) {
-        if (*(uint *)(uStack_6 + 0x13) < uVar8) {
-          handle.seg = *(uint16_t *)(uStack_6 + 0x13);
-          handle.ofs = *(uint16_t *)(uStack_6 + 0x11);
-          stshFree(handle);
-          *(uint16_t *)(uStack_6 + 0x13) = 0;
-          *(uint16_t *)(uStack_6 + 0x11) = 0;
-          bVar2 = true;
+      if (*(int *)(nodeOfs + 0x11) != 0 || *(int *)(nodeOfs + 0x13) != 0) {
+        if (*(uint *)(nodeOfs + 0x13) < uVar8) {
+          block.seg = *(uint16_t *)(nodeOfs + 0x13);
+          block.ofs = *(uint16_t *)(nodeOfs + 0x11);
+          stshFree(block);
+          *(uint16_t *)(nodeOfs + 0x13) = 0;
+          *(uint16_t *)(nodeOfs + 0x11) = 0;
+          freed = true;
         }
         else {
-          if (*(uint *)(uStack_6 + 0x13) < uVar4) {
-            uVar7 = *(uint *)(uStack_6 + 0x13);
-            in_stack_0000fff0 = (uint8_t)uStack_4;
-            uStack_f = (undefined1)(uStack_4 >> 8);
-            in_stack_0000ffee = uStack_6;
-            uStack_a = uVar4;
+          if (*(uint *)(nodeOfs + 0x13) < uVar4) {
+            uVar7 = *(uint *)(nodeOfs + 0x13);
+            bestSegLo = (uint8_t)nodeSeg;
+            bestSegHi = (undefined1)(nodeSeg >> 8);
+            bestOfs = nodeOfs;
+            bestSize = uVar4;
           }
-          if (*(uint *)(uStack_6 + 0x13) < HeapPtr) {
-            HeapPtr = *(uint *)(uStack_6 + 0x13);
+          if (*(uint *)(nodeOfs + 0x13) < HeapPtr) {
+            HeapPtr = *(uint *)(nodeOfs + 0x13);
           }
         }
       }
-      puVar1 = (uint16_t *)(uStack_6 + 0xb);
-      uStack_6 = *(uint16_t *)(uStack_6 + 9);
+      nextSegPtr = (uint16_t *)(nodeOfs + 0xb);
+      nodeOfs = *(uint16_t *)(nodeOfs + 9);
       uVar4 = uVar7;
-      uStack_4 = *puVar1;
+      nodeSeg = *nextSegPtr;
     }
     uVar5 = 0;
-    if (!bVar2) {
+    if (!freed) {
       if (uVar4 == 0xffff) {
-        bVar2 = ovr_fmFreeAudio(1);
-        if (bVar2) {
+        freed = ovr_fmFreeAudio(1);
+        if (freed) {
           return CONCAT11(extraout_AH_00,1);
         }
         if (audioBusy == '\0') {
@@ -1154,17 +1154,17 @@ uint16_t __cdecl16far fmOutOfMemory(uint32_t nbytes)
         }
         return (uint)extraout_AH_00 << 8;
       }
-      uVar9 = (uint16_t)(CONCAT13(uStack_f,CONCAT12(in_stack_0000fff0,in_stack_0000ffee)) >> 0x10)
+      uVar9 = (uint16_t)(CONCAT13(bestSegHi,CONCAT12(bestSegLo,bestOfs)) >> 0x10)
       ;
-      handle_00.seg = *(uint16_t *)(in_stack_0000ffee + 0x13);
-      handle_00.ofs = *(uint16_t *)(in_stack_0000ffee + 0x11);
-      stshFree(handle_00);
-      uVar9 = (uint16_t)(CONCAT13(uStack_f,CONCAT12(in_stack_0000fff0,in_stack_0000ffee)) >> 0x10)
+      bestBlock.seg = *(uint16_t *)(bestOfs + 0x13);
+      bestBlock.ofs = *(uint16_t *)(bestOfs + 0x11);
+      stshFree(bestBlock);
+      uVar9 = (uint16_t)(CONCAT13(bestSegHi,CONCAT12(bestSegLo,bestOfs)) >> 0x10)
       ;
-      *(uint16_t *)(in_stack_0000ffee + 0x13) = 0;
-      *(uint16_t *)(in_stack_0000ffee + 0x11) = 0;
+      *(uint16_t *)(bestOfs + 0x13) = 0;
+      *(uint16_t *)(bestOfs + 0x11) = 0;
       uVar5 = 0x24;
-      HeapPtr = uStack_a;
+      HeapPtr = bestSize;
     }
   }
   return CONCAT11(uVar5,1);
