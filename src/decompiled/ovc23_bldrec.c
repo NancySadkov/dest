@@ -2497,11 +2497,11 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
       }
       GRecordCount = GRecordCount - 1;
     }
-    _fmemset((void *)0x21f2,0x12,unaff_DI);
-    *(byte *)(GRecordCount * 0x12 + 8) = bldType;
-    *(int *)(GRecordCount * 0x12 + 2) = x;
-    *(int *)(GRecordCount * 0x12 + 4) = y;
-    *(byte *)(GRecordCount * 0x12 + 9) = in_stack_0000000e;
+    _fmemset(GRecords + GRecordCount, 0, 0x12);
+    *(byte *)((uint8_t *)&GRecords[GRecordCount] + 8) = bldType;
+    *(int *)((uint8_t *)&GRecords[GRecordCount] + 2) = x;
+    *(int *)((uint8_t *)&GRecords[GRecordCount] + 4) = y;
+    *(byte *)((uint8_t *)&GRecords[GRecordCount] + 9) = in_stack_0000000e;
     iVar4 = ovc23_isLargeBuilding(x,y);
     uVar5 = (uint16_t)((ulong)GUnitGrid >> 0x10);
     uVar9 = (uint16_t)((ulong)GUnits >> 0x10);
@@ -2517,38 +2517,38 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
       bStack_3 = 1;
     }
     if (bStack_3 < *(byte *)((uint)bldType * 0x27 + 0x11c)) {
-      *(undefined1 *)(GRecordCount * 0x12 + 6) = *(undefined1 *)((uint)bldType * 0x27 + 0x11c);
+      *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 6) = *(undefined1 *)((uint)bldType * 0x27 + 0x11c);
     }
     else {
-      *(byte *)(GRecordCount * 0x12 + 6) = bStack_3;
+      *(byte *)((uint8_t *)&GRecords[GRecordCount] + 6) = bStack_3;
     }
-    *(int *)(GRecordCount * 0x12 + 0xf) = GameTick;
-    *(uint16_t *)(GRecordCount * 0x12) = 0;
+    *(int *)((uint8_t *)&GRecords[GRecordCount] + 0xf) = GameTick;
+    *(uint16_t *)(&GRecords[GRecordCount]) = 0;
     uVar5 = ovc23_usesGRecordCount3
                       (*(byte *)((uint)bldType * 0x27 + 0x120),in_stack_0000000e,GRecordCount);
-    *(undefined1 *)(GRecordCount * 0x12 + 0xc) = (char)uVar5;
-    if (*(char *)(GRecordCount * 0x12 + 0xc) == '\0') {
-      *(undefined1 *)(GRecordCount * 0x12 + 0xc) = 1;
+    *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = (char)uVar5;
+    if (*(char *)((uint8_t *)&GRecords[GRecordCount] + 0xc) == '\0') {
+      *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = 1;
     }
     if (bldType == 0) {
       iVar4 = ovc23_isLargeBuilding(x,y);
       if ((char)iVar4 != '\0') {
-        piVar1 = (int *)(GRecordCount * 0x12 + 2);
+        piVar1 = (int *)((uint8_t *)&GRecords[GRecordCount] + 2);
         *piVar1 = *piVar1 + -1;
       }
-      *(undefined1 *)(GRecordCount * 0x12 + 7) = uVar3;
+      *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 7) = uVar3;
       if (in_stack_00000010 == '\x01') {
-        *(undefined1 *)(GRecordCount * 0x12 + 0xe) = 1;
+        *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xe) = 1;
       }
       else {
-        *(char *)(GRecordCount * 0x12 + 0xc) = in_stack_00000010;
-        *(undefined1 *)(GRecordCount * 0x12 + 0xe) = 0;
+        *(char *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = in_stack_00000010;
+        *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xe) = 0;
       }
-      pbVar2 = (byte *)(GRecordCount * 0x12 + 0xd);
+      pbVar2 = (byte *)((uint8_t *)&GRecords[GRecordCount] + 0xd);
       *pbVar2 = *pbVar2 | 3;
     }
     else {
-      *(undefined1 *)(GRecordCount * 0x12 + 7) = *(undefined1 *)((uint)bldType * 0x27 + 0x11b);
+      *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 7) = *(undefined1 *)((uint)bldType * 0x27 + 0x11b);
       if (in_stack_00000010 != '\0') {
         ovc23_placeBuilding(x,y,0,in_stack_0000000e);
         uVar5 = ovr_ovc22_usesGOngoingBattle((byte)x,(byte)y);
@@ -2556,10 +2556,10 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
           *outFlag = 1;
         }
       }
-      *(undefined1 *)(GRecordCount * 0x12 + 0xe) = 0;
+      *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xe) = 0;
     }
-    *(undefined1 *)(GRecordCount * 0x12 + 0x11) = 0;
-    *(undefined1 *)(GRecordCount * 0x12 + 0xb) = *(undefined1 *)(GRecordCount * 0x12 + 0xc);
+    *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0x11) = 0;
+    *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xb) = *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xc);
     uVar8 = GRecordCount;
     GRecordCount = GRecordCount + 1;
     ovc23_abandonConstruction(uVar8);

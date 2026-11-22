@@ -1462,11 +1462,11 @@ L_OVC22_5087_0234_32B8:
               return (far_t far *)((char *)0x26510);
             case (far_t far *)0x11:
               GRecordCount = GRecordCount + -1;
-              _fmemset((void *)0x21f2,0x12,in_stack_0000ffbe);
-              *(byte *)(GRecordCount * 0x12 + 8) = partyIndex;
-              *(uint16_t *)(GRecordCount * 0x12 + 2) = (uint16_t)bStack0006;
-              *(uint16_t *)(GRecordCount * 0x12 + 4) = CONCAT11(uStack0009,bStack0008);
-              *(byte *)(GRecordCount * 0x12 + 9) = in_stack_0000000e;
+              _fmemset(GRecords + GRecordCount, 0, 0x12);
+              *(byte *)((uint8_t *)&GRecords[GRecordCount] + 8) = partyIndex;
+              *(uint16_t *)((uint8_t *)&GRecords[GRecordCount] + 2) = (uint16_t)bStack0006;
+              *(uint16_t *)((uint8_t *)&GRecords[GRecordCount] + 4) = CONCAT11(uStack0009,bStack0008);
+              *(byte *)((uint8_t *)&GRecords[GRecordCount] + 9) = in_stack_0000000e;
               iVar30 = ovc23_isLargeBuilding((int)bStack0006,CONCAT11(uStack0009,bStack0008));
               uVar54 = (uint16_t)((ulong)GUnitGrid >> 0x10);
               uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
@@ -1489,40 +1489,40 @@ L_OVC22_5087_0234_32B8:
                 uStack_6 = (far_t far *)CONCAT13(1,(uint3)uStack_6);
               }
               if ((*(uint8_t *)((uint8_t *)&(uStack_6) + 3)) < *(byte *)((uint)partyIndex * 0x27 + 0x11c)) {
-                *(undefined1 *)(GRecordCount * 0x12 + 6) =
+                *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 6) =
                      *(undefined1 *)((uint)partyIndex * 0x27 + 0x11c);
               }
               else {
-                *(byte *)(GRecordCount * 0x12 + 6) = (*(uint8_t *)((uint8_t *)&(uStack_6) + 3));
+                *(byte *)((uint8_t *)&GRecords[GRecordCount] + 6) = (*(uint8_t *)((uint8_t *)&(uStack_6) + 3));
               }
-              *(uint16_t *)(GRecordCount * 0x12 + 0xf) = GameTick;
-              *(uint16_t *)(GRecordCount * 0x12) = 0;
+              *(uint16_t *)((uint8_t *)&GRecords[GRecordCount] + 0xf) = GameTick;
+              *(uint16_t *)(&GRecords[GRecordCount]) = 0;
               uVar53 = ovc23_usesGRecordCount3
                                  (*(byte *)((uint)partyIndex * 0x27 + 0x120),in_stack_0000000e,
                                   GRecordCount);
-              *(undefined1 *)(GRecordCount * 0x12 + 0xc) = (char)uVar53;
-              if (*(char *)(GRecordCount * 0x12 + 0xc) == '\0') {
-                *(undefined1 *)(GRecordCount * 0x12 + 0xc) = 1;
+              *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = (char)uVar53;
+              if (*(char *)((uint8_t *)&GRecords[GRecordCount] + 0xc) == '\0') {
+                *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = 1;
               }
               if (partyIndex == 0) {
                 iVar30 = ovc23_isLargeBuilding((int)bStack0006,CONCAT11(uStack0009,bStack0008));
                 if ((char)iVar30 != '\0') {
-                  piVar4 = (int *)(GRecordCount * 0x12 + 2);
+                  piVar4 = (int *)((uint8_t *)&GRecords[GRecordCount] + 2);
                   *piVar4 = *piVar4 + -1;
                 }
-                *(undefined1 *)(GRecordCount * 0x12 + 7) = (*(uint8_t *)((uint8_t *)&(uStack_6) + 2));
+                *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 7) = (*(uint8_t *)((uint8_t *)&(uStack_6) + 2));
                 if (in_stack_00000010 == '\x01') {
-                  *(undefined1 *)(GRecordCount * 0x12 + 0xe) = 1;
+                  *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xe) = 1;
                 }
                 else {
-                  *(char *)(GRecordCount * 0x12 + 0xc) = in_stack_00000010;
-                  *(undefined1 *)(GRecordCount * 0x12 + 0xe) = 0;
+                  *(char *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = in_stack_00000010;
+                  *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xe) = 0;
                 }
-                pbVar2 = (uint16_t)((byte *)(GRecordCount * 0x12 + 0xd));
+                pbVar2 = (uint16_t)((byte *)((uint8_t *)&GRecords[GRecordCount] + 0xd));
                 *pbVar2 = *pbVar2 | 3;
               }
               else {
-                *(undefined1 *)(GRecordCount * 0x12 + 7) =
+                *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 7) =
                      *(undefined1 *)((uint)partyIndex * 0x27 + 0x11b);
                 if (in_stack_00000010 != '\0') {
                   ovr_ovc23_placeBuilding((int)bStack0006);
@@ -1531,11 +1531,11 @@ L_OVC22_5087_0234_32B8:
                     *(undefined1 *)CONCAT22(in_stack_0000000c,in_stack_0000000a) = 1;
                   }
                 }
-                *(undefined1 *)(GRecordCount * 0x12 + 0xe) = 0;
+                *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xe) = 0;
               }
-              *(undefined1 *)(GRecordCount * 0x12 + 0x11) = 0;
-              *(undefined1 *)(GRecordCount * 0x12 + 0xb) =
-                   *(undefined1 *)(GRecordCount * 0x12 + 0xc);
+              *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0x11) = 0;
+              *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xb) =
+                   *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xc);
               iVar30 = GRecordCount;
               GRecordCount = GRecordCount + 1;
               ovc23_abandonConstruction(iVar30);

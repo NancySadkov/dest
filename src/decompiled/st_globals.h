@@ -78,7 +78,7 @@ extern int far far StshHandles[544];
 extern char_sheet_t far *GLeaderSheets[80];
 extern int16_t far far AudioSeg[138];
 extern uint32_t far far expThresholds[240];
-extern grec_t GRecords;
+extern grec_t GRecords[0x32];
 extern uint8_t MiceSaveBuf[289];
 extern uint8_t far far miceTileTail[15];
 extern uint32_t ovrAuxSlot;
