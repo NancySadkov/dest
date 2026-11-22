@@ -954,7 +954,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
 
 /* [R4] calls ovr_blitLoadRleGfx */
 
-void __cdecl16far ovc13_usesBlitLoadRleGfx2(int x,int y,char force,...)
+void __cdecl16far ovc13_usesBlitLoadRleGfx2(int x,int y,char force)
 
 {
   uint uVar1;
@@ -994,7 +994,7 @@ void __cdecl16far ovc13_usesBlitLoadRleGfx2(int x,int y,char force,...)
 
 /* [R4] calls ovr_blitLoadRleGfx */
 
-void __cdecl16far ovc13_usesBlitLoadRleGfx3(int x,int y,char force,...)
+void __cdecl16far ovc13_usesBlitLoadRleGfx3(int x,int y,char force)
 
 {
   uint uVar1;

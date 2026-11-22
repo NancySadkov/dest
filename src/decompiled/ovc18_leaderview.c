@@ -794,7 +794,7 @@ L_attact_3f0b_26bd_2767:
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Checks a fortress site and reports the matching rejection message. */
 
-void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind,...)
+void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
 
 {
   undefined1 stk_ffea;   /* stack slot ffea */
@@ -1078,7 +1078,7 @@ uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,...
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "arena" */
 
-bool __cdecl16far ovc18_textArena(uint16_t x,uint16_t y,...)
+bool __cdecl16far ovc18_textArena(uint16_t x,uint16_t y)
 
 {
   uint uVar1;

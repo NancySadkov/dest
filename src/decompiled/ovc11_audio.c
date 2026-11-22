@@ -142,7 +142,7 @@ void __cdecl16far audio_usesLDIV_at_(void)
 /* Frees audio buffers, when we are out of space.
    Returns true on success. */
 
-bool __cdecl16far fmFreeAudio(uint16_t force,...)
+bool __cdecl16far fmFreeAudio(uint16_t force)
 
 {
   bool bVar1;

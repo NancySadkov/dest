@@ -133,7 +133,7 @@ uint __cdecl16far attact_isTerrainFlat(int x,int y)
 
 /* [R6] touches GUnits, GUnitGrid */
 
-uint16_t __cdecl16far attact_usesGUnits(int x,int y,...)
+uint16_t __cdecl16far attact_usesGUnits(int x,int y)
 
 {
   uint uVar1;
@@ -230,7 +230,7 @@ uint __cdecl16far attact_usesSCARRY22(int x,int y,byte dir,char ignoreBlocked,ch
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Counts a party's entities that are off the cursor cell and unflagged, capped at 0x50. */
 
-int __cdecl16far attact_countPartyUnits(byte menuIndex,...)
+int __cdecl16far attact_countPartyUnits(byte menuIndex)
 
 {
   int iVar1;
@@ -267,7 +267,7 @@ int __cdecl16far attact_countPartyUnits(byte menuIndex,...)
 
 /* [R2] string "Abnormal program termination\r\n" */
 
-uint16_t __cdecl16far attact_textAbnormalProgramTermination(uint16_t value,uint8_t partyIndex,...)
+uint16_t __cdecl16far attact_textAbnormalProgramTermination(uint16_t value,uint8_t partyIndex)
 
 {
   long *plVar1;
@@ -310,7 +310,7 @@ void __cdecl16far clearSquareRecords(void)
 
 /* [R6] touches SquareRecCount */
 
-int __cdecl16far attact_usesSquareRecCount(int x,int y,...)
+int __cdecl16far attact_usesSquareRecCount(int x,int y)
 
 {
   uint uVar1;
@@ -908,7 +908,7 @@ L_attact_3f0b_1082_1477:
 /* Updates one attract-menu entry: caches its value, shows the 'cannot attract' message or
    recomputes its count. */
 
-void __cdecl16far attact_updateAttractEntry(int itemIndex,int force,...)
+void __cdecl16far attact_updateAttractEntry(int itemIndex,int force)
 
 {
   int iVar1;
@@ -1205,7 +1205,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
 
 /* [R4] calls LDIV_at_ */
 
-uint16_t __cdecl16far attact_usesLDIV_at_(uint8_t menuIndex,...)
+uint16_t __cdecl16far attact_usesLDIV_at_(uint8_t menuIndex)
 
 {
   long *plVar1;

@@ -11,7 +11,7 @@
 
 /* Returns the bldType of the unit in GUnitGrid[x][y], or 0 outside the map. */
 
-byte __cdecl16far ovc45_getUnitType(int x,int y,...)
+byte __cdecl16far ovc45_getUnitType(int x,int y)
 
 {
   byte bVar1;
@@ -31,7 +31,7 @@ byte __cdecl16far ovc45_getUnitType(int x,int y,...)
 
 /* Returns GUnitGrid[x][y] (the unit index) inside the map bounds, else 0. */
 
-short __cdecl16far ovc45_getUnitIndex(int x,int y,...)
+short __cdecl16far ovc45_getUnitIndex(int x,int y)
 
 {
   short sVar1;
@@ -401,7 +401,7 @@ uint16_t __cdecl16far ovc45_usesLDIV_at_(uint8_t partyIndex,...)
 
 /* Returns the leader's rank as a percentage (rank*10, capped at 100). */
 
-int __cdecl16far ovc45_rankPercent(byte partyIndex,...)
+int __cdecl16far ovc45_rankPercent(byte partyIndex)
 
 {
   int iVar1;
@@ -421,7 +421,7 @@ int __cdecl16far ovc45_rankPercent(byte partyIndex,...)
 
 /* [R7] body shape: compute */
 
-int __cdecl16far ovc45_compute3(byte partyIndex,...)
+int __cdecl16far ovc45_compute3(byte partyIndex)
 
 {
   int iVar1;
@@ -441,7 +441,7 @@ int __cdecl16far ovc45_compute3(byte partyIndex,...)
 
 /* [R6] touches GPopulationLo, GPopulationHi */
 
-void __cdecl16far ovc45_usesGPopulationLo(byte partyIndex,uint goldLo,int goldHi,...)
+void __cdecl16far ovc45_usesGPopulationLo(byte partyIndex,uint goldLo,int goldHi)
 
 {
   uint *puVar1;
@@ -4234,7 +4234,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
 
 /* [R7] body shape: compute */
 
-bool __cdecl16far ovc45_compute6(uint16_t value,...)
+bool __cdecl16far ovc45_compute6(uint16_t value)
 
 {
   return value != 1;
@@ -4435,7 +4435,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
 
 /* [R6] touches GfxRndSeed2 */
 
-uint __cdecl16far ovc45_usesGfxRndSeed2(int *x,...)
+uint __cdecl16far ovc45_usesGfxRndSeed2(int *x)
 
 {
   byte bVar1;
@@ -4474,7 +4474,7 @@ uint __cdecl16far ovc45_usesGfxRndSeed2(int *x,...)
 
 /* [R6] touches GMapFlags */
 
-int __cdecl16far ovc45_usesGMapFlags4(int x,int y,...)
+int __cdecl16far ovc45_usesGMapFlags4(int x,int y)
 
 {
   int in_AX;
@@ -4522,7 +4522,7 @@ uint16_t __cdecl16far ovc45_compute7(byte a,byte b,...)
 /* Shows the land info for the tile under a screen point: hit-tests with video_compute1, maps x to a
    tile column via (x-9)/0x30, and calls land_info. */
 
-bool __cdecl16far ovc45_showLandInfo(int screenX,uint16_t y,...)
+bool __cdecl16far ovc45_showLandInfo(int screenX,uint16_t y)
 
 {
   uint16_t uVar1;
@@ -4542,7 +4542,7 @@ bool __cdecl16far ovc45_showLandInfo(int screenX,uint16_t y,...)
 
 /* [R7] body shape: compute */
 
-uint __cdecl16far ovc45_compute8(byte partyIndex,...)
+uint __cdecl16far ovc45_compute8(byte partyIndex)
 
 {
   uint32_t uVar1;
@@ -4572,7 +4572,7 @@ uint __cdecl16far ovc45_compute8(byte partyIndex,...)
 
 /* Returns the "Maintenance cost is" or "Income created is" label for a signed amount. */
 
-char * __cdecl16far ovc45_costOrIncomeLabel(int amount,...)
+char * __cdecl16far ovc45_costOrIncomeLabel(int amount)
 
 {
   char *pcVar1;

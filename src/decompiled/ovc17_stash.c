@@ -9,7 +9,7 @@
 
 /* 474a:0000 */
 
-uint16_t __cdecl16far stshOpen(uint16_t file_id,...)
+uint16_t __cdecl16far stshOpen(uint16_t file_id)
 
 {
   int fh;
@@ -26,7 +26,7 @@ uint16_t __cdecl16far stshOpen(uint16_t file_id,...)
 
 /* 474a:004e */
 
-void __cdecl16far stshClose(uint16_t file_id,...)
+void __cdecl16far stshClose(uint16_t file_id)
 
 {
   if (((int *)StshHandles)[file_id] != -1) {
@@ -303,7 +303,7 @@ void __cdecl16far stshInit(void)
 
 /* WARNING: Removing unreachable block (ram,0x00047b3c) */
 
-void __cdecl16far stshSeek(uint16_t fid,long ofs,...)
+void __cdecl16far stshSeek(uint16_t fid,long ofs)
 
 {
   int unaff_SI;
@@ -327,7 +327,7 @@ void __cdecl16far stshSeek(uint16_t fid,long ofs,...)
 
 /* 474a:06fe */
 
-uint32_t * __cdecl16far stshTell(uint32_t *__return_storage_ptr__,uint16_t file_id,...)
+uint32_t * __cdecl16far stshTell(uint32_t *__return_storage_ptr__,uint16_t file_id)
 
 {
   return (uint32_t *)*(uint16_t *)((int)&AgntAnms[0x53].y + 1 + (int)__return_storage_ptr__ * 4);
@@ -337,7 +337,7 @@ uint32_t * __cdecl16far stshTell(uint32_t *__return_storage_ptr__,uint16_t file_
 
 /* 474a:0718 */
 
-void __cdecl16far stshFree(far_t handle,...)
+void __cdecl16far stshFree(far_t handle)
 
 {
   if ((handle.seg != StshBuf.seg) || (handle.ofs != StshBuf.ofs)) {
@@ -354,7 +354,7 @@ void __cdecl16far stshFree(far_t handle,...)
 
 
 /* 474a:075a */
-void * __cdecl16far stshAlloc(uint32_t nbytes,...)
+void * __cdecl16far stshAlloc(uint32_t nbytes)
 
 {
   uint uVar1;
@@ -400,7 +400,7 @@ void * __cdecl16far stshAlloc(uint32_t nbytes,...)
 
 
 /* 474a:0822 */
-uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes,...)
+uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes)
 
 {
   uint8_t uVar1;
@@ -573,7 +573,7 @@ void __cdecl16far initStshTables(void)
 
 
 /* 474a:0aa7 */
-uint32_t * __cdecl16far stshFilesize(uint32_t *__return_storage_ptr__,uint16_t file_id,...)
+uint32_t * __cdecl16far stshFilesize(uint32_t *__return_storage_ptr__,uint16_t file_id)
 
 {
   long *__return_storage_ptr___00;
@@ -729,7 +729,7 @@ fmReadIntoHimem(char *filename,uint16_t filenameSeg,int skipLo,int skipHi,char u
 
 /* 474a:0cf8 */
 
-stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle,...)
+stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle)
 
 {
   int iVar1;
@@ -801,7 +801,7 @@ stg_tmp_t * __cdecl16far stshLoadGfx(far_t handle,...)
 
 
 /* 474a:0e9b */
-undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
+undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry)
 
 {
   int iVar1;

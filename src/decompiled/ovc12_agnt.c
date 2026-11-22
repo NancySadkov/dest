@@ -49,7 +49,7 @@ uint16_t __cdecl16far agnt_compute1(int y)
 
 /* Clamps an x coordinate to 0..0xd2. */
 
-int __cdecl16far agnt_clampX(int x,...)
+int __cdecl16far agnt_clampX(int x)
 
 {
   if (x < 0) {
@@ -94,7 +94,7 @@ undefined1 __cdecl16far agnt_compute3(agnt_t *agnt)
 
 /* [R7] body shape: compute */
 
-bool __cdecl16far agnt_compute4(char *flag,...)
+bool __cdecl16far agnt_compute4(char *flag)
 
 {
   return *flag != '\0';
@@ -216,7 +216,7 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,..
 /* WARNING: Type propagation algorithm not settling */
 /* [R6] touches strengthMax, frameIndex */
 
-undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out,...)
+undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
 
 {
   uint8_t uVar1;
@@ -526,7 +526,7 @@ char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
 /* Returns the ability modifier of a party sheet's stat (same thresholds as manage_abilityModifier).
     */
 
-uint16_t __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex,...)
+uint16_t __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex)
 
 {
   byte bVar1;
@@ -792,7 +792,7 @@ void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite,...
 
 /* Draws the agent's current sprite frame, advances the counter and wraps at nframes. */
 
-void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type,...)
+void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
 
 {
   char *pcVar1;
@@ -985,7 +985,7 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
 
 /* [R6] touches AgntCount */
 
-void __cdecl16far agnt_usesAgntCount4(uint agntIndex,...)
+void __cdecl16far agnt_usesAgntCount4(uint agntIndex)
 
 {
   char *pcVar1;
@@ -1025,7 +1025,7 @@ void __cdecl16far agnt_usesAgntCount4(uint agntIndex,...)
 
 /* [R6] touches AgntCount */
 
-void __cdecl16far agnt_usesAgntCount5(int agntIndex,...)
+void __cdecl16far agnt_usesAgntCount5(int agntIndex)
 
 {
   char *pcVar1;
@@ -1055,7 +1055,7 @@ void __cdecl16far agnt_usesAgntCount5(int agntIndex,...)
 
 /* [R6] touches agntSaved, AgntCount */
 
-uint __cdecl16far agnt_usesAgntSaved(int agntIndex,...)
+uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
 
 {
   byte bVar3;
@@ -1251,7 +1251,7 @@ void __cdecl16far agnt_usesAlignToSeg(void)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute14(byte level,...)
+byte __cdecl16far agnt_compute14(byte level)
 
 {
   if (8 < level) {

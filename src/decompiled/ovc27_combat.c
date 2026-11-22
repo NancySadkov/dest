@@ -583,7 +583,7 @@ uint __cdecl16far ovc27_usesRandBelow5(agnt_t *agnt)
 
 /* Formats the "%s casts a %s spell %s %s." notice. */
 
-uint __cdecl16far ovc27_spellNotice(int agntIndex,...)
+uint __cdecl16far ovc27_spellNotice(int agntIndex)
 
 {
   byte bVar1;
@@ -707,7 +707,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex,...)
 
 /* [R4] calls ovr_blitGfxRect */
 
-void __cdecl16far ovc27_usesBlitGfxRect(int agntIndex,brect_t *rect,uint16_t type,...)
+void __cdecl16far ovc27_usesBlitGfxRect(int agntIndex,brect_t *rect,uint16_t type)
 
 {
   uint16_t uVar1;
@@ -1560,7 +1560,7 @@ int __cdecl16far ovc27_usesAgntCount(agnt_t *agnt,byte recIndex,byte maxLevel,in
 
 
 /* 5ded:1c94 */
-int __cdecl16far ovc27_rollToHitEntity(uint32_t agnt,byte column,...)
+int __cdecl16far ovc27_rollToHitEntity(uint32_t agnt,byte column)
 
 {
   uint32_t uVar1;
@@ -1604,7 +1604,7 @@ int __cdecl16far ovc27_rollToHitEntity(uint32_t agnt,byte column,...)
 
 
 /* 5ded:1d8e */
-int __cdecl16far ovc27_rollToHitAgent(uint32_t agnt,byte column,...)
+int __cdecl16far ovc27_rollToHitAgent(uint32_t agnt,byte column)
 
 {
   uint32_t uVar1;
@@ -1654,7 +1654,7 @@ int __cdecl16far ovc27_rollToHitAgent(uint32_t agnt,byte column,...)
 
 /* [R7] body shape: compute */
 
-uint16_t __cdecl16far ovc27_compute3(uint32_t view,char frames,...)
+uint16_t __cdecl16far ovc27_compute3(uint32_t view,char frames)
 
 {
   uint16_t uVar1;

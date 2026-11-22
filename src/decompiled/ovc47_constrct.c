@@ -34,7 +34,7 @@ void __cdecl16far constrct_usesGLeaderCount(void)
 
 
 /* 7e7c:004b */
-void __cdecl16far land_info(byte tileOffset,...)
+void __cdecl16far land_info(byte tileOffset)
 
 {
   byte b;

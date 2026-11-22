@@ -97,7 +97,7 @@ void __cdecl16far manage_blitTalkWindow(void)
 
 /* Rolls count dice of the given number of sides and returns the sum. */
 
-char __cdecl16far manage_rollDice(char count,char sides,...)
+char __cdecl16far manage_rollDice(char count,char sides)
 
 {
   uint16_t uVar1;
@@ -1908,7 +1908,7 @@ L_chargen_17B2:
 /* Stops music/agents and opens the settlement screen for a party slot (manage_settlementScreen),
    restoring the menu afterwards. */
 
-void __cdecl16far manage_showSettlementScreen(uint8_t partySlot,...)
+void __cdecl16far manage_showSettlementScreen(uint8_t partySlot)
 
 {
   ovr_attact_usesAgntFlag1();

@@ -11,7 +11,7 @@
 
 /* [R4] calls LDIV_at_ */
 
-uint __cdecl16far ovc36_usesLDIV_at_(byte partyIndex,...)
+uint __cdecl16far ovc36_usesLDIV_at_(byte partyIndex)
 
 {
   long *plVar1;

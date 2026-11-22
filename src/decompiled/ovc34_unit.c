@@ -11,7 +11,7 @@
 
 /* [R6] touches GUnits, bldType */
 
-int __cdecl16far unit_usesGUnits(int unitIndex,...)
+int __cdecl16far unit_usesGUnits(int unitIndex)
 
 {
   byte bVar1;
@@ -296,7 +296,7 @@ L_keyprocessor_6616_03bd_0684:
 
 
 /* 6616:0689 */
-void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
+void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
 
 {
   far_t gfx;

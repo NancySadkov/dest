@@ -407,7 +407,7 @@ void __cdecl16far constr_usesScreenOriginY(uint16_t rect,uint16_t type,...)
 /* Blits the objects of each map square in the current row range when its bldtp_t flags have bit 0
    or 2 set. */
 
-void __cdecl16far constr_blitRowObjects(brect_t *rect,uint16_t type,...)
+void __cdecl16far constr_blitRowObjects(brect_t *rect,uint16_t type)
 
 {
   byte bVar1;
@@ -1541,7 +1541,7 @@ uint __cdecl16far constr_usesGMapFlags(int x,int y,...)
 
 /* [R6] touches GMapFlags, GMapCells */
 
-uint __cdecl16far constr_usesGMapFlags2(int x,int y,...)
+uint __cdecl16far constr_usesGMapFlags2(int x,int y)
 
 {
   byte cornerA;

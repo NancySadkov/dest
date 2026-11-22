@@ -118,7 +118,7 @@ bool __cdecl16far write_game_cfg(char sfx,char mus,char irq)
 
 /* 6257:01cc */
 
-char __cdecl16far read_cfg(int handle,...)
+char __cdecl16far read_cfg(int handle)
 
 {
   uint16_t nread;

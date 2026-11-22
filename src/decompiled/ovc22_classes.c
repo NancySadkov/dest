@@ -393,7 +393,7 @@ uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,...)
 
 
 /* 5087:056e */
-far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
+far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
 
 {
   undefined1 stk_0035;   /* stack slot 0035 */
@@ -2888,7 +2888,7 @@ void __cdecl16far ovc22_usesLUDIV_at_(entity_t *entity)
 
 /* [R7] body shape: compute */
 
-char __cdecl16far ovc22_compute3(char direction,...)
+char __cdecl16far ovc22_compute3(char direction)
 
 {
   if (direction < '\0') {
@@ -4563,7 +4563,7 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
 
 /* [R4] calls ovr_randBelow */
 
-void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t outFlagSeg,...)
+void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t outFlagSeg)
 
 {
   uint *puVar1;
@@ -4778,7 +4778,7 @@ void __cdecl16far ovc22_spawnForLeaders(void)
 
 /* [R6] touches GOngoingBattle, GfxRndSeed2 */
 
-uint16_t __cdecl16far ovc22_usesGOngoingBattle(byte x,byte y,...)
+uint16_t __cdecl16far ovc22_usesGOngoingBattle(byte x,byte y)
 
 {
   uint16_t uVar1;

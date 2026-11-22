@@ -2358,7 +2358,7 @@ L_stats_6386_1c9f_22C8:
 /* Opens the stats page for the agent under the screen point (video_findAgentAt) and returns whether
    one was hit. */
 
-bool __cdecl16far stats_selectAgentAt(uint16_t x,uint16_t y,...)
+bool __cdecl16far stats_selectAgentAt(uint16_t x,uint16_t y)
 
 {
   int iVar1;

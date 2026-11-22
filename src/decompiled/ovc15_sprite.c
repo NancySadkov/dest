@@ -191,7 +191,7 @@ void __cdecl16far allocSprSeqs(void)
 
 
 /* 4207:047b */
-void __cdecl16far stshInitSprites(bool grab,...)
+void __cdecl16far stshInitSprites(bool grab)
 
 {
   uint16_t in_AX;
@@ -412,7 +412,7 @@ void __cdecl16far agnt_clear(void)
 
 /* Fills all ten rows of one column of the agent grid at Agnts+0x8fa with 0xff. */
 
-void __cdecl16far ovc15_fillGridColumn(uint vramOfs,...)
+void __cdecl16far ovc15_fillGridColumn(uint vramOfs)
 
 {
   uint uVar1;
@@ -537,7 +537,7 @@ void __cdecl16far ovc15_usesAgntIndex(void)
 
 
 /* 4207:0e17 */
-void __cdecl16far ovc15_removeEntity(uint entityIndex,...)
+void __cdecl16far ovc15_removeEntity(uint entityIndex)
 
 {
   int *piVar1;
@@ -801,7 +801,7 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls LDIV_at_ */
 
-void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot,...)
+void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot)
 
 {
   uint8_t *puVar1;
@@ -929,7 +929,7 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
 
 
 /* 4207:1aae */
-void __cdecl16far ovc15_usesStExit(int entityIndex,...)
+void __cdecl16far ovc15_usesStExit(int entityIndex)
 
 {
   uint8_t *puVar1;
@@ -1009,7 +1009,7 @@ uint8_t * __cdecl16far ovc15_usesStshRealloc(char *text,...)
 
 /* Copies a string and capitalises its first character. */
 
-char * __cdecl16far ovc15_capitalize(char *text,...)
+char * __cdecl16far ovc15_capitalize(char *text)
 
 {
   char cVar1;

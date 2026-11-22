@@ -146,7 +146,7 @@ uint16_t __cdecl16far ovc30_usesRandBelow(byte band)
 
 /* [R7] body shape: compute */
 
-undefined1 __cdecl16far ovc30_compute1(byte level,...)
+undefined1 __cdecl16far ovc30_compute1(byte level)
 
 {
   undefined1 uVar1;

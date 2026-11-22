@@ -94,7 +94,7 @@ void __cdecl16far ovc20_textLenLoc(void)
 
 /* Grabs LBM with transparency remap */
 
-stg_tmp_t * __cdecl16far grabLbmTR(int16_t file_id,...)
+stg_tmp_t * __cdecl16far grabLbmTR(int16_t file_id)
 
 {
   uint32_t r;
@@ -184,7 +184,7 @@ void __cdecl16far stshStubifyFromSrc(int src,int dst,...)
 
 /* 4b0a:03cd */
 
-void __cdecl16far StubifyCopy1to0_alt(int index,...)
+void __cdecl16far StubifyCopy1to0_alt(int index)
 
 {
   uint16_t uVar1;
@@ -212,7 +212,7 @@ void __cdecl16far StubifyCopy1to0_alt(int index,...)
 
 /* 4b0a:04a7 */
 
-void __cdecl16far stshStubifyCopy1to0(int index,...)
+void __cdecl16far stshStubifyCopy1to0(int index)
 
 {
   uint16_t uVar1;
@@ -333,7 +333,7 @@ void __cdecl16far stshReadFile(int handle,far_t dst,DW nbytes,...)
    the seq can have upto nanims total
    the function returns array of anim file stubs */
 
-spr_t * __cdecl16far stshSpriteStub(anm_t *anms,uint16_t nanims,...)
+spr_t * __cdecl16far stshSpriteStub(anm_t *anms,uint16_t nanims)
 
 {
   uint16_t k;
@@ -545,7 +545,7 @@ uint16_t __cdecl16far stshDecVocSampleRate(uint8_t encfreq)
 
 
 /* 4b0a:0b9c */
-void __cdecl16far stshInitAudioAssets(char grab,...)
+void __cdecl16far stshInitAudioAssets(char grab)
 
 {
   char *pcVar1;
@@ -955,7 +955,7 @@ void __cdecl16far init_ui_gfxes(void)
 
 
 /* 4b0a:13d3 */
-void __cdecl16far stshLoadAudioDrivers(bool grab,...)
+void __cdecl16far stshLoadAudioDrivers(bool grab)
 
 {
   far_t far *pfVar1;

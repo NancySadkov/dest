@@ -1,0 +1,270 @@
+# Functions whose recovered signature ends in '...'.
+# name	file	named	max_call_arity	class	extra_types	calls_with_extra	calls
+OVC41_6a8f_01e7_entry	ovc41_main.c	1	2	extra	uint16_t	12	16
+StubifyCopy1to0_alt	ovc20_stash.c	1	1	no-extra		0	8
+_sprintf	crtl.c	2	2	variadic		0	2
+agnt_abilityModifier	ovc12_agnt.c	2	2	no-extra		0	4
+agnt_acquireTarget	ovc12_agnt.c	2	3	extra	uint16_t	1	1
+agnt_advanceAnimFrame	ovc12_agnt.c	1	2	extra	uint16_t	8	15
+agnt_clampX	ovc12_agnt.c	1	1	no-extra		0	11
+agnt_compute10	ovc12_agnt.c	1	2	extra	uint16_t	2	3
+agnt_compute11	ovc12_agnt.c	1	2	extra	uint16_t	1	1
+agnt_compute12	ovc12_agnt.c	2	5	extra	uint16_t,uint16_t,uint16_t	2	3
+agnt_compute13	ovc12_agnt.c	1	2	extra	uint16_t	2	2
+agnt_compute14	ovc12_agnt.c	1	1	no-extra		0	4
+agnt_compute4	ovc12_agnt.c	1	1	no-extra		0	5
+agnt_compute8	ovc12_agnt.c	1	2	extra	uint16_t	7	7
+agnt_compute9	ovc12_agnt.c	1	2	extra	uint16_t	5	6
+agnt_computeFrameExtents	ovc12_agnt.c	2	3	extra	uint16_t	6	7
+agnt_drawSpriteFrame	ovc12_agnt.c	3	3	no-extra		0	2
+agnt_statusText	ovc12_agnt.c	2	3	extra	uint16_t	8	52
+agnt_usesAgntCount4	ovc12_agnt.c	1	1	no-extra		0	1
+agnt_usesAgntCount5	ovc12_agnt.c	1	1	no-extra		0	1
+agnt_usesAgntCount6	ovc12_agnt.c	1	2	extra	uint16_t	1	5
+agnt_usesAgntSaved	ovc12_agnt.c	1	1	no-extra		0	2
+agnt_usesAnimFrame	ovc12_agnt.c	1	2	extra	uint16_t	8	16
+agnt_usesAnimFrame2	ovc12_agnt.c	1	2	extra	uint16_t	2	2
+agnt_usesStExit	ovc12_agnt.c	3	7	extra	uint16_t,uint16_t,uint16_t,uint16_t	1	2
+agnt_usesStrengthMax	ovc12_agnt.c	2	2	no-extra		0	1
+alignToSeg	ovc04_lbm.c	1	1	no-extra		0	13
+alignUp4	ovc23_bldrec.c	1	3	extra	uint16_t,uint16_t	13	171
+animAdvance	ovc29_anim.c	5	5	no-extra		0	2
+attact_countPartyUnits	ovc14_attact.c	1	1	no-extra		0	2
+attact_textAbnormalProgramTermination	ovc14_attact.c	2	2	no-extra		0	1
+attact_updateAttractEntry	ovc14_attact.c	2	2	no-extra		0	6
+attact_usesAlignUp4	ovc14_attact.c	4	5	extra	uint16_t	1	3
+attact_usesGMapFlags	ovc14_attact.c	2	3	extra	uint16_t	1	1
+attact_usesGUnits	ovc14_attact.c	2	2	no-extra		0	5
+attact_usesLDIV_at_	ovc14_attact.c	1	1	no-extra		0	3
+attact_usesRandBelow	ovc14_attact.c	2	4	extra	uint16_t,uint16_t	2	3
+attact_usesSCARRY2	ovc14_attact.c	4	6	extra	uint16_t,uint16_t	2	8
+attact_usesSquareRecCount	ovc14_attact.c	2	2	no-extra		0	3
+audio_panFromX	ovc11_audio.c	1	2	extra	uint16_t	35	54
+be2	ovc01_driver.c	1	1	no-extra		0	4
+be4	ovc01_driver.c	2	2	no-extra		0	8
+biosVideoCall	ovc01_driver.c	2	2	no-extra		0	2
+bldng_getClass	ovc35_bldng.c	1	1	no-extra		0	2
+bldng_textArena	ovc35_bldng.c	2	2	no-extra		0	2
+bldng_usesGStrangeTable	ovc35_bldng.c	1	1	no-extra		0	10
+bldng_usesRandBelow	ovc35_bldng.c	1	1	no-extra		0	1
+blitGfx10	ovc06_blit.c	5	7	extra	uint16_t,uint16_t	3	17
+blitGfxN	ovc06_blit.c	6	6	no-extra		0	6
+blitLoadRleGfx	ovc06_blit.c	2	3	extra	uint16_t	27	78
+blitRect	ovc10_constr.c	1	2	extra	uint16_t	1	18
+chpath	ovc09_init.c	1	2	extra	uint16_t	3	3
+constr_blitRowObjects	ovc10_constr.c	2	1	no-extra		0	2
+constr_setHighlightAtOffset	ovc10_constr.c	2	3	extra	uint16_t	1	8
+constr_usesGMapFlags	ovc10_constr.c	2	3	extra	uint16_t	8	26
+constr_usesGMapFlags2	ovc10_constr.c	2	2	no-extra		0	6
+constr_usesScreenOriginY	ovc10_constr.c	2	3	extra	uint16_t	1	3
+constr_usesSmoothPrev	ovc10_constr.c	3	5	extra	uint16_t,uint16_t	18	60
+creat_wait_unlock_and_disk	ovc17_stash.c	1	2	extra	uint16_t	5	5
+drawAgntStats	ovc33_stats.c	2	3	extra	uint16_t	5	5
+drawLine2	ovc01_driver.c	3	3	no-extra		0	1
+drawString	ovc33_stats.c	2	3	extra	uint16_t	19	40
+drawTextAt	ovc03_font.c	2	3	extra	uint16_t	12	23
+draw_compute3	ovc02_draw.c	1	1	no-extra		0	3
+draw_menuCursor	ovc02_draw.c	2	2	no-extra		0	6
+draw_menuRowBar	ovc02_draw.c	2	2	no-extra		0	7
+draw_usesBlitLoadRleGfx3	ovc02_draw.c	1	1	no-extra		0	5
+draw_usesFillRect2	ovc02_draw.c	2	2	no-extra		0	5
+driver_clearMapFlagsRect	ovc01_driver.c	6	8	extra	uint16_t,uint16_t	1	5
+driver_compute1	ovc01_driver.c	3	3	no-extra		0	1
+driver_compute2	ovc01_driver.c	3	3	no-extra		0	5
+driver_compute5	ovc01_driver.c	6	8	extra	uint16_t,uint16_t	7	7
+driver_drawLine	ovc01_driver.c	5	9	extra	uint16_t,uint16_t,uint16_t,uint16_t	8	15
+driver_fillSpan	ovc01_driver.c	5	6	extra	uint16_t	29	37
+driver_setMapFlagsRect	ovc01_driver.c	6	6	no-extra		0	2
+ensure_tail_slash	ovc09_init.c	1	2	extra	uint16_t	1	1
+fmFreeAudio	ovc11_audio.c	1	1	no-extra		0	20
+font_textWidth	ovc03_font.c	2	5	extra	uint16_t,uint16_t,uint16_t	16	38
+font_usesMiceBlitRect	ovc03_font.c	1	1	no-extra		0	2
+gfxRlePrepare	ovc06_blit.c	6	13	extra	uint16_t,uint16_t,uint16_t,uint16_t,uint16_t,uint16_t,uint16_t	4	6
+grabBldLbm	ovc20_stash.c	3	5	extra	uint16_t,uint16_t	8	18
+grabBldLbm2	ovc48_assets2.c	3	4	extra	uint16_t	2	2
+grabLbm	ovc04_lbm.c	3	5	extra	uint16_t,uint16_t	67	138
+grabLbmTR	ovc20_stash.c	1	1	no-extra		0	156
+grabRemap	ovc01_driver.c	3	4	extra	uint16_t	2	5
+heapAlloc	ovc32_heap.c	2	2	no-extra		0	1
+heapFree	ovc32_heap.c	1	1	no-extra		0	2
+heapMalloc	ovc32_heap.c	2	2	no-extra		0	3
+heapRealloc	ovc32_heap.c	3	3	no-extra		0	1
+init2_usesCFGMice	ovc08_init2.c	2	3	extra	uint16_t	2	11
+init_assets1	ovc46_assets.c	1	1	no-extra		0	2
+init_assets2	ovc48_assets2.c	1	1	no-extra		0	2
+init_getMapCell	ovc09_init.c	2	3	extra	uint16_t	6	10
+init_getMapFlags	ovc09_init.c	2	2	no-extra		0	4
+init_setMapCell	ovc09_init.c	3	3	no-extra		0	6
+init_usesGMapCells	ovc09_init.c	2	0	no-extra		0	0
+inputUpdate	ovc03_font.c	1	1	no-extra		0	33
+land_info	ovc47_constrct.c	1	1	no-extra		0	5
+litoa10	ovc21_manage.c	2	4	extra	uint16_t,uint16_t	25	40
+lowNibble	ovc01_driver.c	1	2	extra	uint16_t	1	1
+manage_compute1	ovc21_manage.c	1	2	extra	uint16_t	1	2
+manage_playerTitle	ovc21_manage.c	1	4	extra	uint16_t,uint16_t,uint16_t	5	5
+manage_rollDice	ovc21_manage.c	2	2	no-extra		0	11
+manage_rollStats	ovc21_manage.c	1	2	extra	uint16_t	2	3
+manage_showSettlementScreen	ovc21_manage.c	1	1	no-extra		0	1
+masked_memcpy	ovc01_driver.c	6	7	extra	uint16_t	2	3
+miceBlitRect	ovc08_init2.c	1	2	extra	uint16_t	33	58
+miceRestoreArea	ovc08_init2.c	1	2	extra	uint16_t	40	62
+miceSaveArea	ovc08_init2.c	3	4	extra	uint16_t	1	1
+miceSetPosition	ovc01_driver.c	2	2	no-extra		0	1
+midPlaySequence	ovc01_driver.c	1	1	no-extra		0	1
+mkp	ovc01_driver.c	3	3	variadic		0	31
+open_wait_unlock_and_disk	ovc17_stash.c	1	2	extra	uint16_t	8	11
+ovc07_signum	ovc07_gfxutil.c	1	1	no-extra		0	25
+ovc07_usesFillRect	ovc07_gfxutil.c	6	7	extra	uint16_t	4	4
+ovc13_usesBlitLoadRleGfx2	ovc13_panel.c	3	3	no-extra		0	3
+ovc13_usesBlitLoadRleGfx3	ovc13_panel.c	3	3	no-extra		0	3
+ovc15_capitalize	ovc15_sprite.c	1	1	no-extra		0	7
+ovc15_fillGridColumn	ovc15_sprite.c	1	1	no-extra		0	1
+ovc15_removeEntity	ovc15_sprite.c	1	1	no-extra		0	11
+ovc15_textArena	ovc15_sprite.c	1	3	extra	uint16_t,uint16_t	3	16
+ovc15_usesLDIV_at_2	ovc15_sprite.c	3	3	no-extra		0	1
+ovc15_usesStExit	ovc15_sprite.c	1	1	no-extra		0	2
+ovc15_usesStshRealloc	ovc15_sprite.c	1	8	extra	uint16_t,uint16_t,uint16_t,uint16_t,uint16_t,uint16_t,uint16_t	48	52
+ovc18_checkFortressPlacement	ovc18_leaderview.c	1	1	no-extra		0	4
+ovc18_textArena	ovc18_leaderview.c	2	2	no-extra		0	1
+ovc18_usesRandBelow	ovc18_leaderview.c	4	6	extra	uint16_t,uint16_t	12	13
+ovc20_compute1	ovc20_stash.c	1	2	extra	uint16_t	4	4
+ovc22_className	ovc22_classes.c	1	2	extra	uint16_t	1	10
+ovc22_compute3	ovc22_classes.c	1	1	no-extra		0	4
+ovc22_seasonalIncome	ovc22_classes.c	2	5	extra	uint16_t,uint16_t,uint16_t	1	2
+ovc22_textPOPULATION	ovc22_classes.c	3	5	extra	uint16_t,uint16_t	1	2
+ovc22_textRingProt	ovc22_classes.c	1	1	no-extra		0	8
+ovc22_usesGOngoingBattle	ovc22_classes.c	2	2	no-extra		0	8
+ovc22_usesRandBelow2	ovc22_classes.c	3	3	no-extra		0	12
+ovc23_compute1	ovc23_bldrec.c	4	4	no-extra		0	1
+ovc23_compute2	ovc23_bldrec.c	2	2	no-extra		0	3
+ovc23_findClearColumn	ovc23_bldrec.c	2	2	no-extra		0	7
+ovc23_findRecordAt	ovc23_bldrec.c	2	3	extra	uint16_t	1	8
+ovc23_isCursorAt	ovc23_bldrec.c	2	3	extra	uint16_t	1	12
+ovc23_placeBuilding	ovc23_bldrec.c	4	4	no-extra		0	16
+ovc23_rebuildDirectionFlags	ovc23_bldrec.c	2	2	no-extra		0	42
+ovc23_removeRecord	ovc23_bldrec.c	1	1	no-extra		0	2
+ovc23_textAdlibNone	ovc23_bldrec.c	3	3	no-extra		0	8
+ovc23_textBuildThfres01Lbm	ovc23_bldrec.c	1	1	no-extra		0	2
+ovc23_tickRecordsAt	ovc23_bldrec.c	3	4	extra	uint16_t	1	3
+ovc23_usesAlignUp43	ovc23_bldrec.c	3	3	no-extra		0	2
+ovc24_removeOtherEntities	ovc24_entities.c	1	1	no-extra		0	5
+ovc24_textArena	ovc24_entities.c	3	3	no-extra		0	3
+ovc25_attackingNotice	ovc25_intel.c	1	1	no-extra		0	3
+ovc25_compute1	ovc25_intel.c	1	1	no-extra		0	5
+ovc25_tickCountdown	ovc25_intel.c	1	1	no-extra		0	3
+ovc25_usesAlignUp44	ovc25_intel.c	4	4	no-extra		0	4
+ovc26_usesStExit	ovc26_fillgrid.c	1	1	no-extra		0	5
+ovc27_breathHalfDamage	ovc27_combat.c	1	2	extra	uint16_t	2	2
+ovc27_compute1	ovc27_combat.c	2	4	extra	uint16_t,uint16_t	1	2
+ovc27_compute2	ovc27_combat.c	2	4	extra	uint16_t,uint16_t	2	2
+ovc27_compute3	ovc27_combat.c	2	2	no-extra		0	4
+ovc27_rollAgainstStat	ovc27_combat.c	2	4	extra	uint16_t,uint16_t	7	7
+ovc27_rollToHitAgent	ovc27_combat.c	2	2	no-extra		0	5
+ovc27_rollToHitEntity	ovc27_combat.c	2	2	no-extra		0	15
+ovc27_spellNotice	ovc27_combat.c	1	1	no-extra		0	2
+ovc27_textTakesHalfDamage3	ovc27_combat.c	2	4	extra	uint16_t,uint16_t	1	1
+ovc27_usesBlitGfxRect	ovc27_combat.c	3	3	no-extra		0	2
+ovc28_compute2	ovc28_ui.c	3	5	extra	uint16_t,uint16_t	3	11
+ovc28_usesBDADailyTimeCounter	ovc28_ui.c	1	1	no-extra		0	5
+ovc30_compute1	ovc30_waves.c	1	1	no-extra		0	1
+ovc30_textDivideError	ovc30_waves.c	4	6	extra	uint16_t,uint16_t	6	11
+ovc30_usesRandBelow2	ovc30_waves.c	2	3	extra	uint16_t	1	2
+ovc36_usesLDIV_at_	ovc36_math.c	1	1	no-extra		0	1
+ovc39_textHalflingCastle	ovc39_archive.c	1	1	no-extra		0	2
+ovc40_usesCalcSeasonPalette	ovc40_palette.c	1	1	no-extra		0	13
+ovc40_usesVgaSetPalette8bit	ovc40_palette.c	1	1	no-extra		0	19
+ovc41_advanceAnimFrame	ovc41_main.c	1	2	extra	uint16_t	3	4
+ovc41_buildingNotice	ovc41_main.c	1	1	no-extra		0	2
+ovc41_compute3	ovc41_main.c	1	3	extra	uint16_t,uint16_t	1	5
+ovc41_compute4	ovc41_main.c	4	8	extra	uint16_t,uint16_t,uint16_t,uint16_t	1	3
+ovc41_growthForLevel	ovc41_main.c	1	2	extra	uint16_t	1	2
+ovc41_paralyzeNearbyAgents	ovc41_main.c	1	1	no-extra		0	4
+ovc41_pluralSuffix	ovc41_main.c	1	7	extra	uint16_t,uint16_t,uint16_t,uint16_t,uint16_t,uint16_t	3	18
+ovc41_removeAgent	ovc41_main.c	2	3	extra	uint16_t	1	4
+ovc41_settleAgentCombat	ovc41_main.c	2	3	extra	uint16_t	1	5
+ovc41_specialAttack	ovc41_main.c	2	4	extra	uint16_t,uint16_t	2	3
+ovc41_textParalyzed	ovc41_main.c	3	6	extra	uint16_t,uint16_t,uint16_t	7	8
+ovc41_unitStatusText	ovc41_main.c	1	1	no-extra		0	8
+ovc41_usesAgnt_clear	ovc41_main.c	1	1	no-extra		0	18
+ovc41_usesBiosKeyAvail	ovc41_main.c	1	2	extra	uint16_t	9	9
+ovc41_usesMiceBlitRect	ovc41_main.c	1	1	no-extra		0	8
+ovc41_usesXOfs	ovc41_main.c	1	1	no-extra		0	2
+ovc42_usesBlitLabel	ovc42_demo.c	2	3	extra	uint16_t	1	1
+ovc43_playFli	ovc43_fli.c	3	3	no-extra		0	1
+ovc45_compute3	ovc45_unitinfo.c	1	1	no-extra		0	1
+ovc45_compute4	ovc45_unitinfo.c	2	3	extra	uint16_t	7	9
+ovc45_compute6	ovc45_unitinfo.c	1	1	no-extra		0	1
+ovc45_compute7	ovc45_unitinfo.c	2	5	extra	uint16_t,uint16_t,uint16_t	1	1
+ovc45_compute8	ovc45_unitinfo.c	1	1	no-extra		0	2
+ovc45_compute9	ovc45_unitinfo.c	5	11	extra	uint16_t,uint16_t,uint16_t,uint16_t,uint16_t,uint16_t	25	35
+ovc45_costOrIncomeLabel	ovc45_unitinfo.c	1	0	no-extra		0	0
+ovc45_getUnitIndex	ovc45_unitinfo.c	2	2	no-extra		0	4
+ovc45_getUnitType	ovc45_unitinfo.c	2	2	no-extra		0	19
+ovc45_rankPercent	ovc45_unitinfo.c	1	0	no-extra		0	0
+ovc45_showLandInfo	ovc45_unitinfo.c	2	2	no-extra		0	1
+ovc45_textChoosePartyBuild	ovc45_unitinfo.c	3	4	extra	uint16_t	1	3
+ovc45_usesGMapFlags4	ovc45_unitinfo.c	2	2	no-extra		0	1
+ovc45_usesGPopulationLo	ovc45_unitinfo.c	3	0	no-extra		0	0
+ovc45_usesGfxRndSeed2	ovc45_unitinfo.c	1	1	no-extra		0	1
+ovc45_usesLDIV_at_	ovc45_unitinfo.c	1	3	extra	uint16_t,uint16_t	1	7
+ovc49_body1	ovc49_agents.c	1	2	extra	uint16_t	6	10
+ovc49_compute1	ovc49_agents.c	1	1	no-extra		0	6
+ovc49_fillGridCells	ovc49_agents.c	2	4	extra	uint16_t,uint16_t	3	5
+ovc49_usesStExit	ovc49_agents.c	1	2	extra	uint16_t	3	4
+path_strip_tail_slash	ovc09_init.c	1	2	extra	uint16_t	1	2
+play_sfx	ovc11_audio.c	2	3	extra	uint16_t	17	43
+play_sfxU	ovc11_audio.c	3	5	extra	uint16_t,uint16_t	34	60
+printf	crtl.c	1	2	variadic		1	162
+randBelow	ovc17_stash.c	1	2	extra	uint16_t	1	252
+read_cfg	ovc31_config.c	1	1	no-extra		0	7
+rle_blit_decode	ovc01_driver.c	3	3	no-extra		0	1
+rle_line	ovc01_driver.c	3	3	no-extra		0	1
+saveui_readLine	ovc16_saveui.c	1	1	no-extra		0	3
+saveui_writeLine	ovc16_saveui.c	3	3	no-extra		0	3
+say	ovc03_font.c	1	2	extra	uint16_t	41	60
+season_checkEndGame	ovc37_season.c	1	1	no-extra		0	1
+season_textHalflingCastle	ovc37_season.c	1	1	no-extra		0	3
+setSeasonPalette	ovc40_palette.c	1	1	no-extra		0	8
+stExit	ovc05_error.c	1	2	variadic		1	81
+stash_loadFromStrongDat	ovc17_stash.c	1	1	no-extra		0	2
+stash_usesStExit	ovc17_stash.c	1	3	extra	uint16_t,uint16_t	4	8
+stats_compute4	ovc33_stats.c	1	2	extra	uint16_t	2	2
+stats_selectAgentAt	ovc33_stats.c	2	2	no-extra		0	1
+stgFreeTmp	ovc20_stash.c	1	2	extra	uint16_t	166	293
+stshAlloc	ovc17_stash.c	1	1	no-extra		0	50
+stshAllocBldStubs2	ovc48_assets2.c	1	1	no-extra		0	2
+stshAllocStub	ovc44_strong_dat.c	1	1	no-extra		0	315
+stshClose	ovc17_stash.c	1	1	no-extra		0	7
+stshFilesize	ovc17_stash.c	2	2	no-extra		0	1
+stshFree	ovc17_stash.c	1	1	no-extra		0	104
+stshInitAudioAssets	ovc20_stash.c	1	1	no-extra		0	2
+stshInitSprites	ovc15_sprite.c	1	1	no-extra		0	2
+stshInitTxtFiles	ovc48_assets2.c	1	1	no-extra		0	2
+stshLoadAudioDrivers	ovc20_stash.c	1	1	no-extra		0	2
+stshLoadGfx	ovc17_stash.c	1	1	no-extra		0	38
+stshOpen	ovc17_stash.c	1	1	no-extra		0	5
+stshProcessFontSub	ovc03_font.c	2	3	extra	uint16_t	1	6
+stshReadFile	ovc20_stash.c	3	4	extra	uint16_t	1	1
+stshRealloc	ovc17_stash.c	2	2	no-extra		0	5
+stshSeek	ovc17_stash.c	2	2	no-extra		0	8
+stshSpriteStub	ovc20_stash.c	2	2	no-extra		0	1
+stshStoreFile	ovc20_stash.c	1	2	extra	uint16_t	558	902
+stshStubifyBld	ovc44_strong_dat.c	1	1	no-extra		0	35
+stshStubifyCopy1to0	ovc20_stash.c	1	1	no-extra		0	32
+stshStubifyFromSrc	ovc20_stash.c	2	3	extra	uint16_t	1	8
+stshTell	ovc17_stash.c	2	2	no-extra		0	4
+stshUniqueColorsRemap	ovc20_stash.c	1	2	extra	uint16_t	19	39
+stshWrite	ovc20_stash.c	3	4	extra	uint16_t	23	49
+stshWriteFile	ovc20_stash.c	3	5	extra	uint16_t,uint16_t	2	7
+stsprintf	ovc17_stash.c	3	8	variadic		108	190
+stubyBufSrcToDst	ovc20_stash.c	2	3	extra	uint16_t	4	8
+uiInputText	ovc28_ui.c	4	5	extra	uint16_t	3	13
+uiMenu	ovc16_saveui.c	3	4	extra	uint16_t	7	10
+uiNotify	ovc03_font.c	2	3	extra	uint16_t	31	69
+uiReadString	ovc16_saveui.c	5	6	extra	uint16_t	1	4
+ui_textDefineRegionCommand	ovc34_unit.c	1	1	no-extra		0	2
+unit_usesGUnits	ovc34_unit.c	1	1	no-extra		0	1
+unrle	ovc01_driver.c	3	5	extra	uint16_t,uint16_t	3	4
+unrle_mirror	ovc01_driver.c	3	0	no-extra		0	0
+vgaSetPalette	ovc01_driver.c	3	4	extra	uint16_t	3	3
+vgaSetPalette8bit	ovc01_driver.c	1	2	extra	uint16_t	1	10

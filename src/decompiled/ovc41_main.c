@@ -299,7 +299,7 @@ char * __cdecl16far ovc41_isAre(int count)
 
 /* Builds the party's unit-status summary (count, recruiting, training and building percentages). */
 
-void __cdecl16far ovc41_unitStatusText(byte menuIndex,...)
+void __cdecl16far ovc41_unitStatusText(byte menuIndex)
 
 {
   char *pcVar1;
@@ -465,7 +465,7 @@ void __cdecl16far ovc41_usesPlay_sfxU(void)
 
 
 /* 6a8f:0807 */
-void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex,...)
+void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
 
 {
   byte bVar1;
@@ -502,7 +502,7 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex,...)
 
 /* [R6] touches xOfs */
 
-void __cdecl16far ovc41_usesXOfs(int agntIndex,...)
+void __cdecl16far ovc41_usesXOfs(int agntIndex)
 
 {
   uint uVar1;
@@ -799,7 +799,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
 
 /* Formats the "Building %d %s." notice. */
 
-void __cdecl16far ovc41_buildingNotice(char delta,...)
+void __cdecl16far ovc41_buildingNotice(char delta)
 
 {
   int iVar1;
@@ -878,7 +878,7 @@ void __cdecl16far dbgPromoteEnemy(void)
 
 /* [R4] calls ovr_agnt_clear */
 
-void __cdecl16far ovc41_usesAgnt_clear(char playSound,...)
+void __cdecl16far ovc41_usesAgnt_clear(char playSound)
 
 {
   bool bVar1;
@@ -1936,7 +1936,7 @@ void __cdecl16far ovc41_removeIndexPerm(uint removedIndex)
 
 /* [R4] calls ovr_miceBlitRect */
 
-void __cdecl16far ovc41_usesMiceBlitRect(uint menuIndex,...)
+void __cdecl16far ovc41_usesMiceBlitRect(uint menuIndex)
 
 {
   bool bVar1;

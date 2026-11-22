@@ -110,7 +110,7 @@ uint16_t __cdecl16far ovc39_findBuildingAt(int x,uint16_t y)
 
 /* [R2] string "halfling castle" */
 
-void __cdecl16far ovc39_textHalflingCastle(byte partyIndex,...)
+void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
 
 {
   far_t handle;

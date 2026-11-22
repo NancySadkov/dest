@@ -304,7 +304,7 @@ int __cdecl16far ovc49_usesStExit(agnt_t *agnt,...)
 
 /* [R7] body shape: compute */
 
-uint __cdecl16far ovc49_compute1(int x,...)
+uint __cdecl16far ovc49_compute1(int x)
 
 {
   uint in_AX;

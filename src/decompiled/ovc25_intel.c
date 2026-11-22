@@ -216,7 +216,7 @@ L_OVC25_5b66_038d_0482:
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
 
-void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,uint16_t destY,...)
+void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,uint16_t destY)
 
 {
   bool bVar1;
@@ -909,7 +909,7 @@ void __cdecl16far OVC25_5b66_131f_entry(void)
 
 /* Formats the "%s is attacking." notice. */
 
-void __cdecl16far ovc25_attackingNotice(byte partyIndex,...)
+void __cdecl16far ovc25_attackingNotice(byte partyIndex)
 
 {
   byte *pbVar1;
@@ -953,7 +953,7 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex,...)
 
 /* [R7] body shape: compute */
 
-int __cdecl16far ovc25_compute1(byte gindex,...)
+int __cdecl16far ovc25_compute1(byte gindex)
 
 {
   return (uint)*(byte *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95) +
@@ -1025,7 +1025,7 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
 
 /* Ticks the party's +0x5e countdown; at zero it resets it to 10 and clears bit 0 of flags5d. */
 
-void __cdecl16far ovc25_tickCountdown(int partyIndex,...)
+void __cdecl16far ovc25_tickCountdown(int partyIndex)
 
 {
   int *piVar1;

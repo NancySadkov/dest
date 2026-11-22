@@ -30,7 +30,7 @@ void __cdecl16far ovc07_swapWords(uint16_t *wordA,uint16_t *wordB)
 
 /* Returns the sign of its argument (-1, 0 or 1). */
 
-uint16_t __cdecl16far ovc07_signum(int value,...)
+uint16_t __cdecl16far ovc07_signum(int value)
 
 {
   uint16_t uVar1;

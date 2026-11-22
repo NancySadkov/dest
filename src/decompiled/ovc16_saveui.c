@@ -728,7 +728,7 @@ void __cdecl16far uiMenu(char *title,far_t items,int nitems,...)
 
 /* Writes a text line followed by CRLF to a file handle. */
 
-void __cdecl16far saveui_writeLine(int handle,char *text,int count,...)
+void __cdecl16far saveui_writeLine(int handle,char *text,int count)
 
 {
   size_t len;
@@ -747,7 +747,7 @@ void __cdecl16far saveui_writeLine(int handle,char *text,int count,...)
 
 /* Reads one line from the file and returns a heap copy (empty for ^Z/empty lines). */
 
-char * __cdecl16far saveui_readLine(int fd,...)
+char * __cdecl16far saveui_readLine(int fd)
 
 {
   char *pcVar1;

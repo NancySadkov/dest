@@ -11,7 +11,7 @@
 
 /* Draws the enabled menu row's proportional bar in the two special colours. */
 
-void __cdecl16far draw_menuRowBar(int menuItem,uint16_t dstSeg,...)
+void __cdecl16far draw_menuRowBar(int menuItem,uint16_t dstSeg)
 
 {
   uint uVar1;
@@ -37,7 +37,7 @@ void __cdecl16far draw_menuRowBar(int menuItem,uint16_t dstSeg,...)
 
 /* [R4] calls ovr_driver_fillRect */
 
-void __cdecl16far draw_usesFillRect2(uint value,int dstSeg,...)
+void __cdecl16far draw_usesFillRect2(uint value,int dstSeg)
 
 {
   int iVar1;
@@ -131,7 +131,7 @@ void __cdecl16far draw_usesCrossBlitX(void)
 
 /* [R7] body shape: compute */
 
-uint __cdecl16far draw_compute3(int x,...)
+uint __cdecl16far draw_compute3(int x)
 
 {
   return (uint)((0x13f - x) * 0x80) / 0x140;
@@ -1103,7 +1103,7 @@ uint16_t __cdecl16far draw_usesGameProcessKey(void)
 
 /* [R4] calls ovr_blitLoadRleGfx */
 
-void __cdecl16far draw_usesBlitLoadRleGfx3(int menuIndex,...)
+void __cdecl16far draw_usesBlitLoadRleGfx3(int menuIndex)
 
 {
   int row1;
@@ -1148,7 +1148,7 @@ void __cdecl16far draw_usesBlitLoadRleGfx3(int menuIndex,...)
 
 /* Clamps and stores the menu cursor offset and draws the selection indicator lines. */
 
-void __cdecl16far draw_menuCursor(int x,int y,...)
+void __cdecl16far draw_menuCursor(int x,int y)
 
 {
   if (x < 0) {

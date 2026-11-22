@@ -47,7 +47,7 @@ void __cdecl16far ovc40_usesBlitLabel(far_t text1,far_t text2,byte row,byte term
 
 
 /* 69c8:011e */
-void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette,...)
+void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette)
 
 {
   int iVar1;
@@ -81,7 +81,7 @@ void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette,...)
 
 
 /* 69c8:01ac */
-void __cdecl16far setSeasonPalette(far_t palette,...)
+void __cdecl16far setSeasonPalette(far_t palette)
 
 {
   uint uVar1;
@@ -167,7 +167,7 @@ stg_tmp_t * __cdecl16far ovc40_usesStshLoadGfx(byte backdropIndex)
 
 /* [R4] calls ovr_calcSeasonPalette */
 
-void __cdecl16far ovc40_usesCalcSeasonPalette(char useVgaPalette,...)
+void __cdecl16far ovc40_usesCalcSeasonPalette(char useVgaPalette)
 
 {
   uint16_t in_DX;

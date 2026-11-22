@@ -136,7 +136,7 @@ void __cdecl16far heapFreeSub(uint16_t entry)
 
 
 /* 6316:01ed */
-uint32_t * __cdecl16far heapAlloc(uint32_t *__return_storage_ptr__,uint32_t nbytes,...)
+uint32_t * __cdecl16far heapAlloc(uint32_t *__return_storage_ptr__,uint32_t nbytes)
 
 {
   long *plVar1;
@@ -175,7 +175,7 @@ uint32_t * __cdecl16far heapAlloc(uint32_t *__return_storage_ptr__,uint32_t nbyt
 
 
 /* 6316:02a4 */
-long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nbytes,...)
+long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nbytes)
 
 {
   long *plVar1;
@@ -277,7 +277,7 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
 
 
 /* 6316:04ec */
-far_t * __cdecl16far heapMalloc(far_t *__return_storage_ptr__,uint32_t nbytes,...)
+far_t * __cdecl16far heapMalloc(far_t *__return_storage_ptr__,uint32_t nbytes)
 
 {
   long *plVar1;
@@ -349,7 +349,7 @@ void __cdecl16far heapValidateAll(void)
 
 /* 6316:0600 */
 
-void __cdecl16far heapFree(far_t ptr,...)
+void __cdecl16far heapFree(far_t ptr)
 
 {
   uint16_t uVar1;

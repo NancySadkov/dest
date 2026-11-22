@@ -1394,7 +1394,7 @@ void __cdecl16far init_computeMaxSquares(void)
 
 /* [R6] touches GMapCells */
 
-uint __cdecl16far init_usesGMapCells(int x,int y,...)
+uint __cdecl16far init_usesGMapCells(int x,int y)
 
 {
   byte (*pabVar1) [148];
@@ -1606,7 +1606,7 @@ uint __cdecl16far init_getMapCell(int x,int y,...)
 
 /* Writes a byte into GMapCells[y][x] after the map bounds check. */
 
-void __cdecl16far init_setMapCell(int x,int y,byte cell,...)
+void __cdecl16far init_setMapCell(int x,int y,byte cell)
 
 {
   if ((((x < 0x94) && (-1 < x)) && (y < 0x3c)) && (-1 < y)) {
@@ -1621,7 +1621,7 @@ void __cdecl16far init_setMapCell(int x,int y,byte cell,...)
 
 /* Returns the flag bits of GMapFlags[y][x] inside the map bounds, else 0. */
 
-uint __cdecl16far init_getMapFlags(int x,int y,...)
+uint __cdecl16far init_getMapFlags(int x,int y)
 
 {
   uint in_AX;

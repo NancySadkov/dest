@@ -8,7 +8,7 @@
 
 
 /* 6018:0000 */
-void __cdecl16far ovc28_usesBDADailyTimeCounter(int ticks,...)
+void __cdecl16far ovc28_usesBDADailyTimeCounter(int ticks)
 
 {
   int iVar1;

@@ -393,7 +393,7 @@ int __cdecl16far font_textWidth(char *text,char *font,...)
 
 /* 302d:072b */
 
-uint16_t __cdecl16far inputUpdate(ulong msg_delay,...)
+uint16_t __cdecl16far inputUpdate(ulong msg_delay)
 
 {
   bool bVar1;
@@ -452,7 +452,7 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay,...)
 
 /* [R4] calls ovr_miceBlitRect */
 
-uint __cdecl16far font_usesMiceBlitRect(byte msgDelay,...)
+uint __cdecl16far font_usesMiceBlitRect(byte msgDelay)
 
 {
   bool bVar1;

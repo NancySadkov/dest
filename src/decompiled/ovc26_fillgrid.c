@@ -126,7 +126,7 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
 
 
 /* 5d45:031f */
-uint __cdecl16far ovc26_usesStExit(int entityIndex,...)
+uint __cdecl16far ovc26_usesStExit(int entityIndex)
 
 {
   byte *pbVar1;

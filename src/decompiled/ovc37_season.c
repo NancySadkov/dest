@@ -34,7 +34,7 @@ bool __cdecl16far season_textMainCastle(void)
 
 /* [R2] string "halfling castle" */
 
-uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex,...)
+uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
 
 {
   int iVar1;
@@ -143,7 +143,7 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex,...)
 
 /* Runs the end-of-game score screen once per leader-type band. */
 
-uint __cdecl16far season_checkEndGame(byte leaderIndex,...)
+uint __cdecl16far season_checkEndGame(byte leaderIndex)
 
 {
   byte bVar1;

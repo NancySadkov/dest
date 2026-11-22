@@ -11,7 +11,7 @@
 
 /* Aligns pointer up to 16 bytes */
 
-uint16_t __cdecl16far alignToSeg(far_t ptr,...)
+uint16_t __cdecl16far alignToSeg(far_t ptr)
 
 {
   return 0;

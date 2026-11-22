@@ -41,6 +41,10 @@ CHECKS = [
     ("(D) far const", r"[0-9a-b] \* 0x[0-9a-b]....[0-9a-b]"),
     ("LAB_", r"LAB_"),
     ("->pad_... + 0x", r"->pad_\w* \+ 0x"),
+    # not in AGENTS' list: an unresolved parameter list.  Ghidra writes `...`
+    # when it cannot determine the rest of the signature; the number of such
+    # functions is tracked by scripts/param_infer.py.
+    ("...)", r"\.\.\.\)"),
 ]
 
 

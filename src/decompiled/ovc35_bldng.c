@@ -11,7 +11,7 @@
 
 /* Returns the class byte of a party sheet (0 when unset). */
 
-int __cdecl16far bldng_getClass(byte partyIndex,...)
+int __cdecl16far bldng_getClass(byte partyIndex)
 
 {
   uint32_t uVar1;
@@ -34,7 +34,7 @@ int __cdecl16far bldng_getClass(byte partyIndex,...)
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "arena" */
 
-bool __cdecl16far bldng_textArena(byte bldType,char partyIndex,...)
+bool __cdecl16far bldng_textArena(byte bldType,char partyIndex)
 
 {
   byte bVar1;
@@ -300,7 +300,7 @@ void bldng_selectBuildingType(byte partyIndex)
 
 /* [R6] touches GStrangeTable */
 
-uint16_t __cdecl16far bldng_usesGStrangeTable(byte typeIndex,...)
+uint16_t __cdecl16far bldng_usesGStrangeTable(byte typeIndex)
 
 {
   return CONCAT11((char)((uint)typeIndex * 4 >> 8),
@@ -310,7 +310,7 @@ uint16_t __cdecl16far bldng_usesGStrangeTable(byte typeIndex,...)
 
 
 /* 676c:05c3 */
-uint16_t __cdecl16far bldng_usesRandBelow(byte typeIndex,...)
+uint16_t __cdecl16far bldng_usesRandBelow(byte typeIndex)
 
 {
   uint16_t uVar1;

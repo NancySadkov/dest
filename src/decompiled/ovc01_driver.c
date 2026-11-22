@@ -21,7 +21,7 @@ uint32_t * __cdecl16far mkp(uint32_t *__return_storage_ptr__,uint16_t ofs,uint16
 
 /* 2d63:0016 */
 
-uint16_t __cdecl16far biosVideoCall(uint8_t operation,uint8_t argument,...)
+uint16_t __cdecl16far biosVideoCall(uint8_t operation,uint8_t argument)
 
 {
   code *pcVar1;
@@ -167,7 +167,7 @@ lbm_combine_bitplanes(far_t src,far_t dst,uint16_t npixels,uint8_t nplanes,uint1
 /* Loads big-endian 32bit integer into DX_AX pair
    NOTE: the function has a bug (high order bytes are swapped) */
 
-uint32_t * __cdecl16far be4(uint32_t *__return_storage_ptr__,uint32_t be,...)
+uint32_t * __cdecl16far be4(uint32_t *__return_storage_ptr__,uint32_t be)
 
 {
   return (uint32_t *)CONCAT11((undefined1)be,(*(uint8_t *)((uint8_t *)&(be) + 1)));
@@ -179,7 +179,7 @@ uint32_t * __cdecl16far be4(uint32_t *__return_storage_ptr__,uint32_t be,...)
 
 /* Flips bytes in a 16bt word */
 
-uint16_t __cdecl16far be2(uint16_t w,...)
+uint16_t __cdecl16far be2(uint16_t w)
 
 {
   return CONCAT11((undefined1)w,(*(uint8_t *)((uint8_t *)&(w) + 1)));
@@ -191,7 +191,7 @@ uint16_t __cdecl16far be2(uint16_t w,...)
 
 /* [R7] body shape: compute */
 
-char __cdecl16far driver_compute1(char cornerA,byte cornerB,char cornerC,...)
+char __cdecl16far driver_compute1(char cornerA,byte cornerB,char cornerC)
 
 {
   byte bVar1;
@@ -217,7 +217,7 @@ char __cdecl16far driver_compute1(char cornerA,byte cornerB,char cornerC,...)
 
 /* [R7] body shape: compute */
 
-char __cdecl16far driver_compute2(char cornerA,byte cornerB,char cornerC,...)
+char __cdecl16far driver_compute2(char cornerA,byte cornerB,char cornerC)
 
 {
   byte bVar1;
@@ -262,7 +262,7 @@ uint16_t __cdecl16far miceButton0PressStates(void)
 
 /* 2d63:01a7 */
 
-void __cdecl16far miceSetPosition(uint16_t col,uint16_t row,...)
+void __cdecl16far miceSetPosition(uint16_t col,uint16_t row)
 
 {
   code *pcVar1;
@@ -422,7 +422,7 @@ int __cdecl16far unrle(far_t src,far_t dst,uint16_t len,...)
 
 
 /* 2d63:0241 */
-int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz,...)
+int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz)
 
 {
   char *pcVar1;
@@ -561,7 +561,7 @@ int16_t __cdecl16far countRunLength(char *src,uint16_t avail,uint16_t maxRun)
 
 /* WARNING: Restarted to delay deadcode elimination for space: stack */
 
-int __cdecl16far rle_line(uint8_t *src,uint8_t *dst,uint16_t npixels,...)
+int __cdecl16far rle_line(uint8_t *src,uint8_t *dst,uint16_t npixels)
 
 {
   uint8_t *puVar1;
@@ -661,7 +661,7 @@ L_rle_line_0343:
        }
    } */
 
-int __cdecl16far unrle_mirror(byte *src,byte *dst,int len,...)
+int __cdecl16far unrle_mirror(byte *src,byte *dst,int len)
 
 {
   undefined1 *puVar1;
@@ -718,7 +718,7 @@ int __cdecl16far unrle_mirror(byte *src,byte *dst,int len,...)
 
 /* 2d63:03fc */
 
-int16_t __cdecl16far drawLine2(char *src,char *dst,uint16_t count,...)
+int16_t __cdecl16far drawLine2(char *src,char *dst,uint16_t count)
 
 {
   byte *pbVar1;
@@ -1140,7 +1140,7 @@ return_false:
 
 /* 2d63:075f */
 
-void __cdecl16far midPlaySequence(uint16_t sequence,...)
+void __cdecl16far midPlaySequence(uint16_t sequence)
 
 {
   code *pcVar1;
@@ -1418,7 +1418,7 @@ uint8_t __cdecl16far vda_query(void)
 
 /* ORs a mask into every word of a rectangle of the map-flag array (row stride 0x128 bytes). */
 
-void __cdecl16far driver_setMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int y2,uint mask,...)
+void __cdecl16far driver_setMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int y2,uint mask)
 
 {
   int iVar1;

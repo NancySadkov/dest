@@ -9,7 +9,7 @@
 
 /* 6ffe:0000 */
 
-far_t * __cdecl16far stshAllocStub(far_t *__return_storage_ptr__,...)
+far_t * __cdecl16far stshAllocStub(far_t *__return_storage_ptr__)
 
 {
   uint16_t uVar1;
@@ -78,7 +78,7 @@ void __cdecl16far stshTR_S_stubify0(int index)
 
 /* 6ffe:01c5 */
 
-void __cdecl16far stshStubifyBld(uint16_t index,...)
+void __cdecl16far stshStubifyBld(uint16_t index)
 
 {
   uint32_t uVar1;

@@ -243,7 +243,7 @@ ovc43_playArchiveFli(far_t gfx,uint16_t paletteOfs,uint16_t paletteSeg,uint8_t d
 /* Plays an archive FLI entry (StshNames[0x184] = strong.fli): opens it, hands the handle to the
    frame loop the palette and frame delay, closes it on exit. */
 
-char __cdecl16far ovc43_playFli(uint16_t fileId,uint16_t paletteOfs,uint16_t paletteSeg,...)
+char __cdecl16far ovc43_playFli(uint16_t fileId,uint16_t paletteOfs,uint16_t paletteSeg)
 
 {
   char cVar1;

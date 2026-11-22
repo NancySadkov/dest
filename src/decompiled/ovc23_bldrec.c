@@ -8,7 +8,7 @@
 
 
 /* 55fe:0000 */
-byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t *agnt,...)
+byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t *agnt)
 
 {
   undefined1 stk_02c2;   /* stack slot 02c2 */
@@ -845,7 +845,7 @@ int __cdecl16far ovc23_usesCornerBR2(int x,int step)
 
 /* [R2] string "build\\thfres01.lbm" */
 
-void __cdecl16far ovc23_textBuildThfres01Lbm(far_t dst,...)
+void __cdecl16far ovc23_textBuildThfres01Lbm(far_t dst)
 
 {
   uint16_t play_id;
@@ -950,7 +950,7 @@ void __cdecl16far ovc23_usesGfxRndSeed2(int x,int y)
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
 
-uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,...)
+uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
 
 {
   undefined1 stk_8d06;   /* stack slot 8d06 */
@@ -2203,7 +2203,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
 
 /* Rebuilds the four direction bits of a map cell from its neighbour tests. */
 
-void __cdecl16far ovc23_rebuildDirectionFlags(int x,int y,...)
+void __cdecl16far ovc23_rebuildDirectionFlags(int x,int y)
 
 {
   uint *puVar1;
@@ -2236,7 +2236,7 @@ void __cdecl16far ovc23_rebuildDirectionFlags(int x,int y,...)
 
 /* Places a building of the given bldType/unitType at (x,y). */
 
-void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType,...)
+void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
 
 {
   byte *pbVar1;
@@ -2396,7 +2396,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType,
 /* Removes a record from the 0x12-stride table at 0x21f2, compacts the tail and decrements
    GRecordCount. */
 
-void __cdecl16far ovc23_removeRecord(int recordIndex,...)
+void __cdecl16far ovc23_removeRecord(int recordIndex)
 
 {
   uint16_t unaff_BP;
@@ -3030,7 +3030,7 @@ void __cdecl16far OVC23_55fe_29a2_entry(void)
 
 /* [R7] body shape: compute */
 
-uint __cdecl16far ovc23_compute1(int x,int y,byte bldType,uint8_t unitType,...)
+uint __cdecl16far ovc23_compute1(int x,int y,byte bldType,uint8_t unitType)
 
 {
   char cVar1;
@@ -3105,7 +3105,7 @@ uint __cdecl16far ovc23_compute1(int x,int y,byte bldType,uint8_t unitType,...)
 /* Scans four columns from alignUp4(x) for a cell with clear low flag bits and returns its x, else
    -1. */
 
-int __cdecl16far ovc23_findClearColumn(int x,int y,...)
+int __cdecl16far ovc23_findClearColumn(int x,int y)
 
 {
   uint uVar1;
@@ -3129,7 +3129,7 @@ int __cdecl16far ovc23_findClearColumn(int x,int y,...)
 
 /* [R7] body shape: compute */
 
-int __cdecl16far ovc23_compute2(int x,uint16_t y,...)
+int __cdecl16far ovc23_compute2(int x,uint16_t y)
 
 {
   int iVar1;
