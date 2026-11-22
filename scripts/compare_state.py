@@ -314,6 +314,13 @@ def bytes_from(th, init, size):
             esc = {"n": 10, "r": 13, "t": 9, "0": 0, "\\": 92, "'": 39}
             out += bytes([esc.get(ch, ord(ch) if ch else 0)])
             continue
+        m_rel = re.match(r"\(char far \*\)&(\w+?)_2410_([0-9A-Fa-f]{4})\[(\d+)\]",
+                         it)
+        if m_rel:
+            # relocatable far pointer: the file value is (offset, link segment)
+            off = int(m_rel.group(2), 16) + int(m_rel.group(3))
+            out += struct.pack("<HH", off & 0xFFFF, 0x2410)
+            continue
         try:
             v = num(it)
         except ValueError:
