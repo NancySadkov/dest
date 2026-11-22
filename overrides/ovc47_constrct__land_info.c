@@ -1,3 +1,8 @@
+/* land_info - the terrain/land information panel.  Stack locals named from
+   their assignments: unitType (GUnits[].unitType or the terrain byte),
+   tileClass (2/1 select the message branch), again (do/while flag) and
+   segTable (the word array holding DGROUP segment halves).  The body is
+   333 lines and still register-temporary heavy. */
 void __cdecl16far land_info(byte tileOffset,...)
 
 {
@@ -27,11 +32,11 @@ void __cdecl16far land_info(byte tileOffset,...)
   uint8_t text2;
   uint8_t text1;
   uint8_t menuItems;
-  uint16_t auStack_24c [19];
+  uint16_t segTable [19];
   uint8_t msg;
-  char cStack_25;
-  byte bStack_24;
-  char cStack_23;
+  char tileClass;
+  byte unitType;
+  char again;
   uint8_t foundFlag;
   byte bStack_21;
   uint8_t entityIndex;
@@ -61,21 +66,21 @@ void __cdecl16far land_info(byte tileOffset,...)
     tileOffset = 0;
   }
   bStack_21 = 0xff;
-  bStack_24 = 0xff;
+  unitType = 0xff;
   tileX = (GfxRndSeed + (int)(char)tileOffset) - 2;
   uVar2 = ovr_ovc45_usesGfxRndSeed2((int *)&tileX);
   bStack_1d = (byte)uVar2;
   uVar2 = ovr_ovc45_getUnitIndex(tileX,GfxRndSeed2);
   uVar11 = (uint16_t)((ulong)GUnits >> 0x10);
   if (((unit_t *)GUnits)[uVar2].unitType != 0xff) {
-    bStack_24 = ((unit_t *)GUnits)[uVar2].unitType;
+    unitType = ((unit_t *)GUnits)[uVar2].unitType;
   }
   if (*(int *)((char)tileOffset * 2 + -0x6e29) != -1) {
     if (*(char *)(*(int *)((char)tileOffset * 2 + -0x6e29) * 0x12 + 0xc) == '\0') {
       *(undefined1 *)(*(int *)((char)tileOffset * 2 + -0x6e29) * 0x12 + 0xc) = 1;
     }
     bStack_21 = tileOffset;
-    bStack_24 = *(byte *)(*(int *)((uint)tileOffset * 2 + -0x6e29) * 0x12 + 9);
+    unitType = *(byte *)(*(int *)((uint)tileOffset * 2 + -0x6e29) * 0x12 + 9);
   }
   if (((*(uint *)((uint)bStack_1d * 0x27 + 0x121) & 0x80) == 0) &&
      (((unit_t *)GUnits)[uVar2].level < 3)) {
@@ -100,15 +105,15 @@ void __cdecl16far land_info(byte tileOffset,...)
         if (puVar10[uVar2].unitType == 0xff) {
           if (bStack_1d == 0) {
             uVar11 = ovr_ovc45_usesGMapFlags4(tileX,GfxRndSeed2);
-            cStack_25 = (char)uVar11;
+            tileClass = (char)uVar11;
           }
           else {
-            cStack_25 = '\0';
+            tileClass = '\0';
           }
-          if (cStack_25 == '\x02') {
+          if (tileClass == '\x02') {
             strcpy((char *)CONCAT22(unaff_SS,&msg),"Water:");
           }
-          else if (cStack_25 == '\x01') {
+          else if (tileClass == '\x01') {
             strcpy((char *)CONCAT22(unaff_SS,&msg),"Shore:");
           }
           else {
@@ -208,21 +213,21 @@ void __cdecl16far land_info(byte tileOffset,...)
     else {
       bStack_1d = *(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 + 8);
       if (bStack_1d != 0) {
-        auStack_24c[0] = 0x2410;
+        segTable[0] = 0x2410;
         menuItems = 0x7969;
         auStack_14[0] = 1;
       }
       uVar2 = (uint)(bStack_1d != 0);
       if (foundFlag != 0x0) {
-        auStack_24c[uVar2 * 2] = 0x2410;   /* hand fix: this slot holds the DGROUP segment half, exactly as auStack_24c[0] = 0x2410 above; the literal offset Ghidra printed is that same value */
+        segTable[uVar2 * 2] = 0x2410;   /* hand fix: this slot holds the DGROUP segment half, exactly as segTable[0] = 0x2410 above; the literal offset Ghidra printed is that same value */
         *(char **)(&menuItems + uVar2 * 4) = (char *)"Change party";
         auStack_14[uVar2] = 2;
         uVar2 = uVar2 + 1;
       }
-      auStack_24c[uVar2 * 2] = 0x2410;   /* hand fix: this slot holds the DGROUP segment half, exactly as auStack_24c[0] = 0x2410 above; the literal offset Ghidra printed is that same value */
+      segTable[uVar2 * 2] = 0x2410;   /* hand fix: this slot holds the DGROUP segment half, exactly as segTable[0] = 0x2410 above; the literal offset Ghidra printed is that same value */
       *(char **)(&menuItems + uVar2 * 4) = (char *)"Done";
       auStack_14[uVar2] = 3;
-      cStack_23 = '\0';
+      again = '\0';
       do {
         uVar11 = (uint16_t)((ulong)Entities >> 0x10);
         if (bStack_1d == 0) {
@@ -287,7 +292,7 @@ void __cdecl16far land_info(byte tileOffset,...)
           cStack_1b = auStack_14[((uint)puVar7 & 0xff) - 1];
         }
         if (cStack_1b == '\x01') {
-          uStack_8 = auStack_24c[0];
+          uStack_8 = segTable[0];
           menuLabel = menuItems;
           uStack_4 = 0x2410;
           uStack_6 = 0x7a02;
@@ -307,7 +312,7 @@ void __cdecl16far land_info(byte tileOffset,...)
           if (cStack_1b == '\x01') {
             ovr_ovc23_removeRecord(*(int *)((uint)bStack_21 * 2 + -0x6e29));
           }
-          cStack_23 = '\x01';
+          again = '\x01';
         }
         else if (cStack_1b == '\x02') {
           uVar11 = ovr_ovc45_textChoosePartyBuild
@@ -315,13 +320,13 @@ void __cdecl16far land_info(byte tileOffset,...)
                               (int *)&entityIndex);
           cStack_1c = (char)uVar11;
           if (cStack_1c == -1) {
-            cStack_23 = '\x01';
+            again = '\x01';
           }
         }
         else if ((cStack_1b == '\x03') || (cStack_1b == '\0')) {
-          cStack_23 = '\x01';
+          again = '\x01';
         }
-      } while (cStack_23 == '\0');
+      } while (again == '\0');
     }
     if (outFlag != 0x0) {
       ovr_constr_flushDirtyRects();
