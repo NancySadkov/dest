@@ -88,7 +88,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
   uVar2 = alignToSeg(ptr);
   *(uint16_t *)(src.seg + 0x302) = (*(uint16_t *)((uint8_t *)&(buf) + 2));
   *(uint16_t *)(src.seg + 0x300) = uVar2;
-  _fmemset((void *)(ulong)*(uint *)(src.seg + 0x302),64000,unaff_DI);
+  _fmemset(MK_FP(*(uint16_t *)(src.seg + 0x302), *(uint16_t *)(src.seg + 0x300)), 0, 64000);
   uVar2 = *(uint16_t *)(src.seg + 0x302);
   dst_ofs = *(uint16_t *)(src.seg + 0x300);
   if (((((format == LBM_PBM) || (in_stack_00000004 != '\0')) || ((*(uint16_t *)((uint8_t *)&(dst) + 2)) != 0)) ||
