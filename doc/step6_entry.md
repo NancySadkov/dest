@@ -345,3 +345,43 @@ Ladder:
 0x0E after _c0crtinit  fires    <- _c0crtinit returns
 main marker (0x42)     does not <- next stop: the call to main
 ```
+
+## Blocked on the transfer into `main`
+
+The argument vector is solved: a minimal DGROUP argv (`arg0 = "STRONG.EXE"`,
+`arg0` far pointer, terminator) assigned to `__C0argc/__C0argv/__C0environ`
+before the call makes the marker placed immediately before `main(...)` fire
+(`walk {0x0A,0x0C,0x0D,0x0E} -> CODE=32`).  So everything up to the call works,
+including the argv setup.
+
+What does not work is the transfer itself:
+
+* the call is `9A 05 00 44 06` = `lcall 0x644:0005`;
+* `MAIN_SEG` starts at image offset 0x6445 (frame 0x644), so `0x644:5` is
+  exactly `main`'s entry, and the disassembly there is `push bp / mov bp,sp /
+  sub sp,8 / push si / push di / <marker>`;
+* the segment word at image offset 0x91F **is** in the relocation table
+  (`relocated True`), so the DOS loader does add the load segment;
+* nevertheless, patching `main`'s first five bytes with `mov ax,4c21; int 21h`
+  and NOP-ing every earlier marker still hangs - the caller never arrives.
+
+So TLINK encoded this particular cross-segment call in the VROOMM form (the
+`-V` overlay mechanism rewrites calls into overlay-capable segments at startup),
+and the plain DOS relocation we add is not sufficient for it.  All the other
+cross-segment calls that now work (`_TEXT`, `STUBS_SEG`, `_OVRTEXT_`) are
+resident-to-resident; this one targets a segment TLINK treats as overlay-capable
+under `-V`.
+
+Options for the next session:
+
+1. Initialise VROOMM (`__OVRPREPARE`, `OVRUSER` in `_OVRTEXT_`) before `main` so
+   the manager patches the call.  It is itself a cross-segment far call, so it
+   needs the same treatment - but a first call can be hand-patched in the image.
+2. Force `MAIN_SEG` out of the overlay-capable set (e.g. link main.c without
+   `#pragma codeseg` so it lands in `_TEXT`, which is known to work).
+3. Call `main` through a far function pointer built at runtime from the map's
+   segment/offset, bypassing the linker's call encoding.
+
+The rest of the ladder is green: `startx` -> DOS version -> `SaveVectors` ->
+environment scan -> resize -> UMB block -> `INT 1Ah` -> `_setupio` ->
+`_c0crtinit` -> argv -> the `main` call.
