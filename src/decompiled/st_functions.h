@@ -340,7 +340,7 @@ void __cdecl16far uiNotify(char *msg,uint16_t dst,uint16_t arg3);
 uint16_t __cdecl16far alignToSeg(far_t ptr);
 uint16_t __cdecl16far sub_OVC04_0001();
 void __cdecl16far lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,far_t src,stg_tmp_t *dst,int16_t sx,int16_t sy,int16_t w,int16_t h);
-stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_t arg4,uint16_t arg5);
+stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_t arg4,uint16_t arg5);
 void __cdecl16far stExit(int n,...);
 far_t * __cdecl16far stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,uint16_t ex,uint16_t ey,int16_t hdrsz);
 far_t * __cdecl16far stshRleCut(far_t *__return_storage_ptr__,far_t src,int16_t sx,int16_t sy,int16_t ex,int16_t ey,uint16_t arg7,uint16_t arg8,uint16_t arg9);

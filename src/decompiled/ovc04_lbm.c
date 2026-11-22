@@ -208,7 +208,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
 
 
 /* 30e6:0321 */
-stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_t arg4,uint16_t arg5)
+stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_t arg4,uint16_t arg5)
 
 {
   far_t handle;
@@ -236,7 +236,7 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_t ar
   uint16_t unaff_DI;
   uint16_t unaff_SS;
   bool bVar17;
-  stg_tmp_t *dst;
+  stg_tmp_t far *dst;
   uint32_t remain;
   uint32_t cmszB;
   far_t src;
@@ -275,15 +275,13 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_t ar
   uVar3 = IdILBM.lo;
   uVar2 = IdFORM.hi;
   uVar16 = IdFORM.lo;
-  (*(uint16_t *)((uint8_t *)&(dst) + 2)) = (uint16_t)(stg_tmp_t *)IdPBM_.lo;
   fid = ovr_stshOpen(file_id);
   if ((int)fid < 0) {
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0x16);
   }
-  (*(uint16_t *)((uint8_t *)&(dst))) = (uint16_t)(uint32_t)ovr_stshAlloc(0x308);
-  (*(uint16_t *)((uint8_t *)&(remain) + 2)) = (*(uint16_t *)((uint8_t *)&(dst) + 2));
-  _fmemset((void *)ZEXT24((*(uint16_t *)((uint8_t *)&(dst) + 2))),0x308,unaff_DI);
+  dst = ovr_stshAlloc(0x308);
+  _fmemset(dst, 0, 0x308);
   (*(uint16_t *)((uint8_t *)&(remain))) = ovr_stshRead();
   if ((((int)remain == 0 && (*(uint16_t *)((uint8_t *)&(remain) + 2)) == (stg_tmp_t *)0x0) && (tmp.hi == uVar2)) &&
      (tmp.lo == uVar16)) {
@@ -349,7 +347,7 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_t ar
             if (((int)uVar16 < 1) &&
                (((*(uint16_t *)((uint8_t *)&(sz))) = (uint16_t)(uint32_t *)cmszB, (*(uint16_t *)((uint8_t *)&(sz) + 2)) = (*(uint16_t *)((uint8_t *)&(cmszB) + 2)), uVar16 != 0 || (puVar15 <= i)
                 ))) break;
-            ((stg_tmp_t *)dst)->cmap[i] = (uint8_t)((int)(uint)cmap[i] >> 2);
+            ((stg_tmp_t far *)dst)->cmap[i] = (uint8_t)((int)(uint)cmap[i] >> 2);
             i = i + 1;
           }
         }
@@ -367,14 +365,14 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_t ar
               pvVar14 = ovr_stshAlloc((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(chnk_sz) + 2)),(uint32_t *)chnk_sz));
               ovr_stshRead();
               ovr_stshClose(fid);
-              src.seg = (uint16_t)(stg_tmp_t *)dst;
+              src.seg = ST_SEG(dst);
               src.ofs = (uint16_t)puVar15;
               lbm_decode_body(hd.enc,hd.nplanes,hd.mask,(uint8_t)pvVar14,src,
-                              (stg_tmp_t *)CONCAT22(x,(*(uint16_t *)((uint8_t *)&(dst) + 2))),y,w,h,unaff_DI);
+                              (stg_tmp_t far *)dst,y,w,h,unaff_DI);
               handle.seg = (uint16_t)puVar15;
               handle.ofs = (uint16_t)pvVar14;
               ovr_stshFree(handle);
-              return (stg_tmp_t *)dst;
+              return dst;
             }
             break;
           }
@@ -396,14 +394,14 @@ stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_t ar
     }
   }
                     /* free the pixels pointer at the end */
-  if ((&((stg_tmp_t *)dst)->bptr)->ofs != 0 || (((stg_tmp_t *)dst)->bptr).seg != 0) {
-    handle_00.seg = (((stg_tmp_t *)dst)->bptr).seg;
-    handle_00.ofs = (&((stg_tmp_t *)dst)->bptr)->ofs;
+  if ((&((stg_tmp_t far *)dst)->bptr)->ofs != 0 || (((stg_tmp_t far *)dst)->bptr).seg != 0) {
+    handle_00.seg = (((stg_tmp_t far *)dst)->bptr).seg;
+    handle_00.ofs = (&((stg_tmp_t far *)dst)->bptr)->ofs;
     ovr_stshFree(handle_00);
   }
   ovr_stshClose(fid);
-  handle_01.seg = (uint16_t)(*(uint16_t *)((uint8_t *)&(dst) + 2));
-  handle_01.ofs = (uint16_t)(stg_tmp_t *)dst;
+  handle_01.seg = ST_SEG(dst);
+  handle_01.ofs = ST_OFF(dst);
   ovr_stshFree(handle_01);
   printf("Filename %d %s  \r");
   ovr_biosReadKey();
