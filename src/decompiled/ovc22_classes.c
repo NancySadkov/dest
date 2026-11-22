@@ -524,6 +524,11 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
   int16_t resourceTotals [4];
   int16_t animStep;
   uint16_t uStack_28;
+  /* stack temporaries cleared by _fmemset at 5087:05ae / 05f1 / 064f; the
+     recovered declaration list had no name for these offsets */
+  uint16_t uStack_2e;
+  uint16_t uStack_a;
+  uint16_t uStack_42;
   uint16_t uStack_26;
   uint uStack_24;
   int iStack_22;
@@ -556,9 +561,9 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
     cVar14 = (char)unaff_SS;
     uVar65 = (undefined1)((uint)unaff_SS >> 8);
     _fmemset(MK_FP(_SS, &uStack_28), 0, 6);
-    _fmemset((void *)ZEXT24(unaff_SS),6,CONCAT11(uVar68,cVar25));
+    _fmemset(MK_FP(_SS, &uStack_2e), 0, 6);
     _fmemset(MK_FP(GUnitDescriptions[partyIndex].seg, GUnitDescriptions[partyIndex].ofs + 0x9a), 0, 3);
-    _fmemset((void *)ZEXT24(unaff_SS),6,CONCAT11(uVar68,cVar25));
+    _fmemset(MK_FP(_SS, &uStack_a), 0, 6);
     if (Difficulty == '\x01') {
       uStack_38 = 4000;
     }
@@ -572,7 +577,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
     resourceTotals[0] = 0;
     uStack_34 = 0;
     iStack_3c = 0;
-    _fmemset((void *)ZEXT24(unaff_SS),8,CONCAT11(uVar68,cVar25));
+    _fmemset(MK_FP(_SS, &uStack_42), 0, 8);
     uStack_14 =(uint16_t)( (far_t far *)&GUnitDescriptions[3].ofs);
     while (uStack_14 = (far_t far *)((int)uStack_14 + 1), uStack_14 < GUnitCount) {
       pbVar2 = &((unit_t *)GUnits)[(int)uStack_14].flags;
