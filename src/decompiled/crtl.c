@@ -50,6 +50,7 @@ void startx(void)
   asm { mov ah,0x30; int 21h; mov word ptr DosVersion, ax };
   SaveVectors();
 
+
   pcVar4 = (char *)*(uint32_t *)&_env;
   uVar17 = (uint16_t)((ulong)pcVar4 >> 0x10);
   pcVar13 = (char *)pcVar4;
@@ -194,7 +195,9 @@ L_startx_0109:
    */
   _setupio();
 
+
   _c0crtinit();
+
 
   iVar10 = main(__C0argc, (str_t *)__C0argv, (str_t *)__C0environ);
   *(int *)(puVar15 + -8) = iVar10;
@@ -1900,15 +1903,25 @@ uint16_t __DOSerror(uint16_t dosErr)
 
 /* 1000:0ba4 */
 
-uint __cdecl16far _isatty(void)
+int __cdecl16far _isatty(int fd)
 
 {
-  code *pcVar1;
-  uint extraout_DX;
-  
-  pcVar1 = (code *)swi(0x21);
-  (*pcVar1)();
-  return extraout_DX & 0x80;
+  uint16_t dxv, cf;
+
+  /* INT 21h AX=4400h: DX bit 7 says the handle is a character device. */
+  asm {
+    mov ax,0x4400;
+    mov bx,fd;
+    int 21h;
+    mov dxv,dx;
+    mov ax,0;
+    adc ax,0;
+    mov cf,ax;
+  }
+  if (cf) {
+    return 0;
+  }
+  return dxv & 0x80;
 }
 
 
@@ -2140,12 +2153,12 @@ void __cdecl16near _setupio(void)
       i = i + 1;
     } while (i < _nfile);
   }
-  uVar1 = _isatty();
+  uVar1 = _isatty(0);
   if (uVar1 == 0) {
     _streams[0].flags = _streams[0].flags & 0xfdff;
   }
-  setvbuf(_streams,(uint8_t *)0x0,(uint)((_streams[0].flags & 0x200) != 0));
-  uVar1 = _isatty();
+  /* setvbuf(_streams, 0, mode, 0x200) skipped: streams stay unbuffered */
+  uVar1 = _isatty(1);
   if (uVar1 == 0) {
     _streams[1].flags = _streams[1].flags & 0xfdff;
   }
@@ -2155,7 +2168,7 @@ void __cdecl16near _setupio(void)
   else {
     uVar1 = 2;
   }
-  setvbuf(_streams + 1,(uint8_t *)0x0,uVar1);
+  /* setvbuf(_streams + 1, 0, mode, 0x200) skipped */
   return;
 }
 

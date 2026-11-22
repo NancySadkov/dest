@@ -288,3 +288,30 @@ What was fixed, and why:
 
 Next blocker: `_setupio()` calls `_isatty()` and `setvbuf()` from CM.LIB - the
 same class of far call that made `int86` hang - so it never returns.
+
+## Done: `_setupio()` returns; `_c0crtinit` is the next stop
+
+Two things kept `_setupio` from returning:
+
+* `_isatty` was recovered as `swi(0x21); return extraout_DX & 0x80` - a bare
+  interrupt with garbage `AX/BX`.  It is now `INT 21h AX=4400h, BX=fd` with the
+  carry captured, and takes the fd the disassembly passes (`_isatty(0)`,
+  `_isatty(1)` in `_setupio`).
+* `setvbuf` (recovered at 1000:2b24) calls `malloc`, `fseek` and `farfree` -
+  the same unrelocated far-call class - and `_setupio` was calling it with three
+  arguments while the recovered body reads a fourth (the size at
+  `in_stack_0000000e`).  Both calls in `_setupio` are skipped for now: the
+  streams keep the DGROUP-initialised unbuffered state (`buffer = &hold`,
+  `bsize = 0`), which is functionally equivalent, only slower.
+
+Ladder after the change:
+
+```
+0x0C before _setupio   fires
+0x0D after _setupio    fires      <- _setupio returns
+0x0E after _c0crtinit  does not   <- next blocker
+```
+
+`_c0crtinit` (1000:14d7) is `INT 10h AH=0Fh` -> `__crtinit` -> `INT 10h AH=08h`
+through `_VideoInt`, whose recovered body issues nine `swi(0x10)` calls with no
+register setup.  That is the next set of call sites to give registers to.

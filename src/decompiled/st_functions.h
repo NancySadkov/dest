@@ -67,7 +67,7 @@ byte __cdecl16far sub1_at__at_(void);
 int __cdecl16far N_PSBP_at_(void);
 uint16_t __IOerror(int dosErr);
 uint16_t __DOSerror(uint16_t dosErr);
-uint __cdecl16far _isatty(void);
+int __cdecl16far _isatty(int fd);
 char * __cdecl16near __LONGTOA(char alphaBase,char signFlag,uint16_t radix,char *buf,long value);
 void __UTOA(uint16_t buf,uint16_t valueHi,uint16_t valueLo);
 void __cdecl16far lseek(int handle,long offset,int whence);
