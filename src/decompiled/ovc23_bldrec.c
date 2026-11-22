@@ -81,12 +81,12 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
                 & 0x3000U;
   }
   cursorRecordFound = '\0';
-  _fmemset((void *)&GUnitDescriptions[5].ofs,8,unaff_DI);
+  _fmemset(MK_FP(_DS, 0x91d7), 0xFF, 8);
   uVar29 = 0;
   uVar30 = 0x10;
   uVar27 = 0x5e;
   uVar28 = 0x60;
-  _fmemset((void *)0x2410,4,unaff_DI);
+  _fmemset(MK_FP(_DS, 0x90ea), 0, 4);
   for (uStack_c = 0; uStack_c < GRecordCount; uStack_c = uStack_c + 1) {
     in_DX = 0x2410;
     if ((*(int *)(uStack_c * 0x12 + 4) == GfxRndSeed2) &&
@@ -3199,7 +3199,7 @@ uint16_t __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int re
   
   uVar3 = (uint)amount;
   uStack_8 = amount;
-  _fmemset((void *)(ulong)unaff_SS,3,unaff_DI);
+  _fmemset(MK_FP(_SS, &uStack_4), 0, 3);
   for (uVar5 = 0; uVar5 < GRecordCount; uVar5 = uVar5 + 1) {
     if (*(byte *)(uVar5 * 0x12 + 9) == partyIndex) {
       if ((*(byte *)(uVar5 * 0x12 + 0xd) & 4) != 0) {
