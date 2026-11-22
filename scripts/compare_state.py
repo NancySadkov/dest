@@ -58,39 +58,106 @@ def decode_c(s):
     return bytes(out)
 
 
-# ---- our declarations: name -> (bytes, declared_size) -----------------------
+# ---- our declarations: name -> bytes ---------------------------------------
+WIDTH = {
+    "char": 1, "byte": 1, "undefined": 1, "undefined1": 1, "uint8_t": 1,
+    "int8_t": 1, "bool": 1,
+    "uint16_t": 2, "int16_t": 2, "DW": 2, "word": 2, "uint": 2, "int": 2,
+    "uint32_t": 4, "int32_t": 4, "long": 4, "ulong": 4,
+    "far_t": 4, "brect_t": 10, "dosver_t": 2,
+}
+
+DECL = re.compile(r"^([A-Za-z_][\w ]*?)\s+([A-Za-z_]\w*)\s*(?:\[(\d*)\])?\s*=\s*([^;]*);",
+                  re.M | re.S)
+
+
+def num(tok):
+    tok = tok.strip()
+    return int(tok, 0)
+
+
+def bytes_from(th, init, size):
+    """Initialiser text -> bytes for a declaration of type `th`."""
+    init = init.strip()
+    if init.startswith('"') or init.startswith('L"'):
+        chunks = re.findall(r'"((?:[^"\\]|\\.)*)"', init)
+        data = b"".join(decode_c(c) for c in chunks) + b"\0"
+        size = size if size else len(data)
+        return data[:size] + b"\0" * max(0, size - len(data))
+    if not init.startswith("{"):
+        v = num(init)
+        w = WIDTH.get(th, 2)
+        return struct.pack("<I", v & 0xFFFFFFFF)[:w] if w <= 4 else b""
+    body = init.strip()[1:-1].strip()
+    items = []
+    depth = 0
+    cur = ""
+    for ch in body:
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+        if ch == "," and depth == 0:
+            items.append(cur)
+            cur = ""
+        else:
+            cur += ch
+    if cur.strip():
+        items.append(cur)
+    out = bytearray()
+    for it in items:
+        it = it.strip()
+        if not it:
+            continue
+        if it.startswith("{"):
+            for v in re.findall(r"0x[0-9A-Fa-f]+|\d+", it):
+                out += struct.pack("<H", int(v, 0) & 0xFFFF)
+            continue
+        if it.startswith('"'):
+            out += decode_c(it[1:-1]) + b"\0"
+            continue
+        if it.startswith("'"):
+            ch = it[1:-1]
+            esc = {"n": 10, "r": 13, "t": 9, "0": 0, "\\": 92, "'": 39}
+            out += bytes([esc.get(ch, ord(ch) if ch else 0)])
+            continue
+        try:
+            v = num(it)
+        except ValueError:
+            continue
+        w = WIDTH.get(th, 1)
+        if th == "far_t":
+            out += struct.pack("<H", v & 0xFFFF)
+        elif w == 1:
+            out += bytes([v & 0xFF])
+        elif w == 2:
+            out += struct.pack("<H", v & 0xFFFF)
+        else:
+            out += struct.pack("<I", v & 0xFFFFFFFF)
+    if size:
+        out = out[:size] + b"\0" * max(0, size - len(out))
+    return bytes(out)
+
+
 ours = {}
 for path in sorted(glob.glob("src/decompiled/st_globals*.c")):
     t = io.open(path, encoding="latin-1").read()
-    for m in re.finditer(r'^char ([_0-9A-Za-z]+)\[(\d*)\] = "((?:[^"\\]|\\.)*)";', t, re.M):
-        size = int(m.group(2)) if m.group(2) else None
-        data = decode_c(m.group(3)) + b"\0"
-        if size is None:
-            size = len(data)
-        data = data[:size] + b"\0" * max(0, size - len(data))
-        ours[m.group(1)] = (data, size)
-    for m in re.finditer(r"^uint8_t ([_0-9A-Za-z]+)\[(\d+)\] = \{ ([^}]*) \};", t, re.M):
-        vals = [int(x, 16) for x in re.findall(r"0x([0-9A-Fa-f]{1,2})", m.group(3))]
-        size = int(m.group(2))
-        data = bytes(vals)[:size] + b"\0" * max(0, size - len(vals))
-        ours[m.group(1)] = (data, size)
-    # char arrays written as element lists (non-terminated items: all spaces)
-    for m in re.finditer(r"^char ([_0-9A-Za-z]+)\[(\d+)\] = \{ ([^}]*) \};", t, re.M):
-        size = int(m.group(2))
-        items = re.findall(r"'(\\?.)'|(0x[0-9A-Fa-f]{1,2})|(\d+)", m.group(3))
-        vals = []
-        for ch, hx, dec in items:
-            if hx:
-                vals.append(int(hx, 16))
-            elif dec:
-                vals.append(int(dec))
-            elif ch:
-                esc = {"n": 10, "r": 13, "t": 9, "0": 0, "\\": 92, "'": 39}
-                vals.append(esc.get(ch, ord(ch)))
-        data = bytes(vals)[:size] + b"\0" * max(0, size - len(vals))
-        ours[m.group(1)] = (data, size)
-    for m in re.finditer(r"^(\w[\w \*]*?) ([_0-9A-Za-z]+) = (0x[0-9A-Fa-f]+|\d+);", t, re.M):
-        ours.setdefault(m.group(2), (None, None))   # scalar, handled below
+    for m in DECL.finditer(t):
+        th = m.group(1).strip().split()[-1]
+        name = m.group(2)
+        count = m.group(3)
+        init = m.group(4).strip()
+        if th not in WIDTH:
+            continue
+        w = WIDTH[th]
+        size = int(count) * w if count else None
+        if init.startswith("{") and th in ("far_t", "brect_t") and count:
+            size = int(count) * w
+        data = bytes_from(th, init, size)
+        if data:
+            ours[name] = data
+
+scalars = {}
 
 # every declaration per name, in source order (duplicate symbols share a name)
 occ = {}
@@ -118,8 +185,21 @@ rows = list(csv.DictReader(io.open("audit/dgroup_data.csv", encoding="utf-8",
 
 seen = {}
 same = differ = missing = 0
+renamed = 0
+startup = 0
 diffs = []
 missing_list = []
+
+by_bytes = {}
+for _n, _d in ours.items():
+    by_bytes.setdefault(_d, _n)
+
+STARTUP = re.compile(
+    r"^(_DATA|__C0|__c0|_psp|_env|errno|DosVersion|__brklvl|_brklvl|_heapbase|"
+    r"_heaptop|_StartTime|GSTARTX|__DOSERROR|_streams|_ctype|_fmode|_nfile|"
+    r"_openfd|_exitbuf|_exitfopen|_exitopen|_atexit|_realcvt|_video|_doserrno|"
+    r"__Init|__CleanUp|CtrlBreak|_osmajor|_osminor|_version|__argc|__argv|"
+    r"__stklen|__brkbuf)", re.I)
 for row in rows:
     off = int(row["offset"], 16)
     name = row["name"]
@@ -159,11 +239,18 @@ for row in rows:
             differ += 1
             diffs.append((off, name, length, want, got))
         continue
-    if decl is None or decl[0] is None:
+    if decl is None:
+        if want in by_bytes:
+            renamed += 1
+            same += 1
+            continue
+        if STARTUP.match(name):
+            startup += 1
+            continue
         missing += 1
         missing_list.append((off, name, length))
         continue
-    got = decl[0]
+    got = decl
     if got == want or got[:len(want)] == want:
         same += 1
     else:
@@ -173,7 +260,9 @@ for row in rows:
 print("original symbols:   %d" % len(rows))
 print("identical state:    %d" % same)
 print("DIFFERENT state:    %d" % differ)
-print("not declared:       %d" % missing)
+print("recovered (renamed):%d" % renamed)
+print("startup-owned:      %d" % startup)
+print("genuinely missing:  %d" % missing)
 print("\nstate differences (first %d):" % MAX)
 for off, name, length, want, got in diffs[:MAX]:
     print("  %04x %-34s len=%-3d want=%-20s got=%s"

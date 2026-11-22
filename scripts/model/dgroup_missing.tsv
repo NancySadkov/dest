@@ -1,0 +1,17 @@
+# DGROUP symbols whose state could not be matched: they exist in the tree
+# but with different bytes (big tables rebuilt from other symbols) or are the
+# startup's own data.
+# offset	name	length
+0958	AgntAnms	4170
+26B7	GMenuStrings	32
+26D7	GYesNo	8
+4234	BldInstances	900
+4734	s_your_stronghold_is_too_far_away	33
+4A26	GStructures	180
+5906	s_intelligence_reports_s_attacking	38
+6AC8	s_my_s_we_in_this_neighborhood_are_doing_well	103
+8916	InitStart	24
+892E	InitEnd	6
+908A	StshSprites	4
+908E	Entities	2
+9520	FBOV_header	16

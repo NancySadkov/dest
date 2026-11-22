@@ -1185,6 +1185,8 @@ char s_year_d_s[] = "Year %d. %s";
 char s_year_d_this_leader_s[] = "Year %d. This leader %s";
 char s_next_leader[] = "Next Leader";
 char s_auto_build[] = "Auto-build    " "\x7f";
+/* 50c1: the short twin of s_auto_build (0x50b1) */
+char s_auto_build_2410_50c1[] = "Auto-build";
 char s_census[] = "Census";
 char s_property[] = "Property";
 char s_total_census[] = "Total Census";
@@ -1426,7 +1428,7 @@ char s_plate_mail_2410_6296[] = "plate mail";
 char s_plate_and_shield_2410_62a1[] = "plate and shield";
 char s_suit_armor_2410_62c6[] = "suit armor";
 char s_exp_ld[] = "Exp %ld \r";
-char s__2410_62db[] = { 0x7F };
+char s__2410_62db[2] = { 0x7F, 0x00 };
 char s_Ready_2410_62dd[] = "Ready";
 char s_Home_2410_62e3[] = "Home";
 char s_Unassigned_2410_62e8[] = "Unassigned";
