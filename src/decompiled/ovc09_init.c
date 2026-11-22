@@ -981,21 +981,16 @@ switchD_3000_4a6e_caseD_3:
               iVar15 = ovr_constr_usesSmoothPrev(uStack_24);
               uStack_10 = iVar15 / 3;
               (*(uint8_t *)((uint8_t *)&(gfx.seg))) =
-                   (char)*(undefined2 *)
-                          ((char *)0x28ed6 + uStack_e * 0xc);
-              gfx.ofs = *(undefined2 *)
-                         ((char *)0x28ed4 + uStack_e * 0xc);
+                   (char)*(undefined2 *)((char *)0x28ed6 + uStack_e * 0xc);
+              gfx.ofs = *(undefined2 *)(undefined2 *)((char *)0x28ed4 + uStack_e * 0xc);
               (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) =
-                   (char)((uint)*(undefined2 *)
-                                 ((char *)0x28ed6 + uStack_e * 0xc) >> 8);
+                   (char)((uint)*(undefined2 *)(undefined2 *)((char *)0x28ed6 + uStack_e * 0xc) >> 8);
               ovr_blit_usesBlitGfxN
                         (gfx,((uint16_t *)SquareLeftX)[uVar7],rowBandOrigin[0] - uStack_10,6);
             }
             if ((*(byte *)((uint8_t *)&BuildingTypes[uStack_e] + 16) & 1) != 0) {
-              gfx_00.seg = *(uint16_t *)
-                            ((char *)0x28eda + uStack_e * 0xc);
-              gfx_00.ofs = *(uint16_t *)
-                            ((char *)0x28ed8 + uStack_e * 0xc);
+              gfx_00.seg = *(uint16_t *)(undefined2 *)((char *)0x28eda + uStack_e * 0xc);
+              gfx_00.ofs = *(uint16_t *)(undefined2 *)((char *)0x28ed8 + uStack_e * 0xc);
               ovr_blitGfxRect(gfx_00,((uint16_t *)SquareLeftX)[uVar7]);
             }
           }

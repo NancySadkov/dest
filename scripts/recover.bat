@@ -15,6 +15,10 @@ echo === Exporting recovered source tree ===
 call "%GHIDRA%" "%PROJECT%" st -process st.exe -noanalysis -scriptPath "%SCRIPTDIR%" -postScript ExportRecovered.java "%OUTDIR%"
 if errorlevel 1 goto :eof
 
+echo === Removing stale globals split parts ===
+python "%SCRIPTDIR%\..\clean_globals_parts.py" "%OUTDIR%"
+if errorlevel 1 goto :eof
+
 echo === Recovering global-data initialisers ===
 call "%GHIDRA%" "%PROJECT%" st -process st.exe -noanalysis -scriptPath "%SCRIPTDIR%" -postScript ExportData.java "%OUTDIR%\st_globals.c"
 if errorlevel 1 goto :eof

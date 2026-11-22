@@ -215,10 +215,6 @@ int __cdecl16far bldng_compute2(uint8_t buildType,char leader)
 
 
 /* 676c:03dd */
-
-/* WARNING: Unknown calling convention -- yet parameter storage is locked */
-/* Lets the player pick the building type to place and stores it in the sheet's buildType. */
-
 void bldng_selectBuildingType(byte partyIndex)
 
 {
@@ -297,7 +293,6 @@ void bldng_selectBuildingType(byte partyIndex)
   }
   return;
 }
-
 
 
 /* 676c:05ac */

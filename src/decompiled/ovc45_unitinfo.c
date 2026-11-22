@@ -921,7 +921,7 @@ ovc45_buildPlacementMessage
     uStack_f = 0;
     bStack_11 = *(byte *)((int)Entities + param_3 * 0x37 + 0x1a);
     uVar9 = ovr_bldng_usesGStrangeTable
-                      (((char_sheet_t *)(((uint)bStack_11 << 2)))->buildType);
+                      (((char_sheet_t *)(((uint)bStack_11 << 2)))->buildType[0]);
     bStack_12 = (byte)uVar9;
     iVar10 = (uVar9 & 0xff) * 0x27;
     uVar23 = SUB21(unaff_SS,0);
