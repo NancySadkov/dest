@@ -1,0 +1,2580 @@
+offset,length,type,pointer,components,repr,refs
+0000,4,undefined4,0,0,00000000h,26
+0004,43,byte[43],0,43,,3
+002F,14,string,0,0,"Divide error\r\n",0
+003D,30,string,0,0,"Abnormal program termination\r\n",0
+005B,16,far_t[4],0,4,,3
+006B,2,undefined2,0,0,0000h,2
+006D,2,undefined2,0,0,0000h,2
+006F,2,undefined2,0,0,0000h,2
+0071,2,undefined2,0,0,0000h,1
+0073,2,undefined2,0,0,0000h,1
+0075,2,undefined2,0,0,0000h,3
+0077,2,undefined2,0,0,0000h,4
+0079,2,undefined2,0,0,0000h,1
+007B,2,undefined2,0,0,0000h,11
+007D,2,dosver_t,0,2,,3
+007F,2,int,0,0,0h,3
+0081,4,uint32_t,0,0,0h,1
+0085,2,uint16_t,0,0,949Ah,0
+0087,4,far_t,0,2,,2
+008B,4,far_t,0,2,,5
+008F,4,far_t,0,2,,4
+0093,1,undefined,0,0,00h,0
+0094,1,string,0,0,"",1
+0095,5,string,0,0,"%d \r",1
+009A,46,string,0,0,"Sorry, you may not pass time during a battle.",0
+00C8,16,string,0,0,"Time passes...",0
+00D8,1,undefined1,0,0,00h,2
+00D9,1,undefined1,0,0,00h,6
+00DA,1,undefined,0,0,86h,0
+00DB,1,undefined,0,0,00h,0
+00DC,1,undefined,0,0,93h,0
+00DD,1,undefined,0,0,00h,0
+00DE,1,undefined,0,0,A0h,0
+00DF,1,undefined,0,0,00h,0
+00E0,1,undefined,0,0,ADh,0
+00E1,1,undefined,0,0,00h,0
+00E2,1,undefined,0,0,BAh,0
+00E3,1,undefined,0,0,00h,0
+00E4,2,undefined2,0,0,FFFFh,75
+00E6,2,undefined2,0,0,FFFFh,75
+00E8,2,undefined2,0,0,0000h,25
+00EA,1,undefined1,0,0,00h,5
+00EB,112,far_t[28],0,28,,0
+015B,4,far_t,0,2,,53
+015F,1,undefined1,0,0,00h,16
+0160,1,undefined1,0,0,00h,3
+0161,1,undefined1,0,0,00h,3
+0162,1,undefined,0,0,00h,0
+0163,1,undefined1,0,0,00h,6
+0164,1,undefined1,0,0,00h,3
+0165,1,undefined1,0,0,00h,3
+0166,1,undefined1,0,0,00h,7
+0167,2,undefined2,0,0,0000h,6
+0169,8,string,0,0,"Fighter",1
+0171,5,string,0,0,"Mage",0
+0176,7,string,0,0,"Cleric",0
+017D,6,string,0,0,"Thief",1
+0183,6,string,0,0,"Dwarf",0
+0189,4,string,0,0,"Elf",0
+018D,9,string,0,0,"Halfling",0
+0196,9,string,0,0,"fighters",0
+019F,6,string,0,0,"mages",0
+01A5,8,string,0,0,"clerics",0
+01AD,8,string,0,0,"thieves",0
+01B5,8,string,0,0,"dwarves",0
+01BD,6,string,0,0,"elves",0
+01C3,10,string,0,0,"halflings",0
+01CD,8,string,0,0,"fighter",0
+01D5,5,string,0,0,"mage",0
+01DA,7,string,0,0,"cleric",0
+01E1,6,string,0,0,"thief",0
+01E7,6,string,0,0,"dwarf",0
+01ED,4,string,0,0,"elf",0
+01F1,9,string,0,0,"halfling",0
+01FA,13,string,0,0,"fighter unit",1
+0207,10,string,0,0,"mage unit",1
+0211,14,string,0,0,"clerical unit",0
+021F,11,string,0,0,"thief unit",1
+022A,11,string,0,0,"dwarf unit",1
+0235,9,string,0,0,"elf unit",1
+023E,14,string,0,0,"halfling unit",1
+024C,5,string,0,0,"%d \r",0
+0251,41,string,0,0,"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",0
+027A,12,string,0,0,"Archduchess",0
+0286,17,string,0,0,"The seed is %lx.",0
+0297,62,string,0,0,"Increase by %d levels.  Click on character for higher levels.",0
+02D5,9,string,0,0,"Movement",0
+02DE,8,string,0,0,"Recruit",0
+02E6,6,string,0,0,"Train",0
+02EC,6,string,0,0,"Build",0
+02F2,1,undefined1,0,0,00h,12
+02F3,1,undefined1,0,0,03h,24
+02F4,1,undefined1,0,0,0Fh,2
+02F5,13,string,0,0,"Error 4 %d \r",1
+0302,4,DW,0,2,,1
+0306,4,DW,0,2,,1
+030A,4,DW,0,2,,1
+030E,4,DW,0,2,,1
+0312,4,DW,0,2,,1
+0316,4,DW,0,2,,1
+031A,17,string,0,0,"N %d W %u s %u \r",0
+032B,18,string,0,0,"Filename %d %s  \r",1
+033D,1,undefined,0,0,00h,0
+033E,20,far_t[5],0,5,,1
+0352,41,string,0,0,"Bad 'game.cfg' file. Please reconfigure.",1
+037B,24,string,0,0,"Cannot find sound card.",1
+0393,24,string,0,0,"Cannot find music card.",1
+03AB,55,string,0,0,"Cannot create configuration file.  Stronghold aborted.",1
+03E2,13,string,0,0,"Mouse error.",1
+03EF,12,string,0,0,"\n\rError %d\n",1
+03FB,4,string,0,0,"%s\n",0
+03FF,45,string,0,0,"Error %d %d.  (Give Cathryn BOTH numbers.)\n",1
+042C,2,uint16_t,0,0,0h,105
+042E,2,uint16_t,0,0,0h,86
+0430,2,undefined2,0,0,A000h,51
+0432,2,uint16_t,0,0,1h,9
+0434,4,far_t,0,2,,24
+0438,1,bool,0,0,FALSE,74
+0439,1,undefined1,0,0,00h,11
+043A,1,bool,0,0,FALSE,6
+043B,2,undefined2,0,0,1100h,2
+043D,2,uint16_t,0,0,1400h,3
+043F,1,undefined,0,0,00h,0
+0440,50,brect_t[5],0,5,,2
+0472,1,undefined,0,0,01h,0
+0473,1,undefined,0,0,00h,0
+0474,1,undefined,0,0,01h,0
+0475,1,undefined,0,0,01h,0
+0476,1,undefined,0,0,21h    !,0
+0477,1,undefined,0,0,08h,0
+0478,1,undefined,0,0,11h,0
+0479,1,undefined,0,0,11h,0
+047A,1,undefined,0,0,49h    I,0
+047B,1,undefined,0,0,22h    ",0
+047C,1,undefined,0,0,45h    E,0
+047D,1,undefined,0,0,45h    E,0
+047E,1,undefined,0,0,55h    U,0
+047F,1,undefined,0,0,2Ah    *,0
+0480,1,undefined,0,0,55h    U,0
+0481,1,undefined,0,0,55h    U,0
+0482,1,undefined,0,0,D5h,0
+0483,1,undefined,0,0,AAh,0
+0484,1,undefined,0,0,B5h,0
+0485,1,undefined,0,0,B5h,0
+0486,1,undefined,0,0,6Dh    m,0
+0487,1,undefined,0,0,DBh,0
+0488,1,undefined,0,0,DDh,0
+0489,1,undefined,0,0,DDh,0
+048A,1,undefined,0,0,F7h,0
+048B,1,undefined,0,0,DEh,0
+048C,1,undefined,0,0,EFh,0
+048D,1,undefined,0,0,EFh,0
+048E,1,undefined,0,0,FFh,0
+048F,1,undefined,0,0,FEh,0
+0490,1,undefined,0,0,FFh,0
+0491,1,undefined,0,0,FFh,0
+0492,12,string,0,0,"error(27) \r",1
+049E,26,string,0,0,"y1 %d yn %d y3 %d yx %d ",0
+04B8,2,undefined2,0,0,0000h,2
+04BA,1,undefined,0,0,00h,0
+04BB,1,undefined,0,0,00h,0
+04BC,1,undefined,0,0,00h,0
+04BD,1,undefined,0,0,00h,0
+04BE,1,undefined,0,0,0Ah,0
+04BF,1,undefined,0,0,00h,0
+04C0,1,undefined,0,0,10h,0
+04C1,1,undefined,0,0,00h,0
+04C2,1,undefined,0,0,0Dh,0
+04C3,1,undefined,0,0,00h,0
+04C4,1,undefined,0,0,0Ch,0
+04C5,1,undefined,0,0,00h,0
+04C6,1,undefined,0,0,0Fh,0
+04C7,1,undefined,0,0,00h,0
+04C8,1,undefined,0,0,10h,0
+04C9,1,undefined,0,0,00h,0
+04CA,1,undefined,0,0,07h,0
+04CB,1,undefined,0,0,00h,0
+04CC,1,undefined,0,0,0Ah,0
+04CD,1,undefined,0,0,00h,0
+04CE,8,int16_t[4],0,4,,3
+04D6,8,int16_t[4],0,4,,3
+04DE,2,undefined2,0,0,0000h,18
+04E0,1,undefined1,0,0,00h,7
+04E1,2,string,0,0,"\r",1
+04E3,1,undefined,0,0,00h,0
+04E4,2,int,0,0,FFFFh,9
+04E6,2,undefined2,0,0,0A0Dh,1
+04E8,1,undefined,0,0,10h,0
+04E9,1,undefined,0,0,0Ch,0
+04EA,1,undefined,0,0,06h,0
+04EB,1,undefined,0,0,04h,0
+04EC,1,undefined,0,0,02h,0
+04ED,1,undefined,0,0,01h,0
+04EE,1,undefined,0,0,01h,0
+04EF,1,undefined,0,0,01h,0
+04F0,1,undefined,0,0,01h,0
+04F1,1,undefined,0,0,01h,0
+04F2,1,undefined,0,0,03h,0
+04F3,1,undefined,0,0,06h,0
+04F4,1,undefined,0,0,00h,0
+04F5,1,undefined,0,0,01h,0
+04F6,1,undefined,0,0,05h,0
+04F7,1,undefined,0,0,03h,0
+04F8,1,undefined,0,0,01h,0
+04F9,1,undefined,0,0,00h,0
+04FA,1,undefined,0,0,00h,0
+04FB,1,undefined,0,0,02h,0
+04FC,1,undefined,0,0,03h,0
+04FD,1,undefined,0,0,05h,0
+04FE,1,undefined,0,0,02h,0
+04FF,1,undefined,0,0,00h,0
+0500,1,undefined,0,0,06h,0
+0501,1,undefined,0,0,03h,0
+0502,1,undefined,0,0,00h,0
+0503,1,undefined,0,0,01h,0
+0504,1,undefined,0,0,01h,0
+0505,1,undefined,0,0,02h,0
+0506,1,undefined,0,0,02h,0
+0507,1,undefined,0,0,03h,0
+0508,1,undefined,0,0,03h,0
+0509,1,undefined,0,0,00h,0
+050A,4,far_t,0,2,,5
+050E,11,uint8_t[11],0,11,,1
+0519,1,undefined1,0,0,00h,2
+051A,25,undefined[25],0,25,,1
+0533,25,undefined[25],0,25,,1
+054C,100,far_t[25],0,25,,2
+05B0,12,string,0,0,"strong.sav\\",1
+05BC,11,string,0,0,"%sgame.cfg",1
+05C7,6,string,0,0,"debug",1
+05CD,5,string,0,0,"grab",1
+05D2,19,string,0,0,"NEW MAXSQUARE %d \r",0
+05E5,20,string,0,0,"NEW SMAXSQUARE %d \r",0
+05F9,7,string,0,0,"choose",1
+0600,9,string,0,0,"movement",1
+0609,7,string,0,0,"button",1
+0610,5,string,0,0,"gold",1
+0615,5,string,0,0,"plan",1
+061A,4,string,0,0,"hit",1
+061E,8,string,0,0,"squares",1
+0626,7,TerminatedCString,0,0,"swamps",1
+062D,6,string,0,0,"would",1
+0633,7,string,0,0,"repair",1
+063A,12,string,0,0,"controlling",1
+0646,8,string,0,0,"setting",1
+064E,5,string,0,0,"sage",1
+0653,5,string,0,0,"when",1
+0658,5,string,0,0,"home",1
+065D,7,string,0,0,"needed",1
+0664,7,string,0,0,"screen",1
+066B,13,string,0,0,"spellcasting",1
+0678,10,string,0,0,"opponents",1
+0682,8,string,0,0,"expense",1
+068A,6,string,0,0,"after",1
+0690,5,string,0,0,"dots",1
+0695,8,string,0,0,"longbow",1
+069D,7,string,0,0,"spells",1
+06A4,13,string,0,0,"constructing",1
+06B1,28,string,0,0,"Stronghold copy protection.",1
+06CD,32,string,0,0,"Turn to page #%d of the manual.",1
+06ED,37,string,0,0,"Including titles, count to line #%d.",1
+0712,22,string,0,0,"Enter the first word.",0
+0728,10,uint8_t[10],0,10,,4
+0732,1,undefined,0,0,10h,0
+0733,1,undefined,0,0,0Ch,0
+0734,1,undefined,0,0,06h,0
+0735,1,undefined,0,0,04h,0
+0736,1,undefined,0,0,02h,0
+0737,1,undefined,0,0,01h,0
+0738,1,undefined,0,0,01h,0
+0739,1,undefined,0,0,01h,0
+073A,1,undefined,0,0,01h,0
+073B,1,undefined,0,0,01h,0
+073C,6,uint8_t[6],0,6,,1
+0742,2,undefined2,0,0,0000h,3
+0744,1,undefined1,0,0,00h,8
+0745,1,undefined,0,0,10h,0
+0746,1,undefined,0,0,0Ch,0
+0747,1,undefined,0,0,06h,0
+0748,1,undefined,0,0,04h,0
+0749,1,undefined,0,0,02h,0
+074A,1,undefined,0,0,01h,0
+074B,10,uint8_t[10],0,10,,1
+0755,5,string,0,0,"%d \r",0
+075A,17,string,0,0,"Bad House # %d \r",0
+076B,9,string,0,0,"(%d, %d)",0
+0774,42,string,0,0,"x:%d y:%d  %x %x %x %x   %x %x %x %x    \r",0
+079E,4,far_t,0,2,,19
+07A2,4,far_t,0,2,,11
+07A6,1,undefined1,0,0,FFh,29
+07A7,1,uint8_t,0,0,FFh,34
+07A8,1,undefined1,0,0,00h,3
+07A9,1,undefined1,0,0,00h,3
+07AA,1,undefined1,0,0,00h,5
+07AB,1,undefined1,0,0,00h,5
+07AC,1,undefined1,0,0,00h,8
+07AD,1,undefined1,0,0,00h,6
+07AE,2,undefined2,0,0,0000h,2
+07B0,2,undefined2,0,0,0000h,2
+07B2,2,undefined2,0,0,0000h,3
+07B4,1,undefined1,0,0,00h,2
+07B5,1,undefined1,0,0,00h,2
+07B6,2,undefined2,0,0,0000h,2
+07B8,2,undefined2,0,0,0000h,2
+07BA,4,far_t,0,2,,4
+07BE,2,undefined2,0,0,0000h,2
+07C0,2,undefined2,0,0,0000h,2
+07C2,4,far_t,0,2,,3
+07C6,2,undefined2,0,0,0000h,2
+07C8,2,undefined2,0,0,0000h,2
+07CA,2,undefined2,0,0,0000h,2
+07CC,2,undefined2,0,0,0000h,2
+07CE,2,undefined2,0,0,0000h,2
+07D0,2,undefined2,0,0,0000h,2
+07D2,1,undefined,0,0,00h,0
+07D3,1,undefined,0,0,00h,0
+07D4,1,undefined,0,0,00h,0
+07D5,1,undefined,0,0,00h,0
+07D6,12,string,0,0,"Midi error\r",0
+07E2,1,undefined1,0,0,00h,16
+07E3,2,undefined2,0,0,0000h,10
+07E5,2,undefined2,0,0,0000h,10
+07E7,2,undefined2,0,0,0000h,10
+07E9,2,undefined2,0,0,0000h,10
+07EB,1,bool,0,0,FALSE,3
+07EC,1,undefined,0,0,0Ch,0
+07ED,1,undefined,0,0,00h,0
+07EE,1,undefined,0,0,07h,0
+07EF,1,undefined,0,0,00h,0
+07F0,1,undefined,0,0,DEh,0
+07F1,1,undefined,0,0,00h,0
+07F2,1,undefined,0,0,96h,0
+07F3,1,undefined,0,0,00h,0
+07F4,1,undefined,0,0,00h,0
+07F5,1,undefined,0,0,A0h,0
+07F6,2,undefined2,0,0,0000h,3
+07F8,11,string,0,0,"charmed %s",0
+0803,10,string,0,0,"turned %s",0
+080D,10,string,0,0,"stoned %s",0
+0817,12,string,0,0,"diseased %s",0
+0823,13,string,0,0,"paralyzed %s",0
+0830,12,string,0,0,"sleeping %s",0
+083C,8,string,0,0,"held %s",0
+0844,1,undefined1,0,0,00h,18
+0845,1,uint8_t,0,0,0h,1
+0846,1,undefined,0,0,3Fh    ?,0
+0847,1,undefined,0,0,00h,0
+0848,1,undefined,0,0,00h,0
+0849,1,undefined,0,0,3Fh    ?,0
+084A,1,undefined,0,0,3Fh    ?,0
+084B,1,undefined,0,0,3Fh    ?,0
+084C,1,undefined,0,0,20h     ,0
+084D,1,undefined,0,0,20h     ,0
+084E,1,undefined,0,0,20h     ,0
+084F,1,undefined,0,0,3Fh    ?,0
+0850,1,undefined,0,0,3Fh    ?,0
+0851,1,undefined,0,0,3Fh    ?,0
+0852,1,undefined,0,0,3Fh    ?,0
+0853,1,undefined,0,0,28h    (,0
+0854,1,undefined,0,0,00h,0
+0855,1,undefined,0,0,3Fh    ?,0
+0856,1,undefined,0,0,30h    0,0
+0857,1,undefined,0,0,00h,0
+0858,1,undefined,0,0,D3h,0
+0859,1,undefined,0,0,00h,0
+085A,1,undefined,0,0,AFh,0
+085B,1,undefined,0,0,00h,0
+085C,1,undefined,0,0,DFh,0
+085D,1,undefined,0,0,00h,0
+085E,1,undefined,0,0,B2h,0
+085F,1,undefined,0,0,00h,0
+0860,1,undefined,0,0,00h,0
+0861,1,undefined,0,0,A0h,0
+0862,1,undefined1,0,0,FFh,6
+0863,1,undefined1,0,0,FFh,4
+0864,9,string,0,0,"(%d, %d)",0
+086D,1,undefined,0,0,00h,0
+086E,2,undefined2,0,0,0000h,3
+0870,2,undefined2,0,0,0000h,1
+0872,1,undefined,0,0,1Ch,0
+0873,1,undefined,0,0,1Ch,0
+0874,1,undefined,0,0,1Ch,0
+0875,1,undefined,0,0,1Ch,0
+0876,1,undefined,0,0,1Ch,0
+0877,1,undefined,0,0,0Eh,0
+0878,1,undefined,0,0,0Eh,0
+0879,1,undefined,0,0,0Eh,0
+087A,1,undefined,0,0,0Eh,0
+087B,1,undefined,0,0,0Eh,0
+087C,1,undefined,0,0,00h,0
+087D,1,undefined,0,0,00h,0
+087E,1,undefined,0,0,00h,0
+087F,1,undefined,0,0,00h,0
+0880,1,undefined,0,0,00h,0
+0881,2,undefined2,0,0,0000h,29
+0883,2,undefined2,0,0,0000h,7
+0885,1,undefined,0,0,00h,0
+0886,1,undefined,0,0,01h,0
+0887,1,undefined,0,0,00h,0
+0888,1,undefined,0,0,FFh,0
+0889,1,undefined,0,0,FFh,0
+088A,1,undefined,0,0,00h,0
+088B,1,undefined,0,0,01h,0
+088C,1,undefined,0,0,00h,0
+088D,1,undefined,0,0,DFh,0
+088E,1,undefined,0,0,00h,0
+088F,1,undefined,0,0,9Fh,0
+0890,1,undefined,0,0,00h,0
+0891,1,undefined,0,0,E2h,0
+0892,1,undefined,0,0,00h,0
+0893,1,undefined,0,0,C4h,0
+0894,1,undefined,0,0,00h,0
+0895,1,undefined,0,0,00h,0
+0896,1,undefined,0,0,A0h,0
+0897,1,undefined,0,0,D0h,0
+0898,1,undefined,0,0,00h,0
+0899,1,undefined,0,0,9Dh,0
+089A,1,undefined,0,0,00h,0
+089B,1,undefined,0,0,E2h,0
+089C,1,undefined,0,0,00h,0
+089D,1,undefined,0,0,C4h,0
+089E,1,undefined,0,0,00h,0
+089F,1,undefined,0,0,00h,0
+08A0,1,undefined,0,0,A0h,0
+08A1,57,string,0,0,"Intelligence reports %s unit engaged in combat. (%d, %d)",0
+08DA,5,string,0,0,"%d \r",0
+08DF,11,string,0,0,"%d %d %d \r",0
+08EA,12,string,0,0,"%d %d %d  \r",3
+08F6,43,string,0,0,"You cannot attract units to this location.",1
+0921,55,string,0,0,"Attracting %d of a possible %d %s%s to this location.",1
+0958,4170,anm_t[139],0,139,,2
+19A2,30,string,0,0,"%s: produces bows and arrows.",0
+19C0,25,string,0,0,"%s: increases unit size.",3
+19D9,29,string,0,0,"%s: enhances building speed.",3
+19F6,34,string,0,0,"%s: produces rings of protection.",3
+1A18,61,string,0,0,"%s: creates mirrors for medsae combat and lenses for towers.",1
+1A55,33,string,0,0,"%s: populates a remote location.",7
+1A76,27,string,0,0,"%s: provides gold storage.",3
+1A91,31,string,0,0,"%s: enables claiming of trees.",1
+1AB0,37,string,0,0,"%s: repairs buildings automatically.",1
+1AD5,29,string,0,0,"%s: provides for food trade.",3
+1AF2,45,string,0,0,"%s: enhances training for entire stronghold.",1
+1B1F,20,string,0,0,"%s: creates income.",3
+1B33,29,string,0,0,"%s: produces food in winter.",3
+1B50,29,string,0,0,"%s: creates gambling income.",3
+1B6D,20,string,0,0,"%s: creates income.",3
+1B81,33,string,0,0,"%s: enhances weapons production.",3
+1BA2,29,string,0,0,"%s: creates food and income.",3
+1BBF,23,string,0,0,"%s: enhances training.",21
+1BD6,20,string,0,0,"%s: creates arrows.",3
+1BEA,27,string,0,0,"%s: provides more housing.",39
+1C05,33,string,0,0,"%s: provides housing and income.",3
+1C26,20,string,0,0,"%s: blocks passage.",9
+1C3A,31,string,0,0,"%s: allows passage over water.",2
+1C59,47,string,0,0,"%s: provides storage and distribution of food.",3
+1C88,49,string,0,0,"%s: adds to crop value and gives access to fund.",6
+1CB9,51,string,0,0,"%s: blocks enemy passage. Allows friendly passage.",6
+1CEC,10,string,0,0,"Chop Down",42
+1CF6,7,string,0,0,"Remove",18
+1CFD,8,string,0,0,"Fill in",5
+1D05,2,byte *,1,0,2410:0000,12
+1D07,2,undefined2,0,0,0000h,10
+1D09,1,undefined,0,0,21h    !,0
+1D0A,1,undefined,0,0,00h,0
+1D0B,1,undefined,0,0,51h    Q,0
+1D0C,1,undefined,0,0,00h,0
+1D0D,1,undefined,0,0,81h,0
+1D0E,1,undefined,0,0,00h,0
+1D0F,1,undefined,0,0,B1h,0
+1D10,1,undefined,0,0,00h,0
+1D11,17,string,0,0,"undeveloped land",1
+1D22,5,string,0,0,"plot",1
+1D27,5,string,0,0,"farm",1
+1D2C,11,string,0,0,"plantation",1
+1D37,12,string,0,0,"guest house",1
+1D43,7,string,0,0,"tavern",1
+1D4A,4,string,0,0,"inn",1
+1D4E,16,string,0,0,"magicians' room",1
+1D5E,19,string,0,0,"magicians' cottage",1
+1D71,17,string,0,0,"magician's manor",1
+1D82,7,string,0,0,"shrine",1
+1D89,7,string,0,0,"church",1
+1D90,7,string,0,0,"temple",1
+1D97,13,string,0,0,"thieves' den",1
+1DA4,13,string,0,0,"black market",1
+1DB1,15,string,0,0,"thieves' guild",1
+1DC0,12,string,0,0,"guard house",2
+1DCC,12,string,0,0,"drill house",1
+1DD8,14,string,0,0,"training hall",2
+1DE6,10,string,0,0,"elf house",1
+1DF0,14,string,0,0,"elven cottage",1
+1DFE,11,string,0,0,"elven home",1
+1E09,20,string,0,0,"fighters' residence",2
+1E1D,16,string,0,0,"fighters' house",1
+1E2D,18,string,0,0,"fighters' mansion",1
+1E3F,12,string,0,0,"mage school",1
+1E4B,13,string,0,0,"mage college",1
+1E58,16,string,0,0,"mage university",1
+1E68,12,string,0,0,"small tower",2
+1E74,12,string,0,0,"large tower",2
+1E80,13,string,0,0,"storage shed",1
+1E8D,11,string,0,0,"storehouse",1
+1E98,8,string,0,0,"granary",1
+1EA0,13,string,0,0,"thieves' hut",1
+1EAD,15,string,0,0,"thieves' shack",1
+1EBC,15,string,0,0,"thieves' house",1
+1ECB,17,string,0,0,"clerics' chamber",1
+1EDC,16,string,0,0,"clerics' refuge",1
+1EEC,17,string,0,0,"clerics' retreat",1
+1EFD,15,string,0,0,"halfling lodge",1
+1F0C,15,string,0,0,"halfling abode",1
+1F1B,18,string,0,0,"halfling dwelling",1
+1F2D,11,string,0,0,"drill hall",1
+1F38,12,string,0,0,"marketplace",6
+1F44,13,string,0,0,"dwarven home",1
+1F51,13,string,0,0,"dwarven hall",1
+1F5E,16,string,0,0,"dwarven mansion",1
+1F6E,11,string,0,0,"metalworks",1
+1F79,18,string,0,0,"swordmaker's shop",1
+1F8B,6,string,0,0,"forge",1
+1F91,12,string,0,0,"social club",1
+1F9D,19,string,0,0,"hall of fellowship",1
+1FB0,12,string,0,0,"social hall",1
+1FBC,5,string,0,0,"tree",12
+1FC1,6,string,0,0,"grove",6
+1FC7,7,string,0,0,"forest",6
+1FCE,9,string,0,0,"elf tree",6
+1FD7,10,string,0,0,"elf grove",6
+1FE1,11,string,0,0,"elf forest",6
+1FEC,5,string,0,0,"rock",9
+1FF1,10,string,0,0,"iron mine",1
+1FFB,10,string,0,0,"gold mine",1
+2005,9,string,0,0,"gem mine",1
+200E,13,string,0,0,"fighter keep",1
+201B,17,string,0,0,"fighter fortress",1
+202C,15,string,0,0,"fighter castle",1
+203B,11,string,0,0,"thief keep",1
+2046,15,string,0,0,"thief fortress",1
+2055,13,string,0,0,"thief castle",1
+2062,10,string,0,0,"mage keep",1
+206C,14,string,0,0,"mage fortress",1
+207A,12,string,0,0,"mage castle",1
+2086,12,string,0,0,"cleric keep",1
+2092,16,string,0,0,"cleric fortress",1
+20A2,14,string,0,0,"cleric castle",1
+20B0,9,string,0,0,"elf keep",1
+20B9,13,string,0,0,"elf fortress",1
+20C6,11,string,0,0,"elf castle",1
+20D1,15,string,0,0,"Mindark's keep",1
+20E0,5,string,0,0,"tomb",1
+20E5,12,string,0,0,"giant mound",1
+20F1,14,string,0,0,"dragon's lair",1
+20FF,12,string,0,0,"main castle",1
+210B,17,string,0,0,"fortified castle",1
+211C,11,string,0,0,"stronghold",1
+2127,11,string,0,0,"dwarf keep",1
+2132,15,string,0,0,"dwarf fortress",1
+2141,13,string,0,0,"dwarf castle",1
+214E,14,string,0,0,"halfling keep",1
+215C,18,string,0,0,"halfling fortress",1
+216E,16,string,0,0,"halfling castle",1
+217E,6,string,0,0,"swamp",5
+2184,9,string,0,0,"e/w wall",1
+218D,9,string,0,0,"n/s wall",1
+2196,12,string,0,0,"corner wall",1
+21A2,16,string,0,0,"sturdy e/w wall",1
+21B2,16,string,0,0,"sturdy n/s wall",1
+21C2,19,string,0,0,"sturdy corner wall",1
+21D5,16,string,0,0,"manned e/w wall",1
+21E5,16,string,0,0,"manned n/s wall",1
+21F5,19,string,0,0,"manned corner wall",1
+2208,11,string,0,0,"e/w bridge",1
+2213,11,string,0,0,"n/s bridge",1
+221E,9,string,0,0,"e/w gate",1
+2227,9,string,0,0,"n/s gate",1
+2230,16,string,0,0,"sturdy e/w gate",1
+2240,16,string,0,0,"sturdy n/s gate",1
+2250,16,string,0,0,"manned e/w gate",1
+2260,16,string,0,0,"manned n/s gate",1
+2270,8,string,0,0,"nursery",1
+2278,14,string,0,0,"flower garden",1
+2286,11,string,0,0,"elf garden",1
+2291,18,string,0,0,"Arrowmaker's shop",1
+22A3,11,string,0,0,"arrowsmith",1
+22AE,16,string,0,0,"fletcher's shop",1
+22BE,11,string,0,0,"steam bath",1
+22C9,11,string,0,0,"bath house",1
+22D4,13,string,0,0,"public baths",1
+22E1,11,string,0,0,"brick kiln",1
+22EC,13,string,0,0,"stonemasonry",1
+22F9,13,string,0,0,"mason's hall",1
+2306,8,string,0,0,"jeweler",1
+230E,17,string,0,0,"ringmaker's shop",1
+231F,15,string,0,0,"jeweler's shop",1
+232E,11,string,0,0,"glassworks",1
+2339,16,string,0,0,"fighter outpost",1
+2349,13,string,0,0,"mage outpost",1
+2356,15,string,0,0,"cleric outpost",1
+2365,14,string,0,0,"thief outpost",1
+2373,14,string,0,0,"dwarf outpost",1
+2381,12,string,0,0,"elf outpost",1
+238D,17,string,0,0,"halfling outpost",1
+239E,20,string,0,0,"money dealer's shop",1
+23B2,5,string,0,0,"bank",1
+23B7,6,string,0,0,"vault",1
+23BD,16,string,0,0,"forester's camp",1
+23CD,15,string,0,0,"builder's hall",1
+23DC,13,string,0,0,"trading post",1
+23E9,12,string,0,0,"trade faire",1
+23F5,7,string,0,0,"bazaar",1
+23FC,6,string,0,0,"arena",1
+2402,11,string,0,0,"woodcarver",1
+240D,12,string,0,0,"puppetmaker",1
+2419,9,string,0,0,"toymaker",1
+2422,11,string,0,0,"bread shop",1
+242D,10,string,0,0,"bakehouse",1
+2437,7,string,0,0,"bakery",1
+243E,9,string,0,0,"dice den",1
+2447,12,string,0,0,"card parlor",1
+2453,12,string,0,0,"gaming hall",1
+245F,15,string,0,0,"clerk's office",1
+246E,19,string,0,0,"transcriber's shop",1
+2481,9,string,0,0,"scribery",1
+248A,11,string,0,0,"apothecary",1
+2495,16,string,0,0,"alchemist's lab",1
+24A5,11,string,0,0,"magic mill",1
+24B0,13,string,0,0,"leatherworks",1
+24BD,12,string,0,0,"shieldsmith",1
+24C9,7,string,0,0,"armory",1
+24D0,5,string,0,0,"ruin",9
+24D5,8,string,0,0,"fighter",1
+24DD,6,string,0,0,"spear",2
+24E3,5,string,0,0,"mage",1
+24E8,7,string,0,0,"cleric",1
+24EF,11,string,0,0,"staff,club",1
+24FA,6,string,0,0,"thief",1
+2500,7,string,0,0,"dagger",4
+2507,11,string,0,0,"red dragon",1
+2512,7,string,0,0,"archer",1
+2519,4,string,0,0,"bow",3
+251D,9,string,0,0,"skeleton",1
+2526,12,string,0,0,"short sword",2
+2532,4,string,0,0,"orc",1
+2536,13,string,0,0,"morning star",1
+2543,4,string,0,0,"elf",1
+2547,13,string,0,0,"evil fighter",1
+2554,5,string,0,0,"pike",1
+2559,6,string,0,0,"dwarf",1
+255F,11,string,0,0,"axe,hammer",1
+256A,9,string,0,0,"halfling",1
+2573,16,string,0,0,"carrion crawler",1
+2583,10,string,0,0,"giant ant",1
+258D,6,string,0,0,"harpy",1
+2593,10,string,0,0,"dire wolf",1
+259D,10,string,0,0,"giant bat",1
+25A7,12,string,0,0,"blast spore",1
+25B3,7,string,0,0,"kobold",1
+25BA,16,string,0,0,"obsidian statue",1
+25CA,11,string,0,0,"giant toad",1
+25D5,10,string,0,0,"hobgoblin",1
+25DF,12,string,0,0,"manscorpion",1
+25EB,15,string,0,0,"giant scorpion",1
+25FA,11,string,0,0,"wood golem",1
+2605,10,string,0,0,"evil mage",1
+260F,7,string,0,0,"medusa",1
+2616,12,string,0,0,"evil cleric",1
+2622,11,string,0,0,"evil thief",1
+262D,6,string,0,0,"wight",1
+2633,12,string,0,0,"blue dragon",1
+263F,12,string,0,0,"purple worm",1
+264B,8,string,0,0,"griffon",1
+2653,12,string,0,0,"stone giant",1
+265F,6,string,0,0,"troll",1
+2665,11,string,0,0,"fire giant",1
+2670,15,string,0,0,"lesser phoenix",1
+267F,9,string,0,0,"minotaur",1
+2688,4,string,0,0,"axe",1
+268C,11,string,0,0,"cockatrice",1
+2697,8,string,0,0,"vampire",1
+269F,9,string,0,0,"Mindark",1
+26A8,1,undefined1,0,0,00h,14
+26A9,4,far_t,0,2,,6
+26AD,1,undefined,0,0,16h,0
+26AE,1,undefined,0,0,00h,0
+26AF,1,undefined,0,0,1Dh,0
+26B0,1,undefined,0,0,00h,0
+26B1,1,undefined,0,0,DEh,0
+26B2,1,undefined,0,0,00h,0
+26B3,1,undefined,0,0,27h    ',0
+26B4,1,undefined,0,0,00h,0
+26B5,1,undefined,0,0,00h,0
+26B6,1,undefined,0,0,A0h,0
+26B7,32,char *32[8],0,8,,1
+26D7,8,char *32[2],0,2,,1
+26DF,2,undefined2,0,0,0000h,4
+26E1,2,undefined2,0,0,0000h,4
+26E3,1,undefined,0,0,64h    d,0
+26E4,1,undefined,0,0,00h,0
+26E5,1,undefined,0,0,00h,0
+26E6,1,undefined,0,0,00h,0
+26E7,1,undefined,0,0,C8h,0
+26E8,1,undefined,0,0,00h,0
+26E9,1,undefined,0,0,00h,0
+26EA,1,undefined,0,0,00h,0
+26EB,1,undefined,0,0,2Ch    ,,0
+26EC,1,undefined,0,0,01h,0
+26ED,1,undefined,0,0,00h,0
+26EE,1,undefined,0,0,00h,0
+26EF,1,undefined,0,0,90h,0
+26F0,1,undefined,0,0,01h,0
+26F1,1,undefined,0,0,00h,0
+26F2,1,undefined,0,0,00h,0
+26F3,1,undefined,0,0,2Dh    -,0
+26F4,1,undefined,0,0,A8h,0
+26F5,1,undefined,0,0,0Fh,0
+26F6,1,undefined,0,0,00h,0
+26F7,52,far_t[13],0,13,,0
+272B,8,string,0,0,"<Empty>",1
+2733,5,string,0,0,"More",0
+2738,2,string,0,0,"_",0
+273A,3,string,0,0,"\r\n",0
+273D,12,string,0,0,"%ssaves.txt",0
+2749,3,string,0,0,"%u",0
+274C,25,string,0,0,"Message delay is now %d.",0
+2765,23,string,0,0,"Decrease message delay",0
+277C,23,string,0,0,"Increase message delay",0
+2793,5,string,0,0,"Test",0
+2798,5,string,0,0,"Done",0
+279D,22,string,0,0,"Change message delay:",0
+27B3,49,string,0,0,"This message appears at the message delay of %d.",0
+27E4,7,string,0,0,"Cancel",0
+27EB,9,string,0,0,"New Game",1
+27F4,10,string,0,0,"Save Game",1
+27FE,10,string,0,0,"Load Game",1
+2808,12,string,0,0,"Delete Game",1
+2814,10,string,0,0,"Quit Game",1
+281E,14,string,0,0,"Message Delay",1
+282C,19,string,0,0,"Great Achievements",1
+283F,11,string,0,0,"Begin Play",1
+284A,4,string,0,0,"Yes",1
+284E,3,string,0,0,"No",1
+2851,18,string,0,0,"Stronghold V 1.00",0
+2863,18,string,0,0,"Select an option:",1
+2875,30,string,0,0,"Game not saved: Are you sure?",0
+2893,11,string,0,0,"Save Game:",0
+289E,33,string,0,0,"Name this save:  (Esc to cancel)",0
+28BF,37,string,0,0,"Name for this save:  (Esc to cancel)",0
+28E4,11,string,0,0,"Load Game:",0
+28EF,13,string,0,0,"Delete Game:",0
+28FC,25,string,0,0,"Delete %s: Are you sure?",0
+2915,9,string,0,0,"Peaceful",1
+291E,11,string,0,0,"Aggressive",1
+2929,8,string,0,0,"Hostile",1
+2931,7,string,0,0,"Custom",1
+2938,7,string,0,0,"Return",2
+293F,11,string,0,0,"First City",1
+294A,8,string,0,0,"World 1",1
+2952,8,string,0,0,"World 2",1
+295A,8,string,0,0,"World 3",1
+2962,8,string,0,0,"World 4",0
+296A,8,string,0,0,"World 5",0
+2972,7,string,0,0,"Random",1
+2979,17,string,0,0,"Which new world:",0
+298A,17,string,0,0,"Hostility level:",0
+299B,26,string,0,0,"Low intelligence enemies:",0
+29B5,29,string,0,0,"Medium intelligence enemies:",0
+29D2,27,string,0,0,"High intelligence enemies:",0
+29ED,21,string,0,0,"Size of second wave:",0
+2A02,38,string,0,0,"Too many enemies. 60 enemies maximum.",0
+2A28,18,string,0,0,"Resetting game...",0
+2A3A,20,string,0,0,"New world complete.",0
+2A4E,1,undefined1,0,0,00h,6
+2A4F,4,uint32_t,0,0,0h,18
+2A53,4,uint32_t,0,0,0h,13
+2A57,4,far_t,0,2,,4
+2A5B,32,far_t[8],0,8,,2
+2A7B,1,uint8_t,0,0,0h,5
+2A7C,11,string,0,0,"strong.dat",1
+2A87,12,string,0,0,"bigcomp.lbm",1
+2A93,13,string,0,0,"bighous1.lbm",1
+2AA0,13,string,0,0,"bighous2.lbm",1
+2AAD,13,string,0,0,"bighous3.lbm",1
+2ABA,13,string,0,0,"bighous6.lbm",1
+2AC7,12,string,0,0,"davfont.lbm",1
+2AD3,17,string,0,0,"anim\\2rdrag0.lbm",1
+2AE4,13,string,0,0,"gamfont1.lbm",1
+2AF1,10,string,0,0,"mouse.lbm",1
+2AFB,13,string,0,0,"nwpanel2.lbm",1
+2B08,17,string,0,0,"build\\rock01.lbm",1
+2B19,9,string,0,0,"star.lbm",1
+2B22,11,string,0,0,"trees2.lbm",1
+2B2D,13,string,0,0,"triangls.lbm",1
+2B3A,13,string,0,0,"nwpanel1.lbm",1
+2B47,15,string,0,0,"anim\\1fi1m.lbm",1
+2B56,11,string,0,0,"water1.lbm",1
+2B61,9,string,0,0,"ping.xmi",1
+2B6A,13,string,0,0,"zound007.voc",1
+2B77,13,string,0,0,"zound011.voc",1
+2B84,13,string,0,0,"zound006.voc",1
+2B91,13,string,0,0,"zound001.voc",1
+2B9E,10,string,0,0,"mages.lbm",1
+2BA8,13,string,0,0,"zound005.voc",1
+2BB5,10,string,0,0,"thud2.voc",1
+2BBF,11,string,0,0,"csite1.lbm",2
+2BCA,15,string,0,0,"anim\\1cl1m.lbm",1
+2BD9,11,string,0,0,"skels1.lbm",1
+2BE4,13,string,0,0,"bighous4.lbm",1
+2BF1,13,string,0,0,"bighous5.lbm",1
+2BFE,10,string,0,0,"wall2.lbm",1
+2C08,13,string,0,0,"thieves2.lbm",1
+2C15,9,string,0,0,"orcs.lbm",1
+2C1E,10,string,0,0,"elves.lbm",1
+2C28,9,string,0,0,"bolt.lbm",1
+2C31,15,string,0,0,"anim\\2fi1m.lbm",1
+2C40,9,string,0,0,"fire.lbm",1
+2C49,12,string,0,0,"dwarves.lbm",1
+2C55,11,string,0,0,"halfls.lbm",1
+2C60,11,string,0,0,"crwlrs.lbm",1
+2C6B,10,string,0,0,"aunts.lbm",1
+2C75,13,string,0,0,"castle01.lbm",1
+2C82,13,string,0,0,"castle02.lbm",1
+2C8F,13,string,0,0,"castle03.lbm",1
+2C9C,10,string,0,0,"keep1.lbm",1
+2CA6,10,string,0,0,"keep2.lbm",1
+2CB0,10,string,0,0,"keep3.lbm",1
+2CBA,10,string,0,0,"keep4.lbm",1
+2CC4,10,string,0,0,"keep5.lbm",1
+2CCE,12,string,0,0,"harpies.lbm",1
+2CDA,11,string,0,0,"bridge.lbm",1
+2CE5,17,string,0,0,"build\\mine01.lbm",1
+2CF6,10,string,0,0,"keep6.lbm",1
+2D00,10,string,0,0,"dlair.lbm",1
+2D0A,10,string,0,0,"wolves.lbm",1
+2D14,1,undefined,0,0,00h,0
+2D15,19,string,0,0,"build\\cletem01.lbm",1
+2D28,9,string,0,0,"univ.lbm",1
+2D31,16,string,0,0,"anim\\nubats.lbm",1
+2D41,9,string,0,0,"mage.xmi",1
+2D4A,15,string,0,0,"anim\\1fi1f.lbm",1
+2D59,11,string,0,0,"blasts.lbm",1
+2D64,12,string,0,0,"kobolds.lbm",1
+2D70,11,string,0,0,"house1.lbm",1
+2D7B,11,string,0,0,"house2.lbm",1
+2D86,11,string,0,0,"house3.lbm",1
+2D91,11,string,0,0,"fallen.xmi",1
+2D9C,12,string,0,0,"falloop.xmi",1
+2DA8,11,string,0,0,"falop2.xmi",1
+2DB3,12,string,0,0,"antkill.xmi",1
+2DBF,8,string,0,0,"add.xmi",1
+2DC7,10,string,0,0,"march.xmi",1
+2DD1,10,string,0,0,"ants2.xmi",1
+2DDB,13,string,0,0,"ant2loop.xmi",1
+2DE8,13,string,0,0,"mageloop.xmi",1
+2DF5,13,string,0,0,"magelop2.xmi",1
+2E02,12,string,0,0,"granary.lbm",1
+2E0E,12,string,0,0,"ogolems.lbm",1
+2E1A,13,string,0,0,"talkwin9.lbm",1
+2E27,10,string,0,0,"faces.lbm",1
+2E31,11,string,0,0,"frmlnd.lbm",1
+2E3C,10,string,0,0,"toads.lbm",1
+2E46,11,string,0,0,"stone1.lbm",1
+2E51,11,string,0,0,"stone2.lbm",1
+2E5C,12,string,0,0,"harpy01.lbm",1
+2E68,9,string,0,0,"hobs.lbm",1
+2E71,9,string,0,0,"gobs.lbm",1
+2E7A,12,string,0,0,"stucco1.lbm",1
+2E86,12,string,0,0,"stucco2.lbm",1
+2E92,12,string,0,0,"wicker1.lbm",1
+2E9E,12,string,0,0,"wicker2.lbm",1
+2EAA,12,string,0,0,"thatch1.lbm",1
+2EB6,12,string,0,0,"thatch2.lbm",1
+2EC2,11,string,0,0,"csite2.lbm",1
+2ECD,11,string,0,0,"csite3.lbm",1
+2ED8,11,string,0,0,"csite4.lbm",1
+2EE3,13,string,0,0,"bhouse01.lbm",1
+2EF0,13,string,0,0,"bhouse02.lbm",1
+2EFD,13,string,0,0,"bhouse03.lbm",1
+2F0A,13,string,0,0,"bhouse05.lbm",1
+2F17,13,string,0,0,"bhouse04.lbm",1
+2F24,13,string,0,0,"bhouse06.lbm",1
+2F31,8,string,0,0,"bat.voc",1
+2F39,11,string,0,0,"dragon.voc",1
+2F44,10,string,0,0,"clank.voc",1
+2F4E,11,string,0,0,"sword4.voc",1
+2F59,10,string,0,0,"foots.voc",1
+2F63,10,string,0,0,"clink.voc",1
+2F6D,11,string,0,0,"crash1.voc",1
+2F78,11,string,0,0,"foots2.voc",1
+2F83,10,string,0,0,"walk2.voc",1
+2F8D,10,string,0,0,"magic.voc",1
+2F97,9,string,0,0,"dies.voc",1
+2FA0,10,string,0,0,"harpy.voc",1
+2FAA,10,string,0,0,"arch1.lbm",1
+2FB4,10,string,0,0,"arch2.lbm",1
+2FBE,13,string,0,0,"western1.lbm",1
+2FCB,13,string,0,0,"western2.lbm",1
+2FD8,13,string,0,0,"castle04.lbm",1
+2FE5,13,string,0,0,"castle05.lbm",1
+2FF2,13,string,0,0,"castle06.lbm",1
+2FFF,13,string,0,0,"castle07.lbm",1
+300C,13,string,0,0,"castle08.lbm",1
+3019,13,string,0,0,"castle09.lbm",1
+3026,17,string,0,0,"anim\\2mansc0.lbm",1
+3037,11,string,0,0,"scorps.lbm",1
+3042,12,string,0,0,"panel01.lbm",1
+304E,12,string,0,0,"wgolems.lbm",1
+305A,12,string,0,0,"mouse03.lbm",1
+3066,11,string,0,0,"brick1.lbm",1
+3071,11,string,0,0,"brick2.lbm",1
+307C,11,string,0,0,"brick3.lbm",1
+3087,11,string,0,0,"brick4.lbm",1
+3092,10,string,0,0,"ruin1.lbm",1
+309C,10,string,0,0,"ruin2.lbm",1
+30A6,9,string,0,0,"frog.voc",1
+30AF,9,string,0,0,"pelf.lbm",1
+30B8,13,string,0,0,"talkwin8.lbm",1
+30C5,11,string,0,0,"butt01.lbm",1
+30D0,13,string,0,0,"davfont2.lbm",1
+30DD,15,string,0,0,"anim\\1el1m.lbm",1
+30EC,15,string,0,0,"anim\\1el1f.lbm",1
+30FB,15,string,0,0,"anim\\1el2m.lbm",1
+310A,15,string,0,0,"anim\\1el2f.lbm",1
+3119,15,string,0,0,"anim\\1el3m.lbm",1
+3128,15,string,0,0,"anim\\1el3f.lbm",1
+3137,15,string,0,0,"anim\\1ma1m.lbm",1
+3146,15,string,0,0,"anim\\1ma1f.lbm",1
+3155,15,string,0,0,"anim\\1ma2m.lbm",1
+3164,15,string,0,0,"anim\\1ma2f.lbm",1
+3173,15,string,0,0,"anim\\1ma3m.lbm",1
+3182,15,string,0,0,"anim\\1ma3f.lbm",1
+3191,15,string,0,0,"anim\\2ma1m.lbm",1
+31A0,15,string,0,0,"anim\\2ma2m.lbm",1
+31AF,15,string,0,0,"anim\\2ma3m.lbm",1
+31BE,19,string,0,0,"build\\gencas01.lbm",1
+31D1,19,string,0,0,"build\\gencas03.lbm",1
+31E4,11,string,0,0,"back03.lbm",1
+31EF,13,string,0,0,"midgrnd5.lbm",1
+31FC,12,string,0,0,"strong4.lbm",1
+3208,11,string,0,0,"marble.lbm",1
+3213,17,string,0,0,"anim\\2medus0.lbm",1
+3224,12,string,0,0,"rattler.voc",1
+3230,15,string,0,0,"anim\\1cl1f.lbm",1
+323F,15,string,0,0,"anim\\1fi2f.lbm",1
+324E,15,string,0,0,"anim\\1fi3f.lbm",1
+325D,15,string,0,0,"anim\\1fi2m.lbm",1
+326C,15,string,0,0,"anim\\1fi3m.lbm",1
+327B,15,string,0,0,"anim\\2fi2m.lbm",1
+328A,15,string,0,0,"anim\\2fi3m.lbm",1
+3299,11,string,0,0,"pemage.lbm",1
+32A4,19,string,0,0,"build\\gentow01.lbm",1
+32B7,19,string,0,0,"build\\genmkt01.lbm",1
+32CA,19,string,0,0,"build\\gengra01.lbm",1
+32DD,19,string,0,0,"build\\gentow02.lbm",1
+32F0,19,string,0,0,"build\\gengra02.lbm",1
+3303,12,string,0,0,"pfdwarf.lbm",1
+330F,12,string,0,0,"pffight.lbm",1
+331B,12,string,0,0,"button1.lbm",1
+3327,15,string,0,0,"anim\\1th1m.lbm",1
+3336,15,string,0,0,"anim\\1th1f.lbm",1
+3345,15,string,0,0,"anim\\1th2m.lbm",1
+3354,15,string,0,0,"anim\\1th2f.lbm",1
+3363,15,string,0,0,"anim\\1th3m.lbm",1
+3372,15,string,0,0,"anim\\1th3f.lbm",1
+3381,15,string,0,0,"anim\\2th3m.lbm",1
+3390,15,string,0,0,"anim\\2th1m.lbm",1
+339F,15,string,0,0,"anim\\2th2m.lbm",1
+33AE,15,string,0,0,"anim\\1cl2m.lbm",1
+33BD,15,string,0,0,"anim\\1cl2f.lbm",1
+33CC,15,string,0,0,"anim\\1cl3m.lbm",1
+33DB,15,string,0,0,"anim\\1cl3f.lbm",1
+33EA,15,string,0,0,"anim\\2cl1m.lbm",1
+33F9,15,string,0,0,"anim\\2cl2m.lbm",1
+3408,15,string,0,0,"anim\\2cl3m.lbm",1
+3417,15,string,0,0,"anim\\1dw1m.lbm",1
+3426,15,string,0,0,"anim\\1dw1f.lbm",1
+3435,15,string,0,0,"anim\\1dw2m.lbm",1
+3444,15,string,0,0,"anim\\1dw2f.lbm",1
+3453,15,string,0,0,"anim\\1ha1m.lbm",1
+3462,15,string,0,0,"anim\\1ha1f.lbm",1
+3471,15,string,0,0,"anim\\1ha2m.lbm",1
+3480,15,string,0,0,"anim\\1ha2f.lbm",1
+348F,10,string,0,0,"cue13.xmi",1
+3499,9,string,0,0,"cue2.xmi",1
+34A2,9,string,0,0,"cue3.xmi",1
+34AB,9,string,0,0,"cue4.xmi",1
+34B4,10,string,0,0,"cue5a.xmi",1
+34BE,9,string,0,0,"cue6.xmi",1
+34C7,9,string,0,0,"cue7.xmi",1
+34D0,9,string,0,0,"cue8.xmi",1
+34D9,10,string,0,0,"cue10.xmi",1
+34E3,10,string,0,0,"cue12.xmi",1
+34ED,11,string,0,0,"cue15a.xmi",1
+34F8,11,string,0,0,"cue15b.xmi",1
+3503,10,string,0,0,"cuex1.xmi",1
+350D,11,string,0,0,"cuex2b.xmi",1
+3518,11,string,0,0,"theme2.xmi",1
+3523,13,string,0,0,"pfhfight.lbm",1
+3530,18,string,0,0,"portrait\\sp06.lbm",1
+3542,13,string,0,0,"pfhthief.lbm",1
+354F,11,string,0,0,"cleric.voc",1
+355A,7,string,0,0,"6B.voc",1
+3561,11,string,0,0,"poison.voc",1
+356C,6,string,0,0,"8.voc",1
+3572,10,string,0,0,"murm1.voc",1
+357C,13,string,0,0,"magecast.voc",1
+3589,13,string,0,0,"magecst2.voc",1
+3596,9,string,0,0,"hit1.voc",1
+359F,9,string,0,0,"hit2.voc",1
+35A8,9,string,0,0,"miss.voc",1
+35B1,7,string,0,0,"17.voc",1
+35B8,7,string,0,0,"18.voc",1
+35BF,7,string,0,0,"19.voc",1
+35C6,7,string,0,0,"20.voc",1
+35CD,7,string,0,0,"21.voc",1
+35D4,9,string,0,0,"zero.voc",29
+35DD,7,string,0,0,"22.voc",1
+35E4,12,string,0,0,"placeb1.xmi",1
+35F0,12,string,0,0,"placeb2.xmi",1
+35FC,12,string,0,0,"placeb3.xmi",1
+3608,12,string,0,0,"placeb5.xmi",1
+3614,10,string,0,0,"mine4.xmi",1
+361E,12,string,0,0,"attack1.xmi",1
+362A,7,string,0,0,"29.voc",1
+3631,9,string,0,0,"wolf.voc",1
+363A,7,string,0,0,"31.voc",1
+3641,7,string,0,0,"32.voc",1
+3648,7,string,0,0,"33.voc",1
+364F,8,string,0,0,"33B.voc",1
+3657,8,string,0,0,"35a.voc",1
+365F,7,string,0,0,"37.voc",1
+3666,7,string,0,0,"38.voc",1
+366D,7,string,0,0,"39.voc",1
+3674,11,string,0,0,"sword5.voc",1
+367F,11,string,0,0,"spore2.voc",1
+368A,11,string,0,0,"spore3.voc",1
+3695,12,string,0,0,"phoenix.voc",1
+36A1,10,string,0,0,"troll.voc",1
+36AB,10,string,0,0,"fire4.voc",1
+36B5,8,string,0,0,"45A.voc",1
+36BD,8,string,0,0,"45B.voc",1
+36C5,7,string,0,0,"x1.voc",1
+36CC,10,string,0,0,"cue11.xmi",1
+36D6,10,string,0,0,"cue9b.xmi",1
+36E0,10,string,0,0,"cue16.xmi",1
+36EA,9,string,0,0,"gate.lbm",1
+36F3,11,string,0,0,"volume.xmi",1
+36FE,10,string,0,0,"cue9a.xmi",1
+3708,12,string,0,0,"wintree.lbm",1
+3714,13,string,0,0,"falltree.lbm",1
+3721,18,string,0,0,"anim\\2wights0.lbm",1
+3733,17,string,0,0,"anim\\2bdrag0.lbm",1
+3744,18,string,0,0,"anim\\2bdragt0.lbm",1
+3756,17,string,0,0,"anim\\2pworm0.lbm",1
+3767,7,string,0,0,"l3.lbm",1
+376E,19,string,0,0,"build\\figcas01.lbm",1
+3781,19,string,0,0,"build\\figcas02.lbm",1
+3794,13,string,0,0,"dwfcas03.lbm",1
+37A1,13,string,0,0,"dwfcas04.lbm",1
+37AE,19,string,0,0,"build\\figres01.lbm",1
+37C1,19,string,0,0,"build\\figres02.lbm",1
+37D4,19,string,0,0,"build\\dwfres01.lbm",1
+37E7,19,string,0,0,"build\\dwfres02.lbm",1
+37FA,13,string,0,0,"dwffrg01.lbm",1
+3807,13,string,0,0,"dwffrg02.lbm",1
+3814,19,string,0,0,"build\\hafcas01.lbm",1
+3827,19,string,0,0,"build\\hafcas02.lbm",1
+383A,19,string,0,0,"build\\hafhal01.lbm",1
+384D,19,string,0,0,"build\\hafhal02.lbm",1
+3860,17,string,0,0,"anim\\2sgian0.lbm",1
+3871,17,string,0,0,"anim\\2troll0.lbm",1
+3882,17,string,0,0,"anim\\2griff0.lbm",1
+3893,10,string,0,0,"place.xmi",1
+389D,11,string,0,0,"VOLUME.xmi",2
+38A8,7,string,0,0,"l4.lbm",1
+38AF,7,string,0,0,"l5.lbm",1
+38B6,7,string,0,0,"l6.lbm",1
+38BD,7,string,0,0,"l7.lbm",1
+38C4,7,string,0,0,"l8.lbm",1
+38CB,7,string,0,0,"l9.lbm",1
+38D2,8,string,0,0,"14a.xmi",1
+38DA,10,string,0,0,"cue5b.xmi",1
+38E4,8,string,0,0,"boos.voc",1
+38EC,1,undefined,0,0,00h,0
+38ED,13,string,0,0,"lightngn.voc",1
+38FA,13,string,0,0,"outdoor1.voc",1
+3907,13,string,0,0,"outdoor2.voc",1
+3914,13,string,0,0,"outdoor3.voc",1
+3921,13,string,0,0,"unhappy1.voc",1
+392E,13,string,0,0,"unhappy2.voc",1
+393B,13,string,0,0,"unhappy3.voc",1
+3948,12,string,0,0,"trn1out.voc",1
+3954,12,string,0,0,"trn2out.voc",1
+3960,12,string,0,0,"trn3out.voc",1
+396C,13,string,0,0,"mine1out.voc",1
+3979,13,string,0,0,"mine2out.voc",1
+3986,13,string,0,0,"mine3out.voc",1
+3993,10,string,0,0,"mark1.voc",1
+399D,10,string,0,0,"mark2.voc",1
+39A7,10,string,0,0,"mark3.voc",1
+39B1,13,string,0,0,"forg3out.voc",1
+39BE,13,string,0,0,"forg2out.voc",1
+39CB,13,string,0,0,"forg1out.voc",1
+39D8,12,string,0,0,"saw1out.voc",1
+39E4,11,string,0,0,"saw2out.voc",1
+39EF,1,undefined,0,0,00h,0
+39F0,12,string,0,0,"saw3out.voc",1
+39FC,11,string,0,0,"crick1.voc",1
+3A07,11,string,0,0,"crick2.voc",1
+3A12,11,string,0,0,"crick3.voc",1
+3A1D,12,string,0,0,"birdssp.voc",1
+3A29,11,string,0,0,"birds1.voc",1
+3A34,11,string,0,0,"birds2.voc",1
+3A3F,11,string,0,0,"birds3.voc",1
+3A4A,10,string,0,0,"howl1.voc",1
+3A54,10,string,0,0,"howl2.voc",1
+3A5E,10,string,0,0,"howl3.voc",1
+3A68,12,string,0,0,"breeze1.voc",1
+3A74,12,string,0,0,"breeze2.voc",1
+3A80,12,string,0,0,"breeze3.voc",1
+3A8C,9,string,0,0,"riv1.voc",1
+3A95,9,string,0,0,"riv2.voc",1
+3A9E,9,string,0,0,"riv3.voc",1
+3AA7,11,string,0,0,"brook1.voc",1
+3AB2,11,string,0,0,"brook2.voc",1
+3ABD,11,string,0,0,"brook3.voc",1
+3AC8,10,string,0,0,"farm1.voc",1
+3AD2,10,string,0,0,"farm2.voc",1
+3ADC,10,string,0,0,"farm3.voc",1
+3AE6,17,string,0,0,"anim\\2fgian0.lbm",1
+3AF7,17,string,0,0,"anim\\2phoen0.lbm",1
+3B08,17,string,0,0,"anim\\2minot0.lbm",1
+3B19,18,string,0,0,"anim\\2cockas0.lbm",1
+3B2B,17,string,0,0,"anim\\2vamps0.lbm",1
+3B3C,19,string,0,0,"build\\geninn01.lbm",1
+3B4F,11,string,0,0,"strong.fli",1
+3B5A,19,string,0,0,"build\\hafres01.lbm",1
+3B6D,19,string,0,0,"build\\cleres01.lbm",1
+3B80,19,string,0,0,"build\\cleres02.lbm",1
+3B93,19,string,0,0,"build\\magres01.lbm",1
+3BA6,19,string,0,0,"build\\magres02.lbm",1
+3BB9,13,string,0,0,"fighal01.lbm",1
+3BC6,18,string,0,0,"portrait\\sp07.lbm",1
+3BD8,18,string,0,0,"portrait\\sp08.lbm",1
+3BEA,18,string,0,0,"portrait\\sp09.lbm",1
+3BFC,18,string,0,0,"portrait\\sp10.lbm",1
+3C0E,18,string,0,0,"portrait\\sp11.lbm",1
+3C20,18,string,0,0,"portrait\\sp12.lbm",1
+3C32,18,string,0,0,"portrait\\sp13.lbm",1
+3C44,18,string,0,0,"portrait\\sp14.lbm",1
+3C56,18,string,0,0,"portrait\\sp15.lbm",1
+3C68,18,string,0,0,"portrait\\sp16.lbm",1
+3C7A,18,string,0,0,"portrait\\sp17.lbm",1
+3C8C,18,string,0,0,"portrait\\sp18.lbm",1
+3C9E,18,string,0,0,"portrait\\sp19.lbm",1
+3CB0,18,string,0,0,"portrait\\sp20.lbm",1
+3CC2,18,string,0,0,"portrait\\sp21.lbm",1
+3CD4,18,string,0,0,"portrait\\sp22.lbm",1
+3CE6,13,string,0,0,"demfont1.lbm",1
+3CF3,10,string,0,0,"back2.lbm",1
+3CFD,10,string,0,0,"frnt3.lbm",1
+3D07,10,string,0,0,"midl3.lbm",1
+3D11,10,string,0,0,"sky06.fli",1
+3D1B,12,string,0,0,"storm01.lbm",1
+3D27,12,string,0,0,"ssilogo.lbm",1
+3D33,13,string,0,0,"thunshrt.voc",1
+3D40,13,string,0,0,"txtscrn6.lbm",1
+3D4D,13,string,0,0,"winrefg1.lbm",1
+3D5A,13,string,0,0,"winremg2.lbm",1
+3D67,13,string,0,0,"winrebg1.lbm",1
+3D74,19,string,0,0,"build\\elfres01.lbm",1
+3D87,18,string,0,0,"portrait\\sp23.lbm",1
+3D99,18,string,0,0,"portrait\\sp24.lbm",1
+3DAB,18,string,0,0,"portrait\\sp25.lbm",1
+3DBD,18,string,0,0,"portrait\\sp26.lbm",1
+3DCF,18,string,0,0,"portrait\\sp27.lbm",1
+3DE1,18,string,0,0,"portrait\\sp28.lbm",1
+3DF3,18,string,0,0,"portrait\\sp29.lbm",1
+3E05,18,string,0,0,"portrait\\sp30.lbm",1
+3E17,18,string,0,0,"portrait\\sp31.lbm",1
+3E29,18,string,0,0,"portrait\\sp32.lbm",1
+3E3B,18,string,0,0,"portrait\\sp33.lbm",1
+3E4D,18,string,0,0,"portrait\\sp34.lbm",1
+3E5F,18,string,0,0,"portrait\\sp35.lbm",1
+3E71,12,string,0,0,"captbg2.lbm",1
+3E7D,12,string,0,0,"captmg3.lbm",1
+3E89,12,string,0,0,"captfg1.lbm",1
+3E95,19,string,0,0,"build\\gencas04.lbm",1
+3EA8,19,string,0,0,"build\\gencas02.lbm",1
+3EBB,19,string,0,0,"build\\hafres02.lbm",1
+3ECE,13,string,0,0,"fighal02.lbm",1
+3EDB,19,string,0,0,"build\\cletem02.lbm",1
+3EEE,17,string,0,0,"anim\\2mndark.lbm",1
+3EFF,19,string,0,0,"build\\elfres02.lbm",1
+3F12,19,string,0,0,"build\\thfgld01.lbm",1
+3F25,19,string,0,0,"build\\thfgld02.lbm",1
+3F38,19,string,0,0,"build\\thfres01.lbm",1
+3F4B,19,string,0,0,"build\\thfres02.lbm",1
+3F5E,18,string,0,0,"portrait\\sp36.lbm",1
+3F70,18,string,0,0,"portrait\\sp37.lbm",1
+3F82,18,string,0,0,"portrait\\sp38.lbm",1
+3F94,18,string,0,0,"portrait\\sp39.lbm",1
+3FA6,18,string,0,0,"portrait\\sp40.lbm",1
+3FB8,18,string,0,0,"portrait\\sp41.lbm",1
+3FCA,18,string,0,0,"portrait\\sp42.lbm",1
+3FDC,18,string,0,0,"portrait\\sp43.lbm",1
+3FEE,19,string,0,0,"build\\magunv01.lbm",1
+4001,19,string,0,0,"build\\magunv02.lbm",1
+4014,18,string,0,0,"portrait\\sp00.lbm",1
+4026,19,string,0,0,"build\\elfgar01.lbm",1
+4039,19,string,0,0,"build\\elfgar02.lbm",1
+404C,13,string,0,0,"garden03.lbm",1
+4059,13,string,0,0,"magcas01.lbm",1
+4066,13,string,0,0,"magcas02.lbm",1
+4073,19,string,0,0,"build\\elfwood1.lbm",1
+4086,19,string,0,0,"build\\elfwood2.lbm",1
+4099,19,string,0,0,"build\\genbnk01.lbm",1
+40AC,19,string,0,0,"build\\genbnk02.lbm",1
+40BF,19,string,0,0,"build\\magjwl01.lbm",1
+40D2,19,string,0,0,"build\\magjwl02.lbm",1
+40E5,19,string,0,0,"build\\thfgls01.lbm",1
+40F8,19,string,0,0,"build\\thfgls02.lbm",1
+410B,19,string,0,0,"build\\gencmp01.lbm",1
+411E,19,string,0,0,"build\\gencmp02.lbm",1
+4131,19,string,0,0,"build\\hafbak01.lbm",1
+4144,19,string,0,0,"build\\hafbak02.lbm",1
+4157,19,string,0,0,"build\\clescr01.lbm",1
+416A,19,string,0,0,"build\\clescr02.lbm",1
+417D,19,string,0,0,"build\\magmil01.lbm",1
+4190,19,string,0,0,"build\\magmil02.lbm",1
+41A3,19,string,0,0,"build\\geninn02.lbm",1
+41B6,19,string,0,0,"build\\thfgam01.lbm",1
+41C9,19,string,0,0,"build\\gentrad1.lbm",1
+41DC,19,string,0,0,"build\\gentrad2.lbm",1
+41EF,19,string,0,0,"build\\elfarro1.lbm",1
+4202,19,string,0,0,"build\\elfarro2.lbm",1
+4215,19,string,0,0,"build\\clebath1.lbm",1
+4228,1,undefined,0,0,62h    b,1
+4229,1,undefined,0,0,75h    u,0
+422A,1,undefined,0,0,69h    i,0
+422B,1,undefined,0,0,6Ch    l,0
+422C,1,undefined,0,0,64h    d,0
+422D,1,undefined,0,0,5Ch    \,0
+422E,1,undefined,0,0,63h    c,0
+422F,1,undefined,0,0,6Ch    l,0
+4230,1,undefined,0,0,65h    e,0
+4231,1,undefined,0,0,62h    b,0
+4232,1,undefined,0,0,61h    a,0
+4233,1,undefined,0,0,74h    t,0
+4234,900,bld_inst_t[75],0,75,,0
+45B8,1,undefined1,0,0,00h,8
+45B9,12,far_t[3],0,3,,0
+45C5,9,string,0,0,"View %s.",1
+45CE,10,string,0,0,"Place %s.",0
+45D8,24,string,0,0,"View %s. (Cannot place)",0
+45F0,26,string,0,0,"Create baron or baroness.",0
+460A,21,string,0,0,"Create party member.",0
+461F,40,string,0,0,"Strongholds cannot be placed on rivers.",1
+4647,40,string,0,0,"Strongholds cannot be placed over seas.",1
+466F,26,string,0,0,"The ground is too steep..",1
+4689,47,string,0,0,"A fortress cannot be placed among enemy units.",0
+46B8,36,string,0,0,"Cannot place another fortress here.",0
+46DC,55,string,0,0,"This location is unsuitable for a main stronghold.  %s",0
+4713,33,string,0,0,"This location is unsuitable.  %s",0
+4734,33,string,0,0,"Your stronghold is too far away.",0
+4755,1,undefined,0,0,00h,0
+4756,1,undefined1,0,0,00h,13
+4757,1,undefined1,0,0,00h,3
+4758,4,far_t,0,2,,4
+475C,40,string,0,0,"0.21.  Stronghold Save.",1Ah,"               ",1
+4784,11,string,0,0,"Loading...",1
+478F,15,string,0,0,"Load complete.",1
+479E,11,string,0,0,"Load Error",1
+47A9,12,string,0,0,"%ssave.%03d",2
+47B5,10,string,0,0,"Saving...",1
+47BF,15,string,0,0,"Save complete.",1
+47CE,11,string,0,0,"Save Error",1
+47D9,12,string,0,0,"Deleting...",1
+47E5,17,string,0,0,"Delete complete.",1
+47F6,4,far_t,0,2,,12
+47FA,4,far_t,0,2,,8
+47FE,4,DW,0,2,,11
+4802,27,string,0,0,"uc%lx %d len %ld loc %ld \r",0
+481D,12,string,0,0,"N UP = %d \r",0
+4829,30,string,0,0,"dc%lx %d ln %ld lc %ld @%lx \r",0
+4847,14,string,0,0,"N DOWN = %d \r",0
+4855,18,string,0,0,"type %d len %ld \r",1
+4867,5,string,0,0,".xmi",1
+486C,10,string,0,0,"midpak.ad",1
+4876,12,string,0,0,"cmidpak.com",1
+4882,11,string,0,0,"ibmsnd.com",1
+488D,13,string,0,0,"sblaster.com",1
+489A,12,string,0,0,"fibmbak.com",1
+48A6,10,string,0,0,"sbpro.com",1
+48B0,11,string,0,0,"paudio.com",1
+48BB,10,string,0,0,"adlib.com",1
+48C5,11,string,0,0,"adlibg.com",1
+48D0,9,string,0,0,"sbfm.adv",1
+48D9,11,string,0,0,"sbp2fm.adv",1
+48E4,11,string,0,0,"sbp1fm.adv",1
+48EF,10,string,0,0,"pasfm.adv",1
+48F9,11,string,0,0,"pasopl.adv",1
+4904,10,string,0,0,"adlib.adv",1
+490E,11,string,0,0,"adlibg.adv",1
+4919,12,string,0,0,"mt32mpu.adv",1
+4925,1,undefined,0,0,00h,0
+4926,1,undefined1,0,0,00h,8
+4927,12,far_t[3],0,3,,3
+4933,8,far_t[2],0,2,,1
+493B,1,undefined,0,0,0Ch,0
+493C,1,undefined,0,0,00h,0
+493D,1,undefined,0,0,63h    c,0
+493E,1,undefined,0,0,00h,0
+493F,1,undefined,0,0,DEh,0
+4940,1,undefined,0,0,00h,0
+4941,1,undefined,0,0,96h,0
+4942,1,undefined,0,0,00h,0
+4943,1,undefined,0,0,00h,0
+4944,1,undefined,0,0,A0h,0
+4945,24,far_t[6],0,6,,1
+495D,128,far_t[32],0,32,,0
+49DD,1,undefined,0,0,00h,0
+49DE,1,undefined,0,0,01h,0
+49DF,1,undefined,0,0,02h,0
+49E0,1,undefined,0,0,03h,0
+49E1,1,undefined,0,0,00h,0
+49E2,1,undefined,0,0,00h,0
+49E3,1,undefined,0,0,00h,0
+49E4,1,undefined,0,0,FFh,0
+49E5,1,undefined,0,0,FFh,0
+49E6,1,undefined,0,0,FFh,0
+49E7,4,far_t,0,2,,1
+49EB,12,far_t[3],0,3,,0
+49F7,20,far_t[5],0,5,,0
+4A0B,1,undefined,0,0,08h,1
+4A0C,1,undefined,0,0,04h,0
+4A0D,1,undefined,0,0,06h,0
+4A0E,1,undefined,0,0,04h,0
+4A0F,1,undefined,0,0,08h,0
+4A10,1,undefined,0,0,06h,0
+4A11,1,undefined,0,0,06h,0
+4A12,4,DW,0,2,,6
+4A16,16,far_t[4],0,4,,1
+4A26,180,unk01_t[30],0,30,,1
+4ADA,20,far_t[5],0,5,,0
+4AEE,1,undefined1,0,0,00h,1
+4AEF,1,undefined,0,0,02h,0
+4AF0,1,undefined,0,0,03h,0
+4AF1,1,undefined,0,0,04h,0
+4AF2,1,undefined,0,0,05h,0
+4AF3,1,undefined,0,0,06h,0
+4AF4,1,undefined,0,0,0Bh,0
+4AF5,1,undefined,0,0,10h,0
+4AF6,1,undefined,0,0,14h,0
+4AF7,1,undefined,0,0,1Ah,0
+4AF8,1,undefined,0,0,1Fh,0
+4AF9,1,undefined,0,0,24h    $,0
+4AFA,1,undefined1,0,0,01h,1
+4AFB,1,undefined,0,0,02h,0
+4AFC,1,undefined,0,0,03h,0
+4AFD,1,undefined,0,0,04h,0
+4AFE,1,undefined,0,0,05h,0
+4AFF,1,undefined,0,0,0Ah,0
+4B00,1,undefined,0,0,0Fh,0
+4B01,1,undefined,0,0,14h,0
+4B02,1,undefined,0,0,19h,0
+4B03,1,undefined,0,0,1Eh,0
+4B04,1,undefined,0,0,23h    #,0
+4B05,1,undefined,0,0,FFh,0
+4B06,80,far_t[20],0,20,,0
+4B56,16,far_t[4],0,4,,0
+4B66,1,undefined,0,0,0Ch,0
+4B67,1,undefined,0,0,0Ch,0
+4B68,1,undefined,0,0,0Ch,0
+4B69,1,undefined,0,0,0Ch,0
+4B6A,1,undefined,0,0,09h,0
+4B6B,1,undefined,0,0,08h,0
+4B6C,1,undefined,0,0,08h,0
+4B6D,1,undefined1,0,0,FFh,9
+4B6E,1,undefined1,0,0,FFh,6
+4B6F,7,string,0,0,"Lawful",1
+4B76,8,string,0,0,"Neutral",1
+4B7E,8,string,0,0,"Chaotic",1
+4B86,5,string,0,0,"Male",1
+4B8B,7,string,0,0,"Female",1
+4B92,4,string,0,0,"STR",0
+4B96,4,string,0,0,"INT",0
+4B9A,4,string,0,0,"WIS",0
+4B9E,4,string,0,0,"DEX",0
+4BA2,4,string,0,0,"CON",0
+4BA6,4,string,0,0,"CHA",0
+4BAA,3,string,0,0,"st",0
+4BAD,3,string,0,0,"nd",0
+4BB0,3,string,0,0,"rd",0
+4BB3,3,string,0,0,"th",0
+4BB6,7,string,0,0,"Baron ",0
+4BBD,10,string,0,0,"Baroness ",0
+4BC7,10,string,0,0,"Viscount ",0
+4BD1,13,string,0,0,"Viscountess ",0
+4BDE,7,string,0,0,"Count ",0
+4BE5,10,string,0,0,"Countess ",0
+4BEF,9,string,0,0,"Marquis ",0
+4BF8,10,string,0,0,"Marquise ",0
+4C02,6,string,0,0,"Duke ",0
+4C08,9,string,0,0,"Duchess ",0
+4C11,10,string,0,0,"Archduke ",0
+4C1B,13,string,0,0,"Archduchess ",0
+4C28,8,string,0,0,"Prince ",0
+4C30,10,string,0,0,"Princess ",0
+4C3A,6,string,0,0,"King ",0
+4C40,7,string,0,0,"Queen ",0
+4C47,9,string,0,0,"Emperor ",0
+4C50,10,string,0,0,"Emperess ",0
+4C5A,6,string,0,0,"Lord ",0
+4C60,6,string,0,0,"Lady ",0
+4C66,8,string,0,0,"Wizard ",0
+4C6E,6,string,0,0,"Maga ",0
+4C74,11,string,0,0,"Patriarch ",0
+4C7F,11,string,0,0,"Matriarch ",0
+4C8A,14,string,0,0,"Master Thief ",0
+4C98,12,string,0,0,"Dwarf Lord ",0
+4CA4,12,string,0,0,"Dwarf Lady ",0
+4CB0,13,string,0,0,"Lord Wizard ",0
+4CBD,11,string,0,0,"Lady Maga ",0
+4CC8,9,string,0,0,"Sheriff ",1
+4CD1,3,string,0,0,"%d",1
+4CD4,7,string,0,0,"%s%s, ",0
+4CDB,4,string,0,0,"%s ",1
+4CDF,3,string,0,0,"%s",1
+4CE2,11,string,0,0,"Population",1
+4CED,11,string,0,0,"Food prod.",1
+4CF8,12,string,0,0,"Food stored",1
+4D04,8,string,0,0,"Housing",1
+4D0C,13,string,0,0,"Food storage",1
+4D19,12,string,0,0,"Food bought",1
+4D25,10,string,0,0,"Food sold",1
+4D2F,11,string,0,0,"Max. trade",1
+4D3A,7,string,0,0,"Income",1
+4D41,5,string,0,0,"Gold",1
+4D46,14,string,0,0,"Vault storage",1
+4D54,12,string,0,0,"Fund Access",1
+4D60,12,string,0,0,"Common fund",1
+4D6C,11,string,0,0,"popularity",1
+4D77,12,string,0,0,"city blocks",1
+4D83,8,string,0,0,"Current",1
+4D8B,5,string,0,0,"%d%%",2
+4D90,11,string,0,0,"to promote",1
+4D9B,7,string,0,0,"Accept",1
+4DA2,102,string,0,0,"You may raise a primary ability by trading two points of another ability. Select ability to increase.",1
+4E08,50,string,0,0,"Select ability to adjust downwards by two points.",1
+4E3A,7,string,0,0,"Cancel",0
+4E41,50,string,0,0,"A LAWFUL leader must achieve the rank of EMPEROR.",1
+4E73,75,string,0,0,"A NEUTRAL leader must destroy all enemies and achieve the rank of EMPEROR.",1
+4EBE,43,string,0,0,"A CHAOTIC leader must destroy all enemies.",1
+4EE9,52,string,0,0,"has achieved the rank of EMPEROR.  Congratulations!",1
+4F1D,69,string,0,0,"has destroyed all enemies and has achieved EMPEROR. Congratulations!",1
+4F62,45,string,0,0,"has destroyed all enemies.  Congratulations!",1
+4F8F,3,string,0,0,"OK",1
+4F92,10,string,0,0,"Try Again",1
+4F9C,21,string,0,0,"Select an alignment.",1
+4FB1,16,string,0,0,"Male or female?",0
+4FC1,5,string,0,0,"Keep",1
+4FC6,8,string,0,0,"Discard",1
+4FCE,7,string,0,0,"Reroll",0
+4FD5,56,string,0,0,"Reroll ability scores, or select the character's class.",1
+500D,29,string,0,0,"Select the character's name.",1
+502A,48,string,0,0,"Please type your character's name. Esc go back.",1
+505A,9,string,0,0,"Keep %s.",1
+5063,6,string,0,0,"Place",1
+5069,9,string,0,0,"Continue",1
+5072,15,string,0,0,"Place %s here.",0
+5081,12,string,0,0,"Year %d. %s",0
+508D,24,string,0,0,"Year %d. This leader %s",0
+50A5,12,string,0,0,"Next Leader",0
+50B1,16,string,0,0,"Auto-build    ",7Fh,0
+50C1,11,string,0,0,"Auto-build",0
+50CC,7,string,0,0,"Census",0
+50D3,9,string,0,0,"Property",0
+50DC,13,string,0,0,"Total Census",0
+50E9,13,string,0,0,"All Property",0
+50F6,5,string,0,0,"Help",0
+50FB,5,string,0,0,"Done",1
+5100,39,string,0,0,"%s will now build homes automatically.",0
+5127,46,string,0,0,"%s will no longer build houses automatically.",0
+5155,7,string,0,0,"arenas",1
+515C,9,string,0,0,"armories",1
+5165,9,string,0,0,"bakeries",0
+516E,6,string,0,0,"baths",1
+5174,8,string,0,0,"bazaars",0
+517C,13,string,0,0,"builder hall",0
+5189,8,string,0,0,"castles",0
+5191,6,string,0,0,"farms",0
+5197,10,string,0,0,"fletchers",0
+51A1,14,string,0,0,"forester camp",0
+51AF,7,string,0,0,"forges",0
+51B6,13,string,0,0,"gaming halls",0
+51C3,10,string,0,0,"gem mines",0
+51CD,11,string,0,0,"glassworks",0
+51D8,11,string,0,0,"gold mines",0
+51E3,10,string,0,0,"granaries",0
+51ED,5,string,0,0,"inns",1
+51F2,11,string,0,0,"iron mines",0
+51FD,9,string,0,0,"jewelers",0
+5206,12,string,0,0,"magic mills",0
+5212,8,string,0,0,"markets",0
+521A,14,string,0,0,"mason's halls",0
+5228,9,string,0,0,"outposts",0
+5231,11,string,0,0,"residences",0
+523C,11,string,0,0,"scriberies",0
+5247,7,string,0,0,"towers",0
+524E,10,string,0,0,"toymakers",0
+5258,9,string,0,0,"training",0
+5261,6,string,0,0,"trees",1
+5267,7,string,0,0,"vaults",1
+526E,10,string,0,0,"Summary 1",1
+5278,10,string,0,0,"Summary 2",1
+5282,10,string,0,0,"Summary 3",1
+528C,7,string,0,0,"Damage",1
+5293,14,string,0,0,"All property.",0
+52A1,28,string,0,0,"Buildings belonging to %s%s",0
+52BD,10,string,0,0,"Buildings",0
+52C7,6,string,0,0,"Total",0
+52CD,8,string,0,0,"Level 1",0
+52D5,8,string,0,0,"Level 2",0
+52DD,8,string,0,0,"Level 3",0
+52E5,8,string,0,0,"%d (%d)",0
+52ED,54,string,0,0,"The %s belonging to %s the %s are highlighted in red.",1
+5323,56,string,0,0,"The %s belonging to all leaders are highlighted in red.",1
+535B,70,string,0,0,"The damaged structures belonging to %s the %s are highlighted in red.",1
+53A1,72,string,0,0,"The damaged structures belonging to all leaders are highlighted in red.",1
+53E9,8,string,0,0,"level 1",1
+53F1,8,string,0,0,"level 2",1
+53F9,8,string,0,0,"level 3",1
+5401,8,string,0,0,"level 4",1
+5409,8,string,0,0,"level 5",1
+5411,12,string,0,0,"levels 6-10",2
+541D,13,string,0,0,"levels 11-15",1
+542A,13,string,0,0,"levels 16-20",1
+5437,13,string,0,0,"levels 20-25",1
+5444,13,string,0,0,"levels 26-30",1
+5451,13,string,0,0,"levels 31-35",1
+545E,9,string,0,0,"level 36",1
+5467,14,string,0,0,"levels 11-12f",1
+5475,15,string,0,0,"levels 12g-12k",1
+5484,15,string,0,0,"levels 12l-12m",1
+5493,13,string,0,0,"levels 6-10c",1
+54A0,15,string,0,0,"levels 10d-10h",1
+54AF,16,string,0,0,"levels 10i- 10m",1
+54BF,12,string,0,0,"levels 6-8c",1
+54CB,13,string,0,0,"levels 8d-8h",1
+54D8,13,string,0,0,"levels 8i-8k",1
+54E5,8,string,0,0,"Summary",0
+54ED,11,string,0,0,"All levels",0
+54F8,18,string,0,0,"Total population.",0
+550A,29,string,0,0,"%s population, loyal to %s%s",0
+5527,6,string,0,0,"UNITS",0
+552D,11,string,0,0,"POPULATION",0
+5538,44,string,0,0,"All units loyal to %s the %s are displayed.",0
+5564,25,string,0,0,"All units are displayed.",0
+557D,51,string,0,0,"Only units of %s loyal to %s the %s are displayed.",0
+55B0,32,string,0,0,"Only units of %s are displayed.",0
+55D0,1,undefined,0,0,05h,0
+55D1,1,undefined,0,0,00h,0
+55D2,1,undefined,0,0,0Ah,0
+55D3,1,undefined,0,0,00h,0
+55D4,1,undefined,0,0,14h,0
+55D5,1,undefined,0,0,00h,0
+55D6,2,undefined2,0,0,0000h,4
+55D8,8,string,0,0,"monster",0
+55E0,5,string,0,0,"%d \r",1
+55E5,8,string,0,0,"kill 3\r",0
+55ED,9,string,0,0,"kill 2 \r",0
+55F6,28,string,0,0,"Mine exhausted at (%d, %d).",0
+5612,58,string,0,0,"Intelligence reports %s unit died of starvation. (%d, %d)",1
+564C,1,bool,0,0,FALSE,3
+564D,24,string,0,0,"Construction abandoned.",0
+5665,27,string,0,0,"%s unit drowns.  (%d, %d)",0
+5680,59,string,0,0,"Intelligence reports %s unit fleeing from battle. (%d, %d)",0
+56BB,61,string,0,0,"Intelligence reports %s unit infected with disease. (%d, %d)",0
+56F8,8,string,0,0,"kill 3\r",0
+5700,57,string,0,0,"Intelligence reports %s unit drained of energy. (%d, %d)",0
+5739,49,string,0,0,"Intelligence reports %s unit destroyed. (%d, %d)",0
+576A,35,string,0,0,"Mindark's keep destroyed. (%d, %d)",0
+578D,34,string,0,0,"%s stronghold destroyed. (%d, %d)",0
+57AF,52,string,0,0,"Your main stronghold has been destroyed. Game over.",0
+57E3,31,string,0,0,"You have defeated all enemies.",0
+5802,63,string,0,0,"You may continue playing, but your score will not be recorded.",0
+5841,56,string,0,0,"Intelligence reports %s unit cured of disease. (%d, %d)",0
+5879,71,string,0,0,"Intelligence reports %s unit succombs to blast spore disease. (%d, %d)",0
+58C0,53,string,0,0,"Spies report %s heading towards stronghold. (%d, %d)",0
+58F5,17,string,0,0,"%s is attacking.",0
+5906,38,string,0,0,"Intelligence reports %s attacking.",0
+592C,1,undefined,0,0,FFh,0
+592D,1,undefined,0,0,FFh,0
+592E,1,undefined,0,0,FEh,0
+592F,1,undefined,0,0,FFh,0
+5930,1,undefined,0,0,FDh,0
+5931,1,undefined,0,0,FFh,0
+5932,1,undefined,0,0,FFh,0
+5933,1,undefined,0,0,FFh,0
+5934,1,undefined,0,0,01h,0
+5935,1,undefined,0,0,00h,0
+5936,1,undefined,0,0,03h,0
+5937,1,undefined,0,0,00h,0
+5938,1,undefined,0,0,04h,0
+5939,1,undefined,0,0,00h,0
+593A,1,undefined,0,0,02h,0
+593B,1,undefined,0,0,00h,0
+593C,1,undefined,0,0,00h,0
+593D,1,undefined,0,0,00h,0
+593E,1,undefined,0,0,FFh,0
+593F,1,undefined,0,0,FFh,0
+5940,1,undefined,0,0,00h,0
+5941,1,undefined,0,0,00h,0
+5942,1,undefined,0,0,01h,0
+5943,1,undefined,0,0,00h,0
+5944,1,undefined,0,0,02h,0
+5945,1,undefined,0,0,00h,0
+5946,1,undefined,0,0,01h,0
+5947,1,undefined,0,0,00h,0
+5948,1,undefined,0,0,00h,0
+5949,1,undefined,0,0,00h,0
+594A,1,undefined,0,0,00h,0
+594B,1,undefined,0,0,00h,0
+594C,1,undefined,0,0,00h,0
+594D,1,undefined,0,0,00h,0
+594E,1,undefined,0,0,04h,0
+594F,1,undefined,0,0,00h,0
+5950,1,undefined,0,0,0Ch,0
+5951,1,undefined,0,0,00h,0
+5952,1,undefined,0,0,0Dh,0
+5953,1,undefined,0,0,00h,0
+5954,1,undefined,0,0,0Dh,0
+5955,1,undefined,0,0,00h,0
+5956,1,undefined,0,0,0Dh,0
+5957,1,undefined,0,0,00h,0
+5958,1,undefined,0,0,0Dh,0
+5959,1,undefined,0,0,00h,0
+595A,1,undefined,0,0,0Ch,0
+595B,1,undefined,0,0,00h,0
+595C,1,undefined,0,0,04h,0
+595D,1,undefined,0,0,00h,0
+595E,1,undefined,0,0,00h,0
+595F,1,undefined,0,0,00h,0
+5960,1,undefined,0,0,00h,0
+5961,1,undefined,0,0,00h,0
+5962,1,undefined,0,0,00h,0
+5963,1,undefined,0,0,00h,0
+5964,1,undefined,0,0,00h,0
+5965,1,undefined,0,0,00h,0
+5966,1,undefined,0,0,00h,0
+5967,1,undefined,0,0,00h,0
+5968,1,undefined,0,0,00h,0
+5969,1,undefined,0,0,00h,0
+596A,1,undefined,0,0,0Dh,0
+596B,1,undefined,0,0,00h,0
+596C,1,undefined,0,0,0Dh,0
+596D,1,undefined,0,0,00h,0
+596E,1,undefined,0,0,0Dh,0
+596F,1,undefined,0,0,00h,0
+5970,1,undefined,0,0,0Dh,0
+5971,1,undefined,0,0,00h,0
+5972,1,undefined,0,0,0Ch,0
+5973,1,undefined,0,0,00h,0
+5974,1,undefined,0,0,04h,0
+5975,1,undefined,0,0,00h,0
+5976,1,undefined,0,0,04h,0
+5977,1,undefined,0,0,00h,0
+5978,1,undefined,0,0,0Ch,0
+5979,1,undefined,0,0,00h,0
+597A,1,undefined,0,0,0Dh,0
+597B,1,undefined,0,0,00h,0
+597C,1,undefined,0,0,0Dh,0
+597D,1,undefined,0,0,00h,0
+597E,1,undefined,0,0,0Dh,0
+597F,1,undefined,0,0,00h,0
+5980,1,undefined,0,0,0Dh,0
+5981,1,undefined,0,0,00h,0
+5982,1,undefined,0,0,0Ch,0
+5983,1,undefined,0,0,00h,0
+5984,1,undefined,0,0,04h,0
+5985,1,undefined,0,0,00h,0
+5986,1,undefined,0,0,04h,0
+5987,1,undefined,0,0,00h,0
+5988,1,undefined,0,0,0Ch,0
+5989,1,undefined,0,0,00h,0
+598A,1,undefined,0,0,0Ch,0
+598B,1,undefined,0,0,00h,0
+598C,1,undefined,0,0,04h,0
+598D,1,undefined,0,0,00h,0
+598E,1,undefined,0,0,00h,0
+598F,1,undefined,0,0,00h,0
+5990,1,undefined,0,0,00h,0
+5991,1,undefined,0,0,00h,0
+5992,1,undefined,0,0,00h,0
+5993,1,undefined,0,0,00h,0
+5994,1,undefined,0,0,00h,0
+5995,1,undefined,0,0,00h,0
+5996,1,undefined,0,0,00h,0
+5997,1,undefined,0,0,00h,0
+5998,1,undefined,0,0,00h,0
+5999,1,undefined,0,0,00h,0
+599A,1,undefined,0,0,00h,0
+599B,1,undefined,0,0,00h,0
+599C,1,undefined,0,0,00h,0
+599D,1,undefined,0,0,00h,0
+599E,1,undefined,0,0,04h,0
+599F,1,undefined,0,0,00h,0
+59A0,1,undefined,0,0,0Ch,0
+59A1,1,undefined,0,0,00h,0
+59A2,1,undefined,0,0,0Dh,0
+59A3,1,undefined,0,0,00h,0
+59A4,1,undefined,0,0,0Dh,0
+59A5,1,undefined,0,0,00h,0
+59A6,1,undefined,0,0,0Dh,0
+59A7,1,undefined,0,0,00h,0
+59A8,1,undefined,0,0,0Dh,0
+59A9,1,undefined,0,0,00h,0
+59AA,1,undefined,0,0,00h,0
+59AB,1,undefined,0,0,01h,0
+59AC,1,undefined,0,0,03h,0
+59AD,1,undefined,0,0,05h,0
+59AE,1,undefined,0,0,07h,0
+59AF,1,undefined,0,0,09h,0
+59B0,1,undefined,0,0,0Bh,0
+59B1,1,undefined,0,0,0Fh,0
+59B2,1,undefined,0,0,12h,0
+59B3,1,undefined,0,0,15h,0
+59B4,1,undefined,0,0,00h,0
+59B5,1,undefined,0,0,02h,0
+59B6,1,undefined,0,0,04h,0
+59B7,1,undefined,0,0,06h,0
+59B8,1,undefined,0,0,08h,0
+59B9,1,undefined,0,0,0Ah,0
+59BA,1,undefined,0,0,0Ch,0
+59BB,1,undefined,0,0,11h,0
+59BC,1,undefined,0,0,11h,0
+59BD,1,undefined,0,0,11h,0
+59BE,1,undefined,0,0,11h,0
+59BF,78,uint8_t[78],0,78,,1
+5A0D,48,uint8_t[48],0,48,,1
+5A3D,54,uint8_t[54],0,54,,1
+5A73,54,uint8_t[54],0,54,,1
+5AA9,24,uint8_t[24],0,24,,1
+5AC1,24,uint8_t[24],0,24,,1
+5AD9,18,uint8_t[18],0,18,,1
+5AEB,28,far_t[7],0,7,,0
+5B07,15,string,0,0,"lightning bolt",0
+5B16,8,string,0,0,"towards",0
+5B1E,14,string,0,0,"magic missile",0
+5B2C,13,string,0,0,"charm person",0
+5B39,9,string,0,0,"fireball",0
+5B42,15,string,0,0,"charm monsters",0
+5B51,12,string,0,0,"hold person",0
+5B5D,6,string,0,0,"sleep",0
+5B63,4,string,0,0,"web",0
+5B67,6,string,0,0,"charm",0
+5B6D,16,string,0,0,"finger of death",0
+5B7D,13,string,0,0,"disintegrate",0
+5B8A,15,string,0,0,"flesh to stone",0
+5B99,11,string,0,0,"mass charm",0
+5BA4,27,string,0,0,"%s casts a %s spell %s %s.",0
+5BBF,34,string,0,0,"%s takes half damage from spells.",0
+5BE1,41,string,0,0,"%s takes half damage from dragon breath.",0
+5C0A,37,string,0,0,"%s takes half damage from lightning.",0
+5C2F,21,string,0,0,"%s is charmed by %s.",0
+5C44,22,string,0,0,"%s fails to charm %s.",0
+5C5A,22,string,0,0,"%s is immune to fire.",0
+5C70,32,string,0,0,"%s takes half damage from fire.",0
+5C90,18,string,0,0,"%s is held by %s.",0
+5CA2,26,string,0,0,"%s is put to sleep by %s.",0
+5CBC,40,string,0,0,"%s is entangled in a web created by %s.",0
+5CE4,1,undefined1,0,0,00h,9
+5CE5,1,undefined,0,0,E6h,0
+5CE6,1,undefined,0,0,00h,0
+5CE7,1,undefined,0,0,39h    9,0
+5CE8,1,undefined,0,0,00h,0
+5CE9,1,undefined,0,0,3Fh    ?,0
+5CEA,1,undefined,0,0,01h,0
+5CEB,1,undefined,0,0,C7h,0
+5CEC,1,undefined,0,0,00h,0
+5CED,1,undefined,0,0,00h,0
+5CEE,1,undefined,0,0,A0h,0
+5CEF,1,undefined1,0,0,FFh,12
+5CF0,1,undefined1,0,0,00h,4
+5CF1,1,undefined1,0,0,00h,6
+5CF2,6,string,0,0,"Pause",0
+5CF8,7,string,0,0,"Resume",0
+5CFF,6,string,0,0,"%s-%c",0
+5D05,42,string,0,0,"Sorry, you may not pause during a battle.",0
+5D2F,83,string,0,0,"Pause. Select 'Resume' to enable game events. Press SPACE for a single game event.",0
+5D82,45,string,0,0,"Resume. Game events will now occur normally.",0
+5DAF,5,string,0,0,"Gold",0
+5DB4,5,string,0,0,"Fund",0
+5DB9,9,string,0,0,"Previous",0
+5DC2,5,string,0,0,"Next",0
+5DC7,1,undefined,0,0,00h,1
+5DC8,3,uint8_t[3],0,3,,1
+5DCB,1,undefined,0,0,00h,0
+5DCC,1,undefined,0,0,02h,0
+5DCD,1,undefined,0,0,03h,0
+5DCE,1,undefined,0,0,05h,0
+5DCF,1,undefined1,0,0,05h,1
+5DD0,1,undefined,0,0,01h,0
+5DD1,1,undefined,0,0,03h,0
+5DD2,1,undefined,0,0,04h,0
+5DD3,1,undefined,0,0,00h,0
+5DD4,1,undefined,0,0,01h,0
+5DD5,1,undefined,0,0,02h,0
+5DD6,1,undefined,0,0,04h,0
+5DD7,1,undefined1,0,0,03h,1
+5DD8,1,undefined,0,0,00h,0
+5DD9,1,undefined,0,0,02h,0
+5DDA,1,undefined,0,0,02h,0
+5DDB,1,undefined,0,0,00h,0
+5DDC,1,undefined,0,0,00h,0
+5DDD,1,undefined,0,0,01h,0
+5DDE,1,undefined,0,0,02h,0
+5DDF,1,undefined1,0,0,02h,1
+5DE0,1,undefined,0,0,00h,0
+5DE1,1,undefined,0,0,01h,0
+5DE2,1,undefined,0,0,02h,0
+5DE3,1,undefined,0,0,00h,0
+5DE4,1,undefined,0,0,01h,0
+5DE5,1,undefined,0,0,03h,0
+5DE6,1,undefined,0,0,04h,0
+5DE7,1,undefined1,0,0,04h,1
+5DE8,1,undefined,0,0,03h,0
+5DE9,1,undefined,0,0,05h,0
+5DEA,1,undefined,0,0,07h,0
+5DEB,1,undefined,0,0,07h,0
+5DEC,4,byte[4],0,4,,1
+5DF0,4,byte[4],0,4,,1
+5DF4,2,undefined2,0,0,0000h,8
+5DF6,2,undefined2,0,0,0000h,8
+5DF8,23,string,0,0,"All enemies destroyed.",0
+5E0F,29,string,0,0,"Next wave of enemies appear.",0
+5E2C,4,char[4],0,4,"0\r\n",1
+5E30,11,string,0,0,"strong.sav",1
+5E3B,20,string,0,0,"strong.sav\\game.cfg",1
+5E4F,2,string,0,0,"\n",1
+5E51,4,string,0,0,"\b \b",1
+5E55,3,string,0,0,"%c",1
+5E58,20,string,0,0,"strong.sav\\game.cfg",1
+5E6C,11,string,0,0,"strong.sav",1
+5E77,22,string,0,0,"strong.sav\\strong.$$$",1
+5E8D,22,string,0,0,"strong.sav\\strong.$$$",1
+5EA3,26,string,0,0,"Path to write game data:\n",1
+5EBD,65,TerminatedCString,0,0,"ENTER: use previous configuration, SPACE: reconfigure, ESC: quit",1
+5EFE,2,string,0,0,"\n",1
+5F00,63,string,0,0,"Sound (1. PC Speaker  2. Sound Blaster  3. Pro Audio Spectrum\n",1
+5F3F,49,string,0,0,"       4. Adlib       5. Roland         6. Off):",1
+5F70,2,string,0,0,"\n",1
+5F72,60,string,0,0,"Sound Blaster (1. Original  2.  Pro Type 2  3. Pro Type 1):",1
+5FAE,2,string,0,0,"\n",1
+5FB0,46,string,0,0,"Pro Audio Spectrum (1. Plus  2. Spectrum 16):",1
+5FDE,2,string,0,0,"\n",0
+5FE0,30,string,0,0,"Adlib (1. Original  2. Gold):",1
+5FFE,2,string,0,0,"\n",1
+6000,71,string,0,0,"Sound Effects (1. PC Speaker  2. Sound Blaster  3. Pro Audio Spectrum\n",1
+6047,40,string,0,0,"               4. Adlib       5. None):",1
+606F,2,string,0,0,"\n",1
+6071,38,string,0,0,"Sound Blaster (1. Original  2.  Pro):",1
+6097,2,string,0,0,"\n",0
+6099,46,string,0,0,"Pro Audio Spectrum (1. Plus  2. Spectrum 16):",1
+60C7,2,string,0,0,"\n",1
+60C9,30,string,0,0,"Adlib (1. Original  2. Gold):",1
+60E7,2,string,0,0,"\n",1
+60E9,54,string,0,0,"Sound IRQ is %c (1. Don't change  2. IRQ 2  3. IRQ 5\n",1
+611F,33,string,0,0,"                                 ",0
+6140,22,string,0,0,"4. IRQ 7  5. IRQ 10):",0
+6156,2,string,0,0,"\n",0
+6158,51,string,0,0,"Largest executable program size is only %s bytes.\n",1
+618B,37,string,0,0,"Stronghold requires 585,000 bytes.\n",1
+61B0,1,undefined1,0,0,00h,5
+61B1,18,string,0,0,"Bad Pointer %lx \r",1
+61C3,13,string,0,0,"Str %x %x  \r",1
+61D0,28,string,0,0,"Bad heap @%x S%x Z%x P%x  \r",1
+61EC,20,string,0,0,"%lx already free \r",1
+6200,4,far_t,0,2,,0
+6204,12,string,0,0,"short sword",1
+6210,16,string,0,0,"normal weaponry",1
+6220,18,string,0,0,"+%d ring of prot.",1
+6232,9,string,0,0,"no armor",1
+623B,14,string,0,0,"leather armor",1
+6249,17,string,0,0,"+1 leather armor",0
+625A,17,string,0,0,"+2 leather armor",1
+626B,7,string,0,0,"shield",1
+6272,12,string,0,0,"scale armor",1
+627E,11,string,0,0,"chain mail",1
+6289,13,string,0,0,"banded armor",1
+6296,11,string,0,0,"plate mail",1
+62A1,17,string,0,0,"plate and shield",1
+62B2,20,string,0,0,"plate and shield +1",1
+62C6,11,string,0,0,"suit armor",1
+62D1,10,string,0,0,"Exp %ld \r",0
+62DB,2,string,0,0,7Fh,1
+62DD,6,string,0,0,"Ready",1
+62E3,5,string,0,0,"Home",1
+62E8,11,string,0,0,"Unassigned",1
+62F3,11,string,0,0,"Unit of %d",1
+62FE,12,string,0,0,"Loyal to %s",1
+630A,9,string,0,0,"L. to %s",1
+6313,16,string,0,0,"%d%s lv rn %c, ",1
+6323,13,string,0,0,"%d%s level, ",1
+6330,18,string,0,0,"Experience points",1
+6342,6,string,0,0,"%s/%s",1
+6348,12,string,0,0,"XP value %d",1
+6354,17,string,0,0,"Hit Points %d/%d",1
+6365,11,string,0,0,"damaged %s",1
+6370,7,string,0,0,"+%d %s",1
+6377,15,string,0,0,"Armor class %d",1
+6386,7,string,0,0,"Mirror",1
+638D,21,string,0,0,"  %s is not readied.",0
+63A2,15,string,0,0,"  %s is ready.",0
+63B1,23,string,0,0,"%s is no longer ready.",0
+63C8,57,string,0,0,"Ready characters are the first to come when attracted.%s",0
+6401,5,string,0,0,"Done",2
+6406,72,string,0,0,"%s is now based at (%d, %d). This unit will remain home when attracted.",0
+644E,37,string,0,0,"%s can now be called away from home.",0
+6473,9,string,0,0,"Previous",1
+647C,5,string,0,0,"Next",1
+6481,7,string,0,0,"Leader",1
+6488,5,string,0,0,"Help",1
+648D,1,undefined,0,0,00h,0
+648E,1,undefined1,0,0,00h,6
+648F,41,string,0,0,"Define region to command %s loyal to %s.",1
+64B8,106,string,0,0,"%d %s%s loyal to %s found. Left click: set triangles. R: ready. U: unassign. H: home. Right click: abort.",1
+6522,33,string,0,0,"Priorities adjusted for %d %s%s.",1
+6543,20,string,0,0,"%d %s%s unassigned.",1
+6557,17,string,0,0,"%d %s%s readied.",1
+6568,15,string,0,0,"%d %s%s homed.",1
+6577,26,string,0,0,"Region selection aborted.",1
+6591,1,undefined,0,0,00h,0
+6592,110,uint16_t[55],0,55,,0
+6600,1,undefined,0,0,D7h,0
+6601,392,far_t[98],0,98,,0
+6789,9,string,0,0,"@Housing",1
+6792,10,string,0,0,"@Farmland",0
+679C,5,string,0,0,"@Inn",0
+67A1,8,string,0,0,"@Temple",0
+67A9,7,string,0,0,"@Forge",0
+67B0,12,string,0,0,"@University",0
+67BC,7,string,0,0,"@Tower",0
+67C3,9,string,0,0,"@Granary",0
+67CC,13,string,0,0,"@Marketplace",0
+67D9,6,string,0,0,"@Tree",0
+67DF,10,string,0,0,"@E/W wall",0
+67E9,10,string,0,0,"@N/S wall",0
+67F3,12,string,0,0,"@E/W bridge",0
+67FF,12,string,0,0,"@N/S bridge",0
+680B,13,string,0,0,"@Guard house",0
+6818,14,string,0,0,"@Thieve's Den",0
+6826,13,string,0,0,"@Social hall",0
+6833,10,string,0,0,"@E/W gate",0
+683D,10,string,0,0,"@N/S gate",0
+6847,13,string,0,0,"@Elf Gardens",0
+6854,10,string,0,0,"@Fletcher",0
+685E,13,string,0,0,"@public bath",0
+686B,14,string,0,0,"@mason's hall",0
+6879,9,string,0,0,"@jeweler",0
+6882,12,string,0,0,"@glassworks",0
+688E,9,string,0,0,"@outpost",0
+6897,7,string,0,0,"@vault",0
+689E,17,string,0,0,"@Forester's camp",0
+68AF,16,string,0,0,"@Builder's hall",0
+68BF,8,string,0,0,"@bazaar",0
+68C7,7,string,0,0,"@arena",0
+68CE,10,string,0,0,"@toymaker",0
+68D8,8,string,0,0,"@bakery",0
+68E0,13,string,0,0,"@gaming hall",0
+68ED,10,string,0,0,"@scribery",0
+68F7,12,string,0,0,"@magic mill",0
+6903,8,string,0,0,"@armory",0
+690B,46,string,0,0,"Building is now %s.  Select type of building.",1
+6939,1,string,0,0,"",0
+693A,1,undefined1,0,0,00h,19
+693B,1,undefined,0,0,43h    C,1
+693C,1,undefined,0,0,8Bh,0
+693D,1,undefined,0,0,27h    ',0
+693E,1,undefined,0,0,3Fh    ?,0
+693F,1,undefined,0,0,7Fh    ,0
+6940,1,undefined,0,0,2Fh    /,0
+6941,1,undefined,0,0,43h    C,0
+6942,1,undefined,0,0,73h    s,0
+6943,1,undefined,0,0,37h    7,0
+6944,1,undefined,0,0,43h    C,0
+6945,1,undefined,0,0,67h    g,0
+6946,1,undefined,0,0,3Bh    ;,0
+6947,1,undefined,0,0,43h    C,0
+6948,1,undefined,0,0,5Fh    _,0
+6949,1,undefined,0,0,3Fh    ?,0
+694A,1,undefined,0,0,DFh,0
+694B,1,undefined,0,0,A3h,0
+694C,1,undefined,0,0,6Fh    o,0
+694D,1,undefined,0,0,CFh,0
+694E,1,undefined,0,0,9Bh,0
+694F,1,undefined,0,0,6Fh    o,0
+6950,1,undefined,0,0,C3h,0
+6951,1,undefined,0,0,97h,0
+6952,1,undefined,0,0,6Bh    k,0
+6953,1,undefined,0,0,B3h,0
+6954,1,undefined,0,0,93h,0
+6955,1,undefined,0,0,67h    g,0
+6956,1,undefined,0,0,A7h,0
+6957,1,undefined,0,0,8Bh,0
+6958,1,undefined,0,0,67h    g,0
+6959,1,undefined,0,0,C3h,0
+695A,1,undefined,0,0,7Fh    ,0
+695B,1,undefined,0,0,63h    c,0
+695C,1,undefined,0,0,AFh,0
+695D,1,undefined,0,0,6Bh    k,0
+695E,1,undefined,0,0,4Fh    O,0
+695F,1,undefined,0,0,9Bh,0
+6960,1,undefined,0,0,5Fh    _,0
+6961,1,undefined,0,0,3Bh    ;,0
+6962,1,undefined,0,0,87h,0
+6963,1,undefined,0,0,4Fh    O,0
+6964,1,undefined,0,0,2Bh    +,0
+6965,1,undefined,0,0,73h    s,0
+6966,1,undefined,0,0,43h    C,0
+6967,1,undefined,0,0,1Fh,0
+6968,1,undefined,0,0,A3h,0
+6969,1,undefined,0,0,B3h,0
+696A,1,undefined,0,0,6Fh    o,0
+696B,1,undefined,0,0,93h,0
+696C,1,undefined,0,0,A7h,0
+696D,1,undefined,0,0,6Fh    o,0
+696E,1,undefined,0,0,87h,0
+696F,1,undefined,0,0,9Bh,0
+6970,1,undefined,0,0,6Fh    o,0
+6971,1,undefined,0,0,7Fh    ,0
+6972,1,undefined,0,0,8Fh,0
+6973,1,undefined,0,0,6Fh    o,0
+6974,1,undefined,0,0,77h    w,0
+6975,1,undefined,0,0,83h,0
+6976,1,undefined,0,0,6Fh    o,0
+6977,1,undefined,0,0,DFh,0
+6978,1,undefined,0,0,C3h,0
+6979,1,undefined,0,0,ABh,0
+697A,1,undefined,0,0,CFh,0
+697B,1,undefined,0,0,B3h,0
+697C,1,undefined,0,0,9Bh,0
+697D,1,undefined,0,0,C3h,0
+697E,1,undefined,0,0,A7h,0
+697F,1,undefined,0,0,8Fh,0
+6980,1,undefined,0,0,B3h,0
+6981,1,undefined,0,0,9Bh,0
+6982,1,undefined,0,0,83h,0
+6983,1,undefined,0,0,A7h,0
+6984,1,undefined,0,0,8Fh,0
+6985,1,undefined,0,0,77h    w,0
+6986,1,undefined,0,0,C3h,0
+6987,1,undefined,0,0,7Fh    ,0
+6988,1,undefined,0,0,63h    c,0
+6989,1,undefined,0,0,AFh,0
+698A,1,undefined,0,0,6Bh    k,0
+698B,1,undefined,0,0,4Fh    O,0
+698C,1,undefined,0,0,9Bh,0
+698D,1,undefined,0,0,5Fh    _,0
+698E,1,undefined,0,0,3Bh    ;,0
+698F,1,undefined,0,0,87h,0
+6990,1,undefined,0,0,4Fh    O,0
+6991,1,undefined,0,0,2Bh    +,0
+6992,1,undefined,0,0,73h    s,0
+6993,1,undefined,0,0,43h    C,0
+6994,1,undefined,0,0,1Fh,0
+6995,1,undefined,0,0,DFh,0
+6996,1,undefined,0,0,D7h,0
+6997,1,undefined,0,0,E7h,0
+6998,1,undefined,0,0,CBh,0
+6999,1,undefined,0,0,BFh,0
+699A,1,undefined,0,0,DBh,0
+699B,1,undefined,0,0,B7h,0
+699C,1,undefined,0,0,ABh,0
+699D,1,undefined,0,0,CFh,0
+699E,1,undefined,0,0,A7h,0
+699F,1,undefined,0,0,97h,0
+69A0,1,undefined,0,0,C3h,0
+69A1,1,undefined,0,0,93h,0
+69A2,1,undefined,0,0,87h,0
+69A3,1,undefined,0,0,BBh,0
+69A4,1,undefined,0,0,DFh,0
+69A5,1,undefined,0,0,D7h,0
+69A6,1,undefined,0,0,E7h,0
+69A7,1,undefined,0,0,CBh,0
+69A8,1,undefined,0,0,BFh,0
+69A9,1,undefined,0,0,DBh,0
+69AA,1,undefined,0,0,B7h,0
+69AB,1,undefined,0,0,ABh,0
+69AC,1,undefined,0,0,CFh,0
+69AD,1,undefined,0,0,A7h,0
+69AE,1,undefined,0,0,97h,0
+69AF,1,undefined,0,0,C3h,0
+69B0,1,undefined,0,0,93h,0
+69B1,1,undefined,0,0,87h,0
+69B2,1,undefined,0,0,BBh,0
+69B3,1,undefined,0,0,C3h,0
+69B4,1,undefined,0,0,7Fh    ,0
+69B5,1,undefined,0,0,63h    c,0
+69B6,1,undefined,0,0,AFh,0
+69B7,1,undefined,0,0,6Bh    k,0
+69B8,1,undefined,0,0,4Fh    O,0
+69B9,1,undefined,0,0,9Bh,0
+69BA,1,undefined,0,0,5Fh    _,0
+69BB,1,undefined,0,0,3Bh    ;,0
+69BC,1,undefined,0,0,87h,0
+69BD,1,undefined,0,0,4Fh    O,0
+69BE,1,undefined,0,0,2Bh    +,0
+69BF,1,undefined,0,0,73h    s,0
+69C0,1,undefined,0,0,43h    C,0
+69C1,1,undefined,0,0,1Fh,0
+69C2,1,undefined,0,0,22h    ",1
+69C3,1,undefined,0,0,24h    $,0
+69C4,1,undefined,0,0,3Fh    ?,0
+69C5,1,undefined,0,0,29h    ),1
+69C6,1,undefined,0,0,2Ch    ,,0
+69C7,1,undefined,0,0,3Fh    ?,0
+69C8,1,undefined,0,0,3Fh    ?,1
+69C9,1,undefined,0,0,00h,0
+69CA,1,undefined,0,0,00h,0
+69CB,12,far_t[3],0,3,,1
+69D7,4,byte[4],0,4,,1
+69DB,64,string,0,0,"Your may continue playing, but your score will not be recorded.",1
+6A1B,7,string,0,0,"spring",1
+6A22,5,string,0,0,"fall",1
+6A27,7,string,0,0,"winter",1
+6A2E,34,string,0,0,"The season has changed to summer.",0
+6A50,30,string,0,0,"The season has changed to %s.",1
+6A6E,24,string,0,0,"%d building%s repaired.",0
+6A86,2,undefined2,0,0,0000h,4
+6A88,1,undefined1,0,0,00h,6
+6A89,11,string,0,0,"%shigh.txt",0
+6A94,19,string,0,0,"Great Achievements",0
+6AA7,5,string,0,0,"Name",0
+6AAC,8,string,0,0,"Enemies",0
+6AB4,5,string,0,0,"Done",0
+6AB9,10,string,0,0,"%c%s%s@%d",0
+6AC3,1,string,0,0,"",0
+6AC4,4,far_t,0,2,,1
+6AC8,103,char[103],0,103,"My %s, we in this neighborhood are doing well. We thank you for all you have done to help your people.",0
+6B2F,5,string,0,0,"lord",0
+6B34,5,string,0,0,"lady",0
+6B39,1,string,0,0,"",0
+6B3A,76,far_t[19],0,19,,0
+6B86,1,undefined,0,0,00h,0
+6B87,1,undefined,0,0,00h,0
+6B88,1,undefined,0,0,00h,0
+6B89,1,undefined,0,0,00h,0
+6B8A,1,undefined,0,0,3Fh    ?,0
+6B8B,1,undefined,0,0,01h,0
+6B8C,1,undefined,0,0,8Fh,0
+6B8D,1,undefined,0,0,00h,0
+6B8E,1,undefined,0,0,00h,0
+6B8F,1,undefined,0,0,A0h,0
+6B90,46,string,0,0,"On this day it was declared to all the Realms",1
+6BBE,42,string,0,0,"that %s shall henceforth hold the rank of",1
+6BE8,52,string,0,0,"%s, in recognition of valor on the field of battle.",1
+6C1C,40,string,0,0,"%s, in recognition for city management.",1
+6C44,31,string,0,0,"Your desire to destroy him and",1
+6C63,41,string,0,0,"gain revenge inspires you to new heights",1
+6C8C,43,string,0,0,"You will be promoted to ever-greater ranks",1
+6CB7,42,string,0,0,"of nobility. You will truly be the master",1
+6CE1,11,string,0,0,"of your...",1
+6CEC,44,string,0,0,"Your desire to destroy him and gain revenge",1
+6D18,41,string,0,0,"inspired you to seek a life of glory and",1
+6D41,11,string,0,0,"adventure.",1
+6D4C,24,string,0,0,"%s stronghold destroyed",1
+6D64,51,string,0,0,"Congratulations, you have achieved your objective.",1
+6D97,24,string,0,0,"of adventure and glory.",1
+6DAF,31,string,0,0,"that %s shall hold the rank of",1
+6DCE,25,string,0,0,"%s, for valor in battle.",1
+6DE7,25,string,0,0,"%s, for city management.",1
+6E00,1,undefined,0,0,36h    6,0
+6E01,1,undefined,0,0,00h,0
+6E02,1,undefined,0,0,27h    ',0
+6E03,1,undefined,0,0,00h,0
+6E04,1,undefined,0,0,1Dh,0
+6E05,1,undefined,0,0,00h,0
+6E06,1,undefined,0,0,10h,0
+6E07,1,undefined,0,0,00h,0
+6E08,1,undefined,0,0,01h,0
+6E09,1,undefined,0,0,02h,0
+6E0A,1,undefined,0,0,03h,0
+6E0B,1,undefined,0,0,03h,0
+6E0C,1,undefined,0,0,00h,0
+6E0D,1,undefined,0,0,05h,0
+6E0E,1,undefined,0,0,04h,0
+6E0F,1,undefined,0,0,07h,0
+6E10,1,undefined,0,0,07h,0
+6E11,1,undefined,0,0,08h,0
+6E12,1,undefined,0,0,09h,0
+6E13,1,undefined,0,0,00h,0
+6E14,1,undefined,0,0,04h,0
+6E15,1,undefined,0,0,00h,0
+6E16,1,undefined,0,0,01h,0
+6E17,1,undefined,0,0,02h,0
+6E18,1,undefined,0,0,06h,0
+6E19,1,undefined,0,0,04h,0
+6E1A,1,undefined,0,0,06h,0
+6E1B,1,undefined,0,0,08h,0
+6E1C,1,undefined,0,0,09h,0
+6E1D,1,undefined,0,0,0Ah,0
+6E1E,1,undefined,0,0,0Ah,0
+6E1F,1,undefined,0,0,06h,0
+6E20,1,undefined,0,0,09h,0
+6E21,1,undefined,0,0,08h,0
+6E22,1,undefined,0,0,08h,0
+6E23,1,undefined,0,0,07h,0
+6E24,1,undefined,0,0,0Bh,0
+6E25,1,undefined,0,0,07h,0
+6E26,1,undefined,0,0,0Ah,0
+6E27,1,undefined,0,0,07h,0
+6E28,1,undefined,0,0,08h,0
+6E29,1,undefined,0,0,09h,0
+6E2A,1,undefined,0,0,0Ah,0
+6E2B,1,undefined,0,0,0Ah,0
+6E2C,1,undefined,0,0,00h,0
+6E2D,1,undefined,0,0,01h,0
+6E2E,1,undefined,0,0,02h,0
+6E2F,1,undefined,0,0,03h,0
+6E30,1,undefined,0,0,04h,0
+6E31,1,undefined,0,0,03h,0
+6E32,1,undefined,0,0,06h,0
+6E33,1,undefined,0,0,03h,0
+6E34,1,undefined,0,0,02h,0
+6E35,1,undefined,0,0,00h,0
+6E36,1,undefined,0,0,06h,0
+6E37,1,undefined,0,0,04h,0
+6E38,16,far_t[4],0,4,,0
+6E48,1,undefined,0,0,05h,0
+6E49,1,undefined,0,0,00h,0
+6E4A,1,undefined,0,0,0Ah,0
+6E4B,1,undefined,0,0,00h,0
+6E4C,1,undefined,0,0,14h,0
+6E4D,1,undefined,0,0,00h,0
+6E4E,1,undefined,0,0,23h    #,0
+6E4F,1,undefined,0,0,00h,0
+6E50,1,undefined,0,0,4Bh    K,0
+6E51,1,undefined,0,0,00h,0
+6E52,1,undefined,0,0,AFh,0
+6E53,1,undefined,0,0,00h,0
+6E54,1,undefined,0,0,13h,0
+6E55,1,undefined,0,0,01h,0
+6E56,1,undefined,0,0,C2h,0
+6E57,1,undefined,0,0,01h,0
+6E58,1,undefined,0,0,8Ah,0
+6E59,1,undefined,0,0,02h,0
+6E5A,1,undefined,0,0,84h,0
+6E5B,1,undefined,0,0,03h,0
+6E5C,1,undefined,0,0,E8h,0
+6E5D,1,undefined,0,0,03h,0
+6E5E,1,undefined,0,0,4Ch    L,0
+6E5F,1,undefined,0,0,04h,0
+6E60,1,undefined,0,0,E2h,0
+6E61,1,undefined,0,0,04h,0
+6E62,1,undefined,0,0,46h    F,0
+6E63,1,undefined,0,0,05h,0
+6E64,1,undefined,0,0,DCh,0
+6E65,1,undefined,0,0,05h,0
+6E66,1,undefined,0,0,72h    r,0
+6E67,1,undefined,0,0,06h,0
+6E68,1,undefined,0,0,3Ah    :,0
+6E69,1,undefined,0,0,07h,0
+6E6A,1,undefined,0,0,D0h,0
+6E6B,1,undefined,0,0,07h,0
+6E6C,1,undefined,0,0,4Dh    M,0
+6E6D,1,undefined,0,0,08h,0
+6E6E,1,undefined,0,0,CAh,0
+6E6F,1,undefined,0,0,08h,0
+6E70,1,undefined,0,0,47h    G,0
+6E71,1,undefined,0,0,09h,0
+6E72,1,undefined,0,0,C4h,0
+6E73,1,undefined,0,0,09h,0
+6E74,1,undefined,0,0,00h,0
+6E75,1,undefined,0,0,73h    s,0
+6E76,1,undefined,0,0,00h,0
+6E77,8,string,0,0,"kill 4\r",0
+6E7F,4,string,0,0,"are",0
+6E83,3,string,0,0,"is",0
+6E86,80,string,0,0,"The %d unit%s loyal to %s %s %d%% recruiting, %d%% training, and %d%% building.",0
+6ED6,18,string,0,0,"%s fails to turn.",0
+6EE8,16,string,0,0,"%s cannot turn.",0
+6EF8,23,string,0,0,"%s destroys %d undead.",0
+6F0F,20,string,0,0,"%s turns %d undead.",0
+6F23,16,string,0,0,"Building %d %s.",0
+6F33,10,string,0,0,"Enemy %s.",1
+6F3D,5,string,0,0,"%d \r",0
+6F42,33,string,0,0,"You cannot see the terrain here.",0
+6F63,23,string,0,0,"%s is paralyzed by %s.",0
+6F7A,20,string,0,0,"%s is stoned by %s.",0
+6F8E,25,string,0,0,"%s is no longer charmed.",0
+6FA7,18,string,0,0,"cure light wounds",1
+6FB9,20,string,0,0,"cure serious wounds",1
+6FCD,21,string,0,0,"cure critical wounds",1
+6FE2,9,string,0,0,"cure all",1
+6FEB,70,string,0,0,"%s casts %s on %s to heal %d hitpoint%s for a total of %d hitpoint%s.",0
+7031,45,string,0,0,"%s takes no damage from non-magical weapons.",0
+705E,46,string,0,0,"%s takes no damage from less than +2 weapons.",0
+708C,41,string,0,0,"%s takes no damage from missile attacks.",0
+70B5,15,string,0,0,"%s poisons %s.",0
+70C4,40,string,0,0,"%s infects %s with blast spore disease.",0
+70EC,27,string,0,0,"%s drains a level from %s.",0
+7107,30,string,0,0,"%s drains all energy from %s.",0
+7125,31,string,0,0,"%s drains two levels from %s.",0
+7144,1,bool,0,0,FALSE,41
+7145,1,undefined,0,0,07h,0
+7146,1,undefined,0,0,28h    (,0
+7147,1,undefined,0,0,25h    %,0
+7148,1,undefined,0,0,34h    4,0
+7149,1,undefined,0,0,35h    5,0
+714A,1,undefined,0,0,01h,0
+714B,1,undefined,0,0,02h,0
+714C,1,undefined,0,0,03h,0
+714D,1,undefined,0,0,2Eh    .,0
+714E,1,undefined,0,0,2Fh    /,0
+714F,1,undefined,0,0,30h    0,0
+7150,1,undefined,0,0,1Ch,0
+7151,1,undefined,0,0,1Fh,0
+7152,1,undefined,0,0,71h    q,0
+7153,1,undefined,0,0,00h,0
+7154,1,undefined,0,0,01h,0
+7155,1,undefined,0,0,02h,0
+7156,1,undefined,0,0,03h,0
+7157,1,undefined,0,0,05h,0
+7158,1,undefined,0,0,08h,0
+7159,1,undefined,0,0,0Ah,0
+715A,1,undefined,0,0,0Bh,0
+715B,1,undefined,0,0,00h,0
+715C,1,undefined,0,0,00h,0
+715D,1,undefined,0,0,98h,0
+715E,1,undefined,0,0,00h,0
+715F,1,undefined,0,0,3Fh    ?,0
+7160,1,undefined,0,0,01h,0
+7161,1,undefined,0,0,C7h,0
+7162,1,undefined,0,0,00h,0
+7163,1,undefined,0,0,00h,0
+7164,1,undefined,0,0,A0h,0
+7165,16,string,0,0,"Demo cancelled.",0
+7175,7,string,0,0,"Nasher",0
+717C,7,string,0,0,"Fordor",0
+7183,7,string,0,0,"Kaunas",0
+718A,8,string,0,0,"Mindark",0
+7192,45,string,0,0,"A new land lies before you. Choose carefully",0
+71BF,18,string,0,0,"where you settle.",0
+71D1,40,string,0,0,"Your goal: Create a thriving community.",0
+71F9,45,string,0,0,"Balance building, money, and food production",0
+7226,27,string,0,0,"to keep your people happy.",0
+7241,44,string,0,0,"Your world will be filled with a full range",0
+726D,34,string,0,0,"of official D&D@ game characters.",0
+728F,41,string,0,0,"You are not alone in this pristine land.",0
+72B8,42,string,0,0,"Official D&D@ game monsters will fight to",0
+72E2,19,string,0,0,"destroy your city.",0
+72F5,44,string,0,0,"Force and fury meet magic spells as battles",0
+7321,46,string,0,0,"play out in the courtyards of mighty castles.",0
+734F,40,string,0,0,"Your people will fight bravely and work",0
+7377,29,string,0,0,"hard. Your city will grow...",0
+7394,12,string,0,0,"and grow...",0
+73A0,33,string,0,0,"                     and grow...",0
+73C1,35,string,0,0,"But beware the evil Mindark, whose",0
+73E4,41,string,0,0,"hordes destroyed your homeland long ago.",0
+740D,39,string,0,0,"If you lead with wisdom and cunning...",0
+7434,37,string,0,0,"If you fight with valor and guile...",0
+7459,36,string,0,0,"You will truly be master of your...",0
+747D,1,string,0,0,"",0
+747E,11,string,0,0,"strong.dat",2
+7489,4,uint32_t,0,0,0h,1
+748D,1,undefined,0,0,00h,0
+748E,30,string,0,0,"getcache %d  SIZESTASH %d  \r",1
+74AC,1,undefined1,0,0,FFh,3
+74AD,8,far_t[2],0,2,,0
+74B5,1,undefined,0,0,08h,0
+74B6,1,undefined,0,0,0Ch,0
+74B7,1,undefined,0,0,24h    $,0
+74B8,56,string,0,0,"Choose party to build for.  Now building for %s the %s.",0
+74F0,4,string,0,0,"%s:",0
+74F4,36,string,0,0," You can only place a single arena.",0
+7518,36,string,0,0," Bridges must be near water's edge.",0
+753C,36,string,0,0," Next outpost available at rank %s.",0
+7560,33,string,0,0," No more outposts are available.",0
+7581,24,string,0,0," Requires a rank of %s.",0
+7599,30,string,0,0," Requires a unit of level %d.",0
+75B7,32,string,0,0," Location is too narrow for %s.",0
+75D7,34,string,0,0," Location is too narrow for a %s.",0
+75F9,26,string,0,0," Walls must be near land.",0
+7613,39,string,0,0,"Buildings cannot be placed over water.",0
+763A,43,string,0,0,"This location is unsuitable for buildings.",0
+7665,32,string,0,0," It will cost %s the %s %d gp. ",0
+7685,6,string,0,0,"Place",0
+768B,16,string,0,0,"Change Building",0
+769B,13,string,0,0,"Change Party",0
+76A8,5,string,0,0,"Done",0
+76AD,60,string,0,0,"Party member %s doesn't have enough gold to construct a %s.",0
+76E9,29,string,0,0,"Too many construction sites.",0
+7706,9,string,0,0,"Excavate",0
+770F,7,string,0,0,"Remove",0
+7716,13,string,0,0,"Change party",0
+7723,67,string,0,0,"%s: Search this location for minerals?  Active party is %s the %s.",0
+7766,24,string,0,0,"No minerals were found.",0
+777E,17,string,0,0,"Gems discovered.",0
+778F,26,string,0,0,"Iron deposits discovered.",0
+77A9,17,string,0,0,"Gold discovered.",0
+77BA,3,string,0,0,"No",0
+77BD,37,string,0,0,"Remove %s permanently. Are you sure?",0
+77E2,7,string,0,0,"person",1
+77E9,7,string,0,0,"people",1
+77F0,6,string,0,0,"Claim",0
+77F6,10,string,0,0,"Chop down",0
+7800,74,string,0,0,"%s: Claim this tree? Harvest value is %d gold. Active party is %s the %s.",0
+784A,71,string,0,0,"Forest claimed. This forest creates %d gold of income and feeds %d %s.",0
+7891,33,string,0,0,"Tree cut down. %d gold obtained.",0
+78B2,20,string,0,0,"Maintenance cost is",0
+78C6,18,string,0,0,"Income created is",0
+78D8,3,string,0,0,"..",0
+78DB,4,string,0,0,"...",0
+78DF,1,string,0,0,"",0
+78E0,1,undefined1,0,0,00h,10
+78E1,1,undefined1,0,0,01h,18
+78E2,1,undefined1,0,0,00h,3
+78E3,1,undefined,0,0,00h,0
+78E4,4,far_t,0,2,,1
+78E8,5,string,0,0,"Done",1
+78ED,32,string,0,0,"%s: %d%% complete. Owned by %s.",0
+790D,24,string,0,0,"%s (%u/%u): Held by %s.",0
+7925,34,string,0,0," Home a unit here to halt damage.",0
+7947,16,string,0,0,"%s: Held by %s.",0
+7957,7,string,0,0,"Water:",0
+795E,7,string,0,0,"Shore:",0
+7965,4,string,0,0,"%s:",0
+7969,8,string,0,0,"Suspend",0
+7971,13,string,0,0,"Change party",0
+797E,59,string,0,0,"%s: %d%% complete. Owned by %s. Active party is %s the %s.",0
+79B9,73,string,0,0,"Clearing of land: %d%% complete. Owned by %s. Active party is %s the %s.",0
+7A02,3,string,0,0,"No",0
+7A05,64,string,0,0,"Construction of %s will be permanently suspended. Are you sure?",0
+7A45,52,string,0,0,"%s (%d/%d): Owned by %s. Active party is %s the %s.",0
+7A79,44,string,0,0,"%s: Owned by %s. Active party is %s the %s.",1
+7AA5,31,string,0,0,"%s: Active party is %s the %s.",0
+7AC4,53,string,0,0,"%s: Costs %d gold and provides training to level %d.",1
+7AF9,54,string,0,0,"%s: Costs %d gold of income. Replaces broken weapons.",1
+7B2F,49,string,0,0,"%s: Costs %d gold of income. Forges +%d weapons.",1
+7B60,45,string,0,0,"%s: Costs %d gold of income. Improves armor.",1
+7B8D,58,string,0,0,"%s: Costs %d gold of income. Improves armor class by -%d.",1
+7BC7,51,string,0,0,"%s: Costs %d gold of income. Replaces broken bows.",1
+7BFA,57,string,0,0,"%s: Costs %d gold of income. Creates +%d bow and arrows.",1
+7C33,60,string,0,0,"%s: Costs %d gold. Increases unit size of five units by %d.",1
+7C6F,54,string,0,0,"%s: Costs %d gold. Increases building speed by %d0%%.",1
+7CA5,46,string,0,0,"%s: Costs %d gold. Enhances training by %d%%.",1
+7CD3,53,string,0,0,"%s: Costs %d gold. Produces +%d rings of protection.",1
+7D08,84,string,0,0,"%s: Costs %d gold. Produces mirrors for medusae combat. Increases tower range by 5.",1
+7D5C,56,string,0,0,"%s: Costs %d gold. Attracts new units to this location.",1
+7D94,54,string,0,0,"%s: Costs %d gold. Provides %u units of gold storage.",1
+7DCA,46,string,0,0,"%s: Costs %d gold. Claim trees automatically.",1
+7DF8,56,string,0,0,"%s: Costs %d gold. Repairs buildings at season changes.",1
+7E30,53,string,0,0,"%s: Trades %d food for gold. Total trade is %d food.",1
+7E65,69,string,0,0,"%s: Creates %d gold of income, and accesses %d%% of the market fund.",1
+7EAA,87,string,0,0,"%s: Costs %d gold of income and provides visibility of %d squares n/s, %d squares e/w.",0
+7F01,62,string,0,0,"%s: Costs %d gold of income and provides storage for %u food.",0
+7F3F,62,string,0,0,"%s: Costs %d gold of income and provides storage for %u gold.",1
+7F7D,56,string,0,0,"%s: Provides housing for %d %s and storage for %d food.",1
+7FB5,32,string,0,0,"%s: Provides housing for %d %s.",2
+7FD5,29,string,0,0,"%s: %s %d gold. Feeds %d %s.",2
+7FF2,60,string,0,0,"%s: %s %d gold. provides housing for %d %s and feeds %d %s.",1
+802E,44,string,0,0,"%s: %s %d gold. Provides housing for %d %s.",1
+805A,16,string,0,0,"%s: %s %d gold.",1
+806A,8,string,0,0,"Salvage",0
+8072,24,string,0,0," Salvage value %d gold.",1
+808A,9,string,0,0,"Demolish",0
+8093,7,string,0,0,"Repair",0
+809A,21,string,0,0," Repair costs %d gp.",1
+80AF,8,string,0,0,"Upgrade",0
+80B7,22,string,0,0," Upgrade costs %d gp.",1
+80CD,12,string,0,0,"Information",0
+80D9,10,string,0,0,"New Owner",0
+80E3,13,string,0,0,"Change Party",0
+80F0,47,string,0,0,"%s will be salvaged for %d gold. Are you sure?",1
+811F,41,string,0,0,"Get rid of %s permanently. Are you sure?",0
+8148,20,string,0,0,"%s is being filled.",1
+815C,25,string,0,0,"%s salvaged for %d gold.",1
+8175,18,string,0,0,"%s is demolished.",1
+8187,30,string,0,0,"%s does not have enough gold.",2
+81A5,13,string,0,0,"%s repaired.",1
+81B2,29,string,0,0,"Too many construction sites.",1
+81CF,13,string,0,0,"%s upgraded.",1
+81DC,80,string,0,0,"%ld experience obtained. %ld experience given to each unit. %ld gold recovered.",0
+822C,136,far_t[34],0,34,,1
+82B4,10,string,0,0,"help0.txt",1
+82BE,10,string,0,0,"help1.txt",1
+82C8,10,string,0,0,"help2.txt",1
+82D2,10,string,0,0,"help3.txt",1
+82DC,10,string,0,0,"help4.txt",1
+82E6,10,string,0,0,"help5.txt",1
+82F0,10,string,0,0,"help6.txt",1
+82FA,10,string,0,0,"help7.txt",1
+8304,10,string,0,0,"text1.txt",1
+830E,10,string,0,0,"text2.txt",1
+8318,10,string,0,0,"text3.txt",1
+8322,10,string,0,0,"text4.txt",1
+832C,10,string,0,0,"text5.txt",1
+8336,10,string,0,0,"text6.txt",1
+8340,11,string,0,0,"house1.txt",0
+834B,11,string,0,0,"house2.txt",1
+8356,11,string,0,0,"house3.txt",1
+8361,11,string,0,0,"house4.txt",1
+836C,11,string,0,0,"house5.txt",1
+8377,10,string,0,0,"hung1.txt",1
+8381,10,string,0,0,"hung2.txt",1
+838B,10,string,0,0,"hung3.txt",1
+8395,10,string,0,0,"hung4.txt",1
+839F,10,string,0,0,"hung5.txt",1
+83A9,11,string,0,0,"incom1.txt",1
+83B4,11,string,0,0,"incom2.txt",1
+83BF,11,string,0,0,"incom3.txt",1
+83CA,11,string,0,0,"incom4.txt",1
+83D5,11,string,0,0,"incom5.txt",1
+83E0,11,string,0,0,"cflow1.txt",1
+83EB,11,string,0,0,"cflow2.txt",1
+83F6,11,string,0,0,"cflow3.txt",1
+8401,11,string,0,0,"cflow4.txt",1
+840C,11,string,0,0,"cflow5.txt",1
+8417,11,string,0,0,"bolt12.fli",1
+8422,9,string,0,0,"save.999",1
+842B,1,undefined,0,0,00h,0
+842C,1,undefined,0,0,0Ch,0
+842D,1,undefined,0,0,00h,0
+842E,1,undefined,0,0,07h,0
+842F,1,undefined,0,0,00h,0
+8430,1,undefined,0,0,DEh,0
+8431,1,undefined,0,0,00h,0
+8432,1,undefined,0,0,96h,0
+8433,1,undefined,0,0,00h,0
+8434,1,undefined,0,0,00h,0
+8435,1,undefined,0,0,A0h,0
+8436,27,string,0,0,"%s is no longer paralyzed.",0
+8451,27,string,0,0,"%s breaks free of the web.",0
+846C,55,string,0,0,"%s regenerates 3 hitpoints to a total of %d hitpoints.",0
+84A3,5,string,0,0,"%d \r",0
+84A8,36,far_t[9],0,9,,0
+84CC,8,string,0,0,"Summary",1
+84D4,10,string,0,0,"Now what?",1
+84DE,5,string,0,0,"City",1
+84E3,10,string,0,0,"Buildings",1
+84ED,6,string,0,0,"Money",1
+84F3,11,string,0,0,"Popularity",1
+84FE,7,string,0,0,"Combat",1
+8505,7,string,0,0,"Winter",1
+850C,5,string,0,0,"Done",1
+8511,1,undefined,0,0,00h,0
+8512,1,undefined,0,0,00h,0
+8513,1,undefined,0,0,00h,0
+8514,1,undefined,0,0,00h,0
+8515,1,undefined,0,0,00h,0
+8516,2,undefined2,0,0,0000h,6
+8518,257,byte[257],0,257,,0
+8619,1,undefined,0,0,00h,0
+861A,4,far_t,0,2,,2
+861E,4,far_t,0,2,,1
+8622,4,far_t,0,2,,1
+8626,400,FILE[20],0,20,,1
+87B6,2,uint16_t,0,0,14h,6
+87B8,40,uint16_t[20],0,20,,0
+87E0,2,undefined2,0,0,4000h,2
+87E2,1,undefined,0,0,FFh,0
+87E3,1,undefined,0,0,FFh,0
+87E4,2,undefined2,0,0,0000h,2
+87E6,89,char[89],0,89,"",0
+883F,1,undefined,0,0,00h,0
+8840,4,long,0,0,1h,3
+8844,7,string,0,0,"(null)",1
+884B,96,uint8_t[96],0,96,,1
+88AB,1,undefined,0,0,00h,0
+88AC,16,VIDEOREC,0,12,,4
+88BC,1,undefined,0,0,00h,0
+88BD,7,string,0,0,"COMPAQ",0
+88C4,50,string,0,0,"print scanf : floating point formats not linked\r\n",1
+88F6,2,undefined2,0,0,0000h,2
+88F8,2,undefined2,0,0,0000h,2
+88FA,2,undefined2,0,0,0000h,2
+88FC,2,undefined2,0,0,0000h,2
+88FE,2,undefined2,0,0,0000h,2
