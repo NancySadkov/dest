@@ -143,7 +143,7 @@ uint __cdecl16far draw_compute3(int x,...)
 void __cdecl16far draw_textTalkwin9Lbm(void)
 
 {
-  extern undefined2 _resetTextBlitCycle;   /* hand fix: no symbol exists */
+  undefined2 _resetTextBlitCycle;   /* local lost by the decompiler */
   byte *pbVar1;
   int *piVar2;
   uint *puVar3;
