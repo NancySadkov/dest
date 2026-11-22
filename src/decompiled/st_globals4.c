@@ -452,10 +452,13 @@ undefined1 seasonGroupBase = 0x00;
 /* 0745: six shade bytes */
 uint8_t shadeTable[6] = { 0x10, 0x0C, 0x06, 0x04, 0x02, 0x01 };
 uint8_t rowBandOrigin[10] = { 0x1F, 0x1C, 0x19, 0x16, 0x10, 0xC, 0x6, 0x4, 0x2, 0x1 };
+/* 0755: second "%d \\r" copy (the tree has another one elsewhere) */
+char s_d_2410_0755[] = "%d \r";
 char s_bad_house_d[] = "Bad House # %d \r";
 char s_d_d[] = "(%d, %d)";
 char s_x_d_y_d_x_x_x_x_x_x_x_x[] = "x:%d y:%d  %x %x %x %x   %x %x %x %x    \r";
 far_t DIGHandle = { 0x0, 0x0 };
+far_t MUSHandle = { 0x0, 0x0 };
 undefined1 CurMusicType = 0xFF;
 uint8_t CurSfxType3 = 0xFF;
 undefined1 DIG_2410_07a8 = 0x00;
@@ -471,15 +474,24 @@ undefined1 CurrentlyPlayingSfx = 0x00;
 undefined1 CurrentTrack = 0x00;
 uint16_t SfxGfxOfs = 0x0000;
 uint16_t SfxGfxSeg = 0x0000;
+/* 07ba: a second DIGHandle pair; address-suffixed because the original
+   symbols share the name. */
+uint16_t DIGHandle_07ba = 0x0000;
+uint16_t DIGHandle_seg_07bc = 0x0000;
 uint16_t MidGfxOfs = 0x0000;
 uint16_t MidGfxSeg = 0x0000;
 far_t MIDHandle = { 0x0, 0x0 };
 uint16_t MusGfxOfs = 0x0000;
 uint16_t MusGfxSeg = 0x0000;
-uint16_t MusHandle = 0x0000;
-uint16_t MusHandleSeg = 0x0000;
+/* 07ca: the later MusHandle pair; address-suffixed because TLINK folds
+   MUSHandle/MusHandle to the same name. */
+uint16_t MusHandle_07ca = 0x0000;
+uint16_t MusHandleSeg_07cc = 0x0000;
 uint16_t MusDrvOfs = 0x0000;
 uint16_t MusDrvSeg = 0x0000;
+/* GUESS: 0x7d2, four unnamed bytes after MusDrvSeg; emitted so the
+   addresses after 0x7d6 stay exact. */
+uint8_t musDrvExtra[4] = { 0x00, 0x00, 0x00, 0x00 };
 char s_midi_error[] = "Midi error\r";
 undefined1 animBranchCode = 0x00;
 uint16_t audioSaveCut1Ofs = 0x0000;
@@ -487,7 +499,8 @@ uint16_t audioSaveCut1Seg = 0x0000;
 uint16_t audioSaveCut2Ofs = 0x0000;
 uint16_t audioSaveCut2Seg = 0x0000;
 bool AgntFlag2 = 0;
-undefined mouseSaveRect4 = 0x0C;
+/* 07ec: a mouse save rectangle (10-byte brect_t) */
+brect_t mouseSaveRect4 = { 12, 7, 222, 150, 0xA000 };
 uint16_t BattleDelay = 0x0000;
 char s_charmed_s[] = "charmed %s";
 char s_turned_s[] = "turned %s";

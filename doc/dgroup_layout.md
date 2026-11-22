@@ -242,3 +242,25 @@ but the named arrays remain because they are part of the original DGROUP image.
 Removing them would drop data bytes; the byte-exact representation is one
 anonymous data image, not one array plus one literal (which is why each string
 currently exists twice in our DGROUP).
+
+## Seventh pass: 0x755, 0x7a2, 0x7ba, 0x7d0, 0x7ec
+
+```
+0755  5  a second "%d \r"            (the tree had one copy elsewhere)
+07a2  4  MUSHandle + .seg             (missing)
+07ba  4  a SECOND DIGHandle + .seg    (missing)
+07d0  6  MusDrvSeg + four unnamed bytes
+07ec 10  mouseSaveRect4 = {12,7,222,150,0xA000}   (declared as one byte)
+```
+
+Two C-name collisions surfaced here: TLINK folds `MUSHandle` and `MusHandle` to
+`_MUSHANDLE`, and the original has both (0x7a2 and 0x7ca).  The later, dead one
+is now `MusHandle_07ca`/`MusHandleSeg_07cc` (its only user, ovc11_audio's
+`musInit`, was updated), and the second `DIGHandle` pair is
+`DIGHandle_07ba`/`DIGHandle_seg_07bc`.
+
+Layout runs **132 -> 127 -> 126**; the constant delta now spans 154 symbols from
+`bigcompFrame` (0xd8) to `s_midi_error` (0x7d6).  Next: `-17` at
+`mouseSaveRect1` (0x858), `-9` at `Highlight1` (0x862), `-11` at `SquareRecX`
+(0x86e), `-15` at `SquareRecCount` (0x881) - the same "record declared as a
+scalar" pattern.
