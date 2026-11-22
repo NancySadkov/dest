@@ -372,16 +372,25 @@ char s_error_27__2410_0492[] = "error(27) \r";
 /* 049e: 26 bytes - the image carries two terminating NULs */
 char s_y1_d_yn_d_y3_d_yx_d[26] = "y1 %d yn %d y3 %d yx %d ";
 uint16_t MiceFlag = 0x0000;
+/* GUESS: 0x4ba, ten words with no symbol of their own; emitted so MiceOfsX
+   and everything after stay at the original addresses. */
+uint16_t miceFlagTable[10] = { 0x0000, 0x0000, 0x000A, 0x0010, 0x000D,
+    0x000C, 0x000F, 0x0010, 0x0007, 0x000A };
 int16_t MiceOfsX[4] = { 0, 1, 5, 6 };
 int16_t MiceOfsY[4] = { 0, 15, 3, 5 };
 uint16_t MiceIndex = 0x0000;
 undefined1 MiceUnkState = 0x00;
-char s__2410_04e1[] = "\r";
+/* 04e1: 3 bytes - "\r" plus two NULs */
+char s__2410_04e1[3] = "\r";
 int StshStrongDatHnd = 0xFFFF;
 uint16_t GCrLf = 0x0A0D;
-undefined scaleTable = 0x10;
-undefined edgeMaskTable = 0x03;
-undefined neighbourOfsTable = 0x00;
+/* 04e8: ten scale bytes */
+uint8_t scaleTable[10] = { 0x10, 0x0C, 0x06, 0x04, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01 };
+/* 04f2: sixteen mask bytes */
+uint8_t edgeMaskTable[16] = { 0x03, 0x06, 0x00, 0x01, 0x05, 0x03, 0x01, 0x00,
+    0x00, 0x02, 0x03, 0x05, 0x02, 0x00, 0x06, 0x03 };
+/* 0502: eight neighbour offsets */
+uint8_t neighbourOfsTable[8] = { 0x00, 0x01, 0x01, 0x02, 0x02, 0x03, 0x03, 0x00 };
 far_t GrayscalePalette = { 0x0, 0x0 };
 uint8_t GrayscaleIndices[11] = { 0x1, 0xDF, 0xDE, 0xDD, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8 };
 undefined1 CopyProtectionDone = 0x00;
@@ -425,13 +434,23 @@ char s_dots_2410_0690[] = "dots";
 char s_longbow_2410_0695[] = "longbow";
 char s_spells_2410_069d[] = "spells";
 char s_constructing_2410_06a4[] = "constructing";
+/* 06b1: "Stronghold copy protection." (28 bytes) */
+char s_Stronghold_copy_pro_2410_06b1[] = "Stronghold copy protection.";
+/* 06cd: "Turn to page #%d of the manual." (32 bytes) */
+char s_Turn_to_page_d_of_th_2410_06cd[] = "Turn to page #%d of the manual.";
 char s_Including_titles__c_2410_06ed[] = "Including titles, count to line #%d.";
-char s_enter_the_first_word[] = "Enter the first word.";
+/* 0712: 22 bytes - the image carries one padding NUL */
+char s_enter_the_first_word[22] = "Enter the first word.";
 uint8_t bandOrigin[10] = { 0x4E, 0x49, 0x47, 0x45, 0x43, 0x41, 0x40, 0x3F, 0x3E, 0x3D };
+/* GUESS: 0x732, a ten-byte shade ramp with no symbol of its own;
+   emitted so cornerShadeBias and everything after stay at the original
+   addresses. */
+uint8_t bandShadeTable[10] = { 0x10, 0x0C, 0x06, 0x04, 0x02, 0x01, 0x01, 0x01, 0x01, 0x01 };
 uint8_t cornerShadeBias[6] = { 0xD, 0xA, 0x5, 0x3, 0x2, 0x1 };
 uint16_t SmoothPrev = 0x0000;
 undefined1 seasonGroupBase = 0x00;
-undefined shadeTable = 0x10;
+/* 0745: six shade bytes */
+uint8_t shadeTable[6] = { 0x10, 0x0C, 0x06, 0x04, 0x02, 0x01 };
 uint8_t rowBandOrigin[10] = { 0x1F, 0x1C, 0x19, 0x16, 0x10, 0xC, 0x6, 0x4, 0x2, 0x1 };
 char s_bad_house_d[] = "Bad House # %d \r";
 char s_d_d[] = "(%d, %d)";

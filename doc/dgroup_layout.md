@@ -203,3 +203,42 @@ one.  That removed the remaining duplicate-name noise:
 The next real divergences are `-20` at `MiceOfsX` (0x4ce), `-1` at
 `StshStrongDatHnd` (0x4e4), `-9` at `edgeMaskTable` (0x4f2) and `-15` at
 `neighbourOfsTable` (0x502).
+
+## Sixth pass: 0x4b8, 0x6b1 and 0x732
+
+Three more blocks, all found by reading `PeekBytes` at the address the tool
+named and comparing with the declarations:
+
+```
+04b8 22  MiceFlag (word 0) + ten unnamed words 0,0,10,16,13,12,15,16,7,10
+04e1  3  s__2410_04e1 "\r" + two NULs
+04e8 10  scaleTable       {10,12,6,4,2,1,1,1,1,1}
+04f2 16  edgeMaskTable    {3,6,0,1,5,3,1,0,0,2,3,5,2,0,6,3}
+0502  8  neighbourOfsTable{0,1,1,2,2,3,3,0}
+06b1 28  "Stronghold copy protection."
+06cd 32  "Turn to page #%d of the manual."      (both were missing entirely)
+0732 10  an unnamed shade ramp {10,12,6,4,2,1,1,1,1,1}
+0745  6  shadeTable        {10,12,6,4,2,1}
+```
+
+Note `s_ng` at 0x6ae is not a string: it labels offset 10 inside
+"constructing", so adding it would have been wrong.
+
+Layout runs **139 -> 134 -> 133 -> 132**, and the constant delta now spans 122
+symbols from `bigcompFrame` (0xd8) to `cornerShadeBias`.
+
+Remaining first divergences: `-10` at `GCharLevelsInc` was fixed; the next are
+`-5` around `rowBandOrigin` (0x74b), `+32` at `MUSHandle` (0x7a2) and `-36` at
+`CurMusicType` (0x7a6).
+
+## On `grep 'char [name][N] = "'`
+
+Measured: **885** declarations still match.  The call sites, however, already
+use immediate string literals - 877 of the 885 arrays are referenced only by
+their declaration and `extern` (e.g. `ovl.c` writes through
+`((char *)"Divide error\r\n")[9]` while `char s_divide_error[] = "Divide
+error\r\n";` sits unused in `st_globals5.c`).  So the *source* fold is done,
+but the named arrays remain because they are part of the original DGROUP image.
+Removing them would drop data bytes; the byte-exact representation is one
+anonymous data image, not one array plus one literal (which is why each string
+currently exists twice in our DGROUP).
