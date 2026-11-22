@@ -1,0 +1,35 @@
+# Call targets the exporter rendered as `func_0x<linear address>`.
+#
+# The name encodes the target's *linear* address, and every one of them (17 of 18)
+# resolves to a named symbol in the model when the address is split at the segment
+# that actually contains it.  Example:
+#
+#     0x0004F32D  =  4d05:22dd  =  sub_OVC21_manage_c_22DD
+#
+# The callers pass a segment-like value as the first argument
+# (`func_0x0004f32d(0x2379, ...)`), so these are ordinary calls to functions in the
+# overlay code segments, not indirect dispatch through a table.
+#
+# The problem is that none of the targets is *defined* in the exported tree - the
+# export omitted them - so renaming the call sites alone does not close the link.
+# They have to be exported first.
+#
+# linear <TAB> segment:offset <TAB> model symbol
+0x00010264	1000:0264	audio_init_data
+0x00010268	1000:0268	fp_audio_done
+0x00030E61	30e6:0001	sub_OVC04_0001
+0x000318F5	-	not found in the model
+0x0004F29C	4d05:224c	L_OVC21_manage_c_224C
+0x0004F32D	4d05:22dd	sub_OVC21_manage_c_22DD
+0x0004F412	4d05:23c2	sub_OVC21_manage_c_23C2
+0x0004F501	4d05:24b1	sub_OVC21_manage_c_24B1
+0x0004F68F	4d05:263f	L_manage_4d05_2543_263F
+0x0004F735	4d05:26e5	L_manage_4d05_2543_26E5
+0x0004F930	4d05:28e0	manage_usesLitoa102
+0x0004F944	4d05:28f4	manage_usesLitoa103
+0x0004FB8E	4d05:2b3e	manage_usesCurSfxType32
+0x0004FCDA	4d05:2c89	L_manage_4d05_2bc4_2C89+1
+0x0005D3F4	5b66:1d94	SUB_5b66_1d94
+0x0005F303	5ded:1433	ovc27_textCharmed
+0x0007164E	6ffe:166e	L_OVC44_strong_dat_166E
+0x0007FFE0	7e7c:1820	L_OVC47_constrct_c_1820
