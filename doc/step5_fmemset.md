@@ -249,3 +249,58 @@ not by guessing a name:
 |---|---|
 | `ovc04_lbm.grabLbm` (`30e6:03a6`) | the only genuine one left: its `dst` local is still a near `stg_tmp_t *` while the original keeps the allocator's far pointer at `[BP-0x2e]/[BP-0x2c]`, and the surrounding "high word = segment" line has no asm counterpart |
 | `ovc25_intel`, `ovc41_main`, `ovc43_fli`, `ovc49_agents` | **phantom duplicates**: their containing functions are 36-150 bytes and contain no `CALLF _fmemset` at all.  Ghidra merged a callee's body into the caller, so the statement exists only in the export.  Removing it is only correct together with splitting the merged body. |
+
+## The four "phantom" sites are not phantoms: the overlay blocks alias
+
+`ListMemsetCalls` counts 43 `CALLF _fmemset` instructions, while the C contains
+52.  The four unexplained sites were assumed to be duplicated callee bodies.
+Direct inspection of the project shows something else.
+
+`ovc41_textOnlyPlaceSingle` (`6a8f:2084`) has a **two-range body** with a hole:
+
+```
+range 6a8f:2084 .. 6a8f:211a
+range 6a8f:21a4 .. 6a8f:22c2      ; 158 instructions, no CALLF _fmemset
+```
+
+The hole `6a8f:211b..21a3` is disassembled code, but not part of any function:
+
+```
+6a8f:211b  6A 06        PUSH 0x6
+6a8f:211d  6A 01        PUSH 0x1
+6a8f:211f  9A 57 00 56 23   CALLF 0x2000:35B7   ; ovr_manage_rollDice
+```
+
+Neither range nor the hole calls `_fmemset`, yet the decompilation contains
+
+```c
+pcStack_13e = acStack_42;
+uStack_140 = 0x22de;
+uStack_142 = 0x6f2a;
+_fmemset((void *)ZEXT24(unaff_SS),5,(uint16_t)count);
+iStack_a = 0;
+for (uVar16 = 0; uVar16 < EntityCount; uVar16 = uVar16 + 1) {
+```
+
+and that block is the *same code* as `ui_textDefineRegionCommand` (`6616:0689`),
+including the five-byte clear we gave `MK_FP(_SS,&unitFlags)`.
+
+The two segments are not the same overlay; the match comes from the Ghidra
+model: the placeholder segments BCC emits for overlay code (`0x6000`, `0x5000`,
+`0x4000`, ...) alias the memory block that holds the real overlay, so
+`JMP 0x6000:ca94` resolves to `6a8f:21a4`, and the decompiler follows those
+aliased jumps into neighbouring overlay code.
+
+Consequences:
+
+* the four remaining statements are **real code of some function**, not export
+  artefacts, so deleting them would remove a working clear;
+* the fix belongs in the Ghidra model (stop the placeholder-segment jumps from
+  flowing into other overlays - `ClearRefsTo` / `StripSegmentRefs` target
+  exactly that), not in the C;
+* the same aliasing explains why `ovc49_body1`, `ovc22_textRingProt` and
+  `ovc23_usesAlignUp43` contain far more C than their instruction counts
+  justify, and therefore why their locals are impossible to name consistently.
+
+Until the model is fixed, the `_fmemset` work is complete at **48 of the 52 text
+sites**: every site whose destination can be identified is converted.
