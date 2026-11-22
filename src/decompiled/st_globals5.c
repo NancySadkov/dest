@@ -977,6 +977,8 @@ bld_inst_t BldInstances[75] = { { 0x3268, 0x6C2E, { 0x62, 0x6D, 0x0, 0x62, 0x75,
      0x20, 0x72, 0x65, 0x61, 0x64 } }, { 0x6520, 0x7272, { 0x6F, 0x72, 0x20, 0x25, 0x73, 0x20, 0xD, 0x0 } } };
 undefined1 MsgShown = 0x00;
 far_t PlaceErrPtrs[3] = { { 0x461F, 0x2410 }, { 0x4647, 0x2410 }, { 0x466F, 0x2410 } };
+/* 45c5: "View %s." (9 bytes) */
+char s_View_s_2410_45c5[] = "View %s.";
 char s_place_s[] = "Place %s.";
 char s_view_s_cannot_place[] = "View %s. (Cannot place)";
 char s_create_baron_or_baroness[] = "Create baron or baroness.";
@@ -991,7 +993,15 @@ char s_your_stronghold_is_too_f_6cb9[] = "Your stronghold is too far away.";
 undefined1 SaveAuto = 0x00;
 undefined1 suppressLoadError = 0x00;
 far_t SaveHeader = { 0x475C, 0x2410 };
+/* 475c: the 40-byte version banner; 4784/478f: load progress messages */
+char s_0_21_Stronghold_Sav_2410_475c[40] = "0.21.  Stronghold Save.\x1A               ";
+char s_Loading_2410_4784[] = "Loading...";
+char s_Load_complete_2410_478f[] = "Load complete.";
 char s_Load_Error_2410_479e[] = "Load Error";
+/* 47a9/47b5/47bf: save progress messages */
+char s_ssave_03d_2410_47a9[] = "%ssave.%03d";
+char s_Saving_2410_47b5[] = "Saving...";
+char s_Save_complete_2410_47bf[] = "Save complete.";
 char s_Save_Error_2410_47ce[] = "Save Error";
 far_t Stsh_2410_47f6 = { 0x0, 0x0 };
 far_t StshCtPtr2 = { 0x0, 0x0 };
