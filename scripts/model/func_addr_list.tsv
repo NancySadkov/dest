@@ -1,0 +1,17 @@
+0x00010264	audio_init_data
+0x00010268	fp_audio_done
+0x00030E61	sub_OVC04_0001
+0x0004F29C	L_OVC21_manage_c_224C
+0x0004F32D	sub_OVC21_manage_c_22DD
+0x0004F412	sub_OVC21_manage_c_23C2
+0x0004F501	sub_OVC21_manage_c_24B1
+0x0004F68F	L_manage_4d05_2543_263F
+0x0004F735	L_manage_4d05_2543_26E5
+0x0004F930	manage_usesLitoa102
+0x0004F944	manage_usesLitoa103
+0x0004FB8E	manage_usesCurSfxType32
+0x0004FCDA	L_manage_4d05_2bc4_2C89
+0x0005D3F4	SUB_5b66_1d94
+0x0005F303	ovc27_textCharmed
+0x0007164E	L_OVC44_strong_dat_166E
+0x0007FFE0	L_OVC47_constrct_c_1820
