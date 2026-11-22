@@ -400,7 +400,9 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   byte (*paabVar13) [59] [148];
   short (*paasVar14) [148] [60];
   uint16_t unaff_SI;
+  int row;   /* map row, 0..0x93 */
   int iVar15;
+  int col;   /* map column, 0..0x93 */
   int iVar16;
   byte unaff_DI;
   uint uVar17;
@@ -448,7 +450,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   byte bStack_3;
   
   uStack_10 = (uint)(byte)uStack_10;
-  for (iVar15 = 0; iVar15 < 0x94; iVar15 = iVar15 + 1) {
+  for (row = 0; row < 0x94; row = row + 1) {
     uVar7 = ovr_randBelow(10,0);
     if ((uVar7 & 0xff) == 0) {
       uVar7 = ovr_randBelow(2,0);
@@ -461,10 +463,10 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
         uStack_10 = CONCAT11(1,(byte)uStack_10);
       }
     }
-    if ((iVar15 == 0) || (iVar15 == 0x93)) {
+    if ((row == 0) || (row == 0x93)) {
       uStack_10 = uStack_10 & 0xff;
     }
-    acStack_a4[iVar15] = (*(uint8_t *)((uint8_t *)&(uStack_10) + 1));
+    acStack_a4[row] = (*(uint8_t *)((uint8_t *)&(uStack_10) + 1));
   }
   uStack_c = 0;
   uStack_a = 0;
@@ -473,31 +475,31 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   _fsetmem(GMapFlags,0x4560,0);
   for (uVar17 = 0; (int)uVar17 < 0x3c; uVar17 = uVar17 + 1) {
     if ((uVar17 & 1) == 0) {
-      for (iVar15 = 0; iVar15 < 0x94; iVar15 = iVar15 + 1) {
+      for (row = 0; row < 0x94; row = row + 1) {
         uStack_c = 0;
-        if (iVar15 != 0) {
-          uStack_c = (int)(char)((byte (*) [59] [148])GMapCells)[-1][uVar17 + 0x3a][iVar15 + 0x93];
+        if (row != 0) {
+          uStack_c = (int)(char)((byte (*) [59] [148])GMapCells)[-1][uVar17 + 0x3a][row + 0x93];
         }
         if (uVar17 != 0) {
           uStack_c = uStack_c +
                      (int)(char)((byte (*) [59] [148])GMapCells)[-1][uVar17 + 0x3a]
-                                [acStack_a4[iVar15] + iVar15];
+                                [acStack_a4[row] + row];
         }
         uStack_c = (int)uStack_c >> 1;
-        if ((iVar15 != 0) && (acStack_a4[iVar15 + -1] != acStack_a4[iVar15])) {
+        if ((row != 0) && (acStack_a4[row + -1] != acStack_a4[row])) {
           uVar7 = ovr_randBelow(8,0);
           uStack_8 = uVar7 & 0xff;
           if (uStack_8 == 1) {
-            acStack_a4[iVar15] = acStack_a4[iVar15 + -1];
+            acStack_a4[row] = acStack_a4[row + -1];
           }
           else if (uStack_8 == 2) {
-            acStack_a4[iVar15 + -1] = acStack_a4[iVar15];
+            acStack_a4[row + -1] = acStack_a4[row];
           }
         }
         uVar7 = ovr_randBelow(0x10,0);
         if ((uVar7 & 0xff) == 0) {
-          if (iVar15 != 0) {
-            (*(uint8_t *)((uint8_t *)&(uStack_10) + 1)) = acStack_a4[iVar15 + -1];
+          if (row != 0) {
+            (*(uint8_t *)((uint8_t *)&(uStack_10) + 1)) = acStack_a4[row + -1];
             uVar7 = ovr_randBelow(2,0);
             cVar3 = (char)uVar7 * '\x02' + (*(uint8_t *)((uint8_t *)&(uStack_10) + 1)) + -1;
             uStack_10 = CONCAT11(cVar3,(byte)uStack_10);
@@ -507,7 +509,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
             if ('\x01' < (*(uint8_t *)((uint8_t *)&(uStack_10) + 1))) {
               uStack_10 = CONCAT11(1,(byte)uStack_10);
             }
-            acStack_a4[iVar15] = (*(uint8_t *)((uint8_t *)&(uStack_10) + 1));
+            acStack_a4[row] = (*(uint8_t *)((uint8_t *)&(uStack_10) + 1));
           }
           if ((int)uStack_c < 0x56) {
             if ((int)uStack_c < 0x41) {
@@ -579,35 +581,35 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
           uStack_a = -((uStack_a ^ (int)uStack_a >> 0xf) - ((int)uStack_a >> 0xf));
         }
         psVar9 = (stg_tmp_t *)CONCAT11((char)(uVar17 * 0x94 >> 8),(byte)uStack_c);
-        (*(byte (*) [59] [148])GMapCells)[uVar17][iVar15] = (byte)uStack_c;
+        (*(byte (*) [59] [148])GMapCells)[uVar17][row] = (byte)uStack_c;
       }
     }
     else {
-      for (iVar15 = 0x93; -1 < iVar15; iVar15 = iVar15 + -1) {
+      for (row = 0x93; -1 < row; row = row + -1) {
         uStack_c = 0;
-        if (iVar15 != 0x93) {
-          uStack_c = (int)(char)(*(byte (*) [59] [148])GMapCells)[uVar17][iVar15 + 1];
+        if (row != 0x93) {
+          uStack_c = (int)(char)(*(byte (*) [59] [148])GMapCells)[uVar17][row + 1];
         }
         if (uVar17 != 0) {
           uStack_c = uStack_c +
                      (int)(char)((byte (*) [59] [148])GMapCells)[-1][uVar17 + 0x3a]
-                                [acStack_a4[iVar15] + iVar15];
+                                [acStack_a4[row] + row];
         }
         uStack_c = (int)uStack_c >> 1;
-        if ((iVar15 != 0x93) && (acStack_a4[iVar15 + 1] != acStack_a4[iVar15])) {
+        if ((row != 0x93) && (acStack_a4[row + 1] != acStack_a4[row])) {
           uVar7 = ovr_randBelow(0x10,0);
           uStack_8 = uVar7 & 0xff;
           if (uStack_8 == 1) {
-            acStack_a4[iVar15] = acStack_a4[iVar15 + 1];
+            acStack_a4[row] = acStack_a4[row + 1];
           }
           else if (uStack_8 == 2) {
-            acStack_a4[iVar15 + 1] = acStack_a4[iVar15];
+            acStack_a4[row + 1] = acStack_a4[row];
           }
         }
         uVar7 = ovr_randBelow(0x10,0);
         if ((uVar7 & 0xff) == 0) {
-          if (iVar15 != 0x93) {
-            (*(uint8_t *)((uint8_t *)&(uStack_10) + 1)) = acStack_a4[iVar15 + 1];
+          if (row != 0x93) {
+            (*(uint8_t *)((uint8_t *)&(uStack_10) + 1)) = acStack_a4[row + 1];
             uVar7 = ovr_randBelow(2,0);
             cVar3 = (char)uVar7 * '\x02' + (*(uint8_t *)((uint8_t *)&(uStack_10) + 1)) + -1;
             uStack_10 = CONCAT11(cVar3,(byte)uStack_10);
@@ -617,7 +619,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
             if ('\x01' < (*(uint8_t *)((uint8_t *)&(uStack_10) + 1))) {
               uStack_10 = CONCAT11(1,(byte)uStack_10);
             }
-            acStack_a4[iVar15] = (*(uint8_t *)((uint8_t *)&(uStack_10) + 1));
+            acStack_a4[row] = (*(uint8_t *)((uint8_t *)&(uStack_10) + 1));
           }
           if ((int)uStack_c < 0x56) {
             if ((int)uStack_c < 0x41) {
@@ -689,31 +691,31 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
           uStack_a = -((uStack_a ^ (int)uStack_a >> 0xf) - ((int)uStack_a >> 0xf));
         }
         psVar9 = (stg_tmp_t *)CONCAT11((char)(uVar17 * 0x94 >> 8),(byte)uStack_c);
-        (*(byte (*) [59] [148])GMapCells)[uVar17][iVar15] = (byte)uStack_c;
+        (*(byte (*) [59] [148])GMapCells)[uVar17][row] = (byte)uStack_c;
       }
     }
   }
-  for (iVar15 = 0; iVar15 < 0x3c; iVar15 = iVar15 + 1) {
-    for (iVar16 = 0; iVar16 < 0x94; iVar16 = iVar16 + 1) {
+  for (row = 0; row < 0x3c; row = row + 1) {
+    for (col = 0; col < 0x94; col = col + 1) {
       uVar18 = (uint16_t)((ulong)GMapCells >> 0x10);
-      if ((char)(*(byte (*) [59] [148])GMapCells)[iVar15][iVar16] < '\0') {
-        (*(byte (*) [59] [148])GMapCells)[iVar15][iVar16] = 0;
+      if ((char)(*(byte (*) [59] [148])GMapCells)[row][col] < '\0') {
+        (*(byte (*) [59] [148])GMapCells)[row][col] = 0;
       }
-      psVar9 = (stg_tmp_t *)(iVar15 * 0x94);
-      if ((iVar16 != 0x93) && (iVar15 != 0x3c)) {
+      psVar9 = (stg_tmp_t *)(row * 0x94);
+      if ((col != 0x93) && (row != 0x3c)) {
         uVar18 = (uint16_t)((ulong)GMapCells >> 0x10);
         paabVar13 = (byte (*) [59] [148])GMapCells;
-        uVar17 = (int)(char)(*paabVar13)[iVar15 + 1][iVar16] -
-                 (int)(char)(*paabVar13)[iVar15][iVar16 + 1];
+        uVar17 = (int)(char)(*paabVar13)[row + 1][col] -
+                 (int)(char)(*paabVar13)[row][col + 1];
         uVar11 = (int)uVar17 >> 0xf;
-        uVar8 = (int)(char)(*paabVar13)[iVar15][iVar16] -
-                (int)(char)(*paabVar13)[iVar15 + 1][iVar16 + 1];
+        uVar8 = (int)(char)(*paabVar13)[row][col] -
+                (int)(char)(*paabVar13)[row + 1][col + 1];
         uVar12 = (int)uVar8 >> 0xf;
         psVar9 = (stg_tmp_t *)((uVar8 ^ uVar12) - uVar12);
         if ((int)((uVar17 ^ uVar11) - uVar11) < (int)psVar9) {
-          psVar9 = (stg_tmp_t *)(iVar16 * 2);
-          *(uint *)(psVar9->cmap + (int)(*(short (*) [60] [148])GMapFlags + iVar15)) =
-               *(uint *)(psVar9->cmap + (int)(*(short (*) [60] [148])GMapFlags + iVar15)) | 4;
+          psVar9 = (stg_tmp_t *)(col * 2);
+          *(uint *)(psVar9->cmap + (int)(*(short (*) [60] [148])GMapFlags + row)) =
+               *(uint *)(psVar9->cmap + (int)(*(short (*) [60] [148])GMapFlags + row)) | 4;
         }
       }
     }
@@ -724,61 +726,61 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   __return_storage_ptr__ = (uint32_t *)0x0;
   do {
     if (0x3a < (int)__return_storage_ptr__) {
-      for (iVar15 = 1; iVar15 < 0x3a; iVar15 = iVar15 + 1) {
-        for (iVar16 = 1; iVar16 < 0x92; iVar16 = iVar16 + 1) {
+      for (row = 1; row < 0x3a; row = row + 1) {
+        for (col = 1; col < 0x92; col = col + 1) {
           uVar7 = ovr_randBelow(2,0);
           psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
           if (psVar9 == (stg_tmp_t *)0x0) {
-            psVar9 = (stg_tmp_t *)(iVar15 * 0x94);
+            psVar9 = (stg_tmp_t *)(row * 0x94);
             uVar18 = (uint16_t)((ulong)GMapCells >> 0x10);
             paabVar13 = (byte (*) [59] [148])GMapCells;
-            if ((((((psVar9->cmap[(int)(*paabVar13 + -1) + 0x93 + iVar16] != 0) &&
-                   (psVar9 = (stg_tmp_t *)(*paabVar13 + iVar15), psVar9->cmap[iVar16 + 0x93] != 0))
-                  && (psVar9 = (stg_tmp_t *)(iVar15 * 0x94),
-                     psVar9->cmap[(int)((*paabVar13)[0] + iVar16)] != 0)) &&
-                 ((psVar9 = (stg_tmp_t *)(*paabVar13 + iVar15), psVar9->cmap[iVar16 + 0x94] != 0 &&
-                  (psVar9 = (stg_tmp_t *)(iVar15 * 0x94),
-                  psVar9->cmap[(int)((*paabVar13)[0] + iVar16 + 1)] != 0)))) &&
-                (psVar9 = (stg_tmp_t *)(*paabVar13 + iVar15), psVar9->cmap[iVar16 + 0x95] != 0)) &&
-               (((bVar4 = (*paabVar13)[iVar15][iVar16],
-                 psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(iVar15 * 0x94) >> 8),bVar4),
-                 (char)bVar4 <= (char)(*paabVar13)[iVar15][iVar16 + 1] &&
-                 (bVar4 = (*paabVar13)[iVar15][iVar16],
-                 psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(iVar15 * 0x94) >> 8),bVar4),
-                 (char)bVar4 <= (char)paabVar13[-1][iVar15 + 0x3a][iVar16 + 0x93])) &&
-                ((bVar4 = (*paabVar13)[iVar15][iVar16],
-                 psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(iVar15 * 0x94) >> 8),bVar4),
-                 (char)bVar4 <= (char)paabVar13[-1][iVar15 + 0x3a][iVar16] &&
-                 (((bVar4 = (*paabVar13)[iVar15][iVar16 + 1],
-                   psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(iVar15 * 0x94) >> 8),bVar4),
-                   (char)bVar4 <= (char)paabVar13[-1][iVar15 + 0x3a][iVar16 + 1] &&
-                   (bVar4 = (*paabVar13)[iVar15][iVar16],
-                   psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(iVar15 * 0x94) >> 8),bVar4),
-                   (char)bVar4 <= (char)(*paabVar13)[iVar15 + 1][iVar16])) &&
-                  (bVar4 = (*paabVar13)[iVar15][iVar16 + 1],
-                  psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(iVar15 * 0x94) >> 8),bVar4),
-                  (char)bVar4 <= (char)(*paabVar13)[iVar15 + 1][iVar16 + 1])))))))) {
-              uVar17 = ovr_init_getMapFlags(iVar16);
+            if ((((((psVar9->cmap[(int)(*paabVar13 + -1) + 0x93 + col] != 0) &&
+                   (psVar9 = (stg_tmp_t *)(*paabVar13 + row), psVar9->cmap[col + 0x93] != 0))
+                  && (psVar9 = (stg_tmp_t *)(row * 0x94),
+                     psVar9->cmap[(int)((*paabVar13)[0] + col)] != 0)) &&
+                 ((psVar9 = (stg_tmp_t *)(*paabVar13 + row), psVar9->cmap[col + 0x94] != 0 &&
+                  (psVar9 = (stg_tmp_t *)(row * 0x94),
+                  psVar9->cmap[(int)((*paabVar13)[0] + col + 1)] != 0)))) &&
+                (psVar9 = (stg_tmp_t *)(*paabVar13 + row), psVar9->cmap[col + 0x95] != 0)) &&
+               (((bVar4 = (*paabVar13)[row][col],
+                 psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(row * 0x94) >> 8),bVar4),
+                 (char)bVar4 <= (char)(*paabVar13)[row][col + 1] &&
+                 (bVar4 = (*paabVar13)[row][col],
+                 psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(row * 0x94) >> 8),bVar4),
+                 (char)bVar4 <= (char)paabVar13[-1][row + 0x3a][col + 0x93])) &&
+                ((bVar4 = (*paabVar13)[row][col],
+                 psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(row * 0x94) >> 8),bVar4),
+                 (char)bVar4 <= (char)paabVar13[-1][row + 0x3a][col] &&
+                 (((bVar4 = (*paabVar13)[row][col + 1],
+                   psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(row * 0x94) >> 8),bVar4),
+                   (char)bVar4 <= (char)paabVar13[-1][row + 0x3a][col + 1] &&
+                   (bVar4 = (*paabVar13)[row][col],
+                   psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(row * 0x94) >> 8),bVar4),
+                   (char)bVar4 <= (char)(*paabVar13)[row + 1][col])) &&
+                  (bVar4 = (*paabVar13)[row][col + 1],
+                  psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(row * 0x94) >> 8),bVar4),
+                  (char)bVar4 <= (char)(*paabVar13)[row + 1][col + 1])))))))) {
+              uVar17 = ovr_init_getMapFlags(col);
               psVar9 = (stg_tmp_t *)(uVar17 & 0xff);
               if (psVar9 == (stg_tmp_t *)0x0) {
-                uVar17 = ovr_init_getMapFlags(iVar16 + -1);
+                uVar17 = ovr_init_getMapFlags(col + -1);
                 psVar9 = (stg_tmp_t *)(uVar17 & 0xff);
                 if ((psVar9 == (stg_tmp_t *)0x0) &&
-                   (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags2(iVar16), (char)psVar9 == '\x02')
+                   (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags2(col), (char)psVar9 == '\x02')
                    ) {
-                  iStack_6 = ((short (*) [148] [60])GUnitGrid)[-1][iVar16 + 0x92][iVar15];
+                  iStack_6 = ((short (*) [148] [60])GUnitGrid)[-1][col + 0x92][row];
                   bStack_3 = ((unit_t *)GUnits + iStack_6)->bldType;
                   psVar9 = (stg_tmp_t *)((uint)bStack_3 * 0x27);
                   if ((psVar9->cmap[0x11b] < 2) &&
-                     (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags2(iVar16), (byte)psVar9 < 3)) {
+                     (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags2(col), (byte)psVar9 < 3)) {
                     uVar7 = ovr_randBelow(5,0);
-                    ((short (*) [148] [60])GUnitGrid)[-1][iVar16 + 0x93][iVar15] =
+                    ((short (*) [148] [60])GUnitGrid)[-1][col + 0x93][row] =
                          (uVar7 & 0xff) + 0x92;
                     uVar2 = (ulong)GUnitGrid >> 0x10;
                     paasVar14 = (short (*) [148] [60])GUnitGrid;
-                    psVar9 = (stg_tmp_t *)(iVar15 * 2);
-                    (psVar9->cmap + (int)(*paasVar14 + iVar16))[0] = 0;
-                    (psVar9->cmap + (int)(*paasVar14 + iVar16))[1] = 0;
+                    psVar9 = (stg_tmp_t *)(row * 2);
+                    (psVar9->cmap + (int)(*paasVar14 + col))[0] = 0;
+                    (psVar9->cmap + (int)(*paasVar14 + col))[1] = 0;
                   }
                 }
               }
@@ -789,22 +791,22 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
       init_rebuildAllDirectionFlags();
       return psVar9;
     }
-    for (iVar15 = 0; iVar15 < 0x93; iVar15 = iVar15 + 1) {
+    for (row = 0; row < 0x93; row = row + 1) {
       psVar9 = (stg_tmp_t *)((int)__return_storage_ptr__ * 0x94);
       uVar18 = (uint16_t)((ulong)GMapCells >> 0x10);
       paabVar13 = (byte (*) [59] [148])GMapCells;
-      if (((psVar9->cmap[(int)((*paabVar13)[0] + iVar15)] != 0) &&
+      if (((psVar9->cmap[(int)((*paabVar13)[0] + row)] != 0) &&
           (psVar9 = (stg_tmp_t *)((int)__return_storage_ptr__ * 0x94),
-          psVar9->cmap[(int)((*paabVar13)[0] + iVar15 + 1)] != 0)) &&
+          psVar9->cmap[(int)((*paabVar13)[0] + row + 1)] != 0)) &&
          ((psVar9 = (stg_tmp_t *)(*paabVar13 + (int)__return_storage_ptr__),
-          psVar9->cmap[iVar15 + 0x94] != 0 &&
+          psVar9->cmap[row + 0x94] != 0 &&
           (psVar9 = (stg_tmp_t *)(*paabVar13 + (int)__return_storage_ptr__),
-          psVar9->cmap[iVar15 + 0x94] != 0)))) {
-        uVar17 = ovr_init_getMapFlags(iVar15);
+          psVar9->cmap[row + 0x94] != 0)))) {
+        uVar17 = ovr_init_getMapFlags(row);
         psVar9 = (stg_tmp_t *)(uVar17 & 0xff);
         if (psVar9 == (stg_tmp_t *)0x0) {
           uStack_c = (uint)(char)(*(byte (*) [59] [148])GMapCells)[(int)__return_storage_ptr__]
-                                 [iVar15];
+                                 [row];
           if ((int)uStack_c < 0x6b) {
             if ((int)uStack_c < 0x56) {
               if ((int)uStack_c < 0x40) {
@@ -815,18 +817,18 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                     if (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 2)) {
                       uVar7 = ovr_randBelow(6,0);
                       psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x3d);
-                      (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
+                      (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
                            (short)psVar9;
                     }
                     else if ((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
-                            (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15,0,0),
+                            (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(row,0,0),
                             (char)psVar9 != '\0')) {
                       uVar7 = ovr_randBelow(2,0);
                       psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
                       if (psVar9 == (stg_tmp_t *)0x0) {
                         uVar7 = ovr_randBelow(9,0);
                         psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
-                        (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
+                        (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
                              (short)psVar9;
                       }
                     }
@@ -843,7 +845,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                     case (uint16_t)0x1:
                       while( true ) {
                         pbStack_18 = psVar9->cmap + (int)pbStack_18;
-                        psVar9 = (stg_tmp_t *)(iVar15 + (int)__return_storage_ptr__);
+                        psVar9 = (stg_tmp_t *)(row + (int)__return_storage_ptr__);
                         if ((int)puStack_1c <= (int)psVar9) {
                           psVar9 = memcpy((char *)CONCAT13((char)(uStack_12 >> 8),
                                                            CONCAT12((char)uStack_12,uStack_14)),
@@ -853,9 +855,9 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                                           uStack_e);
                           uStack_14 = uStack_14 + 0x140;
                         }
-                        iVar15 = iVar15 + 1;
-                        if (((int)uStack_10 <= iVar15) ||
-                           (psVar9 = (stg_tmp_t *)(iVar15 + (int)__return_storage_ptr__),
+                        row = row + 1;
+                        if (((int)uStack_10 <= row) ||
+                           (psVar9 = (stg_tmp_t *)(row + (int)__return_storage_ptr__),
                            (int)uStack_20 < (int)psVar9)) break;
                         (*(uint8_t *)((uint8_t *)&(src_00.seg))) = (char)uStack_16;
                         src_00.ofs = (uint16_t)pbStack_18;
@@ -878,15 +880,15 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                   if (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 1)) {
                     uVar7 = ovr_randBelow(6,0);
                     psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x3d);
-                    (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
+                    (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
                          (short)psVar9;
                   }
                   else if ((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
-                          (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15,0,0),
+                          (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(row,0,0),
                           (char)psVar9 != '\0')) {
                     uVar7 = ovr_randBelow(9,0);
                     psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
-                    (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
+                    (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
                          (short)psVar9;
                   }
                 }
@@ -895,11 +897,11 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                 uVar7 = ovr_randBelow(4,0);
                 psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
                 if (((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
-                    (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15,0,0), (char)psVar9 != '\0'))
+                    (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(row,0,0), (char)psVar9 != '\0'))
                    && (psVar9 = (stg_tmp_t *)ovr_randBelow(2,0), (char)psVar9 != '\0')) {
                   uVar7 = ovr_randBelow(9,0);
                   psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
-                  (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
+                  (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
                        (short)psVar9;
                 }
               }
@@ -908,29 +910,29 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
               uVar7 = ovr_randBelow(4,0);
               psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
               if (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 1)) {
-                psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15,0,0);
+                psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(row,0,0);
                 if ((char)psVar9 != '\0') {
                   uVar7 = ovr_randBelow(2,0);
                   if ((uVar7 & 0xff) == 0) {
                     uVar7 = ovr_randBelow(6,0);
                     psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x3d);
-                    (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
+                    (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
                          (short)psVar9;
                   }
                   else {
                     uVar7 = ovr_randBelow(9,0);
                     psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
-                    (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
+                    (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
                          (short)psVar9;
                   }
                 }
               }
               else if ((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
-                      (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15,0,0), (char)psVar9 != '\0')
+                      (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(row,0,0), (char)psVar9 != '\0')
                       ) {
                 uVar7 = ovr_randBelow(9,0);
                 psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
-                (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
+                (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
                      (short)psVar9;
               }
             }
@@ -940,10 +942,10 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
             psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
             if (((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 2)) ||
                 (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3))) &&
-               (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15,0,0), (char)psVar9 != '\0')) {
+               (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(row,0,0), (char)psVar9 != '\0')) {
               uVar7 = ovr_randBelow(9,0);
               psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
-              (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
+              (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
                    (short)psVar9;
             }
           }
@@ -954,7 +956,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   } while( true );
 switchD_3000_4a6e_caseD_3:
   do {
-    *(int *)(&stk_d744 + iVar15) = *(int *)(&stk_d744 + iVar15) + in_CX;
+    *(int *)(&stk_d744 + row) = *(int *)(&stk_d744 + row) + in_CX;
     uStack_28 = constr_compute2((uint8_t)uStack_20,(uint8_t)uStack_22,(uint8_t)puStack_1c,
                                 (byte)psVar9,unaff_DI);
     uStack_28 = uStack_28 & 0xff;
