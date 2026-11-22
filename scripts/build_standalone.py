@@ -27,7 +27,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BUILDSRC = os.path.join(ROOT, "tmp", "buildsrc")
-TC = os.path.join(ROOT, "tools", "TC30")
+TC = os.path.join(ROOT, "tools", "BC30")   # BCC 3.0: the VROOMM compiler
 REPORT = os.path.join(ROOT, "tmp", "build_report.tsv")
 
 # TC 3.0 flags: large model (all pointers far, matching the original), 80186
@@ -51,7 +51,7 @@ def write_batch(mods):
     bat = ["@echo off", "set INCLUDE=D:\\INCLUDE", "set PATH=D:\\BIN"]
     for m in mods:
         stem = m[:-2]
-        bat.append('D:\\BIN\\TCC.EXE %s %s > %s.log' % (CFLAGS, m, stem))
+        bat.append('D:\\BIN\\BCC.EXE %s %s > %s.log' % (CFLAGS, m, stem))
     # overlay thunks are assembly (jmp far to the resident routine)
     if os.path.isfile(os.path.join(BUILDSRC, "ovr.asm")):
         bat.append('E:\\BIN\\TASM.EXE /zi /m2 ovr.asm > ovr.log')

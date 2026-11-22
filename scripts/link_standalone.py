@@ -11,7 +11,7 @@ import sys
 
 ROOT = r"C:\Users\nangl\d\code\dest"
 BUILDSRC = os.path.join(ROOT, "tmp", "buildsrc")
-TC = os.path.join(ROOT, "tools", "TC30")
+TC = os.path.join(ROOT, "tools", "BC30")   # TLINK + libs from BC++ 3.0
 
 
 def main():
@@ -53,7 +53,7 @@ def main():
     res = [o for o in objs if is_resident(o)]
     ovl = [o for o in objs if not is_resident(o)]
     rsp = ("D:\\LIB\\C0M.OBJ " + " ".join(res) + " /o " + " ".join(ovl) +
-           ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\OVERLAY.LIB E:\\LIB\\CM.LIB")
+           ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\OVERLAY.LIB D:\\LIB\\CM.LIB")
     with open(os.path.join(BUILDSRC, "LINK.RSP"), "w", encoding="ascii",
               newline="\r\n") as f:
         f.write(rsp + "\n")
