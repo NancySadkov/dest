@@ -19,6 +19,7 @@ usage: python scripts/fix_x87_remnants.py [--apply]
 """
 import glob
 import io
+import re
 import sys
 
 apply = "--apply" in sys.argv
@@ -31,6 +32,12 @@ for path in sorted(glob.glob("src/decompiled/*.c")):
     new = new.replace("(long)in_ST0", "0L")
     new = new.replace("(double)in_ST0", "0.0")
     new = new.replace("(float)in_ST0", "0.0f")
+    # A store of a double through a computed pointer makes Turbo C pull in the
+    # 80-bit float I/O helpers (FIDRQQ/FIWRQQ), which are called with *near*
+    # relocations and therefore overflow ("Fixup overflow at O33_SEG:12F0").  These
+    # stores only ever wrote the x87 remnant, so with the value gone the store is
+    # meaningless and is dropped.  No other double stores exist in the tree.
+    new = re.sub(r"\*\s*\(double \*\)[^;=]*=\s*0\.0f?\s*;", "(void)0;", new)
     if new != t:
         total += sum(t.count(p) for p in ("(long)in_ST0", "(double)in_ST0", "(float)in_ST0"))
         files += 1

@@ -28,3 +28,8 @@
 #   CONCAT22(param_1, in_stack_00000002) builds the far pointer, and the only
 #   call site passes (0x236f, owner).
 4d05:28f4	undefined2 __cdecl16far manage_usesLitoa103(uint16_t textSeg,uint16_t owner)
+
+# printf (1000:2747): variadic; the recovered prototype dropped the ellipsis.
+1000:2747	void __cdecl16far printf(char *fmt,...)
+# _sprintf (1000:1f1d): variadic; the recovered prototype dropped the ellipsis.
+1000:1f1d	void __cdecl16far _sprintf(char *buf,char *fmt,...)

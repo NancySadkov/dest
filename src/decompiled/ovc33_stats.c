@@ -678,7 +678,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       *piVar3 = *piVar3 + uVar16 + (uint)(CARRY2(uVar20,(uint)pasVar34) || CARRY2(uVar15,uVar13));
       bVar12 = CARRY2(uVar16,*(uint *)(unaff_DI + (int)*pasVar34));
       iVar29 = uVar16 + *(uint *)(unaff_DI + (int)*pasVar34);
-      *(double *)((int)&unaff_SI->ofs + (int)*pasVar34) = 0.0;
+      (void)0;
       puVar4 = (undefined2 *)((int)&unaff_SI->ofs + (int)*pasVar34);
       bVar10 = ((byte)in_CX & 0x1f) % 0x11;
       uVar9 = CONCAT12(bVar12,*puVar4);

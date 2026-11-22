@@ -4879,7 +4879,7 @@ int __cdecl16far _open(char *pathname,int access)
 
 /* 1000:2747 */
 
-void __cdecl16far printf(char *fmt)
+void __cdecl16far printf(char *fmt,...)
 
 {
   __vprinter();
@@ -5162,7 +5162,7 @@ uint16_t __cdecl16near sprintf_strputn(char *dest,char *src,uint16_t n)
 
 /* 1000:2c7f */
 
-void __cdecl16far _sprintf(char *buf,char *fmt)
+void __cdecl16far _sprintf(char *buf,char *fmt,...)
 
 {
   *buf = '\0';
