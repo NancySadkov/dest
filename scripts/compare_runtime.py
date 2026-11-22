@@ -95,7 +95,66 @@ for off, name in orig:
     last = pick[0]
     matched.append((off, name, pick[0]))
 
+# ---- normalisation -----------------------------------------------------------
+# Two runs load the image at different segments, and our DGROUP layout differs
+# from the original's, so raw bytes cannot be compared for pointer data.
+# A word matches if:
+#   * it is the original's DGROUP segment -> ours must be our DGROUP segment;
+#   * it is an original symbol offset       -> ours must be that symbol's offset;
+#   * otherwise the bytes must be equal.
+# GYesNo is a far-pointer table in both images: element 0's segment half is
+# each run's own DGROUP segment.
+gyn = next((m for m in matched if m[1] == "GYesNo"), None)
+if gyn:
+    orig_seg = int.from_bytes(orig_img[gyn[0] + 2:gyn[0] + 4], "little")
+    ours_seg = int.from_bytes(ours_img[gyn[2] + 2:gyn[2] + 4], "little")
+else:
+    orig_seg, ours_seg = 0, dgroup_seg
+print("  original DGROUP segment %04x, rebuilt %04x" % (orig_seg, ours_seg or 0))
+
+off_map = {}
+for off, name, oofs in matched:
+    name_ln = length.get((off, name), 1)
+    off_map[off] = (oofs, name_ln)
+
+# every symbol as an interval, so an interior pointer offset can be mapped
+containers = sorted((off, off + max(length.get((off, name), 1), 1), oofs)
+                    for off, name, oofs in matched)
+
+
+def map_off(w):
+    for a, b, o in containers:
+        if a <= w < b:
+            return o + (w - a)
+    return None
+
+
+def word_matches(a, b, i):
+    if a == b:
+        return True
+    want = int.from_bytes(a, "little")
+    got = int.from_bytes(b, "little")
+    if want == 0 and got == 0:
+        return True
+    if want == orig_seg and got == ours_seg:
+        return True
+    m = map_off(want)
+    if m is not None and m == got:
+        return True
+    return False
+
+
+def symbol_matches(a, b):
+    if len(a) != len(b):
+        return False
+    for i in range(0, len(a) - 1, 2):
+        if not word_matches(a[i:i + 2], b[i:i + 2], i):
+            return False
+    return True
+
+
 same = differ = skipped = 0
+semantic = 0
 diffs = []
 for off, name, oofs in matched:
     ln = length.get((off, name))
@@ -109,6 +168,9 @@ for off, name, oofs in matched:
     b = ours_img[oofs:oofs + ln]
     if a == b:
         same += 1
+    elif symbol_matches(a, b):
+        same += 1
+        semantic += 1
     else:
         differ += 1
         if len(diffs) < 20:
@@ -121,6 +183,8 @@ print("  symbols matched: %d" % len(matched))
 print("  identical state: %d" % same)
 print("  DIFFERENT state: %d" % differ)
 print("  skipped (outside a dump): %d" % skipped)
+print("  of the identical ones, %d match after segment/offset normalisation"
+      % semantic)
 for off, name, oofs, ln, a, b in diffs:
     print("  %04x %-32s -> %04x len=%-3d want=%s got=%s"
           % (off, name, oofs, ln, a.hex()[:24], b.hex()[:24]))

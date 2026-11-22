@@ -381,11 +381,11 @@ far_t GSPEmpty = { 0x272B, 0x2410 };
 /* 26ad: a prompt rectangle (10-byte brect_t) */
 brect_t promptRect = { 0x16, 0x1D, 0xDE, 0x27, 0xA000 };
 /* 26b7: eight FAR pointers (4 bytes each) */
-char far *GMenuStrings[8] = { (char far *)(0x24100000UL + 0x27ebUL), (char far *)(0x24100000UL + 0x27f4UL),
-     (char far *)(0x24100000UL + 0x27feUL), (char far *)(0x24100000UL + 0x2808UL), (char far *)(0x24100000UL + 0x2814UL),
-     (char far *)(0x24100000UL + 0x281eUL), (char far *)(0x24100000UL + 0x282cUL), (char far *)(0x24100000UL + 0x283fUL) };
+char far *GMenuStrings[8] = { (char far *)&s_New_Game_2410_27eb[0], (char far *)&s_Save_Game_2410_27f4[0],
+     (char far *)&s_Load_Game_2410_27fe[0], (char far *)&s_Delete_Game_2410_2808[0], (char far *)&s_Quit_Game_2410_2814[0],
+     (char far *)&s_Message_Delay_2410_281e[0], (char far *)&s_Great_Achievements_2410_282c[0], (char far *)&s_Begin_Play_2410_283f[0] };
 /* 26d7: two FAR pointers */
-char far *GYesNo[2] = { (char far *)(0x24100000UL + 0x284aUL), (char far *)(0x24100000UL + 0x284eUL) };
+char far *GYesNo[2] = { (char far *)&s_Yes_2410_284a[0], (char far *)&s_No_2410_284e[0] };
 uint16_t GSeed = 0x0000;
 /* 26e1: the code uses SeedHi as a scalar, but the original symbol spans 22
    bytes (the seed table), so the remaining 20 bytes are kept verbatim. */
