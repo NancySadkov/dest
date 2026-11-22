@@ -202,8 +202,8 @@ ovc42_showAgentStats(byte gindex,uint8_t partyIndex,char flag,far_t cmap,byte le
   int iVar1;
   uint unaff_SS;
   far_t gfx;
-  agnt_t agntRec;
-  uint8_t agntTmp;
+  entity_t agntRec;   /* the 0x37-byte record at [BP-0x76] */
+  agnt_t agntTmp;     /* the 0x34-byte temp at [BP-0x3e] */
   entity_t *peStack_29;
   uint8_t rect;
   int16_t iStack_6;
@@ -214,35 +214,35 @@ ovc42_showAgentStats(byte gindex,uint8_t partyIndex,char flag,far_t cmap,byte le
   gfx.seg = talkwin9Cut1Seg;
   gfx.ofs = talkwin9Cut1Ofs;
   ovr_blitGfxRect(gfx,0,0,(brect_t *)&rect,(uint8_t)unaff_SS,true,0,0,0,0,0,0);
-  _fmemset(MK_FP(_SS, &agntRec), 0, 0x34);
-  _fmemset((void *)(ulong)unaff_SS,0x37,agntRec.x);
-  peStack_29 = (entity_t *)&agntRec;
-  agntRec.gindex = gindex;
-  agntRec.animFrame = 0x1;
-  (*(uint8_t *)((uint8_t *)&(agntRec.entity) + 3)) = partyIndex;
+  _fmemset(MK_FP(_SS, &agntTmp), 0, 0x34);
+  _fmemset(MK_FP(_SS, &agntRec), 0, 0x37);
+  peStack_29 = &agntRec;
+  agntRec.base.gindex = gindex;
+  agntRec.base.animFrame = 0x1;
+  (*(uint8_t *)((uint8_t *)&(agntRec.base.entity) + 3)) = partyIndex;
   if (flag != '\0') {
     (*(uint16_t *)((uint8_t *)&(agntRec) + 22)) = (*(uint16_t *)((uint8_t *)&(agntRec) + 22)) | 1;
   }
   if (level == 0) {
-    agntRec.level = *(uint8_t *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95);
+    agntRec.base.level = *(uint8_t *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95);
   }
   else {
-    agntRec.level = level;
+    agntRec.base.level = level;
   }
   if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) == -1) {
-    (*(uint16_t *)((uint8_t *)&(agntRec) + 18)) = *(uint16_t *)((uint)agntRec.level * 4 + -2);
-    (*(uint16_t *)((uint8_t *)&(agntRec) + 16)) = *(uint16_t *)((uint)agntRec.level * 4 + -4);
+    (*(uint16_t *)((uint8_t *)&(agntRec) + 18)) = *(uint16_t *)((uint)agntRec.base.level * 4 + -2);
+    (*(uint16_t *)((uint8_t *)&(agntRec) + 16)) = *(uint16_t *)((uint)agntRec.base.level * 4 + -4);
   }
   else {
     iVar1 = (uint)*(byte *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) * 0x94 +
-            (uint)agntRec.level * 4;
+            (uint)agntRec.base.level * 4;
     (*(uint16_t *)((uint8_t *)&(agntRec) + 18)) = *(uint16_t *)(iVar1 + -2);
     (*(uint16_t *)((uint8_t *)&(agntRec) + 16)) = *(uint16_t *)(iVar1 + -4);
   }
   if ((*(uint16_t *)((uint8_t *)&(agntRec) + 16)) == 0 && (*(uint16_t *)((uint8_t *)&(agntRec) + 18)) == 0) {
     (*(uint16_t *)((uint8_t *)&(agntRec) + 18)) = 0;
-    agntRec.health = 0x64;
-    agntRec.animVariant = 0x0;
+    agntRec.base.health = 0x64;
+    agntRec.base.animVariant = 0x0;
   }
   cmap_00.seg = cmap.ofs;
   cmap_00.ofs = unaff_SS;
