@@ -45,7 +45,7 @@ for line in io.open(SYMS, encoding="utf-8"):
 orig.sort()
 
 # ---- our publics -------------------------------------------------------------
-pat = re.compile(r"^\s*([0-9A-Fa-f]{4}):([0-9A-Fa-f]{4})\s+(\S+)\s*$")
+pat = re.compile(r"^\s*([0-9A-Fa-f]{4}):([0-9A-Fa-f]{4})\s+(?:\S+\s+)?(\S+)\s*$")
 ours = {}
 for line in io.open(MAP, encoding="latin-1", errors="replace"):
     m = pat.match(line.rstrip("\n"))

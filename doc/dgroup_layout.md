@@ -93,3 +93,32 @@ Caveat: only 185 of 1,868 original labels match by name, because the recovery
 renamed many symbols (s_*, G*, _uses*).  Matching by *address order*
 instead of name would raise coverage; the current run already localises the
 divergences to a handful of blocks.
+
+## Second pass: the 148-byte gap before TextBlitX is closed
+
+`diff_dgroup.py` matched only 185 labels because TLINK writes data publics with
+an extra column (`1646:0C05 idle  _S_ERROR_4__D_2410_02F5`); the pattern now
+skips that column and matches **1,012 of 1,868** labels.
+
+The tool then localised the -148 bytes to the block before `GErrorStrings`
+(0x33e).  The image shows five string literals the export dropped, all already
+referenced by `GErrorStrings[5]`:
+
+```
+0352 41  "Bad 'game.cfg' file. Please reconfigure."
+037b 24  "Cannot find sound card."
+0393 24  "Cannot find music card."
+03e2 13  "Mouse error."
+03ff 45  "Error %d %d.  (Give Cathryn BOTH numbers.)\n" + padding NUL
+```
+
+and one declaration that was a byte short: `s_Filename__d__s_2410_032b` is 19
+bytes in the image ("Filename %d %s  \r" = 18 with a padding NUL), not 18.
+Both padding NULs are explicit in the declarations, so the bytes match.
+`scripts/fix_error_strings.py` does the insertion in address order.
+
+After the fix no layout run starts between `s_fighter_unit` (0x1fa) and
+`BlitRects` (0x440): the constant delta covers `BlitLetterType`, the `Id*`
+tables, `GErrorStrings` and `TextBlitX`, i.e. the -148 and the following -1 are
+gone.  The next candidates are the string-ordering swings around the class
+names (s_mage/s_thief/s_dwarf, -100/+88/-88) and -1 at `BlitRects` (0x440).

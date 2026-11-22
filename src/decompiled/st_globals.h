@@ -169,6 +169,12 @@ extern DW IdPBM_;
 extern char s_n_d_w_u_s_u[];
 extern char s_Filename__d__s_2410_032b[];
 extern far_t GErrorStrings[5];
+extern char s_Bad_game_cfg_2410_0352[];
+extern char s_Cannot_find_sound_2410_037b[];
+extern char s_Cannot_find_music_2410_0393[];
+extern char s_Mouse_error_2410_03e2[];
+extern char s_Error_d_d_Give_2410_03ff[45];
+
 extern char s_Cannot_create_confi_2410_03ab[];
 extern char s_Error__d_2410_03ef[];
 extern char s_s[];

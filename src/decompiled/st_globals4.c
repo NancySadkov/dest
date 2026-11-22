@@ -320,12 +320,24 @@ DW IdBODY = { 0x4F42, 0x5944 };
 DW IdCMAP = { 0x4D43, 0x5041 };
 DW IdPBM_ = { 0x4250, 0x204D };
 char s_n_d_w_u_s_u[] = "N %d W %u s %u \r";
-char s_Filename__d__s_2410_032b[] = "Filename %d %s  \r";
+/* 032b: 19 bytes - the image carries one padding NUL after the literal */
+char s_Filename__d__s_2410_032b[19] = "Filename %d %s  \r";
 far_t GErrorStrings[5] = { { 0x352, 0x2410 }, { 0x37B, 0x2410 }, { 0x393, 0x2410 }, { 0x3AB, 0x2410 },
      { 0x3E2, 0x2410 } };
+/* 0352: "Bad 'game.cfg' file. Please reconfigure." (41 bytes) */
+char s_Bad_game_cfg_2410_0352[] = "Bad 'game.cfg' file. Please reconfigure.";
+/* 037b: "Cannot find sound card." (24 bytes) */
+char s_Cannot_find_sound_2410_037b[] = "Cannot find sound card.";
+/* 0393: "Cannot find music card." (24 bytes) */
+char s_Cannot_find_music_2410_0393[] = "Cannot find music card.";
 char s_Cannot_create_confi_2410_03ab[] = "Cannot create configuration file.  Stronghold aborted.";
+/* 03e2: "Mouse error." (13 bytes) */
+char s_Mouse_error_2410_03e2[] = "Mouse error.";
 char s_Error__d_2410_03ef[] = "\n\rError %d\n";
 char s_s[] = "%s\n";
+/* 03ff: "Error %d %d.  (Give Cathryn BOTH numbers.)\n" plus the
+   padding NUL the image carries (45 bytes) */
+char s_Error_d_d_Give_2410_03ff[45] = "Error %d %d.  (Give Cathryn BOTH numbers.)\n";
 uint16_t TextBlitX = 0x0;
 uint16_t TextBlitY = 0x0;
 uint16_t TextBlitDstSeg = 0xA000;
