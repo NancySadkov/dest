@@ -77,6 +77,13 @@ for path in sorted(glob.glob("src/decompiled/st_globals*.c")):
     for m in re.finditer(r"^(\w[\w \*]*?) ([_0-9A-Za-z]+) = (0x[0-9A-Fa-f]+|\d+);", t, re.M):
         ours.setdefault(m.group(2), (None, None))   # scalar, handled below
 
+# every declaration per name, in source order (duplicate symbols share a name)
+occ = {}
+for _p in sorted(glob.glob("src/decompiled/st_globals*.c")):
+    for _m in re.finditer(r'^char ([_0-9A-Za-z]+)\[(\d*)\] = "',
+                          io.open(_p, encoding="latin-1").read(), re.M):
+        occ.setdefault(_m.group(1), []).append(_m.group(1))
+
 by_addr = {}
 for name in ours:
     m = re.search(r"_2410_([0-9a-f]{4})$", name, re.I)
@@ -94,6 +101,7 @@ for path in sorted(glob.glob("src/decompiled/st_globals*.c")):
 rows = list(csv.DictReader(io.open("audit/dgroup_data.csv", encoding="utf-8",
                                    errors="replace")))
 
+seen = {}
 same = differ = missing = 0
 diffs = []
 missing_list = []
@@ -110,6 +118,14 @@ for row in rows:
     else:
         decl = ours.get(name)
         decl_name = name
+        # duplicate symbols share a name: bind the k-th original occurrence to
+        # the k-th declaration of that name (declarations are in address order)
+        k = seen.get(name, 0)
+        seen[name] = k + 1
+        if len(occ.get(name, [])) > 1 and k < len(occ[name]):
+            cand = occ[name][k]
+            if cand in ours:
+                decl, decl_name = ours[cand], cand
     if decl is None and name in scalars:
         v = scalars[name]
         if length == 1:

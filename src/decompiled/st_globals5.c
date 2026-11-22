@@ -1051,7 +1051,7 @@ far_t GPlayerTitles[32] = { { 0x4BB6, 0x2410 }, { 0x4BBD, 0x2410 }, { 0x4BC7, 0x
      { 0x4C8A, 0x2410 }, { 0x4C8A, 0x2410 }, { 0x4C98, 0x2410 }, { 0x4CA4, 0x2410 }, { 0x4CB0, 0x2410 },
      { 0x4CBD, 0x2410 }, { 0x4CC8, 0x2410 }, { 0x4CC8, 0x2410 } };
 /* 49dd: seven class stat bytes */
-uint8_t classStatTable1[7] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x03 };
+uint8_t classStatTable1[7] = { 0x00, 0x01, 0x02, 0x03, 0x00, 0x00, 0x00 };
 /* 49e4: three class stat bytes */
 uint8_t classStatTable2[3] = { 0xFF, 0xFF, 0xFF };
 far_t GAlignmentString = { 0xFFFF, 0x301 };
@@ -1277,7 +1277,7 @@ char s_mine_exhausted_at_d_d[] = "Mine exhausted at (%d, %d).";
 char s_Intelligence_report_2410_5612[] = "Intelligence reports %s unit died of starvation. (%d, %d)";
 bool AgntClearFlag = 0;
 char s_construction_abandoned[] = "Construction abandoned.";
-char s_s_unit_drowns_d_d[] = "%s unit drowns.  (%d, %d)";
+char s_s_unit_drowns_d_d[27] = "%s unit drowns.  (%d, %d)";
 char s_intelligence_reports_s_u_ff09[] = "Intelligence reports %s unit fleeing from battle. (%d, %d)";
 char s_intelligence_reports_s_u_8669[] = "Intelligence reports %s unit infected with disease. (%d, %d)";
 char s_intelligence_reports_s_u_2410[] = "Intelligence reports %s unit drained of energy. (%d, %d)";
@@ -1401,12 +1401,12 @@ char s__2410_60e7[] = "\n";
 char s_4_irq_7_5_irq_10[] = "4. IRQ 7  5. IRQ 10):";
 char s_lf_2410_6156[] = "\n";
 char s_Largest_executable__2410_6158[] = "Largest executable program size is only %s bytes.\n";
-char s_Stronghold_requires_2410_618b[] = "Stronghold requires 585,000 bytes.\n";
+char s_Stronghold_requires_2410_618b[37] = "Stronghold requires 585,000 bytes.\n";
 undefined1 HeapReady = 0x00;
 char s_Bad_Pointer__lx_2410_61b1[] = "Bad Pointer %lx \r";
 char s_Str__x__x_2410_61c3[] = "Str %x %x  \r";
 char s_Bad_heap__at__x_S_x_2410_61d0[] = "Bad heap @%x S%x Z%x P%x  \r";
-char s__lx_already_free_2410_61ec[] = "%lx already free \r";
+char s__lx_already_free_2410_61ec[20] = "%lx already free \r";
 far_t GDoneStrPtr = { 0x6401, 0x2410 };
 char s_short_sword_2410_6204[] = "short sword";
 char s_normal_weaponry_2410_6210[] = "normal weaponry";
@@ -1584,7 +1584,7 @@ char s_s_poisons_s[] = "%s poisons %s.";
 char s_s_infects_s_with_blast_s_6682[] = "%s infects %s with blast spore disease.";
 char s_s_drains_a_level_from_s[] = "%s drains a level from %s.";
 char s_s_drains_all_energy_from_s[] = "%s drains all energy from %s.";
-char s_s_drains_two_levels_from_s[] = "%s drains two levels from %s.";
+char s_s_drains_two_levels_from_s[31] = "%s drains two levels from %s.";
 bool GameRunning = 0;
 undefined unitTypeTable = 0x07;
 undefined spawnGindexTable = 0x00;
@@ -1608,7 +1608,7 @@ char s_force_and_fury_meet_magi_83da[] = "Force and fury meet magic spells as ba
 char s_play_out_in_the_courtyar_e3ba[] = "play out in the courtyards of mighty castles.";
 char s_your_people_will_fight_b_ca95[] = "Your people will fight bravely and work";
 char s_hard_your_city_will_grow[] = "hard. Your city will grow...";
-char s_and_grow[] = "and grow...";
+char s_and_grow[33] = "and grow...";
 char s_but_beware_the_evil_mind_f8e6[] = "But beware the evil Mindark, whose";
 char s_hordes_destroyed_your_ho_0a18[] = "hordes destroyed your homeland long ago.";
 char s_if_you_lead_with_wisdom__bac4[] = "If you lead with wisdom and cunning...";
@@ -1616,7 +1616,7 @@ char s_if_you_fight_with_valor__377f[] = "If you fight with valor and guile...";
 char s_you_will_truly_be_master_74a8[] = "You will truly be master of your...";
 char s_empty_2410_747d[] = "";
 uint32_t StshFileSizeVar = 0x0;
-char s_getcache__d_SIZESTA_2410_748e[] = "getcache %d  SIZESTASH %d  \r";
+char s_getcache__d_SIZESTA_2410_748e[30] = "getcache %d  SIZESTASH %d  \r";
 undefined1 selectedPartyIndex = 0xFF;
 far_t PersonWordPtrs[2] = { { 0x77E2, 0x2410 }, { 0x77E9, 0x2410 } };
 char s_choose_party_to_build_fo_296a[] = "Choose party to build for.  Now building for %s the %s.";
@@ -1634,7 +1634,7 @@ char s_this_location_is_unsuita_1464[] = "This location is unsuitable for buildi
 char s_it_will_cost_s_the_s_d_gp[] = " It will cost %s the %s %d gp. ";
 char s_place[] = "Place";
 char s_change_building[] = "Change Building";
-char s_change_party[] = "Change party";
+char s_change_party[] = "Change Party";
 char s_party_member_s_doesn_t_h_25d2[] = "Party member %s doesn't have enough gold to construct a %s.";
 char s_too_many_construction_sites[] = "Too many construction sites.";
 char s_excavate[] = "Excavate";
@@ -1743,7 +1743,15 @@ uint16_t _nfile = 0x14;
 uint16_t _openfd[20] = { 0x6001, 0x6002, 0x6002, 0xA004, 0xA002, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
      0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
 uint16_t _fmode = 0x4000;
-char _dosErrorToSV[89] = "";
+uint8_t _dosErrorToSV[89] = {
+    0x00, 0x13, 0x02, 0x02, 0x04, 0x05, 0x06, 0x08, 0x08, 0x08, 0x14, 0x15,
+    0x05, 0x13, 0xFF, 0x16, 0x05, 0x11, 0x02, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x05, 0x05, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0x0F, 0xFF, 0x23, 0x02, 0xFF, 0x0F, 0xFF, 0xFF, 0xFF, 0xFF,
+    0x13, 0xFF, 0xFF, 0x02, 0x02, 0x05, 0x0F, 0x02, 0xFF, 0xFF, 0xFF, 0x13,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x23, 0xFF, 0xFF, 0xFF,
+    0xFF, 0x23, 0xFF, 0x13, 0xFF };
 long rand_Seed = 0x1;
 undefined vprintter_NullString[] = "(null)";
 uint8_t vprinter_printCtype[96] = { 0x0, 0x14, 0x14, 0x1, 0x14, 0x15, 0x14, 0x14, 0x14, 0x14, 0x2, 0x0,

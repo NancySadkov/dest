@@ -255,7 +255,7 @@ dosver_t DosVersion = { 0x0, 0x0 };
 char s__2410_0094[] = "";
 char s__d_2410_0095[] = "%d \r";
 char s_sorry_you_may_not_pass_t_059e[] = "Sorry, you may not pass time during a battle.";
-char s_time_passes[] = "Time passes...";
+char s_time_passes[16] = "Time passes...";
 undefined1 bigcompFrame = 0x00;
 undefined1 TextBlitFlag = 0x00;
 /* GUESS: 0x0da, 5 words with no references in the image; emitted so the
@@ -543,4 +543,4 @@ char s_d_2410_08da[] = "%d \r";
 char s_d_d_d[] = "%d %d %d \r";
 char s__d__d__d_2410_08ea[] = "%d %d %d  \r";
 char s_You_cannot_attract__2410_08f6[] = "You cannot attract units to this location.";
-char s_Attracting__d_of_a__2410_0921[] = "Attracting %d of a possible %d %s%s to this location.";
+char s_Attracting__d_of_a__2410_0921[55] = "Attracting %d of a possible %d %s%s to this location.";

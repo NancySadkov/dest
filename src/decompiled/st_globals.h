@@ -1752,7 +1752,7 @@ extern uint16_t _nfile;
 extern uint16_t _openfd[20];
 extern uint16_t _fmode;
 extern uint16_t _doserrno;
-extern char _dosErrorToSV[89];
+extern uint8_t _dosErrorToSV[89];
 extern long rand_Seed;
 extern undefined vprintter_NullString[];
 extern uint8_t vprinter_printCtype[96];
