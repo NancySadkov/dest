@@ -1,5 +1,9 @@
 # Step 6: isolating the startup abort
 
+> Superseded in part by `doc/step6_entry.md`: the exit-3 abort came from
+> `C0M.OBJ`'s `_startup` being the entry point.  With `_startx` as the entry the
+> recovered CRT reaches `main`.  The isolation results below still hold.
+
 ## Why
 
 The rebuilt image exits with code 3 before `main` (an `exit(7)` probe in `main`

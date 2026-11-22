@@ -6,6 +6,8 @@ turns "58/58 modules compile" into a concrete list of what still separates us
 from a runnable REBUILT.EXE.
 """
 import os
+import re
+import struct
 import subprocess
 import sys
 
@@ -52,6 +54,10 @@ def main():
 
     res = [o for o in objs if is_resident(o)]
     ovl = [o for o in objs if not is_resident(o)]
+    # C0M.OBJ supplies the startup's data symbols (_psp, errno, _StartTime, the
+    # heap variables, _terminate) that CM.LIB and OVERLAY.LIB expect.  The
+    # original's entry is startx (CRTL), not C0's _startup, so the linked EXE's
+    # entry is moved to _STARTX below.
     rsp = ("D:\\LIB\\C0M.OBJ " + " ".join(res) + " /o " + " ".join(ovl) +
            " /m /s" + ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\OVERLAY.LIB D:\\LIB\\CM.LIB")
     with open(os.path.join(BUILDSRC, "LINK.RSP"), "w", encoding="ascii",
@@ -102,6 +108,18 @@ def main():
         for line in text.splitlines()[-6:]:
             print("   ", line.strip()[:110])
     exe = os.path.join(BUILDSRC, "REBUILT.EXE")
+    mapf = os.path.join(BUILDSRC, "REBUILT.MAP")
+    if os.path.exists(exe) and os.path.exists(mapf):
+        m = re.search(r"^\s*([0-9A-F]{4}):([0-9A-F]{4})\s+(?:idle\s+)?_STARTX\s*$",
+                      open(mapf, encoding="latin-1", errors="replace").read(), re.M)
+        if m:
+            cs, ip = int(m.group(1), 16), int(m.group(2), 16)
+            with open(exe, "r+b") as f:
+                f.seek(0x14)
+                f.write(struct.pack("<HH", ip, cs))
+            print("entry patched to _STARTX %04X:%04X" % (cs, ip))
+        else:
+            print("WARNING: _STARTX not found in the map; entry left at C0's _startup")
     print("REBUILT.EXE exists:", os.path.exists(exe),
           os.path.getsize(exe) if os.path.exists(exe) else "")
 

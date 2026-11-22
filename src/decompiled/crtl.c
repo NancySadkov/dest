@@ -127,16 +127,16 @@ L_startx_0109:
   if (cVar5 != '\0') {
     bda_midnight = 1;
   }
-  *(uint16_t *)(puVar15 + -2) = 0x135;
-  StartExit();
-  *(uint16_t *)(puVar15 + -2) = *(uint16_t *)&__C0environ_2;
-  *(uint16_t *)(puVar15 + -4) = *(uint16_t *)&__C0environ;
-  *(uint16_t *)(puVar15 + -6) = *(uint16_t *)&__C0argv_2;
-  *(uint16_t *)(puVar15 + -8) = *(uint16_t *)&__C0argv;
-  *(uint16_t *)(puVar15 + -10) = *(uint16_t *)&__C0argc;
-  *(uint16_t *)(puVar15 + -0xc) = 0x1000;
-  *(uint16_t *)(puVar15 + -0xe) = 0x14e;
-  iVar10 = main(*(int *)(puVar15 + -0xc),*(str_t **)(puVar15 + -10),*(str_t **)(puVar15 + -8));
+  /* The original walks the linker's init table here (InitStart..InitEnd):
+   * _setupio (priority 2), _c0crtinit and __setargv (0x10) plus one far entry
+   * (priority 1).  Our recovered table still holds the original image's
+   * addresses, so walking it hangs; the two plain initialisers are called
+   * directly and __setargv's stack contract is still to be recovered
+   * (doc/step6_entry.md).
+   */
+  _setupio();
+  _c0crtinit();
+  iVar10 = main(__C0argc, (str_t *)__C0argv, (str_t *)__C0environ);
   *(int *)(puVar15 + -8) = iVar10;
   *(uint16_t *)(puVar15 + -10) = 0x1301;
                     /* WARNING: Subroutine does not return */
