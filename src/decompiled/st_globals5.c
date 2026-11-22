@@ -1296,7 +1296,7 @@ char s_intelligence_reports_s_u_f9de[] = "Intelligence reports %s unit cured of 
 char s_intelligence_reports_s_u_9cd7[] = "Intelligence reports %s unit succombs to blast spore disease. (%d, %d)";
 char s_spies_report_s_heading_t_1d20[] = "Spies report %s heading towards stronghold. (%d, %d)";
 char s_s_is_attacking[] = "%s is attacking.";
-char s_intelligence_reports_s_a_eb5e[] = "Intelligence reports %s attacking.";
+char s_intelligence_reports_s_a_eb5e[38] = "Intelligence reports %s attacking.";
 undefined ditherPlane0 = 0x00;
 undefined ditherPlane1 = 0x0D;
 undefined ditherPlane2 = 0x0C;
@@ -1549,6 +1549,8 @@ char s_my_s_we_in_this_neighbor_b984[103] = { 'M', 'y', ' ', '%', 's', ',', ' ',
      'o', 'u', ' ', 'h', 'a', 'v', 'e', ' ', 'd', 'o', 'n', 'e', ' ', 't', 'o', ' ', 'h', 'e', 'l', 'p',
      ' ', 'y', 'o', 'u', 'r', ' ', 'p', 'e', 'o', 'p', 'l', 'e', '.' };
 /* 6b2f/6b34: the lower-case twins of s_lord/s_lady (0x4c6x) */
+/* 6ac8: 103 bytes, immediately before s_lord at 0x6b2f */
+char s_my_s_we_in_this_neigh_2410_6ac8[] = "My %s, we in this neighborhood are doing well. We thank you for all you have done to help your people.";
 char s_lord_2410_6b2f[] = "lord";
 char s_lady_2410_6b34[] = "lady";
 char s_empty_2410_6b39[] = "";

@@ -63,6 +63,8 @@ WIDTH = {
     "char": 1, "byte": 1, "undefined": 1, "undefined1": 1, "uint8_t": 1,
     "int8_t": 1, "bool": 1,
     "uint16_t": 2, "int16_t": 2, "DW": 2, "word": 2, "uint": 2, "int": 2,
+    "short": 2, "ushort": 2, "unsigned": 2, "signed": 2, "sbyte": 1,
+    "uchar": 1, "uint16": 2, "int32_t": 4, "uint32": 4, "float": 4,
     "uint32_t": 4, "int32_t": 4, "long": 4, "ulong": 4,
     "far_t": 4, "brect_t": 10, "dosver_t": 2,
 }
@@ -89,28 +91,35 @@ def depth_of(layout):
 
 
 def load_structs(path="src/decompiled/st_types.h"):
+    """Resolve every struct in dependency order.
+
+    A struct can embed another one defined later in the header, so a single pass
+    leaves those unresolved (that is why anm_t and bld_inst_t were invisible).
+    Iterate to a fixpoint instead.
+    """
     text = io.open(path, encoding="latin-1").read()
-    defs = list(re.finditer(r"struct (\w+) \{(.*?)\};", text, re.S))
-    # far_t first, since other structs embed it
-    for m in defs:
-        if m.group(1) != "far_t":
-            continue
-        STRUCTS["far_t"] = [2, 2]
-    for m in defs:
-        name, body = m.group(1), m.group(2)
-        if name in STRUCTS:
-            continue
-        fields = []
-        ok = True
-        for fm in re.finditer(r"([\w \*]+?)\s+(\w+)\s*(?:\[(\d+)\])?\s*;", body):
-            lay = _field_layout(fm.group(1))
-            if lay is None:
-                ok = False
-                break
-            n = int(fm.group(3)) if fm.group(3) else 1
-            fields.extend([lay] * n)
-        if ok and fields:
-            STRUCTS[name] = fields
+    text = re.sub(r"/\*.*?\*/", " ", text, flags=re.S)
+    defs = [(m.group(1), m.group(2))
+            for m in re.finditer(r"struct (\w+) \{(.*?)\};", text, re.S)]
+    STRUCTS["far_t"] = [2, 2]
+    progress = True
+    while progress:
+        progress = False
+        for name, body in defs:
+            if name in STRUCTS:
+                continue
+            fields = []
+            ok = True
+            for fm in re.finditer(r"([\w \*]+?)\s+(\w+)\s*(?:\[(\d+)\])?\s*;", body):
+                lay = _field_layout(fm.group(1))
+                if lay is None:
+                    ok = False
+                    break
+                n = int(fm.group(3)) if fm.group(3) else 1
+                fields.extend([lay] * n)
+            if ok and fields:
+                STRUCTS[name] = fields
+                progress = True
 
 
 load_structs()
@@ -239,13 +248,52 @@ def bytes_from(th, init, size):
     if cur.strip():
         items.append(cur)
     if th in STRUCTS and items and items[0].strip().startswith("{"):
+        # Flattening the braces is exact whenever a nested group covers a run of
+        # consecutive fields - which holds for embedded far_t and for byte
+        # arrays like bld_inst_t.data[8].
         out = bytearray()
-        try:
-            for it in items:
-                toks = _tokens(it)
-                out += _walk(toks, 0, STRUCTS[th])
-        except Exception:
-            return b""
+        widths = []
+        stack = [STRUCTS[th]]
+        while stack:
+            lay = stack.pop(0)
+            for f in lay:
+                if isinstance(f, list):
+                    stack.insert(0, f)
+                else:
+                    widths.append(f)
+        for it in items:
+            toks = _tokens(it)
+            if toks and toks[0] == "{":
+                toks = toks[1:]
+            if toks and toks[-1] == "}":
+                toks = toks[:-1]
+            i = 0
+            wi = 0
+            while i < len(toks) and wi < len(widths):
+                w = widths[wi]
+                if toks[i] == "{":
+                    j = i + 1
+                    grp = []
+                    while j < len(toks) and toks[j] != "}":
+                        if toks[j] != "{":
+                            grp.append(toks[j])
+                        j += 1
+                    i = j + 1
+                    if w == 4 and len(grp) == 2:
+                        v = int(grp[0], 0) | (int(grp[1], 0) << 16)
+                        out += struct.pack("<I", v & 0xFFFFFFFF)
+                        wi += 1
+                    else:
+                        for g in grp:
+                            out += _pack(g, w)
+                            wi += 1
+                    continue
+                if toks[i] == "}":
+                    i += 1
+                    continue
+                out += _pack(toks[i], w)
+                i += 1
+                wi += 1
         if size:
             out = out[:size] + b"\0" * max(0, size - len(out))
         return bytes(out)
@@ -405,6 +453,11 @@ for row in rows:
         continue
     if decl is None:
         if want in by_bytes:
+            renamed += 1
+            same += 1
+            continue
+        if len(want) >= 4 and any(len(d) >= len(want) and d[:len(want)] == want
+                                  for d in by_bytes):
             renamed += 1
             same += 1
             continue
