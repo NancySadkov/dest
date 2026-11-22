@@ -45,7 +45,7 @@ int main(int argc,str_t *argv,str_t *envp)
   MenuMode = '\x01';
   menuEnteredFlag = 0x1;
   ovr_uiMainMenu();
-  ovr_play_sfx(7,0);
+  ovr_play_sfx(7,0,0);
   do {
                     /* Process Events */
     MiceUnkState = 1;

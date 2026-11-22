@@ -65,8 +65,7 @@ void __cdecl16far unit_usesAlignUp4(void)
   if (mapDirty != '\0') {
     mapDirty = '\0';
     ovr_driver_clearMapFlagsRect
-              ((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),(short (*) [60] [148])GMapFlags),0,0,0x93,0x3b,
-               0xfff7);
+              ((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),(short (*) [60] [148])GMapFlags),0,0,0x93,0x3b,0xfff7,0,0);
     for (uStack_c = 0; uStack_c < EntityCount; uStack_c = uStack_c + 1) {
       uVar6 = (uint16_t)((ulong)Entities >> 0x10);
       iVar5 = (int)Entities;
@@ -83,9 +82,9 @@ void __cdecl16far unit_usesAlignUp4(void)
         }
         iVar4 = *(int *)((entity_t *)iVar5 + uStack_c);
         iStack_14 = ((entity_t *)iVar5)[uStack_c].base.y;
-        uVar3 = ovr_alignUp4(iVar4 + iStack_16 * -2);
+        uVar3 = ovr_alignUp4(iVar4 + iStack_16 * -2,0,0);
         iStack_e = uVar3 - 2;
-        uVar3 = ovr_alignUp4(iVar4 + iStack_16 * 2);
+        uVar3 = ovr_alignUp4(iVar4 + iStack_16 * 2,0,0);
         iStack_10 = uVar3 + 1;
         if (iStack_e < 0) {
           iStack_e = 0;
@@ -115,9 +114,9 @@ void __cdecl16far unit_usesAlignUp4(void)
         uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
         iVar5 = ((unit_t *)GUnits)[uStack_c].x;
         iStack_14 = ((unit_t *)GUnits)[uStack_c].y;
-        uVar3 = ovr_alignUp4(iVar5 + iVar4 * -2);
+        uVar3 = ovr_alignUp4(iVar5 + iVar4 * -2,0,0);
         iStack_e = uVar3 - 2;
-        uVar3 = ovr_alignUp4(iVar5 + iVar4 * 2);
+        uVar3 = ovr_alignUp4(iVar5 + iVar4 * 2,0,0);
         iStack_10 = uVar3 + 1;
         if (iStack_e < 0) {
           iStack_e = 0;
@@ -384,17 +383,17 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   do {
     type = SUB21(unaff_SS,0);
     uVar13 = (undefined1)((uint)unaff_SS >> 8);
-    bVar1 = ovr_init2_usesCFGMice((uint16_t *)&mouseX);
+    bVar1 = ovr_init2_usesCFGMice((uint16_t *)&mouseX,0,0);
   } while (CONCAT11(extraout_AH,bVar1) != 0);
   while (uVar3 = ovr_biosKeyAvail(), (char)uVar3 != '\0') {
     ovr_gameProcessKey();
   }
   memcpy((char *)CONCAT13(uVar13,CONCAT12(type,&saveArea)),(char *)BlitRects,10);
   uStack_e = 0xa000;
-  ovr_miceRestoreArea((brect_t *)&saveArea);
+  ovr_miceRestoreArea((brect_t *)&saveArea,0);
   pfStack_1a = ovr_stshRleCut((far_t far *)0x0,far_from_u32((uint32_t)(0xca000)),7,222,150,unaff_DI,0xc,7,0xde);
   uStack_18 = uVar6;
-  ovr_miceBlitRect((brect_t *)&saveArea);
+  ovr_miceBlitRect((brect_t *)&saveArea,0);
   pvStack_6 = ovr_stshAlloc(0xfa0f);
   ptr.seg = uVar6;
   ptr.ofs = (uint16_t)pvStack_6;
@@ -431,12 +430,12 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       gfx.ofs = MiceCursors[3].ofs;
       ovr_blitGfx10(gfx,(uint16_t)(cursorX + -6),(uint16_t)(cursorY + -5),(brect_t *)&saveArea,
                     type,(char)(cursorY + -5),(char)(brect_t *)&saveArea);
-      ovr_miceBlitRect((brect_t *)&saveArea);
-      ovr_blitRect((brect_t *)&saveArea);
+      ovr_miceBlitRect((brect_t *)&saveArea,0);
+      ovr_blitRect((brect_t *)&saveArea,0);
       ovr_miceUpdate();
     }
     if (input == 0x0) {
-      input = ovr_init2_usesCFGMice((uint16_t *)&mouseX);
+      input = ovr_init2_usesCFGMice((uint16_t *)&mouseX,0,0);
     }
     if (rightButtonLatch != '\0') goto L_ui_unit_order_6616_0689_1054;
     if ((mouseX != pbStack_2a) || (mouseY != pbStack_2c)) {
@@ -449,7 +448,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   if ((((0xb < (int)pbStack_1c) && ((int)pbStack_1c < 0xdf)) && (6 < (int)pbStack_1e)) &&
      ((int)pbStack_1e < 0x97)) {
     do {
-      bVar1 = ovr_init2_usesCFGMice((uint16_t *)&mouseX);
+      bVar1 = ovr_init2_usesCFGMice((uint16_t *)&mouseX,0,0);
     } while (CONCAT11(extraout_AH_00,bVar1) != 0);
     pbStack_26 = (byte *)0xffff;
     pbStack_28 = (byte *)0xffff;
@@ -497,8 +496,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
                             (char)pbStack_20,0xff,uStack_8);
         ovr_driver_drawLine(pbStack_1c,(int)pbStack_20,pbVar12,(int)pbStack_20,0xff,uVar14,
                             (char)pbStack_20,0xff,uStack_8);
-        ovr_miceBlitRect((brect_t *)&saveArea);
-        ovr_blitRect((brect_t *)&saveArea);
+        ovr_miceBlitRect((brect_t *)&saveArea,0);
+        ovr_blitRect((brect_t *)&saveArea,0);
         ovr_miceUpdate();
         pbVar5 = (byte *)((int)(pbStack_20 + -9) / 3 + Seed_2000_d10e);
         pbVar7 = (byte *)(Seed_2000_d110 + ((uint)(pbVar12 + -0xc) >> 1) + 2 & 0xfffc);
@@ -547,7 +546,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       pbStack_28 = pbStack_20;
       pbStack_26 = pbVar12;
       if (input == 0x0) {
-        input = ovr_init2_usesCFGMice((uint16_t *)&mouseX);
+        input = ovr_init2_usesCFGMice((uint16_t *)&mouseX,0,0);
       }
       if (rightButtonLatch != '\0') goto L_ui_unit_order_6616_0689_1054;
       if ((mouseX != pbStack_2a) || (mouseY != pbStack_2c)) {
@@ -666,8 +665,8 @@ L_ui_unit_order_6616_0689_106E:
   dst_01.seg = uStack_8;
   dst_01.ofs = 0x8cc;
   ovr_blitLoadRleGfx(gfx_02,dst_01,0xcc);
-  ovr_miceBlitRect((brect_t *)&saveArea);
-  ovr_blitRect((brect_t *)&saveArea);
+  ovr_miceBlitRect((brect_t *)&saveArea,0);
+  ovr_blitRect((brect_t *)&saveArea,0);
   ovr_miceUpdate();
   handle.seg = uStack_18;
   handle.ofs = (uint16_t)pfStack_1a;
@@ -697,7 +696,7 @@ void __cdecl16far unit_usesAlignUp42(byte menuIndex,uint16_t x,int y)
   uint8_t savedCursorX;
   uint8_t savedCursorY;
   
-  uVar1 = ovr_alignUp4(x);
+  uVar1 = ovr_alignUp4(x,0,0);
   uVar4 = 0;
   do {
     if (SquareRecCount <= uVar4) {
@@ -738,7 +737,7 @@ L_unit_6616_10d5_1152:
       SquareRecCount = SquareRecCount + 1;
       return;
     }
-    uVar2 = ovr_alignUp4(*(int *)(uVar4 * 0x13));
+    uVar2 = ovr_alignUp4(*(int *)(uVar4 * 0x13),0,0);
     if ((uVar2 == uVar1) && (*(int *)((uint8_t *)&SquareRecs[uVar4] + 2) == y)) {
       memcpy((char *)CONCAT22(unaff_SS,&rec),(char *)CONCAT22(0x17f8,(char *)(uVar4 * 0x13)),0x13);
       goto L_unit_6616_10d5_1152;
@@ -770,7 +769,7 @@ unit_usesEntities(char state,int entityIndex,uint16_t unitFlags,uint16_t unitFla
     if (state == '\x03') {
       pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
       *pbVar1 = *pbVar1 | 1;
-      ovr_attact_usesEntities(entityIndex,0,0,unitFlags,unitFlagsSeg);
+      ovr_attact_usesEntities(entityIndex,0,0,unitFlags,unitFlagsSeg,0,0,0,0);
     }
     else if (state == '\x04') {
       pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
@@ -782,7 +781,7 @@ unit_usesEntities(char state,int entityIndex,uint16_t unitFlags,uint16_t unitFla
       ((entity_t *)Entities)[entityIndex].base.targetY = uVar3;
       pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
       *pbVar1 = *pbVar1 & 0xfa;
-      ovr_attact_usesEntities(entityIndex,0,0,unitFlags,unitFlagsSeg);
+      ovr_attact_usesEntities(entityIndex,0,0,unitFlags,unitFlagsSeg,0,0,0,0);
     }
   }
   return;

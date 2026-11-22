@@ -9,8 +9,7 @@
 
 /* 317e:0000 */
 far_t * __cdecl16far
-stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,uint16_t ex,
-          uint16_t ey,int16_t hdrsz,...)
+stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,uint16_t ex,uint16_t ey,int16_t hdrsz)
 
 {
   uint16_t sz;
@@ -66,7 +65,7 @@ stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,ui
    returns ptrr to stg_t struct */
 
 far_t * __cdecl16far
-stshRleCut(far_t *__return_storage_ptr__,far_t src,int16_t sx,int16_t sy,int16_t ex,int16_t ey,...)
+stshRleCut(far_t *__return_storage_ptr__,far_t src,int16_t sx,int16_t sy,int16_t ex,int16_t ey,uint16_t arg7,uint16_t arg8,uint16_t arg9)
 
 {
   far_t *pfVar1;
@@ -79,8 +78,7 @@ stshRleCut(far_t *__return_storage_ptr__,far_t src,int16_t sx,int16_t sy,int16_t
 
 /* 317e:0168 */
 far_t * __cdecl16far
-stshRleType2(far_t *__return_storage_ptr__,far_t pixels,int16_t sx,int16_t sy,int16_t ex,int16_t ey,
-            int16_t ox,int16_t oy,...)
+stshRleType2(far_t *__return_storage_ptr__,far_t pixels,int16_t sx,int16_t sy,int16_t ex,int16_t ey,int16_t ox,int16_t oy,uint16_t arg9,uint16_t arg10)
 
 {
   far_t far *pfVar1;
@@ -98,7 +96,7 @@ stshRleType2(far_t *__return_storage_ptr__,far_t pixels,int16_t sx,int16_t sy,in
 
 /* 317e:01b2 */
 
-void __cdecl16far blitLoadRleGfx(far_t gfx,far_t dst,...)
+void __cdecl16far blitLoadRleGfx(far_t gfx,far_t dst,uint16_t arg3)
 
 {
   uint16_t consumed;
@@ -156,7 +154,7 @@ void __cdecl16far drawGfx(far_t gfx,far_t dst,bool type)
     }
   }
   else {
-    blitLoadRleGfx(gfx,dst);
+    blitLoadRleGfx(gfx,dst,0);
   }
   return;
 }
@@ -164,7 +162,7 @@ void __cdecl16far drawGfx(far_t gfx,far_t dst,bool type)
 
 
 /* 317e:02a9 */
-void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool type,...)
+void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool type,uint16_t arg6,uint16_t arg7)
 
 {
   far_t dst_00;
@@ -360,7 +358,7 @@ void __cdecl16far blit_usesDrawGfx(far_t gfx,int x,int y,brect_t *rect)
           src.ofs = srcOfs;
           dst_00.seg = unaff_SS;
           dst_00.ofs = (uint16_t)&rowBuf;
-          rowLen = ovr_unrle(src,dst_00,*(uint16_t *)(gfx.ofs + 5),(char)*(uint16_t *)(gfx.ofs + 5));
+          rowLen = ovr_unrle(src,dst_00,*(uint16_t *)(gfx.ofs + 5),(char)*(uint16_t *)(gfx.ofs + 5),0);
           srcOfs = srcOfs + rowLen;
           if (rectY <= row + y) {
             memcpy((char *)CONCAT22(dstSeg,dstOfs),
@@ -441,8 +439,7 @@ void __cdecl16far blitGfxN(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t ty
           (*pcStack_6)();
           if ((*(uint *)((uint)type * 2 + 0x470) & uVar4) != 0) {
             if (uVar1 <= (uint)y) {
-              ovr_masked_memcpy((char *)pdst,(char *)CONCAT22(buf,pcVar3),unaff_SS,skip,
-                                *(int *)(gfx.ofs + 5),mask);
+              ovr_masked_memcpy((char *)pdst,(char *)CONCAT22(buf,pcVar3),unaff_SS,skip,*(int *)(gfx.ofs + 5),mask,0);
             }
             pdst = pdst + 0x140;
             y = y + 1;
@@ -458,7 +455,7 @@ void __cdecl16far blitGfxN(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t ty
       }
     }
     else {
-      blitGfx10(gfx,x,y,(brect_t *)dst,SUB41((ulong)dst >> 0x10,0));
+      blitGfx10(gfx,x,y,(brect_t *)dst,SUB41((ulong)dst >> 0x10,0),0,0);
     }
   }
   return;
@@ -477,7 +474,7 @@ void __cdecl16far blit_usesRandBelow(byte *buf,uint16_t count,byte value,byte ch
   
   while (count != 0) {
     if (*buf != 0) {
-      uVar1 = ovr_randBelow(0x100);
+      uVar1 = ovr_randBelow(0x100,0);
       if (chance < (byte)uVar1) {
         *buf = 0;
       }
@@ -510,7 +507,7 @@ void __cdecl16far copyGrayscalePalette(uint8_t *dst,int count)
 
 /* 317e:08ed */
 
-void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,char flip,...)
+void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,char flip,uint16_t arg7,uint16_t arg8,uint16_t arg9,uint16_t arg10,uint16_t arg11,uint16_t arg12,uint16_t arg13)
 
 {
   far_t buf;
@@ -661,7 +658,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
 /* Blits graphics inside the dst rect */
 
 void __cdecl16far
-blitGfxRect(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t type,bool mirror,...)
+blitGfxRect(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t type,bool mirror,uint16_t arg7,uint16_t arg8,uint16_t arg9,uint16_t arg10,uint16_t arg11,uint16_t arg12)
 
 {
   far_t gfx_00;
@@ -678,7 +675,7 @@ blitGfxRect(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t type,bool mirror,
     }
     if (*(char *)MK_FP(gfx.seg, gfx.ofs) == '\x01') {
       if (mirror == true) {
-        blitGfx10(gfx,x,y,dst,(bool)type);
+        blitGfx10(gfx,x,y,dst,(bool)type,0,0);
       }
       else {
         blitGfxN(gfx,x,y,(brect_t *)CONCAT22(type,dst),mirror,in_stack_00000012);
@@ -689,7 +686,7 @@ blitGfxRect(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t type,bool mirror,
         if (mirror == true) {
           gfx_02.seg = gfx.seg;
           gfx_02.ofs = gfx.ofs + 5;
-          blitGfx10(gfx_02,x - *(int *)(gfx.ofs + 1),y - *(int *)(gfx.ofs + 3),dst,(bool)type);
+          blitGfx10(gfx_02,x - *(int *)(gfx.ofs + 1),y - *(int *)(gfx.ofs + 3),dst,(bool)type,0,0);
         }
         else {
           gfx_00.seg = gfx.seg;
@@ -702,8 +699,7 @@ blitGfxRect(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t type,bool mirror,
       else if (mirror == true) {
         gfx_03.seg = gfx.seg;
         gfx_03.ofs = gfx.ofs + 5;
-        blitGfx10(gfx_03,(x + *(int *)(gfx.ofs + 1)) - (*(int *)(gfx.ofs + 10) + -1),
-                  y - *(int *)(gfx.ofs + 3),dst,(bool)type);
+        blitGfx10(gfx_03,(x + *(int *)(gfx.ofs + 1)) - (*(int *)(gfx.ofs + 10) + -1),y - *(int *)(gfx.ofs + 3),dst,(bool)type,0,0);
       }
       else {
         gfx_01.seg = gfx.seg;
@@ -728,8 +724,7 @@ blitGfxRect(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t type,bool mirror,
 /* [R4] calls blitGfxN */
 
 void __cdecl16far
-blit_usesBlitGfxN(far_t gfx,int16_t x,int y,byte shade1,int y2,byte shade2,brect_t *rect,
-                 uint16_t type,...)
+blit_usesBlitGfxN(far_t gfx,int16_t x,int y,byte shade1,int y2,byte shade2,brect_t *rect,uint16_t type,uint16_t arg9,uint16_t arg10,uint16_t arg11,uint16_t arg12,uint16_t arg13,uint16_t arg14,uint16_t arg15)
 
 {
   byte bVar1;
@@ -842,7 +837,7 @@ blit_compute1(uint16_t dstSeg,int16_t y,int16_t x,far_t src,uint16_t imgWidth,ui
 /* [R4] calls ovr_stExit */
 
 void __cdecl16far
-blit_usesStExit(far_t gfx,int x1,int y1,byte shade1,int x2,int y2,byte shade2,int *rectOfs,...)
+blit_usesStExit(far_t gfx,int x1,int y1,byte shade1,int x2,int y2,byte shade2,int *rectOfs,uint16_t arg9,uint16_t arg10,uint16_t arg11,uint16_t arg12,uint16_t arg13,uint16_t arg14,uint16_t arg15)
 
 {
   byte bVar1;
@@ -988,7 +983,7 @@ void __cdecl16far gfxInitRand(void)
   srand8(CONCAT22(((int)GfxRndSeed2 >> 0xf) + ((int)uVar1 >> 0xf) + (uint)CARRY2(GfxRndSeed2,uVar1),
                   GfxRndSeed2 + uVar1));
   for (puVar3 = (undefined1 *)0x0; (int)puVar3 < 0x100; puVar3 = puVar3 + 1) {
-    uVar2 = ovr_randBelow(0x100);
+    uVar2 = ovr_randBelow(0x100,0);
     *puVar3 = (char)uVar2;
   }
   return;
@@ -1001,8 +996,7 @@ void __cdecl16far gfxInitRand(void)
 /* [R4] calls blitGfxN */
 
 void __cdecl16far
-blit_usesBlitGfxN2(far_t gfx,far_t gfx_00,int x1,int y1,byte shade1,int x2,int y2,byte shade2,
-                  brect_t *rect,uint16_t type,byte highlightLevel,...)
+blit_usesBlitGfxN2(far_t gfx,far_t gfx_00,int x1,int y1,byte shade1,int x2,int y2,byte shade2,brect_t *rect,uint16_t type,byte highlightLevel,uint16_t arg12,uint16_t arg13,uint16_t arg14,uint16_t arg15,uint16_t arg16,uint16_t arg17)
 
 {
   byte *pbVar1;

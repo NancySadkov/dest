@@ -28,7 +28,7 @@ void __cdecl16far stshCopyFontChar(uint8_t *src,uint8_t *dst,int16_t width,int16
 
 /* 302d:0035 */
 
-far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl,...)
+far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl,uint16_t arg3)
 
 {
   far_t *pfVar1;
@@ -133,14 +133,14 @@ far_t * __cdecl16far stshProcessFont(far_t *__return_storage_ptr__,int16_t file_
   far_t *pfVar2;
   uint16_t in_DX;
   
-  psVar1 = ovr_grabLbm((int16_t)__return_storage_ptr__,0,0);
+  psVar1 = ovr_grabLbm((int16_t)__return_storage_ptr__,0,0,0,0);
   if (psVar1 == (stg_tmp_t *)0x0 && in_DX == 0) {
                     /* WARNING: Subroutine does not return */
     ovr_stExit(6);
   }
   hndl.seg = (uint16_t)psVar1;
   hndl.ofs = (psVar1->aptr).seg;
-  pfVar2 = stshProcessFontSub((far_t *)(&psVar1->aptr)->ofs,hndl);
+  pfVar2 = stshProcessFontSub((far_t *)(&psVar1->aptr)->ofs,hndl,0);
   handle.seg = (psVar1->bptr).seg;
   handle.ofs = (&psVar1->bptr)->ofs;
   ovr_stshFree(handle);
@@ -180,7 +180,7 @@ void __cdecl16far blitLetter(char ch,byte far *widths,uint8_t color)
       gfx.ofs = LbxButton2.ofs;
       rle_dst.seg = TextBlitDstSeg;
       rle_dst.ofs = TextBlitY * 0x140 + TextBlitX + 0x140;
-      ovr_blitLoadRleGfx(gfx,rle_dst);
+      ovr_blitLoadRleGfx(gfx,rle_dst,0);
     }
     else {
       ch_index = ch + 0xe0;
@@ -370,7 +370,7 @@ uint __cdecl16far blitLabel(char far *text,byte far *widths,uint16_t term,uint8_
 /* Returns the pixel width of a string in the given font by summing font[ch+0xa1] over its
    characters. */
 
-int __cdecl16far font_textWidth(char *text,char *font,...)
+int __cdecl16far font_textWidth(char *text,char *font,uint16_t arg3,uint16_t arg4,uint16_t arg5)
 
 {
   int iVar1;
@@ -434,13 +434,13 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay)
     uVar8 = (uint16_t)(CONCAT13(bVar2,(int3)lVar6) >> 0x10);
     if (bVar2) break;
     in_stack_0000fff8 = CONCAT22(uVar8,(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));
-    puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)TextBlitCycle,in_stack_0000fff8);
+    puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)TextBlitCycle,in_stack_0000fff8,0);
     uVar8 = (uint16_t)(in_stack_0000fff8 >> 0x10);
   } while ((uVar4 < (*(uint16_t *)((uint8_t *)&(msg_delay) + 2))) ||
           ((uVar4 == (*(uint16_t *)((uint8_t *)&(msg_delay) + 2)) && (puVar3 < (ulong *)msg_delay))));
   uVar9 = (undefined1)((uint)uVar8 >> 8);
   if (bVar5) {
-    ovr_miceRestoreArea((brect_t *)(BlitRects + 1));
+    ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0);
   }
   GDebug = bVar1;
   return CONCAT11(0x24,uVar9);
@@ -476,7 +476,7 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay)
       bVar1 = false;
     }
     else {
-      ovr_miceBlitRect((brect_t *)(BlitRects + 1));
+      ovr_miceBlitRect((brect_t *)(BlitRects + 1),0);
       bVar1 = true;
     }
     do {
@@ -496,7 +496,7 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay)
     } while (!(bool)uStack_3);
     uVar5 = (undefined1)(uVar3 >> 8);
     if (bVar1) {
-      ovr_miceRestoreArea((brect_t *)(BlitRects + 1));
+      ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0);
     }
     uVar3 = CONCAT11(uVar5,uStack_3);
   }
@@ -507,7 +507,7 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay)
 
 /* 302d:08ef */
 
-void __cdecl16far drawTextAt(char *txt,uint16_t dst,...)
+void __cdecl16far drawTextAt(char *txt,uint16_t dst,uint16_t arg3)
 
 {
   far_t gfx;
@@ -530,7 +530,7 @@ void __cdecl16far drawTextAt(char *txt,uint16_t dst,...)
     dst_00.ofs = 0xc31d;
     gfx.seg = FontHandle.seg;
     gfx.ofs = FontHandle.ofs;
-    ovr_blitLoadRleGfx(gfx,dst_00);
+    ovr_blitLoadRleGfx(gfx,dst_00,0);
     for (TextBlitY = 0x9c; TextBlitX = 0x1d, TextBlitY + 9 < 200; TextBlitY = TextBlitY + 0xb) {
       ndrawn = blitText((char far *)CONCAT22(in_stack_00000008,txt),
                       (byte far *)CONCAT22(Font03.seg,Font03.ofs),0xcf,0xed);
@@ -555,7 +555,7 @@ void __cdecl16far drawAnimTextAt(char *text,uint16_t dst)
   char *in_stack_00000004;
   
   inputUpdate((ulong)MessageDelay << 1);
-  drawTextAt(in_stack_00000004,(uint16_t)(char *)text);
+  drawTextAt(in_stack_00000004,(uint16_t)(char *)text,0);
   return;
 }
 
@@ -563,7 +563,7 @@ void __cdecl16far drawAnimTextAt(char *text,uint16_t dst)
 
 /* 302d:0a1b */
 
-void __cdecl16far say(char *msg,...)
+void __cdecl16far say(char *msg,uint16_t arg2)
 
 {
   uint16_t unaff_BP;
@@ -591,7 +591,7 @@ void __cdecl16far resetTextBlitCycle(void)
 
 /* 302d:0a41 */
 
-void __cdecl16far uiNotify(char *msg,uint16_t dst,...)
+void __cdecl16far uiNotify(char *msg,uint16_t dst,uint16_t arg3)
 
 {
   uint8_t mice_no_update;
@@ -603,14 +603,14 @@ void __cdecl16far uiNotify(char *msg,uint16_t dst,...)
   BlitRects[4].seg = in_stack_00000008;
   mice_no_update = MiceNeedsUpdate == '\0';
   if ((bool)mice_no_update) {
-    ovr_miceRestoreArea((brect_t *)(BlitRects + 4));
+    ovr_miceRestoreArea((brect_t *)(BlitRects + 4),0);
   }
-  drawTextAt(msg,dst);
+  drawTextAt(msg,dst,0);
   if ((bool)mice_no_update) {
-    ovr_miceBlitRect((brect_t *)(BlitRects + 4));
+    ovr_miceBlitRect((brect_t *)(BlitRects + 4),0);
   }
   if (in_stack_00000008 != 0xa000) {
-    ovr_blitRect((brect_t *)(BlitRects + 4));
+    ovr_blitRect((brect_t *)(BlitRects + 4),0);
     ovr_miceUpdate();
   }
   BlitRects[4].seg = 0xa000;

@@ -94,10 +94,10 @@ L_OVC30_619c_0339_03CE:
   *(byte *)((int)(char_sheet_t *)uStack_6 + 0x3e) = (byte)gindex;
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x2f) = 0xff;
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x30) = 3;
-  uVar2 = ovr_randBelow(1);
+  uVar2 = ovr_randBelow(1,0);
   *(undefined1 *)((int)(char_sheet_t *)uStack_6 + 0x34) = (char)uVar2;
 code_r0x00061e64:
-  ovr_manage_rollStats((char_sheet_t *)uStack_6);
+  ovr_manage_rollStats((char_sheet_t *)uStack_6,0);
   uVar8 = (uint16_t)((ulong)uStack_6 >> 0x10);
   if (*(char *)((int)&worldMenuLabels[0xc].seg + (uint)(byte)gindex * 0x95) != -1) {
     ((char_sheet_t *)uStack_6)->stats[1] =
@@ -204,7 +204,7 @@ ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte
         cStack_7 = '\x02';
       }
       if (cStack_7 != '\0') goto L_OVC43_6fbe_01a9_02C7;
-      puVar3 = ovr_attact_usesBDADailyTimeCounter(puStack_6,CONCAT22(unaff_DI,uStack_4));
+      puVar3 = ovr_attact_usesBDADailyTimeCounter(puStack_6,CONCAT22(unaff_DI,uStack_4),0);
     } while ((puVar4 == (ulong *)0x0) && (puVar4 = (ulong *)0x0, puVar3 < (ulong *)(uint)delayTicks)
             );
     uStack_4 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
@@ -227,7 +227,7 @@ L_OVC43_6fbe_01a9_02C7:
 /* Seeks strong.dat to the offset in the given graphic entry and plays it through the frame loop. */
 
 void __cdecl16far
-ovc43_playArchiveFli(far_t gfx,uint16_t paletteOfs,uint16_t paletteSeg,uint8_t delayTicks,...)
+ovc43_playArchiveFli(far_t gfx,uint16_t paletteOfs,uint16_t paletteSeg,uint8_t delayTicks)
 
 {
   ovr_stshSeek(StshStrongDatHnd,CONCAT22(*(uint16_t *)(gfx.ofs + 3),*(uint16_t *)(gfx.ofs + 1)))

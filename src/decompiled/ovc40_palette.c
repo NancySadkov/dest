@@ -24,14 +24,13 @@ void __cdecl16far ovc40_usesBlitLabel(far_t text1,far_t text2,byte row,byte term
   else {
     TextBlitX = 0;
     TextBlitY = (uint)row * 0xb + 0x98;
-    iVar1 = ovr_font_textWidth((char *)text1.ofs,(char *)CONCAT22(Font03.ofs,text1.seg),Font03.seg);
+    iVar1 = ovr_font_textWidth((char *)text1.ofs,(char *)CONCAT22(Font03.ofs,text1.seg),Font03.seg,0,0);
     if ((text2.ofs == 0 && text2.seg == 0) || (iVar1 < 0x140)) {
       TextBlitX = TextBlitX + (0x140U - iVar1 >> 1);
     }
     else {
       text1 = text2;
-      iVar1 = ovr_font_textWidth((char *)text2.ofs,(char *)CONCAT22(Font03.ofs,text2.seg),Font03.seg
-                                );
+      iVar1 = ovr_font_textWidth((char *)text2.ofs,(char *)CONCAT22(Font03.ofs,text2.seg),Font03.seg,0,0);
       if (iVar1 < 0x140) {
         TextBlitX = TextBlitX + (0x140U - iVar1 >> 1);
       }
@@ -69,7 +68,7 @@ void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette)
            (uint8_t)(((long)(int)(uint)*(byte *)(palette.ofs + iVar1) * (long)iVar2 & 0xffffU) / 10)
       ;
     }
-    ovr_vgaSetPalette8bit(&pal);
+    ovr_vgaSetPalette8bit(&pal,0);
     do {
       if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != iStack_4) break;
     } while (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */ == iStack_6);
@@ -103,7 +102,7 @@ void __cdecl16far setSeasonPalette(far_t palette)
            (uint8_t)(((long)(int)(uint)*(byte *)(palette.ofs + uVar1) * (long)(int)uVar2 & 0xffffU)
                     / 10);
     }
-    ovr_vgaSetPalette8bit(&pal);
+    ovr_vgaSetPalette8bit(&pal,0);
     do {
       if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != iStack_4) break;
     } while (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */ == iStack_6);
@@ -181,7 +180,7 @@ void __cdecl16far ovc40_usesCalcSeasonPalette(char useVgaPalette)
   handle.seg = Lbm_nwpanel1.seg;
   handle.ofs = Lbm_nwpanel1.ofs;
   psStack_6 = ovr_stshLoadGfx(handle);
-  ovr_calcSeasonPalette(psStack_6->cmap,in_DX,&pal,unaff_SS);
+  ovr_calcSeasonPalette(psStack_6->cmap,in_DX,&pal,unaff_SS,0,0);
   if (useVgaPalette == '\0') {
     palette_00.seg = unaff_SS;
     palette_00.ofs = (uint16_t)&pal;
@@ -215,21 +214,21 @@ void __cdecl16far ovc40_usesBlitGfx10(byte backdropIndex,int scrollOffset,brect_
   dst = (brect_t *)rect;
   gfx_03.seg = ((uint16_t *)&back03Cut2Seg)[(uint)backdropIndex * 2];
   gfx_03.ofs = ((uint16_t *)&back03Cut2Ofs)[(uint)backdropIndex * 2];
-  ovr_blitLoadRleGfx(gfx_03,far_from_u32((uint32_t)((ulong)dst->seg << 0x10)));
+  ovr_blitLoadRleGfx(gfx_03,far_from_u32((uint32_t)((ulong)dst->seg << 0x10)),0);
   gfx.seg = ((uint16_t *)&midgrnd5Cut1Seg)[(uint)backdropIndex * 2];
   gfx.ofs = ((uint16_t *)&midgrnd5Cut1Ofs)[(uint)backdropIndex * 2];
   type = SUB41((ulong)rect >> 0x10,0);
-  ovr_blitGfx10(gfx,-(scrollOffset >> 1),0,dst,type);
+  ovr_blitGfx10(gfx,-(scrollOffset >> 1),0,dst,type,0,0);
   gfx_00.seg = ((uint16_t *)&midgrnd5Cut2Seg)[(uint)backdropIndex * 2];
   gfx_00.ofs = ((uint16_t *)&midgrnd5Cut2Ofs)[(uint)backdropIndex * 2];
-  ovr_blitGfx10(gfx_00,0xdc - (scrollOffset >> 1),0,dst,type);
+  ovr_blitGfx10(gfx_00,0xdc - (scrollOffset >> 1),0,dst,type,0,0);
   gfx_01.seg = ((uint16_t *)&strong4Cut1Seg)[(uint)backdropIndex * 2];
   gfx_01.ofs = ((uint16_t *)&strong4Cut1Ofs)[(uint)backdropIndex * 2];
-  ovr_blitGfx10(gfx_01,-scrollOffset,0,dst,type);
+  ovr_blitGfx10(gfx_01,-scrollOffset,0,dst,type,0,0);
   gfx_02.seg = ((uint16_t *)&strong4Cut2Seg)[(uint)backdropIndex * 2];
   gfx_02.ofs = ((uint16_t *)&strong4Cut2Ofs)[(uint)backdropIndex * 2];
-  ovr_blitGfx10(gfx_02,0x118 - scrollOffset,0,dst,type);
-  ovr_blitRect(dst);
+  ovr_blitGfx10(gfx_02,0x118 - scrollOffset,0,dst,type,0,0);
+  ovr_blitRect(dst,0);
   return;
 }
 
@@ -264,8 +263,7 @@ void __cdecl16far ovc40_flushInput(void)
 /* 69c8:04c6 */
 char __cdecl16far
 ovc40_usesAlignToSeg
-          (char backdropIndex,char *capTextOfs,uint16_t capTextSeg,char *textOfs,uint16_t textSeg,
-          byte formatIndex,...)
+          (char backdropIndex,char *capTextOfs,uint16_t capTextSeg,char *textOfs,uint16_t textSeg,byte formatIndex,uint16_t arg7,uint16_t arg8,uint16_t arg9,uint16_t arg10)
 
 {
   char cVar1;
@@ -402,7 +400,7 @@ ovc40_usesAlignToSeg
     ovc40_usesCalcSeasonPalette('\0');
   }
   MiceNeedsUpdate = 1;
-  ovr_driver_fillRect(0,0,0x13f,199,0xec,0xa000,0x3f,0xec,0);
+  ovr_driver_fillRect(0,0,0x13f,199,0xec,0xa000,0x3f,0xec,0,0,0);
   gfx.seg = marbleCut2Seg;
   gfx.ofs = marbleCut2Ofs;
   ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000b400)),0);
@@ -648,9 +646,8 @@ ovc40_usesAlignToSeg
         do {
           ovr_audio_usesLDIV_at_();
           bVar3 = ovr_init2_usesCFGMice
-                            ((uint16_t *)&clickX,
-                             (uint16_t *)
-                             CONCAT13((char)((uint)&clickY >> 8),CONCAT12((char)&clickY,unaff_SS)));
+                            ((uint16_t *)&clickX,(uint16_t *)
+                             CONCAT13((char)((uint)&clickY >> 8),CONCAT12((char)&clickY,unaff_SS)),0);
           if ((((CONCAT11(extraout_AH,bVar3) != 0) && (0x87 < clickX)) && (0xb9 < clickY)) &&
              ((clickX < 0xd6 && (clickY < 0xc6)))) goto L_OVC40_69c8_04c6_0AF0;
           if (rightButtonLatch != '\0') {

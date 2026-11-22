@@ -172,7 +172,7 @@ void __cdecl16far ovc38_showAchievements(void)
   _fmemset((void *)ZEXT24(unaff_SS),0x28,unaff_DI);
   uStack_64 = 0x2410;
   uStack_66 = 0x6ab4;
-  ovr_uiMenu((char *)0x0,far_from_u32((uint32_t)(ZEXT24(&menuState) << 0x10)));
+  ovr_uiMenu((char *)0x0,far_from_u32((uint32_t)(ZEXT24(&menuState) << 0x10)),0,0);
   ovc38_usesStshFree(fStack_a);
   ovr_saveui_blitPanel();
   return;

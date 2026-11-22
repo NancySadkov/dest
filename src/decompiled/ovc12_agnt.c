@@ -106,7 +106,7 @@ bool __cdecl16far agnt_compute4(char *flag)
 
 /* Computes the screen extents of the agent's current animation frame. */
 
-undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,...)
+undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,uint16_t arg3)
 
 {
   uint8_t uVar1;
@@ -346,7 +346,7 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
 /* [R6] touches AgntCount */
 
 bool __cdecl16far
-agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distance,...)
+agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distance)
 
 {
   uint8_t uVar1;
@@ -421,7 +421,7 @@ void __cdecl16far agnt_compute5(agnt_t *agnt)
 
 /* Advances the agent's animation frame unless bit 2 of its type record (agntG_t+0) is set. */
 
-void __cdecl16far agnt_advanceAnimFrame(agnt_t *agnt,...)
+void __cdecl16far agnt_advanceAnimFrame(agnt_t *agnt,uint16_t arg2)
 
 {
   uint16_t in_stack_00000006;
@@ -438,7 +438,7 @@ void __cdecl16far agnt_advanceAnimFrame(agnt_t *agnt,...)
 
 /* Builds the agent's status text from its flags (charmed / diseased / held / paralyzed). */
 
-char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,...)
+char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,uint16_t arg3)
 
 {
   char *pcVar1;
@@ -563,7 +563,7 @@ uint16_t __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute8(agnt_t *agnt,...)
+byte __cdecl16far agnt_compute8(agnt_t *agnt,uint16_t arg2)
 
 {
   byte bVar1;
@@ -582,7 +582,7 @@ byte __cdecl16far agnt_compute8(agnt_t *agnt,...)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute9(agnt_t *agnt,...)
+byte __cdecl16far agnt_compute9(agnt_t *agnt,uint16_t arg2)
 
 {
   byte bVar1;
@@ -601,7 +601,7 @@ byte __cdecl16far agnt_compute9(agnt_t *agnt,...)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute10(agnt_t *agnt,...)
+byte __cdecl16far agnt_compute10(agnt_t *agnt,uint16_t arg2)
 
 {
   byte bVar1;
@@ -620,7 +620,7 @@ byte __cdecl16far agnt_compute10(agnt_t *agnt,...)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute11(agnt_t *agnt,...)
+byte __cdecl16far agnt_compute11(agnt_t *agnt,uint16_t arg2)
 
 {
   byte bVar1;
@@ -639,7 +639,7 @@ byte __cdecl16far agnt_compute11(agnt_t *agnt,...)
 
 /* [R6] touches animFrame */
 
-undefined1 __cdecl16far agnt_usesAnimFrame2(agnt_t *agnt,...)
+undefined1 __cdecl16far agnt_usesAnimFrame2(agnt_t *agnt,uint16_t arg2)
 
 {
   undefined1 uVar1;
@@ -668,7 +668,7 @@ undefined1 __cdecl16far agnt_usesAnimFrame2(agnt_t *agnt,...)
 
 /* [R7] body shape: compute */
 
-uint __cdecl16far agnt_compute12(agnt_t *a,agnt_t *b,...)
+uint __cdecl16far agnt_compute12(agnt_t *a,agnt_t *b,uint16_t arg3,uint16_t arg4,uint16_t arg5)
 
 {
   uint uVar1;
@@ -695,7 +695,7 @@ uint __cdecl16far agnt_compute12(agnt_t *a,agnt_t *b,...)
 
 /* [R4] calls ovr_stExit */
 
-void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite,...)
+void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite,uint16_t arg4,uint16_t arg5,uint16_t arg6,uint16_t arg7)
 
 {
   int iVar1;
@@ -845,8 +845,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
   }
   gfx.seg = uVar8;
   gfx.ofs = (uint16_t)(psVar6->cmap + 6);
-  ovr_blitGfxRect(gfx,agnt->screenX,(int16_t)y,rect,(uint8_t)type,true,
-                  CONCAT11((char)((uint)psVar7 >> 8),*(undefined1 *)((int)&agnt->flags32 + 1)));
+  ovr_blitGfxRect(gfx,agnt->screenX,(int16_t)y,rect,(uint8_t)type,true,CONCAT11((char)((uint)psVar7 >> 8),*(undefined1 *)((int)&agnt->flags32 + 1)),0,0,0,0,0);
   pcVar1 = (char *)((int)&agnt->state + 1);
   *pcVar1 = *pcVar1 + '\x01';
   if (*(byte *)(iVar5 + 0x1b) <= *(byte *)((int)&agnt->state + 1)) {
@@ -867,7 +866,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
 
 /* [R7] body shape: compute */
 
-void __cdecl16far agnt_compute13(agnt_t *agnt,...)
+void __cdecl16far agnt_compute13(agnt_t *agnt,uint16_t arg2)
 
 {
   uint16_t in_stack_00000006;
@@ -1117,7 +1116,7 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
 
 /* [R6] touches AgntCount */
 
-void __cdecl16far agnt_usesAgntCount6(entity_t *ptr,...)
+void __cdecl16far agnt_usesAgntCount6(entity_t *ptr,uint16_t arg2)
 
 {
   uint16_t i;
@@ -1171,11 +1170,11 @@ void __cdecl16far agnt_usesFmFreeAudio(void)
   }
   src.seg = 0xc;
   src.ofs = BlitRects[0].seg;
-  audioSaveCut1Ofs = ovr_stshRleCut((far_t *)0x0,src,7,222,77,unaff_BP);
+  audioSaveCut1Ofs = ovr_stshRleCut((far_t *)0x0,src,7,222,77,unaff_BP,0,0,0);
   src_00.seg = 0xc;
   src_00.ofs = BlitRects[0].seg;
   audioSaveCut1Seg = in_DX;
-  audioSaveCut2Ofs = ovr_stshRleCut((far_t *)0x0,src_00,78,222,150,unaff_BP);
+  audioSaveCut2Ofs = ovr_stshRleCut((far_t *)0x0,src_00,78,222,150,unaff_BP,0,0,0);
   GGameState = 0x29;
   audioSaveCut2Seg = in_DX;
   if (AgntFlag2 != false) {
@@ -1232,7 +1231,7 @@ void __cdecl16far agnt_usesAlignToSeg(void)
     ovr_ovc49_drawAgents();
     BattleDelay = 0;
     agnt_blitCrossFrame();
-    ovr_miceBlitRect(&mouseRect);
+    ovr_miceBlitRect(&mouseRect,0);
     ovr_blitRaw(0xc,7,0xde,0x96,GSavedBlitSeg,0xa000);
     ovr_miceUpdate();
     handle.seg = tempScreenSeg;
@@ -1300,7 +1299,7 @@ int __cdecl16far agnt_compute15(byte rank,uint8_t level)
 
 /* Selects an enemy agent as target, flags it and reports the index with the attack sound. */
 
-uint __cdecl16far agnt_acquireTarget(agnt_t *agnt,char *agntIndex,...)
+uint __cdecl16far agnt_acquireTarget(agnt_t *agnt,char *agntIndex,uint16_t arg3)
 
 {
   uint32_t uVar1;
@@ -1322,7 +1321,7 @@ uint __cdecl16far agnt_acquireTarget(agnt_t *agnt,char *agntIndex,...)
         agnt->flags = agnt->flags | 3;
         *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(agntIndex) + 2))) = (char)iStack_4 + '\x01';
         unk = ovr_audio_panFromX(agnt,(char *)agntIndex);
-        ovr_play_sfxU(0x3b,0,unk);
+        ovr_play_sfxU(0x3b,0,unk,0,0);
         return CONCAT11((char)(unk >> 8),1);
       }
     }
@@ -1352,7 +1351,7 @@ void __cdecl16far agnt_blitCrossFrame(void)
     dst.ofs = CrossBlitX + CrossBlitY * 0x140;
     gfx.seg = *(uint16_t *)((uint)CrossBlitCount * 4 + -0x748d);
     gfx.ofs = *(uint16_t *)((uint)CrossBlitCount * 4 + -0x748f);
-    ovr_blitLoadRleGfx(gfx,dst);
+    ovr_blitLoadRleGfx(gfx,dst,0);
     CrossBlitCount = CrossBlitCount + 1;
     if (4 < CrossBlitCount) {
       CrossBlitCount = 0;

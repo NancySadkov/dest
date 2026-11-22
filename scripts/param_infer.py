@@ -75,6 +75,13 @@ DEF = re.compile(r"^([A-Za-z_][\w \*]*?)\b(\w+)\s*\(([^;{]*)\)\s*$", re.M)
 defs = {}
 for path in glob.glob(os.path.join(SRC, "*.c")):
     t = strip_comments(read(path))
+    # a definition may put the parameter list on the following line
+    # ("void f" / "(int a,...)"), so join for parsing only
+    t = re.sub(r"\n\s*\(", " (", t)
+    # the export sometimes puts the return type on its own line and the
+    # "name(params)" on the next one; join for parsing only
+    t = re.sub(r"(?m)^([A-Za-z_][\w \*]*?)[ \t]*\n([A-Za-z_]\w*\s*\()",
+               r"\1 \2", t)
     for m in DEF.finditer(t):
         ret, name, params = m.group(1).strip(), m.group(2), m.group(3).strip()
         if name in ("if", "for", "while", "switch", "return", "sizeof"):

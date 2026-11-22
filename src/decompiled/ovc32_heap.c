@@ -31,8 +31,7 @@ bool __cdecl16far heapIsBadPtr(far_t ptr)
 /* 6316:0039 */
 
 void __cdecl16far
-heapMemmove(uint8_t *dstOfs,uint16_t dstSeg,uint8_t *srcOfs,uint16_t srcSeg,uint countLo,int countHi
-           ,...)
+heapMemmove(uint8_t *dstOfs,uint16_t dstSeg,uint8_t *srcOfs,uint16_t srcSeg,uint countLo,int countHi)
 
 {
   uint32_t *puVar1;

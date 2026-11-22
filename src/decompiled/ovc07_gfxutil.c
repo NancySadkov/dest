@@ -54,7 +54,7 @@ uint16_t __cdecl16far ovc07_signum(int value)
 /* [R4] calls ovr_biosReadKey */
 
 void __cdecl16far
-ovc07_usesBiosReadKey(int x1,int y1,int x2,int y2,int x3,int y3,uint16_t rectSeg,brect_t *rect,...)
+ovc07_usesBiosReadKey(int x1,int y1,int x2,int y2,int x3,int y3,uint16_t rectSeg,brect_t *rect,uint16_t arg9,uint16_t arg10,uint16_t arg11,uint16_t arg12,uint16_t arg13,uint16_t arg14)
 
 {
   int iVar1;
@@ -202,7 +202,7 @@ ovc07_usesBiosReadKey(int x1,int y1,int x2,int y2,int x3,int y3,uint16_t rectSeg
 
 /* [R4] calls ovr_driver_fillRect */
 
-void __cdecl16far ovc07_usesFillRect(int x1,int y1,int x2,int y2,uint16_t colour,brect_t *rect,...)
+void __cdecl16far ovc07_usesFillRect(int x1,int y1,int x2,int y2,uint16_t colour,brect_t *rect,uint16_t arg7)
 
 {
   int iVar1;
@@ -232,7 +232,7 @@ void __cdecl16far ovc07_usesFillRect(int x1,int y1,int x2,int y2,uint16_t colour
     y2 = rect->h;
   }
   if ((x1 <= x2) && (y1 <= y2)) {
-    ovr_driver_fillRect(x1,y1,x2,y2,(uint8_t)colour,rect->seg);
+    ovr_driver_fillRect(x1,y1,x2,y2,(uint8_t)colour,rect->seg,0,0,0,0,0);
   }
   return;
 }
@@ -244,7 +244,7 @@ void __cdecl16far ovc07_usesFillRect(int x1,int y1,int x2,int y2,uint16_t colour
 /* [R4] calls LDIV_at_ */
 
 void __cdecl16far
-ovc07_usesLDIV_at_(int ofs1,int row1,int ofs2,int row2,uint8_t colour,brect_t *rect,...)
+ovc07_usesLDIV_at_(int ofs1,int row1,int ofs2,int row2,uint8_t colour,brect_t *rect,uint16_t arg7)
 
 {
   uint8_t *puVar1;
@@ -377,7 +377,7 @@ ovc07_usesLDIV_at_(int ofs1,int row1,int ofs2,int row2,uint8_t colour,brect_t *r
     bStack_e = bStack_e & bVar15;
   }
   if (!bVar11) {
-    ovr_driver_drawLine((uint8_t *)ofs1,row1,(uint8_t *)ofs2,row2,colour,colour,rect->seg);
+    ovr_driver_drawLine((uint8_t *)ofs1,row1,(uint8_t *)ofs2,row2,colour,colour,rect->seg,0,0);
   }
   return;
 }

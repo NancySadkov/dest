@@ -26,35 +26,35 @@ void __cdecl16far audio_usesLDIV_at_(void)
     uVar3 = audio_isPlaying();
     if ((uVar3 & 0xff) == 0) {
       GameRunning = false;
-      play_sfx(46,0);
+      play_sfx(46,0,0);
       GameRunning = true;
     }
   }
   else {
     if (((MusRunning != '\0') && (CurMusicType != 0xff)) &&
        (uVar3 = audio_isPlaying(), (uVar3 & 0xff) == 0)) {
-      play_sfx((uint)CurMusicType,0);
+      play_sfx((uint)CurMusicType,0,0);
     }
     if (((SfxRunning != '\0') && (CurSfxType3 != 0xff)) && (bVar1 = ovr_digSoundPlaying(), !bVar1))
     {
       uVar7 = 0;
       if (CurSfxType3 == 0x80) {
-        uVar4 = ovr_randBelow(3);
+        uVar4 = ovr_randBelow(3,0);
         uVar2 = (char)uVar4 + 0x80;
         uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x83) {
-        uVar4 = ovr_randBelow(3);
+        uVar4 = ovr_randBelow(3,0);
         uVar2 = (char)uVar4 + 0x83;
         uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x76) {
         puVar5 = ovr_attact_usesBDADailyTimeCounter
-                           (sfxTickLo,CONCAT13(0x76,CONCAT12(in_stack_0000fffc,sfxTickHi)));
+                           (sfxTickLo,CONCAT13(0x76,CONCAT12(in_stack_0000fffc,sfxTickHi)),0);
         if ((in_DX == 0) && (puVar5 < SfxDeadline)) {
           return;
         }
-        uVar4 = ovr_randBelow(4);
+        uVar4 = ovr_randBelow(4,0);
         uVar2 = (char)uVar4 + 0x76;
         uVar8 = 0;
         uVar7 = 0x8000;
@@ -65,7 +65,7 @@ void __cdecl16far audio_usesLDIV_at_(void)
           SfxDeadline = (uint16_t)(0x0);
         }
         else {
-          uVar4 = ovr_randBelow(0x48);
+          uVar4 = ovr_randBelow(0x48,0);
           SfxDeadline = (uint16_t)(((uVar4 & 0xff) + 0x80));
         }
         uVar7 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
@@ -73,64 +73,64 @@ void __cdecl16far audio_usesLDIV_at_(void)
         sfxTickHi = uVar7;
       }
       else if (CurSfxType3 == 0x70) {
-        uVar4 = ovr_randBelow(3);
+        uVar4 = ovr_randBelow(3,0);
         uVar2 = (char)uVar4 + 0x70;
         uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x86) {
-        uVar4 = ovr_randBelow(3);
+        uVar4 = ovr_randBelow(3,0);
         uVar2 = (char)uVar4 + 0x86;
         uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x7a) {
-        uVar4 = ovr_randBelow(3);
+        uVar4 = ovr_randBelow(3,0);
         uVar2 = (char)uVar4 + 0x7a;
         uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x7d) {
-        uVar4 = ovr_randBelow(3);
+        uVar4 = ovr_randBelow(3,0);
         uVar2 = (char)uVar4 + 0x7d;
         uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x6a) {
-        uVar4 = ovr_randBelow(3);
+        uVar4 = ovr_randBelow(3,0);
         uVar2 = (char)uVar4 + 0x6a;
         uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x64) {
-        uVar4 = ovr_randBelow(3);
+        uVar4 = ovr_randBelow(3,0);
         uVar2 = (char)uVar4 + 0x64;
         uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x67) {
-        uVar4 = ovr_randBelow(3);
+        uVar4 = ovr_randBelow(3,0);
         uVar2 = (char)uVar4 + 0x67;
         uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x5e) {
-        uVar4 = ovr_randBelow(3);
+        uVar4 = ovr_randBelow(3,0);
         uVar2 = (char)uVar4 + 0x5e;
         uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x61) {
-        uVar4 = ovr_randBelow(6);
+        uVar4 = ovr_randBelow(6,0);
         uVar2 = (char)uVar4 + 0x5e;
         uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x73) {
-        uVar4 = ovr_randBelow(6);
+        uVar4 = ovr_randBelow(6,0);
         uVar2 = (char)uVar4 + 0x73;
         uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
       }
       else {
         uVar2 = CurSfxType3;
         if (CurSfxType3 == 0x6f) {
-          uVar4 = ovr_randBelow(3);
+          uVar4 = ovr_randBelow(3,0);
           uVar2 = (char)uVar4 + 0x6d;
           uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
         }
       }
-      play_sfx(CONCAT11((char)((uint)uVar7 >> 8),uVar2),4);
+      play_sfx(CONCAT11((char)((uint)uVar7 >> 8),uVar2),4,0);
     }
   }
   return;
@@ -245,7 +245,7 @@ uint __cdecl16far ovr_midGetSequenceStatus_entry(void)
 
 
 /* 3a5b:039a */
-void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
+void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,uint16_t arg4,uint16_t arg5)
 
 {
   bool bVar1;
@@ -329,10 +329,10 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,...)
 
 /* 3a5b:0633 */
 
-void __cdecl16far play_sfx(int16_t track,int16_t type,...)
+void __cdecl16far play_sfx(int16_t track,int16_t type,uint16_t arg3)
 
 {
-  play_sfxU((byte)track,type,0x40);
+  play_sfxU((byte)track,type,0x40,0,0);
   return;
 }
 
@@ -583,7 +583,7 @@ void __cdecl16far musInit(void)
 /* WARNING: Removing unreachable block (ram,0x0003b0c9) */
 /* Returns a 0..0x7f pan value from an agent's x (0x7f - clamp(x*127/210)). */
 
-int __cdecl16far audio_panFromX(agnt_t *agnt,...)
+int __cdecl16far audio_panFromX(agnt_t *agnt,uint16_t arg2)
 
 {
   uint uVar1;

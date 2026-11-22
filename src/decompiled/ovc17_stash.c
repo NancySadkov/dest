@@ -598,7 +598,7 @@ uint32_t * __cdecl16far stshFilesize(uint32_t *__return_storage_ptr__,uint16_t f
 
 /* 474a:0b26 */
 
-uint16_t __cdecl16far randBelow(uint16_t n,...)
+uint16_t __cdecl16far randBelow(uint16_t n,uint16_t arg2)
 
 {
   uint8_t rnd;
@@ -611,7 +611,7 @@ uint16_t __cdecl16far randBelow(uint16_t n,...)
 
 /* 474a:0b38 */
 
-int __cdecl16far creat_wait_unlock_and_disk(char *path,...)
+int __cdecl16far creat_wait_unlock_and_disk(char *path,uint16_t arg2)
 
 {
   uint16_t handle;
@@ -634,7 +634,7 @@ int __cdecl16far creat_wait_unlock_and_disk(char *path,...)
 
 /* 474a:0b70 */
 
-int __cdecl16far open_wait_unlock_and_disk(char *filename,...)
+int __cdecl16far open_wait_unlock_and_disk(char *filename,uint16_t arg2)
 
 {
   uint16_t handle;
@@ -657,8 +657,7 @@ int __cdecl16far open_wait_unlock_and_disk(char *filename,...)
 /* 474a:0ba8 */
 
 void __cdecl16far
-fmReadIntoHimem(char *filename,uint16_t filenameSeg,int skipLo,int skipHi,char useEms,
-               uint16_t limitLo,uint16_t limitHi,...)
+fmReadIntoHimem(char *filename,uint16_t filenameSeg,int skipLo,int skipHi,char useEms,uint16_t limitLo,uint16_t limitHi,uint16_t arg8)
 
 {
   long *__return_storage_ptr__;
@@ -674,7 +673,7 @@ fmReadIntoHimem(char *filename,uint16_t filenameSeg,int skipLo,int skipHi,char u
   void *pvStack_6;
   long *plStack_4;
   
-  __return_storage_ptr__ = (long *)open_wait_unlock_and_disk(filename);
+  __return_storage_ptr__ = (long *)open_wait_unlock_and_disk(filename,0);
   if (-1 < (int)__return_storage_ptr__) {
     plStack_a = filelength(__return_storage_ptr__,unaff_DI);
     uStack_8 = in_DX;
@@ -905,7 +904,7 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry)
 
 /* [R4] calls ovr_stExit */
 
-stg_tmp_t * __cdecl16far stash_usesStExit(stg_tmp_t *gfxListOfs,...)
+stg_tmp_t * __cdecl16far stash_usesStExit(stg_tmp_t *gfxListOfs,uint16_t arg2,uint16_t arg3)
 
 {
   uint uVar1;

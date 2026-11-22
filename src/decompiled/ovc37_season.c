@@ -99,8 +99,7 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
         puVar7 = &text;
         pcVar5 = ovr_ovc15_capitalize((char *)&text2);
         ovr_ovc40_usesAlignToSeg
-                  ('\0',pcVar5,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)uVar8,
-                   (byte)(uVar8 >> 0x10));
+                  ('\0',pcVar5,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)uVar8,(byte)(uVar8 >> 0x10),0,0,0,0);
         uVar6 = extraout_AH_01;
       }
       else {
@@ -108,22 +107,21 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
         puVar7 = &text;
         pcVar5 = ovr_ovc15_capitalize((char *)&text2);
         ovr_ovc40_usesAlignToSeg
-                  ('\x02',pcVar5,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)uVar8,
-                   (byte)(uVar8 >> 0x10));
+                  ('\x02',pcVar5,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)uVar8,(byte)(uVar8 >> 0x10),0,0,0,0);
         uVar6 = extraout_AH_00;
       }
       if (cStack_4 != '\0') {
         ovr_stop_audio();
         CurMusicType = 0x54;
-        ovr_play_sfx(84,0);
+        ovr_play_sfx(84,0,0);
         ovr_ovc38_usesStshAlloc();
-        ovr_miceRestoreArea((brect_t *)(BlitRects + 1));
+        ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0);
         ovr_stats_drawStatsPanel();
-        ovr_say((char *)"Your may continue playing, but your score will not be recorded.");
+        ovr_say((char *)"Your may continue playing, but your score will not be recorded.",0);
         ovr_ovc38_showAchievements();
         ovr_ovc28_textHalflingCastle();
         ovr_ovc41_usesGMenuItem();
-        ovr_miceBlitRect((brect_t *)(BlitRects + 1));
+        ovr_miceBlitRect((brect_t *)(BlitRects + 1),0);
         ovr_stop_audio();
         uVar6 = 0x24;
         CurMusicType = 0xff;
@@ -191,7 +189,7 @@ void __cdecl16far season_countPromotable(void)
         (puVar3[uStack_6].unitType != 0xff)) &&
        (uVar1 = *(uint32_t *)((uint)puVar3[uStack_6].unitType << 2),
        *(char *)((int)uVar1 + 0x3f) == '\0')) {
-      uVar2 = ovr_alignUp4(puVar3[uStack_6].x);
+      uVar2 = ovr_alignUp4(puVar3[uStack_6].x,0,0);
       uVar5 = 0;
       for (iVar4 = 0; iVar4 < 4; iVar4 = iVar4 + 1) {
         uVar5 = uVar5 | ((short (*) [60] [148])GMapFlags)[-1][((unit_t *)GUnits)[uStack_6].y + 0x3b]
@@ -309,7 +307,7 @@ char __cdecl16far season_usesDifficulty(void)
 /* 67e7:058d */
 
 uint16_t __cdecl16far
-calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSeg,...)
+calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSeg,uint16_t arg5,uint16_t arg6)
 
 {
   far_t dst;
@@ -419,16 +417,16 @@ void __cdecl16far updSeason(void)
     handle.seg = Lbm_nwpanel1.seg;
     handle.ofs = Lbm_nwpanel1.ofs;
     psStack_8 = ovr_stshLoadGfx(handle);
-    calcSeasonPalette(psStack_8->cmap,(uint16_t)in_DX,palette,(uint16_t)unaff_SS);
+    calcSeasonPalette(psStack_8->cmap,(uint16_t)in_DX,palette,(uint16_t)unaff_SS,0,0);
     palette_00.seg = (uint16_t)unaff_SS;
     palette_00.ofs = (uint16_t)palette;
     ovr_ovc40_usesVgaSetPalette8bit(palette_00);
-    ovr_miceRestoreArea((brect_t *)(BlitRects + 1));
+    ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0);
     GSeason = season;
     ovr_ovc41_usesAgnt_clear('\0');
-    ovr_miceBlitRect((brect_t *)(BlitRects + 1));
+    ovr_miceBlitRect((brect_t *)(BlitRects + 1),0);
     if ((season == 0x0) && (GTimeLo == 0xf)) {
-      ovr_uiNotify((char *)"The season has changed to summer.",0x2410);
+      ovr_uiNotify((char *)"The season has changed to summer.",0x2410,0);
     }
     else {
       in_DX = snames;
@@ -436,13 +434,13 @@ void __cdecl16far updSeason(void)
                           (char *)CONCAT22(*(uint16_t *)(in_DX + (uint)season * 4),
                                            (char *)0x26510),
                           *(uint16_t *)(snames + (uint)season * 4 + 2));
-      ovr_uiNotify(msg,(uint16_t)in_DX);
+      ovr_uiNotify(msg,(uint16_t)in_DX,0);
     }
     handle_00.seg = Lbm_nwpanel1.seg;
     handle_00.ofs = Lbm_nwpanel1.ofs;
     psStack_8 = ovr_stshLoadGfx(handle_00);
     pcStack_6 = in_DX;
-    calcSeasonPalette(psStack_8->cmap,(uint16_t)in_DX,palette,(uint16_t)unaff_SS);
+    calcSeasonPalette(psStack_8->cmap,(uint16_t)in_DX,palette,(uint16_t)unaff_SS,0,0);
     palette_01.seg = (uint16_t)unaff_SS;
     palette_01.ofs = (uint16_t)palette;
     ovr_setSeasonPalette(palette_01);
@@ -488,7 +486,7 @@ int __cdecl16far season_usesAlignUp42(int unitIndex,byte partyIndex)
   int iVar3;
   uint uVar4;
   
-  uVar1 = ovr_alignUp4(((unit_t *)GUnits)[unitIndex].x);
+  uVar1 = ovr_alignUp4(((unit_t *)GUnits)[unitIndex].x,0,0);
   uVar4 = 0;
   for (iVar3 = 0; iVar3 < 4; iVar3 = iVar3 + 1) {
     uVar4 = uVar4 | ((short (*) [60] [148])GMapFlags)[-1][((unit_t *)GUnits)[unitIndex].y + 0x3b]
@@ -555,7 +553,7 @@ void __cdecl16far season_repairBuildings(byte rank)
     uVar2 = ovr_ovc41_pluralSuffix(count);
     msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6a6e,unaff_SS),
                         (char *)CONCAT22(count,(char *)0x26510),uVar2,dst);
-    ovr_uiNotify(msg,(uint16_t)dst);
+    ovr_uiNotify(msg,(uint16_t)dst,0);
   }
   return;
 }

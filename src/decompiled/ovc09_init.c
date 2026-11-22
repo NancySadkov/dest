@@ -21,17 +21,17 @@ void __cdecl16far init_usesBlitGfxRect(void)
   
   gfx_00.seg = fullScreenGfxSeg;
   gfx_00.ofs = fullScreenGfxOfs;
-  ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa0000000)));
+  ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa0000000)),0);
   gfx_01.seg = GMenuGfxSeg;
   gfx_01.ofs = GMenuGfxOfs;
-  ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa00009af)));
+  ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa00009af)),0);
   gfx.seg = nwpanel2Cut1Seg;
   gfx.ofs = nwpanel2Cut1Ofs;
-  ovr_blitGfxRect(gfx,0,0,(brect_t *)(BlitRects + 1),0x10,true);
+  ovr_blitGfxRect(gfx,0,0,(brect_t *)(BlitRects + 1),0x10,true,0,0,0,0,0,0);
   if (GameRunning == false) {
     gfx_02.seg = panel01Cut3Seg;
     gfx_02.ofs = panel01Cut3Ofs;
-    ovr_blitLoadRleGfx(gfx_02,far_from_u32((uint32_t)(0xa000c51d)));
+    ovr_blitLoadRleGfx(gfx_02,far_from_u32((uint32_t)(0xa000c51d)),0);
     mapViewActive = 0;
   }
   return;
@@ -60,7 +60,7 @@ char * __cdecl16far append_name_to_path(char *path,char *name)
 
 /* 3381:00fe */
 
-char * __cdecl16far path_strip_tail_slash(char *s,...)
+char * __cdecl16far path_strip_tail_slash(char *s,uint16_t arg2)
 
 {
   uint16_t l;
@@ -77,7 +77,7 @@ char * __cdecl16far path_strip_tail_slash(char *s,...)
 
 /* 3381:0132 */
 
-char * __cdecl16far ensure_tail_slash(char *s,...)
+char * __cdecl16far ensure_tail_slash(char *s,uint16_t arg2)
 
 {
   uint16_t l;
@@ -97,7 +97,7 @@ char * __cdecl16far ensure_tail_slash(char *s,...)
 
 /* chdir doesn't change the disk, so we have to do that */
 
-void __cdecl16far chpath(char *path,...)
+void __cdecl16far chpath(char *path,uint16_t arg2)
 
 {
   uint8_t c;
@@ -310,7 +310,7 @@ void __cdecl16far init_game(void)
   init_buffers();
   ovr_clean_ring_buffer();
   ovr_heapInit();
-  ovr_play_sfx(83,0);
+  ovr_play_sfx(83,0,0);
   return;
 }
 
@@ -449,9 +449,9 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   
   uStack_10 = (uint)(byte)uStack_10;
   for (iVar15 = 0; iVar15 < 0x94; iVar15 = iVar15 + 1) {
-    uVar7 = ovr_randBelow(10);
+    uVar7 = ovr_randBelow(10,0);
     if ((uVar7 & 0xff) == 0) {
-      uVar7 = ovr_randBelow(2);
+      uVar7 = ovr_randBelow(2,0);
       cVar3 = (char)uVar7 * '\x02' + (*(uint8_t *)((uint8_t *)&(uStack_10) + 1)) + -1;
       uStack_10 = CONCAT11(cVar3,(byte)uStack_10);
       if (cVar3 < -1) {
@@ -485,7 +485,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
         }
         uStack_c = (int)uStack_c >> 1;
         if ((iVar15 != 0) && (acStack_a4[iVar15 + -1] != acStack_a4[iVar15])) {
-          uVar7 = ovr_randBelow(8);
+          uVar7 = ovr_randBelow(8,0);
           uStack_8 = uVar7 & 0xff;
           if (uStack_8 == 1) {
             acStack_a4[iVar15] = acStack_a4[iVar15 + -1];
@@ -494,11 +494,11 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
             acStack_a4[iVar15 + -1] = acStack_a4[iVar15];
           }
         }
-        uVar7 = ovr_randBelow(0x10);
+        uVar7 = ovr_randBelow(0x10,0);
         if ((uVar7 & 0xff) == 0) {
           if (iVar15 != 0) {
             (*(uint8_t *)((uint8_t *)&(uStack_10) + 1)) = acStack_a4[iVar15 + -1];
-            uVar7 = ovr_randBelow(2);
+            uVar7 = ovr_randBelow(2,0);
             cVar3 = (char)uVar7 * '\x02' + (*(uint8_t *)((uint8_t *)&(uStack_10) + 1)) + -1;
             uStack_10 = CONCAT11(cVar3,(byte)uStack_10);
             if (cVar3 < -1) {
@@ -514,31 +514,31 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
               if ((int)uStack_c < 0x2b) {
                 if ((int)uStack_c < 0x16) {
                   if ((int)uStack_c < 1) {
-                    uVar7 = ovr_randBelow(9);
+                    uVar7 = ovr_randBelow(9,0);
                     uStack_a = (uVar7 & 0xff) - 2;
                   }
                   else {
-                    uVar7 = ovr_randBelow(8);
+                    uVar7 = ovr_randBelow(8,0);
                     uStack_a = (uVar7 & 0xff) - 5;
                   }
                 }
                 else {
-                  uVar7 = ovr_randBelow(0x10);
+                  uVar7 = ovr_randBelow(0x10,0);
                   uStack_a = (uVar7 & 0xff) - 8;
                 }
               }
               else {
-                uVar7 = ovr_randBelow(0xb);
+                uVar7 = ovr_randBelow(0xb,0);
                 uStack_a = (uVar7 & 0xff) - 5;
               }
             }
             else {
-              uVar7 = ovr_randBelow(8);
+              uVar7 = ovr_randBelow(8,0);
               uStack_a = (uVar7 & 0xff) - 4;
             }
           }
           else {
-            uVar7 = ovr_randBelow(0x11);
+            uVar7 = ovr_randBelow(0x11,0);
             uStack_a = (uVar7 & 0xff) - 8;
           }
         }
@@ -568,7 +568,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
         else {
           uStack_e = 9;
         }
-        uVar7 = ovr_randBelow(uStack_e);
+        uVar7 = ovr_randBelow(uStack_e,0);
         uStack_c = uStack_c + ((uVar7 & 0xff) - ((int)uStack_e >> 1)) + uStack_a + 1;
         if ((int)uStack_c < -0x23) {
           uStack_c = 0xffdd;
@@ -595,7 +595,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
         }
         uStack_c = (int)uStack_c >> 1;
         if ((iVar15 != 0x93) && (acStack_a4[iVar15 + 1] != acStack_a4[iVar15])) {
-          uVar7 = ovr_randBelow(0x10);
+          uVar7 = ovr_randBelow(0x10,0);
           uStack_8 = uVar7 & 0xff;
           if (uStack_8 == 1) {
             acStack_a4[iVar15] = acStack_a4[iVar15 + 1];
@@ -604,11 +604,11 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
             acStack_a4[iVar15 + 1] = acStack_a4[iVar15];
           }
         }
-        uVar7 = ovr_randBelow(0x10);
+        uVar7 = ovr_randBelow(0x10,0);
         if ((uVar7 & 0xff) == 0) {
           if (iVar15 != 0x93) {
             (*(uint8_t *)((uint8_t *)&(uStack_10) + 1)) = acStack_a4[iVar15 + 1];
-            uVar7 = ovr_randBelow(2);
+            uVar7 = ovr_randBelow(2,0);
             cVar3 = (char)uVar7 * '\x02' + (*(uint8_t *)((uint8_t *)&(uStack_10) + 1)) + -1;
             uStack_10 = CONCAT11(cVar3,(byte)uStack_10);
             if (cVar3 < -1) {
@@ -624,31 +624,31 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
               if ((int)uStack_c < 0x2b) {
                 if ((int)uStack_c < 0x16) {
                   if ((int)uStack_c < 1) {
-                    uVar7 = ovr_randBelow(9);
+                    uVar7 = ovr_randBelow(9,0);
                     uStack_a = (uVar7 & 0xff) - 2;
                   }
                   else {
-                    uVar7 = ovr_randBelow(8);
+                    uVar7 = ovr_randBelow(8,0);
                     uStack_a = (uVar7 & 0xff) - 5;
                   }
                 }
                 else {
-                  uVar7 = ovr_randBelow(0x10);
+                  uVar7 = ovr_randBelow(0x10,0);
                   uStack_a = (uVar7 & 0xff) - 8;
                 }
               }
               else {
-                uVar7 = ovr_randBelow(0xb);
+                uVar7 = ovr_randBelow(0xb,0);
                 uStack_a = (uVar7 & 0xff) - 5;
               }
             }
             else {
-              uVar7 = ovr_randBelow(8);
+              uVar7 = ovr_randBelow(8,0);
               uStack_a = (uVar7 & 0xff) - 4;
             }
           }
           else {
-            uVar7 = ovr_randBelow(0x11);
+            uVar7 = ovr_randBelow(0x11,0);
             uStack_a = (uVar7 & 0xff) - 8;
           }
         }
@@ -678,7 +678,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
         else {
           uStack_e = 9;
         }
-        uVar7 = ovr_randBelow(uStack_e);
+        uVar7 = ovr_randBelow(uStack_e,0);
         uStack_c = uStack_c + ((uVar7 & 0xff) - ((int)uStack_e >> 1)) + uStack_a + 1;
         if ((int)uStack_c < -0x7f) {
           uStack_c = 0xff81;
@@ -726,7 +726,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
     if (0x3a < (int)__return_storage_ptr__) {
       for (iVar15 = 1; iVar15 < 0x3a; iVar15 = iVar15 + 1) {
         for (iVar16 = 1; iVar16 < 0x92; iVar16 = iVar16 + 1) {
-          uVar7 = ovr_randBelow(2);
+          uVar7 = ovr_randBelow(2,0);
           psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
           if (psVar9 == (stg_tmp_t *)0x0) {
             psVar9 = (stg_tmp_t *)(iVar15 * 0x94);
@@ -771,7 +771,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                   psVar9 = (stg_tmp_t *)((uint)bStack_3 * 0x27);
                   if ((psVar9->cmap[0x11b] < 2) &&
                      (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags2(iVar16), (byte)psVar9 < 3)) {
-                    uVar7 = ovr_randBelow(5);
+                    uVar7 = ovr_randBelow(5,0);
                     ((short (*) [148] [60])GUnitGrid)[-1][iVar16 + 0x93][iVar15] =
                          (uVar7 & 0xff) + 0x92;
                     uVar2 = (ulong)GUnitGrid >> 0x10;
@@ -810,21 +810,21 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
               if ((int)uStack_c < 0x40) {
                 if ((int)uStack_c < 0x2b) {
                   if ((int)uStack_c < 0x16) {
-                    uVar7 = ovr_randBelow(4);
+                    uVar7 = ovr_randBelow(4,0);
                     psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
                     if (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 2)) {
-                      uVar7 = ovr_randBelow(6);
+                      uVar7 = ovr_randBelow(6,0);
                       psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x3d);
                       (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
                            (short)psVar9;
                     }
                     else if ((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
-                            (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15),
+                            (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15,0,0),
                             (char)psVar9 != '\0')) {
-                      uVar7 = ovr_randBelow(2);
+                      uVar7 = ovr_randBelow(2,0);
                       psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
                       if (psVar9 == (stg_tmp_t *)0x0) {
-                        uVar7 = ovr_randBelow(9);
+                        uVar7 = ovr_randBelow(9,0);
                         psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
                         (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
                              (short)psVar9;
@@ -832,7 +832,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                     }
                   }
                   else {
-                    uVar7 = ovr_randBelow(4);
+                    uVar7 = ovr_randBelow(4,0);
                     psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
                     switch((uint16_t)psVar9)   /* hand fix: case values are ints */ {
                     case (uint16_t)0x0:
@@ -860,7 +860,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                         (*(uint8_t *)((uint8_t *)&(src_00.seg))) = (char)uStack_16;
                         src_00.ofs = (uint16_t)pbStack_18;
                         (*(uint8_t *)((uint8_t *)&(src_00.seg) + 1)) = (char)(uStack_16 >> 8);
-                        psVar9 = (stg_tmp_t *)ovr_unrle(src_00);
+                        psVar9 = (stg_tmp_t *)ovr_unrle(src_00,0,0,0,0);
                       }
                       return psVar9;
                     case (uint16_t)0x2:
@@ -873,18 +873,18 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                   }
                 }
                 else {
-                  uVar7 = ovr_randBelow(4);
+                  uVar7 = ovr_randBelow(4,0);
                   psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
                   if (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 1)) {
-                    uVar7 = ovr_randBelow(6);
+                    uVar7 = ovr_randBelow(6,0);
                     psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x3d);
                     (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
                          (short)psVar9;
                   }
                   else if ((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
-                          (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15),
+                          (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15,0,0),
                           (char)psVar9 != '\0')) {
-                    uVar7 = ovr_randBelow(9);
+                    uVar7 = ovr_randBelow(9,0);
                     psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
                     (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
                          (short)psVar9;
@@ -892,12 +892,12 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                 }
               }
               else {
-                uVar7 = ovr_randBelow(4);
+                uVar7 = ovr_randBelow(4,0);
                 psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
                 if (((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
-                    (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15), (char)psVar9 != '\0'))
-                   && (psVar9 = (stg_tmp_t *)ovr_randBelow(2), (char)psVar9 != '\0')) {
-                  uVar7 = ovr_randBelow(9);
+                    (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15,0,0), (char)psVar9 != '\0'))
+                   && (psVar9 = (stg_tmp_t *)ovr_randBelow(2,0), (char)psVar9 != '\0')) {
+                  uVar7 = ovr_randBelow(9,0);
                   psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
                   (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
                        (short)psVar9;
@@ -905,20 +905,20 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
               }
             }
             else {
-              uVar7 = ovr_randBelow(4);
+              uVar7 = ovr_randBelow(4,0);
               psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
               if (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 1)) {
-                psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15);
+                psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15,0,0);
                 if ((char)psVar9 != '\0') {
-                  uVar7 = ovr_randBelow(2);
+                  uVar7 = ovr_randBelow(2,0);
                   if ((uVar7 & 0xff) == 0) {
-                    uVar7 = ovr_randBelow(6);
+                    uVar7 = ovr_randBelow(6,0);
                     psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x3d);
                     (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
                          (short)psVar9;
                   }
                   else {
-                    uVar7 = ovr_randBelow(9);
+                    uVar7 = ovr_randBelow(9,0);
                     psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
                     (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
                          (short)psVar9;
@@ -926,9 +926,9 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                 }
               }
               else if ((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
-                      (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15), (char)psVar9 != '\0')
+                      (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15,0,0), (char)psVar9 != '\0')
                       ) {
-                uVar7 = ovr_randBelow(9);
+                uVar7 = ovr_randBelow(9,0);
                 psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
                 (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
                      (short)psVar9;
@@ -936,12 +936,12 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
             }
           }
           else {
-            uVar7 = ovr_randBelow(4);
+            uVar7 = ovr_randBelow(4,0);
             psVar9 = (stg_tmp_t *)(uVar7 & 0xff);
             if (((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 2)) ||
                 (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3))) &&
-               (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15), (char)psVar9 != '\0')) {
-              uVar7 = ovr_randBelow(9);
+               (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(iVar15,0,0), (char)psVar9 != '\0')) {
+              uVar7 = ovr_randBelow(9,0);
               psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
               (*(short (*) [148] [60])GUnitGrid)[iVar15][(int)__return_storage_ptr__] =
                    (short)psVar9;
@@ -958,16 +958,16 @@ switchD_3000_4a6e_caseD_3:
     uStack_28 = constr_compute2((uint8_t)uStack_20,(uint8_t)uStack_22,(uint8_t)puStack_1c,
                                 (byte)psVar9,unaff_DI);
     uStack_28 = uStack_28 & 0xff;
-    ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__]);
+    ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__],0,0,0,0,0,0,0,0,0,0,0,0,0);
     uVar17 = constr_compute2((uint8_t)puStack_1c,(uint8_t)pvStack_1e,(uint8_t)uStack_22,bStack_2b,2)
     ;
     puStack_2a = (uint32_t *)(uVar17 & 0xff);
-    ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareRightX)[(int)__return_storage_ptr__]);
+    ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareRightX)[(int)__return_storage_ptr__],0,0,0,0,0,0,0,0,0,0,0,0,0);
     while( true ) {
-      uVar17 = ovr_constr_usesGMapFlags(uStack_24 + GfxRndSeed);
+      uVar17 = ovr_constr_usesGMapFlags(uStack_24 + GfxRndSeed,0,0);
       if ((char)uVar17 != '\0') {
         ovr_ovc07_usesLDIV_at_
-                  (((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__],RowScreenY[0] - uStack_10)
+                  (((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__],RowScreenY[0] - uStack_10,0,0,0,0,0)
         ;
       }
       do {
@@ -976,10 +976,10 @@ switchD_3000_4a6e_caseD_3:
         if ((int)rowBandSquareEnd[0] <= (int)__return_storage_ptr__) {
           for (; (int)uVar7 < (int)rowBandSquareEnd[0]; uVar7 = uVar7 + 1) {
             uStack_24 = ((uint16_t *)squareColumn)[uVar7];
-            bVar4 = ovr_constr_setHighlightAtOffset(uStack_24);
+            bVar4 = ovr_constr_setHighlightAtOffset(uStack_24,0,0);
             uStack_e = CONCAT11(extraout_AH_00,bVar4);
             if ((*(byte *)((uint8_t *)&BuildingTypes[uStack_e] + 16) & 2) != 0) {
-              iVar15 = ovr_constr_usesSmoothPrev(uStack_24);
+              iVar15 = ovr_constr_usesSmoothPrev(uStack_24,0,0,0,0);
               uStack_10 = iVar15 / 3;
               (*(uint8_t *)((uint8_t *)&(gfx.seg))) =
                    (char)*(uint16_t *)((char *)0x28ed6 + uStack_e * 0xc);
@@ -987,12 +987,12 @@ switchD_3000_4a6e_caseD_3:
               (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) =
                    (char)((uint)*(uint16_t *)(uint16_t *)((char *)0x28ed6 + uStack_e * 0xc) >> 8);
               ovr_blit_usesBlitGfxN
-                        (gfx,((uint16_t *)SquareLeftX)[uVar7],rowBandOrigin[0] - uStack_10,6);
+                        (gfx,((uint16_t *)SquareLeftX)[uVar7],rowBandOrigin[0] - uStack_10,6,0,0,0,0,0,0,0,0,0,0,0);
             }
             if ((*(byte *)((uint8_t *)&BuildingTypes[uStack_e] + 16) & 1) != 0) {
               gfx_00.seg = *(uint16_t *)(uint16_t *)((char *)0x28eda + uStack_e * 0xc);
               gfx_00.ofs = *(uint16_t *)(uint16_t *)((char *)0x28ed8 + uStack_e * 0xc);
-              ovr_blitGfxRect(gfx_00,((uint16_t *)SquareLeftX)[uVar7]);
+              ovr_blitGfxRect(gfx_00,((uint16_t *)SquareLeftX)[uVar7],0,0,0,0,0,0,0,0,0,0);
             }
           }
           return (stg_tmp_t *)((char *)0x26510);
@@ -1002,9 +1002,9 @@ switchD_3000_4a6e_caseD_3:
       uStack_24 = ((uint16_t *)squareColumn)[(int)__return_storage_ptr__];
       puStack_1c = (uint32_t *)constr_getCellAtOffset(uStack_24,-2);
       pvStack_1e = (void *)constr_getCellAtOffset(uStack_24 + 1,-2);
-      iVar16 = ovr_constr_usesSmoothPrev(uStack_24);
+      iVar16 = ovr_constr_usesSmoothPrev(uStack_24,0,0,0,0);
       uStack_10 = iVar16 / 3;
-      iVar16 = ovr_constr_usesSmoothPrev(uStack_24 + 1);
+      iVar16 = ovr_constr_usesSmoothPrev(uStack_24 + 1,0,0,0,0);
       uStack_12 = iVar16 / 3;
       psVar9 = (stg_tmp_t *)constr_getFlagsAtOffset(uStack_24,-1);
       bStack_2b = (byte)psVar9;
@@ -1012,11 +1012,11 @@ switchD_3000_4a6e_caseD_3:
       uStack_28 = constr_compute2((uint8_t)uStack_20,(uint8_t)uStack_22,(uint8_t)pvStack_1e,
                                   (byte)psVar9,2);
       uStack_28 = uStack_28 & 0xff;
-      ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__]);
+      ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__],0,0,0,0,0,0,0,0,0,0,0,0,0);
       uVar17 = constr_compute2((uint8_t)puStack_1c,(uint8_t)pvStack_1e,(uint8_t)uStack_20,bStack_2b,
                                1);
       puStack_2a = (uint32_t *)(uVar17 & 0xff);
-      ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__]);
+      ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__],0,0,0,0,0,0,0,0,0,0,0,0,0);
     }
     unaff_DI = 1;
   } while( true );
@@ -1531,11 +1531,11 @@ void __cdecl16far init_usesClearEntities(void)
   tickCountHi = 0;
   tickCountLo = 0;
   PlayerIndex = 0;
-  uVar1 = ovr_randBelow(3);
+  uVar1 = ovr_randBelow(3,0);
   uVar1 = (uVar1 & 0xff) * 3;
   seasonGroupBase = (undefined1)uVar1;
   if (GameRunning == false) {
-    uVar2 = ovr_randBelow(0x14);
+    uVar2 = ovr_randBelow(0x14,0);
     randomFeatureCount = (undefined1)uVar2;
   }
   else {
@@ -1571,9 +1571,9 @@ void __cdecl16far init_usesClearEntities(void)
   handle.seg = Lbm_nwpanel1.seg;
   handle.ofs = Lbm_nwpanel1.ofs;
   srcOfs = ovr_stshLoadGfx(handle);
-  ovr_calcSeasonPalette(srcOfs->cmap,uVar1,palette,unaff_SS);
+  ovr_calcSeasonPalette(srcOfs->cmap,uVar1,palette,unaff_SS,0,0);
   if (GameRunning == false) {
-    ovr_vgaSetPalette8bit(palette);
+    ovr_vgaSetPalette8bit(palette,0);
   }
   ovr_manage_mapPartySlots();
   return;
@@ -1585,7 +1585,7 @@ void __cdecl16far init_usesClearEntities(void)
 
 /* Returns the GMapCells[y][x] byte inside the map bounds, else 0. */
 
-uint __cdecl16far init_getMapCell(int x,int y,...)
+uint __cdecl16far init_getMapCell(int x,int y,uint16_t arg3)
 
 {
   uint in_AX;
@@ -1650,13 +1650,13 @@ int __cdecl16far init_sumMapCells2x2(int x,int y)
   uint uVar2;
   int iVar3;
   
-  uVar1 = init_getMapCell(x,y);
+  uVar1 = init_getMapCell(x,y,0);
   uVar1 = uVar1 & 0xff;
-  uVar2 = init_getMapCell(x + 1,y);
+  uVar2 = init_getMapCell(x + 1,y,0);
   iVar3 = uVar1 + (uVar2 & 0xff);
-  uVar1 = init_getMapCell(x,y + 1);
+  uVar1 = init_getMapCell(x,y + 1,0);
   iVar3 = iVar3 + (uVar1 & 0xff);
-  uVar1 = init_getMapCell(x + 1,y + 1);
+  uVar1 = init_getMapCell(x + 1,y + 1,0);
   return iVar3 + (uVar1 & 0xff);
 }
 
@@ -1693,7 +1693,7 @@ uint16_t __cdecl16far init_compute2(int x,int y,byte direction)
 /* [R4] calls ovr_randBelow */
 
 uint16_t __cdecl16far
-init_usesRandBelow(int16_t x,int16_t y,uint8_t dir,uint8_t *lastDir,uint8_t *sameDirCount,...)
+init_usesRandBelow(int16_t x,int16_t y,uint8_t dir,uint8_t *lastDir,uint8_t *sameDirCount)
 
 {
   uint8_t uVar1;
@@ -1718,7 +1718,7 @@ init_usesRandBelow(int16_t x,int16_t y,uint8_t dir,uint8_t *lastDir,uint8_t *sam
   bStack_5 = 0xff;
   bStack_7 = 0xff;
   bStack_8 = 0xff;
-  uVar4 = ovr_randBelow(4);
+  uVar4 = ovr_randBelow(4,0);
   uVar7 = (undefined1)(uVar4 >> 8);
   uStack_c = uStack_e;
   bStack_3 = (byte)uVar4;
@@ -1878,9 +1878,9 @@ void __cdecl16far init_usesRandBelow2(void)
     if ((int)(uint)randomFeatureCount <= iStack_12) {
       return;
     }
-    uVar2 = ovr_randBelow(0x93);
+    uVar2 = ovr_randBelow(0x93,0);
     x = uVar2 & 0xff;
-    uVar2 = ovr_randBelow(0x3b);
+    uVar2 = ovr_randBelow(0x3b,0);
     y = uVar2 & 0xff;
     bStack_b = 100;
     uVar3 = init_getMapCell(x,uVar2 & 0xff,(char)uVar2);
@@ -1916,7 +1916,7 @@ void __cdecl16far init_usesRandBelow2(void)
     }
     lastDir = 0x0;
     sameDirCount = 0x0;
-    uVar2 = ovr_randBelow(4);
+    uVar2 = ovr_randBelow(4,0);
     bStack_13 = (byte)uVar2;
     for (; ((((int)x < 0x93 && (-1 < (int)x)) && ((int)y < 0x3b)) && (-1 < (int)y));
         y = y + (int)*(char *)(bStack_14 + 0x889)) {
@@ -2089,7 +2089,7 @@ void __cdecl16far copyProtectionCheck(void)
   uint8_t codes;
   
   if (CopyProtectionDone == '\0') {
-    uVar1 = ovr_randBelow(0x19);
+    uVar1 = ovr_randBelow(0x19,0);
     codes = (uint8_t)uVar1;
     attempts = 0x0;
     while( true ) {
@@ -2131,7 +2131,7 @@ void __cdecl16far copyProtectionCheck(void)
       uStack_8 = (char *)CONCAT22(in_DX,pcVar2);
       *uStack_8 = *(char *)*(uint32_t *)((uint)codes * 4 + 0x54c);
       pcVar2[1] = '\0';
-      input = (uint16_t)ovr_uiReadString((char *)0x0,0,6,pcVar2,(uint16_t)in_DX);
+      input = (uint16_t)ovr_uiReadString((char *)0x0,0,6,pcVar2,(uint16_t)in_DX,0);
       pbStack_a = in_DX;
       init_normalizeName((uint32_t)CONCAT22(in_DX,input));
       if (UserWantsExit != '\0') {

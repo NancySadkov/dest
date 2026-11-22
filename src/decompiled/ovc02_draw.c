@@ -22,10 +22,10 @@ void __cdecl16far draw_menuRowBar(int menuItem,uint16_t dstSeg)
     uVar1 = ((uVar1 & 0xff) * 0x17) / 0x51;
     y1 = menuItem * 0xd + 0x91;
     if (uVar1 != 0) {
-      ovr_driver_fillRect(0x124,y1,uVar1 + 0x123,y1,SpecialColors[6],dstSeg);
+      ovr_driver_fillRect(0x124,y1,uVar1 + 0x123,y1,SpecialColors[6],dstSeg,0,0,0,0,0);
     }
     if (uVar1 < 0x16) {
-      ovr_driver_fillRect(uVar1 + 0x124,y1,0x139,y1,SpecialColors[7],dstSeg);
+      ovr_driver_fillRect(uVar1 + 0x124,y1,0x139,y1,SpecialColors[7],dstSeg,0,0,0,0,0);
     }
   }
   return;
@@ -63,10 +63,10 @@ void __cdecl16far draw_usesFillRect2(uint value,int dstSeg)
     uVar2 = ovr_attact_usesLDIV_at_(GMenuItem);
     uVar2 = uVar2 & 0xff;
     if (uVar2 != 0) {
-      ovr_driver_fillRect(0xea,0x6d,uVar2 + 0xe9,0x6f,SpecialColors[6],dstSeg);
+      ovr_driver_fillRect(0xea,0x6d,uVar2 + 0xe9,0x6f,SpecialColors[6],dstSeg,0,0,0,0,0);
     }
     if (uVar2 < 0x50) {
-      ovr_driver_fillRect(uVar2 + 0xea,0x6d,0x139,0x6f,SpecialColors[7],dstSeg);
+      ovr_driver_fillRect(uVar2 + 0xea,0x6d,0x139,0x6f,SpecialColors[7],dstSeg,0,0,0,0,0);
     }
     draw_menuRowBar((uint)GMenuItem,dstSeg);
   }
@@ -283,8 +283,7 @@ L_draw_2e25_025a_03D9:
       piVar39[-8] = 0xe652;
       CrossBlitPtr.ofs =
            (uint16_t)
-           ovr_stshRleCut((far_t far *)piVar39[-6],*(far_t far *)(piVar39 + -5),piVar39[-3],piVar39[-2],
-                          piVar39[-1],*piVar39);
+           ovr_stshRleCut((far_t far *)piVar39[-6],*(far_t far *)(piVar39 + -5),piVar39[-3],piVar39[-2],piVar39[-1],*piVar39,0,0,0);
       CrossBlitPtr.seg = in_DX;
       *(uint16_t *)((int)piVar42 + 0xe) = (uint16_t)0xa000;
       *(int *)((int)piVar42 + 0xc) = CrossBlitX + CrossBlitY * 0x140;
@@ -294,7 +293,7 @@ L_draw_2e25_025a_03D9:
       uVar52 = 0x22d3;
       puVar43 = (undefined1 *)((int)piVar42 + 4);
       *(uint16_t *)((int)piVar42 + 4) = (uint16_t)0xe689;
-      ovr_blitLoadRleGfx(*(far_t far *)((int)piVar42 + 8),*(far_t far *)((int)piVar42 + 0xc));
+      ovr_blitLoadRleGfx(*(far_t far *)((int)piVar42 + 8),*(far_t far *)((int)piVar42 + 0xc),0);
       piVar39 = (int16_t *)(puVar43 + 0xc);
     }
     if (MouseMoved == 0) {
@@ -308,7 +307,7 @@ L_draw_2e25_025a_03D9:
       *(uint16_t *)pbVar44 = 0;
       *(uint16_t *)(pbVar44 + -2) = (uint16_t)uVar52;
       *(uint16_t *)(pbVar44 + -4) = (uint16_t)0xe6a8;
-      ovr_play_sfxU(*pbVar44,*(int *)(pbVar44 + 2),*(uint16_t *)(pbVar44 + 4));
+      ovr_play_sfxU(*pbVar44,*(int *)(pbVar44 + 2),*(uint16_t *)(pbVar44 + 4),0,0);
     }
                     /* WARNING: Read-only address (ram,0x00026001) is written */
                     /* WARNING: Read-only address (ram,0x00033f01) is written */
@@ -711,18 +710,18 @@ void __cdecl16far draw_usesBlitLoadRleGfx(void)
       iStack_8 = CrossBlitX + *(int far *)((uint8_t far *)MK_FP(CrossBlitPtr.seg, CrossBlitPtr.ofs) +  5) + -1;
       iStack_6 = CrossBlitY + *(int far *)((uint8_t far *)MK_FP(CrossBlitPtr.seg, CrossBlitPtr.ofs) +  7) + -1;
       uStack_4 = 0xa000;
-      ovr_miceRestoreArea((brect_t *)&rect);
+      ovr_miceRestoreArea((brect_t *)&rect,0);
       dst.seg = 0xa000;
       dst.ofs = CrossBlitX + CrossBlitY * 0x140;
-      ovr_blitLoadRleGfx(CrossBlitPtr,dst);
+      ovr_blitLoadRleGfx(CrossBlitPtr,dst,0);
       if (CrossBlitCount < 4) {
         dst_00.seg = 0xa000;
         dst_00.ofs = CrossBlitX + CrossBlitY * 0x140;
         gfx.seg = *(uint16_t *)((int)&CrossBlitGfx.seg + (uint)CrossBlitCount * 4);
         gfx.ofs = ((far_t *)&CrossBlitGfx + CrossBlitCount)->ofs;
-        ovr_blitLoadRleGfx(gfx,dst_00);
+        ovr_blitLoadRleGfx(gfx,dst_00,0);
       }
-      ovr_miceBlitRect((brect_t *)&rect);
+      ovr_miceBlitRect((brect_t *)&rect,0);
       CrossBlitCount = CrossBlitCount + 1;
     }
   }
@@ -748,7 +747,7 @@ void __cdecl16far draw_usesBlitLoadRleGfx2(void)
     dst.ofs = CrossBlitX + CrossBlitY * 0x140;
     gfx.seg = CrossBlitPtr.seg;
     gfx.ofs = CrossBlitPtr.ofs;
-    ovr_blitLoadRleGfx(gfx,dst);
+    ovr_blitLoadRleGfx(gfx,dst,0);
     handle.seg = CrossBlitPtr.seg;
     handle.ofs = CrossBlitPtr.ofs;
     ovr_stshFree(handle);
@@ -781,7 +780,7 @@ void __cdecl16far draw_usesPlay_sfx(void)
   byte bStack_4;
   
   prevTick = CONCAT22(unaff_SI,(*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)));
-  puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)recordUpdateTick,prevTick);
+  puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)recordUpdateTick,prevTick,0);
   if ((in_DX != 0) || ((ulong *)((int)(uint32_t *)&_DATA + 1U) < puVar3)) {
     (*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)) = (uint16_t)*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
     (*(uint16_t *)((uint8_t *)&(recordUpdateTick))) = (uint16_t)*(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
@@ -815,9 +814,9 @@ void __cdecl16far draw_usesPlay_sfx(void)
           *(undefined1 *)(uVar7 * 0x12 + 0xe) = 2;
           x = *(uint16_t *)(uVar7 * 0x12 + 2);
           in_stack_0000fffa = (agnt_t *)*(int *)(uVar7 * 0x12 + 4);
-          uVar5 = ovr_ovc23_isCursorAt(x,(int)in_stack_0000fffa);
+          uVar5 = ovr_ovc23_isCursorAt(x,(int)in_stack_0000fffa,0);
           if (((char)uVar5 != '\0') && (*(char *)(uVar7 * 0x12 + 8) != '\0')) {
-            ovr_play_sfx(80,0);
+            ovr_play_sfx(80,0,0);
           }
           bStack_4 = (byte)x;
           uVar5 = ovr_ovc22_usesGOngoingBattle(bStack_4,(byte)in_stack_0000fffa);
@@ -886,8 +885,7 @@ void __cdecl16far draw_usesPrintf(void)
   if ((timePassing != '\0') ||
      (((GPaused == '\0' || ((bVar1 = ovr_ovc15_usesAlignUp42(), bVar1 && (GOngoingBattle == '\0'))))
       && ((puVar2 = ovr_attact_usesBDADailyTimeCounter
-                              ((ulong *)GDailyTimeCounter,CONCAT22(unaff_BP,(*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2)))
-                              ), in_DX != 0 ||
+                              ((ulong *)GDailyTimeCounter,CONCAT22(unaff_BP,(*(uint16_t *)((uint8_t *)&(GDailyTimeCounter) + 2))),0), in_DX != 0 ||
           ((char *)0x2415a < puVar2)))))) {
     ovr_attact_usesUpdSeason();
   }
@@ -963,8 +961,7 @@ uint16_t __cdecl16far gameProcessKey(void)
       VideoFlag_2410_0167 = 1;
       ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
       ovr_ovc40_usesAlignToSeg
-                ('\0',(char *)"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",0x2410,
-                 (char *)"Archduchess",0x2410,0);
+                ('\0',(char *)"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",0x2410,(char *)"Archduchess",0x2410,0,0,0,0,0);
       ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
       VideoFlag_2410_0167 = 0;
     }
@@ -974,7 +971,7 @@ uint16_t __cdecl16far gameProcessKey(void)
     else if ((key == 0x1900) && (VideoFlag_2410_0167 == 0)) {
       VideoFlag_2410_0167 = 1;
       ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
-      uVar1 = ovr_randBelow(2);
+      uVar1 = ovr_randBelow(2,0);
       ovr_season_textHalflingCastle((uint8_t)uVar1);
       ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
       VideoFlag_2410_0167 = 0;
@@ -1121,22 +1118,19 @@ void __cdecl16far draw_usesBlitLoadRleGfx3(int menuIndex)
     dst.ofs = row1 * 0x140 + 0x124;
     gfx.seg = panel01Cut1Seg;
     gfx.ofs = panel01Cut1Ofs;
-    ovr_blitLoadRleGfx(gfx,dst);
+    ovr_blitLoadRleGfx(gfx,dst,0);
     iVar1 = draw_compute1(menuIndex);
     ofs2 = (uint8_t *)(iVar1 + 2);
     y1_00 = draw_compute2(menuIndex);
     y1 = (byte)row1;
     y2 = (byte)y1_00;
-    ovr_driver_compute5(0x12e,y1,(uint16_t)ofs2,y2,0x126,y1 + 8,(uint)SpecialColors[0]);
-    ovr_driver_compute5(0x12e,y1,(uint16_t)ofs2,y2,0x136,y1 + 8,(uint)SpecialColors[1]);
-    ovr_driver_compute5((uint16_t)ofs2,y2,0x126,y1 + 8,0x136,y1 + 8,(uint)SpecialColors[2]);
-    ovr_driver_drawLine((uint8_t *)((int)&GUnitDescriptions[0x10].seg + 1),row1,ofs2,y1_00,
-                        SpecialColors[3]);
-    ovr_driver_drawLine(ofs2,y1_00,(uint8_t *)((int)&GUnitDescriptions[0x12].seg + 1),row1 + 8,
-                        SpecialColors[4]);
-    ovr_driver_drawLine((uint8_t *)((int)&GUnitDescriptions[0xe].seg + 1),row1 + 8,ofs2,y1_00,
-                        SpecialColors[5]);
-    ovr_driver_fillRect((uint)ofs2,y1_00,(uint)ofs2,y1_00,0x6c,TextBlitDstSeg);
+    ovr_driver_compute5(0x12e,y1,(uint16_t)ofs2,y2,0x126,y1 + 8,(uint)SpecialColors[0],0);
+    ovr_driver_compute5(0x12e,y1,(uint16_t)ofs2,y2,0x136,y1 + 8,(uint)SpecialColors[1],0);
+    ovr_driver_compute5((uint16_t)ofs2,y2,0x126,y1 + 8,0x136,y1 + 8,(uint)SpecialColors[2],0);
+    ovr_driver_drawLine((uint8_t *)((int)&GUnitDescriptions[0x10].seg + 1),row1,ofs2,y1_00,SpecialColors[3],0,0,0,0);
+    ovr_driver_drawLine(ofs2,y1_00,(uint8_t *)((int)&GUnitDescriptions[0x12].seg + 1),row1 + 8,SpecialColors[4],0,0,0,0);
+    ovr_driver_drawLine((uint8_t *)((int)&GUnitDescriptions[0xe].seg + 1),row1 + 8,ofs2,y1_00,SpecialColors[5],0,0,0,0);
+    ovr_driver_fillRect((uint)ofs2,y1_00,(uint)ofs2,y1_00,0x6c,TextBlitDstSeg,0,0,0,0,0);
     draw_menuRowBar((uint)GMenuItem,TextBlitDstSeg);
   }
   return;
@@ -1181,13 +1175,10 @@ void __cdecl16far draw_menuCursor(int x,int y)
                       TextBlitDstSeg);
   ovr_driver_compute5(x + 0xf3,(char)y + 0x3b,0xf3,0x57,299,0x57,(uint)SpecialColors[2],
                       TextBlitDstSeg);
-  ovr_driver_drawLine((uint8_t *)(far_t *)(GUnitDescriptions + 9),0x3b,(uint8_t *)(x + 0xf3),
-                      y + 0x3b,SpecialColors[3],TextBlitDstSeg);
-  ovr_driver_drawLine((uint8_t *)(x + 0xf3),y + 0x3b,(uint8_t *)(far_t *)(GUnitDescriptions + 0x10),
-                      0x57,SpecialColors[4],TextBlitDstSeg);
-  ovr_driver_drawLine((uint8_t *)(x + 0xf3),y + 0x3b,(uint8_t *)(far_t *)(GUnitDescriptions + 2),
-                      0x57,SpecialColors[5],TextBlitDstSeg);
-  ovr_driver_fillRect(x + 0xf3,y + 0x3b,x + 0xf3,y + 0x3b,0x6c,TextBlitDstSeg);
+  ovr_driver_drawLine((uint8_t *)(far_t *)(GUnitDescriptions + 9),0x3b,(uint8_t *)(x + 0xf3),y + 0x3b,SpecialColors[3],TextBlitDstSeg,0,0,0);
+  ovr_driver_drawLine((uint8_t *)(x + 0xf3),y + 0x3b,(uint8_t *)(far_t *)(GUnitDescriptions + 0x10),0x57,SpecialColors[4],TextBlitDstSeg,0,0,0);
+  ovr_driver_drawLine((uint8_t *)(x + 0xf3),y + 0x3b,(uint8_t *)(far_t *)(GUnitDescriptions + 2),0x57,SpecialColors[5],TextBlitDstSeg,0,0,0);
+  ovr_driver_fillRect(x + 0xf3,y + 0x3b,x + 0xf3,y + 0x3b,0x6c,TextBlitDstSeg,0,0,0,0,0);
   draw_usesBlitLoadRleGfx3((uint)GMenuItem);
   return;
 }
@@ -1231,13 +1222,13 @@ void __cdecl16far draw_toolbarLabels(void)
     gfx.seg = nwpanel1Cut1Seg;
     gfx.ofs = nwpanel1Cut1Ofs;
     TextBlitDstSeg = uVar3;
-    ovr_blitLoadRleGfx(gfx,dst);
+    ovr_blitLoadRleGfx(gfx,dst,0);
     if (GMenuItem == 5) {
       dst_00.seg = TextBlitDstSeg;
       dst_00.ofs = 0x4975;
       gfx_00.seg = *(uint16_t *)((int)&LbmBigcomp50x42.seg + (uint)bigcompFrame * 4);
       gfx_00.ofs = ((far_t *)&LbmBigcomp50x42 + bigcompFrame)->ofs;
-      ovr_blitLoadRleGfx(gfx_00,dst_00);
+      ovr_blitLoadRleGfx(gfx_00,dst_00,0);
       TextBlitX = 0xea;
       TextBlitY = 0x62;
       ovr_blitText((char *)"Movement",(byte *)CONCAT22(Font03.ofs,(char *)0x26510),
@@ -1248,7 +1239,7 @@ void __cdecl16far draw_toolbarLabels(void)
       dst_01.ofs = 0x482a;
       gfx_01.seg = trianglsCut1Seg;
       gfx_01.ofs = trianglsCut1Ofs;
-      ovr_blitLoadRleGfx(gfx_01,dst_01);
+      ovr_blitLoadRleGfx(gfx_01,dst_01,0);
       TextBlitX = 0xe6;
       TextBlitY = 0x3e;
       ovr_blitText((char *)"Recruit",(byte *)CONCAT22(Font02.ofs,(char *)0x26510),

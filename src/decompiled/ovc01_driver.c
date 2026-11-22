@@ -82,7 +82,7 @@ uint16_t __cdecl16far miceButtonsStates(void)
 /* 2d63:005d */
 
 void __cdecl16far
-blitRaw(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t srcSeg,uint16_t dstSeg,...)
+blitRaw(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t srcSeg,uint16_t dstSeg)
 
 {
   undefined1 *puVar1;
@@ -120,7 +120,7 @@ blitRaw(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2,uint16_t srcSeg,uint16_t
 /* 2d63:00aa */
 
 void __cdecl16far
-lbm_combine_bitplanes(far_t src,far_t dst,uint16_t npixels,uint8_t nplanes,uint16_t plane_sz,...)
+lbm_combine_bitplanes(far_t src,far_t dst,uint16_t npixels,uint8_t nplanes,uint16_t plane_sz,uint16_t arg6)
 
 {
   byte *pbVar1;
@@ -276,7 +276,7 @@ void __cdecl16far miceSetPosition(uint16_t col,uint16_t row)
 
 /* 2d63:01bf */
 
-uint8_t __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int startIndex,...)
+uint8_t __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int startIndex,uint16_t arg4)
 
 {
   uint8_t *puVar1;
@@ -302,7 +302,7 @@ uint8_t __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int st
 
 /* 2d63:01df */
 
-uint8_t __cdecl16far vgaSetPalette8bit(uint8_t *pal,...)
+uint8_t __cdecl16far vgaSetPalette8bit(uint8_t *pal,uint16_t arg2)
 
 {
   uint8_t *puVar1;
@@ -363,7 +363,7 @@ uint8_t __cdecl16far vgaSetPalette8bit(uint8_t *pal,...)
        uint16_t adjusted_length = DI - dest;
    } */
 
-int __cdecl16far unrle(far_t src,far_t dst,uint16_t len,...)
+int __cdecl16far unrle(far_t src,far_t dst,uint16_t len,uint16_t arg4,uint16_t arg5)
 
 {
   undefined1 *puVar1;
@@ -483,7 +483,7 @@ int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz)
 
 /* 2d63:0292 */
 
-void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor,...)
+void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor,uint16_t arg4)
 
 {
   uint16_t count;
@@ -504,7 +504,7 @@ void __cdecl16far grabRemap(far_t pixels,uint8_t scolor,uint8_t dcolor,...)
 
 
 /* 2d63:02b5 */
-void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_sz,uint mask,...)
+void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_sz,uint mask,uint16_t arg7)
 
 {
   uint16_t edst;
@@ -776,8 +776,7 @@ int16_t __cdecl16far drawLine2(char *src,char *dst,uint16_t count)
 /* [R7] body shape: scan */
 
 void __cdecl16far
-driver_scan1(far_t buf,uint16_t count,uint8_t fill,uint8_t threshold,far_t pattern,uint16_t index,
-            ...)
+driver_scan1(far_t buf,uint16_t count,uint8_t fill,uint8_t threshold,far_t pattern,uint16_t index)
 
 {
   byte *pbVar1;
@@ -837,7 +836,7 @@ driver_scan1(far_t buf,uint16_t count,uint8_t fill,uint8_t threshold,far_t patte
 
 /* draws a line between two screen positions in one colour */
 
-void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,uint8_t colour,...)
+void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,uint8_t colour,uint16_t arg6,uint16_t arg7,uint16_t arg8,uint16_t arg9)
 
 {
   uint8_t *puVar1;
@@ -948,7 +947,7 @@ void __cdecl16far driver_loop1(uint x1,uint x2,uint16_t y,uint8_t colour,uint16_
 /* fills the rectangle (x1,y1)-(x2,y2) with one colour */
 
 uint16_t __cdecl16far
-driver_fillRect(uint x1,uint y1,uint x2,uint y2,uint8_t colour,uint16_t dstSeg,...)
+driver_fillRect(uint x1,uint y1,uint x2,uint y2,uint8_t colour,uint16_t dstSeg,uint16_t arg7,uint16_t arg8,uint16_t arg9,uint16_t arg10,uint16_t arg11)
 
 {
   uint8_t *puVar1;
@@ -995,7 +994,7 @@ driver_fillRect(uint x1,uint y1,uint x2,uint y2,uint8_t colour,uint16_t dstSeg,.
 /* [R7] body shape: compute */
 
 void __cdecl16far
-driver_compute3(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg,...)
+driver_compute3(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg)
 
 {
   uint16_t *puVar1;
@@ -1015,7 +1014,7 @@ driver_compute3(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg,.
 /* [R7] body shape: compute */
 
 void __cdecl16far
-driver_compute4(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg,...)
+driver_compute4(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg)
 
 {
   uint16_t *puVar1;
@@ -1276,7 +1275,7 @@ void __cdecl16far midSetRelativeValue(void)
 
 /* [R7] body shape: compute */
 
-void __cdecl16far driver_compute5(uint16_t x1,byte y1,uint16_t x2,byte y2,uint16_t x3,byte y3,...)
+void __cdecl16far driver_compute5(uint16_t x1,byte y1,uint16_t x2,byte y2,uint16_t x3,byte y3,uint16_t arg7,uint16_t arg8)
 
 {
   byte bVar1;
@@ -1365,7 +1364,7 @@ void __cdecl16near driver_scan2(void)
 
 /* Fills the horizontal span x1..x2 at y, clipped to the given rect. */
 
-void __cdecl16far driver_fillSpan(int x1,int x2,byte y,uint8_t colour,int *rect,...)
+void __cdecl16far driver_fillSpan(int x1,int x2,byte y,uint8_t colour,int *rect,uint16_t arg6)
 
 {
   uint8_t *puVar1;
@@ -1452,7 +1451,7 @@ void __cdecl16far driver_setMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int y
 
 /* ANDs every word of a rectangle of the map-flag array with a mask (row stride 0x128 bytes). */
 
-void __cdecl16far driver_clearMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int y2,uint mask,...)
+void __cdecl16far driver_clearMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int y2,uint mask,uint16_t arg7,uint16_t arg8)
 
 {
   int iVar1;
@@ -1675,7 +1674,7 @@ uint8_t __cdecl16far vgaWaitVerticalRetrace(void)
 
 /* returns the low four bits of the argument */
 
-uint __cdecl16far lowNibble(uint value,...)
+uint __cdecl16far lowNibble(uint value,uint16_t arg2)
 
 {
   return value & 0xf;

@@ -59,40 +59,40 @@ void __cdecl16far ovc30_nextWave(byte flags)
     PlayerIndex = PlayerIndex + 1;
     if (PlayerIndex == 1) {
       pending = enemyBaseLow[Difficulty] +
-                (byte)ovr_randBelow((byte)lowIntelEnemies[Difficulty] + 1);
+                (byte)ovr_randBelow((byte)lowIntelEnemies[Difficulty] + 1,0);
       while (pending != '\0') {
         pending = pending - 1;
-        ovc30_textDivideError((byte)ovc30_usesRandBelow(0),1,1,0x19);
+        ovc30_textDivideError((byte)ovc30_usesRandBelow(0),1,1,0x19,0,0);
       }
       pending = enemyBaseMed[Difficulty] +
-                (byte)ovr_randBelow((byte)lowIntelEnemies[Difficulty] + 1);
+                (byte)ovr_randBelow((byte)lowIntelEnemies[Difficulty] + 1,0);
       while (pending != '\0') {
         pending = pending - 1;
-        ovc30_textDivideError((byte)ovc30_usesRandBelow(1),1,1,0x19);
+        ovc30_textDivideError((byte)ovc30_usesRandBelow(1),1,1,0x19,0,0);
       }
       pending = enemyBaseHigh[Difficulty] +
-                (byte)ovr_randBelow((byte)highIntelEnemies[Difficulty] + 1);
+                (byte)ovr_randBelow((byte)highIntelEnemies[Difficulty] + 1,0);
       while (pending != '\0') {
         pending = pending - 1;
-        ovc30_textDivideError((byte)ovc30_usesRandBelow(2),1,1,0);
+        ovc30_textDivideError((byte)ovc30_usesRandBelow(2),1,1,0,0,0);
       }
     }
     else {
       pending = enemyBaseWave[Difficulty];
       while (pending != '\0') {
         pending = pending - 1;
-        ovc30_textDivideError((byte)ovc30_usesRandBelow(3),1,1,0);
+        ovc30_textDivideError((byte)ovc30_usesRandBelow(3),1,1,0,0,0);
       }
       if (1 < Difficulty) {
-        ovc30_textDivideError((byte)ovc30_usesRandBelow(4),1,1,0);
+        ovc30_textDivideError((byte)ovc30_usesRandBelow(4),1,1,0,0,0);
       }
       if ((flags & 1) != 0) {
-        ovr_uiNotify((char far *)s_all_enemies_destroyed,0xa000);
+        ovr_uiNotify((char far *)s_all_enemies_destroyed,0xa000,0);
         ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x36));
       }
       line = ((stsprintf_far_t *)ovr_stsprintf)
                  (msg,(char far *)s_next_wave_of_enemies_appear,PlayerIndex + 1);
-      ovr_uiNotify(line,0xa000);
+      ovr_uiNotify(line,0xa000,0);
       ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x36));
     }
     if ((flags & 2) == 0) {
@@ -129,7 +129,7 @@ uint16_t __cdecl16far ovc30_usesRandBelow(byte band)
   else {
     do {
       do {
-        uVar2 = ovr_randBelow(0x2a);
+        uVar2 = ovr_randBelow(0x2a,0);
       } while ((char)uVar2 == ')');
     } while (((*(char *)((int)(char **)GMenuStrings + (uVar2 & 0xff) * 0x95 + 0x1f) == '\0') ||
              (*(byte *)((int)&worldMenuLabels[0xc].seg + (uVar2 & 0xff) * 0x95) < (&bandMin)[band]))
@@ -217,7 +217,7 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
   pcStack_6->classStr = gindex;
   pcStack_6->cls = 0xff;
   pcStack_6->race = 3;
-  uVar3 = ovr_randBelow(1);
+  uVar3 = ovr_randBelow(1,0);
   pcStack_6->gender = (byte)uVar3;
   ovr_manage_rollStats(pcStack_6,(char)uStack_4);
   if (*(char *)((int)&worldMenuLabels[0xc].seg + (uint)gindex * 0x95) != -1) {
@@ -244,7 +244,7 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
 
 /* [R2] string "Divide error\r\n" */
 
-byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte percent,...)
+byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte percent,uint16_t arg5,uint16_t arg6)
 
 {
   byte *pbVar1;
@@ -291,7 +291,7 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
       if (0x8c < maxBound) {
         maxBound = 0x8c;
       }
-      uVar8 = ovr_randBelow((maxBound - minBound) + 1);
+      uVar8 = ovr_randBelow((maxBound - minBound) + 1,0);
       uVar8 = (uVar8 & 0xff) + minBound & 0xfffc;
       minBound = demoCenterY + tries * -4;
       maxBound = demoCenterY + tries * 4;
@@ -301,16 +301,16 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
       if (0x34 < maxBound) {
         maxBound = 0x34;
       }
-      uVar5 = ovr_randBelow((maxBound - minBound) + 1);
+      uVar5 = ovr_randBelow((maxBound - minBound) + 1,0);
       spawnY = (uVar5 & 0xff) + minBound;
     }
     else {
       retries = 0;
       do {
         bVar3 = false;
-        uVar8 = ovr_randBelow(0x8c);
+        uVar8 = ovr_randBelow(0x8c,0);
         uVar8 = (uVar8 & 0xff) + 4 & 0xfffc;
-        spawnY = ovr_randBelow(0x3a);
+        spawnY = ovr_randBelow(0x3a,0);
         spawnY = spawnY & 0xff;
         for (iVar4 = 0; iVar4 < (int)(uint)GLeaderCount; iVar4 = iVar4 + 1) {
           if (((((char_sheet_t *)((iVar4 << 2)))->active != '\0') &&
@@ -338,9 +338,9 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
         }
       } while ((bVar3) && (retries < 100));
     }
-    uVar6 = ovr_constr_usesGMapFlags(uVar8 - 1,spawnY);
+    uVar6 = ovr_constr_usesGMapFlags(uVar8 - 1,spawnY,0);
     if ((((char)uVar6 == '\0') ||
-        (uVar6 = ovr_constr_usesGMapFlags(uVar8,spawnY), (char)uVar6 == '\0')) ||
+        (uVar6 = ovr_constr_usesGMapFlags(uVar8,spawnY,0), (char)uVar6 == '\0')) ||
        (bVar3 = ovr_ovc18_textArena(uVar8,spawnY), bVar3)) {
       tries = tries + 1;
       if (500 < tries) {
@@ -359,25 +359,25 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
         if (PlayerIndex < 2) {
           uVar2 = *(uint32_t *)((uVar6 & 0xff) << 2);
           ovr_ovc15_usesLDIV_at_
-                    (uVar8,spawnY,uVar8,spawnY,gindex,*(uint8_t *)((int)uVar2 + 0xa4),leaderIndex)
+                    (uVar8,spawnY,uVar8,spawnY,gindex,*(uint8_t *)((int)uVar2 + 0xa4),leaderIndex,0,0,0,0)
           ;
         }
         else {
           for (count = 0; uVar7 = ovc30_difficultyFactor(), count < (int)(uVar7 & 0xff);
               count = count + 1) {
-            ovr_ovc15_usesLDIV_at_(uVar8,spawnY,uVar8,spawnY,gindex,0xa,leaderIndex);
+            ovr_ovc15_usesLDIV_at_(uVar8,spawnY,uVar8,spawnY,gindex,0xa,leaderIndex,0,0,0,0);
           }
         }
       }
       else {
-        ovr_ovc15_usesLDIV_at_(uVar8,spawnY,uVar8,spawnY,gindex,0x1,leaderIndex);
+        ovr_ovc15_usesLDIV_at_(uVar8,spawnY,uVar8,spawnY,gindex,0x1,leaderIndex,0,0,0,0);
         for (count = 0; uVar7 = ovc30_difficultyFactor(), iVar4 = (uVar7 & 0xff) * 2,
             iVar4 - count != 0 && count <= iVar4; count = count + 1) {
-          ovr_ovc18_textTypeLen(leaderIndex,uVar8,spawnY,0x2);
+          ovr_ovc18_textTypeLen(leaderIndex,uVar8,spawnY,0x2,0,0);
         }
       }
       if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)gindex * 0x95) & 0x1000) != 0) {
-        ovc30_usesRandBelow2(uVar8,spawnY);
+        ovc30_usesRandBelow2(uVar8,spawnY,0);
       }
       uVar2 = *(uint32_t *)((uVar6 & 0xff) << 2);
       *(undefined1 *)((int)uVar2 + 0x5a) = 0;
@@ -392,7 +392,7 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
       frames = frames + -1;
       demoCenterY = spawnY;
       demoCenterX = uVar8;
-      uVar8 = ovr_randBelow(100);
+      uVar8 = ovr_randBelow(100,0);
       mode = (byte)uVar8 < percent;
       tries = 0;
     }
@@ -405,7 +405,7 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
 
 /* [R4] calls ovr_randBelow */
 
-void __cdecl16far ovc30_usesRandBelow2(int centerX,int centerY,...)
+void __cdecl16far ovc30_usesRandBelow2(int centerX,int centerY,uint16_t arg3)
 
 {
   uint16_t uVar1;
@@ -415,11 +415,11 @@ void __cdecl16far ovc30_usesRandBelow2(int centerX,int centerY,...)
   
   for (iStack_6 = -0xc; iStack_6 < 0xd; iStack_6 = iStack_6 + 1) {
     for (iVar3 = -8; iVar3 < 9; iVar3 = iVar3 + 1) {
-      uVar1 = ovr_randBelow(2);
+      uVar1 = ovr_randBelow(2,0);
       if ((uVar1 & 0xff) == 0) {
-        uVar2 = ovr_ovc45_compute4(centerX + iStack_6,centerY + iVar3);
+        uVar2 = ovr_ovc45_compute4(centerX + iStack_6,centerY + iVar3,0);
         if ((char)uVar2 != '\0') {
-          uVar1 = ovr_randBelow(9);
+          uVar1 = ovr_randBelow(9,0);
           (*(short (*) [148] [60])GUnitGrid)[centerX + iStack_6][centerY + iVar3] =
                (uVar1 & 0xff) + 0xef;
         }

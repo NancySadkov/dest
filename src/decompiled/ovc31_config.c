@@ -260,7 +260,7 @@ l_made_new_strong_sav:
     clrscr();
     printf("Path to write game data:\n");
     input_folder_name((char *)CONCAT22(unaff_SS,path_buffer));
-    path = ovr_path_strip_tail_slash(path_buffer);
+    path = ovr_path_strip_tail_slash(path_buffer,0);
     ovr_chpath(path,in_DX);
   } while( true );
 }
@@ -588,7 +588,7 @@ void __cdecl16far init_check_mem(void)
   if ((7 < iVar1) && ((iVar1 != 8 || (0xed27 < lmem_without_psp.ofs + 0x100)))) {
     return;
   }
-  ovr_litoa10(buf,CONCAT22(lmem_without_psp.ofs + 0x100,unaff_SS),iVar1);
+  ovr_litoa10(buf,CONCAT22(lmem_without_psp.ofs + 0x100,unaff_SS),iVar1,0);
   printf("Largest executable program size is only %s bytes.\n");
   printf("Stronghold requires 585,000 bytes.\n");
                     /* WARNING: Subroutine does not return */

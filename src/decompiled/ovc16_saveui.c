@@ -106,18 +106,17 @@ void __cdecl16far saveui_startCrossBlit(void)
   src.ofs = 0xa000;
   CrossBlitPtr.ofs =
        (uint16_t)
-       ovr_stshRleCut((far_t *)0x0,src,CrossBlitY,CrossBlitX + 0xd,CrossBlitY + 9,unaff_BP,
-                      (char)CrossBlitY);
+       ovr_stshRleCut((far_t *)0x0,src,CrossBlitY,CrossBlitX + 0xd,CrossBlitY + 9,unaff_BP,(char)CrossBlitY,0,0);
   dst.seg = 0xa000;
   dst.ofs = CrossBlitX + CrossBlitY * 0x140;
   (*(uint8_t *)((uint8_t *)&(gfx.seg))) = (char)CrossBlitGfx.seg;
   gfx.ofs = CrossBlitGfx.ofs;
   (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) = (char)(CrossBlitGfx.seg >> 8);
   CrossBlitPtr.seg = in_DX;
-  ovr_blitLoadRleGfx(gfx,dst);
+  ovr_blitLoadRleGfx(gfx,dst,0);
   if (MouseMoved == 0) {
     unk = ovr_draw_compute3(CrossBlitX);
-    ovr_play_sfxU(0,1,unk);
+    ovr_play_sfxU(0,1,unk,0,0);
   }
   return;
 }
@@ -142,7 +141,7 @@ void __cdecl16far saveui_usesBlitLoadRleGfx2(far_t textTable,int rowIndex,int it
   dst.ofs = rowIndex * 0x12c0 + 0x2096;
   gfx.seg = trianglsCut3Seg;
   gfx.ofs = trianglsCut3Ofs;
-  ovr_blitLoadRleGfx(gfx,dst);
+  ovr_blitLoadRleGfx(gfx,dst,0);
   TextBlitX = 0x2a;
   TextBlitY = rowIndex * 0xf + 0x1d;
   uVar2 = textTable.seg;
@@ -153,7 +152,7 @@ void __cdecl16far saveui_usesBlitLoadRleGfx2(far_t textTable,int rowIndex,int it
   dst_00.ofs = rowIndex * 0x12c0 + 0x2096;
   gfx_00.seg = trianglsCut4Seg;
   gfx_00.ofs = trianglsCut4Ofs;
-  ovr_blitLoadRleGfx(gfx_00,dst_00);
+  ovr_blitLoadRleGfx(gfx_00,dst_00,0);
   TextBlitX = 0x2a;
   TextBlitY = rowIndex * 0xf + 0x1d;
   puVar1 = (uint16_t *)(textTable.ofs + (rowIndex + itemOffset) * 4);
@@ -214,7 +213,7 @@ void __cdecl16far saveui_blitPanel(void)
   ovr_ovc18_blitPanelIfNotRunning();
   gfx.seg = nwpanel2Cut1Seg;
   gfx.ofs = nwpanel2Cut1Ofs;
-  ovr_blitGfxRect(gfx,0,0,(brect_t *)(BlitRects + 1),0x10,true,0);
+  ovr_blitGfxRect(gfx,0,0,(brect_t *)(BlitRects + 1),0x10,true,0,0,0,0,0,0);
   return;
 }
 
@@ -246,7 +245,7 @@ void __cdecl16far saveui_usesBlitGfx10(far_t gfx,char *text,byte *widths,uint *c
   uVar1 = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
   gfx_00.seg = gfx.ofs;
   gfx_00.ofs = in_stack_00000004;
-  ovr_blitGfx10(gfx_00,0x16,uVar1,(brect_t *)&rect,SUB21(unaff_SS,0),(char)uVar1);
+  ovr_blitGfx10(gfx_00,0x16,uVar1,(brect_t *)&rect,SUB21(unaff_SS,0),(char)uVar1,0);
   TextBlitX = 0x2a;
   TextBlitY = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
   ovr_blitText((char *)gfx.seg,
@@ -257,7 +256,7 @@ void __cdecl16far saveui_usesBlitGfx10(far_t gfx,char *text,byte *widths,uint *c
     uVar1 = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
     gfx_01.seg = gfx.ofs;
     gfx_01.ofs = in_stack_00000004;
-    ovr_blitGfx10(gfx_01,0x16,uVar1,(brect_t *)&rect,SUB21(unaff_SS,0),(char)uVar1);
+    ovr_blitGfx10(gfx_01,0x16,uVar1,(brect_t *)&rect,SUB21(unaff_SS,0),(char)uVar1,0);
   }
   *(uint16_t *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2))) = TextBlitX;
   ovr_blitLetter('_',(byte *)Font03.ofs,(uint8_t)Font03.seg,0xf);
@@ -288,7 +287,7 @@ void __cdecl16far saveui_usesBlitLoadRleGfx3(far_t entries,int count)
       dst.ofs = iVar3 * 0x12c0 + 0x2096;
       gfx.seg = trianglsCut4Seg;
       gfx.ofs = trianglsCut4Ofs;
-      ovr_blitLoadRleGfx(gfx,dst);
+      ovr_blitLoadRleGfx(gfx,dst,0);
       TextBlitX = 0x2a;
       TextBlitY = iVar3 * 0xf + 0x1d;
       puVar2 = (uint16_t *)(entries.ofs + iVar3 * 4);
@@ -536,7 +535,7 @@ L_uiMenuSub_08AD:
 
 
 /* 4528:0c98 */
-char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,uint16_t gfxSeg,...)
+char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,uint16_t gfxSeg,uint16_t arg6)
 
 {
   far_t gfx;
@@ -588,8 +587,7 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   sVar1 = strlen((char *)CONCAT22(unaff_SS,&text));
   bStack_5 = (byte)sVar1;
   uVar8 = (uint16_t)((ulong)((long)row * 0xf) >> 0x10);
-  pfVar2 = ovr_stshRleCut((far_t far *)0x0,far_from_u32((uint32_t)(0x16a000)),(int)((long)row * 0xf) + 0x1d,222,
-                          row * 0xf + 0x29,(int16_t)ey,0xde);
+  pfVar2 = ovr_stshRleCut((far_t far *)0x0,far_from_u32((uint32_t)(0x16a000)),(int)((long)row * 0xf) + 0x1d,222,row * 0xf + 0x29,(int16_t)ey,0xde,0,0);
   TextBlitX = 0x2a;
   TextBlitY = row * 0xf + 0x1d;
   cursorX = 0;
@@ -613,13 +611,9 @@ L_uiReadString_0DC9:
               (bStack_5 < 0x4f)) && ((uStack_4 & 0xff) != 0x40))) {
         (&text)[bStack_5] = (uint8_t)uStack_4;
         (&uStack_5b)[bStack_5] = 0;
-        iVar4 = ovr_font_textWidth((char *)&text,
-                                   (char *)CONCAT13((char)(Font03.ofs >> 8),
-                                                    CONCAT12((char)Font03.ofs,unaff_SS)),
-                                   (char)Font03.ofs,Font03.seg);
-        iVar5 = ovr_font_textWidth((char *)"_",
-                                   (char *)CONCAT22(Font03.ofs,(char *)0x26510),
-                                   (char)Font03.seg);
+        iVar4 = ovr_font_textWidth((char *)&text,(char *)CONCAT13((char)(Font03.ofs >> 8),
+                                                    CONCAT12((char)Font03.ofs,unaff_SS)),(char)Font03.ofs,Font03.seg,0);
+        iVar5 = ovr_font_textWidth((char *)"_",(char *)CONCAT22(Font03.ofs,(char *)0x26510),(char)Font03.seg,0,0);
         if (iVar4 + iVar5 + 0x2aU < 0xe0) {
           bStack_5 = bStack_5 + 1;
         }
@@ -709,7 +703,7 @@ L_uiReadString_0FF7:
 
 /* 4528:10a8 */
 
-void __cdecl16far uiMenu(char *title,far_t items,int nitems,...)
+void __cdecl16far uiMenu(char *title,far_t items,int nitems,uint16_t arg4)
 
 {
   uint16_t unaff_BP;
@@ -800,7 +794,7 @@ uint __cdecl16far saveui_readSavesList(int entries,uint16_t entriesSeg)
   
   uStack_4 = 0;
   pcVar1 = ovr_fmVsprintf("%ssaves.txt",&GWorkDir);
-  fd = ovr_open_wait_unlock_and_disk(pcVar1);
+  fd = ovr_open_wait_unlock_and_disk(pcVar1,0);
   if (-1 < fd) {
     pcVar1 = (char *)saveui_readLine(fd);
     uVar3 = in_DX;
@@ -950,7 +944,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
     pcStack_22 = (char *)CONCAT22(menuLabel,(char *)(uint)MessageDelay);
     pcVar11 = ovr_fmVsprintf("Message delay is now %d.",pcStack_22);
     pcStack_22 = (char *)CONCAT22(menuLabel,in_DX);
-    ovr_say(pcVar11);
+    ovr_say(pcVar11,0);
     if (MessageDelay == 0) {
       uStack_1e = (entity_t *)0x0;
       uVar10 = 0;
@@ -1047,7 +1041,7 @@ switchD_4000_6642_caseD_3:
       uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(char)uStack_1a + -1);
       if (cVar6 == '\0') break;
       pcStack_22 = (char *)((ulong)pcStack_22 & 0xffff0000);
-      ovr_ovc15_textArena(unaff_DI);
+      ovr_ovc15_textArena(unaff_DI,0,0);
     }
   }
   else if ((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) == '\0') {
@@ -1058,7 +1052,7 @@ switchD_4000_6642_caseD_3:
       if (cVar6 == '\0') break;
       pcStack_22 = (char *)CONCAT22(menuLabel,DAT_2000_d190);
       uVar19 = 0x22ff;
-      ovr_agnt_usesAgntCount6(Entities + unaff_DI);
+      ovr_agnt_usesAgntCount6(Entities + unaff_DI,0);
     }
   }
   else if (((char)uStack_18 != '\0') && ((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) != '\0')) {
@@ -1075,7 +1069,7 @@ switchD_4000_6642_caseD_3:
       }
       pcStack_22 = (char *)((ulong)pcStack_22 & 0xffff0000);
       uVar19 = 0x2322;
-      pcVar11 = ovr_ovc15_textArena(unaff_DI);
+      pcVar11 = ovr_ovc15_textArena(unaff_DI,0,0);
       if (((uint)pcVar11 & 0xff) == 0) break;
       uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(char)uStack_1a + -1);
     }
@@ -1142,9 +1136,9 @@ switchD_4000_6642_caseD_3:
           return (char *)0x26510;
         }
         uStack_1e = (entity_t *)CONCAT22(DAT_2000_d190,Entities + unaff_DI);
-        uVar8 = ovr_alignUp4(Entities[unaff_DI].base.destX);
+        uVar8 = ovr_alignUp4(Entities[unaff_DI].base.destX,0,0);
         uVar19 = 0x2379;
-        uVar9 = ovr_alignUp4((uStack_1e->base).x);
+        uVar9 = ovr_alignUp4((uStack_1e->base).x,0,0);
         if ((uVar8 == uVar9) &&
            (uVar18 = (uint16_t)((ulong)uStack_1e >> 0x10),
            (((entity_t *)uStack_1e)->base).destY == (((entity_t *)uStack_1e)->base).y)) {
@@ -1194,7 +1188,7 @@ switchD_4000_6642_caseD_3:
                                      (((entity_t *)uStack_1e)->base).y);
         if (iStack_12 != 0) {
           uVar18 = 0x2337;
-          uVar10 = ovr_randBelow(2);
+          uVar10 = ovr_randBelow(2,0);
           if ((char)uVar10 != '\0') {
             uStackY_2c = 0x2337;
             uStackY_2e = 0x399;
@@ -1266,8 +1260,8 @@ switchD_4000_6642_caseD_3:
       }
 L_attact_3f0b_1082_1477:
       uStack_18 = CONCAT11(1,(char)uStack_18);
-      uVar8 = ovr_alignUp4((((entity_t *)uStack_1e)->base).destX);
-      uVar9 = ovr_alignUp4((uStack_1e->base).x);
+      uVar8 = ovr_alignUp4((((entity_t *)uStack_1e)->base).destX,0,0);
+      uVar9 = ovr_alignUp4((uStack_1e->base).x,0,0);
       if (uVar8 == uVar9) {
         uVar19 = (uint16_t)((ulong)uStack_1e >> 0x10);
         peVar14 = (entity_t *)uStack_1e;
@@ -1283,15 +1277,15 @@ L_attact_3f0b_1082_1477:
           }
           if (bStack_4 != 0xff) {
             for (unaff_SI = (byte *)0x0; unaff_SI < SquareRecCount; unaff_SI = unaff_SI + 1) {
-              uVar8 = ovr_alignUp4(*(int *)((int)unaff_SI * 0x13));
-              uVar9 = ovr_alignUp4((uStack_1e->base).x);
+              uVar8 = ovr_alignUp4(*(int *)((int)unaff_SI * 0x13),0,0);
+              uVar9 = ovr_alignUp4((uStack_1e->base).x,0,0);
               if ((uVar8 == uVar9) &&
                  (*(uint16_t *)((int)unaff_SI * 0x13 + 2) == (((entity_t *)uStack_1e)->base).y)) {
                 pcStack_22 = (char *)CONCAT22(menuLabel,0x17f8);
                 func_0x0004f930();
                 if (*(uint16_t *)((int)unaff_SI * 0x13 + 2) == GfxRndSeed2) {
-                  uVar8 = ovr_alignUp4(*(int *)((int)unaff_SI * 0x13));
-                  uVar9 = ovr_alignUp4(GfxRndSeed);
+                  uVar8 = ovr_alignUp4(*(int *)((int)unaff_SI * 0x13),0,0);
+                  uVar9 = ovr_alignUp4(GfxRndSeed,0,0);
                   if (uVar8 == uVar9) {
                     acStack_e[bStack_4] = '\x01';
                   }
@@ -1337,7 +1331,7 @@ void __cdecl16far saveui_usesBlitLoadRleGfx4(void)
   
   gfx.seg = FontHandle.seg;
   gfx.ofs = FontHandle.ofs;
-  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)));
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)),0);
   return;
 }
 
@@ -1423,7 +1417,7 @@ void __cdecl16far uiMainMenuLoop(void)
   ovr_say((char *)"Stronghold V 1.00",0x2410);
   gfx.seg = GMenuGfxSeg;
   gfx.ofs = GMenuGfxOfs;
-  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa00009af)));
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa00009af)),0);
   ovr_stats_drawStatsPanel();
   saveui_blitPanel();
   entries_05 = ovr_stshAlloc(400);
@@ -1520,7 +1514,7 @@ void __cdecl16far uiMainMenuLoop(void)
           if (iVar8 == 0) {
             saveui_blitPanel();
             saveui_drawCancel();
-            pcVar9 = uiReadString((char *)"Name this save:  (Esc to cancel)",0x2410,0,(char *)0x0,0)
+            pcVar9 = uiReadString((char *)"Name this save:  (Esc to cancel)",0x2410,0,(char *)0x0,0,0)
             ;
             *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = uVar10;
             *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4) =(uint16_t)( pcVar9);
@@ -1529,9 +1523,7 @@ void __cdecl16far uiMainMenuLoop(void)
           else {
             saveui_blitPanel();
             saveui_drawCancel();
-            pcVar9 = uiReadString((char *)"Name for this save:  (Esc to cancel)",0x2410,0,
-                                  (char *)*(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4),
-                                  *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2));
+            pcVar9 = uiReadString((char *)"Name for this save:  (Esc to cancel)",0x2410,0,(char *)*(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4),*(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2),0);
             *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -2) = uVar10;
             *(uint16_t *)((int)entries_05 + (uint)bVar5 * 4 + -4) =(uint16_t)( pcVar9);
             saveui_usesBlitLoadRleGfx4();
@@ -1736,7 +1728,7 @@ void __cdecl16far saveui_configureNewWorld(void)
   puVar1 = &worldItems;
   items.seg = (uint16_t)puVar1;
   items.ofs = 0x2410;
-  uiMenu((char *)"Which new world:",items,unaff_SS);
+  uiMenu((char *)"Which new world:",items,unaff_SS,0);
   bStack_b = (byte)puVar1;
   saveui_blitPanel();
   if ((bStack_b != 8) && (bStack_b != 0)) {
@@ -1757,7 +1749,7 @@ void __cdecl16far saveui_configureNewWorld(void)
     puVar1 = &hostilityItems;
     items_00.seg = (uint16_t)puVar1;
     items_00.ofs = 0x2410;
-    uiMenu((char *)"Hostility level:",items_00,unaff_SS);
+    uiMenu((char *)"Hostility level:",items_00,unaff_SS,0);
     bStack_b = (byte)puVar1;
     saveui_blitPanel();
     if ((bStack_b != '\x05') && (bStack_b != '\0')) {
@@ -1795,7 +1787,7 @@ void __cdecl16far saveui_configureNewWorld(void)
           iStack_4 = 0;
         }
         if (0x3c < iStack_a + iStack_8 + iStack_6 + iStack_4) {
-          ovr_say((char *)"Too many enemies. 60 enemies maximum.");
+          ovr_say((char *)"Too many enemies. 60 enemies maximum.",0);
           return;
         }
         lowIntelEnemies[0] = (uint8_t)iStack_a;
@@ -1805,9 +1797,9 @@ void __cdecl16far saveui_configureNewWorld(void)
       }
       Difficulty = bStack_b;
       worldIndex = cStack_c;
-      ovr_say((char *)"Resetting game...");
+      ovr_say((char *)"Resetting game...",0);
       ovr_init_usesClearEntities();
-      ovr_say((char *)"New world complete.");
+      ovr_say((char *)"New world complete.",0);
     }
   }
   return;
@@ -1874,8 +1866,7 @@ int __cdecl16far saveui_usesBlitText(char *prompt,int textSeg,int row)
   ey = (uint)uStack_5e;
   uStack_5e = (uint3)(uint)uStack_5e;
   uVar4 = (uint16_t)((ulong)((long)(*(uint16_t *)((uint8_t *)&(prompt) + 2)) * 0xf) >> 0x10);
-  pfVar1 = ovr_stshRleCut((far_t far *)0x0,far_from_u32((uint32_t)(0x16a000)),(int)((long)(*(uint16_t *)((uint8_t *)&(prompt) + 2)) * 0xf) + 0x1d,222,
-                          (*(uint16_t *)((uint8_t *)&(prompt) + 2)) * 0xf + 0x27,ey,0xde);
+  pfVar1 = ovr_stshRleCut((far_t far *)0x0,far_from_u32((uint32_t)(0x16a000)),(int)((long)(*(uint16_t *)((uint8_t *)&(prompt) + 2)) * 0xf) + 0x1d,222,(*(uint16_t *)((uint8_t *)&(prompt) + 2)) * 0xf + 0x27,ey,0xde,0,0);
   TextBlitX = 0x2a;
   TextBlitY = (*(uint16_t *)((uint8_t *)&(prompt) + 2)) * 0xf + 0x1d;
   cursorX = 0;
@@ -1892,13 +1883,9 @@ L_saveui_4528_1d55_1E1D:
              (bStack_5 < 2))) {
         (&text)[bStack_5] = (uint8_t)uStack_4;
         (&uStack_5b)[bStack_5] = 0;
-        iVar3 = ovr_font_textWidth((char *)&text,
-                                   (char *)CONCAT13((char)(Font03.ofs >> 8),
-                                                    CONCAT12((char)Font03.ofs,unaff_SS)),
-                                   (char)Font03.ofs,Font03.seg);
-        iVar2 = ovr_font_textWidth((char *)"_",
-                                   (char *)CONCAT22(Font03.ofs,(char *)0x26510),
-                                   (char)Font03.seg);
+        iVar3 = ovr_font_textWidth((char *)&text,(char *)CONCAT13((char)(Font03.ofs >> 8),
+                                                    CONCAT12((char)Font03.ofs,unaff_SS)),(char)Font03.ofs,Font03.seg,0);
+        iVar2 = ovr_font_textWidth((char *)"_",(char *)CONCAT22(Font03.ofs,(char *)0x26510),(char)Font03.seg,0,0);
         if (iVar3 + iVar2 + 0x2aU < 0xe0) {
           bStack_5 = bStack_5 + 1;
         }

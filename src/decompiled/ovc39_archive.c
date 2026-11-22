@@ -143,7 +143,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   
   if ((partyIndex != 0xff) &&
      (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0')) {
-    uStack_8 = ovr_alignUp4(GfxRndSeed);
+    uStack_8 = ovr_alignUp4(GfxRndSeed,0,0);
     for (bStack_b = 0; bStack_b < 4; bStack_b = bStack_b + 1) {
       for (iVar6 = -2; iVar6 < 2; iVar6 = iVar6 + 1) {
         uVar1 = ovr_ovc23_findRecordAt(uStack_8 + iVar6,GfxRndSeed2,(char)GfxRndSeed2);

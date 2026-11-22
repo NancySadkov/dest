@@ -11,7 +11,7 @@
 
 /* [R6] touches GMapFlags */
 
-uint __cdecl16far attact_usesGMapFlags(uint x,int y,...)
+uint __cdecl16far attact_usesGMapFlags(uint x,int y,uint16_t arg3)
 
 {
   uint in_AX;
@@ -165,7 +165,7 @@ uint16_t __cdecl16far attact_usesGUnits(int x,int y)
 
 /* [R6] touches SCARRY2, GMapFlags */
 
-uint __cdecl16far attact_usesSCARRY2(int x,int y,byte dir,char ignoreBlocked,...)
+uint __cdecl16far attact_usesSCARRY2(int x,int y,byte dir,char ignoreBlocked,uint16_t arg5,uint16_t arg6)
 
 {
   int iVar1;
@@ -421,7 +421,7 @@ void __cdecl16far attact_usesAgntFlag1(void)
 
 /* 3f0b:082f */
 ulong * __cdecl16far
-attact_usesBDADailyTimeCounter(ulong *__return_storage_ptr__,ulong prevTick,...)
+attact_usesBDADailyTimeCounter(ulong *__return_storage_ptr__,ulong prevTick,uint16_t arg3)
 
 {
   uint uVar1;
@@ -492,7 +492,7 @@ int __cdecl16far attact_usesAgntCount(int ownerIndex)
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
 
-void __cdecl16far attact_usesAlignUp4(uint16_t x,uint16_t y,char partyIndex,uint32_t flags,...)
+void __cdecl16far attact_usesAlignUp4(uint16_t x,uint16_t y,char partyIndex,uint32_t flags,uint16_t arg5)
 
 {
   uint uVar1;
@@ -504,12 +504,12 @@ void __cdecl16far attact_usesAlignUp4(uint16_t x,uint16_t y,char partyIndex,uint
   byte bStack_3;
   
   if (partyIndex != -1) {
-    uVar1 = ovr_alignUp4(x);
+    uVar1 = ovr_alignUp4(x,0,0);
     for (bStack_3 = 0; bStack_3 < 5; bStack_3 = bStack_3 + 1) {
       if (((uint8_t *)MenuItemEnabled)[bStack_3] == partyIndex) {
         uVar3 = 0;
         while ((uVar3 < SquareRecCount &&
-               ((uVar4 = ovr_alignUp4(*(int *)(uVar3 * 0x13)), uVar4 != uVar1 ||
+               ((uVar4 = ovr_alignUp4(*(int *)(uVar3 * 0x13),0,0), uVar4 != uVar1 ||
                 (*(uint16_t *)((uint8_t *)&SquareRecs[uVar3] + 2) != y))))) {
           uVar3 = uVar3 + 1;
         }
@@ -518,7 +518,7 @@ void __cdecl16far attact_usesAlignUp4(uint16_t x,uint16_t y,char partyIndex,uint
         }
         uStack_8 = 0;
         for (uVar4 = 0; uVar4 < EntityCount; uVar4 = uVar4 + 1) {
-          uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar4].base.destX);
+          uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar4].base.destX,0,0);
           if (uVar2 == uVar1) {
             uVar5 = (uint16_t)((ulong)Entities >> 0x10);
             if ((((entity_t *)Entities)[uVar4].base.destY == y) &&
@@ -529,7 +529,7 @@ void __cdecl16far attact_usesAlignUp4(uint16_t x,uint16_t y,char partyIndex,uint
         }
         if (*(byte *)(uVar3 * 0x13 + (uint)bStack_3 + 0xe) != uStack_8) {
           *(undefined1 *)(uVar3 * 0x13 + (uint)bStack_3 + 0xe) = (undefined1)uStack_8;
-          uVar3 = ovr_alignUp4(GfxRndSeed);
+          uVar3 = ovr_alignUp4(GfxRndSeed,0,0);
           if ((uVar3 == uVar1) && (GfxRndSeed2 == y)) {
             if (flags == 0) {
               ovr_ovc41_usesMiceBlitRect((uint)bStack_3);
@@ -553,8 +553,7 @@ void __cdecl16far attact_usesAlignUp4(uint16_t x,uint16_t y,char partyIndex,uint
 /* [R6] touches Entities, destX */
 
 void __cdecl16far
-attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flagsOfs,
-                   uint16_t flagsSeg,...)
+attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flagsOfs,uint16_t flagsSeg,uint16_t arg6,uint16_t arg7,uint16_t arg8,uint16_t arg9)
 
 {
   uint16_t x;
@@ -576,12 +575,10 @@ attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flags
   ((entity_t *)iVar1)[entityIndex].base.destX = destX;
   ((entity_t *)Entities)[entityIndex].base.destY = destY;
   if ((x != 0) || (y != 0)) {
-    attact_usesAlignUp4(x,y,*(char *)((int)Entities + entityIndex * 0x37 + 0x1a),
-                        CONCAT22(flagsSeg,flagsOfs));
+    attact_usesAlignUp4(x,y,*(char *)((int)Entities + entityIndex * 0x37 + 0x1a),CONCAT22(flagsSeg,flagsOfs),0);
   }
   if ((destX != 0) || (destY != 0)) {
-    attact_usesAlignUp4(destX,destY,*(char *)((int)Entities + entityIndex * 0x37 + 0x1a),
-                        CONCAT22(flagsSeg,flagsOfs));
+    attact_usesAlignUp4(destX,destY,*(char *)((int)Entities + entityIndex * 0x37 + 0x1a),CONCAT22(flagsSeg,flagsOfs),0);
   }
   return;
 }
@@ -601,7 +598,7 @@ void __stdcall16far attact_usesGMapFlags3(void)
   uint uVar3;
   uint16_t uVar4;
   
-  ovr_driver_clearMapFlagsRect((uint32_t)GMapFlags,0,0,0x93,0x3b,0xcfff);
+  ovr_driver_clearMapFlagsRect((uint32_t)GMapFlags,0,0,0x93,0x3b,0xcfff,0,0);
   for (uVar3 = 0; uVar3 < EntityCount; uVar3 = uVar3 + 1) {
     uVar4 = (uint16_t)((ulong)Entities >> 0x10);
     iVar2 = (int)Entities;
@@ -708,9 +705,9 @@ void __cdecl16far attact_usesAlignUp42(void)
     }
     peVar14 = Entities + index;
     destEnt = (entity_t *)CONCAT22(DAT_2000_d190,peVar14);
-    uVar8 = ovr_alignUp4((peVar14->base).destX);
+    uVar8 = ovr_alignUp4((peVar14->base).destX,0,0);
     uVar15 = 0x2379;
-    uVar9 = ovr_alignUp4((destEnt->base).x);
+    uVar9 = ovr_alignUp4((destEnt->base).x,0,0);
     if ((uVar8 == uVar9) && ((peVar14->base).destY == (peVar14->base).y)) {
       manage_usesCurSfxType32(0x2379,index,(peVar14->base).destX,(peVar14->base).destY);
     }
@@ -749,7 +746,7 @@ void __cdecl16far attact_usesAlignUp42(void)
         dySign = ovr_ovc07_signum((peVar14->base).destY - (peVar14->base).y);
         if (dxSign != 0) {
           uVar15 = 0x2337;
-          uVar10 = ovr_randBelow(2);
+          uVar10 = ovr_randBelow(2,0);
           if ((char)uVar10 != '\0') {
             cVar5 = sub_OVC21_manage_c_23C2(0x2337,startX,startY,'\x02' - (char)dxSign,animByte,
                                     flag4000);
@@ -809,8 +806,8 @@ void __cdecl16far attact_usesAlignUp42(void)
       }
 L_attact_3f0b_1082_1477:
       reported = 0x1;
-      uVar8 = ovr_alignUp4((peVar14->base).destX);
-      uVar9 = ovr_alignUp4((destEnt->base).x);
+      uVar8 = ovr_alignUp4((peVar14->base).destX,0,0);
+      uVar9 = ovr_alignUp4((destEnt->base).x,0,0);
       if ((uVar8 == uVar9) && ((peVar14->base).destY == (peVar14->base).y)) {
         (peVar14->base).destX = 0;
         (peVar14->base).destY = 0;
@@ -823,13 +820,13 @@ L_attact_3f0b_1082_1477:
         }
         if (defByte != 0xff) {
           for (uVar8 = 0; uVar8 < SquareRecCount; uVar8 = uVar8 + 1) {
-            uVar9 = ovr_alignUp4(*(int *)(uVar8 * 0x13));
-            uVar11 = ovr_alignUp4((destEnt->base).x);
+            uVar9 = ovr_alignUp4(*(int *)(uVar8 * 0x13),0,0);
+            uVar11 = ovr_alignUp4((destEnt->base).x,0,0);
             if ((uVar9 == uVar11) && (*(uint16_t *)((uint8_t *)&SquareRecs[uVar8] + 2) == (peVar14->base).y)) {
               func_0x0004f930(0x2379,uVar8 * 0x13 + (uint)defByte + 0xe,0x17f8);
               if (*(uint16_t *)((uint8_t *)&SquareRecs[uVar8] + 2) == GfxRndSeed2) {
-                uVar8 = ovr_alignUp4(*(int *)(uVar8 * 0x13));
-                uVar9 = ovr_alignUp4(GfxRndSeed);
+                uVar8 = ovr_alignUp4(*(int *)(uVar8 * 0x13),0,0);
+                uVar9 = ovr_alignUp4(GfxRndSeed,0,0);
                 if (uVar8 == uVar9) {
                   (&reportedUnits)[defByte] = 0x1;
                 }
@@ -866,7 +863,7 @@ L_attact_3f0b_1082_1477:
                   targetSrc = (peVar14->base).target - 2;
                 }
                 uVar15 = 0x2322;
-                pcVar12 = ovr_ovc15_textArena(index);
+                pcVar12 = ovr_ovc15_textArena(index,0,0);
                 if (((uint)pcVar12 & 0xff) == 0) break;
               }
             }
@@ -891,7 +888,7 @@ L_attact_3f0b_1082_1477:
             while( true ) {
               uVar15 = 0x2322;
               if (rowsLeft == '\0') break;
-              ovr_ovc15_textArena(index);
+              ovr_ovc15_textArena(index,0,0);
               rowsLeft = rowsLeft + -1;
             }
           }
@@ -952,7 +949,7 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force)
                               (char *)CONCAT22(uStack_6,(char *)0x26510),callResultTemp,
                               *(uint16_t *)((uint)bStack_3 * 4 + 0x13f),
                               *(uint16_t *)((uint)bStack_3 * 4 + 0x141),uVar3,uVar4);
-          ovr_drawTextAt(txt,dst);
+          ovr_drawTextAt(txt,dst,0);
         }
       }
     }
@@ -982,18 +979,18 @@ attact_textArena(uint16_t *foundIndexOut,int mode,uint8_t partyIndex,uint16_t x,
   uint uStack_4;
   
   uStack_4 = 0xffff;
-  uVar1 = ovr_alignUp4(x);
+  uVar1 = ovr_alignUp4(x,0,0);
   for (uVar7 = 0; uVar7 < EntityCount; uVar7 = uVar7 + 1) {
     uVar8 = (uint16_t)((ulong)Entities >> 0x10);
     if (*(uint8_t *)((int)Entities + uVar7 * 0x37 + 0x1a) == partyIndex) {
-      uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar7 * 0x37));
+      uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar7 * 0x37),0,0);
       uVar4 = (int)(uVar2 - uVar1) >> 0xf;
       uVar8 = (uint16_t)((ulong)Entities >> 0x10);
       uVar3 = ((entity_t *)Entities)[uVar7].base.y - y;
       uVar5 = (int)uVar3 >> 0xf;
       uVar2 = ((uVar2 - uVar1 ^ uVar4) - uVar4) + ((uVar3 ^ uVar5) - uVar5) * 2;
       if ((uVar2 != 0) && (uVar2 < uStack_4)) {
-        uVar3 = ovr_alignUp4(((entity_t *)Entities)[uVar7].base.destX);
+        uVar3 = ovr_alignUp4(((entity_t *)Entities)[uVar7].base.destX,0,0);
         iVar6 = (int)Entities;
         uVar8 = (uint16_t)((ulong)Entities >> 0x10);
         if (((uVar3 != uVar1) || (((entity_t *)iVar6)[uVar7].base.destY != y)) &&
@@ -1034,18 +1031,18 @@ bool __cdecl16far attact_textArena2(uint *foundIndexOut,uint16_t partyIndex,uint
   uint uStack_4;
   
   uStack_4 = 0;
-  uVar1 = ovr_alignUp4(x);
+  uVar1 = ovr_alignUp4(x,0,0);
   for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
     uVar7 = (uint16_t)((ulong)Entities >> 0x10);
     if (*(char *)((int)Entities + uVar6 * 0x37 + 0x1a) == (char)partyIndex) {
-      uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar6 * 0x37));
+      uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar6 * 0x37),0,0);
       uVar4 = (int)(uVar2 - uVar1) >> 0xf;
       uVar7 = (uint16_t)((ulong)Entities >> 0x10);
       uVar3 = ((entity_t *)Entities)[uVar6].base.y - in_stack_0000000c;
       uVar5 = (int)uVar3 >> 0xf;
       uVar2 = ((uVar2 - uVar1 ^ uVar4) - uVar4) + ((uVar3 ^ uVar5) - uVar5) * 2;
       if (((uStack_4 < uVar2) &&
-          (uVar3 = ovr_alignUp4(((entity_t *)Entities)[uVar6].base.destX), uVar3 == uVar1)) &&
+          (uVar3 = ovr_alignUp4(((entity_t *)Entities)[uVar6].base.destX,0,0), uVar3 == uVar1)) &&
          (((entity_t *)Entities)[uVar6].base.destY == in_stack_0000000c)) {
         *foundIndexOut = uVar6;
         uStack_4 = uVar2;
@@ -1076,11 +1073,11 @@ bool __cdecl16far attact_textArena3(uint *foundIndexOut,uint16_t partyIndex,int 
   uint uStack_4;
   
   uStack_4 = 0;
-  uVar1 = ovr_alignUp4(x);
+  uVar1 = ovr_alignUp4(x,0,0);
   for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
     uVar7 = (uint16_t)((ulong)Entities >> 0x10);
     if (*(char *)((int)Entities + uVar6 * 0x37 + 0x1a) == (char)partyIndex) {
-      uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar6 * 0x37));
+      uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar6 * 0x37),0,0);
       uVar4 = (int)(uVar2 - uVar1) >> 0xf;
       uVar3 = ((entity_t *)Entities)[uVar6].base.y - in_stack_0000000c;
       uVar5 = (int)uVar3 >> 0xf;
@@ -1119,7 +1116,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
   uint16_t uStack_6;
   byte bStack_3;
   
-  uVar4 = ovr_alignUp4(*value);
+  uVar4 = ovr_alignUp4(*value,0,0);
   uStack_8 = *value;
   uVar9 = (uint16_t)((ulong)value >> 0x10);
   puVar6 = (uint16_t *)value;
@@ -1141,7 +1138,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
       bStack_3 = *(byte *)((int)Entities + uStack_6 * 0x37 + 0x1a);
       if ((((bStack_3 != 0xff) &&
            (((char_sheet_t *)(((uint)bStack_3 << 2)))->partySlot == uVar8)) &&
-          (uVar5 = ovr_alignUp4(((entity_t *)Entities)[uStack_6].base.destX), uVar5 == uVar4)) &&
+          (uVar5 = ovr_alignUp4(((entity_t *)Entities)[uStack_6].base.destX,0,0), uVar5 == uVar4)) &&
          (((entity_t *)Entities)[uStack_6].base.destY == puVar6[1])) {
         uVar7 = uVar7 + 1;
       }
@@ -1249,7 +1246,7 @@ uint16_t __cdecl16far attact_usesLDIV_at_(uint8_t menuIndex)
 /* [R7] body shape: compute */
 
 void __cdecl16far
-attact_compute2(uint16_t menuIndex,far_t pctOut,far_t remainderOut,far_t partOut,...)
+attact_compute2(uint16_t menuIndex,far_t pctOut,far_t remainderOut,far_t partOut)
 
 {
   int iVar1;
@@ -1329,9 +1326,9 @@ uint __cdecl16far attact_usesAlignUp44(int *xPtr,int y,uint8_t dir)
         return CONCAT11((char)((uint)uVar2 >> 8),1);
       }
       value = value + *(char *)(dir + 0x885);
-      uVar3 = ovr_alignUp4(*xPtr);
+      uVar3 = ovr_alignUp4(*xPtr,0,0);
       uVar2 = 0x2379;
-      uVar1 = ovr_alignUp4(value);
+      uVar1 = ovr_alignUp4(value,0,0);
     } while (uVar3 == uVar1);
     *xPtr = value;
     uVar1 = uVar1 & 0xff00;
@@ -1342,7 +1339,7 @@ uint __cdecl16far attact_usesAlignUp44(int *xPtr,int y,uint8_t dir)
 
 
 /* 3f0b:2430 */
-void __cdecl16far attact_usesRandBelow(agnt_t *agnt,byte dir,...)
+void __cdecl16far attact_usesRandBelow(agnt_t *agnt,byte dir,uint16_t arg3,uint16_t arg4)
 
 {
   uint16_t uVar1;
@@ -1472,8 +1469,7 @@ void __cdecl16far attact_usesEntityCount(void)
     }
     uVar3 = (uint16_t)((ulong)Entities >> 0x10);
     uVar3 = ovr_ovc23_isCursorAt
-                      (*(uint16_t *)((int)Entities + owner * 0x37),
-                       ((entity_t *)Entities)[owner].base.y);
+                      (*(uint16_t *)((int)Entities + owner * 0x37),((entity_t *)Entities)[owner].base.y,0);
     if ((char)uVar3 != '\0') {
       for (iVar1 = manage_usesLitoa103(0x236f,owner); iVar1 != 0; iVar1 = iVar1 + -1) {
         uVar3 = (uint16_t)((ulong)Entities >> 0x10);
@@ -1519,8 +1515,7 @@ void __cdecl16far attact_usesEntityCount2(uint16_t *sum,uint16_t *enemySum)
   for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
     uVar8 = (uint16_t)((ulong)Entities >> 0x10);
     uVar8 = ovr_ovc23_isCursorAt
-                      (*(uint16_t *)((int)Entities + uVar5 * 0x37),
-                       ((entity_t *)Entities)[uVar5].base.y);
+                      (*(uint16_t *)((int)Entities + uVar5 * 0x37),((entity_t *)Entities)[uVar5].base.y,0);
     if ((char)uVar8 != '\0') {
       uVar8 = (uint16_t)((ulong)Entities >> 0x10);
       iVar4 = (int)Entities;
@@ -1615,7 +1610,7 @@ void __cdecl16far attact_usesBlitLoadRleGfx(void)
   iVar1 = (int)(((long)(int)uVar2 * 0xc & 0xffffU) / 0xf);
   gfx.seg = *(uint16_t *)((int)&timeOfDayGfx[0].seg + iVar1 * 4);
   gfx.ofs = ((far_t *)timeOfDayGfx + iVar1)->ofs;
-  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c510)));
+  ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c510)),0);
   ovr_ovc13_blitAnimFrame();
   return;
 }
@@ -1669,17 +1664,17 @@ void __cdecl16far attact_usesLDIV_at_2(void)
       if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) ||
          ((uint16_t)((ulong)lVar8 >> 0x10) == 0 && iStack_1e == 0)) {
         if (cStack_17 != '\0') {
-          ovr_miceRestoreArea((brect_t *)&rect);
+          ovr_miceRestoreArea((brect_t *)&rect,0);
         }
         attact_usesBlitLoadRleGfx();
         if (cStack_17 != '\0') {
-          ovr_miceBlitRect((brect_t *)&rect);
+          ovr_miceBlitRect((brect_t *)&rect,0);
         }
       }
       else {
         if (mapViewActive != '\0') {
           if (cStack_17 != '\0') {
-            ovr_miceRestoreArea((brect_t *)&rect);
+            ovr_miceRestoreArea((brect_t *)&rect,0);
           }
           gfx.seg = nwpanel1Cut5Seg;
           gfx.ofs = nwpanel1Cut5Ofs;
@@ -1688,11 +1683,11 @@ void __cdecl16far attact_usesLDIV_at_2(void)
           gfx_00.ofs = panel01Cut3Ofs;
           ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa000c51d)),0x1d);
           if (cStack_17 != '\0') {
-            ovr_miceBlitRect((brect_t *)&rect);
+            ovr_miceBlitRect((brect_t *)&rect,0);
           }
         }
         if (cStack_17 != '\0') {
-          ovr_miceRestoreArea((brect_t *)&rect2);
+          ovr_miceRestoreArea((brect_t *)&rect2,0);
         }
         mapViewActive = '\0';
         uVar5 = (uint)((ulong)lVar8 >> 0x10);
@@ -1734,23 +1729,23 @@ void __cdecl16far attact_usesLDIV_at_2(void)
           }
         }
         if (0x9e < 0xc4 - uVar5) {
-          ovr_driver_fillRect(0xdf,0x9f,0xe2,0xc4 - uVar5,0x24,0xa000,0x24);
+          ovr_driver_fillRect(0xdf,0x9f,0xe2,0xc4 - uVar5,0x24,0xa000,0x24,0,0,0,0);
         }
         if (uVar5 != 0) {
-          ovr_driver_fillRect(0xdf,0xc5 - uVar5,0xe2,0xc4,0x7,0xa000,7);
+          ovr_driver_fillRect(0xdf,0xc5 - uVar5,0xe2,0xc4,0x7,0xa000,7,0,0,0,0);
         }
         if (cStack_17 != '\0') {
-          ovr_miceBlitRect((brect_t *)&rect2);
+          ovr_miceBlitRect((brect_t *)&rect2,0);
         }
       }
     }
     else {
       if (cStack_17 != '\0') {
-        ovr_miceRestoreArea((brect_t *)&rect);
+        ovr_miceRestoreArea((brect_t *)&rect,0);
       }
       attact_usesBlitLoadRleGfx();
       if (cStack_17 != '\0') {
-        ovr_miceBlitRect((brect_t *)&rect);
+        ovr_miceBlitRect((brect_t *)&rect,0);
       }
     }
   }

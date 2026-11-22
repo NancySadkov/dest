@@ -92,7 +92,7 @@ void __cdecl16far ovc50_usesUiInputText(void)
     ovc50_usesStshLoadGfx(bStack_5);
     entries.seg = unaff_SS;
     entries.ofs = (uint16_t)&tabPtrs;
-    pcVar1 = ovr_uiInputText(entries,9,far_from_u32((uint32_t)(0x0)),0x0);
+    pcVar1 = ovr_uiInputText(entries,9,far_from_u32((uint32_t)(0x0)),0x0,0);
     cStack_3 = (char)pcVar1;
     if ((cStack_3 == '\t') || (cStack_3 == '\0')) {
       cStack_4 = '\x01';

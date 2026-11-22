@@ -196,7 +196,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
       src_00.ofs = src_ofs;
       dst_03.seg = uVar2;
       dst_03.ofs = dst_ofs;
-      written = ovr_unrle(src_00,dst_03,0x140,(char)dst_ofs);
+      written = ovr_unrle(src_00,dst_03,0x140,(char)dst_ofs,0);
       __return_storage_ptr__ = (uint32_t *)(src_ofs + written);
       src_ofs = (uint16_t)ovr_mkp(__return_storage_ptr__,src_seg,unaff_DI);
       dst_ofs = dst_ofs + 0x140;
@@ -208,7 +208,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
 
 
 /* 30e6:0321 */
-stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...)
+stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_t arg4,uint16_t arg5)
 
 {
   far_t handle;

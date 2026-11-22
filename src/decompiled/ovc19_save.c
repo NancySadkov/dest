@@ -88,8 +88,8 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
     handle.ofs = Lbm_nwpanel1.ofs;
     psStack_6 = ovr_stshLoadGfx(handle);
     uStack_4 = in_DX;
-    ovr_calcSeasonPalette(psStack_6->cmap,in_DX,&palette,unaff_SS);
-    ovr_vgaSetPalette8bit(&palette);
+    ovr_calcSeasonPalette(psStack_6->cmap,in_DX,&palette,unaff_SS,0,0);
+    ovr_vgaSetPalette8bit(&palette,0);
     ovr_manage_mapPartySlots();
     strongholdCheckPending = 0;
     return;
@@ -115,7 +115,7 @@ uint __cdecl16far stLoad(int handle)
   uint8_t header;
   
   ovr_stop_audio();
-  ovr_drawTextAt((char *)"Loading...",0x2410);
+  ovr_drawTextAt((char *)"Loading...",0x2410,0);
   if (-1 < handle) {
     SaveAuto = 0;
     AgntFlag1 = false;
@@ -236,7 +236,7 @@ uint __cdecl16far stLoad(int handle)
                                          unaff_SI), (uVar1 & 0xff) != 0)) &&
                 (iVar2 = strcmp((char *)CONCAT22(unaff_SS,&header),
                                 (char *)CONCAT22(SaveHeader.seg,SaveHeader.ofs)), iVar2 == 0)))))) {
-          ovr_drawTextAt((char *)"Load complete.",0x2410);
+          ovr_drawTextAt((char *)"Load complete.",0x2410,0);
           uVar4 = (undefined1)((uint)iVar2 >> 8);
           SaveAuto = 1;
           ovr_ovc24_usesAlignUp4();
@@ -249,7 +249,7 @@ uint __cdecl16far stLoad(int handle)
 L_save_49fd_01da_0800:
   uVar1 = (uint)suppressLoadError;
   if (uVar1 == 0) {
-    ovr_drawTextAt((char *)"Load Error",0x2410);
+    ovr_drawTextAt((char *)"Load Error",0x2410,0);
   }
   return uVar1 & 0xff00;
 }
@@ -291,7 +291,7 @@ undefined1 __cdecl16far save_loadArchiveGame(void)
   
   handle = StshHandles[0];
   if (StshHandles[0] < 0) {
-    handle = ovr_open_wait_unlock_and_disk((char *)StshNames[0]);
+    handle = ovr_open_wait_unlock_and_disk((char *)StshNames[0],0);
   }
   lseek(handle,(ulong)*(uint *)((int)cred03Cut3Ofs + 3),unaff_SI);
   uVar1 = stLoad(handle);

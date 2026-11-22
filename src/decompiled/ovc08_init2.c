@@ -9,7 +9,7 @@
 
 /* 3338:0000 */
 
-void __cdecl16far miceRestoreArea(brect_t *br,...)
+void __cdecl16far miceRestoreArea(brect_t *br,uint16_t arg2)
 
 {
   int dst_x;
@@ -45,7 +45,7 @@ void __cdecl16far miceRestoreArea(brect_t *br,...)
 
 /* Saves the area covered by mice */
 
-void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br,...)
+void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br,uint16_t arg4)
 
 {
   uint16_t uVar1;
@@ -124,7 +124,7 @@ void __cdecl16far miceUpdate(void)
 
 /* 3338:0256 */
 
-void __cdecl16far miceBlitRect(brect_t *br,...)
+void __cdecl16far miceBlitRect(brect_t *br,uint16_t arg2)
 
 {
   uint16_t dst_x;
@@ -190,7 +190,7 @@ void __cdecl16far miceInit(void)
 
 /* [R6] touches CFG_Mice, MiceClick */
 
-byte __cdecl16far init2_usesCFGMice(uint16_t *mouseX,uint16_t *mouseY,...)
+byte __cdecl16far init2_usesCFGMice(uint16_t *mouseX,uint16_t *mouseY,uint16_t arg3)
 
 {
   byte bVar1;

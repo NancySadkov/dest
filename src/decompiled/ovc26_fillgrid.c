@@ -77,7 +77,7 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
       y_00 = piStack_1e[iStack_8];
       piStack_1e = piVar1;
       if (((*(char *)((x_00 + iVar7) * 0xa1 + (int)FillGrid + y_00 + iVar8 + -0xa1) == '\0') &&
-          (uVar9 = ovr_attact_usesSCARRY2(x_00,y_00,3,ignoreBlocked), (uVar9 & 0xff) == 0)) &&
+          (uVar9 = ovr_attact_usesSCARRY2(x_00,y_00,3,ignoreBlocked,0,0), (uVar9 & 0xff) == 0)) &&
          (iVar10 < 300)) {
         *(byte *)((x_00 + iVar7) * 0xa1 + (int)FillGrid + y_00 + iVar8 + -0xa1) = bStack_1f;
         piStack_e[iVar10] = x_00 + -1;
@@ -85,7 +85,7 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
         iVar10 = iVar10 + 1;
       }
       if (((*(char *)((x_00 + iVar7) * 0xa1 + (int)FillGrid + y_00 + iVar8 + 0xa1) == '\0') &&
-          (uVar9 = ovr_attact_usesSCARRY2(x_00,y_00,1,ignoreBlocked), (uVar9 & 0xff) == 0)) &&
+          (uVar9 = ovr_attact_usesSCARRY2(x_00,y_00,1,ignoreBlocked,0,0), (uVar9 & 0xff) == 0)) &&
          (iVar10 < 300)) {
         *(byte *)((x_00 + iVar7) * 0xa1 + (int)FillGrid + y_00 + iVar8 + 0xa1) = bStack_1f;
         piStack_e[iVar10] = x_00 + 1;
@@ -93,7 +93,7 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
         iVar10 = iVar10 + 1;
       }
       if (((*(char *)((int)FillGrid + (x_00 + iVar7) * 0xa1 + y_00 + iVar8 + -1) == '\0') &&
-          (uVar9 = ovr_attact_usesSCARRY2(x_00,y_00,0,ignoreBlocked), (uVar9 & 0xff) == 0)) &&
+          (uVar9 = ovr_attact_usesSCARRY2(x_00,y_00,0,ignoreBlocked,0,0), (uVar9 & 0xff) == 0)) &&
          (iVar10 < 300)) {
         *(byte *)((int)FillGrid + (x_00 + iVar7) * 0xa1 + y_00 + iVar8 + -1) = bStack_1f;
         piStack_e[iVar10] = x_00;
@@ -101,7 +101,7 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
         iVar10 = iVar10 + 1;
       }
       if (((*(char *)((int)FillGrid + (x_00 + iVar7) * 0xa1 + y_00 + iVar8 + 1) == '\0') &&
-          (uVar9 = ovr_attact_usesSCARRY2(x_00,y_00,2,ignoreBlocked), (uVar9 & 0xff) == 0)) &&
+          (uVar9 = ovr_attact_usesSCARRY2(x_00,y_00,2,ignoreBlocked,0,0), (uVar9 & 0xff) == 0)) &&
          (iVar10 < 300)) {
         *(byte *)((int)FillGrid + (x_00 + iVar7) * 0xa1 + y_00 + iVar8 + 1) = bStack_1f;
         piStack_e[iVar10] = x_00;
@@ -278,8 +278,7 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex)
 /* [R4] calls ovr_randBelow */
 
 uint __cdecl16far
-ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_t flagsOfs,
-                   uint16_t flagsSeg,...)
+ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_t flagsOfs,uint16_t flagsSeg)
 
 {
   byte *pbVar1;
@@ -331,7 +330,7 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
         }
         else {
           if ((iVar9 != 0) && (iVar9 != 0)) {
-            uVar7 = ovr_randBelow(2);
+            uVar7 = ovr_randBelow(2,0);
             if ((uVar7 & 0xff) == 0) {
               iVar9 = 0;
             }
@@ -348,11 +347,9 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
           bVar4 = ovr_ovc45_getUnitType(iVar2 + iVar9,iVar3 + (int)psStack_c);
           if ((*(byte *)((uint)bVar4 * 0x27 + 0x11e) & 0xc) == 0) {
             ovr_createConstructionRecordFar
-                      (bStack_7,iVar2 + iVar9,iVar3 + (int)psStack_c,
-                       (uint8_t *)CONCAT22(outFlagSeg,outFlag),
-                       *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),unaff_DI);
+                      (bStack_7,iVar2 + iVar9,iVar3 + (int)psStack_c,(uint8_t *)CONCAT22(outFlagSeg,outFlag),*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),unaff_DI,0,0,0);
             ovr_attact_usesEntities
-                      (entityIndex,iVar2 + iVar9,iVar3 + (int)psStack_c,flagsOfs,flagsSeg);
+                      (entityIndex,iVar2 + iVar9,iVar3 + (int)psStack_c,flagsOfs,flagsSeg,0,0,0,0);
             ((entity_t *)Entities)[entityIndex].base.targetX = iVar2 + iVar9;
             ((entity_t *)Entities)[entityIndex].base.targetY = iVar3 + (int)psStack_c;
             pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);

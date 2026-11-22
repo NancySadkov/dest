@@ -116,8 +116,8 @@ void __cdecl16far land_info(byte tileOffset)
   if (((*(uint *)((uint)bStack_1d * 0x27 + 0x121) & 0x80) == 0) &&
      (((unit_t *)GUnits)[uVar2].level < 3)) {
     type = 0;
-    uVar3 = ovr_randBelow(2);
-    ovr_play_sfx(CONCAT11((char)(uVar3 >> 8),(char)uVar3 + '?'),type);
+    uVar3 = ovr_randBelow(2,0);
+    ovr_play_sfx(CONCAT11((char)(uVar3 >> 8),(char)uVar3 + '?'),type,0);
   }
   uVar13 = SUB21(unaff_SS,0);
   uVar14 = (undefined1)((uint)unaff_SS >> 8);
@@ -150,7 +150,7 @@ void __cdecl16far land_info(byte tileOffset)
           else {
             uVar11 = 0x195d;
             puVar7 = ovr_ovc15_usesStshRealloc
-                               ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e));
+                               ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),0,0,0,0,0,0,0);
             pcVar4 = ovr_fmVsprintf("%s:",(char *)CONCAT22(uVar11,puVar7));
             strcpy((char *)CONCAT22(unaff_SS,&msg),(char *)CONCAT22(uVar11,pcVar4));
           }
@@ -158,9 +158,7 @@ void __cdecl16far land_info(byte tileOffset)
         else if (*(char *)((uint)bStack_1d * 0x27 + 0x130) == 'd') {
           uVar8 = 0x195d;
           puVar7 = ovr_ovc15_usesStshRealloc
-                             ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),
-                              *(uint16_t *)((uint)bStack_1d * 0x27 + 0x110),
-                              *(uint16_t *)((uint)puVar10[uVar2].unitType * 4));
+                             ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),*(uint16_t *)((uint)bStack_1d * 0x27 + 0x110),*(uint16_t *)((uint)puVar10[uVar2].unitType * 4),0,0,0,0,0);
           pcVar4 = ovr_fmVsprintf("%s: Held by %s.",(char *)CONCAT22(uVar8,puVar7));
           strcpy((char *)CONCAT22(unaff_SS,&msg),(char *)CONCAT22(uVar8,pcVar4));
         }
@@ -171,8 +169,7 @@ void __cdecl16far land_info(byte tileOffset)
                                       *(uint16_t *)((uint)puVar10[uVar2].unitType * 4));
           uVar8 = 0x195d;
           puVar7 = ovr_ovc15_usesStshRealloc
-                             ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),
-                              (char)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x110),(char)uVar11);
+                             ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),(char)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x110),(char)uVar11,0,0,0,0,0);
           pcVar4 = ovr_fmVsprintf("%s (%u/%u): Held by %s.",
                                   (char *)CONCAT13((char)((uint)uVar8 >> 8),
                                                    CONCAT12((char)uVar8,puVar7)));
@@ -198,12 +195,10 @@ void __cdecl16far land_info(byte tileOffset)
                                    -0x47,uVar12,(char)uVar11,(char)Font03.ofs);
         uVar11 = 0x195d;
         puVar7 = ovr_ovc15_usesStshRealloc
-                           ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),
-                            (char)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x110),
-                            100 - ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 +
+                           ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),(char)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x110),100 - ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 +
                                                   0xb) * 100) /
                                   (uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 +
-                                                 0xc),iVar6);
+                                                 0xc),iVar6,0,0,0,0);
         pcVar4 = ovr_fmVsprintf("%s: %d%% complete. Owned by %s.",
                                 (char *)CONCAT13((char)((uint)uVar11 >> 8),
                                                  CONCAT12((char)uVar11,puVar7)));
@@ -215,7 +210,7 @@ void __cdecl16far land_info(byte tileOffset)
       (*(uint8_t *)((uint8_t *)&(entries.seg))) = uVar13;
       entries.ofs = (uint16_t)puVar7;
       (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = uVar14;
-      ovr_ovc28_compute2(entries,1,hint);
+      ovr_ovc28_compute2(entries,1,hint,0,0);
       cStack_1b = (char)puVar7;
     }
     else if (bStack_21 == 0xff) {
@@ -262,7 +257,7 @@ void __cdecl16far land_info(byte tileOffset)
       do {
         uVar11 = (uint16_t)((ulong)Entities >> 0x10);
         if (bStack_1d == 0) {
-          pcVar4 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a));
+          pcVar4 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),0);
           puVar5 = (uint16_t *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
           uVar11 = 0x217a;
           iVar6 = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,unaff_SS),
@@ -283,7 +278,7 @@ void __cdecl16far land_info(byte tileOffset)
           strcpy((char *)CONCAT22(unaff_SS,&msg),(char *)CONCAT22(iVar9,pcVar4));
         }
         else {
-          pcVar4 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a));
+          pcVar4 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),0);
           puVar5 = (uint16_t *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
           uVar11 = 0x217a;
           iVar6 = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,unaff_SS),
@@ -299,12 +294,10 @@ void __cdecl16far land_info(byte tileOffset)
                                      0x5f,2,(char)iVar6,uVar11);
           uVar11 = 0x195d;
           puVar7 = ovr_ovc15_usesStshRealloc
-                             ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),
-                              *(uint16_t *)((uint)bStack_1d * 0x27 + 0x110),
-                              100 - ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12
+                             ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),*(uint16_t *)((uint)bStack_1d * 0x27 + 0x110),100 - ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12
                                                     + 0xb) * 100) /
                                     (uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 +
-                                                   0xc),(char)iVar6,uVar12);
+                                                   0xc),(char)iVar6,uVar12,0,0,0);
           pcVar4 = ovr_fmVsprintf("%s: %d%% complete. Owned by %s. Active party is %s the %s.",
                                   (char *)CONCAT22(uVar11,puVar7));
           strcpy((char *)CONCAT22(unaff_SS,&msg),(char *)CONCAT22(uVar11,pcVar4));
@@ -316,7 +309,7 @@ void __cdecl16far land_info(byte tileOffset)
         (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = uVar13;
         entries_00.ofs = (uint16_t)puVar7;
         (*(uint8_t *)((uint8_t *)&(entries_00.seg) + 1)) = uVar14;
-        ovr_ovc28_compute2(entries_00,uVar2 + 1,hint_00);
+        ovr_ovc28_compute2(entries_00,uVar2 + 1,hint_00,0,0);
         cStack_1b = (char)puVar7;
         goldPartyIndex = 0xff;
         if (cStack_1b != '\0') {
@@ -329,7 +322,7 @@ void __cdecl16far land_info(byte tileOffset)
           uStack_6 = 0x7a02;
           uVar3 = 0x195d;
           puVar7 = ovr_ovc15_usesStshRealloc
-                             ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e));
+                             ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),0,0,0,0,0,0,0);
           pcVar4 = ovr_fmVsprintf("Construction of %s will be permanently suspended. Are you sure?",
                                   (char *)CONCAT22(uVar3,puVar7));
           hint_01.seg = uVar3;
@@ -338,7 +331,7 @@ void __cdecl16far land_info(byte tileOffset)
           (*(uint8_t *)((uint8_t *)&(entries_01.seg))) = uVar13;
           entries_01.ofs = (uint16_t)puVar7;
           (*(uint8_t *)((uint8_t *)&(entries_01.seg) + 1)) = uVar14;
-          ovr_ovc28_compute2(entries_01,2,hint_01);
+          ovr_ovc28_compute2(entries_01,2,hint_01,0,0);
           cStack_1b = (char)puVar7;
           if (cStack_1b == '\x01') {
             ovr_ovc23_removeRecord(*(int *)((uint)bStack_21 * 2 + -0x6e29));
@@ -347,8 +340,7 @@ void __cdecl16far land_info(byte tileOffset)
         }
         else if (cStack_1b == '\x02') {
           uVar11 = ovr_ovc45_textChoosePartyBuild
-                             ((GfxRndSeed + (int)(char)tileOffset) - 2,GfxRndSeed2,
-                              (int *)&entityIndex);
+                             ((GfxRndSeed + (int)(char)tileOffset) - 2,GfxRndSeed2,(int *)&entityIndex,0);
           cStack_1c = (char)uVar11;
           if (cStack_1c == -1) {
             again = '\x01';
@@ -439,8 +431,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     for (uVar12 = 0; uVar12 < EntityCount; uVar12 = uVar12 + 1) {
       uVar14 = (uint16_t)((ulong)Entities >> 0x10);
       uVar14 = ovr_ovc23_isCursorAt
-                         (*(uint16_t *)((int)Entities + uVar12 * 0x37),
-                          ((entity_t *)Entities)[uVar12].base.y);
+                         (*(uint16_t *)((int)Entities + uVar12 * 0x37),((entity_t *)Entities)[uVar12].base.y,0);
       if (((char)uVar14 != '\0') &&
          (*(char *)((int)(char **)GMenuStrings +
                    (uint)((entity_t *)Entities)[uVar12].base.gindex * 0x95 + 0x1f) == '\0')) {
@@ -455,7 +446,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     msg = ovr_stsprintf(&stk_ff60,(char *)CONCAT22(0x81dc,unaff_SS),
                         (char *)CONCAT22(plVar6,(char *)0x2410),uVar14,uStack_12,uVar7,
                         uVar5);
-    ovr_say(msg);
+    ovr_say(msg,0);
     lVar17 = LDIV_at_((ulong)uVar5,10);
     uVar14 = (uint16_t)((ulong)*(uint32_t *)((uint)bVar3 << 2) >> 0x10);
     iVar9 = (int)*(uint32_t *)((uint)bVar3 << 2);
@@ -521,7 +512,7 @@ uint __cdecl16far constrct_unitFlagsClear(int unitIndex)
   else {
     uVar1 = *(uint32_t *)((uint)puVar6[unitIndex].unitType << 2);
     if (*(char *)((int)uVar1 + 0x3f) == '\0') {
-      uVar3 = ovr_alignUp4(puVar6[unitIndex].x);
+      uVar3 = ovr_alignUp4(puVar6[unitIndex].x,0,0);
       uVar2 = ((unit_t *)GUnits)[unitIndex].y;
       uVar8 = 0;
       uVar4 = uVar2;
