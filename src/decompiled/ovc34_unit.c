@@ -319,8 +319,9 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   byte *pbVar7;
   byte *pbVar8;
   uint16_t uVar9;
-  int iVar10;
-  uint uVar11;
+  int entitiesOfs;
+  int textWidth;   /* ovr_ovc45_compute9() result */
+  uint entityIdx;
   uint16_t unaff_DI;
   byte *pbVar12;
   char *unaff_SS;
@@ -354,7 +355,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   uint8_t saveArea;
   uint16_t uStack_e;
   byte *pbStack_c;
-  int iStack_a;
+  int matchCount;
   uint16_t uStack_8;
   void *pvStack_6;
   uint16_t uStack_4;
@@ -515,30 +516,30 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
           pbStack_24 = pbVar5;
           pbStack_c = pbVar5;
         }
-        iStack_a = 0;
-        for (uVar11 = 0; uVar11 < EntityCount; uVar11 = uVar11 + 1) {
+        matchCount = 0;
+        for (entityIdx = 0; entityIdx < EntityCount; entityIdx = entityIdx + 1) {
           uVar4 = (uint16_t)((ulong)Entities >> 0x10);
-          iVar10 = (int)Entities;
-          if ((((*(byte *)(iVar10 + uVar11 * 0x37 + 0x1a) == partyIdx) &&
-               (pbStack_22 <= (byte *)*(uint *)((entity_t *)iVar10 + uVar11))) &&
-              ((byte *)*(uint *)((entity_t *)iVar10 + uVar11) <= pbStack_26)) &&
-             ((pbStack_24 <= (byte *)((entity_t *)iVar10)[uVar11].base.y &&
-              ((byte *)((entity_t *)iVar10)[uVar11].base.y <= pbStack_28)))) {
-            iStack_a = iStack_a + 1;
+          entitiesOfs = (int)Entities;
+          if ((((*(byte *)(entitiesOfs + entityIdx * 0x37 + 0x1a) == partyIdx) &&
+               (pbStack_22 <= (byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx))) &&
+              ((byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx) <= pbStack_26)) &&
+             ((pbStack_24 <= (byte *)((entity_t *)entitiesOfs)[entityIdx].base.y &&
+              ((byte *)((entity_t *)entitiesOfs)[entityIdx].base.y <= pbStack_28)))) {
+            matchCount = matchCount + 1;
           }
         }
         ovr_resetTextBlitCycle();
         uVar14 = 0x7a;
-        iVar10 = ovr_ovc45_compute9((char *)&text,
+        textWidth = ovr_ovc45_compute9((char *)&text,
                                     (char *)CONCAT22(*(uint16_t *)((uint)partyIdx * 4),unaff_SS),
                                     (char *)CONCAT22(Font03.ofs,
                                                      (char *)((uint16_t *)((uint)partyIdx * 4))
                                                              [1]),Font03.seg,'C',(char)Font03.seg,
                                     0x43,3,0xa000);
-        uVar4 = ovr_ovc41_pluralSuffix(iStack_a,(char)iVar10,uVar14);
+        uVar4 = ovr_ovc41_pluralSuffix(matchCount,(char)textWidth,uVar14);
         uVar6 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x64b8,unaff_SS),
-                               (char *)CONCAT22(iStack_a,(char *)0x2410),
+                               (char *)CONCAT22(matchCount,(char *)0x2410),
                                *(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                *(uint16_t *)((uint)sheetByte * 4 + 0x141),uVar4,uVar14);
         ovr_uiNotify(pcVar2,uVar6,(char)uVar6);
@@ -578,29 +579,29 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         pbStack_c = pbVar12;
       }
       _fmemset(MK_FP(_SS, &unitFlags), 0, 5);
-      iStack_a = 0;
-      for (uVar11 = 0; uVar11 < EntityCount; uVar11 = uVar11 + 1) {
+      matchCount = 0;
+      for (entityIdx = 0; entityIdx < EntityCount; entityIdx = entityIdx + 1) {
         pbVar8 = (byte *)((char *)0x2410);
         uVar4 = (uint16_t)((ulong)Entities >> 0x10);
-        iVar10 = (int)Entities;
-        if (((*(byte *)(iVar10 + uVar11 * 0x37 + 0x1a) == partyIdx) &&
+        entitiesOfs = (int)Entities;
+        if (((*(byte *)(entitiesOfs + entityIdx * 0x37 + 0x1a) == partyIdx) &&
             (pbVar8 = (byte *)((char *)0x2410),
-            pbStack_22 <= (byte *)*(uint *)((entity_t *)iVar10 + uVar11))) &&
+            pbStack_22 <= (byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx))) &&
            ((pbVar8 = (byte *)((char *)0x2410),
-            (byte *)*(uint *)((entity_t *)iVar10 + uVar11) <= pbStack_26 &&
+            (byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx) <= pbStack_26 &&
             ((pbVar8 = (byte *)((char *)0x2410),
-             pbStack_24 <= (byte *)((entity_t *)iVar10)[uVar11].base.y &&
+             pbStack_24 <= (byte *)((entity_t *)entitiesOfs)[entityIdx].base.y &&
              (pbVar8 = (byte *)((char *)0x2410),
-             (byte *)((entity_t *)iVar10)[uVar11].base.y <= pbStack_28)))))) {
+             (byte *)((entity_t *)entitiesOfs)[entityIdx].base.y <= pbStack_28)))))) {
           if (input < 2) {
             pbVar8 = (byte *)((char *)0x2410);
-            unit_usesAlignUp42(menuIndex,*(uint16_t *)((entity_t *)iVar10 + uVar11),
-                               ((entity_t *)iVar10)[uVar11].base.y);
+            unit_usesAlignUp42(menuIndex,*(uint16_t *)((entity_t *)entitiesOfs + entityIdx),
+                               ((entity_t *)entitiesOfs)[entityIdx].base.y);
           }
           else {
-            unit_usesEntities(input,uVar11,(uint16_t)&unitFlags,(uint16_t)unaff_SS);
+            unit_usesEntities(input,entityIdx,(uint16_t)&unitFlags,(uint16_t)unaff_SS);
           }
-          iStack_a = iStack_a + 1;
+          matchCount = matchCount + 1;
         }
       }
       for (i = 0; (int)i < 5; i = i + 1) {
@@ -611,40 +612,40 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       ovr_constr_flushDirtyRects();
       ovr_resetTextBlitCycle();
       if (input == 0x1) {
-        uVar4 = ovr_ovc41_pluralSuffix(iStack_a);
+        uVar4 = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6522,unaff_SS),
-                               (char *)CONCAT22(iStack_a,(char *)0x2410),
+                               (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)uVar4,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
       else if (input == 0x2) {
-        uVar4 = ovr_ovc41_pluralSuffix(iStack_a);
+        uVar4 = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6543,unaff_SS),
-                               (char *)CONCAT22(iStack_a,(char *)0x2410),
+                               (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)uVar4,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
       else if (input == 0x3) {
-        uVar4 = ovr_ovc41_pluralSuffix(iStack_a);
+        uVar4 = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6557,unaff_SS),
-                               (char *)CONCAT22(iStack_a,(char *)0x2410),
+                               (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)uVar4,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
       else if (input == 0x4) {
-        uVar4 = ovr_ovc41_pluralSuffix(iStack_a);
+        uVar4 = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6568,unaff_SS),
-                               (char *)CONCAT22(iStack_a,(char *)0x2410),
+                               (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)uVar4,pbVar8
                               );
