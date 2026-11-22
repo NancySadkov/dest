@@ -2,7 +2,7 @@
  * ovc04_lbm.c - recovered from STRONG.EXE
  * memory block: OVC04_lbm.c
  * range: 30e6:0000 - 30e6:081f
- * functions: 3
+ * functions: 4
  */
 #include "recovered.h"
 
@@ -12,6 +12,16 @@
 /* Aligns pointer up to 16 bytes */
 
 uint16_t __cdecl16far alignToSeg(far_t ptr,...)
+
+{
+  return 0;
+}
+
+
+
+/* 30e6:0001 */
+
+undefined2 __cdecl16far sub_OVC04_0001()
 
 {
   return 0;

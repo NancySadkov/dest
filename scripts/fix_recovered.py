@@ -324,8 +324,8 @@ def generate_artifacts():
                      r"|(?:in_[A-Za-z0-9_]+)|(?:unaff_[A-Za-z0-9_]+))", re.I)
     for name in os.listdir(OUT):
         if name.endswith(".c"):
-            ids.update(pat.findall(io.open(os.path.join(OUT, name), encoding="utf-8",
-                                           errors="replace").read()))
+            ids.update(pat.findall(open(os.path.join(OUT, name), encoding="utf-8",
+                                        errors="replace").read()))
     mod.main(ids, ident_type)
     return len(ids)
 
@@ -448,6 +448,8 @@ for _name in ("fix_string_folds.py", "fix_raw_arrays.py", "fix_bda_far.py",
               "fix_far_data.py", "fix_struct_stride.py", "fix_long_identifiers.py",
               "fix_startup_owned.py", "fix_startup_globals.py",
               "fix_truncated_names.py", "fix_lost_locals.py",
+              "fix_codeptr_arith.py", "fix_promoted_protos.py",
+              "fix_stack_slots.py",
               "gen_ovr_thunks.py"):
     _script = os.path.join(_HERE, _name)
     if os.path.isfile(_script):

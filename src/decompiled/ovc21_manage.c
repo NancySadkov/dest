@@ -2,7 +2,7 @@
  * ovc21_manage.c - recovered from STRONG.EXE
  * memory block: OVC21_manage.c
  * range: 4d05:0000 - 4d05:381f
- * functions: 39
+ * functions: 43
  */
 #include "recovered.h"
 
@@ -2284,6 +2284,34 @@ void __cdecl16far manage_usesEntities2(void)
 
 
 
+/* 4d05:23c2 */
+
+/* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
+
+undefined2 __cdecl16far sub_OVC21_manage_c_23C2()
+
+{
+  int unaff_BP;
+  int unaff_SI;
+  undefined2 unaff_SS;
+  bool in_CF;
+  bool in_ZF;
+  
+  if (in_CF || in_ZF) {
+    *(int *)*(undefined4 *)(unaff_BP + 0xc) = *(int *)*(undefined4 *)(unaff_BP + 0xc) + 1;
+    *(int *)*(undefined4 *)(unaff_BP + 0x10) =
+         *(int *)*(undefined4 *)(unaff_BP + 0x10) +
+         (uint)*(byte *)((int)Entities + unaff_SI * 0x37 + 0xe);
+  }
+  if (unaff_SI + 1U < EntityCount) {
+    manage_usesEntities();
+    return;
+  }
+  return;
+}
+
+
+
 /* 4d05:23fc */
 
 /* [R6] touches GUnitCount, GRecordCount */
@@ -2361,6 +2389,85 @@ manage_usesGUnitCount
   }
   iVar4 = manage_usesGUnits();
   return iVar4;
+}
+
+
+
+/* 4d05:24b1 */
+
+/* WARNING: Instruction at (ram,0x0004f503) overlaps instruction at (ram,0x0004f502)
+    */
+
+undefined2 __cdecl16far sub_OVC21_manage_c_24B1()
+
+{
+  byte bVar1;
+  undefined4 uVar2;
+  undefined2 uVar3;
+  uint in_AX;
+  uint uVar4;
+  unit_t *puVar5;
+  uint unaff_BP;
+  uint unaff_SI;
+  int unaff_DI;
+  uint uVar6;
+  undefined2 unaff_SS;
+  
+  do {
+    uVar4 = in_AX;
+    *(uint *)(uVar4 + unaff_DI) = unaff_BP;
+    if (*(char *)((unaff_BP & 0xff) * 0x27 + 0x133) == *(char *)(uVar4 + 8)) {
+      *(int *)(uVar4 - 2) = *(int *)(uVar4 - 2) + 1;
+      if (*(char *)((unaff_BP & 0xff) * 0x27 + 0x131) == '\x01') {
+        *(int *)*(undefined4 *)(uVar4 + 10) = *(int *)*(undefined4 *)(uVar4 + 10) + 1;
+      }
+      else if (*(char *)((unaff_BP & 0xff) * 0x27 + 0x131) == '\x02') {
+        *(int *)*(undefined4 *)(uVar4 + 0xe) = *(int *)*(undefined4 *)(uVar4 + 0xe) + 1;
+      }
+      else if (*(char *)((unaff_BP & 0xff) * 0x27 + 0x131) == '\x03') {
+        *(int *)*(undefined4 *)(uVar4 + 0x12) = *(int *)*(undefined4 *)(uVar4 + 0x12) + 1;
+      }
+    }
+    do {
+      unaff_SI = unaff_SI + 1;
+      if (GUnitCount <= unaff_SI) {
+        for (uVar6 = 0; uVar6 < GRecordCount; uVar6 = uVar6 + 1) {
+          if ((*(char *)(uVar6 * 0x12 + 9) == *(char *)(uVar4 + 6)) &&
+             (bVar1 = *(byte *)(uVar6 * 0x12 + 8),
+             *(char *)((uint)bVar1 * 0x27 + 0x133) == *(char *)(uVar4 + 8))) {
+            *(int *)*(undefined4 *)(uVar4 + 0x16) = *(int *)*(undefined4 *)(uVar4 + 0x16) + 1;
+            if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x01') {
+              *(int *)*(undefined4 *)(uVar4 + 0x1a) = *(int *)*(undefined4 *)(uVar4 + 0x1a) + 1;
+            }
+            else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x02') {
+              *(int *)*(undefined4 *)(uVar4 + 0x1e) = *(int *)*(undefined4 *)(uVar4 + 0x1e) + 1;
+            }
+            else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x03') {
+              *(int *)*(undefined4 *)(uVar4 + 0x22) = *(int *)*(undefined4 *)(uVar4 + 0x22) + 1;
+            }
+          }
+        }
+        *(int *)(uVar4 - 2) =
+             *(int *)(uVar4 - 2) -
+             (*(int *)*(undefined4 *)(uVar4 + 0x1e) + *(int *)*(undefined4 *)(uVar4 + 0x22));
+        *(int *)*(undefined4 *)(uVar4 + 10) =
+             *(int *)*(undefined4 *)(uVar4 + 10) - *(int *)*(undefined4 *)(uVar4 + 0x1e);
+        *(int *)*(undefined4 *)(uVar4 + 0xe) =
+             *(int *)*(undefined4 *)(uVar4 + 0xe) - *(int *)*(undefined4 *)(uVar4 + 0x22);
+        return *(undefined2 *)(uVar4 - 2);
+      }
+      if (*(char *)(uVar4 + 6) != -1) {
+        uVar3 = manage_usesGUnits();
+        return uVar3;
+      }
+      uVar3 = (undefined2)((ulong)GUnits >> 0x10);
+      puVar5 = (unit_t *)GUnits;
+    } while ((puVar5[unaff_SI].unitType == 0xff) ||
+            (uVar2 = *(undefined4 *)((uint)puVar5[unaff_SI].unitType << 2),
+            *(char *)((int)uVar2 + 0x3f) != '\0'));
+    in_AX = CONCAT11((char)(unaff_SI * 9 >> 8),(puVar5 + unaff_SI)->bldType);
+    unaff_BP = uVar4;
+  } while( true );
 }
 
 
@@ -2860,6 +2967,147 @@ void manage_textAllProperty2(void)
 }
 
 
+/* 4d05:28f4 */
+
+/* [R4] calls litoa10 */
+
+undefined2 __cdecl16far manage_usesLitoa103(undefined2 param_1,int param_2)
+
+{
+  long lVar1;
+  far_t entries;
+  int iVar2;
+  char *pcVar3;
+  undefined2 uVar4;
+  int unaff_BP;
+  int iVar5;
+  int iVar6;
+  char *unaff_SS;
+  char *in_stack_00000002;
+  undefined1 uStack0006;
+  undefined1 uStack0007;
+  
+  manage_usesBlitLabel2((char *)CONCAT22(param_1,in_stack_00000002),uStack0006);
+  manage_usesBlitLabel2("Level 3",0xdc);
+  TextBlitY = TextBlitY + 0xc;
+  if (*(char *)(unaff_BP + -0x15) == '\x04') {
+    iVar6 = 0x1a;
+  }
+  else if (*(char *)(unaff_BP + -0x15) == '\x03') {
+    iVar6 = 0xd;
+  }
+  else {
+    iVar6 = 0;
+  }
+  for (iVar5 = 0; iVar5 < 0xd; iVar5 = iVar5 + 1) {
+    if (iVar5 + iVar6 < 0x1e) {
+      TextBlitX = 0x11;
+      iVar2 = (iVar5 + iVar6) * 6;
+      ovr_blitLabel((char *)*(undefined2 *)((int)&GStructures[0].name + iVar2),
+                    (uint8_t *)
+                    CONCAT22(Font02.ofs,
+                             (uint8_t *)*(undefined2 *)((int)&GStructures[0].name + 2 + iVar2)),
+                    Font02.seg,0xde);
+      lVar1 = (long)(iVar5 + iVar6) * 6;
+      uVar4 = (undefined2)((ulong)lVar1 >> 0x10);
+      iVar2 = manage_usesGUnitCount
+                        (*(char *)(unaff_BP + 6),(&((unk01_t *)GStructures)->type)[(int)lVar1],
+                         (int *)CONCAT22(unaff_SS,(int *)(unaff_BP + -6)),
+                         (int *)CONCAT22(unaff_SS,(int *)(unaff_BP + -8)),
+                         (int *)CONCAT22(unaff_SS,(int *)(unaff_BP + -10)),
+                         (int *)CONCAT22(unaff_SS,(int *)(unaff_BP + -0xc)));
+      *(int *)((char *)init_textFilename + unaff_BP) = iVar2;
+      if (*(int *)(unaff_BP + -0xc) == 0) {
+        pcVar3 = litoa10((char *)(unaff_BP + -0x66),
+                         (long)CONCAT22(*(undefined2 *)((char *)init_textFilename + unaff_BP),
+                                        unaff_SS));
+        uStack0006 = (undefined1)uVar4;
+        uStack0007 = (undefined1)((uint)uVar4 >> 8);
+        manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),100);
+      }
+      else {
+        pcVar3 = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52e5,unaff_SS),
+                               (char *)CONCAT22(*(undefined2 *)
+                                                 ((char *)init_textFilename + unaff_BP),
+                                                (char *)0x26510));
+        uStack0006 = (undefined1)uVar4;
+        uStack0007 = (undefined1)((uint)uVar4 >> 8);
+        manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),100);
+      }
+      lVar1 = (long)(iVar5 + iVar6) * 6;
+      uVar4 = (undefined2)((ulong)lVar1 >> 0x10);
+      if (*(char *)((int)&GStructures[0].pad + (int)lVar1) != '\0') {
+        if (*(int *)(unaff_BP + -0xe) == 0) {
+          pcVar3 = litoa10((char *)(unaff_BP + -0x66),
+                           (long)CONCAT22(*(undefined2 *)(unaff_BP + -6),unaff_SS));
+          uStack0006 = (undefined1)uVar4;
+          uStack0007 = (undefined1)((uint)uVar4 >> 8);
+          manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0x8c);
+        }
+        else {
+          pcVar3 = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52e5,unaff_SS),
+                                 (char *)CONCAT22(*(undefined2 *)(unaff_BP + -6),
+                                                  (char *)0x26510));
+          uStack0006 = (undefined1)uVar4;
+          uStack0007 = (undefined1)((uint)uVar4 >> 8);
+          manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0x8c);
+        }
+        if (*(int *)(unaff_BP + -0x10) == 0) {
+          pcVar3 = litoa10((char *)(unaff_BP + -0x66),
+                           (long)CONCAT22(*(undefined2 *)(unaff_BP + -8),unaff_SS));
+          uStack0006 = (undefined1)uVar4;
+          uStack0007 = (undefined1)((uint)uVar4 >> 8);
+          manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0xb4);
+        }
+        else {
+          pcVar3 = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52e5,unaff_SS),
+                                 (char *)CONCAT22(*(undefined2 *)(unaff_BP + -8),
+                                                  (char *)0x26510));
+          uStack0006 = (undefined1)uVar4;
+          uStack0007 = (undefined1)((uint)uVar4 >> 8);
+          manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0xb4);
+        }
+        if (*(int *)(unaff_BP + -0x12) == 0) {
+          pcVar3 = litoa10((char *)(unaff_BP + -0x66),
+                           (long)CONCAT22(*(undefined2 *)(unaff_BP + -10),unaff_SS));
+          uStack0006 = (undefined1)uVar4;
+          uStack0007 = (undefined1)((uint)uVar4 >> 8);
+          manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0xdc);
+        }
+        else {
+          pcVar3 = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52e5,unaff_SS),
+                                 (char *)CONCAT22(*(undefined2 *)(unaff_BP + -10),
+                                                  (char *)0x26510));
+          uStack0006 = (undefined1)uVar4;
+          uStack0007 = (undefined1)((uint)uVar4 >> 8);
+          manage_blitLabelRight((char *)CONCAT13(uStack0007,CONCAT12(uStack0006,pcVar3)),0xdc);
+        }
+      }
+      TextBlitY = TextBlitY + 0xc;
+    }
+  }
+  CurSfxType3 = 0x3c;
+  entries.seg = (uint16_t)unaff_SS;
+  entries.ofs = unaff_BP - 0x142;
+  uVar4 = ovr_ovc28_usesUiInputText(entries,0x23,far_from_u32((uint32_t)(0x0)));
+  *(undefined1 *)(unaff_BP + -0x15) = (char)uVar4;
+  keyboardInputMode = 0;
+  if (((*(char *)(unaff_BP + -0x15) != '\0') && (*(char *)(unaff_BP + -0x15) != '\x01')) &&
+     (*(char *)(unaff_BP + -0x15) != -2)) {
+    manage_textAllProperty2();
+    return;
+  }
+  if ((ScreenMode == '\0') && (*(char *)(unaff_BP + -0x15) != -2)) {
+    manage_openTalkWindow();
+  }
+  if (*(char *)(unaff_BP + -0x15) == -2) {
+    Cancelled = 1;
+  }
+  return;
+}
+
+
+
 /* 4d05:2b09 */
 
 /* [R6] touches CurSfxType3, __C0_ASM_CopyRight */
@@ -2881,6 +3129,43 @@ void __cdecl16far manage_usesCurSfxType3(void)
                (uint)*(byte *)((int)&menuHighlightTable[2].seg + 1 +
                               (uint)*(byte *)(unaff_BP + -0x15) * 6));
   }
+  keyboardInputMode = 1;
+  CurSfxType3 = 0x3c;
+  entries.seg = unaff_SS;
+  entries.ofs = unaff_BP - 0x142;
+  uVar1 = ovr_ovc28_usesUiInputText(entries,0x23,far_from_u32((uint32_t)(0x0)),(uint8_t *)(unaff_BP + -0x16));
+  *(undefined1 *)(unaff_BP + -0x15) = (char)uVar1;
+  keyboardInputMode = 0;
+  if (((*(char *)(unaff_BP + -0x15) != '\0') && (*(char *)(unaff_BP + -0x15) != '\x01')) &&
+     (*(char *)(unaff_BP + -0x15) != -2)) {
+    manage_textAllProperty2();
+    return;
+  }
+  if ((ScreenMode == '\0') && (*(char *)(unaff_BP + -0x15) != -2)) {
+    manage_openTalkWindow();
+  }
+  if (*(char *)(unaff_BP + -0x15) == -2) {
+    Cancelled = 1;
+  }
+  return;
+}
+
+
+
+/* 4d05:2b3e */
+
+/* [R6] touches CurSfxType3, __C0_ASM_CopyRight */
+
+undefined2 __cdecl16far manage_usesCurSfxType32()
+
+{
+  undefined2 uVar1;
+  int unaff_BP;
+  uint16_t unaff_SS;
+  int in_stack_00000000;
+  far_t entries;
+  
+  manage_highlightStructures(*(uint8_t *)(unaff_BP + 6),in_stack_00000000);
   keyboardInputMode = 1;
   CurSfxType3 = 0x3c;
   entries.seg = unaff_SS;

@@ -335,7 +335,8 @@ ovc03_font	302d:09f5	drawAnimTextAt	38	ok	ovc03_font.c	void __cdecl16far drawAni
 ovc03_font	302d:0a1b	say	21	ok	ovc03_font.c	void __cdecl16far say(char *msg,...);
 ovc03_font	302d:0a30	resetTextBlitCycle	17	ok	ovc03_font.c	void __cdecl16far resetTextBlitCycle(void);
 ovc03_font	302d:0a41	uiNotify	174	ok	ovc03_font.c	void __cdecl16far uiNotify(char *msg,uint16_t dst,...);
-ovc04_lbm	30e6:0000	alignToSeg	36	ok	ovc04_lbm.c	uint16_t __cdecl16far alignToSeg(far_t ptr,...);
+ovc04_lbm	30e6:0000	alignToSeg	1	ok	ovc04_lbm.c	uint16_t __cdecl16far alignToSeg(far_t ptr,...);
+ovc04_lbm	30e6:0001	sub_OVC04_0001	35	ok	ovc04_lbm.c	undefined2 __cdecl16far sub_OVC04_0001(void);
 ovc04_lbm	30e6:0024	lbm_decode_body	765	ok	ovc04_lbm.c	void __cdecl16far lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,far_t src,stg_tmp_t *dst,int16_t sx,int16_t sy,int16_t w,int16_t h);
 ovc04_lbm	30e6:0321	grabLbm	1171	ok	ovc04_lbm.c	stg_tmp_t * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,...);
 ovc05_error	3168:0000	stExit	282	ok	ovc05_error.c	void __cdecl16far stExit(int n,...);
@@ -668,16 +669,20 @@ ovc21_manage	4d05:1b1d	manage_findFirstLeader	52	ok	ovc21_manage.c	byte __cdecl1
 ovc21_manage	4d05:1b51	manage_usesGLeaderCount3	157	ok	ovc21_manage.c	undefined2 __cdecl16far manage_usesGLeaderCount3(byte partyIndex);
 ovc21_manage	4d05:1bee	manage_settlementScreen	1052	fail	ovc21_manage.c	Exception while decompiling 4d05:1bee: Response buffer size exceeded for: st.exe
 
-ovc21_manage	4d05:217a	litoa10	313	ok	ovc21_manage.c	char * __cdecl16far litoa10(char *buf,long n,...);
+ovc21_manage	4d05:217a	litoa10	312	ok	ovc21_manage.c	char * __cdecl16far litoa10(char *buf,long n,...);
 ovc21_manage	4d05:22b3	manage_4d05_22cf_entry	28	ok	ovc21_manage.c	void __cdecl16far manage_4d05_22cf_entry(void);
-ovc21_manage	4d05:22cf	manage_usesEntities	160	ok	ovc21_manage.c	void manage_usesEntities(void);
-ovc21_manage	4d05:2371	manage_usesEntities2	139	ok	ovc21_manage.c	void __cdecl16far manage_usesEntities2(void);
+ovc21_manage	4d05:22cf	manage_usesEntities	155	ok	ovc21_manage.c	void manage_usesEntities(void);
+ovc21_manage	4d05:2371	manage_usesEntities2	81	ok	ovc21_manage.c	void __cdecl16far manage_usesEntities2(void);
+ovc21_manage	4d05:23c2	sub_OVC21_manage_c_23C2	58	ok	ovc21_manage.c	void __cdecl16far sub_OVC21_manage_c_23C2(void);
 ovc21_manage	4d05:23fc	manage_usesGUnitCount	75	ok	ovc21_manage.c	int __cdecl16far manage_usesGUnitCount(char partyIndex,char unitType,int *resource1Count,int *resource2Count,int *resource3Count,int *recordCount);
-ovc21_manage	4d05:2543	manage_usesGUnits	687	ok	ovc21_manage.c	undefined2 __cdecl16far manage_usesGUnits(void);
+ovc21_manage	4d05:24b1	sub_OVC21_manage_c_24B1	143	ok	ovc21_manage.c	undefined2 __cdecl16far sub_OVC21_manage_c_24B1(void);
+ovc21_manage	4d05:2543	manage_usesGUnits	539	ok	ovc21_manage.c	undefined2 __cdecl16far manage_usesGUnits(void);
 ovc21_manage	4d05:26f6	manage_textAllProperty	132	ok	ovc21_manage.c	void __cdecl16near manage_textAllProperty(uint16_t partyIndex);
-ovc21_manage	4d05:277a	manage_textAllProperty2	911	ok	ovc21_manage.c	void manage_textAllProperty2(void);
-ovc21_manage	4d05:2b09	manage_usesCurSfxType3	187	ok	ovc21_manage.c	void __cdecl16far manage_usesCurSfxType3(void);
-ovc21_manage	4d05:2bc4	manage_highlightStructures	437	ok	ovc21_manage.c	void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType);
+ovc21_manage	4d05:277a	manage_textAllProperty2	377	ok	ovc21_manage.c	void manage_textAllProperty2(void);
+ovc21_manage	4d05:28f4	manage_usesLitoa103	533	ok	ovc21_manage.c	void __cdecl16far manage_usesLitoa103(undefined2 param_1,int param_2);
+ovc21_manage	4d05:2b09	manage_usesCurSfxType3	53	ok	ovc21_manage.c	void __cdecl16far manage_usesCurSfxType3(void);
+ovc21_manage	4d05:2b3e	manage_usesCurSfxType32	134	ok	ovc21_manage.c	void __cdecl16far manage_usesCurSfxType32(void);
+ovc21_manage	4d05:2bc4	manage_highlightStructures	436	ok	ovc21_manage.c	void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType);
 ovc21_manage	4d05:2d79	manage_textTotalPopulation	1427	ok	ovc21_manage.c	char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sheet_t *sheet);
 ovc21_manage	4d05:330c	manage_applyUnitFilter	346	ok	ovc21_manage.c	void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,char *unitName);
 ovc22_classes	5087:0000	ovc22_textArena	281	ok	ovc22_classes.c	bool __cdecl16far ovc22_textArena(int x,int y);
@@ -766,6 +771,7 @@ ovc25_intel	5b66:173b	ovc25_attackingNotice	401	ok	ovc25_intel.c	void __cdecl16f
 ovc25_intel	5b66:18cc	ovc25_compute1	93	ok	ovc25_intel.c	int __cdecl16far ovc25_compute1(byte gindex,...);
 ovc25_intel	5b66:1929	ovc25_intelAttackingNotice	543	ok	ovc25_intel.c	void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex);
 ovc25_intel	5b66:1b48	ovc25_tickCountdown	161	ok	ovc25_intel.c	void __cdecl16far ovc25_tickCountdown(int partyIndex,...);
+ovc25_intel	5b66:1d94	SUB_5b66_1d94	92	ok	ovc25_intel.c	void __cdecl16far SUB_5b66_1d94(int param_1,int param_2,char param_3);
 ovc26_fillgrid	5d45:0000	ovc26_usesFillGrid	799	ok	ovc26_fillgrid.c	void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked);
 ovc26_fillgrid	5d45:031f	ovc26_usesStExit	977	ok	ovc26_fillgrid.c	uint __cdecl16far ovc26_usesStExit(int entityIndex,...);
 ovc26_fillgrid	5d45:06f0	ovc26_usesRandBelow	807	ok	ovc26_fillgrid.c	uint __cdecl16far ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_t flagsOfs,uint16_t flagsSeg,...);
@@ -781,7 +787,8 @@ ovc27_combat	5ded:0a05	ovc27_spellNotice	701	ok	ovc27_combat.c	uint __cdecl16far
 ovc27_combat	5ded:0cc2	ovc27_usesBlitGfxRect	784	ok	ovc27_combat.c	void __cdecl16far ovc27_usesBlitGfxRect(int agntIndex,brect_t *rect,uint16_t type,...);
 ovc27_combat	5ded:0fd2	ovc27_spellHalfDamage	140	ok	ovc27_combat.c	uint __cdecl16far ovc27_spellHalfDamage(agnt_t *agnt);
 ovc27_combat	5ded:105e	ovc27_breathHalfDamage	140	ok	ovc27_combat.c	uint __cdecl16far ovc27_breathHalfDamage(agnt_t *agnt,...);
-ovc27_combat	5ded:10ea	ovc27_textTakesHalfDamage3	956	ok	ovc27_combat.c	void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,...);
+ovc27_combat	5ded:10ea	ovc27_textTakesHalfDamage3	841	ok	ovc27_combat.c	void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,...);
+ovc27_combat	5ded:1433	ovc27_textCharmed	117	ok	ovc27_combat.c	void __cdecl16far ovc27_textCharmed(void);
 ovc27_combat	5ded:14a8	ovc27_textTakesHalfDamage4	1855	ok	ovc27_combat.c	void ovc27_textTakesHalfDamage4(void);
 ovc27_combat	5ded:1be7	emptyFunction	4	ok	ovc27_combat.c	void __cdecl16far emptyFunction(void);
 ovc27_combat	5ded:1beb	ovc27_usesAgntCount	169	ok	ovc27_combat.c	int __cdecl16far ovc27_usesAgntCount(agnt_t *agnt,byte recIndex,byte maxLevel,int *cursor);
@@ -960,7 +967,7 @@ ovc43_fli	6fbe:035f	ovc43_playFli	75	ok	ovc43_fli.c	char __cdecl16far ovc43_play
 ovc44_strong_dat	6ffe:0000	stshAllocStub	155	ok	ovc44_strong_dat.c	far_t * __cdecl16far stshAllocStub(far_t *__return_storage_ptr__,...);
 ovc44_strong_dat	6ffe:009b	stshTR_S_stubify0	298	ok	ovc44_strong_dat.c	void __cdecl16far stshTR_S_stubify0(int index);
 ovc44_strong_dat	6ffe:01c5	stshStubifyBld	306	ok	ovc44_strong_dat.c	void __cdecl16far stshStubifyBld(uint16_t index,...);
-ovc44_strong_dat	6ffe:02f7	init_assets	28741	ok	ovc44_strong_dat.c	void __cdecl16far init_assets(void);
+ovc44_strong_dat	6ffe:02f7	init_assets	28740	ok	ovc44_strong_dat.c	void __cdecl16far init_assets(void);
 ovc44_strong_dat	6ffe:733c	stshInitPtrs	521	ok	ovc44_strong_dat.c	void __cdecl16far stshInitPtrs(void);
 ovc45_unitinfo	77eb:0121	ovc45_getUnitType	88	ok	ovc45_unitinfo.c	byte __cdecl16far ovc45_getUnitType(int x,int y,...);
 ovc45_unitinfo	77eb:0179	ovc45_getUnitIndex	66	ok	ovc45_unitinfo.c	short __cdecl16far ovc45_getUnitIndex(int x,int y,...);
@@ -995,7 +1002,7 @@ ovc46_assets	7a57:0000	init_assets1	15626	ok	ovc46_assets.c	void __cdecl16far in
 ovc47_constrct	7e7c:0000	constrct_usesGLeaderCount	75	ok	ovc47_constrct.c	void __cdecl16far constrct_usesGLeaderCount(void);
 ovc47_constrct	7e7c:004b	land_info	2805	ok	ovc47_constrct.c	void __cdecl16far land_info(byte tileOffset,...);
 ovc47_constrct	7e7c:0b40	constrct_compute1	92	ok	ovc47_constrct.c	int __cdecl16far constrct_compute1(void);
-ovc47_constrct	7e7c:0b9c	constrct_buildInfoText	6106	fail	ovc47_constrct.c	Exception while decompiling 7e7c:0b9c: process: timeout
+ovc47_constrct	7e7c:0b9c	constrct_buildInfoText	6105	fail	ovc47_constrct.c	Exception while decompiling 7e7c:0b9c: process: timeout
 
 ovc47_constrct	7e7c:2b4c	constrct_usesLDIV_at_	834	ok	ovc47_constrct.c	void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex);
 ovc47_constrct	7e7c:2e8e	constrct_unitFlagsClear	224	ok	ovc47_constrct.c	uint __cdecl16far constrct_unitFlagsClear(int unitIndex);

@@ -1,5 +1,8 @@
 /* Global data with original initialisers (recovered image). */
 #include "recovered.h"
+/* _pspseg: supplied by the C runtime startup. */
+/* _psp: supplied by the C runtime startup. */
+/* __brklvl: supplied by the C runtime startup. */
 anm_t AgntAnms[139] = { { 0x0, 8, 1, 27, 21, 0x0, 0x19, 8, 23, 1, 0, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF },
      { 0x1, 44, 1, 63, 21, 0x0, 0x19, 7, 23, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 80, 1,
      94, 21, 0x0, 0x19, 6, 23, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 112, 1, 138, 21, 0x0,

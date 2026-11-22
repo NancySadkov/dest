@@ -297,7 +297,7 @@ code_r0x0005ff56:
             }
             suffix = (char *)0x263c4;
             labelOfs = 0x1b7;
-            func_0x0005f303();
+            ovc27_textCharmed();
             ovr_stsprintf((char *)&numBuf);
             iVar4 = ovr_font_textWidth((char *)&numBuf);
             TextBlitX = 0x89 - iVar4;

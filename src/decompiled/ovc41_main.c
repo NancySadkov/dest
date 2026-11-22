@@ -1006,10 +1006,10 @@ void __cdecl16far ovc41_enterLeaderView(void)
 char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
 
 {
-  undefined1 _backdropIndex;   /* local lost by the decompiler */
   undefined1 stk_fffa;   /* stack slot fffa */
   undefined1 stk_fffc;   /* stack slot fffc */
   undefined1 stk_fffe;   /* stack slot fffe */
+  undefined1 _backdropIndex;   /* local lost by the decompiler */
   undefined4 uVar1;
   undefined4 uVar2;
   bool bVar3;

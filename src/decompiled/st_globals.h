@@ -9,6 +9,7 @@ extern undefined1 bda_midnight;
 extern undefined1 ScreenHeight;
 extern undefined1 IntFlags;
 extern unit_t GUnitsShadow;
+extern dos_psp_t _pspseg;
 extern undefined2 DGROUP_at__at_;
 extern far_t audio_init_data;
 extern far_t fp_audio_done;
@@ -145,10 +146,13 @@ extern undefined2 __C0environ_2;
 extern undefined2 _env;
 extern undefined2 _envseg_at_;
 extern undefined2 _envSize_at_;
+extern undefined2 _psp;
 extern dosver_t DosVersion;
 extern int errno;
 extern uint32_t _StartTime;
+extern uint16_t __brklvl;
 extern far_t _heapbase;
+extern far_t _brklvl;
 extern far_t _heaptop;
 extern char s__2410_0094[];
 extern char s__d_2410_0095[];
@@ -1760,6 +1764,3 @@ extern uint16_t init_textFilenameJumpTable[4];
 extern uint16_t audioCommandSwitch[6];
 extern uint16_t ovc28_codeOffsetTable[59];
 #endif
-
-extern uint16_t __brklvl;   /* supplied by the startup */
-extern undefined2 _psp;   /* supplied by the startup */extern far_t _brklvl;   /* supplied by the startup */

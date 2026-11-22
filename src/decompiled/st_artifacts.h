@@ -96,6 +96,57 @@ extern uint16_t in_stack_0000fffd;
 #define ram0x00024180 (*(undefined1 far *)MK_FP(ST_DGROUP_SEG, 0x0080))
 #define ram0x00024186 (*(undefined1 far *)MK_FP(ST_DGROUP_SEG, 0x0086))
 #define ram0x0002c9bb (*(undefined1 far *)MK_FP(ST_DGROUP_SEG, 0x88bb))
+extern undefined1 stack0x0000;
+extern undefined1 stack0x0004;
+extern undefined1 stack0x0007;
+extern undefined1 stack0x0035;
+extern undefined1 stack0x02c2;
+extern undefined1 stack0x681c;
+extern undefined1 stack0x6ffe;
+extern undefined1 stack0x8d06;
+extern undefined1 stack0x8ed6;
+extern undefined1 stack0xbac4;
+extern undefined1 stack0xc1dd;
+extern undefined1 stack0xd744;
+extern undefined1 stack0xfc0c;
+extern undefined1 stack0xfc0e;
+extern undefined1 stack0xfe0a;
+extern undefined1 stack0xfe3a;
+extern undefined1 stack0xfecc;
+extern undefined1 stack0xfed4;
+extern undefined1 stack0xfed6;
+extern undefined1 stack0xfed8;
+extern undefined1 stack0xfeda;
+extern undefined1 stack0xfedc;
+extern undefined1 stack0xfef4;
+extern undefined1 stack0xff60;
+extern undefined1 stack0xff61;
+extern undefined1 stack0xff74;
+extern undefined1 stack0xffaa;
+extern undefined1 stack0xffaf;
+extern undefined1 stack0xffb4;
+extern undefined1 stack0xffbc;
+extern undefined1 stack0xffd4;
+extern undefined1 stack0xffd6;
+extern undefined1 stack0xffdc;
+extern undefined1 stack0xffde;
+extern undefined1 stack0xffe0;
+extern undefined1 stack0xffe2;
+extern undefined1 stack0xffe4;
+extern undefined1 stack0xffe8;
+extern undefined1 stack0xffe9;
+extern undefined1 stack0xffea;
+extern undefined1 stack0xffeb;
+extern undefined1 stack0xffec;
+extern undefined1 stack0xfff0;
+extern undefined1 stack0xfff2;
+extern undefined1 stack0xfff5;
+extern undefined1 stack0xfff6;
+extern undefined1 stack0xfff8;
+extern undefined1 stack0xfffa;
+extern undefined1 stack0xfffc;
+extern undefined1 stack0xfffe;
+extern undefined1 stack0xffff;
 #define uRam00000064 (*(undefined2 far *)MK_FP(0x0000, 0x0064))
 #define uRam00000066 (*(undefined2 far *)MK_FP(0x0000, 0x0066))
 #define uRam000000fa (*(undefined2 far *)MK_FP(0x0000, 0x00fa))

@@ -1,5 +1,6 @@
 /* Ghidra intrinsic implementations (generated). */
 #include "recovered.h"
+/* conio.h is not on the staged include path */
 extern unsigned char inp(unsigned int port);
 extern void outp(unsigned int port, unsigned char value);
 
@@ -14,8 +15,8 @@ void out(unsigned int port, unsigned char value)
   outp(port, value);
 }
 
-/* far_from_u32 packs {offset,segment}: segment is the high word, the same
-   layout MK_FP(seg,ofs) produces. */
+/* far_from_u32 packs {offset,segment}: segment is the high word, the
+   same layout MK_FP(seg,ofs) produces. */
 far_t far_from_u32(uint32_t v)
 {
   far_t r;

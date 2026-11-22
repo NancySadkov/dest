@@ -395,14 +395,14 @@ void __cdecl16far attact_usesAgntFlag1(void)
     SquareRecCount = SquareRecCount - 1;
     iVar4 = memcmp((char *)&SquareRecX,(char *)0x24109074,0x13);
     if (iVar4 == 0) {
-      func_0x00030e61(0x1000,0x9074,0x2410);
+      sub_OVC04_0001(0x1000,0x9074,0x2410);
       return;
     }
   }
   else {
     iVar4 = memcmp((char *)&SquareRecX,(char *)0x24109074,0x13);
     if (iVar4 == 0) {
-      alignToSeg(far_from_u32((uint32_t)(0x24109074)));
+      sub_OVC04_0001(0x1000,0x9074,0x2410);
       return;
     }
     if (299 < SquareRecCount) {
@@ -413,7 +413,7 @@ void __cdecl16far attact_usesAgntFlag1(void)
   memcpy((char *)CONCAT22(0x17f8,(char *)(SquareRecCount * 0x13)),(char *)0x24109074,0x13);
   iVar5 = SquareRecCount * 0x13;
   SquareRecCount = SquareRecCount + 1;
-  func_0x00030e61(0x1000,iVar5,0x17f8);
+  sub_OVC04_0001(0x1000,iVar5,0x17f8);
   return;
 }
 
@@ -936,7 +936,7 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force,...)
         ((uint8_t *)menuItemRow)[itemIndex] = 0x0;
       }
       else {
-        uVar2 = func_0x0004f501(0x236f,itemIndex & 0xff);
+        uVar2 = sub_OVC21_manage_c_24B1(0x236f,itemIndex & 0xff);
         callResultTemp = uVar2;
         if (uVar2 < uStack_6) {
           (*(uint8_t *)((uint8_t *)&(uStack_6))) = (uint8_t)uVar2;
@@ -1220,7 +1220,7 @@ undefined2 __cdecl16far attact_usesLDIV_at_(uint8_t menuIndex,...)
   undefined1 uVar7;
   undefined1 in_stack_0000fffd;
   
-  callResultTemp = func_0x0004f501(0x3f0b,menuIndex);
+  callResultTemp = sub_OVC21_manage_c_24B1(0x3f0b,menuIndex);
   if ((long *)callResultTemp == (long *)0x0) {
     uVar7 = 0;
     uVar2 = 0;
@@ -1319,12 +1319,12 @@ uint __cdecl16far attact_usesAlignUp44(int *xPtr,int y,uint8_t dir)
   
   uVar2 = 0x3f0b;
   if ((dir & 1) == 0) {
-    uVar1 = func_0x0004f32d(0x3f0b,*xPtr,y,dir,in_stack_0000000c);
+    uVar1 = ovr_EXT_FUN_8000_f2fa(0x3f0b,*xPtr,y,dir,in_stack_0000000c);
   }
   else {
     value = *xPtr;
     do {
-      uVar2 = func_0x0004f32d(uVar2,*xPtr,y,dir,in_stack_0000000c);
+      uVar2 = ovr_EXT_FUN_8000_f2fa(uVar2,*xPtr,y,dir,in_stack_0000000c);
       if ((char)uVar2 != '\0') {
         return CONCAT11((char)((uint)uVar2 >> 8),1);
       }
@@ -1475,7 +1475,7 @@ void __cdecl16far attact_usesEntityCount(void)
                       (*(uint16_t *)((int)Entities + owner * 0x37),
                        *(int *)((int)Entities + owner * 0x37 + 2));
     if ((char)uVar3 != '\0') {
-      for (iVar1 = func_0x0004f944(0x236f,owner); iVar1 != 0; iVar1 = iVar1 + -1) {
+      for (iVar1 = manage_usesLitoa103(0x236f,owner); iVar1 != 0; iVar1 = iVar1 + -1) {
         uVar3 = (undefined2)((ulong)Entities >> 0x10);
         if ((*(byte *)((int)Entities + owner * 0x37 + 0xc) & 1) == 0) {
           uStack_3 = 0;

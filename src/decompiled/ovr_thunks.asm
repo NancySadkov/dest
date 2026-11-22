@@ -467,6 +467,7 @@
     extrn _ovc49_compute1:far
     extrn _ovc49_drawAgents:far
     extrn _ovc50_usesUiInputText:far
+    extrn _EXT_FUN_8000_f2fa:far
 
 OVRT_TEXT segment byte public 'CODE'
     assume cs:OVRT_TEXT
@@ -2800,6 +2801,11 @@ _ovr_ovc49_drawAgents endp
 _ovr_ovc50_usesUiInputText proc far
     jmp _ovc50_usesUiInputText
 _ovr_ovc50_usesUiInputText endp
+
+    public _ovr_EXT_FUN_8000_f2fa
+_ovr_EXT_FUN_8000_f2fa proc far
+    jmp _EXT_FUN_8000_f2fa
+_ovr_EXT_FUN_8000_f2fa endp
 
 OVRT_TEXT ends
     end
