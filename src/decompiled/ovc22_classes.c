@@ -557,7 +557,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
     uVar65 = (undefined1)((uint)unaff_SS >> 8);
     _fmemset((void *)ZEXT24(unaff_SS),6,(uint16_t)unaff_DI);
     _fmemset((void *)ZEXT24(unaff_SS),6,CONCAT11(uVar68,cVar25));
-    _fmemset((void *)(ulong)*(uint *)((uint)partyIndex * 4 + 2),3,CONCAT11(uVar68,cVar25));
+    _fmemset(MK_FP(GUnitDescriptions[partyIndex].seg, GUnitDescriptions[partyIndex].ofs + 0x9a), 0, 3);
     _fmemset((void *)ZEXT24(unaff_SS),6,CONCAT11(uVar68,cVar25));
     if (Difficulty == '\x01') {
       uStack_38 = 4000;
@@ -582,7 +582,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
     uVar23 = CONCAT11(uVar19,bVar17);
     uStack_e =(uint16_t)( (uint *)(0x1000 << (bVar17 & 0x1f)));
     *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xad) = 0;
-    _fmemset((void *)(ulong)*(uint *)((uint)partyIndex * 4 + 2),3,CONCAT11(uVar68,cVar25));
+    _fmemset(MK_FP(GUnitDescriptions[partyIndex].seg, GUnitDescriptions[partyIndex].ofs + 0x9a), 0, 3);
     iVar30 = CONCAT11(uVar69,uVar67);
     if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0') {
       pbVar2 = (uint16_t)((byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d));
