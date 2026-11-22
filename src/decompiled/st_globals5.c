@@ -1188,7 +1188,7 @@ char s_auto_build[] = "Auto-build    " "\x7f";
 char s_census[] = "Census";
 char s_property[] = "Property";
 char s_total_census[] = "Total Census";
-char s_all_property[] = "All property.";
+char s_all_property[] = "All Property";
 char s_help[] = "Help";
 char s_Done_2410_50fb[] = "Done";
 char s_s_will_now_build_homes_a_cbae[] = "%s will now build homes automatically.";
@@ -1227,12 +1227,15 @@ char s_Summary_1_2410_526e[] = "Summary 1";
 char s_Summary_2_2410_5278[] = "Summary 2";
 char s_Summary_3_2410_5282[] = "Summary 3";
 char s_Damage_2410_528c[] = "Damage";
+/* 5293: twin of s_all_property */
+char s_all_property_2410_5293[] = "All property.";
 char s_buildings_belonging_to_s_s[] = "Buildings belonging to %s%s";
 char s_buildings[] = "Buildings";
 char s_total[] = "Total";
 char s_level_1[] = "Level 1";
 char s_level_2[] = "Level 2";
 char s_level_3[] = "Level 3";
+char s_d_d_2410_52e5[] = "%d (%d)";
 char s_The__s_belonging_to_2410_52ed[] = "The %s belonging to %s the %s are highlighted in red.";
 char s_The__s_belonging_to_2410_5323[] = "The %s belonging to all leaders are highlighted in red.";
 char s_The_damaged_structu_2410_535b[] = "The damaged structures belonging to %s the %s are highlighted in red.";
@@ -1398,6 +1401,9 @@ char s__2410_606f[] = "\n";
 char s_lf_2410_6097[] = "\n";
 char s__2410_60c7[] = "\n";
 char s__2410_60e7[] = "\n";
+/* 611f: a 32-space filler string */
+/* 611f: 33 spaces, no terminator in the image */
+char s_empty_2410_611f[33] = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
 char s_4_irq_7_5_irq_10[] = "4. IRQ 7  5. IRQ 10):";
 char s_lf_2410_6156[] = "\n";
 char s_Largest_executable__2410_6158[] = "Largest executable program size is only %s bytes.\n";
@@ -1497,6 +1503,8 @@ char s_fletcher[] = "@Fletcher";
 char s_public_bath[] = "@public bath";
 char s_mason_s_hall[] = "@mason's hall";
 char s_jeweler[] = "@jeweler";
+/* 6882: twin of s_glassworks */
+char s_glassworks_2410_6882[] = "@glassworks";
 char s_outpost[] = "@outpost";
 char s_vault[] = "@vault";
 char s_forester_s_camp[] = "@Forester's camp";
@@ -1538,6 +1546,9 @@ char s_my_s_we_in_this_neighbor_b984[103] = { 'M', 'y', ' ', '%', 's', ',', ' ',
      ' ', 't', 'h', 'a', 'n', 'k', ' ', 'y', 'o', 'u', ' ', 'f', 'o', 'r', ' ', 'a', 'l', 'l', ' ', 'y',
      'o', 'u', ' ', 'h', 'a', 'v', 'e', ' ', 'd', 'o', 'n', 'e', ' ', 't', 'o', ' ', 'h', 'e', 'l', 'p',
      ' ', 'y', 'o', 'u', 'r', ' ', 'p', 'e', 'o', 'p', 'l', 'e', '.' };
+/* 6b2f/6b34: the lower-case twins of s_lord/s_lady (0x4c6x) */
+char s_lord_2410_6b2f[] = "lord";
+char s_lady_2410_6b34[] = "lady";
 char s_empty_2410_6b39[] = "";
 far_t RankMsgPtrs[19] = { { 0x6B90, 0x2410 }, { 0x6BBE, 0x2410 }, { 0x6BE8, 0x2410 }, { 0x6C1C, 0x2410 },
      { 0x6C44, 0x2410 }, { 0x6C63, 0x2410 }, { 0x6C8C, 0x2410 }, { 0x6CB7, 0x2410 }, { 0x6CE1, 0x2410 },
@@ -1608,7 +1619,9 @@ char s_force_and_fury_meet_magi_83da[] = "Force and fury meet magic spells as ba
 char s_play_out_in_the_courtyar_e3ba[] = "play out in the courtyards of mighty castles.";
 char s_your_people_will_fight_b_ca95[] = "Your people will fight bravely and work";
 char s_hard_your_city_will_grow[] = "hard. Your city will grow...";
-char s_and_grow[33] = "and grow...";
+/* 7394: twin of s_and_grow */
+char s_and_grow_2410_7394[] = "and grow...";
+char s_and_grow[33] = "                     and grow...";
 char s_but_beware_the_evil_mind_f8e6[] = "But beware the evil Mindark, whose";
 char s_hordes_destroyed_your_ho_0a18[] = "hordes destroyed your homeland long ago.";
 char s_if_you_lead_with_wisdom__bac4[] = "If you lead with wisdom and cunning...";
@@ -1620,6 +1633,7 @@ char s_getcache__d_SIZESTA_2410_748e[30] = "getcache %d  SIZESTASH %d  \r";
 undefined1 selectedPartyIndex = 0xFF;
 far_t PersonWordPtrs[2] = { { 0x77E2, 0x2410 }, { 0x77E9, 0x2410 } };
 char s_choose_party_to_build_fo_296a[] = "Choose party to build for.  Now building for %s the %s.";
+char s_s_2410_74f0[] = "%s:";
 char s_you_can_only_place_a_sin_6023[] = " You can only place a single arena.";
 char s_bridges_must_be_near_wat_a2e8[] = " Bridges must be near water's edge.";
 char s_next_outpost_available_a_39b7[] = " Next outpost available at rank %s.";
@@ -1639,6 +1653,7 @@ char s_party_member_s_doesn_t_h_25d2[] = "Party member %s doesn't have enough go
 char s_too_many_construction_sites[] = "Too many construction sites.";
 char s_excavate[] = "Excavate";
 char s_remove[] = "Remove";
+char s_change_party_2410_7716[] = "Change party";
 char s_s_search_this_location_f_02b8[] = "%s: Search this location for minerals?  Active party is %s the %s.";
 char s_no_minerals_were_found[] = "No minerals were found.";
 char s_gems_discovered[] = "Gems discovered.";
@@ -1655,6 +1670,9 @@ char s_forest_claimed_this_fore_2435[] = "Forest claimed. This forest creates %d
 char s_tree_cut_down_d_gold_obtained[] = "Tree cut down. %d gold obtained.";
 char s_maintenance_cost_is[] = "Maintenance cost is";
 char s_income_created_is[] = "Income created is";
+/* 78d8/78db: the ".." and "..." progress dots */
+char s_empty_2410_78d8[] = "..";
+char s_empty_2410_78db[] = "...";
 char s_empty_2410_78df[] = "";
 undefined1 MiceProcessed = 0x00;
 undefined1 MiceNeedsUpdate = 0x01;
@@ -1667,7 +1685,10 @@ char s_home_a_unit_here_to_halt_1af9[] = " Home a unit here to halt damage.";
 char s_s_held_by_s[] = "%s: Held by %s.";
 char s_water[] = "Water:";
 char s_shore[] = "Shore:";
+/* 7965: "%s:" (the 0x74f0 copy is the same) */
+char s_s_2410_7965[] = "%s:";
 char s_suspend[] = "Suspend";
+char s_change_party_2410_7971[] = "Change party";
 char s_s_d_complete_owned_by_s__c800[] = "%s: %d%% complete. Owned by %s. Active party is %s the %s.";
 char s_clearing_of_land_d_compl_546b[] = "Clearing of land: %d%% complete. Owned by %s. Active party is %s the %s.";
 char s_construction_of_s_will_b_7f3b[] = "Construction of %s will be permanently suspended. Are you sure?";

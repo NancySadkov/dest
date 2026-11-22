@@ -74,6 +74,21 @@ for path in sorted(glob.glob("src/decompiled/st_globals*.c")):
         size = int(m.group(2))
         data = bytes(vals)[:size] + b"\0" * max(0, size - len(vals))
         ours[m.group(1)] = (data, size)
+    # char arrays written as element lists (non-terminated items: all spaces)
+    for m in re.finditer(r"^char ([_0-9A-Za-z]+)\[(\d+)\] = \{ ([^}]*) \};", t, re.M):
+        size = int(m.group(2))
+        items = re.findall(r"'(\\?.)'|(0x[0-9A-Fa-f]{1,2})|(\d+)", m.group(3))
+        vals = []
+        for ch, hx, dec in items:
+            if hx:
+                vals.append(int(hx, 16))
+            elif dec:
+                vals.append(int(dec))
+            elif ch:
+                esc = {"n": 10, "r": 13, "t": 9, "0": 0, "\\": 92, "'": 39}
+                vals.append(esc.get(ch, ord(ch)))
+        data = bytes(vals)[:size] + b"\0" * max(0, size - len(vals))
+        ours[m.group(1)] = (data, size)
     for m in re.finditer(r"^(\w[\w \*]*?) ([_0-9A-Za-z]+) = (0x[0-9A-Fa-f]+|\d+);", t, re.M):
         ours.setdefault(m.group(2), (None, None))   # scalar, handled below
 
