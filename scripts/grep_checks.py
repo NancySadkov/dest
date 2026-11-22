@@ -17,7 +17,7 @@ CHECKS = [
     ("argN_", r"arg[0-9]_"),
     ("arg_", r"arg_[a-za-z]"),
     ("ram0x", r"ram0x"),
-    ("in_REG", r"in_(?:AX|BX|CX|DX|EAX|EBX|ECX|EDX|CF|ECF)\b"),
+    ("in_REG", r"in_(?:AX|BX|CX|DX|ST|EAX|EBX|ECX|EDX|CF|ECF)"),
     ("[iusbc]Var", r"[iusbc]Var[_0-9]"),
     ("p[iusbc]Var", r"p[iusbc]Var[_0-9]"),
     ("p[iusc]Stack_", r"p[iusc]Stack_"),

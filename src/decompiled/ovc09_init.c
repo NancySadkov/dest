@@ -864,7 +864,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                       }
                       return psVar9;
                     case (uint16_t)0x2:
-                      *__return_storage_ptr__ = (long)in_ST0;
+                      *__return_storage_ptr__ = 0L;
                     /* WARNING: Bad instruction - Truncating control flow here */
                       halt_baddata();
                     case (uint16_t)0x3:
