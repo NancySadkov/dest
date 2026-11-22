@@ -2229,9 +2229,9 @@ void manage_usesEntities(void)
   uVar2 = (undefined2)((ulong)Entities >> 0x10);
   iVar1 = (int)Entities;
   if (((*(char *)((int)(char **)GMenuStrings +
-                 (uint)*(byte *)(iVar1 + unaff_SI * 0x37 + 0xd) * 0x95 + 0x1f) == '\0') &&
-      (*(byte *)(unaff_BP + 8) <= *(byte *)(iVar1 + unaff_SI * 0x37 + 0xf))) &&
-     (*(byte *)(iVar1 + unaff_SI * 0x37 + 0xf) <= *(byte *)(unaff_BP + 10))) {
+                 (uint)((entity_t *)iVar1)[unaff_SI].base.gindex * 0x95 + 0x1f) == '\0') &&
+      (*(byte *)(unaff_BP + 8) <= ((entity_t *)iVar1)[unaff_SI].base.level)) &&
+     (((entity_t *)iVar1)[unaff_SI].base.level <= *(byte *)(unaff_BP + 10))) {
     *(int *)*(undefined4 *)(unaff_BP + 0xc) = *(int *)*(undefined4 *)(unaff_BP + 0xc) + 1;
     *(int *)*(undefined4 *)(unaff_BP + 0x10) =
          *(int *)*(undefined4 *)(unaff_BP + 0x10) +
@@ -2264,8 +2264,8 @@ void __cdecl16far manage_usesEntities2(void)
   uVar2 = (undefined2)((ulong)Entities >> 0x10);
   iVar1 = (int)Entities;
   if (((*(char *)(iVar1 + unaff_SI * 0x37 + 0x1a) == in_CL) &&
-      (*(byte *)(unaff_BP + 8) <= *(byte *)(iVar1 + unaff_SI * 0x37 + 0xf))) &&
-     (*(byte *)(iVar1 + unaff_SI * 0x37 + 0xf) <= *(byte *)(unaff_BP + 10))) {
+      (*(byte *)(unaff_BP + 8) <= ((entity_t *)iVar1)[unaff_SI].base.level)) &&
+     (((entity_t *)iVar1)[unaff_SI].base.level <= *(byte *)(unaff_BP + 10))) {
     *(int *)*(undefined4 *)(unaff_BP + 0xc) = *(int *)*(undefined4 *)(unaff_BP + 0xc) + 1;
     *(int *)*(undefined4 *)(unaff_BP + 0x10) =
          *(int *)*(undefined4 *)(unaff_BP + 0x10) +

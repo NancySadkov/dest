@@ -249,7 +249,7 @@ int __cdecl16far attact_countPartyUnits(byte menuIndex,...)
       if (((*(uint8_t *)(iVar1 + uVar2 * 0x37 + 0x1a) == ((uint8_t *)MenuItemEnabled)[menuIndex]) &&
           (((*(uint *)((entity_t *)iVar1 + uVar2) < GfxRndSeed - 2U ||
             (GfxRndSeed + 1U < *(uint *)((entity_t *)iVar1 + uVar2))) ||
-           (*(int *)(iVar1 + uVar2 * 0x37 + 2) != GfxRndSeed2)))) &&
+           (((entity_t *)iVar1)[uVar2].base.y != GfxRndSeed2)))) &&
          ((*(byte *)(iVar1 + uVar2 * 0x37 + 0x33) & 2) == 0)) {
         iVar3 = iVar3 + 1;
       }
@@ -566,14 +566,14 @@ attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flags
   *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x30) = 0;
   uVar2 = (undefined2)((ulong)Entities >> 0x10);
   iVar1 = (int)Entities;
-  x = *(uint16_t *)(iVar1 + entityIndex * 0x37 + 8);
-  y = *(uint16_t *)(iVar1 + entityIndex * 0x37 + 10);
+  x = ((entity_t *)iVar1)[entityIndex].base.destX;
+  y = ((entity_t *)iVar1)[entityIndex].base.destY;
   if ((*(uint16_t *)((entity_t *)iVar1 + entityIndex) == destX) &&
-     (*(uint16_t *)(iVar1 + entityIndex * 0x37 + 2) == destY)) {
+     (((entity_t *)iVar1)[entityIndex].base.y == destY)) {
     destX = 0;
     destY = 0;
   }
-  *(uint16_t *)(iVar1 + entityIndex * 0x37 + 8) = destX;
+  ((entity_t *)iVar1)[entityIndex].base.destX = destX;
   *(uint16_t *)((int)Entities + entityIndex * 0x37 + 10) = destY;
   if ((x != 0) || (y != 0)) {
     attact_usesAlignUp4(x,y,*(char *)((int)Entities + entityIndex * 0x37 + 0x1a),
@@ -605,10 +605,10 @@ void __stdcall16far attact_usesGMapFlags3(void)
   for (uVar3 = 0; uVar3 < EntityCount; uVar3 = uVar3 + 1) {
     uVar4 = (undefined2)((ulong)Entities >> 0x10);
     iVar2 = (int)Entities;
-    puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[*(int *)(iVar2 + uVar3 * 0x37 + 2)] +
+    puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[((entity_t *)iVar2)[uVar3].base.y] +
                      *(int *)((entity_t *)iVar2 + uVar3));
     *puVar1 = *puVar1 | 0x1000 << (*(byte *)((int)(char **)GMenuStrings +
-                                            (uint)*(byte *)(iVar2 + uVar3 * 0x37 + 0xd) * 0x95 +
+                                            (uint)((entity_t *)iVar2)[uVar3].base.gindex * 0x95 +
                                             0x1f) & 0x1f);
   }
   ovr_ovc15_usesAlignUp42();
@@ -996,11 +996,11 @@ attact_textArena(uint16_t *foundIndexOut,int mode,uint8_t partyIndex,uint16_t x,
         uVar3 = ovr_alignUp4(*(int *)((int)Entities + uVar7 * 0x37 + 8));
         iVar6 = (int)Entities;
         uVar8 = (undefined2)((ulong)Entities >> 0x10);
-        if (((uVar3 != uVar1) || (*(uint16_t *)(iVar6 + uVar7 * 0x37 + 10) != y)) &&
+        if (((uVar3 != uVar1) || (((entity_t *)iVar6)[uVar7].base.destY != y)) &&
            ((((mode == 0 && ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 2) == 0)) ||
              ((mode == 1 &&
-              (((*(int *)(iVar6 + uVar7 * 0x37 + 8) == 0 &&
-                (*(int *)(iVar6 + uVar7 * 0x37 + 10) == 0)) &&
+              (((((entity_t *)iVar6)[uVar7].base.destX == 0 &&
+                (((entity_t *)iVar6)[uVar7].base.destY == 0)) &&
                ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 2) == 0)))))) ||
             (((mode == 2 && ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 1) != 0)) ||
              ((mode == 3 && ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 4) != 0)))))))) {
@@ -1525,19 +1525,19 @@ void __cdecl16far attact_usesEntityCount2(uint16_t *sum,uint16_t *enemySum)
       uVar8 = (undefined2)((ulong)Entities >> 0x10);
       iVar4 = (int)Entities;
       if (*(char *)((int)(char **)GMenuStrings +
-                   (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0') {
-        uVar3 = (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xe) *
-                (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xf) *
-                (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xf);
+                   (uint)((entity_t *)iVar4)[uVar5].base.gindex * 0x95 + 0x1f) == '\0') {
+        uVar3 = (uint)((entity_t *)iVar4)[uVar5].base.animFrame *
+                (uint)((entity_t *)iVar4)[uVar5].base.level *
+                (uint)((entity_t *)iVar4)[uVar5].base.level;
         uVar2 = *sum;
         *sum = *sum + uVar3;
         puVar1 = (uint16_t *)sum + 1;
         *puVar1 = *puVar1 + ((int)uVar3 >> 0xf) + (uint)CARRY2(uVar2,uVar3);
       }
       else {
-        uVar3 = (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xe) *
-                (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xf) *
-                (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xf);
+        uVar3 = (uint)((entity_t *)iVar4)[uVar5].base.animFrame *
+                (uint)((entity_t *)iVar4)[uVar5].base.level *
+                (uint)((entity_t *)iVar4)[uVar5].base.level;
         uVar2 = *enemySum;
         *enemySum = *enemySum + uVar3;
         puVar1 = (uint16_t *)enemySum + 1;

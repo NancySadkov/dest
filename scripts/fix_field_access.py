@@ -75,7 +75,8 @@ def fields(name):
             n *= int(d)
         if s is None:
             return []
-        out.append((off, s * n, mm.group(2), s, n, bool(mm.group(3).strip())))
+        out.append((off, s * n, mm.group(2), s, n, bool(mm.group(3).strip()),
+                    mm.group(1).strip()))
         off += s * n
     return out
 
@@ -86,7 +87,7 @@ def struct_size(name):
 
 by_off = {}
 for s in structs:
-    for off, sz, fname, elem, cnt, is_arr in fields(s):
+    for off, sz, fname, elem, cnt, is_arr, _ty in fields(s):
         # pad_NN / unk_NN components are auto-generated filler, never a name
         if fname.startswith(("pad_", "unk_", "UNK")):
             continue
@@ -132,11 +133,16 @@ for p in files:
 # a struct field declared as an array must never be used bare: `->buildType`
 # where buildType is `byte[1]` is neither assignable nor a scalar argument, so
 # every bare use becomes `->buildType[0]`.
-arr_fields = {}
+# A field name is only normalised when it is an array in *every* struct that
+# declares it: `dir` is `byte[4]` in one record but a plain `byte` in entity_t,
+# and a blanket `->dir[0]` made the entity field unassignable.
+decl = {}
 for sname in structs:
-    for off, sz, fname, elem, cnt, is_arr in fields(sname):
-        if is_arr and not fname.startswith(("pad_", "unk_", "UNK")):
-            arr_fields[fname] = True
+    for off, sz, fname, elem, cnt, is_arr, _ty in fields(sname):
+        if fname.startswith(("pad_", "unk_", "UNK")):
+            continue
+        decl.setdefault(fname, []).append(is_arr)
+arr_fields = {n: True for n, v in decl.items() if v and all(v)}
 
 bare = 0
 if arr_fields:
@@ -151,6 +157,57 @@ if arr_fields:
                 io.open(p, "w", encoding="utf-8", newline="\n").write(new)
 
 print("array fields used bare:", bare)
+
+# `*(T *)(BASE + IDX * STRIDE + OFF)` is a field of an array element: the stride
+# identifies the record type and OFF the field.  Both must match exactly once.
+STRIDE_FIELD = re.compile(
+    r"\*\s*\(\s*([A-Za-z_]\w*)\s*\*\s*\)\s*\(\s*([A-Za-z_]\w*)\s*\+\s*"
+    r"([A-Za-z_]\w*)\s*\*\s*(0x[0-9a-fA-F]+)\s*\+\s*(0x[0-9a-fA-F]+|\d+)\s*\)")
+
+def resolve_field(sname, off, width, depth=0):
+    """Dotted field path of `width` at `off` in struct `sname`, nested structs included."""
+    if depth > 4:
+        return None
+    for foff, fsz, fname, elem, cnt, is_arr, fty in fields(sname):
+        if is_arr or fname.startswith(("pad_", "unk_", "UNK")):
+            continue
+        if foff == off and elem == width:
+            return fname
+        if foff <= off < foff + fsz:
+            base = fty.replace("struct ", "").strip()
+            if base in structs:
+                rest = resolve_field(base, off - foff, width, depth + 1)
+                if rest:
+                    return fname + "." + rest
+    return None
+
+
+stride_hits = 0
+
+
+def stride_repl(m):
+    global stride_hits
+    ty, base, idx = m.group(1), m.group(2), m.group(3)
+    stride, off = int(m.group(4), 16), int(m.group(5), 0)
+    width = SIZES.get(ty)
+    owners = [sname for sname in structs if struct_size(sname) == stride]
+    if len(owners) != 1:
+        return m.group(0)
+    owner = owners[0]
+    fname = resolve_field(owner, off, width)
+    if fname is None:
+        return m.group(0)
+    stride_hits += 1
+    return "((%s *)%s)[%s].%s" % (owner, base, idx, fname)
+
+
+for p in files:
+    t = io.open(p, encoding="utf-8", errors="ignore").read()
+    new = STRIDE_FIELD.sub(stride_repl, t)
+    if new != t and apply:
+        io.open(p, "w", encoding="utf-8", newline="\n").write(new)
+
+print("stride+offset field accesses:", stride_hits)
 
 print("offset accesses found:", total, "named:", done, "ambiguous/skipped:", skipped)
 print("mode:", "APPLY" if apply else "dry run")

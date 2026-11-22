@@ -471,7 +471,7 @@ void __cdecl16far ovc15_usesAgntIndex(void)
     iVar2 = (int)Entities;
     if (((GfxRndSeed - 2U <= *(uint *)((entity_t *)iVar2 + uStack_4)) &&
         (*(uint *)((entity_t *)iVar2 + uStack_4) <= GfxRndSeed + 1U)) &&
-       (*(int *)(iVar2 + uStack_4 * 0x37 + 2) == GfxRndSeed2)) {
+       (((entity_t *)iVar2)[uStack_4].base.y == GfxRndSeed2)) {
       *(uint *)(&agentIndices + iStack_6 * 2) = uStack_4;
       iStack_6 = iStack_6 + 1;
     }
@@ -616,8 +616,8 @@ uint __cdecl16far ovc15_usesAlignUp4(uint16_t x,uint16_t y)
     uVar6 = (undefined2)((ulong)Entities >> 0x10);
     iVar4 = (int)Entities;
     if ((((*(byte *)(iVar4 + uVar3 + 0x33) & 2) != 0) &&
-        (uVar3 = *(uint *)(iVar4 + uVar5 * 0x37 + 6), uVar3 == y)) &&
-       (uVar3 = ovr_alignUp4(*(int *)(iVar4 + uVar5 * 0x37 + 4)), uVar3 == uVar2)) {
+        (uVar3 = ((entity_t *)iVar4)[uVar5].base.targetY, uVar3 == y)) &&
+       (uVar3 = ovr_alignUp4(((entity_t *)iVar4)[uVar5].base.targetX), uVar3 == uVar2)) {
       uVar3 = uVar5 * 0x37;
       uVar6 = (undefined2)((ulong)Entities >> 0x10);
       if ((*(char *)((int)Entities + uVar3 + 0x1a) != -1) &&
@@ -3087,7 +3087,7 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
       iVar3 = (int)Entities;
       if ((*(byte *)(iVar3 + uVar4 * 0x37 + 0x1a) == bStack_9) &&
          (uVar2 = ovr_ovc23_isCursorAt
-                            (*(uint16_t *)((entity_t *)iVar3 + uVar4),*(int *)(iVar3 + uVar4 * 0x37 + 2))
+                            (*(uint16_t *)((entity_t *)iVar3 + uVar4),((entity_t *)iVar3)[uVar4].base.y)
          , (uVar2 & 0xff) == 0)) {
         return uVar4;
       }
@@ -3105,7 +3105,7 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
       iVar3 = (int)Entities;
       if (((*(byte *)(iVar3 + uVar4 * 0x37 + 0x1a) == bStack_8) &&
           (uVar2 = ovr_ovc23_isCursorAt
-                             (*(uint16_t *)((entity_t *)iVar3 + uVar4),*(int *)(iVar3 + uVar4 * 0x37 + 2)
+                             (*(uint16_t *)((entity_t *)iVar3 + uVar4),((entity_t *)iVar3)[uVar4].base.y
                              ), (uVar2 & 0xff) == 0)) &&
          ((*(byte *)((int)Entities + uVar4 * 0x37 + 0x33) & 3) == 0)) {
         return uVar4;

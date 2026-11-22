@@ -179,7 +179,7 @@ void __cdecl16far ovc42_usesEntityCount(void)
     iVar1 = (int)Entities;
     if ((*(char *)(iVar1 + uVar2 * 0x37 + 0x1a) != -1) &&
        (*(char *)((int)(char **)GMenuStrings +
-                 (uint)*(byte *)(iVar1 + uVar2 * 0x37 + 0xd) * 0x95 + 0x1f) != '\0')) {
+                 (uint)((entity_t *)iVar1)[uVar2].base.gindex * 0x95 + 0x1f) != '\0')) {
       *(undefined2 *)((entity_t *)iVar1 + uVar2) = 0;
       *(undefined2 *)((int)Entities + uVar2 * 0x37 + 2) = 0;
     }

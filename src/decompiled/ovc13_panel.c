@@ -152,7 +152,7 @@ void __cdecl16far ovc13_drawPanelEntitiesAll(void)
     uVar5 = (undefined2)((ulong)Entities >> 0x10);
     iVar4 = (int)Entities;
     iVar3 = *(int *)((entity_t *)iVar4 + entityIndex);
-    iVar2 = *(int *)(iVar4 + entityIndex * 0x37 + 2);
+    iVar2 = ((entity_t *)iVar4)[entityIndex].base.y;
     iVar1 = iVar2 + 1;
     if (((((*(char *)(iVar4 + entityIndex * 0x37 + 0x18) != '\0') ||
           (*(char *)((int)(char **)GMenuStrings + iStack_c * 0x95 + 0x1f) == '\0')) ||
@@ -172,7 +172,7 @@ void __cdecl16far ovc13_drawPanelEntitiesAll(void)
           if ((*(byte *)(iVar4 + entityIndex * 0x37 + 0x33) & 1) == 0) {
             if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
               if (*(char *)((int)(char **)GMenuStrings +
-                           (uint)*(byte *)(iVar4 + entityIndex * 0x37 + 0xd) * 0x95 + 0x1f) == '\0')
+                           (uint)((entity_t *)iVar4)[entityIndex].base.gindex * 0x95 + 0x1f) == '\0')
               {
                 uStack_3 = 0xff;
               }
@@ -224,11 +224,11 @@ void __cdecl16far ovc13_drawPanelEntities(void)
       uVar6 = (undefined2)((ulong)Entities >> 0x10);
       iVar4 = (int)Entities;
       iVar2 = *(int *)((entity_t *)iVar4 + uVar5);
-      iVar3 = *(int *)(iVar4 + uVar5 * 0x37 + 2);
+      iVar3 = ((entity_t *)iVar4)[uVar5].base.y;
       iVar1 = iVar3 + 1;
       if (((((*(char *)(iVar4 + uVar5 * 0x37 + 0x18) != '\0') ||
             (*(char *)((int)(char **)GMenuStrings +
-                      (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0')) ||
+                      (uint)((entity_t *)iVar4)[uVar5].base.gindex * 0x95 + 0x1f) == '\0')) ||
            (((*(short (*) [60] [148])GMapFlags)[iVar3][iVar2] & 8U) != 0)) &&
           ((PanelGridX <= iVar2 && (iVar2 <= PanelGridX + 0x22)))) &&
          ((PanelGridY <= iVar1 && (iVar1 <= PanelGridY + 0xf)))) {
@@ -244,7 +244,7 @@ void __cdecl16far ovc13_drawPanelEntities(void)
             if ((*(byte *)(iVar4 + uVar5 * 0x37 + 0x33) & 1) == 0) {
               if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
                 if (*(char *)((int)(char **)GMenuStrings +
-                             (uint)*(byte *)(iVar4 + uVar5 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0') {
+                             (uint)((entity_t *)iVar4)[uVar5].base.gindex * 0x95 + 0x1f) == '\0') {
                   uStack_3 = 0xff;
                 }
                 else {
@@ -553,11 +553,11 @@ void __cdecl16far ovc13_usesScreenY2(void)
       uVar7 = (undefined2)((ulong)Entities >> 0x10);
       iVar4 = (int)Entities;
       uVar1 = *(uint *)((entity_t *)iVar4 + uVar6);
-      iVar3 = *(int *)(iVar4 + uVar6 * 0x37 + 2);
+      iVar3 = ((entity_t *)iVar4)[uVar6].base.y;
       uVar2 = iVar3 + 1;
       if (((((*(char *)(iVar4 + uVar6 * 0x37 + 0x18) != '\0') ||
             (*(char *)((int)(char **)GMenuStrings +
-                      (uint)*(byte *)(iVar4 + uVar6 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0')) ||
+                      (uint)((entity_t *)iVar4)[uVar6].base.gindex * 0x95 + 0x1f) == '\0')) ||
            (DebugVerbose != false)) ||
           (((*(short (*) [60] [148])GMapFlags)[iVar3][uVar1] & 8U) != 0)) &&
          (((Seed_2000_d110 <= (int)uVar1 && (uVar1 <= Seed_2000_d110 + 0x69U)) &&
@@ -575,7 +575,7 @@ void __cdecl16far ovc13_usesScreenY2(void)
             if ((*(byte *)(iVar5 + uVar6 * 0x37 + 0x33) & 1) == 0) {
               if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
                 if (*(char *)((int)(char **)GMenuStrings +
-                             (uint)*(byte *)(iVar5 + uVar6 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0') {
+                             (uint)((entity_t *)iVar5)[uVar6].base.gindex * 0x95 + 0x1f) == '\0') {
                   uStack_3 = 0xff;
                 }
                 else {
@@ -626,7 +626,7 @@ int __cdecl16far ovc13_usesEntities(int entityIndex)
 L_OVC13_3d16_1045_10C4:
     if (partyFilter == -1) {
       if (*(char *)((int)(char **)GMenuStrings +
-                   (uint)*(byte *)(iVar1 + entityIndex * 0x37 + 0xd) * 0x95 + 0x1f) == '\0') {
+                   (uint)((entity_t *)iVar1)[entityIndex].base.gindex * 0x95 + 0x1f) == '\0') {
         iVar1 = 1;
       }
       else {
@@ -645,8 +645,8 @@ L_OVC13_3d16_1045_10C4:
   }
   else {
     if ((byte)((undefined1 *)&LevelRangeMin)[unitTypeFilter] <=
-        *(byte *)(iVar1 + entityIndex * 0x37 + 0xf)) {
-      if (*(byte *)(iVar1 + entityIndex * 0x37 + 0xf) <=
+        ((entity_t *)iVar1)[entityIndex].base.level) {
+      if (((entity_t *)iVar1)[entityIndex].base.level <=
           (byte)((undefined1 *)&LevelRangeMax)[unitTypeFilter]) goto L_OVC13_3d16_1045_10C4;
     }
     iVar1 = 0;
@@ -681,7 +681,7 @@ void __cdecl16far ovc13_drawWindowEntities(void)
     uVar6 = (undefined2)((ulong)Entities >> 0x10);
     iVar4 = (int)Entities;
     uVar1 = *(uint *)((entity_t *)iVar4 + entityIndex);
-    iVar3 = *(int *)(iVar4 + entityIndex * 0x37 + 2);
+    iVar3 = ((entity_t *)iVar4)[entityIndex].base.y;
     uVar2 = iVar3 + 1;
     if (((((*(char *)(iVar4 + entityIndex * 0x37 + 0x18) != '\0') ||
           (*(char *)((int)(char **)GMenuStrings + iStack_c * 0x95 + 0x1f) == '\0')) ||
@@ -703,7 +703,7 @@ void __cdecl16far ovc13_drawWindowEntities(void)
           if ((*(byte *)(iVar5 + entityIndex * 0x37 + 0x33) & 1) == 0) {
             if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
               if (*(char *)((int)(char **)GMenuStrings +
-                           (uint)*(byte *)(iVar5 + entityIndex * 0x37 + 0xd) * 0x95 + 0x1f) == '\0')
+                           (uint)((entity_t *)iVar5)[entityIndex].base.gindex * 0x95 + 0x1f) == '\0')
               {
                 uStack_3 = 0xff;
               }

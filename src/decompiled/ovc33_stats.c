@@ -1750,11 +1750,11 @@ uint __cdecl16far stats_usesAlignUp4(int entityIndex)
         if (uVar1 == uVar2) {
           uVar5 = (undefined2)((ulong)Entities >> 0x10);
           iVar4 = (int)Entities;
-          uVar2 = *(uint *)(iVar4 + entityIndex * 0x37 + 6);
+          uVar2 = ((entity_t *)iVar4)[entityIndex].base.targetY;
           if (uVar2 == GfxRndSeed2) {
-            if (*(int *)(iVar4 + entityIndex * 0x37 + 8) == 0) {
+            if (((entity_t *)iVar4)[entityIndex].base.destX == 0) {
               bVar3 = (byte)((uint)(entityIndex * 0x37) >> 8);
-              if (*(int *)(iVar4 + entityIndex * 0x37 + 10) == 0) {
+              if (((entity_t *)iVar4)[entityIndex].base.destY == 0) {
                 uVar2 = CONCAT11(bVar3,1);
               }
               else {

@@ -2740,7 +2740,7 @@ uint __cdecl16far ovc22_usesEntities(int entityIndex)
     uVar3 = entityIndex * 0x37 & 0xff00;
   }
   else {
-    uVar3 = (uint)*(byte *)(iVar5 + entityIndex * 0x37 + 0xd) * 0x95;
+    uVar3 = (uint)((entity_t *)iVar5)[entityIndex].base.gindex * 0x95;
     if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + uVar3) & 0x800) == 0) {
       if ((*(char *)((int)*(undefined4 *)((uint)bVar2 << 2) + 0x3f) == '\0') &&
          (uVar3 = ((char_sheet_t *)(((uint)bVar2 << 2)))->housing,
@@ -2753,7 +2753,7 @@ uint __cdecl16far ovc22_usesEntities(int entityIndex)
                (*(int *)((int)*(undefined4 *)((uint)bVar2 << 2) + (uint)bVar4 * 2 + 0x8c) == 0))) {
           bVar4 = bVar4 - 1;
         }
-        if (*(byte *)(iVar5 + entityIndex * 0x37 + 0xe) <
+        if (((entity_t *)iVar5)[entityIndex].base.animFrame <
             (byte)(*(char *)((int)*(undefined4 *)((uint)bVar2 << 2) + 0xa4) + bVar4)) {
           pcVar1 = (char *)(iVar5 + entityIndex * 0x37 + 0xe);
           *pcVar1 = *pcVar1 + '\x01';
@@ -2961,9 +2961,9 @@ void __cdecl16far ovc22_usesEntities3(int entityIndex)
         *piVar1 = *piVar1 + -1;
         uVar7 = (undefined2)((ulong)Entities >> 0x10);
         iVar6 = (int)Entities;
-        *(char *)(iVar6 + entityIndex * 0x37 + 0x36) =
-             *(char *)(iVar6 + entityIndex * 0x37 + 0x36) +
-             (char)(((ulong)*(byte *)(iVar6 + entityIndex * 0x37 + 0x36) / 6) % 6) * -6;
+        ((entity_t *)iVar6)[entityIndex].dir =
+             ((entity_t *)iVar6)[entityIndex].dir +
+             (char)(((ulong)((entity_t *)iVar6)[entityIndex].dir / 6) % 6) * -6;
         bVar2 = *(byte *)((int)Entities + entityIndex * 0x37 + 0xd);
         if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar2 * 0x95) == '\x03') &&
            ('\x01' < cStack_6)) {

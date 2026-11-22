@@ -850,7 +850,7 @@ void __cdecl16far dbgPromoteEnemy(void)
     iVar2 = (int)Entities;
     if (((GfxRndSeed - 2U <= *(uint *)((entity_t *)iVar2 + i)) &&
         (*(uint *)((entity_t *)iVar2 + i) <= GfxRndSeed + 1U)) &&
-       (*(int *)(iVar2 + i * 0x37 + 2) == GfxRndSeed2)) {
+       (((entity_t *)iVar2)[i].base.y == GfxRndSeed2)) {
       pcVar1 = (char *)(iVar2 + i * 0x37 + 0xd);
       *pcVar1 = *pcVar1 + '\x01';
       uVar3 = (undefined2)((ulong)Entities >> 0x10);
@@ -2467,8 +2467,8 @@ switchD_6000_ca06_caseD_1:
             if ((((*(byte *)(iVar12 + uVar16 * 0x37 + 0x1a) == bStack_3c) &&
                  (paStack_22 <= (agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
                 ((agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26)) &&
-               ((paStack_24 <= (agnt_t *)*(uint *)(iVar12 + uVar16 * 0x37 + 2) &&
-                ((agnt_t *)*(uint *)(iVar12 + uVar16 * 0x37 + 2) <= paStack_28)))) {
+               ((paStack_24 <= (agnt_t *)((entity_t *)iVar12)[uVar16].base.y &&
+                ((agnt_t *)((entity_t *)iVar12)[uVar16].base.y <= paStack_28)))) {
               iStack_a = iStack_a + 1;
             }
           }
@@ -2540,11 +2540,11 @@ L_ui_unit_order_6616_0689_1054:
           if (((*(byte *)(iVar12 + uVar16 * 0x37 + 0x1a) == bStack_3c) &&
               (paStack_22 <= (agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
              (((agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26 &&
-              ((paStack_24 <= (agnt_t *)*(uint *)(iVar12 + uVar16 * 0x37 + 2) &&
-               ((agnt_t *)*(uint *)(iVar12 + uVar16 * 0x37 + 2) <= paStack_28)))))) {
+              ((paStack_24 <= (agnt_t *)((entity_t *)iVar12)[uVar16].base.y &&
+               ((agnt_t *)((entity_t *)iVar12)[uVar16].base.y <= paStack_28)))))) {
             if (bStack_3b < 2) {
               unit_usesAlignUp42((byte)agntPtr,*(uint16_t *)((entity_t *)iVar12 + uVar16),
-                                 *(int *)(iVar12 + uVar16 * 0x37 + 2));
+                                 ((entity_t *)iVar12)[uVar16].base.y);
             }
             else {
               pcStack_13e = (char *)0x6fdf;

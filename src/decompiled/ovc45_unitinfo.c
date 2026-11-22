@@ -68,9 +68,9 @@ uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIn
     if (uVar1 == x) {
       uVar4 = (undefined2)((ulong)Entities >> 0x10);
       iVar2 = (int)Entities;
-      if ((((*(uint16_t *)(iVar2 + uVar3 * 0x37 + 2) == y) &&
+      if ((((((entity_t *)iVar2)[uVar3].base.y == y) &&
            (*(char *)((int)(char **)GMenuStrings +
-                     (uint)*(byte *)(iVar2 + uVar3 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0')) &&
+                     (uint)((entity_t *)iVar2)[uVar3].base.gindex * 0x95 + 0x1f) == '\0')) &&
           (slotMin < (int)(uint)*(byte *)(iVar2 + uVar3 * 0x37 + 0x1a))) &&
          (*(byte *)(iVar2 + uVar3 * 0x37 + 0x1a) < bStack_3)) {
         bStack_3 = *(byte *)(iVar2 + uVar3 * 0x37 + 0x1a);
@@ -120,13 +120,13 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
     if (uVar2 == uVar1) {
       uVar6 = (undefined2)((ulong)Entities >> 0x10);
       iVar3 = (int)Entities;
-      if (*(uint16_t *)(iVar3 + uVar4 * 0x37 + 2) == y) {
-        uVar2 = (uint)*(byte *)(iVar3 + uVar4 * 0x37 + 0xd) * 0x95;
+      if (((entity_t *)iVar3)[uVar4].base.y == y) {
+        uVar2 = (uint)((entity_t *)iVar3)[uVar4].base.gindex * 0x95;
         if (*(char *)((int)(char **)GMenuStrings + uVar2 + 0x1f) != '\0') {
           return (char *)(uVar2 & 0xff00);
         }
         if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 +
-                      (uint)*(byte *)(iVar3 + uVar4 * 0x37 + 0xd) * 0x95) != -1) &&
+                      (uint)((entity_t *)iVar3)[uVar4].base.gindex * 0x95) != -1) &&
            (*(char *)(iVar3 + uVar4 * 0x37 + 0x1a) != -1)) {
           if (*(char *)(iVar3 + uVar4 * 0x37 + 0x1a) == in_stack_00000010) {
             *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = uVar4;

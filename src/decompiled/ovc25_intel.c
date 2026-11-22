@@ -135,7 +135,7 @@ bool __cdecl16far ovc25_textArena(uint *foundIndexOut,char includeFlag8,uint16_t
       uVar4 = (int)(uVar2 - uVar1) >> 0xf;
       uVar8 = (undefined2)((ulong)Entities >> 0x10);
       iVar6 = (int)Entities;
-      uVar3 = *(int *)(iVar6 + uVar7 * 0x37 + 2) - in_stack_0000000e;
+      uVar3 = ((entity_t *)iVar6)[uVar7].base.y - in_stack_0000000e;
       uVar5 = (int)uVar3 >> 0xf;
       uVar2 = ((uVar2 - uVar1 ^ uVar4) - uVar4) + ((uVar3 ^ uVar5) - uVar5) * 2;
       if ((((uVar2 != 0) && (uVar2 < uStack_4)) &&
@@ -398,7 +398,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
                   *(int *)((entity_t *)iVar7 + uStack_c);
           uVar5 = (int)uVar2 >> 0xf;
           uVar3 = ((char_sheet_t *)((uStack_a << 2)))->y -
-                  *(int *)(iVar7 + uStack_c * 0x37 + 2);
+                  ((entity_t *)iVar7)[uStack_c].base.y;
           uVar6 = (int)uVar3 >> 0xf;
           piVar1 = (int *)((int)*(undefined4 *)(uStack_a << 2) + 0x45);
           *piVar1 = *piVar1 + 1;
@@ -416,13 +416,13 @@ void __cdecl16far ovc25_spyReportNotice(void)
           }
         }
         else if (*(char *)((int)(char **)GMenuStrings +
-                          (uint)*(byte *)(iVar7 + uStack_c * 0x37 + 0xd) * 0x95 + 0x1f) !=
+                          (uint)((entity_t *)iVar7)[uStack_c].base.gindex * 0x95 + 0x1f) !=
                  *(char *)((int)*(undefined4 *)(uStack_a << 2) + 0x3f)) {
           uVar2 = ((char_sheet_t *)((uStack_a << 2)))->x -
                   *(int *)((entity_t *)iVar7 + uStack_c);
           uVar5 = (int)uVar2 >> 0xf;
           uVar3 = ((char_sheet_t *)((uStack_a << 2)))->y -
-                  *(int *)(iVar7 + uStack_c * 0x37 + 2);
+                  ((entity_t *)iVar7)[uStack_c].base.y;
           uVar6 = (int)uVar3 >> 0xf;
           uVar2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((uVar3 ^ uVar6) - uVar6);
           if (uVar2 < uStack_e) {
@@ -723,15 +723,15 @@ void ovc25_usesAlignUp47(void)
     if (uVar3 == *(uint *)(unaff_BP + -6)) {
       uVar7 = (undefined2)((ulong)Entities >> 0x10);
       iVar5 = (int)Entities;
-      if (*(int *)(iVar5 + uVar6 * 0x37 + 2) == *(int *)(iVar5 + *(int *)(unaff_BP + -4) * 0x37 + 2)
+      if (((entity_t *)iVar5)[uVar6].base.y == *(int *)(iVar5 + *(int *)(unaff_BP + -4) * 0x37 + 2)
          ) {
         *(undefined1 *)(iVar5 + uVar6 * 0x37 + 0x19) = 1;
         uVar7 = (undefined2)((ulong)Entities >> 0x10);
         iVar5 = (int)Entities;
-        if (((*(int *)(iVar5 + uVar6 * 0x37 + 8) == 0) && (*(int *)(iVar5 + uVar6 * 0x37 + 10) == 0)
+        if (((((entity_t *)iVar5)[uVar6].base.destX == 0) && (((entity_t *)iVar5)[uVar6].base.destY == 0)
             ) && ((*(char *)(iVar5 + uVar6 * 0x37 + 0x18) == '\0' &&
                   ((*(char *)((int)(char **)GMenuStrings +
-                             (uint)*(byte *)(iVar5 + uVar6 * 0x37 + 0xd) * 0x95 + 0x1f) ==
+                             (uint)((entity_t *)iVar5)[uVar6].base.gindex * 0x95 + 0x1f) ==
                     *(char *)(unaff_BP + -0xd) &&
                    (*(int *)(unaff_BP + -0x10) = *(int *)(unaff_BP + -0x10) + 1,
                    (*(byte *)((int)Entities + uVar6 * 0x37 + 0x33) & 3) == 0)))))) {

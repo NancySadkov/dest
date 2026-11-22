@@ -301,18 +301,18 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
   uVar10 = (undefined2)((ulong)Entities >> 0x10);
   iVar9 = (int)Entities;
   if (*(char *)((int)(char **)GMenuStrings +
-               (uint)*(byte *)(iVar9 + entityIndex * 0x37 + 0xd) * 0x95 + 0x1f) == '\0') {
+               (uint)((entity_t *)iVar9)[entityIndex].base.gindex * 0x95 + 0x1f) == '\0') {
     uVar5 = 0;
   }
   else {
-    uVar5 = (uint)*(byte *)(iVar9 + entityIndex * 0x37 + 0xd) * 0x95;
+    uVar5 = (uint)((entity_t *)iVar9)[entityIndex].base.gindex * 0x95;
     if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + uVar5) & 0x80) == 0) {
       if (*(char *)(iVar9 + entityIndex * 0x37 + 0x18) == '\0') {
         iVar2 = *(int *)((entity_t *)iVar9 + entityIndex);
-        iVar3 = *(int *)(iVar9 + entityIndex * 0x37 + 2);
-        destX = *(uint16_t *)(iVar9 + entityIndex * 0x37 + 8);
-        destY = *(uint16_t *)(iVar9 + entityIndex * 0x37 + 10);
-        iVar9 = ovr_ovc07_signum(*(int *)(iVar9 + entityIndex * 0x37 + 8) - iVar2);
+        iVar3 = ((entity_t *)iVar9)[entityIndex].base.y;
+        destX = ((entity_t *)iVar9)[entityIndex].base.destX;
+        destY = ((entity_t *)iVar9)[entityIndex].base.destY;
+        iVar9 = ovr_ovc07_signum(((entity_t *)iVar9)[entityIndex].base.destX - iVar2);
         psStack_c = (short *)ovr_ovc07_signum(*(int *)((int)Entities + entityIndex * 0x37 + 10) -
                                               iVar3);
         psVar6 = psStack_c;

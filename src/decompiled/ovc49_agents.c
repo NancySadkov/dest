@@ -4196,8 +4196,8 @@ L_OVC49_8699_1e09_3CF7:
       }
       uVar13 = (undefined2)((ulong)Entities >> 0x10);
       iVar17 = (int)Entities;
-    } while ((*(char *)(iVar17 + uVar10 * 0x37 + 0xe) != '\0') ||
-            (iVar14 = *(int *)(iVar17 + uVar10 * 0x37 + 2),
+    } while ((((entity_t *)iVar17)[uVar10].base.animFrame != '\0') ||
+            (iVar14 = ((entity_t *)iVar17)[uVar10].base.y,
             uVar13 = ovr_ovc23_isCursorAt(*(uint16_t *)((entity_t *)iVar17 + uVar10),iVar14,(char)iVar14)
             , (char)uVar13 == '\0'));
     uStack_22 = (uint)AgntCount;

@@ -36,15 +36,15 @@ void __cdecl16far ovc24_usesAlignUp4(void)
     iVar4 = (int)Entities;
     if (*(char *)(iVar4 + uVar7 * 0x37 + 0x18) == '\0') {
       cVar1 = *(char *)((int)(char **)GMenuStrings +
-                       (uint)*(byte *)(iVar4 + uVar7 * 0x37 + 0xd) * 0x95 + 0x1f);
+                       (uint)((entity_t *)iVar4)[uVar7].base.gindex * 0x95 + 0x1f);
       uVar2 = alignUp4(*(int *)((entity_t *)iVar4 + uVar7));
       iVar4 = *(int *)((int)Entities + uVar7 * 0x37 + 2);
       for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
         uVar8 = (undefined2)((ulong)Entities >> 0x10);
         iVar5 = (int)Entities;
-        if (((*(int *)(iVar5 + uVar6 * 0x37 + 2) == iVar4) &&
+        if (((((entity_t *)iVar5)[uVar6].base.y == iVar4) &&
             (*(char *)((int)(char **)GMenuStrings +
-                      (uint)*(byte *)(iVar5 + uVar6 * 0x37 + 0xd) * 0x95 + 0x1f) != cVar1)) &&
+                      (uint)((entity_t *)iVar5)[uVar6].base.gindex * 0x95 + 0x1f) != cVar1)) &&
            (uVar3 = alignUp4(*(int *)((entity_t *)iVar5 + uVar6)), uVar3 == uVar2)) {
           *(undefined1 *)((int)Entities + uVar7 * 0x37 + 0x18) = 1;
           *(undefined1 *)((int)Entities + uVar6 * 0x37 + 0x18) = 1;
@@ -443,7 +443,7 @@ void __cdecl16far ovc24_removeOtherEntities(uint8_t *reportedOut,...)
       iVar3 = (int)Entities;
       if ((*(char *)(iVar3 + uVar4 * 0x37 + 0x18) != '\0') &&
          (*(char *)(iVar3 + uVar4 * 0x37 + 0x19) == '\0')) {
-        if ((GOngoingBattle == '\0') && (*(int *)(iVar3 + uVar4 * 0x37 + 2) == GfxRndSeed2)) {
+        if ((GOngoingBattle == '\0') && (((entity_t *)iVar3)[uVar4].base.y == GfxRndSeed2)) {
           uVar1 = alignUp4(*(int *)((entity_t *)iVar3 + uVar4));
           uVar2 = alignUp4(GfxRndSeed);
           if (uVar1 == uVar2) goto L_OVC24_5943_0d5a_0E37;
@@ -458,11 +458,11 @@ L_OVC24_5943_0d5a_0E37:
     while (uVar4 = uVar4 - 1, -1 < (int)uVar4) {
       uVar5 = (undefined2)((ulong)Entities >> 0x10);
       iVar3 = (int)Entities;
-      if (*(char *)(iVar3 + uVar4 * 0x37 + 0xe) == '\0') {
+      if (((entity_t *)iVar3)[uVar4].base.animFrame == '\0') {
         if ((GOngoingBattle == '\0') &&
            (uVar5 = ovr_ovc23_isCursorAt
                               (*(uint16_t *)((entity_t *)iVar3 + uVar4),
-                               *(int *)(iVar3 + uVar4 * 0x37 + 2)), (char)uVar5 != '\0')) {
+                               ((entity_t *)iVar3)[uVar4].base.y), (char)uVar5 != '\0')) {
           uVar1 = (uint)AgntCount;
           do {
             uVar1 = uVar1 - 1;
@@ -897,13 +897,13 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
     uVar4 = alignUp4(*(int *)((int)Entities + entityIndex * 0x37));
     uVar10 = (undefined2)((ulong)Entities >> 0x10);
     iVar8 = (int)Entities;
-    iVar6 = *(int *)(iVar8 + entityIndex * 0x37 + 2);
+    iVar6 = ((entity_t *)iVar8)[entityIndex].base.y;
     if (*(char *)(iVar8 + entityIndex * 0x37 + 0x18) == '\0') {
       bVar2 = false;
       for (uVar9 = 0; uVar9 < EntityCount; uVar9 = uVar9 + 1) {
         if (((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                       (uint)*(byte *)(iVar8 + uVar9 * 0x37 + 0xd) * 0x95) & 1) != 0) &&
-           (5 < *(byte *)(iVar8 + uVar9 * 0x37 + 0xf))) {
+                       (uint)((entity_t *)iVar8)[uVar9].base.gindex * 0x95) & 1) != 0) &&
+           (5 < ((entity_t *)iVar8)[uVar9].base.level)) {
           bVar2 = true;
           break;
         }
@@ -943,12 +943,12 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
         uVar10 = (undefined2)((ulong)Entities >> 0x10);
         if ((EntityCount <= uVar4) ||
            ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 +
-                      (uint)*(byte *)(iVar6 + uVar4 * 0x37 + 0xd) * 0x95) & 4) != 0)) break;
+                      (uint)((entity_t *)iVar6)[uVar4].base.gindex * 0x95) & 4) != 0)) break;
         uVar4 = uVar4 + 1;
       }
       if (uVar4 < EntityCount) {
         alignUp4(*(int *)((entity_t *)iVar6 + entityIndex),
-                 *(undefined2 *)(iVar6 + entityIndex * 0x37 + 2),0xa000);
+                 ((entity_t *)iVar6)[entityIndex].base.y,0xa000);
         iVar6 = (uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0xd) * 0x95;
         uVar5 = 0x195d;
         pcVar7 = ovr_fmVsprintf("Intelligence reports %s unit succombs to blast spore disease. (%d, %d)"
