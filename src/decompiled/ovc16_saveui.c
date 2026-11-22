@@ -1063,7 +1063,7 @@ switchD_4000_6642_caseD_3:
   }
   else if (((char)uStack_18 != '\0') && ((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) != '\0')) {
     pcStack_22 = (char *)CONCAT22(menuLabel,unaff_DI);
-    uVar7 = func_0x0004f944();
+    uVar7 = manage_usesLitoa103();
     uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),uVar7);
     while ((char)uStack_1a != '\0') {
       uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
@@ -1151,7 +1151,7 @@ switchD_4000_6642_caseD_3:
           pcStack_22 = (char *)CONCAT22(menuLabel,unaff_SS);
           uStackY_2c = 0x2379;
           uStackY_2e = 0x204;
-          func_0x0004fb8e();
+          manage_usesCurSfxType32();
         }
         uVar18 = (undefined2)((ulong)uStack_1e >> 0x10);
         peVar14 = (entity_t *)uStack_1e;
@@ -1198,7 +1198,7 @@ switchD_4000_6642_caseD_3:
           if ((char)uVar10 != '\0') {
             uStackY_2c = 0x2337;
             uStackY_2e = 0x399;
-            cVar6 = func_0x0004f412();
+            cVar6 = sub_OVC21_manage_c_23C2();
             if (cVar6 == '\0') {
               (uStack_1e->base).x = (uStack_1e->base).x + iStack_12;
               (((entity_t *)uStack_1e)->base).target = 0x2 - (char)iStack_12;
@@ -1209,7 +1209,7 @@ switchD_4000_6642_caseD_3:
         if (iStack_14 != 0) {
           uStackY_2e = 0x3d8;
           uStackY_2c = uVar18;
-          cVar6 = func_0x0004f412();
+          cVar6 = sub_OVC21_manage_c_23C2();
           if (cVar6 == '\0') {
             uVar19 = (undefined2)((ulong)uStack_1e >> 0x10);
             puVar2 = &(((entity_t *)uStack_1e)->base).y;
@@ -1221,7 +1221,7 @@ switchD_4000_6642_caseD_3:
         if (iStack_12 != 0) {
           uStackY_2e = 0x418;
           uStackY_2c = uVar18;
-          cVar6 = func_0x0004f412();
+          cVar6 = sub_OVC21_manage_c_23C2();
           if (cVar6 == '\0') {
             (uStack_1e->base).x = (uStack_1e->base).x + iStack_12;
             (((entity_t *)uStack_1e)->base).target = 0x2 - (char)iStack_12;
@@ -1239,7 +1239,7 @@ switchD_4000_6642_caseD_3:
                        (uint)(((entity_t *)uStack_1e)->base).gindex * 0x95 + 0x1f) == '\0')) {
             uStackY_2c = 0x2386;
             uStackY_2e = 0x524;
-            func_0x0004fb8e();
+            manage_usesCurSfxType32();
           }
         }
         else {

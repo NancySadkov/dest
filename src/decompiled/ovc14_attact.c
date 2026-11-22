@@ -712,7 +712,7 @@ void __cdecl16far attact_usesAlignUp42(void)
     uVar15 = 0x2379;
     uVar9 = ovr_alignUp4((uStack_1e->base).x);
     if ((uVar8 == uVar9) && ((peVar14->base).destY == (peVar14->base).y)) {
-      func_0x0004fb8e(0x2379,index,(peVar14->base).destX,(peVar14->base).destY);
+      manage_usesCurSfxType32(0x2379,index,(peVar14->base).destX,(peVar14->base).destY);
     }
     if (((peVar14->base).destX != 0 || (peVar14->base).destY != 0) &&
        (*(char *)((int)&(peVar14->base).entity + 1) == '\0')) {
@@ -751,7 +751,7 @@ void __cdecl16far attact_usesAlignUp42(void)
           uVar15 = 0x2337;
           uVar10 = ovr_randBelow(2);
           if ((char)uVar10 != '\0') {
-            cVar5 = func_0x0004f412(0x2337,uStack_6,uStack_8,'\x02' - (char)iStack_12,uStack_f,
+            cVar5 = sub_OVC21_manage_c_23C2(0x2337,uStack_6,uStack_8,'\x02' - (char)iStack_12,uStack_f,
                                     uStack_3);
             if (cVar5 == '\0') {
               (uStack_1e->base).x = (uStack_1e->base).x + iStack_12;
@@ -761,7 +761,7 @@ void __cdecl16far attact_usesAlignUp42(void)
           }
         }
         if (iStack_14 != 0) {
-          cVar5 = func_0x0004f412(uVar15,uStack_6,uStack_8,(char)iStack_14 + '\x01',uStack_f,
+          cVar5 = sub_OVC21_manage_c_23C2(uVar15,uStack_6,uStack_8,(char)iStack_14 + '\x01',uStack_f,
                                   uStack_3);
           if (cVar5 == '\0') {
             puVar1 = &(peVar14->base).y;
@@ -771,7 +771,7 @@ void __cdecl16far attact_usesAlignUp42(void)
           }
         }
         if (iStack_12 != 0) {
-          cVar5 = func_0x0004f412(uVar15,uStack_6,uStack_8,'\x02' - (char)iStack_12,uStack_f,
+          cVar5 = sub_OVC21_manage_c_23C2(uVar15,uStack_6,uStack_8,'\x02' - (char)iStack_12,uStack_f,
                                   uStack_3);
           if (cVar5 == '\0') {
             (uStack_1e->base).x = (uStack_1e->base).x + iStack_12;
@@ -786,7 +786,7 @@ void __cdecl16far attact_usesAlignUp42(void)
           if (((uVar8 & 0xff) == 0) &&
              (*(char *)((int)(char **)GMenuStrings + (uint)(peVar14->base).gindex * 0x95 + 0x1f) ==
               '\0')) {
-            func_0x0004fb8e(0x2386,index,(peVar14->base).targetX,(peVar14->base).targetY);
+            manage_usesCurSfxType32(0x2386,index,(peVar14->base).targetX,(peVar14->base).targetY);
           }
         }
         else {
@@ -858,7 +858,7 @@ L_attact_3f0b_1082_1477:
         if (bVar7 || bVar6) {
           if (bVar7) {
             if (bVar6) {
-              for (cStack_1a = func_0x0004f944(); cStack_1a != '\0'; cStack_1a = cStack_1a + -1) {
+              for (cStack_1a = manage_usesLitoa103(); cStack_1a != '\0'; cStack_1a = cStack_1a + -1) {
                 if (((peVar14->base).target & 1) == 0) {
                   iStack_16 = 0;
                 }

@@ -1092,7 +1092,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
       uVar31 = 0x6f;
       uVar25 = 0x23;
       bVar38 = (byte)index;
-      callResultTemp = func_0x0004f501();
+      callResultTemp = sub_OVC21_manage_c_24B1();
       if (callResultTemp < CONCAT11(uVar25,uVar31)) {
         uVar31 = (uint8_t)callResultTemp;
         uVar25 = (undefined1)(callResultTemp >> 8);
@@ -1349,7 +1349,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
       return pcVar16;
     }
     ovr_ovc45_compute9(acStack_1b6);
-    func_0x0005d3f4();
+    SUB_5b66_1d94();
     uStack_20 = 0x23f1;
     uStack_22 = 0x44;
     pcVar16 = ovr_stsprintf(acStack_13e,(char *)CONCAT13(0x55,CONCAT12(10,unaff_SS)));
@@ -1377,7 +1377,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
         uVar7 = *(undefined4 *)((index & 0xff) << 2);
         ovr_blitLabel((char *)auStack_11a[iVar23 * 2 + (uint)*(byte *)((int)uVar7 + 0x2f) * 8]);
       }
-      func_0x0005f303();
+      ovc27_textCharmed();
       ovr_stsprintf(acStack_13e,(char *)CONCAT13(0x4c,CONCAT12(0xd1,unaff_SS)));
       iVar24 = ovr_font_textWidth(acStack_13e);
       TextBlitX = 0x89 - iVar24;
@@ -1534,7 +1534,7 @@ L_attact_3f0b_1082_1477:
       if (bVar11 || bVar10) {
         if (bVar11) {
           if (bVar10) {
-            cVar9 = func_0x0004f944();
+            cVar9 = manage_usesLitoa103();
             while ((cVar9 != '\0' &&
                    (pcVar16 = ovr_ovc15_textArena((int)unaff_DI), ((uint)pcVar16 & 0xff) != 0))) {
               cVar9 = cVar9 + -1;
@@ -1604,7 +1604,7 @@ L_attact_3f0b_1082_1477:
       uVar32 = (undefined1)(uVar14 >> 8);
       uVar14 = ovr_alignUp4((((entity_t *)CONCAT22(unaff_ES,peVar27))->base).x);
       if ((CONCAT11(uVar32,uVar25) == uVar14) && ((peVar27->base).destY == (peVar27->base).y)) {
-        func_0x0004fb8e();
+        manage_usesCurSfxType32();
       }
     } while (((peVar27->base).destX == 0 && (peVar27->base).destY == 0) ||
             (*(char *)((int)&(peVar27->base).entity + 1) != '\0'));
@@ -1623,10 +1623,10 @@ L_attact_3f0b_1082_1477:
   if (((CONCAT11(uVar32,cVar30) == 0) ||
       (uVar13 = ovr_randBelow(2), in_stack_0000ffe2 = peVar27, in_stack_0000ffe4 = unaff_ES,
       (char)uVar13 == '\0')) ||
-     (cVar8 = func_0x0004f412(), in_stack_0000ffe2 = peVar27, in_stack_0000ffe4 = unaff_ES,
+     (cVar8 = sub_OVC21_manage_c_23C2(), in_stack_0000ffe2 = peVar27, in_stack_0000ffe4 = unaff_ES,
      cVar8 != '\0')) {
-    if ((CONCAT11(uVar25,cVar9) == 0) || (cVar8 = func_0x0004f412(), cVar8 != '\0')) {
-      if ((CONCAT11(uVar32,cVar30) == 0) || (cVar9 = func_0x0004f412(), cVar9 != '\0')) {
+    if ((CONCAT11(uVar25,cVar9) == 0) || (cVar8 = sub_OVC21_manage_c_23C2(), cVar8 != '\0')) {
+      if ((CONCAT11(uVar32,cVar30) == 0) || (cVar9 = sub_OVC21_manage_c_23C2(), cVar9 != '\0')) {
         uVar14 = ovr_ovc26_usesStExit((int)unaff_DI);
         if ((char)uVar14 == '\0') {
           uVar14 = ovr_ovc26_usesRandBelow((int)unaff_DI,(uint16_t)&stk_ffe9);
@@ -1635,7 +1635,7 @@ L_attact_3f0b_1082_1477:
             uVar13 = 0x195d;
 switchD_4000_e2bf_caseD_6:
             if (peVar27[0xb4].base.teamCode == 0x0) {
-              func_0x0004fb8e();
+              manage_usesCurSfxType32();
             }
           }
         }
@@ -2971,7 +2971,9 @@ void manage_textAllProperty2(void)
 
 /* [R4] calls litoa10 */
 
-undefined2 __cdecl16far manage_usesLitoa103(undefined2 param_1,int param_2)
+undefined2 __cdecl16far manage_usesLitoa103(param_1,param_2)
+undefined2 param_1;
+int param_2;
 
 {
   long lVar1;
@@ -3435,7 +3437,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
     uVar5 = Font02.ofs;
     ovr_ovc45_compute9(acStack_1b6,(char *)CONCAT22(iStack_12,unaff_SS),
                        (char *)CONCAT22(Font02.ofs,uStack_10),Font02.seg,'K');
-    func_0x0005d3f4();
+    SUB_5b66_1d94();
     puVar14 = (uint8_t *)((char *)0x26510);
     pcVar17 = ovr_stsprintf(acStack_13e,(char *)CONCAT22(0x550a,unaff_SS),
                             (char *)CONCAT22(*(undefined2 *)
@@ -3466,7 +3468,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
                       (uint8_t *)
                       CONCAT22(Font02.ofs,(uint8_t *)auStack_11a[iVar9 * 2 + uVar6 * 8 + 1]));
       }
-      func_0x0005f303();
+      ovc27_textCharmed();
       ovr_stsprintf(acStack_13e,(char *)CONCAT13(0x4c,CONCAT12(0xd1,unaff_SS)));
       iVar10 = ovr_font_textWidth(acStack_13e);
       TextBlitX = 0x89 - iVar10;
@@ -3620,7 +3622,7 @@ L_attact_3f0b_1082_1477:
           cStack_1a = -1;
         }
         else if ((cStack_18 != '\0') && (cStack_19 != '\0')) {
-          for (cStack_1a = func_0x0004f944(); cStack_1a != '\0'; cStack_1a = cStack_1a + -1) {
+          for (cStack_1a = manage_usesLitoa103(); cStack_1a != '\0'; cStack_1a = cStack_1a + -1) {
             uVar18 = (undefined2)((ulong)peStack_1e >> 0x10);
             if (((((entity_t *)peStack_1e)->base).target & 1) == 0) {
               iStack_16 = 0;
@@ -3680,7 +3682,7 @@ L_attact_3f0b_1082_1477:
       if ((uVar6 == uVar7) &&
          (uVar18 = (undefined2)((ulong)peStack_1e >> 0x10),
          (((entity_t *)peStack_1e)->base).destY == (((entity_t *)peStack_1e)->base).y)) {
-        func_0x0004fb8e();
+        manage_usesCurSfxType32();
       }
       unaff_ES = (undefined2)((ulong)peStack_1e >> 0x10);
       peVar15 = (entity_t *)peStack_1e;
@@ -3705,16 +3707,16 @@ L_attact_3f0b_1082_1477:
   iStack_14 = ovr_ovc07_signum((((entity_t *)peStack_1e)->base).destY -
                                (((entity_t *)peStack_1e)->base).y);
   if (((iStack_12 == 0) || (uVar5 = ovr_randBelow(2), (char)uVar5 == '\0')) ||
-     (cVar4 = func_0x0004f412(), cVar4 != '\0')) {
-    if ((iStack_14 == 0) || (cVar4 = func_0x0004f412(), cVar4 != '\0')) {
-      if ((iStack_12 == 0) || (cVar4 = func_0x0004f412(), cVar4 != '\0')) {
+     (cVar4 = sub_OVC21_manage_c_23C2(), cVar4 != '\0')) {
+    if ((iStack_14 == 0) || (cVar4 = sub_OVC21_manage_c_23C2(), cVar4 != '\0')) {
+      if ((iStack_12 == 0) || (cVar4 = sub_OVC21_manage_c_23C2(), cVar4 != '\0')) {
         uVar6 = ovr_ovc26_usesStExit((int)count);
         if ((char)uVar6 == '\0') {
           uVar6 = ovr_ovc26_usesRandBelow((int)count,(uint16_t)&uStack_17);
           if (((uVar6 & 0xff) == 0) &&
              (*(char *)((int)(char **)GMenuStrings +
                        (uint)(((entity_t *)peStack_1e)->base).gindex * 0x95 + 0x1f) == '\0')) {
-            func_0x0004fb8e();
+            manage_usesCurSfxType32();
           }
         }
         else {

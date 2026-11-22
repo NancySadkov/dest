@@ -157,7 +157,7 @@ L_attact_3f0b_26bd_2767:
               }
               uVar13 = ovr_ovc23_isCursorAt(*(uint16_t *)((int)Entities + uVar11 * 0x37));
             } while ((char)uVar13 == '\0');
-            destY = func_0x0004f944();
+            destY = manage_usesLitoa103();
           }
         } while( true );
       case 3:

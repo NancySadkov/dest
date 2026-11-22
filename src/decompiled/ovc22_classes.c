@@ -883,7 +883,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
                 ovr_blitLabel((char *)auStackY_11a
                                       [(int)puVar49 * 2 + (uint)*(byte *)((int)uVar11 + 0x2f) * 8]);
                 while( true ) {
-                  func_0x0005f303();
+                  ovc27_textCharmed();
                   ovr_stsprintf(acStackY_13e);
                   iVar30 = ovr_font_textWidth(acStackY_13e);
                   TextBlitX = 0x89 - iVar30;

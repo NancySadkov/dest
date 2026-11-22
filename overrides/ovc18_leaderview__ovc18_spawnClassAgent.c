@@ -227,7 +227,7 @@ ovc18_spawnClassAgent
         *(undefined1 *)&in_stack_00000004[-0x1be0].seg = 0;
       }
       else {
-        callResultTemp = func_0x0004f501();
+        callResultTemp = sub_OVC21_manage_c_24B1();
         if (callResultTemp < (char *)filename) {
           filename = (char *)CONCAT22((int)((ulong)filename >> 0x10),callResultTemp);
           *(char *)&in_stack_00000004[-0x1be0].seg = (char)callResultTemp;

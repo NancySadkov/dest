@@ -1050,7 +1050,10 @@ void __cdecl16far ovc25_tickCountdown(int partyIndex,...)
 /* WARNING: Instruction at (ram,0x0005d43a) overlaps instruction at (ram,0x0005d438)
     */
 
-undefined2 __cdecl16far SUB_5b66_1d94(int param_1,int param_2,char param_3)
+undefined2 __cdecl16far SUB_5b66_1d94(param_1,param_2,param_3)
+int param_1;
+int param_2;
+char param_3;
 
 {
   uint *puVar1;

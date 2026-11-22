@@ -2374,7 +2374,7 @@ L_manage_4d05_2d79_2EE8:
             uVar41 = 0;
             ovr_ovc45_compute9(acStackY_1b6,(char *)CONCAT22(Font02.seg,unaff_SS),
                                (char *)CONCAT22(Font02.ofs,(char *)0xde),Font02.seg,'K');
-            func_0x0005d3f4();
+            SUB_5b66_1d94();
             uVar32 = 0x2410;
             uStackY_2a = 0x23f1;
             uStackY_2c = 0x44;
@@ -2416,7 +2416,7 @@ L_manage_4d05_2d79_2EE8:
                               CONCAT13(uVar10,CONCAT12((char)Font02.ofs,
                                                        auStackY_11a[iVar39 * 2 + uVar16 * 8 + 1])));
               }
-              func_0x0005f303();
+              ovc27_textCharmed();
               ovr_stsprintf(acStackY_13e);
               iVar20 = ovr_font_textWidth(acStackY_13e);
               TextBlitX = 0x89 - iVar20;
@@ -2690,7 +2690,7 @@ L_attact_3f0b_1082_1477:
       if (bVar9 || bVar36) {
         if (bVar9) {
           if (bVar36) {
-            uVar10 = func_0x0004f944();
+            uVar10 = manage_usesLitoa103();
             for (uVar37 = CONCAT31((int3)(uVar37 >> 8),uVar10); uVar5 = 0x23, (char)uVar37 != '\0';
                 uVar37 = CONCAT31((int3)(uVar37 >> 8),(char)uVar37 + -1)) {
               uVar5 = 0x23;
@@ -2781,7 +2781,7 @@ L_attact_3f0b_1082_1477:
          (((entity_t *)in_stack_0000ffe2)->base).destY == (((entity_t *)in_stack_0000ffe2)->base).y)
          ) {
         uVar37 = 0x23790204;
-        func_0x0004fb8e();
+        manage_usesCurSfxType32();
       }
       uVar34 = (undefined2)((ulong)in_stack_0000ffe2 >> 0x10);
       peVar29 = (entity_t *)in_stack_0000ffe2;
@@ -2809,7 +2809,7 @@ L_attact_3f0b_1082_130A:
       if (CONCAT11(uVar40,bVar7) != 0) {
         uVar23 = (undefined1)(uVar25 >> 8);
         cVar6 = bVar7 + 1;
-        bVar7 = func_0x0004f412();
+        bVar7 = sub_OVC21_manage_c_23C2();
         uVar25 = (uint16_t)bVar7;
         if (uVar25 == 0) {
           uVar32 = (undefined2)((ulong)in_stack_0000ffe2 >> 0x10);
@@ -2822,7 +2822,7 @@ L_attact_3f0b_1082_130A:
       if (CONCAT11(uVar23,cVar6) != 0) {
         uVar24 = (undefined1)(uVar25 >> 8);
         cVar6 = '\x02' - cVar6;
-        cVar8 = func_0x0004f412();
+        cVar8 = sub_OVC21_manage_c_23C2();
         if (cVar8 == '\0') {
           (in_stack_0000ffe2->base).x = (in_stack_0000ffe2->base).x + CONCAT11(uVar24,cVar6);
           (((entity_t *)in_stack_0000ffe2)->base).target = 0x2 - cVar6;
@@ -2835,7 +2835,7 @@ L_attact_3f0b_1082_130A:
         if (((uVar16 & 0xff) == 0) &&
            (*(char *)((int)(char **)GMenuStrings +
                      (uint)(((entity_t *)in_stack_0000ffe2)->base).gindex * 0x95 + 0x1f) == '\0')) {
-          func_0x0004fb8e();
+          manage_usesCurSfxType32();
         }
       }
       else {
@@ -2867,7 +2867,7 @@ L_attact_3f0b_1082_130A:
     cVar6 = '\x02' - cVar6;
     bVar43 = bVar44;
     uVar10 = uVar24;
-    bVar7 = func_0x0004f412();
+    bVar7 = sub_OVC21_manage_c_23C2();
     uVar25 = (uint16_t)bVar7;
     bVar7 = bVar44;
     uVar40 = uVar24;

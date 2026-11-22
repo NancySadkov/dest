@@ -224,7 +224,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
         uVar5 = *(undefined4 *)((partyIndex & 0xff) << 2);
         ovr_blitLabel((char *)auStackY_11a[iVar25 * 2 + (uint)*(byte *)((int)uVar5 + 0x2f) * 8]);
       }
-      func_0x0005f303();
+      ovc27_textCharmed();
       ovr_stsprintf(acStackY_13e);
       iVar12 = ovr_font_textWidth(acStackY_13e);
       TextBlitX = 0x89 - iVar12;

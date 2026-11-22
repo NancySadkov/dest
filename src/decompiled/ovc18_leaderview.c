@@ -356,7 +356,7 @@ ovc18_spawnClassAgent
         *(undefined1 *)&in_stack_00000004[-0x1be0].seg = 0;
       }
       else {
-        callResultTemp = func_0x0004f501();
+        callResultTemp = sub_OVC21_manage_c_24B1();
         if (callResultTemp < (char *)filename) {
           filename = (char *)CONCAT22((int)((ulong)filename >> 0x10),callResultTemp);
           *(char *)&in_stack_00000004[-0x1be0].seg = (char)callResultTemp;
@@ -564,7 +564,7 @@ L_attact_3f0b_26bd_2767:
               }
               uVar13 = ovr_ovc23_isCursorAt(*(uint16_t *)((int)Entities + uVar11 * 0x37));
             } while ((char)uVar13 == '\0');
-            destY = func_0x0004f944();
+            destY = manage_usesLitoa103();
           }
         } while( true );
       case 3:

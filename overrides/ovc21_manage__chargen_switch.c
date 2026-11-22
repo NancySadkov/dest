@@ -139,7 +139,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
       uVar31 = 0x6f;
       uVar25 = 0x23;
       bVar38 = (byte)index;
-      callResultTemp = func_0x0004f501();
+      callResultTemp = sub_OVC21_manage_c_24B1();
       if (callResultTemp < CONCAT11(uVar25,uVar31)) {
         uVar31 = (uint8_t)callResultTemp;
         uVar25 = (undefined1)(callResultTemp >> 8);
@@ -396,7 +396,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
       return pcVar16;
     }
     ovr_ovc45_compute9(acStack_1b6);
-    func_0x0005d3f4();
+    SUB_5b66_1d94();
     uStack_20 = 0x23f1;
     uStack_22 = 0x44;
     pcVar16 = ovr_stsprintf(acStack_13e,(char *)CONCAT13(0x55,CONCAT12(10,unaff_SS)));
@@ -424,7 +424,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
         uVar7 = *(undefined4 *)((index & 0xff) << 2);
         ovr_blitLabel((char *)auStack_11a[iVar23 * 2 + (uint)*(byte *)((int)uVar7 + 0x2f) * 8]);
       }
-      func_0x0005f303();
+      ovc27_textCharmed();
       ovr_stsprintf(acStack_13e,(char *)CONCAT13(0x4c,CONCAT12(0xd1,unaff_SS)));
       iVar24 = ovr_font_textWidth(acStack_13e);
       TextBlitX = 0x89 - iVar24;
@@ -581,7 +581,7 @@ L_attact_3f0b_1082_1477:
       if (bVar11 || bVar10) {
         if (bVar11) {
           if (bVar10) {
-            cVar9 = func_0x0004f944();
+            cVar9 = manage_usesLitoa103();
             while ((cVar9 != '\0' &&
                    (pcVar16 = ovr_ovc15_textArena((int)unaff_DI), ((uint)pcVar16 & 0xff) != 0))) {
               cVar9 = cVar9 + -1;
@@ -651,7 +651,7 @@ L_attact_3f0b_1082_1477:
       uVar32 = (undefined1)(uVar14 >> 8);
       uVar14 = ovr_alignUp4((((entity_t *)CONCAT22(unaff_ES,peVar27))->base).x);
       if ((CONCAT11(uVar32,uVar25) == uVar14) && ((peVar27->base).destY == (peVar27->base).y)) {
-        func_0x0004fb8e();
+        manage_usesCurSfxType32();
       }
     } while (((peVar27->base).destX == 0 && (peVar27->base).destY == 0) ||
             (*(char *)((int)&(peVar27->base).entity + 1) != '\0'));
@@ -670,10 +670,10 @@ L_attact_3f0b_1082_1477:
   if (((CONCAT11(uVar32,cVar30) == 0) ||
       (uVar13 = ovr_randBelow(2), in_stack_0000ffe2 = peVar27, in_stack_0000ffe4 = unaff_ES,
       (char)uVar13 == '\0')) ||
-     (cVar8 = func_0x0004f412(), in_stack_0000ffe2 = peVar27, in_stack_0000ffe4 = unaff_ES,
+     (cVar8 = sub_OVC21_manage_c_23C2(), in_stack_0000ffe2 = peVar27, in_stack_0000ffe4 = unaff_ES,
      cVar8 != '\0')) {
-    if ((CONCAT11(uVar25,cVar9) == 0) || (cVar8 = func_0x0004f412(), cVar8 != '\0')) {
-      if ((CONCAT11(uVar32,cVar30) == 0) || (cVar9 = func_0x0004f412(), cVar9 != '\0')) {
+    if ((CONCAT11(uVar25,cVar9) == 0) || (cVar8 = sub_OVC21_manage_c_23C2(), cVar8 != '\0')) {
+      if ((CONCAT11(uVar32,cVar30) == 0) || (cVar9 = sub_OVC21_manage_c_23C2(), cVar9 != '\0')) {
         uVar14 = ovr_ovc26_usesStExit((int)unaff_DI);
         if ((char)uVar14 == '\0') {
           uVar14 = ovr_ovc26_usesRandBelow((int)unaff_DI,(uint16_t)&stack0xffe9);
@@ -682,7 +682,7 @@ L_attact_3f0b_1082_1477:
             uVar13 = 0x195d;
 switchD_4000_e2bf_caseD_6:
             if (peVar27[0xb4].base.teamCode == 0x0) {
-              func_0x0004fb8e();
+              manage_usesCurSfxType32();
             }
           }
         }
