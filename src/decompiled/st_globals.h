@@ -589,6 +589,7 @@ extern char far *GMenuStrings[8];
 extern char far *GYesNo[2];
 extern uint16_t GSeed;
 extern uint16_t SeedHi;
+extern uint8_t seedHiExtra[20];
 extern far_t worldMenuLabels[13];
 extern char s__Empty__2410_272b[];
 extern char s_more[];
