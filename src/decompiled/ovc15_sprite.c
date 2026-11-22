@@ -453,80 +453,80 @@ void __cdecl16far ovc15_usesAgntIndex(void)
 
 {
   uint agntIndex;
-  int iVar1;
-  int iVar2;
-  int iVar3;
-  uint16_t uVar4;
+  int entitiesOfs;
+  int bottomIdx;
+  int topIdx;
+  uint16_t entitiesSeg;
   uint16_t unaff_SS;
   uint8_t agentIndices;
-  uint uStack_a;
-  uint uStack_8;
-  int iStack_6;
-  uint uStack_4;
+  uint linesBottom;
+  uint linesTop;
+  int count;
+  uint i;
   
   ovc15_clearVisited();
-  iStack_6 = 0;
-  for (uStack_4 = 0; uStack_4 < EntityCount; uStack_4 = uStack_4 + 1) {
-    uVar4 = (uint16_t)((ulong)Entities >> 0x10);
-    iVar2 = (int)Entities;
-    if (((GfxRndSeed - 2U <= *(uint *)((entity_t *)iVar2 + uStack_4)) &&
-        (*(uint *)((entity_t *)iVar2 + uStack_4) <= GfxRndSeed + 1U)) &&
-       (((entity_t *)iVar2)[uStack_4].base.y == GfxRndSeed2)) {
-      *(uint *)(&agentIndices + iStack_6 * 2) = uStack_4;
-      iStack_6 = iStack_6 + 1;
+  count = 0;
+  for (i = 0; i < EntityCount; i = i + 1) {
+    entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
+    bottomIdx = (int)Entities;
+    if (((GfxRndSeed - 2U <= *(uint *)((entity_t *)bottomIdx + i)) &&
+        (*(uint *)((entity_t *)bottomIdx + i) <= GfxRndSeed + 1U)) &&
+       (((entity_t *)bottomIdx)[i].base.y == GfxRndSeed2)) {
+      *(uint *)(&agentIndices + count * 2) = i;
+      count = count + 1;
     }
   }
-  iVar3 = 0;
-  iVar2 = 0;
-  while ((iVar2 < iStack_6 || (iVar3 < iStack_6))) {
+  topIdx = 0;
+  bottomIdx = 0;
+  while ((bottomIdx < count || (topIdx < count))) {
     while( true ) {
-      iVar1 = (int)Entities;
-      uVar4 = (uint16_t)((ulong)Entities >> 0x10);
-      if ((iStack_6 <= iVar3) ||
+      entitiesOfs = (int)Entities;
+      entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
+      if ((count <= topIdx) ||
          (*(char *)((int)(char **)GMenuStrings +
-                   (uint)*(byte *)(iVar1 + *(int *)(&agentIndices + iVar3 * 2) * 0x37 + 0xd) * 0x95
+                   (uint)*(byte *)(entitiesOfs + *(int *)(&agentIndices + topIdx * 2) * 0x37 + 0xd) * 0x95
                    + 0x1f) == '\x01')) break;
-      iVar3 = iVar3 + 1;
+      topIdx = topIdx + 1;
     }
-    while ((iVar2 < iStack_6 &&
+    while ((bottomIdx < count &&
            (*(char *)((int)(char **)GMenuStrings +
-                     (uint)*(byte *)(iVar1 + *(int *)(&agentIndices + iVar2 * 2) * 0x37 + 0xd) *
+                     (uint)*(byte *)(entitiesOfs + *(int *)(&agentIndices + bottomIdx * 2) * 0x37 + 0xd) *
                      0x95 + 0x1f) != '\0'))) {
-      iVar2 = iVar2 + 1;
+      bottomIdx = bottomIdx + 1;
     }
-    if (iVar3 < iStack_6) {
-      uStack_8 = (*(byte *)(iVar1 + *(int *)(&agentIndices + iVar3 * 2) * 0x37 + 0xe) + 0xf) / 0x10;
-    }
-    else {
-      uStack_8 = 0;
-    }
-    if (iVar2 < iStack_6) {
-      uStack_a = (*(byte *)(iVar1 + *(int *)(&agentIndices + iVar2 * 2) * 0x37 + 0xe) + 0xf) / 0x10;
+    if (topIdx < count) {
+      linesTop = (*(byte *)(entitiesOfs + *(int *)(&agentIndices + topIdx * 2) * 0x37 + 0xe) + 0xf) / 0x10;
     }
     else {
-      uStack_a = 0;
+      linesTop = 0;
     }
-    while ((uStack_8 != 0 || (uStack_a != 0))) {
-      if (uStack_8 != 0) {
-        ovc15_textArena(*(int *)(&agentIndices + iVar3 * 2),0,(uint)(AgntFlag1 == false));
-        uStack_8 = uStack_8 - 1;
+    if (bottomIdx < count) {
+      linesBottom = (*(byte *)(entitiesOfs + *(int *)(&agentIndices + bottomIdx * 2) * 0x37 + 0xe) + 0xf) / 0x10;
+    }
+    else {
+      linesBottom = 0;
+    }
+    while ((linesTop != 0 || (linesBottom != 0))) {
+      if (linesTop != 0) {
+        ovc15_textArena(*(int *)(&agentIndices + topIdx * 2),0,(uint)(AgntFlag1 == false));
+        linesTop = linesTop - 1;
       }
-      if (uStack_a != 0) {
-        ovc15_textArena(*(int *)(&agentIndices + iVar2 * 2),0,(uint)(AgntFlag1 == false));
-        uStack_a = uStack_a - 1;
+      if (linesBottom != 0) {
+        ovc15_textArena(*(int *)(&agentIndices + bottomIdx * 2),0,(uint)(AgntFlag1 == false));
+        linesBottom = linesBottom - 1;
       }
     }
-    if (iVar3 < iStack_6) {
-      iVar3 = iVar3 + 1;
+    if (topIdx < count) {
+      topIdx = topIdx + 1;
     }
-    if (iVar2 < iStack_6) {
-      iVar2 = iVar2 + 1;
+    if (bottomIdx < count) {
+      bottomIdx = bottomIdx + 1;
     }
   }
-  for (uStack_4 = 0; agntIndex = uStack_4, (int)uStack_4 < (int)(uint)AgntCount;
-      uStack_4 = uStack_4 + 1) {
-    if (*(char *)(uStack_4 * 0x34 + 0x2d) == '\0') {
-      uStack_4 = uStack_4 - 1;
+  for (i = 0; agntIndex = i, (int)i < (int)(uint)AgntCount;
+      i = i + 1) {
+    if (*(char *)(i * 0x34 + 0x2d) == '\0') {
+      i = i - 1;
       ovr_ovc41_removeAgent(agntIndex,0);
     }
   }

@@ -348,10 +348,17 @@ undefined1 GPaused = 0x00;
 bool GDebug = 0;
 uint16_t __ovrbuffer = 0x1100;
 uint16_t __stklen = 0x1400;
+/* GUESS: unnamed padding byte at 0x43f (word-aligns BlitRects). */
+uint8_t __stklenPad = 0x00;
 brect_t BlitRects[5] = { { 12, 7, 222, 150, 0xA000 }, { 0, 0, 319, 199, 0xA000 }, { 0, 0, 319, 199, 0xA000 },
      { 239, 7, 308, 54, 0xA000 }, { 29, 156, 207, 199, 0xA000 } };
+/* GUESS: 0x472, 16 words with no references in the image; emitted so the
+   addresses of s_error_27 and everything after stay exact. */
+uint16_t lineMaskTable[16] = { 0x0001, 0x0101, 0x0821, 0x1111, 0x2249, 0x4545,
+    0x2A55, 0x5555, 0xAAD5, 0xB5B5, 0xDB6D, 0xDDDD, 0xDEF7, 0xEFEF, 0xFEFF, 0xFFFF };
 char s_error_27__2410_0492[] = "error(27) \r";
-char s_y1_d_yn_d_y3_d_yx_d[] = "y1 %d yn %d y3 %d yx %d ";
+/* 049e: 26 bytes - the image carries two terminating NULs */
+char s_y1_d_yn_d_y3_d_yx_d[26] = "y1 %d yn %d y3 %d yx %d ";
 uint16_t MiceFlag = 0x0000;
 int16_t MiceOfsX[4] = { 0, 1, 5, 6 };
 int16_t MiceOfsY[4] = { 0, 15, 3, 5 };

@@ -188,6 +188,9 @@ extern undefined1 GPaused;
 extern bool GDebug;
 extern uint16_t __ovrbuffer;
 extern uint16_t __stklen;
+extern uint8_t __stklenPad;
+extern uint16_t lineMaskTable[16];
+
 extern brect_t BlitRects[5];
 extern char s_error_27__2410_0492[];
 extern char s_y1_d_yn_d_y3_d_yx_d[];

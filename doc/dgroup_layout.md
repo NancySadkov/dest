@@ -122,3 +122,30 @@ After the fix no layout run starts between `s_fighter_unit` (0x1fa) and
 tables, `GErrorStrings` and `TextBlitX`, i.e. the -148 and the following -1 are
 gone.  The next candidates are the string-ordering swings around the class
 names (s_mage/s_thief/s_dwarf, -100/+88/-88) and -1 at `BlitRects` (0x440).
+
+## Third pass: 0x43f, 0x472 and s_y1_d_yn_d_y3_d_yx_d
+
+After the error-string fix the next runs started at `BlitRects` (-1) and
+`MiceFlag` (-33).  Reading the image gave three separate causes:
+
+```
+43d  00 14                     __stklen = 0x1400
+43f        00                  one unnamed padding byte (BlitRects is word aligned)
+440  50 bytes                  BlitRects[5]  (already byte exact)
+472  32 bytes                  a 16-word table with NO references (RefsToAddrs)
+492  "error(27) \r"           12 bytes
+49e  "y1 %d yn %d y3 %d yx %d " 26 bytes (two terminating NULs)
+```
+
+Fixes (`scripts/fix_dgroup_0440.py` plus one declaration):
+
+* `__stklenPad` (GUESS: unnamed byte at 0x43f),
+* `lineMaskTable[16]` (GUESS name; dead data in the original, emitted only so the
+  addresses after 0x472 stay exact - bytes from the image),
+* `s_y1_d_yn_d_y3_d_yx_d[26]` - the image carries two NULs, not one.
+
+Result: layout runs **181 -> 178**, and no run starts at `BlitRects`,
+`s_error_27` or `MiceFlag` any more.  The next divergences are `-1` around
+`GCharLevelsInc` (0x163) and `-10` at `MouseX` (0xe4), then the string-ordering
+swings at `s_mage`/`s_thief`/`s_dwarf` (-100/+88/-88), which look like a
+different order of the class-name table rather than lost bytes.
