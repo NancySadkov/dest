@@ -73,14 +73,35 @@ ours_by_key = {}
 for name, (seg, ofs) in ours.items():
     if seg != dgroup_seg:
         continue
-    ours_by_key.setdefault(key(name), (seg, ofs, name))
+    ours_by_key.setdefault(key(name), []).append((ofs, name))
+for k in ours_by_key:
+    ours_by_key[k].sort()
 
 matched = []
+last = -1
+used = set()
 for off, name in orig:
     k = key(name)
-    if k in ours_by_key:
-        seg, oofs, oname = ours_by_key[k]
-        matched.append((off, name, oofs, seg))
+    cands = ours_by_key.get(k)
+    if not cands:
+        continue
+    # duplicate names (the original reuses s_mage for "Mage" and "mage"):
+    # consume the next public in address order so each maps once
+    pick = None
+    for oofs, oname in cands:
+        if (seg_ok := True) and oofs not in used and oofs > last:
+            pick = (oofs, oname)
+            break
+    if pick is None:
+        for oofs, oname in cands:
+            if oofs not in used:
+                pick = (oofs, oname)
+                break
+    if pick is None:
+        continue
+    used.add(pick[0])
+    last = pick[0]
+    matched.append((off, name, pick[0], dgroup_seg))
 
 print("original DGROUP symbols: %d, matched in the rebuilt image: %d"
       % (len(orig), len(matched)))

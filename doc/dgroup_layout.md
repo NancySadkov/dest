@@ -174,3 +174,32 @@ and `timePassing` as `uint16_t` (its uses store/compare 0 and 1, so behaviour is
 unchanged).
 
 Result: layout runs **178 -> 177**, with no run at `MouseX` or `GCharLevelsInc`.
+
+## Fifth pass: duplicate class names and duplicate-name matching
+
+The `-100/+88/-88` swings at `s_mage`/`s_thief`/`s_dwarf` were not lost bytes.
+The original has two singular class-name tables, and Ghidra named the lower-case
+one with the same symbols as the capitalised one, so the export kept only the
+first of each pair:
+
+```
+0169 "Fighter" 0171 "Mage" 0176 "Cleric" 017d "Thief" 0183 "Dwarf" 0189 "Elf"
+018d "Halfling" ...                                     (capitalised table)
+01cd "fighter" 01d5 "mage" 01da "cleric" 01e1 "thief" 01e7 "dwarf"
+01ed "elf" 01f1 "halfling"                              (lower-case table)
+```
+
+`scripts/fix_class_names.py` re-adds the five dropped lower-case strings under
+address-suffixed names (the convention `s_Fighter_2410_0169` already uses).
+Verified by offset, not by name: every symbol in both tables now has the same
+delta (+2362).
+
+The `diff_dgroup.py` matcher now consumes publics in address order, so duplicate
+original names map to successive publics instead of all pointing at the first
+one.  That removed the remaining duplicate-name noise:
+
+    layout runs 177 -> 139, matched 977 of 1,868
+
+The next real divergences are `-20` at `MiceOfsX` (0x4ce), `-1` at
+`StshStrongDatHnd` (0x4e4), `-9` at `edgeMaskTable` (0x4f2) and `-15` at
+`neighbourOfsTable` (0x502).

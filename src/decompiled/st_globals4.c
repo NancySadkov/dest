@@ -296,7 +296,15 @@ char s_dwarves[] = "dwarves";
 char s_elves[] = "elves";
 char s_halflings[] = "halflings";
 char s_fighter[] = "fighter";
+/* 01d5/01da: the lower-case table repeats mage/cleric, which the export
+   dropped because the names collided with 0x171/0x176. */
+char s_mage_2410_01d5[] = "mage";
+char s_cleric_2410_01da[] = "cleric";
 char s_thief[] = "thief";
+/* 01e7/01ed/01f1: same for dwarf/elf/halfling. */
+char s_dwarf_2410_01e7[] = "dwarf";
+char s_elf_2410_01ed[] = "elf";
+char s_halfling_2410_01f1[] = "halfling";
 char s_fighter_unit_2410_01fa[] = "fighter unit";
 char s_mage_unit_2410_0207[] = "mage unit";
 char s_clerical_unit[] = "clerical unit";

@@ -140,6 +140,12 @@ extern char s_dwarves[];
 extern char s_elves[];
 extern char s_halflings[];
 extern char s_fighter[];
+extern char s_mage_2410_01d5[];
+extern char s_cleric_2410_01da[];
+extern char s_dwarf_2410_01e7[];
+extern char s_elf_2410_01ed[];
+extern char s_halfling_2410_01f1[];
+
 extern char s_thief[];
 extern char s_fighter_unit_2410_01fa[];
 extern char s_mage_unit_2410_0207[];
