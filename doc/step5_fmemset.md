@@ -217,3 +217,35 @@ Status: 42 of 52 call sites converted.  The ten left split into
 * six whose destination is a stack slot that the recovered declaration list does
   not name at that offset (`ovc24_textKill` x3 at `[BP-0x2a]/[BP-0x20]/
   [BP-0x22]`, `ovc38` at `[BP-0x80]`, `ovc42` at `[BP-0x76]`, `ovc41`, `ovc49`).
+
+## Batch: ovc42 record, ovc24 timers, ovc38 menu array
+
+Three sites were resolved by identifying the stack object from its later uses,
+not by guessing a name:
+
+* `ovc42_showAgentStats` clears `0x34` bytes at `[BP-0x3e]` and `0x37` at
+  `[BP-0x76]`.  The field stores settle the mapping: `gindex` at `[BP-0x69]`,
+  `animFrame` at `[BP-0x68]`, the entity pointer's `+3` at `[BP-0x5c]`, flags at
+  `[BP-0x60]` - all `BP-0x76` plus the `agnt_t` offset, so the 0x37-byte record
+  is `agntRec` and the 0x34-byte one is the temp passed to `ovr_drawAgntStats`.
+  `agntRec` is now an `entity_t`, `agntTmp` an `agnt_t`.
+* `ovc24_textKill` clears 8 bytes at `[BP-0x2a]` and two 2-byte slots at
+  `[BP-0x20]`/`[BP-0x22]`.  `5943:0373` indexes the first with `BX = faction*4`
+  and does a 32-bit `ADD SS:[BX],AX / ADC SS:[BX+2],DX`, and the reads at
+  `5943:058d` take the high word from `[BP-0x28]` and the low from `[BP-0x2a]`:
+  two 32-bit per-faction timers.  The two 2-byte slots are indexed by faction as
+  bytes (`LEA DX,[BP-0x22] / ADD AX,DX`) and filled with `0xFF81`.
+* `ovc38_showAchievements` clears 0x28 bytes at `[BP-0x80]` and then passes
+  `SS:[BP-0x80]` to `ovr_uiMenu` with `nitems = 8`; entry 7 (`+0x1C`) is set to
+  `s_done` (`0x6AB4`) with DS as its segment.  So the buffer is ten `far_t`
+  menu items, and the call is `uiMenu(0, 0, items, SS, 8)`.
+
+## Where the pass stands
+
+`52` text sites, of which `47` are converted.  The original has **43**
+`CALLF _fmemset` instructions, so the five left are:
+
+| site | status |
+|---|---|
+| `ovc04_lbm.grabLbm` (`30e6:03a6`) | the only genuine one left: its `dst` local is still a near `stg_tmp_t *` while the original keeps the allocator's far pointer at `[BP-0x2e]/[BP-0x2c]`, and the surrounding "high word = segment" line has no asm counterpart |
+| `ovc25_intel`, `ovc41_main`, `ovc43_fli`, `ovc49_agents` | **phantom duplicates**: their containing functions are 36-150 bytes and contain no `CALLF _fmemset` at all.  Ghidra merged a callee's body into the caller, so the statement exists only in the export.  Removing it is only correct together with splitting the merged body. |
