@@ -67,3 +67,32 @@ The remaining options are therefore not "more recovery" but either
     units are per-module, ours may not match what VROOMM expects), or
   * accepting a flat build and shrinking the image by ~100 KB, which the data tables
     alone cannot deliver.
+
+## 5. Bisecting the object mix (measured)
+
+	mp/bisect_crt2.py links the tiny resident main against growing groups of our
+objects, using an uppercase 8.3 response file (a long TLINK command line is
+truncated by DOS: the first attempt failed with Unable to open file 'cm.li',
+which is a *link* failure, not a program result).
+
+`
+XA  globs only                 run='KCODE9'      -> prints K, returns 9
+XB  + CRTL/STUBS/INTRINS       LINKFAIL: Undefined symbol _INIT_TEXTFILENAME in CRTL.C
+XC  + OVR.OBJ                  not linked (same reason)
+`
+
+So our five GLOB objects are harmless under VROOMM (confirmed again), but
+CRTL.OBJ cannot be isolated: it needs swi() (st_stubs.c), ar_from_u32()
+(st_intrinsics.c), init_textFilename (a game global) and, from the earlier
+list, 29 more recovered names.  The CRT and the game tree are mutually
+dependent, so the CRT cannot be added to a minimal control without dragging in
+the tree - and the tree + tiny main is the known exit-2 case.
+
+That leaves two honest options for step 6:
+
+  A. give every recovered helper name its real definition (so CRTL.OBJ can be
+     dropped in favour of CM.LIB), which is a type/library mapping job, or
+  B. keep both CRTs and find the offending *runtime data* by bisecting inside
+     the tree itself (the tree links, so this needs removals that still link).
+
+Both are larger than a bisect; neither is overlay-manager re-engineering.
