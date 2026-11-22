@@ -5,6 +5,7 @@ src/decompiled uses long, descriptive filenames; DOS 3.0's compiler only sees
 8.3 names.  This script copies the tree to tmp/buildsrc with short names and
 rewrites the single local include (recovered.h -> st.h).
 """
+import io
 import os
 import re
 import shutil
@@ -12,6 +13,16 @@ import shutil
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "src", "decompiled")
 OUT = os.path.join(ROOT, "tmp", "buildsrc")
+
+# Modules not to stage, from scripts/model/build_skip.txt (one name per line).
+SKIP_MODULES = set()
+_skip = os.path.join(os.path.dirname(os.path.abspath(__file__)), "model",
+                     "build_skip.txt")
+if os.path.isfile(_skip):
+    for _l in io.open(_skip, encoding="utf-8"):
+        _l = _l.strip()
+        if _l and not _l.startswith("#"):
+            SKIP_MODULES.add(_l)
 
 HEADERS = {
     "st_compat.h": "compat.h",
@@ -57,6 +68,8 @@ def main():
         f.write("#endif\n")
     for name in sorted(os.listdir(SRC)):
         if not name.endswith(".c"):
+            continue
+        if name in SKIP_MODULES:
             continue
         short = short_module(name)
         mapping[short] = name

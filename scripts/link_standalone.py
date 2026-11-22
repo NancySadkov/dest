@@ -17,6 +17,11 @@ TC = os.path.join(ROOT, "tools", "TC30")
 def main():
     skip = set(a.upper() for a in sys.argv[1:] if a.startswith("--skip=") is False)
     objs = sorted(n for n in os.listdir(BUILDSRC) if n.lower().endswith(".obj"))
+    # EXCLUDE_OBJS=OVL.OBJ,OVR.OBJ lets the overlay experiments drop modules
+    _excl = [x.strip().upper() for x in os.environ.get("EXCLUDE_OBJS", "").split(",") if x.strip()]
+    if _excl:
+        objs = [o for o in objs if o.upper() not in _excl]
+        print("excluding:", ", ".join(_excl))
     # Our tree contains a recovered CRT (crtl.c).  Linking Turbo C's C0L startup
     # and CL.LIB as well duplicates it, so the first link excludes the recovered
     # CRT object and lets the library provide those symbols.
