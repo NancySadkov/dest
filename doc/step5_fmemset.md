@@ -187,3 +187,33 @@ _fmemset((char far *)GLeaderSheets[idx] + 0x76, 0, 6);
 
 Note the segment is a link-time constant with a relocation, not a literal: a
 hard-coded `0x217A` would move with nothing at run time.
+
+## `GRecords` is an array of 0x12-byte records
+
+The original keeps the construction records in their own data segment
+(`21F2h`, block `21f2_DATA_game10`, labels `GRecords.*`), stride `0x12`, at most
+`0x32` entries (the code guards with `if (0x31 < GRecordCount)`).
+
+The tree had a single near `grec_t GRecords` and addressed records as
+`GRecordCount * 0x12 + N`, i.e. DGROUP offsets.  Now:
+
+* `grec_t GRecords[0x32]`;
+* the two memsets are `_fmemset(GRecords + GRecordCount, 0, 0x12)`, which
+  reproduces the pushed arguments exactly (count `0x12`, value `0`, far pointer
+  `21F2h:GRecordCount*0x12`);
+* the 44 field accesses became
+  `*(T *)((uint8_t *)&GRecords[GRecordCount] + N)`.
+
+The three `ovc19_save.c` uses are left alone: they are part of the save/load
+path where every buffer segment arrives through `unaff_DI`, the same systemic
+problem as `Entities`.
+
+Status: 42 of 52 call sites converted.  The ten left split into
+
+* four phantom duplicates (the C has 52 calls, the original 43) whose containing
+  function has no `CALLF _fmemset` at all (`ovc25_intel`, `ovc43_fli`, and the
+  copies inside merged bodies) - these should be removed by splitting the merged
+  function bodies, not rewritten;
+* six whose destination is a stack slot that the recovered declaration list does
+  not name at that offset (`ovc24_textKill` x3 at `[BP-0x2a]/[BP-0x20]/
+  [BP-0x22]`, `ovc38` at `[BP-0x80]`, `ovc42` at `[BP-0x76]`, `ovc41`, `ovc49`).
