@@ -218,6 +218,7 @@ int __cdecl16far bldng_compute2(uint8_t buildType,char leader)
 void bldng_selectBuildingType(byte partyIndex)
 
 {
+  undefined1 stk_fe0a;   /* stack slot fe0a */
   uint16_t uVar1;
   far_t entries;
   far_t entries_00;
@@ -289,7 +290,7 @@ void bldng_selectBuildingType(byte partyIndex)
   cStack_4 = (char)puVar6;
   if ((char)puVar6 != '\0') {
     ((char_sheet_t *)(((uint)in_stack_00000004 << 2)))->buildType[0] =
-         (&stack0xfe0a)[((uint)puVar6 & 0xff) * 2];
+         (&stk_fe0a)[((uint)puVar6 & 0xff) * 2];
   }
   return;
 }

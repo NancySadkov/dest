@@ -408,6 +408,7 @@ char * __cdecl16far
 ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textVariant,...)
 
 {
+  undefined1 stk_681c;   /* stack slot 681c */
   int *piVar1;
   uint16_t y;
   far_t buf;
@@ -569,7 +570,7 @@ L_attact_3f0b_26bd_2767:
       case 3:
                     /* WARNING: Read-only address (ram,0x000277ff) is written */
         ((char *)0x36fe)[1] = -0x58;
-        *(uint *)(&stack0x681c + destX) = *(uint *)(&stack0x681c + destX) & in_CX;
+        *(uint *)(&stk_681c + destX) = *(uint *)(&stk_681c + destX) & in_CX;
         ovr_blitLabel((char *)CONCAT11(uVar17,in_stack_0000ffef));
         uVar17 = 0xdc;
         uVar18 = 0;
@@ -796,6 +797,8 @@ L_attact_3f0b_26bd_2767:
 void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind,...)
 
 {
+  undefined1 stk_ffea;   /* stack slot ffea */
+  undefined1 stk_ffec;   /* stack slot ffec */
   undefined4 uVar1;
   far_t dst;
   bool bVar2;
@@ -857,13 +860,13 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind,...)
         (uVar8 = ovr_constr_usesGMapFlags(GfxRndSeed + 1,GfxRndSeed2,(char)GfxRndSeed2),
         (uVar8 & 0xff) == 0)))) {
       ovr_stats_openCastlePanel();
-      puVar5 = &stack0xffea;
+      puVar5 = &stk_ffea;
       pcVar4 = ovr_fmVsprintf("This location is unsuitable for a main stronghold.  %s",
                               (char *)CONCAT13((char)((uint)*(undefined2 *)
-                                                             (&stack0xffec +
+                                                             (&stk_ffec +
                                                              (uint)placementStatus * 4) >> 8),
                                                CONCAT12((char)*(undefined2 *)
-                                                               (&stack0xffec +
+                                                               (&stk_ffec +
                                                                (uint)placementStatus * 4),
                                                         *(undefined2 *)
                                                          (puVar5 + (uint)placementStatus * 4))));
@@ -878,13 +881,13 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind,...)
        (uVar8 = ovr_constr_usesGMapFlags(GfxRndSeed,GfxRndSeed2,(char)GfxRndSeed2),
        (uVar8 & 0xff) == 0)) {
       ovr_stats_openCastlePanel();
-      puVar5 = &stack0xffea;
+      puVar5 = &stk_ffea;
       pcVar4 = ovr_fmVsprintf("This location is unsuitable.  %s",
                               (char *)CONCAT13((char)((uint)*(undefined2 *)
-                                                             (&stack0xffec +
+                                                             (&stk_ffec +
                                                              (uint)placementStatus * 4) >> 8),
                                                CONCAT12((char)*(undefined2 *)
-                                                               (&stack0xffec +
+                                                               (&stk_ffec +
                                                                (uint)placementStatus * 4),
                                                         *(undefined2 *)
                                                          (puVar5 + (uint)placementStatus * 4))));

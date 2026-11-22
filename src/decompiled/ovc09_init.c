@@ -374,6 +374,7 @@ void __cdecl16far init_rebuildMapFlags(void)
 stg_tmp_t * __cdecl16far init_textFilename(void)
 
 {
+  undefined1 stk_d744;   /* stack slot d744 */
   uint16_t uVar1;
   far_t gfx;
   far_t gfx_00;
@@ -953,7 +954,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   } while( true );
 switchD_3000_4a6e_caseD_3:
   do {
-    *(int *)(&stack0xd744 + iVar15) = *(int *)(&stack0xd744 + iVar15) + in_CX;
+    *(int *)(&stk_d744 + iVar15) = *(int *)(&stk_d744 + iVar15) + in_CX;
     uStack_28 = constr_compute2((uint8_t)uStack_20,(uint8_t)uStack_22,(uint8_t)puStack_1c,
                                 (byte)psVar9,unaff_DI);
     uStack_28 = uStack_28 & 0xff;

@@ -625,6 +625,10 @@ ovc45_buildPlacementMessage
           (uint x,uint16_t y,int entityIndex,undefined2 reserved,char flag)
 
 {
+  undefined1 stk_fc0c;   /* stack slot fc0c */
+  undefined1 stk_fc0e;   /* stack slot fc0e */
+  undefined1 stk_fff5;   /* stack slot fff5 */
+  undefined1 stk_fffe;   /* stack slot fffe */
   long lVar1;
   far_t entries;
   far_t pixels;
@@ -1093,27 +1097,27 @@ ovc45_buildPlacementMessage
       in_stack_0000fc0e = (long *)((char *)0x2410);
       in_stack_0000fc0c = 0x85;
       in_stack_0000fc0d = 0x76;
-      uStack_c = (stg_tmp_t *)CONCAT31(stack0xfff5,1);
+      uStack_c = (stg_tmp_t *)CONCAT31(stk_fff5,1);
       iVar10 = 1;
     }
 L_OVC45_77eb_0d61_1379:
-    *(char **)(&stack0xfc0e + iVar10 * 4) = (char *)0x2410;
-    *(char **)(&stack0xfc0c + iVar10 * 4) = (char *)"Change Building";
+    *(char **)(&stk_fc0e + iVar10 * 4) = (char *)0x2410;
+    *(char **)(&stk_fc0c + iVar10 * 4) = (char *)"Change Building";
     *(undefined1 *)((int)&uStack_c + iVar10) = 2;
     iVar18 = iVar10 + 1;
     if (flag != '\0') {
-      *(char **)(&stack0xfc0e + iVar18 * 4) = (char *)0x2410;
-      *(char **)(&stack0xfc0c + iVar18 * 4) = (char *)"Change Party";
+      *(char **)(&stk_fc0e + iVar18 * 4) = (char *)0x2410;
+      *(char **)(&stk_fc0c + iVar18 * 4) = (char *)"Change Party";
       *(undefined1 *)((int)&uStack_c + iVar10 + 1) = 3;
       iVar18 = iVar10 + 2;
     }
-    *(char **)(&stack0xfc0e + iVar18 * 4) = (char *)0x2410;
-    *(char **)(&stack0xfc0c + iVar18 * 4) = (char *)"Done";
+    *(char **)(&stk_fc0e + iVar18 * 4) = (char *)0x2410;
+    *(char **)(&stk_fc0c + iVar18 * 4) = (char *)"Done";
     *(undefined1 *)((int)&uStack_c + iVar18) = 4;
     uVar19 = iVar18 + 1;
     puVar15 = (uint8_t *)CONCAT11(uVar26,bStack_11);
     goldPartyIndex = bStack_11;
-    puVar13 = &stack0xfc0c;
+    puVar13 = &stk_fc0c;
     entries.seg = (uint16_t)unaff_SS;
     entries.ofs = (uint16_t)puVar13;
     (*(uint8_t *)((uint8_t *)&(hint.seg))) = uVar23;
@@ -1212,7 +1216,7 @@ code_r0x00072658:
     strcpy((char *)CONCAT22(unaff_DI,(char *)(uint)bStack_10),
            (char *)CONCAT13(in_stack_0000fc0d,CONCAT12(in_stack_0000fc0c,CONCAT11(uVar31,uVar25))));
     LOCK();
-    *(uint16_t *)(&stack0xfffe + y) = uVar19;
+    *(uint16_t *)(&stk_fffe + y) = uVar19;
     UNLOCK();
     while (iStack_4 = iStack_4 + 1, iStack_4 < 0xc) {
       if (grab == false) {

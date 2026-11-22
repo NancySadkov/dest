@@ -15,6 +15,7 @@ void __cdecl16far
 miceHandler(uint16_t mask,uint16_t buttons,uint16_t x,uint16_t y,uint16_t dx,uint16_t dy)
 
 {
+  undefined1 stk_fff0;   /* stack slot fff0 */
   uint in_AX;
   undefined2 in_CX;
   undefined2 in_DX;
@@ -40,7 +41,7 @@ miceHandler(uint16_t mask,uint16_t buttons,uint16_t x,uint16_t y,uint16_t dx,uin
     uRam000100f8 = 0x1000;
     uRam000100f6 = 0x3a17;
     uRam00010104 = unaff_SS;
-    puRam00010106 = &stack0xfff0;
+    puRam00010106 = &stk_fff0;
     uRam000100fa = in_CX;
     uRam000100fc = in_DX;
     uRam000100fe = in_AX;

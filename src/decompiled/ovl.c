@@ -991,6 +991,7 @@ undefined2 __cdecl16far __ISOVERLAYMOD(void)
 void __cdecl16far __CHECKSTACK(void)
 
 {
+  undefined1 stk_fffe;   /* stack slot fffe */
   uint *puVar1;
   int iVar2;
   uint uVar3;
@@ -1004,7 +1005,7 @@ void __cdecl16far __CHECKSTACK(void)
   bVar5 = false;
   iVar2 = *(int *)((int)&GUnitDescriptions[9].ofs + 1);
   uVar3 = *(uint *)((int)&GUnitDescriptions[0xe].ofs + 1);
-  puVar6 = (uint *)&stack0xfffe;
+  puVar6 = (uint *)&stk_fffe;
   while (puVar6 < in_CX) {
     uVar7 = *puVar6 >> 1;
     if (uVar7 == 0) break;

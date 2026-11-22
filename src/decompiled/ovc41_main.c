@@ -1006,6 +1006,9 @@ void __cdecl16far ovc41_enterLeaderView(void)
 char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
 
 {
+  undefined1 stk_fffa;   /* stack slot fffa */
+  undefined1 stk_fffc;   /* stack slot fffc */
+  undefined1 stk_fffe;   /* stack slot fffe */
   extern undefined1 _backdropIndex;   /* hand fix: no symbol exists */
   undefined4 uVar1;
   undefined4 uVar2;
@@ -1515,7 +1518,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
   case (char *)0x2:
     LOCK();
     iVar14 = *(int *)((char *)0x81c9 + unaff_DI);
-    *(undefined1 **)((char *)0x81c9 + unaff_DI) = &stack0xfffe;
+    *(undefined1 **)((char *)0x81c9 + unaff_DI) = &stk_fffe;
     UNLOCK();
     *(int *)(iVar14 + -2) = unaff_DI;
     iVar15 = 0;
@@ -1523,7 +1526,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
     for (bVar22 = 0; pcVar6 = (char *)CONCAT11(0x24,GLeaderCount), bVar22 < GLeaderCount;
         bVar22 = bVar22 + 1) {
       pcVar12 = (char *)((uint)bVar22 << 2);
-      if ((byte)(&stack0xfffa)[(uint)_backdropIndex & 0xff] <=
+      if ((byte)(&stk_fffa)[(uint)_backdropIndex & 0xff] <=
           *(byte *)((int)*(undefined4 *)pcVar12 + 0xa5)) {
         for (uVar11 = 0xf8; uVar11 < GUnitCount; uVar11 = uVar11 + 1) {
           pcVar12 = 0x2410;   /* hand fix: segment-half slot */
@@ -1722,7 +1725,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,...)
       do {
         do {
           ovr_audio_usesLDIV_at_();
-          bVar22 = ovr_init2_usesCFGMice((uint16_t *)&stack0xfffc);
+          bVar22 = ovr_init2_usesCFGMice((uint16_t *)&stk_fffc);
           if ((((CONCAT11(extraout_AH,bVar22) != 0) && (0x87 < CONCAT11(uVar26,uVar25))) &&
               (0xb9 < uVar11)) && ((CONCAT11(uVar26,uVar25) < 0xd6 && (uVar11 < 0xc6))))
           goto L_OVC40_69c8_04c6_0AF0;
@@ -2111,6 +2114,16 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t *source,agnt_t *victim,uint s
 byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
 
 {
+  undefined1 stk_6ffe;   /* stack slot 6ffe */
+  undefined1 stk_fecc;   /* stack slot fecc */
+  undefined1 stk_fed4;   /* stack slot fed4 */
+  undefined1 stk_fed6;   /* stack slot fed6 */
+  undefined1 stk_fed8;   /* stack slot fed8 */
+  undefined1 stk_feda;   /* stack slot feda */
+  undefined1 stk_fedc;   /* stack slot fedc */
+  undefined1 stk_fef4;   /* stack slot fef4 */
+  undefined1 stk_fffe;   /* stack slot fffe */
+  undefined1 stk_ffff;   /* stack slot ffff */
   char *pcVar1;
   undefined2 uVar2;
   char cVar3;
@@ -2227,41 +2240,41 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
         return (byte *)((int)(undefined4 *)&_DATA + 1);
       case 2:
         cVar3 = *(char *)(uVar16 * 2 + unaff_SI);
-        puVar18 = &stack0xfffe + unaff_SI;
+        puVar18 = &stk_fffe + unaff_SI;
         iVar20 = uVar16 * 3;
         *(undefined1 **)((char *)0x7501 + iVar20) =
              puVar18 + *(int *)((char *)0x7501 + iVar20);
-        *(int *)(&stack0xffff + (int)puVar18) = *(int *)(&stack0xffff + (int)puVar18) + iVar20;
-        *(int *)(&stack0xfffe + (int)unaff_DI) = *(int *)(&stack0xfffe + (int)unaff_DI) + iVar20;
+        *(int *)(&stk_ffff + (int)puVar18) = *(int *)(&stk_ffff + (int)puVar18) + iVar20;
+        *(int *)(&stk_fffe + (int)unaff_DI) = *(int *)(&stk_fffe + (int)unaff_DI) + iVar20;
                     /* WARNING: Read-only address (ram,0x00033501) is written */
         iRam00033501 = uVar16 + 0x8b26;
-        cVar13 = (char)(&stack0xfed8 + (int)unaff_DI +
+        cVar13 = (char)(&stk_fed8 + (int)unaff_DI +
                        CONCAT11((char)((ulong)paVar4 >> 0x18),(char)((ulong)paVar4 >> 0x10) + cVar3)
                        );
         pcVar19 = (char *)(uint)(byte)((char)iVar20 + cVar13);
-        (&stack0x6ffe)[(int)puVar18] = (&stack0x6ffe)[(int)puVar18];
+        (&stk_6ffe)[(int)puVar18] = (&stk_6ffe)[(int)puVar18];
         pcVar1 = pcVar19;
         *pcVar1 = *pcVar1 + cVar13;
-        *(undefined2 *)(&stack0xfed6 + (int)unaff_DI) = 0x6000;
+        *(undefined2 *)(&stk_fed6 + (int)unaff_DI) = 0x6000;
         pcVar1 = pcVar19 + -0x61f9;
         *pcVar1 = *pcVar1;
         cVar13 = *pcVar1;
-        *(undefined1 **)(&stack0xfeda + (int)unaff_DI) = &stack0xfedc + (int)unaff_DI;
-        uVar22 = *(undefined2 *)(&stack0xfeda + (int)unaff_DI);
-        *(undefined2 *)(&stack0xfeda + (int)unaff_DI) = uVar22;
+        *(undefined1 **)(&stk_feda + (int)unaff_DI) = &stk_fedc + (int)unaff_DI;
+        uVar22 = *(undefined2 *)(&stk_feda + (int)unaff_DI);
+        *(undefined2 *)(&stk_feda + (int)unaff_DI) = uVar22;
         if (iVar12 == 1 || cVar13 == '\0') {
           ((char *)0x06a4)[10] = -0x6b;
           ((char *)0x06a4)[0xb] = '\x06';
                     /* WARNING: Read-only address (ram,0x000247ae) is written */
         }
-        uVar2 = in(&stack0xfed8 + (int)unaff_DI +
+        uVar2 = in(&stk_fed8 + (int)unaff_DI +
                    CONCAT11((char)((ulong)paVar4 >> 0x18),(char)((ulong)paVar4 >> 0x10) + cVar3));
         *unaff_DI = uVar2;
-        *(undefined2 *)(&stack0xfed8 + (int)unaff_DI) = uVar22;
-        *(undefined2 *)(&stack0xfed6 + (int)unaff_DI) = uVar22;
-        *(undefined2 *)(&stack0xfed4 + (int)unaff_DI) = uVar22;
-        *(undefined2 *)(&stack0xfed4 + (int)unaff_DI) =
-             *(undefined2 *)(&stack0xfed4 + (int)unaff_DI);
+        *(undefined2 *)(&stk_fed8 + (int)unaff_DI) = uVar22;
+        *(undefined2 *)(&stk_fed6 + (int)unaff_DI) = uVar22;
+        *(undefined2 *)(&stk_fed4 + (int)unaff_DI) = uVar22;
+        *(undefined2 *)(&stk_fed4 + (int)unaff_DI) =
+             *(undefined2 *)(&stk_fed4 + (int)unaff_DI);
         pcVar5 = (code *)swi(1);
         pbVar8 = (byte *)(*pcVar5)();
         return pbVar8;
@@ -2335,7 +2348,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
         } while( true );
       }
 switchD_6000_ca06_caseD_1:
-      (&stack0xfffe)[(int)unaff_DI] = (&stack0xfffe)[(int)unaff_DI] + (char)iVar12;
+      (&stk_fffe)[(int)unaff_DI] = (&stk_fffe)[(int)unaff_DI] + (char)iVar12;
       *(undefined1 *)((int)unaff_DI + 0x15) = 0;
       (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0x6a64;
       (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = iVar20;
@@ -2613,7 +2626,7 @@ L_ui_unit_order_6616_0689_1054:
       br = &bStack_16;
       ovr_blitRect(br);
       ovr_miceUpdate();
-      stack0xfef4 = uStack_18;
+      stk_fef4 = uStack_18;
       uStack_10e = uStack_1a;
       ovr_stshFree(uStack_10e);
       ovr_stshFree(fStack_6);
@@ -2637,8 +2650,8 @@ L_ui_unit_order_6616_0689_1054:
       (*(uint16_t *)((uint8_t *)&(uStack_132) + 2)) = 0x22f8;
       (*(uint16_t *)((uint8_t *)&(uStack_132))) = (uint16_t)(agnt_t *)0xcb5a;
       ovr_agnt_statusText(paStack_c,
-                          (char *)CONCAT13((char)((uint)&stack0xfecc >> 8),
-                                           CONCAT12((char)&stack0xfecc,iStack_a)));
+                          (char *)CONCAT13((char)((uint)&stk_fecc >> 8),
+                                           CONCAT12((char)&stk_fecc,iStack_a)));
       puVar14 = &agnt;
       uStack_132 = (uint16_t)agntPtr;
       pcVar19 = ovr_agnt_statusText(paVar17,(char *)CONCAT22(&text,pcVar19));

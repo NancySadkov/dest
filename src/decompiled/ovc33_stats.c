@@ -268,6 +268,7 @@ agntGetWeaponName(char *dst,uint8_t atype,bool magical,uint8_t field_index,int32
 far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far_t ringValue)
 
 {
+  undefined1 stk_fffe;   /* stack slot fffe */
   char *pcVar1;
   uint *puVar2;
   int *piVar3;
@@ -380,7 +381,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
     pfVar18 = (far_t far *)(uVar20 * 2);
     switch(uVar20) {
     case 0:
-      (&stack0xfffe)[(int)unaff_SI] = (&stack0xfffe)[(int)unaff_SI] + '\x01';
+      (&stk_fffe)[(int)unaff_SI] = (&stk_fffe)[(int)unaff_SI] + '\x01';
       do {
                     /* WARNING: Do nothing block with infinite loop */
       } while( true );
@@ -472,7 +473,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
                     /* WARNING: Subroutine does not return */
       exit(0x83);
     }
-    (&stack0xfffe)[(int)unaff_DI] = (&stack0xfffe)[(int)unaff_DI] + (byte)in_CX;
+    (&stk_fffe)[(int)unaff_DI] = (&stk_fffe)[(int)unaff_DI] + (byte)in_CX;
     unaff_DI[0x54] = 0;
     *(char *)&unaff_SI->ofs = (char)unaff_SI->ofs + (char)(uVar20 >> 8);
     if (((*(int *)&MouseMoved == 0) && (8 < MouseX)) &&
@@ -661,10 +662,10 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       bVar23 = (byte)pasVar34;
       uVar16 = CONCAT11(bVar10 + bVar23 + bVar26,(char)in_DX);
       uVar20 = (uint)(CARRY1(bVar10,bVar23) || CARRY1(bVar10 + bVar23,bVar26));
-      puVar39 = &stack0xfffe + uVar13 + uVar20;
+      puVar39 = &stk_fffe + uVar13 + uVar20;
       puVar2 = (uint *)(puVar39 + (int)unaff_DI + -0x58ef);
-      uVar15 = (uint)(CARRY2((uint)&stack0xfffe,uVar13) ||
-                     CARRY2((uint)(&stack0xfffe + uVar13),uVar20));
+      uVar15 = (uint)(CARRY2((uint)&stk_fffe,uVar13) ||
+                     CARRY2((uint)(&stk_fffe + uVar13),uVar20));
       uVar20 = *puVar2;
       uVar13 = *puVar2;
       *puVar2 = (uint)(unaff_DI + uVar13 + uVar15);

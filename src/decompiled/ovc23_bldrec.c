@@ -11,6 +11,10 @@
 byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t *agnt,...)
 
 {
+  undefined1 stk_02c2;   /* stack slot 02c2 */
+  undefined1 stk_bac4;   /* stack slot bac4 */
+  undefined1 stk_ffdc;   /* stack slot ffdc */
+  undefined1 stk_ffde;   /* stack slot ffde */
   uint *puVar1;
   int *piVar2;
   uint8_t *puVar3;
@@ -187,7 +191,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   switch((uint16_t)pbVar14)   /* hand fix: case values are ints */ {
   case (uint16_t)0x0:
     *(char *)((int)pbVar14 * 2) = *(char *)((int)pbVar14 * 2) + (char)(in_DX >> 8);
-    uStack_c = (uint)(byte)((byte)uVar15 & (byte)*(undefined2 *)(&stack0x02c2 + iVar24));
+    uStack_c = (uint)(byte)((byte)uVar15 & (byte)*(undefined2 *)(&stk_02c2 + iVar24));
     uVar16 = ovr_randBelow(in_stack_0000ffd8);
     uVar17 = ovr_randBelow(uStackY_2c);
     uStack_6 = (byte *)(CONCAT22(uVar17,(byte *)uStack_6) & 0xffffff);
@@ -253,7 +257,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     cVar10 = (char)uVar26;
     keyboardInputMode = 0;
     if (((cVar10 != '\0') && (cVar10 != '\x01')) && (cVar10 != -2)) {
-      (&stack0xbac4)[iVar24] = (&stack0xbac4)[iVar24] + in_CL;
+      (&stk_bac4)[iVar24] = (&stk_bac4)[iVar24] + in_CL;
       iVar24 = 0x2410;
       do {
         iVar12 = iVar24 * uVar16;
@@ -640,11 +644,11 @@ L_OVC24_5943_026e_0772:
         uVar26 = (undefined2)((ulong)Entities >> 0x10);
         bVar9 = ((entity_t *)Entities)[iVar24].base.gindex;
         if ((((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)bVar9 * 0x95) & 0x40) == 0) ||
-            (pbVar14 = &stack0xffde + (uStack_10 ^ 1), '\x01' < (char)*pbVar14)) &&
+            (pbVar14 = &stk_ffde + (uStack_10 ^ 1), '\x01' < (char)*pbVar14)) &&
            ((((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)bVar9 * 0x95) & 8) == 0 ||
-             (pbVar14 = &stack0xffde + (uStack_10 ^ 1), '\0' < (char)*pbVar14)) &&
+             (pbVar14 = &stk_ffde + (uStack_10 ^ 1), '\0' < (char)*pbVar14)) &&
             (((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)bVar9 * 0x95) & 0x10) == 0 ||
-             (pbVar14 = &stack0xffdc + (uStack_10 ^ 1), -1 < (char)*pbVar14)))))) {
+             (pbVar14 = &stk_ffdc + (uStack_10 ^ 1), -1 < (char)*pbVar14)))))) {
           bStackY_2d = ((entity_t *)Entities)[iVar24].base.level;
           pbVar14 = (byte *)CONCAT11((char)((uint)(iVar24 * 0x37) >> 8),bStackY_2d);
           iVar25 = iVar24;
@@ -949,6 +953,9 @@ void __cdecl16far ovc23_usesGfxRndSeed2(int x,int y)
 uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,...)
 
 {
+  undefined1 stk_8d06;   /* stack slot 8d06 */
+  undefined1 stk_fff8;   /* stack slot fff8 */
+  undefined1 stk_fffe;   /* stack slot fffe */
   uint8_t *puVar1;
   int *piVar2;
   uint *puVar3;
@@ -1561,13 +1568,13 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir,..
              (int)((char *)0x7f01 + x)) =
          *(uint *)(&puVar25->timer +
                   (int)((char *)0x7f01 + x)
-                  ) | (uint)&stack0xfff8;
-    *(uint *)(&puVar25[1].bldType + x) = *(uint *)(&puVar25[1].bldType + x) | (uint)&stack0xfffe;
-    AgntAnms[0x7d].x = AgntAnms[0x7d].x | (uint)&stack0xfff8;
+                  ) | (uint)&stk_fff8;
+    *(uint *)(&puVar25[1].bldType + x) = *(uint *)(&puVar25[1].bldType + x) | (uint)&stk_fffe;
+    AgntAnms[0x7d].x = AgntAnms[0x7d].x | (uint)&stk_fff8;
     *(uint *)unitIndex = *(uint *)unitIndex | uVar16;
-    (&stack0x8d06)[unitIndex] = (&stack0x8d06)[unitIndex];
+    (&stk_8d06)[unitIndex] = (&stk_8d06)[unitIndex];
     *(byte *)(x + 8) = *(byte *)(x + 8) | (byte)((uint)iVar19 >> 8);
-    (&stack0xfffe)[x] = (&stack0xfffe)[x] | (byte)((uint)&puVar25->level >> 8);
+    (&stk_fffe)[x] = (&stk_fffe)[x] | (byte)((uint)&puVar25->level >> 8);
     pbVar4 = &puVar25->level + unitIndex;
     *pbVar4 = *pbVar4 | (byte)in_CX | (byte)x;
                     /* WARNING: Bad instruction - Truncating control flow here */
@@ -1875,6 +1882,8 @@ code_r0x00053afb:
 bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte dir)
 
 {
+  undefined1 stk_fff6;   /* stack slot fff6 */
+  undefined1 stk_fffe;   /* stack slot fffe */
   int *piVar1;
   uint *puVar2;
   byte *pbVar3;
@@ -1989,9 +1998,9 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
       bVar29 = bVar22 - (bVar23 < AgntAnms[0xf].frmid);
       puVar26 = (uint *)CONCAT11(bVar29,bVar15);
       puVar8 = (undefined1 *)(uint)(bVar13 < dir || bVar22 < (bVar23 < AgntAnms[0xf].frmid));
-      puVar31 = (undefined2 *)(&stack0xfffe + -(int)in_CX + -(int)puVar8);
+      puVar31 = (undefined2 *)(&stk_fffe + -(int)in_CX + -(int)puVar8);
       puVar2 = (uint *)(puVar35 + -0x57e7);
-      uVar33 = (uint)(&stack0xfffe < in_CX || &stack0xfffe + -(int)in_CX < puVar8);
+      uVar33 = (uint)(&stk_fffe < in_CX || &stk_fffe + -(int)in_CX < puVar8);
       puVar32 = (undefined2 *)*puVar2;
       uVar18 = *puVar2;
       *puVar2 = (uVar18 - (int)puVar31) - uVar33;
@@ -2013,8 +2022,8 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
       uVar33 = AgntAnms[6].y - (int)pcVar24;
       AgntAnms[6].y = uVar33 - uVar18;
       puVar8 = (undefined1 *)(uint)(bVar37 || uVar33 < uVar18);
-      puVar9 = &stack0xfff6 + -(int)puVar35;
-      bVar37 = &stack0xfff6 < puVar35 || puVar9 < puVar8;
+      puVar9 = &stk_fff6 + -(int)puVar35;
+      bVar37 = &stk_fff6 < puVar35 || puVar9 < puVar8;
       iVar28 = -(int)puVar8;
       puVar30 = (uint *)(puVar9 + iVar28);
       bVar13 = (byte)((uint)in_CX >> 8);

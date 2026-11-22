@@ -403,6 +403,7 @@ undefined constrct_buildInfoText() { return 0; }
 void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
 
 {
+  undefined1 stk_ff60;   /* stack slot ff60 */
   uint *puVar1;
   int *piVar2;
   byte bVar3;
@@ -451,7 +452,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     uVar14 = uVar7;
     plVar6 = LXMUL_at_(unaff_DI,lVar17,in_stack_0000ff62);
     uStack_12 = (undefined2)(lVar16 + 1);
-    msg = ovr_stsprintf(&stack0xff60,(char *)CONCAT22(0x81dc,unaff_SS),
+    msg = ovr_stsprintf(&stk_ff60,(char *)CONCAT22(0x81dc,unaff_SS),
                         (char *)CONCAT22(plVar6,(char *)0x2410),uVar14,uStack_12,uVar7,
                         uVar5);
     ovr_say(msg);

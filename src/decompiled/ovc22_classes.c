@@ -128,6 +128,7 @@ int __cdecl16far ovc22_applyRankBonus(byte partyIndex,int cost)
 char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t *agnt,...)
 
 {
+  undefined1 stk_bac4;   /* stack slot bac4 */
   byte *pbVar1;
   code *pcVar2;
   char cVar3;
@@ -320,7 +321,7 @@ code_r0x0005ff56:
           cVar3 = (char)uVar5;
           keyboardInputMode = 0;
           if (((cVar3 != '\0') && (cVar3 != '\x01')) && (cVar3 != -2)) {
-            (&stack0xbac4)[unaff_DI] = (&stack0xbac4)[unaff_DI] + in_CL;
+            (&stk_bac4)[unaff_DI] = (&stk_bac4)[unaff_DI] + in_CL;
             pcVar6 = (char *)0x26510;
             goto code_r0x0005ff56;
           }
@@ -395,6 +396,15 @@ uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,...)
 far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
 
 {
+  undefined1 stk_0035;   /* stack slot 0035 */
+  undefined1 stk_681c;   /* stack slot 681c */
+  undefined1 stk_8ed6;   /* stack slot 8ed6 */
+  undefined1 stk_bac4;   /* stack slot bac4 */
+  undefined1 stk_ffaa;   /* stack slot ffaa */
+  undefined1 stk_ffaf;   /* stack slot ffaf */
+  undefined1 stk_ffb4;   /* stack slot ffb4 */
+  undefined1 stk_ffbc;   /* stack slot ffbc */
+  undefined1 stk_fffe;   /* stack slot fffe */
   char *pcVar1;
   byte *pbVar2;
   uint *puVar3;
@@ -671,10 +681,10 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
                                                   [0x4c]));
               uVar48 = (int)resourceTotals + (-0x1f - *puVar3);
               iVar30 = -uVar22;
-              puVar8 = (undefined1 *)(uint)(&stack0xffaf < (undefined1 *)*puVar3 || uVar48 < uVar22)
+              puVar8 = (undefined1 *)(uint)(&stk_ffaf < (undefined1 *)*puVar3 || uVar48 < uVar22)
               ;
-              puVar10 = &stack0xfffe + -*puVar49;
-              uVar22 = (uint)(&stack0xfffe < (undefined1 *)*puVar49 || puVar10 < puVar8);
+              puVar10 = &stk_fffe + -*puVar49;
+              uVar22 = (uint)(&stk_fffe < (undefined1 *)*puVar49 || puVar10 < puVar8);
               uVar32 = (int)puVar38 - *(uint *)(&puVar38->bldType + (int)unaff_DI);
               iVar39 = uVar32 - uVar22;
               uVar22 = (uint)(puVar38 < *(unit_t **)(&puVar38->bldType + (int)unaff_DI) ||
@@ -857,8 +867,8 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
                                        bVar16 + (9 < (bVar16 & 0xf) | 9 < (bVar17 & 0xf) | in_AF) *
                                                 '\x06' + (0x99 < bVar16 || 0x99 < bVar17) * '`');
             case (uint16_t)0x1:
-              *(uint *)(&stack0x8ed6 + (int)unaff_DI) =
-                   *(uint *)(&stack0x8ed6 + (int)unaff_DI) & uVar23;
+              *(uint *)(&stk_8ed6 + (int)unaff_DI) =
+                   *(uint *)(&stk_8ed6 + (int)unaff_DI) & uVar23;
               return pfVar20;
             default:
               goto switchD_5000_123d_caseD_2;
@@ -895,12 +905,12 @@ L_OVC22_5087_0234_323C:
                 pfVar20 = (far_t far *)(uint)partyIndex;
               } while( true );
             case (far_t far *)0x6:
-              *(uint *)(&stack0x681c + (int)puVar49) =
-                   *(uint *)(&stack0x681c + (int)puVar49) & uVar23;
+              *(uint *)(&stk_681c + (int)puVar49) =
+                   *(uint *)(&stk_681c + (int)puVar49) & uVar23;
             case (far_t far *)0xb:
-              *(uint *)(&stack0x681c + (int)puVar49) =
-                   *(uint *)(&stack0x681c + (int)puVar49) & uVar23;
-              ovr_blitLabel(&stack0xfffe);
+              *(uint *)(&stk_681c + (int)puVar49) =
+                   *(uint *)(&stk_681c + (int)puVar49) & uVar23;
+              ovr_blitLabel(&stk_fffe);
               iVar30 = ovr_font_textWidth((char *)"POPULATION");
               puVar28 = (uint16_t *)(0xd4 - iVar30);
               TextBlitX = (uint16_t)puVar28;
@@ -911,21 +921,21 @@ L_OVC22_5087_0234_323C:
                     /* WARNING: Read-only address (ram,0x00026a19) is written */
               return pfVar20;
             case (far_t far *)0x8:
-              bVar26 = (&stack0xfffe)[(int)unaff_DI];
+              bVar26 = (&stk_fffe)[(int)unaff_DI];
               in_AF = 9 < (bVar16 & 0xf) | in_AF;
-              uVar46 = (uint)&stack0xffb4 ^ *(uint *)((int)puVar49 + (int)(&puVar38->level + -1));
+              uVar46 = (uint)&stk_ffb4 ^ *(uint *)((int)puVar49 + (int)(&puVar38->level + -1));
               uVar22 = (uint)puVar38 ^ (uint)puVar49;
               uVar32 = CONCAT11((byte)(uVar22 >> 8) ^ *(byte *)((int)unaff_DI + uVar22 + 0x8332),
                                 (char)uVar22);
               bVar27 = bVar15 ^ 0x5d ^ *(byte *)((int)unaff_DI + uVar32 + 0x32);
               uVar22 = CONCAT11(bVar26,bVar27) ^ 0x1900;
-              *(uint *)(&stack0xfffe + (int)puVar49) =
-                   *(uint *)(&stack0xfffe + (int)puVar49) ^ (uint)puVar49;
-              uVar48 = (int)puVar49 - *(int *)(&stack0xfffe + (int)puVar49);
+              *(uint *)(&stk_fffe + (int)puVar49) =
+                   *(uint *)(&stk_fffe + (int)puVar49) ^ (uint)puVar49;
+              uVar48 = (int)puVar49 - *(int *)(&stk_fffe + (int)puVar49);
               uVar32 = uVar32 ^ uVar46;
-              uVar33 = (uint)&stack0xfffe ^ uVar32;
+              uVar33 = (uint)&stk_fffe ^ uVar32;
               uVar23 = CONCAT11(uVar19,bVar16 + in_AF * -6 + (0x99 < bVar16) * -0x60 + '2' +
-                                       (puVar49 < *(uint **)(&stack0xfffe + (int)puVar49))) - 0x5ceU
+                                       (puVar49 < *(uint **)(&stk_fffe + (int)puVar49))) - 0x5ceU
                        ^ uVar23;
               puVar3 = (uint *)((int)unaff_DI + uVar32 + 0xa231);
               *puVar3 = *puVar3 ^ uVar48;
@@ -1188,8 +1198,8 @@ L_OVC22_5087_4975_4ABE:
                 uVar23 = CONCAT11(uVar68,cVar25) -
                          *(uint16_t *)
                           ((int)&(((entity_t *)Entities)->base).x +
-                          CONCAT11((char)((int)pfVar20 % (int)(char)(&stack0x0035)[(int)puVar49]),
-                                   (char)((int)pfVar20 / (int)(char)(&stack0x0035)[(int)puVar49])) *
+                          CONCAT11((char)((int)pfVar20 % (int)(char)(&stk_0035)[(int)puVar49]),
+                                   (char)((int)pfVar20 / (int)(char)(&stk_0035)[(int)puVar49])) *
                           iVar29);
                 uVar32 = (int)uVar23 >> 0xf;
                 uVar22 = ((char_sheet_t *)(((int)puStack_a << 2)))->y -
@@ -1412,7 +1422,7 @@ L_OVC22_5087_0234_32B8:
               uStack_e =(uint16_t)( (uint *)CONCAT11(cVar14,(byte)uStack_e));
               keyboardInputMode = 0;
               if (((cVar14 != '\0') && (cVar14 != '\x01')) && (cVar14 != -2)) {
-                (&stack0xbac4)[(int)unaff_DI] = (&stack0xbac4)[(int)unaff_DI] + cVar25;
+                (&stk_bac4)[(int)unaff_DI] = (&stk_bac4)[(int)unaff_DI] + cVar25;
                 puVar50 = (uint *)((char *)0x26510);
                 do {
                   iVar30 = (int)puVar50 * (int)puVar28;
@@ -1766,8 +1776,8 @@ L_OVC22_5087_0234_32B8:
                uVar23 = CONCAT11((char)(uVar23 >> 8),bVar17),
                (1 << (bVar17 & 0x1f) & (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x11f)) != 0))
               && (*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131) < 4)))) {
-            *(int *)(&stack0xffbc + (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131) * 2) =
-                 *(int *)(&stack0xffbc + (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131) * 2)
+            *(int *)(&stk_ffbc + (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131) * 2) =
+                 *(int *)(&stk_ffbc + (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131) * 2)
                  + 1;
           }
           if ((*(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x121) & 0x200) != 0) {
@@ -1883,7 +1893,7 @@ switchD_5000_123d_caseD_2:
       ovr_ovc15_capitalize(acStackY_a6);
       uStackY_60 = 0x2322;
       uStackY_62 = 0x8f4e;
-      pfVar20 = (far_t far *)ovr_stsprintf(&stack0xffaa,(char *)CONCAT22(0x5665,unaff_SS));
+      pfVar20 = (far_t far *)ovr_stsprintf(&stk_ffaa,(char *)CONCAT22(0x5665,unaff_SS));
       ovr_uiNotify((char *)pfVar20);
     }
     ovr_ovc15_removeEntity((uint)puVar49);

@@ -1629,6 +1629,7 @@ void __cdecl16far attact_usesBlitLoadRleGfx(void)
 void __cdecl16far attact_usesLDIV_at_2(void)
 
 {
+  undefined1 stk_ffe0;   /* stack slot ffe0 */
   far_t dst;
   far_t dst_00;
   bool bVar1;
@@ -1664,7 +1665,7 @@ void __cdecl16far attact_usesLDIV_at_2(void)
     bVar1 = ovr_draw_textArena();
     if (bVar1) {
       attact_usesEntityCount2
-                ((uint16_t *)CONCAT22(unaff_SS,&sum),(uint16_t *)CONCAT22(unaff_SS,&stack0xffe0));
+                ((uint16_t *)CONCAT22(unaff_SS,&sum),(uint16_t *)CONCAT22(unaff_SS,&stk_ffe0));
       if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) ||
          ((uint16_t)((ulong)lVar8 >> 0x10) == 0 && iStack_1e == 0)) {
         if (cStack_17 != '\0') {
@@ -1711,7 +1712,7 @@ void __cdecl16far attact_usesLDIV_at_2(void)
         }
         if (AgntFlag1 != false) {
           attact_usesAgntCount2
-                    ((uint16_t *)CONCAT22(unaff_SS,&sum),(uint16_t *)CONCAT22(unaff_SS,&stack0xffe0)
+                    ((uint16_t *)CONCAT22(unaff_SS,&sum),(uint16_t *)CONCAT22(unaff_SS,&stk_ffe0)
                     );
           uVar9 = (uint)((ulong)lVar8 >> 0x10);
           if (((uint)sum != 0 || (*(uint16_t *)((uint8_t *)&(sum) + 2)) != 0) || (uVar9 != 0 || iStack_1e != 0)) {

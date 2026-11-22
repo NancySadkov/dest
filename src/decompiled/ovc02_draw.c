@@ -1618,6 +1618,7 @@ bool __cdecl16far draw_textProvidesMoreHousing(void)
 void __stdcall16far draw_textGoldProvidesHousing(void)
 
 {
+  undefined1 stk_0000;   /* stack slot 0000 */
   uint *puVar1;
   byte *pbVar2;
   undefined1 uVar3;
@@ -1666,7 +1667,7 @@ void __stdcall16far draw_textGoldProvidesHousing(void)
   uVar18 = unaff_BP | *(uint *)((int)puVar15 + uVar19);
   uVar12 = (in_DX | *(uint *)(unaff_BP + 0xb)) - 1 | 0x7474;
   uVar6 = uVar6 | *(uint *)(uVar18 + uVar22);
-  puVar20 = (uint *)(uVar19 | (uint)&stack0x0000);
+  puVar20 = (uint *)(uVar19 | (uint)&stk_0000);
   bVar7 = (byte)uVar10;
   bVar5 = (byte)uVar6;
   bVar14 = (byte)puVar15;
