@@ -47,13 +47,24 @@ for path in sorted(glob.glob("src/decompiled/st_globals*.c")):
     lines = io.open(path, encoding="utf-8", errors="ignore").read().split("\n")
     keep = []
     n = 0
-    for l in lines:
+    i = 0
+    while i < len(lines):
+        l = lines[i]
         m = DECL.match(l)
         if m and m.group(1) in NAMES:
-            keep.append("/* %s: owned by OVERLAY.LIB (VROOMM manager). */" % m.group(1))
+            # drop the whole declaration, including a multi-line initialiser
+            depth = l.count("{") - l.count("}")
+            j = i
+            while depth > 0 and j + 1 < len(lines):
+                j += 1
+                depth += lines[j].count("{") - lines[j].count("}")
+            keep.append("/* %s: owned by OVERLAY.LIB (VROOMM manager). */"
+                        % m.group(1))
             n += 1
+            i = j + 1
             continue
         keep.append(l)
+        i += 1
     if n:
         removed_def += n
         if apply:

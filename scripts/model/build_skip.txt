@@ -1,1 +1,5 @@
-# Modules excluded from the build (none currently).
+# Modules excluded from the build.
+#
+# ovl.c is the original VROOMM overlay manager, which is compiler machinery:
+# OVERLAY.LIB owns that role in the overlay build.
+ovl.c
