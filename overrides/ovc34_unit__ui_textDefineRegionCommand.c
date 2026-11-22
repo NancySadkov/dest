@@ -1,3 +1,8 @@
+/* ui_textDefineRegionCommand - the define-region menu command.  Locals named
+   from their assignments: partyIdx (MenuItemEnabled[menuIndex], also the
+   entity owner byte at +0x1a), sheetByte (byte at char_sheet+0x2f, indexes
+   the tables at *4+0x107/0x109) and i (0..5 loop).  The pbStack_* pointers
+   and the register temporaries keep their decompiler names. */
 void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
 
 {
@@ -33,10 +38,10 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
   uint8_t text;
   uint8_t msg;
   uint8_t unitFlags;
-  byte bStack_3d;
-  byte bStack_3c;
+  byte sheetByte;
+  byte partyIdx;
   uint8_t input;
-  uint uStack_3a;
+  uint i;
   uint8_t cursorY;
   uint8_t cursorX;
   byte *pbStack_34;
@@ -66,22 +71,22 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
     return;
   }
   ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x2410);
-  bStack_3c = ((uint8_t *)MenuItemEnabled)[menuIndex];
-  if (bStack_3c == 0xff) {
+  partyIdx = ((uint8_t *)MenuItemEnabled)[menuIndex];
+  if (partyIdx == 0xff) {
     return;
   }
-  bStack_3d = *(byte *)((int)*(uint32_t *)((uint)bStack_3c << 2) + 0x2f);
-  if (bStack_3d == 0xff) {
+  sheetByte = *(byte *)((int)*(uint32_t *)((uint)partyIdx << 2) + 0x2f);
+  if (sheetByte == 0xff) {
     return;
   }
   uVar6 = 0x2410;
-  uVar4 = *(uint16_t *)((uint)bStack_3d * 4 + 0x107);
+  uVar4 = *(uint16_t *)((uint)sheetByte * 4 + 0x107);
   uVar13 = (undefined1)uVar4;
   pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x648f,unaff_SS),
                          (char *)CONCAT13((char)((uint)uVar4 >> 8),CONCAT12(uVar13,0x2410)),uVar13,
-                         (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x109),
-                         (char)*(uint16_t *)((uint)bStack_3c * 4),
-                         ((uint16_t *)((uint)bStack_3c * 4))[1]);
+                         (char)*(uint16_t *)((uint)sheetByte * 4 + 0x109),
+                         (char)*(uint16_t *)((uint)partyIdx * 4),
+                         ((uint16_t *)((uint)partyIdx * 4))[1]);
   ovr_say(pcVar2,uVar6);
   do {
     type = SUB21(unaff_SS,0);
@@ -222,28 +227,28 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         for (uVar11 = 0; uVar11 < EntityCount; uVar11 = uVar11 + 1) {
           uVar4 = (uint16_t)((ulong)Entities >> 0x10);
           iVar10 = (int)Entities;
-          if ((((*(byte *)(iVar10 + uVar11 * 0x37 + 0x1a) == bStack_3c) &&
+          if ((((*(byte *)(iVar10 + uVar11 * 0x37 + 0x1a) == partyIdx) &&
                (pbStack_22 <= (byte *)*(uint *)((entity_t *)iVar10 + uVar11))) &&
               ((byte *)*(uint *)((entity_t *)iVar10 + uVar11) <= pbStack_26)) &&
-             ((pbStack_24 <= (byte *)*(uint *)(iVar10 + uVar11 * 0x37 + 2) &&
-              ((byte *)*(uint *)(iVar10 + uVar11 * 0x37 + 2) <= pbStack_28)))) {
+             ((pbStack_24 <= (byte *)((entity_t *)iVar10)[uVar11].base.y &&
+              ((byte *)((entity_t *)iVar10)[uVar11].base.y <= pbStack_28)))) {
             iStack_a = iStack_a + 1;
           }
         }
         ovr_resetTextBlitCycle();
         uVar14 = 0x7a;
         iVar10 = ovr_ovc45_compute9((char *)&text,
-                                    (char *)CONCAT22(*(uint16_t *)((uint)bStack_3c * 4),unaff_SS),
+                                    (char *)CONCAT22(*(uint16_t *)((uint)partyIdx * 4),unaff_SS),
                                     (char *)CONCAT22(Font03.ofs,
-                                                     (char *)((uint16_t *)((uint)bStack_3c * 4))
+                                                     (char *)((uint16_t *)((uint)partyIdx * 4))
                                                              [1]),Font03.seg,'C',(char)Font03.seg,
                                     0x43,3,0xa000);
         uVar4 = ovr_ovc41_pluralSuffix(iStack_a,(char)iVar10,uVar14);
         uVar6 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x64b8,unaff_SS),
                                (char *)CONCAT22(iStack_a,(char *)0x2410),
-                               *(uint16_t *)((uint)bStack_3d * 4 + 0x13f),
-                               *(uint16_t *)((uint)bStack_3d * 4 + 0x141),uVar4,uVar14);
+                               *(uint16_t *)((uint)sheetByte * 4 + 0x13f),
+                               *(uint16_t *)((uint)sheetByte * 4 + 0x141),uVar4,uVar14);
         ovr_uiNotify(pcVar2,uVar6,(char)uVar6);
       }
       pbStack_28 = pbStack_20;
@@ -286,19 +291,19 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         pbVar8 = (byte *)((char *)0x2410);
         uVar4 = (uint16_t)((ulong)Entities >> 0x10);
         iVar10 = (int)Entities;
-        if (((*(byte *)(iVar10 + uVar11 * 0x37 + 0x1a) == bStack_3c) &&
+        if (((*(byte *)(iVar10 + uVar11 * 0x37 + 0x1a) == partyIdx) &&
             (pbVar8 = (byte *)((char *)0x2410),
             pbStack_22 <= (byte *)*(uint *)((entity_t *)iVar10 + uVar11))) &&
            ((pbVar8 = (byte *)((char *)0x2410),
             (byte *)*(uint *)((entity_t *)iVar10 + uVar11) <= pbStack_26 &&
             ((pbVar8 = (byte *)((char *)0x2410),
-             pbStack_24 <= (byte *)*(uint *)(iVar10 + uVar11 * 0x37 + 2) &&
+             pbStack_24 <= (byte *)((entity_t *)iVar10)[uVar11].base.y &&
              (pbVar8 = (byte *)((char *)0x2410),
-             (byte *)*(uint *)(iVar10 + uVar11 * 0x37 + 2) <= pbStack_28)))))) {
+             (byte *)((entity_t *)iVar10)[uVar11].base.y <= pbStack_28)))))) {
           if (input < 2) {
             pbVar8 = (byte *)((char *)0x2410);
             unit_usesAlignUp42(menuIndex,*(uint16_t *)((entity_t *)iVar10 + uVar11),
-                               *(int *)(iVar10 + uVar11 * 0x37 + 2));
+                               ((entity_t *)iVar10)[uVar11].base.y);
           }
           else {
             unit_usesEntities(input,uVar11,(uint16_t)&unitFlags,(uint16_t)unaff_SS);
@@ -306,9 +311,9 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
           iStack_a = iStack_a + 1;
         }
       }
-      for (uStack_3a = 0; (int)uStack_3a < 5; uStack_3a = uStack_3a + 1) {
-        if ((&unitFlags)[uStack_3a] != 0x0) {
-          ovr_ovc41_usesMiceBlitRect(uStack_3a);
+      for (i = 0; (int)i < 5; i = i + 1) {
+        if ((&unitFlags)[i] != 0x0) {
+          ovr_ovc41_usesMiceBlitRect(i);
         }
       }
       ovr_constr_flushDirtyRects();
@@ -318,8 +323,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6522,unaff_SS),
                                (char *)CONCAT22(iStack_a,(char *)0x2410),
-                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x13f),
-                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x141),(char)uVar4,pbVar8
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)uVar4,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
@@ -328,8 +333,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6543,unaff_SS),
                                (char *)CONCAT22(iStack_a,(char *)0x2410),
-                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x13f),
-                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x141),(char)uVar4,pbVar8
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)uVar4,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
@@ -338,8 +343,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6557,unaff_SS),
                                (char *)CONCAT22(iStack_a,(char *)0x2410),
-                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x13f),
-                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x141),(char)uVar4,pbVar8
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)uVar4,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
@@ -348,8 +353,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex,...)
         uVar9 = 0x2410;
         pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6568,unaff_SS),
                                (char *)CONCAT22(iStack_a,(char *)0x2410),
-                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x13f),
-                               (char)*(uint16_t *)((uint)bStack_3d * 4 + 0x141),(char)uVar4,pbVar8
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
+                               (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)uVar4,pbVar8
                               );
         ovr_say(pcVar2,uVar9);
       }
