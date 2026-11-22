@@ -3555,7 +3555,7 @@ void __cdecl16far ovc49_drawAgents(void)
   dst_02.ofs = (uint16_t)&agentRect;
   (*(uint8_t *)((uint8_t *)&(dst_02.seg) + 1)) = uVar23;
   ovr_ovc23_textBuildThfres01Lbm(dst_02);
-  _fmemset((void *)(ulong)unaff_SS,2,unaff_DI);
+  _fmemset(MK_FP(_SS, &uStack_12), 0, 2);
   for (uStack_22 = 0; (int)uStack_22 < (int)(uint)AgntCount; uStack_22 = uStack_22 + 1) {
     (&factionSeen)[*(byte *)(uStack_22 * 0x34 + 0x2f)] = 0x1;
   }
