@@ -1086,6 +1086,9 @@ far_t LevelBandLabels[20] = { { 0x53E9, 0x2410 }, { 0x53F1, 0x2410 }, { 0x53F9, 
      { 0x5475, 0x2410 }, { 0x5484, 0x2410 }, { 0x5493, 0x2410 }, { 0x54A0, 0x2410 }, { 0x54AF, 0x2410 },
      { 0x0, 0x0 } };
 far_t LevelRangeLabels[4] = { { 0x54BF, 0x2410 }, { 0x54CB, 0x2410 }, { 0x54D8, 0x2410 }, { 0x0, 0x0 } };
+/* GUESS: 0x4b66, seven bytes after LevelRangeLabels (the image has 23
+   bytes for that symbol: 3 far pointers, a null and this table). */
+uint8_t levelRangeTails[7] = { 0x0C, 0x0C, 0x0C, 0x0C, 0x09, 0x08, 0x08 };
 undefined1 unitTypeFilter = 0xFF;
 undefined1 partyFilter = 0xFF;
 char s_Lawful_2410_4b6f[] = "Lawful";
@@ -1114,6 +1117,9 @@ char s_marquise[] = "Marquise ";
 char s_duke[] = "Duke ";
 char s_duchess[] = "Duchess ";
 char s_archduke[] = "Archduke ";
+/* 4c1b: "Archduchess " (13 bytes); address-suffixed because the export
+   already uses s_archduchess for a 12-byte string in st_globals4.c. */
+char s_Archduchess_2410_4c1b[] = "Archduchess ";
 char s_prince[] = "Prince ";
 char s_princess[] = "Princess ";
 char s_king[] = "King ";
@@ -1137,11 +1143,15 @@ char s_s_s[] = "%s%s, ";
 char s__s_2410_4cdb[] = "%s ";
 char s__s_2410_4cdf[] = "%s";
 char s_Population_2410_4ce2[] = "Population";
+/* 4ced: "Food prod." (11 bytes) */
+char s_Food_prod_2410_4ced[] = "Food prod.";
 char s_Food_stored_2410_4cf8[] = "Food stored";
 char s_Housing_2410_4d04[] = "Housing";
 char s_Food_storage_2410_4d0c[] = "Food storage";
 char s_Food_bought_2410_4d19[] = "Food bought";
 char s_Food_sold_2410_4d25[] = "Food sold";
+/* 4d2f: "Max. trade" (11 bytes) */
+char s_Max_trade_2410_4d2f[] = "Max. trade";
 char s_Income_2410_4d3a[] = "Income";
 char s_Gold_2410_4d41[] = "Gold";
 char s_Vault_storage_2410_4d46[] = "Vault storage";
