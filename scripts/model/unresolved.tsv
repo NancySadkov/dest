@@ -1,0 +1,23 @@
+# Symbols no longer recoverable, kept as documented stubs.
+# name<TAB>kind<TAB>reason
+func_0x00010264	function	func_0x target is data/fragment in the image
+func_0x00010268	function	func_0x target is data/fragment in the image
+func_0x000318f5	function	func_0x target is data/fragment in the image
+func_0x0004f29c	function	func_0x target is data/fragment in the image
+func_0x0004f32d	function	func_0x target is data/fragment in the image
+func_0x0004f68f	function	func_0x target is data/fragment in the image
+func_0x0004f735	function	func_0x target is data/fragment in the image
+func_0x0004f930	function	func_0x target is data/fragment in the image
+func_0x0004fcda	function	func_0x target is data/fragment in the image
+func_0x0007164e	function	func_0x target is data/fragment in the image
+func_0x0007ffe0	function	func_0x target is data/fragment in the image
+EXT_FUN_8000_f2fa	function	body not recovered
+halt_baddata	function	body not recovered
+smm_restore_state	function	body not recovered
+DOS_GetInterruptHandler	function	body not recovered
+DOS_SetInterruptHandler	function	body not recovered
+ovr_season_usesGPromotable_e11a	function	body not recovered
+swi	function	returns a stub code pointer
+_emu	data	Borland FP runtime
+_fperror	data	Borland FP runtime
+F_FTOL@	function	asm stub in ovr_thunks.asm (identifier has '@')

@@ -313,7 +313,7 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
         destX = ((entity_t *)iVar9)[entityIndex].base.destX;
         destY = ((entity_t *)iVar9)[entityIndex].base.destY;
         iVar9 = ovr_ovc07_signum(((entity_t *)iVar9)[entityIndex].base.destX - iVar2);
-        psStack_c = (short *)ovr_ovc07_signum(*(int *)((int)Entities + entityIndex * 0x37 + 10) -
+        psStack_c = (short *)ovr_ovc07_signum(((entity_t *)Entities)[entityIndex].base.destY -
                                               iVar3);
         psVar6 = psStack_c;
         if ((iVar9 != 0) &&
@@ -353,8 +353,8 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
                        *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),unaff_DI);
             ovr_attact_usesEntities
                       (entityIndex,iVar2 + iVar9,iVar3 + (int)psStack_c,flagsOfs,flagsSeg);
-            *(int *)((int)Entities + entityIndex * 0x37 + 4) = iVar2 + iVar9;
-            *(int *)((int)Entities + entityIndex * 0x37 + 6) = iVar3 + (int)psStack_c;
+            ((entity_t *)Entities)[entityIndex].base.targetX = iVar2 + iVar9;
+            ((entity_t *)Entities)[entityIndex].base.targetY = iVar3 + (int)psStack_c;
             pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
             *pbVar1 = *pbVar1 | 2;
             pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);

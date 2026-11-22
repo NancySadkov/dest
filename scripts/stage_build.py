@@ -30,6 +30,8 @@ def short_module(name):
         return "ovrstub.c"
     if name == "st_intrinsics.c":
         return "intrins.c"
+    if name == "st_stubs.c":
+        return "stubs.c"
     if name in ("crtl.c", "main.c", "mouse.c", "video.c", "ovl.c"):
         return name
     m = re.match(r"ovc(\d+).*\.c$", name)

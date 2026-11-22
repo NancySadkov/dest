@@ -36,14 +36,14 @@ ovc25_usesAlignUp4(char partyIndex,uint16_t x,uint16_t y,uint16_t destX,uint16_t
        ((*(byte *)(iVar4 + uVar5 * 0x37 + 0x33) & 2) == 0)) {
       uVar3 = ovr_alignUp4(*(int *)((entity_t *)iVar4 + uVar5));
       uVar6 = (undefined2)((ulong)Entities >> 0x10);
-      if ((uVar3 == uVar2) && (*(uint16_t *)((int)Entities + uVar5 * 0x37 + 2) == y)) {
+      if ((uVar3 == uVar2) && (((entity_t *)Entities)[uVar5].base.y == y)) {
         return uVar5;
       }
-      uVar3 = ovr_alignUp4(*(int *)((int)Entities + uVar5 * 0x37 + 8));
+      uVar3 = ovr_alignUp4(((entity_t *)Entities)[uVar5].base.destX);
       if (uVar3 != uVar1) {
         return uVar5;
       }
-      if (*(uint16_t *)((int)Entities + uVar5 * 0x37 + 10) != destY) {
+      if (((entity_t *)Entities)[uVar5].base.destY != destY) {
         return uVar5;
       }
     }
@@ -77,8 +77,8 @@ ovc25_usesAlignUp42(char partyIndex,byte count,uint16_t destX,uint16_t destY,uin
         while ((iStack_4 < (int)(uint)count &&
                (uVar4 = ovc25_usesAlignUp4(partyIndex,x,y,destX,destY), -1 < (int)uVar4))) {
           *(undefined1 *)((int)Entities + uVar4 * 0x37 + 0x30) = 0;
-          *(uint16_t *)((int)Entities + uVar4 * 0x37 + 8) = destX;
-          *(uint16_t *)((int)Entities + uVar4 * 0x37 + 10) = destY;
+          ((entity_t *)Entities)[uVar4].base.destX = destX;
+          ((entity_t *)Entities)[uVar4].base.destY = destY;
           pbVar1 = (byte *)((int)Entities + uVar4 * 0x37 + 0x33);
           *pbVar1 = *pbVar1 | 8;
           iStack_4 = iStack_4 + 1;
@@ -91,10 +91,10 @@ ovc25_usesAlignUp42(char partyIndex,byte count,uint16_t destX,uint16_t destY,uin
       uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar4 * 0x37));
       uVar3 = ovr_alignUp4(destX);
       uVar5 = (undefined2)((ulong)Entities >> 0x10);
-      if ((uVar2 != uVar3) || (*(uint16_t *)((int)Entities + uVar4 * 0x37 + 2) != destY)) {
-        uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar4 * 0x37 + 8));
+      if ((uVar2 != uVar3) || (((entity_t *)Entities)[uVar4].base.y != destY)) {
+        uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar4].base.destX);
         uVar3 = ovr_alignUp4(destX);
-        if ((uVar2 != uVar3) || (*(uint16_t *)((int)Entities + uVar4 * 0x37 + 10) != destY))
+        if ((uVar2 != uVar3) || (((entity_t *)Entities)[uVar4].base.destY != destY))
         goto L_OVC25_5b66_00ff_01D9;
       }
       pbVar1 = (byte *)((int)Entities + uVar4 * 0x37 + 0x33);
@@ -177,12 +177,12 @@ ovc25_usesAlignUp43(char partyIndex,byte count,uint16_t destX,uint16_t destY,cha
         uVar3 = ovr_alignUp4(*(int *)((int)Entities + entityIndex * 0x37));
         uVar4 = ovr_alignUp4(destX);
         uVar6 = (undefined2)((ulong)Entities >> 0x10);
-        if ((uVar3 != uVar4) || (*(uint16_t *)((int)Entities + entityIndex * 0x37 + 2) != destY))
+        if ((uVar3 != uVar4) || (((entity_t *)Entities)[entityIndex].base.y != destY))
         {
-          uVar3 = ovr_alignUp4(*(int *)((int)Entities + entityIndex * 0x37 + 8));
+          uVar3 = ovr_alignUp4(((entity_t *)Entities)[entityIndex].base.destX);
           uVar4 = ovr_alignUp4(destX);
           if ((uVar3 != uVar4) ||
-             (*(uint16_t *)((int)Entities + entityIndex * 0x37 + 10) != destY))
+             (((entity_t *)Entities)[entityIndex].base.destY != destY))
           goto L_OVC25_5b66_038d_0482;
         }
         iVar5 = iVar5 + 1;
@@ -197,8 +197,8 @@ L_OVC25_5b66_038d_0482:
            (bVar2 = ovc25_textArena((uint *)CONCAT22(unaff_SS,&entityIndex),setFlag8,
                                     (uint)(byte)partyIndex,destX), bVar2))) {
       *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x30) = 0;
-      *(uint16_t *)((int)Entities + entityIndex * 0x37 + 8) = destX;
-      *(uint16_t *)((int)Entities + entityIndex * 0x37 + 10) = destY;
+      ((entity_t *)Entities)[entityIndex].base.destX = destX;
+      ((entity_t *)Entities)[entityIndex].base.destY = destY;
       if (setFlag8 != '\0') {
         pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
         *pbVar1 = *pbVar1 | 8;
@@ -232,9 +232,9 @@ void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,
     for (entityIndex = 0; entityIndex < EntityCount; entityIndex = entityIndex + 1) {
       uVar5 = (undefined2)((ulong)Entities >> 0x10);
       if (*(char *)((int)Entities + entityIndex * 0x37 + 0x1a) == partyIndex) {
-        uVar2 = ovr_alignUp4(*(int *)((int)Entities + entityIndex * 0x37 + 8));
+        uVar2 = ovr_alignUp4(((entity_t *)Entities)[entityIndex].base.destX);
         uVar3 = ovr_alignUp4(destX);
-        if ((uVar2 == uVar3) && (*(uint16_t *)((int)Entities + entityIndex * 0x37 + 10) == destY))
+        if ((uVar2 == uVar3) && (((entity_t *)Entities)[entityIndex].base.destY == destY))
         {
           iVar4 = iVar4 + 1;
         }
@@ -244,24 +244,24 @@ void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,
            (bVar1 = ovc25_textArena((uint *)CONCAT22(unaff_SS,&entityIndex),'\x02',
                                     (uint)(byte)partyIndex,destX), bVar1))) {
       *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x30) = 0;
-      *(uint16_t *)((int)Entities + entityIndex * 0x37 + 8) = destX;
-      *(uint16_t *)((int)Entities + entityIndex * 0x37 + 10) = destY;
+      ((entity_t *)Entities)[entityIndex].base.destX = destX;
+      ((entity_t *)Entities)[entityIndex].base.destY = destY;
       iVar4 = iVar4 + 1;
     }
     while ((iVar4 < (int)(uint)count &&
            (bVar1 = ovc25_textArena((uint *)CONCAT22(unaff_SS,&entityIndex),'\x01',
                                     (uint)(byte)partyIndex,destX), bVar1))) {
       *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x30) = 0;
-      *(uint16_t *)((int)Entities + entityIndex * 0x37 + 8) = destX;
-      *(uint16_t *)((int)Entities + entityIndex * 0x37 + 10) = destY;
+      ((entity_t *)Entities)[entityIndex].base.destX = destX;
+      ((entity_t *)Entities)[entityIndex].base.destY = destY;
       iVar4 = iVar4 + 1;
     }
     while ((iVar4 < (int)(uint)count &&
            (bVar1 = ovc25_textArena((uint *)CONCAT22(unaff_SS,&entityIndex),'\0',
                                     (uint)(byte)partyIndex,destX), bVar1))) {
       *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x30) = 0;
-      *(uint16_t *)((int)Entities + entityIndex * 0x37 + 8) = destX;
-      *(uint16_t *)((int)Entities + entityIndex * 0x37 + 10) = destY;
+      ((entity_t *)Entities)[entityIndex].base.destX = destX;
+      ((entity_t *)Entities)[entityIndex].base.destY = destY;
       iVar4 = iVar4 + 1;
     }
   }
@@ -407,7 +407,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
             *piVar1 = *piVar1 + 1;
             uVar8 = (undefined2)((ulong)Entities >> 0x10);
             if ((((char_sheet_t *)((uStack_a << 2)))->y ==
-                 *(int *)((int)Entities + uStack_c * 0x37 + 2)) &&
+                 ((entity_t *)Entities)[uStack_c].base.y) &&
                (uVar2 = ovr_alignUp4(*(int *)((int)Entities + uStack_c * 0x37)), uVar2 == uStack_12
                )) {
               piVar1 = (int *)((int)*(undefined4 *)(uStack_a << 2) + 0x47);
@@ -471,7 +471,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
                 *(int *)((int)Entities + unaff_DI * 0x37);
         uVar5 = (int)uVar2 >> 0xf;
         uVar3 = ((char_sheet_t *)((uStack_a << 2)))->y -
-                *(int *)((int)Entities + unaff_DI * 0x37 + 2);
+                ((entity_t *)Entities)[unaff_DI].base.y;
         uVar6 = (int)uVar3 >> 0xf;
         uStack_14 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((uVar3 ^ uVar6) - uVar6);
       }
@@ -544,7 +544,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
         if (9 < ((char_sheet_t *)((uStack_a << 2)))->unitsOnTile) {
           uVar8 = (undefined2)((ulong)Entities >> 0x10);
           ovc25_usesAlignUp43((byte)uStack_a,5,*(uint16_t *)((int)Entities + unaff_DI * 0x37),
-                              *(uint16_t *)((int)Entities + unaff_DI * 0x37 + 2),'\x01');
+                              ((entity_t *)Entities)[unaff_DI].base.y,'\x01');
         }
         ovc25_usesAlignUp43((byte)uStack_a,10,
                             ((char_sheet_t *)((uStack_a << 2)))->x,
@@ -614,16 +614,16 @@ int __cdecl16far ovc25_usesAlignUp46(uint16_t x,uint16_t y,char excluded,uint8_t
     }
     uVar4 = (undefined2)((ulong)Entities >> 0x10);
     if ((((*(byte *)((int)Entities + uVar3 * 0x37 + 0x33) & 2) != 0) &&
-        (uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar3 * 0x37 + 4)), uVar2 == uVar1)) &&
-       (*(uint16_t *)((int)Entities + uVar3 * 0x37 + 6) == y)) {
+        (uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar3].base.targetX), uVar2 == uVar1)) &&
+       (((entity_t *)Entities)[uVar3].base.targetY == y)) {
       *(undefined1 *)CONCAT22((uint8_t *)foundFlag,in_stack_0000000a) = 1;
     }
     uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar3 * 0x37));
     if (uVar2 == uVar1) {
       uVar4 = (undefined2)((ulong)Entities >> 0x10);
-      if (*(uint16_t *)((int)Entities + uVar3 * 0x37 + 2) == y) {
+      if (((entity_t *)Entities)[uVar3].base.y == y) {
         if (*(char *)((int)(char **)GMenuStrings +
-                     (uint)*(byte *)((int)Entities + uVar3 * 0x37 + 0xd) * 0x95 + 0x1f) != excluded
+                     (uint)((entity_t *)Entities)[uVar3].base.gindex * 0x95 + 0x1f) != excluded
            ) {
           return 0xff;
         }
@@ -755,7 +755,7 @@ void ovc25_usesAlignUp47(void)
                        *(char *)(*(byte *)(unaff_BP + -9) + 0x885) * 4);
   *(uint *)(unaff_BP + -6) = uVar6;
   *(int *)(unaff_BP + -8) =
-       *(int *)((int)Entities + uVar2 * 0x37 + 2) +
+       ((entity_t *)Entities)[uVar2].base.y +
        (int)*(char *)(*(byte *)(unaff_BP + -9) + 0x889);
   uVar7 = ovr_attact_usesGUnits(*(int *)(unaff_BP + -6),*(int *)(unaff_BP + -8));
   if ((char)uVar7 != '\0') {
@@ -767,11 +767,11 @@ void ovc25_usesAlignUp47(void)
       OVC25_5b66_131f_entry();
       return;
     }
-    *(undefined2 *)((int)Entities + uVar2 * 0x37 + 8) = *(undefined2 *)(unaff_BP + -6);
-    *(undefined2 *)((int)Entities + uVar2 * 0x37 + 10) = *(undefined2 *)(unaff_BP + -8);
+    ((entity_t *)Entities)[uVar2].base.destX = *(undefined2 *)(unaff_BP + -6);
+    ((entity_t *)Entities)[uVar2].base.destY = *(undefined2 *)(unaff_BP + -8);
     if ((*(char *)(unaff_BP + -0xd) == '\0') && (*(char *)(unaff_BP + -0xe) == '\0')) {
-      *(undefined2 *)((int)Entities + uVar2 * 0x37 + 4) = *(undefined2 *)(unaff_BP + -6);
-      *(undefined2 *)((int)Entities + uVar2 * 0x37 + 6) = *(undefined2 *)(unaff_BP + -8);
+      ((entity_t *)Entities)[uVar2].base.targetX = *(undefined2 *)(unaff_BP + -6);
+      ((entity_t *)Entities)[uVar2].base.targetY = *(undefined2 *)(unaff_BP + -8);
       *(undefined1 *)((int)Entities + uVar2 * 0x37 + 0x33) = 2;
       OVC25_5b66_131f_entry();
       return;
@@ -808,11 +808,11 @@ void ovc25_usesEntities(void)
     OVC25_5b66_131f_entry();
     return;
   }
-  *(undefined2 *)((int)Entities + unaff_DI * 0x37 + 8) = *(undefined2 *)(unaff_BP + -6);
-  *(undefined2 *)((int)Entities + unaff_DI * 0x37 + 10) = *(undefined2 *)(unaff_BP + -8);
+  ((entity_t *)Entities)[unaff_DI].base.destX = *(undefined2 *)(unaff_BP + -6);
+  ((entity_t *)Entities)[unaff_DI].base.destY = *(undefined2 *)(unaff_BP + -8);
   if ((*(char *)(unaff_BP + -0xd) == '\0') && (*(char *)(unaff_BP + -0xe) == '\0')) {
-    *(undefined2 *)((int)Entities + unaff_DI * 0x37 + 4) = *(undefined2 *)(unaff_BP + -6);
-    *(undefined2 *)((int)Entities + unaff_DI * 0x37 + 6) = *(undefined2 *)(unaff_BP + -8);
+    ((entity_t *)Entities)[unaff_DI].base.targetX = *(undefined2 *)(unaff_BP + -6);
+    ((entity_t *)Entities)[unaff_DI].base.targetY = *(undefined2 *)(unaff_BP + -8);
     *(undefined1 *)((int)Entities + unaff_DI * 0x37 + 0x33) = 2;
     OVC25_5b66_131f_entry();
     return;
@@ -850,7 +850,7 @@ void ovc25_usesAlignUp48(void)
                          *(char *)(*(byte *)(unaff_BP + -9) + 0x885) * 4);
     *(uint *)(unaff_BP + -6) = uVar1;
     *(int *)(unaff_BP + -8) =
-         *(int *)((int)Entities + unaff_DI * 0x37 + 2) +
+         ((entity_t *)Entities)[unaff_DI].base.y +
          (int)*(char *)(*(byte *)(unaff_BP + -9) + 0x889);
     uVar2 = ovr_attact_usesGUnits(*(int *)(unaff_BP + -6),*(int *)(unaff_BP + -8));
     if ((char)uVar2 == '\0') {
@@ -865,11 +865,11 @@ void ovc25_usesAlignUp48(void)
       OVC25_5b66_131f_entry();
       return;
     }
-    *(undefined2 *)((int)Entities + unaff_DI * 0x37 + 8) = *(undefined2 *)(unaff_BP + -6);
-    *(undefined2 *)((int)Entities + unaff_DI * 0x37 + 10) = *(undefined2 *)(unaff_BP + -8);
+    ((entity_t *)Entities)[unaff_DI].base.destX = *(undefined2 *)(unaff_BP + -6);
+    ((entity_t *)Entities)[unaff_DI].base.destY = *(undefined2 *)(unaff_BP + -8);
     if ((*(char *)(unaff_BP + -0xd) == '\0') && (*(char *)(unaff_BP + -0xe) == '\0')) {
-      *(undefined2 *)((int)Entities + unaff_DI * 0x37 + 4) = *(undefined2 *)(unaff_BP + -6);
-      *(undefined2 *)((int)Entities + unaff_DI * 0x37 + 6) = *(undefined2 *)(unaff_BP + -8);
+      ((entity_t *)Entities)[unaff_DI].base.targetX = *(undefined2 *)(unaff_BP + -6);
+      ((entity_t *)Entities)[unaff_DI].base.targetY = *(undefined2 *)(unaff_BP + -8);
       *(undefined1 *)((int)Entities + unaff_DI * 0x37 + 0x33) = 2;
       OVC25_5b66_131f_entry();
       return;

@@ -826,13 +826,13 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind,...)
   for (uVar8 = 0; partyIndex = (char)unaff_DI, uVar8 < EntityCount; uVar8 = uVar8 + 1) {
     uVar10 = (undefined2)((ulong)Entities >> 0x10);
     if (*(char *)((int)(char **)GMenuStrings +
-                 (uint)*(byte *)((int)Entities + uVar8 * 0x37 + 0xd) * 0x95 + 0x1f) != '\0') {
+                 (uint)((entity_t *)Entities)[uVar8].base.gindex * 0x95 + 0x1f) != '\0') {
       uVar3 = ovr_alignUp4(*(int *)((int)Entities + uVar8 * 0x37));
       uVar11 = (undefined1)uVar3;
       uVar12 = (undefined1)(uVar3 >> 8);
       uVar3 = ovr_alignUp4(GfxRndSeed);
       if ((CONCAT11(uVar12,uVar11) == uVar3) &&
-         (*(uint16_t *)((int)Entities + uVar8 * 0x37 + 2) == GfxRndSeed2)) {
+         (((entity_t *)Entities)[uVar8].base.y == GfxRndSeed2)) {
         ovr_stats_openCastlePanel();
         ovr_say((char *)"A fortress cannot be placed among enemy units.",0x10);
         MsgShown = 1;
@@ -1092,7 +1092,7 @@ bool __cdecl16far ovc18_textArena(uint16_t x,uint16_t y,...)
       return false;
     }
     uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar3 * 0x37));
-    if ((uVar2 == uVar1) && (*(uint16_t *)((int)Entities + uVar3 * 0x37 + 2) == y)) break;
+    if ((uVar2 == uVar1) && (((entity_t *)Entities)[uVar3].base.y == y)) break;
     uVar3 = uVar3 + 1;
   }
   return true;
@@ -1122,11 +1122,11 @@ uint __cdecl16far ovc18_usesAlignUp4(void)
     for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
       uVar7 = (undefined2)((ulong)Entities >> 0x10);
       if (*(char *)((int)(char **)GMenuStrings +
-                   (uint)*(byte *)((int)Entities + uVar5 * 0x37 + 0xd) * 0x95 + 0x1f) != '\0') {
+                   (uint)((entity_t *)Entities)[uVar5].base.gindex * 0x95 + 0x1f) != '\0') {
         uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar5 * 0x37));
         uVar3 = ovr_alignUp4(GfxRndSeed);
         if ((uVar2 == uVar3) &&
-           (uVar2 = *(uint *)((int)Entities + uVar5 * 0x37 + 2), uVar2 == GfxRndSeed2)) {
+           (uVar2 = ((entity_t *)Entities)[uVar5].base.y, uVar2 == GfxRndSeed2)) {
           return uVar2 & 0xff00;
         }
       }

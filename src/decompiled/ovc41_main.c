@@ -854,10 +854,10 @@ void __cdecl16far dbgPromoteEnemy(void)
       pcVar1 = (char *)(iVar2 + i * 0x37 + 0xd);
       *pcVar1 = *pcVar1 + '\x01';
       uVar3 = (undefined2)((ulong)Entities >> 0x10);
-      if (0x29 < *(byte *)((int)Entities + i * 0x37 + 0xd)) {
-        *(undefined1 *)((int)Entities + i * 0x37 + 0xd) = 0;
+      if (0x29 < ((entity_t *)Entities)[i].base.gindex) {
+        ((entity_t *)Entities)[i].base.gindex = 0;
       }
-      iVar2 = (uint)*(byte *)((int)Entities + i * 0x37 + 0xd) * 0x95;
+      iVar2 = (uint)((entity_t *)Entities)[i].base.gindex * 0x95;
       uVar3 = 0x195d;
       msg = ovr_stsprintf(buf,(char *)CONCAT22(0x6f33,unaff_SS),
                           (char *)CONCAT22(*(undefined2 *)((int)&AgntGs[0].name + iVar2),

@@ -1744,9 +1744,9 @@ uint __cdecl16far stats_usesAlignUp4(int entityIndex)
     uVar2 = ovr_alignUp4(GfxRndSeed);
     if (uVar1 == uVar2) {
       uVar5 = (undefined2)((ulong)Entities >> 0x10);
-      uVar2 = *(uint *)((int)Entities + entityIndex * 0x37 + 2);
+      uVar2 = ((entity_t *)Entities)[entityIndex].base.y;
       if (uVar2 == GfxRndSeed2) {
-        uVar1 = ovr_alignUp4(*(int *)((int)Entities + entityIndex * 0x37 + 4));
+        uVar1 = ovr_alignUp4(((entity_t *)Entities)[entityIndex].base.targetX);
         uVar2 = ovr_alignUp4(GfxRndSeed);
         if (uVar1 == uVar2) {
           uVar5 = (undefined2)((ulong)Entities >> 0x10);
@@ -1813,11 +1813,11 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   iStack_c = *(int *)((uint)agntIndex * 0x34 + 0x1d);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
   *(int *)((int)Entities + entityIndex * 0x37) = iVar2;
-  *(uint16_t *)((int)Entities + entityIndex * 0x37 + 2) = GfxRndSeed2;
+  ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
   uVar4 = (undefined2)((ulong)Entities >> 0x10);
-  *(undefined2 *)((int)Entities + entityIndex * 0x37 + 4) =
+  ((entity_t *)Entities)[entityIndex].base.targetX =
        *(undefined2 *)((int)Entities + entityIndex * 0x37);
-  *(uint16_t *)((int)Entities + entityIndex * 0x37 + 6) = GfxRndSeed2;
+  ((entity_t *)Entities)[entityIndex].base.targetY = GfxRndSeed2;
   pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
   *pbVar1 = *pbVar1 | 2;
   widths = 0x2410;
@@ -1862,11 +1862,11 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
   iStack_c = *(int *)((uint)agntIndex * 0x34 + 0x1d);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
   *(int *)((int)Entities + entityIndex * 0x37) = iVar2;
-  *(uint16_t *)((int)Entities + entityIndex * 0x37 + 2) = GfxRndSeed2;
+  ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
   uVar4 = (undefined2)((ulong)Entities >> 0x10);
-  *(undefined2 *)((int)Entities + entityIndex * 0x37 + 4) =
+  ((entity_t *)Entities)[entityIndex].base.targetX =
        *(undefined2 *)((int)Entities + entityIndex * 0x37);
-  *(uint16_t *)((int)Entities + entityIndex * 0x37 + 6) = GfxRndSeed2;
+  ((entity_t *)Entities)[entityIndex].base.targetY = GfxRndSeed2;
   widths = 0x2410;
   pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
   *pbVar1 = *pbVar1 & 0xfd;
@@ -1962,7 +1962,7 @@ void __cdecl16far stats_openAgentDetail(int agntIndex)
   ScreenMode = 2;
   drawAgntStats((agnt_t *)(agntIndex * 0x34),far_from_u32((uint32_t)(0x1726)),0);
   drawString((char *)0x620f,0x2410);
-  bVar1 = *(byte *)((int)Entities + iVar2 * 0x37 + 0xd);
+  bVar1 = ((entity_t *)Entities)[iVar2].base.gindex;
   if (*(char *)((int)(char **)GMenuStrings + (uint)bVar1 * 0x95 + 0x1f) == '\0') {
     if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\0') ||
        (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\x04')) {
@@ -2099,8 +2099,8 @@ L_stats_6386_1c9f_1E1D:
   iVar14 = *(int *)((uint)agntIndex * 0x34 + 0x1b);
   stats_openAgentDetail((uint)agntIndex);
   uVar16 = (undefined2)((ulong)Entities >> 0x10);
-  if (*(int *)((int)Entities + iVar14 * 0x37 + 6) == GfxRndSeed2) {
-    uVar5 = ovr_alignUp4(*(int *)((int)Entities + iVar14 * 0x37 + 4));
+  if (((entity_t *)Entities)[iVar14].base.targetY == GfxRndSeed2) {
+    uVar5 = ovr_alignUp4(((entity_t *)Entities)[iVar14].base.targetX);
     uVar17 = (undefined1)uVar5;
     uVar18 = (undefined1)(uVar5 >> 8);
     uVar5 = ovr_alignUp4(GfxRndSeed);
@@ -2295,8 +2295,8 @@ switchD_6000_58bf_caseD_5:
           iVar14 = *(int *)((uint)agntIndex * 0x34 + 0x1b);
           stats_openAgentDetail((uint)agntIndex);
           uVar16 = (undefined2)((ulong)Entities >> 0x10);
-          if (*(int *)((int)Entities + iVar14 * 0x37 + 6) == GfxRndSeed2) {
-            uVar5 = ovr_alignUp4(*(int *)((int)Entities + iVar14 * 0x37 + 4));
+          if (((entity_t *)Entities)[iVar14].base.targetY == GfxRndSeed2) {
+            uVar5 = ovr_alignUp4(((entity_t *)Entities)[iVar14].base.targetX);
             uVar17 = (undefined1)uVar5;
             uVar18 = (undefined1)(uVar5 >> 8);
             uVar5 = ovr_alignUp4(GfxRndSeed);

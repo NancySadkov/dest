@@ -2239,7 +2239,7 @@ void manage_usesEntities(void)
     *(int *)*(undefined4 *)(unaff_BP + 0xc) = *(int *)*(undefined4 *)(unaff_BP + 0xc) + 1;
     *(int *)*(undefined4 *)(unaff_BP + 0x10) =
          *(int *)*(undefined4 *)(unaff_BP + 0x10) +
-         (uint)*(byte *)((int)Entities + unaff_SI * 0x37 + 0xe);
+         (uint)((entity_t *)Entities)[unaff_SI].base.animFrame;
   }
   if (EntityCount <= unaff_SI + 1U) {
     return;
@@ -2273,7 +2273,7 @@ void __cdecl16far manage_usesEntities2(void)
     *(int *)*(undefined4 *)(unaff_BP + 0xc) = *(int *)*(undefined4 *)(unaff_BP + 0xc) + 1;
     *(int *)*(undefined4 *)(unaff_BP + 0x10) =
          *(int *)*(undefined4 *)(unaff_BP + 0x10) +
-         (uint)*(byte *)((int)Entities + unaff_SI * 0x37 + 0xe);
+         (uint)((entity_t *)Entities)[unaff_SI].base.animFrame;
   }
   if (unaff_SI + 1U < EntityCount) {
     manage_usesEntities();
@@ -2301,7 +2301,7 @@ undefined2 __cdecl16far sub_OVC21_manage_c_23C2()
     *(int *)*(undefined4 *)(unaff_BP + 0xc) = *(int *)*(undefined4 *)(unaff_BP + 0xc) + 1;
     *(int *)*(undefined4 *)(unaff_BP + 0x10) =
          *(int *)*(undefined4 *)(unaff_BP + 0x10) +
-         (uint)*(byte *)((int)Entities + unaff_SI * 0x37 + 0xe);
+         (uint)((entity_t *)Entities)[unaff_SI].base.animFrame;
   }
   if (unaff_SI + 1U < EntityCount) {
     manage_usesEntities();

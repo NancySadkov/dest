@@ -440,10 +440,10 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
       uVar14 = (undefined2)((ulong)Entities >> 0x10);
       uVar14 = ovr_ovc23_isCursorAt
                          (*(uint16_t *)((int)Entities + uVar12 * 0x37),
-                          *(int *)((int)Entities + uVar12 * 0x37 + 2));
+                          ((entity_t *)Entities)[uVar12].base.y);
       if (((char)uVar14 != '\0') &&
          (*(char *)((int)(char **)GMenuStrings +
-                   (uint)*(byte *)((int)Entities + uVar12 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0')) {
+                   (uint)((entity_t *)Entities)[uVar12].base.gindex * 0x95 + 0x1f) == '\0')) {
         iVar13 = iVar13 + 1;
       }
     }

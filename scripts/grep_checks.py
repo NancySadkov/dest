@@ -34,7 +34,7 @@ CHECKS = [
     ("ptrN", r"ptr[_0-9]"),
     ("(A) idx*stride", r"\(\([_0-9A-Za-z]*\)[0-9A-Za-z]* \+ [_0-9A-Za-z]* \* 0x[0-9A-Za-z]\)"),
     ("(B) idx*stride", r"\([0-9A-Za-z]* \+ [_0-9A-Za-z]* \* 0x[0-9A-Za-z]\)"),
-    ("(C) idx*stride", r"\([_0-9A-Za-z]*[0-9A-Za-z]* \+ [_0-9A-Za-z]* \* 0x[0-9A-Za-z]"),
+    ("(C) idx*stride", r"\([_0-9A-Za-z]*\)[0-9A-Za-z]* \+ [_0-9A-Za-z]* \* 0x[0-9A-Za-z]"),
     ("(D) far const", r"[0-9a-b] \* 0x[0-9a-b]....[0-9a-b]"),
     ("LAB_", r"LAB_"),
 ]

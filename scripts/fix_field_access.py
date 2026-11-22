@@ -160,8 +160,11 @@ print("array fields used bare:", bare)
 
 # `*(T *)(BASE + IDX * STRIDE + OFF)` is a field of an array element: the stride
 # identifies the record type and OFF the field.  Both must match exactly once.
+# The base may be written bare (`Entities`) or cast to int (`(int)Entities`); both
+# mean the same address and both must reach the struct.
 STRIDE_FIELD = re.compile(
-    r"\*\s*\(\s*([A-Za-z_]\w*)\s*\*\s*\)\s*\(\s*([A-Za-z_]\w*)\s*\+\s*"
+    r"\*\s*\(\s*([A-Za-z_]\w*)\s*\*\s*\)\s*\(\s*(?:\(\s*(?:int|char|unsigned)\s*"
+    r"(?:\*\s*)?\)\s*)?([A-Za-z_]\w*)\s*\+\s*"
     r"([A-Za-z_]\w*)\s*\*\s*(0x[0-9a-fA-F]+)\s*\+\s*(0x[0-9a-fA-F]+|\d+)\s*\)")
 
 def resolve_field(sname, off, width, depth=0):

@@ -100,7 +100,6 @@
     extrn _miceInit:far
     extrn _init2_usesCFGMice:far
     extrn _ovr_miceButton0PressStates_entry:far
-    extrn _ovr_miceButton0PressStates_entry:far
     extrn _clearMiceProcessed:far
     extrn _init2_updateMouseButtons:far
     extrn _miceUpdate:far
@@ -118,7 +117,6 @@
     extrn _init_computeMaxSquares:far
     extrn _init_usesRandBelow2:far
     extrn _init_getMapFlags:far
-    extrn _init_rebuildAllDirectionFlags:far
     extrn _init_rebuildAllDirectionFlags:far
     extrn _ensure_tail_slash:far
     extrn _init_paths:far
@@ -149,7 +147,6 @@
     extrn _audio_isPlaying:far
     extrn _fmFreeAudio:far
     extrn _audio_usesLDIV_at_:far
-    extrn _ovr_midGetSequenceStatus_entry:far
     extrn _ovr_midGetSequenceStatus_entry:far
     extrn _audio_panFromX:far
     extrn _musInit:far
@@ -192,11 +189,9 @@
     extrn _clearSquareRecords:far
     extrn _attact_usesUpdSeason:far
     extrn _attact_usesBDADailyTimeCounter:far
-    extrn _attact_usesBDADailyTimeCounter:far
     extrn _attact_updateAttractEntry:far
     extrn _attact_usesLDIV_at_:far
-    extrn _attact_textAbnormalProgramTermination:far
-    extrn _attact_textAbnormalProgramTermination:far
+    extrn _attact_textAbnormalProgramTermin:far
     extrn _attact_countPartyUnits:far
     extrn _attact_compute2:far
     extrn _attact_compute3:far
@@ -351,7 +346,6 @@
     extrn _ovc28_usesBlitGfxRect2:far
     extrn _ovc28_blitButton:far
     extrn _ovc28_usesUiInputText:far
-    extrn _ovc28_usesBDADailyTimeCounter:far
     extrn _ovc28_usesBDADailyTimeCounter:far
     extrn _update_pause_button:far
     extrn _ovc28_textHalflingCastle:far
@@ -962,11 +956,6 @@ _ovr_init2_usesCFGMice proc far
     jmp _init2_usesCFGMice
 _ovr_init2_usesCFGMice endp
 
-    public _ovr_ovr_miceButton0PressStates_entry
-_ovr_ovr_miceButton0PressStates_entry proc far
-    jmp _ovr_miceButton0PressStates_entry
-_ovr_ovr_miceButton0PressStates_entry endp
-
     public _ovr_ovr_miceButton0PressStates_e
 _ovr_ovr_miceButton0PressStates_e proc far
     jmp _ovr_miceButton0PressStates_entry
@@ -1056,11 +1045,6 @@ _ovr_init_usesRandBelow2 endp
 _ovr_init_getMapFlags proc far
     jmp _init_getMapFlags
 _ovr_init_getMapFlags endp
-
-    public _ovr_init_rebuildAllDirectionFlags
-_ovr_init_rebuildAllDirectionFlags proc far
-    jmp _init_rebuildAllDirectionFlags
-_ovr_init_rebuildAllDirectionFlags endp
 
     public _ovr_init_rebuildAllDirectionFlag
 _ovr_init_rebuildAllDirectionFlag proc far
@@ -1211,11 +1195,6 @@ _ovr_fmFreeAudio endp
 _ovr_audio_usesLDIV_at_ proc far
     jmp _audio_usesLDIV_at_
 _ovr_audio_usesLDIV_at_ endp
-
-    public _ovr_ovr_midGetSequenceStatus_entry
-_ovr_ovr_midGetSequenceStatus_entry proc far
-    jmp _ovr_midGetSequenceStatus_entry
-_ovr_ovr_midGetSequenceStatus_entry endp
 
     public _ovr_ovr_midGetSequenceStatus_ent
 _ovr_ovr_midGetSequenceStatus_ent proc far
@@ -1422,11 +1401,6 @@ _ovr_attact_usesUpdSeason proc far
     jmp _attact_usesUpdSeason
 _ovr_attact_usesUpdSeason endp
 
-    public _ovr_attact_usesBDADailyTimeCounter
-_ovr_attact_usesBDADailyTimeCounter proc far
-    jmp _attact_usesBDADailyTimeCounter
-_ovr_attact_usesBDADailyTimeCounter endp
-
     public _ovr_attact_usesBDADailyTimeCount
 _ovr_attact_usesBDADailyTimeCount proc far
     jmp _attact_usesBDADailyTimeCounter
@@ -1442,14 +1416,9 @@ _ovr_attact_usesLDIV_at_ proc far
     jmp _attact_usesLDIV_at_
 _ovr_attact_usesLDIV_at_ endp
 
-    public _ovr_attact_textAbnormalProgramTermination
-_ovr_attact_textAbnormalProgramTermination proc far
-    jmp _attact_textAbnormalProgramTermination
-_ovr_attact_textAbnormalProgramTermination endp
-
     public _ovr_attact_textAbnormalProgramTe
 _ovr_attact_textAbnormalProgramTe proc far
-    jmp _attact_textAbnormalProgramTermination
+    jmp _attact_textAbnormalProgramTermin
 _ovr_attact_textAbnormalProgramTe endp
 
     public _ovr_attact_countPartyUnits
@@ -2222,11 +2191,6 @@ _ovr_ovc28_usesUiInputText proc far
     jmp _ovc28_usesUiInputText
 _ovr_ovc28_usesUiInputText endp
 
-    public _ovr_ovc28_usesBDADailyTimeCounter
-_ovr_ovc28_usesBDADailyTimeCounter proc far
-    jmp _ovc28_usesBDADailyTimeCounter
-_ovr_ovc28_usesBDADailyTimeCounter endp
-
     public _ovr_ovc28_usesBDADailyTimeCounte
 _ovr_ovc28_usesBDADailyTimeCounte proc far
     jmp _ovc28_usesBDADailyTimeCounter
@@ -2806,6 +2770,27 @@ _ovr_ovc50_usesUiInputText endp
 _ovr_EXT_FUN_8000_f2fa proc far
     jmp _EXT_FUN_8000_f2fa
 _ovr_EXT_FUN_8000_f2fa endp
+
+    public F_FTOL@
+F_FTOL@ proc far
+    xor ax,ax
+    cwd
+    ret
+F_FTOL@ endp
+
+    public FIDRQQ
+FIDRQQ proc far
+    xor ax,ax
+    cwd
+    ret
+FIDRQQ endp
+
+    public FIWRQQ
+FIWRQQ proc far
+    xor ax,ax
+    cwd
+    ret
+FIWRQQ endp
 
 OVRT_TEXT ends
     end

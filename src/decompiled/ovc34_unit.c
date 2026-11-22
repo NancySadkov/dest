@@ -779,7 +779,7 @@ unit_usesEntities(char state,int entityIndex,uint16_t unitFlags,uint16_t unitFla
       iVar2 = (int)Entities;
       uVar3 = ((entity_t *)iVar2)[entityIndex].base.y;
       ((entity_t *)iVar2)[entityIndex].base.targetX = *(undefined2 *)((entity_t *)iVar2 + entityIndex);
-      *(undefined2 *)((int)Entities + entityIndex * 0x37 + 6) = uVar3;
+      ((entity_t *)Entities)[entityIndex].base.targetY = uVar3;
       pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
       *pbVar1 = *pbVar1 & 0xfa;
       ovr_attact_usesEntities(entityIndex,0,0,unitFlags,unitFlagsSeg);

@@ -66,7 +66,9 @@ print("thunks with a recovered body (not generated):", len(have_body))
 # Export a thunk under BOTH spellings so either caller resolves.  A spelling is
 # claimed once; two different targets that truncate to the same symbol cannot both
 # be served and are reported.
-base = [("_" + t, "_" + g) for t, g in thunks]
+# Turbo C keeps 32 significant characters, so a long target is referenced
+# truncated; the thunk must name it the same way.
+base = [("_" + t[:32], "_" + g[:32]) for t, g in thunks]
 seen = {}
 uniq = []
 for t, g in base:
@@ -109,6 +111,32 @@ for thunk, target in thunks:
     out.append("    jmp %s" % target)
     out.append("%s endp" % thunk)
     out.append("")
+# F_FTOL@ is the compiler's far "float to long" runtime helper.  Its name contains
+# '@', which is not a C identifier, so it can only be provided from assembly: return
+# 0 in DX:AX.  GUESS: the conversion is not needed by the data path we exercise.
+out += [
+    "    public F_FTOL@",
+    "F_FTOL@ proc far",
+    "    xor ax,ax",
+    "    cwd",
+    "    ret",
+    "F_FTOL@ endp",
+    "",
+]
+# Borland's 80-bit float I/O helpers have assembler names without the C underscore
+# (FIDRQQ/FIWRQQ), so they cannot be defined in C.  GUESS: return 0 in DX:AX; the
+# float scanner/printer then formats 0 instead of the value.
+for _fp in ("FIDRQQ", "FIWRQQ"):
+    out += [
+        "    public %s" % _fp,
+        "%s proc far" % _fp,
+        "    xor ax,ax",
+        "    cwd",
+        "    ret",
+        "%s endp" % _fp,
+        "",
+    ]
+
 out += ["OVRT_TEXT ends", "    end", ""]
 
 if apply:

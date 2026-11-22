@@ -33,7 +33,7 @@ def main():
     # C0M is the medium-model startup and must match -mm on the objects
     # (C0L is the large-model one).
     rsp = ("D:\\LIB\\C0M.OBJ " + " ".join(objs) +
-           ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\EMU.LIB E:\\LIB\\CM.LIB")
+           ",REBUILT.EXE,REBUILT.MAP,E:\\LIB\\CM.LIB")
     with open(os.path.join(BUILDSRC, "LINK.RSP"), "w", encoding="ascii",
               newline="\r\n") as f:
         f.write(rsp + "\n")

@@ -450,7 +450,7 @@ for _name in ("fix_string_folds.py", "fix_raw_arrays.py", "fix_bda_far.py",
               "fix_truncated_names.py", "fix_lost_locals.py",
               "fix_codeptr_arith.py", "fix_promoted_protos.py",
               "fix_func_addr_calls.py", "fix_kr_definitions.py",
-              "fix_param_locals.py",
+              "fix_param_locals.py", "gen_stubs.py",
               "fix_stack_slots.py",
               "gen_ovr_thunks.py"):
     _script = os.path.join(_HERE, _name)

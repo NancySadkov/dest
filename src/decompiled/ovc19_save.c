@@ -60,8 +60,8 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
   iVar3 = 0;
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
     uVar4 = (undefined2)((ulong)Entities >> 0x10);
-    if (100 < *(byte *)((int)Entities + uVar2 * 0x37 + 0xe)) {
-      *(undefined1 *)((int)Entities + uVar2 * 0x37 + 0xe) = 0xf;
+    if (100 < ((entity_t *)Entities)[uVar2].base.animFrame) {
+      ((entity_t *)Entities)[uVar2].base.animFrame = 0xf;
       iVar3 = iVar3 + 1;
     }
     in_DX = 0x2410;

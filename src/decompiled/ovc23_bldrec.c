@@ -3170,11 +3170,11 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
   while (entityIndex = entityIndex - 1, -1 < (int)entityIndex) {
     uVar3 = (undefined2)((ulong)Entities >> 0x10);
     if ((*(uint16_t *)((int)Entities + entityIndex * 0x37) == x) &&
-       (*(uint16_t *)((int)Entities + entityIndex * 0x37 + 2) == y)) {
+       (((entity_t *)Entities)[entityIndex].base.y == y)) {
       iStack_6 = ovc23_findClearColumn(x,y);
       uVar3 = (undefined2)((ulong)Entities >> 0x10);
       if (iStack_6 < 0) {
-        bStack_3 = *(byte *)((int)Entities + entityIndex * 0x37 + 0xd);
+        bStack_3 = ((entity_t *)Entities)[entityIndex].base.gindex;
         if (*(char *)((int)(char **)GMenuStrings + (uint)bStack_3 * 0x95 + 0x1f) == '\0') {
           uVar3 = 0xa000;
           dst = 0x195d;

@@ -220,8 +220,8 @@ L_OVC25_5b66_00ff_01D9:
                                                        unaff_DI,in_stack_0000000a), -1 < (int)uVar7)
                            )) {
                       *(undefined1 *)((int)Entities + uVar7 * 0x37 + 0x30) = 0;
-                      *(uint16_t *)((int)Entities + uVar7 * 0x37 + 8) = unaff_DI;
-                      *(uint16_t *)((int)Entities + uVar7 * 0x37 + 10) = in_stack_0000000a;
+                      ((entity_t *)Entities)[uVar7].base.destX = unaff_DI;
+                      ((entity_t *)Entities)[uVar7].base.destY = in_stack_0000000a;
                       pbVar1 = (byte *)((int)Entities + uVar7 * 0x37 + 0x33);
                       *pbVar1 = *pbVar1 | 8;
                       iVar4 = iVar4 + 1;
@@ -2927,10 +2927,10 @@ void __cdecl16far ovc22_usesEntities2(int entityIndex)
         piVar1 = (int *)((int)uVar3 + cStack_5 * 2 + 0x6a);
         *piVar1 = *piVar1 + -1;
         uVar7 = (undefined2)((ulong)Entities >> 0x10);
-        cVar5 = *(char *)((int)Entities + entityIndex * 0x37 + 0x36) -
-                *(byte *)((int)Entities + entityIndex * 0x37 + 0x36) % 6;
+        cVar5 = ((entity_t *)Entities)[entityIndex].dir -
+                ((entity_t *)Entities)[entityIndex].dir % 6;
         cVar6 = ovc22_compute3(cStack_5);
-        *(char *)((int)Entities + entityIndex * 0x37 + 0x36) = cVar5 + cVar6;
+        ((entity_t *)Entities)[entityIndex].dir = cVar5 + cVar6;
         return;
       }
     }
@@ -2974,7 +2974,7 @@ void __cdecl16far ovc22_usesEntities3(int entityIndex)
         ((entity_t *)iVar6)[entityIndex].dir =
              ((entity_t *)iVar6)[entityIndex].dir +
              (char)(((ulong)((entity_t *)iVar6)[entityIndex].dir / 6) % 6) * -6;
-        bVar2 = *(byte *)((int)Entities + entityIndex * 0x37 + 0xd);
+        bVar2 = ((entity_t *)Entities)[entityIndex].base.gindex;
         if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar2 * 0x95) == '\x03') &&
            ('\x01' < cStack_6)) {
           cStack_7 = '\x01';
@@ -2985,8 +2985,8 @@ void __cdecl16far ovc22_usesEntities3(int entityIndex)
         }
         cVar5 = ovc22_compute3(cStack_7 + '\x01');
         uVar7 = (undefined2)((ulong)Entities >> 0x10);
-        *(char *)((int)Entities + entityIndex * 0x37 + 0x36) =
-             *(char *)((int)Entities + entityIndex * 0x37 + 0x36) + cVar5 * '\x06';
+        ((entity_t *)Entities)[entityIndex].dir =
+             ((entity_t *)Entities)[entityIndex].dir + cVar5 * '\x06';
         return;
       }
     }

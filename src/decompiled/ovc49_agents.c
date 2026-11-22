@@ -3425,7 +3425,7 @@ L_OVC49_8699_1e09_3CF7:
   uVar20 = EntityCount - 1;
   for (uVar15 = uVar20; -1 < (int)uVar15; uVar15 = uVar15 - 1) {
     uVar27 = (undefined2)((ulong)Entities >> 0x10);
-    uVar20 = (uint)*(byte *)((int)Entities + uVar15 * 0x37 + 0xe);
+    uVar20 = (uint)((entity_t *)Entities)[uVar15].base.animFrame;
     if ((uVar20 == 0) &&
        (uVar20 = ovr_ovc23_isCursorAt(*(uint16_t *)((int)Entities + uVar15 * 0x37)),
        (char)uVar20 != '\0')) {

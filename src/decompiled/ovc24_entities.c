@@ -38,7 +38,7 @@ void __cdecl16far ovc24_usesAlignUp4(void)
       cVar1 = *(char *)((int)(char **)GMenuStrings +
                        (uint)((entity_t *)iVar4)[uVar7].base.gindex * 0x95 + 0x1f);
       uVar2 = alignUp4(*(int *)((entity_t *)iVar4 + uVar7));
-      iVar4 = *(int *)((int)Entities + uVar7 * 0x37 + 2);
+      iVar4 = ((entity_t *)Entities)[uVar7].base.y;
       for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
         uVar8 = (undefined2)((ulong)Entities >> 0x10);
         iVar5 = (int)Entities;
@@ -470,7 +470,7 @@ L_OVC24_5943_0d5a_0E37:
           } while (*(uint *)(uVar1 * 0x34 + 0x1b) != uVar4);
           if ((int)uVar1 < 0) {
             if (*(char *)((int)(char **)GMenuStrings +
-                         (uint)*(byte *)((int)Entities + uVar4 * 0x37 + 0xd) * 0x95 + 0x1f) == '\0'
+                         (uint)((entity_t *)Entities)[uVar4].base.gindex * 0x95 + 0x1f) == '\0'
                ) {
               ovr_play_sfx(8,0);
             }
@@ -483,8 +483,8 @@ L_OVC24_5943_0d5a_0E37:
         else {
           uVar5 = (undefined2)((ulong)Entities >> 0x10);
           alignUp4(*(int *)((int)Entities + uVar4 * 0x37),
-                   *(undefined2 *)((int)Entities + uVar4 * 0x37 + 2),0xa000);
-          iVar3 = (uint)*(byte *)((int)Entities + uVar4 * 0x37 + 0xd) * 0x95;
+                   ((entity_t *)Entities)[uVar4].base.y,0xa000);
+          iVar3 = (uint)((entity_t *)Entities)[uVar4].base.gindex * 0x95;
           dst = 0x195d;
           msg = ovr_fmVsprintf("Intelligence reports %s unit destroyed. (%d, %d)",
                                (char *)CONCAT22(*(undefined2 *)
@@ -780,14 +780,14 @@ void __cdecl16far ovc24_usesLDIV_at_(int entityIndex)
   if ((int)lVar7 == 0) {
     uVar10 = (undefined2)((ulong)Entities >> 0x10);
     if (((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                   (uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0xd) * 0x95) & 0x2000) != 0
+                   (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95) & 0x2000) != 0
         ) && (bVar1 = ovr_agnt_compute8((agnt_t *)((int)Entities + entityIndex * 0x37),uVar10),
              -1 < (char)bVar1)) {
       uVar10 = (undefined2)((ulong)Entities >> 0x10);
-      cVar2 = *(char *)((int)Entities + entityIndex * 0x37 + 0x36) -
-              *(byte *)((int)Entities + entityIndex * 0x37 + 0x36) % 6;
+      cVar2 = ((entity_t *)Entities)[entityIndex].dir -
+              ((entity_t *)Entities)[entityIndex].dir % 6;
       cVar3 = ovr_ovc22_compute3(bVar1 - 1);
-      *(char *)((int)Entities + entityIndex * 0x37 + 0x36) = cVar2 + cVar3;
+      ((entity_t *)Entities)[entityIndex].dir = cVar2 + cVar3;
     }
   }
   return;
@@ -856,9 +856,9 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
     uVar6 = (undefined2)((ulong)Entities >> 0x10);
     if ((*(byte *)((int)Entities + uVar1 * 0x37 + 0x1a) == leaderIndex) &&
        (*(byte *)((int)Entities + uVar1 * 0x37 + 0x1a) = bestSameIdx, bestOtherIdx != 0xff)) {
-      *(undefined2 *)((int)Entities + uVar1 * 0x37 + 8) =
+      ((entity_t *)Entities)[uVar1].base.destX =
            ((char_sheet_t *)(((uint)bestOtherIdx << 2)))->x;
-      *(undefined2 *)((int)Entities + uVar1 * 0x37 + 10) =
+      ((entity_t *)Entities)[uVar1].base.destY =
            ((char_sheet_t *)(((uint)bestOtherIdx << 2)))->y;
     }
   }
@@ -922,8 +922,8 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
         *puVar1 = *puVar1 & 0xfffe;
         uVar10 = (undefined2)((ulong)Entities >> 0x10);
         alignUp4(*(int *)((int)Entities + entityIndex * 0x37),
-                 *(undefined2 *)((int)Entities + entityIndex * 0x37 + 2),0xa000);
-        iVar6 = (uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0xd) * 0x95;
+                 ((entity_t *)Entities)[entityIndex].base.y,0xa000);
+        iVar6 = (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95;
         uVar5 = 0x195d;
         pcVar7 = ovr_fmVsprintf("Intelligence reports %s unit cured of disease. (%d, %d)",
                                 (char *)CONCAT22(*(undefined2 *)
@@ -949,7 +949,7 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
       if (uVar4 < EntityCount) {
         alignUp4(*(int *)((entity_t *)iVar6 + entityIndex),
                  ((entity_t *)iVar6)[entityIndex].base.y,0xa000);
-        iVar6 = (uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0xd) * 0x95;
+        iVar6 = (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95;
         uVar5 = 0x195d;
         pcVar7 = ovr_fmVsprintf("Intelligence reports %s unit succombs to blast spore disease. (%d, %d)"
                                 ,(char *)CONCAT22(*(undefined2 *)
@@ -960,7 +960,7 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
         ovr_uiNotify(pcVar7,uVar5);
         uVar10 = (undefined2)((ulong)Entities >> 0x10);
         ovr_ovc15_usesLDIV_at_2
-                  (entityIndex,*(byte *)((int)Entities + uVar4 * 0x37 + 0xd),
+                  (entityIndex,((entity_t *)Entities)[uVar4].base.gindex,
                    *(char *)((int)Entities + uVar4 * 0x37 + 0x1a));
       }
     }
