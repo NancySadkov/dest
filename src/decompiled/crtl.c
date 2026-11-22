@@ -7,6 +7,8 @@
 #include "recovered.h"
 
 
+uint16_t startxDseg;
+
 /* 1000:0000 */
 void startx(void)
 
@@ -49,6 +51,7 @@ void startx(void)
   _heaptop.seg = iVar10;
   asm { mov ah,0x30; int 21h; mov word ptr DosVersion, ax };
   SaveVectors();
+
 
 
 
@@ -102,9 +105,20 @@ L_startx_007B:
       }
     }
 
-    /* The SS:SP switch is deferred: after it, every BP-relative local in
-       this C function would resolve in the new stack segment.  The DOS stack
-       is still inside the block we just resized, so it is usable for now. */
+    /* Switch to the top of the resized block.  SS is unchanged (sseg is the
+       current SS), so BP-relative locals stay valid; only SP moves up, above
+       the frame, giving the initialisers and main a real stack instead of the
+       128 bytes DOS sets in the header. */
+    asm {
+      mov dx, sseg;
+      mov di, paras;
+      mov cl, 4;
+      shl di, cl;
+      cli;
+      mov ss, dx;
+      mov sp, di;
+      sti;
+    }
     __stklen = paras << 4;
   }
   if (0x14 < *(uint *)&_nfile) {
@@ -198,10 +212,29 @@ L_startx_0109:
 
 
 
+
   _c0crtinit();
 
 
 
+
+  /* __setargv is not recovered yet, but main dereferences its argument vector
+     immediately (argv[0] is the executable path, argv[1] the optional save
+     name), so provide a minimal one in DGROUP. */
+  {
+    static char arg0[] = "STRONG.EXE";
+    static far_t argv[2];
+    static char env0[2] = { 0, 0 };
+
+    asm { mov ax, ds; mov word ptr startxDseg, ax }
+    argv[0].ofs = (uint16_t)arg0;
+    argv[0].seg = startxDseg;
+    argv[1].ofs = 0;
+    argv[1].seg = 0;
+    __C0argc = 1;
+    __C0argv = (uint16_t)argv;
+    __C0environ = (uint16_t)env0;
+  }
   iVar10 = main(__C0argc, (str_t *)__C0argv, (str_t *)__C0environ);
   *(int *)(puVar15 + -8) = iVar10;
   *(uint16_t *)(puVar15 + -10) = 0x1301;

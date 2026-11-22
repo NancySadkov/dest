@@ -407,3 +407,32 @@ bytes earlier firing.  That contradicts the static picture and means blind
 rebuilds are no longer productive: the next step needs a real trace (DOSBox
 breakpoints on the marker address and on the call site, or a small TSR logger),
 not another layout experiment.
+
+## Bisected the last four instructions before `main`
+
+No debugger needed: with the marker immediately before `main(...)` in place, the
+binary was patched one instruction at a time so that an `exit` sits exactly where
+that instruction starts.
+
+```
+marker+05  push word ptr [0x9d1]  -> CODE=49   reached
+marker+09  push word ptr [0x9cd]  -> CODE=50   reached
+marker+13  push word ptr [0x9cb]  -> CODE=51   reached
+marker+17  lcall 0:main           -> hang      never reached
+```
+
+So the three argument pushes execute, and the hang is at the third push / the
+`lcall` boundary.  Replacing the `lcall` with `int 20h` (which needs no stack)
+also hangs, so the instruction after the third push is never executed.
+
+The obvious suspect was the stack: the EXE header sets `SS=0x2131, SP=0x0080`,
+i.e. 128 bytes, and the startup had been running all initialisers on it because
+the `SS:SP` switch had been deferred.  The switch is restored (it is a no-op for
+`SS`, since the original loads `DX` from `SS`; only `SP` moves to
+`((__stklen>>4)+1)*16`, above the current frame, so BP-relative locals stay
+valid).  The ladder still stops at the same place, so the stack size was not the
+cause.
+
+Also kept from this round: the minimal DGROUP argv (`arg0 = "STRONG.EXE"` plus a
+terminator) assigned to `__C0argc/__C0argv/__C0environ`, which makes the
+pre-`main` marker fire with a real vector.
