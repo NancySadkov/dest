@@ -132,8 +132,9 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   undefined1 uVar28;
   uint32_t in_stack_0000ffd0;
   long lVar29;
-  uint32_t uStack_2c;
-  uint32_t uStack_28;
+  uint32_t factionTimer[2];   /* [BP-0x2a]: two 32-bit per-faction timers */
+  uint8_t factionFlagsB[2];   /* [BP-0x20] */
+  uint8_t factionFlagsA[2];   /* [BP-0x22] */
   uint8_t factionMax [4];
   long *plStack_18;
   int iStack_16;
@@ -146,9 +147,9 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   uVar17 = (uint16_t)((ulong)Entities >> 0x10);
   uVar14 = ((entity_t *)Entities)[entityIndex].base.y;
   uVar6 = alignUp4((((entity_t *)Entities + entityIndex)->base).x,0,0);
-  _fmemset((void *)(ulong)unaff_SS,8,unaff_DI);
-  _fmemset((void *)CONCAT13(0xff,CONCAT12(0x81,unaff_SS)),2,unaff_DI);
-  _fmemset((void *)CONCAT13(0xff,CONCAT12(0x81,unaff_SS)),2,unaff_DI);
+  _fmemset(MK_FP(_SS, factionTimer), 0, 8);
+  _fmemset(MK_FP(_SS, factionFlagsB), 0xFF81, 2);
+  _fmemset(MK_FP(_SS, factionFlagsA), 0xFF81, 2);
   uVar16 = entityIndex;
   do {
     entityIndex_00 = uVar16;
@@ -159,10 +160,10 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
     bVar5 = ovc24_usesEntities(entityIndex_00);
     uVar7 = (uint)bVar5 * (uint)bVar5 * (uint)((entity_t *)Entities)[entityIndex_00].base.animFrame
     ;
-    puVar1 = (uint *)(&uStack_2c + bVar4);
+    puVar1 = (uint *)(&factionTimer[0] + bVar4);
     uVar16 = *puVar1;
     *puVar1 = *puVar1 + uVar7;
-    piVar2 = (int *)((int)&uStack_2c + (uint)bVar4 * 4 + 2);
+    piVar2 = (int *)((int)&factionTimer[0] + (uint)bVar4 * 4 + 2);
     *piVar2 = *piVar2 + ((int)uVar7 >> 0xf) + (uint)CARRY2(uVar16,uVar7);
     if (((*(uint *)((int)&worldMenuLabels[6].seg + 1 + (uint)bVar20 * 0x95) & 8) == 0) &&
        ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)bVar20 * 0x95) & 0x20) == 0)) {
@@ -203,15 +204,15 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   } while (uVar16 < EntityCount);
   iStack_16 = 0;
   plStack_18 = (long *)"Time passes...";
-  if ((-1 < (*(uint16_t *)((uint8_t *)&(uStack_2c) + 2))) &&
-     ((0 < (*(uint16_t *)((uint8_t *)&(uStack_2c) + 2)) || ((long *)"Time passes..." < (long *)uStack_2c)))) {
-    iStack_16 = (*(uint16_t *)((uint8_t *)&(uStack_2c) + 2));
-    plStack_18 = (long *)uStack_2c;
+  if ((-1 < (*(uint16_t *)((uint8_t *)&(factionTimer[0]) + 2))) &&
+     ((0 < (*(uint16_t *)((uint8_t *)&(factionTimer[0]) + 2)) || ((long *)"Time passes..." < (long *)factionTimer[0])))) {
+    iStack_16 = (*(uint16_t *)((uint8_t *)&(factionTimer[0]) + 2));
+    plStack_18 = (long *)factionTimer[0];
   }
-  if ((iStack_16 <= (*(uint16_t *)((uint8_t *)&(uStack_28) + 2))) &&
-     ((iStack_16 < (*(uint16_t *)((uint8_t *)&(uStack_28) + 2)) || (plStack_18 < (long *)uStack_28)))) {
-    iStack_16 = (*(uint16_t *)((uint8_t *)&(uStack_28) + 2));
-    plStack_18 = (long *)uStack_28;
+  if ((iStack_16 <= (*(uint16_t *)((uint8_t *)&(factionTimer[1]) + 2))) &&
+     ((iStack_16 < (*(uint16_t *)((uint8_t *)&(factionTimer[1]) + 2)) || (plStack_18 < (long *)factionTimer[1])))) {
+    iStack_16 = (*(uint16_t *)((uint8_t *)&(factionTimer[1]) + 2));
+    plStack_18 = (long *)factionTimer[1];
   }
   uVar23 = (undefined1)iStack_16;
   uVar27 = (undefined1)((uint)iStack_16 >> 8);
@@ -223,19 +224,19 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   uVar24 = uVar23;
   uVar28 = uVar27;
   plVar8 = LXMUL_at_(plStack_18,CONCAT22(unaff_DI,iStack_16),lVar29);
-  uStack_2c = LDIV_at_(CONCAT13((char)((uint)uVar17 >> 8),CONCAT12((char)uVar17,plVar8)),
+  factionTimer[0] = LDIV_at_(CONCAT13((char)((uint)uVar17 >> 8),CONCAT12((char)uVar17,plVar8)),
                        CONCAT13(uVar28,CONCAT12(uVar24,CONCAT11(uVar22,uVar19))));
-  uStack_2c = uStack_2c + 0x14;
+  factionTimer[0] = factionTimer[0] + 0x14;
   uVar17 = 0;
   plVar8 = LXMUL_at_(plStack_18,CONCAT22(unaff_DI,iStack_16),lVar29);
-  uStack_28 = LDIV_at_(CONCAT13((char)((uint)uVar17 >> 8),CONCAT12((char)uVar17,plVar8)),
+  factionTimer[1] = LDIV_at_(CONCAT13((char)((uint)uVar17 >> 8),CONCAT12((char)uVar17,plVar8)),
                        CONCAT13(uVar27,CONCAT12(uVar23,CONCAT11(uVar21,uVar18))));
-  uStack_28 = uStack_28 + 0x14;
-  uVar9 = ovr_randBelow((uint16_t)(long *)uStack_2c,0);
-  uVar10 = ovr_randBelow((uint16_t)(long *)uStack_28,0);
-  uVar11 = ovr_randBelow((uint16_t)(long *)uStack_2c,0);
+  factionTimer[1] = factionTimer[1] + 0x14;
+  uVar9 = ovr_randBelow((uint16_t)(long *)factionTimer[0],0);
+  uVar10 = ovr_randBelow((uint16_t)(long *)factionTimer[1],0);
+  uVar11 = ovr_randBelow((uint16_t)(long *)factionTimer[0],0);
   uStack_8 = uVar11 & 0xff;
-  uVar11 = ovr_randBelow((uint16_t)(long *)uStack_28,0);
+  uVar11 = ovr_randBelow((uint16_t)(long *)factionTimer[1],0);
   uVar16 = uVar11 & 0xff;
   if ((uVar10 & 0xff) < (uVar9 & 0xff)) {
     uStack_8 = uStack_8 / (uVar16 + 1);
