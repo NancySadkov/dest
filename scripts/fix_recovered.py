@@ -307,25 +307,26 @@ def ident_type(name):
     return None
 
 def generate_artifacts():
+    """Delegate to scripts/gen_artifacts.py.
+
+    It also turns Ghidra's absolute-address pseudo-variables (iRam00000066,
+    ram0x00024180, ...) into far memory accesses instead of declaring them as
+    DGROUP globals, which is what made those symbols undefined at link time.
+    """
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "gen_artifacts", os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                      "gen_artifacts.py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
     ids = set()
-    pat = re.compile(r"\b((?:p?[uic]?Ram[0-9a-fA-F]{5,8})|(?:stack0x[0-9a-fA-F]+)|(?:in_[A-Za-z0-9_]+)|(?:unaff_[A-Za-z0-9_]+)|(?:extraout_[A-Za-z0-9_]+)|(?:out_[A-Za-z0-9_]+)|(?:_?[A-Za-z]*Stack_[0-9a-fA-F]+)|(?:ram0x[0-9a-fA-F]+)|(?:far_t_ARRAY_[0-9a-fA-F_]+)|(?:UNK_[0-9A-Fa-f_]+)|(?:_font_[0-9a-fA-F_]+))\b")
+    pat = re.compile(r"\b((?:p?[uic]?Ram(?:0x)?[0-9a-fA-F]{5,8})|(?:stack0x[0-9a-fA-F]+)"
+                     r"|(?:in_[A-Za-z0-9_]+)|(?:unaff_[A-Za-z0-9_]+))", re.I)
     for name in os.listdir(OUT):
-        if not name.endswith(".c"):
-            continue
-        with open(os.path.join(OUT, name), "r", encoding="utf-8", errors="replace") as f:
-            ids.update(pat.findall(f.read()))
-    path = os.path.join(OUT, "st_artifacts.h")
-    with open(path, "w", encoding="utf-8") as f:
-        f.write("/* Declarations for Ghidra decompiler RAM/register pseudo-variables. */\n")
-        f.write("#ifndef ST_ARTIFACTS_H\n#define ST_ARTIFACTS_H\n")
-        for i in sorted(ids):
-            t = ident_type(i)
-            if t:
-                if i.startswith("far_t_ARRAY_"):
-                    f.write("extern %s %s[];\n" % (t, i))
-                else:
-                    f.write("extern %s %s;\n" % (t, i))
-        f.write("#endif\n")
+        if name.endswith(".c"):
+            ids.update(pat.findall(io.open(os.path.join(OUT, name), encoding="utf-8",
+                                           errors="replace").read()))
+    mod.main(ids, ident_type)
     return len(ids)
 
 def patch_headers():
