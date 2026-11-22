@@ -96,7 +96,7 @@ void __cdecl16far clrscr(void);
 long * __cdecl16far coreleft(long *__return_storage_ptr__);
 int16_t __cdecl16near _crtinit_system(char *s1,char *s2);
 char __cdecl16near egainstalled(void);
-void __cdecl16near _VideoInt(void);
+uint16_t __cdecl16near _VideoInt(uint16_t axval);
 void __cdecl16near _c0crtinit(void);
 void __cdecl16near __crtinit(uint8_t videoMode);
 void _FakRealCvt(void);

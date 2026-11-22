@@ -315,3 +315,33 @@ Ladder after the change:
 `_c0crtinit` (1000:14d7) is `INT 10h AH=0Fh` -> `__crtinit` -> `INT 10h AH=08h`
 through `_VideoInt`, whose recovered body issues nine `swi(0x10)` calls with no
 register setup.  That is the next set of call sites to give registers to.
+
+## Done: _c0crtinit returns; the call to main is the next stop
+
+`_VideoInt` (1000:1453) is a register-convention wrapper: the caller puts AH
+(function) and AL (argument) in AX.  The recovered C read an uninitialised
+`in_AX` and issued `swi(0x10)` with whatever registers happened to hold.  It now
+takes `uint16_t axval`, does `mov ax,axval; int 10h`, and returns AX through a
+scratch word (BCC will not resolve a local variable inside an inline `asm`
+block, so the result is stored in the file-scope `videoIntResult`).
+
+The callers were fixed with it, from the disassembly:
+
+* `_c0crtinit`: `_VideoInt(0x0f00)` -> `__crtinit(AL)` -> `_VideoInt(0x0800)`,
+  with `normattr`/`attribute` taken from AH.
+* `egainstalled`: `_VideoInt(0x1200)` (AH=12h, BL=10h) then `AL + 0xF0`.
+* `__crtinit`: the mode query/compare part was decompiled with the wrong
+  operands (`if (videoMode != _video.currmode)` could never be true); it now
+  compares the BIOS mode in AL with the requested mode and re-reads AX after a
+  mode set.
+* `clrscr`, `moveto` and `bios` still pass `0x0200` (set cursor) because their
+  DX/BX operands are not modelled yet - they are outside the startup path.
+
+Ladder:
+
+```
+0x0C before _setupio   fires
+0x0D after _setupio    fires
+0x0E after _c0crtinit  fires    <- _c0crtinit returns
+main marker (0x42)     does not <- next stop: the call to main
+```

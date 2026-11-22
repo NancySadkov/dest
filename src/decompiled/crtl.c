@@ -51,6 +51,7 @@ void startx(void)
   SaveVectors();
 
 
+
   pcVar4 = (char *)*(uint32_t *)&_env;
   uVar17 = (uint16_t)((ulong)pcVar4 >> 0x10);
   pcVar13 = (char *)pcVar4;
@@ -196,7 +197,9 @@ L_startx_0109:
   _setupio();
 
 
+
   _c0crtinit();
+
 
 
   iVar10 = main(__C0argc, (str_t *)__C0argv, (str_t *)__C0environ);
@@ -2943,7 +2946,7 @@ void __cdecl16far clrscr(void)
 
 {
   __scroll('\0',_video.windowy2,_video.windowx2,_video.windowy1,_video.windowx1,'\x06');
-  _VideoInt();
+  _VideoInt(0x0200);
   return;
 }
 
@@ -2989,69 +2992,42 @@ int16_t __cdecl16near _crtinit_system(char *s1,char *s2)
 char __cdecl16near egainstalled(void)
 
 {
-  char cVar1;
-  
-  cVar1 = '\x10';
-  _VideoInt();
-  return cVar1 + -0x10;
+  /* AH=12h BL=10h: BL comes back 10h when an EGA is present. */
+  return (char)((uint8_t)_VideoInt(0x1200) + 0xf0);
 }
 
 
 
 /* 1000:1453 */
 
-void __cdecl16near _VideoInt(void)
+uint16_t videoIntResult;
+
+uint16_t __cdecl16near _VideoInt(uint16_t axval)
 
 {
-  code *pcVar1;
-  char cVar2;
-  uint16_t in_AX;
-  
-  cVar2 = (char)((uint)in_AX >> 8);
-  if (cVar2 == '\0') {
-    if ((char)in_AX == '\x03') {
-      pcVar1 = (code *)swi(0x10);
-      cVar2 = (*pcVar1)();
-      if (cVar2 != '\x1a') {
-        IntFlags = IntFlags & 0xfe;
-      }
-      pcVar1 = (code *)swi(0x10);
-      (*pcVar1)();
-    }
-    else if ((char)in_AX == '@') {
-      cVar2 = '\x10';
-      pcVar1 = (code *)swi(0x10);
-      (*pcVar1)();
-      if (cVar2 == '\x10') {
-        return;
-      }
-      pcVar1 = (code *)swi(0x10);
-      (*pcVar1)();
-      pcVar1 = (code *)swi(0x10);
-      (*pcVar1)();
-      pcVar1 = (code *)swi(0x10);
-      cVar2 = (*pcVar1)();
-      if (cVar2 == '\x1a') {
-        return;
-      }
-      IntFlags = IntFlags | 1;
-      pcVar1 = (code *)swi(0x10);
-      (*pcVar1)();
-      return;
+  uint16_t out;
+
+  /* The original is a register-convention wrapper around INT 10h: the caller
+     puts AH (function) and AL (argument) in AX.  The special EGA paths only
+     matter on real EGA hardware, so the interrupt is issued directly. */
+  if ((uint8_t)(axval >> 8) == 0x12) {
+    asm {
+      mov ax, axval;
+      mov bl, 0x10;
+      int 10h;
+      mov al, bl;
+      xor ah, ah;
+      mov word ptr videoIntResult, ax;
     }
   }
-  else if (cVar2 == '\x0f') {
-    pcVar1 = (code *)swi(0x10);
-    cVar2 = (*pcVar1)();
-    if (cVar2 != '\x03') {
-      return;
+  else {
+    asm {
+      mov ax, axval;
+      int 10h;
+      mov word ptr videoIntResult, ax;
     }
-    egainstalled();
-    return;
   }
-  pcVar1 = (code *)swi(0x10);
-  (*pcVar1)();
-  return;
+  return videoIntResult;
 }
 
 
@@ -3061,15 +3037,13 @@ void __cdecl16near _VideoInt(void)
 void __cdecl16near _c0crtinit(void)
 
 {
-  uint8_t in_AL;
-  byte bVar1;
-  
-  _VideoInt();
-  __crtinit(in_AL);
-  bVar1 = 8;
-  _VideoInt();
-  _video.normattr = bVar1 & 0x7f;
-  _video.attribute = bVar1 & 0x7f;
+  uint16_t ax;
+
+  ax = _VideoInt(0x0f00);            /* AH=0Fh: get video mode */
+  __crtinit((uint8_t)ax);
+  ax = _VideoInt(0x0800);            /* AH=08h: read char and attribute */
+  _video.normattr = (uint8_t)(ax >> 8) & 0x7f;
+  _video.attribute = (uint8_t)(ax >> 8) & 0x7f;
   return;
 }
 
@@ -3087,17 +3061,17 @@ void __cdecl16near __crtinit(uint8_t videoMode)
   undefined1 extraout_AH;
   
   _video.currmode = videoMode;
-  uVar1 = 0xf;
-  _VideoInt();
-  _video.screenwidth = uVar1;
-  if (videoMode != _video.currmode) {
-    uVar1 = _video.currmode;
-    _VideoInt();
-    uVar4 = 0xf;
-    _VideoInt();
-    _video.currmode = uVar1;
-    _video.screenwidth = uVar4;
-    if ((uVar1 == 0x3) && ('\x18' < ScreenHeight)) {
+  uVar4 = (uint8_t)_VideoInt(0x0f00);          /* AL = current mode */
+  _video.screenwidth = (uint8_t)(_VideoInt(0x0f00) >> 8);
+  if (uVar4 != videoMode) {
+    _VideoInt((uint16_t)videoMode);            /* AH=0: set mode */
+    {
+      uint16_t axm = _VideoInt(0x0f00);
+      uVar4 = (uint8_t)axm;
+      _video.currmode = uVar4;
+      _video.screenwidth = (uint8_t)(axm >> 8);
+    }
+    if ((uVar4 == 0x3) && ('\x18' < ScreenHeight)) {
       _video.currmode = 0x40;
     }
   }
@@ -3957,7 +3931,7 @@ void __cdecl16near moveto(uint16_t *curPos,uint16_t *nextPos)
   
   uVar2 = *nextPos;
   if (uVar2 != *curPos) {
-    _VideoInt();
+    _VideoInt(0x0200);
     *curPos = uVar2;
   }
   cVar3 = (char)(uVar2 >> 8);
@@ -4006,7 +3980,7 @@ void bios(int width,uint16_t *vramOfs)
       puVar2 = (uint16_t *)&cursorPos;
       moveto((uint16_t *)CONCAT22(unaff_SS,puVar2),(uint16_t *)CONCAT22(unaff_SS,&vramScreenOfs));
       uVar3 = CONCAT11(8,(char)puVar2);
-      _VideoInt();
+      _VideoInt(0x0200);
     }
     else {
       uVar3 = *(uint16_t *)CONCAT22((uint16_t *)vramOfs,in_stack_00000004);
@@ -4015,7 +3989,7 @@ void bios(int width,uint16_t *vramOfs)
     if (bVar4) {
       moveto((uint16_t *)CONCAT22(unaff_SS,&cursorPos),(uint16_t *)CONCAT22(unaff_SS,&srcScreenOfs))
       ;
-      _VideoInt();
+      _VideoInt(0x0200);
       width = width + -1;
     }
     else {
@@ -4024,7 +3998,7 @@ void bios(int width,uint16_t *vramOfs)
       width = width + -1;
     }
   }
-  _VideoInt();
+  _VideoInt(0x0200);
   return;
 }
 
@@ -4116,7 +4090,7 @@ void __scroll(uchar dir,uchar x1,uchar y1,uchar x2,uchar y2,uchar lines)
     _puttext((uint)bVar1,(uint)bVar4,(uint)bVar3,(uint)bVar4,(int)rowBuf,unaff_SS);
   }
   else {
-    _VideoInt();
+    _VideoInt(0x0200);
   }
   return;
 }
@@ -4323,7 +4297,7 @@ uint16_t __cdecl16near _wherexy(void)
 {
   uint16_t in_DX;
   
-  _VideoInt();
+  _VideoInt(0x0200);
   return in_DX;
 }
 
