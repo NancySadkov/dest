@@ -9,6 +9,19 @@
 
 uint16_t startxDseg;
 
+/* The far-pointer tables below are declared as far_t with the original image's
+   link-time segment (0x2410) in the initialiser: a struct field cannot hold a
+   relocatable address, so the linker leaves it literal.  Patch the segment half
+   to this run's DGROUP before main uses the tables.  Tables declared as
+   `char far *` already carry a real relocation and do not need this. */
+static void fixFarTable(far_t *tbl, uint16_t n)
+{
+  uint16_t i;
+  for (i = 0; i < n; i++) {
+    tbl[i].seg = startxDseg;
+  }
+}
+
 /* 1000:0000 */
 void startx(void)
 
@@ -235,6 +248,15 @@ L_startx_0109:
     __C0argv = (uint16_t)argv;
     __C0environ = (uint16_t)env0;
   }
+  fixFarTable(GUnitDescriptions, 28);
+  fixFarTable(CPKeys, 25);
+  fixFarTable(worldMenuLabels, 13);
+  fixFarTable(GStatsLabels, 6);
+  fixFarTable(GPlayerTitles, 32);
+  fixFarTable(menuHighlightTable, 5);
+  fixFarTable(GAlignmentsNames, 3);
+  GSPEmpty.seg = startxDseg;
+  SaveHeader.seg = startxDseg;
   {
     int (far *pmain)(int, str_t *, str_t *);
     pmain = main;
