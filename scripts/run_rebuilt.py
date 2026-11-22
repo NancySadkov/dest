@@ -40,9 +40,9 @@ out = os.path.join(RUN, "RUN.LOG")
 # `if errorlevel N` works without %-expansion, which this shell leaves empty.
 bat = ["@echo off", "c:", "cd \\",
        "STRONG.EXE > RUN.LOG",
-       "if errorlevel 2 echo EXIT_GE2 >> RUN.LOG",
-       "if errorlevel 1 echo EXIT_GE1 >> RUN.LOG",
-       "if not errorlevel 1 echo EXIT_ZERO >> RUN.LOG",
+       ] + ["if errorlevel %d echo CODE_GE%d >> RUN.LOG" % (n, n)
+            for n in range(9, 0, -1)] + [
+       "if not errorlevel 1 echo CODE_ZERO >> RUN.LOG",
        "echo BATCH_DONE >> RUN.LOG"]
 io.open(os.path.join(RUN, "GO.BAT"), "w", encoding="ascii", newline="\r\n").write(
     "\n".join(bat) + "\n")

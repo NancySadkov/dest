@@ -20,7 +20,6 @@ int main(int argc,str_t *argv,str_t *envp)
   undefined2 uVar6;
   byte bStack_6;
   
-  { asm { mov ah,2; mov dl,'A'; int 21h }; }
   uVar6 = (undefined2)((ulong)envp >> 0x10);
   psVar5 = (str_t *)envp;
   GGameExe.seg = psVar5->seg;
@@ -33,13 +32,10 @@ int main(int argc,str_t *argv,str_t *envp)
     GExeArg.seg = psVar5[1].seg;
     GExeArg.ofs = (uint16_t)(psVar5 + 1)->ptr;
   }
-  { asm { mov ah,2; mov dl,'B'; int 21h }; }
   ovr_init_game();
-  { asm { mov ah,2; mov dl,'C'; int 21h }; }
   do {
     uVar3 = ovr_run_demo();
   } while ((uVar3 & 0xff) == 0);
-  { asm { mov ah,2; mov dl,'D'; int 21h }; }
   suppressLoadError = 1;
   ovr_save_loadGameFile();
   suppressLoadError = 0;
@@ -48,10 +44,8 @@ int main(int argc,str_t *argv,str_t *envp)
   GMenuItem = 5;
   MenuMode = '\x01';
   menuEnteredFlag = 0x1;
-  { asm { mov ah,2; mov dl,'E'; int 21h }; }
   ovr_uiMainMenu();
   ovr_play_sfx(7,0);
-  { asm { mov ah,2; mov dl,'F'; int 21h }; }
   do {
                     /* Process Events */
     MiceUnkState = 1;

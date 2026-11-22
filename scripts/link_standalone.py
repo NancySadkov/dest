@@ -32,12 +32,23 @@ def main():
     # library; without it TLINK reports a fixup overflow on __REALCVT.
     # C0M is the medium-model startup and must match -mm on the objects
     # (C0L is the large-model one).
-    rsp = ("D:\\LIB\\C0M.OBJ " + " ".join(objs) +
+    # Resident: the startup, the recovered CRT, the drivers, the globals and the
+    # overlay thunks.  Everything else (the recovered game modules O01..O50) becomes
+    # an overlay - TLINK's /o applies to the modules that follow it.
+    RESIDENT = ("CRTL.OBJ", "MAIN.OBJ", "MOUSE.OBJ", "VIDEO.OBJ", "OVL.OBJ",
+                "STUBS.OBJ", "INTRINS.OBJ", "OVR.OBJ")
+    def is_resident(n):
+        u = n.upper()
+        return u in RESIDENT or u.startswith("GLOB")
+
+    res = [o for o in objs if is_resident(o)]
+    ovl = [o for o in objs if not is_resident(o)]
+    rsp = ("D:\\LIB\\C0M.OBJ " + " ".join(res) + " /o " + " ".join(ovl) +
            ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\OVERLAY.LIB E:\\LIB\\CM.LIB")
     with open(os.path.join(BUILDSRC, "LINK.RSP"), "w", encoding="ascii",
               newline="\r\n") as f:
         f.write(rsp + "\n")
-    bat.append("D:\\BIN\\TLINK.EXE /o @LINK.RSP > LINK.LOG")   # /o: VROOMM overlays
+    bat.append("D:\\BIN\\TLINK.EXE @LINK.RSP > LINK.LOG")
     if os.path.exists(os.path.join(BUILDSRC, "LINK.LOG")):
         os.remove(os.path.join(BUILDSRC, "LINK.LOG"))
     for name in ("REBUILT.EXE", "REBUILT.MAP", "DONE.FLG"):
