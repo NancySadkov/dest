@@ -168,3 +168,45 @@ before `main`.  The `AB` variants in `tmp/ab_crt.py` show the same objects with
 `CM.LIB`'s runtime plus link stubs printing `K` and returning 7.  The recovered
 CRT is therefore implicated, but it is not the whole story: with the entry
 point moved to `startx`, the same recovered CRT reaches `main`.
+
+## Why the image still hangs: cross-segment calls are not relocated
+
+`startx`'s first DOS call is compiled as a far call to the runtime's `int86`:
+
+```
+004c push 0x21
+004e lcall 0, 0x523          ; _INT86, which the map places at 0000:0523
+```
+
+The segment word (image offset `base+0x51`) is **not** in the EXE relocation
+table, so DOS never adds the load segment.  At run time the call goes to
+absolute `0000:0523` - the interrupt vector table - and the program hangs.
+
+Proof: adding that single relocation by hand (append `(offset, 0)` to the
+relocation table, bump `e_crlc`) changes the behaviour immediately - the hang
+becomes an `exit` with code 4.
+
+### Cause
+
+The link uses `-V` (VROOMM).  For calls that cross segments, TLINK emits
+VROOMM fixups instead of DOS relocations; the overlay manager patches them at
+startup.  Our startup never initialises the overlay manager - the original's
+priority-1 init-table entry is `__OVRPREPARE` (`OVRUSER` in `_OVRTEXT_`), which
+we replaced with direct calls to `_setupio`/`_c0crtinit`.  So every
+cross-segment call in the image (library routines, overlay thunks, `main`) still
+points at segment 0.
+
+This also explains why earlier milestone ladders were layout-dependent: which
+call happened to be reached first determined whether the stray jump landed in
+code, in data, or in the IVT.
+
+### Options (next step)
+
+1. Link without `-V` so TLINK emits normal relocations.  Risk: the load image
+   grows because overlays become resident.
+2. Patch the resident segment words after linking: scan the code segments for
+   `9A` (far call) whose operand word equals a segment start from the map and
+   has no relocation, and append the relocation entry.  Mechanical, and the
+   experiment above shows it works.
+3. Initialise VROOMM: call `__OVRPREPARE` before anything else.  It has the
+   same relocation problem, so this needs option 2 for at least that one call.
