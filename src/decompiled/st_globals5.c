@@ -130,10 +130,26 @@ anm_t AgntAnms[139] = { { 0x0, 8, 1, 27, 21, 0x0, 0x19, 8, 23, 1, 0, 0, 0, 5, 0x
 char s_s_produces_bows_and_arrows[] = "%s: produces bows and arrows.";
 char s__s__produces_rings__2410_19f6[] = "%s: produces rings of protection.";
 char s__s__creates_mirrors_2410_1a18[] = "%s: creates mirrors for medsae combat and lenses for towers.";
+/* 1a55..1ad5: four more building description strings */
+char s_s_remote_place_2410_1a55[] = "%s: populates a remote location.";
+char s_s_gold_storage_2410_1a76[] = "%s: provides gold storage.";
+char s_s_claim_trees_2410_1a91[] = "%s: enables claiming of trees.";
+char s_s_food_trade_2410_1ad5[] = "%s: provides for food trade.";
 char s__s__repairs_buildin_2410_1ab0[] = "%s: repairs buildings automatically.";
 char s__s__enhances_traini_2410_1af2[] = "%s: enhances training for entire stronghold.";
+/* 1b81..1c3a: the eight per-building description strings */
+char s_s_enh_weapons_2410_1b81[] = "%s: enhances weapons production.";
+char s_s_creates_food_2410_1ba2[] = "%s: creates food and income.";
+char s_s_enh_training_2410_1bbf[] = "%s: enhances training.";
+char s_s_creates_arrows_2410_1bd6[] = "%s: creates arrows.";
+char s_s_more_housing_2410_1bea[] = "%s: provides more housing.";
+char s_s_housing_income_2410_1c05[] = "%s: provides housing and income.";
+char s_s_blocks_passage_2410_1c26[] = "%s: blocks passage.";
+char s_s_allows_water_2410_1c3a[] = "%s: allows passage over water.";
 char s__s__provides_storag_2410_1c59[] = "%s: provides storage and distribution of food.";
 char s__s__adds_to_crop_va_2410_1c88[] = "%s: adds to crop value and gives access to fund.";
+/* 1cb9: the enemy-passage description */
+char s_s_blocks_enemy_pa_2410_1cb9[] = "%s: blocks enemy passage. Allows friendly passage.";
 char s_Chop_Down_2410_1cec[] = "Chop Down";
 char s_Remove_2410_1cf6[] = "Remove";
 char s_Fill_in_2410_1cfd[] = "Fill in";
