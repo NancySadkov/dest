@@ -1,5 +1,5 @@
-far_t far * __cdecl16far
-stshRleSub(far_t far *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,uint16_t ex,
+far_t * __cdecl16far
+stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,uint16_t ex,
           uint16_t ey,int16_t hdrsz,...)
 
 {

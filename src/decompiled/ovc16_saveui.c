@@ -106,7 +106,7 @@ void __cdecl16far saveui_startCrossBlit(void)
   src.ofs = 0xa000;
   CrossBlitPtr.ofs =
        (uint16_t)
-       ovr_stshRleCut((far_t far *)0x0,src,CrossBlitY,CrossBlitX + 0xd,CrossBlitY + 9,unaff_BP,
+       ovr_stshRleCut((far_t *)0x0,src,CrossBlitY,CrossBlitX + 0xd,CrossBlitY + 9,unaff_BP,
                       (char)CrossBlitY);
   dst.seg = 0xa000;
   dst.ofs = CrossBlitX + CrossBlitY * 0x140;
@@ -893,7 +893,6 @@ void __cdecl16far saveui_freeLines(far_t entries,uint count)
 char * __cdecl16far saveui_configureMessageDelay(void)
 
 {
-  byte abStackY_15bc[5516];   /* stack buffer, was a RAM artefact in _DATA */
   uint *puVar1;
   uint16_t *puVar2;
   uint8_t *puVar3;
@@ -917,7 +916,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   undefined2 uVar18;
   undefined2 uVar19;
   uint16_t unaff_SS;
-
+  byte abStackY_15bc [5516];
   undefined2 uStackY_30;
   undefined2 uStackY_2e;
   undefined2 uStackY_2c;

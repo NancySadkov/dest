@@ -303,7 +303,7 @@ undefined2 __cdecl16far bldng_usesGStrangeTable(byte typeIndex,...)
 
 {
   return CONCAT11((char)((uint)typeIndex * 4 >> 8),
-                  *(undefined1 *)(((far_t far *)GStrangeTable)[typeIndex].ofs + 1));
+                  *(undefined1 *)(((far_t *)GStrangeTable)[typeIndex].ofs + 1));
 }
 
 

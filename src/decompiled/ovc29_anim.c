@@ -18,7 +18,7 @@ void __cdecl16far animInitSeqs(void)
   for (i = 0; (int)i < 3; i = i + 1) {
     (*(uint16_t *)((uint8_t *)&(p))) = ovr_stshAlloc((ulong)((uint8_t *)AnimSeqCounts)[i] << 2);
     *(undefined2 *)((int)&AnimSeqPtr[0].seg + i * 4) = (*(uint16_t *)((uint8_t *)&(p) + 2));
-    ((far_t far *)AnimSeqPtr + i)->ofs = (uint16_t)(void *)p;
+    ((far_t *)AnimSeqPtr + i)->ofs = (uint16_t)(void *)p;
   }
   return;
 }

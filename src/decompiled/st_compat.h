@@ -1,12 +1,10 @@
 /* Compatibility shims for Ghidra's decompiler output. */
 #ifndef ST_COMPAT_H
 #define ST_COMPAT_H
-/* Turbo C++ 3.0 defines __TURBOC__, not __BORLANDC__, so testing only the latter
-   made every `far` in the tree an empty macro (checked with `#ifdef far`): far
-   pointers degraded to near ones and MK_FP produced near addresses.
-
-   Turbo C++ in C mode also spells the calling conventions `cdecl` / `pascal`,
-   not BC++'s `__cdecl` / `__pascal`, and cdecl is the default anyway. */
+/* Turbo C++ 3.0 defines __TURBOC__, not __BORLANDC__; testing
+   only the latter made `far` an empty macro here, so every far
+   pointer degraded to a near one.  Turbo C also spells the
+   conventions cdecl/pascal, and cdecl is the default. */
 #if defined(__BORLANDC__) || defined(__TURBOC__)
 #define __cdecl16far
 #define __cdecl16near
@@ -63,6 +61,16 @@ code *swi(int vector);
 #define ZEXT22(x) ZEXT21(x)
 #define ZEXT24(x) ZEXT21(x)
 #define ZEXT41(x) ((uint32_t)(uint8_t)(x))
+#define SCARRY1(a,b) ((uint8_t)((int16_t)(int8_t)(a) + (int16_t)(int8_t)(b) > 0x7f))
+#define SCARRY2(a,b) ((uint8_t)((int32_t)(int16_t)(a) + (int32_t)(int16_t)(b) > 0x7fff))
+#define SCARRY4(a,b) ((uint8_t)((int32_t)(a) + (int32_t)(b) < 0))
+#define SUB21(x,n) ((uint16_t)((uint32_t)(x) >> ((n)*8)))
+#define SUB43(x,n) ((uint8_t)((uint32_t)(x) >> ((n)*8)))
+#define ZEXT23(x) ((uint32_t)(uint16_t)(x))
+#define POPCOUNT(x) ((uint8_t)(((x) & 1) + (((x) >> 1) & 1) + (((x) >> 2) & 1) + (((x) >> 3) & 1) + (((x) >> 4) & 1) + (((x) >> 5) & 1) + (((x) >> 6) & 1) + (((x) >> 7) & 1)))
+int in();
+void out();
+#define builtin_memcpy memcpy
 #ifndef true
 #define true 1
 #define false 0

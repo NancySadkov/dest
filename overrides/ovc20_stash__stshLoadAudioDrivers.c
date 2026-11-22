@@ -7,56 +7,56 @@ void __cdecl16far stshLoadAudioDrivers(bool grab,...)
   far_t far *unaff_BP;
   
   if (grab) {
-    midpakAd.ofs = (uint16_t)stshStoreFile_2((far_t far *)"midpak.ad",(char *)0x2410,(uint16_t)unaff_BP)
+    midpakAd.ofs = (uint16_t)stshStoreFile_2((far_t *)"midpak.ad",(char *)0x2410,(uint16_t)unaff_BP)
     ;
     midpakAd.seg = in_DX;
-    cmidpakComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"cmidpak.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    cmidpakComOfs =(uint16_t)( stshStoreFile_2((far_t *)"cmidpak.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     cmidpakComSeg = in_DX;
-    ibmsndComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"ibmsnd.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    ibmsndComOfs =(uint16_t)( stshStoreFile_2((far_t *)"ibmsnd.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     ibmsndComSeg = in_DX;
-    sblasterComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"sblaster.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    sblasterComOfs =(uint16_t)( stshStoreFile_2((far_t *)"sblaster.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     audioPlaceholder2.seg = 0;
     audioPlaceholder2.ofs = 0;
     sblasterComSeg = in_DX;
-    fibmbakComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"fibmbak.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    fibmbakComOfs =(uint16_t)( stshStoreFile_2((far_t *)"fibmbak.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     fibmbakComSeg = in_DX;
-    pfVar1 = stshStoreFile_2((far_t far *)"sbpro.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP);
+    pfVar1 = stshStoreFile_2((far_t *)"sbpro.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP);
     sbproComOfs =(uint16_t)( pfVar1);
     sbproComSeg = in_DX;
     sbproComCopyOfs =(uint16_t)( pfVar1);
     sbproComCopySeg = in_DX;
-    paudioComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"paudio.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    paudioComOfs =(uint16_t)( stshStoreFile_2((far_t *)"paudio.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     sblasterComCopySeg = sblasterComSeg;
     sblasterComCopyOfs = sblasterComOfs;
     pfVar2 = sblasterComOfs;
     paudioComSeg =(uint16_t)( pfVar1);
-    adlibComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"adlib.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    adlibComOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlib.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     adlibComSeg =(uint16_t)( pfVar2);
-    adlibgComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"adlibg.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    adlibgComOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlibg.com",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     audioPlaceholder3.seg = 0;
     audioPlaceholder3.ofs = 0;
     musDriver0Seg = 0;
     musDriver0Ofs = 0;
     adlibgComSeg =(uint16_t)( pfVar2);
-    sbfmAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"sbfm.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    sbfmAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"sbfm.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     audioPlaceholder0.seg = 0;
     audioPlaceholder0.ofs = 0;
     audioPlaceholder1.seg = 0;
     audioPlaceholder1.ofs = 0;
     sbfmAdvSeg =(uint16_t)( pfVar2);
-    sbp2fmAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"sbp2fm.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    sbp2fmAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"sbp2fm.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     sbp2fmAdvSeg =(uint16_t)( pfVar2);
-    sbp1fmAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"sbp1fm.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    sbp1fmAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"sbp1fm.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     sbp1fmAdvSeg =(uint16_t)( pfVar2);
-    pasfmAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"pasfm.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    pasfmAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"pasfm.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     pasfmAdvSeg =(uint16_t)( pfVar2);
-    pasoplAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"pasopl.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    pasoplAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"pasopl.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     pasoplAdvSeg =(uint16_t)( pfVar2);
-    adlibAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"adlib.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    adlibAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlib.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     adlibAdvSeg =(uint16_t)( pfVar2);
-    adlibgAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"adlibg.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    adlibgAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlibg.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     adlibgAdvSeg =(uint16_t)( pfVar2);
-    mt32mpuAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"mt32mpu.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
+    mt32mpuAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"mt32mpu.adv",(char *)MK_FP(0x2410, 0x1),(uint16_t)unaff_BP));
     mt32mpuAdvSeg =(uint16_t)( pfVar2);
   }
   else {

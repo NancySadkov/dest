@@ -23,7 +23,7 @@ far_t __cdecl16near malloc_ExpandBlock(void)
   uint16_t seg;
   
   nbytes = CONCAT22(in_BX,malloc_save_hi);
-  fVar15.ofs = (uint16_t)farmalloc((far_t far *)malloc_save_lo,nbytes);   /* hand fix: first argument is the hidden return pointer; result is the offset half */
+  fVar15.ofs = (uint16_t)farmalloc((far_t *)malloc_save_lo,nbytes);   /* hand fix: first argument is the hidden return pointer; result is the offset half */
   if (in_DX == 0) {
     fVar15.seg = 0;
     return fVar15;

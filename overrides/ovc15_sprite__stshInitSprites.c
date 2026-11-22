@@ -21,13 +21,13 @@ void __cdecl16far stshInitSprites(bool grab,...)
   long sz;
   
   StshSprIndex = 0;
-  pfVar1 = stshSprite((far_t far *)((byte *)__C0_ASM_CopyRight + 0x21),0,(anm_t *)0x9195d,
+  pfVar1 = stshSprite((far_t *)((byte *)__C0_ASM_CopyRight + 0x21),0,(anm_t *)0x9195d,
                       CONCAT11((char)((uint)in_AX >> 8),grab),SUB21(unaff_DI,0));
   SprProjectiles.ofs = (uint16_t)pfVar1;
   SprProjectiles.seg = in_DX;
   for (i = 0; (int)i < 0x2a; i = i + 1) {
     uVar6 = 0x195d;
-    pfVar1 = stshSprite((far_t far *)*(undefined2 *)((int)AgntGs[0].sprfls + i * 0x95),
+    pfVar1 = stshSprite((far_t *)*(undefined2 *)((int)AgntGs[0].sprfls + i * 0x95),
                         *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
                         (anm_t *)(ulong)CONCAT12(*(undefined1 *)((int)&AgntGs[0].nanims + i * 0x95),
                                                  *(undefined2 *)
@@ -43,7 +43,7 @@ void __cdecl16far stshInitSprites(bool grab,...)
     }
     else {
       uVar6 = 0x195d;
-      pfVar1 = stshSprite((far_t far *)*(undefined2 *)((int)AgntGs[0].sprfls + 2 + i * 0x95),
+      pfVar1 = stshSprite((far_t *)*(undefined2 *)((int)AgntGs[0].sprfls + 2 + i * 0x95),
                           *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
                           (anm_t *)(ulong)CONCAT12(*(undefined1 *)
                                                     ((int)&AgntGs[0].nanims + i * 0x95),
@@ -61,7 +61,7 @@ void __cdecl16far stshInitSprites(bool grab,...)
     }
     else {
       uVar6 = 0x195d;
-      pfVar1 = stshSprite((far_t far *)*(undefined2 *)((int)AgntGs[0].sprfls + 4 + i * 0x95),
+      pfVar1 = stshSprite((far_t *)*(undefined2 *)((int)AgntGs[0].sprfls + 4 + i * 0x95),
                           *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
                           (anm_t *)(ulong)CONCAT12(*(undefined1 *)
                                                     ((int)&AgntGs[0].nanims + i * 0x95),
@@ -83,7 +83,7 @@ void __cdecl16far stshInitSprites(bool grab,...)
       }
       else {
         uVar6 = 0x195d;
-        pfVar1 = stshSprite((far_t far *)*(undefined2 *)
+        pfVar1 = stshSprite((far_t *)*(undefined2 *)
                                       ((int)AgntGs[0].sprfls + 6 + i * 0x95 + iVar10 * 2),
                             *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
                             (anm_t *)(ulong)CONCAT12(*(undefined1 *)

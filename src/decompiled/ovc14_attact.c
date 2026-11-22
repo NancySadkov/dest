@@ -1614,7 +1614,7 @@ void __cdecl16far attact_usesBlitLoadRleGfx(void)
   }
   iVar1 = (int)(((long)(int)uVar2 * 0xc & 0xffffU) / 0xf);
   gfx.seg = *(uint16_t *)((int)&timeOfDayGfx[0].seg + iVar1 * 4);
-  gfx.ofs = ((far_t far *)timeOfDayGfx + iVar1)->ofs;
+  gfx.ofs = ((far_t *)timeOfDayGfx + iVar1)->ofs;
   ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c510)));
   ovr_ovc13_blitAnimFrame();
   return;

@@ -28,10 +28,10 @@ void __cdecl16far stshCopyFontChar(uint8_t *src,uint8_t *dst,int16_t width,int16
 
 /* 302d:0035 */
 
-far_t far * __cdecl16far stshProcessFontSub(far_t far *__return_storage_ptr__,far_t hndl,...)
+far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl,...)
 
 {
-  far_t far *pfVar1;
+  far_t *pfVar1;
   undefined2 in_DX;
   uint8_t *psrc;
   int16_t line;
@@ -123,14 +123,14 @@ far_t far * __cdecl16far stshProcessFontSub(far_t far *__return_storage_ptr__,fa
 
 /* 302d:021a */
 
-far_t far * __cdecl16far stshProcessFont(far_t far *__return_storage_ptr__,int16_t file_id)
+far_t * __cdecl16far stshProcessFont(far_t *__return_storage_ptr__,int16_t file_id)
 
 {
   far_t handle;
   far_t handle_00;
   far_t hndl;
   stg_tmp_t *psVar1;
-  far_t far *pfVar2;
+  far_t *pfVar2;
   uint16_t in_DX;
   
   psVar1 = ovr_grabLbm((int16_t)__return_storage_ptr__,0,0);
@@ -140,7 +140,7 @@ far_t far * __cdecl16far stshProcessFont(far_t far *__return_storage_ptr__,int16
   }
   hndl.seg = (uint16_t)psVar1;
   hndl.ofs = (psVar1->aptr).seg;
-  pfVar2 = stshProcessFontSub((far_t far *)(&psVar1->aptr)->ofs,hndl);
+  pfVar2 = stshProcessFontSub((far_t *)(&psVar1->aptr)->ofs,hndl);
   handle.seg = (psVar1->bptr).seg;
   handle.ofs = (&psVar1->bptr)->ofs;
   ovr_stshFree(handle);

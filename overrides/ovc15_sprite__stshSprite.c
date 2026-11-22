@@ -1,5 +1,5 @@
-far_t far * __cdecl16far
-stshSprite(far_t far *__return_storage_ptr__,int16_t file_id,anm_t *anms,uint16_t nanims,bool grab)
+far_t * __cdecl16far
+stshSprite(far_t *__return_storage_ptr__,int16_t file_id,anm_t *anms,uint16_t nanims,bool grab)
 
 {
   far_t handle;

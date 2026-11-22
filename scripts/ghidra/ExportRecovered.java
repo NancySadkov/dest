@@ -626,6 +626,7 @@ public class ExportRecovered extends GhidraScript {
         rh.println("#define ST_RECOVERED_H");
         rh.println("#include \"st_compat.h\"");
         rh.println("#include \"st_types.h\"");
+        rh.println("#include \"st_intrinsics.h\"");
         rh.println("#include \"st_globals.h\"");
         rh.println("#include \"st_functions.h\"");
         rh.println("#endif");
@@ -635,11 +636,15 @@ public class ExportRecovered extends GhidraScript {
         ch.println("/* Compatibility shims for Ghidra's decompiler output. */");
         ch.println("#ifndef ST_COMPAT_H");
         ch.println("#define ST_COMPAT_H");
-        ch.println("#ifdef __BORLANDC__");
+        ch.println("/* Turbo C++ 3.0 defines __TURBOC__, not __BORLANDC__; testing");
+        ch.println("   only the latter made `far` an empty macro here, so every far");
+        ch.println("   pointer degraded to a near one.  Turbo C also spells the");
+        ch.println("   conventions cdecl/pascal, and cdecl is the default. */");
+        ch.println("#if defined(__BORLANDC__) || defined(__TURBOC__)");
         ch.println("#define __cdecl16far");
-        ch.println("#define __cdecl16near __cdecl");
-        ch.println("#define __stdcall16far __pascal");
-        ch.println("#define __stdcall16near __pascal");
+        ch.println("#define __cdecl16near");
+        ch.println("#define __stdcall16far");
+        ch.println("#define __stdcall16near");
         ch.println("#else");
         ch.println("#define __cdecl16far");
         ch.println("#define __cdecl16near");
@@ -700,6 +705,21 @@ public class ExportRecovered extends GhidraScript {
         ch.println("#define ZEXT22(x) ZEXT21(x)");
         ch.println("#define ZEXT24(x) ZEXT21(x)");
         ch.println("#define ZEXT41(x) ((uint32_t)(uint8_t)(x))");
+        // Ghidra intrinsics.  Each one is emitted as a plain call, so without a
+        // definition it becomes an undefined symbol at link time.
+        ch.println("#define SCARRY1(a,b) ((uint8_t)((int16_t)(int8_t)(a) + (int16_t)(int8_t)(b) > 0x7f))");
+        ch.println("#define SCARRY2(a,b) ((uint8_t)((int32_t)(int16_t)(a) + (int32_t)(int16_t)(b) > 0x7fff))");
+        ch.println("#define SCARRY4(a,b) ((uint8_t)((int32_t)(a) + (int32_t)(b) < 0))");
+        ch.println("#define SUB21(x,n) ((uint16_t)((uint32_t)(x) >> ((n)*8)))");
+        ch.println("#define SUB43(x,n) ((uint8_t)((uint32_t)(x) >> ((n)*8)))");
+        ch.println("#define ZEXT23(x) ((uint32_t)(uint16_t)(x))");
+        ch.println("#define POPCOUNT(x) ((uint8_t)(((x) & 1) + (((x) >> 1) & 1) + (((x) >> 2) & 1) + (((x) >> 3) & 1) + (((x) >> 4) & 1) + (((x) >> 5) & 1) + (((x) >> 6) & 1) + (((x) >> 7) & 1)))");
+        // Port I/O and block copy.  in/out are declared without a prototype:
+        // a few decompiled sites call them with an unrelated address, and an
+        // unprototyped declaration keeps those sites compiling.
+        ch.println("int in();");
+        ch.println("void out();");
+        ch.println("#define builtin_memcpy memcpy");
         ch.println("#endif");
         ch.close();
 
@@ -714,6 +734,51 @@ public class ExportRecovered extends GhidraScript {
             nth++;
         }
         os.close();
+
+        // Intrinsics that return a struct (or need a real 32-bit result) get a
+        // generated module instead of a macro.
+        PrintWriter ih = new PrintWriter(new FileWriter(new File(dir, "st_intrinsics.h")));
+        ih.println("/* Ghidra intrinsic prototypes that need the typedefs (generated). */");
+        ih.println("#ifndef ST_INTRINSICS_H");
+        ih.println("#define ST_INTRINSICS_H");
+        ih.println("far_t far_from_u32(uint32_t v);");
+        ih.println("unsigned long far_to_u32(far_t v);");
+        ih.println("#endif");
+        ih.close();
+
+        PrintWriter in = new PrintWriter(new FileWriter(new File(dir, "st_intrinsics.c")));
+        in.println("/* Ghidra intrinsic implementations (generated). */");
+        in.println("#include \"recovered.h\"");
+        in.println("/* conio.h is not on the staged include path */");
+        in.println("extern unsigned char inp(unsigned int port);");
+        in.println("extern void outp(unsigned int port, unsigned char value);");
+        in.println("");
+        in.println("/* Port I/O: the decompiler emits in(port) / out(port,value). */");
+        in.println("int in(unsigned int port)");
+        in.println("{");
+        in.println("  return inp(port);");
+        in.println("}");
+        in.println("");
+        in.println("void out(unsigned int port, unsigned char value)");
+        in.println("{");
+        in.println("  outp(port, value);");
+        in.println("}");
+        in.println("");
+        in.println("/* far_from_u32 packs {offset,segment}: segment is the high word, the");
+        in.println("   same layout MK_FP(seg,ofs) produces. */");
+        in.println("far_t far_from_u32(uint32_t v)");
+        in.println("{");
+        in.println("  far_t r;");
+        in.println("  r.ofs = (uint16_t)v;");
+        in.println("  r.seg = (uint16_t)(v >> 16);");
+        in.println("  return r;");
+        in.println("}");
+        in.println("");
+        in.println("unsigned long far_to_u32(far_t v)");
+        in.println("{");
+        in.println("  return ((unsigned long)v.seg << 16) | v.ofs;");
+        in.println("}");
+        in.close();
 
         PrintWriter man = new PrintWriter(new FileWriter(new File(dir, "MANIFEST.md")));
         man.println("# Recovered source manifest\n");

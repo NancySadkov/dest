@@ -1093,10 +1093,10 @@ void ovc27_textTakesHalfDamage4(void)
     uVar6 = ovr_audio_panFromX((agnt_t *)*(undefined2 *)(unaff_BP + -10),
                                (char)*(undefined2 *)(unaff_BP + -8));
     ovr_play_sfxU(0x4c,0,uVar6,0,(char)uVar6);
-    uVar2 = (uint16_t)((agnt_t *)((unaff_BP + -10)))->gdata;
+    uVar2 = ((agnt_t *)((unaff_BP + -10)))->gdata;
     if ((*(uint *)((int)uVar2 + 0x40) & 0x20) == 0) {
       ovr_ovc28_usesBDADailyTimeCounter(6);
-      uVar2 = (uint16_t)((agnt_t *)((unaff_BP + 6)))->entity;
+      uVar2 = ((agnt_t *)((unaff_BP + 6)))->entity;
       bVar3 = ovr_manage_rollDice(*(char *)((int)uVar2 + 0xf),'\x06');
       uVar7 = bVar3 + 1;
       iVar5 = ovc27_rollToHitEntity
@@ -1114,7 +1114,7 @@ void ovc27_textTakesHalfDamage4(void)
       if ((char)uVar4 != '\0') {
         uVar7 = (int)uVar7 >> 1;
       }
-      uVar2 = (uint16_t)((agnt_t *)((unaff_BP + -10)))->gdata;
+      uVar2 = ((agnt_t *)((unaff_BP + -10)))->gdata;
       if ((*(uint *)((int)uVar2 + 0x3e) & 0x200) != 0) {
         uVar10 = (undefined1)GSavedBlitSeg;
         pcVar8 = ovr_agnt_statusText((agnt_t *)*(undefined2 *)(unaff_BP + -10),
@@ -1210,7 +1210,7 @@ void ovc27_textTakesHalfDamage4(void)
       return;
     }
     if ((((agnt_t *)((unaff_BP + -10)))->flags & 0x80) == 0) {
-      uVar2 = (uint16_t)((agnt_t *)((unaff_BP + -10)))->entity;
+      uVar2 = ((agnt_t *)((unaff_BP + -10)))->entity;
       if (*(byte *)((int)uVar2 + 0xf) < 5) {
         pcVar8 = ovr_agnt_statusText((agnt_t *)*(undefined2 *)(unaff_BP + 6),
                                      (char *)CONCAT13((char)((uint)(unaff_BP + -0x122) >> 8),
@@ -1345,7 +1345,7 @@ void ovc27_textTakesHalfDamage4(void)
     return;
   }
   if (((agnt_t *)((unaff_BP + 6)))->variant == '\f') {
-    uVar2 = (uint16_t)((agnt_t *)((unaff_BP + -10)))->entity;
+    uVar2 = ((agnt_t *)((unaff_BP + -10)))->entity;
     if (7 < *(byte *)((int)uVar2 + 0xf)) {
       emptyFunction();
       return;
@@ -1472,7 +1472,7 @@ void ovc27_textTakesHalfDamage4(void)
       if (*(int *)(unaff_BP + -10) == 0 && *(int *)(unaff_BP + -8) == 0) break;
     } while (*(int *)(unaff_BP + -2) == unaff_DI);
     if (*(int *)(unaff_BP + -10) != 0 || *(int *)(unaff_BP + -8) != 0) {
-      uVar2 = (uint16_t)((agnt_t *)((unaff_BP + -10)))->entity;
+      uVar2 = ((agnt_t *)((unaff_BP + -10)))->entity;
       *(int *)(unaff_BP + -4) = *(int *)(unaff_BP + -4) - (uint)*(byte *)((int)uVar2 + 0xf);
     }
     if ((*(int *)(unaff_BP + -10) == 0 && *(int *)(unaff_BP + -8) == 0) ||

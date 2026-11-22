@@ -1,4 +1,4 @@
-far_t far * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far_t ringValue)
+far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far_t ringValue)
 
 {
   char *pcVar1;

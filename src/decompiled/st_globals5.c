@@ -1,0 +1,1717 @@
+/* Global data with original initialisers (recovered image). */
+#include "recovered.h"
+anm_t AgntAnms[139] = { { 0x0, 8, 1, 27, 21, 0x0, 0x19, 8, 23, 1, 0, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF },
+     { 0x1, 44, 1, 63, 21, 0x0, 0x19, 7, 23, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 80, 1,
+     94, 21, 0x0, 0x19, 6, 23, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 112, 1, 138, 21, 0x0,
+     0x19, 8, 23, 0, 0, 16, -14, 5, 0x3, 0xFF, 0x6, 0x0, 0x3 }, { 0x0, 18, 1, 32, 21, 0x0, 0x19, 7, 23,
+     1, 0, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x1, 47, 1, 60, 21, 0x0, 0x19, 5, 23, 1, 1, 0, 0,
+     5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 75, 1, 87, 21, 0x0, 0x19, 6, 23, 1, 1, 0, 0, 5, 0xFF, 0x0,
+     0x8, 0x1, 0xFF }, { 0x14, 102, 26, 121, 46, 0x0, 0x19, 6, 23, 0, 0, 16, -14, 5, 0x3, 0xFF, 0x4,
+     0x0, 0x2 }, { 0x4, 4, 1, 57, 35, 0x37, 0x24, 28, 31, 6, 1, 28, -5, 26, 0x3, 0x0, 0x6, 0x0, 0x13 },
+     { 0x5, 119, 100, 160, 131, 0x0, 0x21, 14, 31, 0, 0, 0, 0, 26, 0xFF, 0xFF, 0x2, 0x0, 0xFF }, { 0x6,
+     75, 38, 110, 71, 0x31, 0x24, 3, 16, 0, 0, 0, 0, 0, 0x3, 0x0, 0x6, 0x0, 0xFF }, { 0x0, 5, 0, 15,
+     19, 0x16, 0x1B, 6, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 19, 27, 48, 46, 0x19,
+     0x1B, 14, 18, 0, 0, 15, -10, 5, 0x5, 0xFF, 0x7, 0x0, 0xFF }, { 0x1, 52, 27, 62, 46, 0x26, 0x1B,
+     6, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 92, 54, 100, 73, 0x1A, 0x1B, 4, 18, 1,
+     1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x0, 4, 0, 20, 21, 0x1A, 0x19, 7, 19, 1, 1, 0, 0, 5,
+     0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 73, 0, 85, 21, 0x1A, 0x19, 4, 19, 1, 1, 0, 0, 5, 0xFF, 0x0,
+     0x8, 0x1, 0xFF }, { 0x1, 40, 0, 52, 21, 0x1A, 0x19, 4, 19, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF },
+     { 0x3, 141, 25, 176, 46, 0x0, 0x19, 12, 19, 0, 0, 28, -19, 5, 0x2, 0xFF, 0x5, 0x0, 0x3 }, { 0x7,
+     107, 25, 131, 46, 0x0, 0x19, 9, 19, 0, 0, 22, -15, 5, 0x2, 0xFF, 0x6, 0x0, 0x3 }, { 0x0, 0, 0, 29,
+     19, 0x18, 0x1B, 14, 18, 1, 0, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x1, 127, 0, 147, 19, 0x26,
+     0x1B, 7, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 68, 0, 80, 19, 0x1F, 0x1B, 6, 18,
+     1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 33, 27, 58, 46, 0x0, 0x1B, 5, 19, 0, 0, 0, 0,
+     5, 0x3, 0xFF, 0x5, 0x0, 0xFF }, { 0x0, 7, 0, 19, 21, 0x0, 0x19, 6, 20, 1, 1, 0, 0, 5, 0xFF, 0x0,
+     0x8, 0x1, 0xFF }, { 0x1, 40, 0, 52, 21, 0x0, 0x19, 7, 20, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x7, 0x1, 0xFF },
+     { 0x2, 81, 0, 93, 21, 0x0, 0x19, 6, 20, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 115,
+     25, 135, 46, 0x0, 0x19, 5, 20, 0, 0, 0, 0, 5, 0x2, 0xFF, 0x4, 0x0, 0xFF }, { 0x0, 7, 0, 24, 19,
+     0x1F, 0x1B, 6, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x1, 38, 27, 55, 46, 0x20, 0x1B,
+     6, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 71, 54, 88, 73, 0x1F, 0x1B, 5, 18, 1,
+     1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 102, 81, 125, 100, 0x17, 0x1B, 5, 18, 0, 0, 0, 0,
+     5, 0x4, 0xFF, 0x6, 0x0, 0xFF }, { 0x0, 7, 0, 24, 19, 0x19, 0x1B, 6, 18, 1, 1, 0, 0, 5, 0xFF, 0x0,
+     0x8, 0x1, 0xFF }, { 0x2, 58, 0, 68, 19, 0x1F, 0x1B, 4, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x9, 0x1, 0xFF },
+     { 0x1, 88, 54, 99, 73, 0x1B, 0x1B, 5, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x14, 32,
+     27, 48, 46, 0x0, 0x1B, 6, 18, 0, 0, 7, -9, 5, 0x4, 0x4, 0x5, 0x0, 0x2 }, { 0x3, 114, 81, 130, 100,
+     0x0, 0x1B, 6, 18, 0, 0, 7, -9, 5, 0x1, 0xFF, 0x3, 0x0, 0xFF }, { 0x0, 13, 0, 29, 19, 0x1F, 0x1B,
+     7, 18, 1, 0, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x1, 45, 27, 57, 46, 0x20, 0x1B, 6, 18, 1,
+     1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 79, 54, 91, 73, 0x1B, 0x1B, 4, 18, 1, 1, 0, 0, 5,
+     0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 99, 81, 123, 100, 0x1C, 0x1B, 11, 18, 0, 0, 0, 0, 5, 0x3, 0xFF,
+     0x5, 0x0, 0xFF }, { 0x0, 8, 0, 20, 19, 0x1C, 0x1B, 8, 18, 1, 0, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF },
+     { 0x1, 38, 27, 50, 46, 0x22, 0x1B, 6, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 75,
+     54, 84, 73, 0x1D, 0x1B, 3, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 103, 81, 120,
+     100, 0x1D, 0x1B, 4, 18, 0, 0, 0, 0, 5, 0x1, 0xFF, 0x3, 0x0, 0xFF }, { 0x0, 6, 7, 38, 19, 0x2B, 0x1B,
+     17, 12, 1, 1, 0, 0, 10, 0xFF, 0x0, 0xC, 0x1, 0xFF }, { 0x3, 97, 7, 126, 19, 0x17, 0x1B, 4, 12, 0,
+     0, 0, 0, 10, 0x3, 0xFF, 0x4, 0x0, 0xFF }, { 0x0, 12, 3, 48, 19, 0x2B, 0x1B, 14, 15, 1, 1, 0, 0,
+     10, 0xFF, 0x0, 0x6, 0x1, 0xFF }, { 0x3, 23, 165, 61, 181, 0x27, 0x1B, 15, 15, 0, 0, 0, 0, 10, 0x3,
+     0xFF, 0x5, 0x0, 0xFF }, { 0x4, 6, 2, 41, 32, 0x2C, 0x21, 21, 31, 5, 4, 0, 0, 9, 0xFF, 0x0, 0x7,
+     0x0, 0xFF }, { 0xF, 50, 35, 85, 65, 0x2C, 0x21, 21, 31, 5, 4, 0, 0, 9, 0x0, 0xFF, 0x1, 0x0, 0xFF },
+     { 0x5, 50, 68, 85, 98, 0x2C, 0x21, 21, 31, 0, 0, 0, 0, 9, 0xFF, 0xFF, 0x1, 0x0, 0xFF }, { 0x0, 15,
+     3, 45, 19, 0x3F, 0x1B, 16, 15, 1, 1, 0, 0, 9, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x1, 170, 57, 193,
+     73, 0x3A, 0x1B, 16, 15, 1, 1, 0, 0, 9, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 121, 30, 144, 46, 0x31,
+     0x1B, 14, 15, 1, 1, 0, 0, 9, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 74, 165, 113, 181, 0x29, 0x1B,
+     20, 15, 0, 0, 0, 0, 9, 0x1, 0xFF, 0x2, 0x0, 0xFF }, { 0x13, 60, 30, 108, 46, 0x31, 0x1B, 34, 15,
+     1, 1, 0, 0, 9, 0xFF, 0xFF, 0x5, 0x1, 0xFF }, { 0x4, 4, 15, 28, 46, 0x3F, 0x23, 15, 28, 6, 28, 0,
+     0, 5, 0xFF, 0x0, 0x3, 0x0, 0xFF }, { 0x5, 55, 15, 82, 46, 0x3F, 0x23, 12, 28, 0, 0, 0, 0, 5, 0xFF,
+     0xFF, 0x5, 0x0, 0xFF }, { 0x3, 105, 15, 117, 46, 0x3F, 0x23, 12, 28, 6, 4, 0, 0, 5, 0x2, 0xFF, 0x5,
+     0x0, 0x12 }, { 0x0, 8, 3, 27, 19, 0x3F, 0x1B, 9, 15, 1, 1, 0, 0, 10, 0xFF, 0x0, 0x6, 0x1, 0xFF },
+     { 0x3, 31, 3, 71, 19, 0x29, 0x1B, 13, 15, 0, 0, 0, 0, 10, 0x2, 0xFF, 0x6, 0x0, 0x49 }, { 0x11, 36,
+     111, 52, 127, 0x29, 0x1B, 8, 15, 0, 0, 0, 0, 10, 0xFF, 0xFF, 0x2, 0x0, 0xFF }, { 0x12, 88, 3, 131,
+     19, 0x29, 0x1B, 11, 15, 0, 0, 0, 0, 10, 0xFF, 0x4, 0x5, 0x0, 0xFF }, { 0x0, 8, 0, 23, 19, 0x1D,
+     0x1B, 6, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 44, 27, 53, 46, 0x1B, 0x1B, 3, 18,
+     1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x1, 65, 54, 87, 73, 0x1D, 0x1B, 6, 18, 1, 1, 0, 0,
+     5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 94, 81, 114, 100, 0x15, 0x1B, 5, 18, 0, 0, 0, 0, 5, 0x4,
+     0xFF, 0x5, 0x0, 0xFF }, { 0x0, 6, 0, 22, 19, 0x1C, 0x1B, 9, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1,
+     0xFF }, { 0x2, 37, 27, 53, 46, 0x21, 0x1B, 6, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x1,
+     67, 54, 84, 73, 0x21, 0x1B, 9, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 100, 81, 124,
+     100, 0x17, 0x1B, 9, 18, 0, 0, 0, 0, 5, 0x1, 0xFF, 0x4, 0x0, 0xFF }, { 0x12, 131, 27, 157, 46, 0x29,
+     0x1B, 13, 18, 0, 0, 0, 0, 5, 0xFF, 0xFF, 0x6, 0x0, 0xFF }, { 0x0, 9, 3, 40, 19, 0x17, 0x1B, 15,
+     15, 1, 1, 0, 0, 10, 0xFF, 0x0, 0x5, 0x1, 0xFF }, { 0x3, 61, 138, 92, 154, 0x29, 0x1B, 13, 15, 0,
+     0, 0, 0, 10, 0x0, 0xFF, 0x2, 0x0, 0xFF }, { 0x15, 61, 3, 131, 19, 0x29, 0x1B, 13, 15, 0, 0, 0, 0,
+     10, 0xFF, 0xFF, 0x4, 0x0, 0xFF }, { 0x0, 14, 0, 44, 19, 0x2C, 0x1B, 10, 18, 1, 1, 0, 0, 9, 0xFF,
+     0x0, 0x8, 0x1, 0xFF }, { 0x2, 59, 27, 89, 46, 0x32, 0x1B, 9, 18, 1, 1, 0, 0, 9, 0xFF, 0x0, 0x8,
+     0x1, 0xFF }, { 0x1, 108, 54, 138, 73, 0x2B, 0x1B, 10, 18, 1, 1, 0, 0, 9, 0xFF, 0x0, 0x8, 0x1, 0xFF },
+     { 0x3, 156, 81, 195, 100, 0x17, 0x1B, 5, 18, 0, 0, 0, 0, 5, 0x1, 0xFF, 0x3, 0x0, 0xFF }, { 0x0,
+     13, 0, 27, 19, 0x1D, 0x1B, 8, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 43, 27, 57,
+     46, 0x1F, 0x1B, 7, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x1, 73, 54, 87, 73, 0x22,
+     0x1B, 8, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 105, 81, 138, 100, 0x17, 0x1B, 10,
+     18, 0, 0, 0, 0, 5, 0x1, 0xFF, 0x4, 0x0, 0xFF }, { 0x0, 8, 0, 39, 19, 0x1D, 0x1B, 18, 18, 1, 1, 0,
+     0, 8, 0xFF, 0x0, 0x6, 0x1, 0xFF }, { 0x3, 50, 108, 96, 127, 0x17, 0x1B, 20, 18, 0, 0, 0, 0, 8, 0x1,
+     0xFF, 0x3, 0x0, 0xFF }, { 0x14, 50, 0, 96, 19, 0x17, 0x1B, 20, 18, 0, 0, 12, -10, 8, 0x2, 0xFF,
+     0x4, 0x0, 0x2 }, { 0x0, 7, 0, 36, 19, 0x1D, 0x1B, 17, 18, 1, 1, 0, 0, 9, 0xFF, 0x0, 0x6, 0x1, 0xFF },
+     { 0x3, 52, 0, 88, 19, 0x17, 0x1B, 17, 18, 0, 0, 0, 0, 9, 0x1, 0xFF, 0x3, 0x0, 0xFF }, { 0x0, 11,
+     0, 21, 19, 0x1A, 0x1B, 5, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x1, 36, 27, 48, 46,
+     0x1B, 0x1B, 6, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 64, 54, 74, 73, 0x26, 0x1B,
+     5, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 103, 81, 121, 100, 0x17, 0x1B, 4, 18,
+     0, 0, 0, 0, 5, 0x1, 0xFF, 0x3, 0x0, 0xFF }, { 0x0, 10, 0, 20, 21, 0x1A, 0x19, 5, 19, 1, 1, 0, 0,
+     5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 64, 0, 71, 21, 0x1A, 0x19, 3, 19, 1, 1, 0, 0, 5, 0xFF, 0x0,
+     0x8, 0x1, 0xFF }, { 0x1, 35, 0, 43, 21, 0x1A, 0x19, 4, 19, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF },
+     { 0x15, 97, 50, 110, 71, 0x20, 0x19, 6, 19, 0, 0, 0, 0, 5, 0x6, 0xFF, 0xA, 0x0, 0x3 }, { 0x0, 5,
+     0, 23, 19, 0x18, 0x1B, 6, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 116, 27, 130, 46,
+     0x37, 0x1B, 7, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x1, 75, 0, 89, 19, 0x29, 0x1B,
+     7, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 32, 27, 57, 46, 0x17, 0x1B, 7, 18, 0,
+     0, 0, 0, 5, 0x2, 0xFF, 0x3, 0x0, 0xFF }, { 0x4, 4, 1, 57, 35, 0x37, 0x24, 28, 31, 6, 1, 28, -5,
+     26, 0x3, 0x0, 0x6, 0x0, 0x13 }, { 0x5, 104, 88, 164, 123, 0x0, 0x25, 26, 31, 0, 0, 0, 0, 26, 0xFF,
+     0xFF, 0x3, 0x0, 0xFF }, { 0x6, 75, 38, 110, 71, 0x31, 0x24, 3, 16, 0, 0, 0, 0, 0, 0x3, 0x0, 0x6,
+     0x0, 0xFF }, { 0x0, 6, 0, 6, 0, 0x0, 0x1B, 9, 19, 1, 1, 0, 0, 8, 0xFF, 0x0, 0x1, 0x0, 0xFF }, { 0x12,
+     125, 22, 145, 46, 0x20, 0x1B, 14, 24, 0, 0, 0, 0, 8, 0xFF, 0xFF, 0x8, 0x0, 0xFF }, { 0x3, 6, 22,
+     36, 46, 0x28, 0x1B, 9, 24, 0, 0, 0, 0, 8, 0x8, 0xFF, 0x12, 0x0, 0xFF }, { 0x4, 6, 2, 41, 32, 0x2C,
+     0x21, 22, 33, 5, 4, 0, 0, 9, 0xFF, 0x0, 0x7, 0x0, 0xFF }, { 0x5, 59, 35, 94, 65, 0x2C, 0x21, 14,
+     33, 0, 0, 0, 0, 9, 0xFF, 0xFF, 0x4, 0x0, 0xFF }, { 0xF, 99, 2, 135, 32, 0x2C, 0x21, 22, 31, 5, 4,
+     0, 0, 9, 0x1, 0xFF, 0x3, 0x0, 0xFF }, { 0x0, 2, 30, 26, 61, 0x1C, 0x22, 12, 29, 1, 1, 0, 0, 5, 0xFF,
+     0x0, 0x8, 0x1, 0xFF }, { 0x1, 62, 30, 83, 61, 0x20, 0x22, 9, 29, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8,
+     0x1, 0xFF }, { 0x2, 94, 132, 117, 163, 0x1D, 0x22, 9, 29, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF },
+     { 0x3, 150, 64, 179, 95, 0x1D, 0x22, 12, 29, 0, 0, 0, 0, 5, 0x4, 0xFF, 0x8, 0x0, 0xFF }, { 0x0,
+     10, 0, 25, 21, 0x1F, 0x19, 7, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x1, 44, 0, 63,
+     21, 0x20, 0x19, 7, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 79, 0, 97, 21, 0x1F, 0x19,
+     7, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 112, 0, 137, 21, 0x17, 0x19, 7, 18, 0,
+     0, 0, 0, 5, 0x3, 0xFF, 0x5, 0x0, 0xFF }, { 0x12, 146, 0, 170, 21, 0x1F, 0x19, 8, 18, 0, 0, 0, 0,
+     5, 0xFF, 0x0, 0x3, 0x0, 0xFF }, { 0x0, 2, 30, 26, 61, 0x1C, 0x22, 12, 29, 1, 1, 0, 0, 5, 0xFF, 0x0,
+     0x8, 0x1, 0xFF }, { 0x1, 62, 30, 83, 61, 0x20, 0x22, 9, 29, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1,
+     0xFF }, { 0x2, 94, 132, 117, 163, 0x1D, 0x22, 9, 29, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF },
+     { 0x3, 148, 64, 179, 95, 0x23, 0x22, 12, 29, 0, 0, 16, -19, 5, 0x6, 0xFF, 0xC, 0x0, 0xFF }, { 0x6,
+     216, 146, 223, 153, 0x0, 0x0, 4, 4, 7, 8, 0, 0, 0, 0xFF, 0x0, 0x1, 0x2, 0xFF }, { 0x4, 4, 15, 46,
+     49, 0x29, 0x25, 27, 31, 5, 4, 0, 0, 9, 0xFF, 0x0, 0x7, 0x0, 0xFF }, { 0xF, 95, 15, 135, 49, 0x2C,
+     0x25, 26, 31, 5, 4, 0, 0, 9, 0x1, 0xFF, 0x5, 0x0, 0xFF }, { 0x5, 196, 15, 247, 49, 0x2C, 0x25, 25,
+     31, 0, 0, 0, 0, 9, 0xFF, 0xFF, 0x4, 0x0, 0xFF }, { 0x12, 144, 15, 189, 49, 0x29, 0x25, 29, 31, 0,
+     0, 0, 0, 9, 0xFF, 0xFF, 0x4, 0x0, 0xFF }, { 0x0, 6, 0, 25, 19, 0x1F, 0x1B, 6, 18, 1, 1, 0, 0, 5,
+     0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x1, 37, 27, 55, 46, 0x20, 0x1B, 7, 18, 1, 1, 0, 0, 5, 0xFF, 0x0,
+     0x8, 0x1, 0xFF }, { 0x2, 71, 54, 83, 73, 0x1F, 0x1B, 5, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1,
+     0xFF }, { 0x3, 99, 81, 123, 100, 0x17, 0x1B, 8, 18, 0, 0, 0, 0, 5, 0x4, 0xFF, 0x5, 0x0, 0xFF },
+     { 0x4, 10, 2, 41, 32, 0x2C, 0x21, 18, 30, 5, 4, 0, 0, 9, 0xFF, 0x0, 0x5, 0x0, 0xFF }, { 0xF, 101,
+     2, 133, 32, 0x2C, 0x21, 18, 30, 5, 4, 0, 0, 9, 0x1, 0xFF, 0x3, 0x0, 0xFF }, { 0x5, 58, 2, 89, 32,
+     0x2C, 0x21, 14, 30, 0, 0, 0, 0, 9, 0xFF, 0xFF, 0x5, 0x0, 0xFF }, { 0x0, 4, 0, 24, 19, 0x18, 0x1B,
+     7, 18, 1, 1, 0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x1, 75, 0, 90, 19, 0x29, 0x1B, 7, 18, 1, 1,
+     0, 0, 5, 0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x2, 116, 27, 130, 46, 0x37, 0x1B, 7, 18, 1, 1, 0, 0, 5,
+     0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 32, 27, 58, 46, 0x17, 0x1B, 7, 18, 0, 0, 18, -12, 5, 0x2, 0xFF,
+     0x4, 0x0, 0xFF } };
+char s_s_produces_bows_and_arrows[] = "%s: produces bows and arrows.";
+char s__s__produces_rings__2410_19f6[] = "%s: produces rings of protection.";
+char s__s__creates_mirrors_2410_1a18[] = "%s: creates mirrors for medsae combat and lenses for towers.";
+char s__s__repairs_buildin_2410_1ab0[] = "%s: repairs buildings automatically.";
+char s__s__enhances_traini_2410_1af2[] = "%s: enhances training for entire stronghold.";
+char s__s__provides_storag_2410_1c59[] = "%s: provides storage and distribution of food.";
+char s__s__adds_to_crop_va_2410_1c88[] = "%s: adds to crop value and gives access to fund.";
+char s_Chop_Down_2410_1cec[] = "Chop Down";
+char s_Remove_2410_1cf6[] = "Remove";
+char s_Fill_in_2410_1cfd[] = "Fill in";
+byte *upperTextOfs = (void far *)(0x24100000UL + 0x0000UL);
+undefined2 upperTextSeg = 0x0000;
+undefined sfxXOffsets = 0x21;
+char s_undeveloped_land_2410_1d11[] = "undeveloped land";
+char s_plot_2410_1d22[] = "plot";
+char s_farm_2410_1d27[] = "farm";
+char s_plantation_2410_1d2c[] = "plantation";
+char s_guest_house_2410_1d37[] = "guest house";
+char s_tavern_2410_1d43[] = "tavern";
+char s_inn_2410_1d4a[] = "inn";
+char s_magicians__room_2410_1d4e[] = "magicians' room";
+char s_magicians__cottage_2410_1d5e[] = "magicians' cottage";
+char s_magician_s_manor_2410_1d71[] = "magician's manor";
+char s_shrine_2410_1d82[] = "shrine";
+char s_church_2410_1d89[] = "church";
+char s_temple_2410_1d90[] = "temple";
+char s_thieves__den_2410_1d97[] = "thieves' den";
+char s_black_market_2410_1da4[] = "black market";
+char s_thieves__guild_2410_1db1[] = "thieves' guild";
+char s_guard_house_2410_1dc0[] = "guard house";
+char s_drill_house_2410_1dcc[] = "drill house";
+char s_training_hall_2410_1dd8[] = "training hall";
+char s_elf_house_2410_1de6[] = "elf house";
+char s_elven_cottage_2410_1df0[] = "elven cottage";
+char s_elven_home_2410_1dfe[] = "elven home";
+char s_fighters__residence_2410_1e09[] = "fighters' residence";
+char s_fighters__house_2410_1e1d[] = "fighters' house";
+char s_fighters__mansion_2410_1e2d[] = "fighters' mansion";
+char s_mage_school_2410_1e3f[] = "mage school";
+char s_mage_college_2410_1e4b[] = "mage college";
+char s_mage_university_2410_1e58[] = "mage university";
+char s_small_tower_2410_1e68[] = "small tower";
+char s_large_tower_2410_1e74[] = "large tower";
+char s_storage_shed_2410_1e80[] = "storage shed";
+char s_storehouse_2410_1e8d[] = "storehouse";
+char s_granary_2410_1e98[] = "granary";
+char s_thieves__hut_2410_1ea0[] = "thieves' hut";
+char s_thieves__shack_2410_1ead[] = "thieves' shack";
+char s_thieves__house_2410_1ebc[] = "thieves' house";
+char s_clerics__chamber_2410_1ecb[] = "clerics' chamber";
+char s_clerics__refuge_2410_1edc[] = "clerics' refuge";
+char s_clerics__retreat_2410_1eec[] = "clerics' retreat";
+char s_halfling_lodge_2410_1efd[] = "halfling lodge";
+char s_halfling_abode_2410_1f0c[] = "halfling abode";
+char s_halfling_dwelling_2410_1f1b[] = "halfling dwelling";
+char s_drill_hall_2410_1f2d[] = "drill hall";
+char s_marketplace_2410_1f38[] = "marketplace";
+char s_dwarven_home_2410_1f44[] = "dwarven home";
+char s_dwarven_hall_2410_1f51[] = "dwarven hall";
+char s_dwarven_mansion_2410_1f5e[] = "dwarven mansion";
+char s_metalworks_2410_1f6e[] = "metalworks";
+char s_swordmaker_s_shop_2410_1f79[] = "swordmaker's shop";
+char s_forge_2410_1f8b[] = "forge";
+char s_social_club_2410_1f91[] = "social club";
+char s_hall_of_fellowship_2410_1f9d[] = "hall of fellowship";
+char s_social_hall_2410_1fb0[] = "social hall";
+char s_tree_2410_1fbc[] = "tree";
+char s_grove_2410_1fc1[] = "grove";
+char s_forest_2410_1fc7[] = "forest";
+char s_elf_tree_2410_1fce[] = "elf tree";
+char s_elf_grove_2410_1fd7[] = "elf grove";
+char s_elf_forest_2410_1fe1[] = "elf forest";
+char s_rock_2410_1fec[] = "rock";
+char s_iron_mine_2410_1ff1[] = "iron mine";
+char s_gold_mine_2410_1ffb[] = "gold mine";
+char s_gem_mine_2410_2005[] = "gem mine";
+char s_fighter_keep_2410_200e[] = "fighter keep";
+char s_fighter_fortress_2410_201b[] = "fighter fortress";
+char s_fighter_castle_2410_202c[] = "fighter castle";
+char s_thief_keep_2410_203b[] = "thief keep";
+char s_thief_fortress_2410_2046[] = "thief fortress";
+char s_thief_castle_2410_2055[] = "thief castle";
+char s_mage_keep_2410_2062[] = "mage keep";
+char s_mage_fortress_2410_206c[] = "mage fortress";
+char s_mage_castle_2410_207a[] = "mage castle";
+char s_cleric_keep_2410_2086[] = "cleric keep";
+char s_cleric_fortress_2410_2092[] = "cleric fortress";
+char s_cleric_castle_2410_20a2[] = "cleric castle";
+char s_elf_keep_2410_20b0[] = "elf keep";
+char s_elf_fortress_2410_20b9[] = "elf fortress";
+char s_elf_castle_2410_20c6[] = "elf castle";
+char s_Mindark_s_keep_2410_20d1[] = "Mindark's keep";
+char s_tomb_2410_20e0[] = "tomb";
+char s_giant_mound_2410_20e5[] = "giant mound";
+char s_dragon_s_lair_2410_20f1[] = "dragon's lair";
+char s_main_castle_2410_20ff[] = "main castle";
+char s_fortified_castle_2410_210b[] = "fortified castle";
+char s_stronghold_2410_211c[] = "stronghold";
+char s_dwarf_keep_2410_2127[] = "dwarf keep";
+char s_dwarf_fortress_2410_2132[] = "dwarf fortress";
+char s_dwarf_castle_2410_2141[] = "dwarf castle";
+char s_halfling_keep_2410_214e[] = "halfling keep";
+char s_halfling_fortress_2410_215c[] = "halfling fortress";
+char s_halfling_castle_2410_216e[] = "halfling castle";
+char s_swamp_2410_217e[] = "swamp";
+char s_e_w_wall_2410_2184[] = "e/w wall";
+char s_n_s_wall_2410_218d[] = "n/s wall";
+char s_corner_wall_2410_2196[] = "corner wall";
+char s_sturdy_e_w_wall_2410_21a2[] = "sturdy e/w wall";
+char s_sturdy_n_s_wall_2410_21b2[] = "sturdy n/s wall";
+char s_sturdy_corner_wall_2410_21c2[] = "sturdy corner wall";
+char s_manned_e_w_wall_2410_21d5[] = "manned e/w wall";
+char s_manned_n_s_wall_2410_21e5[] = "manned n/s wall";
+char s_manned_corner_wall_2410_21f5[] = "manned corner wall";
+char s_e_w_bridge_2410_2208[] = "e/w bridge";
+char s_n_s_bridge_2410_2213[] = "n/s bridge";
+char s_e_w_gate_2410_221e[] = "e/w gate";
+char s_n_s_gate_2410_2227[] = "n/s gate";
+char s_sturdy_e_w_gate_2410_2230[] = "sturdy e/w gate";
+char s_sturdy_n_s_gate_2410_2240[] = "sturdy n/s gate";
+char s_manned_e_w_gate_2410_2250[] = "manned e/w gate";
+char s_manned_n_s_gate_2410_2260[] = "manned n/s gate";
+char s_nursery_2410_2270[] = "nursery";
+char s_flower_garden_2410_2278[] = "flower garden";
+char s_elf_garden_2410_2286[] = "elf garden";
+char s_Arrowmaker_s_shop_2410_2291[] = "Arrowmaker's shop";
+char s_arrowsmith_2410_22a3[] = "arrowsmith";
+char s_fletcher_s_shop_2410_22ae[] = "fletcher's shop";
+char s_steam_bath_2410_22be[] = "steam bath";
+char s_bath_house_2410_22c9[] = "bath house";
+char s_public_baths_2410_22d4[] = "public baths";
+char s_brick_kiln_2410_22e1[] = "brick kiln";
+char s_stonemasonry_2410_22ec[] = "stonemasonry";
+char s_mason_s_hall_2410_22f9[] = "mason's hall";
+char s_jeweler_2410_2306[] = "jeweler";
+char s_ringmaker_s_shop_2410_230e[] = "ringmaker's shop";
+char s_jeweler_s_shop_2410_231f[] = "jeweler's shop";
+char s_glassworks_2410_232e[] = "glassworks";
+char s_fighter_outpost_2410_2339[] = "fighter outpost";
+char s_mage_outpost_2410_2349[] = "mage outpost";
+char s_cleric_outpost_2410_2356[] = "cleric outpost";
+char s_thief_outpost_2410_2365[] = "thief outpost";
+char s_dwarf_outpost_2410_2373[] = "dwarf outpost";
+char s_elf_outpost_2410_2381[] = "elf outpost";
+char s_halfling_outpost_2410_238d[] = "halfling outpost";
+char s_money_dealer_s_shop_2410_239e[] = "money dealer's shop";
+char s_bank_2410_23b2[] = "bank";
+char s_vault_2410_23b7[] = "vault";
+char s_forester_s_camp_2410_23bd[] = "forester's camp";
+char s_builder_s_hall_2410_23cd[] = "builder's hall";
+char s_trading_post_2410_23dc[] = "trading post";
+char s_trade_faire_2410_23e9[] = "trade faire";
+char s_bazaar_2410_23f5[] = "bazaar";
+char s_arena_2410_23fc[] = "arena";
+char s_woodcarver_2410_2402[] = "woodcarver";
+char s_puppetmaker_2410_240d[] = "puppetmaker";
+char s_toymaker_2410_2419[] = "toymaker";
+char s_bread_shop_2410_2422[] = "bread shop";
+char s_bakehouse_2410_242d[] = "bakehouse";
+char s_bakery_2410_2437[] = "bakery";
+char s_dice_den_2410_243e[] = "dice den";
+char s_card_parlor_2410_2447[] = "card parlor";
+char s_gaming_hall_2410_2453[] = "gaming hall";
+char s_clerk_s_office_2410_245f[] = "clerk's office";
+char s_transcriber_s_shop_2410_246e[] = "transcriber's shop";
+char s_scribery_2410_2481[] = "scribery";
+char s_apothecary_2410_248a[] = "apothecary";
+char s_alchemist_s_lab_2410_2495[] = "alchemist's lab";
+char s_magic_mill_2410_24a5[] = "magic mill";
+char s_leatherworks_2410_24b0[] = "leatherworks";
+char s_shieldsmith_2410_24bd[] = "shieldsmith";
+char s_armory_2410_24c9[] = "armory";
+char s_ruin_2410_24d0[] = "ruin";
+char s_fighter_2410_24d5[] = "fighter";
+char s_spear_2410_24dd[] = "spear";
+char s_mage_2410_24e3[] = "mage";
+char s_cleric_2410_24e8[] = "cleric";
+char s_staff_club_2410_24ef[] = "staff,club";
+char s_thief_2410_24fa[] = "thief";
+char s_dagger_2410_2500[] = "dagger";
+char s_red_dragon_2410_2507[] = "red dragon";
+char s_archer_2410_2512[] = "archer";
+char s_bow_2410_2519[] = "bow";
+char s_skeleton_2410_251d[] = "skeleton";
+char s_short_sword_2410_2526[] = "short sword";
+char s_orc_2410_2532[] = "orc";
+char s_morning_star_2410_2536[] = "morning star";
+char s_elf_2410_2543[] = "elf";
+char s_evil_fighter_2410_2547[] = "evil fighter";
+char s_pike_2410_2554[] = "pike";
+char s_dwarf_2410_2559[] = "dwarf";
+char s_axe_hammer_2410_255f[] = "axe,hammer";
+char s_halfling_2410_256a[] = "halfling";
+char s_carrion_crawler_2410_2573[] = "carrion crawler";
+char s_giant_ant_2410_2583[] = "giant ant";
+char s_harpy_2410_258d[] = "harpy";
+char s_dire_wolf_2410_2593[] = "dire wolf";
+char s_giant_bat_2410_259d[] = "giant bat";
+char s_blast_spore_2410_25a7[] = "blast spore";
+char s_kobold_2410_25b3[] = "kobold";
+char s_obsidian_statue_2410_25ba[] = "obsidian statue";
+char s_giant_toad_2410_25ca[] = "giant toad";
+char s_hobgoblin_2410_25d5[] = "hobgoblin";
+char s_manscorpion_2410_25df[] = "manscorpion";
+char s_giant_scorpion_2410_25eb[] = "giant scorpion";
+char s_wood_golem_2410_25fa[] = "wood golem";
+char s_evil_mage_2410_2605[] = "evil mage";
+char s_medusa_2410_260f[] = "medusa";
+char s_evil_cleric_2410_2616[] = "evil cleric";
+char s_evil_thief_2410_2622[] = "evil thief";
+char s_wight_2410_262d[] = "wight";
+char s_blue_dragon_2410_2633[] = "blue dragon";
+char s_purple_worm_2410_263f[] = "purple worm";
+char s_griffon_2410_264b[] = "griffon";
+char s_stone_giant_2410_2653[] = "stone giant";
+char s_troll_2410_265f[] = "troll";
+char s_fire_giant_2410_2665[] = "fire giant";
+char s_lesser_phoenix_2410_2670[] = "lesser phoenix";
+char s_minotaur_2410_267f[] = "minotaur";
+char s_axe_2410_2688[] = "axe";
+char s_cockatrice_2410_268c[] = "cockatrice";
+char s_vampire_2410_2697[] = "vampire";
+char s_Mindark_2410_269f[] = "Mindark";
+undefined1 ScreenMode = 0x00;
+far_t GSPEmpty = { 0x272B, 0x2410 };
+undefined promptRect = 0x16;
+char *GMenuStrings[8] = { (void far *)(0x24100000UL + 0x27ebUL), (void far *)(0x24100000UL + 0x27f4UL),
+     (void far *)(0x24100000UL + 0x27feUL), (void far *)(0x24100000UL + 0x2808UL), (void far *)(0x24100000UL + 0x2814UL),
+     (void far *)(0x24100000UL + 0x281eUL), (void far *)(0x24100000UL + 0x282cUL), (void far *)(0x24100000UL + 0x283fUL) };
+char *GYesNo[2] = { (void far *)(0x24100000UL + 0x284aUL), (void far *)(0x24100000UL + 0x284eUL) };
+undefined2 GSeed = 0x0000;
+undefined2 SeedHi = 0x0000;
+far_t worldMenuLabels[13] = { { 0x2915, 0x2410 }, { 0x291E, 0x2410 }, { 0x2929, 0x2410 }, { 0x2931, 0x2410 },
+     { 0x2938, 0x2410 }, { 0x293F, 0x2410 }, { 0x294A, 0x2410 }, { 0x2952, 0x2410 }, { 0x295A, 0x2410 },
+     { 0x2962, 0x2410 }, { 0x296A, 0x2410 }, { 0x2972, 0x2410 }, { 0x2938, 0x2410 } };
+char s__Empty__2410_272b[] = "<Empty>";
+char s_more[] = "More";
+char s_underscore_2410_2738[] = "_";
+char s_empty[] = "\r\n";
+char s_ssaves_txt[] = "%ssaves.txt";
+char s_u[] = "%u";
+char s_message_delay_is_now_d[] = "Message delay is now %d.";
+char s_decrease_message_delay[] = "Decrease message delay";
+char s_increase_message_delay[] = "Increase message delay";
+char s_test[] = "Test";
+char s_done[] = "Done";
+char s_change_message_delay[] = "Change message delay:";
+char s_this_message_appears_at__ec7e[] = "This message appears at the message delay of %d.";
+char s_cancel[] = "Cancel";
+char s_New_Game_2410_27eb[] = "New Game";
+char s_Save_Game_2410_27f4[] = "Save Game";
+char s_Load_Game_2410_27fe[] = "Load Game";
+char s_Delete_Game_2410_2808[] = "Delete Game";
+char s_Quit_Game_2410_2814[] = "Quit Game";
+char s_Message_Delay_2410_281e[] = "Message Delay";
+char s_Great_Achievements_2410_282c[] = "Great Achievements";
+char s_Begin_Play_2410_283f[] = "Begin Play";
+char s_Yes_2410_284a[] = "Yes";
+char s_No_2410_284e[] = "No";
+char s_stronghold_v_1_00[] = "Stronghold V 1.00";
+char s_Select_an_option__2410_2863[] = "Select an option:";
+char s_game_not_saved_are_you_sure[] = "Game not saved: Are you sure?";
+char s_save_game[] = "Save Game:";
+char s_name_this_save_esc_to_cancel[] = "Name this save:  (Esc to cancel)";
+char s_name_for_this_save_esc_t_1e3b[] = "Name for this save:  (Esc to cancel)";
+char s_load_game[] = "Load Game:";
+char s_delete_game[] = "Delete Game:";
+char s_delete_s_are_you_sure[] = "Delete %s: Are you sure?";
+char s_Peaceful_2410_2915[] = "Peaceful";
+char s_Aggressive_2410_291e[] = "Aggressive";
+char s_Hostile_2410_2929[] = "Hostile";
+char s_Custom_2410_2931[] = "Custom";
+char s_Return_2410_2938[] = "Return";
+char s_First_City_2410_293f[] = "First City";
+char s_World_1_2410_294a[] = "World 1";
+char s_World_2_2410_2952[] = "World 2";
+char s_World_3_2410_295a[] = "World 3";
+char s_world_4[] = "World 4";
+char s_world_5[] = "World 5";
+char s_Random_2410_2972[] = "Random";
+char s_which_new_world[] = "Which new world:";
+char s_hostility_level[] = "Hostility level:";
+char s_low_intelligence_enemies[] = "Low intelligence enemies:";
+char s_medium_intelligence_enemies[] = "Medium intelligence enemies:";
+char s_high_intelligence_enemies[] = "High intelligence enemies:";
+char s_size_of_second_wave[] = "Size of second wave:";
+char s_too_many_enemies_60_enem_1f4f[] = "Too many enemies. 60 enemies maximum.";
+char s_resetting_game[] = "Resetting game...";
+char s_new_world_complete[] = "New world complete.";
+undefined1 audioBusy = 0x00;
+uint32_t FMXmsHandle = 0x0;
+uint32_t FMEmsHandle = 0x0;
+far_t StshBuf = { 0x0, 0x0 };
+far_t FMRingBuf[8] = { { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 },
+     { 0x0, 0x0 }, { 0x0, 0x0 } };
+uint8_t FMRingIndex = 0x0;
+undefined s_build_clebath2_lbm_2410_4228 = 0x62;
+bld_inst_t BldInstances[75] = { { 0x3268, 0x6C2E, { 0x62, 0x6D, 0x0, 0x62, 0x75, 0x69, 0x6C, 0x64 } },
+     { 0x645C, 0x6677, { 0x6D, 0x61, 0x73, 0x30, 0x31, 0x2E, 0x6C, 0x62 } }, { 0x6D, 0x7562, { 0x69,
+     0x6C, 0x64, 0x5C, 0x64, 0x77, 0x66, 0x6D } }, { 0x7361, 0x3230, { 0x2E, 0x6C, 0x62, 0x6D, 0x0, 0x62,
+     0x75, 0x69 } }, { 0x646C, 0x675C, { 0x65, 0x6E, 0x61, 0x72, 0x65, 0x6E, 0x31, 0x2E } }, { 0x626C,
+     0x6D, { 0x62, 0x75, 0x69, 0x6C, 0x64, 0x5C, 0x67, 0x65 } }, { 0x616E, 0x6572, { 0x6E, 0x32, 0x2E,
+     0x6C, 0x62, 0x6D, 0x0, 0x62 } }, { 0x6975, 0x646C, { 0x5C, 0x74, 0x68, 0x66, 0x67, 0x61, 0x6D, 0x30 } },
+     { 0x2E32, 0x626C, { 0x6D, 0x0, 0x62, 0x75, 0x69, 0x6C, 0x64, 0x5C } }, { 0x6567, 0x6F6E, { 0x75,
+     0x74, 0x70, 0x31, 0x2E, 0x6C, 0x62, 0x6D } }, { 0x6200, 0x6975, { 0x6C, 0x64, 0x5C, 0x67, 0x65,
+     0x6E, 0x6F, 0x75 } }, { 0x7074, 0x2E32, { 0x6C, 0x62, 0x6D, 0x0, 0x62, 0x75, 0x69, 0x6C } }, { 0x5C64,
+     0x7274, { 0x65, 0x65, 0x30, 0x31, 0x2E, 0x6C, 0x62, 0x6D } }, { 0x6200, 0x6975, { 0x6C, 0x64, 0x5C,
+     0x74, 0x72, 0x65, 0x65, 0x30 } }, { 0x2E32, 0x626C, { 0x6D, 0x0, 0x62, 0x75, 0x69, 0x6C, 0x64, 0x5C } },
+     { 0x7274, 0x6565, { 0x30, 0x33, 0x2E, 0x6C, 0x62, 0x6D, 0x0, 0x62 } }, { 0x6975, 0x646C, { 0x5C,
+     0x74, 0x72, 0x65, 0x65, 0x30, 0x34, 0x2E } }, { 0x626C, 0x6D, { 0x62, 0x75, 0x69, 0x6C, 0x64, 0x5C,
+     0x74, 0x72 } }, { 0x6565, 0x3530, { 0x2E, 0x6C, 0x62, 0x6D, 0x0, 0x62, 0x75, 0x69 } }, { 0x646C,
+     0x745C, { 0x72, 0x65, 0x65, 0x30, 0x36, 0x2E, 0x6C, 0x62 } }, { 0x6D, 0x7562, { 0x69, 0x6C, 0x64,
+     0x5C, 0x66, 0x69, 0x67, 0x66 } }, { 0x6772, 0x3130, { 0x2E, 0x6C, 0x62, 0x6D, 0x0, 0x62, 0x75, 0x69 } },
+     { 0x646C, 0x665C, { 0x69, 0x67, 0x66, 0x72, 0x67, 0x30, 0x32, 0x2E } }, { 0x626C, 0x6D, { 0x68,
+     0x6F, 0x75, 0x72, 0x67, 0x6C, 0x73, 0x34 } }, { 0x6C2E, 0x6D62, { 0x0, 0x62, 0x75, 0x69, 0x6C, 0x64,
+     0x5C, 0x65 } }, { 0x6C76, 0x6572, { 0x73, 0x30, 0x31, 0x2E, 0x6C, 0x62, 0x6D, 0x0 } }, { 0x7562,
+     0x6C69, { 0x64, 0x5C, 0x65, 0x76, 0x6C, 0x72, 0x65, 0x73 } }, { 0x3230, 0x6C2E, { 0x62, 0x6D, 0x0,
+     0x62, 0x75, 0x69, 0x6C, 0x64 } }, { 0x655C, 0x6C76, { 0x72, 0x65, 0x73, 0x30, 0x33, 0x2E, 0x6C,
+     0x62 } }, { 0x6D, 0x7562, { 0x69, 0x6C, 0x64, 0x5C, 0x65, 0x76, 0x6C, 0x72 } }, { 0x7365, 0x3430,
+     { 0x2E, 0x6C, 0x62, 0x6D, 0x0, 0x62, 0x75, 0x69 } }, { 0x646C, 0x655C, { 0x76, 0x6C, 0x63, 0x61,
+     0x73, 0x30, 0x31, 0x2E } }, { 0x626C, 0x6D, { 0x62, 0x75, 0x69, 0x6C, 0x64, 0x5C, 0x65, 0x76 } },
+     { 0x636C, 0x7361, { 0x30, 0x32, 0x2E, 0x6C, 0x62, 0x6D, 0x0, 0x62 } }, { 0x6975, 0x646C, { 0x5C,
+     0x65, 0x76, 0x6C, 0x63, 0x61, 0x73, 0x30 } }, { 0x2E33, 0x626C, { 0x6D, 0x0, 0x62, 0x75, 0x69, 0x6C,
+     0x64, 0x5C } }, { 0x7665, 0x636C, { 0x61, 0x73, 0x30, 0x34, 0x2E, 0x6C, 0x62, 0x6D } }, { 0x6200,
+     0x6975, { 0x6C, 0x64, 0x5C, 0x65, 0x76, 0x6C, 0x63, 0x61 } }, { 0x3073, 0x2E35, { 0x6C, 0x62, 0x6D,
+     0x0, 0x62, 0x75, 0x69, 0x6C } }, { 0x5C64, 0x7665, { 0x6C, 0x63, 0x61, 0x73, 0x30, 0x36, 0x2E, 0x6C } },
+     { 0x6D62, 0x6200, { 0x75, 0x69, 0x6C, 0x64, 0x5C, 0x65, 0x76, 0x6C } }, { 0x6163, 0x3073, { 0x37,
+     0x2E, 0x6C, 0x62, 0x6D, 0x0, 0x62, 0x75 } }, { 0x6C69, 0x5C64, { 0x65, 0x76, 0x6C, 0x63, 0x61, 0x73,
+     0x30, 0x38 } }, { 0x6C2E, 0x6D62, { 0x0, 0x62, 0x75, 0x69, 0x6C, 0x64, 0x5C, 0x65 } }, { 0x6C76,
+     0x6163, { 0x73, 0x30, 0x39, 0x2E, 0x6C, 0x62, 0x6D, 0x0 } }, { 0x7562, 0x6C69, { 0x64, 0x5C, 0x65,
+     0x76, 0x6C, 0x63, 0x61, 0x73 } }, { 0x3031, 0x6C2E, { 0x62, 0x6D, 0x0, 0x62, 0x75, 0x69, 0x6C, 0x64 } },
+     { 0x655C, 0x6C76, { 0x63, 0x61, 0x73, 0x31, 0x31, 0x2E, 0x6C, 0x62 } }, { 0x6D, 0x7562, { 0x69,
+     0x6C, 0x64, 0x5C, 0x65, 0x76, 0x6C, 0x63 } }, { 0x7361, 0x3231, { 0x2E, 0x6C, 0x62, 0x6D, 0x0, 0x62,
+     0x75, 0x69 } }, { 0x646C, 0x655C, { 0x76, 0x6C, 0x63, 0x61, 0x73, 0x31, 0x33, 0x2E } }, { 0x626C,
+     0x6D, { 0x62, 0x75, 0x69, 0x6C, 0x64, 0x5C, 0x65, 0x76 } }, { 0x636C, 0x7361, { 0x31, 0x34, 0x2E,
+     0x6C, 0x62, 0x6D, 0x0, 0x62 } }, { 0x6975, 0x646C, { 0x5C, 0x65, 0x76, 0x6C, 0x74, 0x6F, 0x77, 0x30 } },
+     { 0x2E31, 0x626C, { 0x6D, 0x0, 0x62, 0x75, 0x69, 0x6C, 0x64, 0x5C } }, { 0x7665, 0x746C, { 0x6F,
+     0x77, 0x30, 0x32, 0x2E, 0x6C, 0x62, 0x6D } }, { 0x6200, 0x6975, { 0x6C, 0x64, 0x5C, 0x65, 0x76,
+     0x6C, 0x72, 0x75 } }, { 0x6E69, 0x2E31, { 0x6C, 0x62, 0x6D, 0x0, 0x70, 0x6F, 0x72, 0x74 } }, { 0x6172,
+     0x7469, { 0x5C, 0x70, 0x68, 0x6F, 0x65, 0x6E, 0x69, 0x78 } }, { 0x6C2E, 0x6D62, { 0x0, 0x63, 0x73,
+     0x69, 0x74, 0x65, 0x35, 0x2E } }, { 0x626C, 0x6D, { 0x63, 0x73, 0x69, 0x74, 0x65, 0x36, 0x2E, 0x6C } },
+     { 0x6D62, 0x6300, { 0x73, 0x69, 0x74, 0x65, 0x37, 0x2E, 0x6C, 0x62 } }, { 0x6D, 0x7363, { 0x69,
+     0x74, 0x65, 0x38, 0x2E, 0x6C, 0x62, 0x6D } }, { 0x6100, 0x696E, { 0x6D, 0x5C, 0x74, 0x6D, 0x73,
+     0x74, 0x72, 0x73 } }, { 0x6C2E, 0x6D62, { 0x0, 0x62, 0x75, 0x69, 0x6C, 0x64, 0x5C, 0x67 } }, { 0x6E65,
+     0x6162, { 0x7A, 0x72, 0x31, 0x2E, 0x6C, 0x62, 0x6D, 0x0 } }, { 0x7562, 0x6C69, { 0x64, 0x5C, 0x67,
+     0x65, 0x6E, 0x62, 0x61, 0x7A } }, { 0x3272, 0x6C2E, { 0x62, 0x6D, 0x0, 0x73, 0x6B, 0x79, 0x30, 0x37 } },
+     { 0x6C2E, 0x6D62, { 0x0, 0x63, 0x72, 0x65, 0x64, 0x30, 0x31, 0x2E } }, { 0x626C, 0x6D, { 0x63, 0x72,
+     0x65, 0x64, 0x30, 0x32, 0x2E, 0x6C } }, { 0x6D62, 0x6300, { 0x72, 0x65, 0x64, 0x30, 0x33, 0x2E,
+     0x6C, 0x62 } }, { 0x6D, 0x6F79, { 0x75, 0x6C, 0x6F, 0x73, 0x65, 0x31, 0x2E, 0x6C } }, { 0x6D62,
+     0x6200, { 0x75, 0x74, 0x74, 0x6F, 0x6E, 0x32, 0x2E, 0x6C } }, { 0x6D62, 0x4600, { 0x69, 0x6C, 0x65,
+     0x20, 0x72, 0x65, 0x61, 0x64 } }, { 0x6520, 0x7272, { 0x6F, 0x72, 0x20, 0x25, 0x73, 0x20, 0xD, 0x0 } } };
+undefined1 MsgShown = 0x00;
+far_t PlaceErrPtrs[3] = { { 0x461F, 0x2410 }, { 0x4647, 0x2410 }, { 0x466F, 0x2410 } };
+char s_place_s[] = "Place %s.";
+char s_view_s_cannot_place[] = "View %s. (Cannot place)";
+char s_create_baron_or_baroness[] = "Create baron or baroness.";
+char s_create_party_member[] = "Create party member.";
+char s_Strongholds_cannot__2410_461f[] = "Strongholds cannot be placed on rivers.";
+char s_Strongholds_cannot__2410_4647[] = "Strongholds cannot be placed over seas.";
+char s_a_fortress_cannot_be_pla_caf6[] = "A fortress cannot be placed among enemy units.";
+char s_cannot_place_another_for_4fbc[] = "Cannot place another fortress here.";
+char s_this_location_is_unsuita_f1c7[] = "This location is unsuitable for a main stronghold.  %s";
+char s_this_location_is_unsuitable_s[] = "This location is unsuitable.  %s";
+char s_your_stronghold_is_too_f_6cb9[] = "Your stronghold is too far away.";
+undefined1 SaveAuto = 0x00;
+undefined1 suppressLoadError = 0x00;
+far_t SaveHeader = { 0x475C, 0x2410 };
+char s_Load_Error_2410_479e[] = "Load Error";
+char s_Save_Error_2410_47ce[] = "Save Error";
+far_t Stsh_2410_47f6 = { 0x0, 0x0 };
+far_t StshCtPtr2 = { 0x0, 0x0 };
+DW StshCtOfs = { 0x0, 0x0 };
+char s_uc_lx_d_len_ld_loc_ld[] = "uc%lx %d len %ld loc %ld \r";
+char s_n_up_d[] = "N UP = %d \r";
+char s_dc_lx_d_ln_ld_lc_ld_lx[] = "dc%lx %d ln %ld lc %ld @%lx \r";
+char s_n_down_d[] = "N DOWN = %d \r";
+char s_type__d_len__ld_2410_4855[] = "type %d len %ld \r";
+undefined1 Cancelled = 0x00;
+far_t GAlignmentsNames[3] = { { 0x4B6F, 0x2410 }, { 0x4B76, 0x2410 }, { 0x4B7E, 0x2410 } };
+far_t far_t_ARRAY_2410_4933[2] = { { 0x4B86, 0x2410 }, { 0x4B8B, 0x2410 } };
+undefined panelClipRect = 0x0C;
+far_t GStatsLabels[6] = { { 0x4B92, 0x2410 }, { 0x4B96, 0x2410 }, { 0x4B9A, 0x2410 }, { 0x4B9E, 0x2410 },
+     { 0x4BA2, 0x2410 }, { 0x4BA6, 0x2410 } };
+far_t GPlayerTitles[32] = { { 0x4BB6, 0x2410 }, { 0x4BBD, 0x2410 }, { 0x4BC7, 0x2410 }, { 0x4BD1, 0x2410 },
+     { 0x4BDE, 0x2410 }, { 0x4BE5, 0x2410 }, { 0x4BEF, 0x2410 }, { 0x4BF8, 0x2410 }, { 0x4C02, 0x2410 },
+     { 0x4C08, 0x2410 }, { 0x4C11, 0x2410 }, { 0x4C1B, 0x2410 }, { 0x4C28, 0x2410 }, { 0x4C30, 0x2410 },
+     { 0x4C3A, 0x2410 }, { 0x4C40, 0x2410 }, { 0x4C47, 0x2410 }, { 0x4C50, 0x2410 }, { 0x4C5A, 0x2410 },
+     { 0x4C60, 0x2410 }, { 0x4C66, 0x2410 }, { 0x4C6E, 0x2410 }, { 0x4C74, 0x2410 }, { 0x4C7F, 0x2410 },
+     { 0x4C8A, 0x2410 }, { 0x4C8A, 0x2410 }, { 0x4C98, 0x2410 }, { 0x4CA4, 0x2410 }, { 0x4CB0, 0x2410 },
+     { 0x4CBD, 0x2410 }, { 0x4CC8, 0x2410 }, { 0x4CC8, 0x2410 } };
+undefined classStatTable1 = 0x00;
+undefined classStatTable2 = 0xFF;
+far_t GAlignmentString = { 0xFFFF, 0x301 };
+far_t RankReqMsgPtrs[3] = { { 0x4E41, 0x2410 }, { 0x4E73, 0x2410 }, { 0x4EBE, 0x2410 } };
+far_t menuHighlightTable[5] = { { 0x4EE9, 0x2410 }, { 0x4F1D, 0x2410 }, { 0x4F62, 0x2410 }, { 0x4F8F,
+     0x2410 }, { 0x4F92, 0x2410 } };
+undefined classLimitTable = 0x08;
+DW TimerSeed = { 0x0, 0x0 };
+far_t GKeepDiscardStrings[4] = { { 0x4FC1, 0x2410 }, { 0x4FC6, 0x2410 }, { 0x5063, 0x2410 }, { 0x5069,
+     0x2410 } };
+unk01_t GStructures[30] = { { 0x17, 0x0, { 0x5155, 0x2410 } }, { 0x1D, 0x1, { 0x515C, 0x2410 } }, { 0x19,
+     0x1, { 0x5165, 0x2410 } }, { 0xE, 0x1, { 0x516E, 0x2410 } }, { 0x16, 0x1, { 0x5174, 0x2410 } },
+     { 0x15, 0x0, { 0x517C, 0x2410 } }, { 0x8, 0x1, { 0x5189, 0x2410 } }, { 0x3, 0x1, { 0x5191, 0x2410 } },
+     { 0xD, 0x1, { 0x5197, 0x2410 } }, { 0x14, 0x0, { 0x51A1, 0x2410 } }, { 0x1, 0x1, { 0x51AF, 0x2410 } },
+     { 0x1A, 0x1, { 0x51B6, 0x2410 } }, { 0xC, 0x0, { 0x51C3, 0x2410 } }, { 0x11, 0x0, { 0x51CD, 0x2410 } },
+     { 0xB, 0x0, { 0x51D8, 0x2410 } }, { 0x5, 0x1, { 0x51E3, 0x2410 } }, { 0x7, 0x1, { 0x51ED, 0x2410 } },
+     { 0xA, 0x0, { 0x51F2, 0x2410 } }, { 0x10, 0x1, { 0x51FD, 0x2410 } }, { 0x1C, 0x1, { 0x5206, 0x2410 } },
+     { 0x4, 0x0, { 0x5212, 0x2410 } }, { 0xF, 0x1, { 0x521A, 0x2410 } }, { 0x12, 0x0, { 0x5228, 0x2410 } },
+     { 0x0, 0x1, { 0x5231, 0x2410 } }, { 0x1B, 0x1, { 0x523C, 0x2410 } }, { 0x2, 0x1, { 0x5247, 0x2410 } },
+     { 0x18, 0x1, { 0x524E, 0x2410 } }, { 0x6, 0x1, { 0x5258, 0x2410 } }, { 0x9, 0x1, { 0x5261, 0x2410 } },
+     { 0x13, 0x1, { 0x5267, 0x2410 } } };
+far_t ManageResultPtrs[5] = { { 0x50FB, 0x2410 }, { 0x526E, 0x2410 }, { 0x5278, 0x2410 }, { 0x5282, 0x2410 },
+     { 0x528C, 0x2410 } };
+undefined1 LevelRangeMin = 0x00;
+undefined1 LevelRangeMax = 0x01;
+far_t LevelBandLabels[20] = { { 0x53E9, 0x2410 }, { 0x53F1, 0x2410 }, { 0x53F9, 0x2410 }, { 0x5401, 0x2410 },
+     { 0x5409, 0x2410 }, { 0x5411, 0x2410 }, { 0x541D, 0x2410 }, { 0x542A, 0x2410 }, { 0x5437, 0x2410 },
+     { 0x5444, 0x2410 }, { 0x5451, 0x2410 }, { 0x545E, 0x2410 }, { 0x5411, 0x2410 }, { 0x5467, 0x2410 },
+     { 0x5475, 0x2410 }, { 0x5484, 0x2410 }, { 0x5493, 0x2410 }, { 0x54A0, 0x2410 }, { 0x54AF, 0x2410 },
+     { 0x0, 0x0 } };
+far_t LevelRangeLabels[4] = { { 0x54BF, 0x2410 }, { 0x54CB, 0x2410 }, { 0x54D8, 0x2410 }, { 0x0, 0x0 } };
+undefined1 unitTypeFilter = 0xFF;
+undefined1 partyFilter = 0xFF;
+char s_Lawful_2410_4b6f[] = "Lawful";
+char s_Neutral_2410_4b76[] = "Neutral";
+char s_Chaotic_2410_4b7e[] = "Chaotic";
+char s_Male_2410_4b86[] = "Male";
+char s_Female_2410_4b8b[] = "Female";
+char s_str[] = "STR";
+char s_int[] = "INT";
+char s_wis[] = "WIS";
+char s_dex[] = "DEX";
+char s_con[] = "CON";
+char s_cha[] = "CHA";
+char s_st[] = "st";
+char s_nd[] = "nd";
+char s_rd[] = "rd";
+char s_th[] = "th";
+char s_baron[] = "Baron ";
+char s_baroness[] = "Baroness ";
+char s_viscount[] = "Viscount ";
+char s_viscountess[] = "Viscountess ";
+char s_count[] = "Count ";
+char s_countess[] = "Countess ";
+char s_marquis[] = "Marquis ";
+char s_marquise[] = "Marquise ";
+char s_duke[] = "Duke ";
+char s_duchess[] = "Duchess ";
+char s_archduke[] = "Archduke ";
+char s_prince[] = "Prince ";
+char s_princess[] = "Princess ";
+char s_king[] = "King ";
+char s_queen[] = "Queen ";
+char s_emperor[] = "Emperor ";
+char s_emperess[] = "Emperess ";
+char s_lord[] = "Lord ";
+char s_lady[] = "Lady ";
+char s_wizard[] = "Wizard ";
+char s_maga[] = "Maga ";
+char s_patriarch[] = "Patriarch ";
+char s_matriarch[] = "Matriarch ";
+char s_master_thief[] = "Master Thief ";
+char s_dwarf_lord[] = "Dwarf Lord ";
+char s_dwarf_lady[] = "Dwarf Lady ";
+char s_lord_wizard[] = "Lord Wizard ";
+char s_lady_maga[] = "Lady Maga ";
+char s_Sheriff_2410_4cc8[] = "Sheriff ";
+char s__d_2410_4cd1[] = "%d";
+char s_s_s[] = "%s%s, ";
+char s__s_2410_4cdb[] = "%s ";
+char s__s_2410_4cdf[] = "%s";
+char s_Population_2410_4ce2[] = "Population";
+char s_Food_stored_2410_4cf8[] = "Food stored";
+char s_Housing_2410_4d04[] = "Housing";
+char s_Food_storage_2410_4d0c[] = "Food storage";
+char s_Food_bought_2410_4d19[] = "Food bought";
+char s_Food_sold_2410_4d25[] = "Food sold";
+char s_Income_2410_4d3a[] = "Income";
+char s_Gold_2410_4d41[] = "Gold";
+char s_Vault_storage_2410_4d46[] = "Vault storage";
+char s_Fund_Access_2410_4d54[] = "Fund Access";
+char s_Common_fund_2410_4d60[] = "Common fund";
+char s_popularity_2410_4d6c[] = "popularity";
+char s_city_blocks_2410_4d77[] = "city blocks";
+char s_Current_2410_4d83[] = "Current";
+char s__d___2410_4d8b[] = "%d%%";
+char s_to_promote_2410_4d90[] = "to promote";
+char s_Accept_2410_4d9b[] = "Accept";
+char s_You_may_raise_a_pri_2410_4da2[] = "You may raise a primary ability by trading two points of another ability. Select ability to increase.";
+char s_Select_ability_to_a_2410_4e08[] = "Select ability to adjust downwards by two points.";
+char s_A_LAWFUL_leader_mus_2410_4e41[] = "A LAWFUL leader must achieve the rank of EMPEROR.";
+char s_A_NEUTRAL_leader_mu_2410_4e73[] = "A NEUTRAL leader must destroy all enemies and achieve the rank of EMPEROR.";
+char s_A_CHAOTIC_leader_mu_2410_4ebe[] = "A CHAOTIC leader must destroy all enemies.";
+char s_has_achieved_the_ra_2410_4ee9[] = "has achieved the rank of EMPEROR.  Congratulations!";
+char s_has_destroyed_all_e_2410_4f1d[] = "has destroyed all enemies and has achieved EMPEROR. Congratulations!";
+char s_OK_2410_4f8f[] = "OK";
+char s_Try_Again_2410_4f92[] = "Try Again";
+char s_male_or_female[] = "Male or female?";
+char s_Keep_2410_4fc1[] = "Keep";
+char s_Discard_2410_4fc6[] = "Discard";
+char s_reroll[] = "Reroll";
+char s_Reroll_ability_scor_2410_4fd5[] = "Reroll ability scores, or select the character's class.";
+char s_Please_type_your_ch_2410_502a[] = "Please type your character's name. Esc go back.";
+char s_Place_2410_5063[] = "Place";
+char s_Continue_2410_5069[] = "Continue";
+char s_place_s_here[] = "Place %s here.";
+char s_year_d_s[] = "Year %d. %s";
+char s_year_d_this_leader_s[] = "Year %d. This leader %s";
+char s_next_leader[] = "Next Leader";
+char s_auto_build[] = "Auto-build    " "\x7f";
+char s_census[] = "Census";
+char s_property[] = "Property";
+char s_total_census[] = "Total Census";
+char s_all_property[] = "All Property";
+char s_help[] = "Help";
+char s_Done_2410_50fb[] = "Done";
+char s_s_will_now_build_homes_a_cbae[] = "%s will now build homes automatically.";
+char s_s_will_no_longer_build_h_e4ef[] = "%s will no longer build houses automatically.";
+char s_arenas_2410_5155[] = "arenas";
+char s_armories_2410_515c[] = "armories";
+char s_bakeries[] = "bakeries";
+char s_baths_2410_516e[] = "baths";
+char s_bazaars[] = "bazaars";
+char s_builder_hall[] = "builder hall";
+char s_castles[] = "castles";
+char s_farms[] = "farms";
+char s_fletchers[] = "fletchers";
+char s_forester_camp[] = "forester camp";
+char s_forges[] = "forges";
+char s_gaming_halls[] = "gaming halls";
+char s_gem_mines[] = "gem mines";
+char s_glassworks[] = "glassworks";
+char s_gold_mines[] = "gold mines";
+char s_granaries[] = "granaries";
+char s_inns_2410_51ed[] = "inns";
+char s_iron_mines[] = "iron mines";
+char s_jewelers[] = "jewelers";
+char s_magic_mills[] = "magic mills";
+char s_markets[] = "markets";
+char s_mason_s_halls[] = "mason's halls";
+char s_outposts[] = "outposts";
+char s_residences[] = "residences";
+char s_scriberies[] = "scriberies";
+char s_towers[] = "towers";
+char s_toymakers[] = "toymakers";
+char s_training[] = "training";
+char s_trees_2410_5261[] = "trees";
+char s_vaults_2410_5267[] = "vaults";
+char s_Summary_1_2410_526e[] = "Summary 1";
+char s_Summary_2_2410_5278[] = "Summary 2";
+char s_Summary_3_2410_5282[] = "Summary 3";
+char s_Damage_2410_528c[] = "Damage";
+char s_buildings_belonging_to_s_s[] = "Buildings belonging to %s%s";
+char s_buildings[] = "Buildings";
+char s_total[] = "Total";
+char s_level_1[] = "Level 1";
+char s_level_2[] = "Level 2";
+char s_level_3[] = "Level 3";
+char s_The__s_belonging_to_2410_52ed[] = "The %s belonging to %s the %s are highlighted in red.";
+char s_The__s_belonging_to_2410_5323[] = "The %s belonging to all leaders are highlighted in red.";
+char s_The_damaged_structu_2410_535b[] = "The damaged structures belonging to %s the %s are highlighted in red.";
+char s_The_damaged_structu_2410_53a1[] = "The damaged structures belonging to all leaders are highlighted in red.";
+char s_level_1_2410_53e9[] = "level 1";
+char s_level_2_2410_53f1[] = "level 2";
+char s_level_3_2410_53f9[] = "level 3";
+char s_level_4_2410_5401[] = "level 4";
+char s_level_5_2410_5409[] = "level 5";
+char s_levels_6_10_2410_5411[] = "levels 6-10";
+char s_levels_11_15_2410_541d[] = "levels 11-15";
+char s_levels_16_20_2410_542a[] = "levels 16-20";
+char s_levels_20_25_2410_5437[] = "levels 20-25";
+char s_levels_26_30_2410_5444[] = "levels 26-30";
+char s_levels_31_35_2410_5451[] = "levels 31-35";
+char s_level_36_2410_545e[] = "level 36";
+char s_levels_11_12f_2410_5467[] = "levels 11-12f";
+char s_levels_12g_12k_2410_5475[] = "levels 12g-12k";
+char s_levels_12l_12m_2410_5484[] = "levels 12l-12m";
+char s_levels_6_10c_2410_5493[] = "levels 6-10c";
+char s_levels_10d_10h_2410_54a0[] = "levels 10d-0x10";
+char s_levels_10i__10m_2410_54af[] = "levels 10i- 10m";
+char s_levels_6_8c_2410_54bf[] = "levels 6-8c";
+char s_levels_8d_8h_2410_54cb[] = "levels 8d-0x8";
+char s_levels_8i_8k_2410_54d8[] = "levels 8i-8k";
+char s_summary[] = "Summary";
+char s_all_levels[] = "All levels";
+char s_total_population[] = "Total population.";
+char s_s_population_loyal_to_s_s[] = "%s population, loyal to %s%s";
+char s_units[] = "UNITS";
+char s_population[] = "POPULATION";
+char s_all_units_loyal_to_s_the_e8c5[] = "All units loyal to %s the %s are displayed.";
+char s_all_units_are_displayed[] = "All units are displayed.";
+char s_only_units_of_s_loyal_to_d644[] = "Only units of %s loyal to %s the %s are displayed.";
+char s_only_units_of_s_are_displayed[] = "Only units of %s are displayed.";
+undefined2 EntityScanPos = 0x0000;
+char s_monster[] = "monster";
+char s__d_2410_55e0[] = "%d \r";
+char s_kill_3[] = "kill 3\r";
+char s_kill_2[] = "kill 2 \r";
+char s_mine_exhausted_at_d_d[] = "Mine exhausted at (%d, %d).";
+char s_Intelligence_report_2410_5612[] = "Intelligence reports %s unit died of starvation. (%d, %d)";
+bool AgntClearFlag = 0;
+char s_construction_abandoned[] = "Construction abandoned.";
+char s_s_unit_drowns_d_d[] = "%s unit drowns.  (%d, %d)";
+char s_intelligence_reports_s_u_ff09[] = "Intelligence reports %s unit fleeing from battle. (%d, %d)";
+char s_intelligence_reports_s_u_8669[] = "Intelligence reports %s unit infected with disease. (%d, %d)";
+char s_intelligence_reports_s_u_2410[] = "Intelligence reports %s unit drained of energy. (%d, %d)";
+char s_intelligence_reports_s_u_b429[] = "Intelligence reports %s unit destroyed. (%d, %d)";
+char s_mindark_s_keep_destroyed_d_d[] = "Mindark's keep destroyed. (%d, %d)";
+char s_s_stronghold_destroyed_d_d[] = "%s stronghold destroyed. (%d, %d)";
+char s_your_main_stronghold_has_b80d[] = "Your main stronghold has been destroyed. Game over.";
+char s_you_have_defeated_all_enemies[] = "You have defeated all enemies.";
+char s_you_may_continue_playing_deac[] = "You may continue playing, but your score will not be recorded.";
+char s_intelligence_reports_s_u_f9de[] = "Intelligence reports %s unit cured of disease. (%d, %d)";
+char s_intelligence_reports_s_u_9cd7[] = "Intelligence reports %s unit succombs to blast spore disease. (%d, %d)";
+char s_spies_report_s_heading_t_1d20[] = "Spies report %s heading towards stronghold. (%d, %d)";
+char s_s_is_attacking[] = "%s is attacking.";
+char s_intelligence_reports_s_a_eb5e[] = "Intelligence reports %s attacking.";
+undefined ditherPlane0 = 0x00;
+undefined ditherPlane1 = 0x0D;
+undefined ditherPlane2 = 0x0C;
+undefined reqLevelRow1 = 0x00;
+undefined reqLevelRow2 = 0x00;
+uint8_t rampRow0[78] = { 0x0, 0xE, 0xC, 0x10, 0x11, 0x11, 0x3, 0xC, 0xC, 0xE, 0xF, 0x10, 0x6, 0xA, 0xA,
+     0xC, 0xD, 0xE, 0x9, 0x8, 0xA, 0xA, 0xB, 0xC, 0xC, 0x6, 0x8, 0x8, 0x9, 0xA, 0xF, 0x6, 0x7, 0x7, 0x8,
+     0x9, 0x12, 0x5, 0x7, 0x6, 0x7, 0x8, 0x15, 0x5, 0x6, 0x6, 0x6, 0x7, 0x18, 0x4, 0x5, 0x5, 0x5, 0x6,
+     0x1B, 0x4, 0x4, 0x5, 0x4, 0x5, 0x1E, 0x3, 0x3, 0x4, 0x3, 0x4, 0x21, 0x3, 0x3, 0x3, 0x2, 0x3, 0xFF,
+     0x2, 0x2, 0x2, 0x2, 0x2 };
+uint8_t rampRow1[48] = { 0x5, 0xD, 0xE, 0xD, 0x10, 0xF, 0xA, 0xB, 0xC, 0xB, 0xE, 0xC, 0xF, 0x9, 0xA,
+     0x9, 0xC, 0x9, 0x14, 0x7, 0x8, 0x7, 0xA, 0x6, 0x18, 0x5, 0x6, 0x5, 0x8, 0x5, 0x1C, 0x4, 0x4, 0x4,
+     0x6, 0x3, 0x20, 0x3, 0x3, 0x3, 0x4, 0x2, 0xFF, 0x2, 0x2, 0x2, 0x2, 0x2 };
+uint8_t rampRow2[54] = { 0x4, 0xB, 0xC, 0xE, 0x10, 0xF, 0x8, 0x9, 0xA, 0xC, 0xE, 0xD, 0xC, 0x7, 0x8,
+     0xA, 0xC, 0xB, 0x10, 0x6, 0x7, 0x8, 0xA, 0x9, 0x14, 0x5, 0x6, 0x6, 0x8, 0x7, 0x18, 0x4, 0x5, 0x5,
+     0x6, 0x5, 0x1C, 0x3, 0x4, 0x4, 0x4, 0x4, 0x20, 0x2, 0x3, 0x3, 0x3, 0x3, 0xFF, 0x2, 0x2, 0x2, 0x2,
+     0x2 };
+uint8_t rampRow3[54] = { 0x4, 0xD, 0xE, 0xD, 0x10, 0xF, 0x8, 0xB, 0xC, 0xB, 0xE, 0xD, 0xC, 0x9, 0xA,
+     0x9, 0xC, 0xB, 0x10, 0x7, 0x8, 0x7, 0xA, 0x9, 0x14, 0x5, 0x6, 0x5, 0x8, 0x7, 0x18, 0x4, 0x5, 0x4,
+     0x6, 0x5, 0x1C, 0x3, 0x4, 0x3, 0x4, 0x4, 0x20, 0x2, 0x3, 0x2, 0x3, 0x3, 0xFF, 0x2, 0x2, 0x2, 0x2,
+     0x2 };
+uint8_t rampRow4[24] = { 0x3, 0x8, 0xA, 0xA, 0xB, 0xC, 0x6, 0x6, 0x7, 0x8, 0xA, 0x9, 0x9, 0x4, 0x5, 0x6,
+     0x7, 0x6, 0xFF, 0x2, 0x3, 0x4, 0x4, 0x3 };
+uint8_t rampRow5[24] = { 0x3, 0xC, 0xD, 0xD, 0xF, 0xF, 0x6, 0x8, 0xA, 0xA, 0xB, 0xB, 0x9, 0x4, 0x7, 0x7,
+     0x7, 0x7, 0xFF, 0x2, 0x4, 0x4, 0x3, 0x3 };
+uint8_t rampRow6[18] = { 0x3, 0x8, 0x9, 0xA, 0xE, 0xC, 0x6, 0x5, 0x6, 0x7, 0x9, 0x8, 0xFF, 0x2, 0x3,
+     0x4, 0x5, 0x4 };
+far_t RampTables[7] = { { 0x59BF, 0x2410 }, { 0x5A0D, 0x2410 }, { 0x5A3D, 0x2410 }, { 0x5A73, 0x2410 },
+     { 0x5AA9, 0x2410 }, { 0x5AC1, 0x2410 }, { 0x5AD9, 0x2410 } };
+char s_lightning_bolt[] = "lightning bolt";
+char s_towards[] = "towards";
+char s_magic_missile[] = "magic missile";
+char s_charm_person[] = "charm person";
+char s_fireball[] = "fireball";
+char s_charm_monsters[] = "charm monsters";
+char s_hold_person[] = "hold person";
+char s_sleep[] = "sleep";
+char s_web[] = "web";
+char s_charm[] = "charm";
+char s_finger_of_death[] = "finger of death";
+char s_disintegrate[] = "disintegrate";
+char s_flesh_to_stone[] = "flesh to stone";
+char s_mass_charm[] = "mass charm";
+char s_s_casts_a_s_spell_s_s[] = "%s casts a %s spell %s %s.";
+char s_s_takes_half_damage_from_d607[] = "%s takes half damage from spells.";
+char s_s_takes_half_damage_from_aed5[] = "%s takes half damage from dragon breath.";
+char s_s_takes_half_damage_from_3fdf[] = "%s takes half damage from lightning.";
+char s_s_is_charmed_by_s[] = "%s is charmed by %s.";
+char s_s_fails_to_charm_s[] = "%s fails to charm %s.";
+char s_s_is_immune_to_fire[] = "%s is immune to fire.";
+char s_s_takes_half_damage_from_fire[] = "%s takes half damage from fire.";
+char s_s_is_held_by_s[] = "%s is held by %s.";
+char s_s_is_put_to_sleep_by_s[] = "%s is put to sleep by %s.";
+char s_s_is_entangled_in_a_web__e9d7[] = "%s is entangled in a web created by %s.";
+undefined1 menuBarShown = 0x00;
+undefined1 goldPartyIndex = 0xFF;
+undefined1 keyboardInputMode = 0x00;
+undefined1 SfxPending = 0x00;
+char s_pause[] = "Pause";
+char s_resume[] = "Resume";
+char s_s_c[] = "%s-%c";
+char s_sorry_you_may_not_pause__137f[] = "Sorry, you may not pause during a battle.";
+char s_pause_select_resume_to_e_d101[] = "Pause. Select 'Resume' to enable game events. Press SPACE for a single game event.";
+char s_resume_game_events_will__6f90[] = "Resume. Game events will now occur normally.";
+char s_gold[] = "Gold";
+char s_fund[] = "Fund";
+char s_previous[] = "Previous";
+char s_next[] = "Next";
+undefined GfxFrameCounts = 0x00;
+uint8_t AnimSeqCounts[3] = { 0x5, 0x7, 0x7 };
+undefined1 lowIntelEnemies = 0x05;
+undefined1 medIntelEnemies = 0x03;
+undefined1 highIntelEnemies = 0x02;
+undefined1 secondWaveSize = 0x04;
+byte LevelBandMin[4] = { 0x0, 0x5, 0x9, 0x0 };
+byte LevelBandMax[4] = { 0x4, 0x8, 0xFF, 0xFF };
+undefined2 demoCenterX = 0x0000;
+undefined2 demoCenterY = 0x0000;
+char s_all_enemies_destroyed[] = "All enemies destroyed.";
+char s_next_wave_of_enemies_appear[] = "Next wave of enemies appear.";
+char GGCTemplate[4] = "0\r\n";
+char s__2410_5e4f[] = "\n";
+char s__2410_5e51[] = "\b \b";
+char s__c_2410_5e55[] = "%c";
+char s_Path_to_write_game__2410_5ea3[] = "Path to write game data:\n";
+char s_ENTER__use_previous_2410_5ebd[] = "ENTER: use previous configuration, SPACE: reconfigure, ESC: quit";
+char s_Newline1[] = "\n";
+char s_Newline2[] = "\n";
+char s__2410_5fae[] = "\n";
+char s_lf_2410_5fde[] = "\n";
+char s__2410_5ffe[] = "\n";
+char s__2410_606f[] = "\n";
+char s_lf_2410_6097[] = "\n";
+char s__2410_60c7[] = "\n";
+char s__2410_60e7[] = "\n";
+char s_4_irq_7_5_irq_10[] = "4. IRQ 7  5. IRQ 10):";
+char s_lf_2410_6156[] = "\n";
+char s_Largest_executable__2410_6158[] = "Largest executable program size is only %s bytes.\n";
+char s_Stronghold_requires_2410_618b[] = "Stronghold requires 585,000 bytes.\n";
+undefined1 HeapReady = 0x00;
+char s_Bad_Pointer__lx_2410_61b1[] = "Bad Pointer %lx \r";
+char s_Str__x__x_2410_61c3[] = "Str %x %x  \r";
+char s_Bad_heap__at__x_S_x_2410_61d0[] = "Bad heap @%x S%x Z%x P%x  \r";
+char s__lx_already_free_2410_61ec[] = "%lx already free \r";
+far_t GDoneStrPtr = { 0x6401, 0x2410 };
+char s_short_sword_2410_6204[] = "short sword";
+char s_normal_weaponry_2410_6210[] = "normal weaponry";
+char s_no_armor_2410_6232[] = "no armor";
+char s_leather_armor_2410_623b[] = "leather armor";
+char s_shield_2410_626b[] = "shield";
+char s_scale_armor_2410_6272[] = "scale armor";
+char s_chain_mail_2410_627e[] = "chain mail";
+char s_banded_armor_2410_6289[] = "banded armor";
+char s_plate_mail_2410_6296[] = "plate mail";
+char s_plate_and_shield_2410_62a1[] = "plate and shield";
+char s_suit_armor_2410_62c6[] = "suit armor";
+char s_exp_ld[] = "Exp %ld \r";
+char s__2410_62db[] = { 0x7F };
+char s_Ready_2410_62dd[] = "Ready";
+char s_Home_2410_62e3[] = "Home";
+char s_Unassigned_2410_62e8[] = "Unassigned";
+char s_Unit_of__d_2410_62f3[] = "Unit of %d";
+char s_Loyal_to__s_2410_62fe[] = "Loyal to %s";
+char s__d_s_lv_rn__c__2410_6313[] = "%d%s lv rn %c, ";
+char s__d_s_level__2410_6323[] = "%d%s level, ";
+char s_Experience_points_2410_6330[] = "Experience points";
+char s__s__s_2410_6342[] = "%s/%s";
+char s_XP_value__d_2410_6348[] = "XP value %d";
+char s_Hit_Points__d__d_2410_6354[] = "Hit Points %d/%d";
+char s_damaged__s_2410_6365[] = "damaged %s";
+char s_Armor_class__d_2410_6377[] = "Armor class %d";
+char s_Mirror_2410_6386[] = "Mirror";
+char s_s_is_not_readied[] = "  %s is not readied.";
+char s_s_is_ready[] = "  %s is ready.";
+char s_s_is_no_longer_ready[] = "%s is no longer ready.";
+char s_ready_characters_are_the_02ab[] = "Ready characters are the first to come when attracted.%s";
+char s_Done_2410_6401[] = "Done";
+char s_s_is_now_based_at_d_d_th_0a82[] = "%s is now based at (%d, %d). This unit will remain home when attracted.";
+char s_s_can_now_be_called_away_38dc[] = "%s can now be called away from home.";
+char s_Previous_2410_6473[] = "Previous";
+char s_Next_2410_647c[] = "Next";
+char s_Leader_2410_6481[] = "Leader";
+char s_Help_2410_6488[] = "Help";
+undefined1 mapDirty = 0x00;
+char s_Define_region_to_co_2410_648f[] = "Define region to command %s loyal to %s.";
+uint16_t strangeTableData[55] = { 0x401, 0x1601, 0x701, 0x2501, 0x2201, 0x3401, 0x1301, 0x2801, 0x101,
+     0xA01, 0x3701, 0x1901, 0xD01, 0x3A01, 0x1C01, 0x1F01, 0x2B01, 0xA801, 0x5509, 0x5756, 0x5958, 0x5B5A,
+     0x5D5C, 0x9701, 0x9801, 0xA001, 0xA101, 0x2E06, 0x302F, 0x3231, 0x133, 0x1A2, 0x1A3, 0x1AB, 0x1AE,
+     0x1B1, 0x1B4, 0x1B7, 0x1B8, 0x1B9, 0x1BA, 0x1BB, 0x1BC, 0x1BD, 0x1BE, 0x1BF, 0x1C2, 0x1C3, 0x1C4,
+     0x1C7, 0x1C8, 0x1CB, 0x1CE, 0x1D1, 0x1D4 };
+far_t GStrangeTable[98] = { { 0x6594, 0x2410 }, { 0x6596, 0x2410 }, { 0x6598, 0x2410 }, { 0x659A, 0x2410 },
+     { 0x659C, 0x2410 }, { 0x659E, 0x2410 }, { 0x65A0, 0x2410 }, { 0x65A2, 0x2410 }, { 0x6592, 0x2410 },
+     { 0x65A4, 0x2410 }, { 0x65A6, 0x2410 }, { 0x65A8, 0x2410 }, { 0x65AE, 0x2410 }, { 0x65B0, 0x2410 },
+     { 0x65C8, 0x2410 }, { 0x65B6, 0x2410 }, { 0x65C0, 0x2410 }, { 0x65C2, 0x2410 }, { 0x65C4, 0x2410 },
+     { 0x65C6, 0x2410 }, { 0x65B2, 0x2410 }, { 0x65AA, 0x2410 }, { 0x65AC, 0x2410 }, { 0x65CF, 0x2410 },
+     { 0x65D1, 0x2410 }, { 0x65B4, 0x2410 }, { 0x65D3, 0x2410 }, { 0x65D5, 0x2410 }, { 0x65D7, 0x2410 },
+     { 0x65D9, 0x2410 }, { 0x65DB, 0x2410 }, { 0x65DD, 0x2410 }, { 0x65DF, 0x2410 }, { 0x65E1, 0x2410 },
+     { 0x65E3, 0x2410 }, { 0x65E5, 0x2410 }, { 0x65E7, 0x2410 }, { 0x65E9, 0x2410 }, { 0x65EB, 0x2410 },
+     { 0x65ED, 0x2410 }, { 0x65EF, 0x2410 }, { 0x65F1, 0x2410 }, { 0x65F3, 0x2410 }, { 0x65F5, 0x2410 },
+     { 0x65F7, 0x2410 }, { 0x65F9, 0x2410 }, { 0x65FB, 0x2410 }, { 0x65FD, 0x2410 }, { 0x65FF, 0x2410 },
+     { 0x6789, 0x2410 }, { 0x6789, 0x2410 }, { 0x6789, 0x2410 }, { 0x6789, 0x2410 }, { 0x6789, 0x2410 },
+     { 0x6789, 0x2410 }, { 0x6789, 0x2410 }, { 0x6792, 0x2410 }, { 0x679C, 0x2410 }, { 0x67A1, 0x2410 },
+     { 0x67A9, 0x2410 }, { 0x67B0, 0x2410 }, { 0x67BC, 0x2410 }, { 0x67C3, 0x2410 }, { 0x67CC, 0x2410 },
+     { 0x67D9, 0x2410 }, { 0x67DF, 0x2410 }, { 0x67E9, 0x2410 }, { 0x67F3, 0x2410 }, { 0x67FF, 0x2410 },
+     { 0x680B, 0x2410 }, { 0x6818, 0x2410 }, { 0x6826, 0x2410 }, { 0x6833, 0x2410 }, { 0x683D, 0x2410 },
+     { 0x6847, 0x2410 }, { 0x6854, 0x2410 }, { 0x685E, 0x2410 }, { 0x686B, 0x2410 }, { 0x6879, 0x2410 },
+     { 0x6882, 0x2410 }, { 0x688E, 0x2410 }, { 0x688E, 0x2410 }, { 0x688E, 0x2410 }, { 0x688E, 0x2410 },
+     { 0x688E, 0x2410 }, { 0x688E, 0x2410 }, { 0x688E, 0x2410 }, { 0x6897, 0x2410 }, { 0x689E, 0x2410 },
+     { 0x68AF, 0x2410 }, { 0x68BF, 0x2410 }, { 0x68C7, 0x2410 }, { 0x68CE, 0x2410 }, { 0x68D8, 0x2410 },
+     { 0x68E0, 0x2410 }, { 0x68ED, 0x2410 }, { 0x68F7, 0x2410 }, { 0x6903, 0x2410 } };
+char s__at_Housing_2410_6789[] = "@Housing";
+char s_farmland[] = "@Farmland";
+char s_inn[] = "@Inn";
+char s_temple[] = "@Temple";
+char s_forge[] = "@Forge";
+char s_university[] = "@University";
+char s_tower[] = "@Tower";
+char s_granary[] = "@Granary";
+char s_marketplace[] = "@Marketplace";
+char s_tree[] = "@Tree";
+char s_e_w_wall[] = "@E/W wall";
+char s_n_s_wall[] = "@N/S wall";
+char s_e_w_bridge[] = "@E/W bridge";
+char s_n_s_bridge[] = "@N/S bridge";
+char s_guard_house[] = "@Guard house";
+char s_thieve_s_den[] = "@Thieve's Den";
+char s_social_hall[] = "@Social hall";
+char s_e_w_gate[] = "@E/W gate";
+char s_n_s_gate[] = "@N/S gate";
+char s_elf_gardens[] = "@Elf Gardens";
+char s_fletcher[] = "@Fletcher";
+char s_public_bath[] = "@public bath";
+char s_mason_s_hall[] = "@mason's hall";
+char s_jeweler[] = "@jeweler";
+char s_outpost[] = "@outpost";
+char s_vault[] = "@vault";
+char s_forester_s_camp[] = "@Forester's camp";
+char s_builder_s_hall[] = "@Builder's hall";
+char s_bazaar[] = "@bazaar";
+char s_arena[] = "@arena";
+char s_toymaker[] = "@toymaker";
+char s_bakery[] = "@bakery";
+char s_gaming_hall[] = "@gaming hall";
+char s_scribery[] = "@scribery";
+char s_magic_mill[] = "@magic mill";
+char s_armory[] = "@armory";
+char s_empty_2410_6939[] = "";
+undefined1 GSeason = 0x00;
+undefined SeasonPalettes = 0x43;
+undefined paletteColorA = 0x22;
+undefined paletteColorB = 0x29;
+undefined paletteColorC = 0x3F;
+far_t GSeasonNames[3] = { { 0x6A1B, 0x2410 }, { 0x6A22, 0x2410 }, { 0x6A27, 0x2410 } };
+byte PromoteThreshold[4] = { 0x1, 0x3, 0x2, 0x4 };
+char s_Your_may_continue_p_2410_69db[] = "Your may continue playing, but your score will not be recorded.";
+char s_spring_2410_6a1b[] = "spring";
+char s_fall_2410_6a22[] = "fall";
+char s_winter_2410_6a27[] = "winter";
+char s_the_season_has_changed_t_3edf[] = "The season has changed to summer.";
+char s_d_building_s_repaired[] = "%d building%s repaired.";
+undefined2 strongholdsDestroyed = 0x0000;
+undefined1 GHighScoreSaved = 0x00;
+char s_shigh_txt[] = "%shigh.txt";
+char s_great_achievements[] = "Great Achievements";
+char s_name[] = "Name";
+char s_enemies[] = "Enemies";
+char s_c_s_s_d[] = "%c%s%s@%d";
+char s_empty_2410_6ac3[] = "";
+far_t msgFormat = { 0x6AC8, 0x2410 };
+char s_my_s_we_in_this_neighbor_b984[103] = { 'M', 'y', ' ', '%', 's', ',', ' ', 'w', 'e',
+     ' ', 'i', 'n', ' ', 't', 'h', 'i', 's', ' ', 'n', 'e', 'i', 'g', 'h', 'b', 'o', 'r', 'h', 'o', 'o',
+     'd', ' ', 'a', 'r', 'e', ' ', 'd', 'o', 'i', 'n', 'g', ' ', 'w', 'e', 'l', 'l', '.', ' ', 'W', 'e',
+     ' ', 't', 'h', 'a', 'n', 'k', ' ', 'y', 'o', 'u', ' ', 'f', 'o', 'r', ' ', 'a', 'l', 'l', ' ', 'y',
+     'o', 'u', ' ', 'h', 'a', 'v', 'e', ' ', 'd', 'o', 'n', 'e', ' ', 't', 'o', ' ', 'h', 'e', 'l', 'p',
+     ' ', 'y', 'o', 'u', 'r', ' ', 'p', 'e', 'o', 'p', 'l', 'e', '.' };
+char s_empty_2410_6b39[] = "";
+far_t RankMsgPtrs[19] = { { 0x6B90, 0x2410 }, { 0x6BBE, 0x2410 }, { 0x6BE8, 0x2410 }, { 0x6C1C, 0x2410 },
+     { 0x6C44, 0x2410 }, { 0x6C63, 0x2410 }, { 0x6C8C, 0x2410 }, { 0x6CB7, 0x2410 }, { 0x6CE1, 0x2410 },
+     { 0x6CEC, 0x2410 }, { 0x6D18, 0x2410 }, { 0x6D41, 0x2410 }, { 0x6D4C, 0x2410 }, { 0x6D64, 0x2410 },
+     { 0x6D97, 0x2410 }, { 0x6BBD, 0x2410 }, { 0x6DAF, 0x2410 }, { 0x6DCE, 0x2410 }, { 0x6DE7, 0x2410 } };
+undefined fullWidthRect = 0x00;
+char s_On_this_day_it_was__2410_6b90[] = "On this day it was declared to all the Realms";
+char s_that__s_shall_hence_2410_6bbe[] = "that %s shall henceforth hold the rank of";
+char s__s__in_recognition__2410_6be8[] = "%s, in recognition of valor on the field of battle.";
+char s__s__in_recognition__2410_6c1c[] = "%s, in recognition for city management.";
+char s_Your_desire_to_dest_2410_6c44[] = "Your desire to destroy him and";
+char s_gain_revenge_inspir_2410_6c63[] = "gain revenge inspires you to new heights";
+char s_You_will_be_promote_2410_6c8c[] = "You will be promoted to ever-greater ranks";
+char s_Your_desire_to_dest_2410_6cec[] = "Your desire to destroy him and gain revenge";
+char s_inspired_you_to_see_2410_6d18[] = "inspired you to seek a life of glory and";
+char s__s_stronghold_destr_2410_6d4c[] = "%s stronghold destroyed";
+char s_Congratulations__yo_2410_6d64[] = "Congratulations, you have achieved your objective.";
+char s_that__s_shall_hold__2410_6daf[] = "that %s shall hold the rank of";
+undefined xOfsTable = 0x36;
+far_t CureSpellPtrs[4] = { { 0x6FA7, 0x2410 }, { 0x6FB9, 0x2410 }, { 0x6FCD, 0x2410 }, { 0x6FE2, 0x2410 } };
+undefined growthTable = 0x05;
+char s_kill_4[] = "kill 4\r";
+char s_are[] = "are";
+char s_is[] = "is";
+char s_the_d_unit_s_loyal_to_s__bf85[] = "The %d unit%s loyal to %s %s %d%% recruiting, %d%% training, and %d%% building.";
+char s_s_fails_to_turn[] = "%s fails to turn.";
+char s_s_cannot_turn[] = "%s cannot turn.";
+char s_s_destroys_d_undead[] = "%s destroys %d undead.";
+char s_s_turns_d_undead[] = "%s turns %d undead.";
+char s_building_d_s[] = "Building %d %s.";
+char s_you_cannot_see_the_terra_85dc[] = "You cannot see the terrain here.";
+char s_s_is_paralyzed_by_s[] = "%s is paralyzed by %s.";
+char s_s_is_stoned_by_s[] = "%s is stoned by %s.";
+char s_s_is_no_longer_charmed[] = "%s is no longer charmed.";
+char s_cure_light_wounds_2410_6fa7[] = "cure light wounds";
+char s_cure_serious_wounds_2410_6fb9[] = "cure serious wounds";
+char s_cure_critical_wound_2410_6fcd[] = "cure critical wounds";
+char s_cure_all_2410_6fe2[] = "cure all";
+char s_s_casts_s_on_s_to_heal_d_5cd8[] = "%s casts %s on %s to heal %d hitpoint%s for a total of %d hitpoint%s.";
+char s_s_takes_no_damage_from_n_d64f[] = "%s takes no damage from non-magical weapons.";
+char s_s_takes_no_damage_from_l_0eae[] = "%s takes no damage from less than +2 weapons.";
+char s_s_takes_no_damage_from_m_57ed[] = "%s takes no damage from missile attacks.";
+char s_s_poisons_s[] = "%s poisons %s.";
+char s_s_infects_s_with_blast_s_6682[] = "%s infects %s with blast spore disease.";
+char s_s_drains_a_level_from_s[] = "%s drains a level from %s.";
+char s_s_drains_all_energy_from_s[] = "%s drains all energy from %s.";
+char s_s_drains_two_levels_from_s[] = "%s drains two levels from %s.";
+bool GameRunning = 0;
+undefined unitTypeTable = 0x07;
+undefined spawnGindexTable = 0x00;
+undefined lowerScreenRect = 0x00;
+char s_demo_cancelled[] = "Demo cancelled.";
+char s_nasher[] = "Nasher";
+char s_fordor[] = "Fordor";
+char s_kaunas[] = "Kaunas";
+char s_mindark[] = "Mindark";
+char s_a_new_land_lies_before_y_7a20[] = "A new land lies before you. Choose carefully";
+char s_where_you_settle[] = "where you settle.";
+char s_your_goal_create_a_thriv_6bc4[] = "Your goal: Create a thriving community.";
+char s_balance_building_money_a_f24f[] = "Balance building, money, and food production";
+char s_to_keep_your_people_happy[] = "to keep your people happy.";
+char s_your_world_will_be_fille_752f[] = "Your world will be filled with a full range";
+char s_of_official_d_d_game_cha_c180[] = "of official D&D@ game characters.";
+char s_you_are_not_alone_in_thi_c41c[] = "You are not alone in this pristine land.";
+char s_official_d_d_game_monste_76f3[] = "Official D&D@ game monsters will fight to";
+char s_destroy_your_city[] = "destroy your city.";
+char s_force_and_fury_meet_magi_83da[] = "Force and fury meet magic spells as battles";
+char s_play_out_in_the_courtyar_e3ba[] = "play out in the courtyards of mighty castles.";
+char s_your_people_will_fight_b_ca95[] = "Your people will fight bravely and work";
+char s_hard_your_city_will_grow[] = "hard. Your city will grow...";
+char s_and_grow[] = "and grow...";
+char s_but_beware_the_evil_mind_f8e6[] = "But beware the evil Mindark, whose";
+char s_hordes_destroyed_your_ho_0a18[] = "hordes destroyed your homeland long ago.";
+char s_if_you_lead_with_wisdom__bac4[] = "If you lead with wisdom and cunning...";
+char s_if_you_fight_with_valor__377f[] = "If you fight with valor and guile...";
+char s_you_will_truly_be_master_74a8[] = "You will truly be master of your...";
+char s_empty_2410_747d[] = "";
+undefined StshFileName[] = "strong.dat";
+uint32_t StshFileSizeVar = 0x0;
+char s_getcache__d_SIZESTA_2410_748e[] = "getcache %d  SIZESTASH %d  \r";
+undefined1 selectedPartyIndex = 0xFF;
+far_t PersonWordPtrs[2] = { { 0x77E2, 0x2410 }, { 0x77E9, 0x2410 } };
+char s_choose_party_to_build_fo_296a[] = "Choose party to build for.  Now building for %s the %s.";
+char s_you_can_only_place_a_sin_6023[] = " You can only place a single arena.";
+char s_bridges_must_be_near_wat_a2e8[] = " Bridges must be near water's edge.";
+char s_next_outpost_available_a_39b7[] = " Next outpost available at rank %s.";
+char s_no_more_outposts_are_ava_fcde[] = " No more outposts are available.";
+char s_requires_a_rank_of_s[] = " Requires a rank of %s.";
+char s_requires_a_unit_of_level_d[] = " Requires a unit of level %d.";
+char s_location_is_too_narrow_for_s[] = " Location is too narrow for %s.";
+char s_location_is_too_narrow_f_c1ec[] = " Location is too narrow for a %s.";
+char s_walls_must_be_near_land[] = " Walls must be near land.";
+char s_buildings_cannot_be_plac_c9ec[] = "Buildings cannot be placed over water.";
+char s_this_location_is_unsuita_1464[] = "This location is unsuitable for buildings.";
+char s_it_will_cost_s_the_s_d_gp[] = " It will cost %s the %s %d gp. ";
+char s_place[] = "Place";
+char s_change_building[] = "Change Building";
+char s_change_party[] = "Change Party";
+char s_party_member_s_doesn_t_h_25d2[] = "Party member %s doesn't have enough gold to construct a %s.";
+char s_too_many_construction_sites[] = "Too many construction sites.";
+char s_excavate[] = "Excavate";
+char s_remove[] = "Remove";
+char s_s_search_this_location_f_02b8[] = "%s: Search this location for minerals?  Active party is %s the %s.";
+char s_no_minerals_were_found[] = "No minerals were found.";
+char s_gems_discovered[] = "Gems discovered.";
+char s_iron_deposits_discovered[] = "Iron deposits discovered.";
+char s_gold_discovered[] = "Gold discovered.";
+char s_no[] = "No";
+char s_remove_s_permanently_are_ceee[] = "Remove %s permanently. Are you sure?";
+char s_person_2410_77e2[] = "person";
+char s_people_2410_77e9[] = "people";
+char s_claim[] = "Claim";
+char s_chop_down[] = "Chop down";
+char s_s_claim_this_tree_harves_57ea[] = "%s: Claim this tree? Harvest value is %d gold. Active party is %s the %s.";
+char s_forest_claimed_this_fore_2435[] = "Forest claimed. This forest creates %d gold of income and feeds %d %s.";
+char s_tree_cut_down_d_gold_obtained[] = "Tree cut down. %d gold obtained.";
+char s_maintenance_cost_is[] = "Maintenance cost is";
+char s_income_created_is[] = "Income created is";
+char s_empty_2410_78df[] = "";
+undefined1 MiceProcessed = 0x00;
+undefined1 MiceNeedsUpdate = 0x01;
+undefined1 MiceClick = 0x00;
+far_t far_t_2410_78e4 = { 0x78E8, 0x2410 };
+char s_Done_2410_78e8[] = "Done";
+char s_s_d_complete_owned_by_s[] = "%s: %d%% complete. Owned by %s.";
+char s_s_u_u_held_by_s[] = "%s (%u/%u): Held by %s.";
+char s_home_a_unit_here_to_halt_1af9[] = " Home a unit here to halt damage.";
+char s_s_held_by_s[] = "%s: Held by %s.";
+char s_water[] = "Water:";
+char s_shore[] = "Shore:";
+char s_suspend[] = "Suspend";
+char s_s_d_complete_owned_by_s__c800[] = "%s: %d%% complete. Owned by %s. Active party is %s the %s.";
+char s_clearing_of_land_d_compl_546b[] = "Clearing of land: %d%% complete. Owned by %s. Active party is %s the %s.";
+char s_construction_of_s_will_b_7f3b[] = "Construction of %s will be permanently suspended. Are you sure?";
+char s_s_d_d_owned_by_s_active__9dba[] = "%s (%d/%d): Owned by %s. Active party is %s the %s.";
+char s_s_active_party_is_s_the_s[] = "%s: Active party is %s the %s.";
+char s__s__Costs__d_gold_a_2410_7ac4[] = "%s: Costs %d gold and provides training to level %d.";
+char s__s__Creates__d_gold_2410_7e65[] = "%s: Creates %d gold of income, and accesses %d%% of the market fund.";
+char s_s_costs_d_gold_of_income_5682[] = "%s: Costs %d gold of income and provides visibility of %d squares n/s, %d squares e/w.";
+char s_s_costs_d_gold_of_income_3dd7[] = "%s: Costs %d gold of income and provides storage for %u food.";
+char s__s__Costs__d_gold_o_2410_7f3f[] = "%s: Costs %d gold of income and provides storage for %u gold.";
+char s__s__Provides_housin_2410_7f7d[] = "%s: Provides housing for %d %s and storage for %d food.";
+char s_salvage[] = "Salvage";
+char s_demolish[] = "Demolish";
+char s_repair[] = "Repair";
+char s_upgrade[] = "Upgrade";
+char s_information[] = "Information";
+char s_new_owner[] = "New Owner";
+char s_get_rid_of_s_permanently_1c0b[] = "Get rid of %s permanently. Are you sure?";
+char s_ld_experience_obtained_l_a1d8[] = "%ld experience obtained. %ld experience given to each unit. %ld gold recovered.";
+far_t GTxtFiles[34] = { { 0x82B4, 0x2410 }, { 0x82BE, 0x2410 }, { 0x82C8, 0x2410 }, { 0x82D2, 0x2410 },
+     { 0x82DC, 0x2410 }, { 0x82E6, 0x2410 }, { 0x82F0, 0x2410 }, { 0x82FA, 0x2410 }, { 0x8304, 0x2410 },
+     { 0x830E, 0x2410 }, { 0x8318, 0x2410 }, { 0x8322, 0x2410 }, { 0x832C, 0x2410 }, { 0x8336, 0x2410 },
+     { 0x8340, 0x2410 }, { 0x834B, 0x2410 }, { 0x8356, 0x2410 }, { 0x8361, 0x2410 }, { 0x836C, 0x2410 },
+     { 0x8377, 0x2410 }, { 0x8381, 0x2410 }, { 0x838B, 0x2410 }, { 0x8395, 0x2410 }, { 0x839F, 0x2410 },
+     { 0x83A9, 0x2410 }, { 0x83B4, 0x2410 }, { 0x83BF, 0x2410 }, { 0x83CA, 0x2410 }, { 0x83D5, 0x2410 },
+     { 0x83E0, 0x2410 }, { 0x83EB, 0x2410 }, { 0x83F6, 0x2410 }, { 0x8401, 0x2410 }, { 0x840C, 0x2410 } };
+char s_house1_txt[] = "house1.txt";
+undefined agentClipRect = 0x0C;
+char s_s_is_no_longer_paralyzed[] = "%s is no longer paralyzed.";
+char s_s_breaks_free_of_the_web[] = "%s breaks free of the web.";
+char s_s_regenerates_3_hitpoint_5ade[] = "%s regenerates 3 hitpoints to a total of %d hitpoints.";
+far_t StatsTabPtrs[9] = { { 0x84CC, 0x2410 }, { 0x84D4, 0x2410 }, { 0x84DE, 0x2410 }, { 0x84E3, 0x2410 },
+     { 0x84ED, 0x2410 }, { 0x84F3, 0x2410 }, { 0x84FE, 0x2410 }, { 0x8505, 0x2410 }, { 0x850C, 0x2410 } };
+char s_Summary_2410_84cc[] = "Summary";
+char s_Now_what__2410_84d4[] = "Now what?";
+char s_City_2410_84de[] = "City";
+char s_Buildings_2410_84e3[] = "Buildings";
+char s_Money_2410_84ed[] = "Money";
+char s_Popularity_2410_84f3[] = "Popularity";
+char s_Combat_2410_84fe[] = "Combat";
+char s_Winter_2410_8505[] = "Winter";
+char s_Done_2410_850c[] = "Done";
+undefined __OvrSize = 0x00;
+undefined2 _atexitcnt = 0x0000;
+byte _ctype[257] = { 0x0, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x21, 0x21, 0x21, 0x21,
+     0x21, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,
+     0x20, 0x20, 0x20, 0x1, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40,
+     0x40, 0x40, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40,
+     0x40, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4,
+     0x4, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4, 0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x18, 0x18, 0x18,
+     0x18, 0x18, 0x18, 0x8, 0x8, 0x8, 0x8, 0x8, 0x8, 0x8, 0x8, 0x8, 0x8, 0x8, 0x8, 0x8, 0x8, 0x8, 0x8,
+     0x8, 0x8, 0x8, 0x8, 0x40, 0x40, 0x40, 0x40, 0x20, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+far_t _exitbuf = { 0x8A5, 0x1000 };
+far_t _exitfopen = { 0x8A5, 0x1000 };
+far_t _exitopen = { 0x8A5, 0x1000 };
+FILE _streams[20] = { { 0, 0x209, 0, 0x0, 0x0, 0x0, 0x0, 0x0, -31194 }, { 0, 0x20A, 1, 0x0, 0x0, 0x0,
+     0x0, 0x0, -31174 }, { 0, 0x202, 2, 0x0, 0x0, 0x0, 0x0, 0x0, -31154 }, { 0, 0x243, 3, 0x0, 0x0, 0x0,
+     0x0, 0x0, -31134 }, { 0, 0x242, 4, 0x0, 0x0, 0x0, 0x0, 0x0, -31114 }, { 0, 0x0, 0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0 }, { 0, 0x0, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 }, { 0, 0x0, 0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0 }, { 0, 0x0, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 }, { 0, 0x0, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 }, { 0,
+     0x0, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 }, { 0, 0x0, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 }, { 0, 0x0, 0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0 }, { 0, 0x0, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 }, { 0, 0x0, 0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0 }, { 0, 0x0, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 }, { 0, 0x0, 0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0 }, { 0, 0x0, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 }, { 0, 0x0, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 }, { 0,
+     0x0, 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0 } };
+uint16_t _nfile = 0x14;
+uint16_t _openfd[20] = { 0x6001, 0x6002, 0x6002, 0xA004, 0xA002, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+undefined2 _fmode = 0x4000;
+char _dosErrorToSV[89] = "";
+long rand_Seed = 0x1;
+undefined vprintter_NullString[] = "(null)";
+uint8_t vprinter_printCtype[96] = { 0x0, 0x14, 0x14, 0x1, 0x14, 0x15, 0x14, 0x14, 0x14, 0x14, 0x2, 0x0,
+     0x14, 0x3, 0x4, 0x14, 0x9, 0x5, 0x5, 0x5, 0x5, 0x5, 0x5, 0x5, 0x5, 0x5, 0x14, 0x14, 0x14, 0x14,
+     0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0xF, 0x17, 0xF, 0x8, 0x14, 0x14, 0x14, 0x7, 0x14, 0x16,
+     0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0xD, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14,
+     0x14, 0x14, 0x14, 0x10, 0xA, 0xF, 0xF, 0xF, 0x8, 0xA, 0x14, 0x14, 0x6, 0x14, 0x12, 0xB, 0xE, 0x14,
+     0x14, 0x11, 0x14, 0xC, 0x14, 0x14, 0xD, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14, 0x14 };
+VIDEOREC _video = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, { 0x0, 0x100 } };
+char s_compaq[] = "COMPAQ";
+char s_print_scanf___float_2410_88c4[] = "print scanf : floating point formats not linked\r\n";
+undefined2 brk_normalize_xsize = 0x0000;
+undefined2 _argc_at_ = 0x0000;
+undefined2 _argv_at_ = 0x0000;
+undefined2 _argv_at__2 = 0x0000;
+undefined2 __setargv_SavedReturn = 0x0000;
+undefined2 __setargv_SavedES = 0x0000;
+undefined2 __setargv_SavedReturn2 = 0x0000;
+undefined2 __setargv_SavedSI = 0x0000;
+undefined2 __setargv_SavedDI = 0x0000;
+undefined _fputc_cr = 0x0D;
+undefined2 _stdinStarted = 0x0000;
+undefined2 _stdoutStarted = 0x0000;
+undefined2 _realcvt = 0x15CF;
+uint16_t crtInitReserved[3] = { 0x15D4, 0x15D4, 0x15D4 };
+boinit_t InitStart[4] = { { 0x1, 0x1, { 0xD24, 0x1403 } }, { 0x0, 0x2, { 0xD36, 0x0 } }, { 0x0, 0x10,
+     { 0x14D7, 0x0 } }, { 0x0, 0x10, { 0x2032, 0x0 } } };
+boinit_t InitEnd = { 0x1, 0x1, { 0x190, 0x1403 } };
+uint32_t recordUpdateTick = 0x0;
+undefined2 panel01Cut1Ofs = 0x0000;
+undefined2 panel01Cut1Seg = 0x0000;
+undefined1 IndexPermA = 0x00;
+undefined1 IndexPermB = 0x00;
+undefined1 IndexPermC = 0x00;
+undefined1 IndexPermD = 0x00;
+undefined1 CrossBlitFlag = 0x00;
+undefined1 crossAgentIndex = 0x00;
+undefined1 SelectedAgent = 0x00;
+undefined1 MenuMode = 0x00;
+undefined1 MenuModeSaved = 0x00;
+undefined1 savedMenuItem = 0x00;
+far_t GExeArg = { 0x0, 0x0 };
+far_t GGameExe = { 0x0, 0x0 };
+uint8_t menuEnteredFlag = 0x0;
+undefined1 CrossBlitCount2 = 0x00;
+undefined2 CrossBlitY = 0x0000;
+undefined2 CrossBlitX = 0x0000;
+undefined1 GMenuItem = 0x00;
+DW FontSize = { 0x0, 0x0 };
+DW InputEventTime = { 0x0, 0x0 };
+uint32_t TextBlitCycle = 0x0;
+undefined2 GGameState = 0x0000;
+undefined1 GGameInProgress = 0x00;
+undefined2 GPopulationLo = 0x0000;
+undefined2 GPopulationHi = 0x0000;
+unit_t *GUnits = (void far *)(0x00000000UL + 0x0000UL);
+undefined2 GUnitCount = 0x0000;
+undefined1 GBattleMode = 0x00;
+undefined1 GOngoingBattle = 0x00;
+undefined2 GfxRndSeed2 = 0x0000;
+undefined2 GfxRndSeed = 0x0000;
+uint8_t SpecialColors[8] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+undefined2 nwpanel1Cut3Ofs = 0x0000;
+undefined2 nwpanel1Cut3Seg = 0x0000;
+undefined2 button1Cut3Ofs = 0x0000;
+undefined2 button1Cut3Seg = 0x0000;
+undefined2 button1Cut2Ofs = 0x0000;
+undefined2 button1Cut2Seg = 0x0000;
+undefined2 button1Cut1Ofs = 0x0000;
+undefined2 button1Cut1Seg = 0x0000;
+undefined2 nwpanel1Cut2Ofs = 0x0000;
+undefined2 nwpanel1Cut2Seg = 0x0000;
+undefined2 trianglsCut6Ofs = 0x0000;
+undefined2 trianglsCut6Seg = 0x0000;
+undefined2 trianglsCut5Ofs = 0x0000;
+undefined2 trianglsCut5Seg = 0x0000;
+undefined2 trianglsCut4Ofs = 0x0000;
+undefined2 trianglsCut4Seg = 0x0000;
+undefined2 trianglsCut3Ofs = 0x0000;
+undefined2 trianglsCut3Seg = 0x0000;
+undefined2 fullScreenGfxOfs = 0x0000;
+undefined2 fullScreenGfxSeg = 0x0000;
+far_t LbmBigcomp50x42 = { 0x0, 0x0 };
+undefined2 panel01Cut3Ofs = 0x0000;
+undefined2 panel01Cut3Seg = 0x0000;
+undefined2 panel01Cut2Ofs = 0x0000;
+undefined2 panel01Cut2Seg = 0x0000;
+undefined2 trianglsCut1Ofs = 0x0000;
+undefined2 trianglsCut1Seg = 0x0000;
+undefined2 nwpanel1Cut1Ofs = 0x0000;
+undefined2 nwpanel1Cut1Seg = 0x0000;
+far_t FontHandle = { 0x0, 0x0 };
+byte (far *GMapCells)[148] = (void far *)(0x00000000UL + 0x0000UL);
+short (far *GMapFlags)[148] = (void far *)(0x00000000UL + 0x0000UL);
+short (far *GUnitGrid)[60] = (void far *)(0x00000000UL + 0x0000UL);
+undefined2 trianglsCut2Ofs = 0x0000;
+undefined2 trianglsCut2Seg = 0x0000;
+far_t FontMain = { 0x0, 0x0 };
+far_t Font01 = { 0x0, 0x0 };
+far_t Font02 = { 0x0, 0x0 };
+far_t Font03 = { 0x0, 0x0 };
+undefined2 csite5Ofs = 0x0000;
+undefined2 csite5Seg = 0x0000;
+undefined2 csite5_3Ofs = 0x0000;
+undefined2 csite5_3Seg = 0x0000;
+undefined2 csite5_6Ofs = 0x0000;
+undefined2 csite5_6Seg = 0x0000;
+undefined2 csite6Ofs = 0x0000;
+undefined2 csite6Seg = 0x0000;
+undefined2 csite6_3Ofs = 0x0000;
+undefined2 csite6_3Seg = 0x0000;
+undefined2 csite6_6Ofs = 0x0000;
+undefined2 csite6_6Seg = 0x0000;
+undefined2 csite7Ofs = 0x0000;
+undefined2 csite7Seg = 0x0000;
+undefined2 csite7_3Ofs = 0x0000;
+undefined2 csite7_3Seg = 0x0000;
+undefined2 csite7_6Ofs = 0x0000;
+undefined2 csite7_6Seg = 0x0000;
+undefined2 csite8Ofs = 0x0000;
+undefined2 csite8Seg = 0x0000;
+undefined2 csite8_3Ofs = 0x0000;
+undefined2 csite8_3Seg = 0x0000;
+undefined2 csite2Ofs = 0x0000;
+undefined2 csite2Seg = 0x0000;
+undefined2 csite2_3Ofs = 0x0000;
+undefined2 csite2_3Seg = 0x0000;
+undefined2 csite2_6Ofs = 0x0000;
+undefined2 csite2_6Seg = 0x0000;
+undefined2 csite3Ofs = 0x0000;
+undefined2 csite3Seg = 0x0000;
+undefined2 csite3_3Ofs = 0x0000;
+undefined2 csite3_3Seg = 0x0000;
+undefined2 csite3_5Ofs = 0x0000;
+undefined2 csite3_5Seg = 0x0000;
+undefined2 csite4Ofs = 0x0000;
+undefined2 csite4Seg = 0x0000;
+undefined2 csite4_3Ofs = 0x0000;
+undefined2 csite4_3Seg = 0x0000;
+undefined2 csite4_6Ofs = 0x0000;
+undefined2 csite4_6Seg = 0x0000;
+undefined2 csite4_8Ofs = 0x0000;
+undefined2 csite4_8Seg = 0x0000;
+undefined2 csite1Ofs = 0x0000;
+undefined2 csite1Seg = 0x0000;
+undefined2 csite1_6Ofs = 0x0000;
+undefined2 csite1_6Seg = 0x0000;
+undefined2 csite1_12Ofs = 0x0000;
+undefined2 csite1_12Seg = 0x0000;
+undefined2 csite1_18Ofs = 0x0000;
+undefined2 csite1_18Seg = 0x0000;
+undefined2 csite1_22Ofs = 0x0000;
+undefined2 csite1_22Seg = 0x0000;
+undefined2 crossBlitType2Ofs = 0x0000;
+undefined2 crossBlitType2Seg = 0x0000;
+far_t CrossBlitGfx = { 0x0, 0x0 };
+undefined2 talkwin9Cut1Ofs = 0x0000;
+undefined2 talkwin9Cut1Seg = 0x0000;
+uint16_t MiceY = 0x0;
+uint16_t MiceX = 0x0;
+far_t MicePtrs = { 0x0, 0x0 };
+far_t MiceCursors[4] = { { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 } };
+undefined1 middleButtonLatch = 0x00;
+undefined1 rightButtonLatch = 0x00;
+undefined1 randomFeatureCount = 0x00;
+undefined GStaticBuffer = 0x00;
+char CFG_Irq = 0x00;
+char CFG_Mus = 0x00;
+char CFG_Sfx = 0x00;
+char GOriginalDir[68] = "";
+undefined GWorkDir = 0x00;
+uint16_t rowBandSquareEnd[3] = { 0x0, 0x0, 0x0 };
+uint16_t rowBandSquareFirst[3] = { 0x0, 0x0, 0x0 };
+uint16_t RowScreenY[3] = { 0x0, 0x0, 0x0 };
+uint16_t RowScreenX[3] = { 0x0, 0x0, 0x0 };
+uint16_t squareSide[36] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0 };
+uint16_t squareColumn[36] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0 };
+uint16_t SquareRightX[36] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0 };
+uint16_t SquareLeftX[36] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0 };
+uint16_t SquareBottomY[36] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0 };
+uint16_t SquareTopY[36] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0,
+     0x0 };
+undefined2 GSMaxSquare = 0x0000;
+uint16_t rowMapSquareEnd[9] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+uint16_t rowMapSquareFirst[9] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+uint16_t ScreenOriginY[9] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+uint16_t ScreenOriginX[9] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+undefined2 GMaxSquare = 0x0000;
+undefined2 HighlightLevel = 0x0000;
+undefined2 l1Cut2Ofs = 0x0000;
+undefined2 l1Cut2Seg = 0x0000;
+undefined2 l4Cut2Ofs = 0x0000;
+undefined2 l4Cut2Seg = 0x0000;
+undefined2 l7Cut2Ofs = 0x0000;
+undefined2 l7Cut2Seg = 0x0000;
+undefined2 l2Cut2Ofs = 0x0000;
+undefined2 l2Cut2Seg = 0x0000;
+undefined2 l5Cut2Ofs = 0x0000;
+undefined2 l5Cut2Seg = 0x0000;
+undefined2 l8Cut2Ofs = 0x0000;
+undefined2 l8Cut2Seg = 0x0000;
+undefined2 l3Cut2Ofs = 0x0000;
+undefined2 l3Cut2Seg = 0x0000;
+undefined2 l6Cut2Ofs = 0x0000;
+undefined2 l6Cut2Seg = 0x0000;
+undefined2 l9Cut2Ofs = 0x0000;
+undefined2 l9Cut2Seg = 0x0000;
+undefined2 l1Cut1Ofs = 0x0000;
+undefined2 l1Cut1Seg = 0x0000;
+undefined2 l1Cut3Ofs = 0x0000;
+undefined2 l1Cut3Seg = 0x0000;
+undefined2 l4Cut1Ofs = 0x0000;
+undefined2 l4Cut1Seg = 0x0000;
+undefined2 l4Cut3Ofs = 0x0000;
+undefined2 l4Cut3Seg = 0x0000;
+undefined2 l7Cut1Ofs = 0x0000;
+undefined2 l7Cut1Seg = 0x0000;
+undefined2 l7Cut3Ofs = 0x0000;
+undefined2 l7Cut3Seg = 0x0000;
+undefined2 l2Cut1Ofs = 0x0000;
+undefined2 l2Cut1Seg = 0x0000;
+undefined2 l2Cut3Ofs = 0x0000;
+undefined2 l2Cut3Seg = 0x0000;
+undefined2 l5Cut1Ofs = 0x0000;
+undefined2 l5Cut1Seg = 0x0000;
+undefined2 l5Cut3Ofs = 0x0000;
+undefined2 l5Cut3Seg = 0x0000;
+undefined2 l8Cut1Ofs = 0x0000;
+undefined2 l8Cut1Seg = 0x0000;
+undefined2 l8Cut3Ofs = 0x0000;
+undefined2 l8Cut3Seg = 0x0000;
+undefined2 l3Cut1Ofs = 0x0000;
+undefined2 l3Cut1Seg = 0x0000;
+undefined2 l3Cut3Ofs = 0x0000;
+undefined2 l3Cut3Seg = 0x0000;
+undefined2 l6Cut1Ofs = 0x0000;
+undefined2 l6Cut1Seg = 0x0000;
+undefined2 l6Cut3Ofs = 0x0000;
+undefined2 l6Cut3Seg = 0x0000;
+undefined2 l9Cut1Ofs = 0x0000;
+undefined2 l9Cut1Seg = 0x0000;
+undefined2 l9Cut3Ofs = 0x0000;
+undefined2 l9Cut3Seg = 0x0000;
+undefined1 placementStatus = 0x00;
+undefined2 cmidpakComOfs = 0x0000;
+undefined cmidpakComSeg = 0x00;
+far_t midpakAd = { 0x0, 0x0 };
+undefined2 musDriver0Ofs = 0x0000;
+undefined2 musDriver0Seg = 0x0000;
+undefined2 sbfmAdvOfs = 0x0000;
+undefined2 sbfmAdvSeg = 0x0000;
+far_t audioPlaceholder0 = { 0x0, 0x0 };
+far_t audioPlaceholder1 = { 0x0, 0x0 };
+undefined2 sbp2fmAdvOfs = 0x0000;
+undefined2 sbp2fmAdvSeg = 0x0000;
+undefined2 sbp1fmAdvOfs = 0x0000;
+undefined2 sbp1fmAdvSeg = 0x0000;
+undefined2 pasfmAdvOfs = 0x0000;
+undefined2 pasfmAdvSeg = 0x0000;
+undefined2 pasoplAdvOfs = 0x0000;
+undefined2 pasoplAdvSeg = 0x0000;
+undefined2 adlibAdvOfs = 0x0000;
+undefined2 adlibAdvSeg = 0x0000;
+undefined2 adlibgAdvOfs = 0x0000;
+undefined2 adlibgAdvSeg = 0x0000;
+undefined2 mt32mpuAdvOfs = 0x0000;
+undefined2 mt32mpuAdvSeg = 0x0000;
+undefined2 ibmsndComOfs = 0x0000;
+undefined2 ibmsndComSeg = 0x0000;
+undefined2 sblasterComOfs = 0x0000;
+undefined2 sblasterComSeg = 0x0000;
+far_t audioPlaceholder2 = { 0x0, 0x0 };
+undefined2 fibmbakComOfs = 0x0000;
+undefined2 fibmbakComSeg = 0x0000;
+undefined2 sbproComOfs = 0x0000;
+undefined2 sbproComSeg = 0x0000;
+undefined2 sbproComCopyOfs = 0x0000;
+undefined2 sbproComCopySeg = 0x0000;
+undefined2 paudioComOfs = 0x0000;
+undefined2 paudioComSeg = 0x0000;
+undefined2 sblasterComCopyOfs = 0x0000;
+undefined2 sblasterComCopySeg = 0x0000;
+undefined2 adlibComOfs = 0x0000;
+undefined2 adlibComSeg = 0x0000;
+undefined2 adlibgComOfs = 0x0000;
+undefined2 adlibgComSeg = 0x0000;
+far_t audioPlaceholder3 = { 0x0, 0x0 };
+undefined1 BothFactions = 0x00;
+undefined1 AgentsChanged = 0x00;
+undefined1 AnimActive = 0x00;
+undefined2 GSavedBlitSeg = 0x0000;
+undefined2 tempScreenOfs = 0x0000;
+undefined2 tempScreenSeg = 0x0000;
+undefined1 constructionDirty = 0x00;
+undefined1 AgntCount = 0x00;
+undefined1 BlitFrame = 0x00;
+undefined2 flashTickLo = 0x0000;
+undefined2 flashTickHi = 0x0000;
+undefined1 FlashToggle = 0x00;
+undefined2 blitFrameTickLo = 0x0000;
+undefined2 blitFrameTickHi = 0x0000;
+undefined2 PanelGridY = 0x0000;
+undefined2 PanelGridX = 0x0000;
+undefined2 Seed_2000_d10e = 0x0000;
+undefined2 Seed_2000_d110 = 0x0000;
+undefined2 PrevMenuValue = 0x0000;
+uint16_t callResultTemp = 0x0;
+undefined1 mapViewActive = 0x00;
+undefined2 nwpanel1Cut5Ofs = 0x0000;
+undefined2 nwpanel1Cut5Seg = 0x0000;
+undefined2 blitFrameOfs = 0x0000;
+undefined2 blitFrameSeg = 0x0000;
+far_t timeOfDayGfx[12] = { { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0,
+     0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 } };
+uint16_t debugEmptyCellCount = 0x0;
+uint16_t debugStaleTickCount = 0x0;
+undefined2 GameTick = 0x0000;
+undefined2 tickCountLo = 0x0000;
+undefined2 tickCountHi = 0x0000;
+undefined1 unitUpdateTimer = 0x00;
+undefined1 seasonTimer = 0x00;
+undefined1 spyReportTimer = 0x00;
+uint32_t GDailyTimeCounter = 0x0;
+undefined menuCursorX = 0x00;
+undefined menuCursorY = 0x00;
+uint8_t menuItemRow[6] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+undefined2 StshSprIndex = 0x0000;
+spr_t *StshSprites = (void far *)(0x00000000UL + 0x0000UL);
+entity_t *Entities = (void far *)(0x1ef40000UL + 0x10c0UL);
+undefined DAT_2000_d190 = 0x00;
+far_t SprProjectiles = { 0x0, 0x0 };
+bool AgntFlag1 = 0;
+undefined2 EntityCount = 0x0000;
+undefined1 GWantsExit2 = 0x00;
+undefined1 inputCancelled = 0x00;
+undefined1 Difficulty = 0x00;
+undefined1 worldIndex = 0x00;
+undefined2 GMenuGfxOfs = 0x0000;
+undefined2 GMenuGfxSeg = 0x0000;
+undefined2 nwpanel2Cut1Ofs = 0x0000;
+undefined2 nwpanel2Cut1Seg = 0x0000;
+undefined2 nwpanel1Cut4Ofs = 0x0000;
+undefined2 nwpanel1Cut4Seg = 0x0000;
+undefined1 trianglesShown = 0x00;
+undefined2 cred03Cut3Ofs = 0x0000;
+undefined2 cred03Cut3Seg = 0x0000;
+undefined2 StshFile = 0x0000;
+uint16_t StshCount = 0x0;
+far_t StshCtPtrCopy = { 0x0, 0x0 };
+far_t StshCtPtr = { 0x0, 0x0 };
+undefined davfont2Cut1Ofs = 0x00;
+undefined2 davfont2Cut1Seg = 0x0000;
+undefined2 davfontCut1Ofs = 0x0000;
+undefined2 davfontCut1Seg = 0x0000;
+undefined2 gamfont1Cut1Ofs = 0x0000;
+undefined2 gamfont1Cut1Seg = 0x0000;
+undefined2 specialColorsOfs = 0x0000;
+undefined2 specialColorsSeg = 0x0000;
+far_t Lbm_nwpanel1 = { 0x0, 0x0 };
+undefined2 Seed_2000_d1d8 = 0x0000;
+undefined2 Seed_2000_d1da = 0x0000;
+uint8_t MenuItemEnabled[5] = { 0x0, 0x0, 0x0, 0x0, 0x0 };
+undefined1 PartySize = 0x00;
+undefined1 PartyCount = 0x00;
+undefined1 CurPartySlot = 0x00;
+undefined1 GLeaderCount = 0x00;
+undefined1 GCanPromote = 0x00;
+undefined2 tmstrsSprites1Ofs = 0x0000;
+undefined2 tmstrsSprites1Seg = 0x0000;
+undefined2 tmstrsSprites2Ofs = 0x0000;
+undefined2 tmstrsSprites2Seg = 0x0000;
+undefined2 anim_tmstrsCut1Ofs = 0x0000;
+undefined2 anim_tmstrsCut1Seg = 0x0000;
+undefined2 tmstrsSprites3Ofs = 0x0000;
+undefined2 tmstrsSprites3Seg = 0x0000;
+undefined2 tmstrsSprites4Ofs = 0x0000;
+undefined2 tmstrsSprites4Seg = 0x0000;
+undefined2 tmstrsSprites5Ofs = 0x0000;
+undefined2 tmstrsSprites5Seg = 0x0000;
+undefined2 tmstrsSprites6Ofs = 0x0000;
+undefined2 tmstrsSprites6Seg = 0x0000;
+undefined2 tmstrsSprites7Ofs = 0x0000;
+undefined2 tmstrsSprites7Seg = 0x0000;
+undefined2 tmstrsSprites9Ofs = 0x0000;
+undefined2 tmstrsSprites9Seg = 0x0000;
+undefined1 cursorRecordFound = 0x00;
+undefined2 GRecordCount = 0x0000;
+undefined1 strongholdCheckPending = 0x00;
+undefined2 GYear = 0x0000;
+undefined1 PlayerCount = 0x00;
+undefined4 FillGrid = 0x00000000;
+undefined2 boltSpritesOfs = 0x0000;
+undefined2 boltSpritesSeg = 0x0000;
+undefined1 UserWantsExit = 0x00;
+undefined GfxFramePtrs = 0x00;
+undefined GfxPlaySteps = 0x00;
+undefined1 GAnimPlaying = 0x00;
+far_t AnimSeqPtr[3] = { { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 } };
+undefined1 PlayerIndex = 0x00;
+uint16_t HeapMax = 0x0;
+uint16_t HeapMin = 0x0;
+undefined2 HeapPtr = 0x0000;
+far_t LbxButton2 = { 0x0, 0x0 };
+undefined2 butt01Cut1Ofs = 0x0000;
+undefined2 butt01Cut1Seg = 0x0000;
+undefined2 butt01Cut2Ofs = 0x0000;
+undefined2 butt01Cut2Seg = 0x0000;
+undefined2 butt01Cut3Ofs = 0x0000;
+undefined2 butt01Cut3Seg = 0x0000;
+undefined2 butt01Cut4Ofs = 0x0000;
+undefined2 butt01Cut4Seg = 0x0000;
+undefined2 butt01Cut5Ofs = 0x0000;
+undefined2 butt01Cut5Seg = 0x0000;
+undefined2 butt01Cut6Ofs = 0x0000;
+undefined2 butt01Cut6Seg = 0x0000;
+undefined2 talkwin9Cut5Ofs = 0x0000;
+undefined2 talkwin9Cut5Seg = 0x0000;
+undefined2 talkwin9Cut4Ofs = 0x0000;
+undefined2 talkwin9Cut4Seg = 0x0000;
+undefined2 talkwin9Cut3Ofs = 0x0000;
+undefined2 talkwin9Cut3Seg = 0x0000;
+undefined2 talkwin9Cut2Ofs = 0x0000;
+undefined2 talkwin9Cut2Seg = 0x0000;
+undefined1 ListCount = 0x00;
+undefined2 GTimeLo = 0x0000;
+undefined2 GPromotableCount = 0x0000;
+undefined1 promotionCount = 0x00;
+byte promotionBandUsed[2] = { 0x0, 0x0 };
+undefined2 marbleCut1Ofs = 0x0000;
+undefined2 marbleCut1Seg = 0x0000;
+undefined2 back03Cut1Ofs = 0x0000;
+undefined2 back03Cut1Seg = 0x0000;
+undefined2 back2Cut1Ofs = 0x0000;
+undefined2 back2Cut1Seg = 0x0000;
+undefined2 winrebg1Cut1Ofs = 0x0000;
+undefined2 winrebg1Cut1Seg = 0x0000;
+undefined2 captbg2Cut1Ofs = 0x0000;
+undefined2 captbg2Cut1Seg = 0x0000;
+far_t far_t_2000_d3e4 = { 0x0, 0x0 };
+undefined2 marbleCut2Ofs = 0x0000;
+undefined2 marbleCut2Seg = 0x0000;
+undefined2 back03Cut2Ofs = 0x0000;
+undefined2 back03Cut2Seg = 0x0000;
+undefined2 back2Cut2Ofs = 0x0000;
+undefined2 back2Cut2Seg = 0x0000;
+undefined2 winrebg1Cut2Ofs = 0x0000;
+undefined2 winrebg1Cut2Seg = 0x0000;
+undefined2 captbg2Cut2Ofs = 0x0000;
+undefined2 captbg2Cut2Seg = 0x0000;
+undefined2 midgrnd5Cut1Ofs = 0x0000;
+undefined2 midgrnd5Cut1Seg = 0x0000;
+undefined2 midl3Cut1Ofs = 0x0000;
+undefined2 midl3Cut1Seg = 0x0000;
+undefined2 winremg2Cut1Ofs = 0x0000;
+undefined2 winremg2Cut1Seg = 0x0000;
+undefined2 captmg3Cut1Ofs = 0x0000;
+undefined2 captmg3Cut1Seg = 0x0000;
+undefined2 midgrnd5Cut2Ofs = 0x0000;
+undefined2 midgrnd5Cut2Seg = 0x0000;
+undefined2 midl3Cut2Ofs = 0x0000;
+undefined2 midl3Cut2Seg = 0x0000;
+undefined2 winremg2Cut2Ofs = 0x0000;
+undefined2 winremg2Cut2Seg = 0x0000;
+undefined2 captmg3Cut2Ofs = 0x0000;
+undefined2 captmg3Cut2Seg = 0x0000;
+undefined2 strong4Cut1Ofs = 0x0000;
+undefined2 strong4Cut1Seg = 0x0000;
+undefined2 frnt3Cut1Ofs = 0x0000;
+undefined2 frnt3Cut1Seg = 0x0000;
+undefined2 winrefg1Cut1Ofs = 0x0000;
+undefined2 winrefg1Cut1Seg = 0x0000;
+undefined2 captfg1Cut1Ofs = 0x0000;
+undefined2 captfg1Cut1Seg = 0x0000;
+undefined2 strong4Cut2Ofs = 0x0000;
+undefined2 strong4Cut2Seg = 0x0000;
+undefined2 frnt3Cut2Ofs = 0x0000;
+undefined2 frnt3Cut2Seg = 0x0000;
+undefined2 winrefg1Cut2Ofs = 0x0000;
+undefined2 winrefg1Cut2Seg = 0x0000;
+undefined2 captfg1Cut2Ofs = 0x0000;
+undefined2 captfg1Cut2Seg = 0x0000;
+undefined2 youlose1Cut1Ofs = 0x0000;
+undefined2 youlose1Cut1Seg = 0x0000;
+undefined2 cred01Cut1Ofs = 0x0000;
+undefined2 cred01Cut1Seg = 0x0000;
+undefined2 cred02Cut1Ofs = 0x0000;
+undefined2 cred02Cut1Seg = 0x0000;
+undefined2 cred03Cut1Ofs = 0x0000;
+undefined2 cred03Cut1Seg = 0x0000;
+undefined2 ssilogoCut1Ofs = 0x0000;
+undefined2 ssilogoCut1Seg = 0x0000;
+undefined2 youlose1Cut2Ofs = 0x0000;
+undefined2 youlose1Cut2Seg = 0x0000;
+undefined2 cred01Cut2Ofs = 0x0000;
+undefined2 cred01Cut2Seg = 0x0000;
+undefined2 cred02Cut2Ofs = 0x0000;
+undefined2 cred02Cut2Seg = 0x0000;
+undefined2 cred03Cut2Ofs = 0x0000;
+undefined2 cred03Cut2Seg = 0x0000;
+undefined2 ssilogoCut2Ofs = 0x0000;
+undefined2 ssilogoCut2Seg = 0x0000;
+undefined2 demfont1FontOfs = 0x0000;
+undefined2 demfont1FontSeg = 0x0000;
+undefined2 l9Cut4Ofs = 0x0000;
+undefined2 l9Cut4Seg = 0x0000;
+undefined2 sky06FliOfs = 0x0000;
+undefined2 sky06FliSeg = 0x0000;
+undefined2 MiceClickY = 0x0000;
+undefined2 MiceClickX = 0x0000;
+undefined _atexittbl = 0x00;
+undefined1 _fputc_c = 0x00;
+undefined edata_at_ = 0x00;
+undefined _stack_end = 0x00;
+bofh_t FBOV_header = { 0x0, 0x0, 0x5D910, 0x14570, 0x5B };
+uint16_t init_textFilenameJumpTable[4] = { 0x1263, 0x1263, 0x1263, 0x1263 };
+uint16_t audioCommandSwitch[6] = { 0x9F4, 0x9FD, 0xA16, 0xA2F, 0xA43, 0xA5C };
+uint16_t ovc28_codeOffsetTable[59] = { 0xFF2, 0xFE0, 0xFD3, 0xFC3, 0xFA3, 0xF93, 0xF89, 0xF7C, 0xF66,
+     0xF53, 0xF3E, 0xF1C, 0xF0B, 0xEFE, 0xEEB, 0xEDE, 0xED0, 0xEC2, 0xEB5, 0xEA4, 0xE93, 0xE86, 0xE73,
+     0xE65, 0xE58, 0xE4A, 0xE3D, 0xE30, 0xE1D, 0xE14, 0xDED, 0xDD7, 0xDC9, 0xDBB, 0xDAE, 0xD97, 0xD8B,
+     0xD82, 0xD35, 0xD1F, 0xD11, 0xD01, 0xCF0, 0xCE0, 0xCC1, 0xCB3, 0xCA6, 0xC99, 0xC8C, 0xC7D, 0xC6F,
+     0xC62, 0xC56, 0xC49, 0xC43, 0xC32, 0xC25, 0xC17, 0xC06 };

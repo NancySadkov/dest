@@ -71,7 +71,7 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex,...)
              (char *)CONCAT22(*(undefined2 *)
                                ((int)&GStatsLabels[4].seg +
                                (uint)*(byte *)(iVar1 + 0x86) * 8 + (uint)*(byte *)(iVar1 + 0x34) * 4
-                               ),(char *)((far_t far *)(GStatsLabels + 4) +
+                               ),(char *)((far_t *)(GStatsLabels + 4) +
                                          (uint)*(byte *)(iVar1 + 0x34) +
                                          (uint)*(byte *)(iVar1 + 0x86) * 2)->ofs));
       sVar4 = strlen((char *)CONCAT22(unaff_SS,&text));

@@ -17,7 +17,7 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry,...)
   pfVar4 = (far_t far *)entry.ofs;
   if (*(char *)MK_FP(entry.seg, entry.ofs) == '\0') {
     uVar6 = in_DX;
-    pfVar4 = fmMalloc((far_t far *)*(undefined2 *)((int)&((far_t far *)(entry.ofs + 4))->ofs + 1),
+    pfVar4 = fmMalloc((far_t *)*(undefined2 *)((int)&((far_t *)(entry.ofs + 4))->ofs + 1),
                       CONCAT13(in_stack_0000fff1,
                                CONCAT12(in_stack_0000fff0,
                                         *(undefined2 *)((int)&((far_t far *)(entry.ofs + 4))->seg + 1)))

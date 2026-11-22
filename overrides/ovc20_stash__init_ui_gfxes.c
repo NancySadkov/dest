@@ -88,7 +88,7 @@ void __cdecl16far init_ui_gfxes(void)
     *(undefined2 *)((int)&MicePtrs.seg + i * 4) =(uint16_t)( pfVar2);
     ((far_t far *)&MicePtrs + i)->ofs = (uint16_t)pvVar3;
     memcpy((char *)CONCAT22(*(undefined2 *)((int)&MicePtrs.seg + i * 4),
-                            (char *)((far_t far *)&MicePtrs + i)->ofs),(char *)MiceSaveArea,0x121);
+                            (char *)((far_t far *)&MicePtrs + i)->ofs),(char *)MiceSaveBuf,0x121);
   }
   handle_01.seg = uStack_4;
   handle_01.ofs = (uint16_t)pvStack_6;

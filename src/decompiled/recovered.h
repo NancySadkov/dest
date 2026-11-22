@@ -3,6 +3,7 @@
 #define ST_RECOVERED_H
 #include "st_compat.h"
 #include "st_types.h"
+#include "st_intrinsics.h"
 #include "st_globals.h"
 #include "st_artifacts.h"
 #include "st_functions.h"

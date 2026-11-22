@@ -299,53 +299,53 @@ ovc18_spawnClassAgent
       *(undefined1 *)x = uVar1;
       midpakAd.ofs = (uint16_t)stshStoreFile_2(unaff_DI,filename,unaff_BP);
       midpakAd.seg = uVar10;
-      cmidpakComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"cmidpak.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      cmidpakComOfs =(uint16_t)( stshStoreFile_2((far_t *)"cmidpak.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       cmidpakComSeg = uVar10;
-      ibmsndComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"ibmsnd.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      ibmsndComOfs =(uint16_t)( stshStoreFile_2((far_t *)"ibmsnd.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       ibmsndComSeg = uVar10;
-      sblasterComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"sblaster.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      sblasterComOfs =(uint16_t)( stshStoreFile_2((far_t *)"sblaster.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       audioPlaceholder2.seg = 0;
       audioPlaceholder2.ofs = 0;
       sblasterComSeg = uVar10;
-      fibmbakComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"fibmbak.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      fibmbakComOfs =(uint16_t)( stshStoreFile_2((far_t *)"fibmbak.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       fibmbakComSeg = uVar10;
-      pfVar8 = stshStoreFile_2((far_t far *)"sbpro.com",(char *)MK_FP(0x2410, 0x1),unaff_BP);
+      pfVar8 = stshStoreFile_2((far_t *)"sbpro.com",(char *)MK_FP(0x2410, 0x1),unaff_BP);
       sbproComOfs =(uint16_t)( pfVar8);
       sbproComSeg = uVar10;
       sbproComCopyOfs =(uint16_t)( pfVar8);
       sbproComCopySeg = uVar10;
-      paudioComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"paudio.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      paudioComOfs =(uint16_t)( stshStoreFile_2((far_t *)"paudio.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       sblasterComCopySeg = sblasterComSeg;
       sblasterComCopyOfs = sblasterComOfs;
       pfVar12 = sblasterComOfs;
       paudioComSeg =(uint16_t)( pfVar8);
-      adlibComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"adlib.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      adlibComOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlib.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       adlibComSeg =(uint16_t)( pfVar12);
-      adlibgComOfs =(uint16_t)( stshStoreFile_2((far_t far *)"adlibg.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      adlibgComOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlibg.com",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       audioPlaceholder3.seg = 0;
       audioPlaceholder3.ofs = 0;
       musDriver0Seg = 0;
       musDriver0Ofs = 0;
       adlibgComSeg =(uint16_t)( pfVar12);
-      sbfmAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"sbfm.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      sbfmAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"sbfm.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       audioPlaceholder0.seg = 0;
       audioPlaceholder0.ofs = 0;
       audioPlaceholder1.seg = 0;
       audioPlaceholder1.ofs = 0;
       sbfmAdvSeg =(uint16_t)( pfVar12);
-      sbp2fmAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"sbp2fm.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      sbp2fmAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"sbp2fm.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       sbp2fmAdvSeg =(uint16_t)( pfVar12);
-      sbp1fmAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"sbp1fm.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      sbp1fmAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"sbp1fm.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       sbp1fmAdvSeg =(uint16_t)( pfVar12);
-      pasfmAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"pasfm.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      pasfmAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"pasfm.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       pasfmAdvSeg =(uint16_t)( pfVar12);
-      pasoplAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"pasopl.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      pasoplAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"pasopl.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       pasoplAdvSeg =(uint16_t)( pfVar12);
-      adlibAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"adlib.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      adlibAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlib.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       adlibAdvSeg =(uint16_t)( pfVar12);
-      adlibgAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"adlibg.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      adlibgAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"adlibg.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       adlibgAdvSeg =(uint16_t)( pfVar12);
-      mt32mpuAdvOfs =(uint16_t)( stshStoreFile_2((far_t far *)"mt32mpu.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
+      mt32mpuAdvOfs =(uint16_t)( stshStoreFile_2((far_t *)"mt32mpu.adv",(char *)MK_FP(0x2410, 0x1),unaff_BP));
       mt32mpuAdvSeg =(uint16_t)( pfVar12);
       return (uint8_t *)mt32mpuAdvOfs;
     case (uint16_t)0x2:
@@ -937,7 +937,7 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind,...)
       *(char *)((int)uVar1 + 0x5a) = strongholdKind;
       uVar1 = *(undefined4 *)((uint)PartyCount * 4 + -4);
       ovr_createConstructionRecordFar
-                (*(byte *)((int)(far_t far *)(worldMenuLabels + 0xb) +
+                (*(byte *)((int)(far_t *)(worldMenuLabels + 0xb) +
                           (uint)*(byte *)((int)uVar1 + 0x3e) * 0x95),GfxRndSeed - 1,GfxRndSeed2,
                  (uint8_t *)CONCAT22(unaff_SS,&uStack_5),PartyCount - 1,partyIndex,(char)GfxRndSeed2
                  ,(char)&uStack_5,PartyCount - 1);

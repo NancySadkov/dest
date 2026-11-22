@@ -299,7 +299,7 @@ void __cdecl16far init_assets(void)
   else {
     StshFile = ovr_creat_wait_unlock_and_disk((char *)"strong.dat",0x10);
     uVar7 = 0x2410;
-    write(StshFile,&StshFileSize,4);
+    write(StshFile,&StshFileSizeVarVar,4);
     bVar15 = 0xfffb < StshCtOfs.lo;
     StshCtOfs.lo = StshCtOfs.lo + 4;
     StshCtOfs.hi = StshCtOfs.hi + bVar15;

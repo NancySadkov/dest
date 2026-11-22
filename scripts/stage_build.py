@@ -19,6 +19,7 @@ HEADERS = {
     "st_globals.h": "glob.h",
     "st_artifacts.h": "art.h",
     "st_functions.h": "func.h",
+    "st_intrinsics.h": "intrin.h",
 }
 
 def short_module(name):
@@ -27,6 +28,8 @@ def short_module(name):
         return "glob%s.c" % (m.group(1) or "")
     if name == "ovr_stubs.c":
         return "ovrstub.c"
+    if name == "st_intrinsics.c":
+        return "intrins.c"
     if name in ("crtl.c", "main.c", "mouse.c", "video.c", "ovl.c"):
         return name
     m = re.match(r"ovc(\d+).*\.c$", name)
@@ -47,7 +50,7 @@ def main():
     with open(os.path.join(OUT, "st.h"), "w", encoding="ascii") as f:
         f.write("/* DOS/TC30 staging aggregate header. */\n")
         f.write("#ifndef ST_AGGREGATE_H\n#define ST_AGGREGATE_H\n")
-        for dst in ("compat.h", "types.h", "glob.h", "art.h", "func.h"):
+        for dst in ("compat.h", "types.h", "intrin.h", "glob.h", "art.h", "func.h"):
             f.write('#include "%s"\n' % dst)
         f.write("#endif\n")
     for name in sorted(os.listdir(SRC)):

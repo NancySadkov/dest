@@ -23,6 +23,32 @@ OWNED = {
     "_terminate": "C0.ASM defines the CRT terminate routine",
 }
 
+# Data the startup also defines (TLINK: "defined in module C0.ASM is
+# duplicated in module GLOBn.C").  The startup's copy is the one the runtime
+# initialises, so drop ours.
+STARTUP_DATA = {
+    "__brklvl": "C0.ASM keeps the break level",
+    "_psp": "C0.ASM keeps the PSP segment",
+    "_brklvl": "C0.ASM keeps the break level",
+    "_pspseg": "C0.ASM keeps the PSP segment",
+}
+
+data_dropped = 0
+for path in glob.glob("src/decompiled/st_globals*.c"):
+    lines = io.open(path, encoding="utf-8", errors="ignore").read().split("\n")
+    keep = []
+    for line in lines:
+        m = re.match(r"^([A-Za-z_][\w ]*?)[\s\*]([A-Za-z_]\w*)\s*(\[|;|=)", line)
+        if m and m.group(2) in STARTUP_DATA:
+            keep.append("/* %s: %s; the startup owns it. */" % (m.group(2),
+                        STARTUP_DATA[m.group(2)]))
+            data_dropped += 1
+            continue
+        keep.append(line)
+    if len(keep) != len(lines) and apply:
+        io.open(path, "w", encoding="utf-8", newline="\n").write("\n".join(keep))
+print("startup-owned data dropped:", data_dropped)
+
 changed = 0
 for path in glob.glob("src/decompiled/*.c"):
     src = io.open(path, encoding="utf-8", errors="ignore").read()

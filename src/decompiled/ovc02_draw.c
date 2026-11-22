@@ -719,7 +719,7 @@ void __cdecl16far draw_usesBlitLoadRleGfx(void)
         dst_00.seg = 0xa000;
         dst_00.ofs = CrossBlitX + CrossBlitY * 0x140;
         gfx.seg = *(uint16_t *)((int)&CrossBlitGfx.seg + (uint)CrossBlitCount * 4);
-        gfx.ofs = ((far_t far *)&CrossBlitGfx + CrossBlitCount)->ofs;
+        gfx.ofs = ((far_t *)&CrossBlitGfx + CrossBlitCount)->ofs;
         ovr_blitLoadRleGfx(gfx,dst_00);
       }
       ovr_miceBlitRect((brect_t *)&rect);
@@ -1181,11 +1181,11 @@ void __cdecl16far draw_menuCursor(int x,int y,...)
                       TextBlitDstSeg);
   ovr_driver_compute5(x + 0xf3,(char)y + 0x3b,0xf3,0x57,299,0x57,(uint)SpecialColors[2],
                       TextBlitDstSeg);
-  ovr_driver_drawLine((uint8_t *)(far_t far *)(GUnitDescriptions + 9),0x3b,(uint8_t *)(x + 0xf3),
+  ovr_driver_drawLine((uint8_t *)(far_t *)(GUnitDescriptions + 9),0x3b,(uint8_t *)(x + 0xf3),
                       y + 0x3b,SpecialColors[3],TextBlitDstSeg);
-  ovr_driver_drawLine((uint8_t *)(x + 0xf3),y + 0x3b,(uint8_t *)(far_t far *)(GUnitDescriptions + 0x10),
+  ovr_driver_drawLine((uint8_t *)(x + 0xf3),y + 0x3b,(uint8_t *)(far_t *)(GUnitDescriptions + 0x10),
                       0x57,SpecialColors[4],TextBlitDstSeg);
-  ovr_driver_drawLine((uint8_t *)(x + 0xf3),y + 0x3b,(uint8_t *)(far_t far *)(GUnitDescriptions + 2),
+  ovr_driver_drawLine((uint8_t *)(x + 0xf3),y + 0x3b,(uint8_t *)(far_t *)(GUnitDescriptions + 2),
                       0x57,SpecialColors[5],TextBlitDstSeg);
   ovr_driver_fillRect(x + 0xf3,y + 0x3b,x + 0xf3,y + 0x3b,0x6c,TextBlitDstSeg);
   draw_usesBlitLoadRleGfx3((uint)GMenuItem);
@@ -1236,7 +1236,7 @@ void __cdecl16far draw_toolbarLabels(void)
       dst_00.seg = TextBlitDstSeg;
       dst_00.ofs = 0x4975;
       gfx_00.seg = *(uint16_t *)((int)&LbmBigcomp50x42.seg + (uint)bigcompFrame * 4);
-      gfx_00.ofs = ((far_t far *)&LbmBigcomp50x42 + bigcompFrame)->ofs;
+      gfx_00.ofs = ((far_t *)&LbmBigcomp50x42 + bigcompFrame)->ofs;
       ovr_blitLoadRleGfx(gfx_00,dst_00);
       TextBlitX = 0xea;
       TextBlitY = 0x62;

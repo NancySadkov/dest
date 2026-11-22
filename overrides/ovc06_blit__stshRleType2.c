@@ -1,5 +1,5 @@
-far_t far * __cdecl16far
-stshRleType2(far_t far *__return_storage_ptr__,far_t pixels,int16_t sx,int16_t sy,int16_t ex,int16_t ey,
+far_t * __cdecl16far
+stshRleType2(far_t *__return_storage_ptr__,far_t pixels,int16_t sx,int16_t sy,int16_t ex,int16_t ey,
             int16_t ox,int16_t oy,...)
 
 {

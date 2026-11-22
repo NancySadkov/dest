@@ -410,7 +410,7 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
       uVar2 = *(undefined4 *)((uVar6 & 0xff) << 2);
       *(undefined1 *)((int)uVar2 + 0x5a) = 0;
       ((short (*) [148] [60])GUnitGrid)[-1][uVar8 + 0x93][uStack_c] =
-           (uint)*(byte *)((int)(far_t far *)(worldMenuLabels + 0xb) + (uint)gindex * 0x95);
+           (uint)*(byte *)((int)(far_t *)(worldMenuLabels + 0xb) + (uint)gindex * 0x95);
       ovr_ovc23_placeBuilding
                 (uVar8 - 1,uStack_c,
                  *(byte *)(((short (*) [148] [60])GUnitGrid)[-1][uVar8 + 0x93] + uStack_c),bStack_11

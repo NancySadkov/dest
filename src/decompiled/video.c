@@ -240,7 +240,7 @@ void __cdecl16far videoMiceEvent(uint16_t x,uint16_t y,uint16_t mask)
         }
         video_copyScreenTile(0xa000,dx,dy);
         src.seg = *(uint16_t *)((int)&MicePtrs.seg + MiceIndex * 4);
-        src.ofs = ((far_t far *)&MicePtrs + MiceIndex)->ofs;
+        src.ofs = ((far_t *)&MicePtrs + MiceIndex)->ofs;
         miceBlitAtSeg(0xa000,src,dx,dy);
         MiceProcessed = '\x01';
         MiceNeedsUpdate = '\0';

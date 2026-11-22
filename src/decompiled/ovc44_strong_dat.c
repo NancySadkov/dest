@@ -9,7 +9,7 @@
 
 /* 6ffe:0000 */
 
-far_t far * __cdecl16far stshAllocStub(far_t far *__return_storage_ptr__,...)
+far_t * __cdecl16far stshAllocStub(far_t *__return_storage_ptr__,...)
 
 {
   uint16_t uVar1;
@@ -29,7 +29,7 @@ far_t far * __cdecl16far stshAllocStub(far_t far *__return_storage_ptr__,...)
     *(undefined2 *)(uVar1 + 9) = 0;
     *(undefined2 *)(uVar1 + 0xf) = 0;
     *(undefined2 *)(uVar1 + 0xd) = 0;
-    return (far_t far *)uVar1;
+    return (far_t *)uVar1;
   }
                     /* WARNING: Subroutine does not return */
   ovr_stExit(0x24);
@@ -46,31 +46,31 @@ void __cdecl16far stshTR_S_stubify0(int index)
   
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxNormal[0].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)BldGfxNormal + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)BldGfxNormal + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxNormal[1].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxNormal + 1) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxNormal + 1) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxNormal[2].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxNormal + 2) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxNormal + 2) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxNormal[3].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxNormal + 3) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxNormal + 3) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxNormal[4].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxNormal + 4) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxNormal + 4) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxNormal[5].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxNormal + 5) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxNormal + 5) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxNormal[6].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxNormal + 6) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxNormal + 6) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxNormal[7].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxNormal + 7) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxNormal + 7) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxNormal[8].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxNormal + 8) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxNormal + 8) + index * 3)->ofs = (uint16_t)uVar1;
   return;
 }
 
@@ -86,31 +86,31 @@ void __cdecl16far stshStubifyBld(uint16_t index,...)
   stshTR_S_stubify0(index);
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxRuin[0].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)BldGfxRuin + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)BldGfxRuin + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxRuin[1].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxRuin + 1) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxRuin[2].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxRuin + 2) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxRuin + 2) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxRuin[3].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxRuin + 3) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxRuin + 3) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxRuin[4].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxRuin + 4) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxRuin + 4) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxRuin[5].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxRuin + 5) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxRuin + 5) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxRuin[6].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxRuin + 6) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxRuin + 6) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxRuin[7].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxRuin + 7) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxRuin + 7) + index * 3)->ofs = (uint16_t)uVar1;
   uVar1 = func_0x0007ffe0(0x6ffe);
   *(undefined2 *)((int)&BldGfxRuin[8].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t far *)(BldGfxRuin + 8) + index * 3)->ofs = (uint16_t)uVar1;
+  ((far_t *)(BldGfxRuin + 8) + index * 3)->ofs = (uint16_t)uVar1;
   return;
 }
 
@@ -418,7 +418,7 @@ void __cdecl16far init_assets(void)
   else {
     StshFile = ovr_creat_wait_unlock_and_disk((char *)"strong.dat",0x10);
     uVar7 = 0x2410;
-    write(StshFile,&StshFileSize,4);
+    write(StshFile,&StshFileSizeVar,4);
     bVar15 = 0xfffb < StshCtOfs.lo;
     StshCtOfs.lo = StshCtOfs.lo + 4;
     StshCtOfs.hi = StshCtOfs.hi + bVar15;

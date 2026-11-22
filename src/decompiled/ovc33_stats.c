@@ -265,7 +265,7 @@ agntGetWeaponName(char *dst,uint8_t atype,bool magical,uint8_t field_index,int32
 
 
 /* 6386:0411 */
-far_t far * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far_t ringValue)
+far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far_t ringValue)
 
 {
   char *pcVar1;
@@ -1146,7 +1146,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
   int *piVar8;
   undefined2 *puVar9;
   int iVar10;
-  far_t far *text_00;
+  far_t *text_00;
   uint8_t *in_DX;
   uint8_t *puVar11;
   uint16_t agnt_o;
@@ -1376,7 +1376,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
      (*(char *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) == -1)) {
     uVar7 = (uint)(byte)((agntG_t *)agnt->gdata)->shortName[2];
     puVar11 = (uint8_t *)((char *)0x26510);
-    ovr_blitLabel((char *)((far_t far *)GAlignmentsNames + uVar7)->ofs,
+    ovr_blitLabel((char *)((far_t *)GAlignmentsNames + uVar7)->ofs,
                   (uint8_t *)
                   CONCAT22(Font02.ofs,
                            (uint8_t *)*(undefined2 *)((int)&GAlignmentsNames[0].seg + uVar7 * 4)),
@@ -1387,7 +1387,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,...)
              ((uint)*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) << 2);
     uVar7 = (uint)*(byte *)((int)uVar1 + 0x33);
     puVar11 = (uint8_t *)((char *)0x26510);
-    ovr_blitLabel((char *)((far_t far *)GAlignmentsNames + uVar7)->ofs,
+    ovr_blitLabel((char *)((far_t *)GAlignmentsNames + uVar7)->ofs,
                   (uint8_t *)
                   CONCAT22(Font02.ofs,
                            (uint8_t *)*(undefined2 *)((int)&GAlignmentsNames[0].seg + uVar7 * 4)),

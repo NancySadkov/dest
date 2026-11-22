@@ -85,7 +85,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
           }
           else {
             uVar10 = 0x195d;
-            pfVar5 = stshSprite((far_t far *)*(undefined2 *)
+            pfVar5 = stshSprite((far_t *)*(undefined2 *)
                                           ((int)AgntGs[0].sprfls + 6 + unaff_SI * 0x95 + iVar17 * 2)
                                 ,*(int16_t *)((int)&AgntGs[0].anms + unaff_SI * 0x95),
                                 (anm_t *)(ulong)CONCAT12(*(undefined1 *)
@@ -202,7 +202,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
           return peVar13;
         }
         uVar10 = 0x195d;
-        pfVar5 = stshSprite((far_t far *)*(undefined2 *)((int)AgntGs[0].sprfls + unaff_SI * 0x95),
+        pfVar5 = stshSprite((far_t *)*(undefined2 *)((int)AgntGs[0].sprfls + unaff_SI * 0x95),
                             *(int16_t *)((int)&AgntGs[0].anms + unaff_SI * 0x95),
                             (anm_t *)(ulong)CONCAT12(*(undefined1 *)
                                                       ((int)&AgntGs[0].nanims + unaff_SI * 0x95),
@@ -220,7 +220,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
         }
         else {
           uVar10 = 0x195d;
-          pfVar5 = stshSprite((far_t far *)*(undefined2 *)((int)AgntGs[0].sprfls + 2 + unaff_SI * 0x95),
+          pfVar5 = stshSprite((far_t *)*(undefined2 *)((int)AgntGs[0].sprfls + 2 + unaff_SI * 0x95),
                               *(int16_t *)((int)&AgntGs[0].anms + unaff_SI * 0x95),
                               (anm_t *)(ulong)CONCAT12(*(undefined1 *)
                                                         ((int)&AgntGs[0].nanims + unaff_SI * 0x95),
@@ -234,7 +234,7 @@ ovc15_textView(undefined4 param_1,int *param_2,int *param_3,undefined2 param_4,u
         }
         if (*(int *)((int)AgntGs[0].sprfls + 4 + unaff_SI * 0x95) == 0) break;
         uVar10 = 0x195d;
-        pfVar5 = stshSprite((far_t far *)*(undefined2 *)((int)AgntGs[0].sprfls + 4 + unaff_SI * 0x95),
+        pfVar5 = stshSprite((far_t *)*(undefined2 *)((int)AgntGs[0].sprfls + 4 + unaff_SI * 0x95),
                             *(int16_t *)((int)&AgntGs[0].anms + unaff_SI * 0x95),
                             (anm_t *)(ulong)CONCAT12(*(undefined1 *)
                                                       ((int)&AgntGs[0].nanims + unaff_SI * 0x95),

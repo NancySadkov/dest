@@ -445,7 +445,8 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 for _name in ("fix_string_folds.py", "fix_raw_arrays.py", "fix_bda_far.py",
               "fix_far_fields.py", "fix_field_access.py", "fix_dgroup_ptrs.py",
               "fix_far_data.py", "fix_struct_stride.py", "fix_long_identifiers.py",
-              "fix_startup_owned.py", "gen_ovr_thunks.py"):
+              "fix_startup_owned.py", "fix_startup_globals.py",
+              "gen_ovr_thunks.py"):
     _script = os.path.join(_HERE, _name)
     if os.path.isfile(_script):
         _sp.run([sys.executable, _script, "--apply"], check=False)
@@ -453,6 +454,19 @@ for _name in ("fix_string_folds.py", "fix_raw_arrays.py", "fix_bda_far.py",
 # The globals TU is ~100 KB of data; Turbo C stops at 64 KB, so it is emitted as
 # st_globals.c + st_globals2.c (stage_build maps the second to glob2.c).
 _sp.run([sys.executable, os.path.join(_HERE, "split_globals.py")], check=False)
+
+# split_globals.py regenerates st_globals.h from the definitions, which drops the
+# `far` the far-data pass put on the declarations.  Re-apply it, now that the
+# header exists in its final shape: without this every reference to
+# BldGfxNormal / BldGfxRuin / AgntGs is a near reference to far data and TLINK
+# reports thousands of fixup overflows.
+_sp.run([sys.executable, os.path.join(_HERE, "fix_far_data.py"), "--apply"],
+        check=False)
+
+# The committed overrides carry hand-written signatures; keep them in step with
+# the prototypes the export just produced.
+_sp.run([sys.executable, os.path.join(_HERE, "fix_override_signatures.py")],
+        check=False)
 
 # The decompiler sometimes unrolls a loop thousands of times, which trips Turbo C's
 # table limit (o02 draw_textTalkwin9Lbm).

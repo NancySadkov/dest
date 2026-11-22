@@ -1,4 +1,4 @@
-far_t far * __cdecl16far heapMalloc(far_t far *__return_storage_ptr__,uint32_t nbytes,...)
+far_t * __cdecl16far heapMalloc(far_t *__return_storage_ptr__,uint32_t nbytes,...)
 
 {
   long *plVar1;

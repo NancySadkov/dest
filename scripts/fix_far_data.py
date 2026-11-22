@@ -17,7 +17,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 TSV = os.path.join(HERE, "model", "far_data.tsv")
 HEADER = "src/decompiled/st_globals.h"
-BODIES = ("src/decompiled/st_globals.c", "src/decompiled/st_globals2.c")
+BODIES = tuple(sorted(__import__("glob").glob("src/decompiled/st_globals*.c")))
 
 apply = "--apply" in sys.argv
 

@@ -392,7 +392,7 @@ uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,...)
 
 
 /* 5087:056e */
-far_t far * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
+far_t * __cdecl16far ovc22_textRingProt(byte partyIndex,...)
 
 {
   char *pcVar1;
