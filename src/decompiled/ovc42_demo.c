@@ -485,7 +485,7 @@ uint16_t __cdecl16far run_demo(void)
   int iVar8;
   uint unaff_SS;
   undefined1 uVar9;
-  uint8_t palette;
+  uint8_t palette[0x300];   /* palette buffer, cleared at 6d7a:0cc6 */
   stg_tmp_t *psStack_c;
   uint16_t uStack_a;
   byte bStack_7;
@@ -558,8 +558,8 @@ uint16_t __cdecl16far run_demo(void)
             (GfxRndSeed - 5,GfxRndSeed2,GfxRndSeed - 1,GfxRndSeed2,0,0x1,1,(char)(GfxRndSeed - 1),
              (char)GfxRndSeed2,0,1);
   GfxRndSeed = GfxRndSeed - 0x10;
-  _fmemset((void *)(ulong)unaff_SS,0x300,unaff_DI);
-  ovr_vgaSetPalette8bit(&palette,0);
+  _fmemset(MK_FP(_SS, palette), 0, 0x300);
+  ovr_vgaSetPalette8bit(palette,0);
   ovr_driver_fillRect(0,0,0x13f,199,0x0,0xa000,0,0x3f,199,0,0);
   ovr_fmFree();
   ovr_play_sfx(137,0,0);
@@ -567,14 +567,14 @@ uint16_t __cdecl16far run_demo(void)
   (*(uint8_t *)((uint8_t *)&(gfx.seg))) = (char)l9Cut4Seg;
   gfx.ofs = l9Cut4Ofs;
   (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) = (char)((uint)l9Cut4Seg >> 8);
-  ovr_ovc43_playArchiveFli(gfx,(uint16_t)&palette,(char)&palette);
+  ovr_ovc43_playArchiveFli(gfx,(uint16_t)palette,(char)palette);
   if (bVar1 < 2) {
     pcVar2 = ovc42_textProvidesMoreHousing(0x48);
     if ((byte)pcVar2 < 2) {
       uVar5 = (undefined1)unaff_SS;
       uVar9 = (undefined1)(unaff_SS >> 8);
       (*(uint8_t *)((uint8_t *)&(palette_00.seg))) = uVar5;
-      palette_00.ofs = (uint16_t)&palette;
+      palette_00.ofs = (uint16_t)palette;
       (*(uint8_t *)((uint8_t *)&(palette_00.seg) + 1)) = uVar9;
       ovr_ovc40_usesVgaSetPalette8bit(palette_00);
       (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)ssilogoCut1Seg;
@@ -582,7 +582,7 @@ uint16_t __cdecl16far run_demo(void)
       (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)ssilogoCut1Seg >> 8);
       psStack_c = ovr_stshLoadGfx(handle);
       uStack_a = uVar6;
-      memcpy((char *)CONCAT13(uVar9,CONCAT12(uVar5,&palette)),
+      memcpy((char *)CONCAT13(uVar9,CONCAT12(uVar5,palette)),
              (char *)CONCAT13((char)(uVar6 >> 8),CONCAT12((char)uVar6,psStack_c)),0x300);
       ovr_driver_fillRect(0,0,0x13f,199,0x0,0xa000,0,0x3f,199,0,0);
       (*(uint8_t *)((uint8_t *)&(gfx_01.seg))) = (char)ssilogoCut2Seg;
@@ -590,13 +590,13 @@ uint16_t __cdecl16far run_demo(void)
       (*(uint8_t *)((uint8_t *)&(gfx_01.seg) + 1)) = (char)((uint)ssilogoCut2Seg >> 8);
       ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa0000000)),0);
       (*(uint8_t *)((uint8_t *)&(palette_01.seg))) = uVar5;
-      palette_01.ofs = (uint16_t)&palette;
+      palette_01.ofs = (uint16_t)palette;
       (*(uint8_t *)((uint8_t *)&(palette_01.seg) + 1)) = uVar9;
       ovr_setSeasonPalette(palette_01);
       pcVar2 = ovc42_textProvidesMoreHousing(0x48);
       if ((byte)pcVar2 < 2) {
         (*(uint8_t *)((uint8_t *)&(palette_02.seg))) = uVar5;
-        palette_02.ofs = (uint16_t)&palette;
+        palette_02.ofs = (uint16_t)palette;
         (*(uint8_t *)((uint8_t *)&(palette_02.seg) + 1)) = uVar9;
         ovr_ovc40_usesVgaSetPalette8bit(palette_02);
         ovr_fmFree();
@@ -608,15 +608,15 @@ uint16_t __cdecl16far run_demo(void)
         (*(uint8_t *)((uint8_t *)&(handle_00.seg) + 1)) = (char)(Lbm_nwpanel1.seg >> 8);
         psStack_c = ovr_stshLoadGfx(handle_00);
         uStack_a = uVar6;
-        ovr_calcSeasonPalette(psStack_c->cmap,uVar6,&palette,(char)uVar6,(char)&palette,0);
-        ovc42_copy1((char *)CONCAT13(uVar9,CONCAT12(uVar5,&palette)));
+        ovr_calcSeasonPalette(psStack_c->cmap,uVar6,palette,(char)uVar6,(char)palette,0);
+        ovc42_copy1((char *)CONCAT13(uVar9,CONCAT12(uVar5,palette)));
         ovr_driver_fillRect(0,0,0x13f,199,0x0,0xa000,0,0x3f,199,0,0);
-        bVar1 = ovr_ovc43_playFli(0x184,(uint16_t)&palette,(char)&palette);
+        bVar1 = ovr_ovc43_playFli(0x184,(uint16_t)palette,(char)palette);
         if (bVar1 < 2) {
           pcVar2 = ovc42_textProvidesMoreHousing(0x10);
           if ((byte)pcVar2 < 2) {
             (*(uint8_t *)((uint8_t *)&(palette_03.seg))) = uVar5;
-            palette_03.ofs = (uint16_t)&palette;
+            palette_03.ofs = (uint16_t)palette;
             (*(uint8_t *)((uint8_t *)&(palette_03.seg) + 1)) = uVar9;
             ovr_ovc40_usesVgaSetPalette8bit(palette_03);
             ovr_init_usesBlitGfxRect();
@@ -666,7 +666,7 @@ uint16_t __cdecl16far run_demo(void)
                       ovc42_drawTextRow("Your world will be filled with a full range",0);
                       ovc42_drawTextRow("of official D&D@ game characters.",1);
                       (*(uint8_t *)((uint8_t *)&(cmap.seg))) = uVar5;
-                      cmap.ofs = (uint16_t)&palette;
+                      cmap.ofs = (uint16_t)palette;
                       (*(uint8_t *)((uint8_t *)&(cmap.seg) + 1)) = uVar9;
                       ovc42_showAgentStats(0,bStack_4,'\0',cmap,0);
                       ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
@@ -677,11 +677,11 @@ uint16_t __cdecl16far run_demo(void)
                       if ((byte)uVar6 < 2) {
                         ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                         (*(uint8_t *)((uint8_t *)&(palette_04.seg))) = uVar5;
-                        palette_04.ofs = (uint16_t)&palette;
+                        palette_04.ofs = (uint16_t)palette;
                         (*(uint8_t *)((uint8_t *)&(palette_04.seg) + 1)) = uVar9;
                         ovr_ovc40_usesVgaSetPalette8bit(palette_04);
                         (*(uint8_t *)((uint8_t *)&(cmap_00.seg))) = uVar5;
-                        cmap_00.ofs = (uint16_t)&palette;
+                        cmap_00.ofs = (uint16_t)palette;
                         (*(uint8_t *)((uint8_t *)&(cmap_00.seg) + 1)) = uVar9;
                         ovc42_showAgentStats(3,bStack_5,'\x01',cmap_00,0);
                         ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
@@ -691,11 +691,11 @@ uint16_t __cdecl16far run_demo(void)
                         if ((byte)uVar6 < 2) {
                           ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                           (*(uint8_t *)((uint8_t *)&(palette_05.seg))) = uVar5;
-                          palette_05.ofs = (uint16_t)&palette;
+                          palette_05.ofs = (uint16_t)palette;
                           (*(uint8_t *)((uint8_t *)&(palette_05.seg) + 1)) = uVar9;
                           ovr_ovc40_usesVgaSetPalette8bit(palette_05);
                           (*(uint8_t *)((uint8_t *)&(cmap_01.seg))) = uVar5;
-                          cmap_01.ofs = (uint16_t)&palette;
+                          cmap_01.ofs = (uint16_t)palette;
                           (*(uint8_t *)((uint8_t *)&(cmap_01.seg) + 1)) = uVar9;
                           ovc42_showAgentStats(8,bStack_6,'\x01',cmap_01,0);
                           ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
@@ -705,11 +705,11 @@ uint16_t __cdecl16far run_demo(void)
                           if ((byte)uVar6 < 2) {
                             ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                             (*(uint8_t *)((uint8_t *)&(palette_06.seg))) = uVar5;
-                            palette_06.ofs = (uint16_t)&palette;
+                            palette_06.ofs = (uint16_t)palette;
                             (*(uint8_t *)((uint8_t *)&(palette_06.seg) + 1)) = uVar9;
                             ovr_ovc40_usesVgaSetPalette8bit(palette_06);
                             (*(uint8_t *)((uint8_t *)&(cmap_02.seg))) = uVar5;
-                            cmap_02.ofs = (uint16_t)&palette;
+                            cmap_02.ofs = (uint16_t)palette;
                             (*(uint8_t *)((uint8_t *)&(cmap_02.seg) + 1)) = uVar9;
                             ovc42_showAgentStats(1,bStack_6,'\0',cmap_02,0xc);
                             ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
@@ -719,14 +719,14 @@ uint16_t __cdecl16far run_demo(void)
                             if ((byte)uVar6 < 2) {
                               ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                               (*(uint8_t *)((uint8_t *)&(palette_07.seg))) = uVar5;
-                              palette_07.ofs = (uint16_t)&palette;
+                              palette_07.ofs = (uint16_t)palette;
                               (*(uint8_t *)((uint8_t *)&(palette_07.seg) + 1)) = uVar9;
                               ovr_ovc40_usesVgaSetPalette8bit(palette_07);
                               ovc42_drawTextRow("You are not alone in this pristine land.",0);
                               ovc42_drawTextRow("Official D&D@ game monsters will fight to",1);
                               ovc42_drawTextRow("destroy your city.",2);
                               (*(uint8_t *)((uint8_t *)&(cmap_03.seg))) = uVar5;
-                              cmap_03.ofs = (uint16_t)&palette;
+                              cmap_03.ofs = (uint16_t)palette;
                               (*(uint8_t *)((uint8_t *)&(cmap_03.seg) + 1)) = uVar9;
                               ovc42_showAgentStats(0x15,bStack_3,'\x01',cmap_03,0);
                               ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
@@ -736,11 +736,11 @@ uint16_t __cdecl16far run_demo(void)
                               if ((byte)uVar6 < 2) {
                                 ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                                 (*(uint8_t *)((uint8_t *)&(palette_08.seg))) = uVar5;
-                                palette_08.ofs = (uint16_t)&palette;
+                                palette_08.ofs = (uint16_t)palette;
                                 (*(uint8_t *)((uint8_t *)&(palette_08.seg) + 1)) = uVar9;
                                 ovr_ovc40_usesVgaSetPalette8bit(palette_08);
                                 (*(uint8_t *)((uint8_t *)&(cmap_04.seg))) = uVar5;
-                                cmap_04.ofs = (uint16_t)&palette;
+                                cmap_04.ofs = (uint16_t)palette;
                                 (*(uint8_t *)((uint8_t *)&(cmap_04.seg) + 1)) = uVar9;
                                 ovc42_showAgentStats(0x24,bStack_3,'\x01',cmap_04,0);
                                 ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
@@ -750,11 +750,11 @@ uint16_t __cdecl16far run_demo(void)
                                 if ((byte)uVar6 < 2) {
                                   ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                                   (*(uint8_t *)((uint8_t *)&(palette_09.seg))) = uVar5;
-                                  palette_09.ofs = (uint16_t)&palette;
+                                  palette_09.ofs = (uint16_t)palette;
                                   (*(uint8_t *)((uint8_t *)&(palette_09.seg) + 1)) = uVar9;
                                   ovr_ovc40_usesVgaSetPalette8bit(palette_09);
                                   (*(uint8_t *)((uint8_t *)&(cmap_05.seg))) = uVar5;
-                                  cmap_05.ofs = (uint16_t)&palette;
+                                  cmap_05.ofs = (uint16_t)palette;
                                   (*(uint8_t *)((uint8_t *)&(cmap_05.seg) + 1)) = uVar9;
                                   ovc42_showAgentStats(0xe,bStack_3,'\x01',cmap_05,0);
                                   ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
@@ -765,7 +765,7 @@ uint16_t __cdecl16far run_demo(void)
                                   if ((byte)uVar6 < 2) {
                                     ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                                     (*(uint8_t *)((uint8_t *)&(palette_10.seg))) = uVar5;
-                                    palette_10.ofs = (uint16_t)&palette;
+                                    palette_10.ofs = (uint16_t)palette;
                                     (*(uint8_t *)((uint8_t *)&(palette_10.seg) + 1)) = uVar9;
                                     ovr_ovc40_usesVgaSetPalette8bit(palette_10);
                                     ovr_ovc28_textHalflingCastle();
@@ -854,7 +854,7 @@ uint16_t __cdecl16far run_demo(void)
                                             ovc42_drawTextRow(
                                                   "hordes destroyed your homeland long ago.",1);
                                             (*(uint8_t *)((uint8_t *)&(cmap_06.seg))) = uVar5;
-                                            cmap_06.ofs = (uint16_t)&palette;
+                                            cmap_06.ofs = (uint16_t)palette;
                                             (*(uint8_t *)((uint8_t *)&(cmap_06.seg) + 1)) = uVar9;
                                             ovc42_showAgentStats(0x29,bStack_3,'\x01',cmap_06,0);
                                             ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
@@ -863,7 +863,7 @@ uint16_t __cdecl16far run_demo(void)
                                             if ((byte)uVar6 < 2) {
                                               ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x10);
                                               (*(uint8_t *)((uint8_t *)&(palette_11.seg))) = uVar5;
-                                              palette_11.ofs = (uint16_t)&palette;
+                                              palette_11.ofs = (uint16_t)palette;
                                               (*(uint8_t *)((uint8_t *)&(palette_11.seg) + 1)) = uVar9;
                                               ovr_ovc40_usesVgaSetPalette8bit(palette_11);
                                               bVar1 = ovr_ovc40_usesAlignToSeg
@@ -932,8 +932,8 @@ uint16_t __cdecl16far run_demo(void)
                                                     (*(uint8_t *)((uint8_t *)&(gfx_00.seg) + 1)) =
                                                          (char)((uint)sky06FliSeg >> 8);
                                                     ovr_ovc43_playArchiveFli
-                                                              (gfx_00,(uint16_t)&palette,
-                                                               (char)&palette);
+                                                              (gfx_00,(uint16_t)palette,
+                                                               (char)palette);
                                                     if (bVar1 < 2) {
                                                       (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                                            *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
@@ -942,7 +942,7 @@ uint16_t __cdecl16far run_demo(void)
                                                       pcVar2 = ovc42_textProvidesMoreHousing(0x30);
                                                       if ((byte)pcVar2 < 2) {
                                                         (*(uint8_t *)((uint8_t *)&(palette_12.seg))) = uVar5;
-                                                        palette_12.ofs = (uint16_t)&palette;
+                                                        palette_12.ofs = (uint16_t)palette;
                                                         (*(uint8_t *)((uint8_t *)&(palette_12.seg) + 1)) = uVar9;
                                                         ovr_ovc40_usesVgaSetPalette8bit(palette_12);
                                                         (*(uint8_t *)((uint8_t *)&(handle_01.seg))) = (char)cred01Cut1Seg;
@@ -952,7 +952,7 @@ uint16_t __cdecl16far run_demo(void)
                                                         psStack_c = ovr_stshLoadGfx(handle_01);
                                                         uStack_a = uVar3;
                                                         memcpy((char *)CONCAT13(uVar9,CONCAT12(uVar5
-                                                  ,&palette)),
+                                                  ,palette)),
                                                   (char *)CONCAT13((char)((uint)uVar3 >> 8),
                                                                    CONCAT12((char)uVar3,psStack_c)),
                                                   0x300);
@@ -964,7 +964,7 @@ uint16_t __cdecl16far run_demo(void)
                                                        (char)((uint)cred01Cut2Seg >> 8);
                                                   ovr_blitLoadRleGfx(gfx_02,far_from_u32((uint32_t)(0xa0000000)),0);
                                                   (*(uint8_t *)((uint8_t *)&(palette_13.seg))) = uVar5;
-                                                  palette_13.ofs = (uint16_t)&palette;
+                                                  palette_13.ofs = (uint16_t)palette;
                                                   (*(uint8_t *)((uint8_t *)&(palette_13.seg) + 1)) = uVar9;
                                                   ovr_setSeasonPalette(palette_13);
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
@@ -975,7 +975,7 @@ uint16_t __cdecl16far run_demo(void)
                                                   uVar6 = ovr_inputUpdate(0xb4);
                                                   if ((byte)uVar6 < 2) {
                                                     (*(uint8_t *)((uint8_t *)&(palette_14.seg))) = uVar5;
-                                                    palette_14.ofs = (uint16_t)&palette;
+                                                    palette_14.ofs = (uint16_t)palette;
                                                     (*(uint8_t *)((uint8_t *)&(palette_14.seg) + 1)) = uVar9;
                                                     ovr_ovc40_usesVgaSetPalette8bit(palette_14);
                                                     (*(uint8_t *)((uint8_t *)&(handle_02.seg))) = (char)cred02Cut1Seg;
@@ -997,7 +997,7 @@ uint16_t __cdecl16far run_demo(void)
                                                        (char)((uint)cred02Cut2Seg >> 8);
                                                   ovr_blitLoadRleGfx(gfx_03,far_from_u32((uint32_t)(0xa0000000)),0);
                                                   (*(uint8_t *)((uint8_t *)&(palette_15.seg))) = uVar5;
-                                                  palette_15.ofs = (uint16_t)&palette;
+                                                  palette_15.ofs = (uint16_t)palette;
                                                   (*(uint8_t *)((uint8_t *)&(palette_15.seg) + 1)) = uVar9;
                                                   ovr_setSeasonPalette(palette_15);
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
@@ -1008,7 +1008,7 @@ uint16_t __cdecl16far run_demo(void)
                                                   uVar6 = ovr_inputUpdate(0xb4);
                                                   if ((byte)uVar6 < 2) {
                                                     (*(uint8_t *)((uint8_t *)&(palette_16.seg))) = uVar5;
-                                                    palette_16.ofs = (uint16_t)&palette;
+                                                    palette_16.ofs = (uint16_t)palette;
                                                     (*(uint8_t *)((uint8_t *)&(palette_16.seg) + 1)) = uVar9;
                                                     ovr_ovc40_usesVgaSetPalette8bit(palette_16);
                                                     (*(uint8_t *)((uint8_t *)&(handle_03.seg))) = (char)cred03Cut1Seg;
@@ -1030,7 +1030,7 @@ uint16_t __cdecl16far run_demo(void)
                                                        (char)((uint)cred03Cut2Seg >> 8);
                                                   ovr_blitLoadRleGfx(gfx_04,far_from_u32((uint32_t)(0xa0000000)),0);
                                                   (*(uint8_t *)((uint8_t *)&(palette_17.seg))) = uVar5;
-                                                  palette_17.ofs = (uint16_t)&palette;
+                                                  palette_17.ofs = (uint16_t)palette;
                                                   (*(uint8_t *)((uint8_t *)&(palette_17.seg) + 1)) = uVar9;
                                                   ovr_setSeasonPalette(palette_17);
                                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
@@ -1040,38 +1040,38 @@ uint16_t __cdecl16far run_demo(void)
                                                        *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
                                                   uVar6 = ovr_inputUpdate(0xb4);
                                                   if ((byte)uVar6 < 2) {
-                                                    ovc42_endDemo('\0',(int)&palette,unaff_SS);
+                                                    ovc42_endDemo('\0',(int)palette,unaff_SS);
                                                     GameRunning = false;
                                                     CurMusicType = 0xff;
                                                     CurSfxType3 = 0xff;
                                                     uVar3 = 0x2400;
                                                   }
                                                   else {
-                                                    puVar4 = &palette;
+                                                    puVar4 = palette;
                                                     ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
                                                     uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
                                                   }
                                                   }
                                                   else {
-                                                    puVar4 = &palette;
+                                                    puVar4 = palette;
                                                     ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
                                                     uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
                                                   }
                                                   }
                                                   else {
-                                                    puVar4 = &palette;
+                                                    puVar4 = palette;
                                                     ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
                                                     uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
                                                   }
                                                   }
                                                   else {
-                                                    puVar4 = &palette;
+                                                    puVar4 = palette;
                                                     ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
                                                     uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
                                                   }
                                                   }
                                                   else {
-                                                    puVar4 = &palette;
+                                                    puVar4 = palette;
                                                     ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
                                                     uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
                                                   }
@@ -1098,7 +1098,7 @@ uint16_t __cdecl16far run_demo(void)
                                               }
                                             }
                                             else {
-                                              puVar4 = &palette;
+                                              puVar4 = palette;
                                               ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
                                               uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
                                             }
@@ -1124,43 +1124,43 @@ uint16_t __cdecl16far run_demo(void)
                                     }
                                   }
                                   else {
-                                    puVar4 = &palette;
+                                    puVar4 = palette;
                                     ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
                                     uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
                                   }
                                 }
                                 else {
-                                  puVar4 = &palette;
+                                  puVar4 = palette;
                                   ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
                                   uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
                                 }
                               }
                               else {
-                                puVar4 = &palette;
+                                puVar4 = palette;
                                 ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
                                 uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
                               }
                             }
                             else {
-                              puVar4 = &palette;
+                              puVar4 = palette;
                               ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
                               uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
                             }
                           }
                           else {
-                            puVar4 = &palette;
+                            puVar4 = palette;
                             ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
                             uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
                           }
                         }
                         else {
-                          puVar4 = &palette;
+                          puVar4 = palette;
                           ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
                           uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
                         }
                       }
                       else {
-                        puVar4 = &palette;
+                        puVar4 = palette;
                         ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
                         uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
                       }
@@ -1191,31 +1191,31 @@ uint16_t __cdecl16far run_demo(void)
             }
           }
           else {
-            puVar4 = &palette;
+            puVar4 = palette;
             ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
             uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
           }
         }
         else {
-          puVar4 = &palette;
+          puVar4 = palette;
           ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
           uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
         }
       }
       else {
-        puVar4 = &palette;
+        puVar4 = palette;
         ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
         uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
       }
     }
     else {
-      puVar4 = &palette;
+      puVar4 = palette;
       ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
       uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
     }
   }
   else {
-    puVar4 = &palette;
+    puVar4 = palette;
     ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
     uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
   }
