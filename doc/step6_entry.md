@@ -40,11 +40,10 @@ observed exit code changes with code layout.
 This also applies to `SaveVectors`, `__restorezero` and `ErrorDisplay`, which
 use the same idiom.
 
-### Next step (concrete)
+### Done: the DOS calls in startx are real now
 
-Rewrite the DOS calls in `startx` (and the three small routines above) from the
-disassembly using `int86x` / `geninterrupt` with explicit `AH`, `BX`, `ES`,
-instead of the `(*swi(n))()` idiom:
+The four interactions in `startx` now follow the disassembly (explicit `AH`,
+`BX`, `ES`) instead of the `(*swi(n))()` idiom:
 
 | original | call |
 |---|---|
@@ -53,8 +52,17 @@ instead of the `(*swi(n))()` idiom:
 | `AX=0x5801, BX=2` / `AH=0x67` / `AH=0x48,BX=1` / `AH=0x49` / `AX=0x5801,BX=0` | UMB + handle count |
 | `MOV AH,0, INT 1Ah` | system time -> `_StartTime`, BDA midnight flag |
 
-Once those are real interrupts, the startup flow stops depending on leftover
-registers and the milestone ladder can be re-measured reliably.
+They are now issued through `int86`/`int86x` (with the minimal `union st_regs` /
+`struct st_sregs` in `st_compat.h`, because `<dos.h>` conflicts with the recovered
+prototypes).  The PSP reads were also wrong (`DGROUP:0x2c` / `DGROUP:2` instead of
+`PSP:0x2c` / `PSP:2`), and the stack/heap setup used the original image's
+segment constants (`0x2d5b`, `0xd2a6`) and switched `SS` to `DS`; it now follows the
+disassembly (`DX = SS`, `SP = ((__stklen>>4)+1) << 4`, resize with `ES = PSP`).
+
+Outcome: the image no longer exits 115; it **stays running** under the
+harness, which is what the original does (it is interactive).  `main` entry
+is still not independently confirmed for the committed layout - the marker
+ladder has to be re-measured now that the interrupts really happen.
 
 ## Summary
 

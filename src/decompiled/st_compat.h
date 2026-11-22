@@ -28,6 +28,17 @@ typedef unsigned long uint3;
 typedef unsigned long undefined3;
 typedef double longdouble;
 code *swi(int vector);
+
+/* Minimal DOS register blocks.  <dos.h> cannot be included: its prototypes for
+   _doserrno / unlink / ... conflict with the recovered CRT declarations. */
+union st_regs {
+    struct { unsigned short ax, bx, cx, dx, si, di, cflag, flags; } x;
+    struct { unsigned char al, ah, bl, bh, cl, ch, dl, dh; } h;
+};
+struct st_sregs { unsigned short es, cs, ss, ds; };
+int int86(int intr, union st_regs *inregs, union st_regs *outregs);
+int int86x(int intr, union st_regs *inregs, union st_regs *outregs,
+           struct st_sregs *segregs);
 #define MK_FP(seg,ofs) ((void far *)(((uint32_t)(seg) << 16) | (uint16_t)(ofs)))
 #define far_ofs_u32(v) ((uint16_t)((uint32_t)(v)))
 #define CONCAT11(a,b) ((uint16_t)(((uint8_t)(a) << 8) | (uint8_t)(b)))

@@ -35,7 +35,7 @@ REPORT = os.path.join(ROOT, "tmp", "build_report.tsv")
 # -w- : warnings are not errors.  TC caps messages per function, so a function
 # with many harmless warnings hits "Too many error or warning messages" before
 # its real errors are printed; suppressing warnings makes the report accurate.
-CFLAGS = "-V -mm -1 -G -O -c -w- -a- -I."   # -V: VROOMM overlays; -mm: far code, near data
+CFLAGS = "-V -mm -1 -G -O -c -w- -a- -I. -ID:\\INCLUDE"   # -V: VROOMM overlays; -mm: far code, near data
 
 
 def stage():

@@ -33,19 +33,20 @@ void startx(void)
   uint16_t uVar17;
   bool bVar18;
   uint32_t uVar19;
+  uint16_t psp;
+  union st_regs r;
+  struct st_sregs sr;
   
   puVar11 = (undefined1 *)((int)(int *)&errno + 1);
-  DGROUP_at__at_ = 0x2410;
-  pcVar3 = (code *)swi(0x21);
-  uVar19 = (*pcVar3)();
-  uVar17 = (*(uint16_t *)((uint8_t *)&(__C0_ASM_CopyRight) + 40));
-  iVar10 = (*(uint16_t *)((uint8_t *)&(_DATA) + 2));
-  uVar9 = (uint16_t)((ulong)uVar19 >> 0x10);
-  *(uint16_t *)&DosVersion = SUB42(uVar19,0);   /* hand fix: write the 2 bytes of the struct */
-  *(uint16_t *)&_psp = unaff_ES;
-  *(uint16_t *)(byte *)&_envseg_at_ = uVar17;
-  *(int *)&_heaptop.seg = iVar10;
-  *(uint16_t *)(puVar11 + -2) = 0x28;
+  psp = _ES;                                   /* DOS enters with ES = PSP */
+  _psp = psp;
+  uVar17 = *(uint16_t far *)MK_FP(psp, 0x2c);  /* environment segment */
+  iVar10 = *(uint16_t far *)MK_FP(psp, 0x02);  /* top of memory */
+  _envseg_at_ = uVar17;
+  _heaptop.seg = iVar10;
+  r.h.ah = 0x30;                               /* DOS version */
+  int86(0x21, &r, &r);
+  *(uint16_t *)&DosVersion = r.x.ax;
   SaveVectors();
   pcVar4 = (char *)*(uint32_t *)&_env;
   uVar17 = (uint16_t)((ulong)pcVar4 >> 0x10);
@@ -68,63 +69,72 @@ L_startx_0034:
   if (__stklen < 0x200) {
     __stklen = 0x200;
   }
-  bVar7 = 4;
-  uVar8 = (__stklen >> 4) + 1;
-  if (iVar10 + 0xd2a6U < uVar8) {
+  {
+    uint16_t sseg = _SS;
+    uint16_t avail = iVar10;             /* top of memory from PSP:0002 */
+    uint16_t paras;
+
+    avail -= sseg;
+    if (__stklen < 0x200) {
+      __stklen = 0x200;
+    }
+    paras = (__stklen >> 4) + 1;
+    if (avail < paras) {
 L_startx_007B:
-                    /* WARNING: Subroutine does not return */
-    _abort();
-  }
-  iVar10 = (__stklen >> 4) + 0x2d5b;
-  *(int *)&_heapbase.seg = iVar10;
-  *(int *)&_brklvl.seg = iVar10;
-  piVar12 = (int *)(puVar11 + -2);
-  *(uint *)(puVar11 + -2) = uVar8;
-  pcVar3 = (code *)swi(0x21);
-  (*pcVar3)();
-  uVar17 = DGROUP_at__at_;
-  puVar15 = (undefined1 *)(*piVar12 << (bVar7 & 0x1f));
-  puVar16 = (uint32_t *)&recordUpdateTick;
-  __stklen = (uint16_t)puVar15;
-  for (iVar10 = 0xb66; iVar10 != 0; iVar10 = iVar10 + -1) {
-    puVar2 = puVar16;
-    puVar16 = (uint32_t *)((int)puVar16 + 1);
-    *(undefined1 *)puVar2 = 0;
+      _abort();
+    }
+    _heapbase.seg = sseg + paras;
+    _brklvl.seg = sseg + paras;
+    sr.es = psp;
+    r.x.bx = sseg + paras - psp;
+    r.h.ah = 0x4a;                       /* resize the memory block */
+    int86x(0x21, &r, &r, &sr);
+
+    asm {                                /* switch to the new stack */
+      mov dx, sseg
+      mov di, paras
+      mov cl, 4
+      shl di, cl
+      cli
+      mov ss, dx
+      mov sp, di
+      sti
+    }
+    __stklen = paras << 4;
   }
   if (0x14 < *(uint *)&_nfile) {
     bVar7 = ((dosver_t *)&DosVersion)->major;
-    bVar18 = bVar7 < 3;
-    if ((!bVar18) && ((3 < bVar7 || (bVar18 = *(byte *)&DosVersion.minor < 0x1e, !bVar18)))) {
-      pcVar3 = (code *)swi(0x21);
-      (*pcVar3)();
-      if (!bVar18) {
-        pcVar3 = (code *)swi(0x21);
-        (*pcVar3)();
-        if (!bVar18) {
-          pcVar3 = (code *)swi(0x21);
-          iVar6 = (*pcVar3)();
-          if (!bVar18) {
-            *(int *)&_heaptop.seg = iVar6 + 1;
-            pcVar3 = (code *)swi(0x21);
-            (*pcVar3)();
-            if (!bVar18) {
-              pcVar3 = (code *)swi(0x21);
-              (*pcVar3)();
-              if (!bVar18) goto L_startx_0109;
+    if (!(bVar7 < 3) && (3 < bVar7 || !(*(byte *)&DosVersion.minor < 0x1e))) {
+      r.x.ax = 0x5801; r.x.bx = 2;             /* get UMB link state */
+      int86(0x21, &r, &r);
+      if (!r.x.cflag) {
+        r.h.ah = 0x67; r.x.bx = _nfile;        /* set handle count */
+        int86(0x21, &r, &r);
+        if (!r.x.cflag) {
+          r.h.ah = 0x48; r.x.bx = 1;           /* probe an allocation */
+          int86(0x21, &r, &r);
+          if (!r.x.cflag) {
+            _heaptop.seg = r.x.ax + 1;
+            sr.es = r.x.ax;                    /* free it again */
+            r.h.ah = 0x49;
+            int86x(0x21, &r, &r, &sr);
+            if (!r.x.cflag) {
+              r.x.ax = 0x5801; r.x.bx = 0;     /* restore UMB link state */
+              int86(0x21, &r, &r);
+              if (!r.x.cflag) goto L_startx_0109;
             }
           }
         }
       }
-                    /* WARNING: Subroutine does not return */
       _abort();
     }
   }
 L_startx_0109:
-  pcVar3 = (code *)swi(0x1a);
-  cVar5 = (*pcVar3)();
-  *(uint16_t *)(uint32_t *)&_StartTime = extraout_DX_00;
-  *(int *)((int)(uint32_t *)&_StartTime + 2) = iVar10;
-  if (cVar5 != '\0') {
+  r.h.ah = 0;                                  /* INT 1Ah: system time */
+  int86(0x1a, &r, &r);
+  *(uint16_t *)&_StartTime = r.x.dx;
+  *(uint16_t *)((uint8_t *)&_StartTime + 2) = r.x.cx;
+  if (r.h.al != 0) {
     bda_midnight = 1;
   }
   /* The original walks the linker's init table here (InitStart..InitEnd):
