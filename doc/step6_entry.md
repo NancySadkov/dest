@@ -468,3 +468,32 @@ manager - and the next entry point we now know is a VROOMM fixup at 0x96F with
 frame 108, which DOS relocates too.
 
 This needs a single-step trace; further static reasoning has been exhausted.
+
+## SOLVED: `main` is entered - call it through a far pointer
+
+The direct `lcall` to `main` never landed, but the same call through a far
+function pointer does:
+
+```c
+int (far *pmain)(int, str_t *, str_t *);
+pmain = main;
+iVar10 = (*pmain)(__C0argc, (str_t *)__C0argv, (str_t *)__C0environ);
+```
+
+A marker as the first statement of `main` now fires (exit code 66), i.e. the
+recovered program reaches its entry point.  With the marker removed the image
+keeps running under the harness (empty RUN.LOG), exactly as the original
+`STRONG.EXE` does - it is an interactive program, so "no exit" is the expected
+state, not a failure.
+
+Why the indirect form works is consistent with the VROOMM theory: the linker
+encodes a *direct* cross-segment call as an overlay-fixup form that only the
+overlay manager can resolve, while a far pointer to the function is emitted as
+an ordinary relocated pointer and `lcall [mem]` needs no linker fixup.
+
+The static ladder is now complete end to end:
+
+```
+startx -> DOS version -> SaveVectors -> environment scan -> memory resize ->
+UMB block -> INT 1Ah -> _setupio -> _c0crtinit -> argv -> main  (entered)
+```

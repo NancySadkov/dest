@@ -235,7 +235,11 @@ L_startx_0109:
     __C0argv = (uint16_t)argv;
     __C0environ = (uint16_t)env0;
   }
-  iVar10 = main(__C0argc, (str_t *)__C0argv, (str_t *)__C0environ);
+  {
+    int (far *pmain)(int, str_t *, str_t *);
+    pmain = main;
+    iVar10 = (*pmain)(__C0argc, (str_t *)__C0argv, (str_t *)__C0environ);
+  }
   *(int *)(puVar15 + -8) = iVar10;
   *(uint16_t *)(puVar15 + -10) = 0x1301;
                     /* WARNING: Subroutine does not return */
