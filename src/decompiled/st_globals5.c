@@ -1017,10 +1017,30 @@ char s_n_up_d[] = "N UP = %d \r";
 char s_dc_lx_d_ln_ld_lc_ld_lx[] = "dc%lx %d ln %ld lc %ld @%lx \r";
 char s_n_down_d[] = "N DOWN = %d \r";
 char s_type__d_len__ld_2410_4855[] = "type %d len %ld \r";
+/* 4867..4926: the 18 sound-driver filenames the game probes */
+char s_dot_xmi_2410_4867[5] = ".xmi";
+char s_midpak_ad_2410_486c[10] = "midpak.ad";
+char s_cmidpak_com_2410_4876[12] = "cmidpak.com";
+char s_ibmsnd_com_2410_4882[11] = "ibmsnd.com";
+char s_sblaster_com_2410_488d[13] = "sblaster.com";
+char s_fibmbak_com_2410_489a[12] = "fibmbak.com";
+char s_sbpro_com_2410_48a6[10] = "sbpro.com";
+char s_paudio_com_2410_48b0[11] = "paudio.com";
+char s_adlib_com_2410_48bb[10] = "adlib.com";
+char s_adlibg_com_2410_48c5[11] = "adlibg.com";
+char s_sbfm_adv_2410_48d0[9] = "sbfm.adv";
+char s_sbp2fm_adv_2410_48d9[11] = "sbp2fm.adv";
+char s_sbp1fm_adv_2410_48e4[11] = "sbp1fm.adv";
+char s_pasfm_adv_2410_48ef[10] = "pasfm.adv";
+char s_pasopl_adv_2410_48f9[11] = "pasopl.adv";
+char s_adlib_adv_2410_4904[10] = "adlib.adv";
+char s_adlibg_adv_2410_490e[11] = "adlibg.adv";
+char s_mt32mpu_adv_2410_4919[13] = "mt32mpu.adv";
 undefined1 Cancelled = 0x00;
 far_t GAlignmentsNames[3] = { { 0x4B6F, 0x2410 }, { 0x4B76, 0x2410 }, { 0x4B7E, 0x2410 } };
 far_t far_t_ARRAY_2410_4933[2] = { { 0x4B86, 0x2410 }, { 0x4B8B, 0x2410 } };
-undefined panelClipRect = 0x0C;
+/* 493b: a clip rectangle (10-byte brect_t) */
+brect_t panelClipRect = { 0x0C, 0x63, 0xDE, 0x96, 0xA000 };
 far_t GStatsLabels[6] = { { 0x4B92, 0x2410 }, { 0x4B96, 0x2410 }, { 0x4B9A, 0x2410 }, { 0x4B9E, 0x2410 },
      { 0x4BA2, 0x2410 }, { 0x4BA6, 0x2410 } };
 far_t GPlayerTitles[32] = { { 0x4BB6, 0x2410 }, { 0x4BBD, 0x2410 }, { 0x4BC7, 0x2410 }, { 0x4BD1, 0x2410 },
