@@ -4422,56 +4422,56 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
 
 {
   byte bVar1;
-  uint uVar2;
+  uint bldType;
   uint16_t uVar3;
   int iVar4;
   int iVar5;
-  uint16_t uVar6;
+  uint16_t sheetSeg;
   
   if (((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 2) == 0) ||
      ((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 4) == 0)) {
     if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0') {
-      uVar2 = ovc22_usesGUnitGrid2(x,y,partyIndex);
-      if ((*(uint *)((uint8_t *)&BuildingTypes[uVar2] + 19) & 0x20) == 0) {
+      bldType = ovc22_usesGUnitGrid2(x,y,partyIndex);
+      if ((*(uint *)((uint8_t *)&BuildingTypes[bldType] + 19) & 0x20) == 0) {
         if ((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 2) == 0) {
-          uVar6 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+          sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
           iVar4 = (int)*(uint32_t *)((uint)partyIndex << 2);
           if (*(int *)(iVar4 + 0x56) == 0 && *(int *)(iVar4 + 0x58) == 0) {
-            uVar2 = 0;
+            bldType = 0;
           }
           else {
-            uVar6 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+            sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
             iVar4 = (int)*(uint32_t *)((uint)partyIndex << 2);
             if (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
                 (uint)(*(int *)(iVar4 + 0x4d) * 2 + *(int *)(iVar4 + 0x4d)) >> 2) {
-              uVar2 = 0;
+              bldType = 0;
             }
             else {
               iVar4 = ovr_bldng_getClass(partyIndex);
-              uVar2 = ovr_bldng_usesRandBelow((byte)iVar4);
-              uVar2 = uVar2 & 0xff;
-              uVar6 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+              bldType = ovr_bldng_usesRandBelow((byte)iVar4);
+              bldType = bldType & 0xff;
+              sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
               iVar5 = (int)*(uint32_t *)((uint)partyIndex << 2);
               iVar4 = *(int *)(iVar5 + 0x58);
               if ((iVar4 < 0) ||
-                 ((iVar4 == 0 && (*(uint *)(iVar5 + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[uVar2] + 23))))) {
-                uVar2 = 0;
+                 ((iVar4 == 0 && (*(uint *)(iVar5 + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[bldType] + 23))))) {
+                bldType = 0;
               }
             }
           }
         }
         else {
-          uVar2 = 0;
+          bldType = 0;
         }
       }
     }
     else {
-      uVar2 = ovc22_usesGUnitGrid(x,y);
-      if ((*(uint *)((uint8_t *)&BuildingTypes[uVar2] + 19) & 2) == 0) {
+      bldType = ovc22_usesGUnitGrid(x,y);
+      if ((*(uint *)((uint8_t *)&BuildingTypes[bldType] + 19) & 2) == 0) {
         uVar3 = ovr_randBelow(2,0);
-        if (((uVar3 & 0xff) == 0) && ((*(uint *)((uint8_t *)&BuildingTypes[uVar2] + 19) & 0x20) != 0)) {
-          if (*(char *)((uint8_t *)&BuildingTypes[uVar2] + 35) == '\0') {
-            uVar2 = uVar2 + 6;
+        if (((uVar3 & 0xff) == 0) && ((*(uint *)((uint8_t *)&BuildingTypes[bldType] + 19) & 0x20) != 0)) {
+          if (*(char *)((uint8_t *)&BuildingTypes[bldType] + 35) == '\0') {
+            bldType = bldType + 6;
           }
         }
         else {
@@ -4481,51 +4481,51 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
               (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
                ((char_sheet_t *)(((uint)partyIndex << 2)))->population)))) {
             uVar3 = ovr_randBelow(3,0);
-            uVar2 = (uVar3 & 0xff) + 1;
+            bldType = (uVar3 & 0xff) + 1;
           }
           else {
             uVar3 = ovr_randBelow(0xc,0);
             if ((uVar3 & 0xff) == 0) {
               uVar3 = ovr_randBelow(3,0);
-              uVar2 = (uVar3 & 0xff) + 0x2b;
-              uVar6 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+              bldType = (uVar3 & 0xff) + 0x2b;
+              sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
               iVar5 = (int)*(uint32_t *)((uint)partyIndex << 2);
               iVar4 = *(int *)(iVar5 + 0x58);
               if (-1 < iVar4) {
                 if (iVar4 != 0) {
-                  return uVar2;
+                  return bldType;
                 }
-                if (*(uint *)((uint8_t *)&BuildingTypes[uVar2] + 23) <= *(uint *)(iVar5 + 0x56)) {
-                  return uVar2;
+                if (*(uint *)((uint8_t *)&BuildingTypes[bldType] + 23) <= *(uint *)(iVar5 + 0x56)) {
+                  return bldType;
                 }
               }
             }
             uVar3 = ovr_randBelow(0xc,0);
             if ((uVar3 & 0xff) == 0) {
               uVar3 = ovr_randBelow(3,0);
-              uVar2 = (uVar3 & 0xff) + 0xec;
-              uVar6 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+              bldType = (uVar3 & 0xff) + 0xec;
+              sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
               iVar5 = (int)*(uint32_t *)((uint)partyIndex << 2);
               iVar4 = *(int *)(iVar5 + 0x58);
               if (-1 < iVar4) {
                 if (iVar4 != 0) {
-                  return uVar2;
+                  return bldType;
                 }
-                if (*(uint *)((uint8_t *)&BuildingTypes[uVar2] + 23) <= *(uint *)(iVar5 + 0x56)) {
-                  return uVar2;
+                if (*(uint *)((uint8_t *)&BuildingTypes[bldType] + 23) <= *(uint *)(iVar5 + 0x56)) {
+                  return bldType;
                 }
               }
             }
             bVar1 = ((char_sheet_t *)(((uint)partyIndex << 2)))->classStr;
             uVar3 = ovr_randBelow(3,0);
-            uVar2 = (uVar3 & 0xff) +
+            bldType = (uVar3 & 0xff) +
                     (uint)*(byte *)((int)&worldMenuLabels[0xb].ofs + 1 + (uint)bVar1 * 0x95);
-            uVar6 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+            sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
             iVar5 = (int)*(uint32_t *)((uint)partyIndex << 2);
             iVar4 = *(int *)(iVar5 + 0x58);
             if ((iVar4 < 0) ||
-               ((iVar4 == 0 && (*(uint *)(iVar5 + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[uVar2] + 23))))) {
-              uVar2 = (uint)*(byte *)((int)&worldMenuLabels[0xb].ofs + 1 + (uint)bVar1 * 0x95);
+               ((iVar4 == 0 && (*(uint *)(iVar5 + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[bldType] + 23))))) {
+              bldType = (uint)*(byte *)((int)&worldMenuLabels[0xb].ofs + 1 + (uint)bVar1 * 0x95);
             }
           }
         }
@@ -4533,24 +4533,24 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
       else {
         uVar3 = ovr_randBelow(0x14,0);
         if ((uVar3 & 0xff) == 0) {
-          uVar2 = 0x72;
+          bldType = 0x72;
         }
         else {
           uVar3 = ovr_randBelow(4,0);
           if ((uVar3 & 0xff) == 0) {
-            uVar2 = 0x71;
+            bldType = 0x71;
           }
           else {
-            uVar2 = 0x70;
+            bldType = 0x70;
           }
         }
       }
     }
   }
   else {
-    uVar2 = 0;
+    bldType = 0;
   }
-  return uVar2;
+  return bldType;
 }
 
 
@@ -4569,59 +4569,59 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
   uint32_t uVar5;
   uint16_t uVar6;
   uint uVar7;
-  int iVar8;
-  int iVar9;
+  int sheetOfs;
+  int unitCount;
   char unaff_SI;
-  uint16_t uVar10;
+  uint16_t unitsSeg;
   uint *unaff_SS;
   byte bStack_e;
   uint16_t y;
   uint16_t x;
-  byte bStack_8;
-  undefined1 uStack_7;
-  char cStack_6;
-  char cStack_5;
-  byte bStack_4;
+  byte listIndex;
+  undefined1 roll;
+  char matchIdx;
+  char targetIdx;
+  byte hasUnits;
   byte bStack_3;
   
-  bStack_8 = ListCount;
+  listIndex = ListCount;
   if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8) != '\0') {
     uVar6 = ovr_randBelow(100,0);
-    uStack_7 = (undefined1)uVar6;
+    roll = (undefined1)uVar6;
     if ((uVar6 & 0xff) <
         ((uint)*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8) * 100) /
         (*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8) + 1)) {
       uVar6 = ovr_randBelow((uint)*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8),0);
-      cStack_5 = (char)uVar6;
-      cStack_6 = '\0';
-      for (bStack_8 = 0; bStack_8 < ListCount; bStack_8 = bStack_8 + 1) {
-        uVar10 = (uint16_t)((ulong)GUnits >> 0x10);
-        if ((*(char *)((uint)((unit_t *)GUnits + *(int *)((uint)bStack_8 * 2 + -0x6d44))->bldType *
+      targetIdx = (char)uVar6;
+      matchIdx = '\0';
+      for (listIndex = 0; listIndex < ListCount; listIndex = listIndex + 1) {
+        unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
+        if ((*(char *)((uint)((unit_t *)GUnits + *(int *)((uint)listIndex * 2 + -0x6d44))->bldType *
                        0x27 + 0x133) == '\x12') &&
-           (((unit_t *)GUnits)[*(int *)((uint)bStack_8 * 2 + -0x6d44)].unitType == partyIndex)) {
-          if (cStack_6 == cStack_5) break;
-          cStack_6 = cStack_6 + '\x01';
+           (((unit_t *)GUnits)[*(int *)((uint)listIndex * 2 + -0x6d44)].unitType == partyIndex)) {
+          if (matchIdx == targetIdx) break;
+          matchIdx = matchIdx + '\x01';
         }
       }
     }
   }
-  if (bStack_8 < ListCount) {
-    uVar10 = (uint16_t)((ulong)GUnits >> 0x10);
-    x = ((unit_t *)GUnits)[*(int *)((uint)bStack_8 * 2 + -0x6d44)].x;
-    y = ((unit_t *)GUnits)[*(int *)((uint)bStack_8 * 2 + -0x6d44)].y;
+  if (listIndex < ListCount) {
+    unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
+    x = ((unit_t *)GUnits)[*(int *)((uint)listIndex * 2 + -0x6d44)].x;
+    y = ((unit_t *)GUnits)[*(int *)((uint)listIndex * 2 + -0x6d44)].y;
   }
   else {
     x = ((char_sheet_t *)(((uint)partyIndex << 2)))->x;
     y = ((char_sheet_t *)(((uint)partyIndex << 2)))->y;
   }
-  uVar10 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-  iVar8 = (int)*(uint32_t *)((uint)partyIndex << 2);
-  iVar9 = *(int *)(iVar8 + 0x58);
-  if ((iVar9 < 1) && ((iVar9 < 0 || (*(uint *)(iVar8 + 0x56) < 10)))) {
-    bStack_4 = 1;
+  unitsSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+  sheetOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+  unitCount = *(int *)(sheetOfs + 0x58);
+  if ((unitCount < 1) && ((unitCount < 0 || (*(uint *)(sheetOfs + 0x56) < 10)))) {
+    hasUnits = 1;
   }
   else {
-    bStack_4 = 0;
+    hasUnits = 0;
   }
   if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
                 (uint)((char_sheet_t *)(((uint)partyIndex << 2)))->classStr * 0x95) & 0x80)
@@ -4641,7 +4641,7 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
   uVar7 = ovc22_searchCellsAround
                     ((uint *)CONCAT22(&y,unaff_SS),
                      (uint *)CONCAT13((char)(((uint)partyIndex << 2) >> 8),
-                                      CONCAT12(partyIndex,unaff_SS)),bStack_3,bStack_4,unaff_SI);
+                                      CONCAT12(partyIndex,unaff_SS)),bStack_3,hasUnits,unaff_SI);
   if ((uVar7 & 0xff) != 0) {
     if ((uVar7 & 0xff) != 1) {
       return;
@@ -4653,24 +4653,24 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
     }
     else {
       if ((*(uint *)((uint8_t *)&BuildingTypes[uVar7] + 19) & 0x60) == 0) {
-        uVar10 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-        iVar8 = (int)*(uint32_t *)((uint)partyIndex << 2);
-        iVar9 = *(int *)(iVar8 + 0x58);
-        if ((iVar9 < 0) ||
-           ((iVar9 == 0 && (*(uint *)(iVar8 + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[uVar7] + 23))))) {
-          uVar10 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-          iVar9 = (int)*(uint32_t *)((uint)partyIndex << 2);
-          *(uint16_t *)(iVar9 + 0x58) = 0;
-          *(uint16_t *)(iVar9 + 0x56) = 0;
+        unitsSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+        sheetOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+        unitCount = *(int *)(sheetOfs + 0x58);
+        if ((unitCount < 0) ||
+           ((unitCount == 0 && (*(uint *)(sheetOfs + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[uVar7] + 23))))) {
+          unitsSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+          unitCount = (int)*(uint32_t *)((uint)partyIndex << 2);
+          *(uint16_t *)(unitCount + 0x58) = 0;
+          *(uint16_t *)(unitCount + 0x56) = 0;
         }
         else {
           uVar4 = *(uint *)((uint8_t *)&BuildingTypes[uVar7] + 23);
-          uVar10 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-          iVar9 = (int)*(uint32_t *)((uint)partyIndex << 2);
-          puVar1 = (uint *)(iVar9 + 0x56);
+          unitsSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+          unitCount = (int)*(uint32_t *)((uint)partyIndex << 2);
+          puVar1 = (uint *)(unitCount + 0x56);
           uVar3 = *puVar1;
           *puVar1 = *puVar1 - uVar4;
-          piVar2 = (int *)(iVar9 + 0x58);
+          piVar2 = (int *)(unitCount + 0x58);
           *piVar2 = *piVar2 - (uint)(uVar3 < uVar4);
         }
       }
