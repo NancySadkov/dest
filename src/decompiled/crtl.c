@@ -255,8 +255,28 @@ L_startx_0109:
   fixFarTable(GPlayerTitles, 32);
   fixFarTable(menuHighlightTable, 5);
   fixFarTable(GAlignmentsNames, 3);
+  fixFarTable(ManageResultPtrs, 5);
+  fixFarTable(LevelBandLabels, 20);
+  fixFarTable(LevelRangeLabels, 4);
+  fixFarTable(RampTables, 7);
+  fixFarTable(GStrangeTable, 98);
+  fixFarTable(GSeasonNames, 3);
+  fixFarTable(RankMsgPtrs, 19);
+  fixFarTable(CureSpellPtrs, 4);
+  fixFarTable(PersonWordPtrs, 2);
+  fixFarTable(GTxtFiles, 34);
+  fixFarTable(StatsTabPtrs, 9);
+  {
+    uint16_t gi;
+    for (gi = 0; gi < 30; gi++) {
+      GStructures[gi].name.seg = startxDseg;
+    }
+  }
   GSPEmpty.seg = startxDseg;
   SaveHeader.seg = startxDseg;
+  GDoneStrPtr.seg = startxDseg;
+  msgFormat.seg = startxDseg;
+  far_t_2410_78e4.seg = startxDseg;
   {
     int (far *pmain)(int, str_t *, str_t *);
     pmain = main;

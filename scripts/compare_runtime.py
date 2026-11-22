@@ -12,12 +12,14 @@ usage: python scripts/compare_runtime.py
 import csv
 import io
 import re
+import sys
 
 ORIG = "tmp/dgrun2_orig/DGR.BIN"
 OURS = "tmp/dgrun2_ours/DGR.BIN"
 MAP = "tmp/buildsrc/REBUILT.MAP"
 SYMS = "audit/symbols.tsv"
 
+DEBUG = "--debug" in sys.argv
 orig_img = open(ORIG, "rb").read()
 ours_img = open(OURS, "rb").read()
 
@@ -53,7 +55,13 @@ for line in io.open(MAP, encoding="latin-1", errors="replace"):
 
 
 def key(name):
+    # The export names long symbols with a _2410_XXXX address suffix; the
+    # original and the rebuilt image spell the descriptive part differently
+    # (quotes, truncation), so the suffix is the reliable identity.
     k = name.upper().lstrip("_")
+    m = re.search(r"_2410_([0-9A-F]{4})$", k)
+    if m:
+        return "OFS_" + m.group(1)
     k = re.sub(r"\[[0-9]+\]$", "", k)
     return re.sub(r"_[0-9]$", "", k)
 
@@ -152,6 +160,14 @@ def symbol_matches(a, b):
             return False
     return True
 
+
+if DEBUG:
+    print("debug: matched", len(matched))
+    print("debug: map_off(0x352) =", map_off(0x352))
+    print("debug: near 0x352:",
+          [c for c in containers if 0x340 <= c[0] <= 0x360][:5])
+    print("debug: names near:", [(o, n) for o, n, _ in matched
+                                 if 0x340 <= o <= 0x360][:5])
 
 same = differ = skipped = 0
 semantic = 0

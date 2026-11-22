@@ -86,3 +86,42 @@ The remaining 41 are dominated by tables still declared as `far_t` (not
 `GPlayerTitles`, `menuHighlightTable`, `PlaceErrPtrs`, `GAlignmentsNames`.  They
 need a type change to `char far *` plus the users of `.ofs`/`.seg` updated
 (`GUnitDescriptions` alone has users in `ovc02_draw.c` and `ovc06_blit.c`).
+
+## Driving the runtime diff down: 43 -> 14
+
+Two changes did most of the work:
+
+* `scripts/compare_runtime.py` now keys symbols by their `_2410_XXXX` address
+  suffix when present.  The export spells long names differently from the
+  original (quotes, truncation), so name matching had only paired 976 symbols;
+  the suffix pairing covers **1537**.  Pointer targets inside strings can then
+  be mapped, which is what made `GErrorStrings` and friends comparable.
+* `startx` patches the segment half of every remaining `far_t` table to this
+  run's DGROUP (a struct field cannot hold a relocatable address).  Tables
+  covered now: GUnitDescriptions, CPKeys, worldMenuLabels, GStatsLabels,
+  GPlayerTitles, menuHighlightTable, GAlignmentsNames, ManageResultPtrs,
+  LevelBandLabels, LevelRangeLabels, RampTables, GStrangeTable, GSeasonNames,
+  RankMsgPtrs, CureSpellPtrs, PersonWordPtrs, GTxtFiles, StatsTabPtrs, and the
+  embedded far pointers of `GStructures`, plus the scalars GSPEmpty,
+  SaveHeader, GDoneStrPtr, msgFormat, far_t_2410_78e4.
+
+Result:
+
+```
+matched 1537
+identical 1523
+different   14
+29 of the identical ones match only after segment/offset normalisation
+```
+
+## The last 14
+
+* **startup state**: `_DATA`, `_StartTime`, `_brklvl`, `brk_normalize_xsize`
+  (the original sets 0xC000 at run time, the file has 0), `__setargv_SavedReturn`;
+* **CRT / stdio state**: `_exitbuf`, `_exitfopen`, `_exitopen`, `_streams`,
+  `_video` - the original sets these in `_c0crtinit`/`setvbuf`, which we still
+  skip (setvbuf was disabled because its recovered body calls malloc/fseek);
+* **comparator artefacts**: `s_kill_3`, `s_and_grow` are duplicate-name strings
+  the pairing assigns to the wrong twin;
+* **normalisation gap**: `PlaceErrPtrs`, `LevelRangeLabels` show the right
+  segment but an offset the mapper still does not resolve.
