@@ -2088,7 +2088,7 @@ extern undefined menuCursorY;
 extern uint8_t menuItemRow[6];
 extern uint16_t StshSprIndex;
 extern spr_t *StshSprites;
-extern entity_t *Entities;
+extern entity_t far *Entities;
 extern undefined DAT_2000_d190;
 extern far_t SprProjectiles;
 extern bool AgntFlag1;

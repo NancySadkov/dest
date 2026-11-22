@@ -89,3 +89,35 @@ declared local in the recovered C is a near pointer (`ovc26_usesStExit`,
 `ovc42_run_demo`, `ovc04_lbm`, `ovc20_stash`) are not converted yet: the C
 itself writes through those near pointers (`peVar11->base`), so the fix is to
 make the pointer far, not just the memset call.
+
+## Far-pointer-in-near-local: `ovc26_usesStExit`
+
+The entity pointer is far in the original: the prologue does
+
+```
+5d45:0334  MOV DX,word ptr ES:[0x9090]      ; segment
+5d45:0339  MOV BX,word ptr ES:[0x908E]      ; offset
+5d45:033a  ADD BX,AX                        ; + entityIndex * 0x37
+5d45:0340  MOV [BP-0x6],DX / MOV [BP-0x8],BX
+```
+
+and every later access is `LES BX,[BP-0x8]`.  So `Entities` (DGROUP 0x908E) is a
+**4-byte far pointer** whose segment half Ghidra exported separately as the
+1-byte `DAT_2000_d190` at 0x9090.
+
+Fixed:
+
+* `entity_t far *Entities` (declaration + definition).  The initialised DGROUP
+  bytes are now `c0 10 f4 1e` (offset 0x10C0, segment 0x1EF4), i.e. the whole
+  pointer, where before only the offset was written.
+* `peVar11` in `ovc26_usesStExit` is `entity_t far *`; the duplicate `uStack_a`
+  (the same entity rebuilt with `CONCAT22(DAT_2000_d190,...)`) is gone, and the
+  memset is
+  `_fmemset(MK_FP(ST_SEG(peVar11), ST_OFF(peVar11) + 0x1b), 0, 0x14);`
+  which is exactly the pushed `SS`-based pair in the disassembly.
+* `ST_SEG`/`ST_OFF` added to `st_compat.h` (`dos.h` cannot be included
+  everywhere).
+
+Build note: `st_compat.h` must keep CRLF line endings.  Rewriting that header
+with LF-only endings made BCC 3.0 report `Illegal character '#'` at its first
+`#if`, which is why the edit is now done in place before the final `#endif`.

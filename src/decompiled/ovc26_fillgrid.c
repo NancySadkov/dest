@@ -130,7 +130,6 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex)
 
 {
   byte *pbVar1;
-  uint uVar2;
   char *pcVar3;
   byte bVar4;
   uint uVar5;
@@ -139,7 +138,7 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex)
   uint uVar8;
   uint uVar9;
   uint uVar10;
-  entity_t *peVar11;
+  entity_t far *peVar11;
   char *pcVar12;
   uint16_t unaff_DI;
   uint16_t uVar13;
@@ -152,22 +151,19 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex)
   byte bStack_10;
   byte bStack_f;
   uint uStack_c;
-  entity_t *uStack_a;   /* hand fix: holds a far entity pointer; written as two 2-byte halves by the original code */
   char *pcStack_6;
   
-  uVar2 = DAT_2000_d190;
   peVar11 = Entities + entityIndex;
-  uStack_a = (entity_t *)CONCAT22(DAT_2000_d190,peVar11);
   uVar5 = GameTick - peVar11->tick;
   if (uVar5 < 0x19) {
     uVar5 = uVar5 & 0xff00;
   }
   else {
     debugStaleTickCount = debugStaleTickCount + 1;
-    ovc26_usesFillGrid((uStack_a->base).x,(peVar11->base).y,
+    ovc26_usesFillGrid((peVar11->base).x,(peVar11->base).y,
                        *(uint8_t *)
                         ((int)(char **)GMenuStrings + (uint)(peVar11->base).gindex * 0x95 + 0x1f));
-    iVar6 = (peVar11->base).destX - ((uStack_a->base).x - 0x50);
+    iVar6 = (peVar11->base).destX - ((peVar11->base).x - 0x50);
     if (iVar6 < 0) {
       iVar6 = 0;
     }
@@ -252,7 +248,7 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex)
         uVar5 = uVar5 & 0xff00;
       }
       else {
-        _fmemset((void *)(ulong)uVar2,0x14,unaff_DI);
+        _fmemset(MK_FP(ST_SEG(peVar11), ST_OFF(peVar11) + 0x1b), 0, 0x14);
         *(byte *)&(peVar11->base).state = bStack_f;
         iStack_1c = 0;
         iVar6 = bStack_f - 1;

@@ -94,4 +94,9 @@ void out();
 #define bdata bdata_at_
 #define DGROUP_ DGROUP_at__at_
 #define _bdata_at_ bdata_at_
+
+/* far-pointer halves, for the places where the original code
+   keeps a pointer in two 16-bit words */
+#define ST_SEG(p) ((uint16_t)((uint32_t)(void far *)(p) >> 16))
+#define ST_OFF(p) ((uint16_t)(void far *)(p))
 #endif
