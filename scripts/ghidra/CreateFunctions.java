@@ -28,6 +28,15 @@ public class CreateFunctions extends GhidraScript {
             Address at = currentProgram.getAddressFactory().getAddress(p[0]);
             if (at == null) { println("bad address " + p[0]); failed++; continue; }
             if (currentProgram.getListing().getInstructionAt(at) == null) {
+                // Do NOT clear an existing data item here: doing so let this script
+                // disassemble data as code (1000:0264 is a data word, and one
+                // attempt produced a 23,750-byte "function" that swallowed a whole
+                // segment).  Refuse instead and report.
+                if (currentProgram.getListing().getDefinedDataAt(at) != null) {
+                    println("data at " + at + " - not disassembling");
+                    failed++;
+                    continue;
+                }
                 disassemble(at);
             }
             Function f = currentProgram.getFunctionManager().getFunctionAt(at);
