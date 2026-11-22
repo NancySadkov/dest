@@ -272,10 +272,9 @@ l_made_new_strong_sav:
 void __cdecl16far init_base(void)
 
 {
-  byte bVar1;
-  uint8_t uVar2;
-  bool bVar3;
-  uint16_t uVar4;
+  byte haveConfig;
+  uint8_t vdaMode;
+  bool cfgWritten;
   uint16_t key;
   size_t unaff_SI;
   uint8_t sfx;
@@ -284,25 +283,25 @@ void __cdecl16far init_base(void)
   
   init_check_mem();
   getcwd((char *)MK_FP(0x2410, 0x50),unaff_SI);
-  bVar1 = init_strong_sav();
-  if (bVar1 != 0) {
-    while (uVar4 = ovr_biosKeyAvail(), (char)uVar4 != '\0') {
+  haveConfig = init_strong_sav();
+  if (haveConfig != 0) {
+    while (key = ovr_biosKeyAvail(), (char)key != '\0') {
       ovr_biosReadKey();
     }
     while( true ) {
       clrscr();
       printf("ENTER: use previous configuration, SPACE: reconfigure, ESC: quit");
-      uVar4 = ovr_biosReadKey();
+      key = ovr_biosReadKey();
                     /* Is ESC key? */
-      if ((uVar4 & 0xff) == 0x1b) {
+      if ((key & 0xff) == 0x1b) {
         printf("\n");
                     /* WARNING: Subroutine does not return */
         exit(0);
       }
                     /* Space */
-      if ((uVar4 & 0xff) == 0x20) break;
+      if ((key & 0xff) == 0x20) break;
                     /* carriage return */
-      if ((uVar4 & 0xff) == 0xd) {
+      if ((key & 0xff) == 0xd) {
         clrscr();
         return;
       }
@@ -313,18 +312,18 @@ void __cdecl16far init_base(void)
   printf("       4. Adlib       5. Roland         6. Off):");
   irq = 0x30;
   do {
-    while (uVar4 = ovr_biosKeyAvail(), (char)uVar4 != '\0') {
+    while (key = ovr_biosKeyAvail(), (char)key != '\0') {
       ovr_biosReadKey();
     }
-    uVar4 = ovr_biosReadKey();
-    if ((uVar4 & 0xff) == 0x1b) {
+    key = ovr_biosReadKey();
+    if ((key & 0xff) == 0x1b) {
       printf("\n");
                     /* WARNING: Subroutine does not return */
       exit(0);
     }
-    if ((uVar4 & 0xff) == 0x31) {
-      uVar2 = ovr_vda_query();
-      if ((uVar2 == 0x0) || (uVar2 == 0x80)) {
+    if ((key & 0xff) == 0x31) {
+      vdaMode = ovr_vda_query();
+      if ((vdaMode == 0x0) || (vdaMode == 0x80)) {
         sfx = 0x31;
       }
       else {
@@ -332,55 +331,55 @@ void __cdecl16far init_base(void)
       }
       goto setup_pc_speaker;
     }
-    if ((uVar4 & 0xff) == 0x32) {
+    if ((key & 0xff) == 0x32) {
       clrscr();
       printf("Sound Blaster (1. Original  2.  Pro Type 2  3. Pro Type 1):");
       goto setup_soundblaster;
     }
                     /* 3 = Pro Audio Spectrum */
-    if ((uVar4 & 0xff) == 0x33) {
+    if ((key & 0xff) == 0x33) {
       clrscr();
       printf("Pro Audio Spectrum (1. Plus  2. Spectrum 16):");
       goto setup_pro_audio_spectrum;
     }
                     /* 4 = Adlib */
-    if ((uVar4 & 0xff) == 0x34) {
+    if ((key & 0xff) == 0x34) {
       clrscr();
       printf("Adlib (1. Original  2. Gold):");
       goto setup_adlib;
     }
                     /* Roland */
-    if ((uVar4 & 0xff) == 0x35) {
+    if ((key & 0xff) == 0x35) {
       mus = 0x42;
       clrscr();
       printf("Sound Effects (1. PC Speaker  2. Sound Blaster  3. Pro Audio Spectrum\n");
       printf("               4. Adlib       5. None):");
       goto pick_sfx_card;
     }
-  } while ((uVar4 & 0xff) != 0x36);
+  } while ((key & 0xff) != 0x36);
   sfx = 0x33;
 setup_pc_speaker:
   mus = 0x33;
   goto pick_irq;
   while( true ) {
-    if ((uVar4 & 0xff) == 0x32) {
+    if ((key & 0xff) == 0x32) {
       sfx = 0x35;
       mus = 0x35;
       goto pick_irq;
     }
-    if ((uVar4 & 0xff) == 0x33) break;
+    if ((key & 0xff) == 0x33) break;
 setup_soundblaster:
     irq = 0x37;
-    while (uVar4 = ovr_biosKeyAvail(), (char)uVar4 != '\0') {
+    while (key = ovr_biosKeyAvail(), (char)key != '\0') {
       ovr_biosReadKey();
     }
-    uVar4 = ovr_biosReadKey();
-    if ((uVar4 & 0xff) == 0x1b) {
+    key = ovr_biosReadKey();
+    if ((key & 0xff) == 0x1b) {
       printf("\n");
                     /* WARNING: Subroutine does not return */
       exit(0);
     }
-    if ((uVar4 & 0xff) == 0x31) {
+    if ((key & 0xff) == 0x31) {
       sfx = 0x32;
       mus = 0x32;
       goto pick_irq;
@@ -389,18 +388,18 @@ setup_soundblaster:
   sfx = 0x36;
   mus = 0x36;
   goto pick_irq;
-  while ((uVar4 & 0xff) != 0x32) {
+  while ((key & 0xff) != 0x32) {
 setup_pro_audio_spectrum:
-    while (uVar4 = ovr_biosKeyAvail(), (char)uVar4 != '\0') {
+    while (key = ovr_biosKeyAvail(), (char)key != '\0') {
       ovr_biosReadKey();
     }
-    uVar4 = ovr_biosReadKey();
-    if ((uVar4 & 0xff) == 0x1b) {
+    key = ovr_biosReadKey();
+    if ((key & 0xff) == 0x1b) {
       printf("\n");
                     /* WARNING: Subroutine does not return */
       exit(0);
     }
-    if ((uVar4 & 0xff) == 0x31) {
+    if ((key & 0xff) == 0x31) {
       sfx = 0x37;
       mus = 0x37;
       goto pick_irq;
@@ -410,18 +409,18 @@ setup_pro_audio_spectrum:
   mus = 0x38;
   irq = 0x35;
   goto pick_irq;
-  while ((uVar4 & 0xff) != 0x32) {
+  while ((key & 0xff) != 0x32) {
 setup_adlib:
-    while (uVar4 = ovr_biosKeyAvail(), (char)uVar4 != '\0') {
+    while (key = ovr_biosKeyAvail(), (char)key != '\0') {
       ovr_biosReadKey();
     }
-    uVar4 = ovr_biosReadKey();
-    if ((uVar4 & 0xff) == 0x1b) {
+    key = ovr_biosReadKey();
+    if ((key & 0xff) == 0x1b) {
       printf("\n");
                     /* WARNING: Subroutine does not return */
       exit(0);
     }
-    if ((uVar4 & 0xff) == 0x31) {
+    if ((key & 0xff) == 0x31) {
       sfx = 0x39;
       mus = 0x39;
       goto pick_irq;
@@ -448,7 +447,7 @@ setup_adlib:
     }
     if ((key & 0xff) == 0x35) break;
 pick_sfx_card:
-    while (uVar4 = ovr_biosKeyAvail(), (char)uVar4 != '\0') {
+    while (key = ovr_biosKeyAvail(), (char)key != '\0') {
       ovr_biosReadKey();
     }
     key = ovr_biosReadKey();
@@ -458,8 +457,8 @@ pick_sfx_card:
       exit(0);
     }
     if ((key & 0xff) == 0x31) {
-      uVar2 = ovr_vda_query();
-      if ((uVar2 == 0x0) || (uVar2 == 0x80)) {
+      vdaMode = ovr_vda_query();
+      if ((vdaMode == 0x0) || (vdaMode == 0x80)) {
         sfx = 0x31;
       }
       else {
@@ -470,37 +469,37 @@ pick_sfx_card:
   }
   sfx = 0x33;
   goto pick_irq;
-  while ((uVar4 & 0xff) != 0x32) {
+  while ((key & 0xff) != 0x32) {
 pick_sb_type:
     irq = 0x37;
-    while (uVar4 = ovr_biosKeyAvail(), (char)uVar4 != '\0') {
+    while (key = ovr_biosKeyAvail(), (char)key != '\0') {
       ovr_biosReadKey();
     }
-    uVar4 = ovr_biosReadKey();
-    if ((uVar4 & 0xff) == 0x1b) {
+    key = ovr_biosReadKey();
+    if ((key & 0xff) == 0x1b) {
       printf("\n");
                     /* WARNING: Subroutine does not return */
       exit(0);
     }
-    if ((uVar4 & 0xff) == 0x31) {
+    if ((key & 0xff) == 0x31) {
       sfx = 0x32;
       goto pick_irq;
     }
   }
   sfx = 0x35;
   goto pick_irq;
-  while ((uVar4 & 0xff) != 0x32) {
+  while ((key & 0xff) != 0x32) {
 pick_spectrum_type:
-    while (uVar4 = ovr_biosKeyAvail(), (char)uVar4 != '\0') {
+    while (key = ovr_biosKeyAvail(), (char)key != '\0') {
       ovr_biosReadKey();
     }
-    uVar4 = ovr_biosReadKey();
-    if ((uVar4 & 0xff) == 0x1b) {
+    key = ovr_biosReadKey();
+    if ((key & 0xff) == 0x1b) {
       printf("\n");
                     /* WARNING: Subroutine does not return */
       exit(0);
     }
-    if ((uVar4 & 0xff) == 0x31) {
+    if ((key & 0xff) == 0x31) {
       sfx = 0x37;
       goto pick_irq;
     }
@@ -508,18 +507,18 @@ pick_spectrum_type:
   sfx = 0x38;
   irq = 0x35;
   goto pick_irq;
-  while ((uVar4 & 0xff) != 0x32) {
+  while ((key & 0xff) != 0x32) {
 pick_adlib_type:
-    while (uVar4 = ovr_biosKeyAvail(), (char)uVar4 != '\0') {
+    while (key = ovr_biosKeyAvail(), (char)key != '\0') {
       ovr_biosReadKey();
     }
-    uVar4 = ovr_biosReadKey();
-    if ((uVar4 & 0xff) == 0x1b) {
+    key = ovr_biosReadKey();
+    if ((key & 0xff) == 0x1b) {
       printf("\n");
                     /* WARNING: Subroutine does not return */
       exit(0);
     }
-    if ((uVar4 & 0xff) == 0x31) {
+    if ((key & 0xff) == 0x31) {
       sfx = 0x39;
       goto pick_irq;
     }
@@ -531,35 +530,35 @@ pick_irq:
     printf("Sound IRQ is %c (1. Don\'t change  2. IRQ 2  3. IRQ 5\n");
     printf("                                 ");
     do {
-      while (uVar4 = ovr_biosKeyAvail(), (char)uVar4 != '\0') {
+      while (key = ovr_biosKeyAvail(), (char)key != '\0') {
         ovr_biosReadKey();
       }
-      uVar4 = ovr_biosReadKey();
-      if ((uVar4 & 0xff) == 0x1b) {
+      key = ovr_biosReadKey();
+      if ((key & 0xff) == 0x1b) {
         printf("\n");
                     /* WARNING: Subroutine does not return */
         exit(0);
       }
-      if ((uVar4 & 0xff) == 0x31) goto done;
-      if ((uVar4 & 0xff) == 0x32) {
+      if ((key & 0xff) == 0x31) goto done;
+      if ((key & 0xff) == 0x32) {
         irq = 0x32;
         goto done;
       }
-      if ((uVar4 & 0xff) == 0x33) {
+      if ((key & 0xff) == 0x33) {
         irq = 0x35;
         goto done;
       }
-      if ((uVar4 & 0xff) == 0x34) {
+      if ((key & 0xff) == 0x34) {
         irq = 0x37;
         goto done;
       }
-    } while ((uVar4 & 0xff) != 0x35);
+    } while ((key & 0xff) != 0x35);
     irq = 0x41;
   }
 done:
   clrscr();
-  bVar3 = write_game_cfg(sfx,mus,irq);
-  if (bVar3) {
+  cfgWritten = write_game_cfg(sfx,mus,irq);
+  if (cfgWritten) {
     return;
   }
                     /* WARNING: Subroutine does not return */

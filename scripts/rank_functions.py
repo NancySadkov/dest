@@ -8,6 +8,7 @@ import glob
 import io
 import os
 import re
+import sys
 
 PATTERNS = {
     "uVar": r"\buVar[_0-9]",
@@ -61,7 +62,8 @@ for path in sorted(glob.glob("src/decompiled/*.c")):
 
 rows.sort(reverse=True)
 print("%6s %-22s %-38s %s" % ("total", "file", "function", "breakdown"))
-for total, f, fn, line, c in rows[:15]:
+limit = int(sys.argv[1]) if len(sys.argv) > 1 else 15
+for total, f, fn, line, c in rows[:limit]:
     hot = ",".join("%s=%d" % (k, v) for k, v in sorted(c.items(), key=lambda x: -x[1]) if v)
     print("%6d %-22s %-38s %s" % (total, f, fn[:38], hot))
 print()
