@@ -128,6 +128,9 @@ anm_t AgntAnms[139] = { { 0x0, 8, 1, 27, 21, 0x0, 0x19, 8, 23, 1, 0, 0, 0, 5, 0x
      0xFF, 0x0, 0x8, 0x1, 0xFF }, { 0x3, 32, 27, 58, 46, 0x17, 0x1B, 7, 18, 0, 0, 18, -12, 5, 0x2, 0xFF,
      0x4, 0x0, 0xFF } };
 char s_s_produces_bows_and_arrows[] = "%s: produces bows and arrows.";
+/* 19c0/19d9: two more description strings */
+char s_s_inc_unit_size_2410_19c0[] = "%s: increases unit size.";
+char s_s_inc_bldg_speed_2410_19d9[] = "%s: enhances building speed.";
 char s__s__produces_rings__2410_19f6[] = "%s: produces rings of protection.";
 char s__s__creates_mirrors_2410_1a18[] = "%s: creates mirrors for medsae combat and lenses for towers.";
 /* 1a55..1ad5: four more building description strings */
@@ -137,6 +140,11 @@ char s_s_claim_trees_2410_1a91[] = "%s: enables claiming of trees.";
 char s_s_food_trade_2410_1ad5[] = "%s: provides for food trade.";
 char s__s__repairs_buildin_2410_1ab0[] = "%s: repairs buildings automatically.";
 char s__s__enhances_traini_2410_1af2[] = "%s: enhances training for entire stronghold.";
+/* 1b20..1b6d: income and winter-food strings */
+char s_s_creates_income_2410_1b20[] = "%s: creates income.";
+char s_s_food_in_winter_2410_1b33[] = "%s: produces food in winter.";
+char s_s_gambling_income_2410_1b50[] = "%s: creates gambling income.";
+char s_s_creates_income_2410_1b6d[] = "%s: creates income.";
 /* 1b81..1c3a: the eight per-building description strings */
 char s_s_enh_weapons_2410_1b81[] = "%s: enhances weapons production.";
 char s_s_creates_food_2410_1ba2[] = "%s: creates food and income.";
@@ -155,7 +163,8 @@ char s_Remove_2410_1cf6[] = "Remove";
 char s_Fill_in_2410_1cfd[] = "Fill in";
 byte *upperTextOfs = (void far *)(0x24100000UL + 0x0000UL);
 uint16_t upperTextSeg = 0x0000;
-undefined sfxXOffsets = 0x21;
+/* 1d09: four sfx x offsets */
+uint16_t sfxXOffsets[4] = { 0x21, 0x51, 0x81, 0xB1 };
 char s_undeveloped_land_2410_1d11[] = "undeveloped land";
 char s_plot_2410_1d22[] = "plot";
 char s_farm_2410_1d27[] = "farm";
