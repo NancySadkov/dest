@@ -577,7 +577,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         pbStack_24 = pbVar5;
         pbStack_c = pbVar12;
       }
-      _fmemset((void *)ZEXT24(unaff_SS),5,unaff_DI);
+      _fmemset(MK_FP(_SS, &unitFlags), 0, 5);
       iStack_a = 0;
       for (uVar11 = 0; uVar11 < EntityCount; uVar11 = uVar11 + 1) {
         pbVar8 = (byte *)((char *)0x2410);

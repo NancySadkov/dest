@@ -67,7 +67,7 @@ void __cdecl16far ovc18_showLeaderView(void)
     MsgShown = '\0';
   }
   else {
-    _fmemset((void *)(ulong)unaff_SS,2,unaff_SI);
+    _fmemset(MK_FP(_SS, &pcStack_6), 0, 2);
     for (iVar5 = 0; iVar5 < (int)(uint)GLeaderCount; iVar5 = iVar5 + 1) {
       if (((((char_sheet_t *)((iVar5 << 2)))->active != '\0') &&
           ((&partyCounts)[*(byte *)((int)*(uint32_t *)(iVar5 << 2) + 0x3f)] =

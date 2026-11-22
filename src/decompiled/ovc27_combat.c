@@ -555,7 +555,7 @@ uint __cdecl16far ovc27_usesRandBelow5(agnt_t *agnt)
     uVar1 = in_AX & 0xff00;
   }
   else {
-    _fmemset((void *)(ulong)unaff_SS,0xf,indexMap);
+    _fmemset(MK_FP(_SS, &indexMap), 0, 0xf);
     bStack_3 = 0;
     for (bStack_4 = 0; bStack_4 < 0xf; bStack_4 = bStack_4 + 1) {
       uVar2 = ovc27_usesRandBelow3

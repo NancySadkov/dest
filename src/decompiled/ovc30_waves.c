@@ -203,7 +203,7 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
     GLeaderCount = GLeaderCount + 1;
     uStack_4 = in_DX;
   }
-  _fmemset((void *)(ulong)uStack_4,0xae,count);
+  _fmemset(MK_FP(uStack_4, (uint16_t)pcStack_6), 0, 0xae);
   partyIndex = (byte)count;
   uVar1 = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + (uint)gindex * 0x95);
   strcpy((char *)CONCAT22(uStack_4,pcStack_6),

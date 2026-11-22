@@ -642,6 +642,7 @@ void __cdecl16far attact_usesAlignUp42(void)
   uint8_t reported;
   int targetSrc;
   int dySign;
+  uint16_t uStack_c;   /* [BP-0xc], cleared by _fmemset at 3f0b:1092 */
   int dxSign;
   undefined1 animByte;
   uint8_t reportedUnits;
@@ -652,7 +653,7 @@ void __cdecl16far attact_usesAlignUp42(void)
   
   func_0x0004f735(0x3f0b);
   reported = 0x0;
-  _fmemset((void *)(ulong)unaff_SS,5,unaff_DI);
+  _fmemset(MK_FP(_SS, &uStack_c), 0, 5);
   GGameState = 0x3f;
   if (DebugVerbose != false) {
     printf("%d %d %d \r");

@@ -1552,7 +1552,7 @@ void __cdecl16far init_usesClearEntities(void)
   TimerSeed.hi = 0;
   TimerSeed.lo = 0;
   GameTick = 0;
-  _fmemset((void *)0x2410,2,(*(uint16_t *)((uint8_t *)&(palette))));
+  _fmemset(MK_FP(_DS, (uint16_t)&promotionBandUsed), 0, 2);
   promotionCount = 0;
   strongholdsDestroyed = 0;
   GHighScoreSaved = 0;

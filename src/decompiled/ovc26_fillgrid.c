@@ -43,7 +43,7 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
   int iStack_a;
   int iStack_8;
   
-  _fmemset((void *)(FillGrid >> 0x10),0x6541,unaff_DI);
+  _fmemset(MK_FP((uint16_t)(FillGrid >> 16), (uint16_t)FillGrid), 0, 0x6541);
   iVar7 = 0x50 - x;
   iVar8 = 0x50 - y;
   iStack_a = 1;

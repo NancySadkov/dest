@@ -587,7 +587,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
     uVar23 = CONCAT11(uVar19,bVar17);
     uStack_e =(uint16_t)( (uint *)(0x1000 << (bVar17 & 0x1f)));
     *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xad) = 0;
-    _fmemset(MK_FP(GUnitDescriptions[partyIndex].seg, GUnitDescriptions[partyIndex].ofs + 0x9a), 0, 3);
+    _fmemset(MK_FP(GUnitDescriptions[partyIndex].seg, GUnitDescriptions[partyIndex].ofs + 0xaa), 0, 3);
     iVar30 = CONCAT11(uVar69,uVar67);
     if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0') {
       pbVar2 = (uint16_t)((byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d));
