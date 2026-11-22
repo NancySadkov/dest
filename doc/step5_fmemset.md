@@ -304,3 +304,42 @@ Consequences:
 
 Until the model is fixed, the `_fmemset` work is complete at **48 of the 52 text
 sites**: every site whose destination can be identified is converted.
+
+## Follow-up: re-owning the body hole changes nothing, and the calls are indirect
+
+`SetBody` was used to give `ovc41_textOnlyPlaceSingle` a single contiguous body
+`6a8f:2084..6a8f:22c2` (previously `2084..211a` + `21a4..22c2`).  Re-decompiling
+it with `DecompileAt` produced a byte-identical 555-line body: same `_fmemset`,
+same `acStack_42` uses.  So the body cut was not the cause.
+
+The hole turned out to be a **switch's case bodies**:
+
+```
+6a8f:2114  D1 E3            SHL BX,0x1
+6a8f:2116  2E FF A7 C3 22   JMP word ptr CS:[BX + 0x22c3]     ; jump table
+6a8f:211b  6A 06 / 6A 01 / CALLF 0x2000:35B7                 ; case 1
+6a8f:212f  6A 06 / 6A 02 / CALLF 0x2000:35B7                 ; case 2
+6a8f:2145  6A 06 / 6A 03 / CALLF 0x2000:35B7                 ; case 3
+```
+
+and the decompilation *does* contain it (`switch (uVar16) { case 0: ... }`), so
+the body was already being decompiled.  My earlier "code from segment 6616" note
+was wrong: the resemblance to `ui_textDefineRegionCommand` is because both
+functions clear the same five-byte stack buffer, not because the code is shared.
+
+The remaining question - why no `CALLF _fmemset` appears in the instruction list
+- is answered by the constants Ghidra folds into the C:
+
+```c
+uStack_140 = 0x22de;
+uStack_142 = 0x6f2a;      /* a far pointer built from a data table */
+_fmemset((void *)ZEXT24(unaff_SS),5,(uint16_t)count);
+```
+
+`0x6f2a` occurs in the image only inside a table of word values (file offset
+`0x765f2`, sequence `2a a2 2a 92 2a 8f 2a 85 2a 6f ...`), i.e. the code loads
+the pointer from a table and calls through it.  Ghidra resolves that indirect
+call to its known `_fmemset` signature, which is why there is no direct `CALLF`
+to match: **the four remaining statements are real indirect calls**, and they
+must not be deleted.  Their destinations cannot be rewritten without resolving
+the table entries at run time.
