@@ -4923,7 +4923,7 @@ void __cdecl16far _fsetmem(void *dest,uint16_t len,uint16_t val)
 
 /* 1000:2666 */
 
-void * __cdecl16far _fmemset(void *ptr,uint16_t v,uint16_t count)
+void far * __cdecl16far _fmemset(void far *ptr,uint16_t v,uint16_t count)
 
 {
   uint16_t in_AX;

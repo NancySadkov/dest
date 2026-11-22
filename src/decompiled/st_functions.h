@@ -153,7 +153,7 @@ char * __cdecl16far getcwd(char *__buf,size_t __size);
 int16_t __cdecl16far memcmp(char *s1,char *s2,uint16_t n);
 void * __cdecl16far memcpy(char *dst,char *src,word size);
 void __cdecl16far _fsetmem(void *dest,uint16_t len,uint16_t val);
-void * __cdecl16far _fmemset(void *ptr,uint16_t v,uint16_t count);
+void far * __cdecl16far _fmemset(void far *ptr,uint16_t v,uint16_t count);
 void * __cdecl16far __fmovmem(char *src,char *dst,word count);
 void * __cdecl16far _fmemmove(char *dst,char *src,word count);
 int __cdecl16far _open(char *pathname,int access);
