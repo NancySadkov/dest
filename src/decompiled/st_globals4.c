@@ -334,8 +334,7 @@ DW IdPBM_ = { 0x4250, 0x204D };
 char s_n_d_w_u_s_u[] = "N %d W %u s %u \r";
 /* 032b: 19 bytes - the image carries one padding NUL after the literal */
 char s_Filename__d__s_2410_032b[19] = "Filename %d %s  \r";
-far_t GErrorStrings[5] = { { 0x352, 0x2410 }, { 0x37B, 0x2410 }, { 0x393, 0x2410 }, { 0x3AB, 0x2410 },
-     { 0x3E2, 0x2410 } };
+char far *GErrorStrings[5] = { (char far *)&s_Bad_game_cfg_2410_0352[0], (char far *)&s_Cannot_find_sound_2410_037b[0], (char far *)&s_Cannot_find_music_2410_0393[0], (char far *)&s_Cannot_create_confi_2410_03ab[0], (char far *)&s_Mouse_error_2410_03e2[0] };
 /* 0352: "Bad 'game.cfg' file. Please reconfigure." (41 bytes) */
 char s_Bad_game_cfg_2410_0352[] = "Bad 'game.cfg' file. Please reconfigure.";
 /* 037b: "Cannot find sound card." (24 bytes) */
