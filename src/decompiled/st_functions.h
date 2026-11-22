@@ -816,7 +816,7 @@ void __cdecl16far ovc28_compute2(far_t entries,uint16_t count,far_t hint,...);
 void __cdecl16far animInitSeqs(void);
 void __cdecl16far animAdvance(uint16_t play_id,byte gfx_id,uint16_t x,uint16_t y,far_t dst,...);
 uint __cdecl16far ovc30_difficultyFactor(void);
-void __cdecl16far ovc30_nextWave(byte flags,...);
+void __cdecl16far ovc30_nextWave(byte flags);
 undefined2 __cdecl16far ovc30_usesRandBelow(byte band);
 undefined1 __cdecl16far ovc30_compute1(byte level,...);
 uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y);

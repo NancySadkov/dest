@@ -37,90 +37,62 @@ uint __cdecl16far ovc30_difficultyFactor(void)
 
 /* Advances the player index, spawns the next enemy wave and reports it. */
 
-void __cdecl16far ovc30_nextWave(byte flags,...)
+/* 619c:004e */
+
+/* Starts the next enemy wave.  On the first wave (PlayerIndex becomes 1) it
+   spawns the low, medium and high bands, each of size
+   enemyBase*[Difficulty] + randBelow(*IntelEnemies[Difficulty] + 1); on the
+   second wave it spawns the elite band only, plus one more unit when
+   Difficulty > 1, and announces the wave.  flags bit 0 asks for the
+   "All enemies destroyed." notice, bit 1 suppresses the blit-rect update. */
+
+void __cdecl16far ovc30_nextWave(byte flags)
 
 {
-  uint16_t uVar1;
-  undefined2 uVar2;
-  char *msg;
-  uint16_t in_DX;
-  char *unaff_SS;
-  int iVar3;
-  char cVar4;
-  char cVar5;
-  undefined1 uVar6;
-  byte bVar7;
-  uint8_t text;
-  char cStack_3;
-  
+  typedef char far *stsprintf_far_t(char *buf,char far *fmt,int v);
+
+  char msg[0x79];
+  char far *line;
+  byte pending;
+
   if (PlayerIndex < 2) {
     PlayerIndex = PlayerIndex + 1;
     if (PlayerIndex == 1) {
-      cVar4 = *(char *)(Difficulty + 0x5dcb);
-      uVar1 = ovr_randBelow((byte)((undefined1 *)&lowIntelEnemies)[Difficulty] + 1);
-      cStack_3 = cVar4 + (char)uVar1;
-      while (cStack_3 != '\0') {
-        bVar7 = 0x19;
-        cVar4 = '\x01';
-        iVar3 = 1;
-        cStack_3 = cStack_3 + -1;
-        uVar2 = ovc30_usesRandBelow(0);
-        ovc30_textDivideError((byte)uVar2,iVar3,cVar4,bVar7,cVar4);
+      pending = enemyBaseLow[Difficulty] +
+                (byte)ovr_randBelow((byte)lowIntelEnemies[Difficulty] + 1);
+      while (pending != '\0') {
+        pending = pending - 1;
+        ovc30_textDivideError((byte)ovc30_usesRandBelow(0),1,1,0x19);
       }
-      cVar4 = *(char *)(Difficulty + 0x5dd3);
-      cStack_3 = cStack_3 + -1;
-      uVar1 = ovr_randBelow((byte)((undefined1 *)&lowIntelEnemies)[Difficulty] + 1);
-      cStack_3 = cVar4 + (char)uVar1;
-      while (cStack_3 != '\0') {
-        bVar7 = 0x19;
-        cVar4 = '\x01';
-        iVar3 = 1;
-        cStack_3 = cStack_3 + -1;
-        uVar2 = ovc30_usesRandBelow(1);
-        ovc30_textDivideError((byte)uVar2,iVar3,cVar4,bVar7,cVar4);
+      pending = enemyBaseMed[Difficulty] +
+                (byte)ovr_randBelow((byte)lowIntelEnemies[Difficulty] + 1);
+      while (pending != '\0') {
+        pending = pending - 1;
+        ovc30_textDivideError((byte)ovc30_usesRandBelow(1),1,1,0x19);
       }
-      cVar4 = *(char *)(Difficulty + 0x5ddb);
-      cStack_3 = cStack_3 + -1;
-      uVar1 = ovr_randBelow((byte)((undefined1 *)&highIntelEnemies)[Difficulty] + 1);
-      cStack_3 = cVar4 + (char)uVar1;
-      while (cStack_3 != '\0') {
-        bVar7 = 0;
-        cVar4 = '\x01';
-        iVar3 = 1;
-        cStack_3 = cStack_3 + -1;
-        uVar2 = ovc30_usesRandBelow(2);
-        ovc30_textDivideError((byte)uVar2,iVar3,cVar4,bVar7,cVar4);
+      pending = enemyBaseHigh[Difficulty] +
+                (byte)ovr_randBelow((byte)highIntelEnemies[Difficulty] + 1);
+      while (pending != '\0') {
+        pending = pending - 1;
+        ovc30_textDivideError((byte)ovc30_usesRandBelow(2),1,1,0);
       }
-      cStack_3 = -1;
     }
     else {
-      cStack_3 = *(char *)(Difficulty + 0x5de3);
-      while (cVar4 = cStack_3 + -1, cStack_3 != '\0') {
-        bVar7 = 0;
-        cVar5 = '\x01';
-        iVar3 = 1;
-        cStack_3 = cVar4;
-        uVar2 = ovc30_usesRandBelow(3);
-        ovc30_textDivideError((byte)uVar2,iVar3,cVar5,bVar7,cVar5);
+      pending = enemyBaseWave[Difficulty];
+      while (pending != '\0') {
+        pending = pending - 1;
+        ovc30_textDivideError((byte)ovc30_usesRandBelow(3),1,1,0);
       }
-      cStack_3 = cVar4;
       if (1 < Difficulty) {
-        bVar7 = 0;
-        cVar5 = '\x01';
-        iVar3 = 1;
-        uVar2 = ovc30_usesRandBelow(4);
-        ovc30_textDivideError((byte)uVar2,iVar3,cVar5,bVar7,cVar5);
+        ovc30_textDivideError((byte)ovc30_usesRandBelow(4),1,1,0);
       }
       if ((flags & 1) != 0) {
-        ovr_uiNotify((char *)"All enemies destroyed.",0x2410,0x10,0);
-        in_DX = 0;
+        ovr_uiNotify((char far *)s_all_enemies_destroyed,0xa000);
         ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x36));
       }
-      uVar6 = (undefined1)(PlayerIndex + 1);
-      msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5e0f,unaff_SS),
-                          (char *)CONCAT13((char)(PlayerIndex + 1 >> 8),CONCAT12(uVar6,0x2410)),
-                          uVar6,0);
-      ovr_uiNotify(msg,in_DX,(char)in_DX);
+      line = ((stsprintf_far_t *)ovr_stsprintf)
+                 (msg,(char far *)s_next_wave_of_enemies_appear,PlayerIndex + 1);
+      ovr_uiNotify(line,0xa000);
       ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x36));
     }
     if ((flags & 2) == 0) {

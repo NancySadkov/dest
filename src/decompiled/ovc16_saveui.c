@@ -1798,10 +1798,10 @@ void __cdecl16far saveui_configureNewWorld(void)
           ovr_say((char *)"Too many enemies. 60 enemies maximum.");
           return;
         }
-        lowIntelEnemies = (undefined1)iStack_a;
-        medIntelEnemies = (undefined1)iStack_8;
-        highIntelEnemies = (undefined1)iStack_6;
-        secondWaveSize = (undefined1)iStack_4;
+        lowIntelEnemies[0] = (uint8_t)iStack_a;
+        medIntelEnemies[0] = (uint8_t)iStack_8;
+        highIntelEnemies[0] = (uint8_t)iStack_6;
+        secondWaveSize[0] = (uint8_t)iStack_4;
       }
       Difficulty = bStack_b;
       worldIndex = cStack_c;

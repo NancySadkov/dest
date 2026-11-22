@@ -814,10 +814,21 @@ char s_previous[] = "Previous";
 char s_next[] = "Next";
 undefined GfxFrameCounts = 0x00;
 uint8_t AnimSeqCounts[3] = { 0x5, 0x7, 0x7 };
-undefined1 lowIntelEnemies = 0x05;
-undefined1 medIntelEnemies = 0x03;
-undefined1 highIntelEnemies = 0x02;
-undefined1 secondWaveSize = 0x04;
+/* GUESS: the four difficulty-indexed base-count tables at 0x5dcb/0x5dd3/
+   0x5ddb/0x5de3 have no symbol in the original image.  ovc30_nextWave reads
+   them as the base size of each enemy band (count = base[Difficulty] +
+   randBelow(spread[Difficulty] + 1)), so they are named after the spread table
+   they pair with.  Bytes are the image's. */
+uint8_t enemyBaseLow[4] = { 0x0, 0x2, 0x3, 0x5 };
+uint8_t lowIntelEnemies[4] = { 0x5, 0x1, 0x3, 0x4 };
+uint8_t enemyBaseMed[4] = { 0x0, 0x1, 0x2, 0x4 };
+uint8_t medIntelEnemies[4] = { 0x3, 0x0, 0x2, 0x2 };
+uint8_t enemyBaseHigh[4] = { 0x0, 0x0, 0x1, 0x2 };
+uint8_t highIntelEnemies[4] = { 0x2, 0x0, 0x1, 0x2 };
+uint8_t enemyBaseWave[4] = { 0x0, 0x1, 0x3, 0x4 };
+uint8_t secondWaveSize[4] = { 0x4, 0x3, 0x5, 0x7 };
+/* GUESS: unnamed byte at 0x5deb, between secondWaveSize and LevelBandMin. */
+uint8_t secondWaveExtra = 0x07;
 byte LevelBandMin[4] = { 0x0, 0x5, 0x9, 0x0 };
 byte LevelBandMax[4] = { 0x4, 0x8, 0xFF, 0xFF };
 undefined2 demoCenterX = 0x0000;

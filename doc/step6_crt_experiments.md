@@ -96,3 +96,44 @@ That leaves two honest options for step 6:
      the tree itself (the tree links, so this needs removals that still link).
 
 Both are larger than a bisect; neither is overlay-manager re-engineering.
+
+## 6. The CRT split, measured and planned
+
+Linking the current tree without CRTL.OBJ leaves exactly 29 symbols.  Every
+one of them is defined in crtl.c, so the split is mechanical (no reimplementation):
+
+`
+audio_done audio_init emsFree ems_init ems_memmove1 ems_memmove2 ems_realloc
+f_scopy ioErrorHndlrInstall ioErrorHndlrUninstall rand8 srand8 stshInit_scan
+xmsFree xms_init xms_usesXmsHandle xms_usesXmsHandle2
+LDIV_at_ LMOD_at_ LUDIV_at_ LXLSH_at_ LXMUL_at_ LXRSH_at_ LXURSH_at_ PADD_at_
+_atol _sprintf __fstrncpy _FakRealCvt
+`
+
+Their definitions in crtl.c (current line numbers):
+
+`
+audio_init 330   audio_done 344      xms_init 356     xmsFree 464
+stshInit_scan 479  ems_init 500      emsFree 706      ems_realloc 723
+ems_memmove1 653   ems_memmove2 680   rand8 737        srand8 765
+ioErrorHndlrInstall 788             ioErrorHndlrUninstall 841
+LXMUL_at_ 1041     F_SCOPY 1057      N_LDIV_at_ 1158  LDIV_at_ 1220
+N_LUDIV_at_ 1288   LUDIV_at_ 1338   N_LMOD_at_ 1382  LMOD_at_ 1447
+N_LXLSH_at_ 1567   LXLSH_at_ 1583   N_LXRSH_at_ 1602 LXRSH_at_ 1621
+N_LXURSH_at_ 1641  LXURSH_at_ 1658  N_PADD_at_ 1677  PADD_at_ 1699
+N_LXMUL_at_ 1959  _FakRealCvt 3054  _atol 4266       _sprintf 5165
+__fstrncpy 5399
+`
+
+Note what these are: the EMS/XMS/audio/sound-driver helpers, the *8 random
+generator and the I/O-error handler are *game* support code that the original
+linked into its CRT segment (1000:026c ... 1000:07e7 in udit/functions.tsv),
+not Borland runtime.  Only the long-math, _atol, _sprintf, _FakRealCvt
+and __fstrncpy entries are genuine RTL, and CM.LIB provides equivalents
+under its own names - which is why dropping CRTL.OBJ needs a name mapping for
+those few (LDIV_at_ <> F_LDIV@, ...) and a real home for the game helpers.
+
+Next step, in order:
+  1. move the game helpers (lines above) into a resident module of their own;
+  2. map the remaining RTL names onto CM.LIB;
+  3. drop crtl.c from uild_skip/the link and re-measure the exit code.
