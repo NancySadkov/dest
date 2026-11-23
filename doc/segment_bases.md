@@ -143,3 +143,41 @@ A gate that *would* measure it: compare each far segment's contents against the
 original image at the same intra-segment offsets.  The agent segment now matches
 structurally (`0000`, `04e0`, `08fa`), so that check is feasible for this
 segment.
+
+## Status after the field-access pass
+
+Done (verified by build + map + gates):
+
+| object | stride | sites | form |
+|---|---|---|---|
+| `AgntArrayA`/`AgntArrayB` grids | 1 | 101 | `AgntArrayA[row][col]` (2-D arrays) |
+| `Agnts` | 0x34 | 669 | `Agnts[i].field`, `AGNT_FIELD`/`AGNT_WORD` for odd offsets |
+| `BuildingTypes` | 0x27 | 191 | `BuildingTypes[i].field`, `BLD_FIELD`/`BLD_WORD` |
+| `Entities` (entity records) | 0x37 | 187 | `((entity_t *)Entities)[i].base.field`, `.tick`, `.dir` |
+| stale `0x1726` | - | 60 | `SEG_OF(Agnts)` |
+
+`Agnts` is back at offset 0 of its far segment (`099E:0000`, with
+`AgntArrayB` at `04e0` and `AgntArrayA` at `08fa`), matching the original
+`1726:0000 / 04e0 / 08fa` exactly.
+
+The offset folding used by the passes: a negative offset is the previous record
+and an offset >= stride the next one, so `-5` is `Agnts[idx - 1].faction` and
+`-0x10` is `Agnts[idx - 1].combatState` - the "grid byte is agentIndex + 1"
+convention.
+
+`(C) idx*stride` is now **0**.  `(D) far const` is 161, and the remainder is
+mostly *not* fixable by typing:
+
+* `iVar12 * 0x30 + 0x32` (36) and `(long)iVar12 * 0x30` - pixel/offset
+  arithmetic for the RLE cut calls, not a record stride;
+* `X * 0x50` (4) - an address-range comparison;
+* `* 0x12` (~30) - a third record type that still needs its struct identified;
+* `* 0x34` address forms (~16) such as `(uint *)(iVar2 * 0x34 + 0x2b)` - these
+  can become `(uint *)&Agnts[iVar2].flags` but the receiving pointer is near, so
+  the cast through a far address needs the local retyped first;
+* `gindex * 0x95 + 0x1f` - `AgntGs` (stride 0x95); the same literals appear both
+  with and without the original base `0x26d6`, so each site needs its
+  disassembly before it can be typed.
+
+Note the regex `(D)` also matches plain arithmetic (`x * 0x30 / 0x30`), so this
+row cannot reach zero by field typing alone.
