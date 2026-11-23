@@ -336,7 +336,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
 
 {
   uint32_t uVar1;
-  char cVar2;
+  char ok;
   bool bVar3;
   uint16_t roll;
   char *pcVar5;
@@ -401,9 +401,9 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
         if ((char)uVar8 == '\0') {
           mode = (byte)((ulong)agnt >> 0x10);
           if ((agnt_00->animVariant == 0x0) ||
-             (cVar2 = ovr_agnt_usesAnimFrame2(agnt_00,agntSeg), cVar2 == '\0')) {
+             (ok = ovr_agnt_usesAnimFrame2(agnt_00,agntSeg), ok == '\0')) {
             if ((((agnt_00->animVariant == 0x0) &&
-                 (cVar2 = ovr_agnt_usesAnimFrame2(agnt_00,agntSeg), cVar2 != '\0')) &&
+                 (ok = ovr_agnt_usesAnimFrame2(agnt_00,agntSeg), ok != '\0')) &&
                 (agnt_00->moveState == 0x0)) && (agnt_00->animFrame == 0xff)) {
               if ((((((agntG_t *)agnt_00->gdata)->flags & 1) == 0) ||
                   (iVar9 = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,2), (char)iVar9 == '\0')) ||
@@ -414,53 +414,53 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                 if ((((((agntG_t *)agnt_00->gdata)->flags & 1) == 0) ||
                     ((((entity_t *)agnt_00->entity)->base).level < 2)) ||
                    ((iVar9 = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,2), (char)iVar9 == '\0' ||
-                    (cVar2 = ovr_agnt_usesStrengthMax
+                    (ok = ovr_agnt_usesStrengthMax
                                        (agnt_00,(byte *)CONCAT13((char)((uint)&agntIndex >> 8),
                                                                  CONCAT12((char)&agntIndex,agntSeg)
-                                                                )), cVar2 == '\0')))) {
+                                                                )), ok == '\0')))) {
                   if (((((((agntG_t *)agnt_00->gdata)->flags & 0x400) == 0) ||
                        (0x14 < (int)agnt_00->y)) ||
-                      (cVar2 = ovc49_usesFrameIndex(agnt,(byte *)CONCAT22(unaff_SS,&agntIndex)),
-                      cVar2 == '\0')) ||
+                      (ok = ovc49_usesFrameIndex(agnt,(byte *)CONCAT22(unaff_SS,&agntIndex)),
+                      ok == '\0')) ||
                      ((0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32) ||
                       (uVar7 = ovr_ovc27_compute2(agnt_00,(int)agntSeg,mode,agntIndex - 1),
                       (char)uVar7 == '\0')))) {
                     if (((int)agnt_00->y < 0x15) &&
                        (iVar9 = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,3), (char)iVar9 != '\0')
                        ) {
-                      cVar2 = ovc49_usesFrameIndex2(agnt,(byte *)CONCAT22(unaff_SS,&agntIndex));
-                      if ((cVar2 == '\0') || (0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32))) {
+                      ok = ovc49_usesFrameIndex2(agnt,(byte *)CONCAT22(unaff_SS,&agntIndex));
+                      if ((ok == '\0') || (0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32))) {
                         if ((((((((agntG_t *)agnt_00->gdata)->flags2 & 1) == 0) ||
-                              (cVar2 = ovr_agnt_computeFrameExtents
+                              (ok = ovr_agnt_computeFrameExtents
                                                  (agnt_00,(uint8_t *)
                                                           CONCAT13((char)((uint)&agntIndex >> 8),
                                                                    CONCAT12((char)&agntIndex,
                                                                             agntSeg)),mode),
-                              cVar2 == '\0')) || (0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32)))
+                              ok == '\0')) || (0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32)))
                             || (((((agntG_t *)agnt_00->gdata)->flags3 & 0x400) != 0 &&
                                 (roll = ovr_randBelow(0x14,0), (roll & 0xff) != 0)))) ||
-                           (cVar2 = ovr_agnt_compute16(agnt,(agnt_t *)
+                           (ok = ovr_agnt_compute16(agnt,(agnt_t *)
                                                             CONCAT22(0x1726,(agnt_t *)
                                                                             ((uint)agntIndex * 0x34
                                                                             + -0x34))),
-                           cVar2 == '\0')) {
+                           ok == '\0')) {
                           if (((((((agntG_t *)agnt_00->gdata)->flags2 & 0x200) == 0) ||
-                               (cVar2 = ovr_agnt_computeFrameExtents
+                               (ok = ovr_agnt_computeFrameExtents
                                                   (agnt_00,(uint8_t *)
                                                            CONCAT13((char)((uint)&agntIndex >> 8),
                                                                     CONCAT12((char)&agntIndex,
                                                                              agntSeg)),mode),
-                               cVar2 == '\0')) ||
+                               ok == '\0')) ||
                               (((((agntG_t *)agnt_00->gdata)->flags3 & 0x400) != 0 &&
                                (roll = ovr_randBelow(0x14,0), (roll & 0xff) != 0)))) ||
                              (0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32))) {
                             if ((((((agntG_t *)agnt_00->gdata)->flags3 & 1) != 0) &&
-                                (cVar2 = ovr_agnt_computeFrameExtents
+                                (ok = ovr_agnt_computeFrameExtents
                                                    (agnt_00,(uint8_t *)
                                                             CONCAT13((char)((uint)&agntIndex >> 8),
                                                                      CONCAT12((char)&agntIndex,
                                                                               agntSeg)),mode),
-                                cVar2 != '\0')) && (*(int *)((uint)agntIndex * 0x34 + -0x32) < 0x15)
+                                ok != '\0')) && (*(int *)((uint)agntIndex * 0x34 + -0x32) < 0x15)
                                ) {
                               agnt_00->health = 0x2;
                               agnt_00->targetY = 0;
@@ -504,9 +504,9 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                               (roll = ovr_randBelow(8,0), (roll & 0xff) == 0)) &&
                              ((((agntG_t *)agnt_00->gdata)->flags2 & 0x40) != 0)) &&
                             (((agnt_00->health != 0x5 &&
-                              (cVar2 = ovc49_usesFrameIndex
+                              (ok = ovc49_usesFrameIndex
                                                  (agnt,(byte *)CONCAT22(unaff_SS,&agntIndex)),
-                              cVar2 != '\0')) &&
+                              ok != '\0')) &&
                              (uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + -0x17),
                              (*(uint *)((int)uVar1 + 0x3e) & 0x80) != 0)))) {
                       roll = ovr_audio_panFromX((agnt_t *)((uint)param * 0x34),0x1726);
@@ -518,9 +518,9 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                     else if ((((int)agnt_00->y < 0x15) &&
                              ((((agntG_t *)agnt_00->gdata)->flags2 & 0x100) != 0)) &&
                             ((agnt_00->health != 0x6 &&
-                             ((((cVar2 = ovc49_usesFrameIndex
+                             ((((ok = ovc49_usesFrameIndex
                                                    (agnt,(byte *)CONCAT22(unaff_SS,&agntIndex)),
-                                cVar2 != '\0' &&
+                                ok != '\0' &&
                                 (iVar9 = (uint)agntIndex * 0x34 + -0x34, uVar11 = (undefined1)iVar9,
                                 uVar7 = ovr_agnt_compute12(agnt_00,(agnt_t *)
                                                                    CONCAT13((char)((uint)iVar9 >> 8)
@@ -672,14 +672,14 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
           }
           else if (((((((agntG_t *)agnt_00->gdata)->flags & 0x400) == 0) ||
                     ((0x14 < (int)agnt_00->y ||
-                     (cVar2 = ovc49_usesFrameIndex(agnt,(byte *)CONCAT22(unaff_SS,&agntIndex)),
-                     cVar2 == '\0')))) || (0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32))) ||
+                     (ok = ovc49_usesFrameIndex(agnt,(byte *)CONCAT22(unaff_SS,&agntIndex)),
+                     ok == '\0')))) || (0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32))) ||
                   (uVar7 = ovr_ovc27_compute2(agnt_00,(int)agntSeg,mode,agntIndex - 1),
                   (char)uVar7 == '\0')) {
             if (((((int)agnt_00->y < 0x15) &&
                  (iVar9 = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,3), (char)iVar9 != '\0')) &&
-                (cVar2 = ovc49_usesFrameIndex2(agnt,(byte *)CONCAT22(unaff_SS,&agntIndex)),
-                cVar2 != '\0')) && (*(int *)((uint)agntIndex * 0x34 + -0x32) < 0x15)) {
+                (ok = ovc49_usesFrameIndex2(agnt,(byte *)CONCAT22(unaff_SS,&agntIndex)),
+                ok != '\0')) && (*(int *)((uint)agntIndex * 0x34 + -0x32) < 0x15)) {
               agnt_00->health = 0x2;
               agnt_00->targetY = 0;
               agnt_00->target = agntIndex + 0xff;
@@ -687,17 +687,17 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
             }
             else if ((((((agntG_t *)agnt_00->gdata)->flags2 & 0x200) == 0) ||
                      (0x14 < (int)agnt_00->y)) ||
-                    ((cVar2 = ovr_agnt_computeFrameExtents
+                    ((ok = ovr_agnt_computeFrameExtents
                                         (agnt_00,(uint8_t *)
                                                  CONCAT13((char)((uint)&agntIndex >> 8),
                                                           CONCAT12((char)&agntIndex,agntSeg)),mode)
-                     , cVar2 == '\0' || (0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32))))) {
+                     , ok == '\0' || (0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32))))) {
               if ((((((agntG_t *)agnt_00->gdata)->flags3 & 1) == 0) || (0x14 < (int)agnt_00->y)) ||
-                 ((cVar2 = ovr_agnt_computeFrameExtents
+                 ((ok = ovr_agnt_computeFrameExtents
                                      (agnt_00,(uint8_t *)
                                               CONCAT13((char)((uint)&agntIndex >> 8),
                                                        CONCAT12((char)&agntIndex,agntSeg)),mode),
-                  cVar2 == '\0' || (0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32))))) {
+                  ok == '\0' || (0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32))))) {
                 if (((('\0' < (char)agnt_00->targetX) && (0xaa < (int)agnt->x)) ||
                     (((char)agnt_00->targetX < '\0' && ((int)agnt->x < 0x34)))) &&
                    (roll = ovr_randBelow(8,0), (roll & 0xff) == 0)) {

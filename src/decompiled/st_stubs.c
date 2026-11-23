@@ -65,7 +65,9 @@ int func_0x0007164e()
   return 0;
 }
 
-/* GUESS: target address is data or a fragment in the original */
+/* Original: push cs; call 0 inside the overlay - a far call to offset 0 of the
+   module segment (stshAllocStub).  The 0x6ffe argument is Ghidra naming the
+   segment; no argument is actually passed. */
 int func_0x0007ffe0()
 {
   return 0;
