@@ -1067,3 +1067,51 @@ around the call and see which far address it uses.  `ovr_init_game` is only
 *declared* in the tree (`undefined ovr_init_game();`) and supplied by TLINK's
 `/o`, so the call may be encoded differently from the thunk the map lists (e.g.
 through the overlay dispatch table rather than a direct `CALLF`).
+
+### Patch probes were silently corrupted by DOS relocations
+
+Chasing why an exit stub at the `ovr_init_game` call site appeared never to run
+turned up a flaw in the probes themselves: a 5-byte stub written over a `9A`/`EA`
+instruction covers its **segment word**, which is a DOS relocation target.  At
+load time DOS adds the load segment to those two bytes, so
+
+```
+patch at 0x653f:  B8 48 4C CD 21      (mov ax,4C48h; int 21h)
+relocation 0x6542 -> bytes "CD 21" become 0x21CD + loadseg
+```
+
+and the stub is no longer an exit.  Every probe that patched a call instruction
+and then reported "hang" was therefore uninformative.
+
+A working probe helper now removes the overlapping relocation entries and
+rebuilds `e_crlc` (`tmp/patch.py`).  Measured with it, on the current build:
+
+```
+patch 0x651f (cmp argc,2)             -> CODE=71   reached
+patch 0x6525 (argc<2 branch body)     -> CODE=74   reached
+patch 0x6531 (jmp to the first call)  -> CODE=75   reached
+patch 0x6533 (argc>=2 branch body)    -> no code   not taken (argc==1)
+patch 0x653c (argc>=2 last store)     -> no code   not taken
+patch 0x653f (lcall ovr_init_game)    -> no code   still unexplained
+patch 0x6544 (lcall ovr_run_demo)     -> no code   not reached before the hang
+patch 0x6FE3 (thunk, reloc dropped)   -> no code
+patch 0x14168 (O09 stub)              -> no code
+```
+
+So `main` is entered (`CODE=70` when its entry is patched), the `envp`/`argv`
+setup runs, the `argc < 2` path is taken, and the `jmp` to the overlay call is
+executed - yet a patch at the instruction it jumps to does not fire.
+
+Two facts learned along the way that outlive this probe:
+
+* the map's segment column is **not** the image paragraph (`_MAIN 0650:0003`
+  while the prologue is at image 0x6503, i.e. paragraph 0x650); only the
+  byte-level match identified the code;
+* `tmp/patch.py` must drop the relocation whose offset lies in
+  `[patch, patch+5)`, otherwise the stub is corrupted at load time.
+
+The next probe should stop patching code bytes and instead use an
+execution-tracing mechanism that cannot be rewritten by the loader - e.g. a
+`CLI`/`HLT` stub and reading CS:IP from a `HALT` in DOSBox's debugger, or an
+`INT 1` single-step handler that records the last IP visited into DGROUP.  Only
+that will settle whether control reaches `1412:0048` at all.
