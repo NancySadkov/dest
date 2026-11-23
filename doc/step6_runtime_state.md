@@ -187,3 +187,44 @@ Consequences for the next attempt:
   the image for `9A ?? ?? ?? ??` targeting `_OVR_RUN_DEMO`'s offset each run.
 
 Both instrumented files were reverted; the tree is back at the committed state.
+
+### AH=40h markers are emitted correctly but still do not appear
+
+The trace was redone with the channel that works for the DGROUP dumps:
+
+```c
+st_traceCh = 'A';
+asm { mov bx,1; mov dx,offset st_traceCh; mov cx,1; mov ah,0x40; int 21h };
+```
+
+after each `init_game` step and at `main`'s first statement / after
+`ovr_init_game`.  The markers are in the image - the byte sequence
+
+```
+bb 01 00   mov bx,1
+ba 40 b8   mov dx,0B840h      ; st_traceCh, a fixed DGROUP offset
+b9 01 00   mov cx,1
+b4 40      mov ah,40h
+cd 21      int 21h
+```
+
+appears at image 0x6519 ('S') and 0x6564 ('M') and six more times in the
+ovc09_init overlay - yet `OUT.BIN` stayed 0 bytes.
+
+Two facts narrow it down:
+
+* the same AH=40h channel *does* work at `main`'s entry: replacing main's first
+  instruction with the 64 KB dump stub produces 65,535 bytes, every run;
+* patching `main`'s entry with `mov ax,4C42h; int 21h` exits with 42, so main's
+  entry really executes.
+
+So the entry instruction runs, and the write to handle 1 works from that same
+address, but the body statements after the prologue produce nothing.  That points
+at DS not being DGROUP once the body starts - the DGROUP dump reads through
+whatever DS holds, and if the far-pointer call into `main` leaves `DS` pointing at
+the PSP (or the caller's segment) then `mov dx,0B840h` addresses the wrong
+segment and DOS returns an error instead of writing.
+
+That is the next thing to check: disassemble `main`'s prologue in the built image
+and log DS at entry, e.g. patch main's entry with a stub that stores DS into a
+DGROUP word and dumps it.
