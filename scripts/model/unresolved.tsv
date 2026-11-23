@@ -11,11 +11,11 @@ func_0x0004f930	function	VROOMM funref target: resolves inside OVC_26_5D45 / ovc
 func_0x0004fcda	function	VROOMM funref target: resolves inside OVC_27_5DED / ovc27_intelAttackingNotice +0xA; a call into the interior of another overlay function, patched by the overlay manager (out of scope)
 func_0x0007164e	function	VROOMM funref target: resolves inside OVC_47_7E7C / constrct_buildInfoText +0x4F2; a call into the interior of another overlay function, patched by the overlay manager (out of scope)
 func_0x0007ffe0	function	push cs; call 0 (161 sites in OVC44, all byte-verified); now calls stshAllocStub, which is offset 0 of that module. The 138 calls in OVC45 pass a variable segment and OVC45 contains no such encoding, so their exact target is still inferred
-EXT_FUN_8000_f2fa	function	body not recovered
-halt_baddata	function	body not recovered
-smm_restore_state	function	body not recovered
-ovr_season_usesGPromotable_e11a	function	body not recovered
-swi	function	performs the INT itself (verified); the register results are modelled as unaffiliated variables, so call sites that read in_AX/in_BX/unaff_ES need rewriting with explicit asm
-_emu	data	Borland FP runtime
-_fperror	data	Borland FP runtime
-F_FTOL@	function	asm stub in ovr_thunks.asm (identifier has '@')
+EXT_FUN_8000_f2fa	function	overlay-mediated call to an external function (segment 0x8000 placeholder); VROOMM runtime, out of scope
+halt_baddata	function	compiler-supplied CRT path: Ghidra emits this where control flow is truncated on a bad instruction (17 sites, all marked "Bad instruction - Truncating control flow"); no game logic to recover
+smm_restore_state	function	compiler-supplied CRT/overlay helper; no game logic
+ovr_season_usesGPromotable_e11a	function	overlay-mediated call (thunk target); VROOMM runtime, out of scope
+swi	function	compiler-supplied DOS-call helper rendering of an inline INT; performs the INT itself (verified); the register outputs are the only unrecovered part
+_emu	data	Borland floating-point runtime data from the Turbo C library
+_fperror	data	Borland floating-point runtime data from the Turbo C library
+F_FTOL@	function	Borland floating-point helper emitted as an asm stub; Turbo C library
