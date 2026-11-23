@@ -163,3 +163,27 @@ available yet.  Two observations:
 
 So checkpoint 2 stays open.  The probe itself is kept in `tmp/checkpoint2.py`
 for the next session.
+
+### Tracing attempt: AH=02 markers are not captured
+
+To find where the rebuild stops inside `ovr_init_game`, letters were printed with
+`INT 21h AH=02` after each step of `init_game` (`_OvrInitExt`, `_OvrInitEm
+s`,
+`ovr_init_base`, `init_paths`, `init_cfg`, `clrscr`, `ovr_stshAlloc`,
+`ovr_init_assets`) and at `main`'s first statement and after `ovr_init_game`.
+
+Result: `OUT.BIN` stayed **0 bytes for the original as well**, although the
+original still created `STRONG.SAV`.  So `AH=02` output is not captured by the
+batch's `>` redirection in this harness - only an explicit
+`AH=40h` write to **handle 1** (what the DGROUP dump stubs use) reaches the
+file.
+
+Consequences for the next attempt:
+
+* any progress trace must use `mov bx,1 / mov ah,40h / int 21h` with the text in
+  DS:DX, not `AH=02`;
+* `tmp/checkpoint2.py`'s rebuilt-image offset (`0x7544`) is a hard-coded file
+  offset and shifts whenever the build changes - it must be located by searching
+  the image for `9A ?? ?? ?? ??` targeting `_OVR_RUN_DEMO`'s offset each run.
+
+Both instrumented files were reverted; the tree is back at the committed state.
