@@ -220,3 +220,54 @@ ovc20_stash.c     rewritten 0,   skipped 0    (no such calls)
 
 So `ovc46`/`ovc48` need per-site reading of the rolling-segment chain before any
 edit.  Only the three `ovc15` sites have been converted (and only those).
+
+## Answer: `.seg` comes from `stshStoreFile`'s returned DX, and `ovc46` is the same as `ovc44`
+
+Dumping `init_assets1` (`7A57:0000`, `OVC_46_7A57`) at its first store gives the
+identical sequence seen in `init_assets`:
+
+```
+7a57:003e  CALLF ovr_stshRleType2        ; DX:AX = pfVar2
+7a57:0046  PUSH DX / PUSH AX             ; the whole far pointer is the argument
+7a57:0048  CALLF ovr_stshStoreFile
+7a57:0050  PUSH AX                       ; returned OFFSET
+7a57:0056  PUSH DX                       ; returned SEGMENT
+7a57:0059  MOV DX,0x195d                 ; dead
+7a57:005e  MOV DX,ES                     ; dead
+7a57:0060  POP AX
+7a57:0061  MOV ES:[BX+0x4DD2],AX         ; .seg = returned SEGMENT
+7a57:0066  POP AX
+7a57:0067  MOV ES:[BX+0x4DD0],AX         ; .ofs = returned OFFSET
+```
+
+So for `ovc46` the answer is the same as for `ovc44`: **the field takes the
+function's returned `DX`**, and `0x195d` is dead.
+
+The recovered C conflates two different values in one rolling variable:
+
+```c
+uVar3 = in_DX;                                              /* segment of pfVar2 - the ARG */
+BldGfxNormal[0x201].ofs = ovr_stshStoreFile(pfVar2, uVar3);
+uVar4 = 0x195d;                                             /* seed for the next ARG */
+BldGfxNormal[0x201].seg = uVar3;                            /* <- should be the CALL's DX */
+```
+
+`.seg` is currently assigned the **argument**, while the hardware stores the
+**result**.  Both the argument seed (`0x195d`) and the field assignment are wrong
+in the same way, which is why a naive replacement of only one of them would leave
+the tables inconsistent.
+
+Correct transform per chain element (one scratch local is enough, because `.seg`
+is assigned before the next call):
+
+```c
+BldGfxNormal[N].ofs = stsh_store(pfVar2, (uint16_t)arg, &stshSegTmp);
+...
+BldGfxNormal[N].seg = stshSegTmp;          /* delete the  uVar = 0x195d  seed */
+```
+
+and the next element's argument becomes the segment of the *new* `pfVar2` (the
+high word of `ovr_stshRleType2`'s return), not `0x195d`.
+
+Status: three `ovc15` sites converted; `ovc44`/`ovc46`/`ovc48`/`ovc49` still to do
+with the two-part transform above.
