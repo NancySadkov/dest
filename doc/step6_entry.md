@@ -1542,3 +1542,41 @@ Honest note on effort: the patch-marker approach has now produced three
 mutually inconsistent results in this area (`H` fired, stage markers silent,
 instruction-start markers split).  Continuing to iterate on it is not converging;
 the debugger route is the way to settle it.
+
+### The overlay code is never entered, and the likely reason is `__OvrDosHandle`
+
+Patch-marking inside the manager gave inconsistent answers, so the effect was
+tested instead: put an exit stub at the *start of the O09 code blob* and see
+whether the program exits with that code.  The blob's **file** offset is not the
+map's image offset - it comes from the overlay header via
+`scripts/fbov/model.py`:
+
+```
+stub id 0x7C = segment 124 -> header 0x156E
+overlay header 156E  code_file_offset 0x84F10  codesz 0x53F  fixupsz 0x30
+patch at 0x84F10 (block start) and 0x84F15 (entry +5) -> no exit, still hangs
+```
+
+(The first attempt patched `img + 0x29FB0`, the map's *image* address, which is a
+different location in the file - that result was meaningless.)
+
+So the manager's handler runs (`A0IX`) but never transfers control into the
+loaded overlay, and the loader's error path is `ljmp 0:0x2AE`, which matches the
+observed reboot-like duplicate `I` markers.
+
+Failure point, from the loader disassembly:
+
+```
+81cc  call word ptr es:[0x18]     ; __ReadOvrDisk
+81d1  jb 0x8215                   ; carry set -> ljmp 0:0x2AE
+```
+
+A read error means `__OvrDosHandle` is invalid.  `__OVRINIT` deliberately closes
+the handle and sets it to 0, then `__OvrResetInterruptVector` re-opens it from
+`__OVRFILENAME[0]` and `__OvrExepathBuf`.  If that reopen fails, every block read
+fails - exactly the observed path.
+
+Next step: after `_OVRINIT`, read the word at `_OVRDATA_:00B8` (`__OVRDOSHHANDLE`)
+and mark whether it is a valid handle, then, if it is not, fix the re-open (the
+path buffer `__OvrExepathBuf` is filled by `OvrDoOpenFile` during `__OVRINIT`, so
+a mismatch there is the first thing to check).
