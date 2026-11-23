@@ -1191,3 +1191,58 @@ entry point:
 2. look the `:OVY` block up in `audit/overlay_blocks.csv`;
 3. read it from the EXE into its segment, apply its relocations;
 4. far-jump to `block_segment:ofs`.
+
+## The overlay manager: what is now known
+
+### Our own EXE has a complete, parseable FBOV structure
+
+`scripts/fbov/model.py` (written for the original) parses the rebuilt image
+without modification:
+
+```
+segments 152   overlays 102   fixups 10758
+hdr 13C4  code_seg 312A  fileofs 0x222A0  codesz 0x1588  fixupsz 0x4E  jmpcnt 60
+hdr 13DB  code_seg 3289  fileofs 0x23890  codesz 0x36CF  fixupsz 0x110 jmpcnt 23
+```
+
+So every input the loader needs is present: per-overlay code offset/size, the
+trampoline count, and the fixup table (each entry is a word offset into the code
+whose current value is `(target_segment_index << 3) | flags`).
+
+### The manager algorithm is already documented in the repo
+
+`tools/devroomm/src/ovrman.c` is a reference decompilation of OVERLAY.LIB's
+VROOMM, with `__OvrPrepare`, `__OVRINIT`, `__InitModules`, `__OvrDoFixups`,
+`__OvrFixupFunref` and `__OvrInitReadSegs`.  Key points:
+
+* `__OvrPrepare()` calls `__InitModules()`, allocates a buffer with
+  `_farmalloc(bufsz*16)`, then `__OVRINIT(0, buf.seg+bufsz, buf.seg)`;
+* `__OVRINIT` opens the exe (env path, then filename, then env), finds `FBOV`,
+  sets `__OvrFileBase`, installs the INT 3Fh vector via
+  `__OvrResetInterruptVector`, sets the overlay heap, re-runs `__InitModules`
+  (this time adding `__OvrFileBase` to each `segh->fileofs`) and reads the
+  segment table.
+
+### Measured attempts
+
+| attempt | result |
+|---|---|
+| far call to `_OVRTEXT_:0D24` (hand-computed) | hangs - that address is **not** `__OvrPrepare`; the public symbol is `__OVRPREPARE` at `07C1:08EE` |
+| `_OVRPREPARE()` from C (links: `__OVRPREPARE`) | runs, program exits **code 3** = Borland `abort()` |
+| `_OVRINIT("STRONG.EXE", bufend, bufseg)` with a DOS AH=48h buffer | hangs |
+| `_OVRINIT(0, bufend, bufseg)` (env path) | hangs |
+
+The abort in `_OVRPREPARE` is consistent with `_farmalloc` returning 0 (our far
+heap is not initialised that early) or `__OVRINIT` failing.  The hang in the
+direct `__OVRINIT` calls is consistent with the environment walk: `startx`
+currently hands `main` a **two-byte fake environment** (`static char env0[2]`),
+while `__OvrExeOpenEnv` walks the real DOS environment block looking for the
+program path that DOS appends after the double NUL.
+
+### Next step
+
+Give the process its real environment: `startx` already reads PSP[0x2C] into
+`_envseg_at_`; pass that segment as `envp` (and keep the real `argv`) instead of
+the fake block, then retry `_OVRPREPARE()`.  If the abort persists, initialise
+the far heap before the call (C0's `__setupfarheap` equivalent) so `_farmalloc`
+can supply the overlay buffer.
