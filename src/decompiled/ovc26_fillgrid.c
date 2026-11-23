@@ -343,14 +343,14 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
           bVar4 = ovr_ovc45_getUnitType(iVar2 + iVar9,iVar3 + (int)psStack_c);
           if ((BuildingTypes[bVar4].flags & 0xc) == 0) {
             ovr_createConstructionRecordFar
-                      (bStack_7,iVar2 + iVar9,iVar3 + (int)psStack_c,(uint8_t *)CONCAT22(outFlagSeg,outFlag),*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),unaff_DI,0,0,0);
+                      (bStack_7,iVar2 + iVar9,iVar3 + (int)psStack_c,(uint8_t *)CONCAT22(outFlagSeg,outFlag),AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),unaff_DI,0,0,0);
             ovr_attact_usesEntities
                       (entityIndex,iVar2 + iVar9,iVar3 + (int)psStack_c,flagsOfs,flagsSeg,0,0,0,0);
             ((entity_t *)Entities)[entityIndex].base.targetX = iVar2 + iVar9;
             ((entity_t *)Entities)[entityIndex].base.targetY = iVar3 + (int)psStack_c;
-            pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
+            pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
             *pbVar1 = *pbVar1 | 2;
-            pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
+            pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
             *pbVar1 = *pbVar1 & 0xfa;
             uVar8 = (undefined1)((uint)(entityIndex * 0x37) >> 8);
             ovr_ovc25_usesAlignUp44

@@ -618,7 +618,7 @@ uint __cdecl16far ovc15_usesAlignUp4(uint16_t x,uint16_t y)
       uVar3 = uVar5 * 0x37;
       uVar6 = (uint16_t)((ulong)Entities >> 0x10);
       if ((*(char *)((int)Entities + uVar3 + 0x1a) != -1) &&
-         (uVar1 = *(uint32_t *)((uint)*(byte *)((int)Entities + uVar5 * 0x37 + 0x1a) << 2),
+         (uVar1 = *(uint32_t *)((uint)AGNT_FIELD(&((entity_t *)Entities)[uVar5], base.entity, 3) << 2),
          uVar3 = (uint)*(byte *)((int)uVar1 + 0x3f), uVar3 == 0)) {
         return 1;
       }

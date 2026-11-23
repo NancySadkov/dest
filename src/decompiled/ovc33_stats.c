@@ -1633,7 +1633,7 @@ void __cdecl16far stats_usesEntityCount(char partyIndex)
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
     uVar3 = (uint16_t)((ulong)Entities >> 0x10);
     if (*(char *)((int)&((entity_t *)Entities)[uVar2].base.entity + 3) == partyIndex) {
-      pbVar1 = (byte *)((int)Entities + uVar2 * 0x37 + 0x33);
+      pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + uVar2) + 0x33);
       *pbVar1 = *pbVar1 & 0xfb;
     }
   }
@@ -1814,10 +1814,10 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   ((entity_t *)Entities)[entityIndex].base.targetX =
        ((entity_t *)Entities)[entityIndex].base.x;
   ((entity_t *)Entities)[entityIndex].base.targetY = GfxRndSeed2;
-  pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
+  pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
   *pbVar1 = *pbVar1 | 2;
   widths = 0x2410;
-  pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
+  pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
   *pbVar1 = *pbVar1 & 0xfa;
   ovr_attact_usesEntities(entityIndex,0,0,(uint16_t)&unitFlags,(uint16_t)_SS,0,0,0,0);
   ovr_alignUp4(GfxRndSeed,GfxRndSeed2,0);
@@ -1863,7 +1863,7 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
        ((entity_t *)Entities)[entityIndex].base.x;
   ((entity_t *)Entities)[entityIndex].base.targetY = GfxRndSeed2;
   widths = 0x2410;
-  pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
+  pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
   *pbVar1 = *pbVar1 & 0xfd;
   ovr_attact_usesEntities(entityIndex,0,0,(uint16_t)&unitFlags,(uint16_t)_SS,0,0,0,0);
   puVar3 = ovr_ovc15_usesStshRealloc

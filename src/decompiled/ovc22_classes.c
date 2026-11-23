@@ -221,7 +221,7 @@ L_OVC25_5b66_00ff_01D9:
                       ((entity_t *)Entities)[uVar7].base.state = 0;
                       ((entity_t *)Entities)[uVar7].base.destX = unaff_DI;
                       ((entity_t *)Entities)[uVar7].base.destY = in_stack_0000000a;
-                      pbVar1 = (byte *)((int)Entities + uVar7 * 0x37 + 0x33);
+                      pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + uVar7) + 0x33);
                       *pbVar1 = *pbVar1 | 8;
                       iVar4 = iVar4 + 1;
                     }
@@ -2912,8 +2912,8 @@ void __cdecl16far ovc22_usesEntities2(int entityIndex)
   
   uVar7 = (uint16_t)((ulong)Entities >> 0x10);
   if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) != -1) {
-    bVar4 = ovr_agnt_compute8((agnt_t *)((int)Entities + entityIndex * 0x37),uVar7);
-    bVar2 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
+    bVar4 = ovr_agnt_compute8((agnt_t *)((uint8_t *)((entity_t *)Entities + entityIndex)),uVar7);
+    bVar2 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
     for (cStack_5 = '\0'; cStack_5 < '\x03'; cStack_5 = cStack_5 + '\x01') {
       uVar3 = *(uint32_t *)((uint)bVar2 << 2);
       if ((*(int *)((int)uVar3 + cStack_5 * 2 + 0x6a) != 0) && ((char)bVar4 < cStack_5)) {
@@ -2954,8 +2954,8 @@ void __cdecl16far ovc22_usesEntities3(int entityIndex)
   
   uVar7 = (uint16_t)((ulong)Entities >> 0x10);
   if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) != -1) {
-    bVar4 = ovr_agnt_compute10((agnt_t *)((int)Entities + entityIndex * 0x37),uVar7);
-    bVar2 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
+    bVar4 = ovr_agnt_compute10((agnt_t *)((uint8_t *)((entity_t *)Entities + entityIndex)),uVar7);
+    bVar2 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
     for (cStack_6 = '\0'; cStack_6 < '\x04'; cStack_6 = cStack_6 + '\x01') {
       uVar3 = *(uint32_t *)((uint)bVar2 << 2);
       if ((*(int *)((int)uVar3 + cStack_6 * 2 + 0x76) != 0) && ((int)(char)bVar4 < cStack_6 + 1)) {
@@ -3014,7 +3014,7 @@ void __cdecl16far ovc22_usesEntities4(int entityIndex)
     uVar4 = *(uint32_t *)((uint)bVar3 << 2);
     pcVar1 = (char *)((int)uVar4 + 0xa7);
     *pcVar1 = *pcVar1 + -1;
-    puVar2 = (uint *)((int)Entities + entityIndex * 0x37 + 0x14);
+    puVar2 = (uint *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x14);
     *puVar2 = *puVar2 | 2;
   }
   return;

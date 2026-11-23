@@ -255,8 +255,8 @@ void __cdecl16far land_info(byte tileOffset)
       do {
         uVar11 = (uint16_t)((ulong)Entities >> 0x10);
         if (bStack_1d == 0) {
-          pcVar4 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),0);
-          puVar5 = (uint16_t *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
+          pcVar4 = ovr_ovc22_className(AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),0);
+          puVar5 = (uint16_t *)((uint)AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) * 4);
           uVar11 = 0x217a;
           iVar6 = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT13((char)(Font03.ofs >> 8),
@@ -276,8 +276,8 @@ void __cdecl16far land_info(byte tileOffset)
           strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(iVar9,pcVar4));
         }
         else {
-          pcVar4 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),0);
-          puVar5 = (uint16_t *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
+          pcVar4 = ovr_ovc22_className(AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),0);
+          puVar5 = (uint16_t *)((uint)AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) * 4);
           uVar11 = 0x217a;
           iVar6 = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT13((char)(Font03.ofs >> 8),
@@ -300,7 +300,7 @@ void __cdecl16far land_info(byte tileOffset)
                                   (char *)CONCAT22(uVar11,puVar7));
           strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(uVar11,pcVar4));
         }
-        goldPartyIndex = *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x1a);
+        goldPartyIndex = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
         hint_00.seg = (uint16_t)_SS;
         hint_00.ofs = (uint16_t)&msg;
         puVar7 = &menuItems;
@@ -419,7 +419,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
   uint16_t uStack_12;
   
   lVar17 = CONCAT22((int)((ulong)in_stack_0000ff5e >> 0x10),unaff_SI);
-  bVar3 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
+  bVar3 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
   if ((partyIndex != 0xff) && (bVar3 != 0xff)) {
     bVar4 = ((char_sheet_t *)(((uint)partyIndex << 2)))->classStr;
     iVar9 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)bVar4 * 0x95);

@@ -1129,7 +1129,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
     uVar7 = 0;
     for (ent = 0; ent < EntityCount; ent = ent + 1) {
       uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-      bStack_3 = *(byte *)((int)Entities + ent * 0x37 + 0x1a);
+      bStack_3 = AGNT_FIELD(&((entity_t *)Entities)[ent], base.entity, 3);
       if ((((bStack_3 != 0xff) &&
            (((char_sheet_t *)(((uint)bStack_3 << 2)))->partySlot == uVar8)) &&
           (uVar5 = ovr_alignUp4(((entity_t *)Entities)[ent].base.destX,0,0), uVar5 == uVar4)) &&
@@ -1145,7 +1145,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
         ((entity_t *)Entities)[ent].base.state = 0;
         ((entity_t *)Entities)[ent].base.destX = uStack_8;
         ((entity_t *)Entities)[ent].base.destY = puVar6[1];
-        pbVar1 = (byte *)((int)Entities + ent * 0x37 + 0x33);
+        pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + ent) + 0x33);
         *pbVar1 = *pbVar1 & 0xfb;
         uVar7 = uVar7 + 1;
       }

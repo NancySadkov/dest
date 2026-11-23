@@ -79,7 +79,7 @@ ovc25_usesAlignUp42(char partyIndex,byte count,uint16_t destX,uint16_t destY,uin
           ((entity_t *)Entities)[uVar4].base.state = 0;
           ((entity_t *)Entities)[uVar4].base.destX = destX;
           ((entity_t *)Entities)[uVar4].base.destY = destY;
-          pbVar1 = (byte *)((int)Entities + uVar4 * 0x37 + 0x33);
+          pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + uVar4) + 0x33);
           *pbVar1 = *pbVar1 | 8;
           iStack_4 = iStack_4 + 1;
         }
@@ -97,7 +97,7 @@ ovc25_usesAlignUp42(char partyIndex,byte count,uint16_t destX,uint16_t destY,uin
         if ((uVar2 != uVar3) || (((entity_t *)Entities)[uVar4].base.destY != destY))
         goto L_OVC25_5b66_00ff_01D9;
       }
-      pbVar1 = (byte *)((int)Entities + uVar4 * 0x37 + 0x33);
+      pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + uVar4) + 0x33);
       *pbVar1 = *pbVar1 | 8;
     }
 L_OVC25_5b66_00ff_01D9:
@@ -184,7 +184,7 @@ ovc25_usesAlignUp43(char partyIndex,byte count,uint16_t destX,uint16_t destY,cha
         }
         iVar5 = iVar5 + 1;
         if (setFlag8 != '\0') {
-          pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
+          pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
           *pbVar1 = *pbVar1 | 8;
         }
       }
@@ -197,7 +197,7 @@ L_OVC25_5b66_038d_0482:
       ((entity_t *)Entities)[entityIndex].base.destX = destX;
       ((entity_t *)Entities)[entityIndex].base.destY = destY;
       if (setFlag8 != '\0') {
-        pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
+        pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
         *pbVar1 = *pbVar1 | 8;
       }
       iVar5 = iVar5 + 1;
@@ -336,7 +336,7 @@ void __cdecl16far ovc25_usesEntityCount(char partyIndex)
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
     uVar3 = (uint16_t)((ulong)Entities >> 0x10);
     if (*(char *)((int)&((entity_t *)Entities)[uVar2].base.entity + 3) == partyIndex) {
-      pbVar1 = (byte *)((int)Entities + uVar2 * 0x37 + 0x33);
+      pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + uVar2) + 0x33);
       *pbVar1 = *pbVar1 & 0xf7;
     }
   }
@@ -645,7 +645,7 @@ void __cdecl16far ovc25_clearEntityFlags(void)
   uint16_t uStack_6;
   
   for (uStack_6 = 0; uStack_6 < EntityCount; uStack_6 = uStack_6 + 1) {
-    *(undefined1 *)((int)Entities + uStack_6 * 0x37 + 0x19) = 0;
+    AGNT_FIELD(&((entity_t *)Entities)[uStack_6], base.entity, 2) = 0;
   }
   if (EntityCount != 0) {
     ovc25_usesAlignUp47();
@@ -769,7 +769,7 @@ void ovc25_usesAlignUp47(void)
     if ((*(char *)(unaff_BP + -0xd) == '\0') && (*(char *)(unaff_BP + -0xe) == '\0')) {
       ((entity_t *)Entities)[uVar2].base.targetX = *(uint16_t *)(unaff_BP + -6);
       ((entity_t *)Entities)[uVar2].base.targetY = *(uint16_t *)(unaff_BP + -8);
-      *(undefined1 *)((int)Entities + uVar2 * 0x37 + 0x33) = 2;
+      AGNT_FIELD(&((entity_t *)Entities)[uVar2], base.flags32, 1) = 2;
       OVC25_5b66_131f_entry();
       return;
     }
@@ -810,7 +810,7 @@ void ovc25_usesEntities(void)
   if ((*(char *)(unaff_BP + -0xd) == '\0') && (*(char *)(unaff_BP + -0xe) == '\0')) {
     ((entity_t *)Entities)[unaff_DI].base.targetX = *(uint16_t *)(unaff_BP + -6);
     ((entity_t *)Entities)[unaff_DI].base.targetY = *(uint16_t *)(unaff_BP + -8);
-    *(undefined1 *)((int)Entities + unaff_DI * 0x37 + 0x33) = 2;
+    AGNT_FIELD(&((entity_t *)Entities)[unaff_DI], base.flags32, 1) = 2;
     OVC25_5b66_131f_entry();
     return;
   }
@@ -867,7 +867,7 @@ void ovc25_usesAlignUp48(void)
     if ((*(char *)(unaff_BP + -0xd) == '\0') && (*(char *)(unaff_BP + -0xe) == '\0')) {
       ((entity_t *)Entities)[unaff_DI].base.targetX = *(uint16_t *)(unaff_BP + -6);
       ((entity_t *)Entities)[unaff_DI].base.targetY = *(uint16_t *)(unaff_BP + -8);
-      *(undefined1 *)((int)Entities + unaff_DI * 0x37 + 0x33) = 2;
+      AGNT_FIELD(&((entity_t *)Entities)[unaff_DI], base.flags32, 1) = 2;
       OVC25_5b66_131f_entry();
       return;
     }
