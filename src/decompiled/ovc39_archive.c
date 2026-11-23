@@ -123,9 +123,9 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   far_t handle_06;
   uint uVar1;
   int iVar2;
-  char *pcVar3;
-  char *pcVar4;
-  unit_t *puVar5;
+  char *textPtr;
+  char *nameOfs;
+  unit_t *units;
   int iVar6;
   uint16_t uVar7;
   uint8_t msg;
@@ -137,7 +137,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   byte bStack_a;
   byte bStack_9;
   uint uStack_8;
-  int iStack_6;
+  int archEntry;
   char *name;
   
   if ((partyIndex != 0xff) &&
@@ -149,58 +149,58 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
         if (uVar1 == 0xffff) {
           iVar2 = ovc39_findBuildingAt(uStack_8 + iVar6,GfxRndSeed2);
           uVar7 = (uint16_t)((ulong)GUnits >> 0x10);
-          puVar5 = (unit_t *)GUnits;
-          bStack_9 = (puVar5 + iVar2)->bldType;
-          pcVar4 = (char *)0x26510;
-          bStack_a = puVar5[iVar2].unitType;
+          units = (unit_t *)GUnits;
+          bStack_9 = (units + iVar2)->bldType;
+          nameOfs = (char *)0x26510;
+          bStack_a = units[iVar2].unitType;
           if ((((bStack_b == 0) &&
-               (pcVar4 = (char *)0x2627a,
+               (nameOfs = (char *)0x2627a,
                *(char *)((int)*(uint32_t *)((uint)bStack_a << 2) + 0x3f) == '\0')) &&
-              (0xf7 < iVar2)) && (pcVar4 = (char *)0x26510, puVar5[iVar2].level < 8)) {
-            pcVar4 = (char *)&AgntAnms[0x88].missileDy;
+              (0xf7 < iVar2)) && (nameOfs = (char *)0x26510, units[iVar2].level < 8)) {
+            nameOfs = (char *)&AgntAnms[0x88].missileDy;
             if ((BuildingTypes[bStack_9].flags2 & 0x80) == 0) {
-              iStack_6 = ovc39_loadArchiveEntry(8);
+              archEntry = ovc39_loadArchiveEntry(8);
             }
             else {
-              iStack_6 = ovc39_loadArchiveEntry(9);
+              archEntry = ovc39_loadArchiveEntry(9);
             }
-            name = pcVar4;
-            pcVar3 = ovc39_lordOrLady();
-            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
-                                   (char *)CONCAT22(pcVar3,name),(char)pcVar4);
-            ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
+            name = nameOfs;
+            textPtr = ovc39_lordOrLady();
+            textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+                                   (char *)CONCAT22(textPtr,name),(char)nameOfs);
+            ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
             (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)name;
-            handle.ofs = iStack_6;
+            handle.ofs = archEntry;
             (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)name >> 8);
             ovr_stshFree(handle);
             return;
           }
           if (((bStack_b == 1) && (iVar2 < 0xf8)) &&
-             (pcVar4 = (char *)&AgntAnms[0x88].missileDy,
+             (nameOfs = (char *)&AgntAnms[0x88].missileDy,
              (BuildingTypes[bStack_9].flags2 & 2) != 0)) {
-            iStack_6 = ovc39_loadArchiveEntry(10);
-            name = pcVar4;
-            pcVar3 = ovc39_lordOrLady();
-            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
-                                   (char *)CONCAT22(pcVar3,name),(char)pcVar4);
-            ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
+            archEntry = ovc39_loadArchiveEntry(10);
+            name = nameOfs;
+            textPtr = ovc39_lordOrLady();
+            textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+                                   (char *)CONCAT22(textPtr,name),(char)nameOfs);
+            ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
             (*(uint8_t *)((uint8_t *)&(handle_00.seg))) = (char)name;
-            handle_00.ofs = iStack_6;
+            handle_00.ofs = archEntry;
             (*(uint8_t *)((uint8_t *)&(handle_00.seg) + 1)) = (char)((uint)name >> 8);
             ovr_stshFree(handle_00);
             return;
           }
           if (((bStack_b == 2) && (iVar2 < 0xf8)) &&
-             (pcVar4 = (char *)&AgntAnms[0x88].missileDy,
+             (nameOfs = (char *)&AgntAnms[0x88].missileDy,
              (BuildingTypes[bStack_9].flags2 & 0x20) != 0)) {
-            iStack_6 = ovc39_loadArchiveEntry(0xb);
-            name = pcVar4;
-            pcVar3 = ovc39_lordOrLady();
-            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
-                                   (char *)CONCAT22(pcVar3,name),(char)pcVar4);
-            ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
+            archEntry = ovc39_loadArchiveEntry(0xb);
+            name = nameOfs;
+            textPtr = ovc39_lordOrLady();
+            textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+                                   (char *)CONCAT22(textPtr,name),(char)nameOfs);
+            ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
             (*(uint8_t *)((uint8_t *)&(handle_01.seg))) = (char)name;
-            handle_01.ofs = iStack_6;
+            handle_01.ofs = archEntry;
             (*(uint8_t *)((uint8_t *)&(handle_01.seg) + 1)) = (char)((uint)name >> 8);
             ovr_stshFree(handle_01);
             return;
@@ -208,29 +208,29 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
           if ((bStack_b == 3) &&
              (uVar1 = ovr_ovc45_compute4(uStack_8 + iVar6,GfxRndSeed2,(char)GfxRndSeed2),
              (char)uVar1 != '\0')) {
-            iStack_6 = ovc39_loadArchiveEntry(0xc);
-            name = pcVar4;
-            pcVar3 = ovc39_lordOrLady();
-            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
-                                   (char *)CONCAT22(pcVar3,name),(char)pcVar4);
-            ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
+            archEntry = ovc39_loadArchiveEntry(0xc);
+            name = nameOfs;
+            textPtr = ovc39_lordOrLady();
+            textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+                                   (char *)CONCAT22(textPtr,name),(char)nameOfs);
+            ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
             (*(uint8_t *)((uint8_t *)&(handle_02.seg))) = (char)name;
-            handle_02.ofs = iStack_6;
+            handle_02.ofs = archEntry;
             (*(uint8_t *)((uint8_t *)&(handle_02.seg) + 1)) = (char)((uint)name >> 8);
             ovr_stshFree(handle_02);
             return;
           }
           if (((bStack_b == 4) && (iVar2 < 0xf8)) &&
-             (pcVar4 = (char *)&AgntAnms[0x88].missileDy,
+             (nameOfs = (char *)&AgntAnms[0x88].missileDy,
              (BuildingTypes[bStack_9].flags2 & 0x400) != 0)) {
-            iStack_6 = ovc39_loadArchiveEntry(0xd);
-            name = pcVar4;
-            pcVar3 = ovc39_lordOrLady();
-            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
-                                   (char *)CONCAT22(pcVar3,name),(char)pcVar4);
-            ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
+            archEntry = ovc39_loadArchiveEntry(0xd);
+            name = nameOfs;
+            textPtr = ovc39_lordOrLady();
+            textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+                                   (char *)CONCAT22(textPtr,name),(char)nameOfs);
+            ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
             (*(uint8_t *)((uint8_t *)&(handle_03.seg))) = (char)name;
-            handle_03.ofs = iStack_6;
+            handle_03.ofs = archEntry;
             (*(uint8_t *)((uint8_t *)&(handle_03.seg) + 1)) = (char)((uint)name >> 8);
             ovr_stshFree(handle_03);
             return;
@@ -369,18 +369,18 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
     else {
       bStack_e = 0;
     }
-    pcVar4 = (char *)0x2627a;
+    nameOfs = (char *)0x2627a;
     if (*(uint *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) <
         (uint)((GLeaderSheets[partyIndex])->population << 1)) {
-      pcVar4 = (char *)((uint)partyIndex << 2);
+      nameOfs = (char *)((uint)partyIndex << 2);
       if (*(uint *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) <
-          ((char_sheet_t *)(pcVar4))->population) {
-        pcVar4 = (char *)0x2627a;
+          ((char_sheet_t *)(nameOfs))->population) {
+        nameOfs = (char *)0x2627a;
         if (*(uint *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) <
             (GLeaderSheets[partyIndex])->population >> 1) {
-          pcVar4 = (char *)0x2627a;
+          nameOfs = (char *)0x2627a;
           if (*(int *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) < 0) {
-            pcVar4 = (char *)0x2627a;
+            nameOfs = (char *)0x2627a;
             if (*(uint *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) <
                 (uint)-(GLeaderSheets[partyIndex])->population) {
               bStack_d = 5;
@@ -407,46 +407,46 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
     if (((bStack_c == 0) || (bStack_c < bStack_e)) || (bStack_c < bStack_d)) {
       if ((bStack_e == 0) || (bStack_e < bStack_d)) {
         if (bStack_d == 0) {
-          pcVar3 = ovc39_lordOrLady();
-          pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(msgFormat.ofs,_SS),
-                                 (char *)CONCAT22(pcVar3,msgFormat.seg),(char)pcVar4);
-          ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
+          textPtr = ovc39_lordOrLady();
+          textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(msgFormat.ofs,_SS),
+                                 (char *)CONCAT22(textPtr,msgFormat.seg),(char)nameOfs);
+          ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
         }
         else {
-          iStack_6 = ovc39_loadArchiveEntry(bStack_d + 0x17);
-          name = pcVar4;
-          pcVar3 = ovc39_lordOrLady();
-          pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
-                                 (char *)CONCAT22(pcVar3,name),(char)pcVar4);
-          ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
+          archEntry = ovc39_loadArchiveEntry(bStack_d + 0x17);
+          name = nameOfs;
+          textPtr = ovc39_lordOrLady();
+          textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+                                 (char *)CONCAT22(textPtr,name),(char)nameOfs);
+          ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
           (*(uint8_t *)((uint8_t *)&(handle_06.seg))) = (char)name;
-          handle_06.ofs = iStack_6;
+          handle_06.ofs = archEntry;
           (*(uint8_t *)((uint8_t *)&(handle_06.seg) + 1)) = (char)((uint)name >> 8);
           ovr_stshFree(handle_06);
         }
       }
       else {
-        iStack_6 = ovc39_loadArchiveEntry(bStack_e + 0xd);
-        name = pcVar4;
-        pcVar3 = ovc39_lordOrLady();
-        pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
-                               (char *)CONCAT22(pcVar3,name),(char)pcVar4);
-        ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
+        archEntry = ovc39_loadArchiveEntry(bStack_e + 0xd);
+        name = nameOfs;
+        textPtr = ovc39_lordOrLady();
+        textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+                               (char *)CONCAT22(textPtr,name),(char)nameOfs);
+        ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
         (*(uint8_t *)((uint8_t *)&(handle_05.seg))) = (char)name;
-        handle_05.ofs = iStack_6;
+        handle_05.ofs = archEntry;
         (*(uint8_t *)((uint8_t *)&(handle_05.seg) + 1)) = (char)((uint)name >> 8);
         ovr_stshFree(handle_05);
       }
     }
     else {
-      iStack_6 = ovc39_loadArchiveEntry(bStack_c + 0x12);
-      name = pcVar4;
-      pcVar3 = ovc39_lordOrLady();
-      pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
-                             (char *)CONCAT22(pcVar3,name),(char)pcVar4);
-      ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
+      archEntry = ovc39_loadArchiveEntry(bStack_c + 0x12);
+      name = nameOfs;
+      textPtr = ovc39_lordOrLady();
+      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+                             (char *)CONCAT22(textPtr,name),(char)nameOfs);
+      ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
       (*(uint8_t *)((uint8_t *)&(handle_04.seg))) = (char)name;
-      handle_04.ofs = iStack_6;
+      handle_04.ofs = archEntry;
       (*(uint8_t *)((uint8_t *)&(handle_04.seg) + 1)) = (char)((uint)name >> 8);
       ovr_stshFree(handle_04);
     }
