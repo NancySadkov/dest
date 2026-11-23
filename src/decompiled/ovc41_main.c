@@ -339,7 +339,7 @@ void __cdecl16far ovc41_unitStatusText(byte menuIndex)
     uVar5 = (ulong)CONCAT12(remainder,(uint)part);
     pcVar1 = ovc41_isAre(count);
     puVar2 = (uint16_t *)((uint)((uint8_t *)MenuItemEnabled)[menuIndex] * 4);
-    dst = 0x217a;
+    dst = _DS;
     uVar3 = ovc41_pluralSuffix(count,*puVar2,puVar2[1],pcVar1,uVar3,uVar5,uVar6);
     pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6e86,_SS),
                            (char *)CONCAT22(count,(char *)0x26510),uVar3,dst);
@@ -1397,21 +1397,21 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
               }
               bVar17 = 0;
               uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
-              pcVar12 = (char *)0x217a;
+              pcVar12 = (char *)_DS;
               uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
               if (*(uint *)((int)uVar1 + 0x54) < (uint)(*(int *)((int)uVar2 + 0x4d) << 1)) {
                 uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                 pcVar12 = (char *)(((uint)_backdropIndex & 0xff) << 2);
                 if (*(uint *)((int)uVar1 + 0x54) < ((char_sheet_t *)(pcVar12))->population) {
                   uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
-                  pcVar12 = (char *)0x217a;
+                  pcVar12 = (char *)_DS;
                   uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                   if (*(uint *)((int)uVar1 + 0x54) < *(uint *)((int)uVar2 + 0x4d) >> 1) {
-                    pcVar12 = (char *)0x217a;
+                    pcVar12 = (char *)_DS;
                     uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                     if (*(int *)((int)uVar1 + 0x54) < 0) {
                       uVar1 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
-                      pcVar12 = (char *)0x217a;
+                      pcVar12 = (char *)_DS;
                       uVar2 = *(uint32_t *)(((uint)_backdropIndex & 0xff) << 2);
                       if (*(uint *)((int)uVar1 + 0x54) < (uint)-*(int *)((int)uVar2 + 0x4d)) {
                         bVar17 = 5;
@@ -1503,7 +1503,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
         bVar19 = ((unit_t *)GUnits)[(int)unaff_SI].unitType;
         uVar11 = CONCAT11(((unit_t *)GUnits + (int)unaff_SI)->bldType,bVar19);
       } while (bVar22 != 0);
-      in_DX = 0x217a;
+      in_DX = _DS;
       uVar1 = *(uint32_t *)((uint)bVar19 << 2);
       cVar4 = *(char *)((int)uVar1 + 0x3f);
     } while( true );

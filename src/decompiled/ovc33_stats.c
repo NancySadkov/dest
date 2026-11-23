@@ -971,7 +971,7 @@ L_OVC27_2288:
                                 ) * 2);
       } while( true );
     case (byte *)0x8:
-      uVar30 = 0x217a;
+      uVar30 = _DS;
       if (((char_sheet_t *)(pbVar21))->income <
           (uint)-(GLeaderSheets[in_stack_00000004])->population) {
         bVar28 = 5;

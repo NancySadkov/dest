@@ -265,7 +265,7 @@ void __cdecl16far ovc38_usesStshAlloc(void)
               ((char_sheet_t *)*(uint16_t *)((uint)bStack_3 * 4),
                ((uint16_t *)((uint)bStack_3 * 4))[1],*(uint16_t *)((uint)bStack_3 * 4),
                ((uint16_t *)((uint)bStack_3 * 4))[1]);
-    uVar4 = 0x217a;
+    uVar4 = _DS;
     _sprintf((char *)CONCAT22(_SS,&msg),"%c%s%s@%d");
     iVar5 = 5;
     while ((0 < iVar5 &&

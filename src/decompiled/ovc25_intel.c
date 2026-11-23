@@ -927,7 +927,7 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex)
        (uVar2 = ovr_randBelow(100,0), (int)(uVar2 & 0xff) < (int)(PlayerCount - uVar4))) {
       *(uint16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5e) = 0x19;
       ovr_play_sfx(82,0,0);
-      uVar2 = 0x217a;
+      uVar2 = _DS;
       puVar3 = ovr_ovc15_usesStshRealloc
                          ((char *)*(uint16_t *)((uint)partyIndex * 4),((uint16_t *)((uint)partyIndex * 4))[1],GSavedBlitSeg,0,0,0,0,0);
       msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58f5,curSeg),
@@ -998,7 +998,7 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
     if (cVar2 == '\0') {
       ovr_play_sfx(82,0,0);
       *(uint16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5e) = 0x19;
-      uVar3 = 0x217a;
+      uVar3 = _DS;
       puVar4 = ovr_ovc15_usesStshRealloc
                          ((char *)*(uint16_t *)((uint)partyIndex * 4),((uint16_t *)((uint)partyIndex * 4))[1],GSavedBlitSeg,0,0,0,0,0);
       msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5906,curSeg),

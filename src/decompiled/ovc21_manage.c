@@ -594,7 +594,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     firstLeader = manage_findFirstLeader();
     TextBlitY = TextBlitY + 0xf;
     if (((sheet_00->titleIndex != 0) && (firstLeader != 0xff)) &&
-       (uVar4 = 0x217a, (GLeaderSheets[firstLeader])->titleIndex < 9)) {
+       (uVar4 = _DS, (GLeaderSheets[firstLeader])->titleIndex < 9)) {
       manage_usesBlitLabel2("popularity",0x7d);
       manage_usesBlitLabel2("city blocks",0xdc);
       TextBlitY = TextBlitY + 10;
@@ -3199,7 +3199,7 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
     else {
       uVar2 = uStack_6;
       pcVar1 = ovr_ovc22_className(partyIndex,0);
-      uVar3 = 0x217a;
+      uVar3 = _DS;
       pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x535b,_SS),
                              (char *)CONCAT22(*(uint16_t *)((uint)partyIndex * 4),
                                               (char *)0x26510),
@@ -3314,14 +3314,14 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
     acStack_e[3] = 0xc;
   }
   else {
-    in_DX = 0x217a;
+    in_DX = _DS;
     unaff_ES = (uint16_t)((ulong)*(uint32_t *)((uint)charIndex << 2) >> 0x10);
     if (*(char *)((int)*(uint32_t *)((uint)charIndex << 2) + 0x2f) == -1) {
       acStack_e[3] = 0xc;
     }
     else {
       acStack_e[3] = acStack_e[*(byte *)((int)*(uint32_t *)((uint)charIndex << 2) + 0x2f) + 4];
-      in_DX = 0x217a;
+      in_DX = _DS;
       unaff_ES = (uint16_t)((ulong)*(uint32_t *)((uint)charIndex << 2) >> 0x10);
       if (3 < *(byte *)((int)*(uint32_t *)((uint)charIndex << 2) + 0x2f)) {
         acStack_e[2] = '\x01';
@@ -3761,7 +3761,7 @@ void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,ch
     else {
       uVar3 = uStack_6;
       pcVar1 = ovr_ovc22_className(partyIndex,0);
-      uVar2 = 0x217a;
+      uVar2 = _DS;
       pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5538,_SS),
                              (char *)CONCAT22(*(uint16_t *)((uint)partyIndex * 4),
                                               (char *)0x26510),
@@ -3779,7 +3779,7 @@ void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,ch
   else {
     uVar3 = uStack_6;
     pcVar1 = ovr_ovc22_className(partyIndex,0);
-    uVar2 = 0x217a;
+    uVar2 = _DS;
     pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x557d,_SS),
                            (char *)CONCAT22((char *)unitName,(char *)0x26510),
                            (*(uint16_t *)((uint8_t *)&(unitName) + 2)),*(uint16_t *)((uint)partyIndex * 4),

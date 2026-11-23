@@ -221,7 +221,7 @@ uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *enti
   else {
     ovr_ovc22_className(*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0x1a),0);
     puVar2 = (uint16_t *)((uint)*(byte *)((int)Entities + *entityIndexPtr * 0x37 + 0x1a) * 4);
-    uVar5 = 0x217a;
+    uVar5 = _DS;
     pcVar3 = ovr_fmVsprintf("Choose party to build for.  Now building for %s the %s.",
                             (char *)CONCAT22(puVar2[1],(char *)*puVar2));
     puVar4 = &menuItems;
@@ -485,7 +485,7 @@ void __cdecl16far ovc45_usesGPopulationLo(byte partyIndex,uint goldLo,int goldHi
     uVar4 = *(uint *)(iVar6 + 0x56);
     uVar3 = goldLo - uVar4;
     iVar6 = (goldHi - *(int *)(iVar6 + 0x58)) - (uint)(goldLo < uVar4);
-    iVar5 = 0x217a;
+    iVar5 = _DS;
     uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
     iVar7 = (int)*(uint32_t *)((uint)partyIndex << 2);
     *(uint16_t *)(iVar7 + 0x58) = 0;
@@ -1037,7 +1037,7 @@ ovc45_buildPlacementMessage
                   uVar26 = 0x10;
                   pcVar11 = ovr_ovc22_className(AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),
                                                 (char)BuildingTypes[bStack_12].cost);
-                  uVar16 = 0x217a;
+                  uVar16 = _DS;
                   iVar18 = ovc45_compute9((char *)&text,
                                           (char *)CONCAT22(*(uint16_t *)((uint)bStack_11 * 4),
                                                            _SS),
@@ -4122,7 +4122,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
     uVar11 = 0x10;
     pcVar2 = ovr_ovc22_className(AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),0);
     puVar3 = (uint16_t *)((uint)AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) * 4);
-    uVar8 = 0x217a;
+    uVar8 = _DS;
     iVar4 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar3,_SS),
                            (char *)CONCAT13((char)(Font03.ofs >> 8),
                                             CONCAT12((char)Font03.ofs,puVar3[1])),Font03.seg,'U',

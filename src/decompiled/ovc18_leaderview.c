@@ -674,7 +674,7 @@ L_attact_3f0b_26bd_2767:
         TextBlitY = TextBlitY + 0xf;
         if ((*(char *)(partyIndex + 0x86) != '\0') && (bVar2 != 0xff)) {
           pcVar7 = (char *)((uint)bVar2 << 2);
-          uVar13 = 0x217a;
+          uVar13 = _DS;
           if (((char_sheet_t *)(pcVar7))->titleIndex < 9) {
             manage_usesBlitLabel2("popularity",0x7d);
             manage_usesBlitLabel2("city blocks",0xdc);

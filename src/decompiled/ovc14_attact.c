@@ -935,7 +935,7 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force)
           ((uint8_t *)menuItemRow)[itemIndex] = (uint8_t)uStack_6;
           uStack_6 = uVar2;
         }
-        uVar4 = 0x217a;
+        uVar4 = _DS;
         bStack_3 = *(byte *)((int)*(uint32_t *)((uint)bStack_4 << 2) + 0x2f);
         if (bStack_3 != 0xff) {
           uVar3 = ovr_ovc41_pluralSuffix(uStack_6,0xa000);
