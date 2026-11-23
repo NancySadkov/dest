@@ -1397,3 +1397,39 @@ compiler-supplied route.
 The important consequence: **no overlay manager needs to be reversed**.  Both
 routes use `OVERLAY.LIB` as linked; the difference is only which startup calls
 `__OvrPrepare` and with what heap/name state.
+
+### The INT 3Fh vector points into the manager, not into our CRT
+
+Dumping the installed vector relative to our own `CS` (which is `CRTL_SEG`,
+map paragraph `006C`) gives, in one instrumented build:
+
+```
+DBG.TXT = "A0#076B04EFI"
+   A      allocation ok
+   0      _OVRINIT INIT_OKAY
+   #      separator
+   076B   IVT[3Fh].segment - CS      -> handler segment = 006C + 076B = 07D7
+   04EF   IVT[3Fh].offset
+   I      main reached ovr_init_game
+```
+
+`07D7` is the `_OVRTEXT_` paragraph in that build, so the vector really is the
+manager's own handler (`__OVRTRAPHANDLER`, installed by
+`__OvrResetInterruptVector` after it also opens the EXE into `__OvrDosHandle`).
+
+An earlier version of this dump printed only two hex digits of the segment
+difference, which made the vector look like it pointed into CRTL_SEG; the
+four-digit form above is the correct one.  `tmp/resolve_handler.py` resolves the
+recorded address to an image offset for the build that produced it.
+
+To place stage markers inside the handler, the offset must be taken as
+`_OVRTEXT_ paragraph * 16 + (handler offset within the module)` computed **in the
+same build that ran**, because the segment layout shifts with every source edit -
+the same stale-offset trap that broke the earlier thunk patches.
+
+Note on the two startup routes, both using OVERLAY.LIB unchanged:
+
+| route | state |
+|---|---|
+| `_STARTX` (default) | manager initialises, `init_game` called, INT 3Fh entered, hangs inside the handler |
+| `STOCK_STARTUP=1` (C0) | C0 walks the init table and calls `__OvrPrepare`, which aborts (code 3) |
