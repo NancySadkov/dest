@@ -107,7 +107,7 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   uint16_t uVar9;
   uint16_t uVar10;
   uint16_t uVar11;
-  int iVar12;
+  int gOfs;
   char *pcVar13;
   uint16_t startY;
   entity_t *peVar15;
@@ -134,10 +134,10 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   uint8_t factionFlagsA[2];   /* [BP-0x22] */
   uint8_t factionMax [4];
   long *plStack_18;
-  int iStack_16;
+  int timerHi;
   char cStack_12;
   byte bStack_10;
-  uint uStack_a;
+  uint otherIdx;
   uint uStack_8;
   
   lVar29 = CONCAT22((int)((ulong)in_stack_0000ffd0 >> 0x10),unaff_SI);
@@ -199,20 +199,20 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
     } while ((((entity_t *)Entities)[uVar16].base.y != startY) ||
             (uVar7 = alignUp4((((entity_t *)Entities + uVar16)->base).x,0,0), uVar7 != uVar6));
   } while (uVar16 < EntityCount);
-  iStack_16 = 0;
+  timerHi = 0;
   plStack_18 = (long *)"Time passes...";
   if ((-1 < (*(uint16_t *)((uint8_t *)&(factionTimer[0]) + 2))) &&
      ((0 < (*(uint16_t *)((uint8_t *)&(factionTimer[0]) + 2)) || ((long *)"Time passes..." < (long *)factionTimer[0])))) {
-    iStack_16 = (*(uint16_t *)((uint8_t *)&(factionTimer[0]) + 2));
+    timerHi = (*(uint16_t *)((uint8_t *)&(factionTimer[0]) + 2));
     plStack_18 = (long *)factionTimer[0];
   }
-  if ((iStack_16 <= (*(uint16_t *)((uint8_t *)&(factionTimer[1]) + 2))) &&
-     ((iStack_16 < (*(uint16_t *)((uint8_t *)&(factionTimer[1]) + 2)) || (plStack_18 < (long *)factionTimer[1])))) {
-    iStack_16 = (*(uint16_t *)((uint8_t *)&(factionTimer[1]) + 2));
+  if ((timerHi <= (*(uint16_t *)((uint8_t *)&(factionTimer[1]) + 2))) &&
+     ((timerHi < (*(uint16_t *)((uint8_t *)&(factionTimer[1]) + 2)) || (plStack_18 < (long *)factionTimer[1])))) {
+    timerHi = (*(uint16_t *)((uint8_t *)&(factionTimer[1]) + 2));
     plStack_18 = (long *)factionTimer[1];
   }
-  uVar23 = (undefined1)iStack_16;
-  uVar27 = (undefined1)((uint)iStack_16 >> 8);
+  uVar23 = (undefined1)timerHi;
+  uVar27 = (undefined1)((uint)timerHi >> 8);
   uVar18 = SUB21(plStack_18,0);
   uVar21 = (undefined1)((uint)plStack_18 >> 8);
   entitiesSeg = 0;
@@ -220,12 +220,12 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   uVar22 = uVar21;
   uVar24 = uVar23;
   uVar28 = uVar27;
-  plVar8 = LXMUL_at_(plStack_18,CONCAT22(unaff_DI,iStack_16),lVar29);
+  plVar8 = LXMUL_at_(plStack_18,CONCAT22(unaff_DI,timerHi),lVar29);
   factionTimer[0] = LDIV_at_(CONCAT13((char)((uint)entitiesSeg >> 8),CONCAT12((char)entitiesSeg,plVar8)),
                        CONCAT13(uVar28,CONCAT12(uVar24,CONCAT11(uVar22,uVar19))));
   factionTimer[0] = factionTimer[0] + 0x14;
   entitiesSeg = 0;
-  plVar8 = LXMUL_at_(plStack_18,CONCAT22(unaff_DI,iStack_16),lVar29);
+  plVar8 = LXMUL_at_(plStack_18,CONCAT22(unaff_DI,timerHi),lVar29);
   factionTimer[1] = LDIV_at_(CONCAT13((char)((uint)entitiesSeg >> 8),CONCAT12((char)entitiesSeg,plVar8)),
                        CONCAT13(uVar27,CONCAT12(uVar23,CONCAT11(uVar21,uVar18))));
   factionTimer[1] = factionTimer[1] + 0x14;
@@ -252,29 +252,29 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   }
   lVar29 = -0x1000000;
   uVar16 = 0xffff;
-  uStack_a = 0xffff;
+  otherIdx = 0xffff;
   do {
     if ((int)entityIndex_00 < (int)entityIndex) {
-      if (uStack_a != 0xffff) {
+      if (otherIdx != 0xffff) {
         if (uVar16 == 0xffff) {
           gindex = (byte)((ulong)Entities >> 0x10);
           ovr_attact_usesRandBelow
-                    (&Entities[uStack_a].base,gindex,gindex,Entities[uStack_a].base.target);
-          ovr_attact_usesEntities(uStack_a,0,0,0,0,0,0,0,0);
+                    (&Entities[otherIdx].base,gindex,gindex,Entities[otherIdx].base.target);
+          ovr_attact_usesEntities(otherIdx,0,0,0,0,0,0,0,0);
           entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
           peVar15 = (entity_t *)Entities;
-          gindex = peVar15[uStack_a].base.gindex;
+          gindex = peVar15[otherIdx].base.gindex;
           if (AgntGs[(uint)gindex].ai == '\0') {
             alignUp4(((peVar15 + entityIndex)->base).x,(char)peVar15[entityIndex].base.y,0);
-            iVar12 = (uint)gindex * 0x95;
+            gOfs = (uint)gindex * 0x95;
             startY = 0x195d;
-            entitiesSeg = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + iVar12);
+            entitiesSeg = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + gOfs);
             pcVar13 = ovr_fmVsprintf("Intelligence reports %s unit fleeing from battle. (%d, %d)",
                                      (char *)CONCAT13((char)((uint)entitiesSeg >> 8),
                                                       CONCAT12((char)entitiesSeg,
                                                                *(uint16_t *)
                                                                 ((int)&worldMenuLabels[0].seg + 1 +
-                                                                iVar12))));
+                                                                gOfs))));
             ovr_uiNotify(pcVar13,startY,(char)startY);
           }
         }
@@ -284,8 +284,8 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
           }
           Entities[uVar16].base.animFrame = Entities[uVar16].base.animFrame - (byte)uStack_8;
           gindex = (byte)((ulong)Entities >> 0x10);
-          ovr_ovc41_compute4(&Entities[uVar16].base,gindex,(byte)uStack_8,&Entities[uStack_a].base,
-                             gindex,(byte)uStack_8,(char)(Entities + uStack_a),gindex);
+          ovr_ovc41_compute4(&Entities[uVar16].base,gindex,(byte)uStack_8,&Entities[otherIdx].base,
+                             gindex,(byte)uStack_8,(char)(Entities + otherIdx),gindex);
           ovr_ovc25_attackingNotice
                     (*(byte *)((int)&((entity_t *)Entities)[uVar16].base.entity + 3));
           if (((entity_t *)Entities)[uVar16].base.animFrame != 0x0) {
@@ -293,7 +293,7 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
             entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
             peVar15 = (entity_t *)Entities;
             if (((*(uint *)((int)&worldMenuLabels[7].ofs + 1 +
-                           (uint)peVar15[uStack_a].base.gindex * 0x95) & 4) != 0) &&
+                           (uint)peVar15[otherIdx].base.gindex * 0x95) & 4) != 0) &&
                ((*(uint *)((int)&peVar15[uVar16].base.frames + 1) & 1) == 0)) {
               uVar6 = ovr_ovc27_rollToHitAgent
                                 (CONCAT13((char)((ulong)Entities >> 0x18),
@@ -305,20 +305,20 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
                 entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
                 alignUp4((((entity_t *)Entities + entityIndex)->base).x,
                          (char)((entity_t *)Entities)[entityIndex].base.y,0);
-                iVar12 = (uint)((entity_t *)Entities)[uVar16].base.gindex * 0x95;
+                gOfs = (uint)((entity_t *)Entities)[uVar16].base.gindex * 0x95;
                 startY = 0x195d;
-                entitiesSeg = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + iVar12);
+                entitiesSeg = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + gOfs);
                 pcVar13 = ovr_fmVsprintf("Intelligence reports %s unit infected with disease. (%d, %d)"
                                          ,(char *)CONCAT13((char)((uint)entitiesSeg >> 8),
                                                            CONCAT12((char)entitiesSeg,
                                                                     *(uint16_t *)
                                                                      ((int)&worldMenuLabels[0].seg +
-                                                                      1 + iVar12))));
+                                                                      1 + gOfs))));
                 ovr_uiNotify(pcVar13,startY,(char)startY);
               }
             }
             if ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 +
-                          (uint)((entity_t *)Entities)[uStack_a].base.gindex * 0x95) & 0xc00) != 0)
+                          (uint)((entity_t *)Entities)[otherIdx].base.gindex * 0x95) & 0xc00) != 0)
             {
               uVar6 = ovr_ovc27_rollToHitAgent
                                 (CONCAT13((char)((ulong)Entities >> 0x18),
@@ -326,7 +326,7 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
                                                    (entity_t *)Entities + uVar16)),3);
               if ((uVar6 & 0xff) == 0) {
                 if ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 +
-                              (uint)((entity_t *)Entities)[uStack_a].base.gindex * 0x95) & 0x800)
+                              (uint)((entity_t *)Entities)[otherIdx].base.gindex * 0x95) & 0x800)
                     == 0) {
                   cStack_12 = '\x01';
                 }
@@ -350,15 +350,15 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
                 entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
                 alignUp4((((entity_t *)Entities + entityIndex)->base).x,
                          (char)((entity_t *)Entities)[entityIndex].base.y,0);
-                iVar12 = (uint)((entity_t *)Entities)[uVar16].base.gindex * 0x95;
+                gOfs = (uint)((entity_t *)Entities)[uVar16].base.gindex * 0x95;
                 startY = 0x195d;
-                entitiesSeg = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + iVar12);
+                entitiesSeg = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + gOfs);
                 pcVar13 = ovr_fmVsprintf("Intelligence reports %s unit drained of energy. (%d, %d)",
                                          (char *)CONCAT13((char)((uint)entitiesSeg >> 8),
                                                           CONCAT12((char)entitiesSeg,
                                                                    *(uint16_t *)
                                                                     ((int)&worldMenuLabels[0].seg +
-                                                                     1 + iVar12))));
+                                                                     1 + gOfs))));
                 ovr_uiNotify(pcVar13,startY,(char)startY);
               }
             }
@@ -399,7 +399,7 @@ L_OVC24_5943_026e_0772:
 L_OVC24_5943_026e_088A:
             lVar29 = (ulong)CONCAT11((char)((ulong)lVar29 >> 0x18),
                                      ((entity_t *)Entities)[entityIndex].base.level) << 0x10;
-            uStack_a = entityIndex;
+            otherIdx = entityIndex;
           }
           else if (peVar15[entityIndex].base.level == gindex) {
             uVar9 = ovr_randBelow(3,0);
