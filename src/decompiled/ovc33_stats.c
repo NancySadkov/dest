@@ -915,7 +915,7 @@ L_OVC27_2288:
         *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x2d) = 0x12;
       }
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x3f) =
-           *(undefined1 *)((int)(char **)GMenuStrings + (uint)in_stack_00000004 * 0x95 + 0x1f);
+           AgntGs[(uint)in_stack_00000004].ai;
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x33) =
            *(undefined1 *)((int)(far_t far *)(worldMenuLabels + 9) + (uint)in_stack_00000004 * 0x95);
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x31) =
@@ -1958,7 +1958,7 @@ void __cdecl16far stats_openAgentDetail(int agntIndex)
   drawAgntStats((agnt_t *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
   drawString((char *)0x620f,0x2410,0);
   bVar1 = ((entity_t *)Entities)[iVar2].base.gindex;
-  if (*(char *)((int)(char **)GMenuStrings + (uint)bVar1 * 0x95 + 0x1f) == '\0') {
+  if (AgntGs[(uint)bVar1].ai == '\0') {
     if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\0') ||
        (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\x04')) {
       CurMusicType = 0x43;

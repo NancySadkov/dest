@@ -70,7 +70,7 @@ void __cdecl16far unit_usesAlignUp4(void)
       uVar6 = (uint16_t)((ulong)Entities >> 0x10);
       iVar5 = (int)Entities;
       uVar3 = (uint)((entity_t *)iVar5)[uStack_c].base.gindex;
-      if (*(char *)((int)(char **)GMenuStrings + uVar3 * 0x95 + 0x1f) == '\0') {
+      if (AgntGs[uVar3].ai == '\0') {
         if (uVar3 == 3) {
           iStack_16 = 0xf;
         }

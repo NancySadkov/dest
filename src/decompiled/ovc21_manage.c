@@ -2217,8 +2217,7 @@ void manage_usesEntities(void)
   }
   uVar2 = (uint16_t)((ulong)Entities >> 0x10);
   iVar1 = (int)Entities;
-  if (((*(char *)((int)(char **)GMenuStrings +
-                 (uint)((entity_t *)iVar1)[unaff_SI].base.gindex * 0x95 + 0x1f) == '\0') &&
+  if (((AgntGs[(uint)((entity_t *)iVar1)[unaff_SI].base.gindex].ai == '\0') &&
       (*(byte *)(unaff_BP + 8) <= ((entity_t *)iVar1)[unaff_SI].base.level)) &&
      (((entity_t *)iVar1)[unaff_SI].base.level <= *(byte *)(unaff_BP + 10))) {
     *(int *)*(uint32_t *)(unaff_BP + 0xc) = *(int *)*(uint32_t *)(unaff_BP + 0xc) + 1;
@@ -3667,8 +3666,7 @@ L_attact_3f0b_1082_1477:
     }
     auStack_6 = CONCAT22(uStack_4,(peStack_1e->base).x);
     uStack_8 = (peVar15->base).y;
-    iStack_12 = CONCAT13(*(undefined1 *)
-                           ((int)(char **)GMenuStrings + (uint)(peVar15->base).gindex * 0x95 + 0x1f)
+    iStack_12 = CONCAT13(AgntGs[(uint)(peVar15->base).gindex].ai
                           ,iStack_12);
   } while ((peVar15->base).faction < (byte)(peVar15->base).state);
   uVar18 = ovr_ovc07_signum((peVar15->base).destX - (peStack_1e->base).x);
@@ -3684,8 +3682,7 @@ L_attact_3f0b_1082_1477:
         if ((char)uVar6 == '\0') {
           uVar6 = ovr_ovc26_usesRandBelow((int)count,(uint16_t)&uStack_17);
           if (((uVar6 & 0xff) == 0) &&
-             (*(char *)((int)(char **)GMenuStrings +
-                       (uint)(((entity_t *)peStack_1e)->base).gindex * 0x95 + 0x1f) == '\0')) {
+             (AgntGs[(uint)(((entity_t *)peStack_1e)->base).gindex].ai == '\0')) {
             manage_usesCurSfxType32();
           }
         }

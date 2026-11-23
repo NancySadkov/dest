@@ -480,15 +480,11 @@ void __cdecl16far ovc15_usesAgntIndex(void)
       entitiesOfs = (int)Entities;
       entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
       if ((count <= topIdx) ||
-         (*(char *)((int)(char **)GMenuStrings +
-                   (uint)*(byte *)(entitiesOfs + *(int *)(&agentIndices + topIdx * 2) * 0x37 + 0xd) * 0x95
-                   + 0x1f) == '\x01')) break;
+         (AgntGs[(uint)*(byte *)(entitiesOfs + *(int *)(&agentIndices + topIdx * 2) * 0x37 + 0xd)].ai == '\x01')) break;
       topIdx = topIdx + 1;
     }
     while ((bottomIdx < count &&
-           (*(char *)((int)(char **)GMenuStrings +
-                     (uint)*(byte *)(entitiesOfs + *(int *)(&agentIndices + bottomIdx * 2) * 0x37 + 0xd) *
-                     0x95 + 0x1f) != '\0'))) {
+           (AgntGs[(uint)*(byte *)(entitiesOfs + *(int *)(&agentIndices + bottomIdx * 2) * 0x37 + 0xd)].ai != '\0'))) {
       bottomIdx = bottomIdx + 1;
     }
     if (topIdx < count) {
@@ -559,8 +555,7 @@ void __cdecl16far ovc15_removeEntity(uint entityIndex)
   peVar3 = (entity_t *)Entities;
   x = peVar3[entityIndex].base.destX;
   y = peVar3[entityIndex].base.destY;
-  cVar2 = *(char *)((int)(char **)GMenuStrings + (uint)peVar3[entityIndex].base.gindex * 0x95 + 0x1f
-                   );
+  cVar2 = AgntGs[(uint)peVar3[entityIndex].base.gindex].ai;
   partyIndex = *(char *)((int)&peVar3[entityIndex].base.entity + 3);
   if (entityIndex < EntityCount - 1U) {
     _fmemmove((char *)CONCAT22(uVar5,peVar3 + entityIndex),
@@ -702,7 +697,7 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
            (undefined1)iStack_6;
       *(undefined1 *)&((entity_t *)Entities)[EntityCount].base.flags32 = (undefined1)iStack_6;
     }
-    if (*(char *)((int)(char **)GMenuStrings + (uint)gindex * 0x95 + 0x1f) == '\0') {
+    if (AgntGs[(uint)gindex].ai == '\0') {
       uVar5 = ovc15_usesAlignUp4(destX,destY);
       if ((uVar5 & 0xff) == 0) {
         *(undefined1 *)((int)&((entity_t *)Entities)[EntityCount].base.flags32 + 1) = 2;
@@ -857,7 +852,7 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
             Agnts[agnt].target = 0xff;
             bVar3 = peVar6[entityIndex].base.gindex;
             AGNT_WORD(&Agnts[agnt], gdata, 2) = 0x195d;
-            AGNT_WORD(&Agnts[agnt], gdata, 0) = (uint)bVar3 * 0x95 + 0x26d6;
+            AGNT_WORD(&Agnts[agnt], gdata, 0) = (uint)&AgntGs[bVar3];
             Agnts[agnt].strength =
                  *(undefined1 *)((int)&peVar6[entityIndex].base.state + 1);
             Agnts[agnt].strengthMax = (char)peVar6[entityIndex].base.flags32;
@@ -1388,9 +1383,9 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
     (*(uint16_t *)((uint8_t *)&(agntCopy.entity) + 2)) = uVar9;
     agntCopy.owner = owner;
     agntCopy.gdata =
-         (agntG_t *)
-         CONCAT22(0x195d,(agntG_t *)
-                         ((int)(char **)GMenuStrings + (uint)(peVar5->base).gindex * 0x95 + 0x1f));
+         (agntG_t far *)
+         CONCAT22(SEG_OF(AgntGs),(agntG_t *)
+                         &AgntGs[(uint)(peVar5->base).gindex]);
     (*(uint16_t *)((uint8_t *)&(agntCopy.entity))) =(uint16_t)( peVar5);
     bVar1 = ovc15_usesAlignUp42();
     if (!bVar1) {
@@ -2824,8 +2819,7 @@ L_attact_3f0b_1082_130A:
       if ((char)uVar16 == '\0') {
         uVar16 = ovr_ovc26_usesRandBelow((int)unaff_DI);
         if (((uVar16 & 0xff) == 0) &&
-           (*(char *)((int)(char **)GMenuStrings +
-                     (uint)(((entity_t *)in_stack_0000ffe2)->base).gindex * 0x95 + 0x1f) == '\0')) {
+           (AgntGs[(uint)(((entity_t *)in_stack_0000ffe2)->base).gindex].ai == '\0')) {
           manage_usesCurSfxType32();
         }
       }

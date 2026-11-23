@@ -75,8 +75,7 @@ uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIn
       uVar4 = (uint16_t)((ulong)Entities >> 0x10);
       iVar2 = (int)Entities;
       if ((((((entity_t *)iVar2)[uVar3].base.y == y) &&
-           (*(char *)((int)(char **)GMenuStrings +
-                     (uint)((entity_t *)iVar2)[uVar3].base.gindex * 0x95 + 0x1f) == '\0')) &&
+           (AgntGs[(uint)((entity_t *)iVar2)[uVar3].base.gindex].ai == '\0')) &&
           (slotMin < (int)(uint)AGNT_FIELD(&((entity_t *)Entities)[uVar3], base.entity, 3))) &&
          (AGNT_FIELD(&((entity_t *)Entities)[uVar3], base.entity, 3) < bStack_3)) {
         bStack_3 = AGNT_FIELD(&((entity_t *)Entities)[uVar3], base.entity, 3);

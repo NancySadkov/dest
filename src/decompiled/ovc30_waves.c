@@ -130,7 +130,7 @@ uint16_t __cdecl16far ovc30_usesRandBelow(byte band)
       do {
         uVar2 = ovr_randBelow(0x2a,0);
       } while ((char)uVar2 == ')');
-    } while (((*(char *)((int)(char **)GMenuStrings + (uVar2 & 0xff) * 0x95 + 0x1f) == '\0') ||
+    } while (((AgntGs[(uVar2 & 0xff)].ai == '\0') ||
              (*(byte *)((int)&worldMenuLabels[0xc].seg + (uVar2 & 0xff) * 0x95) < (&bandMin)[band]))
             || ((&bandMax)[band] < *(byte *)((int)&worldMenuLabels[0xc].seg + (uVar2 & 0xff) * 0x95)
                ));
@@ -225,7 +225,7 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
   if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)gindex * 0x95) & 0x800) != 0) {
     pcStack_6->stats[4] = 0x12;
   }
-  pcStack_6->faction = *(uint8_t *)((int)(char **)GMenuStrings + (uint)gindex * 0x95 + 0x1f);
+  pcStack_6->faction = AgntGs[(uint)gindex].ai;
   pcStack_6->alignment = *(byte *)((int)(far_t far *)(worldMenuLabels + 9) + (uint)gindex * 0x95);
   pcStack_6->hp[0] = *(byte *)((int)&worldMenuLabels[6].seg + (uint)gindex * 0x95);
   pcStack_6->hp[1] = pcStack_6->hp[0];

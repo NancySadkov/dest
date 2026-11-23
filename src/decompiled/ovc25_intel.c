@@ -412,8 +412,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
             }
           }
         }
-        else if (*(char *)((int)(char **)GMenuStrings +
-                          (uint)((entity_t *)iVar7)[idx].base.gindex * 0x95 + 0x1f) !=
+        else if (AgntGs[(uint)((entity_t *)iVar7)[idx].base.gindex].ai !=
                  *(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x3f)) {
           uVar2 = ((char_sheet_t *)((leaderIdx << 2)))->x -
                   *(int *)((entity_t *)iVar7 + idx);
@@ -619,8 +618,7 @@ int __cdecl16far ovc25_usesAlignUp46(uint16_t x,uint16_t y,char excluded,uint8_t
     if (uVar2 == uVar1) {
       uVar4 = (uint16_t)((ulong)Entities >> 0x10);
       if (((entity_t *)Entities)[uVar3].base.y == y) {
-        if (*(char *)((int)(char **)GMenuStrings +
-                     (uint)((entity_t *)Entities)[uVar3].base.gindex * 0x95 + 0x1f) != excluded
+        if (AgntGs[(uint)((entity_t *)Entities)[uVar3].base.gindex].ai != excluded
            ) {
           return 0xff;
         }
@@ -687,7 +685,7 @@ void ovc25_usesAlignUp47(void)
   *(undefined1 *)(unaff_BP + -0xb) =
        *(undefined1 *)((int)Entities + *(int *)(unaff_BP + -4) * 0x37 + 0xd);
   *(undefined1 *)(unaff_BP + -0xd) =
-       *(undefined1 *)((int)(char **)GMenuStrings + (uint)*(byte *)(unaff_BP + -0xb) * 0x95 + 0x1f);
+       AgntGs[(uint)*(byte *)(unaff_BP + -0xb)].ai;
   uVar7 = (uint16_t)((ulong)Entities >> 0x10);
   if ((*(char *)((int)Entities + *(int *)(unaff_BP + -4) * 0x37 + 0x18) != '\0') ||
      (*(char *)(unaff_BP + -0xd) != '\0')) {
@@ -727,8 +725,7 @@ void ovc25_usesAlignUp47(void)
         iVar5 = (int)Entities;
         if (((((entity_t *)iVar5)[uVar6].base.destX == 0) && (((entity_t *)iVar5)[uVar6].base.destY == 0)
             ) && ((AGNT_FIELD(&((entity_t *)Entities)[uVar6], base.entity, 1) == '\0' &&
-                  ((*(char *)((int)(char **)GMenuStrings +
-                             (uint)((entity_t *)iVar5)[uVar6].base.gindex * 0x95 + 0x1f) ==
+                  ((AgntGs[(uint)((entity_t *)iVar5)[uVar6].base.gindex].ai ==
                     *(char *)(unaff_BP + -0xd) &&
                    (*(int *)(unaff_BP + -0x10) = *(int *)(unaff_BP + -0x10) + 1,
                    (*((uint8_t far *)&((entity_t *)Entities)[uVar6].base.flags32 + 1) & 3) == 0)))))) {

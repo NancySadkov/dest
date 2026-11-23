@@ -107,7 +107,7 @@ code_r0x00061e64:
     ((char_sheet_t *)uStack_6)->stats[4] = 0x12;
   }
   ((char_sheet_t *)uStack_6)->faction =
-       *(uint8_t *)((int)(char **)GMenuStrings + (uint)(byte)gindex * 0x95 + 0x1f);
+       AgntGs[(uint)(byte)gindex].ai;
   ((char_sheet_t *)uStack_6)->alignment =
        *(byte *)((int)(far_t far *)(worldMenuLabels + 9) + (uint)(byte)gindex * 0x95);
   ((char_sheet_t *)uStack_6)->hp[0] =

@@ -1149,8 +1149,7 @@ switchD_4000_6642_caseD_3:
                  & 0x4000) != 0;
       uStack_6 = (uStack_1e->base).x;
       uStack_8 = (peVar14->base).y;
-      uStack_f = *(undefined1 *)
-                  ((int)(char **)GMenuStrings + (uint)(peVar14->base).gindex * 0x95 + 0x1f);
+      uStack_f = AgntGs[(uint)(peVar14->base).gindex].ai;
       if ((peVar14->base).faction < (byte)(peVar14->base).state) {
         sVar13 = ((peVar14->base).faction & 3) << 1;
         in_CX = CONCAT11((char)((uint)in_CX >> 8),sVar13);
@@ -1223,8 +1222,7 @@ switchD_4000_6642_caseD_3:
           uVar8 = ovr_ovc26_usesRandBelow
                             (unaff_DI,(int)&uStack_18 + 1,_SS,(uint16_t)acStack_e,_SS);
           if (((uVar8 & 0xff) == 0) &&
-             (*(char *)((int)(char **)GMenuStrings +
-                       (uint)(((entity_t *)uStack_1e)->base).gindex * 0x95 + 0x1f) == '\0')) {
+             (AgntGs[(uint)(((entity_t *)uStack_1e)->base).gindex].ai == '\0')) {
             uStackY_2c = 0x2386;
             uStackY_2e = 0x524;
             manage_usesCurSfxType32();

@@ -819,8 +819,7 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
   F_SCOPY(far_from_u32((uint32_t)(0x241045b9)),dst);
   for (uVar8 = 0; partyIndex = (char)unaff_DI, uVar8 < EntityCount; uVar8 = uVar8 + 1) {
     uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-    if (*(char *)((int)(char **)GMenuStrings +
-                 (uint)((entity_t *)Entities)[uVar8].base.gindex * 0x95 + 0x1f) != '\0') {
+    if (AgntGs[(uint)((entity_t *)Entities)[uVar8].base.gindex].ai != '\0') {
       uVar3 = ovr_alignUp4(((entity_t *)Entities)[uVar8].base.x,0,0);
       uVar11 = (undefined1)uVar3;
       uVar12 = (undefined1)(uVar3 >> 8);
@@ -1115,8 +1114,7 @@ uint __cdecl16far ovc18_usesAlignUp4(void)
   if (inArena) {
     for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
       uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-      if (*(char *)((int)(char **)GMenuStrings +
-                   (uint)((entity_t *)Entities)[uVar5].base.gindex * 0x95 + 0x1f) != '\0') {
+      if (AgntGs[(uint)((entity_t *)Entities)[uVar5].base.gindex].ai != '\0') {
         uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar5].base.x,0,0);
         uVar3 = ovr_alignUp4(GfxRndSeed,0,0);
         if ((uVar2 == uVar3) &&

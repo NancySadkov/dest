@@ -603,9 +603,7 @@ void __stdcall16far attact_usesGMapFlags3(void)
     iVar2 = (int)Entities;
     puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[((entity_t *)iVar2)[uVar3].base.y] +
                      *(int *)((entity_t *)iVar2 + uVar3));
-    *puVar1 = *puVar1 | 0x1000 << (*(byte *)((int)(char **)GMenuStrings +
-                                            (uint)((entity_t *)iVar2)[uVar3].base.gindex * 0x95 +
-                                            0x1f) & 0x1f);
+    *puVar1 = *puVar1 | 0x1000 << (AgntGs[(uint)((entity_t *)iVar2)[uVar3].base.gindex].ai & 0x1f);
   }
   ovr_ovc15_usesAlignUp42();
   draw_textGoldProvidesHousing();
@@ -716,8 +714,7 @@ void __cdecl16far attact_usesAlignUp42(void)
                  & 0x4000) != 0;
       startX = (destEnt->base).x;
       startY = (peVar14->base).y;
-      animByte = *(undefined1 *)
-                  ((int)(char **)GMenuStrings + (uint)(peVar14->base).gindex * 0x95 + 0x1f);
+      animByte = AgntGs[(uint)(peVar14->base).gindex].ai;
       if ((peVar14->base).faction < (byte)(peVar14->base).state) {
         uVar8 = (int)(uint)*(byte *)((int)&(peVar14->base).owner +
                                     ((int)(uint)(peVar14->base).faction >> 2)) >>
@@ -780,7 +777,7 @@ void __cdecl16far attact_usesAlignUp42(void)
           uVar8 = ovr_ovc26_usesRandBelow
                             (index,(uint16_t)&reported,_SS,(uint16_t)&reportedUnits,_SS);
           if (((uVar8 & 0xff) == 0) &&
-             (*(char *)((int)(char **)GMenuStrings + (uint)(peVar14->base).gindex * 0x95 + 0x1f) ==
+             (AgntGs[(uint)(peVar14->base).gindex].ai ==
               '\0')) {
             manage_usesCurSfxType32(0x2386,index,(peVar14->base).targetX,(peVar14->base).targetY);
           }
@@ -1349,8 +1346,7 @@ void __cdecl16far attact_usesRandBelow(agnt_t *agnt,byte dir,uint16_t arg3,uint1
   agnt = (int *)CONCAT13(uStack0007,CONCAT12(dir,agnt));
   uVar4 = (uint16_t)((ulong)agnt >> 0x10);
   if (in_stack_00000008 == 0xff) {
-    uVar1 = ovr_randBelow(4,*(undefined1 *)
-                             ((int)(char **)GMenuStrings + (uint)agnt->gindex * 0x95 + 0x1f));
+    uVar1 = ovr_randBelow(4,AgntGs[(uint)agnt->gindex].ai);
     in_stack_00000008 = (byte)uVar1;
     do {
       agntX = agnt->x;
@@ -1512,8 +1508,7 @@ void __cdecl16far attact_usesEntityCount2(uint16_t *sum,uint16_t *enemySum)
     if ((char)uVar8 != '\0') {
       uVar8 = (uint16_t)((ulong)Entities >> 0x10);
       iVar4 = (int)Entities;
-      if (*(char *)((int)(char **)GMenuStrings +
-                   (uint)((entity_t *)iVar4)[uVar5].base.gindex * 0x95 + 0x1f) == '\0') {
+      if (AgntGs[(uint)((entity_t *)iVar4)[uVar5].base.gindex].ai == '\0') {
         uVar3 = (uint)((entity_t *)iVar4)[uVar5].base.animFrame *
                 (uint)((entity_t *)iVar4)[uVar5].base.level *
                 (uint)((entity_t *)iVar4)[uVar5].base.level;

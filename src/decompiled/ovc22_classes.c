@@ -1393,8 +1393,7 @@ L_OVC22_5087_4975_4ABE:
                       }
                     }
                   }
-                } while (*(char *)((int)(char **)GMenuStrings +
-                                  (uint)peVar41[scratch].base.gindex * 0x95 + 0x1f) ==
+                } while (AgntGs[(uint)peVar41[scratch].base.gindex].ai ==
                          *(char *)((int)*(uint32_t *)((int)puStack_a << 2) + 0x3f));
                 uVar53 = ((char_sheet_t *)(((int)puStack_a << 2)))->x;
                 cVar25 = (char)uVar53;
@@ -1889,7 +1888,7 @@ switchD_5000_123d_caseD_2:
   do {
     bVar17 = ((entity_t *)Entities)[(int)puVar49].base.gindex;
     uStack_6 = (far_t far *)CONCAT13(bVar17,(uint3)uStack_6);
-    pfVar20 = (far_t far *)(uint)*(byte *)((int)(char **)GMenuStrings + (uint)bVar17 * 0x95 + 0x1f);
+    pfVar20 = (far_t far *)(uint)AgntGs[(uint)bVar17].ai;
     if (pfVar20 == (far_t far *)0x0) {
       ovr_ovc15_capitalize(acStackY_a6);
       uStackY_60 = 0x2322;
@@ -2668,8 +2667,7 @@ L_upd_units_5087_1d7d_202C:
       peVar41 = (entity_t *)Entities;
       pfVar20 = (far_t far *)(uint)peVar41[(int)uStack_16].base.animFrame;
       if (pfVar20 == (far_t far *)0x0) {
-        pfVar20 = (far_t far *)(uint)*(byte *)((int)(char **)GMenuStrings +
-                                          (uint)peVar41[(int)uStack_16].base.gindex * 0x95 + 0x1f);
+        pfVar20 = (far_t far *)(uint)AgntGs[(uint)peVar41[(int)uStack_16].base.gindex].ai;
         if (pfVar20 == (far_t far *)0x0) {
           ovr_alignUp4(((peVar41 + (int)uStack_16)->base).x,0,0);
           iVar30 = (uint)((entity_t *)Entities)[(int)uStack_16].base.gindex * 0x95;
@@ -3690,7 +3688,7 @@ void __cdecl16far upd_usesAlignUp4(void)
       if (((*(char *)((int)&peVar20[idx].base.entity + 1) == '\0') &&
           (peVar20[idx].base.destX == 0)) && (peVar20[idx].base.destY == 0)) {
         bStack_6 = peVar20[idx].base.gindex;
-        cVar10 = *(char *)((int)(char **)GMenuStrings + (uint)bStack_6 * 0x95 + 0x1f);
+        cVar10 = AgntGs[(uint)bStack_6].ai;
         bVar5 = *(byte *)((int)&peVar20[idx].base.entity + 3);
         bVar27 = false;
         bVar9 = false;
@@ -3864,8 +3862,7 @@ void __cdecl16far upd_usesAlignUp4(void)
         peVar20 = (entity_t *)Entities;
         uVar23 = idx;
         if (peVar20[idx].base.animFrame == 0x0) {
-          if (*(char *)((int)(char **)GMenuStrings +
-                       (uint)peVar20[idx].base.gindex * 0x95 + 0x1f) == '\0') {
+          if (AgntGs[(uint)peVar20[idx].base.gindex].ai == '\0') {
             ovr_alignUp4(((peVar20 + idx)->base).x,(char)peVar20[idx].base.y,0);
             iVar17 = (uint)((entity_t *)Entities)[idx].base.gindex * 0x95;
             uVar11 = 0x195d;

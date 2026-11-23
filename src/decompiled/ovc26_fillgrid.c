@@ -161,8 +161,7 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex)
   else {
     debugStaleTickCount = debugStaleTickCount + 1;
     ovc26_usesFillGrid((peVar11->base).x,(peVar11->base).y,
-                       *(uint8_t *)
-                        ((int)(char **)GMenuStrings + (uint)(peVar11->base).gindex * 0x95 + 0x1f));
+                       AgntGs[(uint)(peVar11->base).gindex].ai);
     row = (peVar11->base).destX - ((peVar11->base).x - 0x50);
     if (row < 0) {
       row = 0;
@@ -295,8 +294,7 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
   
   uVar10 = (uint16_t)((ulong)Entities >> 0x10);
   iVar9 = (int)Entities;
-  if (*(char *)((int)(char **)GMenuStrings +
-               (uint)((entity_t *)iVar9)[entityIndex].base.gindex * 0x95 + 0x1f) == '\0') {
+  if (AgntGs[(uint)((entity_t *)iVar9)[entityIndex].base.gindex].ai == '\0') {
     uVar5 = 0;
   }
   else {

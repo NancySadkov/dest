@@ -534,7 +534,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
           ovr_attact_usesEntities(uStack_a,0,0,0,0,0,0,0,0);
           uVar26 = (uint16_t)((ulong)Entities >> 0x10);
           bVar9 = ((entity_t *)Entities)[uStack_a].base.gindex;
-          pbVar14 = (byte *)(uint)*(byte *)((int)(char **)GMenuStrings + (uint)bVar9 * 0x95 + 0x1f);
+          pbVar14 = (byte *)(uint)AgntGs[(uint)bVar9].ai;
           if (pbVar14 == (byte *)0x0) {
             alignUp4((((entity_t *)Entities + iVar24)->base).x,0,0);
             uVar26 = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + (uint)bVar9 * 0x95);
@@ -636,7 +636,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
        pbVar14 != (byte *)CONCAT11(uVar30,uVar29))) goto L_OVC24_5943_026e_08A7;
     uVar26 = (uint16_t)((ulong)Entities >> 0x10);
     peVar22 = (entity_t *)Entities;
-    if (*(char *)((int)(char **)GMenuStrings + (uint)peVar22[iVar24].base.gindex * 0x95 + 0x1f) ==
+    if (AgntGs[(uint)peVar22[iVar24].base.gindex].ai ==
         (char)uStack_10) {
       if (peVar22[iVar24].base.level < bStackY_2d) {
 L_OVC24_5943_026e_0772:
@@ -1848,8 +1848,7 @@ code_r0x00053afb:
       peVar23 = (entity_t *)Entities;
       msg = (uint *)(uint)peVar23[(int)entityIndex].base.animFrame;
       if (msg == (uint *)0x0) {
-        msg = (uint *)(uint)*(byte *)((int)(char **)GMenuStrings +
-                                     (uint)peVar23[(int)entityIndex].base.gindex * 0x95 + 0x1f);
+        msg = (uint *)(uint)AgntGs[(uint)peVar23[(int)entityIndex].base.gindex].ai;
         if (msg == (uint *)0x0) {
           ovr_alignUp4(((peVar23 + (int)entityIndex)->base).x,0,0);
           iVar19 = (uint)((entity_t *)Entities)[(int)entityIndex].base.gindex * 0x95;
@@ -3151,7 +3150,7 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
       uVar3 = (uint16_t)((ulong)Entities >> 0x10);
       if (iStack_6 < 0) {
         bStack_3 = ((entity_t *)Entities)[entityIndex].base.gindex;
-        if (*(char *)((int)(char **)GMenuStrings + (uint)bStack_3 * 0x95 + 0x1f) == '\0') {
+        if (AgntGs[(uint)bStack_3].ai == '\0') {
           uVar3 = 0xa000;
           dst = 0x195d;
           uVar4 = x;

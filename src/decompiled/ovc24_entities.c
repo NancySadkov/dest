@@ -35,16 +35,14 @@ void __cdecl16far ovc24_usesAlignUp4(void)
     uVar8 = (uint16_t)((ulong)Entities >> 0x10);
     iVar4 = (int)Entities;
     if (AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.entity, 1) == '\0') {
-      cVar1 = *(char *)((int)(char **)GMenuStrings +
-                       (uint)((entity_t *)iVar4)[uVar7].base.gindex * 0x95 + 0x1f);
+      cVar1 = AgntGs[(uint)((entity_t *)iVar4)[uVar7].base.gindex].ai;
       uVar2 = alignUp4(*(int *)((entity_t *)iVar4 + uVar7),0,0);
       iVar4 = ((entity_t *)Entities)[uVar7].base.y;
       for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
         uVar8 = (uint16_t)((ulong)Entities >> 0x10);
         iVar5 = (int)Entities;
         if (((((entity_t *)iVar5)[uVar6].base.y == iVar4) &&
-            (*(char *)((int)(char **)GMenuStrings +
-                      (uint)((entity_t *)iVar5)[uVar6].base.gindex * 0x95 + 0x1f) != cVar1)) &&
+            (AgntGs[(uint)((entity_t *)iVar5)[uVar6].base.gindex].ai != cVar1)) &&
            (uVar3 = alignUp4(*(int *)((entity_t *)iVar5 + uVar6),0,0), uVar3 == uVar2)) {
           AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.entity, 1) = 1;
           AGNT_FIELD(&((entity_t *)Entities)[uVar6], base.entity, 1) = 1;
@@ -155,7 +153,7 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
     entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
     gindex = ((entity_t *)Entities)[entityIndex_00].base.gindex;
     *(undefined1 *)((int)&((entity_t *)Entities)[entityIndex_00].base.entity + 2) = 1;
-    bVar4 = *(byte *)((int)(char **)GMenuStrings + (uint)gindex * 0x95 + 0x1f);
+    bVar4 = AgntGs[(uint)gindex].ai;
     bVar5 = ovc24_usesEntities(entityIndex_00);
     uVar7 = (uint)bVar5 * (uint)bVar5 * (uint)((entity_t *)Entities)[entityIndex_00].base.animFrame
     ;
@@ -266,7 +264,7 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
           entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
           peVar15 = (entity_t *)Entities;
           gindex = peVar15[uStack_a].base.gindex;
-          if (*(char *)((int)(char **)GMenuStrings + (uint)gindex * 0x95 + 0x1f) == '\0') {
+          if (AgntGs[(uint)gindex].ai == '\0') {
             alignUp4(((peVar15 + entityIndex)->base).x,(char)peVar15[entityIndex].base.y,0);
             iVar12 = (uint)gindex * 0x95;
             startY = 0x195d;
@@ -374,8 +372,7 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
       if (uVar7 == uVar6) {
         entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
         peVar15 = (entity_t *)Entities;
-        if (*(byte *)((int)(char **)GMenuStrings +
-                     (uint)peVar15[entityIndex].base.gindex * 0x95 + 0x1f) == bStack_10) {
+        if (AgntGs[(uint)peVar15[entityIndex].base.gindex].ai == bStack_10) {
           gindex = (byte)((ulong)lVar29 >> 0x18);
           if (peVar15[entityIndex].base.level < gindex) {
 L_OVC24_5943_026e_0772:
@@ -468,8 +465,7 @@ L_OVC24_5943_0d5a_0E37:
             if ((int)uVar1 < 0) break;
           } while (Agnts[uVar1].owner != ent);
           if ((int)uVar1 < 0) {
-            if (*(char *)((int)(char **)GMenuStrings +
-                         (uint)((entity_t *)Entities)[ent].base.gindex * 0x95 + 0x1f) == '\0'
+            if (AgntGs[(uint)((entity_t *)Entities)[ent].base.gindex].ai == '\0'
                ) {
               ovr_play_sfx(8,0,0);
             }

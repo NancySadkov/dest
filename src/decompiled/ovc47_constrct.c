@@ -430,8 +430,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
       uVar14 = ovr_ovc23_isCursorAt
                          (((entity_t *)Entities)[uVar12].base.x,((entity_t *)Entities)[uVar12].base.y,0);
       if (((char)uVar14 != '\0') &&
-         (*(char *)((int)(char **)GMenuStrings +
-                   (uint)((entity_t *)Entities)[uVar12].base.gindex * 0x95 + 0x1f) == '\0')) {
+         (AgntGs[(uint)((entity_t *)Entities)[uVar12].base.gindex].ai == '\0')) {
         iVar13 = iVar13 + 1;
       }
     }
