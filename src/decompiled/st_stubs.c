@@ -145,3 +145,24 @@ int _OVRINITEXT(void)
 {
   return 0;
 }
+
+/* stshStoreFile returns a far pointer in DX:AX.  The recovered call sites used a
+   prototype without a return type, so DX was lost and the .seg field was filled
+   with the dead link-time constant 0x195d (see doc/segment_195d.md).
+   This wrapper performs the same call and hands both halves back. */
+uint16_t stsh_store(uint8_t *data, uint16_t arg2, uint16_t *seg)
+{
+  uint16_t ofs;
+  uint16_t s;
+
+  asm {
+    push arg2;
+    push data;
+    call far ptr ovr_stshStoreFile;
+    add sp,4;
+    mov ofs,ax;
+    mov s,dx;
+  }
+  *seg = s;
+  return ofs;
+}

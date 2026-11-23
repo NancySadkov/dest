@@ -299,9 +299,9 @@ void __cdecl16far stshInitSprites(bool grab)
           pixels.seg = 0;
           pixels.ofs = (gfx->aptr).seg;
           pfVar1 = ovr_stshRleType2((far_t far *)(&gfx->aptr)->ofs,pixels,0,114,103,0,0,(int16_t)unaff_DI,0,0);
-          pcVar4 = ovr_stshStoreFile((uint8_t *)pfVar1,puVar8);
+          pcVar4 = (char *)stsh_store((uint8_t *)pfVar1, (uint16_t)puVar8, &uVar6);
           iVar10 = i * 0x95 + j * 4;
-          uVar6 = 0x195d;
+
           *(int *)((int)AgntGs[0].prts + 2 + iVar10) = (int)puVar8;
           *(uint16_t *)((int)AgntGs[0].prts + iVar10) =(uint16_t)( pcVar4);
           sz = ZEXT24(unaff_DI) << 0x10;
@@ -1585,9 +1585,9 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
               pixels.seg = 0;
               pixels.ofs = (gfx->aptr).seg;
               pfVar5 = ovr_stshRleType2((far_t far *)(&gfx->aptr)->ofs,pixels,0,114,0,0,0,0,0,0);
-              pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5,0);
+              pcVar6 = (char *)stsh_store((uint8_t *)pfVar5, 0, &uVar10);
               iVar8 = unaff_SI * 0x95 + iVar17 * 4;
-              uVar10 = 0x195d;
+
               *(uint16_t *)((int)AgntGs[0].prts + 2 + iVar8) = uVar12;
               *(uint16_t *)((int)AgntGs[0].prts + iVar8) =(uint16_t)( pcVar6);
               puVar7 = ovr_stshWrite((uint32_t *)gfx,0,0,0);
@@ -2152,9 +2152,9 @@ agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt)
                 bVar44 = (byte)((uint)gfx >> 8);
                 ovr_stshUniqueColorsRemap(gfx,0);
                 pfVar12 = ovr_stshRleType2(*(far_t far **)((char *)0x300),0,0,0,0,0,0,0,0,0);
-                pcVar13 = ovr_stshStoreFile((uint8_t *)pfVar12,0);
+                pcVar13 = (char *)stsh_store((uint8_t *)pfVar12, 0, &uVar32);
                 iVar20 = (int)pcVar30 * 0x95 + iVar39 * 4;
-                uVar32 = 0x195d;
+
                 *(uint16_t *)((int)AgntGs[0].prts + 2 + iVar20) =(uint16_t)( gfx);
                 *(uint16_t *)((int)AgntGs[0].prts + iVar20) =(uint16_t)( pcVar13);
                 puVar33 = ovr_stshWrite((uint32_t *)0x0,(uint8_t *)

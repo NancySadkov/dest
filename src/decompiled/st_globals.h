@@ -2147,6 +2147,7 @@ extern uint16_t tmstrsSprites9Ofs;
 extern uint16_t tmstrsSprites9Seg;
 extern undefined1 cursorRecordFound;
 extern uint16_t GRecordCount;
+uint16_t stsh_store(uint8_t *data, uint16_t arg2, uint16_t *seg);
 extern undefined1 strongholdCheckPending;
 extern uint16_t GYear;
 extern undefined1 PlayerCount;
