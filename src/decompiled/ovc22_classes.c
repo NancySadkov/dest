@@ -3086,6 +3086,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint16_t unaff_SI;
   uint16_t unaff_DI;
   uint uVar23;
+  uint unitIdx;   /* the 0xf8..GUnitCount loops only */
   uint16_t unitsSeg;
   uint16_t uVar25;
   uint16_t uVar26;
@@ -3140,40 +3141,40 @@ void __cdecl16far upd_usesAlignUp4(void)
     if (DebugVerbose != false) {
       printf("%d \r");
     }
-    for (uVar23 = 0xf8; uVar23 < GUnitCount; uVar23 = uVar23 + 1) {
+    for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
       unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
       units = (unit_t *)GUnits;
-      if ((units[uVar23].flags & 3) == 0) {
-        if ((units[uVar23].unitType == 0xff) ||
-           (uVar7 = *(uint32_t *)((uint)units[uVar23].unitType << 2),
+      if ((units[unitIdx].flags & 3) == 0) {
+        if ((units[unitIdx].unitType == 0xff) ||
+           (uVar7 = *(uint32_t *)((uint)units[unitIdx].unitType << 2),
            *(char *)((int)uVar7 + 0x3f) == '\0')) {
           uStack_8 = 0x96;
         }
         else {
           uStack_8 = 0x5dc;
         }
-        if (units[uVar23].level != 0) {
+        if (units[unitIdx].level != 0) {
           randVal = ovr_randBelow(uStack_8,0);
           unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
           units = (unit_t *)GUnits;
           if ((int)(randVal & 0xff) <
-              (int)(100 - (uint)*(byte *)((uint)(units + uVar23)->bldType * 0x27 + 0x130))) {
-            bldType = (units + uVar23)->bldType;
-            units[uVar23].level = units[uVar23].level - 1;
+              (int)(100 - (uint)*(byte *)((uint)(units + unitIdx)->bldType * 0x27 + 0x130))) {
+            bldType = (units + unitIdx)->bldType;
+            units[unitIdx].level = units[unitIdx].level - 1;
             units = (unit_t *)GUnits;
             unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
             if (((BuildingTypes[bldType].flags2 & 4) == 0) &&
-               ((units[uVar23].level == 0 ||
+               ((units[unitIdx].level == 0 ||
                 ((BuildingTypes[bldType].flags2 & 0x200) != 0)))) {
-              ovc22_usesGUnits(uVar23,(uint8_t *)
-                                      CONCAT13((char)(uVar23 * 9 >> 8),
-                                               CONCAT12(units[uVar23].unitType,_SS)));
+              ovc22_usesGUnits(unitIdx,(uint8_t *)
+                                      CONCAT13((char)(unitIdx * 9 >> 8),
+                                               CONCAT12(units[unitIdx].unitType,_SS)));
             }
             else if (((((bld_inst_t *)BldInstances + bldType)->ofs != 0 ||
                        *(int *)((int)&BldInstances[0].seg + (uint)bldType * 0xc) != 0) ||
                      (BuildingTypes[bldType].flags == '\x10')) &&
                     (unitsSeg = ovc22_usesGOngoingBattle2
-                                        (*(byte *)&units[uVar23].x,*(byte *)&units[uVar23].y),
+                                        (*(byte *)&units[unitIdx].x,*(byte *)&units[unitIdx].y),
                     (char)unitsSeg != '\0')) {
               found = 0x1;
             }
@@ -3203,11 +3204,11 @@ void __cdecl16far upd_usesAlignUp4(void)
         iVar17 = *(int *)(iVar17 + 0x58) + ((int)uVar23 >> 0xf) +
                  (uint)CARRY2(*(uint *)(iVar17 + 0x56),uVar23);
         if ((iVar17 < 1) && (iVar17 < 0)) {
-          for (uVar23 = 0xf8; uVar23 < GUnitCount; uVar23 = uVar23 + 1) {
+          for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
             unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
             units = (unit_t *)GUnits;
-            bldType = (units + uVar23)->bldType;
-            if ((units[uVar23].unitType == idx) &&
+            bldType = (units + unitIdx)->bldType;
+            if ((units[unitIdx].unitType == idx) &&
                (BuildingTypes[bldType].income < 0)) {
               uVar12 = BuildingTypes[bldType].income;
               uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
@@ -3215,21 +3216,21 @@ void __cdecl16far upd_usesAlignUp4(void)
               iVar17 = *(int *)(iVar17 + 0x58) + ((int)uVar12 >> 0xf) +
                        (uint)CARRY2(*(uint *)(iVar17 + 0x56),uVar12);
               if ((iVar17 < 1) && (iVar17 < 0)) {
-                if ((sheetFaction == '\0') && (units[uVar23].level != 0)) {
+                if ((sheetFaction == '\0') && (units[unitIdx].level != 0)) {
                   randVal = ovr_randBelow(100,0);
                   unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
                   units = (unit_t *)GUnits;
-                  if (*(byte *)((uint)(units + uVar23)->bldType * 0x27 + 0x130) <= (byte)randVal) {
-                    if (units[uVar23].level != 0) {
-                      units[uVar23].level = units[uVar23].level - 1;
+                  if (*(byte *)((uint)(units + unitIdx)->bldType * 0x27 + 0x130) <= (byte)randVal) {
+                    if (units[unitIdx].level != 0) {
+                      units[unitIdx].level = units[unitIdx].level - 1;
                     }
                     units = (unit_t *)GUnits;
                     unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
                     if (((BuildingTypes[bldType].flags2 & 4) == 0) &&
-                       ((iVar17 = 0, units[uVar23].level == 0 ||
+                       ((iVar17 = 0, units[unitIdx].level == 0 ||
                         (iVar17 = (uint)bldType * 0x27, (*(uint *)(iVar17 + 0x121) & 0x200) != 0))))
                     {
-                      ovc22_usesGUnits(uVar23,(uint8_t *)
+                      ovc22_usesGUnits(unitIdx,(uint8_t *)
                                               CONCAT13((char)((uint)iVar17 >> 8),
                                                        CONCAT12((byte)idx,_SS)));
                     }
@@ -3237,8 +3238,8 @@ void __cdecl16far upd_usesAlignUp4(void)
                                *(int *)((int)&BldInstances[0].seg + (uint)bldType * 0xc) != 0) ||
                              (BuildingTypes[bldType].flags == '\x10')) &&
                             (unitsSeg = ovc22_usesGOngoingBattle2
-                                                (*(byte *)&units[uVar23].x,
-                                                 *(byte *)&units[uVar23].y), (char)unitsSeg != '\0')
+                                                (*(byte *)&units[unitIdx].x,
+                                                 *(byte *)&units[unitIdx].y), (char)unitsSeg != '\0')
                             ) {
                       found = 0x1;
                     }
@@ -3620,32 +3621,32 @@ void __cdecl16far upd_usesAlignUp4(void)
     if (DebugVerbose != false) {
       printf("%d \r");
     }
-    for (uVar23 = 0xf8; uVar23 < GUnitCount; uVar23 = uVar23 + 1) {
+    for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
       unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
       units = (unit_t *)GUnits;
-      if ((*(uint *)((uint)(units + uVar23)->bldType * 0x27 + 0x121) & 0x40) != 0) {
-        if (units[uVar23].timer != 0) {
-          units[uVar23].timer = units[uVar23].timer - 1;
+      if ((*(uint *)((uint)(units + unitIdx)->bldType * 0x27 + 0x121) & 0x40) != 0) {
+        if (units[unitIdx].timer != 0) {
+          units[unitIdx].timer = units[unitIdx].timer - 1;
         }
         unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
-        if (((unit_t *)GUnits)[uVar23].timer == 0) {
-          uVar7 = *(uint32_t *)((uint)((unit_t *)GUnits)[uVar23].unitType << 2);
+        if (((unit_t *)GUnits)[unitIdx].timer == 0) {
+          uVar7 = *(uint32_t *)((uint)((unit_t *)GUnits)[unitIdx].unitType << 2);
           if (*(char *)((int)uVar7 + 0x3f) == '\0') {
             ovr_play_sfx(81,0,0);
             unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
-            sVar6 = ((unit_t *)GUnits)[uVar23].y;
+            sVar6 = ((unit_t *)GUnits)[unitIdx].y;
             uVar33 = (undefined1)sVar6;
             uVar35 = (undefined1)((uint)sVar6 >> 8);
             uVar34 = 0x10;
-            uVar12 = ovr_alignUp4(((unit_t *)GUnits)[uVar23].x,0,0);
+            uVar12 = ovr_alignUp4(((unit_t *)GUnits)[unitIdx].x,0,0);
             pcVar13 = ovr_fmVsprintf("Mine exhausted at (%d, %d).",
                                      (char *)CONCAT13(uVar35,CONCAT12(uVar33,uVar12)));
             ovr_say(pcVar13,uVar34);
             ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x24));
           }
-          ovc22_usesGUnits(uVar23,(uint8_t *)
-                                  CONCAT13((char)(uVar23 * 9 >> 8),
-                                           CONCAT12(((unit_t *)GUnits)[uVar23].unitType,_SS)));
+          ovc22_usesGUnits(unitIdx,(uint8_t *)
+                                  CONCAT13((char)(unitIdx * 9 >> 8),
+                                           CONCAT12(((unit_t *)GUnits)[unitIdx].unitType,_SS)));
         }
       }
     }
