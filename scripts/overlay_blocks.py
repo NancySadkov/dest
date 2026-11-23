@@ -20,7 +20,7 @@ for line in io.open(MAP, encoding="latin-1", errors="replace"):
                  line)
     if not m:
         continue
-    start = int(m.group(2), 16)
+    start = int(m.group(1), 16)
     length = int(m.group(3), 16)
     if not length:
         continue

@@ -1032,3 +1032,38 @@ Next probes, in order:
 3. if they agree, the failure is that the stub block itself is not where the map
    says at run time, i.e. the resident image's overlay stub area is not loaded -
    which the loader would also have to address.
+
+### The thunk is correct, but neither the thunk nor the stub is executed
+
+`tmp/thunk_check.py` locates `_OVR_INIT_GAME` through the map and reads the
+operand from the built image:
+
+```
+map:    _OVR_INIT_GAME 06DE:0203        (THUNKS_TEXT at file 0x06DE0)
+thunk:  EA 48 00 12 14                  ljmp 1412:0048
+target: segment 1412 = O09_SEG at file 0x14120 (STUBSEG)
+bytes:  CD 3F 7C 05 00                  INT 3Fh, id 0x7C, offset 0x0005
+segment word at image 0x6FE6 relocated: True
+```
+
+So the relocated target is exactly `O09_SEG:0048` and the stub is there.  The
+`audit/overlay_blocks.csv` entry for O09 now matches too (segment `1412`, file
+`0x14120`, 187 bytes) - the CSV had an off-by-one that took the map's *end*
+column as the start; `scripts/overlay_blocks.py` is fixed.
+
+Decisive probes on that build:
+
+```
+patch the stub at 0x14120+0x48 with mov ax,4c43h; int 21h   -> hang
+patch the thunk at 0x6FE0+0x203 with mov ax,4c44h; int 21h  -> hang
+```
+
+Neither is executed, yet the exit-code ladder shows `main` reaches the
+`ovr_init_game();` statement (0x41 fires).  So the call compiled into `main` does
+not go to the thunk at `06DE:0203`.
+
+That is the next thing to look at: disassemble `main`'s body in the built image
+around the call and see which far address it uses.  `ovr_init_game` is only
+*declared* in the tree (`undefined ovr_init_game();`) and supplied by TLINK's
+`/o`, so the call may be encoded differently from the thunk the map lists (e.g.
+through the overlay dispatch table rather than a direct `CALLF`).
