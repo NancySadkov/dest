@@ -2749,7 +2749,7 @@ void __cdecl16far ovc23_usesBlitGfxRect2(int x,int y,int recordIndex,brect_t *re
   int y_00;
   byte bVar1;
   byte bVar2;
-  uint uVar3;
+  uint buildTimer;
   uint16_t uVar4;
   uint16_t uVar5;
   int x_00;
@@ -2781,7 +2781,7 @@ void __cdecl16far ovc23_usesBlitGfxRect2(int x,int y,int recordIndex,brect_t *re
   bVar1 = *(byte *)(y * 0x12 + 7);
   if (bVar1 < 2) {
     uStack_12 = (uint)*(byte *)(y * 0x12 + 6);
-    uVar3 = *(uint *)(y * 0x12);
+    buildTimer = *(uint *)(y * 0x12);
     bVar1 = *(byte *)(y * 0x12 + 0xe);
     bVar2 = *(byte *)(y * 0x12 + 0x11);
     if (bVar2 < uStack_12) {
@@ -2794,10 +2794,10 @@ void __cdecl16far ovc23_usesBlitGfxRect2(int x,int y,int recordIndex,brect_t *re
     {
       y_00 = iStack_a + 0x13;
       type_00 = (uint8_t)rect;
-      if ((bVar1 == 2) || (0x13 < uVar3)) {
+      if ((bVar1 == 2) || (0x13 < buildTimer)) {
         if (bVar1 < 2) {
           if (uStack_c == 0) {
-            uVar6 = (uVar3 + GfxRndSeed2) % 0xe;
+            uVar6 = (buildTimer + GfxRndSeed2) % 0xe;
             gfx_01.seg = ((uint16_t *)&tmstrsSprites6Seg)[uVar6 * 2];
             gfx_01.ofs = ((uint16_t *)&tmstrsSprites6Ofs)[uVar6 * 2];
             ovr_blitGfxRect(gfx_01,in_stack_00000004 + 0xe,iStack_a + 0x22,(brect_t *)recordIndex,type_00,true,1,0,0,0,0,0);
@@ -2805,54 +2805,54 @@ void __cdecl16far ovc23_usesBlitGfxRect2(int x,int y,int recordIndex,brect_t *re
           gfx_02.seg = uVar5;
           gfx_02.ofs = uVar4;
           ovr_blitGfxRect(gfx_02,x_00,y_00,(brect_t *)recordIndex,type_00,true,0,0,0,0,0,0);
-          if ((uVar3 + uStack_c + GfxRndSeed2 + x_00 & 0x1f) < 0x11) {
-            uVar6 = uVar3 + uStack_c + GfxRndSeed2 + x_00 & 0x1f;
+          if ((buildTimer + uStack_c + GfxRndSeed2 + x_00 & 0x1f) < 0x11) {
+            uVar6 = buildTimer + uStack_c + GfxRndSeed2 + x_00 & 0x1f;
             gfx_03.seg = ((uint16_t *)&tmstrsSprites5Seg)[uVar6 * 2];
             gfx_03.ofs = ((uint16_t *)&tmstrsSprites5Ofs)[uVar6 * 2];
-            ovr_blitGfxRect(gfx_03,x_00 + ((int)((uint)*(byte *)((uVar3 + uStack_c + GfxRndSeed2 +
+            ovr_blitGfxRect(gfx_03,x_00 + ((int)((uint)*(byte *)((buildTimer + uStack_c + GfxRndSeed2 +
                                                                   x_00 >> 5) + uStack_c +
                                                                  GfxRndSeed2 & 0xff) * 0x25) >> 8) +
                                    3,iStack_a + 0x10,(brect_t *)recordIndex,type_00,true,0,0,0,0,0,0);
           }
-          if ((((uVar3 + uStack_c) - GfxRndSeed2) - x_00 & 0xf) < 7) {
-            uVar6 = ((uVar3 + uStack_c) - GfxRndSeed2) - x_00 & 0xf;
+          if ((((buildTimer + uStack_c) - GfxRndSeed2) - x_00 & 0xf) < 7) {
+            uVar6 = ((buildTimer + uStack_c) - GfxRndSeed2) - x_00 & 0xf;
             gfx_04.seg = ((uint16_t *)&tmstrsSprites4Seg)[uVar6 * 2];
             gfx_04.ofs = ((uint16_t *)&tmstrsSprites4Ofs)[uVar6 * 2];
-            ovr_blitGfxRect(gfx_04,x_00 + ((int)((uint)*(byte *)((((((uVar3 + uStack_c) -
+            ovr_blitGfxRect(gfx_04,x_00 + ((int)((uint)*(byte *)((((((buildTimer + uStack_c) -
                                                                     GfxRndSeed2) - x_00 >> 4) +
                                                                   uStack_c) - GfxRndSeed2) + 0xe &
                                                                 0xff) * 0x25) >> 8) + 3,iStack_a + 0x10,(brect_t *)recordIndex,type_00,true,0,0,0,0,0,0);
           }
-          uVar6 = (uVar3 + 5) % 7;
+          uVar6 = (buildTimer + 5) % 7;
           gfx_05.seg = ((uint16_t *)&tmstrsSprites3Seg)[uVar6 * 2];
           gfx_05.ofs = ((uint16_t *)&tmstrsSprites3Ofs)[uVar6 * 2];
           ovr_blitGfxRect(gfx_05,in_stack_00000004 + 4,iStack_a + 0xd,(brect_t *)recordIndex,type_00,true,0,0,0,0,0,0);
-          gfx_06.seg = ((uint16_t *)&tmstrsSprites3Seg)[(uVar3 % 7) * 2];
-          gfx_06.ofs = ((uint16_t *)&tmstrsSprites3Ofs)[(uVar3 % 7) * 2];
+          gfx_06.seg = ((uint16_t *)&tmstrsSprites3Seg)[(buildTimer % 7) * 2];
+          gfx_06.ofs = ((uint16_t *)&tmstrsSprites3Ofs)[(buildTimer % 7) * 2];
           ovr_blitGfxRect(gfx_06,in_stack_00000004 + 6,iStack_a + 0xd,(brect_t *)recordIndex,type_00,true,0,0,0,0,0,0);
-          uVar6 = (uVar3 + 2) % 7;
+          uVar6 = (buildTimer + 2) % 7;
           gfx_07.seg = ((uint16_t *)&tmstrsSprites3Seg)[uVar6 * 2];
           gfx_07.ofs = ((uint16_t *)&tmstrsSprites3Ofs)[uVar6 * 2];
           ovr_blitGfxRect(gfx_07,in_stack_00000004 + 0x18,iStack_a + 0xd,(brect_t *)recordIndex,type_00,true,0,0,0,0,0,0);
-          uVar6 = uVar3 + 3 & 7;
+          uVar6 = buildTimer + 3 & 7;
           gfx_08.seg = ((uint16_t *)&tmstrsSprites2Seg)[uVar6 * 2];
           gfx_08.ofs = ((uint16_t *)&tmstrsSprites2Ofs)[uVar6 * 2];
           ovr_blitGfxRect(gfx_08,in_stack_00000004 + 0x22,iStack_a + 0xd,(brect_t *)recordIndex,type_00,true,0,0,0,0,0,0);
-          gfx_09.seg = ((uint16_t *)&tmstrsSprites2Seg)[(uVar3 & 7) * 2];
-          gfx_09.ofs = ((uint16_t *)&tmstrsSprites2Ofs)[(uVar3 & 7) * 2];
+          gfx_09.seg = ((uint16_t *)&tmstrsSprites2Seg)[(buildTimer & 7) * 2];
+          gfx_09.ofs = ((uint16_t *)&tmstrsSprites2Ofs)[(buildTimer & 7) * 2];
           ovr_blitGfxRect(gfx_09,in_stack_00000004 + 0x1d,iStack_a + 0xd,(brect_t *)recordIndex,type_00,true,0,0,0,0,0,0);
-          gfx_10.seg = ((uint16_t *)&tmstrsSprites1Seg)[(uVar3 % 5) * 2];
-          gfx_10.ofs = ((uint16_t *)&tmstrsSprites1Ofs)[(uVar3 % 5) * 2];
+          gfx_10.seg = ((uint16_t *)&tmstrsSprites1Seg)[(buildTimer % 5) * 2];
+          gfx_10.ofs = ((uint16_t *)&tmstrsSprites1Ofs)[(buildTimer % 5) * 2];
           ovr_blitGfxRect(gfx_10,in_stack_00000004 + 0x13,iStack_a + 0xd,(brect_t *)recordIndex,type_00,true,0,0,0,0,0,0);
-          gfx_11.seg = ((uint16_t *)&tmstrsSprites1Seg)[(uVar3 % 5) * 2];
-          gfx_11.ofs = ((uint16_t *)&tmstrsSprites1Ofs)[(uVar3 % 5) * 2];
+          gfx_11.seg = ((uint16_t *)&tmstrsSprites1Seg)[(buildTimer % 5) * 2];
+          gfx_11.ofs = ((uint16_t *)&tmstrsSprites1Ofs)[(buildTimer % 5) * 2];
           ovr_blitGfxRect(gfx_11,in_stack_00000004 + 0x1f,iStack_a + 0xd,(brect_t *)recordIndex,type_00,true,0,0,0,0,0,0);
           iStack_a = y_00;
         }
         else {
-          if (uVar3 < 10) {
-            uStack_6 = ((uint16_t *)&csite1Seg)[(uVar3 + 0xc) * 2];
-            uStack_8 = ((uint16_t *)&csite1Ofs)[(uVar3 + 0xc) * 2];
+          if (buildTimer < 10) {
+            uStack_6 = ((uint16_t *)&csite1Seg)[(buildTimer + 0xc) * 2];
+            uStack_8 = ((uint16_t *)&csite1Ofs)[(buildTimer + 0xc) * 2];
           }
           else {
             uStack_6 = csite1_22Seg;
@@ -2865,9 +2865,9 @@ void __cdecl16far ovc23_usesBlitGfxRect2(int x,int y,int recordIndex,brect_t *re
         }
       }
       else {
-        if ((uStack_12 - 1 == uStack_c) && (uVar3 < 0xd)) {
-          uStack_6 = ((uint16_t *)&csite1Seg)[uVar3 * 2];
-          uStack_8 = ((uint16_t *)&csite1Ofs)[uVar3 * 2];
+        if ((uStack_12 - 1 == uStack_c) && (buildTimer < 0xd)) {
+          uStack_6 = ((uint16_t *)&csite1Seg)[buildTimer * 2];
+          uStack_8 = ((uint16_t *)&csite1Ofs)[buildTimer * 2];
         }
         else {
           uStack_6 = csite1_12Seg;

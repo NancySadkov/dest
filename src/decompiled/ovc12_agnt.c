@@ -897,28 +897,28 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
 
 {
   char *pcVar1;
-  int iVar2;
+  int ofs;
   int rec;
   uint16_t uStack_4;
   
   if ((int)fromIndex < toIndex) {
     for (rec = 0; rec < 10; rec = rec + 1) {
-      for (iVar2 = 0; iVar2 < 0x69; iVar2 = iVar2 + 1) {
-        if (((int)(fromIndex + 1) < (int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x8fa)) &&
-           ((int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x8fa) <= toIndex + 1)) {
-          pcVar1 = (char *)(rec * 0x69 + iVar2 + 0x8fa);
+      for (ofs = 0; ofs < 0x69; ofs = ofs + 1) {
+        if (((int)(fromIndex + 1) < (int)(uint)*(byte *)(rec * 0x69 + ofs + 0x8fa)) &&
+           ((int)(uint)*(byte *)(rec * 0x69 + ofs + 0x8fa) <= toIndex + 1)) {
+          pcVar1 = (char *)(rec * 0x69 + ofs + 0x8fa);
           *pcVar1 = *pcVar1 + -1;
         }
-        else if ((uint)*(byte *)(rec * 0x69 + iVar2 + 0x8fa) == fromIndex + 1) {
-          *(char *)(rec * 0x69 + iVar2 + 0x8fa) = (char)toIndex + '\x01';
+        else if ((uint)*(byte *)(rec * 0x69 + ofs + 0x8fa) == fromIndex + 1) {
+          *(char *)(rec * 0x69 + ofs + 0x8fa) = (char)toIndex + '\x01';
         }
-        if (((int)(fromIndex + 1) < (int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x4e0)) &&
-           ((int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x4e0) <= toIndex + 1)) {
-          pcVar1 = (char *)(rec * 0x69 + iVar2 + 0x4e0);
+        if (((int)(fromIndex + 1) < (int)(uint)*(byte *)(rec * 0x69 + ofs + 0x4e0)) &&
+           ((int)(uint)*(byte *)(rec * 0x69 + ofs + 0x4e0) <= toIndex + 1)) {
+          pcVar1 = (char *)(rec * 0x69 + ofs + 0x4e0);
           *pcVar1 = *pcVar1 + -1;
         }
-        else if ((uint)*(byte *)(rec * 0x69 + iVar2 + 0x4e0) == fromIndex + 1) {
-          *(char *)(rec * 0x69 + iVar2 + 0x4e0) = (char)toIndex + '\x01';
+        else if ((uint)*(byte *)(rec * 0x69 + ofs + 0x4e0) == fromIndex + 1) {
+          *(char *)(rec * 0x69 + ofs + 0x4e0) = (char)toIndex + '\x01';
         }
       }
     }
@@ -937,25 +937,25 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
   }
   else {
     for (rec = 0; rec < 10; rec = rec + 1) {
-      for (iVar2 = 0; iVar2 < 0x69; iVar2 = iVar2 + 1) {
-        if (((int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x8fa) < toIndex + 1) ||
-           ((int)(fromIndex + 1) <= (int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x8fa))) {
-          if ((uint)*(byte *)(rec * 0x69 + iVar2 + 0x8fa) == fromIndex + 1) {
-            *(char *)(rec * 0x69 + iVar2 + 0x8fa) = (char)toIndex + '\x01';
+      for (ofs = 0; ofs < 0x69; ofs = ofs + 1) {
+        if (((int)(uint)*(byte *)(rec * 0x69 + ofs + 0x8fa) < toIndex + 1) ||
+           ((int)(fromIndex + 1) <= (int)(uint)*(byte *)(rec * 0x69 + ofs + 0x8fa))) {
+          if ((uint)*(byte *)(rec * 0x69 + ofs + 0x8fa) == fromIndex + 1) {
+            *(char *)(rec * 0x69 + ofs + 0x8fa) = (char)toIndex + '\x01';
           }
         }
         else {
-          pcVar1 = (char *)(rec * 0x69 + iVar2 + 0x8fa);
+          pcVar1 = (char *)(rec * 0x69 + ofs + 0x8fa);
           *pcVar1 = *pcVar1 + '\x01';
         }
-        if (((int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x4e0) < toIndex + 1) ||
-           ((int)(fromIndex + 1) <= (int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x4e0))) {
-          if ((uint)*(byte *)(rec * 0x69 + iVar2 + 0x4e0) == fromIndex + 1) {
-            *(char *)(rec * 0x69 + iVar2 + 0x4e0) = (char)toIndex + '\x01';
+        if (((int)(uint)*(byte *)(rec * 0x69 + ofs + 0x4e0) < toIndex + 1) ||
+           ((int)(fromIndex + 1) <= (int)(uint)*(byte *)(rec * 0x69 + ofs + 0x4e0))) {
+          if ((uint)*(byte *)(rec * 0x69 + ofs + 0x4e0) == fromIndex + 1) {
+            *(char *)(rec * 0x69 + ofs + 0x4e0) = (char)toIndex + '\x01';
           }
         }
         else {
-          pcVar1 = (char *)(rec * 0x69 + iVar2 + 0x4e0);
+          pcVar1 = (char *)(rec * 0x69 + ofs + 0x4e0);
           *pcVar1 = *pcVar1 + '\x01';
         }
       }
