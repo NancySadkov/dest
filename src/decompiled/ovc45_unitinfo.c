@@ -77,9 +77,9 @@ uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIn
       if ((((((entity_t *)iVar2)[uVar3].base.y == y) &&
            (*(char *)((int)(char **)GMenuStrings +
                      (uint)((entity_t *)iVar2)[uVar3].base.gindex * 0x95 + 0x1f) == '\0')) &&
-          (slotMin < (int)(uint)*(byte *)(iVar2 + uVar3 * 0x37 + 0x1a))) &&
-         (*(byte *)(iVar2 + uVar3 * 0x37 + 0x1a) < bStack_3)) {
-        bStack_3 = *(byte *)(iVar2 + uVar3 * 0x37 + 0x1a);
+          (slotMin < (int)(uint)AGNT_FIELD(&((entity_t *)Entities)[uVar3], base.entity, 3))) &&
+         (AGNT_FIELD(&((entity_t *)Entities)[uVar3], base.entity, 3) < bStack_3)) {
+        bStack_3 = AGNT_FIELD(&((entity_t *)Entities)[uVar3], base.entity, 3);
         *(uint *)CONCAT22((uint *)entityIndexOut,in_stack_0000000a) = uVar3;
       }
     }
@@ -133,11 +133,11 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
         }
         if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 +
                       (uint)((entity_t *)iVar3)[uVar4].base.gindex * 0x95) != -1) &&
-           (*(char *)(iVar3 + uVar4 * 0x37 + 0x1a) != -1)) {
-          if (*(char *)(iVar3 + uVar4 * 0x37 + 0x1a) == in_stack_00000010) {
+           (AGNT_FIELD(&((entity_t *)Entities)[uVar4], base.entity, 3) != -1)) {
+          if (AGNT_FIELD(&((entity_t *)Entities)[uVar4], base.entity, 3) == in_stack_00000010) {
             *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = uVar4;
           }
-          else if (*(char *)(iVar3 + uVar4 * 0x37 + 0x1a) == selectedPartyIndex) {
+          else if (AGNT_FIELD(&((entity_t *)Entities)[uVar4], base.entity, 3) == selectedPartyIndex) {
             uStack_6 = uVar4;
           }
           if ((uStack_4 != 0xffff) && (AGNT_FIELD(&((entity_t *)Entities)[uVar4], base.entity, 3) != uStack_4))

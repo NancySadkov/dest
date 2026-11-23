@@ -2251,7 +2251,7 @@ void __cdecl16far manage_usesEntities2(void)
   
   uVar2 = (uint16_t)((ulong)Entities >> 0x10);
   iVar1 = (int)Entities;
-  if (((*(char *)(iVar1 + unaff_SI * 0x37 + 0x1a) == in_CL) &&
+  if (((AGNT_FIELD(&((entity_t *)Entities)[unaff_SI], base.entity, 3) == in_CL) &&
       (*(byte *)(unaff_BP + 8) <= ((entity_t *)iVar1)[unaff_SI].base.level)) &&
      (((entity_t *)iVar1)[unaff_SI].base.level <= *(byte *)(unaff_BP + 10))) {
     *(int *)*(uint32_t *)(unaff_BP + 0xc) = *(int *)*(uint32_t *)(unaff_BP + 0xc) + 1;

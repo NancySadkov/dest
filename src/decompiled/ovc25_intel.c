@@ -32,8 +32,8 @@ ovc25_usesAlignUp4(char partyIndex,uint16_t x,uint16_t y,uint16_t destX,uint16_t
     }
     uVar6 = (uint16_t)((ulong)Entities >> 0x10);
     iVar4 = (int)Entities;
-    if ((*(char *)(iVar4 + uVar5 * 0x37 + 0x1a) == partyIndex) &&
-       ((*(byte *)(iVar4 + uVar5 * 0x37 + 0x33) & 2) == 0)) {
+    if ((AGNT_FIELD(&((entity_t *)Entities)[uVar5], base.entity, 3) == partyIndex) &&
+       ((AGNT_FIELD(&((entity_t *)Entities)[uVar5], base.flags32, 1) & 2) == 0)) {
       uVar3 = ovr_alignUp4(*(int *)((entity_t *)iVar4 + uVar5),0,0);
       uVar6 = (uint16_t)((ulong)Entities >> 0x10);
       if ((uVar3 == uVar2) && (((entity_t *)Entities)[uVar5].base.y == y)) {
@@ -136,8 +136,8 @@ bool __cdecl16far ovc25_textArena(uint *foundIndexOut,char includeFlag8,uint16_t
       signMaskY = (int)dy >> 0xf;
       dist = ((dist - targetX ^ signMaskX) - signMaskX) + ((dy ^ signMaskY) - signMaskY) * 2;
       if ((((dist != 0) && (dist < bestDist)) &&
-          ((*(byte *)(entitiesOfs + entityIndex * 0x37 + 0x33) & 2) == 0)) &&
-         ((includeFlag8 != '\0' || ((*(byte *)(entitiesOfs + entityIndex * 0x37 + 0x33) & 8) == 0)))) {
+          ((AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.flags32, 1) & 2) == 0)) &&
+         ((includeFlag8 != '\0' || ((AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.flags32, 1) & 8) == 0)))) {
         *foundIndexOut = entityIndex;
         bestDist = dist;
       }
@@ -390,7 +390,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
       for (idx = 0; idx < EntityCount; idx = idx + 1) {
         uVar8 = (uint16_t)((ulong)Entities >> 0x10);
         iVar7 = (int)Entities;
-        if (*(byte *)(iVar7 + idx * 0x37 + 0x1a) == leaderIdx) {
+        if (AGNT_FIELD(&((entity_t *)Entities)[idx], base.entity, 3) == leaderIdx) {
           uVar2 = ((char_sheet_t *)((leaderIdx << 2)))->x -
                   *(int *)((entity_t *)iVar7 + idx);
           uVar5 = (int)uVar2 >> 0xf;
@@ -722,11 +722,11 @@ void ovc25_usesAlignUp47(void)
       iVar5 = (int)Entities;
       if (((entity_t *)iVar5)[uVar6].base.y == *(int *)(iVar5 + *(int *)(unaff_BP + -4) * 0x37 + 2)
          ) {
-        *(undefined1 *)(iVar5 + uVar6 * 0x37 + 0x19) = 1;
+        AGNT_FIELD(&((entity_t *)Entities)[uVar6], base.entity, 2) = 1;
         uVar7 = (uint16_t)((ulong)Entities >> 0x10);
         iVar5 = (int)Entities;
         if (((((entity_t *)iVar5)[uVar6].base.destX == 0) && (((entity_t *)iVar5)[uVar6].base.destY == 0)
-            ) && ((*(char *)(iVar5 + uVar6 * 0x37 + 0x18) == '\0' &&
+            ) && ((AGNT_FIELD(&((entity_t *)Entities)[uVar6], base.entity, 1) == '\0' &&
                   ((*(char *)((int)(char **)GMenuStrings +
                              (uint)((entity_t *)iVar5)[uVar6].base.gindex * 0x95 + 0x1f) ==
                     *(char *)(unaff_BP + -0xd) &&

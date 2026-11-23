@@ -245,11 +245,11 @@ int __cdecl16far attact_countPartyUnits(byte menuIndex)
     for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
       uVar4 = (uint16_t)((ulong)Entities >> 0x10);
       iVar1 = (int)Entities;
-      if (((*(uint8_t *)(iVar1 + uVar2 * 0x37 + 0x1a) == ((uint8_t *)MenuItemEnabled)[menuIndex]) &&
+      if (((AGNT_FIELD(&((entity_t *)Entities)[uVar2], base.entity, 3) == ((uint8_t *)MenuItemEnabled)[menuIndex]) &&
           (((*(uint *)((entity_t *)iVar1 + uVar2) < GfxRndSeed - 2U ||
             (GfxRndSeed + 1U < *(uint *)((entity_t *)iVar1 + uVar2))) ||
            (((entity_t *)iVar1)[uVar2].base.y != GfxRndSeed2)))) &&
-         ((*(byte *)(iVar1 + uVar2 * 0x37 + 0x33) & 2) == 0)) {
+         ((AGNT_FIELD(&((entity_t *)Entities)[uVar2], base.flags32, 1) & 2) == 0)) {
         iVar3 = iVar3 + 1;
       }
     }
@@ -992,13 +992,13 @@ attact_textArena(uint16_t *foundIndexOut,int mode,uint8_t partyIndex,uint16_t x,
         iVar6 = (int)Entities;
         uVar8 = (uint16_t)((ulong)Entities >> 0x10);
         if (((uVar3 != uVar1) || (((entity_t *)iVar6)[uVar7].base.destY != y)) &&
-           ((((mode == 0 && ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 2) == 0)) ||
+           ((((mode == 0 && ((AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.flags32, 1) & 2) == 0)) ||
              ((mode == 1 &&
               (((((entity_t *)iVar6)[uVar7].base.destX == 0 &&
                 (((entity_t *)iVar6)[uVar7].base.destY == 0)) &&
-               ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 2) == 0)))))) ||
-            (((mode == 2 && ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 1) != 0)) ||
-             ((mode == 3 && ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 4) != 0)))))))) {
+               ((AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.flags32, 1) & 2) == 0)))))) ||
+            (((mode == 2 && ((AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.flags32, 1) & 1) != 0)) ||
+             ((mode == 3 && ((AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.flags32, 1) & 4) != 0)))))))) {
           *foundIndexOut = uVar7;
           uStack_4 = uVar2;
         }

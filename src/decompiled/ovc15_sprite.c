@@ -3083,7 +3083,7 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
     do {
       uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       iVar3 = (int)Entities;
-      if ((*(byte *)(iVar3 + uVar4 * 0x37 + 0x1a) == bStack_9) &&
+      if ((AGNT_FIELD(&((entity_t *)Entities)[uVar4], base.entity, 3) == bStack_9) &&
          (uVar2 = ovr_ovc23_isCursorAt
                             (*(uint16_t *)((entity_t *)iVar3 + uVar4),((entity_t *)iVar3)[uVar4].base.y,0)
          , (uVar2 & 0xff) == 0)) {
@@ -3101,7 +3101,7 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
     do {
       uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       iVar3 = (int)Entities;
-      if (((*(byte *)(iVar3 + uVar4 * 0x37 + 0x1a) == bStack_8) &&
+      if (((AGNT_FIELD(&((entity_t *)Entities)[uVar4], base.entity, 3) == bStack_8) &&
           (uVar2 = ovr_ovc23_isCursorAt
                              (*(uint16_t *)((entity_t *)iVar3 + uVar4),((entity_t *)iVar3)[uVar4].base.y,0), (uVar2 & 0xff) == 0)) &&
          ((*((uint8_t far *)&((entity_t *)Entities)[uVar4].base.flags32 + 1) & 3) == 0)) {

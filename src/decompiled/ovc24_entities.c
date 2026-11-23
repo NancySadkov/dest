@@ -34,7 +34,7 @@ void __cdecl16far ovc24_usesAlignUp4(void)
     }
     uVar8 = (uint16_t)((ulong)Entities >> 0x10);
     iVar4 = (int)Entities;
-    if (*(char *)(iVar4 + uVar7 * 0x37 + 0x18) == '\0') {
+    if (AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.entity, 1) == '\0') {
       cVar1 = *(char *)((int)(char **)GMenuStrings +
                        (uint)((entity_t *)iVar4)[uVar7].base.gindex * 0x95 + 0x1f);
       uVar2 = alignUp4(*(int *)((entity_t *)iVar4 + uVar7),0,0);
@@ -441,8 +441,8 @@ void __cdecl16far ovc24_removeOtherEntities(uint8_t *reportedOut)
     for (ent = 0; ent < EntityCount; ent = ent + 1) {
       uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       iVar3 = (int)Entities;
-      if ((*(char *)(iVar3 + ent * 0x37 + 0x18) != '\0') &&
-         (*(char *)(iVar3 + ent * 0x37 + 0x19) == '\0')) {
+      if ((AGNT_FIELD(&((entity_t *)Entities)[ent], base.entity, 1) != '\0') &&
+         (AGNT_FIELD(&((entity_t *)Entities)[ent], base.entity, 2) == '\0')) {
         if ((GOngoingBattle == '\0') && (((entity_t *)iVar3)[ent].base.y == GfxRndSeed2)) {
           uVar1 = alignUp4(*(int *)((entity_t *)iVar3 + ent),0,0);
           uVar2 = alignUp4(GfxRndSeed,0,0);
@@ -891,7 +891,7 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
     uVar10 = (uint16_t)((ulong)Entities >> 0x10);
     iVar8 = (int)Entities;
     iVar6 = ((entity_t *)iVar8)[entityIndex].base.y;
-    if (*(char *)(iVar8 + entityIndex * 0x37 + 0x18) == '\0') {
+    if (AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 1) == '\0') {
       bVar2 = false;
       for (uVar9 = 0; uVar9 < EntityCount; uVar9 = uVar9 + 1) {
         if (((*(uint *)((int)&worldMenuLabels[6].seg + 1 +

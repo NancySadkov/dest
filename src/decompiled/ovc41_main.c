@@ -844,7 +844,7 @@ void __cdecl16far dbgPromoteEnemy(void)
     if (((GfxRndSeed - 2U <= *(uint *)((entity_t *)iVar2 + i)) &&
         (*(uint *)((entity_t *)iVar2 + i) <= GfxRndSeed + 1U)) &&
        (((entity_t *)iVar2)[i].base.y == GfxRndSeed2)) {
-      pcVar1 = (char *)(iVar2 + i * 0x37 + 0xd);
+      pcVar1 = (char *)((uint8_t *)((entity_t *)Entities + i) + 0xd);
       *pcVar1 = *pcVar1 + '\x01';
       uVar3 = (uint16_t)((ulong)Entities >> 0x10);
       if (0x29 < ((entity_t *)Entities)[i].base.gindex) {
@@ -2461,7 +2461,7 @@ switchD_6000_ca06_caseD_1:
           for (uVar16 = 0; uVar16 < EntityCount; uVar16 = uVar16 + 1) {
             uVar22 = (uint16_t)((ulong)Entities >> 0x10);
             iVar12 = (int)Entities;
-            if ((((*(byte *)(iVar12 + uVar16 * 0x37 + 0x1a) == bStack_3c) &&
+            if ((((AGNT_FIELD(&((entity_t *)Entities)[uVar16], base.entity, 3) == bStack_3c) &&
                  (paStack_22 <= (agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
                 ((agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26)) &&
                ((paStack_24 <= (agnt_t *)((entity_t *)iVar12)[uVar16].base.y &&
@@ -2534,7 +2534,7 @@ L_ui_unit_order_6616_0689_1054:
         for (uVar16 = 0; uVar16 < EntityCount; uVar16 = uVar16 + 1) {
           uVar22 = (uint16_t)((ulong)Entities >> 0x10);
           iVar12 = (int)Entities;
-          if (((*(byte *)(iVar12 + uVar16 * 0x37 + 0x1a) == bStack_3c) &&
+          if (((AGNT_FIELD(&((entity_t *)Entities)[uVar16], base.entity, 3) == bStack_3c) &&
               (paStack_22 <= (agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
              (((agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26 &&
               ((paStack_24 <= (agnt_t *)((entity_t *)iVar12)[uVar16].base.y &&

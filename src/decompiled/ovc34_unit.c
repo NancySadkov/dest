@@ -522,7 +522,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         for (entityIdx = 0; entityIdx < EntityCount; entityIdx = entityIdx + 1) {
           entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
           entitiesOfs = (int)Entities;
-          if ((((*(byte *)(entitiesOfs + entityIdx * 0x37 + 0x1a) == partyIdx) &&
+          if ((((AGNT_FIELD(&((entity_t *)Entities)[entityIdx], base.entity, 3) == partyIdx) &&
                (pbStack_22 <= (byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx))) &&
               ((byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx) <= pbStack_26)) &&
              ((pbStack_24 <= (byte *)((entity_t *)entitiesOfs)[entityIdx].base.y &&
@@ -586,7 +586,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         pbVar8 = (byte *)((char *)0x2410);
         entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
         entitiesOfs = (int)Entities;
-        if (((*(byte *)(entitiesOfs + entityIdx * 0x37 + 0x1a) == partyIdx) &&
+        if (((AGNT_FIELD(&((entity_t *)Entities)[entityIdx], base.entity, 3) == partyIdx) &&
             (pbVar8 = (byte *)((char *)0x2410),
             pbStack_22 <= (byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx))) &&
            ((pbVar8 = (byte *)((char *)0x2410),

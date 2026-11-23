@@ -154,7 +154,7 @@ void __cdecl16far ovc13_drawPanelEntitiesAll(void)
     iVar3 = *(int *)((entity_t *)iVar4 + entityIndex);
     iVar2 = ((entity_t *)iVar4)[entityIndex].base.y;
     iVar1 = iVar2 + 1;
-    if (((((*(char *)(iVar4 + entityIndex * 0x37 + 0x18) != '\0') ||
+    if (((((AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 1) != '\0') ||
           (*(char *)((int)(char **)GMenuStrings + iStack_c * 0x95 + 0x1f) == '\0')) ||
          (DebugVerbose != false)) || (((*(short (*) [60] [148])GMapFlags)[iVar2][iVar3] & 8U) != 0))
        && (((iVar2 = ovc13_usesEntities(entityIndex), (char)iVar2 != '\0' && (PanelGridX <= iVar3))
@@ -167,9 +167,9 @@ void __cdecl16far ovc13_drawPanelEntitiesAll(void)
       uStack_3 = (uint8_t)uVar5;
       uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       iVar4 = (int)Entities;
-      if (*(char *)(iVar4 + entityIndex * 0x37 + 0x18) == '\0') {
-        if ((*(uint *)(iVar4 + entityIndex * 0x37 + 0x14) & 1) == 0) {
-          if ((*(byte *)(iVar4 + entityIndex * 0x37 + 0x33) & 1) == 0) {
+      if (AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 1) == '\0') {
+        if ((AGNT_WORD(&((entity_t *)Entities)[entityIndex], base.frames, 1) & 1) == 0) {
+          if ((AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.flags32, 1) & 1) == 0) {
             if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
               if (*(char *)((int)(char **)GMenuStrings +
                            (uint)((entity_t *)iVar4)[entityIndex].base.gindex * 0x95 + 0x1f) == '\0')
@@ -226,7 +226,7 @@ void __cdecl16far ovc13_drawPanelEntities(void)
       iVar2 = *(int *)((entity_t *)iVar4 + uVar5);
       iVar3 = ((entity_t *)iVar4)[uVar5].base.y;
       iVar1 = iVar3 + 1;
-      if (((((*(char *)(iVar4 + uVar5 * 0x37 + 0x18) != '\0') ||
+      if (((((AGNT_FIELD(&((entity_t *)Entities)[uVar5], base.entity, 1) != '\0') ||
             (*(char *)((int)(char **)GMenuStrings +
                       (uint)((entity_t *)iVar4)[uVar5].base.gindex * 0x95 + 0x1f) == '\0')) ||
            (((*(short (*) [60] [148])GMapFlags)[iVar3][iVar2] & 8U) != 0)) &&
@@ -239,9 +239,9 @@ void __cdecl16far ovc13_drawPanelEntities(void)
         uStack_3 = (uint8_t)uVar6;
         uVar6 = (uint16_t)((ulong)Entities >> 0x10);
         iVar4 = (int)Entities;
-        if (*(char *)(iVar4 + uVar5 * 0x37 + 0x18) == '\0') {
-          if ((*(uint *)(iVar4 + uVar5 * 0x37 + 0x14) & 1) == 0) {
-            if ((*(byte *)(iVar4 + uVar5 * 0x37 + 0x33) & 1) == 0) {
+        if (AGNT_FIELD(&((entity_t *)Entities)[uVar5], base.entity, 1) == '\0') {
+          if ((AGNT_WORD(&((entity_t *)Entities)[uVar5], base.frames, 1) & 1) == 0) {
+            if ((AGNT_FIELD(&((entity_t *)Entities)[uVar5], base.flags32, 1) & 1) == 0) {
               if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
                 if (*(char *)((int)(char **)GMenuStrings +
                              (uint)((entity_t *)iVar4)[uVar5].base.gindex * 0x95 + 0x1f) == '\0') {
@@ -557,7 +557,7 @@ void __cdecl16far ovc13_usesScreenY2(void)
       uVar1 = *(uint *)((entity_t *)iVar4 + uVar6);
       iVar3 = ((entity_t *)iVar4)[uVar6].base.y;
       uVar2 = iVar3 + 1;
-      if (((((*(char *)(iVar4 + uVar6 * 0x37 + 0x18) != '\0') ||
+      if (((((AGNT_FIELD(&((entity_t *)Entities)[uVar6], base.entity, 1) != '\0') ||
             (*(char *)((int)(char **)GMenuStrings +
                       (uint)((entity_t *)iVar4)[uVar6].base.gindex * 0x95 + 0x1f) == '\0')) ||
            (DebugVerbose != false)) ||
@@ -572,9 +572,9 @@ void __cdecl16far ovc13_usesScreenY2(void)
         uStack_3 = (uint8_t)uVar7;
         uVar7 = (uint16_t)((ulong)Entities >> 0x10);
         iVar5 = (int)Entities;
-        if (*(char *)(iVar5 + uVar6 * 0x37 + 0x18) == '\0') {
-          if ((*(uint *)(iVar5 + uVar6 * 0x37 + 0x14) & 1) == 0) {
-            if ((*(byte *)(iVar5 + uVar6 * 0x37 + 0x33) & 1) == 0) {
+        if (AGNT_FIELD(&((entity_t *)Entities)[uVar6], base.entity, 1) == '\0') {
+          if ((AGNT_WORD(&((entity_t *)Entities)[uVar6], base.frames, 1) & 1) == 0) {
+            if ((AGNT_FIELD(&((entity_t *)Entities)[uVar6], base.flags32, 1) & 1) == 0) {
               if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
                 if (*(char *)((int)(char **)GMenuStrings +
                              (uint)((entity_t *)iVar5)[uVar6].base.gindex * 0x95 + 0x1f) == '\0') {
@@ -637,7 +637,7 @@ L_OVC13_3d16_1045_10C4:
     }
     else {
       bVar2 = (byte)((uint)(entityIndex * 0x37) >> 8);
-      if (*(char *)(iVar1 + entityIndex * 0x37 + 0x1a) == partyFilter) {
+      if (AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) == partyFilter) {
         iVar1 = CONCAT11(bVar2,1);
       }
       else {
@@ -685,7 +685,7 @@ void __cdecl16far ovc13_drawWindowEntities(void)
     uVar1 = *(uint *)((entity_t *)iVar4 + entityIndex);
     iVar3 = ((entity_t *)iVar4)[entityIndex].base.y;
     uVar2 = iVar3 + 1;
-    if (((((*(char *)(iVar4 + entityIndex * 0x37 + 0x18) != '\0') ||
+    if (((((AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 1) != '\0') ||
           (*(char *)((int)(char **)GMenuStrings + iStack_c * 0x95 + 0x1f) == '\0')) ||
          (DebugVerbose != false)) || (((*(short (*) [60] [148])GMapFlags)[iVar3][uVar1] & 8U) != 0))
        && (((iVar3 = ovc13_usesEntities(entityIndex), (char)iVar3 != '\0' &&
@@ -700,9 +700,9 @@ void __cdecl16far ovc13_drawWindowEntities(void)
       uStack_3 = (uint8_t)uVar6;
       uVar6 = (uint16_t)((ulong)Entities >> 0x10);
       iVar5 = (int)Entities;
-      if (*(char *)(iVar5 + entityIndex * 0x37 + 0x18) == '\0') {
-        if ((*(uint *)(iVar5 + entityIndex * 0x37 + 0x14) & 1) == 0) {
-          if ((*(byte *)(iVar5 + entityIndex * 0x37 + 0x33) & 1) == 0) {
+      if (AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 1) == '\0') {
+        if ((AGNT_WORD(&((entity_t *)Entities)[entityIndex], base.frames, 1) & 1) == 0) {
+          if ((AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.flags32, 1) & 1) == 0) {
             if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
               if (*(char *)((int)(char **)GMenuStrings +
                            (uint)((entity_t *)iVar5)[entityIndex].base.gindex * 0x95 + 0x1f) == '\0')

@@ -2746,7 +2746,7 @@ uint __cdecl16far ovc22_usesEntities(int entityIndex)
   
   uVar6 = (uint16_t)((ulong)Entities >> 0x10);
   iVar5 = (int)Entities;
-  bVar2 = *(byte *)(iVar5 + entityIndex * 0x37 + 0x1a);
+  bVar2 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
   if (bVar2 == 0xff) {
     uVar3 = entityIndex * 0x37 & 0xff00;
   }
@@ -2766,7 +2766,7 @@ uint __cdecl16far ovc22_usesEntities(int entityIndex)
         }
         if (((entity_t *)iVar5)[entityIndex].base.animFrame <
             (byte)(*(char *)((int)*(uint32_t *)((uint)bVar2 << 2) + 0xa4) + bVar4)) {
-          pcVar1 = (char *)(iVar5 + entityIndex * 0x37 + 0xe);
+          pcVar1 = (char *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0xe);
           *pcVar1 = *pcVar1 + '\x01';
           uVar3 = CONCAT11((char)((uint)(entityIndex * 0x37) >> 8),1);
         }
@@ -3007,9 +3007,9 @@ void __cdecl16far ovc22_usesEntities4(int entityIndex)
   
   uVar6 = (uint16_t)((ulong)Entities >> 0x10);
   iVar5 = (int)Entities;
-  if (((*(char *)(iVar5 + entityIndex * 0x37 + 0x1a) != -1) &&
-      ((*(uint *)(iVar5 + entityIndex * 0x37 + 0x14) & 2) == 0)) &&
-     (bVar3 = *(byte *)(iVar5 + entityIndex * 0x37 + 0x1a),
+  if (((AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) != -1) &&
+      ((AGNT_WORD(&((entity_t *)Entities)[entityIndex], base.frames, 1) & 2) == 0)) &&
+     (bVar3 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),
      uVar4 = *(uint32_t *)((uint)bVar3 << 2), *(char *)((int)uVar4 + 0xa7) != '\0')) {
     uVar4 = *(uint32_t *)((uint)bVar3 << 2);
     pcVar1 = (char *)((int)uVar4 + 0xa7);

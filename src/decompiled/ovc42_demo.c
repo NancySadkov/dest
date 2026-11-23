@@ -177,7 +177,7 @@ void __cdecl16far ovc42_usesEntityCount(void)
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
     uVar3 = (uint16_t)((ulong)Entities >> 0x10);
     iVar1 = (int)Entities;
-    if ((*(char *)(iVar1 + uVar2 * 0x37 + 0x1a) != -1) &&
+    if ((AGNT_FIELD(&((entity_t *)Entities)[uVar2], base.entity, 3) != -1) &&
        (*(char *)((int)(char **)GMenuStrings +
                  (uint)((entity_t *)iVar1)[uVar2].base.gindex * 0x95 + 0x1f) != '\0')) {
       *(uint16_t *)((entity_t *)iVar1 + uVar2) = 0;

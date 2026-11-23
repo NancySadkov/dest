@@ -302,7 +302,7 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
   else {
     uVar5 = (uint)((entity_t *)iVar9)[entityIndex].base.gindex * 0x95;
     if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + uVar5) & 0x80) == 0) {
-      if (*(char *)(iVar9 + entityIndex * 0x37 + 0x18) == '\0') {
+      if (AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 1) == '\0') {
         iVar2 = *(int *)((entity_t *)iVar9 + entityIndex);
         iVar3 = ((entity_t *)iVar9)[entityIndex].base.y;
         destX = ((entity_t *)iVar9)[entityIndex].base.destX;
