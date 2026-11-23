@@ -32,8 +32,15 @@ def add_missing_relocations(exe, mapf):
     img = struct.unpack("<H", b[8:10])[0] * 16
     nrel = struct.unpack("<H", b[6:8])[0]
     relofs = struct.unpack("<H", b[0x18:0x1a])[0]
-    rel = set(struct.unpack("<H", b[relofs + 4 * i: relofs + 4 * i + 2])[0]
-              for i in range(nrel))
+    # Existing relocations, as the linear address of the word they patch.  TLINK
+    # emits (offset-within-segment, segment-paragraph) pairs, so the raw offset
+    # field is NOT the image offset: comparing raw offsets made this pass add a
+    # second entry for words TLINK had already relocated, and DOS then added the
+    # load base twice - every such far call landed at 2*loadbase+seg and hung.
+    rel = set()
+    for i in range(nrel):
+        o, s = struct.unpack("<HH", b[relofs + 4 * i: relofs + 4 * i + 4])
+        rel.add(s * 16 + o)
 
     # segment table: paragraph -> (start, length, class)
     segs = {}
