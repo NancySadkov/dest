@@ -3080,7 +3080,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint16_t uVar14;
   long *plVar15;
   agnt_t *valueLo;
-  unit_t *puVar16;
+  unit_t *units;
   int iVar17;
   int iVar18;
   int iVar19;
@@ -3147,38 +3147,38 @@ void __cdecl16far upd_usesAlignUp4(void)
     }
     for (uVar23 = 0xf8; uVar23 < GUnitCount; uVar23 = uVar23 + 1) {
       uVar24 = (uint16_t)((ulong)GUnits >> 0x10);
-      puVar16 = (unit_t *)GUnits;
-      if ((puVar16[uVar23].flags & 3) == 0) {
-        if ((puVar16[uVar23].unitType == 0xff) ||
-           (uVar7 = *(uint32_t *)((uint)puVar16[uVar23].unitType << 2),
+      units = (unit_t *)GUnits;
+      if ((units[uVar23].flags & 3) == 0) {
+        if ((units[uVar23].unitType == 0xff) ||
+           (uVar7 = *(uint32_t *)((uint)units[uVar23].unitType << 2),
            *(char *)((int)uVar7 + 0x3f) == '\0')) {
           uStack_8 = 0x96;
         }
         else {
           uStack_8 = 0x5dc;
         }
-        if (puVar16[uVar23].level != 0) {
+        if (units[uVar23].level != 0) {
           uVar11 = ovr_randBelow(uStack_8,0);
           uVar24 = (uint16_t)((ulong)GUnits >> 0x10);
-          puVar16 = (unit_t *)GUnits;
+          units = (unit_t *)GUnits;
           if ((int)(uVar11 & 0xff) <
-              (int)(100 - (uint)*(byte *)((uint)(puVar16 + uVar23)->bldType * 0x27 + 0x130))) {
-            bldType = (puVar16 + uVar23)->bldType;
-            puVar16[uVar23].level = puVar16[uVar23].level - 1;
-            puVar16 = (unit_t *)GUnits;
+              (int)(100 - (uint)*(byte *)((uint)(units + uVar23)->bldType * 0x27 + 0x130))) {
+            bldType = (units + uVar23)->bldType;
+            units[uVar23].level = units[uVar23].level - 1;
+            units = (unit_t *)GUnits;
             uVar24 = (uint16_t)((ulong)GUnits >> 0x10);
             if (((*(uint *)((uint)bldType * 0x27 + 0x121) & 4) == 0) &&
-               ((puVar16[uVar23].level == 0 ||
+               ((units[uVar23].level == 0 ||
                 ((*(uint *)((uint)bldType * 0x27 + 0x121) & 0x200) != 0)))) {
               ovc22_usesGUnits(uVar23,(uint8_t *)
                                       CONCAT13((char)(uVar23 * 9 >> 8),
-                                               CONCAT12(puVar16[uVar23].unitType,unaff_SS)));
+                                               CONCAT12(units[uVar23].unitType,unaff_SS)));
             }
             else if (((((bld_inst_t *)BldInstances + bldType)->ofs != 0 ||
                        *(int *)((int)&BldInstances[0].seg + (uint)bldType * 0xc) != 0) ||
                      (*(char *)((uint)bldType * 0x27 + 0x11e) == '\x10')) &&
                     (uVar24 = ovc22_usesGOngoingBattle2
-                                        (*(byte *)&puVar16[uVar23].x,*(byte *)&puVar16[uVar23].y),
+                                        (*(byte *)&units[uVar23].x,*(byte *)&units[uVar23].y),
                     (char)uVar24 != '\0')) {
               found = 0x1;
             }
@@ -3210,9 +3210,9 @@ void __cdecl16far upd_usesAlignUp4(void)
         if ((iVar17 < 1) && (iVar17 < 0)) {
           for (uVar23 = 0xf8; uVar23 < GUnitCount; uVar23 = uVar23 + 1) {
             uVar24 = (uint16_t)((ulong)GUnits >> 0x10);
-            puVar16 = (unit_t *)GUnits;
-            bldType = (puVar16 + uVar23)->bldType;
-            if ((puVar16[uVar23].unitType == idx) &&
+            units = (unit_t *)GUnits;
+            bldType = (units + uVar23)->bldType;
+            if ((units[uVar23].unitType == idx) &&
                (*(int *)((uint)bldType * 0x27 + 0x123) < 0)) {
               uVar12 = *(uint *)((uint)bldType * 0x27 + 0x123);
               uVar25 = (uint16_t)((ulong)*(uint32_t *)(idx << 2) >> 0x10);
@@ -3220,18 +3220,18 @@ void __cdecl16far upd_usesAlignUp4(void)
               iVar17 = *(int *)(iVar17 + 0x58) + ((int)uVar12 >> 0xf) +
                        (uint)CARRY2(*(uint *)(iVar17 + 0x56),uVar12);
               if ((iVar17 < 1) && (iVar17 < 0)) {
-                if ((cVar10 == '\0') && (puVar16[uVar23].level != 0)) {
+                if ((cVar10 == '\0') && (units[uVar23].level != 0)) {
                   uVar11 = ovr_randBelow(100,0);
                   uVar24 = (uint16_t)((ulong)GUnits >> 0x10);
-                  puVar16 = (unit_t *)GUnits;
-                  if (*(byte *)((uint)(puVar16 + uVar23)->bldType * 0x27 + 0x130) <= (byte)uVar11) {
-                    if (puVar16[uVar23].level != 0) {
-                      puVar16[uVar23].level = puVar16[uVar23].level - 1;
+                  units = (unit_t *)GUnits;
+                  if (*(byte *)((uint)(units + uVar23)->bldType * 0x27 + 0x130) <= (byte)uVar11) {
+                    if (units[uVar23].level != 0) {
+                      units[uVar23].level = units[uVar23].level - 1;
                     }
-                    puVar16 = (unit_t *)GUnits;
+                    units = (unit_t *)GUnits;
                     uVar24 = (uint16_t)((ulong)GUnits >> 0x10);
                     if (((*(uint *)((uint)bldType * 0x27 + 0x121) & 4) == 0) &&
-                       ((iVar17 = 0, puVar16[uVar23].level == 0 ||
+                       ((iVar17 = 0, units[uVar23].level == 0 ||
                         (iVar17 = (uint)bldType * 0x27, (*(uint *)(iVar17 + 0x121) & 0x200) != 0))))
                     {
                       ovc22_usesGUnits(uVar23,(uint8_t *)
@@ -3242,8 +3242,8 @@ void __cdecl16far upd_usesAlignUp4(void)
                                *(int *)((int)&BldInstances[0].seg + (uint)bldType * 0xc) != 0) ||
                              (*(char *)((uint)bldType * 0x27 + 0x11e) == '\x10')) &&
                             (uVar24 = ovc22_usesGOngoingBattle2
-                                                (*(byte *)&puVar16[uVar23].x,
-                                                 *(byte *)&puVar16[uVar23].y), (char)uVar24 != '\0')
+                                                (*(byte *)&units[uVar23].x,
+                                                 *(byte *)&units[uVar23].y), (char)uVar24 != '\0')
                             ) {
                       found = 0x1;
                     }
@@ -3627,10 +3627,10 @@ void __cdecl16far upd_usesAlignUp4(void)
     }
     for (uVar23 = 0xf8; uVar23 < GUnitCount; uVar23 = uVar23 + 1) {
       uVar24 = (uint16_t)((ulong)GUnits >> 0x10);
-      puVar16 = (unit_t *)GUnits;
-      if ((*(uint *)((uint)(puVar16 + uVar23)->bldType * 0x27 + 0x121) & 0x40) != 0) {
-        if (puVar16[uVar23].timer != 0) {
-          puVar16[uVar23].timer = puVar16[uVar23].timer - 1;
+      units = (unit_t *)GUnits;
+      if ((*(uint *)((uint)(units + uVar23)->bldType * 0x27 + 0x121) & 0x40) != 0) {
+        if (units[uVar23].timer != 0) {
+          units[uVar23].timer = units[uVar23].timer - 1;
         }
         uVar24 = (uint16_t)((ulong)GUnits >> 0x10);
         if (((unit_t *)GUnits)[uVar23].timer == 0) {
