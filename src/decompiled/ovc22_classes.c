@@ -462,7 +462,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
   byte bVar35;
   byte bVar43;
   uint *puVar36;
-  unit_t *puVar37;
+  unit_t *units;
   unit_t *puVar38;
   int iVar39;
   int iVar40;
@@ -626,10 +626,10 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
     puVar49 = (uint *)&GUnitDescriptions[3].ofs;
     while (puVar50 = puVar49, puVar49 = (uint *)((int)puVar50 + 1), puVar49 < GUnitCount) {
       uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
-      puVar37 = (unit_t *)GUnits;
-      if (puVar37[(int)puVar49].unitType == partyIndex) {
-        (*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) = (puVar37 + (int)puVar49)->bldType;
-        uStack_16 =(uint16_t)( (far_t far *)ovr_alignUp4(puVar37[(int)puVar49].x,0,0));
+      units = (unit_t *)GUnits;
+      if (units[(int)puVar49].unitType == partyIndex) {
+        (*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) = (units + (int)puVar49)->bldType;
+        uStack_16 =(uint16_t)( (far_t far *)ovr_alignUp4(units[(int)puVar49].x,0,0));
         uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
         uStack_18 = ((unit_t *)GUnits)[(int)puVar49].y;
         puStack_10 = (uint *)0x0;
@@ -658,7 +658,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
           iVar29 = 0x195d;
           uVar54 = 0x195d;
           pfVar20 = (far_t far *)(*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x133) - 7);
-          puVar37 = (unit_t *)GUnits;
+          units = (unit_t *)GUnits;
           uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
           if (pfVar20 < (far_t far *)((byte *)__C0_ASM_CopyRight + 0x12)) {
             puVar38 = (unit_t *)((int)pfVar20 * 2);
@@ -1048,13 +1048,13 @@ L_OVC22_5087_0234_323C:
               (*(uint8_t *)((uint8_t *)&(iVar30) + 1)) = (puVar38 + -0xc24)->level;
               do {
                 pfVar20 = (far_t far *)uStack_6;
-                if (puVar37[iVar30].unitType == partyIndex) {
+                if (units[iVar30].unitType == partyIndex) {
                   if ((byte)uStack_6 == (*(uint8_t *)((uint8_t *)&(uStack_6) + 1))) {
 L_OVC22_5087_4975_4ABE:
                     (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)( pfVar20);
                     if ((byte)uStack_8 < ListCount) {
-                      puStack_a = (uint *)puVar37[*(int *)((uStack_8 & 0xff) * 2 + -0x6d44)].x;
-                      scratch = puVar37[*(int *)((uStack_8 & 0xff) * 2 + -0x6d44)].y;
+                      puStack_a = (uint *)units[*(int *)((uStack_8 & 0xff) * 2 + -0x6d44)].x;
+                      scratch = units[*(int *)((uStack_8 & 0xff) * 2 + -0x6d44)].y;
                     }
                     else {
                       puStack_a = (uint *)((char_sheet_t *)(((uint)partyIndex << 2)))->x;
@@ -1153,7 +1153,7 @@ L_OVC22_5087_4975_4ABE:
                   uStack_8 = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_8) + 1)),bVar17);
                   pfVar20 = (far_t far *)uStack_6;
                   if (ListCount <= bVar17) goto L_OVC22_5087_4975_4ABE;
-                } while (*(char *)((uint)(puVar37 + *(int *)((uint)bVar17 * 2 + -0x6d44))->bldType *
+                } while (*(char *)((uint)(units + *(int *)((uint)bVar17 * 2 + -0x6d44))->bldType *
                                    0x27 + 0x133) != '\x12');
                 iVar30 = *(int *)((uint)bVar17 * 2 + -0x6d44);
               } while( true );
@@ -1932,28 +1932,28 @@ switchD_5000_123d_caseD_3:
       if (((unit_t *)GUnits)[(int)unaff_DI].level != 0) {
         uVar31 = ovr_randBelow(uStack_8,0);
         uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
-        puVar37 = (unit_t *)GUnits;
+        units = (unit_t *)GUnits;
         if ((int)(uVar31 & 0xff) <
-            (int)(100 - (uint)*(byte *)((uint)(puVar37 + (int)unaff_DI)->bldType * 0x27 + 0x130))) {
-          bVar17 = (puVar37 + (int)unaff_DI)->bldType;
+            (int)(100 - (uint)*(byte *)((uint)(units + (int)unaff_DI)->bldType * 0x27 + 0x130))) {
+          bVar17 = (units + (int)unaff_DI)->bldType;
           uStack_20 =(uint16_t)( (byte *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_20) + 1)),bVar17));
-          puVar37[(int)unaff_DI].level = puVar37[(int)unaff_DI].level - 1;
-          puVar37 = (unit_t *)GUnits;
+          units[(int)unaff_DI].level = units[(int)unaff_DI].level - 1;
+          units = (unit_t *)GUnits;
           uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
           if (((*(uint *)((uint)bVar17 * 0x27 + 0x121) & 4) == 0) &&
-             ((puVar37[(int)unaff_DI].level == 0 ||
+             ((units[(int)unaff_DI].level == 0 ||
               ((*(uint *)((uint)bVar17 * 0x27 + 0x121) & 0x200) != 0)))) {
             ovc22_usesGUnits((int)unaff_DI,
                              (uint8_t *)
                              CONCAT13((char)((uint)((int)unaff_DI * 9) >> 8),
-                                      CONCAT12(puVar37[(int)unaff_DI].unitType,unaff_SS)));
+                                      CONCAT12(units[(int)unaff_DI].unitType,unaff_SS)));
           }
           else if (((((bld_inst_t *)BldInstances + bVar17)->ofs != 0 ||
                      *(int *)((int)&BldInstances[0].seg + (uint)bVar17 * 0xc) != 0) ||
                    (*(char *)((uint)bVar17 * 0x27 + 0x11e) == '\x10')) &&
                   (uVar53 = ovc22_usesGOngoingBattle2
-                                      (*(byte *)&puVar37[(int)unaff_DI].x,
-                                       *(byte *)&puVar37[(int)unaff_DI].y), (char)uVar53 != '\0')) {
+                                      (*(byte *)&units[(int)unaff_DI].x,
+                                       *(byte *)&units[(int)unaff_DI].y), (char)uVar53 != '\0')) {
             cStack_1c = '\x01';
           }
         }
@@ -1991,10 +1991,10 @@ L_upd_units_5087_1d7d_202C:
         puVar49 = (uint *)&GUnitDescriptions[3].ofs;
         while (puVar49 = (uint *)((int)puVar49 + 1), puVar49 < GUnitCount) {
           uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
-          puVar37 = (unit_t *)GUnits;
-          bVar17 = (puVar37 + (int)puVar49)->bldType;
+          units = (unit_t *)GUnits;
+          bVar17 = (units + (int)puVar49)->bldType;
           uStack_20 =(uint16_t)( (byte *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_20) + 1)),bVar17));
-          if (((far_t far *)(uint)puVar37[(int)puVar49].unitType == uStack_16) &&
+          if (((far_t far *)(uint)units[(int)puVar49].unitType == uStack_16) &&
              (*(int *)((uint)bVar17 * 0x27 + 0x123) < 0)) {
             uVar23 = *(uint *)((uint)bVar17 * 0x27 + 0x123);
             uVar54 = (uint16_t)((ulong)*(uint32_t *)((int)uStack_16 << 2) >> 0x10);
@@ -2002,19 +2002,19 @@ L_upd_units_5087_1d7d_202C:
             iVar29 = *(int *)(iVar29 + 0x58) + ((int)uVar23 >> 0xf) +
                      (uint)CARRY2(*(uint *)(iVar29 + 0x56),uVar23);
             if ((iVar29 < 1) && (iVar29 < 0)) {
-              if ((cVar18 == '\0') && (puVar37[(int)puVar49].level != 0)) {
+              if ((cVar18 == '\0') && (units[(int)puVar49].level != 0)) {
                 uVar31 = ovr_randBelow(100,0);
                 uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
-                puVar37 = (unit_t *)GUnits;
-                if (*(byte *)((uint)(puVar37 + (int)puVar49)->bldType * 0x27 + 0x130) <=
+                units = (unit_t *)GUnits;
+                if (*(byte *)((uint)(units + (int)puVar49)->bldType * 0x27 + 0x130) <=
                     (byte)uVar31) {
-                  if (puVar37[(int)puVar49].level != 0) {
-                    puVar37[(int)puVar49].level = puVar37[(int)puVar49].level - 1;
+                  if (units[(int)puVar49].level != 0) {
+                    units[(int)puVar49].level = units[(int)puVar49].level - 1;
                   }
-                  puVar37 = (unit_t *)GUnits;
+                  units = (unit_t *)GUnits;
                   uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
                   if (((*(uint *)(((uint)uStack_20 & 0xff) * 0x27 + 0x121) & 4) == 0) &&
-                     ((iVar29 = 0, puVar37[(int)puVar49].level == 0 ||
+                     ((iVar29 = 0, units[(int)puVar49].level == 0 ||
                       (iVar29 = ((uint)uStack_20 & 0xff) * 0x27,
                       (*(uint *)(iVar29 + 0x121) & 0x200) != 0)))) {
                     ovc22_usesGUnits((int)puVar49,
@@ -2026,8 +2026,8 @@ L_upd_units_5087_1d7d_202C:
                              *(int *)((int)&BldInstances[0].seg + ((uint)uStack_20 & 0xff) * 0xc) !=
                              0) || (*(char *)(((uint)uStack_20 & 0xff) * 0x27 + 0x11e) == '\x10'))
                           && (uVar53 = ovc22_usesGOngoingBattle2
-                                                 (*(byte *)&puVar37[(int)puVar49].x,
-                                                  *(byte *)&puVar37[(int)puVar49].y),
+                                                 (*(byte *)&units[(int)puVar49].x,
+                                                  *(byte *)&units[(int)puVar49].y),
                              (char)uVar53 != '\0')) {
                     cStack_1c = '\x01';
                   }
@@ -2416,10 +2416,10 @@ L_upd_units_5087_1d7d_202C:
   puVar49 = (uint *)&GUnitDescriptions[3].ofs;
   while (puVar49 = (uint *)((int)puVar49 + 1), puVar49 < GUnitCount) {
     uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
-    puVar37 = (unit_t *)GUnits;
-    if ((*(uint *)((uint)(puVar37 + (int)puVar49)->bldType * 0x27 + 0x121) & 0x40) != 0) {
-      if (puVar37[(int)puVar49].timer != 0) {
-        puVar37[(int)puVar49].timer = puVar37[(int)puVar49].timer - 1;
+    units = (unit_t *)GUnits;
+    if ((*(uint *)((uint)(units + (int)puVar49)->bldType * 0x27 + 0x121) & 0x40) != 0) {
+      if (units[(int)puVar49].timer != 0) {
+        units[(int)puVar49].timer = units[(int)puVar49].timer - 1;
       }
       uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
       if (((unit_t *)GUnits)[(int)puVar49].timer == 0) {

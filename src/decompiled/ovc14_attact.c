@@ -1114,7 +1114,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
   uint16_t uVar10;
   uint16_t unaff_SS;
   uint16_t uStack_8;
-  uint16_t uStack_6;
+  uint16_t ent;
   byte bStack_3;
   
   uVar4 = ovr_alignUp4(*value,0,0);
@@ -1123,73 +1123,73 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
   puVar6 = (uint16_t *)value;
   cVar2 = func_0x0004f29c(0x2379,uStack_8,puVar6[1]);
   if (cVar2 == '\0') {
-    uStack_6 = 0xfffe;
-    while (((int)uStack_6 < 2 &&
-           (cVar2 = func_0x0004f29c(0x2379,uStack_8 + uStack_6,puVar6[1]), cVar2 == '\0'))) {
-      uStack_6 = uStack_6 + 1;
+    ent = 0xfffe;
+    while (((int)ent < 2 &&
+           (cVar2 = func_0x0004f29c(0x2379,uStack_8 + ent,puVar6[1]), cVar2 == '\0'))) {
+      ent = ent + 1;
     }
-    if ((int)uStack_6 < 2) {
-      uStack_8 = uStack_8 + uStack_6;
+    if ((int)ent < 2) {
+      uStack_8 = uStack_8 + ent;
     }
   }
   for (uVar8 = 0; (int)uVar8 < 5; uVar8 = uVar8 + 1) {
     uVar7 = 0;
-    for (uStack_6 = 0; uStack_6 < EntityCount; uStack_6 = uStack_6 + 1) {
+    for (ent = 0; ent < EntityCount; ent = ent + 1) {
       uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-      bStack_3 = *(byte *)((int)Entities + uStack_6 * 0x37 + 0x1a);
+      bStack_3 = *(byte *)((int)Entities + ent * 0x37 + 0x1a);
       if ((((bStack_3 != 0xff) &&
            (((char_sheet_t *)(((uint)bStack_3 << 2)))->partySlot == uVar8)) &&
-          (uVar5 = ovr_alignUp4(((entity_t *)Entities)[uStack_6].base.destX,0,0), uVar5 == uVar4)) &&
-         (((entity_t *)Entities)[uStack_6].base.destY == puVar6[1])) {
+          (uVar5 = ovr_alignUp4(((entity_t *)Entities)[ent].base.destX,0,0), uVar5 == uVar4)) &&
+         (((entity_t *)Entities)[ent].base.destY == puVar6[1])) {
         uVar7 = uVar7 + 1;
       }
     }
     bStack_3 = ((uint8_t *)MenuItemEnabled)[uVar8];
     if (*(byte *)((int)puVar6 + uVar8 + 0xe) != uVar7) {
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),3,bStack_3,*value,
+             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&ent),3,bStack_3,*value,
                                        puVar6[1]), bVar3))) {
-        *(undefined1 *)((int)Entities + uStack_6 * 0x37 + 0x30) = 0;
-        ((entity_t *)Entities)[uStack_6].base.destX = uStack_8;
-        ((entity_t *)Entities)[uStack_6].base.destY = puVar6[1];
-        pbVar1 = (byte *)((int)Entities + uStack_6 * 0x37 + 0x33);
+        *(undefined1 *)((int)Entities + ent * 0x37 + 0x30) = 0;
+        ((entity_t *)Entities)[ent].base.destX = uStack_8;
+        ((entity_t *)Entities)[ent].base.destY = puVar6[1];
+        pbVar1 = (byte *)((int)Entities + ent * 0x37 + 0x33);
         *pbVar1 = *pbVar1 & 0xfb;
         uVar7 = uVar7 + 1;
       }
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),2,bStack_3,*value,
+             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&ent),2,bStack_3,*value,
                                        puVar6[1]), bVar3))) {
-        *(undefined1 *)((int)Entities + uStack_6 * 0x37 + 0x30) = 0;
-        ((entity_t *)Entities)[uStack_6].base.destX = uStack_8;
-        ((entity_t *)Entities)[uStack_6].base.destY = puVar6[1];
+        *(undefined1 *)((int)Entities + ent * 0x37 + 0x30) = 0;
+        ((entity_t *)Entities)[ent].base.destX = uStack_8;
+        ((entity_t *)Entities)[ent].base.destY = puVar6[1];
         uVar7 = uVar7 + 1;
       }
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),1,bStack_3,*value,
+             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&ent),1,bStack_3,*value,
                                        puVar6[1]), bVar3))) {
-        *(undefined1 *)((int)Entities + uStack_6 * 0x37 + 0x30) = 0;
-        ((entity_t *)Entities)[uStack_6].base.destX = uStack_8;
-        ((entity_t *)Entities)[uStack_6].base.destY = puVar6[1];
+        *(undefined1 *)((int)Entities + ent * 0x37 + 0x30) = 0;
+        ((entity_t *)Entities)[ent].base.destX = uStack_8;
+        ((entity_t *)Entities)[ent].base.destY = puVar6[1];
         uVar7 = uVar7 + 1;
       }
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&uStack_6),0,bStack_3,*value,
+             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&ent),0,bStack_3,*value,
                                        puVar6[1]), bVar3))) {
-        *(undefined1 *)((int)Entities + uStack_6 * 0x37 + 0x30) = 0;
-        ((entity_t *)Entities)[uStack_6].base.destX = uStack_8;
-        ((entity_t *)Entities)[uStack_6].base.destY = puVar6[1];
+        *(undefined1 *)((int)Entities + ent * 0x37 + 0x30) = 0;
+        ((entity_t *)Entities)[ent].base.destX = uStack_8;
+        ((entity_t *)Entities)[ent].base.destY = puVar6[1];
         uVar7 = uVar7 + 1;
       }
       while (((int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) < (int)uVar7 &&
-             (bVar3 = attact_textArena2((uint *)CONCAT22(unaff_SS,&uStack_6),(uint)bStack_3,*value),
+             (bVar3 = attact_textArena2((uint *)CONCAT22(unaff_SS,&ent),(uint)bStack_3,*value),
              bVar3))) {
-        *(undefined1 *)((int)Entities + uStack_6 * 0x37 + 0x30) = 0;
+        *(undefined1 *)((int)Entities + ent * 0x37 + 0x30) = 0;
         uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-        ((entity_t *)Entities)[uStack_6].base.destX =
-             ((entity_t *)Entities)[uStack_6].base.targetX;
+        ((entity_t *)Entities)[ent].base.destX =
+             ((entity_t *)Entities)[ent].base.targetX;
         uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-        ((entity_t *)Entities)[uStack_6].base.destY =
-             ((entity_t *)Entities)[uStack_6].base.targetY;
+        ((entity_t *)Entities)[ent].base.destY =
+             ((entity_t *)Entities)[ent].base.targetY;
         uVar7 = uVar7 - 1;
       }
     }
