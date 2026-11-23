@@ -4423,7 +4423,7 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
 {
   byte bVar1;
   uint bldType;
-  uint16_t uVar3;
+  uint16_t roll;
   int iVar4;
   int iVar5;
   uint16_t sheetSeg;
@@ -4468,26 +4468,26 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
     else {
       bldType = ovc22_usesGUnitGrid(x,y);
       if ((*(uint *)((uint8_t *)&BuildingTypes[bldType] + 19) & 2) == 0) {
-        uVar3 = ovr_randBelow(2,0);
-        if (((uVar3 & 0xff) == 0) && ((*(uint *)((uint8_t *)&BuildingTypes[bldType] + 19) & 0x20) != 0)) {
+        roll = ovr_randBelow(2,0);
+        if (((roll & 0xff) == 0) && ((*(uint *)((uint8_t *)&BuildingTypes[bldType] + 19) & 0x20) != 0)) {
           if (*(char *)((uint8_t *)&BuildingTypes[bldType] + 35) == '\0') {
             bldType = bldType + 6;
           }
         }
         else {
-          uVar3 = ovr_randBelow(8,0);
-          if (((uVar3 & 0xff) == 0) ||
-             ((uVar3 = ovr_randBelow(3,0), (uVar3 & 0xff) == 0 &&
+          roll = ovr_randBelow(8,0);
+          if (((roll & 0xff) == 0) ||
+             ((roll = ovr_randBelow(3,0), (roll & 0xff) == 0 &&
               (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
                ((char_sheet_t *)(((uint)partyIndex << 2)))->population)))) {
-            uVar3 = ovr_randBelow(3,0);
-            bldType = (uVar3 & 0xff) + 1;
+            roll = ovr_randBelow(3,0);
+            bldType = (roll & 0xff) + 1;
           }
           else {
-            uVar3 = ovr_randBelow(0xc,0);
-            if ((uVar3 & 0xff) == 0) {
-              uVar3 = ovr_randBelow(3,0);
-              bldType = (uVar3 & 0xff) + 0x2b;
+            roll = ovr_randBelow(0xc,0);
+            if ((roll & 0xff) == 0) {
+              roll = ovr_randBelow(3,0);
+              bldType = (roll & 0xff) + 0x2b;
               sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
               iVar5 = (int)*(uint32_t *)((uint)partyIndex << 2);
               iVar4 = *(int *)(iVar5 + 0x58);
@@ -4500,10 +4500,10 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
                 }
               }
             }
-            uVar3 = ovr_randBelow(0xc,0);
-            if ((uVar3 & 0xff) == 0) {
-              uVar3 = ovr_randBelow(3,0);
-              bldType = (uVar3 & 0xff) + 0xec;
+            roll = ovr_randBelow(0xc,0);
+            if ((roll & 0xff) == 0) {
+              roll = ovr_randBelow(3,0);
+              bldType = (roll & 0xff) + 0xec;
               sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
               iVar5 = (int)*(uint32_t *)((uint)partyIndex << 2);
               iVar4 = *(int *)(iVar5 + 0x58);
@@ -4517,8 +4517,8 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
               }
             }
             bVar1 = ((char_sheet_t *)(((uint)partyIndex << 2)))->classStr;
-            uVar3 = ovr_randBelow(3,0);
-            bldType = (uVar3 & 0xff) +
+            roll = ovr_randBelow(3,0);
+            bldType = (roll & 0xff) +
                     (uint)*(byte *)((int)&worldMenuLabels[0xb].ofs + 1 + (uint)bVar1 * 0x95);
             sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
             iVar5 = (int)*(uint32_t *)((uint)partyIndex << 2);
@@ -4531,13 +4531,13 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
         }
       }
       else {
-        uVar3 = ovr_randBelow(0x14,0);
-        if ((uVar3 & 0xff) == 0) {
+        roll = ovr_randBelow(0x14,0);
+        if ((roll & 0xff) == 0) {
           bldType = 0x72;
         }
         else {
-          uVar3 = ovr_randBelow(4,0);
-          if ((uVar3 & 0xff) == 0) {
+          roll = ovr_randBelow(4,0);
+          if ((roll & 0xff) == 0) {
             bldType = 0x71;
           }
           else {

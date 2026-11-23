@@ -449,7 +449,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
   far_t dst;
   byte bVar3;
   uint uVar4;
-  int iVar5;
+  int scrY;
   int iVar6;
   undefined1 extraout_AH;
   int sqRight;
@@ -549,92 +549,92 @@ void __cdecl16far constr_usesAgnt_clear(void)
           if ((int)sqCol < 0) {
             uVar4 = constr_compute1(cornerTL,cornerTR,cornerBL,bStack_b,1,cornerTR,cornerBL,bStack_b
                                    );
-            iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
+            scrY = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
             sqRight = *(int *)(&mapSquareRightX[sq]);
             iVar6 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
             iVar8 = *(int *)(&mapSquareLeftX[sq]);
             ovr_ovc07_usesBiosReadKey
                       (*(int *)((int)&AgntAnms[0x5d].sx + 1 + sq * 2),
-                       ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,sqRight,iVar5,
-                       uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,(char)sqRight,(char)iVar5,
+                       ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,sqRight,scrY,
+                       uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,(char)sqRight,(char)scrY,
                        (char)uVar4,0x40);
             uVar4 = constr_compute1(cornerBL,cornerBR,cornerTR,bStack_b,2,cornerBR,cornerTR,bStack_b
                                    );
-            iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
+            scrY = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
             sqRight = *(int *)(&mapSquareRightX[sq]);
             iVar6 = ((uint16_t *)ScreenOriginX)[iVar10] - iStack_24;
             iVar8 = *(int *)(&mapSquareBottomY[sq]);
             ovr_ovc07_usesBiosReadKey
                       (*(int *)((int)&AgntAnms[0x5d].sx + 1 + sq * 2),
-                       ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,sqRight,iVar5,
-                       uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,(char)sqRight,(char)iVar5,
+                       ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,sqRight,scrY,
+                       uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,(char)sqRight,(char)scrY,
                        (char)uVar4,0x40);
           }
           else {
             uVar4 = constr_compute1(cornerBL,cornerBR,cornerTR,bStack_b,2,cornerBR,cornerTR,bStack_b
                                    );
-            iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
+            scrY = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
             sqRight = *(int *)(&mapSquareRightX[sq]);
             iVar6 = ((uint16_t *)ScreenOriginX)[iVar10] - iStack_24;
             iVar8 = *(int *)(&mapSquareBottomY[sq]);
             ovr_ovc07_usesBiosReadKey
                       (*(int *)((int)&AgntAnms[0x5d].sx + 1 + sq * 2),
-                       ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,sqRight,iVar5,
-                       uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,(char)sqRight,(char)iVar5,
+                       ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,sqRight,scrY,
+                       uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,(char)sqRight,(char)scrY,
                        (char)uVar4,0x40);
             uVar4 = constr_compute1(cornerTL,cornerTR,cornerBL,bStack_b,1,cornerTR,cornerBL,bStack_b
                                    );
-            iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
+            scrY = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
             sqRight = *(int *)(&mapSquareRightX[sq]);
             iVar6 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
             iVar8 = *(int *)(&mapSquareLeftX[sq]);
             ovr_ovc07_usesBiosReadKey
                       (*(int *)((int)&AgntAnms[0x5d].sx + 1 + sq * 2),
-                       ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,sqRight,iVar5,
-                       uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,(char)sqRight,(char)iVar5,
+                       ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,sqRight,scrY,
+                       uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,(char)sqRight,(char)scrY,
                        (char)uVar4,0x40);
           }
         }
         else if ((int)sqCol < 0) {
           uVar4 = constr_compute1(cornerBL,cornerBR,cornerTL,bStack_b,1,cornerBR,cornerTL,bStack_b);
-          iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
+          scrY = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
           sqRight = *(int *)(&mapSquareLeftX[sq]);
           iVar6 = ((uint16_t *)ScreenOriginX)[iVar10] - iStack_24;
           iVar8 = *(int *)(&mapSquareBottomY[sq]);
           ovr_ovc07_usesBiosReadKey
                     (*(int *)((int)&AgntAnms[0x5d].sx + 1 + sq * 2),
-                     ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,sqRight,iVar5,
-                     uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,(char)sqRight,(char)iVar5,
+                     ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,sqRight,scrY,
+                     uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,(char)sqRight,(char)scrY,
                      (char)uVar4,0x40);
           uVar4 = constr_compute1(cornerTL,cornerTR,cornerBR,bStack_b,2,cornerTR,cornerBR,bStack_b);
-          iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
+          scrY = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
           sqRight = *(int *)(&mapSquareRightX[sq]);
           iVar6 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
           iVar8 = *(int *)(&mapSquareLeftX[sq]);
           ovr_ovc07_usesBiosReadKey
                     (*(int *)(&mapSquareBottomY[sq]),((uint16_t *)ScreenOriginX)[iVar10] - iStack_24,
-                     iVar8,iVar6,sqRight,iVar5,uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,
-                     (char)sqRight,(char)iVar5,(char)uVar4,0x40);
+                     iVar8,iVar6,sqRight,scrY,uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,
+                     (char)sqRight,(char)scrY,(char)uVar4,0x40);
         }
         else {
           uVar4 = constr_compute1(cornerTL,cornerTR,cornerBR,bStack_b,2,cornerTR,cornerBR,bStack_b);
-          iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
+          scrY = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
           sqRight = *(int *)(&mapSquareRightX[sq]);
           iVar6 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
           iVar8 = *(int *)(&mapSquareLeftX[sq]);
           ovr_ovc07_usesBiosReadKey
                     (*(int *)(&mapSquareBottomY[sq]),((uint16_t *)ScreenOriginX)[iVar10] - iStack_24,
-                     iVar8,iVar6,sqRight,iVar5,uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,
-                     (char)sqRight,(char)iVar5,(char)uVar4,0x40);
+                     iVar8,iVar6,sqRight,scrY,uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,
+                     (char)sqRight,(char)scrY,(char)uVar4,0x40);
           uVar4 = constr_compute1(cornerBL,cornerBR,cornerTL,bStack_b,1,cornerBR,cornerTL,bStack_b);
-          iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
+          scrY = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
           sqRight = *(int *)(&mapSquareLeftX[sq]);
           iVar6 = ((uint16_t *)ScreenOriginX)[iVar10] - iStack_24;
           iVar8 = *(int *)(&mapSquareBottomY[sq]);
           ovr_ovc07_usesBiosReadKey
                     (*(int *)((int)&AgntAnms[0x5d].sx + 1 + sq * 2),
-                     ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,sqRight,iVar5,
-                     uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,(char)sqRight,(char)iVar5,
+                     ((uint16_t *)ScreenOriginX)[iVar10] - iStack_22,iVar8,iVar6,sqRight,scrY,
+                     uVar4 & 0xff,BlitRects,(char)iVar8,(char)iVar6,(char)sqRight,(char)scrY,
                      (char)uVar4,0x40);
         }
       }

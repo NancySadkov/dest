@@ -1650,7 +1650,7 @@ uint16_t __cdecl16far ovc27_compute3(uint32_t view,char frames)
   uint16_t uVar2;
   byte bVar3;
   int iVar4;
-  int iVar5;
+  int viewIdx;
   uint16_t uVar6;
   bool bVar7;
   byte bStack_6;
@@ -1658,42 +1658,42 @@ uint16_t __cdecl16far ovc27_compute3(uint32_t view,char frames)
   
   uStack_4 = 0;
   while( true ) {
-    iVar5 = (int)view;
+    viewIdx = (int)view;
     uVar6 = (uint16_t)(view >> 0x10);
-    if ((frames == '\0') || (*(char *)(iVar5 + 0xf) == '\0')) break;
+    if ((frames == '\0') || (*(char *)(viewIdx + 0xf) == '\0')) break;
     bVar3 = ovr_ovc15_textView(view);
     uStack_4 = uStack_4 + bVar3;
-    *(char *)(iVar5 + 0xf) = *(char *)(iVar5 + 0xf) + -1;
+    *(char *)(viewIdx + 0xf) = *(char *)(viewIdx + 0xf) + -1;
     frames = frames + -1;
   }
-  bVar7 = *(char *)(iVar5 + 0xf) == '\0';
+  bVar7 = *(char *)(viewIdx + 0xf) == '\0';
   if (bVar7) {
-    *(undefined1 *)(iVar5 + 0xf) = 1;
+    *(undefined1 *)(viewIdx + 0xf) = 1;
   }
-  if (uStack_4 < *(byte *)(iVar5 + 0x32)) {
-    *(char *)(iVar5 + 0x32) = *(char *)(iVar5 + 0x32) - (char)uStack_4;
-  }
-  else {
-    *(undefined1 *)(iVar5 + 0x32) = 1;
-  }
-  if (uStack_4 < *(byte *)(iVar5 + 0x31)) {
-    *(char *)(iVar5 + 0x31) = *(char *)(iVar5 + 0x31) - (char)uStack_4;
+  if (uStack_4 < *(byte *)(viewIdx + 0x32)) {
+    *(char *)(viewIdx + 0x32) = *(char *)(viewIdx + 0x32) - (char)uStack_4;
   }
   else {
-    *(undefined1 *)(iVar5 + 0x31) = 1;
+    *(undefined1 *)(viewIdx + 0x32) = 1;
   }
-  if (*(byte *)(iVar5 + 0x32) < *(byte *)(iVar5 + 0x31)) {
-    *(undefined1 *)(iVar5 + 0x31) = *(undefined1 *)(iVar5 + 0x32);
+  if (uStack_4 < *(byte *)(viewIdx + 0x31)) {
+    *(char *)(viewIdx + 0x31) = *(char *)(viewIdx + 0x31) - (char)uStack_4;
   }
-  bStack_6 = *(byte *)((int)&worldMenuLabels[9].ofs + 1 + (uint)*(byte *)(iVar5 + 0xd) * 0x95);
+  else {
+    *(undefined1 *)(viewIdx + 0x31) = 1;
+  }
+  if (*(byte *)(viewIdx + 0x32) < *(byte *)(viewIdx + 0x31)) {
+    *(undefined1 *)(viewIdx + 0x31) = *(undefined1 *)(viewIdx + 0x32);
+  }
+  bStack_6 = *(byte *)((int)&worldMenuLabels[9].ofs + 1 + (uint)*(byte *)(viewIdx + 0xd) * 0x95);
   if (bStack_6 == 0xff) {
     bStack_6 = 0;
   }
-  iVar4 = (uint)bStack_6 * 0x94 + (uint)*(byte *)(iVar5 + 0xf) * 4;
+  iVar4 = (uint)bStack_6 * 0x94 + (uint)*(byte *)(viewIdx + 0xf) * 4;
   uVar1 = *(uint16_t *)(iVar4 + -2);
   uVar2 = *(uint16_t *)(iVar4 + -4);
-  *(uint16_t *)(iVar5 + 0x12) = uVar1;
-  *(uint16_t *)(iVar5 + 0x10) = uVar2;
+  *(uint16_t *)(viewIdx + 0x12) = uVar1;
+  *(uint16_t *)(viewIdx + 0x10) = uVar2;
   return CONCAT11((char)((uint)uVar1 >> 8),bVar7);
 }
 
