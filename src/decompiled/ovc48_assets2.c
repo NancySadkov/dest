@@ -55,9 +55,9 @@ void __cdecl16far init_assets2(bool grab)
   uint16_t in_DX;
   uint16_t uVar4;
   uint16_t uVar5;
-  uint16_t uVar6;
+  uint16_t rleSeg;
   uint8_t *tmpSeg;
-  uint8_t *puVar8;
+  uint8_t *segArg2;
   uint8_t *segArg;
   int i;
   far_t far *unaff_DI;
@@ -279,8 +279,8 @@ void __cdecl16far init_assets2(bool grab)
     pixels_04.ofs = (lbmTmp->aptr).seg;
     BldGfxNormal[0x2e6].seg = stshSegTmp;
     pfVar2 = ovr_stshRleType2((far_t far *)(&lbmTmp->aptr)->ofs,pixels_04,130,199,194,26,-1,(int16_t)unaff_DI,0xff,0);
-    asm { mov uVar6,dx };
-    BldGfxNormal[0x2e3].ofs = stsh_store((uint8_t *)pfVar2, (uint16_t)(char)uVar6, &stshSegTmp);
+    asm { mov rleSeg,dx };
+    BldGfxNormal[0x2e3].ofs = stsh_store((uint8_t *)pfVar2, (uint16_t)(char)rleSeg, &stshSegTmp);
     pixels_05.seg = 200;
     pixels_05.ofs = (lbmTmp->aptr).seg;
     BldGfxNormal[0x2e3].seg = stshSegTmp;
@@ -291,8 +291,8 @@ void __cdecl16far init_assets2(bool grab)
     pixels_06.ofs = (lbmTmp->aptr).seg;
     BldGfxNormal[0x2e0].seg = stshSegTmp;
     pfVar2 = ovr_stshRleType2((far_t far *)(&lbmTmp->aptr)->ofs,pixels_06,65,99,129,26,-1,(int16_t)unaff_DI,0xff,0);
-    asm { mov uVar6,dx };
-    BldGfxNormal[0x2dd].ofs = stsh_store((uint8_t *)pfVar2, (uint16_t)(char)uVar6, &stshSegTmp);
+    asm { mov rleSeg,dx };
+    BldGfxNormal[0x2dd].ofs = stsh_store((uint8_t *)pfVar2, (uint16_t)(char)rleSeg, &stshSegTmp);
     pixels_07.seg = 100;
     pixels_07.ofs = (lbmTmp->aptr).seg;
     BldGfxNormal[0x2dd].seg = stshSegTmp;
@@ -303,8 +303,8 @@ void __cdecl16far init_assets2(bool grab)
     pixels_08.ofs = (lbmTmp->aptr).seg;
     BldGfxNormal[0x2da].seg = stshSegTmp;
     pfVar2 = ovr_stshRleType2((far_t far *)(&lbmTmp->aptr)->ofs,pixels_08,65,299,129,26,-1,(int16_t)unaff_DI,0xff,0);
-    asm { mov uVar6,dx };
-    BldGfxNormal[0x2d7].ofs = stsh_store((uint8_t *)pfVar2, (uint16_t)(char)uVar6, &stshSegTmp);
+    asm { mov rleSeg,dx };
+    BldGfxNormal[0x2d7].ofs = stsh_store((uint8_t *)pfVar2, (uint16_t)(char)rleSeg, &stshSegTmp);
     pixels_09.seg = 0;
     pixels_09.ofs = (lbmTmp->aptr).seg;
     BldGfxNormal[0x2d7].seg = stshSegTmp;
@@ -315,8 +315,8 @@ void __cdecl16far init_assets2(bool grab)
     pixels_10.ofs = (lbmTmp->aptr).seg;
     BldGfxNormal[0x2d4].seg = stshSegTmp;
     pfVar2 = ovr_stshRleType2((far_t far *)(&lbmTmp->aptr)->ofs,pixels_10,0,199,64,26,-1,(int16_t)unaff_DI,0xff,0);
-    asm { mov uVar6,dx };
-    BldGfxNormal[0x2d1].ofs = stsh_store((uint8_t *)pfVar2, (uint16_t)(char)uVar6, &stshSegTmp);
+    asm { mov rleSeg,dx };
+    BldGfxNormal[0x2d1].ofs = stsh_store((uint8_t *)pfVar2, (uint16_t)(char)rleSeg, &stshSegTmp);
     pixels_11.seg = 200;
     pixels_11.ofs = (lbmTmp->aptr).seg;
     BldGfxNormal[0x2d1].seg = stshSegTmp;
@@ -333,20 +333,20 @@ void __cdecl16far init_assets2(bool grab)
     BldGfxNormal[0x2e3].ofs = (uint16_t)ovr_stshAllocStub(unaff_DI);
     BldGfxNormal[0x2e3].seg = uVar5;
     BldGfxNormal[0x2e0].ofs = (uint16_t)ovr_stshAllocStub(unaff_DI);
-    BldGfxNormal[0x2e0].seg = uVar6;
+    BldGfxNormal[0x2e0].seg = rleSeg;
     BldGfxNormal[0x2dd].ofs = (uint16_t)ovr_stshAllocStub(unaff_DI);
     BldGfxNormal[0x2dd].seg = uVar5;
     BldGfxNormal[0x2da].ofs = (uint16_t)ovr_stshAllocStub(unaff_DI);
-    BldGfxNormal[0x2da].seg = uVar6;
+    BldGfxNormal[0x2da].seg = rleSeg;
     BldGfxNormal[0x2d7].ofs = (uint16_t)ovr_stshAllocStub(unaff_DI);
     BldGfxNormal[0x2d7].seg = uVar5;
     BldGfxNormal[0x2d4].ofs = (uint16_t)ovr_stshAllocStub(unaff_DI);
-    BldGfxNormal[0x2d4].seg = uVar6;
+    BldGfxNormal[0x2d4].seg = rleSeg;
     BldGfxNormal[0x2d1].ofs = (uint16_t)ovr_stshAllocStub(unaff_DI);
     BldGfxNormal[0x2d1].seg = uVar5;
     BldGfxNormal[0x2ce].ofs = (uint16_t)ovr_stshAllocStub(unaff_DI);
     segArg = (uint8_t *)((int)&BuildingTypes[0x9f].income + 1);
-    BldGfxNormal[0x2ce].seg = uVar6;
+    BldGfxNormal[0x2ce].seg = rleSeg;
   }
   ovr_stshStubifyCopy1to0(0xef);
   ovr_stshStubifyCopy1to0(0xf2);
@@ -381,49 +381,49 @@ void __cdecl16far init_assets2(bool grab)
     SpecialColors[5] = *(uint8_t *)((int)&GStrangeTable[0x12].seg + 1 + (lbmTmp->aptr).ofs);
     SpecialColors[6] = *(uint8_t *)((int)(uint16_t *)&youlose1Cut1Seg + (lbmTmp->aptr).ofs);
     SpecialColors[7] = *(uint8_t *)((lbmTmp->aptr).ofs + 0x936e);
-    puVar8 = (uint8_t *)((char *)0x26510);
+    segArg2 = (uint8_t *)((char *)0x26510);
     specialColorsOfs =(uint16_t)(
          (far_t far *)ovr_stshWrite((uint32_t *)SpecialColors,(uint8_t *)MK_FP(0x2410, 0x8),
                                 ZEXT24(unaff_DI) << 0x10,0));
     src_01.seg = 0xea;
     src_01.ofs = (lbmTmp->aptr).seg;
-    specialColorsSeg =(uint16_t)( puVar8);
+    specialColorsSeg =(uint16_t)( segArg2);
     pfVar2 = ovr_stshRleCut((far_t far *)(&lbmTmp->aptr)->ofs,src_01,64,314,120,(int16_t)unaff_DI,0x78,0,0);
-    trianglsCut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)puVar8);
+    trianglsCut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg2);
     src_02.seg = 0xd0;
     src_02.ofs = (lbmTmp->aptr).seg;
-    trianglsCut1Seg =(uint16_t)( puVar8);
+    trianglsCut1Seg =(uint16_t)( segArg2);
     pfVar2 = ovr_stshRleCut((far_t far *)(&lbmTmp->aptr)->ofs,src_02,158,228,176,(int16_t)unaff_DI,0xb0,0,0)
     ;
-    trianglsCut2Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)puVar8);
+    trianglsCut2Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg2);
     src_03.seg = 0xb3;
     src_03.ofs = (lbmTmp->aptr).seg;
-    trianglsCut2Seg =(uint16_t)( puVar8);
+    trianglsCut2Seg =(uint16_t)( segArg2);
     pfVar2 = ovr_stshRleCut((far_t far *)(&lbmTmp->aptr)->ofs,src_03,180,198,196,(int16_t)unaff_DI,0xc4,0,0)
     ;
-    trianglsCut3Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)puVar8);
+    trianglsCut3Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg2);
     src_04.seg = 0xcf;
     src_04.ofs = (lbmTmp->aptr).seg;
-    trianglsCut3Seg =(uint16_t)( puVar8);
+    trianglsCut3Seg =(uint16_t)( segArg2);
     pfVar2 = ovr_stshRleCut((far_t far *)(&lbmTmp->aptr)->ofs,src_04,180,226,196,(int16_t)unaff_DI,0xc4,0,0)
     ;
-    trianglsCut4Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)puVar8);
+    trianglsCut4Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg2);
     src_05.seg = 0x26;
     src_05.ofs = (lbmTmp->aptr).seg;
-    trianglsCut4Seg =(uint16_t)( puVar8);
+    trianglsCut4Seg =(uint16_t)( segArg2);
     pfVar2 = ovr_stshRleCut((far_t far *)(&lbmTmp->aptr)->ofs,src_05,181,57,196,(int16_t)unaff_DI,0xc4,0,0);
-    trianglsCut5Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)puVar8);
+    trianglsCut5Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg2);
     src_06.seg = 9;
     src_06.ofs = (lbmTmp->aptr).seg;
-    trianglsCut5Seg =(uint16_t)( puVar8);
+    trianglsCut5Seg =(uint16_t)( segArg2);
     pfVar2 = ovr_stshRleCut((far_t far *)(&lbmTmp->aptr)->ofs,src_06,181,24,196,(int16_t)unaff_DI,0xc4,0,0);
-    trianglsCut6Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)puVar8);
-    trianglsCut6Seg =(uint16_t)( puVar8);
+    trianglsCut6Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg2);
+    trianglsCut6Seg =(uint16_t)( segArg2);
     ovr_stgFreeTmp(lbmTmp,(char)tmpSeg);
     lbmTmp = ovr_grabLbmTR(127);
     src_07.seg = 0xf5;
     src_07.ofs = (lbmTmp->aptr).seg;
-    segArg = (uint16_t)(puVar8);
+    segArg = (uint16_t)(segArg2);
     pfVar2 = ovr_stshRleCut((far_t far *)(&lbmTmp->aptr)->ofs,src_07,116,267,128,(int16_t)unaff_DI,0x80,0,0)
     ;
     panel01Cut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg);
@@ -440,7 +440,7 @@ void __cdecl16far init_assets2(bool grab)
     ;
     panel01Cut3Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg);
     panel01Cut3Seg =(uint16_t)( segArg);
-    ovr_stgFreeTmp(lbmTmp,(char)puVar8);
+    ovr_stgFreeTmp(lbmTmp,(char)segArg2);
     lbmTmp = ovr_grabLbm(15,0,0,0,0);
     tmpSeg = (uint16_t)(segArg);
     Lbm_nwpanel1.ofs =
@@ -764,29 +764,29 @@ void __cdecl16far init_assets2(bool grab)
     }
     ovr_stgFreeTmp(lbmTmp,(char)segArg);
     lbmTmp = ovr_grabLbm(534,0,0,0,0);
-    puVar8 = (uint16_t)(tmpSeg);
+    segArg2 = (uint16_t)(tmpSeg);
     for (i = 0; i < 3; i = i + 1) {
-      puVar8 = (uint8_t *)((ulong)((long)i * 0x3d) >> 0x10);
+      segArg2 = (uint8_t *)((ulong)((long)i * 0x3d) >> 0x10);
       pixels_34.seg = 1;
       pixels_34.ofs = (lbmTmp->aptr).seg;
       pfVar2 = ovr_stshRleType2((far_t far *)(&lbmTmp->aptr)->ofs,pixels_34,(int)((long)i * 0x3d) + 0x11,103,i * 0x3d + 0x49,-4,-60,(int16_t)unaff_DI,0xc4,0);
-      stored = ovr_stshStoreFile((uint8_t *)pfVar2,(char)puVar8);
-      ((uint16_t *)&csite8Seg)[i * 2] = (uint16_t)(puVar8);
+      stored = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg2);
+      ((uint16_t *)&csite8Seg)[i * 2] = (uint16_t)(segArg2);
       ((uint16_t *)&csite8Ofs)[i * 2] = (uint16_t)(stored);
     }
     for (i = 0; i < 2; i = i + 1) {
-      puVar8 = (uint8_t *)((ulong)((long)i * 0x3d) >> 0x10);
+      segArg2 = (uint8_t *)((ulong)((long)i * 0x3d) >> 0x10);
       pixels_35.seg = 0x68;
       pixels_35.ofs = (lbmTmp->aptr).seg;
       pfVar2 = ovr_stshRleType2((far_t far *)(&lbmTmp->aptr)->ofs,pixels_35,(int)((long)i * 0x3d) + 0x11,206,i * 0x3d + 0x49,-4,-60,(int16_t)unaff_DI,0xc4,0);
-      stored = ovr_stshStoreFile((uint8_t *)pfVar2,(char)puVar8);
-      ((uint16_t *)&csite8_3Seg)[i * 2] = (uint16_t)(puVar8);
+      stored = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg2);
+      ((uint16_t *)&csite8_3Seg)[i * 2] = (uint16_t)(segArg2);
       ((uint16_t *)&csite8_3Ofs)[i * 2] = (uint16_t)(stored);
     }
     ovr_stgFreeTmp(lbmTmp,(char)tmpSeg);
     lbmTmp = ovr_grabLbm(535,0,0,0,0);
-    psStack_a = (stg_tmp_t *)CONCAT22(puVar8,lbmTmp);
-    segArg = (uint16_t)(puVar8);
+    psStack_a = (stg_tmp_t *)CONCAT22(segArg2,lbmTmp);
+    segArg = (uint16_t)(segArg2);
     for (i = 0; i < 7; i = i + 1) {
       segArg = (uint8_t *)((ulong)((long)i * 0x1b) >> 0x10);
       pixels_36.seg = 6;
@@ -873,7 +873,7 @@ void __cdecl16far init_assets2(bool grab)
       ((uint16_t *)&tmstrsSprites1Seg)[i * 2] = (uint16_t)(segArg);
       ((uint16_t *)&tmstrsSprites1Ofs)[i * 2] = (uint16_t)(stored);
     }
-    ovr_stgFreeTmp(lbmTmp,(char)puVar8);
+    ovr_stgFreeTmp(lbmTmp,(char)segArg2);
   }
   else {
     for (i = 0; i < 0x17; i = i + 1) {
@@ -1254,19 +1254,19 @@ void __cdecl16far init_assets2(bool grab)
     lbmTmp = ovr_grabLbm(439,0,0,0,0);
     src_50.seg = 0;
     src_50.ofs = (lbmTmp->aptr).seg;
-    puVar8 = (uint16_t)(tmpSeg);
+    segArg2 = (uint16_t)(tmpSeg);
     pfVar2 = ovr_stshRleCut((far_t far *)(&lbmTmp->aptr)->ofs,src_50,0,279,143,(int16_t)unaff_DI,0x8f,0,0);
-    captfg1Cut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)puVar8);
-    captfg1Cut1Seg = (uint16_t)(puVar8);
+    captfg1Cut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg2);
+    captfg1Cut1Seg = (uint16_t)(segArg2);
     ovr_stgFreeTmp(lbmTmp,(char)tmpSeg);
     lbmTmp = ovr_grabLbm(439,280,0,0,0);
     src_51.seg = 0;
     src_51.ofs = (lbmTmp->aptr).seg;
-    segArg = (uint16_t)(puVar8);
+    segArg = (uint16_t)(segArg2);
     pfVar2 = ovr_stshRleCut((far_t far *)(&lbmTmp->aptr)->ofs,src_51,0,279,143,(int16_t)unaff_DI,0x8f,0,0);
     captfg1Cut2Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg);
     captfg1Cut2Seg = (uint16_t)(segArg);
-    ovr_stgFreeTmp(lbmTmp,(char)puVar8);
+    ovr_stgFreeTmp(lbmTmp,(char)segArg2);
     lbmTmp = ovr_grabLbm(305,0,0,0,0);
     tmpSeg = (uint16_t)(segArg);
     ovr_stshUniqueColorsRemap(lbmTmp,(char)segArg);
@@ -1301,26 +1301,26 @@ void __cdecl16far init_assets2(bool grab)
     l4Cut2Seg = (uint16_t)(tmpSeg);
     ovr_stgFreeTmp(lbmTmp,(char)segArg);
     lbmTmp = ovr_grabLbm(328,320,0,0,0);
-    puVar8 = (uint16_t)(tmpSeg);
+    segArg2 = (uint16_t)(tmpSeg);
     ovr_stshUniqueColorsRemap(lbmTmp,(char)tmpSeg);
     src_55.seg = 0;
     src_55.ofs = (lbmTmp->aptr).seg;
     pfVar2 = ovr_stshRleCut((far_t far *)(&lbmTmp->aptr)->ofs,src_55,0,319,59,(int16_t)unaff_DI,0x3b,0,0);
-    l4Cut3Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)puVar8);
-    l4Cut3Seg = (uint16_t)(puVar8);
+    l4Cut3Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg2);
+    l4Cut3Seg = (uint16_t)(segArg2);
     ovr_stgFreeTmp(lbmTmp,(char)tmpSeg);
     lbmTmp = ovr_grabLbm(331,0,0,0,0);
-    segArg = (uint16_t)(puVar8);
-    ovr_stshUniqueColorsRemap(lbmTmp,(char)puVar8);
+    segArg = (uint16_t)(segArg2);
+    ovr_stshUniqueColorsRemap(lbmTmp,(char)segArg2);
     src_56.seg = 0;
     src_56.ofs = (lbmTmp->aptr).seg;
     pfVar2 = ovr_stshRleCut((far_t far *)(&lbmTmp->aptr)->ofs,src_56,0,319,59,(int16_t)unaff_DI,0x3b,0,0);
     l7Cut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg);
     l7Cut1Seg = (uint16_t)(segArg);
     l7Cut2Ofs =(uint16_t)( (far_t far *)ovr_stshWrite((uint32_t *)(lbmTmp->cmap + 0x1e0),
-                                       (uint8_t *)CONCAT22(0x90,puVar8),ZEXT24(unaff_DI) << 0x10,0));
+                                       (uint8_t *)CONCAT22(0x90,segArg2),ZEXT24(unaff_DI) << 0x10,0));
     l7Cut2Seg = (uint16_t)(segArg);
-    ovr_stgFreeTmp(lbmTmp,(char)puVar8);
+    ovr_stgFreeTmp(lbmTmp,(char)segArg2);
     lbmTmp = ovr_grabLbm(331,320,0,0,0);
     tmpSeg = (uint16_t)(segArg);
     ovr_stshUniqueColorsRemap(lbmTmp,(char)segArg);
@@ -1343,26 +1343,26 @@ void __cdecl16far init_assets2(bool grab)
     l2Cut2Seg = (uint16_t)(segArg);
     ovr_stgFreeTmp(lbmTmp,(char)tmpSeg);
     lbmTmp = ovr_grabLbm(307,320,0,0,0);
-    puVar8 = (uint16_t)(segArg);
+    segArg2 = (uint16_t)(segArg);
     ovr_stshUniqueColorsRemap(lbmTmp,(char)segArg);
     src_59.seg = 0;
     src_59.ofs = (lbmTmp->aptr).seg;
     pfVar2 = ovr_stshRleCut((far_t far *)(&lbmTmp->aptr)->ofs,src_59,0,319,59,(int16_t)unaff_DI,0x3b,0,0);
-    l2Cut3Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)puVar8);
-    l2Cut3Seg = (uint16_t)(puVar8);
+    l2Cut3Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg2);
+    l2Cut3Seg = (uint16_t)(segArg2);
     ovr_stgFreeTmp(lbmTmp,(char)segArg);
     lbmTmp = ovr_grabLbm(329,0,0,0,0);
-    tmpSeg = (uint16_t)(puVar8);
-    ovr_stshUniqueColorsRemap(lbmTmp,(char)puVar8);
+    tmpSeg = (uint16_t)(segArg2);
+    ovr_stshUniqueColorsRemap(lbmTmp,(char)segArg2);
     src_60.seg = 0;
     src_60.ofs = (lbmTmp->aptr).seg;
     pfVar2 = ovr_stshRleCut((far_t far *)(&lbmTmp->aptr)->ofs,src_60,0,319,59,(int16_t)unaff_DI,0x3b,0,0);
     l5Cut1Ofs = ovr_stshStoreFile((uint8_t *)pfVar2,(char)tmpSeg);
     l5Cut1Seg = (uint16_t)(tmpSeg);
     l5Cut2Ofs =(uint16_t)( (far_t far *)ovr_stshWrite((uint32_t *)(lbmTmp->cmap + 0x1e0),
-                                       (uint8_t *)CONCAT22(0x90,puVar8),ZEXT24(unaff_DI) << 0x10,0));
+                                       (uint8_t *)CONCAT22(0x90,segArg2),ZEXT24(unaff_DI) << 0x10,0));
     l5Cut2Seg = (uint16_t)(tmpSeg);
-    ovr_stgFreeTmp(lbmTmp,(char)puVar8);
+    ovr_stgFreeTmp(lbmTmp,(char)segArg2);
     lbmTmp = ovr_grabLbm(329,320,0,0,0);
     segArg = (uint16_t)(tmpSeg);
     ovr_stshUniqueColorsRemap(lbmTmp,(char)tmpSeg);
