@@ -745,3 +745,36 @@ Next probes, in order of cost:
    than memory);
 3. re-check `e_lfarlc`/`e_crlc` against the relocation entries: a bad entry that
    points into the code would rewrite the prologue after the patch is written.
+
+### The map entry for `_STARTX` does not match the image in the NO_OVERLAY link
+
+My earlier "the entry points at startx" check was wrong: it compared the header
+`CS:IP` against a *segment table* base that was itself derived from the same
+(possibly stale) map.  Comparing against the actual bytes instead:
+
+```
+startx prologue (55 8B EC 83 EC 1C 56 57 B8 94 00) is at image 0x06F0
+header CS:IP 0069:002B  -> image 0x06BB        (+0x35, unrelated code)
+map _STARTX  0069:002B  -> image 0x06BB        (same wrong value)
+```
+
+So in the `NO_OVERLAY` link the map's `_STARTX` does not point at `startx`, and
+the patched entry lands 0x35 bytes before it - which explains the silent
+`CODE=0` and the missing markers far better than a load failure (no DOS error
+text appeared in the redirected output either).
+
+Two things to fix before this route can be traced:
+
+1. `REBUILT.MAP` contains the whole symbol list **twice** (`_STARTX` and
+   `_STARTXDSEG` each appear twice), so any lookup must take the last matching
+   entry, and the value must be cross-checked against the image bytes;
+2. the map's segment values do not correspond to the image paragraphs the way
+   the overlay link's did (overlay: `_TEXT` 0..0x7A7, `CRTL_SEG` at paragraph
+   0x7A, map `_STARTX 007A:0007` - consistent; non-overlay: `CRTL_SEG` starts at
+   image 0x6CB but the map says segment 0x0069), so the entry offset has to be
+   derived from the image (find the prologue) rather than from the map alone.
+
+Doing that by hand: the prologue is at image 0x06F0, i.e. `CRTL_SEG + 0x25`;
+patching `CS:IP` to `06CB:0025` and putting `exit 42` at 0x06F0 is the next
+experiment - the previous attempt aborted on a bad offset computation and the
+image was left untouched.
