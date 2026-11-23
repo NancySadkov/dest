@@ -558,3 +558,42 @@ The change was reverted; the tree is back at the verified state.  The next probe
 should read the original's init-table walk (`InitStart..InitEnd`) to get the
 exact priority-1 entry address and its calling convention, instead of assuming
 the module entry.
+
+### The init table is stale data, not a symbol reference
+
+Dumping the table bytes settles what the walk would call.  Our
+`_INITSTART` (DGROUP offset `8590`) holds exactly the same 24 bytes as the
+original image (`audit/dgroup_2410.bin` at `8916`):
+
+```
+01 01 24 0d 03 14   entry 0: done=1 prio=1  ofs=0D24 seg=1403
+00 02 36 0d 00 00   entry 1: done=0 prio=2  ofs=0D36 seg=0000  (_setupio)
+00 10 d7 14 00 00   entry 2: done=0 prio=16 ofs=14D7 seg=0000  (_c0crtinit)
+00 10 32 20 00 00   entry 3: done=0 prio=16 ofs=2032 seg=0000  (__setargv)
+```
+
+So the layout is: mark at `+0` (0 = pending, 0xFF = done), priority at `+1`,
+far pointer offset at `+2`, segment at `+4` (segment 0 = near call).
+
+The table was reproduced **byte for byte from the original**, so its pointers
+are the *original's* link-time values:
+
+* entry 0 points at `1403:0D24`, which in our link is a VROOMM stub
+  (`CD 3F ...` at image `0x14D54`), not the prepare routine;
+* the near entries point at the original's CRTL offsets (`0D36`, `14D7`,
+  `2032`), which happen to coincide with our own `_setupio`/`_c0crtinit`/
+  `__setargv` only because we call those by symbol instead of through the table.
+
+The routine entry 0 wants is at offset `0D24` of `_OVRTEXT_` - exactly 5 bytes
+before the OVRUSER module header the map lists at `07BF:0D29`.  Calling
+`(_psp + 0x10 + 0x7BF):0D24` from `startx` builds and links, but the program
+still produces a 0-byte `OUT.BIN` and no `STRONG.SAV`, so the prepare entry
+needs something we do not supply yet (most likely the overlay file handle opened
+by the manager's own entry point, or a different register/argument walk).
+
+Reverted; tree at the verified state.
+
+**Consequence for the plan:** the init table cannot be *walked* as-is in our
+build - every pointer in it is a stale original address.  It must either be
+regenerated from our own symbols, or each entry patched at startup the way
+`fixFarTable` already patches the far-pointer tables.
