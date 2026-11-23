@@ -14,7 +14,7 @@ void __cdecl16far audio_usesLDIV_at_(void)
   bool bVar1;
   uint8_t uVar2;
   uint uVar3;
-  uint16_t uVar4;
+  uint16_t roll;
   ulong *puVar5;
   int in_DX;
   long lVar6;
@@ -39,14 +39,14 @@ void __cdecl16far audio_usesLDIV_at_(void)
     {
       uVar7 = 0;
       if (CurSfxType3 == 0x80) {
-        uVar4 = ovr_randBelow(3,0);
-        uVar2 = (char)uVar4 + 0x80;
-        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+        roll = ovr_randBelow(3,0);
+        uVar2 = (char)roll + 0x80;
+        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x83) {
-        uVar4 = ovr_randBelow(3,0);
-        uVar2 = (char)uVar4 + 0x83;
-        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+        roll = ovr_randBelow(3,0);
+        uVar2 = (char)roll + 0x83;
+        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x76) {
         puVar5 = ovr_attact_usesBDADailyTimeCounter
@@ -54,8 +54,8 @@ void __cdecl16far audio_usesLDIV_at_(void)
         if ((in_DX == 0) && (puVar5 < SfxDeadline)) {
           return;
         }
-        uVar4 = ovr_randBelow(4,0);
-        uVar2 = (char)uVar4 + 0x76;
+        roll = ovr_randBelow(4,0);
+        uVar2 = (char)roll + 0x76;
         uVar8 = 0;
         uVar7 = 0x8000;
         uVar3 = rand();
@@ -65,69 +65,69 @@ void __cdecl16far audio_usesLDIV_at_(void)
           SfxDeadline = (uint16_t)(0x0);
         }
         else {
-          uVar4 = ovr_randBelow(0x48,0);
-          SfxDeadline = (uint16_t)(((uVar4 & 0xff) + 0x80));
+          roll = ovr_randBelow(0x48,0);
+          SfxDeadline = (uint16_t)(((roll & 0xff) + 0x80));
         }
         uVar7 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
         sfxTickLo = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);   /* hand fix: the offset half is the address, and sfxTickLo is 16-bit */
         sfxTickHi = uVar7;
       }
       else if (CurSfxType3 == 0x70) {
-        uVar4 = ovr_randBelow(3,0);
-        uVar2 = (char)uVar4 + 0x70;
-        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+        roll = ovr_randBelow(3,0);
+        uVar2 = (char)roll + 0x70;
+        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x86) {
-        uVar4 = ovr_randBelow(3,0);
-        uVar2 = (char)uVar4 + 0x86;
-        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+        roll = ovr_randBelow(3,0);
+        uVar2 = (char)roll + 0x86;
+        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x7a) {
-        uVar4 = ovr_randBelow(3,0);
-        uVar2 = (char)uVar4 + 0x7a;
-        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+        roll = ovr_randBelow(3,0);
+        uVar2 = (char)roll + 0x7a;
+        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x7d) {
-        uVar4 = ovr_randBelow(3,0);
-        uVar2 = (char)uVar4 + 0x7d;
-        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+        roll = ovr_randBelow(3,0);
+        uVar2 = (char)roll + 0x7d;
+        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x6a) {
-        uVar4 = ovr_randBelow(3,0);
-        uVar2 = (char)uVar4 + 0x6a;
-        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+        roll = ovr_randBelow(3,0);
+        uVar2 = (char)roll + 0x6a;
+        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x64) {
-        uVar4 = ovr_randBelow(3,0);
-        uVar2 = (char)uVar4 + 0x64;
-        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+        roll = ovr_randBelow(3,0);
+        uVar2 = (char)roll + 0x64;
+        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x67) {
-        uVar4 = ovr_randBelow(3,0);
-        uVar2 = (char)uVar4 + 0x67;
-        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+        roll = ovr_randBelow(3,0);
+        uVar2 = (char)roll + 0x67;
+        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x5e) {
-        uVar4 = ovr_randBelow(3,0);
-        uVar2 = (char)uVar4 + 0x5e;
-        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+        roll = ovr_randBelow(3,0);
+        uVar2 = (char)roll + 0x5e;
+        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x61) {
-        uVar4 = ovr_randBelow(6,0);
-        uVar2 = (char)uVar4 + 0x5e;
-        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+        roll = ovr_randBelow(6,0);
+        uVar2 = (char)roll + 0x5e;
+        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
       }
       else if (CurSfxType3 == 0x73) {
-        uVar4 = ovr_randBelow(6,0);
-        uVar2 = (char)uVar4 + 0x73;
-        uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+        roll = ovr_randBelow(6,0);
+        uVar2 = (char)roll + 0x73;
+        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
       }
       else {
         uVar2 = CurSfxType3;
         if (CurSfxType3 == 0x6f) {
-          uVar4 = ovr_randBelow(3,0);
-          uVar2 = (char)uVar4 + 0x6d;
-          uVar7 = CONCAT11((char)(uVar4 >> 8),uVar2);
+          roll = ovr_randBelow(3,0);
+          uVar2 = (char)roll + 0x6d;
+          uVar7 = CONCAT11((char)(roll >> 8),uVar2);
         }
       }
       play_sfx(CONCAT11((char)((uint)uVar7 >> 8),uVar2),4,0);
