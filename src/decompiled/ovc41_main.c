@@ -844,7 +844,7 @@ void __cdecl16far dbgPromoteEnemy(void)
     if (((GfxRndSeed - 2U <= *(uint *)((entity_t *)iVar2 + i)) &&
         (*(uint *)((entity_t *)iVar2 + i) <= GfxRndSeed + 1U)) &&
        (((entity_t *)iVar2)[i].base.y == GfxRndSeed2)) {
-      pcVar1 = (char *)((uint8_t *)((entity_t *)Entities + i) + 0xd);
+      pcVar1 = (char *)((uint8_t *)&((entity_t *)Entities)[i] + 0xd);
       *pcVar1 = *pcVar1 + '\x01';
       uVar3 = (uint16_t)((ulong)Entities >> 0x10);
       if (0x29 < ((entity_t *)Entities)[i].base.gindex) {

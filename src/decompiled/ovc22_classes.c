@@ -202,10 +202,10 @@ char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t *ag
         case 1:
           *(char *)(unaff_DI + 0x34) = *(char *)(unaff_DI + 0x34) << 1;
 code_r0x0005b805:
-          if (*(uint16_t *)((int)Entities + (int)pcVar6 * 0x37 + 10) != in_stack_0000000a)
+          if (((entity_t *)Entities)[pcVar6].base.destY != in_stack_0000000a)
           goto L_OVC25_5b66_00ff_01D9;
           do {
-            pbVar1 = (byte *)((int)Entities + (int)pcVar6 * 0x37 + 0x33);
+            pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[pcVar6] + 0x33);
             *pbVar1 = *pbVar1 | 8;
 L_OVC25_5b66_00ff_01D9:
             while( true ) {
@@ -221,7 +221,7 @@ L_OVC25_5b66_00ff_01D9:
                       ((entity_t *)Entities)[uVar7].base.state = 0;
                       ((entity_t *)Entities)[uVar7].base.destX = unaff_DI;
                       ((entity_t *)Entities)[uVar7].base.destY = in_stack_0000000a;
-                      pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + uVar7) + 0x33);
+                      pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[uVar7] + 0x33);
                       *pbVar1 = *pbVar1 | 8;
                       iVar4 = iVar4 + 1;
                     }
@@ -229,14 +229,14 @@ L_OVC25_5b66_00ff_01D9:
                   return (char *)0xffff;
                 }
                 uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-              } while (*(byte *)((int)Entities + (int)pcVar6 * 0x37 + 0x1a) != bldType);
-              uVar7 = ovr_alignUp4(*(int *)((int)Entities + (int)pcVar6 * 0x37),0,0);
+              } while (AGNT_FIELD(&((entity_t *)Entities)[pcVar6], base.entity, 3) != bldType);
+              uVar7 = ovr_alignUp4(((entity_t *)Entities)[pcVar6].base.x,0,0);
               uVar8 = ovr_alignUp4(unaff_DI,0,0);
               uVar5 = (uint16_t)((ulong)Entities >> 0x10);
               if ((uVar7 == uVar8) &&
-                 (*(uint16_t *)((int)Entities + (int)pcVar6 * 0x37 + 2) == in_stack_0000000a))
+                 (((entity_t *)Entities)[pcVar6].base.y == in_stack_0000000a))
               break;
-              uVar7 = ovr_alignUp4(*(int *)((int)Entities + (int)pcVar6 * 0x37 + 8),0,0);
+              uVar7 = ovr_alignUp4(((entity_t *)Entities)[pcVar6].base.destX,0,0);
               uVar8 = ovr_alignUp4(unaff_DI,0,0);
               if (uVar7 == uVar8) goto code_r0x0005b805;
             }
@@ -2766,7 +2766,7 @@ uint __cdecl16far ovc22_usesEntities(int entityIndex)
         }
         if (((entity_t *)iVar5)[entityIndex].base.animFrame <
             (byte)(*(char *)((int)*(uint32_t *)((uint)bVar2 << 2) + 0xa4) + bVar4)) {
-          pcVar1 = (char *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0xe);
+          pcVar1 = (char *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0xe);
           *pcVar1 = *pcVar1 + '\x01';
           uVar3 = CONCAT11((char)((uint)(entityIndex * 0x37) >> 8),1);
         }
@@ -2912,7 +2912,7 @@ void __cdecl16far ovc22_usesEntities2(int entityIndex)
   
   uVar7 = (uint16_t)((ulong)Entities >> 0x10);
   if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) != -1) {
-    bVar4 = ovr_agnt_compute8((agnt_t *)((uint8_t *)((entity_t *)Entities + entityIndex)),uVar7);
+    bVar4 = ovr_agnt_compute8((agnt_t *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),uVar7);
     bVar2 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
     for (cStack_5 = '\0'; cStack_5 < '\x03'; cStack_5 = cStack_5 + '\x01') {
       uVar3 = *(uint32_t *)((uint)bVar2 << 2);
@@ -2954,7 +2954,7 @@ void __cdecl16far ovc22_usesEntities3(int entityIndex)
   
   uVar7 = (uint16_t)((ulong)Entities >> 0x10);
   if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) != -1) {
-    bVar4 = ovr_agnt_compute10((agnt_t *)((uint8_t *)((entity_t *)Entities + entityIndex)),uVar7);
+    bVar4 = ovr_agnt_compute10((agnt_t *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),uVar7);
     bVar2 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
     for (cStack_6 = '\0'; cStack_6 < '\x04'; cStack_6 = cStack_6 + '\x01') {
       uVar3 = *(uint32_t *)((uint)bVar2 << 2);
@@ -3014,7 +3014,7 @@ void __cdecl16far ovc22_usesEntities4(int entityIndex)
     uVar4 = *(uint32_t *)((uint)bVar3 << 2);
     pcVar1 = (char *)((int)uVar4 + 0xa7);
     *pcVar1 = *pcVar1 + -1;
-    puVar2 = (uint *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x14);
+    puVar2 = (uint *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x14);
     *puVar2 = *puVar2 | 2;
   }
   return;

@@ -764,24 +764,24 @@ unit_usesEntities(char state,int entityIndex,uint16_t unitFlags,uint16_t unitFla
   uint16_t uVar3;
   uint16_t uVar4;
   
-  pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
+  pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
   *pbVar1 = *pbVar1 & 0xf8;
   if (state != '\x02') {
     uVar3 = (uint16_t)((ulong)Entities >> 0x10);
     if (state == '\x03') {
-      pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
+      pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
       *pbVar1 = *pbVar1 | 1;
       ovr_attact_usesEntities(entityIndex,0,0,unitFlags,unitFlagsSeg,0,0,0,0);
     }
     else if (state == '\x04') {
-      pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
+      pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
       *pbVar1 = *pbVar1 | 2;
       uVar4 = (uint16_t)((ulong)Entities >> 0x10);
       iVar2 = (int)Entities;
       uVar3 = ((entity_t *)iVar2)[entityIndex].base.y;
       ((entity_t *)iVar2)[entityIndex].base.targetX = *(uint16_t *)((entity_t *)iVar2 + entityIndex);
       ((entity_t *)Entities)[entityIndex].base.targetY = uVar3;
-      pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
+      pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
       *pbVar1 = *pbVar1 & 0xfa;
       ovr_attact_usesEntities(entityIndex,0,0,unitFlags,unitFlagsSeg,0,0,0,0);
     }

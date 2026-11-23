@@ -774,7 +774,7 @@ void __cdecl16far ovc24_usesLDIV_at_(int entityIndex)
     uVar10 = (uint16_t)((ulong)Entities >> 0x10);
     if (((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
                    (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95) & 0x2000) != 0
-        ) && (bVar1 = ovr_agnt_compute8((agnt_t *)((uint8_t *)((entity_t *)Entities + entityIndex)),uVar10),
+        ) && (bVar1 = ovr_agnt_compute8((agnt_t *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),uVar10),
              -1 < (char)bVar1)) {
       uVar10 = (uint16_t)((ulong)Entities >> 0x10);
       cVar2 = ((entity_t *)Entities)[entityIndex].dir -
@@ -911,7 +911,7 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
         }
       }
       if (bVar2) {
-        puVar1 = (uint *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x14);
+        puVar1 = (uint *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x14);
         *puVar1 = *puVar1 & 0xfffe;
         uVar10 = (uint16_t)((ulong)Entities >> 0x10);
         alignUp4(((entity_t *)Entities)[entityIndex].base.x,

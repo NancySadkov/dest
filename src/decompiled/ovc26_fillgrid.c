@@ -348,9 +348,9 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
                       (entityIndex,iVar2 + iVar9,iVar3 + (int)psStack_c,flagsOfs,flagsSeg,0,0,0,0);
             ((entity_t *)Entities)[entityIndex].base.targetX = iVar2 + iVar9;
             ((entity_t *)Entities)[entityIndex].base.targetY = iVar3 + (int)psStack_c;
-            pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
+            pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
             *pbVar1 = *pbVar1 | 2;
-            pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
+            pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
             *pbVar1 = *pbVar1 & 0xfa;
             uVar8 = (undefined1)((uint)(entityIndex * 0x37) >> 8);
             ovr_ovc25_usesAlignUp44

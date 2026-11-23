@@ -79,7 +79,7 @@ ovc25_usesAlignUp42(char partyIndex,byte count,uint16_t destX,uint16_t destY,uin
           ((entity_t *)Entities)[uVar4].base.state = 0;
           ((entity_t *)Entities)[uVar4].base.destX = destX;
           ((entity_t *)Entities)[uVar4].base.destY = destY;
-          pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + uVar4) + 0x33);
+          pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[uVar4] + 0x33);
           *pbVar1 = *pbVar1 | 8;
           iStack_4 = iStack_4 + 1;
         }
@@ -97,7 +97,7 @@ ovc25_usesAlignUp42(char partyIndex,byte count,uint16_t destX,uint16_t destY,uin
         if ((uVar2 != uVar3) || (((entity_t *)Entities)[uVar4].base.destY != destY))
         goto L_OVC25_5b66_00ff_01D9;
       }
-      pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + uVar4) + 0x33);
+      pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[uVar4] + 0x33);
       *pbVar1 = *pbVar1 | 8;
     }
 L_OVC25_5b66_00ff_01D9:
@@ -184,7 +184,7 @@ ovc25_usesAlignUp43(char partyIndex,byte count,uint16_t destX,uint16_t destY,cha
         }
         iVar5 = iVar5 + 1;
         if (setFlag8 != '\0') {
-          pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
+          pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
           *pbVar1 = *pbVar1 | 8;
         }
       }
@@ -197,7 +197,7 @@ L_OVC25_5b66_038d_0482:
       ((entity_t *)Entities)[entityIndex].base.destX = destX;
       ((entity_t *)Entities)[entityIndex].base.destY = destY;
       if (setFlag8 != '\0') {
-        pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + entityIndex) + 0x33);
+        pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
         *pbVar1 = *pbVar1 | 8;
       }
       iVar5 = iVar5 + 1;
@@ -336,7 +336,7 @@ void __cdecl16far ovc25_usesEntityCount(char partyIndex)
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
     uVar3 = (uint16_t)((ulong)Entities >> 0x10);
     if (*(char *)((int)&((entity_t *)Entities)[uVar2].base.entity + 3) == partyIndex) {
-      pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + uVar2) + 0x33);
+      pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[uVar2] + 0x33);
       *pbVar1 = *pbVar1 & 0xf7;
     }
   }

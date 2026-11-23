@@ -1145,7 +1145,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
         ((entity_t *)Entities)[ent].base.state = 0;
         ((entity_t *)Entities)[ent].base.destX = uStack_8;
         ((entity_t *)Entities)[ent].base.destY = puVar6[1];
-        pbVar1 = (byte *)((uint8_t *)((entity_t *)Entities + ent) + 0x33);
+        pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[ent] + 0x33);
         *pbVar1 = *pbVar1 & 0xfb;
         uVar7 = uVar7 + 1;
       }
