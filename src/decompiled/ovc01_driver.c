@@ -1609,42 +1609,40 @@ L_driver_2d63_0af7_0B3E:
 int __cdecl16far vgaDoSomethingWithPalette(int *paletteData)
 
 {
-  undefined1 *puVar1;
-  int *piVar2;
-  undefined1 uVar4;
+  undefined1 *lenPtr;
+  int *entryPtr2;
+  undefined1 countHi;
   int iVar3;
-  int iVar5;
-  int iVar6;
-  int *piVar7;
-  int iVar8;
-  int iVar9;
-  uint16_t uVar10;
+  int repeatCount;
+  int blocksLeft;
+  int *palPtr;
+  int curIndex;
+  int startIndex;
   
-  uVar10 = (uint16_t)((ulong)paletteData >> 0x10);
-  iVar8 = 0;
-  piVar7 = (int *)paletteData + 1;
+  curIndex = 0;
+  palPtr = (int *)paletteData + 1;
   iVar3 = *paletteData;
-  for (iVar6 = iVar3; iVar6 != 0; iVar6 = iVar6 + -1) {
-    puVar1 = (undefined1 *)((int)piVar7 + 1);
-    uVar4 = (undefined1)((uint)iVar3 >> 8);
-    iVar9 = iVar8 + CONCAT11(uVar4,(char)*piVar7);
-    piVar7 = piVar7 + 1;
-    iVar5 = CONCAT11(uVar4,*puVar1);
-    if (iVar5 == 0) {
-      iVar5 = 0x100;
+  for (blocksLeft = iVar3; blocksLeft != 0; blocksLeft = blocksLeft + -1) {
+    lenPtr = (undefined1 *)((int)palPtr + 1);
+    countHi = (undefined1)((uint)iVar3 >> 8);
+    startIndex = curIndex + CONCAT11(countHi,(char)*palPtr);
+    palPtr = palPtr + 1;
+    repeatCount = CONCAT11(countHi,*lenPtr);
+    if (repeatCount == 0) {
+      repeatCount = 0x100;
     }
     do {
-      out(0x3c8,(char)iVar9);
-      iVar8 = iVar9 + 1;
-      out(0x3c9,(char)*piVar7);
-      piVar2 = piVar7 + 1;
-      out(0x3c9,*(undefined1 *)((int)piVar7 + 1));
-      piVar7 = (int *)((int)piVar7 + 3);
-      iVar3 = CONCAT11((char)((uint)iVar9 >> 8),(char)*piVar2);
-      out(0x3c9,(char)*piVar2);
-      iVar5 = iVar5 + -1;
-      iVar9 = iVar8;
-    } while (iVar5 != 0);
+      out(0x3c8,(char)startIndex);
+      curIndex = startIndex + 1;
+      out(0x3c9,(char)*palPtr);
+      entryPtr2 = palPtr + 1;
+      out(0x3c9,*(undefined1 *)((int)palPtr + 1));
+      palPtr = (int *)((int)palPtr + 3);
+      iVar3 = CONCAT11((char)((uint)startIndex >> 8),(char)*entryPtr2);
+      out(0x3c9,(char)*entryPtr2);
+      repeatCount = repeatCount + -1;
+      startIndex = curIndex;
+    } while (repeatCount != 0);
   }
   return iVar3;
 }
