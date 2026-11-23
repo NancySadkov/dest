@@ -313,3 +313,30 @@ file-wide.
 
 Status: the `.seg` half is fixed for 543 results; the argument seed is unchanged
 (704 literals) and needs this multi-line-aware pass.
+
+## The remaining ovc45 sites are inside an unmarked merged body
+
+`ovc45_unitinfo.c` contains **zero** function markers (`/* XXXX:XXXX */`).  The
+202 remaining `0x195d` sites all sit after line 618, in a region with no function
+boundary at all - attributing them to `ovc45_textArena2` happens only because it
+is the nearest *definition*, and that function itself ends at line 618.
+
+Consequence: the third shape
+
+```c
+pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5,0);
+uVar20 = 0x195d;
+*(uint16_t *)((int)&BldInstances[0].seg + (uVar19 + 1) * 0xc) = uVar16;  /* other var */
+((bld_inst_t *)BldInstances + uVar19 + 1)->ofs = (short)pcVar6;
+```
+
+cannot be paired safely, because the variable that lands in `.seg` is not the one
+seeded next to the call - and the code it belongs to is not a single function we
+can disassemble and check.
+
+Fixing these needs the function boundaries restored in the model (the same
+merged-body problem already noted for `ovc22_textRingProt`, `ovc49_body1`,
+`ovc23_usesAlignUp43`), not another per-file rewrite.
+
+Status of `0x195d`: 706 -> 321 (ovc46 cleared; ovc44 11, ovc48 31, ovc45 202 in
+the unmarked region, the rest spread over smaller files).

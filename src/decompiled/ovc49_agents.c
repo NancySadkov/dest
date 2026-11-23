@@ -3511,7 +3511,7 @@ void __cdecl16far ovc49_drawAgents(void)
   uint8_t agntIndex;
   byte bStack_1b;
   uint uStack_1a;
-  stg_tmp_t *psStack_18;
+  stg_tmp_t *stgFar;
   uint16_t uStack_16;
   uint8_t factionSeen;
   char cStack_13;
@@ -3588,7 +3588,7 @@ void __cdecl16far ovc49_drawAgents(void)
                         ((stg_tmp_t *)*(uint16_t *)(iVar17 + 0x58),
                          (char)*(uint16_t *)(iVar17 + 0x5a),*(undefined1 *)(agentIndex * 0x34 + 6))
     ;
-    psStack_18 = (stg_tmp_t *)CONCAT22(uVar15,psVar11);
+    stgFar = (stg_tmp_t *)CONCAT22(uVar15,psVar11);
     if (*(char *)(agentIndex * 0x34 + 4) < '\x01') {
       if (*(char *)(agentIndex * 0x34 + 4) < '\0') {
         *(int *)(agentIndex * 0x34) = *(int *)(agentIndex * 0x34) - (int)(char)psVar11->cmap[5];
@@ -3657,7 +3657,7 @@ void __cdecl16far ovc49_drawAgents(void)
     if ((((char)uVar15 == '\0') || (*(int *)(agentIndex * 0x34 + 2) < 0)) ||
        ((-1 < *(int *)(agentIndex * 0x34) &&
         ((*(int *)(agentIndex * 0x34) < 0xd3 &&
-         ((uint)(*(int *)(agentIndex * 0x34 + 0x28) - *(int *)(((stg_tmp_t *)psStack_18)->cmap + 9))
+         ((uint)(*(int *)(agentIndex * 0x34 + 0x28) - *(int *)(((stg_tmp_t *)stgFar)->cmap + 9))
           < 0x96)))))) {
       if ((*(char *)(agentIndex * 0x34 + 0x11) == '\0') &&
          (uVar10 = ovc49_compute1(*(int *)(agentIndex * 0x34)), (char)uVar10 != '\0')) {
@@ -3781,7 +3781,7 @@ void __cdecl16far ovc49_drawAgents(void)
                         ((stg_tmp_t *)*(uint16_t *)(iVar17 + 0x58),
                          (char)*(uint16_t *)(iVar17 + 0x5a),*(undefined1 *)(agentIndex * 0x34 + 6))
     ;
-    psStack_18 = (stg_tmp_t *)CONCAT22(uVar13,psVar11);
+    stgFar = (stg_tmp_t *)CONCAT22(uVar13,psVar11);
     GGameState = 0x38;
     if (DebugVerbose != false) {
       printf("%d \r");
@@ -3803,7 +3803,7 @@ void __cdecl16far ovc49_drawAgents(void)
       if (*(char *)(agentIndex * 0x34 + 0x24) == '\0') {
         GGameState = 0x32;
         gfx_04.seg = uStack_16;
-        gfx_04.ofs = (uint16_t)(psStack_18->cmap + 6);
+        gfx_04.ofs = (uint16_t)(stgFar->cmap + 6);
         ovr_blitGfxRect(gfx_04,iVar17,scrY,&agentRect,type,(*(uint8_t *)((uint8_t *)&(scrY))),0,0,0,0,0,0);
         GGameState = 0x33;
         if ((*(uint *)(agentIndex * 0x34 + 0x2b) & 100) != 0) {
@@ -3821,7 +3821,7 @@ void __cdecl16far ovc49_drawAgents(void)
         uVar6 = *(uint32_t *)(agentIndex * 0x34 + 0x1d);
         if ((*(uint *)((int)uVar6 + 0x40) & 2) == 0) {
           gfx_07.seg = uStack_16;
-          gfx_07.ofs = (uint16_t)(psStack_18->cmap + 6);
+          gfx_07.ofs = (uint16_t)(stgFar->cmap + 6);
           ovr_blitGfxRect(gfx_07,iVar17,scrY,&agentRect,type,(*(uint8_t *)((uint8_t *)&(scrY))),0,0,0,0,0,0);
           iVar14 = scrY - *(int *)((int)uStack_12 + 0xd);
           uVar10 = *(byte *)(agentIndex * 0x34 + 0x23) & 3;
@@ -3838,7 +3838,7 @@ void __cdecl16far ovc49_drawAgents(void)
         }
         else {
           gfx_06.seg = uStack_16;
-          gfx_06.ofs = (uint16_t)(psStack_18->cmap + 6);
+          gfx_06.ofs = (uint16_t)(stgFar->cmap + 6);
           ovr_blitGfxRect(gfx_06,iVar17,scrY,&agentRect,type,(*(uint8_t *)((uint8_t *)&(scrY))),0,0,0,0,0,0);
           if ((int)(uint)*(byte *)((int)uStack_12 + 0x1b) <= *(int *)(agentIndex * 0x34 + 6) + 1) {
             *(undefined1 *)(agentIndex * 0x34 + 0x24) = 0;
@@ -3848,7 +3848,7 @@ void __cdecl16far ovc49_drawAgents(void)
       else if (*(char *)(agentIndex * 0x34 + 0x24) == '\x02') {
         if (bStack_1b == 0x12) {
           gfx_09.seg = uStack_16;
-          gfx_09.ofs = (uint16_t)(psStack_18->cmap + 6);
+          gfx_09.ofs = (uint16_t)(stgFar->cmap + 6);
           ovr_blitGfxRect(gfx_09,iVar17,scrY,&agentRect,type,(*(uint8_t *)((uint8_t *)&(scrY))),0,0,0,0,0,0);
           if ((int)(uint)*(byte *)((int)uStack_12 + 0x1b) <= *(int *)(agentIndex * 0x34 + 6) + 1) {
             *(undefined1 *)(agentIndex * 0x34 + 0x25) = 2;
@@ -3857,8 +3857,8 @@ void __cdecl16far ovc49_drawAgents(void)
         }
         else {
           uVar12 = ovr_randBelow(0x100,0);
-          gfx_01.seg = (uint16_t)((ulong)psStack_18 >> 0x10);
-          gfx_01.ofs = (uint16_t)(psStack_18->cmap + 6);
+          gfx_01.seg = (uint16_t)((ulong)stgFar >> 0x10);
+          gfx_01.ofs = (uint16_t)(stgFar->cmap + 6);
           ovr_gfxRlePrepare(gfx_01,iVar17,scrY,&agentRect.x,type,'\x10',0x10,CONCAT11((char)(agentIndex * 0x34 >> 8),
                                      *(undefined1 *)(agentIndex * 0x34 + 0xf)),1,*(char *)(agentIndex * 0x34 + 0x23) * '\x19',(char)uVar12,0,0);
           if (*(char *)(agentIndex * 0x34 + 0x23) == '\0') {
@@ -3874,7 +3874,7 @@ void __cdecl16far ovc49_drawAgents(void)
     }
     else {
       gfx_03.seg = uStack_16;
-      gfx_03.ofs = (uint16_t)(psStack_18->cmap + 6);
+      gfx_03.ofs = (uint16_t)(stgFar->cmap + 6);
       ovr_gfxRlePrepare(gfx_03,iVar17,scrY,&agentRect.x,type,'\x10',0x10,CONCAT11((char)(agentIndex * 0x34 >> 8),
                                  *(undefined1 *)(agentIndex * 0x34 + 0xf)),0xff,0,0,0,0);
     }
@@ -4070,7 +4070,7 @@ void __cdecl16far ovc49_drawAgents(void)
         psVar11 = ovr_stash_usesStExit
                             ((stg_tmp_t *)*(uint16_t *)(iVar17 + 0x58),
                              (char)*(uint16_t *)(iVar17 + 0x5a),bVar4);
-        psStack_18 = (stg_tmp_t *)CONCAT22(uVar12,psVar11);
+        stgFar = (stg_tmp_t *)CONCAT22(uVar12,psVar11);
         GGameState = 0x30;
         bVar5 = *(bool *)(agentIndex * 0x34 + 10);
         gfx_02.seg = uVar12;
@@ -4081,14 +4081,14 @@ void __cdecl16far ovc49_drawAgents(void)
         uVar13 = (uint16_t)((ulong)uStack_12 >> 0x10);
         iVar17 = (int)uStack_12;
         if ((*(byte *)(iVar17 + 0x1c) & 2) == 0) {
-          uVar21 = (uint16_t)((ulong)psStack_18 >> 0x10);
+          uVar21 = (uint16_t)((ulong)stgFar >> 0x10);
           if (*(char *)(agentIndex * 0x34 + 0xb) == '\0') {
             pTarget = (int *)(agentIndex * 0x34 + 8);
-            *pTarget = *pTarget + (int)(char)((stg_tmp_t *)psStack_18)->cmap[5];
+            *pTarget = *pTarget + (int)(char)((stg_tmp_t *)stgFar)->cmap[5];
           }
           else {
             pTarget = (int *)(agentIndex * 0x34 + 8);
-            *pTarget = *pTarget - (int)(char)((stg_tmp_t *)psStack_18)->cmap[5];
+            *pTarget = *pTarget - (int)(char)((stg_tmp_t *)stgFar)->cmap[5];
           }
           uStack_1a = uStack_1a + 1;
           if (*(byte *)(iVar17 + 0x19) + 1 == uStack_1a) {
@@ -4109,10 +4109,10 @@ void __cdecl16far ovc49_drawAgents(void)
                               (anm_t *)CONCAT22(iVar17,(anm_t *)((int)&AgntAnms[0x75].halfWidth + 1)
                                                ),
                               (stg_tmp_t *)
-                              CONCAT13((char)((ulong)psStack_18 >> 8),
-                                       CONCAT12((char)psStack_18,uVar13)),0x26,
-                              (char)((ulong)uStack_12 >> 0x10),(char)psStack_18,
-                              (char)((ulong)psStack_18 >> 0x10));
+                              CONCAT13((char)((ulong)stgFar >> 8),
+                                       CONCAT12((char)stgFar,uVar13)),0x26,
+                              (char)((ulong)uStack_12 >> 0x10),(char)stgFar,
+                              (char)((ulong)stgFar >> 0x10));
         }
       }
       else {

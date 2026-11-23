@@ -1653,7 +1653,7 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
 
 {
   byte *pbVar1;
-  uint32_t uVar2;
+  uint32_t entityFar;
   uint32_t uVar3;
   uint8_t *puVar4;
   char *pcVar5;
@@ -1667,40 +1667,40 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
   uint8_t unitFlags;
   int iStack_4;
   
-  uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+  entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
   uVar8 = text;
-  pcStack_d4 = (char *)(CONCAT22(text,(uint)*(byte *)((int)uVar2 + 0x33)) ^ 1);
-  uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
-  *(undefined1 *)((int)uVar2 + 0x33) = (char)pcStack_d4;
-  uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
-  if ((*(byte *)((int)uVar2 + 0x33) & 1) == 0) {
-    uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
-    pbVar1 = (byte *)((int)uVar2 + 0x33);
+  pcStack_d4 = (char *)(CONCAT22(text,(uint)*(byte *)((int)entityFar + 0x33)) ^ 1);
+  entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+  *(undefined1 *)((int)entityFar + 0x33) = (char)pcStack_d4;
+  entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+  if ((*(byte *)((int)entityFar + 0x33) & 1) == 0) {
+    entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+    pbVar1 = (byte *)((int)entityFar + 0x33);
     *pbVar1 = *pbVar1 & 0xfb;
   }
   else {
-    uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+    entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
     text = uVar8;
-    stats_usesEntityCount(*(char *)((int)uVar2 + 0x1a));
-    uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
-    pbVar1 = (byte *)((int)uVar2 + 0x33);
+    stats_usesEntityCount(*(char *)((int)entityFar + 0x1a));
+    entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+    pbVar1 = (byte *)((int)entityFar + 0x33);
     *pbVar1 = *pbVar1 | 4;
     iStack_4 = *(int *)((uint)agnt_id * 0x34 + 0x1b);
     pcStack_d4 = (char *)CONCAT22(text,unaff_SS);
     ovr_attact_usesEntities(iStack_4,0,0,(uint16_t)&unitFlags,(uint16_t)unaff_SS,0,0,0,0);
   }
-  uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+  entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
   uVar3 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
-  *(byte *)((int)uVar3 + 0x33) = *(byte *)((int)uVar2 + 0x33) & 0xfd;
+  *(byte *)((int)uVar3 + 0x33) = *(byte *)((int)entityFar + 0x33) & 0xfd;
   pcStack_d4 = (char *)((ulong)pcStack_d4 & 0xffff0000);
   drawAgntStats((agnt_t *)((uint)agnt_id * 0x34),far_from_u32((uint32_t)(0x1726)),0);
   uVar6 = 0x1726;
-  uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
-  if ((*(byte *)((int)uVar2 + 0x33) & 1) == 0) {
+  entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+  if ((*(byte *)((int)entityFar + 0x33) & 1) == 0) {
     uVar6 = 0x1726;
-    uVar2 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x1d);
-    uVar8 = (uint16_t)((ulong)uVar2 >> 0x10);
-    iVar7 = (int)uVar2;
+    entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x1d);
+    uVar8 = (uint16_t)((ulong)entityFar >> 0x10);
+    iVar7 = (int)entityFar;
     puVar4 = ovr_ovc15_usesStshRealloc
                        ((char *)*(uint16_t *)(iVar7 + 0x24),*(uint16_t *)(iVar7 + 0x26),0,0,0,0,0,0);
     pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x63b1,unaff_SS),
