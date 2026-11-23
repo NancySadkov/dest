@@ -1,7 +1,7 @@
 # Symbols no longer recoverable, kept as documented stubs.
 # name<TAB>kind<TAB>reason
-func_0x00010264	function	func_0x target is data/fragment in the image
-func_0x00010268	function	func_0x target is data/fragment in the image
+func_0x00010264	function	OVERLAY.LIB EMS/EXT far-call trampoline (slot at 1000:0264/0268, segment patched at 1000:0266/026A by the routine at 026C/0274); overlay runtime, out of scope
+func_0x00010268	function	OVERLAY.LIB EMS/EXT far-call trampoline (slot at 1000:0264/0268, segment patched at 1000:0266/026A by the routine at 026C/0274); overlay runtime, out of scope
 func_0x000318f5	function	func_0x target is data/fragment in the image
 func_0x0004f29c	function	func_0x target is data/fragment in the image
 func_0x0004f32d	function	func_0x target is data/fragment in the image
