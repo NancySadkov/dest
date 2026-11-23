@@ -340,3 +340,25 @@ merged-body problem already noted for `ovc22_textRingProt`, `ovc49_body1`,
 
 Status of `0x195d`: 706 -> 321 (ovc46 cleared; ovc44 11, ovc48 31, ovc45 202 in
 the unmarked region, the rest spread over smaller files).
+
+## Correction: ovc45_unitinfo.c did have markers - the merged body is `ovc45_buildPlacementMessage`
+
+My earlier "zero function markers" came from a regex that only accepted
+upper-case hex (`[0-9A-F]`); the file's markers are lower-case.  After restoring
+the 25 missing ones there are 54, and every remaining `0x195d` site is inside a
+marked segment:
+
+```
+/* 77eb:0d61 */   199 sites
+/* 77eb:1754 */     2 sites
+/* 77eb:1bb3 */     1 site
+```
+
+`77eb:0d61` is `ovc45_buildPlacementMessage`, recorded as **1752 bytes**, but its
+C body spans **3354 lines** (lines 652-4005) - about 1900 lines/KB, far past the
+900 lines/KB plausibility limit used elsewhere.  So it is a merged body after
+all: the code of several original functions was spliced into one C body, which is
+why the store/`.seg` pairs cannot be matched to a single disassembled function.
+
+That keeps the merged-body blocker, but now it has an exact address and a name
+instead of "an unmarked region".
