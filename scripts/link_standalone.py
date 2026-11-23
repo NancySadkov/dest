@@ -71,7 +71,9 @@ def add_missing_relocations(exe, mapf):
         if seg not in segs:
             continue
         tstart, tlen, tclass = segs[seg]
-        if tclass != "CODE" or off >= tlen:
+        # Overlay call thunks jump into STUBSEG segments (O01_SEG, O09_SEG, ...);
+        # those targets need the same relocation as resident CODE ones.
+        if tclass not in ("CODE", "STUBSEG") or off >= tlen:
             continue
         if not any(s <= i < e for s, e in ranges):
             continue

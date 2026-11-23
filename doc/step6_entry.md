@@ -497,3 +497,38 @@ The static ladder is now complete end to end:
 startx -> DOS version -> SaveVectors -> environment scan -> memory resize ->
 UMB block -> INT 1Ah -> _setupio -> _c0crtinit -> argv -> main  (entered)
 ```
+
+## Root cause of the `main`-body stall: the overlay thunks are `INT 3Fh` stubs
+
+Tracing `main`'s first call showed it enters `ovr_init_game` and never returns.
+Disassembling the built image explains both halves:
+
+```
+main:            image 0x653f   lcall 06DE:0203          ; _OVR_INIT_GAME
+thunk 06DE:0203: image 0x6fe3   EA 48 00 B0 14           ; ljmp 14B0:0048
+target 14B0:0048                 -> O09_SEG
+O09_SEG bytes:   CD 3F 28 01 00  CD 3F 5F 01 00  ...     ; INT 3Fh, <id>, <ofs>
+```
+
+`INT 3Fh` is the VROOMM supervisor call.  The overlay segments are stubs that ask
+the overlay manager to load the real code; without the manager the interrupt has
+no handler and the program stops there.
+
+Two defects were found on the way:
+
+1. **The thunk segment word was not relocated.**  `add_missing_relocations()`
+   only accepted target segments whose map class is `CODE`, but overlay targets
+   are class `STUBSEG` (`O01_SEG`, `O09_SEG`, ...), so `EA`/`9A` instructions
+   pointing at them were skipped and the jump went to absolute `14B0:0048`.
+   The scan now accepts `STUBSEG` too; relocation entries went from 1006 to
+   1464 and the thunk's segment word at image `0x6FE6` is now relocated.
+2. **VROOMM is never initialised.**  With the relocation in place the jump
+   reaches `O09_SEG`, which is exactly when `INT 3Fh` needs the manager.  The
+   original's priority-1 init-table entry is module `OVRUSER`
+   (`07BF:0D29`, size `5B`, module `M=OVRUSER` in `REBUILT.MAP`).  Our `startx`
+   calls `_setupio`/`_c0crtinit` directly and never runs that entry.
+
+Calling `__OVRINIT()` from `startx` does not link (`Undefined symbol
+___OVRINIT in module CRTL.C`), so the OVRUSER prepare entry has to be reached by
+address - it is resident at `07BF:0D29` and the call needs the usual
+cross-segment relocation.
