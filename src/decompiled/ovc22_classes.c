@@ -3068,7 +3068,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   far_t partOut;
   bool bVar8;
   bool bVar9;
-  char cVar10;
+  char sheetFaction;
   uint16_t randVal;
   uint uVar12;
   char *pcVar13;
@@ -3079,7 +3079,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   unit_t *units;
   int iVar17;
   int iVar18;
-  int iVar19;
+  int sheetOfs;
   entity_t *peVar20;
   int iVar21;
   entity_t *peVar22;
@@ -3110,7 +3110,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint8_t found;
   byte bStack_1b;
   uint16_t uStack_1a;
-  uint uStack_18;
+  uint entX;
   uint idx;
   uint uStack_14;
   uint popAcc;
@@ -3121,7 +3121,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint16_t uStack_8;
   byte bStack_6;
   byte bStack_5;
-  uint uStack_4;
+  uint sheetAA;
   
   a = CONCAT22(unaff_SI,unaff_DI);
   if (!GameRunning) {
@@ -3188,8 +3188,8 @@ void __cdecl16far upd_usesAlignUp4(void)
     for (idx = 0; (int)idx < (int)(uint)GLeaderCount; idx = idx + 1) {
       if ((GLeaderSheets[idx])->active != '\0') {
         (GLeaderSheets[idx])->foodSold = 0;
-        cVar10 = *(char *)((int)(uint32_t)GLeaderSheets[idx] + 0x3f);
-        if ((cVar10 == '\0') &&
+        sheetFaction = *(char *)((int)(uint32_t)GLeaderSheets[idx] + 0x3f);
+        if ((sheetFaction == '\0') &&
            ((GLeaderSheets[idx])->foodProd <
             (GLeaderSheets[idx])->population >> 1)) {
           bVar8 = true;
@@ -3215,7 +3215,7 @@ void __cdecl16far upd_usesAlignUp4(void)
               iVar17 = *(int *)(iVar17 + 0x58) + ((int)uVar12 >> 0xf) +
                        (uint)CARRY2(*(uint *)(iVar17 + 0x56),uVar12);
               if ((iVar17 < 1) && (iVar17 < 0)) {
-                if ((cVar10 == '\0') && (units[uVar23].level != 0)) {
+                if ((sheetFaction == '\0') && (units[uVar23].level != 0)) {
                   randVal = ovr_randBelow(100,0);
                   unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
                   units = (unit_t *)GUnits;
@@ -3263,7 +3263,7 @@ void __cdecl16far upd_usesAlignUp4(void)
           *(uint16_t *)(iVar17 + 0x56) = 0;
         }
         else {
-          if ((cVar10 == '\0') && (0 < *(int *)((int)(uint32_t)GLeaderSheets[idx] + 0x54))) {
+          if ((sheetFaction == '\0') && (0 < *(int *)((int)(uint32_t)GLeaderSheets[idx] + 0x54))) {
             uStack_10 = *(int *)((int)(uint32_t)GLeaderSheets[idx] + 0x54) / 10;
           }
           else {
@@ -3331,7 +3331,7 @@ void __cdecl16far upd_usesAlignUp4(void)
               popAcc = popAcc - uStack_a;
               (GLeaderSheets[idx])->foodSold = uStack_a;
             }
-            if (cVar10 == '\0') {
+            if (sheetFaction == '\0') {
               for (iVar17 = 0; (popAcc != 0 && (iVar17 < (int)(uint)GLeaderCount));
                   iVar17 = iVar17 + 1) {
                 if (((GLeaderSheets[iVar17])->active != '\0') &&
@@ -3398,10 +3398,10 @@ void __cdecl16far upd_usesAlignUp4(void)
         iVar18 = (int)(uint32_t)GLeaderSheets[idx];
         iVar17 = *(int *)(iVar18 + 0x62);
         uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-        iVar19 = (int)(uint32_t)GLeaderSheets[idx];
-        iVar21 = *(int *)(iVar19 + 0x80);
+        sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
+        iVar21 = *(int *)(sheetOfs + 0x80);
         if ((iVar21 <= iVar17) &&
-           ((iVar21 < iVar17 || (*(uint *)(iVar19 + 0x7e) < *(uint *)(iVar18 + 0x60))))) {
+           ((iVar21 < iVar17 || (*(uint *)(sheetOfs + 0x7e) < *(uint *)(iVar18 + 0x60))))) {
           unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           iVar17 = (int)(uint32_t)GLeaderSheets[idx];
           uVar23 = *(uint *)(iVar17 + 0x60);
@@ -3524,23 +3524,23 @@ void __cdecl16far upd_usesAlignUp4(void)
           }
         }
         if (*(char *)((int)(uint32_t)GLeaderSheets[idx] + 0xaa) != '\0') {
-          uStack_4 = (uint)*(byte *)((int)(uint32_t)GLeaderSheets[idx] + 0xaa);
+          sheetAA = (uint)*(byte *)((int)(uint32_t)GLeaderSheets[idx] + 0xaa);
           for (uVar23 = 0; (int)uVar23 < (int)(uint)GLeaderCount; uVar23 = uVar23 + 1) {
             unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
             iVar18 = (int)(uint32_t)GLeaderSheets[idx];
             iVar17 = *(int *)(iVar18 + 0x58);
             uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-            iVar19 = (int)(uint32_t)GLeaderSheets[idx];
-            iVar21 = *(int *)(iVar19 + 0x8c);
+            sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
+            iVar21 = *(int *)(sheetOfs + 0x8c);
             if ((iVar21 <= iVar17) &&
-               ((iVar17 != iVar21 || (*(uint *)(iVar19 + 0x8a) <= *(uint *)(iVar18 + 0x56)))))
+               ((iVar17 != iVar21 || (*(uint *)(sheetOfs + 0x8a) <= *(uint *)(iVar18 + 0x56)))))
             break;
             if (((GLeaderSheets[uVar23])->active != '\0') &&
                (((0 < *(int *)((int)*(uint32_t *)(uVar23 << 2) + 0x54) &&
                  (*(char *)((int)*(uint32_t *)(uVar23 << 2) + 0x3f) == '\0')) &&
                 (uVar23 != idx)))) {
               in_stack_0000ffd2 =
-                   ((long)*(int *)((int)*(uint32_t *)(uVar23 << 2) + 0x54) * (long)(int)uStack_4 &
+                   ((long)*(int *)((int)*(uint32_t *)(uVar23 << 2) + 0x54) * (long)(int)sheetAA &
                    0xffffU) / 100;
               unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
               iVar17 = (int)(uint32_t)GLeaderSheets[idx];
@@ -3602,10 +3602,10 @@ void __cdecl16far upd_usesAlignUp4(void)
         iVar18 = (int)(uint32_t)GLeaderSheets[idx];
         iVar17 = *(int *)(iVar18 + 0x58);
         uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
-        iVar19 = (int)(uint32_t)GLeaderSheets[idx];
-        iVar21 = *(int *)(iVar19 + 0x8c);
+        sheetOfs = (int)(uint32_t)GLeaderSheets[idx];
+        iVar21 = *(int *)(sheetOfs + 0x8c);
         if ((iVar21 <= iVar17) &&
-           ((iVar21 < iVar17 || (*(uint *)(iVar19 + 0x8a) < *(uint *)(iVar18 + 0x56))))) {
+           ((iVar21 < iVar17 || (*(uint *)(sheetOfs + 0x8a) < *(uint *)(iVar18 + 0x56))))) {
           uVar25 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
           iVar17 = (int)(uint32_t)GLeaderSheets[idx];
           unitsSeg = *(uint16_t *)(iVar17 + 0x8a);
@@ -3688,7 +3688,7 @@ void __cdecl16far upd_usesAlignUp4(void)
       if (((*(char *)((int)&peVar20[idx].base.entity + 1) == '\0') &&
           (peVar20[idx].base.destX == 0)) && (peVar20[idx].base.destY == 0)) {
         bStack_6 = peVar20[idx].base.gindex;
-        cVar10 = AgntGs[(uint)bStack_6].ai;
+        sheetFaction = AgntGs[(uint)bStack_6].ai;
         bVar5 = *(byte *)((int)&peVar20[idx].base.entity + 3);
         bVar27 = false;
         bVar9 = false;
@@ -3700,9 +3700,9 @@ void __cdecl16far upd_usesAlignUp4(void)
           bStack_1b = ((char_sheet_t *)(((uint)bVar5 << 2)))->partySlot;
           if (bStack_1b < 5) {
             uStack_1a = peVar20[idx].base.y;
-            uStack_18 = ovr_alignUp4(((peVar20 + idx)->base).x,0,0);
+            entX = ovr_alignUp4(((peVar20 + idx)->base).x,0,0);
             randVal = 0x2410;
-            if (((*(short (*) [60] [148])GMapFlags)[uStack_1a][uStack_18] & 8U) == 0) {
+            if (((*(short (*) [60] [148])GMapFlags)[uStack_1a][entX] & 8U) == 0) {
               successWeight = 0x22;
               partialWeight = 0x21;
               bldType = 0x22;
@@ -3716,7 +3716,7 @@ void __cdecl16far upd_usesAlignUp4(void)
               index = CONCAT11((char)((uint)puVar28 >> 8),bStack_1b);
               uVar29 = _SS;
               uVar31 = _SS;
-              uVar14 = ovr_attact_usesSquareRecCount(uStack_18,uStack_1a);
+              uVar14 = ovr_attact_usesSquareRecCount(entX,uStack_1a);
               table.seg = randVal;
               table.ofs = uVar14;
               pctOut.seg = uVar29;
@@ -3748,9 +3748,9 @@ void __cdecl16far upd_usesAlignUp4(void)
         if ((bVar8) &&
            (unitsSeg = (uint16_t)((ulong)Entities >> 0x10),
            randVal = ((entity_t *)Entities)[idx].base.y,
-           cVar10 = ovr_ovc23_tickRecordsAt
-                              ((((entity_t *)Entities + idx)->base).x,randVal,cVar10,
-                               (char)randVal), cVar10 == '\0')) {
+           sheetFaction = ovr_ovc23_tickRecordsAt
+                              ((((entity_t *)Entities + idx)->base).x,randVal,sheetFaction,
+                               (char)randVal), sheetFaction == '\0')) {
           if ((partialWeight == 0x0) && (successWeight == 0x0)) {
             randVal = ovr_randBelow(2,0);
             if ((randVal & 0xff) == 0) {
