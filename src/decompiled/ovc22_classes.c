@@ -15,10 +15,10 @@ bool __cdecl16far ovc22_textArena(int x,int y)
 
 {
   bool bVar1;
-  int iVar2;
-  int iVar3;
+  int cellB;
+  int cellMin;
   uint16_t uVar4;
-  int iStack_4;
+  int cellA;
   
   if ((((x < 0) || (y < 0)) || (0x93 < x + 1)) || (0x3b < y + 1)) {
     placementStatus = 2;
@@ -28,16 +28,16 @@ bool __cdecl16far ovc22_textArena(int x,int y)
     uVar4 = (uint16_t)((ulong)GMapFlags >> 0x10);
     if ((((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) == 0) &&
        (((*(short (*) [60] [148])GMapFlags)[y + 1][x] & 3U) == 0)) {
-      iStack_4 = (int)(char)(*(byte (*) [59] [148])GMapCells)[y + 1][x];
-      iVar2 = (int)(char)(*(byte (*) [59] [148])GMapCells)[y + 1][x + 1];
-      iVar3 = iStack_4;
-      if (iVar2 < iStack_4) {
-        iVar3 = iVar2;
+      cellA = (int)(char)(*(byte (*) [59] [148])GMapCells)[y + 1][x];
+      cellB = (int)(char)(*(byte (*) [59] [148])GMapCells)[y + 1][x + 1];
+      cellMin = cellA;
+      if (cellB < cellA) {
+        cellMin = cellB;
       }
-      if (iStack_4 < iVar2) {
-        iStack_4 = iVar2;
+      if (cellA < cellB) {
+        cellA = cellB;
       }
-      if (iStack_4 - iVar3 < 9) {
+      if (cellA - cellMin < 9) {
         placementStatus = 3;
         bVar1 = true;
       }
