@@ -11,6 +11,8 @@
 
 /* Returns the bldType of the unit in GUnitGrid[x][y], or 0 outside the map. */
 
+/* 77eb:0121 */
+
 byte __cdecl16far ovc45_getUnitType(int x,int y)
 
 {
@@ -30,6 +32,8 @@ byte __cdecl16far ovc45_getUnitType(int x,int y)
 /* 77eb:0179 */
 
 /* Returns GUnitGrid[x][y] (the unit index) inside the map bounds, else 0. */
+
+/* 77eb:0179 */
 
 short __cdecl16far ovc45_getUnitIndex(int x,int y)
 
@@ -51,6 +55,8 @@ short __cdecl16far ovc45_getUnitIndex(int x,int y)
 
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
+
+/* 77eb:01bb */
 
 uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIndexOut)
 
@@ -173,6 +179,8 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "Choose party to build for.  Now building" */
 
+/* 77eb:04d8 */
+
 uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *entityIndexPtr,uint16_t arg4)
 
 {
@@ -247,6 +255,8 @@ uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *enti
 
 /* [R6] touches GMapFlags, GUnits */
 
+/* 77eb:0683 */
+
 int __cdecl16far ovc45_usesGMapFlags(int x,int y)
 
 {
@@ -279,6 +289,8 @@ int __cdecl16far ovc45_usesGMapFlags(int x,int y)
 
 /* [R6] touches GMapFlags */
 
+/* 77eb:0708 */
+
 bool __cdecl16far ovc45_usesGMapFlags2(int x,int y)
 
 {
@@ -290,6 +302,8 @@ bool __cdecl16far ovc45_usesGMapFlags2(int x,int y)
 /* 77eb:0742 */
 
 /* Returns whether the map cell directly below (x,y) has either of its low two flag bits set. */
+
+/* 77eb:0742 */
 
 int __cdecl16far ovc45_cellBelowBlocked(int x,int y)
 
@@ -314,6 +328,8 @@ int __cdecl16far ovc45_cellBelowBlocked(int x,int y)
 /* 77eb:0778 */
 
 /* [R7] body shape: compute */
+
+/* 77eb:0778 */
 
 uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
 
@@ -375,6 +391,8 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
 
 /* [R4] calls LDIV_at_ */
 
+/* 77eb:0904 */
+
 uint16_t __cdecl16far ovc45_usesLDIV_at_(uint8_t partyIndex,uint16_t arg2,uint16_t arg3)
 
 {
@@ -401,6 +419,8 @@ uint16_t __cdecl16far ovc45_usesLDIV_at_(uint8_t partyIndex,uint16_t arg2,uint16
 
 /* Returns the leader's rank as a percentage (rank*10, capped at 100). */
 
+/* 77eb:0976 */
+
 int __cdecl16far ovc45_rankPercent(byte partyIndex)
 
 {
@@ -421,6 +441,8 @@ int __cdecl16far ovc45_rankPercent(byte partyIndex)
 
 /* [R7] body shape: compute */
 
+/* 77eb:09c1 */
+
 int __cdecl16far ovc45_compute3(byte partyIndex)
 
 {
@@ -440,6 +462,8 @@ int __cdecl16far ovc45_compute3(byte partyIndex)
 /* 77eb:0a02 */
 
 /* [R6] touches GPopulationLo, GPopulationHi */
+
+/* 77eb:0a02 */
 
 void __cdecl16far ovc45_usesGPopulationLo(byte partyIndex,uint goldLo,int goldHi)
 
@@ -498,6 +522,8 @@ void __cdecl16far ovc45_usesGPopulationLo(byte partyIndex,uint goldLo,int goldHi
 
 /* [R7] body shape: compute */
 
+/* 77eb:0aea */
+
 uint __cdecl16far ovc45_compute4(int x,uint16_t y,uint16_t arg3)
 
 {
@@ -553,6 +579,8 @@ uint __cdecl16far ovc45_compute4(int x,uint16_t y,uint16_t arg3)
 
 /* [R7] body shape: compute */
 
+/* 77eb:0bc1 */
+
 uint __cdecl16far ovc45_compute5(void)
 
 {
@@ -586,6 +614,8 @@ uint __cdecl16far ovc45_compute5(void)
 /* 77eb:0c36 */
 
 /* [R2] string "arena" */
+
+/* 77eb:0c36 */
 
 bool __cdecl16far ovc45_textArena2(byte bldType)
 
@@ -3978,6 +4008,8 @@ L_init_assets_4EA5:
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_randBelow */
 
+/* 77eb:16b2 */
+
 uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
 
 {
@@ -4211,6 +4243,8 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
 
 /* [R7] body shape: compute */
 
+/* 77eb:1ba2 */
+
 bool __cdecl16far ovc45_compute6(uint16_t value)
 
 {
@@ -4409,6 +4443,8 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
 
 /* [R6] touches GfxRndSeed2 */
 
+/* 77eb:20e8 */
+
 uint __cdecl16far ovc45_usesGfxRndSeed2(int *x)
 
 {
@@ -4448,6 +4484,8 @@ uint __cdecl16far ovc45_usesGfxRndSeed2(int *x)
 
 /* [R6] touches GMapFlags */
 
+/* 77eb:215a */
+
 int __cdecl16far ovc45_usesGMapFlags4(int x,int y)
 
 {
@@ -4483,6 +4521,8 @@ int __cdecl16far ovc45_usesGMapFlags4(int x,int y)
 
 /* [R7] body shape: compute */
 
+/* 77eb:21d3 */
+
 uint16_t __cdecl16far ovc45_compute7(byte a,byte b,uint16_t arg3,uint16_t arg4,uint16_t arg5)
 
 {
@@ -4495,6 +4535,8 @@ uint16_t __cdecl16far ovc45_compute7(byte a,byte b,uint16_t arg3,uint16_t arg4,u
 
 /* Shows the land info for the tile under a screen point: hit-tests with video_compute1, maps x to a
    tile column via (x-9)/0x30, and calls land_info. */
+
+/* 77eb:21f1 */
 
 bool __cdecl16far ovc45_showLandInfo(int screenX,uint16_t y)
 
@@ -4515,6 +4557,8 @@ bool __cdecl16far ovc45_showLandInfo(int screenX,uint16_t y)
 /* 77eb:2226 */
 
 /* [R7] body shape: compute */
+
+/* 77eb:2226 */
 
 uint __cdecl16far ovc45_compute8(byte partyIndex)
 
@@ -4546,6 +4590,8 @@ uint __cdecl16far ovc45_compute8(byte partyIndex)
 
 /* Returns the "Maintenance cost is" or "Income created is" label for a signed amount. */
 
+/* 77eb:2257 */
+
 char * __cdecl16far ovc45_costOrIncomeLabel(int amount)
 
 {
@@ -4563,6 +4609,8 @@ char * __cdecl16far ovc45_costOrIncomeLabel(int amount)
 
 
 /* 77eb:226e */
+/* 77eb:226e */
+
 int __cdecl16far ovc45_compute9(char *dest,char *src,char *font,uint maxWidth,char mode,...)
 
 {
@@ -4609,6 +4657,8 @@ int __cdecl16far ovc45_compute9(char *dest,char *src,char *font,uint maxWidth,ch
 /* 77eb:234a */
 
 /* [R6] touches GMapFlags */
+
+/* 77eb:234a */
 
 uint __cdecl16far ovc45_usesGMapFlags5(char mode,uint x,int y)
 
