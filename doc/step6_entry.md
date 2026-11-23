@@ -1502,3 +1502,43 @@ manager's failure path.
 
 The important gain: the question is no longer "is the handler reached" (it is)
 but "why does a marker inside the loader alter main's execution".
+
+### Marker-per-instruction inside the loader: the tracer itself fails there
+
+`tmp/ovr_stage3.py` disassembles `_OVRTEXT_+0x59F` in the same build that is
+probed and marks verified instruction starts:
+
+```
+_OVRTEXT_ base 0x7d00, loader 0x829f
+
++0x000  inc word ptr [0xac]        -> A0II
++0x004  cmp word ptr es:[0x10],0   -> A0II
++0x00A  je 0x82ba                  -> A0II
++0x00C  mov byte ptr es:[0x1b],1   -> A0I
++0x012  or byte ptr es:[0x1a],4    -> A0I
++0x018  jmp 0x82d6                 -> A0I
++0x01A  nop                        -> A0I
++0x01B  or byte ptr es:[0x1a],8    -> A0II
++0x021  call 0x8255                -> A0II
+```
+
+Reading the two possible answers as "marker hit" (would append `X`) and "marker
+not hit" (plain `A0I`) leaves a contradiction: none of the runs contains `X`, yet
+five of them show a duplicate `I`, and the duplicate is not accompanied by a
+second `A`/`0` pair, so it is not a reboot of `startx`.
+
+Conclusion: **the INT 60h tracer does not reliably fire inside the manager.**
+Either the vector is not what we installed by the time the loader runs, or the
+manager's own code path never executes these instruction starts (its first
+instruction is reached but the code we disassembled is not the path taken).
+
+Rather than keep patch-probing, the next step should use a mechanism outside the
+program's own code: DOSBox's built-in debugger (`-dbg`/`Z:\DEBUG`) with a
+breakpoint at `_OVRTEXT_+0x59F`, reading `CS:IP` directly.  That cannot be
+rewritten by relocations, does not need a marker byte, and answers "is this
+address executed" without perturbing the instruction stream.
+
+Honest note on effort: the patch-marker approach has now produced three
+mutually inconsistent results in this area (`H` fired, stage markers silent,
+instruction-start markers split).  Continuing to iterate on it is not converging;
+the debugger route is the way to settle it.
