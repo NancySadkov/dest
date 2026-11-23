@@ -329,19 +329,19 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     return pbVar14;
   case (byte *)0x3:
     do {
-      if (((char_sheet_t *)((uStack_a << 2)))->unitsOnTile < 10) {
+      if ((GLeaderSheets[uStack_a])->unitsOnTile < 10) {
         ovc25_usesAlignUp43((byte)uStack_a,10,
-                            ((char_sheet_t *)((uStack_a << 2)))->x,
-                            ((char_sheet_t *)((uStack_a << 2)))->y,'\0');
-        ((char_sheet_t *)((uStack_a << 2)))->reportState = 0;
+                            (GLeaderSheets[uStack_a])->x,
+                            (GLeaderSheets[uStack_a])->y,'\0');
+        (GLeaderSheets[uStack_a])->reportState = 0;
       }
       else {
-        ((char_sheet_t *)((uStack_a << 2)))->reportState = 0;
-        iVar25 = ovc25_compute1(((char_sheet_t *)((uStack_a << 2)))->classStr);
+        (GLeaderSheets[uStack_a])->reportState = 0;
+        iVar25 = ovc25_compute1((GLeaderSheets[uStack_a])->classStr);
         uStack_6 = (byte *)CONCAT22(iVar25,(byte *)uStack_6);
         if ((int)(uint)PlayerCount < iVar25) {
           uVar16 = ovr_randBelow(0x28,0);
-          iVar25 = ((char_sheet_t *)((uStack_a << 2)))->x + -0x14 + (uVar16 & 0xff);
+          iVar25 = (GLeaderSheets[uStack_a])->x + -0x14 + (uVar16 & 0xff);
           (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)(unsigned long)(byte *)iVar25;
           if (iVar25 < 4) {
             (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)(unsigned long)(byte *)0x4;
@@ -350,7 +350,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
             uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),0x8b);
           }
           uVar16 = ovr_randBelow(0x14,0);
-          uStack_8 =(uint16_t)( (byte *)(((char_sheet_t *)((uStack_a << 2)))->y + -10 +
+          uStack_8 =(uint16_t)( (byte *)((GLeaderSheets[uStack_a])->y + -10 +
                              (uVar16 & 0xff)));
           if ((int)uStack_8 < 1) {
             uStack_8 =(uint16_t)(unsigned long)(byte *)0x1;
@@ -373,43 +373,43 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
           } while ((*(char *)((int)*(uint32_t *)(uStack_a * 4) + 0x40) == '\0') ||
                   (((char_sheet_t *)((uStack_a * 4)))->active == '\0'));
           ovc25_intelAttackingNotice((byte)uStack_a);
-          if (((char_sheet_t *)((uStack_a << 2)))->nearestEnemy == -1) {
+          if ((GLeaderSheets[uStack_a])->nearestEnemy == -1) {
             uVar15 = 0xffff;
           }
           else {
-            iVar24 = ((char_sheet_t *)((uStack_a << 2)))->nearestEnemy;
+            iVar24 = (GLeaderSheets[uStack_a])->nearestEnemy;
             uVar26 = (uint16_t)((ulong)Entities >> 0x10);
-            uVar15 = ((char_sheet_t *)((uStack_a << 2)))->x -
+            uVar15 = (GLeaderSheets[uStack_a])->x -
                      (((entity_t *)Entities + iVar24)->base).x;
             uVar20 = (int)uVar15 >> 0xf;
-            uVar18 = ((char_sheet_t *)((uStack_a << 2)))->y -
+            uVar18 = (GLeaderSheets[uStack_a])->y -
                      ((entity_t *)Entities)[iVar24].base.y;
             uVar21 = (int)uVar18 >> 0xf;
             uVar15 = (int)((uVar15 ^ uVar20) - uVar20) / 2 + ((uVar18 ^ uVar21) - uVar21);
           }
-          if ((((char_sheet_t *)((uStack_a << 2)))->enemiesNear == 0) || (9 < uVar15)) break;
+          if (((GLeaderSheets[uStack_a])->enemiesNear == 0) || (9 < uVar15)) break;
           ovc25_usesEntityCount((byte)uStack_a);
-          if (9 < ((char_sheet_t *)((uStack_a << 2)))->unitsOnTile) {
+          if (9 < (GLeaderSheets[uStack_a])->unitsOnTile) {
             uVar26 = (uint16_t)((ulong)Entities >> 0x10);
             ovc25_usesAlignUp43((byte)uStack_a,5,(((entity_t *)Entities + iVar24)->base).x,
                                 ((entity_t *)Entities)[iVar24].base.y,'\x01');
           }
           ovc25_usesAlignUp43((byte)uStack_a,10,
-                              ((char_sheet_t *)((uStack_a << 2)))->x,
-                              ((char_sheet_t *)((uStack_a << 2)))->y,'\0');
-          ((char_sheet_t *)((uStack_a << 2)))->reportState = 1;
+                              (GLeaderSheets[uStack_a])->x,
+                              (GLeaderSheets[uStack_a])->y,'\0');
+          (GLeaderSheets[uStack_a])->reportState = 1;
         }
         if ((*(char *)((int)*(uint32_t *)(uStack_a << 2) + 0x49) == -1) ||
-           ((((char_sheet_t *)((uStack_a << 2)))->flags5d & 1) == 0)) break;
+           (((GLeaderSheets[uStack_a])->flags5d & 1) == 0)) break;
         ovc25_usesEntityCount((byte)uStack_a);
         bVar9 = *(byte *)((int)*(uint32_t *)(uStack_a << 2) + 0x49);
-        if (0xe < ((char_sheet_t *)((uStack_a << 2)))->unitsOnTile) {
+        if (0xe < (GLeaderSheets[uStack_a])->unitsOnTile) {
           ovc25_usesAlignUp42((byte)uStack_a,10,
                               ((char_sheet_t *)(((uint)bVar9 << 2)))->x,
                               ((char_sheet_t *)(((uint)bVar9 << 2)))->y,
-                              ((char_sheet_t *)((uStack_a << 2)))->x,
-                              ((char_sheet_t *)((uStack_a << 2)))->y);
-          if (((char_sheet_t *)((uStack_a << 2)))->reportState != '\x02') {
+                              (GLeaderSheets[uStack_a])->x,
+                              (GLeaderSheets[uStack_a])->y);
+          if ((GLeaderSheets[uStack_a])->reportState != '\x02') {
             ovr_alignUp4(((char_sheet_t *)(((uint)bVar9 << 2)))->x,0,0);
             uStackY_2a = 0x2379;
             uStackY_2c = 0xc5d4;
@@ -418,9 +418,9 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
           }
         }
         ovc25_usesAlignUp43((byte)uStack_a,0xf,
-                            ((char_sheet_t *)((uStack_a << 2)))->x,
-                            ((char_sheet_t *)((uStack_a << 2)))->y,'\0');
-        ((char_sheet_t *)((uStack_a << 2)))->reportState = 2;
+                            (GLeaderSheets[uStack_a])->x,
+                            (GLeaderSheets[uStack_a])->y,'\0');
+        (GLeaderSheets[uStack_a])->reportState = 2;
       }
     } while( true );
   case (byte *)0x4:
@@ -1089,12 +1089,12 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
       printf("%d \r");
     }
     for (uVar27 = 0; (int)uVar27 < (int)(uint)GLeaderCount; uVar27 = uVar27 + 1) {
-      if (((char_sheet_t *)((uVar27 << 2)))->active != '\0') {
-        ((char_sheet_t *)((uVar27 << 2)))->foodSold = 0;
+      if ((GLeaderSheets[uVar27])->active != '\0') {
+        (GLeaderSheets[uVar27])->foodSold = 0;
         cVar11 = *(char *)((int)*(uint32_t *)(uVar27 << 2) + 0x3f);
         if ((cVar11 == '\0') &&
-           (((char_sheet_t *)((uVar27 << 2)))->foodProd <
-            ((char_sheet_t *)((uVar27 << 2)))->population >> 1)) {
+           ((GLeaderSheets[uVar27])->foodProd <
+            (GLeaderSheets[uVar27])->population >> 1)) {
           bVar8 = true;
         }
         else {
@@ -1185,12 +1185,12 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
           *piVar2 = *piVar2 + ((int)uVar16 >> 0xf) + (uint)CARRY2(uVar26,uVar16);
         }
         if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                      (uint)((char_sheet_t *)((uVar27 << 2)))->classStr * 0x95) & 0x100) ==
+                      (uint)(GLeaderSheets[uVar27])->classStr * 0x95) & 0x100) ==
             0) {
-          if (((char_sheet_t *)((uVar27 << 2)))->foodProd <
-              ((char_sheet_t *)((uVar27 << 2)))->population) {
-            uVar16 = ((char_sheet_t *)((uVar27 << 2)))->population -
-                     ((char_sheet_t *)((uVar27 << 2)))->foodProd;
+          if ((GLeaderSheets[uVar27])->foodProd <
+              (GLeaderSheets[uVar27])->population) {
+            uVar16 = (GLeaderSheets[uVar27])->population -
+                     (GLeaderSheets[uVar27])->foodProd;
             uVar18 = (uint16_t)((ulong)*(uint32_t *)(uVar27 << 2) >> 0x10);
             iVar22 = (int)*(uint32_t *)(uVar27 << 2);
             iVar19 = *(int *)(iVar22 + 0x62);
@@ -1217,8 +1217,8 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
             else {
               uVar31 = (undefined1)uVar16;
               uVar17 = (undefined1)(uVar16 >> 8);
-              if (((char_sheet_t *)((uVar27 << 2)))->maxTrade < uVar16) {
-                uVar18 = ((char_sheet_t *)((uVar27 << 2)))->maxTrade;
+              if ((GLeaderSheets[uVar27])->maxTrade < uVar16) {
+                uVar18 = (GLeaderSheets[uVar27])->maxTrade;
                 uVar31 = (undefined1)uVar18;
                 uVar17 = (undefined1)((uint)uVar18 >> 8);
               }
@@ -1239,12 +1239,12 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
               piVar2 = (int *)(iVar19 + 0x58);
               *piVar2 = *piVar2 - (uint)(uVar26 < CONCAT11(uVar17,uVar31));
               uVar16 = uVar16 - CONCAT11(uVar17,uVar31);
-              ((char_sheet_t *)((uVar27 << 2)))->foodSold = CONCAT11(uVar17,uVar31);
+              (GLeaderSheets[uVar27])->foodSold = CONCAT11(uVar17,uVar31);
             }
             if (cVar11 == '\0') {
               for (iVar19 = 0; (uVar16 != 0 && (iVar19 < (int)(uint)GLeaderCount));
                   iVar19 = iVar19 + 1) {
-                if ((((char_sheet_t *)((iVar19 << 2)))->active != '\0') &&
+                if (((GLeaderSheets[iVar19])->active != '\0') &&
                    ((*(char *)((int)*(uint32_t *)(iVar19 << 2) + 0x3f) == '\0' &&
                     (uVar18 = (uint16_t)((ulong)*(uint32_t *)(iVar19 << 2) >> 0x10),
                     iVar22 = (int)*(uint32_t *)(iVar19 << 2),
@@ -1290,8 +1290,8 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
             }
           }
           else {
-            uVar26 = ((char_sheet_t *)((uVar27 << 2)))->foodProd -
-                     ((char_sheet_t *)((uVar27 << 2)))->population;
+            uVar26 = (GLeaderSheets[uVar27])->foodProd -
+                     (GLeaderSheets[uVar27])->population;
             uVar18 = (uint16_t)((ulong)*(uint32_t *)(uVar27 << 2) >> 0x10);
             iVar19 = (int)*(uint32_t *)(uVar27 << 2);
             puVar3 = (uint *)(iVar19 + 0x60);
@@ -1319,14 +1319,14 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
           uVar32 = *(int *)(iVar19 + 0x62) - *(int *)(iVar22 + 0x80);
           if (((int)(uVar32 - uVar26) < 0) ||
              ((uVar32 == uVar26 &&
-              (uVar16 - *puVar3 <= ((char_sheet_t *)((uVar27 << 2)))->maxTrade)))) {
+              (uVar16 - *puVar3 <= (GLeaderSheets[uVar27])->maxTrade)))) {
             uVar16 = *(int *)((int)*(uint32_t *)(uVar27 << 2) + 0x60) -
                      *(int *)((int)*(uint32_t *)(uVar27 << 2) + 0x7e);
           }
           else {
-            uVar16 = ((char_sheet_t *)((uVar27 << 2)))->maxTrade;
+            uVar16 = (GLeaderSheets[uVar27])->maxTrade;
           }
-          ((char_sheet_t *)((uVar27 << 2)))->foodSold = -uVar16;
+          (GLeaderSheets[uVar27])->foodSold = -uVar16;
           uVar18 = (uint16_t)((ulong)*(uint32_t *)(uVar27 << 2) >> 0x10);
           iVar19 = (int)*(uint32_t *)(uVar27 << 2);
           puVar3 = (uint *)(iVar19 + 0x56);
@@ -1342,13 +1342,13 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
           *(uint16_t *)(iVar22 + 0x62) = *(uint16_t *)(iVar19 + 0x80);
           *(uint16_t *)(iVar22 + 0x60) = uVar18;
         }
-        if ((((char_sheet_t *)((uVar27 << 2)))->housing <
-             ((char_sheet_t *)((uVar27 << 2)))->population) &&
+        if (((GLeaderSheets[uVar27])->housing <
+             (GLeaderSheets[uVar27])->population) &&
            ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                      (uint)((char_sheet_t *)((uVar27 << 2)))->classStr * 0x95) & 0x80) == 0
+                      (uint)(GLeaderSheets[uVar27])->classStr * 0x95) & 0x80) == 0
            )) {
-          iVar19 = ((char_sheet_t *)((uVar27 << 2)))->population -
-                   ((char_sheet_t *)((uVar27 << 2)))->housing;
+          iVar19 = (GLeaderSheets[uVar27])->population -
+                   (GLeaderSheets[uVar27])->housing;
           uVar16 = 0;
           while ((uVar16 < EntityCount && (iVar19 != 0))) {
             uVar18 = (uint16_t)((ulong)Entities >> 0x10);
@@ -1376,7 +1376,7 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
                *(uint16_t *)((int)*(uint32_t *)(uVar27 << 2) + 100);
         }
         else {
-          ((char_sheet_t *)((uVar27 << 2)))->dirBudget[0] =
+          (GLeaderSheets[uVar27])->dirBudget[0] =
                *(uint16_t *)((int)*(uint32_t *)(uVar27 << 2) + 100);
         }
         uVar35 = ovr_randBelow(100,0);
@@ -1393,11 +1393,11 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
         uVar35 = ovr_randBelow(100,0);
         if ((byte)uVar35 < *(byte *)((int)*(uint32_t *)(uVar27 << 2) + 0xa9)) {
           *(uint16_t *)((int)*(uint32_t *)(uVar27 << 2) + 0x78) =
-               ((char_sheet_t *)((uVar27 << 2)))->ringBudgetIn[0];
+               (GLeaderSheets[uVar27])->ringBudgetIn[0];
         }
         else {
-          ((char_sheet_t *)((uVar27 << 2)))->ringBudget[0] =
-               ((char_sheet_t *)((uVar27 << 2)))->ringBudgetIn[0];
+          (GLeaderSheets[uVar27])->ringBudget[0] =
+               (GLeaderSheets[uVar27])->ringBudgetIn[0];
         }
         uVar35 = ovr_randBelow(100,0);
         if ((byte)uVar35 < *(byte *)((int)*(uint32_t *)(uVar27 << 2) + 0xa9)) {
@@ -1443,7 +1443,7 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
             if ((iVar22 <= iVar19) &&
                ((iVar19 != iVar22 || (*(uint *)(iVar21 + 0x8a) <= *(uint *)(iVar20 + 0x56)))))
             break;
-            if ((((char_sheet_t *)((uVar26 << 2)))->active != '\0') &&
+            if (((GLeaderSheets[uVar26])->active != '\0') &&
                (((0 < *(int *)((int)*(uint32_t *)(uVar26 << 2) + 0x54) &&
                  (*(char *)((int)*(uint32_t *)(uVar26 << 2) + 0x3f) == '\0')) &&
                 (uVar26 != uVar27)))) {
@@ -1594,7 +1594,7 @@ code_r0x00053afb:
   if (EntityCount <= EntityScanPos) {
     EntityScanPos = 0;
     for (iVar19 = 0; iVar19 < (int)(uint)GLeaderCount; iVar19 = iVar19 + 1) {
-      if (((char_sheet_t *)((iVar19 << 2)))->active != '\0') {
+      if ((GLeaderSheets[iVar19])->active != '\0') {
         iVar22 = ((int *)(iVar19 * 4))[1];
         uVar31 = 0x95;
         uVar17 = 0x3b;

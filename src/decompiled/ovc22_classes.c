@@ -1230,10 +1230,10 @@ L_OVC22_5087_4975_4ABE:
                           if ((*(char *)((int)*(uint32_t *)(scratch << 2) + 0x3f) !=
                                *(char *)((int)*(uint32_t *)((int)puStack_a << 2) + 0x3f)) &&
                              (uVar23 = ((char_sheet_t *)(((int)puStack_a << 2)))->x -
-                                       ((char_sheet_t *)((scratch << 2)))->x,
+                                       (GLeaderSheets[scratch])->x,
                              uVar32 = (int)uVar23 >> 0xf,
                              uVar22 = ((char_sheet_t *)(((int)puStack_a << 2)))->y -
-                                      ((char_sheet_t *)((scratch << 2)))->y,
+                                      (GLeaderSheets[scratch])->y,
                              uVar33 = (int)uVar22 >> 0xf,
                              puVar49 = (uint *)((int)((uVar23 ^ uVar32) - uVar32) / 2 +
                                                ((uVar22 ^ uVar33) - uVar33)), puVar49 < puStack_10))
@@ -2122,7 +2122,7 @@ L_upd_units_5087_1d7d_202C:
           if (cVar18 == '\0') {
             for (iVar29 = 0; (puStack_12 != (uint *)0x0 && (iVar29 < (int)(uint)GLeaderCount));
                 iVar29 = iVar29 + 1) {
-              if ((((char_sheet_t *)((iVar29 << 2)))->active != '\0') &&
+              if (((GLeaderSheets[iVar29])->active != '\0') &&
                  ((*(char *)((int)*(uint32_t *)(iVar29 << 2) + 0x3f) == '\0' &&
                   (uVar53 = (uint16_t)((ulong)*(uint32_t *)(iVar29 << 2) >> 0x10),
                   iVar52 = (int)*(uint32_t *)(iVar29 << 2),
@@ -2326,13 +2326,13 @@ L_upd_units_5087_1d7d_202C:
           iVar52 = *(int *)(iVar40 + 0x8c);
           if ((iVar52 <= iVar29) &&
              ((iVar29 != iVar52 || (*(uint *)(iVar40 + 0x8a) <= *(uint *)(iVar39 + 0x56))))) break;
-          if ((((char_sheet_t *)((uVar23 << 2)))->active != '\0') &&
-             (((0 < ((char_sheet_t *)((uVar23 << 2)))->income &&
+          if (((GLeaderSheets[uVar23])->active != '\0') &&
+             (((0 < (GLeaderSheets[uVar23])->income &&
                (*(char *)((int)*(uint32_t *)(uVar23 << 2) + 0x3f) == '\0')) &&
               ((far_t far *)uVar23 != uStack_16)))) {
             (*(uint16_t *)((uint8_t *)&(uStack_6) + 2)) = (uint)bVar17;
             resourceTotals[2] =
-                 (int16_t)(((long)((char_sheet_t *)((uVar23 << 2)))->income *
+                 (int16_t)(((long)(GLeaderSheets[uVar23])->income *
                             (long)(int)(*(uint16_t *)((uint8_t *)&(uStack_6) + 2)) & 0xffffU) / 100);
             resourceTotals[3] = 0;
             uVar53 = (uint16_t)((ulong)*(uint32_t *)((int)uStack_16 << 2) >> 0x10);
@@ -3132,7 +3132,7 @@ void __cdecl16far upd_usesAlignUp4(void)
       *pbVar1 = *pbVar1 & 0xfc;
     }
     for (idx = 0; (int)idx < (int)(uint)GLeaderCount; idx = idx + 1) {
-      if (((char_sheet_t *)((idx << 2)))->active != '\0') {
+      if ((GLeaderSheets[idx])->active != '\0') {
         ovc22_textRingProt((byte)idx);
       }
     }
@@ -3186,12 +3186,12 @@ void __cdecl16far upd_usesAlignUp4(void)
       printf("%d \r");
     }
     for (idx = 0; (int)idx < (int)(uint)GLeaderCount; idx = idx + 1) {
-      if (((char_sheet_t *)((idx << 2)))->active != '\0') {
-        ((char_sheet_t *)((idx << 2)))->foodSold = 0;
+      if ((GLeaderSheets[idx])->active != '\0') {
+        (GLeaderSheets[idx])->foodSold = 0;
         cVar10 = *(char *)((int)*(uint32_t *)(idx << 2) + 0x3f);
         if ((cVar10 == '\0') &&
-           (((char_sheet_t *)((idx << 2)))->foodProd <
-            ((char_sheet_t *)((idx << 2)))->population >> 1)) {
+           ((GLeaderSheets[idx])->foodProd <
+            (GLeaderSheets[idx])->population >> 1)) {
           bVar8 = true;
         }
         else {
@@ -3282,12 +3282,12 @@ void __cdecl16far upd_usesAlignUp4(void)
           *accHi = *accHi + ((int)uVar12 >> 0xf) + (uint)CARRY2(uVar23,uVar12);
         }
         if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                      (uint)((char_sheet_t *)((idx << 2)))->classStr * 0x95) & 0x100)
+                      (uint)(GLeaderSheets[idx])->classStr * 0x95) & 0x100)
             == 0) {
-          if (((char_sheet_t *)((idx << 2)))->foodProd <
-              ((char_sheet_t *)((idx << 2)))->population) {
-            popAcc = ((char_sheet_t *)((idx << 2)))->population -
-                        ((char_sheet_t *)((idx << 2)))->foodProd;
+          if ((GLeaderSheets[idx])->foodProd <
+              (GLeaderSheets[idx])->population) {
+            popAcc = (GLeaderSheets[idx])->population -
+                        (GLeaderSheets[idx])->foodProd;
             unitsSeg = (uint16_t)((ulong)*(uint32_t *)(idx << 2) >> 0x10);
             iVar21 = (int)*(uint32_t *)(idx << 2);
             iVar17 = *(int *)(iVar21 + 0x62);
@@ -3311,8 +3311,8 @@ void __cdecl16far upd_usesAlignUp4(void)
             }
             if (popAcc != 0) {
               uStack_a = popAcc;
-              if (((char_sheet_t *)((idx << 2)))->maxTrade < popAcc) {
-                uStack_a = ((char_sheet_t *)((idx << 2)))->maxTrade;
+              if ((GLeaderSheets[idx])->maxTrade < popAcc) {
+                uStack_a = (GLeaderSheets[idx])->maxTrade;
               }
               unitsSeg = (uint16_t)((ulong)*(uint32_t *)(idx << 2) >> 0x10);
               iVar17 = (int)*(uint32_t *)(idx << 2);
@@ -3329,12 +3329,12 @@ void __cdecl16far upd_usesAlignUp4(void)
               accHi = (int *)(iVar17 + 0x58);
               *accHi = *accHi - (uint)(uVar23 < uStack_a);
               popAcc = popAcc - uStack_a;
-              ((char_sheet_t *)((idx << 2)))->foodSold = uStack_a;
+              (GLeaderSheets[idx])->foodSold = uStack_a;
             }
             if (cVar10 == '\0') {
               for (iVar17 = 0; (popAcc != 0 && (iVar17 < (int)(uint)GLeaderCount));
                   iVar17 = iVar17 + 1) {
-                if ((((char_sheet_t *)((iVar17 << 2)))->active != '\0') &&
+                if (((GLeaderSheets[iVar17])->active != '\0') &&
                    ((*(char *)((int)*(uint32_t *)(iVar17 << 2) + 0x3f) == '\0' &&
                     (unitsSeg = (uint16_t)((ulong)*(uint32_t *)(iVar17 << 2) >> 0x10),
                     iVar21 = (int)*(uint32_t *)(iVar17 << 2),
@@ -3383,8 +3383,8 @@ void __cdecl16far upd_usesAlignUp4(void)
             }
           }
           else {
-            uVar12 = ((char_sheet_t *)((idx << 2)))->foodProd -
-                     ((char_sheet_t *)((idx << 2)))->population;
+            uVar12 = (GLeaderSheets[idx])->foodProd -
+                     (GLeaderSheets[idx])->population;
             unitsSeg = (uint16_t)((ulong)*(uint32_t *)(idx << 2) >> 0x10);
             iVar17 = (int)*(uint32_t *)(idx << 2);
             accLo = (uint *)(iVar17 + 0x60);
@@ -3412,14 +3412,14 @@ void __cdecl16far upd_usesAlignUp4(void)
           uVar36 = *(int *)(iVar17 + 0x62) - *(int *)(iVar21 + 0x80);
           if (((int)(uVar36 - uVar12) < 0) ||
              ((uVar36 == uVar12 &&
-              (uVar23 - *accLo <= ((char_sheet_t *)((idx << 2)))->maxTrade)))) {
+              (uVar23 - *accLo <= (GLeaderSheets[idx])->maxTrade)))) {
             uStack_a = *(int *)((int)*(uint32_t *)(idx << 2) + 0x60) -
                        *(int *)((int)*(uint32_t *)(idx << 2) + 0x7e);
           }
           else {
-            uStack_a = ((char_sheet_t *)((idx << 2)))->maxTrade;
+            uStack_a = (GLeaderSheets[idx])->maxTrade;
           }
-          ((char_sheet_t *)((idx << 2)))->foodSold = -uStack_a;
+          (GLeaderSheets[idx])->foodSold = -uStack_a;
           unitsSeg = (uint16_t)((ulong)*(uint32_t *)(idx << 2) >> 0x10);
           iVar17 = (int)*(uint32_t *)(idx << 2);
           accLo = (uint *)(iVar17 + 0x56);
@@ -3435,13 +3435,13 @@ void __cdecl16far upd_usesAlignUp4(void)
           *(uint16_t *)(iVar21 + 0x62) = *(uint16_t *)(iVar17 + 0x80);
           *(uint16_t *)(iVar21 + 0x60) = unitsSeg;
         }
-        if ((((char_sheet_t *)((idx << 2)))->housing <
-             ((char_sheet_t *)((idx << 2)))->population) &&
+        if (((GLeaderSheets[idx])->housing <
+             (GLeaderSheets[idx])->population) &&
            ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                      (uint)((char_sheet_t *)((idx << 2)))->classStr * 0x95) & 0x80)
+                      (uint)(GLeaderSheets[idx])->classStr * 0x95) & 0x80)
             == 0)) {
-          popAcc = ((char_sheet_t *)((idx << 2)))->population -
-                      ((char_sheet_t *)((idx << 2)))->housing;
+          popAcc = (GLeaderSheets[idx])->population -
+                      (GLeaderSheets[idx])->housing;
           uVar23 = 0;
           while ((uVar23 < EntityCount && (popAcc != 0))) {
             unitsSeg = (uint16_t)((ulong)Entities >> 0x10);
@@ -3469,7 +3469,7 @@ void __cdecl16far upd_usesAlignUp4(void)
                *(uint16_t *)((int)*(uint32_t *)(idx << 2) + 100);
         }
         else {
-          ((char_sheet_t *)((idx << 2)))->dirBudget[0] =
+          (GLeaderSheets[idx])->dirBudget[0] =
                *(uint16_t *)((int)*(uint32_t *)(idx << 2) + 100);
         }
         randVal = ovr_randBelow(100,0);
@@ -3486,11 +3486,11 @@ void __cdecl16far upd_usesAlignUp4(void)
         randVal = ovr_randBelow(100,0);
         if ((byte)randVal < *(byte *)((int)*(uint32_t *)(idx << 2) + 0xa9)) {
           *(uint16_t *)((int)*(uint32_t *)(idx << 2) + 0x78) =
-               ((char_sheet_t *)((idx << 2)))->ringBudgetIn[0];
+               (GLeaderSheets[idx])->ringBudgetIn[0];
         }
         else {
-          ((char_sheet_t *)((idx << 2)))->ringBudget[0] =
-               ((char_sheet_t *)((idx << 2)))->ringBudgetIn[0];
+          (GLeaderSheets[idx])->ringBudget[0] =
+               (GLeaderSheets[idx])->ringBudgetIn[0];
         }
         randVal = ovr_randBelow(100,0);
         if ((byte)randVal < *(byte *)((int)*(uint32_t *)(idx << 2) + 0xa9)) {
@@ -3535,7 +3535,7 @@ void __cdecl16far upd_usesAlignUp4(void)
             if ((iVar21 <= iVar17) &&
                ((iVar17 != iVar21 || (*(uint *)(iVar19 + 0x8a) <= *(uint *)(iVar18 + 0x56)))))
             break;
-            if ((((char_sheet_t *)((uVar23 << 2)))->active != '\0') &&
+            if (((GLeaderSheets[uVar23])->active != '\0') &&
                (((0 < *(int *)((int)*(uint32_t *)(uVar23 << 2) + 0x54) &&
                  (*(char *)((int)*(uint32_t *)(uVar23 << 2) + 0x3f) == '\0')) &&
                 (uVar23 != idx)))) {
@@ -3662,7 +3662,7 @@ void __cdecl16far upd_usesAlignUp4(void)
     if (EntityCount <= EntityScanPos) {
       EntityScanPos = 0;
       for (idx = 0; (int)idx < (int)(uint)GLeaderCount; idx = idx + 1) {
-        if (((char_sheet_t *)((idx << 2)))->active != '\0') {
+        if ((GLeaderSheets[idx])->active != '\0') {
           iVar17 = ((int *)(idx * 4))[1];
           memcpy((char *)CONCAT22(((int *)(idx * 4))[1],
                                   (char *)(*(int *)(idx * 4) + 0x8e)),
@@ -4704,21 +4704,21 @@ void __cdecl16far ovc22_spawnForLeaders(void)
   
   outFlag = 0x0;
   for (leader = 0; leader < (int)(uint)GLeaderCount; leader = leader + 1) {
-    if (((((char_sheet_t *)((leader << 2)))->active != '\0') &&
+    if ((((GLeaderSheets[leader])->active != '\0') &&
         (uVar1 = ovr_randBelow((uint)(byte)((char *)0x2686a)
-                                           [(uint)((char_sheet_t *)((leader << 2)))->classStr * 0x95],0),
+                                           [(uint)(GLeaderSheets[leader])->classStr * 0x95],0),
         (byte)uVar1 < ((agnt_t *)((leader << 2)))->variant)) &&
        ((*(char *)((int)*(uint32_t *)(leader << 2) + 0x3f) != '\0' ||
-        (((char_sheet_t *)((leader << 2)))->population <=
-         ((char_sheet_t *)((leader << 2)))->housing)))) {
+        ((GLeaderSheets[leader])->population <=
+         (GLeaderSheets[leader])->housing)))) {
       if (EntityCount < 0x21c) {
         ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
       }
       else if (*(char *)((int)*(uint32_t *)(leader << 2) + 0x3f) == '\0') {
-        if (((char_sheet_t *)((leader << 2)))->unitCount < 0x23) {
+        if ((GLeaderSheets[leader])->unitCount < 0x23) {
           ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
         }
-        else if (((char_sheet_t *)((leader << 2)))->unitCount < 0x4b) {
+        else if ((GLeaderSheets[leader])->unitCount < 0x4b) {
           uVar1 = ovr_randBelow(8,0);
           if ((uVar1 & 0xff) == 0) {
             ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
@@ -4731,13 +4731,13 @@ void __cdecl16far ovc22_spawnForLeaders(void)
           }
         }
       }
-      else if (((char_sheet_t *)((leader << 2)))->unitsOnTile == 0) {
+      else if ((GLeaderSheets[leader])->unitsOnTile == 0) {
         ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
       }
-      else if (((char_sheet_t *)((leader << 2)))->unitCount < 0x19) {
+      else if ((GLeaderSheets[leader])->unitCount < 0x19) {
         ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
       }
-      else if (((char_sheet_t *)((leader << 2)))->unitCount < 0x32) {
+      else if ((GLeaderSheets[leader])->unitCount < 0x32) {
         uVar1 = ovr_randBelow(8,0);
         if ((uVar1 & 0xff) == 0) {
           ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);

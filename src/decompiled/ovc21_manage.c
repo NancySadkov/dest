@@ -20,9 +20,9 @@ void __cdecl16far manage_mapPartySlots(void)
     ((uint8_t *)MenuItemEnabled)[iVar1] = 0xff;
   }
   for (iVar1 = 0; iVar1 < (int)(uint)GLeaderCount; iVar1 = iVar1 + 1) {
-    if ((((char_sheet_t *)((iVar1 << 2)))->active != '\0') &&
-       (((char_sheet_t *)((iVar1 << 2)))->partySlot != -1)) {
-      ((uint8_t *)MenuItemEnabled)[((char_sheet_t *)((iVar1 << 2)))->partySlot] =
+    if (((GLeaderSheets[iVar1])->active != '\0') &&
+       ((GLeaderSheets[iVar1])->partySlot != -1)) {
+      ((uint8_t *)MenuItemEnabled)[(GLeaderSheets[iVar1])->partySlot] =
            (uint8_t)iVar1;
     }
   }
@@ -306,9 +306,9 @@ uint __cdecl16far manage_usesGLeaderCount(void)
   uVar3 = 0;
   bVar1 = 0;
   for (iVar2 = 0; iVar2 < (int)(uint)GLeaderCount; iVar2 = iVar2 + 1) {
-    if ((((char_sheet_t *)((iVar2 << 2)))->active != '\0') &&
+    if (((GLeaderSheets[iVar2])->active != '\0') &&
        (*(char *)((int)*(uint32_t *)(iVar2 << 2) + 0x3f) == '\0')) {
-      uVar3 = uVar3 + ((char_sheet_t *)((iVar2 << 2)))->popularity;
+      uVar3 = uVar3 + (GLeaderSheets[iVar2])->popularity;
       bVar1 = bVar1 + 1;
     }
   }
@@ -1103,9 +1103,9 @@ char * __cdecl16far chargen_switch(uint16_t index)
     return unaff_SI;
   case 3:
     for (iVar23 = 0; iVar23 < (int)(uint)GLeaderCount; iVar23 = iVar23 + 1) {
-      if (((((char_sheet_t *)((iVar23 << 2)))->active != '\0') &&
-          (uVar13 = 0x2410, ((char_sheet_t *)((iVar23 << 2)))->x == GfxRndSeed)) &&
-         (uVar13 = 0x2410, ((char_sheet_t *)((iVar23 << 2)))->y == GfxRndSeed2))
+      if ((((GLeaderSheets[iVar23])->active != '\0') &&
+          (uVar13 = 0x2410, (GLeaderSheets[iVar23])->x == GfxRndSeed)) &&
+         (uVar13 = 0x2410, (GLeaderSheets[iVar23])->y == GfxRndSeed2))
       {
         if (GCharLevelsInc != '\0') {
           uVar12 = (uint16_t)((ulong)*(uint32_t *)(iVar23 << 2) >> 0x10);
@@ -1143,7 +1143,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
       }
       iVar23 = 0;
       while ((iVar23 < (int)(uint)GLeaderCount &&
-             (((char_sheet_t *)((iVar23 << 2)))->statMask != '\0'))) {
+             ((GLeaderSheets[iVar23])->statMask != '\0'))) {
         iVar23 = iVar23 + 1;
       }
       if (iVar23 < (int)(uint)GLeaderCount) {
@@ -1952,9 +1952,9 @@ void __cdecl16far manage_textHalflingCastle(void)
   TextBlitDstSeg = 0xa000;
   for (iStack_4 = 0; iStack_10 = 0x2410, iStack_4 < (int)(uint)GLeaderCount; iStack_4 = iStack_4 + 1
       ) {
-    if (((((char_sheet_t *)((iStack_4 << 2)))->active != '\0') &&
-        (((char_sheet_t *)((iStack_4 << 2)))->x == GfxRndSeed)) &&
-       (((char_sheet_t *)((iStack_4 << 2)))->y == GfxRndSeed2)) {
+    if ((((GLeaderSheets[iStack_4])->active != '\0') &&
+        ((GLeaderSheets[iStack_4])->x == GfxRndSeed)) &&
+       ((GLeaderSheets[iStack_4])->y == GfxRndSeed2)) {
       if (GCharLevelsInc != '\0') {
         uVar6 = (uint16_t)((ulong)*(uint32_t *)(iStack_4 << 2) >> 0x10);
         iVar5 = (int)*(uint32_t *)(iStack_4 << 2);
@@ -1985,7 +1985,7 @@ void __cdecl16far manage_textHalflingCastle(void)
     }
     iStack_4 = 0;
     while ((iStack_4 < (int)(uint)GLeaderCount &&
-           (((char_sheet_t *)((iStack_4 << 2)))->statMask != '\0'))) {
+           ((GLeaderSheets[iStack_4])->statMask != '\0'))) {
       iStack_4 = iStack_4 + 1;
     }
     if (iStack_4 < (int)(uint)GLeaderCount) {

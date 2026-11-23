@@ -68,11 +68,11 @@ void __cdecl16far ovc18_showLeaderView(void)
   else {
     _fmemset(MK_FP(_SS, &pcStack_6), 0, 2);
     for (iVar5 = 0; iVar5 < (int)(uint)GLeaderCount; iVar5 = iVar5 + 1) {
-      if (((((char_sheet_t *)((iVar5 << 2)))->active != '\0') &&
+      if ((((GLeaderSheets[iVar5])->active != '\0') &&
           ((&partyCounts)[*(byte *)((int)*(uint32_t *)(iVar5 << 2) + 0x3f)] =
                 (&partyCounts)[*(byte *)((int)*(uint32_t *)(iVar5 << 2) + 0x3f)] + 0x1,
-          ((char_sheet_t *)((iVar5 << 2)))->x == GfxRndSeed)) &&
-         (((char_sheet_t *)((iVar5 << 2)))->y == GfxRndSeed2)) {
+          (GLeaderSheets[iVar5])->x == GfxRndSeed)) &&
+         ((GLeaderSheets[iVar5])->y == GfxRndSeed2)) {
         bVar1 = ovr_draw_textArena();
         if (!bVar1) {
           return;
@@ -834,9 +834,9 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
     }
   }
   for (leaderIndex = 0; leaderIndex < (int)(uint)GLeaderCount; leaderIndex = leaderIndex + 1) {
-    if (((((char_sheet_t *)((leaderIndex << 2)))->active != '\0') &&
-        (((char_sheet_t *)((leaderIndex << 2)))->x == GfxRndSeed)) &&
-       (((char_sheet_t *)((leaderIndex << 2)))->y == GfxRndSeed2)) {
+    if ((((GLeaderSheets[leaderIndex])->active != '\0') &&
+        ((GLeaderSheets[leaderIndex])->x == GfxRndSeed)) &&
+       ((GLeaderSheets[leaderIndex])->y == GfxRndSeed2)) {
       ovr_stats_openCastlePanel();
       ovr_say((char *)"Cannot place another fortress here.",0x10);
       MsgShown = 1;
@@ -894,11 +894,11 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
     if (1 < CurPartySlot) {
       foundIdx = 0xffff;
       for (leaderIndex = 0; leaderIndex < (int)(uint)GLeaderCount; leaderIndex = leaderIndex + 1) {
-        if (((((char_sheet_t *)((leaderIndex << 2)))->active != '\0') &&
+        if ((((GLeaderSheets[leaderIndex])->active != '\0') &&
             (*(char *)((int)*(uint32_t *)(leaderIndex << 2) + 0x3f) == '\0')) &&
-           (entityIndex = ((char_sheet_t *)((leaderIndex << 2)))->x - GfxRndSeed,
+           (entityIndex = (GLeaderSheets[leaderIndex])->x - GfxRndSeed,
            uVar6 = (int)entityIndex >> 0xf,
-           uVar3 = ((char_sheet_t *)((leaderIndex << 2)))->y - GfxRndSeed2,
+           uVar3 = (GLeaderSheets[leaderIndex])->y - GfxRndSeed2,
            uVar7 = (int)uVar3 >> 0xf, entityIndex = ((entityIndex ^ uVar6) - uVar6) + ((uVar3 ^ uVar7) - uVar7),
            entityIndex < foundIdx)) {
           foundIdx = entityIndex;
@@ -1124,9 +1124,9 @@ uint __cdecl16far ovc18_usesAlignUp4(void)
       }
     }
     for (leaderIdx = 0; leaderIdx < (int)(uint)GLeaderCount; leaderIdx = leaderIdx + 1) {
-      if (((((char_sheet_t *)((leaderIdx << 2)))->active != '\0') &&
-          (((char_sheet_t *)((leaderIdx << 2)))->x == GfxRndSeed)) &&
-         (uVar5 = ((char_sheet_t *)((leaderIdx << 2)))->y, uVar5 == GfxRndSeed2)) {
+      if ((((GLeaderSheets[leaderIdx])->active != '\0') &&
+          ((GLeaderSheets[leaderIdx])->x == GfxRndSeed)) &&
+         (uVar5 = (GLeaderSheets[leaderIdx])->y, uVar5 == GfxRndSeed2)) {
         return uVar5 & 0xff00;
       }
     }
@@ -1146,11 +1146,11 @@ uint __cdecl16far ovc18_usesAlignUp4(void)
       if (1 < CurPartySlot) {
         bestDist = 0xffff;
         for (leaderIdx = 0; uVar5 = (uint)GLeaderCount, leaderIdx < (int)uVar5; leaderIdx = leaderIdx + 1) {
-          if (((((char_sheet_t *)((leaderIdx << 2)))->active != '\0') &&
+          if ((((GLeaderSheets[leaderIdx])->active != '\0') &&
               (*(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x3f) == '\0')) &&
-             (uVar5 = ((char_sheet_t *)((leaderIdx << 2)))->x - GfxRndSeed,
+             (uVar5 = (GLeaderSheets[leaderIdx])->x - GfxRndSeed,
              uVar3 = (int)uVar5 >> 0xf,
-             uVar2 = ((char_sheet_t *)((leaderIdx << 2)))->y - GfxRndSeed2,
+             uVar2 = (GLeaderSheets[leaderIdx])->y - GfxRndSeed2,
              uVar4 = (int)uVar2 >> 0xf,
              uVar5 = ((uVar5 ^ uVar3) - uVar3) + ((uVar2 ^ uVar4) - uVar4), uVar5 < bestDist)) {
             bestDist = uVar5;

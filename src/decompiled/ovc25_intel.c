@@ -379,22 +379,22 @@ void __cdecl16far ovc25_spyReportNotice(void)
   int classValue;
   
   for (leaderIdx = 0; (int)leaderIdx < (int)(uint)GLeaderCount; leaderIdx = leaderIdx + 1) {
-    if (((char_sheet_t *)((leaderIdx << 2)))->active != '\0') {
-      ((char_sheet_t *)((leaderIdx << 2)))->unitsOnTile = 0;
-      ((char_sheet_t *)((leaderIdx << 2)))->unitsNear = 0;
-      ((char_sheet_t *)((leaderIdx << 2)))->enemiesNear = 0;
-      ((char_sheet_t *)((leaderIdx << 2)))->unitCount = 0;
+    if ((GLeaderSheets[leaderIdx])->active != '\0') {
+      (GLeaderSheets[leaderIdx])->unitsOnTile = 0;
+      (GLeaderSheets[leaderIdx])->unitsNear = 0;
+      (GLeaderSheets[leaderIdx])->enemiesNear = 0;
+      (GLeaderSheets[leaderIdx])->unitCount = 0;
       enemyDist = 0xffff;
       enemyIdx = 0xffff;
-      leaderX = ovr_alignUp4(((char_sheet_t *)((leaderIdx << 2)))->x,0,0);
+      leaderX = ovr_alignUp4((GLeaderSheets[leaderIdx])->x,0,0);
       for (idx = 0; idx < EntityCount; idx = idx + 1) {
         uVar8 = (uint16_t)((ulong)Entities >> 0x10);
         iVar7 = (int)Entities;
         if (AGNT_FIELD(&((entity_t *)Entities)[idx], base.entity, 3) == leaderIdx) {
-          uVar2 = ((char_sheet_t *)((leaderIdx << 2)))->x -
+          uVar2 = (GLeaderSheets[leaderIdx])->x -
                   *(int *)((entity_t *)iVar7 + idx);
           uVar5 = (int)uVar2 >> 0xf;
-          uVar3 = ((char_sheet_t *)((leaderIdx << 2)))->y -
+          uVar3 = (GLeaderSheets[leaderIdx])->y -
                   ((entity_t *)iVar7)[idx].base.y;
           uVar6 = (int)uVar3 >> 0xf;
           piVar1 = (int *)((int)*(uint32_t *)(leaderIdx << 2) + 0x45);
@@ -403,7 +403,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
             piVar1 = (int *)((int)*(uint32_t *)(leaderIdx << 2) + 0x41);
             *piVar1 = *piVar1 + 1;
             uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-            if ((((char_sheet_t *)((leaderIdx << 2)))->y ==
+            if (((GLeaderSheets[leaderIdx])->y ==
                  ((entity_t *)Entities)[idx].base.y) &&
                (uVar2 = ovr_alignUp4(((entity_t *)Entities)[idx].base.x,0,0), uVar2 == leaderX
                )) {
@@ -414,10 +414,10 @@ void __cdecl16far ovc25_spyReportNotice(void)
         }
         else if (AgntGs[(uint)((entity_t *)iVar7)[idx].base.gindex].ai !=
                  *(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x3f)) {
-          uVar2 = ((char_sheet_t *)((leaderIdx << 2)))->x -
+          uVar2 = (GLeaderSheets[leaderIdx])->x -
                   *(int *)((entity_t *)iVar7 + idx);
           uVar5 = (int)uVar2 >> 0xf;
-          uVar3 = ((char_sheet_t *)((leaderIdx << 2)))->y -
+          uVar3 = (GLeaderSheets[leaderIdx])->y -
                   ((entity_t *)iVar7)[idx].base.y;
           uVar6 = (int)uVar3 >> 0xf;
           uVar2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((uVar3 ^ uVar6) - uVar6);
@@ -431,18 +431,18 @@ void __cdecl16far ovc25_spyReportNotice(void)
           }
         }
       }
-      ((char_sheet_t *)((leaderIdx << 2)))->nearestEnemy = enemyIdx;
+      (GLeaderSheets[leaderIdx])->nearestEnemy = enemyIdx;
       otherIdx = 0xff;
       if (*(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x40) != '\0') {
         otherDist = 0xffff;
         for (idx = 0; (int)idx < (int)(uint)GLeaderCount; idx = idx + 1) {
           if ((*(char *)((int)*(uint32_t *)(idx << 2) + 0x3f) !=
                *(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x3f)) &&
-             (uVar2 = ((char_sheet_t *)((leaderIdx << 2)))->x -
-                      ((char_sheet_t *)((idx << 2)))->x,
+             (uVar2 = (GLeaderSheets[leaderIdx])->x -
+                      (GLeaderSheets[idx])->x,
              uVar5 = (int)uVar2 >> 0xf,
-             uVar3 = ((char_sheet_t *)((leaderIdx << 2)))->y -
-                     ((char_sheet_t *)((idx << 2)))->y, uVar6 = (int)uVar3 >> 0xf
+             uVar3 = (GLeaderSheets[leaderIdx])->y -
+                     (GLeaderSheets[idx])->y, uVar6 = (int)uVar3 >> 0xf
              , uVar2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((uVar3 ^ uVar6) - uVar6),
              uVar2 < otherDist)) {
             otherIdx = (undefined1)idx;
@@ -455,38 +455,38 @@ void __cdecl16far ovc25_spyReportNotice(void)
   }
   for (leaderIdx = 0; (int)leaderIdx < (int)(uint)GLeaderCount; leaderIdx = leaderIdx + 1) {
     if ((*(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x40) != '\0') &&
-       (((char_sheet_t *)((leaderIdx << 2)))->active != '\0')) {
+       ((GLeaderSheets[leaderIdx])->active != '\0')) {
       ovc25_intelAttackingNotice((byte)leaderIdx);
-      if (((char_sheet_t *)((leaderIdx << 2)))->nearestEnemy == -1) {
+      if ((GLeaderSheets[leaderIdx])->nearestEnemy == -1) {
         enemyDist2 = 0xffff;
       }
       else {
-        enemyIdx = ((char_sheet_t *)((leaderIdx << 2)))->nearestEnemy;
+        enemyIdx = (GLeaderSheets[leaderIdx])->nearestEnemy;
         uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-        uVar2 = ((char_sheet_t *)((leaderIdx << 2)))->x -
+        uVar2 = (GLeaderSheets[leaderIdx])->x -
                 ((entity_t *)Entities)[enemyIdx].base.x;
         uVar5 = (int)uVar2 >> 0xf;
-        uVar3 = ((char_sheet_t *)((leaderIdx << 2)))->y -
+        uVar3 = (GLeaderSheets[leaderIdx])->y -
                 ((entity_t *)Entities)[enemyIdx].base.y;
         uVar6 = (int)uVar3 >> 0xf;
         enemyDist2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((uVar3 ^ uVar6) - uVar6);
       }
-      if ((((char_sheet_t *)((leaderIdx << 2)))->enemiesNear == 0) || (9 < enemyDist2)) {
+      if (((GLeaderSheets[leaderIdx])->enemiesNear == 0) || (9 < enemyDist2)) {
         if ((*(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x49) == -1) ||
-           ((((char_sheet_t *)((leaderIdx << 2)))->flags5d & 1) == 0)) {
-          if (((char_sheet_t *)((leaderIdx << 2)))->unitsOnTile < 10) {
+           (((GLeaderSheets[leaderIdx])->flags5d & 1) == 0)) {
+          if ((GLeaderSheets[leaderIdx])->unitsOnTile < 10) {
             ovc25_usesAlignUp43((byte)leaderIdx,10,
-                                ((char_sheet_t *)((leaderIdx << 2)))->x,
-                                ((char_sheet_t *)((leaderIdx << 2)))->y,'\0');
-            ((char_sheet_t *)((leaderIdx << 2)))->reportState = 0;
+                                (GLeaderSheets[leaderIdx])->x,
+                                (GLeaderSheets[leaderIdx])->y,'\0');
+            (GLeaderSheets[leaderIdx])->reportState = 0;
           }
           else {
-            ((char_sheet_t *)((leaderIdx << 2)))->reportState = 0;
-            classIdx = ((char_sheet_t *)((leaderIdx << 2)))->classStr;
+            (GLeaderSheets[leaderIdx])->reportState = 0;
+            classIdx = (GLeaderSheets[leaderIdx])->classStr;
             classValue = ovc25_compute1(classIdx);
             if ((int)(uint)PlayerCount < classValue) {
               uVar4 = ovr_randBelow(0x28,0);
-              spawnX = ((char_sheet_t *)((leaderIdx << 2)))->x + -0x14 +
+              spawnX = (GLeaderSheets[leaderIdx])->x + -0x14 +
                          (uVar4 & 0xff);
               if ((int)spawnX < 4) {
                 spawnX = 4;
@@ -495,7 +495,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
                 spawnX = 0x8b;
               }
               uVar4 = ovr_randBelow(0x14,0);
-              spawnY = ((char_sheet_t *)((leaderIdx << 2)))->y + -10 + (uVar4 & 0xff)
+              spawnY = (GLeaderSheets[leaderIdx])->y + -10 + (uVar4 & 0xff)
               ;
               if ((int)spawnY < 1) {
                 spawnY = 1;
@@ -510,16 +510,16 @@ void __cdecl16far ovc25_spyReportNotice(void)
         else {
           ovc25_usesEntityCount((byte)leaderIdx);
           otherLeaderIdx = *(byte *)((int)*(uint32_t *)(leaderIdx << 2) + 0x49);
-          if (0xe < ((char_sheet_t *)((leaderIdx << 2)))->unitsOnTile) {
+          if (0xe < (GLeaderSheets[leaderIdx])->unitsOnTile) {
             ovc25_usesAlignUp42((byte)leaderIdx,10,
                                 ((char_sheet_t *)(((uint)otherLeaderIdx << 2)))->x,
                                 ((char_sheet_t *)(((uint)otherLeaderIdx << 2)))->y,
-                                ((char_sheet_t *)((leaderIdx << 2)))->x,
-                                ((char_sheet_t *)((leaderIdx << 2)))->y);
-            if (((char_sheet_t *)((leaderIdx << 2)))->reportState != '\x02') {
+                                (GLeaderSheets[leaderIdx])->x,
+                                (GLeaderSheets[leaderIdx])->y);
+            if ((GLeaderSheets[leaderIdx])->reportState != '\x02') {
               uVar2 = ovr_alignUp4(((char_sheet_t *)(((uint)otherLeaderIdx << 2)))->x,
                                    ((char_sheet_t *)(((uint)otherLeaderIdx << 2)))->y,0xa000);
-              iVar7 = (uint)((char_sheet_t *)((leaderIdx << 2)))->classStr * 0x95;
+              iVar7 = (uint)(GLeaderSheets[leaderIdx])->classStr * 0x95;
               uVar4 = 0x195d;
               msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58c0,curSeg),
                                   (char *)CONCAT22(*(uint16_t *)
@@ -530,22 +530,22 @@ void __cdecl16far ovc25_spyReportNotice(void)
             }
           }
           ovc25_usesAlignUp43((byte)leaderIdx,0xf,
-                              ((char_sheet_t *)((leaderIdx << 2)))->x,
-                              ((char_sheet_t *)((leaderIdx << 2)))->y,'\0');
-          ((char_sheet_t *)((leaderIdx << 2)))->reportState = 2;
+                              (GLeaderSheets[leaderIdx])->x,
+                              (GLeaderSheets[leaderIdx])->y,'\0');
+          (GLeaderSheets[leaderIdx])->reportState = 2;
         }
       }
       else {
         ovc25_usesEntityCount((byte)leaderIdx);
-        if (9 < ((char_sheet_t *)((leaderIdx << 2)))->unitsOnTile) {
+        if (9 < (GLeaderSheets[leaderIdx])->unitsOnTile) {
           uVar8 = (uint16_t)((ulong)Entities >> 0x10);
           ovc25_usesAlignUp43((byte)leaderIdx,5,((entity_t *)Entities)[enemyIdx].base.x,
                               ((entity_t *)Entities)[enemyIdx].base.y,'\x01');
         }
         ovc25_usesAlignUp43((byte)leaderIdx,10,
-                            ((char_sheet_t *)((leaderIdx << 2)))->x,
-                            ((char_sheet_t *)((leaderIdx << 2)))->y,'\0');
-        ((char_sheet_t *)((leaderIdx << 2)))->reportState = 1;
+                            (GLeaderSheets[leaderIdx])->x,
+                            (GLeaderSheets[leaderIdx])->y,'\0');
+        (GLeaderSheets[leaderIdx])->reportState = 1;
       }
     }
   }
@@ -1026,7 +1026,7 @@ void __cdecl16far ovc25_tickCountdown(int partyIndex)
   if ((((*(char *)((int)*(uint32_t *)(partyIndex << 2) + 0x3f) != '\0') &&
        (*(int *)((int)*(uint32_t *)(partyIndex << 2) + 0x5e) != 0)) &&
       (piVar1 = (int *)((int)*(uint32_t *)(partyIndex << 2) + 0x5e), *piVar1 = *piVar1 + -1,
-      (((char_sheet_t *)((partyIndex << 2)))->flags5d & 1) != 0)) &&
+      ((GLeaderSheets[partyIndex])->flags5d & 1) != 0)) &&
      (*(int *)((int)*(uint32_t *)(partyIndex << 2) + 0x5e) == 0)) {
     *(uint16_t *)((int)*(uint32_t *)(partyIndex << 2) + 0x5e) = 10;
     pbVar2 = (byte *)((int)*(uint32_t *)(partyIndex << 2) + 0x5d);

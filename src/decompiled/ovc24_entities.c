@@ -584,13 +584,13 @@ void __cdecl16far ovc24_checkStrongholds(void)
     cStack_a = '\0';
     bVar1 = false;
     for (leaderIndex = 0; (int)leaderIndex < (int)(uint)GLeaderCount; leaderIndex = leaderIndex + 1) {
-      if (((char_sheet_t *)((leaderIndex << 2)))->active != '\0') {
-        leaderClass = ((char_sheet_t *)((leaderIndex << 2)))->classStr;
+      if ((GLeaderSheets[leaderIndex])->active != '\0') {
+        leaderClass = (GLeaderSheets[leaderIndex])->classStr;
         side = *(byte *)((int)*(uint32_t *)(leaderIndex << 2) + 0x3f);
         ownMask = 0x1000 << (1U - (side != 0) & 0x1f);
         enemyMask = '\0' << (side & 0x1f);
-        cellX = alignUp4(((char_sheet_t *)((leaderIndex << 2)))->x,0,0);
-        uVar6 = ((char_sheet_t *)((leaderIndex << 2)))->y;
+        cellX = alignUp4((GLeaderSheets[leaderIndex])->x,0,0);
+        uVar6 = (GLeaderSheets[leaderIndex])->y;
         flagMask = 0;
         for (probeOfs = -2; probeOfs < 2; probeOfs = probeOfs + 1) {
           flagMask = flagMask | (*(short (*) [60] [148])GMapFlags)[uVar6][cellX + probeOfs];
@@ -619,7 +619,7 @@ L_OVC24_5943_112e_1255:
         }
         uVar7 = 0x195d;
         if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)leaderClass * 0x95) & 0x800) == 0) {
-          uVar4 = alignUp4(((char_sheet_t *)((leaderIndex << 2)))->x,uVar6,0);
+          uVar4 = alignUp4((GLeaderSheets[leaderIndex])->x,uVar6,0);
           uVar7 = 0x195d;
           pcVar5 = ovr_ovc15_capitalize((char *)&text);
           pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x578d,_SS),
@@ -627,27 +627,27 @@ L_OVC24_5943_112e_1255:
           ovr_uiNotify(pcVar5,uVar7,0);
         }
         else {
-          uVar4 = alignUp4(((char_sheet_t *)((leaderIndex << 2)))->x,uVar6,0);
+          uVar4 = alignUp4((GLeaderSheets[leaderIndex])->x,uVar6,0);
           pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x576a,_SS),
                                  (char *)CONCAT22(uVar4,(char *)0x26510));
           ovr_uiNotify(pcVar5,uVar7,0);
         }
         if (firstLeader == leaderIndex) {
           ovr_createConstructionRecordFar
-                    (0,((char_sheet_t *)((leaderIndex << 2)))->x + -2,uVar6,(uint8_t *)CONCAT22(_SS,&outFlag),0xff,(char)unaff_DI,0xff,0,0);
+                    (0,(GLeaderSheets[leaderIndex])->x + -2,uVar6,(uint8_t *)CONCAT22(_SS,&outFlag),0xff,(char)unaff_DI,0xff,0,0);
         }
         else {
           ovr_createConstructionRecordFar
-                    (0,((char_sheet_t *)((leaderIndex << 2)))->x + -1,uVar6,(uint8_t *)CONCAT22(_SS,&outFlag),0xff,(char)unaff_DI,0xff,0,0);
+                    (0,(GLeaderSheets[leaderIndex])->x + -1,uVar6,(uint8_t *)CONCAT22(_SS,&outFlag),0xff,(char)unaff_DI,0xff,0,0);
         }
         CurSfxType3 = 0xff;
-        ((char_sheet_t *)((leaderIndex << 2)))->active = 0;
+        (GLeaderSheets[leaderIndex])->active = 0;
         bVar1 = true;
         ovr_manage_mapPartySlots();
         ovr_font_usesMiceBlitRect(0x5a);
         _fmemset(MK_FP(_SS, &flagMask), 0, 2);
         if (side == 0) {
-          probeOfs = (uint)((char_sheet_t *)((leaderIndex << 2)))->classStr * 0x95;
+          probeOfs = (uint)(GLeaderSheets[leaderIndex])->classStr * 0x95;
           ovr_ovc40_usesAlignToSeg
                     ('\x01',(char *)*(uint16_t *)((int)&worldMenuLabels[0].seg + 1 + probeOfs),*(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + probeOfs),(char *)0x0,0,4,0,0,0,0);
         }
@@ -655,7 +655,7 @@ L_OVC24_5943_112e_1255:
           uVar6 = ovr_season_checkEndGame((byte)leaderIndex);
           if ((uVar6 & 0xff) == 0) {
             for (probeOfs = 0; probeOfs < (int)(uint)GLeaderCount; probeOfs = probeOfs + 1) {
-              if (((char_sheet_t *)((probeOfs << 2)))->active != '\0') {
+              if ((GLeaderSheets[probeOfs])->active != '\0') {
                 (&excludedFlags)[*(byte *)((int)*(uint32_t *)(probeOfs << 2) + 0x3f)] = 0x1;
               }
             }
@@ -666,12 +666,12 @@ L_OVC24_5943_112e_1255:
               cStack_4 = '\x01';
             }
             if (cStack_4 == '\0') {
-              probeOfs = (uint)((char_sheet_t *)((leaderIndex << 2)))->classStr * 0x95;
+              probeOfs = (uint)(GLeaderSheets[leaderIndex])->classStr * 0x95;
               ovr_ovc40_usesAlignToSeg
                         ('\x03',(char *)*(uint16_t *)((int)&worldMenuLabels[0].seg + 1 + probeOfs),*(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + probeOfs),(char *)0x0,0,6,0,0,0,0);
             }
             else {
-              probeOfs = (uint)((char_sheet_t *)((leaderIndex << 2)))->classStr * 0x95;
+              probeOfs = (uint)(GLeaderSheets[leaderIndex])->classStr * 0x95;
               ovr_ovc40_usesAlignToSeg
                         ('\x02',(char *)*(uint16_t *)((int)&worldMenuLabels[0].seg + 1 + probeOfs),*(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + probeOfs),(char *)0x0,0,5,0,0,0,0);
             }
@@ -685,7 +685,7 @@ L_OVC24_5943_112e_15E7:
       firstLeader = ovr_manage_findFirstLeader();
       _fmemset(MK_FP(_SS, &flagMask), 0, 2);
       for (leaderIndex = 0; (int)leaderIndex < (int)(uint)GLeaderCount; leaderIndex = leaderIndex + 1) {
-        if (((char_sheet_t *)((leaderIndex << 2)))->active != '\0') {
+        if ((GLeaderSheets[leaderIndex])->active != '\0') {
           (&excludedFlags)[*(byte *)((int)*(uint32_t *)(leaderIndex << 2) + 0x3f)] = 0x1;
         }
       }
