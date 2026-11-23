@@ -1612,3 +1612,59 @@ So "just use the compiler's CRT" cannot be a wholesale drop: the file would have
 to be split into a stock-CRT half (deleted, linked from CM.LIB) and a
 first-segment half (kept, recovered).  That split is a worthwhile next step but a
 real refactor, not a switch.
+
+### CRT substitution, second attempt: 46 stock functions deleted
+
+`tmp/del_funcs.py` removes a named definition together with its `/* SEG:OFF */`
+marker; the stock half of `crtl.c` is then supplied by `CM.LIB` at link time.
+Because TLINK resolves object files before libraries, deleting our copy is what
+makes the library version win.
+
+Deleted and replaced by `CM.LIB` (link clean, 46 functions):
+
+```
+strings/memory  strcat strcmp strcpy strlen memcmp _fstrstr memcpy
+                _fsetmem _fmemset _fmemmove _fstricmp
+file I/O        __write __sbrk write close read _open _creat lseek
+                fseek ftell fflush fputc flushall filelength _xfflush
+                unlink mkdir chdir getcwd getcurdir _dos_setdrive _dos_getdrive
+                getdisk setdisk
+heap/other      malloc farfree farmalloc farrealloc coreleft __brk
+                toupper tolower rand _cexit _c_exit
+```
+
+Result:
+
+```
+grep_checks TOTAL 61,437 -> 60,339   (-1,098)
+build 62/62 clean, 0 errors; link 0 errors
+compare_state 1,630 identical / 0 different / 0 missing
+compare_runtime 1,523 identical / 14 different (unchanged)
+diff_dgroup 976/1,868 matched
+```
+
+### What still cannot be substituted, and why
+
+Two CM.LIB modules reference internal symbols whose *names differ* from the
+original's recovered names, so the link fails with the same message both times:
+
+```
+Error: Fixup overflow at _TEXT:0026, target = __REALCVT  ... module CLRSCR
+Error: Fixup overflow at _TEXT:0122, target = __VIDEOINT ... module SCREEN
+```
+
+* `__VIDEOINT` - CM.LIB's `SCREEN`/`CLRSCR`/`SCROLL`/`WHEREXY` call it.  The
+  original's function is `_VideoInt` (`audit/symbols.tsv: 1000:1453 _VideoInt
+  Function`), so the two builds disagree on the spelling of that hook.
+* `__REALCVT` - CM.LIB's `VPRINTER` reads it as the float-conversion pointer.
+  The original's CRT keeps it as a *data word*, `audit/symbols.tsv:
+  2ca0:000e _realcvt Label` (value `0x15CF` = the offset of `_FakRealCvt`).
+
+So `printf`/`sprintf`/`vsprintf`/`__vprinter*` (688 §5 artifacts) and the conio
+family stay recovered: substituting them would need an alias layer that rewrites
+the original's data word, which would break the byte-exact DGROUP requirement.
+
+The conclusion recorded earlier stands and is now narrower: pure C runtime
+helpers can be taken from `CM.LIB`; anything on the float or console path cannot,
+because the original's CRT and the bundled `CM.LIB` disagree on the internal
+hook names.
