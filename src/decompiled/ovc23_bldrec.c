@@ -19,7 +19,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   int *piVar2;
   uint8_t *puVar3;
   bool bVar4;
-  uint32_t uVar5;
+  uint32_t sheetPtr;
   uint32_t uVar6;
   far_t entries;
   ulong uVar7;
@@ -235,8 +235,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
         ovr_blitLabel((char *)auStackY_96[iVar25 * 2]);
       }
       else {
-        uVar5 = *(uint32_t *)((partyIndex & 0xff) << 2);
-        ovr_blitLabel((char *)auStackY_11a[iVar25 * 2 + (uint)*(byte *)((int)uVar5 + 0x2f) * 8]);
+        sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
+        ovr_blitLabel((char *)auStackY_11a[iVar25 * 2 + (uint)*(byte *)((int)sheetPtr + 0x2f) * 8]);
       }
       ovc27_textCharmed();
       ovr_stsprintf(acStackY_13e);
@@ -431,14 +431,14 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
       uStack_c = ((unit_t *)GUnits)[*(int *)(((uint)uStack_8 & 0xff) * 2 + -0x6d44)].y;
     }
     else {
-      uVar5 = *(uint32_t *)((partyIndex & 0xff) << 2);
-      uStack_a = *(uint16_t *)((int)uVar5 + 0x39);
-      uVar5 = *(uint32_t *)((partyIndex & 0xff) << 2);
-      uStack_c = *(uint16_t *)((int)uVar5 + 0x3b);
+      sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
+      uStack_a = *(uint16_t *)((int)sheetPtr + 0x39);
+      sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
+      uStack_c = *(uint16_t *)((int)sheetPtr + 0x3b);
     }
-    uVar5 = *(uint32_t *)((partyIndex & 0xff) << 2);
-    uVar26 = (uint16_t)((ulong)uVar5 >> 0x10);
-    iVar25 = (int)uVar5;
+    sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
+    uVar26 = (uint16_t)((ulong)sheetPtr >> 0x10);
+    iVar25 = (int)sheetPtr;
     iVar24 = *(int *)(iVar25 + 0x58);
     if ((iVar24 < 1) && ((iVar24 < 0 || (*(uint *)(iVar25 + 0x56) < 10)))) {
       (*(uint32_t *)((uint8_t *)&(uStack_6))) = CONCAT12(1,(byte *)uStack_6);
@@ -446,21 +446,21 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     else {
       (*(uint32_t *)((uint8_t *)&(uStack_6))) = ZEXT23((byte *)uStack_6);
     }
-    uVar5 = *(uint32_t *)((partyIndex & 0xff) << 2);
-    if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + (uint)*(byte *)((int)uVar5 + 0x3e) * 0x95) &
+    sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
+    if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + (uint)*(byte *)((int)sheetPtr + 0x3e) * 0x95) &
         0x80) == 0) {
       uStack_6 = (byte *)(ulong)(uint3)uStack_6;
     }
     else {
       uStack_6 = (byte *)CONCAT13(3,(uint3)uStack_6);
     }
-    uVar5 = *(uint32_t *)((partyIndex & 0xff) << 2);
-    if ((*(byte *)((int)uVar5 + 0x5d) & 2) != 0) {
+    sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
+    if ((*(byte *)((int)sheetPtr + 0x5d) & 2) != 0) {
       uStack_6 = (byte *)((ulong)uStack_6 | 0x1000000);
     }
     puVar13 = (uint32_t *)((partyIndex & 0xff) << 2);
-    uVar5 = *puVar13;
-    if ((*(byte *)((int)uVar5 + 0x5d) & 4) != 0) {
+    sheetPtr = *puVar13;
+    if ((*(byte *)((int)sheetPtr + 0x5d) & 4) != 0) {
       uStack_6 = (byte *)((ulong)uStack_6 | 0x2000000);
     }
     uVar15 = ovc22_searchCellsAround
@@ -476,30 +476,30 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
       }
       uVar15 = ovc22_usesRandBelow((byte)partyIndex,uStack_a,uStack_c);
       if (uVar15 == 0) {
-        uVar5 = *(uint32_t *)((partyIndex & 0xff) << 2);
-        uStack_a = *(uint16_t *)((int)uVar5 + 0x39);
-        uVar5 = *(uint32_t *)((partyIndex & 0xff) << 2);
-        uStack_c = *(uint16_t *)((int)uVar5 + 0x3b);
+        sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
+        uStack_a = *(uint16_t *)((int)sheetPtr + 0x39);
+        sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
+        uStack_c = *(uint16_t *)((int)sheetPtr + 0x3b);
       }
       else {
         if ((*(uint *)((uint8_t *)&BuildingTypes[uVar15] + 19) & 0x60) == 0) {
-          uVar5 = *(uint32_t *)((partyIndex & 0xff) << 2);
-          uVar26 = (uint16_t)((ulong)uVar5 >> 0x10);
-          iVar25 = (int)uVar5;
+          sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
+          uVar26 = (uint16_t)((ulong)sheetPtr >> 0x10);
+          iVar25 = (int)sheetPtr;
           iVar24 = *(int *)(iVar25 + 0x58);
           if ((iVar24 < 0) ||
              ((iVar24 == 0 && (*(uint *)(iVar25 + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[uVar15] + 23))))) {
-            uVar5 = *(uint32_t *)((partyIndex & 0xff) << 2);
-            uVar26 = (uint16_t)((ulong)uVar5 >> 0x10);
-            iVar24 = (int)uVar5;
+            sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
+            uVar26 = (uint16_t)((ulong)sheetPtr >> 0x10);
+            iVar24 = (int)sheetPtr;
             *(uint16_t *)(iVar24 + 0x58) = 0;
             *(uint16_t *)(iVar24 + 0x56) = 0;
           }
           else {
             uVar20 = *(uint *)((uint8_t *)&BuildingTypes[uVar15] + 23);
-            uVar5 = *(uint32_t *)((partyIndex & 0xff) << 2);
-            uVar26 = (uint16_t)((ulong)uVar5 >> 0x10);
-            iVar24 = (int)uVar5;
+            sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
+            uVar26 = (uint16_t)((ulong)sheetPtr >> 0x10);
+            iVar24 = (int)sheetPtr;
             puVar1 = (uint *)(iVar24 + 0x56);
             uVar18 = *puVar1;
             *puVar1 = *puVar1 - uVar20;
@@ -511,11 +511,11 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
         ovr_createConstructionRecordFar(bStack_e,0,0,0,0,0,0,0,0);
       }
     }
-    uVar5 = *(uint32_t *)((partyIndex & 0xff) << 2);
-    if (*(char *)((int)uVar5 + 0x3f) == '\0') {
-      uVar5 = *(uint32_t *)((partyIndex & 0xff) << 2);
+    sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
+    if (*(char *)((int)sheetPtr + 0x3f) == '\0') {
+      sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
       uVar6 = *(uint32_t *)((partyIndex & 0xff) << 2);
-      if (*(uint *)((int)uVar5 + 0x5b) < *(uint *)((int)uVar6 + 0x4d)) {
+      if (*(uint *)((int)sheetPtr + 0x5b) < *(uint *)((int)uVar6 + 0x4d)) {
         pbVar14 = (byte *)ovr_ovc18_textTypeLen((byte)partyIndex,0,0,0,0,0);
       }
       else {
