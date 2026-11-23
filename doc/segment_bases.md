@@ -144,40 +144,51 @@ original image at the same intra-segment offsets.  The agent segment now matches
 structurally (`0000`, `04e0`, `08fa`), so that check is feasible for this
 segment.
 
-## Status after the field-access pass
+## Status after the field-access passes
 
 Done (verified by build + map + gates):
 
 | object | stride | sites | form |
 |---|---|---|---|
 | `AgntArrayA`/`AgntArrayB` grids | 1 | 101 | `AgntArrayA[row][col]` (2-D arrays) |
-| `Agnts` | 0x34 | 669 | `Agnts[i].field`, `AGNT_FIELD`/`AGNT_WORD` for odd offsets |
-| `BuildingTypes` | 0x27 | 191 | `BuildingTypes[i].field`, `BLD_FIELD`/`BLD_WORD` |
-| `Entities` (entity records) | 0x37 | 187 | `((entity_t *)Entities)[i].base.field`, `.tick`, `.dir` |
+| `Agnts` | 0x34 | 854 | `Agnts[i].field`, `&Agnts[i].field`, `AGNT_FIELD`/`AGNT_WORD` |
+| `BuildingTypes` | 0x27 | 194 | `BuildingTypes[i].field`, `BLD_FIELD`/`BLD_WORD` |
+| `Entities` (entity records) | 0x37 | 218 | `((entity_t *)Entities)[i].base.field`, `.tick`, `.dir` |
+| `GRecords` | 0x12 | 113 | `GRecords[i].field`, `GREC_FIELD`/`GREC_WORD` |
 | stale `0x1726` | - | 60 | `SEG_OF(Agnts)` |
+| stale `0x21f2` | - | 12 | `_DS` (GRecords lives in DGROUP) |
 
 `Agnts` is back at offset 0 of its far segment (`099E:0000`, with
 `AgntArrayB` at `04e0` and `AgntArrayA` at `08fa`), matching the original
 `1726:0000 / 04e0 / 08fa` exactly.
+
+Three `grec_t` field names had no reader and are now evidenced from
+`draw_usesPlay_sfx` / `ovc23_tickRecordsAt`:
+
+```
+reserved06 -> frameCount   frame + 1 < frameCount bounds the frame counter
+done       -> state        0/1/2; 1 when the countdown ends, 2 after the last frame
+reserved11 -> frame        incrementing animation frame
+```
 
 The offset folding used by the passes: a negative offset is the previous record
 and an offset >= stride the next one, so `-5` is `Agnts[idx - 1].faction` and
 `-0x10` is `Agnts[idx - 1].combatState` - the "grid byte is agentIndex + 1"
 convention.
 
-`(C) idx*stride` is now **0**.  `(D) far const` is 161, and the remainder is
+`(C) idx*stride` is now **0**.  `(D) far const` is 83, and the remainder is
 mostly *not* fixable by typing:
 
 * `iVar12 * 0x30 + 0x32` (36) and `(long)iVar12 * 0x30` - pixel/offset
   arithmetic for the RLE cut calls, not a record stride;
 * `X * 0x50` (4) - an address-range comparison;
-* `* 0x12` (~30) - a third record type that still needs its struct identified;
-* `* 0x34` address forms (~16) such as `(uint *)(iVar2 * 0x34 + 0x2b)` - these
-  can become `(uint *)&Agnts[iVar2].flags` but the receiving pointer is near, so
-  the cast through a far address needs the local retyped first;
-* `gindex * 0x95 + 0x1f` - `AgntGs` (stride 0x95); the same literals appear both
-  with and without the original base `0x26d6`, so each site needs its
-  disassembly before it can be typed.
+* `y + (int)pfVar * 0x1e + off` (11, ovc18_leaderview.c) - a 0x1e-stride record
+  whose struct is not identified yet; the base is a local pointer, so it needs
+  the type before it can be named;
+* `gindex * 0x95 + 0x1f` and `bVar * 0x95 + 0x26d6` - `AgntGs` (stride 0x95).
+  The literals appear both with and without the original base `0x26d6`, so the
+  two spellings disagree about the base and each site needs its disassembly;
+* small remainders: `iStack_4 * 0x17 + 0x1b`, `(uint)bVar1 * 0x27 & 0xff00`.
 
 Note the regex `(D)` also matches plain arithmetic (`x * 0x30 / 0x30`), so this
 row cannot reach zero by field typing alone.
