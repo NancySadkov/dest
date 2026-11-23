@@ -1632,7 +1632,7 @@ void __cdecl16far stats_usesEntityCount(char partyIndex)
   
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
     uVar3 = (uint16_t)((ulong)Entities >> 0x10);
-    if (*(char *)((int)Entities + uVar2 * 0x37 + 0x1a) == partyIndex) {
+    if (*(char *)((int)&((entity_t *)Entities)[uVar2].base.entity + 3) == partyIndex) {
       pbVar1 = (byte *)((int)Entities + uVar2 * 0x37 + 0x33);
       *pbVar1 = *pbVar1 & 0xfb;
     }
@@ -1733,11 +1733,11 @@ uint __cdecl16far stats_usesAlignUp4(int entityIndex)
   uint16_t uVar5;
   
   uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-  if ((*(byte *)((int)Entities + entityIndex * 0x37 + 0x33) & 2) == 0) {
+  if ((*((uint8_t far *)&((entity_t *)Entities)[entityIndex].base.flags32 + 1) & 2) == 0) {
     uVar2 = 0;
   }
   else {
-    uVar1 = ovr_alignUp4(*(int *)((int)Entities + entityIndex * 0x37),0,0);
+    uVar1 = ovr_alignUp4(((entity_t *)Entities)[entityIndex].base.x,0,0);
     uVar2 = ovr_alignUp4(GfxRndSeed,0,0);
     if (uVar1 == uVar2) {
       uVar5 = (uint16_t)((ulong)Entities >> 0x10);
@@ -1808,11 +1808,11 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   uStack_a = *(uint16_t *)((uint)agntIndex * 0x34 + 0x1f);
   iStack_c = *(int *)((uint)agntIndex * 0x34 + 0x1d);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
-  *(int *)((int)Entities + entityIndex * 0x37) = iVar2;
+  ((entity_t *)Entities)[entityIndex].base.x = iVar2;
   ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
   uVar4 = (uint16_t)((ulong)Entities >> 0x10);
   ((entity_t *)Entities)[entityIndex].base.targetX =
-       *(uint16_t *)((int)Entities + entityIndex * 0x37);
+       ((entity_t *)Entities)[entityIndex].base.x;
   ((entity_t *)Entities)[entityIndex].base.targetY = GfxRndSeed2;
   pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);
   *pbVar1 = *pbVar1 | 2;
@@ -1856,11 +1856,11 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
   uStack_a = *(uint16_t *)((uint)agntIndex * 0x34 + 0x1f);
   iStack_c = *(int *)((uint)agntIndex * 0x34 + 0x1d);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
-  *(int *)((int)Entities + entityIndex * 0x37) = iVar2;
+  ((entity_t *)Entities)[entityIndex].base.x = iVar2;
   ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
   uVar4 = (uint16_t)((ulong)Entities >> 0x10);
   ((entity_t *)Entities)[entityIndex].base.targetX =
-       *(uint16_t *)((int)Entities + entityIndex * 0x37);
+       ((entity_t *)Entities)[entityIndex].base.x;
   ((entity_t *)Entities)[entityIndex].base.targetY = GfxRndSeed2;
   widths = 0x2410;
   pbVar1 = (byte *)((int)Entities + entityIndex * 0x37 + 0x33);

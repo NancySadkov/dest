@@ -428,7 +428,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     for (uVar12 = 0; uVar12 < EntityCount; uVar12 = uVar12 + 1) {
       uVar14 = (uint16_t)((ulong)Entities >> 0x10);
       uVar14 = ovr_ovc23_isCursorAt
-                         (*(uint16_t *)((int)Entities + uVar12 * 0x37),((entity_t *)Entities)[uVar12].base.y,0);
+                         (((entity_t *)Entities)[uVar12].base.x,((entity_t *)Entities)[uVar12].base.y,0);
       if (((char)uVar14 != '\0') &&
          (*(char *)((int)(char **)GMenuStrings +
                    (uint)((entity_t *)Entities)[uVar12].base.gindex * 0x95 + 0x1f) == '\0')) {

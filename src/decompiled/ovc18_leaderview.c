@@ -557,7 +557,7 @@ L_attact_3f0b_26bd_2767:
               if (EntityCount <= uVar11) {
                 return (char *)0x26510;
               }
-              uVar13 = ovr_ovc23_isCursorAt(*(uint16_t *)((int)Entities + uVar11 * 0x37),0,0);
+              uVar13 = ovr_ovc23_isCursorAt(((entity_t *)Entities)[uVar11].base.x,0,0);
             } while ((char)uVar13 == '\0');
             destY = manage_usesLitoa103();
           }
@@ -821,7 +821,7 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
     uVar10 = (uint16_t)((ulong)Entities >> 0x10);
     if (*(char *)((int)(char **)GMenuStrings +
                  (uint)((entity_t *)Entities)[uVar8].base.gindex * 0x95 + 0x1f) != '\0') {
-      uVar3 = ovr_alignUp4(*(int *)((int)Entities + uVar8 * 0x37),0,0);
+      uVar3 = ovr_alignUp4(((entity_t *)Entities)[uVar8].base.x,0,0);
       uVar11 = (undefined1)uVar3;
       uVar12 = (undefined1)(uVar3 >> 8);
       uVar3 = ovr_alignUp4(GfxRndSeed,0,0);
@@ -1085,7 +1085,7 @@ bool __cdecl16far ovc18_textArena(uint16_t x,uint16_t y)
     if (EntityCount <= uVar3) {
       return false;
     }
-    uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar3 * 0x37),0,0);
+    uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar3].base.x,0,0);
     if ((uVar2 == uVar1) && (((entity_t *)Entities)[uVar3].base.y == y)) break;
     uVar3 = uVar3 + 1;
   }
@@ -1117,7 +1117,7 @@ uint __cdecl16far ovc18_usesAlignUp4(void)
       uVar7 = (uint16_t)((ulong)Entities >> 0x10);
       if (*(char *)((int)(char **)GMenuStrings +
                    (uint)((entity_t *)Entities)[uVar5].base.gindex * 0x95 + 0x1f) != '\0') {
-        uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar5 * 0x37),0,0);
+        uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar5].base.x,0,0);
         uVar3 = ovr_alignUp4(GfxRndSeed,0,0);
         if ((uVar2 == uVar3) &&
            (uVar2 = ((entity_t *)Entities)[uVar5].base.y, uVar2 == GfxRndSeed2)) {

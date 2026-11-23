@@ -354,7 +354,7 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
             *pbVar1 = *pbVar1 & 0xfa;
             uVar8 = (undefined1)((uint)(entityIndex * 0x37) >> 8);
             ovr_ovc25_usesAlignUp44
-                      (*(char *)((int)Entities + entityIndex * 0x37 + 0x1a),1,destX,destY);
+                      (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3),1,destX,destY);
             uVar5 = CONCAT11(uVar8,1);
           }
           else {

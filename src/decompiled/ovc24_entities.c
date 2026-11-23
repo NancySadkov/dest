@@ -481,7 +481,7 @@ L_OVC24_5943_0d5a_0E37:
         }
         else {
           uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-          alignUp4(*(int *)((int)Entities + ent * 0x37),
+          alignUp4(((entity_t *)Entities)[ent].base.x,
                    ((entity_t *)Entities)[ent].base.y,0xa000);
           iVar3 = (uint)((entity_t *)Entities)[ent].base.gindex * 0x95;
           dst = 0x195d;
@@ -887,7 +887,7 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
   
   uVar10 = (uint16_t)((ulong)Entities >> 0x10);
   if ((*(uint *)((int)Entities + entityIndex * 0x37 + 0x14) & 1) != 0) {
-    uVar4 = alignUp4(*(int *)((int)Entities + entityIndex * 0x37),0,0);
+    uVar4 = alignUp4(((entity_t *)Entities)[entityIndex].base.x,0,0);
     uVar10 = (uint16_t)((ulong)Entities >> 0x10);
     iVar8 = (int)Entities;
     iVar6 = ((entity_t *)iVar8)[entityIndex].base.y;
@@ -914,7 +914,7 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
         puVar1 = (uint *)((int)Entities + entityIndex * 0x37 + 0x14);
         *puVar1 = *puVar1 & 0xfffe;
         uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-        alignUp4(*(int *)((int)Entities + entityIndex * 0x37),
+        alignUp4(((entity_t *)Entities)[entityIndex].base.x,
                  ((entity_t *)Entities)[entityIndex].base.y,0xa000);
         iVar6 = (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95;
         uVar5 = 0x195d;
@@ -954,7 +954,7 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
         uVar10 = (uint16_t)((ulong)Entities >> 0x10);
         ovr_ovc15_usesLDIV_at_2
                   (entityIndex,((entity_t *)Entities)[uVar4].base.gindex,
-                   *(char *)((int)Entities + uVar4 * 0x37 + 0x1a));
+                   *(char *)((int)&((entity_t *)Entities)[uVar4].base.entity + 3));
       }
     }
   }

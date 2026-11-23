@@ -53,7 +53,7 @@ bool __cdecl16far bldng_textArena(byte bldType,char partyIndex)
     if ((*(byte *)((uint)bldType * 0x27 + 0x134) & 0x80) == 0) {
       for (uVar4 = 0; uVar4 < EntityCount; uVar4 = uVar4 + 1) {
         uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-        if ((*(char *)((int)Entities + uVar4 * 0x37 + 0x1a) == partyIndex) &&
+        if ((*(char *)((int)&((entity_t *)Entities)[uVar4].base.entity + 3) == partyIndex) &&
            (bVar1 <= ((entity_t *)Entities)[uVar4].base.level)) {
           return true;
         }

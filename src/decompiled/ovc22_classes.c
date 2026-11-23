@@ -218,7 +218,7 @@ L_OVC25_5b66_00ff_01D9:
                            (uVar7 = ovc25_usesAlignUp4(bldType,in_stack_0000000c,in_stack_0000000e,
                                                        unaff_DI,in_stack_0000000a), -1 < (int)uVar7)
                            )) {
-                      *(undefined1 *)((int)Entities + uVar7 * 0x37 + 0x30) = 0;
+                      ((entity_t *)Entities)[uVar7].base.state = 0;
                       ((entity_t *)Entities)[uVar7].base.destX = unaff_DI;
                       ((entity_t *)Entities)[uVar7].base.destY = in_stack_0000000a;
                       pbVar1 = (byte *)((int)Entities + uVar7 * 0x37 + 0x33);
@@ -2911,7 +2911,7 @@ void __cdecl16far ovc22_usesEntities2(int entityIndex)
   char cStack_5;
   
   uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-  if (*(char *)((int)Entities + entityIndex * 0x37 + 0x1a) != -1) {
+  if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) != -1) {
     bVar4 = ovr_agnt_compute8((agnt_t *)((int)Entities + entityIndex * 0x37),uVar7);
     bVar2 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
     for (cStack_5 = '\0'; cStack_5 < '\x03'; cStack_5 = cStack_5 + '\x01') {
@@ -2953,7 +2953,7 @@ void __cdecl16far ovc22_usesEntities3(int entityIndex)
   char cStack_6;
   
   uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-  if (*(char *)((int)Entities + entityIndex * 0x37 + 0x1a) != -1) {
+  if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) != -1) {
     bVar4 = ovr_agnt_compute10((agnt_t *)((int)Entities + entityIndex * 0x37),uVar7);
     bVar2 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
     for (cStack_6 = '\0'; cStack_6 < '\x04'; cStack_6 = cStack_6 + '\x01') {

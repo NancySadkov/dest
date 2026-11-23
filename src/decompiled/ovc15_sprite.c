@@ -3104,7 +3104,7 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
       if (((*(byte *)(iVar3 + uVar4 * 0x37 + 0x1a) == bStack_8) &&
           (uVar2 = ovr_ovc23_isCursorAt
                              (*(uint16_t *)((entity_t *)iVar3 + uVar4),((entity_t *)iVar3)[uVar4].base.y,0), (uVar2 & 0xff) == 0)) &&
-         ((*(byte *)((int)Entities + uVar4 * 0x37 + 0x33) & 3) == 0)) {
+         ((*((uint8_t far *)&((entity_t *)Entities)[uVar4].base.flags32 + 1) & 3) == 0)) {
         return uVar4;
       }
       uVar4 = uVar4 + 1;

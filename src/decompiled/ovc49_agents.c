@@ -3432,7 +3432,7 @@ L_OVC49_8699_1e09_3CF7:
     uVar27 = (uint16_t)((ulong)Entities >> 0x10);
     uVar20 = (uint)((entity_t *)Entities)[uVar15].base.animFrame;
     if ((uVar20 == 0) &&
-       (uVar20 = ovr_ovc23_isCursorAt(*(uint16_t *)((int)Entities + uVar15 * 0x37),0,0),
+       (uVar20 = ovr_ovc23_isCursorAt(((entity_t *)Entities)[uVar15].base.x,0,0),
        (char)uVar20 != '\0')) {
       uVar20 = AgntCount - 1;
       uStackY_22 = (cte_t *)uVar20;

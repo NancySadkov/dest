@@ -3145,7 +3145,7 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
   entityIndex = EntityCount;
   while (entityIndex = entityIndex - 1, -1 < (int)entityIndex) {
     uVar3 = (uint16_t)((ulong)Entities >> 0x10);
-    if ((*(uint16_t *)((int)Entities + entityIndex * 0x37) == x) &&
+    if ((((entity_t *)Entities)[entityIndex].base.x == x) &&
        (((entity_t *)Entities)[entityIndex].base.y == y)) {
       iStack_6 = ovc23_findClearColumn(x,y);
       uVar3 = (uint16_t)((ulong)Entities >> 0x10);
@@ -3165,7 +3165,7 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
         ovr_ovc15_removeEntity(entityIndex);
       }
       else {
-        *(int *)((int)Entities + entityIndex * 0x37) = iStack_6;
+        ((entity_t *)Entities)[entityIndex].base.x = iStack_6;
       }
     }
   }

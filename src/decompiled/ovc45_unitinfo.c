@@ -70,7 +70,7 @@ uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIn
   
   bStack_3 = 0xff;
   for (uVar3 = 0; uVar3 < EntityCount; uVar3 = uVar3 + 1) {
-    uVar1 = ovr_alignUp4(*(int *)((int)Entities + uVar3 * 0x37),0,0);
+    uVar1 = ovr_alignUp4(((entity_t *)Entities)[uVar3].base.x,0,0);
     if (uVar1 == x) {
       uVar4 = (uint16_t)((ulong)Entities >> 0x10);
       iVar2 = (int)Entities;
@@ -122,7 +122,7 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
   uVar5 = 0xffff;
   uStack_4 = 0xffff;
   for (uVar4 = 0; uVar4 < EntityCount; uVar4 = uVar4 + 1) {
-    uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar4 * 0x37),0,0);
+    uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar4].base.x,0,0);
     if (uVar2 == uVar1) {
       uVar6 = (uint16_t)((ulong)Entities >> 0x10);
       iVar3 = (int)Entities;
@@ -4019,7 +4019,7 @@ uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
   uint16_t uVar6;
   
   uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-  if (*(char *)((int)Entities + entityIndex * 0x37 + 0x1a) == -1) {
+  if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) == -1) {
     uVar3 = entityIndex * 0x37 & 0xff00;
   }
   else {
@@ -4374,7 +4374,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
       bVar3 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
       pcStack_16 = ovr_ovc22_textPOPULATION(bStack_11,bVar3,(agnt_t *)agnt,bVar3,(char)GfxRndSeed2);
       uVar14 = 0x10;
-      partyIndex = *(uint8_t *)((int)Entities + entityIndex * 0x37 + 0x1a);
+      partyIndex = *(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
       uStack_18 = ovr_ovc22_seasonalIncome(bStack_11,partyIndex,partyIndex,agnt,(char)GfxRndSeed2);
       ovc45_compute6((uint16_t)pcStack_16);
       pcVar4 = ovr_fmVsprintf("Forest claimed. This forest creates %d gold of income and feeds %d %s."
