@@ -1290,3 +1290,41 @@ Next step: give the manager a name it can open - fill `__EXENAME__` from
 `argv[0]` in `startx` (or pass a far pointer to a DGROUP "STRONG.EXE"), and make
 the DOS buffer allocation's carry flag observable so a failed AH=48h cannot be
 mistaken for a manager hang.
+
+### BREAKTHROUGH: `__OVRINIT` now succeeds and `init_game` is called
+
+Two instrumentation defects had been hiding the truth:
+
+1. **BCC's inline assembler rejects `0xNNh`** when a hex letter precedes the `h`
+   suffix (`mov ax,0x4c5ah` is a compile error, `mov ax,4C5Ah` is fine).  A probe
+   built on the broken form linked a stale object and looked like a hang.
+2. **`RUN.LOG` only grows when the program exits** - the shell closes its
+   redirection file then.  A hanging probe therefore reports 0 bytes even though
+   its `AH=40h` write succeeded.  Markers now go to `DBG.TXT` opened, appended
+   and *closed* per write, so they survive a hang (`st_dbg()`).
+
+With those fixed, the manager initialises correctly:
+
+```
+DBG.TXT = "A0I"
+
+  A  DOS AH=48h allocation of 128 KiB succeeded (carry clear)
+  0  _OVRINIT returned INIT_OKAY
+  I  main reached the ovr_init_game() call site
+  -  no 'J': init_game does not return
+```
+
+So the whole VROOMM bootstrap works now:
+
+* `_OVRINIT((char far *)"STRONG.EXE", end, beg)` - the **far** name is the fix;
+  `__EXENAME__` is still empty because `__setargv` is a stub;
+* INT 3Fh is installed by the manager, `FBOV` is found, the segment table is read;
+* `main` proceeds to `lcall ovr_init_game` and the manager takes over.
+
+The failure has moved one level deeper: it is now inside the overlay load for
+`init_game` (O09), not in the manager's initialisation.
+
+Next step: find where the first overlay load stops.  Either the manager's INT 3Fh
+handler is entered and the block read hangs, or the handler is not entered at all;
+reading the installed vector after `_OVRINIT` and marking inside the manager's
+`__OvrReadOvrDisk` path will separate those two.
