@@ -185,7 +185,7 @@ void __cdecl16far init_assets2(bool grab)
   far_t src_72;
   far_t src_73;
   far_t src_74;
-  stg_tmp_t *psStack_a;
+  stg_tmp_t *lbmFar;
   uint8_t *puStack_8;
   
   if (grab) {
@@ -208,7 +208,7 @@ void __cdecl16far init_assets2(bool grab)
   ovr_stshStubifyCopy1to0(0xe9);
   if (grab) {
     lbmTmp = ovr_grabLbmTR(527);
-    psStack_a = (stg_tmp_t *)CONCAT22(in_DX,lbmTmp);
+    lbmFar = (stg_tmp_t *)CONCAT22(in_DX,lbmTmp);
   }
   i = 0;
   while( true ) {
@@ -216,8 +216,8 @@ void __cdecl16far init_assets2(bool grab)
     if (grab) {
       uVar4 = (uint16_t)((ulong)((long)i * 100) >> 0x10);
       pixels_01.seg = (int)((long)i * 100) + 0x14;
-      pixels_01.ofs = (psStack_a->aptr).seg;
-      pfVar2 = ovr_stshRleType2((far_t far *)(&psStack_a->aptr)->ofs,pixels_01,33,i * 100 + 99,116,10,28,(int16_t)unaff_DI,0x1c,0);
+      pixels_01.ofs = (lbmFar->aptr).seg;
+      pfVar2 = ovr_stshRleType2((far_t far *)(&lbmFar->aptr)->ofs,pixels_01,33,i * 100 + 99,116,10,28,(int16_t)unaff_DI,0x1c,0);
       stored = ovr_stshStoreFile((uint8_t *)pfVar2,(char)uVar4);
       *(uint16_t *)((int)&BldGfxNormal[1].seg + (i + 0xec) * 0xc) = uVar4;
       ((far_t far *)(BldGfxNormal + 1) + (i + 0xec) * 3)->ofs = (uint16_t)stored;
@@ -238,9 +238,9 @@ void __cdecl16far init_assets2(bool grab)
     i = i + 1;
   }
   if (grab) {
-    ovr_stgFreeTmp(psStack_a,(char)((ulong)psStack_a >> 0x10));
+    ovr_stgFreeTmp(lbmFar,(char)((ulong)lbmFar >> 0x10));
     lbmTmp = ovr_grabLbmTR(528);
-    psStack_a = (stg_tmp_t *)CONCAT22(in_DX,lbmTmp);
+    lbmFar = (stg_tmp_t *)CONCAT22(in_DX,lbmTmp);
   }
   i = 0;
   while( true ) {
@@ -248,8 +248,8 @@ void __cdecl16far init_assets2(bool grab)
     if (grab) {
       uVar4 = (uint16_t)((ulong)((long)i * 100) >> 0x10);
       pixels_02.seg = (int)((long)i * 100) + 0x14;
-      pixels_02.ofs = (psStack_a->aptr).seg;
-      pfVar2 = ovr_stshRleType2((far_t far *)(&psStack_a->aptr)->ofs,pixels_02,33,i * 100 + 99,116,10,28,(int16_t)unaff_DI,0x1c,0);
+      pixels_02.ofs = (lbmFar->aptr).seg;
+      pfVar2 = ovr_stshRleType2((far_t far *)(&lbmFar->aptr)->ofs,pixels_02,33,i * 100 + 99,116,10,28,(int16_t)unaff_DI,0x1c,0);
       stored = ovr_stshStoreFile((uint8_t *)pfVar2,(char)uVar4);
       *(uint16_t *)((int)&BldGfxRuin[1].seg + (i + 0xec) * 0xc) = uVar4;
       ((far_t far *)(BldGfxRuin + 1) + (i + 0xec) * 3)->ofs = (uint16_t)stored;
@@ -263,12 +263,12 @@ void __cdecl16far init_assets2(bool grab)
     i = i + 1;
   }
   if (grab) {
-    ovr_stgFreeTmp(psStack_a,(char)((ulong)psStack_a >> 0x10));
+    ovr_stgFreeTmp(lbmFar,(char)((ulong)lbmFar >> 0x10));
   }
   ovr_stshStubifyCopy1to0(0xec);
   if (grab) {
     lbmTmp = ovr_grabLbmTR(529);
-    psStack_a = (stg_tmp_t *)CONCAT22(in_DX,lbmTmp);
+    lbmFar = (stg_tmp_t *)CONCAT22(in_DX,lbmTmp);
     pixels_03.seg = 0;
     pixels_03.ofs = (lbmTmp->aptr).seg;
     uVar5 = in_DX;
@@ -486,7 +486,7 @@ void __cdecl16far init_assets2(bool grab)
     nwpanel1Cut5Seg =(uint16_t)( tmpSeg);
     ovr_stgFreeTmp(lbmTmp,(char)segArg);
     lbmTmp = ovr_grabLbm(12,0,0,0,0);
-    psStack_a = (stg_tmp_t *)CONCAT22(tmpSeg,lbmTmp);
+    lbmFar = (stg_tmp_t *)CONCAT22(tmpSeg,lbmTmp);
     segArg = (uint16_t)(tmpSeg);
     for (i = 0; i < 4; i = i + 1) {
       uVar4 = (uint16_t)((ulong)((long)i * 0xe) >> 0x10);
@@ -785,7 +785,7 @@ void __cdecl16far init_assets2(bool grab)
     }
     ovr_stgFreeTmp(lbmTmp,(char)tmpSeg);
     lbmTmp = ovr_grabLbm(535,0,0,0,0);
-    psStack_a = (stg_tmp_t *)CONCAT22(segArg2,lbmTmp);
+    lbmFar = (stg_tmp_t *)CONCAT22(segArg2,lbmTmp);
     segArg = (uint16_t)(segArg2);
     for (i = 0; i < 7; i = i + 1) {
       segArg = (uint8_t *)((ulong)((long)i * 0x1b) >> 0x10);
@@ -924,7 +924,7 @@ void __cdecl16far init_assets2(bool grab)
   }
   if (grab) {
     lbmTmp = ovr_grabLbm(35,0,0,0,0);
-    psStack_a = (stg_tmp_t *)CONCAT22(segArg,lbmTmp);
+    lbmFar = (stg_tmp_t *)CONCAT22(segArg,lbmTmp);
   }
   i = 0;
   while( true ) {
@@ -932,8 +932,8 @@ void __cdecl16far init_assets2(bool grab)
     if (grab) {
       segArg = (uint8_t *)((ulong)((long)i * 0x16) >> 0x10);
       pixels_00.seg = (uint16_t)((long)i * 0x16);
-      pixels_00.ofs = (psStack_a->aptr).seg;
-      pfVar2 = ovr_stshRleType2((far_t far *)(&psStack_a->aptr)->ofs,pixels_00,0,i * 0x16 + 0x15,14,11,7,(int16_t)unaff_DI,7,0);
+      pixels_00.ofs = (lbmFar->aptr).seg;
+      pfVar2 = ovr_stshRleType2((far_t far *)(&lbmFar->aptr)->ofs,pixels_00,0,i * 0x16 + 0x15,14,11,7,(int16_t)unaff_DI,7,0);
       stored = ovr_stshStoreFile((uint8_t *)pfVar2,(char)segArg);
       ((uint16_t *)&boltSpritesSeg)[i * 2] = (uint16_t)(segArg);
       ((uint16_t *)&boltSpritesOfs)[i * 2] = (uint16_t)(stored);
@@ -946,7 +946,7 @@ void __cdecl16far init_assets2(bool grab)
     i = i + 1;
   }
   if (grab) {
-    ovr_stgFreeTmp(psStack_a,(char)((ulong)psStack_a >> 0x10));
+    ovr_stgFreeTmp(lbmFar,(char)((ulong)lbmFar >> 0x10));
     lbmTmp = ovr_grabLbm(8,0,0,0,0);
     src_17.seg = 0;
     src_17.ofs = (lbmTmp->aptr).seg;

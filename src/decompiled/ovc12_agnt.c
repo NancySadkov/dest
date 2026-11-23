@@ -219,121 +219,121 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,ui
 undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
 
 {
-  uint8_t uVar1;
+  uint8_t factionId;
   uint16_t uVar2;
-  int iVar3;
-  uint32_t uVar4;
+  int frameOfs;
+  uint32_t gdataFar;
   bool bVar5;
-  undefined1 uVar6;
+  undefined1 result;
   int iVar7;
-  int *piVar8;
+  int *framePtr;
   uint16_t in_stack_0000000a;
   char in_stack_0000000c;
-  char cStack_e;
-  char cStack_d;
-  int iStack_c;
-  int iStack_a;
-  int iStack_8;
-  int iStack_6;
+  char rowDir;
+  char levelSign;
+  int colB;
+  int colA;
+  int rowOff;
+  int baseRow;
   
   if (((agnt->strength < agnt->strengthMax) && ((agnt->flags & 0x820) == 0)) &&
      ((((agntG_t *)agnt->gdata)->flags & 0x20) == 0)) {
     *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) = in_stack_0000000c + 1;
-    uVar6 = 1;
+    result = 1;
   }
   else {
-    uVar1 = agnt->faction;
+    factionId = agnt->faction;
     uVar2 = *(uint16_t *)((int)&agnt->frames + 2);
-    piVar8 = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
-    iVar7 = piVar8[1];
-    iVar3 = *piVar8;
-    iStack_6 = (int)agnt->y >> 1;
-    if (iStack_6 < 0) {
-      iStack_6 = 0;
+    framePtr = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
+    iVar7 = framePtr[1];
+    frameOfs = *framePtr;
+    baseRow = (int)agnt->y >> 1;
+    if (baseRow < 0) {
+      baseRow = 0;
     }
-    if (9 < iStack_6) {
-      iStack_6 = 9;
+    if (9 < baseRow) {
+      baseRow = 9;
     }
     if (agnt->level == 0x0) {
-      cStack_d = '\x01';
-      iStack_a = ((int)((int)(*((agntG_t *)agnt->gdata)->extents)[0] + *(int *)(iVar3 + 0x17) +
+      levelSign = '\x01';
+      colA = ((int)((int)(*((agntG_t *)agnt->gdata)->extents)[0] + *(int *)(frameOfs + 0x17) +
                        ((agnt_t *)CONCAT22((byte *)out,agnt))->x) >> 1) + -1;
-      iStack_c = iStack_a +
+      colB = colA +
                  ((int)((agntG_t *)agnt->gdata)->extents[0][1] -
                   (int)(*((agntG_t *)agnt->gdata)->extents)[0] >> 1);
     }
     else {
-      cStack_d = -1;
-      iStack_a = ((int)((-*(int *)(iVar3 + 0x17) - (int)(*((agntG_t *)agnt->gdata)->extents)[0]) +
+      levelSign = -1;
+      colA = ((int)((-*(int *)(frameOfs + 0x17) - (int)(*((agntG_t *)agnt->gdata)->extents)[0]) +
                        ((agnt_t *)CONCAT22((byte *)out,agnt))->x) >> 1) + 1;
-      iStack_c = iStack_a -
+      colB = colA -
                  ((int)((agntG_t *)agnt->gdata)->extents[0][1] -
                   (int)(*((agntG_t *)agnt->gdata)->extents)[0] >> 1);
     }
-    if (iStack_a < 0) {
-      iStack_a = 0;
+    if (colA < 0) {
+      colA = 0;
     }
-    if (iStack_c < 0) {
-      iStack_c = 0;
+    if (colB < 0) {
+      colB = 0;
     }
-    if (0x68 < iStack_a) {
-      iStack_a = 0x68;
+    if (0x68 < colA) {
+      colA = 0x68;
     }
-    if (0x68 < iStack_c) {
-      iStack_c = 0x68;
+    if (0x68 < colB) {
+      colB = 0x68;
     }
-    for (; iStack_a != iStack_c; iStack_a = iStack_a + cStack_d) {
-      for (iStack_8 = 0; iStack_8 <= (int)((agntG_t *)agnt->gdata)->extents[0][2] >> 1;
-          iStack_8 = iStack_8 + 1) {
-        cStack_e = -1;
-        while (((cStack_e < '\x02' && (iStack_8 != 0)) || ((cStack_e == -1 && (iStack_8 == 0))))) {
-          iVar7 = iStack_6 + iStack_8 * cStack_e;
+    for (; colA != colB; colA = colA + levelSign) {
+      for (rowOff = 0; rowOff <= (int)((agntG_t *)agnt->gdata)->extents[0][2] >> 1;
+          rowOff = rowOff + 1) {
+        rowDir = -1;
+        while (((rowDir < '\x02' && (rowOff != 0)) || ((rowDir == -1 && (rowOff == 0))))) {
+          iVar7 = baseRow + rowOff * rowDir;
           if ((-1 < iVar7) && (iVar7 < 10)) {
-            if ((AgntArrayA[iVar7][iStack_a] != '\0') &&
-               ((((AgntArrayA[iVar7][iStack_a] <= AgntCount &&
-                  (Agnts[AgntArrayA[iVar7][iStack_a] - 1].strength <
-                   Agnts[AgntArrayA[iVar7][iStack_a] - 1].strengthMax)) &&
-                 (Agnts[AgntArrayA[iVar7][iStack_a] - 1].faction ==
-                  uVar1)) &&
+            if ((AgntArrayA[iVar7][colA] != '\0') &&
+               ((((AgntArrayA[iVar7][colA] <= AgntCount &&
+                  (Agnts[AgntArrayA[iVar7][colA] - 1].strength <
+                   Agnts[AgntArrayA[iVar7][colA] - 1].strengthMax)) &&
+                 (Agnts[AgntArrayA[iVar7][colA] - 1].faction ==
+                  factionId)) &&
                 ((*(uint8_t *)
-                   *(uint32_t far *)&Agnts[AgntArrayA[iVar7][iStack_a] - 1].gdata
-                  == uVar1 &&
-                 (uVar4 = *(uint32_t far *)&Agnts[AgntArrayA[iVar7][iStack_a] - 1].gdata,
-                 (*(uint *)((int)uVar4 + 0x3c) & 0x20) == 0)))))) {
+                   *(uint32_t far *)&Agnts[AgntArrayA[iVar7][colA] - 1].gdata
+                  == factionId &&
+                 (gdataFar = *(uint32_t far *)&Agnts[AgntArrayA[iVar7][colA] - 1].gdata,
+                 (*(uint *)((int)gdataFar + 0x3c) & 0x20) == 0)))))) {
               *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
-                   AgntArrayA[iVar7][iStack_a];
+                   AgntArrayA[iVar7][colA];
               bVar5 = agnt_compute4((char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))));
               if ((bVar5) &&
                  ((*(byte *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -0x13) <
                    *(byte *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -0x12) &&
                   ((*(uint *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -9) &
                    0x820) == 0)))) {
-                return AgntArrayA[iVar7][iStack_a];
+                return AgntArrayA[iVar7][colA];
               }
             }
-            if ((((AgntArrayB[iVar7][iStack_a] != '\0') &&
-                 (AgntArrayB[iVar7][iStack_a] <= AgntCount)) &&
-                (Agnts[AgntArrayB[iVar7][iStack_a] - 1].strength <
-                 Agnts[AgntArrayB[iVar7][iStack_a] - 1].strengthMax)) &&
-               (((Agnts[AgntArrayB[iVar7][iStack_a] - 1].faction ==
-                  uVar1 && (*(uint8_t *)
-                             *(uint32_t far *)&Agnts[AgntArrayB[iVar7][iStack_a] - 1].gdata ==
-                            uVar1)) &&
-                (uVar4 = *(uint32_t far *)&Agnts[AgntArrayB[iVar7][iStack_a] - 1].gdata,
-                (*(uint *)((int)uVar4 + 0x3c) & 0x20) == 0)))) {
+            if ((((AgntArrayB[iVar7][colA] != '\0') &&
+                 (AgntArrayB[iVar7][colA] <= AgntCount)) &&
+                (Agnts[AgntArrayB[iVar7][colA] - 1].strength <
+                 Agnts[AgntArrayB[iVar7][colA] - 1].strengthMax)) &&
+               (((Agnts[AgntArrayB[iVar7][colA] - 1].faction ==
+                  factionId && (*(uint8_t *)
+                             *(uint32_t far *)&Agnts[AgntArrayB[iVar7][colA] - 1].gdata ==
+                            factionId)) &&
+                (gdataFar = *(uint32_t far *)&Agnts[AgntArrayB[iVar7][colA] - 1].gdata,
+                (*(uint *)((int)gdataFar + 0x3c) & 0x20) == 0)))) {
               *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
-                   AgntArrayB[iVar7][iStack_a];
-              return AgntArrayB[iVar7][iStack_a];
+                   AgntArrayB[iVar7][colA];
+              return AgntArrayB[iVar7][colA];
             }
           }
-          cStack_e = cStack_e + '\x02';
+          rowDir = rowDir + '\x02';
         }
       }
     }
     *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) = 0;
-    uVar6 = 0;
+    result = 0;
   }
-  return uVar6;
+  return result;
 }
 
 
