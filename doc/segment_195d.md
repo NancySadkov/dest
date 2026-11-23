@@ -82,3 +82,41 @@ Per the project owner: the CRT and the VROOMM/overlay runtime are supplied by
 Turbo C and `OVERLAY.LIB`.  `scripts/model/unresolved.tsv` now marks the
 remaining entries accordingly (CRT, floating-point runtime, overlay trampoline),
 so no recovery time goes into them.
+
+## Correction: the literal is Ghidra constant-folding, not original code
+
+Searching the original image for the immediate:
+
+```
+mov ax,195Dh   0 occurrences
+mov ax,095Dh   0 occurrences
+push 195Dh     0 occurrences
+```
+
+**The original code never loads 0x195D.**  Ghidra substituted the known segment
+of the *data* (segment `195D` holds `BldGfxRuin` at `4230`, `BldGfxNormal`,
+`BuildingTypes`, `EntityTypeSeg`, `ProjectileAnms`) wherever it could prove the
+pointer's segment, and the recovered C therefore shows a constant where the
+original computes or loads the value at run time.
+
+That changes the fix:
+
+* it is **not** a "stale copy of the original literal" that can be swapped for a
+  symbol — there is no literal to swap;
+* the correct code is whatever the original executed at that site, which is
+  either `mov ax,es` (the current data segment), the return of
+  `ovr_stshStoreFile`/`ovr_stshAlloc`, or a value read from a variable.
+
+Consequences for the plan:
+
+1. Each of the 706 sites needs its own disassembly check.  A first attempt to
+   locate the store for `BldGfxNormal[0xc].seg` by its absolute displacement
+   (`26 A3 62 42` / `26 89 06 62 42`) found nothing, so the original store goes
+   through a computed register — the addressing has to be followed from the
+   surrounding code rather than pattern-matched.
+2. A blanket `0x195d -> startxDseg` replacement would be wrong twice over: the
+   tables are not in DGROUP, and some sites do not store a constant at all.
+
+Priority should therefore go to the sites that are provably constant (a run of
+`BldGfxNormal[i].seg = <same var>` after `uVar = 0x195d`), and the rest left until
+their disassembly is read.
