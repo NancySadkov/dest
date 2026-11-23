@@ -2899,30 +2899,30 @@ char __cdecl16far ovc22_compute3(char direction)
 void __cdecl16far ovc22_usesEntities2(int entityIndex)
 
 {
-  int *piVar1;
-  byte bVar2;
-  uint32_t uVar3;
-  byte bVar4;
-  char cVar5;
-  char cVar6;
-  uint16_t uVar7;
-  char cStack_5;
+  int *budgetPtr;
+  byte partyId;
+  uint32_t gdataPtr;
+  byte dirLevel;
+  char ringBase;
+  char innerDir;
+  uint16_t entSeg;
+  char budgetIdx;
   
-  uVar7 = (uint16_t)((ulong)Entities >> 0x10);
+  entSeg = (uint16_t)((ulong)Entities >> 0x10);
   if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) != -1) {
-    bVar4 = ovr_agnt_compute8((agnt_t *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),uVar7);
-    bVar2 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
-    for (cStack_5 = '\0'; cStack_5 < '\x03'; cStack_5 = cStack_5 + '\x01') {
-      uVar3 = *(uint32_t *)((uint)bVar2 << 2);
-      if ((*(int *)((int)uVar3 + cStack_5 * 2 + 0x6a) != 0) && ((char)bVar4 < cStack_5)) {
-        uVar3 = *(uint32_t *)((uint)bVar2 << 2);
-        piVar1 = (int *)((int)uVar3 + cStack_5 * 2 + 0x6a);
-        *piVar1 = *piVar1 + -1;
-        uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-        cVar5 = ((entity_t *)Entities)[entityIndex].dir -
+    dirLevel = ovr_agnt_compute8((agnt_t *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),entSeg);
+    partyId = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+    for (budgetIdx = '\0'; budgetIdx < '\x03'; budgetIdx = budgetIdx + '\x01') {
+      gdataPtr = *(uint32_t *)((uint)partyId << 2);
+      if ((*(int *)((int)gdataPtr + budgetIdx * 2 + 0x6a) != 0) && ((char)dirLevel < budgetIdx)) {
+        gdataPtr = *(uint32_t *)((uint)partyId << 2);
+        budgetPtr = (int *)((int)gdataPtr + budgetIdx * 2 + 0x6a);
+        *budgetPtr = *budgetPtr + -1;
+        entSeg = (uint16_t)((ulong)Entities >> 0x10);
+        ringBase = ((entity_t *)Entities)[entityIndex].dir -
                 ((entity_t *)Entities)[entityIndex].dir % 6;
-        cVar6 = ovc22_compute3(cStack_5);
-        ((entity_t *)Entities)[entityIndex].dir = cVar5 + cVar6;
+        innerDir = ovc22_compute3(budgetIdx);
+        ((entity_t *)Entities)[entityIndex].dir = ringBase + innerDir;
         return;
       }
     }
@@ -2940,45 +2940,45 @@ void __cdecl16far ovc22_usesEntities2(int entityIndex)
 void __cdecl16far ovc22_usesEntities3(int entityIndex)
 
 {
-  int *piVar1;
+  int *budgetPtr;
   byte bVar2;
-  uint32_t uVar3;
-  byte bVar4;
-  char cVar5;
+  uint32_t gdataPtr;
+  byte dirLevel;
+  char innerDir;
   int iVar6;
-  uint16_t uVar7;
-  char cStack_7;
-  char cStack_6;
+  uint16_t entSeg;
+  char chosenIdx;
+  char budgetIdx;
   
-  uVar7 = (uint16_t)((ulong)Entities >> 0x10);
+  entSeg = (uint16_t)((ulong)Entities >> 0x10);
   if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) != -1) {
-    bVar4 = ovr_agnt_compute10((agnt_t *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),uVar7);
+    dirLevel = ovr_agnt_compute10((agnt_t *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),entSeg);
     bVar2 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
-    for (cStack_6 = '\0'; cStack_6 < '\x04'; cStack_6 = cStack_6 + '\x01') {
-      uVar3 = *(uint32_t *)((uint)bVar2 << 2);
-      if ((*(int *)((int)uVar3 + cStack_6 * 2 + 0x76) != 0) && ((int)(char)bVar4 < cStack_6 + 1)) {
-        cStack_7 = cStack_6;
-        uVar3 = *(uint32_t *)((uint)bVar2 << 2);
-        piVar1 = (int *)((int)uVar3 + cStack_6 * 2 + 0x76);
-        *piVar1 = *piVar1 + -1;
-        uVar7 = (uint16_t)((ulong)Entities >> 0x10);
+    for (budgetIdx = '\0'; budgetIdx < '\x04'; budgetIdx = budgetIdx + '\x01') {
+      gdataPtr = *(uint32_t *)((uint)bVar2 << 2);
+      if ((*(int *)((int)gdataPtr + budgetIdx * 2 + 0x76) != 0) && ((int)(char)dirLevel < budgetIdx + 1)) {
+        chosenIdx = budgetIdx;
+        gdataPtr = *(uint32_t *)((uint)bVar2 << 2);
+        budgetPtr = (int *)((int)gdataPtr + budgetIdx * 2 + 0x76);
+        *budgetPtr = *budgetPtr + -1;
+        entSeg = (uint16_t)((ulong)Entities >> 0x10);
         iVar6 = (int)Entities;
         ((entity_t *)iVar6)[entityIndex].dir =
              ((entity_t *)iVar6)[entityIndex].dir +
              (char)(((ulong)((entity_t *)iVar6)[entityIndex].dir / 6) % 6) * -6;
         bVar2 = ((entity_t *)Entities)[entityIndex].base.gindex;
         if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar2 * 0x95) == '\x03') &&
-           ('\x01' < cStack_6)) {
-          cStack_7 = '\x01';
+           ('\x01' < budgetIdx)) {
+          chosenIdx = '\x01';
         }
         if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar2 * 0x95) == '\x01') &&
-           ('\x02' < cStack_7)) {
-          cStack_7 = '\x02';
+           ('\x02' < chosenIdx)) {
+          chosenIdx = '\x02';
         }
-        cVar5 = ovc22_compute3(cStack_7 + '\x01');
-        uVar7 = (uint16_t)((ulong)Entities >> 0x10);
+        innerDir = ovc22_compute3(chosenIdx + '\x01');
+        entSeg = (uint16_t)((ulong)Entities >> 0x10);
         ((entity_t *)Entities)[entityIndex].dir =
-             ((entity_t *)Entities)[entityIndex].dir + cVar5 * '\x06';
+             ((entity_t *)Entities)[entityIndex].dir + innerDir * '\x06';
         return;
       }
     }
