@@ -1246,3 +1246,47 @@ Give the process its real environment: `startx` already reads PSP[0x2C] into
 the fake block, then retry `_OVRPREPARE()`.  If the abort persists, initialise
 the far heap before the call (C0's `__setupfarheap` equivalent) so `_farmalloc`
 can supply the overlay buffer.
+
+### Localised: `__OVRINIT` returns INIT_NOEXE - it cannot open our own EXE
+
+Tracing `__OVRINIT` instruction by instruction with INT 60h markers
+(`tmp/trace_ovrpath.py`) gives a definite answer:
+
+```
+call __OvrExeOpenEnv       reached
+call __OvrExeOpenFilename  reached
+call __OvrExeOpenEnvPath   reached
+mov ax,0xfffe (INIT_NOEXE) reached      <- all three opens failed
+success path               NOT reached
+```
+
+So the manager runs, checks `__OVRTRAP__` (present: `cd 3f ...` at
+`_OVRDATA_:00A0`), and then fails to open the executable.  `__OvrPrepare`
+therefore calls `abort()` - which is exactly the exit code 3 observed.
+
+Why each open fails:
+
+* `__OvrExeOpenEnv` walks the real DOS environment for the command line DOS
+  appends after the double NUL; it needs DOS >= 3 and that appended path.
+* `__OvrExeOpenFilename` uses `__EXENAME__`, which C0 fills from `argv[0]`.
+  Our `__setargv` is still a stub, so the buffer is empty.
+* `__OvrExeOpenEnvPath` needs a `PATH=` variable; the harness environment has
+  none, and the reference code's scan can run past the end of the block.
+
+Two concrete defects found on the way:
+
+1. **`exename` is a far pointer.**  `__OVRINIT` reads `[bp+6]`/`[bp+8]` as
+   ofs:seg, but the prototype used `char *` - near in medium model - so the
+   segment half was garbage.  The prototype must be `char far *`.
+2. **`__EXENAME__` is empty.**  Filling it (or passing a valid far name) is the
+   direct fix; recovering `__setargv` is the faithful one.
+
+Also verified: the manager's data segment load `mov ds, word ptr cs:[0]` reads a
+word that **is** relocated (`0x1369` = `_OVRDATA_`), and `FBOV` sits exactly at
+the paragraph-aligned end of the load image (`0x22280`), so neither the segment
+setup nor the FBOV search is at fault.
+
+Next step: give the manager a name it can open - fill `__EXENAME__` from
+`argv[0]` in `startx` (or pass a far pointer to a DGROUP "STRONG.EXE"), and make
+the DOS buffer allocation's carry flag observable so a failed AH=48h cannot be
+mistaken for a manager hang.
