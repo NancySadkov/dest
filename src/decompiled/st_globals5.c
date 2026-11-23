@@ -2175,6 +2175,7 @@ uint16_t tmstrsSprites9Ofs = 0x0000;
 uint16_t tmstrsSprites9Seg = 0x0000;
 undefined1 cursorRecordFound = 0x00;
 uint16_t GRecordCount = 0x0000;
+uint16_t stshSegTmp;   /* segment returned by the last stsh_store call */
 undefined1 strongholdCheckPending = 0x00;
 uint16_t GYear = 0x0000;
 undefined1 PlayerCount = 0x00;
