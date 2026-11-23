@@ -365,19 +365,19 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
 {
   char cVar1;
   void *pvVar2;
-  char *pcVar3;
+  char *textPtr;
   uint16_t uVar4;
   uint uVar5;
   uint8_t *in_DX;
-  int iVar6;
+  int signWord;
   char_sheet_t *sheet_00;
   int iVar7;
   uint16_t uVar8;
   char *pcVar9;
   uint16_t uVar10;
-  undefined1 uVar11;
+  undefined1 loByte;
   uint8_t uVar12;
-  undefined1 uVar13;
+  undefined1 hiByte;
   char textBuf [120];
   uint8_t msg;
   byte statMask;
@@ -407,11 +407,11 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
   TextBlitY = 0xc;
   if ((statMask & 2) != 0) {
     TextBlitX = 0x15;
-    uVar11 = (undefined1)Font02.ofs;
-    uVar13 = (undefined1)(Font02.ofs >> 8);
-    pcVar3 = manage_playerTitle(sheet_00,pcVar9,uVar11,(char)Font02.seg);
-    textWidth = ovr_font_textWidth(pcVar3,(char *)CONCAT13(uVar13,CONCAT12(uVar11,in_DX)),0,0,0);
-    uVar11 = 0x50;
+    loByte = (undefined1)Font02.ofs;
+    hiByte = (undefined1)(Font02.ofs >> 8);
+    textPtr = manage_playerTitle(sheet_00,pcVar9,loByte,(char)Font02.seg);
+    textWidth = ovr_font_textWidth(textPtr,(char *)CONCAT13(hiByte,CONCAT12(loByte,in_DX)),0,0,0);
+    loByte = 0x50;
     uVar12 = 0xde;
     cVar1 = (char)(0x7d - textWidth);
     uVar8 = Font02.ofs;
@@ -419,178 +419,178 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     iVar7 = ovr_ovc45_compute9((char *)&msg,(char *)CONCAT22(sheet_00,_SS),
                                (char *)CONCAT22(Font02.ofs,pcVar9),Font02.seg,cVar1,cVar1,3);
     pvVar2 = manage_playerTitle(sheet_00,pcVar9,(char)iVar7,in_DX);
-    pcVar3 = ovr_stsprintf(textBuf,(char *)CONCAT22(0x4cd4,_SS),
+    textPtr = ovr_stsprintf(textBuf,(char *)CONCAT22(0x4cd4,_SS),
                            (char *)CONCAT22(pvVar2,(char *)0x26510),in_DX);
-    ovr_blitLabel(pcVar3,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,uVar12,uVar12,uVar11);
+    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,uVar12,uVar12,loByte);
   }
   if ((statMask & 4) != 0) {
-    uVar11 = 0x50;
+    loByte = 0x50;
     uVar12 = 0xde;
     uVar8 = Font02.ofs;
     uVar10 = Font02.seg;
-    pcVar3 = ovr_fmVsprintf("%s ",(char *)CONCAT22(*(uint16_t *)
+    textPtr = ovr_fmVsprintf("%s ",(char *)CONCAT22(*(uint16_t *)
                                                     ((int)&GAlignmentsNames[0].seg +
                                                     (uint)sheet_00->alignment * 4),
                                                    (char *)((far_t *)GAlignmentsNames +
                                                            sheet_00->alignment)->ofs));
-    ovr_blitLabel(pcVar3,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,uVar12,uVar12,uVar11);
+    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,uVar12,uVar12,loByte);
   }
   if ((statMask & 1) != 0) {
-    uVar11 = 0x50;
+    loByte = 0x50;
     uVar12 = 0xde;
     iVar7 = (uint)sheet_00->cls * 4;
     in_DX = (uint8_t *)((char *)0x26510);
     uVar8 = Font02.ofs;
     uVar10 = Font02.seg;
-    pcVar3 = ovr_fmVsprintf("%s",(char *)CONCAT22(*(uint16_t *)(iVar7 + 0xed),
+    textPtr = ovr_fmVsprintf("%s",(char *)CONCAT22(*(uint16_t *)(iVar7 + 0xed),
                                                   (char *)*(uint16_t *)(iVar7 + 0xeb)));
-    ovr_blitLabel(pcVar3,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,uVar12,uVar12,uVar11);
+    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,uVar12,uVar12,loByte);
   }
   TextBlitY = TextBlitY + 10;
   if (((statMask & 0x40) != 0) || (DebugVerbose != false)) {
     TextBlitX = 0x37;
     ovr_blitLabel((char *)"Population",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                   Font02.seg,0xde,0xde,0xe0);
-    uVar11 = 0x7d;
-    uVar13 = 0;
-    pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4cd1,_SS),
+    loByte = 0x7d;
+    hiByte = 0;
+    textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4cd1,_SS),
                            (char *)CONCAT13((char)((uint)sheet_00->population >> 8),
                                             CONCAT12((char)sheet_00->population,0x2410)));
     manage_blitLabelRight
-              ((char *)CONCAT13((char)((uint)in_DX >> 8),CONCAT12((char)in_DX,pcVar3)),
-               CONCAT11(uVar13,uVar11));
+              ((char *)CONCAT13((char)((uint)in_DX >> 8),CONCAT12((char)in_DX,textPtr)),
+               CONCAT11(hiByte,loByte));
     TextBlitX = 0x82;
     ovr_ovc22_textRingProt(sheet_00->charIndex);
     ovr_blitLabel((char *)"Food prod.",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                   Font02.seg,0xde,0xde,0xe0);
-    uVar11 = 0xdc;
-    uVar13 = 0;
-    pcVar3 = litoa10(textBuf,(long)CONCAT22(sheet_00->foodProd,_SS),0,0);
+    loByte = 0xdc;
+    hiByte = 0;
+    textPtr = litoa10(textBuf,(long)CONCAT22(sheet_00->foodProd,_SS),0,0);
     manage_blitLabelRight
-              ((char *)CONCAT13((char)((uint)in_DX >> 8),CONCAT12((char)in_DX,pcVar3)),
-               CONCAT11(uVar13,uVar11));
+              ((char *)CONCAT13((char)((uint)in_DX >> 8),CONCAT12((char)in_DX,textPtr)),
+               CONCAT11(hiByte,loByte));
     TextBlitY = TextBlitY + 10;
     TextBlitX = 0x82;
     ovr_blitLabel((char *)"Food stored",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                   Font02.seg,0xde,0xde,0xe0);
-    uVar11 = 0xdc;
-    uVar13 = 0;
-    pcVar3 = litoa10(textBuf,(long)CONCAT22((int)sheet_00->foodStored,_SS),(char)*(uint16_t *)((int)&sheet_00->foodStored + 2),0);
+    loByte = 0xdc;
+    hiByte = 0;
+    textPtr = litoa10(textBuf,(long)CONCAT22((int)sheet_00->foodStored,_SS),(char)*(uint16_t *)((int)&sheet_00->foodStored + 2),0);
     manage_blitLabelRight
-              ((char *)CONCAT13((char)((uint)in_DX >> 8),CONCAT12((char)in_DX,pcVar3)),
-               CONCAT11(uVar13,uVar11));
+              ((char *)CONCAT13((char)((uint)in_DX >> 8),CONCAT12((char)in_DX,textPtr)),
+               CONCAT11(hiByte,loByte));
     TextBlitY = TextBlitY + 10;
     TextBlitX = 0x37;
     ovr_blitLabel((char *)"Housing",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                   Font02.seg,0xde,0xde,0xe0);
-    uVar11 = 0x7d;
-    uVar13 = 0;
-    pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4cd1,_SS),
+    loByte = 0x7d;
+    hiByte = 0;
+    textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4cd1,_SS),
                            (char *)CONCAT13((char)((uint)sheet_00->housing >> 8),
                                             CONCAT12((char)sheet_00->housing,0x2410)));
     manage_blitLabelRight
-              ((char *)CONCAT13((char)((uint)in_DX >> 8),CONCAT12((char)in_DX,pcVar3)),
-               CONCAT11(uVar13,uVar11));
+              ((char *)CONCAT13((char)((uint)in_DX >> 8),CONCAT12((char)in_DX,textPtr)),
+               CONCAT11(hiByte,loByte));
     TextBlitX = 0x82;
     ovr_blitLabel((char *)"Food storage",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                   Font02.seg,0xde,0xde,0xe0);
-    uVar11 = 0xdc;
-    uVar13 = 0;
-    pcVar3 = litoa10(textBuf,(long)CONCAT22((int)sheet_00->foodStorage,_SS),(char)*(uint16_t *)((int)&sheet_00->foodStorage + 2),0);
+    loByte = 0xdc;
+    hiByte = 0;
+    textPtr = litoa10(textBuf,(long)CONCAT22((int)sheet_00->foodStorage,_SS),(char)*(uint16_t *)((int)&sheet_00->foodStorage + 2),0);
     manage_blitLabelRight
-              ((char *)CONCAT13((char)((uint)in_DX >> 8),CONCAT12((char)in_DX,pcVar3)),
-               CONCAT11(uVar13,uVar11));
+              ((char *)CONCAT13((char)((uint)in_DX >> 8),CONCAT12((char)in_DX,textPtr)),
+               CONCAT11(hiByte,loByte));
     TextBlitY = TextBlitY + 0xf;
     if (sheet_00->maxTrade != 0) {
       TextBlitX = 0x37;
       if (sheet_00->foodSold < 0) {
         ovr_blitLabel((char *)"Food sold",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                       Font02.seg,0xde,0xde,0xe0);
-        uVar11 = 0x7d;
-        uVar13 = 0;
+        loByte = 0x7d;
+        hiByte = 0;
         iVar7 = -sheet_00->foodSold;
-        iVar6 = iVar7 >> 0xf;
-        pcVar3 = litoa10(textBuf,(long)CONCAT22(iVar7,_SS),(char)(iVar7 >> 0xf),0);
+        signWord = iVar7 >> 0xf;
+        textPtr = litoa10(textBuf,(long)CONCAT22(iVar7,_SS),(char)(iVar7 >> 0xf),0);
         manage_blitLabelRight
-                  ((char *)CONCAT13((char)((uint)iVar6 >> 8),CONCAT12((char)iVar6,pcVar3)),
-                   CONCAT11(uVar13,uVar11));
+                  ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
+                   CONCAT11(hiByte,loByte));
       }
       else {
         ovr_blitLabel((char *)"Food bought",
                       (uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),Font02.seg,0xde,0xde
                       ,0xe0);
-        uVar11 = 0x7d;
-        uVar13 = 0;
+        loByte = 0x7d;
+        hiByte = 0;
         iVar7 = sheet_00->foodSold;
-        iVar6 = iVar7 >> 0xf;
-        pcVar3 = litoa10(textBuf,(long)CONCAT22(iVar7,_SS),(char)(iVar7 >> 0xf),0);
+        signWord = iVar7 >> 0xf;
+        textPtr = litoa10(textBuf,(long)CONCAT22(iVar7,_SS),(char)(iVar7 >> 0xf),0);
         manage_blitLabelRight
-                  ((char *)CONCAT13((char)((uint)iVar6 >> 8),CONCAT12((char)iVar6,pcVar3)),
-                   CONCAT11(uVar13,uVar11));
+                  ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
+                   CONCAT11(hiByte,loByte));
       }
       TextBlitX = 0x82;
       ovr_blitLabel((char *)"Max. trade",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                     Font02.seg,0xde,0xde,0xe0);
-      uVar11 = 0xdc;
-      uVar13 = 0;
-      pcVar3 = litoa10(textBuf,(long)CONCAT22(sheet_00->maxTrade,_SS),0,0);
+      loByte = 0xdc;
+      hiByte = 0;
+      textPtr = litoa10(textBuf,(long)CONCAT22(sheet_00->maxTrade,_SS),0,0);
       manage_blitLabelRight
-                ((char *)CONCAT13((char)((uint)iVar6 >> 8),CONCAT12((char)iVar6,pcVar3)),
-                 CONCAT11(uVar13,uVar11));
+                ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
+                 CONCAT11(hiByte,loByte));
     }
     TextBlitY = TextBlitY + 0xf;
     TextBlitX = 0x37;
     ovr_blitLabel((char *)"Income",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                   Font02.seg,0xde,0xde,0xe0);
-    uVar11 = 0xdc;
-    uVar13 = 0;
+    loByte = 0xdc;
+    hiByte = 0;
     iVar7 = sheet_00->income;
-    iVar6 = iVar7 >> 0xf;
-    pcVar3 = litoa10((char *)&msg,(long)CONCAT22(iVar7,_SS),(char)(iVar7 >> 0xf),0);
+    signWord = iVar7 >> 0xf;
+    textPtr = litoa10((char *)&msg,(long)CONCAT22(iVar7,_SS),(char)(iVar7 >> 0xf),0);
     manage_blitLabelRight
-              ((char *)CONCAT13((char)((uint)iVar6 >> 8),CONCAT12((char)iVar6,pcVar3)),
-               CONCAT11(uVar13,uVar11));
+              ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
+               CONCAT11(hiByte,loByte));
     TextBlitY = TextBlitY + 10;
     TextBlitX = 0x37;
     ovr_blitLabel((char *)"Gold",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                   Font02.seg,0xde,0xde,0xe0);
-    uVar11 = 0xdc;
-    uVar13 = 0;
-    pcVar3 = litoa10((char *)&msg,(long)CONCAT22((int)sheet_00->gold,_SS),(char)*(uint16_t *)((int)&sheet_00->gold + 2),0);
+    loByte = 0xdc;
+    hiByte = 0;
+    textPtr = litoa10((char *)&msg,(long)CONCAT22((int)sheet_00->gold,_SS),(char)*(uint16_t *)((int)&sheet_00->gold + 2),0);
     manage_blitLabelRight
-              ((char *)CONCAT13((char)((uint)iVar6 >> 8),CONCAT12((char)iVar6,pcVar3)),
-               CONCAT11(uVar13,uVar11));
+              ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
+               CONCAT11(hiByte,loByte));
     TextBlitY = TextBlitY + 10;
     TextBlitX = 0x37;
     ovr_blitLabel((char *)"Vault storage",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                   Font02.seg,0xde,0xde,0xe0);
-    uVar11 = 0xdc;
-    uVar13 = 0;
-    pcVar3 = litoa10((char *)&msg,(long)CONCAT22((int)sheet_00->vaultStorage,_SS),(char)*(uint16_t *)((int)&sheet_00->vaultStorage + 2),0);
+    loByte = 0xdc;
+    hiByte = 0;
+    textPtr = litoa10((char *)&msg,(long)CONCAT22((int)sheet_00->vaultStorage,_SS),(char)*(uint16_t *)((int)&sheet_00->vaultStorage + 2),0);
     manage_blitLabelRight
-              ((char *)CONCAT13((char)((uint)iVar6 >> 8),CONCAT12((char)iVar6,pcVar3)),
-               CONCAT11(uVar13,uVar11));
+              ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
+               CONCAT11(hiByte,loByte));
     TextBlitY = TextBlitY + 10;
     TextBlitX = 0x37;
     ovr_blitLabel((char *)"Fund Access",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                   Font02.seg,0xde,0xde,0xe0);
-    uVar11 = 0xdc;
-    uVar13 = 0;
+    loByte = 0xdc;
+    hiByte = 0;
     uVar4 = ovr_ovc45_usesLDIV_at_(sheet_00->charIndex,0,0);
-    pcVar3 = litoa10(textBuf,(long)CONCAT22(uVar4,_SS),(char)iVar6,0);
+    textPtr = litoa10(textBuf,(long)CONCAT22(uVar4,_SS),(char)signWord,0);
     manage_blitLabelRight
-              ((char *)CONCAT13((char)((uint)iVar6 >> 8),CONCAT12((char)iVar6,pcVar3)),
-               CONCAT11(uVar13,uVar11));
+              ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
+               CONCAT11(hiByte,loByte));
     TextBlitY = TextBlitY + 10;
     TextBlitX = 0x37;
     ovr_blitLabel((char *)"Common fund",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                   Font02.seg,0xde,0xde,0xe0);
-    uVar11 = 0xdc;
-    uVar13 = 0;
-    pcVar3 = litoa10(textBuf,(long)CONCAT22(GPopulationLo,_SS),(char)GPopulationHi,0);
+    loByte = 0xdc;
+    hiByte = 0;
+    textPtr = litoa10(textBuf,(long)CONCAT22(GPopulationLo,_SS),(char)GPopulationHi,0);
     manage_blitLabelRight
-              ((char *)CONCAT13((char)((uint)iVar6 >> 8),CONCAT12((char)iVar6,pcVar3)),
-               CONCAT11(uVar13,uVar11));
+              ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
+               CONCAT11(hiByte,loByte));
     firstLeader = manage_findFirstLeader();
     TextBlitY = TextBlitY + 0xf;
     if (((sheet_00->titleIndex != 0) && (firstLeader != 0xff)) &&
@@ -601,43 +601,43 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
       TextBlitX = 0x11;
       ovr_blitLabel((char *)"Current",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                     Font02.seg,0xde,0xde,0xe0);
-      uVar11 = 0x7d;
-      uVar13 = 0;
+      loByte = 0x7d;
+      hiByte = 0;
       uVar5 = manage_usesGLeaderCount();
       pcVar9 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4d8b,_SS),
                              (char *)CONCAT13((char)(uVar5 >> 8),CONCAT12((char)uVar5,0x2410)));
       manage_blitLabelRight
                 ((char *)CONCAT13((char)((uint)uVar4 >> 8),CONCAT12((char)uVar4,pcVar9)),
-                 CONCAT11(uVar13,uVar11));
-      uVar11 = 0xdc;
-      uVar13 = 0;
+                 CONCAT11(hiByte,loByte));
+      loByte = 0xdc;
+      hiByte = 0;
       pcVar9 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4cd1,_SS),
                              (char *)CONCAT13((char)((uint)GPromotableCount >> 8),
                                               CONCAT12((char)GPromotableCount,0x2410)));
       manage_blitLabelRight
                 ((char *)CONCAT13((char)((uint)uVar4 >> 8),CONCAT12((char)uVar4,pcVar9)),
-                 CONCAT11(uVar13,uVar11));
+                 CONCAT11(hiByte,loByte));
       TextBlitY = TextBlitY + 10;
       TextBlitX = 0x11;
       ovr_blitLabel((char *)"to promote",(uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),
                     Font02.seg,0xde,0xde,0xe0);
-      uVar11 = 0x7d;
-      uVar13 = 0;
+      loByte = 0x7d;
+      hiByte = 0;
       cVar1 = ovr_season_usesDifficulty();
       pcVar9 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4d8b,_SS),
                              (char *)(ulong)CONCAT12(cVar1,0x2410));
       manage_blitLabelRight
                 ((char *)CONCAT13((char)((uint)uVar4 >> 8),CONCAT12((char)uVar4,pcVar9)),
-                 CONCAT11(uVar13,uVar11));
-      uVar11 = 0xdc;
-      uVar13 = 0;
+                 CONCAT11(hiByte,loByte));
+      loByte = 0xdc;
+      hiByte = 0;
       iVar7 = ovr_season_usesGPromotableCount2();
       pcVar9 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4cd1,_SS),
                              (char *)CONCAT13((char)((uint)iVar7 >> 8),CONCAT12((char)iVar7,0x2410))
                             );
       manage_blitLabelRight
                 ((char *)CONCAT13((char)((uint)uVar4 >> 8),CONCAT12((char)uVar4,pcVar9)),
-                 CONCAT11(uVar13,uVar11));
+                 CONCAT11(hiByte,loByte));
     }
   }
   return;
