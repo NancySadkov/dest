@@ -192,3 +192,54 @@ mostly *not* fixable by typing:
 
 Note the regex `(D)` also matches plain arithmetic (`x * 0x30 / 0x30`), so this
 row cannot reach zero by field typing alone.
+
+## AgntGs resolved: the "unknown base" was the array itself
+
+`doc` previously listed `gindex * 0x95 + 0x1f` as ambiguous because the same
+expression appeared both with and without the original base `0x26d6`.  The
+disassembly of `ovc13_drawPanelEntitiesAll` (`3d16:0255`) settles it:
+
+```
+3d16:02b3  MOV DX,0x95
+3d16:02b6  IMUL DX
+3d16:02b8  MOV DX,0x195d
+3d16:02bf  MOV AL,byte ptr ES:[BX + 0x26d6]
+```
+
+`ES = 195d`, offset `0x26d6` is `AgntGs`, and `ai` is offset 0 - so the access is
+`AgntGs[gindex].ai`.  The export's `+ 0x1f` is an artefact of resolving the same
+offset against **DGROUP**, where `GMenuStrings` sits at `2410:26b7` and
+`26b7 + 0x1f = 26d6`; that is why every one of these sites was written as
+`(int)(char **)GMenuStrings + ... * 0x95 + 0x1f`.  All 56 sites now read
+`AgntGs[idx].ai`.
+
+The neighbouring `+0x2716` access in `ovc18_spawnClassAgent` (`48ac:027f`) is
+`AgntGs[i].flags3` (`0x2716 - 0x26d6 = 0x40`), which matches the struct field
+that `TEST word ptr ES:[BX+0x40],0x100` masks.
+
+## `y + (int)pfVar * 0x1e + off` is blocked, not unidentified
+
+Eleven sites in `ovc18_leaderview.c` index a 0x1e-stride record through a local
+`y`.  Two pieces of evidence say the export there is not trustworthy yet:
+
+1. `Ghidra` calls `48ac:0251` **`ovc18_spawnClassAgent`** (111 instructions),
+   while the C marker at that address is `ovc18_showLeaderView` - the name and
+   the body disagree.
+2. The immediately adjacent access in the same block is
+   `*(byte *)(y + (int)pfVar8 * uVar10 + 10)` with `uVar10 = 0x195d`, i.e. a
+   **segment value used as a multiplier**, which cannot be real arithmetic.
+
+So the 0x1e arithmetic comes from a mis-modelled body; typing it would invent a
+struct.  It needs the overlay half of the function (the C jumps to `4000:8xxx`)
+re-exported before anything can be named.
+
+## Param names in ovc15_textView are blocked on the call site
+
+`ovc15_textView` has nine `param_N` arguments, but its only call site is
+
+```c
+cVar4 = (uint16_t)( ovr_ovc15_textView()   /* hand fix: args lost by the decompiler */);
+```
+
+so neither arity nor meaning can be recovered from the C.  Naming them would be
+guesswork; the call's arguments have to be recovered from the disassembly first.
