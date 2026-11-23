@@ -794,38 +794,38 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
 {
   undefined1 stk_ffea;   /* stack slot ffea */
   undefined1 stk_ffec;   /* stack slot ffec */
-  uint32_t uVar1;
+  uint32_t lastPartyPtr;
   far_t dst;
   bool bVar2;
   uint uVar3;
-  char *pcVar4;
-  undefined1 *puVar5;
+  char *textPtr;
+  undefined1 *bufPtr;
   uint uVar6;
   uint uVar7;
-  uint uVar8;
-  int iVar9;
+  uint entityIndex;
+  int leaderIndex;
   uint16_t unaff_DI;
   uint16_t uVar10;
-  undefined1 uVar11;
-  undefined1 uVar12;
+  undefined1 xLo;
+  undefined1 xHi;
   char partyIndex;
   undefined1 auStack_12 [13];
   uint8_t uStack_5;
-  uint uStack_4;
+  uint foundIdx;
   
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
   dst.ofs = (uint16_t)auStack_12;
   (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)_SS >> 8);
   F_SCOPY(far_from_u32((uint32_t)(0x241045b9)),dst);
-  for (uVar8 = 0; partyIndex = (char)unaff_DI, uVar8 < EntityCount; uVar8 = uVar8 + 1) {
+  for (entityIndex = 0; partyIndex = (char)unaff_DI, entityIndex < EntityCount; entityIndex = entityIndex + 1) {
     uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-    if (AgntGs[(uint)((entity_t *)Entities)[uVar8].base.gindex].ai != '\0') {
-      uVar3 = ovr_alignUp4(((entity_t *)Entities)[uVar8].base.x,0,0);
-      uVar11 = (undefined1)uVar3;
-      uVar12 = (undefined1)(uVar3 >> 8);
+    if (AgntGs[(uint)((entity_t *)Entities)[entityIndex].base.gindex].ai != '\0') {
+      uVar3 = ovr_alignUp4(((entity_t *)Entities)[entityIndex].base.x,0,0);
+      xLo = (undefined1)uVar3;
+      xHi = (undefined1)(uVar3 >> 8);
       uVar3 = ovr_alignUp4(GfxRndSeed,0,0);
-      if ((CONCAT11(uVar12,uVar11) == uVar3) &&
-         (((entity_t *)Entities)[uVar8].base.y == GfxRndSeed2)) {
+      if ((CONCAT11(xHi,xLo) == uVar3) &&
+         (((entity_t *)Entities)[entityIndex].base.y == GfxRndSeed2)) {
         ovr_stats_openCastlePanel();
         ovr_say((char *)"A fortress cannot be placed among enemy units.",0x10);
         MsgShown = 1;
@@ -833,10 +833,10 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
       }
     }
   }
-  for (iVar9 = 0; iVar9 < (int)(uint)GLeaderCount; iVar9 = iVar9 + 1) {
-    if (((((char_sheet_t *)((iVar9 << 2)))->active != '\0') &&
-        (((char_sheet_t *)((iVar9 << 2)))->x == GfxRndSeed)) &&
-       (((char_sheet_t *)((iVar9 << 2)))->y == GfxRndSeed2)) {
+  for (leaderIndex = 0; leaderIndex < (int)(uint)GLeaderCount; leaderIndex = leaderIndex + 1) {
+    if (((((char_sheet_t *)((leaderIndex << 2)))->active != '\0') &&
+        (((char_sheet_t *)((leaderIndex << 2)))->x == GfxRndSeed)) &&
+       (((char_sheet_t *)((leaderIndex << 2)))->y == GfxRndSeed2)) {
       ovr_stats_openCastlePanel();
       ovr_say((char *)"Cannot place another fortress here.",0x10);
       MsgShown = 1;
@@ -844,17 +844,17 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
     }
   }
   if (strongholdKind == '\x02') {
-    uVar8 = ovr_constr_usesGMapFlags(GfxRndSeed - 2,GfxRndSeed2,(char)GfxRndSeed2);
-    if ((((uVar8 & 0xff) == 0) ||
-        (uVar8 = ovr_constr_usesGMapFlags(GfxRndSeed - 1,GfxRndSeed2,(char)GfxRndSeed2),
-        (uVar8 & 0xff) == 0)) ||
-       ((uVar8 = ovr_constr_usesGMapFlags(GfxRndSeed,GfxRndSeed2,(char)GfxRndSeed2),
-        (uVar8 & 0xff) == 0 ||
-        (uVar8 = ovr_constr_usesGMapFlags(GfxRndSeed + 1,GfxRndSeed2,(char)GfxRndSeed2),
-        (uVar8 & 0xff) == 0)))) {
+    entityIndex = ovr_constr_usesGMapFlags(GfxRndSeed - 2,GfxRndSeed2,(char)GfxRndSeed2);
+    if ((((entityIndex & 0xff) == 0) ||
+        (entityIndex = ovr_constr_usesGMapFlags(GfxRndSeed - 1,GfxRndSeed2,(char)GfxRndSeed2),
+        (entityIndex & 0xff) == 0)) ||
+       ((entityIndex = ovr_constr_usesGMapFlags(GfxRndSeed,GfxRndSeed2,(char)GfxRndSeed2),
+        (entityIndex & 0xff) == 0 ||
+        (entityIndex = ovr_constr_usesGMapFlags(GfxRndSeed + 1,GfxRndSeed2,(char)GfxRndSeed2),
+        (entityIndex & 0xff) == 0)))) {
       ovr_stats_openCastlePanel();
-      puVar5 = &stk_ffea;
-      pcVar4 = ovr_fmVsprintf("This location is unsuitable for a main stronghold.  %s",
+      bufPtr = &stk_ffea;
+      textPtr = ovr_fmVsprintf("This location is unsuitable for a main stronghold.  %s",
                               (char *)CONCAT13((char)((uint)*(uint16_t *)
                                                              (&stk_ffec +
                                                              (uint)placementStatus * 4) >> 8),
@@ -862,20 +862,20 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
                                                                (&stk_ffec +
                                                                (uint)placementStatus * 4),
                                                         *(uint16_t *)
-                                                         (puVar5 + (uint)placementStatus * 4))));
-      ovr_say(pcVar4,(char)puVar5);
+                                                         (bufPtr + (uint)placementStatus * 4))));
+      ovr_say(textPtr,(char)bufPtr);
       MsgShown = 1;
       return;
     }
   }
   else {
-    uVar8 = ovr_constr_usesGMapFlags(GfxRndSeed - 1,GfxRndSeed2,(char)GfxRndSeed2);
-    if (((uVar8 & 0xff) == 0) ||
-       (uVar8 = ovr_constr_usesGMapFlags(GfxRndSeed,GfxRndSeed2,(char)GfxRndSeed2),
-       (uVar8 & 0xff) == 0)) {
+    entityIndex = ovr_constr_usesGMapFlags(GfxRndSeed - 1,GfxRndSeed2,(char)GfxRndSeed2);
+    if (((entityIndex & 0xff) == 0) ||
+       (entityIndex = ovr_constr_usesGMapFlags(GfxRndSeed,GfxRndSeed2,(char)GfxRndSeed2),
+       (entityIndex & 0xff) == 0)) {
       ovr_stats_openCastlePanel();
-      puVar5 = &stk_ffea;
-      pcVar4 = ovr_fmVsprintf("This location is unsuitable.  %s",
+      bufPtr = &stk_ffea;
+      textPtr = ovr_fmVsprintf("This location is unsuitable.  %s",
                               (char *)CONCAT13((char)((uint)*(uint16_t *)
                                                              (&stk_ffec +
                                                              (uint)placementStatus * 4) >> 8),
@@ -883,8 +883,8 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
                                                                (&stk_ffec +
                                                                (uint)placementStatus * 4),
                                                         *(uint16_t *)
-                                                         (puVar5 + (uint)placementStatus * 4))));
-      ovr_say(pcVar4,(char)puVar5);
+                                                         (bufPtr + (uint)placementStatus * 4))));
+      ovr_say(textPtr,(char)bufPtr);
       MsgShown = 1;
       return;
     }
@@ -892,36 +892,36 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
   bVar2 = ovr_draw_textArena();
   if (bVar2) {
     if (1 < CurPartySlot) {
-      uStack_4 = 0xffff;
-      for (iVar9 = 0; iVar9 < (int)(uint)GLeaderCount; iVar9 = iVar9 + 1) {
-        if (((((char_sheet_t *)((iVar9 << 2)))->active != '\0') &&
-            (*(char *)((int)*(uint32_t *)(iVar9 << 2) + 0x3f) == '\0')) &&
-           (uVar8 = ((char_sheet_t *)((iVar9 << 2)))->x - GfxRndSeed,
-           uVar6 = (int)uVar8 >> 0xf,
-           uVar3 = ((char_sheet_t *)((iVar9 << 2)))->y - GfxRndSeed2,
-           uVar7 = (int)uVar3 >> 0xf, uVar8 = ((uVar8 ^ uVar6) - uVar6) + ((uVar3 ^ uVar7) - uVar7),
-           uVar8 < uStack_4)) {
-          uStack_4 = uVar8;
+      foundIdx = 0xffff;
+      for (leaderIndex = 0; leaderIndex < (int)(uint)GLeaderCount; leaderIndex = leaderIndex + 1) {
+        if (((((char_sheet_t *)((leaderIndex << 2)))->active != '\0') &&
+            (*(char *)((int)*(uint32_t *)(leaderIndex << 2) + 0x3f) == '\0')) &&
+           (entityIndex = ((char_sheet_t *)((leaderIndex << 2)))->x - GfxRndSeed,
+           uVar6 = (int)entityIndex >> 0xf,
+           uVar3 = ((char_sheet_t *)((leaderIndex << 2)))->y - GfxRndSeed2,
+           uVar7 = (int)uVar3 >> 0xf, entityIndex = ((entityIndex ^ uVar6) - uVar6) + ((uVar3 ^ uVar7) - uVar7),
+           entityIndex < foundIdx)) {
+          foundIdx = entityIndex;
         }
       }
-      if (0x1e < uStack_4) {
+      if (0x1e < foundIdx) {
         ovr_stats_openCastlePanel();
         ovr_say((char *)"Your stronghold is too far away.",0x10);
         MsgShown = 1;
         return;
       }
     }
-    uVar1 = *(uint32_t *)((uint)PartyCount * 4 + -4);
-    *(uint16_t *)((int)uVar1 + 0x39) = GfxRndSeed;
-    uVar1 = *(uint32_t *)((uint)PartyCount * 4 + -4);
-    *(uint16_t *)((int)uVar1 + 0x3b) = GfxRndSeed2;
-    uVar1 = *(uint32_t *)((uint)PartyCount * 4 + -4);
-    *(undefined1 *)((int)uVar1 + 0x3d) = 1;
-    uVar1 = *(uint32_t *)((uint)PartyCount * 4 + -4);
-    *(char *)((int)uVar1 + 0x89) = CurPartySlot - 1;
+    lastPartyPtr = *(uint32_t *)((uint)PartyCount * 4 + -4);
+    *(uint16_t *)((int)lastPartyPtr + 0x39) = GfxRndSeed;
+    lastPartyPtr = *(uint32_t *)((uint)PartyCount * 4 + -4);
+    *(uint16_t *)((int)lastPartyPtr + 0x3b) = GfxRndSeed2;
+    lastPartyPtr = *(uint32_t *)((uint)PartyCount * 4 + -4);
+    *(undefined1 *)((int)lastPartyPtr + 0x3d) = 1;
+    lastPartyPtr = *(uint32_t *)((uint)PartyCount * 4 + -4);
+    *(char *)((int)lastPartyPtr + 0x89) = CurPartySlot - 1;
     if (strongholdKind == '\x02') {
-      uVar1 = *(uint32_t *)((uint)PartyCount * 4 + -4);
-      *(undefined1 *)((int)uVar1 + 0x5a) = 1;
+      lastPartyPtr = *(uint32_t *)((uint)PartyCount * 4 + -4);
+      *(undefined1 *)((int)lastPartyPtr + 0x5a) = 1;
       ovr_createConstructionRecordFar
                 (0x89,GfxRndSeed - 2,GfxRndSeed2,(uint8_t *)CONCAT22(_SS,&uStack_5),
                  PartyCount - 1,partyIndex,(char)GfxRndSeed2,(char)&uStack_5,PartyCount - 1);
@@ -929,12 +929,12 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
       ovr_ovc22_usesRandBelow2(PartyCount - 1,(uint16_t)&uStack_5);
     }
     else {
-      uVar1 = *(uint32_t *)((uint)PartyCount * 4 + -4);
-      *(char *)((int)uVar1 + 0x5a) = strongholdKind;
-      uVar1 = *(uint32_t *)((uint)PartyCount * 4 + -4);
+      lastPartyPtr = *(uint32_t *)((uint)PartyCount * 4 + -4);
+      *(char *)((int)lastPartyPtr + 0x5a) = strongholdKind;
+      lastPartyPtr = *(uint32_t *)((uint)PartyCount * 4 + -4);
       ovr_createConstructionRecordFar
                 (*(byte *)((int)(far_t *)(worldMenuLabels + 0xb) +
-                          (uint)*(byte *)((int)uVar1 + 0x3e) * 0x95),GfxRndSeed - 1,GfxRndSeed2,
+                          (uint)*(byte *)((int)lastPartyPtr + 0x3e) * 0x95),GfxRndSeed - 1,GfxRndSeed2,
                  (uint8_t *)CONCAT22(_SS,&uStack_5),PartyCount - 1,partyIndex,(char)GfxRndSeed2
                  ,(char)&uStack_5,PartyCount - 1);
       ovc18_textTypeLen(PartyCount - 1,GfxRndSeed,GfxRndSeed2,0x0,(char)GfxRndSeed,0);
