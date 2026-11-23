@@ -90,18 +90,6 @@ int smm_restore_state()
 }
 
 /* GUESS: body not recovered */
-int DOS_GetInterruptHandler()
-{
-  return 0;
-}
-
-/* GUESS: body not recovered */
-int DOS_SetInterruptHandler()
-{
-  return 0;
-}
-
-/* GUESS: body not recovered */
 int ovr_season_usesGPromotable_e11a()
 {
   return 0;

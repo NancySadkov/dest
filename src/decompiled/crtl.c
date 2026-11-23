@@ -954,19 +954,34 @@ void __cdecl16far srand8(uint32_t seed)
 void __cdecl16far ioErrorHndlrInstall(void)
 
 {
-  uint16_t in_BX;
-  uint16_t unaff_ES;
-  
-  swi(0x21);
-  DOS_GetInterruptHandler(0x2410);
-  swi(0x21);
-  GSavedErrorHandler.ofs = in_BX;
-  GSavedErrorHandler.seg = unaff_ES;
-  DOS_SetInterruptHandler(0x24,0x7a7);
+  uint16_t hofs = 0;
+  uint16_t hseg = 0;
+
+  /* 077b: DOS "get interrupt vector" for INT 24h -> ES:BX */
+  asm {
+    mov ax,3524h;
+    int 21h;
+    mov hofs,bx;
+    mov hseg,es;
+  }
+  GSavedErrorHandler.ofs = hofs;
+  GSavedErrorHandler.seg = hseg;
+
+  /* 078a: DS = CS, DX = offset of ioErrorHndlr (1000:07A7), AX = 0x2524 */
+  asm {
+    push ds;
+    mov ax,cs;
+    mov ds,ax;
+    mov dx,offset ioErrorHndlr;
+    mov ax,2524h;
+    int 21h;
+    pop ds;
+  }
   GIOErrorCode = 0;
   GIOErrorRetryCount = 5;
   return;
 }
+
 
 
 

@@ -14,8 +14,6 @@ func_0x0007ffe0	function	func_0x target is data/fragment in the image
 EXT_FUN_8000_f2fa	function	body not recovered
 halt_baddata	function	body not recovered
 smm_restore_state	function	body not recovered
-DOS_GetInterruptHandler	function	body not recovered
-DOS_SetInterruptHandler	function	body not recovered
 ovr_season_usesGPromotable_e11a	function	body not recovered
 swi	function	returns a no-op code pointer; every (*swi(n))() is therefore a no-op (startx DOS calls, SaveVectors, ErrorDisplay). Root cause of the startup flow being register-dependent - see doc/step6_entry.md
 _emu	data	Borland FP runtime
