@@ -1961,14 +1961,14 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
         uVar34 = uVar34 | ((short (*) [60] [148])GMapFlags)[-1][unaff_SI + 0x3b][iVar28 + 0x92] &
                           0x3000U;
       }
-      if ((((*(byte *)((int)pcVar12 * 0x12 + 0xd) & 3) != 1) || (uVar34 != uVar33)) ||
+      if ((((GRecords[pcVar12].kind & 3) != 1) || (uVar34 != uVar33)) ||
          (uVar10 = *(uint32_t *)((uint)(byte)(uVar43 >> 0x10) << 2),
          bVar37 = ovr_ovc24_textArena((uint16_t)in_stack_0000fffc,unaff_SI,
                                       *(char *)((int)uVar10 + 0x3f)), bVar37)) {
-        bVar22 = *(byte *)((int)pcVar12 * 0x12 + 0xd);
+        bVar22 = GRecords[pcVar12].kind;
         pbVar20 = (byte *)(uint)bVar22;
         if (((bVar22 & 1) == 0) && ((uVar18 & uVar34) != 0)) {
-          pbVar20 = (byte *)((int)pcVar12 * 0x12);
+          pbVar20 = (byte *)&GREC_FIELD(&GRecords[pcVar12], buildTimer, 0);
           pbVar20[0xd] = pbVar20[0xd] | 1;
         }
       }
@@ -1978,8 +1978,8 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
           ovr_say((char *)"Construction abandoned.",0);
         }
         if (pcVar12 + 1 < GRecordCount) {
-          _fmemmove((char *)CONCAT22(_DS,(char *)((int)pcVar12 * 0x12)),
-                    (char *)CONCAT22(_DS,(char *)((int)pcVar12 * 0x12 + 0x12)),
+          _fmemmove((char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[pcVar12], buildTimer, 0)),
+                    (char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[pcVar12 + 1], buildTimer, 0)),
                     (int)(GRecordCount + (-1 - (int)pcVar12)) * 0x12);
         }
         GRecordCount = GRecordCount + -1;

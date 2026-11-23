@@ -570,7 +570,7 @@ void __cdecl16far ovc15_removeEntity(uint entityIndex)
   if (AgntFlag1 != false) {
     for (uVar4 = 0; uVar4 < AgntCount; uVar4 = uVar4 + 1) {
       if (entityIndex < Agnts[uVar4].owner) {
-        piVar1 = (int *)(uVar4 * 0x34 + 0x1b);
+        piVar1 = (int *)&Agnts[uVar4].owner;
         *piVar1 = *piVar1 + -1;
         peVar3 = Entities + Agnts[uVar4].owner;
         AGNT_WORD(&Agnts[uVar4], entity, 2) = DAT_2000_d190;
@@ -912,7 +912,7 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
               uVar8 = ovr_randBelow(2,0);
               Agnts[agnt].animVariant = (char)uVar8;
             }
-            uVar8 = ovr_audio_panFromX((agnt_t *)(agnt * 0x34),0);
+            uVar8 = ovr_audio_panFromX((agnt_t *)&Agnts[agnt].x,0);
             ovr_play_sfxU(0x1b,0,uVar8,0,0);
           }
         }
@@ -1097,7 +1097,7 @@ uint16_t __cdecl16far ovc15_usesStExit2(byte agntIndex)
   int iStack_6;
   int iStack_4;
   
-  piVar1 = (int *)((uint)agntIndex * 0x34);
+  piVar1 = (int *)&Agnts[agntIndex].x;
   uStack_12 = (int *)CONCAT22(SEG_OF(Agnts),piVar1);
   if ((((piVar1[1] < 0x14) || (*(char *)((int)piVar1 + 0x25) == '\x01')) && (*uStack_12 < 0xd3)) &&
      (-1 < *uStack_12)) {
@@ -1289,19 +1289,19 @@ L_OVC15_4207_1ffe_2193:
           iStack_4 = iStack_4 + 1;
         }
         if (iStack_4 < (int)(uint)AgntCount) {
-          _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)(iStack_4 * 0x34 + 0x34)),
-                    (char *)CONCAT22(SEG_OF(Agnts),(char *)(iStack_4 * 0x34)),
+          _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[iStack_4 + 1].x),
+                    (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[iStack_4].x),
                     ((uint)AgntCount - iStack_4) * 0x34);
         }
         agnt_00->visited = 0x1;
-        memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)(iStack_4 * 0x34)),(char *)agnt,0x34);
+        memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[iStack_4].x),(char *)agnt,0x34);
         ovr_agnt_usesAgntCount5(iStack_4 + 1);
-        ovr_ovc49_fillGridCells((char)iStack_4 + 1,(agnt_t *)(iStack_4 * 0x34),SEG_OF(Agnts),0);
+        ovr_ovc49_fillGridCells((char)iStack_4 + 1,(agnt_t *)&Agnts[iStack_4].x,SEG_OF(Agnts),0);
         AgntCount = AgntCount + 1;
         for (iVar5 = 0; iVar5 < (int)(uint)AgntCount; iVar5 = iVar5 + 1) {
           if ((Agnts[iVar5].target != -1) &&
              (iStack_4 <= (int)(uint)Agnts[iVar5].target)) {
-            pcVar1 = (char *)(iVar5 * 0x34 + 0xc);
+            pcVar1 = (char *)&Agnts[iVar5].target;
             *pcVar1 = *pcVar1 + '\x01';
           }
         }
@@ -1372,7 +1372,7 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
           }
         }
         _fmemmove((char *)CONCAT22(_SS,&agntCopy),
-                  (char *)CONCAT22(SEG_OF(Agnts),(char *)(uStack_8 * 0x34)),0x34);
+                  (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[uStack_8].x),0x34);
         agntCopy.target = 0xff;
         ovr_ovc41_removeAgent(uStack_8,0,0);
         pcVar4 = (char *)ovc15_usesRandBelow((agnt_t *)CONCAT22(_SS,&agntCopy),

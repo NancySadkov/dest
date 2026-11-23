@@ -1690,7 +1690,7 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
   uVar3 = *(uint32_t far *)&Agnts[agnt_id].entity;
   *(byte *)((int)uVar3 + 0x33) = *(byte *)((int)entityFar + 0x33) & 0xfd;
   pcStack_d4 = (char *)((ulong)pcStack_d4 & 0xffff0000);
-  drawAgntStats((agnt_t *)((uint)agnt_id * 0x34),far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
+  drawAgntStats((agnt_t *)&Agnts[agnt_id].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
   uVar6 = SEG_OF(Agnts);
   entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
   if ((*(byte *)((int)entityFar + 0x33) & 1) == 0) {
@@ -1826,7 +1826,7 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6406,_SS),
                        (char *)CONCAT22(puVar3,(char *)0x26510),widths);
   drawString(text,widths,0);
-  drawAgntStats((agnt_t *)((uint)agntIndex * 0x34),far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
+  drawAgntStats((agnt_t *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
   return;
 }
 
@@ -1871,7 +1871,7 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
   text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x644e,_SS),
                        (char *)CONCAT22(puVar3,(char *)0x26510),widths);
   drawString(text,widths,0);
-  drawAgntStats((agnt_t *)((uint)agntIndex * 0x34),far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
+  drawAgntStats((agnt_t *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
   return;
 }
 
@@ -1955,7 +1955,7 @@ void __cdecl16far stats_openAgentDetail(int agntIndex)
   iVar2 = Agnts[agntIndex].owner;
   ovr_manage_openTalkWindow();
   ScreenMode = 2;
-  drawAgntStats((agnt_t *)(agntIndex * 0x34),far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
+  drawAgntStats((agnt_t *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
   drawString((char *)0x620f,0x2410,0);
   bVar1 = ((entity_t *)Entities)[iVar2].base.gindex;
   if (*(char *)((int)(char **)GMenuStrings + (uint)bVar1 * 0x95 + 0x1f) == '\0') {

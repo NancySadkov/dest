@@ -71,7 +71,7 @@ bool __cdecl16far bldng_textArena(byte bldType,char partyIndex)
       else if (BuildingTypes[bldType].unitType == '\x12') {
         bStack_6 = ListCount;
         for (uVar4 = 0; uVar4 < GRecordCount; uVar4 = uVar4 + 1) {
-          if (*(char *)((uint)GRecords[uVar4].reserved08 * 0x27 + 0x133) == '\x12') {
+          if (BuildingTypes[GRecords[uVar4].reserved08].unitType == '\x12') {
             bStack_6 = bStack_6 + 1;
           }
         }

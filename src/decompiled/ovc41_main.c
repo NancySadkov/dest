@@ -221,7 +221,7 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,uint16_t arg3)
     }
     if (Agnts[uVar6].target != -1) {
       if ((int)agntIndex < (int)(uint)Agnts[uVar6].target) {
-        pcVar1 = (char *)(uVar6 * 0x34 + 0xc);
+        pcVar1 = (char *)&Agnts[uVar6].target;
         *pcVar1 = *pcVar1 + -1;
       }
       else if (Agnts[uVar6].target == agntIndex) {
@@ -230,8 +230,8 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,uint16_t arg3)
     }
   }
   if ((int)(agntIndex + 1) < (int)(uint)AgntCount) {
-    _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34)),
-              (char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34 + 0x34)),
+    _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x),
+              (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex + 1].x),
               ((AgntCount - agntIndex) + -1) * 0x34);
   }
   AgntCount = AgntCount - 1;
@@ -447,10 +447,10 @@ void __cdecl16far ovc41_usesPlay_sfxU(void)
   if (AgntFlag1) {
     for (iVar2 = 0; iVar2 < (int)(uint)AgntCount; iVar2 = iVar2 + 1) {
       if ((Agnts[iVar2].flags & 0x800) == 0) {
-        OVC41_6a8f_01e7_entry((agnt_t *)(iVar2 * 0x34),SEG_OF(Agnts));
-        puVar1 = (uint *)(iVar2 * 0x34 + 0x2b);
+        OVC41_6a8f_01e7_entry((agnt_t *)&Agnts[iVar2].x,SEG_OF(Agnts));
+        puVar1 = (uint *)&Agnts[iVar2].flags;
         *puVar1 = *puVar1 | 0x800;
-        unk = ovr_audio_panFromX((agnt_t *)(iVar2 * 0x34),SEG_OF(Agnts));
+        unk = ovr_audio_panFromX((agnt_t *)&Agnts[iVar2].x,SEG_OF(Agnts));
         ovr_play_sfxU(0x1b,0,unk,0,0);
         ovr_attact_usesEntityCount();
         return;
@@ -474,7 +474,7 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
   int iVar6;
   entity_t *uStack_6;   /* hand fix: dereferenced as uStack_6->base.x */
   
-  paVar2 = (agnt_t *)(agntIndex * 0x34);
+  paVar2 = (agnt_t *)&Agnts[agntIndex].x;
   uStack_6 = (agnt_t *)CONCAT22(SEG_OF(Agnts),paVar2);
   if ((((agntG_t *)paVar2->gdata)->flags2 & 4) != 0) {
     for (iVar6 = 0; iVar6 < (int)(uint)AgntCount; iVar6 = iVar6 + 1) {
@@ -487,7 +487,7 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
         if ((char)iVar4 != '\0') {
           uVar3 = (int)uVar3 >> 1;
         }
-        ovc41_textParalyzed((agnt_t *)CONCAT22(SEG_OF(Agnts),paVar2),(agnt_t *)CONCAT22(SEG_OF(Agnts),(agnt_t *)(iVar6 * 0x34)),uVar3,0,0,0);
+        ovc41_textParalyzed((agnt_t *)CONCAT22(SEG_OF(Agnts),paVar2),(agnt_t *)CONCAT22(SEG_OF(Agnts),(agnt_t *)&Agnts[iVar6].x),uVar3,0,0,0);
       }
     }
   }
@@ -717,18 +717,18 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
               }
               while ((cStack_3 != '\0' && (uVar9 != 0))) {
                 if (cStack_4 == '\0') {
-                  OVC41_6a8f_01e7_entry((agnt_t *)(iVar5 * 0x34),0);
+                  OVC41_6a8f_01e7_entry((agnt_t *)&Agnts[iVar5].x,0);
                   AGNT_FIELD(&Agnts[iVar5], targetX, 0) = 0;
                   AGNT_FIELD(&Agnts[iVar5], targetX, 1) = 0;
-                  puVar1 = (uint *)(iVar5 * 0x34 + 0x2b);
+                  puVar1 = (uint *)&Agnts[iVar5].flags;
                   *puVar1 = *puVar1 | 4;
                   Agnts[iVar5].combatState = 1;
                   Agnts[iVar5].targetY = 0;
                   Agnts[iVar5].timer = 5;
-                  ovr_agnt_usesAnimFrame((agnt_t *)(iVar5 * 0x34));
+                  ovr_agnt_usesAnimFrame((agnt_t *)&Agnts[iVar5].x);
                 }
                 else {
-                  ovc41_settleAgentCombat(agnt,(agnt_t *)CONCAT22(SEG_OF(Agnts),(agnt_t *)(iVar5 * 0x34)),0);
+                  ovc41_settleAgentCombat(agnt,(agnt_t *)CONCAT22(SEG_OF(Agnts),(agnt_t *)&Agnts[iVar5].x),0);
                 }
                 bStack_5 = bStack_5 + 1;
                 uVar11 = *(uint32_t far *)&Agnts[iVar5].entity;
@@ -2919,7 +2919,7 @@ void __cdecl16far ovc41_usesAgntCount3(void)
   
   for (iVar1 = 0; iVar1 < (int)(uint)AgntCount; iVar1 = iVar1 + 1) {
     if (Agnts[iVar1].faction != '\0') {
-      ovc41_settleAgentCombat((agnt_t *)0x0,(agnt_t *)CONCAT22(SEG_OF(Agnts),(agnt_t *)(iVar1 * 0x34)),0);
+      ovc41_settleAgentCombat((agnt_t *)0x0,(agnt_t *)CONCAT22(SEG_OF(Agnts),(agnt_t *)&Agnts[iVar1].x),0);
     }
   }
   return;

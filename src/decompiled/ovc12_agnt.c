@@ -808,7 +808,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
   uint16_t uStack_e;
   uint16_t uStack_c;
   
-  agnt = (agnt_t *)((uint)index * 0x34);
+  agnt = (agnt_t *)&Agnts[index].x;
   uStack_c = *(uint16_t *)((int)&agnt->frames + 2);
   uStack_e = *(uint16_t *)&agnt->frames;
   piVar9 = (int *)(uStack_e + (uint)agnt->frameIndex * 4);
@@ -923,7 +923,7 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
       if (Agnts[agentIndex].target != -1) {
         if (((int)fromIndex < (int)(uint)Agnts[agentIndex].target) &&
            ((int)(uint)Agnts[agentIndex].target <= toIndex)) {
-          cellPtr = (char *)(agentIndex * 0x34 + 0xc);
+          cellPtr = (char *)&Agnts[agentIndex].target;
           *cellPtr = *cellPtr + -1;
         }
         else if (Agnts[agentIndex].target == fromIndex) {
@@ -966,7 +966,7 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
           }
         }
         else {
-          cellPtr = (char *)(agentIndex * 0x34 + 0xc);
+          cellPtr = (char *)&Agnts[agentIndex].target;
           *cellPtr = *cellPtr + '\x01';
         }
       }
@@ -1074,11 +1074,11 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
         iVar5 = toIndex;
       } while (Agnts[toIndex + 1].y < Agnts[agntIndex].y);
       memcpy((char *)CONCAT22(_SS,&agntSaved),
-             (char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34)),0x34);
-      _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34)),
-                (char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34 + 0x34)),
+             (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x),0x34);
+      _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x),
+                (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex + 1].x),
                 (toIndex - agntIndex) * 0x34);
-      pvVar2 = memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)(toIndex * 0x34)),
+      pvVar2 = memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[toIndex].x),
                       (char *)CONCAT22(_SS,&agntSaved),0x34);
       uVar4 = (undefined1)((uint)pvVar2 >> 8);
       agnt_remapGridRefs(agntIndex,toIndex);
@@ -1093,11 +1093,11 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
       iVar5 = iVar5 + -1;
       if (iVar5 < 1) break;
     } while (Agnts[agntIndex].y < Agnts[iVar5 - 1].y);
-    memcpy((char *)CONCAT22(_SS,&agntSaved),(char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34))
+    memcpy((char *)CONCAT22(_SS,&agntSaved),(char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x)
            ,0x34);
-    _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)(iVar5 * 0x34 + 0x34)),
-              (char *)CONCAT22(SEG_OF(Agnts),(char *)(iVar5 * 0x34)),(agntIndex - iVar5) * 0x34);
-    pvVar2 = memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)(iVar5 * 0x34)),
+    _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[iVar5 + 1].x),
+              (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[iVar5].x),(agntIndex - iVar5) * 0x34);
+    pvVar2 = memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[iVar5].x),
                     (char *)CONCAT22(_SS,&agntSaved),0x34);
     bVar3 = (byte)((uint)pvVar2 >> 8);
     agnt_remapGridRefs(agntIndex,iVar5);

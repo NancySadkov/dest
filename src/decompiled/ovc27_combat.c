@@ -607,7 +607,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
   agnt_t *paStack_6;
   uint16_t uStack_4;
   
-  paStack_6 = (agnt_t *)(agntIndex * 0x34);
+  paStack_6 = (agnt_t *)&Agnts[agntIndex].x;
   uStack_4 = SEG_OF(Agnts);
   bVar1 = (byte)((uint)paStack_6 >> 8);
   if ((((agntG_t *)paStack_6->gdata)->flags & 0x803) == 0) {
@@ -719,7 +719,7 @@ void __cdecl16far ovc27_usesBlitGfxRect(int agntIndex,brect_t *rect,uint16_t typ
   int iStack_e;
   uint16_t uStack_c;
   
-  paVar3 = (agnt_t *)(agntIndex * 0x34);
+  paVar3 = (agnt_t *)&Agnts[agntIndex].x;
   iVar4 = (uint)paVar3->target * 0x34;
   if (((paVar3->combatState == 0x0) && (paVar3->target != 0xff)) && (paVar3->animFrame != 0xff)) {
     uVar1 = *(uint16_t *)((int)&paVar3->frames + 2);

@@ -3922,7 +3922,7 @@ bool __cdecl16far ovc22_textArena2(uint x,int y)
             for (uVar4 = 0; uVar4 < GRecordCount; uVar4 = uVar4 + 1) {
               if (((GRecords[uVar4].y == y) && (GRecords[uVar4].x <= x)) &&
                  (x < GRecords[uVar4].x +
-                      (uint)*(byte *)((uint)GRecords[uVar4].reserved08 * 0x27 + 0x11b))) {
+                      (uint)BuildingTypes[GRecords[uVar4].reserved08].size)) {
                 return false;
               }
             }
