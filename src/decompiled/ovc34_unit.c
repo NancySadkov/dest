@@ -50,91 +50,91 @@ void __cdecl16far unit_usesAlignUp4(void)
 
 {
   byte bVar1;
-  uint32_t uVar2;
+  uint32_t typePtr;
   uint uVar3;
   int iVar4;
   int iVar5;
   uint16_t uVar6;
-  int iStack_16;
-  int iStack_14;
-  int iStack_12;
-  int iStack_10;
-  int iStack_e;
-  uint uStack_c;
+  int extent;
+  int rowBottom;
+  int rowTop;
+  int colRight;
+  int colLeft;
+  uint index;
   
   if (mapDirty != '\0') {
     mapDirty = '\0';
     ovr_driver_clearMapFlagsRect
               ((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),(short (*) [60] [148])GMapFlags),0,0,0x93,0x3b,0xfff7,0,0);
-    for (uStack_c = 0; uStack_c < EntityCount; uStack_c = uStack_c + 1) {
+    for (index = 0; index < EntityCount; index = index + 1) {
       uVar6 = (uint16_t)((ulong)Entities >> 0x10);
       iVar5 = (int)Entities;
-      uVar3 = (uint)((entity_t *)iVar5)[uStack_c].base.gindex;
+      uVar3 = (uint)((entity_t *)iVar5)[index].base.gindex;
       if (AgntGs[uVar3].ai == '\0') {
         if (uVar3 == 3) {
-          iStack_16 = 0xf;
+          extent = 0xf;
         }
         else if (uVar3 == 0xb) {
-          iStack_16 = 8;
+          extent = 8;
         }
         else {
-          iStack_16 = 5;
+          extent = 5;
         }
-        iVar4 = *(int *)((entity_t *)iVar5 + uStack_c);
-        iStack_14 = ((entity_t *)iVar5)[uStack_c].base.y;
-        uVar3 = ovr_alignUp4(iVar4 + iStack_16 * -2,0,0);
-        iStack_e = uVar3 - 2;
-        uVar3 = ovr_alignUp4(iVar4 + iStack_16 * 2,0,0);
-        iStack_10 = uVar3 + 1;
-        if (iStack_e < 0) {
-          iStack_e = 0;
+        iVar4 = *(int *)((entity_t *)iVar5 + index);
+        rowBottom = ((entity_t *)iVar5)[index].base.y;
+        uVar3 = ovr_alignUp4(iVar4 + extent * -2,0,0);
+        colLeft = uVar3 - 2;
+        uVar3 = ovr_alignUp4(iVar4 + extent * 2,0,0);
+        colRight = uVar3 + 1;
+        if (colLeft < 0) {
+          colLeft = 0;
         }
-        if (0x93 < iStack_10) {
-          iStack_10 = 0x93;
+        if (0x93 < colRight) {
+          colRight = 0x93;
         }
-        iStack_12 = iStack_14 - iStack_16;
-        iStack_14 = iStack_14 + iStack_16;
-        if (iStack_12 < 0) {
-          iStack_12 = 0;
+        rowTop = rowBottom - extent;
+        rowBottom = rowBottom + extent;
+        if (rowTop < 0) {
+          rowTop = 0;
         }
-        if (0x3b < iStack_14) {
-          iStack_14 = 0x3b;
+        if (0x3b < rowBottom) {
+          rowBottom = 0x3b;
         }
         ovr_driver_setMapFlagsRect
-                  ((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),(short (*) [60] [148])GMapFlags),iStack_e,
-                   iStack_12,iStack_10,iStack_14,8);
+                  ((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),(short (*) [60] [148])GMapFlags),colLeft,
+                   rowTop,colRight,rowBottom,8);
       }
     }
-    for (uStack_c = 0xf8; uStack_c < GUnitCount; uStack_c = uStack_c + 1) {
+    for (index = 0xf8; index < GUnitCount; index = index + 1) {
       uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
-      if (((*(int *)((uint)((unit_t *)GUnits + uStack_c)->bldType * 0x27 + 0x12e) != 0) &&
-          (bVar1 = ((unit_t *)GUnits)[uStack_c].unitType, bVar1 != 0xff)) &&
-         (uVar2 = *(uint32_t *)((uint)bVar1 << 2), *(char *)((int)uVar2 + 0x3f) == '\0')) {
-        iVar4 = unit_usesGUnits(uStack_c);
+      if (((*(int *)((uint)((unit_t *)GUnits + index)->bldType * 0x27 + 0x12e) != 0) &&
+          (bVar1 = ((unit_t *)GUnits)[index].unitType, bVar1 != 0xff)) &&
+         (typePtr = *(uint32_t *)((uint)bVar1 << 2), *(char *)((int)typePtr + 0x3f) == '\0')) {
+        iVar4 = unit_usesGUnits(index);
         uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
-        iVar5 = ((unit_t *)GUnits)[uStack_c].x;
-        iStack_14 = ((unit_t *)GUnits)[uStack_c].y;
+        iVar5 = ((unit_t *)GUnits)[index].x;
+        rowBottom = ((unit_t *)GUnits)[index].y;
         uVar3 = ovr_alignUp4(iVar5 + iVar4 * -2,0,0);
-        iStack_e = uVar3 - 2;
+        colLeft = uVar3 - 2;
         uVar3 = ovr_alignUp4(iVar5 + iVar4 * 2,0,0);
-        iStack_10 = uVar3 + 1;
-        if (iStack_e < 0) {
-          iStack_e = 0;
+        colRight = uVar3 + 1;
+        if (colLeft < 0) {
+          colLeft = 0;
         }
-        if (0x93 < iStack_10) {
-          iStack_10 = 0x93;
+        if (0x93 < colRight) {
+          colRight = 0x93;
         }
-        iStack_12 = iStack_14 - iVar4;
-        iStack_14 = iStack_14 + iVar4;
-        if (iStack_12 < 0) {
-          iStack_12 = 0;
+        rowTop = rowBottom - iVar4;
+        rowBottom = rowBottom + iVar4;
+        if (rowTop < 0) {
+          rowTop = 0;
         }
-        if (0x3b < iStack_14) {
-          iStack_14 = 0x3b;
+        if (0x3b < rowBottom) {
+          rowBottom = 0x3b;
         }
         ovr_driver_setMapFlagsRect
-                  ((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),(short (*) [60] [148])GMapFlags),iStack_e,
-                   iStack_12,iStack_10,iStack_14,8);
+                  ((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),(short (*) [60] [148])GMapFlags),colLeft,
+                   rowTop,colRight,rowBottom,8);
       }
     }
   }

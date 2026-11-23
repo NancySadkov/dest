@@ -616,23 +616,23 @@ void __stdcall16far attact_usesGMapFlags3(void)
 void __cdecl16far attact_usesAlignUp42(void)
 
 {
-  uint16_t *puVar1;
-  uint8_t *puVar2;
+  uint16_t *yPtr;
+  uint8_t *factionPtr;
   uint32_t uVar3;
   uint16_t uVar4;
-  char cVar5;
+  char ok;
   bool bVar6;
   bool bVar7;
   uint uVar8;
-  uint uVar9;
-  undefined1 uVar13;
+  uint alignedX;
+  undefined1 valHi;
   uint16_t uVar10;
   uint uVar11;
   char *pcVar12;
   entity_t *peVar14;
   uint16_t unaff_DI;
   uint16_t index;
-  uint16_t uVar15;
+  uint16_t segArg;
   entity_t *destEnt;   /* hand fix: dereferenced as destEnt->base */
   char rowsLeft;
   uint8_t reported;
@@ -654,7 +654,7 @@ void __cdecl16far attact_usesAlignUp42(void)
   if (DebugVerbose != false) {
     printf("%d %d %d \r");
   }
-  uVar15 = 0x1000;
+  segArg = 0x1000;
   debugStaleTickCount = 0;
   debugEmptyCellCount = 0;
   index = 0;
@@ -663,10 +663,10 @@ void __cdecl16far attact_usesAlignUp42(void)
     if (EntityCount <= index) {
       GGameState = 0x3c;
       if (DebugVerbose != false) {
-        uVar15 = 0x1000;
+        segArg = 0x1000;
         printf("%d %d %d  \r");
       }
-      func_0x0004fcda(uVar15);
+      func_0x0004fcda(segArg);
       GGameState = 0x3d;
       if (DebugVerbose != false) {
         printf("%d %d %d  \r");
@@ -676,15 +676,15 @@ void __cdecl16far attact_usesAlignUp42(void)
       if (DebugVerbose != false) {
         printf("%d %d %d  \r");
       }
-      uVar15 = 0x2379;
+      segArg = 0x2379;
       ovr_ovc24_removeOtherEntities(&reported);
       GGameState = 0x1f;
       if (reported != 0x0) {
-        uVar15 = 0x22ef;
+        segArg = 0x22ef;
         ovr_constr_usesBlitRect();
         GGameState = 0x13;
       }
-      func_0x0004f68f(uVar15);
+      func_0x0004f68f(segArg);
       GGameState = 0x1d;
       for (uVar8 = 0; (int)uVar8 < 5; uVar8 = uVar8 + 1) {
         if ((&reportedUnits)[uVar8] != 0x0) {
@@ -703,9 +703,9 @@ void __cdecl16far attact_usesAlignUp42(void)
     peVar14 = Entities + index;
     destEnt = (entity_t *)CONCAT22(DAT_2000_d190,peVar14);
     uVar8 = ovr_alignUp4((peVar14->base).destX,0,0);
-    uVar15 = 0x2379;
-    uVar9 = ovr_alignUp4((destEnt->base).x,0,0);
-    if ((uVar8 == uVar9) && ((peVar14->base).destY == (peVar14->base).y)) {
+    segArg = 0x2379;
+    alignedX = ovr_alignUp4((destEnt->base).x,0,0);
+    if ((uVar8 == alignedX) && ((peVar14->base).destY == (peVar14->base).y)) {
       manage_usesCurSfxType32(0x2379,index,(peVar14->base).destX,(peVar14->base).destY);
     }
     if (((peVar14->base).destX != 0 || (peVar14->base).destY != 0) &&
@@ -720,16 +720,16 @@ void __cdecl16far attact_usesAlignUp42(void)
                                     ((int)(uint)(peVar14->base).faction >> 2)) >>
                 (((peVar14->base).faction & 3) << 1) & 0xff03;
         (peVar14->base).target = (uint8_t)uVar8;
-        uVar13 = (undefined1)(uVar8 >> 8);
-        cVar5 = func_0x0004f32d(0x2379,(destEnt->base).x,(peVar14->base).y,
-                                CONCAT11(uVar13,(peVar14->base).target),CONCAT11(uVar13,animByte));
-        if (cVar5 == '\0') {
+        valHi = (undefined1)(uVar8 >> 8);
+        ok = func_0x0004f32d(0x2379,(destEnt->base).x,(peVar14->base).y,
+                                CONCAT11(valHi,(peVar14->base).target),CONCAT11(valHi,animByte));
+        if (ok == '\0') {
           (destEnt->base).x = (destEnt->base).x + (int)*(char *)((peVar14->base).target + 0x885)
           ;
-          puVar1 = &(peVar14->base).y;
-          *puVar1 = *puVar1 + (int)*(char *)((peVar14->base).target + 0x889);
-          puVar2 = &(peVar14->base).faction;
-          *puVar2 = *puVar2 + 0x1;
+          yPtr = &(peVar14->base).y;
+          *yPtr = *yPtr + (int)*(char *)((peVar14->base).target + 0x889);
+          factionPtr = &(peVar14->base).faction;
+          *factionPtr = *factionPtr + 0x1;
         }
         else {
           (peVar14->base).faction = 0x0;
@@ -738,15 +738,15 @@ void __cdecl16far attact_usesAlignUp42(void)
       }
       else {
         dxSign = ovr_ovc07_signum((peVar14->base).destX - (destEnt->base).x);
-        uVar15 = 0x22da;
+        segArg = 0x22da;
         dySign = ovr_ovc07_signum((peVar14->base).destY - (peVar14->base).y);
         if (dxSign != 0) {
-          uVar15 = 0x2337;
+          segArg = 0x2337;
           uVar10 = ovr_randBelow(2,0);
           if ((char)uVar10 != '\0') {
-            cVar5 = sub_OVC21_manage_c_23C2(0x2337,startX,startY,'\x02' - (char)dxSign,animByte,
+            ok = sub_OVC21_manage_c_23C2(0x2337,startX,startY,'\x02' - (char)dxSign,animByte,
                                     flag4000);
-            if (cVar5 == '\0') {
+            if (ok == '\0') {
               (destEnt->base).x = (destEnt->base).x + dxSign;
               (peVar14->base).target = 0x2 - (char)dxSign;
               goto L_attact_3f0b_1082_1477;
@@ -754,19 +754,19 @@ void __cdecl16far attact_usesAlignUp42(void)
           }
         }
         if (dySign != 0) {
-          cVar5 = sub_OVC21_manage_c_23C2(uVar15,startX,startY,(char)dySign + '\x01',animByte,
+          ok = sub_OVC21_manage_c_23C2(segArg,startX,startY,(char)dySign + '\x01',animByte,
                                   flag4000);
-          if (cVar5 == '\0') {
-            puVar1 = &(peVar14->base).y;
-            *puVar1 = *puVar1 + dySign;
+          if (ok == '\0') {
+            yPtr = &(peVar14->base).y;
+            *yPtr = *yPtr + dySign;
             (peVar14->base).target = (char)dySign + 0x1;
             goto L_attact_3f0b_1082_1477;
           }
         }
         if (dxSign != 0) {
-          cVar5 = sub_OVC21_manage_c_23C2(uVar15,startX,startY,'\x02' - (char)dxSign,animByte,
+          ok = sub_OVC21_manage_c_23C2(segArg,startX,startY,'\x02' - (char)dxSign,animByte,
                                   flag4000);
-          if (cVar5 == '\0') {
+          if (ok == '\0') {
             (destEnt->base).x = (destEnt->base).x + dxSign;
             (peVar14->base).target = 0x2 - (char)dxSign;
             goto L_attact_3f0b_1082_1477;
@@ -787,24 +787,24 @@ void __cdecl16far attact_usesAlignUp42(void)
                                       ((int)(uint)(peVar14->base).faction >> 2)) >>
                   (((peVar14->base).faction & 3) << 1) & 0xff03;
           (peVar14->base).target = (uint8_t)uVar8;
-          uVar13 = (undefined1)(uVar8 >> 8);
-          cVar5 = func_0x0004f32d(0x2386,startX,startY,CONCAT11(uVar13,(peVar14->base).target),
-                                  CONCAT11(uVar13,animByte));
-          if (cVar5 == '\0') {
+          valHi = (undefined1)(uVar8 >> 8);
+          ok = func_0x0004f32d(0x2386,startX,startY,CONCAT11(valHi,(peVar14->base).target),
+                                  CONCAT11(valHi,animByte));
+          if (ok == '\0') {
             (destEnt->base).x =
                  (destEnt->base).x + (int)*(char *)((peVar14->base).target + 0x885);
-            puVar1 = &(peVar14->base).y;
-            *puVar1 = *puVar1 + (int)*(char *)((peVar14->base).target + 0x889);
-            puVar2 = &(peVar14->base).faction;
-            *puVar2 = *puVar2 + 0x1;
+            yPtr = &(peVar14->base).y;
+            *yPtr = *yPtr + (int)*(char *)((peVar14->base).target + 0x889);
+            factionPtr = &(peVar14->base).faction;
+            *factionPtr = *factionPtr + 0x1;
           }
         }
       }
 L_attact_3f0b_1082_1477:
       reported = 0x1;
       uVar8 = ovr_alignUp4((peVar14->base).destX,0,0);
-      uVar9 = ovr_alignUp4((destEnt->base).x,0,0);
-      if ((uVar8 == uVar9) && ((peVar14->base).destY == (peVar14->base).y)) {
+      alignedX = ovr_alignUp4((destEnt->base).x,0,0);
+      if ((uVar8 == alignedX) && ((peVar14->base).destY == (peVar14->base).y)) {
         (peVar14->base).destX = 0;
         (peVar14->base).destY = 0;
         if (*(char *)((int)&(peVar14->base).entity + 3) == -1) {
@@ -816,14 +816,14 @@ L_attact_3f0b_1082_1477:
         }
         if (defByte != 0xff) {
           for (uVar8 = 0; uVar8 < SquareRecCount; uVar8 = uVar8 + 1) {
-            uVar9 = ovr_alignUp4(*(int *)(uVar8 * 0x13),0,0);
+            alignedX = ovr_alignUp4(*(int *)(uVar8 * 0x13),0,0);
             uVar11 = ovr_alignUp4((destEnt->base).x,0,0);
-            if ((uVar9 == uVar11) && (*(uint16_t *)((uint8_t *)&SquareRecs[uVar8] + 2) == (peVar14->base).y)) {
+            if ((alignedX == uVar11) && (*(uint16_t *)((uint8_t *)&SquareRecs[uVar8] + 2) == (peVar14->base).y)) {
               func_0x0004f930(0x2379,uVar8 * 0x13 + (uint)defByte + 0xe,0x17f8);
               if (*(uint16_t *)((uint8_t *)&SquareRecs[uVar8] + 2) == GfxRndSeed2) {
                 uVar8 = ovr_alignUp4(*(int *)(uVar8 * 0x13),0,0);
-                uVar9 = ovr_alignUp4(GfxRndSeed,0,0);
-                if (uVar8 == uVar9) {
+                alignedX = ovr_alignUp4(GfxRndSeed,0,0);
+                if (uVar8 == alignedX) {
                   (&reportedUnits)[defByte] = 0x1;
                 }
               }
@@ -832,7 +832,7 @@ L_attact_3f0b_1082_1477:
           }
         }
       }
-      uVar15 = 0x2379;
+      segArg = 0x2379;
       if (AgntFlag1 != false) {
         if ((((destEnt->base).x < GfxRndSeed - 2U) || (GfxRndSeed + 1U < (destEnt->base).x)) ||
            ((peVar14->base).y != GfxRndSeed2)) {
@@ -858,7 +858,7 @@ L_attact_3f0b_1082_1477:
                 else {
                   targetSrc = (peVar14->base).target - 2;
                 }
-                uVar15 = 0x2322;
+                segArg = 0x2322;
                 pcVar12 = ovr_ovc15_textArena(index,0,0);
                 if (((uint)pcVar12 & 0xff) == 0) break;
               }
@@ -866,7 +866,7 @@ L_attact_3f0b_1082_1477:
             else {
               rowsLeft = (char)((ulong)((peVar14->base).animFrame + 0xf) / 0x10);
               while (rowsLeft != '\0') {
-                uVar15 = 0x22ff;
+                segArg = 0x22ff;
                 ovr_agnt_usesAgntCount6(Entities + index,DAT_2000_d190);
                 rowsLeft = rowsLeft + -1;
               }
@@ -882,7 +882,7 @@ L_attact_3f0b_1082_1477:
               targetSrc = (peVar14->base).target - 2;
             }
             while( true ) {
-              uVar15 = 0x2322;
+              segArg = 0x2322;
               if (rowsLeft == '\0') break;
               ovr_ovc15_textArena(index,0,0);
               rowsLeft = rowsLeft + -1;
