@@ -405,12 +405,12 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
         bVar9 = *(byte *)((int)*(uint32_t *)(uStack_a << 2) + 0x49);
         if (0xe < (GLeaderSheets[uStack_a])->unitsOnTile) {
           ovc25_usesAlignUp42((byte)uStack_a,10,
-                              ((char_sheet_t *)(((uint)bVar9 << 2)))->x,
-                              ((char_sheet_t *)(((uint)bVar9 << 2)))->y,
+                              (GLeaderSheets[bVar9])->x,
+                              (GLeaderSheets[bVar9])->y,
                               (GLeaderSheets[uStack_a])->x,
                               (GLeaderSheets[uStack_a])->y);
           if ((GLeaderSheets[uStack_a])->reportState != '\x02') {
-            ovr_alignUp4(((char_sheet_t *)(((uint)bVar9 << 2)))->x,0,0);
+            ovr_alignUp4((GLeaderSheets[bVar9])->x,0,0);
             uStackY_2a = 0x2379;
             uStackY_2c = 0xc5d4;
             pcVar19 = ovr_stsprintf(acStackY_68,(char *)CONCAT22(0x58c0,_SS));
@@ -1613,11 +1613,11 @@ code_r0x00053afb:
   if ((bVar10 == 0xff) || (GCanPromote == '\0')) {
     pbVar13 = (byte *)0x0;
   }
-  else if (((char_sheet_t *)(((uint)bVar10 << 2)))->titleIndex < 5) {
+  else if ((GLeaderSheets[bVar10])->titleIndex < 5) {
     pbVar13 = (byte *)__C0_ASM_CopyRight + 0x24;
   }
   else {
-    pbVar13 = (byte *)((uint)((char_sheet_t *)(((uint)bVar10 << 2)))->titleIndex * 4 + 0x14);
+    pbVar13 = (byte *)((uint)(GLeaderSheets[bVar10])->titleIndex * 4 + 0x14);
   }
   for (; uVar27 < EntityCount; uVar27 = uVar27 + 1) {
     uVar29 = (uint16_t)((ulong)Entities >> 0x10);
@@ -1634,7 +1634,7 @@ code_r0x00053afb:
         bVar30 = true;
       }
       else {
-        bVar10 = ((char_sheet_t *)(((uint)bVar5 << 2)))->partySlot;
+        bVar10 = (GLeaderSheets[bVar5])->partySlot;
         uStackY_1c = CONCAT11(bVar10,(char)uStackY_1c);
         if (bVar10 < 5) {
           uVar35 = peVar23[uVar27].base.y;

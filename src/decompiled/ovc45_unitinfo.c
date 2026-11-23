@@ -424,8 +424,8 @@ int __cdecl16far ovc45_rankPercent(byte partyIndex)
 {
   int iVar1;
   
-  if (((char_sheet_t *)(((uint)partyIndex << 2)))->rank < 0xb) {
-    iVar1 = ((char_sheet_t *)(((uint)partyIndex << 2)))->rank * 10;
+  if ((GLeaderSheets[partyIndex])->rank < 0xb) {
+    iVar1 = (GLeaderSheets[partyIndex])->rank * 10;
   }
   else {
     iVar1 = 100;
@@ -596,7 +596,7 @@ uint __cdecl16far ovc45_compute5(void)
     if (*(byte *)((int)uVar1 + 0x86) < 4) {
       uVar3 = CONCAT11((char)(((uint)bVar2 << 2) >> 8),4);
     }
-    else if (((char_sheet_t *)(((uint)bVar2 << 2)))->titleIndex < 9) {
+    else if ((GLeaderSheets[bVar2])->titleIndex < 9) {
       uVar1 = *(uint32_t *)((uint)bVar2 << 2);
       uVar3 = CONCAT11((char)(((uint)bVar2 << 2) >> 8),*(char *)((int)uVar1 + 0x86) + '\x01');
     }
@@ -952,7 +952,7 @@ ovc45_buildPlacementMessage
     uStack_f = 0;
     bStack_11 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
     uVar9 = ovr_bldng_usesGStrangeTable
-                      (((char_sheet_t *)(((uint)bStack_11 << 2)))->buildType[0]);
+                      ((GLeaderSheets[bStack_11])->buildType[0]);
     bStack_12 = (byte)uVar9;
     iVar10 = (uVar9 & 0xff) * 0x27;
     uVar23 = SUB21(_SS,0);

@@ -1128,7 +1128,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
       uVar10 = (uint16_t)((ulong)Entities >> 0x10);
       bStack_3 = AGNT_FIELD(&((entity_t *)Entities)[ent], base.entity, 3);
       if ((((bStack_3 != 0xff) &&
-           (((char_sheet_t *)(((uint)bStack_3 << 2)))->partySlot == uVar8)) &&
+           ((GLeaderSheets[bStack_3])->partySlot == uVar8)) &&
           (uVar5 = ovr_alignUp4(((entity_t *)Entities)[ent].base.destX,0,0), uVar5 == uVar4)) &&
          (((entity_t *)Entities)[ent].base.destY == puVar6[1])) {
         uVar7 = uVar7 + 1;

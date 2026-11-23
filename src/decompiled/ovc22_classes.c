@@ -100,10 +100,10 @@ uint __cdecl16far ovc22_compute1(byte partyIndex,uint value)
 int __cdecl16far ovc22_applyRankBonus(byte partyIndex,int cost)
 
 {
-  if (((char_sheet_t *)(((uint)partyIndex << 2)))->rank < 10) {
-    if (((char_sheet_t *)(((uint)partyIndex << 2)))->rank != 0) {
+  if ((GLeaderSheets[partyIndex])->rank < 10) {
+    if ((GLeaderSheets[partyIndex])->rank != 0) {
       cost = (int)(((long)cost *
-                    (long)(((char_sheet_t *)(((uint)partyIndex << 2)))->rank + 10) &
+                    (long)((GLeaderSheets[partyIndex])->rank + 10) &
                    0xffffU) / 10);
     }
   }
@@ -597,11 +597,11 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
     }
     pbVar2 = (uint16_t)((byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d));
     *pbVar2 = *pbVar2 & 0xf7;
-    ((char_sheet_t *)(((uint)partyIndex << 2)))->maxTrade = 0;
+    (GLeaderSheets[partyIndex])->maxTrade = 0;
     *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa6) = 0;
     *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa5) = 0;
     *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa9) = 0;
-    bVar17 = ((char_sheet_t *)(((uint)partyIndex << 2)))->classStr;
+    bVar17 = (GLeaderSheets[partyIndex])->classStr;
     (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)( (far_t far *)CONCAT11(bVar17,(byte)uStack_6));
     if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar17 * 0x95) == '\x01') {
       (*(uint32_t *)((uint8_t *)&(uStack_6))) = CONCAT12(1,(far_t far *)uStack_6);
@@ -1055,8 +1055,8 @@ L_OVC22_5087_4975_4ABE:
                       scratch = units[*(int *)((uStack_8 & 0xff) * 2 + -0x6d44)].y;
                     }
                     else {
-                      puStack_a = (uint *)((char_sheet_t *)(((uint)partyIndex << 2)))->x;
-                      scratch = ((char_sheet_t *)(((uint)partyIndex << 2)))->y;
+                      puStack_a = (uint *)(GLeaderSheets[partyIndex])->x;
+                      scratch = (GLeaderSheets[partyIndex])->y;
                     }
                     uVar53 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
                     iVar29 = (int)*(uint32_t *)((uint)partyIndex << 2);
@@ -1068,13 +1068,13 @@ L_OVC22_5087_4975_4ABE:
                       (*(uint32_t *)((uint8_t *)&(uStack_6))) = ZEXT23((far_t far *)uStack_6);
                     }
                     if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                                  (uint)((char_sheet_t *)(((uint)partyIndex << 2)))->classStr * 0x95) & 0x80) == 0) {
+                                  (uint)(GLeaderSheets[partyIndex])->classStr * 0x95) & 0x80) == 0) {
                       uStack_6 = (far_t far *)(ulong)(uint3)uStack_6;
                     }
                     else {
                       uStack_6 = (far_t far *)CONCAT13(3,(uint3)uStack_6);
                     }
-                    if ((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 2) != 0) {
+                    if (((GLeaderSheets[partyIndex])->flags5d & 2) != 0) {
                       uStack_6 = (far_t far *)((ulong)uStack_6 | 0x1000000);
                     }
                     uVar11 = *(uint32_t *)((uint)partyIndex << 2);
@@ -1095,8 +1095,8 @@ L_OVC22_5087_4975_4ABE:
                       uStack_e =(uint16_t)( (uint *)ovc22_usesRandBelow(partyIndex,(uint16_t)puStack_a,scratch)
                       );
                       if (uStack_e == (uint *)0x0) {
-                        puStack_a = (uint *)((char_sheet_t *)(((uint)partyIndex << 2)))->x;
-                        scratch = ((char_sheet_t *)(((uint)partyIndex << 2)))->y;
+                        puStack_a = (uint *)(GLeaderSheets[partyIndex])->x;
+                        scratch = (GLeaderSheets[partyIndex])->y;
                       }
                       else {
                         if ((BuildingTypes[uStack_e].flags2 & 0x60) == 0) {
@@ -1130,8 +1130,8 @@ L_OVC22_5087_4975_4ABE:
                       }
                     }
                     if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0') {
-                      if (((char_sheet_t *)(((uint)partyIndex << 2)))->housing <
-                          ((char_sheet_t *)(((uint)partyIndex << 2)))->population) {
+                      if ((GLeaderSheets[partyIndex])->housing <
+                          (GLeaderSheets[partyIndex])->population) {
                         pfVar20 = (far_t far *)ovr_ovc18_textTypeLen(partyIndex,0,0,0,0,0);
                       }
                       else {
@@ -1315,7 +1315,7 @@ L_OVC22_5087_4975_4ABE:
                                   uStack_16 =(uint16_t)( (far_t far *)CONCAT11(bVar17,(undefined1)uStack_16));
                                   if (0xe < ((char_sheet_t *)(((int)puStack_a << 2)))->unitsOnTile) {
                                     ovc25_usesAlignUp42((byte)puStack_a,10,
-                                                        ((char_sheet_t *)(((uint)bVar17 << 2)))->x,((char_sheet_t *)(((uint)bVar17 << 2)))->y,
+                                                        (GLeaderSheets[bVar17])->x,(GLeaderSheets[bVar17])->y,
                                                         ((char_sheet_t *)(((int)puStack_a << 2)))->x,((char_sheet_t *)(((int)puStack_a << 2)))->y);
                                     if (((char_sheet_t *)(((int)puStack_a << 2)))->reportState
                                         != '\x02') {
@@ -1845,7 +1845,7 @@ L_OVC22_5087_0234_32B8:
     else {
       *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x53) = 0xff;
     }
-    ((char_sheet_t *)(((uint)partyIndex << 2)))->reserved_82 = 0;
+    (GLeaderSheets[partyIndex])->reserved_82 = 0;
     if ((resourceTotals[0] < 0) || (resourceTotals[0] < 1)) {
       uVar53 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
       iVar29 = (int)*(uint32_t *)((uint)partyIndex << 2);
@@ -1858,10 +1858,10 @@ L_OVC22_5087_0234_32B8:
       *(uint16_t *)(iVar29 + 0x80) = 0;
       *(uint16_t *)(iVar29 + 0x7e) = 0xffff;
     }
-    ((char_sheet_t *)(((uint)partyIndex << 2)))->housing = iStack_22;
-    ((char_sheet_t *)(((uint)partyIndex << 2)))->population = uStack_1e;
-    ((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd = (int)uStack_20;
-    ((char_sheet_t *)(((uint)partyIndex << 2)))->income = iVar30;
+    (GLeaderSheets[partyIndex])->housing = iStack_22;
+    (GLeaderSheets[partyIndex])->population = uStack_1e;
+    (GLeaderSheets[partyIndex])->foodProd = (int)uStack_20;
+    (GLeaderSheets[partyIndex])->income = iVar30;
     uVar53 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
     iVar30 = (int)*(uint32_t *)((uint)partyIndex << 2);
     *(int *)(iVar30 + 0x8c) = iStack_36;
@@ -1869,10 +1869,10 @@ L_OVC22_5087_0234_32B8:
     *(int16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 100) = animStep;
     *(uint16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x66) = uStack_28;
     *(uint16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x68) = uStack_26;
-    ((char_sheet_t *)(((uint)partyIndex << 2)))->ringBudgetIn[0] = resourceTotals[1];
+    (GLeaderSheets[partyIndex])->ringBudgetIn[0] = resourceTotals[1];
     *(int16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x72) = resourceTotals[2];
     *(int16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x74) = resourceTotals[3];
-    ((char_sheet_t *)(((uint)partyIndex << 2)))->rank = iStack_3c;
+    (GLeaderSheets[partyIndex])->rank = iStack_3c;
     if (uStack_24 < 0x100) {
       *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x52) = (undefined1)uStack_24;
     }
@@ -1880,7 +1880,7 @@ L_OVC22_5087_0234_32B8:
       *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x52) = 0xff;
     }
     uVar23 = ovr_ovc36_usesLDIV_at_(partyIndex);
-    ((char_sheet_t *)(((uint)partyIndex << 2)))->popularity = (char)uVar23;
+    (GLeaderSheets[partyIndex])->popularity = (char)uVar23;
     in_AX = (far_t far *)ovc22_usesPlayerCount(partyIndex);
   }
   return in_AX;
@@ -2471,11 +2471,11 @@ L_upd_units_5087_1d7d_202C:
   if ((bVar17 == 0xff) || (GCanPromote == '\0')) {
     scratch = 0;
   }
-  else if (((char_sheet_t *)(((uint)bVar17 << 2)))->titleIndex < 5) {
+  else if ((GLeaderSheets[bVar17])->titleIndex < 5) {
     scratch = 0x28;
   }
   else {
-    scratch = (uint)((char_sheet_t *)(((uint)bVar17 << 2)))->titleIndex * 4 + 0x14;
+    scratch = (uint)(GLeaderSheets[bVar17])->titleIndex * 4 + 0x14;
   }
   for (uStack_16 = EntityScanPos; uStack_16 < EntityCount;
       uStack_16 = (far_t far *)((int)&uStack_16->ofs + 1)) {
@@ -2494,7 +2494,7 @@ L_upd_units_5087_1d7d_202C:
         bVar59 = true;
       }
       else {
-        bStack_1b = ((char_sheet_t *)(((uint)bVar16 << 2)))->partySlot;
+        bStack_1b = (GLeaderSheets[bVar16])->partySlot;
         if (bStack_1b < 5) {
           uStack_1a = peVar41[(int)uStack_16].base.y;
           uStack_18 = ovr_alignUp4(((peVar41 + (int)uStack_16)->base).x,0,0);
@@ -2705,12 +2705,12 @@ uint16_t __cdecl16far ovc22_usesPlayerCount(byte partyIndex)
   uint16_t uVar5;
   
   if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0') {
-    cVar3 = (char)((ulong)((char_sheet_t *)(((uint)partyIndex << 2)))->unitCount / 10);
+    cVar3 = (char)((ulong)(GLeaderSheets[partyIndex])->unitCount / 10);
     bVar2 = cVar3 + 2;
     uVar5 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
     iVar4 = (int)*(uint32_t *)((uint)partyIndex << 2);
     if ((uint)(*(int *)(iVar4 + 0x4d) * 2 + *(int *)(iVar4 + 0x4d)) >> 1 <=
-        ((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd) {
+        (GLeaderSheets[partyIndex])->foodProd) {
       bVar2 = cVar3 + 4;
     }
   }
@@ -2752,8 +2752,8 @@ uint __cdecl16far ovc22_usesEntities(int entityIndex)
     uVar3 = (uint)((entity_t *)iVar5)[entityIndex].base.gindex * 0x95;
     if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + uVar3) & 0x800) == 0) {
       if ((*(char *)((int)*(uint32_t *)((uint)bVar2 << 2) + 0x3f) == '\0') &&
-         (uVar3 = ((char_sheet_t *)(((uint)bVar2 << 2)))->housing,
-         uVar3 < ((char_sheet_t *)(((uint)bVar2 << 2)))->population)) {
+         (uVar3 = (GLeaderSheets[bVar2])->housing,
+         uVar3 < (GLeaderSheets[bVar2])->population)) {
         uVar3 = uVar3 & 0xff00;
       }
       else {
@@ -3678,11 +3678,11 @@ void __cdecl16far upd_usesAlignUp4(void)
     if ((bStack_5 == 0xff) || (GCanPromote == '\0')) {
       iStack_c = 0;
     }
-    else if (((char_sheet_t *)(((uint)bStack_5 << 2)))->titleIndex < 5) {
+    else if ((GLeaderSheets[bStack_5])->titleIndex < 5) {
       iStack_c = 0x28;
     }
     else {
-      iStack_c = (uint)((char_sheet_t *)(((uint)bStack_5 << 2)))->titleIndex * 4 + 0x14;
+      iStack_c = (uint)(GLeaderSheets[bStack_5])->titleIndex * 4 + 0x14;
     }
     for (idx = EntityScanPos; idx < EntityCount; idx = idx + 1) {
       unitsSeg = (uint16_t)((ulong)Entities >> 0x10);
@@ -3699,7 +3699,7 @@ void __cdecl16far upd_usesAlignUp4(void)
           bVar27 = true;
         }
         else {
-          bStack_1b = ((char_sheet_t *)(((uint)bVar5 << 2)))->partySlot;
+          bStack_1b = (GLeaderSheets[bVar5])->partySlot;
           if (bStack_1b < 5) {
             uStack_1a = peVar20[idx].base.y;
             entX = ovr_alignUp4(((peVar20 + idx)->base).x,0,0);
@@ -4026,7 +4026,7 @@ uint __cdecl16far ovc22_usesGUnitGrid2(int x,int y,byte partyIndex)
   uint uVar1;
   uint uVar2;
   
-  if ((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 4) == 0) {
+  if (((GLeaderSheets[partyIndex])->flags5d & 4) == 0) {
     uVar1 = (*(short (*) [148] [60])GUnitGrid)[x][y];
     if (uVar1 < 0xf8) {
       uVar2 = ovr_ovc23_findRecordAt(x,y,0);
@@ -4424,12 +4424,12 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
   int iVar5;
   uint16_t sheetSeg;
   
-  if (((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 2) == 0) ||
-     ((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 4) == 0)) {
+  if ((((GLeaderSheets[partyIndex])->flags5d & 2) == 0) ||
+     (((GLeaderSheets[partyIndex])->flags5d & 4) == 0)) {
     if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0') {
       bldType = ovc22_usesGUnitGrid2(x,y,partyIndex);
       if ((*(uint *)((uint8_t *)&BuildingTypes[bldType] + 19) & 0x20) == 0) {
-        if ((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 2) == 0) {
+        if (((GLeaderSheets[partyIndex])->flags5d & 2) == 0) {
           sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
           iVar4 = (int)*(uint32_t *)((uint)partyIndex << 2);
           if (*(int *)(iVar4 + 0x56) == 0 && *(int *)(iVar4 + 0x58) == 0) {
@@ -4438,7 +4438,7 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
           else {
             sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
             iVar4 = (int)*(uint32_t *)((uint)partyIndex << 2);
-            if (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
+            if ((GLeaderSheets[partyIndex])->foodProd <
                 (uint)(*(int *)(iVar4 + 0x4d) * 2 + *(int *)(iVar4 + 0x4d)) >> 2) {
               bldType = 0;
             }
@@ -4474,8 +4474,8 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
           roll = ovr_randBelow(8,0);
           if (((roll & 0xff) == 0) ||
              ((roll = ovr_randBelow(3,0), (roll & 0xff) == 0 &&
-              (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
-               ((char_sheet_t *)(((uint)partyIndex << 2)))->population)))) {
+              ((GLeaderSheets[partyIndex])->foodProd <
+               (GLeaderSheets[partyIndex])->population)))) {
             roll = ovr_randBelow(3,0);
             bldType = (roll & 0xff) + 1;
           }
@@ -4512,7 +4512,7 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
                 }
               }
             }
-            bVar1 = ((char_sheet_t *)(((uint)partyIndex << 2)))->classStr;
+            bVar1 = (GLeaderSheets[partyIndex])->classStr;
             roll = ovr_randBelow(3,0);
             bldType = (roll & 0xff) +
                     (uint)*(byte *)((int)&worldMenuLabels[0xb].ofs + 1 + (uint)bVar1 * 0x95);
@@ -4606,8 +4606,8 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
     y = ((unit_t *)GUnits)[*(int *)((uint)listIndex * 2 + -0x6d44)].y;
   }
   else {
-    x = ((char_sheet_t *)(((uint)partyIndex << 2)))->x;
-    y = ((char_sheet_t *)(((uint)partyIndex << 2)))->y;
+    x = (GLeaderSheets[partyIndex])->x;
+    y = (GLeaderSheets[partyIndex])->y;
   }
   unitsSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
   sheetOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
@@ -4619,14 +4619,14 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
     hasUnits = 0;
   }
   if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                (uint)((char_sheet_t *)(((uint)partyIndex << 2)))->classStr * 0x95) & 0x80)
+                (uint)(GLeaderSheets[partyIndex])->classStr * 0x95) & 0x80)
       == 0) {
     bStack_3 = 0;
   }
   else {
     bStack_3 = 3;
   }
-  if ((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 2) != 0) {
+  if (((GLeaderSheets[partyIndex])->flags5d & 2) != 0) {
     bStack_3 = bStack_3 | 1;
   }
   uVar5 = *(uint32_t *)((uint)partyIndex << 2);
@@ -4643,8 +4643,8 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
     }
     uVar7 = ovc22_usesRandBelow(partyIndex,x,y);
     if (uVar7 == 0) {
-      x = ((char_sheet_t *)(((uint)partyIndex << 2)))->x;
-      y = ((char_sheet_t *)(((uint)partyIndex << 2)))->y;
+      x = (GLeaderSheets[partyIndex])->x;
+      y = (GLeaderSheets[partyIndex])->y;
     }
     else {
       if ((*(uint *)((uint8_t *)&BuildingTypes[uVar7] + 19) & 0x60) == 0) {
@@ -4677,8 +4677,8 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
     }
   }
   if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0') {
-    if (((char_sheet_t *)(((uint)partyIndex << 2)))->housing <
-        ((char_sheet_t *)(((uint)partyIndex << 2)))->population) {
+    if ((GLeaderSheets[partyIndex])->housing <
+        (GLeaderSheets[partyIndex])->population) {
       ovr_ovc18_textTypeLen(partyIndex,x,y,0x1,(char)x,(char)y);
     }
     else {

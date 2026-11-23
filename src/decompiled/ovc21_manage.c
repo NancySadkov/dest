@@ -594,7 +594,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     firstLeader = manage_findFirstLeader();
     TextBlitY = TextBlitY + 0xf;
     if (((sheet_00->titleIndex != 0) && (firstLeader != 0xff)) &&
-       (uVar4 = 0x217a, ((char_sheet_t *)(((uint)firstLeader << 2)))->titleIndex < 9)) {
+       (uVar4 = 0x217a, (GLeaderSheets[firstLeader])->titleIndex < 9)) {
       manage_usesBlitLabel2("popularity",0x7d);
       manage_usesBlitLabel2("city blocks",0xdc);
       TextBlitY = TextBlitY + 10;
@@ -2063,7 +2063,7 @@ byte __cdecl16far manage_findFirstLeader(void)
     if (GLeaderCount <= bVar1) {
       return 0xff;
     }
-    if (((char_sheet_t *)(((uint)bVar1 << 2)))->titleIndex != '\0') break;
+    if ((GLeaderSheets[bVar1])->titleIndex != '\0') break;
     bVar1 = bVar1 + 1;
   }
   return bVar1;

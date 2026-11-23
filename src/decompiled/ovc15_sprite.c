@@ -724,7 +724,7 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
     }
     ((entity_t *)Entities)[EntityCount].base.level =
          *(uint8_t *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95);
-    if ((((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 0x10) != 0) &&
+    if (((((GLeaderSheets[partyIndex])->flags5d & 0x10) != 0) &&
         (*(byte *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95) < 5)) &&
        (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) != -1)) {
       while (((entity_t *)Entities)[EntityCount].base.level < 5) {
@@ -3061,14 +3061,14 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
   bStack_9 = 0xff;
   for (bStack_7 = 0; bStack_7 < GLeaderCount; bStack_7 = bStack_7 + 1) {
     if ((*(char *)((int)*(uint32_t *)((uint)bStack_7 << 2) + 0x3f) == '\0') &&
-       (uStack_4 < ((char_sheet_t *)(((uint)bStack_7 << 2)))->unitCount)) {
+       (uStack_4 < (GLeaderSheets[bStack_7])->unitCount)) {
       bStack_8 = bStack_7;
-      uStack_4 = ((char_sheet_t *)(((uint)bStack_7 << 2)))->unitCount;
+      uStack_4 = (GLeaderSheets[bStack_7])->unitCount;
     }
     if ((*(char *)((int)*(uint32_t *)((uint)bStack_7 << 2) + 0x3f) != '\0') &&
-       (uStack_6 < ((char_sheet_t *)(((uint)bStack_7 << 2)))->unitCount)) {
+       (uStack_6 < (GLeaderSheets[bStack_7])->unitCount)) {
       bStack_9 = bStack_7;
-      uStack_6 = ((char_sheet_t *)(((uint)bStack_7 << 2)))->unitCount;
+      uStack_6 = (GLeaderSheets[bStack_7])->unitCount;
     }
   }
   if ((bStack_9 != 0xff) && (0xe < uStack_6)) {

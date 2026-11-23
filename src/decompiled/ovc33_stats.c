@@ -973,7 +973,7 @@ L_OVC27_2288:
     case (byte *)0x8:
       uVar30 = 0x217a;
       if (((char_sheet_t *)(pbVar21))->income <
-          (uint)-((char_sheet_t *)(((uint)in_stack_00000004 << 2)))->population) {
+          (uint)-(GLeaderSheets[in_stack_00000004])->population) {
         bVar28 = 5;
       }
       else {

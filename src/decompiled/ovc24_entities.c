@@ -513,8 +513,8 @@ uint16_t __cdecl16far ovc24_unitAtLeader(byte leaderIndex)
   short sVar5;
   uint16_t uVar6;
   
-  iVar3 = ((char_sheet_t *)(((uint)leaderIndex << 2)))->x;
-  iVar1 = ((char_sheet_t *)(((uint)leaderIndex << 2)))->y;
+  iVar3 = (GLeaderSheets[leaderIndex])->x;
+  iVar1 = (GLeaderSheets[leaderIndex])->y;
   bVar2 = ovr_manage_findFirstLeader();
   uVar6 = (uint16_t)((ulong)GUnitGrid >> 0x10);
   if (leaderIndex == bVar2) {
@@ -660,9 +660,9 @@ L_OVC24_5943_112e_1255:
               }
             }
             if ((((cStack_11 == '\0') && (1 < PlayerIndex)) && (GHighScoreSaved == '\0')) &&
-               ((((char_sheet_t *)(((uint)firstLeader << 2)))->alignment == '\x02' ||
-                ((((char_sheet_t *)(((uint)firstLeader << 2)))->alignment == '\x01' &&
-                 (8 < ((char_sheet_t *)(((uint)firstLeader << 2)))->titleIndex)))))) {
+               (((GLeaderSheets[firstLeader])->alignment == '\x02' ||
+                (((GLeaderSheets[firstLeader])->alignment == '\x01' &&
+                 (8 < (GLeaderSheets[firstLeader])->titleIndex)))))) {
               cStack_4 = '\x01';
             }
             if (cStack_4 == '\0') {
@@ -690,7 +690,7 @@ L_OVC24_5943_112e_15E7:
         }
       }
       if ((firstLeader == 0xff) ||
-         (((char_sheet_t *)(((uint)firstLeader << 2)))->active == '\0')) {
+         ((GLeaderSheets[firstLeader])->active == '\0')) {
         ovr_play_sfx(68,0,0);
         CurMusicType = 0x44;
         ovr_uiNotify((char *)"Your main stronghold has been destroyed. Game over.",0x2410,0);
@@ -810,14 +810,14 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
   bestOtherIdx = 0xff;
   if (*(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f) == '\0') {
     for (leaderIdx = 0; leaderIdx < GLeaderCount; leaderIdx = leaderIdx + 1) {
-      if (((((char_sheet_t *)(((uint)leaderIdx << 2)))->active != '\0') &&
+      if ((((GLeaderSheets[leaderIdx])->active != '\0') &&
           (*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3f) ==
            *(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f))) &&
-         (uVar1 = ((char_sheet_t *)(((uint)leaderIdx << 2)))->x -
-                  ((char_sheet_t *)(((uint)leaderIndex << 2)))->x,
+         (uVar1 = (GLeaderSheets[leaderIdx])->x -
+                  (GLeaderSheets[leaderIndex])->x,
          uVar4 = (int)uVar1 >> 0xf,
-         uVar2 = ((char_sheet_t *)(((uint)leaderIdx << 2)))->y -
-                 ((char_sheet_t *)(((uint)leaderIndex << 2)))->y,
+         uVar2 = (GLeaderSheets[leaderIdx])->y -
+                 (GLeaderSheets[leaderIndex])->y,
          uVar5 = (int)uVar2 >> 0xf, uVar1 = ((uVar1 ^ uVar4) - uVar4) + ((uVar2 ^ uVar5) - uVar5),
          uVar1 < bestDist)) {
         bestDist = uVar1;
@@ -827,13 +827,13 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
   }
   else {
     for (leaderIdx = 0; leaderIdx < GLeaderCount; leaderIdx = leaderIdx + 1) {
-      if (((((char_sheet_t *)(((uint)leaderIdx << 2)))->active != '\0') &&
+      if ((((GLeaderSheets[leaderIdx])->active != '\0') &&
           (*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3f) == '\0')) &&
-         (uVar1 = ((char_sheet_t *)(((uint)leaderIdx << 2)))->x -
-                  ((char_sheet_t *)(((uint)leaderIndex << 2)))->x,
+         (uVar1 = (GLeaderSheets[leaderIdx])->x -
+                  (GLeaderSheets[leaderIndex])->x,
          uVar4 = (int)uVar1 >> 0xf,
-         uVar2 = ((char_sheet_t *)(((uint)leaderIdx << 2)))->y -
-                 ((char_sheet_t *)(((uint)leaderIndex << 2)))->y,
+         uVar2 = (GLeaderSheets[leaderIdx])->y -
+                 (GLeaderSheets[leaderIndex])->y,
          uVar5 = (int)uVar2 >> 0xf,
          uVar1 = ((uVar1 ^ uVar4) - uVar4) + ((uVar2 ^ uVar5) - uVar5) * 2, uVar1 < bestOtherDist)) {
         bestOtherDist = uVar1;
@@ -846,9 +846,9 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
     if ((AGNT_FIELD(&((entity_t *)Entities)[uVar1], base.entity, 3) == leaderIndex) &&
        (AGNT_FIELD(&((entity_t *)Entities)[uVar1], base.entity, 3) = bestSameIdx, bestOtherIdx != 0xff)) {
       ((entity_t *)Entities)[uVar1].base.destX =
-           ((char_sheet_t *)(((uint)bestOtherIdx << 2)))->x;
+           (GLeaderSheets[bestOtherIdx])->x;
       ((entity_t *)Entities)[uVar1].base.destY =
-           ((char_sheet_t *)(((uint)bestOtherIdx << 2)))->y;
+           (GLeaderSheets[bestOtherIdx])->y;
     }
   }
   for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {

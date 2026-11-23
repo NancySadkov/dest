@@ -68,7 +68,7 @@ char * __cdecl16far ovc39_lordOrLady(void)
   char *pcVar2;
   
   bVar1 = ovr_manage_findFirstLeader();
-  if ((bVar1 == 0xff) || (((char_sheet_t *)(((uint)bVar1 << 2)))->gender == '\0')) {
+  if ((bVar1 == 0xff) || ((GLeaderSheets[bVar1])->gender == '\0')) {
     pcVar2 = (char *)"lord";
   }
   else {
@@ -240,18 +240,18 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
     }
     uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
     iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
-    if (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
+    if ((GLeaderSheets[partyIndex])->foodProd <
         (uint)(*(int *)(iVar6 + 0x4d) * 2 + *(int *)(iVar6 + 0x4d)) >> 1) {
-      if (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
-          ((char_sheet_t *)(((uint)partyIndex << 2)))->population) {
+      if ((GLeaderSheets[partyIndex])->foodProd <
+          (GLeaderSheets[partyIndex])->population) {
         uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
         iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
-        if (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
+        if ((GLeaderSheets[partyIndex])->foodProd <
             (uint)(*(int *)(iVar6 + 0x4d) * 2 + *(int *)(iVar6 + 0x4d)) >> 2) {
-          if (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
-              ((char_sheet_t *)(((uint)partyIndex << 2)))->population >> 1) {
-            if (((char_sheet_t *)(((uint)partyIndex << 2)))->foodProd <
-                ((char_sheet_t *)(((uint)partyIndex << 2)))->population >> 2) {
+          if ((GLeaderSheets[partyIndex])->foodProd <
+              (GLeaderSheets[partyIndex])->population >> 1) {
+            if ((GLeaderSheets[partyIndex])->foodProd <
+                (GLeaderSheets[partyIndex])->population >> 2) {
               bStack_c = 5;
             }
             else {
@@ -279,28 +279,28 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
     if ((iVar6 < 0) ||
        ((iVar6 == 0 &&
         (*(uint *)(iVar2 + 0x60) <
-         (uint)(((char_sheet_t *)(((uint)partyIndex << 2)))->population * 0x28))))) {
+         (uint)((GLeaderSheets[partyIndex])->population * 0x28))))) {
       uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
       iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
       iVar6 = *(int *)(iVar2 + 0x62);
       if ((iVar6 < 0) ||
          ((iVar6 == 0 &&
           (*(uint *)(iVar2 + 0x60) <
-           (uint)(((char_sheet_t *)(((uint)partyIndex << 2)))->population * 0x14))))) {
+           (uint)((GLeaderSheets[partyIndex])->population * 0x14))))) {
         uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
         iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
         iVar6 = *(int *)(iVar2 + 0x62);
         if ((iVar6 < 0) ||
            ((iVar6 == 0 &&
             (*(uint *)(iVar2 + 0x60) <
-             (uint)(((char_sheet_t *)(((uint)partyIndex << 2)))->population * 0x3c) >> 2)))) {
+             (uint)((GLeaderSheets[partyIndex])->population * 0x3c) >> 2)))) {
           uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
           iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
           iVar6 = *(int *)(iVar2 + 0x62);
           if ((iVar6 < 0) ||
              ((iVar6 == 0 &&
               (*(uint *)(iVar2 + 0x60) <
-               (uint)(((char_sheet_t *)(((uint)partyIndex << 2)))->population * 0x14) >> 1))))
+               (uint)((GLeaderSheets[partyIndex])->population * 0x14) >> 1))))
           {
             uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
             iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
@@ -308,7 +308,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             if ((iVar6 < 0) ||
                ((iVar6 == 0 &&
                 (*(uint *)(iVar2 + 0x60) <
-                 (uint)(((char_sheet_t *)(((uint)partyIndex << 2)))->population * 0x14) >> 2)))
+                 (uint)((GLeaderSheets[partyIndex])->population * 0x14) >> 2)))
                ) {
               bStack_f = 5;
             }
@@ -336,18 +336,18 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
     }
     uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
     iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
-    if (((char_sheet_t *)(((uint)partyIndex << 2)))->housing <
+    if ((GLeaderSheets[partyIndex])->housing <
         (uint)(*(int *)(iVar6 + 0x4d) * 2 + *(int *)(iVar6 + 0x4d)) >> 1) {
-      if (((char_sheet_t *)(((uint)partyIndex << 2)))->housing <
-          ((char_sheet_t *)(((uint)partyIndex << 2)))->population) {
+      if ((GLeaderSheets[partyIndex])->housing <
+          (GLeaderSheets[partyIndex])->population) {
         uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
         iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
-        if (((char_sheet_t *)(((uint)partyIndex << 2)))->housing <
+        if ((GLeaderSheets[partyIndex])->housing <
             (uint)(*(int *)(iVar6 + 0x4d) * 2 + *(int *)(iVar6 + 0x4d)) >> 2) {
-          if (((char_sheet_t *)(((uint)partyIndex << 2)))->housing <
-              ((char_sheet_t *)(((uint)partyIndex << 2)))->population >> 1) {
-            if (((char_sheet_t *)(((uint)partyIndex << 2)))->housing <
-                ((char_sheet_t *)(((uint)partyIndex << 2)))->population >> 2) {
+          if ((GLeaderSheets[partyIndex])->housing <
+              (GLeaderSheets[partyIndex])->population >> 1) {
+            if ((GLeaderSheets[partyIndex])->housing <
+                (GLeaderSheets[partyIndex])->population >> 2) {
               bStack_e = 5;
             }
             else {
@@ -371,18 +371,18 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
     }
     pcVar4 = (char *)0x2627a;
     if (*(uint *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) <
-        (uint)(((char_sheet_t *)(((uint)partyIndex << 2)))->population << 1)) {
+        (uint)((GLeaderSheets[partyIndex])->population << 1)) {
       pcVar4 = (char *)((uint)partyIndex << 2);
       if (*(uint *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) <
           ((char_sheet_t *)(pcVar4))->population) {
         pcVar4 = (char *)0x2627a;
         if (*(uint *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) <
-            ((char_sheet_t *)(((uint)partyIndex << 2)))->population >> 1) {
+            (GLeaderSheets[partyIndex])->population >> 1) {
           pcVar4 = (char *)0x2627a;
           if (*(int *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) < 0) {
             pcVar4 = (char *)0x2627a;
             if (*(uint *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) <
-                (uint)-((char_sheet_t *)(((uint)partyIndex << 2)))->population) {
+                (uint)-(GLeaderSheets[partyIndex])->population) {
               bStack_d = 5;
             }
             else {

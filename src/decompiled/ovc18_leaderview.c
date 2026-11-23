@@ -165,7 +165,7 @@ ovc18_spawnClassAgent
   uint32_t in_stack_0000fffa;
   byte bVar17;
   
-  bVar17 = ((char_sheet_t *)(((uint)classStr << 2)))->classStr;
+  bVar17 = (GLeaderSheets[classStr])->classStr;
   filename = (char *)CONCAT13((char)((ulong)in_stack_0000fffa >> 0x18),CONCAT12(bVar17,unaff_SI));
   uVar10 = 0x195d;
   if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)bVar17 * 0x95) & 0x800) == 0) {

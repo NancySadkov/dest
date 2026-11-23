@@ -289,9 +289,9 @@ void __cdecl16far ovc13_drawPanelLeaders(void)
   
   bVar2 = ovr_manage_findFirstLeader();
   for (bStack_3 = 0; bStack_3 < GLeaderCount; bStack_3 = bStack_3 + 1) {
-    if (((char_sheet_t *)(((uint)bStack_3 << 2)))->active != '\0') {
-      iVar3 = ((char_sheet_t *)(((uint)bStack_3 << 2)))->x;
-      iVar4 = ((char_sheet_t *)(((uint)bStack_3 << 2)))->y;
+    if ((GLeaderSheets[bStack_3])->active != '\0') {
+      iVar3 = (GLeaderSheets[bStack_3])->x;
+      iVar4 = (GLeaderSheets[bStack_3])->y;
       if ((((*(char *)((int)*(uint32_t *)((uint)bStack_3 << 2) + 0x3f) == '\0') ||
            (DebugVerbose != false)) ||
           (((*(short (*) [60] [148])GMapFlags)[iVar4][iVar3] & 8U) != 0)) &&
@@ -746,9 +746,9 @@ void __cdecl16far ovc13_drawPanelHighlight(void)
   if (Highlight1 == -1) {
     bVar4 = ovr_manage_findFirstLeader();
     for (bStack_3 = 0; bStack_3 < GLeaderCount; bStack_3 = bStack_3 + 1) {
-      if (((char_sheet_t *)(((uint)bStack_3 << 2)))->active != '\0') {
-        uVar1 = ((char_sheet_t *)(((uint)bStack_3 << 2)))->x;
-        uVar2 = ((char_sheet_t *)(((uint)bStack_3 << 2)))->y;
+      if ((GLeaderSheets[bStack_3])->active != '\0') {
+        uVar1 = (GLeaderSheets[bStack_3])->x;
+        uVar2 = (GLeaderSheets[bStack_3])->y;
         if ((((*(char *)((int)*(uint32_t *)((uint)bStack_3 << 2) + 0x3f) == '\0') ||
              (DebugVerbose != false)) ||
             (((*(short (*) [60] [148])GMapFlags)[uVar2][uVar1] & 8U) != 0)) &&

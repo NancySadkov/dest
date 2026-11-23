@@ -373,11 +373,11 @@ int __cdecl16far constrct_compute1(void)
   if (bVar1 == 0xff) {
     iVar2 = 0;
   }
-  else if (((char_sheet_t *)(((uint)bVar1 << 2)))->titleIndex < 5) {
+  else if ((GLeaderSheets[bVar1])->titleIndex < 5) {
     iVar2 = 0x14;
   }
   else {
-    iVar2 = (uint)((char_sheet_t *)(((uint)bVar1 << 2)))->titleIndex * 4 + 0x14;
+    iVar2 = (uint)(GLeaderSheets[bVar1])->titleIndex * 4 + 0x14;
   }
   return iVar2;
 }
@@ -421,7 +421,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
   lVar17 = CONCAT22((int)((ulong)in_stack_0000ff5e >> 0x10),unaff_SI);
   bVar3 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
   if ((partyIndex != 0xff) && (bVar3 != 0xff)) {
-    bVar4 = ((char_sheet_t *)(((uint)partyIndex << 2)))->classStr;
+    bVar4 = (GLeaderSheets[partyIndex])->classStr;
     iVar9 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)bVar4 * 0x95);
     uVar5 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)bVar4 * 0x95) * 0xf;
     iVar13 = 0;

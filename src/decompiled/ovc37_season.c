@@ -79,14 +79,14 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
       if ((GHighScoreSaved == '\0') &&
          ((((1 < PlayerIndex &&
             (capTextSeg = (uint8_t *)((char *)0x2627a),
-            ((char_sheet_t *)(((uint)bStack_3 << 2)))->alignment == '\x02')) &&
+            (GLeaderSheets[bStack_3])->alignment == '\x02')) &&
            (bVar2 = season_textMainCastle(), bVar2)) ||
           ((capTextSeg = (uint8_t *)((char *)0x2627a),
-           8 < ((char_sheet_t *)(((uint)bStack_3 << 2)))->titleIndex &&
+           8 < (GLeaderSheets[bStack_3])->titleIndex &&
            ((capTextSeg = (uint8_t *)((char *)0x2627a),
-            ((char_sheet_t *)(((uint)bStack_3 << 2)))->alignment == '\0' ||
+            (GLeaderSheets[bStack_3])->alignment == '\0' ||
             ((capTextSeg = (uint8_t *)((char *)0x2627a),
-             ((char_sheet_t *)(((uint)bStack_3 << 2)))->alignment == '\x01' &&
+             (GLeaderSheets[bStack_3])->alignment == '\x01' &&
              (bVar2 = season_textMainCastle(), bVar2)))))))))) {
         cStack_4 = '\x01';
       }
@@ -151,7 +151,7 @@ uint __cdecl16far season_checkEndGame(byte leaderIndex)
   }
   else {
     bVar1 = ovr_ovc30_compute1(*(byte *)((int)&worldMenuLabels[0xc].seg +
-                                        (uint)((char_sheet_t *)(((uint)leaderIndex << 2)))->classStr * 0x95));
+                                        (uint)(GLeaderSheets[leaderIndex])->classStr * 0x95));
     if (bVar1 < 2) {
       if (((byte *)promotionBandUsed)[bVar1] != 0) {
         return 0;
@@ -216,7 +216,7 @@ void __cdecl16far season_usesGPromotableCount(void)
   
   season_countPromotable();
   bVar1 = ovr_manage_findFirstLeader();
-  if ((bVar1 != 0xff) && (((char_sheet_t *)(((uint)bVar1 << 2)))->titleIndex < 9)) {
+  if ((bVar1 != 0xff) && ((GLeaderSheets[bVar1])->titleIndex < 9)) {
     uVar2 = ovr_manage_usesGLeaderCount();
     bVar1 = season_usesDifficulty();
     if (bVar1 <= uVar2) {

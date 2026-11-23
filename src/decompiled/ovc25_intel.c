@@ -512,13 +512,13 @@ void __cdecl16far ovc25_spyReportNotice(void)
           otherLeaderIdx = *(byte *)((int)*(uint32_t *)(leaderIdx << 2) + 0x49);
           if (0xe < (GLeaderSheets[leaderIdx])->unitsOnTile) {
             ovc25_usesAlignUp42((byte)leaderIdx,10,
-                                ((char_sheet_t *)(((uint)otherLeaderIdx << 2)))->x,
-                                ((char_sheet_t *)(((uint)otherLeaderIdx << 2)))->y,
+                                (GLeaderSheets[otherLeaderIdx])->x,
+                                (GLeaderSheets[otherLeaderIdx])->y,
                                 (GLeaderSheets[leaderIdx])->x,
                                 (GLeaderSheets[leaderIdx])->y);
             if ((GLeaderSheets[leaderIdx])->reportState != '\x02') {
-              uVar2 = ovr_alignUp4(((char_sheet_t *)(((uint)otherLeaderIdx << 2)))->x,
-                                   ((char_sheet_t *)(((uint)otherLeaderIdx << 2)))->y,0xa000);
+              uVar2 = ovr_alignUp4((GLeaderSheets[otherLeaderIdx])->x,
+                                   (GLeaderSheets[otherLeaderIdx])->y,0xa000);
               iVar7 = (uint)(GLeaderSheets[leaderIdx])->classStr * 0x95;
               uVar4 = 0x195d;
               msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58c0,curSeg),
@@ -918,12 +918,12 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex)
   if (((partyIndex != 0xff) &&
       (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) != '\0')) &&
      (*(int *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5e) == 0)) {
-    bStack_3 = ((char_sheet_t *)(((uint)partyIndex << 2)))->classStr;
+    bStack_3 = (GLeaderSheets[partyIndex])->classStr;
     uVar4 = (uint)*(byte *)((int)&worldMenuLabels[8].seg + (uint)bStack_3 * 0x95) +
             (uint)*(byte *)((int)&worldMenuLabels[8].ofs + 1 + (uint)bStack_3 * 0x95) +
             (uint)*(byte *)((int)&worldMenuLabels[8].seg + 1 + (uint)bStack_3 * 0x95);
     if (((uVar4 < PlayerCount) &&
-        ((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 1) == 0)) &&
+        (((GLeaderSheets[partyIndex])->flags5d & 1) == 0)) &&
        (uVar2 = ovr_randBelow(100,0), (int)(uVar2 & 0xff) < (int)(PlayerCount - uVar4))) {
       *(uint16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5e) = 0x19;
       ovr_play_sfx(82,0,0);
@@ -973,19 +973,19 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
   byte bStack_5;
   int iStack_4;
   
-  iStack_4 = ovc25_compute1(((char_sheet_t *)(((uint)partyIndex << 2)))->classStr);
+  iStack_4 = ovc25_compute1((GLeaderSheets[partyIndex])->classStr);
   if ((((((iStack_4 < (int)(uint)PlayerCount) &&
          (*(int *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5e) == 0)) &&
         (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x40) != '\0')) &&
-       (((((char_sheet_t *)(((uint)partyIndex << 2)))->flags5d & 1) == 0 &&
-        (9 < ((char_sheet_t *)(((uint)partyIndex << 2)))->unitCount)))) &&
+       ((((GLeaderSheets[partyIndex])->flags5d & 1) == 0 &&
+        (9 < (GLeaderSheets[partyIndex])->unitCount)))) &&
       ((*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x49) != -1 &&
        ((bStack_5 = *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x49),
-        ((char_sheet_t *)(((uint)bStack_5 << 2)))->unitCount < 0x50 ||
+        (GLeaderSheets[bStack_5])->unitCount < 0x50 ||
         (uVar3 = ovr_randBelow(0x28,0), (char)uVar3 == '\0')))))) &&
      (8 < ((agnt_t *)(((uint)partyIndex << 2)))->teamCode)) {
-    if (((char_sheet_t *)(((uint)bStack_5 << 2)))->unitCount < 0x28) {
-      if (((char_sheet_t *)(((uint)bStack_5 << 2)))->unitCount < 0x14) {
+    if ((GLeaderSheets[bStack_5])->unitCount < 0x28) {
+      if ((GLeaderSheets[bStack_5])->unitCount < 0x14) {
         return;
       }
       uVar3 = ovr_randBelow(0x78,0);
