@@ -597,3 +597,54 @@ Reverted; tree at the verified state.
 build - every pointer in it is a stale original address.  It must either be
 regenerated from our own symbols, or each entry patched at startup the way
 `fixFarTable` already patches the far-pointer tables.
+
+### Why the prepare entry cannot bootstrap in our link
+
+Disassembling `_OVRTEXT_:0D24` (the routine the priority-1 table entry wants)
+shows why calling it does nothing useful:
+
+```
+0d24  push ds / push si / push di
+0d27  mov ax,0x13F9        ; _OVRDATA_   <-- immediate segment
+0d2a  mov ds,ax
+0d2c  call 0x0298          ; __INITMODULES
+0d2f  mov bx,[0x11a]
+0d33  mov ax,0x163A        ; DGROUP      <-- immediate segment
+0d36  mov ds,ax
+0d38  mov ax,0x163A
+0d3b  mov es,ax
+0d3d  cmp bx,es:[0xB006]
+0d4f  mov ax,0x10 / mul bx
+0d56  lcall 0x06C:0x37A9   ; into _TEXT
+```
+
+Every segment in this routine is a **`mov ax,imm16` immediate**.  In a VROOMM
+image those immediates are not DOS relocations: the overlay manager patches them
+from its fixup table when it loads the module.  Our `add_missing_relocations()`
+only handles `9A`/`EA` operands, so these stay at their link-time values and the
+routine addresses absolute `13F9`/`163A` instead of the loaded segments - the
+same root cause as the unrelocated overlay thunk found earlier.
+
+So the bootstrap is circular in this link:
+
+```
+to run an overlay  -> need the manager
+to have the manager -> must run _OVRTEXT_:0D24
+to run _OVRTEXT_:0D24 correctly -> needs its immediates patched by the manager
+```
+
+That is inherent to OVERLAY.LIB, not a missing call.  Two ways out:
+
+1. **Link without `-V`.**  TLINK then emits ordinary relocations for every
+   far call and the segments become resident; no manager, no `INT 3Fh`, no
+   fixup table.  The code is already split into segments with classes, so a
+   large-model link without overlays is legal; what is lost is the 64 KB
+   swapping (irrelevant for a rebuild that must only be functionally
+   equivalent).
+2. Implement VROOMM's fixup application by hand: apply the `_EXEINFO_` /
+   `_OVRDATA_` fixup records to the resident image at startup.  That is a
+   sizeable routine and is exactly what the manager already does.
+
+Option 1 is the cheaper experiment and the one that would finally let
+`init_game` run, the second runtime checkpoint exist, and step 6 be testable at
+all.
