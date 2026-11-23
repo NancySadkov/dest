@@ -890,3 +890,38 @@ markers, so the same pattern applies.
 The INT 3Fh handler can then be reinstalled once `startx` is known to complete;
 the block loader itself is unchanged in design (`audit/overlay_blocks.csv`,
 `CD 3F <id> <ofs>`).
+
+### The startx ladder is green: startx completes and main is called
+
+Exit-code markers were placed in `startx` after `DS=DGROUP` (0x30), after
+`SaveVectors` (0x31), after `_setupio` (0x36), after `_c0crtinit` (0x37) and at
+the `main` call (0x38), then nop-ed progressively:
+
+```
+nop 30                         -> CODE=49 (0x31)   SaveVectors reached
+nop 30,31                      -> CODE=54 (0x36)   _setupio reached
+nop 30,31,36                   -> CODE=55 (0x37)   _c0crtinit reached
+nop 30,31,36,37                -> CODE=56 (0x38)   the main call reached
+nop 30,31,36,37,38             -> (no exit - runs)
+```
+
+So the whole startup chain works: DOS version, `SaveVectors`, the environment
+scan, the memory resize, the UMB block, `INT 1Ah`, `_setupio` and `_c0crtinit`
+all complete, and `main` is called.  With every marker removed the program keeps
+running (it is interactive), which is the correct behaviour.
+
+**This corrects the earlier reading.**  The program does *not* stop inside
+`startx`; the earlier "startx markers never appear" result was a marker-channel
+artefact (the `AH=40h` writes), not a real stop.  The only remaining blocker is
+the overlay manager: `main` calls `ovr_init_game`, whose thunk jumps into an
+overlay segment containing `INT 3Fh` stubs, and nothing services that interrupt.
+
+The earlier INT 3Fh probe (handler installed, never fired) needs to be re-checked
+in the light of this: with `main` reached, the interrupt *should* fire, so that
+probe's handler installation (AH=25h with a temporary DS) was probably the
+problem, not the absence of the call.
+
+Next: re-install the INT 3Fh handler using the same simple pattern as the ladder
+(an `asm` block with `mov ax,0x253f / mov dx,offset handler / mov ds,cs`-style
+addressing verified by disassembly), confirm it fires, then implement the block
+loader from `audit/overlay_blocks.csv`.
