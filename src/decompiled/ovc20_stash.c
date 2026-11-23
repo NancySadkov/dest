@@ -389,7 +389,7 @@ spr_t * __cdecl16far stshSpriteStub(anm_t *anms,uint16_t nanims)
 undefined1 * __cdecl16far ovc20_allocBlock(far_t buf,DW sz)
 
 {
-  far_t ptr_ofs;
+  far_t padOfs;
   uint32_t *puVar1;
   uint16_t unaff_BP;
   bool bVar2;
@@ -405,9 +405,9 @@ undefined1 * __cdecl16far ovc20_allocBlock(far_t buf,DW sz)
     uVar4 = 0x1000;
     fVar3.seg = (uint16_t)in_stack_0000fffa;
     fVar3.ofs = 0x1000;
-    ptr_ofs.seg = unaff_BP;
-    ptr_ofs.ofs = in_stack_0000fffc;
-    fVar3 = PADD_at_(fVar3,ptr_ofs);
+    padOfs.seg = unaff_BP;
+    padOfs.ofs = in_stack_0000fffc;
+    fVar3 = PADD_at_(fVar3,padOfs);
     fVar3.seg = fVar3.seg;
     puVar1 = ovr_mkp((uint32_t *)fVar3.ofs,fVar3.seg,uVar4);
     *(uint16_t *)((int)puVar1 + 7) = sz.hi;
@@ -674,10 +674,10 @@ void __cdecl16far stshInitAudioAssets(char grab)
 
 
 /* 4b0a:0eda */
-long * __cdecl16far stshAlloc_2(long *__return_storage_ptr__,DW sz)
+long * __cdecl16far stshAlloc_2(long *retStorage,DW sz)
 
 {
-  far_t ptr_ofs;
+  far_t padOfs;
   uint32_t *puVar1;
   uint16_t unaff_BP;
   bool bVar2;
@@ -693,21 +693,21 @@ long * __cdecl16far stshAlloc_2(long *__return_storage_ptr__,DW sz)
     uVar4 = 0x1000;
     fVar3.seg = (uint16_t)in_stack_0000fffa;
     fVar3.ofs = 0x1000;
-    ptr_ofs.seg = unaff_BP;
-    ptr_ofs.ofs = in_stack_0000fffc;
-    fVar3 = PADD_at_(fVar3,ptr_ofs);
+    padOfs.seg = unaff_BP;
+    padOfs.ofs = in_stack_0000fffc;
+    fVar3 = PADD_at_(fVar3,padOfs);
     fVar3.seg = fVar3.seg;
     puVar1 = ovr_mkp((uint32_t *)fVar3.ofs,fVar3.seg,uVar4);
     *(uint16_t *)((int)puVar1 + 7) = sz.lo;
-    *(uint16_t *)((int)puVar1 + 5) =(uint16_t)( __return_storage_ptr__);
+    *(uint16_t *)((int)puVar1 + 5) =(uint16_t)( retStorage);
     *(undefined1 *)CONCAT22(fVar3.seg,puVar1) = 0;
     uVar4 = StshCtOfs.lo;
     *(uint16_t *)((int)puVar1 + 3) = StshCtOfs.hi;
     *(uint16_t *)((int)puVar1 + 1) = uVar4;
     *(uint16_t *)((int)puVar1 + 0x13) = 0;
     *(uint16_t *)((int)puVar1 + 0x11) = 0;
-    bVar2 = CARRY2(StshCtOfs.lo,(uint)__return_storage_ptr__);
-    StshCtOfs.lo = StshCtOfs.lo + (int)__return_storage_ptr__;
+    bVar2 = CARRY2(StshCtOfs.lo,(uint)retStorage);
+    StshCtOfs.lo = StshCtOfs.lo + (int)retStorage;
     StshCtOfs.hi = StshCtOfs.hi + sz.lo + (uint)bVar2;
     *(uint16_t *)((int)puVar1 + 0xb) = 0;
     *(uint16_t *)((int)puVar1 + 9) = 0;
@@ -721,7 +721,7 @@ long * __cdecl16far stshAlloc_2(long *__return_storage_ptr__,DW sz)
 
 
 /* 4b0a:0f95 */
-uint32_t * __cdecl16far stshWrite(uint32_t *__return_storage_ptr__,uint8_t *data,long sz,uint16_t arg4)
+uint32_t * __cdecl16far stshWrite(uint32_t *retStorage,uint8_t *data,long sz,uint16_t arg4)
 
 {
   DW sz_00;
@@ -735,7 +735,7 @@ uint32_t * __cdecl16far stshWrite(uint32_t *__return_storage_ptr__,uint8_t *data
     ovr_stExit(0x58);
   }
   buf.seg = (uint16_t)(uint8_t *)data;
-  buf.ofs = (uint16_t)__return_storage_ptr__;
+  buf.ofs = (uint16_t)retStorage;
   sz_00.hi = (uint16_t)sz;
   sz_00.lo = (uint16_t)(*(uint16_t *)((uint8_t *)&(data) + 2));
   stshWriteFile(StshFile,buf,sz_00,0,0);
@@ -750,14 +750,14 @@ uint32_t * __cdecl16far stshWrite(uint32_t *__return_storage_ptr__,uint8_t *data
 
 /* duplicate name, disambiguated by address order */
 
-far_t * __cdecl16far stshStoreFile_2(far_t *__return_storage_ptr__,char *filename,uint16_t flag)
+far_t * __cdecl16far stshStoreFile_2(far_t *retStorage,char *filename,uint16_t flag)
 
 {
   far_t buf;
   DW sz;
   far_t handle;
   DW sz_00;
-  long *__return_storage_ptr___00;
+  long *retStorage2;
   far_t *pfVar1;
   uint16_t in_DX;
   uint v;
@@ -768,10 +768,10 @@ far_t * __cdecl16far stshStoreFile_2(far_t *__return_storage_ptr__,char *filenam
   uint16_t len;
   uint16_t uStack_8;
   
-  __return_storage_ptr___00 =
-       (long *)ovr_open_wait_unlock_and_disk((char *)__return_storage_ptr__,(char *)filename);
-  if (-1 < (int)__return_storage_ptr___00) {
-    plStack_c = filelength(__return_storage_ptr___00,unaff_DI);
+  retStorage2 =
+       (long *)ovr_open_wait_unlock_and_disk((char *)retStorage,(char *)filename);
+  if (-1 < (int)retStorage2) {
+    plStack_c = filelength(retStorage2,unaff_DI);
     len = (uint16_t)plStack_c;
     uStack_8 = in_DX;
     if ((*(uint8_t *)((uint8_t *)&(filename) + 2)) != '\0') {
@@ -794,7 +794,7 @@ far_t * __cdecl16far stshStoreFile_2(far_t *__return_storage_ptr__,char *filenam
         v = 0xc000;
       }
       _fmemset(p, 0, v);
-      read((int)__return_storage_ptr___00,p,v);
+      read((int)retStorage2,p,v);
       buf.seg = ST_SEG(p);
       buf.ofs = pbuf;
       sz.hi = 0;
@@ -802,7 +802,7 @@ far_t * __cdecl16far stshStoreFile_2(far_t *__return_storage_ptr__,char *filenam
       stshWriteFile(StshFile,buf,sz,0,0);
       uStack_8 = uStack_8 - (len < v);
     }
-    close((int)__return_storage_ptr___00);
+    close((int)retStorage2);
     handle.seg = (uint16_t)plStack_c;
     handle.ofs = pbuf;
     ovr_stshFree(handle);

@@ -11,10 +11,10 @@
 
 /* packs seg+ofs into a uint32_t */
 
-uint32_t * __cdecl16far mkp(uint32_t *__return_storage_ptr__,uint16_t ofs,uint16_t seg,...)
+uint32_t * __cdecl16far mkp(uint32_t *retStorage,uint16_t ofs,uint16_t seg,...)
 
 {
-  return (uint32_t *)((uint)__return_storage_ptr__ & 0xf);
+  return (uint32_t *)((uint)retStorage & 0xf);
 }
 
 
@@ -167,7 +167,7 @@ lbm_combine_bitplanes(far_t src,far_t dst,uint16_t npixels,uint8_t nplanes,uint1
 /* Loads big-endian 32bit integer into DX_AX pair
    NOTE: the function has a bug (high order bytes are swapped) */
 
-uint32_t * __cdecl16far be4(uint32_t *__return_storage_ptr__,uint32_t be)
+uint32_t * __cdecl16far be4(uint32_t *retStorage,uint32_t be)
 
 {
   return (uint32_t *)CONCAT11((undefined1)be,(*(uint8_t *)((uint8_t *)&(be) + 1)));

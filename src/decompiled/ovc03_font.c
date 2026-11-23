@@ -28,7 +28,7 @@ void __cdecl16far stshCopyFontChar(uint8_t *src,uint8_t *dst,int16_t width,int16
 
 /* 302d:0035 */
 
-far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl,uint16_t arg3)
+far_t * __cdecl16far stshProcessFontSub(far_t *retStorage,far_t hndl,uint16_t arg3)
 
 {
   far_t *pfVar1;
@@ -50,7 +50,7 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
   uint16_t xx;
   
   height = 0;
-  for (line = 320; *(char *)((int)&__return_storage_ptr__->ofs + line) != -1; line = line + 0x140) {
+  for (line = 320; *(char *)((int)&retStorage->ofs + line) != -1; line = line + 0x140) {
     if (height == 200) {
                     /* WARNING: Subroutine does not return */
       ovr_stExit(1);
@@ -83,14 +83,14 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
         if (0x13f < m) {
           m = 0;
           for (o = height * 0x140 + x + 0x280; x = o,
-              *(char *)((int)&__return_storage_ptr__->ofs + o) != -1; o = o + 0x140) {
+              *(char *)((int)&retStorage->ofs + o) != -1; o = o + 0x140) {
             if (64000 < o) {
                     /* WARNING: Subroutine does not return */
               ovr_stExit(2);
             }
           }
         }
-        for (; (*(char *)((int)&__return_storage_ptr__->ofs + o) != -1 && (m < 0x140)); m = m + 1) {
+        for (; (*(char *)((int)&retStorage->ofs + o) != -1 && (m < 0x140)); m = m + 1) {
           o = o + 1;
         }
       } while (0x13f < m);
@@ -98,7 +98,7 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
       *(uint16_t *)(dchofs + i * 2) = dofs;
       j = 2;
       while( true ) {
-        if (*(char *)((int)&__return_storage_ptr__->ofs + o + 1) == -1) break;
+        if (*(char *)((int)&retStorage->ofs + o + 1) == -1) break;
         j = j + 1;
         o = o + 1;
         m = m + 1;
@@ -122,7 +122,7 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
 
 /* 302d:021a */
 
-far_t * __cdecl16far stshProcessFont(far_t *__return_storage_ptr__,int16_t file_id)
+far_t * __cdecl16far stshProcessFont(far_t *retStorage,int16_t file_id)
 
 {
   far_t handle;
@@ -132,7 +132,7 @@ far_t * __cdecl16far stshProcessFont(far_t *__return_storage_ptr__,int16_t file_
   far_t *pfVar2;
   uint16_t in_DX;
   
-  psVar1 = ovr_grabLbm((int16_t)__return_storage_ptr__,0,0,0,0);
+  psVar1 = ovr_grabLbm((int16_t)retStorage,0,0,0,0);
   if (psVar1 == (stg_tmp_t *)0x0 && in_DX == 0) {
                     /* WARNING: Subroutine does not return */
     ovr_stExit(6);

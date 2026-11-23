@@ -44,11 +44,11 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
   far_t ptr;
   far_t handle;
   far_t handle_00;
-  far_t ptr_base;
-  far_t ptr_ofs;
+  far_t padBase;
+  far_t padOfs;
   uint16_t uVar2;
   uint16_t written;
-  uint32_t *__return_storage_ptr__;
+  uint32_t *retStorage;
   uint16_t t;
   uint16_t unaff_SI;
   uint uVar3;
@@ -131,11 +131,11 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
     }
     if (npixels != 0) {
       for (y = 0; ((uint)y < (uint)w && (y - sx < 200)); y = y + 1) {
-        ptr_base.seg = unaff_SI;
-        ptr_base.ofs = uVar4;
-        ptr_ofs.seg = x;
-        ptr_ofs.ofs = unaff_SI;
-        *(far_t far *)&srcline = PADD_at_(ptr_base,ptr_ofs);   /* hand fix: PADD_at_ returns a far_t struct; assign the 4 bytes through the pointer */
+        padBase.seg = unaff_SI;
+        padBase.ofs = uVar4;
+        padOfs.seg = x;
+        padOfs.ofs = unaff_SI;
+        *(far_t far *)&srcline = PADD_at_(padBase,padOfs);   /* hand fix: PADD_at_ returns a far_t struct; assign the 4 bytes through the pointer */
         uVar5 = (undefined1)dstline.seg;
         uVar6 = (undefined1)(dstline.seg >> 8);
         if (format == LBM_PBM) {
@@ -197,10 +197,10 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
       dst_03.seg = uVar2;
       dst_03.ofs = dst_ofs;
       written = ovr_unrle(src_00,dst_03,0x140,(char)dst_ofs,0);
-      __return_storage_ptr__ = (uint32_t *)(src_ofs + written);
-      src_ofs = (uint16_t)ovr_mkp(__return_storage_ptr__,src_seg,unaff_DI);
+      retStorage = (uint32_t *)(src_ofs + written);
+      src_ofs = (uint16_t)ovr_mkp(retStorage,src_seg,unaff_DI);
       dst_ofs = dst_ofs + 0x140;
-      src_seg = (uint16_t)__return_storage_ptr__;
+      src_seg = (uint16_t)retStorage;
     }
   }
   return;

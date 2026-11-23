@@ -405,7 +405,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   int iVar16;
   byte unaff_DI;
   uint uVar17;
-  uint32_t *__return_storage_ptr__;
+  uint32_t *retStorage;
   uint16_t uVar18;
   bool bVar19;
   longdouble in_ST0;
@@ -721,9 +721,9 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   init_rebuildMapFlags();
   init_usesRandBelow2();
   init_rebuildMapFlags();
-  __return_storage_ptr__ = (uint32_t *)0x0;
+  retStorage = (uint32_t *)0x0;
   do {
-    if (0x3a < (int)__return_storage_ptr__) {
+    if (0x3a < (int)retStorage) {
       for (row = 1; row < 0x3a; row = row + 1) {
         for (col = 1; col < 0x92; col = col + 1) {
           uVar7 = ovr_randBelow(2,0);
@@ -790,20 +790,20 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
       return psVar9;
     }
     for (row = 0; row < 0x93; row = row + 1) {
-      psVar9 = (stg_tmp_t *)((int)__return_storage_ptr__ * 0x94);
+      psVar9 = (stg_tmp_t *)((int)retStorage * 0x94);
       uVar18 = (uint16_t)((ulong)GMapCells >> 0x10);
       paabVar13 = (byte (*) [59] [148])GMapCells;
       if (((psVar9->cmap[(int)((*paabVar13)[0] + row)] != 0) &&
-          (psVar9 = (stg_tmp_t *)((int)__return_storage_ptr__ * 0x94),
+          (psVar9 = (stg_tmp_t *)((int)retStorage * 0x94),
           psVar9->cmap[(int)((*paabVar13)[0] + row + 1)] != 0)) &&
-         ((psVar9 = (stg_tmp_t *)(*paabVar13 + (int)__return_storage_ptr__),
+         ((psVar9 = (stg_tmp_t *)(*paabVar13 + (int)retStorage),
           psVar9->cmap[row + 0x94] != 0 &&
-          (psVar9 = (stg_tmp_t *)(*paabVar13 + (int)__return_storage_ptr__),
+          (psVar9 = (stg_tmp_t *)(*paabVar13 + (int)retStorage),
           psVar9->cmap[row + 0x94] != 0)))) {
         uVar17 = ovr_init_getMapFlags(row);
         psVar9 = (stg_tmp_t *)(uVar17 & 0xff);
         if (psVar9 == (stg_tmp_t *)0x0) {
-          uStack_c = (uint)(char)(*(byte (*) [59] [148])GMapCells)[(int)__return_storage_ptr__]
+          uStack_c = (uint)(char)(*(byte (*) [59] [148])GMapCells)[(int)retStorage]
                                  [row];
           if ((int)uStack_c < 0x6b) {
             if ((int)uStack_c < 0x56) {
@@ -815,7 +815,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                     if (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 2)) {
                       uVar7 = ovr_randBelow(6,0);
                       psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x3d);
-                      (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
+                      (*(short (*) [148] [60])GUnitGrid)[row][(int)retStorage] =
                            (short)psVar9;
                     }
                     else if ((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
@@ -826,7 +826,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                       if (psVar9 == (stg_tmp_t *)0x0) {
                         uVar7 = ovr_randBelow(9,0);
                         psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
-                        (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
+                        (*(short (*) [148] [60])GUnitGrid)[row][(int)retStorage] =
                              (short)psVar9;
                       }
                     }
@@ -843,7 +843,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                     case (uint16_t)0x1:
                       while( true ) {
                         pbStack_18 = psVar9->cmap + (int)pbStack_18;
-                        psVar9 = (stg_tmp_t *)(row + (int)__return_storage_ptr__);
+                        psVar9 = (stg_tmp_t *)(row + (int)retStorage);
                         if ((int)puStack_1c <= (int)psVar9) {
                           psVar9 = memcpy((char *)CONCAT13((char)(uStack_12 >> 8),
                                                            CONCAT12((char)uStack_12,uStack_14)),
@@ -855,7 +855,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                         }
                         row = row + 1;
                         if (((int)uStack_10 <= row) ||
-                           (psVar9 = (stg_tmp_t *)(row + (int)__return_storage_ptr__),
+                           (psVar9 = (stg_tmp_t *)(row + (int)retStorage),
                            (int)uStack_20 < (int)psVar9)) break;
                         (*(uint8_t *)((uint8_t *)&(src_00.seg))) = (char)uStack_16;
                         src_00.ofs = (uint16_t)pbStack_18;
@@ -864,7 +864,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                       }
                       return psVar9;
                     case (uint16_t)0x2:
-                      *__return_storage_ptr__ = 0L;
+                      *retStorage = 0L;
                     /* WARNING: Bad instruction - Truncating control flow here */
                       halt_baddata();
                     case (uint16_t)0x3:
@@ -878,7 +878,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                   if (psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 1)) {
                     uVar7 = ovr_randBelow(6,0);
                     psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x3d);
-                    (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
+                    (*(short (*) [148] [60])GUnitGrid)[row][(int)retStorage] =
                          (short)psVar9;
                   }
                   else if ((psVar9 == (stg_tmp_t *)((int)(uint32_t *)&_DATA + 3)) &&
@@ -886,7 +886,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                           (char)psVar9 != '\0')) {
                     uVar7 = ovr_randBelow(9,0);
                     psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
-                    (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
+                    (*(short (*) [148] [60])GUnitGrid)[row][(int)retStorage] =
                          (short)psVar9;
                   }
                 }
@@ -899,7 +899,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                    && (psVar9 = (stg_tmp_t *)ovr_randBelow(2,0), (char)psVar9 != '\0')) {
                   uVar7 = ovr_randBelow(9,0);
                   psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
-                  (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
+                  (*(short (*) [148] [60])GUnitGrid)[row][(int)retStorage] =
                        (short)psVar9;
                 }
               }
@@ -914,13 +914,13 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                   if ((uVar7 & 0xff) == 0) {
                     uVar7 = ovr_randBelow(6,0);
                     psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x3d);
-                    (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
+                    (*(short (*) [148] [60])GUnitGrid)[row][(int)retStorage] =
                          (short)psVar9;
                   }
                   else {
                     uVar7 = ovr_randBelow(9,0);
                     psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
-                    (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
+                    (*(short (*) [148] [60])GUnitGrid)[row][(int)retStorage] =
                          (short)psVar9;
                   }
                 }
@@ -930,7 +930,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                       ) {
                 uVar7 = ovr_randBelow(9,0);
                 psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
-                (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
+                (*(short (*) [148] [60])GUnitGrid)[row][(int)retStorage] =
                      (short)psVar9;
               }
             }
@@ -943,14 +943,14 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags(row,0,0), (char)psVar9 != '\0')) {
               uVar7 = ovr_randBelow(9,0);
               psVar9 = (stg_tmp_t *)((uVar7 & 0xff) + 0x67);
-              (*(short (*) [148] [60])GUnitGrid)[row][(int)__return_storage_ptr__] =
+              (*(short (*) [148] [60])GUnitGrid)[row][(int)retStorage] =
                    (short)psVar9;
             }
           }
         }
       }
     }
-    __return_storage_ptr__ = (uint32_t *)((int)__return_storage_ptr__ + 1);
+    retStorage = (uint32_t *)((int)retStorage + 1);
   } while( true );
 switchD_3000_4a6e_caseD_3:
   do {
@@ -958,22 +958,22 @@ switchD_3000_4a6e_caseD_3:
     uStack_28 = constr_compute2((uint8_t)uStack_20,(uint8_t)uStack_22,(uint8_t)puStack_1c,
                                 (byte)psVar9,unaff_DI);
     uStack_28 = uStack_28 & 0xff;
-    ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__],0,0,0,0,0,0,0,0,0,0,0,0,0);
+    ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareLeftX)[(int)retStorage],0,0,0,0,0,0,0,0,0,0,0,0,0);
     uVar17 = constr_compute2((uint8_t)puStack_1c,(uint8_t)pvStack_1e,(uint8_t)uStack_22,bStack_2b,2)
     ;
     puStack_2a = (uint32_t *)(uVar17 & 0xff);
-    ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareRightX)[(int)__return_storage_ptr__],0,0,0,0,0,0,0,0,0,0,0,0,0);
+    ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareRightX)[(int)retStorage],0,0,0,0,0,0,0,0,0,0,0,0,0);
     while( true ) {
       uVar17 = ovr_constr_usesGMapFlags(uStack_24 + GfxRndSeed,0,0);
       if ((char)uVar17 != '\0') {
         ovr_ovc07_usesLDIV_at_
-                  (((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__],RowScreenY[0] - uStack_10,0,0,0,0,0)
+                  (((uint16_t *)SquareLeftX)[(int)retStorage],RowScreenY[0] - uStack_10,0,0,0,0,0)
         ;
       }
       do {
-        __return_storage_ptr__ = (uint32_t *)((int)__return_storage_ptr__ + 1);
+        retStorage = (uint32_t *)((int)retStorage + 1);
         uVar7 = rowBandSquareFirst[0];
-        if ((int)rowBandSquareEnd[0] <= (int)__return_storage_ptr__) {
+        if ((int)rowBandSquareEnd[0] <= (int)retStorage) {
           for (; (int)uVar7 < (int)rowBandSquareEnd[0]; uVar7 = uVar7 + 1) {
             uStack_24 = ((uint16_t *)squareColumn)[uVar7];
             bVar4 = ovr_constr_setHighlightAtOffset(uStack_24,0,0);
@@ -997,9 +997,9 @@ switchD_3000_4a6e_caseD_3:
           }
           return (stg_tmp_t *)((char *)0x26510);
         }
-      } while (((int)((uint16_t *)SquareRightX)[(int)__return_storage_ptr__] < 0xef) ||
-              (0x134 < (int)((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__]));
-      uStack_24 = ((uint16_t *)squareColumn)[(int)__return_storage_ptr__];
+      } while (((int)((uint16_t *)SquareRightX)[(int)retStorage] < 0xef) ||
+              (0x134 < (int)((uint16_t *)SquareLeftX)[(int)retStorage]));
+      uStack_24 = ((uint16_t *)squareColumn)[(int)retStorage];
       puStack_1c = (uint32_t *)constr_getCellAtOffset(uStack_24,-2);
       pvStack_1e = (void *)constr_getCellAtOffset(uStack_24 + 1,-2);
       iVar16 = ovr_constr_usesSmoothPrev(uStack_24,0,0,0,0);
@@ -1012,11 +1012,11 @@ switchD_3000_4a6e_caseD_3:
       uStack_28 = constr_compute2((uint8_t)uStack_20,(uint8_t)uStack_22,(uint8_t)pvStack_1e,
                                   (byte)psVar9,2);
       uStack_28 = uStack_28 & 0xff;
-      ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__],0,0,0,0,0,0,0,0,0,0,0,0,0);
+      ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareLeftX)[(int)retStorage],0,0,0,0,0,0,0,0,0,0,0,0,0);
       uVar17 = constr_compute2((uint8_t)puStack_1c,(uint8_t)pvStack_1e,(uint8_t)uStack_20,bStack_2b,
                                1);
       puStack_2a = (uint32_t *)(uVar17 & 0xff);
-      ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareLeftX)[(int)__return_storage_ptr__],0,0,0,0,0,0,0,0,0,0,0,0,0);
+      ovr_ovc07_usesBiosReadKey(((uint16_t *)SquareLeftX)[(int)retStorage],0,0,0,0,0,0,0,0,0,0,0,0,0);
     }
     unaff_DI = 1;
   } while( true );
@@ -1033,7 +1033,7 @@ bad_lbm:
       (*(uint8_t *)((uint8_t *)&(handle_00.seg) + 1)) = (char)(uVar1 >> 8);
       ovr_stshFree(handle_00);
     }
-    ovr_stshClose((uint16_t)__return_storage_ptr__);
+    ovr_stshClose((uint16_t)retStorage);
     ovr_stshFree(fStack_30);
     printf("Filename %d %s  \r");
     ovr_biosReadKey();
@@ -1073,8 +1073,8 @@ bad_lbm:
       ovr_stshRead();
       if ((-1 < (int)uStack_24) &&
          ((0 < (int)uStack_24 || ((char *)0x24400 < puStack_26)))) {
-        ovr_stshTell(__return_storage_ptr__,unaff_SI);
-        ovr_stshSeek((uint16_t)__return_storage_ptr__);
+        ovr_stshTell(retStorage,unaff_SI);
+        ovr_stshSeek((uint16_t)retStorage);
       }
     }
     puVar6 = (uint32_t *)0x0;
@@ -1107,7 +1107,7 @@ bad_lbm:
                                             CONCAT12((char)uStack_24,puStack_26)));
         ovr_stshRead();
         uVar10 = extraout_AH;
-        ovr_stshClose((uint16_t)__return_storage_ptr__);
+        ovr_stshClose((uint16_t)retStorage);
         uStackY_be = CONCAT11(uVar10,bStack_2b);
         uStackY_c0 = 0x2337;
         uStackY_c2 = 0x152a;
@@ -1135,9 +1135,9 @@ bad_lbm:
       puStack_26 = (uint32_t *)((int)puStack_26 + 1);
       uStack_24 = uVar17 + bVar19;
     }
-    puVar6 = ovr_stshTell(__return_storage_ptr__,unaff_SI);
+    puVar6 = ovr_stshTell(retStorage,unaff_SI);
     uVar17 = ((int)puVar6 >> 0xf) + uStack_24 + (uint)CARRY2((uint)puVar6,(uint)puStack_26);
-    ovr_stshSeek((uint16_t)__return_storage_ptr__);
+    ovr_stshSeek((uint16_t)retStorage);
   }
   goto L_grabLbm_0445;
 }

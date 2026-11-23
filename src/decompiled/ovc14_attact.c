@@ -420,7 +420,7 @@ void __cdecl16far attact_usesAgntFlag1(void)
 
 /* 3f0b:082f */
 ulong * __cdecl16far
-attact_usesBDADailyTimeCounter(ulong *__return_storage_ptr__,ulong prevTick,uint16_t arg3)
+attact_usesBDADailyTimeCounter(ulong *retStorage,ulong prevTick,uint16_t arg3)
 
 {
   uint uVar1;
@@ -428,11 +428,11 @@ attact_usesBDADailyTimeCounter(ulong *__return_storage_ptr__,ulong prevTick,uint
   
   uVar1 = *(uint far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   if (((uint)prevTick < uVar1) ||
-     (((uint)prevTick == uVar1 && (__return_storage_ptr__ <= *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs))))) {
-    iVar2 = -(int)__return_storage_ptr__;
+     (((uint)prevTick == uVar1 && (retStorage <= *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs))))) {
+    iVar2 = -(int)retStorage;
   }
   else {
-    iVar2 = 0xb0 - (int)__return_storage_ptr__;
+    iVar2 = 0xb0 - (int)retStorage;
   }
   return (ulong *)((int)*(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) + iVar2);
 }

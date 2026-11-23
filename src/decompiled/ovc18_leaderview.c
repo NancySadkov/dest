@@ -409,7 +409,7 @@ ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textV
   uint16_t y;
   far_t buf;
   far_t handle;
-  far_t ptr_ofs;
+  far_t padOfs;
   byte bVar2;
   int *piVar3;
   uint uVar4;
@@ -494,11 +494,11 @@ ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textV
           (*(uint8_t *)((uint8_t *)&(fVar16.seg))) = uVar17;
           fVar16.ofs = 0x1000;
           (*(uint8_t *)((uint8_t *)&(fVar16.seg) + 1)) = uVar18;
-          (*(uint8_t *)((uint8_t *)&(ptr_ofs.ofs) + 1)) = uVar20;
-          (*(uint8_t *)((uint8_t *)&(ptr_ofs.ofs))) = uVar19;
-          (*(uint8_t *)((uint8_t *)&(ptr_ofs.seg))) = uVar21;
-          (*(uint8_t *)((uint8_t *)&(ptr_ofs.seg) + 1)) = uVar22;
-          fVar16 = PADD_at_(fVar16,ptr_ofs);
+          (*(uint8_t *)((uint8_t *)&(padOfs.ofs) + 1)) = uVar20;
+          (*(uint8_t *)((uint8_t *)&(padOfs.ofs))) = uVar19;
+          (*(uint8_t *)((uint8_t *)&(padOfs.seg))) = uVar21;
+          (*(uint8_t *)((uint8_t *)&(padOfs.seg) + 1)) = uVar22;
+          fVar16 = PADD_at_(fVar16,padOfs);
           uVar12 = fVar16.seg;
           puVar6 = ovr_mkp((uint32_t *)fVar16.ofs);
           uStack_4 = (undefined1)uVar12;

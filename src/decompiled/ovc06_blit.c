@@ -9,7 +9,7 @@
 
 /* 317e:0000 */
 far_t * __cdecl16far
-stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,uint16_t ex,uint16_t ey,int16_t hdrsz)
+stshRleSub(far_t *retStorage,uint8_t *src,uint16_t sx,uint16_t sy,uint16_t ex,uint16_t ey,int16_t hdrsz)
 
 {
   uint16_t sz;
@@ -32,7 +32,7 @@ stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,ui
   (*(uint16_t *)((uint8_t *)&(block))) = (uint16_t)(uint32_t)ovr_stshAlloc(CONCAT22((CARRY2(sz,hdrsz) - 1) + (uint)(sz + hdrsz != 0),(*(uint16_t *)((uint8_t *)&(block) + 2)))
                              );
   uStack_6 = (undefined1 *)CONCAT22((*(uint16_t *)((uint8_t *)&(block) + 2)),(undefined1 *)((int)(void *)block + hdrsz + -10));
-  prow = (int)&__return_storage_ptr__[sy * 0x50].ofs + sx;
+  prow = (int)&retStorage[sy * 0x50].ofs + sx;
   uVar1 = (int)(void *)block + hdrsz + -1;
   width = (ex - sx) + 1;
   rows_left = (ey - sy) + 1;
@@ -65,12 +65,12 @@ stshRleSub(far_t *__return_storage_ptr__,uint8_t *src,uint16_t sx,uint16_t sy,ui
    returns ptrr to stg_t struct */
 
 far_t * __cdecl16far
-stshRleCut(far_t *__return_storage_ptr__,far_t src,int16_t sx,int16_t sy,int16_t ex,int16_t ey,uint16_t arg7,uint16_t arg8,uint16_t arg9)
+stshRleCut(far_t *retStorage,far_t src,int16_t sx,int16_t sy,int16_t ex,int16_t ey,uint16_t arg7,uint16_t arg8,uint16_t arg9)
 
 {
   far_t *pfVar1;
   
-  pfVar1 = stshRleSub(__return_storage_ptr__,(uint8_t *)src.ofs,src.seg,sx,sy,ex,10);
+  pfVar1 = stshRleSub(retStorage,(uint8_t *)src.ofs,src.seg,sx,sy,ex,10);
   return pfVar1;
 }
 
@@ -78,14 +78,14 @@ stshRleCut(far_t *__return_storage_ptr__,far_t src,int16_t sx,int16_t sy,int16_t
 
 /* 317e:0168 */
 far_t * __cdecl16far
-stshRleType2(far_t *__return_storage_ptr__,far_t pixels,int16_t sx,int16_t sy,int16_t ex,int16_t ey,int16_t ox,int16_t oy,uint16_t arg9,uint16_t arg10)
+stshRleType2(far_t *retStorage,far_t pixels,int16_t sx,int16_t sy,int16_t ex,int16_t ey,int16_t ox,int16_t oy,uint16_t arg9,uint16_t arg10)
 
 {
   far_t far *pfVar1;
   uint16_t in_DX;
   far_t far *uStack_6;   /* hand fix: assigned a far_t pointer and used as uStack_6->ofs */
   
-  pfVar1 = stshRleSub(__return_storage_ptr__,(uint8_t *)pixels.ofs,pixels.seg,sx,sy,ex,15);
+  pfVar1 = stshRleSub(retStorage,(uint8_t *)pixels.ofs,pixels.seg,sx,sy,ex,15);
   uStack_6 = (far_t far *)CONCAT22(in_DX,pfVar1);
   *(int16_t *)((int)&pfVar1->ofs + 1) = ey;
   *(int16_t *)((int)&pfVar1->seg + 1) = ox;

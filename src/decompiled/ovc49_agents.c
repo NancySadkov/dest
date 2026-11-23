@@ -3462,11 +3462,11 @@ void __cdecl16far ovc49_drawAgents(void)
 
 {
   int *pTarget;
-  char *pcVar2;
+  char *counterPtr;
   uint *puVar3;
   byte bVar4;
   bool bVar5;
-  uint32_t uVar6;
+  uint32_t unitPtr;
   far_t gfx;
   far_t gfx_00;
   far_t dst;
@@ -3479,17 +3479,16 @@ void __cdecl16far ovc49_drawAgents(void)
   far_t gfx_02;
   char cVar9;
   uint uVar10;
-  stg_tmp_t *psVar11;
+  stg_tmp_t *stgTmp;
   uint16_t uVar12;
   uint16_t uVar13;
   int iVar14;
   uint16_t uVar15;
-  uint16_t *puVar16;
+  uint16_t *sprEntry;
   int iVar17;
-  int *piVar18;
+  int *entryPtr;
   uint16_t *puVar19;
   uint16_t unaff_DI;
-  uint16_t uVar20;
   uint16_t uVar21;
   far_t gfx_03;
   far_t gfx_04;
@@ -3504,18 +3503,18 @@ void __cdecl16far ovc49_drawAgents(void)
   brect_t agentRect;
   int scrY;
   uint agentIndex;
-  byte bStack_1e;
+  byte sprIdx;
   uint8_t agntIndex;
-  byte bStack_1b;
+  byte frameNo;
   uint uStack_1a;
   stg_tmp_t *stgFar;
   uint16_t uStack_16;
   uint8_t factionSeen;
   char cStack_13;
-  uint16_t uStack_12;
+  uint16_t recPtr;
   uint16_t uStack_10;
-  uint32_t uStack_e;
-  uint32_t uStack_a;
+  uint32_t scanPtr;
+  uint32_t sprPtr;
   char cStack_6;
   char cStack_5;
   char cStack_4;
@@ -3552,7 +3551,7 @@ void __cdecl16far ovc49_drawAgents(void)
   dst_02.ofs = (uint16_t)&agentRect;
   (*(uint8_t *)((uint8_t *)&(dst_02.seg) + 1)) = uVar23;
   ovr_ovc23_textBuildThfres01Lbm(dst_02);
-  _fmemset(MK_FP(_SS, &uStack_12), 0, 2);
+  _fmemset(MK_FP(_SS, &recPtr), 0, 2);
   for (agentIndex = 0; (int)agentIndex < (int)(uint)AgntCount; agentIndex = agentIndex + 1) {
     (&factionSeen)[*(byte *)(agentIndex * 0x34 + 0x2f)] = 0x1;
   }
@@ -3567,7 +3566,7 @@ void __cdecl16far ovc49_drawAgents(void)
     printf("%d \r");
   }
   for (agentIndex = 0; (int)agentIndex < (int)(uint)AgntCount; agentIndex = agentIndex + 1) {
-    uStack_a = CONCAT22(*(uint16_t *)(agentIndex * 0x34 + 0x15),
+    sprPtr = CONCAT22(*(uint16_t *)(agentIndex * 0x34 + 0x15),
                         *(uint16_t *)(agentIndex * 0x34 + 0x13));
     ovc49_fillGridCells(0,(agnt_t *)(agentIndex * 0x34),(char)(agnt_t *)(agentIndex * 0x34),0x26);
     ovc49_textLongerParalyzed
@@ -3575,28 +3574,27 @@ void __cdecl16far ovc49_drawAgents(void)
     uVar13 = *(uint16_t *)(agentIndex * 0x34);
     uVar21 = *(uint16_t *)(agentIndex * 0x34 + 2);
     uVar10 = ovc49_body1((agnt_t *)(agentIndex * 0x34),0x26);
-    bStack_1b = (byte)uVar10;
-    uVar20 = (uint16_t)((ulong)uStack_a >> 0x10);
-    puVar16 = (uint16_t *)((int)uStack_a + (uVar10 & 0xff) * 4);
-    uStack_12 = CONCAT22(puVar16[1],*puVar16);
+    frameNo = (byte)uVar10;
+    sprEntry = (uint16_t *)((int)sprPtr + (uVar10 & 0xff) * 4);
+    recPtr = CONCAT22(sprEntry[1],*sprEntry);
     uVar15 = 0x1726;
-    iVar17 = (int)uStack_a + (uVar10 & 0xff) * 4;
-    psVar11 = ovr_stash_usesStExit
+    iVar17 = (int)sprPtr + (uVar10 & 0xff) * 4;
+    stgTmp = ovr_stash_usesStExit
                         ((stg_tmp_t *)*(uint16_t *)(iVar17 + 0x58),
                          (char)*(uint16_t *)(iVar17 + 0x5a),*(undefined1 *)(agentIndex * 0x34 + 6))
     ;
-    stgFar = (stg_tmp_t *)CONCAT22(uVar15,psVar11);
+    stgFar = (stg_tmp_t *)CONCAT22(uVar15,stgTmp);
     if (*(char *)(agentIndex * 0x34 + 4) < '\x01') {
       if (*(char *)(agentIndex * 0x34 + 4) < '\0') {
-        *(int *)(agentIndex * 0x34) = *(int *)(agentIndex * 0x34) - (int)(char)psVar11->cmap[5];
+        *(int *)(agentIndex * 0x34) = *(int *)(agentIndex * 0x34) - (int)(char)stgTmp->cmap[5];
       }
     }
     else {
-      *(int *)(agentIndex * 0x34) = *(int *)(agentIndex * 0x34) + (int)(char)psVar11->cmap[5];
+      *(int *)(agentIndex * 0x34) = *(int *)(agentIndex * 0x34) + (int)(char)stgTmp->cmap[5];
     }
     bVar5 = true;
-    iVar17 = (int)uStack_12;
-    uVar15 = (uint16_t)((ulong)uStack_12 >> 0x10);
+    iVar17 = (int)recPtr;
+    uVar15 = (uint16_t)((ulong)recPtr >> 0x10);
     if (*(char *)(agentIndex * 0x34 + 5) < '\x01') {
       if (*(char *)(agentIndex * 0x34 + 5) < '\0') {
         pTarget = (int *)(agentIndex * 0x34 + 2);
@@ -3762,23 +3760,23 @@ void __cdecl16far ovc49_drawAgents(void)
   for (agentIndex = 0; (int)agentIndex < (int)(uint)AgntCount; agentIndex = agentIndex + 1) {
     uVar13 = *(uint16_t *)(agentIndex * 0x34 + 0x15);
     iVar17 = *(int *)(agentIndex * 0x34 + 0x13);
-    uStack_a = CONCAT22(uVar13,iVar17);
+    sprPtr = CONCAT22(uVar13,iVar17);
     uStack_1a = *(uint *)(agentIndex * 0x34 + 6);
-    bStack_1b = *(byte *)(agentIndex * 0x34 + 0x12);
-    puVar16 = (uint16_t *)(iVar17 + (uint)bStack_1b * 4);
-    uStack_12 = CONCAT22(puVar16[1],*puVar16);
+    frameNo = *(byte *)(agentIndex * 0x34 + 0x12);
+    sprEntry = (uint16_t *)(iVar17 + (uint)frameNo * 4);
+    recPtr = CONCAT22(sprEntry[1],*sprEntry);
     GGameState = 0x37;
     if (DebugVerbose != false) {
       printf("%d \r");
     }
     uVar13 = 0x1726;
-    uVar21 = (uint16_t)((ulong)uStack_a >> 0x10);
-    iVar17 = (int)uStack_a + (uint)bStack_1b * 4;
-    psVar11 = ovr_stash_usesStExit
+    uVar21 = (uint16_t)((ulong)sprPtr >> 0x10);
+    iVar17 = (int)sprPtr + (uint)frameNo * 4;
+    stgTmp = ovr_stash_usesStExit
                         ((stg_tmp_t *)*(uint16_t *)(iVar17 + 0x58),
                          (char)*(uint16_t *)(iVar17 + 0x5a),*(undefined1 *)(agentIndex * 0x34 + 6))
     ;
-    stgFar = (stg_tmp_t *)CONCAT22(uVar13,psVar11);
+    stgFar = (stg_tmp_t *)CONCAT22(uVar13,stgTmp);
     GGameState = 0x38;
     if (DebugVerbose != false) {
       printf("%d \r");
@@ -3790,9 +3788,9 @@ void __cdecl16far ovc49_drawAgents(void)
     }
     else {
       iVar14 = ovr_agnt_clampX(*(int *)(agentIndex * 0x34));
-      uVar6 = *(uint32_t *)(agentIndex * 0x34 + 0x1d);
+      unitPtr = *(uint32_t *)(agentIndex * 0x34 + 0x1d);
       scrY = *(int *)(&columnScreenY[iVar14]) + *(int *)(agentIndex * 0x34 + 2) +
-                  (int)*(char *)((int)uVar6 + 0x52) + -0x16;
+                  (int)*(char *)((int)unitPtr + 0x52) + -0x16;
     }
     *(int *)(agentIndex * 0x34 + 0x26) = iVar17;
     *(int *)(agentIndex * 0x34 + 0x28) = scrY;
@@ -3804,10 +3802,10 @@ void __cdecl16far ovc49_drawAgents(void)
         ovr_blitGfxRect(gfx_04,iVar17,scrY,&agentRect,type,(*(uint8_t *)((uint8_t *)&(scrY))),0,0,0,0,0,0);
         GGameState = 0x33;
         if ((*(uint *)(agentIndex * 0x34 + 0x2b) & 100) != 0) {
-          iVar14 = scrY - *(int *)((int)uStack_12 + 0xd);
+          iVar14 = scrY - *(int *)((int)recPtr + 0xd);
           bVar4 = *(byte *)(agentIndex * 0x34 + 0x23);
-          pcVar2 = (char *)(agentIndex * 0x34 + 0x23);
-          *pcVar2 = *pcVar2 + -1;
+          counterPtr = (char *)(agentIndex * 0x34 + 0x23);
+          *counterPtr = *counterPtr + -1;
           uVar10 = bVar4 & 3;
           gfx_05.seg = ((uint16_t *)&crossBlitType2Seg)[uVar10 * 2];
           gfx_05.ofs = ((uint16_t *)&crossBlitType2Ofs)[uVar10 * 2];
@@ -3815,12 +3813,12 @@ void __cdecl16far ovc49_drawAgents(void)
         }
       }
       else if (*(char *)(agentIndex * 0x34 + 0x24) == '\x01') {
-        uVar6 = *(uint32_t *)(agentIndex * 0x34 + 0x1d);
-        if ((*(uint *)((int)uVar6 + 0x40) & 2) == 0) {
+        unitPtr = *(uint32_t *)(agentIndex * 0x34 + 0x1d);
+        if ((*(uint *)((int)unitPtr + 0x40) & 2) == 0) {
           gfx_07.seg = uStack_16;
           gfx_07.ofs = (uint16_t)(stgFar->cmap + 6);
           ovr_blitGfxRect(gfx_07,iVar17,scrY,&agentRect,type,(*(uint8_t *)((uint8_t *)&(scrY))),0,0,0,0,0,0);
-          iVar14 = scrY - *(int *)((int)uStack_12 + 0xd);
+          iVar14 = scrY - *(int *)((int)recPtr + 0xd);
           uVar10 = *(byte *)(agentIndex * 0x34 + 0x23) & 3;
           gfx_08.seg = ((uint16_t *)&crossBlitType2Seg)[uVar10 * 2];
           gfx_08.ofs = ((uint16_t *)&crossBlitType2Ofs)[uVar10 * 2];
@@ -3829,25 +3827,25 @@ void __cdecl16far ovc49_drawAgents(void)
             *(undefined1 *)(agentIndex * 0x34 + 0x24) = 0;
           }
           else {
-            pcVar2 = (char *)(agentIndex * 0x34 + 0x23);
-            *pcVar2 = *pcVar2 + -1;
+            counterPtr = (char *)(agentIndex * 0x34 + 0x23);
+            *counterPtr = *counterPtr + -1;
           }
         }
         else {
           gfx_06.seg = uStack_16;
           gfx_06.ofs = (uint16_t)(stgFar->cmap + 6);
           ovr_blitGfxRect(gfx_06,iVar17,scrY,&agentRect,type,(*(uint8_t *)((uint8_t *)&(scrY))),0,0,0,0,0,0);
-          if ((int)(uint)*(byte *)((int)uStack_12 + 0x1b) <= *(int *)(agentIndex * 0x34 + 6) + 1) {
+          if ((int)(uint)*(byte *)((int)recPtr + 0x1b) <= *(int *)(agentIndex * 0x34 + 6) + 1) {
             *(undefined1 *)(agentIndex * 0x34 + 0x24) = 0;
           }
         }
       }
       else if (*(char *)(agentIndex * 0x34 + 0x24) == '\x02') {
-        if (bStack_1b == 0x12) {
+        if (frameNo == 0x12) {
           gfx_09.seg = uStack_16;
           gfx_09.ofs = (uint16_t)(stgFar->cmap + 6);
           ovr_blitGfxRect(gfx_09,iVar17,scrY,&agentRect,type,(*(uint8_t *)((uint8_t *)&(scrY))),0,0,0,0,0,0);
-          if ((int)(uint)*(byte *)((int)uStack_12 + 0x1b) <= *(int *)(agentIndex * 0x34 + 6) + 1) {
+          if ((int)(uint)*(byte *)((int)recPtr + 0x1b) <= *(int *)(agentIndex * 0x34 + 6) + 1) {
             *(undefined1 *)(agentIndex * 0x34 + 0x25) = 2;
             ovr_ovc41_paralyzeNearbyAgents(agentIndex);
           }
@@ -3863,8 +3861,8 @@ void __cdecl16far ovc49_drawAgents(void)
             ovr_ovc41_paralyzeNearbyAgents(agentIndex);
           }
           else {
-            pcVar2 = (char *)(agentIndex * 0x34 + 0x23);
-            *pcVar2 = *pcVar2 + -1;
+            counterPtr = (char *)(agentIndex * 0x34 + 0x23);
+            *counterPtr = *counterPtr + -1;
           }
         }
       }
@@ -3878,10 +3876,10 @@ void __cdecl16far ovc49_drawAgents(void)
     if (*(char *)(agentIndex * 0x34 + 0x30) != '\0') {
       ovr_agnt_drawSpriteFrame((byte)agentIndex,&agentRect,(char)&agentRect);
     }
-    uVar13 = (uint16_t)((ulong)uStack_12 >> 0x10);
+    uVar13 = (uint16_t)((ulong)recPtr >> 0x10);
     if (((*(uint *)(agentIndex * 0x34 + 0x2b) & 8) == 0) ||
-       ((uint)*(byte *)((int)uStack_12 + 0x19) != *(uint *)(agentIndex * 0x34 + 6))) {
-      if (((uint)*(byte *)((int)uStack_12 + 0x19) == *(uint *)(agentIndex * 0x34 + 6)) &&
+       ((uint)*(byte *)((int)recPtr + 0x19) != *(uint *)(agentIndex * 0x34 + 6))) {
+      if (((uint)*(byte *)((int)recPtr + 0x19) == *(uint *)(agentIndex * 0x34 + 6)) &&
          ((*(char *)(agentIndex * 0x34 + 0x24) == '\0' && (*(char *)(agentIndex * 0x34 + 0xe) == -1)))
          ) {
         if (*(char *)(agentIndex * 0x34 + 0xd) == '\0') {
@@ -3950,11 +3948,11 @@ void __cdecl16far ovc49_drawAgents(void)
                  (*(char *)(agentIndex * 0x34 + 0xd) == '\x04')) &&
                 (*(char *)(agentIndex * 0x34 + 0xe) == -1)) {
           uVar12 = ovr_audio_panFromX((agnt_t *)(agentIndex * 0x34),0x26);
-          ovr_play_sfxU(*(byte *)((int)uStack_12 + 0x1d),0,uVar12,0,(char)uVar12);
+          ovr_play_sfxU(*(byte *)((int)recPtr + 0x1d),0,uVar12,0,(char)uVar12);
           *(undefined1 *)(agentIndex * 0x34 + 0xe) = 0;
           *(undefined1 *)(agentIndex * 0x34 + 0x2e) = 0;
-          uVar13 = (uint16_t)((ulong)uStack_12 >> 0x10);
-          iVar14 = (int)uStack_12;
+          uVar13 = (uint16_t)((ulong)recPtr >> 0x10);
+          iVar14 = (int)recPtr;
           *(char *)(agentIndex * 0x34 + 10) = *(char *)(iVar14 + 0x15) + (*(uint8_t *)((uint8_t *)&(scrY)));
           if (*(char *)(agentIndex * 0x34 + 0xf) == '\0') {
             *(int *)(agentIndex * 0x34 + 8) = *(int *)(iVar14 + 0x13) + iVar17;
@@ -3965,10 +3963,10 @@ void __cdecl16far ovc49_drawAgents(void)
           *(undefined1 *)(agentIndex * 0x34 + 0xb) = *(undefined1 *)(agentIndex * 0x34 + 0xf);
         }
         else if ((*(char *)(agentIndex * 0x34 + 0xd) == '\0') &&
-                (uVar6 = *(uint32_t *)(agentIndex * 0x34 + 0x1d),
-                (*(uint *)((int)uVar6 + 0x3c) & 8) == 0)) {
+                (unitPtr = *(uint32_t *)(agentIndex * 0x34 + 0x1d),
+                (*(uint *)((int)unitPtr + 0x3c) & 8) == 0)) {
           uVar12 = ovr_audio_panFromX((agnt_t *)(agentIndex * 0x34),0x26);
-          ovr_play_sfxU(*(byte *)((int)uStack_12 + 0x1d),0,uVar12,0,(char)uVar12);
+          ovr_play_sfxU(*(byte *)((int)recPtr + 0x1d),0,uVar12,0,(char)uVar12);
           ovr_ovc41_resolveSpecialAttack
                     ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)),
                      (uint)*(byte *)(agentIndex * 0x34 + 0xc));
@@ -3981,8 +3979,8 @@ void __cdecl16far ovc49_drawAgents(void)
                                       CONCAT13((char)((uint)iVar17 >> 8),CONCAT12(uVar22,0x1726)),
                                       0x26,uVar22,0x26);
           if (((char)uVar10 != '\0') && ((*(uint *)((uint)agntIndex * 0x34 + -9) & 0x800) == 0)) {
-            uVar6 = *(uint32_t *)((uint)agntIndex * 0x34 + -0x1d);
-            if (((*(uint *)((int)uVar6 + 0x14) & 2) == 0) ||
+            unitPtr = *(uint32_t *)((uint)agntIndex * 0x34 + -0x1d);
+            if (((*(uint *)((int)unitPtr + 0x14) & 2) == 0) ||
                ((uVar12 = ovr_randBelow(2,0), (uVar12 & 0xff) != 0 ||
                 ((*(uint *)(agentIndex * 0x34 + 0x2b) & 0x800) == 0)))) {
               ovr_OVC41_6a8f_01e7_entry((agnt_t *)((uint)agntIndex * 0x34 + -0x34),0x26);
@@ -4004,13 +4002,13 @@ void __cdecl16far ovc49_drawAgents(void)
         }
         else if (*(char *)(agentIndex * 0x34 + 0xd) == '\x05') {
           uVar12 = ovr_audio_panFromX((agnt_t *)(agentIndex * 0x34),0x26);
-          ovr_play_sfxU(*(byte *)((int)uStack_12 + 0x1d),0,uVar12,0,(char)uVar12);
+          ovr_play_sfxU(*(byte *)((int)recPtr + 0x1d),0,uVar12,0,(char)uVar12);
           *(undefined1 *)(agentIndex * 0x34 + 0xe) = 0xf5;
           *(undefined1 *)(agentIndex * 0x34 + 0x2e) = 1;
         }
         else if (*(char *)(agentIndex * 0x34 + 0xd) == '\x06') {
           uVar12 = ovr_audio_panFromX((agnt_t *)(agentIndex * 0x34),0x26);
-          ovr_play_sfxU(*(byte *)((int)uStack_12 + 0x1d),0,uVar12,0,(char)uVar12);
+          ovr_play_sfxU(*(byte *)((int)recPtr + 0x1d),0,uVar12,0,(char)uVar12);
           ovr_ovc41_resolveSpecialAttack
                     ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)),
                      (uint)*(byte *)(agentIndex * 0x34 + 0xc));
@@ -4041,42 +4039,42 @@ void __cdecl16far ovc49_drawAgents(void)
               (*(char *)((uint)*(byte *)(agentIndex * 0x34 + 0x2e) * 0x21 + -0x16) != '\0')) {
         bVar4 = *(byte *)(agentIndex * 0x34 + 0xe);
         uStack_1a = (uint)bVar4;
-        uVar13 = (uint16_t)((ulong)uStack_a >> 0x10);
-        uStack_e = uStack_a;
+        uVar13 = (uint16_t)((ulong)sprPtr >> 0x10);
+        scanPtr = sprPtr;
         if (*(char *)(agentIndex * 0x34 + 0x2e) == '\0') {
-          bStack_1e = 6;
+          sprIdx = 6;
         }
         else {
-          bStack_1e = *(byte *)((uint)*(byte *)(agentIndex * 0x34 + 0x2e) * 0x21 + -0x16);
+          sprIdx = *(byte *)((uint)*(byte *)(agentIndex * 0x34 + 0x2e) * 0x21 + -0x16);
         }
-        piVar18 = (int *)((int)uStack_a + (uint)bStack_1e * 4);
-        if (*piVar18 == 0 && piVar18[1] == 0) {
-          uStack_e = CONCAT22(SprProjectiles.seg,SprProjectiles.ofs);
+        entryPtr = (int *)((int)sprPtr + (uint)sprIdx * 4);
+        if (*entryPtr == 0 && entryPtr[1] == 0) {
+          scanPtr = CONCAT22(SprProjectiles.seg,SprProjectiles.ofs);
         }
-        uVar13 = (uint16_t)((ulong)uStack_e >> 0x10);
-        iVar17 = (int)uStack_e;
-        puVar19 = (uint16_t *)(iVar17 + (uint)bStack_1e * 4);
+        uVar13 = (uint16_t)((ulong)scanPtr >> 0x10);
+        iVar17 = (int)scanPtr;
+        puVar19 = (uint16_t *)(iVar17 + (uint)sprIdx * 4);
         uVar12 = *puVar19;
-        uStack_12 = CONCAT22(puVar19[1],uVar12);
-        piVar18 = (int *)(iVar17 + (uint)bStack_1e * 4);
-        if (*piVar18 == 0 && piVar18[1] == 0) {
+        recPtr = CONCAT22(puVar19[1],uVar12);
+        entryPtr = (int *)(iVar17 + (uint)sprIdx * 4);
+        if (*entryPtr == 0 && entryPtr[1] == 0) {
                     /* WARNING: Subroutine does not return */
           ovr_stExit(0xf);
         }
-        iVar17 = iVar17 + (uint)bStack_1e * 4;
-        psVar11 = ovr_stash_usesStExit
+        iVar17 = iVar17 + (uint)sprIdx * 4;
+        stgTmp = ovr_stash_usesStExit
                             ((stg_tmp_t *)*(uint16_t *)(iVar17 + 0x58),
                              (char)*(uint16_t *)(iVar17 + 0x5a),bVar4);
-        stgFar = (stg_tmp_t *)CONCAT22(uVar12,psVar11);
+        stgFar = (stg_tmp_t *)CONCAT22(uVar12,stgTmp);
         GGameState = 0x30;
         bVar5 = *(bool *)(agentIndex * 0x34 + 10);
         gfx_02.seg = uVar12;
-        gfx_02.ofs = (uint16_t)(psVar11->cmap + 6);
+        gfx_02.ofs = (uint16_t)(stgTmp->cmap + 6);
         ovr_blitGfxRect(gfx_02,*(int16_t *)(agentIndex * 0x34 + 8),(uint)bVar5,&agentRect,type,bVar5,0,0,0,0,0,0)
         ;
         GGameState = 0x31;
-        uVar13 = (uint16_t)((ulong)uStack_12 >> 0x10);
-        iVar17 = (int)uStack_12;
+        uVar13 = (uint16_t)((ulong)recPtr >> 0x10);
+        iVar17 = (int)recPtr;
         if ((*(byte *)(iVar17 + 0x1c) & 2) == 0) {
           uVar21 = (uint16_t)((ulong)stgFar >> 0x10);
           if (*(char *)(agentIndex * 0x34 + 0xb) == '\0') {
@@ -4093,7 +4091,7 @@ void __cdecl16far ovc49_drawAgents(void)
                       ((agnt_t *)(agentIndex * 0x34),0x1726,0x26,
                        *(undefined1 *)(agentIndex * 0x34 + 0xc));
           }
-          if ((int)uStack_1a < (int)(uint)*(byte *)((int)uStack_12 + 0x1b)) {
+          if ((int)uStack_1a < (int)(uint)*(byte *)((int)recPtr + 0x1b)) {
             *(undefined1 *)(agentIndex * 0x34 + 0xe) = (undefined1)uStack_1a;
           }
           else {
@@ -4108,7 +4106,7 @@ void __cdecl16far ovc49_drawAgents(void)
                               (stg_tmp_t *)
                               CONCAT13((char)((ulong)stgFar >> 8),
                                        CONCAT12((char)stgFar,uVar13)),0x26,
-                              (char)((ulong)uStack_12 >> 0x10),(char)stgFar,
+                              (char)((ulong)recPtr >> 0x10),(char)stgFar,
                               (char)((ulong)stgFar >> 0x10));
         }
       }

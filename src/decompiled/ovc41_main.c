@@ -113,21 +113,21 @@ void __cdecl16far ovc41_compute4(agnt_t *agnt,byte flag,byte pad,agnt_t *other,u
   long b;
   uint16_t in_stack_0000000c;
   undefined1 in_stack_0000fffc;
-  long *__return_storage_ptr__;
+  long *retStorage;
   
   if (pad != 0) {
-    __return_storage_ptr__ = (long *)CONCAT11(other->gindex,in_stack_0000fffc);
+    retStorage = (long *)CONCAT11(other->gindex,in_stack_0000fffc);
     if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)other->gindex * 0x95) != -1) {
       ovc41_growthForLevel(agnt,0);
       iVar4 = 0;
-      paVar3 = (agnt_t *)LXMUL_at_(__return_storage_ptr__,CONCAT22(in_stack_00000000,unaff_BP),b);
+      paVar3 = (agnt_t *)LXMUL_at_(retStorage,CONCAT22(in_stack_00000000,unaff_BP),b);
       paVar3 = ovr_ovc15_textError((agnt_t *)CONCAT22(in_stack_0000000c,other),paVar3);
       puVar1 = (uint *)&other->health;
       uVar2 = *puVar1;
       *puVar1 = (int)&paVar3->x + *puVar1;
       *(uint *)&other->frameIndex =
            *(int *)&other->frameIndex + iVar4 + (uint)CARRY2(uVar2,(uint)paVar3);
-      ovc41_compute3((uint32_t)CONCAT22(in_stack_0000000c,other),__return_storage_ptr__,unaff_BP);
+      ovc41_compute3((uint32_t)CONCAT22(in_stack_0000000c,other),retStorage,unaff_BP);
     }
   }
   return;

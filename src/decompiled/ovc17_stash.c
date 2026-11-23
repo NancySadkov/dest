@@ -223,7 +223,7 @@ next_iteration:
 void __cdecl16far stshInit(void)
 
 {
-  long *__return_storage_ptr__;
+  long *retStorage;
   uint uVar1;
   uint16_t file_id;
   uint32_t *unaff_DI;
@@ -234,16 +234,16 @@ void __cdecl16far stshInit(void)
   _fmemset(MK_FP(0x1ef4, 0x2420), 0xFFFF, 0x440);
   _fmemset(MK_FP(0x1ef4, 0x0880), 0, 0x220);
   for (file_id = 0; (int)file_id < 0x220; file_id = file_id + 1) {
-    __return_storage_ptr__ =
+    retStorage =
          (long *)open_wait_unlock_and_disk
                            ((char *)*(uint16_t *)(file_id * 4),((uint16_t *)(file_id * 4))[1]);
-    if ((int)__return_storage_ptr__ < 0) {
+    if ((int)retStorage < 0) {
       szhi = 0;
       szlo = 0;
     }
     else {
-      (*(uint16_t *)((uint8_t *)&(flen))) =(uint16_t) filelength(__return_storage_ptr__,(int)unaff_DI);
-      close((int)__return_storage_ptr__);
+      (*(uint16_t *)((uint8_t *)&(flen))) =(uint16_t) filelength(retStorage,(int)unaff_DI);
+      close((int)retStorage);
       szlo = (uint16_t)(long *)flen;
       szhi = (*(uint16_t *)((uint8_t *)&(flen) + 2));
     }
@@ -327,10 +327,10 @@ void __cdecl16far stshSeek(uint16_t fid,long ofs)
 
 /* 474a:06fe */
 
-uint32_t * __cdecl16far stshTell(uint32_t *__return_storage_ptr__,uint16_t file_id)
+uint32_t * __cdecl16far stshTell(uint32_t *retStorage,uint16_t file_id)
 
 {
-  return (uint32_t *)*(uint16_t *)((int)&AgntAnms[0x53].y + 1 + (int)__return_storage_ptr__ * 4);
+  return (uint32_t *)*(uint16_t *)((int)&AgntAnms[0x53].y + 1 + (int)retStorage * 4);
 }
 
 
@@ -443,7 +443,7 @@ uint8_t * __cdecl16far stshRealloc(uint32_t oldblock,uint32_t nbytes)
 
 /* 474a:08d1 */
 
-far_t * __cdecl16far fmMalloc(far_t *__return_storage_ptr__,uint32_t nbytes)
+far_t * __cdecl16far fmMalloc(far_t *retStorage,uint32_t nbytes)
 
 {
   far_t *pfVar1;
@@ -456,18 +456,18 @@ far_t * __cdecl16far fmMalloc(far_t *__return_storage_ptr__,uint32_t nbytes)
   
   uVar4 = in_stack_0000fff8 & 0xffff0000;
   ovr_fmFreeAudio(0);
-  if (__return_storage_ptr__ == (far_t *)0x0 && (int)nbytes == 0) {
+  if (retStorage == (far_t *)0x0 && (int)nbytes == 0) {
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0x1c);
   }
   do {
     uVar5 = (uint16_t)(uVar4 >> 0x10);
     if (HeapReady == '\0') {
-      pfVar1 = farmalloc(__return_storage_ptr__,CONCAT22(uVar5,(int)nbytes));
+      pfVar1 = farmalloc(retStorage,CONCAT22(uVar5,(int)nbytes));
       iVar3 = in_DX;
     }
     else {
-      pfVar1 = ovr_heapMalloc(__return_storage_ptr__,CONCAT22(uVar5,(int)nbytes));
+      pfVar1 = ovr_heapMalloc(retStorage,CONCAT22(uVar5,(int)nbytes));
       iVar3 = in_DX;
     }
     uVar4 = ZEXT24(pfVar1) << 0x10;
@@ -572,26 +572,26 @@ void __cdecl16far initStshTables(void)
 
 
 /* 474a:0aa7 */
-uint32_t * __cdecl16far stshFilesize(uint32_t *__return_storage_ptr__,uint16_t file_id)
+uint32_t * __cdecl16far stshFilesize(uint32_t *retStorage,uint16_t file_id)
 
 {
-  long *__return_storage_ptr___00;
+  long *retStorage2;
   long *plVar1;
   uint16_t in_DX;
   int unaff_DI;
   
-  if ((*(int *)((int)__return_storage_ptr__ * 4 + 0xaa2) == 0x7fff) &&
-     (*(int *)((int)__return_storage_ptr__ * 4 + 0xaa0) == -1)) {
-    __return_storage_ptr___00 =
+  if ((*(int *)((int)retStorage * 4 + 0xaa2) == 0x7fff) &&
+     (*(int *)((int)retStorage * 4 + 0xaa0) == -1)) {
+    retStorage2 =
          (long *)open_wait_unlock_and_disk
-                           ((char *)*(uint16_t *)((int)__return_storage_ptr__ * 4),
-                            ((uint16_t *)((int)__return_storage_ptr__ * 4))[1]);
-    plVar1 = filelength(__return_storage_ptr___00,unaff_DI);
-    *(uint16_t *)((int)__return_storage_ptr__ * 4 + 0xaa2) = in_DX;
-    *(uint16_t *)((int)__return_storage_ptr__ * 4 + 0xaa0) = (uint16_t)plVar1;
-    close((int)__return_storage_ptr___00);
+                           ((char *)*(uint16_t *)((int)retStorage * 4),
+                            ((uint16_t *)((int)retStorage * 4))[1]);
+    plVar1 = filelength(retStorage2,unaff_DI);
+    *(uint16_t *)((int)retStorage * 4 + 0xaa2) = in_DX;
+    *(uint16_t *)((int)retStorage * 4 + 0xaa0) = (uint16_t)plVar1;
+    close((int)retStorage2);
   }
-  return (uint32_t *)*(uint16_t *)((int)__return_storage_ptr__ * 4 + 0xaa0);
+  return (uint32_t *)*(uint16_t *)((int)retStorage * 4 + 0xaa0);
 }
 
 
@@ -659,7 +659,7 @@ void __cdecl16far
 fmReadIntoHimem(char *filename,uint16_t filenameSeg,int skipLo,int skipHi,char useEms,uint16_t limitLo,uint16_t limitHi,uint16_t arg8)
 
 {
-  long *__return_storage_ptr__;
+  long *retStorage;
   long *plVar1;
   uint in_DX;
   uint unaff_DI;
@@ -672,12 +672,12 @@ fmReadIntoHimem(char *filename,uint16_t filenameSeg,int skipLo,int skipHi,char u
   void *pvStack_6;
   long *plStack_4;
   
-  __return_storage_ptr__ = (long *)open_wait_unlock_and_disk(filename,0);
-  if (-1 < (int)__return_storage_ptr__) {
-    plStack_a = filelength(__return_storage_ptr__,unaff_DI);
+  retStorage = (long *)open_wait_unlock_and_disk(filename,0);
+  if (-1 < (int)retStorage) {
+    plStack_a = filelength(retStorage,unaff_DI);
     uStack_8 = in_DX;
     if (skipLo != 0 || skipHi != 0) {
-      lseek((int)__return_storage_ptr__,(ulong)(uint)skipHi,unaff_DI);
+      lseek((int)retStorage,(ulong)(uint)skipHi,unaff_DI);
       bVar2 = plStack_a < (uint)skipLo;
       plStack_a = (long *)((int)plStack_a - skipLo);
       uStack_8 = (in_DX - skipHi) - (uint)bVar2;
@@ -701,7 +701,7 @@ fmReadIntoHimem(char *filename,uint16_t filenameSeg,int skipLo,int skipHi,char u
       if ((-1 < (int)uStack_8) && ((0 < (int)uStack_8 || ((long *)0xc000 < plStack_a)))) {
         plVar1 = (long *)0xc000;
       }
-      plVar1 = (long *)read((int)__return_storage_ptr__,(long *)CONCAT22(plVar1,plStack_4),unaff_DI)
+      plVar1 = (long *)read((int)retStorage,(long *)CONCAT22(plVar1,plStack_4),unaff_DI)
       ;
       if ((plVar1 == (long *)0x0) || (plVar1 == (long *)0xffff)) break;
       if (useEms == '\0') {
@@ -715,7 +715,7 @@ fmReadIntoHimem(char *filename,uint16_t filenameSeg,int skipLo,int skipHi,char u
       uStack_c = uStack_c + bVar2;
       uStack_8 = uStack_8 - (plStack_a < plVar1);
     }
-    close((int)__return_storage_ptr__);
+    close((int)retStorage);
     handle.seg = (uint16_t)plStack_4;
     handle.ofs = (uint16_t)pvStack_6;
     stshFree(handle);

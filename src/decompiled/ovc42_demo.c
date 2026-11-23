@@ -12,7 +12,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
 
 {
   uint16_t uVar1;
-  ulong *__return_storage_ptr__;
+  ulong *retStorage;
   uint16_t uVar2;
   uint uVar3;
   ulong *puVar4;
@@ -23,9 +23,9 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
   
   prevTick = (ulong)unaff_SI << 0x10;
   uVar1 = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-  __return_storage_ptr__ = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+  retStorage = *(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
   MiceNeedsUpdate = 1;
-  puVar5 = __return_storage_ptr__;
+  puVar5 = retStorage;
   do {
     uVar6 = (uint16_t)(prevTick >> 0x10);
     uVar2 = ovr_biosKeyAvail();
@@ -46,7 +46,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
       return (char *)0x2401;
     }
     prevTick = CONCAT22(uVar6,uVar1);
-    puVar4 = ovr_attact_usesBDADailyTimeCounter(__return_storage_ptr__,prevTick,0);
+    puVar4 = ovr_attact_usesBDADailyTimeCounter(retStorage,prevTick,0);
   } while ((puVar5 < (*(uint16_t *)((uint8_t *)&(timeoutTicks) + 2))) ||
           ((puVar5 == (*(uint16_t *)((uint8_t *)&(timeoutTicks) + 2)) && (puVar4 < (ulong *)timeoutTicks))));
   return (char *)((uint)puVar4 & 0xff00);

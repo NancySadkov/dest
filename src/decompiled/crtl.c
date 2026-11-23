@@ -519,7 +519,7 @@ void __cdecl16far audio_done(uint16_t seg)
 
 /* 1000:02c9 */
 
-uint32_t * __cdecl16far xms_init(uint32_t *__return_storage_ptr__)
+uint32_t * __cdecl16far xms_init(uint32_t *retStorage)
 
 {
   code *pcVar1;
@@ -663,7 +663,7 @@ void __cdecl16far stshInit_scan(uint32_t handle)
 
 /* 1000:04b3 */
 
-uint32_t * __cdecl16far ems_init(uint32_t *__return_storage_ptr__)
+uint32_t * __cdecl16far ems_init(uint32_t *retStorage)
 
 {
   code *pcVar1;
@@ -1150,7 +1150,7 @@ void __cdecl16far __exit(uint16_t status)
 
 /* long multiply routine  */
 
-long * __cdecl16far LXMUL_at_(long *__return_storage_ptr__,long a,long b)
+long * __cdecl16far LXMUL_at_(long *retStorage,long a,long b)
 
 {
   int in_AX;
@@ -1645,7 +1645,7 @@ int N_LXLSH_at_(void)
 
 /* 1000:0a72 */
 
-long * __cdecl16far LXLSH_at_(long *__return_storage_ptr__,long i,byte s)
+long * __cdecl16far LXLSH_at_(long *retStorage,long i,byte s)
 
 {
   int in_AX;
@@ -1683,7 +1683,7 @@ uint N_LXRSH_at_(void)
 
 /* long shift right (unsigned) */
 
-long * __cdecl16far LXRSH_at_(long *__return_storage_ptr__,long n,uint8_t cx)
+long * __cdecl16far LXRSH_at_(long *retStorage,long n,uint8_t cx)
 
 {
   uint in_AX;
@@ -1720,7 +1720,7 @@ uint N_LXURSH_at_(void)
 
 /* 1000:0ab3 */
 
-uint32_t * __cdecl16far LXURSH_at_(uint32_t *__return_storage_ptr__,uint32_t val,uint8_t sh)
+uint32_t * __cdecl16far LXURSH_at_(uint32_t *retStorage,uint32_t val,uint8_t sh)
 
 {
   uint in_AX;
@@ -1761,7 +1761,7 @@ uint N_PADD_at_(void)
 
 /* WARNING: Unknown calling convention -- yet parameter storage is locked */
 
-far_t PADD_at_(far_t ptr_base,far_t ptr_ofs)
+far_t PADD_at_(far_t padBase,far_t padOfs)
 
 {
   uint in_AX;

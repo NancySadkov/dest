@@ -69,12 +69,12 @@ void __cdecl16far heapInit(void)
   byte *pbVar1;
   int in_DX;
   uint32_t in_stack_0000fff6;
-  long *__return_storage_ptr__;
+  long *retStorage;
   
-  __return_storage_ptr__ = (long *)((ulong)in_stack_0000fff6 >> 0x10);
-  pbVar1 = (byte *)coreleft(__return_storage_ptr__);
+  retStorage = (long *)((ulong)in_stack_0000fff6 >> 0x10);
+  pbVar1 = (byte *)coreleft(retStorage);
   in_DX = in_DX - (uint)(pbVar1 < (byte *)__C0_ASM_CopyRight);
-  farmalloc((far_t *)(pbVar1 + -4),CONCAT22(__return_storage_ptr__,in_DX));
+  farmalloc((far_t *)(pbVar1 + -4),CONCAT22(retStorage,in_DX));
   HeapMin = in_DX + 1;
   *(int *)0x0 = *(int *)0x0 + -1;
   *(uint16_t *)((int)(uint32_t *)&_DATA + 2) = 0;
@@ -135,7 +135,7 @@ void __cdecl16far heapFreeSub(uint16_t entry)
 
 
 /* 6316:01ed */
-uint32_t * __cdecl16far heapAlloc(uint32_t *__return_storage_ptr__,uint32_t nbytes)
+uint32_t * __cdecl16far heapAlloc(uint32_t *retStorage,uint32_t nbytes)
 
 {
   long *plVar1;
@@ -174,12 +174,12 @@ uint32_t * __cdecl16far heapAlloc(uint32_t *__return_storage_ptr__,uint32_t nbyt
 
 
 /* 6316:02a4 */
-long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nbytes)
+long * __cdecl16far heapRealloc(long *retStorage,long block,long nbytes)
 
 {
   long *plVar1;
   far_t ptr;
-  far_t ptr_00;
+  far_t blockPtr;
   bool bVar2;
   long *plVar3;
   long *plVar4;
@@ -194,10 +194,10 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
   
   lVar6 = CONCAT22((int)((ulong)in_stack_0000fff0 >> 0x10),unaff_SI);
   ptr.seg = (uint16_t)block;
-  ptr.ofs = (uint16_t)__return_storage_ptr__;
+  ptr.ofs = (uint16_t)retStorage;
   bVar2 = heapIsBadPtr(ptr);
   if (bVar2) {
-    __return_storage_ptr__ = (long *)0x0;
+    retStorage = (long *)0x0;
   }
   else {
     plVar3 = LXRSH_at_(unaff_DI,lVar6,in_stack_0000fff4);
@@ -259,24 +259,24 @@ long * __cdecl16far heapRealloc(long *__return_storage_ptr__,long block,long nby
           iVar5 = 0;
           plVar4 = LXLSH_at_(unaff_DI,lVar6,s);
           heapMemmove((byte *)__C0_ASM_CopyRight,entry,
-                      (uint8_t *)CONCAT22((uint16_t)block,__return_storage_ptr__),
+                      (uint8_t *)CONCAT22((uint16_t)block,retStorage),
                       (uint16_t)(plVar4 + -1),
                       iVar5 + -1 + (uint)((long *)((int)(uint32_t *)&_DATA + 3U) < plVar4),
                       (int)unaff_DI);
-          ptr_00.seg = (uint16_t)block;
-          ptr_00.ofs = (uint16_t)__return_storage_ptr__;
-          heapFree(ptr_00);
-          __return_storage_ptr__ = (long *)__C0_ASM_CopyRight;
+          blockPtr.seg = (uint16_t)block;
+          blockPtr.ofs = (uint16_t)retStorage;
+          heapFree(blockPtr);
+          retStorage = (long *)__C0_ASM_CopyRight;
         }
       }
     }
   }
-  return __return_storage_ptr__;
+  return retStorage;
 }
 
 
 /* 6316:04ec */
-far_t * __cdecl16far heapMalloc(far_t *__return_storage_ptr__,uint32_t nbytes)
+far_t * __cdecl16far heapMalloc(far_t *retStorage,uint32_t nbytes)
 
 {
   long *plVar1;
