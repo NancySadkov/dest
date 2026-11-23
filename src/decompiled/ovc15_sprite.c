@@ -1365,7 +1365,7 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
          ((Agnts[uStack_8].flags & 0xae4) == 0)) {
         Agnts[uStack_8].visited = 1;
         if ((Agnts[uStack_8].animVariant != '\0') ||
-           (uVar2 = ovr_ovc49_compute1(*(int *)(uStack_8 * 0x34)), (char)uVar2 == '\0')) {
+           (uVar2 = ovr_ovc49_compute1(Agnts[uStack_8].x), (char)uVar2 == '\0')) {
           uVar2 = ovc15_usesStExit2((byte)uStack_8);
           if ((uVar2 & 0xff) != 0) {
             return (char *)((int)(uint32_t *)&_DATA + 1);
@@ -1803,8 +1803,8 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
                 *param_3 = *param_3 - *param_9;
                 return (entity_t *)(iVar8 - (iVar17 + iVar15));
               }
-            } while (*(char *)(unaff_DI * 0x12 + 9) != (char)param_1);
-            bVar22 = *(byte *)(unaff_DI * 0x12 + 8);
+            } while (GRecords[unaff_DI].party != (char)param_1);
+            bVar22 = GRecords[unaff_DI].reserved08;
           } while (BuildingTypes[bVar22].unitType != (*(uint8_t *)((uint8_t *)&(param_1) + 2)));
           *param_6 = *param_6 + 1;
           if (BuildingTypes[bVar22].resource != '\x01') break;

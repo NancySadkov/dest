@@ -2828,8 +2828,8 @@ void __cdecl16far ovc22_usesGUnits(int unitIndex,uint8_t *outFlag)
       }
       return;
     }
-    if ((*(int *)(uVar4 * 0x12 + 2) == puVar3[unitIndex].x) &&
-       (*(int *)(uVar4 * 0x12 + 4) == puVar3[unitIndex].y)) break;
+    if ((GRecords[uVar4].x == puVar3[unitIndex].x) &&
+       (GRecords[uVar4].y == puVar3[unitIndex].y)) break;
     uVar4 = uVar4 + 1;
   }
   return;
@@ -3920,9 +3920,9 @@ bool __cdecl16far ovc22_textArena2(uint x,int y)
         if (*(byte *)((uint)(puVar3 + paasVar2[-1][x + 0x92][y])->bldType * 0x27 + 0x11b) < 3) {
           if (*(byte *)((uint)(puVar3 + paasVar2[-1][x + 0x91][y])->bldType * 0x27 + 0x11b) < 4) {
             for (uVar4 = 0; uVar4 < GRecordCount; uVar4 = uVar4 + 1) {
-              if (((*(int *)(uVar4 * 0x12 + 4) == y) && (*(uint *)(uVar4 * 0x12 + 2) <= x)) &&
-                 (x < *(int *)(uVar4 * 0x12 + 2) +
-                      (uint)*(byte *)((uint)*(byte *)(uVar4 * 0x12 + 8) * 0x27 + 0x11b))) {
+              if (((GRecords[uVar4].y == y) && (GRecords[uVar4].x <= x)) &&
+                 (x < GRecords[uVar4].x +
+                      (uint)*(byte *)((uint)GRecords[uVar4].reserved08 * 0x27 + 0x11b))) {
                 return false;
               }
             }
@@ -4211,9 +4211,9 @@ ovc22_usesAlignUp42(uint16_t *xOut,uint16_t *yOut,uint8_t classIndex,uint16_t bl
     if (GRecordCount <= uStack_4) {
       return GRecordCount & 0xff00;
     }
-    if (*(uint8_t *)(uStack_4 * 0x12 + 9) == classIndex) {
-      uVar2 = ovr_alignUp4(*(int *)(uStack_4 * 0x12 + 2),0,0);
-      uVar1 = *(uint16_t *)(uStack_4 * 0x12 + 4);
+    if (GRecords[uStack_4].party == classIndex) {
+      uVar2 = ovr_alignUp4(GRecords[uStack_4].x,0,0);
+      uVar1 = GRecords[uStack_4].y;
       uVar4 = 0;
       for (iVar3 = -2; iVar3 < 2; iVar3 = iVar3 + 1) {
         uVar4 = uVar4 | (*(short (*) [60] [148])GMapFlags)[uVar1][uVar2 + iVar3];

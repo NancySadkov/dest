@@ -361,12 +361,12 @@ agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distanc
   while( true ) {
     if (AgntCount <= bStack_4) break;
     if ((Agnts[bStack_4].faction != uVar1) &&
-       (uVar2 = *(int *)((uint)bStack_4 * 0x34) - agnt->x, uVar5 = (int)uVar2 >> 0xf,
+       (uVar2 = Agnts[bStack_4].x - agnt->x, uVar5 = (int)uVar2 >> 0xf,
        uVar3 = Agnts[bStack_4].y - agnt->y, uVar6 = (int)uVar3 >> 0xf,
        uVar2 = ((uVar2 ^ uVar5) - uVar5) + ((uVar3 ^ uVar6) - uVar6),
        uVar2 < *(uint *)CONCAT22(in_stack_00000012,(*(uint16_t *)((uint8_t *)&(distance) + 2))))) {
       *(uint *)CONCAT22(in_stack_00000012,(*(uint16_t *)((uint8_t *)&(distance) + 2))) = uVar2;
-      uVar4 = ovr_ovc07_signum(*(int *)((uint)bStack_4 * 0x34) -
+      uVar4 = ovr_ovc07_signum(Agnts[bStack_4].x -
                                ((agnt_t *)CONCAT22((uint16_t *)xDir,agnt))->x);
       *(uint16_t *)CONCAT22((uint16_t *)yDir,(*(uint16_t *)((uint8_t *)&(xDir) + 2))) = uVar4;
       uVar4 = ovr_ovc07_signum(Agnts[bStack_4].y - agnt->y);

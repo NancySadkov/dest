@@ -162,8 +162,7 @@ uint __cdecl16far stLoad(int handle)
                   (readOk & 0xff) != 0)) &&
                  (((readOk = save_readBlock(-0x6e21,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
                    (readOk & 0xff) != 0 &&
-                   (readOk = save_readBlock(0,(char *)CONCAT22(GRecordCount * 0x12,
-                                                              (char *)0x21f2),
+                   (readOk = save_readBlock(0,(char *)CONCAT22(GRecordCount * 0x12, (char *)GRecords),
                                            unaff_DI,unaff_SI), (readOk & 0xff) != 0)) &&
                   ((readOk = save_readBlock(-0x7667,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
                    (readOk & 0xff) != 0 &&

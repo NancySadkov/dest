@@ -88,17 +88,17 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   _fmemset(MK_FP(_DS, 0x90ea), 0, 4);
   for (uStack_c = 0; uStack_c < GRecordCount; uStack_c = uStack_c + 1) {
     in_DX = 0x2410;
-    if ((*(int *)(uStack_c * 0x12 + 4) == GfxRndSeed2) &&
-       (in_DX = 0x21f2, (*(byte *)(uStack_c * 0x12 + 0xd) & 1) != 0)) {
-      bVar9 = *(byte *)(uStack_c * 0x12 + 7);
+    if ((GRecords[uStack_c].y == GfxRndSeed2) &&
+       (in_DX = _DS, (GRecords[uStack_c].kind & 1) != 0)) {
+      bVar9 = GRecords[uStack_c].width;
       uStack_6 = (byte *)CONCAT31((*(uint32_t *)((uint8_t *)&(uStack_6) + 1)),bVar9);
-      iVar24 = *(int *)(uStack_c * 0x12 + 2) - (GfxRndSeed + -2);
+      iVar24 = GRecords[uStack_c].x - (GfxRndSeed + -2);
       in_DX = (iVar24 + (uint)bVar9) - 1;
       if ((0 < (int)(iVar24 + (uint)bVar9)) && (iVar24 < 4)) {
-        if (20000 < *(uint *)(uStack_c * 0x12)) {
-          *(uint16_t *)(uStack_c * 0x12) = 3;
+        if (20000 < GRecords[uStack_c].buildTimer) {
+          GRecords[uStack_c].buildTimer = 3;
         }
-        in_DX = 0x21f2;
+        in_DX = _DS;
         for (iVar25 = 0; iVar25 < (int)(uint)bVar9; iVar25 = iVar25 + 1) {
           if (((SCARRY2(iVar25,iVar24) == iVar25 + iVar24 < 0) && (iVar25 + iVar24 < 4)) &&
              (*(uint *)((iVar25 + iVar24) * 2 + -0x6e29) = uStack_c, in_DX = uStack_c, 0 < iVar25))
@@ -701,17 +701,17 @@ undefined1 __cdecl16far ovc23_tickRecordsAt(uint16_t x,int y,char excluded,uint1
   uVar4 = ovr_alignUp4(x,0,0);
   uStack_3 = 0;
   for (uVar5 = 0; uVar5 < GRecordCount; uVar5 = uVar5 + 1) {
-    if ((((*(int *)(uVar5 * 0x12 + 4) == y) && (*(uint *)(uVar5 * 0x12 + 2) <= uVar4 + 1)) &&
-        (uVar4 - 2 <= (*(int *)(uVar5 * 0x12 + 2) + (uint)*(byte *)(uVar5 * 0x12 + 7)) - 1)) &&
-       ((bVar2 = *(byte *)(uVar5 * 0x12 + 9), bVar2 != 0xff &&
+    if ((((GRecords[uVar5].y == y) && (GRecords[uVar5].x <= uVar4 + 1)) &&
+        (uVar4 - 2 <= (GRecords[uVar5].x + (uint)GRecords[uVar5].width) - 1)) &&
+       ((bVar2 = GRecords[uVar5].party, bVar2 != 0xff &&
         (uVar3 = *(uint32_t *)((uint)bVar2 << 2), *(char *)((int)uVar3 + 0x3f) == excluded)))) {
-      *(uint16_t *)(uVar5 * 0x12 + 0xf) = GameTick;
-      if (*(char *)(uVar5 * 0x12 + 0xb) != '\0') {
-        pcVar1 = (char *)(uVar5 * 0x12 + 0xb);
+      GRecords[uVar5].tick = GameTick;
+      if (GRecords[uVar5].countdown != '\0') {
+        pcVar1 = (char *)&GRecords[uVar5].countdown;
         *pcVar1 = *pcVar1 + -1;
       }
-      if (*(char *)(uVar5 * 0x12 + 0xb) == '\0') {
-        *(undefined1 *)(uVar5 * 0x12 + 0xe) = 1;
+      if (GRecords[uVar5].countdown == '\0') {
+        GRecords[uVar5].state = 1;
       }
       uStack_3 = 1;
     }
@@ -877,14 +877,14 @@ void __cdecl16far ovc23_textBuildThfres01Lbm(far_t dst)
       if (*(int *)(play_id * 2 + -0x6e25) != -1) {
         if (*(char *)(play_id + 0x90ec) == '\0') {
           iVar3 = *(int *)(play_id * 2 + -0x6e25);
-          iVar4 = ovc23_usesCornerBR2(play_id,(uint)*(byte *)(iVar3 * 0x12 + 7));
+          iVar4 = ovc23_usesCornerBR2(play_id,(uint)GRecords[iVar3].width);
           ovc23_usesBlitGfxRect2
                     ((uint)bandOrigin[0] - iVar4,iVar3,dst.ofs,(brect_t *)CONCAT22(unaff_DI,dst.seg)
                      ,unaff_SI);
           bVar1 = true;
         }
         else if (play_id == 0xfffe) {
-          iVar4 = ovc23_usesCornerBR2(-2,(uint)*(byte *)(iRam0002d2d7 * 0x12 + 7));
+          iVar4 = ovc23_usesCornerBR2(-2,(uint)GRecords[iRam0002d2d7].width);
           ovc23_usesBlitGfxRect2
                     ((uint)bandOrigin[0] - iVar4,iVar3,dst.ofs,(brect_t *)CONCAT22(unaff_DI,dst.seg)
                      ,unaff_SI);
@@ -1978,8 +1978,8 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
           ovr_say((char *)"Construction abandoned.",0);
         }
         if (pcVar12 + 1 < GRecordCount) {
-          _fmemmove((char *)CONCAT22(0x21f2,(char *)((int)pcVar12 * 0x12)),
-                    (char *)CONCAT22(0x21f2,(char *)((int)pcVar12 * 0x12 + 0x12)),
+          _fmemmove((char *)CONCAT22(_DS,(char *)((int)pcVar12 * 0x12)),
+                    (char *)CONCAT22(_DS,(char *)((int)pcVar12 * 0x12 + 0x12)),
                     (int)(GRecordCount + (-1 - (int)pcVar12)) * 0x12);
         }
         GRecordCount = GRecordCount + -1;
@@ -2186,7 +2186,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
         }
       } while (play_id != 0xfffe);
       in_stack_0000fffc = (agnt_t *)((int)&GSeasonNames[1].seg + 1);
-      ovc23_usesCornerBR2(-2,(uint)*(byte *)(iRam0002d2d7 * 0x12 + 7));
+      ovc23_usesCornerBR2(-2,(uint)GRecords[iRam0002d2d7].width);
       in_stack_00000000 = (brect_t *)CONCAT22(uVar36,seg);
       unaff_SI = (uint)bandOrigin[0] - (int)in_stack_0000fffc;
       unaff_BP = ofs;
@@ -2390,7 +2390,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
 
 /* 55fe:1803 */
 
-/* Removes a record from the 0x12-stride table at 0x21f2, compacts the tail and decrements
+/* Removes a record from the 0x12-stride table at GRecords, compacts the tail and decrements
    GRecordCount. */
 
 void __cdecl16far ovc23_removeRecord(int recordIndex)
@@ -2401,8 +2401,8 @@ void __cdecl16far ovc23_removeRecord(int recordIndex)
   agnt_t *in_stack_00000000;
   
   if (recordIndex + 1U < GRecordCount) {
-    _fmemmove((char *)CONCAT22(0x21f2,(char *)(recordIndex * 0x12)),
-              (char *)CONCAT22(0x21f2,(char *)(recordIndex * 0x12 + 0x12)),
+    _fmemmove((char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[recordIndex], buildTimer, 0)),
+              (char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[recordIndex + 1], buildTimer, 0)),
               ((GRecordCount - recordIndex) + -1) * 0x12);
   }
   GRecordCount = GRecordCount - 1;
@@ -2469,17 +2469,17 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
       uVar8 = 0xffff;
       for (uStack_8 = 0; uStack_8 < GRecordCount; uStack_8 = uStack_8 + 1) {
         uVar6 = ovr_ovc22_usesGOngoingBattle
-                          (*(byte *)(uStack_8 * 0x12 + 2),*(byte *)(uStack_8 * 0x12 + 4));
-        if (((uVar6 & 0xff) == 0) && (uVar7 <= (uint)(GameTick - *(int *)(uStack_8 * 0x12 + 0xf))))
+                          (GREC_FIELD(&GRecords[uStack_8], x, 0),GREC_FIELD(&GRecords[uStack_8], y, 0));
+        if (((uVar6 & 0xff) == 0) && (uVar7 <= (uint)(GameTick - GRecords[uStack_8].tick)))
         {
-          uVar7 = GameTick - *(int *)(uStack_8 * 0x12 + 0xf);
+          uVar7 = GameTick - GRecords[uStack_8].tick;
           uVar8 = uStack_8;
         }
       }
       if (uVar8 == 0xffff) {
         for (uStack_8 = 0; uStack_8 < GRecordCount; uStack_8 = uStack_8 + 1) {
-          if (uVar7 <= (uint)(GameTick - *(int *)(uStack_8 * 0x12 + 0xf))) {
-            uVar7 = GameTick - *(int *)(uStack_8 * 0x12 + 0xf);
+          if (uVar7 <= (uint)(GameTick - GRecords[uStack_8].tick)) {
+            uVar7 = GameTick - GRecords[uStack_8].tick;
             uVar8 = uStack_8;
           }
         }
@@ -2488,8 +2488,8 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
         return;
       }
       if (uVar8 + 1 < GRecordCount) {
-        _fmemmove((char *)CONCAT22(0x21f2,(char *)(uVar8 * 0x12)),
-                  (char *)CONCAT22(0x21f2,(char *)(uVar8 * 0x12 + 0x12)),
+        _fmemmove((char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[uVar8], buildTimer, 0)),
+                  (char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[uVar8 + 1], buildTimer, 0)),
                   ((GRecordCount - uVar8) + -1) * 0x12);
       }
       GRecordCount = GRecordCount - 1;
@@ -2626,10 +2626,10 @@ void __cdecl16far ovc23_usesBlitGfxRect(int x,int y,int recordIndex,brect_t *rec
   uint16_t uStack_a;
   uint16_t uStack_8;
   
-  uStack_10 = (uint)*(byte *)(y * 0x12 + 6);
-  buildTimer = *(uint *)(y * 0x12);
-  bVar1 = *(byte *)(y * 0x12 + 0xe);
-  bVar2 = *(byte *)(y * 0x12 + 0x11);
+  uStack_10 = (uint)GRecords[y].frameCount;
+  buildTimer = GRecords[y].buildTimer;
+  bVar1 = GRecords[y].state;
+  bVar2 = GRecords[y].frame;
   if (bVar2 < uStack_10) {
     uStack_10 = bVar2 + 1;
   }
@@ -2775,12 +2775,12 @@ void __cdecl16far ovc23_usesBlitGfxRect2(int x,int y,int recordIndex,brect_t *re
   uint16_t uStack_8;
   uint16_t uStack_6;
   
-  bVar1 = *(byte *)(y * 0x12 + 7);
+  bVar1 = GRecords[y].width;
   if (bVar1 < 2) {
-    uStack_12 = (uint)*(byte *)(y * 0x12 + 6);
-    buildTimer = *(uint *)(y * 0x12);
-    bVar1 = *(byte *)(y * 0x12 + 0xe);
-    bVar2 = *(byte *)(y * 0x12 + 0x11);
+    uStack_12 = (uint)GRecords[y].frameCount;
+    buildTimer = GRecords[y].buildTimer;
+    bVar1 = GRecords[y].state;
+    bVar2 = GRecords[y].frame;
     if (bVar2 < uStack_12) {
       uStack_12 = bVar2 + 1;
     }
@@ -2907,9 +2907,9 @@ uint __cdecl16far ovc23_findRecordAt(int x,int y,uint16_t arg3)
     if (GRecordCount <= uVar2) {
       return 0xffff;
     }
-    if (((*(int *)(uVar2 * 0x12 + 4) == y) &&
-        (iVar1 = *(int *)(uVar2 * 0x12 + 2),
-        x <= (int)(iVar1 + (uint)*(byte *)(uVar2 * 0x12 + 7) + -1))) && (iVar1 <= x)) break;
+    if (((GRecords[uVar2].y == y) &&
+        (iVar1 = GRecords[uVar2].x,
+        x <= (int)(iVar1 + (uint)GRecords[uVar2].width + -1))) && (iVar1 <= x)) break;
     uVar2 = uVar2 + 1;
   }
   return uVar2;
@@ -2939,12 +2939,12 @@ void __cdecl16far ovc23_abandonConstruction(int recordIndex)
   agnt_t *agnt;
   byte bVar8;
   
-  bVar2 = *(byte *)(recordIndex * 0x12 + 9);
+  bVar2 = GRecords[recordIndex].party;
   uVar7 = (uint)bVar2;
   uVar3 = *(uint32_t *)((uint)bVar2 << 2);
   if (*(char *)((int)uVar3 + 0x3f) == '\0') {
-    x = ovr_alignUp4(*(int *)(recordIndex * 0x12 + 2),0,0);
-    y = *(uint *)(recordIndex * 0x12 + 4);
+    x = ovr_alignUp4(GRecords[recordIndex].x,0,0);
+    y = GRecords[recordIndex].y;
     uVar3 = *(uint32_t *)((uVar7 & 0xff) << 2);
     bVar2 = *(byte *)((int)uVar3 + 0x3f);
     uVar3 = *(uint32_t *)((uVar7 & 0xff) << 2);
@@ -2956,13 +2956,13 @@ void __cdecl16far ovc23_abandonConstruction(int recordIndex)
       uVar6 = uVar6 | ((short (*) [60] [148])GMapFlags)[-1][y + 0x3b][x + bVar8 + 0x92] & 0x3000U;
       agnt = (agnt_t *)CONCAT11(bVar8 + 1,(char)agnt);
     }
-    if ((((*(byte *)(recordIndex * 0x12 + 0xd) & 3) != 1) ||
+    if ((((GRecords[recordIndex].kind & 3) != 1) ||
         (uVar6 != 0x1000 << ((*(byte *)((int)uVar3 + 0x3f) ^ 1) & 0x1f))) ||
        (uVar3 = *(uint32_t *)(((uint)agnt & 0xff) << 2),
        bVar4 = ovr_ovc24_textArena(x,y,*(char *)((int)uVar3 + 0x3f)), bVar4)) {
-      if (((*(byte *)(recordIndex * 0x12 + 0xd) & 1) == 0) &&
+      if (((GRecords[recordIndex].kind & 1) == 0) &&
          ((0x1000 << (bVar2 & 0x1f) & uVar6) != 0)) {
-        pbVar1 = (byte *)(recordIndex * 0x12 + 0xd);
+        pbVar1 = (byte *)&GRecords[recordIndex].kind;
         *pbVar1 = *pbVar1 | 1;
       }
     }
@@ -2972,8 +2972,8 @@ void __cdecl16far ovc23_abandonConstruction(int recordIndex)
         ovr_say((char *)"Construction abandoned.",0x2410);
       }
       if (recordIndex + 1U < GRecordCount) {
-        _fmemmove((char *)CONCAT22(0x21f2,(char *)(recordIndex * 0x12)),
-                  (char *)CONCAT22(0x21f2,(char *)(recordIndex * 0x12 + 0x12)),
+        _fmemmove((char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[recordIndex], buildTimer, 0)),
+                  (char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[recordIndex + 1], buildTimer, 0)),
                   ((GRecordCount - recordIndex) + -1) * 0x12);
       }
       GRecordCount = GRecordCount - 1;
@@ -3196,14 +3196,14 @@ uint16_t __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int re
   uStack_8 = amount;
   _fmemset(MK_FP(_SS, &uStack_4), 0, 3);
   for (uVar5 = 0; uVar5 < GRecordCount; uVar5 = uVar5 + 1) {
-    if (*(byte *)(uVar5 * 0x12 + 9) == partyIndex) {
-      if ((*(byte *)(uVar5 * 0x12 + 0xd) & 4) != 0) {
+    if (GRecords[uVar5].party == partyIndex) {
+      if ((GRecords[uVar5].kind & 4) != 0) {
         loopIndex = loopIndex + 0x1;
       }
-      if ((*(byte *)(uVar5 * 0x12 + 0xd) & 8) != 0) {
+      if ((GRecords[uVar5].kind & 8) != 0) {
         uStack_5 = uStack_5 + 1;
       }
-      if ((*(byte *)(uVar5 * 0x12 + 0xd) & 0x10) != 0) {
+      if ((GRecords[uVar5].kind & 0x10) != 0) {
         uStack_4 = uStack_4 + 1;
       }
     }

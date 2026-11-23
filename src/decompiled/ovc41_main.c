@@ -479,7 +479,7 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
   if ((((agntG_t *)paVar2->gdata)->flags2 & 4) != 0) {
     for (iVar6 = 0; iVar6 < (int)(uint)AgntCount; iVar6 = iVar6 + 1) {
       if ((iVar6 != agntIndex) &&
-         (uVar3 = uStack_6->base.x - *(int *)(iVar6 * 0x34), uVar5 = (int)uVar3 >> 0xf,
+         (uVar3 = uStack_6->base.x - Agnts[iVar6].x, uVar5 = (int)uVar3 >> 0xf,
          (int)((uVar3 ^ uVar5) - uVar5) < 0x32)) {
         bVar1 = ovr_manage_rollDice('\x06','\x06');
         uVar3 = (uint)bVar1;
@@ -516,16 +516,16 @@ void __cdecl16far ovc41_usesXOfs(int agntIndex)
     iStack_c = 3;
   }
   if (Agnts[agntIndex].level == '\0') {
-    *(int *)(uVar1 * 0x34) = *(int *)(agntIndex * 0x34) + *(int *)(&xOfs + iStack_c * 2);
+    Agnts[uVar1].x = Agnts[agntIndex].x + *(int *)(&xOfs + iStack_c * 2);
   }
   else {
-    *(int *)(uVar1 * 0x34) = *(int *)(agntIndex * 0x34) - *(int *)(&xOfs + iStack_c * 2);
+    Agnts[uVar1].x = Agnts[agntIndex].x - *(int *)(&xOfs + iStack_c * 2);
   }
-  if (0xd2 < *(int *)(uVar1 * 0x34)) {
-    *(uint16_t *)(uVar1 * 0x34) = 0xd2;
+  if (0xd2 < Agnts[uVar1].x) {
+    Agnts[uVar1].x = 0xd2;
   }
-  if (*(int *)(uVar1 * 0x34) < 0) {
-    *(uint16_t *)(uVar1 * 0x34) = 0;
+  if (Agnts[uVar1].x < 0) {
+    Agnts[uVar1].x = 0;
   }
   Agnts[uVar1].y = Agnts[agntIndex].y;
   AGNT_FIELD(&Agnts[uVar1], targetX, 1) = 0;

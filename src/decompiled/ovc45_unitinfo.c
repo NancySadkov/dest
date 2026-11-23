@@ -635,8 +635,8 @@ bool __cdecl16far ovc45_textArena2(byte bldType)
       }
     }
     for (uVar3 = 0; uVar3 < GRecordCount; uVar3 = uVar3 + 1) {
-      bVar1 = *(byte *)(uVar3 * 0x12 + 9);
-      if (((*(char *)((uint)*(byte *)(uVar3 * 0x12 + 8) * 0x27 + 0x133) == '\x17') &&
+      bVar1 = GRecords[uVar3].party;
+      if (((*(char *)((uint)GRecords[uVar3].reserved08 * 0x27 + 0x133) == '\x17') &&
           (bVar1 != 0xff)) &&
          (uVar2 = *(uint32_t *)((uint)bVar1 << 2), *(char *)((int)uVar2 + 0x3f) == '\0')) {
         return true;

@@ -730,8 +730,8 @@ L_attact_3f0b_26bd_2767:
                 *(uint16_t *)in_stack_0000000c = *(uint16_t *)in_stack_0000000c - *(uint16_t *)in_stack_00000020;
                 return (char *)(CONCAT11(uStack_3,uStack_4) - (iVar10 + iVar9));
               }
-            } while ((*(uint8_t *)(uVar12 * 0x12 + 9) != partyIndex) ||
-                    (bVar2 = *(byte *)(uVar12 * 0x12 + 8),
+            } while ((GRecords[uVar12].party != partyIndex) ||
+                    (bVar2 = GRecords[uVar12].reserved08,
                     BuildingTypes[bVar2].unitType != (char)destX));
             *in_stack_00000014 = *in_stack_00000014 + 1;
             if (BuildingTypes[bVar2].resource != '\x01') break;

@@ -2186,19 +2186,19 @@ L_stats_6386_1c9f_1ECD:
           if (*(char *)((int)uVar1 + 1) == '\x02') break;
           uVar1 = *(uint32_t far *)&Agnts[uVar5].gdata;
           if (*(char *)((int)uVar1 + 1) == '\x01') {
-            *(uint16_t *)(uVar5 * 0x34) = 0x3d;
+            Agnts[uVar5].x = 0x3d;
             Agnts[uVar5].y = 0x12;
           }
           else {
             uVar1 = *(uint32_t far *)&Agnts[uVar5].gdata;
             if (*(char *)((int)uVar1 + 1) == '\v') {
-              *(uint16_t *)(uVar5 * 0x34) = 0x56;
+              Agnts[uVar5].x = 0x56;
               Agnts[uVar5].y = 0x14;
             }
           }
         }
 switchD_6000_58bf_caseD_5:
-        *(uint16_t *)(uVar5 * 0x34) = 0x6e;
+        Agnts[uVar5].x = 0x6e;
         Agnts[uVar8].y = 0xb;
         uVar5 = uVar8;
       } while( true );

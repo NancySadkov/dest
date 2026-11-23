@@ -1428,7 +1428,7 @@ L_OVC49_8699_18c4_1CA7:
 L_OVC49_8699_1e09_21A5:
           do {
             uVar27 = (uint16_t)((ulong)in_stack_0000ffe0 >> 0x10);
-            if ((*(int *)((int)uStackY_22 * 0x34) < 0) || (0xd2 < *(int *)((int)uStackY_22 * 0x34)))
+            if ((Agnts[uStackY_22].x < 0) || (0xd2 < Agnts[uStackY_22].x))
             {
 L_OVC49_8699_1e09_2229:
               cVar8 = '\0';
@@ -1437,7 +1437,7 @@ L_OVC49_8699_1e09_2229:
 code_r0x00088b64:
               if ((Agnts[uStackY_22].y < 0) ||
                  ((Agnts[uStackY_22].animVariant == '\0' &&
-                  (uVar15 = ovc49_compute1(*(int *)((int)uStackY_22 * 0x34)), (char)uVar15 != '\0'))
+                  (uVar15 = ovc49_compute1(Agnts[uStackY_22].x), (char)uVar15 != '\0'))
                  )) goto L_OVC49_8699_1e09_2229;
               cVar8 = '\x01';
             }
@@ -1449,11 +1449,11 @@ code_r0x00088b64:
             }
             uVar31 = CONCAT31(CONCAT21(uVar27,cVar8),uVar7);
             if (Agnts[uStackY_22].animVariant == '\0') {
-              iVar14 = ovr_agnt_clampX(*(int *)((int)uStackY_22 * 0x34));
+              iVar14 = ovr_agnt_clampX(Agnts[uStackY_22].x);
               iStackY_28 = *(int *)(&columnScreenY[iVar14]) + Agnts[uStackY_22].y + 3;
             }
             else {
-              iVar14 = ovr_agnt_clampX(*(int *)((int)uStackY_22 * 0x34));
+              iVar14 = ovr_agnt_clampX(Agnts[uStackY_22].x);
               iStackY_28 = *(int *)(&columnScreenY[iVar14]) + Agnts[uStackY_22].y +
                            -0x16;
             }
@@ -1467,14 +1467,14 @@ code_r0x00088b64:
             uVar27 = ovc49_agentIsActive((agnt_t *)
                                          CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)));
             if ((((char)uVar27 == '\0') || (Agnts[uStackY_22].y < 0)) ||
-               ((-1 < *(int *)((int)uStackY_22 * 0x34) &&
-                ((*(int *)((int)uStackY_22 * 0x34) < 0xd3 &&
+               ((-1 < Agnts[uStackY_22].x &&
+                ((Agnts[uStackY_22].x < 0xd3 &&
                  ((uint)(Agnts[uStackY_22].screenY -
                         *(int *)(in_stack_0000ffe8->cmap + 9)) < 0x96)))))) {
               if (Agnts[uStackY_22].animVariant == '\0') {
-                uVar15 = ovc49_compute1(*(int *)((int)uStackY_22 * 0x34));
+                uVar15 = ovc49_compute1(Agnts[uStackY_22].x);
                 if ((char)uVar15 != '\0') {
-                  *(uint16_t *)((int)uStackY_22 * 0x34) = uStackY_24;
+                  Agnts[uStackY_22].x = uStackY_24;
                   Agnts[uStackY_22].y = uStackY_26;
                   if (AGNT_FIELD(&Agnts[uStackY_22], targetX, 0) == '\0') {
                     uVar16 = ovr_randBelow(3,0);
@@ -1516,7 +1516,7 @@ code_r0x00088b64:
                                                 CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34))
                                                ), (uVar15 & 0xff) == 0)))) {
                 if (Agnts[uStackY_22].moveState != '\x02') {
-                  *(uint16_t *)((int)uStackY_22 * 0x34) = uStackY_24;
+                  Agnts[uStackY_22].x = uStackY_24;
                   Agnts[uStackY_22].y = uStackY_26;
                   if ((Agnts[uStackY_22].flags & 0xbc0) == 0) {
                     if (AGNT_FIELD(&Agnts[uStackY_22], targetX, 0) == '\0') {
@@ -1545,7 +1545,7 @@ code_r0x00088b64:
               else {
                 iVar14 = ovc49_usesStExit((agnt_t *)((int)uStackY_22 * 0x34),0);
                 if ((char)iVar14 != '\0') {
-                  *(uint16_t *)((int)uStackY_22 * 0x34) = uStackY_24;
+                  Agnts[uStackY_22].x = uStackY_24;
                   Agnts[uStackY_22].y = uStackY_26;
                   if ((Agnts[uStackY_22].animVariant == '\0') ||
                      (AGNT_FIELD(&Agnts[uStackY_22], targetX, 0) != '\0')) {
@@ -1606,7 +1606,7 @@ L_OVC49_8699_1e09_29B9:
             ovc49_textLongerParalyzed
                       ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
                        (byte)uStackY_22);
-            uStackY_26 = CONCAT22(*(uint16_t *)((int)uStackY_22 * 0x34),
+            uStackY_26 = CONCAT22(Agnts[uStackY_22].x,
                                    Agnts[uStackY_22].y);
             uVar15 = ovc49_body1((agnt_t *)((int)uStackY_22 * 0x34),0);
             in_stack_0000ffe4 = (uint16_t)bVar9;
@@ -1620,13 +1620,13 @@ L_OVC49_8699_1e09_29B9:
             cVar6 = (char)((uint)uVar22 >> 8);
             if (AGNT_FIELD(&Agnts[uStackY_22], targetX, 0) < '\x01') {
               if (AGNT_FIELD(&Agnts[uStackY_22], targetX, 0) < '\0') {
-                *(int *)((int)uStackY_22 * 0x34) =
-                     *(int *)((int)uStackY_22 * 0x34) - (int)(char)in_stack_0000ffe8->cmap[5];
+                Agnts[uStackY_22].x =
+                     Agnts[uStackY_22].x - (int)(char)in_stack_0000ffe8->cmap[5];
               }
             }
             else {
-              *(int *)((int)uStackY_22 * 0x34) =
-                   *(int *)((int)uStackY_22 * 0x34) + (int)(char)in_stack_0000ffe8->cmap[5];
+              Agnts[uStackY_22].x =
+                   Agnts[uStackY_22].x + (int)(char)in_stack_0000ffe8->cmap[5];
             }
             in_stack_0000ffe0 = (uint16_t)((char *)0x1000000);
             if (AGNT_FIELD(&Agnts[uStackY_22], targetX, 1) < '\x01') {
@@ -2941,17 +2941,17 @@ L_OVC49_8699_1e09_3BDE:
     pbVar19 = (brect_t *)((char *)0x2337);
     printf("%d \r");
   }
-  uVar16 = *(int *)((int)uStackY_22 * 0x34) + 0xc;
+  uVar16 = Agnts[uStackY_22].x + 0xc;
   if (Agnts[uStackY_22].animVariant == '\0') {
     bVar9 = 0x3e;
     uVar33 = 0x95;
-    iVar18 = ovr_agnt_clampX(*(int *)((int)uStackY_22 * 0x34));
+    iVar18 = ovr_agnt_clampX(Agnts[uStackY_22].x);
     iStackY_28 = *(int *)(&columnScreenY[iVar18]) + Agnts[uStackY_22].y + 3;
   }
   else {
     bVar9 = 0xd9;
     uVar33 = 0x94;
-    iVar18 = ovr_agnt_clampX(*(int *)((int)uStackY_22 * 0x34));
+    iVar18 = ovr_agnt_clampX(Agnts[uStackY_22].x);
     uVar31 = *(uint32_t far *)&Agnts[uStackY_22].gdata;
     iStackY_28 = *(int *)(&columnScreenY[iVar18]) + Agnts[uStackY_22].y +
                  (int)*(char *)((int)uVar31 + 0x52) + -0x16;
@@ -3571,7 +3571,7 @@ void __cdecl16far ovc49_drawAgents(void)
     ovc49_fillGridCells(0,(agnt_t *)(agentIndex * 0x34),(char)(agnt_t *)(agentIndex * 0x34),0x26);
     ovc49_textLongerParalyzed
               ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)),(byte)agentIndex);
-    uVar13 = *(uint16_t *)(agentIndex * 0x34);
+    uVar13 = Agnts[agentIndex].x;
     uVar21 = Agnts[agentIndex].y;
     uVar10 = ovc49_body1((agnt_t *)(agentIndex * 0x34),0x26);
     frameNo = (byte)uVar10;
@@ -3586,11 +3586,11 @@ void __cdecl16far ovc49_drawAgents(void)
     stgFar = (stg_tmp_t *)CONCAT22(uVar15,stgTmp);
     if (AGNT_FIELD(&Agnts[agentIndex], targetX, 0) < '\x01') {
       if (AGNT_FIELD(&Agnts[agentIndex], targetX, 0) < '\0') {
-        *(int *)(agentIndex * 0x34) = *(int *)(agentIndex * 0x34) - (int)(char)stgTmp->cmap[5];
+        Agnts[agentIndex].x = Agnts[agentIndex].x - (int)(char)stgTmp->cmap[5];
       }
     }
     else {
-      *(int *)(agentIndex * 0x34) = *(int *)(agentIndex * 0x34) + (int)(char)stgTmp->cmap[5];
+      Agnts[agentIndex].x = Agnts[agentIndex].x + (int)(char)stgTmp->cmap[5];
     }
     bVar5 = true;
     iVar17 = (int)recPtr;
@@ -3620,10 +3620,10 @@ void __cdecl16far ovc49_drawAgents(void)
         *pTarget = *pTarget + *(int *)(iVar17 + 0x11);
       }
     }
-    if ((((*(int *)(agentIndex * 0x34) < 0) || (0xd2 < *(int *)(agentIndex * 0x34))) ||
+    if ((((Agnts[agentIndex].x < 0) || (0xd2 < Agnts[agentIndex].x)) ||
         (Agnts[agentIndex].y < 0)) ||
        ((Agnts[agentIndex].animVariant == '\0' &&
-        (uVar10 = ovc49_compute1(*(int *)(agentIndex * 0x34)), (char)uVar10 != '\0')))) {
+        (uVar10 = ovc49_compute1(Agnts[agentIndex].x), (char)uVar10 != '\0')))) {
       bVar7 = false;
     }
     else {
@@ -3636,11 +3636,11 @@ void __cdecl16far ovc49_drawAgents(void)
       bVar8 = false;
     }
     if (Agnts[agentIndex].animVariant == '\0') {
-      iVar17 = ovr_agnt_clampX(*(int *)(agentIndex * 0x34));
+      iVar17 = ovr_agnt_clampX(Agnts[agentIndex].x);
       scrY = *(int *)(&columnScreenY[iVar17]) + Agnts[agentIndex].y + 3;
     }
     else {
-      iVar17 = ovr_agnt_clampX(*(int *)(agentIndex * 0x34));
+      iVar17 = ovr_agnt_clampX(Agnts[agentIndex].x);
       scrY = *(int *)(&columnScreenY[iVar17]) + Agnts[agentIndex].y + -0x16;
     }
     Agnts[agentIndex].screenY = scrY;
@@ -3650,13 +3650,13 @@ void __cdecl16far ovc49_drawAgents(void)
     }
     uVar15 = ovc49_agentIsActive((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)));
     if ((((char)uVar15 == '\0') || (Agnts[agentIndex].y < 0)) ||
-       ((-1 < *(int *)(agentIndex * 0x34) &&
-        ((*(int *)(agentIndex * 0x34) < 0xd3 &&
+       ((-1 < Agnts[agentIndex].x &&
+        ((Agnts[agentIndex].x < 0xd3 &&
          ((uint)(Agnts[agentIndex].screenY - *(int *)(((stg_tmp_t *)stgFar)->cmap + 9))
           < 0x96)))))) {
       if ((Agnts[agentIndex].animVariant == '\0') &&
-         (uVar10 = ovc49_compute1(*(int *)(agentIndex * 0x34)), (char)uVar10 != '\0')) {
-        *(uint16_t *)(agentIndex * 0x34) = uVar13;
+         (uVar10 = ovc49_compute1(Agnts[agentIndex].x), (char)uVar10 != '\0')) {
+        Agnts[agentIndex].x = uVar13;
         Agnts[agentIndex].y = uVar21;
         if (AGNT_FIELD(&Agnts[agentIndex], targetX, 0) == '\0') {
           uVar12 = ovr_randBelow(3,0);
@@ -3693,7 +3693,7 @@ void __cdecl16far ovc49_drawAgents(void)
                (uVar10 & 0xff) != 0)))) {
         iVar17 = ovc49_usesStExit((agnt_t *)(agentIndex * 0x34),0x26);
         if ((char)iVar17 != '\0') {
-          *(uint16_t *)(agentIndex * 0x34) = uVar13;
+          Agnts[agentIndex].x = uVar13;
           Agnts[agentIndex].y = uVar21;
           if ((Agnts[agentIndex].animVariant == '\0') ||
              (AGNT_FIELD(&Agnts[agentIndex], targetX, 0) != '\0')) {
@@ -3721,7 +3721,7 @@ void __cdecl16far ovc49_drawAgents(void)
         }
       }
       else if (Agnts[agentIndex].moveState != '\x02') {
-        *(uint16_t *)(agentIndex * 0x34) = uVar13;
+        Agnts[agentIndex].x = uVar13;
         Agnts[agentIndex].y = uVar21;
         if ((Agnts[agentIndex].flags & 0xbc0) == 0) {
           if (AGNT_FIELD(&Agnts[agentIndex], targetX, 0) == '\0') {
@@ -3781,13 +3781,13 @@ void __cdecl16far ovc49_drawAgents(void)
     if (DebugVerbose != false) {
       printf("%d \r");
     }
-    iVar17 = *(int *)(agentIndex * 0x34) + 0xc;
+    iVar17 = Agnts[agentIndex].x + 0xc;
     if (Agnts[agentIndex].animVariant == '\0') {
-      iVar14 = ovr_agnt_clampX(*(int *)(agentIndex * 0x34));
+      iVar14 = ovr_agnt_clampX(Agnts[agentIndex].x);
       scrY = *(int *)(&columnScreenY[iVar14]) + Agnts[agentIndex].y + 3;
     }
     else {
-      iVar14 = ovr_agnt_clampX(*(int *)(agentIndex * 0x34));
+      iVar14 = ovr_agnt_clampX(Agnts[agentIndex].x);
       unitPtr = *(uint32_t far *)&Agnts[agentIndex].gdata;
       scrY = *(int *)(&columnScreenY[iVar14]) + Agnts[agentIndex].y +
                   (int)*(char *)((int)unitPtr + 0x52) + -0x16;

@@ -2329,8 +2329,8 @@ manage_usesGUnitCount
   while( true ) {
     if (GUnitCount <= uVar6) {
       for (uVar6 = 0; uVar6 < GRecordCount; uVar6 = uVar6 + 1) {
-        if ((*(char *)(uVar6 * 0x12 + 9) == partyIndex) &&
-           (bVar1 = *(byte *)(uVar6 * 0x12 + 8), BuildingTypes[bVar1].unitType == unitType))
+        if ((GRecords[uVar6].party == partyIndex) &&
+           (bVar1 = GRecords[uVar6].reserved08, BuildingTypes[bVar1].unitType == unitType))
         {
           *recordCount = *recordCount + 1;
           if (BuildingTypes[bVar1].resource == '\x01') {
@@ -2414,8 +2414,8 @@ uint16_t __cdecl16far sub_OVC21_manage_c_24B1()
       unaff_SI = unaff_SI + 1;
       if (GUnitCount <= unaff_SI) {
         for (uVar6 = 0; uVar6 < GRecordCount; uVar6 = uVar6 + 1) {
-          if ((*(char *)(uVar6 * 0x12 + 9) == *(char *)(uVar4 + 6)) &&
-             (bVar1 = *(byte *)(uVar6 * 0x12 + 8),
+          if ((GRecords[uVar6].party == *(char *)(uVar4 + 6)) &&
+             (bVar1 = GRecords[uVar6].reserved08,
              BuildingTypes[bVar1].unitType == *(char *)(uVar4 + 8))) {
             *(int *)*(uint32_t *)(uVar4 + 0x16) = *(int *)*(uint32_t *)(uVar4 + 0x16) + 1;
             if (BuildingTypes[bVar1].resource == '\x01') {
@@ -2488,8 +2488,8 @@ uint16_t __cdecl16far manage_usesGUnits(void)
     unaff_SI = unaff_SI + 1;
     if (GUnitCount <= unaff_SI) {
       for (uVar4 = 0; uVar4 < GRecordCount; uVar4 = uVar4 + 1) {
-        if ((*(char *)(uVar4 * 0x12 + 9) == *(char *)(unaff_BP + 6)) &&
-           (bVar1 = *(byte *)(uVar4 * 0x12 + 8),
+        if ((GRecords[uVar4].party == *(char *)(unaff_BP + 6)) &&
+           (bVar1 = GRecords[uVar4].reserved08,
            BuildingTypes[bVar1].unitType == *(char *)(unaff_BP + 8))) {
           *(int *)*(uint32_t *)(unaff_BP + 0x16) = *(int *)*(uint32_t *)(unaff_BP + 0x16) + 1;
           if (BuildingTypes[bVar1].resource == '\x01') {

@@ -315,7 +315,7 @@ struct grec_t {
     word buildTimer; /* Compared with 20000 and reset to 3 (ovc23_placeBuilding). */
     word x; /* Left column of the record's span. */
     word y; /* Row of the record (compared with GfxRndSeed2). */
-    byte reserved06; /* No reader or writer in the recovered code. */
+    byte frameCount; /* Upper bound for frame: draw_usesPlay_sfx advances while frame + 1 < frameCount. */
     byte width; /* Span width: x0 <= x <= x0+width-1. */
     byte reserved08; /* No reader or writer in the recovered code. */
     byte party; /* Party sheet index (*(undefined4 *)(party*4)). */
@@ -323,9 +323,9 @@ struct grec_t {
     byte countdown; /* Decremented by ovc23_tickRecordsAt. */
     byte reserved0c; /* No reader or writer in the recovered code. */
     byte kind; /* Tested with & 3; 1 is a construction record. */
-    byte done; /* Set when the countdown reaches zero. */
+    byte state; /* 0/1/2 state byte: ovc23_tickRecordsAt sets 1 when countdown reaches zero, draw_usesPlay_sfx sets 2 after the last frame. */
     word tick; /* Assigned GameTick by ovc23_tickRecordsAt. */
-    byte reserved11; /* No reader or writer in the recovered code. */
+    byte frame; /* Animation frame, incremented by draw_usesPlay_sfx while it stays below frameCount. */
 };
 
 typedef struct squarerec_t squarerec_t, *Psquarerec_t;
@@ -565,3 +565,10 @@ typedef uint16_t size_t;
     (*((uint8_t far *)((uint8_t far *)&(rec)->field + (k))))
 #define BLD_WORD(rec, field, k) \
     (*((uint16_t far *)((uint8_t far *)&(rec)->field + (k))))
+
+/* Byte / word views of a field inside a game-record entry (same trick as
+   AGNT_FIELD: the export produced odd offsets that member access cannot say). */
+#define GREC_FIELD(rec, field, k) \
+    (*((uint8_t *)((uint8_t *)&(rec)->field + (k))))
+#define GREC_WORD(rec, field, k) \
+    (*((uint16_t *)((uint8_t *)&(rec)->field + (k))))

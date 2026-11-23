@@ -785,36 +785,36 @@ void __cdecl16far draw_usesPlay_sfx(void)
     (*(uint16_t *)((uint8_t *)&(recordUpdateTick))) = (uint16_t)*(ulong * far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
     outFlag = 0;
     for (rec = 0; uVar6 = (uint)(prevTick >> 0x10), rec < GRecordCount; rec = rec + 1) {
-      *(int *)(rec * 0x12) = *(int *)(rec * 0x12) + 1;
-      if (20000 < *(uint *)(rec * 0x12)) {
-        *(uint16_t *)(rec * 0x12) = (uint16_t)0x14;
+      GRecords[rec].buildTimer = GRecords[rec].buildTimer + 1;
+      if (20000 < GRecords[rec].buildTimer) {
+        GRecords[rec].buildTimer = (uint16_t)0x14;
       }
-      cVar2 = *(char *)(rec * 0x12 + 0xe);
+      cVar2 = GRecords[rec].state;
       if (cVar2 == '\0') {
-        uVar4 = *(byte *)(rec * 0x12 + 0x11) + 1;
+        uVar4 = GRecords[rec].frame + 1;
         prevTick = CONCAT22(uVar6,uVar4);
-        if ((uVar4 < *(byte *)(rec * 0x12 + 6)) && (0x13 < *(uint *)(rec * 0x12))) {
-          *(uint16_t *)(rec * 0x12) = (uint16_t)0;
-          pcVar1 = (char *)(rec * 0x12 + 0x11);
+        if ((uVar4 < GRecords[rec].frameCount) && (0x13 < GRecords[rec].buildTimer)) {
+          GRecords[rec].buildTimer = (uint16_t)0;
+          pcVar1 = (char *)&GRecords[rec].frame;
           *pcVar1 = *pcVar1 + '\x01';
         }
       }
       else if (cVar2 == '\x01') {
-        uVar4 = *(byte *)(rec * 0x12 + 0x11) + 1;
+        uVar4 = GRecords[rec].frame + 1;
         prevTick = CONCAT22(uVar6,uVar4);
-        if (uVar4 < *(byte *)(rec * 0x12 + 6)) {
-          if (0x13 < *(uint *)(rec * 0x12)) {
-            *(uint16_t *)(rec * 0x12) = (uint16_t)0;
-            pcVar1 = (char *)(rec * 0x12 + 0x11);
+        if (uVar4 < GRecords[rec].frameCount) {
+          if (0x13 < GRecords[rec].buildTimer) {
+            GRecords[rec].buildTimer = (uint16_t)0;
+            pcVar1 = (char *)&GRecords[rec].frame;
             *pcVar1 = *pcVar1 + '\x01';
           }
         }
         else {
-          *(undefined1 *)(rec * 0x12 + 0xe) = 2;
-          x = *(uint16_t *)(rec * 0x12 + 2);
-          in_stack_0000fffa = (agnt_t *)*(int *)(rec * 0x12 + 4);
+          GRecords[rec].state = 2;
+          x = GRecords[rec].x;
+          in_stack_0000fffa = (agnt_t *)GRecords[rec].y;
           uVar5 = ovr_ovc23_isCursorAt(x,(int)in_stack_0000fffa,0);
-          if (((char)uVar5 != '\0') && (*(char *)(rec * 0x12 + 8) != '\0')) {
+          if (((char)uVar5 != '\0') && (GRecords[rec].reserved08 != '\0')) {
             ovr_play_sfx(80,0,0);
           }
           bStack_4 = (byte)x;
@@ -823,23 +823,23 @@ void __cdecl16far draw_usesPlay_sfx(void)
             outFlag = CONCAT11(1,(char)outFlag);
           }
           prevTick = (ulong)uVar6 << 0x10;
-          uVar6 = ovr_ovc23_compute1(x,(int)in_stack_0000fffa,*(byte *)(rec * 0x12 + 8),
-                                     *(uint8_t *)(rec * 0x12 + 9));
+          uVar6 = ovr_ovc23_compute1(x,(int)in_stack_0000fffa,GRecords[rec].reserved08,
+                                     GRecords[rec].party);
           if ((uVar6 & 0xff) == 0) {
             prevTick = prevTick & 0xffff0000;
             ovr_ovc23_placeBuilding
-                      (x,(int)in_stack_0000fffa,*(byte *)(rec * 0x12 + 8),
-                       *(uint8_t *)(rec * 0x12 + 9));
+                      (x,(int)in_stack_0000fffa,GRecords[rec].reserved08,
+                       GRecords[rec].party);
           }
-          *(uint16_t *)(rec * 0x12) = (uint16_t)0;
+          GRecords[rec].buildTimer = (uint16_t)0;
         }
       }
-      else if ((cVar2 == '\x02') && (9 < *(uint *)(rec * 0x12))) {
+      else if ((cVar2 == '\x02') && (9 < GRecords[rec].buildTimer)) {
         if (rec + 1 < GRecordCount) {
           count = ((GRecordCount - rec) + -1) * 0x12;
           prevTick = CONCAT22(uVar6,count);
-          _fmemmove((char *)CONCAT22(0x21f2,(char *)(rec * 0x12)),
-                    (char *)CONCAT22(0x21f2,(char *)(rec * 0x12 + 0x12)),count);
+          _fmemmove((char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[rec], buildTimer, 0)),
+                    (char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[rec + 1], buildTimer, 0)),count);
           rec = rec - 1;
         }
         GRecordCount = GRecordCount - 1;
