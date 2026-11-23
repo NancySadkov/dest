@@ -1027,21 +1027,21 @@ void __cdecl16far agnt_usesAgntCount4(uint agntIndex)
 void __cdecl16far agnt_usesAgntCount5(int agntIndex)
 
 {
-  char *pcVar1;
-  int iVar2;
-  int iVar3;
+  char *countPtr;
+  int col;
+  int row;
   
-  for (iVar3 = 0; iVar3 < 10; iVar3 = iVar3 + 1) {
-    for (iVar2 = 0; iVar2 < 0x69; iVar2 = iVar2 + 1) {
-      if ((*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) <= AgntCount) &&
-         (agntIndex <= (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa))) {
-        pcVar1 = (char *)(iVar3 * 0x69 + iVar2 + 0x8fa);
-        *pcVar1 = *pcVar1 + '\x01';
+  for (row = 0; row < 10; row = row + 1) {
+    for (col = 0; col < 0x69; col = col + 1) {
+      if ((*(byte *)(row * 0x69 + col + 0x8fa) <= AgntCount) &&
+         (agntIndex <= (int)(uint)*(byte *)(row * 0x69 + col + 0x8fa))) {
+        countPtr = (char *)(row * 0x69 + col + 0x8fa);
+        *countPtr = *countPtr + '\x01';
       }
-      if ((*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) <= AgntCount) &&
-         (agntIndex <= (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0))) {
-        pcVar1 = (char *)(iVar3 * 0x69 + iVar2 + 0x4e0);
-        *pcVar1 = *pcVar1 + '\x01';
+      if ((*(byte *)(row * 0x69 + col + 0x4e0) <= AgntCount) &&
+         (agntIndex <= (int)(uint)*(byte *)(row * 0x69 + col + 0x4e0))) {
+        countPtr = (char *)(row * 0x69 + col + 0x4e0);
+        *countPtr = *countPtr + '\x01';
       }
     }
   }

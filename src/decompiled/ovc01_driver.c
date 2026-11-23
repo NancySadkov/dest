@@ -1736,32 +1736,30 @@ void __cdecl16far driver_zeroWords(far_t dst,uint16_t count)
 void __cdecl16far driver_loop3(far_t src,far_t dst)
 
 {
-  char *pcVar1;
-  undefined1 uVar3;
-  int iVar2;
-  int iVar4;
-  int iVar5;
-  char *pcVar6;
-  char *pcVar7;
-  uint16_t uVar8;
+  char *outPtr;
+  undefined1 countHi;
+  int runCount;
+  int byteCount;
+  int spanCount;
+  char *srcPtr;
+  char *dstPtr;
   
-  uVar8 = src.seg;
-  pcVar7 = (char *)dst.ofs;
-  pcVar6 = (char *)(src.ofs + 2);
-  iVar2 = *(int *)MK_FP(src.seg, src.ofs);
-  for (iVar5 = iVar2; iVar5 != 0; iVar5 = iVar5 + -1) {
-    pcVar1 = pcVar6;
-    pcVar6 = pcVar6 + 1;
-    uVar3 = (undefined1)((uint)iVar2 >> 8);
-    pcVar7 = pcVar7 + CONCAT11(uVar3,*pcVar1) * 3;
-    iVar2 = CONCAT11(uVar3,*pcVar6);
-    if (*pcVar6 == '\0') {
-      iVar2 = 0x100;
+  dstPtr = (char *)dst.ofs;
+  srcPtr = (char *)(src.ofs + 2);
+  runCount = *(int *)MK_FP(src.seg, src.ofs);
+  for (spanCount = runCount; spanCount != 0; spanCount = spanCount + -1) {
+    outPtr = srcPtr;
+    srcPtr = srcPtr + 1;
+    countHi = (undefined1)((uint)runCount >> 8);
+    dstPtr = dstPtr + CONCAT11(countHi,*outPtr) * 3;
+    runCount = CONCAT11(countHi,*srcPtr);
+    if (*srcPtr == '\0') {
+      runCount = 0x100;
     }
-    for (iVar4 = iVar2 * 3; pcVar6 = pcVar6 + 1, iVar4 != 0; iVar4 = iVar4 + -1) {
-      pcVar1 = pcVar7;
-      pcVar7 = pcVar7 + 1;
-      *pcVar1 = *pcVar6;
+    for (byteCount = runCount * 3; srcPtr = srcPtr + 1, byteCount != 0; byteCount = byteCount + -1) {
+      outPtr = dstPtr;
+      dstPtr = dstPtr + 1;
+      *outPtr = *srcPtr;
     }
   }
   return;

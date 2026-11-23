@@ -358,18 +358,18 @@ void __cdecl16far ovc41_unitStatusText(byte menuIndex)
 void __cdecl16far ovc41_usesDebugVerbose(void)
 
 {
-  int iVar1;
-  int iVar2;
+  int col;
+  int row;
   
   if (DebugVerbose) {
-    for (iVar2 = 0; iVar2 < 10; iVar2 = iVar2 + 1) {
-      for (iVar1 = 0; iVar1 < 0x69; iVar1 = iVar1 + 1) {
-        *(char *)(iVar2 * 0x140 + iVar1 + -0x1280) = *(char *)(iVar2 * 0x69 + iVar1 + 0x8fa) + '@';
+    for (row = 0; row < 10; row = row + 1) {
+      for (col = 0; col < 0x69; col = col + 1) {
+        *(char *)(row * 0x140 + col + -0x1280) = *(char *)(row * 0x69 + col + 0x8fa) + '@';
       }
     }
-    for (iVar2 = 0; iVar2 < 10; iVar2 = iVar2 + 1) {
-      for (iVar1 = 0; iVar1 < 0x69; iVar1 = iVar1 + 1) {
-        *(char *)(iVar2 * 0x140 + iVar1 + -0x120d) = *(char *)(iVar2 * 0x69 + iVar1 + 0x4e0) + '@';
+    for (row = 0; row < 10; row = row + 1) {
+      for (col = 0; col < 0x69; col = col + 1) {
+        *(char *)(row * 0x140 + col + -0x120d) = *(char *)(row * 0x69 + col + 0x4e0) + '@';
       }
     }
   }
