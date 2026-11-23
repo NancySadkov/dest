@@ -925,3 +925,39 @@ Next: re-install the INT 3Fh handler using the same simple pattern as the ladder
 (an `asm` block with `mov ax,0x253f / mov dx,offset handler / mov ds,cs`-style
 addressing verified by disassembly), confirm it fires, then implement the block
 loader from `audit/overlay_blocks.csv`.
+
+### The INT 3Fh probes were invalid: the handler address resolves to 0x30
+
+Re-installed the handler by writing the IVT directly (`0x3F*4 = 0xFC`):
+
+```
+cli / xor ax,ax / mov es,ax
+mov word ptr es:[0xfc], offset int3f_probe
+mov word ptr es:[0xfe], cs
+sti
+```
+
+Disassembling the built image shows what was actually installed:
+
+```
+001c  mov word ptr es:[0xfc], 0x30        <- not the handler
+0023  mov word ptr es:[0xfe], cs
+```
+
+The same 0x30 appears when the address is taken in C
+(`uint16_t hofs = (uint16_t)int3f_probe;`), so it is not an inline-asm quirk:
+`int3f_probe` resolves to offset 0x30 in a segment that is not the CRTL_SEG
+`cs` used at install time.  The vector therefore pointed into `startx` itself,
+which explains why the handler never fired in either probe.
+
+So the overlay stub path is **still unverified** - not disproved.  The next
+attempt must place the handler where its address is known:
+
+* simplest: write the handler as a few bytes at a fixed place in `startx`'s own
+  segment and install the address of that label, verifying the vector contents
+  by disassembly before running;
+* or use a `void interrupt` function and let BCC emit the prologue, but still
+  check the installed offset against `REBUILT.MAP` in the same build.
+
+Once the vector is right, the block loader follows the design already recorded
+(`audit/overlay_blocks.csv`, stub `CD 3F <id> <ofs>`).
