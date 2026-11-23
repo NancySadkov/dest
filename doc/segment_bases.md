@@ -323,5 +323,22 @@ threaded through unrelated roles, and the census shows no cheap split:
   ...  plus bldType * 0x27 and further field addresses
 ```
 
-Splitting them means roughly ten new locals and a per-occurrence rewrite, so the
-next attempt should start from a body that only uses one role each.
+Splitting them means roughly ten new locals and a per-occurrence rewrite.
+What was done instead is a constrained split with two mechanical safety checks
+per block:
+
+  1. the block contains exactly one assignment to the variable (the
+     header/init), so the value is the loop counter throughout;
+  2. the first use after the block is itself an assignment, so no stale value
+     is read across the boundary.
+
+Accepted: the three 0xf8..GUnitCount loops (48 occurrences, unitIdx) and the
+0..GLeaderCount loop at 3529 (12, leaderIdxB).
+Rejected by check 1 and left alone: iVar17 3336..3362, uVar23 3364..3384,
+uVar23 3446..3462, uVar23 3789..3881 (each assigns the variable again inside
+the block, so the counter and the other role share the storage).
+
+One consequence worth recording: adding a local grows the frame, which turns
+some [BP+disp8] accesses into disp16 encodings, so the linked EXE is *not* byte
+identical after a pure rename.  Byte comparison is therefore not a usable
+acceptance test here; the gates plus the two checks above are.
