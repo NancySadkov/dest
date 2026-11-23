@@ -898,27 +898,27 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
 {
   char *pcVar1;
   int iVar2;
-  int iVar3;
+  int rec;
   uint16_t uStack_4;
   
   if ((int)fromIndex < toIndex) {
-    for (iVar3 = 0; iVar3 < 10; iVar3 = iVar3 + 1) {
+    for (rec = 0; rec < 10; rec = rec + 1) {
       for (iVar2 = 0; iVar2 < 0x69; iVar2 = iVar2 + 1) {
-        if (((int)(fromIndex + 1) < (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa)) &&
-           ((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) <= toIndex + 1)) {
-          pcVar1 = (char *)(iVar3 * 0x69 + iVar2 + 0x8fa);
+        if (((int)(fromIndex + 1) < (int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x8fa)) &&
+           ((int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x8fa) <= toIndex + 1)) {
+          pcVar1 = (char *)(rec * 0x69 + iVar2 + 0x8fa);
           *pcVar1 = *pcVar1 + -1;
         }
-        else if ((uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) == fromIndex + 1) {
-          *(char *)(iVar3 * 0x69 + iVar2 + 0x8fa) = (char)toIndex + '\x01';
+        else if ((uint)*(byte *)(rec * 0x69 + iVar2 + 0x8fa) == fromIndex + 1) {
+          *(char *)(rec * 0x69 + iVar2 + 0x8fa) = (char)toIndex + '\x01';
         }
-        if (((int)(fromIndex + 1) < (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0)) &&
-           ((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) <= toIndex + 1)) {
-          pcVar1 = (char *)(iVar3 * 0x69 + iVar2 + 0x4e0);
+        if (((int)(fromIndex + 1) < (int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x4e0)) &&
+           ((int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x4e0) <= toIndex + 1)) {
+          pcVar1 = (char *)(rec * 0x69 + iVar2 + 0x4e0);
           *pcVar1 = *pcVar1 + -1;
         }
-        else if ((uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) == fromIndex + 1) {
-          *(char *)(iVar3 * 0x69 + iVar2 + 0x4e0) = (char)toIndex + '\x01';
+        else if ((uint)*(byte *)(rec * 0x69 + iVar2 + 0x4e0) == fromIndex + 1) {
+          *(char *)(rec * 0x69 + iVar2 + 0x4e0) = (char)toIndex + '\x01';
         }
       }
     }
@@ -936,26 +936,26 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
     }
   }
   else {
-    for (iVar3 = 0; iVar3 < 10; iVar3 = iVar3 + 1) {
+    for (rec = 0; rec < 10; rec = rec + 1) {
       for (iVar2 = 0; iVar2 < 0x69; iVar2 = iVar2 + 1) {
-        if (((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) < toIndex + 1) ||
-           ((int)(fromIndex + 1) <= (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa))) {
-          if ((uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) == fromIndex + 1) {
-            *(char *)(iVar3 * 0x69 + iVar2 + 0x8fa) = (char)toIndex + '\x01';
+        if (((int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x8fa) < toIndex + 1) ||
+           ((int)(fromIndex + 1) <= (int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x8fa))) {
+          if ((uint)*(byte *)(rec * 0x69 + iVar2 + 0x8fa) == fromIndex + 1) {
+            *(char *)(rec * 0x69 + iVar2 + 0x8fa) = (char)toIndex + '\x01';
           }
         }
         else {
-          pcVar1 = (char *)(iVar3 * 0x69 + iVar2 + 0x8fa);
+          pcVar1 = (char *)(rec * 0x69 + iVar2 + 0x8fa);
           *pcVar1 = *pcVar1 + '\x01';
         }
-        if (((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) < toIndex + 1) ||
-           ((int)(fromIndex + 1) <= (int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0))) {
-          if ((uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) == fromIndex + 1) {
-            *(char *)(iVar3 * 0x69 + iVar2 + 0x4e0) = (char)toIndex + '\x01';
+        if (((int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x4e0) < toIndex + 1) ||
+           ((int)(fromIndex + 1) <= (int)(uint)*(byte *)(rec * 0x69 + iVar2 + 0x4e0))) {
+          if ((uint)*(byte *)(rec * 0x69 + iVar2 + 0x4e0) == fromIndex + 1) {
+            *(char *)(rec * 0x69 + iVar2 + 0x4e0) = (char)toIndex + '\x01';
           }
         }
         else {
-          pcVar1 = (char *)(iVar3 * 0x69 + iVar2 + 0x4e0);
+          pcVar1 = (char *)(rec * 0x69 + iVar2 + 0x4e0);
           *pcVar1 = *pcVar1 + '\x01';
         }
       }

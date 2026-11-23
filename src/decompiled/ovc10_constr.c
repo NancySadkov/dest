@@ -431,7 +431,7 @@ void __cdecl16far constr_blitRowObjects(brect_t *rect,uint16_t type)
 void __cdecl16far constr_usesAgnt_clear(void)
 
 {
-  uint16_t uVar1;
+  uint16_t sqCol;
   int16_t iVar2;
   far_t gfx;
   far_t gfx_00;
@@ -534,19 +534,19 @@ void __cdecl16far constr_usesAgnt_clear(void)
     for (iVar10 = 8; -1 < iVar10; iVar10 = iVar10 + -1) {
       for (sq = ((uint16_t *)rowMapSquareFirst)[iVar10]; uVar12 = (undefined1)iVar10,
           (int)sq < (int)((uint16_t *)rowMapSquareEnd)[iVar10]; sq = sq + 1) {
-        uVar1 = *(uint16_t *)(&mapSquareColumn[sq]);
+        sqCol = *(uint16_t *)(&mapSquareColumn[sq]);
         iStack_1e = constr_usesSmoothPrev
-                              (uVar1,iVar10 + -1,(int *)&cornerTL,(char)(iVar10 + -1),
+                              (sqCol,iVar10 + -1,(int *)&cornerTL,(char)(iVar10 + -1),
                                (char)&cornerTL);
         iStack_20 = constr_usesSmoothPrev
-                              (uVar1 + 1,iVar10 + -1,(int *)&cornerTR,(char)(iVar10 + -1),
+                              (sqCol + 1,iVar10 + -1,(int *)&cornerTR,(char)(iVar10 + -1),
                                (char)&cornerTR);
-        iStack_22 = constr_usesSmoothPrev(uVar1,iVar10,(int *)&cornerBL,uVar12,(char)&cornerBL);
-        iStack_24 = constr_usesSmoothPrev(uVar1 + 1,iVar10,(int *)&cornerBR,uVar12,(char)&cornerBR);
-        uVar4 = constr_getFlagsAtOffset(uVar1,iVar10);
+        iStack_22 = constr_usesSmoothPrev(sqCol,iVar10,(int *)&cornerBL,uVar12,(char)&cornerBL);
+        iStack_24 = constr_usesSmoothPrev(sqCol + 1,iVar10,(int *)&cornerBR,uVar12,(char)&cornerBR);
+        uVar4 = constr_getFlagsAtOffset(sqCol,iVar10);
         bStack_b = (byte)uVar4;
         if ((uVar4 & 4) == 0) {
-          if ((int)uVar1 < 0) {
+          if ((int)sqCol < 0) {
             uVar4 = constr_compute1(cornerTL,cornerTR,cornerBL,bStack_b,1,cornerTR,cornerBL,bStack_b
                                    );
             iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_20;
@@ -595,7 +595,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                        (char)uVar4,0x40);
           }
         }
-        else if ((int)uVar1 < 0) {
+        else if ((int)sqCol < 0) {
           uVar4 = constr_compute1(cornerBL,cornerBR,cornerTL,bStack_b,1,cornerBR,cornerTL,bStack_b);
           iVar5 = ((uint16_t *)ScreenOriginY)[iVar10] - iStack_1e;
           sqRight = *(int *)(&mapSquareLeftX[sq]);
@@ -642,8 +642,8 @@ void __cdecl16far constr_usesAgnt_clear(void)
         for (bStack_3b = 0; bStack_3b < 2; bStack_3b = bStack_3b + 1) {
           for (sq = ((uint16_t *)rowMapSquareFirst)[iVar10];
               (int)sq < (int)((uint16_t *)rowMapSquareEnd)[iVar10]; sq = sq + 1) {
-            uVar1 = *(uint16_t *)(&mapSquareColumn[sq]);
-            bVar3 = constr_setHighlightAtOffset(uVar1,iVar10,uVar12);
+            sqCol = *(uint16_t *)(&mapSquareColumn[sq]);
+            bVar3 = constr_setHighlightAtOffset(sqCol,iVar10,uVar12);
             iStack_e = CONCAT11(extraout_AH,bVar3);
             GGameState = 0x37;
             if (DebugVerbose != false) {
@@ -655,39 +655,39 @@ void __cdecl16far constr_usesAgnt_clear(void)
                   ((bStack_3b != 0 && ((*(uint *)((uint8_t *)&BuildingTypes[iStack_e] + 19) & 0x800) == 0)))))) {
                 if (*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 13) < 2) {
                   iStack_1e = constr_usesSmoothPrev
-                                        (uVar1,iVar10 + -1,(int *)&cornerTL,(char)(iVar10 + -1),
+                                        (sqCol,iVar10 + -1,(int *)&cornerTL,(char)(iVar10 + -1),
                                          (char)&cornerTL);
                   iStack_22 = constr_usesSmoothPrev
-                                        (uVar1,iVar10,(int *)&cornerBL,uVar12,(char)&cornerBL);
+                                        (sqCol,iVar10,(int *)&cornerBL,uVar12,(char)&cornerBL);
                   iStack_20 = constr_usesSmoothPrev
-                                        (uVar1 + 1,iVar10 + -1,(int *)&cornerTR,(char)(iVar10 + -1),
+                                        (sqCol + 1,iVar10 + -1,(int *)&cornerTR,(char)(iVar10 + -1),
                                          (char)&cornerTR);
                   iStack_24 = constr_usesSmoothPrev
-                                        (uVar1 + 1,iVar10,(int *)&cornerBR,uVar12,(char)&cornerBR);
+                                        (sqCol + 1,iVar10,(int *)&cornerBR,uVar12,(char)&cornerBR);
                 }
                 else if (*(byte *)((uint8_t *)&BuildingTypes[iStack_e] + 13) < 3) {
                   iStack_1e = constr_usesSmoothPrev
-                                        (uVar1,iVar10 + -1,(int *)&cornerTL,(char)(iVar10 + -1),
+                                        (sqCol,iVar10 + -1,(int *)&cornerTL,(char)(iVar10 + -1),
                                          (char)&cornerTL);
                   iStack_22 = constr_usesSmoothPrev
-                                        (uVar1,iVar10,(int *)&cornerBL,uVar12,(char)&cornerBL);
+                                        (sqCol,iVar10,(int *)&cornerBL,uVar12,(char)&cornerBL);
                   iStack_20 = constr_usesSmoothPrev
-                                        (uVar1 + 2,iVar10 + -1,(int *)&cornerTR,(char)(iVar10 + -1),
+                                        (sqCol + 2,iVar10 + -1,(int *)&cornerTR,(char)(iVar10 + -1),
                                          (char)&cornerTR);
                   iStack_24 = constr_usesSmoothPrev
-                                        (uVar1 + 2,iVar10,(int *)&cornerBR,uVar12,(char)&cornerBR);
+                                        (sqCol + 2,iVar10,(int *)&cornerBR,uVar12,(char)&cornerBR);
                 }
                 else {
                   iStack_1e = constr_usesSmoothPrev
-                                        (uVar1 + 1,iVar10 + -1,(int *)&cornerTL,(char)(iVar10 + -1),
+                                        (sqCol + 1,iVar10 + -1,(int *)&cornerTL,(char)(iVar10 + -1),
                                          (char)&cornerTL);
                   iStack_22 = constr_usesSmoothPrev
-                                        (uVar1 + 1,iVar10,(int *)&cornerBL,uVar12,(char)&cornerBL);
+                                        (sqCol + 1,iVar10,(int *)&cornerBL,uVar12,(char)&cornerBL);
                   iStack_20 = constr_usesSmoothPrev
-                                        (uVar1 + 2,iVar10 + -1,(int *)&cornerTR,(char)(iVar10 + -1),
+                                        (sqCol + 2,iVar10 + -1,(int *)&cornerTR,(char)(iVar10 + -1),
                                          (char)&cornerTR);
                   iStack_24 = constr_usesSmoothPrev
-                                        (uVar1 + 2,iVar10,(int *)&cornerBR,uVar12,(char)&cornerBR);
+                                        (sqCol + 2,iVar10,(int *)&cornerBR,uVar12,(char)&cornerBR);
                 }
                 uStack_10 = (uint)*(byte *)(iVar10 + 0x73c);
                 iStack_30 = iStack_22 + iStack_1e + iStack_20 + iStack_24 >> 2;
@@ -887,10 +887,10 @@ void __cdecl16far constr_usesAgnt_clear(void)
     for (sq = rowMapSquareFirst[0]; (int)sq < (int)rowMapSquareEnd[0]; sq = sq + 1)
     {
       if ((0xb < *(int *)(&mapSquareRightX[sq])) && (*(int *)(&mapSquareLeftX[sq]) < 0xdf)) {
-        uVar1 = *(uint16_t *)(&mapSquareColumn[sq]);
-        iStack_1a = constr_usesSmoothPrev(uVar1,-1,(int *)&cornerBL,0xff,(char)&cornerBL);
-        iStack_1c = constr_usesSmoothPrev(uVar1 + 1,-1,(int *)&cornerBR,0xff,(char)&cornerBR);
-        uVar4 = constr_getFlagsAtOffset(uVar1,-1);
+        sqCol = *(uint16_t *)(&mapSquareColumn[sq]);
+        iStack_1a = constr_usesSmoothPrev(sqCol,-1,(int *)&cornerBL,0xff,(char)&cornerBL);
+        iStack_1c = constr_usesSmoothPrev(sqCol + 1,-1,(int *)&cornerBR,0xff,(char)&cornerBR);
+        uVar4 = constr_getFlagsAtOffset(sqCol,-1);
         bStack_b = (byte)uVar4;
         iVar8 = ScreenOriginY[0] - iStack_1a;
         iVar10 = *(int *)(&mapSquareRightX[sq]);

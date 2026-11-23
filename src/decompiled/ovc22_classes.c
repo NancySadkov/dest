@@ -4708,53 +4708,53 @@ void __cdecl16far ovc22_spawnForLeaders(void)
   uint16_t uVar1;
   uint16_t unaff_SS;
   uint8_t outFlag;
-  int iStack_4;
+  int leader;
   
   outFlag = 0x0;
-  for (iStack_4 = 0; iStack_4 < (int)(uint)GLeaderCount; iStack_4 = iStack_4 + 1) {
-    if (((((char_sheet_t *)((iStack_4 << 2)))->active != '\0') &&
+  for (leader = 0; leader < (int)(uint)GLeaderCount; leader = leader + 1) {
+    if (((((char_sheet_t *)((leader << 2)))->active != '\0') &&
         (uVar1 = ovr_randBelow((uint)(byte)((char *)0x2686a)
-                                           [(uint)((char_sheet_t *)((iStack_4 << 2)))->classStr * 0x95],0),
-        (byte)uVar1 < ((agnt_t *)((iStack_4 << 2)))->variant)) &&
-       ((*(char *)((int)*(uint32_t *)(iStack_4 << 2) + 0x3f) != '\0' ||
-        (((char_sheet_t *)((iStack_4 << 2)))->population <=
-         ((char_sheet_t *)((iStack_4 << 2)))->housing)))) {
+                                           [(uint)((char_sheet_t *)((leader << 2)))->classStr * 0x95],0),
+        (byte)uVar1 < ((agnt_t *)((leader << 2)))->variant)) &&
+       ((*(char *)((int)*(uint32_t *)(leader << 2) + 0x3f) != '\0' ||
+        (((char_sheet_t *)((leader << 2)))->population <=
+         ((char_sheet_t *)((leader << 2)))->housing)))) {
       if (EntityCount < 0x21c) {
-        ovc22_usesRandBelow2((byte)iStack_4,(uint16_t)&outFlag,unaff_SS);
+        ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
       }
-      else if (*(char *)((int)*(uint32_t *)(iStack_4 << 2) + 0x3f) == '\0') {
-        if (((char_sheet_t *)((iStack_4 << 2)))->unitCount < 0x23) {
-          ovc22_usesRandBelow2((byte)iStack_4,(uint16_t)&outFlag,unaff_SS);
+      else if (*(char *)((int)*(uint32_t *)(leader << 2) + 0x3f) == '\0') {
+        if (((char_sheet_t *)((leader << 2)))->unitCount < 0x23) {
+          ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
         }
-        else if (((char_sheet_t *)((iStack_4 << 2)))->unitCount < 0x4b) {
+        else if (((char_sheet_t *)((leader << 2)))->unitCount < 0x4b) {
           uVar1 = ovr_randBelow(8,0);
           if ((uVar1 & 0xff) == 0) {
-            ovc22_usesRandBelow2((byte)iStack_4,(uint16_t)&outFlag,unaff_SS);
+            ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
           }
         }
         else {
           uVar1 = ovr_randBelow(0x10,0);
           if ((uVar1 & 0xff) == 0) {
-            ovc22_usesRandBelow2((byte)iStack_4,(uint16_t)&outFlag,unaff_SS);
+            ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
           }
         }
       }
-      else if (((char_sheet_t *)((iStack_4 << 2)))->unitsOnTile == 0) {
-        ovc22_usesRandBelow2((byte)iStack_4,(uint16_t)&outFlag,unaff_SS);
+      else if (((char_sheet_t *)((leader << 2)))->unitsOnTile == 0) {
+        ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
       }
-      else if (((char_sheet_t *)((iStack_4 << 2)))->unitCount < 0x19) {
-        ovc22_usesRandBelow2((byte)iStack_4,(uint16_t)&outFlag,unaff_SS);
+      else if (((char_sheet_t *)((leader << 2)))->unitCount < 0x19) {
+        ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
       }
-      else if (((char_sheet_t *)((iStack_4 << 2)))->unitCount < 0x32) {
+      else if (((char_sheet_t *)((leader << 2)))->unitCount < 0x32) {
         uVar1 = ovr_randBelow(8,0);
         if ((uVar1 & 0xff) == 0) {
-          ovc22_usesRandBelow2((byte)iStack_4,(uint16_t)&outFlag,unaff_SS);
+          ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
         }
       }
       else {
         uVar1 = ovr_randBelow(0x10,0);
         if ((uVar1 & 0xff) == 0) {
-          ovc22_usesRandBelow2((byte)iStack_4,(uint16_t)&outFlag,unaff_SS);
+          ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
         }
       }
     }

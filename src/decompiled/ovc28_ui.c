@@ -625,7 +625,7 @@ char * __cdecl16far uiInputText(far_t entries,uint16_t count,far_t hint,uint8_t 
   int iVar1;
   uint uVar2;
   undefined1 uVar5;
-  uint16_t uVar3;
+  uint16_t key;
   uint16_t uVar4;
   
   UserWantsExit = 0;
@@ -659,8 +659,8 @@ char * __cdecl16far uiInputText(far_t entries,uint16_t count,far_t hint,uint8_t 
 L_uiInputText_1007:
   do {
     while( true ) {
-      uVar3 = ovr_uiReadKey2();
-      if (uVar3 != 0x4838) break;
+      key = ovr_uiReadKey2();
+      if (key != 0x4838) break;
 L_uiInputText_110E:
       do {
         if (menuBarShown == '\0') {
@@ -693,8 +693,8 @@ L_uiInputText_110E:
               *(int *)(iVar1 + -4) == 0 && *(int *)(iVar1 + -2) == 0));
       ovc28_startCrossBlit();
     }
-    if (uVar3 < 0x4839) {
-      if (uVar3 == 0x1675) {
+    if (key < 0x4839) {
+      if (key == 0x1675) {
 L_uiInputText_10F1:
         if (menuBarShown != '\0') {
           GMenuFlag = 0;
@@ -702,17 +702,17 @@ L_uiInputText_10F1:
         }
         goto L_uiInputText_1007;
       }
-      if (uVar3 < 0x1676) {
-        if (uVar3 != 0x1372) {
-          if (0x1372 < uVar3) {
-            if (uVar3 == 0x1655) goto L_uiInputText_10F1;
+      if (key < 0x1676) {
+        if (key != 0x1372) {
+          if (0x1372 < key) {
+            if (key == 0x1655) goto L_uiInputText_10F1;
             goto L_uiInputText_1007;
           }
-          if (uVar3 == 0x11b) {
+          if (key == 0x11b) {
             UserWantsExit = 1;
             goto L_uiInputText_1348;
           }
-          if (uVar3 != 0x1352) goto L_uiInputText_1007;
+          if (key != 0x1352) goto L_uiInputText_1007;
         }
         if (menuBarShown != '\0') {
           GMenuFlag = 0;
@@ -720,12 +720,12 @@ L_uiInputText_10F1:
         }
         goto L_uiInputText_1007;
       }
-      if (uVar3 != 0x2368) {
-        if (0x2368 < uVar3) {
-          if (uVar3 == 0x4800) goto L_uiInputText_110E;
+      if (key != 0x2368) {
+        if (0x2368 < key) {
+          if (key == 0x4800) goto L_uiInputText_110E;
           goto L_uiInputText_1007;
         }
-        if (uVar3 == 0x1c0d) {
+        if (key == 0x1c0d) {
           if (GMenuItem != 0) {
             ovc28_blitMenuEntry(entries,GMenuItem - 1);
           }
@@ -733,7 +733,7 @@ L_uiInputText_10F1:
           GMenuFlag = 0;
           return (char *)CONCAT11(0x24,GMenuItem);
         }
-        if (uVar3 != 0x2348) goto L_uiInputText_1007;
+        if (key != 0x2348) goto L_uiInputText_1007;
       }
       if (menuBarShown != '\0') {
         GMenuFlag = 0;
@@ -741,15 +741,15 @@ L_uiInputText_10F1:
       }
       goto L_uiInputText_1007;
     }
-    if (uVar3 == 0x5100) {
+    if (key == 0x5100) {
 L_uiInputText_1376:
       if ((flags & 2) != 0) {
         GMenuFlag = 0;
         return (char *)CONCAT11(0x24,(byte)count);
       }
     }
-    else if (uVar3 < 0x5101) {
-      if (uVar3 == 0x5000) {
+    else if (key < 0x5101) {
+      if (key == 0x5000) {
 L_uiInputText_11EE:
         do {
           if (menuBarShown == '\0') {
@@ -782,23 +782,23 @@ L_uiInputText_11EE:
                 *(int *)(iVar1 + -4) == 0 && *(int *)(iVar1 + -2) == 0));
         ovc28_startCrossBlit();
       }
-      else if (uVar3 < 0x5001) {
-        if (((uVar3 == 0x4900) || (uVar3 == 0x4939)) && ((flags & 1) != 0)) {
+      else if (key < 0x5001) {
+        if (((key == 0x4900) || (key == 0x4939)) && ((flags & 1) != 0)) {
           GMenuFlag = 0;
           return (char *)0x2401;
         }
       }
-      else if (uVar3 == 0x5032) goto L_uiInputText_11EE;
+      else if (key == 0x5032) goto L_uiInputText_11EE;
     }
     else {
-      if (uVar3 == 0x5133) goto L_uiInputText_1376;
-      if (uVar3 == 0xfffe) {
+      if (key == 0x5133) goto L_uiInputText_1376;
+      if (key == 0xfffe) {
 L_uiInputText_1348:
         ovc28_usesBlitLoadRleGfx();
         GMenuFlag = 0;
         return (char *)0x2400;
       }
-      if (uVar3 == 0xffff) {
+      if (key == 0xffff) {
         uVar4 = ovc28_usesScreenMode(entries,count);
         if ((char)uVar4 != -1) {
           ovc28_usesBlitLoadRleGfx();
