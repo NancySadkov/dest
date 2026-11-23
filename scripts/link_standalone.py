@@ -153,6 +153,13 @@ def main():
     # entry is moved to _STARTX below.
     rsp = ("D:\\LIB\\C0M.OBJ " + " ".join(res) + " /o " + " ".join(ovl) +
            " /m /s" + ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\OVERLAY.LIB D:\\LIB\\CM.LIB")
+    if os.environ.get("NO_OVERLAY"):
+        # Ordinary (non-VROOMM) link: TLINK emits normal relocations for every
+        # far call and the game modules become resident segments.  VROOMM's
+        # runtime cannot bootstrap in this rebuild (doc/step6_entry.md), so the
+        # overlay machinery is dropped entirely.
+        rsp = ("D:\\LIB\\C0M.OBJ " + " ".join(res) + " " + " ".join(ovl) +
+               " /m /s" + ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\CM.LIB")
     with open(os.path.join(BUILDSRC, "LINK.RSP"), "w", encoding="ascii",
               newline="\r\n") as f:
         f.write(rsp + "\n")

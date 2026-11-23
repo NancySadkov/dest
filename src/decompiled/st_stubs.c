@@ -132,3 +132,15 @@ int _emu = 0;
 
 /* GUESS: Borland floating-point runtime data */
 int _fperror = 0;
+
+
+/* GUESS: VROOMM initialisers, no-ops in the non-overlay link (NO_OVERLAY) */
+int _OVRINITEMS(void)
+{
+  return 0;
+}
+
+int _OVRINITEXT(void)
+{
+  return 0;
+}

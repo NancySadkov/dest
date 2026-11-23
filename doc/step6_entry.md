@@ -648,3 +648,30 @@ That is inherent to OVERLAY.LIB, not a missing call.  Two ways out:
 Option 1 is the cheaper experiment and the one that would finally let
 `init_game` run, the second runtime checkpoint exist, and step 6 be testable at
 all.
+
+### Tried: the non-overlay link (`NO_OVERLAY=1`)
+
+`scripts/link_standalone.py` now accepts `NO_OVERLAY=1`, which drops `/o` and
+`OVERLAY.LIB` from the TLINK response file and leaves every module resident.
+`st_stubs.c` gained `_OVRINITEMS`/`_OVRINITEXT` no-ops (the C names that produce
+the linker's `__OVRINITEMS`/`__OVRINITEXT`) so the link is complete.
+
+What the experiment showed:
+
+* the link is **clean** - 0 errors, 0 undefined symbols;
+* TLINK emits every relocation itself: `add_missing_relocations()` reports
+  **0** additions, versus 166-1464 with `-V`.  This confirms the earlier
+  diagnosis that the VROOMM link omits the relocations;
+* the resulting image no longer hangs: the batch runs to completion and creates
+  `DONE.FLG`;
+* but `main` is still not reached - patching `_MAIN`'s entry with
+  `mov ax,4C42h; int 21h` yields `CODE=0`, so the program exits before it.
+
+So the non-overlay link removes the VROOMM obstacle but the startup path itself
+does not survive the change: `startx` was written against the overlay image and
+returns to DOS before calling `main`.  That is the next thing to fix if this
+route is taken (the entry is `_STARTX 0069:002B` in this link, versus
+`006C:0030` with overlays).
+
+The switch is kept (default link unchanged, still 0 errors, 1,630/0/0 state) so
+the experiment can be resumed deliberately rather than re-derived.
