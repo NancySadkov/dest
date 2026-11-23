@@ -215,56 +215,56 @@ void __cdecl16far StubifyCopy1to0_alt(int index)
 void __cdecl16far stshStubifyCopy1to0(int index)
 
 {
-  uint16_t uVar1;
+  uint16_t gfxOfs;
   
-  uVar1 = ((far_t *)(BldGfxNormal + 1) + index * 3)->ofs;
+  gfxOfs = ((far_t *)(BldGfxNormal + 1) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxNormal[0].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxNormal[1].seg + index * 0xc);
-  ((far_t *)BldGfxNormal + index * 3)->ofs = uVar1;
-  uVar1 = ((far_t *)(BldGfxNormal + 1) + index * 3)->ofs;
+  ((far_t *)BldGfxNormal + index * 3)->ofs = gfxOfs;
+  gfxOfs = ((far_t *)(BldGfxNormal + 1) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxNormal[2].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxNormal[1].seg + index * 0xc);
-  ((far_t *)(BldGfxNormal + 2) + index * 3)->ofs = uVar1;
-  uVar1 = ((far_t *)(BldGfxNormal + 4) + index * 3)->ofs;
+  ((far_t *)(BldGfxNormal + 2) + index * 3)->ofs = gfxOfs;
+  gfxOfs = ((far_t *)(BldGfxNormal + 4) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxNormal[3].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxNormal[4].seg + index * 0xc);
-  ((far_t *)(BldGfxNormal + 3) + index * 3)->ofs = uVar1;
-  uVar1 = ((far_t *)(BldGfxNormal + 4) + index * 3)->ofs;
+  ((far_t *)(BldGfxNormal + 3) + index * 3)->ofs = gfxOfs;
+  gfxOfs = ((far_t *)(BldGfxNormal + 4) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxNormal[5].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxNormal[4].seg + index * 0xc);
-  ((far_t *)(BldGfxNormal + 5) + index * 3)->ofs = uVar1;
-  uVar1 = ((far_t *)(BldGfxNormal + 7) + index * 3)->ofs;
+  ((far_t *)(BldGfxNormal + 5) + index * 3)->ofs = gfxOfs;
+  gfxOfs = ((far_t *)(BldGfxNormal + 7) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxNormal[6].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxNormal[7].seg + index * 0xc);
-  ((far_t *)(BldGfxNormal + 6) + index * 3)->ofs = uVar1;
-  uVar1 = ((far_t *)(BldGfxNormal + 7) + index * 3)->ofs;
+  ((far_t *)(BldGfxNormal + 6) + index * 3)->ofs = gfxOfs;
+  gfxOfs = ((far_t *)(BldGfxNormal + 7) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxNormal[8].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxNormal[7].seg + index * 0xc);
-  ((far_t *)(BldGfxNormal + 8) + index * 3)->ofs = uVar1;
-  uVar1 = ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs;
+  ((far_t *)(BldGfxNormal + 8) + index * 3)->ofs = gfxOfs;
+  gfxOfs = ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxRuin[0].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxRuin[1].seg + index * 0xc);
-  ((far_t *)BldGfxRuin + index * 3)->ofs = uVar1;
-  uVar1 = ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs;
+  ((far_t *)BldGfxRuin + index * 3)->ofs = gfxOfs;
+  gfxOfs = ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxRuin[2].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxRuin[1].seg + index * 0xc);
-  ((far_t *)(BldGfxRuin + 2) + index * 3)->ofs = uVar1;
-  uVar1 = ((far_t *)(BldGfxRuin + 4) + index * 3)->ofs;
+  ((far_t *)(BldGfxRuin + 2) + index * 3)->ofs = gfxOfs;
+  gfxOfs = ((far_t *)(BldGfxRuin + 4) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxRuin[3].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxRuin[4].seg + index * 0xc);
-  ((far_t *)(BldGfxRuin + 3) + index * 3)->ofs = uVar1;
-  uVar1 = ((far_t *)(BldGfxRuin + 4) + index * 3)->ofs;
+  ((far_t *)(BldGfxRuin + 3) + index * 3)->ofs = gfxOfs;
+  gfxOfs = ((far_t *)(BldGfxRuin + 4) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxRuin[5].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxRuin[4].seg + index * 0xc);
-  ((far_t *)(BldGfxRuin + 5) + index * 3)->ofs = uVar1;
-  uVar1 = ((far_t *)(BldGfxRuin + 7) + index * 3)->ofs;
+  ((far_t *)(BldGfxRuin + 5) + index * 3)->ofs = gfxOfs;
+  gfxOfs = ((far_t *)(BldGfxRuin + 7) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxRuin[6].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxRuin[7].seg + index * 0xc);
-  ((far_t *)(BldGfxRuin + 6) + index * 3)->ofs = uVar1;
-  uVar1 = ((far_t *)(BldGfxRuin + 7) + index * 3)->ofs;
+  ((far_t *)(BldGfxRuin + 6) + index * 3)->ofs = gfxOfs;
+  gfxOfs = ((far_t *)(BldGfxRuin + 7) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxRuin[8].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxRuin[7].seg + index * 0xc);
-  ((far_t *)(BldGfxRuin + 8) + index * 3)->ofs = uVar1;
+  ((far_t *)(BldGfxRuin + 8) + index * 3)->ofs = gfxOfs;
   return;
 }
 

@@ -42,35 +42,35 @@ far_t * __cdecl16far stshAllocStub(far_t *__return_storage_ptr__)
 void __cdecl16far stshTR_S_stubify0(int index)
 
 {
-  uint32_t uVar1;
+  uint32_t res;
   
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[0].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)BldGfxNormal + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[1].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxNormal + 1) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[2].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxNormal + 2) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[3].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxNormal + 3) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[4].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxNormal + 4) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[5].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxNormal + 5) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[6].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxNormal + 6) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[7].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxNormal + 7) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxNormal[8].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxNormal + 8) + index * 3)->ofs = (uint16_t)uVar1;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxNormal[0].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)BldGfxNormal + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxNormal[1].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxNormal + 1) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxNormal[2].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxNormal + 2) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxNormal[3].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxNormal + 3) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxNormal[4].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxNormal + 4) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxNormal[5].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxNormal + 5) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxNormal[6].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxNormal + 6) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxNormal[7].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxNormal + 7) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxNormal[8].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxNormal + 8) + index * 3)->ofs = (uint16_t)res;
   return;
 }
 
@@ -81,36 +81,36 @@ void __cdecl16far stshTR_S_stubify0(int index)
 void __cdecl16far stshStubifyBld(uint16_t index)
 
 {
-  uint32_t uVar1;
+  uint32_t res;
   
   stshTR_S_stubify0(index);
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[0].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)BldGfxRuin + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[1].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[2].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxRuin + 2) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[3].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxRuin + 3) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[4].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxRuin + 4) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[5].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxRuin + 5) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[6].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxRuin + 6) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[7].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxRuin + 7) + index * 3)->ofs = (uint16_t)uVar1;
-  uVar1 = func_0x0007ffe0(0x6ffe);
-  *(uint16_t *)((int)&BldGfxRuin[8].seg + index * 0xc) = (int)((ulong)uVar1 >> 0x10);
-  ((far_t *)(BldGfxRuin + 8) + index * 3)->ofs = (uint16_t)uVar1;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxRuin[0].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)BldGfxRuin + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxRuin[1].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxRuin[2].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxRuin + 2) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxRuin[3].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxRuin + 3) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxRuin[4].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxRuin + 4) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxRuin[5].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxRuin + 5) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxRuin[6].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxRuin + 6) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxRuin[7].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxRuin + 7) + index * 3)->ofs = (uint16_t)res;
+  res = func_0x0007ffe0(0x6ffe);
+  *(uint16_t *)((int)&BldGfxRuin[8].seg + index * 0xc) = (int)((ulong)res >> 0x10);
+  ((far_t *)(BldGfxRuin + 8) + index * 3)->ofs = (uint16_t)res;
   return;
 }
 
