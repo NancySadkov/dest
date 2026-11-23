@@ -104,7 +104,7 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
 uint __cdecl16far stLoad(int handle)
 
 {
-  uint uVar1;
+  uint readOk;
   int iVar2;
   void *pvVar3;
   undefined1 uVar4;
@@ -120,120 +120,120 @@ uint __cdecl16far stLoad(int handle)
     SaveAuto = 0;
     AgntFlag1 = false;
     ovr_freeGameResources();
-    uVar1 = save_readBlock((int)&header,(void *)CONCAT22(0x28,unaff_SS),unaff_DI,unaff_SI);
-    if (((((uVar1 & 0xff) != 0) &&
+    readOk = save_readBlock((int)&header,(void *)CONCAT22(0x28,unaff_SS),unaff_DI,unaff_SI);
+    if (((((readOk & 0xff) != 0) &&
          (iVar2 = strcmp((char *)CONCAT22(unaff_SS,&header),
                          (char *)CONCAT22(SaveHeader.seg,SaveHeader.ofs)), iVar2 == 0)) &&
-        (uVar1 = save_readBlock((int)(short (*) [148] [60])GUnitGrid,
+        (readOk = save_readBlock((int)(short (*) [148] [60])GUnitGrid,
                                 (void *)CONCAT22(0x4560,(*(uint16_t *)((uint8_t *)&(GUnitGrid) + 2))),unaff_DI,unaff_SI),
-        (uVar1 & 0xff) != 0)) &&
-       ((((uVar1 = save_readBlock((int)(short (*) [60] [148])GMapFlags,
+        (readOk & 0xff) != 0)) &&
+       ((((readOk = save_readBlock((int)(short (*) [60] [148])GMapFlags,
                                   (void *)CONCAT22(0x4560,(*(uint16_t *)((uint8_t *)&(GMapFlags) + 2))),unaff_DI,unaff_SI),
-          (uVar1 & 0xff) != 0 &&
-          (uVar1 = save_readBlock((int)(byte (*) [59] [148])GMapCells,
+          (readOk & 0xff) != 0 &&
+          (readOk = save_readBlock((int)(byte (*) [59] [148])GMapCells,
                                   (void *)CONCAT22(0x22b0,(*(uint16_t *)((uint8_t *)&(GMapCells) + 2))),unaff_DI,unaff_SI),
-          (uVar1 & 0xff) != 0)) &&
-         ((uVar1 = save_readBlock(-0x7661,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (uVar1 & 0xff) != 0 &&
-          ((uVar1 = save_readBlock(-0x7663,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (uVar1 & 0xff) != 0
-           && (uVar1 = save_readBlock(-0x6f69,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-              (uVar1 & 0xff) != 0)))))) &&
-        ((uVar1 = save_readBlock((int)Entities,(void *)CONCAT22(EntityCount * 0x37,DAT_2000_d190),
-                                 unaff_DI,unaff_SI), (uVar1 & 0xff) != 0 &&
-         (uVar1 = save_readBlock(0x881,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (uVar1 & 0xff) != 0))))))
+          (readOk & 0xff) != 0)) &&
+         ((readOk = save_readBlock(-0x7661,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (readOk & 0xff) != 0 &&
+          ((readOk = save_readBlock(-0x7663,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (readOk & 0xff) != 0
+           && (readOk = save_readBlock(-0x6f69,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+              (readOk & 0xff) != 0)))))) &&
+        ((readOk = save_readBlock((int)Entities,(void *)CONCAT22(EntityCount * 0x37,DAT_2000_d190),
+                                 unaff_DI,unaff_SI), (readOk & 0xff) != 0 &&
+         (readOk = save_readBlock(0x881,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (readOk & 0xff) != 0))))))
     {
       uVar5 = (uint16_t)((ulong)((long)SquareRecCount * 0x13) >> 0x10);
-      uVar1 = save_readBlock(0,(void *)CONCAT22((int)((long)SquareRecCount * 0x13),
+      readOk = save_readBlock(0,(void *)CONCAT22((int)((long)SquareRecCount * 0x13),
                                                 (void *)((int)&AgntAnms[0x7c].halfWidth + 1)),
                              unaff_DI,unaff_SI);
-      if (((uVar1 & 0xff) != 0) &&
-         (uVar1 = save_readBlock(-0x6f1a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI), (uVar1 & 0xff) != 0)) {
+      if (((readOk & 0xff) != 0) &&
+         (readOk = save_readBlock(-0x6f1a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI), (readOk & 0xff) != 0)) {
         for (iVar2 = 0; iVar2 < (int)(uint)GLeaderCount; iVar2 = iVar2 + 1) {
           pvVar3 = ovr_stshAlloc(0xae);
           ((uint16_t *)(iVar2 * 4))[1] = uVar5;
           *(uint16_t *)(iVar2 * 4) = (uint16_t)pvVar3;   /* hand fix: store of the far pointer's offset half */
-          uVar1 = save_readBlock(*(int *)(iVar2 * 4),
+          readOk = save_readBlock(*(int *)(iVar2 * 4),
                                  (void *)CONCAT22(0xae,(void *)((int *)(iVar2 * 4))[1]),unaff_DI,
                                  unaff_SI);
-          if ((uVar1 & 0xff) == 0) goto L_save_49fd_01da_0800;
+          if ((readOk & 0xff) == 0) goto L_save_49fd_01da_0800;
         }
-        uVar1 = save_readBlock(0x4a12,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI);
-        if (((((((((((uVar1 & 0xff) != 0) &&
-                   (uVar1 = save_readBlock(-0x6f1b,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                   (uVar1 & 0xff) != 0)) &&
-                  (uVar1 = save_readBlock(-0x6f1c,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                  (uVar1 & 0xff) != 0)) &&
-                 (((uVar1 = save_readBlock(-0x6e21,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                   (uVar1 & 0xff) != 0 &&
-                   (uVar1 = save_readBlock(0,(char *)CONCAT22(GRecordCount * 0x12,
+        readOk = save_readBlock(0x4a12,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI);
+        if (((((((((((readOk & 0xff) != 0) &&
+                   (readOk = save_readBlock(-0x6f1b,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                   (readOk & 0xff) != 0)) &&
+                  (readOk = save_readBlock(-0x6f1c,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                  (readOk & 0xff) != 0)) &&
+                 (((readOk = save_readBlock(-0x6e21,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+                   (readOk & 0xff) != 0 &&
+                   (readOk = save_readBlock(0,(char *)CONCAT22(GRecordCount * 0x12,
                                                               (char *)0x21f2),
-                                           unaff_DI,unaff_SI), (uVar1 & 0xff) != 0)) &&
-                  ((uVar1 = save_readBlock(-0x7667,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                   (uVar1 & 0xff) != 0 &&
-                   ((uVar1 = save_readBlock((int)(unit_t *)GUnits,
+                                           unaff_DI,unaff_SI), (readOk & 0xff) != 0)) &&
+                  ((readOk = save_readBlock(-0x7667,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+                   (readOk & 0xff) != 0 &&
+                   ((readOk = save_readBlock((int)(unit_t *)GUnits,
                                             (void *)CONCAT22(GUnitCount * 9,(*(uint16_t *)((uint8_t *)&(GUnits) + 2))),unaff_DI,
-                                            unaff_SI), (uVar1 & 0xff) != 0 &&
-                    (uVar1 = save_readBlock(0x2f3,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                    (uVar1 & 0xff) != 0)))))))) &&
-                (uVar1 = save_readBlock(-0x6f62,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                (uVar1 & 0xff) != 0)) &&
-               ((((uVar1 = save_readBlock(-0x6f91,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                  (uVar1 & 0xff) != 0 &&
-                  (uVar1 = save_readBlock(-0x6f92,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                  (uVar1 & 0xff) != 0)) &&
-                 (uVar1 = save_readBlock(-0x6f97,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI),
-                 (uVar1 & 0xff) != 0)) &&
-                ((uVar1 = save_readBlock(-0x6df0,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                 (uVar1 & 0xff) != 0 &&
-                 (uVar1 = save_readBlock(-0x6f1d,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                 (uVar1 & 0xff) != 0)))))) &&
-              (((uVar1 = save_readBlock(-0x6f93,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                (uVar1 & 0xff) != 0 &&
-                ((uVar1 = save_readBlock(0x2f4,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                 (uVar1 & 0xff) != 0 &&
-                 (uVar1 = save_readBlock(-0x6f99,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                 (uVar1 & 0xff) != 0)))) &&
-               (uVar1 = save_readBlock(-0x6f63,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-               (uVar1 & 0xff) != 0)))) &&
-             ((((uVar1 = save_readBlock(0x5dcf,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                (uVar1 & 0xff) != 0 &&
-                (uVar1 = save_readBlock(0x5dd7,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                (uVar1 & 0xff) != 0)) &&
-               (uVar1 = save_readBlock(0x5ddf,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-               (uVar1 & 0xff) != 0)) &&
-              (((uVar1 = save_readBlock(0x5de7,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                (uVar1 & 0xff) != 0 &&
-                (uVar1 = save_readBlock(-0x6d33,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                (uVar1 & 0xff) != 0)) &&
-               ((uVar1 = save_readBlock(-0x6d34,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                (uVar1 & 0xff) != 0 &&
-                ((uVar1 = save_readBlock(0x6a86,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                 (uVar1 & 0xff) != 0 &&
-                 (uVar1 = save_readBlock(0x6a88,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                 (uVar1 & 0xff) != 0)))))))))) &&
-            ((uVar1 = save_readBlock(0x439,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI), (uVar1 & 0xff) != 0
-             && ((((uVar1 = save_readBlock(-0x766f,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI),
-                   (uVar1 & 0xff) != 0 &&
-                   (uVar1 = save_readBlock(-0x7670,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                   (uVar1 & 0xff) != 0)) &&
-                  (uVar1 = save_readBlock(0x693a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                  (uVar1 & 0xff) != 0)) &&
-                 (((uVar1 = save_readBlock(-0x6d38,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                   (uVar1 & 0xff) != 0 &&
-                   (uVar1 = save_readBlock(0x744,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                   (uVar1 & 0xff) != 0)) &&
-                  ((uVar1 = save_readBlock(-0x6f65,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                   (uVar1 & 0xff) != 0 &&
-                   ((uVar1 = save_readBlock(-0x6e1a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                    (uVar1 & 0xff) != 0 &&
-                    (uVar1 = save_readBlock(-0x6e1c,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                    (uVar1 & 0xff) != 0)))))))))))) &&
-           ((uVar1 = save_readBlock(0x26df,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI), (uVar1 & 0xff) != 0
-            && ((((uVar1 = save_readBlock(-0x6d3a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                  (uVar1 & 0xff) != 0 &&
-                  (uVar1 = save_readBlock(-0x6d44,(void *)MK_FP(0x2410, 0xa),unaff_DI,unaff_SI),
-                  (uVar1 & 0xff) != 0)) &&
-                 (uVar1 = save_readBlock((int)&header,(void *)CONCAT22(0x28,unaff_SS),unaff_DI,
-                                         unaff_SI), (uVar1 & 0xff) != 0)) &&
+                                            unaff_SI), (readOk & 0xff) != 0 &&
+                    (readOk = save_readBlock(0x2f3,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                    (readOk & 0xff) != 0)))))))) &&
+                (readOk = save_readBlock(-0x6f62,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                (readOk & 0xff) != 0)) &&
+               ((((readOk = save_readBlock(-0x6f91,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                  (readOk & 0xff) != 0 &&
+                  (readOk = save_readBlock(-0x6f92,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                  (readOk & 0xff) != 0)) &&
+                 (readOk = save_readBlock(-0x6f97,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI),
+                 (readOk & 0xff) != 0)) &&
+                ((readOk = save_readBlock(-0x6df0,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                 (readOk & 0xff) != 0 &&
+                 (readOk = save_readBlock(-0x6f1d,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                 (readOk & 0xff) != 0)))))) &&
+              (((readOk = save_readBlock(-0x6f93,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                (readOk & 0xff) != 0 &&
+                ((readOk = save_readBlock(0x2f4,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                 (readOk & 0xff) != 0 &&
+                 (readOk = save_readBlock(-0x6f99,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+                 (readOk & 0xff) != 0)))) &&
+               (readOk = save_readBlock(-0x6f63,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+               (readOk & 0xff) != 0)))) &&
+             ((((readOk = save_readBlock(0x5dcf,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                (readOk & 0xff) != 0 &&
+                (readOk = save_readBlock(0x5dd7,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                (readOk & 0xff) != 0)) &&
+               (readOk = save_readBlock(0x5ddf,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+               (readOk & 0xff) != 0)) &&
+              (((readOk = save_readBlock(0x5de7,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                (readOk & 0xff) != 0 &&
+                (readOk = save_readBlock(-0x6d33,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+                (readOk & 0xff) != 0)) &&
+               ((readOk = save_readBlock(-0x6d34,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                (readOk & 0xff) != 0 &&
+                ((readOk = save_readBlock(0x6a86,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+                 (readOk & 0xff) != 0 &&
+                 (readOk = save_readBlock(0x6a88,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                 (readOk & 0xff) != 0)))))))))) &&
+            ((readOk = save_readBlock(0x439,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI), (readOk & 0xff) != 0
+             && ((((readOk = save_readBlock(-0x766f,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI),
+                   (readOk & 0xff) != 0 &&
+                   (readOk = save_readBlock(-0x7670,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                   (readOk & 0xff) != 0)) &&
+                  (readOk = save_readBlock(0x693a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                  (readOk & 0xff) != 0)) &&
+                 (((readOk = save_readBlock(-0x6d38,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+                   (readOk & 0xff) != 0 &&
+                   (readOk = save_readBlock(0x744,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                   (readOk & 0xff) != 0)) &&
+                  ((readOk = save_readBlock(-0x6f65,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                   (readOk & 0xff) != 0 &&
+                   ((readOk = save_readBlock(-0x6e1a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                    (readOk & 0xff) != 0 &&
+                    (readOk = save_readBlock(-0x6e1c,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+                    (readOk & 0xff) != 0)))))))))))) &&
+           ((readOk = save_readBlock(0x26df,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI), (readOk & 0xff) != 0
+            && ((((readOk = save_readBlock(-0x6d3a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                  (readOk & 0xff) != 0 &&
+                  (readOk = save_readBlock(-0x6d44,(void *)MK_FP(0x2410, 0xa),unaff_DI,unaff_SI),
+                  (readOk & 0xff) != 0)) &&
+                 (readOk = save_readBlock((int)&header,(void *)CONCAT22(0x28,unaff_SS),unaff_DI,
+                                         unaff_SI), (readOk & 0xff) != 0)) &&
                 (iVar2 = strcmp((char *)CONCAT22(unaff_SS,&header),
                                 (char *)CONCAT22(SaveHeader.seg,SaveHeader.ofs)), iVar2 == 0)))))) {
           ovr_drawTextAt((char *)"Load complete.",0x2410,0);
@@ -247,11 +247,11 @@ uint __cdecl16far stLoad(int handle)
     }
   }
 L_save_49fd_01da_0800:
-  uVar1 = (uint)suppressLoadError;
-  if (uVar1 == 0) {
+  readOk = (uint)suppressLoadError;
+  if (readOk == 0) {
     ovr_drawTextAt((char *)"Load Error",0x2410,0);
   }
-  return uVar1 & 0xff00;
+  return readOk & 0xff00;
 }
 
 
@@ -343,7 +343,7 @@ int __cdecl16far stSave(void)
 {
   char *pcVar1;
   int iVar2;
-  uint uVar3;
+  uint writeOk;
   undefined1 uVar4;
   byte bVar5;
   uint16_t in_DX;
@@ -356,125 +356,125 @@ int __cdecl16far stSave(void)
   pcVar1 = ovr_fmVsprintf("%ssave.%03d",&GWorkDir);
   iVar2 = ovr_creat_wait_unlock_and_disk(pcVar1,in_DX);
   if (-1 < iVar2) {
-    uVar3 = save_writeBlock(SaveHeader.ofs,(void *)CONCAT22(0x28,SaveHeader.seg),unaff_DI,unaff_SI);
-    if ((((((uVar3 & 0xff) != 0) &&
-          (uVar3 = save_writeBlock((int)(short (*) [148] [60])GUnitGrid,
+    writeOk = save_writeBlock(SaveHeader.ofs,(void *)CONCAT22(0x28,SaveHeader.seg),unaff_DI,unaff_SI);
+    if ((((((writeOk & 0xff) != 0) &&
+          (writeOk = save_writeBlock((int)(short (*) [148] [60])GUnitGrid,
                                    (void *)CONCAT22(0x4560,(*(uint16_t *)((uint8_t *)&(GUnitGrid) + 2))),unaff_DI,unaff_SI),
-          (uVar3 & 0xff) != 0)) &&
-         (uVar3 = save_writeBlock((int)(short (*) [60] [148])GMapFlags,
+          (writeOk & 0xff) != 0)) &&
+         (writeOk = save_writeBlock((int)(short (*) [60] [148])GMapFlags,
                                   (void *)CONCAT22(0x4560,(*(uint16_t *)((uint8_t *)&(GMapFlags) + 2))),unaff_DI,unaff_SI),
-         (uVar3 & 0xff) != 0)) &&
-        ((uVar3 = save_writeBlock((int)(byte (*) [59] [148])GMapCells,
+         (writeOk & 0xff) != 0)) &&
+        ((writeOk = save_writeBlock((int)(byte (*) [59] [148])GMapCells,
                                   (void *)CONCAT22(0x22b0,(*(uint16_t *)((uint8_t *)&(GMapCells) + 2))),unaff_DI,unaff_SI),
-         (uVar3 & 0xff) != 0 &&
-         (uVar3 = save_writeBlock(-0x7661,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (uVar3 & 0xff) != 0)))
-        ) && ((uVar3 = save_writeBlock(-0x7663,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-              (uVar3 & 0xff) != 0 &&
-              (uVar3 = save_writeBlock(-0x6f69,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-              (uVar3 & 0xff) != 0)))) {
+         (writeOk & 0xff) != 0 &&
+         (writeOk = save_writeBlock(-0x7661,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (writeOk & 0xff) != 0)))
+        ) && ((writeOk = save_writeBlock(-0x7663,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+              (writeOk & 0xff) != 0 &&
+              (writeOk = save_writeBlock(-0x6f69,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+              (writeOk & 0xff) != 0)))) {
       in_DX = (uint16_t)((ulong)((long)EntityCount * 0x37) >> 0x10);
-      uVar3 = save_writeBlock((int)Entities,
+      writeOk = save_writeBlock((int)Entities,
                               (void *)CONCAT22((int)((long)EntityCount * 0x37),DAT_2000_d190),
                               unaff_DI,unaff_SI);
-      if (((uVar3 & 0xff) != 0) &&
-         (uVar3 = save_writeBlock(0x881,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (uVar3 & 0xff) != 0)) {
+      if (((writeOk & 0xff) != 0) &&
+         (writeOk = save_writeBlock(0x881,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI), (writeOk & 0xff) != 0)) {
         in_DX = (uint16_t)((ulong)((long)SquareRecCount * 0x13) >> 0x10);
-        uVar3 = save_writeBlock(0,(void *)CONCAT22((int)((long)SquareRecCount * 0x13),
+        writeOk = save_writeBlock(0,(void *)CONCAT22((int)((long)SquareRecCount * 0x13),
                                                    (void *)((int)&AgntAnms[0x7c].halfWidth + 1)),
                                 unaff_DI,unaff_SI);
-        if (((uVar3 & 0xff) != 0) &&
-           (uVar3 = save_writeBlock(-0x6f1a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI), (uVar3 & 0xff) != 0)
+        if (((writeOk & 0xff) != 0) &&
+           (writeOk = save_writeBlock(-0x6f1a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI), (writeOk & 0xff) != 0)
            ) {
           for (iVar6 = 0; iVar6 < (int)(uint)GLeaderCount; iVar6 = iVar6 + 1) {
-            uVar3 = save_writeBlock(*(int *)(iVar6 * 4),
+            writeOk = save_writeBlock(*(int *)(iVar6 * 4),
                                     (void *)CONCAT22(0xae,(void *)((int *)(iVar6 * 4))[1]),unaff_DI,
                                     unaff_SI);
-            if ((uVar3 & 0xff) == 0) goto L_stSave_0EE6;
+            if ((writeOk & 0xff) == 0) goto L_stSave_0EE6;
           }
-          uVar3 = save_writeBlock(0x4a12,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI);
-          if (((((uVar3 & 0xff) != 0) &&
-               (uVar3 = save_writeBlock(-0x6f1b,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-               (uVar3 & 0xff) != 0)) &&
-              (uVar3 = save_writeBlock(-0x6f1c,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-              (uVar3 & 0xff) != 0)) &&
-             (uVar3 = save_writeBlock(-0x6e21,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-             (uVar3 & 0xff) != 0)) {
+          writeOk = save_writeBlock(0x4a12,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI);
+          if (((((writeOk & 0xff) != 0) &&
+               (writeOk = save_writeBlock(-0x6f1b,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+               (writeOk & 0xff) != 0)) &&
+              (writeOk = save_writeBlock(-0x6f1c,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+              (writeOk & 0xff) != 0)) &&
+             (writeOk = save_writeBlock(-0x6e21,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+             (writeOk & 0xff) != 0)) {
             in_DX = (uint16_t)((ulong)((long)GRecordCount * 0x12) >> 0x10);
-            uVar3 = save_writeBlock(0,(char *)CONCAT22((int)((long)GRecordCount * 0x12),
+            writeOk = save_writeBlock(0,(char *)CONCAT22((int)((long)GRecordCount * 0x12),
                                                        (char *)0x262f2),unaff_DI,
                                     unaff_SI);
-            if (((uVar3 & 0xff) != 0) &&
-               (uVar3 = save_writeBlock(-0x7667,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-               (uVar3 & 0xff) != 0)) {
+            if (((writeOk & 0xff) != 0) &&
+               (writeOk = save_writeBlock(-0x7667,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+               (writeOk & 0xff) != 0)) {
               in_DX = (uint16_t)((ulong)((long)GUnitCount * 9) >> 0x10);
-              uVar3 = save_writeBlock((int)(unit_t *)GUnits,
+              writeOk = save_writeBlock((int)(unit_t *)GUnits,
                                       (void *)CONCAT22((int)((long)GUnitCount * 9),(*(uint16_t *)((uint8_t *)&(GUnits) + 2))),
                                       unaff_DI,unaff_SI);
-              if ((((uVar3 & 0xff) != 0) &&
-                  ((uVar3 = save_writeBlock(0x2f3,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                   (uVar3 & 0xff) != 0 &&
-                   (uVar3 = save_writeBlock(-0x6f62,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                   (uVar3 & 0xff) != 0)))) &&
-                 (((uVar3 = save_writeBlock(-0x6f91,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                   (uVar3 & 0xff) != 0 &&
-                   ((((((uVar3 = save_writeBlock(-0x6f92,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                        (uVar3 & 0xff) != 0 &&
-                        (uVar3 = save_writeBlock(-0x6f97,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI),
-                        (uVar3 & 0xff) != 0)) &&
-                       (uVar3 = save_writeBlock(-0x6df0,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                       (uVar3 & 0xff) != 0)) &&
-                      (((uVar3 = save_writeBlock(-0x6f1d,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                        (uVar3 & 0xff) != 0 &&
-                        (uVar3 = save_writeBlock(-0x6f93,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                        (uVar3 & 0xff) != 0)) &&
-                       ((uVar3 = save_writeBlock(0x2f4,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                        (uVar3 & 0xff) != 0 &&
-                        ((uVar3 = save_writeBlock(-0x6f99,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                         (uVar3 & 0xff) != 0 &&
-                         (uVar3 = save_writeBlock(-0x6f63,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                         (uVar3 & 0xff) != 0)))))))) &&
-                     (uVar3 = save_writeBlock(0x5dcf,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                     (uVar3 & 0xff) != 0)) &&
-                    ((((((uVar3 = save_writeBlock(0x5dd7,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                         (uVar3 & 0xff) != 0 &&
-                         (uVar3 = save_writeBlock(0x5ddf,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                         (uVar3 & 0xff) != 0)) &&
-                        (uVar3 = save_writeBlock(0x5de7,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                        (uVar3 & 0xff) != 0)) &&
-                       ((uVar3 = save_writeBlock(-0x6d33,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                        (uVar3 & 0xff) != 0 &&
-                        (uVar3 = save_writeBlock(-0x6d34,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                        (uVar3 & 0xff) != 0)))) &&
-                      (uVar3 = save_writeBlock(0x6a86,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                      (uVar3 & 0xff) != 0)) &&
-                     ((uVar3 = save_writeBlock(0x6a88,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                      (uVar3 & 0xff) != 0 &&
-                      (uVar3 = save_writeBlock(0x439,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                      (uVar3 & 0xff) != 0)))))))) &&
-                  ((((uVar3 = save_writeBlock(-0x766f,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI),
-                     (uVar3 & 0xff) != 0 &&
-                     (((uVar3 = save_writeBlock(-0x7670,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                       (uVar3 & 0xff) != 0 &&
-                       (uVar3 = save_writeBlock(0x693a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                       (uVar3 & 0xff) != 0)) &&
-                      (uVar3 = save_writeBlock(-0x6d38,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                      (uVar3 & 0xff) != 0)))) &&
-                    (((uVar3 = save_writeBlock(0x744,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                      (uVar3 & 0xff) != 0 &&
-                      (uVar3 = save_writeBlock(-0x6f65,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                      (uVar3 & 0xff) != 0)) &&
-                     (uVar3 = save_writeBlock(-0x6e1a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                     (uVar3 & 0xff) != 0)))) &&
-                   (((uVar3 = save_writeBlock(-0x6e1c,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
-                     (uVar3 & 0xff) != 0 &&
-                     (uVar3 = save_writeBlock(0x26df,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI),
-                     (uVar3 & 0xff) != 0)) &&
-                    ((uVar3 = save_writeBlock(-0x6d3a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
-                     (uVar3 & 0xff) != 0 &&
-                     ((uVar3 = save_writeBlock(-0x6d44,(void *)MK_FP(0x2410, 0xa),unaff_DI,unaff_SI),
-                      (uVar3 & 0xff) != 0 &&
-                      (uVar3 = save_writeBlock(SaveHeader.ofs,(void *)CONCAT22(0x28,SaveHeader.seg),
-                                               unaff_DI,unaff_SI), (uVar3 & 0xff) != 0)))))))))))) {
+              if ((((writeOk & 0xff) != 0) &&
+                  ((writeOk = save_writeBlock(0x2f3,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                   (writeOk & 0xff) != 0 &&
+                   (writeOk = save_writeBlock(-0x6f62,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                   (writeOk & 0xff) != 0)))) &&
+                 (((writeOk = save_writeBlock(-0x6f91,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                   (writeOk & 0xff) != 0 &&
+                   ((((((writeOk = save_writeBlock(-0x6f92,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                        (writeOk & 0xff) != 0 &&
+                        (writeOk = save_writeBlock(-0x6f97,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI),
+                        (writeOk & 0xff) != 0)) &&
+                       (writeOk = save_writeBlock(-0x6df0,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                       (writeOk & 0xff) != 0)) &&
+                      (((writeOk = save_writeBlock(-0x6f1d,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                        (writeOk & 0xff) != 0 &&
+                        (writeOk = save_writeBlock(-0x6f93,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                        (writeOk & 0xff) != 0)) &&
+                       ((writeOk = save_writeBlock(0x2f4,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                        (writeOk & 0xff) != 0 &&
+                        ((writeOk = save_writeBlock(-0x6f99,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+                         (writeOk & 0xff) != 0 &&
+                         (writeOk = save_writeBlock(-0x6f63,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                         (writeOk & 0xff) != 0)))))))) &&
+                     (writeOk = save_writeBlock(0x5dcf,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                     (writeOk & 0xff) != 0)) &&
+                    ((((((writeOk = save_writeBlock(0x5dd7,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                         (writeOk & 0xff) != 0 &&
+                         (writeOk = save_writeBlock(0x5ddf,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                         (writeOk & 0xff) != 0)) &&
+                        (writeOk = save_writeBlock(0x5de7,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                        (writeOk & 0xff) != 0)) &&
+                       ((writeOk = save_writeBlock(-0x6d33,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+                        (writeOk & 0xff) != 0 &&
+                        (writeOk = save_writeBlock(-0x6d34,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                        (writeOk & 0xff) != 0)))) &&
+                      (writeOk = save_writeBlock(0x6a86,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+                      (writeOk & 0xff) != 0)) &&
+                     ((writeOk = save_writeBlock(0x6a88,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                      (writeOk & 0xff) != 0 &&
+                      (writeOk = save_writeBlock(0x439,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                      (writeOk & 0xff) != 0)))))))) &&
+                  ((((writeOk = save_writeBlock(-0x766f,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI),
+                     (writeOk & 0xff) != 0 &&
+                     (((writeOk = save_writeBlock(-0x7670,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                       (writeOk & 0xff) != 0 &&
+                       (writeOk = save_writeBlock(0x693a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                       (writeOk & 0xff) != 0)) &&
+                      (writeOk = save_writeBlock(-0x6d38,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+                      (writeOk & 0xff) != 0)))) &&
+                    (((writeOk = save_writeBlock(0x744,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                      (writeOk & 0xff) != 0 &&
+                      (writeOk = save_writeBlock(-0x6f65,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                      (writeOk & 0xff) != 0)) &&
+                     (writeOk = save_writeBlock(-0x6e1a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                     (writeOk & 0xff) != 0)))) &&
+                   (((writeOk = save_writeBlock(-0x6e1c,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
+                     (writeOk & 0xff) != 0 &&
+                     (writeOk = save_writeBlock(0x26df,(void *)&__C0_ASM_CopyRight,unaff_DI,unaff_SI),
+                     (writeOk & 0xff) != 0)) &&
+                    ((writeOk = save_writeBlock(-0x6d3a,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
+                     (writeOk & 0xff) != 0 &&
+                     ((writeOk = save_writeBlock(-0x6d44,(void *)MK_FP(0x2410, 0xa),unaff_DI,unaff_SI),
+                      (writeOk & 0xff) != 0 &&
+                      (writeOk = save_writeBlock(SaveHeader.ofs,(void *)CONCAT22(0x28,SaveHeader.seg),
+                                               unaff_DI,unaff_SI), (writeOk & 0xff) != 0)))))))))))) {
                 iVar2 = close(iVar2);
                 uVar4 = (undefined1)((uint)iVar2 >> 8);
                 ovr_drawTextAt((char *)"Save complete.",0x2410,0xa000);
