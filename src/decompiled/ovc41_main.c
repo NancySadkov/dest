@@ -230,8 +230,8 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,uint16_t arg3)
     }
   }
   if ((int)(agntIndex + 1) < (int)(uint)AgntCount) {
-    _fmemmove((char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34)),
-              (char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34 + 0x34)),
+    _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34)),
+              (char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34 + 0x34)),
               ((AgntCount - agntIndex) + -1) * 0x34);
   }
   AgntCount = AgntCount - 1;
@@ -322,7 +322,7 @@ void __cdecl16far ovc41_unitStatusText(byte menuIndex)
   if (((uint8_t *)MenuItemEnabled)[menuIndex] != 0xff) {
     count = 0;
     for (uVar4 = 0; uVar4 < AgntCount; uVar4 = uVar4 + 1) {
-      uVar3 = 0x1726;
+      uVar3 = SEG_OF(Agnts);
       uVar6 = *(uint32_t *)(uVar4 * 0x34 + 0x17);
       if (((uint8_t *)MenuItemEnabled)[menuIndex] == *(uint8_t *)((int)uVar6 + 0x1a)) {
         count = count + 1;
@@ -363,12 +363,12 @@ void __cdecl16far ovc41_usesDebugVerbose(void)
   if (DebugVerbose) {
     for (row = 0; row < 10; row = row + 1) {
       for (col = 0; col < 0x69; col = col + 1) {
-        *(char *)(row * 0x140 + col + -0x1280) = *(char *)(row * 0x69 + col + 0x8fa) + '@';
+        *(char *)(row * 0x140 + col + -0x1280) = AgntArrayA[row][col] + '@';
       }
     }
     for (row = 0; row < 10; row = row + 1) {
       for (col = 0; col < 0x69; col = col + 1) {
-        *(char *)(row * 0x140 + col + -0x120d) = *(char *)(row * 0x69 + col + 0x4e0) + '@';
+        *(char *)(row * 0x140 + col + -0x120d) = AgntArrayB[row][col] + '@';
       }
     }
   }
@@ -447,10 +447,10 @@ void __cdecl16far ovc41_usesPlay_sfxU(void)
   if (AgntFlag1) {
     for (iVar2 = 0; iVar2 < (int)(uint)AgntCount; iVar2 = iVar2 + 1) {
       if ((*(uint *)(iVar2 * 0x34 + 0x2b) & 0x800) == 0) {
-        OVC41_6a8f_01e7_entry((agnt_t *)(iVar2 * 0x34),0x1726);
+        OVC41_6a8f_01e7_entry((agnt_t *)(iVar2 * 0x34),SEG_OF(Agnts));
         puVar1 = (uint *)(iVar2 * 0x34 + 0x2b);
         *puVar1 = *puVar1 | 0x800;
-        unk = ovr_audio_panFromX((agnt_t *)(iVar2 * 0x34),0x1726);
+        unk = ovr_audio_panFromX((agnt_t *)(iVar2 * 0x34),SEG_OF(Agnts));
         ovr_play_sfxU(0x1b,0,unk,0,0);
         ovr_attact_usesEntityCount();
         return;
@@ -475,7 +475,7 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
   entity_t *uStack_6;   /* hand fix: dereferenced as uStack_6->base.x */
   
   paVar2 = (agnt_t *)(agntIndex * 0x34);
-  uStack_6 = (agnt_t *)CONCAT22(0x1726,paVar2);
+  uStack_6 = (agnt_t *)CONCAT22(SEG_OF(Agnts),paVar2);
   if ((((agntG_t *)paVar2->gdata)->flags2 & 4) != 0) {
     for (iVar6 = 0; iVar6 < (int)(uint)AgntCount; iVar6 = iVar6 + 1) {
       if ((iVar6 != agntIndex) &&
@@ -483,11 +483,11 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
          (int)((uVar3 ^ uVar5) - uVar5) < 0x32)) {
         bVar1 = ovr_manage_rollDice('\x06','\x06');
         uVar3 = (uint)bVar1;
-        iVar4 = ovr_ovc27_rollToHitEntity(CONCAT22(0x1726,iVar6 * 0x34),1);
+        iVar4 = ovr_ovc27_rollToHitEntity(CONCAT22(SEG_OF(Agnts),iVar6 * 0x34),1);
         if ((char)iVar4 != '\0') {
           uVar3 = (int)uVar3 >> 1;
         }
-        ovc41_textParalyzed((agnt_t *)CONCAT22(0x1726,paVar2),(agnt_t *)CONCAT22(0x1726,(agnt_t *)(iVar6 * 0x34)),uVar3,0,0,0);
+        ovc41_textParalyzed((agnt_t *)CONCAT22(SEG_OF(Agnts),paVar2),(agnt_t *)CONCAT22(SEG_OF(Agnts),(agnt_t *)(iVar6 * 0x34)),uVar3,0,0,0);
       }
     }
   }
@@ -664,7 +664,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
     }
     else {
       iStack_a = (uint)agnt_00->target * 0x34;
-      uStack_8 = 0x1726;
+      uStack_8 = SEG_OF(Agnts);
       bStack_6 = ((agntG_t *)((iStack_a + 0x1d)))->rank;
       if (bStack_6 == 0) {
         iVar5 = 0;
@@ -728,7 +728,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
                   ovr_agnt_usesAnimFrame((agnt_t *)(iVar5 * 0x34));
                 }
                 else {
-                  ovc41_settleAgentCombat(agnt,(agnt_t *)CONCAT22(0x1726,(agnt_t *)(iVar5 * 0x34)),0);
+                  ovc41_settleAgentCombat(agnt,(agnt_t *)CONCAT22(SEG_OF(Agnts),(agnt_t *)(iVar5 * 0x34)),0);
                 }
                 bStack_5 = bStack_5 + 1;
                 uVar11 = *(uint32_t *)(iVar5 * 0x34 + 0x17);
@@ -742,7 +742,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
                 cStack_3 = cStack_3 + -1;
               }
             }
-            uVar6 = 0x1726;
+            uVar6 = SEG_OF(Agnts);
             iVar5 = iVar5 + 1;
           }
           if (bStack_5 == 0) {
@@ -2203,7 +2203,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
   paVar4 = (agnt_t *)((long)agntIndex * 0x34);
   paVar9 = (agnt_t *)paVar4;
   paStack_c = paVar9;
-  iStack_a = 0x1726;
+  iStack_a = SEG_OF(Agnts);
   if ((paVar9->flags & 0x820) == 0) {
     pcVar19 = (char *)((ulong)agntPtr >> 0x10);
     paVar17 = (agnt_t *)agntPtr;
@@ -2686,7 +2686,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
      (in_stack_00000008 < (int)(uint)AgntCount)) {
     uVar10 = (uint16_t)((ulong)((long)in_stack_00000008 * 0x34) >> 0x10);
     agnt_00 = (agnt_t *)(agnt_t *)((long)in_stack_00000008 * 0x34);
-    agntPtr = (agnt_t *)CONCAT22(0x1726,agnt_00);
+    agntPtr = (agnt_t *)CONCAT22(SEG_OF(Agnts),agnt_00);
     if (agnt_00->animVariant == 0x0) {
       *(undefined1 *)&agnt_00->targetX = 0;
       *(undefined1 *)((int)&agnt_00->targetX + 1) = 0;
@@ -2919,7 +2919,7 @@ void __cdecl16far ovc41_usesAgntCount3(void)
   
   for (iVar1 = 0; iVar1 < (int)(uint)AgntCount; iVar1 = iVar1 + 1) {
     if (*(char *)(iVar1 * 0x34 + 0x2f) != '\0') {
-      ovc41_settleAgentCombat((agnt_t *)0x0,(agnt_t *)CONCAT22(0x1726,(agnt_t *)(iVar1 * 0x34)),0);
+      ovc41_settleAgentCombat((agnt_t *)0x0,(agnt_t *)CONCAT22(SEG_OF(Agnts),(agnt_t *)(iVar1 * 0x34)),0);
     }
   }
   return;

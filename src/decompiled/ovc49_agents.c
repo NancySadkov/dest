@@ -82,24 +82,24 @@ undefined1 __cdecl16far ovc49_usesFrameIndex(agnt_t *agnt,byte *out)
         while (((side < '\x02' && (radius != 0)) || ((side == -1 && (radius == 0))))) {
           iVar5 = row + radius * side;
           if ((-1 < iVar5) && (iVar5 < 10)) {
-            if ((*(char *)(iVar5 * 0x69 + x + 0x8fa) != '\0') &&
-               (((*(byte *)(iVar5 * 0x69 + x + 0x8fa) <= AgntCount &&
-                 (*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + x + 0x8fa) * 0x34 + -5) !=
+            if ((AgntArrayA[iVar5][x] != '\0') &&
+               (((AgntArrayA[iVar5][x] <= AgntCount &&
+                 (*(uint8_t *)((uint)AgntArrayA[iVar5][x] * 0x34 + -5) !=
                   faction)) &&
-                (*(char *)((uint)*(byte *)(iVar5 * 0x69 + x + 0x8fa) * 0x34 + -0x10) == '\0')
+                (*(char *)((uint)AgntArrayA[iVar5][x] * 0x34 + -0x10) == '\0')
                 ))) {
-              *out = *(byte *)(iVar5 * 0x69 + x + 0x8fa);
+              *out = AgntArrayA[iVar5][x];
               ok = ovr_agnt_compute4((char *)out);
               if (ok) {
                 return *out;
               }
             }
-            if (((*(char *)(iVar5 * 0x69 + x + 0x4e0) != '\0') &&
-                (*(byte *)(iVar5 * 0x69 + x + 0x4e0) <= AgntCount)) &&
-               ((*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + x + 0x4e0) * 0x34 + -5) != faction
-                && (*(char *)((uint)*(byte *)(iVar5 * 0x69 + x + 0x4e0) * 0x34 + -0x10) ==
+            if (((AgntArrayB[iVar5][x] != '\0') &&
+                (AgntArrayB[iVar5][x] <= AgntCount)) &&
+               ((*(uint8_t *)((uint)AgntArrayB[iVar5][x] * 0x34 + -5) != faction
+                && (*(char *)((uint)AgntArrayB[iVar5][x] * 0x34 + -0x10) ==
                     '\0')))) {
-              *out = *(byte *)(iVar5 * 0x69 + x + 0x4e0);
+              *out = AgntArrayB[iVar5][x];
               return *out;
             }
           }
@@ -189,24 +189,24 @@ undefined1 __cdecl16far ovc49_usesFrameIndex2(agnt_t *agnt,byte *out)
         while (((side < '\x02' && (radius != 0)) || ((side == -1 && (radius == 0))))) {
           iVar5 = row + radius * side;
           if ((-1 < iVar5) && (iVar5 < 10)) {
-            if ((*(char *)(iVar5 * 0x69 + x + 0x8fa) != '\0') &&
-               (((*(byte *)(iVar5 * 0x69 + x + 0x8fa) <= AgntCount &&
-                 (*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + x + 0x8fa) * 0x34 + -5) !=
+            if ((AgntArrayA[iVar5][x] != '\0') &&
+               (((AgntArrayA[iVar5][x] <= AgntCount &&
+                 (*(uint8_t *)((uint)AgntArrayA[iVar5][x] * 0x34 + -5) !=
                   faction)) &&
-                (*(char *)((uint)*(byte *)(iVar5 * 0x69 + x + 0x8fa) * 0x34 + -0x10) == '\0')
+                (*(char *)((uint)AgntArrayA[iVar5][x] * 0x34 + -0x10) == '\0')
                 ))) {
-              *out = *(byte *)(iVar5 * 0x69 + x + 0x8fa);
+              *out = AgntArrayA[iVar5][x];
               ok = ovr_agnt_compute4((char *)out);
               if (ok) {
                 return *out;
               }
             }
-            if (((*(char *)(iVar5 * 0x69 + x + 0x4e0) != '\0') &&
-                (*(byte *)(iVar5 * 0x69 + x + 0x4e0) <= AgntCount)) &&
-               ((*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + x + 0x4e0) * 0x34 + -5) != faction
-                && (*(char *)((uint)*(byte *)(iVar5 * 0x69 + x + 0x4e0) * 0x34 + -0x10) ==
+            if (((AgntArrayB[iVar5][x] != '\0') &&
+                (AgntArrayB[iVar5][x] <= AgntCount)) &&
+               ((*(uint8_t *)((uint)AgntArrayB[iVar5][x] * 0x34 + -5) != faction
+                && (*(char *)((uint)AgntArrayB[iVar5][x] * 0x34 + -0x10) ==
                     '\0')))) {
-              *out = *(byte *)(iVar5 * 0x69 + x + 0x4e0);
+              *out = AgntArrayB[iVar5][x];
               return *out;
             }
           }
@@ -279,7 +279,7 @@ int __cdecl16far ovc49_usesStExit(agnt_t *agnt,uint16_t arg2)
   if (uVar5 == 0) {
     iVar4 = 0;
     for (; bVar6 = (byte)((uint)iVar4 >> 8), iStack_4 <= iStack_6; iStack_4 = iStack_4 + 1) {
-      if (*(char *)(iVar3 * 0x69 + iStack_4 + 0x8fa) != '\0') {
+      if (AgntArrayA[iVar3][iStack_4] != '\0') {
         return CONCAT11((char)((uint)(iVar3 * 0x69) >> 8),1);
       }
       iVar4 = iVar3 * 0x69;
@@ -290,7 +290,7 @@ int __cdecl16far ovc49_usesStExit(agnt_t *agnt,uint16_t arg2)
   }
   else {
     for (; bVar6 = (byte)(uVar5 >> 8), iStack_4 <= iStack_6; iStack_4 = iStack_4 + 1) {
-      if (*(char *)(iVar3 * 0x69 + iStack_4 + 0x4e0) != '\0') {
+      if (AgntArrayB[iVar3][iStack_4] != '\0') {
         return CONCAT11((char)((uint)(iVar3 * 0x69) >> 8),1);
       }
       if (*(char *)(iVar3 * 0x69 + iStack_4 + 0x549) != '\0') {
@@ -439,7 +439,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                             || (((((agntG_t *)agnt_00->gdata)->flags3 & 0x400) != 0 &&
                                 (roll = ovr_randBelow(0x14,0), (roll & 0xff) != 0)))) ||
                            (ok = ovr_agnt_compute16(agnt,(agnt_t *)
-                                                            CONCAT22(0x1726,(agnt_t *)
+                                                            CONCAT22(SEG_OF(Agnts),(agnt_t *)
                                                                             ((uint)agntIndex * 0x34
                                                                             + -0x34))),
                            ok == '\0')) {
@@ -508,7 +508,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                               ok != '\0')) &&
                              (uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + -0x17),
                              (*(uint *)((int)uVar1 + 0x3e) & 0x80) != 0)))) {
-                      roll = ovr_audio_panFromX((agnt_t *)((uint)param * 0x34),0x1726);
+                      roll = ovr_audio_panFromX((agnt_t *)((uint)param * 0x34),SEG_OF(Agnts));
                       ovr_play_sfxU(0x1e,0,roll,0,0);
                       agnt_00->target = agntIndex + 0xff;
                       agnt_00->health = 0x5;
@@ -524,12 +524,12 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                                 uVar7 = ovr_agnt_compute12(agnt_00,(agnt_t *)
                                                                    CONCAT13((char)((uint)iVar9 >> 8)
                                                                             ,CONCAT12(uVar11,
-                                                  agntSeg)),mode,uVar11,0x1726),
+                                                  agntSeg)),mode,uVar11,SEG_OF(Agnts)),
                                 (char)uVar7 != '\0')) &&
                                ((*(uint *)((uint)agntIndex * 0x34 + -9) & 0x800) == 0)) &&
                               (uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + -0x17),
                               (*(uint *)((int)uVar1 + 0x3c) & 4) != 0)))))) {
-                      roll = ovr_audio_panFromX((agnt_t *)((uint)param * 0x34),0x1726);
+                      roll = ovr_audio_panFromX((agnt_t *)((uint)param * 0x34),SEG_OF(Agnts));
                       ovr_play_sfxU(0x1f,0,roll,0,0);
                       agnt_00->target = agntIndex + 0xff;
                       agnt_00->health = 0x6;
@@ -839,17 +839,17 @@ void * __cdecl16far ovc49_fillGridCells(byte count,agnt_t *agnt,uint16_t arg3,ui
     colEnd = 0x68;
   }
   if (agnt->animVariant == 0x0) {
-    _fmemset(MK_FP(0x1726, row * 0x69 + colStart + 0x8fa),
+    _fmemset(&AgntArrayA[row][colStart],
              count,(colEnd - colStart) + 1);
-    pvVar5 = _fmemset(MK_FP(0x1726, row * 0x69 + colStart + 0x963),
+    pvVar5 = _fmemset(&AgntArrayA[row + 1][colStart],
                       count,(colEnd - colStart) + 1);
   }
   else {
-    _fmemset(MK_FP(0x1726, row * 0x69 + colStart + 0x4e0),
+    _fmemset(&AgntArrayB[row][colStart],
              count,(colEnd - colStart) + 1);
-    _fmemset(MK_FP(0x1726, row * 0x69 + colStart + 0x549),
+    _fmemset(&AgntArrayB[row + 1][colStart],
              count,(colEnd - colStart) + 1);
-    pvVar5 = _fmemset(MK_FP(0x1726, row * 0x69 + colStart + 0x5b2),
+    pvVar5 = _fmemset(&AgntArrayB[row + 2][colStart],
                       count,(colEnd - colStart) + 1);
   }
   return pvVar5;
@@ -1610,7 +1610,7 @@ L_OVC49_8699_1e09_29B9:
                                    *(uint16_t *)((int)uStackY_22 * 0x34 + 2));
             uVar15 = ovc49_body1((agnt_t *)((int)uStackY_22 * 0x34),0);
             in_stack_0000ffe4 = (uint16_t)bVar9;
-            uVar22 = 0x1726;
+            uVar22 = SEG_OF(Agnts);
             psVar17 = (stg_tmp_t *)*(uint16_t *)(iVar14 + (uVar15 & 0xff) * 4 + 0x58);
             uVar7 = SUB21(psVar17,0);
             uVar34 = (undefined1)((uint)psVar17 >> 8);
@@ -2894,25 +2894,25 @@ L_OVC49_8699_0000_0121:
              ((cVar6 == -1 && (pcStack_8 == (char *)0x0))))) {
         iVar14 = CONCAT11(uVar41,uVar39) + (int)pcStack_8 * (int)cVar6;
         if ((-1 < iVar14) && (iVar14 < 10)) {
-          if ((*(char *)(iVar14 * 0x69 + uVar15 + 0x8fa) != '\0') &&
-             (((*(byte *)(iVar14 * 0x69 + uVar15 + 0x8fa) <= AgntCount &&
-               (*(byte *)((uint)*(byte *)(iVar14 * 0x69 + uVar15 + 0x8fa) * 0x34 + -5) !=
+          if ((AgntArrayA[iVar14][uVar15] != '\0') &&
+             (((AgntArrayA[iVar14][uVar15] <= AgntCount &&
+               (*(byte *)((uint)AgntArrayA[iVar14][uVar15] * 0x34 + -5) !=
                 in_stack_0000fffd)) &&
-              (*(char *)((uint)*(byte *)(iVar14 * 0x69 + uVar15 + 0x8fa) * 0x34 + -0x10) == '\0'))))
+              (*(char *)((uint)AgntArrayA[iVar14][uVar15] * 0x34 + -0x10) == '\0'))))
           {
-            *in_stack_00000008 = *(char *)(iVar14 * 0x69 + uVar15 + 0x8fa);
+            *in_stack_00000008 = AgntArrayA[iVar14][uVar15];
             bVar5 = ovr_agnt_compute4(in_stack_00000008);
             if (bVar5) {
               return CONCAT11(extraout_AH,*in_stack_00000008);
             }
           }
-          if (((*(char *)(iVar14 * 0x69 + uVar15 + 0x4e0) != '\0') &&
-              (*(byte *)(iVar14 * 0x69 + uVar15 + 0x4e0) <= AgntCount)) &&
-             ((*(byte *)((uint)*(byte *)(iVar14 * 0x69 + uVar15 + 0x4e0) * 0x34 + -5) !=
+          if (((AgntArrayB[iVar14][uVar15] != '\0') &&
+              (AgntArrayB[iVar14][uVar15] <= AgntCount)) &&
+             ((*(byte *)((uint)AgntArrayB[iVar14][uVar15] * 0x34 + -5) !=
                in_stack_0000fffd &&
-              (*(char *)((uint)*(byte *)(iVar14 * 0x69 + uVar15 + 0x4e0) * 0x34 + -0x10) == '\0'))))
+              (*(char *)((uint)AgntArrayB[iVar14][uVar15] * 0x34 + -0x10) == '\0'))))
           {
-            *in_stack_00000008 = *(char *)(iVar14 * 0x69 + uVar15 + 0x4e0);
+            *in_stack_00000008 = AgntArrayB[iVar14][uVar15];
             return CONCAT11((char)((uint)(iVar14 * 0x69) >> 8),*in_stack_00000008);
           }
         }
@@ -3577,7 +3577,7 @@ void __cdecl16far ovc49_drawAgents(void)
     frameNo = (byte)uVar10;
     sprEntry = (uint16_t *)((int)sprPtr + (uVar10 & 0xff) * 4);
     recPtr = CONCAT22(sprEntry[1],*sprEntry);
-    uVar15 = 0x1726;
+    uVar15 = SEG_OF(Agnts);
     iVar17 = (int)sprPtr + (uVar10 & 0xff) * 4;
     stgTmp = ovr_stash_usesStExit
                         ((stg_tmp_t *)*(uint16_t *)(iVar17 + 0x58),
@@ -3769,7 +3769,7 @@ void __cdecl16far ovc49_drawAgents(void)
     if (DebugVerbose != false) {
       printf("%d \r");
     }
-    uVar13 = 0x1726;
+    uVar13 = SEG_OF(Agnts);
     uVar21 = (uint16_t)((ulong)sprPtr >> 0x10);
     iVar17 = (int)sprPtr + (uint)frameNo * 4;
     stgTmp = ovr_stash_usesStExit
@@ -3904,7 +3904,7 @@ void __cdecl16far ovc49_drawAgents(void)
                             ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)),
                              (byte *)CONCAT13(uVar23,CONCAT12(type,&agntIndex)));
           if ((cVar9 == '\0') ||
-             (uVar10 = ovr_ovc27_compute1((agnt_t *)(agentIndex * 0x34),0x1726,0x26,agntIndex + 0xff)
+             (uVar10 = ovr_ovc27_compute1((agnt_t *)(agentIndex * 0x34),SEG_OF(Agnts),0x26,agntIndex + 0xff)
              , (char)uVar10 == '\0')) {
             animBranchCode = 10;
             ovr_agnt_advanceAnimFrame((agnt_t *)(agentIndex * 0x34),0x26);
@@ -3920,7 +3920,7 @@ void __cdecl16far ovc49_drawAgents(void)
                             ((agnt_t *)(agentIndex * 0x34),
                              (uint8_t *)
                              CONCAT13((char)((uint)&agntIndex >> 8),
-                                      CONCAT12((char)&agntIndex,0x1726)),0x26);
+                                      CONCAT12((char)&agntIndex,SEG_OF(Agnts))),0x26);
           if (cVar9 == '\0') {
             animBranchCode = 0xb;
             ovr_agnt_advanceAnimFrame((agnt_t *)(agentIndex * 0x34),0x26);
@@ -3976,7 +3976,7 @@ void __cdecl16far ovc49_drawAgents(void)
           uVar22 = (undefined1)iVar17;
           uVar10 = ovr_agnt_compute12((agnt_t *)(agentIndex * 0x34),
                                       (agnt_t *)
-                                      CONCAT13((char)((uint)iVar17 >> 8),CONCAT12(uVar22,0x1726)),
+                                      CONCAT13((char)((uint)iVar17 >> 8),CONCAT12(uVar22,SEG_OF(Agnts))),
                                       0x26,uVar22,0x26);
           if (((char)uVar10 != '\0') && ((*(uint *)((uint)agntIndex * 0x34 + -9) & 0x800) == 0)) {
             unitPtr = *(uint32_t *)((uint)agntIndex * 0x34 + -0x1d);
@@ -4088,7 +4088,7 @@ void __cdecl16far ovc49_drawAgents(void)
           uStack_1a = uStack_1a + 1;
           if (*(byte *)(iVar17 + 0x19) + 1 == uStack_1a) {
             ovr_ovc41_specialAttack
-                      ((agnt_t *)(agentIndex * 0x34),0x1726,0x26,
+                      ((agnt_t *)(agentIndex * 0x34),SEG_OF(Agnts),0x26,
                        *(undefined1 *)(agentIndex * 0x34 + 0xc));
           }
           if ((int)uStack_1a < (int)(uint)*(byte *)((int)recPtr + 0x1b)) {

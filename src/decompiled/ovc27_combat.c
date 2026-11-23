@@ -310,7 +310,7 @@ uint __cdecl16far ovc27_usesRandBelow3(agnt_t *agnt,uint32_t reqRecord,int agntI
   dst_00.ofs = (uint16_t)&reqLevel2;
   F_SCOPY(far_from_u32((uint32_t)(0x241059b4)),dst_00);
   uVar2 = agntIndex * 0x34;
-  uStack_10 = CONCAT22(0x1726,uVar2);
+  uStack_10 = CONCAT22(SEG_OF(Agnts),uVar2);
   uVar8 = (uint16_t)(reqRecord >> 0x10);
   recIdx = (int)reqRecord;
   paVar7 = (agnt_t *)agnt;
@@ -608,16 +608,16 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
   uint16_t uStack_4;
   
   paStack_6 = (agnt_t *)(agntIndex * 0x34);
-  uStack_4 = 0x1726;
+  uStack_4 = SEG_OF(Agnts);
   bVar1 = (byte)((uint)paStack_6 >> 8);
   if ((((agntG_t *)paStack_6->gdata)->flags & 0x803) == 0) {
     return (uint)bVar1 << 8;
   }
   if (paStack_6->animFrame == 0xff) {
     iStack_a = (uint)paStack_6->target * 0x34;
-    uStack_8 = 0x1726;
+    uStack_8 = SEG_OF(Agnts);
     uVar11 = uStack_8;
-    uStack_8 = 0x1726;
+    uStack_8 = SEG_OF(Agnts);
     uVar12 = uVar11;
     if (((((((agntG_t *)paStack_6->gdata)->flags & 0x1000) != 0) &&
          (uVar12 = uStack_8, (((agntG_t *)((iStack_a + 0x1d)))->flags2 & 0x10) == 0))
@@ -788,7 +788,7 @@ void __cdecl16far ovc27_usesBlitGfxRect(int agntIndex,brect_t *rect,uint16_t typ
       paVar3->animFrame = paVar3->animFrame + 0x1;
       paVar3->health = 0x2;
       if (paVar3->animFrame == 0xff) {
-        ovr_ovc41_resolveSpecialAttack((agnt_t *)CONCAT22(0x1726,paVar3),(uint)paVar3->target);
+        ovr_ovc41_resolveSpecialAttack((agnt_t *)CONCAT22(SEG_OF(Agnts),paVar3),(uint)paVar3->target);
         paVar3->variant = 0x0;
         paVar3->health = 0x0;
       }

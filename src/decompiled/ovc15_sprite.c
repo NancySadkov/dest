@@ -417,7 +417,7 @@ void __cdecl16far ovc15_fillGridColumn(uint vramOfs)
   
   if (vramOfs >> 1 < 0x69) {
     for (uVar1 = 0; uVar1 < 10; uVar1 = uVar1 + 1) {
-      *(undefined1 *)(uVar1 * 0x69 + (vramOfs >> 1) + 0x8fa) = 0xff;
+      AgntArrayA[uVar1][(vramOfs >> 1)] = 0xff;
     }
   }
   return;
@@ -1098,7 +1098,7 @@ uint16_t __cdecl16far ovc15_usesStExit2(byte agntIndex)
   int iStack_4;
   
   piVar1 = (int *)((uint)agntIndex * 0x34);
-  uStack_12 = (int *)CONCAT22(0x1726,piVar1);
+  uStack_12 = (int *)CONCAT22(SEG_OF(Agnts),piVar1);
   if ((((piVar1[1] < 0x14) || (*(char *)((int)piVar1 + 0x25) == '\x01')) && (*uStack_12 < 0xd3)) &&
      (-1 < *uStack_12)) {
     piVar4 = (int *)(*(int *)((int)piVar1 + 0x13) + (uint)*(byte *)(piVar1 + 9) * 4);
@@ -1132,7 +1132,7 @@ uint16_t __cdecl16far ovc15_usesStExit2(byte agntIndex)
     iVar5 = iStack_6;
     if (*(char *)((int)piVar1 + 0x11) == '\0') {
       for (; iVar5 <= iVar3; iVar5 = iVar5 + 1) {
-        if (agntIndex + 1 != (uint)*(byte *)(iStack_4 * 0x69 + iVar5 + 0x8fa)) {
+        if (agntIndex + 1 != (uint)AgntArrayA[iStack_4][iVar5]) {
           return 0;
         }
       }
@@ -1144,7 +1144,7 @@ uint16_t __cdecl16far ovc15_usesStExit2(byte agntIndex)
     }
     else {
       for (; iVar5 <= iVar3; iVar5 = iVar5 + 1) {
-        if (agntIndex + 1 != (uint)*(byte *)(iStack_4 * 0x69 + iVar5 + 0x4e0)) {
+        if (agntIndex + 1 != (uint)AgntArrayB[iStack_4][iVar5]) {
           return 0;
         }
       }
@@ -1289,14 +1289,14 @@ L_OVC15_4207_1ffe_2193:
           iStack_4 = iStack_4 + 1;
         }
         if (iStack_4 < (int)(uint)AgntCount) {
-          _fmemmove((char *)CONCAT22(0x1726,(char *)(iStack_4 * 0x34 + 0x34)),
-                    (char *)CONCAT22(0x1726,(char *)(iStack_4 * 0x34)),
+          _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)(iStack_4 * 0x34 + 0x34)),
+                    (char *)CONCAT22(SEG_OF(Agnts),(char *)(iStack_4 * 0x34)),
                     ((uint)AgntCount - iStack_4) * 0x34);
         }
         agnt_00->visited = 0x1;
-        memcpy((char *)CONCAT22(0x1726,(char *)(iStack_4 * 0x34)),(char *)agnt,0x34);
+        memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)(iStack_4 * 0x34)),(char *)agnt,0x34);
         ovr_agnt_usesAgntCount5(iStack_4 + 1);
-        ovr_ovc49_fillGridCells((char)iStack_4 + 1,(agnt_t *)(iStack_4 * 0x34),0x1726,0);
+        ovr_ovc49_fillGridCells((char)iStack_4 + 1,(agnt_t *)(iStack_4 * 0x34),SEG_OF(Agnts),0);
         AgntCount = AgntCount + 1;
         for (iVar5 = 0; iVar5 < (int)(uint)AgntCount; iVar5 = iVar5 + 1) {
           if ((*(char *)(iVar5 * 0x34 + 0xc) != -1) &&
@@ -1372,7 +1372,7 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
           }
         }
         _fmemmove((char *)CONCAT22(_SS,&agntCopy),
-                  (char *)CONCAT22(0x1726,(char *)(uStack_8 * 0x34)),0x34);
+                  (char *)CONCAT22(SEG_OF(Agnts),(char *)(uStack_8 * 0x34)),0x34);
         agntCopy.target = 0xff;
         ovr_ovc41_removeAgent(uStack_8,0,0);
         pcVar4 = (char *)ovc15_usesRandBelow((agnt_t *)CONCAT22(_SS,&agntCopy),

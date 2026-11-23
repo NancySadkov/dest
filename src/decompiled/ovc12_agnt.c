@@ -172,26 +172,26 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,ui
         while (((cStack_e < '\x02' && (iStack_8 != 0)) || ((cStack_e == -1 && (iStack_8 == 0))))) {
           iVar5 = iStack_6 + iStack_8 * cStack_e;
           if ((-1 < iVar5) && (iVar5 < 10)) {
-            if ((*(char *)(iVar5 * 0x69 + iStack_a + 0x8fa) != '\0') &&
-               (((*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) <= AgntCount &&
-                 (*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) * 0x34 + -5) !=
+            if ((AgntArrayA[iVar5][iStack_a] != '\0') &&
+               (((AgntArrayA[iVar5][iStack_a] <= AgntCount &&
+                 (*(uint8_t *)((uint)AgntArrayA[iVar5][iStack_a] * 0x34 + -5) !=
                   uVar1)) &&
-                (*(char *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x10) == '\0')
+                (*(char *)((uint)AgntArrayA[iVar5][iStack_a] * 0x34 + -0x10) == '\0')
                 ))) {
               *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) =
-                   *(char *)(iVar5 * 0x69 + iStack_a + 0x8fa);
+                   AgntArrayA[iVar5][iStack_a];
               bVar4 = agnt_compute4((char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))));
               if (bVar4) {
                 return *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2)));
               }
             }
-            if (((*(char *)(iVar5 * 0x69 + iStack_a + 0x4e0) != '\0') &&
-                (*(byte *)(iVar5 * 0x69 + iStack_a + 0x4e0) <= AgntCount)) &&
-               ((*(uint8_t *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x4e0) * 0x34 + -5) != uVar1
-                && (*(char *)((uint)*(byte *)(iVar5 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x10) ==
+            if (((AgntArrayB[iVar5][iStack_a] != '\0') &&
+                (AgntArrayB[iVar5][iStack_a] <= AgntCount)) &&
+               ((*(uint8_t *)((uint)AgntArrayB[iVar5][iStack_a] * 0x34 + -5) != uVar1
+                && (*(char *)((uint)AgntArrayB[iVar5][iStack_a] * 0x34 + -0x10) ==
                     '\0')))) {
               *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) =
-                   *(char *)(iVar5 * 0x69 + iStack_a + 0x4e0);
+                   AgntArrayB[iVar5][iStack_a];
               return *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2)));
             }
           }
@@ -289,44 +289,44 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
         while (((cStack_e < '\x02' && (iStack_8 != 0)) || ((cStack_e == -1 && (iStack_8 == 0))))) {
           iVar7 = iStack_6 + iStack_8 * cStack_e;
           if ((-1 < iVar7) && (iVar7 < 10)) {
-            if ((*(char *)(iVar7 * 0x69 + iStack_a + 0x8fa) != '\0') &&
-               ((((*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) <= AgntCount &&
-                  (*(byte *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x13) <
-                   *(byte *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x12))) &&
-                 (*(uint8_t *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -5) ==
+            if ((AgntArrayA[iVar7][iStack_a] != '\0') &&
+               ((((AgntArrayA[iVar7][iStack_a] <= AgntCount &&
+                  (*(byte *)((uint)AgntArrayA[iVar7][iStack_a] * 0x34 + -0x13) <
+                   *(byte *)((uint)AgntArrayA[iVar7][iStack_a] * 0x34 + -0x12))) &&
+                 (*(uint8_t *)((uint)AgntArrayA[iVar7][iStack_a] * 0x34 + -5) ==
                   uVar1)) &&
                 ((*(uint8_t *)
-                   *(uint32_t *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x17)
+                   *(uint32_t *)((uint)AgntArrayA[iVar7][iStack_a] * 0x34 + -0x17)
                   == uVar1 &&
                  (uVar4 = *(uint32_t *)
-                           ((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa) * 0x34 + -0x17),
+                           ((uint)AgntArrayA[iVar7][iStack_a] * 0x34 + -0x17),
                  (*(uint *)((int)uVar4 + 0x3c) & 0x20) == 0)))))) {
               *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
-                   *(byte *)(iVar7 * 0x69 + iStack_a + 0x8fa);
+                   AgntArrayA[iVar7][iStack_a];
               bVar5 = agnt_compute4((char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))));
               if ((bVar5) &&
                  ((*(byte *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -0x13) <
                    *(byte *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -0x12) &&
                   ((*(uint *)((uint)*(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) * 0x34 + -9) &
                    0x820) == 0)))) {
-                return *(undefined1 *)(iVar7 * 0x69 + iStack_a + 0x8fa);
+                return AgntArrayA[iVar7][iStack_a];
               }
             }
-            if ((((*(char *)(iVar7 * 0x69 + iStack_a + 0x4e0) != '\0') &&
-                 (*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) <= AgntCount)) &&
-                (*(byte *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x13) <
-                 *(byte *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x12))) &&
-               (((*(uint8_t *)((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -5) ==
+            if ((((AgntArrayB[iVar7][iStack_a] != '\0') &&
+                 (AgntArrayB[iVar7][iStack_a] <= AgntCount)) &&
+                (*(byte *)((uint)AgntArrayB[iVar7][iStack_a] * 0x34 + -0x13) <
+                 *(byte *)((uint)AgntArrayB[iVar7][iStack_a] * 0x34 + -0x12))) &&
+               (((*(uint8_t *)((uint)AgntArrayB[iVar7][iStack_a] * 0x34 + -5) ==
                   uVar1 && (*(uint8_t *)
                              *(uint32_t *)
-                              ((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x17) ==
+                              ((uint)AgntArrayB[iVar7][iStack_a] * 0x34 + -0x17) ==
                             uVar1)) &&
                 (uVar4 = *(uint32_t *)
-                          ((uint)*(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0) * 0x34 + -0x17),
+                          ((uint)AgntArrayB[iVar7][iStack_a] * 0x34 + -0x17),
                 (*(uint *)((int)uVar4 + 0x3c) & 0x20) == 0)))) {
               *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
-                   *(byte *)(iVar7 * 0x69 + iStack_a + 0x4e0);
-              return *(undefined1 *)(iVar7 * 0x69 + iStack_a + 0x4e0);
+                   AgntArrayB[iVar7][iStack_a];
+              return AgntArrayB[iVar7][iStack_a];
             }
           }
           cStack_e = cStack_e + '\x02';
@@ -825,7 +825,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
   piVar9 = (int *)(uStack_e + (uint)(byte)agnt->state * 4);
   iVar4 = piVar9[1];
   iVar5 = *piVar9;
-  uVar8 = 0x1726;
+  uVar8 = SEG_OF(Agnts);
   iVar10 = uStack_e + (uint)(byte)agnt->state * 4;
   psVar6 = ovr_stash_usesStExit
                      ((stg_tmp_t *)*(uint16_t *)(iVar10 + 0x58),*(uint16_t *)(iVar10 + 0x5a),
@@ -856,7 +856,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
       *(undefined1 *)((int)&agnt->state + 1) = *(undefined1 *)(iVar5 + 0x1a);
     }
   }
-  agnt_compute13(agnt,0x1726);
+  agnt_compute13(agnt,SEG_OF(Agnts));
   return;
 }
 
@@ -904,21 +904,21 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
   if ((int)fromIndex < toIndex) {
     for (rec = 0; rec < 10; rec = rec + 1) {
       for (ofs = 0; ofs < 0x69; ofs = ofs + 1) {
-        if (((int)(fromIndex + 1) < (int)(uint)*(byte *)(rec * 0x69 + ofs + 0x8fa)) &&
-           ((int)(uint)*(byte *)(rec * 0x69 + ofs + 0x8fa) <= toIndex + 1)) {
-          cellPtr = (char *)(rec * 0x69 + ofs + 0x8fa);
+        if (((int)(fromIndex + 1) < (int)(uint)AgntArrayA[rec][ofs]) &&
+           ((int)(uint)AgntArrayA[rec][ofs] <= toIndex + 1)) {
+          cellPtr = (char *)(&AgntArrayA[rec][ofs]);
           *cellPtr = *cellPtr + -1;
         }
-        else if ((uint)*(byte *)(rec * 0x69 + ofs + 0x8fa) == fromIndex + 1) {
-          *(char *)(rec * 0x69 + ofs + 0x8fa) = (char)toIndex + '\x01';
+        else if ((uint)AgntArrayA[rec][ofs] == fromIndex + 1) {
+          AgntArrayA[rec][ofs] = (char)toIndex + '\x01';
         }
-        if (((int)(fromIndex + 1) < (int)(uint)*(byte *)(rec * 0x69 + ofs + 0x4e0)) &&
-           ((int)(uint)*(byte *)(rec * 0x69 + ofs + 0x4e0) <= toIndex + 1)) {
-          cellPtr = (char *)(rec * 0x69 + ofs + 0x4e0);
+        if (((int)(fromIndex + 1) < (int)(uint)AgntArrayB[rec][ofs]) &&
+           ((int)(uint)AgntArrayB[rec][ofs] <= toIndex + 1)) {
+          cellPtr = (char *)(&AgntArrayB[rec][ofs]);
           *cellPtr = *cellPtr + -1;
         }
-        else if ((uint)*(byte *)(rec * 0x69 + ofs + 0x4e0) == fromIndex + 1) {
-          *(char *)(rec * 0x69 + ofs + 0x4e0) = (char)toIndex + '\x01';
+        else if ((uint)AgntArrayB[rec][ofs] == fromIndex + 1) {
+          AgntArrayB[rec][ofs] = (char)toIndex + '\x01';
         }
       }
     }
@@ -938,24 +938,24 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
   else {
     for (rec = 0; rec < 10; rec = rec + 1) {
       for (ofs = 0; ofs < 0x69; ofs = ofs + 1) {
-        if (((int)(uint)*(byte *)(rec * 0x69 + ofs + 0x8fa) < toIndex + 1) ||
-           ((int)(fromIndex + 1) <= (int)(uint)*(byte *)(rec * 0x69 + ofs + 0x8fa))) {
-          if ((uint)*(byte *)(rec * 0x69 + ofs + 0x8fa) == fromIndex + 1) {
-            *(char *)(rec * 0x69 + ofs + 0x8fa) = (char)toIndex + '\x01';
+        if (((int)(uint)AgntArrayA[rec][ofs] < toIndex + 1) ||
+           ((int)(fromIndex + 1) <= (int)(uint)AgntArrayA[rec][ofs])) {
+          if ((uint)AgntArrayA[rec][ofs] == fromIndex + 1) {
+            AgntArrayA[rec][ofs] = (char)toIndex + '\x01';
           }
         }
         else {
-          cellPtr = (char *)(rec * 0x69 + ofs + 0x8fa);
+          cellPtr = (char *)(&AgntArrayA[rec][ofs]);
           *cellPtr = *cellPtr + '\x01';
         }
-        if (((int)(uint)*(byte *)(rec * 0x69 + ofs + 0x4e0) < toIndex + 1) ||
-           ((int)(fromIndex + 1) <= (int)(uint)*(byte *)(rec * 0x69 + ofs + 0x4e0))) {
-          if ((uint)*(byte *)(rec * 0x69 + ofs + 0x4e0) == fromIndex + 1) {
-            *(char *)(rec * 0x69 + ofs + 0x4e0) = (char)toIndex + '\x01';
+        if (((int)(uint)AgntArrayB[rec][ofs] < toIndex + 1) ||
+           ((int)(fromIndex + 1) <= (int)(uint)AgntArrayB[rec][ofs])) {
+          if ((uint)AgntArrayB[rec][ofs] == fromIndex + 1) {
+            AgntArrayB[rec][ofs] = (char)toIndex + '\x01';
           }
         }
         else {
-          cellPtr = (char *)(rec * 0x69 + ofs + 0x4e0);
+          cellPtr = (char *)(&AgntArrayB[rec][ofs]);
           *cellPtr = *cellPtr + '\x01';
         }
       }
@@ -993,24 +993,24 @@ void __cdecl16far agnt_usesAgntCount4(uint agntIndex)
   
   for (iVar3 = 0; iVar3 < 10; iVar3 = iVar3 + 1) {
     for (iVar2 = 0; iVar2 < 0x69; iVar2 = iVar2 + 1) {
-      if ((AgntCount < *(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa)) ||
-         ((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) <= (int)agntIndex)) {
-        if (*(byte *)(iVar3 * 0x69 + iVar2 + 0x8fa) == agntIndex) {
-          *(undefined1 *)(iVar3 * 0x69 + iVar2 + 0x8fa) = 0;
+      if ((AgntCount < AgntArrayA[iVar3][iVar2]) ||
+         ((int)(uint)AgntArrayA[iVar3][iVar2] <= (int)agntIndex)) {
+        if (AgntArrayA[iVar3][iVar2] == agntIndex) {
+          AgntArrayA[iVar3][iVar2] = 0;
         }
       }
       else {
-        pcVar1 = (char *)(iVar3 * 0x69 + iVar2 + 0x8fa);
+        pcVar1 = (char *)(&AgntArrayA[iVar3][iVar2]);
         *pcVar1 = *pcVar1 + -1;
       }
-      if ((AgntCount < *(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0)) ||
-         ((int)(uint)*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) <= (int)agntIndex)) {
-        if (*(byte *)(iVar3 * 0x69 + iVar2 + 0x4e0) == agntIndex) {
-          *(undefined1 *)(iVar3 * 0x69 + iVar2 + 0x4e0) = 0;
+      if ((AgntCount < AgntArrayB[iVar3][iVar2]) ||
+         ((int)(uint)AgntArrayB[iVar3][iVar2] <= (int)agntIndex)) {
+        if (AgntArrayB[iVar3][iVar2] == agntIndex) {
+          AgntArrayB[iVar3][iVar2] = 0;
         }
       }
       else {
-        pcVar1 = (char *)(iVar3 * 0x69 + iVar2 + 0x4e0);
+        pcVar1 = (char *)(&AgntArrayB[iVar3][iVar2]);
         *pcVar1 = *pcVar1 + -1;
       }
     }
@@ -1033,14 +1033,14 @@ void __cdecl16far agnt_usesAgntCount5(int agntIndex)
   
   for (row = 0; row < 10; row = row + 1) {
     for (col = 0; col < 0x69; col = col + 1) {
-      if ((*(byte *)(row * 0x69 + col + 0x8fa) <= AgntCount) &&
-         (agntIndex <= (int)(uint)*(byte *)(row * 0x69 + col + 0x8fa))) {
-        countPtr = (char *)(row * 0x69 + col + 0x8fa);
+      if ((AgntArrayA[row][col] <= AgntCount) &&
+         (agntIndex <= (int)(uint)AgntArrayA[row][col])) {
+        countPtr = (char *)(&AgntArrayA[row][col]);
         *countPtr = *countPtr + '\x01';
       }
-      if ((*(byte *)(row * 0x69 + col + 0x4e0) <= AgntCount) &&
-         (agntIndex <= (int)(uint)*(byte *)(row * 0x69 + col + 0x4e0))) {
-        countPtr = (char *)(row * 0x69 + col + 0x4e0);
+      if ((AgntArrayB[row][col] <= AgntCount) &&
+         (agntIndex <= (int)(uint)AgntArrayB[row][col])) {
+        countPtr = (char *)(&AgntArrayB[row][col]);
         *countPtr = *countPtr + '\x01';
       }
     }
@@ -1077,11 +1077,11 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
         iVar5 = toIndex;
       } while (*(int *)(toIndex * 0x34 + 0x36) < *(int *)(agntIndex * 0x34 + 2));
       memcpy((char *)CONCAT22(_SS,&agntSaved),
-             (char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34)),0x34);
-      _fmemmove((char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34)),
-                (char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34 + 0x34)),
+             (char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34)),0x34);
+      _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34)),
+                (char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34 + 0x34)),
                 (toIndex - agntIndex) * 0x34);
-      pvVar2 = memcpy((char *)CONCAT22(0x1726,(char *)(toIndex * 0x34)),
+      pvVar2 = memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)(toIndex * 0x34)),
                       (char *)CONCAT22(_SS,&agntSaved),0x34);
       uVar4 = (undefined1)((uint)pvVar2 >> 8);
       agnt_remapGridRefs(agntIndex,toIndex);
@@ -1096,11 +1096,11 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
       iVar5 = iVar5 + -1;
       if (iVar5 < 1) break;
     } while (*(int *)(agntIndex * 0x34 + 2) < *(int *)(iVar5 * 0x34 + -0x32));
-    memcpy((char *)CONCAT22(_SS,&agntSaved),(char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34))
+    memcpy((char *)CONCAT22(_SS,&agntSaved),(char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34))
            ,0x34);
-    _fmemmove((char *)CONCAT22(0x1726,(char *)(iVar5 * 0x34 + 0x34)),
-              (char *)CONCAT22(0x1726,(char *)(iVar5 * 0x34)),(agntIndex - iVar5) * 0x34);
-    pvVar2 = memcpy((char *)CONCAT22(0x1726,(char *)(iVar5 * 0x34)),
+    _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)(iVar5 * 0x34 + 0x34)),
+              (char *)CONCAT22(SEG_OF(Agnts),(char *)(iVar5 * 0x34)),(agntIndex - iVar5) * 0x34);
+    pvVar2 = memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)(iVar5 * 0x34)),
                     (char *)CONCAT22(_SS,&agntSaved),0x34);
     bVar3 = (byte)((uint)pvVar2 >> 8);
     agnt_remapGridRefs(agntIndex,iVar5);

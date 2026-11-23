@@ -48,6 +48,8 @@ int int86x(int intr, union st_regs *inregs, union st_regs *outregs,
 #define CONCAT21(a,b) ((uint16_t)(((uint16_t)(a) >> 8) | ((uint16_t)(b) << 8)))
 #define CONCAT22(a,b) ((uint32_t)(((uint16_t)(a) << 16) | (uint16_t)(b)))
 #define CONCAT31(a,b) CONCAT22(a,b)
+/* segment half of a far pointer value (the far segment of a far object) */
+#define SEG_OF(p) ((uint16_t)((uint32_t)(p) >> 16))
 #define CONCAT44(a,b) ((uint32_t)(((uint32_t)(a) << 16) | (uint16_t)(b)))
 #define CARRY1(a,b) ((uint8_t)((uint16_t)(a) + (uint16_t)(b) > 0xff))
 #define CARRY2(a,b) ((uint8_t)((uint32_t)(a) + (uint32_t)(b) > 0xffff))
