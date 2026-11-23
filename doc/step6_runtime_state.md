@@ -125,3 +125,41 @@ different   14
   the pairing assigns to the wrong twin;
 * **normalisation gap**: `PlaceErrPtrs`, `LevelRangeLabels` show the right
   segment but an offset the mapper still does not resolve.
+
+## Second checkpoint attempt: after `ovr_init_game`
+
+`tmp/checkpoint2.py` patches the `lcall ovr_run_demo` in `main` with the same
+18-byte "write 64 KB of DS:0 to stdout and exit" stub used for the entry
+checkpoint, so the captured state is what exists after initialisation and before
+the first demo frame.
+
+The call sites were derived from the resident code block, not from overlay
+segment arithmetic:
+
+```
+original  1301:0061  -> file 0x4E71   bytes 9A 20 00 E3 13   (lcall 13e3:0020)
+rebuilt   image 0x6544                bytes 9A 34 08 DE 06   (lcall 06de:0834)
+```
+
+Result of running both:
+
+```
+orig  DGR.BIN 0 bytes   STRONG.SAV created (1 byte)   DONE.FLG absent
+ours  DGR.BIN 0 bytes   STRONG.SAV absent            DONE.FLG absent
+```
+
+Neither binary reaches the patched call, so no second-checkpoint DGROUP dump is
+available yet.  Two observations:
+
+* the original *does* run far enough during `ovr_init_game` to create
+  `STRONG.SAV`, while the rebuild does not - the first concrete init-stage
+  behavioural difference found;
+* the rebuild's earlier probe work showed that file creation through
+  `INT 21h AH=3Ch` hangs under the headless harness (critical-error dialog) for
+  our image, so the missing save file may be the same environmental symptom
+  rather than a logic difference.  Both hypotheses are testable: patch the
+  1-byte creation out of the original and see whether it also stops, or trace
+  the rebuild's open call.
+
+So checkpoint 2 stays open.  The probe itself is kept in `tmp/checkpoint2.py`
+for the next session.
