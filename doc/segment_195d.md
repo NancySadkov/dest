@@ -178,3 +178,45 @@ the prototype change alone is not shippable.
 
 Status: 0x195d sites unchanged (706); the cause and the exact edit shape are now
 known and recorded here.
+
+## The ovc46 shape is different - do not apply the ovc15 transform blindly
+
+`ovc15_sprite.c` (fixed) has
+
+```c
+pcVar4 = ovr_stshStoreFile(data, arg);
+uVar6  = 0x195d;
+*(... + iVar10)     = (uint16_t)pcVar4;   /* .ofs */
+*(... + 2 + iVar10) = uVar6;              /* .seg  <- dead constant, must be the call's DX */
+```
+
+`ovc46_assets.c` does **not** have that shape. There the call result goes straight
+into the field and the segment comes from the *argument*:
+
+```c
+uVar3 = in_DX;
+BldGfxNormal[0x201].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar2,uVar3);
+uVar4 = 0x195d;
+...
+BldGfxNormal[0x201].seg = uVar3;      /* <- the argument, not uVar4 */
+BldGfxNormal[0x202].ofs = (uint16_t)ovr_stshStoreFile((uint8_t *)pfVar2,uVar4);
+uVar3 = 0x195d;
+...
+BldGfxNormal[0x202].seg = uVar4;
+```
+
+The segment is carried in a rolling variable that is *also* passed as the
+argument, so the constant is the chain's seed rather than dead code in every
+case.  Applying the `stsh_store` rewrite here would change which value ends up in
+`.seg` and could corrupt the tables.
+
+Measured with the scripted transform in dry-run mode:
+
+```
+ovc46_assets.c    rewritten 0,   skipped 0    (the call form does not match)
+ovc48_assets2.c   rewritten 17,  skipped 116  (mixed shapes)
+ovc20_stash.c     rewritten 0,   skipped 0    (no such calls)
+```
+
+So `ovc46`/`ovc48` need per-site reading of the rolling-segment chain before any
+edit.  Only the three `ovc15` sites have been converted (and only those).
