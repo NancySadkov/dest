@@ -964,7 +964,7 @@ void __cdecl16far ovc43_usesStExit(uint32_t gindex,uint16_t hnd,uint16_t sheetOf
 char __cdecl16far ovc43_playFliFrames(uint16_t handle,uint16_t paletteOfs,uint16_t paletteSeg,byte delayTicks);
 void __cdecl16far ovc43_playArchiveFli(far_t gfx,uint16_t paletteOfs,uint16_t paletteSeg,uint8_t delayTicks);
 char __cdecl16far ovc43_playFli(uint16_t fileId,uint16_t paletteOfs,uint16_t paletteSeg);
-far_t * __cdecl16far stshAllocStub(far_t *__return_storage_ptr__);
+far_t __cdecl16far stshAllocStub(void);
 void __cdecl16far stshTR_S_stubify0(int index);
 void __cdecl16far stshStubifyBld(uint16_t index);
 void __cdecl16far init_assets(void);
@@ -1447,6 +1447,7 @@ undefined ovr_ovc42_usesBlitLabel();
 undefined ovr_ovc43_playArchiveFli();
 undefined ovr_ovc43_playFli();
 undefined ovr_stshAllocStub();
+uint32_t __cdecl16far func_0x0007ffe0();
 undefined ovr_init_assets();
 undefined ovr_stshStubifyBld();
 undefined ovr_ovc45_getUnitIndex();

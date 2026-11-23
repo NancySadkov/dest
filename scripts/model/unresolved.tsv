@@ -10,7 +10,7 @@ func_0x0004f735	function	func_0x target is data/fragment in the image
 func_0x0004f930	function	func_0x target is data/fragment in the image
 func_0x0004fcda	function	func_0x target is data/fragment in the image
 func_0x0007164e	function	func_0x target is data/fragment in the image
-func_0x0007ffe0	function	Ghidra rendering of push cs; call 0 inside an overlay - a far call to offset 0 of the module (stshAllocStub); replacing it needs all 299 call sites rewritten
+func_0x0007ffe0	function	push cs; call 0 (161 sites in OVC44, all byte-verified); now calls stshAllocStub, which is offset 0 of that module. The 138 calls in OVC45 pass a variable segment and OVC45 contains no such encoding, so their exact target is still inferred
 EXT_FUN_8000_f2fa	function	body not recovered
 halt_baddata	function	body not recovered
 smm_restore_state	function	body not recovered

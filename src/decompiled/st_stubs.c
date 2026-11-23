@@ -65,14 +65,15 @@ int func_0x0007164e()
   return 0;
 }
 
-/* Original: push cs; call 0 inside the overlay - a far call to offset 0 of the
-   module segment (stshAllocStub).  The 0x6ffe argument is Ghidra naming the
-   segment; no argument is actually passed. */
-int func_0x0007ffe0()
+/* Original: `push cs; call 0` inside the overlay - a far call to offset 0 of the
+   module segment, i.e. stshAllocStub, whose result comes back in DX:AX as a
+   far pointer (segment high, offset low). */
+uint32_t func_0x0007ffe0(uint16_t seg)
 {
-  return 0;
-}
+  far_t p = stshAllocStub();
 
+  return ((uint32_t)p.seg << 16) | (uint32_t)p.ofs;
+}
 /* GUESS: body not recovered */
 int EXT_FUN_8000_f2fa()
 {

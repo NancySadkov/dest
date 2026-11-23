@@ -9,31 +9,30 @@
 
 /* 6ffe:0000 */
 
-far_t * __cdecl16far stshAllocStub(far_t *__return_storage_ptr__)
-
+far_t __cdecl16far stshAllocStub(void)
 {
-  uint16_t uVar1;
-  uint16_t uVar2;
-  uint32_t *puVar3;
-  
-  uVar2 = StshCtPtrCopy.seg;
-  uVar1 = StshCtPtrCopy.ofs;
+  far_t old;
+  uint32_t fresh;
+
+  old.ofs = StshCtPtrCopy.ofs;
+  old.seg = StshCtPtrCopy.seg;
   if (StshCount < 0xd93) {
     StshCount = StshCount + 1;
-    puVar3 = ovr_mkp((uint32_t *)(StshCtPtrCopy.ofs + 0x15),StshCtPtrCopy.seg,StshCtPtrCopy.ofs);
-    StshCtPtrCopy.seg = StshCtPtrCopy.ofs;
-    *(uint16_t *)(uVar1 + 0x13) = 0;
-    StshCtPtrCopy.ofs = (uint16_t)puVar3;
-    *(uint16_t *)(uVar1 + 0x11) = 0;
-    *(uint16_t *)(uVar1 + 0xb) = 0;
-    *(uint16_t *)(uVar1 + 9) = 0;
-    *(uint16_t *)(uVar1 + 0xf) = 0;
-    *(uint16_t *)(uVar1 + 0xd) = 0;
-    return (far_t *)uVar1;
+    fresh = (uint32_t)ovr_mkp((uint32_t *)(old.ofs + 0x15),old.seg,old.ofs);
+    StshCtPtrCopy.seg = (uint16_t)(fresh >> 16);
+    StshCtPtrCopy.ofs = (uint16_t)fresh;
+    *(uint16_t *)(old.ofs + 0x13) = 0;
+    *(uint16_t *)(old.ofs + 0x11) = 0;
+    *(uint16_t *)(old.ofs + 0xb) = 0;
+    *(uint16_t *)(old.ofs + 9) = 0;
+    *(uint16_t *)(old.ofs + 0xf) = 0;
+    *(uint16_t *)(old.ofs + 0xd) = 0;
+    return old;
   }
                     /* WARNING: Subroutine does not return */
   ovr_stExit(0x24);
 }
+
 
 
 
