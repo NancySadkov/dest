@@ -1115,3 +1115,79 @@ execution-tracing mechanism that cannot be rewritten by the loader - e.g. a
 `CLI`/`HLT` stub and reading CS:IP from a `HALT` in DOSBox's debugger, or an
 `INT 1` single-step handler that records the last IP visited into DGROUP.  Only
 that will settle whether control reaches `1412:0048` at all.
+
+## RESOLVED: the stall was a double relocation, and the overlay stub is now reached
+
+### Root cause
+
+`add_missing_relocations()` built its "already relocated" set from the **raw
+offset field** of each existing entry:
+
+```python
+rel = set(offset for (offset, segment) in entries)      # wrong
+```
+
+TLINK emits `(offset-within-segment, segment-paragraph)` pairs, so the word an
+entry patches is at `segment*16 + offset`, not at `offset`.  The check therefore
+missed every TLINK entry and appended a second `(image-offset, 0)` entry for the
+same word.  DOS adds the load base once per entry, so those words received it
+**twice** and every such far transfer landed at `2*loadbase + seg`.
+
+Measured on the pre-fix image:
+
+```
+1451 entries, 831 distinct linear targets, 620 words relocated twice
+including main's lcall to ovr_init_game and the thunk's ljmp into O09_SEG
+```
+
+After comparing linear addresses (`seg*16 + off`): **831 entries, 0 duplicates**.
+
+### Verification: an INT 60h tracer
+
+`INT 3` was useless as a marker - DOSBox intercepts it internally, so the
+installed handler never ran and every probe answered "no code".  `INT 60h` is an
+unused software interrupt that goes through the IVT, and a 2-byte `CD 60` marker
+has no immediates for the loader to rewrite.
+
+`tmp/trace60.py` installs a handler that writes one byte and exits 0x50, builds
+once, and marks each address in turn:
+
+```
+                     before the fix     after the fix
+main entry           reached            reached
+argc test            reached            reached
+branch jmp           reached            reached
+ovr_init_game lcall  reached            reached
+thunk (ljmp)         NOT reached        reached
+O09 stub (INT 3Fh)   NOT reached        reached
+```
+
+The original was used as the oracle for the method itself: patching its main
+entry and two interior sites with exit stubs gives `CODE=81` each time, so a
+"no code" answer from the rebuild is a real result and not a harness artefact.
+
+### The overlay interrupt now fires
+
+With the fix in place, the `INT 3Fh` probe handler (installed at vector `0xFC`,
+non-static so its address is real) **fires**:
+
+```
+OUT.BIN 1 bytes: b'H'
+```
+
+So the whole chain is confirmed: `startx` -> `main` -> `lcall ovr_init_game` ->
+thunk `ljmp` -> `O09_SEG` stub -> `INT 3Fh`.
+
+### What remains
+
+`INT 3Fh` needs a real handler: the VROOMM block loader.  Calling the prepare
+entry (`_OVRTEXT_:0D24`, the original's init-table priority-1 entry) still does
+not produce `STRONG.SAV`, so the manager does not initialise itself from that
+call alone in this link.  The loader design is unchanged and now has a confirmed
+entry point:
+
+1. on `INT 3Fh`, read `id` and `ofs` from the stub at the returned `CS:IP`
+   (`CD 3F <id> <ofs_lo> <ofs_hi>`);
+2. look the `:OVY` block up in `audit/overlay_blocks.csv`;
+3. read it from the EXE into its segment, apply its relocations;
+4. far-jump to `block_segment:ofs`.
