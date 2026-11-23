@@ -1022,12 +1022,21 @@ uint16_t ioErrorHndlr(void)
 uint16_t __cdecl16far ioErrorHndlrUninstall(void)
 
 {
-  code *pcVar1;
-  
-  pcVar1 = (code *)swi(0x21);
-  (*pcVar1)(0x2410);
+  uint16_t hofs = GSavedErrorHandler.ofs;
+  uint16_t hseg = GSavedErrorHandler.seg;
+
+  asm {
+    push ds;
+    mov ax,hseg;
+    mov ds,ax;
+    mov dx,hofs;
+    mov ax,2524h;
+    int 21h;
+    pop ds;
+  }
   return GIOErrorCode;
 }
+
 
 
 
