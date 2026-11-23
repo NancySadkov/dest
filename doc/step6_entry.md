@@ -704,3 +704,44 @@ Next probe for this route: verify the patched CS:IP points at the bytes of
 `startx`'s prologue in the non-overlay image (compare the first bytes with the
 map offset); if not, derive the load-relative offset from `e_cparhdr` plus the
 map's segment start rather than from the segment value alone.
+
+### The NO_OVERLAY entry points at startx, yet nothing executes
+
+Header and image check for the `NO_OVERLAY=1` link:
+
+```
+e_cparhdr  2944  (0xB80)            header 47,104 bytes
+e_lfarlc   0x3E   e_crlc 11,412     relocation table ends at 0xB28E
+CS:IP      0069:002B                file offset 0xBEBB
+bytes at 0xBEBB: 55 8B EC 83 EC 1C 56 57 B8 94 00   ; startx's prologue
+map _STARTX: 0069:002B, segment base 0x696, same bytes at that offset
+```
+
+So the entry mapping is **correct**: `CS:IP` lands on `push bp / mov bp,sp /
+sub sp,1Ch / push si / push di / mov ax,94h ...`.
+
+Nevertheless:
+
+* patching those five bytes with `mov ax,4C42h; int 21h` still yields `CODE=0`;
+* none of the `AH=40h` startx markers (`S` after `DS=DGROUP`, `A` after
+  `SaveVectors`, `B` before `_setupio`, `C` after `_c0crtinit`, `D` before the
+  `main` call) writes a byte.
+
+So execution never reaches the entry even though the header says it should.  The
+one structural difference from the working overlay link is the **11,412-entry
+relocation table with a 47 KB header**: DOS spends that pass before jumping to
+`CS:IP`, and both the silent `CODE=0` and the absence of any marker are
+consistent with the load failing (program too big to fit / relocation error) or
+with the relocation pass corrupting the entry bytes.
+
+Next probes, in order of cost:
+
+1. run the same EXE without the batch redirection and read what DOS prints
+   (`Program too big to fit in memory` would settle it);
+2. if it is a size failure, link with a smaller subset (the link already supports
+   `EXCLUDE_OBJS=`, and `--without-crtl`), or raise DOSBox's `memsize` and free
+   conventional memory (the harness currently uses 16 MB with a 714 KB image and
+   a 5 MB data file, which should fit, so a *relocation* error is more likely
+   than memory);
+3. re-check `e_lfarlc`/`e_crlc` against the relocation entries: a bad entry that
+   points into the code would rewrite the prologue after the patch is written.
