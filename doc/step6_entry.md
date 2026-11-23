@@ -861,3 +861,32 @@ recomputed from `audit/overlay_blocks.csv` plus the link map.
 This is a bounded piece of work (a handler plus a block cache), and it is the
 only path to a runnable rebuild now that the non-overlay link is ruled out by
 size.
+
+### Probe: an installed INT 3Fh handler never fires
+
+Before writing the block loader, a cheaper check: install an `INT 3Fh` handler in
+`startx` (AH=25h, vector 3Fh) that writes `H` to stdout and exits with 0x3F, then
+run the default overlay link.
+
+Result: build clean, entry `_STARTX 006C:004C`, but `OUT.BIN` stays 0 bytes - the
+handler never runs.  So the program does not reach its first overlay call
+(`ovr_init_game`) at all.
+
+That is consistent with the earlier startx trace (no `S`/`A`/`B`/`C`/`D` marker
+either) and conflicts with the working main-entry dump only if one assumes the
+program gets that far.  The resolution is that the main-entry dump works because
+it *replaces* main's first bytes, whereas the real run stops somewhere in
+`startx` before main's body.
+
+So the next probe is a bisect of `startx` with **exit codes** (not markers, which
+have failed twice for reasons that are themselves unexplained): patch the image
+so that an `exit` sits at each phase boundary of `startx` - after `DS=DGROUP`,
+after `SaveVectors`, after the environment scan, after the memory resize, after
+the UMB block, after `INT 1Ah`, after `_setupio`, after `_c0crtinit`, at the
+`main` call - and run the sequence, recording which exit code first appears.  The
+`walk.py` harness already does exactly that for embedded `mov ax,4cXXh; int 21h`
+markers, so the same pattern applies.
+
+The INT 3Fh handler can then be reinstalled once `startx` is known to complete;
+the block loader itself is unchanged in design (`audit/overlay_blocks.csv`,
+`CD 3F <id> <ofs>`).
