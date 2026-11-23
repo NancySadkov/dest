@@ -228,3 +228,43 @@ segment and DOS returns an error instead of writing.
 That is the next thing to check: disassemble `main`'s prologue in the built image
 and log DS at entry, e.g. patch main's entry with a stub that stores DS into a
 DGROUP word and dumps it.
+
+### DS at `main` is DGROUP; the trace statements are simply not executed
+
+The DS probe patches `main`'s entry with a stub that writes `DS` and then 64 KB
+from `DS:0`:
+
+```
+8C D8        mov ax,ds
+50           push ax
+BB 01 00     mov bx,1
+B9 02 00     mov cx,2
+89 E2        mov dx,sp
+B4 40 / CD 21  int 21h        ; the two DS bytes
+...
+B9 FF FF / BA 00 00 / B4 40 / CD 21   ; 64 KB from DS:0
+```
+
+Result: `OUT.BIN` = 65,537 bytes and the first two bytes are `DS = 0x1A00`.
+The 64 KB that follow match the original DGROUP symbol-for-symbol (1,523
+identical), so `DS` at `main`'s entry is this run's DGROUP segment.  The DS
+hypothesis is therefore wrong.
+
+The trace byte was also moved to DGROUP BSS and forced live:
+
+```
+map:  163C:B840  _ST_TRACECH     (_DATA starts 163C0, length B084; B840 is BSS)
+code: bb 01 00 / ba 40 b8 / b9 01 00 / b4 40 / cd 21
+```
+
+so the marker encodes a valid DGROUP buffer address, and `DS` is DGROUP.  Yet
+`OUT.BIN` is still 0 bytes.
+
+Conclusion: the trace statements are not reached.  `main`'s entry executes (exit
+42 when patched), the DS probe at the same address works, but nothing after the
+prologue runs - so the rebuild stops inside the first call of the body,
+`ovr_init_game()`, i.e. in the overlay thunk/call path (the same place the
+original creates `STRONG.SAV` and the rebuild does not).
+
+That is now the single open step-6 question: whether the VROOMM thunk call into
+`ovr_init_game` returns at all in our link.
