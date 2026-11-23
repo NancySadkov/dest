@@ -431,60 +431,60 @@ void __cdecl16far ovc24_removeOtherEntities(uint8_t *reportedOut)
   char *msg;
   uint16_t dst;
   int iVar3;
-  uint uVar4;
+  uint ent;
   uint16_t uVar5;
   uint16_t in_stack_00000006;
   
   if (!GameRunning) {
-    for (uVar4 = 0; uVar4 < EntityCount; uVar4 = uVar4 + 1) {
-      *(undefined1 *)((int)Entities + uVar4 * 0x37 + 0x19) = 0;
+    for (ent = 0; ent < EntityCount; ent = ent + 1) {
+      *(undefined1 *)((int)Entities + ent * 0x37 + 0x19) = 0;
     }
-    for (uVar4 = 0; uVar4 < EntityCount; uVar4 = uVar4 + 1) {
+    for (ent = 0; ent < EntityCount; ent = ent + 1) {
       uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       iVar3 = (int)Entities;
-      if ((*(char *)(iVar3 + uVar4 * 0x37 + 0x18) != '\0') &&
-         (*(char *)(iVar3 + uVar4 * 0x37 + 0x19) == '\0')) {
-        if ((GOngoingBattle == '\0') && (((entity_t *)iVar3)[uVar4].base.y == GfxRndSeed2)) {
-          uVar1 = alignUp4(*(int *)((entity_t *)iVar3 + uVar4),0,0);
+      if ((*(char *)(iVar3 + ent * 0x37 + 0x18) != '\0') &&
+         (*(char *)(iVar3 + ent * 0x37 + 0x19) == '\0')) {
+        if ((GOngoingBattle == '\0') && (((entity_t *)iVar3)[ent].base.y == GfxRndSeed2)) {
+          uVar1 = alignUp4(*(int *)((entity_t *)iVar3 + ent),0,0);
           uVar2 = alignUp4(GfxRndSeed,0,0);
           if (uVar1 == uVar2) goto L_OVC24_5943_0d5a_0E37;
         }
-        ovc24_textKill(uVar4);
+        ovc24_textKill(ent);
       }
 L_OVC24_5943_0d5a_0E37:
-      ovc24_intelUnitReport(uVar4);
+      ovc24_intelUnitReport(ent);
     }
     GGameState = 0x20;
-    uVar4 = EntityCount;
-    while (uVar4 = uVar4 - 1, -1 < (int)uVar4) {
+    ent = EntityCount;
+    while (ent = ent - 1, -1 < (int)ent) {
       uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       iVar3 = (int)Entities;
-      if (((entity_t *)iVar3)[uVar4].base.animFrame == '\0') {
+      if (((entity_t *)iVar3)[ent].base.animFrame == '\0') {
         if ((GOngoingBattle == '\0') &&
            (uVar5 = ovr_ovc23_isCursorAt
-                              (*(uint16_t *)((entity_t *)iVar3 + uVar4),((entity_t *)iVar3)[uVar4].base.y,0), (char)uVar5 != '\0')) {
+                              (*(uint16_t *)((entity_t *)iVar3 + ent),((entity_t *)iVar3)[ent].base.y,0), (char)uVar5 != '\0')) {
           uVar1 = (uint)AgntCount;
           do {
             uVar1 = uVar1 - 1;
             if ((int)uVar1 < 0) break;
-          } while (*(uint *)(uVar1 * 0x34 + 0x1b) != uVar4);
+          } while (*(uint *)(uVar1 * 0x34 + 0x1b) != ent);
           if ((int)uVar1 < 0) {
             if (*(char *)((int)(char **)GMenuStrings +
-                         (uint)((entity_t *)Entities)[uVar4].base.gindex * 0x95 + 0x1f) == '\0'
+                         (uint)((entity_t *)Entities)[ent].base.gindex * 0x95 + 0x1f) == '\0'
                ) {
               ovr_play_sfx(8,0,0);
             }
             else {
               ovr_play_sfx(11,0,0);
             }
-            ovr_ovc15_removeEntity(uVar4);
+            ovr_ovc15_removeEntity(ent);
           }
         }
         else {
           uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-          alignUp4(*(int *)((int)Entities + uVar4 * 0x37),
-                   ((entity_t *)Entities)[uVar4].base.y,0xa000);
-          iVar3 = (uint)((entity_t *)Entities)[uVar4].base.gindex * 0x95;
+          alignUp4(*(int *)((int)Entities + ent * 0x37),
+                   ((entity_t *)Entities)[ent].base.y,0xa000);
+          iVar3 = (uint)((entity_t *)Entities)[ent].base.gindex * 0x95;
           dst = 0x195d;
           msg = ovr_fmVsprintf("Intelligence reports %s unit destroyed. (%d, %d)",
                                (char *)CONCAT22(*(uint16_t *)
@@ -493,7 +493,7 @@ L_OVC24_5943_0d5a_0E37:
                                                          ((int)&worldMenuLabels[0].seg + 1 + iVar3))
                               );
           ovr_uiNotify(msg,dst,0);
-          ovr_ovc15_removeEntity(uVar4);
+          ovr_ovc15_removeEntity(ent);
         }
         *reportedOut = 0x1;
       }

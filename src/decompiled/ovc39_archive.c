@@ -139,7 +139,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   byte bStack_9;
   uint uStack_8;
   int iStack_6;
-  char *pcStack_4;
+  char *name;
   
   if ((partyIndex != 0xff) &&
      (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0')) {
@@ -165,14 +165,14 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             else {
               iStack_6 = ovc39_loadArchiveEntry(9);
             }
-            pcStack_4 = pcVar4;
+            name = pcVar4;
             pcVar3 = ovc39_lordOrLady();
             pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
-                                   (char *)CONCAT22(pcVar3,pcStack_4),(char)pcVar4);
+                                   (char *)CONCAT22(pcVar3,name),(char)pcVar4);
             ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
-            (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)pcStack_4;
+            (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)name;
             handle.ofs = iStack_6;
-            (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)pcStack_4 >> 8);
+            (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)name >> 8);
             ovr_stshFree(handle);
             return;
           }
@@ -180,14 +180,14 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
              (pcVar4 = (char *)&AgntAnms[0x88].missileDy,
              (*(uint *)((uint)bStack_9 * 0x27 + 0x121) & 2) != 0)) {
             iStack_6 = ovc39_loadArchiveEntry(10);
-            pcStack_4 = pcVar4;
+            name = pcVar4;
             pcVar3 = ovc39_lordOrLady();
             pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
-                                   (char *)CONCAT22(pcVar3,pcStack_4),(char)pcVar4);
+                                   (char *)CONCAT22(pcVar3,name),(char)pcVar4);
             ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
-            (*(uint8_t *)((uint8_t *)&(handle_00.seg))) = (char)pcStack_4;
+            (*(uint8_t *)((uint8_t *)&(handle_00.seg))) = (char)name;
             handle_00.ofs = iStack_6;
-            (*(uint8_t *)((uint8_t *)&(handle_00.seg) + 1)) = (char)((uint)pcStack_4 >> 8);
+            (*(uint8_t *)((uint8_t *)&(handle_00.seg) + 1)) = (char)((uint)name >> 8);
             ovr_stshFree(handle_00);
             return;
           }
@@ -195,14 +195,14 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
              (pcVar4 = (char *)&AgntAnms[0x88].missileDy,
              (*(uint *)((uint)bStack_9 * 0x27 + 0x121) & 0x20) != 0)) {
             iStack_6 = ovc39_loadArchiveEntry(0xb);
-            pcStack_4 = pcVar4;
+            name = pcVar4;
             pcVar3 = ovc39_lordOrLady();
             pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
-                                   (char *)CONCAT22(pcVar3,pcStack_4),(char)pcVar4);
+                                   (char *)CONCAT22(pcVar3,name),(char)pcVar4);
             ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
-            (*(uint8_t *)((uint8_t *)&(handle_01.seg))) = (char)pcStack_4;
+            (*(uint8_t *)((uint8_t *)&(handle_01.seg))) = (char)name;
             handle_01.ofs = iStack_6;
-            (*(uint8_t *)((uint8_t *)&(handle_01.seg) + 1)) = (char)((uint)pcStack_4 >> 8);
+            (*(uint8_t *)((uint8_t *)&(handle_01.seg) + 1)) = (char)((uint)name >> 8);
             ovr_stshFree(handle_01);
             return;
           }
@@ -210,14 +210,14 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
              (uVar1 = ovr_ovc45_compute4(uStack_8 + iVar6,GfxRndSeed2,(char)GfxRndSeed2),
              (char)uVar1 != '\0')) {
             iStack_6 = ovc39_loadArchiveEntry(0xc);
-            pcStack_4 = pcVar4;
+            name = pcVar4;
             pcVar3 = ovc39_lordOrLady();
             pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
-                                   (char *)CONCAT22(pcVar3,pcStack_4),(char)pcVar4);
+                                   (char *)CONCAT22(pcVar3,name),(char)pcVar4);
             ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
-            (*(uint8_t *)((uint8_t *)&(handle_02.seg))) = (char)pcStack_4;
+            (*(uint8_t *)((uint8_t *)&(handle_02.seg))) = (char)name;
             handle_02.ofs = iStack_6;
-            (*(uint8_t *)((uint8_t *)&(handle_02.seg) + 1)) = (char)((uint)pcStack_4 >> 8);
+            (*(uint8_t *)((uint8_t *)&(handle_02.seg) + 1)) = (char)((uint)name >> 8);
             ovr_stshFree(handle_02);
             return;
           }
@@ -225,14 +225,14 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
              (pcVar4 = (char *)&AgntAnms[0x88].missileDy,
              (*(uint *)((uint)bStack_9 * 0x27 + 0x121) & 0x400) != 0)) {
             iStack_6 = ovc39_loadArchiveEntry(0xd);
-            pcStack_4 = pcVar4;
+            name = pcVar4;
             pcVar3 = ovc39_lordOrLady();
             pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
-                                   (char *)CONCAT22(pcVar3,pcStack_4),(char)pcVar4);
+                                   (char *)CONCAT22(pcVar3,name),(char)pcVar4);
             ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
-            (*(uint8_t *)((uint8_t *)&(handle_03.seg))) = (char)pcStack_4;
+            (*(uint8_t *)((uint8_t *)&(handle_03.seg))) = (char)name;
             handle_03.ofs = iStack_6;
-            (*(uint8_t *)((uint8_t *)&(handle_03.seg) + 1)) = (char)((uint)pcStack_4 >> 8);
+            (*(uint8_t *)((uint8_t *)&(handle_03.seg) + 1)) = (char)((uint)name >> 8);
             ovr_stshFree(handle_03);
             return;
           }
@@ -415,40 +415,40 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
         }
         else {
           iStack_6 = ovc39_loadArchiveEntry(bStack_d + 0x17);
-          pcStack_4 = pcVar4;
+          name = pcVar4;
           pcVar3 = ovc39_lordOrLady();
           pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
-                                 (char *)CONCAT22(pcVar3,pcStack_4),(char)pcVar4);
+                                 (char *)CONCAT22(pcVar3,name),(char)pcVar4);
           ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
-          (*(uint8_t *)((uint8_t *)&(handle_06.seg))) = (char)pcStack_4;
+          (*(uint8_t *)((uint8_t *)&(handle_06.seg))) = (char)name;
           handle_06.ofs = iStack_6;
-          (*(uint8_t *)((uint8_t *)&(handle_06.seg) + 1)) = (char)((uint)pcStack_4 >> 8);
+          (*(uint8_t *)((uint8_t *)&(handle_06.seg) + 1)) = (char)((uint)name >> 8);
           ovr_stshFree(handle_06);
         }
       }
       else {
         iStack_6 = ovc39_loadArchiveEntry(bStack_e + 0xd);
-        pcStack_4 = pcVar4;
+        name = pcVar4;
         pcVar3 = ovc39_lordOrLady();
         pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
-                               (char *)CONCAT22(pcVar3,pcStack_4),(char)pcVar4);
+                               (char *)CONCAT22(pcVar3,name),(char)pcVar4);
         ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
-        (*(uint8_t *)((uint8_t *)&(handle_05.seg))) = (char)pcStack_4;
+        (*(uint8_t *)((uint8_t *)&(handle_05.seg))) = (char)name;
         handle_05.ofs = iStack_6;
-        (*(uint8_t *)((uint8_t *)&(handle_05.seg) + 1)) = (char)((uint)pcStack_4 >> 8);
+        (*(uint8_t *)((uint8_t *)&(handle_05.seg) + 1)) = (char)((uint)name >> 8);
         ovr_stshFree(handle_05);
       }
     }
     else {
       iStack_6 = ovc39_loadArchiveEntry(bStack_c + 0x12);
-      pcStack_4 = pcVar4;
+      name = pcVar4;
       pcVar3 = ovc39_lordOrLady();
       pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
-                             (char *)CONCAT22(pcVar3,pcStack_4),(char)pcVar4);
+                             (char *)CONCAT22(pcVar3,name),(char)pcVar4);
       ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
-      (*(uint8_t *)((uint8_t *)&(handle_04.seg))) = (char)pcStack_4;
+      (*(uint8_t *)((uint8_t *)&(handle_04.seg))) = (char)name;
       handle_04.ofs = iStack_6;
-      (*(uint8_t *)((uint8_t *)&(handle_04.seg) + 1)) = (char)((uint)pcStack_4 >> 8);
+      (*(uint8_t *)((uint8_t *)&(handle_04.seg) + 1)) = (char)((uint)name >> 8);
       ovr_stshFree(handle_04);
     }
   }
