@@ -120,3 +120,61 @@ Consequences for the plan:
 Priority should therefore go to the sites that are provably constant (a run of
 `BldGfxNormal[i].seg = <same var>` after `uVar = 0x195d`), and the rest left until
 their disassembly is read.
+
+## Resolved: the store is `stshStoreFile`'s returned segment; 0x195d is dead code
+
+Dumping `init_assets` (6FFE:02F7) from the Ghidra project and reading the store to
+`BldGfxNormal[0xc]` (`195d:4DD0`, `.seg` at `4DD2`) gives the whole sequence:
+
+```
+6ffe:09d5  PUSH DX / PUSH AX
+6ffe:09d7  CALLF ovr_stshStoreFile
+6ffe:09dc  ADD SP,4
+6ffe:09df  PUSH AX                 ; save the returned OFFSET
+6ffe:09e0  MOV AX,SI
+6ffe:09e2  MOV BX,0xc
+6ffe:09e5  PUSH DX                 ; save the returned SEGMENT
+6ffe:09e6  IMUL BX                 ; BX = index * 12
+6ffe:09e8  MOV DX,0x195d           ; <-- dead
+6ffe:09eb  MOV BX,AX
+6ffe:09ed  MOV DX,ES               ; <-- dead as well
+6ffe:09ef  POP AX                 ; AX = returned SEGMENT
+6ffe:09f0  MOV ES:[BX+0x4dd2],AX   ; .seg = returned segment
+6ffe:09f5  POP AX                 ; AX = returned OFFSET
+6ffe:09f6  MOV ES:[BX+0x4dd0],AX   ; .ofs = returned offset
+```
+
+So:
+
+* `0x195d` is a **dead link-time constant** - it is loaded and then overwritten
+  before any use, which is why it never appears as a store operand;
+* the value actually stored into `.seg` is the **segment `stshStoreFile` returns in
+  DX**;
+* our tree lost that because the prototypes dropped DX:
+
+```c
+cte_t * __cdecl16far stshStoreFile(uint8_t *data,uint16_t arg2);   /* near */
+undefined ovr_stshStoreFile();
+```
+
+## Why it is not a one-line fix
+
+Changing the prototypes to `far_t` is correct but breaks the build immediately:
+all **890** `ovr_stshStoreFile(...)` call sites cast the result to `uint16_t`,
+which is an illegal struct cast (167 compile errors, measured).
+
+The fix therefore has to merge each pair
+
+```c
+X[i].ofs = (uint16_t)ovr_stshStoreFile(...);
+uVar = 0x195d;
+...
+X[i].seg = uVar;
+```
+
+into a single far-pointer result, file by file (ovc44 233, ovc45 228, ovc46 158,
+ovc48 149, ovc49 117, ovc15 5).  That is mechanical but must be done per site;
+the prototype change alone is not shippable.
+
+Status: 0x195d sites unchanged (706); the cause and the exact edit shape are now
+known and recorded here.
