@@ -3086,6 +3086,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint16_t unaff_SI;
   uint16_t unaff_DI;
   uint uVar23;
+  uint leaderIdxB;   /* the 0..GLeaderCount loop at 3529 only */
   uint unitIdx;   /* the 0xf8..GUnitCount loops only */
   uint16_t unitsSeg;
   uint16_t uVar25;
@@ -3526,7 +3527,7 @@ void __cdecl16far upd_usesAlignUp4(void)
         }
         if (*(char *)((int)(uint32_t)GLeaderSheets[idx] + 0xaa) != '\0') {
           sheetAA = (uint)*(byte *)((int)(uint32_t)GLeaderSheets[idx] + 0xaa);
-          for (uVar23 = 0; (int)uVar23 < (int)(uint)GLeaderCount; uVar23 = uVar23 + 1) {
+          for (leaderIdxB = 0; (int)leaderIdxB < (int)(uint)GLeaderCount; leaderIdxB = leaderIdxB + 1) {
             unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
             iVar18 = (int)(uint32_t)GLeaderSheets[idx];
             iVar17 = *(int *)(iVar18 + 0x58);
@@ -3536,12 +3537,12 @@ void __cdecl16far upd_usesAlignUp4(void)
             if ((iVar21 <= iVar17) &&
                ((iVar17 != iVar21 || (*(uint *)(sheetOfs + 0x8a) <= *(uint *)(iVar18 + 0x56)))))
             break;
-            if (((GLeaderSheets[uVar23])->active != '\0') &&
-               (((0 < *(int *)((int)*(uint32_t *)(uVar23 << 2) + 0x54) &&
-                 (*(char *)((int)*(uint32_t *)(uVar23 << 2) + 0x3f) == '\0')) &&
-                (uVar23 != idx)))) {
+            if (((GLeaderSheets[leaderIdxB])->active != '\0') &&
+               (((0 < *(int *)((int)*(uint32_t *)(leaderIdxB << 2) + 0x54) &&
+                 (*(char *)((int)*(uint32_t *)(leaderIdxB << 2) + 0x3f) == '\0')) &&
+                (leaderIdxB != idx)))) {
               in_stack_0000ffd2 =
-                   ((long)*(int *)((int)*(uint32_t *)(uVar23 << 2) + 0x54) * (long)(int)sheetAA &
+                   ((long)*(int *)((int)*(uint32_t *)(leaderIdxB << 2) + 0x54) * (long)(int)sheetAA &
                    0xffffU) / 100;
               unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[idx] >> 0x10);
               iVar17 = (int)(uint32_t)GLeaderSheets[idx];
@@ -3562,14 +3563,14 @@ void __cdecl16far upd_usesAlignUp4(void)
                      CONCAT22((*(int *)(iVar17 + 0x8c) - *(int *)(iVar21 + 0x58)) -
                               (uint)(uVar12 < *accLo),uVar12 - *accLo);
               }
-              unitsSeg = (uint16_t)((ulong)*(uint32_t *)(uVar23 << 2) >> 0x10);
-              iVar21 = (int)*(uint32_t *)(uVar23 << 2);
+              unitsSeg = (uint16_t)((ulong)*(uint32_t *)(leaderIdxB << 2) >> 0x10);
+              iVar21 = (int)*(uint32_t *)(leaderIdxB << 2);
               iVar17 = *(int *)(iVar21 + 0x58);
               iVar18 = (int)(in_stack_0000ffd2 >> 0x10);
               if ((iVar17 <= iVar18) &&
                  ((iVar17 < iVar18 || (*(uint *)(iVar21 + 0x56) < (uint)in_stack_0000ffd2)))) {
-                unitsSeg = (uint16_t)((ulong)*(uint32_t *)(uVar23 << 2) >> 0x10);
-                iVar17 = (int)*(uint32_t *)(uVar23 << 2);
+                unitsSeg = (uint16_t)((ulong)*(uint32_t *)(leaderIdxB << 2) >> 0x10);
+                iVar17 = (int)*(uint32_t *)(leaderIdxB << 2);
                 in_stack_0000ffd2 =
                      CONCAT22(*(uint16_t *)(iVar17 + 0x58),*(uint16_t *)(iVar17 + 0x56));
               }
@@ -3582,8 +3583,8 @@ void __cdecl16far upd_usesAlignUp4(void)
               *accLo = *accLo + uVar36;
               accHi = (int *)(iVar17 + 0x58);
               *accHi = *accHi + iVar21 + (uint)CARRY2(uVar12,uVar36);
-              unitsSeg = (uint16_t)((ulong)*(uint32_t *)(uVar23 << 2) >> 0x10);
-              iVar17 = (int)*(uint32_t *)(uVar23 << 2);
+              unitsSeg = (uint16_t)((ulong)*(uint32_t *)(leaderIdxB << 2) >> 0x10);
+              iVar17 = (int)*(uint32_t *)(leaderIdxB << 2);
               accLo = (uint *)(iVar17 + 0x56);
               uVar12 = *accLo;
               *accLo = *accLo - uVar36;
