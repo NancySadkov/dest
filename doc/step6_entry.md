@@ -778,3 +778,39 @@ Doing that by hand: the prologue is at image 0x06F0, i.e. `CRTL_SEG + 0x25`;
 patching `CS:IP` to `06CB:0025` and putting `exit 42` at 0x06F0 is the next
 experiment - the previous attempt aborted on a bad offset computation and the
 image was left untouched.
+
+### The non-overlay link cannot load: the image exceeds conventional memory
+
+The entry probe was redone against the current build.  The prologue really is at
+image `0x06BB`, which is exactly where the map's `_STARTX 0069:002B` points
+(`0x69*16 + 0x2B = 0x6BB`), so the entry mapping is correct after all - my
+earlier 0x06F0 measurement came from a different (instrumented) build.
+
+Patching `55 8B EC ...` at `0x06BB` with `mov ax,4C42h; int 21h` still yields
+`CODE=0`, and no marker executes.  The reason is the image size:
+
+```
+load image (e_cp/e_cblp) = 761,576 bytes = 744 KiB
+conventional memory      = 640 KiB = 655,360 bytes
+exceeds by                106,216 bytes
+```
+
+With every module resident the program is 744 KiB, which DOS cannot load into
+640 KiB of conventional memory.  The load fails before the first instruction -
+which is exactly the silent `CODE=0` with no DOS text captured.
+
+The original is 511 KiB *because* most of it lives in overlays (resident image
+~128 KiB).  So **the non-overlay route is not viable for this program**: overlays
+are mandatory, and with them the VROOMM manager (or an equivalent loader) must
+work.
+
+That leaves the earlier fork:
+
+1. implement VROOMM's fixup application by hand (apply `_EXEINFO_` fixup records
+   to the resident image at startup), or
+2. write a minimal overlay loader that reads the overlay blocks from the EXE on
+   demand and patches the `INT 3Fh` stubs - essentially the same work.
+
+Option 1 is bounded: the fixup records are already extracted in
+`doc/fbov_fixups.csv` (515 KB, produced for the FBO view), so the data needed to
+apply them at run time is available.
