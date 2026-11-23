@@ -1580,3 +1580,35 @@ Next step: after `_OVRINIT`, read the word at `_OVRDATA_:00B8` (`__OVRDOSHHANDLE
 and mark whether it is a valid handle, then, if it is not, fix the re-open (the
 path buffer `__OvrExepathBuf` is filled by `OvrDoOpenFile` during `__OVRINIT`, so
 a mismatch there is the first thing to check).
+
+### Can the hand-recovered CRT be replaced by the Turbo C library?
+
+Tested with `link_standalone.py --without-crtl` (the switch already existed):
+
+```
+Error: Undefined symbol __FAKREALCVT in module OVR.ASM
+Error: Undefined symbol _PADD_AT_ in module O04.C
+Error: Undefined symbol _EMSFREE in module O05.C
+Error: Undefined symbol _XMSFREE in module O05.C
+Error: Undefined symbol _AUDIO_DONE in module O05.C
+Error: Undefined symbol _SRAND8 in module O06.C
+Error: Undefined symbol _LXMUL_AT_ in module O07.C
+... 25+ more
+```
+
+So `crtl.c` is **not** only the CRT.  It defines 171 functions, 60 of which are
+referenced from other modules, and they fall into two groups:
+
+* stock Turbo C functions - `printf` (162 calls), `memcpy` (43), `strcpy` (37),
+  `strlen` (24), `close` (23), `write` (18), `exit` (17), `_fmemset` (52),
+  `_fmemmove` (36), `_fsetmem` (17), `F_SCOPY` (54) - all of which CM.LIB has;
+* **original first-segment game code** - `_AUDIO_INIT` / `_AUDIO_DONE`,
+  `_EMS_INIT` / `_EMS_FREE` / `_EMS_REALLOC`, `_XMS_INIT` / `_XMSFREE`,
+  `_STSHINIT_SCAN`, `_SRAND8` / `_RAND8`, `_PADD_AT_`, `_LXMUL_AT_`,
+  `_LDIV_AT_`, `_LXLSH_AT_`, `_LMOD_AT_` ... These are the 1000:xxxx functions of
+  the original, they are not in any library, and they must stay.
+
+So "just use the compiler's CRT" cannot be a wholesale drop: the file would have
+to be split into a stock-CRT half (deleted, linked from CM.LIB) and a
+first-segment half (kept, recovered).  That split is a worthwhile next step but a
+real refactor, not a switch.
