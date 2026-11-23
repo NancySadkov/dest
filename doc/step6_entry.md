@@ -1433,3 +1433,39 @@ Note on the two startup routes, both using OVERLAY.LIB unchanged:
 |---|---|
 | `_STARTX` (default) | manager initialises, `init_game` called, INT 3Fh entered, hangs inside the handler |
 | `STOCK_STARTUP=1` (C0) | C0 walks the init table and calls `__OvrPrepare`, which aborts (code 3) |
+
+### Stage probe inside the manager: inconclusive, and why
+
+`tmp/ovr_stage.py` installs the DBG tracer, initialises VROOMM with
+`_OVRINIT("STRONG.EXE", ...)` (which returns INIT_OKAY), then places a 2-byte
+`CD 60` marker at each manager stage in turn:
+
+```
+_OVRTEXT_ base 0x7CE0, handler 0x81CF
+  handler entry    +0x4EF -> DBG.TXT "00"
+  resident check   +0x5BA -> "0"
+  size/slot setup  +0x5C0 -> "0"
+  read call        +0x5CC -> "00"
+  fixups call      +0x5D3 -> "00"
+  add to list      +0x5F5 -> "0"
+```
+
+No stage marker fired, although the earlier run showed `H` (INT 3Fh entered).
+The two results come from different builds and cannot both be right, so the next
+step must put both markers in **one** build:
+
+* the `H` probe replaces the INT 3Fh vector with a handler that only marks;
+* the stage probe leaves the manager's handler in place and marks inside it.
+
+Reconciling them requires the same run to (a) mark main's arrival, (b) install
+the INT 60 marker inside the manager, and (c) report the exit state.  Only then
+is it known whether the manager's handler is reached with the stage build's
+layout.
+
+The measured facts that are not in doubt:
+
+* `_OVRINIT` returns INIT_OKAY and installs the INT 3Fh vector, which resolves to
+  `_OVRTEXT_` (paragraph difference 076B from `CRTL_SEG` 006C, offset 04EF);
+* the handler's loader routine is at `_OVRTEXT_+0x59F` and its stages are
+  visible in the map-relative disassembly (`call 0x8155` size/slot, `call word
+  es:[0x18]` read, `call 0x8330` fixups, `call 0x8380` add-to-list).
