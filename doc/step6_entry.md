@@ -993,3 +993,42 @@ in order:
 Both are cheap to separate: put an exit-code marker immediately before
 `ovr_init_game();` in `main` and rerun the ladder - if that code appears, the
 call is reached and suspect 1 is confirmed.
+
+### main reaches `ovr_init_game`; the hang is inside the thunk, before the stub
+
+Exit-code markers at `main`'s first statement (0x40) and immediately before
+`ovr_init_game();` (0x41):
+
+```
+no nops          -> CODE=64 (0x40)   main's body runs
+nop 40           -> CODE=65 (0x41)   the ovr_init_game call site is reached
+nop 40,41        -> (no exit)        the call is taken and the program hangs
+```
+
+Combined with the verified `INT 3Fh` vector (`_ST_INT3F_PROBE` at
+`006C:0030`, installed as `es:[0xFC]=0x30`, `es:[0xFE]=cs`), the same build
+hangs **without the handler firing**:
+
+```
+OUT.BIN missing / RUN.LOG empty
+```
+
+So the hang is inside the `ovr_init_game` thunk's far jump, *before* the
+`INT 3Fh` stub executes.  The override attempt (patch the thunk's `EA 48 00 B0
+14` to `CD 3F`) could not even locate that byte pattern in the current
+build, because the relocation pass changes the image layout - the thunk has to
+be found through `REBUILT.MAP` (`_OVR_INIT_GAME`) and the segment table each
+time, not by a fixed byte pattern.
+
+Next probes, in order:
+
+1. locate the thunk through the map, read its `EA <ofs> <seg>` operands from the
+   *built* image, compute where `seg` points once the DOS relocation is applied,
+   and compare that paragraph with `O09_SEG`'s start from
+   `audit/overlay_blocks.csv`;
+2. if they differ, the relocation entry's assumed load base is wrong for the
+   stub blocks - the fix is in `add_missing_relocations()` (it currently assumes
+   the DOS load segment applies to the whole image);
+3. if they agree, the failure is that the stub block itself is not where the map
+   says at run time, i.e. the resident image's overlay stub area is not loaded -
+   which the loader would also have to address.
