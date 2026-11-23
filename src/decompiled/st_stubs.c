@@ -95,11 +95,21 @@ int ovr_season_usesGPromotable_e11a()
   return 0;
 }
 
-/* Ghidra renders an inline \INT n\ as \pc = swi(n); (*pc)();\.  The callers
-   have already set AH/BX/ES, so the interrupt is performed here and the pointer
-   returned only has to be callable.  It is a FAR function: taking its address
-   then emits a normal relocation, whereas casting a near function baked the
-   link-time segment in as an immediate (absolute memory once DOS loads). */
+/* Ghidra renders an inline `INT n` as `pc = swi(n); (*pc)();`.
+
+   Verified against the original: the interrupt is executed *here*, inside swi(),
+   and the pointer returned only has to be callable - so every `(*pc)()` is a
+   no-op but the DOS call has already happened.  What remains unrecovered is the
+   *register interface*: call sites read the register outputs as though the
+   interrupt returned them, which Ghidra modelled as
+   unattached variables.  Recovering those means rewriting each call site with
+   explicit inline asm (as was done for ioErrorHndlrInstall/Uninstall).  It is a
+   FAR function: taking its address with a near cast baked the link-time segment
+   in as an immediate (absolute memory once DOS loads). */
+
+/* The returned pointer only has to be callable; it must be FAR so the compiler
+   emits a normal relocation instead of a near cast that bakes in the link-time
+   segment. */
 static void far st_swi_target(void)
 {
 }
