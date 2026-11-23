@@ -2,14 +2,14 @@
 # name<TAB>kind<TAB>reason
 func_0x00010264	function	OVERLAY.LIB EMS/EXT far-call trampoline (slot at 1000:0264/0268, segment patched at 1000:0266/026A by the routine at 026C/0274); overlay runtime, out of scope
 func_0x00010268	function	OVERLAY.LIB EMS/EXT far-call trampoline (slot at 1000:0264/0268, segment patched at 1000:0266/026A by the routine at 026C/0274); overlay runtime, out of scope
-func_0x000318f5	function	func_0x target is data/fragment in the image
-func_0x0004f29c	function	func_0x target is data/fragment in the image
-func_0x0004f32d	function	func_0x target is data/fragment in the image
-func_0x0004f68f	function	func_0x target is data/fragment in the image
-func_0x0004f735	function	func_0x target is data/fragment in the image
-func_0x0004f930	function	func_0x target is data/fragment in the image
-func_0x0004fcda	function	func_0x target is data/fragment in the image
-func_0x0007164e	function	func_0x target is data/fragment in the image
+func_0x000318f5	function	VROOMM funref target: resolves inside OVC_14_3F0B / attact_usesAlignUp4 +0x104; a call into the interior of another overlay function, patched by the overlay manager (out of scope)
+func_0x0004f29c	function	VROOMM funref target: resolves inside OVC_26_5D45 / ovc26_usesFillGrid +0x4C; a call into the interior of another overlay function, patched by the overlay manager (out of scope)
+func_0x0004f32d	function	VROOMM funref target: resolves inside OVC_26_5D45 / ovc26_usesFillGrid +0xDD; a call into the interior of another overlay function, patched by the overlay manager (out of scope)
+func_0x0004f68f	function	VROOMM funref target: resolves inside OVC_26_5D45 / ovc26_usesStExit +0x120; a call into the interior of another overlay function, patched by the overlay manager (out of scope)
+func_0x0004f735	function	VROOMM funref target: resolves inside OVC_26_5D45 / ovc26_usesStExit +0x1C6; a call into the interior of another overlay function, patched by the overlay manager (out of scope)
+func_0x0004f930	function	VROOMM funref target: resolves inside OVC_26_5D45 / ovc26_usesStExit +0x3C1; a call into the interior of another overlay function, patched by the overlay manager (out of scope)
+func_0x0004fcda	function	VROOMM funref target: resolves inside OVC_27_5DED / ovc27_intelAttackingNotice +0xA; a call into the interior of another overlay function, patched by the overlay manager (out of scope)
+func_0x0007164e	function	VROOMM funref target: resolves inside OVC_47_7E7C / constrct_buildInfoText +0x4F2; a call into the interior of another overlay function, patched by the overlay manager (out of scope)
 func_0x0007ffe0	function	push cs; call 0 (161 sites in OVC44, all byte-verified); now calls stshAllocStub, which is offset 0 of that module. The 138 calls in OVC45 pass a variable segment and OVC45 contains no such encoding, so their exact target is still inferred
 EXT_FUN_8000_f2fa	function	body not recovered
 halt_baddata	function	body not recovered
