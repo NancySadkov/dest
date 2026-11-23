@@ -1061,36 +1061,34 @@ void __cdecl16far ovc13_usesBlitRect(void)
 void __cdecl16far ovc13_drawHighlightedUnits(void)
 
 {
-  uint uVar1;
-  uint uVar2;
-  uint32_t uVar3;
-  char cVar4;
+  uint ux;
+  uint uy;
+  uint32_t unitRec;
+  char rowY;
   int x1;
-  int iVar5;
+  int spanW;
   unit_t *puVar6;
-  uint uVar7;
-  uint16_t uVar8;
+  uint unitIndex;
   
   if (Highlight1 != -1) {
-    for (uVar7 = 0xf8; uVar7 < GUnitCount; uVar7 = uVar7 + 1) {
-      uVar8 = (uint16_t)((ulong)GUnits >> 0x10);
+    for (unitIndex = 0xf8; unitIndex < GUnitCount; unitIndex = unitIndex + 1) {
       puVar6 = (unit_t *)GUnits;
-      if (((puVar6[uVar7].unitType != 0xff) &&
-          (uVar3 = *(uint32_t *)((uint)puVar6[uVar7].unitType << 2),
-          *(char *)((int)uVar3 + 0x3f) == '\0')) &&
-         ((puVar6[uVar7].unitType == Highlight1 || (Highlight1 == 0xff)))) {
-        uVar1 = puVar6[uVar7].x;
-        uVar2 = puVar6[uVar7].y;
-        if (((((Highlight1 == -2) && (puVar6[uVar7].level < 8)) ||
-             (*(char *)((uint)(puVar6 + uVar7)->bldType * 0x27 + 0x133) == Highlight1)) &&
-            ((Seed_2000_d110 <= (int)uVar1 && (uVar1 <= Seed_2000_d110 + 0x69U)))) &&
-           ((Seed_2000_d10e <= (int)uVar2 && (uVar2 <= Seed_2000_d10e + 0x2fU)))) {
-          cVar4 = ((char)uVar2 - (char)Seed_2000_d10e) * '\x03';
-          x1 = (uVar1 - Seed_2000_d110) * 2 + 0xc;
-          iVar5 = (uint)*(byte *)((uint)(puVar6 + uVar7)->bldType * 0x27 + 0x11b) * 2 + -1;
-          ovr_driver_fillSpan(x1,x1 + iVar5,cVar4 + 9,0x75,&((brect_t *)BlitRects)->x,0x2410);
-          ovr_driver_fillSpan(x1,x1 + iVar5,cVar4 + 10,0x75,&((brect_t *)BlitRects)->x,0x2410);
-          ovr_driver_fillSpan(x1,x1 + iVar5,cVar4 + 0xb,0x75,&((brect_t *)BlitRects)->x,0x2410);
+      if (((puVar6[unitIndex].unitType != 0xff) &&
+          (unitRec = *(uint32_t *)((uint)puVar6[unitIndex].unitType << 2),
+          *(char *)((int)unitRec + 0x3f) == '\0')) &&
+         ((puVar6[unitIndex].unitType == Highlight1 || (Highlight1 == 0xff)))) {
+        ux = puVar6[unitIndex].x;
+        uy = puVar6[unitIndex].y;
+        if (((((Highlight1 == -2) && (puVar6[unitIndex].level < 8)) ||
+             (*(char *)((uint)(puVar6 + unitIndex)->bldType * 0x27 + 0x133) == Highlight1)) &&
+            ((Seed_2000_d110 <= (int)ux && (ux <= Seed_2000_d110 + 0x69U)))) &&
+           ((Seed_2000_d10e <= (int)uy && (uy <= Seed_2000_d10e + 0x2fU)))) {
+          rowY = ((char)uy - (char)Seed_2000_d10e) * '\x03';
+          x1 = (ux - Seed_2000_d110) * 2 + 0xc;
+          spanW = (uint)*(byte *)((uint)(puVar6 + unitIndex)->bldType * 0x27 + 0x11b) * 2 + -1;
+          ovr_driver_fillSpan(x1,x1 + spanW,rowY + 9,0x75,&((brect_t *)BlitRects)->x,0x2410);
+          ovr_driver_fillSpan(x1,x1 + spanW,rowY + 10,0x75,&((brect_t *)BlitRects)->x,0x2410);
+          ovr_driver_fillSpan(x1,x1 + spanW,rowY + 0xb,0x75,&((brect_t *)BlitRects)->x,0x2410);
         }
       }
     }

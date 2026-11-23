@@ -896,41 +896,41 @@ void __cdecl16far agnt_compute13(agnt_t *agnt,uint16_t arg2)
 void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
 
 {
-  char *pcVar1;
+  char *cellPtr;
   int ofs;
   int rec;
-  uint16_t uStack_4;
+  uint16_t agentIndex;
   
   if ((int)fromIndex < toIndex) {
     for (rec = 0; rec < 10; rec = rec + 1) {
       for (ofs = 0; ofs < 0x69; ofs = ofs + 1) {
         if (((int)(fromIndex + 1) < (int)(uint)*(byte *)(rec * 0x69 + ofs + 0x8fa)) &&
            ((int)(uint)*(byte *)(rec * 0x69 + ofs + 0x8fa) <= toIndex + 1)) {
-          pcVar1 = (char *)(rec * 0x69 + ofs + 0x8fa);
-          *pcVar1 = *pcVar1 + -1;
+          cellPtr = (char *)(rec * 0x69 + ofs + 0x8fa);
+          *cellPtr = *cellPtr + -1;
         }
         else if ((uint)*(byte *)(rec * 0x69 + ofs + 0x8fa) == fromIndex + 1) {
           *(char *)(rec * 0x69 + ofs + 0x8fa) = (char)toIndex + '\x01';
         }
         if (((int)(fromIndex + 1) < (int)(uint)*(byte *)(rec * 0x69 + ofs + 0x4e0)) &&
            ((int)(uint)*(byte *)(rec * 0x69 + ofs + 0x4e0) <= toIndex + 1)) {
-          pcVar1 = (char *)(rec * 0x69 + ofs + 0x4e0);
-          *pcVar1 = *pcVar1 + -1;
+          cellPtr = (char *)(rec * 0x69 + ofs + 0x4e0);
+          *cellPtr = *cellPtr + -1;
         }
         else if ((uint)*(byte *)(rec * 0x69 + ofs + 0x4e0) == fromIndex + 1) {
           *(char *)(rec * 0x69 + ofs + 0x4e0) = (char)toIndex + '\x01';
         }
       }
     }
-    for (uStack_4 = 0; uStack_4 < (int)(uint)AgntCount; uStack_4 = uStack_4 + 1) {
-      if (*(char *)(uStack_4 * 0x34 + 0xc) != -1) {
-        if (((int)fromIndex < (int)(uint)*(byte *)(uStack_4 * 0x34 + 0xc)) &&
-           ((int)(uint)*(byte *)(uStack_4 * 0x34 + 0xc) <= toIndex)) {
-          pcVar1 = (char *)(uStack_4 * 0x34 + 0xc);
-          *pcVar1 = *pcVar1 + -1;
+    for (agentIndex = 0; agentIndex < (int)(uint)AgntCount; agentIndex = agentIndex + 1) {
+      if (*(char *)(agentIndex * 0x34 + 0xc) != -1) {
+        if (((int)fromIndex < (int)(uint)*(byte *)(agentIndex * 0x34 + 0xc)) &&
+           ((int)(uint)*(byte *)(agentIndex * 0x34 + 0xc) <= toIndex)) {
+          cellPtr = (char *)(agentIndex * 0x34 + 0xc);
+          *cellPtr = *cellPtr + -1;
         }
-        else if (*(byte *)(uStack_4 * 0x34 + 0xc) == fromIndex) {
-          *(char *)(uStack_4 * 0x34 + 0xc) = (char)toIndex;
+        else if (*(byte *)(agentIndex * 0x34 + 0xc) == fromIndex) {
+          *(char *)(agentIndex * 0x34 + 0xc) = (char)toIndex;
         }
       }
     }
@@ -945,8 +945,8 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
           }
         }
         else {
-          pcVar1 = (char *)(rec * 0x69 + ofs + 0x8fa);
-          *pcVar1 = *pcVar1 + '\x01';
+          cellPtr = (char *)(rec * 0x69 + ofs + 0x8fa);
+          *cellPtr = *cellPtr + '\x01';
         }
         if (((int)(uint)*(byte *)(rec * 0x69 + ofs + 0x4e0) < toIndex + 1) ||
            ((int)(fromIndex + 1) <= (int)(uint)*(byte *)(rec * 0x69 + ofs + 0x4e0))) {
@@ -955,22 +955,22 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
           }
         }
         else {
-          pcVar1 = (char *)(rec * 0x69 + ofs + 0x4e0);
-          *pcVar1 = *pcVar1 + '\x01';
+          cellPtr = (char *)(rec * 0x69 + ofs + 0x4e0);
+          *cellPtr = *cellPtr + '\x01';
         }
       }
     }
-    for (uStack_4 = 0; uStack_4 < (int)(uint)AgntCount; uStack_4 = uStack_4 + 1) {
-      if (*(char *)(uStack_4 * 0x34 + 0xc) != -1) {
-        if (((int)(uint)*(byte *)(uStack_4 * 0x34 + 0xc) < toIndex) ||
-           ((int)fromIndex <= (int)(uint)*(byte *)(uStack_4 * 0x34 + 0xc))) {
-          if (*(byte *)(uStack_4 * 0x34 + 0xc) == fromIndex) {
-            *(char *)(uStack_4 * 0x34 + 0xc) = (char)toIndex;
+    for (agentIndex = 0; agentIndex < (int)(uint)AgntCount; agentIndex = agentIndex + 1) {
+      if (*(char *)(agentIndex * 0x34 + 0xc) != -1) {
+        if (((int)(uint)*(byte *)(agentIndex * 0x34 + 0xc) < toIndex) ||
+           ((int)fromIndex <= (int)(uint)*(byte *)(agentIndex * 0x34 + 0xc))) {
+          if (*(byte *)(agentIndex * 0x34 + 0xc) == fromIndex) {
+            *(char *)(agentIndex * 0x34 + 0xc) = (char)toIndex;
           }
         }
         else {
-          pcVar1 = (char *)(uStack_4 * 0x34 + 0xc);
-          *pcVar1 = *pcVar1 + '\x01';
+          cellPtr = (char *)(agentIndex * 0x34 + 0xc);
+          *cellPtr = *cellPtr + '\x01';
         }
       }
     }
