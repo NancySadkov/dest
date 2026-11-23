@@ -675,3 +675,32 @@ route is taken (the entry is `_STARTX 0069:002B` in this link, versus
 
 The switch is kept (default link unchanged, still 0 errors, 1,630/0/0 state) so
 the experiment can be resumed deliberately rather than re-derived.
+
+### NO_OVERLAY trace: the entry point does not reach startx
+
+`AH=40h` markers were placed at the first statement after the `DS=DGROUP` setup
+and after `SaveVectors`, before `_setupio`, after `_c0crtinit` and before the
+`main` call (`tmp/trace_startx.py`).  In the `NO_OVERLAY=1` build:
+
+```
+OUT.BIN 0 bytes        (not even the first marker)
+DONE.FLG present       (the program exits, code 0)
+entry _STARTX 0069:002B
+```
+
+So in the non-overlay link the program terminates **before** the `DS=DGROUP`
+assignment, i.e. the computed entry does not run `startx` at all.  With the
+overlay link the same image reaches `main`'s entry (the DGROUP dump works), so
+the difference is the entry/startup mapping in the non-overlay link, not the
+trace channel.
+
+Likely cause: `link_standalone.py` patches the EXE header's CS:IP from the map
+symbol `_STARTX`, and in the non-overlay link the map's segment numbering no
+longer matches the file layout the way the overlay link did (the overlay link
+carries a fixed resident segment table; the non-overlay link renumbers
+everything).  The entry then lands in unrelated code that returns to DOS.
+
+Next probe for this route: verify the patched CS:IP points at the bytes of
+`startx`'s prologue in the non-overlay image (compare the first bytes with the
+map offset); if not, derive the load-relative offset from `e_cparhdr` plus the
+map's segment start rather than from the segment value alone.
