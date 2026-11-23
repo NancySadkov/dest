@@ -271,3 +271,45 @@ high word of `ovr_stshRleType2`'s return), not `0x195d`.
 
 Status: three `ovc15` sites converted; `ovc44`/`ovc46`/`ovc48`/`ovc49` still to do
 with the two-part transform above.
+
+## Second transform (argument seed): proven on one chain, not yet scaled
+
+Per the same disassembly, the **argument** to `stshStoreFile` is the whole far
+pointer returned by `ovr_stshRleType2`:
+
+```
+003e CALLF ovr_stshRleType2
+0046 PUSH DX / PUSH AX        ; the far pointer is the 2nd argument
+0048 CALLF ovr_stshStoreFile
+```
+
+Ghidra lost that segment as well, seeding a rolling variable with the dead
+`0x195d` (or reading `in_DX`) *before* the call.  Inline asm can capture it
+correctly right after the call:
+
+```c
+pfVar2 = ovr_stshRleType2(...);
+asm { mov uVar3,dx };          /* segment of pfVar2 */
+BldGfxNormal[0x201].ofs = stsh_store((uint8_t *)pfVar2, (uint16_t)uVar3, &stshSegTmp);
+...
+BldGfxNormal[0x201].seg = stshSegTmp;
+```
+
+That form was applied to the first two elements of the `ovc46` chain, compiled
+clean and reduced the gate by 2 - then **reverted**: the rest of the chain still
+used the previous element's variable, so a two-element change leaves the chain
+inconsistent.  A partial conversion is worse than none.
+
+Why the scripted pass does not scale as written (`tmp/fix_seed_file.py`):
+
+```
+ovc46_assets.c   captured 2, no RLE match 0, 0x195d left 177
+```
+
+Most `ovr_stshRleType2(...)` calls wrap over two source lines, so the
+single-line matcher only sees the first chain.  The next attempt needs a
+multi-line call matcher (match up to the closing `);`) before it can be applied
+file-wide.
+
+Status: the `.seg` half is fixed for 543 results; the argument seed is unchanged
+(704 literals) and needs this multi-line-aware pass.
