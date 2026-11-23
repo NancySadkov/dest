@@ -1469,3 +1469,36 @@ The measured facts that are not in doubt:
 * the handler's loader routine is at `_OVRTEXT_+0x59F` and its stages are
   visible in the map-relative disassembly (`call 0x8155` size/slot, `call word
   es:[0x18]` read, `call 0x8330` fixups, `call 0x8380` add-to-list).
+
+### Self-consistent run: main and the manager handler are both reached
+
+`tmp/ovr_stage2.py` puts main's marker and one manager-stage marker in the *same*
+build, which resolves the earlier two-build conflict:
+
+```
+baseline (no stage marker)   A0I     alloc ok, _OVRINIT INIT_OKAY, main at the call
+handler entry  +0x4EF        A0IX    the manager's INT 3Fh handler IS entered
+loader start   +0x59F        A0II
+resident check +0x5BA        A0II
+size/slot      +0x5C0        A0II
+read call      +0x5CC        A0II
+fixups call    +0x5D3        A0II
+```
+
+Two facts are now certain:
+
+* `_OVRTEXT_` base `0x7D00`, handler `0x81EF`; marking `+0x4EF` produces `X`, so
+  the manager's own handler runs in the same image that reaches `main`;
+* the earlier "no marker fired" result was an artefact of the stage-probe build
+  not marking `main` at all, i.e. it could not distinguish "handler not reached"
+  from "program never got that far".
+
+Open anomaly: the loader-stage markers produce `A0II` - **two** main markers and
+no `X`. Since the INT 60h handler always writes `X` before spinning, the second
+`I` means the main marker executed twice in those runs. That is the next thing to
+explain; plausible causes are the marker landing inside an instruction that
+changes control flow so the call is retried, or `main` being re-entered from the
+manager's failure path.
+
+The important gain: the question is no longer "is the handler reached" (it is)
+but "why does a marker inside the loader alter main's execution".
