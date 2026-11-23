@@ -478,7 +478,7 @@ uint16_t __cdecl16far run_demo(void)
   uint16_t uVar3;
   undefined1 extraout_AH;
   undefined1 uVar5;
-  uint8_t *puVar4;
+  uint8_t *pal;
   uint16_t uVar6;
   int iVar7;
   uint16_t unaff_DI;
@@ -1047,33 +1047,33 @@ uint16_t __cdecl16far run_demo(void)
                                                     uVar3 = 0x2400;
                                                   }
                                                   else {
-                                                    puVar4 = palette;
-                                                    ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
-                                                    uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+                                                    pal = palette;
+                                                    ovc42_endDemo('\x03',(int)pal,unaff_SS);
+                                                    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
                                                   else {
-                                                    puVar4 = palette;
-                                                    ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
-                                                    uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+                                                    pal = palette;
+                                                    ovc42_endDemo('\x03',(int)pal,unaff_SS);
+                                                    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
                                                   else {
-                                                    puVar4 = palette;
-                                                    ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
-                                                    uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+                                                    pal = palette;
+                                                    ovc42_endDemo('\x03',(int)pal,unaff_SS);
+                                                    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
                                                   else {
-                                                    puVar4 = palette;
-                                                    ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
-                                                    uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+                                                    pal = palette;
+                                                    ovc42_endDemo('\x03',(int)pal,unaff_SS);
+                                                    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
                                                   else {
-                                                    puVar4 = palette;
-                                                    ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
-                                                    uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+                                                    pal = palette;
+                                                    ovc42_endDemo('\x03',(int)pal,unaff_SS);
+                                                    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
                                                   else {
@@ -1098,9 +1098,9 @@ uint16_t __cdecl16far run_demo(void)
                                               }
                                             }
                                             else {
-                                              puVar4 = palette;
-                                              ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
-                                              uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+                                              pal = palette;
+                                              ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                                              uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                             }
                                           }
                                           else {
@@ -1124,45 +1124,45 @@ uint16_t __cdecl16far run_demo(void)
                                     }
                                   }
                                   else {
-                                    puVar4 = palette;
-                                    ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
-                                    uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+                                    pal = palette;
+                                    ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                                    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                   }
                                 }
                                 else {
-                                  puVar4 = palette;
-                                  ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
-                                  uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+                                  pal = palette;
+                                  ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                                  uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                 }
                               }
                               else {
-                                puVar4 = palette;
-                                ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
-                                uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+                                pal = palette;
+                                ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                                uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                               }
                             }
                             else {
-                              puVar4 = palette;
-                              ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
-                              uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+                              pal = palette;
+                              ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                              uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                             }
                           }
                           else {
-                            puVar4 = palette;
-                            ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
-                            uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+                            pal = palette;
+                            ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                            uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                           }
                         }
                         else {
-                          puVar4 = palette;
-                          ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
-                          uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+                          pal = palette;
+                          ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                          uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                         }
                       }
                       else {
-                        puVar4 = palette;
-                        ovc42_endDemo('\x01',(int)puVar4,unaff_SS);
-                        uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+                        pal = palette;
+                        ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                        uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                       }
                     }
                     else {
@@ -1191,33 +1191,33 @@ uint16_t __cdecl16far run_demo(void)
             }
           }
           else {
-            puVar4 = palette;
-            ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
-            uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+            pal = palette;
+            ovc42_endDemo('\x03',(int)pal,unaff_SS);
+            uVar3 = CONCAT11((char)((uint)pal >> 8),1);
           }
         }
         else {
-          puVar4 = palette;
-          ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
-          uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+          pal = palette;
+          ovc42_endDemo('\x03',(int)pal,unaff_SS);
+          uVar3 = CONCAT11((char)((uint)pal >> 8),1);
         }
       }
       else {
-        puVar4 = palette;
-        ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
-        uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+        pal = palette;
+        ovc42_endDemo('\x03',(int)pal,unaff_SS);
+        uVar3 = CONCAT11((char)((uint)pal >> 8),1);
       }
     }
     else {
-      puVar4 = palette;
-      ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
-      uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+      pal = palette;
+      ovc42_endDemo('\x03',(int)pal,unaff_SS);
+      uVar3 = CONCAT11((char)((uint)pal >> 8),1);
     }
   }
   else {
-    puVar4 = palette;
-    ovc42_endDemo('\x03',(int)puVar4,unaff_SS);
-    uVar3 = CONCAT11((char)((uint)puVar4 >> 8),1);
+    pal = palette;
+    ovc42_endDemo('\x03',(int)pal,unaff_SS);
+    uVar3 = CONCAT11((char)((uint)pal >> 8),1);
   }
   return uVar3;
 }
