@@ -1592,10 +1592,10 @@ char * __cdecl16far stats_readyStatusText(byte agntIndex,char *text)
   byte in_stack_00000004;
   undefined1 in_stack_00000007;
   
-  uVar1 = *(uint32_t *)((uint)in_stack_00000004 * 0x34 + 0x17);
+  uVar1 = *(uint32_t far *)&Agnts[in_stack_00000004].entity;
   if ((*(byte *)((int)uVar1 + 0x33) & 1) == 0) {
     uVar4 = SEG_OF(Agnts);
-    uVar1 = *(uint32_t *)((uint)in_stack_00000004 * 0x34 + 0x1d);
+    uVar1 = *(uint32_t far *)&Agnts[in_stack_00000004].gdata;
     uVar6 = (uint16_t)((ulong)uVar1 >> 0x10);
     iVar5 = (int)uVar1;
     puVar2 = ovr_ovc15_usesStshRealloc
@@ -1605,7 +1605,7 @@ char * __cdecl16far stats_readyStatusText(byte agntIndex,char *text)
   }
   else {
     uVar4 = SEG_OF(Agnts);
-    uVar1 = *(uint32_t *)((uint)in_stack_00000004 * 0x34 + 0x1d);
+    uVar1 = *(uint32_t far *)&Agnts[in_stack_00000004].gdata;
     uVar6 = (uint16_t)((ulong)uVar1 >> 0x10);
     iVar5 = (int)uVar1;
     puVar2 = ovr_ovc15_usesStshRealloc
@@ -1664,38 +1664,38 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
   uint8_t unitFlags;
   int iStack_4;
   
-  entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+  entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
   uVar8 = text;
   pcStack_d4 = (char *)(CONCAT22(text,(uint)*(byte *)((int)entityFar + 0x33)) ^ 1);
-  entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+  entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
   *(undefined1 *)((int)entityFar + 0x33) = (char)pcStack_d4;
-  entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+  entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
   if ((*(byte *)((int)entityFar + 0x33) & 1) == 0) {
-    entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+    entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
     pbVar1 = (byte *)((int)entityFar + 0x33);
     *pbVar1 = *pbVar1 & 0xfb;
   }
   else {
-    entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+    entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
     text = uVar8;
     stats_usesEntityCount(*(char *)((int)entityFar + 0x1a));
-    entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+    entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
     pbVar1 = (byte *)((int)entityFar + 0x33);
     *pbVar1 = *pbVar1 | 4;
-    iStack_4 = *(int *)((uint)agnt_id * 0x34 + 0x1b);
+    iStack_4 = Agnts[agnt_id].owner;
     pcStack_d4 = (char *)CONCAT22(text,_SS);
     ovr_attact_usesEntities(iStack_4,0,0,(uint16_t)&unitFlags,(uint16_t)_SS,0,0,0,0);
   }
-  entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
-  uVar3 = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+  entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
+  uVar3 = *(uint32_t far *)&Agnts[agnt_id].entity;
   *(byte *)((int)uVar3 + 0x33) = *(byte *)((int)entityFar + 0x33) & 0xfd;
   pcStack_d4 = (char *)((ulong)pcStack_d4 & 0xffff0000);
   drawAgntStats((agnt_t *)((uint)agnt_id * 0x34),far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
   uVar6 = SEG_OF(Agnts);
-  entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x17);
+  entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
   if ((*(byte *)((int)entityFar + 0x33) & 1) == 0) {
     uVar6 = SEG_OF(Agnts);
-    entityFar = *(uint32_t *)((uint)agnt_id * 0x34 + 0x1d);
+    entityFar = *(uint32_t far *)&Agnts[agnt_id].gdata;
     uVar8 = (uint16_t)((ulong)entityFar >> 0x10);
     iVar7 = (int)entityFar;
     puVar4 = ovr_ovc15_usesStshRealloc
@@ -1804,9 +1804,9 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   uint16_t uStack_a;
   uint8_t unitFlags;
   
-  entityIndex = *(int *)((uint)agntIndex * 0x34 + 0x1b);
-  uStack_a = *(uint16_t *)((uint)agntIndex * 0x34 + 0x1f);
-  iStack_c = *(int *)((uint)agntIndex * 0x34 + 0x1d);
+  entityIndex = Agnts[agntIndex].owner;
+  uStack_a = AGNT_WORD(&Agnts[agntIndex], gdata, 2);
+  iStack_c = AGNT_WORD(&Agnts[agntIndex], gdata, 0);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
   ((entity_t *)Entities)[entityIndex].base.x = iVar2;
   ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
@@ -1852,9 +1852,9 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
   uint16_t uStack_a;
   uint8_t unitFlags;
   
-  entityIndex = *(int *)((uint)agntIndex * 0x34 + 0x1b);
-  uStack_a = *(uint16_t *)((uint)agntIndex * 0x34 + 0x1f);
-  iStack_c = *(int *)((uint)agntIndex * 0x34 + 0x1d);
+  entityIndex = Agnts[agntIndex].owner;
+  uStack_a = AGNT_WORD(&Agnts[agntIndex], gdata, 2);
+  iStack_c = AGNT_WORD(&Agnts[agntIndex], gdata, 0);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
   ((entity_t *)Entities)[entityIndex].base.x = iVar2;
   ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
@@ -1891,9 +1891,9 @@ undefined1 __cdecl16far stats_nextAgentByOwner(byte agntIndex)
   uStack_3 = 0xff;
   uVar2 = 0x7fff;
   for (iVar1 = 0; iVar1 < (int)(uint)AgntCount; iVar1 = iVar1 + 1) {
-    if ((*(uint *)((uint)agntIndex * 0x34 + 0x1b) < *(uint *)(iVar1 * 0x34 + 0x1b)) &&
-       (*(uint *)(iVar1 * 0x34 + 0x1b) < uVar2)) {
-      uVar2 = *(uint *)(iVar1 * 0x34 + 0x1b);
+    if ((Agnts[agntIndex].owner < Agnts[iVar1].owner) &&
+       (Agnts[iVar1].owner < uVar2)) {
+      uVar2 = Agnts[iVar1].owner;
       uStack_3 = (undefined1)iVar1;
     }
   }
@@ -1916,9 +1916,9 @@ undefined1 __cdecl16far stats_prevAgentByOwner(byte agntIndex)
   uStack_3 = 0xff;
   iVar2 = -1;
   for (iVar1 = 0; iVar1 < (int)(uint)AgntCount; iVar1 = iVar1 + 1) {
-    if ((*(uint *)(iVar1 * 0x34 + 0x1b) < *(uint *)((uint)agntIndex * 0x34 + 0x1b)) &&
-       (iVar2 < *(int *)(iVar1 * 0x34 + 0x1b))) {
-      iVar2 = *(int *)(iVar1 * 0x34 + 0x1b);
+    if ((Agnts[iVar1].owner < Agnts[agntIndex].owner) &&
+       (iVar2 < Agnts[iVar1].owner)) {
+      iVar2 = Agnts[iVar1].owner;
       uStack_3 = (undefined1)iVar1;
     }
   }
@@ -1934,7 +1934,7 @@ undefined1 __cdecl16far stats_prevAgentByOwner(byte agntIndex)
 void __cdecl16far stats_compute5(byte agntIndex)
 
 {
-  ovr_ovc15_usesStExit(*(int *)((uint)agntIndex * 0x34 + 0x1b));
+  ovr_ovc15_usesStExit(Agnts[agntIndex].owner);
   return;
 }
 
@@ -1952,7 +1952,7 @@ void __cdecl16far stats_openAgentDetail(int agntIndex)
   int iVar2;
   uint uVar3;
   
-  iVar2 = *(int *)(agntIndex * 0x34 + 0x1b);
+  iVar2 = Agnts[agntIndex].owner;
   ovr_manage_openTalkWindow();
   ScreenMode = 2;
   drawAgntStats((agnt_t *)(agntIndex * 0x34),far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
@@ -2068,29 +2068,29 @@ stats_usesAlignUp42(byte agntIndex,byte gfxIndex,int16_t x,int16_t y,brect_t *re
   CurMusicType = 0xff;
 L_stats_6386_1c9f_1E1D:
   for (; GCharLevelsInc != '\0'; GCharLevelsInc = GCharLevelsInc + -1) {
-    uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x1d);
+    uVar1 = *(uint32_t far *)&Agnts[agntIndex].gdata;
     bStack_3 = *(byte *)((int)uVar1 + 0x46);
     if (bStack_3 == 0xff) {
       bStack_3 = 0;
     }
-    uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
+    uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
     piVar12 = (int *)((uint)bStack_3 * 0x94 + (uint)*(byte *)((int)uVar1 + 0xf) * 4);
     if (*piVar12 != 0 || piVar12[1] != 0) {
-      uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
+      uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
       puVar13 = (uint16_t *)((uint)bStack_3 * 0x94 + (uint)*(byte *)((int)uVar1 + 0xf) * 4);
       uVar16 = *puVar13;
-      uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
+      uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
       uVar15 = (uint16_t)((ulong)uVar1 >> 0x10);
       iVar14 = (int)uVar1;
       *(uint16_t *)(iVar14 + 0x12) = puVar13[1];
       *(uint16_t *)(iVar14 + 0x10) = uVar16;
-      uVar16 = *(uint16_t *)((uint)agntIndex * 0x34 + 0x19);
+      uVar16 = AGNT_WORD(&Agnts[agntIndex], entity, 2);
       ovr_ovc41_compute3(CONCAT13((char)((uint)uVar16 >> 8),
                                   CONCAT12((char)uVar16,
-                                           *(uint16_t *)((uint)agntIndex * 0x34 + 0x17))));
+                                           AGNT_WORD(&Agnts[agntIndex], entity, 0))));
     }
   }
-  iVar14 = *(int *)((uint)agntIndex * 0x34 + 0x1b);
+  iVar14 = Agnts[agntIndex].owner;
   stats_openAgentDetail((uint)agntIndex);
   uVar16 = (uint16_t)((ulong)Entities >> 0x10);
   if (((entity_t *)Entities)[iVar14].base.targetY == GfxRndSeed2) {
@@ -2099,7 +2099,7 @@ L_stats_6386_1c9f_1E1D:
     uVar18 = (undefined1)(uVar5 >> 8);
     uVar5 = ovr_alignUp4(GfxRndSeed,0,0);
     if (CONCAT11(uVar18,uVar17) == uVar5) {
-      uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
+      uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
       ovr_ovc39_textHalflingCastle(*(byte *)((int)uVar1 + 0x1a));
     }
   }
@@ -2125,7 +2125,7 @@ L_stats_6386_1c9f_1ECD:
   }
   uStack_f = 5;
   uStack_e = 7;
-  uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
+  uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
   if (*(char *)((int)uVar1 + 0x1a) == -1) {
     uStack_2e = 0;
     uStack_30 = 0;
@@ -2141,7 +2141,7 @@ L_stats_6386_1c9f_1ECD:
   uStack_26 = 0x2410;
   uStack_28 = 0x6401;
   puVar9 = (uint8_t *)((int)&AgntAnms[0x75].halfWidth + 1);
-  if (*(char *)*(uint32_t *)((uint)agntIndex * 0x34 + 0x1d) == '\0') {
+  if (*(char *)*(uint32_t far *)&Agnts[agntIndex].gdata == '\0') {
     menuBarShown = 1;
   }
   entries_00.seg = _SS;
@@ -2181,25 +2181,25 @@ L_stats_6386_1c9f_1ECD:
             ovr_agnt_usesAlignToSeg();
             return bVar3;
           }
-          uVar1 = *(uint32_t *)(uVar5 * 0x34 + 0x1d);
+          uVar1 = *(uint32_t far *)&Agnts[uVar5].gdata;
           uVar8 = uVar5;
           if (*(char *)((int)uVar1 + 1) == '\x02') break;
-          uVar1 = *(uint32_t *)(uVar5 * 0x34 + 0x1d);
+          uVar1 = *(uint32_t far *)&Agnts[uVar5].gdata;
           if (*(char *)((int)uVar1 + 1) == '\x01') {
             *(uint16_t *)(uVar5 * 0x34) = 0x3d;
-            *(uint16_t *)(uVar5 * 0x34 + 2) = 0x12;
+            Agnts[uVar5].y = 0x12;
           }
           else {
-            uVar1 = *(uint32_t *)(uVar5 * 0x34 + 0x1d);
+            uVar1 = *(uint32_t far *)&Agnts[uVar5].gdata;
             if (*(char *)((int)uVar1 + 1) == '\v') {
               *(uint16_t *)(uVar5 * 0x34) = 0x56;
-              *(uint16_t *)(uVar5 * 0x34 + 2) = 0x14;
+              Agnts[uVar5].y = 0x14;
             }
           }
         }
 switchD_6000_58bf_caseD_5:
         *(uint16_t *)(uVar5 * 0x34) = 0x6e;
-        *(uint16_t *)(uVar8 * 0x34 + 2) = 0xb;
+        Agnts[uVar8].y = 0xb;
         uVar5 = uVar8;
       } while( true );
     case 1:
@@ -2272,21 +2272,21 @@ switchD_6000_58bf_caseD_5:
     }
   }
   else if (uVar5 == 0xfc) {
-    uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
+    uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
     if ((*(byte *)((int)uVar1 + 0x33) & 1) == 0) {
       stats_unreadyNotice(agntIndex);
     }
   }
   else if (uVar5 < 0xfd) {
     if (uVar5 == 7) {
-      uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
+      uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
       if (*(char *)((int)uVar1 + 0x1a) != -1) {
         ovr_stop_audio();
         CurMusicType = 0xff;
-        uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
+        uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
         ovr_manage_settlementScreen(*(byte *)((int)uVar1 + 0x1a));
         if (Cancelled == 0) {
-          iVar14 = *(int *)((uint)agntIndex * 0x34 + 0x1b);
+          iVar14 = Agnts[agntIndex].owner;
           stats_openAgentDetail((uint)agntIndex);
           uVar16 = (uint16_t)((ulong)Entities >> 0x10);
           if (((entity_t *)Entities)[iVar14].base.targetY == GfxRndSeed2) {
@@ -2295,7 +2295,7 @@ switchD_6000_58bf_caseD_5:
             uVar18 = (undefined1)(uVar5 >> 8);
             uVar5 = ovr_alignUp4(GfxRndSeed,0,0);
             if (CONCAT11(uVar18,uVar17) == uVar5) {
-              uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
+              uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
               ovr_ovc39_textHalflingCastle(*(byte *)((int)uVar1 + 0x1a));
             }
           }
@@ -2315,17 +2315,17 @@ switchD_6000_58bf_caseD_5:
   }
   else if (uVar5 == 0xfd) {
 L_stats_6386_1c9f_20C5:
-    uVar5 = stats_usesAlignUp4(*(int *)((uint)agntIndex * 0x34 + 0x1b));
+    uVar5 = stats_usesAlignUp4(Agnts[agntIndex].owner);
     if ((uVar5 & 0xff) == 0) {
       stats_setAgentBase(agntIndex);
     }
   }
   else if (uVar5 == 0xfe) {
-    uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + 0x17);
+    uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
     if ((*(byte *)((int)uVar1 + 0x33) & 1) != 0) {
       stats_unreadyNotice(agntIndex);
     }
-    uVar5 = stats_usesAlignUp4(*(int *)((uint)agntIndex * 0x34 + 0x1b));
+    uVar5 = stats_usesAlignUp4(Agnts[agntIndex].owner);
     if ((char)uVar5 != '\0') {
       stats_calledAwayNotice(agntIndex);
     }

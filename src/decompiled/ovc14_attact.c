@@ -373,14 +373,14 @@ void __cdecl16far attact_usesAgntFlag1(void)
     bVar3 = ovr_ovc15_usesAlignUp42();
     if (bVar3) {
       for (iVar5 = 0; iVar5 < (int)(uint)AgntCount; iVar5 = iVar5 + 1) {
-        uVar1 = *(uint32_t *)(iVar5 * 0x34 + 0x17);
-        *(undefined1 *)((int)uVar1 + 0x31) = *(undefined1 *)(iVar5 * 0x34 + 0x21);
+        uVar1 = *(uint32_t far *)&Agnts[iVar5].entity;
+        *(undefined1 *)((int)uVar1 + 0x31) = Agnts[iVar5].strength;
       }
     }
     else {
       for (iVar5 = 0; iVar5 < (int)(uint)AgntCount; iVar5 = iVar5 + 1) {
-        uVar1 = *(uint32_t *)(iVar5 * 0x34 + 0x17);
-        uVar2 = *(uint32_t *)(iVar5 * 0x34 + 0x17);
+        uVar1 = *(uint32_t far *)&Agnts[iVar5].entity;
+        uVar2 = *(uint32_t far *)&Agnts[iVar5].entity;
         *(undefined1 *)((int)uVar2 + 0x31) = *(undefined1 *)((int)uVar1 + 0x32);
       }
     }
@@ -468,9 +468,9 @@ int __cdecl16far attact_usesAgntCount(int ownerIndex)
   
   uStack_3 = 0;
   for (bVar3 = 0; bVar3 < AgntCount; bVar3 = bVar3 + 1) {
-    if (((*(int *)((uint)bVar3 * 0x34 + 0x1b) == ownerIndex) &&
-        (*(char *)((uint)bVar3 * 0x34 + 0x25) != '\x02')) &&
-       ((*(uint *)((uint)bVar3 * 0x34 + 0x2b) & 0xae4) == 0)) {
+    if (((Agnts[bVar3].owner == ownerIndex) &&
+        (Agnts[bVar3].moveState != '\x02')) &&
+       ((Agnts[bVar3].flags & 0xae4) == 0)) {
       uStack_3 = uStack_3 + 1;
     }
   }
@@ -1559,16 +1559,16 @@ void __cdecl16far attact_usesAgntCount2(uint16_t *sum,uint16_t *enemySum)
   ((uint16_t *)sum)[1] = 0;
   *sum = 0;
   for (iVar4 = 0; iVar4 < (int)(uint)AgntCount; iVar4 = iVar4 + 1) {
-    if ((*(uint *)(iVar4 * 0x34 + 0x2b) & 0xae4) == 0) {
-      if (*(char *)(iVar4 * 0x34 + 0x2f) == '\0') {
-        uVar3 = (uint)*(byte *)(iVar4 * 0x34 + 0x21);
+    if ((Agnts[iVar4].flags & 0xae4) == 0) {
+      if (Agnts[iVar4].faction == '\0') {
+        uVar3 = (uint)Agnts[iVar4].strength;
         uVar2 = *sum;
         *sum = *sum + uVar3;
         puVar1 = (uint16_t *)sum + 1;
         *puVar1 = *puVar1 + (uint)CARRY2(uVar2,uVar3);
       }
       else {
-        uVar3 = (uint)*(byte *)(iVar4 * 0x34 + 0x21);
+        uVar3 = (uint)Agnts[iVar4].strength;
         uVar2 = *enemySum;
         *enemySum = *enemySum + uVar3;
         puVar1 = (uint16_t *)enemySum + 1;

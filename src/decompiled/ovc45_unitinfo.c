@@ -338,7 +338,7 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
   uint uVar2;
   byte extraout_AH_00;
   
-  if ((*(uint *)((uint)bldType * 0x27 + 0x121) & 0x10) != 0) {
+  if ((BuildingTypes[bldType].flags2 & 0x10) != 0) {
     uVar2 = ovc45_usesGMapFlags(x,y + 1);
     if ((((uVar2 & 0xff) == 0) && (uVar2 = ovc45_usesGMapFlags(x,y), (uVar2 & 0xff) == 0)) &&
        (uVar2 = ovc45_usesGMapFlags(x,y + -1), (uVar2 & 0xff) == 0)) {
@@ -541,12 +541,12 @@ uint __cdecl16far ovc45_compute4(int x,uint16_t y,uint16_t arg3)
       bVar1 = ovc45_getUnitType(x,y);
       if (CONCAT11(extraout_AH,bVar1) == 0) {
         bVar1 = ovc45_getUnitType(x + -1,y);
-        if (*(byte *)((uint)bVar1 * 0x27 + 0x11b) < 2) {
+        if (BuildingTypes[bVar1].size < 2) {
           bVar1 = ovc45_getUnitType(x + -2,y);
-          if (*(byte *)((uint)bVar1 * 0x27 + 0x11b) < 3) {
+          if (BuildingTypes[bVar1].size < 3) {
             bVar1 = ovc45_getUnitType(x + -3,y);
             bVar3 = (byte)((uint)bVar1 * 0x27 >> 8);
-            if (*(byte *)((uint)bVar1 * 0x27 + 0x11b) < 4) {
+            if (BuildingTypes[bVar1].size < 4) {
               uVar2 = CONCAT11(bVar3,1);
             }
             else {
@@ -624,7 +624,7 @@ bool __cdecl16far ovc45_textArena2(byte bldType)
   uint uVar3;
   uint16_t uVar4;
   
-  if (*(char *)((uint)bldType * 0x27 + 0x133) == '\x17') {
+  if (BuildingTypes[bldType].unitType == '\x17') {
     for (uVar3 = 0xf8; uVar3 < GUnitCount; uVar3 = uVar3 + 1) {
       uVar4 = (uint16_t)((ulong)GUnits >> 0x10);
       bVar1 = ((unit_t *)GUnits)[uVar3].unitType;
@@ -990,7 +990,7 @@ ovc45_buildPlacementMessage
       else {
         bVar3 = ovr_bldng_textArena(bStack_12,bStack_11);
         if (bVar3) {
-          if ((*(char *)((uint)bStack_12 * 0x27 + 0x11b) == '\x04') &&
+          if ((BuildingTypes[bStack_12].size == '\x04') &&
              ((((uVar9 = ovc45_compute4(x - bStack_13,y,uVar28), (uVar9 & 0xff) == 0 ||
                 (uVar9 = ovc45_compute4((x - bStack_13) + 1,y,uVar28),
                 (uVar9 & 0xff) == 0)) ||
@@ -1005,7 +1005,7 @@ ovc45_buildPlacementMessage
             uVar26 = (undefined1)((uint)uVar16 >> 8);
             cStack_e = '\x01';
           }
-          else if (((*(char *)((uint)bStack_12 * 0x27 + 0x11b) == '\x02') &&
+          else if (((BuildingTypes[bStack_12].size == '\x02') &&
                    ((bStack_13 == 3 ||
                     (uVar9 = ovc45_compute4(x + 1,y,uVar28), (char)uVar9 == '\0')))) &&
                   ((bStack_13 == 0 ||
@@ -1019,17 +1019,17 @@ ovc45_buildPlacementMessage
           }
           else {
             uVar26 = 0x19;
-            uVar9 = ovc45_usesGMapFlags5(*(char *)((uint)bStack_12 * 0x27 + 0x11e),x,y);
+            uVar9 = ovc45_usesGMapFlags5(BuildingTypes[bStack_12].flags,x,y);
             if ((char)uVar9 == '\0') {
-              if (((*(char *)((uint)bStack_12 * 0x27 + 0x11a) == '\x02') ||
-                  (*(char *)((uint)bStack_12 * 0x27 + 0x11e) == '\x01')) ||
-                 ((uVar26 = 0x19, *(char *)((uint)bStack_12 * 0x27 + 0x11e) == '\x02' ||
+              if (((BuildingTypes[bStack_12].kind == '\x02') ||
+                  (BuildingTypes[bStack_12].flags == '\x01')) ||
+                 ((uVar26 = 0x19, BuildingTypes[bStack_12].flags == '\x02' ||
                   (uVar9 = ovr_attact_usesGMapFlags(x,y,uVar28), (uVar9 & 0xff) != 0))))
               {
                 uVar9 = ovr_constr_usesGMapFlags(x,y,uVar28);
                 if ((((char)uVar9 == '\0') &&
-                    ((*(uint *)((uint)bStack_12 * 0x27 + 0x121) & 0x20) == 0)) &&
-                   (uVar26 = 0x19, *(char *)((uint)bStack_12 * 0x27 + 0x11e) == '\0')) {
+                    ((BuildingTypes[bStack_12].flags2 & 0x20) == 0)) &&
+                   (uVar26 = 0x19, BuildingTypes[bStack_12].flags == '\0')) {
                   strcpy((char *)CONCAT13(uVar24,CONCAT12(uVar23,&msg)),
                          "This location is unsuitable for buildings.");
                   cStack_e = '\x01';
@@ -1037,8 +1037,7 @@ ovc45_buildPlacementMessage
                 else {
                   uVar26 = 0x10;
                   pcVar11 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),
-                                                (char)*(uint16_t *)
-                                                       ((uint)bStack_12 * 0x27 + 0x125));
+                                                (char)BuildingTypes[bStack_12].cost);
                   uVar16 = 0x217a;
                   iVar18 = ovc45_compute9((char *)&text,
                                           (char *)CONCAT22(*(uint16_t *)((uint)bStack_11 * 4),
@@ -1076,7 +1075,7 @@ ovc45_buildPlacementMessage
         }
         else {
           uVar26 = 0x19;
-          if (*(char *)((uint)bStack_12 * 0x27 + 0x133) == '\x12') {
+          if (BuildingTypes[bStack_12].unitType == '\x12') {
             uVar9 = ovc45_compute5();
             if ((char)uVar9 == '\0') {
               strcat((char *)CONCAT13(uVar24,CONCAT12(uVar23,&msg)),
@@ -1091,11 +1090,10 @@ ovc45_buildPlacementMessage
               uVar26 = (undefined1)((uint)uVar16 >> 8);
             }
           }
-          else if ((*(byte *)((uint)bStack_12 * 0x27 + 0x134) & 0x80) == 0) {
+          else if ((BuildingTypes[bStack_12].flags3 & 0x80) == 0) {
             uVar16 = 0x195d;
             pcVar11 = ovr_stsprintf((char *)&reqMsg,(char *)CONCAT13(0x75,CONCAT12(0x99,_SS)),
-                                    (char *)(ulong)CONCAT12(*(undefined1 *)
-                                                             ((uint)bStack_12 * 0x27 + 0x134),0x2410
+                                    (char *)(ulong)CONCAT12(BuildingTypes[bStack_12].flags3,0x2410
                                                            ),0x99,0x10);
             strcat((char *)CONCAT13(uVar24,CONCAT12(uVar23,&msg)),
                    (char *)CONCAT13((char)((uint)uVar16 >> 8),CONCAT12((char)uVar16,pcVar11)));
@@ -1116,10 +1114,10 @@ ovc45_buildPlacementMessage
       uVar9 = ovr_constr_usesGMapFlags(x,y,uVar28);
       uVar28 = uVar26;
       if (((char)uVar9 == '\0') &&
-         (uVar28 = 0x19, (*(uint *)((uint)bStack_12 * 0x27 + 0x121) & 0x20) == 0)) {
+         (uVar28 = 0x19, (BuildingTypes[bStack_12].flags2 & 0x20) == 0)) {
         uVar26 = 0x19;
         uVar28 = 0x19;
-        if (*(char *)((uint)bStack_12 * 0x27 + 0x11e) == '\0') goto L_OVC45_77eb_0d61_1379;
+        if (BuildingTypes[bStack_12].flags == '\0') goto L_OVC45_77eb_0d61_1379;
       }
       uVar26 = uVar28;
       in_stack_0000fc0e = (long *)((char *)0x2410);
@@ -4101,13 +4099,13 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
   auStack_28e[0] = 0x2410;
   menuItems = 0x7706;
   acStack_d[1] = 1;
-  if (*(int *)((uint)bldType * 0x27 + 0x116) == 0 && *(int *)((uint)bldType * 0x27 + 0x118) == 0) {
+  if (BLD_WORD(&BuildingTypes[bldType], action, 0) == 0 && BLD_WORD(&BuildingTypes[bldType], action, 2) == 0) {
     auStack_28e[2] = 0x2410;
     auStack_28e[1] = 0x770f;
   }
   else {
-    auStack_28e[2] = *(uint16_t *)((uint)bldType * 0x27 + 0x118);
-    auStack_28e[1] = *(uint16_t *)((uint)bldType * 0x27 + 0x116);
+    auStack_28e[2] = BLD_WORD(&BuildingTypes[bldType], action, 2);
+    auStack_28e[1] = BLD_WORD(&BuildingTypes[bldType], action, 0);
   }
   acStack_d[2] = 2;
   iVar10 = 2;
@@ -4132,7 +4130,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
                            (char)Font03.ofs,0x55,3,pcVar2,uVar11);
     uVar9 = 0x195d;
     puVar5 = ovr_ovc15_usesStshRealloc
-                       ((char *)*(uint16_t *)((uint)bldType * 0x27 + 0x10e),*(uint16_t *)((uint)bldType * 0x27 + 0x110),(char)iVar4,uVar8,0,0,0,0);
+                       ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),BLD_WORD(&BuildingTypes[bldType], name, 2),(char)iVar4,uVar8,0,0,0,0);
     pcVar2 = ovr_fmVsprintf("%s: Search this location for minerals?  Active party is %s the %s.",
                             (char *)CONCAT22(uVar9,puVar5));
     strcpy((char *)CONCAT22(_SS,&msg),
@@ -4199,12 +4197,11 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
       acStack_d[0] = '$';
       uStack_10 = 0x77ba;
       uVar9 = 0x195d;
-      uVar8 = *(uint16_t *)((uint)bldType * 0x27 + 0x110);
+      uVar8 = BLD_WORD(&BuildingTypes[bldType], name, 2);
       pcVar2 = ovr_fmVsprintf("Remove %s permanently. Are you sure?",
                               (char *)CONCAT13((char)((uint)uVar8 >> 8),
                                                CONCAT12((char)uVar8,
-                                                        *(uint16_t *)
-                                                         ((uint)bldType * 0x27 + 0x10e))));
+                                                        BLD_WORD(&BuildingTypes[bldType], name, 0))));
       puVar5 = &menuLabel;
       (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = uVar11;
       entries_00.ofs = (uint16_t)puVar5;
@@ -4291,17 +4288,17 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
   undefined1 auStack_c [10];
   
   agnt = x;
-  uStack_1a = *(uint *)((uint)bldType * 0x27 + 0x125) / 10;
+  uStack_1a = BuildingTypes[bldType].cost / 10;
   auStack_290[0] = 0x2410;
   menuLabels = 0x77f0;
   auStack_c[0] = 1;
-  if (*(int *)((uint)bldType * 0x27 + 0x116) == 0 && *(int *)((uint)bldType * 0x27 + 0x118) == 0) {
+  if (BLD_WORD(&BuildingTypes[bldType], action, 0) == 0 && BLD_WORD(&BuildingTypes[bldType], action, 2) == 0) {
     auStack_290[2] = 0x2410;
     auStack_290[1] = 0x77f6;
   }
   else {
-    auStack_290[2] = *(uint16_t *)((uint)bldType * 0x27 + 0x118);
-    auStack_290[1] = *(uint16_t *)((uint)bldType * 0x27 + 0x116);
+    auStack_290[2] = BLD_WORD(&BuildingTypes[bldType], action, 2);
+    auStack_290[1] = BLD_WORD(&BuildingTypes[bldType], action, 0);
   }
   auStack_c[1] = 2;
   iVar12 = 2;
@@ -4327,7 +4324,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
                            pcVar4,uVar14);
     uVar8 = 0x195d;
     puVar7 = ovr_ovc15_usesStshRealloc
-                       ((char *)*(uint16_t *)((uint)bldType * 0x27 + 0x10e),(char)*(uint16_t *)((uint)bldType * 0x27 + 0x110),uStack_1a,(char)iVar6,uVar15,0,0,0);
+                       ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),(char)BLD_WORD(&BuildingTypes[bldType], name, 2),uStack_1a,(char)iVar6,uVar15,0,0,0);
     pcVar4 = ovr_fmVsprintf("%s: Claim this tree? Harvest value is %d gold. Active party is %s the %s."
                             ,(char *)CONCAT13((char)((uint)uVar8 >> 8),CONCAT12((char)uVar8,puVar7))
                            );
@@ -4351,7 +4348,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
     }
     if (menuActions == 0x1) {
       ovr_play_sfx(86,0,0);
-      if (*(char *)((uint)bldType * 0x27 + 0x131) == '\0') {
+      if (BuildingTypes[bldType].resource == '\0') {
         if (*(char *)((int)&worldMenuLabels[9].ofs + 1 +
                      (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95) == '\x05') {
           bStack_11 = bldType + 0x18;
@@ -4363,14 +4360,14 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
       else {
         bStack_11 = bldType;
       }
-      uStack_14 = (uint)*(byte *)((uint)bStack_11 * 0x27 + 0x120);
-      *(undefined1 *)((uint)bStack_11 * 0x27 + 0x120) = 1;
+      uStack_14 = (uint)BuildingTypes[bStack_11].expinc;
+      BuildingTypes[bStack_11].expinc = 1;
       ovr_createConstructionRecord
                 (bStack_11,agnt,GfxRndSeed2,(uint8_t *)outFlag,(char)outFlagSeg,(char)agnt,
                  (char)outFlag,(char)outFlagSeg,
                  CONCAT11((char)((uint)(entityIndex * 0x37) >> 8),
                           *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x1a)),0);
-      *(undefined1 *)((uint)bStack_11 * 0x27 + 0x120) = (undefined1)uStack_14;
+      BuildingTypes[bStack_11].expinc = (undefined1)uStack_14;
       bVar3 = *(byte *)((int)Entities + entityIndex * 0x37 + 0x1a);
       pcStack_16 = ovr_ovc22_textPOPULATION(bStack_11,bVar3,(agnt_t *)agnt,bVar3,(char)GfxRndSeed2);
       uVar14 = 0x10;
@@ -4462,7 +4459,7 @@ uint __cdecl16far ovc45_usesGfxRndSeed2(int *x)
     if (bStack_3 != 0) break;
     bStack_4 = bStack_4 + 1;
   }
-  bVar1 = *(byte *)((uint)bStack_3 * 0x27 + 0x11b);
+  bVar1 = BuildingTypes[bStack_3].size;
   uVar2 = CONCAT11((char)((uint)bStack_3 * 0x27 >> 8),bVar1);
   if (bStack_4 < bVar1) {
     uVar2 = (uint)bStack_4;

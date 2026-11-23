@@ -1394,10 +1394,10 @@ char * __cdecl16far chargen_switch(uint16_t index)
         bVar38 = *(byte *)(iVar24 * uVar13 + 0x21);
         uVar25 = (undefined1)(iVar24 * uVar13 >> 8);
         iVar24 = iVar23;
-        if (*(byte *)(iVar23 * 0x34 + 0x22) < bVar38) {
-          bVar38 = *(byte *)(iVar23 * 0x34 + 0x22);
+        if (Agnts[iVar23].strengthMax < bVar38) {
+          bVar38 = Agnts[iVar23].strengthMax;
           uVar25 = (undefined1)((uint)(iVar23 * 0x34) >> 8);
-          *(byte *)(iVar23 * 0x34 + 0x21) = bVar38;
+          Agnts[iVar23].strength = bVar38;
         }
         do {
           iVar24 = iVar24 + 1;
@@ -1407,9 +1407,9 @@ char * __cdecl16far chargen_switch(uint16_t index)
             ovr_play_sfxU(0x1c,0,0,0,0);
             return (char *)CONCAT11(uVar25,1);
           }
-        } while (*(uint16_t *)(iVar24 * 0x34 + 0x1b) != paStack0008->owner);
-        if ((byte)puVar36[0x32] < *(byte *)(iVar24 * 0x34 + 0x22)) {
-          *(undefined1 *)(iVar24 * 0x34 + 0x22) = puVar36[0x32];
+        } while (Agnts[iVar24].owner != paStack0008->owner);
+        if ((byte)puVar36[0x32] < Agnts[iVar24].strengthMax) {
+          Agnts[iVar24].strengthMax = puVar36[0x32];
         }
         uVar13 = 0x34;
         iVar23 = iVar24;
@@ -2330,16 +2330,16 @@ manage_usesGUnitCount
     if (GUnitCount <= uVar6) {
       for (uVar6 = 0; uVar6 < GRecordCount; uVar6 = uVar6 + 1) {
         if ((*(char *)(uVar6 * 0x12 + 9) == partyIndex) &&
-           (bVar1 = *(byte *)(uVar6 * 0x12 + 8), *(char *)((uint)bVar1 * 0x27 + 0x133) == unitType))
+           (bVar1 = *(byte *)(uVar6 * 0x12 + 8), BuildingTypes[bVar1].unitType == unitType))
         {
           *recordCount = *recordCount + 1;
-          if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x01') {
+          if (BuildingTypes[bVar1].resource == '\x01') {
             *in_stack_00000018 = *in_stack_00000018 + 1;
           }
-          else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x02') {
+          else if (BuildingTypes[bVar1].resource == '\x02') {
             *in_stack_0000001c = *in_stack_0000001c + 1;
           }
-          else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x03') {
+          else if (BuildingTypes[bVar1].resource == '\x03') {
             *in_stack_00000020 = *in_stack_00000020 + 1;
           }
         }
@@ -2356,15 +2356,15 @@ manage_usesGUnitCount
     if (((puVar5[uVar6].unitType != 0xff) &&
         (uVar3 = *(uint32_t *)((uint)puVar5[uVar6].unitType << 2),
         *(char *)((int)uVar3 + 0x3f) == '\0')) &&
-       (bVar1 = (puVar5 + uVar6)->bldType, *(char *)((uint)bVar1 * 0x27 + 0x133) == unitType)) {
+       (bVar1 = (puVar5 + uVar6)->bldType, BuildingTypes[bVar1].unitType == unitType)) {
       iStack_4 = iStack_4 + 1;
-      if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x01') {
+      if (BuildingTypes[bVar1].resource == '\x01') {
         *resource1Count = *resource1Count + 1;
       }
-      else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x02') {
+      else if (BuildingTypes[bVar1].resource == '\x02') {
         *resource2Count = *resource2Count + 1;
       }
-      else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x03') {
+      else if (BuildingTypes[bVar1].resource == '\x03') {
         *resource3Count = *resource3Count + 1;
       }
     }
@@ -2416,15 +2416,15 @@ uint16_t __cdecl16far sub_OVC21_manage_c_24B1()
         for (uVar6 = 0; uVar6 < GRecordCount; uVar6 = uVar6 + 1) {
           if ((*(char *)(uVar6 * 0x12 + 9) == *(char *)(uVar4 + 6)) &&
              (bVar1 = *(byte *)(uVar6 * 0x12 + 8),
-             *(char *)((uint)bVar1 * 0x27 + 0x133) == *(char *)(uVar4 + 8))) {
+             BuildingTypes[bVar1].unitType == *(char *)(uVar4 + 8))) {
             *(int *)*(uint32_t *)(uVar4 + 0x16) = *(int *)*(uint32_t *)(uVar4 + 0x16) + 1;
-            if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x01') {
+            if (BuildingTypes[bVar1].resource == '\x01') {
               *(int *)*(uint32_t *)(uVar4 + 0x1a) = *(int *)*(uint32_t *)(uVar4 + 0x1a) + 1;
             }
-            else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x02') {
+            else if (BuildingTypes[bVar1].resource == '\x02') {
               *(int *)*(uint32_t *)(uVar4 + 0x1e) = *(int *)*(uint32_t *)(uVar4 + 0x1e) + 1;
             }
-            else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x03') {
+            else if (BuildingTypes[bVar1].resource == '\x03') {
               *(int *)*(uint32_t *)(uVar4 + 0x22) = *(int *)*(uint32_t *)(uVar4 + 0x22) + 1;
             }
           }
@@ -2472,15 +2472,15 @@ uint16_t __cdecl16far manage_usesGUnits(void)
   uVar5 = (uint16_t)((ulong)GUnits >> 0x10);
   if ((((unit_t *)GUnits)[unaff_SI].unitType == *(byte *)(unaff_BP + 6)) &&
      (bVar1 = ((unit_t *)GUnits + unaff_SI)->bldType,
-     *(char *)((uint)bVar1 * 0x27 + 0x133) == *(char *)(unaff_BP + 8))) {
+     BuildingTypes[bVar1].unitType == *(char *)(unaff_BP + 8))) {
     *(int *)(unaff_BP + -2) = *(int *)(unaff_BP + -2) + 1;
-    if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x01') {
+    if (BuildingTypes[bVar1].resource == '\x01') {
       *(int *)*(uint32_t *)(unaff_BP + 10) = *(int *)*(uint32_t *)(unaff_BP + 10) + 1;
     }
-    else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x02') {
+    else if (BuildingTypes[bVar1].resource == '\x02') {
       *(int *)*(uint32_t *)(unaff_BP + 0xe) = *(int *)*(uint32_t *)(unaff_BP + 0xe) + 1;
     }
-    else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x03') {
+    else if (BuildingTypes[bVar1].resource == '\x03') {
       *(int *)*(uint32_t *)(unaff_BP + 0x12) = *(int *)*(uint32_t *)(unaff_BP + 0x12) + 1;
     }
   }
@@ -2490,15 +2490,15 @@ uint16_t __cdecl16far manage_usesGUnits(void)
       for (uVar4 = 0; uVar4 < GRecordCount; uVar4 = uVar4 + 1) {
         if ((*(char *)(uVar4 * 0x12 + 9) == *(char *)(unaff_BP + 6)) &&
            (bVar1 = *(byte *)(uVar4 * 0x12 + 8),
-           *(char *)((uint)bVar1 * 0x27 + 0x133) == *(char *)(unaff_BP + 8))) {
+           BuildingTypes[bVar1].unitType == *(char *)(unaff_BP + 8))) {
           *(int *)*(uint32_t *)(unaff_BP + 0x16) = *(int *)*(uint32_t *)(unaff_BP + 0x16) + 1;
-          if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x01') {
+          if (BuildingTypes[bVar1].resource == '\x01') {
             *(int *)*(uint32_t *)(unaff_BP + 0x1a) = *(int *)*(uint32_t *)(unaff_BP + 0x1a) + 1;
           }
-          else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x02') {
+          else if (BuildingTypes[bVar1].resource == '\x02') {
             *(int *)*(uint32_t *)(unaff_BP + 0x1e) = *(int *)*(uint32_t *)(unaff_BP + 0x1e) + 1;
           }
-          else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x03') {
+          else if (BuildingTypes[bVar1].resource == '\x03') {
             *(int *)*(uint32_t *)(unaff_BP + 0x22) = *(int *)*(uint32_t *)(unaff_BP + 0x22) + 1;
           }
         }
@@ -2519,15 +2519,15 @@ uint16_t __cdecl16far manage_usesGUnits(void)
         (uVar2 = *(uint32_t *)((uint)puVar3[unaff_SI].unitType << 2),
         *(char *)((int)uVar2 + 0x3f) == '\0')) &&
        (bVar1 = (puVar3 + unaff_SI)->bldType,
-       *(char *)((uint)bVar1 * 0x27 + 0x133) == *(char *)(unaff_BP + 8))) {
+       BuildingTypes[bVar1].unitType == *(char *)(unaff_BP + 8))) {
       *(int *)(unaff_BP + -2) = *(int *)(unaff_BP + -2) + 1;
-      if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x01') {
+      if (BuildingTypes[bVar1].resource == '\x01') {
         *(int *)*(uint32_t *)(unaff_BP + 10) = *(int *)*(uint32_t *)(unaff_BP + 10) + 1;
       }
-      else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x02') {
+      else if (BuildingTypes[bVar1].resource == '\x02') {
         *(int *)*(uint32_t *)(unaff_BP + 0xe) = *(int *)*(uint32_t *)(unaff_BP + 0xe) + 1;
       }
-      else if (*(char *)((uint)bVar1 * 0x27 + 0x131) == '\x03') {
+      else if (BuildingTypes[bVar1].resource == '\x03') {
         *(int *)*(uint32_t *)(unaff_BP + 0x12) = *(int *)*(uint32_t *)(unaff_BP + 0x12) + 1;
       }
     }
@@ -3462,8 +3462,8 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
       do {
         iVar11 = iVar10 * uVar5;
         iVar10 = iVar9;
-        if (*(byte *)(iVar9 * 0x34 + 0x22) < *(byte *)(iVar11 + 0x21)) {
-          *(undefined1 *)(iVar9 * 0x34 + 0x21) = *(undefined1 *)(iVar9 * 0x34 + 0x22);
+        if (Agnts[iVar9].strengthMax < *(byte *)(iVar11 + 0x21)) {
+          Agnts[iVar9].strength = Agnts[iVar9].strengthMax;
         }
         do {
           iVar10 = iVar10 + 1;
@@ -3473,10 +3473,10 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
             ovr_play_sfxU(0x1c,0,0,0,0);
             return (char *)CONCAT11(uVar12,1);
           }
-        } while (*(int *)(iVar10 * 0x34 + 0x1b) != *(int *)(sheet->nameText + 0x1b));
+        } while (Agnts[iVar10].owner != *(int *)(sheet->nameText + 0x1b));
         uVar18 = (uint16_t)((ulong)auStack_6 >> 0x10);
-        if (*(byte *)((int)auStack_6 + 0x32) < *(byte *)(iVar10 * 0x34 + 0x22)) {
-          *(undefined1 *)(iVar10 * 0x34 + 0x22) = *(undefined1 *)((int)auStack_6 + 0x32);
+        if (*(byte *)((int)auStack_6 + 0x32) < Agnts[iVar10].strengthMax) {
+          Agnts[iVar10].strengthMax = *(undefined1 *)((int)auStack_6 + 0x32);
         }
         uVar5 = 0x34;
         iVar9 = iVar10;

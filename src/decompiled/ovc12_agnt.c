@@ -174,9 +174,9 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,ui
           if ((-1 < iVar5) && (iVar5 < 10)) {
             if ((AgntArrayA[iVar5][iStack_a] != '\0') &&
                (((AgntArrayA[iVar5][iStack_a] <= AgntCount &&
-                 (*(uint8_t *)((uint)AgntArrayA[iVar5][iStack_a] * 0x34 + -5) !=
+                 (Agnts[AgntArrayA[iVar5][iStack_a] - 1].faction !=
                   uVar1)) &&
-                (*(char *)((uint)AgntArrayA[iVar5][iStack_a] * 0x34 + -0x10) == '\0')
+                (Agnts[AgntArrayA[iVar5][iStack_a] - 1].combatState == '\0')
                 ))) {
               *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) =
                    AgntArrayA[iVar5][iStack_a];
@@ -187,8 +187,8 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,ui
             }
             if (((AgntArrayB[iVar5][iStack_a] != '\0') &&
                 (AgntArrayB[iVar5][iStack_a] <= AgntCount)) &&
-               ((*(uint8_t *)((uint)AgntArrayB[iVar5][iStack_a] * 0x34 + -5) != uVar1
-                && (*(char *)((uint)AgntArrayB[iVar5][iStack_a] * 0x34 + -0x10) ==
+               ((Agnts[AgntArrayB[iVar5][iStack_a] - 1].faction != uVar1
+                && (Agnts[AgntArrayB[iVar5][iStack_a] - 1].combatState ==
                     '\0')))) {
               *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(result) + 2))) =
                    AgntArrayB[iVar5][iStack_a];
@@ -291,15 +291,14 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
           if ((-1 < iVar7) && (iVar7 < 10)) {
             if ((AgntArrayA[iVar7][iStack_a] != '\0') &&
                ((((AgntArrayA[iVar7][iStack_a] <= AgntCount &&
-                  (*(byte *)((uint)AgntArrayA[iVar7][iStack_a] * 0x34 + -0x13) <
-                   *(byte *)((uint)AgntArrayA[iVar7][iStack_a] * 0x34 + -0x12))) &&
-                 (*(uint8_t *)((uint)AgntArrayA[iVar7][iStack_a] * 0x34 + -5) ==
+                  (Agnts[AgntArrayA[iVar7][iStack_a] - 1].strength <
+                   Agnts[AgntArrayA[iVar7][iStack_a] - 1].strengthMax)) &&
+                 (Agnts[AgntArrayA[iVar7][iStack_a] - 1].faction ==
                   uVar1)) &&
                 ((*(uint8_t *)
-                   *(uint32_t *)((uint)AgntArrayA[iVar7][iStack_a] * 0x34 + -0x17)
+                   *(uint32_t far *)&Agnts[AgntArrayA[iVar7][iStack_a] - 1].gdata
                   == uVar1 &&
-                 (uVar4 = *(uint32_t *)
-                           ((uint)AgntArrayA[iVar7][iStack_a] * 0x34 + -0x17),
+                 (uVar4 = *(uint32_t far *)&Agnts[AgntArrayA[iVar7][iStack_a] - 1].gdata,
                  (*(uint *)((int)uVar4 + 0x3c) & 0x20) == 0)))))) {
               *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
                    AgntArrayA[iVar7][iStack_a];
@@ -314,15 +313,13 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
             }
             if ((((AgntArrayB[iVar7][iStack_a] != '\0') &&
                  (AgntArrayB[iVar7][iStack_a] <= AgntCount)) &&
-                (*(byte *)((uint)AgntArrayB[iVar7][iStack_a] * 0x34 + -0x13) <
-                 *(byte *)((uint)AgntArrayB[iVar7][iStack_a] * 0x34 + -0x12))) &&
-               (((*(uint8_t *)((uint)AgntArrayB[iVar7][iStack_a] * 0x34 + -5) ==
+                (Agnts[AgntArrayB[iVar7][iStack_a] - 1].strength <
+                 Agnts[AgntArrayB[iVar7][iStack_a] - 1].strengthMax)) &&
+               (((Agnts[AgntArrayB[iVar7][iStack_a] - 1].faction ==
                   uVar1 && (*(uint8_t *)
-                             *(uint32_t *)
-                              ((uint)AgntArrayB[iVar7][iStack_a] * 0x34 + -0x17) ==
+                             *(uint32_t far *)&Agnts[AgntArrayB[iVar7][iStack_a] - 1].gdata ==
                             uVar1)) &&
-                (uVar4 = *(uint32_t *)
-                          ((uint)AgntArrayB[iVar7][iStack_a] * 0x34 + -0x17),
+                (uVar4 = *(uint32_t far *)&Agnts[AgntArrayB[iVar7][iStack_a] - 1].gdata,
                 (*(uint *)((int)uVar4 + 0x3c) & 0x20) == 0)))) {
               *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
                    AgntArrayB[iVar7][iStack_a];
@@ -363,16 +360,16 @@ agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distanc
   bStack_4 = 0;
   while( true ) {
     if (AgntCount <= bStack_4) break;
-    if ((*(uint8_t *)((uint)bStack_4 * 0x34 + 0x2f) != uVar1) &&
+    if ((Agnts[bStack_4].faction != uVar1) &&
        (uVar2 = *(int *)((uint)bStack_4 * 0x34) - agnt->x, uVar5 = (int)uVar2 >> 0xf,
-       uVar3 = *(int *)((uint)bStack_4 * 0x34 + 2) - agnt->y, uVar6 = (int)uVar3 >> 0xf,
+       uVar3 = Agnts[bStack_4].y - agnt->y, uVar6 = (int)uVar3 >> 0xf,
        uVar2 = ((uVar2 ^ uVar5) - uVar5) + ((uVar3 ^ uVar6) - uVar6),
        uVar2 < *(uint *)CONCAT22(in_stack_00000012,(*(uint16_t *)((uint8_t *)&(distance) + 2))))) {
       *(uint *)CONCAT22(in_stack_00000012,(*(uint16_t *)((uint8_t *)&(distance) + 2))) = uVar2;
       uVar4 = ovr_ovc07_signum(*(int *)((uint)bStack_4 * 0x34) -
                                ((agnt_t *)CONCAT22((uint16_t *)xDir,agnt))->x);
       *(uint16_t *)CONCAT22((uint16_t *)yDir,(*(uint16_t *)((uint8_t *)&(xDir) + 2))) = uVar4;
-      uVar4 = ovr_ovc07_signum(*(int *)((uint)bStack_4 * 0x34 + 2) - agnt->y);
+      uVar4 = ovr_ovc07_signum(Agnts[bStack_4].y - agnt->y);
       *(uint16_t *)CONCAT22((uint16_t *)distance,(*(uint16_t *)((uint8_t *)&(yDir) + 2))) = uVar4;
     }
     bStack_4 = bStack_4 + 1;
@@ -830,7 +827,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
   psVar6 = ovr_stash_usesStExit
                      ((stg_tmp_t *)*(uint16_t *)(iVar10 + 0x58),*(uint16_t *)(iVar10 + 0x5a),
                       CONCAT11((char)((uint)index * 0x34 >> 8),
-                               *(undefined1 *)((uint)index * 0x34 + 0x31)));
+                               AGNT_FIELD(&Agnts[index], state, 1)));
   if ((char)agnt->state == '\r') {
     psVar7 = psVar6;
     y = (stg_tmp_t *)agnt->screenY;
@@ -923,14 +920,14 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
       }
     }
     for (agentIndex = 0; agentIndex < (int)(uint)AgntCount; agentIndex = agentIndex + 1) {
-      if (*(char *)(agentIndex * 0x34 + 0xc) != -1) {
-        if (((int)fromIndex < (int)(uint)*(byte *)(agentIndex * 0x34 + 0xc)) &&
-           ((int)(uint)*(byte *)(agentIndex * 0x34 + 0xc) <= toIndex)) {
+      if (Agnts[agentIndex].target != -1) {
+        if (((int)fromIndex < (int)(uint)Agnts[agentIndex].target) &&
+           ((int)(uint)Agnts[agentIndex].target <= toIndex)) {
           cellPtr = (char *)(agentIndex * 0x34 + 0xc);
           *cellPtr = *cellPtr + -1;
         }
-        else if (*(byte *)(agentIndex * 0x34 + 0xc) == fromIndex) {
-          *(char *)(agentIndex * 0x34 + 0xc) = (char)toIndex;
+        else if (Agnts[agentIndex].target == fromIndex) {
+          Agnts[agentIndex].target = (char)toIndex;
         }
       }
     }
@@ -961,11 +958,11 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
       }
     }
     for (agentIndex = 0; agentIndex < (int)(uint)AgntCount; agentIndex = agentIndex + 1) {
-      if (*(char *)(agentIndex * 0x34 + 0xc) != -1) {
-        if (((int)(uint)*(byte *)(agentIndex * 0x34 + 0xc) < toIndex) ||
-           ((int)fromIndex <= (int)(uint)*(byte *)(agentIndex * 0x34 + 0xc))) {
-          if (*(byte *)(agentIndex * 0x34 + 0xc) == fromIndex) {
-            *(char *)(agentIndex * 0x34 + 0xc) = (char)toIndex;
+      if (Agnts[agentIndex].target != -1) {
+        if (((int)(uint)Agnts[agentIndex].target < toIndex) ||
+           ((int)fromIndex <= (int)(uint)Agnts[agentIndex].target)) {
+          if (Agnts[agentIndex].target == fromIndex) {
+            Agnts[agentIndex].target = (char)toIndex;
           }
         }
         else {
@@ -1066,16 +1063,16 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
   undefined1 uVar4;
   
   if ((agntIndex < 1) ||
-     (iVar5 = agntIndex, *(int *)(agntIndex * 0x34 + -0x32) <= *(int *)(agntIndex * 0x34 + 2))) {
+     (iVar5 = agntIndex, Agnts[agntIndex - 1].y <= Agnts[agntIndex].y)) {
     uVar1 = (uint)AgntCount;
     if ((agntIndex + 1 < (int)uVar1) &&
-       (uVar1 = *(uint *)(agntIndex * 0x34 + 2), iVar5 = agntIndex,
-       *(int *)(agntIndex * 0x34 + 0x36) < (int)uVar1)) {
+       (uVar1 = Agnts[agntIndex].y, iVar5 = agntIndex,
+       Agnts[agntIndex + 1].y < (int)uVar1)) {
       do {
         toIndex = iVar5 + 1;
         if ((int)(uint)AgntCount <= iVar5 + 2) break;
         iVar5 = toIndex;
-      } while (*(int *)(toIndex * 0x34 + 0x36) < *(int *)(agntIndex * 0x34 + 2));
+      } while (Agnts[toIndex + 1].y < Agnts[agntIndex].y);
       memcpy((char *)CONCAT22(_SS,&agntSaved),
              (char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34)),0x34);
       _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34)),
@@ -1095,7 +1092,7 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
     do {
       iVar5 = iVar5 + -1;
       if (iVar5 < 1) break;
-    } while (*(int *)(agntIndex * 0x34 + 2) < *(int *)(iVar5 * 0x34 + -0x32));
+    } while (Agnts[agntIndex].y < Agnts[iVar5 - 1].y);
     memcpy((char *)CONCAT22(_SS,&agntSaved),(char *)CONCAT22(SEG_OF(Agnts),(char *)(agntIndex * 0x34))
            ,0x34);
     _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)(iVar5 * 0x34 + 0x34)),
@@ -1122,12 +1119,12 @@ void __cdecl16far agnt_usesAgntCount6(entity_t *ptr,uint16_t arg2)
   int in_stack_00000006;
   
   for (i = 0; (int)i < (int)(uint)AgntCount; i = i + 1) {
-    if ((*(int *)(i * 0x34 + 0x19) == in_stack_00000006) &&
-       ((entity_t *)*(int *)(i * 0x34 + 0x17) == ptr)) {
-      if (*(byte *)(i * 0x34 + 0x25) < 2) {
-        *(undefined1 *)(i * 0x34 + 0x25) = 1;
+    if ((AGNT_WORD(&Agnts[i], entity, 2) == in_stack_00000006) &&
+       ((entity_t *)AGNT_WORD(&Agnts[i], entity, 0) == ptr)) {
+      if (Agnts[i].moveState < 2) {
+        Agnts[i].moveState = 1;
       }
-      *(undefined1 *)(i * 0x34 + 4) = 0;
+      AGNT_FIELD(&Agnts[i], targetX, 0) = 0;
     }
   }
   return;
@@ -1313,10 +1310,10 @@ uint __cdecl16far agnt_acquireTarget(agnt_t *agnt,char *agntIndex,uint16_t arg3)
   
   if ((agnt->flags & 1) == 0) {
     for (iStack_4 = 0; iStack_4 < (int)(uint)AgntCount; iStack_4 = iStack_4 + 1) {
-      if ((((*(uint8_t *)(iStack_4 * 0x34 + 0x2f) != agnt->faction) &&
-           ((*(uint *)(iStack_4 * 0x34 + 0x2b) & 0xae4) == 0)) &&
-          (*(char *)(iStack_4 * 0x34 + 0x24) == '\0')) &&
-         (uVar1 = *(uint32_t *)(iStack_4 * 0x34 + 0x1d),
+      if ((((Agnts[iStack_4].faction != agnt->faction) &&
+           ((Agnts[iStack_4].flags & 0xae4) == 0)) &&
+          (Agnts[iStack_4].combatState == '\0')) &&
+         (uVar1 = *(uint32_t far *)&Agnts[iStack_4].gdata,
          iVar3 = agnt_compute15(*(byte *)((int)uVar1 + 0x42),
                                 (((entity_t *)agnt->entity)->base).level), (char)iVar3 != '\0')) {
         agnt->flags = agnt->flags | 3;

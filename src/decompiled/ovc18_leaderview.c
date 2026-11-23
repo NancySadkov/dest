@@ -732,15 +732,15 @@ L_attact_3f0b_26bd_2767:
               }
             } while ((*(uint8_t *)(uVar12 * 0x12 + 9) != partyIndex) ||
                     (bVar2 = *(byte *)(uVar12 * 0x12 + 8),
-                    *(char *)((uint)bVar2 * 0x27 + 0x133) != (char)destX));
+                    BuildingTypes[bVar2].unitType != (char)destX));
             *in_stack_00000014 = *in_stack_00000014 + 1;
-            if (*(char *)((uint)bVar2 * 0x27 + 0x131) != '\x01') break;
+            if (BuildingTypes[bVar2].resource != '\x01') break;
             *in_stack_00000018 = *in_stack_00000018 + 1;
           }
-          if (*(char *)((uint)bVar2 * 0x27 + 0x131) != '\x02') break;
+          if (BuildingTypes[bVar2].resource != '\x02') break;
           *in_stack_0000001c = *in_stack_0000001c + 1;
         }
-        bVar15 = *(char *)((uint)bVar2 * 0x27 + 0x131) == '\x03';
+        bVar15 = BuildingTypes[bVar2].resource == '\x03';
       } while( true );
     }
   }
@@ -1042,8 +1042,8 @@ uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,uin
     uVar6 = (uint16_t)((ulong)GMapFlags >> 0x10);
     (*(short (*) [60] [148])GMapFlags)[y][x] =
          (*(short (*) [60] [148])GMapFlags)[y][x] & 0x3fffU |
-         (uint)*(byte *)((uint)bldType * 0x27 + 0x11e) << 0xe;
-    if ((*(uint *)((uint)bldType * 0x27 + 0x121) & 0x40) == 0) {
+         (uint)BuildingTypes[bldType].flags << 0xe;
+    if ((BuildingTypes[bldType].flags2 & 0x40) == 0) {
       ((unit_t *)GUnits)[unaff_SI].timer = 0;
     }
     else {

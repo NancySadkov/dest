@@ -435,7 +435,7 @@ void __cdecl16far ovc15_clearVisited(void)
   int iVar1;
   
   for (iVar1 = 0; iVar1 < (int)(uint)AgntCount; iVar1 = iVar1 + 1) {
-    *(undefined1 *)(iVar1 * 0x34 + 0x2d) = 0;
+    Agnts[iVar1].visited = 0;
   }
   return;
 }
@@ -522,7 +522,7 @@ void __cdecl16far ovc15_usesAgntIndex(void)
   }
   for (i = 0; agntIndex = i, (int)i < (int)(uint)AgntCount;
       i = i + 1) {
-    if (*(char *)(i * 0x34 + 0x2d) == '\0') {
+    if (Agnts[i].visited == '\0') {
       i = i - 1;
       ovr_ovc41_removeAgent(agntIndex,0,0);
     }
@@ -548,10 +548,10 @@ void __cdecl16far ovc15_removeEntity(uint entityIndex)
   
   if (AgntFlag1) {
     for (uVar4 = 0; uVar4 < AgntCount; uVar4 = uVar4 + 1) {
-      if ((*(uint *)(uVar4 * 0x34 + 0x1b) == entityIndex) &&
-         (*(char *)(uVar4 * 0x34 + 0x24) != '\x02')) {
-        *(undefined1 *)(uVar4 * 0x34 + 0x24) = 2;
-        *(uint16_t *)(uVar4 * 0x34 + 6) = 0;
+      if ((Agnts[uVar4].owner == entityIndex) &&
+         (Agnts[uVar4].combatState != '\x02')) {
+        Agnts[uVar4].combatState = 2;
+        Agnts[uVar4].targetY = 0;
       }
     }
   }
@@ -569,12 +569,12 @@ void __cdecl16far ovc15_removeEntity(uint entityIndex)
   }
   if (AgntFlag1 != false) {
     for (uVar4 = 0; uVar4 < AgntCount; uVar4 = uVar4 + 1) {
-      if (entityIndex < *(uint *)(uVar4 * 0x34 + 0x1b)) {
+      if (entityIndex < Agnts[uVar4].owner) {
         piVar1 = (int *)(uVar4 * 0x34 + 0x1b);
         *piVar1 = *piVar1 + -1;
-        peVar3 = Entities + *(int *)(uVar4 * 0x34 + 0x1b);
-        *(uint16_t *)(uVar4 * 0x34 + 0x19) = DAT_2000_d190;
-        *(uint16_t *)(uVar4 * 0x34 + 0x17) =(uint16_t)( peVar3);
+        peVar3 = Entities + Agnts[uVar4].owner;
+        AGNT_WORD(&Agnts[uVar4], entity, 2) = DAT_2000_d190;
+        AGNT_WORD(&Agnts[uVar4], entity, 0) =(uint16_t)( peVar3);
       }
     }
   }
@@ -853,64 +853,64 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
           (((peVar9 + entityIndex)->base).x <= GfxRndSeed + 1U)) &&
          (peVar9[entityIndex].base.y == GfxRndSeed2)) {
         for (agnt = 0; agnt < (int)(uint)AgntCount; agnt = agnt + 1) {
-          if (*(int *)(agnt * 0x34 + 0x1b) == entityIndex) {
-            *(undefined1 *)(agnt * 0x34 + 0xc) = 0xff;
+          if (Agnts[agnt].owner == entityIndex) {
+            Agnts[agnt].target = 0xff;
             bVar3 = peVar6[entityIndex].base.gindex;
-            *(uint16_t *)(agnt * 0x34 + 0x1f) = 0x195d;
-            *(int *)(agnt * 0x34 + 0x1d) = (uint)bVar3 * 0x95 + 0x26d6;
-            *(undefined1 *)(agnt * 0x34 + 0x21) =
+            AGNT_WORD(&Agnts[agnt], gdata, 2) = 0x195d;
+            AGNT_WORD(&Agnts[agnt], gdata, 0) = (uint)bVar3 * 0x95 + 0x26d6;
+            Agnts[agnt].strength =
                  *(undefined1 *)((int)&peVar6[entityIndex].base.state + 1);
-            *(undefined1 *)(agnt * 0x34 + 0x22) = (char)peVar6[entityIndex].base.flags32;
+            Agnts[agnt].strengthMax = (char)peVar6[entityIndex].base.flags32;
             bVar14 = (*(uint *)((int)&peVar6[entityIndex].base.frames + 3) & 1) != 0;
             if (peVar6[entityIndex].base.level < 10) {
               if (peVar6[entityIndex].base.level < 4) {
-                uVar4 = *(uint32_t *)(agnt * 0x34 + 0x1d);
+                uVar4 = *(uint32_t far *)&Agnts[agnt].gdata;
                 uVar13 = (uint16_t)((ulong)uVar4 >> 0x10);
                 iVar10 = (int)uVar4 + (uint)bVar14 * 0xc;
                 uVar12 = *(uint16_t *)(iVar10 + 3);
-                *(uint16_t *)(agnt * 0x34 + 0x15) = *(uint16_t *)(iVar10 + 5);
-                *(uint16_t *)(agnt * 0x34 + 0x13) = uVar12;
+                AGNT_WORD(&Agnts[agnt], frames, 2) = *(uint16_t *)(iVar10 + 5);
+                AGNT_WORD(&Agnts[agnt], frames, 0) = uVar12;
               }
               else {
-                uVar4 = *(uint32_t *)(agnt * 0x34 + 0x1d);
+                uVar4 = *(uint32_t far *)&Agnts[agnt].gdata;
                 uVar13 = (uint16_t)((ulong)uVar4 >> 0x10);
                 iVar10 = (int)uVar4 + (uint)bVar14 * 0xc;
                 uVar12 = *(uint16_t *)(iVar10 + 7);
-                *(uint16_t *)(agnt * 0x34 + 0x15) = *(uint16_t *)(iVar10 + 9);
-                *(uint16_t *)(agnt * 0x34 + 0x13) = uVar12;
+                AGNT_WORD(&Agnts[agnt], frames, 2) = *(uint16_t *)(iVar10 + 9);
+                AGNT_WORD(&Agnts[agnt], frames, 0) = uVar12;
               }
             }
             else {
-              uVar4 = *(uint32_t *)(agnt * 0x34 + 0x1d);
+              uVar4 = *(uint32_t far *)&Agnts[agnt].gdata;
               uVar13 = (uint16_t)((ulong)uVar4 >> 0x10);
               iVar10 = (int)uVar4 + (uint)bVar14 * 0xc;
               uVar12 = *(uint16_t *)(iVar10 + 0xb);
-              *(uint16_t *)(agnt * 0x34 + 0x15) = *(uint16_t *)(iVar10 + 0xd);
-              *(uint16_t *)(agnt * 0x34 + 0x13) = uVar12;
+              AGNT_WORD(&Agnts[agnt], frames, 2) = *(uint16_t *)(iVar10 + 0xd);
+              AGNT_WORD(&Agnts[agnt], frames, 0) = uVar12;
             }
-            *(undefined1 *)(agnt * 0x34 + 0xe) = 0xff;
-            *(undefined1 *)(agnt * 0x34 + 0x2f) =
-                 *(undefined1 *)*(uint32_t *)(agnt * 0x34 + 0x1d);
-            uVar4 = *(uint32_t *)(agnt * 0x34 + 0x13);
+            Agnts[agnt].animFrame = 0xff;
+            Agnts[agnt].faction =
+                 *(undefined1 *)*(uint32_t far *)&Agnts[agnt].gdata;
+            uVar4 = *(uint32_t far *)&Agnts[agnt].frames;
             uVar12 = (uint16_t)((ulong)uVar4 >> 0x10);
             iVar10 = (int)uVar4;
             if ((*(int *)(iVar10 + 0x68) == 0 && *(int *)(iVar10 + 0x6a) == 0) ||
-               (uVar4 = *(uint32_t *)(agnt * 0x34 + 0x13),
+               (uVar4 = *(uint32_t far *)&Agnts[agnt].frames,
                uVar12 = (uint16_t)((ulong)uVar4 >> 0x10), iVar10 = (int)uVar4,
                *(int *)(iVar10 + 0x58) == 0 && *(int *)(iVar10 + 0x5a) == 0)) {
-              uVar4 = *(uint32_t *)(agnt * 0x34 + 0x13);
+              uVar4 = *(uint32_t far *)&Agnts[agnt].frames;
               uVar12 = (uint16_t)((ulong)uVar4 >> 0x10);
               iVar10 = (int)uVar4;
               if (*(int *)(iVar10 + 0x68) == 0 && *(int *)(iVar10 + 0x6a) == 0) {
-                *(undefined1 *)(agnt * 0x34 + 0x11) = 0;
+                Agnts[agnt].animVariant = 0;
               }
               else {
-                *(undefined1 *)(agnt * 0x34 + 0x11) = 1;
+                Agnts[agnt].animVariant = 1;
               }
             }
             else {
               uVar8 = ovr_randBelow(2,0);
-              *(undefined1 *)(agnt * 0x34 + 0x11) = (char)uVar8;
+              Agnts[agnt].animVariant = (char)uVar8;
             }
             uVar8 = ovr_audio_panFromX((agnt_t *)(agnt * 0x34),0);
             ovr_play_sfxU(0x1b,0,uVar8,0,0);
@@ -954,12 +954,12 @@ void __cdecl16far ovc15_usesStExit(int entityIndex)
         cStack_5 = '\0';
         iVar4 = 0;
         while ((iVar4 < (int)(uint)AgntCount && (uVar5 != 0))) {
-          if (*(int *)(iVar4 * 0x34 + 0x1b) == entityIndex) {
+          if (Agnts[iVar4].owner == entityIndex) {
             if (cStack_5 == '\0') {
-              *(uint *)(iVar4 * 0x34 + 0x1b) = uVar2;
+              Agnts[iVar4].owner = uVar2;
               peVar3 = Entities + uVar2;
-              *(uint16_t *)(iVar4 * 0x34 + 0x19) = DAT_2000_d190;
-              *(uint16_t *)(iVar4 * 0x34 + 0x17) =(uint16_t)( peVar3);
+              AGNT_WORD(&Agnts[iVar4], entity, 2) = DAT_2000_d190;
+              AGNT_WORD(&Agnts[iVar4], entity, 0) =(uint16_t)( peVar3);
               uVar5 = uVar5 - 1;
             }
             cStack_5 = '\x01' - (cStack_5 != '\0');
@@ -1284,7 +1284,7 @@ L_OVC15_4207_1ffe_2193:
           agnt_00->y = uVar4 & 0xff;
         }
         iStack_4 = 0;
-        while ((iStack_4 < (int)(uint)AgntCount && (*(int *)(iStack_4 * 0x34 + 2) < (int)agnt_00->y)
+        while ((iStack_4 < (int)(uint)AgntCount && (Agnts[iStack_4].y < (int)agnt_00->y)
                )) {
           iStack_4 = iStack_4 + 1;
         }
@@ -1299,8 +1299,8 @@ L_OVC15_4207_1ffe_2193:
         ovr_ovc49_fillGridCells((char)iStack_4 + 1,(agnt_t *)(iStack_4 * 0x34),SEG_OF(Agnts),0);
         AgntCount = AgntCount + 1;
         for (iVar5 = 0; iVar5 < (int)(uint)AgntCount; iVar5 = iVar5 + 1) {
-          if ((*(char *)(iVar5 * 0x34 + 0xc) != -1) &&
-             (iStack_4 <= (int)(uint)*(byte *)(iVar5 * 0x34 + 0xc))) {
+          if ((Agnts[iVar5].target != -1) &&
+             (iStack_4 <= (int)(uint)Agnts[iVar5].target)) {
             pcVar1 = (char *)(iVar5 * 0x34 + 0xc);
             *pcVar1 = *pcVar1 + '\x01';
           }
@@ -1360,11 +1360,11 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
   uVar9 = DAT_2000_d190;
   if (AgntFlag1) {
     for (uStack_8 = 0; (int)uStack_8 < (int)(uint)AgntCount; uStack_8 = uStack_8 + 1) {
-      if (((*(char *)(uStack_8 * 0x34 + 0x2d) == '\0') &&
-          (*(int *)(uStack_8 * 0x34 + 0x1b) == owner)) &&
-         ((*(uint *)(uStack_8 * 0x34 + 0x2b) & 0xae4) == 0)) {
-        *(undefined1 *)(uStack_8 * 0x34 + 0x2d) = 1;
-        if ((*(char *)(uStack_8 * 0x34 + 0x11) != '\0') ||
+      if (((Agnts[uStack_8].visited == '\0') &&
+          (Agnts[uStack_8].owner == owner)) &&
+         ((Agnts[uStack_8].flags & 0xae4) == 0)) {
+        Agnts[uStack_8].visited = 1;
+        if ((Agnts[uStack_8].animVariant != '\0') ||
            (uVar2 = ovr_ovc49_compute1(*(int *)(uStack_8 * 0x34)), (char)uVar2 == '\0')) {
           uVar2 = ovc15_usesStExit2((byte)uStack_8);
           if ((uVar2 & 0xff) != 0) {
@@ -1805,15 +1805,15 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
               }
             } while (*(char *)(unaff_DI * 0x12 + 9) != (char)param_1);
             bVar22 = *(byte *)(unaff_DI * 0x12 + 8);
-          } while (*(char *)((uint)bVar22 * 0x27 + 0x133) != (*(uint8_t *)((uint8_t *)&(param_1) + 2)));
+          } while (BuildingTypes[bVar22].unitType != (*(uint8_t *)((uint8_t *)&(param_1) + 2)));
           *param_6 = *param_6 + 1;
-          if (*(char *)((uint)bVar22 * 0x27 + 0x131) != '\x01') break;
+          if (BuildingTypes[bVar22].resource != '\x01') break;
           *param_7 = *param_7 + 1;
         }
-        if (*(char *)((uint)bVar22 * 0x27 + 0x131) != '\x02') break;
+        if (BuildingTypes[bVar22].resource != '\x02') break;
         *param_8 = *param_8 + 1;
       }
-      bVar18 = *(char *)((uint)bVar22 * 0x27 + 0x131) == '\x03';
+      bVar18 = BuildingTypes[bVar22].resource == '\x03';
     } while( true );
   }
   if (((byte)uVar9 & (&stk_02c2)[unaff_DI]) == 0) {
@@ -2435,8 +2435,8 @@ L_manage_4d05_2d79_2EE8:
               do {
                 iVar21 = iVar20 * uVar25;
                 iVar20 = iVar39;
-                if (*(byte *)(iVar39 * 0x34 + 0x22) < *(byte *)(iVar21 + 0x21)) {
-                  *(undefined1 *)(iVar39 * 0x34 + 0x21) = *(undefined1 *)(iVar39 * 0x34 + 0x22);
+                if (Agnts[iVar39].strengthMax < *(byte *)(iVar21 + 0x21)) {
+                  Agnts[iVar39].strength = Agnts[iVar39].strengthMax;
                 }
                 do {
                   iVar20 = iVar20 + 1;
@@ -2445,9 +2445,9 @@ L_manage_4d05_2d79_2EE8:
                     ovr_play_sfxU(0x1c,0,0,0,0);
                     return (agnt_t *)0x1;
                   }
-                } while (*(uint16_t *)(iVar20 * 0x34 + 0x1b) != ((agnt_t *)agnt)->owner);
-                if (*(byte *)(uVar11 + 0x32) < *(byte *)(iVar20 * 0x34 + 0x22)) {
-                  *(undefined1 *)(iVar20 * 0x34 + 0x22) = *(undefined1 *)(uVar11 + 0x32);
+                } while (Agnts[iVar20].owner != ((agnt_t *)agnt)->owner);
+                if (*(byte *)(uVar11 + 0x32) < Agnts[iVar20].strengthMax) {
+                  Agnts[iVar20].strengthMax = *(undefined1 *)(uVar11 + 0x32);
                 }
                 uVar25 = 0x34;
                 iVar39 = iVar20;
@@ -2902,8 +2902,8 @@ void __cdecl16far ovc15_positionCrosshair(void)
 
 {
   if (SelectedAgent < AgntCount) {
-    CrossBlitX = *(uint16_t *)((uint)SelectedAgent * 0x34 + 0x26);
-    CrossBlitY = *(int *)((uint)SelectedAgent * 0x34 + 0x28) + -0x10;
+    CrossBlitX = Agnts[SelectedAgent].screenX;
+    CrossBlitY = Agnts[SelectedAgent].screenY + -0x10;
   }
   return;
 }
@@ -2926,11 +2926,11 @@ bool __cdecl16far ovc15_selectLeftmostAgent(void)
   uVar2 = 0x7fff;
   uVar3 = 0x7fff;
   for (iVar1 = 0; iVar1 < (int)(uint)AgntCount; iVar1 = iVar1 + 1) {
-    if ((*(uint *)(iVar1 * 0x34 + 0x26) < uVar2) ||
-       ((*(uint *)(iVar1 * 0x34 + 0x26) == uVar2 && (*(uint *)(iVar1 * 0x34 + 0x28) < uVar3)))) {
+    if ((Agnts[iVar1].screenX < uVar2) ||
+       ((Agnts[iVar1].screenX == uVar2 && (Agnts[iVar1].screenY < uVar3)))) {
       cStack_3 = (char)iVar1;
-      uVar2 = *(uint *)(iVar1 * 0x34 + 0x26);
-      uVar3 = *(uint *)(iVar1 * 0x34 + 0x28);
+      uVar2 = Agnts[iVar1].screenX;
+      uVar3 = Agnts[iVar1].screenY;
     }
   }
   if (cStack_3 != -1) {
@@ -2957,11 +2957,11 @@ bool __cdecl16far ovc15_selectRightmostAgent(void)
   uVar2 = 0;
   uVar3 = 0;
   for (iVar1 = 0; iVar1 < (int)(uint)AgntCount; iVar1 = iVar1 + 1) {
-    if ((uVar2 < *(uint *)(iVar1 * 0x34 + 0x26)) ||
-       ((*(uint *)(iVar1 * 0x34 + 0x26) == uVar2 && (uVar3 < *(uint *)(iVar1 * 0x34 + 0x28))))) {
+    if ((uVar2 < Agnts[iVar1].screenX) ||
+       ((Agnts[iVar1].screenX == uVar2 && (uVar3 < Agnts[iVar1].screenY)))) {
       cStack_3 = (char)iVar1;
-      uVar2 = *(uint *)(iVar1 * 0x34 + 0x26);
-      uVar3 = *(uint *)(iVar1 * 0x34 + 0x28);
+      uVar2 = Agnts[iVar1].screenX;
+      uVar3 = Agnts[iVar1].screenY;
     }
   }
   if (cStack_3 != -1) {
@@ -2989,14 +2989,14 @@ bool __cdecl16far ovc15_textArena4(void)
   uVar3 = 0x7fff;
   for (uVar1 = 0; (int)uVar1 < (int)(uint)AgntCount; uVar1 = uVar1 + 1) {
     if (((SelectedAgent != uVar1) &&
-        ((*(uint *)((uint)SelectedAgent * 0x34 + 0x26) < *(uint *)(uVar1 * 0x34 + 0x26) ||
-         ((*(int *)((uint)SelectedAgent * 0x34 + 0x26) == *(int *)(uVar1 * 0x34 + 0x26) &&
-          (*(uint *)((uint)SelectedAgent * 0x34 + 0x28) < *(uint *)(uVar1 * 0x34 + 0x28))))))) &&
-       ((*(uint *)(uVar1 * 0x34 + 0x26) < uVar2 ||
-        ((*(uint *)(uVar1 * 0x34 + 0x26) == uVar2 && (*(uint *)(uVar1 * 0x34 + 0x28) < uVar3)))))) {
+        ((Agnts[SelectedAgent].screenX < Agnts[uVar1].screenX ||
+         ((Agnts[SelectedAgent].screenX == Agnts[uVar1].screenX &&
+          (Agnts[SelectedAgent].screenY < Agnts[uVar1].screenY)))))) &&
+       ((Agnts[uVar1].screenX < uVar2 ||
+        ((Agnts[uVar1].screenX == uVar2 && (Agnts[uVar1].screenY < uVar3)))))) {
       bStack_3 = (byte)uVar1;
-      uVar2 = *(uint *)(uVar1 * 0x34 + 0x26);
-      uVar3 = *(uint *)(uVar1 * 0x34 + 0x28);
+      uVar2 = Agnts[uVar1].screenX;
+      uVar3 = Agnts[uVar1].screenY;
     }
   }
   if (bStack_3 != 0xff) {
@@ -3024,14 +3024,14 @@ bool __cdecl16far ovc15_textArena5(void)
   uVar3 = 0;
   for (uVar1 = 0; (int)uVar1 < (int)(uint)AgntCount; uVar1 = uVar1 + 1) {
     if (((SelectedAgent != uVar1) &&
-        ((*(uint *)(uVar1 * 0x34 + 0x26) < *(uint *)((uint)SelectedAgent * 0x34 + 0x26) ||
-         ((*(int *)((uint)SelectedAgent * 0x34 + 0x26) == *(int *)(uVar1 * 0x34 + 0x26) &&
-          (*(uint *)(uVar1 * 0x34 + 0x28) < *(uint *)((uint)SelectedAgent * 0x34 + 0x28))))))) &&
-       ((uVar2 < *(uint *)(uVar1 * 0x34 + 0x26) ||
-        ((*(uint *)(uVar1 * 0x34 + 0x26) == uVar2 && (uVar3 < *(uint *)(uVar1 * 0x34 + 0x28))))))) {
+        ((Agnts[uVar1].screenX < Agnts[SelectedAgent].screenX ||
+         ((Agnts[SelectedAgent].screenX == Agnts[uVar1].screenX &&
+          (Agnts[uVar1].screenY < Agnts[SelectedAgent].screenY)))))) &&
+       ((uVar2 < Agnts[uVar1].screenX ||
+        ((Agnts[uVar1].screenX == uVar2 && (uVar3 < Agnts[uVar1].screenY)))))) {
       bStack_3 = (byte)uVar1;
-      uVar2 = *(uint *)(uVar1 * 0x34 + 0x26);
-      uVar3 = *(uint *)(uVar1 * 0x34 + 0x28);
+      uVar2 = Agnts[uVar1].screenX;
+      uVar3 = Agnts[uVar1].screenY;
     }
   }
   if (bStack_3 != 0xff) {

@@ -145,9 +145,9 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     uVar7 = (ulong)uStack_6;
     if ((*(char *)((int)*(uint32_t *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_6) + 2)) << 2) + 0x3f) == '\0') &&
        (puVar23[uVar15].unitType != 0xff)) {
-      iVar24 = iVar24 + (uint)*(byte *)((uint)bVar11 * 0x27 + 0x11b);
+      iVar24 = iVar24 + (uint)BuildingTypes[bVar11].size;
     }
-    cVar10 = *(char *)((uint)bVar11 * 0x27 + 0x132);
+    cVar10 = BuildingTypes[bVar11].sfxType;
     uStack_6 = (byte *)CONCAT13(cVar10,(uint3)uStack_6);
     in_DX = 0x2410;
     if (((5 < puVar23[uVar15].level) && (cVar10 == -0x7a)) &&
@@ -261,8 +261,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
       do {
         iVar12 = iVar24 * uVar16;
         iVar24 = iVar25;
-        if (*(byte *)(iVar25 * 0x34 + 0x22) < *(byte *)(iVar12 + 0x21)) {
-          *(undefined1 *)(iVar25 * 0x34 + 0x21) = *(undefined1 *)(iVar25 * 0x34 + 0x22);
+        if (Agnts[iVar25].strengthMax < *(byte *)(iVar12 + 0x21)) {
+          Agnts[iVar25].strength = Agnts[iVar25].strengthMax;
         }
         do {
           iVar24 = iVar24 + 1;
@@ -272,10 +272,10 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
             ovr_play_sfxU(0x1c,0,0,0,0);
             return (byte *)CONCAT11(uVar27,1);
           }
-        } while (*(uint16_t *)(iVar24 * 0x34 + 0x1b) != agnt->owner);
+        } while (Agnts[iVar24].owner != agnt->owner);
         uVar26 = (uint16_t)((ulong)uStack_6 >> 0x10);
-        if (*(byte *)((int)uStack_6 + 0x32) < *(byte *)(iVar24 * 0x34 + 0x22)) {
-          *(undefined1 *)(iVar24 * 0x34 + 0x22) = *(undefined1 *)((int)uStack_6 + 0x32);
+        if (*(byte *)((int)uStack_6 + 0x32) < Agnts[iVar24].strengthMax) {
+          Agnts[iVar24].strengthMax = *(undefined1 *)((int)uStack_6 + 0x32);
         }
         uVar16 = 0x34;
         iVar25 = iVar24;
@@ -1059,9 +1059,9 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
             puVar25[unitIndex].level = puVar25[unitIndex].level - 1;
             puVar25 = (unit_t *)GUnits;
             uVar18 = (uint16_t)((ulong)GUnits >> 0x10);
-            if (((*(uint *)((uint)bStackY_20 * 0x27 + 0x121) & 4) == 0) &&
+            if (((BuildingTypes[bStackY_20].flags2 & 4) == 0) &&
                ((puVar25[unitIndex].level == 0 ||
-                ((*(uint *)((uint)bStackY_20 * 0x27 + 0x121) & 0x200) != 0)))) {
+                ((BuildingTypes[bStackY_20].flags2 & 0x200) != 0)))) {
               ovc22_usesGUnits(unitIndex,
                                (uint8_t *)
                                CONCAT13((char)(unitIndex * 9 >> 8),
@@ -1069,7 +1069,7 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
             }
             else if (((((bld_inst_t *)BldInstances + bStackY_20)->ofs != 0 ||
                        *(int *)((int)&BldInstances[0].seg + (uint)bStackY_20 * 0xc) != 0) ||
-                     (*(char *)((uint)bStackY_20 * 0x27 + 0x11e) == '\x10')) &&
+                     (BuildingTypes[bStackY_20].flags == '\x10')) &&
                     (uVar18 = ovc22_usesGOngoingBattle2
                                         (*(byte *)&puVar25[unitIndex].x,
                                          *(byte *)&puVar25[unitIndex].y), (char)uVar18 != '\0')) {
@@ -1111,8 +1111,8 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
             puVar25 = (unit_t *)GUnits;
             bStackY_20 = (puVar25 + uVar16)->bldType;
             if ((puVar25[uVar16].unitType == uVar27) &&
-               (*(int *)((uint)bStackY_20 * 0x27 + 0x123) < 0)) {
-              uVar26 = *(uint *)((uint)bStackY_20 * 0x27 + 0x123);
+               (BuildingTypes[bStackY_20].income < 0)) {
+              uVar26 = BuildingTypes[bStackY_20].income;
               uVar29 = (uint16_t)((ulong)*(uint32_t *)(uVar27 << 2) >> 0x10);
               iVar19 = (int)*(uint32_t *)(uVar27 << 2);
               iVar19 = *(int *)(iVar19 + 0x58) + ((int)uVar26 >> 0xf) +
@@ -1128,7 +1128,7 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
                     }
                     puVar25 = (unit_t *)GUnits;
                     uVar18 = (uint16_t)((ulong)GUnits >> 0x10);
-                    if (((*(uint *)((uint)bStackY_20 * 0x27 + 0x121) & 4) == 0) &&
+                    if (((BuildingTypes[bStackY_20].flags2 & 4) == 0) &&
                        ((iVar19 = 0, puVar25[uVar16].level == 0 ||
                         (iVar19 = (uint)bStackY_20 * 0x27, (*(uint *)(iVar19 + 0x121) & 0x200) != 0)
                         ))) {
@@ -1138,7 +1138,7 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
                     }
                     else if (((((bld_inst_t *)BldInstances + bStackY_20)->ofs != 0 ||
                                *(int *)((int)&BldInstances[0].seg + (uint)bStackY_20 * 0xc) != 0) ||
-                             (*(char *)((uint)bStackY_20 * 0x27 + 0x11e) == '\x10')) &&
+                             (BuildingTypes[bStackY_20].flags == '\x10')) &&
                             (uVar18 = ovc22_usesGOngoingBattle2
                                                 (*(byte *)&puVar25[uVar16].x,
                                                  *(byte *)&puVar25[uVar16].y), (char)uVar18 != '\0')
@@ -1149,7 +1149,7 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
                 }
               }
               else {
-                uVar32 = *(uint *)((uint)bStackY_20 * 0x27 + 0x123);
+                uVar32 = BuildingTypes[bStackY_20].income;
                 uVar18 = (uint16_t)((ulong)*(uint32_t *)(uVar27 << 2) >> 0x10);
                 iVar19 = (int)*(uint32_t *)(uVar27 << 2);
                 puVar3 = (uint *)(iVar19 + 0x56);
@@ -2249,38 +2249,38 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
   
   iVar4 = (*(short (*) [148] [60])GUnitGrid)[x][y];
   bVar3 = ((unit_t *)GUnits + iVar4)->bldType;
-  if ((*(uint *)((uint)bVar3 * 0x27 + 0x121) & 4) != 0) {
+  if ((BuildingTypes[bVar3].flags2 & 4) != 0) {
     strongholdCheckPending = 1;
   }
   uVar6 = ovr_ovc18_usesRandBelow(x,y,bldType,unitType,0,0);
-  if ((*(byte *)((uint)bldType * 0x27 + 0x11e) & 2) == 2) {
+  if ((BuildingTypes[bldType].flags & 2) == 2) {
     ovc23_usesGfxRndSeed2(x,y);
   }
-  if (((*(byte *)((uint)bldType * 0x27 + 0x11e) & 0xf) != 0) ||
-     ((*(byte *)((uint)bVar3 * 0x27 + 0x11e) & 0xf) != 0)) {
+  if (((BuildingTypes[bldType].flags & 0xf) != 0) ||
+     ((BuildingTypes[bVar3].flags & 0xf) != 0)) {
     ovc23_rebuildDirectionFlags(x,y);
   }
-  if (((*(byte *)((uint)bVar3 * 0x27 + 0x11e) & 1) != 0) ||
-     ((*(byte *)((uint)bldType * 0x27 + 0x11e) & 1) != 0)) {
+  if (((BuildingTypes[bVar3].flags & 1) != 0) ||
+     ((BuildingTypes[bldType].flags & 1) != 0)) {
     ovc23_rebuildDirectionFlags(x,y + 1);
   }
-  if (((*(byte *)((uint)bldType * 0x27 + 0x11e) & 2) != 0) ||
-     ((*(byte *)((uint)bVar3 * 0x27 + 0x11e) & 2) != 0)) {
+  if (((BuildingTypes[bldType].flags & 2) != 0) ||
+     ((BuildingTypes[bVar3].flags & 2) != 0)) {
     ovc23_rebuildDirectionFlags(x + -1,y);
   }
-  if (((*(byte *)((uint)bldType * 0x27 + 0x11e) & 3) == 3) ||
-     ((*(byte *)((uint)bVar3 * 0x27 + 0x11e) & 3) == 3)) {
+  if (((BuildingTypes[bldType].flags & 3) == 3) ||
+     ((BuildingTypes[bVar3].flags & 3) == 3)) {
     ovc23_rebuildDirectionFlags(x + 1,y);
     ovc23_rebuildDirectionFlags(x,y + 1);
   }
-  if (*(char *)((uint)bldType * 0x27 + 0x11a) == '\x02') {
+  if (BuildingTypes[bldType].kind == '\x02') {
     if (((*(short (*) [60] [148])GMapFlags)[y + 1][x] & 3U) != 0) {
       pbVar1 = &((unit_t *)GUnits)[uVar6].flags;
       *pbVar1 = *pbVar1 | 4;
       puVar2 = (uint *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x);
       *puVar2 = *puVar2 & 0xfffc;
     }
-    if ((*(byte *)((uint)bldType * 0x27 + 0x11e) & 4) != 0) {
+    if ((BuildingTypes[bldType].flags & 4) != 0) {
       if (((*(short (*) [60] [148])GMapFlags)[y][x + 0x93] & 3U) != 0) {
         pbVar1 = &((unit_t *)GUnits)[uVar6].flags;
         *pbVar1 = *pbVar1 | 8;
@@ -2300,7 +2300,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
         ovc23_rebuildDirectionFlags(x + 2,y);
       }
     }
-    if ((*(byte *)((uint)bldType * 0x27 + 0x11e) & 8) != 0) {
+    if ((BuildingTypes[bldType].flags & 8) != 0) {
       if (((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) != 0) {
         pbVar1 = &((unit_t *)GUnits)[uVar6].flags;
         *pbVar1 = *pbVar1 | 8;
@@ -2326,12 +2326,12 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
     ovc23_rebuildDirectionFlags(x,y + -1);
     ovc23_rebuildDirectionFlags(x,y + 1);
   }
-  if (*(char *)((uint)bVar3 * 0x27 + 0x11a) == '\x02') {
+  if (BuildingTypes[bVar3].kind == '\x02') {
     ovc23_usesGfxRndSeed2(x,y);
     if ((((unit_t *)GUnits)[iVar4].flags & 4) != 0) {
       ovc23_drownUnitsAt(x,y);
     }
-    if (*(char *)((uint)bVar3 * 0x27 + 0x11e) == '\x04') {
+    if (BuildingTypes[bVar3].flags == '\x04') {
       bVar5 = ovr_ovc45_getUnitType(x + -1,y);
       if ((CONCAT11(extraout_AH,bVar5) == 0) && ((((unit_t *)GUnits)[iVar4].flags & 8) != 0)) {
         ovc23_usesGfxRndSeed2(x + -1,y);
@@ -2350,7 +2350,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
         ovc23_rebuildDirectionFlags(x + 2,y);
       }
     }
-    else if (*(char *)((uint)bVar3 * 0x27 + 0x11e) == '\b') {
+    else if (BuildingTypes[bVar3].flags == '\b') {
       bVar5 = ovr_ovc45_getUnitType(x,y + -1);
       if ((CONCAT11(extraout_AH_01,bVar5) == 0) && ((((unit_t *)GUnits)[iVar4].flags & 8) != 0)) {
         ovc23_usesGfxRndSeed2(x,y + -1);
@@ -2375,11 +2375,11 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
     ovc23_rebuildDirectionFlags(x,y + -1);
     ovc23_rebuildDirectionFlags(x,y + 1);
   }
-  if ((*(char *)((uint)bldType * 0x27 + 0x133) == '\x12') && (ListCount < 5)) {
+  if ((BuildingTypes[bldType].unitType == '\x12') && (ListCount < 5)) {
     *(uint *)((uint)ListCount * 2 + -0x6d44) = uVar6;
     ListCount = ListCount + 1;
   }
-  if ((*(int *)((uint)bldType * 0x27 + 0x12e) != 0) || (*(int *)((uint)bVar3 * 0x27 + 0x12e) != 0))
+  if ((BuildingTypes[bldType].sight != 0) || (BuildingTypes[bVar3].sight != 0))
   {
     ovr_unit_usesAlignUp4();
   }
@@ -2440,7 +2440,7 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
   byte bStack_3;
   
   outFlag = (undefined1 *)CONCAT13(uStack000d,CONCAT12(partyIndex,outFlag));
-  for (uStack_8 = 0; (int)uStack_8 < (int)(uint)*(byte *)((uint)bldType * 0x27 + 0x11b);
+  for (uStack_8 = 0; (int)uStack_8 < (int)(uint)BuildingTypes[bldType].size;
       uStack_8 = uStack_8 + 1) {
     in_stack_0000fff6 = (agnt_t *)ovc23_findRecordAt(x + uStack_8,y,0);
     if (-1 < (int)in_stack_0000fff6) {
@@ -2455,7 +2455,7 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
       *outFlag = 1;
     }
   }
-  for (uStack_8 = 1; (int)uStack_8 < (int)(uint)*(byte *)((uint)bldType * 0x27 + 0x11b);
+  for (uStack_8 = 1; (int)uStack_8 < (int)(uint)BuildingTypes[bldType].size;
       uStack_8 = uStack_8 + 1) {
     ovc23_placeBuilding(x + uStack_8,y,0,in_stack_0000000e);
     uVar5 = ovr_ovc22_usesGOngoingBattle((byte)x + (char)uStack_8,(byte)y);
@@ -2508,13 +2508,13 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
     else {
       bStack_5 = ((unit_t *)GUnits + ((short (*) [148] [60])GUnitGrid)[-1][x + 0x93][y])->bldType;
     }
-    bStack_3 = *(byte *)((uint)bStack_5 * 0x27 + 0x11d);
-    uVar3 = *(undefined1 *)((uint)bStack_5 * 0x27 + 0x11b);
+    bStack_3 = BuildingTypes[bStack_5].buildTime;
+    uVar3 = BuildingTypes[bStack_5].size;
     if (bStack_3 == 0) {
       bStack_3 = 1;
     }
-    if (bStack_3 < *(byte *)((uint)bldType * 0x27 + 0x11c)) {
-      *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 6) = *(undefined1 *)((uint)bldType * 0x27 + 0x11c);
+    if (bStack_3 < BuildingTypes[bldType].minBuildTime) {
+      *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 6) = BuildingTypes[bldType].minBuildTime;
     }
     else {
       *(byte *)((uint8_t *)&GRecords[GRecordCount] + 6) = bStack_3;
@@ -2522,7 +2522,7 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
     *(int *)((uint8_t *)&GRecords[GRecordCount] + 0xf) = GameTick;
     *(uint16_t *)(&GRecords[GRecordCount]) = 0;
     uVar5 = ovc23_usesGRecordCount3
-                      (*(byte *)((uint)bldType * 0x27 + 0x120),in_stack_0000000e,GRecordCount);
+                      (BuildingTypes[bldType].expinc,in_stack_0000000e,GRecordCount);
     *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = (char)uVar5;
     if (*(char *)((uint8_t *)&GRecords[GRecordCount] + 0xc) == '\0') {
       *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = 1;
@@ -2545,7 +2545,7 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
       *pbVar2 = *pbVar2 | 3;
     }
     else {
-      *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 7) = *(undefined1 *)((uint)bldType * 0x27 + 0x11b);
+      *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 7) = BuildingTypes[bldType].size;
       if (in_stack_00000010 != '\0') {
         ovc23_placeBuilding(x,y,0,in_stack_0000000e);
         uVar5 = ovr_ovc22_usesGOngoingBattle((byte)x,(byte)y);
@@ -3015,13 +3015,13 @@ uint __cdecl16far ovc23_compute1(int x,int y,byte bldType,uint8_t unitType)
   int iVar3;
   uint uVar4;
   
-  cVar1 = *(char *)((uint)bldType * 0x27 + 0x11e);
+  cVar1 = BuildingTypes[bldType].flags;
   if (cVar1 == '\0') {
     uVar4 = 0;
   }
   else if (cVar1 == '\x01') {
     bVar2 = ovr_ovc45_getUnitType(x,y + -1);
-    if (*(char *)((uint)bVar2 * 0x27 + 0x11e) == '\x02') {
+    if (BuildingTypes[bVar2].flags == '\x02') {
       ovc23_placeBuilding(x,y,bldType + 2,unitType);
     }
     else {
@@ -3037,7 +3037,7 @@ uint __cdecl16far ovc23_compute1(int x,int y,byte bldType,uint8_t unitType)
   }
   else if (cVar1 == '\x02') {
     bVar2 = ovr_ovc45_getUnitType(x + 1,y);
-    if (*(char *)((uint)bVar2 * 0x27 + 0x11e) == '\x01') {
+    if (BuildingTypes[bVar2].flags == '\x01') {
       ovc23_placeBuilding(x,y,bldType + 1,unitType);
     }
     else {

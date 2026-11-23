@@ -44,13 +44,13 @@ bool __cdecl16far bldng_textArena(byte bldType,char partyIndex)
   uint16_t uVar5;
   byte bStack_6;
   
-  bVar1 = *(byte *)((uint)bldType * 0x27 + 0x134);
+  bVar1 = BuildingTypes[bldType].flags3;
   if (bVar1 == 1) {
     bVar2 = true;
   }
   else {
     bVar1 = bVar1 & 0x7f;
-    if ((*(byte *)((uint)bldType * 0x27 + 0x134) & 0x80) == 0) {
+    if ((BuildingTypes[bldType].flags3 & 0x80) == 0) {
       for (uVar4 = 0; uVar4 < EntityCount; uVar4 = uVar4 + 1) {
         uVar5 = (uint16_t)((ulong)Entities >> 0x10);
         if ((*(char *)((int)&((entity_t *)Entities)[uVar4].base.entity + 3) == partyIndex) &&
@@ -68,7 +68,7 @@ bool __cdecl16far bldng_textArena(byte bldType,char partyIndex)
       else if (((char_sheet_t *)(((uint)bVar3 << 2)))->titleIndex < bVar1) {
         bVar2 = false;
       }
-      else if (*(char *)((uint)bldType * 0x27 + 0x133) == '\x12') {
+      else if (BuildingTypes[bldType].unitType == '\x12') {
         bStack_6 = ListCount;
         for (uVar4 = 0; uVar4 < GRecordCount; uVar4 = uVar4 + 1) {
           if (*(char *)((uint)*(byte *)(uVar4 * 0x12 + 8) * 0x27 + 0x133) == '\x12') {

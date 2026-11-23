@@ -111,7 +111,7 @@ void __cdecl16far land_info(byte tileOffset)
     bStack_21 = tileOffset;
     unitType = *(byte *)(*(int *)((uint)tileOffset * 2 + -0x6e29) * 0x12 + 9);
   }
-  if (((*(uint *)((uint)bStack_1d * 0x27 + 0x121) & 0x80) == 0) &&
+  if (((BuildingTypes[bStack_1d].flags2 & 0x80) == 0) &&
      (((unit_t *)GUnits)[uVar2].level < 3)) {
     type = 0;
     uVar3 = ovr_randBelow(2,0);
@@ -148,26 +148,26 @@ void __cdecl16far land_info(byte tileOffset)
           else {
             uVar11 = 0x195d;
             puVar7 = ovr_ovc15_usesStshRealloc
-                               ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),0,0,0,0,0,0,0);
+                               ((char *)BLD_WORD(&BuildingTypes[bStack_1d], name, 0),0,0,0,0,0,0,0);
             pcVar4 = ovr_fmVsprintf("%s:",(char *)CONCAT22(uVar11,puVar7));
             strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(uVar11,pcVar4));
           }
         }
-        else if (*(char *)((uint)bStack_1d * 0x27 + 0x130) == 'd') {
+        else if (BuildingTypes[bStack_1d].durability == 'd') {
           uVar8 = 0x195d;
           puVar7 = ovr_ovc15_usesStshRealloc
-                             ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),*(uint16_t *)((uint)bStack_1d * 0x27 + 0x110),*(uint16_t *)((uint)puVar10[uVar2].unitType * 4),0,0,0,0,0);
+                             ((char *)BLD_WORD(&BuildingTypes[bStack_1d], name, 0),BLD_WORD(&BuildingTypes[bStack_1d], name, 2),*(uint16_t *)((uint)puVar10[uVar2].unitType * 4),0,0,0,0,0);
           pcVar4 = ovr_fmVsprintf("%s: Held by %s.",(char *)CONCAT22(uVar8,puVar7));
           strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(uVar8,pcVar4));
         }
         else {
-          b = *(byte *)((uint)bStack_1d * 0x27 + 0x130);
+          b = BuildingTypes[bStack_1d].durability;
           uVar11 = ovr_ovc45_compute7(puVar10[uVar2].level,b,b,
-                                      (uint)*(byte *)((uint)bStack_1d * 0x27 + 0x130),
+                                      (uint)BuildingTypes[bStack_1d].durability,
                                       *(uint16_t *)((uint)puVar10[uVar2].unitType * 4));
           uVar8 = 0x195d;
           puVar7 = ovr_ovc15_usesStshRealloc
-                             ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),(char)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x110),(char)uVar11,0,0,0,0,0);
+                             ((char *)BLD_WORD(&BuildingTypes[bStack_1d], name, 0),(char)BLD_WORD(&BuildingTypes[bStack_1d], name, 2),(char)uVar11,0,0,0,0,0);
           pcVar4 = ovr_fmVsprintf("%s (%u/%u): Held by %s.",
                                   (char *)CONCAT13((char)((uint)uVar8 >> 8),
                                                    CONCAT12((char)uVar8,puVar7)));
@@ -193,7 +193,7 @@ void __cdecl16far land_info(byte tileOffset)
                                    -0x47,uVar12,(char)uVar11,(char)Font03.ofs);
         uVar11 = 0x195d;
         puVar7 = ovr_ovc15_usesStshRealloc
-                           ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),(char)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x110),100 - ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 +
+                           ((char *)BLD_WORD(&BuildingTypes[bStack_1d], name, 0),(char)BLD_WORD(&BuildingTypes[bStack_1d], name, 2),100 - ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 +
                                                   0xb) * 100) /
                                   (uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 +
                                                  0xc),iVar6,0,0,0,0);
@@ -212,8 +212,8 @@ void __cdecl16far land_info(byte tileOffset)
       cStack_1b = (char)puVar7;
     }
     else if (bStack_21 == 0xff) {
-      if (((*(uint *)((uint)bStack_1d * 0x27 + 0x121) & 2) == 0) || (0xf7 < uVar2)) {
-        if (((*(uint *)((uint)bStack_1d * 0x27 + 0x121) & 0x20) == 0) || (0xf7 < uVar2)) {
+      if (((BuildingTypes[bStack_1d].flags2 & 2) == 0) || (0xf7 < uVar2)) {
+        if (((BuildingTypes[bStack_1d].flags2 & 0x20) == 0) || (0xf7 < uVar2)) {
           if (bStack_1d == 0) {
             ovr_ovc45_buildPlacementMessage
                       ((char)(GfxRndSeed + (int)(char)tileOffset + -2),(char)GfxRndSeed2,
@@ -292,7 +292,7 @@ void __cdecl16far land_info(byte tileOffset)
                                      0x5f,2,(char)iVar6,uVar11);
           uVar11 = 0x195d;
           puVar7 = ovr_ovc15_usesStshRealloc
-                             ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),*(uint16_t *)((uint)bStack_1d * 0x27 + 0x110),100 - ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12
+                             ((char *)BLD_WORD(&BuildingTypes[bStack_1d], name, 0),BLD_WORD(&BuildingTypes[bStack_1d], name, 2),100 - ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12
                                                     + 0xb) * 100) /
                                     (uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 +
                                                    0xc),(char)iVar6,uVar12,0,0,0);
@@ -320,7 +320,7 @@ void __cdecl16far land_info(byte tileOffset)
           uStack_6 = 0x7a02;
           uVar3 = 0x195d;
           puVar7 = ovr_ovc15_usesStshRealloc
-                             ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),0,0,0,0,0,0,0);
+                             ((char *)BLD_WORD(&BuildingTypes[bStack_1d], name, 0),0,0,0,0,0,0,0);
           pcVar4 = ovr_fmVsprintf("Construction of %s will be permanently suspended. Are you sure?",
                                   (char *)CONCAT22(uVar3,puVar7));
           hint_01.seg = uVar3;

@@ -97,7 +97,7 @@ uint16_t __cdecl16far ovc39_findBuildingAt(int x,uint16_t y)
       return 0;
     }
     bVar1 = ovr_ovc45_getUnitType(x - (uint)bStack_4,y);
-    if ((bVar1 != 0) && (bStack_4 < *(byte *)((uint)bVar1 * 0x27 + 0x11b))) break;
+    if ((bVar1 != 0) && (bStack_4 < BuildingTypes[bVar1].size)) break;
     bStack_4 = bStack_4 + 1;
   }
   sVar2 = ovr_ovc45_getUnitIndex(x - (uint)bStack_4,y);
@@ -158,7 +158,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
                *(char *)((int)*(uint32_t *)((uint)bStack_a << 2) + 0x3f) == '\0')) &&
               (0xf7 < iVar2)) && (pcVar4 = (char *)0x26510, puVar5[iVar2].level < 8)) {
             pcVar4 = (char *)&AgntAnms[0x88].missileDy;
-            if ((*(uint *)((uint)bStack_9 * 0x27 + 0x121) & 0x80) == 0) {
+            if ((BuildingTypes[bStack_9].flags2 & 0x80) == 0) {
               iStack_6 = ovc39_loadArchiveEntry(8);
             }
             else {
@@ -177,7 +177,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
           }
           if (((bStack_b == 1) && (iVar2 < 0xf8)) &&
              (pcVar4 = (char *)&AgntAnms[0x88].missileDy,
-             (*(uint *)((uint)bStack_9 * 0x27 + 0x121) & 2) != 0)) {
+             (BuildingTypes[bStack_9].flags2 & 2) != 0)) {
             iStack_6 = ovc39_loadArchiveEntry(10);
             name = pcVar4;
             pcVar3 = ovc39_lordOrLady();
@@ -192,7 +192,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
           }
           if (((bStack_b == 2) && (iVar2 < 0xf8)) &&
              (pcVar4 = (char *)&AgntAnms[0x88].missileDy,
-             (*(uint *)((uint)bStack_9 * 0x27 + 0x121) & 0x20) != 0)) {
+             (BuildingTypes[bStack_9].flags2 & 0x20) != 0)) {
             iStack_6 = ovc39_loadArchiveEntry(0xb);
             name = pcVar4;
             pcVar3 = ovc39_lordOrLady();
@@ -222,7 +222,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
           }
           if (((bStack_b == 4) && (iVar2 < 0xf8)) &&
              (pcVar4 = (char *)&AgntAnms[0x88].missileDy,
-             (*(uint *)((uint)bStack_9 * 0x27 + 0x121) & 0x400) != 0)) {
+             (BuildingTypes[bStack_9].flags2 & 0x400) != 0)) {
             iStack_6 = ovc39_loadArchiveEntry(0xd);
             name = pcVar4;
             pcVar3 = ovc39_lordOrLady();

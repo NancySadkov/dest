@@ -341,7 +341,7 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
             bStack_7 = 0xa0;
           }
           bVar4 = ovr_ovc45_getUnitType(iVar2 + iVar9,iVar3 + (int)psStack_c);
-          if ((*(byte *)((uint)bVar4 * 0x27 + 0x11e) & 0xc) == 0) {
+          if ((BuildingTypes[bVar4].flags & 0xc) == 0) {
             ovr_createConstructionRecordFar
                       (bStack_7,iVar2 + iVar9,iVar3 + (int)psStack_c,(uint8_t *)CONCAT22(outFlagSeg,outFlag),*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),unaff_DI,0,0,0);
             ovr_attact_usesEntities

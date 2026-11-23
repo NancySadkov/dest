@@ -47,14 +47,14 @@ int __cdecl16far video_findAgentAt(int x,int y)
     if ((int)(uint)AgntCount <= iVar5) {
       return -1;
     }
-    uVar1 = *(uint16_t *)(iVar5 * 0x34 + 0x15);
-    piVar4 = (int *)(*(int *)(iVar5 * 0x34 + 0x13) + (uint)*(byte *)(iVar5 * 0x34 + 0x12) * 4);
+    uVar1 = AGNT_WORD(&Agnts[iVar5], frames, 2);
+    piVar4 = (int *)(AGNT_WORD(&Agnts[iVar5], frames, 0) + (uint)Agnts[iVar5].frameIndex * 4);
     iVar2 = piVar4[1];
     iVar3 = *piVar4;
-    if (((((*(int *)(iVar5 * 0x34 + 0x26) - *(int *)(iVar3 + 0x17)) + -0xc <= x) &&
-         (x <= *(int *)(iVar5 * 0x34 + 0x26) + *(int *)(iVar3 + 0x17) + -0xc)) &&
-        ((*(int *)(iVar5 * 0x34 + 0x28) - *(int *)(iVar3 + 0xd)) + -7 <= y)) &&
-       (y <= *(int *)(iVar5 * 0x34 + 0x28) + -7)) break;
+    if (((((Agnts[iVar5].screenX - *(int *)(iVar3 + 0x17)) + -0xc <= x) &&
+         (x <= Agnts[iVar5].screenX + *(int *)(iVar3 + 0x17) + -0xc)) &&
+        ((Agnts[iVar5].screenY - *(int *)(iVar3 + 0xd)) + -7 <= y)) &&
+       (y <= Agnts[iVar5].screenY + -7)) break;
     iVar5 = iVar5 + 1;
   }
   return iVar5;

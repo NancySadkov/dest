@@ -335,9 +335,9 @@ void __cdecl16far ovc42_usesGfxRndSeed(void)
       if ((char)uVar2 != '\0') {
         uVar4 = (uint16_t)((ulong)GUnitGrid >> 0x10);
         bVar1 = ((unit_t *)GUnits + (*(short (*) [148] [60])GUnitGrid)[x][y])->bldType;
-        if (*(char *)((uint)bVar1 * 0x27 + 300) != '\0') {
+        if (BLD_FIELD(&BuildingTypes[bVar1], halfWidth, 0) != '\0') {
           (*(short (*) [148] [60])GUnitGrid)[x][y] =
-               (uint)bVar1 + (uint)*(byte *)((uint)bVar1 * 0x27 + 300);
+               (uint)bVar1 + (uint)BLD_FIELD(&BuildingTypes[bVar1], halfWidth, 0);
         }
       }
     }
@@ -1232,29 +1232,29 @@ void __cdecl16far ovc42_usesAgntCount(void)
   
   bVar2 = false;
   for (iVar3 = 0; iVar3 < (int)(uint)AgntCount; iVar3 = iVar3 + 1) {
-    uVar1 = *(uint32_t *)(iVar3 * 0x34 + 0x1d);
+    uVar1 = *(uint32_t far *)&Agnts[iVar3].gdata;
     if (*(char *)((int)uVar1 + 1) == '\x02') {
       if (bVar2) {
         *(uint16_t *)(iVar3 * 0x34) = 0x6e;
-        *(uint16_t *)(iVar3 * 0x34 + 2) = 0xb;
+        Agnts[iVar3].y = 0xb;
       }
       else {
         *(uint16_t *)(iVar3 * 0x34) = 0x2b;
-        *(uint16_t *)(iVar3 * 0x34 + 2) = 2;
+        Agnts[iVar3].y = 2;
       }
       bVar2 = true;
     }
     else {
-      uVar1 = *(uint32_t *)(iVar3 * 0x34 + 0x1d);
+      uVar1 = *(uint32_t far *)&Agnts[iVar3].gdata;
       if (*(char *)((int)uVar1 + 1) == '\x01') {
         *(uint16_t *)(iVar3 * 0x34) = 0x3d;
-        *(uint16_t *)(iVar3 * 0x34 + 2) = 0x12;
+        Agnts[iVar3].y = 0x12;
       }
       else {
-        uVar1 = *(uint32_t *)(iVar3 * 0x34 + 0x1d);
+        uVar1 = *(uint32_t far *)&Agnts[iVar3].gdata;
         if (*(char *)((int)uVar1 + 1) == '\v') {
           *(uint16_t *)(iVar3 * 0x34) = 0x56;
-          *(uint16_t *)(iVar3 * 0x34 + 2) = 0x14;
+          Agnts[iVar3].y = 0x14;
         }
       }
     }

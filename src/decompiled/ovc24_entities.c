@@ -466,7 +466,7 @@ L_OVC24_5943_0d5a_0E37:
           do {
             uVar1 = uVar1 - 1;
             if ((int)uVar1 < 0) break;
-          } while (*(uint *)(uVar1 * 0x34 + 0x1b) != ent);
+          } while (Agnts[uVar1].owner != ent);
           if ((int)uVar1 < 0) {
             if (*(char *)((int)(char **)GMenuStrings +
                          (uint)((entity_t *)Entities)[ent].base.gindex * 0x95 + 0x1f) == '\0'
@@ -904,7 +904,7 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
       if (!bVar2) {
         for (iVar8 = 0; iVar8 < 4; iVar8 = iVar8 + 1) {
           bVar3 = ovr_ovc45_getUnitType(uVar4 + iVar8 + -2,iVar6);
-          if ((*(uint *)((uint)bVar3 * 0x27 + 0x121) & 0x100) != 0) {
+          if ((BuildingTypes[bVar3].flags2 & 0x100) != 0) {
             bVar2 = true;
             break;
           }
@@ -983,8 +983,8 @@ bool __cdecl16far ovc24_textArena(uint16_t x,uint y,char faction)
         if ((int)(uint)AgntCount <= iVar3) {
           return false;
         }
-        if (((*(uint *)(iVar3 * 0x34 + 0x2b) & 0xae4) == 0) &&
-           (*(char *)(iVar3 * 0x34 + 0x2f) == faction)) break;
+        if (((Agnts[iVar3].flags & 0xae4) == 0) &&
+           (Agnts[iVar3].faction == faction)) break;
         iVar3 = iVar3 + 1;
       }
       return true;

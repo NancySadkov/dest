@@ -159,29 +159,29 @@ char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t *ag
   
   uVar12 = (undefined1)unaff_BP;
   uVar13 = (undefined1)((uint)unaff_BP >> 8);
-  if (*(char *)((uint)bldType * 0x27 + 0x133) == '\x16') {
+  if (BuildingTypes[bldType].unitType == '\x16') {
     pcVar6 = (char *)0x0;
   }
-  else if (*(char *)((uint)bldType * 0x27 + 0x128) == '\0') {
+  else if (BuildingTypes[bldType].production == '\0') {
     pcVar6 = (char *)0x0;
   }
   else {
-    if ((*(uint *)((uint)bldType * 0x27 + 0x121) & 0x20) == 0) {
-      if ((*(uint *)((uint)bldType * 0x27 + 0x121) & 0x80) == 0) {
-        pcVar6 = (char *)(uint)*(byte *)((uint)bldType * 0x27 + 0x128);
+    if ((BuildingTypes[bldType].flags2 & 0x20) == 0) {
+      if ((BuildingTypes[bldType].flags2 & 0x80) == 0) {
+        pcVar6 = (char *)(uint)BuildingTypes[bldType].production;
       }
       else {
         pcVar6 = (char *)ovc22_applyRankBonus
-                                   (partyIndex,(uint)*(byte *)((uint)bldType * 0x27 + 0x128));
+                                   (partyIndex,(uint)BuildingTypes[bldType].production);
       }
     }
     else {
-      pcVar6 = (char *)ovc22_compute1(partyIndex,(uint)*(byte *)((uint)bldType * 0x27 + 0x128));
+      pcVar6 = (char *)ovc22_compute1(partyIndex,(uint)BuildingTypes[bldType].production);
     }
     if (pcVar6 == (char *)0x0) {
       pcVar6 = (char *)0x0;
     }
-    else if (*(char *)((uint)bldType * 0x27 + 0x133) == '\x19') {
+    else if (BuildingTypes[bldType].unitType == '\x19') {
       if (GSeason == '\0') {
         if (GTimeLo < 0xf) {
           pcVar6 = (char *)((uint)pcVar6 >> 2);
@@ -195,7 +195,7 @@ char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t *ag
       }
     }
     else {
-      if ((*(uint *)((uint)bldType * 0x27 + 0x121) & 0x80) != 0) {
+      if ((BuildingTypes[bldType].flags2 & 0x80) != 0) {
         uVar9 = in_stack_0000000a;
         uVar7 = ovr_constr_usesGMapFlags2((int)agnt,in_stack_0000000a);
         switch(uVar7 & 0xff) {
@@ -247,8 +247,8 @@ L_OVC25_5b66_00ff_01D9:
           return pcVar6;
         case 3:
           do {
-            if (*(byte *)(uVar9 + 0x32) < *(byte *)((int)pcVar6 * 0x34 + 0x22)) {
-              *(undefined1 *)((int)pcVar6 * 0x34 + 0x22) = *(undefined1 *)(uVar9 + 0x32);
+            if (*(byte *)(uVar9 + 0x32) < Agnts[pcVar6].strengthMax) {
+              Agnts[pcVar6].strengthMax = *(undefined1 *)(uVar9 + 0x32);
             }
             uVar9 = 0x34;
             pcVar10 = pcVar6;
@@ -256,10 +256,10 @@ code_r0x0005ff56:
             bVar11 = *(byte *)((int)pcVar6 * uVar9 + 0x21);
             uVar9 = CONCAT11((char)((int)pcVar6 * uVar9 >> 8),bVar11);
             pcVar6 = pcVar10;
-            if (*(byte *)((int)pcVar10 * 0x34 + 0x22) < bVar11) {
-              uVar12 = *(undefined1 *)((int)pcVar10 * 0x34 + 0x22);
+            if (Agnts[pcVar10].strengthMax < bVar11) {
+              uVar12 = Agnts[pcVar10].strengthMax;
               uVar9 = CONCAT11((char)((uint)((int)pcVar10 * 0x34) >> 8),uVar12);
-              *(undefined1 *)((int)pcVar10 * 0x34 + 0x21) = uVar12;
+              Agnts[pcVar10].strength = uVar12;
             }
             do {
               pcVar6 = pcVar6 + 1;
@@ -269,7 +269,7 @@ code_r0x0005ff56:
                 ovr_play_sfxU(0x1c,0,0,0,0);
                 return (char *)CONCAT11(uVar12,1);
               }
-            } while (*(uint16_t *)((int)pcVar6 * 0x34 + 0x1b) != agnt->owner);
+            } while (Agnts[pcVar6].owner != agnt->owner);
           } while( true );
         case 4:
           iVar4 = ovr_font_textWidth((char *)"POPULATION",(char *)CONCAT13(uVar13,CONCAT12(uVar12,unaff_SI)),0,0,0);
@@ -351,11 +351,11 @@ uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,uint16_t 
 {
   uint uVar1;
   
-  if (*(int *)((uint)bldType * 0x27 + 0x123) == 0) {
+  if (BuildingTypes[bldType].income == 0) {
     uVar1 = 0;
   }
-  else if (*(char *)((uint)bldType * 0x27 + 0x133) == '\x19') {
-    uVar1 = *(uint *)((uint)bldType * 0x27 + 0x123);
+  else if (BuildingTypes[bldType].unitType == '\x19') {
+    uVar1 = BuildingTypes[bldType].income;
     if (GSeason == '\0') {
       if (GTimeLo < 0xf) {
         uVar1 = uVar1 >> 2;
@@ -368,12 +368,12 @@ uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,uint16_t 
       uVar1 = uVar1 + (uVar1 >> 2);
     }
   }
-  else if ((*(uint *)((uint)bldType * 0x27 + 0x121) & 0x20) == 0) {
-    if ((*(uint *)((uint)bldType * 0x27 + 0x121) & 0x80) == 0) {
-      uVar1 = *(uint *)((uint)bldType * 0x27 + 0x123);
+  else if ((BuildingTypes[bldType].flags2 & 0x20) == 0) {
+    if ((BuildingTypes[bldType].flags2 & 0x80) == 0) {
+      uVar1 = BuildingTypes[bldType].income;
     }
     else {
-      uVar1 = ovc22_applyRankBonus(partyIndex,*(int *)((uint)bldType * 0x27 + 0x123));
+      uVar1 = ovc22_applyRankBonus(partyIndex,BuildingTypes[bldType].income);
       if (GSeason == '\x01') {
         uVar1 = uVar1 + ((int)uVar1 >> 2);
       }
@@ -383,7 +383,7 @@ uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,uint16_t 
     }
   }
   else {
-    uVar1 = ovc22_compute1(partyIndex,*(uint *)((uint)bldType * 0x27 + 0x123));
+    uVar1 = ovc22_compute1(partyIndex,BuildingTypes[bldType].income);
   }
   return uVar1;
 }
@@ -1099,14 +1099,14 @@ L_OVC22_5087_4975_4ABE:
                         scratch = ((char_sheet_t *)(((uint)partyIndex << 2)))->y;
                       }
                       else {
-                        if ((*(uint *)((int)uStack_e * 0x27 + 0x121) & 0x60) == 0) {
+                        if ((BuildingTypes[uStack_e].flags2 & 0x60) == 0) {
                           uVar53 = (uint16_t)
                                    ((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
                           iVar29 = (int)*(uint32_t *)((uint)partyIndex << 2);
                           iVar30 = *(int *)(iVar29 + 0x58);
                           if ((iVar30 < 0) ||
                              ((iVar30 == 0 &&
-                              (*(uint *)(iVar29 + 0x56) < *(uint *)((int)uStack_e * 0x27 + 0x125))))
+                              (*(uint *)(iVar29 + 0x56) < BuildingTypes[uStack_e].cost)))
                              ) {
                             uVar53 = (uint16_t)
                                      ((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
@@ -1115,7 +1115,7 @@ L_OVC22_5087_4975_4ABE:
                             *(uint16_t *)(iVar30 + 0x56) = 0;
                           }
                           else {
-                            uVar22 = *(uint *)((int)uStack_e * 0x27 + 0x125);
+                            uVar22 = BuildingTypes[uStack_e].cost;
                             uVar53 = (uint16_t)
                                      ((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
                             iVar30 = (int)*(uint32_t *)((uint)partyIndex << 2);
@@ -1161,10 +1161,10 @@ L_OVC22_5087_4975_4ABE:
                 uVar23 = ovr_ovc23_findRecordAt((int)unaff_DI,0,0);
                 if (uVar23 == 0xffff) {
                   pfVar20 = (far_t far *)(uint)((unit_t *)GUnits + (*(uint16_t *)((uint8_t *)&(uStack_6) + 2)))->bldType;
-                  if ((*(uint *)((int)pfVar20 * 0x27 + 0x121) & 0x20) == 0) {
+                  if ((BuildingTypes[(uint)pfVar20].flags2 & 0x20) == 0) {
                     pfVar20 = (far_t far *)0x0;
                   }
-                  else if (*(char *)((int)pfVar20 * 0x27 + 0x131) == '\0') {
+                  else if (BuildingTypes[(uint)pfVar20].resource == '\0') {
                     if (*(char *)((int)*(uint32_t *)((uint)bStack0008 << 2) + 0x2f) == '\x05') {
                       pfVar20 = pfVar20 + 6;
                     }
@@ -1428,9 +1428,9 @@ L_OVC22_5087_0234_32B8:
                 do {
                   iVar30 = (int)puVar50 * (int)puVar28;
                   puVar50 = (uint16_t)(puVar49);
-                  if (*(byte *)((int)puVar49 * 0x34 + 0x22) < *(byte *)(iVar30 + 0x21)) {
-                    *(undefined1 *)((int)puVar49 * 0x34 + 0x21) =
-                         *(undefined1 *)((int)puVar49 * 0x34 + 0x22);
+                  if (Agnts[puVar49].strengthMax < *(byte *)(iVar30 + 0x21)) {
+                    Agnts[puVar49].strength =
+                         Agnts[puVar49].strengthMax;
                   }
                   do {
                     puVar50 = (uint *)((int)puVar50 + 1);
@@ -1440,11 +1440,11 @@ L_OVC22_5087_0234_32B8:
                       ovr_play_sfxU(0x1c,0,0,0,0);
                       return (far_t far *)CONCAT11(uVar19,1);
                     }
-                  } while (*(int *)((int)puVar50 * 0x34 + 0x1b) !=
+                  } while (Agnts[puVar50].owner !=
                            *(int *)(CONCAT11(uStack0009,bStack0008) + 0x1b));
                   uVar53 = (uint16_t)((ulong)uStack_6 >> 0x10);
-                  if ((byte)((far_t far *)uStack_6)[0xc].seg < *(byte *)((int)puVar50 * 0x34 + 0x22)) {
-                    *(undefined1 *)((int)puVar50 * 0x34 + 0x22) = (char)((far_t far *)uStack_6)[0xc].seg
+                  if ((byte)((far_t far *)uStack_6)[0xc].seg < Agnts[puVar50].strengthMax) {
+                    Agnts[puVar50].strengthMax = (char)((far_t far *)uStack_6)[0xc].seg
                     ;
                   }
                   puVar28 = (uint16_t *)((char *)0x24134);
@@ -1478,17 +1478,17 @@ L_OVC22_5087_0234_32B8:
                          GUnitGrid[(int)((int)&bStack0006 - 1)   /* hand fix: byte array, no [-1].seg */]
                          [CONCAT11(uStack0009,bStack0008)])->bldType;
               }
-              cVar25 = *(char *)((uint)bVar17 * 0x27 + 0x11d);
+              cVar25 = BuildingTypes[bVar17].buildTime;
               (*(uint32_t *)((uint8_t *)&(uStack_6))) =
-                   CONCAT12(*(undefined1 *)((uint)bVar17 * 0x27 + 0x11b),
+                   CONCAT12(BuildingTypes[bVar17].size,
                             CONCAT11(bVar17,(byte)uStack_6));
               uStack_6 = (far_t far *)CONCAT13(cVar25,(uint3)uStack_6);
               if (cVar25 == '\0') {
                 uStack_6 = (far_t far *)CONCAT13(1,(uint3)uStack_6);
               }
-              if ((*(uint8_t *)((uint8_t *)&(uStack_6) + 3)) < *(byte *)((uint)partyIndex * 0x27 + 0x11c)) {
+              if ((*(uint8_t *)((uint8_t *)&(uStack_6) + 3)) < BuildingTypes[partyIndex].minBuildTime) {
                 *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 6) =
-                     *(undefined1 *)((uint)partyIndex * 0x27 + 0x11c);
+                     BuildingTypes[partyIndex].minBuildTime;
               }
               else {
                 *(byte *)((uint8_t *)&GRecords[GRecordCount] + 6) = (*(uint8_t *)((uint8_t *)&(uStack_6) + 3));
@@ -1496,7 +1496,7 @@ L_OVC22_5087_0234_32B8:
               *(uint16_t *)((uint8_t *)&GRecords[GRecordCount] + 0xf) = GameTick;
               *(uint16_t *)(&GRecords[GRecordCount]) = 0;
               uVar53 = ovc23_usesGRecordCount3
-                                 (*(byte *)((uint)partyIndex * 0x27 + 0x120),in_stack_0000000e,
+                                 (BuildingTypes[partyIndex].expinc,in_stack_0000000e,
                                   GRecordCount);
               *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 0xc) = (char)uVar53;
               if (*(char *)((uint8_t *)&GRecords[GRecordCount] + 0xc) == '\0') {
@@ -1521,7 +1521,7 @@ L_OVC22_5087_0234_32B8:
               }
               else {
                 *(undefined1 *)((uint8_t *)&GRecords[GRecordCount] + 7) =
-                     *(undefined1 *)((uint)partyIndex * 0x27 + 0x11b);
+                     BuildingTypes[partyIndex].size;
                 if (in_stack_00000010 != '\0') {
                   ovr_ovc23_placeBuilding((int)bStack0006);
                   uVar53 = ovr_ovc22_usesGOngoingBattle(bStack0006,bStack0008);
@@ -1938,9 +1938,9 @@ switchD_5000_123d_caseD_3:
           units[(int)unaff_DI].level = units[(int)unaff_DI].level - 1;
           units = (unit_t *)GUnits;
           uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
-          if (((*(uint *)((uint)bVar17 * 0x27 + 0x121) & 4) == 0) &&
+          if (((BuildingTypes[bVar17].flags2 & 4) == 0) &&
              ((units[(int)unaff_DI].level == 0 ||
-              ((*(uint *)((uint)bVar17 * 0x27 + 0x121) & 0x200) != 0)))) {
+              ((BuildingTypes[bVar17].flags2 & 0x200) != 0)))) {
             ovc22_usesGUnits((int)unaff_DI,
                              (uint8_t *)
                              CONCAT13((char)((uint)((int)unaff_DI * 9) >> 8),
@@ -1948,7 +1948,7 @@ switchD_5000_123d_caseD_3:
           }
           else if (((((bld_inst_t *)BldInstances + bVar17)->ofs != 0 ||
                      *(int *)((int)&BldInstances[0].seg + (uint)bVar17 * 0xc) != 0) ||
-                   (*(char *)((uint)bVar17 * 0x27 + 0x11e) == '\x10')) &&
+                   (BuildingTypes[bVar17].flags == '\x10')) &&
                   (uVar53 = ovc22_usesGOngoingBattle2
                                       (*(byte *)&units[(int)unaff_DI].x,
                                        *(byte *)&units[(int)unaff_DI].y), (char)uVar53 != '\0')) {
@@ -1993,8 +1993,8 @@ L_upd_units_5087_1d7d_202C:
           bVar17 = (units + (int)puVar49)->bldType;
           uStack_20 =(uint16_t)( (byte *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_20) + 1)),bVar17));
           if (((far_t far *)(uint)units[(int)puVar49].unitType == uStack_16) &&
-             (*(int *)((uint)bVar17 * 0x27 + 0x123) < 0)) {
-            uVar23 = *(uint *)((uint)bVar17 * 0x27 + 0x123);
+             (BuildingTypes[bVar17].income < 0)) {
+            uVar23 = BuildingTypes[bVar17].income;
             uVar54 = (uint16_t)((ulong)*(uint32_t *)((int)uStack_16 << 2) >> 0x10);
             iVar29 = (int)*(uint32_t *)((int)uStack_16 << 2);
             iVar29 = *(int *)(iVar29 + 0x58) + ((int)uVar23 >> 0xf) +
@@ -2033,7 +2033,7 @@ L_upd_units_5087_1d7d_202C:
               }
             }
             else {
-              uVar22 = *(uint *)((uint)bVar17 * 0x27 + 0x123);
+              uVar22 = BuildingTypes[bVar17].income;
               uVar53 = (uint16_t)((ulong)*(uint32_t *)((int)uStack_16 << 2) >> 0x10);
               iVar29 = (int)*(uint32_t *)((int)uStack_16 << 2);
               puVar3 = (uint *)(iVar29 + 0x56);
@@ -2804,7 +2804,7 @@ void __cdecl16far ovc22_usesGUnits(int unitIndex,uint8_t *outFlag)
     uVar2 = (uint16_t)((ulong)GUnits >> 0x10);
     if (GRecordCount <= uVar4) {
       bVar1 = (puVar3 + unitIndex)->bldType;
-      if ((*(uint *)((uint)bVar1 * 0x27 + 0x121) & 4) == 0) {
+      if ((BuildingTypes[bVar1].flags2 & 4) == 0) {
         uVar2 = ovc22_usesGOngoingBattle
                           (*(byte *)&puVar3[unitIndex].x,*(byte *)&puVar3[unitIndex].y);
         if ((char)uVar2 != '\0') {
@@ -2814,10 +2814,10 @@ void __cdecl16far ovc22_usesGUnits(int unitIndex,uint8_t *outFlag)
         ovr_createConstructionRecordFar
                   (0,((unit_t *)GUnits)[unitIndex].x,((unit_t *)GUnits)[unitIndex].y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0)
         ;
-        if ((1 < *(byte *)((uint)bVar1 * 0x27 + 0x11b)) &&
+        if ((1 < BuildingTypes[bVar1].size) &&
            (uVar2 = (uint16_t)((ulong)GUnits >> 0x10),
            ovr_createConstructionRecordFar
-                     (0,((unit_t *)GUnits)[unitIndex].x + 1,((unit_t *)GUnits)[unitIndex].y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0), 3 < *(byte *)((uint)bVar1 * 0x27 + 0x11b))) {
+                     (0,((unit_t *)GUnits)[unitIndex].x + 1,((unit_t *)GUnits)[unitIndex].y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0), 3 < BuildingTypes[bVar1].size)) {
           uVar2 = (uint16_t)((ulong)GUnits >> 0x10);
           ovr_createConstructionRecordFar
                     (0,((unit_t *)GUnits)[unitIndex].x + 2,((unit_t *)GUnits)[unitIndex].y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0);
@@ -3164,16 +3164,16 @@ void __cdecl16far upd_usesAlignUp4(void)
             units[uVar23].level = units[uVar23].level - 1;
             units = (unit_t *)GUnits;
             uVar24 = (uint16_t)((ulong)GUnits >> 0x10);
-            if (((*(uint *)((uint)bldType * 0x27 + 0x121) & 4) == 0) &&
+            if (((BuildingTypes[bldType].flags2 & 4) == 0) &&
                ((units[uVar23].level == 0 ||
-                ((*(uint *)((uint)bldType * 0x27 + 0x121) & 0x200) != 0)))) {
+                ((BuildingTypes[bldType].flags2 & 0x200) != 0)))) {
               ovc22_usesGUnits(uVar23,(uint8_t *)
                                       CONCAT13((char)(uVar23 * 9 >> 8),
                                                CONCAT12(units[uVar23].unitType,_SS)));
             }
             else if (((((bld_inst_t *)BldInstances + bldType)->ofs != 0 ||
                        *(int *)((int)&BldInstances[0].seg + (uint)bldType * 0xc) != 0) ||
-                     (*(char *)((uint)bldType * 0x27 + 0x11e) == '\x10')) &&
+                     (BuildingTypes[bldType].flags == '\x10')) &&
                     (uVar24 = ovc22_usesGOngoingBattle2
                                         (*(byte *)&units[uVar23].x,*(byte *)&units[uVar23].y),
                     (char)uVar24 != '\0')) {
@@ -3210,8 +3210,8 @@ void __cdecl16far upd_usesAlignUp4(void)
             units = (unit_t *)GUnits;
             bldType = (units + uVar23)->bldType;
             if ((units[uVar23].unitType == idx) &&
-               (*(int *)((uint)bldType * 0x27 + 0x123) < 0)) {
-              uVar12 = *(uint *)((uint)bldType * 0x27 + 0x123);
+               (BuildingTypes[bldType].income < 0)) {
+              uVar12 = BuildingTypes[bldType].income;
               uVar25 = (uint16_t)((ulong)*(uint32_t *)(idx << 2) >> 0x10);
               iVar17 = (int)*(uint32_t *)(idx << 2);
               iVar17 = *(int *)(iVar17 + 0x58) + ((int)uVar12 >> 0xf) +
@@ -3227,7 +3227,7 @@ void __cdecl16far upd_usesAlignUp4(void)
                     }
                     units = (unit_t *)GUnits;
                     uVar24 = (uint16_t)((ulong)GUnits >> 0x10);
-                    if (((*(uint *)((uint)bldType * 0x27 + 0x121) & 4) == 0) &&
+                    if (((BuildingTypes[bldType].flags2 & 4) == 0) &&
                        ((iVar17 = 0, units[uVar23].level == 0 ||
                         (iVar17 = (uint)bldType * 0x27, (*(uint *)(iVar17 + 0x121) & 0x200) != 0))))
                     {
@@ -3237,7 +3237,7 @@ void __cdecl16far upd_usesAlignUp4(void)
                     }
                     else if (((((bld_inst_t *)BldInstances + bldType)->ofs != 0 ||
                                *(int *)((int)&BldInstances[0].seg + (uint)bldType * 0xc) != 0) ||
-                             (*(char *)((uint)bldType * 0x27 + 0x11e) == '\x10')) &&
+                             (BuildingTypes[bldType].flags == '\x10')) &&
                             (uVar24 = ovc22_usesGOngoingBattle2
                                                 (*(byte *)&units[uVar23].x,
                                                  *(byte *)&units[uVar23].y), (char)uVar24 != '\0')
@@ -3248,7 +3248,7 @@ void __cdecl16far upd_usesAlignUp4(void)
                 }
               }
               else {
-                uVar36 = *(uint *)((uint)bldType * 0x27 + 0x123);
+                uVar36 = BuildingTypes[bldType].income;
                 uVar24 = (uint16_t)((ulong)*(uint32_t *)(idx << 2) >> 0x10);
                 iVar17 = (int)*(uint32_t *)(idx << 2);
                 puVar2 = (uint *)(iVar17 + 0x56);

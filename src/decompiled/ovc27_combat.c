@@ -209,7 +209,7 @@ uint __cdecl16far ovc27_compute1(agnt_t *agnt,int param,uint16_t arg3,uint16_t a
   int in_stack_00000008;
   
   if ((((agntG_t *)agnt->gdata)->flags & 2) != 0) {
-    uVar1 = *(uint32_t *)(in_stack_00000008 * 0x34 + 0x1d);
+    uVar1 = *(uint32_t far *)&Agnts[in_stack_00000008].gdata;
     bVar3 = (byte)((uint)(in_stack_00000008 * 0x34) >> 8);
     if (((*(uint *)((int)uVar1 + 0x3e) & 0x10) != 0) &&
        ((((entity_t *)agnt->entity)->base).level < 3)) {
@@ -508,7 +508,7 @@ uint __cdecl16far ovc27_compute2(agnt_t *agnt,int param,uint16_t arg3,uint16_t a
       uVar2 = 0;
     }
     else {
-      uVar1 = *(uint32_t *)(in_stack_00000008 * 0x34 + 0x1d);
+      uVar1 = *(uint32_t far *)&Agnts[in_stack_00000008].gdata;
       if (((*(uint *)((int)uVar1 + 0x3e) & 0x10) == 0) ||
          (2 < (((entity_t *)agnt->entity)->base).level)) {
         uVar2 = ovc27_rollAgainstStat(agnt,mode,1,0);
@@ -1713,12 +1713,12 @@ ovc27_usesPlay_sfxU(uint16_t ptrOfs,uint16_t ptrSeg,agnt_t *agnt,uint8_t frames,
   uVar3 = ovc27_compute3(CONCAT22(uVar1,iVar2),frames);
   if ((char)uVar3 == '\0') {
     for (iVar5 = 0; iVar5 < (int)(uint)AgntCount; iVar5 = iVar5 + 1) {
-      if (*(uint16_t *)(iVar5 * 0x34 + 0x1b) == agnt_00->owner) {
-        if (*(byte *)(iVar2 + 0x32) < *(byte *)(iVar5 * 0x34 + 0x22)) {
-          *(undefined1 *)(iVar5 * 0x34 + 0x22) = *(undefined1 *)(iVar2 + 0x32);
+      if (Agnts[iVar5].owner == agnt_00->owner) {
+        if (*(byte *)(iVar2 + 0x32) < Agnts[iVar5].strengthMax) {
+          Agnts[iVar5].strengthMax = *(undefined1 *)(iVar2 + 0x32);
         }
-        if (*(byte *)(iVar5 * 0x34 + 0x22) < *(byte *)(iVar5 * 0x34 + 0x21)) {
-          *(undefined1 *)(iVar5 * 0x34 + 0x21) = *(undefined1 *)(iVar5 * 0x34 + 0x22);
+        if (Agnts[iVar5].strengthMax < Agnts[iVar5].strength) {
+          Agnts[iVar5].strength = Agnts[iVar5].strengthMax;
         }
       }
     }

@@ -551,3 +551,17 @@ struct brect_t {
 
 typedef uint16_t size_t;
 
+/* Byte / word views of a field inside an agent record.  The original reads odd
+   offsets such as +4/+5 (the halves of targetX) and +0x30/+0x31 (state), which
+   struct member access alone cannot express. */
+#define AGNT_FIELD(rec, field, k) \
+    (*((uint8_t far *)((uint8_t far *)&(rec)->field + (k))))
+#define AGNT_WORD(rec, field, k) \
+    (*((uint16_t far *)((uint8_t far *)&(rec)->field + (k))))
+
+/* Byte / word views of a field inside a building-type record (same trick as
+   AGNT_FIELD: the export produced odd offsets that member access cannot say). */
+#define BLD_FIELD(rec, field, k) \
+    (*((uint8_t far *)((uint8_t far *)&(rec)->field + (k))))
+#define BLD_WORD(rec, field, k) \
+    (*((uint16_t far *)((uint8_t far *)&(rec)->field + (k))))
