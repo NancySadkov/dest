@@ -961,3 +961,35 @@ attempt must place the handler where its address is known:
 
 Once the vector is right, the block loader follows the design already recorded
 (`audit/overlay_blocks.csv`, stub `CD 3F <id> <ofs>`).
+
+### The handler vector is now correct - and still never fires
+
+The earlier 0x30 was not a wrong address: it was `_STARTX`'s offset, because the
+`static` handler was eliminated and the reference fell through to the next
+symbol.  Making the handler non-static fixes that, and the map confirms it:
+
+```
+006C:0030  _ST_INT3F_PROBE
+006C:004C  _STARTX
+```
+
+with the install emitting exactly `mov word ptr es:[0xfc],0x30` /
+`mov word ptr es:[0xfe],cs`.  So the `INT 3Fh` vector is now the handler, in the
+same segment (`CRTL_SEG`), at a verified offset.
+
+It still does not fire: `OUT.BIN` stays 0 bytes.
+
+That means `main` does not reach `ovr_init_game`'s overlay call in the real run,
+even though the exit-code ladder reaches the `pmain = main;` site and a marker at
+`main`'s first statement has fired in earlier builds.  The remaining suspects,
+in order:
+
+1. the `ovr_init_game` thunk in the built image does not jump to `O09_SEG` at run
+   time - its segment word is relocated (image `0x6FE6`) but the *load* base it
+   receives may differ from the segment the overlay block expects;
+2. `main`'s body stops before the call (e.g. in the `envp` dereference, which
+   uses our two-byte `env0`).
+
+Both are cheap to separate: put an exit-code marker immediately before
+`ovr_init_game();` in `main` and rerun the ladder - if that code appears, the
+call is reached and suspect 1 is confirmed.
