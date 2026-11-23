@@ -3505,7 +3505,7 @@ void __cdecl16far ovc49_drawAgents(void)
   uint8_t type;
   undefined1 uVar23;
   brect_t agentRect;
-  int iStack_28;
+  int scrY;
   uint agentIndex;
   byte bStack_1e;
   uint8_t agntIndex;
@@ -3642,13 +3642,13 @@ void __cdecl16far ovc49_drawAgents(void)
     }
     if (*(char *)(agentIndex * 0x34 + 0x11) == '\0') {
       iVar17 = ovr_agnt_clampX(*(int *)(agentIndex * 0x34));
-      iStack_28 = *(int *)(&columnScreenY[iVar17]) + *(int *)(agentIndex * 0x34 + 2) + 3;
+      scrY = *(int *)(&columnScreenY[iVar17]) + *(int *)(agentIndex * 0x34 + 2) + 3;
     }
     else {
       iVar17 = ovr_agnt_clampX(*(int *)(agentIndex * 0x34));
-      iStack_28 = *(int *)(&columnScreenY[iVar17]) + *(int *)(agentIndex * 0x34 + 2) + -0x16;
+      scrY = *(int *)(&columnScreenY[iVar17]) + *(int *)(agentIndex * 0x34 + 2) + -0x16;
     }
-    *(int *)(agentIndex * 0x34 + 0x28) = iStack_28;
+    *(int *)(agentIndex * 0x34 + 0x28) = scrY;
     if ((*(char *)(agentIndex * 0x34 + 0x10) == '\x05') && (*(char *)(agentIndex * 0x34 + 0xc) != -1))
     {
       ovr_ovc41_usesXOfs(agentIndex);
@@ -3789,25 +3789,25 @@ void __cdecl16far ovc49_drawAgents(void)
     iVar17 = *(int *)(agentIndex * 0x34) + 0xc;
     if (*(char *)(agentIndex * 0x34 + 0x11) == '\0') {
       iVar14 = ovr_agnt_clampX(*(int *)(agentIndex * 0x34));
-      iStack_28 = *(int *)(&columnScreenY[iVar14]) + *(int *)(agentIndex * 0x34 + 2) + 3;
+      scrY = *(int *)(&columnScreenY[iVar14]) + *(int *)(agentIndex * 0x34 + 2) + 3;
     }
     else {
       iVar14 = ovr_agnt_clampX(*(int *)(agentIndex * 0x34));
       uVar6 = *(uint32_t *)(agentIndex * 0x34 + 0x1d);
-      iStack_28 = *(int *)(&columnScreenY[iVar14]) + *(int *)(agentIndex * 0x34 + 2) +
+      scrY = *(int *)(&columnScreenY[iVar14]) + *(int *)(agentIndex * 0x34 + 2) +
                   (int)*(char *)((int)uVar6 + 0x52) + -0x16;
     }
     *(int *)(agentIndex * 0x34 + 0x26) = iVar17;
-    *(int *)(agentIndex * 0x34 + 0x28) = iStack_28;
+    *(int *)(agentIndex * 0x34 + 0x28) = scrY;
     if ((*(uint *)(agentIndex * 0x34 + 0x2b) & 0x800) == 0) {
       if (*(char *)(agentIndex * 0x34 + 0x24) == '\0') {
         GGameState = 0x32;
         gfx_04.seg = uStack_16;
         gfx_04.ofs = (uint16_t)(psStack_18->cmap + 6);
-        ovr_blitGfxRect(gfx_04,iVar17,iStack_28,&agentRect,type,(*(uint8_t *)((uint8_t *)&(iStack_28))),0,0,0,0,0,0);
+        ovr_blitGfxRect(gfx_04,iVar17,scrY,&agentRect,type,(*(uint8_t *)((uint8_t *)&(scrY))),0,0,0,0,0,0);
         GGameState = 0x33;
         if ((*(uint *)(agentIndex * 0x34 + 0x2b) & 100) != 0) {
-          iVar14 = iStack_28 - *(int *)((int)uStack_12 + 0xd);
+          iVar14 = scrY - *(int *)((int)uStack_12 + 0xd);
           bVar4 = *(byte *)(agentIndex * 0x34 + 0x23);
           pcVar2 = (char *)(agentIndex * 0x34 + 0x23);
           *pcVar2 = *pcVar2 + -1;
@@ -3822,8 +3822,8 @@ void __cdecl16far ovc49_drawAgents(void)
         if ((*(uint *)((int)uVar6 + 0x40) & 2) == 0) {
           gfx_07.seg = uStack_16;
           gfx_07.ofs = (uint16_t)(psStack_18->cmap + 6);
-          ovr_blitGfxRect(gfx_07,iVar17,iStack_28,&agentRect,type,(*(uint8_t *)((uint8_t *)&(iStack_28))),0,0,0,0,0,0);
-          iVar14 = iStack_28 - *(int *)((int)uStack_12 + 0xd);
+          ovr_blitGfxRect(gfx_07,iVar17,scrY,&agentRect,type,(*(uint8_t *)((uint8_t *)&(scrY))),0,0,0,0,0,0);
+          iVar14 = scrY - *(int *)((int)uStack_12 + 0xd);
           uVar10 = *(byte *)(agentIndex * 0x34 + 0x23) & 3;
           gfx_08.seg = ((uint16_t *)&crossBlitType2Seg)[uVar10 * 2];
           gfx_08.ofs = ((uint16_t *)&crossBlitType2Ofs)[uVar10 * 2];
@@ -3839,7 +3839,7 @@ void __cdecl16far ovc49_drawAgents(void)
         else {
           gfx_06.seg = uStack_16;
           gfx_06.ofs = (uint16_t)(psStack_18->cmap + 6);
-          ovr_blitGfxRect(gfx_06,iVar17,iStack_28,&agentRect,type,(*(uint8_t *)((uint8_t *)&(iStack_28))),0,0,0,0,0,0);
+          ovr_blitGfxRect(gfx_06,iVar17,scrY,&agentRect,type,(*(uint8_t *)((uint8_t *)&(scrY))),0,0,0,0,0,0);
           if ((int)(uint)*(byte *)((int)uStack_12 + 0x1b) <= *(int *)(agentIndex * 0x34 + 6) + 1) {
             *(undefined1 *)(agentIndex * 0x34 + 0x24) = 0;
           }
@@ -3849,7 +3849,7 @@ void __cdecl16far ovc49_drawAgents(void)
         if (bStack_1b == 0x12) {
           gfx_09.seg = uStack_16;
           gfx_09.ofs = (uint16_t)(psStack_18->cmap + 6);
-          ovr_blitGfxRect(gfx_09,iVar17,iStack_28,&agentRect,type,(*(uint8_t *)((uint8_t *)&(iStack_28))),0,0,0,0,0,0);
+          ovr_blitGfxRect(gfx_09,iVar17,scrY,&agentRect,type,(*(uint8_t *)((uint8_t *)&(scrY))),0,0,0,0,0,0);
           if ((int)(uint)*(byte *)((int)uStack_12 + 0x1b) <= *(int *)(agentIndex * 0x34 + 6) + 1) {
             *(undefined1 *)(agentIndex * 0x34 + 0x25) = 2;
             ovr_ovc41_paralyzeNearbyAgents(agentIndex);
@@ -3859,7 +3859,7 @@ void __cdecl16far ovc49_drawAgents(void)
           uVar12 = ovr_randBelow(0x100,0);
           gfx_01.seg = (uint16_t)((ulong)psStack_18 >> 0x10);
           gfx_01.ofs = (uint16_t)(psStack_18->cmap + 6);
-          ovr_gfxRlePrepare(gfx_01,iVar17,iStack_28,&agentRect.x,type,'\x10',0x10,CONCAT11((char)(agentIndex * 0x34 >> 8),
+          ovr_gfxRlePrepare(gfx_01,iVar17,scrY,&agentRect.x,type,'\x10',0x10,CONCAT11((char)(agentIndex * 0x34 >> 8),
                                      *(undefined1 *)(agentIndex * 0x34 + 0xf)),1,*(char *)(agentIndex * 0x34 + 0x23) * '\x19',(char)uVar12,0,0);
           if (*(char *)(agentIndex * 0x34 + 0x23) == '\0') {
             *(undefined1 *)(agentIndex * 0x34 + 0x25) = 2;
@@ -3875,7 +3875,7 @@ void __cdecl16far ovc49_drawAgents(void)
     else {
       gfx_03.seg = uStack_16;
       gfx_03.ofs = (uint16_t)(psStack_18->cmap + 6);
-      ovr_gfxRlePrepare(gfx_03,iVar17,iStack_28,&agentRect.x,type,'\x10',0x10,CONCAT11((char)(agentIndex * 0x34 >> 8),
+      ovr_gfxRlePrepare(gfx_03,iVar17,scrY,&agentRect.x,type,'\x10',0x10,CONCAT11((char)(agentIndex * 0x34 >> 8),
                                  *(undefined1 *)(agentIndex * 0x34 + 0xf)),0xff,0,0,0,0);
     }
     if (*(char *)(agentIndex * 0x34 + 0x30) != '\0') {
@@ -3958,7 +3958,7 @@ void __cdecl16far ovc49_drawAgents(void)
           *(undefined1 *)(agentIndex * 0x34 + 0x2e) = 0;
           uVar13 = (uint16_t)((ulong)uStack_12 >> 0x10);
           iVar14 = (int)uStack_12;
-          *(char *)(agentIndex * 0x34 + 10) = *(char *)(iVar14 + 0x15) + (*(uint8_t *)((uint8_t *)&(iStack_28)));
+          *(char *)(agentIndex * 0x34 + 10) = *(char *)(iVar14 + 0x15) + (*(uint8_t *)((uint8_t *)&(scrY)));
           if (*(char *)(agentIndex * 0x34 + 0xf) == '\0') {
             *(int *)(agentIndex * 0x34 + 8) = *(int *)(iVar14 + 0x13) + iVar17;
           }
