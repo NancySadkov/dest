@@ -229,14 +229,13 @@ void __cdecl16far saveui_usesBlitGfx10(far_t gfx,char *text,byte *widths,uint *c
   far_t gfx_00;
   far_t gfx_01;
   uint16_t uVar1;
-  uint16_t unaff_SS;
   uint16_t in_stack_00000004;
   far_t dst;
   uint8_t rect;
   int iStack_a;
   int iStack_6;
   
-  dst.seg = unaff_SS;
+  dst.seg = _SS;
   dst.ofs = (uint16_t)&rect;
   F_SCOPY(far_from_u32((uint32_t)(0x241026ad)),dst);
   rect = *(uint *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2)));
@@ -245,7 +244,7 @@ void __cdecl16far saveui_usesBlitGfx10(far_t gfx,char *text,byte *widths,uint *c
   uVar1 = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
   gfx_00.seg = gfx.ofs;
   gfx_00.ofs = in_stack_00000004;
-  ovr_blitGfx10(gfx_00,0x16,uVar1,(brect_t *)&rect,SUB21(unaff_SS,0),(char)uVar1,0);
+  ovr_blitGfx10(gfx_00,0x16,uVar1,(brect_t *)&rect,SUB21(_SS,0),(char)uVar1,0);
   TextBlitX = 0x2a;
   TextBlitY = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
   ovr_blitText((char *)gfx.seg,
@@ -256,7 +255,7 @@ void __cdecl16far saveui_usesBlitGfx10(far_t gfx,char *text,byte *widths,uint *c
     uVar1 = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
     gfx_01.seg = gfx.ofs;
     gfx_01.ofs = in_stack_00000004;
-    ovr_blitGfx10(gfx_01,0x16,uVar1,(brect_t *)&rect,SUB21(unaff_SS,0),(char)uVar1,0);
+    ovr_blitGfx10(gfx_01,0x16,uVar1,(brect_t *)&rect,SUB21(_SS,0),(char)uVar1,0);
   }
   *(uint16_t *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2))) = TextBlitX;
   ovr_blitLetter('_',(byte *)Font03.ofs,(uint8_t)Font03.seg,0xf);
@@ -317,7 +316,6 @@ void __cdecl16far uiMenuSub(char *title,far_t items,uint16_t nitems,uint16_t def
   uint16_t uVar3;
   uint uVar4;
   uint16_t *puVar5;
-  uint16_t unaff_SS;
   char *in_stack_00000004;
   undefined1 uVar6;
   undefined1 uVar7;
@@ -355,8 +353,8 @@ void __cdecl16far uiMenuSub(char *title,far_t items,uint16_t nitems,uint16_t def
     uStack_a = 0x2410;
     uStack_c = 0x2733;
   }
-  uVar6 = (undefined1)unaff_SS;
-  uVar7 = (undefined1)(unaff_SS >> 8);
+  uVar6 = (undefined1)_SS;
+  uVar7 = (undefined1)(_SS >> 8);
   (*(uint8_t *)((uint8_t *)&(entries.seg))) = uVar6;
   entries.ofs = (uint16_t)&dest;
   (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = uVar7;
@@ -395,7 +393,7 @@ L_uiMenuSub_0903:
             return;
           }
           if (uVar2 == 0xffff) {
-            textTable.seg = unaff_SS;
+            textTable.seg = _SS;
             textTable.ofs = (uint16_t)&dest;
             uVar3 = saveui_usesMouseMoved(textTable,sz,0);
             bStack_3 = (byte)uVar3;
@@ -404,7 +402,7 @@ L_uiMenuSub_0903:
 L_uiMenuSub_0B46:
               GMenuItem = bVar1;
               if (GMenuItem != 0) {
-                textTable_00.seg = unaff_SS;
+                textTable_00.seg = _SS;
                 textTable_00.ofs = (uint16_t)&dest;
                 saveui_usesBlitLoadRleGfx2(textTable_00,GMenuItem - 1,0);
               }
@@ -418,7 +416,7 @@ L_uiMenuSub_0B46:
               else {
                 iStack_6 = 0;
               }
-              _fsetmem((uint8_t *)CONCAT22(unaff_SS,&dest),0x1c,0);
+              _fsetmem((uint8_t *)CONCAT22(_SS,&dest),0x1c,0);
               for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
                   readed = readed + 0x1) {
                 puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
@@ -453,7 +451,7 @@ L_uiMenuSub_0B46:
         else {
           iStack_6 = 0;
         }
-        _fsetmem((uint8_t *)CONCAT22(unaff_SS,&dest),0x1c,0);
+        _fsetmem((uint8_t *)CONCAT22(_SS,&dest),0x1c,0);
         for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
             readed = readed + 0x1) {
           puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
@@ -506,7 +504,7 @@ L_uiMenuSub_08AD:
       else {
         iStack_6 = iStack_6 + -7;
       }
-      _fsetmem((uint8_t *)CONCAT22(unaff_SS,&dest),0x1c,0);
+      _fsetmem((uint8_t *)CONCAT22(_SS,&dest),0x1c,0);
       for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
           readed = readed + 0x1) {
         puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
@@ -559,7 +557,6 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   uint16_t uVar8;
   uint16_t uVar9;
   uint *unaff_SI;
-  byte *unaff_SS;
   uint8_t *puVar10;
   uint *ey;
   uint3 uStack_5e;
@@ -582,9 +579,9 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
     uStack_5e = ZEXT23(ey);
   }
   else {
-    strcpy((char *)CONCAT22(unaff_SS,&text),(char *)CONCAT22(gfxSeg,gfxOfs));
+    strcpy((char *)CONCAT22(_SS,&text),(char *)CONCAT22(gfxSeg,gfxOfs));
   }
-  sVar1 = strlen((char *)CONCAT22(unaff_SS,&text));
+  sVar1 = strlen((char *)CONCAT22(_SS,&text));
   bStack_5 = (byte)sVar1;
   uVar8 = (uint16_t)((ulong)((long)row * 0xf) >> 0x10);
   pfVar2 = ovr_stshRleCut((far_t far *)0x0,far_from_u32((uint32_t)(0x16a000)),(int)((long)row * 0xf) + 0x1d,222,row * 0xf + 0x29,(int16_t)ey,0xde,0,0);
@@ -594,7 +591,7 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   gfx.seg = (uint16_t)&text;
   gfx.ofs = uVar8;
   saveui_usesBlitGfx10
-            (gfx,(char *)CONCAT22(&cursorX,unaff_SS),(byte *)CONCAT22(row,unaff_SS),(uint *)uStack_5e,
+            (gfx,(char *)CONCAT22(&cursorX,_SS),(byte *)CONCAT22(row,_SS),(uint *)uStack_5e,
              in_stack_0000ffa6);
   uVar3 = row * 0x12c0 + 0x2096;
   gfx_02.seg = trianglsCut4Seg;
@@ -612,7 +609,7 @@ L_uiReadString_0DC9:
         (&text)[bStack_5] = (uint8_t)uStack_4;
         (&uStack_5b)[bStack_5] = 0;
         iVar4 = ovr_font_textWidth((char *)&text,(char *)CONCAT13((char)(Font03.ofs >> 8),
-                                                    CONCAT12((char)Font03.ofs,unaff_SS)),(char)Font03.ofs,Font03.seg,0);
+                                                    CONCAT12((char)Font03.ofs,_SS)),(char)Font03.ofs,Font03.seg,0);
         iVar5 = ovr_font_textWidth((char *)"_",(char *)CONCAT22(Font03.ofs,(char *)0x26510),(char)Font03.seg,0,0);
         if (iVar4 + iVar5 + 0x2aU < 0xe0) {
           bStack_5 = bStack_5 + 1;
@@ -621,7 +618,7 @@ L_uiReadString_0DC9:
         gfx_00.seg = (uint16_t)&text;
         gfx_00.ofs = uVar8;
         saveui_usesBlitGfx10
-                  (gfx_00,(char *)CONCAT22(&cursorX,unaff_SS),(byte *)CONCAT22(row,unaff_SS),
+                  (gfx_00,(char *)CONCAT22(&cursorX,_SS),(byte *)CONCAT22(row,_SS),
                    (uint *)uStack_5e,in_stack_0000ffa6);
       }
       if (uStack_4 != 0x4b00) break;
@@ -632,7 +629,7 @@ L_uiReadString_0ECE:
         gfx_01.seg = (uint16_t)&text;
         gfx_01.ofs = uVar8;
         saveui_usesBlitGfx10
-                  (gfx_01,(char *)CONCAT22(&cursorX,unaff_SS),(byte *)CONCAT22(row,unaff_SS),
+                  (gfx_01,(char *)CONCAT22(&cursorX,_SS),(byte *)CONCAT22(row,_SS),
                    (uint *)uStack_5e,in_stack_0000ffa6);
       }
     }
@@ -692,7 +689,7 @@ L_uiReadString_0FF7:
           puVar10 = &text;
           uVar9 = 0;
           puVar7 = ovr_stshRealloc((uint32_t)CONCAT22(gfxSeg,gfxOfs),(ulong)(bStack_5 + 1));
-          pcVar6 = strcpy((char *)CONCAT22(uVar9,puVar7),(char *)CONCAT22(unaff_SS,puVar10));
+          pcVar6 = strcpy((char *)CONCAT22(uVar9,puVar7),(char *)CONCAT22(_SS,puVar10));
         }
         return pcVar6;
       }
@@ -748,13 +745,12 @@ char * __cdecl16far saveui_readLine(int fd)
   int iVar2;
   int iVar3;
   uint unaff_DI;
-  void *unaff_SS;
   uint8_t *src;
   uint8_t lineBuf;
   
   iVar3 = 0;
   while (iVar3 < 0x4f) {
-    iVar2 = read(fd,(void *)CONCAT22(1,unaff_SS),unaff_DI);
+    iVar2 = read(fd,(void *)CONCAT22(1,_SS),unaff_DI);
     if ((iVar2 != 1) || ((&lineBuf)[iVar3] == 0xa)) break;
     if ((&lineBuf)[iVar3] != 0xd) {
       iVar3 = iVar3 + 1;
@@ -768,7 +764,7 @@ char * __cdecl16far saveui_readLine(int fd)
     pcVar1 = (char *)0x0;
   }
   else {
-    src = (uint8_t *)CONCAT22(unaff_SS,&lineBuf);
+    src = (uint8_t *)CONCAT22(_SS,&lineBuf);
     iVar2 = iVar3 + 1 >> 0xf;
     pcVar1 = ovr_stshAlloc((long)(iVar3 + 1));
     pcVar1 = strcpy((char *)CONCAT22(iVar2,pcVar1),(char *)src);
@@ -826,14 +822,13 @@ void __cdecl16far saveui_writeSavesList(far_t entries,uint count)
   uint16_t in_DX;
   uint16_t *puVar1;
   uint uVar2;
-  int unaff_SS;
   uint8_t msg;
   
   path = ovr_fmVsprintf("%ssaves.txt",&GWorkDir);
   handle = ovr_creat_wait_unlock_and_disk(path,in_DX);
   if (-1 < handle) {
-    _sprintf((char *)CONCAT22(unaff_SS,&msg),"%u");
-    saveui_writeLine(handle,(char *)&msg,unaff_SS);
+    _sprintf((char *)CONCAT22(_SS,&msg),"%u");
+    saveui_writeLine(handle,(char *)&msg,_SS);
     for (uVar2 = 0; uVar2 < count; uVar2 = uVar2 + 1) {
       puVar1 = (uint16_t *)(entries.ofs + uVar2 * 4);
       saveui_writeLine(handle,(char *)*puVar1,puVar1[1]);
@@ -914,7 +909,6 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   uint unaff_DI;
   uint16_t uVar18;
   uint16_t uVar19;
-  uint16_t unaff_SS;
   byte abStackY_15bc [5516];
   uint16_t uStackY_30;
   uint16_t uStackY_2e;
@@ -966,7 +960,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
     iStack_14 = 0x2798;
     pcStack_22 = (char *)CONCAT22(uVar10,CONCAT11(0x24,GMenuItem));
     items.seg = 4;
-    items.ofs = unaff_SS;
+    items.ofs = _SS;
     puVar12 = &menuLabel;
     uStackY_2c = 0x279d;
     uStackY_2e = 0x22c4;
@@ -1142,7 +1136,7 @@ switchD_4000_6642_caseD_3:
         if ((uVar8 == uVar9) &&
            (uVar18 = (uint16_t)((ulong)uStack_1e >> 0x10),
            (((entity_t *)uStack_1e)->base).destY == (((entity_t *)uStack_1e)->base).y)) {
-          pcStack_22 = (char *)CONCAT22(menuLabel,unaff_SS);
+          pcStack_22 = (char *)CONCAT22(menuLabel,_SS);
           uStackY_2c = 0x2379;
           uStackY_2e = 0x204;
           manage_usesCurSfxType32();
@@ -1227,7 +1221,7 @@ switchD_4000_6642_caseD_3:
           uStackY_2c = 0x2386;
           uStackY_2e = 0x4e3;
           uVar8 = ovr_ovc26_usesRandBelow
-                            (unaff_DI,(int)&uStack_18 + 1,unaff_SS,(uint16_t)acStack_e,unaff_SS);
+                            (unaff_DI,(int)&uStack_18 + 1,_SS,(uint16_t)acStack_e,_SS);
           if (((uVar8 & 0xff) == 0) &&
              (*(char *)((int)(char **)GMenuStrings +
                        (uint)(((entity_t *)uStack_1e)->base).gindex * 0x95 + 0x1f) == '\0')) {
@@ -1397,7 +1391,6 @@ void __cdecl16far uiMainMenuLoop(void)
   int *piVar14;
   uint uVar15;
   uint uVar16;
-  uint16_t unaff_SS;
   uint16_t uVar17;
   uint32_t menu;
   uint16_t uStack_30;
@@ -1408,10 +1401,10 @@ void __cdecl16far uiMainMenuLoop(void)
   char yesno [9];
   uint8_t yes_picked;
   
-  dst.seg = unaff_SS;
+  dst.seg = _SS;
   dst.ofs = (uint16_t)&menu;
   F_SCOPY(far_from_u32((uint32_t)(0x241026b7)),dst);
-  dst_00.seg = unaff_SS;
+  dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)yesno;
   F_SCOPY(far_from_u32((uint32_t)(0x241026d7)),dst_00);
   ovr_say((char *)"Stronghold V 1.00",0x2410);
@@ -1445,7 +1438,7 @@ void __cdecl16far uiMainMenuLoop(void)
     pmenu = (uint16_t)&menu;
     items.seg = pmenu;
     items.ofs = 0x2410;
-    uiMenu((char *)"Select an option:",items,unaff_SS,8);
+    uiMenu((char *)"Select an option:",items,_SS,8);
     bStack_13 = (byte)pmenu;
     ovr_say((char *)0x26832,0x2410);
     if (bStack_13 < 9) {
@@ -1462,7 +1455,7 @@ void __cdecl16far uiMainMenuLoop(void)
           pcVar9 = yesno;
           items_00.seg = (uint16_t)pcVar9;
           items_00.ofs = 0x2410;
-          uiMenu((char *)"Game not saved: Are you sure?",items_00,unaff_SS,2);
+          uiMenu((char *)"Game not saved: Are you sure?",items_00,_SS,2);
           if ((char)pcVar9 == '\x01') {
             bVar1 = true;
           }
@@ -1596,7 +1589,7 @@ void __cdecl16far uiMainMenuLoop(void)
             pcVar9 = yesno;
             items_03.seg = (uint16_t)pcVar9;
             items_03.ofs = 0x2410;
-            uiMenu((char *)"Game not saved: Are you sure?",items_03,unaff_SS,2);
+            uiMenu((char *)"Game not saved: Are you sure?",items_03,_SS,2);
             if ((char)pcVar9 == '\x01') {
               bVar1 = true;
             }
@@ -1626,7 +1619,7 @@ void __cdecl16far uiMainMenuLoop(void)
           saveui_blitPanel();
           uVar17 = 2;
           pcVar9 = yesno;
-          uVar7 = unaff_SS;
+          uVar7 = _SS;
           title = ovr_fmVsprintf("Delete %s: Are you sure?",
                                  (char *)CONCAT22(*(uint16_t *)
                                                    ((int)entries_05 + (uint)bVar5 * 4 + -2),
@@ -1697,7 +1690,6 @@ void __cdecl16far saveui_configureNewWorld(void)
 
 {
   uint8_t *puVar1;
-  uint16_t unaff_SS;
   far_t items;
   far_t items_00;
   far_t dst_00;
@@ -1716,19 +1708,19 @@ void __cdecl16far saveui_configureNewWorld(void)
   int iStack_6;
   int iStack_4;
   
-  dst_00.seg = unaff_SS;
+  dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&dst;
   F_SCOPY(far_from_u32((uint32_t)(0x241026e3)),dst_00);
-  dst_01.seg = unaff_SS;
+  dst_01.seg = _SS;
   dst_01.ofs = (uint16_t)&hostilityItems;
   F_SCOPY(far_from_u32((uint32_t)(0x241026f7)),dst_01);
-  dst_02.seg = unaff_SS;
+  dst_02.seg = _SS;
   dst_02.ofs = (uint16_t)&worldItems;
   F_SCOPY(far_from_u32((uint32_t)(0x2410270b)),dst_02);
   puVar1 = &worldItems;
   items.seg = (uint16_t)puVar1;
   items.ofs = 0x2410;
-  uiMenu((char *)"Which new world:",items,unaff_SS,0);
+  uiMenu((char *)"Which new world:",items,_SS,0);
   bStack_b = (byte)puVar1;
   saveui_blitPanel();
   if ((bStack_b != 8) && (bStack_b != 0)) {
@@ -1749,7 +1741,7 @@ void __cdecl16far saveui_configureNewWorld(void)
     puVar1 = &hostilityItems;
     items_00.seg = (uint16_t)puVar1;
     items_00.ofs = 0x2410;
-    uiMenu((char *)"Hostility level:",items_00,unaff_SS,0);
+    uiMenu((char *)"Hostility level:",items_00,_SS,0);
     bStack_b = (byte)puVar1;
     saveui_blitPanel();
     if ((bStack_b != '\x05') && (bStack_b != '\0')) {
@@ -1844,7 +1836,6 @@ int __cdecl16far saveui_usesBlitText(char *prompt,int textSeg,int row)
   int iVar3;
   uint16_t uVar4;
   uint16_t unaff_SI;
-  byte *unaff_SS;
   char *in_stack_00000004;
   uint3 uStack_5e;
   uint8_t text;
@@ -1873,7 +1864,7 @@ int __cdecl16far saveui_usesBlitText(char *prompt,int textSeg,int row)
   gfx.seg = (uint16_t)&text;
   gfx.ofs = uVar4;
   saveui_usesBlitGfx10
-            (gfx,(char *)CONCAT22(&cursorX,unaff_SS),(byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),unaff_SS),
+            (gfx,(char *)CONCAT22(&cursorX,_SS),(byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),_SS),
              (uint *)uStack_5e,in_stack_0000ffa6);
   ovr_ovc40_flushInput();
 L_saveui_4528_1d55_1E1D:
@@ -1884,7 +1875,7 @@ L_saveui_4528_1d55_1E1D:
         (&text)[bStack_5] = (uint8_t)uStack_4;
         (&uStack_5b)[bStack_5] = 0;
         iVar3 = ovr_font_textWidth((char *)&text,(char *)CONCAT13((char)(Font03.ofs >> 8),
-                                                    CONCAT12((char)Font03.ofs,unaff_SS)),(char)Font03.ofs,Font03.seg,0);
+                                                    CONCAT12((char)Font03.ofs,_SS)),(char)Font03.ofs,Font03.seg,0);
         iVar2 = ovr_font_textWidth((char *)"_",(char *)CONCAT22(Font03.ofs,(char *)0x26510),(char)Font03.seg,0,0);
         if (iVar3 + iVar2 + 0x2aU < 0xe0) {
           bStack_5 = bStack_5 + 1;
@@ -1893,8 +1884,8 @@ L_saveui_4528_1d55_1E1D:
         gfx_00.seg = (uint16_t)&text;
         gfx_00.ofs = uVar4;
         saveui_usesBlitGfx10
-                  (gfx_00,(char *)CONCAT22(&cursorX,unaff_SS),
-                   (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),unaff_SS),(uint *)uStack_5e,in_stack_0000ffa6);
+                  (gfx_00,(char *)CONCAT22(&cursorX,_SS),
+                   (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),_SS),(uint *)uStack_5e,in_stack_0000ffa6);
       }
       if (uStack_4 != 0x4b00) break;
 L_saveui_4528_1d55_1F0C:
@@ -1904,8 +1895,8 @@ L_saveui_4528_1d55_1F0C:
         gfx_01.seg = (uint16_t)&text;
         gfx_01.ofs = uVar4;
         saveui_usesBlitGfx10
-                  (gfx_01,(char *)CONCAT22(&cursorX,unaff_SS),
-                   (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),unaff_SS),(uint *)uStack_5e,in_stack_0000ffa6);
+                  (gfx_01,(char *)CONCAT22(&cursorX,_SS),
+                   (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(prompt) + 2)),_SS),(uint *)uStack_5e,in_stack_0000ffa6);
       }
     }
     if (0x4b00 < uStack_4) {
@@ -1932,7 +1923,7 @@ L_saveui_4528_1d55_1F59:
         iVar3 = -1;
       }
       else {
-        iVar3 = saveui_parseNumber((char *)CONCAT22(unaff_SS,&text));
+        iVar3 = saveui_parseNumber((char *)CONCAT22(_SS,&text));
       }
       return iVar3;
     }

@@ -327,7 +327,6 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   uint entityIdx;
   uint16_t unaff_DI;
   byte *pbVar12;
-  char *unaff_SS;
   undefined1 uVar13;
   undefined1 uVar14;
   bool type;
@@ -378,15 +377,15 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   uVar6 = 0x2410;
   sheetEntry = *(uint16_t *)((uint)sheetByte * 4 + 0x107);
   uVar13 = (undefined1)sheetEntry;
-  pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x648f,unaff_SS),
+  pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x648f,_SS),
                          (char *)CONCAT13((char)((uint)sheetEntry >> 8),CONCAT12(uVar13,0x2410)),uVar13,
                          (char)*(uint16_t *)((uint)sheetByte * 4 + 0x109),
                          (char)*(uint16_t *)((uint)partyIdx * 4),
                          ((uint16_t *)((uint)partyIdx * 4))[1]);
   ovr_say(pcVar2,uVar6);
   do {
-    type = SUB21(unaff_SS,0);
-    uVar13 = (undefined1)((uint)unaff_SS >> 8);
+    type = SUB21(_SS,0);
+    uVar13 = (undefined1)((uint)_SS >> 8);
     bVar1 = ovr_init2_usesCFGMice((uint16_t *)&mouseX,0,0);
   } while (CONCAT11(extraout_AH,bVar1) != 0);
   while (uVar3 = ovr_biosKeyAvail(), (char)uVar3 != '\0') {
@@ -414,9 +413,9 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   uStack_8 = uVar6;
   do {
     keyPressed = keyprocessor_usesBiosKeyAvail
-                      ((uint16_t *)CONCAT22(unaff_SS,&cursorX),
+                      ((uint16_t *)CONCAT22(_SS,&cursorX),
                        (uint16_t *)CONCAT13(uVar13,CONCAT12(type,&cursorY)),
-                       (uint8_t *)CONCAT22(unaff_SS,&input));
+                       (uint8_t *)CONCAT22(_SS,&input));
     if ((char)keyPressed != '\0') goto L_ui_unit_order_6616_0689_1054;
     if ((cursorX != pbStack_32) || (cursorY != pbStack_34)) {
       pbStack_32 = cursorX;
@@ -461,9 +460,9 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
     pbVar12 = pbStack_1c;
     do {
       keyPressed = keyprocessor_usesBiosKeyAvail
-                        ((uint16_t *)CONCAT22(unaff_SS,&cursorX),
+                        ((uint16_t *)CONCAT22(_SS,&cursorX),
                          (uint16_t *)CONCAT13(uVar13,CONCAT12(type,&cursorY)),
-                         (uint8_t *)CONCAT22(unaff_SS,&input));
+                         (uint8_t *)CONCAT22(_SS,&input));
       if ((char)keyPressed != '\0') goto L_ui_unit_order_6616_0689_1054;
       if ((cursorX != pbStack_32) || (cursorY != pbStack_34)) {
         pbStack_32 = cursorX;
@@ -534,14 +533,14 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         ovr_resetTextBlitCycle();
         uVar14 = 0x7a;
         textWidth = ovr_ovc45_compute9((char *)&text,
-                                    (char *)CONCAT22(*(uint16_t *)((uint)partyIdx * 4),unaff_SS),
+                                    (char *)CONCAT22(*(uint16_t *)((uint)partyIdx * 4),_SS),
                                     (char *)CONCAT22(Font03.ofs,
                                                      (char *)((uint16_t *)((uint)partyIdx * 4))
                                                              [1]),Font03.seg,'C',(char)Font03.seg,
                                     0x43,3,0xa000);
         suffix = ovr_ovc41_pluralSuffix(matchCount,(char)textWidth,uVar14);
         uVar6 = 0x2410;
-        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x64b8,unaff_SS),
+        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x64b8,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                *(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                *(uint16_t *)((uint)sheetByte * 4 + 0x141),suffix,uVar14);
@@ -602,7 +601,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
                                ((entity_t *)entitiesOfs)[entityIdx].base.y);
           }
           else {
-            unit_usesEntities(input,entityIdx,(uint16_t)&unitFlags,(uint16_t)unaff_SS);
+            unit_usesEntities(input,entityIdx,(uint16_t)&unitFlags,(uint16_t)_SS);
           }
           matchCount = matchCount + 1;
         }
@@ -617,7 +616,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       if (input == 0x1) {
         suffix = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
-        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6522,unaff_SS),
+        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6522,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
@@ -627,7 +626,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       else if (input == 0x2) {
         suffix = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
-        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6543,unaff_SS),
+        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6543,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
@@ -637,7 +636,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       else if (input == 0x3) {
         suffix = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
-        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6557,unaff_SS),
+        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6557,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
@@ -647,7 +646,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       else if (input == 0x4) {
         suffix = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
-        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6568,unaff_SS),
+        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6568,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
@@ -694,7 +693,6 @@ void __cdecl16far unit_usesAlignUp42(byte menuIndex,uint16_t x,int y)
   uint uVar2;
   int16_t iVar3;
   uint uVar4;
-  uint16_t unaff_SS;
   uint8_t rec;
   int iStack_14;
   uint8_t savedCursorX;
@@ -706,7 +704,7 @@ void __cdecl16far unit_usesAlignUp42(byte menuIndex,uint16_t x,int y)
     if (SquareRecCount <= uVar4) {
 L_unit_6616_10d5_1152:
       if (SquareRecCount <= uVar4) {
-        memcpy((char *)CONCAT22(unaff_SS,&rec),(char *)&SquareRecX,0x13);
+        memcpy((char *)CONCAT22(_SS,&rec),(char *)&SquareRecX,0x13);
       }
       rec = GfxRndSeed;
       iStack_14 = GfxRndSeed2;
@@ -719,13 +717,13 @@ L_unit_6616_10d5_1152:
                     ((SquareRecCount - uVar4) + -1) * 0x13);
         }
         SquareRecCount = SquareRecCount - 1;
-        iVar3 = memcmp((char *)&SquareRecX,(char *)CONCAT22(unaff_SS,&rec),0x13);
+        iVar3 = memcmp((char *)&SquareRecX,(char *)CONCAT22(_SS,&rec),0x13);
         if (iVar3 == 0) {
           return;
         }
       }
       else {
-        iVar3 = memcmp((char *)&SquareRecX,(char *)CONCAT22(unaff_SS,&rec),0x13);
+        iVar3 = memcmp((char *)&SquareRecX,(char *)CONCAT22(_SS,&rec),0x13);
         if (iVar3 == 0) {
           return;
         }
@@ -737,13 +735,13 @@ L_unit_6616_10d5_1152:
       iStack_14 = y;
       rec = uVar1;
       memcpy((char *)CONCAT22(0x17f8,(char *)(SquareRecCount * 0x13)),
-             (char *)CONCAT22(unaff_SS,&rec),0x13);
+             (char *)CONCAT22(_SS,&rec),0x13);
       SquareRecCount = SquareRecCount + 1;
       return;
     }
     uVar2 = ovr_alignUp4(*(int *)(uVar4 * 0x13),0,0);
     if ((uVar2 == uVar1) && (*(int *)((uint8_t *)&SquareRecs[uVar4] + 2) == y)) {
-      memcpy((char *)CONCAT22(unaff_SS,&rec),(char *)CONCAT22(0x17f8,(char *)(uVar4 * 0x13)),0x13);
+      memcpy((char *)CONCAT22(_SS,&rec),(char *)CONCAT22(0x17f8,(char *)(uVar4 * 0x13)),0x13);
       goto L_unit_6616_10d5_1152;
     }
     uVar4 = uVar4 + 1;

@@ -241,7 +241,6 @@ void __cdecl16near OvrDoOpenFile(void)
   char *pcVar5;
   char *unaff_DI;
   uint16_t unaff_ES;
-  uint16_t unaff_SS;
   int iVar6;
   
   iVar6 = (int)((ulong)*(uint32_t *)(unaff_BP + 6) >> 0x10);
@@ -881,7 +880,6 @@ void __cdecl16near __OvrPatchStack(void)
 {
   uint16_t in_CX;
   int in_BX;
-  uint16_t unaff_SS;
   
   __OvrPatchStack_2();
   if (in_BX != 0) {
@@ -906,7 +904,6 @@ void __cdecl16near __OvrPatchStack_2(void)
   uint in_DX;
   uint *puVar2;
   uint *unaff_BP;
-  uint16_t unaff_SS;
   
   puVar2 = (uint *)0x0;
   while( true ) {
@@ -1000,7 +997,6 @@ void __cdecl16far __CHECKSTACK(void)
   uint *in_CX;
   uint *puVar6;
   uint uVar7;
-  uint16_t unaff_SS;
   
   bVar5 = false;
   iVar2 = *(int *)((int)&GUnitDescriptions[9].ofs + 1);
@@ -1690,7 +1686,6 @@ int __cdecl16far __INITEXT(void)
   uint16_t in_BX;
   byte *pbVar13;
   byte *pbVar14;
-  uint16_t unaff_SS;
   bool bVar15;
   undefined1 uVar16;
   uint32_t uVar17;

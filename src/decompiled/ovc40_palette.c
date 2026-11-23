@@ -51,7 +51,6 @@ void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette)
 {
   int iVar1;
   int iVar2;
-  uint16_t unaff_SS;
   uint8_t pal;
   int iStack_6;
   int iStack_4;
@@ -85,7 +84,6 @@ void __cdecl16far setSeasonPalette(far_t palette)
 {
   uint uVar1;
   uint uVar2;
-  uint16_t unaff_SS;
   uint8_t pal;
   int iStack_6;
   int iStack_4;
@@ -126,7 +124,6 @@ stg_tmp_t * __cdecl16far ovc40_usesStshLoadGfx(byte backdropIndex)
   far_t handle_02;
   uint16_t in_DX;
   uint16_t uVar1;
-  uint16_t unaff_SS;
   uint8_t cmapBackupB;
   uint8_t cmapBackupA;
   stg_tmp_t *psStack_6;
@@ -135,12 +132,12 @@ stg_tmp_t * __cdecl16far ovc40_usesStshLoadGfx(byte backdropIndex)
   handle.seg = marbleCut1Seg;
   handle.ofs = marbleCut1Ofs;
   psStack_6 = ovr_stshLoadGfx(handle);
-  _fmemmove((char *)CONCAT22(unaff_SS,&cmapBackupB),(char *)CONCAT22(in_DX,psStack_6->cmap + 0x231),
+  _fmemmove((char *)CONCAT22(_SS,&cmapBackupB),(char *)CONCAT22(in_DX,psStack_6->cmap + 0x231),
             0xcf);
   handle_00.seg = Lbm_nwpanel1.seg;
   handle_00.ofs = Lbm_nwpanel1.ofs;
   psStack_6 = ovr_stshLoadGfx(handle_00);
-  _fmemmove((char *)CONCAT22(unaff_SS,&cmapBackupA),(char *)CONCAT22(in_DX,psStack_6->cmap + 0x2ac),
+  _fmemmove((char *)CONCAT22(_SS,&cmapBackupA),(char *)CONCAT22(in_DX,psStack_6->cmap + 0x2ac),
             0xc);
   if (backdropIndex == 4) {
     handle_01.seg = youlose1Cut1Seg;
@@ -156,7 +153,7 @@ stg_tmp_t * __cdecl16far ovc40_usesStshLoadGfx(byte backdropIndex)
     uStack_4 = uVar1;
   }
   _fmemmove((char *)CONCAT22(uStack_4,psStack_6->cmap + 0x231),
-            (char *)CONCAT22(unaff_SS,&cmapBackupB),0xcf);
+            (char *)CONCAT22(_SS,&cmapBackupB),0xcf);
   return psStack_6;
 }
 
@@ -170,7 +167,6 @@ void __cdecl16far ovc40_usesCalcSeasonPalette(char useVgaPalette)
 
 {
   uint16_t in_DX;
-  uint16_t unaff_SS;
   far_t handle;
   far_t palette;
   far_t palette_00;
@@ -180,14 +176,14 @@ void __cdecl16far ovc40_usesCalcSeasonPalette(char useVgaPalette)
   handle.seg = Lbm_nwpanel1.seg;
   handle.ofs = Lbm_nwpanel1.ofs;
   psStack_6 = ovr_stshLoadGfx(handle);
-  ovr_calcSeasonPalette(psStack_6->cmap,in_DX,&pal,unaff_SS,0,0);
+  ovr_calcSeasonPalette(psStack_6->cmap,in_DX,&pal,_SS,0,0);
   if (useVgaPalette == '\0') {
-    palette_00.seg = unaff_SS;
+    palette_00.seg = _SS;
     palette_00.ofs = (uint16_t)&pal;
     ovc40_usesVgaSetPalette8bit(palette_00);
   }
   else {
-    palette.seg = unaff_SS;
+    palette.seg = _SS;
     palette.ofs = (uint16_t)&pal;
     setSeasonPalette(palette);
   }
@@ -318,7 +314,6 @@ ovc40_usesAlignToSeg
   uint8_t *puVar8;
   int iVar9;
   int scrollOffset;
-  char *unaff_SS;
   undefined1 uVar10;
   undefined1 uVar11;
   undefined1 uVar12;
@@ -371,8 +366,8 @@ ovc40_usesAlignToSeg
   uint8_t clickY;
   uint8_t clickX;
   
-  uVar12 = SUB21(unaff_SS,0);
-  uVar14 = (undefined1)((uint)unaff_SS >> 8);
+  uVar12 = SUB21(_SS,0);
+  uVar14 = (undefined1)((uint)_SS >> 8);
   (*(uint8_t *)((uint8_t *)&(dst_00.seg))) = uVar12;
   dst_00.ofs = (uint16_t)&rankMsg;
   (*(uint8_t *)((uint8_t *)&(dst_00.seg) + 1)) = uVar14;
@@ -478,7 +473,7 @@ ovc40_usesAlignToSeg
     uVar5 = 0;
     uVar10 = 0;
     uVar11 = 0;
-    pcVar4 = ovr_stsprintf((char *)&text2,(char *)CONCAT22(uStack_2c,unaff_SS),
+    pcVar4 = ovr_stsprintf((char *)&text2,(char *)CONCAT22(uStack_2c,_SS),
                            (char *)CONCAT22(&text1,pcStack_2a));
     text1_06.seg = in_DX;
     text1_06.ofs = (uint16_t)pcVar4;
@@ -494,7 +489,7 @@ ovc40_usesAlignToSeg
     uVar5 = 0;
     uVar10 = 0;
     uVar11 = 0;
-    pcVar4 = ovr_stsprintf((char *)&text2,(char *)CONCAT22(uStack_2c,unaff_SS),
+    pcVar4 = ovr_stsprintf((char *)&text2,(char *)CONCAT22(uStack_2c,_SS),
                            (char *)CONCAT22(&text1,pcStack_2a));
     text1_07.seg = in_DX;
     text1_07.ofs = (uint16_t)pcVar4;
@@ -514,14 +509,14 @@ ovc40_usesAlignToSeg
     ovc40_usesBlitLabel(text1_09,text2_08,0,0xf2);
     bVar13 = 0xf2;
     bVar3 = 1;
-    pcVar4 = ovr_stsprintf((char *)&text1,(char *)CONCAT22(uStack_68,unaff_SS),
+    pcVar4 = ovr_stsprintf((char *)&text1,(char *)CONCAT22(uStack_68,_SS),
                            (char *)CONCAT13((char)((uint)capTextOfs >> 8),
                                             CONCAT12((char)capTextOfs,uStack_66)),(char)capTextOfs,
                            capTextSeg);
     uVar10 = SUB21(pcVar4,0);
     uVar11 = (undefined1)((uint)pcVar4 >> 8);
     uVar5 = in_DX;
-    pcVar4 = ovr_stsprintf((char *)&text2,(char *)CONCAT22(uStack_58,unaff_SS),
+    pcVar4 = ovr_stsprintf((char *)&text2,(char *)CONCAT22(uStack_58,_SS),
                            (char *)CONCAT22(capTextOfs,pcStack_56),capTextSeg);
     text1_10.seg = in_DX;
     text1_10.ofs = (uint16_t)pcVar4;
@@ -533,7 +528,7 @@ ovc40_usesAlignToSeg
     bVar3 = 2;
     puVar7 = &format1;
     pcVar4 = ovr_stsprintf((char *)&text1,
-                           (char *)CONCAT22(*(uint16_t *)(puVar7 + (uint)formatIndex * 4),unaff_SS
+                           (char *)CONCAT22(*(uint16_t *)(puVar7 + (uint)formatIndex * 4),_SS
                                            ),
                            (char *)CONCAT13((char)((uint)textOfs >> 8),
                                             CONCAT12((char)textOfs,auStack_62[(uint)formatIndex * 2]
@@ -542,7 +537,7 @@ ovc40_usesAlignToSeg
     uVar11 = (undefined1)((uint)pcVar4 >> 8);
     puVar8 = &format2;
     pcVar4 = ovr_stsprintf((char *)&text2,
-                           (char *)CONCAT22(*(uint16_t *)(puVar8 + (uint)formatIndex * 4),unaff_SS
+                           (char *)CONCAT22(*(uint16_t *)(puVar8 + (uint)formatIndex * 4),_SS
                                            ),
                            (char *)CONCAT22(textOfs,(char *)auStack_52[(uint)formatIndex * 2]),
                            textSeg);
@@ -647,7 +642,7 @@ ovc40_usesAlignToSeg
           ovr_audio_usesLDIV_at_();
           bVar3 = ovr_init2_usesCFGMice
                             ((uint16_t *)&clickX,(uint16_t *)
-                             CONCAT13((char)((uint)&clickY >> 8),CONCAT12((char)&clickY,unaff_SS)),0);
+                             CONCAT13((char)((uint)&clickY >> 8),CONCAT12((char)&clickY,_SS)),0);
           if ((((CONCAT11(extraout_AH,bVar3) != 0) && (0x87 < clickX)) && (0xb9 < clickY)) &&
              ((clickX < 0xd6 && (clickY < 0xc6)))) goto L_OVC40_69c8_04c6_0AF0;
           if (rightButtonLatch != '\0') {

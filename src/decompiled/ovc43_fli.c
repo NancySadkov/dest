@@ -130,7 +130,6 @@ code_r0x00061e64:
 void __cdecl16far ovc43_usesStExit(uint32_t gindex,uint16_t hnd,uint16_t sheetOfs,uint16_t sheetSeg)
 
 {
-  uint16_t unaff_SS;
   bool bVar1;
   uint16_t remainingLo;
   int iStack_10;
@@ -147,7 +146,7 @@ void __cdecl16far ovc43_usesStExit(uint32_t gindex,uint16_t hnd,uint16_t sheetOf
   if (remainingLo != 0 || iStack_10 != 0) {
     ovr_stshRead();
     ovc43_usesFmFreeAudio
-              ((uint32_t)CONCAT22(unaff_SS,&remainingLo),(char_sheet_t *)sheetOfs,sheetSeg);
+              ((uint32_t)CONCAT22(_SS,&remainingLo),(char_sheet_t *)sheetOfs,sheetSeg);
   }
   return;
 }

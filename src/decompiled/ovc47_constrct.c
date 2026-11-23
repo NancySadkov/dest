@@ -15,14 +15,13 @@ void __cdecl16far constrct_usesGLeaderCount(void)
 
 {
   int iVar1;
-  uint16_t unaff_SS;
   uint8_t outFlag;
   byte bStack_3;
   
   outFlag = 0x0;
   for (bStack_3 = 0; bStack_3 < GLeaderCount; bStack_3 = bStack_3 + 1) {
     for (iVar1 = 0; iVar1 < 10; iVar1 = iVar1 + 1) {
-      ovr_ovc22_usesRandBelow2(bStack_3,(uint16_t)&outFlag,unaff_SS);
+      ovr_ovc22_usesRandBelow2(bStack_3,(uint16_t)&outFlag,_SS);
     }
   }
   if (outFlag != 0x0) {
@@ -52,7 +51,6 @@ void __cdecl16far land_info(byte tileOffset)
   int iVar9;
   unit_t *puVar10;
   uint16_t uVar11;
-  char *unaff_SS;
   undefined1 uVar12;
   undefined1 uVar13;
   undefined1 uVar14;
@@ -119,8 +117,8 @@ void __cdecl16far land_info(byte tileOffset)
     uVar3 = ovr_randBelow(2,0);
     ovr_play_sfx(CONCAT11((char)(uVar3 >> 8),(char)uVar3 + '?'),type,0);
   }
-  uVar13 = SUB21(unaff_SS,0);
-  uVar14 = (undefined1)((uint)unaff_SS >> 8);
+  uVar13 = SUB21(_SS,0);
+  uVar14 = (undefined1)((uint)_SS >> 8);
   pcVar4 = ovr_ovc45_findEntityAt
                      (GfxRndSeed,GfxRndSeed2,(uint *)&entityIndex,(char)GfxRndSeed2,
                       (char)&entityIndex);
@@ -142,17 +140,17 @@ void __cdecl16far land_info(byte tileOffset)
             tileClass = '\0';
           }
           if (tileClass == '\x02') {
-            strcpy((char *)CONCAT22(unaff_SS,&msg),"Water:");
+            strcpy((char *)CONCAT22(_SS,&msg),"Water:");
           }
           else if (tileClass == '\x01') {
-            strcpy((char *)CONCAT22(unaff_SS,&msg),"Shore:");
+            strcpy((char *)CONCAT22(_SS,&msg),"Shore:");
           }
           else {
             uVar11 = 0x195d;
             puVar7 = ovr_ovc15_usesStshRealloc
                                ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),0,0,0,0,0,0,0);
             pcVar4 = ovr_fmVsprintf("%s:",(char *)CONCAT22(uVar11,puVar7));
-            strcpy((char *)CONCAT22(unaff_SS,&msg),(char *)CONCAT22(uVar11,pcVar4));
+            strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(uVar11,pcVar4));
           }
         }
         else if (*(char *)((uint)bStack_1d * 0x27 + 0x130) == 'd') {
@@ -160,7 +158,7 @@ void __cdecl16far land_info(byte tileOffset)
           puVar7 = ovr_ovc15_usesStshRealloc
                              ((char *)*(uint16_t *)((uint)bStack_1d * 0x27 + 0x10e),*(uint16_t *)((uint)bStack_1d * 0x27 + 0x110),*(uint16_t *)((uint)puVar10[uVar2].unitType * 4),0,0,0,0,0);
           pcVar4 = ovr_fmVsprintf("%s: Held by %s.",(char *)CONCAT22(uVar8,puVar7));
-          strcpy((char *)CONCAT22(unaff_SS,&msg),(char *)CONCAT22(uVar8,pcVar4));
+          strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(uVar8,pcVar4));
         }
         else {
           b = *(byte *)((uint)bStack_1d * 0x27 + 0x130);
@@ -173,10 +171,10 @@ void __cdecl16far land_info(byte tileOffset)
           pcVar4 = ovr_fmVsprintf("%s (%u/%u): Held by %s.",
                                   (char *)CONCAT13((char)((uint)uVar8 >> 8),
                                                    CONCAT12((char)uVar8,puVar7)));
-          strcpy((char *)CONCAT22(unaff_SS,&msg),(char *)CONCAT22(uVar8,pcVar4));
+          strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(uVar8,pcVar4));
           cVar1 = func_0x0007164e(0x1000);
           if (cVar1 != '\0') {
-            strcat((char *)CONCAT22(unaff_SS,&msg)," Home a unit here to halt damage.");
+            strcat((char *)CONCAT22(_SS,&msg)," Home a unit here to halt damage.");
           }
         }
       }
@@ -189,7 +187,7 @@ void __cdecl16far land_info(byte tileOffset)
         uVar12 = (undefined1)uVar8;
         iVar6 = ovr_ovc45_compute9((char *)&text1,
                                    (char *)CONCAT13((char)((uint)uVar8 >> 8),
-                                                    CONCAT12(uVar12,unaff_SS)),
+                                                    CONCAT12(uVar12,_SS)),
                                    (char *)CONCAT13((char)(Font03.ofs >> 8),
                                                     CONCAT12((char)Font03.ofs,uVar11)),Font03.seg,
                                    -0x47,uVar12,(char)uVar11,(char)Font03.ofs);
@@ -202,9 +200,9 @@ void __cdecl16far land_info(byte tileOffset)
         pcVar4 = ovr_fmVsprintf("%s: %d%% complete. Owned by %s.",
                                 (char *)CONCAT13((char)((uint)uVar11 >> 8),
                                                  CONCAT12((char)uVar11,puVar7)));
-        strcpy((char *)CONCAT22(unaff_SS,&msg),(char *)CONCAT22(uVar11,pcVar4));
+        strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(uVar11,pcVar4));
       }
-      hint.seg = (uint16_t)unaff_SS;
+      hint.seg = (uint16_t)_SS;
       hint.ofs = (uint16_t)&msg;
       puVar7 = &gfxOfs;
       (*(uint8_t *)((uint8_t *)&(entries.seg))) = uVar13;
@@ -228,12 +226,12 @@ void __cdecl16far land_info(byte tileOffset)
         }
         else {
           ovr_ovc45_textDone2(foundFlag,bStack_1d,entityIndex,tileX,(uint16_t)&outFlag,
-                              (uint16_t)unaff_SS,bStack_1d,(char)entityIndex);
+                              (uint16_t)_SS,bStack_1d,(char)entityIndex);
         }
       }
       else {
         ovr_ovc45_textDone(foundFlag,bStack_1d,entityIndex,tileX,(uint16_t)&outFlag,
-                           (uint16_t)unaff_SS,bStack_1d,(char)entityIndex);
+                           (uint16_t)_SS,bStack_1d,(char)entityIndex);
       }
     }
     else {
@@ -260,14 +258,14 @@ void __cdecl16far land_info(byte tileOffset)
           pcVar4 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),0);
           puVar5 = (uint16_t *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
           uVar11 = 0x217a;
-          iVar6 = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,unaff_SS),
+          iVar6 = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT13((char)(Font03.ofs >> 8),
                                                       CONCAT12((char)Font03.ofs,puVar5[1])),
                                      Font03.seg,'J',(char)Font03.ofs,(char)Font03.seg,0x4a,3,pcVar4)
           ;
           puVar5 = (uint16_t *)
                    ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 + 9) * 4);
-          iVar6 = ovr_ovc45_compute9((char *)&text1,(char *)CONCAT22(*puVar5,unaff_SS),
+          iVar6 = ovr_ovc45_compute9((char *)&text1,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT22(Font03.ofs,(char *)puVar5[1]),Font03.seg,'J',
                                      0x4a,2,(char)iVar6,uVar11);
           iVar9 = 100 - ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 + 0xb) * 100
@@ -275,13 +273,13 @@ void __cdecl16far land_info(byte tileOffset)
           pcVar4 = ovr_fmVsprintf("Clearing of land: %d%% complete. Owned by %s. Active party is %s the %s."
                                   ,(char *)CONCAT13((char)((uint)iVar6 >> 8),
                                                     CONCAT12((char)iVar6,iVar9)));
-          strcpy((char *)CONCAT22(unaff_SS,&msg),(char *)CONCAT22(iVar9,pcVar4));
+          strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(iVar9,pcVar4));
         }
         else {
           pcVar4 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),0);
           puVar5 = (uint16_t *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
           uVar11 = 0x217a;
-          iVar6 = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,unaff_SS),
+          iVar6 = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT13((char)(Font03.ofs >> 8),
                                                       CONCAT12((char)Font03.ofs,puVar5[1])),
                                      Font03.seg,'_',(char)Font03.ofs,(char)Font03.seg,0x5f,3,pcVar4)
@@ -289,7 +287,7 @@ void __cdecl16far land_info(byte tileOffset)
           puVar5 = (uint16_t *)
                    ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 + 9) * 4);
           uVar12 = 0x7a;
-          iVar6 = ovr_ovc45_compute9((char *)&text1,(char *)CONCAT22(*puVar5,unaff_SS),
+          iVar6 = ovr_ovc45_compute9((char *)&text1,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT22(Font03.ofs,(char *)puVar5[1]),Font03.seg,'_',
                                      0x5f,2,(char)iVar6,uVar11);
           uVar11 = 0x195d;
@@ -300,10 +298,10 @@ void __cdecl16far land_info(byte tileOffset)
                                                    0xc),(char)iVar6,uVar12,0,0,0);
           pcVar4 = ovr_fmVsprintf("%s: %d%% complete. Owned by %s. Active party is %s the %s.",
                                   (char *)CONCAT22(uVar11,puVar7));
-          strcpy((char *)CONCAT22(unaff_SS,&msg),(char *)CONCAT22(uVar11,pcVar4));
+          strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(uVar11,pcVar4));
         }
         goldPartyIndex = *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x1a);
-        hint_00.seg = (uint16_t)unaff_SS;
+        hint_00.seg = (uint16_t)_SS;
         hint_00.ofs = (uint16_t)&msg;
         puVar7 = &menuItems;
         (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = uVar13;
@@ -414,7 +412,6 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
   int iVar13;
   uint16_t uVar14;
   uint16_t uVar15;
-  char *unaff_SS;
   long lVar16;
   long lVar17;
   uint32_t in_stack_0000ff5e;
@@ -443,7 +440,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     uVar14 = uVar7;
     plVar6 = LXMUL_at_(unaff_DI,lVar17,in_stack_0000ff62);
     uStack_12 = (uint16_t)(lVar16 + 1);
-    msg = ovr_stsprintf(&stk_ff60,(char *)CONCAT22(0x81dc,unaff_SS),
+    msg = ovr_stsprintf(&stk_ff60,(char *)CONCAT22(0x81dc,_SS),
                         (char *)CONCAT22(plVar6,(char *)0x2410),uVar14,uStack_12,uVar7,
                         uVar5);
     ovr_say(msg,0);

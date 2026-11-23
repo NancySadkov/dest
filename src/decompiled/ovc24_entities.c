@@ -118,7 +118,6 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   uint uVar16;
   uint16_t unaff_DI;
   uint16_t entitiesSeg;
-  uint unaff_SS;
   undefined1 uVar18;
   undefined1 uVar19;
   byte gindex;
@@ -567,7 +566,6 @@ void __cdecl16far ovc24_checkStrongholds(void)
   uint16_t uVar7;
   int probeOfs;
   uint16_t unaff_DI;
-  char *unaff_SS;
   uint8_t text;
   char sbuf [120];
   uint8_t outFlag;
@@ -628,23 +626,23 @@ L_OVC24_5943_112e_1255:
           uVar4 = alignUp4(((char_sheet_t *)((leaderIndex << 2)))->x,uVar6,0);
           uVar7 = 0x195d;
           pcVar5 = ovr_ovc15_capitalize((char *)&text);
-          pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x578d,unaff_SS),
+          pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x578d,_SS),
                                  (char *)CONCAT22(pcVar5,(char *)0x26510),uVar7,uVar4);
           ovr_uiNotify(pcVar5,uVar7,0);
         }
         else {
           uVar4 = alignUp4(((char_sheet_t *)((leaderIndex << 2)))->x,uVar6,0);
-          pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x576a,unaff_SS),
+          pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x576a,_SS),
                                  (char *)CONCAT22(uVar4,(char *)0x26510));
           ovr_uiNotify(pcVar5,uVar7,0);
         }
         if (firstLeader == leaderIndex) {
           ovr_createConstructionRecordFar
-                    (0,((char_sheet_t *)((leaderIndex << 2)))->x + -2,uVar6,(uint8_t *)CONCAT22(unaff_SS,&outFlag),0xff,(char)unaff_DI,0xff,0,0);
+                    (0,((char_sheet_t *)((leaderIndex << 2)))->x + -2,uVar6,(uint8_t *)CONCAT22(_SS,&outFlag),0xff,(char)unaff_DI,0xff,0,0);
         }
         else {
           ovr_createConstructionRecordFar
-                    (0,((char_sheet_t *)((leaderIndex << 2)))->x + -1,uVar6,(uint8_t *)CONCAT22(unaff_SS,&outFlag),0xff,(char)unaff_DI,0xff,0,0);
+                    (0,((char_sheet_t *)((leaderIndex << 2)))->x + -1,uVar6,(uint8_t *)CONCAT22(_SS,&outFlag),0xff,(char)unaff_DI,0xff,0,0);
         }
         CurSfxType3 = 0xff;
         ((char_sheet_t *)((leaderIndex << 2)))->active = 0;

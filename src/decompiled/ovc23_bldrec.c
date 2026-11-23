@@ -45,7 +45,6 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   int iVar25;
   uint16_t unaff_DI;
   uint16_t uVar26;
-  char *unaff_SS;
   uint16_t in_stack_0000000a;
   char acStackY_13e [36];
   uint16_t auStackY_11a [66];
@@ -250,9 +249,9 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
       ovr_blitLabel(acStackY_13e);
     }
     CurSfxType3 = 0x3c;
-    (*(uint8_t *)((uint8_t *)&(entries.seg))) = (char)unaff_SS;
+    (*(uint8_t *)((uint8_t *)&(entries.seg))) = (char)_SS;
     entries.ofs = (uint16_t)auStackY_66;
-    (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = (char)((uint)unaff_SS >> 8);
+    (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = (char)((uint)_SS >> 8);
     uVar26 = ovr_ovc28_usesUiInputText(entries,0,0,0,0,0);
     cVar10 = (char)uVar26;
     keyboardInputMode = 0;
@@ -414,7 +413,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
             ovr_alignUp4(((char_sheet_t *)(((uint)bVar9 << 2)))->x,0,0);
             uStackY_2a = 0x2379;
             uStackY_2c = 0xc5d4;
-            pcVar19 = ovr_stsprintf(acStackY_68,(char *)CONCAT22(0x58c0,unaff_SS));
+            pcVar19 = ovr_stsprintf(acStackY_68,(char *)CONCAT22(0x58c0,_SS));
             ovr_uiNotify(pcVar19,0,0);
           }
         }
@@ -465,9 +464,9 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     }
     uVar15 = ovc22_searchCellsAround
                        ((uint *)CONCAT13((char)((uint)&uStack_c >> 8),
-                                         CONCAT12((char)&uStack_c,unaff_SS)),
+                                         CONCAT12((char)&uStack_c,_SS)),
                         (uint *)CONCAT13((char)((uint)puVar13 >> 8),
-                                         CONCAT12((byte)partyIndex,unaff_SS)),(*(uint8_t *)((uint8_t *)&(uStack_6) + 3)),
+                                         CONCAT12((byte)partyIndex,_SS)),(*(uint8_t *)((uint8_t *)&(uStack_6) + 3)),
                         (*(uint8_t *)((uint8_t *)&(uStack_6) + 2)),cVar10);
     pbVar14 = (byte *)(uVar15 & 0xff);
     if (pbVar14 != (byte *)0x0) {
@@ -994,7 +993,6 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
   char *unaff_DI;
   uint16_t uVar28;
   uint16_t uVar29;
-  uint16_t unaff_SS;
   bool bVar30;
   uint uStackY_2e;
   int iStackY_2c;
@@ -1067,7 +1065,7 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
               ovc22_usesGUnits(unitIndex,
                                (uint8_t *)
                                CONCAT13((char)(unitIndex * 9 >> 8),
-                                        CONCAT12(puVar25[unitIndex].unitType,unaff_SS)));
+                                        CONCAT12(puVar25[unitIndex].unitType,_SS)));
             }
             else if (((((bld_inst_t *)BldInstances + bStackY_20)->ofs != 0 ||
                        *(int *)((int)&BldInstances[0].seg + (uint)bStackY_20 * 0xc) != 0) ||
@@ -1136,7 +1134,7 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
                         ))) {
                       ovc22_usesGUnits(uVar16,(uint8_t *)
                                               CONCAT13((char)((uint)iVar19 >> 8),
-                                                       CONCAT12((char)uVar27,unaff_SS)));
+                                                       CONCAT12((char)uVar27,_SS)));
                     }
                     else if (((((bld_inst_t *)BldInstances + bStackY_20)->ofs != 0 ||
                                *(int *)((int)&BldInstances[0].seg + (uint)bStackY_20 * 0xc) != 0) ||
@@ -1551,7 +1549,7 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
           }
           ovc22_usesGUnits(uVar27,(uint8_t *)
                                   CONCAT13((char)(uVar27 * 9 >> 8),
-                                           CONCAT12(((unit_t *)GUnits)[uVar27].unitType,unaff_SS)));
+                                           CONCAT12(((unit_t *)GUnits)[uVar27].unitType,_SS)));
         }
       }
     }
@@ -1649,8 +1647,8 @@ code_r0x00053afb:
             bStackY_20 = 0x22;
           }
           else {
-            uVar38 = (undefined1)unaff_SS;
-            uVar39 = (undefined1)(unaff_SS >> 8);
+            uVar38 = (undefined1)_SS;
+            uVar39 = (undefined1)(_SS >> 8);
             puVar37 = &uStackY_1e;
             pbVar13 = &bStackY_1f;
             pbVar33 = &bStackY_20;
@@ -1658,8 +1656,8 @@ code_r0x00053afb:
             uVar17 = (undefined1)((uint)pbVar33 >> 8);
             uStackY_1c = 0x2379;
             uStackY_1e = 0x3d98;
-            uVar34 = unaff_SS;
-            uVar36 = unaff_SS;
+            uVar34 = _SS;
+            uVar36 = _SS;
             uVar35 = ovr_attact_usesSquareRecCount(uVar35,uVar35);
             table.seg = uVar14;
             table.ofs = uVar35;
@@ -1922,7 +1920,6 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
   uint unaff_SI;
   uint uVar34;
   uint8_t *puVar35;
-  uint16_t unaff_SS;
   uint16_t uVar36;
   bool bVar37;
   bool bVar38;
@@ -3136,7 +3133,6 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
   uint16_t dst;
   uint entityIndex;
   uint16_t uVar3;
-  char *unaff_SS;
   uint16_t uVar4;
   uint16_t uVar5;
   uint8_t text2;
@@ -3161,7 +3157,7 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
           uVar4 = x;
           uVar5 = y;
           pcVar2 = ovr_ovc15_capitalize((char *)&text2);
-          pcVar2 = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5665,unaff_SS),
+          pcVar2 = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5665,_SS),
                                  (char *)CONCAT22(pcVar2,(char *)0x26510),dst,uVar4,uVar5,
                                  uVar3);
           ovr_uiNotify(pcVar2,dst,0);
@@ -3191,7 +3187,6 @@ uint16_t __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int re
   int iVar4;
   uint uVar5;
   uint16_t unaff_DI;
-  uint unaff_SS;
   undefined1 uStack_8;
   uint8_t loopIndex;
   undefined1 uStack_5;

@@ -113,7 +113,6 @@ uint16_t __cdecl16far ovc30_usesRandBelow(byte band)
 {
   uint16_t uVar1;
   uint16_t uVar2;
-  uint16_t unaff_SS;
   uint8_t bandMax;
   byte abStack_8 [2];
   uint8_t bandMin;

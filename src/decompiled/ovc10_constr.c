@@ -460,7 +460,6 @@ void __cdecl16far constr_usesAgnt_clear(void)
   int iVar10;
   uint unaff_DI;
   uint16_t sq;
-  char *unaff_SS;
   undefined1 uVar12;
   undefined1 uVar13;
   undefined1 uVar14;
@@ -492,9 +491,9 @@ void __cdecl16far constr_usesAgnt_clear(void)
   int iStack_6;
   uint16_t uStack_4;
   
-  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)unaff_SS;
+  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
   dst.ofs = (uint16_t)&shades;
-  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)unaff_SS >> 8);
+  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)_SS >> 8);
   F_SCOPY(far_from_u32((uint32_t)(0x24100745)),dst);
   if (GOngoingBattle == '\0') {
     ovr_ovc13_usesBlitRects();
@@ -938,7 +937,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
       uVar12 = (undefined1)Font02.ofs;
       uVar13 = (undefined1)(Font02.ofs >> 8);
       uVar4 = ovr_alignUp4(GfxRndSeed,(char)GfxRndSeed2,0);
-      text = ovr_stsprintf(buf,(char *)CONCAT22(0x76b,unaff_SS),
+      text = ovr_stsprintf(buf,(char *)CONCAT22(0x76b,_SS),
                            (char *)CONCAT13((char)(uVar4 >> 8),CONCAT12((char)uVar4,0x2410)),0x10);
       ovr_blitText(text,(byte *)CONCAT13(uVar13,CONCAT12(uVar12,uVar9)),CONCAT11(uVar15,uVar14),term
                    ,(char)uVar9,uVar12,uVar14,term,uVar16);
@@ -1083,7 +1082,6 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
   int dy;
   uint16_t sq;
   uint16_t uVar7;
-  uint16_t unaff_SS;
   far_t gfx_08;
   far_t gfx_09;
   far_t gfx_10;
@@ -1108,7 +1106,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
   int scrollOfs;
   uint rowBase;
   
-  dst_00.seg = unaff_SS;
+  dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)bandY;
   F_SCOPY(far_from_u32((uint32_t)(0x2410074f)),dst_00);
   textArenaDrawn = ovr_draw_textArena();

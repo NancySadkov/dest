@@ -1062,7 +1062,6 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
   void *pvVar2;
   int iVar5;
   int toIndex;
-  uint16_t unaff_SS;
   agnt_t agntSaved;
   undefined1 uVar4;
   
@@ -1077,13 +1076,13 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
         if ((int)(uint)AgntCount <= iVar5 + 2) break;
         iVar5 = toIndex;
       } while (*(int *)(toIndex * 0x34 + 0x36) < *(int *)(agntIndex * 0x34 + 2));
-      memcpy((char *)CONCAT22(unaff_SS,&agntSaved),
+      memcpy((char *)CONCAT22(_SS,&agntSaved),
              (char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34)),0x34);
       _fmemmove((char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34)),
                 (char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34 + 0x34)),
                 (toIndex - agntIndex) * 0x34);
       pvVar2 = memcpy((char *)CONCAT22(0x1726,(char *)(toIndex * 0x34)),
-                      (char *)CONCAT22(unaff_SS,&agntSaved),0x34);
+                      (char *)CONCAT22(_SS,&agntSaved),0x34);
       uVar4 = (undefined1)((uint)pvVar2 >> 8);
       agnt_remapGridRefs(agntIndex,toIndex);
       uVar1 = CONCAT11(uVar4,1);
@@ -1097,12 +1096,12 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
       iVar5 = iVar5 + -1;
       if (iVar5 < 1) break;
     } while (*(int *)(agntIndex * 0x34 + 2) < *(int *)(iVar5 * 0x34 + -0x32));
-    memcpy((char *)CONCAT22(unaff_SS,&agntSaved),(char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34))
+    memcpy((char *)CONCAT22(_SS,&agntSaved),(char *)CONCAT22(0x1726,(char *)(agntIndex * 0x34))
            ,0x34);
     _fmemmove((char *)CONCAT22(0x1726,(char *)(iVar5 * 0x34 + 0x34)),
               (char *)CONCAT22(0x1726,(char *)(iVar5 * 0x34)),(agntIndex - iVar5) * 0x34);
     pvVar2 = memcpy((char *)CONCAT22(0x1726,(char *)(iVar5 * 0x34)),
-                    (char *)CONCAT22(unaff_SS,&agntSaved),0x34);
+                    (char *)CONCAT22(_SS,&agntSaved),0x34);
     bVar3 = (byte)((uint)pvVar2 >> 8);
     agnt_remapGridRefs(agntIndex,iVar5);
     uVar1 = (uint)bVar3 << 8;
@@ -1202,13 +1201,12 @@ void __cdecl16far agnt_usesAlignToSeg(void)
 {
   bool bVar1;
   uint16_t in_DX;
-  uint16_t unaff_SS;
   far_t dst;
   far_t ptr;
   far_t handle;
   brect_t mouseRect;
   
-  dst.seg = unaff_SS;
+  dst.seg = _SS;
   dst.ofs = (uint16_t)&mouseRect;
   F_SCOPY(far_from_u32((uint32_t)(0x241007ec)),dst);
   constructionDirty = '\0';

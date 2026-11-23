@@ -17,7 +17,6 @@ void __cdecl16far stshUniqueColorsRemap(stg_tmp_t *gfx,uint16_t arg2)
   uint16_t si;
   uint16_t i;
   uint uVar1;
-  uint16_t unaff_SS;
   uint16_t in_stack_00000006;
   uint8_t cmap [769];
   uint8_t c;
@@ -34,7 +33,7 @@ void __cdecl16far stshUniqueColorsRemap(stg_tmp_t *gfx,uint16_t arg2)
     }
     *(uint8_t *)((gfx->aptr).ofs + i) = c;
   }
-  _fmemmove((char *)CONCAT22(unaff_SS,cmap),(char *)CONCAT22(in_stack_00000006,gfx),0x300);
+  _fmemmove((char *)CONCAT22(_SS,cmap),(char *)CONCAT22(in_stack_00000006,gfx),0x300);
   for (uVar1 = 0; uVar1 < 0x100; uVar1 = uVar1 + 1) {
     if ((uVar1 < 0x50) || (0x9f < uVar1)) {
       si = uVar1;
@@ -878,7 +877,6 @@ void __cdecl16far init_ui_gfxes(void)
   uint16_t uVar4;
   uint16_t i;
   uint16_t unaff_DI;
-  uint16_t unaff_SS;
   uint8_t palette;
   stg_tmp_t *psStack_e;
   stg_tmp_t *psStack_a;
@@ -888,7 +886,7 @@ void __cdecl16far init_ui_gfxes(void)
   handle.seg = Lbm_nwpanel1.seg;
   handle.ofs = Lbm_nwpanel1.ofs;
   psStack_a = ovr_stshLoadGfx(handle);
-  pcVar1 = (char *)ovr_calcSeasonPalette(psStack_a->cmap,in_DX,&palette,unaff_SS,(char)&palette,0);
+  pcVar1 = (char *)ovr_calcSeasonPalette(psStack_a->cmap,in_DX,&palette,_SS,(char)&palette,0);
   init_special_graphics((char *)CONCAT22(in_DX,pcVar1));
   ovr_vgaSetPalette8bit(&palette,0);
   init_special_graphics((char *)CONCAT22(Lbm_nwpanel1.seg,Lbm_nwpanel1.ofs));

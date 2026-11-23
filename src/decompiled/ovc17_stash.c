@@ -497,7 +497,6 @@ char * __cdecl16far fmVsprintf(char *fmt,char *arg)
   char *pcVar2;
   int iVar3;
   uint uVar4;
-  uint16_t unaff_SS;
   uint8_t *src;
   uint8_t buf;
   int16_t iStack_8;
@@ -505,8 +504,8 @@ char * __cdecl16far fmVsprintf(char *fmt,char *arg)
   
   FMRingIndex = FMRingIndex + 1 & 7;
   ppcStack_6 = &arg;
-  iStack_8 = vsprintf((char *)CONCAT22(unaff_SS,&buf),fmt,(uint16_t)ppcStack_6);
-  src = (uint8_t *)CONCAT22(unaff_SS,&buf);
+  iStack_8 = vsprintf((char *)CONCAT22(_SS,&buf),fmt,(uint16_t)ppcStack_6);
+  src = (uint8_t *)CONCAT22(_SS,&buf);
   iVar3 = iStack_8 + 1 >> 0xf;
   puVar1 = stshRealloc(CONCAT22(*(uint16_t *)((int)&FMRingBuf[0].seg + (uint)FMRingIndex * 4),
                                 ((far_t *)FMRingBuf + FMRingIndex)->ofs),(long)(iStack_8 + 1));

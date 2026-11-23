@@ -90,7 +90,6 @@ uint __cdecl16far attact_isTerrainFlat(int x,int y)
   int iVar4;
   int iVar5;
   uint16_t uVar6;
-  uint16_t unaff_SS;
   uint8_t cornerHeights;
   int iStack_8;
   int iStack_6;
@@ -636,7 +635,6 @@ void __cdecl16far attact_usesAlignUp42(void)
   uint16_t unaff_DI;
   uint16_t index;
   uint16_t uVar15;
-  uint unaff_SS;
   entity_t *destEnt;   /* hand fix: dereferenced as destEnt->base */
   char rowsLeft;
   uint8_t reported;
@@ -780,7 +778,7 @@ void __cdecl16far attact_usesAlignUp42(void)
         uVar8 = ovr_ovc26_usesStExit(index);
         if ((char)uVar8 == '\0') {
           uVar8 = ovr_ovc26_usesRandBelow
-                            (index,(uint16_t)&reported,unaff_SS,(uint16_t)&reportedUnits,unaff_SS);
+                            (index,(uint16_t)&reported,_SS,(uint16_t)&reportedUnits,_SS);
           if (((uVar8 & 0xff) == 0) &&
              (*(char *)((int)(char **)GMenuStrings + (uint)(peVar14->base).gindex * 0x95 + 0x1f) ==
               '\0')) {
@@ -915,7 +913,6 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force)
   char *txt;
   uint16_t uVar4;
   uint16_t dst;
-  char *unaff_SS;
   uint8_t msg;
   uint uStack_6;
   byte bStack_4;
@@ -946,7 +943,7 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force)
         if (bStack_3 != 0xff) {
           uVar3 = ovr_ovc41_pluralSuffix(uStack_6,0xa000);
           dst = 0x2410;
-          txt = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x921,unaff_SS),
+          txt = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x921,_SS),
                               (char *)CONCAT22(uStack_6,(char *)0x26510),callResultTemp,
                               *(uint16_t *)((uint)bStack_3 * 4 + 0x13f),
                               *(uint16_t *)((uint)bStack_3 * 4 + 0x141),uVar3,uVar4);
@@ -1109,7 +1106,6 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
   uint uVar8;
   uint16_t uVar9;
   uint16_t uVar10;
-  uint16_t unaff_SS;
   uint16_t uStack_8;
   uint16_t ent;
   byte bStack_3;
@@ -1144,7 +1140,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
     bStack_3 = ((uint8_t *)MenuItemEnabled)[uVar8];
     if (*(byte *)((int)puVar6 + uVar8 + 0xe) != uVar7) {
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&ent),3,bStack_3,*value,
+             (bVar3 = attact_textArena((uint16_t *)CONCAT22(_SS,&ent),3,bStack_3,*value,
                                        puVar6[1]), bVar3))) {
         *(undefined1 *)((int)Entities + ent * 0x37 + 0x30) = 0;
         ((entity_t *)Entities)[ent].base.destX = uStack_8;
@@ -1154,7 +1150,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
         uVar7 = uVar7 + 1;
       }
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&ent),2,bStack_3,*value,
+             (bVar3 = attact_textArena((uint16_t *)CONCAT22(_SS,&ent),2,bStack_3,*value,
                                        puVar6[1]), bVar3))) {
         *(undefined1 *)((int)Entities + ent * 0x37 + 0x30) = 0;
         ((entity_t *)Entities)[ent].base.destX = uStack_8;
@@ -1162,7 +1158,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
         uVar7 = uVar7 + 1;
       }
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&ent),1,bStack_3,*value,
+             (bVar3 = attact_textArena((uint16_t *)CONCAT22(_SS,&ent),1,bStack_3,*value,
                                        puVar6[1]), bVar3))) {
         *(undefined1 *)((int)Entities + ent * 0x37 + 0x30) = 0;
         ((entity_t *)Entities)[ent].base.destX = uStack_8;
@@ -1170,7 +1166,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
         uVar7 = uVar7 + 1;
       }
       while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(unaff_SS,&ent),0,bStack_3,*value,
+             (bVar3 = attact_textArena((uint16_t *)CONCAT22(_SS,&ent),0,bStack_3,*value,
                                        puVar6[1]), bVar3))) {
         *(undefined1 *)((int)Entities + ent * 0x37 + 0x30) = 0;
         ((entity_t *)Entities)[ent].base.destX = uStack_8;
@@ -1178,7 +1174,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
         uVar7 = uVar7 + 1;
       }
       while (((int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) < (int)uVar7 &&
-             (bVar3 = attact_textArena2((uint *)CONCAT22(unaff_SS,&ent),(uint)bStack_3,*value),
+             (bVar3 = attact_textArena2((uint *)CONCAT22(_SS,&ent),(uint)bStack_3,*value),
              bVar3))) {
         *(undefined1 *)((int)Entities + ent * 0x37 + 0x30) = 0;
         uVar10 = (uint16_t)((ulong)Entities >> 0x10);
@@ -1344,7 +1340,6 @@ void __cdecl16far attact_usesRandBelow(agnt_t *agnt,byte dir,uint16_t arg3,uint1
   uint uVar2;
   int iVar3;
   uint16_t uVar4;
-  uint16_t unaff_SS;
   undefined1 uStack0007;
   byte in_stack_00000008;
   uint16_t agntX;   /* hand fix: [BP-6] is a WORD copy of agnt->x (3f0b:246f) */
@@ -1359,7 +1354,7 @@ void __cdecl16far attact_usesRandBelow(agnt_t *agnt,byte dir,uint16_t arg3,uint1
     in_stack_00000008 = (byte)uVar1;
     do {
       agntX = agnt->x;
-      uVar2 = attact_usesAlignUp44((int *)CONCAT22(unaff_SS,&agntX),agnt->y,in_stack_00000008);
+      uVar2 = attact_usesAlignUp44((int *)CONCAT22(_SS,&agntX),agnt->y,in_stack_00000008);
       if ((uVar2 & 0xff) == 0) goto L_attact_3f0b_2430_24BF;
       in_stack_00000008 = in_stack_00000008 + 1 & 3;
     } while (in_stack_00000008 != (byte)uVar1);
@@ -1633,7 +1628,6 @@ void __cdecl16far attact_usesLDIV_at_2(void)
   uint uVar5;
   uint16_t unaff_DI;
   int iVar6;
-  uint16_t unaff_SS;
   long lVar7;
   long lVar8;
   far_t gfx;
@@ -1647,10 +1641,10 @@ void __cdecl16far attact_usesLDIV_at_2(void)
   uint8_t rect2;
   
   lVar8 = CONCAT22((uint16_t)((ulong)in_stack_0000ffde >> 0x10),unaff_SI);
-  dst.seg = unaff_SS;
+  dst.seg = _SS;
   dst.ofs = (uint16_t)&rect2;
   F_SCOPY(far_from_u32((uint32_t)(0x2410088d)),dst);
-  dst_00.seg = unaff_SS;
+  dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&rect;
   F_SCOPY(far_from_u32((uint32_t)(0x24100897)),dst_00);
   if (GameRunning == false) {
@@ -1658,7 +1652,7 @@ void __cdecl16far attact_usesLDIV_at_2(void)
     bVar1 = ovr_draw_textArena();
     if (bVar1) {
       attact_usesEntityCount2
-                ((uint16_t *)CONCAT22(unaff_SS,&sum),(uint16_t *)CONCAT22(unaff_SS,&stk_ffe0));
+                ((uint16_t *)CONCAT22(_SS,&sum),(uint16_t *)CONCAT22(_SS,&stk_ffe0));
       if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) ||
          ((uint16_t)((ulong)lVar8 >> 0x10) == 0 && iStack_1e == 0)) {
         if (cStack_17 != '\0') {
@@ -1705,7 +1699,7 @@ void __cdecl16far attact_usesLDIV_at_2(void)
         }
         if (AgntFlag1 != false) {
           attact_usesAgntCount2
-                    ((uint16_t *)CONCAT22(unaff_SS,&sum),(uint16_t *)CONCAT22(unaff_SS,&stk_ffe0)
+                    ((uint16_t *)CONCAT22(_SS,&sum),(uint16_t *)CONCAT22(_SS,&stk_ffe0)
                     );
           uVar9 = (uint)((ulong)lVar8 >> 0x10);
           if (((uint)sum != 0 || (*(uint16_t *)((uint8_t *)&(sum) + 2)) != 0) || (uVar9 != 0 || iStack_1e != 0)) {

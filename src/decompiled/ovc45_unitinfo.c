@@ -195,7 +195,6 @@ uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *enti
   uint16_t count;
   uint16_t unaff_DI;
   uint slotMin;
-  uint *unaff_SS;
   uint16_t in_stack_0000000a;
   uint8_t foundEntities;
   uint8_t menuItems;
@@ -207,7 +206,7 @@ uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *enti
   entityIndex = *entityIndexPtr;
   slotMin = 0xffff;
   for (count = 0; (int)count < 10; count = count + 1) {
-    slotMin = ovc45_usesAlignUp4(slotMin,x_00,y,(uint *)CONCAT22(unaff_DI,unaff_SS));
+    slotMin = ovc45_usesAlignUp4(slotMin,x_00,y,(uint *)CONCAT22(unaff_DI,_SS));
     if (slotMin == 0xffff) break;
     *(int *)(&foundEntities + count * 2) = entityIndex;
     uVar5 = *(uint16_t *)(slotMin * 4);
@@ -227,7 +226,7 @@ uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *enti
     pcVar3 = ovr_fmVsprintf("Choose party to build for.  Now building for %s the %s.",
                             (char *)CONCAT22(puVar2[1],(char *)*puVar2));
     puVar4 = &menuItems;
-    entries.seg = (uint16_t)unaff_SS;
+    entries.seg = (uint16_t)_SS;
     entries.ofs = (uint16_t)puVar4;
     (*(uint8_t *)((uint8_t *)&(hint.seg))) = (char)uVar5;
     hint.ofs = (uint16_t)pcVar3;
@@ -915,7 +914,6 @@ ovc45_buildPlacementMessage
   int unaff_DI;
   uint16_t uVar20;
   uint16_t uVar21;
-  char *unaff_SS;
   uint32_t uVar22;
   undefined1 uVar23;
   undefined1 uVar24;
@@ -958,8 +956,8 @@ ovc45_buildPlacementMessage
                       (((char_sheet_t *)(((uint)bStack_11 << 2)))->buildType[0]);
     bStack_12 = (byte)uVar9;
     iVar10 = (uVar9 & 0xff) * 0x27;
-    uVar23 = SUB21(unaff_SS,0);
-    uVar24 = (undefined1)((uint)unaff_SS >> 8);
+    uVar23 = SUB21(_SS,0);
+    uVar24 = (undefined1)((uint)_SS >> 8);
     if (*(int *)(iVar10 + 0x112) == 0 && *(int *)(iVar10 + 0x114) == 0) {
       iVar10 = (uVar9 & 0xff) * 0x27;
       uVar26 = 0x19;
@@ -1044,12 +1042,12 @@ ovc45_buildPlacementMessage
                   uVar16 = 0x217a;
                   iVar18 = ovc45_compute9((char *)&text,
                                           (char *)CONCAT22(*(uint16_t *)((uint)bStack_11 * 4),
-                                                           unaff_SS),
+                                                           _SS),
                                           (char *)CONCAT22(Font03.ofs,
                                                            (char *)((uint16_t *)
                                                                    ((uint)bStack_11 * 4))[1]),
                                           Font03.seg,'U',0x55,3,(char)pcVar11,uVar26);
-                  pcVar11 = ovr_stsprintf((char *)&reqMsg,(char *)CONCAT22(0x7665,unaff_SS),
+                  pcVar11 = ovr_stsprintf((char *)&reqMsg,(char *)CONCAT22(0x7665,_SS),
                                           (char *)CONCAT13((char)((uint)iVar18 >> 8),
                                                            CONCAT12((char)iVar18,0x2410)),
                                           (char)iVar18,uVar16);
@@ -1095,7 +1093,7 @@ ovc45_buildPlacementMessage
           }
           else if ((*(byte *)((uint)bStack_12 * 0x27 + 0x134) & 0x80) == 0) {
             uVar16 = 0x195d;
-            pcVar11 = ovr_stsprintf((char *)&reqMsg,(char *)CONCAT13(0x75,CONCAT12(0x99,unaff_SS)),
+            pcVar11 = ovr_stsprintf((char *)&reqMsg,(char *)CONCAT13(0x75,CONCAT12(0x99,_SS)),
                                     (char *)(ulong)CONCAT12(*(undefined1 *)
                                                              ((uint)bStack_12 * 0x27 + 0x134),0x2410
                                                            ),0x99,0x10);
@@ -1148,7 +1146,7 @@ L_OVC45_77eb_0d61_1379:
     puVar15 = (uint8_t *)CONCAT11(uVar26,bStack_11);
     goldPartyIndex = bStack_11;
     puVar13 = &stk_fc0c;
-    entries.seg = (uint16_t)unaff_SS;
+    entries.seg = (uint16_t)_SS;
     entries.ofs = (uint16_t)puVar13;
     (*(uint8_t *)((uint8_t *)&(hint.seg))) = uVar23;
     hint.ofs = (uint16_t)&msg;
@@ -4084,7 +4082,6 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
   uint16_t uVar9;
   int iVar10;
   uint16_t unaff_DI;
-  char *unaff_SS;
   undefined1 uVar11;
   undefined1 uVar12;
   uint8_t menuItems;
@@ -4129,7 +4126,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
     pcVar2 = ovr_ovc22_className(*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a),0);
     puVar3 = (uint16_t *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
     uVar8 = 0x217a;
-    iVar4 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar3,unaff_SS),
+    iVar4 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar3,_SS),
                            (char *)CONCAT13((char)(Font03.ofs >> 8),
                                             CONCAT12((char)Font03.ofs,puVar3[1])),Font03.seg,'U',
                            (char)Font03.ofs,0x55,3,pcVar2,uVar11);
@@ -4138,11 +4135,11 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
                        ((char *)*(uint16_t *)((uint)bldType * 0x27 + 0x10e),*(uint16_t *)((uint)bldType * 0x27 + 0x110),(char)iVar4,uVar8,0,0,0,0);
     pcVar2 = ovr_fmVsprintf("%s: Search this location for minerals?  Active party is %s the %s.",
                             (char *)CONCAT22(uVar9,puVar5));
-    strcpy((char *)CONCAT22(unaff_SS,&msg),
+    strcpy((char *)CONCAT22(_SS,&msg),
            (char *)CONCAT13((char)((uint)uVar9 >> 8),CONCAT12((char)uVar9,pcVar2)));
     goldPartyIndex = *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x1a);
-    uVar11 = SUB21(unaff_SS,0);
-    uVar12 = (undefined1)((uint)unaff_SS >> 8);
+    uVar11 = SUB21(_SS,0);
+    uVar12 = (undefined1)((uint)_SS >> 8);
     puVar5 = &menuItems;
     (*(uint8_t *)((uint8_t *)&(entries.seg))) = uVar11;
     entries.ofs = (uint16_t)puVar5;
@@ -4276,7 +4273,6 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
   int iVar12;
   uint16_t unaff_DI;
   uint16_t uVar13;
-  char *unaff_SS;
   undefined1 uVar14;
   undefined1 uVar15;
   uint8_t menuLabels;
@@ -4325,7 +4321,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
     puVar5 = (uint16_t *)((uint)*(byte *)((int)Entities + entityIndex * 0x37 + 0x1a) * 4);
     uVar15 = 0x7a;
     uVar8 = puVar5[1];
-    iVar6 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar5,unaff_SS),
+    iVar6 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar5,_SS),
                            (char *)CONCAT13((char)(Font03.ofs >> 8),CONCAT12((char)Font03.ofs,uVar8)
                                            ),Font03.seg,'U',(char)uVar8,(char)Font03.ofs,0x55,3,
                            pcVar4,uVar14);
@@ -4335,8 +4331,8 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
     pcVar4 = ovr_fmVsprintf("%s: Claim this tree? Harvest value is %d gold. Active party is %s the %s."
                             ,(char *)CONCAT13((char)((uint)uVar8 >> 8),CONCAT12((char)uVar8,puVar7))
                            );
-    uVar14 = SUB21(unaff_SS,0);
-    uVar15 = (undefined1)((uint)unaff_SS >> 8);
+    uVar14 = SUB21(_SS,0);
+    uVar15 = (undefined1)((uint)_SS >> 8);
     strcpy((char *)CONCAT13(uVar15,CONCAT12(uVar14,&msg)),
            (char *)CONCAT13((char)((uint)uVar8 >> 8),CONCAT12((char)uVar8,pcVar4)));
     goldPartyIndex = *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x1a);

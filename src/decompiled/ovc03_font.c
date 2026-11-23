@@ -38,7 +38,6 @@ far_t * __cdecl16far stshProcessFontSub(far_t *__return_storage_ptr__,far_t hndl
   uint16_t o;
   int16_t unaff_DI;
   uint16_t m;
-  uint16_t unaff_SS;
   uint8_t widths [96];
   uint8_t dchofs [192];
   uint8_t schofs [192];

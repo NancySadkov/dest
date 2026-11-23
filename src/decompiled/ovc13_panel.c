@@ -38,17 +38,16 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
   ulong *puVar1;
   int in_DX;
   uint8_t *paletteOfs;
-  uint16_t unaff_SS;
   uint8_t paletteSeg;
   uint16_t in_stack_0000ffe2;
   uint8_t flashPalette1;
   uint8_t flashPalette2;
   uint8_t rect;
   
-  dst.seg = unaff_SS;
+  dst.seg = _SS;
   dst.ofs = (uint16_t)&stk_ffe2;
   F_SCOPY(far_from_u32((uint32_t)(0x24100846)),dst);
-  dst_00.seg = unaff_SS;
+  dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&rect;
   F_SCOPY(far_from_u32((uint32_t)(0x24100858)),dst_00);
   puVar1 = ovr_attact_usesBDADailyTimeCounter(flashTickLo,CONCAT22(in_stack_0000ffe2,flashTickHi),0);
@@ -59,7 +58,7 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
     flashTickHi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
     flashTickLo = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t far */;
     FlashToggle = 1 - (FlashToggle != 0);
-    paletteSeg = (uint8_t)unaff_SS;
+    paletteSeg = (uint8_t)_SS;
     ovr_vgaSetPalette(&stk_ffe2 + (uint)FlashToggle * 3,paletteSeg,0xef,1);
     ovr_vgaSetPalette(&flashPalette1 + (uint)FlashToggle * 3,paletteSeg,0xee,1);
     paletteOfs = &flashPalette2 + (uint)FlashToggle * 3;
@@ -806,7 +805,6 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   short *psVar7;
   int iVar8;
   int iVar9;
-  char *unaff_SS;
   uint16_t uVar10;
   uint16_t uVar11;
   uint8_t msg;
@@ -938,7 +936,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
     uVar11 = Font02.seg;
     uVar10 = Font02.ofs;
     uVar5 = ovr_alignUp4(GfxRndSeed,GfxRndSeed2,0);
-    text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x864,unaff_SS),
+    text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x864,_SS),
                          (char *)CONCAT22(uVar5,(char *)0x26510));
     ovr_blitText(text,(byte *)CONCAT22(uVar10,pbVar6),uVar11,uVar3,uVar4);
   }

@@ -75,22 +75,21 @@ void __cdecl16far ovc50_usesUiInputText(void)
 {
   far_t dst;
   char *pcVar1;
-  uint16_t unaff_SS;
   far_t entries;
   uint8_t tabPtrs;
   byte bStack_5;
   char cStack_4;
   char cStack_3;
   
-  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)unaff_SS;
+  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
   dst.ofs = (uint16_t)&tabPtrs;
-  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)(unaff_SS >> 8);
+  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)(_SS >> 8);
   F_SCOPY(far_from_u32((uint32_t)(0x241084a8)),dst);
   bStack_5 = 0;
   do {
     ovr_manage_openTalkWindow();
     ovc50_usesStshLoadGfx(bStack_5);
-    entries.seg = unaff_SS;
+    entries.seg = _SS;
     entries.ofs = (uint16_t)&tabPtrs;
     pcVar1 = ovr_uiInputText(entries,9,far_from_u32((uint32_t)(0x0)),0x0,0);
     cStack_3 = (char)pcVar1;

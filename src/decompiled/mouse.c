@@ -19,7 +19,6 @@ miceHandler(uint16_t mask,uint16_t buttons,uint16_t x,uint16_t y,uint16_t dx,uin
   uint in_AX;
   uint16_t in_CX;
   uint16_t in_DX;
-  uint16_t unaff_SS;
   
                     /* Mask bits:
                         0 call if mouse moves
@@ -40,7 +39,7 @@ miceHandler(uint16_t mask,uint16_t buttons,uint16_t x,uint16_t y,uint16_t dx,uin
                     /* WARNING: Read-only address (ram,0x000100f8) is written */
     uRam000100f8 = 0x1000;
     uRam000100f6 = 0x3a17;
-    uRam00010104 = unaff_SS;
+    uRam00010104 = _SS;
     puRam00010106 = &stk_fff0;
     uRam000100fa = in_CX;
     uRam000100fc = in_DX;

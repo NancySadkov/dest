@@ -348,7 +348,6 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
   uint16_t in_DX;
   agnt_t *agnt_00;
   uint16_t *agntSeg;
-  uint16_t *unaff_SS;
   byte mode;
   undefined1 uVar11;
   uint8_t uVar12;
@@ -368,7 +367,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
       pcVar5 = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
                                                             CONCAT12((char)&text,agntSeg)),0);
       puVar6 = ovr_ovc15_usesStshRealloc(pcVar5,(char)in_DX,uVar8,0,0,0,0,0);
-      pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x8436,unaff_SS),
+      pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x8436,_SS),
                              (char *)CONCAT13((char)((uint)puVar6 >> 8),
                                               CONCAT12((char)puVar6,0x2410)),(char)puVar6,
                              (char)in_DX);
@@ -385,7 +384,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
       pcVar5 = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
                                                             CONCAT12((char)&text,agntSeg)),0);
       puVar6 = ovr_ovc15_usesStshRealloc(pcVar5,(char)in_DX,uVar8,0,0,0,0,0);
-      pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x8451,unaff_SS),
+      pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x8451,_SS),
                              (char *)CONCAT13((char)((uint)puVar6 >> 8),
                                               CONCAT12((char)puVar6,0x2410)),(char)puVar6,
                              (char)in_DX);
@@ -420,7 +419,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                                                                 )), ok == '\0')))) {
                   if (((((((agntG_t *)agnt_00->gdata)->flags & 0x400) == 0) ||
                        (0x14 < (int)agnt_00->y)) ||
-                      (ok = ovc49_usesFrameIndex(agnt,(byte *)CONCAT22(unaff_SS,&agntIndex)),
+                      (ok = ovc49_usesFrameIndex(agnt,(byte *)CONCAT22(_SS,&agntIndex)),
                       ok == '\0')) ||
                      ((0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32) ||
                       (uVar7 = ovr_ovc27_compute2(agnt_00,(int)agntSeg,mode,agntIndex - 1),
@@ -428,7 +427,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                     if (((int)agnt_00->y < 0x15) &&
                        (iVar9 = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,3), (char)iVar9 != '\0')
                        ) {
-                      ok = ovc49_usesFrameIndex2(agnt,(byte *)CONCAT22(unaff_SS,&agntIndex));
+                      ok = ovc49_usesFrameIndex2(agnt,(byte *)CONCAT22(_SS,&agntIndex));
                       if ((ok == '\0') || (0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32))) {
                         if ((((((((agntG_t *)agnt_00->gdata)->flags2 & 1) == 0) ||
                               (ok = ovr_agnt_computeFrameExtents
@@ -505,7 +504,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                              ((((agntG_t *)agnt_00->gdata)->flags2 & 0x40) != 0)) &&
                             (((agnt_00->health != 0x5 &&
                               (ok = ovc49_usesFrameIndex
-                                                 (agnt,(byte *)CONCAT22(unaff_SS,&agntIndex)),
+                                                 (agnt,(byte *)CONCAT22(_SS,&agntIndex)),
                               ok != '\0')) &&
                              (uVar1 = *(uint32_t *)((uint)agntIndex * 0x34 + -0x17),
                              (*(uint *)((int)uVar1 + 0x3e) & 0x80) != 0)))) {
@@ -519,7 +518,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                              ((((agntG_t *)agnt_00->gdata)->flags2 & 0x100) != 0)) &&
                             ((agnt_00->health != 0x6 &&
                              ((((ok = ovc49_usesFrameIndex
-                                                   (agnt,(byte *)CONCAT22(unaff_SS,&agntIndex)),
+                                                   (agnt,(byte *)CONCAT22(_SS,&agntIndex)),
                                 ok != '\0' &&
                                 (iVar9 = (uint)agntIndex * 0x34 + -0x34, uVar11 = (undefined1)iVar9,
                                 uVar7 = ovr_agnt_compute12(agnt_00,(agnt_t *)
@@ -561,7 +560,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                         else {
                           bVar3 = ovr_agnt_usesAgntCount2
                                             (agnt_00,(uint16_t *)CONCAT22(&dx,agntSeg),
-                                             (uint16_t *)CONCAT22(&dirY,unaff_SS));
+                                             (uint16_t *)CONCAT22(&dirY,_SS));
                           if (bVar3) {
                             *(uint8_t *)((int)&agnt_00->targetX + 1) = dirY;
                             if ((distance < 0x6e) &&
@@ -641,7 +640,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                       uVar8 = GSavedBlitSeg;
                       pcVar5 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,agntSeg),0);
                       puVar6 = ovr_ovc15_usesStshRealloc(pcVar5,(char)roll,uVar12,uVar8,0,0,0,0);
-                      pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x846c,unaff_SS),
+                      pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x846c,_SS),
                                              (char *)CONCAT22(puVar6,(char *)0x26510),
                                              (char)roll);
                       ovr_uiNotify(pcVar5,roll,(char)roll);
@@ -672,13 +671,13 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
           }
           else if (((((((agntG_t *)agnt_00->gdata)->flags & 0x400) == 0) ||
                     ((0x14 < (int)agnt_00->y ||
-                     (ok = ovc49_usesFrameIndex(agnt,(byte *)CONCAT22(unaff_SS,&agntIndex)),
+                     (ok = ovc49_usesFrameIndex(agnt,(byte *)CONCAT22(_SS,&agntIndex)),
                      ok == '\0')))) || (0x14 < *(int *)((uint)agntIndex * 0x34 + -0x32))) ||
                   (uVar7 = ovr_ovc27_compute2(agnt_00,(int)agntSeg,mode,agntIndex - 1),
                   (char)uVar7 == '\0')) {
             if (((((int)agnt_00->y < 0x15) &&
                  (iVar9 = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,3), (char)iVar9 != '\0')) &&
-                (ok = ovc49_usesFrameIndex2(agnt,(byte *)CONCAT22(unaff_SS,&agntIndex)),
+                (ok = ovc49_usesFrameIndex2(agnt,(byte *)CONCAT22(_SS,&agntIndex)),
                 ok != '\0')) && (*(int *)((uint)agntIndex * 0x34 + -0x32) < 0x15)) {
               agnt_00->health = 0x2;
               agnt_00->targetY = 0;
@@ -703,7 +702,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                    (roll = ovr_randBelow(8,0), (roll & 0xff) == 0)) {
                   bVar3 = ovr_agnt_usesAgntCount2
                                     (agnt_00,(uint16_t *)CONCAT22(&dx,agntSeg),
-                                     (uint16_t *)CONCAT22(&dirY,unaff_SS));
+                                     (uint16_t *)CONCAT22(&dirY,_SS));
                   if (bVar3) {
                     *(uint8_t *)((int)&agnt_00->targetX + 1) = dirY;
                   }
@@ -948,7 +947,6 @@ uint __cdecl16far ovc49_body1(agnt_t *agnt,uint16_t arg2)
   uint16_t uVar27;
   brect_t *pbVar28;
   brect_t *pbVar29;
-  brect_t *unaff_SS;
   byte in_AF;
   long lVar30;
   uint16_t in_stack_00000006;
@@ -1190,8 +1188,8 @@ L_OVC49_8699_18c4_1CA7:
     in_stack_0000fffd = 0x12;
     goto L_OVC49_8699_18c4_1CA7;
   }
-  bVar36 = (byte)unaff_SS;
-  uVar38 = (undefined1)((uint)unaff_SS >> 8);
+  bVar36 = (byte)_SS;
+  uVar38 = (undefined1)((uint)_SS >> 8);
   if (agnt->animVariant != 0x0) {
     uVar15 = agnt->timer & 3;
     if (uVar15 < 4) {
@@ -1223,7 +1221,7 @@ L_OVC49_8699_18c4_1CA7:
         ovr_ovc23_textBuildThfres01Lbm(dst);
         cVar6 = 'o';
         cVar8 = '#';
-        _fmemset((void *)ZEXT24(unaff_SS),2,(uint16_t)in_stack_0000fff6);
+        _fmemset((void *)ZEXT24(_SS),2,(uint16_t)in_stack_0000fff6);
         for (uStackY_22 = (cte_t *)0x0; (int)uStackY_22 < (int)(uint)AgntCount;
             uStackY_22 = (cte_t *)((int)uStackY_22 + 1)) {
           (&stk_ffec)[*(byte *)((int)uStackY_22 * 0x34 + 0x2f)] = 1;
@@ -1402,9 +1400,9 @@ L_OVC49_8699_18c4_1CA7:
       uVar33 = (undefined1)uVar22;
       cVar6 = (char)((uint)uVar22 >> 8);
       in_stack_0000ffe8 = (stg_tmp_t *)&AgntAnms[0xd].eventFrame;
-      entries.seg = (uint16_t)unaff_SS;
+      entries.seg = (uint16_t)_SS;
       entries.ofs = (uint16_t)puVar11;
-      pbVar29 = unaff_SS;
+      pbVar29 = _SS;
       pcVar21 = (uint16_t)(pcVar26);
       ovr_ovc28_compute2(entries,0,0,0,0);
       goldPartyIndex = 0xff;
@@ -3052,7 +3050,7 @@ L_OVC49_8699_1e09_3BDE:
         pbVar19 = (brect_t *)
                   CONCAT11((char)((uint)((int)uStackY_22 * 0x34) >> 8),
                            *(undefined1 *)((int)uStackY_22 * 0x34 + 0xf));
-        gfx_09.seg = (uint16_t)unaff_SS;
+        gfx_09.seg = (uint16_t)_SS;
         gfx_09.ofs = (uint16_t)&bStackY_32.h;
         uStackY_22 = (cte_t *)0x2337;
         pbVar28 = (brect_t *)((char *)0x263d3);
@@ -3079,7 +3077,7 @@ L_OVC49_8699_1e09_3BDE:
     pbVar19 = (brect_t *)
               CONCAT11((char)((uint)((int)uStackY_22 * 0x34) >> 8),
                        *(undefined1 *)((int)uStackY_22 * 0x34 + 0xf));
-    gfx_08.seg = (uint16_t)unaff_SS;
+    gfx_08.seg = (uint16_t)_SS;
     gfx_08.ofs = (uint16_t)&bStackY_32.h;
     uStackY_22 = (cte_t *)0x22ff;
     pbVar28 = (brect_t *)((char *)0x263d3);
@@ -3493,7 +3491,6 @@ void __cdecl16far ovc49_drawAgents(void)
   uint16_t unaff_DI;
   uint16_t uVar20;
   uint16_t uVar21;
-  uint unaff_SS;
   far_t gfx_03;
   far_t gfx_04;
   far_t gfx_05;
@@ -3524,8 +3521,8 @@ void __cdecl16far ovc49_drawAgents(void)
   char cStack_4;
   char cStack_3;
   
-  type = (uint8_t)unaff_SS;
-  uVar23 = (undefined1)(unaff_SS >> 8);
+  type = (uint8_t)_SS;
+  uVar23 = (undefined1)(_SS >> 8);
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = type;
   dst.ofs = (uint16_t)&agentRect;
   (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = uVar23;

@@ -200,7 +200,6 @@ ovc42_showAgentStats(byte gindex,uint8_t partyIndex,char flag,far_t cmap,byte le
 {
   far_t cmap_00;
   int iVar1;
-  uint unaff_SS;
   far_t gfx;
   entity_t agntRec;   /* the 0x37-byte record at [BP-0x76] */
   agnt_t agntTmp;     /* the 0x34-byte temp at [BP-0x3e] */
@@ -209,11 +208,11 @@ ovc42_showAgentStats(byte gindex,uint8_t partyIndex,char flag,far_t cmap,byte le
   int16_t iStack_6;
   
   ovr_draw_freeRingBuffers();
-  memcpy((char *)CONCAT22(unaff_SS,&rect),(char *)(BlitRects + 1),10);
+  memcpy((char *)CONCAT22(_SS,&rect),(char *)(BlitRects + 1),10);
   iStack_6 = 150;
   gfx.seg = talkwin9Cut1Seg;
   gfx.ofs = talkwin9Cut1Ofs;
-  ovr_blitGfxRect(gfx,0,0,(brect_t *)&rect,(uint8_t)unaff_SS,true,0,0,0,0,0,0);
+  ovr_blitGfxRect(gfx,0,0,(brect_t *)&rect,(uint8_t)_SS,true,0,0,0,0,0,0);
   _fmemset(MK_FP(_SS, &agntTmp), 0, 0x34);
   _fmemset(MK_FP(_SS, &agntRec), 0, 0x37);
   peStack_29 = &agntRec;
@@ -245,7 +244,7 @@ ovc42_showAgentStats(byte gindex,uint8_t partyIndex,char flag,far_t cmap,byte le
     agntRec.base.animVariant = 0x0;
   }
   cmap_00.seg = cmap.ofs;
-  cmap_00.ofs = unaff_SS;
+  cmap_00.ofs = _SS;
   ovr_drawAgntStats((agnt_t *)&agntTmp,cmap_00,cmap.seg);
   return;
 }
@@ -264,7 +263,6 @@ void __cdecl16far ovc42_populateArea(byte partyIndex)
   uint16_t uVar1;
   uint uVar2;
   uint uVar3;
-  uint16_t unaff_SS;
   far_t dst;
   far_t dst_00;
   uint32_t uVar4;
@@ -273,10 +271,10 @@ void __cdecl16far ovc42_populateArea(byte partyIndex)
   int iStack_6;
   int iStack_4;
   
-  dst.seg = unaff_SS;
+  dst.seg = _SS;
   dst.ofs = (uint16_t)&unitTypeMap;
   F_SCOPY(far_from_u32((uint32_t)(0x24107145)),dst);
-  dst_00.seg = unaff_SS;
+  dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&spawnGindexMap;
   F_SCOPY(far_from_u32((uint32_t)(0x24107153)),dst_00);
   iStack_4 = -0x14;
@@ -377,7 +375,6 @@ void __cdecl16far ovc42_drawTextRow(char *text,byte row)
 
 {
   int16_t max_width;
-  uint16_t unaff_SS;
   far_t gfx;
   far_t dst_00;
   far_t handle;
@@ -385,13 +382,13 @@ void __cdecl16far ovc42_drawTextRow(char *text,byte row)
   stg_tmp_t *psStack_6;
   int16_t iStack_4;
   
-  dst_00.seg = unaff_SS;
+  dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&dst;
   F_SCOPY(far_from_u32((uint32_t)(0x2410715b)),dst_00);
   if (row == 0) {
     gfx.seg = fullScreenGfxSeg;
     gfx.ofs = fullScreenGfxOfs;
-    ovr_blitGfx10(gfx,0,0,(brect_t *)&dst,SUB21(unaff_SS,0),0,0);
+    ovr_blitGfx10(gfx,0,0,(brect_t *)&dst,SUB21(_SS,0),0,0);
   }
   TextBlitY = (uint)row * 0xd + 0x9e;
   max_width = 9232;
@@ -483,7 +480,6 @@ uint16_t __cdecl16far run_demo(void)
   int iVar7;
   uint16_t unaff_DI;
   int iVar8;
-  uint unaff_SS;
   undefined1 uVar9;
   uint8_t palette[0x300];   /* palette buffer, cleared at 6d7a:0cc6 */
   stg_tmp_t *psStack_c;
@@ -571,8 +567,8 @@ uint16_t __cdecl16far run_demo(void)
   if (bVar1 < 2) {
     pcVar2 = ovc42_textProvidesMoreHousing(0x48);
     if ((byte)pcVar2 < 2) {
-      uVar5 = (undefined1)unaff_SS;
-      uVar9 = (undefined1)(unaff_SS >> 8);
+      uVar5 = (undefined1)_SS;
+      uVar9 = (undefined1)(_SS >> 8);
       (*(uint8_t *)((uint8_t *)&(palette_00.seg))) = uVar5;
       palette_00.ofs = (uint16_t)palette;
       (*(uint8_t *)((uint8_t *)&(palette_00.seg) + 1)) = uVar9;
@@ -1040,7 +1036,7 @@ uint16_t __cdecl16far run_demo(void)
                                                        *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
                                                   uVar6 = ovr_inputUpdate(0xb4);
                                                   if ((byte)uVar6 < 2) {
-                                                    ovc42_endDemo('\0',(int)palette,unaff_SS);
+                                                    ovc42_endDemo('\0',(int)palette,_SS);
                                                     GameRunning = false;
                                                     CurMusicType = 0xff;
                                                     CurSfxType3 = 0xff;
@@ -1048,31 +1044,31 @@ uint16_t __cdecl16far run_demo(void)
                                                   }
                                                   else {
                                                     pal = palette;
-                                                    ovc42_endDemo('\x03',(int)pal,unaff_SS);
+                                                    ovc42_endDemo('\x03',(int)pal,_SS);
                                                     uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
                                                   else {
                                                     pal = palette;
-                                                    ovc42_endDemo('\x03',(int)pal,unaff_SS);
+                                                    ovc42_endDemo('\x03',(int)pal,_SS);
                                                     uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
                                                   else {
                                                     pal = palette;
-                                                    ovc42_endDemo('\x03',(int)pal,unaff_SS);
+                                                    ovc42_endDemo('\x03',(int)pal,_SS);
                                                     uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
                                                   else {
                                                     pal = palette;
-                                                    ovc42_endDemo('\x03',(int)pal,unaff_SS);
+                                                    ovc42_endDemo('\x03',(int)pal,_SS);
                                                     uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
                                                   else {
                                                     pal = palette;
-                                                    ovc42_endDemo('\x03',(int)pal,unaff_SS);
+                                                    ovc42_endDemo('\x03',(int)pal,_SS);
                                                     uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                                   }
                                                   }
@@ -1099,7 +1095,7 @@ uint16_t __cdecl16far run_demo(void)
                                             }
                                             else {
                                               pal = palette;
-                                              ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                                              ovc42_endDemo('\x01',(int)pal,_SS);
                                               uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                             }
                                           }
@@ -1125,43 +1121,43 @@ uint16_t __cdecl16far run_demo(void)
                                   }
                                   else {
                                     pal = palette;
-                                    ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                                    ovc42_endDemo('\x01',(int)pal,_SS);
                                     uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                   }
                                 }
                                 else {
                                   pal = palette;
-                                  ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                                  ovc42_endDemo('\x01',(int)pal,_SS);
                                   uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                                 }
                               }
                               else {
                                 pal = palette;
-                                ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                                ovc42_endDemo('\x01',(int)pal,_SS);
                                 uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                               }
                             }
                             else {
                               pal = palette;
-                              ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                              ovc42_endDemo('\x01',(int)pal,_SS);
                               uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                             }
                           }
                           else {
                             pal = palette;
-                            ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                            ovc42_endDemo('\x01',(int)pal,_SS);
                             uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                           }
                         }
                         else {
                           pal = palette;
-                          ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                          ovc42_endDemo('\x01',(int)pal,_SS);
                           uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                         }
                       }
                       else {
                         pal = palette;
-                        ovc42_endDemo('\x01',(int)pal,unaff_SS);
+                        ovc42_endDemo('\x01',(int)pal,_SS);
                         uVar3 = CONCAT11((char)((uint)pal >> 8),1);
                       }
                     }
@@ -1192,31 +1188,31 @@ uint16_t __cdecl16far run_demo(void)
           }
           else {
             pal = palette;
-            ovc42_endDemo('\x03',(int)pal,unaff_SS);
+            ovc42_endDemo('\x03',(int)pal,_SS);
             uVar3 = CONCAT11((char)((uint)pal >> 8),1);
           }
         }
         else {
           pal = palette;
-          ovc42_endDemo('\x03',(int)pal,unaff_SS);
+          ovc42_endDemo('\x03',(int)pal,_SS);
           uVar3 = CONCAT11((char)((uint)pal >> 8),1);
         }
       }
       else {
         pal = palette;
-        ovc42_endDemo('\x03',(int)pal,unaff_SS);
+        ovc42_endDemo('\x03',(int)pal,_SS);
         uVar3 = CONCAT11((char)((uint)pal >> 8),1);
       }
     }
     else {
       pal = palette;
-      ovc42_endDemo('\x03',(int)pal,unaff_SS);
+      ovc42_endDemo('\x03',(int)pal,_SS);
       uVar3 = CONCAT11((char)((uint)pal >> 8),1);
     }
   }
   else {
     pal = palette;
-    ovc42_endDemo('\x03',(int)pal,unaff_SS);
+    ovc42_endDemo('\x03',(int)pal,_SS);
     uVar3 = CONCAT11((char)((uint)pal >> 8),1);
   }
   return uVar3;

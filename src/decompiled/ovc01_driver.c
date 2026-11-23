@@ -906,7 +906,6 @@ uint16_t __cdecl16near driver_drawLine_compute(void)
 
 {
   int unaff_BP;
-  uint16_t unaff_SS;
   
   return *(uint16_t *)(unaff_BP + 0x10);
 }
@@ -1320,7 +1319,6 @@ void __cdecl16near driver_scan2(void)
   int unaff_DI;
   undefined1 *puVar8;
   uint16_t unaff_ES;
-  uint16_t unaff_SS;
   bool bVar9;
   
   bVar2 = *(byte *)(unaff_BP + -6);

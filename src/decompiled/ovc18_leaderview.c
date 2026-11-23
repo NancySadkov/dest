@@ -57,7 +57,6 @@ void __cdecl16far ovc18_showLeaderView(void)
   char *pcVar4;
   uint16_t unaff_SI;
   int iVar5;
-  uint unaff_SS;
   uint8_t partyCounts;
   char *pcStack_6;
   uint16_t uStack_4;
@@ -149,7 +148,6 @@ ovc18_spawnClassAgent
   uint uVar11;
   far_t far *unaff_DI;
   far_t far *pfVar12;
-  char *unaff_SS;
   far_t far *in_stack_00000004;
   char acStackY_56 [46];
   uint8_t *puStackY_28;
@@ -371,7 +369,7 @@ ovc18_spawnClassAgent
           pfStackY_20 = (far_t far *)CONCAT22(acStackY_56,0x23d5);
           uStackY_24 = (uint8_t *)CONCAT22(0xad0,(uint8_t *)uStackY_24);
           txt = (uint8_t *)
-                ovr_stsprintf(acStackY_56,(char *)CONCAT22(0x921,unaff_SS),
+                ovr_stsprintf(acStackY_56,(char *)CONCAT22(0x921,_SS),
                               (char *)CONCAT22(pcVar15,(char *)0x26510));
           ovr_drawTextAt((char *)txt,uVar10,0);
         }
@@ -428,7 +426,6 @@ ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t destY,uint8_t textV
   uint16_t uVar12;
   uint16_t uVar13;
   uint16_t uVar14;
-  uint16_t unaff_SS;
   bool bVar15;
   far_t fVar16;
   undefined1 uStack000b;
@@ -809,7 +806,6 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
   int iVar9;
   uint16_t unaff_DI;
   uint16_t uVar10;
-  uint16_t unaff_SS;
   undefined1 uVar11;
   undefined1 uVar12;
   char partyIndex;
@@ -817,9 +813,9 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
   uint8_t uStack_5;
   uint uStack_4;
   
-  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)unaff_SS;
+  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
   dst.ofs = (uint16_t)auStack_12;
-  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)unaff_SS >> 8);
+  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)_SS >> 8);
   F_SCOPY(far_from_u32((uint32_t)(0x241045b9)),dst);
   for (uVar8 = 0; partyIndex = (char)unaff_DI, uVar8 < EntityCount; uVar8 = uVar8 + 1) {
     uVar10 = (uint16_t)((ulong)Entities >> 0x10);
@@ -928,7 +924,7 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
       uVar1 = *(uint32_t *)((uint)PartyCount * 4 + -4);
       *(undefined1 *)((int)uVar1 + 0x5a) = 1;
       ovr_createConstructionRecordFar
-                (0x89,GfxRndSeed - 2,GfxRndSeed2,(uint8_t *)CONCAT22(unaff_SS,&uStack_5),
+                (0x89,GfxRndSeed - 2,GfxRndSeed2,(uint8_t *)CONCAT22(_SS,&uStack_5),
                  PartyCount - 1,partyIndex,(char)GfxRndSeed2,(char)&uStack_5,PartyCount - 1);
       ovc18_textTypeLen(PartyCount - 1,GfxRndSeed,GfxRndSeed2,0x0,(char)GfxRndSeed,0);
       ovr_ovc22_usesRandBelow2(PartyCount - 1,(uint16_t)&uStack_5);
@@ -940,7 +936,7 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
       ovr_createConstructionRecordFar
                 (*(byte *)((int)(far_t *)(worldMenuLabels + 0xb) +
                           (uint)*(byte *)((int)uVar1 + 0x3e) * 0x95),GfxRndSeed - 1,GfxRndSeed2,
-                 (uint8_t *)CONCAT22(unaff_SS,&uStack_5),PartyCount - 1,partyIndex,(char)GfxRndSeed2
+                 (uint8_t *)CONCAT22(_SS,&uStack_5),PartyCount - 1,partyIndex,(char)GfxRndSeed2
                  ,(char)&uStack_5,PartyCount - 1);
       ovc18_textTypeLen(PartyCount - 1,GfxRndSeed,GfxRndSeed2,0x0,(char)GfxRndSeed,0);
     }

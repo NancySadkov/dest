@@ -128,7 +128,6 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   unit_t *puVar5;
   int iVar6;
   uint16_t uVar7;
-  char *unaff_SS;
   uint8_t msg;
   byte bStack_f;
   byte bStack_e;
@@ -167,7 +166,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             }
             name = pcVar4;
             pcVar3 = ovc39_lordOrLady();
-            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
+            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
                                    (char *)CONCAT22(pcVar3,name),(char)pcVar4);
             ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
             (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)name;
@@ -182,7 +181,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             iStack_6 = ovc39_loadArchiveEntry(10);
             name = pcVar4;
             pcVar3 = ovc39_lordOrLady();
-            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
+            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
                                    (char *)CONCAT22(pcVar3,name),(char)pcVar4);
             ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
             (*(uint8_t *)((uint8_t *)&(handle_00.seg))) = (char)name;
@@ -197,7 +196,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             iStack_6 = ovc39_loadArchiveEntry(0xb);
             name = pcVar4;
             pcVar3 = ovc39_lordOrLady();
-            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
+            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
                                    (char *)CONCAT22(pcVar3,name),(char)pcVar4);
             ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
             (*(uint8_t *)((uint8_t *)&(handle_01.seg))) = (char)name;
@@ -212,7 +211,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             iStack_6 = ovc39_loadArchiveEntry(0xc);
             name = pcVar4;
             pcVar3 = ovc39_lordOrLady();
-            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
+            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
                                    (char *)CONCAT22(pcVar3,name),(char)pcVar4);
             ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
             (*(uint8_t *)((uint8_t *)&(handle_02.seg))) = (char)name;
@@ -227,7 +226,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             iStack_6 = ovc39_loadArchiveEntry(0xd);
             name = pcVar4;
             pcVar3 = ovc39_lordOrLady();
-            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
+            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
                                    (char *)CONCAT22(pcVar3,name),(char)pcVar4);
             ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
             (*(uint8_t *)((uint8_t *)&(handle_03.seg))) = (char)name;
@@ -409,7 +408,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
       if ((bStack_e == 0) || (bStack_e < bStack_d)) {
         if (bStack_d == 0) {
           pcVar3 = ovc39_lordOrLady();
-          pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(msgFormat.ofs,unaff_SS),
+          pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(msgFormat.ofs,_SS),
                                  (char *)CONCAT22(pcVar3,msgFormat.seg),(char)pcVar4);
           ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
         }
@@ -417,7 +416,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
           iStack_6 = ovc39_loadArchiveEntry(bStack_d + 0x17);
           name = pcVar4;
           pcVar3 = ovc39_lordOrLady();
-          pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
+          pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
                                  (char *)CONCAT22(pcVar3,name),(char)pcVar4);
           ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
           (*(uint8_t *)((uint8_t *)&(handle_06.seg))) = (char)name;
@@ -430,7 +429,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
         iStack_6 = ovc39_loadArchiveEntry(bStack_e + 0xd);
         name = pcVar4;
         pcVar3 = ovc39_lordOrLady();
-        pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
+        pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
                                (char *)CONCAT22(pcVar3,name),(char)pcVar4);
         ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
         (*(uint8_t *)((uint8_t *)&(handle_05.seg))) = (char)name;
@@ -443,7 +442,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
       iStack_6 = ovc39_loadArchiveEntry(bStack_c + 0x12);
       name = pcVar4;
       pcVar3 = ovc39_lordOrLady();
-      pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,unaff_SS),
+      pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(iStack_6,_SS),
                              (char *)CONCAT22(pcVar3,name),(char)pcVar4);
       ovr_drawString(pcVar3,(uint16_t)pcVar4,(char)pcVar4);
       (*(uint8_t *)((uint8_t *)&(handle_04.seg))) = (char)name;

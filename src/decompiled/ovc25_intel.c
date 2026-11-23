@@ -163,7 +163,7 @@ ovc25_usesAlignUp43(char partyIndex,byte count,uint16_t destX,uint16_t destY,cha
   uint uVar4;
   int iVar5;
   uint16_t uVar6;
-  uint16_t unaff_SS;
+  uint16_t curSeg = _SS;
   uint8_t entityIndex;
   
   if (count != 0) {
@@ -191,7 +191,7 @@ ovc25_usesAlignUp43(char partyIndex,byte count,uint16_t destX,uint16_t destY,cha
 L_OVC25_5b66_038d_0482:
     }
     while ((iVar5 < (int)(uint)count &&
-           (bVar2 = ovc25_textArena((uint *)CONCAT22(unaff_SS,&entityIndex),setFlag8,
+           (bVar2 = ovc25_textArena((uint *)CONCAT22(curSeg,&entityIndex),setFlag8,
                                     (uint)(byte)partyIndex,destX), bVar2))) {
       *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x30) = 0;
       ((entity_t *)Entities)[entityIndex].base.destX = destX;
@@ -221,7 +221,7 @@ void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,
   uint uVar3;
   int iVar4;
   uint16_t uVar5;
-  uint16_t unaff_SS;
+  uint16_t curSeg = _SS;
   uint8_t entityIndex;
   
   if (count != 0) {
@@ -238,7 +238,7 @@ void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,
       }
     }
     while ((iVar4 < (int)(uint)count &&
-           (bVar1 = ovc25_textArena((uint *)CONCAT22(unaff_SS,&entityIndex),'\x02',
+           (bVar1 = ovc25_textArena((uint *)CONCAT22(curSeg,&entityIndex),'\x02',
                                     (uint)(byte)partyIndex,destX), bVar1))) {
       *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x30) = 0;
       ((entity_t *)Entities)[entityIndex].base.destX = destX;
@@ -246,7 +246,7 @@ void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,
       iVar4 = iVar4 + 1;
     }
     while ((iVar4 < (int)(uint)count &&
-           (bVar1 = ovc25_textArena((uint *)CONCAT22(unaff_SS,&entityIndex),'\x01',
+           (bVar1 = ovc25_textArena((uint *)CONCAT22(curSeg,&entityIndex),'\x01',
                                     (uint)(byte)partyIndex,destX), bVar1))) {
       *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x30) = 0;
       ((entity_t *)Entities)[entityIndex].base.destX = destX;
@@ -254,7 +254,7 @@ void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,
       iVar4 = iVar4 + 1;
     }
     while ((iVar4 < (int)(uint)count &&
-           (bVar1 = ovc25_textArena((uint *)CONCAT22(unaff_SS,&entityIndex),'\0',
+           (bVar1 = ovc25_textArena((uint *)CONCAT22(curSeg,&entityIndex),'\0',
                                     (uint)(byte)partyIndex,destX), bVar1))) {
       *(undefined1 *)((int)Entities + entityIndex * 0x37 + 0x30) = 0;
       ((entity_t *)Entities)[entityIndex].base.destX = destX;
@@ -363,7 +363,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
   int iVar7;
   uint enemyIdx;
   uint16_t uVar8;
-  char *unaff_SS;
+  uint16_t curSeg = _SS;
   uint8_t text;
   byte classIdx;
   undefined1 otherIdx;
@@ -522,7 +522,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
                                    ((char_sheet_t *)(((uint)otherLeaderIdx << 2)))->y,0xa000);
               iVar7 = (uint)((char_sheet_t *)((leaderIdx << 2)))->classStr * 0x95;
               uVar4 = 0x195d;
-              msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58c0,unaff_SS),
+              msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58c0,curSeg),
                                   (char *)CONCAT22(*(uint16_t *)
                                                     ((int)&worldMenuLabels[0].seg + 1 + iVar7),
                                                    (char *)0x26510),
@@ -673,7 +673,7 @@ void ovc25_usesAlignUp47(void)
   int unaff_BP;
   uint uVar6;
   uint16_t uVar7;
-  uint8_t *unaff_SS;
+  uint16_t curSeg = _SS;
   uint16_t in_stack_00000000;
   
   uVar7 = (uint16_t)((ulong)Entities >> 0x10);
@@ -758,7 +758,7 @@ void ovc25_usesAlignUp47(void)
   if ((char)uVar7 != '\0') {
     iVar5 = ovc25_usesAlignUp46(*(uint16_t *)(unaff_BP + -6),*(uint16_t *)(unaff_BP + -8),
                                 *(char *)(unaff_BP + -0xd),
-                                (uint8_t *)CONCAT22(in_stack_00000000,unaff_SS));
+                                (uint8_t *)CONCAT22(in_stack_00000000,curSeg));
     *(int *)(unaff_BP + -2) = iVar5;
     if (*(uint *)(unaff_BP + -0x10) <= *(uint *)(unaff_BP + -2)) {
       OVC25_5b66_131f_entry();
@@ -798,7 +798,7 @@ void ovc25_usesEntities(void)
   uint16_t in_AX;
   int unaff_BP;
   int unaff_DI;
-  uint16_t unaff_SS;
+  uint16_t curSeg = _SS;
   
   *(uint16_t *)(unaff_BP + -2) = in_AX;
   if (*(uint *)(unaff_BP + -0x10) <= *(uint *)(unaff_BP + -2)) {
@@ -838,7 +838,7 @@ void ovc25_usesAlignUp48(void)
   int iVar3;
   int unaff_BP;
   int unaff_DI;
-  uint8_t *unaff_SS;
+  uint16_t curSeg = _SS;
   uint16_t in_stack_00000000;
   
   *(byte *)(unaff_BP + -9) = *(char *)(unaff_BP + -9) + 1U & 3;
@@ -856,7 +856,7 @@ void ovc25_usesAlignUp48(void)
     }
     iVar3 = ovc25_usesAlignUp46(*(uint16_t *)(unaff_BP + -6),*(uint16_t *)(unaff_BP + -8),
                                 *(char *)(unaff_BP + -0xd),
-                                (uint8_t *)CONCAT22(in_stack_00000000,unaff_SS));
+                                (uint8_t *)CONCAT22(in_stack_00000000,curSeg));
     *(int *)(unaff_BP + -2) = iVar3;
     if (*(uint *)(unaff_BP + -0x10) <= *(uint *)(unaff_BP + -2)) {
       OVC25_5b66_131f_entry();
@@ -890,7 +890,7 @@ void __cdecl16far OVC25_5b66_131f_entry(void)
 
 {
   int unaff_BP;
-  uint16_t unaff_SS;
+  uint16_t curSeg = _SS;
   
   *(int *)(unaff_BP + -4) = *(int *)(unaff_BP + -4) + 1;
   if (*(uint *)(unaff_BP + -4) < EntityCount) {
@@ -914,7 +914,7 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex)
   uint8_t *puVar3;
   char *msg;
   uint uVar4;
-  char *unaff_SS;
+  uint16_t curSeg = _SS;
   uint8_t text;
   byte bStack_3;
   
@@ -933,7 +933,7 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex)
       uVar2 = 0x217a;
       puVar3 = ovr_ovc15_usesStshRealloc
                          ((char *)*(uint16_t *)((uint)partyIndex * 4),((uint16_t *)((uint)partyIndex * 4))[1],GSavedBlitSeg,0,0,0,0,0);
-      msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58f5,unaff_SS),
+      msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58f5,curSeg),
                           (char *)CONCAT22(puVar3,(char *)0x26510),uVar2);
       ovr_uiNotify(msg,uVar2,0);
       pbVar1 = (byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d);
@@ -971,7 +971,7 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
   uint16_t uVar3;
   uint8_t *puVar4;
   char *msg;
-  char *unaff_SS;
+  uint16_t curSeg = _SS;
   uint8_t text;
   byte bStack_5;
   int iStack_4;
@@ -1004,7 +1004,7 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
       uVar3 = 0x217a;
       puVar4 = ovr_ovc15_usesStshRealloc
                          ((char *)*(uint16_t *)((uint)partyIndex * 4),((uint16_t *)((uint)partyIndex * 4))[1],GSavedBlitSeg,0,0,0,0,0);
-      msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5906,unaff_SS),
+      msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5906,curSeg),
                           (char *)CONCAT22(puVar4,(char *)0x26510),uVar3);
       ovr_uiNotify(msg,uVar3,0);
       pbVar1 = (byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d);
@@ -1087,7 +1087,7 @@ char ignoreBlocked;
   uint unaff_DI;
   uint *puVar27;
   uint16_t unaff_ES;
-  uint16_t unaff_SS;
+  uint16_t curSeg = _SS;
   uint16_t uVar28;
   byte in_CF;
   bool bVar29;
@@ -1213,15 +1213,15 @@ char ignoreBlocked;
   iVar21 = 0x50 - gridX;
   iVar23 = 0x50 - gridY;
   iStack_a = 1;
-  piStack_1a = (int *)CONCAT22(unaff_SS,aiStack_278);
-  piStack_1e = (int *)CONCAT22(unaff_SS,aiStack_4d0);
+  piStack_1a = (int *)CONCAT22(curSeg,aiStack_278);
+  piStack_1e = (int *)CONCAT22(curSeg,aiStack_4d0);
   piStack_e = aiStack_728;
   piStack_12 = aiStack_980;
   *(undefined1 *)((int)*(uint32_t *)&FillGrid + (gridX + iVar21) * 0xa1 + gridY + iVar23) = 1;
   *piStack_1a = gridX;
   *piStack_1e = gridY;
   bStack_1f = 2;
-  uVar35 = unaff_SS;
+  uVar35 = curSeg;
   while( true ) {
     piVar13 = piStack_e;
     piVar12 = piStack_12;
@@ -1279,12 +1279,12 @@ char ignoreBlocked;
     }
     if (iVar26 == 0) break;
     piStack_e = piStack_1a;
-    piStack_1a = (int *)CONCAT22(unaff_SS,piVar13);
+    piStack_1a = (int *)CONCAT22(curSeg,piVar13);
     piStack_12 = piStack_1e;
     piStack_1e = (int *)CONCAT22(uVar35,piVar12);
     bStack_1f = bStack_1f + 1;
     iStack_a = iVar26;
-    unaff_SS = uVar11;
+    curSeg = uVar11;
     uVar35 = uVar9;
   }
   return;

@@ -171,7 +171,6 @@ void __cdecl16far init_cfg(void)
   int iVar6;
   int iVar7;
   uint16_t in_DX;
-  char *unaff_SS;
   char lbuf [80];
   uint8_t goterr;
   uint8_t update;
@@ -181,7 +180,7 @@ void __cdecl16far init_cfg(void)
   
   crlf = GCrLf;
   bVar1 = false;
-  cfgPath = (uint16_t)ovr_stsprintf(lbuf,(char *)CONCAT22(0x5bc,unaff_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410)
+  cfgPath = (uint16_t)ovr_stsprintf(lbuf,(char *)CONCAT22(0x5bc,_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410)
   ;
   fh = ovr_open_wait_unlock_and_disk((char *)cfgPath,in_DX);
   if ((int)fh < 0) {
@@ -243,20 +242,20 @@ void __cdecl16far init_cfg(void)
   }
   close(fh);
   if (bVar1) {
-    path = ovr_stsprintf(lbuf,(char *)CONCAT22(0x5bc,unaff_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410);
+    path = ovr_stsprintf(lbuf,(char *)CONCAT22(0x5bc,_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410);
     iVar3 = ovr_creat_wait_unlock_and_disk(path,in_DX);
     if (iVar3 < 0) {
                     /* WARNING: Subroutine does not return */
       ovr_stExit(0x83);
     }
     write(iVar3,&CFG_Sfx,1);
-    write(iVar3,(uint16_t *)CONCAT22(unaff_SS,&crlf),2);
+    write(iVar3,(uint16_t *)CONCAT22(_SS,&crlf),2);
     write(iVar3,&CFG_Mus,1);
-    write(iVar3,(uint16_t *)CONCAT22(unaff_SS,&crlf),2);
+    write(iVar3,(uint16_t *)CONCAT22(_SS,&crlf),2);
     iVar4 = write(iVar3,&CFG_Irq,1);
-    iVar5 = write(iVar3,(uint16_t *)CONCAT22(unaff_SS,&crlf),2);
-    iVar6 = write(iVar3,(char *)CONCAT22(unaff_SS,&mice),1);
-    iVar7 = write(iVar3,(uint16_t *)CONCAT22(unaff_SS,&crlf),2);
+    iVar5 = write(iVar3,(uint16_t *)CONCAT22(_SS,&crlf),2);
+    iVar6 = write(iVar3,(char *)CONCAT22(_SS,&mice),1);
+    iVar7 = write(iVar3,(uint16_t *)CONCAT22(_SS,&crlf),2);
     iVar3 = close(iVar3);
     if ((((iVar4 != 1 || iVar5 != 2) || iVar6 != 1) || iVar7 != 2) || (char)iVar3 != '\0') {
                     /* WARNING: Subroutine does not return */
@@ -408,7 +407,6 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   uint uVar17;
   uint32_t *__return_storage_ptr__;
   uint16_t uVar18;
-  uint16_t unaff_SS;
   bool bVar19;
   longdouble in_ST0;
   uint32_t in_stack_00000004;
@@ -849,8 +847,8 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                         if ((int)puStack_1c <= (int)psVar9) {
                           psVar9 = memcpy((char *)CONCAT13((char)(uStack_12 >> 8),
                                                            CONCAT12((char)uStack_12,uStack_14)),
-                                          (char *)CONCAT13((char)((uint)unaff_SS >> 8),
-                                                           CONCAT12((char)unaff_SS,
+                                          (char *)CONCAT13((char)((uint)_SS >> 8),
+                                                           CONCAT12((char)_SS,
                                                                     auStackY_160 + uStack_c)),
                                           uStack_e);
                           uStack_14 = uStack_14 + 0x140;
@@ -1204,7 +1202,6 @@ void __cdecl16far init_computeMaxSquares(void)
   int colDown;
   uint sqColUp;
   uint16_t sqColDown;
-  uint16_t unaff_SS;
   uint8_t scaleRow[10];
   uint yOffset;
   uint xOffset;
@@ -1216,7 +1213,7 @@ void __cdecl16far init_computeMaxSquares(void)
   uint yStep;
   uint xStep;
   
-  dst.seg = unaff_SS;
+  dst.seg = _SS;
   dst.ofs = (uint16_t)&scaleRow;
   F_SCOPY(far_from_u32((uint32_t)(0x241004e8)),dst);
   GMaxSquare = 0;
@@ -1509,7 +1506,6 @@ void __cdecl16far init_usesClearEntities(void)
   uint16_t uVar1;
   uint16_t uVar2;
   stg_tmp_t *srcOfs;
-  uint16_t unaff_SS;
   uint8_t palette [768];
   
   GUnitCount = 0xf8;
@@ -1567,7 +1563,7 @@ void __cdecl16far init_usesClearEntities(void)
   handle.seg = Lbm_nwpanel1.seg;
   handle.ofs = Lbm_nwpanel1.ofs;
   srcOfs = ovr_stshLoadGfx(handle);
-  ovr_calcSeasonPalette(srcOfs->cmap,uVar1,palette,unaff_SS,0,0);
+  ovr_calcSeasonPalette(srcOfs->cmap,uVar1,palette,_SS,0,0);
   if (GameRunning == false) {
     ovr_vgaSetPalette8bit(palette,0);
   }
@@ -1846,7 +1842,6 @@ void __cdecl16far init_usesRandBelow2(void)
   uint x;
   uint y;
   uint16_t uVar7;
-  uint8_t *unaff_SS;
   undefined1 uVar8;
   uint8_t edgeMasks;
   byte bStack_14;
@@ -1860,12 +1855,12 @@ void __cdecl16far init_usesRandBelow2(void)
   uint8_t neighbourOfs;
   byte abStack_9 [7];
   
-  uVar8 = (undefined1)((uint)unaff_SS >> 8);
-  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)unaff_SS;
+  uVar8 = (undefined1)((uint)_SS >> 8);
+  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
   dst.ofs = (uint16_t)&edgeMasks;
   (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = uVar8;
   F_SCOPY(far_from_u32((uint32_t)(0x241004f2)),dst);
-  (*(uint8_t *)((uint8_t *)&(dst_00.seg))) = (char)unaff_SS;
+  (*(uint8_t *)((uint8_t *)&(dst_00.seg))) = (char)_SS;
   dst_00.ofs = (uint16_t)&neighbourOfs;
   (*(uint8_t *)((uint8_t *)&(dst_00.seg) + 1)) = uVar8;
   F_SCOPY(far_from_u32((uint32_t)(0x24100502)),dst_00);
@@ -1927,7 +1922,7 @@ void __cdecl16far init_usesRandBelow2(void)
         puVar1 = (uint *)((*paasVar6)[y] + x);
         *puVar1 = *puVar1 | 3;
       }
-      uVar2 = init_usesRandBelow(x,y,bStack_13,&lastDir,(uint8_t *)CONCAT22(&sameDirCount,unaff_SS))
+      uVar2 = init_usesRandBelow(x,y,bStack_13,&lastDir,(uint8_t *)CONCAT22(&sameDirCount,_SS))
       ;
       bStack_14 = (byte)uVar2;
       if (((bStack_14 == 0xff) || (bStack_13 == (bStack_14 ^ 2))) ||
@@ -2006,14 +2001,13 @@ void __cdecl16far init_grayscale_palette(void)
   uint16_t max_c;
   uint16_t in_DX;
   uint16_t i;
-  uint16_t unaff_SS;
   far_t dst;
   far_t handle;
   char buf [12];
   stg_tmp_t *pgfx;
   uint32_t gfx;
   
-  dst.seg = unaff_SS;
+  dst.seg = _SS;
   dst.ofs = (uint16_t)buf;
   F_SCOPY(far_from_u32((uint32_t)(0x2410050e)),dst);
   if (GrayscalePalette.ofs == 0 && GrayscalePalette.seg == 0) {
@@ -2073,7 +2067,6 @@ void __cdecl16far copyProtectionCheck(void)
   uint16_t uVar1;
   char *pcVar2;
   byte *in_DX;
-  char *unaff_SS;
   uint16_t uVar3;
   uint8_t uVar4;
   far_t handle;
@@ -2106,7 +2099,7 @@ void __cdecl16far copyProtectionCheck(void)
       uVar4 = 0xde;
       uVar1 = Font03.ofs;
       uVar3 = Font03.seg;
-      pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6cd,unaff_SS),
+      pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6cd,_SS),
                              (char *)(ulong)CONCAT12(*(undefined1 *)(codes + 0x51a),0x2410));
       ovr_blitText(pcVar2,(byte *)CONCAT22(uVar1,in_DX),uVar3,uVar4);
       TextBlitX = 0x16;
@@ -2114,7 +2107,7 @@ void __cdecl16far copyProtectionCheck(void)
       uVar4 = 0xde;
       uVar1 = Font03.ofs;
       uVar3 = Font03.seg;
-      pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ed,unaff_SS),
+      pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ed,_SS),
                              (char *)(ulong)CONCAT12(*(undefined1 *)(codes + 0x533),0x2410));
       ovr_blitText(pcVar2,(byte *)CONCAT22(uVar1,in_DX),uVar3,uVar4);
       TextBlitX = 0x16;

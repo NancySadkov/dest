@@ -1202,11 +1202,10 @@ void __cdecl16far F_SCOPY(far_t src,far_t dst)
 
    The decompiled body was
 
-       uint *unaff_SS;
        uint8_t driveCount;
        uint *puStack_6;
 
-       puStack_6 = (uint *)CONCAT22(_driveCount,unaff_SS);
+       puStack_6 = (uint *)CONCAT22(_driveCount,_SS);
        _dos_setdrive(drive + 1,puStack_6);
        return _driveCount;
 
@@ -1924,7 +1923,6 @@ char * __cdecl16near __LONGTOA(char alphaBase,char signFlag,uint16_t radix,char 
   char *pcVar9;
   char *pcVar10;
   uint16_t uVar11;
-  uint16_t unaff_SS;
   uint8_t digits [34];
   
   uVar11 = (uint16_t)((ulong)buf >> 0x10);
@@ -2223,7 +2221,6 @@ void __cdecl16near __vprinter_1000_0eb3(void)
   int iVar2;
   int unaff_BP;
   undefined1 *unaff_DI;
-  uint16_t unaff_SS;
   
   *unaff_DI = in_AL;
   pcVar1 = (char *)init_textFilename + unaff_BP;
@@ -2251,7 +2248,6 @@ void __cdecl16near __vprinter_1000_0ebc(void)
   int unaff_BP;
   int unaff_DI;
   int iVar2;
-  uint16_t unaff_SS;
   
   iVar2 = unaff_DI - (unaff_BP + -0x96);
   iVar1 = (*(code *)*(uint16_t *)(unaff_BP + 0xe))
@@ -2294,7 +2290,6 @@ uint16_t __vprinter_func_start(void)
   int *piVar20;
   uint16_t uVar21;
   int iVar22;
-  int unaff_SS;
   bool bVar23;
   
   *(int *)(unaff_BP + -4) = unaff_BP + -0x96;
@@ -2336,7 +2331,7 @@ code_r0x00010f23:
     if (0x5f < (byte)(cVar7 - 0x20U)) goto switchD_1000_0f5d_caseD_13;
     alphaBase = ((uint8_t *)vprinter_printCtype)[(byte)(cVar7 - 0x20U)] * '\x02';
     bVar11 = (byte)(uVar8 >> 8);
-    iVar22 = unaff_SS;
+    iVar22 = _SS;
     switch(((uint8_t *)vprinter_printCtype)[(byte)(cVar7 - 0x20U)]) {
     case '\0':
       if (bVar11 != 0) goto switchD_1000_0f5d_caseD_13;
@@ -2577,7 +2572,7 @@ L__vprinter_func_start_106E:
   else {
     *(uint *)(unaff_BP + -2) = *(uint *)(unaff_BP + -2) | 4;
   }
-  __LONGTOA(alphaBase,*(char *)(unaff_BP + -6),(int)cVar13,(char *)CONCAT22(unaff_SS,puVar19),
+  __LONGTOA(alphaBase,*(char *)(unaff_BP + -6),(int)cVar13,(char *)CONCAT22(_SS,puVar19),
             CONCAT22(iVar9,iVar12));
   iVar12 = *(int *)(unaff_BP + -10);
   if (iVar12 < 0) {
@@ -3544,7 +3539,6 @@ void bios(int width,uint16_t *vramOfs)
   uint16_t *puVar1;
   uint16_t *puVar2;
   uint16_t uVar3;
-  uint16_t unaff_SS;
   bool bVar4;
   bool bVar5;
   uint16_t *in_stack_00000004;
@@ -3569,7 +3563,7 @@ void bios(int width,uint16_t *vramOfs)
     if (width == 0) break;
     if (bVar5) {
       puVar2 = (uint16_t *)&cursorPos;
-      moveto((uint16_t *)CONCAT22(unaff_SS,puVar2),(uint16_t *)CONCAT22(unaff_SS,&vramScreenOfs));
+      moveto((uint16_t *)CONCAT22(_SS,puVar2),(uint16_t *)CONCAT22(_SS,&vramScreenOfs));
       uVar3 = CONCAT11(8,(char)puVar2);
       _VideoInt(0x0200);
     }
@@ -3578,7 +3572,7 @@ void bios(int width,uint16_t *vramOfs)
       in_stack_00000004 = in_stack_00000004 + 1;
     }
     if (bVar4) {
-      moveto((uint16_t *)CONCAT22(unaff_SS,&cursorPos),(uint16_t *)CONCAT22(unaff_SS,&srcScreenOfs))
+      moveto((uint16_t *)CONCAT22(_SS,&cursorPos),(uint16_t *)CONCAT22(_SS,&srcScreenOfs))
       ;
       _VideoInt(0x0200);
       width = width + -1;
@@ -3659,7 +3653,6 @@ void __scroll(uchar dir,uchar x1,uchar y1,uchar x2,uchar y2,uchar lines)
   byte bVar2;
   byte bVar3;
   byte bVar4;
-  uint16_t unaff_SS;
   uint16_t rowBuf [80];
   
   if (((_video.graphicsmode == 0x0) && (ram0x0002c9bb != 0)) && (dir == '\x01')) {
@@ -3669,16 +3662,16 @@ void __scroll(uchar dir,uchar x1,uchar y1,uchar x2,uchar y2,uchar lines)
     bVar4 = x1 + 1;
     if (lines == '\x06') {
       _movetext((uint)bVar1,bVar2 + 1,(uint)bVar3,(uint)bVar4,(uint)bVar1,(uint)bVar2);
-      _gettext((uint)bVar1,(uint)bVar4,(uint)bVar1,(uint)bVar4,(int)rowBuf,unaff_SS);
-      _zapline((uint)bVar3,(uint)bVar1,(uint16_t *)CONCAT22(unaff_SS,rowBuf));
+      _gettext((uint)bVar1,(uint)bVar4,(uint)bVar1,(uint)bVar4,(int)rowBuf,_SS);
+      _zapline((uint)bVar3,(uint)bVar1,(uint16_t *)CONCAT22(_SS,rowBuf));
     }
     else {
       _movetext((uint)bVar1,(uint)bVar2,(uint)bVar3,bVar4 - 1,(uint)bVar1,bVar2 + 1);
-      _gettext((uint)bVar1,(uint)bVar2,(uint)bVar1,(uint)bVar2,(int)rowBuf,unaff_SS);
-      _zapline((uint)bVar3,(uint)bVar1,(uint16_t *)CONCAT22(unaff_SS,rowBuf));
+      _gettext((uint)bVar1,(uint)bVar2,(uint)bVar1,(uint)bVar2,(int)rowBuf,_SS);
+      _zapline((uint)bVar3,(uint)bVar1,(uint16_t *)CONCAT22(_SS,rowBuf));
       bVar4 = bVar2;
     }
-    _puttext((uint)bVar1,(uint)bVar4,(uint)bVar3,(uint)bVar4,(int)rowBuf,unaff_SS);
+    _puttext((uint)bVar1,(uint)bVar4,(uint)bVar3,(uint)bVar4,(int)rowBuf,_SS);
   }
   else {
     _VideoInt(0x0200);
@@ -3708,7 +3701,6 @@ void __setargv(uint savedES)
   uint16_t unaff_DI;
   char *pcVar11;
   uint16_t uVar12;
-  int unaff_SS;
   uint16_t uVar13;
   bool bVar14;
   undefined1 uVar15;
@@ -3746,7 +3738,7 @@ void __setargv(uint savedES)
   if (puVar4 <= &stk_0004) {
     *(uint16_t *)((int)&savedES + iVar8) = uVar12;
     uVar13 = *(uint16_t *)((int)&savedES + iVar8);
-    *(int *)((int)&savedES + iVar8) = unaff_SS;
+    *(int *)((int)&savedES + iVar8) = _SS;
     uVar12 = *(uint16_t *)((int)&savedES + iVar8);
     *(uint *)((int)&savedES + iVar8) = uVar6;
     while (uVar6 - 1 != 0) {
@@ -3776,7 +3768,7 @@ Processing:
           piVar9 = (int *)(&stk_0004 + iVar8 * -2);
           if (&stk_0004 < (undefined1 *)(iVar8 * 4)) goto code_r0x000120eb;
           *(uint16_t *)&_argv_at_ = (uint16_t)piVar9;   /* hand fix: 2-byte slot */
-          *(int *)&_argv_at__2 = unaff_SS;
+          *(int *)&_argv_at__2 = _SS;
           uVar12 = __setargv_SavedDS;
           goto SetArgvX;
         }
@@ -3802,7 +3794,7 @@ EndArgument:
   goto Processing;
   while( true ) {
     *piVar9 = (int)pcVar10;
-    piVar9[1] = unaff_SS;
+    piVar9[1] = _SS;
     piVar9 = piVar9 + 2;
     do {
       pcVar1 = pcVar10;

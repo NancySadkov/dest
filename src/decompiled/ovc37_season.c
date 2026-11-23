@@ -47,7 +47,6 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
   undefined1 extraout_AH_01;
   undefined1 uVar6;
   uint8_t *capTextSeg;
-  uint16_t unaff_SS;
   uint8_t *puVar7;
   ulong uVar8;
   uint8_t text;
@@ -67,14 +66,14 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
     iStack_8 = CONCAT22(uVar3,iVar1);
     if (*(byte *)(iVar1 + 0x86) < 9) {
       *(char *)(iVar1 + 0x86) = *(char *)(iVar1 + 0x86) + '\x01';
-      strcpy((char *)CONCAT22(unaff_SS,&text),
+      strcpy((char *)CONCAT22(_SS,&text),
              (char *)CONCAT22(*(uint16_t *)
                                ((int)&GStatsLabels[4].seg +
                                (uint)*(byte *)(iVar1 + 0x86) * 8 + (uint)*(byte *)(iVar1 + 0x34) * 4
                                ),(char *)((far_t *)(GStatsLabels + 4) +
                                          (uint)*(byte *)(iVar1 + 0x34) +
                                          (uint)*(byte *)(iVar1 + 0x86) * 2)->ofs));
-      sVar4 = strlen((char *)CONCAT22(unaff_SS,&text));
+      sVar4 = strlen((char *)CONCAT22(_SS,&text));
       capTextSeg = &text;
       capTextSeg[sVar4 - 1] = 0x0;
       if ((GHighScoreSaved == '\0') &&
@@ -95,7 +94,7 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
         cStack_4 = '\0';
       }
       if (cStack_4 == '\0') {
-        uVar8 = (ulong)CONCAT12(formatIndex,unaff_SS);
+        uVar8 = (ulong)CONCAT12(formatIndex,_SS);
         puVar7 = &text;
         pcVar5 = ovr_ovc15_capitalize((char *)&text2);
         ovr_ovc40_usesAlignToSeg
@@ -103,7 +102,7 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
         uVar6 = extraout_AH_01;
       }
       else {
-        uVar8 = (ulong)CONCAT12(formatIndex,unaff_SS);
+        uVar8 = (ulong)CONCAT12(formatIndex,_SS);
         puVar7 = &text;
         pcVar5 = ovr_ovc15_capitalize((char *)&text2);
         ovr_ovc40_usesAlignToSeg
@@ -316,7 +315,6 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
   far_t dst_02;
   far_t handle;
   uint16_t uVar1;
-  uint16_t unaff_SS;
   uint8_t seasonPalette;
   uint16_t uStack_18;
   uint16_t uStack_16;
@@ -327,16 +325,16 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
   stg_tmp_t *psStack_6;
   uint16_t uStack_4;
   
-  dst.seg = unaff_SS;
+  dst.seg = _SS;
   dst.ofs = (uint16_t)&seasonPalette;
   F_SCOPY(far_from_u32((uint32_t)(0x2410693b)),dst);
-  dst_00.seg = unaff_SS;
+  dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&colorA;
   F_SCOPY(far_from_u32((uint32_t)(0x241069c2)),dst_00);
-  dst_01.seg = unaff_SS;
+  dst_01.seg = _SS;
   dst_01.ofs = (uint16_t)&colorB;
   F_SCOPY(far_from_u32((uint32_t)(0x241069c5)),dst_01);
-  dst_02.seg = unaff_SS;
+  dst_02.seg = _SS;
   dst_02.ofs = (uint16_t)&colorC;
   F_SCOPY(far_from_u32((uint32_t)(0x241069c8)),dst_02);
   _fmemmove((char *)CONCAT22(dstSeg,dstOfs),(char *)CONCAT22(srcSeg,srcOfs),0x300);
@@ -349,13 +347,13 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
   uStack_4 = uVar1;
   _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x1e0),(char *)CONCAT22(uVar1,psStack_6),0x90);
   _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2d0),
-            (char *)CONCAT22(unaff_SS,&seasonPalette + (uint)GSeason * 0x2d),0x2d);
+            (char *)CONCAT22(_SS,&seasonPalette + (uint)GSeason * 0x2d),0x2d);
   if (GameRunning == false) {
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2ac),(char *)CONCAT22(unaff_SS,&colorA),3);
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2af),(char *)CONCAT22(unaff_SS,&colorA),3);
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2b2),(char *)CONCAT22(unaff_SS,&colorB),3);
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2b5),(char *)CONCAT22(unaff_SS,&colorB),3);
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2be),(char *)CONCAT22(unaff_SS,&colorC),3);
+    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2ac),(char *)CONCAT22(_SS,&colorA),3);
+    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2af),(char *)CONCAT22(_SS,&colorA),3);
+    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2b2),(char *)CONCAT22(_SS,&colorB),3);
+    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2b5),(char *)CONCAT22(_SS,&colorB),3);
+    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2be),(char *)CONCAT22(_SS,&colorC),3);
   }
   for (bStack_13 = 0; bStack_13 < 0x2d; bStack_13 = bStack_13 + 1) {
     dstOfs[bStack_13 + 0x2d0] = (uint8_t)((int)(uint)dstOfs[bStack_13 + 0x2d0] >> 2);
@@ -372,7 +370,6 @@ void __cdecl16far updSeason(void)
 {
   char *msg;
   char *in_DX;
-  char *unaff_SS;
   far_t dst;
   far_t handle;
   far_t palette_00;
@@ -387,7 +384,7 @@ void __cdecl16far updSeason(void)
   uint8_t s;
   uint8_t season;
   
-  dst.seg = (uint16_t)unaff_SS;
+  dst.seg = (uint16_t)_SS;
   dst.ofs = (uint16_t)snames;
   F_SCOPY(far_from_u32((uint32_t)(0x241069cb)),dst);
   seaon2 = GSeason;
@@ -417,8 +414,8 @@ void __cdecl16far updSeason(void)
     handle.seg = Lbm_nwpanel1.seg;
     handle.ofs = Lbm_nwpanel1.ofs;
     psStack_8 = ovr_stshLoadGfx(handle);
-    calcSeasonPalette(psStack_8->cmap,(uint16_t)in_DX,palette,(uint16_t)unaff_SS,0,0);
-    palette_00.seg = (uint16_t)unaff_SS;
+    calcSeasonPalette(psStack_8->cmap,(uint16_t)in_DX,palette,(uint16_t)_SS,0,0);
+    palette_00.seg = (uint16_t)_SS;
     palette_00.ofs = (uint16_t)palette;
     ovr_ovc40_usesVgaSetPalette8bit(palette_00);
     ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0);
@@ -430,7 +427,7 @@ void __cdecl16far updSeason(void)
     }
     else {
       in_DX = snames;
-      msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6a50,unaff_SS),
+      msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6a50,_SS),
                           (char *)CONCAT22(*(uint16_t *)(in_DX + (uint)season * 4),
                                            (char *)0x26510),
                           *(uint16_t *)(snames + (uint)season * 4 + 2));
@@ -440,8 +437,8 @@ void __cdecl16far updSeason(void)
     handle_00.ofs = Lbm_nwpanel1.ofs;
     psStack_8 = ovr_stshLoadGfx(handle_00);
     pcStack_6 = in_DX;
-    calcSeasonPalette(psStack_8->cmap,(uint16_t)in_DX,palette,(uint16_t)unaff_SS,0,0);
-    palette_01.seg = (uint16_t)unaff_SS;
+    calcSeasonPalette(psStack_8->cmap,(uint16_t)in_DX,palette,(uint16_t)_SS,0,0);
+    palette_01.seg = (uint16_t)_SS;
     palette_01.ofs = (uint16_t)palette;
     ovr_setSeasonPalette(palette_01);
     GTimeHi = '\0';
@@ -518,7 +515,6 @@ void __cdecl16far season_repairBuildings(byte rank)
   uint unitIndex;
   int count;
   uint16_t uVar2;
-  char *unaff_SS;
   uint8_t text;
   byte bStack_7;
   uint8_t promoteThreshold;
@@ -551,7 +547,7 @@ void __cdecl16far season_repairBuildings(byte rank)
   if (count != 0) {
     ovr_inputUpdate(0x24);
     uVar2 = ovr_ovc41_pluralSuffix(count);
-    msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6a6e,unaff_SS),
+    msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6a6e,_SS),
                         (char *)CONCAT22(count,(char *)0x26510),uVar2,dst);
     ovr_uiNotify(msg,(uint16_t)dst,0);
   }

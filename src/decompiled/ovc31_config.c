@@ -125,14 +125,13 @@ char __cdecl16far read_cfg(int handle)
   int iVar1;
   uint16_t rdsz;
   uint unaff_SI;
-  void *unaff_SS;
   uint8_t tmp;
   char b;
   
-  nread = read(handle,(void *)CONCAT22(1,unaff_SS),unaff_SI);
+  nread = read(handle,(void *)CONCAT22(1,_SS),unaff_SI);
   if (nread == 1) {
     do {
-      iVar1 = read(handle,(void *)CONCAT22(1,unaff_SS),unaff_SI);
+      iVar1 = read(handle,(void *)CONCAT22(1,_SS),unaff_SI);
       if (iVar1 != 1) goto return_zero;
     } while (tmp != 0xa);
   }
@@ -223,7 +222,6 @@ byte __cdecl16far init_strong_sav(void)
   char *path;
   uint16_t in_DX;
   uint16_t unaff_SI;
-  uint16_t unaff_SS;
   char path_buffer [81];
   uint8_t b;
   
@@ -259,7 +257,7 @@ l_made_new_strong_sav:
     }
     clrscr();
     printf("Path to write game data:\n");
-    input_folder_name((char *)CONCAT22(unaff_SS,path_buffer));
+    input_folder_name((char *)CONCAT22(_SS,path_buffer));
     path = ovr_path_strip_tail_slash(path_buffer,0);
     ovr_chpath(path,in_DX);
   } while( true );
@@ -576,7 +574,6 @@ void __cdecl16far init_check_mem(void)
 {
   uint16_t smem;
   int iVar1;
-  uint16_t unaff_SS;
   far_t lmem_without_psp;
   char buf [80];
   long lmem;
@@ -588,7 +585,7 @@ void __cdecl16far init_check_mem(void)
   if ((7 < iVar1) && ((iVar1 != 8 || (0xed27 < lmem_without_psp.ofs + 0x100)))) {
     return;
   }
-  ovr_litoa10(buf,CONCAT22(lmem_without_psp.ofs + 0x100,unaff_SS),iVar1,0);
+  ovr_litoa10(buf,CONCAT22(lmem_without_psp.ofs + 0x100,_SS),iVar1,0);
   printf("Largest executable program size is only %s bytes.\n");
   printf("Stronghold requires 585,000 bytes.\n");
                     /* WARNING: Subroutine does not return */

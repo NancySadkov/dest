@@ -202,7 +202,6 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
   int unaff_DI;
   uint16_t uVar51;
   uint16_t uVar52;
-  uint16_t unaff_SS;
   uint16_t in_FS;
   bool bVar53;
   byte in_AF;
@@ -937,7 +936,6 @@ uint16_t __cdecl16far gameProcessKey(void)
   uint16_t uVar1;
   char *pcVar2;
   undefined1 in_DL;
-  char *unaff_SS;
   uint8_t msg;
   
   key = ovr_biosReadKey();
@@ -989,7 +987,7 @@ uint16_t __cdecl16far gameProcessKey(void)
       destroyLatchSide0 = 1;
     }
     else if (key == 0x2300) {
-      pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x286,unaff_SS),
+      pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x286,_SS),
                              (char *)CONCAT22(GSeed,(char *)0x26510),(char)SeedHi);
       ovr_say(pcVar2,in_DL);
     }
@@ -1001,7 +999,7 @@ uint16_t __cdecl16far gameProcessKey(void)
     }
     else if (key == 0x2600) {
       GCharLevelsInc = GCharLevelsInc + '\x01';
-      pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x297,unaff_SS),
+      pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x297,_SS),
                              (char *)(ulong)CONCAT12(GCharLevelsInc,0x2410));
       ovr_say(pcVar2,in_DL);
     }
@@ -1201,7 +1199,6 @@ void __cdecl16far draw_toolbarLabels(void)
   uint16_t in_DX;
   uint16_t uVar3;
   byte *pbVar4;
-  char *unaff_SS;
   uint16_t seg;
   uint8_t term;
   far_t ptr;
@@ -1259,7 +1256,7 @@ void __cdecl16far draw_toolbarLabels(void)
       pbVar4 = (byte *)((char *)0x2627a);
       uVar3 = Font03.ofs;
       seg = Font03.seg;
-      text = (char *)ovr_ovc45_compute9(textBuf,(char *)CONCAT22(*puVar2,unaff_SS),
+      text = (char *)ovr_ovc45_compute9(textBuf,(char *)CONCAT22(*puVar2,_SS),
                                         (char *)CONCAT22(Font03.ofs,(char *)puVar2[1]),Font03.seg,
                                         'T',3);
       ovr_blitText(text,(byte *)CONCAT22(uVar3,pbVar4),seg,term);
@@ -1641,7 +1638,6 @@ void __stdcall16far draw_textGoldProvidesHousing(void)
   uint uVar22;
   byte *pbVar23;
   uint16_t unaff_ES;
-  uint16_t unaff_SS;
   uint16_t in_GS;
   uint16_t uStack_4;
   

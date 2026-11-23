@@ -27,7 +27,7 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
   uint blockedFlag;
   int nextCount;
   uint16_t unaff_DI;
-  uint16_t unaff_SS;
+  uint16_t curSeg = _SS;
   uint8_t nextQueueY;
   uint8_t nextQueueX;
   uint8_t fillQueueY;
@@ -47,15 +47,15 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
   xOfs = 0x50 - x;
   yOfs = 0x50 - y;
   queueLen = 1;
-  piStack_1a = (int *)CONCAT22(unaff_SS,&fillQueueX);
-  piStack_1e = (int *)CONCAT22(unaff_SS,&fillQueueY);
+  piStack_1a = (int *)CONCAT22(curSeg,&fillQueueX);
+  piStack_1e = (int *)CONCAT22(curSeg,&fillQueueY);
   piStack_e = (int *)&nextQueueX;
   piStack_12 = (int *)&nextQueueY;
   *(undefined1 *)((int)FillGrid + (x + xOfs) * 0xa1 + y + yOfs) = 1;
   *piStack_1a = x;
   *piStack_1e = y;
   depth = 2;
-  uVar13 = unaff_SS;
+  uVar13 = curSeg;
   while( true ) {
     piVar6 = piStack_e;
     piVar5 = piStack_12;
@@ -112,12 +112,12 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
     }
     if (nextCount == 0) break;
     piStack_e = piStack_1a;
-    piStack_1a = (int *)CONCAT22(unaff_SS,piVar6);
+    piStack_1a = (int *)CONCAT22(curSeg,piVar6);
     piStack_12 = piStack_1e;
     piStack_1e = (int *)CONCAT22(uVar13,piVar5);
     depth = depth + 1;
     queueLen = nextCount;
-    unaff_SS = uVar4;
+    curSeg = uVar4;
     uVar13 = uVar2;
   }
   return;
@@ -142,7 +142,7 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex)
   char *fillGrid;
   uint16_t unaff_DI;
   uint16_t fillGridSeg;
-  uint16_t unaff_SS;
+  uint16_t curSeg = _SS;
   uint8_t pathDirs [80];
   int dirPos;
   int bitPos;

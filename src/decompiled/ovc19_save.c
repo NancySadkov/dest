@@ -51,7 +51,6 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
   uint uVar2;
   int iVar3;
   uint16_t uVar4;
-  uint16_t unaff_SS;
   far_t handle;
   uint8_t palette;
   stg_tmp_t *psStack_6;
@@ -88,7 +87,7 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
     handle.ofs = Lbm_nwpanel1.ofs;
     psStack_6 = ovr_stshLoadGfx(handle);
     uStack_4 = in_DX;
-    ovr_calcSeasonPalette(psStack_6->cmap,in_DX,&palette,unaff_SS,0,0);
+    ovr_calcSeasonPalette(psStack_6->cmap,in_DX,&palette,_SS,0,0);
     ovr_vgaSetPalette8bit(&palette,0);
     ovr_manage_mapPartySlots();
     strongholdCheckPending = 0;
@@ -111,7 +110,6 @@ uint __cdecl16far stLoad(int handle)
   uint16_t uVar5;
   uint unaff_SI;
   uint16_t unaff_DI;
-  void *unaff_SS;
   uint8_t header;
   
   ovr_stop_audio();
@@ -120,9 +118,9 @@ uint __cdecl16far stLoad(int handle)
     SaveAuto = 0;
     AgntFlag1 = false;
     ovr_freeGameResources();
-    readOk = save_readBlock((int)&header,(void *)CONCAT22(0x28,unaff_SS),unaff_DI,unaff_SI);
+    readOk = save_readBlock((int)&header,(void *)CONCAT22(0x28,_SS),unaff_DI,unaff_SI);
     if (((((readOk & 0xff) != 0) &&
-         (iVar2 = strcmp((char *)CONCAT22(unaff_SS,&header),
+         (iVar2 = strcmp((char *)CONCAT22(_SS,&header),
                          (char *)CONCAT22(SaveHeader.seg,SaveHeader.ofs)), iVar2 == 0)) &&
         (readOk = save_readBlock((int)(short (*) [148] [60])GUnitGrid,
                                 (void *)CONCAT22(0x4560,(*(uint16_t *)((uint8_t *)&(GUnitGrid) + 2))),unaff_DI,unaff_SI),
@@ -232,9 +230,9 @@ uint __cdecl16far stLoad(int handle)
                   (readOk & 0xff) != 0 &&
                   (readOk = save_readBlock(-0x6d44,(void *)MK_FP(0x2410, 0xa),unaff_DI,unaff_SI),
                   (readOk & 0xff) != 0)) &&
-                 (readOk = save_readBlock((int)&header,(void *)CONCAT22(0x28,unaff_SS),unaff_DI,
+                 (readOk = save_readBlock((int)&header,(void *)CONCAT22(0x28,_SS),unaff_DI,
                                          unaff_SI), (readOk & 0xff) != 0)) &&
-                (iVar2 = strcmp((char *)CONCAT22(unaff_SS,&header),
+                (iVar2 = strcmp((char *)CONCAT22(_SS,&header),
                                 (char *)CONCAT22(SaveHeader.seg,SaveHeader.ofs)), iVar2 == 0)))))) {
           ovr_drawTextAt((char *)"Load complete.",0x2410,0);
           uVar4 = (undefined1)((uint)iVar2 >> 8);

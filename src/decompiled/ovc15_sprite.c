@@ -455,7 +455,6 @@ void __cdecl16far ovc15_usesAgntIndex(void)
   int bottomIdx;
   int topIdx;
   uint16_t entitiesSeg;
-  uint16_t unaff_SS;
   uint8_t agentIndices;
   uint linesBottom;
   uint linesTop;
@@ -1223,12 +1222,11 @@ int __cdecl16far ovc15_usesRandBelow(agnt_t *agnt,int xSide,char keepPos,char ra
   int iVar5;
   agnt_t *agnt_00;
   uint16_t uVar7;
-  uint16_t unaff_SS;
   uint16_t xOffsets [4];
   int iStack_6;
   int iStack_4;
   
-  dst.seg = unaff_SS;
+  dst.seg = _SS;
   dst.ofs = (uint16_t)xOffsets;
   F_SCOPY(far_from_u32((uint32_t)(0x24101d09)),dst);
   agnt_00 = (agnt_t *)agnt;
@@ -1354,7 +1352,6 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
   uint16_t unaff_DI;
   uint16_t uVar8;
   uint16_t uVar9;
-  uint unaff_SS;
   int in_stack_00000006;
   char in_stack_00000008;
   agnt_t agntCopy;
@@ -1374,11 +1371,11 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
             return (char *)((int)(uint32_t *)&_DATA + 1);
           }
         }
-        _fmemmove((char *)CONCAT22(unaff_SS,&agntCopy),
+        _fmemmove((char *)CONCAT22(_SS,&agntCopy),
                   (char *)CONCAT22(0x1726,(char *)(uStack_8 * 0x34)),0x34);
         agntCopy.target = 0xff;
         ovr_ovc41_removeAgent(uStack_8,0,0);
-        pcVar4 = (char *)ovc15_usesRandBelow((agnt_t *)CONCAT22(unaff_SS,&agntCopy),
+        pcVar4 = (char *)ovc15_usesRandBelow((agnt_t *)CONCAT22(_SS,&agntCopy),
                                              in_stack_00000006,'\x01',in_stack_00000008);
         return pcVar4;
       }
@@ -1449,7 +1446,7 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
     else {
       agntCopy.level = 0x0;
     }
-    pcVar4 = (char *)ovc15_usesRandBelow((agnt_t *)CONCAT22(unaff_SS,&agntCopy),in_stack_00000006,
+    pcVar4 = (char *)ovc15_usesRandBelow((agnt_t *)CONCAT22(_SS,&agntCopy),in_stack_00000006,
                                          '\0',in_stack_00000008);
   }
   else {
@@ -1489,7 +1486,6 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
   uint unaff_DI;
   uint uVar16;
   int iVar17;
-  uint16_t unaff_SS;
   bool bVar18;
   far_t pixels;
   uint32_t in_stack_0000ffee;
@@ -1951,7 +1947,6 @@ agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt)
   uint32_t *puVar33;
   uint16_t uVar34;
   uint8_t uVar35;
-  char *unaff_SS;
   bool bVar36;
   byte in_AF;
   byte in_TF;
@@ -2368,13 +2363,13 @@ L_manage_4d05_2d79_2EE8:
           if ((byte)partyIndex != 0xff) {
             uVar22 = 0xde;
             uVar41 = 0;
-            ovr_ovc45_compute9(acStackY_1b6,(char *)CONCAT22(Font02.seg,unaff_SS),
+            ovr_ovc45_compute9(acStackY_1b6,(char *)CONCAT22(Font02.seg,_SS),
                                (char *)CONCAT22(Font02.ofs,(char *)0xde),Font02.seg,'K');
             SUB_5b66_1d94();
             uVar32 = 0x2410;
             uStackY_2a = 0x23f1;
             uStackY_2c = 0x44;
-            pcVar30 = ovr_stsprintf(acStackY_13e,(char *)CONCAT22(0x550a,unaff_SS),
+            pcVar30 = ovr_stsprintf(acStackY_13e,(char *)CONCAT22(0x550a,_SS),
                                     (char *)CONCAT22(*(uint16_t *)
                                                       ((uint)*(byte *)(CONCAT11(uVar23,uVar40) +
                                                                       0x2f) * 4 + 0xeb),
@@ -2418,18 +2413,18 @@ L_manage_4d05_2d79_2EE8:
               TextBlitX = 0x89 - iVar20;
               ovr_blitLabel(acStackY_13e,
                             (uint8_t *)
-                            CONCAT13((char)(Font02.ofs >> 8),CONCAT12((char)Font02.ofs,unaff_SS)));
+                            CONCAT13((char)(Font02.ofs >> 8),CONCAT12((char)Font02.ofs,_SS)));
               ovr_stsprintf(acStackY_13e);
               iVar20 = ovr_font_textWidth(acStackY_13e,0,0,0,0);
               uVar25 = 0xd4 - iVar20;
               TextBlitX = uVar25;
               ovr_blitLabel(acStackY_13e,
                             (uint8_t *)
-                            CONCAT13((char)(Font02.ofs >> 8),CONCAT12((char)Font02.ofs,unaff_SS)));
+                            CONCAT13((char)(Font02.ofs >> 8),CONCAT12((char)Font02.ofs,_SS)));
               iVar39 = iVar39 + 1;
             }
             CurSfxType3 = 0x3c;
-            entries.seg = (uint16_t)unaff_SS;
+            entries.seg = (uint16_t)_SS;
             entries.ofs = (uint16_t)&eStackY_66;
             uVar32 = ovr_ovc28_usesUiInputText(entries,(uint16_t)unaff_DI,0,0,0,0);
             cVar8 = (char)uVar32;

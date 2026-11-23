@@ -21,7 +21,6 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
   int iVar5;
   int *piVar6;
   uint16_t uVar7;
-  uint16_t unaff_SS;
   byte in_stack_00000010;
   far_t dst;
   uint8_t yOffset;
@@ -35,7 +34,7 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
   
   iVar5 = y2;
   iVar4 = x2;
-  dst.seg = unaff_SS;
+  dst.seg = _SS;
   dst.ofs = (uint16_t)&yOffset;
   F_SCOPY(far_from_u32((uint32_t)(0x2410592a)),dst);
   if (x2 < x1) {
@@ -109,7 +108,6 @@ void __cdecl16far ovc27_usesRandBelow(int x1,int y1,int x2,int y2,brect_t *rect,
   uint uVar6;
   brect_t *pbVar7;
   uint16_t uVar8;
-  uint16_t unaff_SS;
   far_t dst;
   far_t dst_00;
   far_t dst_01;
@@ -126,13 +124,13 @@ void __cdecl16far ovc27_usesRandBelow(int x1,int y1,int x2,int y2,brect_t *rect,
   
   iVar1 = y2;
   iVar2 = x2;
-  dst.seg = unaff_SS;
+  dst.seg = _SS;
   dst.ofs = (uint16_t)&plane0;
   F_SCOPY(far_from_u32((uint32_t)(0x2410594a)),dst);
-  dst_00.seg = unaff_SS;
+  dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&plane1;
   F_SCOPY(far_from_u32((uint32_t)(0x2410596a)),dst_00);
-  dst_01.seg = unaff_SS;
+  dst_01.seg = _SS;
   dst_01.ofs = (uint16_t)&plane2;
   F_SCOPY(far_from_u32((uint32_t)(0x2410598a)),dst_01);
   if (x2 < x1) {
@@ -298,7 +296,6 @@ uint __cdecl16far ovc27_usesRandBelow3(agnt_t *agnt,uint32_t reqRecord,int agntI
   agnt_t *paVar7;
   uint16_t uVar8;
   uint16_t uVar9;
-  uint16_t unaff_SS;
   far_t dst;
   far_t dst_00;
   uint8_t reqLevel2;
@@ -306,10 +303,10 @@ uint __cdecl16far ovc27_usesRandBelow3(agnt_t *agnt,uint32_t reqRecord,int agntI
   uint16_t uStack_e;
   uint8_t reqLevel1;
   
-  dst.seg = unaff_SS;
+  dst.seg = _SS;
   dst.ofs = (uint16_t)&reqLevel1;
   F_SCOPY(far_from_u32((uint32_t)(0x241059aa)),dst);
-  dst_00.seg = unaff_SS;
+  dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&reqLevel2;
   F_SCOPY(far_from_u32((uint32_t)(0x241059b4)),dst_00);
   uVar2 = agntIndex * 0x34;
@@ -545,7 +542,6 @@ uint __cdecl16far ovc27_usesRandBelow5(agnt_t *agnt)
   uint16_t uVar2;
   uint16_t uVar3;
   uint16_t uVar4;
-  uint unaff_SS;
   uint8_t indexMap;
   byte bStack_4;
   byte bStack_3;
@@ -599,7 +595,6 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
   int *piVar10;
   uint16_t uVar11;
   uint16_t uVar12;
-  char *unaff_SS;
   long lVar13;
   uint8_t text;
   byte bStack_13;
@@ -653,7 +648,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
                           *(uint16_t *)(iVar6 + -0x21),*(uint16_t *)(iVar6 + -0x1f),
                           *(uint16_t *)(iVar5 + -0x1d),*(uint16_t *)(iVar5 + -0x1b),
                           *(uint16_t *)(iVar8 + 0x24),*(uint16_t *)(iVar8 + 0x26));
-      msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5ba4,unaff_SS),
+      msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5ba4,_SS),
                           (char *)CONCAT22(puVar7,(char *)0x26510),uVar2);
       ovr_uiNotify(msg,uVar2,0);
       paStack_6->variant = bStack_13;
@@ -821,7 +816,6 @@ uint __cdecl16far ovc27_spellHalfDamage(agnt_t *agnt)
   uint16_t in_DX;
   agnt_t *agnt_00;
   char *pcVar3;
-  char *unaff_SS;
   uint16_t uVar4;
   uint8_t text;
   uint8_t msg;
@@ -835,7 +829,7 @@ uint __cdecl16far ovc27_spellHalfDamage(agnt_t *agnt)
     uVar4 = GSavedBlitSeg;
     pcVar3 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,pcVar3),0);
     puVar1 = ovr_ovc15_usesStshRealloc(pcVar3,in_DX,uVar4,0,0,0,0,0);
-    pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5bbf,unaff_SS),
+    pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5bbf,_SS),
                            (char *)CONCAT22(puVar1,(char *)0x26510),in_DX);
     ovr_uiNotify(pcVar3,in_DX,0);
     uVar2 = CONCAT11((char)((uint)pcVar3 >> 8),1);
@@ -860,7 +854,6 @@ uint __cdecl16far ovc27_breathHalfDamage(agnt_t *agnt,uint16_t arg2)
   uint8_t *puVar2;
   uint uVar3;
   uint16_t in_DX;
-  char *unaff_SS;
   char *in_stack_00000006;
   uint16_t uVar4;
   uint8_t text;
@@ -873,7 +866,7 @@ uint __cdecl16far ovc27_breathHalfDamage(agnt_t *agnt,uint16_t arg2)
     uVar4 = GSavedBlitSeg;
     pcVar1 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text,in_stack_00000006),0);
     puVar2 = ovr_ovc15_usesStshRealloc(pcVar1,in_DX,uVar4,0,0,0,0,0);
-    pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5be1,unaff_SS),
+    pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5be1,_SS),
                            (char *)CONCAT22(puVar2,(char *)0x26510),in_DX);
     ovr_uiNotify(pcVar1,in_DX,0);
     uVar3 = CONCAT11((char)((uint)pcVar1 >> 8),1);
@@ -901,7 +894,6 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
   char *pcVar6;
   uint8_t *puVar7;
   uint16_t uVar8;
-  char *unaff_SS;
   int in_stack_00000008;
   undefined1 uVar9;
   undefined1 uVar10;
@@ -956,7 +948,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
     pcVar6 = ovr_agnt_statusText(paStack_c,(char *)CONCAT13((char)((uint)&text2 >> 8),
                                                   CONCAT12((char)&text2,ptrSeg)),0);
     puVar7 = ovr_ovc15_usesStshRealloc(pcVar6,(char)uVar8,uVar9,0,0,0,0,0);
-    pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c0a,unaff_SS),
+    pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c0a,_SS),
                            (char *)CONCAT13((char)((uint)puVar7 >> 8),CONCAT12((char)puVar7,0x2410))
                            ,(char)puVar7,(char)uVar8);
     ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
@@ -999,7 +991,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
       uVar9 = SUB21(pcVar6,0);
       pcVar6 = ovr_agnt_statusText(paStack_c,(char *)CONCAT22(&text2,ptrSeg),0);
       puVar7 = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11,0,0,0);
-      pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,unaff_SS),
+      pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,_SS),
                              (char *)CONCAT22(puVar7,(char *)0x26510),uVar8);
       ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
       ovr_OVC41_6a8f_01e7_entry(paStack_c,(char)ptrSeg);
@@ -1017,7 +1009,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
     uVar9 = SUB21(pcVar6,0);
     pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text2,agntIndex),0);
     puVar7 = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11,0,0,0);
-    pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c44,unaff_SS),
+    pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c44,_SS),
                            (char *)CONCAT22(puVar7,(char *)0x26510),uVar8);
     ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
     paStack_c->flags = paStack_c->flags | 0x400;
@@ -1041,7 +1033,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
     uVar9 = SUB21(pcVar6,0);
     pcVar6 = ovr_agnt_statusText(paStack_c,(char *)CONCAT22(&text2,ptrSeg),0);
     puVar7 = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11,0,0,0);
-    pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,unaff_SS),
+    pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,_SS),
                            (char *)CONCAT22(puVar7,(char *)0x26510),uVar8);
     ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
     paStack_c->faction = agnt->faction;
@@ -1071,12 +1063,11 @@ uint16_t __cdecl16far ovc27_textCharmed()
   uint16_t unk;
   uint16_t in_DX;
   int unaff_BP;
-  char *unaff_SS;
   char *in_stack_00000000;
   
   pcVar2 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),in_stack_00000000,0);
   puVar3 = ovr_ovc15_usesStshRealloc(pcVar2,0,0,0,0,0,0,0);
-  pcVar2 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c2f,unaff_SS),
+  pcVar2 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c2f,_SS),
                          (char *)CONCAT22(puVar3,(char *)0x26510));
   ovr_uiNotify(pcVar2,in_DX,0);
   *(undefined1 *)((int)*(uint32_t *)(unaff_BP + -10) + 0x2f) =
@@ -1112,7 +1103,6 @@ void ovc27_textTakesHalfDamage4(void)
   uint16_t in_DX;
   int unaff_BP;
   int unaff_DI;
-  char *unaff_SS;
   undefined1 uVar10;
   undefined1 uVar11;
   undefined1 uVar12;
@@ -1151,7 +1141,7 @@ void ovc27_textTakesHalfDamage4(void)
                                                                *(uint16_t *)(unaff_BP + -8))),
                                      (char)*(uint16_t *)(unaff_BP + -8));
         puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,0,0,0,0,0);
-        pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c70,unaff_SS),
+        pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c70,_SS),
                                (char *)CONCAT13((char)((uint)puVar9 >> 8),
                                                 CONCAT12((char)puVar9,0x2410)),0x10,(char)puVar9,
                                (char)in_DX);
@@ -1180,7 +1170,7 @@ void ovc27_textTakesHalfDamage4(void)
                                                            *(uint16_t *)(unaff_BP + -8))),
                                  (char)*(uint16_t *)(unaff_BP + -8));
     puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,0,0,0,0,0);
-    pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c5a,unaff_SS),
+    pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c5a,_SS),
                            (char *)CONCAT13((char)((uint)puVar9 >> 8),CONCAT12((char)puVar9,0x2410))
                            ,0x10,(char)puVar9,(char)in_DX);
     ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
@@ -1209,7 +1199,7 @@ void ovc27_textTakesHalfDamage4(void)
         pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                       (char *)*(uint16_t *)(unaff_BP + -8)),0);
         puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,uVar12,0,0,0);
-        pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c90,unaff_SS),
+        pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c90,_SS),
                                (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
         ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
         ovr_OVC41_6a8f_01e7_entry
@@ -1249,7 +1239,7 @@ void ovc27_textTakesHalfDamage4(void)
         pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                       (char *)*(uint16_t *)(unaff_BP + -8)),0);
         puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar11,uVar12,uVar10,0,0,0);
-        pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5ca2,unaff_SS),
+        pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5ca2,_SS),
                                (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
         ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
         ovr_OVC41_6a8f_01e7_entry
@@ -1286,7 +1276,7 @@ void ovc27_textTakesHalfDamage4(void)
       pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                     (char *)*(uint16_t *)(unaff_BP + -8)),0);
       puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar11,uVar12,uVar10,0,0,0);
-      pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5cbc,unaff_SS),
+      pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5cbc,_SS),
                              (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
       ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
       ((char_sheet_t *)((unaff_BP + -10)))->alignment =
@@ -1325,7 +1315,7 @@ void ovc27_textTakesHalfDamage4(void)
       pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                     (char *)*(uint16_t *)(unaff_BP + -8)),0);
       puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,uVar12,0,0,0);
-      pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c90,unaff_SS),
+      pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c90,_SS),
                              (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
       ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
       ovr_OVC41_6a8f_01e7_entry
@@ -1470,7 +1460,7 @@ void ovc27_textTakesHalfDamage4(void)
       pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                     (char *)*(uint16_t *)(unaff_BP + -8)),0);
       puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,uVar12,0,0,0);
-      pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c2f,unaff_SS),
+      pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c2f,_SS),
                              (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
       ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
       ovr_OVC41_6a8f_01e7_entry
@@ -1488,8 +1478,8 @@ void ovc27_textTakesHalfDamage4(void)
                                   CONCAT22(*(uint16_t *)(unaff_BP + 8),
                                            (agnt_t *)*(uint16_t *)(unaff_BP + 6)),0xe,
                                   *(byte *)(unaff_BP + -4),
-                                  (int *)CONCAT13((char)((uint)unaff_SS >> 8),
-                                                  CONCAT12((char)unaff_SS,unaff_BP + -2)));
+                                  (int *)CONCAT13((char)((uint)_SS >> 8),
+                                                  CONCAT12((char)_SS,unaff_BP + -2)));
       *(uint16_t *)(unaff_BP + -8) = in_DX;
       *(int *)(unaff_BP + -10) = iVar5;
       if (*(int *)(unaff_BP + -10) == 0 && *(int *)(unaff_BP + -8) == 0) break;
@@ -1756,7 +1746,6 @@ void switchD_6000_3cd8__caseD_0_3(void)
 {
   int unaff_BP;
   int unaff_SI;
-  uint16_t unaff_SS;
   
   *(char *)(unaff_BP + unaff_SI) = *(char *)(unaff_BP + unaff_SI) + '\x01';
   do {

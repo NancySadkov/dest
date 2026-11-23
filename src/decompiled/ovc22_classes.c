@@ -143,7 +143,6 @@ char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t *ag
   char *pcVar10;
   uint16_t unaff_SI;
   uint16_t unaff_DI;
-  uint16_t unaff_SS;
   uint16_t in_stack_0000000a;
   uint16_t in_stack_0000000c;
   uint16_t in_stack_0000000e;
@@ -312,7 +311,7 @@ code_r0x0005ff56:
             ovr_blitLabel((char *)&numBuf);
           }
           CurSfxType3 = 0x3c;
-          entries.seg = unaff_SS;
+          entries.seg = _SS;
           entries.ofs = (uint16_t)&menuItems;
           suffix = (char *)0x263c4;
           labelOfs = 0x327;
@@ -481,7 +480,6 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
   uint16_t uVar53;
   uint16_t uVar54;
   uint16_t uVar55;
-  char *unaff_SS;
   bool bVar56;
   bool bVar57;
   bool bVar58;
@@ -558,8 +556,8 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
     uVar69 = 0;
     iStack_22 = 0;
     uStack_20 =(uint16_t)( (byte *)__C0_ASM_CopyRight + 6);
-    cVar14 = (char)unaff_SS;
-    uVar65 = (undefined1)((uint)unaff_SS >> 8);
+    cVar14 = (char)_SS;
+    uVar65 = (undefined1)((uint)_SS >> 8);
     _fmemset(MK_FP(_SS, &uStack_28), 0, 6);
     _fmemset(MK_FP(_SS, &uStack_2e), 0, 6);
     _fmemset(MK_FP(GUnitDescriptions[partyIndex].seg, GUnitDescriptions[partyIndex].ofs + 0x9a), 0, 3);
@@ -1085,9 +1083,9 @@ L_OVC22_5087_4975_4ABE:
                     }
                     uVar23 = ovc22_searchCellsAround
                                        ((uint *)CONCAT13((char)((uint)&scratch >> 8),
-                                                         CONCAT12((char)&scratch,unaff_SS)),
+                                                         CONCAT12((char)&scratch,_SS)),
                                         (uint *)CONCAT13((char)(((uint)partyIndex << 2) >> 8),
-                                                         CONCAT12(partyIndex,unaff_SS)),
+                                                         CONCAT12(partyIndex,_SS)),
                                         (*(uint8_t *)((uint8_t *)&(uStack_6) + 3)),(*(uint8_t *)((uint8_t *)&(uStack_6) + 2)),cVar25);
                     pfVar20 = (far_t far *)(uVar23 & 0xff);
                     if (pfVar20 != (far_t far *)0x0) {
@@ -1326,7 +1324,7 @@ L_OVC22_5087_4975_4ABE:
                                       uStackY_60 = 0xc5d4;
                                       pcVar21 = ovr_stsprintf(acStackY_68,
                                                               (char *)CONCAT13(0x58,CONCAT12(0xc0,
-                                                  unaff_SS)));
+                                                  _SS)));
                                       ovr_uiNotify(pcVar21,0,0);
                                     }
                                   }
@@ -1896,7 +1894,7 @@ switchD_5000_123d_caseD_2:
       ovr_ovc15_capitalize(acStackY_a6);
       uStackY_60 = 0x2322;
       uStackY_62 = 0x8f4e;
-      pfVar20 = (far_t far *)ovr_stsprintf(&stk_ffaa,(char *)CONCAT22(0x5665,unaff_SS));
+      pfVar20 = (far_t far *)ovr_stsprintf(&stk_ffaa,(char *)CONCAT22(0x5665,_SS));
       ovr_uiNotify((char *)pfVar20,0,0);
     }
     ovr_ovc15_removeEntity((uint)puVar49);
@@ -1946,7 +1944,7 @@ switchD_5000_123d_caseD_3:
             ovc22_usesGUnits((int)unaff_DI,
                              (uint8_t *)
                              CONCAT13((char)((uint)((int)unaff_DI * 9) >> 8),
-                                      CONCAT12(units[(int)unaff_DI].unitType,unaff_SS)));
+                                      CONCAT12(units[(int)unaff_DI].unitType,_SS)));
           }
           else if (((((bld_inst_t *)BldInstances + bVar17)->ofs != 0 ||
                      *(int *)((int)&BldInstances[0].seg + (uint)bVar17 * 0xc) != 0) ||
@@ -2020,7 +2018,7 @@ L_upd_units_5087_1d7d_202C:
                     ovc22_usesGUnits((int)puVar49,
                                      (uint8_t *)
                                      CONCAT13((char)((uint)iVar29 >> 8),
-                                              CONCAT12((undefined1)uStack_16,unaff_SS)));
+                                              CONCAT12((undefined1)uStack_16,_SS)));
                   }
                   else if (((((bld_inst_t *)BldInstances + ((uint)uStack_20 & 0xff))->ofs != 0 ||
                              *(int *)((int)&BldInstances[0].seg + ((uint)uStack_20 & 0xff) * 0xc) !=
@@ -2439,7 +2437,7 @@ L_upd_units_5087_1d7d_202C:
         ovc22_usesGUnits((int)puVar49,
                          (uint8_t *)
                          CONCAT13((char)((uint)((int)puVar49 * 9) >> 8),
-                                  CONCAT12(((unit_t *)GUnits)[(int)puVar49].unitType,unaff_SS)));
+                                  CONCAT12(((unit_t *)GUnits)[(int)puVar49].unitType,_SS)));
       }
     }
   }
@@ -3093,7 +3091,6 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint16_t uVar24;
   uint16_t uVar25;
   uint16_t uVar26;
-  uint16_t unaff_SS;
   bool bVar27;
   far_t table;
   uint8_t *puVar28;
@@ -3172,7 +3169,7 @@ void __cdecl16far upd_usesAlignUp4(void)
                 ((*(uint *)((uint)bldType * 0x27 + 0x121) & 0x200) != 0)))) {
               ovc22_usesGUnits(uVar23,(uint8_t *)
                                       CONCAT13((char)(uVar23 * 9 >> 8),
-                                               CONCAT12(units[uVar23].unitType,unaff_SS)));
+                                               CONCAT12(units[uVar23].unitType,_SS)));
             }
             else if (((((bld_inst_t *)BldInstances + bldType)->ofs != 0 ||
                        *(int *)((int)&BldInstances[0].seg + (uint)bldType * 0xc) != 0) ||
@@ -3236,7 +3233,7 @@ void __cdecl16far upd_usesAlignUp4(void)
                     {
                       ovc22_usesGUnits(uVar23,(uint8_t *)
                                               CONCAT13((char)((uint)iVar17 >> 8),
-                                                       CONCAT12((byte)idx,unaff_SS)));
+                                                       CONCAT12((byte)idx,_SS)));
                     }
                     else if (((((bld_inst_t *)BldInstances + bldType)->ofs != 0 ||
                                *(int *)((int)&BldInstances[0].seg + (uint)bldType * 0xc) != 0) ||
@@ -3650,7 +3647,7 @@ void __cdecl16far upd_usesAlignUp4(void)
           }
           ovc22_usesGUnits(uVar23,(uint8_t *)
                                   CONCAT13((char)(uVar23 * 9 >> 8),
-                                           CONCAT12(((unit_t *)GUnits)[uVar23].unitType,unaff_SS)));
+                                           CONCAT12(((unit_t *)GUnits)[uVar23].unitType,_SS)));
         }
       }
     }
@@ -3713,14 +3710,14 @@ void __cdecl16far upd_usesAlignUp4(void)
               bldType = 0x22;
             }
             else {
-              uVar34 = (undefined1)unaff_SS;
-              uVar33 = (undefined1)(unaff_SS >> 8);
+              uVar34 = (undefined1)_SS;
+              uVar33 = (undefined1)(_SS >> 8);
               puVar32 = &successWeight;
               puVar30 = &partialWeight;
               puVar28 = &bldType;
               index = CONCAT11((char)((uint)puVar28 >> 8),bStack_1b);
-              uVar29 = unaff_SS;
-              uVar31 = unaff_SS;
+              uVar29 = _SS;
+              uVar31 = _SS;
               uVar14 = ovr_attact_usesSquareRecCount(uStack_18,uStack_1a);
               table.seg = uVar11;
               table.ofs = uVar14;
@@ -4573,7 +4570,6 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
   int unitCount;
   char unaff_SI;
   uint16_t unitsSeg;
-  uint *unaff_SS;
   byte bStack_e;
   uint16_t y;
   uint16_t x;
@@ -4639,9 +4635,9 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
     bStack_3 = bStack_3 | 2;
   }
   uVar7 = ovc22_searchCellsAround
-                    ((uint *)CONCAT22(&y,unaff_SS),
+                    ((uint *)CONCAT22(&y,_SS),
                      (uint *)CONCAT13((char)(((uint)partyIndex << 2) >> 8),
-                                      CONCAT12(partyIndex,unaff_SS)),bStack_3,hasUnits,unaff_SI);
+                                      CONCAT12(partyIndex,_SS)),bStack_3,hasUnits,unaff_SI);
   if ((uVar7 & 0xff) != 0) {
     if ((uVar7 & 0xff) != 1) {
       return;
@@ -4706,7 +4702,6 @@ void __cdecl16far ovc22_spawnForLeaders(void)
 
 {
   uint16_t uVar1;
-  uint16_t unaff_SS;
   uint8_t outFlag;
   int leader;
   
@@ -4720,41 +4715,41 @@ void __cdecl16far ovc22_spawnForLeaders(void)
         (((char_sheet_t *)((leader << 2)))->population <=
          ((char_sheet_t *)((leader << 2)))->housing)))) {
       if (EntityCount < 0x21c) {
-        ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
+        ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
       }
       else if (*(char *)((int)*(uint32_t *)(leader << 2) + 0x3f) == '\0') {
         if (((char_sheet_t *)((leader << 2)))->unitCount < 0x23) {
-          ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
+          ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
         }
         else if (((char_sheet_t *)((leader << 2)))->unitCount < 0x4b) {
           uVar1 = ovr_randBelow(8,0);
           if ((uVar1 & 0xff) == 0) {
-            ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
+            ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
           }
         }
         else {
           uVar1 = ovr_randBelow(0x10,0);
           if ((uVar1 & 0xff) == 0) {
-            ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
+            ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
           }
         }
       }
       else if (((char_sheet_t *)((leader << 2)))->unitsOnTile == 0) {
-        ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
+        ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
       }
       else if (((char_sheet_t *)((leader << 2)))->unitCount < 0x19) {
-        ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
+        ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
       }
       else if (((char_sheet_t *)((leader << 2)))->unitCount < 0x32) {
         uVar1 = ovr_randBelow(8,0);
         if ((uVar1 & 0xff) == 0) {
-          ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
+          ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
         }
       }
       else {
         uVar1 = ovr_randBelow(0x10,0);
         if ((uVar1 & 0xff) == 0) {
-          ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,unaff_SS);
+          ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
         }
       }
     }
