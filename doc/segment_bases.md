@@ -342,3 +342,82 @@ One consequence worth recording: adding a local grows the frame, which turns
 some [BP+disp8] accesses into disp16 encodings, so the linked EXE is *not* byte
 identical after a pure rename.  Byte comparison is therefore not a usable
 acceptance test here; the gates plus the two checks above are.
+
+## The start-up relocation pass: measured, built, and not yet safe to enable
+
+Per the note above, far pointers stored in data keep the original segment in the
+image and need fixing at run time.  This section records what the pass has to do
+and the two traps found while implementing it.
+
+### Why the pointers are stale in our build but not in the original
+
+The original EXE carries **1832** DOS relocations; our rebuild carries **846**
+(`link_standalone.py` only adds relocations for far *code* transfers, and TLINK
+emits none for an integer initialiser).  The loader uses those entries to add the
+load segment to each stored far pointer, which is why the original's file value
+`GSPEmpty = { 0x272B, 0x2410 }` becomes `0x272B:0x1C33` at run time.
+
+Scanning `audit/dgroup_2410.bin` (the original DGROUP image) for 32-bit words
+whose high half is a known original segment gives:
+
+```
+segment 0000  3337   relocatable, the loader already patches these
+segment 2410   377   hard-coded DGROUP self-pointers (the stale ones)
+segment 1000    14   code-segment pointers (callbacks)
+segment 1403     2
+```
+
+So the runtime work is bounded by the **377** non-zero ones, not by all 3,730.
+
+### The table that can be built today
+
+`tmp/build_reloc_table.py` resolves each candidate through
+`audit/symbols.tsv` (which object the stored offset names) and `REBUILT.MAP`
+(where that object is now), keeping only entries that pass three filters:
+
+* the stored offset is exactly a symbol start (so it names an object, not the
+  middle of one) - rejects 42;
+* the target object exists in the rebuilt DGROUP - rejects 69;
+* the *location* sits inside a symbol whose declaration mentions `far`, `*` or
+  `ptr` - rejects 30.
+
+That yields **236** entries, all of the form
+`dgroup[0x0ac2] = 0x0b40; dgroup[0x0ac4] = _DS` (string pointers to
+`s_Fighter`, `s_mage`, ... in the sample checked against the linked image).
+
+### Trap 1: the table itself moves DGROUP
+
+Emitting the table as `static const ... dgptr_fixups[]` puts 944 bytes of
+initialised data into DGROUP and shifts every offset the table describes
+(observed: DGROUP `15a7 -> 15ad`, after which all 236 entries were pointing at
+the wrong words and the program failed to reach `main`).  The generator now
+emits straight-line code instead, which lives in `_TEXT`, and it takes the
+DGROUP segment from `REBUILT.MAP` rather than a constant.
+
+### Trap 2: the enabled pass still breaks startup
+
+With the code-only version, DGROUP stays at `15ad`, 236 entries are emitted and
+the build is clean, but:
+
+```
+(tmp/dump_dgroup_stdout.py)
+  rebuilt dump: none          <- program no longer reaches main
+```
+
+Disabling only the call restores a full 65,535-byte dump, so at least one of the
+236 writes corrupts DGROUP.  The candidates most likely to be wrong are entries
+whose stored offset coincides with a symbol start but which are not actually
+pointers (the declaration filter is textual).  The next attempt must validate
+per entry: log each write, or enable the entries in small batches and re-run the
+dump each time.
+
+### Tooling note
+
+`scripts/compare_runtime.py` only *compares* the stored dumps
+`tmp/dgrun2_{orig,ours}/DGR.BIN`; it does not produce them.  Regenerate with
+`python tmp/dump_dgroup_stdout.py` (about 40 s per image).  The dumps had been
+eight hours stale during this investigation, which briefly made the pass look
+successful.
+
+State: the pass is **not** in the tree.  `doc` and `tmp/build_reloc_table.py`
+carry the analysis, the filters and the two traps.
