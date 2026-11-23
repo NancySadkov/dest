@@ -326,40 +326,40 @@ void __cdecl16far init_rebuildMapFlags(void)
   uint *puVar1;
   short (*paasVar2) [60] [148];
   byte (*paabVar3) [59] [148];
-  int iVar4;
-  int iVar5;
+  int col;
+  int row;
   uint16_t uVar6;
   
-  for (iVar5 = 0; iVar5 < 0x3b; iVar5 = iVar5 + 1) {
-    for (iVar4 = 0; iVar4 < 0x93; iVar4 = iVar4 + 1) {
+  for (row = 0; row < 0x3b; row = row + 1) {
+    for (col = 0; col < 0x93; col = col + 1) {
       uVar6 = (uint16_t)((ulong)GMapFlags >> 0x10);
       paasVar2 = (short (*) [60] [148])GMapFlags;
-      if (((*paasVar2)[iVar5][iVar4] & 4U) == 0) {
-        if ((((*(byte (*) [59] [148])GMapCells)[iVar5][iVar4] == 0) &&
-            ((*(byte (*) [59] [148])GMapCells)[iVar5 + 1][iVar4 + 1] == 0)) &&
-           ((*(byte (*) [59] [148])GMapCells)[iVar5 + 1][iVar4] == 0)) {
-          puVar1 = (uint *)((*paasVar2)[iVar5] + iVar4);
+      if (((*paasVar2)[row][col] & 4U) == 0) {
+        if ((((*(byte (*) [59] [148])GMapCells)[row][col] == 0) &&
+            ((*(byte (*) [59] [148])GMapCells)[row + 1][col + 1] == 0)) &&
+           ((*(byte (*) [59] [148])GMapCells)[row + 1][col] == 0)) {
+          puVar1 = (uint *)((*paasVar2)[row] + col);
           *puVar1 = *puVar1 | 1;
         }
         uVar6 = (uint16_t)((ulong)GMapCells >> 0x10);
         paabVar3 = (byte (*) [59] [148])GMapCells;
-        if ((((*paabVar3)[iVar5][iVar4] == 0) && ((*paabVar3)[iVar5 + 1][iVar4 + 1] == 0)) &&
-           ((*paabVar3)[iVar5][iVar4 + 1] == 0)) {
-          puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[iVar5] + iVar4);
+        if ((((*paabVar3)[row][col] == 0) && ((*paabVar3)[row + 1][col + 1] == 0)) &&
+           ((*paabVar3)[row][col + 1] == 0)) {
+          puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[row] + col);
           *puVar1 = *puVar1 | 2;
         }
       }
       else {
-        if ((((*(byte (*) [59] [148])GMapCells)[iVar5 + 1][iVar4] == 0) &&
-            ((*(byte (*) [59] [148])GMapCells)[iVar5][iVar4 + 1] == 0)) &&
-           ((*(byte (*) [59] [148])GMapCells)[iVar5][iVar4] == 0)) {
-          puVar1 = (uint *)((*paasVar2)[iVar5] + iVar4);
+        if ((((*(byte (*) [59] [148])GMapCells)[row + 1][col] == 0) &&
+            ((*(byte (*) [59] [148])GMapCells)[row][col + 1] == 0)) &&
+           ((*(byte (*) [59] [148])GMapCells)[row][col] == 0)) {
+          puVar1 = (uint *)((*paasVar2)[row] + col);
           *puVar1 = *puVar1 | 1;
         }
-        if ((((*(byte (*) [59] [148])GMapCells)[iVar5 + 1][iVar4] == 0) &&
-            ((*(byte (*) [59] [148])GMapCells)[iVar5][iVar4 + 1] == 0)) &&
-           ((*(byte (*) [59] [148])GMapCells)[iVar5 + 1][iVar4 + 1] == 0)) {
-          puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[iVar5] + iVar4);
+        if ((((*(byte (*) [59] [148])GMapCells)[row + 1][col] == 0) &&
+            ((*(byte (*) [59] [148])GMapCells)[row][col + 1] == 0)) &&
+           ((*(byte (*) [59] [148])GMapCells)[row + 1][col + 1] == 0)) {
+          puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[row] + col);
           *puVar1 = *puVar1 | 2;
         }
       }

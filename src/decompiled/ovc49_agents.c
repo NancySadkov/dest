@@ -3463,7 +3463,7 @@ L_OVC49_8699_1e09_3CF7:
 void __cdecl16far ovc49_drawAgents(void)
 
 {
-  int *piVar1;
+  int *pTarget;
   char *pcVar2;
   uint *puVar3;
   byte bVar4;
@@ -3602,27 +3602,27 @@ void __cdecl16far ovc49_drawAgents(void)
     uVar15 = (uint16_t)((ulong)uStack_12 >> 0x10);
     if (*(char *)(agentIndex * 0x34 + 5) < '\x01') {
       if (*(char *)(agentIndex * 0x34 + 5) < '\0') {
-        piVar1 = (int *)(agentIndex * 0x34 + 2);
-        *piVar1 = *piVar1 - *(int *)(iVar17 + 0x11);
+        pTarget = (int *)(agentIndex * 0x34 + 2);
+        *pTarget = *pTarget - *(int *)(iVar17 + 0x11);
       }
       else {
         bVar5 = false;
       }
     }
     else {
-      piVar1 = (int *)(agentIndex * 0x34 + 2);
-      *piVar1 = *piVar1 + *(int *)(iVar17 + 0x11);
+      pTarget = (int *)(agentIndex * 0x34 + 2);
+      *pTarget = *pTarget + *(int *)(iVar17 + 0x11);
     }
     if (0x14 < *(int *)(agentIndex * 0x34 + 2)) {
       if (*(char *)(agentIndex * 0x34 + 5) < '\x01') {
         if (*(char *)(agentIndex * 0x34 + 5) < '\0') {
-          piVar1 = (int *)(agentIndex * 0x34 + 2);
-          *piVar1 = *piVar1 - *(int *)(iVar17 + 0x11);
+          pTarget = (int *)(agentIndex * 0x34 + 2);
+          *pTarget = *pTarget - *(int *)(iVar17 + 0x11);
         }
       }
       else {
-        piVar1 = (int *)(agentIndex * 0x34 + 2);
-        *piVar1 = *piVar1 + *(int *)(iVar17 + 0x11);
+        pTarget = (int *)(agentIndex * 0x34 + 2);
+        *pTarget = *pTarget + *(int *)(iVar17 + 0x11);
       }
     }
     if ((((*(int *)(agentIndex * 0x34) < 0) || (0xd2 < *(int *)(agentIndex * 0x34))) ||
@@ -4033,8 +4033,8 @@ void __cdecl16far ovc49_drawAgents(void)
     if (DebugVerbose != false) {
       printf("%d \r");
     }
-    piVar1 = (int *)(agentIndex * 0x34 + 6);
-    *piVar1 = *piVar1 + 1;
+    pTarget = (int *)(agentIndex * 0x34 + 6);
+    *pTarget = *pTarget + 1;
     if (*(char *)(agentIndex * 0x34 + 0xe) != -1) {
       if (*(char *)(agentIndex * 0x34 + 0xc) == -1) {
         ovr_agnt_usesAnimFrame((agnt_t *)(agentIndex * 0x34),0x26);
@@ -4083,12 +4083,12 @@ void __cdecl16far ovc49_drawAgents(void)
         if ((*(byte *)(iVar17 + 0x1c) & 2) == 0) {
           uVar21 = (uint16_t)((ulong)psStack_18 >> 0x10);
           if (*(char *)(agentIndex * 0x34 + 0xb) == '\0') {
-            piVar1 = (int *)(agentIndex * 0x34 + 8);
-            *piVar1 = *piVar1 + (int)(char)((stg_tmp_t *)psStack_18)->cmap[5];
+            pTarget = (int *)(agentIndex * 0x34 + 8);
+            *pTarget = *pTarget + (int)(char)((stg_tmp_t *)psStack_18)->cmap[5];
           }
           else {
-            piVar1 = (int *)(agentIndex * 0x34 + 8);
-            *piVar1 = *piVar1 - (int)(char)((stg_tmp_t *)psStack_18)->cmap[5];
+            pTarget = (int *)(agentIndex * 0x34 + 8);
+            *pTarget = *pTarget - (int)(char)((stg_tmp_t *)psStack_18)->cmap[5];
           }
           uStack_1a = uStack_1a + 1;
           if (*(byte *)(iVar17 + 0x19) + 1 == uStack_1a) {
