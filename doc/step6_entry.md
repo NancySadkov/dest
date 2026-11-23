@@ -532,3 +532,29 @@ Calling `__OVRINIT()` from `startx` does not link (`Undefined symbol
 ___OVRINIT in module CRTL.C`), so the OVRUSER prepare entry has to be reached by
 address - it is resident at `07BF:0D29` and the call needs the usual
 cross-segment relocation.
+
+### Tried: calling the OVRUSER prepare entry from `startx`
+
+The prepare entry was added before the `main` call as a relocated far pointer
+built from the PSP:
+
+```c
+uint16_t ovrSeg = (uint16_t)(_psp + 0x10 + 0x7BF);   /* _OVRTEXT_ at 07BF */
+((void (far *)(void))MK_FP(ovrSeg, 0x0D29))();        /* OVRUSER entry */
+```
+
+Built and linked cleanly, but the program still stops before `init_game`:
+`OUT.BIN` stays 0 bytes (with the trace markers back in) and no `STRONG.SAV`
+appears.
+
+So either the entry address is not the callable prepare routine (the map line
+`07BF:0D29 005B ... M=OVRUSER` is the *module* entry, not necessarily its public
+prepare symbol), or the routine needs state that is only set up later in the
+original (the overlay file handle opened by the earlier init entries), or the
+call cannot be made this late in `startx` (after the memory resize and stack
+switch).
+
+The change was reverted; the tree is back at the verified state.  The next probe
+should read the original's init-table walk (`InitStart..InitEnd`) to get the
+exact priority-1 entry address and its calling convention, instead of assuming
+the module entry.
