@@ -1328,3 +1328,36 @@ Next step: find where the first overlay load stops.  Either the manager's INT 3F
 handler is entered and the block read hangs, or the handler is not entered at all;
 reading the installed vector after `_OVRINIT` and marking inside the manager's
 `__OvrReadOvrDisk` path will separate those two.
+
+### The INT 3Fh handler is installed and entered
+
+Reading the IVT after `_OVRINIT` and replacing the vector with a probe that
+appends `H` to `DBG.TXT` gives:
+
+```
+DBG.TXT = "A0VOPIH"
+
+  A  DOS AH=48h allocation succeeded
+  0  _OVRINIT returned INIT_OKAY
+  V  IVT[3Fh].segment is non-zero   (manager installed its handler)
+  O  IVT[3Fh].offset  is non-zero
+  P  probe handler installed
+  I  main reached the ovr_init_game() call site
+  H  INT 3Fh was entered by the first overlay call
+```
+
+So the whole overlay *dispatch* path works: `main` -> `lcall ovr_init_game` ->
+thunk -> `O09_SEG` stub -> `INT 3Fh` -> handler.  The hang is inside the
+manager's own handler, i.e. in the block load / fixup / far-jump, not in reaching
+it.
+
+Next step: mark successive points inside the manager's handler.  Its address can
+be read from the IVT as a load-module paragraph (subtract the load base), and
+`tools/devroomm/src/ovrman.c` names the stages - `__OvrCalcSize`, `__OvrAddToLoadList`,
+`__OvrReadOvrDisk` (seek + DOS read), `__OvrDoFixups`, `__OvrFixupFunref`, then
+the far jump to `code_seg:ofs`.  One INT 60h pass over those stages will show the
+last one reached.
+
+Note on the earlier "hang": the program is interactive and never exits, so
+`RUN.LOG` stays empty by construction; only `DBG.TXT` (flushed per write) carries
+evidence.
