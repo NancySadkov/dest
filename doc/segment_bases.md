@@ -243,3 +243,85 @@ cVar4 = (uint16_t)( ovr_ovc15_textView()   /* hand fix: args lost by the decompi
 
 so neither arity nor meaning can be recovered from the C.  Naming them would be
 guesswork; the call's arguments have to be recovered from the disassembly first.
+
+## The leader-sheet table: the same missing base, one struct bigger
+
+`doc` listed `(char_sheet_t *)(idx << 2)` and `*(uint32_t *)(idx << 2)` as
+unexplained.  They are the **GLeaderSheets** table, and the disassembly of
+`upd_usesAlignUp4` (`5087:1d7d`) shows both the base and the field layout:
+
+```
+5087:210d  MOV AX,word ptr ES:[BX + 0x54]   ; income
+5087:2111  CWD
+5087:2115  SHL BX,0x2                       ; idx * 4
+5087:2118  MOV CX,0x217a                    ; GLeaderSheets segment
+5087:211d  LES BX,ES:[BX + 0x0]             ; GLeaderSheets[idx], a far pointer
+5087:2122  MOV CX,word ptr ES:[BX + 0x58]   ; gold high
+5087:2126  MOV BX,word ptr ES:[BX + 0x56]   ; gold low
+5087:212a  ADD BX,AX
+5087:212c  ADC CX,DX                        ; gold += income
+```
+
+`audit/symbols.tsv` has `GLeaderSheets` at **217a:0000**, so the export's bare
+`idx << 2` was correct inside that segment; the rebuild has the array in DGROUP
+at `15A7:077C`, so every such access read DGROUP instead - the same defect class
+as `Agnts`.
+
+Fixed in this pass:
+
+* 193 `(char_sheet_t *)((idx << 2))` casts -> `GLeaderSheets[idx]` (which also
+  removes the `idx<<2` arithmetic on a 0xae-byte struct);
+* 102 `*(uint32_t *)(idx << 2)` loads in `upd_usesAlignUp4` -> `GLeaderSheets[idx]`
+  (there `idx` is the leader loop variable, and the neighbouring `+0x54/0x56/0x58`
+  uses confirm the table).
+
+### char_sheet_t layout confirmed at +0x54..+0x62
+
+With `-a-` (byte alignment) the struct offsets are consecutive, and the
+disassembly above matches:
+
+| offset | field | evidence |
+|---|---|---|
+| 0x3f | `faction` | `cVar10 = *(char *)(GLeaderSheets[idx] + 0x3f)` |
+| 0x54 | `income` (word) | `MOV AX,ES:[BX+0x54]` then added into gold |
+| 0x56 | `gold` low word | `MOV BX,ES:[BX+0x56]` |
+| 0x58 | `gold` high word | `MOV CX,ES:[BX+0x58]` |
+| 0x60 | `foodStored` low word | added/subtracted as a pair with 0x62 |
+| 0x62 | `foodStored` high word | `*(int *)(iVar21 + 0x62)` sign word |
+| 0x64/0x6a/0x70/0x76 | `dirBudgetIn`/`dirBudget`/`ringBudgetIn`/`ringBudget` | the 32-bit pairs written at 0x6c/0x6e, 0x78/0x7a |
+
+So the earlier note calling these a "unit-record layout" was wrong: they belong
+to the 0xae-byte leader sheet reached through `GLeaderSheets[idx]`, not to
+`unit_t` (which is 9 bytes).
+
+### Why `uVar23` and `iVar17` are still not split
+
+Now that the layout is known the split is *possible*, but the two slots are
+threaded through unrelated roles, and the census shows no cheap split:
+
+`uVar23` 122 occurrences on 101 lines:
+
+```
+  6  = *accLo            (the old low word of a 32-bit field)
+  4  loop increment of the second unit loop
+  3+3 first/second unit loop headers
+  4  *(uint32_t *)(iVar21 << 2)
+  4  (int)&peVar20[...].base.entity
+  3  >= 0 / = 0                (a value, not an index)
+  3  (uint)(units + uVar23)->bldType
+  ...  ~10 more shapes
+```
+
+`iVar17` 117 occurrences on 104 lines:
+
+```
+ 21  = (int)*(uint32_t *)(idx << 2)     the leader-sheet offset
+  8  = *(int *)(iVar21 + 0x62)          a field value
+  6  accLo = (uint *)(iVar17 + 0x56)    gold low
+  6  accHi = (int  *)(iVar17 + 0x58)    gold high
+  3  = 0                                a flag
+  ...  plus bldType * 0x27 and further field addresses
+```
+
+Splitting them means roughly ten new locals and a per-occurrence rewrite, so the
+next attempt should start from a body that only uses one role each.
