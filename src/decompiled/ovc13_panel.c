@@ -481,51 +481,51 @@ void __cdecl16far ovc13_usesBlitRects(void)
 void __cdecl16far ovc13_drawPanelCell(int x,int y)
 
 {
-  char cVar1;
+  char rowY;
   byte flags;
-  int iVar2;
+  int xTimes2;
   int x1;
-  int iVar3;
-  int iVar4;
-  int iVar5;
-  int iVar6;
-  uint uVar7;
-  uint16_t uVar8;
-  uint8_t uStack_a;
-  uint8_t uStack_8;
-  uint8_t uStack_6;
-  uint8_t uStack_4;
+  int cellBottomLeft;
+  int cellTopLeft;
+  int cellBottomRight;
+  int cellTopRight;
+  uint cellFlags;
+  uint16_t fillColor;
+  uint8_t topRight;
+  uint8_t topLeft;
+  uint8_t bottomRight;
+  uint8_t bottomLeft;
   
-  cVar1 = (char)y * '\x03';
-  iVar2 = x * 2;
-  x1 = iVar2 + 0xc;
-  iVar3 = ovc13_usesSeedD110(x,y + 1);
-  iVar4 = ovc13_usesSeedD110(x,y);
-  iVar5 = ovc13_usesSeedD110(x + 1,y + 1);
-  iVar6 = ovc13_usesSeedD110(x + 1,y);
-  uVar7 = ovc13_usesSeedD1102(x,y);
-  flags = (byte)uVar7;
-  uStack_a = (uint8_t)iVar6;
-  uStack_8 = (uint8_t)iVar4;
-  uStack_6 = (uint8_t)iVar5;
-  uStack_4 = (uint8_t)iVar3;
-  if ((uVar7 & 4) == 0) {
-    uVar8 = ovr_constr_compute1(uStack_8,uStack_a,uStack_6,flags,2,0,0,0);
-    ovr_driver_fillSpan(x1,iVar2 + 0xd,cVar1 + 7U,(uint8_t)uVar8,&((brect_t *)BlitRects)->x,0x2410);
-    ovr_driver_fillSpan(iVar2 + 0xd,iVar2 + 0xd,cVar1 + 8,(uint8_t)uVar8,&((brect_t *)BlitRects)->x,
+  rowY = (char)y * '\x03';
+  xTimes2 = x * 2;
+  x1 = xTimes2 + 0xc;
+  cellBottomLeft = ovc13_usesSeedD110(x,y + 1);
+  cellTopLeft = ovc13_usesSeedD110(x,y);
+  cellBottomRight = ovc13_usesSeedD110(x + 1,y + 1);
+  cellTopRight = ovc13_usesSeedD110(x + 1,y);
+  cellFlags = ovc13_usesSeedD1102(x,y);
+  flags = (byte)cellFlags;
+  topRight = (uint8_t)cellTopRight;
+  topLeft = (uint8_t)cellTopLeft;
+  bottomRight = (uint8_t)cellBottomRight;
+  bottomLeft = (uint8_t)cellBottomLeft;
+  if ((cellFlags & 4) == 0) {
+    fillColor = ovr_constr_compute1(topLeft,topRight,bottomRight,flags,2,0,0,0);
+    ovr_driver_fillSpan(x1,xTimes2 + 0xd,rowY + 7U,(uint8_t)fillColor,&((brect_t *)BlitRects)->x,0x2410);
+    ovr_driver_fillSpan(xTimes2 + 0xd,xTimes2 + 0xd,rowY + 8,(uint8_t)fillColor,&((brect_t *)BlitRects)->x,
                         0x2410);
-    uVar8 = ovr_constr_compute1(uStack_4,uStack_6,uStack_8,flags,1,0,0,0);
-    ovr_driver_fillSpan(x1,x1,cVar1 + 8,(uint8_t)uVar8,&((brect_t *)BlitRects)->x,0x2410);
-    ovr_driver_fillSpan(x1,iVar2 + 0xd,cVar1 + 9,(uint8_t)uVar8,&((brect_t *)BlitRects)->x,0x2410);
+    fillColor = ovr_constr_compute1(bottomLeft,bottomRight,topLeft,flags,1,0,0,0);
+    ovr_driver_fillSpan(x1,x1,rowY + 8,(uint8_t)fillColor,&((brect_t *)BlitRects)->x,0x2410);
+    ovr_driver_fillSpan(x1,xTimes2 + 0xd,rowY + 9,(uint8_t)fillColor,&((brect_t *)BlitRects)->x,0x2410);
   }
   else {
-    uVar8 = ovr_constr_compute1(uStack_8,uStack_a,uStack_4,flags,1,0,0,0);
-    ovr_driver_fillSpan(x1,iVar2 + 0xd,cVar1 + 7U,(uint8_t)uVar8,&((brect_t *)BlitRects)->x,0x2410);
-    ovr_driver_fillSpan(x1,x1,cVar1 + 8,(uint8_t)uVar8,&((brect_t *)BlitRects)->x,0x2410);
-    uVar8 = ovr_constr_compute1(uStack_4,uStack_6,uStack_a,flags,2,0,0,0);
-    ovr_driver_fillSpan(iVar2 + 0xd,iVar2 + 0xd,cVar1 + 8,(uint8_t)uVar8,&((brect_t *)BlitRects)->x,
+    fillColor = ovr_constr_compute1(topLeft,topRight,bottomLeft,flags,1,0,0,0);
+    ovr_driver_fillSpan(x1,xTimes2 + 0xd,rowY + 7U,(uint8_t)fillColor,&((brect_t *)BlitRects)->x,0x2410);
+    ovr_driver_fillSpan(x1,x1,rowY + 8,(uint8_t)fillColor,&((brect_t *)BlitRects)->x,0x2410);
+    fillColor = ovr_constr_compute1(bottomLeft,bottomRight,topRight,flags,2,0,0,0);
+    ovr_driver_fillSpan(xTimes2 + 0xd,xTimes2 + 0xd,rowY + 8,(uint8_t)fillColor,&((brect_t *)BlitRects)->x,
                         0x2410);
-    ovr_driver_fillSpan(x1,iVar2 + 0xd,cVar1 + 9,(uint8_t)uVar8,&((brect_t *)BlitRects)->x,0x2410);
+    ovr_driver_fillSpan(x1,xTimes2 + 0xd,rowY + 9,(uint8_t)fillColor,&((brect_t *)BlitRects)->x,0x2410);
   }
   return;
 }

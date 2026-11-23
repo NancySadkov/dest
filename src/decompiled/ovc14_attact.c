@@ -1021,36 +1021,33 @@ attact_textArena(uint16_t *foundIndexOut,int mode,uint8_t partyIndex,uint16_t x,
 bool __cdecl16far attact_textArena2(uint *foundIndexOut,uint16_t partyIndex,uint16_t x)
 
 {
-  uint uVar1;
-  uint uVar2;
+  uint targetX;
+  uint dist;
   uint uVar3;
-  uint uVar4;
-  uint uVar5;
-  uint uVar6;
-  uint16_t uVar7;
-  int in_stack_0000000c;
-  uint uStack_4;
+  uint signMaskX;
+  uint signMaskY;
+  uint entityIndex;
+  int targetY;
+  uint bestDist;
   
-  uStack_4 = 0;
-  uVar1 = ovr_alignUp4(x,0,0);
-  for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
-    uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-    if (*(char *)((int)Entities + uVar6 * 0x37 + 0x1a) == (char)partyIndex) {
-      uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar6 * 0x37),0,0);
-      uVar4 = (int)(uVar2 - uVar1) >> 0xf;
-      uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-      uVar3 = ((entity_t *)Entities)[uVar6].base.y - in_stack_0000000c;
-      uVar5 = (int)uVar3 >> 0xf;
-      uVar2 = ((uVar2 - uVar1 ^ uVar4) - uVar4) + ((uVar3 ^ uVar5) - uVar5) * 2;
-      if (((uStack_4 < uVar2) &&
-          (uVar3 = ovr_alignUp4(((entity_t *)Entities)[uVar6].base.destX,0,0), uVar3 == uVar1)) &&
-         (((entity_t *)Entities)[uVar6].base.destY == in_stack_0000000c)) {
-        *foundIndexOut = uVar6;
-        uStack_4 = uVar2;
+  bestDist = 0;
+  targetX = ovr_alignUp4(x,0,0);
+  for (entityIndex = 0; entityIndex < EntityCount; entityIndex = entityIndex + 1) {
+    if (*(char *)((int)Entities + entityIndex * 0x37 + 0x1a) == (char)partyIndex) {
+      dist = ovr_alignUp4(*(int *)((int)Entities + entityIndex * 0x37),0,0);
+      signMaskX = (int)(dist - targetX) >> 0xf;
+      uVar3 = ((entity_t *)Entities)[entityIndex].base.y - targetY;
+      signMaskY = (int)uVar3 >> 0xf;
+      dist = ((dist - targetX ^ signMaskX) - signMaskX) + ((uVar3 ^ signMaskY) - signMaskY) * 2;
+      if (((bestDist < dist) &&
+          (uVar3 = ovr_alignUp4(((entity_t *)Entities)[entityIndex].base.destX,0,0), uVar3 == targetX)) &&
+         (((entity_t *)Entities)[entityIndex].base.destY == targetY)) {
+        *foundIndexOut = entityIndex;
+        bestDist = dist;
       }
     }
   }
-  return uStack_4 != 0;
+  return bestDist != 0;
 }
 
 

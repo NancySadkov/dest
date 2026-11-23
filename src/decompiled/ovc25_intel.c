@@ -115,38 +115,35 @@ L_OVC25_5b66_00ff_01D9:
 bool __cdecl16far ovc25_textArena(uint *foundIndexOut,char includeFlag8,uint16_t partyIndex,int x)
 
 {
-  uint uVar1;
-  uint uVar2;
-  uint uVar3;
-  uint uVar4;
-  uint uVar5;
-  int iVar6;
-  uint uVar7;
-  uint16_t uVar8;
-  int in_stack_0000000e;
-  uint uStack_4;
+  uint targetX;
+  uint dist;
+  uint dy;
+  uint signMaskX;
+  uint signMaskY;
+  int entitiesOfs;
+  uint entityIndex;
+  int targetY;
+  uint bestDist;
   
-  uStack_4 = 0xffff;
-  uVar1 = ovr_alignUp4(x,0,0);
-  for (uVar7 = 0; uVar7 < EntityCount; uVar7 = uVar7 + 1) {
-    uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-    if (*(char *)((int)Entities + uVar7 * 0x37 + 0x1a) == (char)partyIndex) {
-      uVar2 = ovr_alignUp4(*(int *)((int)Entities + uVar7 * 0x37),0,0);
-      uVar4 = (int)(uVar2 - uVar1) >> 0xf;
-      uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar6 = (int)Entities;
-      uVar3 = ((entity_t *)iVar6)[uVar7].base.y - in_stack_0000000e;
-      uVar5 = (int)uVar3 >> 0xf;
-      uVar2 = ((uVar2 - uVar1 ^ uVar4) - uVar4) + ((uVar3 ^ uVar5) - uVar5) * 2;
-      if ((((uVar2 != 0) && (uVar2 < uStack_4)) &&
-          ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 2) == 0)) &&
-         ((includeFlag8 != '\0' || ((*(byte *)(iVar6 + uVar7 * 0x37 + 0x33) & 8) == 0)))) {
-        *foundIndexOut = uVar7;
-        uStack_4 = uVar2;
+  bestDist = 0xffff;
+  targetX = ovr_alignUp4(x,0,0);
+  for (entityIndex = 0; entityIndex < EntityCount; entityIndex = entityIndex + 1) {
+    if (*(char *)((int)Entities + entityIndex * 0x37 + 0x1a) == (char)partyIndex) {
+      dist = ovr_alignUp4(*(int *)((int)Entities + entityIndex * 0x37),0,0);
+      signMaskX = (int)(dist - targetX) >> 0xf;
+      entitiesOfs = (int)Entities;
+      dy = ((entity_t *)entitiesOfs)[entityIndex].base.y - targetY;
+      signMaskY = (int)dy >> 0xf;
+      dist = ((dist - targetX ^ signMaskX) - signMaskX) + ((dy ^ signMaskY) - signMaskY) * 2;
+      if ((((dist != 0) && (dist < bestDist)) &&
+          ((*(byte *)(entitiesOfs + entityIndex * 0x37 + 0x33) & 2) == 0)) &&
+         ((includeFlag8 != '\0' || ((*(byte *)(entitiesOfs + entityIndex * 0x37 + 0x33) & 8) == 0)))) {
+        *foundIndexOut = entityIndex;
+        bestDist = dist;
       }
     }
   }
-  return uStack_4 != 0xffff;
+  return bestDist != 0xffff;
 }
 
 
