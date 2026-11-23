@@ -339,8 +339,8 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
   char ok;
   bool bVar3;
   uint16_t roll;
-  char *pcVar5;
-  uint8_t *puVar6;
+  char *textPtr;
+  uint8_t *stashOfs;
   uint uVar7;
   uint16_t uVar8;
   int iVar9;
@@ -364,14 +364,14 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
     if (((agnt_00->flags & 0x200) != 0) && (roll = ovr_randBelow(0xc,0), (roll & 0xff) == 0)) {
       agnt_00->flags = agnt_00->flags & 0xfdff;
       uVar8 = GSavedBlitSeg;
-      pcVar5 = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
+      textPtr = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
                                                             CONCAT12((char)&text,agntSeg)),0);
-      puVar6 = ovr_ovc15_usesStshRealloc(pcVar5,(char)in_DX,uVar8,0,0,0,0,0);
-      pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x8436,_SS),
-                             (char *)CONCAT13((char)((uint)puVar6 >> 8),
-                                              CONCAT12((char)puVar6,0x2410)),(char)puVar6,
+      stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)in_DX,uVar8,0,0,0,0,0);
+      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x8436,_SS),
+                             (char *)CONCAT13((char)((uint)stashOfs >> 8),
+                                              CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,
                              (char)in_DX);
-      ovr_uiNotify(pcVar5,in_DX,(char)in_DX);
+      ovr_uiNotify(textPtr,in_DX,(char)in_DX);
       ovr_ovc41_advanceAnimFrame(agnt_00,agntSeg);
       ovr_attact_usesLDIV_at_2();
     }
@@ -381,14 +381,14 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
          (roll = ovr_randBelow(0x20,0), (roll & 0xff) == 0)))))) {
       agnt_00->flags = agnt_00->flags & 0xfeff;
       uVar8 = GSavedBlitSeg;
-      pcVar5 = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
+      textPtr = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
                                                             CONCAT12((char)&text,agntSeg)),0);
-      puVar6 = ovr_ovc15_usesStshRealloc(pcVar5,(char)in_DX,uVar8,0,0,0,0,0);
-      pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x8451,_SS),
-                             (char *)CONCAT13((char)((uint)puVar6 >> 8),
-                                              CONCAT12((char)puVar6,0x2410)),(char)puVar6,
+      stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)in_DX,uVar8,0,0,0,0,0);
+      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x8451,_SS),
+                             (char *)CONCAT13((char)((uint)stashOfs >> 8),
+                                              CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,
                              (char)in_DX);
-      ovr_uiNotify(pcVar5,in_DX,(char)in_DX);
+      ovr_uiNotify(textPtr,in_DX,(char)in_DX);
       *(undefined1 *)&agnt_00->state = 0;
       ovr_agnt_compute13(agnt_00,agntSeg);
       ovr_attact_usesLDIV_at_2();
@@ -636,12 +636,12 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t *agnt,byte param)
                       ovr_play_sfxU(0x4a,0,uVar10,0,0);
                       uVar12 = agnt_00->strength;
                       uVar8 = GSavedBlitSeg;
-                      pcVar5 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,agntSeg),0);
-                      puVar6 = ovr_ovc15_usesStshRealloc(pcVar5,(char)roll,uVar12,uVar8,0,0,0,0);
-                      pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x846c,_SS),
-                                             (char *)CONCAT22(puVar6,(char *)0x26510),
+                      textPtr = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,agntSeg),0);
+                      stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)roll,uVar12,uVar8,0,0,0,0);
+                      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x846c,_SS),
+                                             (char *)CONCAT22(stashOfs,(char *)0x26510),
                                              (char)roll);
-                      ovr_uiNotify(pcVar5,roll,(char)roll);
+                      ovr_uiNotify(textPtr,roll,(char)roll);
                     }
                   }
                   else {
