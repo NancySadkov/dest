@@ -814,3 +814,50 @@ That leaves the earlier fork:
 Option 1 is bounded: the fixup records are already extracted in
 `doc/fbov_fixups.csv` (515 KB, produced for the FBO view), so the data needed to
 apply them at run time is available.
+
+### Overlay loader: the table is now extracted
+
+`scripts/overlay_blocks.py` derives, from `REBUILT.MAP`, what an overlay loader
+needs for *our* link.  It finds **100 blocks** (a `STUBSEG` stub block and an
+`:OVY` code block for each of O01..O50) totalling **597,720 bytes**:
+
+```
+O01  13D8  file 0x13D8B    332 bytes  STUBSEG
+O01  2282  file 0x22827   5512 bytes  :OVY
+O02  13E4  file 0x13E42    147 bytes  STUBSEG
+O02  25F5  file 0x25F5E  14031 bytes  :OVY
+...
+O09  2DF3  file 0x2DF3..  16268 bytes  :OVY
+```
+
+The table is written to `audit/overlay_blocks.csv`.
+
+Two facts that shape the loader:
+
+* the `STUBSEG` blocks sit **inside the resident image** (offsets around
+  `0x13D8B`, resident load image is `0x22600`), so the `INT 3Fh` stubs are always
+  present;
+* the `:OVY` blocks hold the real code and start beyond the resident image, so
+  they must be read from the EXE on demand.
+
+Stub encoding, from `O09_SEG`: `CD 3F <id> <ofs_lo> <ofs_hi>` - e.g.
+`CD 3F 28 01 00` = overlay id `0x28`, entry offset `0x0001`.
+
+So a minimal loader is:
+
+1. install an `INT 3Fh` handler at startup;
+2. on entry, read `id` and `ofs` from the stub at `CS:IP` (the interrupt returns
+   with `CS:IP` pointing after `CD`), find the `:OVY` block for that id in
+   `audit/overlay_blocks.csv`, read it from the EXE into its segment (open the
+   EXE via the PSP command tail), apply that block's relocations, mark it
+   loaded;
+3. far-jump to `block_segment:ofs`.
+
+The relocation data per block is in our own EXE's TLINK block headers (the
+`fixupsz` field that `doc/fbov_overlays.csv` shows for the original); for our
+link they follow each block's code in the file and can be read the same way, or
+recomputed from `audit/overlay_blocks.csv` plus the link map.
+
+This is a bounded piece of work (a handler plus a block cache), and it is the
+only path to a runnable rebuild now that the non-overlay link is ruled out by
+size.
