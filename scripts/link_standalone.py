@@ -219,8 +219,9 @@ def main():
     if os.path.exists(exe) and os.path.exists(mapf):
         n = 0 if os.environ.get("NO_RELOC_FIX") else add_missing_relocations(exe, mapf)
         print("relocations added for cross-segment far transfers:", n)
-        m = re.search(r"^\s*([0-9A-F]{4}):([0-9A-F]{4})\s+(?:idle\s+)?_STARTX\s*$",
-                      open(mapf, encoding="latin-1", errors="replace").read(), re.M)
+        m = None if os.environ.get("STOCK_STARTUP") else re.search(
+            r"^\s*([0-9A-F]{4}):([0-9A-F]{4})\s+(?:idle\s+)?_STARTX\s*$",
+            open(mapf, encoding="latin-1", errors="replace").read(), re.M)
         if m:
             cs, ip = int(m.group(1), 16), int(m.group(2), 16)
             with open(exe, "r+b") as f:

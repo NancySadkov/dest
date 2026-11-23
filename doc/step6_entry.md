@@ -1361,3 +1361,39 @@ last one reached.
 Note on the earlier "hang": the program is interactive and never exits, so
 `RUN.LOG` stays empty by construction; only `DBG.TXT` (flushed per write) carries
 evidence.
+
+### Using the compiler's own startup instead of a hand-written one
+
+The overlay machinery is compiler-supplied (OVERLAY.LIB + C0), so the rebuild
+should let *C0* do the startup rather than replicate it.  `link_standalone.py`
+now accepts `STOCK_STARTUP=1`, which leaves the EXE header entry at TLINK's own
+value instead of patching it to our recovered `_STARTX`.
+
+```
+STOCK_STARTUP=1  ->  header entry 0000:0000 = C0.ASM's _start (segment 0000,
+                     size 0x297 in the map), i.e. the real Borland startup
+                     that walks _INITSTART.._INITEND including __OvrPrepare
+```
+
+Result of running it:
+
+```
+CODE=3          (Borland abort)
+STRONG.SAV      absent
+```
+
+So C0's startup *does* run the compiler-supplied path, and that path aborts.
+The two plausible aborts in `__OvrPrepare` are:
+
+* `_farmalloc(bufsz*16)` returning 0 - the far heap is not ready at priority 1;
+* `__OVRINIT` returning non-zero - `__EXENAME__` is filled by `__setargv`
+  (priority 16), which runs *after* `__OvrPrepare` (priority 1), so the name may
+  still be empty at that point.
+
+The hand-written `_STARTX` path is kept as the default because it is the one with
+verified behaviour (`A0VOPIH`), and `STOCK_STARTUP=1` is the switch for the
+compiler-supplied route.
+
+The important consequence: **no overlay manager needs to be reversed**.  Both
+routes use `OVERLAY.LIB` as linked; the difference is only which startup calls
+`__OvrPrepare` and with what heap/name state.
