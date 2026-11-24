@@ -980,8 +980,8 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
   int in_CX;
   uint16_t uVar18;
   int iVar19;
-  int iVar20;
-  int iVar21;
+  int leaderPtr;
+  int leaderPtr2;
   int iVar22;
   entity_t *peVar23;
   entity_t *peVar24;
@@ -1302,13 +1302,13 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
           }
         }
         uVar18 = (uint16_t)((ulong)*(uint32_t *)(uVar27 << 2) >> 0x10);
-        iVar20 = (int)*(uint32_t *)(uVar27 << 2);
-        iVar19 = *(int *)(iVar20 + 0x62);
+        leaderPtr = (int)*(uint32_t *)(uVar27 << 2);
+        iVar19 = *(int *)(leaderPtr + 0x62);
         uVar29 = (uint16_t)((ulong)*(uint32_t *)(uVar27 << 2) >> 0x10);
-        iVar21 = (int)*(uint32_t *)(uVar27 << 2);
-        iVar22 = *(int *)(iVar21 + 0x80);
+        leaderPtr2 = (int)*(uint32_t *)(uVar27 << 2);
+        iVar22 = *(int *)(leaderPtr2 + 0x80);
         if ((iVar22 <= iVar19) &&
-           ((iVar22 < iVar19 || (*(uint *)(iVar21 + 0x7e) < *(uint *)(iVar20 + 0x60))))) {
+           ((iVar22 < iVar19 || (*(uint *)(leaderPtr2 + 0x7e) < *(uint *)(leaderPtr + 0x60))))) {
           uVar18 = (uint16_t)((ulong)*(uint32_t *)(uVar27 << 2) >> 0x10);
           iVar19 = (int)*(uint32_t *)(uVar27 << 2);
           uVar16 = *(uint *)(iVar19 + 0x60);
@@ -1435,13 +1435,13 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
           b = CONCAT22((int)((ulong)b >> 0x10),uVar16);
           for (uVar26 = 0; (int)uVar26 < (int)(uint)GLeaderCount; uVar26 = uVar26 + 1) {
             uVar18 = (uint16_t)((ulong)*(uint32_t *)(uVar27 << 2) >> 0x10);
-            iVar20 = (int)*(uint32_t *)(uVar27 << 2);
-            iVar19 = *(int *)(iVar20 + 0x58);
+            leaderPtr = (int)*(uint32_t *)(uVar27 << 2);
+            iVar19 = *(int *)(leaderPtr + 0x58);
             uVar29 = (uint16_t)((ulong)*(uint32_t *)(uVar27 << 2) >> 0x10);
-            iVar21 = (int)*(uint32_t *)(uVar27 << 2);
-            iVar22 = *(int *)(iVar21 + 0x8c);
+            leaderPtr2 = (int)*(uint32_t *)(uVar27 << 2);
+            iVar22 = *(int *)(leaderPtr2 + 0x8c);
             if ((iVar22 <= iVar19) &&
-               ((iVar19 != iVar22 || (*(uint *)(iVar21 + 0x8a) <= *(uint *)(iVar20 + 0x56)))))
+               ((iVar19 != iVar22 || (*(uint *)(leaderPtr2 + 0x8a) <= *(uint *)(leaderPtr + 0x56)))))
             break;
             if (((GLeaderSheets[uVar26])->active != '\0') &&
                (((0 < *(int *)((int)*(uint32_t *)(uVar26 << 2) + 0x54) &&
@@ -1504,13 +1504,13 @@ uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir)
           *(uint16_t *)(iVar19 + 0x56) = 0;
         }
         uVar18 = (uint16_t)((ulong)*(uint32_t *)(uVar27 << 2) >> 0x10);
-        iVar20 = (int)*(uint32_t *)(uVar27 << 2);
-        iVar19 = *(int *)(iVar20 + 0x58);
+        leaderPtr = (int)*(uint32_t *)(uVar27 << 2);
+        iVar19 = *(int *)(leaderPtr + 0x58);
         uVar29 = (uint16_t)((ulong)*(uint32_t *)(uVar27 << 2) >> 0x10);
-        iVar21 = (int)*(uint32_t *)(uVar27 << 2);
-        iVar22 = *(int *)(iVar21 + 0x8c);
+        leaderPtr2 = (int)*(uint32_t *)(uVar27 << 2);
+        iVar22 = *(int *)(leaderPtr2 + 0x8c);
         if ((iVar22 <= iVar19) &&
-           ((iVar22 < iVar19 || (*(uint *)(iVar21 + 0x8a) < *(uint *)(iVar20 + 0x56))))) {
+           ((iVar22 < iVar19 || (*(uint *)(leaderPtr2 + 0x8a) < *(uint *)(leaderPtr + 0x56))))) {
           uVar29 = (uint16_t)((ulong)*(uint32_t *)(uVar27 << 2) >> 0x10);
           iVar19 = (int)*(uint32_t *)(uVar27 << 2);
           uVar18 = *(uint16_t *)(iVar19 + 0x8a);
