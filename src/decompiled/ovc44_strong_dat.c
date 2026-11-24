@@ -173,7 +173,7 @@ void __cdecl16far init_assets(void)
   long *unaff_DI;
   int iVar12;
   uint16_t rleSeg3;
-  undefined1 uVar14;
+  undefined1 resId;
   bool bVar15;
   uint32_t farPtr;
   bool in_stack_00000004;
@@ -406,7 +406,7 @@ void __cdecl16far init_assets(void)
   nbytes.hi = 1;
   ovr_stshReadFile(StshFile,dst,nbytes,0xf);
 }
-    uVar14 = 0;
+    resId = 0;
     close(StshFile);
     MiceCursors[0] = far_from_u32((uint32_t)(func_0x0007ffe0(0)));
     MiceCursors[1] = far_from_u32((uint32_t)(func_0x0007ffe0(0)));
@@ -444,7 +444,7 @@ void __cdecl16far init_assets(void)
     MiceCursors[3].ofs = stsh_store((uint8_t *)pfVar1, (uint16_t)(char)(*(uint16_t *)((uint8_t *)&(tg) + 2)), &stshSegTmp);
     MiceCursors[3].seg = (*(uint16_t *)((uint8_t *)&(tg) + 2));
     ovr_stgFreeTmp(lbmTmp,(char)rleSeg);
-    uVar14 = 0x4c;
+    resId = 0x4c;
     (*(uint16_t *)((uint8_t *)&(tg))) = ovr_grabLbmTR(1);
     asm { mov word ptr [(tg) + 2], dx };
     farPtr = CONCAT22((*(uint16_t *)((uint8_t *)&(tg) + 2)),MiceCursors[3].ofs);
@@ -461,7 +461,7 @@ void __cdecl16far init_assets(void)
       MiceCursors[3].ofs = (uint16_t)farPtr;
       if (0x9d < (int)ii) break;
       if (in_stack_00000004 == false) {
-        farPtr = func_0x0007ffe0(uVar14);
+        farPtr = func_0x0007ffe0(resId);
         segArg = (uint16_t)((ulong)farPtr >> 0x10);
         *(uint16_t *)((int)&LbmBigcomp50x42.seg + cc * 4) = segArg;
         ((far_t far *)&LbmBigcomp50x42 + cc)->ofs = (uint16_t)farPtr;
@@ -470,7 +470,7 @@ void __cdecl16far init_assets(void)
         src_03.seg = ii;
         src_03.ofs = (((stg_tmp_t *)tg)->aptr).seg;
         pfVar1 = ovr_stshRleCut((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,src_03,jj,ii + 0x32,jj + 0x2a,(int16_t)unaff_DI,(char)(ii + 0x32),(char)(jj + 0x2a),0);
-        uVar14 = 0x4c;
+        resId = 0x4c;
         stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
         *(uint16_t *)((int)&LbmBigcomp50x42.seg + cc * 4) = segArg;
         ((far_t far *)&LbmBigcomp50x42 + cc)->ofs = (uint16_t)stored;
@@ -483,14 +483,14 @@ void __cdecl16far init_assets(void)
   }
   if (in_stack_00000004 != false) {
     ovr_stgFreeTmp((stg_tmp_t *)tg,(char)(*(uint16_t *)((uint8_t *)&(tg) + 2)));
-    uVar14 = 0xcb;
+    resId = 0xcb;
     (*(uint16_t *)((uint8_t *)&(tg))) = ovr_grabLbm(508,0,0,0,0);
     farPtr = CONCAT22(rleSeg,MiceCursors[3].ofs);
     (*(uint16_t *)((uint8_t *)&(tg) + 2)) = rleSeg;
   }
   for (cc = 0; MiceCursors[3].ofs = (uint16_t)farPtr, (int)cc < 0xc; cc = cc + 1) {
     if (in_stack_00000004 == false) {
-      farPtr = func_0x0007ffe0(uVar14);
+      farPtr = func_0x0007ffe0(resId);
       segArg = (uint16_t)((ulong)farPtr >> 0x10);
       *(uint16_t *)((int)&timeOfDayGfx[0].seg + cc * 4) = segArg;
       ((far_t far *)timeOfDayGfx + cc)->ofs = (uint16_t)farPtr;
@@ -501,7 +501,7 @@ void __cdecl16far init_assets(void)
       src_04.seg = (int)((long)(int)cc * 0x17) + 6;
       src_04.ofs = (((stg_tmp_t *)tg)->aptr).seg;
       pfVar1 = ovr_stshRleCut((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,src_04,21,iVar12,62,(int16_t)unaff_DI,(char)iVar12,0x3e,0);
-      uVar14 = 0x4c;
+      resId = 0x4c;
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
       *(uint16_t *)((int)&timeOfDayGfx[0].seg + cc * 4) = segArg;
       ((far_t far *)timeOfDayGfx + cc)->ofs = (uint16_t)stored;
@@ -514,7 +514,7 @@ void __cdecl16far init_assets(void)
     MiceCursors[3].ofs = (uint16_t)farPtr;
     if (5 < (int)cc) break;
     if (in_stack_00000004 == false) {
-      farPtr = func_0x0007ffe0(uVar14);
+      farPtr = func_0x0007ffe0(resId);
       segArg = (uint16_t)((ulong)farPtr >> 0x10);
       ((uint16_t *)&blitFrameSeg)[cc * 2] = segArg;
       ((uint16_t *)&blitFrameOfs)[cc * 2] = (int)farPtr;
@@ -525,7 +525,7 @@ void __cdecl16far init_assets(void)
       src_05.seg = (int)((long)(int)cc * 0x17) + 9;
       src_05.ofs = (((stg_tmp_t *)tg)->aptr).seg;
       pfVar1 = ovr_stshRleCut((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,src_05,72,iVar12,75,(int16_t)unaff_DI,(char)iVar12,0x4b,0);
-      uVar14 = 0x4c;
+      resId = 0x4c;
       stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
       ((uint16_t *)&blitFrameSeg)[cc * 2] = segArg;
       ((uint16_t *)&blitFrameOfs)[cc * 2] = (uint16_t)stored;
@@ -534,12 +534,12 @@ void __cdecl16far init_assets(void)
     cc = cc + 1;
   }
   if (in_stack_00000004 == false) {
-    BldGfxNormal[4] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[7] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[10] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxRuin[4] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxRuin[7] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxRuin[10] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
+    BldGfxNormal[4] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[7] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[10] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxRuin[4] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxRuin[7] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxRuin[10] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
     stshStubifyBld(4);
     stshStubifyBld(7);
     stshStubifyBld(10);
@@ -547,12 +547,12 @@ void __cdecl16far init_assets(void)
     stshStubifyBld(0x10);
     stshStubifyBld(0x13);
     stshStubifyBld(0x16);
-    BldGfxNormal[0x4c] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x4f] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x52] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxRuin[0x4c] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxRuin[0x4f] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxRuin[0x52] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
+    BldGfxNormal[0x4c] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x4f] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x52] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxRuin[0x4c] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxRuin[0x4f] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxRuin[0x52] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
   }
   else {
     ovr_stgFreeTmp((stg_tmp_t *)tg,(char)(*(uint16_t *)((uint8_t *)&(tg) + 2)));
@@ -2553,13 +2553,13 @@ void __cdecl16far init_assets(void)
     BldGfxRuin[0x1b4].seg = stshSegTmp;
     ovr_stgFreeTmp((stg_tmp_t *)tg,(char)(*(uint16_t *)((uint8_t *)&(tg) + 2)));
   }
-  uVar14 = 0x4c;
+  resId = 0x4c;
   ovr_stshStubifyCopy1to0(0x8f);
   iVar12 = 0x92;
   rleSeg = rleSeg2;
   if (in_stack_00000004 != false) {
     (*(uint16_t *)((uint8_t *)&(tg))) = ovr_grabLbm(17,0,0,0,0);
-    uVar14 = 0xa6;
+    resId = 0xa6;
     pixels.seg = (((stg_tmp_t *)tg)->aptr).seg;
     pixels.ofs = (&((stg_tmp_t *)tg)->aptr)->ofs;
     rleSeg = rleSeg2;
@@ -2570,7 +2570,7 @@ void __cdecl16far init_assets(void)
     for (cc = 0; (int)cc < 2; cc = cc + 1) {
       if ((cc != 0) || (iVar3 != 0)) {
         if (in_stack_00000004 == false) {
-          farPtr = func_0x0007ffe0(uVar14);
+          farPtr = func_0x0007ffe0(resId);
           *(uint16_t *)((int)&BldGfxNormal[0].seg + iVar12 * 0xc) = (int)((ulong)farPtr >> 0x10);
           ((far_t far *)BldGfxNormal + iVar12 * 3)->ofs = (uint16_t)farPtr;
         }
@@ -2584,7 +2584,7 @@ void __cdecl16far init_assets(void)
           asm { mov rleSeg,dx };
           asm { mov rleSeg3,dx };
           asm { mov rleSeg2,dx };
-          uVar14 = 0x4c;
+          resId = 0x4c;
           stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)segArg);
           *(uint16_t *)((int)&BldGfxNormal[0].seg + iVar12 * 0xc) = segArg;
           ((far_t far *)BldGfxNormal + iVar12 * 3)->ofs = (uint16_t)stored;
@@ -2602,9 +2602,9 @@ void __cdecl16far init_assets(void)
     }
   }
   if (in_stack_00000004 == false) {
-    BldGfxNormal[0x1c5] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1c6] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1c7] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
+    BldGfxNormal[0x1c5] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1c6] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1c7] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
   }
   else {
     ovr_stgFreeTmp((stg_tmp_t *)tg,(char)(*(uint16_t *)((uint8_t *)&(tg) + 2)));
@@ -2624,7 +2624,7 @@ void __cdecl16far init_assets(void)
     src_14.ofs = (((stg_tmp_t *)tg)->aptr).seg;
     BldGfxNormal[0x1c6].seg = stshSegTmp;
     pfVar1 = ovr_stshRleCut((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,src_14,49,79,55,(int16_t)unaff_DI,0x4f,0x37,0);
-    uVar14 = 0x4c;
+    resId = 0x4c;
     stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)rleSeg2);
     BldGfxNormal[0x1c7].seg = rleSeg2;
     BldGfxNormal[0x1c7].ofs = (uint16_t)stored;
@@ -2637,9 +2637,9 @@ void __cdecl16far init_assets(void)
   BldGfxNormal[0x1cb] = BldGfxNormal[0x1c5];
   BldGfxNormal[0x1cc] = BldGfxNormal[0x1c6];
   if (in_stack_00000004 == false) {
-    BldGfxNormal[0x1ce] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1cf] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1d0] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
+    BldGfxNormal[0x1ce] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1cf] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1d0] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
   }
   else {
     src_15.seg = 0;
@@ -2656,7 +2656,7 @@ void __cdecl16far init_assets(void)
     src_17.ofs = (((stg_tmp_t *)tg)->aptr).seg;
     BldGfxNormal[0x1cf].seg = stshSegTmp;
     pfVar1 = ovr_stshRleCut((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,src_17,49,179,55,(int16_t)unaff_DI,0xb3,0x37,0);
-    uVar14 = 0x4c;
+    resId = 0x4c;
     stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)rleSeg);
     BldGfxNormal[0x1d0].seg = rleSeg;
     BldGfxNormal[0x1d0].ofs = (uint16_t)stored;
@@ -2668,9 +2668,9 @@ void __cdecl16far init_assets(void)
   BldGfxNormal[0x1d4] = BldGfxNormal[0x1ce];
   BldGfxNormal[0x1d5] = BldGfxNormal[0x1cf];
   if (in_stack_00000004 == false) {
-    BldGfxNormal[0x1d7] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
+    BldGfxNormal[0x1d7] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
     BldGfxNormal[0x1d8] = BldGfxNormal[0x1d2];
-    BldGfxNormal[0x1d9] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
+    BldGfxNormal[0x1d9] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
   }
   else {
     src_18.seg = 0;
@@ -2684,7 +2684,7 @@ void __cdecl16far init_assets(void)
     BldGfxNormal[0x1d7].seg = stshSegTmp;
     BldGfxNormal[0x1d8] = BldGfxNormal[0x1d2];
     pfVar1 = ovr_stshRleCut((far_t far *)(&((stg_tmp_t *)tg)->aptr)->ofs,src_19,49,279,55,(int16_t)unaff_DI,0x17,0x37,0);
-    uVar14 = 0x4c;
+    resId = 0x4c;
     stored = ovr_stshStoreFile((uint8_t *)pfVar1,(char)rleSeg2);
     BldGfxNormal[0x1d9].seg = rleSeg2;
     BldGfxNormal[0x1d9].ofs = (uint16_t)stored;
@@ -2696,21 +2696,21 @@ void __cdecl16far init_assets(void)
   BldGfxNormal[0x1db] = BldGfxNormal[0x1d8];
   BldGfxNormal[0x1de] = BldGfxNormal[0x1d8];
   if (in_stack_00000004 == false) {
-    BldGfxNormal[0x1e0] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1e1] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1e5] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
+    BldGfxNormal[0x1e0] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1e1] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1e5] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
     BldGfxNormal[0x1e3] = BldGfxNormal[0x1e0];
     BldGfxNormal[0x1e4] = BldGfxNormal[0x1e1];
     BldGfxNormal[0x1e2] = BldGfxNormal[0x1e5];
-    BldGfxNormal[0x1e6] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1e7] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1e8] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1ec] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1ed] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1ee] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1f2] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[499] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[500] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
+    BldGfxNormal[0x1e6] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1e7] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1e8] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1ec] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1ed] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1ee] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1f2] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[499] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[500] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
   }
   else {
     rleSeg = BldGfxNormal[0x1d9].ofs;
@@ -2789,7 +2789,7 @@ void __cdecl16far init_assets(void)
                               ,(int16_t)unaff_DI,0,0xd);
     asm { mov rleSeg,dx };
     BldGfxNormal[500].ofs = stsh_store((uint8_t *)pfVar1, (uint16_t)(char)rleSeg, &stshSegTmp);
-    uVar14 = 0x4c;
+    resId = 0x4c;
     BldGfxNormal[500].seg = stshSegTmp;
     ovr_stgFreeTmp((stg_tmp_t *)tg,(char)(*(uint16_t *)((uint8_t *)&(tg) + 2)));
   }
@@ -2809,12 +2809,12 @@ void __cdecl16far init_assets(void)
   BldGfxNormal[0x1ea] = BldGfxNormal[0x1e7];
   BldGfxNormal[0x1eb] = BldGfxNormal[0x1e8];
   if (in_stack_00000004 == false) {
-    BldGfxNormal[0x1f9] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1fc] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxNormal[0x1ff] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxRuin[0x1f9] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxRuin[0x1fc] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
-    BldGfxRuin[0x1ff] = far_from_u32((uint32_t)(func_0x0007ffe0(uVar14)));
+    BldGfxNormal[0x1f9] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1fc] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxNormal[0x1ff] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxRuin[0x1f9] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxRuin[0x1fc] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
+    BldGfxRuin[0x1ff] = far_from_u32((uint32_t)(func_0x0007ffe0(resId)));
   }
   else {
     rleSeg = BldGfxNormal[0x1ee].seg;
