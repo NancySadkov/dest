@@ -162,14 +162,14 @@ def main():
     # heap variables, _terminate) that CM.LIB and OVERLAY.LIB expect.  The
     # original's entry is startx (CRTL), not C0's _startup, so the linked EXE's
     # entry is moved to _STARTX below.
-    rsp = ("D:\\LIB\\C0M.OBJ " + " ".join(res) + " /o " + " ".join(ovl) +
+    rsp = ((os.environ.get("C0OBJ") or "D:\\LIB\\C0M.OBJ") + " " + " ".join(res) + " /o " + " ".join(ovl) +
            " /m /s" + ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\OVERLAY.LIB D:\\LIB\\CM.LIB")
     if not os.environ.get("WITH_OVERLAY"):
         # Ordinary (non-VROOMM) link - now the default.  With /o the generated
         # thunks bind to TLINK's resident STUBSEG copies, whose bodies are
         # INT 3Fh stubs; without a VROOMM manager that never returns, which is
         # exactly where the rebuild used to stop (doc/step6_entry.md).
-        rsp = ("D:\\LIB\\C0M.OBJ " + " ".join(res) + " " + " ".join(ovl) +
+        rsp = ((os.environ.get("C0OBJ") or "D:\\LIB\\C0M.OBJ") + " " + " ".join(res) + " " + " ".join(ovl) +
                " /m /s" + ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\CM.LIB D:\\LIB\\EMU.LIB")
     with open(os.path.join(BUILDSRC, "LINK.RSP"), "w", encoding="ascii",
               newline="\r\n") as f:

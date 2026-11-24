@@ -3251,3 +3251,33 @@ utility routines into their own module so `crtl.c` can be dropped entirely), not
 rename.  Tree restored to the working link.
 
   build 64/64 clean; link 0 errors; grep_checks 51,169; compare_state 1,627/0/0
+
+## Instrumented C0 from its shipped source: startup never reaches `call _main`
+
+`tools/BC30/LIB/STARTUP/C0.ASM` is the real startup source (`STARTX PROC NEAR` at line
+106, `call _main` at line 409) and Borland's own recipe assembles it:
+
+```
+TASM /M /MX /Q /T /D__MEDIUM__ /IE:\LIB\STARTUP c0prb.asm
+```
+
+An instrumented copy with a code-segment marker (`push cs / pop ds / db 'S:$' /
+int 21h`) immediately **before** `call _main` assembles to `C0PRB.OBJ` and links in
+place of `C0M.OBJ` (`link_standalone.py` now honours a `C0OBJ` override):
+
+```
+link: entry left at C0's _startup · REBUILT.EXE 546,752
+run:  OUT.TXT = ''      reached call _main: False
+```
+
+So with the stock startup in the image, control **never reaches C0's call to `main`** -
+the stall is inside C0 before that call, not in `main` and not in the call frame.
+
+A follow-up probe with the marker at `STARTX`'s first instruction produced no output
+either, but the assembled object did not change size, so that run is not trustworthy
+and must be repeated with the TASM log captured.
+
+Tree restored (instrumented object removed, default link rebuilt); gates green.
+
+  grep_checks 51,094; compare_state 1,627/0/0; diff_dgroup 972/1,868;
+  compare_runtime 1,543/13
