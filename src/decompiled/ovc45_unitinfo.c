@@ -3865,7 +3865,7 @@ uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
   uint32_t uVar2;
   uint uVar3;
   byte bVar5;
-  uint16_t uVar4;
+  uint16_t randDraw;
   uint16_t uVar6;
   
   uVar6 = (uint16_t)((ulong)Entities >> 0x10);
@@ -3876,9 +3876,9 @@ uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
     uVar2 = *(uint32_t *)((uint)AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) << 2);
     cVar1 = *(char *)((int)uVar2 + 0x2f);
     if (cVar1 == '\x04') {
-      uVar4 = ovr_randBelow(5,0);
-      bVar5 = (byte)(uVar4 >> 8);
-      if ((byte)uVar4 < 4) {
+      randDraw = ovr_randBelow(5,0);
+      bVar5 = (byte)(randDraw >> 8);
+      if ((byte)randDraw < 4) {
         uVar3 = CONCAT11(bVar5,1);
       }
       else {
@@ -3886,9 +3886,9 @@ uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
       }
     }
     else if (cVar1 == '\x05') {
-      uVar4 = ovr_randBelow(3,0);
-      bVar5 = (byte)(uVar4 >> 8);
-      if ((char)uVar4 == '\0') {
+      randDraw = ovr_randBelow(3,0);
+      bVar5 = (byte)(randDraw >> 8);
+      if ((char)randDraw == '\0') {
         uVar3 = CONCAT11(bVar5,1);
       }
       else {
@@ -3896,9 +3896,9 @@ uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
       }
     }
     else {
-      uVar4 = ovr_randBelow(4,0);
-      bVar5 = (byte)(uVar4 >> 8);
-      if ((byte)uVar4 < 2) {
+      randDraw = ovr_randBelow(4,0);
+      bVar5 = (byte)(randDraw >> 8);
+      if ((byte)randDraw < 2) {
         uVar3 = CONCAT11(bVar5,1);
       }
       else {
