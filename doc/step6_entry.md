@@ -2955,3 +2955,37 @@ Remaining suspects, in `startx` order:
 
 Next: put markers between those statements (they can reuse the same asm routine
 pattern), and the first one that is missing names the defect.
+
+## Bisection inside `startx`: the stop is between the DS switch and `SaveVectors`
+
+Four markers (code-segment strings, same proven pattern) were placed in `startx`:
+
+| marker | position | printed |
+|---|---|---|
+| S1 (earlier probe) | after the DS switch, before the PSP reads | **yes** |
+| A | after `SaveVectors()` | **no** |
+| B | after `_brklvl` (heap setup) | no |
+| C | before the stack switch (i.e. after the AH=4Ah shrink) | no |
+| D | after the stack switch | no |
+
+`OUT.TXT` is empty, so even A is not reached.  That narrows the fault to the five
+statements between S1 and A (`crtl.c:61..66`):
+
+```
+uVar17 = *(uint16_t far *)MK_FP(psp, 0x2c);   /* environment segment */
+iVar10 = *(uint16_t far *)MK_FP(psp, 0x02);   /* top of memory */
+_envseg_at_ = uVar17;
+_heaptop.seg = iVar10;
+asm { mov ah,0x30; int 21h; mov word ptr DosVersion, ax };
+SaveVectors();
+```
+
+The two `MK_FP` reads and the `AH=30h` call cannot hang; `SaveVectors()` - the
+recovered routine that installs vectors 0/4/5/6 through `INT 21h AH=25h` - is the only
+candidate, and a wrong `DS:DX` there would hand DOS a bad handler (a divide-error
+vector pointing at garbage kills the program on the first hardware interrupt of any
+kind).
+
+Next: put one marker immediately **before** `SaveVectors()` and one **after** it (the
+latter already exists as A) to confirm, then inspect `SaveVectors()` against the
+original's `1000:017a` and fix its pointer setup.
