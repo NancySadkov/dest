@@ -867,30 +867,30 @@ bool __cdecl16far uiPickGender(char_sheet_t *sheet)
 undefined1 __cdecl16far manage_abilityModifier(byte abilityScore)
 
 {
-  undefined1 uVar1;
+  undefined1 modifier;
   
   if (abilityScore < 4) {
-    uVar1 = 0xfd;
+    modifier = 0xfd;
   }
   else if (abilityScore < 6) {
-    uVar1 = 0xfe;
+    modifier = 0xfe;
   }
   else if (abilityScore < 9) {
-    uVar1 = 0xff;
+    modifier = 0xff;
   }
   else if (abilityScore < 0xd) {
-    uVar1 = 0;
+    modifier = 0;
   }
   else if (abilityScore < 0x10) {
-    uVar1 = 1;
+    modifier = 1;
   }
   else if (abilityScore < 0x12) {
-    uVar1 = 2;
+    modifier = 2;
   }
   else {
-    uVar1 = 3;
+    modifier = 3;
   }
-  return uVar1;
+  return modifier;
 }
 
 
