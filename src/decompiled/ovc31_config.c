@@ -20,7 +20,7 @@ int __cdecl16far creat_wait_unlock(char *filename)
 
   do {
     ioErrorHndlrInstall();
-    handle = _creat((char far *)filename,0);
+    handle = _creat(filename,0);
     ioerr = ioErrorHndlrUninstall();
     if (handle != 0xffff) {
       return handle;
@@ -44,7 +44,7 @@ int __cdecl16far file_open_rdonly(char *filename)
   do {
     ioErrorHndlrInstall();
                     /* O_RDONLY|O_DENYNONE */
-    handle = _open((char far *)filename,0x41);
+    handle = _open(filename,0x41);
     hwerr = ioErrorHndlrUninstall();
     if (handle != 0xffff) {
       return handle;
@@ -79,39 +79,47 @@ bool __cdecl16far ovc31_fileExists(char *filename)
 bool __cdecl16far write_game_cfg(char sfx,char mus,char irq)
 
 {
-  int iVar1;
-  size_t sVar2;
-  uint16_t sz;
-  uint16_t l;
-  size_t sVar3;
+  /* Recovered, 6257:009F (file 0x5440F): the original keeps a one-line scratch
+     buffer at DGROUP:0x5E2C holding "0\r\n\0"; it stores each value in byte 0,
+     calls strlen (3 bytes: value + CRLF) and write()s that many bytes, three times
+     (sfx, mus, irq at [bp+6], [bp+8], [bp+0xA]).
+
+     The decompiled form used the absolute address 0x5e2c, which in this rebuild is
+     unrelated memory - and write() now takes a near buffer, so the scratch line has
+     to be DGROUP-resident. */
+  int h;
+  size_t n;
+  size_t w;
+  static char line[4] = { '0', '\r', '\n', '\0' };
 
   mkdir("strong.sav");
-  iVar1 = creat_wait_unlock((char *)"strong.sav\\game.cfg");
-  if (-1 < iVar1) {
-    cRam00005e2c = sfx;
-    sVar2 = strlen((char *)0x5e2c);
-    sz = write(iVar1,(void *)0x5e2c,sVar2);
-    l = strlen((char *)0x5e2c);
-    if (sz == l) {
-      cRam00005e2c = mus;
-      sVar2 = strlen((char *)0x5e2c);
-      sVar2 = write(iVar1,(void *)0x5e2c,sVar2);
-      sVar3 = strlen((char *)0x5e2c);
-      if (sVar2 == sVar3) {
-        cRam00005e2c = irq;
-        sVar2 = strlen((char *)0x5e2c);
-        sVar2 = write(iVar1,(void *)0x5e2c,sVar2);
-        sVar3 = strlen((char *)0x5e2c);
-        iVar1 = close(iVar1);
-        if (sVar2 == sVar3 && (char)iVar1 == '\0') {
-          clrscr();
-          return true;
-        }
-      }
-    }
+  h = creat_wait_unlock("strong.sav\\game.cfg");
+  if (h < 0) {
+    return false;
   }
-  return false;
+  line[0] = sfx;
+  n = strlen(line);
+  w = write(h,line,n);
+  if (w != n) {
+    return false;
+  }
+  line[0] = mus;
+  n = strlen(line);
+  w = write(h,line,n);
+  if (w != n) {
+    return false;
+  }
+  line[0] = irq;
+  n = strlen(line);
+  w = write(h,line,n);
+  h = close(h);
+  if (w != n || (char)h != '\0') {
+    return false;
+  }
+  clrscr();
+  return true;
 }
+
 
 
 
