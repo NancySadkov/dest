@@ -12,14 +12,15 @@
 int __cdecl16far creat_wait_unlock(char *filename)
 
 {
+  /* Recovered, 6257:0000: ioErrorHndlrInstall(); _creat(path, 0); retry while the
+     deferred error is 0x20 (sharing violation); returns the handle or -1.  The
+     decompiled form passed an uninitialised word as the attribute. */
   uint16_t handle;
   uint16_t ioerr;
-  int unaff_SI;
-  
+
   do {
     ioErrorHndlrInstall();
-                    /* mode 0 = create regular file */
-    handle = _creat((char *)((ulong)filename & 0xffff),unaff_SI);
+    handle = _creat((char far *)filename,0);
     ioerr = ioErrorHndlrUninstall();
     if (handle != 0xffff) {
       return handle;
@@ -35,15 +36,15 @@ int __cdecl16far creat_wait_unlock(char *filename)
 int __cdecl16far file_open_rdonly(char *filename)
 
 {
+  /* Recovered, 6257:003B: ioErrorHndlrInstall(); _open(path, 0x41); retry while the
+     deferred error is 0x20.  The decompiled form built the path with CONCAT22(). */
   uint16_t handle;
   uint16_t hwerr;
-  char *in_stack_00000004;
-  
+
   do {
     ioErrorHndlrInstall();
-                    /* O_RDONLY|O_DENYNONE
-                       O_DENYNONE = Allow concurrent access  */
-    handle = _open((char *)CONCAT22((char *)filename,in_stack_00000004),0x41);
+                    /* O_RDONLY|O_DENYNONE */
+    handle = _open((char far *)filename,0x41);
     hwerr = ioErrorHndlrUninstall();
     if (handle != 0xffff) {
       return handle;
@@ -63,9 +64,8 @@ bool __cdecl16far ovc31_fileExists(char *filename)
 
 {
   int handle;
-  uint16_t unaff_SI;
-  
-  handle = file_open_rdonly((char *)CONCAT22(unaff_SI,(char *)filename));
+
+  handle = file_open_rdonly(filename);
   if (-1 < handle) {
     close(handle);
   }
@@ -84,10 +84,9 @@ bool __cdecl16far write_game_cfg(char sfx,char mus,char irq)
   uint16_t sz;
   uint16_t l;
   size_t sVar3;
-  uint unaff_SI;
-  
+
   mkdir("strong.sav");
-  iVar1 = creat_wait_unlock("strong.sav\\game.cfg");
+  iVar1 = creat_wait_unlock((char *)"strong.sav\\game.cfg");
   if (-1 < iVar1) {
     cRam00005e2c = sfx;
     sVar2 = strlen((char *)0x5e2c);
@@ -121,23 +120,20 @@ bool __cdecl16far write_game_cfg(char sfx,char mus,char irq)
 char __cdecl16far read_cfg(int handle)
 
 {
-  uint16_t nread;
-  int iVar1;
-  uint16_t rdsz;
-  uint unaff_SI;
-  uint8_t tmp;
+  /* Recovered, 6257:01CC: read one byte into b; then read one byte at a time until
+     the newline; return b (0 on any short read).  The decompiled form read into
+     SS:0001 because the buffer argument had been lost. */
   char b;
-  
-  nread = read(handle,(void *)CONCAT22(1,_SS),unaff_SI);
-  if (nread == 1) {
-    do {
-      iVar1 = read(handle,(void *)CONCAT22(1,_SS),unaff_SI);
-      if (iVar1 != 1) goto return_zero;
-    } while (tmp != 0xa);
+  char tmp;
+
+  if (read(handle,(void far *)MK_FP(_SS,(uint16_t)&b),1) != 1) {
+    return '\0';
   }
-  else {
-return_zero:
-    b = '\0';
+  while (read(handle,(void far *)MK_FP(_SS,(uint16_t)&tmp),1) == 1) {
+    if (tmp == '\n') break;
+  }
+  if (tmp != '\n') {
+    return '\0';
   }
   return b;
 }
@@ -145,72 +141,6 @@ return_zero:
 
 
 /* 6257:021e */
-
-byte __cdecl16far is_printable(char *buf,char c)
-
-{
-  uint8_t r;
-  char in_stack_00000008;
-  
-  if ((((((((((byte *)_ctype + 1)[in_stack_00000008] & 0xe) == 0) && (in_stack_00000008 != ':')) &&
-         (in_stack_00000008 != '.')) && ((in_stack_00000008 != '\\' && (in_stack_00000008 != '}'))))
-       && (((in_stack_00000008 != '!' && ((in_stack_00000008 != '@' && (in_stack_00000008 != '#'))))
-           && (in_stack_00000008 != '$')))) &&
-      ((((in_stack_00000008 != '%' && (in_stack_00000008 != '^')) && (in_stack_00000008 != '&')) &&
-       (((in_stack_00000008 != '(' && (in_stack_00000008 != ')')) &&
-        ((in_stack_00000008 != '-' && ((in_stack_00000008 != '_' && (in_stack_00000008 != '{')))))))
-       ))) && ((in_stack_00000008 != '}' &&
-               ((in_stack_00000008 != '~' && (in_stack_00000008 != '`')))))) {
-    r = 0;
-  }
-  else {
-    r = 0x1;
-  }
-  return r;
-}
-
-
-
-/* 6257:029f */
-
-void __cdecl16far input_folder_name(char *result)
-
-{
-  byte bVar1;
-  uint16_t key;
-  uint16_t len;
-  uint8_t ascii;
-  
-  len = 0;
-  *result = '\0';
-  while( true ) {
-    key = ovr_biosReadKey();
-    if (key == 0x11b) {
-      printf("\n");
-                    /* WARNING: Subroutine does not return */
-      exit(0);
-    }
-    if (key == 0x1c0d) break;
-    if ((key == 0xe08) && (0 < (int)len)) {
-      printf("\b \b");
-      ((char *)result)[len - 1] = '\0';
-      return;
-    }
-    if (((int)len < 0x41) &&
-       (bVar1 = is_printable((char *)result,(char)((ulong)result >> 0x10)), bVar1 != 0)) {
-      printf("%c");
-      ascii = (uint8_t)key;
-      ((char *)result)[len] = ascii;
-      len = len + 1;
-      ((char *)result)[len] = '\0';
-    }
-  }
-  return;
-}
-
-
-
-/* 6257:0345 */
 
 byte __cdecl16far init_strong_sav(void)
 
@@ -572,24 +502,39 @@ done:
 void __cdecl16far init_check_mem(void)
 
 {
-  uint16_t smem;
-  int iVar1;
-  far_t lmem_without_psp;
-  char buf [80];
-  long lmem;
-  uint16_t himem;
-  
-  lmem_without_psp.seg = 0;
-  lmem_without_psp.ofs = (uint16_t)LXLSH_at_((long *)(*(uint16_t *)((uint8_t *)&(buf))),(*(uint32_t *)((uint8_t *)&(buf) + 2)),buf[6]);
-  iVar1 = lmem_without_psp.seg + (0xfeff < lmem_without_psp.ofs);
-  if ((7 < iVar1) && ((iVar1 != 8 || (0xed27 < lmem_without_psp.ofs + 0x100)))) {
-    return;
-  }
-  ovr_litoa10(buf,CONCAT22(lmem_without_psp.ofs + 0x100,_SS),iVar1,0);
-  printf("Largest executable program size is only %s bytes.\n");
-  printf("Stronghold requires 585,000 bytes.\n");
+  /* Recovered from the original, 6257:0A81 / file offset 0x54DF1 (123 bytes):
+
+         mov es, [0x7b]          ; ES = PSP segment (DGROUP:0x007b)
+         mov ax, es:[2]          ; top-of-memory paragraph
+         sub ax, [0x7b]          ; paragraphs from the PSP to the top
+         inc ax
+         xor dx, dx
+         mov cl, 4
+         lcall 0:0x0a72          ; (paragraphs << 4) = bytes
+         add ax, 0x0100
+         adc dx, 0
+         cmp dx, 8 ; jl fail ; jne ok ; cmp ax, 0xED28 ; jb fail
+
+     i.e. the machine must offer 0x8ED28 = 585,000 bytes from the PSP to the top of
+     memory.  The decompiled form instead fed an uninitialised local to LXLSH_at_, so
+     the test compared garbage and the program took the abort path below. */
+  char buf [0x56];
+  uint16_t topSeg;
+  uint16_t paras;
+  uint32_t avail;
+
+  topSeg = *(uint16_t far *)MK_FP(_psp, 2);
+  paras = (uint16_t)(topSeg - _psp) + 1;
+  avail = ((uint32_t)paras << 4) + 0x100;
+  if (avail < 0x8ED28UL) {
+    /* litoa10's first argument is a far pointer here: the original pushes ss and the
+       buffer offset separately. */
+    litoa10((char *)(char far *)buf, (long)avail, 0, 0);
+    printf("Largest executable program size is only %s bytes.\n");
+    printf("Stronghold requires 585,000 bytes.\n");
                     /* WARNING: Subroutine does not return */
-  exit(0x84);
+    exit(0x84);
+  }
 }
 
 

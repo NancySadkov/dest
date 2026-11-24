@@ -3377,3 +3377,70 @@ computation, so it must be recovered from the disassembly rather than guessed.
 So step 6's comparison target is the text configuration the original writes (and any
 save files beside it), not a binary blob.  The rebuild must produce the same directory
 and contents from the same key sequence.
+
+## init_check_mem recovered from the original; the game now reaches config file I/O
+
+### Locating original code without an overlay table
+
+`audit/functions.tsv` gives `6257:0a81 OVC31 init_check_mem 123`.  Overlay blocks have
+no exported file-offset table, but the two message strings it prints live in DGROUP at
+`audit/dgroup_2410.bin` offsets `0x6158` and `0x618b`, and the EXE contains exactly one
+reference to each - `0x54e47` and `0x54e54`, both past the resident image.  That fixes
+the function, and with it the segment base for OVC31:
+
+```
+file offset = 0x54370 + offset_in_6257
+```
+
+### The real check
+
+```
+54DF1  push bp / mov bp,sp / sub sp,0x56
+54DF7  mov es,[0x7b]        ; ES = PSP segment (DGROUP:0x007b)
+54DFB  mov ax,es:[2]        ; top-of-memory paragraph
+54E05  sub ax,[0x7b] / inc ax
+54E0A  xor dx,dx / mov cl,4 / lcall LXSH      ; (top - psp + 1) << 4
+54E13  add ax,0x100 / adc dx,0
+54E1F  cmp dx,8 / jl fail / jne ok / cmp ax,0xED28 / jb fail
+```
+
+so the requirement is `(top - psp + 1) * 16 + 0x100 >= 0x8ED28` = **585,000 bytes**.
+`init_check_mem` now implements exactly that; the decompiled form had fed an
+uninitialised local to `LXLSH_at_`, so the test compared garbage.
+
+### Config file routines recovered from the same block
+
+`file_open_rdonly` built its path with `CONCAT22(filename, in_stack_...)` and
+`read_cfg` read into `SS:0001`; both were unusable.  Recovered from
+`6257:0000` / `6257:003b` / `6257:01cc` in the EXE:
+
+* `creat_wait_unlock(path)` -> `ioErrorHndlrInstall(); _creat(path, 0); ...` retry on
+  deferred error `0x20`;
+* `file_open_rdonly(path)` -> `_open(path, 0x41)` in the same retry loop;
+* `read_cfg(handle)` -> read one byte, then one byte at a time up to the newline,
+  return the first byte (0 on short read).
+
+Also: Borland's `IO.H` declares `_open`, `_creat`, `mkdir`, `unlink` with `char _FAR *`
+paths, so the prototypes in `st_functions.h` were changed to match and the call sites
+pass far pointers.  Before that, the segment came off the wrong stack slot.
+
+### Measured effect
+
+```
+before: MK6 reached, MK10.. missing, init_base stalls in init_check_mem
+after : init_check_mem returns, init_strong_sav runs, and the game OPENS
+        strong.sav\game.cfg   (no temp file is created any more)
+```
+
+With a fresh directory it also creates `STRONG.SAV` (the observed directory and its
+`strong.$$$` temp), i.e. the rebuild now performs real game file I/O.
+
+### New stall: the first `read()` inside read_cfg
+
+Markers 40/42 fire (entry, just before the first `read`), 41 (`return b`) never does.
+So the program dies or hangs inside the CRT's `read()` when handed a far pointer to a
+**stack** buffer, `MK_FP(_SS, &b)`.  That is the next defect to isolate - it is a
+runtime/ABI question, not a recovered-body question.
+
+  grep_checks 51,070 -> 51,028; build 64/64 clean; link 0 errors
+  compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13
