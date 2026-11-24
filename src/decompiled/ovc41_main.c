@@ -1070,7 +1070,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
   uint16_t uStack_18;
   uint16_t uStack_16;
   undefined1 auStack_14 [2];
-  uint16_t uStack_12;
+  uint16_t fmtOfs;
   uint16_t uStack_10;
   byte bVar17;
   undefined1 uVar18;
@@ -1145,7 +1145,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
           ovc39_loadArchiveEntry(9);
         }
         ovc39_lordOrLady();
-        uStack_12 = 0x938f;
+        fmtOfs = 0x938f;
         uStack_10 = uVar16;
         textPtr = ovr_stsprintf(acStack_2cc);
         asm { mov backdropSeg,dx };
@@ -1165,7 +1165,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
            ((BuildingTypes[bVar19].flags2 & 2) != 0)) {
           ovc39_loadArchiveEntry(10);
           ovc39_lordOrLady();
-          uStack_12 = 0x93f9;
+          fmtOfs = 0x93f9;
           uStack_10 = uVar16;
           textPtr = ovr_stsprintf(acStack_2cc);
           asm { mov in_DX,dx };
@@ -1183,7 +1183,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
            ((BuildingTypes[bVar19].flags2 & 0x20) != 0)) {
           ovc39_loadArchiveEntry(0xb);
           ovc39_lordOrLady();
-          uStack_12 = 0x9463;
+          fmtOfs = 0x9463;
           uStack_10 = uVar16;
           textPtr = ovr_stsprintf(acStack_2cc);
           asm { mov in_DX,dx };
@@ -1208,7 +1208,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
             ovc39_loadArchiveEntry(0xc);
             ovc39_lordOrLady();
             uStack_10 = 0x23f1;
-            uStack_12 = 0x94c9;
+            fmtOfs = 0x94c9;
             textPtr = ovr_stsprintf(acStack_2cc);
             segLo = (undefined1)in_DX;
             segHi = (undefined1)((uint)in_DX >> 8);
@@ -1225,7 +1225,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
            ((BuildingTypes[bVar19].flags2 & 0x400) != 0)) {
           ovc39_loadArchiveEntry(0xd);
           ovc39_lordOrLady();
-          uStack_12 = 0x9533;
+          fmtOfs = 0x9533;
           uStack_10 = uVar16;
           textPtr = ovr_stsprintf(acStack_2cc);
           asm { mov backdropSeg,dx };
@@ -1438,7 +1438,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
               if (((bVar22 != 0) && (bVar19 <= bVar22)) && (bVar17 <= bVar22)) {
                 ovc39_loadArchiveEntry(bVar22 + 0x12);
                 ovc39_lordOrLady();
-                uStack_12 = 0x9ad8;
+                fmtOfs = 0x9ad8;
                 uStack_10 = uVar16;
                 textPtr = ovr_stsprintf(acStack_2cc);
                 segLo = SUB21(pcVar12,0);
@@ -1454,7 +1454,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
               if ((bVar19 != 0) && (bVar17 <= bVar19)) {
                 ovc39_loadArchiveEntry(bVar19 + 0xd);
                 ovc39_lordOrLady();
-                uStack_12 = 0x9b2e;
+                fmtOfs = 0x9b2e;
                 uStack_10 = uVar16;
                 textPtr = ovr_stsprintf(acStack_2cc);
                 segLo = SUB21(pcVar12,0);
@@ -1470,7 +1470,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
               if (bVar17 != 0) {
                 ovc39_loadArchiveEntry(bVar17 + 0x17);
                 ovc39_lordOrLady();
-                uStack_12 = 0x9b7b;
+                fmtOfs = 0x9b7b;
                 uStack_10 = uVar16;
                 textPtr = ovr_stsprintf(acStack_2cc);
                 segLo = SUB21(pcVar12,0);
@@ -1484,7 +1484,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
                 return textPtr;
               }
               ovc39_lordOrLady();
-              uStack_12 = 0x9bb1;
+              fmtOfs = 0x9bb1;
               uStack_10 = uVar16;
               pcVar12 = ovr_stsprintf(acStack_2cc);
               ovr_drawString(pcVar12,0,0);
