@@ -2440,3 +2440,44 @@ and the PSP/heap values it uses come from `_psp`, `_heaptop`, `_brklvl` (crtl.c:
 Next: compare that block against the original C0 (`tmp/asm_startx.txt`, 1000:0000) -
 in particular the `ES`/`BX` values passed to `AH=4Ah` - and fix it so the process's
 memory block ends where C0 leaves it.
+
+## The AH=4Ah block matches C0, and even `fopen` loses its file
+
+The original's memory shrink (from `tmp/asm_startx.txt`):
+
+```
+1000:007e  MOV BX,DI        ; DI = stack paragraphs
+1000:0080  ADD BX,DX        ; DX = SS
+1000:0082  MOV [0x89],BX    ; _heapbase.seg
+1000:0086  MOV [0x8d],BX    ; _brklvl.seg
+1000:008a  MOV AX,[0x7b]    ; _psp
+1000:008d  SUB BX,AX        ; BX = (sseg+paras) - psp
+1000:008f  MOV AX,ES
+1000:0091  MOV AH,0x4a      ; AH=4Ah, ES=PSP
+1000:0093  PUSH DI
+1000:0094  INT 0x21
+```
+
+and `crtl.c:108..118` computes the same `BX = sseg + paras - psp` with `ES = psp`,
+so the shrink is **not** the fault - that hypothesis is retired.
+
+What the latest probes show instead:
+
+| probe at `init_game`'s first line | result |
+|---|---|
+| `mkdir("C:\\pp")` / `mkdir("pp2")` | nothing created |
+| `creat("probe.txt",0); write; close` | nothing created |
+| `fopen("pp3","wb"); fputs; fclose` | **reports success**, nothing created |
+| `exit(getdisk() + 0x30)` | errorlevel >= 50, i.e. the drive is C: |
+
+So the C library believes every one of those calls succeeded, the current drive is C:,
+the batch's own `md probe_dir` in the same mount does create `PROBE_DI`, and the
+original `game/STRONG.EXE` in the same harness does create its `strong.sav` folder -
+but no file or directory created *by our program* ever appears.
+
+That is no longer consistent with a decompilation defect in the file API path: the
+path string, `DS`, the `_MKDIR` binding, the drive and the mount are all verified.
+It points at the process environment DOS sees for our EXE (PSP / job file table /
+current directory block), which our `startx` reconstructs rather than inheriting from
+C0's `_startup`, or at a write-redirection in the modded emulator that keys on
+something about the program image.
