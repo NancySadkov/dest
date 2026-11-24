@@ -8,23 +8,37 @@ row actually is, which rows have a mechanical fix, and which need real recovery.
 
 | class | count | worst files |
 |---|---|---|
-| `char [N] = ""` | 1,408 | `st_globals5.c` 1,297, `st_globals4.c` 110, `crtl.c` 1 |
-| `[iusbc]Var` | 35,603 | `ovc22_classes.c` 3,216, `ovc23_bldrec.c` 2,558, `ovc45_unitinfo.c` 2,216 |
-| `p[iusbc]Var` | 8,797 | `ovc49_agents.c` 955, `ovc22_classes.c` 738, `ovc02_draw.c` 717 |
-| `[iusc]Stack_` | 5,433 | `ovc22_classes.c` 850, `ovc21_manage.c` 416 |
-| `in_stack_` | 1,539 | `ovc49_agents.c` 278, `ovc15_sprite.c` 147 |
-| `bStack_` | 1,216 | `ovc09_init.c` 149, `ovc34_unit.c` 114 |
-| `unaff_DI` | 1,159 | `ovc48_assets2.c` 284, `ovc44_strong_dat.c` 238 |
-| `in_REG` | 937 | `crtl.c` 154, `ovl.c` 106, `ovc27_combat.c` 72 |
-| `unaff_SI` | 828 | `ovc46_assets.c` 191, `ovc19_save.c` 108 |
-| `(D) far const` | 652 | `ovc49_agents.c` 175, `ovc15_sprite.c` 66 |
-| `p[iusc]Stack_` | 597 | `ovc22_classes.c` 140 |
-| `(C) idx*stride` | 132 | `ovc25_intel.c` 31, `ovc45_unitinfo.c` 24 |
-| `unaff_ES` | 60 | `ovl.c` 25, `ovc21_manage.c` 15, `crtl.c` 11 |
-| `param_` | 46 | `ovc15_sprite.c` 36, `crtl.c` 10 |
-| `...)` | 10 | `ovc41_main.c` 2, `crtl.c` 2 |
-| `ram0x` | 7 | `ovl.c` 3, `crtl.c` 2 |
-| already 0 | — | `" + x`, `argN_`, `arg_`, `undefined[24]`, `stack0x`, `unaff_SS`, `valueN`, `numN`, `ptrN`, `(A)`, `(B)`, `LAB_`, `->pad_...` |
+| `char [N] = ""` | 1408 | st_globals5.c=1297, st_globals4.c=110, crtl.c=1 |
+| `" + [0-9a-bA-Z]` | 0 |  |
+| `argN_` | 0 |  |
+| `arg_` | 0 |  |
+| `undefined[24]` | 0 |  |
+| `ram0x` | 7 | ovl.c=3, crtl.c=2, ovc45_unitinfo.c=1 |
+| `in_REG` | 923 | crtl.c=154, ovl.c=106, ovc27_combat.c=72 |
+| `[iusbc]Var` | 32054 | ovc22_classes.c=2903, ovc23_bldrec.c=2517, ovc45_unitinfo.c=2210 |
+| `p[iusbc]Var` | 7392 | ovc49_agents.c=931, ovc02_draw.c=717, ovc22_classes.c=632 |
+| `p[iusc]Stack_` | 567 | ovc22_classes.c=140, ovc49_agents.c=57, ovc09_init.c=47 |
+| `[iusc]Stack_` | 4870 | ovc22_classes.c=795, ovc21_manage.c=369, ovc09_init.c=341 |
+| `bStack_ (not in list)` | 1216 | ovc09_init.c=149, ovc34_unit.c=114, ovc45_unitinfo.c=85 |
+| `in_stack_` | 1539 | ovc49_agents.c=278, ovc15_sprite.c=147, ovc33_stats.c=141 |
+| `stack0x` | 0 |  |
+| `unaff_SS` | 0 |  |
+| `unaff_ES` | 60 | ovl.c=25, ovc21_manage.c=15, crtl.c=11 |
+| `unaff_DI` | 1159 | ovc48_assets2.c=284, ovc44_strong_dat.c=238, ovc22_classes.c=123 |
+| `unaff_SI` | 828 | ovc46_assets.c=191, ovc19_save.c=108, ovc15_sprite.c=87 |
+| `param_` | 46 | ovc15_sprite.c=36, crtl.c=10 |
+| `valueN` | 0 |  |
+| `numN` | 0 |  |
+| `ptrN` | 0 |  |
+| `(A) idx*stride` | 0 |  |
+| `(B) idx*stride` | 0 |  |
+| `(C) idx*stride` | 0 |  |
+| `(D) far const` | 75 | ovc45_unitinfo.c=30, ovc44_strong_dat.c=20, ovc18_leaderview.c=20 |
+| `LAB_` | 0 |  |
+| `->pad_... + 0x` | 0 |  |
+| `...)` | 10 | ovc41_main.c=2, crtl.c=2, ovc45_unitinfo.c=1 |
+
+**TOTAL 52154** (regenerate with `python scripts/grep_checks.py`).
 
 ## Rows that are mechanically removable (done, or a recipe exists)
 
