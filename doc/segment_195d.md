@@ -362,3 +362,33 @@ why the store/`.seg` pairs cannot be matched to a single disassembled function.
 
 That keeps the merged-body blocker, but now it has an exact address and a name
 instead of "an unmarked region".
+
+## Progress: the returned segment is now written in `ovc48_assets2.c`
+
+Three shapes in that module still stored the constant (or the previous stale
+value) instead of the call's returned segment.  All are converted, following the
+disassembly quoted above:
+
+* **`grabBldLbm2`, 18 blocks** - `stored = ovr_stshStoreFile(pfVar2, resSeg);`
+  followed by a dead `segArg = 0x195d;` and `.seg = resSeg;`.  Each block now
+  captures the RLE result's segment (`asm { mov segArg,dx };`), calls
+  `stsh_store(pfVar2, segArg, &stshSegTmp)` and stores `stshSegTmp` into `.seg`.
+* **`stshAllocBldStubs2`, 18 blocks** - `.seg` took `in_DX` (the previous value)
+  and every block seeded `segArg/segArg2 = 0x195d;`.  Each block now captures DX
+  after `ovr_stshAllocStub` and stores it.
+* **`init_assets2`** - the ruin loop ended with a dead `in_DX = 0x195d;` that
+  seeded the next iteration; DX captures after `ovr_stshAllocStub` and
+  `ovr_grabLbmTR` replace it, and `in_DX` is renamed `storeSeg`.
+
+`ovc48_assets2.c` now contains no `0x195d` at all:
+
+```
+0x195d in ovc48_assets2.c   34 -> 0
+0x195d in the whole tree    320 -> 289
+```
+
+The same transformation (capture DX, pass it as the argument, store the returned
+segment) is what `ovc44_strong_dat.c` already had; the remaining 289 literals are
+spread over `ovc45_unitinfo.c` (202, inside the merged
+`ovc45_buildPlacementMessage` body), `ovc44_strong_dat.c` (11), `ovc48` (0) and
+smaller files.
