@@ -3042,7 +3042,7 @@ bool __cdecl16far ovc15_textArena5(void)
 uint __cdecl16far ovc15_usesRandBelow2(void)
 
 {
-  uint16_t uVar1;
+  uint16_t randPick;
   uint uVar2;
   int iVar3;
   uint uVar4;
@@ -3070,8 +3070,8 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
     }
   }
   if ((bStack_9 != 0xff) && (0xe < uStack_6)) {
-    uVar1 = ovr_randBelow(EntityCount,0);
-    uVar4 = uVar1 & 0xff;
+    randPick = ovr_randBelow(EntityCount,0);
+    uVar4 = randPick & 0xff;
     do {
       uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       iVar3 = (int)Entities;
@@ -3085,11 +3085,11 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
       if (EntityCount <= uVar4) {
         uVar4 = 0;
       }
-    } while (uVar4 != (uVar1 & 0xff));
+    } while (uVar4 != (randPick & 0xff));
   }
   if ((bStack_8 != 0xff) && (0x1d < uStack_4)) {
-    uVar1 = ovr_randBelow(EntityCount,0);
-    uVar4 = uVar1 & 0xff;
+    randPick = ovr_randBelow(EntityCount,0);
+    uVar4 = randPick & 0xff;
     do {
       uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       iVar3 = (int)Entities;
@@ -3103,10 +3103,10 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
       if (EntityCount <= uVar4) {
         uVar4 = 0;
       }
-    } while (uVar4 != (uVar1 & 0xff));
+    } while (uVar4 != (randPick & 0xff));
   }
-  uVar1 = ovr_randBelow(EntityCount,0);
-  return uVar1 & 0xff;
+  randPick = ovr_randBelow(EntityCount,0);
+  return randPick & 0xff;
 }
 
 
