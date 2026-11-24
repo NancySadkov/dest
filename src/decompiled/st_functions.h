@@ -76,7 +76,7 @@ uint32_t __cdecl16near N_LXMUL_at_(void);
 uint __cdecl16near N_PCMP_at_(void);
 void __cdecl16far _srand(uint16_t s);
 uint __cdecl16far rand(void);
-int __cdecl16far read(int fd,void far *buf,uint len);
+int __cdecl16far read(int fd,void *buf,uint len);
 void __cdecl16near _setupio(void);
 void __cdecl16far _tell(int fd);
 uint __cdecl16far tolower(uint c);

@@ -3444,3 +3444,51 @@ runtime/ABI question, not a recovered-body question.
 
   grep_checks 51,070 -> 51,028; build 64/64 clean; link 0 errors
   compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13
+
+## read_cfg works: the library's read() takes a NEAR buffer
+
+Measured directly: calling `read(handle, far_buffer, 1)` on a file returned **12** (the
+whole file) instead of 1, i.e. the callee took the length from the segment word of the
+far pointer.  `tools/BC30/INCLUDE/_defs.h` explains it - `_FAR` expands to nothing
+unless the RTL DLL is being built:
+
+```
+#    if defined(__DLL__) ... #define _FAR far
+#    else
+#      define _FAR            <- medium model
+```
+
+so `io.h`'s `read`/`write` take `void *`, not `void far *`.  With a near buffer the
+same call returned 1.
+
+`read_cfg` therefore keeps its two bytes in **DGROUP** (`static char b, tmp`) and passes
+plain near pointers; the original read into its stack frame through a far pointer,
+which is not expressible against this library.
+
+Result, measured with markers on unique anchors:
+
+```
+MK50 read_cfg start                reached
+MK51 read_cfg return b             reached
+MK52 init_strong_sav success path  reached   ("Found previous game_cfg")
+MK53 after init_strong_sav         reached
+```
+
+So `init_strong_sav` now reads `strong.sav\game.cfg` correctly and returns 1.  The
+program then blocks where the original does: the
+`ENTER: use previous configuration, SPACE: reconfigure, ESC: quit` prompt.
+
+### Where the prompt blocks
+
+Markers around it show `MK55` (entered the `haveConfig` branch) is reached but `MK61`
+(just before `clrscr`, i.e. after the key-drain loop) is not, so the drain
+`while (key = ovr_biosKeyAvail(), (char)key != '\0') ovr_biosReadKey();` never ends.
+`INT 16h AH=01h` itself is fine - a probe stub placed early in `init_game` ran it and
+reported "no key" correctly - and a blocking `INT 16h AH=00h` did not return with
+`AUTOTYPE` keys pending, so the next suspect is the drain loop's use of the thunked
+`ovr_biosKeyAvail` after `init_base`'s `getcwd((char *)MK_FP(0x2410, 0x50), ...)`,
+which writes the CWD to a hard-coded original-DGROUP address and can corrupt the
+rebuild's image.
+
+  grep_checks 51,028; build 64/64 clean; link 0 errors
+  compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13

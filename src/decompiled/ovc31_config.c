@@ -120,16 +120,20 @@ bool __cdecl16far write_game_cfg(char sfx,char mus,char irq)
 char __cdecl16far read_cfg(int handle)
 
 {
-  /* Recovered, 6257:01CC: read one byte into b; then read one byte at a time until
-     the newline; return b (0 on any short read).  The decompiled form read into
-     SS:0001 because the buffer argument had been lost. */
-  char b;
-  char tmp;
+  /* Recovered, 6257:01CC: read one byte, then one byte at a time until the newline,
+     returning the first byte (0 on a short read).
 
-  if (read(handle,(void far *)MK_FP(_SS,(uint16_t)&b),1) != 1) {
+     The original read into its stack frame through a far pointer.  In this link the
+     library's read() takes a NEAR buffer (BC30 io.h: _FAR is empty for the medium
+     model), so the two bytes live in DGROUP to make the near pointer correct. */
+  static char b;
+  static char tmp;
+
+  if (read(handle,&b,1) != 1) {
     return '\0';
   }
-  while (read(handle,(void far *)MK_FP(_SS,(uint16_t)&tmp),1) == 1) {
+  tmp = '\0';
+  while (read(handle,&tmp,1) == 1) {
     if (tmp == '\n') break;
   }
   if (tmp != '\n') {
@@ -137,6 +141,7 @@ char __cdecl16far read_cfg(int handle)
   }
   return b;
 }
+
 
 
 
