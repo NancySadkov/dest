@@ -2529,3 +2529,36 @@ Next: establish which convention the header actually declares (`__pascal`,
 that matches the compiled objects, or fix the prototypes so cdecl is used on both
 sides.  The acceptance test is the existing one: `fopen("pp4","wb")` must make `PP4`
 appear in DOS's `dir`.
+
+### The convention is not the cause either
+
+Calling the same routine through a pascal-typed pointer
+
+```c
+extern int creat(const char *, int);
+int (pascal *pc)(const char *, int) = (void *)creat;
+h = pc("pp5", 0);
+```
+
+still reports `h >= 0` and still creates nothing (`PP5` appears neither on the host
+nor in DOS's own `dir`).  So argument order and stack cleanup are not the defect;
+the routine returns a plausible handle without DOS ever making the file, for both
+conventions and under both the stock and the modded emulator.
+
+What is proven so far about this call path:
+
+| property | state |
+|---|---|
+| mount writable / DOS `md` works | yes (`PROBE_DI` created by the batch) |
+| original game creates its `strong.sav` directory | yes |
+| path string, `DS`, `_MKDIR` binding | verified correct |
+| current drive | C: |
+| emulator (stock DOSBox-X, same mount) | same behaviour -> exonerated |
+| cdecl vs pascal argument order | both "succeed", neither creates the file |
+
+The remaining difference between our process and a normal DOS program is the
+environment `startx` builds (PSP -- `_psp` is set from a stack argument --, heap
+base, break level and the memory shrink).  A wrong PSP would make DOS resolve the
+batch's working directory and the program's relative path differently, which fits
+every observation: the call "succeeds" (DOS is given a path in a segment that is not
+the current directory) yet nothing lands where we look.
