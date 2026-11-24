@@ -1196,7 +1196,6 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)(&psVar4->aptr)->ofs,pixels_82,130,199,194,26,100,0x82,199,
                               0x1a);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5,0);
-    uVar16 = 0x195d;
     *(uint16_t *)((int)&BldInstances[0].seg + uVar19 * 0xc) = (uint16_t)puVar15;
     ((bld_inst_t *)BldInstances + uVar19)->ofs = (short)pcVar6;
     uVar20 = (uint16_t)((ulong)stgTmp >> 0x10);
@@ -1206,7 +1205,7 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_83,65,199,129,
                               26,100,0x41,199,0x1a);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5,0);
-    uVar20 = 0x195d;
+    asm { mov uVar16,dx };
     *(uint16_t *)((int)&BldInstances[0].seg + (uVar19 + 1) * 0xc) = uVar16;
     ((bld_inst_t *)BldInstances + uVar19 + 1)->ofs = (short)pcVar6;
     uVar16 = (uint16_t)((ulong)stgTmp >> 0x10);
@@ -1216,6 +1215,7 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_84,0,199,64,26
                               ,100,0,199,0x1a);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5,0);
+    asm { mov uVar20,dx };
     *(uint16_t *)((int)&BldInstances[0].seg + (uVar19 + 2) * 0xc) = uVar20;
     ((bld_inst_t *)BldInstances + uVar19 + 2)->ofs = (short)pcVar6;
     ovr_stgFreeTmp(stgTmp,0);
