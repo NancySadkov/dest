@@ -996,7 +996,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
     *puVar1 = *puVar1 | unaff_DI;
     *puVar15 = *puVar15 | (uint)&stk_ffff;
                     /* WARNING: Read-only address (ram,0x00025f09) is written */
-    (*(uint16_t *)((uint8_t *)&(s_fighters__residence_2410_1e09))) = (uint)&stk_ffde | 0x6966;
+    (*(uint16_t *)((uint8_t *)&("fighters' residence"))) = (uint)&stk_ffde | 0x6966;
     bVar17 = (byte)((uint)puVar15 >> 8) | (byte)in_CX | bVar17 | (byte)unaff_DI;
     iVar16 = CONCAT11(bVar17,(byte)puVar15);
     pbVar4 = (byte *)(iVar16 + -0x51f8);

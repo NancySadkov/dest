@@ -2012,7 +2012,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
       *puVar2 = (uVar18 - (int)puVar26) - uVar33;
                     /* WARNING: Read-only address (ram,0x00026a19) is written */
       uVar18 = (uint)(puVar27 < puVar26 || uVar18 - (int)puVar26 < uVar33);
-      (*(uint16_t *)((uint8_t *)&(s_Peaceful_2410_2915) + 4)) = (0x6665U - (int)puVar35) - uVar18;
+      (*(uint16_t *)((uint8_t *)&("Peaceful") + 4)) = (0x6665U - (int)puVar35) - uVar18;
       uVar18 = (uint)((uint)0x6665 < puVar35 || (uint)(0x6665U - (int)puVar35) < uVar18);
       bVar37 = (uint)AgntAnms[6].y < pcVar24;
       uVar33 = AgntAnms[6].y - (int)pcVar24;

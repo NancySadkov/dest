@@ -742,7 +742,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
               *(uint16_t *)(uVar48 + iVar30 + -2) =(uint16_t)( unaff_DI);
                     /* WARNING: Read-only address (ram,0x00026a19) is written */
               uVar23 = (uint)(puVar50 < puVar36 || uVar23 - (int)puVar36 < uVar22);
-              (*(uint16_t *)((uint8_t *)&(s_Peaceful_2410_2915) + 4)) = (0x6665U - (int)unaff_DI) - uVar23;
+              (*(uint16_t *)((uint8_t *)&("Peaceful") + 4)) = (0x6665U - (int)unaff_DI) - uVar23;
               uVar23 = (uint)((uint)0x6665 < unaff_DI || (uint)(0x6665U - (int)unaff_DI) < uVar23);
               bVar58 = (uint)AgntAnms[6].y < CONCAT11(bVar34,bVar26);
               uVar22 = AgntAnms[6].y - CONCAT11(bVar34,bVar26);

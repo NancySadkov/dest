@@ -382,7 +382,7 @@ L_draw_2e25_025a_03D9:
   pcVar46 = pcVar46 + (int)pcVar49;
   *pcVar49 = *pcVar49 + cVar31;
                     /* WARNING: Read-only address (ram,0x00026001) is written */
-  (*(uint16_t *)((uint8_t *)&(s_halfling_lodge_2410_1efd) + 4)) = (uint16_t)pcVar33 + 0x696c;
+  (*(uint16_t *)((uint8_t *)&("halfling lodge") + 4)) = (uint16_t)pcVar33 + 0x696c;
   piVar50 = (int *)(pcVar49 + (int)pcVar46);
   cVar35 = cVar35 + cVar22;
   iVar14 = CONCAT11(cVar35,cVar31);
