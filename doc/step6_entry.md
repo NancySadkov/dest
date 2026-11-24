@@ -2394,3 +2394,49 @@ comparing a few more pushed constants against their strings; if it holds, look f
 the 0x10-byte object placed before the module's data in the link (`_CVTSEG` / heap
 header) and either move it or align the module's data so the compiler's offsets
 match.
+
+## Corrected: the path constants are right; every DOS file call from the program fails
+
+The `0x10` difference recorded above was an artefact of a **stale DGROUP base**: the
+linker moved `_DATA` from `A5660` to `A5670`, and with the current base the pushed
+constants resolve exactly to the strings:
+
+```
+push A1C2 -> DGROUP+A1C2: b'strong.sav\0strong.sav\\ga'
+push A1E7 -> DGROUP+A1E7: b'%c\0strong.sav\\game.cfg\0s'
+push A1FE -> DGROUP+A1FE: b'strong.sav\0strong.sav\\st'
+push A21F -> DGROUP+A21F: b'strong.sav\\strong.$$$\0Pa'
+push A235 -> DGROUP+A235: b'Path to write game data:'
+```
+
+So the pointers and the binding are fine, and so is `DS`:
+
+| probe | result |
+|---|---|
+| `_DS == 0xa567` at `init_game` entry | true |
+| `_DS == 0xa567` at `init_strong_sav` entry | true |
+| `_DS == 0xa567` immediately before `mkdir("strong.sav")` | true |
+| marker immediately before that `mkdir` | **reached** |
+
+Yet nothing is created, and it is not the directory: `mkdir("C:\\pp")` and
+`mkdir("pp2")` at the very start of `init_game` also produce nothing, while the
+*batch* command `md probe_dir` in the same mount creates `PROBE_DI` immediately.
+`creat` behaves the same way.
+
+So **every DOS file/directory call made from inside the program fails**, regardless
+of path and segment. The only unusual DOS call our startup makes is the memory
+shrink in `crtl.c`:
+
+```
+/* INT 21h AH=4Ah with ES=PSP, BX=paragraphs.  CM.LIB's int86x hangs in
+   ... */
+mov ah,0x4a;
+```
+
+and the PSP/heap values it uses come from `_psp`, `_heaptop`, `_brklvl` (crtl.c:60,
+64, 107).  A mis-sized shrink is the leading candidate: it is the one place where our
+`startx` alters DOS's view of the process before any file call happens.
+
+Next: compare that block against the original C0 (`tmp/asm_startx.txt`, 1000:0000) -
+in particular the `ES`/`BX` values passed to `AH=4Ah` - and fix it so the process's
+memory block ends where C0 leaves it.
