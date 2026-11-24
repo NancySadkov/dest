@@ -176,7 +176,7 @@ char * __cdecl16far _fstrstr(char *haystack,char *needle);
 uint16_t __cdecl16far __write(uint fd,char *bufOfs,uint16_t bufSeg,uint16_t count);
 int __cdecl16far write(int handle,void *buf,uint16_t len);
 void __cdecl16far _xfflush(void);
-int main(int argc,str_t *argv,str_t *envp);
+int __cdecl16far main(int argc,str_t *argv,str_t *envp);
 void __cdecl16far miceHandler(uint16_t mask,uint16_t buttons,uint16_t x,uint16_t y,uint16_t dx,uint16_t dy);
 bool __cdecl16far miceInitDriver(void);
 void __cdecl16far blitTillAlpha(far_t dst,far_t src,uint16_t size);

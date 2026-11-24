@@ -9,7 +9,7 @@
 
 /* 1301:000c */
 
-int main(int argc,str_t *argv,str_t *envp)
+int __cdecl16far main(int argc,str_t *argv,str_t *envp)
 
 {
   byte bVar1;

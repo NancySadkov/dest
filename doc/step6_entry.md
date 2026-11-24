@@ -1910,3 +1910,66 @@ test (build, link, run, expect `DONE.FLG`).
 
 The probe driver is `tmp/probe_initgame_k.py` (k=-2, -1, 0..6) and
 `tmp/probe_exit.py` (A, B, C, D, E); both restore every file they touch.
+
+## `main` is called with CALLF in the original - and our `main` now is far too
+
+Disassembly of the original C0 (`DumpAsmNamed.java "1000:0000"`) gives the boundary
+exactly:
+
+```
+1000:0025  CALL  0x1000:017a   ; SaveVectors
+1000:0132  CALL  0x1000:01ea   ; StartExit
+1000:0149  CALLF 0x1000:301c   ; main        <- far call
+1000:0151  CALL  0x1000:08fd   ; exit        <- runs after main returns
+```
+
+So `main` is a far function (`__cdecl16far`), and our tree was declaring it with no
+prototype in the calling module and a **near** prototype
+(`int main(int, str_t *, str_t *);`) in `st_functions.h`. Both are now far:
+
+* `st_functions.h`: `int __cdecl16far main(int argc, str_t *argv, str_t *envp);`
+* `main.c`: `int __cdecl16far main(int argc, str_t *argv, str_t *envp)`
+
+Byte check of the rebuilt image confirms the definition is far: `main` starts at
+image offset `0x6524` and ends
+
+```
+  5f 5e c9 cb        pop di / pop si / leave / retf
+```
+
+which matches the original's `CALLF`.
+
+### But the return still does not reach the caller
+
+| probe | change | DONE.FLG |
+|---|---|---|
+| k=-1 | `main` returns immediately | no |
+| k=-2 | `main` exits with `int 21h` in its own frame | **yes** |
+| E (after the far prototype) | `startx` calls `main(...)` directly, then `int 21h` | no |
+| F | `startx` calls through a **near** pointer, then `int 21h` | no |
+| marker | `startx` writes a unique exit code (`4c21h`) right after the call | never reached |
+
+The marker test is the sharp one: the instruction immediately after the call is
+never executed, so control does not come back to `startx` at all - even though the
+callee's epilogue is a proper `retf` and the call is a proper far call.
+
+Everything before the call works (`main`'s body runs, `SaveVectors`/`StartExit` ran),
+so what remains is the **call frame `startx` builds**: the decompiled body uses
+`puVar15` (an uninitialised pointer) for the simulated call frame and writes through
+it at `-8/-10/-0xc` before `exit`.  Those stores are decompiler noise for C0's stack
+slots and are the prime suspect for the corrupted frame; the correct shape is the
+original's two instructions - `CALLF main` then `CALL exit` - with no intermediate
+frame pokes.
+
+### Next step
+
+Rewrite that region of `startx` as:
+
+```c
+  iVar10 = main(__C0argc, (str_t *)__C0argv, (str_t *)__C0environ);
+  exit(iVar10);
+```
+
+with `exit` declared `void __cdecl16near exit(int);` (it is `CALL 0x1000:08fd`, a near
+call), and drop the `puVar15` stores.  `tmp/runcase.py` is the acceptance test:
+`returned to DOS : True`.
