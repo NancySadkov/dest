@@ -3813,7 +3813,6 @@ L_init_assets_4EA5:
     pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_x00198,28,202,
                               119,0,0x77,0x1c,0xca,0);
     BldGfxRuin[0x1fc].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     uVar16 = (uint16_t)((ulong)stgTmp >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00199.seg))) = 0xe2;
     pixels_x00199.ofs = *(uint16_t *)((int)stgTmp + 0x302);
