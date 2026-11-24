@@ -1681,19 +1681,19 @@ char_sheet_t * __cdecl16far chargen(void)
   bool bVar2;
   char *pcVar3;
   int iVar4;
-  uint uVar5;
+  uint dlgResult;
   uint in_DX;
   uint16_t widths;
   uint16_t unaff_SI;
-  int iVar6;
+  int entryIdx;
   char acStack_9d [11];
   uint8_t menuItems;
   uint16_t auStack_90 [21];
   uint8_t msg;
   char_sheet_t *sheet;
-  uint uStack_14;
-  int iStack_12;
-  uint uStack_10;
+  uint sheetSeg;
+  int statIdx;
+  uint choice;
   char *pcStack_e;
   uint16_t uStack_c;
   uint8_t keepDiscard;
@@ -1705,10 +1705,10 @@ char_sheet_t * __cdecl16far chargen(void)
   ovr_fmFreeAudio(1);
   ovr_ovc13_usesBlitRect();
   sheet = ovr_stshAlloc(0xae);
-  uStack_14 = in_DX;
+  sheetSeg = in_DX;
   do {
     while( true ) {
-      _fmemset(MK_FP(uStack_14, (uint16_t)sheet), 0, 0xae);
+      _fmemset(MK_FP(sheetSeg, (uint16_t)sheet), 0, 0xae);
       sheet->charIndex = 0xff;
       while( true ) {
         if (TimerSeed.lo == 0 && TimerSeed.hi == 0) {
@@ -1717,76 +1717,76 @@ char_sheet_t * __cdecl16far chargen(void)
         }
         srand8(CONCAT13((char)(TimerSeed.hi >> 8),CONCAT12((char)TimerSeed.hi,TimerSeed.lo)));
         manage_openTalkWindow();
-        manage_rollStats(sheet,(char)uStack_14);
+        manage_rollStats(sheet,(char)sheetSeg);
         manage_usesLitoa10((char_sheet_t *)
-                           CONCAT13((char)(uStack_14 >> 8),CONCAT12((char)uStack_14,sheet)));
+                           CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
         auStack_90[0] = 0x2410;
         menuItems = 0x4fce;
         acStack_9d[0] = '\0';
         auStack_90[2] = 0;
         auStack_90[1] = 0;
         iVar4 = 1;
-        for (iStack_12 = 0; iVar6 = iVar4 + 1, iStack_12 < 4; iStack_12 = iStack_12 + 1) {
-          acStack_9d[iVar4] = (char)iStack_12 + '\x02';
-          uVar1 = *(uint16_t *)(&GUnitDescriptions[iStack_12]);
-          auStack_90[iVar6 * 2] = *(uint16_t *)((uint8_t *)&GUnitDescriptions[iStack_12] + 2);
-          *(uint16_t *)(&menuItems + iVar6 * 4) = uVar1;
-          iVar4 = iVar6;
+        for (statIdx = 0; entryIdx = iVar4 + 1, statIdx < 4; statIdx = statIdx + 1) {
+          acStack_9d[iVar4] = (char)statIdx + '\x02';
+          uVar1 = *(uint16_t *)(&GUnitDescriptions[statIdx]);
+          auStack_90[entryIdx * 2] = *(uint16_t *)((uint8_t *)&GUnitDescriptions[statIdx] + 2);
+          *(uint16_t *)(&menuItems + entryIdx * 4) = uVar1;
+          iVar4 = entryIdx;
         }
         acStack_9d[iVar4] = '\x06';
         if (sheet->stats[4] < 9) {
-          auStack_90[iVar6 * 2] = 0;
-          (&menuItems + iVar6 * 4)[0] = 0x0;
-          (&menuItems + iVar6 * 4)[1] = 0x0;
+          auStack_90[entryIdx * 2] = 0;
+          (&menuItems + entryIdx * 4)[0] = 0x0;
+          (&menuItems + entryIdx * 4)[1] = 0x0;
         }
         else {
-          auStack_90[iVar6 * 2] = GUnitDescriptions[4].seg;
-          *(uint16_t *)(&menuItems + iVar6 * 4) = GUnitDescriptions[4].ofs;
+          auStack_90[entryIdx * 2] = GUnitDescriptions[4].seg;
+          *(uint16_t *)(&menuItems + entryIdx * 4) = GUnitDescriptions[4].ofs;
         }
-        iVar6 = iVar4 + 2;
+        entryIdx = iVar4 + 2;
         acStack_9d[iVar4 + 1] = '\a';
         if (sheet->stats[1] < 9) {
-          auStack_90[iVar6 * 2] = 0;
-          (&menuItems + iVar6 * 4)[0] = 0x0;
-          (&menuItems + iVar6 * 4)[1] = 0x0;
+          auStack_90[entryIdx * 2] = 0;
+          (&menuItems + entryIdx * 4)[0] = 0x0;
+          (&menuItems + entryIdx * 4)[1] = 0x0;
         }
         else {
-          auStack_90[iVar6 * 2] = GUnitDescriptions[5].seg;
-          *(uint16_t *)(&menuItems + iVar6 * 4) = GUnitDescriptions[5].ofs;
+          auStack_90[entryIdx * 2] = GUnitDescriptions[5].seg;
+          *(uint16_t *)(&menuItems + entryIdx * 4) = GUnitDescriptions[5].ofs;
         }
-        iVar6 = iVar4 + 3;
+        entryIdx = iVar4 + 3;
         acStack_9d[iVar4 + 2] = '\b';
         if ((sheet->stats[4] < 9) || (sheet->stats[3] < 9)) {
-          auStack_90[iVar6 * 2] = 0;
-          (&menuItems + iVar6 * 4)[0] = 0x0;
-          (&menuItems + iVar6 * 4)[1] = 0x0;
+          auStack_90[entryIdx * 2] = 0;
+          (&menuItems + entryIdx * 4)[0] = 0x0;
+          (&menuItems + entryIdx * 4)[1] = 0x0;
         }
         else {
-          auStack_90[iVar6 * 2] = GUnitDescriptions[6].seg;
-          *(uint16_t *)(&menuItems + iVar6 * 4) = GUnitDescriptions[6].ofs;
+          auStack_90[entryIdx * 2] = GUnitDescriptions[6].seg;
+          *(uint16_t *)(&menuItems + entryIdx * 4) = GUnitDescriptions[6].ofs;
         }
         ovr_drawString((char *)"Reroll ability scores, or select the character\'s class.",0x2410,
                        0x10);
         entries.seg = (uint16_t)_SS;
         entries.ofs = (uint16_t)&menuItems;
         pcVar3 = ovr_uiInputText(entries,9,far_from_u32((uint32_t)(0x0)),0x0,0);
-        uStack_10 = (uint)pcVar3 & 0xff;
-        if (uStack_10 != 0) {
-          uStack_10 = (uint)(char)(&stk_ff61)[uStack_10];
+        choice = (uint)pcVar3 & 0xff;
+        if (choice != 0) {
+          choice = (uint)(char)(&stk_ff61)[choice];
         }
-        if (uStack_10 == 0) goto L_chargen_17B2;
-        if (uStack_10 != 1) break;
+        if (choice == 0) goto L_chargen_17B2;
+        if (choice != 1) break;
         TimerSeed.hi = 0;
         TimerSeed.lo = 0;
       }
-      uStack_10 = uStack_10 - 1;
+      choice = choice - 1;
       if (Difficulty < 2) {
         sheet->flags5d = sheet->flags5d | 4;
       }
       else {
         sheet->flags5d = sheet->flags5d | 6;
       }
-      sheet->cls = (char)uStack_10 - 1;
+      sheet->cls = (char)choice - 1;
       pcVar3 = chargen_switch(CONCAT11(0x24,sheet->cls));
       sheet->classStr = (byte)pcVar3;
       sheet->race = 6;
@@ -1811,25 +1811,25 @@ char_sheet_t * __cdecl16far chargen(void)
       sheet->buildType[0] = 7;
       sheet->partySlot = 0xff;
       manage_usesLitoa10((char_sheet_t *)
-                         CONCAT13((char)(uStack_14 >> 8),CONCAT12((char)uStack_14,sheet)));
-      uVar5 = abilitiesDlg((char_sheet_t *)
-                           CONCAT13((char)(uStack_14 >> 8),CONCAT12((char)uStack_14,sheet)));
-      if ((uVar5 & 0xff) == 0) break;
+                         CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
+      dlgResult = abilitiesDlg((char_sheet_t *)
+                           CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
+      if ((dlgResult & 0xff) == 0) break;
       manage_rollHitPoints
                 ((char_sheet_t *)
-                 CONCAT13((char)(uStack_14 >> 8),CONCAT12((char)uStack_14,sheet)));
+                 CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
       while( true ) {
         manage_usesLitoa10((char_sheet_t *)
-                           CONCAT13((char)(uStack_14 >> 8),CONCAT12((char)uStack_14,sheet)));
-        uVar5 = alignmentDlg((char_sheet_t *)
-                             CONCAT13((char)(uStack_14 >> 8),CONCAT12((char)uStack_14,sheet)));
-        if ((uVar5 & 0xff) == 0) break;
+                           CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
+        dlgResult = alignmentDlg((char_sheet_t *)
+                             CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
+        if ((dlgResult & 0xff) == 0) break;
 L_chargen_1661:
         manage_openTalkWindow();
         manage_usesLitoa10((char_sheet_t *)
-                           CONCAT13((char)(uStack_14 >> 8),CONCAT12((char)uStack_14,sheet)));
+                           CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
         bVar2 = uiPickGender((char_sheet_t *)
-                             CONCAT13((char)(uStack_14 >> 8),CONCAT12((char)uStack_14,sheet)));
+                             CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
         if (bVar2) {
           do {
             manage_blitTalkWindow();
@@ -1845,7 +1845,7 @@ L_chargen_1661:
               ;
             }
             ovr_drawString((char *)0x28c75,0x2410,0x10);
-            __fstrncpy((char *)CONCAT22(uStack_14,sheet),(char *)CONCAT22(uStack_c,pcStack_e),
+            __fstrncpy((char *)CONCAT22(sheetSeg,sheet),(char *)CONCAT22(uStack_c,pcStack_e),
                        0x27);
             (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)uStack_c;
             handle.ofs = (uint16_t)pcStack_e;
@@ -1853,19 +1853,19 @@ L_chargen_1661:
             ovr_stshFree(handle);
             pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x505a,_SS),
                                    (char *)CONCAT22(sheet,(char *)0x26510),
-                                   (char)uStack_14);
+                                   (char)sheetSeg);
             ovr_drawString(pcVar3,widths,(char)widths);
             entries_00.seg = (uint16_t)_SS;
             entries_00.ofs = (uint16_t)&keepDiscard;
             pcVar3 = ovr_uiInputText(entries_00,2,far_from_u32((uint32_t)(0x0)),0x0,0);
-            uStack_10 = (uint)pcVar3 & 0xff;
-            if (uStack_10 != 0) {
-              if (uStack_10 != 2) {
+            choice = (uint)pcVar3 & 0xff;
+            if (choice != 0) {
+              if (choice != 2) {
                 sheet->statMask = sheet->statMask | 2;
                 manage_openTalkWindow();
                 manage_usesLitoa10((char_sheet_t *)
-                                   CONCAT13((char)(uStack_14 >> 8),
-                                            CONCAT12((char)uStack_14,sheet)));
+                                   CONCAT13((char)(sheetSeg >> 8),
+                                            CONCAT12((char)sheetSeg,sheet)));
                 TimerSeed.lo = 0;
                 TimerSeed.hi = 0;
                 return sheet;
@@ -1881,9 +1881,9 @@ L_chargen_1661:
     }
   } while (UserWantsExit == '\0');
 L_chargen_17B2:
-  (*(uint8_t *)((uint8_t *)&(handle_00.seg))) = (char)uStack_14;
+  (*(uint8_t *)((uint8_t *)&(handle_00.seg))) = (char)sheetSeg;
   handle_00.ofs = (uint16_t)sheet;
-  (*(uint8_t *)((uint8_t *)&(handle_00.seg) + 1)) = (char)(uStack_14 >> 8);
+  (*(uint8_t *)((uint8_t *)&(handle_00.seg) + 1)) = (char)(sheetSeg >> 8);
   ovr_stshFree(handle_00);
   return (char_sheet_t *)0x0;
 }
