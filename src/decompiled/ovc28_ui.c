@@ -618,7 +618,7 @@ uint16_t __cdecl16far ovc28_usesScreenMode(far_t entries,uint count)
 char * __cdecl16far uiInputText(far_t entries,uint16_t count,far_t hint,uint8_t flags,uint16_t arg5)
 
 {
-  int iVar1;
+  int entryPtr;
   uint uVar2;
   undefined1 uVar5;
   uint16_t key;
@@ -636,8 +636,8 @@ char * __cdecl16far uiInputText(far_t entries,uint16_t count,far_t hint,uint8_t 
   ovc28_usesBlitGfx10(entries,count);
   GMenuItem = 1;
   while (((int)(uint)GMenuItem <= (int)count &&
-         (iVar1 = (uint)GMenuItem * 4 + entries.ofs,
-         *(int *)(iVar1 + -4) == 0 && *(int *)(iVar1 + -2) == 0))) {
+         (entryPtr = (uint)GMenuItem * 4 + entries.ofs,
+         *(int *)(entryPtr + -4) == 0 && *(int *)(entryPtr + -2) == 0))) {
     GMenuItem = GMenuItem + 1;
   }
   uVar2 = (uint)GMenuItem;
@@ -685,8 +685,8 @@ L_uiInputText_110E:
           GMenuItem = GMenuItem - 1;
         }
       } while ((GMenuItem != 0) &&
-              (iVar1 = (uint)GMenuItem * 4 + entries.ofs,
-              *(int *)(iVar1 + -4) == 0 && *(int *)(iVar1 + -2) == 0));
+              (entryPtr = (uint)GMenuItem * 4 + entries.ofs,
+              *(int *)(entryPtr + -4) == 0 && *(int *)(entryPtr + -2) == 0));
       ovc28_startCrossBlit();
     }
     if (key < 0x4839) {
@@ -774,8 +774,8 @@ L_uiInputText_11EE:
             GMenuItem = GMenuItem + 1;
           }
         } while ((GMenuItem != 0) &&
-                (iVar1 = (uint)GMenuItem * 4 + entries.ofs,
-                *(int *)(iVar1 + -4) == 0 && *(int *)(iVar1 + -2) == 0));
+                (entryPtr = (uint)GMenuItem * 4 + entries.ofs,
+                *(int *)(entryPtr + -4) == 0 && *(int *)(entryPtr + -2) == 0));
         ovc28_startCrossBlit();
       }
       else if (key < 0x5001) {
