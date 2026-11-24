@@ -1973,3 +1973,39 @@ Rewrite that region of `startx` as:
 with `exit` declared `void __cdecl16near exit(int);` (it is `CALL 0x1000:08fd`, a near
 call), and drop the `puVar15` stores.  `tmp/runcase.py` is the acceptance test:
 `returned to DOS : True`.
+
+### startx now has the original's shape, and the hang is specific to `main`
+
+`startx` has been rewritten to the original's two statements (see commit
+6c42f6e3): a direct far call to `main`, then `exit(iVar10)`, with the `puVar15`
+stores (decompiler noise for C0's stack slots) removed.
+
+Two probes run from that exact call site, differing only in which function is
+called:
+
+| probe | statement placed at the call site | returned to DOS |
+|---|---|---|
+| G | `srand8(0);` then `int 21h` | **True** |
+| G' | `init_paths();` then `int 21h` | False (that function itself does not come back) |
+| H | `main(__C0argc, __C0argv, __C0environ);` then `int 21h` | **False** |
+
+So far calls from `startx` do return (G proves it), and the failure is specific to
+the call into `main`. `main` itself is a far function - its epilogue in the rebuilt
+image is `pop di / pop si / leave / retf` (`5f 5e c9 cb` at image 0x6524+14) - and
+its body runs (exiting from inside it via `int 21h` succeeds).
+
+### Next step: compare the two call encodings
+
+Disassemble the rebuilt `startx` (segment 01B6, offset 0029, image 0x1B89) and
+compare the instruction emitted for the `main` call against the one emitted for
+`srand8`.  One of these is wrong:
+
+* the arguments (three, cdecl) are pushed but the callee's `retf` expects a
+  different frame, or
+* the call is a near `call` to a far function (which leaves CS on the stack and
+  returns into garbage - exactly the observed symptom), or
+* the far pointer's segment word is a link-time constant that was never relocated
+  (the same defect class as the retired `0x195d` literals).
+
+The fix is then a one-line source change, and `tmp/runcase.py` is the test:
+`returned to DOS : True`.
