@@ -384,7 +384,7 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
   byte *pbVar2;
   uint16_t uVar3;
   uint16_t uVar4;
-  uint8_t uVar5;
+  uint8_t color;
   far_t dst;
   far_t dst_00;
   uint8_t text;
@@ -399,30 +399,30 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
   pbVar2 = (byte *)((char *)0x26510);
   if (*label == '%') {
     BlitLetterType = 2;
-    uVar5 = 0x3f;
+    color = 0x3f;
     uVar3 = Font01.ofs;
     uVar4 = Font01.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,_SS),
                                         (char *)CONCAT22(Font01.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),Font01.seg,'E',3);
-    ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
+    ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,color);
     BlitLetterType = 0;
   }
   else if (*label == '@') {
-    uVar5 = 0x3f;
+    color = 0x3f;
     uVar3 = Font01.ofs;
     uVar4 = Font01.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,_SS),
                                         (char *)CONCAT22(Font01.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),Font01.seg,'E',3);
-    ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
+    ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,color);
   }
   else {
-    uVar5 = 0x3f;
+    color = 0x3f;
     uVar3 = Font01.ofs;
     uVar4 = Font01.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label,_SS),
                                         (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
-    ovr_blitText(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
+    ovr_blitText(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,color);
   }
   ovc28_usesBDADailyTimeCounter(3);
   dst_00.seg = 0xa000;
@@ -435,32 +435,32 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
   pbVar2 = (byte *)((char *)0x26510);
   if (*label == '%') {
     BlitLetterType = 2;
-    uVar5 = 0x3f;
+    color = 0x3f;
     uVar3 = FontMain.ofs;
     uVar4 = FontMain.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,_SS),
                                         (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
-    ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
+    ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,color);
     BlitLetterType = 0;
   }
   else if (*label == '@') {
-    uVar5 = 0x3f;
+    color = 0x3f;
     uVar3 = FontMain.ofs;
     uVar4 = FontMain.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,_SS),
                                         (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
-    ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
+    ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,color);
   }
   else {
-    uVar5 = 0x3f;
+    color = 0x3f;
     uVar3 = FontMain.ofs;
     uVar4 = FontMain.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label,_SS),
                                         (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
-    ovr_blitText(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,uVar5);
+    ovr_blitText(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,color);
   }
   return;
 }

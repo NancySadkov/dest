@@ -120,34 +120,34 @@ void __cdecl16far constr_usesSmoothPrev2(void)
 
 {
   int iVar1;
-  int iVar2;
+  int smoothVal;
   uint8_t cell;
   int iStack_4;
   
   SmoothPrev = 0;
   iVar1 = constr_usesSmoothPrev(0xffff,-1,(int *)&cell,0,0);
   iStack_4 = iVar1;
-  iVar2 = constr_usesSmoothPrev(0,-1,(int *)&cell,0,0);
-  if (iVar2 < iVar1) {
-    iVar1 = iVar2;
+  smoothVal = constr_usesSmoothPrev(0,-1,(int *)&cell,0,0);
+  if (smoothVal < iVar1) {
+    iVar1 = smoothVal;
   }
-  if (iStack_4 < iVar2) {
-    iStack_4 = iVar2;
+  if (iStack_4 < smoothVal) {
+    iStack_4 = smoothVal;
   }
-  iVar2 = constr_usesSmoothPrev(1,-1,(int *)&cell,0,0);
-  if (iVar2 < iVar1) {
-    iVar1 = iVar2;
+  smoothVal = constr_usesSmoothPrev(1,-1,(int *)&cell,0,0);
+  if (smoothVal < iVar1) {
+    iVar1 = smoothVal;
   }
-  if (iStack_4 < iVar2) {
-    iStack_4 = iVar2;
+  if (iStack_4 < smoothVal) {
+    iStack_4 = smoothVal;
   }
-  iVar2 = constr_usesSmoothPrev(2,-1,(int *)&cell,0,0);
-  if (iVar2 < iVar1) {
-    iVar1 = iVar2;
+  smoothVal = constr_usesSmoothPrev(2,-1,(int *)&cell,0,0);
+  if (smoothVal < iVar1) {
+    iVar1 = smoothVal;
   }
-  iVar2 = constr_usesSmoothPrev(0xfffe,-1,(int *)&cell,0,0);
-  if (iVar2 < iVar1) {
-    iVar1 = iVar2;
+  smoothVal = constr_usesSmoothPrev(0xfffe,-1,(int *)&cell,0,0);
+  if (smoothVal < iVar1) {
+    iVar1 = smoothVal;
   }
   if (0x5a < iStack_4 - iVar1) {
     iVar1 = iStack_4 + -0x5a;
