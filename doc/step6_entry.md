@@ -2308,3 +2308,50 @@ built one, or `main` is entered at a different address than `_MAIN`.
   first thing to verify);
 * only then re-test whether `init_game` runs, and only after that revisit the
   `mkdir`/`creat` failures - they were measured through the same probe harness.
+
+## `mkdir` is bound correctly, but the path constant points nowhere
+
+The rebuilt image has exactly two `mkdir` call sites, and both are plain library
+calls:
+
+```
+0x55C02  83 ec 06 56 57 68 c2 a1 9a bd 05 00 00   push 0xA1C2 ; lcall 0000:05BD
+0x55F47  fc 5f 5e c9 cb 68 fe a1 9a bd 05 00 00   push 0xA1FE ; lcall 0000:05BD
+```
+
+`0000:05BD` is `_MKDIR` (`mov ah,39h / mov dx,[bp+6] / int 21h / retf`), so the
+symbol binding is right.
+
+The pushed constants are not:
+
+| value | maps into | contains |
+|---|---|---|
+| `0xA1C2` | `O02_SEG` (`091AA..0C8AD`, class CODE) | not a path |
+| `0xA1FE` | same segment | not a path |
+
+while the string literals really are in DGROUP:
+
+```
+"strong.sav" at link offset 0xA65E7  ->  DGROUP (_DATA 0xA5660..0xB073B) + 0x0F87
+```
+
+So `DS:DX` at the call points into a code segment at some unrelated offset, which is
+why DOS creates nothing (and why `mkdir`'s error path can still leave `AX = 0`, so
+the "success" seen by earlier probes was itself unreliable).
+
+Using a DGROUP array instead of a literal does not help either:
+
+```c
+{ static char probe_path[] = "probe_dir";
+  if (mkdir(probe_path) == 0) exit(23); }   /* reports success, no directory */
+```
+
+so the next measurement must be the segment actually in `DS` at the call - e.g.
+`exit((_DS >> 8) & 0xFF)` and compare it with the segment list in `REBUILT.MAP`.
+If `DS` is not DGROUP there, the module is running with its own data segment (the
+original's overlay layout) and the fix is to establish DS per module or to make the
+whole link use DGROUP for near data.
+
+Reliable tooling from this round: `tmp/mark.py` (exit-code marker + `if errorlevel`),
+`tmp/probe_mkdir3.py` (mkdir with a path argument), `tmp/probe_path.py` (DGROUP
+array variant), `tmp/dirtest.py` (DOS-side `dir > DIR.TXT`).
