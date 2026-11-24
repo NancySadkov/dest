@@ -3476,7 +3476,7 @@ void __cdecl16far ovc49_drawAgents(void)
   bool bVar8;
   far_t gfx_01;
   far_t gfx_02;
-  char cVar9;
+  char frameOk;
   uint uVar10;
   stg_tmp_t *stgTmp;
   uint16_t uVar12;
@@ -3498,7 +3498,7 @@ void __cdecl16far ovc49_drawAgents(void)
   far_t gfx_09;
   undefined1 uVar22;
   uint8_t type;
-  undefined1 uVar23;
+  undefined1 ssHi;
   brect_t agentRect;
   int scrY;
   uint agentIndex;
@@ -3520,10 +3520,10 @@ void __cdecl16far ovc49_drawAgents(void)
   char cStack_3;
   
   type = (uint8_t)_SS;
-  uVar23 = (undefined1)(_SS >> 8);
+  ssHi = (undefined1)(_SS >> 8);
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = type;
   dst.ofs = (uint16_t)&agentRect;
-  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = uVar23;
+  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = ssHi;
   F_SCOPY(far_from_u32((uint32_t)(0x2410842c)),dst);
   AgentsChanged = '\0';
   agentRect.seg = GSavedBlitSeg;
@@ -3548,7 +3548,7 @@ void __cdecl16far ovc49_drawAgents(void)
   GGameState = 0x2c;
   (*(uint8_t *)((uint8_t *)&(dst_02.seg))) = type;
   dst_02.ofs = (uint16_t)&agentRect;
-  (*(uint8_t *)((uint8_t *)&(dst_02.seg) + 1)) = uVar23;
+  (*(uint8_t *)((uint8_t *)&(dst_02.seg) + 1)) = ssHi;
   ovr_ovc23_textBuildThfres01Lbm(dst_02);
   _fmemset(MK_FP(_SS, &recPtr), 0, 2);
   for (agentIndex = 0; (int)agentIndex < (int)(uint)AgntCount; agentIndex = agentIndex + 1) {
@@ -3882,10 +3882,10 @@ void __cdecl16far ovc49_drawAgents(void)
          ((Agnts[agentIndex].combatState == '\0' && (Agnts[agentIndex].animFrame == -1)))
          ) {
         if (Agnts[agentIndex].gindex == '\0') {
-          cVar9 = ovc49_usesFrameIndex2
+          frameOk = ovc49_usesFrameIndex2
                             ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)),
-                             (byte *)CONCAT13(uVar23,CONCAT12(type,&agntIndex)));
-          if (cVar9 == '\0') {
+                             (byte *)CONCAT13(ssHi,CONCAT12(type,&agntIndex)));
+          if (frameOk == '\0') {
             if ((Agnts[agentIndex].frameIndex == '\x03') ||
                (Agnts[agentIndex].frameIndex == '\x0f')) {
               uVar12 = ovr_audio_panFromX((agnt_t *)&Agnts[agentIndex].x,0x26);
@@ -3899,10 +3899,10 @@ void __cdecl16far ovc49_drawAgents(void)
           }
         }
         else if (Agnts[agentIndex].gindex == '\x01') {
-          cVar9 = ovc49_usesFrameIndex
+          frameOk = ovc49_usesFrameIndex
                             ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)),
-                             (byte *)CONCAT13(uVar23,CONCAT12(type,&agntIndex)));
-          if ((cVar9 == '\0') ||
+                             (byte *)CONCAT13(ssHi,CONCAT12(type,&agntIndex)));
+          if ((frameOk == '\0') ||
              (uVar10 = ovr_ovc27_compute1((agnt_t *)&Agnts[agentIndex].x,SEG_OF(Agnts),0x26,agntIndex + 0xff)
              , (char)uVar10 == '\0')) {
             animBranchCode = 10;
@@ -3915,12 +3915,12 @@ void __cdecl16far ovc49_drawAgents(void)
         else if (((Agnts[agentIndex].gindex == '\x02') ||
                  (Agnts[agentIndex].gindex == '\x04')) ||
                 (Agnts[agentIndex].gindex == '\x05')) {
-          cVar9 = ovr_agnt_computeFrameExtents
+          frameOk = ovr_agnt_computeFrameExtents
                             ((agnt_t *)&Agnts[agentIndex].x,
                              (uint8_t *)
                              CONCAT13((char)((uint)&agntIndex >> 8),
                                       CONCAT12((char)&agntIndex,SEG_OF(Agnts))),0x26);
-          if (cVar9 == '\0') {
+          if (frameOk == '\0') {
             animBranchCode = 0xb;
             ovr_agnt_advanceAnimFrame((agnt_t *)&Agnts[agentIndex].x,0x26);
           }
