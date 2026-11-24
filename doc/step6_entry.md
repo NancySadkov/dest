@@ -3183,3 +3183,45 @@ Two conclusions:
 declarations and to be run against a fresh link log.
 
   tree restored to the working link; grep_checks 51,169; compare_state 1,627/0/0
+
+## Fresh stock-CRT link: 28 symbols, only 2 of them CRT
+
+A fresh `--without-crtl` link (so the earlier stale log is retired) reports **28**
+undefined symbols.  Mapping them against every `public`/`proc` name in
+`tools/BC30/CRTL/**/*.ASM` (new `tmp/map_crt.py`) gives:
+
+```
+_F_SCOPY    -> CLIB\F_SCOPY.ASM
+__FAKREALCVT-> CLIB\CVTFAK.ASM
+26 others   -> no shipped source
+```
+
+And the other 26 are not CRT at all - they are functions that currently live in
+`crtl.c` but belong to the game/utility side:
+
+```
+crtl.c:488  audio_init()      crtl.c:637  stshInit_scan()
+crtl.c:502  audio_done()      crtl.c:658  ems_init()
+crtl.c:514  xms_init()        crtl.c:4324 _sprintf()
+... plus LDIV/LMOD/LXSH/LXMUL/LXRSH/LXURSH/PADD/RAND8/SRAND8/FSTRNCPY/IOERRORHNDLR
+```
+
+So `crtl.c` is a mixed module: Turbo C's C0/startup (out of scope) **plus** a set of
+utility routines that the recovered game code actually calls.  Dropping the whole file
+therefore removes game functionality, which is why the link fails - not because the CRT
+is missing.
+
+### The refactor this implies
+
+1. split `crtl.c` into `crtstart.c` (startx / _setupio / _c0crtinit / SaveVectors /
+   __cleanup - the C0 part) and `util.c` (the audio/xms/ems/stsh helpers, the LMOD /
+   LSH / LMUL / PADD / RAND8 / FSTRNCPY family and `_sprintf`);
+2. link with `--without-crtl` so `crtstart.c` is not needed at all, and let C0M's
+   `_startup` run;
+3. assemble the two genuinely-CRT pieces from the shipped sources
+   (`CLIB\F_SCOPY.ASM`, `CLIB\CVTFAK.ASM`).
+
+That satisfies AGENTS.md (no reconstructed C0) without losing game code, and it is a
+mechanical file split rather than new recovery work.
+
+  working link restored; grep_checks 51,169; compare_state 1,627/0/0
