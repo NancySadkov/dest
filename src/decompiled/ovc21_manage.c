@@ -376,7 +376,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
   char *pcVar9;
   uint16_t uVar10;
   undefined1 loByte;
-  uint8_t uVar12;
+  uint8_t attr;
   undefined1 hiByte;
   char textBuf [120];
   uint8_t msg;
@@ -412,7 +412,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     textPtr = manage_playerTitle(sheet_00,pcVar9,loByte,(char)Font02.seg);
     textWidth = ovr_font_textWidth(textPtr,(char *)CONCAT13(hiByte,CONCAT12(loByte,in_DX)),0,0,0);
     loByte = 0x50;
-    uVar12 = 0xde;
+    attr = 0xde;
     cVar1 = (char)(0x7d - textWidth);
     uVar8 = Font02.ofs;
     uVar10 = Font02.seg;
@@ -421,11 +421,11 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     pvVar2 = manage_playerTitle(sheet_00,pcVar9,(char)iVar7,in_DX);
     textPtr = ovr_stsprintf(textBuf,(char *)CONCAT22(0x4cd4,_SS),
                            (char *)CONCAT22(pvVar2,(char *)0x26510),in_DX);
-    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,uVar12,uVar12,loByte);
+    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,attr,attr,loByte);
   }
   if ((statMask & 4) != 0) {
     loByte = 0x50;
-    uVar12 = 0xde;
+    attr = 0xde;
     uVar8 = Font02.ofs;
     uVar10 = Font02.seg;
     textPtr = ovr_fmVsprintf("%s ",(char *)CONCAT22(*(uint16_t *)
@@ -433,18 +433,18 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                                                     (uint)sheet_00->alignment * 4),
                                                    (char *)((far_t *)GAlignmentsNames +
                                                            sheet_00->alignment)->ofs));
-    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,uVar12,uVar12,loByte);
+    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,attr,attr,loByte);
   }
   if ((statMask & 1) != 0) {
     loByte = 0x50;
-    uVar12 = 0xde;
+    attr = 0xde;
     iVar7 = (uint)sheet_00->cls * 4;
     in_DX = (uint8_t *)((char *)0x26510);
     uVar8 = Font02.ofs;
     uVar10 = Font02.seg;
     textPtr = ovr_fmVsprintf("%s",(char *)CONCAT22(*(uint16_t *)(iVar7 + 0xed),
                                                   (char *)*(uint16_t *)(iVar7 + 0xeb)));
-    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,uVar12,uVar12,loByte);
+    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(uVar8,in_DX),uVar10,attr,attr,loByte);
   }
   TextBlitY = TextBlitY + 10;
   if (((statMask & 0x40) != 0) || (DebugVerbose != false)) {
