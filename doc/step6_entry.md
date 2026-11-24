@@ -3225,3 +3225,29 @@ That satisfies AGENTS.md (no reconstructed C0) without losing game code, and it 
 mechanical file split rather than new recovery work.
 
   working link restored; grep_checks 51,169; compare_state 1,627/0/0
+
+## Why the stock startup stalls: our `_setupio` overrides the CRT's
+
+`_streams` is *our* data (`st_globals5.c:1753`, a 20-entry FILE table matching the
+original image), but `_setupio` - the routine that initialises it - is defined in
+`crtl.c`.  When `CRTL.OBJ` is linked together with `C0M.OBJ`, the linker resolves
+C0's `call _setupio` to **our** implementation, which is the one that hangs.  That
+explains the otherwise puzzling observation that the stock startup stalls before its
+`lcall _main` at `0x7955`: the CRT never gets past its own stream initialiser.
+
+The obvious one-line test - rename our function so it no longer shadows the CRT's:
+
+```
+_setupio -> st_setupio   (3 occurrences in crtl.c)
+```
+
+was applied and reverted: with `STOCK_STARTUP=1` the link then reported other
+undefined symbols (`__FAKREALCVT`, `_PADD_AT_`, `_EMSFREE`, ...), i.e. the rename
+alone does not produce a linkable configuration, because the same link still expects
+those helpers from somewhere else.
+
+Conclusion: the shadowing diagnosis stands, but the fix is the full split (move the
+utility routines into their own module so `crtl.c` can be dropped entirely), not a
+rename.  Tree restored to the working link.
+
+  build 64/64 clean; link 0 errors; grep_checks 51,169; compare_state 1,627/0/0
