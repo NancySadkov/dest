@@ -1309,7 +1309,6 @@ code_r0x00072658:
       BldGfxRuin[0x4c] = far_from_u32((uint32_t)(func_0x0007ffe0()));
       BldGfxRuin[0x4f] = far_from_u32((uint32_t)(func_0x0007ffe0()));
       BldGfxRuin[0x52] = far_from_u32((uint32_t)(func_0x0007ffe0()));
-      uVar14 = 0x195d;
     }
     else {
       ovr_stgFreeTmp(stgTmp,0);
@@ -2228,7 +2227,6 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_x00106,65,99,
                               129,26,0,0x41,99,0x1a);
     BldGfxNormal[0x94].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     uVar16 = (uint16_t)((ulong)stgTmp >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00107.seg))) = 100;
     pixels_x00107.ofs = *(uint16_t *)((int)stgTmp + 0x302);
@@ -3006,7 +3004,6 @@ code_r0x00072658:
     BldGfxRuin[0x186] = far_from_u32((uint32_t)(func_0x0007ffe0()));
     BldGfxRuin[0x187] = far_from_u32((uint32_t)(func_0x0007ffe0()));
     BldGfxRuin[0x188] = far_from_u32((uint32_t)(func_0x0007ffe0()));
-    uVar21 = 0x195d;
   }
   else {
     stgTmp = ovr_grabLbmTR(513);
@@ -3471,7 +3468,6 @@ L_init_assets_4EA5:
     pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_x00191,50,313,
                               154,-4,0xd5,0x32,0x39,0xfc);
     BldGfxRuin[0x1b4].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar19 = 0x195d;
     BldGfxRuin[0x1b4].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
   }
@@ -3479,6 +3475,7 @@ L_init_assets_4EA5:
   iVar10 = 0x92;
   if (grab != false) {
     psVar4 = ovr_grabLbm(17,0,0,0,0);
+    asm { mov uVar19,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar19,psVar4);
     pixels_x00200.seg = (psVar4->aptr).seg;
     pixels_x00200.ofs = (&psVar4->aptr)->ofs;
@@ -3541,7 +3538,6 @@ L_init_assets_4EA5:
     BldGfxNormal[0x1c5].seg = stshSegTmp;
     pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),src_08,74,179,(char)uVar16,0x83,0xb3,0,0);
     BldGfxNormal[0x1c6].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar19 = 0x195d;
     uVar20 = (uint16_t)((ulong)stgTmp >> 0x10);
     uVar16 = *(uint16_t *)((int)stgTmp + 0x302);
     (*(uint8_t *)((uint8_t *)&(src_09.seg))) = 0x1f;
@@ -3550,6 +3546,7 @@ L_init_assets_4EA5:
     BldGfxNormal[0x1c6].seg = stshSegTmp;
     pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),src_09,49,79,(char)uVar16,0x1f,0x4f,0,0);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5,0);
+    asm { mov uVar19,dx };
     BldGfxNormal[0x1c7].seg = uVar19;
     BldGfxNormal[0x1c7].ofs = (uint16_t)pcVar6;
   }
@@ -3580,7 +3577,6 @@ L_init_assets_4EA5:
     BldGfxNormal[0x1ce].seg = stshSegTmp;
     pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),src_11,74,79,(char)uVar16,0x1f,0x4f,0,0);
     BldGfxNormal[0x1cf].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar19 = 0x195d;
     uVar20 = (uint16_t)((ulong)stgTmp >> 0x10);
     uVar16 = *(uint16_t *)((int)stgTmp + 0x302);
     (*(uint8_t *)((uint8_t *)&(src_12.seg))) = 0x83;
@@ -3589,6 +3585,7 @@ L_init_assets_4EA5:
     BldGfxNormal[0x1cf].seg = stshSegTmp;
     pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),src_12,49,179,(char)uVar16,0x83,0xb3,0,0);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5,0);
+    asm { mov uVar19,dx };
     BldGfxNormal[0x1d0].seg = uVar19;
     BldGfxNormal[0x1d0].ofs = (uint16_t)pcVar6;
   }
@@ -3732,7 +3729,6 @@ L_init_assets_4EA5:
     BldGfxNormal[0x1ee].seg = stshSegTmp;
     pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),src_24,168,200,(char)uVar9,0,200,0,0);
     BldGfxNormal[0x1f2].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     uVar20 = (uint16_t)((ulong)stgTmp >> 0x10);
     uVar16 = *(uint16_t *)((int)stgTmp + 0x302);
     (*(uint8_t *)((uint8_t *)&(src_25.seg))) = 0xe7;
@@ -3985,11 +3981,11 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
                            (char *)CONCAT13((char)(Font03.ofs >> 8),
                                             CONCAT12((char)Font03.ofs,puVar3[1])),Font03.seg,'U',
                            (char)Font03.ofs,0x55,3,pcVar2,uVar11);
-    uVar9 = 0x195d;
     puVar5 = ovr_ovc15_usesStshRealloc
                        ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),BLD_WORD(&BuildingTypes[bldType], name, 2),(char)iVar4,uVar8,0,0,0,0);
     pcVar2 = ovr_fmVsprintf("%s: Search this location for minerals?  Active party is %s the %s.",
                             (char *)CONCAT22(uVar9,puVar5));
+                            asm { mov uVar9,dx };
     strcpy((char *)CONCAT22(_SS,&msg),
            (char *)CONCAT13((char)((uint)uVar9 >> 8),CONCAT12((char)uVar9,pcVar2)));
     goldPartyIndex = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
@@ -4053,12 +4049,12 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
       cStack_e = '\x10';
       acStack_d[0] = '$';
       uStack_10 = 0x77ba;
-      uVar9 = 0x195d;
       uVar8 = BLD_WORD(&BuildingTypes[bldType], name, 2);
       pcVar2 = ovr_fmVsprintf("Remove %s permanently. Are you sure?",
                               (char *)CONCAT13((char)((uint)uVar8 >> 8),
                                                CONCAT12((char)uVar8,
                                                         BLD_WORD(&BuildingTypes[bldType], name, 0))));
+                                                        asm { mov uVar9,dx };
       puVar5 = &menuLabel;
       (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = uVar11;
       entries_00.ofs = (uint16_t)puVar5;
