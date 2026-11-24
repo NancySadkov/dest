@@ -1768,3 +1768,45 @@ that segment.
 With a close, one run can emit several segments again (no 256 KB ceiling, no lost
 tail), so `tmp/dump_state1.py` should return to a multi-`(delta,size)` stub - the
 file handle, not the write size, is what was missing.
+
+## The original zeroes part of DGROUP at start-up
+
+The state comparison flagged `2410:8436 s_s_is_no_longer_paralyzed` and
+`2410:8451 s_s_breaks_free_of_the_web` as `want 00 00 ... got "..."`.  That is
+not a pairing artefact: read directly from the two dumps,
+
+```
+original runtime 0x842c..0x846c : 00 00 00 00 ...   (all zero)
+original file image 0x842c..    : %s is no longer paralyzed.\0%s breaks free ...
+ours 0x842c..                   : a2 87 14 00 01 60 02 ...   (different layout)
+```
+
+so `audit/dgroup_2410.bin` (the file image) holds those strings but the *running*
+original has zeros there.  The program clears that region during start-up, which
+means:
+
+* the state comparison is right to report a difference, and it will keep reporting
+  one until our build also leaves that area zero;
+* the strings must reach the game by some other route (they are almost certainly
+  copied or repointed at run time), which is worth identifying before changing any
+  declaration - `diff_dgroup` compares the *file* image, so "fixing" this by
+  zeroing the initialisers would break that gate instead.
+
+Practical consequence: this class must be handled by matching the original's
+start-up zeroing, not by editing the string declarations.  It is the same family
+as `agentClipRect` (2410:842c) and `s_d` (84a3), which the state report lists
+alongside it.
+
+## Where the state comparison stands
+
+```
+original dump 78,448 bytes / 21 segments, 0 short fragments
+rebuilt  dump 92,480 bytes /  8 segments, 0 short fragments
+1,570 identical / 100 different / 985 no counterpart
+```
+
+Counting only the fixes to the instrumentation (address normalisation through
+both linked and runtime segments, authoritative object sizes, duplicate-name
+pairing by address), the different count went 816 -> 100 with no change to the
+source data, because the earlier numbers were dominated by artefacts of the
+comparator itself.
