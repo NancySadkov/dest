@@ -2481,3 +2481,51 @@ It points at the process environment DOS sees for our EXE (PSP / job file table 
 current directory block), which our `startx` reconstructs rather than inheriting from
 C0's `_startup`, or at a write-redirection in the modded emulator that keys on
 something about the program image.
+
+## The emulator is exonerated; the DOS file layer is called with the wrong convention
+
+Running the same binary under a **stock** DOSBox-X (`C:\soft\dosbox\dosbox-x.exe`)
+with the identical mount reproduces the modded emulator exactly:
+
+```
+OK.FLG present  (the program reached the probe and exited)
+PP3             absent from the host listing and from DOS's own `dir`
+```
+
+and the DOS-side test is the decisive one:
+
+```c
+f = fopen("pp4","wb"); fputs("x",f); fclose(f);
+if (fopen("pp4","rb") != 0) exit(23);   /* taken */
+```
+
+The program's re-open **succeeds**, yet DOS's `dir` (written by the batch right after
+the program exits) shows no `PP4` at all.  So the C runtime reports success without
+DOS ever creating the file - and this is identical under both emulators.
+
+### Why: the library routine pops its own arguments
+
+`_OPEN`/`_CREAT` in the linked library starts at `0000:17E3`:
+
+```
+55 8b ec            push bp / mov bp,sp
+8b 4e 04            mov cx,[bp+4]
+b4 3c               mov ah,3ch
+8b 56 06            mov dx,[bp+6]
+cd 21               int 21h
+72 02  eb 04        jc / jmp
+50 e8 89 ed         push ax ; call error helper
+5d c2 04 00         pop bp ; **ret 4**     <- callee pops the arguments
+```
+
+`ret 4` means the *callee* discards two argument words - a pascal-style convention -
+while our translation units call it cdecl, whose caller also pops.  Every such call
+therefore removes four extra bytes from the caller's frame (and the error path returns
+`AX` from the helper rather than -1), which explains both the "success" that creates
+nothing and the corrupted state after the call.
+
+Next: establish which convention the header actually declares (`__pascal`,
+`_Cdecl`, `__cdecl16far` are all empty macros in `st_compat.h`) and link the library
+that matches the compiled objects, or fix the prototypes so cdecl is used on both
+sides.  The acceptance test is the existing one: `fopen("pp4","wb")` must make `PP4`
+appear in DOS's `dir`.
