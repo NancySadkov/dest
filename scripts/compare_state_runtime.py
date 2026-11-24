@@ -27,6 +27,7 @@ SYMS = os.path.join(ROOT, "audit", "symbols.tsv")
 STATE = os.path.join(ROOT, "audit", "state_map.tsv")
 
 DG_ORIG = 0x2410
+LIST = "--list" in sys.argv[1:]
 
 
 def load_map():
@@ -136,6 +137,7 @@ for row in state:
 seg_map.setdefault(DG_ORIG, u_dg)
 
 per_seg = {}
+DETAIL = []
 missing = 0
 checked = 0
 for row in state:
@@ -170,6 +172,8 @@ for row in state:
         same = a == b
     st = per_seg.setdefault("%04x" % oseg, [0, 0])
     st[0 if same else 1] += 1
+    if not same and LIST:
+        DETAIL.append((oseg, oofs, name, size, a.hex(), b.hex()))
     checked += 1
 
 print("checked %d symbols, %d have no rebuilt counterpart" % (checked, missing))
@@ -181,3 +185,9 @@ for seg in sorted(per_seg):
     flag = "" if bad == 0 else "   <-- %d differ" % bad
     print("  %s  identical %5d  different %4d%s" % (seg, ok, bad, flag))
 print("TOTAL identical %d, different %d" % (tot[0], tot[1]))
+if LIST:
+    print()
+    for seg, ofs, name, size, a, b in DETAIL[:60]:
+        print("  %04x:%04x %-32s %3d want %s got %s"
+              % (seg, ofs, name[:32], size, a[:40], b[:40]))
+    print("  (%d differing symbols listed)" % len(DETAIL))
