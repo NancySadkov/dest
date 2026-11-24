@@ -2145,3 +2145,52 @@ re-deriving from the original's `main` prologue at `1301:000c`.
 
 Next: dump `1301:000c` (the original main) and our `_MAIN` (0650:0002) and compare
 their prologues; the first divergent statement is the stop.
+
+## The stop is an INT 3Fh overlay stub, not a crash in `main`
+
+`main`'s prologue is now correct against the original (`1301:000c` -> the second
+argument is `argv`, the count is `argc`, and the `argc < 2` branch stores `_DS`, not
+the literal 0x2410), and the rebuilt prologue reads:
+
+```
+55 8b ec 83 ec 08 56 57
+8c 5e fa            mov [bp-6],ds
+8b 76 08            mov si,[bp+8]        ; argv
+8b 44 02 a3 9a 85   mov ax,[si+2] / mov [859a],ax
+8b 5e 08 8b 07 a3 98 85  mov bx,[bp+8] / mov ax,[bx] / mov [8598],ax
+83 7e 06 02 7d 0c   cmp word [bp+6],2 / jge  ; argc
+9a 0e 02 dd 06      lcall 06DD:020E      ; ovr_init_game
+```
+
+That is the original's shape.  So the run stops at (or inside) the thunk call, and
+the thunk's target explains why:
+
+```
+06DD:020E  ea 48 00 1b 14      jmp far 141B:0048
+141B:0048  cd 3f 79 05 00 cd 3f 90 06 00 cd 3f 6d 08 00 00 ...
+```
+
+`141B:0048` is a table of **`INT 3Fh` overlay stubs** (`CD 3F` followed by the
+overlay entry index - `0x0579` is exactly the value the MAP reports as
+`_INIT_GAME 141B:0579`, i.e. that is a *stub index*, not a code offset).  With no
+VROOMM manager installed, the first `INT 3Fh` does not return and the game stops
+right there - which is why `_MAIN` is reached and `_OVR_INIT_GAME`/`_INIT_GAME`/
+`_RUN_DEMO` are not.
+
+So the old 'INT 3Fh ladder' note in this document was right after all, but it
+applies to the **targets of the generated thunks**, not to `main`'s call itself:
+`ovr_thunks.asm` emits `jmp _init_game`, and the linker resolves `_init_game` to a
+symbol whose address is the O09 stub table rather than to real code.
+
+### Next step
+
+Find where `init_game` actually landed in the image (the O09 module's real
+functions are at `141B:00CA`, `141B:019A`, `141B:028E`, `141B:2CDC`, ... with
+`_INIT_GAME` absent from that list), and either
+
+* define `init_game` in a segment the thunk can reach and let `jmp _init_game` bind
+  to it, or
+* point `_ovr_init_game` at the recovered function explicitly.
+
+The check is `tmp/reach.py <symbol>` against the real address, then
+`tmp/runcase.py` for the `STRONG.SAV` milestone.

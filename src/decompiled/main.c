@@ -20,12 +20,17 @@ int __cdecl16far main(int argc,str_t *argv,str_t *envp)
   uint16_t uVar6;
   byte bStack_6;
   
-  uVar6 = (uint16_t)((ulong)envp >> 0x10);
-  psVar5 = (str_t *)envp;
+  /* The original (1301:000c) does:
+   *   LES BX,[BP+8] ; MOV AX,ES:[BX+2] ; MOV DX,ES:[BX]      -> argv[0]
+   *   CMP word [BP+6],2                                      -> argc
+   *   LES BX,[BP+8] ; MOV AX,ES:[BX+6] ; MOV DX,ES:[BX+4]     -> argv[1]
+   * so the second argument is argv (not envp), and the count is argc. */
+  uVar6 = (uint16_t)((ulong)argv >> 0x10);
+  psVar5 = (str_t *)argv;
   GGameExe.seg = psVar5->seg;
-  GGameExe.ofs = (uint16_t)envp->ptr;
-  if ((int)argv < 2) {
-    GExeArg.seg = 0x2410;
+  GGameExe.ofs = (uint16_t)argv->ptr;
+  if (argc < 2) {
+    GExeArg.seg = _DS;
     GExeArg.ofs = 0x94;
   }
   else {
