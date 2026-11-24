@@ -1,0 +1,2656 @@
+seg	ofs	size	name	decl	kind
+1529	0000	1	GfxRndBytes		scalar
+1539	0000	864	mapSquareSide		scalar
+1539	0360	864	mapSquareColumn		scalar
+1539	06c0	864	mapSquareRightX		scalar
+1539	0a20	864	mapSquareLeftX		scalar
+1539	0d80	1728	mapSquareBottomY		scalar
+1539	1440	1	mapSquareTopY		scalar
+16b3	034c	420	columnScreenY		scalar
+16b3	04f0	1	columnScreenY[210]		scalar
+1703	0000	2	AudioHandles		scalar
+1703	0002	1	AudioHandles[0].hi		scalar
+1726	0000	1	AgntSeg		scalar
+1726	0000	2	Agnts		scalar
+1726	0002	2	Agnts[0].y		scalar
+1726	0004	1	Agnts[0].targetX		scalar
+1726	0005	1	Agnts[0].targetX+1		scalar
+1726	0006	6	Agnts[0].targetY		scalar
+1726	000c	2	Agnts[0].target		scalar
+1726	000e	3	Agnts[0].animFrame		scalar
+1726	0011	1	Agnts[0].animVariant		scalar
+1726	0012	1	Agnts[0].frameIndex		scalar
+1726	0013	2	Agnts[0].frames		scalar
+1726	0015	2	Agnts[0].frames+2		scalar
+1726	0017	2	agnt_someptr		scalar
+1726	0019	2	Agnts[0].entity+2		scalar
+1726	001b	2	Agnts[0].owner		scalar
+1726	001d	2	Agnts[0].gdata		scalar
+1726	001f	2	Agnts[0].gdata+2		scalar
+1726	0021	1	Agnts[0].strength		scalar
+1726	0022	1	Agnts[0].strengthMax		scalar
+1726	0023	1	Agnts[0].timer		scalar
+1726	0024	1	Agnts[0].combatState		scalar
+1726	0025	1	Agnts[0].moveState		scalar
+1726	0026	2	Agnts[0].screenX		scalar
+1726	0028	3	Agnts[0].screenY		scalar
+1726	002b	2	Agnts[0].flags		scalar
+1726	002d	2	Agnts[0].visited		scalar
+1726	002f	215	Agnts[0].faction		scalar
+1726	0106	50	Agnts[5].y		scalar
+1726	0138	2	Agnts[6].x		scalar
+1726	013a	27	Agnts[6].y		scalar
+1726	0155	907	Agnts[6].gdata		scalar
+1726	04e0	1050	AgntArrayB		scalar
+1726	08fa	1	AgntArrayA		scalar
+17f8	0000	2	SquareRecs		scalar
+17f8	0002	17	SquareRecs[0].y		scalar
+17f8	0013	1	SquareRecs[1].x		scalar
+195d	0000	1	EntityTypeSeg		scalar
+195d	0000	29	ProjectileAnms		scalar
+195d	001d	35	EntityTypeSeg[0].sfxId		scalar
+195d	0040	206	EntityTypeSeg[2].sy+1		scalar
+195d	010e	19	BuildingTypes		scalar
+195d	0121	13	BuildingTypes[0].flags2		scalar
+195d	012e	5	BuildingTypes[0].sight		scalar
+195d	0133	1	BuildingTypes[0].unitType		scalar
+195d	0134	460	BuildingTypes[0].flags3		scalar
+195d	0300	2	BuildingTypes[12].halfWidth		scalar
+195d	0302	9171	BuildingTypes[12].sight		scalar
+195d	26d5	1	ntt_type		scalar
+195d	26d6	2	AgntGs		scalar
+195d	26d8	1	AgntGs[0].nanims		scalar
+195d	26d9	2	AgntGs[0].sprs[0]		scalar
+195d	26db	2	AgntGs[0].sprs[0]+2		scalar
+195d	26dd	2	AgntGs[0].sprs[1]		scalar
+195d	26df	2	AgntGs[0].sprs[1]+2		scalar
+195d	26e1	2	AgntGs[0].sprs[2]		scalar
+195d	26e3	2	AgntGs[0].sprs[2]+2		scalar
+195d	26e5	2	AgntGs[0].sprs[3]		scalar
+195d	26e7	2	AgntGs[0].sprs[3]+2		scalar
+195d	26e9	17	AgntGs[0].sprs[4]		scalar
+195d	26fa	2	AgntGs[0].name		scalar
+195d	26fc	2	AgntGs[0].name+2		scalar
+195d	26fe	2	AgntGs[0].anms		scalar
+195d	2700	2	AgntGs[0].anms+2		scalar
+195d	2702	2	AgntGs[0].sprfls[0]		scalar
+195d	2704	2	AgntGs[0].sprfls[1]		scalar
+195d	2706	2	AgntGs[0].sprfls[2]		scalar
+195d	2708	20	AgntGs[0].sprfls[3]		scalar
+195d	271c	1	AgntGs[0].shortName[3]		scalar
+195d	271d	13	AgntGs[0].shortName[4]		scalar
+195d	272a	12	AgntGs[0].prtfls[0]		scalar
+195d	2736	2	AgntGs[0].prts[0].ofs		scalar
+195d	2738	2	AgntGs[0].prts[0].seg		scalar
+195d	273a	2	AgntGs[0].prts[1].ofs		scalar
+195d	273c	2	AgntGs[0].prts[1].seg		scalar
+195d	273e	2	AgntGs[0].prts[2].ofs		scalar
+195d	2740	2	AgntGs[0].prts[2].seg		scalar
+195d	2742	2	AgntGs[0].prts[3].ofs		scalar
+195d	2744	10	AgntGs[0].prts[3].seg		scalar
+195d	274e	2	AgntGs[0].prtpals[0].ofs		scalar
+195d	2750	2	AgntGs[0].prtpals[0].seg		scalar
+195d	2752	2	AgntGs[0].prtpals[1].ofs		scalar
+195d	2754	6	AgntGs[0].prtpals[1].seg		scalar
+195d	275a	2	AgntGs[0].prtpals[3].ofs		scalar
+195d	275c	10	AgntGs[0].prtpals[3].seg		scalar
+195d	2766	2	AgntGs[0].wpn_name		scalar
+195d	2768	6112	AgntGs[0].wpn_name+2		scalar
+195d	3f48	1	BldFlags		scalar
+195d	3f49	1	BldFlags[1]		scalar
+195d	3f4a	742	BldFlags[2]		scalar
+195d	4230	2	BldGfxRuin		scalar
+195d	4232	18	BldGfxRuin[0].seg		scalar
+195d	4244	6	BldGfxRuin[5].ofs		scalar
+195d	424a	2026	BldGfxRuin[6].seg		scalar
+195d	4a34	2	BldGfxRuin[513].ofs		scalar
+195d	4a36	2	BldGfxRuin[513].seg		scalar
+195d	4a38	2	BldGfxRuin[514].ofs		scalar
+195d	4a3a	2	BldGfxRuin[514].seg		scalar
+195d	4a3c	2	BldGfxRuin[515].ofs		scalar
+195d	4a3e	2	BldGfxRuin[515].seg		scalar
+195d	4a40	2	BldGfxRuin[516].ofs		scalar
+195d	4a42	2	BldGfxRuin[516].seg		scalar
+195d	4a44	2	BldGfxRuin[517].ofs		scalar
+195d	4a46	2	BldGfxRuin[517].seg		scalar
+195d	4a48	2	BldGfxRuin[518].ofs		scalar
+195d	4a4a	2	BldGfxRuin[518].seg		scalar
+195d	4a4c	2	BldGfxRuin[519].ofs		scalar
+195d	4a4e	2	BldGfxRuin[519].seg		scalar
+195d	4a50	2	BldGfxRuin[520].ofs		scalar
+195d	4a52	2	BldGfxRuin[520].seg		scalar
+195d	4a54	2	BldGfxRuin[521].ofs		scalar
+195d	4a56	2	BldGfxRuin[521].seg		scalar
+195d	4a58	2	BldGfxRuin[522].ofs		scalar
+195d	4a5a	2	BldGfxRuin[522].seg		scalar
+195d	4a5c	2	BldGfxRuin[523].ofs		scalar
+195d	4a5e	2	BldGfxRuin[523].seg		scalar
+195d	4a60	2	BldGfxRuin[524].ofs		scalar
+195d	4a62	2	BldGfxRuin[524].seg		scalar
+195d	4a64	2	BldGfxRuin[525].ofs		scalar
+195d	4a66	2	BldGfxRuin[525].seg		scalar
+195d	4a68	2	BldGfxRuin[526].ofs		scalar
+195d	4a6a	2	BldGfxRuin[526].seg		scalar
+195d	4a6c	2	BldGfxRuin[527].ofs		scalar
+195d	4a6e	2	BldGfxRuin[527].seg		scalar
+195d	4a70	2	BldGfxRuin[528].ofs		scalar
+195d	4a72	2	BldGfxRuin[528].seg		scalar
+195d	4a74	2	BldGfxRuin[529].ofs		scalar
+195d	4a76	2	BldGfxRuin[529].seg		scalar
+195d	4a78	2	BldGfxRuin[530].ofs		scalar
+195d	4a7a	2	BldGfxRuin[530].seg		scalar
+195d	4a7c	2	BldGfxRuin[531].ofs		scalar
+195d	4a7e	2	BldGfxRuin[531].seg		scalar
+195d	4a80	2	BldGfxRuin[532].ofs		scalar
+195d	4a82	2	BldGfxRuin[532].seg		scalar
+195d	4a84	2	BldGfxRuin[533].ofs		scalar
+195d	4a86	2	BldGfxRuin[533].seg		scalar
+195d	4a88	2	BldGfxRuin[534].ofs		scalar
+195d	4a8a	2	BldGfxRuin[534].seg		scalar
+195d	4a8c	2	BldGfxRuin[535].ofs		scalar
+195d	4a8e	2	BldGfxRuin[535].seg		scalar
+195d	4a90	2	BldGfxRuin[536].ofs		scalar
+195d	4a92	2	BldGfxRuin[536].seg		scalar
+195d	4a94	2	BldGfxRuin[537].ofs		scalar
+195d	4a96	2	BldGfxRuin[537].seg		scalar
+195d	4a98	2	BldGfxRuin[538].ofs		scalar
+195d	4a9a	2	BldGfxRuin[538].seg		scalar
+195d	4a9c	2	BldGfxRuin[539].ofs		scalar
+195d	4a9e	38	BldGfxRuin[539].seg		scalar
+195d	4ac4	2	BldGfxRuin[549].ofs		scalar
+195d	4ac6	2	BldGfxRuin[549].seg		scalar
+195d	4ac8	2	BldGfxRuin[550].ofs		scalar
+195d	4aca	2	BldGfxRuin[550].seg		scalar
+195d	4acc	2	BldGfxRuin[551].ofs		scalar
+195d	4ace	2	BldGfxRuin[551].seg		scalar
+195d	4ad0	2	BldGfxRuin[552].ofs		scalar
+195d	4ad2	2	BldGfxRuin[552].seg		scalar
+195d	4ad4	2	BldGfxRuin[553].ofs		scalar
+195d	4ad6	2	BldGfxRuin[553].seg		scalar
+195d	4ad8	2	BldGfxRuin[554].ofs		scalar
+195d	4ada	74	BldGfxRuin[554].seg		scalar
+195d	4b24	2	BldGfxRuin[573].ofs		scalar
+195d	4b26	2	BldGfxRuin[573].seg		scalar
+195d	4b28	2	BldGfxRuin[574].ofs		scalar
+195d	4b2a	2	BldGfxRuin[574].seg		scalar
+195d	4b2c	2	BldGfxRuin[575].ofs		scalar
+195d	4b2e	2	BldGfxRuin[575].seg		scalar
+195d	4b30	2	BldGfxRuin[576].ofs		scalar
+195d	4b32	2	BldGfxRuin[576].seg		scalar
+195d	4b34	2	BldGfxRuin[577].ofs		scalar
+195d	4b36	2	BldGfxRuin[577].seg		scalar
+195d	4b38	2	BldGfxRuin[578].ofs		scalar
+195d	4b3a	2	BldGfxRuin[578].seg		scalar
+195d	4b3c	2	BldGfxRuin[579].ofs		scalar
+195d	4b3e	2	BldGfxRuin[579].seg		scalar
+195d	4b40	2	BldGfxRuin[580].ofs		scalar
+195d	4b42	2	BldGfxRuin[580].seg		scalar
+195d	4b44	2	BldGfxRuin[581].ofs		scalar
+195d	4b46	2	BldGfxRuin[581].seg		scalar
+195d	4b48	2	BldGfxRuin[582].ofs		scalar
+195d	4b4a	2	BldGfxRuin[582].seg		scalar
+195d	4b4c	2	BldGfxRuin[583].ofs		scalar
+195d	4b4e	2	BldGfxRuin[583].seg		scalar
+195d	4b50	2	BldGfxRuin[584].ofs		scalar
+195d	4b52	2	BldGfxRuin[584].seg		scalar
+195d	4b54	2	BldGfxRuin[585].ofs		scalar
+195d	4b56	2	BldGfxRuin[585].seg		scalar
+195d	4b58	2	BldGfxRuin[586].ofs		scalar
+195d	4b5a	2	BldGfxRuin[586].seg		scalar
+195d	4b5c	2	BldGfxRuin[587].ofs		scalar
+195d	4b5e	2	BldGfxRuin[587].seg		scalar
+195d	4b60	2	BldGfxRuin[588].ofs		scalar
+195d	4b62	2	BldGfxRuin[588].seg		scalar
+195d	4b64	2	BldGfxRuin[589].ofs		scalar
+195d	4b66	2	BldGfxRuin[589].seg		scalar
+195d	4b68	2	BldGfxRuin[590].ofs		scalar
+195d	4b6a	2	BldGfxRuin[590].seg		scalar
+195d	4b6c	2	BldGfxRuin[591].ofs		scalar
+195d	4b6e	2	BldGfxRuin[591].seg		scalar
+195d	4b70	2	BldGfxRuin[592].ofs		scalar
+195d	4b72	2	BldGfxRuin[592].seg		scalar
+195d	4b74	2	BldGfxRuin[593].ofs		scalar
+195d	4b76	2	BldGfxRuin[593].seg		scalar
+195d	4b78	2	BldGfxRuin[594].ofs		scalar
+195d	4b7a	2	BldGfxRuin[594].seg		scalar
+195d	4b7c	2	BldGfxRuin[595].ofs		scalar
+195d	4b7e	2	BldGfxRuin[595].seg		scalar
+195d	4b80	2	BldGfxRuin[596].ofs		scalar
+195d	4b82	2	BldGfxRuin[596].seg		scalar
+195d	4b84	2	BldGfxRuin[597].ofs		scalar
+195d	4b86	2	BldGfxRuin[597].seg		scalar
+195d	4b88	2	BldGfxRuin[598].ofs		scalar
+195d	4b8a	2	BldGfxRuin[598].seg		scalar
+195d	4b8c	2	BldGfxRuin[599].ofs		scalar
+195d	4b8e	6	BldGfxRuin[599].seg		scalar
+195d	4b94	2	BldGfxRuin[601].ofs		scalar
+195d	4b96	10	BldGfxRuin[601].seg		scalar
+195d	4ba0	2	BldGfxRuin[604].ofs		scalar
+195d	4ba2	10	BldGfxRuin[604].seg		scalar
+195d	4bac	2	BldGfxRuin[607].ofs		scalar
+195d	4bae	10	BldGfxRuin[607].seg		scalar
+195d	4bb8	2	BldGfxRuin[610].ofs		scalar
+195d	4bba	10	BldGfxRuin[610].seg		scalar
+195d	4bc4	2	BldGfxRuin[613].ofs		scalar
+195d	4bc6	10	BldGfxRuin[613].seg		scalar
+195d	4bd0	2	BldGfxRuin[616].ofs		scalar
+195d	4bd2	6	BldGfxRuin[616].seg		scalar
+195d	4bd8	2	BldGfxRuin[618].ofs		scalar
+195d	4bda	2	BldGfxRuin[618].seg		scalar
+195d	4bdc	2	BldGfxRuin[619].ofs		scalar
+195d	4bde	2	BldGfxRuin[619].seg		scalar
+195d	4be0	2	BldGfxRuin[620].ofs		scalar
+195d	4be2	2	BldGfxRuin[620].seg		scalar
+195d	4be4	2	BldGfxRuin[621].ofs		scalar
+195d	4be6	2	BldGfxRuin[621].seg		scalar
+195d	4be8	2	BldGfxRuin[622].ofs		scalar
+195d	4bea	2	BldGfxRuin[622].seg		scalar
+195d	4bec	2	BldGfxRuin[623].ofs		scalar
+195d	4bee	2	BldGfxRuin[623].seg		scalar
+195d	4bf0	2	BldGfxRuin[624].ofs		scalar
+195d	4bf2	2	BldGfxRuin[624].seg		scalar
+195d	4bf4	2	BldGfxRuin[625].ofs		scalar
+195d	4bf6	2	BldGfxRuin[625].seg		scalar
+195d	4bf8	2	BldGfxRuin[626].ofs		scalar
+195d	4bfa	2	BldGfxRuin[626].seg		scalar
+195d	4bfc	2	BldGfxRuin[627].ofs		scalar
+195d	4bfe	2	BldGfxRuin[627].seg		scalar
+195d	4c00	2	BldGfxRuin[628].ofs		scalar
+195d	4c02	2	BldGfxRuin[628].seg		scalar
+195d	4c04	2	BldGfxRuin[629].ofs		scalar
+195d	4c06	2	BldGfxRuin[629].seg		scalar
+195d	4c08	2	BldGfxRuin[630].ofs		scalar
+195d	4c0a	2	BldGfxRuin[630].seg		scalar
+195d	4c0c	2	BldGfxRuin[631].ofs		scalar
+195d	4c0e	2	BldGfxRuin[631].seg		scalar
+195d	4c10	2	BldGfxRuin[632].ofs		scalar
+195d	4c12	2	BldGfxRuin[632].seg		scalar
+195d	4c14	2	BldGfxRuin[633].ofs		scalar
+195d	4c16	2	BldGfxRuin[633].seg		scalar
+195d	4c18	2	BldGfxRuin[634].ofs		scalar
+195d	4c1a	2	BldGfxRuin[634].seg		scalar
+195d	4c1c	2	BldGfxRuin[635].ofs		scalar
+195d	4c1e	2	BldGfxRuin[635].seg		scalar
+195d	4c20	2	BldGfxRuin[636].ofs		scalar
+195d	4c22	2	BldGfxRuin[636].seg		scalar
+195d	4c24	2	BldGfxRuin[637].ofs		scalar
+195d	4c26	2	BldGfxRuin[637].seg		scalar
+195d	4c28	2	BldGfxRuin[638].ofs		scalar
+195d	4c2a	2	BldGfxRuin[638].seg		scalar
+195d	4c2c	2	BldGfxRuin[639].ofs		scalar
+195d	4c2e	2	BldGfxRuin[639].seg		scalar
+195d	4c30	2	BldGfxRuin[640].ofs		scalar
+195d	4c32	2	BldGfxRuin[640].seg		scalar
+195d	4c34	2	BldGfxRuin[641].ofs		scalar
+195d	4c36	2	BldGfxRuin[641].seg		scalar
+195d	4c38	2	BldGfxRuin[642].ofs		scalar
+195d	4c3a	2	BldGfxRuin[642].seg		scalar
+195d	4c3c	2	BldGfxRuin[643].ofs		scalar
+195d	4c3e	2	BldGfxRuin[643].seg		scalar
+195d	4c40	2	BldGfxRuin[644].ofs		scalar
+195d	4c42	258	BldGfxRuin[644].seg		scalar
+195d	4d44	2	BldGfxRuin[709].ofs		scalar
+195d	4d46	138	BldGfxRuin[709].seg		scalar
+195d	4dd0	2	BldGfxNormal		scalar
+195d	4dd2	2	BldGfxNormal[0].seg		scalar
+195d	4dd4	2	BldGfxNormal[1].ofs		scalar
+195d	4dd6	2046	BldGfxNormal[1].seg		scalar
+195d	55d4	2	BldGfxNormal[513].ofs		scalar
+195d	55d6	2	BldGfxNormal[513].seg		scalar
+195d	55d8	2	BldGfxNormal[514].ofs		scalar
+195d	55da	2	BldGfxNormal[514].seg		scalar
+195d	55dc	2	BldGfxNormal[515].ofs		scalar
+195d	55de	2	BldGfxNormal[515].seg		scalar
+195d	55e0	2	BldGfxNormal[516].ofs		scalar
+195d	55e2	2	BldGfxNormal[516].seg		scalar
+195d	55e4	2	BldGfxNormal[517].ofs		scalar
+195d	55e6	2	BldGfxNormal[517].seg		scalar
+195d	55e8	2	BldGfxNormal[518].ofs		scalar
+195d	55ea	2	BldGfxNormal[518].seg		scalar
+195d	55ec	2	BldGfxNormal[519].ofs		scalar
+195d	55ee	2	BldGfxNormal[519].seg		scalar
+195d	55f0	2	BldGfxNormal[520].ofs		scalar
+195d	55f2	2	BldGfxNormal[520].seg		scalar
+195d	55f4	2	BldGfxNormal[521].ofs		scalar
+195d	55f6	2	BldGfxNormal[521].seg		scalar
+195d	55f8	2	BldGfxNormal[522].ofs		scalar
+195d	55fa	2	BldGfxNormal[522].seg		scalar
+195d	55fc	2	BldGfxNormal[523].ofs		scalar
+195d	55fe	2	BldGfxNormal[523].seg		scalar
+195d	5600	2	BldGfxNormal[524].ofs		scalar
+195d	5602	2	BldGfxNormal[524].seg		scalar
+195d	5604	2	BldGfxNormal[525].ofs		scalar
+195d	5606	2	BldGfxNormal[525].seg		scalar
+195d	5608	2	BldGfxNormal[526].ofs		scalar
+195d	560a	2	BldGfxNormal[526].seg		scalar
+195d	560c	2	BldGfxNormal[527].ofs		scalar
+195d	560e	2	BldGfxNormal[527].seg		scalar
+195d	5610	2	BldGfxNormal[528].ofs		scalar
+195d	5612	2	BldGfxNormal[528].seg		scalar
+195d	5614	2	BldGfxNormal[529].ofs		scalar
+195d	5616	2	BldGfxNormal[529].seg		scalar
+195d	5618	2	BldGfxNormal[530].ofs		scalar
+195d	561a	2	BldGfxNormal[530].seg		scalar
+195d	561c	2	BldGfxNormal[531].ofs		scalar
+195d	561e	2	BldGfxNormal[531].seg		scalar
+195d	5620	2	BldGfxNormal[532].ofs		scalar
+195d	5622	2	BldGfxNormal[532].seg		scalar
+195d	5624	2	BldGfxNormal[533].ofs		scalar
+195d	5626	2	BldGfxNormal[533].seg		scalar
+195d	5628	2	BldGfxNormal[534].ofs		scalar
+195d	562a	2	BldGfxNormal[534].seg		scalar
+195d	562c	2	BldGfxNormal[535].ofs		scalar
+195d	562e	2	BldGfxNormal[535].seg		scalar
+195d	5630	2	BldGfxNormal[536].ofs		scalar
+195d	5632	2	BldGfxNormal[536].seg		scalar
+195d	5634	2	BldGfxNormal[537].ofs		scalar
+195d	5636	2	BldGfxNormal[537].seg		scalar
+195d	5638	2	BldGfxNormal[538].ofs		scalar
+195d	563a	2	BldGfxNormal[538].seg		scalar
+195d	563c	2	BldGfxNormal[539].ofs		scalar
+195d	563e	38	BldGfxNormal[539].seg		scalar
+195d	5664	2	BldGfxNormal[549].ofs		scalar
+195d	5666	2	BldGfxNormal[549].seg		scalar
+195d	5668	2	BldGfxNormal[550].ofs		scalar
+195d	566a	2	BldGfxNormal[550].seg		scalar
+195d	566c	2	BldGfxNormal[551].ofs		scalar
+195d	566e	2	BldGfxNormal[551].seg		scalar
+195d	5670	2	BldGfxNormal[552].ofs		scalar
+195d	5672	2	BldGfxNormal[552].seg		scalar
+195d	5674	2	BldGfxNormal[553].ofs		scalar
+195d	5676	2	BldGfxNormal[553].seg		scalar
+195d	5678	2	BldGfxNormal[554].ofs		scalar
+195d	567a	74	BldGfxNormal[554].seg		scalar
+195d	56c4	2	BldGfxNormal[573].ofs		scalar
+195d	56c6	2	BldGfxNormal[573].seg		scalar
+195d	56c8	2	BldGfxNormal[574].ofs		scalar
+195d	56ca	2	BldGfxNormal[574].seg		scalar
+195d	56cc	2	BldGfxNormal[575].ofs		scalar
+195d	56ce	2	BldGfxNormal[575].seg		scalar
+195d	56d0	2	BldGfxNormal[576].ofs		scalar
+195d	56d2	2	BldGfxNormal[576].seg		scalar
+195d	56d4	2	BldGfxNormal[577].ofs		scalar
+195d	56d6	2	BldGfxNormal[577].seg		scalar
+195d	56d8	2	BldGfxNormal[578].ofs		scalar
+195d	56da	2	BldGfxNormal[578].seg		scalar
+195d	56dc	2	BldGfxNormal[579].ofs		scalar
+195d	56de	2	BldGfxNormal[579].seg		scalar
+195d	56e0	2	BldGfxNormal[580].ofs		scalar
+195d	56e2	2	BldGfxNormal[580].seg		scalar
+195d	56e4	2	BldGfxNormal[581].ofs		scalar
+195d	56e6	2	BldGfxNormal[581].seg		scalar
+195d	56e8	2	BldGfxNormal[582].ofs		scalar
+195d	56ea	2	BldGfxNormal[582].seg		scalar
+195d	56ec	2	BldGfxNormal[583].ofs		scalar
+195d	56ee	2	BldGfxNormal[583].seg		scalar
+195d	56f0	2	BldGfxNormal[584].ofs		scalar
+195d	56f2	2	BldGfxNormal[584].seg		scalar
+195d	56f4	2	BldGfxNormal[585].ofs		scalar
+195d	56f6	2	BldGfxNormal[585].seg		scalar
+195d	56f8	2	BldGfxNormal[586].ofs		scalar
+195d	56fa	2	BldGfxNormal[586].seg		scalar
+195d	56fc	2	BldGfxNormal[587].ofs		scalar
+195d	56fe	2	BldGfxNormal[587].seg		scalar
+195d	5700	2	BldGfxNormal[588].ofs		scalar
+195d	5702	2	BldGfxNormal[588].seg		scalar
+195d	5704	2	BldGfxNormal[589].ofs		scalar
+195d	5706	2	BldGfxNormal[589].seg		scalar
+195d	5708	2	BldGfxNormal[590].ofs		scalar
+195d	570a	2	BldGfxNormal[590].seg		scalar
+195d	570c	2	BldGfxNormal[591].ofs		scalar
+195d	570e	2	BldGfxNormal[591].seg		scalar
+195d	5710	2	BldGfxNormal[592].ofs		scalar
+195d	5712	2	BldGfxNormal[592].seg		scalar
+195d	5714	2	BldGfxNormal[593].ofs		scalar
+195d	5716	2	BldGfxNormal[593].seg		scalar
+195d	5718	2	BldGfxNormal[594].ofs		scalar
+195d	571a	2	BldGfxNormal[594].seg		scalar
+195d	571c	2	BldGfxNormal[595].ofs		scalar
+195d	571e	2	BldGfxNormal[595].seg		scalar
+195d	5720	2	BldGfxNormal[596].ofs		scalar
+195d	5722	2	BldGfxNormal[596].seg		scalar
+195d	5724	2	BldGfxNormal[597].ofs		scalar
+195d	5726	2	BldGfxNormal[597].seg		scalar
+195d	5728	2	BldGfxNormal[598].ofs		scalar
+195d	572a	2	BldGfxNormal[598].seg		scalar
+195d	572c	2	BldGfxNormal[599].ofs		scalar
+195d	572e	6	BldGfxNormal[599].seg		scalar
+195d	5734	2	BldGfxNormal[601].ofs		scalar
+195d	5736	10	BldGfxNormal[601].seg		scalar
+195d	5740	2	BldGfxNormal[604].ofs		scalar
+195d	5742	10	BldGfxNormal[604].seg		scalar
+195d	574c	2	BldGfxNormal[607].ofs		scalar
+195d	574e	10	BldGfxNormal[607].seg		scalar
+195d	5758	2	BldGfxNormal[610].ofs		scalar
+195d	575a	10	BldGfxNormal[610].seg		scalar
+195d	5764	2	BldGfxNormal[613].ofs		scalar
+195d	5766	10	BldGfxNormal[613].seg		scalar
+195d	5770	2	BldGfxNormal[616].ofs		scalar
+195d	5772	6	BldGfxNormal[616].seg		scalar
+195d	5778	2	BldGfxNormal[618].ofs		scalar
+195d	577a	2	BldGfxNormal[618].seg		scalar
+195d	577c	2	BldGfxNormal[619].ofs		scalar
+195d	577e	2	BldGfxNormal[619].seg		scalar
+195d	5780	2	BldGfxNormal[620].ofs		scalar
+195d	5782	2	BldGfxNormal[620].seg		scalar
+195d	5784	2	BldGfxNormal[621].ofs		scalar
+195d	5786	2	BldGfxNormal[621].seg		scalar
+195d	5788	2	BldGfxNormal[622].ofs		scalar
+195d	578a	2	BldGfxNormal[622].seg		scalar
+195d	578c	2	BldGfxNormal[623].ofs		scalar
+195d	578e	2	BldGfxNormal[623].seg		scalar
+195d	5790	2	BldGfxNormal[624].ofs		scalar
+195d	5792	2	BldGfxNormal[624].seg		scalar
+195d	5794	2	BldGfxNormal[625].ofs		scalar
+195d	5796	2	BldGfxNormal[625].seg		scalar
+195d	5798	2	BldGfxNormal[626].ofs		scalar
+195d	579a	2	BldGfxNormal[626].seg		scalar
+195d	579c	2	BldGfxNormal[627].ofs		scalar
+195d	579e	2	BldGfxNormal[627].seg		scalar
+195d	57a0	2	BldGfxNormal[628].ofs		scalar
+195d	57a2	2	BldGfxNormal[628].seg		scalar
+195d	57a4	2	BldGfxNormal[629].ofs		scalar
+195d	57a6	2	BldGfxNormal[629].seg		scalar
+195d	57a8	2	BldGfxNormal[630].ofs		scalar
+195d	57aa	2	BldGfxNormal[630].seg		scalar
+195d	57ac	2	BldGfxNormal[631].ofs		scalar
+195d	57ae	2	BldGfxNormal[631].seg		scalar
+195d	57b0	2	BldGfxNormal[632].ofs		scalar
+195d	57b2	2	BldGfxNormal[632].seg		scalar
+195d	57b4	2	BldGfxNormal[633].ofs		scalar
+195d	57b6	2	BldGfxNormal[633].seg		scalar
+195d	57b8	2	BldGfxNormal[634].ofs		scalar
+195d	57ba	2	BldGfxNormal[634].seg		scalar
+195d	57bc	2	BldGfxNormal[635].ofs		scalar
+195d	57be	2	BldGfxNormal[635].seg		scalar
+195d	57c0	2	BldGfxNormal[636].ofs		scalar
+195d	57c2	2	BldGfxNormal[636].seg		scalar
+195d	57c4	2	BldGfxNormal[637].ofs		scalar
+195d	57c6	2	BldGfxNormal[637].seg		scalar
+195d	57c8	2	BldGfxNormal[638].ofs		scalar
+195d	57ca	2	BldGfxNormal[638].seg		scalar
+195d	57cc	2	BldGfxNormal[639].ofs		scalar
+195d	57ce	2	BldGfxNormal[639].seg		scalar
+195d	57d0	2	BldGfxNormal[640].ofs		scalar
+195d	57d2	2	BldGfxNormal[640].seg		scalar
+195d	57d4	2	BldGfxNormal[641].ofs		scalar
+195d	57d6	2	BldGfxNormal[641].seg		scalar
+195d	57d8	2	BldGfxNormal[642].ofs		scalar
+195d	57da	2	BldGfxNormal[642].seg		scalar
+195d	57dc	2	BldGfxNormal[643].ofs		scalar
+195d	57de	2	BldGfxNormal[643].seg		scalar
+195d	57e0	2	BldGfxNormal[644].ofs		scalar
+195d	57e2	254	BldGfxNormal[644].seg		scalar
+195d	58e0	2	BldGfxNormal[708].ofs		scalar
+195d	58e2	2	BldGfxNormal[708].seg		scalar
+195d	58e4	2	BldGfxNormal[709].ofs		scalar
+195d	58e6	2	BldGfxNormal[709].seg		scalar
+195d	58e8	2	BldGfxNormal[710].ofs		scalar
+195d	58ea	30	BldGfxNormal[710].seg		scalar
+195d	5908	2	BldGfxNormal[718].ofs		scalar
+195d	590a	10	BldGfxNormal[718].seg		scalar
+195d	5914	2	BldGfxNormal[721].ofs		scalar
+195d	5916	10	BldGfxNormal[721].seg		scalar
+195d	5920	2	BldGfxNormal[724].ofs		scalar
+195d	5922	10	BldGfxNormal[724].seg		scalar
+195d	592c	2	BldGfxNormal[727].ofs		scalar
+195d	592e	10	BldGfxNormal[727].seg		scalar
+195d	5938	2	BldGfxNormal[730].ofs		scalar
+195d	593a	10	BldGfxNormal[730].seg		scalar
+195d	5944	2	BldGfxNormal[733].ofs		scalar
+195d	5946	10	BldGfxNormal[733].seg		scalar
+195d	5950	2	BldGfxNormal[736].ofs		scalar
+195d	5952	10	BldGfxNormal[736].seg		scalar
+195d	595c	2	BldGfxNormal[739].ofs		scalar
+195d	595e	10	BldGfxNormal[739].seg		scalar
+195d	5968	2	BldGfxNormal[742].ofs		scalar
+195d	596a	1	BldGfxNormal[742].seg		scalar
+1ef4	0000	1	STSH_DATA		scalar
+1ef4	0000	2	StshNames		scalar
+1ef4	0002	70	StshNames[0]+2		scalar
+1ef4	0048	2	StshNames[18]		scalar
+1ef4	004a	1586	StshNames[18]+2		scalar
+1ef4	067c	2	StshNames[415]		scalar
+1ef4	067e	514	StshNames[415]+2		scalar
+1ef4	0880	544	StshBytes		scalar
+1ef4	0aa0	2	StshSizes		scalar
+1ef4	0aa2	1613	StshSizes[0]+2		scalar
+1ef4	10ef	561	StshSizes[403]+3		scalar
+1ef4	1320	2	StshPtrs		scalar
+1ef4	1322	92	StshPtrs[0]+2		scalar
+1ef4	137e	6	StshPtrs[23]+2		scalar
+1ef4	1384	2	StshPtrs[25]		scalar
+1ef4	1386	2	StshPtrs[25]+2		scalar
+1ef4	1388	4248	StshPtrs[26]		scalar
+1ef4	2420	1	StshHandles		scalar
+217a	0000	2	GLeaderSheets		scalar
+217a	0002	61	GLeaderSheets[0]+2		scalar
+217a	003f	20	GLeaderSheets[15]+3		scalar
+217a	0053	63	GLeaderSheets[20]+3		scalar
+217a	0092	1	GLeaderSheets[36]+2		scalar
+218e	0000	1	AudioFileIds		scalar
+218e	0000	276	AudioSeg		scalar
+218e	0114	1	AudioHandles		scalar
+21b1	0000	2	expThresholds		scalar
+21b1	0002	1	data_21b1_DATA_game9_0002		scalar
+21f2	0000	2	GRecords		scalar
+21f2	0002	2	GRecords.x		scalar
+21f2	0004	2	GRecords.y		scalar
+21f2	0006	1	GRecords.reserved06		scalar
+21f2	0007	1	GRecords.width		scalar
+21f2	0008	1	GRecords.reserved08		scalar
+21f2	0009	2	GRecords.party		scalar
+21f2	000b	2	GRecords.countdown		scalar
+21f2	000d	1	GRecords.kind		scalar
+21f2	000e	1	GRecords.done		scalar
+21f2	000f	2	GRecords.tick		scalar
+21f2	0011	1	GRecords.reserved11		scalar
+224a	0000	289	MiceSaveArea		scalar
+224a	0121	1	miceTileTail		scalar
+225d	0000	1	_OVRDATA_		scalar
+225d	0000	2	__OVRGROUP		scalar
+225d	0002	4	__OVRTRAPHANDLER		scalar
+225d	0006	10	__OVRFILENAME		scalar
+225d	0010	16	OvrFlags		scalar
+225d	0020	16	__OVRVDISK		scalar
+225d	0030	2	__EmsPageFrame		scalar
+225d	0032	2	__EmsHandle		scalar
+225d	0034	2	__EmsFirstPage		scalar
+225d	0036	2	__EmsPages		scalar
+225d	0038	1	__EmsChecked		scalar
+225d	0039	1	__EmsVersion		scalar
+225d	003a	4	__ExtStartAddress		scalar
+225d	003e	4	__ExtEndAddress		scalar
+225d	0042	1	__ExtChecked		scalar
+225d	0043	4	__XmsControl		scalar
+225d	0047	2	__XmsHandle		scalar
+225d	0049	4	__XmsBase		scalar
+225d	004d	1	__EXTGDT		scalar
+225d	004d	51	__XMSGDT		scalar
+225d	0080	2	__CALLEXTEMSSWAP		scalar
+225d	0082	2	__CALLEXTEXIT		scalar
+225d	0084	2	__CALLEMSEXIT		scalar
+225d	0086	4	__OVRHOOK__		scalar
+225d	008a	2	__OVRBACKLINK__		scalar
+225d	008c	2	__OvrExepathBuf		scalar
+225d	008e	1	ovrAuxSlot		scalar
+2270	0000	1	__EmsRec		scalar
+2271	0000	1	__ExtRec		scalar
+2272	0000	18	__FakeVdisk		scalar
+2272	0012	26	s_vdisk_fake		scalar
+2272	002c	2	vdiskEndOfs		scalar
+2272	002e	1	vdiskEndHi		scalar
+2272	002f	2	_BootHandlerCode		scalar
+2272	0031	9	Int19Seg		scalar
+2272	003a	2	vdiskBaseOfs		scalar
+2272	003c	1	vdiskBaseHi		scalar
+2410	0000	1	DATASEG	undefined4 _DATA	scalar
+2410	0000	1	DGROUP	undefined4 _DATA	scalar
+2410	0000	2	_DATA	undefined4 _DATA	scalar
+2410	0002	2	_DATA+2		scalar
+2410	0004	2	__C0_ASM_CopyRight	byte __C0_ASM_CopyRight[43]	scalar
+2410	0006	8	__C0_ASM_CopyRight[2]		scalar
+2410	000e	11	__C0_ASM_CopyRight[10]		scalar
+2410	0019	19	__C0_ASM_CopyRight[21]		scalar
+2410	002c	3	PSPEnv		scalar
+2410	002f	1	s_divide_error	undefined s_divide_error[]	string
+2410	0030	2	s_divide_error+1		scalar
+2410	0032	2	s_divide_error+3		scalar
+2410	0034	2	s_divide_error+5		scalar
+2410	0036	2	s_divide_error+7		scalar
+2410	0038	1	s_divide_error+9		scalar
+2410	0039	1	s_divide_error+0xa		scalar
+2410	003a	2	s_divide_error+0xb		scalar
+2410	003c	1	s_divide_error+0xd		scalar
+2410	003d	1	s_abnormal_program_termination	undefined s_abnormal_program_termination[]	string
+2410	003e	2	s_abnormal_program_termination+1		scalar
+2410	0040	3	s_abnormal_program_termination+3		scalar
+2410	0043	2	s_abnormal_program_termination+6		scalar
+2410	0045	2	s_abnormal_program_termination+8		scalar
+2410	0047	2	s_abnormal_program_termination+0xa		scalar
+2410	0049	2	s_abnormal_program_termination+0xc		scalar
+2410	004b	6	s_abnormal_program_termination+0xe		scalar
+2410	0051	2	s_abnormal_program_termination+0x14		scalar
+2410	0053	2	s_abnormal_program_termination+0x16		scalar
+2410	0055	2	s_abnormal_program_termination+0x18		scalar
+2410	0057	2	s_abnormal_program_termination+0x1a		scalar
+2410	0059	2	s_abnormal_program_termination+0x1c		scalar
+2410	005b	2	GSTARTX_SavedVectors	far_t GSTARTX_SavedVectors[4]	scalar
+2410	005d	2	GSTARTX_SavedVectors[0].seg		scalar
+2410	005f	2	GSTARTX_SavedVectors[1].ofs		scalar
+2410	0061	2	GSTARTX_SavedVectors[1].seg		scalar
+2410	0063	2	GSTARTX_SavedVectors[2].ofs		scalar
+2410	0065	2	GSTARTX_SavedVectors[2].seg		scalar
+2410	0067	2	GSTARTX_SavedVectors[3].ofs		scalar
+2410	0069	2	GSTARTX_SavedVectors[3].seg		scalar
+2410	006b	2	__C0argc	undefined2 __C0argc	scalar
+2410	006d	2	__C0argv	undefined2 __C0argv	scalar
+2410	006f	2	__C0argv_2	undefined2 __C0argv_2	scalar
+2410	0071	2	__C0environ	undefined2 __C0environ	scalar
+2410	0073	2	__C0environ_2	undefined2 __C0environ_2	scalar
+2410	0075	2	_env	undefined2 _env	scalar
+2410	0077	2	_envseg_at_	undefined2 _envseg_at_	scalar
+2410	0079	2	_envSize_at_	undefined2 _envSize_at_	scalar
+2410	007b	2	_psp	undefined2 _psp	scalar
+2410	007d	1	DosVersion	dosver_t DosVersion	scalar
+2410	007e	1	DosVersion.minor		scalar
+2410	007f	1	errno	int errno	scalar
+2410	0080	1	errno+1		scalar
+2410	0081	2	_StartTime	uint32_t _StartTime	scalar
+2410	0083	2	_StartTime+2		scalar
+2410	0085	2	__brklvl	uint16_t __brklvl	scalar
+2410	0087	2	_heapbase	far_t _heapbase	scalar
+2410	0089	2	_heapbase.seg		scalar
+2410	008b	2	_brklvl	far_t _brklvl	scalar
+2410	008d	2	_brklvl.seg		scalar
+2410	008f	2	_heaptop	far_t _heaptop	scalar
+2410	0091	3	_heaptop.seg		scalar
+2410	0094	1	s__2410_0094	undefined s__2410_0094[]	string
+2410	0095	5	s__d_2410_0095	undefined s__d_2410_0095[]	string
+2410	009a	46	s_sorry_you_may_not_pass_time_during_a_battle	undefined s_sorry_you_may_not_pass_time_during_a_battle[]	string
+2410	00c8	16	s_time_passes	undefined s_time_passes[]	string
+2410	00d8	1	bigcompFrame	undefined1 bigcompFrame	scalar
+2410	00d9	11	TextBlitFlag	undefined1 TextBlitFlag	scalar
+2410	00e4	2	MouseX	undefined2 MouseX	scalar
+2410	00e6	2	MouseY	undefined2 MouseY	scalar
+2410	00e8	2	MouseMoved	undefined2 MouseMoved	scalar
+2410	00ea	1	MouseBkgPixel	undefined1 MouseBkgPixel	scalar
+2410	00eb	13	GUnitDescriptions	far_t GUnitDescriptions[28]	scalar
+2410	00f8	3	GUnitDescriptions[3].ofs+1		scalar
+2410	00fb	2	GUnitDescriptions[4].ofs		scalar
+2410	00fd	2	GUnitDescriptions[4].seg		scalar
+2410	00ff	2	GUnitDescriptions[5].ofs		scalar
+2410	0101	2	GUnitDescriptions[5].seg		scalar
+2410	0103	2	GUnitDescriptions[6].ofs		scalar
+2410	0105	11	GUnitDescriptions[6].seg		scalar
+2410	0110	4	GUnitDescriptions[9].ofs+1		scalar
+2410	0114	2	GUnitDescriptions[10].ofs+1		scalar
+2410	0116	2	GUnitDescriptions[10].seg+1		scalar
+2410	0118	2	GUnitDescriptions[11].ofs+1		scalar
+2410	011a	2	GUnitDescriptions[11].seg+1		scalar
+2410	011c	4	GUnitDescriptions[12].ofs+1		scalar
+2410	0120	2	GUnitDescriptions[13].ofs+1		scalar
+2410	0122	2	GUnitDescriptions[13].seg+1		scalar
+2410	0124	2	GUnitDescriptions[14].ofs+1		scalar
+2410	0126	2	GUnitDescriptions[14].seg+1		scalar
+2410	0128	2	GUnitDescriptions[15].ofs+1		scalar
+2410	012a	2	GUnitDescriptions[15].seg+1		scalar
+2410	012c	19	GUnitDescriptions[16].ofs+1		scalar
+2410	013f	2	GUnitDescriptions[21].ofs		scalar
+2410	0141	26	GUnitDescriptions[21].seg		scalar
+2410	015b	4	BDA_DailyTimeCounter	far_t BDA_DailyTimeCounter	scalar
+2410	015f	1	CrossBlitCount	undefined1 CrossBlitCount	scalar
+2410	0160	1	DrawBusy	undefined1 DrawBusy	scalar
+2410	0161	2	timePassing	undefined1 timePassing	scalar
+2410	0163	1	GCharLevelsInc	undefined1 GCharLevelsInc	scalar
+2410	0164	1	destroyLatchSide1	undefined1 destroyLatchSide1	scalar
+2410	0165	1	destroyLatchSide0	undefined1 destroyLatchSide0	scalar
+2410	0166	1	GTimeHi	undefined1 GTimeHi	scalar
+2410	0167	2	VideoFlag_2410_0167	undefined2 VideoFlag_2410_0167	scalar
+2410	0169	8	s_Fighter_2410_0169	undefined s_Fighter_2410_0169[]	string
+2410	0171	5	s_mage	undefined s_mage[]	string
+2410	0176	7	s_cleric	undefined s_cleric[]	string
+2410	017d	6	s_Thief_2410_017d	undefined s_Thief_2410_017d[]	string
+2410	0183	6	s_dwarf	undefined s_dwarf[]	string
+2410	0189	4	s_elf	undefined s_elf[]	string
+2410	018d	9	s_halfling	undefined s_halfling[]	string
+2410	0196	9	s_fighters	undefined s_fighters[]	string
+2410	019f	1	s_mages	undefined s_mages[]	string
+2410	01a0	2	s_mages+1		scalar
+2410	01a2	2	s_mages+3		scalar
+2410	01a4	1	s_mages+5		scalar
+2410	01a5	7	s_clerics	undefined s_clerics[]	string
+2410	01ac	1	s_clerics+7		scalar
+2410	01ad	8	s_thieves	undefined s_thieves[]	string
+2410	01b5	8	s_dwarves	undefined s_dwarves[]	string
+2410	01bd	6	s_elves	undefined s_elves[]	string
+2410	01c3	10	s_halflings	undefined s_halflings[]	string
+2410	01cd	8	s_fighter	undefined s_fighter[]	string
+2410	01d5	5	s_mage	undefined s_mage[]	string
+2410	01da	7	s_cleric	undefined s_cleric[]	string
+2410	01e1	6	s_thief	undefined s_thief[]	string
+2410	01e7	6	s_dwarf	undefined s_dwarf[]	string
+2410	01ed	4	s_elf	undefined s_elf[]	string
+2410	01f1	9	s_halfling	undefined s_halfling[]	string
+2410	01fa	13	s_fighter_unit_2410_01fa	undefined s_fighter_unit_2410_01fa[]	string
+2410	0207	10	s_mage_unit_2410_0207	undefined s_mage_unit_2410_0207[]	string
+2410	0211	14	s_clerical_unit	undefined s_clerical_unit[]	string
+2410	021f	11	s_thief_unit_2410_021f	undefined s_thief_unit_2410_021f[]	string
+2410	022a	11	s_dwarf_unit_2410_022a	undefined s_dwarf_unit_2410_022a[]	string
+2410	0235	9	s_elf_unit_2410_0235	undefined s_elf_unit_2410_0235[]	string
+2410	023e	14	s_halfling_unit_2410_023e	undefined s_halfling_unit_2410_023e[]	string
+2410	024c	5	s_d	undefined s_d[]	string
+2410	0251	41	s_wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww	undefined s_wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww[]	string
+2410	027a	12	s_archduchess	undefined s_archduchess[]	string
+2410	0286	17	s_the_seed_is_lx	undefined s_the_seed_is_lx[]	string
+2410	0297	62	s_increase_by_d_levels_click_on_character_for_	undefined s_increase_by_d_levels_click_on_character_for_[]	string
+2410	02d5	9	s_movement	undefined s_movement[]	string
+2410	02de	8	s_recruit	undefined s_recruit[]	string
+2410	02e6	6	s_train	undefined s_train[]	string
+2410	02ec	6	s_build	undefined s_build[]	string
+2410	02f2	1	BlitLetterType	undefined1 BlitLetterType	scalar
+2410	02f3	1	MessageDelay	undefined1 MessageDelay	scalar
+2410	02f4	1	messageDelayTicks	undefined1 messageDelayTicks	scalar
+2410	02f5	13	s_Error_4__d_2410_02f5	undefined s_Error_4__d_2410_02f5[]	string
+2410	0302	2	IdFORM	DW IdFORM	scalar
+2410	0304	2	IdFORM.hi		scalar
+2410	0306	2	IdILBM	DW IdILBM	scalar
+2410	0308	2	IdILBM.hi		scalar
+2410	030a	2	IdBMHD	DW IdBMHD	scalar
+2410	030c	2	IdBMHD.hi		scalar
+2410	030e	2	IdBODY	DW IdBODY	scalar
+2410	0310	2	IdBODY.hi		scalar
+2410	0312	2	IdCMAP	DW IdCMAP	scalar
+2410	0314	2	IdCMAP.hi		scalar
+2410	0316	2	IdPBM_	DW IdPBM_	scalar
+2410	0318	2	IdPBM_.hi		scalar
+2410	031a	17	s_n_d_w_u_s_u	undefined s_n_d_w_u_s_u[]	string
+2410	032b	19	s_Filename__d__s_2410_032b	undefined s_Filename__d__s_2410_032b[]	string
+2410	033e	20	GErrorStrings	far_t GErrorStrings[5]	scalar
+2410	0352	41	s_Bad_'game.cfg'_file._Please_reco_2410_0352		scalar
+2410	037b	24	s_Cannot_find_sound_card._2410_037b		scalar
+2410	0393	24	s_Cannot_find_music_card._2410_0393		scalar
+2410	03ab	55	s_Cannot_create_configuration_file_2410_03ab	undefined s_Cannot_create_configuration_file_2410_03ab[]	string
+2410	03e2	13	s_Mouse_error._2410_03e2		scalar
+2410	03ef	12	s_Error__d_2410_03ef	undefined s_Error__d_2410_03ef[]	string
+2410	03fb	4	s_s	undefined s_s[]	string
+2410	03ff	45	s_Error_%d_%d._(Give_Cathryn_BOTH_n_2410_03ff		scalar
+2410	042c	2	TextBlitX	uint16_t TextBlitX	scalar
+2410	042e	2	TextBlitY	uint16_t TextBlitY	scalar
+2410	0430	2	TextBlitDstSeg	undefined2 TextBlitDstSeg	scalar
+2410	0432	2	CFG_Mice	uint16_t CFG_Mice	scalar
+2410	0434	2	CrossBlitPtr	far_t CrossBlitPtr	scalar
+2410	0436	2	CrossBlitPtr.seg		scalar
+2410	0438	1	DebugVerbose	bool DebugVerbose	scalar
+2410	0439	1	GPaused	undefined1 GPaused	scalar
+2410	043a	1	GDebug	bool GDebug	scalar
+2410	043b	2	__ovrbuffer	undefined2 __ovrbuffer	scalar
+2410	043d	3	__stklen	uint16_t __stklen	scalar
+2410	0440	8	BlitRects	brect_t BlitRects[5]	scalar
+2410	0448	2	BlitRects[0].seg		scalar
+2410	044a	28	BlitRects[1].x		scalar
+2410	0466	2	BlitRects[3].seg		scalar
+2410	0468	8	BlitRects[4].x		scalar
+2410	0470	34	BlitRects[4].seg		scalar
+2410	0492	12	s_error_27__2410_0492	undefined s_error_27__2410_0492[]	string
+2410	049e	26	s_y1_d_yn_d_y3_d_yx_d	undefined s_y1_d_yn_d_y3_d_yx_d[]	string
+2410	04b8	22	MiceFlag	undefined2 MiceFlag	scalar
+2410	04ce	8	MiceOfsX	int16_t MiceOfsX[4]	scalar
+2410	04d6	8	MiceOfsY	int16_t MiceOfsY[4]	scalar
+2410	04de	2	MiceIndex	undefined2 MiceIndex	scalar
+2410	04e0	1	MiceUnkState	undefined1 MiceUnkState	scalar
+2410	04e1	3	s__2410_04e1	undefined s__2410_04e1[]	string
+2410	04e4	2	StshStrongDatHnd	int StshStrongDatHnd	scalar
+2410	04e6	2	GCrLf	undefined2 GCrLf	scalar
+2410	04e8	10	scaleTable	undefined scaleTable	scalar
+2410	04f2	16	edgeMaskTable	undefined edgeMaskTable	scalar
+2410	0502	8	neighbourOfsTable	undefined neighbourOfsTable	scalar
+2410	050a	2	GrayscalePalette	far_t GrayscalePalette	scalar
+2410	050c	2	GrayscalePalette.seg		scalar
+2410	050e	11	GrayscaleIndices	uint8_t GrayscaleIndices[11]	scalar
+2410	0519	1	CopyProtectionDone	undefined1 CopyProtectionDone	scalar
+2410	051a	25	CpPages	undefined CpPages[25]	string
+2410	0533	25	CpLines	undefined CpLines[25]	string
+2410	054c	2	CPKeys	far_t CPKeys[25]	scalar
+2410	054e	98	CPKeys[0].seg		scalar
+2410	05b0	11	GSaveFileName	undefined GSaveFileName[]	string
+2410	05bb	1	GSaveFileName+0xb		scalar
+2410	05bc	11	GCfgFileName	undefined GCfgFileName[]	string
+2410	05c7	6	s_debug_2410_05c7	undefined s_debug_2410_05c7[]	string
+2410	05cd	5	s_grab_2410_05cd	undefined s_grab_2410_05cd[]	string
+2410	05d2	19	s_new_maxsquare_d	undefined s_new_maxsquare_d[]	string
+2410	05e5	20	s_new_smaxsquare_d	undefined s_new_smaxsquare_d[]	string
+2410	05f9	7	s_choose_2410_05f9	undefined s_choose_2410_05f9[]	string
+2410	0600	9	s_movement_2410_0600	undefined s_movement_2410_0600[]	string
+2410	0609	2	s_button_2410_0609	undefined s_button_2410_0609[]	string
+2410	060b	5	s_tton_2410_0609+2		scalar
+2410	0610	5	s_gold_2410_0610	undefined s_gold_2410_0610[]	string
+2410	0615	5	s_plan_2410_0615	undefined s_plan_2410_0615[]	string
+2410	061a	4	s_hit_2410_061a	undefined s_hit_2410_061a[]	string
+2410	061e	8	s_squares_2410_061e	undefined s_squares_2410_061e[]	string
+2410	0626	7	s_swamps_2410_0626	char s_swamps_2410_0626[]	string
+2410	062d	6	s_would_2410_062d	undefined s_would_2410_062d[]	string
+2410	0633	7	s_repair_2410_0633	undefined s_repair_2410_0633[]	string
+2410	063a	12	s_controlling_2410_063a	undefined s_controlling_2410_063a[]	string
+2410	0646	8	s_setting_2410_0646	undefined s_setting_2410_0646[]	string
+2410	064e	5	s_sage_2410_064e	undefined s_sage_2410_064e[]	string
+2410	0653	5	s_when_2410_0653	undefined s_when_2410_0653[]	string
+2410	0658	5	s_home_2410_0658	undefined s_home_2410_0658[]	string
+2410	065d	7	s_needed_2410_065d	undefined s_needed_2410_065d[]	string
+2410	0664	7	s_screen_2410_0664	undefined s_screen_2410_0664[]	string
+2410	066b	13	s_spellcasting_2410_066b	undefined s_spellcasting_2410_066b[]	string
+2410	0678	10	s_opponents_2410_0678	undefined s_opponents_2410_0678[]	string
+2410	0682	8	s_expense_2410_0682	undefined s_expense_2410_0682[]	string
+2410	068a	6	s_after_2410_068a	undefined s_after_2410_068a[]	string
+2410	0690	5	s_dots_2410_0690	undefined s_dots_2410_0690[]	string
+2410	0695	8	s_longbow_2410_0695	undefined s_longbow_2410_0695[]	string
+2410	069d	7	s_spells_2410_069d	undefined s_spells_2410_069d[]	string
+2410	06a4	10	s_constructing_2410_06a4	undefined s_constructing_2410_06a4[]	string
+2410	06ae	3	s_ng_2410_06a4+0xa		scalar
+2410	06b1	28	s_Stronghold_copy_protection._2410_06b1		scalar
+2410	06cd	32	s_Turn_to_page_#%d_of_the_manual._2410_06cd		scalar
+2410	06ed	37	s_Including_titles__count_to_line___2410_06ed	undefined s_Including_titles__count_to_line___2410_06ed[]	string
+2410	0712	22	s_enter_the_first_word	undefined s_enter_the_first_word[]	string
+2410	0728	8	bandOrigin	uint8_t bandOrigin[10]	scalar
+2410	0730	1	bandOrigin[8]		scalar
+2410	0731	11	bandOrigin[9]		scalar
+2410	073c	4	cornerShadeBias	uint8_t cornerShadeBias[6]	scalar
+2410	0740	2	cornerShadeBias[4]		scalar
+2410	0742	2	SmoothPrev	undefined2 SmoothPrev	scalar
+2410	0744	1	seasonGroupBase	undefined1 seasonGroupBase	scalar
+2410	0745	6	shadeTable	undefined shadeTable	scalar
+2410	074b	2	rowBandOrigin	uint8_t rowBandOrigin[10]	scalar
+2410	074d	1	rowBandOrigin[2]		scalar
+2410	074e	7	rowBandOrigin[3]		scalar
+2410	0755	5	s_d	undefined s_d[]	string
+2410	075a	17	s_bad_house_d	undefined s_bad_house_d[]	string
+2410	076b	9	s_d_d	undefined s_d_d[]	string
+2410	0774	42	s_x_d_y_d_x_x_x_x_x_x_x_x	undefined s_x_d_y_d_x_x_x_x_x_x_x_x[]	string
+2410	079e	2	DIGHandle	far_t DIGHandle	scalar
+2410	07a0	2	DIGHandle.seg		scalar
+2410	07a2	2	MUSHandle	far_t MUSHandle	scalar
+2410	07a4	2	MUSHandle.seg		scalar
+2410	07a6	1	CurMusicType	undefined1 CurMusicType	scalar
+2410	07a7	1	CurSfxType3	uint8_t CurSfxType3	scalar
+2410	07a8	1	DIG_2410_07a8	undefined1 DIG_2410_07a8	scalar
+2410	07a9	1	MUS_2410_07a9	undefined1 MUS_2410_07a9	scalar
+2410	07aa	1	AudioAssetsReady1	undefined1 AudioAssetsReady1	scalar
+2410	07ab	1	AudioAssetsReady2	undefined1 AudioAssetsReady2	scalar
+2410	07ac	1	MusRunning	undefined1 MusRunning	scalar
+2410	07ad	1	SfxRunning	undefined1 SfxRunning	scalar
+2410	07ae	2	sfxTickLo	undefined2 sfxTickLo	scalar
+2410	07b0	2	sfxTickHi	undefined2 sfxTickHi	scalar
+2410	07b2	2	SfxDeadline	undefined2 SfxDeadline	scalar
+2410	07b4	1	CurrentlyPlayingSfx	undefined1 CurrentlyPlayingSfx	scalar
+2410	07b5	1	CurrentTrack	undefined1 CurrentTrack	scalar
+2410	07b6	2	SfxGfxOfs	undefined2 SfxGfxOfs	scalar
+2410	07b8	2	SfxGfxSeg	undefined2 SfxGfxSeg	scalar
+2410	07ba	2	DIGHandle	far_t DIGHandle	scalar
+2410	07bc	2	DIGHandle.seg		scalar
+2410	07be	2	MidGfxOfs	undefined2 MidGfxOfs	scalar
+2410	07c0	2	MidGfxSeg	undefined2 MidGfxSeg	scalar
+2410	07c2	2	MIDHandle	far_t MIDHandle	scalar
+2410	07c4	2	MIDHandle.seg		scalar
+2410	07c6	2	MusGfxOfs	undefined2 MusGfxOfs	scalar
+2410	07c8	2	MusGfxSeg	undefined2 MusGfxSeg	scalar
+2410	07ca	2	MusHandle	undefined2 MusHandle	scalar
+2410	07cc	2	MusHandleSeg	undefined2 MusHandleSeg	scalar
+2410	07ce	2	MusDrvOfs	undefined2 MusDrvOfs	scalar
+2410	07d0	6	MusDrvSeg	undefined2 MusDrvSeg	scalar
+2410	07d6	12	s_midi_error	undefined s_midi_error[]	string
+2410	07e2	1	animBranchCode	undefined1 animBranchCode	scalar
+2410	07e3	2	audioSaveCut1Ofs	undefined2 audioSaveCut1Ofs	scalar
+2410	07e5	2	audioSaveCut1Seg	undefined2 audioSaveCut1Seg	scalar
+2410	07e7	2	audioSaveCut2Ofs	undefined2 audioSaveCut2Ofs	scalar
+2410	07e9	2	audioSaveCut2Seg	undefined2 audioSaveCut2Seg	scalar
+2410	07eb	1	AgntFlag2	bool AgntFlag2	scalar
+2410	07ec	10	mouseSaveRect4	undefined mouseSaveRect4	scalar
+2410	07f6	2	BattleDelay	undefined2 BattleDelay	scalar
+2410	07f8	11	s_charmed_s	undefined s_charmed_s[]	string
+2410	0803	10	s_turned_s	undefined s_turned_s[]	string
+2410	080d	10	s_stoned_s	undefined s_stoned_s[]	string
+2410	0817	12	s_diseased_s	undefined s_diseased_s[]	string
+2410	0823	13	s_paralyzed_s	undefined s_paralyzed_s[]	string
+2410	0830	12	s_sleeping_s	undefined s_sleeping_s[]	string
+2410	083c	8	s_held_s	undefined s_held_s[]	string
+2410	0844	1	GMenuFlag	undefined1 GMenuFlag	scalar
+2410	0845	1	noAnimBlit	uint8_t noAnimBlit	scalar
+2410	0846	18	flashPaletteEf	undefined flashPaletteEf	scalar
+2410	0858	10	mouseSaveRect1	undefined mouseSaveRect1	scalar
+2410	0862	1	Highlight1	undefined1 Highlight1	scalar
+2410	0863	1	Highlight1	undefined1 Highlight1	scalar
+2410	0864	10	s_d_d	undefined s_d_d[]	string
+2410	086e	2	SquareRecX	undefined2 SquareRecX	scalar
+2410	0870	17	SquareRecY	undefined2 SquareRecY	scalar
+2410	0881	2	SquareRecCount	undefined2 SquareRecCount	scalar
+2410	0883	10	SquareRecIndex	undefined2 SquareRecIndex	scalar
+2410	088d	10	mouseSaveRect3	undefined mouseSaveRect3	scalar
+2410	0897	10	mouseSaveRect2	undefined mouseSaveRect2	scalar
+2410	08a1	57	s_intelligence_reports_s_unit_engaged_in_comba	undefined s_intelligence_reports_s_unit_engaged_in_comba[]	string
+2410	08da	5	s_d	undefined s_d[]	string
+2410	08df	11	s_d_d_d	undefined s_d_d_d[]	string
+2410	08ea	12	s__d__d__d_2410_08ea	undefined s__d__d__d_2410_08ea[]	string
+2410	08f6	43	s_You_cannot_attract_units_to_this_2410_08f6	undefined s_You_cannot_attract_units_to_this_2410_08f6[]	string
+2410	0921	55	s_Attracting__d_of_a_possible__d___2410_0921	undefined s_Attracting__d_of_a_possible__d___2410_0921[]	string
+2410	0958	120	AgntAnms	anm_t AgntAnms[139]	scalar
+2410	09d0	73	AgntAnms[4].frmid		scalar
+2410	0a19	47	AgntAnms[6].y		scalar
+2410	0a48	90	AgntAnms[8].frmid		scalar
+2410	0aa2	104	AgntAnms[11].frmid		scalar
+2410	0b0a	16	AgntAnms[14].y+1		scalar
+2410	0b1a	1	AgntAnms[15].frmid		scalar
+2410	0b1b	149	AgntAnms[15].sx		scalar
+2410	0bb0	120	AgntAnms[20].frmid		scalar
+2410	0c28	120	AgntAnms[24].frmid		scalar
+2410	0ca0	120	AgntAnms[28].frmid		scalar
+2410	0d18	150	AgntAnms[32].frmid		scalar
+2410	0dae	120	AgntAnms[37].frmid		scalar
+2410	0e26	120	AgntAnms[41].frmid		scalar
+2410	0e9e	60	AgntAnms[45].frmid		scalar
+2410	0eda	60	AgntAnms[47].frmid		scalar
+2410	0f16	90	AgntAnms[49].frmid		scalar
+2410	0f70	150	AgntAnms[52].frmid		scalar
+2410	1006	21	AgntAnms[57].frmid		scalar
+2410	101b	69	AgntAnms[57].missileDy		scalar
+2410	1060	120	AgntAnms[60].frmid		scalar
+2410	10d8	120	AgntAnms[64].frmid		scalar
+2410	1150	150	AgntAnms[68].frmid		scalar
+2410	11e6	90	AgntAnms[73].frmid		scalar
+2410	1240	120	AgntAnms[76].frmid		scalar
+2410	12b8	120	AgntAnms[80].frmid		scalar
+2410	1330	90	AgntAnms[84].frmid		scalar
+2410	138a	60	AgntAnms[87].frmid		scalar
+2410	13c6	120	AgntAnms[89].frmid		scalar
+2410	143e	120	AgntAnms[93].frmid		scalar
+2410	14b6	120	AgntAnms[97].frmid		scalar
+2410	152e	90	AgntAnms[101].frmid		scalar
+2410	1588	7	AgntAnms[104].frmid		scalar
+2410	158f	83	AgntAnms[104].ey		scalar
+2410	15e2	90	AgntAnms[107].frmid		scalar
+2410	163c	17	AgntAnms[110].frmid		scalar
+2410	164d	103	AgntAnms[110].maxDy		scalar
+2410	16b4	150	AgntAnms[114].frmid		scalar
+2410	174a	150	AgntAnms[119].frmid		scalar
+2410	17e0	41	AgntAnms[124].frmid		scalar
+2410	1809	79	AgntAnms[125].x		scalar
+2410	1858	120	AgntAnms[128].frmid		scalar
+2410	18d0	90	AgntAnms[132].frmid		scalar
+2410	192a	120	AgntAnms[135].frmid		scalar
+2410	19a2	30	s_s_produces_bows_and_arrows	undefined s_s_produces_bows_and_arrows[]	string
+2410	19c0	25	s_%s:_increases_unit_size._2410_19c0		scalar
+2410	19d9	29	s_%s:_enhances_building_speed._2410_19d9		scalar
+2410	19f6	34	s__s__produces_rings_of_protection_2410_19f6	undefined s__s__produces_rings_of_protection_2410_19f6[]	string
+2410	1a18	61	s__s__creates_mirrors_for_medsae_c_2410_1a18	undefined s__s__creates_mirrors_for_medsae_c_2410_1a18[]	string
+2410	1a55	33	s_%s:_populates_a_remote_location._2410_1a55		scalar
+2410	1a76	27	s_%s:_provides_gold_storage._2410_1a76		scalar
+2410	1a91	31	s_%s:_enables_claiming_of_trees._2410_1a91		scalar
+2410	1ab0	37	s__s__repairs_buildings_automatica_2410_1ab0	undefined s__s__repairs_buildings_automatica_2410_1ab0[]	string
+2410	1ad5	29	s_%s:_provides_for_food_trade._2410_1ad5		scalar
+2410	1af2	45	s__s__enhances_training_for_entire_2410_1af2	undefined s__s__enhances_training_for_entire_2410_1af2[]	string
+2410	1b1f	20	s_%s:_creates_income._2410_1b1f		scalar
+2410	1b33	29	s_%s:_produces_food_in_winter._2410_1b33		scalar
+2410	1b50	29	s_%s:_creates_gambling_income._2410_1b50		scalar
+2410	1b6d	20	s_%s:_creates_income._2410_1b6d		scalar
+2410	1b81	33	s_%s:_enhances_weapons_production._2410_1b81		scalar
+2410	1ba2	29	s_%s:_creates_food_and_income._2410_1ba2		scalar
+2410	1bbf	23	s_%s:_enhances_training._2410_1bbf		scalar
+2410	1bd6	20	s_%s:_creates_arrows._2410_1bd6		scalar
+2410	1bea	27	s_%s:_provides_more_housing._2410_1bea		scalar
+2410	1c05	33	s_%s:_provides_housing_and_income._2410_1c05		scalar
+2410	1c26	20	s_%s:_blocks_passage._2410_1c26		scalar
+2410	1c3a	31	s_%s:_allows_passage_over_water._2410_1c3a		scalar
+2410	1c59	47	s__s__provides_storage_and_distrib_2410_1c59	undefined s__s__provides_storage_and_distrib_2410_1c59[]	string
+2410	1c88	49	s__s__adds_to_crop_value_and_gives_2410_1c88	undefined s__s__adds_to_crop_value_and_gives_2410_1c88[]	string
+2410	1cb9	51	s_%s:_blocks_enemy_passage._Allows_2410_1cb9		scalar
+2410	1cec	10	s_Chop_Down_2410_1cec	undefined s_Chop_Down_2410_1cec[]	string
+2410	1cf6	7	s_Remove_2410_1cf6	undefined s_Remove_2410_1cf6[]	string
+2410	1cfd	8	s_Fill_in_2410_1cfd	undefined s_Fill_in_2410_1cfd[]	string
+2410	1d05	2	upperTextOfs	byte *upperTextOfs	farptr
+2410	1d07	2	upperTextSeg	undefined2 upperTextSeg	scalar
+2410	1d09	8	sfxXOffsets	undefined sfxXOffsets	scalar
+2410	1d11	17	s_undeveloped_land_2410_1d11	undefined s_undeveloped_land_2410_1d11[]	string
+2410	1d22	5	s_plot_2410_1d22	undefined s_plot_2410_1d22[]	string
+2410	1d27	5	s_farm_2410_1d27	undefined s_farm_2410_1d27[]	string
+2410	1d2c	11	s_plantation_2410_1d2c	undefined s_plantation_2410_1d2c[]	string
+2410	1d37	6	s_guest_house_2410_1d37	undefined s_guest_house_2410_1d37[]	string
+2410	1d3d	6	s_house_2410_1d37+6		scalar
+2410	1d43	7	s_tavern_2410_1d43	undefined s_tavern_2410_1d43[]	string
+2410	1d4a	4	s_inn_2410_1d4a	undefined s_inn_2410_1d4a[]	string
+2410	1d4e	16	s_magicians__room_2410_1d4e	undefined s_magicians__room_2410_1d4e[]	string
+2410	1d5e	19	s_magicians__cottage_2410_1d5e	undefined s_magicians__cottage_2410_1d5e[]	string
+2410	1d71	17	s_magician_s_manor_2410_1d71	undefined s_magician_s_manor_2410_1d71[]	string
+2410	1d82	7	s_shrine_2410_1d82	undefined s_shrine_2410_1d82[]	string
+2410	1d89	7	s_church_2410_1d89	undefined s_church_2410_1d89[]	string
+2410	1d90	7	s_temple_2410_1d90	undefined s_temple_2410_1d90[]	string
+2410	1d97	13	s_thieves__den_2410_1d97	undefined s_thieves__den_2410_1d97[]	string
+2410	1da4	13	s_black_market_2410_1da4	undefined s_black_market_2410_1da4[]	string
+2410	1db1	15	s_thieves__guild_2410_1db1	undefined s_thieves__guild_2410_1db1[]	string
+2410	1dc0	12	s_guard_house_2410_1dc0	undefined s_guard_house_2410_1dc0[]	string
+2410	1dcc	12	s_drill_house_2410_1dcc	undefined s_drill_house_2410_1dcc[]	string
+2410	1dd8	14	s_training_hall_2410_1dd8	undefined s_training_hall_2410_1dd8[]	string
+2410	1de6	10	s_elf_house_2410_1de6	undefined s_elf_house_2410_1de6[]	string
+2410	1df0	14	s_elven_cottage_2410_1df0	undefined s_elven_cottage_2410_1df0[]	string
+2410	1dfe	11	s_elven_home_2410_1dfe	undefined s_elven_home_2410_1dfe[]	string
+2410	1e09	20	s_fighters__residence_2410_1e09	undefined s_fighters__residence_2410_1e09[]	string
+2410	1e1d	16	s_fighters__house_2410_1e1d	undefined s_fighters__house_2410_1e1d[]	string
+2410	1e2d	18	s_fighters__mansion_2410_1e2d	undefined s_fighters__mansion_2410_1e2d[]	string
+2410	1e3f	12	s_mage_school_2410_1e3f	undefined s_mage_school_2410_1e3f[]	string
+2410	1e4b	13	s_mage_college_2410_1e4b	undefined s_mage_college_2410_1e4b[]	string
+2410	1e58	16	s_mage_university_2410_1e58	undefined s_mage_university_2410_1e58[]	string
+2410	1e68	6	s_small_tower_2410_1e68	undefined s_small_tower_2410_1e68[]	string
+2410	1e6e	6	s_tower_2410_1e68+6		scalar
+2410	1e74	12	s_large_tower_2410_1e74	undefined s_large_tower_2410_1e74[]	string
+2410	1e80	13	s_storage_shed_2410_1e80	undefined s_storage_shed_2410_1e80[]	string
+2410	1e8d	11	s_storehouse_2410_1e8d	undefined s_storehouse_2410_1e8d[]	string
+2410	1e98	8	s_granary_2410_1e98	undefined s_granary_2410_1e98[]	string
+2410	1ea0	9	s_thieves__hut_2410_1ea0	undefined s_thieves__hut_2410_1ea0[]	string
+2410	1ea9	4	s_thieves__hut_2410_1ea0+9		scalar
+2410	1ead	9	s_thieves__shack_2410_1ead	undefined s_thieves__shack_2410_1ead[]	string
+2410	1eb6	6	s_thieves__shack_2410_1ead+9		scalar
+2410	1ebc	15	s_thieves__house_2410_1ebc	undefined s_thieves__house_2410_1ebc[]	string
+2410	1ecb	17	s_clerics__chamber_2410_1ecb	undefined s_clerics__chamber_2410_1ecb[]	string
+2410	1edc	16	s_clerics__refuge_2410_1edc	undefined s_clerics__refuge_2410_1edc[]	string
+2410	1eec	17	s_clerics__retreat_2410_1eec	undefined s_clerics__retreat_2410_1eec[]	string
+2410	1efd	15	s_halfling_lodge_2410_1efd	undefined s_halfling_lodge_2410_1efd[]	string
+2410	1f0c	15	s_halfling_abode_2410_1f0c	undefined s_halfling_abode_2410_1f0c[]	string
+2410	1f1b	18	s_halfling_dwelling_2410_1f1b	undefined s_halfling_dwelling_2410_1f1b[]	string
+2410	1f2d	11	s_drill_hall_2410_1f2d	undefined s_drill_hall_2410_1f2d[]	string
+2410	1f38	12	s_marketplace_2410_1f38	undefined s_marketplace_2410_1f38[]	string
+2410	1f44	13	s_dwarven_home_2410_1f44	undefined s_dwarven_home_2410_1f44[]	string
+2410	1f51	13	s_dwarven_hall_2410_1f51	undefined s_dwarven_hall_2410_1f51[]	string
+2410	1f5e	16	s_dwarven_mansion_2410_1f5e	undefined s_dwarven_mansion_2410_1f5e[]	string
+2410	1f6e	11	s_metalworks_2410_1f6e	undefined s_metalworks_2410_1f6e[]	string
+2410	1f79	18	s_swordmaker_s_shop_2410_1f79	undefined s_swordmaker_s_shop_2410_1f79[]	string
+2410	1f8b	6	s_forge_2410_1f8b	undefined s_forge_2410_1f8b[]	string
+2410	1f91	7	s_social_club_2410_1f91	undefined s_social_club_2410_1f91[]	string
+2410	1f98	5	s_club_2410_1f91+7		scalar
+2410	1f9d	19	s_hall_of_fellowship_2410_1f9d	undefined s_hall_of_fellowship_2410_1f9d[]	string
+2410	1fb0	12	s_social_hall_2410_1fb0	undefined s_social_hall_2410_1fb0[]	string
+2410	1fbc	5	s_tree_2410_1fbc	undefined s_tree_2410_1fbc[]	string
+2410	1fc1	6	s_grove_2410_1fc1	undefined s_grove_2410_1fc1[]	string
+2410	1fc7	7	s_forest_2410_1fc7	undefined s_forest_2410_1fc7[]	string
+2410	1fce	9	s_elf_tree_2410_1fce	undefined s_elf_tree_2410_1fce[]	string
+2410	1fd7	10	s_elf_grove_2410_1fd7	undefined s_elf_grove_2410_1fd7[]	string
+2410	1fe1	11	s_elf_forest_2410_1fe1	undefined s_elf_forest_2410_1fe1[]	string
+2410	1fec	5	s_rock_2410_1fec	undefined s_rock_2410_1fec[]	string
+2410	1ff1	10	s_iron_mine_2410_1ff1	undefined s_iron_mine_2410_1ff1[]	string
+2410	1ffb	10	s_gold_mine_2410_1ffb	undefined s_gold_mine_2410_1ffb[]	string
+2410	2005	9	s_gem_mine_2410_2005	undefined s_gem_mine_2410_2005[]	string
+2410	200e	8	s_fighter_keep_2410_200e	undefined s_fighter_keep_2410_200e[]	string
+2410	2016	5	s_keep_2410_200e+8		scalar
+2410	201b	17	s_fighter_fortress_2410_201b	undefined s_fighter_fortress_2410_201b[]	string
+2410	202c	15	s_fighter_castle_2410_202c	undefined s_fighter_castle_2410_202c[]	string
+2410	203b	11	s_thief_keep_2410_203b	undefined s_thief_keep_2410_203b[]	string
+2410	2046	15	s_thief_fortress_2410_2046	undefined s_thief_fortress_2410_2046[]	string
+2410	2055	13	s_thief_castle_2410_2055	undefined s_thief_castle_2410_2055[]	string
+2410	2062	10	s_mage_keep_2410_2062	undefined s_mage_keep_2410_2062[]	string
+2410	206c	14	s_mage_fortress_2410_206c	undefined s_mage_fortress_2410_206c[]	string
+2410	207a	12	s_mage_castle_2410_207a	undefined s_mage_castle_2410_207a[]	string
+2410	2086	12	s_cleric_keep_2410_2086	undefined s_cleric_keep_2410_2086[]	string
+2410	2092	16	s_cleric_fortress_2410_2092	undefined s_cleric_fortress_2410_2092[]	string
+2410	20a2	14	s_cleric_castle_2410_20a2	undefined s_cleric_castle_2410_20a2[]	string
+2410	20b0	9	s_elf_keep_2410_20b0	undefined s_elf_keep_2410_20b0[]	string
+2410	20b9	13	s_elf_fortress_2410_20b9	undefined s_elf_fortress_2410_20b9[]	string
+2410	20c6	11	s_elf_castle_2410_20c6	undefined s_elf_castle_2410_20c6[]	string
+2410	20d1	15	s_Mindark_s_keep_2410_20d1	undefined s_Mindark_s_keep_2410_20d1[]	string
+2410	20e0	5	s_tomb_2410_20e0	undefined s_tomb_2410_20e0[]	string
+2410	20e5	12	s_giant_mound_2410_20e5	undefined s_giant_mound_2410_20e5[]	string
+2410	20f1	14	s_dragon_s_lair_2410_20f1	undefined s_dragon_s_lair_2410_20f1[]	string
+2410	20ff	12	s_main_castle_2410_20ff	undefined s_main_castle_2410_20ff[]	string
+2410	210b	17	s_fortified_castle_2410_210b	undefined s_fortified_castle_2410_210b[]	string
+2410	211c	11	s_stronghold_2410_211c	undefined s_stronghold_2410_211c[]	string
+2410	2127	11	s_dwarf_keep_2410_2127	undefined s_dwarf_keep_2410_2127[]	string
+2410	2132	15	s_dwarf_fortress_2410_2132	undefined s_dwarf_fortress_2410_2132[]	string
+2410	2141	13	s_dwarf_castle_2410_2141	undefined s_dwarf_castle_2410_2141[]	string
+2410	214e	14	s_halfling_keep_2410_214e	undefined s_halfling_keep_2410_214e[]	string
+2410	215c	18	s_halfling_fortress_2410_215c	undefined s_halfling_fortress_2410_215c[]	string
+2410	216e	16	s_halfling_castle_2410_216e	undefined s_halfling_castle_2410_216e[]	string
+2410	217e	6	s_swamp_2410_217e	undefined s_swamp_2410_217e[]	string
+2410	2184	9	s_e_w_wall_2410_2184	undefined s_e_w_wall_2410_2184[]	string
+2410	218d	9	s_n_s_wall_2410_218d	undefined s_n_s_wall_2410_218d[]	string
+2410	2196	12	s_corner_wall_2410_2196	undefined s_corner_wall_2410_2196[]	string
+2410	21a2	16	s_sturdy_e_w_wall_2410_21a2	undefined s_sturdy_e_w_wall_2410_21a2[]	string
+2410	21b2	16	s_sturdy_n_s_wall_2410_21b2	undefined s_sturdy_n_s_wall_2410_21b2[]	string
+2410	21c2	19	s_sturdy_corner_wall_2410_21c2	undefined s_sturdy_corner_wall_2410_21c2[]	string
+2410	21d5	16	s_manned_e_w_wall_2410_21d5	undefined s_manned_e_w_wall_2410_21d5[]	string
+2410	21e5	16	s_manned_n_s_wall_2410_21e5	undefined s_manned_n_s_wall_2410_21e5[]	string
+2410	21f5	19	s_manned_corner_wall_2410_21f5	undefined s_manned_corner_wall_2410_21f5[]	string
+2410	2208	11	s_e_w_bridge_2410_2208	undefined s_e_w_bridge_2410_2208[]	string
+2410	2213	11	s_n_s_bridge_2410_2213	undefined s_n_s_bridge_2410_2213[]	string
+2410	221e	9	s_e_w_gate_2410_221e	undefined s_e_w_gate_2410_221e[]	string
+2410	2227	9	s_n_s_gate_2410_2227	undefined s_n_s_gate_2410_2227[]	string
+2410	2230	16	s_sturdy_e_w_gate_2410_2230	undefined s_sturdy_e_w_gate_2410_2230[]	string
+2410	2240	16	s_sturdy_n_s_gate_2410_2240	undefined s_sturdy_n_s_gate_2410_2240[]	string
+2410	2250	16	s_manned_e_w_gate_2410_2250	undefined s_manned_e_w_gate_2410_2250[]	string
+2410	2260	16	s_manned_n_s_gate_2410_2260	undefined s_manned_n_s_gate_2410_2260[]	string
+2410	2270	8	s_nursery_2410_2270	undefined s_nursery_2410_2270[]	string
+2410	2278	14	s_flower_garden_2410_2278	undefined s_flower_garden_2410_2278[]	string
+2410	2286	11	s_elf_garden_2410_2286	undefined s_elf_garden_2410_2286[]	string
+2410	2291	18	s_Arrowmaker_s_shop_2410_2291	undefined s_Arrowmaker_s_shop_2410_2291[]	string
+2410	22a3	11	s_arrowsmith_2410_22a3	undefined s_arrowsmith_2410_22a3[]	string
+2410	22ae	16	s_fletcher_s_shop_2410_22ae	undefined s_fletcher_s_shop_2410_22ae[]	string
+2410	22be	11	s_steam_bath_2410_22be	undefined s_steam_bath_2410_22be[]	string
+2410	22c9	11	s_bath_house_2410_22c9	undefined s_bath_house_2410_22c9[]	string
+2410	22d4	13	s_public_baths_2410_22d4	undefined s_public_baths_2410_22d4[]	string
+2410	22e1	11	s_brick_kiln_2410_22e1	undefined s_brick_kiln_2410_22e1[]	string
+2410	22ec	13	s_stonemasonry_2410_22ec	undefined s_stonemasonry_2410_22ec[]	string
+2410	22f9	13	s_mason_s_hall_2410_22f9	undefined s_mason_s_hall_2410_22f9[]	string
+2410	2306	8	s_jeweler_2410_2306	undefined s_jeweler_2410_2306[]	string
+2410	230e	17	s_ringmaker_s_shop_2410_230e	undefined s_ringmaker_s_shop_2410_230e[]	string
+2410	231f	15	s_jeweler_s_shop_2410_231f	undefined s_jeweler_s_shop_2410_231f[]	string
+2410	232e	11	s_glassworks_2410_232e	undefined s_glassworks_2410_232e[]	string
+2410	2339	16	s_fighter_outpost_2410_2339	undefined s_fighter_outpost_2410_2339[]	string
+2410	2349	13	s_mage_outpost_2410_2349	undefined s_mage_outpost_2410_2349[]	string
+2410	2356	15	s_cleric_outpost_2410_2356	undefined s_cleric_outpost_2410_2356[]	string
+2410	2365	14	s_thief_outpost_2410_2365	undefined s_thief_outpost_2410_2365[]	string
+2410	2373	14	s_dwarf_outpost_2410_2373	undefined s_dwarf_outpost_2410_2373[]	string
+2410	2381	12	s_elf_outpost_2410_2381	undefined s_elf_outpost_2410_2381[]	string
+2410	238d	17	s_halfling_outpost_2410_238d	undefined s_halfling_outpost_2410_238d[]	string
+2410	239e	20	s_money_dealer_s_shop_2410_239e	undefined s_money_dealer_s_shop_2410_239e[]	string
+2410	23b2	5	s_bank_2410_23b2	undefined s_bank_2410_23b2[]	string
+2410	23b7	6	s_vault_2410_23b7	undefined s_vault_2410_23b7[]	string
+2410	23bd	16	s_forester_s_camp_2410_23bd	undefined s_forester_s_camp_2410_23bd[]	string
+2410	23cd	15	s_builder_s_hall_2410_23cd	undefined s_builder_s_hall_2410_23cd[]	string
+2410	23dc	13	s_trading_post_2410_23dc	undefined s_trading_post_2410_23dc[]	string
+2410	23e9	12	s_trade_faire_2410_23e9	undefined s_trade_faire_2410_23e9[]	string
+2410	23f5	7	s_bazaar_2410_23f5	undefined s_bazaar_2410_23f5[]	string
+2410	23fc	6	s_arena_2410_23fc	undefined s_arena_2410_23fc[]	string
+2410	2402	11	s_woodcarver_2410_2402	undefined s_woodcarver_2410_2402[]	string
+2410	240d	12	s_puppetmaker_2410_240d	undefined s_puppetmaker_2410_240d[]	string
+2410	2419	9	s_toymaker_2410_2419	undefined s_toymaker_2410_2419[]	string
+2410	2422	11	s_bread_shop_2410_2422	undefined s_bread_shop_2410_2422[]	string
+2410	242d	10	s_bakehouse_2410_242d	undefined s_bakehouse_2410_242d[]	string
+2410	2437	7	s_bakery_2410_2437	undefined s_bakery_2410_2437[]	string
+2410	243e	9	s_dice_den_2410_243e	undefined s_dice_den_2410_243e[]	string
+2410	2447	12	s_card_parlor_2410_2447	undefined s_card_parlor_2410_2447[]	string
+2410	2453	12	s_gaming_hall_2410_2453	undefined s_gaming_hall_2410_2453[]	string
+2410	245f	15	s_clerk_s_office_2410_245f	undefined s_clerk_s_office_2410_245f[]	string
+2410	246e	19	s_transcriber_s_shop_2410_246e	undefined s_transcriber_s_shop_2410_246e[]	string
+2410	2481	9	s_scribery_2410_2481	undefined s_scribery_2410_2481[]	string
+2410	248a	11	s_apothecary_2410_248a	undefined s_apothecary_2410_248a[]	string
+2410	2495	16	s_alchemist_s_lab_2410_2495	undefined s_alchemist_s_lab_2410_2495[]	string
+2410	24a5	11	s_magic_mill_2410_24a5	undefined s_magic_mill_2410_24a5[]	string
+2410	24b0	13	s_leatherworks_2410_24b0	undefined s_leatherworks_2410_24b0[]	string
+2410	24bd	12	s_shieldsmith_2410_24bd	undefined s_shieldsmith_2410_24bd[]	string
+2410	24c9	7	s_armory_2410_24c9	undefined s_armory_2410_24c9[]	string
+2410	24d0	5	s_ruin_2410_24d0	undefined s_ruin_2410_24d0[]	string
+2410	24d5	8	s_fighter_2410_24d5	undefined s_fighter_2410_24d5[]	string
+2410	24dd	6	s_spear_2410_24dd	undefined s_spear_2410_24dd[]	string
+2410	24e3	5	s_mage_2410_24e3	undefined s_mage_2410_24e3[]	string
+2410	24e8	7	s_cleric_2410_24e8	undefined s_cleric_2410_24e8[]	string
+2410	24ef	11	s_staff_club_2410_24ef	undefined s_staff_club_2410_24ef[]	string
+2410	24fa	6	s_thief_2410_24fa	undefined s_thief_2410_24fa[]	string
+2410	2500	7	s_dagger_2410_2500	undefined s_dagger_2410_2500[]	string
+2410	2507	11	s_red_dragon_2410_2507	undefined s_red_dragon_2410_2507[]	string
+2410	2512	7	s_archer_2410_2512	undefined s_archer_2410_2512[]	string
+2410	2519	4	s_bow_2410_2519	undefined s_bow_2410_2519[]	string
+2410	251d	9	s_skeleton_2410_251d	undefined s_skeleton_2410_251d[]	string
+2410	2526	12	s_short_sword_2410_2526	undefined s_short_sword_2410_2526[]	string
+2410	2532	4	s_orc_2410_2532	undefined s_orc_2410_2532[]	string
+2410	2536	13	s_morning_star_2410_2536	undefined s_morning_star_2410_2536[]	string
+2410	2543	4	s_elf_2410_2543	undefined s_elf_2410_2543[]	string
+2410	2547	13	s_evil_fighter_2410_2547	undefined s_evil_fighter_2410_2547[]	string
+2410	2554	5	s_pike_2410_2554	undefined s_pike_2410_2554[]	string
+2410	2559	6	s_dwarf_2410_2559	undefined s_dwarf_2410_2559[]	string
+2410	255f	11	s_axe_hammer_2410_255f	undefined s_axe_hammer_2410_255f[]	string
+2410	256a	9	s_halfling_2410_256a	undefined s_halfling_2410_256a[]	string
+2410	2573	16	s_carrion_crawler_2410_2573	undefined s_carrion_crawler_2410_2573[]	string
+2410	2583	10	s_giant_ant_2410_2583	undefined s_giant_ant_2410_2583[]	string
+2410	258d	6	s_harpy_2410_258d	undefined s_harpy_2410_258d[]	string
+2410	2593	10	s_dire_wolf_2410_2593	undefined s_dire_wolf_2410_2593[]	string
+2410	259d	10	s_giant_bat_2410_259d	undefined s_giant_bat_2410_259d[]	string
+2410	25a7	12	s_blast_spore_2410_25a7	undefined s_blast_spore_2410_25a7[]	string
+2410	25b3	7	s_kobold_2410_25b3	undefined s_kobold_2410_25b3[]	string
+2410	25ba	16	s_obsidian_statue_2410_25ba	undefined s_obsidian_statue_2410_25ba[]	string
+2410	25ca	11	s_giant_toad_2410_25ca	undefined s_giant_toad_2410_25ca[]	string
+2410	25d5	3	s_hobgoblin_2410_25d5	undefined s_hobgoblin_2410_25d5[]	string
+2410	25d8	7	s_goblin_2410_25d5+3		scalar
+2410	25df	12	s_manscorpion_2410_25df	undefined s_manscorpion_2410_25df[]	string
+2410	25eb	15	s_giant_scorpion_2410_25eb	undefined s_giant_scorpion_2410_25eb[]	string
+2410	25fa	11	s_wood_golem_2410_25fa	undefined s_wood_golem_2410_25fa[]	string
+2410	2605	10	s_evil_mage_2410_2605	undefined s_evil_mage_2410_2605[]	string
+2410	260f	7	s_medusa_2410_260f	undefined s_medusa_2410_260f[]	string
+2410	2616	12	s_evil_cleric_2410_2616	undefined s_evil_cleric_2410_2616[]	string
+2410	2622	11	s_evil_thief_2410_2622	undefined s_evil_thief_2410_2622[]	string
+2410	262d	6	s_wight_2410_262d	undefined s_wight_2410_262d[]	string
+2410	2633	12	s_blue_dragon_2410_2633	undefined s_blue_dragon_2410_2633[]	string
+2410	263f	12	s_purple_worm_2410_263f	undefined s_purple_worm_2410_263f[]	string
+2410	264b	8	s_griffon_2410_264b	undefined s_griffon_2410_264b[]	string
+2410	2653	12	s_stone_giant_2410_2653	undefined s_stone_giant_2410_2653[]	string
+2410	265f	6	s_troll_2410_265f	undefined s_troll_2410_265f[]	string
+2410	2665	11	s_fire_giant_2410_2665	undefined s_fire_giant_2410_2665[]	string
+2410	2670	15	s_lesser_phoenix_2410_2670	undefined s_lesser_phoenix_2410_2670[]	string
+2410	267f	9	s_minotaur_2410_267f	undefined s_minotaur_2410_267f[]	string
+2410	2688	4	s_axe_2410_2688	undefined s_axe_2410_2688[]	string
+2410	268c	11	s_cockatrice_2410_268c	undefined s_cockatrice_2410_268c[]	string
+2410	2697	8	s_vampire_2410_2697	undefined s_vampire_2410_2697[]	string
+2410	269f	9	s_Mindark_2410_269f	undefined s_Mindark_2410_269f[]	string
+2410	26a8	1	ScreenMode	undefined1 ScreenMode	scalar
+2410	26a9	2	GSPEmpty	far_t GSPEmpty	scalar
+2410	26ab	2	GSPEmpty.seg		scalar
+2410	26ad	10	promptRect	undefined promptRect	scalar
+2410	26b7	32	GMenuStrings	char *GMenuStrings[8]	farptr
+2410	26d7	8	GYesNo	char *GYesNo[2]	farptr
+2410	26df	2	GSeed	undefined2 GSeed	scalar
+2410	26e1	22	SeedHi	undefined2 SeedHi	scalar
+2410	26f7	52	worldMenuLabels	far_t worldMenuLabels[13]	scalar
+2410	272b	7	s__Empty__2410_272b	undefined s__Empty__2410_272b[]	string
+2410	2732	1	s__Empty__2410_272b+7		scalar
+2410	2733	5	s_more	undefined s_more[]	string
+2410	2738	2	s_underscore_2410_2738	undefined s_underscore_2410_2738[]	string
+2410	273a	3	s_empty	undefined s_empty[]	string
+2410	273d	12	s_ssaves_txt	undefined s_ssaves_txt[]	string
+2410	2749	3	s_u	undefined s_u[]	string
+2410	274c	25	s_message_delay_is_now_d	undefined s_message_delay_is_now_d[]	string
+2410	2765	23	s_decrease_message_delay	undefined s_decrease_message_delay[]	string
+2410	277c	23	s_increase_message_delay	undefined s_increase_message_delay[]	string
+2410	2793	5	s_test	undefined s_test[]	string
+2410	2798	5	s_done	undefined s_done[]	string
+2410	279d	22	s_change_message_delay	undefined s_change_message_delay[]	string
+2410	27b3	49	s_this_message_appears_at_the_message_delay_of	undefined s_this_message_appears_at_the_message_delay_of[]	string
+2410	27e4	7	s_cancel	undefined s_cancel[]	string
+2410	27eb	9	s_New_Game_2410_27eb	undefined s_New_Game_2410_27eb[]	string
+2410	27f4	10	s_Save_Game_2410_27f4	undefined s_Save_Game_2410_27f4[]	string
+2410	27fe	10	s_Load_Game_2410_27fe	undefined s_Load_Game_2410_27fe[]	string
+2410	2808	12	s_Delete_Game_2410_2808	undefined s_Delete_Game_2410_2808[]	string
+2410	2814	10	s_Quit_Game_2410_2814	undefined s_Quit_Game_2410_2814[]	string
+2410	281e	14	s_Message_Delay_2410_281e	undefined s_Message_Delay_2410_281e[]	string
+2410	282c	19	s_Great_Achievements_2410_282c	undefined s_Great_Achievements_2410_282c[]	string
+2410	283f	11	s_Begin_Play_2410_283f	undefined s_Begin_Play_2410_283f[]	string
+2410	284a	4	s_Yes_2410_284a	undefined s_Yes_2410_284a[]	string
+2410	284e	3	s_No_2410_284e	undefined s_No_2410_284e[]	string
+2410	2851	18	s_stronghold_v_1_00	undefined s_stronghold_v_1_00[]	string
+2410	2863	18	s_Select_an_option__2410_2863	undefined s_Select_an_option__2410_2863[]	string
+2410	2875	30	s_game_not_saved_are_you_sure	undefined s_game_not_saved_are_you_sure[]	string
+2410	2893	11	s_save_game	undefined s_save_game[]	string
+2410	289e	33	s_name_this_save_esc_to_cancel	undefined s_name_this_save_esc_to_cancel[]	string
+2410	28bf	37	s_name_for_this_save_esc_to_cancel	undefined s_name_for_this_save_esc_to_cancel[]	string
+2410	28e4	11	s_load_game	undefined s_load_game[]	string
+2410	28ef	13	s_delete_game	undefined s_delete_game[]	string
+2410	28fc	25	s_delete_s_are_you_sure	undefined s_delete_s_are_you_sure[]	string
+2410	2915	4	s_Peaceful_2410_2915	undefined s_Peaceful_2410_2915[]	string
+2410	2919	5	s_eful_2410_2915+4		scalar
+2410	291e	11	s_Aggressive_2410_291e	undefined s_Aggressive_2410_291e[]	string
+2410	2929	8	s_Hostile_2410_2929	undefined s_Hostile_2410_2929[]	string
+2410	2931	7	s_Custom_2410_2931	undefined s_Custom_2410_2931[]	string
+2410	2938	7	s_Return_2410_2938	undefined s_Return_2410_2938[]	string
+2410	293f	11	s_First_City_2410_293f	undefined s_First_City_2410_293f[]	string
+2410	294a	8	s_World_1_2410_294a	undefined s_World_1_2410_294a[]	string
+2410	2952	8	s_World_2_2410_2952	undefined s_World_2_2410_2952[]	string
+2410	295a	8	s_World_3_2410_295a	undefined s_World_3_2410_295a[]	string
+2410	2962	8	s_world_4	undefined s_world_4[]	string
+2410	296a	8	s_world_5	undefined s_world_5[]	string
+2410	2972	7	s_Random_2410_2972	undefined s_Random_2410_2972[]	string
+2410	2979	17	s_which_new_world	undefined s_which_new_world[]	string
+2410	298a	17	s_hostility_level	undefined s_hostility_level[]	string
+2410	299b	26	s_low_intelligence_enemies	undefined s_low_intelligence_enemies[]	string
+2410	29b5	29	s_medium_intelligence_enemies	undefined s_medium_intelligence_enemies[]	string
+2410	29d2	27	s_high_intelligence_enemies	undefined s_high_intelligence_enemies[]	string
+2410	29ed	21	s_size_of_second_wave	undefined s_size_of_second_wave[]	string
+2410	2a02	38	s_too_many_enemies_60_enemies_maximum	undefined s_too_many_enemies_60_enemies_maximum[]	string
+2410	2a28	18	s_resetting_game	undefined s_resetting_game[]	string
+2410	2a3a	20	s_new_world_complete	undefined s_new_world_complete[]	string
+2410	2a4e	1	audioBusy	undefined1 audioBusy	scalar
+2410	2a4f	2	FMXmsHandle	uint32_t FMXmsHandle	scalar
+2410	2a51	2	FMXmsHandle+2		scalar
+2410	2a53	2	FMEmsHandle	uint32_t FMEmsHandle	scalar
+2410	2a55	2	FMEmsHandle+2		scalar
+2410	2a57	2	StshBuf	far_t StshBuf	scalar
+2410	2a59	2	StshBuf.seg		scalar
+2410	2a5b	2	FMRingBuf	far_t FMRingBuf[8]	scalar
+2410	2a5d	30	FMRingBuf[0].seg		scalar
+2410	2a7b	1	FMRingIndex	uint8_t FMRingIndex	scalar
+2410	2a7c	11	s_strong.dat_2410_2a7c		scalar
+2410	2a87	12	s_bigcomp.lbm_2410_2a87		scalar
+2410	2a93	13	s_bighous1.lbm_2410_2a93		scalar
+2410	2aa0	13	s_bighous2.lbm_2410_2aa0		scalar
+2410	2aad	13	s_bighous3.lbm_2410_2aad		scalar
+2410	2aba	13	s_bighous6.lbm_2410_2aba		scalar
+2410	2ac7	12	s_davfont.lbm_2410_2ac7		scalar
+2410	2ad3	17	s_anim\2rdrag0.lbm_2410_2ad3		scalar
+2410	2ae4	13	s_gamfont1.lbm_2410_2ae4		scalar
+2410	2af1	10	s_mouse.lbm_2410_2af1		scalar
+2410	2afb	6	s_nwpanel2.lbm_2410_2afb		scalar
+2410	2b01	7	s_l2.lbm_2410_2afb+6		scalar
+2410	2b08	17	s_build\rock01.lbm_2410_2b08		scalar
+2410	2b19	9	s_star.lbm_2410_2b19		scalar
+2410	2b22	11	s_trees2.lbm_2410_2b22		scalar
+2410	2b2d	13	s_triangls.lbm_2410_2b2d		scalar
+2410	2b3a	6	s_nwpanel1.lbm_2410_2b3a		scalar
+2410	2b40	7	s_l1.lbm_2410_2b3a+6		scalar
+2410	2b47	15	s_anim\1fi1m.lbm_2410_2b47		scalar
+2410	2b56	11	s_water1.lbm_2410_2b56		scalar
+2410	2b61	9	s_ping.xmi_2410_2b61		scalar
+2410	2b6a	13	s_zound007.voc_2410_2b6a		scalar
+2410	2b77	13	s_zound011.voc_2410_2b77		scalar
+2410	2b84	7	s_zound006.voc_2410_2b84		scalar
+2410	2b8b	6	s_6.voc_2410_2b84+7		scalar
+2410	2b91	13	s_zound001.voc_2410_2b91		scalar
+2410	2b9e	10	s_mages.lbm_2410_2b9e		scalar
+2410	2ba8	13	s_zound005.voc_2410_2ba8		scalar
+2410	2bb5	4	s_thud2.voc_2410_2bb5		scalar
+2410	2bb9	6	s_2.voc_2410_2bb5+4		scalar
+2410	2bbf	11	s_csite1.lbm_2410_2bbf		scalar
+2410	2bca	15	s_anim\1cl1m.lbm_2410_2bca		scalar
+2410	2bd9	11	s_skels1.lbm_2410_2bd9		scalar
+2410	2be4	13	s_bighous4.lbm_2410_2be4		scalar
+2410	2bf1	13	s_bighous5.lbm_2410_2bf1		scalar
+2410	2bfe	10	s_wall2.lbm_2410_2bfe		scalar
+2410	2c08	13	s_thieves2.lbm_2410_2c08		scalar
+2410	2c15	9	s_orcs.lbm_2410_2c15		scalar
+2410	2c1e	10	s_elves.lbm_2410_2c1e		scalar
+2410	2c28	9	s_bolt.lbm_2410_2c28		scalar
+2410	2c31	15	s_anim\2fi1m.lbm_2410_2c31		scalar
+2410	2c40	9	s_fire.lbm_2410_2c40		scalar
+2410	2c49	12	s_dwarves.lbm_2410_2c49		scalar
+2410	2c55	11	s_halfls.lbm_2410_2c55		scalar
+2410	2c60	11	s_crwlrs.lbm_2410_2c60		scalar
+2410	2c6b	10	s_aunts.lbm_2410_2c6b		scalar
+2410	2c75	13	s_castle01.lbm_2410_2c75		scalar
+2410	2c82	13	s_castle02.lbm_2410_2c82		scalar
+2410	2c8f	13	s_castle03.lbm_2410_2c8f		scalar
+2410	2c9c	10	s_keep1.lbm_2410_2c9c		scalar
+2410	2ca6	10	s_keep2.lbm_2410_2ca6		scalar
+2410	2cb0	10	s_keep3.lbm_2410_2cb0		scalar
+2410	2cba	10	s_keep4.lbm_2410_2cba		scalar
+2410	2cc4	10	s_keep5.lbm_2410_2cc4		scalar
+2410	2cce	12	s_harpies.lbm_2410_2cce		scalar
+2410	2cda	11	s_bridge.lbm_2410_2cda		scalar
+2410	2ce5	17	s_build\mine01.lbm_2410_2ce5		scalar
+2410	2cf6	10	s_keep6.lbm_2410_2cf6		scalar
+2410	2d00	10	s_dlair.lbm_2410_2d00		scalar
+2410	2d0a	11	s_wolves.lbm_2410_2d0a		scalar
+2410	2d15	19	s_build\cletem01.lbm_2410_2d15		scalar
+2410	2d28	9	s_univ.lbm_2410_2d28		scalar
+2410	2d31	16	s_anim\nubats.lbm_2410_2d31		scalar
+2410	2d41	9	s_mage.xmi_2410_2d41		scalar
+2410	2d4a	15	s_anim\1fi1f.lbm_2410_2d4a		scalar
+2410	2d59	11	s_blasts.lbm_2410_2d59		scalar
+2410	2d64	12	s_kobolds.lbm_2410_2d64		scalar
+2410	2d70	11	s_house1.lbm_2410_2d70		scalar
+2410	2d7b	11	s_house2.lbm_2410_2d7b		scalar
+2410	2d86	11	s_house3.lbm_2410_2d86		scalar
+2410	2d91	11	s_fallen.xmi_2410_2d91		scalar
+2410	2d9c	12	s_falloop.xmi_2410_2d9c		scalar
+2410	2da8	11	s_falop2.xmi_2410_2da8		scalar
+2410	2db3	12	s_antkill.xmi_2410_2db3		scalar
+2410	2dbf	8	s_add.xmi_2410_2dbf		scalar
+2410	2dc7	10	s_march.xmi_2410_2dc7		scalar
+2410	2dd1	10	s_ants2.xmi_2410_2dd1		scalar
+2410	2ddb	13	s_ant2loop.xmi_2410_2ddb		scalar
+2410	2de8	13	s_mageloop.xmi_2410_2de8		scalar
+2410	2df5	13	s_magelop2.xmi_2410_2df5		scalar
+2410	2e02	12	s_granary.lbm_2410_2e02		scalar
+2410	2e0e	12	s_ogolems.lbm_2410_2e0e		scalar
+2410	2e1a	13	s_talkwin9.lbm_2410_2e1a		scalar
+2410	2e27	10	s_faces.lbm_2410_2e27		scalar
+2410	2e31	11	s_frmlnd.lbm_2410_2e31		scalar
+2410	2e3c	10	s_toads.lbm_2410_2e3c		scalar
+2410	2e46	11	s_stone1.lbm_2410_2e46		scalar
+2410	2e51	11	s_stone2.lbm_2410_2e51		scalar
+2410	2e5c	12	s_harpy01.lbm_2410_2e5c		scalar
+2410	2e68	9	s_hobs.lbm_2410_2e68		scalar
+2410	2e71	9	s_gobs.lbm_2410_2e71		scalar
+2410	2e7a	12	s_stucco1.lbm_2410_2e7a		scalar
+2410	2e86	12	s_stucco2.lbm_2410_2e86		scalar
+2410	2e92	12	s_wicker1.lbm_2410_2e92		scalar
+2410	2e9e	12	s_wicker2.lbm_2410_2e9e		scalar
+2410	2eaa	12	s_thatch1.lbm_2410_2eaa		scalar
+2410	2eb6	12	s_thatch2.lbm_2410_2eb6		scalar
+2410	2ec2	11	s_csite2.lbm_2410_2ec2		scalar
+2410	2ecd	11	s_csite3.lbm_2410_2ecd		scalar
+2410	2ed8	11	s_csite4.lbm_2410_2ed8		scalar
+2410	2ee3	13	s_bhouse01.lbm_2410_2ee3		scalar
+2410	2ef0	13	s_bhouse02.lbm_2410_2ef0		scalar
+2410	2efd	13	s_bhouse03.lbm_2410_2efd		scalar
+2410	2f0a	13	s_bhouse05.lbm_2410_2f0a		scalar
+2410	2f17	13	s_bhouse04.lbm_2410_2f17		scalar
+2410	2f24	13	s_bhouse06.lbm_2410_2f24		scalar
+2410	2f31	8	s_bat.voc_2410_2f31		scalar
+2410	2f39	11	s_dragon.voc_2410_2f39		scalar
+2410	2f44	10	s_clank.voc_2410_2f44		scalar
+2410	2f4e	11	s_sword4.voc_2410_2f4e		scalar
+2410	2f59	10	s_foots.voc_2410_2f59		scalar
+2410	2f63	10	s_clink.voc_2410_2f63		scalar
+2410	2f6d	11	s_crash1.voc_2410_2f6d		scalar
+2410	2f78	11	s_foots2.voc_2410_2f78		scalar
+2410	2f83	10	s_walk2.voc_2410_2f83		scalar
+2410	2f8d	10	s_magic.voc_2410_2f8d		scalar
+2410	2f97	9	s_dies.voc_2410_2f97		scalar
+2410	2fa0	10	s_harpy.voc_2410_2fa0		scalar
+2410	2faa	10	s_arch1.lbm_2410_2faa		scalar
+2410	2fb4	10	s_arch2.lbm_2410_2fb4		scalar
+2410	2fbe	13	s_western1.lbm_2410_2fbe		scalar
+2410	2fcb	13	s_western2.lbm_2410_2fcb		scalar
+2410	2fd8	13	s_castle04.lbm_2410_2fd8		scalar
+2410	2fe5	13	s_castle05.lbm_2410_2fe5		scalar
+2410	2ff2	13	s_castle06.lbm_2410_2ff2		scalar
+2410	2fff	13	s_castle07.lbm_2410_2fff		scalar
+2410	300c	13	s_castle08.lbm_2410_300c		scalar
+2410	3019	13	s_castle09.lbm_2410_3019		scalar
+2410	3026	17	s_anim\2mansc0.lbm_2410_3026		scalar
+2410	3037	11	s_scorps.lbm_2410_3037		scalar
+2410	3042	12	s_panel01.lbm_2410_3042		scalar
+2410	304e	12	s_wgolems.lbm_2410_304e		scalar
+2410	305a	12	s_mouse03.lbm_2410_305a		scalar
+2410	3066	11	s_brick1.lbm_2410_3066		scalar
+2410	3071	11	s_brick2.lbm_2410_3071		scalar
+2410	307c	11	s_brick3.lbm_2410_307c		scalar
+2410	3087	11	s_brick4.lbm_2410_3087		scalar
+2410	3092	10	s_ruin1.lbm_2410_3092		scalar
+2410	309c	10	s_ruin2.lbm_2410_309c		scalar
+2410	30a6	9	s_frog.voc_2410_30a6		scalar
+2410	30af	9	s_pelf.lbm_2410_30af		scalar
+2410	30b8	13	s_talkwin8.lbm_2410_30b8		scalar
+2410	30c5	11	s_butt01.lbm_2410_30c5		scalar
+2410	30d0	13	s_davfont2.lbm_2410_30d0		scalar
+2410	30dd	15	s_anim\1el1m.lbm_2410_30dd		scalar
+2410	30ec	15	s_anim\1el1f.lbm_2410_30ec		scalar
+2410	30fb	15	s_anim\1el2m.lbm_2410_30fb		scalar
+2410	310a	15	s_anim\1el2f.lbm_2410_310a		scalar
+2410	3119	15	s_anim\1el3m.lbm_2410_3119		scalar
+2410	3128	15	s_anim\1el3f.lbm_2410_3128		scalar
+2410	3137	15	s_anim\1ma1m.lbm_2410_3137		scalar
+2410	3146	15	s_anim\1ma1f.lbm_2410_3146		scalar
+2410	3155	15	s_anim\1ma2m.lbm_2410_3155		scalar
+2410	3164	15	s_anim\1ma2f.lbm_2410_3164		scalar
+2410	3173	15	s_anim\1ma3m.lbm_2410_3173		scalar
+2410	3182	15	s_anim\1ma3f.lbm_2410_3182		scalar
+2410	3191	15	s_anim\2ma1m.lbm_2410_3191		scalar
+2410	31a0	15	s_anim\2ma2m.lbm_2410_31a0		scalar
+2410	31af	15	s_anim\2ma3m.lbm_2410_31af		scalar
+2410	31be	19	s_build\gencas01.lbm_2410_31be		scalar
+2410	31d1	19	s_build\gencas03.lbm_2410_31d1		scalar
+2410	31e4	11	s_back03.lbm_2410_31e4		scalar
+2410	31ef	13	s_midgrnd5.lbm_2410_31ef		scalar
+2410	31fc	12	s_strong4.lbm_2410_31fc		scalar
+2410	3208	11	s_marble.lbm_2410_3208		scalar
+2410	3213	17	s_anim\2medus0.lbm_2410_3213		scalar
+2410	3224	12	s_rattler.voc_2410_3224		scalar
+2410	3230	15	s_anim\1cl1f.lbm_2410_3230		scalar
+2410	323f	15	s_anim\1fi2f.lbm_2410_323f		scalar
+2410	324e	15	s_anim\1fi3f.lbm_2410_324e		scalar
+2410	325d	15	s_anim\1fi2m.lbm_2410_325d		scalar
+2410	326c	15	s_anim\1fi3m.lbm_2410_326c		scalar
+2410	327b	15	s_anim\2fi2m.lbm_2410_327b		scalar
+2410	328a	15	s_anim\2fi3m.lbm_2410_328a		scalar
+2410	3299	11	s_pemage.lbm_2410_3299		scalar
+2410	32a4	19	s_build\gentow01.lbm_2410_32a4		scalar
+2410	32b7	19	s_build\genmkt01.lbm_2410_32b7		scalar
+2410	32ca	19	s_build\gengra01.lbm_2410_32ca		scalar
+2410	32dd	19	s_build\gentow02.lbm_2410_32dd		scalar
+2410	32f0	19	s_build\gengra02.lbm_2410_32f0		scalar
+2410	3303	12	s_pfdwarf.lbm_2410_3303		scalar
+2410	330f	12	s_pffight.lbm_2410_330f		scalar
+2410	331b	12	s_button1.lbm_2410_331b		scalar
+2410	3327	15	s_anim\1th1m.lbm_2410_3327		scalar
+2410	3336	15	s_anim\1th1f.lbm_2410_3336		scalar
+2410	3345	15	s_anim\1th2m.lbm_2410_3345		scalar
+2410	3354	15	s_anim\1th2f.lbm_2410_3354		scalar
+2410	3363	15	s_anim\1th3m.lbm_2410_3363		scalar
+2410	3372	15	s_anim\1th3f.lbm_2410_3372		scalar
+2410	3381	15	s_anim\2th3m.lbm_2410_3381		scalar
+2410	3390	15	s_anim\2th1m.lbm_2410_3390		scalar
+2410	339f	15	s_anim\2th2m.lbm_2410_339f		scalar
+2410	33ae	15	s_anim\1cl2m.lbm_2410_33ae		scalar
+2410	33bd	15	s_anim\1cl2f.lbm_2410_33bd		scalar
+2410	33cc	15	s_anim\1cl3m.lbm_2410_33cc		scalar
+2410	33db	15	s_anim\1cl3f.lbm_2410_33db		scalar
+2410	33ea	15	s_anim\2cl1m.lbm_2410_33ea		scalar
+2410	33f9	15	s_anim\2cl2m.lbm_2410_33f9		scalar
+2410	3408	15	s_anim\2cl3m.lbm_2410_3408		scalar
+2410	3417	15	s_anim\1dw1m.lbm_2410_3417		scalar
+2410	3426	15	s_anim\1dw1f.lbm_2410_3426		scalar
+2410	3435	15	s_anim\1dw2m.lbm_2410_3435		scalar
+2410	3444	15	s_anim\1dw2f.lbm_2410_3444		scalar
+2410	3453	15	s_anim\1ha1m.lbm_2410_3453		scalar
+2410	3462	15	s_anim\1ha1f.lbm_2410_3462		scalar
+2410	3471	15	s_anim\1ha2m.lbm_2410_3471		scalar
+2410	3480	15	s_anim\1ha2f.lbm_2410_3480		scalar
+2410	348f	10	s_cue13.xmi_2410_348f		scalar
+2410	3499	9	s_cue2.xmi_2410_3499		scalar
+2410	34a2	9	s_cue3.xmi_2410_34a2		scalar
+2410	34ab	9	s_cue4.xmi_2410_34ab		scalar
+2410	34b4	10	s_cue5a.xmi_2410_34b4		scalar
+2410	34be	9	s_cue6.xmi_2410_34be		scalar
+2410	34c7	9	s_cue7.xmi_2410_34c7		scalar
+2410	34d0	9	s_cue8.xmi_2410_34d0		scalar
+2410	34d9	10	s_cue10.xmi_2410_34d9		scalar
+2410	34e3	10	s_cue12.xmi_2410_34e3		scalar
+2410	34ed	11	s_cue15a.xmi_2410_34ed		scalar
+2410	34f8	11	s_cue15b.xmi_2410_34f8		scalar
+2410	3503	10	s_cuex1.xmi_2410_3503		scalar
+2410	350d	11	s_cuex2b.xmi_2410_350d		scalar
+2410	3518	11	s_theme2.xmi_2410_3518		scalar
+2410	3523	13	s_pfhfight.lbm_2410_3523		scalar
+2410	3530	18	s_portrait\sp06.lbm_2410_3530		scalar
+2410	3542	13	s_pfhthief.lbm_2410_3542		scalar
+2410	354f	11	s_cleric.voc_2410_354f		scalar
+2410	355a	7	s_6B.voc_2410_355a		scalar
+2410	3561	11	s_poison.voc_2410_3561		scalar
+2410	356c	6	s_8.voc_2410_356c		scalar
+2410	3572	10	s_murm1.voc_2410_3572		scalar
+2410	357c	13	s_magecast.voc_2410_357c		scalar
+2410	3589	13	s_magecst2.voc_2410_3589		scalar
+2410	3596	9	s_hit1.voc_2410_3596		scalar
+2410	359f	9	s_hit2.voc_2410_359f		scalar
+2410	35a8	9	s_miss.voc_2410_35a8		scalar
+2410	35b1	7	s_17.voc_2410_35b1		scalar
+2410	35b8	7	s_18.voc_2410_35b8		scalar
+2410	35bf	7	s_19.voc_2410_35bf		scalar
+2410	35c6	7	s_20.voc_2410_35c6		scalar
+2410	35cd	7	s_21.voc_2410_35cd		scalar
+2410	35d4	9	s_zero.voc_2410_35d4		scalar
+2410	35dd	7	s_22.voc_2410_35dd		scalar
+2410	35e4	12	s_placeb1.xmi_2410_35e4		scalar
+2410	35f0	12	s_placeb2.xmi_2410_35f0		scalar
+2410	35fc	12	s_placeb3.xmi_2410_35fc		scalar
+2410	3608	12	s_placeb5.xmi_2410_3608		scalar
+2410	3614	10	s_mine4.xmi_2410_3614		scalar
+2410	361e	12	s_attack1.xmi_2410_361e		scalar
+2410	362a	7	s_29.voc_2410_362a		scalar
+2410	3631	9	s_wolf.voc_2410_3631		scalar
+2410	363a	7	s_31.voc_2410_363a		scalar
+2410	3641	7	s_32.voc_2410_3641		scalar
+2410	3648	7	s_33.voc_2410_3648		scalar
+2410	364f	8	s_33B.voc_2410_364f		scalar
+2410	3657	8	s_35a.voc_2410_3657		scalar
+2410	365f	7	s_37.voc_2410_365f		scalar
+2410	3666	7	s_38.voc_2410_3666		scalar
+2410	366d	7	s_39.voc_2410_366d		scalar
+2410	3674	11	s_sword5.voc_2410_3674		scalar
+2410	367f	11	s_spore2.voc_2410_367f		scalar
+2410	368a	11	s_spore3.voc_2410_368a		scalar
+2410	3695	12	s_phoenix.voc_2410_3695		scalar
+2410	36a1	10	s_troll.voc_2410_36a1		scalar
+2410	36ab	10	s_fire4.voc_2410_36ab		scalar
+2410	36b5	8	s_45A.voc_2410_36b5		scalar
+2410	36bd	8	s_45B.voc_2410_36bd		scalar
+2410	36c5	7	s_x1.voc_2410_36c5		scalar
+2410	36cc	10	s_cue11.xmi_2410_36cc		scalar
+2410	36d6	10	s_cue9b.xmi_2410_36d6		scalar
+2410	36e0	10	s_cue16.xmi_2410_36e0		scalar
+2410	36ea	9	s_gate.lbm_2410_36ea		scalar
+2410	36f3	11	s_volume.xmi_2410_36f3		scalar
+2410	36fe	10	s_cue9a.xmi_2410_36fe		scalar
+2410	3708	12	s_wintree.lbm_2410_3708		scalar
+2410	3714	13	s_falltree.lbm_2410_3714		scalar
+2410	3721	18	s_anim\2wights0.lbm_2410_3721		scalar
+2410	3733	17	s_anim\2bdrag0.lbm_2410_3733		scalar
+2410	3744	18	s_anim\2bdragt0.lbm_2410_3744		scalar
+2410	3756	17	s_anim\2pworm0.lbm_2410_3756		scalar
+2410	3767	7	s_l3.lbm_2410_3767		scalar
+2410	376e	6	s_build\figcas01.lbm_2410_376e		scalar
+2410	3774	13	s_figcas01.lbm_2410_376e+6		scalar
+2410	3781	6	s_build\figcas02.lbm_2410_3781		scalar
+2410	3787	13	s_figcas02.lbm_2410_3781+6		scalar
+2410	3794	13	s_dwfcas03.lbm_2410_3794		scalar
+2410	37a1	13	s_dwfcas04.lbm_2410_37a1		scalar
+2410	37ae	19	s_build\figres01.lbm_2410_37ae		scalar
+2410	37c1	19	s_build\figres02.lbm_2410_37c1		scalar
+2410	37d4	19	s_build\dwfres01.lbm_2410_37d4		scalar
+2410	37e7	19	s_build\dwfres02.lbm_2410_37e7		scalar
+2410	37fa	13	s_dwffrg01.lbm_2410_37fa		scalar
+2410	3807	13	s_dwffrg02.lbm_2410_3807		scalar
+2410	3814	19	s_build\hafcas01.lbm_2410_3814		scalar
+2410	3827	19	s_build\hafcas02.lbm_2410_3827		scalar
+2410	383a	19	s_build\hafhal01.lbm_2410_383a		scalar
+2410	384d	19	s_build\hafhal02.lbm_2410_384d		scalar
+2410	3860	17	s_anim\2sgian0.lbm_2410_3860		scalar
+2410	3871	17	s_anim\2troll0.lbm_2410_3871		scalar
+2410	3882	17	s_anim\2griff0.lbm_2410_3882		scalar
+2410	3893	10	s_place.xmi_2410_3893		scalar
+2410	389d	11	s_VOLUME.xmi_2410_389d		scalar
+2410	38a8	7	s_l4.lbm_2410_38a8		scalar
+2410	38af	7	s_l5.lbm_2410_38af		scalar
+2410	38b6	7	s_l6.lbm_2410_38b6		scalar
+2410	38bd	7	s_l7.lbm_2410_38bd		scalar
+2410	38c4	7	s_l8.lbm_2410_38c4		scalar
+2410	38cb	7	s_l9.lbm_2410_38cb		scalar
+2410	38d2	8	s_14a.xmi_2410_38d2		scalar
+2410	38da	10	s_cue5b.xmi_2410_38da		scalar
+2410	38e4	9	s_boos.voc_2410_38e4		scalar
+2410	38ed	13	s_lightngn.voc_2410_38ed		scalar
+2410	38fa	13	s_outdoor1.voc_2410_38fa		scalar
+2410	3907	13	s_outdoor2.voc_2410_3907		scalar
+2410	3914	13	s_outdoor3.voc_2410_3914		scalar
+2410	3921	13	s_unhappy1.voc_2410_3921		scalar
+2410	392e	13	s_unhappy2.voc_2410_392e		scalar
+2410	393b	13	s_unhappy3.voc_2410_393b		scalar
+2410	3948	12	s_trn1out.voc_2410_3948		scalar
+2410	3954	12	s_trn2out.voc_2410_3954		scalar
+2410	3960	12	s_trn3out.voc_2410_3960		scalar
+2410	396c	13	s_mine1out.voc_2410_396c		scalar
+2410	3979	13	s_mine2out.voc_2410_3979		scalar
+2410	3986	13	s_mine3out.voc_2410_3986		scalar
+2410	3993	10	s_mark1.voc_2410_3993		scalar
+2410	399d	10	s_mark2.voc_2410_399d		scalar
+2410	39a7	10	s_mark3.voc_2410_39a7		scalar
+2410	39b1	13	s_forg3out.voc_2410_39b1		scalar
+2410	39be	13	s_forg2out.voc_2410_39be		scalar
+2410	39cb	13	s_forg1out.voc_2410_39cb		scalar
+2410	39d8	12	s_saw1out.voc_2410_39d8		scalar
+2410	39e4	12	s_saw2out.voc_2410_39e4		scalar
+2410	39f0	12	s_saw3out.voc_2410_39f0		scalar
+2410	39fc	11	s_crick1.voc_2410_39fc		scalar
+2410	3a07	11	s_crick2.voc_2410_3a07		scalar
+2410	3a12	11	s_crick3.voc_2410_3a12		scalar
+2410	3a1d	12	s_birdssp.voc_2410_3a1d		scalar
+2410	3a29	11	s_birds1.voc_2410_3a29		scalar
+2410	3a34	11	s_birds2.voc_2410_3a34		scalar
+2410	3a3f	11	s_birds3.voc_2410_3a3f		scalar
+2410	3a4a	10	s_howl1.voc_2410_3a4a		scalar
+2410	3a54	10	s_howl2.voc_2410_3a54		scalar
+2410	3a5e	10	s_howl3.voc_2410_3a5e		scalar
+2410	3a68	12	s_breeze1.voc_2410_3a68		scalar
+2410	3a74	12	s_breeze2.voc_2410_3a74		scalar
+2410	3a80	12	s_breeze3.voc_2410_3a80		scalar
+2410	3a8c	9	s_riv1.voc_2410_3a8c		scalar
+2410	3a95	9	s_riv2.voc_2410_3a95		scalar
+2410	3a9e	9	s_riv3.voc_2410_3a9e		scalar
+2410	3aa7	11	s_brook1.voc_2410_3aa7		scalar
+2410	3ab2	11	s_brook2.voc_2410_3ab2		scalar
+2410	3abd	11	s_brook3.voc_2410_3abd		scalar
+2410	3ac8	10	s_farm1.voc_2410_3ac8		scalar
+2410	3ad2	10	s_farm2.voc_2410_3ad2		scalar
+2410	3adc	10	s_farm3.voc_2410_3adc		scalar
+2410	3ae6	17	s_anim\2fgian0.lbm_2410_3ae6		scalar
+2410	3af7	17	s_anim\2phoen0.lbm_2410_3af7		scalar
+2410	3b08	17	s_anim\2minot0.lbm_2410_3b08		scalar
+2410	3b19	18	s_anim\2cockas0.lbm_2410_3b19		scalar
+2410	3b2b	17	s_anim\2vamps0.lbm_2410_3b2b		scalar
+2410	3b3c	19	s_build\geninn01.lbm_2410_3b3c		scalar
+2410	3b4f	11	s_strong.fli_2410_3b4f		scalar
+2410	3b5a	19	s_build\hafres01.lbm_2410_3b5a		scalar
+2410	3b6d	19	s_build\cleres01.lbm_2410_3b6d		scalar
+2410	3b80	19	s_build\cleres02.lbm_2410_3b80		scalar
+2410	3b93	19	s_build\magres01.lbm_2410_3b93		scalar
+2410	3ba6	19	s_build\magres02.lbm_2410_3ba6		scalar
+2410	3bb9	13	s_fighal01.lbm_2410_3bb9		scalar
+2410	3bc6	18	s_portrait\sp07.lbm_2410_3bc6		scalar
+2410	3bd8	18	s_portrait\sp08.lbm_2410_3bd8		scalar
+2410	3bea	18	s_portrait\sp09.lbm_2410_3bea		scalar
+2410	3bfc	18	s_portrait\sp10.lbm_2410_3bfc		scalar
+2410	3c0e	18	s_portrait\sp11.lbm_2410_3c0e		scalar
+2410	3c20	18	s_portrait\sp12.lbm_2410_3c20		scalar
+2410	3c32	18	s_portrait\sp13.lbm_2410_3c32		scalar
+2410	3c44	18	s_portrait\sp14.lbm_2410_3c44		scalar
+2410	3c56	18	s_portrait\sp15.lbm_2410_3c56		scalar
+2410	3c68	18	s_portrait\sp16.lbm_2410_3c68		scalar
+2410	3c7a	18	s_portrait\sp17.lbm_2410_3c7a		scalar
+2410	3c8c	18	s_portrait\sp18.lbm_2410_3c8c		scalar
+2410	3c9e	18	s_portrait\sp19.lbm_2410_3c9e		scalar
+2410	3cb0	18	s_portrait\sp20.lbm_2410_3cb0		scalar
+2410	3cc2	18	s_portrait\sp21.lbm_2410_3cc2		scalar
+2410	3cd4	18	s_portrait\sp22.lbm_2410_3cd4		scalar
+2410	3ce6	13	s_demfont1.lbm_2410_3ce6		scalar
+2410	3cf3	10	s_back2.lbm_2410_3cf3		scalar
+2410	3cfd	10	s_frnt3.lbm_2410_3cfd		scalar
+2410	3d07	10	s_midl3.lbm_2410_3d07		scalar
+2410	3d11	10	s_sky06.fli_2410_3d11		scalar
+2410	3d1b	12	s_storm01.lbm_2410_3d1b		scalar
+2410	3d27	12	s_ssilogo.lbm_2410_3d27		scalar
+2410	3d33	13	s_thunshrt.voc_2410_3d33		scalar
+2410	3d40	13	s_txtscrn6.lbm_2410_3d40		scalar
+2410	3d4d	13	s_winrefg1.lbm_2410_3d4d		scalar
+2410	3d5a	13	s_winremg2.lbm_2410_3d5a		scalar
+2410	3d67	13	s_winrebg1.lbm_2410_3d67		scalar
+2410	3d74	19	s_build\elfres01.lbm_2410_3d74		scalar
+2410	3d87	18	s_portrait\sp23.lbm_2410_3d87		scalar
+2410	3d99	18	s_portrait\sp24.lbm_2410_3d99		scalar
+2410	3dab	18	s_portrait\sp25.lbm_2410_3dab		scalar
+2410	3dbd	18	s_portrait\sp26.lbm_2410_3dbd		scalar
+2410	3dcf	18	s_portrait\sp27.lbm_2410_3dcf		scalar
+2410	3de1	18	s_portrait\sp28.lbm_2410_3de1		scalar
+2410	3df3	18	s_portrait\sp29.lbm_2410_3df3		scalar
+2410	3e05	18	s_portrait\sp30.lbm_2410_3e05		scalar
+2410	3e17	18	s_portrait\sp31.lbm_2410_3e17		scalar
+2410	3e29	18	s_portrait\sp32.lbm_2410_3e29		scalar
+2410	3e3b	18	s_portrait\sp33.lbm_2410_3e3b		scalar
+2410	3e4d	18	s_portrait\sp34.lbm_2410_3e4d		scalar
+2410	3e5f	18	s_portrait\sp35.lbm_2410_3e5f		scalar
+2410	3e71	12	s_captbg2.lbm_2410_3e71		scalar
+2410	3e7d	12	s_captmg3.lbm_2410_3e7d		scalar
+2410	3e89	12	s_captfg1.lbm_2410_3e89		scalar
+2410	3e95	19	s_build\gencas04.lbm_2410_3e95		scalar
+2410	3ea8	19	s_build\gencas02.lbm_2410_3ea8		scalar
+2410	3ebb	19	s_build\hafres02.lbm_2410_3ebb		scalar
+2410	3ece	13	s_fighal02.lbm_2410_3ece		scalar
+2410	3edb	19	s_build\cletem02.lbm_2410_3edb		scalar
+2410	3eee	17	s_anim\2mndark.lbm_2410_3eee		scalar
+2410	3eff	19	s_build\elfres02.lbm_2410_3eff		scalar
+2410	3f12	19	s_build\thfgld01.lbm_2410_3f12		scalar
+2410	3f25	19	s_build\thfgld02.lbm_2410_3f25		scalar
+2410	3f38	19	s_build\thfres01.lbm_2410_3f38		scalar
+2410	3f4b	19	s_build\thfres02.lbm_2410_3f4b		scalar
+2410	3f5e	18	s_portrait\sp36.lbm_2410_3f5e		scalar
+2410	3f70	18	s_portrait\sp37.lbm_2410_3f70		scalar
+2410	3f82	18	s_portrait\sp38.lbm_2410_3f82		scalar
+2410	3f94	18	s_portrait\sp39.lbm_2410_3f94		scalar
+2410	3fa6	18	s_portrait\sp40.lbm_2410_3fa6		scalar
+2410	3fb8	18	s_portrait\sp41.lbm_2410_3fb8		scalar
+2410	3fca	18	s_portrait\sp42.lbm_2410_3fca		scalar
+2410	3fdc	18	s_portrait\sp43.lbm_2410_3fdc		scalar
+2410	3fee	19	s_build\magunv01.lbm_2410_3fee		scalar
+2410	4001	19	s_build\magunv02.lbm_2410_4001		scalar
+2410	4014	18	s_portrait\sp00.lbm_2410_4014		scalar
+2410	4026	19	s_build\elfgar01.lbm_2410_4026		scalar
+2410	4039	19	s_build\elfgar02.lbm_2410_4039		scalar
+2410	404c	13	s_garden03.lbm_2410_404c		scalar
+2410	4059	13	s_magcas01.lbm_2410_4059		scalar
+2410	4066	13	s_magcas02.lbm_2410_4066		scalar
+2410	4073	19	s_build\elfwood1.lbm_2410_4073		scalar
+2410	4086	19	s_build\elfwood2.lbm_2410_4086		scalar
+2410	4099	19	s_build\genbnk01.lbm_2410_4099		scalar
+2410	40ac	19	s_build\genbnk02.lbm_2410_40ac		scalar
+2410	40bf	19	s_build\magjwl01.lbm_2410_40bf		scalar
+2410	40d2	19	s_build\magjwl02.lbm_2410_40d2		scalar
+2410	40e5	19	s_build\thfgls01.lbm_2410_40e5		scalar
+2410	40f8	19	s_build\thfgls02.lbm_2410_40f8		scalar
+2410	410b	19	s_build\gencmp01.lbm_2410_410b		scalar
+2410	411e	19	s_build\gencmp02.lbm_2410_411e		scalar
+2410	4131	19	s_build\hafbak01.lbm_2410_4131		scalar
+2410	4144	19	s_build\hafbak02.lbm_2410_4144		scalar
+2410	4157	19	s_build\clescr01.lbm_2410_4157		scalar
+2410	416a	19	s_build\clescr02.lbm_2410_416a		scalar
+2410	417d	19	s_build\magmil01.lbm_2410_417d		scalar
+2410	4190	19	s_build\magmil02.lbm_2410_4190		scalar
+2410	41a3	19	s_build\geninn02.lbm_2410_41a3		scalar
+2410	41b6	19	s_build\thfgam01.lbm_2410_41b6		scalar
+2410	41c9	19	s_build\gentrad1.lbm_2410_41c9		scalar
+2410	41dc	19	s_build\gentrad2.lbm_2410_41dc		scalar
+2410	41ef	19	s_build\elfarro1.lbm_2410_41ef		scalar
+2410	4202	19	s_build\elfarro2.lbm_2410_4202		scalar
+2410	4215	19	s_build\clebath1.lbm_2410_4215		scalar
+2410	4228	12	s_build_clebath2_lbm_2410_4228	undefined s_build_clebath2_lbm_2410_4228	scalar
+2410	4234	7	BldInstances	bld_inst_t BldInstances[75]	scalar
+2410	423b	19	BldInstances[0].data[3]		scalar
+2410	424e	19	BldInstances[2].seg		scalar
+2410	4261	19	BldInstances[3].data[5]		scalar
+2410	4274	19	BldInstances[5].data[0]		scalar
+2410	4287	19	BldInstances[6].data[7]		scalar
+2410	429a	19	BldInstances[8].data[2]		scalar
+2410	42ad	19	BldInstances[10].ofs+1		scalar
+2410	42c0	17	BldInstances[11].data[4]		scalar
+2410	42d1	17	BldInstances[13].ofs+1		scalar
+2410	42e2	17	BldInstances[14].data[2]		scalar
+2410	42f3	17	BldInstances[15].data[7]		scalar
+2410	4304	17	BldInstances[17].data[0]		scalar
+2410	4315	17	BldInstances[18].data[5]		scalar
+2410	4326	19	BldInstances[20].seg		scalar
+2410	4339	19	BldInstances[21].data[5]		scalar
+2410	434c	13	BldInstances[23].data[0]		scalar
+2410	4359	19	BldInstances[24].data[1]		scalar
+2410	436c	19	BldInstances[26].ofs		scalar
+2410	437f	19	BldInstances[27].data[3]		scalar
+2410	4392	19	BldInstances[29].seg		scalar
+2410	43a5	19	BldInstances[30].data[5]		scalar
+2410	43b8	19	BldInstances[32].data[0]		scalar
+2410	43cb	19	BldInstances[33].data[7]		scalar
+2410	43de	19	BldInstances[35].data[2]		scalar
+2410	43f1	19	BldInstances[37].ofs+1		scalar
+2410	4404	19	BldInstances[38].data[4]		scalar
+2410	4417	19	BldInstances[40].seg+1		scalar
+2410	442a	19	BldInstances[41].data[6]		scalar
+2410	443d	19	BldInstances[43].data[1]		scalar
+2410	4450	19	BldInstances[45].ofs		scalar
+2410	4463	19	BldInstances[46].data[3]		scalar
+2410	4476	19	BldInstances[48].seg		scalar
+2410	4489	19	BldInstances[49].data[5]		scalar
+2410	449c	19	BldInstances[51].data[0]		scalar
+2410	44af	19	BldInstances[52].data[7]		scalar
+2410	44c2	19	BldInstances[54].data[2]		scalar
+2410	44d5	19	BldInstances[56].ofs+1		scalar
+2410	44e8	21	BldInstances[57].data[4]		scalar
+2410	44fd	11	BldInstances[59].data[1]		scalar
+2410	4508	11	BldInstances[60].data[0]		scalar
+2410	4513	11	BldInstances[61].seg+1		scalar
+2410	451e	11	BldInstances[62].seg		scalar
+2410	4529	16	BldInstances[63].ofs+1		scalar
+2410	4539	19	BldInstances[64].data[1]		scalar
+2410	454c	19	BldInstances[66].ofs		scalar
+2410	455f	10	BldInstances[67].data[3]		scalar
+2410	4569	11	BldInstances[68].data[1]		scalar
+2410	4574	11	BldInstances[69].data[0]		scalar
+2410	457f	11	BldInstances[70].seg+1		scalar
+2410	458a	13	BldInstances[71].seg		scalar
+2410	4597	12	BldInstances[72].seg+1		scalar
+2410	45a3	21	s_File_read_error__s_2410_45a3		scalar
+2410	45b8	1	MsgShown	undefined1 MsgShown	scalar
+2410	45b9	12	PlaceErrPtrs	far_t PlaceErrPtrs[3]	scalar
+2410	45c5	9	s_View_%s._2410_45c5		scalar
+2410	45ce	10	s_place_s	undefined s_place_s[]	string
+2410	45d8	24	s_view_s_cannot_place	undefined s_view_s_cannot_place[]	string
+2410	45f0	26	s_create_baron_or_baroness	undefined s_create_baron_or_baroness[]	string
+2410	460a	21	s_create_party_member	undefined s_create_party_member[]	string
+2410	461f	40	s_Strongholds_cannot_be_placed_on_r_2410_461f	undefined s_Strongholds_cannot_be_placed_on_r_2410_461f[]	string
+2410	4647	40	s_Strongholds_cannot_be_placed_ove_2410_4647	undefined s_Strongholds_cannot_be_placed_ove_2410_4647[]	string
+2410	466f	26	s_The_ground_is_too_steep.._2410_466f		scalar
+2410	4689	47	s_a_fortress_cannot_be_placed_among_enemy_unit	undefined s_a_fortress_cannot_be_placed_among_enemy_unit[]	string
+2410	46b8	36	s_cannot_place_another_fortress_here	undefined s_cannot_place_another_fortress_here[]	string
+2410	46dc	55	s_this_location_is_unsuitable_for_a_main_stron	undefined s_this_location_is_unsuitable_for_a_main_stron[]	string
+2410	4713	33	s_this_location_is_unsuitable_s	undefined s_this_location_is_unsuitable_s[]	string
+2410	4734	34	s_your_stronghold_is_too_far_away	undefined s_your_stronghold_is_too_far_away[]	string
+2410	4756	1	SaveAuto	undefined1 SaveAuto	scalar
+2410	4757	1	suppressLoadError	undefined1 suppressLoadError	scalar
+2410	4758	2	SaveHeader	far_t SaveHeader	scalar
+2410	475a	2	SaveHeader.seg		scalar
+2410	475c	40	s_0.21._Stronghold_Save._2410_475c		scalar
+2410	4784	11	s_Loading..._2410_4784		scalar
+2410	478f	15	s_Load_complete._2410_478f		scalar
+2410	479e	11	s_Load_Error_2410_479e	undefined s_Load_Error_2410_479e[]	string
+2410	47a9	12	s_%ssave.%03d_2410_47a9		scalar
+2410	47b5	10	s_Saving..._2410_47b5		scalar
+2410	47bf	15	s_Save_complete._2410_47bf		scalar
+2410	47ce	11	s_Save_Error_2410_47ce	undefined s_Save_Error_2410_47ce[]	string
+2410	47d9	12	s_Deleting..._2410_47d9		scalar
+2410	47e5	17	s_Delete_complete._2410_47e5		scalar
+2410	47f6	2	Stsh_2410_47f6	far_t Stsh_2410_47f6	scalar
+2410	47f8	2	Stsh_2410_47f6.seg		scalar
+2410	47fa	2	StshCtPtr2	far_t StshCtPtr2	scalar
+2410	47fc	2	StshCtPtr2.seg		scalar
+2410	47fe	2	StshCtOfs	DW StshCtOfs	scalar
+2410	4800	2	StshCtOfs.hi		scalar
+2410	4802	27	s_uc_lx_d_len_ld_loc_ld	undefined s_uc_lx_d_len_ld_loc_ld[]	string
+2410	481d	12	s_n_up_d	undefined s_n_up_d[]	string
+2410	4829	30	s_dc_lx_d_ln_ld_lc_ld_lx	undefined s_dc_lx_d_ln_ld_lc_ld_lx[]	string
+2410	4847	14	s_n_down_d	undefined s_n_down_d[]	string
+2410	4855	18	s_type__d_len__ld_2410_4855	undefined s_type__d_len__ld_2410_4855[]	string
+2410	4867	5	s_.xmi_2410_4867		scalar
+2410	486c	10	s_midpak.ad_2410_486c		scalar
+2410	4876	12	s_cmidpak.com_2410_4876		scalar
+2410	4882	11	s_ibmsnd.com_2410_4882		scalar
+2410	488d	13	s_sblaster.com_2410_488d		scalar
+2410	489a	12	s_fibmbak.com_2410_489a		scalar
+2410	48a6	10	s_sbpro.com_2410_48a6		scalar
+2410	48b0	11	s_paudio.com_2410_48b0		scalar
+2410	48bb	10	s_adlib.com_2410_48bb		scalar
+2410	48c5	11	s_adlibg.com_2410_48c5		scalar
+2410	48d0	9	s_sbfm.adv_2410_48d0		scalar
+2410	48d9	11	s_sbp2fm.adv_2410_48d9		scalar
+2410	48e4	11	s_sbp1fm.adv_2410_48e4		scalar
+2410	48ef	10	s_pasfm.adv_2410_48ef		scalar
+2410	48f9	11	s_pasopl.adv_2410_48f9		scalar
+2410	4904	10	s_adlib.adv_2410_4904		scalar
+2410	490e	11	s_adlibg.adv_2410_490e		scalar
+2410	4919	13	s_mt32mpu.adv_2410_4919		scalar
+2410	4926	1	Cancelled	undefined1 Cancelled	scalar
+2410	4927	2	GAlignmentsNames	far_t GAlignmentsNames[3]	scalar
+2410	4929	10	GAlignmentsNames[0].seg		scalar
+2410	4933	8	far_t_ARRAY_2410_4933	far_t far_t_ARRAY_2410_4933[2]	scalar
+2410	493b	10	panelClipRect	undefined panelClipRect	scalar
+2410	4945	2	GStatsLabels	far_t GStatsLabels[6]	scalar
+2410	4947	22	GStatsLabels[0].seg		scalar
+2410	495d	128	GPlayerTitles	far_t GPlayerTitles[32]	scalar
+2410	49dd	7	classStatTable1	undefined classStatTable1	scalar
+2410	49e4	3	classStatTable2	undefined classStatTable2	scalar
+2410	49e7	2	GAlignmentString	far_t GAlignmentString	scalar
+2410	49e9	2	GAlignmentString.seg		scalar
+2410	49eb	12	RankReqMsgPtrs	far_t RankReqMsgPtrs[3]	scalar
+2410	49f7	20	menuHighlightTable	far_t menuHighlightTable[5]	scalar
+2410	4a0b	7	classLimitTable	undefined classLimitTable	scalar
+2410	4a12	2	TimerSeed	DW TimerSeed	scalar
+2410	4a14	2	TimerSeed.hi		scalar
+2410	4a16	16	GKeepDiscardStrings	far_t GKeepDiscardStrings[4]	scalar
+2410	4a26	2	GStructures	unk01_t GStructures[30]	scalar
+2410	4a28	2	GStructures[0].name.ofs		scalar
+2410	4a2a	152	GStructures[0].name.seg		scalar
+2410	4ac2	1	GStructures[26].type		scalar
+2410	4ac3	1	GStructures[26].pad		scalar
+2410	4ac4	2	GStructures[26].name.ofs		scalar
+2410	4ac6	20	GStructures[26].name.seg		scalar
+2410	4ada	20	ManageResultPtrs	far_t ManageResultPtrs[5]	scalar
+2410	4aee	12	LevelRangeMin	undefined1 LevelRangeMin	scalar
+2410	4afa	12	LevelRangeMax	undefined1 LevelRangeMax	scalar
+2410	4b06	80	LevelBandLabels	far_t LevelBandLabels[20]	scalar
+2410	4b56	23	LevelRangeLabels	far_t LevelRangeLabels[4]	scalar
+2410	4b6d	1	unitTypeFilter	undefined1 unitTypeFilter	scalar
+2410	4b6e	1	partyFilter	undefined1 partyFilter	scalar
+2410	4b6f	6	s_Lawful_2410_4b6f	undefined s_Lawful_2410_4b6f[]	string
+2410	4b75	1	s__2410_4b6f+6		scalar
+2410	4b76	8	s_Neutral_2410_4b76	undefined s_Neutral_2410_4b76[]	string
+2410	4b7e	8	s_Chaotic_2410_4b7e	undefined s_Chaotic_2410_4b7e[]	string
+2410	4b86	5	s_Male_2410_4b86	undefined s_Male_2410_4b86[]	string
+2410	4b8b	7	s_Female_2410_4b8b	undefined s_Female_2410_4b8b[]	string
+2410	4b92	4	s_str	undefined s_str[]	string
+2410	4b96	4	s_int	undefined s_int[]	string
+2410	4b9a	4	s_wis	undefined s_wis[]	string
+2410	4b9e	4	s_dex	undefined s_dex[]	string
+2410	4ba2	4	s_con	undefined s_con[]	string
+2410	4ba6	4	s_cha	undefined s_cha[]	string
+2410	4baa	3	s_st	undefined s_st[]	string
+2410	4bad	3	s_nd	undefined s_nd[]	string
+2410	4bb0	3	s_rd	undefined s_rd[]	string
+2410	4bb3	3	s_th	undefined s_th[]	string
+2410	4bb6	7	s_baron	undefined s_baron[]	string
+2410	4bbd	10	s_baroness	undefined s_baroness[]	string
+2410	4bc7	10	s_viscount	undefined s_viscount[]	string
+2410	4bd1	13	s_viscountess	undefined s_viscountess[]	string
+2410	4bde	7	s_count	undefined s_count[]	string
+2410	4be5	8	s_countess	undefined s_countess[]	string
+2410	4bed	2	s_countess+8		scalar
+2410	4bef	9	s_marquis	undefined s_marquis[]	string
+2410	4bf8	1	s_marquise	undefined s_marquise[]	string
+2410	4bf9	9	s_marquise+1		scalar
+2410	4c02	6	s_duke	undefined s_duke[]	string
+2410	4c08	9	s_duchess	undefined s_duchess[]	string
+2410	4c11	10	s_archduke	undefined s_archduke[]	string
+2410	4c1b	13	s_archduchess	undefined s_archduchess[]	string
+2410	4c28	8	s_prince	undefined s_prince[]	string
+2410	4c30	10	s_princess	undefined s_princess[]	string
+2410	4c3a	6	s_king	undefined s_king[]	string
+2410	4c40	7	s_queen	undefined s_queen[]	string
+2410	4c47	9	s_emperor	undefined s_emperor[]	string
+2410	4c50	10	s_emperess	undefined s_emperess[]	string
+2410	4c5a	6	s_lord	undefined s_lord[]	string
+2410	4c60	6	s_lady	undefined s_lady[]	string
+2410	4c66	8	s_wizard	undefined s_wizard[]	string
+2410	4c6e	6	s_maga	undefined s_maga[]	string
+2410	4c74	11	s_patriarch	undefined s_patriarch[]	string
+2410	4c7f	11	s_matriarch	undefined s_matriarch[]	string
+2410	4c8a	14	s_master_thief	undefined s_master_thief[]	string
+2410	4c98	12	s_dwarf_lord	undefined s_dwarf_lord[]	string
+2410	4ca4	12	s_dwarf_lady	undefined s_dwarf_lady[]	string
+2410	4cb0	13	s_lord_wizard	undefined s_lord_wizard[]	string
+2410	4cbd	11	s_lady_maga	undefined s_lady_maga[]	string
+2410	4cc8	9	s_Sheriff_2410_4cc8	undefined s_Sheriff_2410_4cc8[]	string
+2410	4cd1	3	s__d_2410_4cd1	undefined s__d_2410_4cd1[]	string
+2410	4cd4	7	s_s_s	undefined s_s_s[]	string
+2410	4cdb	4	s__s_2410_4cdb	undefined s__s_2410_4cdb[]	string
+2410	4cdf	3	s__s_2410_4cdf	undefined s__s_2410_4cdf[]	string
+2410	4ce2	11	s_Population_2410_4ce2	undefined s_Population_2410_4ce2[]	string
+2410	4ced	11	s_Food_prod._2410_4ced		scalar
+2410	4cf8	12	s_Food_stored_2410_4cf8	undefined s_Food_stored_2410_4cf8[]	string
+2410	4d04	8	s_Housing_2410_4d04	undefined s_Housing_2410_4d04[]	string
+2410	4d0c	13	s_Food_storage_2410_4d0c	undefined s_Food_storage_2410_4d0c[]	string
+2410	4d19	12	s_Food_bought_2410_4d19	undefined s_Food_bought_2410_4d19[]	string
+2410	4d25	10	s_Food_sold_2410_4d25	undefined s_Food_sold_2410_4d25[]	string
+2410	4d2f	11	s_Max._trade_2410_4d2f		scalar
+2410	4d3a	7	s_Income_2410_4d3a	undefined s_Income_2410_4d3a[]	string
+2410	4d41	5	s_Gold_2410_4d41	undefined s_Gold_2410_4d41[]	string
+2410	4d46	14	s_Vault_storage_2410_4d46	undefined s_Vault_storage_2410_4d46[]	string
+2410	4d54	12	s_Fund_Access_2410_4d54	undefined s_Fund_Access_2410_4d54[]	string
+2410	4d60	12	s_Common_fund_2410_4d60	undefined s_Common_fund_2410_4d60[]	string
+2410	4d6c	11	s_popularity_2410_4d6c	undefined s_popularity_2410_4d6c[]	string
+2410	4d77	12	s_city_blocks_2410_4d77	undefined s_city_blocks_2410_4d77[]	string
+2410	4d83	8	s_Current_2410_4d83	undefined s_Current_2410_4d83[]	string
+2410	4d8b	5	s__d___2410_4d8b	undefined s__d___2410_4d8b[]	string
+2410	4d90	11	s_to_promote_2410_4d90	undefined s_to_promote_2410_4d90[]	string
+2410	4d9b	7	s_Accept_2410_4d9b	undefined s_Accept_2410_4d9b[]	string
+2410	4da2	102	s_You_may_raise_a_primary_ability_b_2410_4da2	undefined s_You_may_raise_a_primary_ability_b_2410_4da2[]	string
+2410	4e08	50	s_Select_ability_to_adjust_downwar_2410_4e08	undefined s_Select_ability_to_adjust_downwar_2410_4e08[]	string
+2410	4e3a	7	s_cancel	undefined s_cancel[]	string
+2410	4e41	50	s_A_LAWFUL_leader_must_achieve_the_2410_4e41	undefined s_A_LAWFUL_leader_must_achieve_the_2410_4e41[]	string
+2410	4e73	75	s_A_NEUTRAL_leader_must_destroy_al_2410_4e73	undefined s_A_NEUTRAL_leader_must_destroy_al_2410_4e73[]	string
+2410	4ebe	43	s_A_CHAOTIC_leader_must_destroy_al_2410_4ebe	undefined s_A_CHAOTIC_leader_must_destroy_al_2410_4ebe[]	string
+2410	4ee9	52	s_has_achieved_the_rank_of_EMPEROR_2410_4ee9	undefined s_has_achieved_the_rank_of_EMPEROR_2410_4ee9[]	string
+2410	4f1d	69	s_has_destroyed_all_enemies_and_ha_2410_4f1d	undefined s_has_destroyed_all_enemies_and_ha_2410_4f1d[]	string
+2410	4f62	45	s_has_destroyed_all_enemies._Congr_2410_4f62		scalar
+2410	4f8f	3	s_OK_2410_4f8f	undefined s_OK_2410_4f8f[]	string
+2410	4f92	10	s_Try_Again_2410_4f92	undefined s_Try_Again_2410_4f92[]	string
+2410	4f9c	21	s_Select_an_alignment._2410_4f9c		scalar
+2410	4fb1	16	s_male_or_female	undefined s_male_or_female[]	string
+2410	4fc1	5	s_Keep_2410_4fc1	undefined s_Keep_2410_4fc1[]	string
+2410	4fc6	8	s_Discard_2410_4fc6	undefined s_Discard_2410_4fc6[]	string
+2410	4fce	7	s_reroll	undefined s_reroll[]	string
+2410	4fd5	56	s_Reroll_ability_scores__or_select_2410_4fd5	undefined s_Reroll_ability_scores__or_select_2410_4fd5[]	string
+2410	500d	29	s_Select_the_character's_name._2410_500d		scalar
+2410	502a	48	s_Please_type_your_character_s_nam_2410_502a	undefined s_Please_type_your_character_s_nam_2410_502a[]	string
+2410	505a	9	s_Keep_%s._2410_505a		scalar
+2410	5063	6	s_Place_2410_5063	undefined s_Place_2410_5063[]	string
+2410	5069	9	s_Continue_2410_5069	undefined s_Continue_2410_5069[]	string
+2410	5072	15	s_place_s_here	undefined s_place_s_here[]	string
+2410	5081	12	s_year_d_s	undefined s_year_d_s[]	string
+2410	508d	24	s_year_d_this_leader_s	undefined s_year_d_this_leader_s[]	string
+2410	50a5	12	s_next_leader	undefined s_next_leader[]	string
+2410	50b1	16	s_auto_build	undefined s_auto_build[]	string
+2410	50c1	11	s_auto_build	undefined s_auto_build[]	string
+2410	50cc	7	s_census	undefined s_census[]	string
+2410	50d3	9	s_property	undefined s_property[]	string
+2410	50dc	13	s_total_census	undefined s_total_census[]	string
+2410	50e9	13	s_all_property	undefined s_all_property[]	string
+2410	50f6	5	s_help	undefined s_help[]	string
+2410	50fb	5	s_Done_2410_50fb	undefined s_Done_2410_50fb[]	string
+2410	5100	39	s_s_will_now_build_homes_automatically	undefined s_s_will_now_build_homes_automatically[]	string
+2410	5127	46	s_s_will_no_longer_build_houses_automatically	undefined s_s_will_no_longer_build_houses_automatically[]	string
+2410	5155	7	s_arenas_2410_5155	undefined s_arenas_2410_5155[]	string
+2410	515c	9	s_armories_2410_515c	undefined s_armories_2410_515c[]	string
+2410	5165	9	s_bakeries	undefined s_bakeries[]	string
+2410	516e	6	s_baths_2410_516e	undefined s_baths_2410_516e[]	string
+2410	5174	8	s_bazaars	undefined s_bazaars[]	string
+2410	517c	13	s_builder_hall	undefined s_builder_hall[]	string
+2410	5189	8	s_castles	undefined s_castles[]	string
+2410	5191	6	s_farms	undefined s_farms[]	string
+2410	5197	10	s_fletchers	undefined s_fletchers[]	string
+2410	51a1	14	s_forester_camp	undefined s_forester_camp[]	string
+2410	51af	7	s_forges	undefined s_forges[]	string
+2410	51b6	13	s_gaming_halls	undefined s_gaming_halls[]	string
+2410	51c3	10	s_gem_mines	undefined s_gem_mines[]	string
+2410	51cd	11	s_glassworks	undefined s_glassworks[]	string
+2410	51d8	11	s_gold_mines	undefined s_gold_mines[]	string
+2410	51e3	10	s_granaries	undefined s_granaries[]	string
+2410	51ed	5	s_inns_2410_51ed	undefined s_inns_2410_51ed[]	string
+2410	51f2	11	s_iron_mines	undefined s_iron_mines[]	string
+2410	51fd	9	s_jewelers	undefined s_jewelers[]	string
+2410	5206	12	s_magic_mills	undefined s_magic_mills[]	string
+2410	5212	8	s_markets	undefined s_markets[]	string
+2410	521a	14	s_mason_s_halls	undefined s_mason_s_halls[]	string
+2410	5228	9	s_outposts	undefined s_outposts[]	string
+2410	5231	11	s_residences	undefined s_residences[]	string
+2410	523c	11	s_scriberies	undefined s_scriberies[]	string
+2410	5247	7	s_towers	undefined s_towers[]	string
+2410	524e	10	s_toymakers	undefined s_toymakers[]	string
+2410	5258	9	s_training	undefined s_training[]	string
+2410	5261	6	s_trees_2410_5261	undefined s_trees_2410_5261[]	string
+2410	5267	7	s_vaults_2410_5267	undefined s_vaults_2410_5267[]	string
+2410	526e	10	s_Summary_1_2410_526e	undefined s_Summary_1_2410_526e[]	string
+2410	5278	10	s_Summary_2_2410_5278	undefined s_Summary_2_2410_5278[]	string
+2410	5282	10	s_Summary_3_2410_5282	undefined s_Summary_3_2410_5282[]	string
+2410	528c	7	s_Damage_2410_528c	undefined s_Damage_2410_528c[]	string
+2410	5293	14	s_all_property	undefined s_all_property[]	string
+2410	52a1	28	s_buildings_belonging_to_s_s	undefined s_buildings_belonging_to_s_s[]	string
+2410	52bd	10	s_buildings	undefined s_buildings[]	string
+2410	52c7	6	s_total	undefined s_total[]	string
+2410	52cd	8	s_level_1	undefined s_level_1[]	string
+2410	52d5	8	s_level_2	undefined s_level_2[]	string
+2410	52dd	8	s_level_3	undefined s_level_3[]	string
+2410	52e5	8	s_d_d	undefined s_d_d[]	string
+2410	52ed	54	s_The__s_belonging_to__s_the__s_ar_2410_52ed	undefined s_The__s_belonging_to__s_the__s_ar_2410_52ed[]	string
+2410	5323	56	s_The__s_belonging_to_all_leaders_a_2410_5323	undefined s_The__s_belonging_to_all_leaders_a_2410_5323[]	string
+2410	535b	70	s_The_damaged_structures_belonging_2410_535b	undefined s_The_damaged_structures_belonging_2410_535b[]	string
+2410	53a1	72	s_The_damaged_structures_belonging_2410_53a1	undefined s_The_damaged_structures_belonging_2410_53a1[]	string
+2410	53e9	8	s_level_1_2410_53e9	undefined s_level_1_2410_53e9[]	string
+2410	53f1	8	s_level_2_2410_53f1	undefined s_level_2_2410_53f1[]	string
+2410	53f9	8	s_level_3_2410_53f9	undefined s_level_3_2410_53f9[]	string
+2410	5401	8	s_level_4_2410_5401	undefined s_level_4_2410_5401[]	string
+2410	5409	8	s_level_5_2410_5409	undefined s_level_5_2410_5409[]	string
+2410	5411	12	s_levels_6_10_2410_5411	undefined s_levels_6_10_2410_5411[]	string
+2410	541d	13	s_levels_11_15_2410_541d	undefined s_levels_11_15_2410_541d[]	string
+2410	542a	13	s_levels_16_20_2410_542a	undefined s_levels_16_20_2410_542a[]	string
+2410	5437	13	s_levels_20_25_2410_5437	undefined s_levels_20_25_2410_5437[]	string
+2410	5444	13	s_levels_26_30_2410_5444	undefined s_levels_26_30_2410_5444[]	string
+2410	5451	13	s_levels_31_35_2410_5451	undefined s_levels_31_35_2410_5451[]	string
+2410	545e	9	s_level_36_2410_545e	undefined s_level_36_2410_545e[]	string
+2410	5467	14	s_levels_11_12f_2410_5467	undefined s_levels_11_12f_2410_5467[]	string
+2410	5475	15	s_levels_12g_12k_2410_5475	undefined s_levels_12g_12k_2410_5475[]	string
+2410	5484	15	s_levels_12l_12m_2410_5484	undefined s_levels_12l_12m_2410_5484[]	string
+2410	5493	13	s_levels_6_10c_2410_5493	undefined s_levels_6_10c_2410_5493[]	string
+2410	54a0	15	s_levels_10d_10h_2410_54a0	undefined s_levels_10d_10h_2410_54a0[]	string
+2410	54af	16	s_levels_10i__10m_2410_54af	undefined s_levels_10i__10m_2410_54af[]	string
+2410	54bf	12	s_levels_6_8c_2410_54bf	undefined s_levels_6_8c_2410_54bf[]	string
+2410	54cb	13	s_levels_8d_8h_2410_54cb	undefined s_levels_8d_8h_2410_54cb[]	string
+2410	54d8	13	s_levels_8i_8k_2410_54d8	undefined s_levels_8i_8k_2410_54d8[]	string
+2410	54e5	8	s_summary	undefined s_summary[]	string
+2410	54ed	11	s_all_levels	undefined s_all_levels[]	string
+2410	54f8	18	s_total_population	undefined s_total_population[]	string
+2410	550a	29	s_s_population_loyal_to_s_s	undefined s_s_population_loyal_to_s_s[]	string
+2410	5527	6	s_units	undefined s_units[]	string
+2410	552d	11	s_population	undefined s_population[]	string
+2410	5538	44	s_all_units_loyal_to_s_the_s_are_displayed	undefined s_all_units_loyal_to_s_the_s_are_displayed[]	string
+2410	5564	25	s_all_units_are_displayed	undefined s_all_units_are_displayed[]	string
+2410	557d	51	s_only_units_of_s_loyal_to_s_the_s_are_display	undefined s_only_units_of_s_loyal_to_s_the_s_are_display[]	string
+2410	55b0	38	s_only_units_of_s_are_displayed	undefined s_only_units_of_s_are_displayed[]	string
+2410	55d6	2	EntityScanPos	undefined2 EntityScanPos	scalar
+2410	55d8	8	s_monster	undefined s_monster[]	string
+2410	55e0	5	s__d_2410_55e0	undefined s__d_2410_55e0[]	string
+2410	55e5	8	s_kill_3	undefined s_kill_3[]	string
+2410	55ed	9	s_kill_2	undefined s_kill_2[]	string
+2410	55f6	28	s_mine_exhausted_at_d_d	undefined s_mine_exhausted_at_d_d[]	string
+2410	5612	58	s_Intelligence_reports__s_unit_die_2410_5612	undefined s_Intelligence_reports__s_unit_die_2410_5612[]	string
+2410	564c	1	AgntClearFlag	bool AgntClearFlag	scalar
+2410	564d	24	s_construction_abandoned	undefined s_construction_abandoned[]	string
+2410	5665	27	s_s_unit_drowns_d_d	undefined s_s_unit_drowns_d_d[]	string
+2410	5680	59	s_intelligence_reports_s_unit_fleeing_from_bat	undefined s_intelligence_reports_s_unit_fleeing_from_bat[]	string
+2410	56bb	61	s_intelligence_reports_s_unit_infected_with_di	undefined s_intelligence_reports_s_unit_infected_with_di[]	string
+2410	56f8	8	s_kill_3	undefined s_kill_3[]	string
+2410	5700	57	s_intelligence_reports_s_unit_drained_of_energ	undefined s_intelligence_reports_s_unit_drained_of_energ[]	string
+2410	5739	49	s_intelligence_reports_s_unit_destroyed_d_d	undefined s_intelligence_reports_s_unit_destroyed_d_d[]	string
+2410	576a	35	s_mindark_s_keep_destroyed_d_d	undefined s_mindark_s_keep_destroyed_d_d[]	string
+2410	578d	34	s_s_stronghold_destroyed_d_d	undefined s_s_stronghold_destroyed_d_d[]	string
+2410	57af	52	s_your_main_stronghold_has_been_destroyed_game	undefined s_your_main_stronghold_has_been_destroyed_game[]	string
+2410	57e3	31	s_you_have_defeated_all_enemies	undefined s_you_have_defeated_all_enemies[]	string
+2410	5802	63	s_you_may_continue_playing_but_your_score_will	undefined s_you_may_continue_playing_but_your_score_will[]	string
+2410	5841	56	s_intelligence_reports_s_unit_cured_of_disease	undefined s_intelligence_reports_s_unit_cured_of_disease[]	string
+2410	5879	71	s_intelligence_reports_s_unit_succombs_to_blas	undefined s_intelligence_reports_s_unit_succombs_to_blas[]	string
+2410	58c0	53	s_spies_report_s_heading_towards_stronghold_d_	undefined s_spies_report_s_heading_towards_stronghold_d_[]	string
+2410	58f5	17	s_s_is_attacking	undefined s_s_is_attacking[]	string
+2410	5906	68	s_intelligence_reports_s_attacking	undefined s_intelligence_reports_s_attacking[]	string
+2410	594a	32	ditherPlane0	undefined ditherPlane0	scalar
+2410	596a	32	ditherPlane1	undefined ditherPlane1	scalar
+2410	598a	32	ditherPlane2	undefined ditherPlane2	scalar
+2410	59aa	10	reqLevelRow1	undefined reqLevelRow1	scalar
+2410	59b4	11	reqLevelRow2	undefined reqLevelRow2	scalar
+2410	59bf	78	rampRow0	uint8_t rampRow0[78]	scalar
+2410	5a0d	48	rampRow1	uint8_t rampRow1[48]	scalar
+2410	5a3d	54	rampRow2	uint8_t rampRow2[54]	scalar
+2410	5a73	54	rampRow3	uint8_t rampRow3[54]	scalar
+2410	5aa9	24	rampRow4	uint8_t rampRow4[24]	scalar
+2410	5ac1	24	rampRow5	uint8_t rampRow5[24]	scalar
+2410	5ad9	18	rampRow6	uint8_t rampRow6[18]	scalar
+2410	5aeb	28	RampTables	far_t RampTables[7]	scalar
+2410	5b07	15	s_lightning_bolt	undefined s_lightning_bolt[]	string
+2410	5b16	8	s_towards	undefined s_towards[]	string
+2410	5b1e	14	s_magic_missile	undefined s_magic_missile[]	string
+2410	5b2c	13	s_charm_person	undefined s_charm_person[]	string
+2410	5b39	9	s_fireball	undefined s_fireball[]	string
+2410	5b42	15	s_charm_monsters	undefined s_charm_monsters[]	string
+2410	5b51	12	s_hold_person	undefined s_hold_person[]	string
+2410	5b5d	6	s_sleep	undefined s_sleep[]	string
+2410	5b63	4	s_web	undefined s_web[]	string
+2410	5b67	6	s_charm	undefined s_charm[]	string
+2410	5b6d	16	s_finger_of_death	undefined s_finger_of_death[]	string
+2410	5b7d	13	s_disintegrate	undefined s_disintegrate[]	string
+2410	5b8a	15	s_flesh_to_stone	undefined s_flesh_to_stone[]	string
+2410	5b99	11	s_mass_charm	undefined s_mass_charm[]	string
+2410	5ba4	27	s_s_casts_a_s_spell_s_s	undefined s_s_casts_a_s_spell_s_s[]	string
+2410	5bbf	34	s_s_takes_half_damage_from_spells	undefined s_s_takes_half_damage_from_spells[]	string
+2410	5be1	41	s_s_takes_half_damage_from_dragon_breath	undefined s_s_takes_half_damage_from_dragon_breath[]	string
+2410	5c0a	37	s_s_takes_half_damage_from_lightning	undefined s_s_takes_half_damage_from_lightning[]	string
+2410	5c2f	21	s_s_is_charmed_by_s	undefined s_s_is_charmed_by_s[]	string
+2410	5c44	22	s_s_fails_to_charm_s	undefined s_s_fails_to_charm_s[]	string
+2410	5c5a	22	s_s_is_immune_to_fire	undefined s_s_is_immune_to_fire[]	string
+2410	5c70	32	s_s_takes_half_damage_from_fire	undefined s_s_takes_half_damage_from_fire[]	string
+2410	5c90	18	s_s_is_held_by_s	undefined s_s_is_held_by_s[]	string
+2410	5ca2	26	s_s_is_put_to_sleep_by_s	undefined s_s_is_put_to_sleep_by_s[]	string
+2410	5cbc	40	s_s_is_entangled_in_a_web_created_by_s	undefined s_s_is_entangled_in_a_web_created_by_s[]	string
+2410	5ce4	11	menuBarShown	undefined1 menuBarShown	scalar
+2410	5cef	1	goldPartyIndex	undefined1 goldPartyIndex	scalar
+2410	5cf0	1	keyboardInputMode	undefined1 keyboardInputMode	scalar
+2410	5cf1	1	SfxPending	undefined1 SfxPending	scalar
+2410	5cf2	6	s_pause	undefined s_pause[]	string
+2410	5cf8	7	s_resume	undefined s_resume[]	string
+2410	5cff	6	s_s_c	undefined s_s_c[]	string
+2410	5d05	42	s_sorry_you_may_not_pause_during_a_battle	undefined s_sorry_you_may_not_pause_during_a_battle[]	string
+2410	5d2f	83	s_pause_select_resume_to_enable_game_events_pr	undefined s_pause_select_resume_to_enable_game_events_pr[]	string
+2410	5d82	45	s_resume_game_events_will_now_occur_normally	undefined s_resume_game_events_will_now_occur_normally[]	string
+2410	5daf	5	s_gold	undefined s_gold[]	string
+2410	5db4	5	s_fund	undefined s_fund[]	string
+2410	5db9	9	s_previous	undefined s_previous[]	string
+2410	5dc2	5	s_next	undefined s_next[]	string
+2410	5dc7	1	GfxFrameCounts	undefined GfxFrameCounts	scalar
+2410	5dc8	7	AnimSeqCounts	uint8_t AnimSeqCounts[3]	scalar
+2410	5dcf	8	lowIntelEnemies	undefined1 lowIntelEnemies	scalar
+2410	5dd7	8	medIntelEnemies	undefined1 medIntelEnemies	scalar
+2410	5ddf	8	highIntelEnemies	undefined1 highIntelEnemies	scalar
+2410	5de7	5	secondWaveSize	undefined1 secondWaveSize	scalar
+2410	5dec	2	LevelBandMin	byte LevelBandMin[4]	scalar
+2410	5dee	2	LevelBandMin[2]		scalar
+2410	5df0	2	LevelBandMax	byte LevelBandMax[4]	scalar
+2410	5df2	2	LevelBandMax[2]		scalar
+2410	5df4	2	demoCenterX	undefined2 demoCenterX	scalar
+2410	5df6	2	demoCenterY	undefined2 demoCenterY	scalar
+2410	5df8	23	s_all_enemies_destroyed	undefined s_all_enemies_destroyed[]	string
+2410	5e0f	29	s_next_wave_of_enemies_appear	undefined s_next_wave_of_enemies_appear[]	string
+2410	5e2c	4	GGCTemplate	char GGCTemplate[4]	string
+2410	5e30	11	s_strong.sav_2410_5e30		scalar
+2410	5e3b	20	s_strong.sav\game.cfg_2410_5e3b		scalar
+2410	5e4f	2	s__2410_5e4f	undefined s__2410_5e4f[]	string
+2410	5e51	4	s__2410_5e51	undefined s__2410_5e51[]	string
+2410	5e55	3	s__c_2410_5e55	undefined s__c_2410_5e55[]	string
+2410	5e58	20	s_strong.sav\game.cfg_2410_5e58		scalar
+2410	5e6c	11	s_strong.sav_2410_5e6c		scalar
+2410	5e77	22	s_strong.sav\strong.$$$_2410_5e77		scalar
+2410	5e8d	22	s_strong.sav\strong.$$$_2410_5e8d		scalar
+2410	5ea3	26	s_Path_to_write_game_data__2410_5ea3	undefined s_Path_to_write_game_data__2410_5ea3[]	string
+2410	5ebd	65	s_ENTER__use_previous_configuratio_2410_5ebd	char s_ENTER__use_previous_configuratio_2410_5ebd[]	string
+2410	5efe	2	s_Newline1	undefined s_Newline1[]	string
+2410	5f00	63	s_Sound_(1._PC_Speaker_2._Sound_Bl_2410_5f00		scalar
+2410	5f3f	49	s_4._Adlib_5._Roland_6._Off):_2410_5f3f		scalar
+2410	5f70	2	s_Newline2	undefined s_Newline2[]	string
+2410	5f72	60	s_Sound_Blaster_(1._Original_2._Pr_2410_5f72		scalar
+2410	5fae	2	s__2410_5fae	undefined s__2410_5fae[]	string
+2410	5fb0	46	s_Pro_Audio_Spectrum_(1._Plus_2._S_2410_5fb0		scalar
+2410	5fde	2	s_lf_2410_5fde	undefined s_lf_2410_5fde[]	string
+2410	5fe0	30	s_Adlib_(1._Original_2._Gold):_2410_5fe0		scalar
+2410	5ffe	2	s__2410_5ffe	undefined s__2410_5ffe[]	string
+2410	6000	71	s_Sound_Effects_(1._PC_Speaker_2._S_2410_6000		scalar
+2410	6047	40	s_4._Adlib_5._None):_2410_6047		scalar
+2410	606f	2	s__2410_606f	undefined s__2410_606f[]	string
+2410	6071	38	s_Sound_Blaster_(1._Original_2._Pr_2410_6071		scalar
+2410	6097	2	s_lf_2410_6097	undefined s_lf_2410_6097[]	string
+2410	6099	46	s_Pro_Audio_Spectrum_(1._Plus_2._S_2410_6099		scalar
+2410	60c7	2	s__2410_60c7	undefined s__2410_60c7[]	string
+2410	60c9	30	s_Adlib_(1._Original_2._Gold):_2410_60c9		scalar
+2410	60e7	2	s__2410_60e7	undefined s__2410_60e7[]	string
+2410	60e9	54	s_Sound_IRQ_is_%c_(1._Don't_change_2410_60e9		scalar
+2410	611f	33	s_empty	undefined s_empty[]	string
+2410	6140	22	s_4_irq_7_5_irq_10	undefined s_4_irq_7_5_irq_10[]	string
+2410	6156	2	s_lf_2410_6156	undefined s_lf_2410_6156[]	string
+2410	6158	51	s_Largest_executable_program_size_i_2410_6158	undefined s_Largest_executable_program_size_i_2410_6158[]	string
+2410	618b	37	s_Stronghold_requires_585_000_byte_2410_618b	undefined s_Stronghold_requires_585_000_byte_2410_618b[]	string
+2410	61b0	1	HeapReady	undefined1 HeapReady	scalar
+2410	61b1	18	s_Bad_Pointer__lx_2410_61b1	undefined s_Bad_Pointer__lx_2410_61b1[]	string
+2410	61c3	13	s_Str__x__x_2410_61c3	undefined s_Str__x__x_2410_61c3[]	string
+2410	61d0	28	s_Bad_heap__at__x_S_x_Z_x_P_x_2410_61d0	undefined s_Bad_heap__at__x_S_x_Z_x_P_x_2410_61d0[]	string
+2410	61ec	20	s__lx_already_free_2410_61ec	undefined s__lx_already_free_2410_61ec[]	string
+2410	6200	4	GDoneStrPtr	far_t GDoneStrPtr	scalar
+2410	6204	11	s_short_sword_2410_6204	undefined s_short_sword_2410_6204[]	string
+2410	620f	1	s__2410_6204+0xb		scalar
+2410	6210	7	s_normal_weaponry_2410_6210	undefined s_normal_weaponry_2410_6210[]	string
+2410	6217	9	s_weaponry_2410_6210+7		scalar
+2410	6220	18	s_+%d_ring_of_prot._2410_6220		scalar
+2410	6232	9	s_no_armor_2410_6232	undefined s_no_armor_2410_6232[]	string
+2410	623b	31	s_leather_armor_2410_623b	undefined s_leather_armor_2410_623b[]	string
+2410	625a	17	s_+2_leather_armor_2410_625a		scalar
+2410	626b	7	s_shield_2410_626b	undefined s_shield_2410_626b[]	string
+2410	6272	12	s_scale_armor_2410_6272	undefined s_scale_armor_2410_6272[]	string
+2410	627e	11	s_chain_mail_2410_627e	undefined s_chain_mail_2410_627e[]	string
+2410	6289	13	s_banded_armor_2410_6289	undefined s_banded_armor_2410_6289[]	string
+2410	6296	11	s_plate_mail_2410_6296	undefined s_plate_mail_2410_6296[]	string
+2410	62a1	17	s_plate_and_shield_2410_62a1	undefined s_plate_and_shield_2410_62a1[]	string
+2410	62b2	20	s_plate_and_shield_+1_2410_62b2		scalar
+2410	62c6	11	s_suit_armor_2410_62c6	undefined s_suit_armor_2410_62c6[]	string
+2410	62d1	10	s_exp_ld	undefined s_exp_ld[]	string
+2410	62db	2	s__2410_62db	undefined s__2410_62db[]	string
+2410	62dd	6	s_Ready_2410_62dd	undefined s_Ready_2410_62dd[]	string
+2410	62e3	5	s_Home_2410_62e3	undefined s_Home_2410_62e3[]	string
+2410	62e8	11	s_Unassigned_2410_62e8	undefined s_Unassigned_2410_62e8[]	string
+2410	62f3	11	s_Unit_of__d_2410_62f3	undefined s_Unit_of__d_2410_62f3[]	string
+2410	62fe	12	s_Loyal_to__s_2410_62fe	undefined s_Loyal_to__s_2410_62fe[]	string
+2410	630a	9	s_L._to_%s_2410_630a		scalar
+2410	6313	16	s__d_s_lv_rn__c__2410_6313	undefined s__d_s_lv_rn__c__2410_6313[]	string
+2410	6323	13	s__d_s_level__2410_6323	undefined s__d_s_level__2410_6323[]	string
+2410	6330	18	s_Experience_points_2410_6330	undefined s_Experience_points_2410_6330[]	string
+2410	6342	6	s__s__s_2410_6342	undefined s__s__s_2410_6342[]	string
+2410	6348	12	s_XP_value__d_2410_6348	undefined s_XP_value__d_2410_6348[]	string
+2410	6354	17	s_Hit_Points__d__d_2410_6354	undefined s_Hit_Points__d__d_2410_6354[]	string
+2410	6365	11	s_damaged__s_2410_6365	undefined s_damaged__s_2410_6365[]	string
+2410	6370	7	s_+%d_%s_2410_6370		scalar
+2410	6377	15	s_Armor_class__d_2410_6377	undefined s_Armor_class__d_2410_6377[]	string
+2410	6386	7	s_Mirror_2410_6386	undefined s_Mirror_2410_6386[]	string
+2410	638d	21	s_s_is_not_readied	undefined s_s_is_not_readied[]	string
+2410	63a2	15	s_s_is_ready	undefined s_s_is_ready[]	string
+2410	63b1	23	s_s_is_no_longer_ready	undefined s_s_is_no_longer_ready[]	string
+2410	63c8	57	s_ready_characters_are_the_first_to_come_when_	undefined s_ready_characters_are_the_first_to_come_when_[]	string
+2410	6401	5	s_Done_2410_6401	undefined s_Done_2410_6401[]	string
+2410	6406	72	s_s_is_now_based_at_d_d_this_unit_will_remain_	undefined s_s_is_now_based_at_d_d_this_unit_will_remain_[]	string
+2410	644e	37	s_s_can_now_be_called_away_from_home	undefined s_s_can_now_be_called_away_from_home[]	string
+2410	6473	9	s_Previous_2410_6473	undefined s_Previous_2410_6473[]	string
+2410	647c	5	s_Next_2410_647c	undefined s_Next_2410_647c[]	string
+2410	6481	7	s_Leader_2410_6481	undefined s_Leader_2410_6481[]	string
+2410	6488	6	s_Help_2410_6488	undefined s_Help_2410_6488[]	string
+2410	648e	1	mapDirty	undefined1 mapDirty	scalar
+2410	648f	41	s_Define_region_to_command__s_loya_2410_648f	undefined s_Define_region_to_command__s_loya_2410_648f[]	string
+2410	64b8	106	s_%d_%s%s_loyal_to_%s_found._Left_c_2410_64b8		scalar
+2410	6522	33	s_Priorities_adjusted_for_%d_%s%s._2410_6522		scalar
+2410	6543	20	s_%d_%s%s_unassigned._2410_6543		scalar
+2410	6557	17	s_%d_%s%s_readied._2410_6557		scalar
+2410	6568	15	s_%d_%s%s_homed._2410_6568		scalar
+2410	6577	27	s_Region_selection_aborted._2410_6577		scalar
+2410	6592	2	strangeTableData	uint16_t strangeTableData[55]	scalar
+2410	6594	2	strangeTableData[1]		scalar
+2410	6596	2	strangeTableData[2]		scalar
+2410	6598	44	strangeTableData[3]		scalar
+2410	65c4	57	strangeTableData[25]		scalar
+2410	65fd	2	strangeTableData[53]+1		scalar
+2410	65ff	2	strangeTableData[54]+1		scalar
+2410	6601	73	GStrangeTable	far_t GStrangeTable[98]	scalar
+2410	664a	319	GStrangeTable[18].ofs+1		scalar
+2410	6789	9	s__at_Housing_2410_6789	undefined s__at_Housing_2410_6789[]	string
+2410	6792	10	s_farmland	undefined s_farmland[]	string
+2410	679c	5	s_inn	undefined s_inn[]	string
+2410	67a1	8	s_temple	undefined s_temple[]	string
+2410	67a9	7	s_forge	undefined s_forge[]	string
+2410	67b0	12	s_university	undefined s_university[]	string
+2410	67bc	7	s_tower	undefined s_tower[]	string
+2410	67c3	9	s_granary	undefined s_granary[]	string
+2410	67cc	13	s_marketplace	undefined s_marketplace[]	string
+2410	67d9	6	s_tree	undefined s_tree[]	string
+2410	67df	10	s_e_w_wall	undefined s_e_w_wall[]	string
+2410	67e9	10	s_n_s_wall	undefined s_n_s_wall[]	string
+2410	67f3	12	s_e_w_bridge	undefined s_e_w_bridge[]	string
+2410	67ff	12	s_n_s_bridge	undefined s_n_s_bridge[]	string
+2410	680b	13	s_guard_house	undefined s_guard_house[]	string
+2410	6818	14	s_thieve_s_den	undefined s_thieve_s_den[]	string
+2410	6826	13	s_social_hall	undefined s_social_hall[]	string
+2410	6833	10	s_e_w_gate	undefined s_e_w_gate[]	string
+2410	683d	10	s_n_s_gate	undefined s_n_s_gate[]	string
+2410	6847	13	s_elf_gardens	undefined s_elf_gardens[]	string
+2410	6854	10	s_fletcher	undefined s_fletcher[]	string
+2410	685e	13	s_public_bath	undefined s_public_bath[]	string
+2410	686b	14	s_mason_s_hall	undefined s_mason_s_hall[]	string
+2410	6879	9	s_jeweler	undefined s_jeweler[]	string
+2410	6882	12	s_glassworks	undefined s_glassworks[]	string
+2410	688e	9	s_outpost	undefined s_outpost[]	string
+2410	6897	7	s_vault	undefined s_vault[]	string
+2410	689e	17	s_forester_s_camp	undefined s_forester_s_camp[]	string
+2410	68af	16	s_builder_s_hall	undefined s_builder_s_hall[]	string
+2410	68bf	8	s_bazaar	undefined s_bazaar[]	string
+2410	68c7	7	s_arena	undefined s_arena[]	string
+2410	68ce	10	s_toymaker	undefined s_toymaker[]	string
+2410	68d8	8	s_bakery	undefined s_bakery[]	string
+2410	68e0	13	s_gaming_hall	undefined s_gaming_hall[]	string
+2410	68ed	10	s_scribery	undefined s_scribery[]	string
+2410	68f7	12	s_magic_mill	undefined s_magic_mill[]	string
+2410	6903	8	s_armory	undefined s_armory[]	string
+2410	690b	46	s_Building_is_now_%s._Select_type_o_2410_690b		scalar
+2410	6939	1	s_empty_2410_6939	undefined s_empty_2410_6939[]	string
+2410	693a	1	GSeason	undefined1 GSeason	scalar
+2410	693b	135	SeasonPalettes	undefined SeasonPalettes	scalar
+2410	69c2	3	paletteColorA	undefined paletteColorA	scalar
+2410	69c5	3	paletteColorB	undefined paletteColorB	scalar
+2410	69c8	3	paletteColorC	undefined paletteColorC	scalar
+2410	69cb	12	GSeasonNames	far_t GSeasonNames[3]	scalar
+2410	69d7	2	PromoteThreshold	byte PromoteThreshold[4]	scalar
+2410	69d9	2	PromoteThreshold[2]		scalar
+2410	69db	64	s_Your_may_continue_playing__but_y_2410_69db	undefined s_Your_may_continue_playing__but_y_2410_69db[]	string
+2410	6a1b	7	s_spring_2410_6a1b	undefined s_spring_2410_6a1b[]	string
+2410	6a22	5	s_fall_2410_6a22	undefined s_fall_2410_6a22[]	string
+2410	6a27	7	s_winter_2410_6a27	undefined s_winter_2410_6a27[]	string
+2410	6a2e	34	s_the_season_has_changed_to_summer	undefined s_the_season_has_changed_to_summer[]	string
+2410	6a50	30	s_The_season_has_changed_to_%s._2410_6a50		scalar
+2410	6a6e	24	s_d_building_s_repaired	undefined s_d_building_s_repaired[]	string
+2410	6a86	2	strongholdsDestroyed	undefined2 strongholdsDestroyed	scalar
+2410	6a88	1	GHighScoreSaved	undefined1 GHighScoreSaved	scalar
+2410	6a89	11	s_shigh_txt	undefined s_shigh_txt[]	string
+2410	6a94	19	s_great_achievements	undefined s_great_achievements[]	string
+2410	6aa7	5	s_name	undefined s_name[]	string
+2410	6aac	8	s_enemies	undefined s_enemies[]	string
+2410	6ab4	5	s_done	undefined s_done[]	string
+2410	6ab9	10	s_c_s_s_d	undefined s_c_s_s_d[]	string
+2410	6ac3	1	s_empty_2410_6ac3	undefined s_empty_2410_6ac3[]	string
+2410	6ac4	2	msgFormat	far_t msgFormat	scalar
+2410	6ac6	2	msgFormat.seg		scalar
+2410	6ac8	76	s_my_s_we_in_this_neighborhood_are_doing_well	char s_my_s_we_in_this_neighborhood_are_doing_well[103]	string
+2410	6b14	27	s_my_s_we_in_this_neighborhood_are_doing_well+0x4c		scalar
+2410	6b2f	5	s_lord	undefined s_lord[]	string
+2410	6b34	5	s_lady	undefined s_lady[]	string
+2410	6b39	1	s_empty_2410_6b39	undefined s_empty_2410_6b39[]	string
+2410	6b3a	76	RankMsgPtrs	far_t RankMsgPtrs[19]	scalar
+2410	6b86	10	fullWidthRect	undefined fullWidthRect	scalar
+2410	6b90	45	s_On_this_day_it_was_declared_to_a_2410_6b90	undefined s_On_this_day_it_was_declared_to_a_2410_6b90[]	string
+2410	6bbd	1	s__2410_6b90+0x2d		scalar
+2410	6bbe	42	s_that__s_shall_henceforth_hold_th_2410_6bbe	undefined s_that__s_shall_henceforth_hold_th_2410_6bbe[]	string
+2410	6be8	52	s__s__in_recognition_of_valor_on_t_2410_6be8	undefined s__s__in_recognition_of_valor_on_t_2410_6be8[]	string
+2410	6c1c	40	s__s__in_recognition_for_city_mana_2410_6c1c	undefined s__s__in_recognition_for_city_mana_2410_6c1c[]	string
+2410	6c44	31	s_Your_desire_to_destroy_him_and_2410_6c44	undefined s_Your_desire_to_destroy_him_and_2410_6c44[]	string
+2410	6c63	41	s_gain_revenge_inspires_you_to_new_2410_6c63	undefined s_gain_revenge_inspires_you_to_new_2410_6c63[]	string
+2410	6c8c	43	s_You_will_be_promoted_to_ever_gre_2410_6c8c	undefined s_You_will_be_promoted_to_ever_gre_2410_6c8c[]	string
+2410	6cb7	42	s_of_nobility._You_will_truly_be_t_2410_6cb7		scalar
+2410	6ce1	11	s_of_your..._2410_6ce1		scalar
+2410	6cec	44	s_Your_desire_to_destroy_him_and_g_2410_6cec	undefined s_Your_desire_to_destroy_him_and_g_2410_6cec[]	string
+2410	6d18	41	s_inspired_you_to_seek_a_life_of_g_2410_6d18	undefined s_inspired_you_to_seek_a_life_of_g_2410_6d18[]	string
+2410	6d41	11	s_adventure._2410_6d41		scalar
+2410	6d4c	24	s__s_stronghold_destroyed_2410_6d4c	undefined s__s_stronghold_destroyed_2410_6d4c[]	string
+2410	6d64	51	s_Congratulations__you_have_achiev_2410_6d64	undefined s_Congratulations__you_have_achiev_2410_6d64[]	string
+2410	6d97	24	s_of_adventure_and_glory._2410_6d97		scalar
+2410	6daf	31	s_that__s_shall_hold_the_rank_of_2410_6daf	undefined s_that__s_shall_hold_the_rank_of_2410_6daf[]	string
+2410	6dce	25	s_%s,_for_valor_in_battle._2410_6dce		scalar
+2410	6de7	25	s_%s,_for_city_management._2410_6de7		scalar
+2410	6e00	56	xOfsTable	undefined xOfsTable	scalar
+2410	6e38	16	CureSpellPtrs	far_t CureSpellPtrs[4]	scalar
+2410	6e48	47	growthTable	undefined growthTable	scalar
+2410	6e77	8	s_kill_4	undefined s_kill_4[]	string
+2410	6e7f	4	s_are	undefined s_are[]	string
+2410	6e83	3	s_is	undefined s_is[]	string
+2410	6e86	80	s_the_d_unit_s_loyal_to_s_s_d_recruiting_d_tra	undefined s_the_d_unit_s_loyal_to_s_s_d_recruiting_d_tra[]	string
+2410	6ed6	18	s_s_fails_to_turn	undefined s_s_fails_to_turn[]	string
+2410	6ee8	16	s_s_cannot_turn	undefined s_s_cannot_turn[]	string
+2410	6ef8	23	s_s_destroys_d_undead	undefined s_s_destroys_d_undead[]	string
+2410	6f0f	20	s_s_turns_d_undead	undefined s_s_turns_d_undead[]	string
+2410	6f23	16	s_building_d_s	undefined s_building_d_s[]	string
+2410	6f33	10	s_Enemy_%s._2410_6f33		scalar
+2410	6f3d	5	s_d	undefined s_d[]	string
+2410	6f42	33	s_you_cannot_see_the_terrain_here	undefined s_you_cannot_see_the_terrain_here[]	string
+2410	6f63	23	s_s_is_paralyzed_by_s	undefined s_s_is_paralyzed_by_s[]	string
+2410	6f7a	20	s_s_is_stoned_by_s	undefined s_s_is_stoned_by_s[]	string
+2410	6f8e	25	s_s_is_no_longer_charmed	undefined s_s_is_no_longer_charmed[]	string
+2410	6fa7	18	s_cure_light_wounds_2410_6fa7	undefined s_cure_light_wounds_2410_6fa7[]	string
+2410	6fb9	20	s_cure_serious_wounds_2410_6fb9	undefined s_cure_serious_wounds_2410_6fb9[]	string
+2410	6fcd	21	s_cure_critical_wounds_2410_6fcd	undefined s_cure_critical_wounds_2410_6fcd[]	string
+2410	6fe2	9	s_cure_all_2410_6fe2	undefined s_cure_all_2410_6fe2[]	string
+2410	6feb	70	s_s_casts_s_on_s_to_heal_d_hitpoint_s_for_a_to	undefined s_s_casts_s_on_s_to_heal_d_hitpoint_s_for_a_to[]	string
+2410	7031	45	s_s_takes_no_damage_from_non_magical_weapons	undefined s_s_takes_no_damage_from_non_magical_weapons[]	string
+2410	705e	46	s_s_takes_no_damage_from_less_than_2_weapons	undefined s_s_takes_no_damage_from_less_than_2_weapons[]	string
+2410	708c	41	s_s_takes_no_damage_from_missile_attacks	undefined s_s_takes_no_damage_from_missile_attacks[]	string
+2410	70b5	15	s_s_poisons_s	undefined s_s_poisons_s[]	string
+2410	70c4	40	s_s_infects_s_with_blast_spore_disease	undefined s_s_infects_s_with_blast_spore_disease[]	string
+2410	70ec	27	s_s_drains_a_level_from_s	undefined s_s_drains_a_level_from_s[]	string
+2410	7107	30	s_s_drains_all_energy_from_s	undefined s_s_drains_all_energy_from_s[]	string
+2410	7125	31	s_s_drains_two_levels_from_s	undefined s_s_drains_two_levels_from_s[]	string
+2410	7144	1	GameRunning	bool GameRunning	scalar
+2410	7145	14	unitTypeTable	undefined unitTypeTable	scalar
+2410	7153	8	spawnGindexTable	undefined spawnGindexTable	scalar
+2410	715b	10	lowerScreenRect	undefined lowerScreenRect	scalar
+2410	7165	15	s_demo_cancelled	undefined s_demo_cancelled[]	string
+2410	7174	1	s_demo_cancelled+0xf		scalar
+2410	7175	7	s_nasher	undefined s_nasher[]	string
+2410	717c	7	s_fordor	undefined s_fordor[]	string
+2410	7183	7	s_kaunas	undefined s_kaunas[]	string
+2410	718a	8	s_mindark	undefined s_mindark[]	string
+2410	7192	45	s_a_new_land_lies_before_you_choose_carefully	undefined s_a_new_land_lies_before_you_choose_carefully[]	string
+2410	71bf	18	s_where_you_settle	undefined s_where_you_settle[]	string
+2410	71d1	40	s_your_goal_create_a_thriving_community	undefined s_your_goal_create_a_thriving_community[]	string
+2410	71f9	45	s_balance_building_money_and_food_production	undefined s_balance_building_money_and_food_production[]	string
+2410	7226	27	s_to_keep_your_people_happy	undefined s_to_keep_your_people_happy[]	string
+2410	7241	44	s_your_world_will_be_filled_with_a_full_range	undefined s_your_world_will_be_filled_with_a_full_range[]	string
+2410	726d	34	s_of_official_d_d_game_characters	undefined s_of_official_d_d_game_characters[]	string
+2410	728f	41	s_you_are_not_alone_in_this_pristine_land	undefined s_you_are_not_alone_in_this_pristine_land[]	string
+2410	72b8	42	s_official_d_d_game_monsters_will_fight_to	undefined s_official_d_d_game_monsters_will_fight_to[]	string
+2410	72e2	19	s_destroy_your_city	undefined s_destroy_your_city[]	string
+2410	72f5	44	s_force_and_fury_meet_magic_spells_as_battles	undefined s_force_and_fury_meet_magic_spells_as_battles[]	string
+2410	7321	46	s_play_out_in_the_courtyards_of_mighty_castles	undefined s_play_out_in_the_courtyards_of_mighty_castles[]	string
+2410	734f	40	s_your_people_will_fight_bravely_and_work	undefined s_your_people_will_fight_bravely_and_work[]	string
+2410	7377	29	s_hard_your_city_will_grow	undefined s_hard_your_city_will_grow[]	string
+2410	7394	12	s_and_grow	undefined s_and_grow[]	string
+2410	73a0	33	s_and_grow	undefined s_and_grow[]	string
+2410	73c1	35	s_but_beware_the_evil_mindark_whose	undefined s_but_beware_the_evil_mindark_whose[]	string
+2410	73e4	41	s_hordes_destroyed_your_homeland_long_ago	undefined s_hordes_destroyed_your_homeland_long_ago[]	string
+2410	740d	39	s_if_you_lead_with_wisdom_and_cunning	undefined s_if_you_lead_with_wisdom_and_cunning[]	string
+2410	7434	37	s_if_you_fight_with_valor_and_guile	undefined s_if_you_fight_with_valor_and_guile[]	string
+2410	7459	36	s_you_will_truly_be_master_of_your	undefined s_you_will_truly_be_master_of_your[]	string
+2410	747d	1	s_empty_2410_747d	undefined s_empty_2410_747d[]	string
+2410	747e	11	StshFileName	undefined StshFileName[]	string
+2410	7489	5	StshFileSize	uint32_t StshFileSizeVar	scalar
+2410	748e	30	s_getcache__d_SIZESTASH__d_2410_748e	undefined s_getcache__d_SIZESTASH__d_2410_748e[]	string
+2410	74ac	1	selectedPartyIndex	undefined1 selectedPartyIndex	scalar
+2410	74ad	11	PersonWordPtrs	far_t PersonWordPtrs[2]	scalar
+2410	74b8	56	s_choose_party_to_build_for_now_building_for_s	undefined s_choose_party_to_build_for_now_building_for_s[]	string
+2410	74f0	4	s_s	undefined s_s[]	string
+2410	74f4	36	s_you_can_only_place_a_single_arena	undefined s_you_can_only_place_a_single_arena[]	string
+2410	7518	36	s_bridges_must_be_near_water_s_edge	undefined s_bridges_must_be_near_water_s_edge[]	string
+2410	753c	36	s_next_outpost_available_at_rank_s	undefined s_next_outpost_available_at_rank_s[]	string
+2410	7560	33	s_no_more_outposts_are_available	undefined s_no_more_outposts_are_available[]	string
+2410	7581	24	s_requires_a_rank_of_s	undefined s_requires_a_rank_of_s[]	string
+2410	7599	30	s_requires_a_unit_of_level_d	undefined s_requires_a_unit_of_level_d[]	string
+2410	75b7	32	s_location_is_too_narrow_for_s	undefined s_location_is_too_narrow_for_s[]	string
+2410	75d7	34	s_location_is_too_narrow_for_a_s	undefined s_location_is_too_narrow_for_a_s[]	string
+2410	75f9	26	s_walls_must_be_near_land	undefined s_walls_must_be_near_land[]	string
+2410	7613	39	s_buildings_cannot_be_placed_over_water	undefined s_buildings_cannot_be_placed_over_water[]	string
+2410	763a	43	s_this_location_is_unsuitable_for_buildings	undefined s_this_location_is_unsuitable_for_buildings[]	string
+2410	7665	32	s_it_will_cost_s_the_s_d_gp	undefined s_it_will_cost_s_the_s_d_gp[]	string
+2410	7685	6	s_place	undefined s_place[]	string
+2410	768b	16	s_change_building	undefined s_change_building[]	string
+2410	769b	13	s_change_party	undefined s_change_party[]	string
+2410	76a8	5	s_done	undefined s_done[]	string
+2410	76ad	60	s_party_member_s_doesn_t_have_enough_gold_to_c	undefined s_party_member_s_doesn_t_have_enough_gold_to_c[]	string
+2410	76e9	29	s_too_many_construction_sites	undefined s_too_many_construction_sites[]	string
+2410	7706	9	s_excavate	undefined s_excavate[]	string
+2410	770f	7	s_remove	undefined s_remove[]	string
+2410	7716	13	s_change_party	undefined s_change_party[]	string
+2410	7723	67	s_s_search_this_location_for_minerals_active_p	undefined s_s_search_this_location_for_minerals_active_p[]	string
+2410	7766	24	s_no_minerals_were_found	undefined s_no_minerals_were_found[]	string
+2410	777e	17	s_gems_discovered	undefined s_gems_discovered[]	string
+2410	778f	26	s_iron_deposits_discovered	undefined s_iron_deposits_discovered[]	string
+2410	77a9	17	s_gold_discovered	undefined s_gold_discovered[]	string
+2410	77ba	3	s_no	undefined s_no[]	string
+2410	77bd	37	s_remove_s_permanently_are_you_sure	undefined s_remove_s_permanently_are_you_sure[]	string
+2410	77e2	7	s_person_2410_77e2	undefined s_person_2410_77e2[]	string
+2410	77e9	7	s_people_2410_77e9	undefined s_people_2410_77e9[]	string
+2410	77f0	6	s_claim	undefined s_claim[]	string
+2410	77f6	10	s_chop_down	undefined s_chop_down[]	string
+2410	7800	74	s_s_claim_this_tree_harvest_value_is_d_gold_ac	undefined s_s_claim_this_tree_harvest_value_is_d_gold_ac[]	string
+2410	784a	71	s_forest_claimed_this_forest_creates_d_gold_of	undefined s_forest_claimed_this_forest_creates_d_gold_of[]	string
+2410	7891	33	s_tree_cut_down_d_gold_obtained	undefined s_tree_cut_down_d_gold_obtained[]	string
+2410	78b2	20	s_maintenance_cost_is	undefined s_maintenance_cost_is[]	string
+2410	78c6	18	s_income_created_is	undefined s_income_created_is[]	string
+2410	78d8	3	s_empty	undefined s_empty[]	string
+2410	78db	4	s_empty	undefined s_empty[]	string
+2410	78df	1	s_empty_2410_78df	undefined s_empty_2410_78df[]	string
+2410	78e0	1	MiceProcessed	undefined1 MiceProcessed	scalar
+2410	78e1	1	MiceNeedsUpdate	undefined1 MiceNeedsUpdate	scalar
+2410	78e2	2	MiceClick	undefined1 MiceClick	scalar
+2410	78e4	2	far_t_2410_78e4	far_t far_t_2410_78e4	scalar
+2410	78e6	2	far_t_2410_78e4.seg		scalar
+2410	78e8	5	s_Done_2410_78e8	undefined s_Done_2410_78e8[]	string
+2410	78ed	32	s_s_d_complete_owned_by_s	undefined s_s_d_complete_owned_by_s[]	string
+2410	790d	24	s_s_u_u_held_by_s	undefined s_s_u_u_held_by_s[]	string
+2410	7925	34	s_home_a_unit_here_to_halt_damage	undefined s_home_a_unit_here_to_halt_damage[]	string
+2410	7947	16	s_s_held_by_s	undefined s_s_held_by_s[]	string
+2410	7957	7	s_water	undefined s_water[]	string
+2410	795e	7	s_shore	undefined s_shore[]	string
+2410	7965	4	s_s	undefined s_s[]	string
+2410	7969	8	s_suspend	undefined s_suspend[]	string
+2410	7971	13	s_change_party	undefined s_change_party[]	string
+2410	797e	59	s_s_d_complete_owned_by_s_active_party_is_s_th	undefined s_s_d_complete_owned_by_s_active_party_is_s_th[]	string
+2410	79b9	73	s_clearing_of_land_d_complete_owned_by_s_activ	undefined s_clearing_of_land_d_complete_owned_by_s_activ[]	string
+2410	7a02	3	s_no	undefined s_no[]	string
+2410	7a05	64	s_construction_of_s_will_be_permanently_suspen	undefined s_construction_of_s_will_be_permanently_suspen[]	string
+2410	7a45	52	s_s_d_d_owned_by_s_active_party_is_s_the_s	undefined s_s_d_d_owned_by_s_active_party_is_s_the_s[]	string
+2410	7a79	44	s_%s:_Owned_by_%s._Active_party_is_2410_7a79		scalar
+2410	7aa5	31	s_s_active_party_is_s_the_s	undefined s_s_active_party_is_s_the_s[]	string
+2410	7ac4	53	s__s__Costs__d_gold_and_provides_t_2410_7ac4	undefined s__s__Costs__d_gold_and_provides_t_2410_7ac4[]	string
+2410	7af9	54	s_%s:_Costs_%d_gold_of_income._Rep_2410_7af9		scalar
+2410	7b2f	49	s_%s:_Costs_%d_gold_of_income._For_2410_7b2f		scalar
+2410	7b60	45	s_%s:_Costs_%d_gold_of_income._Imp_2410_7b60		scalar
+2410	7b8d	58	s_%s:_Costs_%d_gold_of_income._Imp_2410_7b8d		scalar
+2410	7bc7	51	s_%s:_Costs_%d_gold_of_income._Rep_2410_7bc7		scalar
+2410	7bfa	57	s_%s:_Costs_%d_gold_of_income._Cre_2410_7bfa		scalar
+2410	7c33	60	s_%s:_Costs_%d_gold._Increases_uni_2410_7c33		scalar
+2410	7c6f	54	s_%s:_Costs_%d_gold._Increases_bui_2410_7c6f		scalar
+2410	7ca5	46	s_%s:_Costs_%d_gold._Enhances_trai_2410_7ca5		scalar
+2410	7cd3	53	s_%s:_Costs_%d_gold._Produces_+%d_r_2410_7cd3		scalar
+2410	7d08	84	s_%s:_Costs_%d_gold._Produces_mirr_2410_7d08		scalar
+2410	7d5c	56	s_%s:_Costs_%d_gold._Attracts_new_u_2410_7d5c		scalar
+2410	7d94	54	s_%s:_Costs_%d_gold._Provides_%u_u_2410_7d94		scalar
+2410	7dca	46	s_%s:_Costs_%d_gold._Claim_trees_a_2410_7dca		scalar
+2410	7df8	56	s_%s:_Costs_%d_gold._Repairs_build_2410_7df8		scalar
+2410	7e30	53	s_%s:_Trades_%d_food_for_gold._Tot_2410_7e30		scalar
+2410	7e65	69	s__s__Creates__d_gold_of_income__a_2410_7e65	undefined s__s__Creates__d_gold_of_income__a_2410_7e65[]	string
+2410	7eaa	87	s_s_costs_d_gold_of_income_and_provides_visibi	undefined s_s_costs_d_gold_of_income_and_provides_visibi[]	string
+2410	7f01	62	s_s_costs_d_gold_of_income_and_provides_storag	undefined s_s_costs_d_gold_of_income_and_provides_storag[]	string
+2410	7f3f	62	s__s__Costs__d_gold_of_income_and_p_2410_7f3f	undefined s__s__Costs__d_gold_of_income_and_p_2410_7f3f[]	string
+2410	7f7d	56	s__s__Provides_housing_for__d__s_a_2410_7f7d	undefined s__s__Provides_housing_for__d__s_a_2410_7f7d[]	string
+2410	7fb5	32	s_%s:_Provides_housing_for_%d_%s._2410_7fb5		scalar
+2410	7fd5	29	s_%s:_%s_%d_gold._Feeds_%d_%s._2410_7fd5		scalar
+2410	7ff2	60	s_%s:_%s_%d_gold._provides_housing_2410_7ff2		scalar
+2410	802e	44	s_%s:_%s_%d_gold._Provides_housing_2410_802e		scalar
+2410	805a	16	s_%s:_%s_%d_gold._2410_805a		scalar
+2410	806a	8	s_salvage	undefined s_salvage[]	string
+2410	8072	24	s_Salvage_value_%d_gold._2410_8072		scalar
+2410	808a	9	s_demolish	undefined s_demolish[]	string
+2410	8093	7	s_repair	undefined s_repair[]	string
+2410	809a	21	s_Repair_costs_%d_gp._2410_809a		scalar
+2410	80af	8	s_upgrade	undefined s_upgrade[]	string
+2410	80b7	22	s_Upgrade_costs_%d_gp._2410_80b7		scalar
+2410	80cd	12	s_information	undefined s_information[]	string
+2410	80d9	10	s_new_owner	undefined s_new_owner[]	string
+2410	80e3	13	s_change_party	undefined s_change_party[]	string
+2410	80f0	47	s_%s_will_be_salvaged_for_%d_gold._2410_80f0		scalar
+2410	811f	41	s_get_rid_of_s_permanently_are_you_sure	undefined s_get_rid_of_s_permanently_are_you_sure[]	string
+2410	8148	20	s_%s_is_being_filled._2410_8148		scalar
+2410	815c	25	s_%s_salvaged_for_%d_gold._2410_815c		scalar
+2410	8175	18	s_%s_is_demolished._2410_8175		scalar
+2410	8187	30	s_%s_does_not_have_enough_gold._2410_8187		scalar
+2410	81a5	13	s_%s_repaired._2410_81a5		scalar
+2410	81b2	29	s_Too_many_construction_sites._2410_81b2		scalar
+2410	81cf	13	s_%s_upgraded._2410_81cf		scalar
+2410	81dc	80	s_ld_experience_obtained_ld_experience_given_t	undefined s_ld_experience_obtained_ld_experience_given_t[]	string
+2410	822c	136	GTxtFiles	far_t GTxtFiles[34]	scalar
+2410	82b4	10	s_help0.txt_2410_82b4		scalar
+2410	82be	10	s_help1.txt_2410_82be		scalar
+2410	82c8	10	s_help2.txt_2410_82c8		scalar
+2410	82d2	10	s_help3.txt_2410_82d2		scalar
+2410	82dc	10	s_help4.txt_2410_82dc		scalar
+2410	82e6	10	s_help5.txt_2410_82e6		scalar
+2410	82f0	10	s_help6.txt_2410_82f0		scalar
+2410	82fa	10	s_help7.txt_2410_82fa		scalar
+2410	8304	10	s_text1.txt_2410_8304		scalar
+2410	830e	10	s_text2.txt_2410_830e		scalar
+2410	8318	10	s_text3.txt_2410_8318		scalar
+2410	8322	10	s_text4.txt_2410_8322		scalar
+2410	832c	10	s_text5.txt_2410_832c		scalar
+2410	8336	10	s_text6.txt_2410_8336		scalar
+2410	8340	11	s_house1_txt	undefined s_house1_txt[]	string
+2410	834b	11	s_house2.txt_2410_834b		scalar
+2410	8356	11	s_house3.txt_2410_8356		scalar
+2410	8361	11	s_house4.txt_2410_8361		scalar
+2410	836c	11	s_house5.txt_2410_836c		scalar
+2410	8377	10	s_hung1.txt_2410_8377		scalar
+2410	8381	10	s_hung2.txt_2410_8381		scalar
+2410	838b	10	s_hung3.txt_2410_838b		scalar
+2410	8395	10	s_hung4.txt_2410_8395		scalar
+2410	839f	10	s_hung5.txt_2410_839f		scalar
+2410	83a9	11	s_incom1.txt_2410_83a9		scalar
+2410	83b4	11	s_incom2.txt_2410_83b4		scalar
+2410	83bf	11	s_incom3.txt_2410_83bf		scalar
+2410	83ca	11	s_incom4.txt_2410_83ca		scalar
+2410	83d5	11	s_incom5.txt_2410_83d5		scalar
+2410	83e0	11	s_cflow1.txt_2410_83e0		scalar
+2410	83eb	11	s_cflow2.txt_2410_83eb		scalar
+2410	83f6	11	s_cflow3.txt_2410_83f6		scalar
+2410	8401	11	s_cflow4.txt_2410_8401		scalar
+2410	840c	11	s_cflow5.txt_2410_840c		scalar
+2410	8417	11	s_bolt12.fli_2410_8417		scalar
+2410	8422	10	s_save.999_2410_8422		scalar
+2410	842c	10	agentClipRect	undefined agentClipRect	scalar
+2410	8436	27	s_s_is_no_longer_paralyzed	undefined s_s_is_no_longer_paralyzed[]	string
+2410	8451	27	s_s_breaks_free_of_the_web	undefined s_s_breaks_free_of_the_web[]	string
+2410	846c	55	s_s_regenerates_3_hitpoints_to_a_total_of_d_hi	undefined s_s_regenerates_3_hitpoints_to_a_total_of_d_hi[]	string
+2410	84a3	5	s_d	undefined s_d[]	string
+2410	84a8	36	StatsTabPtrs	far_t StatsTabPtrs[9]	scalar
+2410	84cc	8	s_Summary_2410_84cc	undefined s_Summary_2410_84cc[]	string
+2410	84d4	10	s_Now_what__2410_84d4	undefined s_Now_what__2410_84d4[]	string
+2410	84de	5	s_City_2410_84de	undefined s_City_2410_84de[]	string
+2410	84e3	10	s_Buildings_2410_84e3	undefined s_Buildings_2410_84e3[]	string
+2410	84ed	6	s_Money_2410_84ed	undefined s_Money_2410_84ed[]	string
+2410	84f3	11	s_Popularity_2410_84f3	undefined s_Popularity_2410_84f3[]	string
+2410	84fe	7	s_Combat_2410_84fe	undefined s_Combat_2410_84fe[]	string
+2410	8505	7	s_Winter_2410_8505	undefined s_Winter_2410_8505[]	string
+2410	850c	6	s_Done_2410_850c	undefined s_Done_2410_850c[]	string
+2410	8512	4	__OvrSize	undefined __OvrSize	scalar
+2410	8516	2	_atexitcnt	undefined2 _atexitcnt	scalar
+2410	8518	1	_ctype	byte _ctype[257]	scalar
+2410	8519	257	_ctype[1]		scalar
+2410	861a	2	_exitbuf	far_t _exitbuf	scalar
+2410	861c	2	_exitbuf.seg		scalar
+2410	861e	4	_exitfopen	far_t _exitfopen	scalar
+2410	8622	4	_exitopen	far_t _exitopen	scalar
+2410	8626	2	_streams	FILE _streams[20]	scalar
+2410	8628	2	_streams[0].flags		scalar
+2410	862a	16	_streams[0].fd		scalar
+2410	863a	2	stdout		scalar
+2410	863c	2	_streams[1].flags		scalar
+2410	863e	16	_streams[1].fd		scalar
+2410	864e	64	stderr		scalar
+2410	868e	14	_streams[5].fd		scalar
+2410	869c	6	_streams[5].token		scalar
+2410	86a2	276	_streams[6].fd		scalar
+2410	87b6	2	_nfile	uint16_t _nfile	scalar
+2410	87b8	10	_openfd	uint16_t _openfd[20]	scalar
+2410	87c2	2	_openfd[5]		scalar
+2410	87c4	28	_openfd[6]		scalar
+2410	87e0	4	_fmode	undefined2 _fmode	scalar
+2410	87e4	2	_doserrno	undefined2 _doserrno	scalar
+2410	87e6	87	_dosErrorToSV	char _dosErrorToSV[89]	string
+2410	883d	3	_dosErrorToSV		scalar
+2410	8840	2	rand_Seed	long rand_Seed	scalar
+2410	8842	2	rand_Seed+2		scalar
+2410	8844	7	vprintter_NullString	undefined vprintter_NullString[]	string
+2410	884b	97	vprinter_printCtype	uint8_t vprinter_printCtype[96]	scalar
+2410	88ac	1	_video	VIDEOREC _video	scalar
+2410	88ad	1	_video.windowy1		scalar
+2410	88ae	1	_video.windowx2		scalar
+2410	88af	1	_video.windowy2		scalar
+2410	88b0	1	_video.attribute		scalar
+2410	88b1	1	_video.normattr		scalar
+2410	88b2	1	_video.currmode		scalar
+2410	88b3	1	_video.screenheight		scalar
+2410	88b4	1	_video.screenwidth		scalar
+2410	88b5	1	_video_graphicsmode		scalar
+2410	88b6	1	_video.snow		scalar
+2410	88b7	2	_video+0xb		scalar
+2410	88b9	2	_video.displayptr.ofs+1		scalar
+2410	88bb	2	directvideo		scalar
+2410	88bd	7	s_compaq	undefined s_compaq[]	string
+2410	88c4	5	s_print_scanf___floating_point_for_2410_88c4	undefined s_print_scanf___floating_point_for_2410_88c4[]	string
+2410	88c9	45	s_print_scanf___floating_point_for_2410_88c4+5		scalar
+2410	88f6	2	brk_normalize_xsize	undefined2 brk_normalize_xsize	scalar
+2410	88f8	2	_argc_at_	undefined2 _argc_at_	scalar
+2410	88fa	2	_argv_at_	undefined2 _argv_at_	scalar
+2410	88fc	2	_argv_at__2	undefined2 _argv_at__2	scalar
+2410	88fe	1	__setargv_SavedReturn	undefined2 __setargv_SavedReturn	scalar
+2ca0	0000	2	__setargv_SavedES		scalar
+2ca0	0002	2	__setargv_SavedReturn2		scalar
+2ca0	0004	2	__setargv_SavedSI		scalar
+2ca0	0006	2	__setargv_SavedDI		scalar
+2ca0	0008	2	_fputc_cr		scalar
+2ca0	000a	2	_stdinStarted		scalar
+2ca0	000c	2	_stdoutStarted		scalar
+2ca0	000e	1	_realcvt		scalar
+2ca1	0000	2	crtInitReserved		scalar
+2ca1	0002	2	data_2ca1_DATA_INIT_0002_word		scalar
+2ca1	0004	2	data_2ca1_DATA_INIT_0004_word		scalar
+2ca1	0006	24	InitStart		scalar
+2ca1	001e	1	ExitStart		scalar
+2ca1	001e	1	InitEnd		scalar
