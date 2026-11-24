@@ -2730,3 +2730,45 @@ whether the stub prints.  If it does, the fault is between the stub and the C
 `startx` prologue (i.e. our `startx` frame/first statements); if it does not, the
 problem is in how the EXE is loaded at all (header/segment layout), independent of
 the recovered code.
+
+### A pure-assembly entry stub prints nothing either
+
+An assembly stub (`ovr_thunks.asm`, TASM is part of the build)
+
+```asm
+_ST_ENTRY proc far
+    push cs
+    pop ds
+    mov dx, offset st_msg
+    mov ah, 9
+    int 21h
+    jmp far ptr _STARTX
+_ST_ENTRY endp
+st_msg db 'ENTRY$'
+```
+
+was placed at `06DA:0917` and the EXE header's `CS:IP` was patched to it.  `OUT.TXT`
+stays **empty** - the stub does not even print - while the `.COM` control does.
+
+The header itself is structurally sane:
+
+```
+magic 5A4D  cblp 0156  cp 05E9  crlc 12515  cparhdr 0CA0 (=51,712-byte header)
+minalloc 0083  maxalloc FFFF  ss B0F0  sp 0080  ip 0034  cs 01B2  lfarlc 003E
+file 774,486 bytes
+```
+
+So: header parses, the image is complete, the entry points into the image - and yet
+nothing at the entry executes (or its DOS call produces nothing).
+
+### Conclusion for this thread
+
+Every code-level probe has now been exhausted: the failure is either in how the
+loaded image executes (relocation/segment layout produced by our custom link step) or
+the emulator rejects/mis-loads this particular EXE in a way that produces no message.
+No further source-level experiment can distinguish those; the next step must be
+observational at the loader level - e.g. run the EXE under a DOSBox-X build with its
+debugger enabled and read `CS:IP`/memory at the first instruction, or compare our
+EXE header/relocation table byte-for-byte with the original `game/STRONG.EXE`
+(12,515 relocation entries and a 51 KB header are unusual and worth checking against
+the original's numbers).
