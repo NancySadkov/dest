@@ -3528,3 +3528,34 @@ without the busy-wait version's regression.
 
   grep_checks 51,019; build 64/64 clean; link 0 errors
   compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13
+
+## printf was our own copy - the library's now returns
+
+A minimal `printf` program built with C0M + CM.LIB (no recovered data) works, so the
+toolchain and the emulator were never the problem.  The culprits were two name
+collisions with the library:
+
+1. **`crtl.c` defined `printf`/`vsprintf` itself** (`crtl.c:4131`, `:4340`), so every
+   `printf` in the game called the reconstruction.  They are now `st_printf` /
+   `st_vsprintf`, and `CM.LIB`'s `printf` is used.
+2. **`st_globals5.c` defined `_realcvt`**, and TLINK is case-insensitive, so it
+   collided with the library's `__REALCVT` - VPRINTER's *near* fixup then pointed at a
+   DGROUP variable and overflowed.  The data is now `realcvtReserved`, and a resident
+   `_REALCVT` stub keeps the (unused) floating-point path in range.
+
+Measured with the bracket around `printf("EARLY\n")` early in `init_game`:
+
+```
+before: marker before printf reached, marker after printf MISSING  (hang)
+after : marker before printf reached, marker after printf reached
+```
+
+`biosReadKeyRaw()` was also measured directly at a reached point and returned
+`0x1E41` ('A', scan 0x1E), so the INT 16h stub and AUTOTYPE delivery both work.
+
+Remaining puzzle: the marker placed immediately **after the prompt's** `printf(...)`
+inside `init_base` still does not fire even though the identical early `printf` does, so
+something about that call site (it follows `clrscr()` in the prompt loop) still blocks.
+
+  grep_checks 51,043; build 64/64 clean; LINK ERRORS 0
+  compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13

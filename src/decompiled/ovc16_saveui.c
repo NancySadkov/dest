@@ -827,7 +827,7 @@ void __cdecl16far saveui_writeSavesList(far_t entries,uint count)
   path = ovr_fmVsprintf("%ssaves.txt",&GWorkDir);
   handle = ovr_creat_wait_unlock_and_disk(path,in_DX);
   if (-1 < handle) {
-    _sprintf((char *)CONCAT22(_SS,&msg),"%u");
+    sprintf((char *)CONCAT22(_SS,&msg),"%u");
     saveui_writeLine(handle,(char *)&msg,_SS);
     for (uVar2 = 0; uVar2 < count; uVar2 = uVar2 + 1) {
       puVar1 = (uint16_t *)(entries.ofs + uVar2 * 4);

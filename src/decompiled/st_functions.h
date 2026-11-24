@@ -164,7 +164,7 @@ void __cdecl16far fputchar(uint16_t c);
 uint16_t __cdecl16near __fputn(far_t stream,uint16_t count,far_t buf);
 uint16_t __cdecl16far setvbuf(FILE *stream,uint8_t *bufOfs,uint mode,uint16_t size);
 uint16_t __cdecl16near sprintf_strputn(char *dest,char *src,uint16_t n);
-void __cdecl16far _sprintf(char *buf,char *fmt,...);
+void __cdecl16far sprintf(char *buf,char *fmt,...);
 int16_t __cdecl16far vsprintf(char *buf,char *fmt,uint16_t ap);
 char * __cdecl16far strcat(char *dst,char *src);
 int __cdecl16far strcmp(char *a,char *b);

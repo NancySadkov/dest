@@ -1786,7 +1786,7 @@ extern uint16_t __setargv_SavedDI;
 extern undefined _fputc_cr;
 extern uint16_t _stdinStarted;
 extern uint16_t _stdoutStarted;
-extern uint16_t _realcvt;
+extern uint16_t realcvtReserved;
 extern uint16_t crtInitReserved[3];
 extern boinit_t InitStart[4];
 extern boinit_t InitEnd;

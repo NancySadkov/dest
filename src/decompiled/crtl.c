@@ -2929,6 +2929,16 @@ L__crtinit_159A:
 
 /* WARNING: Unknown calling convention */
 
+/* CM.LIB's VPRINTER (pulled in by printf) refers to __REALCVT with a NEAR fixup.
+   The emulator library defines it in a segment too far away, which is a "fixup
+   overflow"; defining it here, in the same resident code segment as the library's
+   printf machinery, keeps the fixup in range.  The game's printf calls use %s, %c
+   and %d only, so the floating-point conversion is never entered. */
+void _REALCVT(void)
+{
+}
+
+
 void _FakRealCvt(void)
 
 {
@@ -4128,7 +4138,7 @@ void * __cdecl16far __fmovmem(char *src,char *dst,word count)
 
 /* 1000:2747 */
 
-void __cdecl16far printf(char *fmt,...)
+void __cdecl16far st_printf(char *fmt,...)
 
 {
   __vprinter();
@@ -4308,7 +4318,7 @@ uint16_t __cdecl16far setvbuf(FILE *stream, uint8_t *bufOfs, uint mode,
 
 /* 1000:2c3f */
 
-uint16_t __cdecl16near sprintf_strputn(char *dest,char *src,uint16_t n)
+uint16_t __cdecl16near sst_printf_strputn(char *dest,char *src,uint16_t n)
 
 {
   uint16_t uVar1;
@@ -4325,7 +4335,7 @@ uint16_t __cdecl16near sprintf_strputn(char *dest,char *src,uint16_t n)
 
 /* 1000:2c7f */
 
-void __cdecl16far _sprintf(char *buf,char *fmt,...)
+void __cdecl16far _sst_printf(char *buf,char *fmt,...)
 
 {
   *buf = '\0';
@@ -4337,7 +4347,7 @@ void __cdecl16far _sprintf(char *buf,char *fmt,...)
 
 /* 1000:2ca1 */
 
-int16_t __cdecl16far vsprintf(char *buf,char *fmt,uint16_t ap)
+int16_t __cdecl16far st_vsst_printf(char *buf,char *fmt,uint16_t ap)
 
 {
   char **ppcVar1;
