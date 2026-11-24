@@ -2107,3 +2107,41 @@ stub; if the stub fires, the game reached the save point and the difference is i
 what it wrote; if it does not fire, the game is stuck earlier and the k-bisection of
 `init_game` continues - now knowable because the original's behaviour is the
 reference.
+
+## Reachability with the corrected milestone: the stop is inside `main`
+
+`tmp/reach.py <symbol>` patches a symbol's entry in a run copy with
+`mov ax,4c21h / int 21h` and reports whether the run reaches it (the harness then
+sees `DONE.FLG`).  Results on the current build:
+
+| symbol | address | reached |
+|---|---|---|
+| `_MAIN` | 0650:0002 | **yes** |
+| `_OVR_INIT_GAME` (thunk) | 06DD:020F | no |
+| `_INIT_GAME` | 141B:0579 | no |
+| `_RUN_DEMO` | 1564:0A32 | no |
+| original `game/STRONG.EXE` (no patch) | - | writes `STRONG.SAV` in 60 s |
+
+So `main` is entered and everything after it - the overlay thunk for `init_game`,
+`init_game` itself, `run_demo` - is never reached.  The stop is therefore in
+`main`'s own prologue, before its `ovr_init_game()` call, in one of the four
+statements that touch `envp`:
+
+```c
+uVar6 = (uint16_t)((ulong)envp >> 0x10);
+psVar5 = (str_t *)envp;
+GGameExe.seg = psVar5->seg;
+GGameExe.ofs = (uint16_t)envp->ptr;
+if ((int)argv < 2) { GExeArg.seg = 0x2410; GExeArg.ofs = 0x94; }
+else { GExeArg.seg = psVar5[1].seg; GExeArg.ofs = (uint16_t)(psVar5 + 1)->ptr; }
+```
+
+Note `(int)argv < 2` compares a **pointer** to 2 where the original compares
+`argc`, and `(ulong)envp >> 0x10` narrows a far pointer to get a segment - both are
+shapes Ghidra produced for what was probably `argc/argv/envp` in a different
+register assignment.  The original's `main` reads its arguments from five words on
+the stack (`PUSH [0x73] ... [0x6b]`), so the C signature/parameter mapping is worth
+re-deriving from the original's `main` prologue at `1301:000c`.
+
+Next: dump `1301:000c` (the original main) and our `_MAIN` (0650:0002) and compare
+their prologues; the first divergent statement is the stop.
