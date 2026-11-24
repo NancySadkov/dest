@@ -2072,3 +2072,38 @@ symbol in `REBUILT.MAP` (segment 0652, offset 0004).  If the far pointer's segme
 word is a literal rather than a relocation, the call goes to the right offset in
 the *wrong* segment - the same defect class as the `0x195d` literals - and that
 single check decides the fix.
+
+## The acceptance test was wrong: the original never returns to DOS either
+
+Running the **original** `game/STRONG.EXE` through the same DOSBox harness settles
+it:
+
+```
+original returned to DOS : False
+original files           : GO.BAT STRONG.DAT STRONG.EXE STRONG.FLI STRONG.SAV
+```
+
+The original does not hand control back to DOS (it is a game), but it *does* write
+**`STRONG.SAV`** within 60 s.  So `DONE.FLG` - which every probe in this document
+has been reading for several sessions - was never a valid milestone: both the
+original and the rebuild "fail" it, and the k=-2 success was an artefact of forcing
+an early `int 21h`.
+
+The real milestone for step 6 is:
+
+1. our rebuild produces `STRONG.SAV`, and
+2. that file matches one produced by `game/STRONG.EXE`.
+
+The original's file has been captured as `tmp/orig_STRONG.SAV` for the comparison.
+
+### Consequence
+
+`main`'s return path is *not* the blocker - the original never reaches it either in
+a normal session.  The blocker is that our rebuild produces no `STRONG.SAV`, i.e.it does not get as far as the original does (init/loop), and the bisection of
+`init_game` should be redone with this milestone, not with `DONE.FLG`.
+
+Cheapest probe: patch the entry of `ovr_save_loadGameFile` with the existing dump
+stub; if the stub fires, the game reached the save point and the difference is in
+what it wrote; if it does not fire, the game is stuck earlier and the k-bisection of
+`init_game` continues - now knowable because the original's behaviour is the
+reference.
