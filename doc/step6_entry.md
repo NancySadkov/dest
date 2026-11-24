@@ -2562,3 +2562,29 @@ base, break level and the memory shrink).  A wrong PSP would make DOS resolve th
 batch's working directory and the program's relative path differently, which fits
 every observation: the call "succeeds" (DOS is given a path in a segment that is not
 the current directory) yet nothing lands where we look.
+
+## PSP capture, corrected measurement
+
+There is no duplicate symbol: the MAP has a single `_PSP` at `A566:0090`, written
+only by `crtl.c` (`psp = _ES;  ...  _psp = psp;`).
+
+The first capture attempt was invalid: it stored `GPspSig*` **before**
+`asm { mov ax, seg DosVersion; mov ds, ax }`, so with `DS = PSP` those writes landed
+in the PSP segment instead of DGROUP and the later read saw zeros.  Repeating the
+capture *after* the DS switch still reports a non-`CD 20` word at `PSP:0000`, and an
+earlier probe (measuring `_ES` at `init_game`) showed that by then `ES` *does* point
+at a `CD 20` area.
+
+So the two measurements disagree only because they are taken at different times:
+
+| measurement | result |
+|---|---|
+| `_ES` at `init_game` (early probe) | points at `CD 20` |
+| `psp` captured at `startx` entry, read after DS switch | not `CD 20` |
+| header entry | `01B2:0034` = `_STARTX` (correct) |
+
+Next: encode the captured value in an exit code - `exit((_psp >> 8) & 0xFF)` and
+`exit(_psp & 0xFF)` in two runs - so the actual segment is known, then read the bytes
+at that segment and compare with the PSP DOS reports (INT 21h AH=51h).  That will
+show whether `_ES` at entry is stale (e.g. the loader's own segment) or whether the
+capture is overwritten before `init_game`.
