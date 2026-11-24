@@ -355,7 +355,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
 {
   int *piVar1;
   uint uVar2;
-  uint uVar3;
+  uint dy;
   char *msg;
   uint16_t uVar4;
   uint uVar5;
@@ -394,12 +394,12 @@ void __cdecl16far ovc25_spyReportNotice(void)
           uVar2 = (GLeaderSheets[leaderIdx])->x -
                   *(int *)((entity_t *)iVar7 + idx);
           uVar5 = (int)uVar2 >> 0xf;
-          uVar3 = (GLeaderSheets[leaderIdx])->y -
+          dy = (GLeaderSheets[leaderIdx])->y -
                   ((entity_t *)iVar7)[idx].base.y;
-          uVar6 = (int)uVar3 >> 0xf;
+          uVar6 = (int)dy >> 0xf;
           piVar1 = (int *)((int)*(uint32_t *)(leaderIdx << 2) + 0x45);
           *piVar1 = *piVar1 + 1;
-          if ((int)((uVar2 ^ uVar5) - uVar5) / 2 + ((uVar3 ^ uVar6) - uVar6) < 10) {
+          if ((int)((uVar2 ^ uVar5) - uVar5) / 2 + ((dy ^ uVar6) - uVar6) < 10) {
             piVar1 = (int *)((int)*(uint32_t *)(leaderIdx << 2) + 0x41);
             *piVar1 = *piVar1 + 1;
             uVar8 = (uint16_t)((ulong)Entities >> 0x10);
@@ -417,10 +417,10 @@ void __cdecl16far ovc25_spyReportNotice(void)
           uVar2 = (GLeaderSheets[leaderIdx])->x -
                   *(int *)((entity_t *)iVar7 + idx);
           uVar5 = (int)uVar2 >> 0xf;
-          uVar3 = (GLeaderSheets[leaderIdx])->y -
+          dy = (GLeaderSheets[leaderIdx])->y -
                   ((entity_t *)iVar7)[idx].base.y;
-          uVar6 = (int)uVar3 >> 0xf;
-          uVar2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((uVar3 ^ uVar6) - uVar6);
+          uVar6 = (int)dy >> 0xf;
+          uVar2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((dy ^ uVar6) - uVar6);
           if (uVar2 < enemyDist) {
             enemyIdx = idx;
             enemyDist = uVar2;
@@ -441,9 +441,9 @@ void __cdecl16far ovc25_spyReportNotice(void)
              (uVar2 = (GLeaderSheets[leaderIdx])->x -
                       (GLeaderSheets[idx])->x,
              uVar5 = (int)uVar2 >> 0xf,
-             uVar3 = (GLeaderSheets[leaderIdx])->y -
-                     (GLeaderSheets[idx])->y, uVar6 = (int)uVar3 >> 0xf
-             , uVar2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((uVar3 ^ uVar6) - uVar6),
+             dy = (GLeaderSheets[leaderIdx])->y -
+                     (GLeaderSheets[idx])->y, uVar6 = (int)dy >> 0xf
+             , uVar2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((dy ^ uVar6) - uVar6),
              uVar2 < otherDist)) {
             otherIdx = (undefined1)idx;
             otherDist = uVar2;
@@ -466,10 +466,10 @@ void __cdecl16far ovc25_spyReportNotice(void)
         uVar2 = (GLeaderSheets[leaderIdx])->x -
                 ((entity_t *)Entities)[enemyIdx].base.x;
         uVar5 = (int)uVar2 >> 0xf;
-        uVar3 = (GLeaderSheets[leaderIdx])->y -
+        dy = (GLeaderSheets[leaderIdx])->y -
                 ((entity_t *)Entities)[enemyIdx].base.y;
-        uVar6 = (int)uVar3 >> 0xf;
-        enemyDist2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((uVar3 ^ uVar6) - uVar6);
+        uVar6 = (int)dy >> 0xf;
+        enemyDist2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((dy ^ uVar6) - uVar6);
       }
       if (((GLeaderSheets[leaderIdx])->enemiesNear == 0) || (9 < enemyDist2)) {
         if ((*(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x49) == -1) ||

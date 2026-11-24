@@ -1105,7 +1105,7 @@ void ovc27_textTakesHalfDamage4(void)
   int unaff_DI;
   undefined1 uVar10;
   undefined1 uVar11;
-  undefined1 uVar12;
+  undefined1 savedSeg;
   
   if (((agnt_t *)((unaff_BP + 6)))->variant == '\x04') {
     pan = ovr_audio_panFromX((agnt_t *)*(uint16_t *)(unaff_BP + -10),
@@ -1188,7 +1188,7 @@ void ovc27_textTakesHalfDamage4(void)
                                   CONCAT12((char)*(uint16_t *)(unaff_BP + -8),
                                            *(uint16_t *)(unaff_BP + -10))),3);
       if ((char)iVar5 == '\0') {
-        uVar12 = (undefined1)GSavedBlitSeg;
+        savedSeg = (undefined1)GSavedBlitSeg;
         pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + 6),
                                      (char *)CONCAT13((char)((uint)(unaff_BP + -0x122) >> 8),
                                                       CONCAT12((char)(unaff_BP + -0x122),
@@ -1198,7 +1198,7 @@ void ovc27_textTakesHalfDamage4(void)
         uVar10 = SUB21(pcVar8,0);
         pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                       (char *)*(uint16_t *)(unaff_BP + -8)),0);
-        puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,uVar12,0,0,0);
+        puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,savedSeg,0,0,0);
         pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c90,_SS),
                                (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
         ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
@@ -1234,11 +1234,11 @@ void ovc27_textTakesHalfDamage4(void)
                                                       CONCAT12((char)(unaff_BP + -0x122),
                                                                *(uint16_t *)(unaff_BP + 8))),
                                      (char)*(uint16_t *)(unaff_BP + 8));
-        uVar12 = (undefined1)in_DX;
+        savedSeg = (undefined1)in_DX;
         uVar11 = SUB21(pcVar8,0);
         pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                       (char *)*(uint16_t *)(unaff_BP + -8)),0);
-        puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar11,uVar12,uVar10,0,0,0);
+        puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar11,savedSeg,uVar10,0,0,0);
         pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5ca2,_SS),
                                (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
         ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
@@ -1271,11 +1271,11 @@ void ovc27_textTakesHalfDamage4(void)
                                                     CONCAT12((char)(unaff_BP + -0x122),
                                                              *(uint16_t *)(unaff_BP + 8))),
                                    (char)*(uint16_t *)(unaff_BP + 8));
-      uVar12 = (undefined1)in_DX;
+      savedSeg = (undefined1)in_DX;
       uVar11 = SUB21(pcVar8,0);
       pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                     (char *)*(uint16_t *)(unaff_BP + -8)),0);
-      puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar11,uVar12,uVar10,0,0,0);
+      puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar11,savedSeg,uVar10,0,0,0);
       pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5cbc,_SS),
                              (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
       ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
@@ -1304,7 +1304,7 @@ void ovc27_textTakesHalfDamage4(void)
                                 CONCAT12((char)*(uint16_t *)(unaff_BP + -8),
                                          *(uint16_t *)(unaff_BP + -10))),3);
     if ((char)iVar5 == '\0') {
-      uVar12 = (undefined1)GSavedBlitSeg;
+      savedSeg = (undefined1)GSavedBlitSeg;
       pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + 6),
                                    (char *)CONCAT13((char)((uint)(unaff_BP + -0x122) >> 8),
                                                     CONCAT12((char)(unaff_BP + -0x122),
@@ -1314,7 +1314,7 @@ void ovc27_textTakesHalfDamage4(void)
       uVar10 = SUB21(pcVar8,0);
       pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                     (char *)*(uint16_t *)(unaff_BP + -8)),0);
-      puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,uVar12,0,0,0);
+      puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,savedSeg,0,0,0);
       pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c90,_SS),
                              (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
       ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
@@ -1449,7 +1449,7 @@ void ovc27_textTakesHalfDamage4(void)
                                     CONCAT12((char)*(uint16_t *)(unaff_BP + -8),
                                              *(uint16_t *)(unaff_BP + -10))),3),
        (uVar7 & 0xff) == 0)) {
-      uVar12 = (undefined1)GSavedBlitSeg;
+      savedSeg = (undefined1)GSavedBlitSeg;
       pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + 6),
                                    (char *)CONCAT13((char)((uint)(unaff_BP + -0x122) >> 8),
                                                     CONCAT12((char)(unaff_BP + -0x122),
@@ -1459,7 +1459,7 @@ void ovc27_textTakesHalfDamage4(void)
       uVar10 = SUB21(pcVar8,0);
       pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                     (char *)*(uint16_t *)(unaff_BP + -8)),0);
-      puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,uVar12,0,0,0);
+      puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,savedSeg,0,0,0);
       pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c2f,_SS),
                              (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
       ovr_uiNotify(pcVar8,in_DX,(char)in_DX);

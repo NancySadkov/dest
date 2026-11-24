@@ -314,7 +314,7 @@ void __cdecl16far uiMenuSub(char *title,far_t items,uint16_t nitems,uint16_t def
   byte bVar1;
   uint16_t uVar2;
   uint16_t uVar3;
-  uint uVar4;
+  uint readLen;
   uint16_t *puVar5;
   char *in_stack_00000004;
   undefined1 uVar6;
@@ -345,9 +345,9 @@ void __cdecl16far uiMenuSub(char *title,far_t items,uint16_t nitems,uint16_t def
   for (readed = 0x0; (int)(uint)readed < (int)sz; readed = readed + 0x1) {
     puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + (uint)readed * 4);
     uVar3 = *puVar5;
-    uVar4 = (uint)readed;
-    auStack_26[uVar4 * 2] = puVar5[1];
-    *(uint16_t *)(&dest + uVar4 * 4) = uVar3;
+    readLen = (uint)readed;
+    auStack_26[readLen * 2] = puVar5[1];
+    *(uint16_t *)(&dest + readLen * 4) = uVar3;
   }
   if (8 < (int)items.seg) {
     uStack_a = 0x2410;
@@ -421,9 +421,9 @@ L_uiMenuSub_0B46:
                   readed = readed + 0x1) {
                 puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
                 uVar3 = *puVar5;
-                uVar4 = (uint)readed;
-                auStack_26[uVar4 * 2] = puVar5[1];
-                *(uint16_t *)(&dest + uVar4 * 4) = uVar3;
+                readLen = (uint)readed;
+                auStack_26[readLen * 2] = puVar5[1];
+                *(uint16_t *)(&dest + readLen * 4) = uVar3;
               }
               saveui_blitPanel();
               if (in_stack_00000004 != (char *)0x0 || (char *)title != (char *)0x0) {
@@ -456,9 +456,9 @@ L_uiMenuSub_0B46:
             readed = readed + 0x1) {
           puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
           uVar3 = *puVar5;
-          uVar4 = (uint)readed;
-          auStack_26[uVar4 * 2] = puVar5[1];
-          *(uint16_t *)(&dest + uVar4 * 4) = uVar3;
+          readLen = (uint)readed;
+          auStack_26[readLen * 2] = puVar5[1];
+          *(uint16_t *)(&dest + readLen * 4) = uVar3;
         }
         saveui_blitPanel();
         if (in_stack_00000004 != (char *)0x0 || (char *)title != (char *)0x0) {
@@ -509,9 +509,9 @@ L_uiMenuSub_08AD:
           readed = readed + 0x1) {
         puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
         uVar3 = *puVar5;
-        uVar4 = (uint)readed;
-        auStack_26[uVar4 * 2] = puVar5[1];
-        *(uint16_t *)(&dest + uVar4 * 4) = uVar3;
+        readLen = (uint)readed;
+        auStack_26[readLen * 2] = puVar5[1];
+        *(uint16_t *)(&dest + readLen * 4) = uVar3;
       }
       saveui_blitPanel();
       if (in_stack_00000004 != (char *)0x0 || (char *)title != (char *)0x0) {
