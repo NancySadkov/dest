@@ -86,8 +86,8 @@ bool __cdecl16far write_game_cfg(char sfx,char mus,char irq)
   size_t sVar3;
   uint unaff_SI;
   
-  mkdir((char *)0x5e30);
-  iVar1 = creat_wait_unlock((char *)((ulong)unaff_SI << 0x10));
+  mkdir("strong.sav");
+  iVar1 = creat_wait_unlock("strong.sav\\game.cfg");
   if (-1 < iVar1) {
     cRam00005e2c = sfx;
     sVar2 = strlen((char *)0x5e2c);
