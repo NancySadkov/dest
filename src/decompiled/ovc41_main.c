@@ -1138,7 +1138,6 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
     do {
       if (((cVar4 == '\0') && (0xf7 < (int)unaff_SI)) &&
          (in_DX = 0x2410, ((unit_t *)GUnits)[(int)unaff_SI].level < 8)) {
-        uVar13 = 0x195d;
         if ((*(uint *)((uVar11 >> 8) * 0x27 + 0x121) & 0x80) == 0) {
           ovc39_loadArchiveEntry(8);
         }
@@ -1149,6 +1148,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
         uStack_12 = 0x938f;
         uStack_10 = uVar16;
         pcVar6 = ovr_stsprintf(acStack_2cc);
+        asm { mov uVar13,dx };
         uVar10 = (undefined1)uVar13;
         uVar23 = (undefined1)((uint)uVar13 >> 8);
         pcVar12 = pcVar6;
@@ -1162,12 +1162,13 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
       do {
         bVar19 = (byte)(uVar11 >> 8);
         if (((bVar22 == 1) && ((int)unaff_SI < 0xf8)) &&
-           (in_DX = 0x195d, (BuildingTypes[bVar19].flags2 & 2) != 0)) {
+           ((BuildingTypes[bVar19].flags2 & 2) != 0)) {
           ovc39_loadArchiveEntry(10);
           ovc39_lordOrLady();
           uStack_12 = 0x93f9;
           uStack_10 = uVar16;
           pcVar6 = ovr_stsprintf(acStack_2cc);
+          asm { mov in_DX,dx };
           uVar10 = (undefined1)in_DX;
           uVar23 = (undefined1)((uint)in_DX >> 8);
           pcVar12 = pcVar6;
@@ -1179,12 +1180,13 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
           return pcVar6;
         }
         if (((bVar22 == 2) && ((int)unaff_SI < 0xf8)) &&
-           (in_DX = 0x195d, (BuildingTypes[bVar19].flags2 & 0x20) != 0)) {
+           ((BuildingTypes[bVar19].flags2 & 0x20) != 0)) {
           ovc39_loadArchiveEntry(0xb);
           ovc39_lordOrLady();
           uStack_12 = 0x9463;
           uStack_10 = uVar16;
           pcVar6 = ovr_stsprintf(acStack_2cc);
+          asm { mov in_DX,dx };
           uVar10 = (undefined1)in_DX;
           uVar23 = (undefined1)((uint)in_DX >> 8);
           pcVar12 = pcVar6;
@@ -1220,12 +1222,13 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
           }
         }
         if (((bVar22 == 4) && ((int)unaff_SI < 0xf8)) &&
-           (uVar13 = 0x195d, (BuildingTypes[bVar19].flags2 & 0x400) != 0)) {
+           ((BuildingTypes[bVar19].flags2 & 0x400) != 0)) {
           ovc39_loadArchiveEntry(0xd);
           ovc39_lordOrLady();
           uStack_12 = 0x9533;
           uStack_10 = uVar16;
           pcVar6 = ovr_stsprintf(acStack_2cc);
+          asm { mov uVar13,dx };
           uVar10 = (undefined1)uVar13;
           uVar23 = (undefined1)((uint)uVar13 >> 8);
           pcVar12 = pcVar6;
