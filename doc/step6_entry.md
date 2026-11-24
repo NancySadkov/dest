@@ -2989,3 +2989,35 @@ kind).
 Next: put one marker immediately **before** `SaveVectors()` and one **after** it (the
 latter already exists as A) to confirm, then inspect `SaveVectors()` against the
 original's `1000:017a` and fix its pointer setup.
+
+## Correction: `SaveVectors()` is fine; the stop is after it
+
+The previous bisection (markers A-D all silent) was an artefact of that probe, not of
+the program.  Re-running with a marker immediately **before** and **after**
+`SaveVectors()`:
+
+```
+OUT.TXT: 'E:A:'
+```
+
+Both print, so `SaveVectors()` - the `INT 21h AH=35h/25h` sequence that saves vectors
+0/4/5/6 and installs `ZeroDivision` - completes normally.
+
+The stop is therefore further along `startx`, in the block that follows:
+
+```
+crtl.c:71  pcVar4 = (char *)*(uint32_t *)&_env;      /* environment scan setup */
+crtl.c:76  L_startx_0034:  do { ... } while (...);   /* up to 0x7fff iterations */
+crtl.c:88  _envSize_at_ = ...;
+crtl.c:89  if (__stklen < 0x200) ...
+crtl.c:106 _heapbase.seg / _brklvl.seg
+crtl.c:113 asm { mov ah,0x4a; int 21h }               /* shrink */
+crtl.c:125 asm { ... mov ss,dx ; mov sp,di ... }      /* stack switch */
+```
+
+The environment scan is a `do/while` bounded by `uVar8 = 0x7fff`; if `_env` or the
+environment block is not what the code expects, it burns the loop and then hits
+`L_startx_007B: _abort()` - a clean exit that looks exactly like "the program stopped".
+
+Next: markers after the scan (line 88) and after the heap/shrink/stack block
+(line 136).  Those three points separate a hang from an `_abort()`.
