@@ -3097,3 +3097,31 @@ Next: dump `_setupio` from the original C0 (`1000:0xxx`, near `SaveVectors` at
 `1000:017a`) and rebuild the stream-table arithmetic from it (`_streams`, `_openfd`,
 the 0x14 stride and the token base), then re-run the markers - IO: and CI: should both
 print, and `main` should follow.
+
+## Linking the stock Turbo C CRT instead of the reconstructed `crtl.c`
+
+Per AGENTS.md the C runtime is supplied by Turbo C (it matches the original), so the
+`startx()`/`_setupio()`/CRT work in this document is out of scope and was stopped.
+Switching the link to the stock CRT is a single switch - `link_standalone.py
+--without-crtl` drops `CRTL.OBJ` so `C0M.OBJ`'s own `_startup` runs - and it fails on
+exactly two things:
+
+```
+Error: Undefined symbol _LMOD_AT_ in module O21.C
+Error: Fixup overflow at _TEXT:0323, target = __REALCVT
+       in library file d:\lib\cm.lib in module VPRINTER
+```
+
+1. `_LMOD_AT_` (and whatever group of symbols `ovc21_manage.c` takes from the
+   reconstructed startup) must come from the stock CRT or be supplied beside it.
+2. The `__REALCVT` overflow is the known floating-point-emulator issue: `printf %f`
+   pulls in VPRINTER, which needs the emulator library, and our rsp does not link it.
+
+`link_standalone.py` also crashed in its relocation post-processing on that build
+(`struct.error: ushort format requires 0 <= number <= 65535`), so the no-crtl path
+cannot be evaluated until that is guarded.
+
+Next: add the FP emulator library to the no-crtl rsp and supply/relocate the handful of
+symbols the game code takes from the reconstructed startup, then the whole `crtl.c`
+module can be dropped - which is both the correct scope and the shortest path to a
+working program, since the stock CRT's `startx`/`_setupio` are known-good.
