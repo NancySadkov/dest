@@ -1164,7 +1164,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,uint16_t arg3)
   undefined1 fontHi;
   undefined1 uVar22;
   uint8_t uVar23;
-  uint8_t uVar24;
+  uint8_t attr;
   uint16_t uVar25;
   uint16_t uVar26;
   char palbuf [768];
@@ -1486,17 +1486,17 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,uint16_t arg3)
     segHi = (undefined1)(Font02.seg >> 8);
     if (damage == 0) {
       uVar25 = 0xe0;
-      uVar24 = 0xde;
+      attr = 0xde;
       fontOfs = Font02.ofs;
       textPtr = agntGetWeaponName((char *)CONCAT22(CONCAT11(0x24,((agntG_t *)agnt->gdata)->type),
                                                   _SS),0x0,(bool)field_index,uVar23,
                                  CONCAT22(Font02.ofs,cmap.ofs));
-      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),uVar24,uVar5,
-                    uVar24,uVar25);
+      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),attr,uVar5,
+                    attr,uVar25);
     }
     else if (damage < '\0') {
       uVar25 = 0xe0;
-      uVar24 = 0xde;
+      attr = 0xde;
       fontOfs = Font02.ofs;
       textPtr = agntGetWeaponName((char *)CONCAT22(CONCAT11(0x24,((agntG_t *)agnt->gdata)->type),
                                                   _SS),damage,(bool)field_index,uVar23,
@@ -1505,12 +1505,12 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,uint16_t arg3)
                              (char *)CONCAT13((char)((uint)textPtr >> 8),
                                               CONCAT12((char)textPtr,0x2410)),0x65,0x10,(char)textPtr,
                              nameOfs);
-      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),uVar24,uVar5,
-                    uVar24,uVar25);
+      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),attr,uVar5,
+                    attr,uVar25);
     }
     else {
       uVar25 = 0xe0;
-      uVar24 = 0xde;
+      attr = 0xde;
       fontOfs = Font02.ofs;
       textPtr = agntGetWeaponName((char *)CONCAT22(CONCAT11(0x24,((agntG_t *)agnt->gdata)->type),
                                                   _SS),damage,(bool)field_index,uVar23,
@@ -1518,8 +1518,8 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,uint16_t arg3)
       textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT22(0x6370,_SS),
                              (char *)CONCAT13(damage >> 7,CONCAT12(damage,0x2410)),0x10,damage,
                              (char)textPtr,nameOfs);
-      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),uVar24,uVar5,
-                    uVar24,uVar25);
+      ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),attr,uVar5,
+                    attr,uVar25);
     }
   }
   TextBlitY = 0x54;
