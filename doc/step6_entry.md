@@ -2270,3 +2270,41 @@ Next check: print/compare `_DS` inside `init_game` (e.g. `if (_DS != SEG_OF(GWor
 and, if it differs, set `DS` to DGROUP before the file calls - a prior recovered
 function that does far-data access (`_SS`/`_DS` casts appear throughout the export)
 may be leaving DS changed.
+
+## The startup probes are invalid now that the program exits by itself
+
+`tmp/reach.py` works by patching a symbol's entry with `mov ax,4c21h / int 21h` and
+treating "`DONE.FLG` was written" as proof the symbol was reached.  That was sound
+while the rebuild hung (the only way to get `DONE.FLG` was to reach the patched
+entry).  With the resident link the program returns to DOS on its own, so
+`DONE.FLG` appears **whether or not** the patched entry is executed - every reach
+result since then, including "`_INIT_GAME` not reached", is void.
+
+The same caveat now applies to the hang probes:
+
+```
+probe_hang.py     while (1) {} at init_game's first line   -> program still returned
+                 and the built image really contains it:  _INIT_GAME 105C:057D
+                                                          55 8b ec 83 ec 04 eb fe
+```
+
+`eb fe` is `jmp $`, so the loop survived the optimiser, yet the program still
+returned to DOS.  Combined with `startx` containing
+
+```
+startx+0369  9a 0e 00 4c 06   lcall 064C:000E   (= _MAIN)
+```
+
+the two facts cannot both be true unless the run used a different image than the
+built one, or `main` is entered at a different address than `_MAIN`.
+
+### Consequences
+
+* re-do reachability with a marker that cannot be confused with a normal exit -
+  for example exit with a distinct code and have `GO.BAT` branch on
+  `if errorlevel`, or write a byte into video memory;
+* check that `tmp/runcase.py` really runs the freshly linked
+  `tmp/buildsrc/REBUILT.EXE` (the probe scripts link and then run, so this is the
+  first thing to verify);
+* only then re-test whether `init_game` runs, and only after that revisit the
+  `mkdir`/`creat` failures - they were measured through the same probe harness.
