@@ -2648,3 +2648,43 @@ vectors 0/4/5/6, or ES/DS assumptions inside the library's DOS entry).  A minima
 test is a raw `INT 21h AH=09h` (print string) with a DGROUP string - if that prints
 and `AH=40h` on handle 1 does not, the handle path is the problem; if neither prints,
 the interrupt path is.
+
+## Control test: the harness captures DOS output; our EXE produces none
+
+A hand-assembled 22-byte `.COM` in the same mount and the same `GO.BAT` shape:
+
+```
+BA 0C 01   mov dx,0x010C     ; -> string
+B4 09      mov ah,9
+CD 21      int 21h
+B8 00 4C   mov ax,4C00h
+CD 21      int 21h
+HELLO$     ...
+```
+
+prints `HELLO` into `OUT.TXT`.  So the emulator, the mount and the redirect are all
+fine (`tmp/comtest.py`).
+
+The identical call - `INT 21h AH=09h` on a DGROUP `$`-string - produces **nothing**
+when issued from our EXE, at `init_game`'s first line *and* at `main`'s first line.
+Since the harness demonstrably captures the same interrupt from a `.COM`, the
+conclusion is that our program does not reach those points at all: it stops inside
+`startx`.
+
+That also explains every earlier "it runs" result: `DONE.FLG` is written by the batch
+whenever control returns to the shell, **including after a crash**, and the
+`if errorlevel` probes can then observe a stale code.  The only trustworthy signals
+are side effects a program must actively produce - a printed string, a created file,
+a changed screen.
+
+### Next step
+
+Put the `INT 21h AH=09h` probe in `startx` immediately after
+`asm { mov ax, seg DosVersion; mov ds, ax }` (with a file-scope
+`char st_sx[] = "STARTX$";` so the operand is a plain symbol):
+
+* if `STARTX` appears, `startx` reaches the DS switch and DOS works from our process -
+  narrow forward from there;
+* if it does not, the program dies at or before that point, and the entry patch
+  (`_STARTX 01B2:0034`), the linked startup objects or `startx`'s first pages are the
+  place to look.
