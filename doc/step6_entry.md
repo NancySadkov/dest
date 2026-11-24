@@ -2852,3 +2852,37 @@ The image has to be made smaller at the source/link level:
 
 Either way the acceptance test is unchanged and unambiguous: the `ENTRY`/`MINIMAL$`
 print from an entry stub, or `strong.sav\` appearing.
+
+## Proof of the size root cause: exclude two modules and the program actually runs
+
+Linking without `o45.obj` and `o49.obj` (`EXCLUDE_OBJS`):
+
+```
+file          645,278
+image         606,366
+needed RAM    608,734      (limit 655,360 - margin 46,626)   ✓ fits
+```
+
+and the behaviour changes in exactly the way the diagnosis predicts:
+
+| build | harness result |
+|---|---|
+| resident, all modules (needed 710,908) | batch completes: `DONE.FLG` written, nothing created |
+| resident, minus o45/o49 (needed 608,734) | **batch never completes**: no `DONE.FLG`, no `DIR.TXT` |
+
+A program that DOS refuses to load returns immediately to the shell; a program that
+loads runs.  The second build is the first one in this whole investigation that
+actually executes, and it now hangs (or waits) instead of being rejected - so
+"over 640 KiB" was indeed the reason nothing ever ran.
+
+`strong.sav` is still not produced, which is expected: TLINK reported the excluded
+modules' entry points as **undefined** and resolved them to address 0, so the first
+call into one of them crashes.  The next step is therefore to give those symbols real
+return-0 stubs instead of excluding them silently:
+
+* the linker prints the exact list (`_OVC45_COMPUTE7`, `_OVC49_BODY1`, ... in
+  `OVR.ASM`), and `scripts/model/unresolved.tsv` already tracks this class;
+* generating a C file with those names as empty bodies keeps the image small and
+  makes the calls harmless, after which the startup path can be walked forward with
+  the `INT 21h AH=09h` print probe (which is now trustworthy because the program
+  really loads).
