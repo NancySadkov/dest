@@ -79,6 +79,32 @@ state = [l.rstrip("\n").split("\t") for l in io.open(STATE, encoding="latin-1")]
 ours_map, orig_map = load_map(), load_orig()
 u_dg = ours_map["GSPEMPTY"][0]
 
+
+def key(name):
+    """Same three-tier identity compare_runtime.py uses."""
+    k = name.upper().lstrip("_")
+    m = re.search(r"_2410_([0-9A-F]{4})$", k)
+    if m:
+        return "OFS_" + m.group(1)
+    return re.sub(r"\[[0-9]+\]$", "", k)
+
+
+_by_exact, _by_loose = {}, {}
+for _nm, _so in ours_map.items():
+    _by_exact.setdefault(key(_nm), _so)
+    _by_loose.setdefault(re.sub(r"_[0-9]$", "", key(_nm)), _so)
+
+
+def resolve(name):
+    k = name.upper().lstrip("_")
+    m = re.search(r"_2410_([0-9A-F]{4})$", k)
+    if m and ("OFS_" + m.group(1)) in _by_exact:
+        return _by_exact["OFS_" + m.group(1)]
+    if key(name) in _by_exact:
+        return _by_exact[key(name)]
+    return _by_loose.get(re.sub(r"_[0-9]$", "", key(name)))
+
+
 ob, oblocks = load_blocks("orig", DG_ORIG)
 ub, ublocks = load_blocks("ours", u_dg)
 if ob is None or ub is None:
@@ -91,7 +117,7 @@ print("rebuilt  dump %d bytes over %d segments" % (len(ub), len(ublocks)))
 seg_map = {}
 for row in state:
     o = int(row[0], 16)
-    hit = ours_map.get(row[3].upper())
+    hit = resolve(row[3])
     if hit:
         seg_map.setdefault(o, hit[0])
 seg_map.setdefault(DG_ORIG, u_dg)
@@ -102,7 +128,7 @@ checked = 0
 for row in state:
     oseg, oofs, size, name, decl, kind = (int(row[0], 16), int(row[1], 16),
                                          int(row[2]), row[3], row[4], row[5])
-    hit = ours_map.get(name.upper())
+    hit = resolve(name)
     if hit is None:
         missing += 1
         continue
