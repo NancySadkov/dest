@@ -2886,3 +2886,40 @@ return-0 stubs instead of excluding them silently:
   makes the calls harmless, after which the startup path can be walked forward with
   the `INT 21h AH=09h` print probe (which is now trustworthy because the program
   really loads).
+
+## The program loads and runs: `ENTRY` prints, `startx` starts
+
+With the image at 516,016 bytes (needed 518,368), the self-contained assembly entry
+stub now prints:
+
+```
+ST_ENTRY at 06C6:091B
+OUT.TXT: 'ENTRY'      entry stub ran: True
+```
+
+So the rebuilt EXE loads, executes its entry point, and can write to the redirected
+handle - the first time any of that has been demonstrated.
+
+The `startx` marker still prints nothing, and the entry bytes are confirmed correct
+in the image:
+
+```
+entry 01B2:0041 -> 55 8b ec 83 ec 1a 56 57 b8 94 00 40 89 46 f4 b4 ...
+                   push bp / mov bp,sp / sub sp,0x1a / push si / push di / ...
+```
+
+That is `startx`'s own prologue, so the entry is right.  The most likely reason the
+marker fails is the marker itself: its asm block does
+
+```
+asm { lea dx, st_s1 ; mov ah,9 ; int 21h }
+```
+
+with `DS` loaded from `seg DosVersion`.  If `DosVersion` is not in DGROUP, `DS` is not
+DGROUP and the string address is wrong - the print then emits garbage rather than
+`S1:`.  A stack/segment patch (SS, SP, minalloc=0x1000) changed nothing, which is
+consistent with a marker bug rather than a program fault.
+
+Next: repeat the marker with the string in the **code** segment (`push cs / pop ds`
+plus an asm-level `db 'S1:$'`), the same technique the ENTRY stub proved works.  Only
+once that prints can the walk continue into `init_game`.
