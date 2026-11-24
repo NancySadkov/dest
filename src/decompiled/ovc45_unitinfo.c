@@ -3123,7 +3123,6 @@ code_r0x00074dd0:
   pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_x00164,70,298,
                             180,0,0xd7,0x46,0x2a,0);
   BldGfxRuin[0x18b].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-  uVar14 = 0x195d;
   BldGfxRuin[0x18b].seg = stshSegTmp;
   ovr_stgFreeTmp(stgTmp,0);
 L_init_assets_4EA5:
@@ -3164,6 +3163,7 @@ L_init_assets_4EA5:
   }
   else {
     stgTmp = ovr_grabLbmTR(525);
+    asm { mov uVar14,dx };
     (*(uint8_t *)((uint8_t *)&(pixels_x00165.seg))) = 0x6c;
     pixels_x00165.ofs = (stgTmp->aptr).seg;
     (*(uint8_t *)((uint8_t *)&(pixels_x00165.seg) + 1)) = 0;
