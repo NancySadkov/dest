@@ -2234,3 +2234,39 @@ grep_checks     51,212               (unchanged)
 Remaining step-6 work is behavioural: the game now starts and exits at once instead
 of hanging, so the task is to get `run_demo` as far as the save point and compare
 its `STRONG.SAV` with `tmp/orig_STRONG.SAV`.
+
+## File APIs fail because DS:DX is not the DGROUP literal
+
+The restored literals in `init_strong_sav` and `write_game_cfg` were correct but did
+not create the folder, so the failure was probed directly:
+
+| probe at the top of `init_game` | result |
+|---|---|
+| `mkdir("probe_dir")` | no directory |
+| `creat("probe.txt",0)` + `write` + `close` | no file |
+| `if (mkdir("probe_dir") == 0) while (1) ;` | program still returns to DOS, i.e. **mkdir returned an error** |
+
+The library routine itself is fine - `_MKDIR` at `0000:05BD` is
+
+```
+55 8b ec            push bp / mov bp,sp
+b4 39               mov ah,39h        ; DOS: make directory
+8b 56 06            mov dx,[bp+6]     ; arg at +6 => a far call, args start there
+cd 21               int 21h
+72 04 ... 5d cb     jc error / ... / retf
+```
+
+which is exactly what a medium-model (`-mm`, far code) call produces: one near
+pointer argument at `[bp+6]`, `retf` to return.  So the calling convention matches
+our call; DOS is rejecting `DS:DX`.
+
+That leaves the segment: at the moment `init_game` runs, `DS` is either no longer
+DGROUP or the literal is not in DGROUP, so `DS:DX` points at the wrong bytes.  This
+is consistent with every other file operation in the build failing (both
+`init_strong_sav` and `write_game_cfg` reach their calls and get errors), and with
+the fact that the same harness lets the original create its folder.
+
+Next check: print/compare `_DS` inside `init_game` (e.g. `if (_DS != SEG_OF(GWorkDir))`)
+and, if it differs, set `DS` to DGROUP before the file calls - a prior recovered
+function that does far-data access (`_SS`/`_DS` casts appear throughout the export)
+may be leaving DS changed.
