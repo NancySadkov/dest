@@ -14,9 +14,9 @@ row actually is, which rows have a mechanical fix, and which need real recovery.
 | `arg_` | 0 |  |
 | `undefined[24]` | 0 |  |
 | `ram0x` | 7 | ovl.c=3, crtl.c=2, ovc45_unitinfo.c=1 |
-| `in_REG` | 923 | crtl.c=154, ovl.c=106, ovc27_combat.c=72 |
-| `[iusbc]Var` | 32054 | ovc22_classes.c=2903, ovc23_bldrec.c=2517, ovc45_unitinfo.c=2210 |
-| `p[iusbc]Var` | 7392 | ovc49_agents.c=931, ovc02_draw.c=717, ovc22_classes.c=632 |
+| `in_REG` | 922 | crtl.c=154, ovl.c=106, ovc27_combat.c=72 |
+| `[iusbc]Var` | 31826 | ovc22_classes.c=2901, ovc23_bldrec.c=2517, ovc45_unitinfo.c=2210 |
+| `p[iusbc]Var` | 7355 | ovc49_agents.c=931, ovc02_draw.c=717, ovc22_classes.c=632 |
 | `p[iusc]Stack_` | 567 | ovc22_classes.c=140, ovc49_agents.c=57, ovc09_init.c=47 |
 | `[iusc]Stack_` | 4870 | ovc22_classes.c=795, ovc21_manage.c=369, ovc09_init.c=341 |
 | `bStack_ (not in list)` | 1216 | ovc09_init.c=149, ovc34_unit.c=114, ovc45_unitinfo.c=85 |
@@ -37,6 +37,8 @@ row actually is, which rows have a mechanical fix, and which need real recovery.
 | `LAB_` | 0 |  |
 | `->pad_... + 0x` | 0 |  |
 | `...)` | 10 | ovc41_main.c=2, crtl.c=2, ovc45_unitinfo.c=1 |
+
+**TOTAL 51888** (regenerate with `python scripts/grep_checks.py`).
 
 **TOTAL 52154** (regenerate with `python scripts/grep_checks.py`).
 
