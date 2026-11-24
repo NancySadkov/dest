@@ -1523,7 +1523,7 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
   bVar18 = iVar15 == 0;
   switch(uVar9) {
   case 1:
-    *(uint16_t *)((int)AgntGs[0].sprs + 10 + iVar15) = 0x195d;
+    *(uint16_t *)((int)AgntGs[0].sprs + 10 + iVar15) = SEG_OF(AgntGs);
     do {
       *(uint *)((int)AgntGs[0].sprs + 8 + iVar15) = uVar9;
       while( true ) {
