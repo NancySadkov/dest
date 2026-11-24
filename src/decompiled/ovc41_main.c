@@ -812,11 +812,11 @@ void __cdecl16far ovc41_buildingNotice(char delta)
     }
     ((unit_t *)GUnits + iVar1)->bldType = bStack_3;
     ovr_constr_flushDirtyRects();
-    uVar2 = 0x195d;
     msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6f23,_SS),
                         (char *)(ulong)CONCAT12(bStack_3,(char *)0x26510),
                         BLD_WORD(&BuildingTypes[bStack_3], name, 0),
                         BLD_WORD(&BuildingTypes[bStack_3], name, 2));
+    asm { mov uVar2,dx };
     ovr_say(msg,uVar2);
   }
   return;
@@ -851,11 +851,11 @@ void __cdecl16far dbgPromoteEnemy(void)
         ((entity_t *)Entities)[i].base.gindex = 0;
       }
       iVar2 = (uint)((entity_t *)Entities)[i].base.gindex * 0x95;
-      uVar3 = 0x195d;
       msg = ovr_stsprintf(buf,(char *)CONCAT22(0x6f33,_SS),
                           (char *)CONCAT22(*(uint16_t *)((int)&AgntGs[0].name + iVar2),
                                            (char *)((int)&BuildingTypes[0xe5].halfWidth + 1)),
                           *(uint16_t *)((int)&AgntGs[0].name + 2 + iVar2));
+      asm { mov uVar3,dx };
       ovr_say(msg,uVar3);
     }
   }

@@ -3867,13 +3867,13 @@ void __cdecl16far upd_usesAlignUp4(void)
           if (AgntGs[(uint)peVar20[idx].base.gindex].ai == '\0') {
             ovr_alignUp4(((peVar20 + idx)->base).x,(char)peVar20[idx].base.y,0);
             iVar17 = (uint)((entity_t *)Entities)[idx].base.gindex * 0x95;
-            randVal = 0x195d;
             pcVar13 = ovr_fmVsprintf("Intelligence reports %s unit died of starvation. (%d, %d)",
                                      (char *)CONCAT22(*(uint16_t *)
                                                        ((int)&worldMenuLabels[1].ofs + 1 + iVar17),
                                                       (char *)*(uint16_t *)
                                                                ((int)&worldMenuLabels[0].seg + 1 +
                                                                iVar17)));
+            asm { mov randVal,dx };
             ovr_uiNotify(pcVar13,randVal,(char)randVal);
           }
           ovr_ovc15_removeEntity(idx);
