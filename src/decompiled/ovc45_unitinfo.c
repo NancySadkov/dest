@@ -1901,10 +1901,10 @@ code_r0x00072658:
       pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_73,68,291,182,-1,0xd0,0x44,
                                 0x23,0xff);
       BldGfxNormal[0x52].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-      uVar19 = 0x195d;
       BldGfxNormal[0x52].seg = stshSegTmp;
       ovr_stgFreeTmp(stgTmp,0);
       psVar4 = ovr_grabLbmTR(460);
+      asm { mov uVar19,dx };
       stgTmp = (stg_tmp_t *)CONCAT22(uVar19,psVar4);
       (*(uint8_t *)((uint8_t *)&(pixels_74.seg))) = 9;
       pixels_74.ofs = (psVar4->aptr).seg;
@@ -1929,13 +1929,13 @@ code_r0x00072658:
       pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_76,68,291,
                                 182,-1,0xd0,0x44,0x23,0xff);
       BldGfxRuin[0x52].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-      uVar14 = 0x195d;
       BldGfxRuin[0x52].seg = stshSegTmp;
       ovr_stgFreeTmp(stgTmp,0);
     }
     ovr_stshStubifyCopy1to0(0x19);
     if (grab != false) {
       psVar4 = ovr_grabLbmTR(172);
+      asm { mov uVar14,dx };
       stgTmp = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     }
     iStack_4 = 0;
@@ -2198,10 +2198,10 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_x00102,6,299,59,-10,0xd8,6,0x2b
                               ,0xf6);
     BldGfxRuin[0x89].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     BldGfxRuin[0x89].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(173);
+    asm { mov uVar14,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     pixels_x00103.seg = 0;
     pixels_x00103.ofs = (psVar4->aptr).seg;
@@ -2290,10 +2290,10 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_x00111,25,134,83,-4,0x3a,0x19,
                               0x86,0xfc);
     BldGfxNormal[0xb5].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     BldGfxNormal[0xb5].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(321);
+    asm { mov uVar14,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     (*(uint8_t *)((uint8_t *)&(pixels_x00112.seg))) = 0x3a;
     pixels_x00112.ofs = (psVar4->aptr).seg;
@@ -2318,13 +2318,13 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_x00114,25,134,
                               83,-4,0x3a,0x19,0x86,0xfc);
     BldGfxRuin[0xb5].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar19 = 0x195d;
     BldGfxRuin[0xb5].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
   }
   ovr_stshStubifyCopy1to0(0x3a);
   if (grab != false) {
     psVar4 = ovr_grabLbmTR(500);
+    asm { mov uVar19,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar19,psVar4);
   }
   iVar10 = 0;
@@ -2381,12 +2381,12 @@ code_r0x00072658:
       *(uint16_t *)((int)&BldGfxNormal[0xb9].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xb9) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
     }
-    uVar19 = 0x195d;
     iVar10 = iVar10 + 1;
   }
   if (grab != false) {
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(501);
+    asm { mov uVar19,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar19,psVar4);
   }
   iVar10 = 0;
@@ -2443,12 +2443,12 @@ code_r0x00072658:
       *(uint16_t *)((int)&BldGfxNormal[0xbc].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xbc) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
     }
-    uVar19 = 0x195d;
     iVar10 = iVar10 + 1;
   }
   if (grab != false) {
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(502);
+    asm { mov uVar19,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar19,psVar4);
   }
   iVar10 = 0;
@@ -2505,12 +2505,12 @@ code_r0x00072658:
       *(uint16_t *)((int)&BldGfxNormal[0xbf].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xbf) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
     }
-    uVar19 = 0x195d;
     iVar10 = iVar10 + 1;
   }
   if (grab != false) {
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(503);
+    asm { mov uVar19,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar19,psVar4);
   }
   iVar10 = 0;
@@ -2567,12 +2567,12 @@ code_r0x00072658:
       *(uint16_t *)((int)&BldGfxNormal[0xc2].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xc2) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
     }
-    uVar19 = 0x195d;
     iVar10 = iVar10 + 1;
   }
   if (grab != false) {
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(504);
+    asm { mov uVar19,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar19,psVar4);
   }
   iVar10 = 0;
@@ -2629,12 +2629,12 @@ code_r0x00072658:
       *(uint16_t *)((int)&BldGfxNormal[0xc5].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 0xc5) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
     }
-    uVar19 = 0x195d;
     iVar10 = iVar10 + 1;
   }
   if (grab != false) {
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(505);
+    asm { mov uVar19,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar19,psVar4);
   }
   iVar10 = 0;
@@ -2691,7 +2691,6 @@ code_r0x00072658:
       *(uint16_t *)((int)&BldGfxNormal[200].seg + iVar10 * 0x48) = uVar16;
       ((far_t far *)(BldGfxNormal + 200) + iVar10 * 0x12)->ofs = (uint16_t)pcVar6;
     }
-    uVar19 = 0x195d;
     iVar10 = iVar10 + 1;
   }
   if (grab != false) {
@@ -2702,6 +2701,7 @@ code_r0x00072658:
   }
   if (grab != false) {
     psVar4 = ovr_grabLbmTR(11);
+    asm { mov uVar19,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar19,psVar4);
   }
   for (iVar10 = 0; iVar10 < 3; iVar10 = iVar10 + 1) {
@@ -2907,10 +2907,10 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_x00143,86,298,180,0,0xd0,0x56,
                               0x2a,0);
     BldGfxNormal[0x160].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     BldGfxNormal[0x160].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(309);
+    asm { mov uVar14,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     (*(uint8_t *)((uint8_t *)&(pixels_x00144.seg))) = 2;
     pixels_x00144.ofs = (psVar4->aptr).seg;
@@ -2970,10 +2970,10 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_x00149,74,299,180,3,0xcc,0x4a,
                               0x2b,3);
     BldGfxNormal[0x169].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     BldGfxNormal[0x169].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(468);
+    asm { mov uVar14,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     (*(uint8_t *)((uint8_t *)&(pixels_x00150.seg))) = 4;
     pixels_x00150.ofs = (psVar4->aptr).seg;
@@ -3037,10 +3037,10 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_x00155,70,298,180,0,0xd7,0x46,
                               0x2a,0);
     BldGfxNormal[0x188].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     BldGfxNormal[0x188].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(514);
+    asm { mov uVar14,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     (*(uint8_t *)((uint8_t *)&(pixels_x00156.seg))) = 2;
     pixels_x00156.ofs = (psVar4->aptr).seg;
@@ -3106,10 +3106,10 @@ code_r0x00074dd0:
   pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_x00161,70,298,180,0,0xd7,0x46,
                             0x2a,0);
   BldGfxNormal[0x18b].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-  uVar19 = 0x195d;
   BldGfxNormal[0x18b].seg = stshSegTmp;
   ovr_stgFreeTmp(stgTmp,0);
   psVar4 = ovr_grabLbmTR(518);
+  asm { mov uVar19,dx };
   stgTmp = (stg_tmp_t *)CONCAT22(uVar19,psVar4);
   (*(uint8_t *)((uint8_t *)&(pixels_x00162.seg))) = 2;
   pixels_x00162.ofs = (psVar4->aptr).seg;
@@ -3180,10 +3180,10 @@ L_init_assets_4EA5:
     pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_x00165,70,191,180,0,0x6c,0x46,
                               0xbf,0);
     BldGfxNormal[0x18d].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar19 = 0x195d;
     BldGfxNormal[0x18d].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(526);
+    asm { mov uVar19,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar19,psVar4);
     (*(uint8_t *)((uint8_t *)&(pixels_x00166.seg))) = 0x6c;
     pixels_x00166.ofs = (psVar4->aptr).seg;
@@ -3260,10 +3260,10 @@ L_init_assets_4EA5:
     pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_x00173,70,191,180,0,0x6c,0x46,
                               0xbf,0);
     BldGfxNormal[0x193].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     BldGfxNormal[0x193].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(520);
+    asm { mov uVar14,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     (*(uint8_t *)((uint8_t *)&(pixels_x00174.seg))) = 0x6c;
     pixels_x00174.ofs = (psVar4->aptr).seg;
@@ -3290,10 +3290,10 @@ L_init_assets_4EA5:
     pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_x00175,70,191,180,0,0x6c,0x46,
                               0xbf,0);
     BldGfxNormal[0x196].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     BldGfxNormal[0x196].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(522);
+    asm { mov uVar14,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     (*(uint8_t *)((uint8_t *)&(pixels_x00176.seg))) = 0x6c;
     pixels_x00176.ofs = (psVar4->aptr).seg;
@@ -3336,10 +3336,10 @@ L_init_assets_4EA5:
     pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_x00178,87,222,181,22,0x52,0x57,
                               0xde,0x16);
     BldGfxNormal[0x199].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     BldGfxNormal[0x199].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(524);
+    asm { mov uVar14,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     (*(uint8_t *)((uint8_t *)&(pixels_x00179.seg))) = 0x52;
     pixels_x00179.ofs = (psVar4->aptr).seg;
@@ -3403,10 +3403,10 @@ L_init_assets_4EA5:
     pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_x00184,70,319,193,60,0,0x46,
                               0x3f,0x3c);
     BldGfxNormal[0x1a2].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     BldGfxNormal[0x1a2].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(440);
+    asm { mov uVar14,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     pixels_x00185.seg = 0;
     pixels_x00185.ofs = (psVar4->aptr).seg;
@@ -3450,10 +3450,10 @@ L_init_assets_4EA5:
     pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_x00188,50,313,154,-4,0xd5,0x32,
                               0x39,0xfc);
     BldGfxNormal[0x1b4].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     BldGfxNormal[0x1b4].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(319);
+    asm { mov uVar14,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     (*(uint8_t *)((uint8_t *)&(pixels_x00189.seg))) = 8;
     pixels_x00189.ofs = (psVar4->aptr).seg;
@@ -3807,10 +3807,10 @@ L_init_assets_4EA5:
     pfVar5 = ovr_stshRleType2((far_t far *)(&stgTmp->aptr)->ofs,pixels_x00196,28,309,119,0,0xe2,0x1c,
                               0x35,0);
     BldGfxNormal[0x1ff].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     BldGfxNormal[0x1ff].seg = stshSegTmp;
     ovr_stgFreeTmp(stgTmp,0);
     psVar4 = ovr_grabLbmTR(463);
+    asm { mov uVar14,dx };
     stgTmp = (stg_tmp_t *)CONCAT22(uVar14,psVar4);
     (*(uint8_t *)((uint8_t *)&(pixels_x00197.seg))) = 0xd;
     pixels_x00197.ofs = (psVar4->aptr).seg;
