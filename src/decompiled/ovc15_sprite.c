@@ -2971,30 +2971,30 @@ bool __cdecl16far ovc15_selectRightmostAgent(void)
 bool __cdecl16far ovc15_textArena4(void)
 
 {
-  uint uVar1;
-  uint uVar2;
-  uint uVar3;
-  byte bStack_3;
+  uint agentIdx;
+  uint bestX;
+  uint bestY;
+  byte bestAgent;
   
-  bStack_3 = 0xff;
-  uVar2 = 0x7fff;
-  uVar3 = 0x7fff;
-  for (uVar1 = 0; (int)uVar1 < (int)(uint)AgntCount; uVar1 = uVar1 + 1) {
-    if (((SelectedAgent != uVar1) &&
-        ((Agnts[SelectedAgent].screenX < Agnts[uVar1].screenX ||
-         ((Agnts[SelectedAgent].screenX == Agnts[uVar1].screenX &&
-          (Agnts[SelectedAgent].screenY < Agnts[uVar1].screenY)))))) &&
-       ((Agnts[uVar1].screenX < uVar2 ||
-        ((Agnts[uVar1].screenX == uVar2 && (Agnts[uVar1].screenY < uVar3)))))) {
-      bStack_3 = (byte)uVar1;
-      uVar2 = Agnts[uVar1].screenX;
-      uVar3 = Agnts[uVar1].screenY;
+  bestAgent = 0xff;
+  bestX = 0x7fff;
+  bestY = 0x7fff;
+  for (agentIdx = 0; (int)agentIdx < (int)(uint)AgntCount; agentIdx = agentIdx + 1) {
+    if (((SelectedAgent != agentIdx) &&
+        ((Agnts[SelectedAgent].screenX < Agnts[agentIdx].screenX ||
+         ((Agnts[SelectedAgent].screenX == Agnts[agentIdx].screenX &&
+          (Agnts[SelectedAgent].screenY < Agnts[agentIdx].screenY)))))) &&
+       ((Agnts[agentIdx].screenX < bestX ||
+        ((Agnts[agentIdx].screenX == bestX && (Agnts[agentIdx].screenY < bestY)))))) {
+      bestAgent = (byte)agentIdx;
+      bestX = Agnts[agentIdx].screenX;
+      bestY = Agnts[agentIdx].screenY;
     }
   }
-  if (bStack_3 != 0xff) {
-    SelectedAgent = bStack_3;
+  if (bestAgent != 0xff) {
+    SelectedAgent = bestAgent;
   }
-  return bStack_3 != 0xff;
+  return bestAgent != 0xff;
 }
 
 
@@ -3006,30 +3006,30 @@ bool __cdecl16far ovc15_textArena4(void)
 bool __cdecl16far ovc15_textArena5(void)
 
 {
-  uint uVar1;
-  uint uVar2;
-  uint uVar3;
-  byte bStack_3;
+  uint agentIdx;
+  uint bestX;
+  uint bestY;
+  byte bestAgent;
   
-  bStack_3 = 0xff;
-  uVar2 = 0;
-  uVar3 = 0;
-  for (uVar1 = 0; (int)uVar1 < (int)(uint)AgntCount; uVar1 = uVar1 + 1) {
-    if (((SelectedAgent != uVar1) &&
-        ((Agnts[uVar1].screenX < Agnts[SelectedAgent].screenX ||
-         ((Agnts[SelectedAgent].screenX == Agnts[uVar1].screenX &&
-          (Agnts[uVar1].screenY < Agnts[SelectedAgent].screenY)))))) &&
-       ((uVar2 < Agnts[uVar1].screenX ||
-        ((Agnts[uVar1].screenX == uVar2 && (uVar3 < Agnts[uVar1].screenY)))))) {
-      bStack_3 = (byte)uVar1;
-      uVar2 = Agnts[uVar1].screenX;
-      uVar3 = Agnts[uVar1].screenY;
+  bestAgent = 0xff;
+  bestX = 0;
+  bestY = 0;
+  for (agentIdx = 0; (int)agentIdx < (int)(uint)AgntCount; agentIdx = agentIdx + 1) {
+    if (((SelectedAgent != agentIdx) &&
+        ((Agnts[agentIdx].screenX < Agnts[SelectedAgent].screenX ||
+         ((Agnts[SelectedAgent].screenX == Agnts[agentIdx].screenX &&
+          (Agnts[agentIdx].screenY < Agnts[SelectedAgent].screenY)))))) &&
+       ((bestX < Agnts[agentIdx].screenX ||
+        ((Agnts[agentIdx].screenX == bestX && (bestY < Agnts[agentIdx].screenY)))))) {
+      bestAgent = (byte)agentIdx;
+      bestX = Agnts[agentIdx].screenX;
+      bestY = Agnts[agentIdx].screenY;
     }
   }
-  if (bStack_3 != 0xff) {
-    SelectedAgent = bStack_3;
+  if (bestAgent != 0xff) {
+    SelectedAgent = bestAgent;
   }
-  return bStack_3 != 0xff;
+  return bestAgent != 0xff;
 }
 
 
