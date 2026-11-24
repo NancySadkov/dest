@@ -54,16 +54,23 @@ for line in io.open(MAP, encoding="latin-1", errors="replace"):
                         (int(m.group(1), 16), int(m.group(2), 16)))
 
 
-def key(name):
+def key(name, loose=False):
     # The export names long symbols with a _2410_XXXX address suffix; the
     # original and the rebuilt image spell the descriptive part differently
     # (quotes, truncation), so the suffix is the reliable identity.
+    #
+    # The trailing `_N` is only stripped in the loose pass: stripping it in the
+    # primary key collapsed s_kill_2/3/4 (and similar families) into one key, and
+    # the monotonic picker then compared the original's s_kill_3 against our
+    # s_kill_4 - a mis-pairing reported as a data difference.
     k = name.upper().lstrip("_")
     m = re.search(r"_2410_([0-9A-F]{4})$", k)
     if m:
         return "OFS_" + m.group(1)
     k = re.sub(r"\[[0-9]+\]$", "", k)
-    return re.sub(r"_[0-9]$", "", k)
+    if loose:
+        k = re.sub(r"_[0-9]$", "", k)
+    return k
 
 
 dgroup_seg = None
@@ -74,17 +81,27 @@ if dgroup_seg is None:
     dgroup_seg = ours.get("_ANIMSEQCOUNTS", (None, None))[0]
 
 ours_by_key = {}
+ours_by_loose = {}
 for name, (seg, ofs) in ours.items():
     if seg == dgroup_seg:
         ours_by_key.setdefault(key(name), []).append((ofs, name))
+        ours_by_loose.setdefault(key(name, True), []).append((ofs, name))
 for k in ours_by_key:
     ours_by_key[k].sort()
+for k in ours_by_loose:
+    ours_by_loose[k].sort()
 
 matched = []
 last = -1
 used = set()
 for off, name in orig:
-    cands = ours_by_key.get(key(name))
+    # the export's address suffix is the exact identity: prefer the twin whose
+    # _2410_XXXX names this very original offset
+    cands = [c for c in ours_by_key.get("OFS_%04X" % off, []) if c[1].upper().endswith("_2410_%04X" % off)]
+    if not cands:
+        cands = ours_by_key.get(key(name))
+    if not cands:
+        cands = ours_by_loose.get(key(name, True))
     if not cands:
         continue
     pick = None

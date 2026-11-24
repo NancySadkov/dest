@@ -1668,3 +1668,42 @@ The conclusion recorded earlier stands and is now narrower: pure C runtime
 helpers can be taken from `CM.LIB`; anything on the float or console path cannot,
 because the original's CRT and the bundled `CM.LIB` disagree on the internal
 hook names.
+
+### Runtime data state at `main` entry: 12 differences, all classified
+
+`scripts/compare_runtime.py` compares the 64 KB at DS:0 dumped from both images
+at `main`'s first instruction (`tmp/dump_dgroup_stdout.py` regenerates the
+dumps; the compare script only reads them).
+
+The matcher used to collapse a trailing `_N` in its primary key, which merged
+`s_kill_2/3/4` into one key; the monotonic picker then compared the original's
+`s_kill_3` against our `s_kill_4` and reported a data difference that did not
+exist.  It also never preferred the export's `_2410_XXXX` twin.  With
+`exact suffix -> exact key -> loose key` matching:
+
+```
+symbols matched   1537 -> 1560
+identical state   1523 -> 1548
+DIFFERENT state     14 -> 12
+```
+
+The remaining twelve, classified with what writes them:
+
+| symbol | why it differs |
+|---|---|
+| `_StartTime` | reads the BIOS timer at start-up; different on every run |
+| `_brklvl`, `brk_normalize_xsize` | heap break level and its granularity, set by C0 for the linked program size |
+| `_DATA` (DGROUP:0) | C0's PSP/heap-top words; ours holds 0x10, the original 0 |
+| `_streams`, `_exitbuf`, `_exitfopen`, `_exitopen` | C0/stdio table and its exit-chain function pointers: our CRT addresses |
+| `_video` | CRT video state block; same shape, one late byte differs |
+| `__setargv_SavedReturn` | our `startx` does not call `__setargv` (see below) |
+| `PlaceErrPtrs`, `LevelRangeLabels` | arrays of far pointers into DGROUP: our offsets, which the normaliser cannot map because the targets are mid-symbol |
+
+None of them is game data: every one is CRT start-up state, a clock reading, or
+an address-space artefact.  Under the project rule that the CRT is
+compiler-supplied, these stay as they are; the game-data state is at parity.
+
+`__setargv` is the one remaining *structural* gap rather than an artefact: the
+original walks the linker init table (priority 0x10) and `startx` calls
+`_setupio` and `_c0crtinit` directly instead, then builds a minimal argv in
+DGROUP, so `__setargv_SavedReturn` stays 0.
