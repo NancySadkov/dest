@@ -277,16 +277,8 @@ L_startx_0109:
   GDoneStrPtr.seg = startxDseg;
   msgFormat.seg = startxDseg;
   far_t_2410_78e4.seg = startxDseg;
-  {
-    int (far *pmain)(int, str_t *, str_t *);
-    pmain = main;
-    iVar10 = (*pmain)(__C0argc, (str_t *)__C0argv, (str_t *)__C0environ);
-  }
-  *(int *)(puVar15 + -8) = iVar10;
-  *(uint16_t *)(puVar15 + -10) = 0x1301;
-                    /* WARNING: Subroutine does not return */
-  *(uint16_t *)(puVar15 + -0xc) = 0x154;
-  exit(*(int *)(puVar15 + -8));
+  iVar10 = main(__C0argc, (str_t *)__C0argv, (str_t *)__C0environ);
+  exit(iVar10);
 }
 
 
