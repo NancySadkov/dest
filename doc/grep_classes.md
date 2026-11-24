@@ -174,3 +174,46 @@ A quick screen for "safe to rename" is `C lines / (bytes/1024)`:
 * 70–100 lines/KB — normal, hand-naming works (`constr_usesBlitGfxRect2` 80,
   `ovc49_drawAgents` 90);
 * > 300 lines/KB — merged or split body, leave alone until the model is fixed.
+
+## Correction: the "merged" bodies are non-contiguous, not multi-segment
+
+`BadBodies.java` and `BodyCheck.java` on the Ghidra project (program `st.exe`)
+settle what the merged bodies actually are:
+
+```
+BadBodies.java>  non-contiguous bodies: 17
+BodyCheck.java>  multi-segment functions: 0
+```
+
+So no body spans two segments - the split is *inside* one segment, at a hole.
+`FnBody.java "77eb:0d61"` (the entry of `ovc45_buildPlacementMessage`) shows it
+directly:
+
+```
+name=ovc45_buildPlacementMessage entry=77eb:0d61
+  range 77eb:0d61 .. 77eb:0f53
+  range 77eb:0f57 .. 77eb:142b
+  range 77eb:1698 .. 77eb:16a7
+  instructions=665
+```
+
+Three ranges with holes at **0f54..0f56** and **142c..1697** (~620 bytes of
+somebody else's code) captured by the body.  That is why the exported C is 3,354
+lines for 1,752 bytes: the decompiler renders all three ranges as one flow, and
+the middle hole makes the tail look like a continuation of the head.
+
+The fix is therefore a cut at the hole boundaries, not a segment split:
+
+1. `ProbeCuts.java` at `77eb:0f54` and `77eb:142c` to confirm the cut points;
+2. `CutAndDecompile.java` (or `TrimBody.java` + `CreateFunctionAt.java`) to
+   re-form the head as `0d61..0f53` and the tail as its own function(s);
+3. `ExportOne.java` for the module, then the usual five gates - `compare_state`
+   must stay 1,630 / 0 / 0, because a bad cut merges two symbols.
+
+The same check applies to `draw_textTalkwin9Lbm` (`2e25:025a`, 514 bytes / 161
+instructions), `ovc22_textRingProt` and `ovc49_body1`: measure with `FnBody.java`
+first, then cut at the holes.
+
+Earlier text in this file said these bodies "cannot be cleaned at source level"
+and implied a segment/overlay split.  The measurement above is the accurate
+statement: they are single-segment bodies with interior holes.
