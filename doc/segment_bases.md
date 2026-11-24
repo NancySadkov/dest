@@ -421,3 +421,51 @@ successful.
 
 State: the pass is **not** in the tree.  `doc` and `tmp/build_reloc_table.py`
 carry the analysis, the filters and the two traps.
+
+## The relocation pass is unnecessary: TLINK already relocates those pointers
+
+The bisection authorised for step 6 settled this, and the answer is a negative one.
+
+### The pass never broke startup
+
+| probe | fix-up location | entries | rebuilt dump |
+|---|---|---|---|
+| 0..20 | new module `st_reloc.c` | 20 | **none** |
+| 0..1 | new module | 1 | **none** |
+| 0..0 | new module (control) | **0** | **none** |
+| 0..0 | inside `crtl.c` | 0 | **65535** |
+| 0..235 | inside `crtl.c` | 235 | **65535** |
+
+Adding a module broke startup; the entries were never the problem.  That retires
+the old note "at least one entry corrupts DGROUP".
+
+### But the entries patch words that are already correct
+
+`tmp/reloc_safe.py` checks, for every entry, the word at `where+2` in the
+pass-disabled rebuilt dump.  A fix-up is only meaningful if that word still holds
+the linked original segment `2410`.  Result:
+
+```
+entries: 235 total, 0 safe (word==0x2410), 235 unsafe
+   drop 0ac2 -> 0b40  s_Fighter_2410_0169   word=1dca
+   drop 0ac6 -> 0b48  s_mage                word=1dca
+   ...
+```
+
+Every one already reads `1dca` - our runtime DGROUP - so the loader has already
+relocated it.  Writing a linked offset over that value is what made parity worse
+(state 82 -> 99 differing, `compare_runtime` 12 -> 15).
+
+So the premise that produced the table ("TLINK emits no relocation for these") holds
+only for *constant* initialisers written as literals such as
+`far_t GSPEmpty = { 0x272B, 0x2410 }`.  Initialisers that name a symbol
+(`&s_Fighter`, table elements, struct members) get a normal DOS relocation and are
+already correct at run time - in our build exactly as in the original.
+
+**Consequence for step 6:** the stored-far-pointer problem does not exist in this
+build.  The remaining 82 state differences are not unrelocated pointers, and step 6
+is blocked on producing a run (`STRONG.SAV`, a comparison against
+`game/STRONG.EXE`), not on relocation.
+
+Keep `tmp/build_reloc_table.py` and `tmp/reloc_safe.py` as the record of how this
+was measured; do not install the pass.
