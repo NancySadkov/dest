@@ -3281,3 +3281,38 @@ Tree restored (instrumented object removed, default link rebuilt); gates green.
 
   grep_checks 51,094; compare_state 1,627/0/0; diff_dgroup 972/1,868;
   compare_runtime 1,543/13
+
+## CORRECTION: the stock startup DOES reach `call _main`
+
+The earlier conclusions in this document that "startup never reaches `lcall _main`" and
+that "`S:` never prints" are **withdrawn**.  They were measured by writing markers with
+`INT 21h AH=09h` to stdout redirected by the DOS shell (`STRONG.EXE > OUT.TXT`).  That
+redirect is only *closed* when the process ends, so a program that hangs leaves
+`OUT.TXT` at 0 bytes even though the marker ran - and a missing `DIR.TXT` in the run
+directory shows the batch indeed never regained control.
+
+A marker that opens a file, writes and **closes** it (`AH=3Ch` / `40h` / `3Eh`) is
+durable across a hang.  Instrumenting the shipped `C0.ASM` (`tools/BC30/LIB/STARTUP`,
+`TASM /M /MX /Q /T /D__MEDIUM__`) with four of them and linking it as the C0 object
+(`C0OBJ=C0PRB.OBJ`, `STOCK_STARTUP=1`):
+
+| marker | placed at | file created |
+|---|---|---|
+| 1 | first instruction of `STARTX` (entry point) | `MK1.TXT` = 1 |
+| 2 | immediately after `call StartExit` | `MK2.TXT` = 2 |
+| 3 | immediately before `call _main` | `MK3.TXT` = 3 |
+| 4 | immediately after `call _main` | **missing** |
+
+So with the stock startup the program runs C0's initialisation **and calls `main`**.
+`main` is entered and does not return (marker 4 absent), which is expected for a game
+loop that waits for input - not a startup defect.
+
+Also worth recording: C0 does not call `__setupio` directly.  It calls `StartExit`
+(line 395), which walks the `InitStart..InitEnd` table in DGROUP; `__setupio` (declared
+`extrn __setupio:near ;required!` at line 67) is registered there.
+
+The next question is therefore inside game code, not in the CRT: instrument `main`'s
+first statement and `init_game` with the same closing-file marker to see how far the
+game runs.  The startup path is no longer a blocker.
+
+  grep_checks 51,094; compare_state 1,627/0/0; diff_dgroup 972/1,868
