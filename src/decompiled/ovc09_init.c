@@ -174,8 +174,10 @@ void __cdecl16far init_cfg(void)
   char lbuf [80];
   uint8_t goterr;
   uint8_t update;
-  uint16_t crlf;
-  char mice;
+  /* static: write() takes a near buffer (BC30 io.h, _FAR is empty for the
+     medium model), so the two bytes it writes must live in DGROUP. */
+  static uint16_t crlf;
+  static char mice;
   uint8_t c;
   
   crlf = GCrLf;
@@ -249,13 +251,13 @@ void __cdecl16far init_cfg(void)
       ovr_stExit(0x83);
     }
     write(iVar3,&CFG_Sfx,1);
-    write(iVar3,(uint16_t *)CONCAT22(_SS,&crlf),2);
+    write(iVar3,(void *)&crlf,2);
     write(iVar3,&CFG_Mus,1);
-    write(iVar3,(uint16_t *)CONCAT22(_SS,&crlf),2);
+    write(iVar3,(void *)&crlf,2);
     iVar4 = write(iVar3,&CFG_Irq,1);
-    iVar5 = write(iVar3,(uint16_t *)CONCAT22(_SS,&crlf),2);
-    iVar6 = write(iVar3,(char *)CONCAT22(_SS,&mice),1);
-    iVar7 = write(iVar3,(uint16_t *)CONCAT22(_SS,&crlf),2);
+    iVar5 = write(iVar3,(void *)&crlf,2);
+    iVar6 = write(iVar3,(void *)&mice,1);
+    iVar7 = write(iVar3,(void *)&crlf,2);
     iVar3 = close(iVar3);
     if ((((iVar4 != 1 || iVar5 != 2) || iVar6 != 1) || iVar7 != 2) || (char)iVar3 != '\0') {
                     /* WARNING: Subroutine does not return */
