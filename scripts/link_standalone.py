@@ -100,6 +100,7 @@ def add_missing_relocations(exe, mapf):
     old_load = (struct.unpack("<H", b[4:6])[0] - 1) * 512 + struct.unpack("<H", b[2:4])[0]
     head = bytearray(b[:relofs])
     table = b[relofs:relofs + 4 * nrel]
+    hits = [h for h in hits if 0 <= h <= 0xFFFF]
     table += b"".join(struct.pack("<HH", o, 0) for o in hits)
     table += b"\0" * (grow + spare - need)
     image = bytes(b[img:])
@@ -169,7 +170,7 @@ def main():
         # INT 3Fh stubs; without a VROOMM manager that never returns, which is
         # exactly where the rebuild used to stop (doc/step6_entry.md).
         rsp = ("D:\\LIB\\C0M.OBJ " + " ".join(res) + " " + " ".join(ovl) +
-               " /m /s" + ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\CM.LIB")
+               " /m /s" + ",REBUILT.EXE,REBUILT.MAP,D:\\LIB\\CM.LIB D:\\LIB\\EMU.LIB")
     with open(os.path.join(BUILDSRC, "LINK.RSP"), "w", encoding="ascii",
               newline="\r\n") as f:
         f.write(rsp + "\n")
