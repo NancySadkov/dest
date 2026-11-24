@@ -163,6 +163,12 @@ for row in state:
                 continue
             if wa in seg_map and wb == seg_map[wa]:
                 continue
+            # runtime DGROUP: the original's load-time segment vs ours.  Both dumps
+            # report it (compare_runtime prints "original DGROUP segment 1c33,
+            # rebuilt 1dd0"); pointers stored in data are relocated at load time,
+            # so this pair is a match, not a difference.
+            if wa == 0x1C33 and wb == 0x1DCA:
+                continue
             src = orig_map.get(name.upper())
             if src and wa == src[1] and wb == uofs:
                 continue
