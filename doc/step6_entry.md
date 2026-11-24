@@ -2688,3 +2688,45 @@ Put the `INT 21h AH=09h` probe in `startx` immediately after
 * if it does not, the program dies at or before that point, and the entry patch
   (`_STARTX 01B2:0034`), the linked startup objects or `startx`'s first pages are the
   place to look.
+
+### Even at `startx`'s DS switch the program prints nothing
+
+With a file-scope `char st_sx[] = "STARTX$";` and
+
+```
+asm { lea dx, st_sx
+      mov ah,9
+      int 21h }
+```
+
+placed immediately after `asm { mov ax, seg DosVersion; mov ds, ax }`, `OUT.TXT`
+stays empty - while the `.COM` control prints through the same harness.
+
+The EXE header gives `SS:SP = B0F1:0080`, i.e. a 128-byte initial stack, and our
+decompiled `startx` has a large C frame, so stack overflow was the natural suspect.
+Raising the header SP to `0xF000` in the run copy changes nothing, so that is not it
+(or not only it).
+
+Conclusion: the program does not reach the instruction after the DS switch.  Either
+it dies in the first few instructions of `startx` (prologue / `&errno` computation /
+`psp = _ES`), or the entry never gets there at all.
+
+### Next measurement
+
+Put the print **before any C code**: an assembly entry stub
+
+```
+        public _st_entry
+_st_entry proc far
+        push cs
+        pop ds                 ; DS = ?? (need a valid segment for the string)
+        ...int 21h AH=09h...
+        jmp far _STARTX
+_st_entry endp
+```
+
+in `ovr_thunks.asm` (TASM is part of the build), patch the header entry to it, and see
+whether the stub prints.  If it does, the fault is between the stub and the C
+`startx` prologue (i.e. our `startx` frame/first statements); if it does not, the
+problem is in how the EXE is loaded at all (header/segment layout), independent of
+the recovered code.
