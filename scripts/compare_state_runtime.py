@@ -143,6 +143,11 @@ checked = 0
 for row in state:
     oseg, oofs, size, name, decl, kind = (int(row[0], 16), int(row[1], 16),
                                          int(row[2]), row[3], row[4], row[5])
+    # 'name[k]' rows are element views of a base symbol that is also present; the
+    # base row compares the same bytes, so skip them rather than resolving to the
+    # base offset without the subscript
+    if re.search(r'\[\d+\]$', name) and oseg == DG_ORIG:
+        continue
     # duplicate names: prefer the export's address-tagged twin (s_empty@611f ->
     # s_empty_2410_611f) over the unrelated same-named symbol
     hit = _by_exact.get("OFS_%04X" % oofs) if oseg == DG_ORIG else None
