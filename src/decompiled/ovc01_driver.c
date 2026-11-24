@@ -6,8 +6,8 @@
  */
 #include "recovered.h"
 
-extern uint16_t _biosReadKeyRaw(void);
-extern uint16_t _biosKeyAvailRaw(void);
+extern uint16_t biosReadKeyRaw(void);
+extern uint16_t biosKeyAvailRaw(void);
 
 
 /* 2d63:0000 */
@@ -45,7 +45,7 @@ uint16_t __cdecl16far biosReadKey(void)
   /* INT 16h AH=00h through the register-level stub: blocks until a key is available
      and returns it in AX.  (Reading 0040:001A/001C directly was tried here and made
      the run stop earlier, so the stub stays.) */
-  return _biosReadKeyRaw();
+  return biosReadKeyRaw();
 }
 
 

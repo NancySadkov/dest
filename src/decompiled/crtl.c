@@ -6,6 +6,10 @@
  */
 #include "recovered.h"
 
+/* Local prototype: this file no longer defines _setupio, so the C library's own
+   stream initialiser is the one C0 registers. */
+void st_setupio(void);
+
 
 uint16_t startxDseg;
 
@@ -215,13 +219,13 @@ L_startx_0109:
     }
   }
   /* The original walks the linker's init table here (InitStart..InitEnd):
-   * _setupio (priority 2), _c0crtinit and __setargv (0x10) plus one far entry
+   * st_setupio (priority 2), _c0crtinit and __setargv (0x10) plus one far entry
    * (priority 1).  Our recovered table still holds the original image's
    * addresses, so walking it hangs; the two plain initialisers are called
    * directly and __setargv's stack contract is still to be recovered
    * (doc/step6_entry.md).
    */
-  _setupio();
+  st_setupio();
 
 
 
@@ -2027,7 +2031,7 @@ void __cdecl16far _srand(uint16_t s)
 
 /* 1000:0d36 */
 
-void __cdecl16near _setupio(void)
+void __cdecl16near st_setupio(void)
 
 {
   uint uVar1;

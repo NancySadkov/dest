@@ -147,6 +147,74 @@ char __cdecl16far read_cfg(int handle)
 
 /* 6257:021e */
 
+byte __cdecl16far is_printable(char *buf,char c)
+
+{
+  uint8_t r;
+  char in_stack_00000008;
+  
+  if ((((((((((byte *)_ctype + 1)[in_stack_00000008] & 0xe) == 0) && (in_stack_00000008 != ':')) &&
+         (in_stack_00000008 != '.')) && ((in_stack_00000008 != '\\' && (in_stack_00000008 != '}'))))
+       && (((in_stack_00000008 != '!' && ((in_stack_00000008 != '@' && (in_stack_00000008 != '#'))))
+           && (in_stack_00000008 != '$')))) &&
+      ((((in_stack_00000008 != '%' && (in_stack_00000008 != '^')) && (in_stack_00000008 != '&')) &&
+       (((in_stack_00000008 != '(' && (in_stack_00000008 != ')')) &&
+        ((in_stack_00000008 != '-' && ((in_stack_00000008 != '_' && (in_stack_00000008 != '{')))))))
+       ))) && ((in_stack_00000008 != '}' &&
+               ((in_stack_00000008 != '~' && (in_stack_00000008 != '`')))))) {
+    r = 0;
+  }
+  else {
+    r = 0x1;
+  }
+  return r;
+}
+
+
+
+
+
+/* 6257:029f */
+
+void __cdecl16far input_folder_name(char *result)
+
+{
+  byte bVar1;
+  uint16_t key;
+  uint16_t len;
+  uint8_t ascii;
+  
+  len = 0;
+  *result = '\0';
+  while( true ) {
+    key = ovr_biosReadKey();
+    if (key == 0x11b) {
+      printf("\n");
+                    /* WARNING: Subroutine does not return */
+      exit(0);
+    }
+    if (key == 0x1c0d) break;
+    if ((key == 0xe08) && (0 < (int)len)) {
+      printf("\b \b");
+      ((char *)result)[len - 1] = '\0';
+      return;
+    }
+    if (((int)len < 0x41) &&
+       (bVar1 = is_printable((char *)result,(char)((ulong)result >> 0x10)), bVar1 != 0)) {
+      printf("%c");
+      ascii = (uint8_t)key;
+      ((char *)result)[len] = ascii;
+      len = len + 1;
+      ((char *)result)[len] = '\0';
+    }
+  }
+  return;
+}
+
+
+
+/* 6257:0345 */
+
 byte __cdecl16far init_strong_sav(void)
 
 {
