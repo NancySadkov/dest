@@ -2772,3 +2772,49 @@ debugger enabled and read `CS:IP`/memory at the first instruction, or compare ou
 EXE header/relocation table byte-for-byte with the original `game/STRONG.EXE`
 (12,515 relocation entries and a 51 KB header are unusual and worth checking against
 the original's numbers).
+
+## Root cause of everything since the resident link: the image does not fit in 640 KiB
+
+```
+file total     774,470
+header          51,712   (12,515 relocations)
+image          722,758
+minalloc         2,096
+needed RAM     725,110   <- conventional-memory limit is 655,360
+over limit      69,750
+```
+
+A real-mode DOS program must load entirely below 640 KiB.  Ours needs 725,110
+bytes, so **DOS cannot load it**: the shell prints its error to the console (not to
+the redirected handle), returns to the batch, and `DONE.FLG` is written - which is
+exactly the pattern that earlier looked like "the program runs and returns to DOS".
+
+That single fact explains every negative result of the last several turns:
+
+* no output from `printf`/`write`/`INT 21h AH=09h`, even from a self-contained
+  assembly entry stub - the stub is never loaded, let alone executed;
+* no file or directory created by the program, while the batch's `md` works;
+* `errorlevel` and `DONE.FLG` observations that disagreed with each other;
+* why enlarging the header SP, fixing `_psp`, `_nfile`, the calling convention and
+  the emulator all changed nothing.
+
+It also retires the "resident link made it run" claim: the resident link is what
+pushed the image from 511 KB (the original, with overlays) to 722 KB.
+
+### Implications for the build
+
+The step-6 build has to satisfy two constraints at once:
+
+1. the image must fit below ~600 KiB to load, and
+2. the game modules must be reachable (the old `/o` overlay link bound the generated
+   thunks to `INT 3Fh` stubs, which is why it hung instead).
+
+Options, in order of effort:
+
+* **shrink the resident image** by ~70 KB - e.g. build only the modules the startup
+  path needs, drop the 46 duplicated CRT stubs, compile with size optimisations.
+  The acceptance test is unchanged and now unambiguous: a `MINIMAL$` print from an
+  entry stub, or `strong.sav\` appearing;
+* **restore the overlay link and provide a minimal overlay loader** that maps each
+  overlay segment from the EXE on demand and patches the thunk table, replacing the
+  VROOMM manager that is compiler-supplied but absent here.
