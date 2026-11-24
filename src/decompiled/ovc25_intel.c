@@ -520,12 +520,12 @@ void __cdecl16far ovc25_spyReportNotice(void)
               uVar2 = ovr_alignUp4((GLeaderSheets[otherLeaderIdx])->x,
                                    (GLeaderSheets[otherLeaderIdx])->y,0xa000);
               iVar7 = (uint)(GLeaderSheets[leaderIdx])->classStr * 0x95;
-              uVar4 = 0x195d;
               msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58c0,curSeg),
                                   (char *)CONCAT22(*(uint16_t *)
                                                     ((int)&worldMenuLabels[0].seg + 1 + iVar7),
                                                    (char *)0x26510),
                                   *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + iVar7),uVar2);
+              asm { mov uVar4,dx };
               ovr_uiNotify(msg,uVar4,0);
             }
           }

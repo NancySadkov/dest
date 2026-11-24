@@ -273,12 +273,12 @@ void bldng_selectBuildingType(byte partyIndex)
   uVar2 = bldng_usesGStrangeTable
                     ((GLeaderSheets[in_stack_00000004])->buildType[0]);
   iVar4 = (uVar2 & 0xff) * 0x27;
-  uVar7 = 0x195d;
   uVar3 = *(uint16_t *)(iVar4 + 0x10e);
   uVar8 = (undefined1)uVar3;
   pcVar5 = ovr_stsprintf(acStack_ce,(char *)CONCAT22(0x690b,_SS),
                          (char *)CONCAT13((char)((uint)uVar3 >> 8),CONCAT12(uVar8,0x2410)),uVar8,
                          (char)*(uint16_t *)(iVar4 + 0x110));
+  asm { mov uVar7,dx };
   puVar6 = &menuEntries;
   entries.seg = (uint16_t)_SS;
   entries.ofs = (uint16_t)puVar6;

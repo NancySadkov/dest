@@ -267,7 +267,6 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
           if (AgntGs[(uint)gindex].ai == '\0') {
             alignUp4(((peVar15 + entityIndex)->base).x,(char)peVar15[entityIndex].base.y,0);
             gOfs = (uint)gindex * 0x95;
-            startY = 0x195d;
             entitiesSeg = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + gOfs);
             pcVar13 = ovr_fmVsprintf("Intelligence reports %s unit fleeing from battle. (%d, %d)",
                                      (char *)CONCAT13((char)((uint)entitiesSeg >> 8),
@@ -275,6 +274,7 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
                                                                *(uint16_t *)
                                                                 ((int)&worldMenuLabels[0].seg + 1 +
                                                                 gOfs))));
+            asm { mov startY,dx };
             ovr_uiNotify(pcVar13,startY,(char)startY);
           }
         }
@@ -306,7 +306,6 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
                 alignUp4((((entity_t *)Entities + entityIndex)->base).x,
                          (char)((entity_t *)Entities)[entityIndex].base.y,0);
                 gOfs = (uint)((entity_t *)Entities)[uVar16].base.gindex * 0x95;
-                startY = 0x195d;
                 entitiesSeg = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + gOfs);
                 pcVar13 = ovr_fmVsprintf("Intelligence reports %s unit infected with disease. (%d, %d)"
                                          ,(char *)CONCAT13((char)((uint)entitiesSeg >> 8),
@@ -314,6 +313,7 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
                                                                     *(uint16_t *)
                                                                      ((int)&worldMenuLabels[0].seg +
                                                                       1 + gOfs))));
+                asm { mov startY,dx };
                 ovr_uiNotify(pcVar13,startY,(char)startY);
               }
             }
@@ -351,7 +351,6 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
                 alignUp4((((entity_t *)Entities + entityIndex)->base).x,
                          (char)((entity_t *)Entities)[entityIndex].base.y,0);
                 gOfs = (uint)((entity_t *)Entities)[uVar16].base.gindex * 0x95;
-                startY = 0x195d;
                 entitiesSeg = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + gOfs);
                 pcVar13 = ovr_fmVsprintf("Intelligence reports %s unit drained of energy. (%d, %d)",
                                          (char *)CONCAT13((char)((uint)entitiesSeg >> 8),
@@ -359,6 +358,7 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
                                                                    *(uint16_t *)
                                                                     ((int)&worldMenuLabels[0].seg +
                                                                      1 + gOfs))));
+                asm { mov startY,dx };
                 ovr_uiNotify(pcVar13,startY,(char)startY);
               }
             }

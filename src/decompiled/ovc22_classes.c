@@ -1545,7 +1545,6 @@ L_OVC22_5087_0234_32B8:
               return pfVar20;
             case (far_t far *)0x15:
               iVar30 = (uint)*(byte *)((int)&pfVar20[3].ofs + (int)ovrAuxSlot + 1) * 0x95;
-              uVar31 = 0x195d;
               uVar53 = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + iVar30);
               pcVar21 = ovr_fmVsprintf("Intelligence reports %s unit infected with disease. (%d, %d)"
                                        ,(char *)CONCAT13((char)((uint)uVar53 >> 8),
@@ -1553,6 +1552,7 @@ L_OVC22_5087_0234_32B8:
                                                                   *(uint16_t *)
                                                                    ((int)&worldMenuLabels[0].seg + 1
                                                                    + iVar30))));
+              asm { mov uVar31,dx };
               ovr_uiNotify(pcVar21,uVar31,0);
               uVar53 = (uint16_t)((ulong)Entities >> 0x10);
               pfVar20 = (far_t far *)((uint)((entity_t *)Entities)[(int)puStack_a].base.gindex * 0x95);
@@ -1586,7 +1586,6 @@ L_OVC22_5087_0234_32B8:
                   }
                   alignUp4((((entity_t *)Entities + (int)puVar49)->base).x,0,0);
                   iVar30 = (uint)((entity_t *)Entities)[(int)unaff_DI].base.gindex * 0x95;
-                  uVar31 = 0x195d;
                   uVar53 = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + iVar30);
                   pfVar20 = (far_t far *)ovr_fmVsprintf(
                                                   "Intelligence reports %s unit drained of energy. (%d, %d)"
@@ -1596,6 +1595,7 @@ L_OVC22_5087_0234_32B8:
                                                                               ((int)&worldMenuLabels
                                                                                      [0].seg + 1 +
                                                                               iVar30))));
+                  asm { mov uVar31,dx };
                   ovr_uiNotify((char *)pfVar20,uVar31,0);
                 }
               }
