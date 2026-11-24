@@ -653,8 +653,6 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
            ) {
           pbVar2 = &((unit_t *)GUnits)[(int)puVar49].flags;
           *pbVar2 = *pbVar2 | 3;
-          iVar29 = 0x195d;
-          uVar54 = 0x195d;
           pfVar20 = (far_t far *)(*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x133) - 7);
           units = (unit_t *)GUnits;
           uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
