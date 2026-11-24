@@ -3364,3 +3364,16 @@ computation, so it must be recovered from the disassembly rather than guessed.
 
   grep_checks 51,070; compare_state 1,627/0/0; diff_dgroup 972/1,868;
   compare_runtime 1,543/13; build 64/64 clean; link 0 errors
+
+### The reference artifact is a directory, not a file
+
+`tmp/origrun/STRONG.SAV` is a **directory** created by the original game; it contains
+`GAME.CFG`, 12 bytes:
+
+```
+33 0d 0a 33 0d 0a 30 0d 0a 31 0d 0a     "3\r\n3\r\n0\r\n1\r\n"
+```
+
+So step 6's comparison target is the text configuration the original writes (and any
+save files beside it), not a binary blob.  The rebuild must produce the same directory
+and contents from the same key sequence.
