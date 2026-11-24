@@ -2043,3 +2043,32 @@ near `char **` cast to the four-byte `str_t *`), the callee's `retf` still retur
 but the caller's `add sp, n` cleanup can pop the wrong amount and the next call -
 or the return to DOS - goes wrong.  That is measurable by disassembling our
 `startx` at image 0x1B89 and counting the pushes before the `lcall`.
+
+### `__cdecl16far` is an empty macro
+
+`src/decompiled/st_compat.h` defines every calling-convention macro as *nothing*:
+
+```c
+#if defined(__BORLANDC__) || defined(__TURBOC__)
+#define __cdecl16far
+#define __cdecl16near
+...
+```
+
+so `int __cdecl16far main(...)` in `st_functions.h` / `main.c` is just
+`int main(...)`, and every "far" function in the tree is really *the compiler
+model's default*.  The rebuilt `main` nevertheless ends in `retf`
+(`5f 5e c9 cb` at image 0x6524+14), which tells us the build is a **far-code**
+model - so plain functions and plain function pointers are both far and the call
+into `main` should be well matched.
+
+That makes the remaining hang narrower still: the call is far, the callee returns
+with `retf`, arguments are five words in both the original (`PUSH [0x73] ... [0x6b]`)
+and the large-model cdecl call, and yet control never comes back to `startx`.
+
+The next measurement is therefore the one recorded above: disassemble the rebuilt
+`startx` (image 0x1B89) and check the `lcall`'s target segment against the `_MAIN`
+symbol in `REBUILT.MAP` (segment 0652, offset 0004).  If the far pointer's segment
+word is a literal rather than a relocation, the call goes to the right offset in
+the *wrong* segment - the same defect class as the `0x195d` literals - and that
+single check decides the fix.
