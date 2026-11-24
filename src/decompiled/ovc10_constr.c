@@ -432,7 +432,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
 
 {
   uint16_t sqCol;
-  int16_t iVar2;
+  int16_t squareX;
   far_t gfx;
   far_t gfx_00;
   far_t gfx_00_00;
@@ -711,7 +711,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                     if (((*(int *)(sqRight + 0x4230) == 0 && *(int *)(sqRight + 0x4232) == 0) ||
                         (2 < row)) || (7 < HighlightLevel)) {
                       avgDy = (uint)*(byte *)(row + 0x728) - avgDy;
-                      iVar2 = *(int16_t *)(&mapSquareLeftX[sq]);
+                      squareX = *(int16_t *)(&mapSquareLeftX[sq]);
                       sqRight = bldIndex * 0xc + *(int *)(sq * 2) * 4;
                       (*(uint8_t *)((uint8_t *)&(gfx_10.seg))) =
                            (char)*(uint16_t *)
@@ -721,20 +721,20 @@ void __cdecl16far constr_usesAgnt_clear(void)
                       (*(uint8_t *)((uint8_t *)&(gfx_10.seg) + 1)) =
                            (char)((uint)*(uint16_t *)
                                          ((char *)0x28ed2 + sqRight) >> 8);
-                      ovr_blitGfxRect(gfx_10,iVar2,avgDy,(brect_t *)BlitRects,0x10,
-                                      (bool)abStack_17[row + -1],(char)iVar2,(char)avgDy,0x40
+                      ovr_blitGfxRect(gfx_10,squareX,avgDy,(brect_t *)BlitRects,0x10,
+                                      (bool)abStack_17[row + -1],(char)squareX,(char)avgDy,0x40
                                       ,0x10,abStack_17[row + -1],0);
                     }
                     else {
                       sqRight = (uint)*(byte *)(row + 0x728) - avgDy;
-                      iVar2 = *(int16_t *)(&mapSquareLeftX[sq]);
+                      squareX = *(int16_t *)(&mapSquareLeftX[sq]);
                       iVar8 = bldIndex * 0xc + *(int *)(sq * 2) * 4;
                       uVar9 = *(uint16_t *)(iVar8 + 0x4232);
                       (*(uint8_t *)((uint8_t *)&(gfx_09.seg))) = (char)uVar9;
                       gfx_09.ofs = *(uint16_t *)(iVar8 + 0x4230);
                       (*(uint8_t *)((uint8_t *)&(gfx_09.seg) + 1)) = (char)((uint)uVar9 >> 8);
-                      ovr_blitGfxRect(gfx_09,iVar2,sqRight,(brect_t *)BlitRects,0x10,
-                                      (bool)abStack_17[row + -1],(char)iVar2,(char)sqRight,0x40,
+                      ovr_blitGfxRect(gfx_09,squareX,sqRight,(brect_t *)BlitRects,0x10,
+                                      (bool)abStack_17[row + -1],(char)squareX,(char)sqRight,0x40,
                                       0x10,abStack_17[row + -1],0);
                       if (1 < HighlightLevel) {
                         sqRight = bldIndex * 0xc + *(int *)(sq * 2) * 4;
@@ -752,7 +752,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
                   }
                   else {
                     avgDy = (uint)*(byte *)(row + 0x728) - avgDy;
-                    iVar2 = *(int16_t *)(&mapSquareLeftX[sq]);
+                    squareX = *(int16_t *)(&mapSquareLeftX[sq]);
                     sqRight = bldIndex * 0xc + (uint)GSeason * 4;
                     (*(uint8_t *)((uint8_t *)&(gfx_08.seg))) =
                          (char)*(uint16_t *)
@@ -762,8 +762,8 @@ void __cdecl16far constr_usesAgnt_clear(void)
                     (*(uint8_t *)((uint8_t *)&(gfx_08.seg) + 1)) =
                          (char)((uint)*(uint16_t *)
                                        ((char *)0x28ed2 + sqRight) >> 8);
-                    ovr_blitGfxRect(gfx_08,iVar2,avgDy,(brect_t *)BlitRects,0x10,
-                                    (bool)abStack_17[row + -1],(char)iVar2,(char)avgDy,0x40,
+                    ovr_blitGfxRect(gfx_08,squareX,avgDy,(brect_t *)BlitRects,0x10,
+                                    (bool)abStack_17[row + -1],(char)squareX,(char)avgDy,0x40,
                                     0x10,abStack_17[row + -1],0);
                   }
                 }
@@ -799,14 +799,14 @@ void __cdecl16far constr_usesAgnt_clear(void)
                         *(int *)((int)&AgntAnms[0x5d].sx + 1 + sq * 2)) {
                       sqRight = (uint)*(byte *)(row + 0x729) - smoothBL;
                       iVar8 = (uint)*(byte *)(row + 0x728) - smoothTL;
-                      iVar2 = *(int16_t *)(&mapSquareLeftX[sq]);
+                      squareX = *(int16_t *)(&mapSquareLeftX[sq]);
                       gfx_04.seg = *(uint16_t *)
                                     ((char *)0x28ed6 + bldIndex * 0xc);
                       gfx_04.ofs = *(uint16_t *)
                                     ((char *)0x28ed4 + bldIndex * 0xc);
                       ovr_blit_usesBlitGfxN
-                                (gfx_04,iVar2,iVar8,abStack_17[row + -1],sqRight,abStack_17[row]
-                                 ,(brect_t *)BlitRects,0x2410,(char)iVar2,(char)iVar8,
+                                (gfx_04,squareX,iVar8,abStack_17[row + -1],sqRight,abStack_17[row]
+                                 ,(brect_t *)BlitRects,0x2410,(char)squareX,(char)iVar8,
                                  abStack_17[row + -1],(char)sqRight,abStack_17[row],0x40,0x10);
                     }
                     else {
@@ -827,14 +827,14 @@ void __cdecl16far constr_usesAgnt_clear(void)
                     if (*(int *)(&mapSquareBottomY[sq]) == *(int *)(&mapSquareRightX[sq])) {
                       sqRight = (uint)*(byte *)(row + 0x729) - smoothBR;
                       iVar8 = (uint)*(byte *)(row + 0x728) - smoothTR;
-                      iVar2 = *(int16_t *)(&mapSquareRightX[sq]);
+                      squareX = *(int16_t *)(&mapSquareRightX[sq]);
                       gfx_05.seg = *(uint16_t *)
                                     ((char *)0x28ed6 + bldIndex * 0xc);
                       gfx_05.ofs = *(uint16_t *)
                                     ((char *)0x28ed4 + bldIndex * 0xc);
                       ovr_blit_usesBlitGfxN
-                                (gfx_05,iVar2,iVar8,abStack_17[row + -1],sqRight,abStack_17[row]
-                                 ,(brect_t *)BlitRects,0x2410,(char)iVar2,(char)iVar8,
+                                (gfx_05,squareX,iVar8,abStack_17[row + -1],sqRight,abStack_17[row]
+                                 ,(brect_t *)BlitRects,0x2410,(char)squareX,(char)iVar8,
                                  abStack_17[row + -1],(char)sqRight,abStack_17[row],0x40,0x10);
                     }
                     else {
