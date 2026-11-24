@@ -2355,3 +2355,42 @@ whole link use DGROUP for near data.
 Reliable tooling from this round: `tmp/mark.py` (exit-code marker + `if errorlevel`),
 `tmp/probe_mkdir3.py` (mkdir with a path argument), `tmp/probe_path.py` (DGROUP
 array variant), `tmp/dirtest.py` (DOS-side `dir > DIR.TXT`).
+
+## DS is DGROUP at both call sites, and the literal offsets are 0x10 out
+
+Two exit-code probes (exit 23 when the condition holds, `GO.BAT` branching on
+`if errorlevel 23`):
+
+| condition | result |
+|---|---|
+| `_DS == 0xa566` at `init_game`'s first line | **true** |
+| `_DS == 0xa566` at `init_strong_sav`'s first statement | **true** |
+
+and the harness itself can create directories (`md probe_dir` in the same mount
+produces `PROBE_DI`), so the mount, DOS `mkdir` and `DS` are all fine.
+
+What is left is the pointer the compiler emitted. In the current image the DGROUP
+copies of `"strong.sav"` are at
+
+```
+DGROUP +0F97  +8DF2  +A1D2  +A1DD  +A1FA  +A20E  +A219  +A22F
+```
+
+while the two `mkdir` call sites push
+
+```
+68 c2 a1   -> DGROUP +A1C2   ("Gold\0Fund\0Fund\0\0" - not a path)
+68 fe a1   -> DGROUP +A1FE   (four bytes inside the copy at +A1FA)
+```
+
+`0xA1C2` is exactly `0xA1D2 - 0x10`, i.e. the module's literal offsets appear to be
+computed against a near-data base that is 0x10 bytes lower than the one the linker
+actually used.  That single 0x10 shift would make every string argument emitted by
+that module point at the wrong bytes - which is consistent with `mkdir` "succeeding"
+while nothing usable appears.
+
+Next: confirm the shift by dumping the whole literal pool of `ovc31_config.c` and
+comparing a few more pushed constants against their strings; if it holds, look for
+the 0x10-byte object placed before the module's data in the link (`_CVTSEG` / heap
+header) and either move it or align the module's data so the compiler's offsets
+match.
