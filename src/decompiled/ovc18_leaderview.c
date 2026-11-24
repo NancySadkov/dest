@@ -971,7 +971,7 @@ uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,uin
 {
   uint *puVar1;
   uint uVar2;
-  uint16_t uVar3;
+  uint16_t randDraw;
   short (*paasVar4) [148] [60];
   uint unaff_SI;
   uint16_t uVar5;
@@ -1006,8 +1006,8 @@ uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,uin
           GUnitCount = GUnitCount + 1;
         }
         else {
-          uVar3 = ovr_randBelow(0x3b8,0);
-          uVar2 = (uVar3 & 0xff) + 0xf8;
+          randDraw = ovr_randBelow(0x3b8,0);
+          uVar2 = (randDraw & 0xff) + 0xf8;
           unaff_SI = uVar2;
           do {
             if ((((*(uint *)((uint8_t *)&BuildingTypes[unaff_SI] + 19) & 0xa0) != 0) ||
@@ -1048,16 +1048,16 @@ uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,uin
     else {
       uVar2 = ovr_constr_usesGMapFlags2(x,y);
       if ((uVar2 & 0xff) == 3) {
-        uVar3 = ovr_randBelow(0x28,0);
-        ((unit_t *)GUnits)[unaff_SI].timer = (char)uVar3 + 0x1e;
+        randDraw = ovr_randBelow(0x28,0);
+        ((unit_t *)GUnits)[unaff_SI].timer = (char)randDraw + 0x1e;
       }
       else if ((uVar2 & 0xff) == 4) {
-        uVar3 = ovr_randBelow(0x50,0);
-        ((unit_t *)GUnits)[unaff_SI].timer = (char)uVar3 + 0x3c;
+        randDraw = ovr_randBelow(0x50,0);
+        ((unit_t *)GUnits)[unaff_SI].timer = (char)randDraw + 0x3c;
       }
       else {
-        uVar3 = ovr_randBelow(0x14,0);
-        ((unit_t *)GUnits)[unaff_SI].timer = (char)uVar3 + 0xf;
+        randDraw = ovr_randBelow(0x14,0);
+        ((unit_t *)GUnits)[unaff_SI].timer = (char)randDraw + 0xf;
       }
     }
   }
