@@ -2818,3 +2818,37 @@ Options, in order of effort:
 * **restore the overlay link and provide a minimal overlay loader** that maps each
   overlay segment from the EXE on demand and patches the thunk table, replacing the
   VROOMM manager that is compiler-supplied but absent here.
+
+## The overlay link loads (134 KB image) but a simple loader cannot work
+
+Linking with TLINK `/o` (`WITH_OVERLAY=1`) gives:
+
+```
+file            751,248
+loaded image    134,416      -> needs 134,672 bytes of RAM (limit 655,360)
+overlay code    612,736      (after the image; VROOMM pages it in)
+```
+
+So the overlay build **does** fit and does load — which is consistent with it
+reaching `main`/`init_game` in the earlier probes, and stopping only when a thunk
+jumped into the `INT 3Fh` stub table.
+
+The obvious repair - "map each overlay segment in on demand" - does not work for
+this image: every overlay segment has its **own linked segment number**
+(`O01_SEG 20D30H`, `O02_SEG 222C0H`, ... in the MAP), and the compiled code inside it
+contains absolute far addresses to that segment.  Paging segments into a shared
+buffer would break every pointer inside them, so a loader would have to keep the
+whole 612 KB resident - which is the same 640 KiB problem again.
+
+### What that leaves
+
+The image has to be made smaller at the source/link level:
+
+* link only the modules reachable from `main` -> `init_game` -> the save path, and
+  generate return-0 stubs for the rest (the build already has a stub generator for
+  unresolved symbols, `scripts/model/unresolved.tsv`);
+* or reduce the decompiled code size (the bloat is in the exported expressions, e.g.
+  `CONCAT22`/`CONCAT13` chains, not in the data).
+
+Either way the acceptance test is unchanged and unambiguous: the `ENTRY`/`MINIMAL$`
+print from an entry stub, or `strong.sav\` appearing.
