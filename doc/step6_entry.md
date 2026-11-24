@@ -3559,3 +3559,42 @@ something about that call site (it follows `clrscr()` in the prompt loop) still 
 
   grep_checks 51,043; build 64/64 clean; LINK ERRORS 0
   compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13
+
+## The rebuild now writes STRONG.SAV\GAME.CFG (3 of the reference's 4 lines)
+
+Driving `init_base`'s sound menu with the single key **`6`** (Off) is enough: the
+`do ... while ((key & 0xff) != 0x36)` loop exits to `sfx = '3'; mus = '3'`, and
+`pick_irq` is skipped because `irq` is still `'0'`, so `write_game_cfg(sfx,mus,irq)`
+runs immediately.
+
+Measured on a clean run directory (asserted before launch):
+
+```
+R1 write_game_cfg called   : True
+R3 after ovr_init_base     : True      (init_base returns)
+STRONG.SAV contents        : ['GAME.CFG']
+GAME.CFG (rebuilt)         : 33 0d 0a 33 0d 0a 30 0d 0a          "3\r\n3\r\n0\r\n"
+GAME.CFG (original)        : 33 0d 0a 33 0d 0a 30 0d 0a 31 0d 0a "3\r\n3\r\n0\r\n1\r\n"
+```
+
+So the first three lines are **byte-identical** to the original; the fourth (`mice`,
+`'1'`) is missing.  It is produced by `init_cfg` (`ovc09_init.c:159`), the four-value
+writer, which runs later in `init_game` (line 285) when an existing config is read.
+
+### Why the fourth line is not written
+
+`init_cfg` builds its path with hard-coded original-DGROUP addresses:
+
+```c
+cfgPath = (uint16_t)ovr_stsprintf(lbuf,(char *)CONCAT22(0x5bc,_SS),
+                                  (char *)MK_FP(0x2410, 0x8c6c),0x2410);
+```
+
+`0x5bc` is the format `"%sgame.cfg"` (verified in `audit/dgroup_2410.bin`), and
+`0x8c6c` is a buffer that is empty at startup and has no symbol in `audit/symbols.tsv`
+- i.e. a runtime-filled data-path prefix.  `MK_FP(0x2410, ...)` is the original image's
+DGROUP, so in the rebuild the path is wrong and the open fails.  A second run with the
+three-line file present leaves it unchanged, confirming `init_cfg` does not complete.
+
+  grep_checks 51,018; build 64/64 clean; LINK ERRORS 0
+  compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13
