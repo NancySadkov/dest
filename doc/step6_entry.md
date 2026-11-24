@@ -3055,3 +3055,45 @@ handle table those calls depend on.
 
 Next: markers after `_setupio()` and after `_c0crtinit()`; that separates CRT
 initialisation from the far-table fix-ups in one run.
+
+## The stop is `_setupio()`
+
+Two markers around the CRT initialisers in `startx`:
+
+```
+OUT.TXT: ''          -- neither IO: (after _setupio) nor CI: (after _c0crtinit) printed
+```
+
+So `startx` reaches the initialiser block (X3 printed) and dies inside
+**`_setupio()`** (`crtl.c:2030`), before `_c0crtinit()` is even called.
+
+`_setupio` is the routine that sets up the CRT stream/handle tables:
+
+```c
+i = 5;
+if (5 < _nfile) {
+  do {
+    ((uint16_t *)_openfd)[i] = 0;
+    *(undefined1 *)((int)&_streams[0].fd + i * 0x14) = 0xff;
+    *(int *)((int)&_streams[0].token + i * 0x14) = i * 0x14 + -0x79da;   /* magic base */
+    i = i + 1;
+  } while (i < _nfile);
+}
+uVar1 = _isatty(0);
+...
+setvbuf(_streams, 0, ..., 0x200);
+```
+
+It writes through `_streams` with a hard-coded `0x14` stride and a hard-coded
+`-0x79da` token base - both suspicious decompiler artefacts.  A wrong base or stride
+writes outside the stream table, and the next `_isatty`/`setvbuf` call then operates on
+corrupted state; that is also consistent with every stdout/file operation in this
+build having failed silently.
+
+This ties the two threads together: **the file/stdio failures and the stop before
+`main` are the same defect** - the CRT stream table is mis-modelled.
+
+Next: dump `_setupio` from the original C0 (`1000:0xxx`, near `SaveVectors` at
+`1000:017a`) and rebuild the stream-table arithmetic from it (`_streams`, `_openfd`,
+the 0x14 stride and the token base), then re-run the markers - IO: and CI: should both
+print, and `main` should follow.
