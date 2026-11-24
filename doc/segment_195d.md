@@ -392,3 +392,40 @@ segment) is what `ovc44_strong_dat.c` already had; the remaining 289 literals ar
 spread over `ovc45_unitinfo.c` (202, inside the merged
 `ovc45_buildPlacementMessage` body), `ovc44_strong_dat.c` (11), `ovc48` (0) and
 smaller files.
+
+## Where the 320 literals stand now: 232 left, and the shapes they fall into
+
+Four modules are clean, and every conversion below writes the segment the original
+actually used instead of the dead link-time constant:
+
+| module | before | now | what the fix was |
+|---|---|---|---|
+| `ovc48_assets2.c` | 34 | **0** | capture DX after `ovr_stshRleType2` / `ovr_stshAllocStub`, pass it to `stsh_store`, store the returned segment in `.seg` (36 blocks + the `init_assets2` `in_DX` chain) |
+| `ovc44_strong_dat.c` | 11 | **0** | the rolling `tg` far pointer: capture DX after every `ovr_grabLbmTR` (23 sites) instead of seeding `tg.seg` with the constant |
+| `ovc20_stash.c` | 17 | **0** | 16 blocks by the shared script, plus two type-aware rewrites (the `uint32_t p` site that assigned its segment half before the call, and a block whose segment argument was an unassigned local) |
+| `ovc15_sprite.c` | 24 | **2** | 13 seed/call pairs, the branch-local seeds in the `prt` loops (`uVar9`/`uVar12`/`uVar34` become the capture the `.seg` store reads), dead seeds deleted, and `AGNT_WORD(&Agnts[agnt], gdata, 2) = SEG_OF(AgntGs)` |
+| `ovc24_entities.c`, `ovc22_classes.c`, `ovc41_main.c` | 8 / 6 / 6 | 4 / 5 / 4 | the "sprintf result split across two arguments" shape: `dst = 0x195d; msg = ovr_fmVsprintf(...); ovr_uiNotify(msg, dst, 0);` - `(dst, msg)` is the far `char *`, so `dst` must be the call's DX |
+
+### Taxonomy of the remaining 30 (202 of them are one body)
+
+* **`ovc45_unitinfo.c` 202** - inside `ovc45_buildPlacementMessage`, the merged body
+  that spans an overlay boundary (1,752 bytes of code exported as 3,354 C lines).
+  Same blocker as `draw_textTalkwin9Lbm`; it needs the model split, not a rewrite.
+* **comma expressions** (`in_DX = 0x195d, expr`, `uVar13 = 0x195d, (… & 0x400) != 0`)
+  in `ovc41_main.c` (3) and `ovc49_agents.c` (1) - the assignment is dead, the
+  constant is a decompiler artefact inside a comma expression, so there is nothing
+  to capture; the statement needs re-exporting.
+* **bitwise** `AgntAnms[0x68].ey | 0x195d` (`ovc22_classes.c`) - nonsense operand.
+* **two-role locals**: `ovc24_entities.c:620` `uVar7` is both a vararg to
+  `ovr_stsprintf` and the notify segment, so the capture would have to come from a
+  different call than the one the script can see.
+* **one comment** (`st_stubs.c:151`) mentions the constant while explaining it.
+* the rest (`ovc47_constrct.c` 6, `ovc22_classes.c` 4, `ovc24_entities.c` 3,
+  `ovc41_main.c` 1, `ovc49_agents.c` 1, `ovc18`/`ovc19`/`ovc21`/`ovc23`/`ovc25`/
+  `ovc35` 1 each) are seeds whose consumer is a `ovr_stsprintf` vararg or a
+  `ovr_say`/`ovr_uiNotify` pair that the generic script cannot type without the
+  disassembly of that block.
+
+The two generic passes are `tmp/fix_195d_seedcall.py` (drop a `V = 0x195d` seed and
+capture DX after the following call) and `tmp/fix_195d_blocks.py`
+(`<file> <function> <store-fn>` for the full stsh block shape).
