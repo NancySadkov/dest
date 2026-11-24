@@ -2916,7 +2916,7 @@ void __cdecl16far stshInitPtrs(void)
   far_t padOfs06;
   far_t padOfs07;
   far_t padOfs08;
-  uint32_t *puVar1;
+  uint32_t *recPtr;
   uint16_t uVar2;
   uint16_t unaff_BP;
   uint16_t unaff_SI;
@@ -2944,11 +2944,11 @@ void __cdecl16far stshInitPtrs(void)
   padOfs08.ofs = (uint16_t)in_stack_0000fffa;
   fVar5 = PADD_at_(fVar5,padOfs08);
   uVar7 = fVar5.seg;
-  puVar1 = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)retStorage2);
+  recPtr = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)retStorage2);
   uVar4 = StshCtPtr.seg;
   uVar2 = StshCtPtr.ofs;
   *(uint16_t *)(uVar2 + 0xb) = uVar7;
-  *(uint16_t *)(uVar2 + 9) = (uint16_t)puVar1;   /* hand fix: 2-byte half */
+  *(uint16_t *)(uVar2 + 9) = (uint16_t)recPtr;   /* hand fix: 2-byte half */
   for (uVar3 = 1; uVar3 < StshCount - 1; uVar3 = uVar3 + 1) {
     LXMUL_at_(retStorage2,CONCAT22(in_stack_0000fffa,unaff_SI),
               CONCAT22(unaff_BP,in_stack_0000fffc));
@@ -2976,9 +2976,9 @@ void __cdecl16far stshInitPtrs(void)
     padOfs02.ofs = (uint16_t)retStorage;
     fVar5 = PADD_at_(padBase01,padOfs02);
     uVar7 = fVar5.seg;
-    puVar1 = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)plVar6);
+    recPtr = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)plVar6);
     *(uint16_t *)((int)in_stack_0000fffa + 0xb) = uVar7;
-    *(uint16_t *)((int)in_stack_0000fffa + 9) = (uint16_t)puVar1;
+    *(uint16_t *)((int)in_stack_0000fffa + 9) = (uint16_t)recPtr;
     LXMUL_at_(plVar6,CONCAT22(retStorage,uVar2),
               (long)CONCAT22(unaff_SI,retStorage2));
     padBase.seg = (uint16_t)plVar6;
@@ -2993,9 +2993,9 @@ void __cdecl16far stshInitPtrs(void)
     padOfs.ofs = (uint16_t)plVar6;
     fVar5 = PADD_at_(padBase07,padOfs);
     uVar7 = fVar5.seg;
-    puVar1 = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)retStorage2);
+    recPtr = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)retStorage2);
     *(uint16_t *)((int)in_stack_0000fffa + 0xf) = uVar7;
-    *(uint16_t *)((int)in_stack_0000fffa + 0xd) = (uint16_t)puVar1;
+    *(uint16_t *)((int)in_stack_0000fffa + 0xd) = (uint16_t)recPtr;
   }
   LXMUL_at_(retStorage2,CONCAT22(in_stack_0000fffa,unaff_SI),
             CONCAT22(unaff_BP,in_stack_0000fffc));
@@ -3012,11 +3012,11 @@ void __cdecl16far stshInitPtrs(void)
   padOfs05.ofs = (uint16_t)retStorage2;
   fVar5 = PADD_at_(padBase04,padOfs05);
   uVar7 = fVar5.seg;
-  puVar1 = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)plVar6);
+  recPtr = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,(uint16_t)plVar6);
   Stsh_2410_47f6.seg = uVar7;
-  Stsh_2410_47f6.ofs = (uint16_t)puVar1;
-  *(uint16_t *)((int)puVar1 + 0xb) = 0;
-  *(uint16_t *)((int)puVar1 + 9) = 0;
+  Stsh_2410_47f6.ofs = (uint16_t)recPtr;
+  *(uint16_t *)((int)recPtr + 0xb) = 0;
+  *(uint16_t *)((int)recPtr + 9) = 0;
   LXMUL_at_(plVar6,CONCAT22(retStorage2,uVar4),CONCAT22(in_stack_0000fffa,unaff_SI));
   uVar7 = 0x1000;
   padBase02.seg = (uint16_t)plVar6;
@@ -3031,11 +3031,11 @@ void __cdecl16far stshInitPtrs(void)
   padOfs01.ofs = (uint16_t)plVar6;
   fVar5 = PADD_at_(padBase00,padOfs01);
   uVar7 = fVar5.seg;
-  puVar1 = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,uVar2);
+  recPtr = ovr_mkp((uint32_t *)fVar5.ofs,uVar7,uVar2);
   uVar4 = Stsh_2410_47f6.seg;
   uVar2 = Stsh_2410_47f6.ofs;
   *(uint16_t *)(uVar2 + 0xf) = uVar7;
-  *(uint16_t *)(uVar2 + 0xd) = (uint16_t)puVar1;
+  *(uint16_t *)(uVar2 + 0xd) = (uint16_t)recPtr;
   return;
 }
 

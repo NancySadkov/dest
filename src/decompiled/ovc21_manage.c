@@ -2550,7 +2550,7 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
   far_t dst;
   void *pvVar2;
   int iVar3;
-  char *pcVar4;
+  char *numText;
   char_sheet_t *pcVar5;
   uint16_t uVar6;
   int iVar7;
@@ -2627,9 +2627,9 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
     iVar7 = ovr_ovc45_compute9(acStack_68,(char *)CONCAT22(pcVar5,_SS),
                                (char *)CONCAT22(Font02.ofs,pcStack_4),Font02.seg,'i',0x69,3);
     pvVar2 = manage_playerTitle(pcStack_6,pcStack_4,(char)iVar7,pcVar5);
-    pcVar4 = ovr_stsprintf(acStack_b8,(char *)CONCAT22(0x52a1,_SS),
+    numText = ovr_stsprintf(acStack_b8,(char *)CONCAT22(0x52a1,_SS),
                            (char *)CONCAT22(pvVar2,(char *)0x26510),pcVar5);
-    ovr_blitLabel(pcVar4,(uint8_t *)CONCAT22(uVar9,pcVar5),CONCAT11(uVar11,uVar10),term,uVar10,term,
+    ovr_blitLabel(numText,(uint8_t *)CONCAT22(uVar9,pcVar5),CONCAT11(uVar11,uVar10),term,uVar10,term,
                   uVar6);
   }
   TextBlitY = TextBlitY + 0xc;
@@ -2670,62 +2670,62 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
                              (int *)CONCAT22(_SS,&iStack_e));
       if (iStack_e == 0) {
         iVar3 = 100;
-        pcVar4 = litoa10(acStack_68,
+        numText = litoa10(acStack_68,
                          CONCAT13((char)((uint)iStack_16 >> 8),CONCAT12((char)iStack_16,_SS)),
                          (char)iStack_16,0);
         manage_blitLabelRight
-                  ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,pcVar4)),iVar3);
+                  ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
       }
       else {
         iVar3 = 100;
-        pcVar4 = ovr_stsprintf(acStack_b8);
+        numText = ovr_stsprintf(acStack_b8);
         manage_blitLabelRight
-                  ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,pcVar4)),iVar3);
+                  ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
       }
       lVar1 = (long)(iVar8 + iVar7) * 6;
       uVar6 = (uint16_t)((ulong)lVar1 >> 0x10);
       if (*(char *)((int)&GStructures[0].pad + (int)lVar1) != '\0') {
         if (iStack_10 == 0) {
           iVar3 = 0x8c;
-          pcVar4 = litoa10(acStack_68,
+          numText = litoa10(acStack_68,
                            CONCAT13((char)((uint)iStack_8 >> 8),CONCAT12((char)iStack_8,_SS)),
                            (char)iStack_8,0);
           manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,pcVar4)),iVar3);
+                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
         }
         else {
           iVar3 = 0x8c;
-          pcVar4 = ovr_stsprintf(acStack_b8);
+          numText = ovr_stsprintf(acStack_b8);
           manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,pcVar4)),iVar3);
+                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
         }
         if (iStack_12 == 0) {
           iVar3 = 0xb4;
-          pcVar4 = litoa10(acStack_68,
+          numText = litoa10(acStack_68,
                            CONCAT13((char)((uint)iStack_a >> 8),CONCAT12((char)iStack_a,_SS)),
                            (char)iStack_a,0);
           manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,pcVar4)),iVar3);
+                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
         }
         else {
           iVar3 = 0xb4;
-          pcVar4 = ovr_stsprintf(acStack_b8);
+          numText = ovr_stsprintf(acStack_b8);
           manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,pcVar4)),iVar3);
+                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
         }
         if (iStack_14 == 0) {
           iVar3 = 0xdc;
-          pcVar4 = litoa10(acStack_68,
+          numText = litoa10(acStack_68,
                            CONCAT13((char)((uint)iStack_c >> 8),CONCAT12((char)iStack_c,_SS)),
                            (char)iStack_c,0);
           manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,pcVar4)),iVar3);
+                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
         }
         else {
           iVar3 = 0xdc;
-          pcVar4 = ovr_stsprintf(acStack_b8);
+          numText = ovr_stsprintf(acStack_b8);
           manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,pcVar4)),iVar3);
+                    ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
         }
       }
       TextBlitY = TextBlitY + 0xc;
@@ -2764,7 +2764,7 @@ void manage_textAllProperty2(void)
   uint16_t *puVar2;
   void *pvVar3;
   int iVar4;
-  char *pcVar5;
+  char *numText;
   uint8_t *puVar6;
   uint16_t uVar7;
   int unaff_BP;
@@ -2810,9 +2810,9 @@ void manage_textAllProperty2(void)
                                Font02.seg,'i',0x69,3);
     pvVar3 = manage_playerTitle((char_sheet_t *)*(uint16_t *)(unaff_BP + -4),
                                 *(uint16_t *)(unaff_BP + -2),(char)iVar9,puVar6);
-    pcVar5 = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52a1,_SS),
+    numText = ovr_stsprintf((char *)(unaff_BP + -0xb6),(char *)CONCAT22(0x52a1,_SS),
                            (char *)CONCAT22(pvVar3,(char *)0x26510),puVar6);
-    ovr_blitLabel(pcVar5,(uint8_t *)CONCAT22(uVar10,puVar6),CONCAT11(uVar12,uVar11),term,uVar11,term
+    ovr_blitLabel(numText,(uint8_t *)CONCAT22(uVar10,puVar6),CONCAT11(uVar12,uVar11),term,uVar11,term
                   ,uVar7);
   }
   TextBlitY = TextBlitY + 0xc;
@@ -2856,17 +2856,17 @@ void manage_textAllProperty2(void)
       if (*(int *)(unaff_BP + -0xc) == 0) {
         iVar4 = 100;
         uVar11 = (undefined1)*(uint16_t *)((char *)init_textFilename + unaff_BP);
-        pcVar5 = litoa10((char *)(unaff_BP + -0x66),
+        numText = litoa10((char *)(unaff_BP + -0x66),
                          CONCAT13((char)((uint)*(uint16_t *)((char *)init_textFilename + unaff_BP)
                                         >> 8),CONCAT12(uVar11,_SS)),uVar11,0);
         manage_blitLabelRight
-                  ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);
+                  ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
       }
       else {
         iVar4 = 100;
-        pcVar5 = ovr_stsprintf((char *)(unaff_BP + -0xb6));
+        numText = ovr_stsprintf((char *)(unaff_BP + -0xb6));
         manage_blitLabelRight
-                  ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);
+                  ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
       }
       lVar1 = (long)(iVar8 + iVar9) * 6;
       uVar7 = (uint16_t)((ulong)lVar1 >> 0x10);
@@ -2874,47 +2874,47 @@ void manage_textAllProperty2(void)
         if (*(int *)(unaff_BP + -0xe) == 0) {
           iVar4 = 0x8c;
           uVar11 = (undefined1)*(uint16_t *)(unaff_BP + -6);
-          pcVar5 = litoa10((char *)(unaff_BP + -0x66),
+          numText = litoa10((char *)(unaff_BP + -0x66),
                            CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + -6) >> 8),
                                     CONCAT12(uVar11,_SS)),uVar11,0);
           manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);
+                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
         }
         else {
           iVar4 = 0x8c;
-          pcVar5 = ovr_stsprintf((char *)(unaff_BP + -0xb6));
+          numText = ovr_stsprintf((char *)(unaff_BP + -0xb6));
           manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);
+                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
         }
         if (*(int *)(unaff_BP + -0x10) == 0) {
           iVar4 = 0xb4;
           uVar11 = (undefined1)*(uint16_t *)(unaff_BP + -8);
-          pcVar5 = litoa10((char *)(unaff_BP + -0x66),
+          numText = litoa10((char *)(unaff_BP + -0x66),
                            CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + -8) >> 8),
                                     CONCAT12(uVar11,_SS)),uVar11,0);
           manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);
+                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
         }
         else {
           iVar4 = 0xb4;
-          pcVar5 = ovr_stsprintf((char *)(unaff_BP + -0xb6));
+          numText = ovr_stsprintf((char *)(unaff_BP + -0xb6));
           manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);
+                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
         }
         if (*(int *)(unaff_BP + -0x12) == 0) {
           iVar4 = 0xdc;
           uVar11 = (undefined1)*(uint16_t *)(unaff_BP + -10);
-          pcVar5 = litoa10((char *)(unaff_BP + -0x66),
+          numText = litoa10((char *)(unaff_BP + -0x66),
                            CONCAT13((char)((uint)*(uint16_t *)(unaff_BP + -10) >> 8),
                                     CONCAT12(uVar11,_SS)),uVar11,0);
           manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);
+                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
         }
         else {
           iVar4 = 0xdc;
-          pcVar5 = ovr_stsprintf((char *)(unaff_BP + -0xb6));
+          numText = ovr_stsprintf((char *)(unaff_BP + -0xb6));
           manage_blitLabelRight
-                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,pcVar5)),iVar4);
+                    ((char *)CONCAT13((char)((uint)uVar7 >> 8),CONCAT12((char)uVar7,numText)),iVar4);
         }
       }
       TextBlitY = TextBlitY + 0xc;
