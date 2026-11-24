@@ -429,3 +429,33 @@ actually used instead of the dead link-time constant:
 The two generic passes are `tmp/fix_195d_seedcall.py` (drop a `V = 0x195d` seed and
 capture DX after the following call) and `tmp/fix_195d_blocks.py`
 (`<file> <function> <store-fn>` for the full stsh block shape).
+
+## Current count: 211, and 202 of them are one body
+
+After the passes above, the constant stands at 211 across the tree:
+
+| file | count | state |
+|---|---|---|
+| `ovc45_unitinfo.c` | 202 | the merged `ovc45_buildPlacementMessage` body, blocked on the model split |
+| `ovc15_sprite.c` | 2 | one inline `.seg` store in `stshInitSprites`, one numeric comparison |
+| `ovc18_leaderview.c` | 1 | inside the mis-modelled `ovc18_spawnClassAgent` block |
+| `ovc21_manage.c` | 1 | inside the corrupt switch body at 1623 |
+| `ovc22_classes.c` | 1 | `AgntAnms[0x68].ey | 0x195d` in that same corrupt switch |
+| `ovc23_bldrec.c` | 1 | `dst` is a `stsprintf` vararg *and* the notify segment |
+| `ovc24_entities.c` | 1 | `uVar7`, the same two-role problem |
+| `ovc49_agents.c` | 1 | inside a mis-modelled block |
+| `st_stubs.c` | 1 | a comment that explains the constant |
+
+Modules at zero: `ovc44_strong_dat.c`, `ovc48_assets2.c`, `ovc20_stash.c`,
+`ovc47_constrct.c`, `ovc41_main.c`, `ovc19_save.c`, `ovc25_intel.c`,
+`ovc35_bldng.c`.
+
+The three generic passes, all in `tmp/`:
+
+* `fix_195d_blocks.py <file> <function> <store-fn>` - the full stsh block shape
+  (capture DX, pass it, store the returned segment);
+* `fix_195d_seedcall.py <file>` - a `V = 0x195d` seed replaced by the following
+  call's DX, with SKIP diagnostics for the shapes it cannot prove;
+* the one-off `fix_195d_*.py` scripts for shapes that needed a type-aware
+  rewrite (`uint32_t p` whose segment half preceded the call, blocks whose
+  segment argument was an unassigned local, the `stsprintf` stash strings).
