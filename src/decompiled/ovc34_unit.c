@@ -309,7 +309,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   far_t handle;
   far_t handle_00;
   byte bVar1;
-  char *pcVar2;
+  char *textPtr;
   undefined1 extraout_AH;
   uint16_t uVar3;
   uint16_t sheetEntry;   /* sheetByte record +0x107 */
@@ -377,12 +377,12 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   uVar6 = 0x2410;
   sheetEntry = *(uint16_t *)((uint)sheetByte * 4 + 0x107);
   uVar13 = (undefined1)sheetEntry;
-  pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x648f,_SS),
+  textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x648f,_SS),
                          (char *)CONCAT13((char)((uint)sheetEntry >> 8),CONCAT12(uVar13,0x2410)),uVar13,
                          (char)*(uint16_t *)((uint)sheetByte * 4 + 0x109),
                          (char)*(uint16_t *)((uint)partyIdx * 4),
                          ((uint16_t *)((uint)partyIdx * 4))[1]);
-  ovr_say(pcVar2,uVar6);
+  ovr_say(textPtr,uVar6);
   do {
     type = SUB21(_SS,0);
     uVar13 = (undefined1)((uint)_SS >> 8);
@@ -540,11 +540,11 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
                                     0x43,3,0xa000);
         suffix = ovr_ovc41_pluralSuffix(matchCount,(char)textWidth,uVar14);
         uVar6 = 0x2410;
-        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x64b8,_SS),
+        textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x64b8,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                *(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                *(uint16_t *)((uint)sheetByte * 4 + 0x141),suffix,uVar14);
-        ovr_uiNotify(pcVar2,uVar6,(char)uVar6);
+        ovr_uiNotify(textPtr,uVar6,(char)uVar6);
       }
       pbStack_28 = pbStack_20;
       pbStack_26 = pbVar12;
@@ -616,42 +616,42 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       if (input == 0x1) {
         suffix = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
-        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6522,_SS),
+        textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6522,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
                               );
-        ovr_say(pcVar2,uVar9);
+        ovr_say(textPtr,uVar9);
       }
       else if (input == 0x2) {
         suffix = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
-        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6543,_SS),
+        textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6543,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
                               );
-        ovr_say(pcVar2,uVar9);
+        ovr_say(textPtr,uVar9);
       }
       else if (input == 0x3) {
         suffix = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
-        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6557,_SS),
+        textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6557,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
                               );
-        ovr_say(pcVar2,uVar9);
+        ovr_say(textPtr,uVar9);
       }
       else if (input == 0x4) {
         suffix = ovr_ovc41_pluralSuffix(matchCount);
         uVar9 = 0x2410;
-        pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6568,_SS),
+        textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6568,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
                               );
-        ovr_say(pcVar2,uVar9);
+        ovr_say(textPtr,uVar9);
       }
       ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x24));
       goto L_ui_unit_order_6616_0689_106E;

@@ -382,8 +382,8 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
   far_t gfx_00;
   char *pcVar1;
   byte *pbVar2;
-  uint16_t uVar3;
-  uint16_t uVar4;
+  uint16_t fontOfs;
+  uint16_t fontSeg;
   uint8_t color;
   far_t dst;
   far_t dst_00;
@@ -400,29 +400,29 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
   if (*label == '%') {
     BlitLetterType = 2;
     color = 0x3f;
-    uVar3 = Font01.ofs;
-    uVar4 = Font01.seg;
+    fontOfs = Font01.ofs;
+    fontSeg = Font01.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,_SS),
                                         (char *)CONCAT22(Font01.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),Font01.seg,'E',3);
-    ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,color);
+    ovr_blitLabel(pcVar1,(byte *)CONCAT22(fontOfs,pbVar2),fontSeg,color);
     BlitLetterType = 0;
   }
   else if (*label == '@') {
     color = 0x3f;
-    uVar3 = Font01.ofs;
-    uVar4 = Font01.seg;
+    fontOfs = Font01.ofs;
+    fontSeg = Font01.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,_SS),
                                         (char *)CONCAT22(Font01.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),Font01.seg,'E',3);
-    ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,color);
+    ovr_blitLabel(pcVar1,(byte *)CONCAT22(fontOfs,pbVar2),fontSeg,color);
   }
   else {
     color = 0x3f;
-    uVar3 = Font01.ofs;
-    uVar4 = Font01.seg;
+    fontOfs = Font01.ofs;
+    fontSeg = Font01.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label,_SS),
                                         (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
-    ovr_blitText(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,color);
+    ovr_blitText(pcVar1,(byte *)CONCAT22(fontOfs,pbVar2),fontSeg,color);
   }
   ovc28_usesBDADailyTimeCounter(3);
   dst_00.seg = 0xa000;
@@ -436,31 +436,31 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
   if (*label == '%') {
     BlitLetterType = 2;
     color = 0x3f;
-    uVar3 = FontMain.ofs;
-    uVar4 = FontMain.seg;
+    fontOfs = FontMain.ofs;
+    fontSeg = FontMain.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,_SS),
                                         (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
-    ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,color);
+    ovr_blitLabel(pcVar1,(byte *)CONCAT22(fontOfs,pbVar2),fontSeg,color);
     BlitLetterType = 0;
   }
   else if (*label == '@') {
     color = 0x3f;
-    uVar3 = FontMain.ofs;
-    uVar4 = FontMain.seg;
+    fontOfs = FontMain.ofs;
+    fontSeg = FontMain.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label + 1,_SS),
                                         (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
-    ovr_blitLabel(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,color);
+    ovr_blitLabel(pcVar1,(byte *)CONCAT22(fontOfs,pbVar2),fontSeg,color);
   }
   else {
     color = 0x3f;
-    uVar3 = FontMain.ofs;
-    uVar4 = FontMain.seg;
+    fontOfs = FontMain.ofs;
+    fontSeg = FontMain.seg;
     pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22((char *)label,_SS),
                                         (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
-    ovr_blitText(pcVar1,(byte *)CONCAT22(uVar3,pbVar2),uVar4,color);
+    ovr_blitText(pcVar1,(byte *)CONCAT22(fontOfs,pbVar2),fontSeg,color);
   }
   return;
 }
