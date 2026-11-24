@@ -755,7 +755,7 @@ int __cdecl16far ovc23_usesCornerBR(int x,int bldType)
   int iVar2;
   uint uVar3;
   int iStack_14;
-  int iStack_12;
+  int cornerSample;
   uint8_t cornerBR;
   uint8_t cornerBL;
   uint8_t cornerTR;
@@ -765,31 +765,31 @@ int __cdecl16far ovc23_usesCornerBR(int x,int bldType)
   iVar1 = ovr_constr_usesSmoothPrev(x,-1,(int *)&cornerTL,0,0);
   iVar2 = ovr_constr_usesSmoothPrev(x,0,(int *)&cornerBL,0,0);
   if (*(byte *)((uint8_t *)&BuildingTypes[bldType] + 13) < 2) {
-    iStack_12 = ovr_constr_usesSmoothPrev(x + 1,-1,(int *)&cornerTR,0,0);
+    cornerSample = ovr_constr_usesSmoothPrev(x + 1,-1,(int *)&cornerTR,0,0);
     iStack_14 = ovr_constr_usesSmoothPrev(x + 1,0,(int *)&cornerBR,0,0);
   }
   else if (*(byte *)((uint8_t *)&BuildingTypes[bldType] + 13) < 3) {
-    iStack_12 = ovr_constr_usesSmoothPrev(x + 2,-1,(int *)&cornerTR,0,0);
+    cornerSample = ovr_constr_usesSmoothPrev(x + 2,-1,(int *)&cornerTR,0,0);
     iStack_14 = ovr_constr_usesSmoothPrev(x + 2,0,(int *)&cornerBR,0,0);
   }
   else {
-    iStack_12 = ovr_constr_usesSmoothPrev(x + 4,-1,(int *)&cornerTR,0,0);
+    cornerSample = ovr_constr_usesSmoothPrev(x + 4,-1,(int *)&cornerTR,0,0);
     iStack_14 = ovr_constr_usesSmoothPrev(x + 4,0,(int *)&cornerBR,0,0);
   }
   uVar3 = (uint)cornerShadeBias[0];
-  iStack_4 = iVar2 + iVar1 + iStack_12 + iStack_14 >> 2;
-  if ((int)(iVar1 - uVar3) < (int)(iStack_12 - uVar3)) {
+  iStack_4 = iVar2 + iVar1 + cornerSample + iStack_14 >> 2;
+  if ((int)(iVar1 - uVar3) < (int)(cornerSample - uVar3)) {
     iVar2 = iVar1 - uVar3;
   }
   else {
-    iVar2 = iStack_12 - uVar3;
+    iVar2 = cornerSample - uVar3;
   }
   if (iStack_4 < iVar2) {
-    if ((int)(iVar1 - uVar3) < (int)(iStack_12 - uVar3)) {
+    if ((int)(iVar1 - uVar3) < (int)(cornerSample - uVar3)) {
       iStack_4 = iVar1 - uVar3;
     }
     else {
-      iStack_4 = iStack_12 - uVar3;
+      iStack_4 = cornerSample - uVar3;
     }
   }
   return iStack_4;
