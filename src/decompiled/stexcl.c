@@ -1,0 +1,27 @@
+/* stand-ins for excluded modules */
+
+int ovc45_buildplacementmessage() { return 0; }
+int ovc45_compute3() { return 0; }
+int ovc45_compute4() { return 0; }
+int ovc45_compute6() { return 0; }
+int ovc45_compute7() { return 0; }
+int ovc45_compute8() { return 0; }
+int ovc45_compute9() { return 0; }
+int ovc45_costorincomelabel() { return 0; }
+int ovc45_findentityat() { return 0; }
+int ovc45_getunitindex() { return 0; }
+int ovc45_getunittype() { return 0; }
+int ovc45_rankpercent() { return 0; }
+int ovc45_showlandinfo() { return 0; }
+int ovc45_textchoosepartybuild() { return 0; }
+int ovc45_textdone() { return 0; }
+int ovc45_textdone2() { return 0; }
+int ovc45_usesgfxrndseed2() { return 0; }
+int ovc45_usesgmapflags4() { return 0; }
+int ovc45_usesgpopulationlo() { return 0; }
+int ovc45_usesldiv_at_() { return 0; }
+int ovc49_body1() { return 0; }
+int ovc49_compute1() { return 0; }
+int ovc49_drawagents() { return 0; }
+int ovc49_fillgridcells() { return 0; }
+int ovc49_usesstexit() { return 0; }

@@ -121,7 +121,10 @@ def main():
     objs = sorted(n for n in os.listdir(BUILDSRC) if n.lower().endswith(".obj"))
     # EXCLUDE_OBJS=OVL.OBJ,OVR.OBJ lets the overlay experiments drop modules
     # compiler machinery is provided by the toolchain, not by our recovery
-    DEFAULT_EXCLUDE = "OVL.OBJ"
+    # o45 (unitinfo) and o49 (agents) are excluded so the resident image fits
+    # below the 640 KiB conventional-memory limit; stexcl.c supplies their
+    # symbols as return-0 stand-ins.
+    DEFAULT_EXCLUDE = "OVL.OBJ,O45.OBJ,O49.OBJ"
     _excl = [x.strip().upper() for x in
              (os.environ.get("EXCLUDE_OBJS", DEFAULT_EXCLUDE)).split(",")
              if x.strip()]
