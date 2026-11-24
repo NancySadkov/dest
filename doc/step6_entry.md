@@ -2612,3 +2612,39 @@ The next measurement should therefore read the **actual DOS return** (CF/AX) of 
 INT 21h AH=3Ch call, by capturing AX into a file the batch can see or by branching on
 it *inside* the program and writing the branch result through the batch - not by
 `errorlevel`.
+
+## The program cannot write to its own standard handles
+
+A probe that avoids `errorlevel` entirely - raw `INT 21h AH=3Ch` in a helper whose
+return is printed - showed nothing at all, and the printed text itself never reached
+the redirect:
+
+```c
+write(1, "HI\n", 3);      /* stdout is redirected to OUT.TXT by the batch */
+write(2, "ERR\n", 4);
+exit(0);
+```
+
+`OUT.TXT` is **0 bytes**.  So it is not the file-create call that is broken: the
+program cannot write to handle 1 (or 2) either, and `printf` output is lost the same
+way.
+
+Initialising the CRT handle table in `startx` (what C0's `__initio` would do):
+
+```c
+_nfile = 20;
+for (i = 0; i < 20; i++) __openfd[i] = (i < 5) ? i : 0xFF;
+```
+
+does **not** change that - `OUT.TXT` stays empty - so the table contents are not the
+missing piece either.
+
+That reframes the whole file-layer thread: every DOS-level operation from this
+program (open, create, mkdir, write to stdout) silently does nothing while the C
+library reports success, under both emulators.  The next thing to verify is therefore
+not the file API but whether `INT 21h` from our program reaches DOS at all when
+`AH >= 3Ch` (e.g. an interrupt hook installed by `startx`'s `SaveVectors` for
+vectors 0/4/5/6, or ES/DS assumptions inside the library's DOS entry).  A minimal
+test is a raw `INT 21h AH=09h` (print string) with a DGROUP string - if that prints
+and `AH=40h` on handle 1 does not, the handle path is the problem; if neither prints,
+the interrupt path is.
