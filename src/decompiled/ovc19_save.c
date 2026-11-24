@@ -69,7 +69,6 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
     for (uVar2 = 0xf8; uVar2 < GUnitCount; uVar2 = uVar2 + 1) {
       uVar4 = (uint16_t)((ulong)GUnits >> 0x10);
       puVar1 = (unit_t *)GUnits;
-      in_DX = 0x195d;
       if ((*(byte *)((uint)(puVar1 + uVar2)->bldType * 0x27 + 0x11e) & 3) != 0) {
         ovr_ovc23_rebuildDirectionFlags(puVar1[uVar2].x,puVar1[uVar2].y);
         uVar4 = (uint16_t)((ulong)GUnits >> 0x10);

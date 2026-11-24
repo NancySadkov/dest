@@ -1293,7 +1293,7 @@ L_OVC49_8699_18c4_1CA7:
       if (*(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x116) == 0 &&
           *(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x118) == 0) {
         if (((uStackY_26 < 0xf8) || (*(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x125) == 0)) ||
-           (uVar22 = 0x195d, (*(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x121) & 4) != 0)) {
+           ((*(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x121) & 4) != 0)) {
           if ((((*(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x121) & 4) == 0) ||
               (puVar23[uStackY_26].unitType == 0xff)) ||
              (uVar31 = *(uint32_t *)((uint)puVar23[uStackY_26].unitType << 2),
@@ -1311,6 +1311,7 @@ L_OVC49_8699_18c4_1CA7:
           if ((*(uint8_t *)((uint8_t *)&(bStackY_32.seg) + 1)) != '\0') {
             pcVar10 = ovr_fmVsprintf(" Salvage value %d gold.",
                                      (char *)CONCAT22(in_stack_0000fff6,pcVar10));
+                                     asm { mov uVar22,dx };
             strcat((char *)CONCAT13(uVar38,CONCAT12(bVar36,auStackY_2ca)),
                    (char *)CONCAT13((char)((uint)uVar22 >> 8),CONCAT12((char)uVar22,pcVar10)));
           }
