@@ -1882,42 +1882,42 @@ void __cdecl16far ovc41_initIndexPerms(void)
 void __cdecl16far ovc41_removeIndexPerm(uint removedIndex)
 
 {
-  undefined1 uVar1;
-  uint uVar2;
+  undefined1 permByte;
+  uint permIdx;
   
-  for (uVar2 = 0; (int)uVar2 < 0xc; uVar2 = uVar2 + 1) {
-    if (uVar2 != removedIndex) {
-      uVar1 = (undefined1)uVar2;
-      if ((byte)((undefined1 *)&IndexPermD)[uVar2] == removedIndex) {
+  for (permIdx = 0; (int)permIdx < 0xc; permIdx = permIdx + 1) {
+    if (permIdx != removedIndex) {
+      permByte = (undefined1)permIdx;
+      if ((byte)((undefined1 *)&IndexPermD)[permIdx] == removedIndex) {
         if ((byte)((undefined1 *)&IndexPermD)[removedIndex] == removedIndex) {
-          ((undefined1 *)&IndexPermD)[uVar2] = uVar1;
+          ((undefined1 *)&IndexPermD)[permIdx] = permByte;
         }
         else {
-          ((undefined1 *)&IndexPermD)[uVar2] = ((undefined1 *)&IndexPermD)[removedIndex];
+          ((undefined1 *)&IndexPermD)[permIdx] = ((undefined1 *)&IndexPermD)[removedIndex];
         }
       }
-      if ((byte)((undefined1 *)&IndexPermC)[uVar2] == removedIndex) {
+      if ((byte)((undefined1 *)&IndexPermC)[permIdx] == removedIndex) {
         if ((byte)((undefined1 *)&IndexPermC)[removedIndex] == removedIndex) {
-          ((undefined1 *)&IndexPermC)[uVar2] = uVar1;
+          ((undefined1 *)&IndexPermC)[permIdx] = permByte;
         }
         else {
-          ((undefined1 *)&IndexPermC)[uVar2] = ((undefined1 *)&IndexPermC)[removedIndex];
+          ((undefined1 *)&IndexPermC)[permIdx] = ((undefined1 *)&IndexPermC)[removedIndex];
         }
       }
-      if ((byte)((undefined1 *)&IndexPermB)[uVar2] == removedIndex) {
+      if ((byte)((undefined1 *)&IndexPermB)[permIdx] == removedIndex) {
         if ((byte)((undefined1 *)&IndexPermB)[removedIndex] == removedIndex) {
-          ((undefined1 *)&IndexPermB)[uVar2] = uVar1;
+          ((undefined1 *)&IndexPermB)[permIdx] = permByte;
         }
         else {
-          ((undefined1 *)&IndexPermB)[uVar2] = ((undefined1 *)&IndexPermB)[removedIndex];
+          ((undefined1 *)&IndexPermB)[permIdx] = ((undefined1 *)&IndexPermB)[removedIndex];
         }
       }
-      if ((byte)((undefined1 *)&IndexPermA)[uVar2] == removedIndex) {
+      if ((byte)((undefined1 *)&IndexPermA)[permIdx] == removedIndex) {
         if ((byte)((undefined1 *)&IndexPermA)[removedIndex] == removedIndex) {
-          ((undefined1 *)&IndexPermA)[uVar2] = uVar1;
+          ((undefined1 *)&IndexPermA)[permIdx] = permByte;
         }
         else {
-          ((undefined1 *)&IndexPermA)[uVar2] = ((undefined1 *)&IndexPermA)[removedIndex];
+          ((undefined1 *)&IndexPermA)[permIdx] = ((undefined1 *)&IndexPermA)[removedIndex];
         }
       }
     }
