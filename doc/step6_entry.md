@@ -2588,3 +2588,27 @@ Next: encode the captured value in an exit code - `exit((_psp >> 8) & 0xFF)` and
 at that segment and compare with the PSP DOS reports (INT 21h AH=51h).  That will
 show whether `_ES` at entry is stale (e.g. the loader's own segment) or whether the
 capture is overwritten before `init_game`.
+
+## The handle table is fine; errorlevel probes are unreliable
+
+`_nfile` (the CRT's file-handle count) reads **20** in the running build, i.e. the
+library data is initialised and the table is not the cause of the "success without a
+file" behaviour.  An earlier reading of `< 5` came from an `if errorlevel` probe and
+was wrong: once the program can exit on its own, `errorlevel` can be stale or set by
+something other than our `exit()` code, so **exit-code probes are only trustworthy
+when the DIR/file checks agree**.
+
+That leaves the file-layer question open again, with these facts established by
+observation rather than by inference:
+
+* mount writable, DOS `md` works, original game creates its folder;
+* path string / `DS` / `_MKDIR` binding / drive / `_psp` (now from `AH=51h`) all
+  verified;
+* emulator exonerated (stock DOSBox-X identical);
+* `_nfile` = 20, so the handle table is initialised;
+* `fopen`/`creat`/`mkdir` all report success while DOS's own `dir` shows nothing.
+
+The next measurement should therefore read the **actual DOS return** (CF/AX) of one
+INT 21h AH=3Ch call, by capturing AX into a file the batch can see or by branching on
+it *inside* the program and writing the branch result through the batch - not by
+`errorlevel`.
