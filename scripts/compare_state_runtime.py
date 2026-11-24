@@ -143,7 +143,11 @@ checked = 0
 for row in state:
     oseg, oofs, size, name, decl, kind = (int(row[0], 16), int(row[1], 16),
                                          int(row[2]), row[3], row[4], row[5])
-    hit = resolve(name)
+    # duplicate names: prefer the export's address-tagged twin (s_empty@611f ->
+    # s_empty_2410_611f) over the unrelated same-named symbol
+    hit = _by_exact.get("OFS_%04X" % oofs) if oseg == DG_ORIG else None
+    if hit is None:
+        hit = resolve(name)
     if hit is None:
         missing += 1
         continue
@@ -157,6 +161,9 @@ for row in state:
     b = ub[ua + uofs:ua + uofs + size]
     same = True
     if kind in ("farptr", "table"):
+        hit = _by_exact.get("OFS_%04X" % oofs) if oseg == DG_ORIG else None
+        if hit is None:
+            hit = resolve(name)
         for k in range(0, size - 1, 2):
             wa, wb = struct.unpack_from("<H", a, k)[0], struct.unpack_from("<H", b, k)[0]
             if wa == wb:

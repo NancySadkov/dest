@@ -650,7 +650,7 @@ seg	ofs	size	name	decl	kind
 2410	009a	46	s_sorry_you_may_not_pass_time_during_a_battle	undefined s_sorry_you_may_not_pass_time_during_a_battle[]	string
 2410	00c8	16	s_time_passes	undefined s_time_passes[]	string
 2410	00d8	1	bigcompFrame	undefined1 bigcompFrame	scalar
-2410	00d9	11	TextBlitFlag	undefined1 TextBlitFlag	scalar
+2410	00d9	1	TextBlitFlag	undefined1 TextBlitFlag	scalar
 2410	00e4	2	MouseX	undefined2 MouseX	scalar
 2410	00e6	2	MouseY	undefined2 MouseY	scalar
 2410	00e8	2	MouseMoved	undefined2 MouseMoved	scalar
@@ -681,7 +681,7 @@ seg	ofs	size	name	decl	kind
 2410	015b	4	BDA_DailyTimeCounter	far_t BDA_DailyTimeCounter	farptr
 2410	015f	1	CrossBlitCount	undefined1 CrossBlitCount	scalar
 2410	0160	1	DrawBusy	undefined1 DrawBusy	scalar
-2410	0161	2	timePassing	undefined1 timePassing	scalar
+2410	0161	1	timePassing	undefined1 timePassing	scalar
 2410	0163	1	GCharLevelsInc	undefined1 GCharLevelsInc	scalar
 2410	0164	1	destroyLatchSide1	undefined1 destroyLatchSide1	scalar
 2410	0165	1	destroyLatchSide0	undefined1 destroyLatchSide0	scalar
@@ -745,7 +745,7 @@ seg	ofs	size	name	decl	kind
 2410	0316	2	IdPBM_	DW IdPBM_	scalar
 2410	0318	2	IdPBM_.hi		scalar
 2410	031a	17	s_n_d_w_u_s_u	undefined s_n_d_w_u_s_u[]	string
-2410	032b	19	s_Filename__d__s_2410_032b	undefined s_Filename__d__s_2410_032b[]	string
+2410	032b	18	s_Filename__d__s_2410_032b	undefined s_Filename__d__s_2410_032b[]	string
 2410	033e	20	GErrorStrings	far_t GErrorStrings[5]	table
 2410	0352	41	s_Bad_'game.cfg'_file._Please_reco_2410_0352		scalar
 2410	037b	24	s_Cannot_find_sound_card._2410_037b		scalar
@@ -765,7 +765,7 @@ seg	ofs	size	name	decl	kind
 2410	0439	1	GPaused	undefined1 GPaused	scalar
 2410	043a	1	GDebug	bool GDebug	scalar
 2410	043b	2	__ovrbuffer	undefined2 __ovrbuffer	scalar
-2410	043d	3	__stklen	uint16_t __stklen	scalar
+2410	043d	2	__stklen	uint16_t __stklen	scalar
 2410	0440	8	BlitRects	brect_t BlitRects[5]	scalar
 2410	0448	2	BlitRects[0].seg		scalar
 2410	044a	28	BlitRects[1].x		scalar
@@ -774,17 +774,17 @@ seg	ofs	size	name	decl	kind
 2410	0470	34	BlitRects[4].seg		scalar
 2410	0492	12	s_error_27__2410_0492	undefined s_error_27__2410_0492[]	string
 2410	049e	26	s_y1_d_yn_d_y3_d_yx_d	undefined s_y1_d_yn_d_y3_d_yx_d[]	string
-2410	04b8	22	MiceFlag	undefined2 MiceFlag	scalar
+2410	04b8	2	MiceFlag	undefined2 MiceFlag	scalar
 2410	04ce	8	MiceOfsX	int16_t MiceOfsX[4]	scalar
 2410	04d6	8	MiceOfsY	int16_t MiceOfsY[4]	scalar
 2410	04de	2	MiceIndex	undefined2 MiceIndex	scalar
 2410	04e0	1	MiceUnkState	undefined1 MiceUnkState	scalar
-2410	04e1	3	s__2410_04e1	undefined s__2410_04e1[]	string
+2410	04e1	2	s__2410_04e1	undefined s__2410_04e1[]	string
 2410	04e4	2	StshStrongDatHnd	int StshStrongDatHnd	scalar
 2410	04e6	2	GCrLf	undefined2 GCrLf	scalar
-2410	04e8	10	scaleTable	undefined scaleTable	scalar
-2410	04f2	16	edgeMaskTable	undefined edgeMaskTable	scalar
-2410	0502	8	neighbourOfsTable	undefined neighbourOfsTable	scalar
+2410	04e8	1	scaleTable	undefined scaleTable	scalar
+2410	04f2	1	edgeMaskTable	undefined edgeMaskTable	scalar
+2410	0502	1	neighbourOfsTable	undefined neighbourOfsTable	scalar
 2410	050a	2	GrayscalePalette	far_t GrayscalePalette	farptr
 2410	050c	2	GrayscalePalette.seg		scalar
 2410	050e	11	GrayscaleIndices	uint8_t GrayscaleIndices[11]	scalar
@@ -838,7 +838,7 @@ seg	ofs	size	name	decl	kind
 2410	0740	2	cornerShadeBias[4]		scalar
 2410	0742	2	SmoothPrev	undefined2 SmoothPrev	scalar
 2410	0744	1	seasonGroupBase	undefined1 seasonGroupBase	scalar
-2410	0745	6	shadeTable	undefined shadeTable	scalar
+2410	0745	1	shadeTable	undefined shadeTable	scalar
 2410	074b	2	rowBandOrigin	uint8_t rowBandOrigin[10]	scalar
 2410	074d	1	rowBandOrigin[2]		scalar
 2410	074e	7	rowBandOrigin[3]		scalar
@@ -876,7 +876,7 @@ seg	ofs	size	name	decl	kind
 2410	07ca	2	MusHandle	undefined2 MusHandle	scalar
 2410	07cc	2	MusHandleSeg	undefined2 MusHandleSeg	scalar
 2410	07ce	2	MusDrvOfs	undefined2 MusDrvOfs	scalar
-2410	07d0	6	MusDrvSeg	undefined2 MusDrvSeg	scalar
+2410	07d0	2	MusDrvSeg	undefined2 MusDrvSeg	scalar
 2410	07d6	12	s_midi_error	undefined s_midi_error[]	string
 2410	07e2	1	animBranchCode	undefined1 animBranchCode	scalar
 2410	07e3	2	audioSaveCut1Ofs	undefined2 audioSaveCut1Ofs	scalar
@@ -884,7 +884,7 @@ seg	ofs	size	name	decl	kind
 2410	07e7	2	audioSaveCut2Ofs	undefined2 audioSaveCut2Ofs	scalar
 2410	07e9	2	audioSaveCut2Seg	undefined2 audioSaveCut2Seg	scalar
 2410	07eb	1	AgntFlag2	bool AgntFlag2	scalar
-2410	07ec	10	mouseSaveRect4	undefined mouseSaveRect4	scalar
+2410	07ec	1	mouseSaveRect4	undefined mouseSaveRect4	scalar
 2410	07f6	2	BattleDelay	undefined2 BattleDelay	scalar
 2410	07f8	11	s_charmed_s	undefined s_charmed_s[]	string
 2410	0803	10	s_turned_s	undefined s_turned_s[]	string
@@ -895,17 +895,17 @@ seg	ofs	size	name	decl	kind
 2410	083c	8	s_held_s	undefined s_held_s[]	string
 2410	0844	1	GMenuFlag	undefined1 GMenuFlag	scalar
 2410	0845	1	noAnimBlit	uint8_t noAnimBlit	scalar
-2410	0846	18	flashPaletteEf	undefined flashPaletteEf	scalar
-2410	0858	10	mouseSaveRect1	undefined mouseSaveRect1	scalar
+2410	0846	1	flashPaletteEf	undefined flashPaletteEf	scalar
+2410	0858	1	mouseSaveRect1	undefined mouseSaveRect1	scalar
 2410	0862	1	Highlight1	undefined1 Highlight1	scalar
 2410	0863	1	Highlight1	undefined1 Highlight1	scalar
-2410	0864	10	s_d_d	undefined s_d_d[]	string
+2410	0864	9	s_d_d	undefined s_d_d[]	string
 2410	086e	2	SquareRecX	undefined2 SquareRecX	scalar
-2410	0870	17	SquareRecY	undefined2 SquareRecY	scalar
+2410	0870	2	SquareRecY	undefined2 SquareRecY	scalar
 2410	0881	2	SquareRecCount	undefined2 SquareRecCount	scalar
-2410	0883	10	SquareRecIndex	undefined2 SquareRecIndex	scalar
-2410	088d	10	mouseSaveRect3	undefined mouseSaveRect3	scalar
-2410	0897	10	mouseSaveRect2	undefined mouseSaveRect2	scalar
+2410	0883	2	SquareRecIndex	undefined2 SquareRecIndex	scalar
+2410	088d	1	mouseSaveRect3	undefined mouseSaveRect3	scalar
+2410	0897	1	mouseSaveRect2	undefined mouseSaveRect2	scalar
 2410	08a1	57	s_intelligence_reports_s_unit_engaged_in_comba	undefined s_intelligence_reports_s_unit_engaged_in_comba[]	string
 2410	08da	5	s_d	undefined s_d[]	string
 2410	08df	11	s_d_d_d	undefined s_d_d_d[]	string
@@ -987,7 +987,7 @@ seg	ofs	size	name	decl	kind
 2410	1cfd	8	s_Fill_in_2410_1cfd	undefined s_Fill_in_2410_1cfd[]	string
 2410	1d05	2	upperTextOfs	byte *upperTextOfs	farptr
 2410	1d07	2	upperTextSeg	undefined2 upperTextSeg	scalar
-2410	1d09	8	sfxXOffsets	undefined sfxXOffsets	scalar
+2410	1d09	1	sfxXOffsets	undefined sfxXOffsets	scalar
 2410	1d11	17	s_undeveloped_land_2410_1d11	undefined s_undeveloped_land_2410_1d11[]	string
 2410	1d22	5	s_plot_2410_1d22	undefined s_plot_2410_1d22[]	string
 2410	1d27	5	s_farm_2410_1d27	undefined s_farm_2410_1d27[]	string
@@ -1208,11 +1208,11 @@ seg	ofs	size	name	decl	kind
 2410	26a8	1	ScreenMode	undefined1 ScreenMode	scalar
 2410	26a9	2	GSPEmpty	far_t GSPEmpty	farptr
 2410	26ab	2	GSPEmpty.seg		scalar
-2410	26ad	10	promptRect	undefined promptRect	scalar
+2410	26ad	1	promptRect	undefined promptRect	scalar
 2410	26b7	32	GMenuStrings	char *GMenuStrings[8]	farptr
 2410	26d7	8	GYesNo	char *GYesNo[2]	farptr
 2410	26df	2	GSeed	undefined2 GSeed	scalar
-2410	26e1	22	SeedHi	undefined2 SeedHi	scalar
+2410	26e1	2	SeedHi	undefined2 SeedHi	scalar
 2410	26f7	52	worldMenuLabels	far_t worldMenuLabels[13]	table
 2410	272b	7	s__Empty__2410_272b	undefined s__Empty__2410_272b[]	string
 2410	2732	1	s__Empty__2410_272b+7		scalar
@@ -1742,7 +1742,7 @@ seg	ofs	size	name	decl	kind
 2410	41ef	19	s_build\elfarro1.lbm_2410_41ef		scalar
 2410	4202	19	s_build\elfarro2.lbm_2410_4202		scalar
 2410	4215	19	s_build\clebath1.lbm_2410_4215		scalar
-2410	4228	12	s_build_clebath2_lbm_2410_4228	undefined s_build_clebath2_lbm_2410_4228	scalar
+2410	4228	1	s_build_clebath2_lbm_2410_4228	undefined s_build_clebath2_lbm_2410_4228	scalar
 2410	4234	7	BldInstances	bld_inst_t BldInstances[75]	scalar
 2410	423b	19	BldInstances[0].data[3]		scalar
 2410	424e	19	BldInstances[2].seg		scalar
@@ -1810,7 +1810,7 @@ seg	ofs	size	name	decl	kind
 2410	46b8	36	s_cannot_place_another_fortress_here	undefined s_cannot_place_another_fortress_here[]	string
 2410	46dc	55	s_this_location_is_unsuitable_for_a_main_stron	undefined s_this_location_is_unsuitable_for_a_main_stron[]	string
 2410	4713	33	s_this_location_is_unsuitable_s	undefined s_this_location_is_unsuitable_s[]	string
-2410	4734	34	s_your_stronghold_is_too_far_away	undefined s_your_stronghold_is_too_far_away[]	string
+2410	4734	33	s_your_stronghold_is_too_far_away	undefined s_your_stronghold_is_too_far_away[]	string
 2410	4756	1	SaveAuto	undefined1 SaveAuto	scalar
 2410	4757	1	suppressLoadError	undefined1 suppressLoadError	scalar
 2410	4758	2	SaveHeader	far_t SaveHeader	farptr
@@ -1858,17 +1858,17 @@ seg	ofs	size	name	decl	kind
 2410	4927	2	GAlignmentsNames	far_t GAlignmentsNames[3]	table
 2410	4929	10	GAlignmentsNames[0].seg		scalar
 2410	4933	8	far_t_ARRAY_2410_4933	far_t far_t_ARRAY_2410_4933[2]	table
-2410	493b	10	panelClipRect	undefined panelClipRect	scalar
+2410	493b	1	panelClipRect	undefined panelClipRect	scalar
 2410	4945	2	GStatsLabels	far_t GStatsLabels[6]	table
 2410	4947	22	GStatsLabels[0].seg		scalar
 2410	495d	128	GPlayerTitles	far_t GPlayerTitles[32]	table
-2410	49dd	7	classStatTable1	undefined classStatTable1	scalar
-2410	49e4	3	classStatTable2	undefined classStatTable2	scalar
+2410	49dd	1	classStatTable1	undefined classStatTable1	scalar
+2410	49e4	1	classStatTable2	undefined classStatTable2	scalar
 2410	49e7	2	GAlignmentString	far_t GAlignmentString	farptr
 2410	49e9	2	GAlignmentString.seg		scalar
 2410	49eb	12	RankReqMsgPtrs	far_t RankReqMsgPtrs[3]	table
 2410	49f7	20	menuHighlightTable	far_t menuHighlightTable[5]	table
-2410	4a0b	7	classLimitTable	undefined classLimitTable	scalar
+2410	4a0b	1	classLimitTable	undefined classLimitTable	scalar
 2410	4a12	2	TimerSeed	DW TimerSeed	scalar
 2410	4a14	2	TimerSeed.hi		scalar
 2410	4a16	16	GKeepDiscardStrings	far_t GKeepDiscardStrings[4]	table
@@ -1880,10 +1880,10 @@ seg	ofs	size	name	decl	kind
 2410	4ac4	2	GStructures[26].name.ofs		scalar
 2410	4ac6	20	GStructures[26].name.seg		scalar
 2410	4ada	20	ManageResultPtrs	far_t ManageResultPtrs[5]	table
-2410	4aee	12	LevelRangeMin	undefined1 LevelRangeMin	scalar
-2410	4afa	12	LevelRangeMax	undefined1 LevelRangeMax	scalar
+2410	4aee	1	LevelRangeMin	undefined1 LevelRangeMin	scalar
+2410	4afa	1	LevelRangeMax	undefined1 LevelRangeMax	scalar
 2410	4b06	80	LevelBandLabels	far_t LevelBandLabels[20]	table
-2410	4b56	23	LevelRangeLabels	far_t LevelRangeLabels[4]	table
+2410	4b56	16	LevelRangeLabels	far_t LevelRangeLabels[4]	table
 2410	4b6d	1	unitTypeFilter	undefined1 unitTypeFilter	scalar
 2410	4b6e	1	partyFilter	undefined1 partyFilter	scalar
 2410	4b6f	6	s_Lawful_2410_4b6f	undefined s_Lawful_2410_4b6f[]	string
@@ -2069,7 +2069,7 @@ seg	ofs	size	name	decl	kind
 2410	5538	44	s_all_units_loyal_to_s_the_s_are_displayed	undefined s_all_units_loyal_to_s_the_s_are_displayed[]	string
 2410	5564	25	s_all_units_are_displayed	undefined s_all_units_are_displayed[]	string
 2410	557d	51	s_only_units_of_s_loyal_to_s_the_s_are_display	undefined s_only_units_of_s_loyal_to_s_the_s_are_display[]	string
-2410	55b0	38	s_only_units_of_s_are_displayed	undefined s_only_units_of_s_are_displayed[]	string
+2410	55b0	32	s_only_units_of_s_are_displayed	undefined s_only_units_of_s_are_displayed[]	string
 2410	55d6	2	EntityScanPos	undefined2 EntityScanPos	scalar
 2410	55d8	8	s_monster	undefined s_monster[]	string
 2410	55e0	5	s__d_2410_55e0	undefined s__d_2410_55e0[]	string
@@ -2094,12 +2094,12 @@ seg	ofs	size	name	decl	kind
 2410	5879	71	s_intelligence_reports_s_unit_succombs_to_blas	undefined s_intelligence_reports_s_unit_succombs_to_blas[]	string
 2410	58c0	53	s_spies_report_s_heading_towards_stronghold_d_	undefined s_spies_report_s_heading_towards_stronghold_d_[]	string
 2410	58f5	17	s_s_is_attacking	undefined s_s_is_attacking[]	string
-2410	5906	68	s_intelligence_reports_s_attacking	undefined s_intelligence_reports_s_attacking[]	string
-2410	594a	32	ditherPlane0	undefined ditherPlane0	scalar
-2410	596a	32	ditherPlane1	undefined ditherPlane1	scalar
-2410	598a	32	ditherPlane2	undefined ditherPlane2	scalar
-2410	59aa	10	reqLevelRow1	undefined reqLevelRow1	scalar
-2410	59b4	11	reqLevelRow2	undefined reqLevelRow2	scalar
+2410	5906	38	s_intelligence_reports_s_attacking	undefined s_intelligence_reports_s_attacking[]	string
+2410	594a	1	ditherPlane0	undefined ditherPlane0	scalar
+2410	596a	1	ditherPlane1	undefined ditherPlane1	scalar
+2410	598a	1	ditherPlane2	undefined ditherPlane2	scalar
+2410	59aa	1	reqLevelRow1	undefined reqLevelRow1	scalar
+2410	59b4	1	reqLevelRow2	undefined reqLevelRow2	scalar
 2410	59bf	78	rampRow0	uint8_t rampRow0[78]	scalar
 2410	5a0d	48	rampRow1	uint8_t rampRow1[48]	scalar
 2410	5a3d	54	rampRow2	uint8_t rampRow2[54]	scalar
@@ -2133,7 +2133,7 @@ seg	ofs	size	name	decl	kind
 2410	5c90	18	s_s_is_held_by_s	undefined s_s_is_held_by_s[]	string
 2410	5ca2	26	s_s_is_put_to_sleep_by_s	undefined s_s_is_put_to_sleep_by_s[]	string
 2410	5cbc	40	s_s_is_entangled_in_a_web_created_by_s	undefined s_s_is_entangled_in_a_web_created_by_s[]	string
-2410	5ce4	11	menuBarShown	undefined1 menuBarShown	scalar
+2410	5ce4	1	menuBarShown	undefined1 menuBarShown	scalar
 2410	5cef	1	goldPartyIndex	undefined1 goldPartyIndex	scalar
 2410	5cf0	1	keyboardInputMode	undefined1 keyboardInputMode	scalar
 2410	5cf1	1	SfxPending	undefined1 SfxPending	scalar
@@ -2148,11 +2148,11 @@ seg	ofs	size	name	decl	kind
 2410	5db9	9	s_previous	undefined s_previous[]	string
 2410	5dc2	5	s_next	undefined s_next[]	string
 2410	5dc7	1	GfxFrameCounts	undefined GfxFrameCounts	scalar
-2410	5dc8	7	AnimSeqCounts	uint8_t AnimSeqCounts[3]	scalar
-2410	5dcf	8	lowIntelEnemies	undefined1 lowIntelEnemies	scalar
-2410	5dd7	8	medIntelEnemies	undefined1 medIntelEnemies	scalar
-2410	5ddf	8	highIntelEnemies	undefined1 highIntelEnemies	scalar
-2410	5de7	5	secondWaveSize	undefined1 secondWaveSize	scalar
+2410	5dc8	3	AnimSeqCounts	uint8_t AnimSeqCounts[3]	scalar
+2410	5dcf	1	lowIntelEnemies	undefined1 lowIntelEnemies	scalar
+2410	5dd7	1	medIntelEnemies	undefined1 medIntelEnemies	scalar
+2410	5ddf	1	highIntelEnemies	undefined1 highIntelEnemies	scalar
+2410	5de7	1	secondWaveSize	undefined1 secondWaveSize	scalar
 2410	5dec	2	LevelBandMin	byte LevelBandMin[4]	scalar
 2410	5dee	2	LevelBandMin[2]		scalar
 2410	5df0	2	LevelBandMax	byte LevelBandMax[4]	scalar
@@ -2210,7 +2210,7 @@ seg	ofs	size	name	decl	kind
 2410	6217	9	s_weaponry_2410_6210+7		scalar
 2410	6220	18	s_+%d_ring_of_prot._2410_6220		scalar
 2410	6232	9	s_no_armor_2410_6232	undefined s_no_armor_2410_6232[]	string
-2410	623b	31	s_leather_armor_2410_623b	undefined s_leather_armor_2410_623b[]	string
+2410	623b	14	s_leather_armor_2410_623b	undefined s_leather_armor_2410_623b[]	string
 2410	625a	17	s_+2_leather_armor_2410_625a		scalar
 2410	626b	7	s_shield_2410_626b	undefined s_shield_2410_626b[]	string
 2410	6272	12	s_scale_armor_2410_6272	undefined s_scale_armor_2410_6272[]	string
@@ -2248,7 +2248,7 @@ seg	ofs	size	name	decl	kind
 2410	6473	9	s_Previous_2410_6473	undefined s_Previous_2410_6473[]	string
 2410	647c	5	s_Next_2410_647c	undefined s_Next_2410_647c[]	string
 2410	6481	7	s_Leader_2410_6481	undefined s_Leader_2410_6481[]	string
-2410	6488	6	s_Help_2410_6488	undefined s_Help_2410_6488[]	string
+2410	6488	5	s_Help_2410_6488	undefined s_Help_2410_6488[]	string
 2410	648e	1	mapDirty	undefined1 mapDirty	scalar
 2410	648f	41	s_Define_region_to_command__s_loya_2410_648f	undefined s_Define_region_to_command__s_loya_2410_648f[]	string
 2410	64b8	106	s_%d_%s%s_loyal_to_%s_found._Left_c_2410_64b8		scalar
@@ -2306,10 +2306,10 @@ seg	ofs	size	name	decl	kind
 2410	690b	46	s_Building_is_now_%s._Select_type_o_2410_690b		scalar
 2410	6939	1	s_empty_2410_6939	undefined s_empty_2410_6939[]	string
 2410	693a	1	GSeason	undefined1 GSeason	scalar
-2410	693b	135	SeasonPalettes	undefined SeasonPalettes	scalar
-2410	69c2	3	paletteColorA	undefined paletteColorA	scalar
-2410	69c5	3	paletteColorB	undefined paletteColorB	scalar
-2410	69c8	3	paletteColorC	undefined paletteColorC	scalar
+2410	693b	1	SeasonPalettes	undefined SeasonPalettes	scalar
+2410	69c2	1	paletteColorA	undefined paletteColorA	scalar
+2410	69c5	1	paletteColorB	undefined paletteColorB	scalar
+2410	69c8	1	paletteColorC	undefined paletteColorC	scalar
 2410	69cb	12	GSeasonNames	far_t GSeasonNames[3]	table
 2410	69d7	2	PromoteThreshold	byte PromoteThreshold[4]	scalar
 2410	69d9	2	PromoteThreshold[2]		scalar
@@ -2337,7 +2337,7 @@ seg	ofs	size	name	decl	kind
 2410	6b34	5	s_lady	undefined s_lady[]	string
 2410	6b39	1	s_empty_2410_6b39	undefined s_empty_2410_6b39[]	string
 2410	6b3a	76	RankMsgPtrs	far_t RankMsgPtrs[19]	table
-2410	6b86	10	fullWidthRect	undefined fullWidthRect	scalar
+2410	6b86	1	fullWidthRect	undefined fullWidthRect	scalar
 2410	6b90	45	s_On_this_day_it_was_declared_to_a_2410_6b90	undefined s_On_this_day_it_was_declared_to_a_2410_6b90[]	string
 2410	6bbd	1	s__2410_6b90+0x2d		scalar
 2410	6bbe	42	s_that__s_shall_henceforth_hold_th_2410_6bbe	undefined s_that__s_shall_henceforth_hold_th_2410_6bbe[]	string
@@ -2357,9 +2357,9 @@ seg	ofs	size	name	decl	kind
 2410	6daf	31	s_that__s_shall_hold_the_rank_of_2410_6daf	undefined s_that__s_shall_hold_the_rank_of_2410_6daf[]	string
 2410	6dce	25	s_%s,_for_valor_in_battle._2410_6dce		scalar
 2410	6de7	25	s_%s,_for_city_management._2410_6de7		scalar
-2410	6e00	56	xOfsTable	undefined xOfsTable	scalar
+2410	6e00	1	xOfsTable	undefined xOfsTable	scalar
 2410	6e38	16	CureSpellPtrs	far_t CureSpellPtrs[4]	table
-2410	6e48	47	growthTable	undefined growthTable	scalar
+2410	6e48	1	growthTable	undefined growthTable	scalar
 2410	6e77	8	s_kill_4	undefined s_kill_4[]	string
 2410	6e7f	4	s_are	undefined s_are[]	string
 2410	6e83	3	s_is	undefined s_is[]	string
@@ -2389,9 +2389,9 @@ seg	ofs	size	name	decl	kind
 2410	7107	30	s_s_drains_all_energy_from_s	undefined s_s_drains_all_energy_from_s[]	string
 2410	7125	31	s_s_drains_two_levels_from_s	undefined s_s_drains_two_levels_from_s[]	string
 2410	7144	1	GameRunning	bool GameRunning	scalar
-2410	7145	14	unitTypeTable	undefined unitTypeTable	scalar
-2410	7153	8	spawnGindexTable	undefined spawnGindexTable	scalar
-2410	715b	10	lowerScreenRect	undefined lowerScreenRect	scalar
+2410	7145	1	unitTypeTable	undefined unitTypeTable	scalar
+2410	7153	1	spawnGindexTable	undefined spawnGindexTable	scalar
+2410	715b	1	lowerScreenRect	undefined lowerScreenRect	scalar
 2410	7165	15	s_demo_cancelled	undefined s_demo_cancelled[]	string
 2410	7174	1	s_demo_cancelled+0xf		scalar
 2410	7175	7	s_nasher	undefined s_nasher[]	string
@@ -2421,10 +2421,10 @@ seg	ofs	size	name	decl	kind
 2410	7459	36	s_you_will_truly_be_master_of_your	undefined s_you_will_truly_be_master_of_your[]	string
 2410	747d	1	s_empty_2410_747d	undefined s_empty_2410_747d[]	string
 2410	747e	11	StshFileName	undefined StshFileName[]	string
-2410	7489	5	StshFileSize	uint32_t StshFileSizeVar	scalar
+2410	7489	4	StshFileSize	uint32_t StshFileSizeVar	scalar
 2410	748e	30	s_getcache__d_SIZESTASH__d_2410_748e	undefined s_getcache__d_SIZESTASH__d_2410_748e[]	string
 2410	74ac	1	selectedPartyIndex	undefined1 selectedPartyIndex	scalar
-2410	74ad	11	PersonWordPtrs	far_t PersonWordPtrs[2]	table
+2410	74ad	8	PersonWordPtrs	far_t PersonWordPtrs[2]	table
 2410	74b8	56	s_choose_party_to_build_for_now_building_for_s	undefined s_choose_party_to_build_for_now_building_for_s[]	string
 2410	74f0	4	s_s	undefined s_s[]	string
 2410	74f4	36	s_you_can_only_place_a_single_arena	undefined s_you_can_only_place_a_single_arena[]	string
@@ -2469,7 +2469,7 @@ seg	ofs	size	name	decl	kind
 2410	78df	1	s_empty_2410_78df	undefined s_empty_2410_78df[]	string
 2410	78e0	1	MiceProcessed	undefined1 MiceProcessed	scalar
 2410	78e1	1	MiceNeedsUpdate	undefined1 MiceNeedsUpdate	scalar
-2410	78e2	2	MiceClick	undefined1 MiceClick	scalar
+2410	78e2	1	MiceClick	undefined1 MiceClick	scalar
 2410	78e4	2	far_t_2410_78e4	far_t far_t_2410_78e4	farptr
 2410	78e6	2	far_t_2410_78e4.seg		scalar
 2410	78e8	5	s_Done_2410_78e8	undefined s_Done_2410_78e8[]	string
@@ -2573,7 +2573,7 @@ seg	ofs	size	name	decl	kind
 2410	840c	11	s_cflow5.txt_2410_840c		scalar
 2410	8417	11	s_bolt12.fli_2410_8417		scalar
 2410	8422	10	s_save.999_2410_8422		scalar
-2410	842c	10	agentClipRect	undefined agentClipRect	scalar
+2410	842c	1	agentClipRect	undefined agentClipRect	scalar
 2410	8436	27	s_s_is_no_longer_paralyzed	undefined s_s_is_no_longer_paralyzed[]	string
 2410	8451	27	s_s_breaks_free_of_the_web	undefined s_s_breaks_free_of_the_web[]	string
 2410	846c	55	s_s_regenerates_3_hitpoints_to_a_total_of_d_hi	undefined s_s_regenerates_3_hitpoints_to_a_total_of_d_hi[]	string
@@ -2587,8 +2587,8 @@ seg	ofs	size	name	decl	kind
 2410	84f3	11	s_Popularity_2410_84f3	undefined s_Popularity_2410_84f3[]	string
 2410	84fe	7	s_Combat_2410_84fe	undefined s_Combat_2410_84fe[]	string
 2410	8505	7	s_Winter_2410_8505	undefined s_Winter_2410_8505[]	string
-2410	850c	6	s_Done_2410_850c	undefined s_Done_2410_850c[]	string
-2410	8512	4	__OvrSize	undefined __OvrSize	scalar
+2410	850c	5	s_Done_2410_850c	undefined s_Done_2410_850c[]	string
+2410	8512	1	__OvrSize	undefined __OvrSize	scalar
 2410	8516	2	_atexitcnt	undefined2 _atexitcnt	scalar
 2410	8518	1	_ctype	byte _ctype[257]	scalar
 2410	8519	257	_ctype[1]		scalar
@@ -2610,14 +2610,14 @@ seg	ofs	size	name	decl	kind
 2410	87b8	10	_openfd	uint16_t _openfd[20]	scalar
 2410	87c2	2	_openfd[5]		scalar
 2410	87c4	28	_openfd[6]		scalar
-2410	87e0	4	_fmode	undefined2 _fmode	scalar
+2410	87e0	2	_fmode	undefined2 _fmode	scalar
 2410	87e4	2	_doserrno	undefined2 _doserrno	scalar
 2410	87e6	87	_dosErrorToSV	char _dosErrorToSV[89]	string
 2410	883d	3	_dosErrorToSV		scalar
 2410	8840	2	rand_Seed	long rand_Seed	scalar
 2410	8842	2	rand_Seed+2		scalar
 2410	8844	7	vprintter_NullString	undefined vprintter_NullString[]	string
-2410	884b	97	vprinter_printCtype	uint8_t vprinter_printCtype[96]	scalar
+2410	884b	96	vprinter_printCtype	uint8_t vprinter_printCtype[96]	scalar
 2410	88ac	1	_video	VIDEOREC _video	scalar
 2410	88ad	1	_video.windowy1		scalar
 2410	88ae	1	_video.windowx2		scalar
