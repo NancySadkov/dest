@@ -3316,3 +3316,51 @@ first statement and `init_game` with the same closing-file marker to see how far
 game runs.  The startup path is no longer a blocker.
 
   grep_checks 51,094; compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+## The game now runs: main -> init_game -> init_base (stall in init_check_mem)
+
+With the startup question settled (previous section), the remaining chain was walked with
+the same durable file markers:
+
+| stage | marker | result |
+|---|---|---|
+| `main` body | MK5 (C, first statement) | reached |
+| `init_game` | MK6 (before `_OvrInitExt(0,0)`) | reached |
+| after `_OvrInitExt` | MK7 | reached only after the fix below |
+| after `_OvrInitEms` | MK8 | reached |
+| after `ovr_init_base()` | MK9 | **missing** |
+| inside `init_base` | MK20 (entry) | reached |
+| after `init_check_mem()` | MK21 | **missing** |
+
+Two real defects were found and fixed on the way:
+
+1. **`_OvrInitExt` must do nothing in a resident link.**  Its decompiled body reads the
+   overlay image at fixed addresses (`*(uint *)0x3c`, `0x40`, `0x69e2`...) that only
+   exist when linking with `/o`.  That code is the compiler-supplied overlay runtime
+   (AGENTS.md), so for the resident build it now returns 0 immediately, with the reason
+   recorded at the call site.  Before: the program never got past `_OvrInitExt`.
+   After: `_OvrInitExt` and `_OvrInitEms` both return.
+
+2. **`biosKeyAvail`/`biosReadKey` did not set `AH`.**  The `swi(0x16)` form calls the
+   BIOS vector with whatever is in the registers, and the availability test returned an
+   uninitialised `in_ZF`.  `init_base` starts with
+   `while (biosKeyAvail()) biosReadKey();` - a drain loop that can never end with a
+   random flag.  They now go through two code-segment stubs (`INT 16h AH=01h` /
+   `AH=00h`) in `ovr_thunks.asm`, the same place and technique as the other register
+   level helpers.
+
+Also established, and important for the next step: **the original game runs in this
+harness**.  `game/STRONG.EXE` copied to a fresh directory and driven by the same
+`AUTOTYPE -w 6 -p 1.5 6 ENTER ENTER ENTER ENTER` produces a **`STRONG.SAV`** (kept at
+`tmp/origrun/STRONG.SAV`).  That is the reference artifact step 6 needs; the rebuild
+does not produce one yet because it stops earlier.
+
+Current stall: `init_check_mem()` is entered and never returns.  Its decompiled body
+feeds an uninitialised `buf` to `LXLSH_at_`, so the "largest executable program size"
+comparison is garbage and can take the abort path
+(`"Stronghold requires 585,000 bytes."` / `exit(0x84)`).  This needs the original
+instruction sequence - the decompiled form has no usable evidence for the real
+computation, so it must be recovered from the disassembly rather than guessed.
+
+  grep_checks 51,070; compare_state 1,627/0/0; diff_dgroup 972/1,868;
+  compare_runtime 1,543/13; build 64/64 clean; link 0 errors

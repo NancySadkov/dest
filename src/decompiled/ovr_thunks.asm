@@ -2792,5 +2792,23 @@ FIWRQQ proc far
     ret
 FIWRQQ endp
 
+    public _biosKeyAvailRaw
+_biosKeyAvailRaw proc far
+    mov ah, 1
+    int 16h
+    mov ax, 0
+    jz short kavailNone
+    mov ax, 1
+kavailNone:
+    retf
+_biosKeyAvailRaw endp
+
+    public _biosReadKeyRaw
+_biosReadKeyRaw proc far
+    xor ah, ah
+    int 16h
+    retf
+_biosReadKeyRaw endp
+
 THUNKS_TEXT ends
     end

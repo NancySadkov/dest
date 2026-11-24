@@ -6,6 +6,9 @@
  */
 #include "recovered.h"
 
+extern uint16_t _biosReadKeyRaw(void);
+extern uint16_t _biosKeyAvailRaw(void);
+
 
 /* 2d63:0000 */
 
@@ -39,12 +42,11 @@ uint16_t __cdecl16far biosVideoCall(uint8_t operation,uint8_t argument)
 uint16_t __cdecl16far biosReadKey(void)
 
 {
-  code *pcVar1;
-  uint16_t uVar2;
-  
-  pcVar1 = (code *)swi(0x16);
-  uVar2 = (*pcVar1)();
-  return uVar2;
+  /* The swi(0x16) form lost the register setup: the original is INT 16h AH=00h,
+     which blocks until a key is available and returns it in AX.  C-level asm is
+     disabled in this project (-a-), so the instruction sequence lives in a code
+     segment stub (ovr_thunks.asm). */
+  return _biosReadKeyRaw();
 }
 
 
@@ -54,12 +56,9 @@ uint16_t __cdecl16far biosReadKey(void)
 uint16_t __cdecl16far biosKeyAvail(void)
 
 {
-  code *pcVar1;
-  undefined1 in_ZF;
-  
-  pcVar1 = (code *)swi(0x16);
-  (*pcVar1)();
-  return (uint)!(bool)in_ZF;
+  /* INT 16h AH=01h: peek, ZF clear when a key is waiting.  The decompiled form
+     returned an uninitialised in_ZF, which made init_base's drain loop spin. */
+  return _biosKeyAvailRaw();
 }
 
 

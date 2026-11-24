@@ -1236,6 +1236,11 @@ int __cdecl16far _OvrInitExt(uint32_t startAddress,uint32_t length)
   uint sizeHi;
   
   uVar2 = (uint)startx;   /* hand fix: startx is a function */
+  /* hand fix: resident link - no VROOMM/EMS overlay memory is in use, so there is
+     nothing to initialise.  This function belongs to the compiler-supplied overlay
+     runtime (AGENTS.md); its original body reads the overlay image at fixed
+     addresses that only exist when linking with /o. */
+  if (1) return 0;
   if ((*(byte *)&OvrFlags & 2) == 0) {
     bVar1 = false;
     iVar3 = __INITEXT();
