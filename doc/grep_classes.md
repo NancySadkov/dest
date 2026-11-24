@@ -217,3 +217,40 @@ first, then cut at the holes.
 Earlier text in this file said these bodies "cannot be cleaned at source level"
 and implied a segment/overlay split.  The measurement above is the accurate
 statement: they are single-segment bodies with interior holes.
+
+## `ovc45_buildPlacementMessage` is not a broken body: it is one big switch
+
+The previous section said the three ranges mean the body was cut.  The
+disassembly says otherwise:
+
+```
+77eb:0f49  CALLF 0x1000:2cc2            ; strcat
+77eb:0f4e  ADD SP,0x8
+77eb:0f51  JMP 0x7000:8eae              ; the overlay thunk continuation
+77eb:0f57  MOV AL,byte ptr [BP + -0x10] ; <- range 2 starts here
+...
+77eb:1422  JMP 0x7000:9548
+77eb:1425  SHL BX,0x1
+77eb:1427  JMP word ptr CS:[BX + 0x16a8]   ; THE JUMP TABLE
+77eb:1698  MOV AL,byte ptr [BP + -0xd]  ; <- a case block, range 3
+```
+
+So the hole `142c..1697` holds the **switch jump table** (`CS:[BX+0x16a8]`, i.e.
+the table base lies inside the hole), and the hole `0f54..0f56` is the thunk
+call sequence.  Ghidra excluded both as data, which is correct; the two excluded
+spots are why `FnBody` reports three ranges and `BadBodies` counts the body as
+non-contiguous even though `BodyCheck` finds no multi-segment function.
+
+Consequences, and they change the plan:
+
+* **do not cut it.**  `CutAndDecompile` / `TrimBody` at 0f54 or 142c would
+  disconnect a live jump target or the switch table.  `ProbeCuts` already showed
+  the injected `RET` does not shrink the body (3,377 lines either way), which is
+  the same fact from the other side.
+* the 202 `0x195d` literals and the `[iusbc]Var` hits inside it are **real code
+  in a real function**, so they have to be fixed block by block like every other
+  module, not re-exported away.  The earlier "blocked on the model split" note
+  for this function is withdrawn.
+* the same reasoning applies to the other three suspects, but each must be
+  checked the same way: dump its body (`DumpAsmNamed.java`) and look for
+  `JMP word ptr CS:[BX + ...]` inside the hole before assuming a cut is possible.
