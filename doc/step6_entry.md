@@ -3492,3 +3492,39 @@ rebuild's image.
 
   grep_checks 51,028; build 64/64 clean; link 0 errors
   compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13
+
+## The key-drain loop is fixed; the blocking read is the remaining blocker
+
+Measured at the drain point: the BIOS keyboard buffer is **empty**
+(`40:1A == 40:1C == 0x30`), yet the loop
+`while (key = ovr_biosKeyAvail(), (char)key != '\0') ovr_biosReadKey();` never ended.
+So the thunked `ovr_biosKeyAvail` call was not reporting "no key".  `biosKeyAvail` now
+performs the buffer test itself:
+
+```c
+return *(uint16_t far *)MK_FP(0x40,0x1a) != *(uint16_t far *)MK_FP(0x40,0x1c);
+```
+
+which is exactly `INT 16h AH=01h`'s condition.  Markers confirm the drain now exits
+(`P1` entered the branch, `P2` is after the drain).
+
+### The emulator's AUTOTYPE key names are lowercase
+
+`AUTOTYPE ... ENTER` types nothing (`KP_ENTER` neither) - the parser table in the
+emulator binary (`Err bad key %s`) lists `down up left right return enter escape esc
+space tab backspace f1 ...`, i.e. **lowercase**.  With `A` a key is delivered
+(`40:1A` stays `0x30`, `40:1C` advances to `0x32`), and `return` is the valid name for
+the Enter key.
+
+### Still blocked: the blocking read
+
+With the drain fixed and `return` typed by AUTOTYPE, the next marker (`P3`, placed
+before `if ((key & 0xff) == 0xd)`, i.e. after `ovr_biosReadKey()`) is still missing, so
+the blocking read never returns even though keys do reach the buffer.  Reading the ring
+buffer directly in `biosReadKey` was tried and stopped the run *earlier* (even `P1`
+vanished), so it was reverted.  The `ovr_biosReadKey -> _biosReadKey ->
+_biosReadKeyRaw` call chain needs the same treatment the availability test got, but
+without the busy-wait version's regression.
+
+  grep_checks 51,019; build 64/64 clean; link 0 errors
+  compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13

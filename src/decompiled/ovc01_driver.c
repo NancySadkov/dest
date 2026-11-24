@@ -42,12 +42,13 @@ uint16_t __cdecl16far biosVideoCall(uint8_t operation,uint8_t argument)
 uint16_t __cdecl16far biosReadKey(void)
 
 {
-  /* The swi(0x16) form lost the register setup: the original is INT 16h AH=00h,
-     which blocks until a key is available and returns it in AX.  C-level asm is
-     disabled in this project (-a-), so the instruction sequence lives in a code
-     segment stub (ovr_thunks.asm). */
+  /* INT 16h AH=00h through the register-level stub: blocks until a key is available
+     and returns it in AX.  (Reading 0040:001A/001C directly was tried here and made
+     the run stop earlier, so the stub stays.) */
   return _biosReadKeyRaw();
 }
+
+
 
 
 
@@ -56,10 +57,13 @@ uint16_t __cdecl16far biosReadKey(void)
 uint16_t __cdecl16far biosKeyAvail(void)
 
 {
-  /* INT 16h AH=01h: peek, ZF clear when a key is waiting.  The decompiled form
-     returned an uninitialised in_ZF, which made init_base's drain loop spin. */
-  return _biosKeyAvailRaw();
+  /* INT 16h AH=01h reports a key when the BIOS ring buffer's head differs from its
+     tail.  Reading the two pointers directly is the same test and does not depend on
+     the register-level stub: measured at init_base's drain point the buffer was empty
+     (40:1A == 40:1C == 0x30) while the thunked call never reported "no key". */
+  return *(uint16_t far *)MK_FP(0x40,0x1a) != *(uint16_t far *)MK_FP(0x40,0x1c);
 }
+
 
 
 
