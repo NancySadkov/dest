@@ -3021,3 +3021,37 @@ environment block is not what the code expects, it burns the loop and then hits
 
 Next: markers after the scan (line 88) and after the heap/shrink/stack block
 (line 136).  Those three points separate a hang from an `_abort()`.
+
+## startx: everything up to the initialiser block works
+
+Three markers in the post-`SaveVectors` region (`crtl.c:88`, `:119`, `:135`):
+
+```
+OUT.TXT: 'X1:X2:X3:'
+```
+
+| marker | position | printed |
+|---|---|---|
+| E / A | before / after `SaveVectors()` | yes / yes |
+| X1 | after the environment scan (`_envSize_at_`) | yes |
+| X2 | inside the heap block, after `__stklen` setup | yes |
+| X3 | after the stack switch (`cli / mov ss,dx / mov sp,di / sti`) | yes |
+| M | immediately before `iVar10 = main(...)` | **no** |
+
+So the environment scan terminates, the heap values are computed, the `AH=4Ah` shrink
+runs and the **stack switch works**.  The stop is in the block between X3 and the call
+to `main` (`crtl.c:195..283`), which contains:
+
+```
+_setupio();          /* CRT stdio/handle-table initialisation       */
+_c0crtinit();        /* CRT initialisers                             */
+{ ... argv[0]/argv[1], __C0argc/__C0argv/__C0environ ... }
+fixFarTable(...) x 28
+```
+
+`_setupio()` is the prime suspect: every file/stdio operation in this build has been
+observed to fail silently, and `_setupio` is exactly the routine that establishes the
+handle table those calls depend on.
+
+Next: markers after `_setupio()` and after `_c0crtinit()`; that separates CRT
+initialisation from the far-table fix-ups in one run.
