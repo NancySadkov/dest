@@ -440,7 +440,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   uint uStack_14;
   uint uStack_12;
   uint16_t uStack_10;
-  uint16_t uStack_e;
+  uint16_t fileIdx;
   uint uStack_c;
   uint uStack_a;
   uint uStack_8;
@@ -547,29 +547,29 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
             if ((int)uStack_c < 0x2b) {
               if ((int)uStack_c < 0x16) {
                 if ((int)uStack_c < 1) {
-                  uStack_e = 0xb;
+                  fileIdx = 0xb;
                 }
                 else {
-                  uStack_e = 5;
+                  fileIdx = 5;
                 }
               }
               else {
-                uStack_e = 0xf;
+                fileIdx = 0xf;
               }
             }
             else {
-              uStack_e = 5;
+              fileIdx = 5;
             }
           }
           else {
-            uStack_e = 0x13;
+            fileIdx = 0x13;
           }
         }
         else {
-          uStack_e = 9;
+          fileIdx = 9;
         }
-        uVar7 = ovr_randBelow(uStack_e,0);
-        uStack_c = uStack_c + ((uVar7 & 0xff) - ((int)uStack_e >> 1)) + uStack_a + 1;
+        uVar7 = ovr_randBelow(fileIdx,0);
+        uStack_c = uStack_c + ((uVar7 & 0xff) - ((int)fileIdx >> 1)) + uStack_a + 1;
         if ((int)uStack_c < -0x23) {
           uStack_c = 0xffdd;
           uStack_a = (uStack_a ^ (int)uStack_a >> 0xf) - ((int)uStack_a >> 0xf);
@@ -657,29 +657,29 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
             if ((int)uStack_c < 0x2b) {
               if ((int)uStack_c < 0x16) {
                 if ((int)uStack_c < 1) {
-                  uStack_e = 0xb;
+                  fileIdx = 0xb;
                 }
                 else {
-                  uStack_e = 5;
+                  fileIdx = 5;
                 }
               }
               else {
-                uStack_e = 0xf;
+                fileIdx = 0xf;
               }
             }
             else {
-              uStack_e = 5;
+              fileIdx = 5;
             }
           }
           else {
-            uStack_e = 0x13;
+            fileIdx = 0x13;
           }
         }
         else {
-          uStack_e = 9;
+          fileIdx = 9;
         }
-        uVar7 = ovr_randBelow(uStack_e,0);
-        uStack_c = uStack_c + ((uVar7 & 0xff) - ((int)uStack_e >> 1)) + uStack_a + 1;
+        uVar7 = ovr_randBelow(fileIdx,0);
+        uStack_c = uStack_c + ((uVar7 & 0xff) - ((int)fileIdx >> 1)) + uStack_a + 1;
         if ((int)uStack_c < -0x7f) {
           uStack_c = 0xff81;
           uStack_a = (uStack_a ^ (int)uStack_a >> 0xf) - ((int)uStack_a >> 0xf);
@@ -850,7 +850,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                                           (char *)CONCAT13((char)((uint)_SS >> 8),
                                                            CONCAT12((char)_SS,
                                                                     auStackY_160 + uStack_c)),
-                                          uStack_e);
+                                          fileIdx);
                           uStack_14 = uStack_14 + 0x140;
                         }
                         row = row + 1;
@@ -977,21 +977,21 @@ switchD_3000_4a6e_caseD_3:
           for (; (int)uVar7 < (int)rowBandSquareEnd[0]; uVar7 = uVar7 + 1) {
             uStack_24 = ((uint16_t *)squareColumn)[uVar7];
             bVar4 = ovr_constr_setHighlightAtOffset(uStack_24,0,0);
-            uStack_e = CONCAT11(extraout_AH_00,bVar4);
-            if ((*(byte *)((uint8_t *)&BuildingTypes[uStack_e] + 16) & 2) != 0) {
+            fileIdx = CONCAT11(extraout_AH_00,bVar4);
+            if ((*(byte *)((uint8_t *)&BuildingTypes[fileIdx] + 16) & 2) != 0) {
               iVar15 = ovr_constr_usesSmoothPrev(uStack_24,0,0,0,0);
               uStack_10 = iVar15 / 3;
               (*(uint8_t *)((uint8_t *)&(gfx.seg))) =
-                   (char)*(uint16_t *)((char *)0x28ed6 + uStack_e * 0xc);
-              gfx.ofs = *(uint16_t *)(uint16_t *)((char *)0x28ed4 + uStack_e * 0xc);
+                   (char)*(uint16_t *)((char *)0x28ed6 + fileIdx * 0xc);
+              gfx.ofs = *(uint16_t *)(uint16_t *)((char *)0x28ed4 + fileIdx * 0xc);
               (*(uint8_t *)((uint8_t *)&(gfx.seg) + 1)) =
-                   (char)((uint)*(uint16_t *)(uint16_t *)((char *)0x28ed6 + uStack_e * 0xc) >> 8);
+                   (char)((uint)*(uint16_t *)(uint16_t *)((char *)0x28ed6 + fileIdx * 0xc) >> 8);
               ovr_blit_usesBlitGfxN
                         (gfx,((uint16_t *)SquareLeftX)[uVar7],rowBandOrigin[0] - uStack_10,6,0,0,0,0,0,0,0,0,0,0,0);
             }
-            if ((*(byte *)((uint8_t *)&BuildingTypes[uStack_e] + 16) & 1) != 0) {
-              gfx_00.seg = *(uint16_t *)(uint16_t *)((char *)0x28eda + uStack_e * 0xc);
-              gfx_00.ofs = *(uint16_t *)(uint16_t *)((char *)0x28ed8 + uStack_e * 0xc);
+            if ((*(byte *)((uint8_t *)&BuildingTypes[fileIdx] + 16) & 1) != 0) {
+              gfx_00.seg = *(uint16_t *)(uint16_t *)((char *)0x28eda + fileIdx * 0xc);
+              gfx_00.ofs = *(uint16_t *)(uint16_t *)((char *)0x28ed8 + fileIdx * 0xc);
               ovr_blitGfxRect(gfx_00,((uint16_t *)SquareLeftX)[uVar7],0,0,0,0,0,0,0,0,0,0);
             }
           }
@@ -1040,7 +1040,7 @@ bad_lbm:
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0xd);
   }
-  if ((uStack_20 == uStack_c) && (uStack_22 == uStack_e)) {
+  if ((uStack_20 == uStack_c) && (uStack_22 == fileIdx)) {
     cStack_2c = '\x01';
     uVar17 = uStack_22;
     iVar15 = ovr_stshRead();

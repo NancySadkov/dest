@@ -12,7 +12,7 @@ void __cdecl16far audio_usesLDIV_at_(void)
 
 {
   bool bVar1;
-  uint8_t uVar2;
+  uint8_t sfxId;
   uint uVar3;
   uint16_t roll;
   ulong *puVar5;
@@ -40,13 +40,13 @@ void __cdecl16far audio_usesLDIV_at_(void)
       uVar7 = 0;
       if (CurSfxType3 == 0x80) {
         roll = ovr_randBelow(3,0);
-        uVar2 = (char)roll + 0x80;
-        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
+        sfxId = (char)roll + 0x80;
+        uVar7 = CONCAT11((char)(roll >> 8),sfxId);
       }
       else if (CurSfxType3 == 0x83) {
         roll = ovr_randBelow(3,0);
-        uVar2 = (char)roll + 0x83;
-        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
+        sfxId = (char)roll + 0x83;
+        uVar7 = CONCAT11((char)(roll >> 8),sfxId);
       }
       else if (CurSfxType3 == 0x76) {
         puVar5 = ovr_attact_usesBDADailyTimeCounter
@@ -55,7 +55,7 @@ void __cdecl16far audio_usesLDIV_at_(void)
           return;
         }
         roll = ovr_randBelow(4,0);
-        uVar2 = (char)roll + 0x76;
+        sfxId = (char)roll + 0x76;
         uVar8 = 0;
         uVar7 = 0x8000;
         uVar3 = rand();
@@ -74,63 +74,63 @@ void __cdecl16far audio_usesLDIV_at_(void)
       }
       else if (CurSfxType3 == 0x70) {
         roll = ovr_randBelow(3,0);
-        uVar2 = (char)roll + 0x70;
-        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
+        sfxId = (char)roll + 0x70;
+        uVar7 = CONCAT11((char)(roll >> 8),sfxId);
       }
       else if (CurSfxType3 == 0x86) {
         roll = ovr_randBelow(3,0);
-        uVar2 = (char)roll + 0x86;
-        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
+        sfxId = (char)roll + 0x86;
+        uVar7 = CONCAT11((char)(roll >> 8),sfxId);
       }
       else if (CurSfxType3 == 0x7a) {
         roll = ovr_randBelow(3,0);
-        uVar2 = (char)roll + 0x7a;
-        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
+        sfxId = (char)roll + 0x7a;
+        uVar7 = CONCAT11((char)(roll >> 8),sfxId);
       }
       else if (CurSfxType3 == 0x7d) {
         roll = ovr_randBelow(3,0);
-        uVar2 = (char)roll + 0x7d;
-        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
+        sfxId = (char)roll + 0x7d;
+        uVar7 = CONCAT11((char)(roll >> 8),sfxId);
       }
       else if (CurSfxType3 == 0x6a) {
         roll = ovr_randBelow(3,0);
-        uVar2 = (char)roll + 0x6a;
-        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
+        sfxId = (char)roll + 0x6a;
+        uVar7 = CONCAT11((char)(roll >> 8),sfxId);
       }
       else if (CurSfxType3 == 0x64) {
         roll = ovr_randBelow(3,0);
-        uVar2 = (char)roll + 0x64;
-        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
+        sfxId = (char)roll + 0x64;
+        uVar7 = CONCAT11((char)(roll >> 8),sfxId);
       }
       else if (CurSfxType3 == 0x67) {
         roll = ovr_randBelow(3,0);
-        uVar2 = (char)roll + 0x67;
-        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
+        sfxId = (char)roll + 0x67;
+        uVar7 = CONCAT11((char)(roll >> 8),sfxId);
       }
       else if (CurSfxType3 == 0x5e) {
         roll = ovr_randBelow(3,0);
-        uVar2 = (char)roll + 0x5e;
-        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
+        sfxId = (char)roll + 0x5e;
+        uVar7 = CONCAT11((char)(roll >> 8),sfxId);
       }
       else if (CurSfxType3 == 0x61) {
         roll = ovr_randBelow(6,0);
-        uVar2 = (char)roll + 0x5e;
-        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
+        sfxId = (char)roll + 0x5e;
+        uVar7 = CONCAT11((char)(roll >> 8),sfxId);
       }
       else if (CurSfxType3 == 0x73) {
         roll = ovr_randBelow(6,0);
-        uVar2 = (char)roll + 0x73;
-        uVar7 = CONCAT11((char)(roll >> 8),uVar2);
+        sfxId = (char)roll + 0x73;
+        uVar7 = CONCAT11((char)(roll >> 8),sfxId);
       }
       else {
-        uVar2 = CurSfxType3;
+        sfxId = CurSfxType3;
         if (CurSfxType3 == 0x6f) {
           roll = ovr_randBelow(3,0);
-          uVar2 = (char)roll + 0x6d;
-          uVar7 = CONCAT11((char)(roll >> 8),uVar2);
+          sfxId = (char)roll + 0x6d;
+          uVar7 = CONCAT11((char)(roll >> 8),sfxId);
         }
       }
-      play_sfx(CONCAT11((char)((uint)uVar7 >> 8),uVar2),4,0);
+      play_sfx(CONCAT11((char)((uint)uVar7 >> 8),sfxId),4,0);
     }
   }
   return;
