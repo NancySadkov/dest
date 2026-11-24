@@ -1707,3 +1707,64 @@ compiler-supplied, these stay as they are; the game-data state is at parity.
 original walks the linker init table (priority 0x10) and `startx` calls
 `_setupio` and `_c0crtinit` directly instead, then builds a minimal argv in
 DGROUP, so `__setargv_SavedReturn` stays 0.
+
+## State sampler: what works, what does not, and the exact next fix
+
+`audit/state_map.tsv` lists every data object (2,655 symbols over 20 segments,
+76,136 bytes).  `scripts/compare_state_runtime.py` compares them per segment,
+normalising stored far pointers through segment/offset mapping.
+
+Measured stub shapes (`tmp/probe_stub.py` is the harness regression test):
+
+| stub shape | rebuilt image | original image |
+|---|---|---|
+| single write, `CX = size` | **all 8 segments exact, 92,480 bytes** | 32,768 of 35,072; 20,480 of 22,896 |
+| single write, `CX = 0xFFFF` | 65,535 (probe) | - |
+| 4 KB chunks in one stub | 28,672 of 46,288 | 12,288 of 35,072 |
+| `mov bp, ds` capture | 0 | 0 |
+
+Conclusions, each from the table:
+
+* the rebuilt side is **done** - one write per run, `mov ax, ds / add ax, delta /
+  mov ds, ax / xor dx,dx / mov cx,size / mov bx,1 / mov ah,40h / int 21h`;
+* `mov bp, ds` (8C DD) is fine, but `8C DA` - which the first attempt used - is
+  `mov dx, ds`, and that is what made both images dump 0 bytes;
+* extra `int 21h` calls lose data, so never write a segment in several chunks;
+* the original still comes up ~2,300-2,400 bytes short (32,768/35,072,
+  20,480/22,896), i.e. the tail is lost when the program exits while stdout is
+  still buffered.  Both shortfalls sit on 4 KB boundaries, so this is a flush
+  problem, not a wrong size.
+
+### The fix to implement next
+
+Create the dump file from inside the stub and close it explicitly, so the final
+flush happens before exit.  The filename goes in the patched stub itself and is
+addressed through CS:
+
+```
+1E              push ds                       ; save DGROUP
+0E 1F           push cs / pop ds              ; DS = CS for the filename
+BA <nameoff>    mov  dx, nameoff              ; ofs of "ST.BIN" in the stub
+B9 0000         mov  cx, 0
+B4 3C           mov  ah, 3ch                  ; create
+CD 21           int  21h                      ; AX = handle
+89 C3           mov  bx, ax
+1F              pop  ds                       ; DS = DGROUP again
+B9 <size>       mov  cx, size
+BA 0000         mov  dx, 0
+B4 40           mov  ah, 40h                  ; write
+CD 21           int  21h
+B4 3E           mov  ah, 3eh                  ; close -> flush
+CD 21           int  21h
+B8 004C         mov  ax, 4c00h
+CD 21           int  21h
+name:  "ST.BIN",0
+```
+
+`nameoff` is the stub's own intra-segment offset (`ofs + len(prefix)`), because
+the stub is patched at `seg:ofs` inside main's segment while CS still addresses
+that segment.
+
+With a close, one run can emit several segments again (no 256 KB ceiling, no lost
+tail), so `tmp/dump_state1.py` should return to a multi-`(delta,size)` stub - the
+file handle, not the write size, is what was missing.
