@@ -218,13 +218,13 @@ void __cdecl16far stshInitSprites(bool grab)
   SprProjectiles.ofs = (uint16_t)pfVar1;
   SprProjectiles.seg = in_DX;
   for (i = 0; (int)i < 0x2a; i = i + 1) {
-    uVar6 = 0x195d;
     pfVar1 = stshSprite((far_t *)*(uint16_t *)((int)AgntGs[0].sprfls + i * 0x95),
                         *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
                         (anm_t *)(ulong)CONCAT12(*(undefined1 *)((int)&AgntGs[0].nanims + i * 0x95),
                                                  *(uint16_t *)
                                                   ((int)&AgntGs[0].anms + 2 + i * 0x95)),
                         CONCAT11((char)((uint)pfVar1 >> 8),grab),SUB21(unaff_DI,0));
+    asm { mov uVar6,dx };
     *(uint16_t *)((int)AgntGs[0].sprs + 2 + i * 0x95) = uVar6;
     *(uint16_t *)((int)AgntGs[0].sprs + i * 0x95) =(uint16_t)( pfVar1);
     if (*(int *)((int)AgntGs[0].sprfls + 2 + i * 0x95) == 0) {
@@ -234,7 +234,6 @@ void __cdecl16far stshInitSprites(bool grab)
       *(uint16_t *)((int)AgntGs[0].sprs + 4 + i * 0x95) = uVar6;
     }
     else {
-      uVar6 = 0x195d;
       pfVar1 = stshSprite((far_t *)*(uint16_t *)((int)AgntGs[0].sprfls + 2 + i * 0x95),
                           *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
                           (anm_t *)(ulong)CONCAT12(*(undefined1 *)
@@ -242,6 +241,7 @@ void __cdecl16far stshInitSprites(bool grab)
                                                    *(uint16_t *)
                                                     ((int)&AgntGs[0].anms + 2 + i * 0x95)),
                           CONCAT11((char)(i * 0x95 >> 8),grab),SUB21(unaff_DI,0));
+      asm { mov uVar6,dx };
       *(uint16_t *)((int)AgntGs[0].sprs + 6 + i * 0x95) = uVar6;
       *(uint16_t *)((int)AgntGs[0].sprs + 4 + i * 0x95) =(uint16_t)( pfVar1);
     }
@@ -252,7 +252,6 @@ void __cdecl16far stshInitSprites(bool grab)
       *(uint16_t *)((int)AgntGs[0].sprs + 8 + i * 0x95) = uVar6;
     }
     else {
-      uVar6 = 0x195d;
       pfVar1 = stshSprite((far_t *)*(uint16_t *)((int)AgntGs[0].sprfls + 4 + i * 0x95),
                           *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
                           (anm_t *)(ulong)CONCAT12(*(undefined1 *)
@@ -260,6 +259,7 @@ void __cdecl16far stshInitSprites(bool grab)
                                                    *(uint16_t *)
                                                     ((int)&AgntGs[0].anms + 2 + i * 0x95)),
                           CONCAT11((char)(i * 0x95 >> 8),grab),SUB21(unaff_DI,0));
+      asm { mov uVar6,dx };
       *(uint16_t *)((int)AgntGs[0].sprs + 10 + i * 0x95) = uVar6;
       *(uint16_t *)((int)AgntGs[0].sprs + 8 + i * 0x95) =(uint16_t)( pfVar1);
     }
@@ -274,7 +274,6 @@ void __cdecl16far stshInitSprites(bool grab)
         *(uint16_t *)((int)AgntGs[0].sprs + 0xc + iVar3) = uVar6;
       }
       else {
-        uVar6 = 0x195d;
         pfVar1 = stshSprite((far_t *)*(uint16_t *)
                                       ((int)AgntGs[0].sprfls + 6 + i * 0x95 + iVar10 * 2),
                             *(int16_t *)((int)&AgntGs[0].anms + i * 0x95),
@@ -283,13 +282,13 @@ void __cdecl16far stshInitSprites(bool grab)
                                                      *(uint16_t *)
                                                       ((int)&AgntGs[0].anms + 2 + i * 0x95)),
                             CONCAT11((char)((uint)labelOfs >> 8),grab),SUB21(unaff_DI,0));
+        asm { mov uVar6,dx };
         labelOfs = i * 0x95 + iVar10 * 4;
         *(uint16_t *)((int)AgntGs[0].sprs + 0xe + labelOfs) = uVar6;
         *(uint16_t *)((int)AgntGs[0].sprs + 0xc + labelOfs) =(uint16_t)( pfVar1);
       }
     }
     for (j = 0; (int)j < 6; j = j + 1) {
-      uVar6 = 0x195d;
       if (*(int *)((int)AgntGs[0].prtfls + i * 0x95 + j * 2) != 0) {
         if (grab) {
           puVar7 = (uint8_t *)((int)&BuildingTypes[0x9f].income + 1);
@@ -315,10 +314,11 @@ void __cdecl16far stshInitSprites(bool grab)
         else {
           pfVar1 = ovr_stshAllocStub(unaff_DI);
           iVar10 = i * 0x95 + j * 4;
-          uVar9 = 0x195d;
+          asm { mov uVar6,dx };
           *(uint16_t *)((int)AgntGs[0].prts + 2 + iVar10) = uVar6;
           *(uint16_t *)((int)AgntGs[0].prts + iVar10) =(uint16_t)( pfVar1);
           pfVar1 = ovr_stshAllocStub(unaff_DI);
+          asm { mov uVar9,dx };
           iVar10 = i * 0x95 + j * 4;
           *(uint16_t *)((int)AgntGs[0].prtpals + 2 + iVar10) = uVar9;
           *(uint16_t *)((int)AgntGs[0].prtpals + iVar10) =(uint16_t)( pfVar1);
@@ -851,7 +851,7 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
           if (Agnts[agnt].owner == entityIndex) {
             Agnts[agnt].target = 0xff;
             bVar3 = peVar6[entityIndex].base.gindex;
-            AGNT_WORD(&Agnts[agnt], gdata, 2) = 0x195d;
+            AGNT_WORD(&Agnts[agnt], gdata, 2) = SEG_OF(AgntGs);
             AGNT_WORD(&Agnts[agnt], gdata, 0) = (uint)&AgntGs[bVar3];
             Agnts[agnt].strength =
                  *(undefined1 *)((int)&peVar6[entityIndex].base.state + 1);
@@ -1538,7 +1538,6 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
             *(uint16_t *)((int)AgntGs[0].sprs + 0xc + iVar15) = uVar10;
           }
           else {
-            uVar10 = 0x195d;
             pfVar5 = stshSprite((far_t *)*(uint16_t *)
                                           ((int)AgntGs[0].sprfls + 6 + unaff_SI * 0x95 + iVar17 * 2)
                                 ,*(int16_t *)((int)&AgntGs[0].anms + unaff_SI * 0x95),
@@ -1549,28 +1548,29 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
                                                            unaff_SI * 0x95)),
                                 CONCAT11((char)((uint)iVar8 >> 8),(char)param_1),
                                 (bool)in_stack_0000fff8);
+            asm { mov uVar10,dx };
             iVar8 = unaff_SI * 0x95 + iVar17 * 4;
             *(uint16_t *)((int)AgntGs[0].sprs + 0xe + iVar8) = uVar10;
             *(uint16_t *)((int)AgntGs[0].sprs + 0xc + iVar8) =(uint16_t)( pfVar5);
           }
         }
         for (iVar17 = 0; iVar17 < 6; iVar17 = iVar17 + 1) {
-          uVar10 = 0x195d;
           if (*(int *)((int)AgntGs[0].prtfls + unaff_SI * 0x95 + iVar17 * 2) != 0) {
             if ((char)param_1 == '\0') {
               pfVar5 = ovr_stshAllocStub((far_t far *)CONCAT11(in_stack_0000fff9,in_stack_0000fff8));
               iVar8 = unaff_SI * 0x95 + iVar17 * 4;
-              uVar12 = 0x195d;
+              asm { mov uVar10,dx };
               *(uint16_t *)((int)AgntGs[0].prts + 2 + iVar8) = uVar10;
               *(uint16_t *)((int)AgntGs[0].prts + iVar8) =(uint16_t)( pfVar5);
               pfVar5 = ovr_stshAllocStub((far_t far *)CONCAT11(in_stack_0000fff9,in_stack_0000fff8));
+              asm { mov uVar12,dx };
               iVar8 = unaff_SI * 0x95 + iVar17 * 4;
               *(uint16_t *)((int)AgntGs[0].prtpals + 2 + iVar8) = uVar12;
               *(uint16_t *)((int)AgntGs[0].prtpals + iVar8) =(uint16_t)( pfVar5);
             }
             else {
-              uVar12 = 0x195d;
               gfx = ovr_grabLbm(*(int16_t *)((int)AgntGs[0].prtfls + unaff_SI * 0x95 + iVar17 * 2),0,0,0,0);
+              asm { mov uVar12,dx };
               uVar10 = uVar12;
               ovr_stshUniqueColorsRemap(gfx,0);
               pixels.seg = 0;
@@ -1655,7 +1655,6 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
         if (0x29 < unaff_SI) {
           return peVar13;
         }
-        uVar10 = 0x195d;
         pfVar5 = stshSprite((far_t *)*(uint16_t *)((int)AgntGs[0].sprfls + unaff_SI * 0x95),
                             *(int16_t *)((int)&AgntGs[0].anms + unaff_SI * 0x95),
                             (anm_t *)(ulong)CONCAT12(*(undefined1 *)
@@ -1664,6 +1663,7 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
                                                       ((int)&AgntGs[0].anms + 2 + unaff_SI * 0x95)),
                             CONCAT11((char)((uint)peVar13 >> 8),(char)param_1),
                             (bool)in_stack_0000fff8);
+        asm { mov uVar10,dx };
         *(uint16_t *)((int)AgntGs[0].sprs + 2 + unaff_SI * 0x95) = uVar10;
         *(uint16_t *)((int)AgntGs[0].sprs + unaff_SI * 0x95) =(uint16_t)( pfVar5);
         if (*(int *)((int)AgntGs[0].sprfls + 2 + unaff_SI * 0x95) == 0) {
@@ -1673,7 +1673,6 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
           *(uint16_t *)((int)AgntGs[0].sprs + 4 + unaff_SI * 0x95) = uVar10;
         }
         else {
-          uVar10 = 0x195d;
           pfVar5 = stshSprite((far_t *)*(uint16_t *)((int)AgntGs[0].sprfls + 2 + unaff_SI * 0x95),
                               *(int16_t *)((int)&AgntGs[0].anms + unaff_SI * 0x95),
                               (anm_t *)(ulong)CONCAT12(*(undefined1 *)
@@ -1683,11 +1682,11 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
                                                       ),
                               CONCAT11((char)((uint)(unaff_SI * 0x95) >> 8),(char)param_1),
                               (bool)in_stack_0000fff8);
+          asm { mov uVar10,dx };
           *(uint16_t *)((int)AgntGs[0].sprs + 6 + unaff_SI * 0x95) = uVar10;
           *(uint16_t *)((int)AgntGs[0].sprs + 4 + unaff_SI * 0x95) =(uint16_t)( pfVar5);
         }
         if (*(int *)((int)AgntGs[0].sprfls + 4 + unaff_SI * 0x95) == 0) break;
-        uVar10 = 0x195d;
         pfVar5 = stshSprite((far_t *)*(uint16_t *)((int)AgntGs[0].sprfls + 4 + unaff_SI * 0x95),
                             *(int16_t *)((int)&AgntGs[0].anms + unaff_SI * 0x95),
                             (anm_t *)(ulong)CONCAT12(*(undefined1 *)
@@ -1696,6 +1695,7 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
                                                       ((int)&AgntGs[0].anms + 2 + unaff_SI * 0x95)),
                             CONCAT11((char)((uint)(unaff_SI * 0x95) >> 8),(char)param_1),
                             (bool)in_stack_0000fff8);
+        asm { mov uVar10,dx };
         *(uint16_t *)((int)AgntGs[0].sprs + 10 + unaff_SI * 0x95) = uVar10;
         *(uint16_t *)((int)AgntGs[0].sprs + 8 + unaff_SI * 0x95) =(uint16_t)( pfVar5);
       }
@@ -1982,8 +1982,6 @@ agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt)
   uVar32 = *puVar14;
   bVar43 = (byte)uVar32;
   uVar10 = (undefined1)((uint)uVar32 >> 8);
-  uVar25 = 0x195d;
-  uVar34 = 0x195d;
   bVar44 = *(byte *)((int)&worldMenuLabels[9].ofs + 1 + (uint)*(byte *)(uVar27 + 0xd) * 0x95);
   if (bVar44 == 0xff) {
     bVar44 = 0;
@@ -2108,13 +2106,13 @@ agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt)
   case 1:
     *puVar28 = *puVar28;
     do {
-      uVar32 = 0x195d;
       pfVar12 = stshSprite((far_t *)*(uint16_t *)
                                      ((int)AgntGs[0].sprfls + 6 +
                                      (int)pcVar30 * 0x95 + (int)unaff_DI * 2),
                            *(int16_t *)(puVar28 + 0x26fe),
                            (anm_t *)CONCAT13(uVar10,CONCAT12(bVar43,unaff_SI)),uVar11,
                            (bool)in_stack_0000fffc);
+      asm { mov uVar32,dx };
       iVar39 = (int)pcVar30 * 0x95 + (int)unaff_DI * 4;
       *(uint16_t *)((int)AgntGs[0].sprs + 0xe + iVar39) = uVar32;
       *(uint16_t *)((int)AgntGs[0].sprs + 0xc + iVar39) =(uint16_t)( pfVar12);
@@ -2122,15 +2120,15 @@ agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt)
         unaff_DI = unaff_DI + 1;
         while (2 < (int)unaff_DI) {
           for (iVar39 = 0; iVar39 < 6; iVar39 = iVar39 + 1) {
-            uVar32 = 0x195d;
             if (*(int *)((int)AgntGs[0].prtfls + (int)pcVar30 * 0x95 + iVar39 * 2) != 0) {
               if ((byte)partyIndex == 0) {
                 pfVar12 = ovr_stshAllocStub((far_t far *)CONCAT11(bVar44,in_stack_0000fffc));
                 iVar20 = (int)pcVar30 * 0x95 + iVar39 * 4;
-                uVar34 = 0x195d;
+                asm { mov uVar32,dx };
                 *(uint16_t *)((int)AgntGs[0].prts + 2 + iVar20) = uVar32;
                 *(uint16_t *)((int)AgntGs[0].prts + iVar20) =(uint16_t)( pfVar12);
                 pfVar12 = ovr_stshAllocStub((far_t far *)CONCAT11(bVar44,in_stack_0000fffc));
+                asm { mov uVar34,dx };
                 iVar20 = (int)pcVar30 * 0x95 + iVar39 * 4;
                 *(uint16_t *)((int)AgntGs[0].prtpals + 2 + iVar20) = uVar34;
                 *(uint16_t *)((int)AgntGs[0].prtpals + iVar20) =(uint16_t)( pfVar12);
@@ -2222,7 +2220,6 @@ agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt)
           if (0x29 < (int)pcVar30) {
             return paVar19;
           }
-          uVar32 = 0x195d;
           pfVar12 = stshSprite((far_t *)*(uint16_t *)((int)AgntGs[0].sprfls + (int)pcVar30 * 0x95)
                                ,*(int16_t *)((int)&AgntGs[0].anms + (int)pcVar30 * 0x95),
                                (anm_t *)(ulong)CONCAT12(*(undefined1 *)
@@ -2233,6 +2230,7 @@ agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt)
                                                          (int)pcVar30 * 0x95)),
                                CONCAT11((char)((uint)paVar19 >> 8),(byte)partyIndex),
                                (bool)in_stack_0000fffc);
+          asm { mov uVar32,dx };
           *(uint16_t *)((int)AgntGs[0].sprs + 2 + (int)pcVar30 * 0x95) = uVar32;
           *(uint16_t *)((int)AgntGs[0].sprs + (int)pcVar30 * 0x95) =(uint16_t)( pfVar12);
           if (*(int *)((int)AgntGs[0].sprfls + 2 + (int)pcVar30 * 0x95) == 0) {
@@ -2242,7 +2240,6 @@ agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt)
             *(uint16_t *)((int)AgntGs[0].sprs + 4 + (int)pcVar30 * 0x95) = uVar32;
           }
           else {
-            uVar32 = 0x195d;
             pfVar12 = stshSprite((far_t *)*(uint16_t *)
                                            ((int)AgntGs[0].sprfls + 2 + (int)pcVar30 * 0x95),
                                  *(int16_t *)((int)&AgntGs[0].anms + (int)pcVar30 * 0x95),
@@ -2254,6 +2251,7 @@ agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt)
                                                            (int)pcVar30 * 0x95)),
                                  CONCAT11((char)((uint)((int)pcVar30 * 0x95) >> 8),(byte)partyIndex),
                                  (bool)in_stack_0000fffc);
+            asm { mov uVar32,dx };
             *(uint16_t *)((int)AgntGs[0].sprs + 6 + (int)pcVar30 * 0x95) = uVar32;
             *(uint16_t *)((int)AgntGs[0].sprs + 4 + (int)pcVar30 * 0x95) =(uint16_t)( pfVar12);
           }
@@ -2264,7 +2262,6 @@ agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt)
             *(uint16_t *)((int)AgntGs[0].sprs + 8 + (int)pcVar30 * 0x95) = uVar32;
           }
           else {
-            uVar32 = 0x195d;
             pfVar12 = stshSprite((far_t *)*(uint16_t *)
                                            ((int)AgntGs[0].sprfls + 4 + (int)pcVar30 * 0x95),
                                  *(int16_t *)((int)&AgntGs[0].anms + (int)pcVar30 * 0x95),
@@ -2276,6 +2273,7 @@ agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt)
                                                            (int)pcVar30 * 0x95)),
                                  CONCAT11((char)((uint)((int)pcVar30 * 0x95) >> 8),(byte)partyIndex),
                                  (bool)in_stack_0000fffc);
+            asm { mov uVar32,dx };
             *(uint16_t *)((int)AgntGs[0].sprs + 10 + (int)pcVar30 * 0x95) = uVar32;
             *(uint16_t *)((int)AgntGs[0].sprs + 8 + (int)pcVar30 * 0x95) =(uint16_t)( pfVar12);
           }
