@@ -4419,7 +4419,7 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
   uint bldType;
   uint16_t roll;
   int iVar4;
-  int iVar5;
+  int sheetBase;
   uint16_t sheetSeg;
   
   if ((((GLeaderSheets[partyIndex])->flags5d & 2) == 0) ||
@@ -4445,10 +4445,10 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
               bldType = ovr_bldng_usesRandBelow((byte)iVar4);
               bldType = bldType & 0xff;
               sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-              iVar5 = (int)*(uint32_t *)((uint)partyIndex << 2);
-              iVar4 = *(int *)(iVar5 + 0x58);
+              sheetBase = (int)*(uint32_t *)((uint)partyIndex << 2);
+              iVar4 = *(int *)(sheetBase + 0x58);
               if ((iVar4 < 0) ||
-                 ((iVar4 == 0 && (*(uint *)(iVar5 + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[bldType] + 23))))) {
+                 ((iVar4 == 0 && (*(uint *)(sheetBase + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[bldType] + 23))))) {
                 bldType = 0;
               }
             }
@@ -4483,13 +4483,13 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
               roll = ovr_randBelow(3,0);
               bldType = (roll & 0xff) + 0x2b;
               sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-              iVar5 = (int)*(uint32_t *)((uint)partyIndex << 2);
-              iVar4 = *(int *)(iVar5 + 0x58);
+              sheetBase = (int)*(uint32_t *)((uint)partyIndex << 2);
+              iVar4 = *(int *)(sheetBase + 0x58);
               if (-1 < iVar4) {
                 if (iVar4 != 0) {
                   return bldType;
                 }
-                if (*(uint *)((uint8_t *)&BuildingTypes[bldType] + 23) <= *(uint *)(iVar5 + 0x56)) {
+                if (*(uint *)((uint8_t *)&BuildingTypes[bldType] + 23) <= *(uint *)(sheetBase + 0x56)) {
                   return bldType;
                 }
               }
@@ -4499,13 +4499,13 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
               roll = ovr_randBelow(3,0);
               bldType = (roll & 0xff) + 0xec;
               sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-              iVar5 = (int)*(uint32_t *)((uint)partyIndex << 2);
-              iVar4 = *(int *)(iVar5 + 0x58);
+              sheetBase = (int)*(uint32_t *)((uint)partyIndex << 2);
+              iVar4 = *(int *)(sheetBase + 0x58);
               if (-1 < iVar4) {
                 if (iVar4 != 0) {
                   return bldType;
                 }
-                if (*(uint *)((uint8_t *)&BuildingTypes[bldType] + 23) <= *(uint *)(iVar5 + 0x56)) {
+                if (*(uint *)((uint8_t *)&BuildingTypes[bldType] + 23) <= *(uint *)(sheetBase + 0x56)) {
                   return bldType;
                 }
               }
@@ -4515,10 +4515,10 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
             bldType = (roll & 0xff) +
                     (uint)*(byte *)((int)&worldMenuLabels[0xb].ofs + 1 + (uint)bVar1 * 0x95);
             sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-            iVar5 = (int)*(uint32_t *)((uint)partyIndex << 2);
-            iVar4 = *(int *)(iVar5 + 0x58);
+            sheetBase = (int)*(uint32_t *)((uint)partyIndex << 2);
+            iVar4 = *(int *)(sheetBase + 0x58);
             if ((iVar4 < 0) ||
-               ((iVar4 == 0 && (*(uint *)(iVar5 + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[bldType] + 23))))) {
+               ((iVar4 == 0 && (*(uint *)(sheetBase + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[bldType] + 23))))) {
               bldType = (uint)*(byte *)((int)&worldMenuLabels[0xb].ofs + 1 + (uint)bVar1 * 0x95);
             }
           }
