@@ -2009,3 +2009,37 @@ compare the instruction emitted for the `main` call against the one emitted for
 
 The fix is then a one-line source change, and `tmp/runcase.py` is the test:
 `returned to DOS : True`.
+
+### The original pushes five words before `CALLF main`
+
+The same dump gives the call site with its arguments:
+
+```
+1000:0132  CALL 0x1000:01ea   ; StartExit
+1000:0135  PUSH word ptr [0x73]
+1000:0139  PUSH word ptr [0x71]
+1000:013d  PUSH word ptr [0x6f]
+1000:0141  PUSH word ptr [0x6d]
+1000:0145  PUSH word ptr [0x6b]
+1000:0149  CALLF 0x1000:301c   ; main
+1000:014e  PUSH AX             ; main's return value
+1000:014f  NOP
+1000:0150  PUSH CS             ; exit is reached through a far pointer
+1000:0151  CALL 0x1000:08fd   ; exit
+```
+
+Five words = `argc` (1) + `argv` (2) + `envp` (2), i.e. `main(int argc, str_t *argv,
+str_t *envp)` with `str_t` a far/space pointer of two words - which is exactly the
+signature now declared in `st_functions.h`.
+
+Two things to check in our build against this:
+
+1. the call site must push **five** words from the same three values, and
+2. `exit` is reached by `PUSH CS` + a near `CALL`, i.e. through a **far** pointer -
+   so `exit` must be called far, not near.
+
+If our `main` call pushes a different number of words (e.g. because `__C0argv` is a
+near `char **` cast to the four-byte `str_t *`), the callee's `retf` still returns,
+but the caller's `add sp, n` cleanup can pop the wrong amount and the next call -
+or the return to DOS - goes wrong.  That is measurable by disassembling our
+`startx` at image 0x1B89 and counting the pushes before the `lcall`.
