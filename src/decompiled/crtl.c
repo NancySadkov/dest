@@ -53,8 +53,8 @@ void startx(void)
   struct st_sregs sr;
   
   puVar11 = (undefined1 *)((int)(int *)&errno + 1);
-  /* DOS does not guarantee ES at a patched entry point; ask the kernel. */
-  asm { mov ah,0x51; int 21h; mov psp,bx }
+  /* DOS enters with ES = PSP; capture it straight into the global. */
+  asm { mov ax,es; mov _psp,ax; mov psp,ax }
   /* DOS enters with DS = ES = PSP; the original startup loads DX with DGROUP
      and does MOV DS,DX before touching any global. */
   asm { mov ax, seg DosVersion; mov ds, ax };
