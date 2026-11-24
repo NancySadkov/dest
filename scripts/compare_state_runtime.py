@@ -55,8 +55,21 @@ def load_orig():
 
 def load_blocks(tag, dgroup):
     """Return (bytes, {segment: (offset_in_blob, size)}) for one image."""
-    blob_path = os.path.join(ROOT, "tmp", "state_%s" % tag, "ST.BIN")
+    blob_path = os.path.join(ROOT, "tmp", "state_%s.bin" % tag)
     man_path = os.path.join(ROOT, "tmp", "state_%s.manifest" % tag)
+    if os.path.exists(blob_path) and os.path.exists(man_path):
+        blob = open(blob_path, "rb").read()
+        blocks = {}
+        pos = 0
+        for line in io.open(man_path, encoding="ascii"):
+            if not line.strip():
+                continue
+            seg, off, size = line.split()
+            seg, size = int(seg, 16), int(size)
+            blocks.setdefault(seg, (pos + int(off, 16), size))
+            pos += size
+        return blob, blocks
+    blob_path = os.path.join(ROOT, "tmp", "state_%s" % tag, "ST.BIN")
     if os.path.exists(blob_path) and os.path.exists(man_path):
         blob = open(blob_path, "rb").read()
         blocks = {}
