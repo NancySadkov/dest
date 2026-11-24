@@ -3153,3 +3153,33 @@ while that is done.
 
   build 64/64 clean; link 0 errors; grep_checks 51,169
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+## The CRT sources are in the tree (tools/BC30/CRTL), but the names do not match
+
+`tools/BC30/CRTL` holds a real source tree - `CLIB\F_SCOPY.ASM` (1,488 bytes),
+`CLIB\H_LDIV.ASM`, `CLIB\H_PADD.ASM`, `CLIB\F_LXMUL.ASM`, `CLIB\ACCESS.C`, ... -
+plus `tools/BC30/LIB/STARTUP/C0.ASM`.  (The `.ASM` files at the CRTL root are 1-byte
+placeholders; the real ones are under `CLIB`.)
+
+Looking up the symbols the stock link reported missing:
+
+| symbol | source file found |
+|---|---|
+| `_F_SCOPY` | `CLIB\F_SCOPY.ASM` |
+| the other 18 | none by that name |
+
+Two conclusions:
+
+* the CRT sources are the right import, but the linker's symbol names do not match the
+  source identifiers (`H_LDIV.ASM` declares its entry with a different spelling, and
+  several are model-specific variants), so the mapping has to be built by reading each
+  candidate source's `public`/`proc` line rather than by filename or grep;
+* some of the reported names look like **game** symbols, not CRT ones
+  (`_AUDIO_INIT`, `_AUDIO_DONE` live in `ovc11_audio.c`), which means that list came
+  from a stale `LINK.LOG`.  The next attempt must capture a fresh log before mapping
+  anything.
+
+`tmp/crt_lookup.py` does the name scan; it needs extending to parse `public`/`proc`
+declarations and to be run against a fresh link log.
+
+  tree restored to the working link; grep_checks 51,169; compare_state 1,627/0/0
