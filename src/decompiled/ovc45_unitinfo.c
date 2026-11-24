@@ -1216,7 +1216,6 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_84,0,199,64,26
                               ,100,0,199,0x1a);
     pcVar6 = ovr_stshStoreFile((uint8_t *)pfVar5,0);
-    uVar14 = 0x195d;
     *(uint16_t *)((int)&BldInstances[0].seg + (uVar19 + 2) * 0xc) = uVar20;
     ((bld_inst_t *)BldInstances + uVar19 + 2)->ofs = (short)pcVar6;
     ovr_stgFreeTmp(stgTmp,0);
@@ -1920,7 +1919,6 @@ code_r0x00072658:
       pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_75,68,191,
                                 182,-3,0x6c,0x44,0xbf,0xfd);
       BldGfxRuin[0x4f].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-      uVar19 = 0x195d;
       uVar16 = (uint16_t)((ulong)stgTmp >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_76.seg))) = 0xd0;
       pixels_76.ofs = *(uint16_t *)((int)stgTmp + 0x302);
@@ -2022,7 +2020,6 @@ code_r0x00072658:
       pfVar5 = ovr_stshRleType2((far_t far *)(&psVar4->aptr)->ofs,pixels_79,130,199,194,26,100,0x82,199,
                                 0x1a);
       BldGfxNormal[0x5e].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-      uVar21 = 0x195d;
       uVar16 = (uint16_t)((ulong)stgTmp >> 0x10);
       (*(uint8_t *)((uint8_t *)&(pixels_80.seg))) = 100;
       pixels_80.ofs = *(uint16_t *)((int)stgTmp + 0x302);
@@ -2240,7 +2237,6 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_x00107,65,199,
                               129,26,100,0x41,199,0x1a);
     BldGfxNormal[0x97].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar21 = 0x195d;
     uVar16 = (uint16_t)((ulong)stgTmp >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00108.seg))) = 200;
     pixels_x00108.ofs = *(uint16_t *)((int)stgTmp + 0x302);
@@ -2309,7 +2305,6 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_x00113,84,134,
                               142,-4,0x3a,0x54,0x86,0xfc);
     BldGfxRuin[0xb2].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     uVar16 = (uint16_t)((ulong)stgTmp >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00114.seg))) = 0x3a;
     pixels_x00114.ofs = *(uint16_t *)((int)stgTmp + 0x302);
@@ -3056,7 +3051,6 @@ code_r0x00072658:
     pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_x00157,70,191,
                               180,0,0x6c,0x46,0xbf,0);
     BldGfxRuin[0x187].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     uVar16 = (uint16_t)((ulong)stgTmp >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00158.seg))) = 0xd7;
     pixels_x00158.ofs = *(uint16_t *)((int)stgTmp + 0x302);
@@ -3469,7 +3463,6 @@ L_init_assets_4EA5:
     pfVar5 = ovr_stshRleType2((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),pixels_x00190,50,212,
                               154,-4,0x6f,0x32,0xd4,0xfc);
     BldGfxRuin[0x1b1].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     uVar16 = (uint16_t)((ulong)stgTmp >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00191.seg))) = 0xd5;
     pixels_x00191.ofs = *(uint16_t *)((int)stgTmp + 0x302);
@@ -3579,7 +3572,6 @@ L_init_assets_4EA5:
     uVar19 = BldGfxNormal[0x1c7].ofs;
     pfVar5 = ovr_stshRleCut((far_t far *)*(uint16_t *)((int)stgTmp + 0x300),src_10,49,200,(char)uVar9,0,200,0,0);
     BldGfxNormal[0x1ce].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar14 = 0x195d;
     uVar20 = (uint16_t)((ulong)stgTmp >> 0x10);
     uVar16 = *(uint16_t *)((int)stgTmp + 0x302);
     (*(uint8_t *)((uint8_t *)&(src_11.seg))) = 0x1f;
@@ -3666,7 +3658,6 @@ L_init_assets_4EA5:
     puStack_a = (uint8_t *)uVar14;
     pfVar5 = ovr_stshRleCut((far_t far *)(&stgTmp->aptr)->ofs,src_15,49,219,(char)uVar19,0x83,0xdb,0,0);
     BldGfxNormal[0x1e0].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar21 = 0x195d;
     uVar19 = (stgTmp->aptr).seg;
     (*(uint8_t *)((uint8_t *)&(src_16.seg))) = 0x83;
     src_16.ofs = uVar19;
@@ -3818,7 +3809,6 @@ L_init_assets_4EA5:
     pfVar5 = ovr_stshRleType2((far_t far *)(&psVar4->aptr)->ofs,pixels_x00197,28,96,119,0,0xd,0x1c,0x60,
                               0);
     BldGfxRuin[0x1f9].ofs = stsh_store((uint8_t *)pfVar5, 0, &stshSegTmp);
-    uVar19 = 0x195d;
     uVar16 = (uint16_t)((ulong)stgTmp >> 0x10);
     (*(uint8_t *)((uint8_t *)&(pixels_x00198.seg))) = 0x77;
     pixels_x00198.ofs = *(uint16_t *)((int)stgTmp + 0x302);
