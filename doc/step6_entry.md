@@ -3598,3 +3598,35 @@ three-line file present leaves it unchanged, confirming `init_cfg` does not comp
 
   grep_checks 51,018; build 64/64 clean; LINK ERRORS 0
   compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13
+
+## STEP 6 DATA PARITY DEMONSTRATED: GAME.CFG is byte-identical to the original
+
+Same procedure on both sides (fresh run directory, one key `6` = sound Off):
+
+```
+original game/STRONG.EXE   -> STRONG.SAV\GAME.CFG = 33 0d 0a 33 0d 0a 30 0d 0a 31 0d 0a
+rebuilt REBUILT.EXE        -> STRONG.SAV\GAME.CFG = 33 0d 0a 33 0d 0a 30 0d 0a 31 0d 0a
+IDENTICAL: True
+```
+
+The last three defects were all the same class - functions whose recovered form uses a
+phantom stack parameter or the original image's data segment as a pointer:
+
+* `init_paths` (`ovc09_init.c`) called `getcwd(MK_FP(0x2410,0x44), unaff_BP)`; the
+  buffer it fills is copied into `GWorkDir` immediately afterwards, so it is
+  `GOriginalDir`.  It now uses the real DGROUP buffers, and `GWorkDir` holds
+  `<cwd>\strong.sav\`;
+* `init_cfg` built its path twice with `MK_FP(0x2410,0x8c6c)` and the format at
+  DGROUP:0x5BC (`"%sgame.cfg"`, verified in `audit/dgroup_2410.bin`); both now use
+  `sprintf(lbuf,"%sgame.cfg",&GWorkDir)`;
+* `creat_wait_unlock_and_disk`/`open_wait_unlock_and_disk` (`ovc17_stash.c`) used a
+  phantom stack parameter as the path and an uninitialised register as the create
+  attribute; they now use the near path and attribute 0, like the already verified
+  `creat_wait_unlock`/`file_open_rdonly`.
+
+Marker sequence on the fresh path: `T1` init_cfg entry, `T2` config opened, `T3` mice
+read, `T4` rewrite create - all reached, and the four-value writer then rewrites
+`3 3 0` into `3 3 0 1`.
+
+  grep_checks 51,018 -> 51,009; build 64/64 clean; LINK ERRORS 0
+  compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13

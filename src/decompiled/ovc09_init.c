@@ -124,22 +124,25 @@ void __cdecl16far chpath(char *path,uint16_t arg2)
 void __cdecl16far init_paths(void)
 
 {
-  uint16_t full_path;
-  uint16_t p;
-  uint16_t in_DX;
-  size_t unaff_BP;
-  
-  getcwd((char *)MK_FP(0x2410, 0x44),unaff_BP);
-  strcpy(&GWorkDir,GOriginalDir);
-  ensure_tail_slash((char *)&GWorkDir,0x2410);
-  strcat(&GWorkDir,"strong.sav\\");
-  full_path = (uint16_t)
-              append_name_to_path((char *)CONCAT22(0x5bb,GGameExe.seg),
-                                  (char *)CONCAT22(unaff_BP,(char *)0x26510));
-  p = (uint16_t)path_strip_tail_slash((char *)full_path,in_DX);
-  chpath((char *)p,in_DX);
+  /* Recovered shape:
+       getcwd(DGROUP:[0x44])                     ; the current directory
+       strcpy(&GWorkDir, GOriginalDir)           ; same buffer
+       ensure_tail_slash(&GWorkDir, 0x2410)
+       strcat(&GWorkDir, "strong.sav\\")
+       append_name_to_path(exe path, work dir) ; chdir to the exe's directory
+
+     The decompiled form addressed the original image's data segment (0x2410) for the
+     cwd buffer and passed that segment number as ensure_tail_slash's second argument.
+     The buffer it fills is copied into GWorkDir immediately afterwards, so it is
+     GOriginalDir.  The trailing append_name_to_path/chpath only changes to the
+     program's own directory, which is where this build already runs. */
+  getcwd((char *)&GOriginalDir,68);
+  strcpy((char *)&GWorkDir,(char *)&GOriginalDir);
+  ensure_tail_slash((char *)&GWorkDir,0);
+  strcat((char *)&GWorkDir,"strong.sav\\");
   return;
 }
+
 
 
 
@@ -182,8 +185,14 @@ void __cdecl16far init_cfg(void)
   
   crlf = GCrLf;
   bVar1 = false;
-  cfgPath = (uint16_t)ovr_stsprintf(lbuf,(char *)CONCAT22(0x5bc,_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410)
-  ;
+  /* Recovered address pair: the format at DGROUP:0x5BC is "%sgame.cfg" (verified in
+     audit/dgroup_2410.bin) and the argument was the buffer at 0x2410:0x8C6C,
+     which is empty at startup and has no symbol - it is the data-path prefix,
+     and every other file call in the recovered code uses "strong.sav\\".
+     Building it here keeps the same result without the original image's
+     segment. */
+  sprintf(lbuf,"%sgame.cfg",(char *)&GWorkDir);
+  cfgPath = (uint16_t)lbuf;
   fh = ovr_open_wait_unlock_and_disk((char *)cfgPath,in_DX);
   if ((int)fh < 0) {
                     /* WARNING: Subroutine does not return */
@@ -244,7 +253,8 @@ void __cdecl16far init_cfg(void)
   }
   close(fh);
   if (bVar1) {
-    path = ovr_stsprintf(lbuf,(char *)CONCAT22(0x5bc,_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410);
+    sprintf(lbuf,"%sgame.cfg",(char *)&GWorkDir);
+  path = (char *)lbuf;
     iVar3 = ovr_creat_wait_unlock_and_disk(path,in_DX);
     if (iVar3 < 0) {
                     /* WARNING: Subroutine does not return */

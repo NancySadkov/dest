@@ -613,14 +613,16 @@ uint16_t __cdecl16far randBelow(uint16_t n,uint16_t arg2)
 int __cdecl16far creat_wait_unlock_and_disk(char *path,uint16_t arg2)
 
 {
+  /* The decompiled form used a phantom stack parameter as the path and an
+     uninitialised register as the create attribute.  Same shape as creat_wait_unlock
+     in ovc31_config.c, whose near-path form is verified to work. */
   uint16_t handle;
   uint16_t ioerr;
-  int unaff_DI;
-  uint in_stack_00000006;
-  
+
+  (void)arg2;
   do {
     ioErrorHndlrInstall();
-    handle = _creat((char *)(ulong)in_stack_00000006,unaff_DI);
+    handle = _creat(path,0);
     ioerr = ioErrorHndlrUninstall();
     if (handle != 0xffff) {
       return handle;
@@ -636,13 +638,15 @@ int __cdecl16far creat_wait_unlock_and_disk(char *path,uint16_t arg2)
 int __cdecl16far open_wait_unlock_and_disk(char *filename,uint16_t arg2)
 
 {
+  /* The decompiled form built the path as CONCAT22(phantomParam, filename), i.e. a
+     far pointer whose segment was never supplied. */
   uint16_t handle;
   uint16_t ioerr;
-  uint16_t in_stack_00000006;
-  
+
+  (void)arg2;
   do {
     ioErrorHndlrInstall();
-    handle = _open((char *)CONCAT22(in_stack_00000006,filename),0x41);
+    handle = _open(filename,0x41);
     ioerr = ioErrorHndlrUninstall();
     if (handle != 0xffff) {
       return handle;
