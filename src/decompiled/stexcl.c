@@ -44,3 +44,6 @@ int ovc22_usesludiv_at_2() { return 0; }
 int ovc22_usesrandbelow() { return 0; }
 int ovc22_usesrandbelow2() { return 0; }
 int upd_usesalignup4() { return 0; }
+int init_assets() { return 0; }
+int stshallocstub() { return 0; }
+int stshstubifybld() { return 0; }

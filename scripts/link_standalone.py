@@ -124,7 +124,7 @@ def main():
     # o45 (unitinfo) and o49 (agents) are excluded so the resident image fits
     # below the 640 KiB conventional-memory limit; stexcl.c supplies their
     # symbols as return-0 stand-ins.
-    DEFAULT_EXCLUDE = "OVL.OBJ,O45.OBJ,O49.OBJ,O22.OBJ"
+    DEFAULT_EXCLUDE = "OVL.OBJ,O45.OBJ,O49.OBJ,O22.OBJ,O44.OBJ"
     _excl = [x.strip().upper() for x in
              (os.environ.get("EXCLUDE_OBJS", DEFAULT_EXCLUDE)).split(",")
              if x.strip()]
