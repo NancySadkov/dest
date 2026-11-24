@@ -126,35 +126,35 @@ stg_tmp_t * __cdecl16far ovc40_usesStshLoadGfx(byte backdropIndex)
   uint16_t uVar1;
   uint8_t cmapBackupB;
   uint8_t cmapBackupA;
-  stg_tmp_t *psStack_6;
+  stg_tmp_t *gfxRec;
   uint16_t uStack_4;
   
   handle.seg = marbleCut1Seg;
   handle.ofs = marbleCut1Ofs;
-  psStack_6 = ovr_stshLoadGfx(handle);
-  _fmemmove((char *)CONCAT22(_SS,&cmapBackupB),(char *)CONCAT22(in_DX,psStack_6->cmap + 0x231),
+  gfxRec = ovr_stshLoadGfx(handle);
+  _fmemmove((char *)CONCAT22(_SS,&cmapBackupB),(char *)CONCAT22(in_DX,gfxRec->cmap + 0x231),
             0xcf);
   handle_00.seg = Lbm_nwpanel1.seg;
   handle_00.ofs = Lbm_nwpanel1.ofs;
-  psStack_6 = ovr_stshLoadGfx(handle_00);
-  _fmemmove((char *)CONCAT22(_SS,&cmapBackupA),(char *)CONCAT22(in_DX,psStack_6->cmap + 0x2ac),
+  gfxRec = ovr_stshLoadGfx(handle_00);
+  _fmemmove((char *)CONCAT22(_SS,&cmapBackupA),(char *)CONCAT22(in_DX,gfxRec->cmap + 0x2ac),
             0xc);
   if (backdropIndex == 4) {
     handle_01.seg = youlose1Cut1Seg;
     handle_01.ofs = youlose1Cut1Ofs;
-    psStack_6 = ovr_stshLoadGfx(handle_01);
+    gfxRec = ovr_stshLoadGfx(handle_01);
     uStack_4 = in_DX;
   }
   else {
     uVar1 = 0x2410;
     handle_02.seg = ((uint16_t *)&back03Cut1Seg)[(uint)backdropIndex * 2];
     handle_02.ofs = ((uint16_t *)&back03Cut1Ofs)[(uint)backdropIndex * 2];
-    psStack_6 = ovr_stshLoadGfx(handle_02);
+    gfxRec = ovr_stshLoadGfx(handle_02);
     uStack_4 = uVar1;
   }
-  _fmemmove((char *)CONCAT22(uStack_4,psStack_6->cmap + 0x231),
+  _fmemmove((char *)CONCAT22(uStack_4,gfxRec->cmap + 0x231),
             (char *)CONCAT22(_SS,&cmapBackupB),0xcf);
-  return psStack_6;
+  return gfxRec;
 }
 
 
