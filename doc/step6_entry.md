@@ -2923,3 +2923,35 @@ consistent with a marker bug rather than a program fault.
 Next: repeat the marker with the string in the **code** segment (`push cs / pop ds`
 plus an asm-level `db 'S1:$'`), the same technique the ENTRY stub proved works.  Only
 once that prints can the walk continue into `init_game`.
+
+## `startx` runs, but it never reaches `main`
+
+Markers were implemented as far asm routines in `ovr_thunks.asm` that print a
+**code-segment** string (`push cs / pop ds` + `db 'S1:$'`) - the technique the ENTRY
+stub proved works; the earlier marker failed only because it used `seg DosVersion` to
+load `DS`.
+
+Results with the loading build (516,016-byte image):
+
+```
+OUT.TXT: 'S1:'
+S1 (startx, after the DS switch)   printed
+S3 (main, first statement)         not printed
+S2 (init_game, first statement)    not printed
+```
+
+So execution enters `startx` and stops **inside `startx`, before it calls `main`**.
+No game code has run yet - which also means the 47 return-0 stand-ins are not
+implicated in the current failure.
+
+Remaining suspects, in `startx` order:
+
+1. `SaveVectors()` (installs vectors 0/4/5/6);
+2. the heap setup (`_heapbase`, `_brklvl`, `__stklen`);
+3. the `AH=4Ah` memory shrink;
+4. the stack switch (`cli / mov ss,dx / mov sp,di / sti`) - the most dangerous, and the
+   one piece of hand-written asm in the path;
+5. the `fixFarTable` / initialisers that follow.
+
+Next: put markers between those statements (they can reuse the same asm routine
+pattern), and the first one that is missing names the defect.
