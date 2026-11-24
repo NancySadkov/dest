@@ -1852,3 +1852,61 @@ inject-and-dump technique already used by `tmp/dump_dgroup_stdout.py`, applied t
 Once a full pass through `init_game` is possible, the next milestone is a save:
 run with the `grab`/save argument so the game writes `STRONG.SAV`, then compare that
 file against one produced by `game/STRONG.EXE`.
+
+## Bisection result: `main` runs, but returning from it never reaches DOS
+
+Five probes, each a rebuilt EXE run under the project's DOSBox harness, all reading
+`DONE.FLG` (written by `GO.BAT` only if the program hands control back):
+
+| probe | change | DONE.FLG |
+|---|---|---|
+| baseline | `main` -> `ovr_init_game()` and on | no |
+| k=-1 | `main` -> `return 0;` (no `init_game` call at all) | **no** |
+| k=0 | `init_game` returns before its first statement | no |
+| k=1 | `init_game` returns right after `_OvrInitExt(0,0)` | no |
+| k=-2 | `main` -> `asm mov ax,4c00h / asm int 21h` instead of calling `init_game` | **yes** |
+| A | `startx`: replace `exit(...)` with `asm mov ax,4c00h / int 21h` | no |
+| C | `startx`: drop the `puVar15-8/-10/-c` stores *and* `exit`, exit via DOS | no |
+| D | `startx`: call `main(...)` directly instead of through `(far *)main` | no |
+| E | D plus an inline DOS exit immediately after the call | **no** |
+
+Read together:
+
+* `main`'s body **does** run — k=-2 proves control arrives in `main`, executes its
+  prologue (`GGameExe`/`GExeArg` writes) and can exit cleanly from inside it;
+* nothing about `init_game` matters: with the call removed entirely (k=-1) the
+  program still never returns to DOS, and with `init_game` returning at its very
+  first statement (k=0) it still never returns;
+* the failure is in the **call/return boundary around `main`** — every variant
+  that lets `main` RET hangs, even with the DOS exit instruction placed right
+  after the call in `startx` (probe E).
+
+`startx` currently calls `main` through a decompiled far-pointer dance:
+
+```c
+  {
+    int (far *pmain)(int, str_t *, str_t *);
+    pmain = main;
+    iVar10 = (*pmain)(__C0argc, (str_t *)__C0argv, (str_t *)__C0environ);
+  }
+  *(int *)(puVar15 + -8) = iVar10;
+  *(uint16_t *)(puVar15 + -10) = 0x1301;
+  *(uint16_t *)(puVar15 + -0xc) = 0x154;
+  exit(*(int *)(puVar15 + -8));
+```
+
+`main` is declared nowhere in `recovered.h`, so that cast is built from an implicit
+declaration; a far call to a near function (or the reverse) leaves the stack
+unbalanced, which matches the symptom exactly (body runs, `ret` does not return).
+The `puVar15` stores are decompiler noise for the simulated call frame.
+
+### Next step
+
+Compare the rebuilt `startx`/`main` boundary against the original: dump the original
+C0 start-up (`_STARTX`) and see whether it invokes `main` with a **near** or a **far**
+call, then declare `main` accordingly in `recovered.h` and simplify `startx` to the
+matching direct call. That is a small, verifiable change: probe E already carries the
+test (build, link, run, expect `DONE.FLG`).
+
+The probe driver is `tmp/probe_initgame_k.py` (k=-2, -1, 0..6) and
+`tmp/probe_exit.py` (A, B, C, D, E); both restore every file they touch.
