@@ -1810,3 +1810,45 @@ both linked and runtime segments, authoritative object sizes, duplicate-name
 pairing by address), the different count went 816 -> 100 with no change to the
 source data, because the earlier numbers were dominated by artefacts of the
 comparator itself.
+
+## The overlay thunks are plain jumps - the INT 3Fh premise is obsolete
+
+The entry ladder recorded earlier (`main -> lcall ovr_init_game -> thunk ->
+O09_SEG stub -> INT 3Fh`) no longer describes this build.  `ovr_thunks.asm` is
+generated (`scripts/gen_ovr_thunks.py`) and every entry is a direct far jump:
+
+```
+    public _ovr_init_game
+_ovr_init_game proc far
+    jmp _init_game
+_ovr_init_game endp
+```
+
+so `main` reaches the recovered `init_game` (`ovc09_init.c:273`) without any
+overlay manager involvement.  Whatever stops the program is therefore *inside*
+`init_game`, not in the thunk chain.
+
+`init_game` itself calls, in order:
+
+```
+_OvrInitExt(0,0);      _OvrInitEms(0,0,0);     ovr_init_base();
+init_paths();          init_cfg();             clrscr();
+srand8(...);           ovr_stshAlloc(0xfa0f);  strcmp(...) x2
+ovr_init_assets();     ovr_stshInit();         ...
+```
+
+`_OvrInitExt` / `_OvrInitEms` are OVERLAY.LIB entry points (compiler-supplied), and
+`clrscr` is CM.LIB; those three are the first suspects because they are the only
+calls in the list that are not recovered game code.
+
+### How to bisect it without guessing
+
+Patch `main`'s call site so it returns immediately after the k-th statement of
+`init_game`, dump DGROUP as the existing stub does, and increase k until the dump
+disappears - the first k that fails names the call.  This is the same
+inject-and-dump technique already used by `tmp/dump_dgroup_stdout.py`, applied to
+`init_game`'s return address instead of `main`'s entry.
+
+Once a full pass through `init_game` is possible, the next milestone is a save:
+run with the `grab`/save argument so the game writes `STRONG.SAV`, then compare that
+file against one produced by `game/STRONG.EXE`.
