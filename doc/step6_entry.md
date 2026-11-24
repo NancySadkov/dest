@@ -3125,3 +3125,31 @@ Next: add the FP emulator library to the no-crtl rsp and supply/relocate the han
 symbols the game code takes from the reconstructed startup, then the whole `crtl.c`
 module can be dropped - which is both the correct scope and the shortest path to a
 working program, since the stock CRT's `startx`/`_setupio` are known-good.
+
+## Dropping the reconstructed CRT: not 4 RTL symbols
+
+Excluding `CRTL.OBJ` (stock `C0M` startup, `--without-crtl`) and adding stand-ins for
+the first four helpers did not converge - the next link reported **22** undefined
+symbols:
+
+```
+__FAKREALCVT   _PADD_AT_      _EMSFREE      _XMSFREE
+_AUDIO_DONE    _SRAND8        _LDIV_AT_     _LXMUL_AT_
+_F_SCOPY       _AUDIO_INIT    _LXRSH_AT_    _LXURSH_AT_   ...
+```
+
+None of them exist in any BC30 library (`tools/BC30/LIB/*.LIB` was scanned).  They are
+Borland C0/RTL internals that the original build obtained by linking its own CRT
+objects - i.e. exactly the code AGENTS.md says is Turbo C's, and which the open-source
+CRT provides.
+
+Also unresolved: the `__REALCVT` fixup overflow in `CM.LIB`'s VPRINTER survives
+`EMU.LIB` in either position (`CM EMU`, `EMU CM`) and `FP87.LIB`.
+
+So "drop `crtl.c`" is not a switch, it is an import job: take the CRT sources, build
+the RTL objects this image needs, and link those instead of the reconstruction.  The
+tree is restored to the working link (reconstruction included) so the gates stay green
+while that is done.
+
+  build 64/64 clean; link 0 errors; grep_checks 51,169
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
