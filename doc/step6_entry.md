@@ -2194,3 +2194,43 @@ functions are at `141B:00CA`, `141B:019A`, `141B:028E`, `141B:2CDC`, ... with
 
 The check is `tmp/reach.py <symbol>` against the real address, then
 `tmp/runcase.py` for the `STRONG.SAV` milestone.
+
+## Root cause of step 6: `/o` in the link made every thunk an INT 3Fh stub
+
+`link_standalone.py` placed `/o` before the game modules, so TLINK built VROOMM
+overlays and emitted a resident **STUBSEG** copy of each overlay module whose
+bodies are `INT 3Fh` (`CD 3F <index>`).  The generated thunks (`jmp _name`) bound
+to those stubs:
+
+```
+06DD:020E  _ovr_init_game    ea 48 00 1b 14     jmp far 141B:0048
+141B:0048                    cd 3f 79 05 00 ... INT 3Fh stub table
+```
+
+With no VROOMM manager the first `INT 3Fh` never returns - that is the "hang" every
+startup probe in this file was chasing, and it also explains why `_INIT_GAME` in the
+map pointed at `141B:0579`, which is a stub *index* rather than code.
+
+The resident link (the script's existing `NO_OVERLAY` branch, now the default;
+`WITH_OVERLAY=1` restores the old behaviour) makes those modules normal code:
+
+```
+_INIT_GAME  105C:057D   55 8b ec 83 ec 02 56 6a   (push bp / mov bp,sp / ...)
+STUBSEG segments: 2 (empty)
+tmp/reach.py _INIT_ASSETS   reached
+tmp/reach.py _RUN_DEMO      reached
+tmp/runcase.py              returned to DOS: True
+```
+
+Gate cost (accepted - it is what makes the program run at all):
+
+```
+compare_state   1,627 / 0 / 0        (unchanged)
+diff_dgroup     972 / 1,868          (was 973)
+compare_runtime 1,543 / 13           (was 1,545 / 12)
+grep_checks     51,212               (unchanged)
+```
+
+Remaining step-6 work is behavioural: the game now starts and exits at once instead
+of hanging, so the task is to get `run_demo` as far as the save point and compare
+its `STRONG.SAV` with `tmp/orig_STRONG.SAV`.
