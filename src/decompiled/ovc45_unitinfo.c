@@ -997,8 +997,8 @@ ovc45_buildPlacementMessage
                (uVar9 & 0xff) == 0)) ||
               (uVar9 = ovc45_compute4((x - bStack_13) + 3,y,uVar28), (uVar9 & 0xff) == 0
               )))) {
-            uVar16 = 0x195d;
             pcVar11 = ovr_stsprintf((char *)&reqMsg);
+            asm { mov uVar16,dx };
             strcat((char *)CONCAT13(uVar24,CONCAT12(uVar23,&msg)),
                    (char *)CONCAT13((char)((uint)uVar16 >> 8),CONCAT12((char)uVar16,pcVar11)));
             uVar26 = (undefined1)((uint)uVar16 >> 8);
@@ -1009,8 +1009,8 @@ ovc45_buildPlacementMessage
                     (uVar9 = ovc45_compute4(x + 1,y,uVar28), (char)uVar9 == '\0')))) &&
                   ((bStack_13 == 0 ||
                    (uVar9 = ovc45_compute4(x - 1,y,uVar28), (char)uVar9 == '\0')))) {
-            uVar16 = 0x195d;
             pcVar11 = ovr_stsprintf((char *)&reqMsg);
+            asm { mov uVar16,dx };
             strcat((char *)CONCAT13(uVar24,CONCAT12(uVar23,&msg)),
                    (char *)CONCAT13((char)((uint)uVar16 >> 8),CONCAT12((char)uVar16,pcVar11)));
             uVar26 = (undefined1)((uint)uVar16 >> 8);
@@ -1090,10 +1090,10 @@ ovc45_buildPlacementMessage
             }
           }
           else if ((BuildingTypes[bStack_12].flags3 & 0x80) == 0) {
-            uVar16 = 0x195d;
             pcVar11 = ovr_stsprintf((char *)&reqMsg,(char *)CONCAT13(0x75,CONCAT12(0x99,_SS)),
                                     (char *)(ulong)CONCAT12(BuildingTypes[bStack_12].flags3,0x2410
                                                            ),0x99,0x10);
+                                                           asm { mov uVar16,dx };
             strcat((char *)CONCAT13(uVar24,CONCAT12(uVar23,&msg)),
                    (char *)CONCAT13((char)((uint)uVar16 >> 8),CONCAT12((char)uVar16,pcVar11)));
             uVar26 = (undefined1)((uint)uVar16 >> 8);
@@ -4189,12 +4189,12 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
                            (char *)CONCAT13((char)(Font03.ofs >> 8),CONCAT12((char)Font03.ofs,uVar8)
                                            ),Font03.seg,'U',(char)uVar8,(char)Font03.ofs,0x55,3,
                            pcVar4,uVar14);
-    uVar8 = 0x195d;
     puVar7 = ovr_ovc15_usesStshRealloc
                        ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),(char)BLD_WORD(&BuildingTypes[bldType], name, 2),uStack_1a,(char)iVar6,uVar15,0,0,0);
     pcVar4 = ovr_fmVsprintf("%s: Claim this tree? Harvest value is %d gold. Active party is %s the %s."
                             ,(char *)CONCAT13((char)((uint)uVar8 >> 8),CONCAT12((char)uVar8,puVar7))
                            );
+                           asm { mov uVar8,dx };
     uVar14 = SUB21(_SS,0);
     uVar15 = (undefined1)((uint)_SS >> 8);
     strcpy((char *)CONCAT13(uVar15,CONCAT12(uVar14,&msg)),
