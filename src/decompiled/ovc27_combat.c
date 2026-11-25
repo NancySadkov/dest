@@ -1023,7 +1023,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
     emptyFunction();
     return;
   }
-  iVar5 = ovc27_rollToHitEntity(CONCAT13(0x17,CONCAT12(0x26,paStack_c)),3);
+  iVar5 = ovc27_rollToHitEntity((uint32_t)MK_FP(SEG_OF(Agnts), paStack_c),3);
   if ((char)iVar5 == '\0') {
     uVar11 = (undefined1)GSavedBlitSeg;
     pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&text1 >> 8),

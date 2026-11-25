@@ -1462,7 +1462,7 @@ code_r0x00088b64:
               ovr_ovc41_usesXOfs((int)uStackY_22);
             }
             uVar27 = ovc49_agentIsActive((agnt_t *)
-                                         CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)));
+                                         MK_FP(SEG_OF(Agnts), (int)uStackY_22 * 0x34));
             if ((((char)uVar27 == '\0') || (Agnts[uStackY_22].y < 0)) ||
                ((-1 < Agnts[uStackY_22].x &&
                 ((Agnts[uStackY_22].x < 0xd3 &&
@@ -1481,7 +1481,7 @@ code_r0x00088b64:
                     AGNT_FIELD(&Agnts[uStackY_22], targetX, 0) = -AGNT_FIELD(&Agnts[uStackY_22], targetX, 0);
                   }
                   uVar27 = ovc49_agentIsActive((agnt_t *)
-                                               CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)))
+                                               MK_FP(SEG_OF(Agnts), (int)uStackY_22 * 0x34))
                   ;
                   if ((char)uVar27 == '\0') {
                     uVar16 = ovr_randBelow(3,0);
@@ -1510,7 +1510,7 @@ code_r0x00088b64:
               if (((char)((ulong)uVar31 >> 8) == '\0') ||
                  ((((char)uVar31 == '\0' && (-1 < AGNT_FIELD(&Agnts[uStackY_22], targetX, 1))) &&
                   (uVar15 = ovc49_agentIsActive((agnt_t *)
-                                                CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34))
+                                                MK_FP(SEG_OF(Agnts), (int)uStackY_22 * 0x34)
                                                ), (uVar15 & 0xff) == 0)))) {
                 if (Agnts[uStackY_22].moveState != '\x02') {
                   Agnts[uStackY_22].x = uStackY_24;
@@ -1601,7 +1601,7 @@ L_OVC49_8699_1e09_29B9:
             iVar14 = AGNT_WORD(&Agnts[uStackY_22], frames, 0);
             ovr_ovc49_fillGridCells(0,0,0,0);
             ovc49_textLongerParalyzed
-                      ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
+                      ((agnt_t *)MK_FP(SEG_OF(Agnts), (int)uStackY_22 * 0x34),
                        (byte)uStackY_22);
             uStackY_26 = CONCAT22(Agnts[uStackY_22].x,
                                    Agnts[uStackY_22].y);
@@ -3098,7 +3098,7 @@ L_OVC49_8699_1e09_3BDE:
         (Agnts[uStackY_22].animFrame == -1)))) {
       if (Agnts[uStackY_22].gindex == '\0') {
         cVar8 = ovc49_usesFrameIndex2
-                          ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
+                          ((agnt_t *)MK_FP(SEG_OF(Agnts), (int)uStackY_22 * 0x34),
                            (byte *)CONCAT13(uVar38,CONCAT12(bVar36,&stk_ffe4)));
         if (cVar8 == '\0') {
           if ((Agnts[uStackY_22].frameIndex == '\x03') ||
@@ -3116,7 +3116,7 @@ L_OVC49_8699_1e09_3BDE:
       }
       else if (Agnts[uStackY_22].gindex == '\x01') {
         cVar8 = ovc49_usesFrameIndex
-                          ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
+                          ((agnt_t *)MK_FP(SEG_OF(Agnts), (int)uStackY_22 * 0x34),
                            (byte *)CONCAT13(uVar38,CONCAT12(bVar36,&stk_ffe4)));
         if (cVar8 != '\0') {
           pbVar29 = (brect_t *)((char *)0x26489);
@@ -3196,7 +3196,7 @@ L_OVC49_8699_1e09_3310:
         ovr_play_sfxU(*(byte *)(iVar18 + 0x1d),0,0,0,0);
         pbVar29 = (brect_t *)((char *)0x23d5);
         ovr_ovc41_resolveSpecialAttack
-                  ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
+                  ((agnt_t *)MK_FP(SEG_OF(Agnts), (int)uStackY_22 * 0x34),
                    (uint)Agnts[uStackY_22].target);
       }
       else if (Agnts[uStackY_22].gindex == '\x03') {
@@ -3239,7 +3239,7 @@ L_OVC49_8699_1e09_3310:
         ovr_play_sfxU(*(byte *)(iVar18 + 0x1d),0,0,0,0);
         pbVar29 = (brect_t *)((char *)0x23d5);
         ovr_ovc41_resolveSpecialAttack
-                  ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
+                  ((agnt_t *)MK_FP(SEG_OF(Agnts), (int)uStackY_22 * 0x34),
                    (uint)Agnts[uStackY_22].target);
       }
       else {
@@ -3252,7 +3252,7 @@ L_OVC49_8699_1e09_3310:
   else {
     pbVar29 = (brect_t *)((char *)0x23d5);
     ovr_ovc41_resolveSpecialAttack
-              ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,(int)uStackY_22 * 0x34)),
+              ((agnt_t *)MK_FP(SEG_OF(Agnts), (int)uStackY_22 * 0x34),
                (uint)Agnts[uStackY_22].target);
   }
   GGameState = 0x39;
@@ -3567,7 +3567,7 @@ void __cdecl16far ovc49_drawAgents(void)
                         AGNT_WORD(&Agnts[agentIndex], frames, 0));
     ovc49_fillGridCells(0,(agnt_t *)&Agnts[agentIndex].x,(char)(agnt_t *)&Agnts[agentIndex].x,0x26);
     ovc49_textLongerParalyzed
-              ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)),(byte)agentIndex);
+              ((agnt_t *)MK_FP(SEG_OF(Agnts), agentIndex * 0x34),(byte)agentIndex);
     uVar13 = Agnts[agentIndex].x;
     uVar21 = Agnts[agentIndex].y;
     uVar10 = ovc49_body1((agnt_t *)&Agnts[agentIndex].x,0x26);
@@ -3645,7 +3645,7 @@ void __cdecl16far ovc49_drawAgents(void)
     {
       ovr_ovc41_usesXOfs(agentIndex);
     }
-    uVar15 = ovc49_agentIsActive((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)));
+    uVar15 = ovc49_agentIsActive((agnt_t *)MK_FP(SEG_OF(Agnts), agentIndex * 0x34));
     if ((((char)uVar15 == '\0') || (Agnts[agentIndex].y < 0)) ||
        ((-1 < Agnts[agentIndex].x &&
         ((Agnts[agentIndex].x < 0xd3 &&
@@ -3662,7 +3662,7 @@ void __cdecl16far ovc49_drawAgents(void)
         else {
           AGNT_FIELD(&Agnts[agentIndex], targetX, 0) = -AGNT_FIELD(&Agnts[agentIndex], targetX, 0);
         }
-        uVar13 = ovc49_agentIsActive((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)));
+        uVar13 = ovc49_agentIsActive((agnt_t *)MK_FP(SEG_OF(Agnts), agentIndex * 0x34));
         if ((char)uVar13 == '\0') {
           uVar12 = ovr_randBelow(3,0);
           AGNT_FIELD(&Agnts[agentIndex], targetX, 1) = (char)uVar12 + -1;
@@ -3686,7 +3686,7 @@ void __cdecl16far ovc49_drawAgents(void)
       else if ((bVar7) &&
               (((bVar8 || (AGNT_FIELD(&Agnts[agentIndex], targetX, 1) < '\0')) ||
                (uVar10 = ovc49_agentIsActive((agnt_t *)
-                                             CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34))),
+                                             MK_FP(SEG_OF(Agnts), agentIndex * 0x34)),
                (uVar10 & 0xff) != 0)))) {
         iVar17 = ovc49_usesStExit((agnt_t *)&Agnts[agentIndex].x,0x26);
         if ((char)iVar17 != '\0') {
@@ -3881,7 +3881,7 @@ void __cdecl16far ovc49_drawAgents(void)
          ) {
         if (Agnts[agentIndex].gindex == '\0') {
           frameOk = ovc49_usesFrameIndex2
-                            ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)),
+                            ((agnt_t *)MK_FP(SEG_OF(Agnts), agentIndex * 0x34),
                              (byte *)CONCAT13(ssHi,CONCAT12(type,&agntIndex)));
           if (frameOk == '\0') {
             if ((Agnts[agentIndex].frameIndex == '\x03') ||
@@ -3898,7 +3898,7 @@ void __cdecl16far ovc49_drawAgents(void)
         }
         else if (Agnts[agentIndex].gindex == '\x01') {
           frameOk = ovc49_usesFrameIndex
-                            ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)),
+                            ((agnt_t *)MK_FP(SEG_OF(Agnts), agentIndex * 0x34),
                              (byte *)CONCAT13(ssHi,CONCAT12(type,&agntIndex)));
           if ((frameOk == '\0') ||
              (uVar10 = ovr_ovc27_compute1((agnt_t *)&Agnts[agentIndex].x,SEG_OF(Agnts),0x26,agntIndex + 0xff)
@@ -3965,7 +3965,7 @@ void __cdecl16far ovc49_drawAgents(void)
           uVar12 = ovr_audio_panFromX((agnt_t *)&Agnts[agentIndex].x,0x26);
           ovr_play_sfxU(*(byte *)((int)recPtr + 0x1d),0,uVar12,0,(char)uVar12);
           ovr_ovc41_resolveSpecialAttack
-                    ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)),
+                    ((agnt_t *)MK_FP(SEG_OF(Agnts), agentIndex * 0x34),
                      (uint)Agnts[agentIndex].target);
         }
         else if (Agnts[agentIndex].gindex == '\x03') {
@@ -4007,7 +4007,7 @@ void __cdecl16far ovc49_drawAgents(void)
           uVar12 = ovr_audio_panFromX((agnt_t *)&Agnts[agentIndex].x,0x26);
           ovr_play_sfxU(*(byte *)((int)recPtr + 0x1d),0,uVar12,0,(char)uVar12);
           ovr_ovc41_resolveSpecialAttack
-                    ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)),
+                    ((agnt_t *)MK_FP(SEG_OF(Agnts), agentIndex * 0x34),
                      (uint)Agnts[agentIndex].target);
         }
         else {
@@ -4018,7 +4018,7 @@ void __cdecl16far ovc49_drawAgents(void)
     }
     else {
       ovr_ovc41_resolveSpecialAttack
-                ((agnt_t *)CONCAT13(0x17,CONCAT12(0x26,agentIndex * 0x34)),
+                ((agnt_t *)MK_FP(SEG_OF(Agnts), agentIndex * 0x34),
                  (uint)Agnts[agentIndex].target);
     }
     GGameState = 0x39;

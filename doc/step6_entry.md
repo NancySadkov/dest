@@ -6253,3 +6253,39 @@ two-role `iVar6` - with every expression kept byte-for-byte, so only register al
 
   grep_checks 41,263 -> 41,190; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### Agnts/0x34, part 1: the hardcoded segment 0x1726 is replaced, and the rest is model-gated
+
+Working the class turned up a shape that makes the `-ml` question concrete.
+
+19 of the sites build the far pointer **by hand**:
+
+```c
+CONCAT13(0x17, CONCAT12(0x26, index * 0x34))
+```
+
+Since `CONCAT13(a,b) = a<<24|b` and `CONCAT12(a,b) = a<<16|b`, that value is `0x1726_XXXX` - segment
+**0x1726**, which is exactly where `symbols.tsv` puts `Agnts` (`1726:0000`).  So the export embedded
+the original image's segment as a literal.  Replacing it with `MK_FP(SEG_OF(Agnts), index * 0x34)`
+gives the same pointer with this build's segment; because `Agnts` is at offset 0 of its segment, that
+is also exactly `&Agnts[index]`.  **19 sites fixed** (1 in ovc27_combat, 18 in ovc49_agents), with one
+explicit `(uint32_t)` added where the callee is declared `ovc27_rollToHitEntity(uint32_t agnt, ...)`.
+
+The rest of the class **cannot** be fixed by rewriting text, and the reason is the pointer model:
+
+```c
+uint16_t __cdecl16far ovc49_agentIsActive(agnt_t *agnt);      /* near under -mm */
+int      __cdecl16far ovc27_rollToHitEntity(uint32_t agnt, ...);  /* wants the far value */
+```
+
+Callees declared with a near `agnt_t *` cannot receive a far pointer at all under this build: the cast
+`(agnt_t *)MK_FP(...)` truncates to 16 bits and the callee then dereferences through DS.  Under `-ml`
+those same declarations become far and the calls are correct **with no source change**.
+
+That reverses the direction of the `-ml` argument.  It is not only a theory about data layout: there
+are 45 remaining `* 0x34` sites, and the ones that pass an agent to a near-`agnt_t *` callee are
+broken now and fixed by the switch.  The switch is still blocked on the three type-mangled bodies
+(o22, o49, and the two inline-asm sites), so the two problems are the same problem.
+
+  grep_checks 41,190 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
