@@ -6804,3 +6804,50 @@ gates.  The full `-c` build was rerun before linking, per the trap recorded last
 
   grep_checks 40,962 -> 40,885; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### ovc30_textDivideError renamed by line range; ovc49 listing closed via an isolated probe
+
+`619c:05a5`, 1209 bytes, 441 instructions, **19 calls** - and the C body has exactly 19 real calls once
+three type casts (`short`) and the signature line are excluded.
+
+The exported body reuses locals for unrelated roles (`iVar4` is `baseDist`, then `scanIdx`, then
+`twiceFactor`; `uVar6` is `dx`, then `mapOk`, then `newLeader`; `uVar8` is `spawnX`, then `roll`), so
+the rename is assigned **by line range**:
+
+```
+iVar4  <=271 baseDist | <=372 scanIdx | else twiceFactor
+uVar6  <=339 dx       | <=349 mapOk   | else newLeader
+uVar7  <=339 dy       | else factor
+uVar8  <=393 spawnX   | else roll
+bVar3  <=342 rejected | else inArena
+uVar2 sheet   uVar5 yRoll   uVar9 dxSign   uVar10 dySign   pbVar1 flagsByte
+```
+
+A first attempt used an explicit per-line map and failed with 13 errors: continuation lines such as
+321 use four temps at once (`uVar6 ^ uVar9) - uVar9) / 2 + ((uVar7 ^ uVar10) - uVar10)`) and were not
+in the map.  Range assignment cannot miss a line, and the script now reports
+`lines still holding an exported temp: none`.
+
+**Verified against the emitted listing**, which o30 supports:
+
+```
+instructions: 572 (original 441)
+call instructions: 19 (original 19)
+  ovr_randBelow x5          ovr_ovc15_usesLDIV_at_ x3   ovr_constr_usesGMapFlags x2
+  ovc30_difficultyFactor x2 ovr_ovc23_placeBuilding x2   five others x1
+```
+
+The call distribution matches the original's lcall profile exactly (0x170,0x5c x5; 0x160,0x20 x3;
+0x138,0x2a x2; two near calls; 0x1a0,0x52 x2; five singles).  572 against 441 instructions is the
+expected cost of C over hand-written assembly, not extra logic.
+
+### ovc49_usesStExit: the missed listing check, now done
+
+Last turn's `ovc49_usesStExit` shipped without the emitted-code check because `--asm` on `o49` hits the
+compiler table limit.  Compiling the function alone fixes that: `tmp/make_fn_probe.py` copies it into
+`probe.c`, which lists fine - 1 call (`_ovr_stExit`, matching the original's single lcall) and the
+fallthrough exit emits `mov al,[bp-9] / mov ah,0 / shl ax,8`, i.e. the `retHi << 8` shape.  The debt is
+closed.
+
+  grep_checks 40,885 -> 40,771; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

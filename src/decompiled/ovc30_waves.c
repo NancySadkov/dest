@@ -246,16 +246,23 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
 byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte percent,uint16_t arg5,uint16_t arg6)
 
 {
-  byte *pbVar1;
-  uint32_t uVar2;
-  bool bVar3;
-  int iVar4;
-  uint16_t uVar5;
-  uint uVar6;
-  uint uVar7;
-  uint16_t uVar8;
-  uint uVar9;
-  uint uVar10;
+  byte *flagsByte;
+  uint32_t sheet;
+  bool rejected;
+  bool inArena;
+  int baseDist;
+  int scanIdx;
+  int twiceFactor;
+  uint16_t yRoll;
+  uint dx;
+  uint mapOk;
+  uint newLeader;
+  uint dy;
+  uint factor;
+  uint16_t spawnX;
+  uint16_t roll;
+  uint dxSign;
+  uint dySign;
   byte retries;
   byte leaderIndex;
   int maxDist;
@@ -267,8 +274,8 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
   
   tries = 1;
   leaderIndex = 0xff;
-  iVar4 = ovr_ovc25_compute1(gindex);
-  maxDist = iVar4 * 3 + 0xf;
+  baseDist = ovr_ovc25_compute1(gindex);
+  maxDist = baseDist * 3 + 0xf;
   if (0x31 < maxDist) {
     maxDist = 0x32;
   }
@@ -279,7 +286,7 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
     if (mode == '\x02') {
       spawnY = demoCenterY;
       mode = '\x01';
-      uVar8 = demoCenterX;
+      spawnX = demoCenterX;
     }
     else if (mode == '\0') {
       minBound = demoCenterX + tries * -8;
@@ -290,8 +297,8 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
       if (0x8c < maxBound) {
         maxBound = 0x8c;
       }
-      uVar8 = ovr_randBelow((maxBound - minBound) + 1,0);
-      uVar8 = (uVar8 & 0xff) + minBound & 0xfffc;
+      spawnX = ovr_randBelow((maxBound - minBound) + 1,0);
+      spawnX = (spawnX & 0xff) + minBound & 0xfffc;
       minBound = demoCenterY + tries * -4;
       maxBound = demoCenterY + tries * 4;
       if (minBound < 8) {
@@ -300,99 +307,99 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
       if (0x34 < maxBound) {
         maxBound = 0x34;
       }
-      uVar5 = ovr_randBelow((maxBound - minBound) + 1,0);
-      spawnY = (uVar5 & 0xff) + minBound;
+      yRoll = ovr_randBelow((maxBound - minBound) + 1,0);
+      spawnY = (yRoll & 0xff) + minBound;
     }
     else {
       retries = 0;
       do {
-        bVar3 = false;
-        uVar8 = ovr_randBelow(0x8c,0);
-        uVar8 = (uVar8 & 0xff) + 4 & 0xfffc;
+        rejected = false;
+        spawnX = ovr_randBelow(0x8c,0);
+        spawnX = (spawnX & 0xff) + 4 & 0xfffc;
         spawnY = ovr_randBelow(0x3a,0);
         spawnY = spawnY & 0xff;
-        for (iVar4 = 0; iVar4 < (int)(uint)GLeaderCount; iVar4 = iVar4 + 1) {
-          if ((((GLeaderSheets[iVar4])->active != '\0') &&
-              (*(char *)((int)*(uint32_t *)(iVar4 << 2) + 0x3f) != '\0')) &&
-             (uVar6 = (GLeaderSheets[iVar4])->x - uVar8,
-             uVar9 = (int)uVar6 >> 0xf,
-             uVar7 = (GLeaderSheets[iVar4])->y - spawnY,
-             uVar10 = (int)uVar7 >> 0xf,
-             (int)((int)((uVar6 ^ uVar9) - uVar9) / 2 + ((uVar7 ^ uVar10) - uVar10)) < 10)) {
-            bVar3 = true;
+        for (scanIdx = 0; scanIdx < (int)(uint)GLeaderCount; scanIdx = scanIdx + 1) {
+          if ((((GLeaderSheets[scanIdx])->active != '\0') &&
+              (*(char *)((int)*(uint32_t *)(scanIdx << 2) + 0x3f) != '\0')) &&
+             (dx = (GLeaderSheets[scanIdx])->x - spawnX,
+             dxSign = (int)dx >> 0xf,
+             dy = (GLeaderSheets[scanIdx])->y - spawnY,
+             dySign = (int)dy >> 0xf,
+             (int)((int)((dx ^ dxSign) - dxSign) / 2 + ((dy ^ dySign) - dySign)) < 10)) {
+            rejected = true;
             retries = retries + 1;
             break;
           }
-          if ((((GLeaderSheets[iVar4])->active != '\0') &&
-              (*(char *)((int)*(uint32_t *)(iVar4 << 2) + 0x3f) == '\0')) &&
-             (uVar6 = (GLeaderSheets[iVar4])->x - uVar8,
-             uVar9 = (int)uVar6 >> 0xf,
-             uVar7 = (GLeaderSheets[iVar4])->y - spawnY,
-             uVar10 = (int)uVar7 >> 0xf,
-             (int)((int)((uVar6 ^ uVar9) - uVar9) / 2 + ((uVar7 ^ uVar10) - uVar10)) < maxDist)) {
-            bVar3 = true;
+          if ((((GLeaderSheets[scanIdx])->active != '\0') &&
+              (*(char *)((int)*(uint32_t *)(scanIdx << 2) + 0x3f) == '\0')) &&
+             (dx = (GLeaderSheets[scanIdx])->x - spawnX,
+             dxSign = (int)dx >> 0xf,
+             dy = (GLeaderSheets[scanIdx])->y - spawnY,
+             dySign = (int)dy >> 0xf,
+             (int)((int)((dx ^ dxSign) - dxSign) / 2 + ((dy ^ dySign) - dySign)) < maxDist)) {
+            rejected = true;
             retries = retries + 1;
             break;
           }
         }
-      } while ((bVar3) && (retries < 100));
+      } while ((rejected) && (retries < 100));
     }
-    uVar6 = ovr_constr_usesGMapFlags(uVar8 - 1,spawnY,0);
-    if ((((char)uVar6 == '\0') ||
-        (uVar6 = ovr_constr_usesGMapFlags(uVar8,spawnY,0), (char)uVar6 == '\0')) ||
-       (bVar3 = ovr_ovc18_textArena(uVar8,spawnY), bVar3)) {
+    mapOk = ovr_constr_usesGMapFlags(spawnX - 1,spawnY,0);
+    if ((((char)mapOk == '\0') ||
+        (mapOk = ovr_constr_usesGMapFlags(spawnX,spawnY,0), (char)mapOk == '\0')) ||
+       (inArena = ovr_ovc18_textArena(spawnX,spawnY), inArena)) {
       tries = tries + 1;
       if (500 < tries) {
         return leaderIndex;
       }
     }
     else {
-      uVar6 = ovc30_createLeader(gindex,uVar8,spawnY);
-      leaderIndex = (byte)uVar6;
+      newLeader = ovc30_createLeader(gindex,spawnX,spawnY);
+      leaderIndex = (byte)newLeader;
       if (1 < PlayerIndex) {
-        uVar2 = *(uint32_t *)((uVar6 & 0xff) << 2);
-        pbVar1 = (byte *)((int)uVar2 + 0x5d);
-        *pbVar1 = *pbVar1 | 0x10;
+        sheet = *(uint32_t *)((newLeader & 0xff) << 2);
+        flagsByte = (byte *)((int)sheet + 0x5d);
+        *flagsByte = *flagsByte | 0x10;
       }
       if ((AgntGs[(uint)gindex].flags3 & 0x800) == 0) {
         if (PlayerIndex < 2) {
-          uVar2 = *(uint32_t *)((uVar6 & 0xff) << 2);
+          sheet = *(uint32_t *)((newLeader & 0xff) << 2);
           ovr_ovc15_usesLDIV_at_
-                    (uVar8,spawnY,uVar8,spawnY,gindex,*(uint8_t *)((int)uVar2 + 0xa4),leaderIndex,0,0,0,0)
+                    (spawnX,spawnY,spawnX,spawnY,gindex,*(uint8_t *)((int)sheet + 0xa4),leaderIndex,0,0,0,0)
           ;
         }
         else {
-          for (count = 0; uVar7 = ovc30_difficultyFactor(), count < (int)(uVar7 & 0xff);
+          for (count = 0; factor = ovc30_difficultyFactor(), count < (int)(factor & 0xff);
               count = count + 1) {
-            ovr_ovc15_usesLDIV_at_(uVar8,spawnY,uVar8,spawnY,gindex,0xa,leaderIndex,0,0,0,0);
+            ovr_ovc15_usesLDIV_at_(spawnX,spawnY,spawnX,spawnY,gindex,0xa,leaderIndex,0,0,0,0);
           }
         }
       }
       else {
-        ovr_ovc15_usesLDIV_at_(uVar8,spawnY,uVar8,spawnY,gindex,0x1,leaderIndex,0,0,0,0);
-        for (count = 0; uVar7 = ovc30_difficultyFactor(), iVar4 = (uVar7 & 0xff) * 2,
-            iVar4 - count != 0 && count <= iVar4; count = count + 1) {
-          ovr_ovc18_textTypeLen(leaderIndex,uVar8,spawnY,0x2,0,0);
+        ovr_ovc15_usesLDIV_at_(spawnX,spawnY,spawnX,spawnY,gindex,0x1,leaderIndex,0,0,0,0);
+        for (count = 0; factor = ovc30_difficultyFactor(), twiceFactor = (factor & 0xff) * 2,
+            twiceFactor - count != 0 && count <= twiceFactor; count = count + 1) {
+          ovr_ovc18_textTypeLen(leaderIndex,spawnX,spawnY,0x2,0,0);
         }
       }
       if ((AgntGs[(uint)gindex].flags3 & 0x1000) != 0) {
-        ovc30_usesRandBelow2(uVar8,spawnY,0);
+        ovc30_usesRandBelow2(spawnX,spawnY,0);
       }
-      uVar2 = *(uint32_t *)((uVar6 & 0xff) << 2);
-      *(undefined1 *)((int)uVar2 + 0x5a) = 0;
-      ((short (*) [148] [60])GUnitGrid)[-1][uVar8 + 0x93][spawnY] =
+      sheet = *(uint32_t *)((newLeader & 0xff) << 2);
+      *(undefined1 *)((int)sheet + 0x5a) = 0;
+      ((short (*) [148] [60])GUnitGrid)[-1][spawnX + 0x93][spawnY] =
            (uint)*(byte *)((int)(far_t *)(worldMenuLabels + 0xb) + (uint)gindex * 0x95);
       ovr_ovc23_placeBuilding
-                (uVar8 - 1,spawnY,
-                 *(byte *)(((short (*) [148] [60])GUnitGrid)[-1][uVar8 + 0x93] + spawnY),leaderIndex
+                (spawnX - 1,spawnY,
+                 *(byte *)(((short (*) [148] [60])GUnitGrid)[-1][spawnX + 0x93] + spawnY),leaderIndex
                 );
-      ovr_ovc23_placeBuilding(uVar8,spawnY,0,leaderIndex);
-      (*(short (*) [148] [60])GUnitGrid)[uVar8][spawnY] = 0;
+      ovr_ovc23_placeBuilding(spawnX,spawnY,0,leaderIndex);
+      (*(short (*) [148] [60])GUnitGrid)[spawnX][spawnY] = 0;
       frames = frames + -1;
       demoCenterY = spawnY;
-      demoCenterX = uVar8;
-      uVar8 = ovr_randBelow(100,0);
-      mode = (byte)uVar8 < percent;
+      demoCenterX = spawnX;
+      roll = ovr_randBelow(100,0);
+      mode = (byte)roll < percent;
       tries = 0;
     }
   } while( true );
