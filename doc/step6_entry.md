@@ -6522,3 +6522,46 @@ pointer.  Fixing that needs the far-pointer treatment, not an expression edit.
 
   grep_checks 41,047 -> 41,041; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### ovc27_rollAgainstStat re-derived: it was corrupting its own parameter
+
+`5ded:04cd`, 96 bytes, 37 instructions.  The whole listing:
+
+```
+les  bx,[bp+6]              ; agnt far pointer
+les  bx,es:[bx+0x17]        ; agnt->entity
+al = es:[bx+0x1a]           ; entity + 0x1a = base.entity + 3, the leader index
+if (al == 0xff) target = 6
+else {
+  ax = al << 2
+  es = 0x70                 ; the leader-sheet table segment
+  les bx, es:[bx]           ; GLeaderSheets[index]
+  bx += mode                ; mode is the second parameter at bp+0xa
+  target = es:[bx + 0x29]
+}
+randBelow(0x28); ax = (rand & 0xff) + 1; ah = 0
+if (ax > target) al = 0 else al = 1
+```
+
+Three defects, all visible in that listing:
+
+1. **`agnt = CONCAT13(uStack0007,CONCAT12(mode,agnt));`** - the export rebuilds the agent pointer out
+   of an undefined stack byte and `mode`, i.e. it corrupts the parameter it is supposed to read.
+   There is no such code in the original.  This is the most damaging kind of export artefact: not a
+   naming problem but a self-inflicted pointer corruption on the first line of the body.
+2. `*(uint32_t *)((uint)bVar5 << 2)` read the leader table DS-relative, losing the segment-0x70 base;
+   it is `GLeaderSheets[index]`, the same table `ovc15_textError` uses.
+3. the return went through a fabricated high byte (`bVar5 << 8`, `CONCAT11`) although every exit
+   writes only AL - a plain 0/1.
+
+The stat target is `GLeaderSheets[idx]` byte `+0x29+mode`, with 0xff meaning a target of 6, and the
+function returns 1 when `randBelow(0x28)+1 <= target`.  The rebuilt code emits `les bx,[bp+6]` ->
+entity -> `[bx+26]` exactly as the original does.
+
+One caveat stated rather than hidden: `agnt->entity` is reached through a near cast
+(`((entity_t *)agnt->entity)`), so the entity access is DS-relative rather than `les`.  That is the
+same convention as the rest of the tree and happens to be sound because `Entities` lives in DGROUP -
+but it is not what the original does, and it would break if Entities ever moved.
+
+  grep_checks 41,039 -> 41,014; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

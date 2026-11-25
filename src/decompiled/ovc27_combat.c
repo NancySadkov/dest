@@ -245,33 +245,27 @@ uint __cdecl16far ovc27_compute1(agnt_t far *agnt,int param,uint16_t arg3,uint16
 int __cdecl16far ovc27_rollAgainstStat(agnt_t far *agnt,byte mode,uint16_t arg3,uint16_t arg4)
 
 {
-  uint32_t uVar1;
-  uint16_t uVar2;
-  uint uVar3;
-  byte bVar5;
-  int iVar4;
-  undefined1 uStack0007;
-  byte bStack_4;
-  
-  agnt = CONCAT13(uStack0007,CONCAT12(mode,agnt));
-  bVar5 = *(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3);
-  if (bVar5 == 0xff) {
-    bStack_4 = 6;
+  /* Re-derived from 5ded:04cd.  Takes the leader index from the agent's entity record, looks the
+     leader sheet up in the segment-0x70 table (GLeaderSheets), picks the byte at +0x29+mode as the
+     target stat, rolls 0x28 and returns 1 when rand+1 <= target.  The leader index 0xff means a
+     target of 6.  The exported `agnt = CONCAT13(uStack0007,CONCAT12(mode,agnt))` corrupted the
+     parameter and is removed; the return is a plain 0/1 (every exit writes only AL). */
+  byte leaderIdx;
+  byte target;
+  uint16_t roll;
+
+  leaderIdx = AGNT_FIELD(&((entity_t *)agnt->entity)->base, entity, 3);
+  if (leaderIdx == 0xff) {
+    target = 6;
   }
   else {
-    uVar1 = *(uint32_t *)((uint)bVar5 << 2);
-    bStack_4 = *(byte *)((int)uVar1 + (uint)mode + 0x29);
+    target = *(uint8_t far *)((uint8_t far *)GLeaderSheets[leaderIdx] + 0x29 + mode);
   }
-  uVar2 = ovr_randBelow(0x28,0);
-  uVar3 = (uVar2 & 0xff) + 1;
-  bVar5 = (byte)(uVar3 >> 8);
-  if (bStack_4 < uVar3) {
-    iVar4 = (uint)bVar5 << 8;
+  roll = ovr_randBelow(0x28,0);
+  if (target < (uint16_t)((roll & 0xff) + 1)) {
+    return 0;
   }
-  else {
-    iVar4 = CONCAT11(bVar5,1);
-  }
-  return iVar4;
+  return 1;
 }
 
 
