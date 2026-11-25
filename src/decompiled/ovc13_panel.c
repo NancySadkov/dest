@@ -682,66 +682,77 @@ L_OVC13_3d16_1045_10C4:
 void __cdecl16far ovc13_drawWindowEntities(void)
 
 {
-  uint uVar1;
-  uint uVar2;
-  int iVar3;
+  /* Re-derived: the window twin of ovc13_usesScreenY2 - the same state-coloured bar (0xef
+     present, 0xeb moving, 0xee flag bit, 0xff/0xea own/other AI when the pixel underneath is not
+     already one of those) plus a 0xec bar one pixel to its right, inside the
+     Seed_2000_d110/d10e window and using BlitRects[0].  The exported `AgntGs[iStack_c].ai` read
+     used an uninitialised local; the identical expression later in the loop reads the entity's
+     base.gindex, which is what it means. */
+  uint entX;
+  uint entY1;
+  int entY;
   int screenY;
-  int iVar4;
-  int iVar5;
+  int xPix;
+  int spanX1;
+  int spanX2;
+  int entitiesOfs;
   uint entityIndex;
-  uint16_t uVar6;
+  uint16_t pixelResult;
+  uint16_t usesResult;
+  byte pixel;
   byte y;
-  int iStack_c;
-  uint8_t uStack_3;
-  
-  for (entityIndex = 0; entityIndex < EntityCount; entityIndex = entityIndex + 1) {
-    uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-    iVar4 = (int)Entities;
-    uVar1 = *(uint *)((entity_t *)iVar4 + entityIndex);
-    iVar3 = ((entity_t *)iVar4)[entityIndex].base.y;
-    uVar2 = iVar3 + 1;
-    if (((((AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 1) != '\0') ||
-          (AgntGs[iStack_c].ai == '\0')) ||
-         (DebugVerbose != false)) || (((*(short (*) [60] [148])GMapFlags)[iVar3][uVar1] & 8U) != 0))
-       && (((iVar3 = ovc13_usesEntities(entityIndex), (char)iVar3 != '\0' &&
-            (Seed_2000_d110 <= (int)uVar1)) &&
-           ((uVar1 <= Seed_2000_d110 + 0x69U &&
-            ((Seed_2000_d10e <= (int)uVar2 && (uVar2 <= Seed_2000_d10e + 0x2fU)))))))) {
-      screenY = (uVar2 - Seed_2000_d10e) * 3 + 7;
-      iVar4 = (uVar1 - Seed_2000_d110) * 2;
-      iVar3 = iVar4 + 0xd;
-      iVar4 = iVar4 + 0xc;
-      uVar6 = ovc13_readPixel(iVar4,screenY,BlitRects);
-      uStack_3 = (uint8_t)uVar6;
-      uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar5 = (int)Entities;
+  bool firstPart;
+  bool inPanel;
+
+  for (entityIndex = 0; entityIndex < (int)(uint)EntityCount; entityIndex = entityIndex + 1) {
+    entitiesOfs = (int)Entities;
+    entX = *(uint *)((entity_t *)entitiesOfs + entityIndex);
+    entY = ((entity_t *)entitiesOfs)[entityIndex].base.y;
+    entY1 = entY + 1;
+    firstPart = (AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 1) != '\0') ||
+                (AgntGs[(uint)((entity_t *)entitiesOfs)[entityIndex].base.gindex].ai == '\0') ||
+                (DebugVerbose != false) ||
+                (((*(short (*) [60] [148])GMapFlags)[entY][entX] & 8U) != 0);
+    usesResult = 0;
+    if (firstPart) {
+      usesResult = ovc13_usesEntities(entityIndex);
+    }
+    inPanel = ((Seed_2000_d110 <= (int)entX) && (entX <= Seed_2000_d110 + 0x69U)) &&
+              ((Seed_2000_d10e <= (int)entY1) && (entY1 <= Seed_2000_d10e + 0x2fU));
+    if (firstPart && ((char)usesResult != '\0') && inPanel) {
+      screenY = (entY1 - Seed_2000_d10e) * 3 + 7;
+      xPix = (entX - Seed_2000_d110) * 2;
+      spanX1 = xPix + 0xc;
+      spanX2 = xPix + 0xd;
+      pixelResult = ovc13_readPixel(spanX1,screenY,BlitRects);
+      pixel = (uint8_t)pixelResult;
+      entitiesOfs = (int)Entities;
       if (AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 1) == '\0') {
         if ((AGNT_WORD(&((entity_t *)Entities)[entityIndex], base.frames, 1) & 1) == 0) {
           if ((AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.flags32, 1) & 1) == 0) {
-            if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
-              if (AgntGs[(uint)((entity_t *)iVar5)[entityIndex].base.gindex].ai == '\0')
-              {
-                uStack_3 = 0xff;
+            if (((pixel != 0xef) && (pixel != 0xee)) && (pixel != 0xeb)) {
+              if (AgntGs[(uint)((entity_t *)entitiesOfs)[entityIndex].base.gindex].ai == '\0') {
+                pixel = 0xff;
               }
               else {
-                uStack_3 = 0xea;
+                pixel = 0xea;
               }
             }
           }
           else {
-            uStack_3 = 0xee;
+            pixel = 0xee;
           }
         }
         else {
-          uStack_3 = 0xeb;
+          pixel = 0xeb;
         }
       }
       else {
-        uStack_3 = 0xef;
+        pixel = 0xef;
       }
       y = (byte)screenY;
-      ovr_driver_fillSpan(iVar4,iVar4,y,uStack_3,&((brect_t *)BlitRects)->x,0);
-      ovr_driver_fillSpan(iVar3,iVar3,y,0xec,&((brect_t *)BlitRects)->x,0);
+      ovr_driver_fillSpan(spanX1,spanX1,y,pixel,&((brect_t *)BlitRects)->x,0);
+      ovr_driver_fillSpan(spanX2,spanX2,y,0xec,&((brect_t *)BlitRects)->x,0);
     }
   }
   return;

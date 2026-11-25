@@ -5616,3 +5616,43 @@ declaration question, not a decoding one.
 
   grep_checks 45,304; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### Why the runtime instrument cannot simply call the rewritten routines
+
+The existing dump harness is small and reusable: `tmp/dump_dgroup_stdout.py` patches an entry
+point with
+
+```
+mov bx,1 / mov cx,0FFFFh / mov dx,0 / mov ah,40h / int 21h / exit
+```
+
+so 64 KB at `DS:0` goes to stdout, which the batch redirects to `DGR.BIN`; `scripts/run_original.py`
+and `scripts/run_rebuilt.py` drive the two images through headless DOSBox-X.  Two facts make the
+"invoke the function and diff the fields" plan harder than it looks:
+
+* **our build is linked resident** (overlays are off by default), so in the rebuild any function is
+  present at main entry and could be called by a probe;
+* **in the original the two targets live in overlays that are not resident at the existing
+  checkpoints** - `ovc15_textError` is in overlay segment 4207 and `ovc23_usesAlignUp43` in 55fe -
+  so a main-entry probe in `game/STRONG.EXE` has nothing to call.  The overlay manager has to have
+  loaded those segments first.
+
+So the instrument splits into two halves of very different cost:
+
+1. **Cheap half, available now:** because the rebuild is resident, a probe can call our compiled
+   routine over an input matrix and compare the results with a reference implementation written
+   from the same disassembly.  That catches *transcription* slips - the realistic failure mode, and
+   exactly what the `ovc23_usesAlignUp43` cases-2-and-3 oddity would show up as - but it cannot
+   catch a misreading of the original.
+2. **Expensive half:** a third checkpoint deep enough into the game that overlays 15 and 23 are
+   resident, driven with DOSBox-X `AUTOTYPE` to reach gameplay, dumping `DGROUP` plus the overlay
+   data segments at the same instruction point in both binaries.  That is what would verify the
+   decode itself, and it is a harness project rather than a single turn's addition.
+
+Recording this so the next attempt starts from the constraint rather than rediscovering it.  The
+six rewritten routines with real logic (`ovc15_textError`, `ovc23_usesAlignUp43`, `driver_compute5`,
+`driver_drawLine`, `driver_fillRect`, `ovc18_usesAlignUp4`) remain verified only by decoding plus
+compilation until at least half 2 exists.
+
+  grep_checks 42,615; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
