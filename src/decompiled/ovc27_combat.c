@@ -1099,7 +1099,7 @@ void ovc27_textTakesHalfDamage4(void)
   uint16_t pan;
   uint uVar7;
   char *pcVar8;
-  uint8_t *puVar9;
+  uint8_t *bufPtr;
   uint16_t in_DX;
   int unaff_BP;
   int unaff_DI;
@@ -1140,10 +1140,10 @@ void ovc27_textTakesHalfDamage4(void)
                                                       CONCAT12((char)(unaff_BP + -0xd2),
                                                                *(uint16_t *)(unaff_BP + -8))),
                                      (char)*(uint16_t *)(unaff_BP + -8));
-        puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,0,0,0,0,0);
+        bufPtr = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,0,0,0,0,0);
         pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c70,_SS),
-                               (char *)CONCAT13((char)((uint)puVar9 >> 8),
-                                                CONCAT12((char)puVar9,0x2410)),0x10,(char)puVar9,
+                               (char *)CONCAT13((char)((uint)bufPtr >> 8),
+                                                CONCAT12((char)bufPtr,0x2410)),0x10,(char)bufPtr,
                                (char)in_DX);
         ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
         uVar7 = (int)uVar7 >> 1;
@@ -1169,10 +1169,10 @@ void ovc27_textTakesHalfDamage4(void)
                                                   CONCAT12((char)(unaff_BP + -0xd2),
                                                            *(uint16_t *)(unaff_BP + -8))),
                                  (char)*(uint16_t *)(unaff_BP + -8));
-    puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,0,0,0,0,0);
+    bufPtr = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,0,0,0,0,0);
     pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c5a,_SS),
-                           (char *)CONCAT13((char)((uint)puVar9 >> 8),CONCAT12((char)puVar9,0x2410))
-                           ,0x10,(char)puVar9,(char)in_DX);
+                           (char *)CONCAT13((char)((uint)bufPtr >> 8),CONCAT12((char)bufPtr,0x2410))
+                           ,0x10,(char)bufPtr,(char)in_DX);
     ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
     emptyFunction();
     return;
@@ -1198,9 +1198,9 @@ void ovc27_textTakesHalfDamage4(void)
         uVar10 = SUB21(pcVar8,0);
         pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                       (char *)*(uint16_t *)(unaff_BP + -8)),0);
-        puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,savedSeg,0,0,0);
+        bufPtr = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,savedSeg,0,0,0);
         pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c90,_SS),
-                               (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
+                               (char *)CONCAT22(bufPtr,(char *)0x26510),(char)in_DX);
         ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
         ovr_OVC41_6a8f_01e7_entry
                   ((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char)*(uint16_t *)(unaff_BP + -8));
@@ -1238,9 +1238,9 @@ void ovc27_textTakesHalfDamage4(void)
         uVar11 = SUB21(pcVar8,0);
         pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                       (char *)*(uint16_t *)(unaff_BP + -8)),0);
-        puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar11,savedSeg,uVar10,0,0,0);
+        bufPtr = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar11,savedSeg,uVar10,0,0,0);
         pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5ca2,_SS),
-                               (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
+                               (char *)CONCAT22(bufPtr,(char *)0x26510),(char)in_DX);
         ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
         ovr_OVC41_6a8f_01e7_entry
                   ((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char)*(uint16_t *)(unaff_BP + -8));
@@ -1275,9 +1275,9 @@ void ovc27_textTakesHalfDamage4(void)
       uVar11 = SUB21(pcVar8,0);
       pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                     (char *)*(uint16_t *)(unaff_BP + -8)),0);
-      puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar11,savedSeg,uVar10,0,0,0);
+      bufPtr = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar11,savedSeg,uVar10,0,0,0);
       pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5cbc,_SS),
-                             (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
+                             (char *)CONCAT22(bufPtr,(char *)0x26510),(char)in_DX);
       ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
       ((char_sheet_t *)((unaff_BP + -10)))->alignment =
            *(undefined1 *)((int)*(uint32_t *)(unaff_BP + 6) + 0x32);
@@ -1314,9 +1314,9 @@ void ovc27_textTakesHalfDamage4(void)
       uVar10 = SUB21(pcVar8,0);
       pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                     (char *)*(uint16_t *)(unaff_BP + -8)),0);
-      puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,savedSeg,0,0,0);
+      bufPtr = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,savedSeg,0,0,0);
       pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c90,_SS),
-                             (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
+                             (char *)CONCAT22(bufPtr,(char *)0x26510),(char)in_DX);
       ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
       ovr_OVC41_6a8f_01e7_entry
                 ((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char)*(uint16_t *)(unaff_BP + -8));
@@ -1459,9 +1459,9 @@ void ovc27_textTakesHalfDamage4(void)
       uVar10 = SUB21(pcVar8,0);
       pcVar8 = ovr_agnt_statusText((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char *)CONCAT22(unaff_BP + -0xd2,
                                                     (char *)*(uint16_t *)(unaff_BP + -8)),0);
-      puVar9 = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,savedSeg,0,0,0);
+      bufPtr = ovr_ovc15_usesStshRealloc(pcVar8,(char)in_DX,uVar10,uVar11,savedSeg,0,0,0);
       pcVar8 = ovr_stsprintf((char *)(unaff_BP + -0x82),(char *)CONCAT22(0x5c2f,_SS),
-                             (char *)CONCAT22(puVar9,(char *)0x26510),(char)in_DX);
+                             (char *)CONCAT22(bufPtr,(char *)0x26510),(char)in_DX);
       ovr_uiNotify(pcVar8,in_DX,(char)in_DX);
       ovr_OVC41_6a8f_01e7_entry
                 ((agnt_t *)*(uint16_t *)(unaff_BP + -10),(char)*(uint16_t *)(unaff_BP + -8));

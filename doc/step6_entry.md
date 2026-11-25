@@ -3630,3 +3630,46 @@ read, `T4` rewrite create - all reached, and the four-value writer then rewrites
 
   grep_checks 51,018 -> 51,009; build 64/64 clean; LINK ERRORS 0
   compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13
+
+## Second runtime checkpoint: state after init_cfg (both sides)
+
+`compare_runtime.py` now takes its two dumps from `RUNTIME_ORIG` / `RUNTIME_OURS`
+(defaults unchanged, so the main-entry gate is untouched: 1,543 / 13).
+
+### Sampling the original after init_cfg
+
+`init_cfg` is `3381:024d`.  Its two `"%sgame.cfg"` constructions were found in the file
+at `0x25877` and `0x25a3e`; walking back to the enclosing prologues and checking which
+base makes `init_game` (`3381:0579`) start with `push bp / mov bp,sp` gives the segment
+base `0x25610` (0x25610 + 0x579 = 0x25b89, which is `55 8b ec ...`).  So
+`init_cfg = 0x2585d`, and `init_game`'s `call 0x2585d` at `0x25bb4` is followed by the
+sampling point `0x25bb7`.
+
+A fragment-writer stub (the existing `dump_state3.py` shape) patched at that address
+dumps DGROUP and exits.  Run with the same `'6'` key, the original produced 36,864 bytes
+and the buffer at DGROUP `0x8c6c` contains `C:\\strong.sav\\` - the work directory built by
+`init_paths` and used by `init_cfg`, i.e. the patch is at the right place.
+
+### Sampling the rebuild
+
+A probe build with a `dumpdg` stub called immediately after `init_cfg();` in
+`init_game` writes the same 36,864 bytes to stdout.
+
+### Comparison
+
+```
+runtime DGROUP comparison (post-init_cfg)
+  original dump: 36864 bytes, rebuilt dump: 36864 bytes
+  symbols matched: 1556
+  identical state: 1519
+  DIFFERENT state: 36
+```
+
+The 36 differences are dominated by pointer tables whose second word is a *segment*
+(`...331c` in the original vs `...1024` in the rebuild), i.e. stored addresses across
+segments that the current normaliser only maps for DGROUP-resident targets.  That is
+the next thing to extend in the comparator, and it is now measurable because the
+checkpoint exists.
+
+  build 64/64 clean; LINK ERRORS 0; grep_checks 50,869
+  compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13 (main entry)

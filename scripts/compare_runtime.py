@@ -11,11 +11,12 @@ usage: python scripts/compare_runtime.py
 """
 import csv
 import io
+import os
 import re
 import sys
 
-ORIG = "tmp/dgrun2_orig/DGR.BIN"
-OURS = "tmp/dgrun2_ours/DGR.BIN"
+ORIG = os.environ.get("RUNTIME_ORIG", "tmp/dgrun2_orig/DGR.BIN")
+OURS = os.environ.get("RUNTIME_OURS", "tmp/dgrun2_ours/DGR.BIN")
 MAP = "tmp/buildsrc/REBUILT.MAP"
 SYMS = "audit/symbols.tsv"
 
@@ -209,7 +210,7 @@ for off, name, oofs in matched:
         if len(diffs) < 20:
             diffs.append((off, name, oofs, ln, a, b))
 
-print("runtime DGROUP comparison at main entry")
+print("runtime DGROUP comparison (paths from RUNTIME_ORIG/RUNTIME_OURS; default: main entry)")
 print("  original dump: %d bytes, rebuilt dump: %d bytes"
       % (len(orig_img), len(ours_img)))
 print("  symbols matched: %d" % len(matched))
