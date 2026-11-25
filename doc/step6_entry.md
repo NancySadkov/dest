@@ -4398,3 +4398,48 @@ evidence, and the same idiom appears 302 times.
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 49,605
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### CORRECTION: the earlier "segment 0x0070 holds a table" reading was a bad dump
+
+The previous entry claimed a probe had shown absolute segment `00070h` holding a copy of
+the unit-description far-pointer table.  **That was wrong.**  The probe wrote three
+fragments (DS, `0x0070`, `0x0280`) in one run and the file came back with 6894 bytes
+instead of the requested 1280, so the fragment boundaries were unknown; what the hexdump
+actually showed was DGROUP's own `GUnitDescriptions` table (`1c33:018d`, `1c33:0196`, …,
+followed by `Fighter`, `Mage`, … and later `fighter unit`, `mage unit`), i.e. the
+*control* fragment bleeding into the second slice.
+
+Re-measured properly, one fragment per run, patching the EXE header entry (`0000:003e` at
+file `0x1E3E`, no keystrokes needed so the run is deterministic):
+
+```
+=== entry_ds   seg DS     want 0x0100 -> 256 bytes
+   head: 00 00 00 00 42 6f 72 6c 61 6e 64 20 43 2b 2b 20 - 20 43 6f 70 79 72 69 67 ...
+   strings: Borland C++ - Copyrigh | Divide error\r\nAbnormal | Sorry, you may not pas
+=== entry_70   seg 0070   want 0x0200 -> 512 bytes
+   nonzero: 69 / 512      head: all 00, one 01, then ff ff ff ff ...
+   strings: none (only 0xff runs and 'NUL     ')
+=== entry_280  seg 0280   want 0x0100 -> 256 bytes
+   nonzero: 0 / 256
+```
+
+So at program start segment `0x0070` is uninitialised low memory and `0x0280` is all
+zeros - **neither holds a table**.  What the code does with them is therefore still open,
+and there is no measured evidence of a defect in the recovered DS-relative rendering:
+
+* the same `mov ax,0x0280 / mov es,ax` idiom occurs **2398** times and `0x0070` variants
+  about 236 times, and the export renders every one of them as a DS-relative access;
+* our rebuild works end to end through configuration with that rendering, while a
+  resident build has no overlay segment to substitute;
+* a linear sweep of `textRingProt`'s range finds **no MZ relocation** covering the
+  `mov dx,0x70` immediate, so DOS does not patch it either.
+
+Withdrawing the claim and leaving the code alone is the correct outcome: changing those
+302 sites to read a segment that is empty at runtime would be strictly worse.  Settling
+what they mean needs a *working* runtime probe at a later point (the post-`init_cfg`
+patch is flaky: three attempts returned 0 bytes even when `GAME.CFG` proved the menu had
+been answered), so the probe scripts and their negative results are kept in `tmp/`
+(`probe_entry70.py` works, `probe_post70.py` does not).
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 49,570
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
