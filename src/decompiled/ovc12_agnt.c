@@ -346,35 +346,39 @@ bool __cdecl16far
 agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distance)
 
 {
-  uint8_t uVar1;
-  uint uVar2;
-  uint uVar3;
-  uint16_t uVar4;
-  uint uVar5;
-  uint uVar6;
-  uint16_t in_stack_00000012;
-  byte bStack_4;
-  
-  uVar1 = agnt->faction;
-  *(uint *)CONCAT22(in_stack_00000012,(*(uint16_t *)((uint8_t *)&(distance) + 2))) = 0xffff;
-  bStack_4 = 0;
+  /* Re-derived from 3b1d:093e.  All four parameters are far pointers read directly by the
+     original, so the exported CONCAT22 forms - each of which used one parameter's offset as
+     another's segment - collapse to plain dereferences.  As written they sent the x-direction
+     sign into yDir and the y-direction sign into distance, overwriting the distance just
+     stored. */
+  uint8_t faction;
+  uint dx;
+  uint dxSign;
+  uint dy;
+  uint dySign;
+  uint dist;
+  uint16_t dirVal;
+  byte agntIdx;
+
+  faction = agnt->faction;
+  *distance = 0xffff;
+  agntIdx = 0;
   while( true ) {
-    if (AgntCount <= bStack_4) break;
-    if ((Agnts[bStack_4].faction != uVar1) &&
-       (uVar2 = Agnts[bStack_4].x - agnt->x, uVar5 = (int)uVar2 >> 0xf,
-       uVar3 = Agnts[bStack_4].y - agnt->y, uVar6 = (int)uVar3 >> 0xf,
-       uVar2 = ((uVar2 ^ uVar5) - uVar5) + ((uVar3 ^ uVar6) - uVar6),
-       uVar2 < *(uint *)CONCAT22(in_stack_00000012,(*(uint16_t *)((uint8_t *)&(distance) + 2))))) {
-      *(uint *)CONCAT22(in_stack_00000012,(*(uint16_t *)((uint8_t *)&(distance) + 2))) = uVar2;
-      uVar4 = ovr_ovc07_signum(Agnts[bStack_4].x -
-                               ((agnt_t *)CONCAT22((uint16_t *)xDir,agnt))->x);
-      *(uint16_t *)CONCAT22((uint16_t *)yDir,(*(uint16_t *)((uint8_t *)&(xDir) + 2))) = uVar4;
-      uVar4 = ovr_ovc07_signum(Agnts[bStack_4].y - agnt->y);
-      *(uint16_t *)CONCAT22((uint16_t *)distance,(*(uint16_t *)((uint8_t *)&(yDir) + 2))) = uVar4;
+    if (AgntCount <= agntIdx) break;
+    if ((Agnts[agntIdx].faction != faction) &&
+       (dx = Agnts[agntIdx].x - agnt->x, dxSign = (int)dx >> 0xf,
+       dy = Agnts[agntIdx].y - agnt->y, dySign = (int)dy >> 0xf,
+       dist = ((dx ^ dxSign) - dxSign) + ((dy ^ dySign) - dySign),
+       dist < *distance)) {
+      *distance = dist;
+      dirVal = ovr_ovc07_signum(Agnts[agntIdx].x - agnt->x);
+      *xDir = dirVal;
+      dirVal = ovr_ovc07_signum(Agnts[agntIdx].y - agnt->y);
+      *yDir = dirVal;
     }
-    bStack_4 = bStack_4 + 1;
+    agntIdx = agntIdx + 1;
   }
-  return *(uint *)CONCAT22(in_stack_00000012,(*(uint16_t *)((uint8_t *)&(distance) + 2))) != 0xffff;
+  return *distance != 0xffff;
 }
 
 
