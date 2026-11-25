@@ -1290,8 +1290,7 @@ L_OVC49_8699_18c4_1CA7:
                                 (long)(int)(uint)puVar23[uStackY_26].level & 0xffffU) / 0x18) + 1);
       uVar15 = (uint)((ulong)in_stack_0000ffe0 >> 0x10);
       in_stack_0000ffe0 = (uint16_t)((char *)CONCAT22(uVar15,pcVar10));
-      if (*(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x116) == 0 &&
-          *(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x118) == 0) {
+      if (BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1))].action == 0) {
         if (((uStackY_26 < 0xf8) || (BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1))].cost == 0)) ||
            ((BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1))].flags2 & 4) != 0)) {
           if ((((BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1))].flags2 & 4) == 0) ||
@@ -1318,8 +1317,8 @@ L_OVC49_8699_18c4_1CA7:
         }
       }
       else {
-        auStackY_2f2[1] = *(uint16_t *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x118);
-        auStackY_2f2[0] = *(uint16_t *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x116);
+        auStackY_2f2[1] = SEG_OF(BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1))].action);
+        auStackY_2f2[0] = far_ofs_u32(BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1))].action);
         iVar14 = 1;
       }
       uVar22 = 0x23f1;

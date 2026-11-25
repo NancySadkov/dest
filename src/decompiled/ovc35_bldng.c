@@ -224,7 +224,7 @@ void bldng_selectBuildingType(byte partyIndex)
     uVar2 = bldng_usesGStrangeTable((byte)iStack_6);
     if ((BuildingTypes[(uVar2 & 0xff)].type & bitMask) != 0) {
       uVar2 = bldng_usesGStrangeTable((byte)iStack_6);
-      if (*(char *)((uVar2 & 0xff) * 0x27 + 0x12d) == '\0') {
+      if ((uint8_t)((uint)BuildingTypes[uVar2 & 0xff].halfWidth >> 8) == 0) {
         uVar3 = bldng_compute2((uint8_t)iStack_6,in_stack_00000004);
         if ((char)uVar3 != '\0') {
           *(int *)(&buildTypes + count * 2) = iStack_6;
