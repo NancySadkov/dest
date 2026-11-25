@@ -3259,7 +3259,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
   char cVar4;
   uint16_t uVar5;
   uint uVar6;
-  uint uVar7;
+  uint aligned;
   uint uVar8;
   int iVar9;
   int iVar10;
@@ -3510,8 +3510,8 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
 L_attact_3f0b_1082_1477:
     uStack_17 = 0x1;
     uVar6 = ovr_alignUp4((((entity_t *)peStack_1e)->base).destX,0,0);
-    uVar7 = ovr_alignUp4((peStack_1e->base).x,0,0);
-    if (uVar6 == uVar7) {
+    aligned = ovr_alignUp4((peStack_1e->base).x,0,0);
+    if (uVar6 == aligned) {
       uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
       peVar15 = (entity_t *)peStack_1e;
       if ((peVar15->base).destY == (peVar15->base).y) {
@@ -3530,15 +3530,15 @@ L_attact_3f0b_1082_1477:
         auStack_6 = uVar3;
         if (bVar19) {
           for (uVar6 = 0; uVar6 < SquareRecCount; uVar6 = uVar6 + 1) {
-            uVar7 = ovr_alignUp4(*(int *)(uVar6 * 0x13),0,0);
+            aligned = ovr_alignUp4(*(int *)(uVar6 * 0x13),0,0);
             uVar8 = ovr_alignUp4((peStack_1e->base).x,0,0);
-            if ((uVar7 == uVar8) &&
+            if ((aligned == uVar8) &&
                (*(uint16_t *)((uint8_t *)&SquareRecs[uVar6] + 2) == (((entity_t *)peStack_1e)->base).y)) {
               func_0x0004f930();
               if (*(uint16_t *)((uint8_t *)&SquareRecs[uVar6] + 2) == GfxRndSeed2) {
                 uVar6 = ovr_alignUp4(*(int *)(uVar6 * 0x13),0,0);
-                uVar7 = ovr_alignUp4(GfxRndSeed,0,0);
-                if (uVar6 == uVar7) {
+                aligned = ovr_alignUp4(GfxRndSeed,0,0);
+                if (uVar6 == aligned) {
                   acStack_e[(byte)uStack_4] = '\x01';
                 }
               }
@@ -3647,8 +3647,8 @@ L_attact_3f0b_1082_1477:
       uVar18 = (uint16_t)((ulong)Entities >> 0x10);
       peStack_1e = (entity_t *)CONCAT22(uVar18,Entities + (int)count);
       uVar6 = ovr_alignUp4(Entities[(int)count].base.destX,0,0);
-      uVar7 = ovr_alignUp4((peStack_1e->base).x,0,0);
-      if ((uVar6 == uVar7) &&
+      aligned = ovr_alignUp4((peStack_1e->base).x,0,0);
+      if ((uVar6 == aligned) &&
          (uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10),
          (((entity_t *)peStack_1e)->base).destY == (((entity_t *)peStack_1e)->base).y)) {
         manage_usesCurSfxType32();

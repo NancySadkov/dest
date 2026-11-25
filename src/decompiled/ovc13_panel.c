@@ -383,7 +383,7 @@ void __cdecl16far ovc13_usesBlitRects(void)
   uint16_t uStack_e;
   int destY;
   int row;
-  uint16_t uVar4;
+  uint16_t edge;
   
   seg = BlitRects[3].seg;
   PanelGridX = GfxRndSeed + -0x11;
@@ -432,17 +432,17 @@ void __cdecl16far ovc13_usesBlitRects(void)
       flagsLo = (byte)uVar1;
       if ((uVar1 & 4) == 0) {
         uVar9 = seg;
-        uVar4 = ovr_constr_compute1(cornerA,cornerB,cornerC,flagsLo,1,0,0,0);
-        uVar3 = (uint8_t)uVar4;
-        uVar4 = ovr_constr_compute1(cornerC,cornerB_00,cornerB,flagsLo,2,0,0,0);
-        ovr_driver_compute4(destX,(byte)destY,(uint8_t)uVar4,uVar3,uVar9);
+        edge = ovr_constr_compute1(cornerA,cornerB,cornerC,flagsLo,1,0,0,0);
+        uVar3 = (uint8_t)edge;
+        edge = ovr_constr_compute1(cornerC,cornerB_00,cornerB,flagsLo,2,0,0,0);
+        ovr_driver_compute4(destX,(byte)destY,(uint8_t)edge,uVar3,uVar9);
       }
       else {
         uVar9 = seg;
-        uVar4 = ovr_constr_compute1(cornerA,cornerB,cornerB_00,flagsLo,2,0,0,0);
-        uVar3 = (uint8_t)uVar4;
-        uVar4 = ovr_constr_compute1(cornerC,cornerB_00,cornerA,flagsLo,1,0,0,0);
-        ovr_driver_compute3(destX,(byte)destY,(uint8_t)uVar4,uVar3,uVar9);
+        edge = ovr_constr_compute1(cornerA,cornerB,cornerB_00,flagsLo,2,0,0,0);
+        uVar3 = (uint8_t)edge;
+        edge = ovr_constr_compute1(cornerC,cornerB_00,cornerA,flagsLo,1,0,0,0);
+        ovr_driver_compute3(destX,(byte)destY,(uint8_t)edge,uVar3,uVar9);
       }
       if (((uVar1 | uVar2) & 0xc000) != 0) {
         ovc13_compute2(destX,destY,(byte)(uVar2 >> 0xe),(byte)(uVar1 >> 0xe),seg);

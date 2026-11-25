@@ -259,7 +259,7 @@ void __cdecl16far ovc42_populateArea(byte partyIndex)
 {
   uint16_t x;
   uint16_t y;
-  uint16_t uVar1;
+  uint16_t randPick;
   uint uVar2;
   uint uVar3;
   far_t dst;
@@ -284,7 +284,7 @@ void __cdecl16far ovc42_populateArea(byte partyIndex)
     for (iStack_6 = -0x14; iStack_6 < 3; iStack_6 = iStack_6 + 1) {
       x = GfxRndSeed + iStack_4;
       y = GfxRndSeed2 + iStack_6;
-      if ((-0xb < iStack_4) || (uVar1 = ovr_randBelow(3,0), (uVar1 & 0xff) == 0)) {
+      if ((-0xb < iStack_4) || (randPick = ovr_randBelow(3,0), (randPick & 0xff) == 0)) {
         if (y == 0x24) {
           uVar2 = ovr_alignUp4(x,0,0);
           uVar3 = ovr_alignUp4(0x48,0,0);
@@ -292,14 +292,14 @@ void __cdecl16far ovc42_populateArea(byte partyIndex)
         }
         if ((((GfxRndSeed2 != y) || ((int)x < GfxRndSeed + -1)) || (GfxRndSeed + 1 < (int)x)) &&
            (uVar2 = ovr_constr_usesGMapFlags(x,y,0), (char)uVar2 != '\0')) {
-          uVar1 = ovr_randBelow(0xe,0);
-          (*(short (*) [148] [60])GUnitGrid)[x][y] = (uint)(&unitTypeMap)[uVar1 & 0xff];
-          uVar1 = ovr_randBelow(5,0);
-          if ((uVar1 & 0xff) == 0) {
+          randPick = ovr_randBelow(0xe,0);
+          (*(short (*) [148] [60])GUnitGrid)[x][y] = (uint)(&unitTypeMap)[randPick & 0xff];
+          randPick = ovr_randBelow(5,0);
+          if ((randPick & 0xff) == 0) {
             uVar4 = CONCAT22((uint)partyIndex,1);
-            uVar1 = ovr_randBelow(8,0);
+            randPick = ovr_randBelow(8,0);
             ovr_ovc15_usesLDIV_at_
-                      (x,y,x,y,(&spawnGindexMap)[uVar1 & 0xff],(uint8_t)uVar4,(byte)((ulong)uVar4 >> 0x10),0,0,0,0);
+                      (x,y,x,y,(&spawnGindexMap)[randPick & 0xff],(uint8_t)uVar4,(byte)((ulong)uVar4 >> 0x10),0,0,0,0);
           }
         }
       }
