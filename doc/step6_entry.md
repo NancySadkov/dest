@@ -5506,3 +5506,77 @@ constraints.
 
   grep_checks 45,332 -> 45,304; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### Overlay map resolved, including all four calls that blocked `attact_usesGMapFlags3`
+
+`tmp/overlay_segments5.py` fixes two flaws in the earlier passes and then closes the map by
+bijection:
+
+* **Do not scan every recorded function start.**  `functions.tsv` sizes are unreliable, so
+  disassembling from a wrong start turns data bytes into bogus `lcall`s.  The symptom was
+  decisive: segment `0x00e0`'s intersection became **empty**, which cannot be true of a real
+  segment, so that run was contamination rather than evidence.  Only functions present in the
+  recovered tree are scanned.
+* **An overlay is loaded at one runtime segment**, so once a segment resolves uniquely its
+  overlay is unavailable to the others.  Propagating that to a fixed point (6 rounds) resolves
+  more than the raw intersection.
+
+Result: **18 of 58 runtime segments resolved**, including every one this function needed:
+
+```
+runtime  offsets  overlay  what it settles
+0x00e0      42    22a6     driver_clearMapFlagsRect (22a6:0093)
+0x00f0      13    22bb
+0x00f8      11    22c4     uiNotify (22c4:0039)
+0x0138      10    22ef
+0x0140      10    22f8     play_sfx (22f8:0020), stop_audio (22f8:002a)
+0x0148      20    22ff
+0x0158      18    2315
+0x0160      15    2322     ovc15_usesAlignUp42 (2322:0057)
+0x0170      21    2337     stsprintf (2337:007a)
+0x0188      11    234c
+0x0190      12    2356
+0x01a0      12    236f     ovc23_isCursorAt (236f:0034), OVC23_55fe_29a2_entry (236f:004d)
+0x01c8       9    2391
+0x0230      20    23d5
+```
+
+`0x1a8` stays at seven candidates, but its call site pushes one word (the entity x) and uses the
+result as a grid column, which is `alignUp4` (`2379:0043`).
+
+### The complete call list for `attact_usesGMapFlags3` (3f0b:0c2a)
+
+| ip | call | arguments the code actually pushes |
+|---|---|---|
+| 0C4D | `driver_clearMapFlagsRect` | 7 words, `add sp,0xe` |
+| 0CFA | `ovc15_usesAlignUp42` | none, result into a byte local |
+| 0D1D | `alignUp4` | 1 word (entity x), `add sp,2` |
+| 0D21/0E17 | `alignUp4` | same |
+| 0E58 | `stsprintf` | buf `[bp-0x5c]`, fmt `DS:0x8a1`, 4 vararg words, `add sp,0x10` |
+| 0E62 | `uiNotify` | 3 words: the returned far string + `0xa000`, `add sp,6` |
+| 0EAF/0F46 | `ovc23_isCursorAt` | 2 words (entity y, x), `add sp,4`, result tested with `or al,al` |
+| 0F83/0F8D/101A/102E/1042 | `play_sfx` | 2 words: an id (0x24, 0x26, 0x5a, 0x23, 0x25) and 0, `add sp,4` |
+| 1006 | `stop_audio` | none |
+| 0,0x2747 | `printf` | `es:[0x898e]`, `DS:0x8da` format, `add sp,6` |
+| 1079 | `OVC23_55fe_29a2_entry` | none |
+
+**A prototype defect this exposed.**  `st_functions.h` declares
+`play_sfx(int16_t track,int16_t type,uint16_t arg3)` and
+`uiNotify(char *msg,uint16_t dst,uint16_t arg3)`, i.e. 3 and 4 words of arguments.  But at every
+call site here the code pushes **2 words** for `play_sfx` and **3 words** for `uiNotify`
+(far string + `0xa000`).  Stack accounting at `0x0DE7..0x0E67` confirms it: 9 words pushed before
+`stsprintf`, `add sp,0x10` leaves exactly one (`0xa000`), and `add sp,6` after `uiNotify` clears
+`dx:ax` plus it.  So the recovered prototypes over-count by one word.  Calls therefore have to
+pass a trailing 0 to satisfy the declarations; the callee reads the same first arguments either
+way.  This is recorded rather than silently "fixed", because the extra parameter may be
+referenced by other recovered bodies.
+
+### What the surviving body gets wrong
+
+The tail currently calls `draw_textGoldProvidesHousing()`, but the final `lcall` is
+`0x1a0,0x4d`, i.e. `OVC23_55fe_29a2_entry` (236f:004d).  `draw_textGoldProvidesHousing` is not an
+overlay entry at all - it does not appear in `ovr_stubs.c` - so it cannot be reached by an
+inter-segment `lcall`.  The replacement body should call `ovr_OVC23_55fe_29a2_entry()`.
+
+  grep_checks 45,304; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
