@@ -6033,3 +6033,31 @@ module-ordering difference, and no evidence of missing or wrong data.
 
   grep_checks 42,181; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1444/1,868 (83 distinct deltas, unchanged)
+
+#### The rest of the diff_dgroup gap cannot be closed by tuning the pairing rule
+
+The obvious follow-up is to strip the build's duplicate-discriminator suffixes too, since a
+duplicate is emitted as `<name>_<address>` (e.g. `_DIGHANDLE_07BA` for the original's second
+`DIGHandle` at 0x07ba).  `tmp/key_variants.py` scores five rules on both measures - matched count,
+and the number of distinct deltas, which is the criterion the script exists for (a layout gap changes
+the delta; a name gap does not):
+
+```
+pairing rule                  matched   deltas  in top delta
+current (sanitiser only)         1444       82          606
++ strip _2410_XXXX               1467       83          607
++ strip _XXXX                    1448       86          606
++ strip both                     1471       86          607
++ strip _XXXX (any case)         1448       86          606
+```
+
+The best variant gains 27 pairs and **adds four distinct deltas** - i.e. it manufactures pairings
+that do not hold, which is worse than not matching them.  So the pairing rule stays as committed
+(sanitiser only), and the remaining gap is not a naming problem at all.
+
+What it is, measured: **at most 606 of 1868** symbols sit in the largest constant-delta run, and
+there are ~82 deltas.  That is a genuine layout difference spread through DGROUP, of which the CRT
+module ordering shown above is one clear instance, not a gap that better keying can close.
+
+  grep_checks 42,181; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
