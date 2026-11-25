@@ -4145,53 +4145,53 @@ uint16_t __cdecl16far ovc22_usesGMapFlags2(char skipCheck,int x1,int y1,int x2,i
   uint16_t uVar1;
   int iVar2;
   byte bVar3;
-  int iStack_c;
-  int iStack_a;
-  int iStack_8;
-  int iStack_6;
-  char cStack_3;
+  int dy;
+  int dx;
+  int stepY;
+  int stepX;
+  char toggle;
   
   if (skipCheck == '\0') {
-    iStack_6 = ovr_ovc07_signum(x2 - x1);
-    iStack_8 = ovr_ovc07_signum(y2 - y1);
-    if ((iStack_6 != 0) || (iStack_8 != 0)) {
-      cStack_3 = '\0';
+    stepX = ovr_ovc07_signum(x2 - x1);
+    stepY = ovr_ovc07_signum(y2 - y1);
+    if ((stepX != 0) || (stepY != 0)) {
+      toggle = '\0';
       while( true ) {
-        iStack_a = iStack_6;
-        iStack_c = iStack_8;
+        dx = stepX;
+        dy = stepY;
         uVar1 = (uint16_t)((ulong)GMapFlags >> 0x10);
-        iVar2 = iStack_8;
-        if ((iStack_6 != 0) &&
-           (iVar2 = (x1 + iStack_6) * 2,
-           ((*(short (*) [60] [148])GMapFlags)[y1][x1 + iStack_6] & 3U) != 0)) {
-          iStack_a = 0;
+        iVar2 = stepY;
+        if ((stepX != 0) &&
+           (iVar2 = (x1 + stepX) * 2,
+           ((*(short (*) [60] [148])GMapFlags)[y1][x1 + stepX] & 3U) != 0)) {
+          dx = 0;
         }
         bVar3 = (byte)((uint)iVar2 >> 8);
-        if ((iStack_8 != 0) &&
+        if ((stepY != 0) &&
            (bVar3 = (byte)((uint)(x1 * 2) >> 8),
-           ((*(short (*) [60] [148])GMapFlags)[y1 + iStack_8][x1] & 3U) != 0)) {
-          iStack_c = 0;
+           ((*(short (*) [60] [148])GMapFlags)[y1 + stepY][x1] & 3U) != 0)) {
+          dy = 0;
         }
-        if ((iStack_a == 0) && (iStack_c == 0)) break;
-        if ((iStack_c == 0) || ((iStack_a != 0 && (cStack_3 != '\0')))) {
-          x1 = x1 + iStack_a;
+        if ((dx == 0) && (dy == 0)) break;
+        if ((dy == 0) || ((dx != 0 && (toggle != '\0')))) {
+          x1 = x1 + dx;
           if (x1 == x2) {
             if (y1 == y2) {
               return 1;
             }
-            iStack_6 = 0;
+            stepX = 0;
           }
         }
         else {
-          y1 = y1 + iStack_c;
+          y1 = y1 + dy;
           if (y1 == y2) {
             if (x1 == x2) {
               return 1;
             }
-            iStack_8 = 0;
+            stepY = 0;
           }
         }
-        cStack_3 = '\x01' - (cStack_3 != '\0');
+        toggle = '\x01' - (toggle != '\0');
       }
       return (uint)bVar3 << 8;
     }
