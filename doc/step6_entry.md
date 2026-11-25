@@ -6989,3 +6989,83 @@ settled first.
 
   grep_checks 40,734 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### Ranking by section-5 matches, not by `mass`: the `char [N] = ""` class is data
+
+`grep_checks` counts matches, so the useful queue is "which function holds the most matches", not
+"which has the largest per-line ratio".  `tmp/rank_by_grep.py` reports:
+
+```
+clean functions (no in_stack_/unaff_/LAB_): 358, total matches 6929
+dirty functions:                            169, total matches 21988
+```
+
+and the top clean entries are functions the previous queue had buried:
+
+```
+237  329  ovc16_saveui.c    uiMainMenuLoop
+200  324  ovc47_constrct.c  land_info
+143  163  ovc41_main.c      ovc41_turnUndeadNotice
+129  343  ovc39_archive.c   ovc39_textHalflingCastle
+129  163  ovc27_combat.c    ovc27_textTakesHalfDamage3
+```
+
+The 1,405 matches for `char [N] = ""` are **not** a decompilation defect and are not worth chasing:
+1,294 are in `st_globals5.c`, 110 in `st_globals4.c`, 1 in `crtl.c` - i.e. **zero in any game code
+module**.  Of the 1,294, `tmp/check_str_use.py` finds **1,249 are referenced by nothing at all**: they
+exist only because the original's DGROUP holds those bytes, and `compare_state` checks them there.
+Rewriting them as byte lists would preserve the data and move the gate by 1,294 while making the data
+less readable, so it is left alone.  The class's *code* portion is already zero.
+
+### ovc41_turnUndeadNotice re-derived (40,734 -> 40,591, -143)
+
+`6a8f:0b39`, 1160 bytes, 432 instructions, 163 lines and the largest section-5 match count of any
+function that has no `in_stack_`/`unaff_`/`LAB_` blocker.
+
+The listing shows the field chain as three far loads:
+
+```
+0051  les bx, ptr [bp-8]          ; Agnts[idx]
+0054  les bx, ptr es:[bx + 0x1d]  ; agnt->gdata
+0058  mov al, byte ptr es:[bx+0x42]   ; gdata->rank
+007D  les bx, ptr es:[bx + 0x17]  ; agnt->entity
+0081  mov al, byte ptr es:[bx+0x0f]   ; entity->base.level
+```
+
+so `Agnts[i].gdata->rank`, `..entity->base.level` and `..entity->base.animFrame` are exact.  The
+export instead did `agntPtr2 = *(uint32_t far *)&Agnts[i].gdata` and then
+`*(byte *)((int)agntPtr2 + 0x42)`, which drops the segment before dereferencing - and `AgntGs` lives
+in its own segment, so every one of those reads was addressing the wrong memory.
+
+The returns: every exit writes only AL (`mov al,0` at 0x14/0x33/0x68, `mov al,1` at 0xF1/0x482).  The
+exported `CONCAT11(savedSeg,1)` and `(uint)bVar7 << 8` build fabricated high bytes from `savedSeg` and
+an unassigned `in_AX`; the single caller reads `(char)uVar5`, so they are stale AH and become plain
+`return 0` / `return 1`.
+
+Dead and removed: `in_AX` (never assigned - the fourth instance of that class), `extraout_AH`,
+`targetOfs` (assigned, never read), `uStack_8` (same), `savedSeg` (fed only the fabricated returns).
+
+Verified by listing the function alone, since o41 cannot list as a module:
+
+```
+instructions: 620   (original 432)
+call instructions: 27   (original 27)
+  agnt_statusText x4   ovc15_usesStshRealloc x4   stsprintf x4   uiNotify x4
+  agnt_usesAnimFrame x3   + eight singles
+les sites: 23
+final return: mov ax,1
+```
+
+That call distribution is the original's exactly (lcall 0x148,0x2f x4 / 0x160,0x25 x4 / 0x170,0x7a x4
+/ 0xf8,0x39 x4 / 0x148,0x34 x3 / four singles, plus five near calls).  620 against 432 is the usual
+cost of C over hand-written assembly.
+
+Deliberately kept byte-for-byte: the argument lists of `agnt_statusText`, `ovc15_usesStshRealloc`,
+`stsprintf`, `uiNotify` and `play_sfxU`.  The frame is `sub sp,0xa8` and one argument is
+`SS:[bp-0xa8]`, and the push sequences interleave buffer setup I have not established, so those
+arguments are not reinterpreted - only the locals inside them are renamed.  `notifyValue` in
+particular keeps the export's `SEG_OF(Agnts)` assignment, which is very likely wrong but which I
+cannot replace without decoding that region.
+
+  grep_checks 40,734 -> 40,591; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

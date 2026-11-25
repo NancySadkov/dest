@@ -631,165 +631,149 @@ int __cdecl16far ovc41_compute8(byte rank,uint8_t level)
 int __cdecl16far ovc41_turnUndeadNotice(agnt_t far *agnt)
 
 {
-  uint *flagsPtr;
-  char cVar2;
-  uint16_t in_AX;
-  byte bVar7;
-  undefined1 extraout_AH;
-  uint16_t uVar3;
-  uint8_t *stashOfs;
-  undefined1 savedSeg;
-  int iVar5;
-  uint16_t uVar6;
-  agnt_t far *agnt_00;
-  uint uVar9;
-  char *pcVar10;
-  uint32_t agntPtr2;
+  /* Re-derived from 6a8f:0b39 (1160 bytes).  Clears the agent's health and its "2" flag, then rolls
+     2d6 against the target's rank ladder: on a success the target is reported as turned, otherwise
+     every enemy within range loses a level per hit until the budget runs out.
+
+     The agent, `gdata` and `entity` chains are three chained far loads in the original
+     (`les bx,es:[bx+0x1d]` then `mov al,es:[bx+0x42]`), so the field accesses below are direct struct
+     reads.  The export truncated those pointers through `uint32_t` locals and `(int)` casts.
+
+     Every exit writes only AL and the caller reads the low byte, so the returns are plain 0 / 1.
+
+     The argument lists of agnt_statusText / usesStshRealloc / stsprintf / uiNotify / play_sfxU are
+     kept exactly as exported: their push sequences here are interleaved with buffer setup that is not
+     yet established, so they are not reinterpreted. */
+  uint *flagsWord;
+  char diceRoll;
+  uint16_t diceTarget;
+  uint8_t *allocPtr;
+  uint levelBudget;
+  char *textPtr;
+  uint16_t roll;
+  uint16_t notifyValue;
+  uint32_t extraArg;
   uint8_t text;
   uint8_t msg;
-  int targetOfs;
-  uint16_t uStack_8;
-  byte bStack_6;
-  byte bStack_5;
-  char cStack_4;
-  char stateVal;
-  
-  pcVar10 = (char *)((ulong)agnt >> 0x10);
-  agnt_00 = (agnt_t far *)agnt;
-  bVar7 = (byte)((uint)in_AX >> 8);
-  if ((agnt_00->flags & 2) == 0) {
-    iVar5 = (uint)bVar7 << 8;
+  byte targetRank;
+  byte hitCount;
+  char spotResult;
+  char attacksLeft;
+  int i;
+
+  textPtr = (char *)SEG_OF(agnt);
+  if ((agnt->flags & 2) == 0) {
+    return 0;
   }
-  else {
-    agnt_00->health = 0x0;
-    agnt_00->flags = agnt_00->flags & 0xfffd;
-    if (agnt_00->target == 0xff) {
-      iVar5 = (uint)bVar7 << 8;
-    }
-    else {
-      targetOfs = (uint)agnt_00->target * 0x34;
-      uStack_8 = SEG_OF(Agnts);
-      bStack_6 = Agnts[agnt_00->target].gdata->rank;
-      if (bStack_6 == 0) {
-        iVar5 = 0;
+  agnt->health = 0x0;
+  agnt->flags = agnt->flags & 0xfffd;
+  if (agnt->target == 0xff) {
+    return 0;
+  }
+  targetRank = Agnts[agnt->target].gdata->rank;
+  if (targetRank == 0) {
+    return 0;
+  }
+  diceRoll = ovr_manage_rollDice('\x02','\x06');
+  roll = (uint16_t)(uint8_t)diceRoll;
+  diceTarget = ovc41_compute6(Agnts[agnt->target].gdata->rank,
+                              agnt->entity->base.level);
+  if ((byte)roll < (byte)diceTarget) {
+    textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&text >> 8),
+                                                        CONCAT12((char)&text,textPtr)),0);
+    allocPtr = ovr_ovc15_usesStshRealloc(textPtr,roll,0,0,0,0,0,0);
+    textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ed6,_SS),
+                            (char *)CONCAT13((char)((uint)allocPtr >> 8),
+                                             CONCAT12((char)allocPtr,0x2410)),(char)allocPtr,roll
+                           );
+    ovr_uiNotify(textPtr,roll,0);
+    ovr_agnt_usesAnimFrame(agnt);
+    return 1;
+  }
+  targetRank = Agnts[agnt->target].gdata->rank;
+  levelBudget = (uint)targetRank;
+  ovc41_rollStatDice(targetRank,agnt->entity->base.level);
+  levelBudget = levelBudget & 0xff;
+  spotResult = (char)ovc41_compute8(Agnts[agnt->target].gdata->rank,
+                                    agnt->entity->base.level);
+  hitCount = 0;
+  i = 0;
+  while ((i < (int)(uint)AgntCount && (levelBudget != 0))) {
+    if (((Agnts[i].gdata->rank != '\0') &&
+        ((((Agnts[i].faction != agnt->faction &&
+           ((Agnts[i].flags & 4) == 0)) &&
+          (Agnts[i].combatState == '\0')) &&
+         ((hitCount == 0 ||
+          ((int)(uint)Agnts[i].entity->base.level <= (int)levelBudget)))))) &&
+       (Agnts[i].gdata->rank <= targetRank)) {
+      if ((Agnts[i].flags & 0xae4) == 0) {
+        attacksLeft = (char)Agnts[i].entity->base.animFrame;
       }
       else {
-        cVar2 = ovr_manage_rollDice('\x02','\x06');
-        uVar6 = CONCAT11(extraout_AH,cVar2);
-        uVar3 = ovc41_compute6(Agnts[agnt_00->target].gdata->rank,
-                               (((entity_t *)agnt_00->entity)->base).level);
-        if ((byte)uVar6 < (byte)uVar3) {
-          pcVar10 = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
-                                                                 CONCAT12((char)&text,pcVar10)),0);
-          stashOfs = ovr_ovc15_usesStshRealloc(pcVar10,uVar6,0,0,0,0,0,0);
-          pcVar10 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ed6,_SS),
-                                  (char *)CONCAT13((char)((uint)stashOfs >> 8),
-                                                   CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,uVar6
-                                 );
-          ovr_uiNotify(pcVar10,uVar6,0);
-          savedSeg = (undefined1)((uint)pcVar10 >> 8);
-          ovr_agnt_usesAnimFrame(agnt_00);
-          iVar5 = CONCAT11(savedSeg,1);
+        attacksLeft = '\x01';
+      }
+      while ((attacksLeft != '\0' && (levelBudget != 0))) {
+        if (spotResult == '\0') {
+          OVC41_6a8f_01e7_entry((agnt_t far *)&Agnts[i].x,0);
+          AGNT_FIELD(&Agnts[i], targetX, 0) = 0;
+          AGNT_FIELD(&Agnts[i], targetX, 1) = 0;
+          flagsWord = (uint *)&Agnts[i].flags;
+          *flagsWord = *flagsWord | 4;
+          Agnts[i].combatState = 1;
+          Agnts[i].targetY = 0;
+          Agnts[i].timer = 5;
+          ovr_agnt_usesAnimFrame((agnt_t far *)&Agnts[i].x);
         }
         else {
-          bVar7 = Agnts[agnt_00->target].gdata->rank;
-          uVar9 = (uint)bVar7;
-          ovc41_rollStatDice(bVar7,(((entity_t *)agnt_00->entity)->base).level);
-          uVar9 = uVar9 & 0xff;
-          iVar5 = ovc41_compute8(Agnts[agnt_00->target].gdata->rank,
-                                 (((entity_t *)agnt_00->entity)->base).level);
-          cStack_4 = (char)iVar5;
-          bStack_5 = 0;
-          iVar5 = 0;
-          while ((iVar5 < (int)(uint)AgntCount && (uVar9 != 0))) {
-            agntPtr2 = *(uint32_t far *)&Agnts[iVar5].gdata;
-            if (((*(char *)((int)agntPtr2 + 0x42) != '\0') &&
-                ((((Agnts[iVar5].faction != agnt_00->faction &&
-                   ((Agnts[iVar5].flags & 4) == 0)) &&
-                  (Agnts[iVar5].combatState == '\0')) &&
-                 ((bStack_5 == 0 ||
-                  (agntPtr2 = *(uint32_t far *)&Agnts[iVar5].entity,
-                  (int)(uint)*(byte *)((int)agntPtr2 + 0xf) <= (int)uVar9)))))) &&
-               (agntPtr2 = *(uint32_t far *)&Agnts[iVar5].gdata,
-               *(byte *)((int)agntPtr2 + 0x42) <= bStack_6)) {
-              if ((Agnts[iVar5].flags & 0xae4) == 0) {
-                agntPtr2 = *(uint32_t far *)&Agnts[iVar5].entity;
-                stateVal = *(char *)((int)agntPtr2 + 0xe);
-              }
-              else {
-                stateVal = '\x01';
-              }
-              while ((stateVal != '\0' && (uVar9 != 0))) {
-                if (cStack_4 == '\0') {
-                  OVC41_6a8f_01e7_entry((agnt_t far *)&Agnts[iVar5].x,0);
-                  AGNT_FIELD(&Agnts[iVar5], targetX, 0) = 0;
-                  AGNT_FIELD(&Agnts[iVar5], targetX, 1) = 0;
-                  flagsPtr = (uint *)&Agnts[iVar5].flags;
-                  *flagsPtr = *flagsPtr | 4;
-                  Agnts[iVar5].combatState = 1;
-                  Agnts[iVar5].targetY = 0;
-                  Agnts[iVar5].timer = 5;
-                  ovr_agnt_usesAnimFrame((agnt_t far *)&Agnts[iVar5].x);
-                }
-                else {
-                  ovc41_settleAgentCombat(agnt,(agnt_t far *)CONCAT22(SEG_OF(Agnts),(agnt_t far *)&Agnts[iVar5].x),0);
-                }
-                bStack_5 = bStack_5 + 1;
-                agntPtr2 = *(uint32_t far *)&Agnts[iVar5].entity;
-                if ((int)uVar9 < (int)(uint)*(byte *)((int)agntPtr2 + 0xf)) {
-                  uVar9 = 0;
-                }
-                else {
-                  agntPtr2 = *(uint32_t far *)&Agnts[iVar5].entity;
-                  uVar9 = uVar9 - *(byte *)((int)agntPtr2 + 0xf);
-                }
-                stateVal = stateVal + -1;
-              }
-            }
-            uVar6 = SEG_OF(Agnts);
-            iVar5 = iVar5 + 1;
-          }
-          if (bStack_5 == 0) {
-            pcVar10 = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
-                                                                   CONCAT12((char)&text,pcVar10)),0);
-            stashOfs = ovr_ovc15_usesStshRealloc(pcVar10,uVar6,0,0,0,0,0,0);
-            pcVar10 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ee8,_SS),
-                                    (char *)CONCAT13((char)((uint)stashOfs >> 8),
-                                                     CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,
-                                    uVar6);
-            ovr_uiNotify(pcVar10,uVar6,0);
-            savedSeg = (undefined1)((uint)pcVar10 >> 8);
-          }
-          else {
-            if (cStack_4 == '\0') {
-              agntPtr2 = CONCAT22(GSavedBlitSeg,(uint)bStack_5);
-              pcVar10 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,pcVar10),0);
-              stashOfs = ovr_ovc15_usesStshRealloc(pcVar10,(char)uVar6,agntPtr2,0,0,0,0,0);
-              pcVar10 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6f0f,_SS),
-                                      (char *)CONCAT22(stashOfs,(char *)0x26510),(char)uVar6
-                                     );
-              ovr_uiNotify(pcVar10,uVar6,0);
-            }
-            else {
-              agntPtr2 = CONCAT22(GSavedBlitSeg,(uint)bStack_5);
-              pcVar10 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,pcVar10),0);
-              stashOfs = ovr_ovc15_usesStshRealloc(pcVar10,(char)uVar6,agntPtr2,0,0,0,0,0);
-              pcVar10 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ef8,_SS),
-                                      (char *)CONCAT22(stashOfs,(char *)0x26510),(char)uVar6
-                                     );
-              ovr_uiNotify(pcVar10,uVar6,0);
-            }
-            uVar6 = ovr_audio_panFromX(agnt_00,0);
-            ovr_play_sfxU(0x3b,0,uVar6,0,0);
-            savedSeg = (undefined1)(uVar6 >> 8);
-          }
-          ovr_agnt_usesAnimFrame(agnt_00);
-          iVar5 = CONCAT11(savedSeg,1);
+          ovc41_settleAgentCombat(agnt,(agnt_t far *)CONCAT22(SEG_OF(Agnts),(agnt_t far *)&Agnts[i].x),0);
         }
+        hitCount = hitCount + 1;
+        if ((int)levelBudget < (int)(uint)Agnts[i].entity->base.level) {
+          levelBudget = 0;
+        }
+        else {
+          levelBudget = levelBudget - Agnts[i].entity->base.level;
+        }
+        attacksLeft = attacksLeft + -1;
       }
     }
+    notifyValue = SEG_OF(Agnts);
+    i = i + 1;
   }
-  return iVar5;
+  if (hitCount == 0) {
+    textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&text >> 8),
+                                                        CONCAT12((char)&text,textPtr)),0);
+    allocPtr = ovr_ovc15_usesStshRealloc(textPtr,notifyValue,0,0,0,0,0,0);
+    textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ee8,_SS),
+                            (char *)CONCAT13((char)((uint)allocPtr >> 8),
+                                             CONCAT12((char)allocPtr,0x2410)),(char)allocPtr,
+                            notifyValue);
+    ovr_uiNotify(textPtr,notifyValue,0);
+  }
+  else {
+    if (spotResult == '\0') {
+      extraArg = CONCAT22(GSavedBlitSeg,(uint)hitCount);
+      textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text,textPtr),0);
+      allocPtr = ovr_ovc15_usesStshRealloc(textPtr,(char)notifyValue,extraArg,0,0,0,0,0);
+      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6f0f,_SS),
+                              (char *)CONCAT22(allocPtr,(char *)0x26510),(char)notifyValue
+                             );
+      ovr_uiNotify(textPtr,notifyValue,0);
+    }
+    else {
+      extraArg = CONCAT22(GSavedBlitSeg,(uint)hitCount);
+      textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text,textPtr),0);
+      allocPtr = ovr_ovc15_usesStshRealloc(textPtr,(char)notifyValue,extraArg,0,0,0,0,0);
+      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ef8,_SS),
+                              (char *)CONCAT22(allocPtr,(char *)0x26510),(char)notifyValue
+                             );
+      ovr_uiNotify(textPtr,notifyValue,0);
+    }
+    notifyValue = ovr_audio_panFromX(agnt,0);
+    ovr_play_sfxU(0x3b,0,notifyValue,0,0);
+  }
+  ovr_agnt_usesAnimFrame(agnt);
+  return 1;
 }
 
 
