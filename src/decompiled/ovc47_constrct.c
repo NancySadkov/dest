@@ -70,7 +70,7 @@ void __cdecl16far land_info(byte tileOffset)
   byte bStack_21;
   uint8_t entityIndex;
   uint8_t outFlag;
-  byte bStack_1d;
+  byte bldType;
   char cStack_1c;
   char itemCode;
   uint8_t tileX;
@@ -98,7 +98,7 @@ void __cdecl16far land_info(byte tileOffset)
   unitType = 0xff;
   tileX = (GfxRndSeed + (int)(char)tileOffset) - 2;
   uVar2 = ovr_ovc45_usesGfxRndSeed2((int *)&tileX);
-  bStack_1d = (byte)uVar2;
+  bldType = (byte)uVar2;
   uVar2 = ovr_ovc45_getUnitIndex(tileX,GfxRndSeed2);
   uVar11 = (uint16_t)((ulong)GUnits >> 0x10);
   if (((unit_t *)GUnits)[uVar2].unitType != 0xff) {
@@ -111,7 +111,7 @@ void __cdecl16far land_info(byte tileOffset)
     bStack_21 = tileOffset;
     unitType = *(byte *)(*(int *)((uint)tileOffset * 2 + -0x6e29) * 0x12 + 9);
   }
-  if (((BuildingTypes[bStack_1d].flags2 & 0x80) == 0) &&
+  if (((BuildingTypes[bldType].flags2 & 0x80) == 0) &&
      (((unit_t *)GUnits)[uVar2].level < 3)) {
     type = 0;
     uVar3 = ovr_randBelow(2,0);
@@ -132,7 +132,7 @@ void __cdecl16far land_info(byte tileOffset)
         uVar11 = (uint16_t)((ulong)GUnits >> 0x10);
         puVar10 = (unit_t *)GUnits;
         if (puVar10[uVar2].unitType == 0xff) {
-          if (bStack_1d == 0) {
+          if (bldType == 0) {
             uVar11 = ovr_ovc45_usesGMapFlags4(tileX,GfxRndSeed2);
             tileClass = (char)uVar11;
           }
@@ -147,26 +147,26 @@ void __cdecl16far land_info(byte tileOffset)
           }
           else {
             stashOfs = ovr_ovc15_usesStshRealloc
-                               ((char *)BLD_WORD(&BuildingTypes[bStack_1d], name, 0),0,0,0,0,0,0,0);
+                               ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),0,0,0,0,0,0,0);
             asm { mov uVar11,dx };
             textMsg = ovr_fmVsprintf("%s:",(char *)CONCAT22(uVar11,stashOfs));
             strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(uVar11,textMsg));
           }
         }
-        else if (BuildingTypes[bStack_1d].durability == 'd') {
+        else if (BuildingTypes[bldType].durability == 'd') {
           stashOfs = ovr_ovc15_usesStshRealloc
-                             ((char *)BLD_WORD(&BuildingTypes[bStack_1d], name, 0),BLD_WORD(&BuildingTypes[bStack_1d], name, 2),*(uint16_t *)((uint)puVar10[uVar2].unitType * 4),0,0,0,0,0);
+                             ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),BLD_WORD(&BuildingTypes[bldType], name, 2),*(uint16_t *)((uint)puVar10[uVar2].unitType * 4),0,0,0,0,0);
           asm { mov uVar8,dx };
           textMsg = ovr_fmVsprintf("%s: Held by %s.",(char *)CONCAT22(uVar8,stashOfs));
           strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(uVar8,textMsg));
         }
         else {
-          b = BuildingTypes[bStack_1d].durability;
+          b = BuildingTypes[bldType].durability;
           uVar11 = ovr_ovc45_compute7(puVar10[uVar2].level,b,b,
-                                      (uint)BuildingTypes[bStack_1d].durability,
+                                      (uint)BuildingTypes[bldType].durability,
                                       *(uint16_t *)((uint)puVar10[uVar2].unitType * 4));
           stashOfs = ovr_ovc15_usesStshRealloc
-                             ((char *)BLD_WORD(&BuildingTypes[bStack_1d], name, 0),(char)BLD_WORD(&BuildingTypes[bStack_1d], name, 2),(char)uVar11,0,0,0,0,0);
+                             ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),(char)BLD_WORD(&BuildingTypes[bldType], name, 2),(char)uVar11,0,0,0,0,0);
           asm { mov uVar8,dx };
           textMsg = ovr_fmVsprintf("%s (%u/%u): Held by %s.",
                                   (char *)CONCAT13((char)((uint)uVar8 >> 8),
@@ -179,7 +179,7 @@ void __cdecl16far land_info(byte tileOffset)
         }
       }
       else {
-        bStack_1d = *(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 + 8);
+        bldType = *(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 + 8);
         puVar5 = (uint16_t *)
                  ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 + 9) * 4);
         uVar11 = puVar5[1];
@@ -192,7 +192,7 @@ void __cdecl16far land_info(byte tileOffset)
                                                     CONCAT12((char)Font03.ofs,uVar11)),Font03.seg,
                                    -0x47,uVar12,(char)uVar11,(char)Font03.ofs);
         stashOfs = ovr_ovc15_usesStshRealloc
-                           ((char *)BLD_WORD(&BuildingTypes[bStack_1d], name, 0),(char)BLD_WORD(&BuildingTypes[bStack_1d], name, 2),100 - ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 +
+                           ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),(char)BLD_WORD(&BuildingTypes[bldType], name, 2),100 - ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 +
                                                   0xb) * 100) /
                                   (uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 +
                                                  0xc),computed,0,0,0,0);
@@ -212,9 +212,9 @@ void __cdecl16far land_info(byte tileOffset)
       itemCode = (char)stashOfs;
     }
     else if (bStack_21 == 0xff) {
-      if (((BuildingTypes[bStack_1d].flags2 & 2) == 0) || (0xf7 < uVar2)) {
-        if (((BuildingTypes[bStack_1d].flags2 & 0x20) == 0) || (0xf7 < uVar2)) {
-          if (bStack_1d == 0) {
+      if (((BuildingTypes[bldType].flags2 & 2) == 0) || (0xf7 < uVar2)) {
+        if (((BuildingTypes[bldType].flags2 & 0x20) == 0) || (0xf7 < uVar2)) {
+          if (bldType == 0) {
             ovr_ovc45_buildPlacementMessage
                       ((char)(GfxRndSeed + (int)(char)tileOffset + -2),(char)GfxRndSeed2,
                        entityIndex,(uint)textMsg & 0xff,foundFlag);
@@ -225,23 +225,23 @@ void __cdecl16far land_info(byte tileOffset)
           }
         }
         else {
-          ovr_ovc45_textDone2(foundFlag,bStack_1d,entityIndex,tileX,(uint16_t)&outFlag,
-                              (uint16_t)_SS,bStack_1d,(char)entityIndex);
+          ovr_ovc45_textDone2(foundFlag,bldType,entityIndex,tileX,(uint16_t)&outFlag,
+                              (uint16_t)_SS,bldType,(char)entityIndex);
         }
       }
       else {
-        ovr_ovc45_textDone(foundFlag,bStack_1d,entityIndex,tileX,(uint16_t)&outFlag,
-                           (uint16_t)_SS,bStack_1d,(char)entityIndex);
+        ovr_ovc45_textDone(foundFlag,bldType,entityIndex,tileX,(uint16_t)&outFlag,
+                           (uint16_t)_SS,bldType,(char)entityIndex);
       }
     }
     else {
-      bStack_1d = *(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 + 8);
-      if (bStack_1d != 0) {
+      bldType = *(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 + 8);
+      if (bldType != 0) {
         segTable[0] = 0x2410;
         menuItems = 0x7969;
         auStack_14[0] = 1;
       }
-      uVar2 = (uint)(bStack_1d != 0);
+      uVar2 = (uint)(bldType != 0);
       if (foundFlag != 0x0) {
         segTable[uVar2 * 2] = 0x2410;   /* hand fix: this slot holds the DGROUP segment half, exactly as segTable[0] = 0x2410 above; the literal offset Ghidra printed is that same value */
         *(char **)(&menuItems + uVar2 * 4) = (char *)"Change party";
@@ -254,7 +254,7 @@ void __cdecl16far land_info(byte tileOffset)
       again = '\0';
       do {
         uVar11 = (uint16_t)((ulong)Entities >> 0x10);
-        if (bStack_1d == 0) {
+        if (bldType == 0) {
           textMsg = ovr_ovc22_className(AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),0);
           puVar5 = (uint16_t *)((uint)AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) * 4);
           uVar11 = _DS;
@@ -291,7 +291,7 @@ void __cdecl16far land_info(byte tileOffset)
                                      (char *)CONCAT22(Font03.ofs,(char *)puVar5[1]),Font03.seg,'_',
                                      0x5f,2,(char)computed,uVar11);
           stashOfs = ovr_ovc15_usesStshRealloc
-                             ((char *)BLD_WORD(&BuildingTypes[bStack_1d], name, 0),BLD_WORD(&BuildingTypes[bStack_1d], name, 2),100 - ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12
+                             ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),BLD_WORD(&BuildingTypes[bldType], name, 2),100 - ((uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12
                                                     + 0xb) * 100) /
                                     (uint)*(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 +
                                                    0xc),(char)computed,uVar12,0,0,0);
@@ -319,7 +319,7 @@ void __cdecl16far land_info(byte tileOffset)
           uStack_4 = 0x2410;
           uStack_6 = 0x7a02;
           stashOfs = ovr_ovc15_usesStshRealloc
-                             ((char *)BLD_WORD(&BuildingTypes[bStack_1d], name, 0),0,0,0,0,0,0,0);
+                             ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),0,0,0,0,0,0,0);
           asm { mov uVar3,dx };
           textMsg = ovr_fmVsprintf("Construction of %s will be permanently suspended. Are you sure?",
                                   (char *)CONCAT22(uVar3,stashOfs));
