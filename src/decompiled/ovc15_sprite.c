@@ -1169,7 +1169,7 @@ uint16_t __cdecl16far ovc15_compute1(uint16_t *agnt)
   uint16_t uVar1;
   int *piVar2;
   int iVar3;
-  int iVar4;
+  int clampedX;
   int iVar5;
   uint16_t *puVar6;
   uint16_t uVar7;
@@ -1185,15 +1185,15 @@ uint16_t __cdecl16far ovc15_compute1(uint16_t *agnt)
   if (*(char *)((int)puVar6 + 0x11) == '\0') {
     iVar5 = piVar2[1];
     iVar3 = *uStack_6;
-    iVar4 = ovr_agnt_clampX(*agnt);
-    iVar5 = (*(int *)(iVar3 + 0xd) - *(int *)(&columnScreenY[iVar4])) + 0x93;
+    clampedX = ovr_agnt_clampX(*agnt);
+    iVar5 = (*(int *)(iVar3 + 0xd) - *(int *)(&columnScreenY[clampedX])) + 0x93;
     uStack_c = (undefined1)iVar5;
   }
   else {
     iVar5 = piVar2[9];
     iVar3 = piVar2[8];
-    iVar4 = ovr_agnt_clampX(*agnt);
-    iVar5 = (*(int *)(iVar3 + 0xd) - *(int *)(&columnScreenY[iVar4])) + 0xac;
+    clampedX = ovr_agnt_clampX(*agnt);
+    iVar5 = (*(int *)(iVar3 + 0xd) - *(int *)(&columnScreenY[clampedX])) + 0xac;
     uStack_c = (undefined1)iVar5;
   }
   return CONCAT11((char)((uint)iVar5 >> 8),uStack_c);

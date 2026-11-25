@@ -1196,7 +1196,7 @@ void __cdecl16far agnt_usesFmFreeAudio(void)
 void __cdecl16far agnt_usesAlignToSeg(void)
 
 {
-  bool bVar1;
+  bool animating;
   uint16_t in_DX;
   far_t dst;
   far_t ptr;
@@ -1207,8 +1207,8 @@ void __cdecl16far agnt_usesAlignToSeg(void)
   dst.ofs = (uint16_t)&mouseRect;
   F_SCOPY(far_from_u32((uint32_t)(0x241007ec)),dst);
   constructionDirty = '\0';
-  bVar1 = agnt_isAnimating();
-  if (bVar1) {
+  animating = agnt_isAnimating();
+  if (animating) {
     AnimActive = '\x01';
   }
   if (((AnimActive != '\0') && (GOngoingBattle == '\0')) &&
@@ -1222,8 +1222,8 @@ void __cdecl16far agnt_usesAlignToSeg(void)
     tempScreenSeg = ptr.seg;
     ovr_alignToSeg(ptr);
     GSavedBlitSeg = in_DX;
-    bVar1 = agnt_isAnimating();
-    if (!bVar1) {
+    animating = agnt_isAnimating();
+    if (!animating) {
       AnimActive = '\0';
     }
     ovr_ovc49_drawAgents();

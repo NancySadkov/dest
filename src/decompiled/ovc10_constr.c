@@ -1089,7 +1089,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
   far_t gfx_11;
   ulong uVar8;
   far_t dst_00;
-  ulong uVar9;
+  ulong packed;
   uint fillColor;
   int avgDy;
   uint8_t cornerBR;
@@ -1149,9 +1149,9 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
         bVar3 = (byte)uVar4;
         if ((uVar4 & 4) == 0) {
           if ((int)uVar7 < 0) {
-            uVar9 = CONCAT22(1,uVar4) & 0xffff00ff;
+            packed = CONCAT22(1,uVar4) & 0xffff00ff;
             uVar8 = (ulong)CONCAT12(cornerBL,cornerTR) & 0xffff00ff;
-            uVar4 = constr_compute1(cornerTL,(uint8_t)uVar8,(uint8_t)(uVar8 >> 0x10),(byte)uVar9,(byte)(uVar9 >> 0x10),0,0,0);
+            uVar4 = constr_compute1(cornerTL,(uint8_t)uVar8,(uint8_t)(uVar8 >> 0x10),(byte)packed,(byte)(packed >> 0x10),0,0,0);
             ovr_ovc07_usesBiosReadKey
                       (((uint16_t *)SquareTopY)[sq],((uint16_t *)RowScreenX)[dy] - smoothBL,((uint16_t *)SquareLeftX)[sq],((uint16_t *)RowScreenY)[dy] - smoothTL,((uint16_t *)SquareRightX)[sq],((uint16_t *)RowScreenY)[dy] - smoothTR,uVar4 & 0xff,BlitRects + 3,(char)((uint16_t *)SquareLeftX)[sq],0,0,0,0,0);
             uVar4 = constr_compute1(cornerBL,cornerBR,cornerTR,bVar3,2,0,0,0);
@@ -1178,9 +1178,9 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
                     (((uint16_t *)SquareBottomY)[sq],((uint16_t *)RowScreenX)[dy] - smoothBR,((uint16_t *)SquareLeftX)[sq],((uint16_t *)RowScreenY)[dy] - smoothTL,((uint16_t *)SquareRightX)[sq],((uint16_t *)RowScreenY)[dy] - smoothTR,uVar4 & 0xff,BlitRects + 3,(char)((uint16_t *)SquareLeftX)[sq],0,0,0,0,0);
         }
         else {
-          uVar9 = CONCAT22(2,uVar4) & 0xffff00ff;
+          packed = CONCAT22(2,uVar4) & 0xffff00ff;
           uVar8 = (ulong)CONCAT12(cornerBR,cornerTR) & 0xffff00ff;
-          uVar4 = constr_compute1(cornerTL,(uint8_t)uVar8,(uint8_t)(uVar8 >> 0x10),(byte)uVar9,(byte)(uVar9 >> 0x10),0,0,0);
+          uVar4 = constr_compute1(cornerTL,(uint8_t)uVar8,(uint8_t)(uVar8 >> 0x10),(byte)packed,(byte)(packed >> 0x10),0,0,0);
           ovr_ovc07_usesBiosReadKey
                     (((uint16_t *)SquareBottomY)[sq],((uint16_t *)RowScreenX)[dy] - smoothBR,((uint16_t *)SquareLeftX)[sq],((uint16_t *)RowScreenY)[dy] - smoothTL,((uint16_t *)SquareRightX)[sq],((uint16_t *)RowScreenY)[dy] - smoothTR,uVar4 & 0xff,BlitRects + 3,(char)((uint16_t *)SquareLeftX)[sq],0,0,0,0,0);
           uVar4 = constr_compute1(cornerBL,cornerBR,cornerTL,bVar3,1,0,0,0);
@@ -1471,8 +1471,8 @@ uint __cdecl16far constr_usesGMapFlags2(int x,int y)
   undefined1 uVar3;
   short (*paasVar4) [60] [148];
   uint16_t uVar5;
-  byte bStack_4;
-  byte bStack_3;
+  byte edgeA;
+  byte edgeB;
   
   uVar5 = (uint16_t)((ulong)GMapFlags >> 0x10);
   paasVar4 = (short (*) [60] [148])GMapFlags;
@@ -1487,17 +1487,17 @@ uint __cdecl16far constr_usesGMapFlags2(int x,int y)
       cornerA_00 = (*(byte (*) [59] [148])GMapCells)[y][x];
       cornerB_00 = (*(byte (*) [59] [148])GMapCells)[y][x + 1];
       if ((uVar1 & 4) == 0) {
-        bStack_3 = ovr_driver_compute2(cornerA_00,cornerB_00,cornerB);
-        bStack_4 = ovr_driver_compute2(cornerA,cornerB,cornerA_00);
+        edgeB = ovr_driver_compute2(cornerA_00,cornerB_00,cornerB);
+        edgeA = ovr_driver_compute2(cornerA,cornerB,cornerA_00);
         uVar3 = extraout_AH_00;
       }
       else {
-        bStack_3 = ovr_driver_compute2(cornerA_00,cornerB_00,cornerA);
-        bStack_4 = ovr_driver_compute2(cornerA,cornerB,cornerB_00);
+        edgeB = ovr_driver_compute2(cornerA_00,cornerB_00,cornerA);
+        edgeA = ovr_driver_compute2(cornerA,cornerB,cornerB_00);
         uVar3 = extraout_AH;
       }
-      if ((bStack_3 < 0xfa) && (bStack_4 < 0xfa)) {
-        if ((bStack_3 < 0xf5) && (bStack_4 < 0xf5)) {
+      if ((edgeB < 0xfa) && (edgeA < 0xfa)) {
+        if ((edgeB < 0xf5) && (edgeA < 0xf5)) {
           uVar1 = CONCAT11(uVar3,2);
         }
         else {

@@ -979,7 +979,7 @@ int __cdecl16far fmMallocRecover(void)
 
 {
   uint16_t *puVar1;
-  bool bVar2;
+  bool freed;
   undefined1 extraout_AH;
   int iVar3;
   undefined1 uVar4;
@@ -988,8 +988,8 @@ int __cdecl16far fmMallocRecover(void)
   uint16_t uStack_6;
   uint16_t uStack_4;
   
-  bVar2 = ovr_fmFreeAudio(0);
-  if (bVar2) {
+  freed = ovr_fmFreeAudio(0);
+  if (freed) {
     iVar3 = CONCAT11(extraout_AH,1);
   }
   else {
@@ -1014,8 +1014,8 @@ int __cdecl16far fmMallocRecover(void)
       uStack_6 = *(uint16_t *)(uStack_6 + 9);
       uStack_4 = *puVar1;
     }
-    bVar2 = ovr_fmFreeAudio(1);
-    if (bVar2) {
+    freed = ovr_fmFreeAudio(1);
+    if (freed) {
       iVar3 = CONCAT11(extraout_AH_00,1);
     }
     else {

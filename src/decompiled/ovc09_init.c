@@ -414,7 +414,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   int row;   /* map row, 0..0x93 */
   int iVar15;
   int col;   /* map column, 0..0x93 */
-  int iVar16;
+  int sample;
   byte unaff_DI;
   uint uVar17;
   uint32_t *retStorage;
@@ -1014,10 +1014,10 @@ switchD_3000_4a6e_caseD_3:
       uStack_24 = ((uint16_t *)squareColumn)[(int)retStorage];
       puStack_1c = (uint32_t *)constr_getCellAtOffset(uStack_24,-2);
       pvStack_1e = (void *)constr_getCellAtOffset(uStack_24 + 1,-2);
-      iVar16 = ovr_constr_usesSmoothPrev(uStack_24,0,0,0,0);
-      uStack_10 = iVar16 / 3;
-      iVar16 = ovr_constr_usesSmoothPrev(uStack_24 + 1,0,0,0,0);
-      uStack_12 = iVar16 / 3;
+      sample = ovr_constr_usesSmoothPrev(uStack_24,0,0,0,0);
+      uStack_10 = sample / 3;
+      sample = ovr_constr_usesSmoothPrev(uStack_24 + 1,0,0,0,0);
+      uStack_12 = sample / 3;
       psVar9 = (stg_tmp_t *)constr_getFlagsAtOffset(uStack_24,-1);
       bStack_2b = (byte)psVar9;
       if (((uint)psVar9 & 4) != 0) break;
