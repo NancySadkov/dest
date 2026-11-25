@@ -4522,3 +4522,43 @@ hold 5,303 of the `[iusbc]Var` + `p[iusbc]Var` matches between them.
 
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; grep_checks 49,452
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### From renames to whole-function re-derivation (first two functions)
+
+With the per-slot ratchet out of candidates (`stack_scan.py`: 1, the known rejection;
+`cand2.py`: 7, of which 2 are `crtl.c`, 1 `ovl.c` and 1 the `in_CX` register), the work
+moved to re-deriving whole functions against the original.  Both done so far are in
+`ovc22_classes.c`, the heaviest file, and both exposed real defects rather than only
+naming.
+
+**`ovc22_usesGUnits`** (`5087:1674`, file `0x43CE4`)
+
+* export: `bVar1`, `uVar2`, `puVar3`, `uVar4` + repeated rebuilds of the `GUnits` far
+  pointer (`si*9` recomputed for every field access);
+* recovered: one typed `unit_t *u = (unit_t *)GUnits + unitIndex;`, a counted loop over
+  `GRecordCount`, and `bldType` in a word;
+* **defect fixed**: the export gated the `x+2`/`x+3` construction records on
+  `createConstructionRecordFar(...) != 0`.  The original executes no `or al,al` after that
+  call (0x43E17) and tests only `BuildingTypes[bldType].size`, so the exported condition
+  silently dropped two construction records whenever the call returned zero;
+* **documented, not changed**: the original's `outFlag` is a FAR pointer (ofs `[bp+8]`,
+  seg `[bp+0xa]`) plus a fourth argument at `[bp+0xc]`, stored through `ES:BX`.  Our
+  2-argument prototype makes the callee read the caller's stack, which is exactly what
+  `in_stack_00000006` and `unaff_DI` in that function are.  Fixing it needs the same
+  treatment at all nine call sites.
+
+**`ovc22_usesEntities`** (`5087:1532`, file `0x43BA2`)
+
+* export: `pcVar1`, `bVar2`, `uVar3`, `bVar4`, `iVar5`, `uVar6`;
+* recovered: entity pointer, `field`, `animBase`, `n`, and the early-return chain read
+  straight from the instructions (0xff check, `0x800` flag, `0x3f`/`0x5b`/`0x4d` sheet
+  fields, the `n = 3..1` walk over `0x8c + n*2`, then `AnimFrame` advance);
+* **defect fixed**: the exported returns `entityIndex * 0x37 & 0xff00` /
+  `CONCAT11(...,1)` were Ghidra modelling a stale `AH` left by the `imul dx` that computes
+  the record offset.  The original only executes `mov al,0` / `mov al,1`
+  (0x43BCC, 0x43CDB, 0x43CDF), and every caller tests `& 0xff` - so the function returns
+  0 or 1.
+
+  grep_checks 49,387 -> 49,357 -> 49,315 (-72); build 65/65 clean; LINK.LOG 65 bytes /
+  0 problems; compare_state 1,627/0/0; diff_dgroup 972/1,868;
+  compare_runtime 1,546/11 main entry, 1,545/11 post-init_cfg
