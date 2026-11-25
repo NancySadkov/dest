@@ -5580,3 +5580,39 @@ inter-segment `lcall`.  The replacement body should call `ovr_OVC23_55fe_29a2_en
 
   grep_checks 45,304; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### `attact_usesGMapFlags3`: every global resolved; the body now needs only transcription
+
+The absolute offsets in the disassembly map to named DGROUP globals
+(`audit/dgroup_data.csv`), and the two format strings are in the DGROUP string table:
+
+| offset | symbol | role in this function |
+|---|---|---|
+| `0x7144` | `GameRunning` (bool) | if set, skip building the message (0x0DA2) |
+| `0x0438` | `DebugVerbose` (bool) | gates the final `printf` (0x105B) |
+| `0x07a7` | `CurSfxType3` (uint8_t) | set to 0xff just before the `0x5a` sound (0x1010) |
+| `0x898e` | `GGameState` (undefined2) | set to 0x3d before the final report (0x104F) |
+| `0x9097` | `EntityCount` | both loops |
+| `0x908e` | `Entities` | both loops |
+| `0x08a1` | `s_intelligence_reports_...` | `"Intelligence reports %s unit engaged in combat. (%d, %d)"` |
+| `0x08da` | `s_d` | `"%d \r"` |
+
+The `%s` argument at 0x0E45/0x0E4A is `AgntGs[gindex].name` (the far pointer stored at
+`+0x24`), and the two `%d`s are `alignUp4(entX)` and `entY` - which is why four vararg words are
+pushed and `add sp,0x10` clears them.
+
+**One thing must be settled before writing it.**  The overlay wrappers are declared
+`undefined ovr_xxx()` - unprototyped - in `st_functions.h`.  That is fine for the void calls,
+and for `play_sfx`/`uiNotify` it is actually *more* faithful than the typed prototypes (an
+unprototyped call passes exactly the words written, i.e. 2 and 3).  But `ovr_stsprintf` returns
+a far `char *`, and an unprototyped call returns only `AX`, so on a large-model build the
+segment half is lost.  Either the wrapper needs a real prototype, or the body must take the
+returned pointer from an explicitly typed call.  Existing code that assigns
+`ovr_stsprintf(...)` to a `char *` (e.g. `ovc13_usesAlignUp4`) has the same latent defect.
+
+So the next attempt should first pick one of those two routes and check that the chosen one
+still leaves every other caller compiling - that is the last open question, and it is a
+declaration question, not a decoding one.
+
+  grep_checks 45,304; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
