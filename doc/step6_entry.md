@@ -6606,3 +6606,31 @@ substitution.
 
   grep_checks 41,014 -> 41,005; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### Three path helpers: the phantom is the path segment, and it is `arg2`
+
+`chpath`, `path_strip_tail_slash` and `ensure_tail_slash` are short and share one shape:
+
+```c
+chdir((char *)CONCAT22(in_stack_00000006,path));
+l = strlen((char *)CONCAT22(in_stack_00000006,s));
+```
+
+`CONCAT22(hi,lo)` is `hi<<16|lo`, so the phantom is the **high word = the segment** and `path`/`s` is
+the offset.  In all three bodies the declared second parameter `arg2` appears nowhere else, and it is
+the only `uint16_t` that could carry a segment, so `in_stack_00000006` is `arg2`.
+
+The rebuilt `chpath` confirms it: `mov si,[bp+6]; mov ax,[bp+8]; shl ax,16` - i.e. `MK_FP(arg2, path)`
+built from the two parameters, which is what the original does.
+
+The other `ovc09_init` cases in this family are *not* the same and are left alone:
+`append_name_to_path` has `CONCAT22((char *)path,in_stack_00000004)`, i.e. the phantom in the **low**
+word and `path` in the high one - the roles are swapped relative to these three, so its parameter
+naming has to be settled before the phantom is touched.  `init_textFilename` is a 770-line body for a
+`(void)` function, i.e. another merged blob, so its `in_stack_` reads are not parameters at all.
+
+Implementation: the three bodies are edited in memory and the file written once, which avoids the
+delete-then-reread defect that broke two earlier helpers.
+
+  grep_checks 41,005 -> 40,999; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

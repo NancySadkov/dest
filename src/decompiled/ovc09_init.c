@@ -64,9 +64,8 @@ char * __cdecl16far path_strip_tail_slash(char *s,uint16_t arg2)
 
 {
   uint16_t l;
-  uint16_t in_stack_00000006;
   
-  l = strlen((char *)CONCAT22(in_stack_00000006,s));
+  l = strlen((char *)CONCAT22(arg2,s));
   if ((3 < (int)l) && (s[l - 1] == '\\')) {
     s[l - 1] = '\0';
   }
@@ -81,9 +80,8 @@ char * __cdecl16far ensure_tail_slash(char *s,uint16_t arg2)
 
 {
   uint16_t l;
-  uint16_t in_stack_00000006;
   
-  l = strlen((char *)CONCAT22(in_stack_00000006,s));
+  l = strlen((char *)CONCAT22(arg2,s));
   if ((l == 0) || (s[l - 1] != '\\')) {
     s[l] = '\\';
     s[l + 1] = '\0';
@@ -104,9 +102,8 @@ void __cdecl16far chpath(char *path,uint16_t arg2)
   char cVar1;
   int iVar2;
   undefined1 extraout_AH;
-  uint16_t in_stack_00000006;
   
-  iVar2 = chdir((char *)CONCAT22(in_stack_00000006,path));
+  iVar2 = chdir((char *)CONCAT22(arg2,path));
   if (iVar2 == 0) {
     c = toupper((int)*path);
     if (((path[1] == ':') && ('@' < (char)c)) && ((char)c < '[')) {
