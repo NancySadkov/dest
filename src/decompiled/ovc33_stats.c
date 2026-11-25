@@ -1726,60 +1726,41 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
 uint __cdecl16far stats_usesAlignUp4(int entityIndex)
 
 {
-  uint uVar1;
-  uint uVar2;
-  byte bVar3;
-  int iVar4;
-  uint16_t uVar5;
-  
-  uVar5 = (uint16_t)((ulong)Entities >> 0x10);
+  /* Re-derived: 1 when the entity is the cursor's own unit at rest - flags32 bit 2 set, x
+     aligned to GfxRndSeed with y == GfxRndSeed2, targetX likewise aligned with targetY ==
+     GfxRndSeed2, and both destination fields zero.  Every exported `& 0xff00` / CONCAT11 / <<8
+     return was stale AH (AL is written as 0 at seven exits and 1 at one). */
+  uint alignedX;
+  uint cursorAligned;
+  entity_t *ent;
+
   if ((*((uint8_t far *)&((entity_t *)Entities)[entityIndex].base.flags32 + 1) & 2) == 0) {
-    uVar2 = 0;
+    return 0;
   }
-  else {
-    uVar1 = ovr_alignUp4(((entity_t *)Entities)[entityIndex].base.x,0,0);
-    uVar2 = ovr_alignUp4(GfxRndSeed,0,0);
-    if (uVar1 == uVar2) {
-      uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-      uVar2 = ((entity_t *)Entities)[entityIndex].base.y;
-      if (uVar2 == GfxRndSeed2) {
-        uVar1 = ovr_alignUp4(((entity_t *)Entities)[entityIndex].base.targetX,0,0);
-        uVar2 = ovr_alignUp4(GfxRndSeed,0,0);
-        if (uVar1 == uVar2) {
-          uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-          iVar4 = (int)Entities;
-          uVar2 = ((entity_t *)iVar4)[entityIndex].base.targetY;
-          if (uVar2 == GfxRndSeed2) {
-            if (((entity_t *)iVar4)[entityIndex].base.destX == 0) {
-              bVar3 = (byte)((uint)(entityIndex * 0x37) >> 8);
-              if (((entity_t *)iVar4)[entityIndex].base.destY == 0) {
-                uVar2 = CONCAT11(bVar3,1);
-              }
-              else {
-                uVar2 = (uint)bVar3 << 8;
-              }
-            }
-            else {
-              uVar2 = entityIndex * 0x37 & 0xff00;
-            }
-          }
-          else {
-            uVar2 = uVar2 & 0xff00;
-          }
-        }
-        else {
-          uVar2 = uVar2 & 0xff00;
-        }
-      }
-      else {
-        uVar2 = uVar2 & 0xff00;
-      }
-    }
-    else {
-      uVar2 = uVar2 & 0xff00;
-    }
+  ent = (entity_t *)Entities;
+  alignedX = ovr_alignUp4(ent[entityIndex].base.x,0,0);
+  cursorAligned = ovr_alignUp4(GfxRndSeed,0,0);
+  if (alignedX != cursorAligned) {
+    return 0;
   }
-  return uVar2;
+  if ((uint)ent[entityIndex].base.y != (uint)GfxRndSeed2) {
+    return 0;
+  }
+  alignedX = ovr_alignUp4(ent[entityIndex].base.targetX,0,0);
+  cursorAligned = ovr_alignUp4(GfxRndSeed,0,0);
+  if (alignedX != cursorAligned) {
+    return 0;
+  }
+  if ((uint)ent[entityIndex].base.targetY != (uint)GfxRndSeed2) {
+    return 0;
+  }
+  if (ent[entityIndex].base.destX != 0) {
+    return 0;
+  }
+  if (ent[entityIndex].base.destY != 0) {
+    return 0;
+  }
+  return 1;
 }
 
 
