@@ -5147,3 +5147,60 @@ written immediately once the arithmetic convention is settled.
 
   grep_checks 45,444; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### MEASURED: the Turbo C long multiply/divide convention (probe, not inference)
+
+A probe module compiled with the tree's own flags (`-mm -1 -G -O -Z -d`, `-c` swapped for `-S`):
+
+```c
+long gA, gB, gC;  unsigned long uA, uB, uC;
+void probe_mul(void)   { gC = gA * gB; }        void probe_div(void)   { gC = gA / gB; }
+void probe_umul(void)  { uC = uA * uB; }        void probe_udiv(void)  { uC = uA / uB; }
+```
+
+produced:
+
+```
+; gC = gA * gB                                ; gC = gA / gB
+mov cx,word ptr DGROUP:_gA+2                  push word ptr DGROUP:_gB+2
+mov bx,word ptr DGROUP:_gA                    push word ptr DGROUP:_gB
+mov dx,word ptr DGROUP:_gB+2                  push word ptr DGROUP:_gA+2
+mov ax,word ptr DGROUP:_gB                    push word ptr DGROUP:_gA
+call far ptr F_LXMUL@                         call far ptr F_LDIV@
+mov word ptr DGROUP:_gC+2,dx                  mov word ptr DGROUP:_gC+2,dx
+mov word ptr DGROUP:_gC,ax                    mov word ptr DGROUP:_gC,ax
+```
+
+so:
+
+* **`F_LXMUL@`** takes `CX:BX` = a and `DX:AX` = b, returns `DX:AX` = a*b, and touches no
+  stack.  It is used for *both* signed and unsigned multiply (`probe_umul` emits the same call).
+* **`F_LDIV@` / `F_LUDIV@`** take their two longs **on the stack**, pushed second-argument
+  first and high-word first (`push b.hi / b.lo / a.hi / a.lo`), return `DX:AX`, and **pop their
+  own arguments** - the compiler emits no `add sp` after the call.
+
+That settles `ovc15_textError`'s exit exactly: `push 0 / push 0x64` leaves the divisor 100 on the
+stack, `pop cx / pop bx` puts `si+100` into `CX:BX`, `DX:AX` is set from `[bp+0xa..0xc]`, and
+`F_LXMUL@` then `F_LDIV@` compute `(value * (acc + 100)) / 100`, storing `dx:ax` back.  Nothing
+needs to be guessed.
+
+**Consequence for the tree.**  `st_functions.h` currently declares
+
+```c
+long * __cdecl16far LXMUL_at_(long *__return_storage_ptr__,long a,long b);
+long   __stdcall16far LDIV_at_(long a,long b);
+```
+
+and call sites pass a fabricated "return storage pointer" - in `ovc15_textError` that pointer is
+`(long *)((int)&GSTARTX_SavedVectors[2].ofs + 1)`, a saved-interrupt-vector global.  Those
+declarations cannot express a register-passed multiply, so an explicit call to them can never
+reproduce the original.  The correct recovery is to write the **plain C arithmetic** (`a * b`,
+`a / b`) and let the compiler emit `F_LXMUL@`/`F_LDIV@` itself, exactly as the probe does.  That
+applies to the three sites that call the helpers by name: `ovc15_textError`, `ovc36_usesLDIV_at_`
+and `ovc15_usesLDIV_at_`.
+
+Probe module deleted afterwards (a stray `probe.c` defining probe_mul etc. is harmless at link
+but should not linger).
+
+  grep_checks 45,444; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
