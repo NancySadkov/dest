@@ -7950,3 +7950,67 @@ group in `ovc49_body1` (2944/2979/3184) and `ovc49_drawAgents` (3955/3971) which
   grep_checks 40,160 -> 40,145; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### Three more ovc49 gdata reads, and the queue scanner corrected (40,145 -> 40,139)
+
+Chain evidence:
+
+```
+8699:1e09 (ovc49_drawAgents)
+  0D77  les bx, ptr es:[bx + 0x1d] / mov al, byte ptr es:[bx + 0x52]   agntG_t.yOffset
+  0F64  les bx, ptr es:[bx + 0x1d] / test word ptr es:[bx + 0x40], 2   agntG_t.flags3
+8699:18c4 (ovc49_body1)
+  0045  les bx, ptr es:[bx + 0x1d] / test word ptr es:[bx + 0x40], 2   agntG_t.flags3
+  04A4  les bx, ptr es:[bx + 0x1d] / test word ptr es:[bx + 0x40], 4   agntG_t.flags3
+```
+
+```c
+2941/2943  ... + (int)*(char *)((int)uVar31 + 0x52) + -0x16;
+       ->  ... + (int)Agnts[uStackY_22].gdata->yOffset + -0x16;
+2976/2977  if ((*(uint *)((int)uVar31 + 0x40) & 2) == 0)
+       ->  if ((Agnts[uStackY_22].gdata->flags3 & 2) == 0)
+3181/3182  (uVar31 = ..., (*(uint *)((int)uVar31 + 0x3c) & 8) == 0)
+       ->  ((Agnts[uStackY_22].gdata->flags & 8) == 0)
+```
+
+`uVar31` is a genuine multi-role temporary (12 uses in this file, including a different
+`*(uint32_t *)((in_stack_0000ffe4 & 0xff) * 0x34 + -0x1d)` at 3195), so only the three dereferences are
+replaced and its declaration stays.
+
+#### Verification without a listing
+
+`ovc49_body1` cannot be listed - `Compiler table limit exceeded in function ovc49_body1` - so the
+emitted offsets for that function cannot be read directly.  The three field offsets were pinned by a
+four-line probe compiled through the same build:
+
+```
+probe_yoffset: les bx,dword ptr [bp+6] / mov al, byte ptr es:[bx+82]   = 0x52
+probe_flags3 : les bx,dword ptr [bp+6] / mov ax, word ptr es:[bx+64]   = 0x40
+probe_flags  : les bx,dword ptr [bp+6] / mov ax, word ptr es:[bx+60]   = 0x3c
+```
+
+exactly the original's `0x52` / `0x40` / `0x3c`.  The far-ness is implied by the field types
+(`agntG_t far *`), so each read emits `les` + `es:` instead of the previous DS-relative access.  That is
+weaker than reading the function's own listing and is recorded as such.
+
+#### The queue scanner was undercounting
+
+`tmp/find_truncfar.py`'s `TRUNC` regex matched only the assignment form (`x = *(uint32_t far *)&...`),
+so the inline form `*(char *)*(uint32_t far *)&...` - the shape most remaining sites use - was invisible.
+It now matches `(uint32_t far *)&FIELD` in every shape.  Recounted:
+
+```
+agnt_usesStrengthMax   4   ovc12_agnt.c      AgntArrayA/B[i][colA] - 1
+stats_openAgentDetail  4   ovc33_stats.c     1 is the segment-0x80 table block
+ovc49_drawAgents       4   ovc49_agents.c
+stats_readyStatusText  3   ovc33_stats.c     behind in_stack_00000004
+agnt_acquireTarget     1   ovc12_agnt.c
+ovc27_compute2         1   ovc27_combat.c
+```
+
+Two of those functions (`agnt_usesStrengthMax`, `agnt_acquireTarget`) had never appeared in the queue,
+which is why the previous three turns kept reporting the class as nearly empty.
+
+  grep_checks 40,145 -> 40,139; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

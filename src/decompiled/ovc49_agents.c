@@ -2938,9 +2938,8 @@ L_OVC49_8699_1e09_3BDE:
     bVar9 = 0xd9;
     uVar33 = 0x94;
     iVar18 = ovr_agnt_clampX(Agnts[uStackY_22].x);
-    uVar31 = *(uint32_t far *)&Agnts[uStackY_22].gdata;
     iStackY_28 = *(int *)(&columnScreenY[iVar18]) + Agnts[uStackY_22].y +
-                 (int)*(char *)((int)uVar31 + 0x52) + -0x16;
+                 (int)Agnts[uStackY_22].gdata->yOffset + -0x16;
   }
   pbVar28 = (brect_t *)((char *)0x22ff);
   Agnts[uStackY_22].screenX = uVar16;
@@ -2973,8 +2972,7 @@ L_OVC49_8699_1e09_3BDE:
       }
     }
     else if (Agnts[uStackY_22].combatState == '\x01') {
-      uVar31 = *(uint32_t far *)&Agnts[uStackY_22].gdata;
-      if ((*(uint *)((int)uVar31 + 0x40) & 2) == 0) {
+      if ((Agnts[uStackY_22].gdata->flags3 & 2) == 0) {
         gfx_02.seg = uVar16;
         gfx_02.ofs = (uint16_t)(psVar17->cmap + 6);
         ovr_blitGfxRect(gfx_02,0,0,0,0,0,0,0,0,0,0,0);
@@ -3178,8 +3176,7 @@ L_OVC49_8699_1e09_3310:
              Agnts[uStackY_22].level;
       }
       else if ((Agnts[uStackY_22].gindex == '\0') &&
-              (uVar31 = *(uint32_t far *)&Agnts[uStackY_22].gdata,
-              (*(uint *)((int)uVar31 + 0x3c) & 8) == 0)) {
+              ((Agnts[uStackY_22].gdata->flags & 8) == 0)) {
         iVar18 = -0x60d4;
         ovr_audio_panFromX((agnt_t far *)&Agnts[uStackY_22].x,0);
         ovr_play_sfxU(*(byte *)(iVar18 + 0x1d),0,0,0,0);
