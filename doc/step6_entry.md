@@ -7433,3 +7433,59 @@ a distinct class from the pointer-width work and is not attempted here.
 
   grep_checks 40,507; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### MEASURED: `F_SCOPY` - 55 sites, no `_CX` support, and the compiler inlines struct copies
+
+Three measurements, all cheap and all needed before touching the class.
+
+**1. Scale.** 55 call sites in `src/decompiled`, every one with exactly two arguments, concentrated in
+`ovc21_manage.c` (12), `ovc16_saveui.c` (6), `ovc27_combat.c` (6), `ovc37_season.c` (5), `ovc09_init.c` (4).
+`crtl.c:1292` is the definition.
+
+**2. The body already reads the count from CX.**  `crtl.c` implements it as
+
+```c
+puVar4 = (uint16_t *)src.ofs;
+puVar5 = (uint16_t *)dst.ofs;
+for (uVar3 = in_CX >> 1; uVar3 != 0; uVar3 = uVar3 - 1) { ... }
+```
+
+so the implementation is correct and only the *prototype* is missing the argument.  That is why the
+original sets CX at each call (`lea ax,[bp-0xa] / push ss / push ax / push ds / push 0x59aa /
+mov cx,0xa / lcall 0,0x94f`).
+
+**3. Turbo C 3.0 cannot express a register parameter.**
+
+```c
+void t_reg(far_t dst, uint16_t _CX n);      /* Error probe.c 5: ) expected */
+```
+
+so the count has to go on the stack, which deviates from the original's convention.
+
+**4. But that deviation is safe, because this compiler never calls the helper.**  A plain struct
+assignment is inlined:
+
+```c
+far_t a, b;                  void t_struct_assign(void) { a = b; }
+struct big_t { char x[20]; } big1, big2;    void t_big_assign(void) { big1 = big2; }
+```
+
+```
+t_struct_assign:  mov ax,[_b+2] / mov dx,[_b] / mov [_a+2],ax / mov [_a],dx
+t_big_assign:     mov si,offset _big2 / mov di,offset _big1 / push ds / pop es
+                  mov cx,10 / rep movsw
+```
+
+No helper call in either case, so nothing in our build depends on `F_SCOPY` reading CX.  Giving it a
+stack parameter therefore breaks no compiler-generated call - which was the hazard worth checking
+before changing it.
+
+**What remains before the fix can be written:** the length at each of the 54 sites.  They are not
+uniform - `uiMainMenuLoop` copies `GMenuStrings` (which occupies 0x26d7-0x26b7 = 32 bytes in the
+original) and `GYesNo` (4 bytes), while the destinations are a `uint32_t menu` (4 bytes) and
+`char yesno[9]`.  So some destinations are under-declared as well, and the length cannot be inferred
+from the source declaration.  Reading the `mov cx,N` before each `lcall 0,0x94f` is the way to get them,
+one site at a time.
+
+  grep_checks 40,507; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
