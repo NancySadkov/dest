@@ -3706,3 +3706,33 @@ state differences.  The main-entry gate is unchanged (1,543/13).
 
   build 64/64 clean; LINK ERRORS 0; grep_checks 50,869
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### The 187 link-time-segment words are repaired (offsets still to do)
+
+The repair for the far-pointer tables already existed (`fixFarTable(...)` plus explicit
+`.seg = startxDseg` assignments), but it lived inside our reconstructed `startx`, which
+does not run when the stock C0 startup is the entry - so under the step-6 configuration
+the tables kept the original image's link-time DGROUP.
+
+It is now a function of its own, `st_fix_far_tables()`, called from `main()` (and still
+from `startx`), and `fixFarTable` derives the data segment from the table's own far
+address instead of `startxDseg`.
+
+Measured on the post-init_cfg checkpoint after re-sampling:
+
+```
+before: words using the original link-time segment 0x2410: 187
+after : words using the original link-time segment 0x2410:   0
+        identical state 1542 / DIFFERENT 13
+```
+
+The one symbol that moved from identical to different is the *second half* of the same
+defect, now visible: `LevelRangeLabels` and `PlaceErrPtrs` carry the **original's
+offsets** (`0x54bf...`, `0x461f...`), so even with the right segment they point at the
+wrong data in our layout unless the offsets are remapped too.  That remapping is the
+next step (initialise each table entry from the rebuild's own symbol rather than from the
+original DGROUP offset).
+
+  build 64/64 clean; LINK ERRORS 0; grep_checks 50,869
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
+  compare_runtime 1,543/13 (main entry), 1,542/13 (post-init_cfg)

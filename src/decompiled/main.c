@@ -19,6 +19,10 @@ int __cdecl16far main(int argc,str_t *argv,str_t *envp)
   str_t *psVar5;
   uint16_t uVar6;
   byte bStack_6;
+
+  /* Far-pointer tables initialised with the original image link-time DGROUP must be
+     repaired whichever startup is the entry point; our startx does this too. */
+  { extern void st_fix_far_tables(void); st_fix_far_tables(); }
   
   /* The original (1301:000c) does:
    *   LES BX,[BP+8] ; MOV AX,ES:[BX+2] ; MOV DX,ES:[BX]      -> argv[0]

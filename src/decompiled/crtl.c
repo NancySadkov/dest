@@ -21,10 +21,54 @@ uint16_t startxDseg;
 static void fixFarTable(far_t *tbl, uint16_t n)
 {
   uint16_t i;
+  /* The table lives in DGROUP, so a far cast of its own address yields DS.
+     This must not depend on startxDseg: that is set by our startx, which does
+     not run when the stock C0 startup is the entry. */
+  uint16_t ds = (uint16_t)((unsigned long)(char far *)tbl >> 16);
   for (i = 0; i < n; i++) {
-    tbl[i].seg = startxDseg;
+    tbl[i].seg = ds;
   }
 }
+
+/* Far-pointer tables whose initialisers carry the original image's link-time
+   DGROUP (0x2410) and its offsets.  The original's loader relocates them; ours
+   must be repaired at run time, and the repair has to happen whichever startup
+   is the entry point, so it lives here and is called from main(). */
+void st_fix_far_tables(void)
+{
+  uint16_t ds_seg =
+      (uint16_t)((unsigned long)(char far *)GUnitDescriptions >> 16);
+  fixFarTable(GUnitDescriptions, 28);
+  fixFarTable(CPKeys, 25);
+  fixFarTable(worldMenuLabels, 13);
+  fixFarTable(GStatsLabels, 6);
+  fixFarTable(GPlayerTitles, 32);
+  fixFarTable(menuHighlightTable, 5);
+  fixFarTable(GAlignmentsNames, 3);
+  fixFarTable(ManageResultPtrs, 5);
+  fixFarTable(LevelBandLabels, 20);
+  fixFarTable(LevelRangeLabels, 4);
+  fixFarTable(RampTables, 7);
+  fixFarTable(GStrangeTable, 98);
+  fixFarTable(GSeasonNames, 3);
+  fixFarTable(RankMsgPtrs, 19);
+  fixFarTable(CureSpellPtrs, 4);
+  fixFarTable(PersonWordPtrs, 2);
+  fixFarTable(GTxtFiles, 34);
+  fixFarTable(StatsTabPtrs, 9);
+  {
+    uint16_t gi;
+    for (gi = 0; gi < 30; gi++) {
+      GStructures[gi].name.seg = ds_seg;
+    }
+  }
+  GSPEmpty.seg = ds_seg;
+  SaveHeader.seg = ds_seg;
+  GDoneStrPtr.seg = ds_seg;
+  msgFormat.seg = ds_seg;
+  far_t_2410_78e4.seg = ds_seg;
+}
+
 
 /* 1000:0000 */
 void startx(void)
@@ -252,35 +296,7 @@ L_startx_0109:
     __C0argv = (uint16_t)argv;
     __C0environ = (uint16_t)env0;
   }
-  fixFarTable(GUnitDescriptions, 28);
-  fixFarTable(CPKeys, 25);
-  fixFarTable(worldMenuLabels, 13);
-  fixFarTable(GStatsLabels, 6);
-  fixFarTable(GPlayerTitles, 32);
-  fixFarTable(menuHighlightTable, 5);
-  fixFarTable(GAlignmentsNames, 3);
-  fixFarTable(ManageResultPtrs, 5);
-  fixFarTable(LevelBandLabels, 20);
-  fixFarTable(LevelRangeLabels, 4);
-  fixFarTable(RampTables, 7);
-  fixFarTable(GStrangeTable, 98);
-  fixFarTable(GSeasonNames, 3);
-  fixFarTable(RankMsgPtrs, 19);
-  fixFarTable(CureSpellPtrs, 4);
-  fixFarTable(PersonWordPtrs, 2);
-  fixFarTable(GTxtFiles, 34);
-  fixFarTable(StatsTabPtrs, 9);
-  {
-    uint16_t gi;
-    for (gi = 0; gi < 30; gi++) {
-      GStructures[gi].name.seg = startxDseg;
-    }
-  }
-  GSPEmpty.seg = startxDseg;
-  SaveHeader.seg = startxDseg;
-  GDoneStrPtr.seg = startxDseg;
-  msgFormat.seg = startxDseg;
-  far_t_2410_78e4.seg = startxDseg;
+  st_fix_far_tables();
   iVar10 = main(__C0argc, (str_t *)__C0argv, (str_t *)__C0environ);
   exit(iVar10);
 }
