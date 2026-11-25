@@ -561,9 +561,9 @@ uint16_t __cdecl16far saveui_usesMouseMoved(far_t textTable,int rowLimit,int ite
 void __cdecl16far saveui_blitPanel(void);
 void __cdecl16far saveui_usesBlitGfx10(far_t gfx,char *text,byte *widths,uint *cursorX,int row);
 void __cdecl16far saveui_usesBlitLoadRleGfx3(far_t entries,int count);
-void __cdecl16far uiMenuSub(char *title,far_t items,uint16_t nitems,uint16_t defopt);
+uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint16_t defopt);
 char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,uint16_t gfxSeg,uint16_t arg6);
-void __cdecl16far uiMenu(char *title,far_t items,int nitems,uint16_t arg4);
+uint16_t __cdecl16far uiMenu(char far *title,far_t items,uint16_t nitems);
 void __cdecl16far saveui_writeLine(int handle,char *text,int count);
 char * __cdecl16far saveui_readLine(int fd);
 uint __cdecl16far saveui_readSavesList(int entries,uint16_t entriesSeg);

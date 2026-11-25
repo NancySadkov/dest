@@ -300,7 +300,7 @@ void __cdecl16far saveui_usesBlitLoadRleGfx3(far_t entries,int count)
 
 /* 4528:0706 */
 
-void __cdecl16far uiMenuSub(char *title,far_t items,uint16_t nitems,uint16_t defopt)
+uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint16_t defopt)
 
 {
   undefined1 stk_ffd4;   /* stack slot ffd4 */
@@ -702,17 +702,13 @@ L_uiReadString_0FF7:
 
 /* 4528:10a8 */
 
-void __cdecl16far uiMenu(char *title,far_t items,int nitems,uint16_t arg4)
+uint16_t __cdecl16far uiMenu(char far *title,far_t items,uint16_t nitems)
 
 {
-  uint16_t unaff_BP;
-  uint16_t in_stack_0000000c;
-  far_t items_00;
-  
-  items_00.seg = in_stack_0000000c;
-  items_00.ofs = nitems;
-  uiMenuSub((char *)MK_FP(items.seg, items.ofs),items_00,1,unaff_BP);
-  return;
+  /* Re-derived from 4528:10a8 (29 bytes, 13 instructions, no locals): a pure argument shuffle that
+     forwards its three arguments to uiMenuSub with defopt = 1 and returns the result in AX
+     (`pop bp / retf` leaves AX alone, so the return type is not void). */
+  return (uint16_t)uiMenuSub(title,items,nitems,1);
 }
 
 
@@ -1445,8 +1441,7 @@ void __cdecl16far uiMainMenuLoop(void)
     pmenu = (uint16_t)&menu;
     items.seg = _SS;
     items.ofs = pmenu;
-    uiMenu((char *)"Select an option:",items,_SS,8);
-    pmenuIdx = (byte)pmenu;
+    pmenuIdx = (byte)uiMenu((char far *)"Select an option:",items,8);
     ovr_say((char *)0x26832,0x2410);
     if (pmenuIdx < 9) {
                     /* WARNING: Switch is manually overridden */
@@ -1462,7 +1457,7 @@ void __cdecl16far uiMainMenuLoop(void)
           pcVar9 = yesno;
           items_00.seg = _SS;
           items_00.ofs = (uint16_t)pcVar9;
-          uiMenu((char *)"Game not saved: Are you sure?",items_00,_SS,2);
+          uiMenu((char far *)"Game not saved: Are you sure?",items_00,2);
           if ((char)pcVar9 == '\x01') {
             bVar1 = true;
           }
@@ -1504,7 +1499,7 @@ void __cdecl16far uiMainMenuLoop(void)
         saveui_drawCancel();
         items_01.seg = savesSeg;
         items_01.ofs = far_ofs_u32(entries_05);
-        uiMenu((char *)"Save Game:",items_01,savesSeg,uVar15);
+        uiMenu((char far *)"Save Game:",items_01,uVar15);
         saveui_usesBlitLoadRleGfx4();
         if (bVar5 != 0) {
           iVar8 = strcmp((char *)CONCAT22(saves[(uint)bVar5 - 1].seg,
@@ -1581,7 +1576,7 @@ void __cdecl16far uiMainMenuLoop(void)
         cVar6 = (char)uVar16;
         items_02.seg = savesSeg;
         items_02.ofs = far_ofs_u32(entries_05);
-        uiMenu((char *)"Load Game:",items_02,savesSeg,uVar15);
+        uiMenu((char far *)"Load Game:",items_02,uVar15);
         saveui_usesBlitLoadRleGfx4();
         if (cVar6 != '\0') {
           bVar1 = false;
@@ -1593,7 +1588,7 @@ void __cdecl16far uiMainMenuLoop(void)
             pcVar9 = yesno;
             items_03.seg = _SS;
             items_03.ofs = (uint16_t)pcVar9;
-            uiMenu((char *)"Game not saved: Are you sure?",items_03,_SS,2);
+            uiMenu((char far *)"Game not saved: Are you sure?",items_03,2);
             if ((char)pcVar9 == '\x01') {
               bVar1 = true;
             }
@@ -1617,7 +1612,7 @@ void __cdecl16far uiMainMenuLoop(void)
         bVar5 = (byte)uVar16;
         items_04.seg = savesSeg;
         items_04.ofs = far_ofs_u32(entries_05);
-        uiMenu((char *)"Delete Game:",items_04,savesSeg,uVar15);
+        uiMenu((char far *)"Delete Game:",items_04,uVar15);
         saveui_usesBlitLoadRleGfx4();
         if (bVar5 != 0) {
           saveui_blitPanel();
@@ -1630,7 +1625,7 @@ void __cdecl16far uiMainMenuLoop(void)
                                 );
           items_05.seg = (uint16_t)pcVar9;
           items_05.ofs = uVar10;
-          uiMenu(title,items_05,uVar7,uVar17);
+          uiMenu(title,items_05,uVar17);
           if ((char)title == '\x01') {
             ovr_save_deleteGameFile();
             handle_00.seg = saves[(uint)bVar5 - 1].seg;
@@ -1722,7 +1717,7 @@ void __cdecl16far saveui_configureNewWorld(void)
   puVar1 = &worldItems;
   items.seg = _SS;
   items.ofs = (uint16_t)puVar1;
-  uiMenu((char *)"Which new world:",items,_SS,0);
+  uiMenu((char far *)"Which new world:",items,0);
   bStack_b = (byte)puVar1;
   saveui_blitPanel();
   if ((bStack_b != 8) && (bStack_b != 0)) {
@@ -1743,7 +1738,7 @@ void __cdecl16far saveui_configureNewWorld(void)
     puVar1 = &hostilityItems;
     items_00.seg = _SS;
     items_00.ofs = (uint16_t)puVar1;
-    uiMenu((char *)"Hostility level:",items_00,_SS,0);
+    uiMenu((char far *)"Hostility level:",items_00,0);
     bStack_b = (byte)puVar1;
     saveui_blitPanel();
     if ((bStack_b != '\x05') && (bStack_b != '\0')) {
