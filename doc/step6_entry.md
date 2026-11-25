@@ -7386,3 +7386,50 @@ where before the first far argument was `push 0; push txt`, i.e. segment 0.
 
   grep_checks 40,510 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### The uiMainMenuLoop 0x2410 offsets resolve to real symbols
+
+`tmp/resolve_dgroup_offsets.py` looks each literal up in `audit/symbols.tsv` (the original's own
+DGROUP labels) and `audit/dgroup_data.csv` (its bytes):
+
+```
+offset     symbol at/below              next symbol              data
+0x26b7     GMenuStrings +0              GYesNo -32               char *GMenuStrings[8]
+0x26d7     GYesNo +0                   GSeed -8                 char *GYesNo[2]
+0x26e3     SeedHi +2                   worldMenuLabels -20      (inside a 4-byte seed)
+0x26f7     worldMenuLabels +0          s__Empty__2410_272b -52  far_t worldMenuLabels[13]
+0x270b     worldMenuLabels +20         s__Empty__2410_272b -32
+0x27f4     s_Save_Game_2410_27f4 +0    s_Load_Game_2410_27fe -10
+0x283f     s_Begin_Play_2410_283f +0  s_Yes_2410_284a -11
+```
+
+So they are all namable.  But **naming them is not enough on its own**, because `F_SCOPY`'s prototype
+is wrong (below), and because `uiMainMenuLoop` uses `pmenu = (uint16_t)&menu; pmenuIdx = (byte)pmenu;`
+- the *address* of the buffer rather than its contents - which cannot be right whatever the source
+literal is.  Both have to be settled before the literals can be replaced.
+
+### `F_SCOPY` is declared without its length parameter
+
+The tree declares
+
+```c
+void __cdecl16far F_SCOPY(far_t src,far_t dst);
+```
+
+i.e. two `far_t` and nothing else, so a call copies 4 bytes.  The original passes a **length in CX**:
+
+```
+lea  ax,[bp-0xa]
+push ss / push ax           ; dst  = SS:<buffer>
+push ds / push 0x59aa       ; src  = DS:0x59aa
+mov  cx, 0xa                ; length in CX, not on the stack
+lcall 0, 0x94f
+```
+
+That is `memcpy(dst, src, cx)` with the count in a register - a non-standard convention the export
+dropped.  Until it is corrected, every `F_SCOPY` call in the tree copies the wrong number of bytes, and
+the `uiMainMenuLoop` menu-table copies (`GMenuStrings`, 8 pointers = 16 bytes) are copying 4.  This is
+a distinct class from the pointer-width work and is not attempted here.
+
+  grep_checks 40,507; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
