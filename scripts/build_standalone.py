@@ -16,6 +16,7 @@ Usage
   python scripts/build_standalone.py --only main     # one module
   python scripts/build_standalone.py --keep-stage    # reuse tmp/buildsrc
   python scripts/build_standalone.py --wait 900
+  python scripts/build_standalone.py --only o01 --asm   # assembly listing instead
 
 Exit status is 0 only when every module compiled.
 """
@@ -47,11 +48,15 @@ def modules():
     return sorted(n for n in os.listdir(BUILDSRC) if n.lower().endswith(".c"))
 
 
-def write_batch(mods):
+def write_batch(mods, asm_mode=False):
+    # -S asks BCC for an assembly listing (.ASM) and is mutually exclusive with -c,
+    # which produces the object.  Everything else stays identical, so the listing shows
+    # exactly the code the real build compiles.
+    flags = CFLAGS.replace("-c", "-S") if asm_mode else CFLAGS
     bat = ["@echo off", "set INCLUDE=D:\\INCLUDE", "set PATH=D:\\BIN"]
     for m in mods:
         stem = m[:-2]
-        bat.append('D:\\BIN\\BCC.EXE %s %s > %s.log' % (CFLAGS, m, stem))
+        bat.append('D:\\BIN\\BCC.EXE %s %s > %s.log' % (flags, m, stem))
     # overlay thunks are assembly (jmp far to the resident routine)
     if os.path.isfile(os.path.join(BUILDSRC, "ovr.asm")):
         bat.append('E:\\BIN\\TASM.EXE /zi /m2 ovr.asm > ovr.log')
@@ -99,6 +104,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--only", help="compile a single staged module (e.g. main)")
     ap.add_argument("--keep-stage", action="store_true")
+    ap.add_argument("--asm", action="store_true",
+                    help="emit Turbo C assembly listings (.ASM) instead of objects")
     ap.add_argument("--wait", type=int, default=1200)
     a = ap.parse_args()
 
@@ -111,7 +118,7 @@ def main():
         if not mods:
             raise SystemExit("no staged module named " + want)
     for m in mods:
-        for ext in (".obj", ".log"):
+        for ext in (".obj", ".asm", ".log"):
             try:
                 os.remove(os.path.join(BUILDSRC, m[:-2] + ext))
             except FileNotFoundError:
@@ -121,7 +128,7 @@ def main():
     except FileNotFoundError:
         pass
 
-    conf = write_batch(mods)
+    conf = write_batch(mods, a.asm)
     subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "fbov", "run_dosbox.py"),
                     "--conf", conf, "--wait", str(a.wait),
                     "--until", os.path.join(BUILDSRC, "DONE.FLG")], check=True)
@@ -129,9 +136,9 @@ def main():
     rows = []
     for m in mods:
         stem = m[:-2]
-        obj = os.path.join(BUILDSRC, stem + ".obj")
+        product = os.path.join(BUILDSRC, stem + (".asm" if a.asm else ".obj"))
         errs, warns, first = parse_log(os.path.join(BUILDSRC, stem + ".log"))
-        ok = os.path.exists(obj)
+        ok = os.path.exists(product)
         status = "ok" if ok else "FAIL"
         rows.append((m, status, errs, warns, first))
 
@@ -145,6 +152,8 @@ def main():
     for m, st, e, w, first in rows:
         if st != "ok":
             print("  FAIL %-10s errors=%d  %s" % (m, e, first[:110]))
+    if a.asm:
+        print("listings in " + BUILDSRC)
     print("report: " + REPORT)
     return 0 if good == len(rows) else 1
 

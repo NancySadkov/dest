@@ -4798,3 +4798,47 @@ matches, and touched no `in_stack_` at all.
   grep_checks 48,982 -> 47,719 this turn (-1,263); build 65/65 clean; LINK.LOG 65 bytes /
   0 problems; compare_state 1,627/0/0; diff_dgroup 972/1,868;
   compare_runtime 1,546/11 main entry, 1,545/11 post-init_cfg
+
+### Assembly listings are now available, and they close the `driver_fillRect` gap
+
+`scripts/build_standalone.py --asm` (optionally with `--only <module>`) swaps `-c` for `-S`
+in the same BCC invocation, so the listing shows exactly the code the real build compiles:
+
+```
+python scripts/build_standalone.py --only o01 --asm
+  -> tmp/buildsrc/O01.ASM   (95,205 bytes, source interleaved with assembly)
+```
+
+That turns several earlier "rests on reasoning" claims into measurements.  `driver_fillRect`
+(2d63:05e5) compiles to:
+
+```
+ 3060  mov  ax, word ptr [bp+16]      ; dstSeg - the 6th argument, 0x10 = 16
+ 3061  mov  word ptr [bp-6], ax       ; ... which becomes the far pointer's SEGMENT word
+ 3062  mov  word ptr [bp-8], dx       ; ... with the offset beside it
+ ...
+ 3102  les  bx, dword ptr [bp-4]      ; load ES:BX from that far pointer
+ 3103  mov  al, byte ptr [bp+14]
+ 3104  mov  byte ptr es:[bx], al      ; the fill, through ES
+ ...
+ 3143  pop  di
+ 3144  pop  si
+ 3145  leave
+ 3146  ret                           ; AX never set - the function returns nothing
+```
+
+So the segment really does come from `dstSeg`, and the `void` return really is unset.  Note
+the selector differs from the original (`es:[di]` with `rep stosb` there, `les`+`es:[bx]`
+per byte here) - that is code shape, which AGENTS.md does not require to match, unlike the
+data it writes.
+
+Two things this unlocks for later turns:
+
+* any fix that claims to change *code shape* (segment selection, a call's argument order, a
+  widened type) can be checked against the original's instructions instead of argued;
+* the listing is the natural place to confirm a signature repair, because the `[bp+N]`
+  offsets it emits are the ABI itself - e.g. `distances` like `[bp+16]` above show where the
+  compiler believes each argument lives.
+
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; grep_checks 47,227
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
