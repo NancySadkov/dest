@@ -408,7 +408,7 @@ void __cdecl16far constr_blitRowObjects(brect_t *rect,uint16_t type)
     iVar2 = *(int *)(&mapSquareColumn[uVar3]);
     if ((0xb < iVar2 + 0x2f) && (iVar2 < 0xdf)) {
       bVar1 = constr_setHighlightAtOffset(iVar2,0,0);
-      if ((*(byte *)(CONCAT11(extraout_AH,bVar1) * 0x27 + 0x11e) & 5) != 0) {
+      if ((BuildingTypes[CONCAT11(extraout_AH,bVar1)].flags & 5) != 0) {
         iVar2 = CONCAT11(extraout_AH,bVar1) * 0xc;
         gfx.seg = *(uint16_t *)
                    ((char *)0x28eda + iVar2);

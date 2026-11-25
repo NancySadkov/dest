@@ -1147,7 +1147,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
     do {
       if (((cVar4 == '\0') && (0xf7 < (int)unaff_SI)) &&
          (in_DX = 0x2410, ((unit_t *)GUnits)[(int)unaff_SI].level < 8)) {
-        if ((*(uint *)((uVar11 >> 8) * 0x27 + 0x121) & 0x80) == 0) {
+        if ((BuildingTypes[(uVar11 >> 8)].flags2 & 0x80) == 0) {
           ovc39_loadArchiveEntry(8);
         }
         else {

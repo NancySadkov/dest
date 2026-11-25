@@ -140,8 +140,7 @@ uint16_t __cdecl16far attact_usesGUnits(int x,int y)
     if ((uVar1 & 0xff) == 0) {
       uVar2 = 0;
     }
-    else if ((*(byte *)((uint)((unit_t *)GUnits + (*(short (*) [148] [60])GUnitGrid)[x][y])->bldType
-                        * 0x27 + 0x11e) & 3) == 3) {
+    else if ((BuildingTypes[(uint)((unit_t *)GUnits + (*(short (*) [148] [60])GUnitGrid)[x][y])->bldType].flags & 3) == 3) {
       uVar2 = 0;
     }
     else {

@@ -24,7 +24,7 @@ int __cdecl16far unit_usesGUnits(int unitIndex)
   int value;
 
   units = (unit_t *)GUnits;
-  value = *(int *)((uint)(units + unitIndex)->bldType * 0x27 + 0x12e);
+  value = BuildingTypes[(uint)(units + unitIndex)->bldType].sight;
   quality = ovr_constr_usesGMapFlags2(units[unitIndex].x,units[unitIndex].y);
   if ((quality & 0xff) == 3) {
     value = value * 3 >> 1;
@@ -109,7 +109,7 @@ void __cdecl16far unit_usesAlignUp4(void)
     }
     for (index = 0xf8; index < GUnitCount; index = index + 1) {
       uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
-      if (((*(int *)((uint)((unit_t *)GUnits + index)->bldType * 0x27 + 0x12e) != 0) &&
+      if (((BuildingTypes[(uint)((unit_t *)GUnits + index)->bldType].sight != 0) &&
           (bVar1 = ((unit_t *)GUnits)[index].unitType, bVar1 != 0xff)) &&
          (typePtr = *(uint32_t *)((uint)bVar1 << 2), *(char *)((int)typePtr + 0x3f) == '\0')) {
         iVar4 = unit_usesGUnits(index);

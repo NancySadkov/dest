@@ -1286,15 +1286,15 @@ L_OVC49_8699_18c4_1CA7:
       iVar14 = 0;
       uVar27 = (uint16_t)((ulong)GUnits >> 0x10);
       puVar23 = (unit_t *)GUnits;
-      pcVar10 = (char *)((int)(((long)*(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x125) *
+      pcVar10 = (char *)((int)(((long)BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1))].cost *
                                 (long)(int)(uint)puVar23[uStackY_26].level & 0xffffU) / 0x18) + 1);
       uVar15 = (uint)((ulong)in_stack_0000ffe0 >> 0x10);
       in_stack_0000ffe0 = (uint16_t)((char *)CONCAT22(uVar15,pcVar10));
       if (*(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x116) == 0 &&
           *(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x118) == 0) {
-        if (((uStackY_26 < 0xf8) || (*(int *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x125) == 0)) ||
-           ((*(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x121) & 4) != 0)) {
-          if ((((*(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 0x121) & 4) == 0) ||
+        if (((uStackY_26 < 0xf8) || (BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1))].cost == 0)) ||
+           ((BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1))].flags2 & 4) != 0)) {
+          if ((((BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1))].flags2 & 4) == 0) ||
               (puVar23[uStackY_26].unitType == 0xff)) ||
              (uVar31 = *(uint32_t *)((uint)puVar23[uStackY_26].unitType << 2),
              *(char *)((int)uVar31 + 0x3f) != '\0')) {
@@ -1334,9 +1334,8 @@ L_OVC49_8699_18c4_1CA7:
           auStackY_2f2[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( (char *)"Upgrade");
           iVar14 = iVar14 + 1;
           uVar27 = 0x195d;
-          pcVar10 = (char *)*(uint *)(((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) +
-                                      (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 300)) * 0x27 +
-                                     0x125);
+          pcVar10 = (char *)BuildingTypes[((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) +
+                                      (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 300))].cost;
           in_stack_0000ffe0 = (uint16_t)((char *)(ZEXT24(pcVar10) << 0x10));
           if ((*(uint8_t *)((uint8_t *)&(bStackY_32.seg) + 1)) == '\0') {
             pcVar10 = ovr_fmVsprintf(" Upgrade costs %d gp.",
@@ -1352,7 +1351,7 @@ L_OVC49_8699_18c4_1CA7:
         auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)(unsigned long)(unsigned long)( (char *)0x26510);
         auStackY_2f2[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( (char *)"Repair");
         iVar14 = iVar14 + 1;
-        uVar15 = *(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x125);
+        uVar15 = BuildingTypes[((uint)uStackY_22 >> 8)].cost;
         uVar20 = uVar15 % 5;
         pcVar10 = (uint16_t)((char *)(uVar15 / 5 + 1));
         in_stack_0000ffe0 = (uint16_t)((char *)(ZEXT24(pcVar10) << 0x10));
@@ -1366,7 +1365,7 @@ L_OVC49_8699_18c4_1CA7:
       }
       bVar9 = ((unit_t *)GUnits)[uStackY_26].unitType;
       uStackY_24 = CONCAT11((*(uint8_t *)((uint8_t *)&(uStackY_24) + 1)),bVar9);
-      if ((((*(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x121) & 0x400) == 0) && (bVar9 != 0xff)) &&
+      if ((((BuildingTypes[((uint)uStackY_22 >> 8)].flags2 & 0x400) == 0) && (bVar9 != 0xff)) &&
          (*(char *)((int)*(uint32_t *)((uint)bVar9 << 2) + 0x3f) == '\0')) {
         (&stk_ffec)[iVar14] = 7;
         auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)(unsigned long)(unsigned long)( (char *)0x26510);
@@ -1374,7 +1373,7 @@ L_OVC49_8699_18c4_1CA7:
         iVar14 = iVar14 + 1;
       }
       uVar33 = 0x19;
-      if (((*(uint *)(((uint)uStackY_22 >> 8) * 0x27 + 0x121) & 4) == 0) && (0xf7 < uStackY_26)) {
+      if (((BuildingTypes[((uint)uStackY_22 >> 8)].flags2 & 4) == 0) && (0xf7 < uStackY_26)) {
         uVar33 = 0x24;
         if (*(char *)((int)Entities + (*(uint16_t *)((uint8_t *)&(in_stack_00000008) + 2)) * 0x37 + 0x1a) != (char)uStackY_24) {
           (&stk_ffec)[iVar14] = 6;

@@ -640,7 +640,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
           uStack_1a = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),(byte)uStack_1a + 1);
         }
         puStack_12 = (uint *)0x0;
-        if ((*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x11e) & 3) == 1) {
+        if ((BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].flags & 3) == 1) {
           uStack_1a = (uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) << 8;
           while ((byte)uStack_1a < 4) {
             puStack_12 = (uint *)((uint)puStack_12 |
@@ -653,7 +653,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
            ) {
           pbVar2 = &((unit_t *)GUnits)[(int)puVar49].flags;
           *pbVar2 = *pbVar2 | 3;
-          pfVar20 = (far_t far *)(*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x133) - 7);
+          pfVar20 = (far_t far *)(BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].unitType - 7);
           units = (unit_t *)GUnits;
           uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
           if (pfVar20 < (far_t far *)((byte *)__C0_ASM_CopyRight + 0x12)) {
@@ -1149,8 +1149,7 @@ L_OVC22_5087_4975_4ABE:
                   uStack_8 = CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_8) + 1)),bVar17);
                   pfVar20 = (far_t far *)uStack_6;
                   if (ListCount <= bVar17) goto L_OVC22_5087_4975_4ABE;
-                } while (*(char *)((uint)(units + *(int *)((uint)bVar17 * 2 + -0x6d44))->bldType *
-                                   0x27 + 0x133) != '\x12');
+                } while (BuildingTypes[(uint)(units + *(int *)((uint)bVar17 * 2 + -0x6d44))->bldType].unitType != '\x12');
                 iVar30 = *(int *)((uint)bVar17 * 2 + -0x6d44);
               } while( true );
             case (far_t far *)0xd:
@@ -1721,65 +1720,65 @@ L_OVC22_5087_0234_32B8:
               iVar29 = (uint)((int)unaff_DI + 5) % 7 << 2;
             } while( true );
           }
-          if (*(char *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x133) == '\x13') {
-            uVar22 = *(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x12a);
+          if (BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].unitType == '\x13') {
+            uVar22 = BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].storage;
             bVar58 = CARRY2(uStack_38,uVar22);
             uStack_38 = uStack_38 + uVar22;
             iStack_36 = iStack_36 + (uint)bVar58;
           }
           else {
-            uVar22 = *(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x12a);
+            uVar22 = BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].storage;
             bVar58 = CARRY2(uStack_34,uVar22);
             uStack_34 = uStack_34 + uVar22;
             resourceTotals[0] = resourceTotals[0] + (uint)bVar58;
           }
-          if (*(char *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x133) == '\x1d') {
+          if (BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].unitType == '\x1d') {
             if ((*(uint8_t *)((uint8_t *)&(uStack_6) + 2)) == '\0') {
-              resourceTotals[*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131)] =
-                   resourceTotals[*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131)] +
-                   (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x129);
+              resourceTotals[BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].resource] =
+                   resourceTotals[BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].resource] +
+                   (uint)BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].output;
             }
           }
-          else if (*(char *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x133) == '\x10') {
+          else if (BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].unitType == '\x10') {
             if ((*(uint8_t *)((uint8_t *)&(uStack_6) + 2)) != '\0') {
-              resourceTotals[*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131)] =
-                   resourceTotals[*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131)] +
-                   (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x129);
+              resourceTotals[BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].resource] =
+                   resourceTotals[BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].resource] +
+                   (uint)BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].output;
             }
           }
-          else if (*(char *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x129) != '\0') {
-            if (*(char *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x133) == '\r') {
+          else if (BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].output != '\0') {
+            if (BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].unitType == '\r') {
               if ((*(uint8_t *)((uint8_t *)&(uStack_6) + 3)) != '\0') {
-                resourceTotals[*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131) + 3] =
-                     resourceTotals[*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131) + 3] +
-                     (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x129);
+                resourceTotals[BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].resource + 3] =
+                     resourceTotals[BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].resource + 3] +
+                     (uint)BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].output;
               }
             }
             else {
-              resourceTotals[*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131) + 3] =
-                   resourceTotals[*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131) + 3] +
-                   (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x129);
+              resourceTotals[BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].resource + 3] =
+                   resourceTotals[BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].resource + 3] +
+                   (uint)BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].output;
             }
           }
-          iStack_22 = iStack_22 + (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x127);
+          iStack_22 = iStack_22 + (uint)BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].housing;
           if (0xf7 < (int)puVar49) {
             pcVar21 = ovr_ovc22_textPOPULATION((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),partyIndex,0,0,0);
             uStack_20 = uStack_20 + (int)pcVar21;
             uVar22 = ovc22_seasonalIncome((*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)),partyIndex,0,0,0);
             iVar30 = iVar30 + uVar22;
           }
-          if (((*(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x121) & 1) != 0) &&
+          if (((BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].flags2 & 1) != 0) &&
              (((*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x2f) == -1 ||
                (bVar17 = *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x2f),
                uVar23 = CONCAT11((char)(uVar23 >> 8),bVar17),
-               (1 << (bVar17 & 0x1f) & (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x11f)) != 0))
-              && (*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131) < 4)))) {
-            *(int *)(&stk_ffbc + (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131) * 2) =
-                 *(int *)(&stk_ffbc + (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131) * 2)
+               (1 << (bVar17 & 0x1f) & (uint)BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].type) != 0))
+              && (BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].resource < 4)))) {
+            *(int *)(&stk_ffbc + (uint)BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].resource * 2) =
+                 *(int *)(&stk_ffbc + (uint)BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].resource * 2)
                  + 1;
           }
-          if ((*(uint *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x121) & 0x200) != 0) {
-            iStack_3c = iStack_3c + (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1)) * 0x27 + 0x131);
+          if ((BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].flags2 & 0x200) != 0) {
+            iStack_3c = iStack_3c + (uint)BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].resource;
           }
         }
       }
@@ -1929,7 +1928,7 @@ switchD_5000_123d_caseD_3:
         uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
         units = (unit_t *)GUnits;
         if ((int)(uVar31 & 0xff) <
-            (int)(100 - (uint)*(byte *)((uint)(units + (int)unaff_DI)->bldType * 0x27 + 0x130))) {
+            (int)(100 - (uint)BuildingTypes[(uint)(units + (int)unaff_DI)->bldType].durability)) {
           bVar17 = (units + (int)unaff_DI)->bldType;
           uStack_20 =(uint16_t)( (byte *)CONCAT11((*(uint8_t *)((uint8_t *)&(uStack_20) + 1)),bVar17));
           units[(int)unaff_DI].level = units[(int)unaff_DI].level - 1;
@@ -2001,14 +2000,14 @@ L_upd_units_5087_1d7d_202C:
                 uVar31 = ovr_randBelow(100,0);
                 uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
                 units = (unit_t *)GUnits;
-                if (*(byte *)((uint)(units + (int)puVar49)->bldType * 0x27 + 0x130) <=
+                if (BuildingTypes[(uint)(units + (int)puVar49)->bldType].durability <=
                     (byte)uVar31) {
                   if (units[(int)puVar49].level != 0) {
                     units[(int)puVar49].level = units[(int)puVar49].level - 1;
                   }
                   units = (unit_t *)GUnits;
                   uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
-                  if (((*(uint *)(((uint)uStack_20 & 0xff) * 0x27 + 0x121) & 4) == 0) &&
+                  if (((BuildingTypes[((uint)uStack_20 & 0xff)].flags2 & 4) == 0) &&
                      ((iVar29 = 0, units[(int)puVar49].level == 0 ||
                       (iVar29 = ((uint)uStack_20 & 0xff) * 0x27,
                       (*(uint *)(iVar29 + 0x121) & 0x200) != 0)))) {
@@ -2019,7 +2018,7 @@ L_upd_units_5087_1d7d_202C:
                   }
                   else if (((((bld_inst_t *)BldInstances + ((uint)uStack_20 & 0xff))->ofs != 0 ||
                              *(int *)((int)&BldInstances[0].seg + ((uint)uStack_20 & 0xff) * 0xc) !=
-                             0) || (*(char *)(((uint)uStack_20 & 0xff) * 0x27 + 0x11e) == '\x10'))
+                             0) || (BuildingTypes[((uint)uStack_20 & 0xff)].flags == '\x10'))
                           && (uVar53 = ovc22_usesGOngoingBattle2
                                                  (*(byte *)&units[(int)puVar49].x,
                                                   *(byte *)&units[(int)puVar49].y),
@@ -2412,7 +2411,7 @@ L_upd_units_5087_1d7d_202C:
   while (puVar49 = (uint *)((int)puVar49 + 1), puVar49 < GUnitCount) {
     uVar53 = (uint16_t)((ulong)GUnits >> 0x10);
     units = (unit_t *)GUnits;
-    if ((*(uint *)((uint)(units + (int)puVar49)->bldType * 0x27 + 0x121) & 0x40) != 0) {
+    if ((BuildingTypes[(uint)(units + (int)puVar49)->bldType].flags2 & 0x40) != 0) {
       if (units[(int)puVar49].timer != 0) {
         units[(int)puVar49].timer = units[(int)puVar49].timer - 1;
       }
@@ -3176,7 +3175,7 @@ void __cdecl16far upd_usesAlignUp4(void)
           unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
           units = (unit_t *)GUnits;
           if ((int)(randVal & 0xff) <
-              (int)(100 - (uint)*(byte *)((uint)(units + unitIdx)->bldType * 0x27 + 0x130))) {
+              (int)(100 - (uint)BuildingTypes[(uint)(units + unitIdx)->bldType].durability)) {
             bldType = (units + unitIdx)->bldType;
             units[unitIdx].level = units[unitIdx].level - 1;
             units = (unit_t *)GUnits;
@@ -3238,7 +3237,7 @@ void __cdecl16far upd_usesAlignUp4(void)
                   randVal = ovr_randBelow(100,0);
                   unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
                   units = (unit_t *)GUnits;
-                  if (*(byte *)((uint)(units + unitIdx)->bldType * 0x27 + 0x130) <= (byte)randVal) {
+                  if (BuildingTypes[(uint)(units + unitIdx)->bldType].durability <= (byte)randVal) {
                     if (units[unitIdx].level != 0) {
                       units[unitIdx].level = units[unitIdx].level - 1;
                     }
@@ -3642,7 +3641,7 @@ void __cdecl16far upd_usesAlignUp4(void)
     for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
       unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
       units = (unit_t *)GUnits;
-      if ((*(uint *)((uint)(units + unitIdx)->bldType * 0x27 + 0x121) & 0x40) != 0) {
+      if ((BuildingTypes[(uint)(units + unitIdx)->bldType].flags2 & 0x40) != 0) {
         if (units[unitIdx].timer != 0) {
           units[unitIdx].timer = units[unitIdx].timer - 1;
         }
@@ -3928,19 +3927,19 @@ bool __cdecl16far ovc22_textArena2(uint x,int y)
   grid = (short (*) [148] [60])GUnitGrid;
   units = (unit_t *)GUnits;
   if ((units[(*grid)[x][y]].bldType != 0) &&
-     ((*(uint *)((uint)units[(*grid)[x][y]].bldType * 0x27 + 0x121) & 0x1000) == 0)) {
+     ((BuildingTypes[(uint)units[(*grid)[x][y]].bldType].flags2 & 0x1000) == 0)) {
     return false;
   }
   if ((int)x < 4) {
     return false;
   }
-  if (*(byte *)((uint)units[(*grid)[x + -1][y]].bldType * 0x27 + 0x11b) >= 2) {
+  if (BuildingTypes[(uint)units[(*grid)[x + -1][y]].bldType].size >= 2) {
     return false;
   }
-  if (*(byte *)((uint)units[(*grid)[x + -2][y]].bldType * 0x27 + 0x11b) >= 3) {
+  if (BuildingTypes[(uint)units[(*grid)[x + -2][y]].bldType].size >= 3) {
     return false;
   }
-  if (*(byte *)((uint)units[(*grid)[x + -3][y]].bldType * 0x27 + 0x11b) >= 4) {
+  if (BuildingTypes[(uint)units[(*grid)[x + -3][y]].bldType].size >= 4) {
     return false;
   }
   for (recIdx = 0; recIdx < (int)(uint)GRecordCount; recIdx = recIdx + 1) {
@@ -4599,8 +4598,7 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
       matchIdx = '\0';
       for (listIndex = 0; listIndex < ListCount; listIndex = listIndex + 1) {
         unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
-        if ((*(char *)((uint)((unit_t *)GUnits + *(int *)((uint)listIndex * 2 + -0x6d44))->bldType *
-                       0x27 + 0x133) == '\x12') &&
+        if ((BuildingTypes[(uint)((unit_t *)GUnits + *(int *)((uint)listIndex * 2 + -0x6d44))->bldType].unitType == '\x12') &&
            (((unit_t *)GUnits)[*(int *)((uint)listIndex * 2 + -0x6d44)].unitType == partyIndex)) {
           if (matchIdx == targetIdx) break;
           matchIdx = matchIdx + '\x01';

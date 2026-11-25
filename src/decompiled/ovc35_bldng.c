@@ -118,10 +118,10 @@ bldng_buildMenuEntries(uint32_t bldTypes,far_t entries,int count,uint8_t partyIn
   bldTypesOfs = (int)bldTypes;
   for (i = 0; count + -1 > i; i = i + 1) {
     tableIdx = bldng_usesGStrangeTable(*(byte *)(bldTypesOfs + i * 2));
-    minKey = *(uint *)((tableIdx & 0xff) * 0x27 + 0x125);
+    minKey = BuildingTypes[(tableIdx & 0xff)].cost;
     for (j = i + 1; j < count; j = j + 1) {
       tableIdx = bldng_usesGStrangeTable(*(byte *)(bldTypesOfs + j * 2));
-      sortKey = *(uint *)((tableIdx & 0xff) * 0x27 + 0x125);
+      sortKey = BuildingTypes[(tableIdx & 0xff)].cost;
       if (sortKey < minKey) {
         swapTypes = *(uint16_t *)(bldTypesOfs + j * 2);
         *(uint16_t *)(bldTypesOfs + j * 2) = *(uint16_t *)(bldTypesOfs + i * 2);
@@ -130,13 +130,13 @@ bldng_buildMenuEntries(uint32_t bldTypes,far_t entries,int count,uint8_t partyIn
         *(far_t *)(entries.ofs + j * 4) = *(far_t *)(entries.ofs + i * 4);
         *(far_t *)(entries.ofs + i * 4) = swapEntry;
         tableIdx = bldng_usesGStrangeTable(*(byte *)(bldTypesOfs + i * 2));
-        minKey = *(uint *)((tableIdx & 0xff) * 0x27 + 0x125);
+        minKey = BuildingTypes[(tableIdx & 0xff)].cost;
       }
     }
   }
   for (i = 0; i < count; i = i + 1) {
     tableIdx = bldng_usesGStrangeTable(*(byte *)(bldTypesOfs + i * 2));
-    sortKey = *(uint *)((tableIdx & 0xff) * 0x27 + 0x125);
+    sortKey = BuildingTypes[(tableIdx & 0xff)].cost;
     entryPair = (uint16_t *)(entries.ofs + i * 4);
     entryOfs = *entryPair;
     entryPtr = (byte *)CONCAT22(entryPair[1],entryOfs);
@@ -222,7 +222,7 @@ void bldng_selectBuildingType(byte partyIndex)
   while( true ) {
     if (0x30 < iStack_6) break;
     uVar2 = bldng_usesGStrangeTable((byte)iStack_6);
-    if ((*(byte *)((uVar2 & 0xff) * 0x27 + 0x11f) & bitMask) != 0) {
+    if ((BuildingTypes[(uVar2 & 0xff)].type & bitMask) != 0) {
       uVar2 = bldng_usesGStrangeTable((byte)iStack_6);
       if (*(char *)((uVar2 & 0xff) * 0x27 + 0x12d) == '\0') {
         uVar3 = bldng_compute2((uint8_t)iStack_6,in_stack_00000004);

@@ -6061,3 +6061,68 @@ module ordering shown above is one clear instance, not a gap that better keying 
 
   grep_checks 42,181; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### BuildingTypes was being read from DGROUP: 75 sites fixed, and the -ml block cleared
+
+Investigating `ovc23_textConstructionAbandoned`'s `-ml` errors exposed a much larger defect.
+
+Its residual errors were not the `(T *)(integer)` class at all.  They were `GRecords[pcVar12]` with
+`pcVar12` declared `char *`, plus reads written as
+
+```c
+*(byte *)((uint)bldType * 0x27 + 0x11e)
+```
+
+which look like pointer arithmetic but are the export's **flattened absolute address** for
+`BuildingTypes[bldType].flags`.  The proof is the original's own symbol table:
+
+```
+195d:010e   BuildingTypes
+195d:0134   BuildingTypes[0].flags3      -> 0x134 - 0x10e = 0x26  = flags3
+0x11e - 0x10e = 0x10 = flags
+0x121 - 0x10e = 0x13 = flags2
+0x133 - 0x10e = 0x25 = unitType
+```
+
+So Ghidra folded the array base (0x10e, in segment 195d) into every field offset.  In the original
+that is harmless - the code says `mov dx,0x60 / mov es,dx / test es:[bx+0x11e]`.  In this rebuild
+BuildingTypes lives in its own group (`6822:0000`), so `*(byte *)(idx*0x27 + 0x11e)` reads
+**DGROUP+0x11e+idx*0x27**, an unrelated variable.  Every one of those reads was wrong.
+
+`tmp/fix_bldg_fields.py` rewrites `*(T *)(<index> * 0x27 + 0x1XX)` to `BuildingTypes[<index>].<field>`
+over a field table derived from the offsets above.  It refuses anything it cannot parse or whose
+width disagrees: **75 sites rewritten across 14 modules, 5 left alone** (the high word of the
+`action` far pointer at 0x116/0x118, and the high byte of `halfWidth` at 0x12d - all need an
+explicit split rather than a field name).
+
+Verified, not assumed: **all 248 records' non-pointer tails are byte-present in REBUILT.EXE**
+(`tmp/verify_buildingtypes.py`), and the spot values cross-check against another function - buildings
+1..3 have `flags3 == 1`, which is exactly the `flags3 == 1 -> allowed` case newly written into
+`bldng_textArena`.  BuildingTypes is outside DGROUP, which is why `compare_state` never noticed.
+
+### ovc23_textConstructionAbandoned (55fe:0cdf, 594 bytes) re-derived
+
+315 lines -> 48.  Decoded from the listing with the jump table at ip 0x0f31 (targets 0x65, 0xe2,
+0x166, 0x1dd):
+
+```
+if (attact_usesGUnits(x + dirX[dir], y + dirY[dir]) == 0) return 0;
+switch (dir):
+   0: GUnitGrid[x][y-1]   1: GUnitGrid[x+1][y]   2: GUnitGrid[x][y]   3: GUnitGrid[x][y]
+   >3: return 0                                   ; cmp bx,3 / jbe
+bldType = GUnits[idx].bldType;  if (>= 0xf8) return 0
+if (dir is 0 or 2) require flags & 1  else require flags & 2;  then require flags & 0x20
+```
+
+Cases 2 and 3 read the same cell and share their direction bit, exactly as in the adjacent
+`ovc23_usesAlignUp43` - two independently decoded functions agreeing on both quirks.  The signature
+was wrong too: both parameters are words, not pointers (the caller already cast ints into them, and
+the callee reads `mov si,[bp+6]` / `mov di,[bp+8]`), so it is now `(int x,int y,byte dir)`.
+
+**This clears the `-ml` block for o23**: a full `-ml` build now reports
+**61/65 modules, 51 errors** (was 60/65, 61), with o22 19, o49 28 and the two inline-asm sites
+(o48 `init_assets2`, stubs `stsh_store`) remaining.  Still not linkable, so still no `-ml`
+measurement.
+
+  grep_checks 42,098 -> 41,307; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

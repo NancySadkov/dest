@@ -69,7 +69,7 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
   if (resetCount == 0) {
     for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
       units = (unit_t *)GUnits;
-      if ((*(byte *)((uint)(units + unitIdx)->bldType * 0x27 + 0x11e) & 3) != 0) {
+      if ((BuildingTypes[(uint)(units + unitIdx)->bldType].flags & 3) != 0) {
         ovr_ovc23_rebuildDirectionFlags(units[unitIdx].x,units[unitIdx].y);
         ovr_ovc23_rebuildDirectionFlags(((unit_t *)GUnits)[unitIdx].x + -1,
                                         ((unit_t *)GUnits)[unitIdx].y);

@@ -628,7 +628,7 @@ bool __cdecl16far ovc45_textArena2(byte bldType)
   if (BuildingTypes[bldType].unitType == '\x17') {
     for (idx = 0xf8; idx < GUnitCount; idx = idx + 1) {
       unitType = ((unit_t *)GUnits)[idx].unitType;
-      if (((*(char *)((uint)((unit_t *)GUnits + idx)->bldType * 0x27 + 0x133) == '\x17') &&
+      if (((BuildingTypes[(uint)((unit_t *)GUnits + idx)->bldType].unitType == '\x17') &&
           (unitType != 0xff)) &&
          (sheetRef = *(uint32_t *)((uint)unitType << 2),
           *(char *)((int)sheetRef + 0x3f) == '\0')) {

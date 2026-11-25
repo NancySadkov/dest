@@ -724,7 +724,7 @@ void __cdecl16far ovc23_textBuildThfres01Lbm(far_t dst);
 int __cdecl16far ovc23_isLargeBuilding(int x,int y);
 void __cdecl16far ovc23_usesGfxRndSeed2(int x,int y);
 uint __cdecl16far ovc23_usesAlignUp43(int x,int y,byte dir);
-bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte dir);
+bool __cdecl16far ovc23_textConstructionAbandoned(int x,int y,byte dir);
 void __cdecl16far ovc23_rebuildDirectionFlags(int x,int y);
 void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType);
 void __cdecl16far ovc23_removeRecord(int recordIndex);

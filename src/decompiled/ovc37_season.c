@@ -186,7 +186,7 @@ void __cdecl16far season_countPromotable(void)
   GPromotableCount = 0;
   for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
     units = (unit_t *)GUnits;
-    if ((((*(uint *)((uint)(units + unitIdx)->bldType * 0x27 + 0x121) & 0x60) == 0) &&
+    if ((((BuildingTypes[(uint)(units + unitIdx)->bldType].flags2 & 0x60) == 0) &&
         (units[unitIdx].unitType != 0xff)) &&
        (sheetRef = *(uint32_t *)((uint)units[unitIdx].unitType << 2),
         *(char *)((int)sheetRef + 0x3f) == '\0')) {

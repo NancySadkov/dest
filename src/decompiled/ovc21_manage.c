@@ -2395,15 +2395,15 @@ uint16_t __cdecl16far sub_OVC21_manage_c_24B1()
   do {
     uVar4 = in_AX;
     *(uint *)(uVar4 + unaff_DI) = unaff_BP;
-    if (*(char *)((unaff_BP & 0xff) * 0x27 + 0x133) == *(char *)(uVar4 + 8)) {
+    if (BuildingTypes[(unaff_BP & 0xff)].unitType == *(char *)(uVar4 + 8)) {
       *(int *)(uVar4 - 2) = *(int *)(uVar4 - 2) + 1;
-      if (*(char *)((unaff_BP & 0xff) * 0x27 + 0x131) == '\x01') {
+      if (BuildingTypes[(unaff_BP & 0xff)].resource == '\x01') {
         *(int *)*(uint32_t *)(uVar4 + 10) = *(int *)*(uint32_t *)(uVar4 + 10) + 1;
       }
-      else if (*(char *)((unaff_BP & 0xff) * 0x27 + 0x131) == '\x02') {
+      else if (BuildingTypes[(unaff_BP & 0xff)].resource == '\x02') {
         *(int *)*(uint32_t *)(uVar4 + 0xe) = *(int *)*(uint32_t *)(uVar4 + 0xe) + 1;
       }
-      else if (*(char *)((unaff_BP & 0xff) * 0x27 + 0x131) == '\x03') {
+      else if (BuildingTypes[(unaff_BP & 0xff)].resource == '\x03') {
         *(int *)*(uint32_t *)(uVar4 + 0x12) = *(int *)*(uint32_t *)(uVar4 + 0x12) + 1;
       }
     }

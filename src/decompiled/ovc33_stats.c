@@ -951,7 +951,7 @@ L_OVC27_2288:
             }
             uVar43 = (uint16_t)((ulong)GUnits >> 0x10);
             puVar35 = (unit_t *)GUnits;
-          } while ((((*(uint *)((uint)(puVar35 + (int)pfVar18)->bldType * 0x27 + 0x121) & 0x60) != 0
+          } while ((((BuildingTypes[(uint)(puVar35 + (int)pfVar18)->bldType].flags2 & 0x60) != 0
                     ) || (puVar35[(int)pfVar18].unitType == 0xff)) ||
                   (uVar46 = *(uint32_t *)((uint)puVar35[(int)pfVar18].unitType << 2),
                   *(char *)((int)uVar46 + 0x3f) != '\0'));
