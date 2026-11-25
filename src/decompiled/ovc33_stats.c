@@ -292,7 +292,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   byte *pbVar14;
   byte bVar23;
   uint uVar16;
-  char *pcVar17;
+  char *textPtr;
   far_t far *pfVar18;
   uint16_t uVar19;
   uint uVar20;
@@ -566,10 +566,10 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       do {
         uVar48 = uVar11;
         uVar49 = uVar47;
-        pcVar17 = (char *)ovr_ovc45_compute9(acStack_80);
+        textPtr = (char *)ovr_ovc45_compute9(acStack_80);
         in_stack_00000004 = (byte)in_DX;
         in_stack_00000005 = (undefined1)((uint)in_DX >> 8);
-        ovr_blitLabel(pcVar17);
+        ovr_blitLabel(textPtr);
         pfVar18 = (far_t far *)((char *)0x26510);
         BlitLetterType = 0;
         pbVar21 = unaff_DI;
@@ -622,10 +622,10 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
             in_stack_00000005 = 0;
             uVar48 = uVar11;
             uVar49 = uVar47;
-            pcVar17 = (char *)ovr_ovc45_compute9(acStack_80);
+            textPtr = (char *)ovr_ovc45_compute9(acStack_80);
             in_stack_00000004 = (byte)in_DX;
             in_stack_00000005 = (undefined1)((uint)in_DX >> 8);
-            pfVar18 = (far_t far *)ovr_blitLabel(pcVar17);
+            pfVar18 = (far_t far *)ovr_blitLabel(textPtr);
             pbVar21 = unaff_DI;
           }
           else {
@@ -635,10 +635,10 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
             in_stack_00000005 = 0;
             uVar48 = uVar11;
             uVar49 = uVar47;
-            pcVar17 = (char *)ovr_ovc45_compute9(acStack_80);
+            textPtr = (char *)ovr_ovc45_compute9(acStack_80);
             in_stack_00000004 = (byte)in_DX;
             in_stack_00000005 = (undefined1)((uint)in_DX >> 8);
-            pfVar18 = (far_t far *)ovr_blitLabel(pcVar17);
+            pfVar18 = (far_t far *)ovr_blitLabel(textPtr);
             pbVar21 = unaff_DI;
           }
         }

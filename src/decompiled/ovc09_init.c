@@ -1847,7 +1847,7 @@ void __cdecl16far init_usesRandBelow2(void)
   far_t dst;
   far_t dst_00;
   uint16_t uVar2;
-  uint uVar3;
+  uint cellValue;
   int iVar4;
   byte (*paabVar5) [59] [148];
   short (*paasVar6) [60] [148];
@@ -1886,23 +1886,23 @@ void __cdecl16far init_usesRandBelow2(void)
     uVar2 = ovr_randBelow(0x3b,0);
     y = uVar2 & 0xff;
     bStack_b = 100;
-    uVar3 = init_getMapCell(x,uVar2 & 0xff,(char)uVar2);
-    bStack_c = (byte)uVar3;
+    cellValue = init_getMapCell(x,uVar2 & 0xff,(char)uVar2);
+    bStack_c = (byte)cellValue;
     if (bStack_c < bStack_b) {
       bStack_b = bStack_c;
     }
-    uVar3 = init_getMapCell(x + 1,uVar2 & 0xff,(char)uVar2);
-    bStack_c = (byte)uVar3;
+    cellValue = init_getMapCell(x + 1,uVar2 & 0xff,(char)uVar2);
+    bStack_c = (byte)cellValue;
     if (bStack_c < bStack_b) {
       bStack_b = bStack_c;
     }
-    uVar3 = init_getMapCell(x,y + 1,(char)(y + 1));
-    bStack_c = (byte)uVar3;
+    cellValue = init_getMapCell(x,y + 1,(char)(y + 1));
+    bStack_c = (byte)cellValue;
     if (bStack_c < bStack_b) {
       bStack_b = bStack_c;
     }
-    uVar3 = init_getMapCell(x + 1,y + 1,(char)(y + 1));
-    bStack_c = (byte)uVar3;
+    cellValue = init_getMapCell(x + 1,y + 1,(char)(y + 1));
+    bStack_c = (byte)cellValue;
     if (bStack_c < bStack_b) {
       bStack_b = bStack_c;
     }
@@ -1944,11 +1944,11 @@ void __cdecl16far init_usesRandBelow2(void)
       puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[y] + x);
       *puVar1 = *puVar1 | (uint)(&edgeMasks)[(uint)bStack_13 * 4 + (uVar2 & 0xff)];
       iVar4 = y + ((int)(uint)abStack_9[(uint)bStack_13 * 2 + -1] >> 1);
-      uVar3 = init_getMapCell(x + (abStack_9[(uint)bStack_13 * 2 + -1] & 1),iVar4,(char)iVar4);
-      bStack_c = (byte)uVar3;
+      cellValue = init_getMapCell(x + (abStack_9[(uint)bStack_13 * 2 + -1] & 1),iVar4,(char)iVar4);
+      bStack_c = (byte)cellValue;
       iVar4 = y + ((int)(uint)abStack_9[(uint)bStack_13 * 2] >> 1);
-      uVar3 = init_getMapCell(x + (abStack_9[(uint)bStack_13 * 2] & 1),iVar4,(char)iVar4);
-      bStack_d = (byte)uVar3;
+      cellValue = init_getMapCell(x + (abStack_9[(uint)bStack_13 * 2] & 1),iVar4,(char)iVar4);
+      bStack_d = (byte)cellValue;
       if (bStack_c < bStack_b) {
         bStack_b = bStack_c;
       }
