@@ -54,41 +54,44 @@ uint16_t __cdecl16far ovc41_compute2(int count)
 void __cdecl16far ovc41_compute3(uint32_t view,...)
 
 {
-  uint uVar1;
-  char cVar2;
-  int *piVar3;
-  int iVar4;
-  uint *puVar5;
-  int iVar6;
-  uint16_t uVar7;
-  byte bStack_7;
-  
-  uVar7 = (uint16_t)(view >> 0x10);
-  iVar6 = (int)view;
-  bStack_7 = *(byte *)((int)&worldMenuLabels[9].ofs + 1 + (uint)*(byte *)(iVar6 + 0xd) * 0x95);
-  if (bStack_7 == 0xff) {
-    bStack_7 = 0;
+  /* Re-derived: `view` is a far pointer and its offset half is the menu-view record.
+     ownerIdx comes from the agnt-g table via view[0xd] (0xff normalises to 0);
+     entryOfs addresses a 0x94-stride table at view[0xf]*4.  An all-zero entry means
+     "nothing selected yet", so the cursor is placed one past the previous entry;
+     otherwise the stored position is compared and, when it is behind the cursor, the
+     cursor steps forward and ovc15_textView's delta is added to view[0x31]/view[0x32]. */
+  uint16_t ownerIdx;
+  int viewOfs;
+  uint16_t entryOfs;
+  int *entry;
+  uint entryLo;
+  char panDelta;
+
+  viewOfs = (int)view;
+  ownerIdx = *(byte *)((int)&worldMenuLabels[9].ofs + 1 +
+                       (uint)*(byte *)(viewOfs + 0xd) * 0x95);
+  if (ownerIdx == 0xff) {
+    ownerIdx = 0;
   }
-  piVar3 = (int *)((uint)bStack_7 * 0x94 + (uint)*(byte *)(iVar6 + 0xf) * 4);
-  if (*piVar3 == 0 && piVar3[1] == 0) {
-    iVar4 = (uint)bStack_7 * 0x94 + (uint)*(byte *)(iVar6 + 0xf) * 4;
-    uVar1 = *(uint *)(iVar4 + -4);
-    *(int *)(iVar6 + 0x12) = *(int *)(iVar4 + -2) + (uint)(0xfffe < uVar1);
-    *(int *)(iVar6 + 0x10) = uVar1 + 1;
+  entryOfs = (uint)ownerIdx * 0x94 + (uint)*(byte *)(viewOfs + 0xf) * 4;
+  entry = (int *)entryOfs;
+  if (*entry == 0 && entry[1] == 0) {
+    entryLo = *(uint *)(entryOfs + -4);
+    *(int *)(viewOfs + 0x12) = *(int *)(entryOfs + -2) + (uint)(0xfffe < entryLo);
+    *(int *)(viewOfs + 0x10) = entryLo + 1;
   }
   else {
-    puVar5 = (uint *)((uint)bStack_7 * 0x94 + (uint)*(byte *)(iVar6 + 0xf) * 4);
-    uVar1 = puVar5[1];
-    if ((uVar1 <= *(uint *)(iVar6 + 0x12)) &&
-       ((uVar1 != *(uint *)(iVar6 + 0x12) || (*puVar5 <= *(uint *)(iVar6 + 0x10))))) {
-      puVar5 = (uint *)((uint)bStack_7 * 0x94 + (uint)*(byte *)(iVar6 + 0xf) * 4);
-      uVar1 = *puVar5;
-      *(int *)(iVar6 + 0x12) = puVar5[1] + (uint)(0xfffe < uVar1);
-      *(int *)(iVar6 + 0x10) = uVar1 + 1;
-      *(char *)(iVar6 + 0xf) = *(char *)(iVar6 + 0xf) + '\x01';
-      cVar2 = ovr_ovc15_textView(view);
-      *(char *)(iVar6 + 0x31) = *(char *)(iVar6 + 0x31) + cVar2;
-      *(char *)(iVar6 + 0x32) = *(char *)(iVar6 + 0x32) + cVar2;
+    entryLo = entry[1];
+    if ((entryLo <= *(uint *)(viewOfs + 0x12)) &&
+       ((entryLo != *(uint *)(viewOfs + 0x12)) ||
+        ((uint)*entry <= *(uint *)(viewOfs + 0x10)))) {
+      entryLo = (uint)*entry;
+      *(int *)(viewOfs + 0x12) = entry[1] + (uint)(0xfffe < entryLo);
+      *(int *)(viewOfs + 0x10) = entryLo + 1;
+      *(char *)(viewOfs + 0xf) = *(char *)(viewOfs + 0xf) + '\x01';
+      panDelta = ovr_ovc15_textView(view);
+      *(char *)(viewOfs + 0x31) = *(char *)(viewOfs + 0x31) + panDelta;
+      *(char *)(viewOfs + 0x32) = *(char *)(viewOfs + 0x32) + panDelta;
     }
   }
   return;
