@@ -7213,3 +7213,64 @@ re-discovering it.
 
   grep_checks 40,526 (unchanged - none of this is a section-5 pattern); build 65/65 clean
   LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### uiMainMenuLoop, part 1: the saves table is a far object again
+
+`4528:14b1`, 1573 bytes, 584 instructions, 69 calls.  The function reads and writes a 400-byte table
+of 100 far pointers (`{ofs, seg}` pairs) returned by `ovr_stshAlloc`.  Four coupled defects, all
+evidenced from the listing:
+
+1. **`entries_05` was `void *`** while `ovr_stshAlloc` is declared `void far *`, so the segment was
+   dropped at the assignment.
+2. **`in_DX` was a never-assigned local** - 15 uses, all uninitialised.  The original keeps the
+   segment in DX across the call and stores it immediately:
+
+   ```
+   005A lcall 0x170,0x43     ; stshAlloc(400)
+   0062 mov word ptr [bp-4], dx     ; segment
+   0065 mov word ptr [bp-6], ax     ; offset
+   ```
+
+   so it is the return's segment, not a register the export could observe separately.
+3. **About 30 dereferences went through `(int)entries_05 + i*4`** - the offset only - so every read and
+   write of the table addressed DS instead of the heap block.
+4. **Three `items_0N` far_t locals** still carried the seg/ofs swap.
+
+The fix keeps every offset expression exactly as exported and routes access through the segment:
+`savesSeg` is set once from `SEG_OF(entries_05)`, the four pointer temporaries become far pointers
+into a `far_t far *saves` view, and the field accesses become `saves[i].ofs` / `saves[i].seg`.  The
+export's `(uint)bVar5 * 4 + -4` / `-2` offsets on a 1-based menu index are entry `bVar5 - 1`'s offset
+and segment, which is what the new form says.
+
+**Measured:** `grep_checks` 40,526 -> 40,510 (-16, exactly the 16 `in_DX` matches); build 65/65;
+LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0; diff_dgroup 1,444/1,868; compare_runtime
+1,545/12.
+
+**Emitted-code check** (function alone, since the module cannot list as a whole): 859 instructions
+against the original's 584, 13 `les`/`lds` against 7, and **72 call instructions against 69**.  The
+three extra are `_far_from_u32` - one for each of the three remaining
+
+```c
+F_SCOPY(far_from_u32((uint32_t)(0x241026b7)),dst);
+```
+
+lines.  `far_from_u32` is a reconstruction helper (a `far_t` cannot be built from a `uint32_t` without
+one), not a call the original makes, and this change introduced no calls of its own.  More `les` than
+the original is expected: the original holds ES across accesses while our compiler reloads the far
+pointer after each call.
+
+### What is left in uiMainMenuLoop
+
+8 uses of `0x2410` remain, and they need more than a `_DS` substitution: `0x26b7`, `0x26d7`, `0x26e3`,
+`0x26f7`, `0x270b`, `0x27f4`, `0x283f` are **offsets into the original's DGROUP layout**, and our
+layout differs (diff_dgroup still reports 83 constant-delta runs), so `MK_FP(_DS, 0x26b7)` would point
+at different bytes.  Each needs the owning symbol resolved from `audit/dgroup_data.csv` before it can
+be written.  The `ovr_say(...,0x2410)` and `uiReadString(...,0x2410,...)` arguments do become `_DS`
+directly, since those point at our own literals.
+
+Also recorded: `_fsetmem` is declared `void __cdecl16far _fsetmem(void *dest, ...)` - a **near**
+destination - while all 17 call sites pass far pointers (either a far global or `CONCAT22(seg,ofs)`
+cast).  The original's call at `0x0068..0x0073` pushes four words (0, 400, seg, ofs), i.e. a far
+fill with the `(dest, len, val)` order.  So the first parameter must become `void far *` and the eight
+`(void *)CONCAT22(...)` sites must become `(void far *)`.  Left alone here because it is a 17-site
+class of its own and changing the prototype without all of them would be worse than leaving it.
