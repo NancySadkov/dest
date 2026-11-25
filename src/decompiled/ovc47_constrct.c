@@ -41,7 +41,9 @@ void __cdecl16far land_info(byte tileOffset)
   far_t entries_00;
   far_t entries_01;
   char cVar1;
-  uint uVar2;
+  uint tileVal;
+  uint unitIdx;
+  uint menuCount;
   uint16_t uVar3;
   char *textMsg;
   uint16_t *puVar5;
@@ -97,12 +99,12 @@ void __cdecl16far land_info(byte tileOffset)
   bStack_21 = 0xff;
   unitType = 0xff;
   tileX = (GfxRndSeed + (int)(char)tileOffset) - 2;
-  uVar2 = ovr_ovc45_usesGfxRndSeed2((int *)&tileX);
-  bldType = (byte)uVar2;
-  uVar2 = ovr_ovc45_getUnitIndex(tileX,GfxRndSeed2);
+  tileVal = ovr_ovc45_usesGfxRndSeed2((int *)&tileX);
+  bldType = (byte)tileVal;
+  unitIdx = ovr_ovc45_getUnitIndex(tileX,GfxRndSeed2);
   uVar11 = (uint16_t)((ulong)GUnits >> 0x10);
-  if (((unit_t *)GUnits)[uVar2].unitType != 0xff) {
-    unitType = ((unit_t *)GUnits)[uVar2].unitType;
+  if (((unit_t *)GUnits)[unitIdx].unitType != 0xff) {
+    unitType = ((unit_t *)GUnits)[unitIdx].unitType;
   }
   if (*(int *)((char)tileOffset * 2 + -0x6e29) != -1) {
     if (*(char *)(*(int *)((char)tileOffset * 2 + -0x6e29) * 0x12 + 0xc) == '\0') {
@@ -112,7 +114,7 @@ void __cdecl16far land_info(byte tileOffset)
     unitType = *(byte *)(*(int *)((uint)tileOffset * 2 + -0x6e29) * 0x12 + 9);
   }
   if (((BuildingTypes[bldType].flags2 & 0x80) == 0) &&
-     (((unit_t *)GUnits)[uVar2].level < 3)) {
+     (((unit_t *)GUnits)[unitIdx].level < 3)) {
     type = 0;
     uVar3 = ovr_randBelow(2,0);
     ovr_play_sfx(CONCAT11((char)(uVar3 >> 8),(char)uVar3 + '?'),type,0);
@@ -131,7 +133,7 @@ void __cdecl16far land_info(byte tileOffset)
       if (bStack_21 == 0xff) {
         uVar11 = (uint16_t)((ulong)GUnits >> 0x10);
         puVar10 = (unit_t *)GUnits;
-        if (puVar10[uVar2].unitType == 0xff) {
+        if (puVar10[unitIdx].unitType == 0xff) {
           if (bldType == 0) {
             uVar11 = ovr_ovc45_usesGMapFlags4(tileX,GfxRndSeed2);
             tileClass = (char)uVar11;
@@ -155,16 +157,16 @@ void __cdecl16far land_info(byte tileOffset)
         }
         else if (BuildingTypes[bldType].durability == 'd') {
           stashOfs = ovr_ovc15_usesStshRealloc
-                             ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),BLD_WORD(&BuildingTypes[bldType], name, 2),*(uint16_t *)((uint)puVar10[uVar2].unitType * 4),0,0,0,0,0);
+                             ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),BLD_WORD(&BuildingTypes[bldType], name, 2),*(uint16_t *)((uint)puVar10[unitIdx].unitType * 4),0,0,0,0,0);
           asm { mov uVar8,dx };
           textMsg = ovr_fmVsprintf("%s: Held by %s.",(char *)CONCAT22(uVar8,stashOfs));
           strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(uVar8,textMsg));
         }
         else {
           b = BuildingTypes[bldType].durability;
-          uVar11 = ovr_ovc45_compute7(puVar10[uVar2].level,b,b,
+          uVar11 = ovr_ovc45_compute7(puVar10[unitIdx].level,b,b,
                                       (uint)BuildingTypes[bldType].durability,
-                                      *(uint16_t *)((uint)puVar10[uVar2].unitType * 4));
+                                      *(uint16_t *)((uint)puVar10[unitIdx].unitType * 4));
           stashOfs = ovr_ovc15_usesStshRealloc
                              ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),(char)BLD_WORD(&BuildingTypes[bldType], name, 2),(char)uVar11,0,0,0,0,0);
           asm { mov uVar8,dx };
@@ -212,8 +214,8 @@ void __cdecl16far land_info(byte tileOffset)
       itemCode = (char)stashOfs;
     }
     else if (bStack_21 == 0xff) {
-      if (((BuildingTypes[bldType].flags2 & 2) == 0) || (0xf7 < uVar2)) {
-        if (((BuildingTypes[bldType].flags2 & 0x20) == 0) || (0xf7 < uVar2)) {
+      if (((BuildingTypes[bldType].flags2 & 2) == 0) || (0xf7 < unitIdx)) {
+        if (((BuildingTypes[bldType].flags2 & 0x20) == 0) || (0xf7 < unitIdx)) {
           if (bldType == 0) {
             ovr_ovc45_buildPlacementMessage
                       ((char)(GfxRndSeed + (int)(char)tileOffset + -2),(char)GfxRndSeed2,
@@ -237,20 +239,20 @@ void __cdecl16far land_info(byte tileOffset)
     else {
       bldType = *(byte *)(*(int *)((uint)bStack_21 * 2 + -0x6e29) * 0x12 + 8);
       if (bldType != 0) {
-        segTable[0] = 0x2410;
+        segTable[0] = _DS;
         menuItems = 0x7969;
         auStack_14[0] = 1;
       }
-      uVar2 = (uint)(bldType != 0);
+      menuCount = (uint)(bldType != 0);
       if (foundFlag != 0x0) {
-        segTable[uVar2 * 2] = 0x2410;   /* hand fix: this slot holds the DGROUP segment half, exactly as segTable[0] = 0x2410 above; the literal offset Ghidra printed is that same value */
-        *(char **)(&menuItems + uVar2 * 4) = (char *)"Change party";
-        auStack_14[uVar2] = 2;
-        uVar2 = uVar2 + 1;
+        segTable[menuCount * 2] = _DS;   /* hand fix: this slot holds the DGROUP segment half, exactly as segTable[0] = 0x2410 above; the literal offset Ghidra printed is that same value */
+        *(char **)(&menuItems + menuCount * 4) = (char *)"Change party";
+        auStack_14[menuCount] = 2;
+        menuCount = menuCount + 1;
       }
-      segTable[uVar2 * 2] = 0x2410;   /* hand fix: this slot holds the DGROUP segment half, exactly as segTable[0] = 0x2410 above; the literal offset Ghidra printed is that same value */
-      *(char **)(&menuItems + uVar2 * 4) = (char *)"Done";
-      auStack_14[uVar2] = 3;
+      segTable[menuCount * 2] = _DS;   /* hand fix: this slot holds the DGROUP segment half, exactly as segTable[0] = 0x2410 above; the literal offset Ghidra printed is that same value */
+      *(char **)(&menuItems + menuCount * 4) = (char *)"Done";
+      auStack_14[menuCount] = 3;
       again = '\0';
       do {
         uVar11 = (uint16_t)((ulong)Entities >> 0x10);
@@ -307,7 +309,7 @@ void __cdecl16far land_info(byte tileOffset)
         (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = uVar13;
         entries_00.ofs = (uint16_t)stashOfs;
         (*(uint8_t *)((uint8_t *)&(entries_00.seg) + 1)) = uVar14;
-        ovr_ovc28_compute2(entries_00,uVar2 + 1,hint_00,0,0);
+        ovr_ovc28_compute2(entries_00,menuCount + 1,hint_00,0,0);
         itemCode = (char)stashOfs;
         goldPartyIndex = 0xff;
         if (itemCode != '\0') {
