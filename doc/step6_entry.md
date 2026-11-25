@@ -4724,3 +4724,53 @@ be acted on for these two functions - their five arguments are all read.
 
   grep_checks 49,020; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,546/11, 1,545/11
+
+### A selection rule that turned whole-function work from risky into mechanical
+
+Every whole-function re-derivation in this session had been picked by raw section-5 mass
+(`tmp/rank_funcs.py`), and the two biggest entries (`ovc22_textRingProt`, 3,955 matches;
+`ovc23_textAdlibNone`, 985) are exactly the ones that cannot be rewritten safely: their
+bodies carry `unaff_*` register pseudo-variables, `in_stack_*`/`stk_*` bogus stack slots,
+`code_r0x...` labels and even a bogus `swi(1)` call, so the *control flow* is still wrong
+and naming individual slots leaves the real defects in place.
+
+`tmp/rank_clean.py` splits the ranking on that axis.  For every function it counts the
+section-5 mass and separately the "anomaly" identifiers:
+
+```
+ANOM = unaff_[A-Z] | in_[A-Z] | extraout_ | in_stack_ | stk_[0-9a-f]
+       | code_r0x | L_[A-Z0-9_]+ | swi( | ram0x | param_ | value[0-9] | num[_0-9]
+```
+
+Measured over the tree (excluding `crtl.c` / `ovl.c`):
+
+```
+clean: 121 functions, 5,716 section-5 matches   <- only the naming is missing
+dirty: 148 functions, 21,130 matches            <- control flow needs work first
+```
+
+A clean function's body is already faithful; every slot in it holds one value with one
+role, so renaming is evidence-based and the rewrite cannot change behaviour.  Five such
+rewrites in this session:
+
+| function | module | matches | shape |
+|---|---|---|---|
+| `bldng_buildMenuEntries` | ovc35_bldng.c | 116 | selection sort of a uint16 array + parallel far-pointer array by `BuildingTypes[..].word_0x125` |
+| `driver_unrleScreen` | ovc01_driver.c | 69 | RLE, 200 rows, `count,value` / literal-run chunks |
+| `driver_unrleSprite` | ovc01_driver.c | 71 | RLE with per-chunk x-skip, sprite header at spr[0..1] |
+| `ovc07_usesBiosReadKey` | ovc07_gfxutil.c | 185 | triangle rasteriser: y-sort + two DDA edge walks |
+| `ovc41_compute3` | ovc41_main.c | 59 | menu cursor move over a 0x94-stride table |
+| `ovc27_rollToHitEntity` / `...Agent` | ovc27_combat.c | 48+50 | ramp-table lookup by ability, column+1 target |
+| `ovc45_usesGPopulationLo` | ovc45_unitinfo.c | 60 | 32-bit gold decrement with population fallback |
+| `ovc25_hasBuildingNear`, `season_countPromotable`, `ovc15_selectRightmostAgent` | - | 28+35+26 | small scans/searches |
+
+Yield: 48,982 -> 48,110 (-872) from eleven functions, i.e. ~79 matches per function,
+against ~30-60 for the earlier mass-ranked picks - and with control flow untouched, so the
+risk is only in transcription, which the gates then check.
+
+The rule also explains the earlier zero-yield turn: `ovc23_textAdlibNone` has 985 matches
+but is dirty, so it belongs in the 21,130-match group that needs its body rebuilt, and no
+amount of slot naming will move it.
+
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 972/1,868; compare_runtime 1,546/11 main entry, 1,545/11 post-init_cfg
