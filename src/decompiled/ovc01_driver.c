@@ -953,45 +953,50 @@ void __cdecl16far driver_loop1(uint x1,uint x2,uint16_t y,uint8_t colour,uint16_
 
 /* fills the rectangle (x1,y1)-(x2,y2) with one colour */
 
-uint16_t __cdecl16far
+void __cdecl16far
 driver_fillRect(uint x1,uint y1,uint x2,uint y2,uint8_t colour,uint16_t dstSeg,uint16_t arg7,uint16_t arg8,uint16_t arg9,uint16_t arg10,uint16_t arg11)
 
 {
-  uint8_t *puVar1;
-  uint uVar2;
-  uint16_t in_AX;
-  uint uVar3;
-  int iVar4;
-  int iVar5;
-  int iVar6;
-  uint8_t *puVar7;
-  
-  uVar2 = y2;
-  uVar3 = x2;
+  /* Re-derived from 2d63:05e5.  Normalises the corners, converts the top row to a video
+     offset with the y*320 = (y<<8) + (y<<6) trick, then fills one row at a time and steps
+     the destination by 0x140-width.  The destination segment comes from dstSeg
+     (`mov es,[bp+0x10]` at 0x1FA1E) and the function returns nothing (`pop ax` before
+     `retf` at 0x1FA7D restores AX rather than setting it). */
+  uint8_t far *copyPtr;
+  uint8_t far *dstPtr;
+  uint savedY2;
+  uint savedX2;
+  uint yShift;
+  int rows;
+  int colCount;
+  int width;
+
+  savedY2 = y2;
+  savedX2 = x2;
   if (x2 < x1) {
     x2 = x1;
-    x1 = uVar3;
+    x1 = savedX2;
   }
   if (y2 < y1) {
     y2 = y1;
-    y1 = uVar2;
+    y1 = savedY2;
   }
-  uVar3 = CONCAT11((char)y1,(char)(y1 >> 8));
-  puVar7 = (uint8_t *)(x1 + uVar3 + (uVar3 >> 2));
-  iVar4 = (y2 - y1) + 1;
-  iVar6 = (x2 - x1) + 1;
-  iVar5 = iVar6;
+  yShift = CONCAT11((char)y1,(char)(y1 >> 8));
+  dstPtr = MK_FP(dstSeg,x1 + yShift + (yShift >> 2));
+  rows = (y2 - y1) + 1;
+  width = (x2 - x1) + 1;
+  colCount = width;
   do {
-    for (; iVar5 != 0; iVar5 = iVar5 + -1) {
-      puVar1 = puVar7;
-      puVar7 = puVar7 + 1;
-      *puVar1 = colour;
+    for (; colCount != 0; colCount = colCount + -1) {
+      copyPtr = dstPtr;
+      dstPtr = dstPtr + 1;
+      *copyPtr = colour;
     }
-    puVar7 = puVar7 + (0x140 - iVar6);
-    iVar4 = iVar4 + -1;
-    iVar5 = iVar6;
-  } while (iVar4 != 0);
-  return in_AX;
+    dstPtr = dstPtr + (0x140 - width);
+    rows = rows + -1;
+    colCount = width;
+  } while (rows != 0);
+  return;
 }
 
 

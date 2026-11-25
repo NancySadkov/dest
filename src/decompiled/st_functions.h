@@ -267,7 +267,7 @@ void __cdecl16far driver_scan1(far_t buf,uint16_t count,uint8_t fill,uint8_t thr
 void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,uint8_t colour,uint16_t arg6,uint16_t arg7,uint16_t arg8,uint16_t arg9);
 uint16_t __cdecl16near driver_drawLine_compute(void);
 void __cdecl16far driver_loop1(uint x1,uint x2,uint16_t y,uint8_t colour,uint16_t dstSeg);
-uint16_t __cdecl16far driver_fillRect(uint x1,uint y1,uint x2,uint y2,uint8_t colour,uint16_t dstSeg,uint16_t arg7,uint16_t arg8,uint16_t arg9,uint16_t arg10,uint16_t arg11);
+void __cdecl16far driver_fillRect(uint x1,uint y1,uint x2,uint y2,uint8_t colour,uint16_t dstSeg,uint16_t arg7,uint16_t arg8,uint16_t arg9,uint16_t arg10,uint16_t arg11);
 void __cdecl16far driver_compute3(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg);
 void __cdecl16far driver_compute4(int ofs,byte y,uint8_t colour1,uint8_t colour2,uint16_t dstSeg);
 bool __cdecl16far digSoundPlaying(void);
