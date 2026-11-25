@@ -438,7 +438,7 @@ attact_usesBDADailyTimeCounter(ulong *retStorage,ulong prevTick,uint16_t arg3)
 
 /* Decrements the byte pointed at by its argument when it is non-zero. */
 
-void __cdecl16far attact_decrementCounter(char *counter)
+void __cdecl16far attact_decrementCounter(char far *counter)
 
 {
   if (*counter != '\0') {
@@ -1154,7 +1154,7 @@ bool __cdecl16far attact_textArena2(uint *foundIndexOut,uint16_t partyIndex,uint
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "arena" */
 
-bool __cdecl16far attact_textArena3(uint *foundIndexOut,uint16_t partyIndex,int x,int y)
+bool __cdecl16far attact_textArena3(uint far *foundIndexOut, uint16_t partyIndex, int x, int y)
 
 {
   /* Re-derived: the FARTHEST entity of the party by |dx| + 2*|dy| in aligned columns -
@@ -1195,7 +1195,7 @@ bool __cdecl16far attact_textArena3(uint *foundIndexOut,uint16_t partyIndex,int 
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
 
-void __cdecl16far attact_usesAlignUp43(uint16_t *value)
+void __cdecl16far attact_usesAlignUp43(uint16_t far *value)
 
 {
   /* Re-derived.  alignUp4(*value) is the target column; if that cell is blocked the free
@@ -1208,7 +1208,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
   bool movedOk;
   uint targetAligned;
   uint entityAligned;
-  uint16_t *valuePtr;
+  uint16_t far *valuePtr;
   uint placedCount;
   uint slot;
   int entIdx;
@@ -1218,7 +1218,7 @@ void __cdecl16far attact_usesAlignUp43(uint16_t *value)
 
   targetAligned = ovr_alignUp4(*value,0,0);
   destX = *value;
-  valuePtr = (uint16_t *)value;
+  valuePtr = value;
   blitOk = func_0x0004f29c(0x2379,destX,valuePtr[1]);
   if (blitOk == '\0') {
     entIdx = -2;

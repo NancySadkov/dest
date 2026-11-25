@@ -305,7 +305,7 @@ uint8_t __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int st
 
 /* 2d63:01df */
 
-uint8_t __cdecl16far vgaSetPalette8bit(uint8_t *pal,uint16_t arg2)
+uint8_t __cdecl16far vgaSetPalette8bit(uint8_t far *pal, uint16_t arg2)
 
 {
   uint8_t *puVar1;
@@ -424,7 +424,7 @@ int __cdecl16far unrle(far_t src,far_t dst,uint16_t len,uint16_t arg4,uint16_t a
 
 
 /* 2d63:0241 */
-int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz)
+int __cdecl16far rle_blit_decode(byte far *src, byte *dst, uint16_t sz)
 
 {
   char *pcVar1;
@@ -538,7 +538,7 @@ void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_
 
 /* counts the run of bytes equal to the first, bounded by the limit argument */
 
-int16_t __cdecl16far countRunLength(char *src,uint16_t avail,uint16_t maxRun)
+int16_t __cdecl16far countRunLength(char far *src, uint16_t avail, uint16_t maxRun)
 
 {
   char *pcVar1;
@@ -562,7 +562,7 @@ int16_t __cdecl16far countRunLength(char *src,uint16_t avail,uint16_t maxRun)
 
 /* WARNING: Restarted to delay deadcode elimination for space: stack */
 
-int __cdecl16far rle_line(uint8_t *src,uint8_t *dst,uint16_t npixels)
+int __cdecl16far rle_line(uint8_t far *src, uint8_t *dst, uint16_t npixels)
 
 {
   uint8_t *puVar1;
@@ -661,7 +661,7 @@ L_rle_line_0343:
        }
    } */
 
-int __cdecl16far unrle_mirror(byte *src,byte *dst,int len)
+int __cdecl16far unrle_mirror(byte far *src, byte *dst, int len)
 
 {
   undefined1 *puVar1;
@@ -717,7 +717,7 @@ int __cdecl16far unrle_mirror(byte *src,byte *dst,int len)
 
 /* 2d63:03fc */
 
-int16_t __cdecl16far drawLine2(char *src,char *dst,uint16_t count)
+int16_t __cdecl16far drawLine2(char far *src, char *dst, uint16_t count)
 
 {
   /* Re-derived: reverse-order RLE line writer.  A control byte of 0x80 is skipped; below
@@ -1685,7 +1685,7 @@ void __cdecl16far driver_unrleScreen(far_t src,far_t dst)
 
 /* decodes a run-length sprite (header row offset + height, per-run x offsets) */
 
-void __cdecl16far driver_unrleSprite(int *spr,far_t dst)
+void __cdecl16far driver_unrleSprite(int far *spr, far_t dst)
 
 {
   /* RLE sprite decoder with a per-chunk x-skip.  spr[0] is the source row, spr[1] the
@@ -1736,7 +1736,7 @@ void __cdecl16far driver_unrleSprite(int *spr,far_t dst)
 
 /* 2d63:0b4d */
 
-int __cdecl16far vgaDoSomethingWithPalette(int *paletteData)
+int __cdecl16far vgaDoSomethingWithPalette(int far *paletteData)
 
 {
   undefined1 *lenPtr;

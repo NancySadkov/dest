@@ -369,7 +369,7 @@ uint __cdecl16far blitLabel(char far *text,byte far *widths,uint16_t term,uint8_
 /* Returns the pixel width of a string in the given font by summing font[ch+0xa1] over its
    characters. */
 
-int __cdecl16far font_textWidth(char *text,char *font,uint16_t arg3,uint16_t arg4,uint16_t arg5)
+int __cdecl16far font_textWidth(char far *text, char *font, uint16_t arg3, uint16_t arg4, uint16_t arg5)
 
 {
   int iVar1;

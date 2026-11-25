@@ -9,7 +9,7 @@
 
 /* 3338:0000 */
 
-void __cdecl16far miceRestoreArea(brect_t *br,uint16_t arg2)
+void __cdecl16far miceRestoreArea(brect_t far *br, uint16_t arg2)
 
 {
   int dst_x;

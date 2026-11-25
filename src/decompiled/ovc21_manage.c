@@ -169,15 +169,15 @@ char * __cdecl16far manage_compute1(int n,uint16_t arg2)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far manage_compute2(char_sheet_t *sheet)
+byte __cdecl16far manage_compute2(char_sheet_t far *sheet)
 
 {
   byte bVar1;
-  char_sheet_t *pcVar2;
+  char_sheet_t far *pcVar2;
   uint16_t uVar3;
   
   uVar3 = (uint16_t)((ulong)sheet >> 0x10);
-  pcVar2 = (char_sheet_t *)sheet;
+  pcVar2 = sheet;
   if ((pcVar2->cls == 4) && (0xc < pcVar2->race)) {
     bVar1 = 0xc;
   }
@@ -199,15 +199,15 @@ byte __cdecl16far manage_compute2(char_sheet_t *sheet)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far manage_compute3(char_sheet_t *sheet)
+byte __cdecl16far manage_compute3(char_sheet_t far *sheet)
 
 {
   byte bVar1;
-  char_sheet_t *pcVar2;
+  char_sheet_t far *pcVar2;
   uint16_t uVar3;
   
   uVar3 = (uint16_t)((ulong)sheet >> 0x10);
-  pcVar2 = (char_sheet_t *)sheet;
+  pcVar2 = sheet;
   if ((pcVar2->cls == 4) && (0xb < pcVar2->race)) {
     bVar1 = 1;
   }
@@ -229,15 +229,15 @@ byte __cdecl16far manage_compute3(char_sheet_t *sheet)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far manage_compute4(char_sheet_t *sheet)
+byte __cdecl16far manage_compute4(char_sheet_t far *sheet)
 
 {
   byte bVar1;
-  char_sheet_t *pcVar2;
+  char_sheet_t far *pcVar2;
   uint16_t uVar3;
   
   uVar3 = (uint16_t)((ulong)sheet >> 0x10);
-  pcVar2 = (char_sheet_t *)sheet;
+  pcVar2 = sheet;
   if ((pcVar2->cls == 4) && (0xb < pcVar2->race)) {
     bVar1 = pcVar2->race + 0x37;
   }

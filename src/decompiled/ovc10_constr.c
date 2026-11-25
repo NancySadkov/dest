@@ -193,15 +193,15 @@ void __cdecl16far blitRect(brect_t *br,uint16_t arg2)
 
 /* Restores the mouse area, blits a raw rect to the 0xa000 screen and blits the mouse back. */
 
-void __cdecl16far constr_blitRawToScreen(brect_t *rect)
+void __cdecl16far constr_blitRawToScreen(brect_t far *rect)
 
 {
   uint16_t dstSeg;
-  brect_t *br;
+  brect_t far *br;
   uint16_t uVar1;
   
   uVar1 = (uint16_t)((ulong)rect >> 0x10);
-  br = (brect_t *)rect;
+  br = rect;
   dstSeg = br->seg;
   br->seg = 0xa000;
   ovr_miceRestoreArea(br,uVar1);

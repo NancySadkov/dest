@@ -4290,7 +4290,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
 
 /* 77eb:20e8 */
 
-uint __cdecl16far ovc45_usesGfxRndSeed2(int *x)
+uint __cdecl16far ovc45_usesGfxRndSeed2(int far *x)
 
 {
   byte bVar1;

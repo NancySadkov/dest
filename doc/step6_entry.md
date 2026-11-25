@@ -6694,3 +6694,51 @@ rewritten.  Left unchanged for that reason: the semantic guess (`strcpy(dst, pat
 right, and "very likely" is what produced the segment-0 regression earlier in this session.
 
   grep_checks 40,970; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+
+### The mis-declared pointer widths, swept as a class: 25 functions and 5 locals
+
+The last four hand-decoded functions all had the same root cause, and it was not the phantom local: a
+parameter declared as a **near** pointer that the original loads with `les`/`lds`, i.e. a far pointer
+of 4 bytes.  The phantom `in_stack_` local was a symptom - Ghidra needed somewhere to hold the second
+half.
+
+`tmp/find_near_params.py` finds them directly.  For each function it computes every parameter's
+declared bp offset from this build's widths (near pointer 2, far pointer 4, char/byte 1, short/word 2,
+long 4) and checks whether the disassembly performs `les`/`lds` at exactly that offset.  Two filters
+keep the change safe:
+
+* bodies containing `in_stack_` or `unaff_` are skipped, because changing a parameter's width shifts
+  every later slot and those references are pinned to the old layout (named parameters are recomputed
+  by the compiler and are fine);
+* only functions with **no callers** are converted in this pass, so no caller has to be recompiled
+  against the new signature.
+
+**56 functions** show the mismatch; **25** are uncalled and were converted.  The header prototypes were
+updated to match, and the whole tree still compiles 65/65.
+
+One follow-on was needed and is easy to miss: the bodies route the parameter through a near local
+
+```c
+char_sheet_t *pcVar2;
+pcVar2 = (char_sheet_t *)sheet;      /* truncates straight back */
+```
+
+so the declaration change alone emits identical code.  Five such locals were made far and their casts
+dropped (`tmp/fix_far_locals.py`).
+
+Verified at the instruction level, `manage_compute2` now emits
+
+```
+les  bx, dword ptr [bp-4]
+cmp  byte ptr es:[bx+47], 4
+```
+
+where the original has `les bx, ptr [bp+6]` / `cmp byte ptr es:[bx+0x2f],4`.  Offset 0x2f and the `les`
+form both match.
+
+`grep_checks` does not move - a correct far declaration carries the same identifiers as the wrong near
+one - but 25 functions stop truncating their arguments, which is the same defect that produced
+`driver_fillSpan`'s DGROUP writes.
+
+  grep_checks 40,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

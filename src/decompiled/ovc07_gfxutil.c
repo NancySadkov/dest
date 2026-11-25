@@ -211,7 +211,7 @@ ovc07_usesBiosReadKey(int x1,int y1,int x2,int y2,int x3,int y3,uint16_t rectSeg
 
 /* [R4] calls ovr_driver_fillRect */
 
-void __cdecl16far ovc07_usesFillRect(int x1,int y1,int x2,int y2,uint16_t colour,brect_t *rect,uint16_t arg7)
+void __cdecl16far ovc07_usesFillRect(int x1, int y1, int x2, int y2, uint16_t colour, brect_t far *rect, uint16_t arg7)
 
 {
   int iVar1;

@@ -73,7 +73,7 @@ char * __cdecl16far append_name_to_path(char far *path,char far *name)
 
 /* 3381:00fe */
 
-char * __cdecl16far path_strip_tail_slash(char *s,uint16_t arg2)
+char * __cdecl16far path_strip_tail_slash(char far *s, uint16_t arg2)
 
 {
   uint16_t l;
@@ -108,7 +108,7 @@ char * __cdecl16far ensure_tail_slash(char *s,uint16_t arg2)
 
 /* chdir doesn't change the disk, so we have to do that */
 
-void __cdecl16far chpath(char *path,uint16_t arg2)
+void __cdecl16far chpath(char far *path, uint16_t arg2)
 
 {
   uint8_t c;

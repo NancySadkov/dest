@@ -690,7 +690,7 @@ uint __cdecl16far agnt_compute12(agnt_t far *a,agnt_t far *b,uint16_t arg3,uint1
 
 /* [R4] calls ovr_stExit */
 
-void __cdecl16far agnt_usesStExit(agnt_t far *agnt,anm_t *anim,stg_tmp_t *sprite,uint16_t arg4,uint16_t arg5,uint16_t arg6,uint16_t arg7)
+void __cdecl16far agnt_usesStExit(agnt_t far *agnt, anm_t far *anim, stg_tmp_t *sprite, uint16_t arg4, uint16_t arg5, uint16_t arg6, uint16_t arg7)
 
 {
   int iVar1;

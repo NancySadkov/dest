@@ -414,7 +414,7 @@ L_OVC24_5943_026e_088A:
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* Kills and reports every entity except the one under the cursor, then sets GGameState = 0x20. */
 
-void __cdecl16far ovc24_removeOtherEntities(uint8_t *reportedOut)
+void __cdecl16far ovc24_removeOtherEntities(uint8_t far *reportedOut)
 
 {
   uint uVar1;

@@ -278,7 +278,7 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
 
 /* [R4] calls drawGfx */
 
-void __cdecl16far blit_usesDrawGfx(far_t gfx,int x,int y,brect_t *rect)
+void __cdecl16far blit_usesDrawGfx(far_t gfx, int x, int y, brect_t far *rect)
 
 {
   far_t dst;
@@ -463,7 +463,7 @@ void __cdecl16far blitGfxN(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t ty
 
 /* [R4] calls ovr_randBelow */
 
-void __cdecl16far blit_usesRandBelow(byte *buf,uint16_t count,byte value,byte chance)
+void __cdecl16far blit_usesRandBelow(byte far *buf, uint16_t count, byte value, byte chance)
 
 {
   uint16_t uVar1;
