@@ -4308,3 +4308,93 @@ exactly one write, from a parameter:
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 49,623 -> 49,621
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### CORRECTION: `ovc22_textRingProt`'s `unaff_DI` is not the loop counter
+
+The earlier entry in this document claimed the 98 `unaff_DI` uses were a loop counter that
+had to be re-derived.  That is **wrong**, and the measurements are unambiguous:
+
+* the original prologue (`42BDE`) is `push bp / mov bp,sp / sub sp,0x46 / push si /
+  push di` - DI is saved but **never set**;
+* a linear sweep of `42BE6..436A7` finds exactly one mention of DI: `push di` itself, i.e.
+  **no read** before the loops;
+* DI's entire live range is the two loops: `0436A7 mov di,2` … `04370B jge`, then
+  `043712 xor di,di` … `043743 jle`;
+* after `043745` DI is neither read nor written until the epilogue `pop di`.
+
+And the two loops are **already recovered correctly** by the export, with real indices:
+
+```c
+1794  bStack_1b = *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xad);
+1795  for (iVar29 = 2; -1 < iVar29; iVar29 = iVar29 + -1) {      /* borrow propagation */
+1796    if (bStack_1b < *(byte *)(... + iVar29 + 0xaa)) {
+1797      *(byte *)(... + iVar29 + 0xaa) = bStack_1b;
+1798      bStack_1b = 0;
+1800    } else {
+1801      bStack_1b = bStack_1b - *(char *)(... + iVar29 + 0xaa);
+1803    }
+1804  }
+1805  iVar29 = 0;
+1806  for (iVar52 = 0; iVar52 < 3; iVar52 = iVar52 + 1) {          /* weighted sum */
+1807    iVar29 = iVar29 + *(byte *)(... + iVar52 + 0xaa) * (iVar52 + 1) * 3;
+1809  }
+```
+
+which matches the original instruction-for-instruction (loop 2 computes
+`acc += b[i]*(i+1)*3`, exactly the `imul dx / shl dx,1 / add dx,ax` sequence).  So there is
+no loop to re-derive.
+
+Consequently the 98 remaining `unaff_DI` uses (lines 551-552 and 668-698) are **artifacts**
+that do not correspond to any DI access in the original; they are expressions where the
+decompiler lost the real base (`&puVar38->bldType + (int)unaff_DI`, `*puVar3 = ...`).  They
+were left untouched deliberately:
+
+* initialising the pointer to `NULL` would make `*puVar3 = *puVar3 + ...` write into
+  DGROUP offset 0 (`_DATA`, the C0 header) if that path is reached - worse than the
+  present undefined value;
+* pointing it at a scratch word would make the build deterministic but would *hide* the
+  real defect, which is that the base of those expressions is unknown.
+
+So this item needs the original's code for that region (the switch at 0x43xxx), not a
+rename, and is left open with this correction in place.
+
+### Measured: absolute segment 0x0070 is a runtime far-pointer table
+
+The same function reads the party record through a game-wide idiom that occurs **302**
+times in the image:
+
+```
+mov  al, byte ptr [bp + 6]      ; partyIndex
+shl  ax, 2
+mov  dx, 0x70
+mov  bx, ax
+mov  es, dx
+les  bx, ptr es:[bx]            ; far pointer from 0070:partyIndex*4
+mov  al, byte ptr es:[bx + di + 0xaa]
+```
+
+i.e. the table lives at **absolute segment 00070h**, not in DGROUP.  To find out what that
+contains, the original was patched at the post-`init_cfg` point (`0x25BB7`) with a stub
+that dumps `DS:0` and then `0x0070:0`.  The dump shows a 28-entry far-pointer table whose
+entries are `1c33:018d`, `1c33:0196`, `1c33:019f`, `1c33:01a5`, … followed by the strings
+
+```
+Fighter, Mage, Cleric, Thief, Dwarf, Elf, Halfling,
+fighters, mages, clerics, thieves, dwarves, elves, halflings,
+fighter, mage, cleric, thief, dwarf, elf, halfling,
+fighter unit, mage unit, clerical unit, ...
+```
+
+`1c33` is the running original's DGROUP segment, and those offsets are the unit-description
+strings, so segment `0x0070` holds a *copy of the unit-description far-pointer table*.
+
+Our export never modelled this: it renders the access as `*(uint32_t *)((uint)partyIndex << 2)`,
+a **DS-relative** read at DGROUP offset `partyIndex*4` - which lands in `_DATA`'s header, not
+in the table.  That is a separate, real defect (the recovered `+0x2f`, `+0xad`, `+0x94` field
+reads in this function all go through it), and it is why `+0xaa`-based logic still "works"
+in tests: those offsets are read relative to whatever the DS-relative expression points at.
+Fixing it means teaching the recovery that `00070h:0` is a base - the probe above is the
+evidence, and the same idiom appears 302 times.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 49,605
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
