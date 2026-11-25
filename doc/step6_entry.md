@@ -6483,3 +6483,42 @@ this measurement now quantifies.
 
   grep_checks 41,090 -> 41,047; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### The three ovc01_driver rle functions: a segment-for-offset bug, not just a phantom local
+
+All three prologues read the same way, and each hides two errors:
+
+```
+rle_blit_decode 2d63:0241  lds si,[bp+6]  les di,[bp+0xa]  mov dx,[bp+0xe]  add dx,di
+rle_line        2d63:032d  lds si,[bp+6]  mov dx,[bp+0xe]  add dx,si
+unrle_mirror    2d63:03b6  lds si,[bp+6]  les dx,[bp+0xa]  mov di,[bp+0xe]  add di,dx
+```
+
+1. the phantom `in_stack_0000000c` is the **third parameter**, which sits at bp+0xe because the first
+   two are far pointers (`lds`/`les`), not at bp+0x0c;
+2. where the export wrote `(int)(*(uint16_t *)((uint8_t *)&(dst) + 2))` - **dst's segment** - the
+   original adds **dst's offset**.  So the end pointers were computed from a segment value, which is
+   not a pointer at all.
+
+Corrected:
+
+```
+end  = sz + (int)dst;              rle_blit_decode
+end  = npixels + (int)src;         rle_line
+pdst = (int)dst + len + -1;        unrle_mirror
+```
+
+The rebuilt `rle_blit_decode` now emits `mov di,[bp+8]; mov ax,[bp+10]; add ax,di`, which is the
+original's shape (`sz + dst_offset`).
+
+My earlier turn recorded wrong addresses for two of these (`2d63:0292` and `2d63:02cb`), which is why
+its disassembly looked like `xlatb` garbage and a byte-pair read.  The source comments give
+`2d63:032d` and `2d63:03b6`; using those, both functions decode cleanly.  The lesson is to take the
+address from the comment above the function rather than from a remembered offset.
+
+Still wrong in these functions, and out of scope here: `dst` is declared `byte *` (near) while the
+original uses `les`/`lds`, and `pd` is assigned dst's segment and then written through as a near
+pointer.  Fixing that needs the far-pointer treatment, not an expression edit.
+
+  grep_checks 41,047 -> 41,041; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

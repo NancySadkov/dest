@@ -437,10 +437,9 @@ int __cdecl16far rle_blit_decode(byte *src,byte *dst,uint16_t sz)
   uint16_t ps;
   uint16_t s;
   uint16_t d;
-  int in_stack_0000000c;
   uint32_t q;
   
-  end = in_stack_0000000c + (int)(*(uint16_t *)((uint8_t *)&(dst) + 2));
+  end = sz + (int)dst;
   pbVar4 = src;
   do {
     do {
@@ -575,9 +574,8 @@ int __cdecl16far rle_line(uint8_t *src,uint8_t *dst,uint16_t npixels)
   uint16_t c;
   uint16_t ps;
   uint16_t pd;
-  int in_stack_0000000c;
   
-  end = in_stack_0000000c + (int)src;
+  end = npixels + (int)src;
   ps = (uint16_t)src;
   pd = (uint16_t)(*(uint16_t *)((uint8_t *)&(dst) + 2));
 L_rle_line_0343:
@@ -676,12 +674,11 @@ int __cdecl16far unrle_mirror(byte *src,byte *dst,int len)
   uint16_t ppsrc;
   uint16_t psrc;
   uint16_t pdst;
-  int in_stack_0000000c;
   uint32_t pd;
   uint32_t ps;
   uint8_t b;
   
-  pdst = (int)(*(uint16_t *)((uint8_t *)&(dst) + 2)) + in_stack_0000000c + -1;
+  pdst = (int)dst + len + -1;
   pbVar5 = src;
   do {
     do {
