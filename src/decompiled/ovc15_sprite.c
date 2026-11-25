@@ -800,11 +800,11 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
 {
   uint8_t *puVar1;
   uint *puVar2;
-  byte bVar3;
+  byte gindexCopy;
   uint32_t uVar4;
   uint16_t uVar5;
   entity_t *peVar6;
-  uint uVar7;
+  uint randVal;
   uint16_t uVar8;
   entity_t *peVar9;
   int iVar10;
@@ -836,8 +836,8 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
     *(undefined1 *)&peVar6[entityIndex].base.flags32 =
          AgntGs[(uint)gindex].strength;
     lVar15 = 0x8000;
-    uVar7 = rand();
-    lVar15 = LDIV_at_(CONCAT22(((int)uVar7 >> 0xf) << 1 | (uint)((int)uVar7 < 0),uVar7 << 1),lVar15)
+    randVal = rand();
+    lVar15 = LDIV_at_(CONCAT22(((int)randVal >> 0xf) << 1 | (uint)((int)randVal < 0),randVal << 1),lVar15)
     ;
     if ((int)lVar15 == 0) {
       puVar2 = (uint *)((int)&peVar6[entityIndex].base.frames + 3);
@@ -853,9 +853,9 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
         for (agnt = 0; agnt < (int)(uint)AgntCount; agnt = agnt + 1) {
           if (Agnts[agnt].owner == entityIndex) {
             Agnts[agnt].target = 0xff;
-            bVar3 = peVar6[entityIndex].base.gindex;
+            gindexCopy = peVar6[entityIndex].base.gindex;
             AGNT_WORD(&Agnts[agnt], gdata, 2) = SEG_OF(AgntGs);
-            AGNT_WORD(&Agnts[agnt], gdata, 0) = (uint)&AgntGs[bVar3];
+            AGNT_WORD(&Agnts[agnt], gdata, 0) = (uint)&AgntGs[gindexCopy];
             Agnts[agnt].strength =
                  *(undefined1 *)((int)&peVar6[entityIndex].base.state + 1);
             Agnts[agnt].strengthMax = (char)peVar6[entityIndex].base.flags32;
