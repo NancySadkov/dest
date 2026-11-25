@@ -602,7 +602,7 @@ uint __cdecl16far ovc15_usesAlignUp4(uint16_t x,uint16_t y)
   uVar3 = uVar2;
   do {
     if (EntityCount <= uVar5) {
-      return uVar3 & 0xff00;
+      return 0;
     }
     uVar3 = uVar5 * 0x37;
     uVar6 = (uint16_t)((ulong)Entities >> 0x10);

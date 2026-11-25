@@ -674,16 +674,16 @@ uint __cdecl16far agnt_compute12(agnt_t *a,agnt_t *b,uint16_t arg3,uint16_t arg4
   uVar1 = ((agnt_t *)CONCAT22((agnt_t *)b,a))->x;
   if ((int)uVar1 < *(int *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(b) + 2)))) {
     if (*(char *)((int)(*(uint16_t *)((uint8_t *)&(b) + 2)) + 0xf) != '\0') {
-      return CONCAT11((char)(uVar1 >> 8),1);
+      return 1;
     }
   }
   else {
     uVar1 = (uint)*(char *)((int)(*(uint16_t *)((uint8_t *)&(b) + 2)) + 0xf);
     if (uVar1 == 0) {
-      return CONCAT11(*(char *)((int)(*(uint16_t *)((uint8_t *)&(b) + 2)) + 0xf) >> 7,1);
+      return 1;
     }
   }
-  return uVar1 & 0xff00;
+  return 0;
 }
 
 

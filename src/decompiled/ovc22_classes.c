@@ -4181,7 +4181,7 @@ uint16_t __cdecl16far ovc22_usesGMapFlags2(char skipCheck,int x1,int y1,int x2,i
           x1 = x1 + iStack_a;
           if (x1 == x2) {
             if (y1 == y2) {
-              return CONCAT11(bVar3,1);
+              return 1;
             }
             iStack_6 = 0;
           }
@@ -4190,7 +4190,7 @@ uint16_t __cdecl16far ovc22_usesGMapFlags2(char skipCheck,int x1,int y1,int x2,i
           y1 = y1 + iStack_c;
           if (y1 == y2) {
             if (x1 == x2) {
-              return CONCAT11(bVar3,1);
+              return 1;
             }
             iStack_8 = 0;
           }
@@ -4226,7 +4226,7 @@ ovc22_usesAlignUp42(uint16_t *xOut,uint16_t *yOut,uint8_t classIndex,uint16_t bl
   uStack_4 = 0;
   do {
     if (GRecordCount <= uStack_4) {
-      return GRecordCount & 0xff00;
+      return 0;
     }
     if (GRecords[uStack_4].party == classIndex) {
       uVar2 = ovr_alignUp4(GRecords[uStack_4].x,0,0);
@@ -4327,7 +4327,7 @@ ovc22_searchCellsAround(uint *xPtr,uint *yPtr,byte yOutOfs,byte yOutSeg,char par
                                      *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
                                      *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))));
                   if ((char)uVar5 != '\0') {
-                    return CONCAT11((char)((uint)uVar5 >> 8),1);
+                    return 1;
                   }
                 }
                 if (((yOutOfs & 2) == 0) &&
@@ -4340,7 +4340,7 @@ ovc22_searchCellsAround(uint *xPtr,uint *yPtr,byte yOutOfs,byte yOutSeg,char par
                                      *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
                                      *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))));
                   if ((char)uVar5 != '\0') {
-                    return CONCAT11((char)((uint)uVar5 >> 8),1);
+                    return 1;
                   }
                 }
               }
@@ -4385,7 +4385,7 @@ ovc22_searchCellsAround(uint *xPtr,uint *yPtr,byte yOutOfs,byte yOutSeg,char par
                                      *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
                                      *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))));
                   if ((char)uVar5 != '\0') {
-                    return CONCAT11((char)((uint)uVar5 >> 8),1);
+                    return 1;
                   }
                 }
                 if (((yOutOfs & 2) == 0) &&
@@ -4398,7 +4398,7 @@ ovc22_searchCellsAround(uint *xPtr,uint *yPtr,byte yOutOfs,byte yOutSeg,char par
                                      *(uint *)CONCAT22((uint *)xPtr,in_stack_00000004),
                                      *(uint *)CONCAT22((uint *)yPtr,(*(uint16_t *)((uint8_t *)&(xPtr) + 2))));
                   if ((char)uVar5 != '\0') {
-                    return CONCAT11((char)((uint)uVar5 >> 8),1);
+                    return 1;
                   }
                 }
               }

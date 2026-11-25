@@ -1119,7 +1119,7 @@ uint __cdecl16far ovc18_usesAlignUp4(void)
         uVar3 = ovr_alignUp4(GfxRndSeed,0,0);
         if ((uVar2 == uVar3) &&
            (uVar2 = ((entity_t *)Entities)[uVar5].base.y, uVar2 == GfxRndSeed2)) {
-          return uVar2 & 0xff00;
+          return 0;
         }
       }
     }
