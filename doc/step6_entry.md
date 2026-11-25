@@ -5204,3 +5204,42 @@ but should not linger).
 
   grep_checks 45,444; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### `ovc15_textError`'s C body is not that function at all (mis-attribution)
+
+The last blocker for rebuilding it turns out to be upstream of the code.  The real function at
+4207:26bc..0x287c is 449 bytes: a two-parameter prologue (`les bx, ptr [bp+6]` and a 32-bit
+argument at [bp+0xa..0xc]), a 7-case jump table at 0x287d, and `retf` at 0x287c - the table
+fills 0x287d..0x288a exactly up to the next function at 0x288b.
+
+The C body currently sitting under that name is **969 lines** of heap-and-audio code:
+`switch(uVar17)` with `LXRSH_at_`, `HeapPtr`, `MUSHandle`, `DIGHandle`, `LXMUL_at_` - none of
+which appears anywhere in the 449 bytes.  Density settles it:
+
+```
+driver_compute5       175 lines / 324 bytes   = 0.54 lines/byte
+ovc13_usesAlignUp4    161 lines / 1005 bytes  = 0.16
+ovc15_textError       969 lines / 449 bytes   = 2.16
+```
+
+roughly four times the densest comparable function, i.e. the body is ~2,000 bytes of code.
+
+So the name and address comment (`/* 4207:26bc */`, which occurs exactly once) are attached to
+some *other* function's text.  Two consequences:
+
+* **the section-5 mass attributed to `ovc15_textError` belongs elsewhere**, so any ranking or
+  pool figure that counted it is mis-assigned - including the earlier note that the clean/dirty
+  split has 132 dirty functions;
+* writing the real 449-byte routine is now a *replacement*, and before that the existing body
+  must be identified and moved to its true owner, or the reverse-engineering loses ~2,000 bytes
+  of recovered code.
+
+What is already in hand for the replacement, and does not need re-deriving: the seven-case table
+(cases 0-4 one-field against +0x29/+0x2a/+0x2b/+0x2c with 0x10->10, 0xd->5; case 5 two-field
+AND/AND; case 6 both->10, either->5), the exit `(value * (acc + 100)) / 100` with the
+F_LXMUL@/F_LDIV@ convention measured last turn, and the corrected signature.  The one remaining
+unknown is the C idiom for the selector byte read at segment 0x60 offset `+0x271c` (indexed by
+`agnt->+0xd * 0x95`).
+
+  grep_checks 45,383; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
