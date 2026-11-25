@@ -811,23 +811,23 @@ int __cdecl16far ovc23_usesCornerBR2(int x,int step)
   uint8_t cornerBL;
   uint8_t cornerTR;
   uint8_t cornerTL;
-  int iStack_8;
+  int cornerSampleBR;
   int cornerSampleTR;
-  int iStack_4;
+  int cornerSampleBL;
   
   if (step == 4) {
     cornerSampleTL = ovr_constr_usesSmoothPrev(x + 1,-1,(int *)&cornerTL,0,0);
-    iStack_4 = ovr_constr_usesSmoothPrev(x + 1,0,(int *)&cornerBL,0,0);
+    cornerSampleBL = ovr_constr_usesSmoothPrev(x + 1,0,(int *)&cornerBL,0,0);
     cornerSampleTR = ovr_constr_usesSmoothPrev(x + 2,-1,(int *)&cornerTR,0,0);
-    iStack_8 = ovr_constr_usesSmoothPrev(x + 2,0,(int *)&cornerBR,0,0);
+    cornerSampleBR = ovr_constr_usesSmoothPrev(x + 2,0,(int *)&cornerBR,0,0);
   }
   else {
     cornerSampleTL = ovr_constr_usesSmoothPrev(x,-1,(int *)&cornerTL,0,0);
-    iStack_4 = ovr_constr_usesSmoothPrev(x,0,(int *)&cornerBL,0,0);
+    cornerSampleBL = ovr_constr_usesSmoothPrev(x,0,(int *)&cornerBL,0,0);
     cornerSampleTR = ovr_constr_usesSmoothPrev(x + step,-1,(int *)&cornerTR,0,0);
-    iStack_8 = ovr_constr_usesSmoothPrev(x + step,0,(int *)&cornerBR,0,0);
+    cornerSampleBR = ovr_constr_usesSmoothPrev(x + step,0,(int *)&cornerBR,0,0);
   }
-  iStack_12 = iStack_4 + cornerSampleTL + cornerSampleTR + iStack_8 >> 2;
+  iStack_12 = cornerSampleBL + cornerSampleTL + cornerSampleTR + cornerSampleBR >> 2;
   iVar2 = cornerSampleTR;
   if (cornerSampleTL < cornerSampleTR) {
     iVar2 = cornerSampleTL;

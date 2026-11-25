@@ -934,7 +934,7 @@ uint16_t __cdecl16far gameProcessKey(void)
 {
   uint16_t key;
   uint16_t uVar1;
-  char *pcVar2;
+  char *msgPtr;
   undefined1 in_DL;
   uint8_t msg;
   
@@ -987,9 +987,9 @@ uint16_t __cdecl16far gameProcessKey(void)
       destroyLatchSide0 = 1;
     }
     else if (key == 0x2300) {
-      pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x286,_SS),
+      msgPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x286,_SS),
                              (char *)CONCAT22(GSeed,(char *)0x26510),(char)SeedHi);
-      ovr_say(pcVar2,in_DL);
+      ovr_say(msgPtr,in_DL);
     }
     else if (key == 0x2400) {
       ovr_constrct_usesGLeaderCount();
@@ -999,9 +999,9 @@ uint16_t __cdecl16far gameProcessKey(void)
     }
     else if (key == 0x2600) {
       GCharLevelsInc = GCharLevelsInc + '\x01';
-      pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x297,_SS),
+      msgPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x297,_SS),
                              (char *)(ulong)CONCAT12(GCharLevelsInc,0x2410));
-      ovr_say(pcVar2,in_DL);
+      ovr_say(msgPtr,in_DL);
     }
     else if (key == 0x2c00) {
       ovr_ovc41_usesAgntCount3();

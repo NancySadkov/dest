@@ -111,7 +111,7 @@ void __cdecl16far ovc30_nextWave(byte flags)
 uint16_t __cdecl16far ovc30_usesRandBelow(byte band)
 
 {
-  uint16_t uVar1;
+  uint16_t packed;
   uint16_t uVar2;
   uint8_t bandMax;
   byte abStack_8 [2];
@@ -123,7 +123,7 @@ uint16_t __cdecl16far ovc30_usesRandBelow(byte band)
   memcpy(&abStack_8, &((*(uint16_t *)((uint8_t *)&(LevelBandMax) + 2))), 2);
   bandMax = (*(uint16_t *)((uint8_t *)&(LevelBandMax)));
   if (band == 4) {
-    uVar1 = CONCAT11(SUB21((*(uint16_t *)((uint8_t *)&(LevelBandMax) + 2)),1),0x29);
+    packed = CONCAT11(SUB21((*(uint16_t *)((uint8_t *)&(LevelBandMax) + 2)),1),0x29);
   }
   else {
     do {
@@ -134,9 +134,9 @@ uint16_t __cdecl16far ovc30_usesRandBelow(byte band)
              (*(byte *)((int)&worldMenuLabels[0xc].seg + (uVar2 & 0xff) * 0x95) < (&bandMin)[band]))
             || ((&bandMax)[band] < *(byte *)((int)&worldMenuLabels[0xc].seg + (uVar2 & 0xff) * 0x95)
                ));
-    uVar1 = CONCAT11((char)((uint)(&bandMax + band) >> 8),(char)uVar2);
+    packed = CONCAT11((char)((uint)(&bandMax + band) >> 8),(char)uVar2);
   }
-  return uVar1;
+  return packed;
 }
 
 

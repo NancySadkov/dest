@@ -1585,7 +1585,7 @@ char * __cdecl16far stats_readyStatusText(byte agntIndex,char *text)
 {
   uint32_t uVar1;
   uint8_t *puVar2;
-  char *pcVar3;
+  char *msg;
   uint16_t agntSeg;
   int iVar5;
   uint16_t uVar6;
@@ -1600,7 +1600,7 @@ char * __cdecl16far stats_readyStatusText(byte agntIndex,char *text)
     iVar5 = (int)uVar1;
     puVar2 = ovr_ovc15_usesStshRealloc
                        ((char *)*(uint16_t *)(iVar5 + 0x24),*(uint16_t *)(iVar5 + 0x26),0,0,0,0,0,0);
-    pcVar3 = ovr_stsprintf(agntIndex,(char *)CONCAT22(0x638d,(char *)text),
+    msg = ovr_stsprintf(agntIndex,(char *)CONCAT22(0x638d,(char *)text),
                            (char *)CONCAT22(puVar2,(char *)0x26510),agntSeg);
   }
   else {
@@ -1610,10 +1610,10 @@ char * __cdecl16far stats_readyStatusText(byte agntIndex,char *text)
     iVar5 = (int)uVar1;
     puVar2 = ovr_ovc15_usesStshRealloc
                        ((char *)*(uint16_t *)(iVar5 + 0x24),*(uint16_t *)(iVar5 + 0x26),0,0,0,0,0,0);
-    pcVar3 = ovr_stsprintf(agntIndex,(char *)CONCAT22(0x63a2,(char *)text),
+    msg = ovr_stsprintf(agntIndex,(char *)CONCAT22(0x63a2,(char *)text),
                            (char *)CONCAT22(puVar2,(char *)0x26510),agntSeg);
   }
-  return pcVar3;
+  return msg;
 }
 
 

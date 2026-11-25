@@ -103,7 +103,7 @@ void __cdecl16far ovc27_usesRandBelow(int x1,int y1,int x2,int y2,brect_t *rect,
   int iVar1;
   int iVar2;
   uint8_t *puVar3;
-  uint16_t uVar4;
+  uint16_t randPick;
   uint uVar5;
   uint uVar6;
   brect_t *pbVar7;
@@ -168,17 +168,17 @@ void __cdecl16far ovc27_usesRandBelow(int x1,int y1,int x2,int y2,brect_t *rect,
       puVar3 = (uint8_t *)(iVar2 * 0x140 + iStack_8);
       if ((((pbVar7->y <= iVar2) && (iVar2 <= pbVar7->h)) &&
           (*(int *)(&plane0 + (uint)bStack_3 * 2) != 0)) &&
-         (uVar4 = ovr_randBelow(3,0), (uVar4 & 0xff) == 0)) {
+         (randPick = ovr_randBelow(3,0), (randPick & 0xff) == 0)) {
         *puVar3 = (&plane0)[(uint)bStack_3 * 2];
       }
       if (((pbVar7->y <= y1) && (y1 <= pbVar7->h)) &&
          ((*(int *)(&plane1 + (uint)bStack_3 * 2) != 0 &&
-          (uVar4 = ovr_randBelow(3,0), (uVar4 & 0xff) == 0)))) {
+          (randPick = ovr_randBelow(3,0), (randPick & 0xff) == 0)))) {
         puVar3[0x140] = (&plane1)[(uint)bStack_3 * 2];
       }
       if (((pbVar7->y <= y1 + 1) && (y1 + 1 <= pbVar7->h)) &&
          ((*(int *)(&plane2 + (uint)bStack_3 * 2) != 0 &&
-          (uVar4 = ovr_randBelow(3,0), (uVar4 & 0xff) == 0)))) {
+          (randPick = ovr_randBelow(3,0), (randPick & 0xff) == 0)))) {
         puVar3[0x280] = (&plane2)[(uint)bStack_3 * 2];
       }
       y1 = y1 + iStack_a;

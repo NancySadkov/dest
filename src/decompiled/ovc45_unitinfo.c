@@ -4464,22 +4464,22 @@ int __cdecl16far ovc45_compute9(char *dest,char *src,char *font,uint maxWidth,ch
   int iVar3;
   int iVar4;
   char in_stack_00000012;
-  int iStack_4;
+  int textWidth;
   
   uVar2 = ovr_font_textWidth((*(uint16_t *)((uint8_t *)&(src) + 2)),font,maxWidth,0,0);
   if (mode < uVar2) {
     if (in_stack_00000012 == '\x02') {
-      iStack_4 = ovr_font_textWidth((char *)"..",(char *)CONCAT22((*(uint16_t *)((uint8_t *)&(font) + 2)),(char *)0x2410),maxWidth,0,0)
+      textWidth = ovr_font_textWidth((char *)"..",(char *)CONCAT22((*(uint16_t *)((uint8_t *)&(font) + 2)),(char *)0x2410),maxWidth,0,0)
       ;
     }
     else {
-      iStack_4 = ovr_font_textWidth((char *)"...",(char *)CONCAT22((*(uint16_t *)((uint8_t *)&(font) + 2)),(char *)0x2410),maxWidth,0,0)
+      textWidth = ovr_font_textWidth((char *)"...",(char *)CONCAT22((*(uint16_t *)((uint8_t *)&(font) + 2)),(char *)0x2410),maxWidth,0,0)
       ;
     }
     iVar3 = 0;
     for (iVar4 = 0;
         (((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   iVar3] != '\0' &&
-        ((int)(iStack_4 + iVar4 + (uint)*(byte *)((*(uint16_t *)((uint8_t *)&(font) + 2)) + ((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   iVar3] + 0xa1)) <=
+        ((int)(textWidth + iVar4 + (uint)*(byte *)((*(uint16_t *)((uint8_t *)&(font) + 2)) + ((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   iVar3] + 0xa1)) <=
          (int)mode)); iVar4 = iVar4 + (uint)bVar1) {
       bVar1 = *(byte *)((*(uint16_t *)((uint8_t *)&(font) + 2)) + ((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   iVar3] + 0xa1);
       dest[iVar3] = ((byte *)(*(uint16_t *)((uint8_t *)&(src) + 2)))[   iVar3];
