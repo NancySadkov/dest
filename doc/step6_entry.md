@@ -4278,3 +4278,33 @@ green.
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 49,662 -> 49,642
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### Two more `unaff_` members settled; `stshRead`'s prototype is wrong
+
+`tmp/unaff_classify.py` reports which register writes actually occur. Two holders have
+exactly one write, from a parameter:
+
+* **`uiReadString` (`4528:0C98`)**: `mov si, word ptr [bp + 0xa]` and nothing else, so
+  `unaff_SI` is the third parameter (`row`).  The local `uint *unaff_SI;` was an
+  uninitialised pointer in our build; it is now bound to `row`, so
+  `uStack_5e = (uint16_t)CONCAT22(text,row)` uses the argument the caller really passes.
+* **`stshRead` (`474a:008F`)**: `mov si, word ptr [bp + 6]` - the first parameter - but
+  the prototype in `st_functions.h` is `uint stshRead(void)` and all three call sites call
+  it with no arguments.  The original pushes one word before the manual far call:
+
+  ```
+  03A11D  mov ax, 0x280
+  03A120  mov es, ax
+  03A122  push word ptr es:[0x4e4]
+  03A127  push cs
+  03A128  call 0x3932f            ; stshRead
+  ```
+
+  so the callee reads `MK_FP(0x280,0x4e4)`'s word as the **segment** half of
+  `srcPtr = CONCAT22(pbuf, arg)`.  Fixing it means giving `stshRead` a `uint16_t`
+  parameter and passing that expression at `ovc17_stash.c:796`, `:840` and
+  `ovc21_manage.c:1229` - the third site's argument has not been read yet, so the change
+  was not made rather than guessed.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 49,623 -> 49,621
+  compare_state 1,627/0/0; diff_dgroup 972/1,868

@@ -556,7 +556,9 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   uint8_t *puVar7;
   uint16_t uVar8;
   uint16_t uVar9;
-  uint *unaff_SI;
+  /* 4528:0C98 prologue: mov si, word ptr [bp + 0xa] - the third parameter (row),
+     and the only write to SI in the whole function, so the pseudo-register IS
+     that parameter. */
   uint8_t *puVar10;
   uint *ey;
   uint3 uStack_5e;
@@ -567,7 +569,7 @@ char * __cdecl16far uiReadString(char *textOfs,int textSeg,int row,char *gfxOfs,
   byte bStack_5;
   uint16_t uStack_4;
   
-  uStack_5e = (uint16_t)CONCAT22(text,unaff_SI);
+  uStack_5e = (uint16_t)CONCAT22(text,row);
   UserWantsExit = 0;
   inputCancelled = 0;
   if (textOfs != (char *)0x0 || textSeg != 0) {
