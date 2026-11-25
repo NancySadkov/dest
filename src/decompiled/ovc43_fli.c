@@ -132,7 +132,7 @@ void __cdecl16far ovc43_usesStExit(uint32_t gindex,uint16_t hnd,uint16_t sheetOf
 {
   bool bVar1;
   uint16_t remainingLo;
-  int iStack_10;
+  int remainingHi;
   int iStack_e;
   
   ovr_stshRead();
@@ -142,8 +142,8 @@ void __cdecl16far ovc43_usesStExit(uint32_t gindex,uint16_t hnd,uint16_t sheetOf
   }
   bVar1 = remainingLo < 0x10;
   remainingLo = remainingLo - 0x10;
-  iStack_10 = iStack_10 - (uint)bVar1;
-  if (remainingLo != 0 || iStack_10 != 0) {
+  remainingHi = remainingHi - (uint)bVar1;
+  if (remainingLo != 0 || remainingHi != 0) {
     ovr_stshRead();
     ovc43_usesFmFreeAudio
               ((uint32_t)CONCAT22(_SS,&remainingLo),(char_sheet_t *)sheetOfs,sheetSeg);

@@ -4227,3 +4227,27 @@ flow per function.
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 49,708 -> 49,687
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### `ovc22_textRingProt`: `unaff_DI` is a loop counter, not a pointer
+
+The largest remaining slot (98 uses, `5087:056e`) looked like a pointer in the export
+(`uint *unaff_DI`, used as `*unaff_DI` and `+ (int)unaff_DI`).  The original says
+otherwise - both loops are ordinary counted loops with DI as the index:
+
+```
+loop 1  bf 02 00      mov di, 2
+        0b ff / 4f    or di,di / dec di      ; 2, 1, 0
+        7d ..         jge body
+loop 2  33 ff         xor di, di
+        26 8a 81 aa 00  mov al, es:[bx + di + 0xaa]   ; index into the record
+        47 / 83 ff 02 / 7e ..  inc di / cmp di,2 / jle body   ; 0, 1, 2
+```
+
+So DI is `int i` in two three-iteration loops, and the export's pointer type is a
+decompiler artefact.  Fixing it means re-deriving both loop bodies inside a 2,300-line
+function - a genuine recovery task, not a slot rename - so it was not attempted in a
+batch.  The two loop addresses (`0436A7`, `043712`) are recorded here as the starting
+point for that work.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 49,708 -> 49,687 -> 49,662
+  compare_state 1,627/0/0; diff_dgroup 972/1,868

@@ -378,7 +378,7 @@ void __cdecl16far ovc42_drawTextRow(char *text,byte row)
   far_t dst_00;
   far_t handle;
   uint8_t dst;
-  stg_tmp_t *psStack_6;
+  stg_tmp_t *gfxRec;
   int16_t iStack_4;
   
   dst_00.seg = _SS;
@@ -394,10 +394,10 @@ void __cdecl16far ovc42_drawTextRow(char *text,byte row)
   TextBlitX = 0xb;
   handle.seg = demfont1FontSeg;
   handle.ofs = demfont1FontOfs;
-  psStack_6 = ovr_stshLoadGfx(handle);
+  gfxRec = ovr_stshLoadGfx(handle);
   TextBlitDstSeg = 0xa000;
   iStack_4 = max_width;
-  ovr_blitLabel((char *)text,(uint8_t *)CONCAT22(psStack_6,(*(uint16_t *)((uint8_t *)&(text) + 2))),max_width,0x3f);
+  ovr_blitLabel((char *)text,(uint8_t *)CONCAT22(gfxRec,(*(uint16_t *)((uint8_t *)&(text) + 2))),max_width,0x3f);
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
   return;

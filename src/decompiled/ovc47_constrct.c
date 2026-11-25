@@ -416,7 +416,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
   long lVar17;
   uint32_t in_stack_0000ff5e;
   long in_stack_0000ff62;
-  uint16_t uStack_12;
+  uint16_t count;
   
   lVar17 = CONCAT22((int)((ulong)in_stack_0000ff5e >> 0x10),unaff_SI);
   bVar3 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
@@ -438,9 +438,9 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     uVar7 = (uint16_t)((ulong)(lVar16 + 1) >> 0x10);
     uVar14 = uVar7;
     plVar6 = LXMUL_at_(unaff_DI,lVar17,in_stack_0000ff62);
-    uStack_12 = (uint16_t)(lVar16 + 1);
+    count = (uint16_t)(lVar16 + 1);
     msg = ovr_stsprintf(&stk_ff60,(char *)CONCAT22(0x81dc,_SS),
-                        (char *)CONCAT22(plVar6,(char *)0x2410),uVar14,uStack_12,uVar7,
+                        (char *)CONCAT22(plVar6,(char *)0x2410),uVar14,count,uVar7,
                         uVar5);
     ovr_say(msg,0);
     lVar17 = LDIV_at_((ulong)uVar5,10);

@@ -523,10 +523,10 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
   int iStack_1e;
   uint16_t gfxSeg;
   char *pcStack_1a;
-  char *pcStack_18;
+  char *srcPtr;
   uint rectBottom;
   int iStack_14;
-  uint uStack_12;
+  uint rectTop;
   int rectLeft;
   char *pcStack_e;
   uint spanH;
@@ -549,7 +549,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
     }
     rectLeft = *rectOfs;
     uVar4 = (uint16_t)((ulong)rectOfs >> 0x10);
-    uStack_12 = rectOfs[1];
+    rectTop = rectOfs[1];
     iStack_14 = rectOfs[2];
     rectBottom = rectOfs[3];
     if (in_stack_00000012 == '\0') {
@@ -574,7 +574,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
     spanH = (iStack_14 - (int)pcStack_e) + 1;
     if (0 < (int)spanH) {
       pcStack_1a = (char *)((int)pcStack_e + uVar1 * 0x140);
-      pcStack_18 = (char *)rectOfs[4];
+      srcPtr = (char *)rectOfs[4];
       uVar3 = 1;
       if (in_stack_00000012 == '\0') {
         pfStack_6 = (far_t *)(GUnitDescriptions + 0x12);
@@ -592,12 +592,12 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
           iVar2 = (*(code *)pfStack_6)(uVar5,iStack_1e,gfxSeg,&skip);
           iStack_1e = iStack_1e + iVar2;
           if ((*(uint *)((uint)(byte)flip * 2 + 0x470) & uVar3) != 0) {
-            if (uStack_12 <= uVar1) {
+            if (rectTop <= uVar1) {
               copyGrayscalePalette
                         ((uint8_t *)CONCAT22(_SS,&skip + uStack_a),
                          *(int *)(gfx.ofs + 10) - uStack_a);
               uVar5 = 0x22a6;
-              ovr_masked_memcpy(pcStack_1a,(char *)CONCAT22(&skip,pcStack_18),_SS,uStack_a,
+              ovr_masked_memcpy(pcStack_1a,(char *)CONCAT22(&skip,srcPtr),_SS,uStack_a,
                                 *(int *)(gfx.ofs + 10),spanH,
                                 *(uint16_t *)((uint)(byte)flip * 2 + 0x470));
             }
@@ -619,14 +619,14 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
           iVar2 = (*(code *)pfStack_6)(uVar5,iStack_1e,gfxSeg,&skip);
           iStack_1e = iStack_1e + iVar2;
           if ((*(uint *)((uint)(byte)flip * 2 + 0x470) & uVar3) != 0) {
-            if (uStack_12 <= uVar1) {
+            if (rectTop <= uVar1) {
               buf.seg = _SS;
               buf.ofs = (uint16_t)(&skip + uStack_a);
               ovr_driver_scan1(buf,*(int *)(gfx.ofs + 10) - uStack_a,in_stack_00000014,
                                in_stack_00000016,far_from_u32((uint32_t)(0x15290000)),(uint)in_stack_00000018);
               in_stack_00000018 = in_stack_00000018 + (*(char *)(gfx.ofs + 10) - (char)uStack_a);
               uVar5 = 0x22a6;
-              ovr_masked_memcpy(pcStack_1a,(char *)CONCAT22(&skip,pcStack_18),_SS,uStack_a,
+              ovr_masked_memcpy(pcStack_1a,(char *)CONCAT22(&skip,srcPtr),_SS,uStack_a,
                                 *(int *)(gfx.ofs + 10),spanH,
                                 *(uint16_t *)((uint)(byte)flip * 2 + 0x470));
             }
