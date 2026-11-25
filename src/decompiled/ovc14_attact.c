@@ -83,47 +83,40 @@ uint __cdecl16far attact_usesGMapFlags2(int x,int y)
 uint __cdecl16far attact_isTerrainFlat(int x,int y)
 
 {
-  uint in_AX;
-  uint uVar1;
-  byte bVar2;
-  byte (*paabVar3) [59] [148];
-  int iVar4;
-  int iVar5;
-  uint16_t uVar6;
-  uint8_t cornerHeights;
-  int iStack_8;
-  int iStack_6;
-  int iStack_4;
-  
-  if ((((x < 0) || (y < 0)) || (in_AX = x + 1, 0x93 < (int)in_AX)) ||
-     (in_AX = y + 1, 0x3b < (int)in_AX)) {
-    uVar1 = in_AX & 0xff00;
+  /* Re-derived: 1 when the four corner heights of the cell differ by less than 0x3c, 0 when
+     out of bounds or steeper.  The sole caller tests (result & 0xff), so the exported
+     `in_AX & 0xff00` and `(uint)bVar2 << 8` high bytes were never observed and the tail is
+     0/1.  The heights are addressed as an int array by the original, so the aliasing
+     expression is preserved. */
+  byte (*cells) [59] [148];
+  int minHeight;
+  int k;
+  uint8_t maxHeight;
+  int h1;
+  int h2;
+  int h3;
+
+  if ((((x < 0) || (y < 0)) || (0x93 < x + 1)) || (0x3b < y + 1)) {
+    return 0;
   }
-  else {
-    uVar6 = (uint16_t)((ulong)GMapCells >> 0x10);
-    paabVar3 = (byte (*) [59] [148])GMapCells;
-    cornerHeights = (int)(char)(*paabVar3)[y][x];
-    iStack_8 = (int)(char)(*paabVar3)[y][x + 1];
-    iStack_6 = (int)(char)(*paabVar3)[y + 1][x];
-    iStack_4 = (int)(char)(*paabVar3)[y + 1][x + 1];
-    iVar5 = cornerHeights;
-    for (iVar4 = 1; iVar4 < 4; iVar4 = iVar4 + 1) {
-      if (*(int *)(&cornerHeights + iVar4 * 2) < iVar5) {
-        iVar5 = *(int *)(&cornerHeights + iVar4 * 2);
-      }
-      if (cornerHeights < *(int *)(&cornerHeights + iVar4 * 2)) {
-        cornerHeights = *(int *)(&cornerHeights + iVar4 * 2);
-      }
+  cells = (byte (*) [59] [148])GMapCells;
+  maxHeight = (int)(char)(*cells)[y][x];
+  h1 = (int)(char)(*cells)[y][x + 1];
+  h2 = (int)(char)(*cells)[y + 1][x];
+  h3 = (int)(char)(*cells)[y + 1][x + 1];
+  minHeight = maxHeight;
+  for (k = 1; k < 4; k = k + 1) {
+    if (*(int *)(&maxHeight + k * 2) < minHeight) {
+      minHeight = *(int *)(&maxHeight + k * 2);
     }
-    bVar2 = (byte)((uint)(cornerHeights - iVar5) >> 8);
-    if (cornerHeights - iVar5 < 0x3c) {
-      uVar1 = CONCAT11(bVar2,1);
-    }
-    else {
-      uVar1 = (uint)bVar2 << 8;
+    if (maxHeight < *(int *)(&maxHeight + k * 2)) {
+      maxHeight = *(int *)(&maxHeight + k * 2);
     }
   }
-  return uVar1;
+  if (maxHeight - minHeight < 0x3c) {
+    return 1;
+  }
+  return 0;
 }
 
 

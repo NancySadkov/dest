@@ -62,46 +62,51 @@ uint16_t __cdecl16far
 ovc25_usesAlignUp42(char partyIndex,byte count,uint16_t destX,uint16_t destY,uint16_t x,uint16_t y)
 
 {
-  byte *pbVar1;
-  uint uVar2;
-  uint uVar3;
-  uint uVar4;
-  uint16_t uVar5;
-  int iStack_4;
-  
-  uVar4 = 0;
+  /* Re-derived: flags every entity of the party that stands at the destination cell, or is
+     already heading there, with bit 8; then places up to `count` further units there and
+     returns 0xffff when the scan ends.  The export's label existed only to skip the flag
+     store, so it is a guard on that statement. */
+  byte *flagsPtr;
+  uint entAligned;
+  uint destAligned;
+  uint entIdx;
+  int placed;
+  bool atCell;
+
+  entIdx = 0;
   do {
-    if (EntityCount <= uVar4) {
+    if (EntityCount <= entIdx) {
       if (count != 0) {
-        iStack_4 = 0;
-        while ((iStack_4 < (int)(uint)count &&
-               (uVar4 = ovc25_usesAlignUp4(partyIndex,x,y,destX,destY), -1 < (int)uVar4))) {
-          ((entity_t *)Entities)[uVar4].base.state = 0;
-          ((entity_t *)Entities)[uVar4].base.destX = destX;
-          ((entity_t *)Entities)[uVar4].base.destY = destY;
-          pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[uVar4] + 0x33);
-          *pbVar1 = *pbVar1 | 8;
-          iStack_4 = iStack_4 + 1;
+        for (placed = 0;
+             (placed < (int)(uint)count &&
+              (entIdx = ovc25_usesAlignUp4(partyIndex,x,y,destX,destY), -1 < (int)entIdx));
+             placed = placed + 1) {
+          ((entity_t *)Entities)[entIdx].base.state = 0;
+          ((entity_t *)Entities)[entIdx].base.destX = destX;
+          ((entity_t *)Entities)[entIdx].base.destY = destY;
+          flagsPtr = (byte *)((uint8_t *)&((entity_t *)Entities)[entIdx] + 0x33);
+          *flagsPtr = *flagsPtr | 8;
         }
       }
       return 0xffff;
     }
-    uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-    if (*(char *)((int)&((entity_t *)Entities)[uVar4].base.entity + 3) == partyIndex) {
-      uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar4].base.x,0,0);
-      uVar3 = ovr_alignUp4(destX,0,0);
-      uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-      if ((uVar2 != uVar3) || (((entity_t *)Entities)[uVar4].base.y != destY)) {
-        uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar4].base.destX,0,0);
-        uVar3 = ovr_alignUp4(destX,0,0);
-        if ((uVar2 != uVar3) || (((entity_t *)Entities)[uVar4].base.destY != destY))
-        goto L_OVC25_5b66_00ff_01D9;
+    if (*(char *)((int)&((entity_t *)Entities)[entIdx].base.entity + 3) == partyIndex) {
+      atCell = true;
+      entAligned = ovr_alignUp4(((entity_t *)Entities)[entIdx].base.x,0,0);
+      destAligned = ovr_alignUp4(destX,0,0);
+      if ((entAligned != destAligned) ||
+         (((entity_t *)Entities)[entIdx].base.y != destY)) {
+        entAligned = ovr_alignUp4(((entity_t *)Entities)[entIdx].base.destX,0,0);
+        destAligned = ovr_alignUp4(destX,0,0);
+        atCell = !((entAligned != destAligned) ||
+                   (((entity_t *)Entities)[entIdx].base.destY != destY));
       }
-      pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[uVar4] + 0x33);
-      *pbVar1 = *pbVar1 | 8;
+      if (atCell) {
+        flagsPtr = (byte *)((uint8_t *)&((entity_t *)Entities)[entIdx] + 0x33);
+        *flagsPtr = *flagsPtr | 8;
+      }
     }
-L_OVC25_5b66_00ff_01D9:
-    uVar4 = uVar4 + 1;
+    entIdx = entIdx + 1;
   } while( true );
 }
 
