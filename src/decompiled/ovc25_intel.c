@@ -280,47 +280,51 @@ void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,
 uint __cdecl16far ovc25_findUnitCell(int *x,uint *y)
 
 {
-  int iVar1;
-  uint uVar2;
-  uint16_t uVar3;
-  uint uVar4;
-  uint uVar5;
-  uint uVar6;
-  int *in_stack_00000004;
-  char cStack_a;
-  byte bStack_9;
-  uint uStack_8;
-  
-  iVar1 = *(int *)CONCAT22((int *)x,in_stack_00000004);
-  uVar2 = *(uint *)CONCAT22((uint *)y,(*(uint16_t *)((uint8_t *)&(x) + 2)));
-  uStack_8 = 0;
-  uVar4 = uVar2;
+  /* Re-derived from 5b66:0722.  Both parameters are far pointers read directly by the
+     original (`les bx, ptr [bp+6]` / `les bx, ptr [bp+0xa]`), so the exported CONCAT22 forms
+     were wrong: they invented an in_stack_00000004 slot at [bp+4] - the far return CS, never
+     read - and built the y pointer from x's segment word as an offset.  The spiral search is
+     unchanged. */
+  int baseX;
+  uint baseY;
+  uint16_t found;
+  uint retAcc;
+  uint dy;
+  uint dx;
+  char stepX;
+  byte stepY;
+  uint radius;
+
+  baseX = *x;
+  baseY = *y;
+  radius = 0;
+  retAcc = baseY;
   do {
-    if (99 < uStack_8) {
-      return uVar4 & 0xff00;
+    if (99 < radius) {
+      return retAcc & 0xff00;
     }
-    for (uVar6 = 0; uVar6 <= uStack_8; uVar6 = uVar6 + 1) {
-      for (uVar5 = 0; uVar5 <= uStack_8; uVar5 = uVar5 + 1) {
-        bStack_9 = 0xff;
-        while ((0x7f < bStack_9 || ((uVar6 != 0 && ((char)bStack_9 < '\x02'))))) {
-          cStack_a = -1;
-          while ((cStack_a < '\0' || ((uVar5 != 0 && (cStack_a < '\x02'))))) {
-            uVar3 = ovr_attact_usesGUnits
-                              (iVar1 + uVar6 * (int)cStack_a,uVar2 + uVar5 * (int)cStack_a);
-            if ((char)uVar3 != '\0') {
-              *(uint *)CONCAT22((int *)x,in_stack_00000004) = iVar1 + uVar6 * (int)cStack_a;
-              *(uint *)CONCAT22((uint *)y,(*(uint16_t *)((uint8_t *)&(x) + 2))) = uVar2 + uVar5 * (int)cStack_a;
-              return CONCAT11((char)(uVar5 * (int)cStack_a >> 8),1);
+    for (dx = 0; dx <= radius; dx = dx + 1) {
+      for (dy = 0; dy <= radius; dy = dy + 1) {
+        stepY = 0xff;
+        while ((0x7f < stepY || ((dx != 0 && ((char)stepY < '\x02'))))) {
+          stepX = -1;
+          while ((stepX < '\0' || ((dy != 0 && (stepX < '\x02'))))) {
+            found = ovr_attact_usesGUnits(baseX + dx * (int)stepX,
+                                          baseY + dy * (int)stepX);
+            if ((char)found != '\0') {
+              *x = baseX + dx * (int)stepX;
+              *y = baseY + dy * (int)stepX;
+              return CONCAT11((char)(dy * (int)stepX >> 8),1);
             }
-            cStack_a = cStack_a + '\x02';
-            uVar4 = CONCAT11((char)((uint)uVar3 >> 8),cStack_a);
+            stepX = stepX + '\x02';
+            retAcc = CONCAT11((char)((uint)found >> 8),stepX);
           }
-          bStack_9 = bStack_9 + 2;
-          uVar4 = CONCAT11((char)(uVar4 >> 8),bStack_9);
+          stepY = stepY + '\x02';
+          retAcc = CONCAT11((char)(retAcc >> 8),stepY);
         }
       }
     }
-    uStack_8 = uStack_8 + 1;
+    radius = radius + 1;
   } while( true );
 }
 
