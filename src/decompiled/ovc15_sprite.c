@@ -1386,8 +1386,7 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
     (*(uint16_t *)((uint8_t *)&(agntCopy.entity) + 2)) = uVar9;
     agntCopy.owner = owner;
     agntCopy.gdata =
-         (agntG_t far *)
-         CONCAT22(SEG_OF(AgntGs),(agntG_t *)
+         (agntG_t far *)MK_FP(SEG_OF(AgntGs),(agntG_t *)
                          &AgntGs[(uint)(peVar5->base).gindex]);
     (*(uint16_t *)((uint8_t *)&(agntCopy.entity))) =(uint16_t)( peVar5);
     bVar1 = ovc15_usesAlignUp42();

@@ -433,8 +433,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
                               ok == '\0')) || (0x14 < Agnts[agntIndex - 1].y))
                             || (((((agntG_t far *)agnt_00->gdata)->flags3 & 0x400) != 0 &&
                                 (roll = ovr_randBelow(0x14,0), (roll & 0xff) != 0)))) ||
-                           (ok = ovr_agnt_compute16(agnt,(agnt_t far *)
-                                                            CONCAT22(SEG_OF(Agnts),(agnt_t far *)&Agnts[agntIndex - 1].x)),
+                           (ok = ovr_agnt_compute16(agnt,(agnt_t far *)MK_FP(SEG_OF(Agnts),(agnt_t far *)&Agnts[agntIndex - 1].x)),
                            ok == '\0')) {
                           if (((((((agntG_t far *)agnt_00->gdata)->flags2 & 0x200) == 0) ||
                                (ok = ovr_agnt_computeFrameExtents
