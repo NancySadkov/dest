@@ -7768,3 +7768,68 @@ which is worse than the segment-0 `CONCAT22` class because it silently reads our
   grep_checks 40,240 -> 40,190; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### Three more truncated record reads, and a count of the whole class
+
+`tmp/find_truncfar.py` enumerates the shape that has now been fixed six times: a far pointer folded
+into a `uint32_t` and then truncated with `(int)`, so the dereference is DS-relative even though the
+record lives in its own segment. It found **31 reads in 9 functions**. Three were unambiguous and are
+fixed here.
+
+**ovc42_usesAgntCount** - three reads of `agntG_t.type` (offset 1):
+
+```c
+uVar1 = *(uint32_t far *)&Agnts[iVar3].gdata;
+if (*(char *)((int)uVar1 + 1) == '\x02') {
+```
+
+becomes `Agnts[iVar3].gdata->type == '\x02'` (and `\x01`, `\v`). Emitted:
+
+```
+les  bx,dword ptr es:_Agnts[bx+29]     ; gdata at 0x1d
+cmp  byte ptr es:[bx+1],2
+```
+
+and the module now has **zero** DS-relative `[bx+1]`.
+
+**ovc27_compute1** - one read of `agntG_t.flags2` (0x3e). Emitted `test word ptr es:[bx+62],16`. This
+function already used `((agntG_t far *)agnt->gdata)->flags` correctly on its next line, so the one site
+was simply inconsistent with its own neighbours.
+
+**ovc27_compute2** - not a truncated pointer but the same consequence: the record *offset* used as a DS
+pointer.
+
+```c
+(in_AX = param * 0x34, (*(uint *)(in_AX + 0x2b) & 0x7e0) == 0)
+```
+
+`param * 0x34` indexes the Agnts segment, so `*(uint *)(in_AX + 0x2b)` read DGROUP. 0x2b is
+`Agnts[].flags` (audit/symbols.tsv). Emitted `test word ptr es:_Agnts[bx+43],2016`.
+
+**Queue after this:** 27 reads in 7 functions - `stats_usesAlignUp42` (14), `stats_readyStatusText` (3),
+`attact_usesAgntFlag1` (3), `ovc49_drawAgents` (3), `ovc49_body1` (2), `ovc41_unitStatusText` (1).
+`stats_usesAlignUp42` (6386:1c9f) is the single biggest remaining target: 14 reads, 26 locals, and its
+`gdata`/`entity` chains are the same shape already decoded twice.
+
+**Deliberately not touched:** the three remaining
+`far_from_u32((uint32_t)(SEG_OF(Agnts)))` arguments to `drawAgntStats` (ovc33_stats.c:1803, 1848, 1932).
+`SEG_OF(Agnts)` is 0x50, so each builds `{ofs:0x50, seg:0}` - a colormap pointer into segment 0, which
+is certainly wrong. But the call sites do not agree on arity, so the correct replacement is not the same
+at all three:
+
+```
+stats_setAgentBase     6386:16a2   push 0 / push 0x50 / push ax            (3 words)
+stats_calledAwayNotice 6386:1837   push 0 / push 0x50 / push ax            (3 words)
+stats_openAgentDetail  6386:1abe   push 0 / push 0 / push 0x50 / push ax   (4 words)
+```
+
+Only the third matches the 4-word shape fixed earlier in `stats_unreadyNotice` (`far agnt` + a zero
+`far_t`). The first two push a single extra word, which means the declared
+`drawAgntStats(agnt_t far *, far_t cmap, uint16_t arg3)` splits those two call sites wrongly - either the
+`far_t` is really one word there, or a word belongs to a different argument. Settling it means reading
+`drawAgntStats`'s own prologue at 6386:06cd and its `add sp` accounting, which is a turn of its own, so
+these are recorded rather than guessed.
+
+  grep_checks 40,190 -> 40,180; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

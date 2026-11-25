@@ -206,9 +206,8 @@ uint __cdecl16far ovc27_compute1(agnt_t far *agnt,int param,uint16_t arg3,uint16
   uint uVar2;
   
   if ((((agntG_t far *)agnt->gdata)->flags & 2) != 0) {
-    uVar1 = *(uint32_t far *)&Agnts[param].gdata;
     bVar3 = (byte)((uint)(param * 0x34) >> 8);
-    if (((*(uint *)((int)uVar1 + 0x3e) & 0x10) != 0) &&
+    if (((Agnts[param].gdata->flags2 & 0x10) != 0) &&
        ((((entity_t *)agnt->entity)->base).level < 3)) {
       return (uint)bVar3 << 8;
     }
@@ -455,7 +454,7 @@ uint __cdecl16far ovc27_compute2(agnt_t far *agnt,int param,uint16_t arg3,uint16
     if ((((agntG_t far *)agnt->gdata)->flags & 1) == 0) {
       if (((((((agntG_t far *)agnt->gdata)->flags & 0x800) != 0) &&
            (in_AX = ovc27_rollAgainstStat(agnt,mode,5,0), (char)in_AX != '\0')) &&
-          (in_AX = param * 0x34, (*(uint *)(in_AX + 0x2b) & 0x7e0) == 0)) &&
+          (in_AX = param * 0x34, (Agnts[param].flags & 0x7e0) == 0)) &&
          ((in_AX = param * 0x34,
           (Agnts[param].gdata->flags3 & 0x80) == 0 &&
           (in_AX = param * 0x34,

@@ -1226,14 +1226,12 @@ uint16_t __cdecl16far run_demo(void)
 void __cdecl16far ovc42_usesAgntCount(void)
 
 {
-  uint32_t uVar1;
   bool bVar2;
   int iVar3;
   
   bVar2 = false;
   for (iVar3 = 0; iVar3 < (int)(uint)AgntCount; iVar3 = iVar3 + 1) {
-    uVar1 = *(uint32_t far *)&Agnts[iVar3].gdata;
-    if (*(char *)((int)uVar1 + 1) == '\x02') {
+    if (Agnts[iVar3].gdata->type == '\x02') {
       if (bVar2) {
         Agnts[iVar3].x = 0x6e;
         Agnts[iVar3].y = 0xb;
@@ -1245,14 +1243,12 @@ void __cdecl16far ovc42_usesAgntCount(void)
       bVar2 = true;
     }
     else {
-      uVar1 = *(uint32_t far *)&Agnts[iVar3].gdata;
-      if (*(char *)((int)uVar1 + 1) == '\x01') {
+      if (Agnts[iVar3].gdata->type == '\x01') {
         Agnts[iVar3].x = 0x3d;
         Agnts[iVar3].y = 0x12;
       }
       else {
-        uVar1 = *(uint32_t far *)&Agnts[iVar3].gdata;
-        if (*(char *)((int)uVar1 + 1) == '\v') {
+        if (Agnts[iVar3].gdata->type == '\v') {
           Agnts[iVar3].x = 0x56;
           Agnts[iVar3].y = 0x14;
         }
