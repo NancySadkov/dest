@@ -4880,3 +4880,58 @@ worth doing for behaviour, but it is not a way to reach zero.
   grep_checks 46,742 -> 46,741; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868;
   compare_runtime 1,546/11 main entry, 1,545/11 post-init_cfg
+
+### Two scanners for the 16-bit-width / far-pointer defect families
+
+`tmp/find_width_defects.py` looks for both families at once, and
+`tmp/check_gmapflag_ptrs.py` tells whether a candidate pointer has a single role.
+
+**(A) `uint *` views over a 16-bit array.**  Ghidra types a `GMapFlags` element as `uint`, so
+
+```c
+puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+```
+
+makes every access four bytes wide: `*p = *p | 3` becomes a dword write and `p + 1` steps 4
+bytes.  The original is unambiguous - `ovc23_rebuildDirectionFlags` (55fe:0f39) has
+`and word ptr es:[bx], 0xff0f` at 048D5F and `or word ptr es:[bx], ax` at 048D9E;
+`init_rebuildMapFlags` (3381:0693) has `or word ptr es:[bx], 1` at 025D49.
+
+Measured: **18 sites in six modules, ten distinct pointer/function pairs.**  Eight pairs are
+single-role and were corrected (8 declarations, 20 casts to `uint16_t *`):
+
+```
+ovc09_init.c        init_rebuildAllDirectionFlags, init_rebuildMapFlags, init_usesGMapFlags3
+ovc14_attact.c      attact_usesGMapFlags3
+ovc18_leaderview.c  ovc18_usesRandBelow
+ovc23_bldrec.c      ovc23_rebuildDirectionFlags, ovc23_placeBuilding, ovc23_drownUnitsAt
+```
+
+Two pairs remain, deferred because the pointer is reused for other things:
+`ovc22_textRingProt`'s `puVar3` (25 non-GMapFlags assignments) and `upd_usesAlignUp4`'s
+`accLo` (12).  The rebuild's listing confirms the fix produces 16-bit ops (`and ax,65295`
+= 0xFF0F, `and ax,65532` = 0xFFFC).
+
+**(B) `CONCAT22(<never-written local>, ...)`.**  This is the `uStack_6` / `uStack_a` case in
+`ovc13_usesAlignUp4`, where a far pointer was rebuilt each iteration on a segment word that
+nothing ever wrote.  First measurements were polluted by `CONCAT22(1, ...)` /
+`CONCAT22(2, ...)` literals being read as names; tightened to identifiers, the true count is
+**4 functions / 5 slots**, and every one is a *register* pseudo-variable rather than a stack
+slot:
+
+```
+ovc09_init.c     copyProtectionCheck   2x in_DX
+ovc11_audio.c    sfxInit               1x in_DX
+ovc20_stash.c    stshInitAudioAssets   1x unaff_DI
+ovc48_assets2.c  init_assets2          1x unaff_DI
+```
+
+So the mechanical half of family (B) is exhausted - the remaining cases are far pointers
+split across registers, which need the call sites read (the same class as `stshRead` and
+`ovc23_textAdlibNone`), not a declaration change.
+
+Neither family moves `grep_checks`: `uint`/`uint16_t` and `in_DX` are not section-5 patterns.
+Their value is entirely that the data written is now the right width.
+
+  grep_checks 46,469 (unchanged by the eight width fixes); build 65/65 clean;
+  LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0; diff_dgroup 972/1,868
