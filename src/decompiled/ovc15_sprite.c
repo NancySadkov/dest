@@ -1085,79 +1085,82 @@ void __cdecl16far stshStoreSprite(spr_t *spr,anm_t *anms,int16_t nanims)
 uint16_t __cdecl16far ovc15_usesStExit2(byte agntIndex)
 
 {
-  int *piVar1;
-  uint16_t uVar2;
-  int iVar3;
-  int *piVar4;
-  int iVar5;
+  /* Re-derived: 1 when a whole horizontal run of the agent-index grid (AgntArrayA or B
+     according to byte +0x11) belongs to this agent, 0 on the first foreign entry.  The
+     export's iVar5 carries two roles (frame offset, then the column cursor) and iVar3's first
+     assignment (framePtr[1]) is dead; the stale-AH success return is simply 1. */
+  int *agntBase;
+  uint16_t result;
+  int frameOfs;
+  int *framePtr;
+  int colIdx;
+  int colStart;
+  int colEnd;
+  int rowBand;
   int *agntRec;
-  uint16_t uStack_10;
-  int iStack_6;
-  int iStack_4;
-  
-  piVar1 = (int *)&Agnts[agntIndex].x;
-  agntRec = (int *)CONCAT22(SEG_OF(Agnts),piVar1);
-  if ((((piVar1[1] < 0x14) || (*(char *)((int)piVar1 + 0x25) == '\x01')) && (*agntRec < 0xd3)) &&
-     (-1 < *agntRec)) {
-    piVar4 = (int *)(*(int *)((int)piVar1 + 0x13) + (uint)*(byte *)(piVar1 + 9) * 4);
-    iVar3 = piVar4[1];
-    iVar5 = *piVar4;
-    iStack_4 = piVar1[1] >> 1;
-    if (iStack_4 < 0) {
-      iStack_4 = 0;
+
+  agntBase = (int *)&Agnts[agntIndex].x;
+  agntRec = (int *)CONCAT22(SEG_OF(Agnts),agntBase);
+  if ((((agntBase[1] < 0x14) || (*(char *)((int)agntBase + 0x25) == '\x01')) &&
+      (*agntRec < 0xd3)) && (-1 < *agntRec)) {
+    framePtr = (int *)(*(int *)((int)agntBase + 0x13) + (uint)*(byte *)(agntBase + 9) * 4);
+    frameOfs = *framePtr;
+    rowBand = agntBase[1] >> 1;
+    if (rowBand < 0) {
+      rowBand = 0;
     }
-    if (8 < iStack_4) {
-      iStack_4 = 8;
+    if (8 < rowBand) {
+      rowBand = 8;
     }
-    iStack_6 = *piVar1 - *(int *)(iVar5 + 0x17) >> 1;
-    iVar3 = *piVar1 + *(int *)(iVar5 + 0x17) >> 1;
-    if (iStack_6 < 0) {
-      iStack_6 = 0;
+    colStart = *agntBase - *(int *)(frameOfs + 0x17) >> 1;
+    colEnd = *agntBase + *(int *)(frameOfs + 0x17) >> 1;
+    if (colStart < 0) {
+      colStart = 0;
     }
-    if (iVar3 < 0) {
-      iVar3 = 0;
+    if (colEnd < 0) {
+      colEnd = 0;
     }
-    if (0x68 < iStack_6) {
-      iStack_6 = 0x68;
+    if (0x68 < colStart) {
+      colStart = 0x68;
     }
-    if (0x68 < iVar3) {
-      iVar3 = 0x68;
+    if (0x68 < colEnd) {
+      colEnd = 0x68;
     }
-    if (iVar3 < iStack_6) {
+    if (colEnd < colStart) {
                     /* WARNING: Subroutine does not return */
       ovr_stExit(0x25);
     }
-    iVar5 = iStack_6;
-    if (*(char *)((int)piVar1 + 0x11) == '\0') {
-      for (; iVar5 <= iVar3; iVar5 = iVar5 + 1) {
-        if (agntIndex + 1 != (uint)AgntArrayA[iStack_4][iVar5]) {
+    colIdx = colStart;
+    if (*(char *)((int)agntBase + 0x11) == '\0') {
+      for (; colIdx <= colEnd; colIdx = colIdx + 1) {
+        if (agntIndex + 1 != (uint)AgntArrayA[rowBand][colIdx]) {
           return 0;
         }
       }
-      for (; iStack_6 <= iVar3; iStack_6 = iStack_6 + 1) {
-        if (agntIndex + 1 != (uint)*(byte *)(iStack_4 * 0x69 + iStack_6 + 0x963)) {
+      for (; colStart <= colEnd; colStart = colStart + 1) {
+        if (agntIndex + 1 != (uint)*(byte *)(rowBand * 0x69 + colStart + 0x963)) {
           return 0;
         }
       }
     }
     else {
-      for (; iVar5 <= iVar3; iVar5 = iVar5 + 1) {
-        if (agntIndex + 1 != (uint)AgntArrayB[iStack_4][iVar5]) {
+      for (; colIdx <= colEnd; colIdx = colIdx + 1) {
+        if (agntIndex + 1 != (uint)AgntArrayB[rowBand][colIdx]) {
           return 0;
         }
       }
-      for (; iStack_6 <= iVar3; iStack_6 = iStack_6 + 1) {
-        if (agntIndex + 1 != (uint)*(byte *)(iStack_4 * 0x69 + iStack_6 + 0x549)) {
+      for (; colStart <= colEnd; colStart = colStart + 1) {
+        if (agntIndex + 1 != (uint)*(byte *)(rowBand * 0x69 + colStart + 0x549)) {
           return 0;
         }
       }
     }
-    uVar2 = 1;
+    result = 1;
   }
   else {
-    uVar2 = CONCAT11((char)((uint)piVar1 >> 8),1);
+    result = 1;
   }
-  return uVar2;
+  return result;
 }
 
 

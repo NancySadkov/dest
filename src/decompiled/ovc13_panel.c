@@ -209,60 +209,63 @@ void __cdecl16far ovc13_drawPanelEntitiesAll(void)
 void __cdecl16far ovc13_drawPanelEntities(void)
 
 {
-  int iVar1;
-  int iVar2;
-  int iVar3;
-  int iVar4;
-  uint uVar5;
-  uint16_t uVar6;
+  /* Re-derived: every entity inside the panel window becomes a short vertical bar coloured
+     by its state, plus a one-pixel bar to its right. */
+  int rowY;
+  int entX;
+  int entY;
+  int entitiesOfs;
+  uint entIdx;
+  int xPix;
+  int spanX;
+  uint16_t pixelResult;
+  byte pixel;
   byte y;
-  uint8_t uStack_3;
-  
+
   if (unitTypeFilter == -1) {
-    for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
-      uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar4 = (int)Entities;
-      iVar2 = *(int *)((entity_t *)iVar4 + uVar5);
-      iVar3 = ((entity_t *)iVar4)[uVar5].base.y;
-      iVar1 = iVar3 + 1;
-      if (((((AGNT_FIELD(&((entity_t *)Entities)[uVar5], base.entity, 1) != '\0') ||
-            (AgntGs[(uint)((entity_t *)iVar4)[uVar5].base.gindex].ai == '\0')) ||
-           (((*(short (*) [60] [148])GMapFlags)[iVar3][iVar2] & 8U) != 0)) &&
-          ((PanelGridX <= iVar2 && (iVar2 <= PanelGridX + 0x22)))) &&
-         ((PanelGridY <= iVar1 && (iVar1 <= PanelGridY + 0xf)))) {
-        iVar1 = (iVar1 - PanelGridY) * 3 + 7;
-        iVar2 = (iVar2 - PanelGridX) * 2;
-        iVar3 = iVar2 + 0xef;
-        uVar6 = ovc13_readPixel(iVar3,iVar1,BlitRects + 3);
-        uStack_3 = (uint8_t)uVar6;
-        uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-        iVar4 = (int)Entities;
-        if (AGNT_FIELD(&((entity_t *)Entities)[uVar5], base.entity, 1) == '\0') {
-          if ((AGNT_WORD(&((entity_t *)Entities)[uVar5], base.frames, 1) & 1) == 0) {
-            if ((AGNT_FIELD(&((entity_t *)Entities)[uVar5], base.flags32, 1) & 1) == 0) {
-              if (((uStack_3 != 0xef) && (uStack_3 != 0xee)) && (uStack_3 != 0xeb)) {
-                if (AgntGs[(uint)((entity_t *)iVar4)[uVar5].base.gindex].ai == '\0') {
-                  uStack_3 = 0xff;
+    for (entIdx = 0; entIdx < EntityCount; entIdx = entIdx + 1) {
+      entitiesOfs = (int)Entities;
+      entX = *(int *)((entity_t *)entitiesOfs + entIdx);
+      entY = ((entity_t *)entitiesOfs)[entIdx].base.y;
+      rowY = entY + 1;
+      if (((((AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 1) != '\0') ||
+            (AgntGs[(uint)((entity_t *)entitiesOfs)[entIdx].base.gindex].ai == '\0')) ||
+           (((*(short (*) [60] [148])GMapFlags)[entY][entX] & 8U) != 0)) &&
+          ((PanelGridX <= entX && (entX <= PanelGridX + 0x22)))) &&
+         ((PanelGridY <= rowY && (rowY <= PanelGridY + 0xf)))) {
+        rowY = (rowY - PanelGridY) * 3 + 7;
+        xPix = (entX - PanelGridX) * 2;
+        spanX = xPix + 0xef;
+        pixelResult = ovc13_readPixel(spanX,rowY,BlitRects + 3);
+        pixel = (uint8_t)pixelResult;
+        entitiesOfs = (int)Entities;
+        if (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 1) == '\0') {
+          if ((AGNT_WORD(&((entity_t *)Entities)[entIdx], base.frames, 1) & 1) == 0) {
+            if ((AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.flags32, 1) & 1) == 0) {
+              if (((pixel != 0xef) && (pixel != 0xee)) && (pixel != 0xeb)) {
+                if (AgntGs[(uint)((entity_t *)entitiesOfs)[entIdx].base.gindex].ai == '\0') {
+                  pixel = 0xff;
                 }
                 else {
-                  uStack_3 = 0xea;
+                  pixel = 0xea;
                 }
               }
             }
             else {
-              uStack_3 = 0xee;
+              pixel = 0xee;
             }
           }
           else {
-            uStack_3 = 0xeb;
+            pixel = 0xeb;
           }
         }
         else {
-          uStack_3 = 0xef;
+          pixel = 0xef;
         }
-        y = (byte)iVar1;
-        ovr_driver_fillSpan(iVar3,iVar3,y,uStack_3,&((brect_t *)(BlitRects + 3))->x,0);
-        ovr_driver_fillSpan(iVar2 + 0xf0,iVar2 + 0xf0,y,0xec,&((brect_t *)(BlitRects + 3))->x,0);
+        y = (byte)rowY;
+        ovr_driver_fillSpan(spanX,spanX,y,pixel,&((brect_t *)(BlitRects + 3))->x,0);
+        ovr_driver_fillSpan(xPix + 0xf0,xPix + 0xf0,y,0xec,
+                            &((brect_t *)(BlitRects + 3))->x,0);
       }
     }
   }
