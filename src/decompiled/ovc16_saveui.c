@@ -416,7 +416,7 @@ L_uiMenuSub_0B46:
               else {
                 iStack_6 = 0;
               }
-              _fsetmem((uint8_t *)CONCAT22(_SS,&dest),0x1c,0);
+              _fsetmem(MK_FP(_SS,&dest),0x1c,0);
               for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
                   readed = readed + 0x1) {
                 puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
@@ -451,7 +451,7 @@ L_uiMenuSub_0B46:
         else {
           iStack_6 = 0;
         }
-        _fsetmem((uint8_t *)CONCAT22(_SS,&dest),0x1c,0);
+        _fsetmem(MK_FP(_SS,&dest),0x1c,0);
         for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
             readed = readed + 0x1) {
           puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
@@ -504,7 +504,7 @@ L_uiMenuSub_08AD:
       else {
         iStack_6 = iStack_6 + -7;
       }
-      _fsetmem((uint8_t *)CONCAT22(_SS,&dest),0x1c,0);
+      _fsetmem(MK_FP(_SS,&dest),0x1c,0);
       for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
           readed = readed + 0x1) {
         puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
@@ -1416,7 +1416,7 @@ void __cdecl16far uiMainMenuLoop(void)
   savesSeg = SEG_OF(entries_05);
   saves = (far_t far *)entries_05;
   uVar10 = savesSeg;
-  _fsetmem((void *)CONCAT22(savesSeg,entries_05),400,0);
+  _fsetmem(MK_FP(savesSeg,far_ofs_u32(entries_05)),400,0);
   uVar15 = 0;
   bVar2 = false;
   do {

@@ -357,7 +357,7 @@ spr_t * __cdecl16far stshSpriteStub(anm_t *anms,uint16_t nanims)
     dst.seg = (uint16_t)((spr_t *)StshSprites + StshSprIndex);
     StshSprIndex = StshSprIndex + 1;
     dst.ofs = (uint16_t)ovr_mkp((uint32_t *)dst.seg,(*(uint16_t *)((uint8_t *)&(StshSprites) + 2)),(uint16_t)unaff_DI);
-    _fsetmem((void *)CONCAT22(dst.seg,dst.ofs),0xb0,0);
+    _fsetmem(MK_FP(dst.seg,dst.ofs),0xb0,0);
     i = 0;
     while ((i < in_stack_00000008 && (anms[i].nframes != 0x0))) {
       k = (uint16_t)(anms + i)->frmid;

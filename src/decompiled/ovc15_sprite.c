@@ -45,7 +45,7 @@ spr_t * __cdecl16far stshRleAnims(uint8_t *src,anm_t *anms,uint16_t nanims)
   dst.seg = (uint16_t)((spr_t *)StshSprites + StshSprIndex);
   StshSprIndex = StshSprIndex + 1;
   dst.ofs = (uint16_t)ovr_mkp((uint32_t *)dst.seg,(*(uint16_t *)((uint8_t *)&(StshSprites) + 2)),unaff_DI);
-  _fsetmem((void *)CONCAT22(dst.seg,dst.ofs),0xb0,0);
+  _fsetmem(MK_FP(dst.seg,dst.ofs),0xb0,0);
   i = 0;
   while ((i < (*(uint16_t *)((uint8_t *)&(anms) + 2)) && (*(char *)((*(uint16_t *)((uint8_t *)&(src) + 2)) + i * 0x1e + 0x1b) != '\0'))) {
     uVar1 = (uint)*(byte *)((*(uint16_t *)((uint8_t *)&(src) + 2)) + i * 0x1e);
@@ -657,7 +657,7 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
       ovc15_removeEntity(uVar5);
       EntityCount = EntityCount - 1;
     }
-    _fsetmem((entity_t *)CONCAT22((int)((ulong)Entities >> 0x10),Entities + EntityCount),0x37,0);
+    _fsetmem(MK_FP((int)((ulong)Entities >> 0x10),Entities + EntityCount),0x37,0);
     ((entity_t *)Entities)[EntityCount].base.targetX = destX;
     ((entity_t *)Entities)[EntityCount].base.targetY = destY;
     uVar8 = (uint16_t)((ulong)Entities >> 0x10);
