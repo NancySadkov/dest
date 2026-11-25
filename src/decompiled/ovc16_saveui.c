@@ -1391,7 +1391,7 @@ void __cdecl16far uiMainMenuLoop(void)
   uint uVar15;
   uint uVar16;
   uint16_t uVar17;
-  uint32_t menu;
+  char far *menu[8];   /* 8 far string pointers = 0x20 bytes; the frame is sub sp,0x32 */
   uint16_t uStack_30;
   uint16_t uStack_2e;
   uint16_t uStack_18;
@@ -1400,13 +1400,19 @@ void __cdecl16far uiMainMenuLoop(void)
   char yesno [9];
   uint8_t yes_picked;
   
+  far_t src;
+
   dst.seg = _SS;
   dst.ofs = (uint16_t)&menu;
-  F_SCOPY(far_from_u32((uint32_t)(0x241026b7)),dst,32);
+  src.seg = _DS;
+  src.ofs = (uint16_t)&GMenuStrings;
+  F_SCOPY(src,dst,32);
   dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)yesno;
-  F_SCOPY(far_from_u32((uint32_t)(0x241026d7)),dst_00,8);
-  ovr_say((char *)"Stronghold V 1.00",0x2410);
+  src.seg = _DS;
+  src.ofs = (uint16_t)&GYesNo;
+  F_SCOPY(src,dst_00,8);
+  ovr_say((char *)"Stronghold V 1.00",_DS);
   gfx.seg = GMenuGfxSeg;
   gfx.ofs = GMenuGfxOfs;
   ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa00009af)),0);
@@ -1425,12 +1431,12 @@ void __cdecl16far uiMainMenuLoop(void)
       uStack_30 = 0;
     }
     else {
-      uStack_2e = 0x2410;
-      uStack_30 = 0x27f4;
+      uStack_2e = _DS;
+      uStack_30 = (uint16_t)&s_Save_Game_2410_27f4;
     }
     if ((GGameInProgress == '\0') && (SaveAuto != '\0')) {
-      uStack_16 = 0x2410;
-      uStack_18 = 0x283f;
+      uStack_16 = _DS;
+      uStack_18 = (uint16_t)&s_Begin_Play_2410_283f;
     }
     else {
       uStack_16 = 0;
@@ -1507,7 +1513,7 @@ void __cdecl16far uiMainMenuLoop(void)
           if (iVar8 == 0) {
             saveui_blitPanel();
             saveui_drawCancel();
-            pcVar9 = uiReadString((char *)"Name this save:  (Esc to cancel)",0x2410,0,(char *)0x0,0,0)
+            pcVar9 = uiReadString((char *)"Name this save:  (Esc to cancel)",_DS,0,(char *)0x0,0,0)
             ;
             saves[(uint)bVar5 - 1].seg = uVar10;
             saves[(uint)bVar5 - 1].ofs =(uint16_t)( pcVar9);
@@ -1516,7 +1522,7 @@ void __cdecl16far uiMainMenuLoop(void)
           else {
             saveui_blitPanel();
             saveui_drawCancel();
-            pcVar9 = uiReadString((char *)"Name for this save:  (Esc to cancel)",0x2410,0,(char *)saves[(uint)bVar5 - 1].ofs,saves[(uint)bVar5 - 1].seg,0);
+            pcVar9 = uiReadString((char *)"Name for this save:  (Esc to cancel)",_DS,0,(char *)saves[(uint)bVar5 - 1].ofs,saves[(uint)bVar5 - 1].seg,0);
             saves[(uint)bVar5 - 1].seg = uVar10;
             saves[(uint)bVar5 - 1].ofs =(uint16_t)( pcVar9);
             saveui_usesBlitLoadRleGfx4();
