@@ -319,8 +319,7 @@ uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint
     uint16_t *itemPtr;
     undefined1 ssLow;
     undefined1 ssHigh;
-  uint8_t dest;
-  uint16_t auStack_26 [13];
+  far_t dest[7];   /* 7 far string pointers: _fsetmem zeroes 0x1c bytes and row runs 0..6 */
     uint16_t titleOfs;
     uint16_t titleSeg;
   uint16_t sz;
@@ -345,12 +344,12 @@ uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint
     itemPtr = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + (uint)readed * 4);
     itemOfs = *itemPtr;
     readLen = (uint)readed;
-    auStack_26[readLen * 2] = itemPtr[1];
-    *(uint16_t *)(&dest + readLen * 4) = itemOfs;
+    dest[readLen].seg = itemPtr[1];
+    dest[readLen].ofs = itemOfs;
   }
   if (8 < (int)items.seg) {
-    titleSeg = 0x2410;
-    titleOfs = 0x2733;
+    titleSeg = _DS;
+    titleOfs = (uint16_t)&s_more;
   }
   ssLow = (undefined1)_SS;
   ssHigh = (undefined1)(_SS >> 8);
@@ -421,8 +420,8 @@ L_uiMenuSub_0B46:
                 itemPtr = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + scrollOfs) * 4);
                 itemOfs = *itemPtr;
                 readLen = (uint)readed;
-                auStack_26[readLen * 2] = itemPtr[1];
-                *(uint16_t *)(&dest + readLen * 4) = itemOfs;
+                dest[readLen].seg = itemPtr[1];
+                dest[readLen].ofs = itemOfs;
               }
               saveui_blitPanel();
               if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
@@ -455,8 +454,8 @@ L_uiMenuSub_0B46:
           itemPtr = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + scrollOfs) * 4);
           itemOfs = *itemPtr;
           readLen = (uint)readed;
-          auStack_26[readLen * 2] = itemPtr[1];
-          *(uint16_t *)(&dest + readLen * 4) = itemOfs;
+          dest[readLen].seg = itemPtr[1];
+          dest[readLen].ofs = itemOfs;
         }
         saveui_blitPanel();
         if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
@@ -507,8 +506,8 @@ L_uiMenuSub_08AD:
         itemPtr = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + scrollOfs) * 4);
         itemOfs = *itemPtr;
         readLen = (uint)readed;
-        auStack_26[readLen * 2] = itemPtr[1];
-        *(uint16_t *)(&dest + readLen * 4) = itemOfs;
+        dest[readLen].seg = itemPtr[1];
+        dest[readLen].ofs = itemOfs;
       }
       saveui_blitPanel();
       if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
