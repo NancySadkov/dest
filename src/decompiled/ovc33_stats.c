@@ -101,7 +101,7 @@ void __cdecl16far stats_drawStatsPanel(void)
 undefined1 __cdecl16far stats_compute3(agnt_t *agnt)
 
 {
-  undefined1 uVar1;
+  undefined1 result;
   agnt_t *paVar2;
   uint16_t uVar3;
   
@@ -109,20 +109,20 @@ undefined1 __cdecl16far stats_compute3(agnt_t *agnt)
   paVar2 = (agnt_t *)agnt;
   if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x04') &&
      (0xb < (((entity_t *)paVar2->entity)->base).level)) {
-    uVar1 = 1;
+    result = 1;
   }
   else if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x05') &&
           (9 < (((entity_t *)paVar2->entity)->base).level)) {
-    uVar1 = 1;
+    result = 1;
   }
   else if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x06') &&
           (7 < (((entity_t *)paVar2->entity)->base).level)) {
-    uVar1 = 1;
+    result = 1;
   }
   else {
-    uVar1 = 0;
+    result = 0;
   }
-  return uVar1;
+  return result;
 }
 
 

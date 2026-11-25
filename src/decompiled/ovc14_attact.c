@@ -234,12 +234,12 @@ int __cdecl16far attact_countPartyUnits(byte menuIndex)
 {
   int iVar1;
   uint uVar2;
-  int iVar3;
+  int count;
   uint16_t uVar4;
   
-  iVar3 = 0;
+  count = 0;
   if (((uint8_t *)MenuItemEnabled)[menuIndex] == 0xff) {
-    iVar3 = 0;
+    count = 0;
   }
   else {
     for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
@@ -250,14 +250,14 @@ int __cdecl16far attact_countPartyUnits(byte menuIndex)
             (GfxRndSeed + 1U < *(uint *)((entity_t *)iVar1 + uVar2))) ||
            (((entity_t *)iVar1)[uVar2].base.y != GfxRndSeed2)))) &&
          ((AGNT_FIELD(&((entity_t *)Entities)[uVar2], base.flags32, 1) & 2) == 0)) {
-        iVar3 = iVar3 + 1;
+        count = count + 1;
       }
     }
-    if (0x50 < iVar3) {
-      iVar3 = 0x50;
+    if (0x50 < count) {
+      count = 0x50;
     }
   }
-  return iVar3;
+  return count;
 }
 
 

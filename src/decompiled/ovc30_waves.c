@@ -14,21 +14,21 @@
 uint __cdecl16far ovc30_difficultyFactor(void)
 
 {
-  uint uVar1;
+  uint factor;
   
   if (*(char *)(Difficulty + 0x5de4) == '\0') {
-    uVar1 = 10;
+    factor = 10;
   }
   else {
-    uVar1 = (uint)(0x3c / (ulong)(long)(int)(uint)*(byte *)(Difficulty + 0x5de4));
-    if (uVar1 == 0) {
-      uVar1 = 1;
+    factor = (uint)(0x3c / (ulong)(long)(int)(uint)*(byte *)(Difficulty + 0x5de4));
+    if (factor == 0) {
+      factor = 1;
     }
-    if (9 < uVar1) {
-      uVar1 = 10;
+    if (9 < factor) {
+      factor = 10;
     }
   }
-  return uVar1;
+  return factor;
 }
 
 
