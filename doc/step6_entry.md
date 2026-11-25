@@ -4482,3 +4482,43 @@ is why the count stays at 98.
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 49,533
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### The section-5 distance, quantified by module group
+
+`tmp/s5_split.py` applies `grep_checks.py`'s own regexes with the same counting rule
+(`len(rx.findall(text))`, which is what the gate script uses - counting *lines* gives a
+misleadingly low 37,706) and splits every class by module group:
+
+```
+check              total    game     crt     ovl    data   largest game modules
+[iusbc]Var         30602   27772    1865     965       0   ovc22_classes:2861, ovc23_bldrec:2442
+p[iusbc]Var         7157    6266     535     356       0   ovc49_agents:931, ovc02_draw:712
+[iusc]Stack_        4306    4261      37       8       0   ovc22_classes:791, ovc21_manage:300
+char [N] = ""       1405       0       1       0    1404
+in_REG               919     659     154     106       0   ovc27_combat:72, ovc33_stats:51
+p[iusc]Stack_        485     482       3       0       0   ovc22_classes:140, ovc49_agents:57
+ram0x                  7       2       2       3       0
+... )                 10       8       2       0       0
+---------------------------------------------------------------
+TOTAL              49452   43814    2723    1511    1404
+game 88.6 %    out-of-scope CRT+VROOMM 8.6 %    data 2.8 %
+```
+
+Three facts follow, and they bound what the gate can reach by source work:
+
+* **88.6 % (43,814) is resident/overlay *game* code** - that is the real target, concentrated
+  in `ovc22_classes.c` and `ovc23_bldrec.c` for `[iusbc]Var`.
+* **8.6 % (4,234) is the reconstructed C runtime (`crtl.c` 2,723) and VROOMM manager
+  (`ovl.c` 1,511)**, which AGENTS.md classes as compiler-supplied and out of scope to
+  reverse; those rows can only fall by deleting the reconstructions in favour of the shipped
+  `CM.LIB`/`OVERLAY.LIB` behaviour, not by decompiling them.
+* **2.8 % (1,404) is `char [N] = ""` in the data modules** - recovered *data* objects, not
+  temporaries, and measured earlier to be structural (14,090 bytes of DGROUP headroom
+  against 22,560 bytes of literals, plus static initialisers such as `GErrorStrings` that
+  need those symbols as compile-time addresses).
+
+So the practical target is the 43,814 game-code matches, and the two largest single files
+hold 5,303 of the `[iusbc]Var` + `p[iusbc]Var` matches between them.
+
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; grep_checks 49,452
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
