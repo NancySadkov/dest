@@ -1554,34 +1554,32 @@ void __cdecl16far attact_usesEntityCount2(uint16_t *sum,uint16_t *enemySum)
 void __cdecl16far attact_usesAgntCount2(uint16_t *sum,uint16_t *enemySum)
 
 {
-  uint16_t *puVar1;
-  uint uVar2;
-  uint uVar3;
-  int iVar4;
-  uint16_t uVar5;
-  uint16_t uVar6;
-  
-  uVar5 = (uint16_t)((ulong)enemySum >> 0x10);
-  ((uint16_t *)enemySum)[1] = 0;
+  /* Re-derived: accumulates the strength of every agent whose flags has none of 0xae4 set
+     into two 32-bit sums, split by faction (faction 0 versus the rest). */
+  uint16_t *hiPtr;
+  uint oldLo;
+  uint addend;
+  int agntIdx;
+
+  enemySum[1] = 0;
   *enemySum = 0;
-  uVar6 = (uint16_t)((ulong)sum >> 0x10);
-  ((uint16_t *)sum)[1] = 0;
+  sum[1] = 0;
   *sum = 0;
-  for (iVar4 = 0; iVar4 < (int)(uint)AgntCount; iVar4 = iVar4 + 1) {
-    if ((Agnts[iVar4].flags & 0xae4) == 0) {
-      if (Agnts[iVar4].faction == '\0') {
-        uVar3 = (uint)Agnts[iVar4].strength;
-        uVar2 = *sum;
-        *sum = *sum + uVar3;
-        puVar1 = (uint16_t *)sum + 1;
-        *puVar1 = *puVar1 + (uint)CARRY2(uVar2,uVar3);
+  for (agntIdx = 0; agntIdx < (int)(uint)AgntCount; agntIdx = agntIdx + 1) {
+    if ((Agnts[agntIdx].flags & 0xae4) == 0) {
+      if (Agnts[agntIdx].faction == '\0') {
+        addend = (uint)Agnts[agntIdx].strength;
+        oldLo = *sum;
+        *sum = *sum + addend;
+        hiPtr = (uint16_t *)sum + 1;
+        *hiPtr = *hiPtr + (uint)CARRY2(oldLo,addend);
       }
       else {
-        uVar3 = (uint)Agnts[iVar4].strength;
-        uVar2 = *enemySum;
-        *enemySum = *enemySum + uVar3;
-        puVar1 = (uint16_t *)enemySum + 1;
-        *puVar1 = *puVar1 + (uint)CARRY2(uVar2,uVar3);
+        addend = (uint)Agnts[agntIdx].strength;
+        oldLo = *enemySum;
+        *enemySum = *enemySum + addend;
+        hiPtr = (uint16_t *)enemySum + 1;
+        *hiPtr = *hiPtr + (uint)CARRY2(oldLo,addend);
       }
     }
   }
