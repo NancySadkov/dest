@@ -546,7 +546,7 @@ uint16_t __cdecl16far ovc15_compute1(uint16_t *agnt);
 int __cdecl16far ovc15_usesRandBelow(agnt_t *agnt,int xSide,char keepPos,char randomY);
 char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3);
 entity_t * __cdecl16far ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint16_t param_5,int *param_6,int *param_7,int *param_8,int *param_9);
-agnt_t * __cdecl16far ovc15_textError(uint32_t partyIndex,agnt_t *agnt);
+long __cdecl16far ovc15_textError(agnt_t *agnt,long value);
 bool __cdecl16far ovc15_usesAlignUp42(void);
 void __cdecl16far ovc15_positionCrosshair(void);
 bool __cdecl16far ovc15_selectLeftmostAgent(void);
