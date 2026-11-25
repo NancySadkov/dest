@@ -275,7 +275,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
   uint16_t *puVar4;
   byte *pbVar5;
   long lVar6;
-  code *pcVar7;
+  code *intVector;
   ulong uVar8;
   uint3 uVar9;
   far_t gfx;
@@ -385,8 +385,8 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
                     /* WARNING: Do nothing block with infinite loop */
       } while( true );
     case 1:
-      pcVar7 = (code *)swi(1);
-      pfVar18 = (far_t far *)(*pcVar7)();
+      intVector = (code *)swi(1);
+      pfVar18 = (far_t far *)(*intVector)();
       return pfVar18;
     case 2:
       do {
@@ -711,8 +711,8 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
       (*pasVar34)[0] = CONCAT11(bVar23,bVar27);
       if (!CARRY1(bVar26,bVar28) && !CARRY1(bVar10,bVar12)) {
         src = far_ofs_u32((uint32_t)(CONCAT22(0x6000,src)));
-        pcVar7 = (code *)swi(3);
-        pfVar18 = (far_t far *)(*pcVar7)();
+        intVector = (code *)swi(3);
+        pfVar18 = (far_t far *)(*intVector)();
         return pfVar18;
       }
       iVar29 = (bVar27 & 3) - (AgntAnms[0x6e].maxDy & 3U);
@@ -829,8 +829,8 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
                                (bVar28 < bVar27 || (byte)(bVar10 - bVar27) < bVar45));
       uVar44 = *(uint16_t *)(uVar15 + iVar41 + 2);
       puVar36 = (uint *)(uVar15 + iVar41 + 4);
-      pcVar7 = (code *)swi(0x1e);
-      uVar46 = (*pcVar7)();
+      intVector = (code *)swi(0x1e);
+      uVar46 = (*intVector)();
       uVar43 = (uint16_t)((ulong)uVar46 >> 0x10);
       uVar20 = (uint)uVar46;
       uVar13 = *puVar36;

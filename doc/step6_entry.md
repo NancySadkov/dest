@@ -3980,3 +3980,19 @@ main-entry dump came from a different binary than the current build, so that num
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 50,741
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### Main-entry sampler offset fixed
+
+`tmp/dump_dgroup_stdout.py` computed the patch offset as `seg*16 + ofs` from the map.
+The map's segments are absolute paragraphs, so with DGROUP at `0x740f` the offset landed
+at `0x740f0`, far outside the 555 KB file - the EXE was never patched and the dump came
+from an unpatched image (which is why it showed `s_n_d_w_u_s_u` as `%k_s` while the
+post-init_cfg dump held the correct text at the same offset).
+
+The offset is now `(seg - load_base)*16 + ofs`, with `load_base` derived from the header's
+entry `CS:IP` and the map's `_STARTX` (falling back to the lowest map segment).  Re-sampled
+both dumps; `compare_runtime` at main entry is **1,546 / 11** from a genuinely patched
+build again.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 50,741 -> 50,727
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
