@@ -437,7 +437,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   uint16_t beWordB;
   uint16_t beWordA;
   far_t fStack_30;
-  char cStack_2c;
+  char ok;
   byte bStack_2b;
   uint32_t *puStack_2a;
   uint uStack_28;
@@ -457,7 +457,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   uint uStack_a;
   uint uStack_8;
   int unitIdx;
-  byte bStack_3;
+  byte bldType;
   
   uStack_10 = (uint)(byte)uStack_10;
   for (row = 0; row < 0x94; row = row + 1) {
@@ -779,8 +779,8 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                    (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags2(col), (char)psVar9 == '\x02')
                    ) {
                   unitIdx = ((short (*) [148] [60])GUnitGrid)[-1][col + 0x92][row];
-                  bStack_3 = ((unit_t *)GUnits + unitIdx)->bldType;
-                  psVar9 = (stg_tmp_t *)((uint)bStack_3 * 0x27);
+                  bldType = ((unit_t *)GUnits + unitIdx)->bldType;
+                  psVar9 = (stg_tmp_t *)((uint)bldType * 0x27);
                   if ((psVar9->cmap[0x11b] < 2) &&
                      (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags2(col), (byte)psVar9 < 3)) {
                     randPick = ovr_randBelow(5,0);
@@ -1053,7 +1053,7 @@ bad_lbm:
     ovr_stExit(0xd);
   }
   if ((uStack_20 == uStack_c) && (uStack_22 == fileIdx)) {
-    cStack_2c = '\x01';
+    ok = '\x01';
     uVar17 = uStack_22;
     iVar15 = ovr_stshRead();
     if ((((iVar15 != 0 || uVar17 != 0) ||
@@ -1105,7 +1105,7 @@ bad_lbm:
   }
   else {
     if ((uStack_20 == uStack_10) && (uStack_22 == sampleHi)) {
-      if (cStack_2c != '\0') {
+      if (ok != '\0') {
         ovr_stshRead();
         puStack_1c = ovr_be4(puStack_2a);
         puStack_26 = puStack_1c;

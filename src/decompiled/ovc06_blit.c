@@ -182,9 +182,9 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
   uint16_t dst_y;
   uint16_t dst_x;
   int iStack_1c;
-  uint16_t uStack_1a;
+  uint16_t gfxSeg;
   uint16_t uStack_18;
-  uint16_t uStack_16;
+  uint16_t savedDstSeg;
   int iStack_14;
   uint16_t uStack_12;
   int iStack_10;
@@ -246,15 +246,15 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
         }
         iStack_14 = (uStack_e - y) + 1;
         uStack_18 = uStack_8 + uStack_a * 0x140;
-        uStack_16 = dst->seg;
+        savedDstSeg = dst->seg;
         iStack_1c = gfx.ofs + 9;
-        uStack_1a = gfx.seg;
+        gfxSeg = gfx.seg;
         for (iVar2 = 0; (iVar2 < iStack_14 && ((int)(iVar2 + y) <= (int)dst_h)); iVar2 = iVar2 + 1)
         {
-          iVar1 = (*(code *)pfn)(uVar4,iStack_1c,uStack_1a,&rowBuf);
+          iVar1 = (*(code *)pfn)(uVar4,iStack_1c,gfxSeg,&rowBuf);
           iStack_1c = iStack_1c + iVar1;
           if ((int)dst_y <= (int)(iVar2 + y)) {
-            dst_01.seg = uStack_16;
+            dst_01.seg = savedDstSeg;
             dst_01.ofs = uStack_18;
             uVar4 = 0x138e;
             src.seg = _SS;
@@ -525,11 +525,11 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
   char *pcStack_1a;
   char *srcPtr;
   uint rectBottom;
-  int iStack_14;
+  int rectRight;
   uint rectTop;
   int rectLeft;
   char *pcStack_e;
-  uint spanH;
+  uint spanW;
   uint uStack_a;
   uint uStack_8;
   far_t *pfStack_6;
@@ -550,7 +550,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
     rectLeft = *rectOfs;
     uVar4 = (uint16_t)((ulong)rectOfs >> 0x10);
     rectTop = rectOfs[1];
-    iStack_14 = rectOfs[2];
+    rectRight = rectOfs[2];
     rectBottom = rectOfs[3];
     if (in_stack_00000012 == '\0') {
       uVar1 = (int)((uint)(byte)flip * *(int *)(gfx.ofs + 1)) >> 4;
@@ -571,8 +571,8 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
       pcStack_e = (char *)x;
       uStack_a = 0;
     }
-    spanH = (iStack_14 - (int)pcStack_e) + 1;
-    if (0 < (int)spanH) {
+    spanW = (rectRight - (int)pcStack_e) + 1;
+    if (0 < (int)spanW) {
       pcStack_1a = (char *)((int)pcStack_e + uVar1 * 0x140);
       srcPtr = (char *)rectOfs[4];
       uVar3 = 1;
@@ -598,7 +598,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
                          *(int *)(gfx.ofs + 10) - uStack_a);
               uVar5 = 0x22a6;
               ovr_masked_memcpy(pcStack_1a,(char *)CONCAT22(&skip,srcPtr),_SS,uStack_a,
-                                *(int *)(gfx.ofs + 10),spanH,
+                                *(int *)(gfx.ofs + 10),spanW,
                                 *(uint16_t *)((uint)(byte)flip * 2 + 0x470));
             }
             pcStack_1a = pcStack_1a + 0x140;
@@ -627,7 +627,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
               in_stack_00000018 = in_stack_00000018 + (*(char *)(gfx.ofs + 10) - (char)uStack_a);
               uVar5 = 0x22a6;
               ovr_masked_memcpy(pcStack_1a,(char *)CONCAT22(&skip,srcPtr),_SS,uStack_a,
-                                *(int *)(gfx.ofs + 10),spanH,
+                                *(int *)(gfx.ofs + 10),spanW,
                                 *(uint16_t *)((uint)(byte)flip * 2 + 0x470));
             }
             pcStack_1a = pcStack_1a + 0x140;
