@@ -373,7 +373,7 @@ void __cdecl16far ovr_miceButton0PressStates_entry(void);
 uint __cdecl16far init2_updateMouseButtons(void);
 void __cdecl16far clearMiceProcessed(void);
 void __cdecl16far init_usesBlitGfxRect(void);
-char * __cdecl16far append_name_to_path(char *path,char *name);
+char * __cdecl16far append_name_to_path(char far *path,char far *name);
 char * __cdecl16far path_strip_tail_slash(char *s,uint16_t arg2);
 char * __cdecl16far ensure_tail_slash(char *s,uint16_t arg2);
 void __cdecl16far chpath(char *path,uint16_t arg2);

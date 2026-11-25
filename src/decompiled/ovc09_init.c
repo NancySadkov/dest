@@ -41,18 +41,31 @@ void __cdecl16far init_usesBlitGfxRect(void)
 
 /* 3381:009a */
 
-char * __cdecl16far append_name_to_path(char *path,char *name)
+char * __cdecl16far append_name_to_path(char far *path,char far *name)
 
 {
+  /* Re-derived from 3381:009a (100 bytes).  The prologue pushes each far argument segment-then-
+     offset, so both parameters are far pointers: (seg [bp+8], ofs [bp+6]) for the path and
+     (seg [bp+0xc], ofs [bp+0xa]) for the name.  strcpy into GStaticBuffer, strlen, then a backward
+     scan that stops at the first backslash and terminates the string there, then strcat the name.
+     The exported CONCAT22 builds split the far pointers and rejoined them in the wrong order, and it
+     stored the terminator unconditionally instead of only on a hit. */
   uint16_t l;
-  char *in_stack_00000004;
-  
-  strcpy(&GStaticBuffer,(char *)CONCAT22((char *)path,in_stack_00000004));
-  for (l = strlen(&GStaticBuffer); (0 < (int)l && (((undefined1 *)&randomFeatureCount)[l] != '\\'));
-      l = l - 1) {
+
+  strcpy((char *)&GStaticBuffer,(char *)path);
+  l = strlen((char *)&GStaticBuffer);
+  for (;;) {
+    l = l - 1;
+    if ((int)l <= 0) {
+      break;
+    }
+    if (((undefined1 *)&GStaticBuffer)[l - 1] != 0x5c) {
+      continue;
+    }
+    ((undefined *)&GStaticBuffer)[l] = 0;
+    break;
   }
-  ((undefined *)&GStaticBuffer)[l] = 0;
-  strcat(&GStaticBuffer,(char *)CONCAT22((char *)name,(*(uint16_t *)((uint8_t *)&(path) + 2))));
+  strcat((char *)&GStaticBuffer,(char *)name);
   return (char *)&GStaticBuffer;
 }
 
