@@ -1709,41 +1709,43 @@ uint __cdecl16far
 ovc27_usesPlay_sfxU(uint16_t ptrOfs,uint16_t ptrSeg,agnt_t *agnt,uint8_t frames,uint16_t arg5,uint16_t arg6)
 
 {
-  uint16_t uVar1;
-  int iVar2;
-  uint16_t uVar3;
-  uint uVar4;
-  uint16_t unk;
-  agnt_t *agnt_00;
-  int iVar5;
-  uint16_t uVar6;
-  
-  uVar6 = (uint16_t)((ulong)agnt >> 0x10);
-  agnt_00 = (agnt_t *)agnt;
-  uVar1 = *(uint16_t *)((int)&agnt_00->entity + 2);
-  iVar2 = *(int *)&agnt_00->entity;
-  uVar3 = ovc27_compute3(CONCAT22(uVar1,iVar2),frames);
-  if ((char)uVar3 == '\0') {
-    for (iVar5 = 0; iVar5 < (int)(uint)AgntCount; iVar5 = iVar5 + 1) {
-      if (Agnts[iVar5].owner == agnt_00->owner) {
-        if (*(byte *)(iVar2 + 0x32) < Agnts[iVar5].strengthMax) {
-          Agnts[iVar5].strengthMax = *(undefined1 *)(iVar2 + 0x32);
+  /* Re-derived: when ovc27_compute3 says the agent is not ready, lower the strengthMax of every
+     agent of the same owner to entity+0x32 and clamp strength to it, then play sfx 0x1c panned by
+     audio_panFromX and return 1; otherwise hand off to ovc41_settleAgentCombat and return its
+     high byte.  The dead segment half uVar6 is gone. */
+  uint16_t entSeg;
+  int entOfs;
+  uint16_t computed;
+  uint result;
+  uint16_t pan;
+  agnt_t *a;
+  int agntIdx;
+
+  a = (agnt_t *)agnt;
+  entSeg = *(uint16_t *)((int)&a->entity + 2);
+  entOfs = *(int *)&a->entity;
+  computed = ovc27_compute3(CONCAT22(entSeg,entOfs),frames);
+  if ((char)computed == '\0') {
+    for (agntIdx = 0; agntIdx < (int)(uint)AgntCount; agntIdx = agntIdx + 1) {
+      if (Agnts[agntIdx].owner == a->owner) {
+        if (*(byte *)(entOfs + 0x32) < Agnts[agntIdx].strengthMax) {
+          Agnts[agntIdx].strengthMax = *(undefined1 *)(entOfs + 0x32);
         }
-        if (Agnts[iVar5].strengthMax < Agnts[iVar5].strength) {
-          Agnts[iVar5].strength = Agnts[iVar5].strengthMax;
+        if (Agnts[agntIdx].strengthMax < Agnts[agntIdx].strength) {
+          Agnts[agntIdx].strength = Agnts[agntIdx].strengthMax;
         }
       }
     }
-    unk = ovr_audio_panFromX(agnt_00,(char)((ulong)agnt >> 0x10));
-    ovr_play_sfxU(0x1c,0,unk,(char)unk,0);
-    uVar4 = CONCAT11((char)(unk >> 8),1);
+    pan = ovr_audio_panFromX(a,(char)((ulong)agnt >> 0x10));
+    ovr_play_sfxU(0x1c,0,pan,(char)pan,0);
+    result = 1;
   }
   else {
-    uVar4 = ovr_ovc41_settleAgentCombat
-                      ((agnt_t *)CONCAT13((char)(ptrSeg >> 8),CONCAT12((char)ptrSeg,ptrOfs)),agnt,0);
-    uVar4 = uVar4 & 0xff00;
+    result = ovr_ovc41_settleAgentCombat
+               ((agnt_t *)CONCAT13((char)(ptrSeg >> 8),CONCAT12((char)ptrSeg,ptrOfs)),agnt,0);
+    result = result & 0xff00;
   }
-  return uVar4;
+  return result;
 }
 
 

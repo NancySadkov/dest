@@ -16,38 +16,38 @@ uint __cdecl16far
 ovc25_usesAlignUp4(char partyIndex,uint16_t x,uint16_t y,uint16_t destX,uint16_t destY)
 
 {
-  uint uVar1;
-  uint uVar2;
-  uint uVar3;
-  int iVar4;
-  uint uVar5;
-  uint16_t uVar6;
-  
-  uVar1 = ovr_alignUp4(destX,0,0);
-  uVar2 = ovr_alignUp4(x,0,0);
-  uVar5 = 0;
+  /* Re-derived: the first entity of the given party that is either standing at (x,y) or whose
+     destination is not (destX,destY) - a unit not already committed there - skipping entities
+     whose flags32 word has bit 1 set; 0xffff when none is found. */
+  uint destAligned;
+  uint entAligned;
+  uint checkAligned;
+  int entitiesOfs;
+  uint entIdx;
+
+  destAligned = ovr_alignUp4(destX,0,0);
+  entAligned = ovr_alignUp4(x,0,0);
+  entIdx = 0;
   do {
-    if (EntityCount <= uVar5) {
+    if (EntityCount <= entIdx) {
       return 0xffff;
     }
-    uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-    iVar4 = (int)Entities;
-    if ((AGNT_FIELD(&((entity_t *)Entities)[uVar5], base.entity, 3) == partyIndex) &&
-       ((AGNT_FIELD(&((entity_t *)Entities)[uVar5], base.flags32, 1) & 2) == 0)) {
-      uVar3 = ovr_alignUp4(*(int *)((entity_t *)iVar4 + uVar5),0,0);
-      uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-      if ((uVar3 == uVar2) && (((entity_t *)Entities)[uVar5].base.y == y)) {
-        return uVar5;
+    entitiesOfs = (int)Entities;
+    if ((AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) == partyIndex) &&
+       ((AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.flags32, 1) & 2) == 0)) {
+      checkAligned = ovr_alignUp4(*(int *)((entity_t *)entitiesOfs + entIdx),0,0);
+      if ((checkAligned == entAligned) && (((entity_t *)Entities)[entIdx].base.y == y)) {
+        return entIdx;
       }
-      uVar3 = ovr_alignUp4(((entity_t *)Entities)[uVar5].base.destX,0,0);
-      if (uVar3 != uVar1) {
-        return uVar5;
+      checkAligned = ovr_alignUp4(((entity_t *)Entities)[entIdx].base.destX,0,0);
+      if (checkAligned != destAligned) {
+        return entIdx;
       }
-      if (((entity_t *)Entities)[uVar5].base.destY != destY) {
-        return uVar5;
+      if (((entity_t *)Entities)[entIdx].base.destY != destY) {
+        return entIdx;
       }
     }
-    uVar5 = uVar5 + 1;
+    entIdx = entIdx + 1;
   } while( true );
 }
 
