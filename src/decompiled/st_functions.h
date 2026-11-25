@@ -610,7 +610,7 @@ char * __cdecl16far ovc18_textTypeLen(uint8_t partyIndex,uint16_t destX,uint16_t
 void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind);
 uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,uint16_t arg5,uint16_t arg6);
 bool __cdecl16far ovc18_textArena(uint16_t x,uint16_t y);
-uint __cdecl16far ovc18_usesAlignUp4(void);
+byte __cdecl16far ovc18_usesAlignUp4(void);
 int __cdecl16far save_readBlock(int handle,void *buf,uint16_t bufSeg,uint count);
 void __cdecl16far save_usesCalcSeasonPalette(void);
 uint __cdecl16far stLoad(int handle);

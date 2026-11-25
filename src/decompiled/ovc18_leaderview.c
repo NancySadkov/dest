@@ -1098,75 +1098,87 @@ bool __cdecl16far ovc18_textArena(uint16_t x,uint16_t y)
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R4] calls ovr_alignUp4 */
 
-uint __cdecl16far ovc18_usesAlignUp4(void)
+byte __cdecl16far ovc18_usesAlignUp4(void)
 
 {
+  /* Re-derived: 1 when the cursor may place a unit - not on an entity, not on a leader, and the
+     two cells to the left free; additionally the cells two-left and one-right when CurPartySlot
+     is 1, and no active leader further than 0x1e away when it is above 1.  The exported
+     `return uVar5 & 0xff00` in the leader branch was stale AH: ip 0x0110 is `mov al,0`. */
   bool inArena;
-  uint uVar2;
-  uint uVar3;
-  uint uVar4;
-  uint uVar5;
-  int leaderIdx;
-  uint16_t uVar7;
+  bool blocked;
+  uint entAlignedX;
+  uint cursorAlignedX;
+  uint dx;
+  uint dxSign;
+  uint dy;
+  uint dySign;
+  uint dist;
   uint bestDist;
-  
+  uint ok;
+  int leaderIdx;
+
   inArena = ovr_draw_textArena();
-  if (inArena) {
-    for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
-      uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-      if (AgntGs[(uint)((entity_t *)Entities)[uVar5].base.gindex].ai != '\0') {
-        uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar5].base.x,0,0);
-        uVar3 = ovr_alignUp4(GfxRndSeed,0,0);
-        if ((uVar2 == uVar3) &&
-           (uVar2 = ((entity_t *)Entities)[uVar5].base.y, uVar2 == GfxRndSeed2)) {
-          return 0;
-        }
+  if (inArena == false) {
+    return 0;
+  }
+  for (leaderIdx = 0; leaderIdx < (int)(uint)EntityCount; leaderIdx = leaderIdx + 1) {
+    if (AgntGs[(uint)((entity_t *)Entities)[leaderIdx].base.gindex].ai != '\0') {
+      entAlignedX = ovr_alignUp4(((entity_t *)Entities)[leaderIdx].base.x,0,0);
+      cursorAlignedX = ovr_alignUp4(GfxRndSeed,0,0);
+      if ((entAlignedX == cursorAlignedX) &&
+         ((uint)((entity_t *)Entities)[leaderIdx].base.y == (uint)GfxRndSeed2)) {
+        return 0;
       }
     }
+  }
+  for (leaderIdx = 0; leaderIdx < (int)(uint)GLeaderCount; leaderIdx = leaderIdx + 1) {
+    if (((GLeaderSheets[leaderIdx])->active != '\0') &&
+       ((GLeaderSheets[leaderIdx])->x == GfxRndSeed) &&
+       ((GLeaderSheets[leaderIdx])->y == GfxRndSeed2)) {
+      return 0;
+    }
+  }
+  ok = ovr_constr_usesGMapFlags(GfxRndSeed + -1,GfxRndSeed2,0);
+  blocked = ((ok & 0xff) == 0);
+  if (blocked == false) {
+    ok = ovr_constr_usesGMapFlags(GfxRndSeed,GfxRndSeed2,0);
+    blocked = ((ok & 0xff) == 0);
+  }
+  if (blocked) {
+    return 0;
+  }
+  if (CurPartySlot == 1) {
+    ok = ovr_constr_usesGMapFlags(GfxRndSeed + -2,GfxRndSeed2,0);
+    blocked = ((ok & 0xff) == 0);
+    if (blocked == false) {
+      ok = ovr_constr_usesGMapFlags(GfxRndSeed + 1,GfxRndSeed2,0);
+      blocked = ((ok & 0xff) == 0);
+    }
+    if (blocked) {
+      return 0;
+    }
+  }
+  if (1 < CurPartySlot) {
+    bestDist = 0xffff;
     for (leaderIdx = 0; leaderIdx < (int)(uint)GLeaderCount; leaderIdx = leaderIdx + 1) {
-      if ((((GLeaderSheets[leaderIdx])->active != '\0') &&
-          ((GLeaderSheets[leaderIdx])->x == GfxRndSeed)) &&
-         (uVar5 = (GLeaderSheets[leaderIdx])->y, uVar5 == GfxRndSeed2)) {
-        return uVar5 & 0xff00;
-      }
-    }
-    uVar5 = ovr_constr_usesGMapFlags(GfxRndSeed + -1,GfxRndSeed2,0);
-    if (((uVar5 & 0xff) == 0) ||
-       (uVar5 = ovr_constr_usesGMapFlags(GfxRndSeed,GfxRndSeed2,0), (uVar5 & 0xff) == 0)) {
-      uVar5 = 0;
-    }
-    else if ((CurPartySlot == 1) &&
-            ((uVar5 = ovr_constr_usesGMapFlags(GfxRndSeed + -2,GfxRndSeed2,0), (uVar5 & 0xff) == 0 ||
-             (uVar5 = ovr_constr_usesGMapFlags(GfxRndSeed + 1,GfxRndSeed2,0), (uVar5 & 0xff) == 0))))
-    {
-      uVar5 = 0;
-    }
-    else {
-      uVar5 = 0x2410;
-      if (1 < CurPartySlot) {
-        bestDist = 0xffff;
-        for (leaderIdx = 0; uVar5 = (uint)GLeaderCount, leaderIdx < (int)uVar5; leaderIdx = leaderIdx + 1) {
-          if ((((GLeaderSheets[leaderIdx])->active != '\0') &&
-              (*(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x3f) == '\0')) &&
-             (uVar5 = (GLeaderSheets[leaderIdx])->x - GfxRndSeed,
-             uVar3 = (int)uVar5 >> 0xf,
-             uVar2 = (GLeaderSheets[leaderIdx])->y - GfxRndSeed2,
-             uVar4 = (int)uVar2 >> 0xf,
-             uVar5 = ((uVar5 ^ uVar3) - uVar3) + ((uVar2 ^ uVar4) - uVar4), uVar5 < bestDist)) {
-            bestDist = uVar5;
-          }
-        }
-        if (0x1e < bestDist) {
-          return 0;
+      if (((GLeaderSheets[leaderIdx])->active != '\0') &&
+         (*(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x3f) == '\0')) {
+        dx = (GLeaderSheets[leaderIdx])->x - GfxRndSeed;
+        dxSign = (int)dx >> 0xf;
+        dy = (GLeaderSheets[leaderIdx])->y - GfxRndSeed2;
+        dySign = (int)dy >> 0xf;
+        dist = ((dx ^ dxSign) - dxSign) + ((dy ^ dySign) - dySign);
+        if (dist < bestDist) {
+          bestDist = dist;
         }
       }
-      uVar5 = CONCAT11((char)(uVar5 >> 8),1);
+    }
+    if (0x1e < bestDist) {
+      return 0;
     }
   }
-  else {
-    uVar5 = 0;
-  }
-  return uVar5;
+  return 1;
 }
 
 
