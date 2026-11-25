@@ -334,44 +334,39 @@ void __cdecl16far init_game(void)
 void __cdecl16far init_rebuildMapFlags(void)
 
 {
-  uint16_t *puVar1;
-  short (*paasVar2) [60] [148];
-  byte (*paabVar3) [59] [148];
+  /* Re-derived: the same map-flags rebuild applied to the whole 0x3b x 0x93 grid. */
+  uint16_t *flagWord;
   int col;
   int row;
-  uint16_t uVar6;
-  
+
   for (row = 0; row < 0x3b; row = row + 1) {
     for (col = 0; col < 0x93; col = col + 1) {
-      uVar6 = (uint16_t)((ulong)GMapFlags >> 0x10);
-      paasVar2 = (short (*) [60] [148])GMapFlags;
-      if (((*paasVar2)[row][col] & 4U) == 0) {
-        if ((((*(byte (*) [59] [148])GMapCells)[row][col] == 0) &&
-            ((*(byte (*) [59] [148])GMapCells)[row + 1][col + 1] == 0)) &&
-           ((*(byte (*) [59] [148])GMapCells)[row + 1][col] == 0)) {
-          puVar1 = (uint16_t *)((*paasVar2)[row] + col);
-          *puVar1 = *puVar1 | 1;
+      if (((*(short (*) [60] [148])GMapFlags)[row][col] & 4U) == 0) {
+        if (((*(byte (*) [59] [148])GMapCells)[row][col] == 0) &&
+            ((*(byte (*) [59] [148])GMapCells)[row + 1][col + 1] == 0) &&
+            ((*(byte (*) [59] [148])GMapCells)[row + 1][col] == 0)) {
+          flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[row] + col);
+          *flagWord = *flagWord | 1;
         }
-        uVar6 = (uint16_t)((ulong)GMapCells >> 0x10);
-        paabVar3 = (byte (*) [59] [148])GMapCells;
-        if ((((*paabVar3)[row][col] == 0) && ((*paabVar3)[row + 1][col + 1] == 0)) &&
-           ((*paabVar3)[row][col + 1] == 0)) {
-          puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[row] + col);
-          *puVar1 = *puVar1 | 2;
+        if (((*(byte (*) [59] [148])GMapCells)[row][col] == 0) &&
+            ((*(byte (*) [59] [148])GMapCells)[row + 1][col + 1] == 0) &&
+            ((*(byte (*) [59] [148])GMapCells)[row][col + 1] == 0)) {
+          flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[row] + col);
+          *flagWord = *flagWord | 2;
         }
       }
       else {
-        if ((((*(byte (*) [59] [148])GMapCells)[row + 1][col] == 0) &&
-            ((*(byte (*) [59] [148])GMapCells)[row][col + 1] == 0)) &&
-           ((*(byte (*) [59] [148])GMapCells)[row][col] == 0)) {
-          puVar1 = (uint16_t *)((*paasVar2)[row] + col);
-          *puVar1 = *puVar1 | 1;
+        if (((*(byte (*) [59] [148])GMapCells)[row + 1][col] == 0) &&
+            ((*(byte (*) [59] [148])GMapCells)[row][col + 1] == 0) &&
+            ((*(byte (*) [59] [148])GMapCells)[row][col] == 0)) {
+          flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[row] + col);
+          *flagWord = *flagWord | 1;
         }
-        if ((((*(byte (*) [59] [148])GMapCells)[row + 1][col] == 0) &&
-            ((*(byte (*) [59] [148])GMapCells)[row][col + 1] == 0)) &&
-           ((*(byte (*) [59] [148])GMapCells)[row + 1][col + 1] == 0)) {
-          puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[row] + col);
-          *puVar1 = *puVar1 | 2;
+        if (((*(byte (*) [59] [148])GMapCells)[row + 1][col] == 0) &&
+            ((*(byte (*) [59] [148])GMapCells)[row][col + 1] == 0) &&
+            ((*(byte (*) [59] [148])GMapCells)[row + 1][col + 1] == 0)) {
+          flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[row] + col);
+          *flagWord = *flagWord | 2;
         }
       }
     }
@@ -1792,40 +1787,38 @@ init_usesRandBelow(int16_t x,int16_t y,uint8_t dir,uint8_t *lastDir,uint8_t *sam
 void __cdecl16far init_usesGMapFlags3(int x,int y)
 
 {
-  uint16_t *puVar1;
-  short (*paasVar2) [60] [148];
-  byte (*paabVar3) [59] [148];
-  uint16_t uVar4;
-  
-  uVar4 = (uint16_t)((ulong)GMapFlags >> 0x10);
-  paasVar2 = (short (*) [60] [148])GMapFlags;
-  if (((*paasVar2)[y][x] & 4U) == 0) {
-    if ((((*(byte (*) [59] [148])GMapCells)[y][x] == 0) &&
-        ((*(byte (*) [59] [148])GMapCells)[y + 1][x + 1] == 0)) &&
-       ((*(byte (*) [59] [148])GMapCells)[y + 1][x] == 0)) {
-      puVar1 = (uint16_t *)((*paasVar2)[y] + x);
-      *puVar1 = *puVar1 | 1;
+  /* Re-derived: sets bit 0x1 or 0x2 in the cell's map-flags word according to which of the
+     three neighbouring GMapCells are empty; the cell's own 0x4 flag selects which pair is
+     tested against which neighbour.  The exported segment half (uVar4) and the paasVar2 /
+     paabVar3 cast aliases were dead. */
+  uint16_t *flagWord;
+
+  if (((*(short (*) [60] [148])GMapFlags)[y][x] & 4U) == 0) {
+    if (((*(byte (*) [59] [148])GMapCells)[y][x] == 0) &&
+        ((*(byte (*) [59] [148])GMapCells)[y + 1][x + 1] == 0) &&
+        ((*(byte (*) [59] [148])GMapCells)[y + 1][x] == 0)) {
+      flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+      *flagWord = *flagWord | 1;
     }
-    uVar4 = (uint16_t)((ulong)GMapCells >> 0x10);
-    paabVar3 = (byte (*) [59] [148])GMapCells;
-    if ((((*paabVar3)[y][x] == 0) && ((*paabVar3)[y + 1][x + 1] == 0)) &&
-       ((*paabVar3)[y][x + 1] == 0)) {
-      puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
-      *puVar1 = *puVar1 | 2;
+    if (((*(byte (*) [59] [148])GMapCells)[y][x] == 0) &&
+        ((*(byte (*) [59] [148])GMapCells)[y + 1][x + 1] == 0) &&
+        ((*(byte (*) [59] [148])GMapCells)[y][x + 1] == 0)) {
+      flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+      *flagWord = *flagWord | 2;
     }
   }
   else {
-    if ((((*(byte (*) [59] [148])GMapCells)[y + 1][x] == 0) &&
-        ((*(byte (*) [59] [148])GMapCells)[y][x + 1] == 0)) &&
-       ((*(byte (*) [59] [148])GMapCells)[y][x] == 0)) {
-      puVar1 = (uint16_t *)((*paasVar2)[y] + x);
-      *puVar1 = *puVar1 | 1;
+    if (((*(byte (*) [59] [148])GMapCells)[y + 1][x] == 0) &&
+        ((*(byte (*) [59] [148])GMapCells)[y][x + 1] == 0) &&
+        ((*(byte (*) [59] [148])GMapCells)[y][x] == 0)) {
+      flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+      *flagWord = *flagWord | 1;
     }
-    if ((((*(byte (*) [59] [148])GMapCells)[y + 1][x] == 0) &&
-        ((*(byte (*) [59] [148])GMapCells)[y][x + 1] == 0)) &&
-       ((*(byte (*) [59] [148])GMapCells)[y + 1][x + 1] == 0)) {
-      puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
-      *puVar1 = *puVar1 | 2;
+    if (((*(byte (*) [59] [148])GMapCells)[y + 1][x] == 0) &&
+        ((*(byte (*) [59] [148])GMapCells)[y][x + 1] == 0) &&
+        ((*(byte (*) [59] [148])GMapCells)[y + 1][x + 1] == 0)) {
+      flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+      *flagWord = *flagWord | 2;
     }
   }
   return;
