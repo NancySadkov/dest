@@ -3796,3 +3796,27 @@ now compare clean.
   build 64/64 clean; LINK ERRORS 0; grep_checks 50,869
   compare_state 1,627/0/0; diff_dgroup 972/1,868
   compare_runtime 1,545/12 (main entry), 1,545/11 (post-init_cfg)
+
+### The remaining far-pointer tables, resolved by string content
+
+Name-based resolution only worked for `CPKeys` (25/25) and part of
+`GUnitDescriptions` (13/28), because many of our copies of the strings carry names
+without the `_2410_XXXX` suffix (`s_mage`, `s_dwarf`, `s_fighters`, ...).  The reliable
+key is the **content**: for each entry offset, take the original string from
+`audit/dgroup.csv` and find the rebuilt symbol whose bytes in the post-init_cfg dump are
+exactly that string followed by NUL.
+
+```
+GUnitDescriptions  28/28
+GStatsLabels        6/6
+GPlayerTitles      32/32
+GTxtFiles           1/34   (the 33 missing are file names such as "help0.txt", which
+                            are not DGROUP string symbols in our build)
+```
+
+66 `.ofs` assignments were added to `st_fix_far_tables()`.  The checkpoint stays at
+1,545/11 because the comparator already mapped the original offsets; the change is what
+the program dereferences at run time.
+
+  build 64/64 clean; LINK ERRORS 0; grep_checks 50,869 -> 50,827
+  compare_state 1,627/0/0; diff_dgroup 972/1,868

@@ -321,7 +321,7 @@ void __cdecl16far ovc28_usesBlitGfx10(far_t entries,int count)
 void __cdecl16far ovc28_drawGold(byte partyIndex)
 
 {
-  uint uVar1;
+  uint textWidth;
   char *text;
   uint16_t uVar2;
   byte *pbVar3;
@@ -331,31 +331,31 @@ void __cdecl16far ovc28_drawGold(byte partyIndex)
   uint16_t uVar7;
   uint8_t numText;
   
-  uVar1 = ovr_font_textWidth((char *)"Gold",(char *)CONCAT22(Font03.ofs,(char *)0x26510),Font03.seg,0,0);
-  TextBlitX = 0x10e - (uVar1 >> 1);
+  textWidth = ovr_font_textWidth((char *)"Gold",(char *)CONCAT22(Font03.ofs,(char *)0x26510),Font03.seg,0,0);
+  TextBlitX = 0x10e - (textWidth >> 1);
   TextBlitY = 0x9c;
   ovr_blitText((char *)"Gold",(byte *)CONCAT22(Font03.ofs,(char *)0x26510),Font03.seg,0x3f
                ,0xed);
   uVar5 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
   iVar4 = (int)*(uint32_t *)((uint)partyIndex << 2);
   ovr_litoa10((char *)&numText,(long)CONCAT22(*(uint16_t *)(iVar4 + 0x56),_SS),*(uint16_t *)(iVar4 + 0x58),0);
-  uVar1 = ovr_font_textWidth((char *)&numText,(char *)CONCAT22(Font03.ofs,_SS),Font03.seg,0,0);
-  uVar2 = 0x10e - (uVar1 >> 1);
+  textWidth = ovr_font_textWidth((char *)&numText,(char *)CONCAT22(Font03.ofs,_SS),Font03.seg,0,0);
+  uVar2 = 0x10e - (textWidth >> 1);
   TextBlitY = 0xa7;
   TextBlitX = uVar2;
   ovr_blitText((char *)&numText,(byte *)CONCAT22(Font03.ofs,_SS),Font03.seg,0x3f,0xed);
   iVar4 = ovr_ovc45_usesLDIV_at_(partyIndex,0,0);
   if (iVar4 != 0 || uVar2 != 0) {
-    uVar1 = ovr_font_textWidth((char *)"Fund",(char *)CONCAT22(Font03.ofs,(char *)0x26510),Font03.seg,0,0);
-    uVar2 = 0x10e - (uVar1 >> 1);
+    textWidth = ovr_font_textWidth((char *)"Fund",(char *)CONCAT22(Font03.ofs,(char *)0x26510),Font03.seg,0,0);
+    uVar2 = 0x10e - (textWidth >> 1);
     TextBlitY = 0xb2;
     TextBlitX = uVar2;
     ovr_blitText((char *)"Fund",(byte *)CONCAT22(Font03.ofs,(char *)0x26510),Font03.seg,
                  0x3f,0xed);
     uVar5 = ovr_ovc45_usesLDIV_at_(partyIndex,0,0);
     ovr_litoa10((char *)&numText,(long)CONCAT22(uVar5,_SS),uVar2,0);
-    uVar1 = ovr_font_textWidth((char *)&numText,(char *)CONCAT22(Font03.ofs,_SS),Font03.seg,0,0);
-    pbVar3 = (byte *)(0x10e - (uVar1 >> 1));
+    textWidth = ovr_font_textWidth((char *)&numText,(char *)CONCAT22(Font03.ofs,_SS),Font03.seg,0,0);
+    pbVar3 = (byte *)(0x10e - (textWidth >> 1));
     TextBlitY = 0xbd;
     uVar7 = 0xed;
     uVar6 = CONCAT22(0x13f,Font03.seg);

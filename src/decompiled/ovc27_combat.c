@@ -892,7 +892,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
   uint16_t uVar4;
   int iVar5;
   char *pcVar6;
-  uint8_t *puVar7;
+  uint8_t *bufPtr;
   uint16_t uVar8;
   int in_stack_00000008;
   undefined1 uVar9;
@@ -947,10 +947,10 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
     uVar9 = (undefined1)GSavedBlitSeg;
     pcVar6 = ovr_agnt_statusText(paStack_c,(char *)CONCAT13((char)((uint)&text2 >> 8),
                                                   CONCAT12((char)&text2,ptrSeg)),0);
-    puVar7 = ovr_ovc15_usesStshRealloc(pcVar6,(char)uVar8,uVar9,0,0,0,0,0);
+    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,(char)uVar8,uVar9,0,0,0,0,0);
     pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c0a,_SS),
-                           (char *)CONCAT13((char)((uint)puVar7 >> 8),CONCAT12((char)puVar7,0x2410))
-                           ,(char)puVar7,(char)uVar8);
+                           (char *)CONCAT13((char)((uint)bufPtr >> 8),CONCAT12((char)bufPtr,0x2410))
+                           ,(char)bufPtr,(char)uVar8);
     ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
     emptyFunction();
     return;
@@ -990,9 +990,9 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
       uVar10 = (undefined1)uVar8;
       uVar9 = SUB21(pcVar6,0);
       pcVar6 = ovr_agnt_statusText(paStack_c,(char *)CONCAT22(&text2,ptrSeg),0);
-      puVar7 = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11,0,0,0);
+      bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11,0,0,0);
       pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,_SS),
-                             (char *)CONCAT22(puVar7,(char *)0x26510),uVar8);
+                             (char *)CONCAT22(bufPtr,(char *)0x26510),uVar8);
       ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
       ovr_OVC41_6a8f_01e7_entry(paStack_c,(char)ptrSeg);
       paStack_c->faction = agnt->faction;
@@ -1008,9 +1008,9 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
     uVar10 = (undefined1)uVar8;
     uVar9 = SUB21(pcVar6,0);
     pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text2,agntIndex),0);
-    puVar7 = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11,0,0,0);
+    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11,0,0,0);
     pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c44,_SS),
-                           (char *)CONCAT22(puVar7,(char *)0x26510),uVar8);
+                           (char *)CONCAT22(bufPtr,(char *)0x26510),uVar8);
     ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
     paStack_c->flags = paStack_c->flags | 0x400;
     emptyFunction();
@@ -1032,9 +1032,9 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
     uVar10 = (undefined1)uVar8;
     uVar9 = SUB21(pcVar6,0);
     pcVar6 = ovr_agnt_statusText(paStack_c,(char *)CONCAT22(&text2,ptrSeg),0);
-    puVar7 = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11,0,0,0);
+    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11,0,0,0);
     pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,_SS),
-                           (char *)CONCAT22(puVar7,(char *)0x26510),uVar8);
+                           (char *)CONCAT22(bufPtr,(char *)0x26510),uVar8);
     ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
     paStack_c->faction = agnt->faction;
     ovr_OVC41_6a8f_01e7_entry(paStack_c,(char)ptrSeg);

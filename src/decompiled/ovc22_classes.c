@@ -4698,16 +4698,16 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
 void __cdecl16far ovc22_spawnForLeaders(void)
 
 {
-  uint16_t uVar1;
+  uint16_t randPick;
   uint8_t outFlag;
   int leader;
   
   outFlag = 0x0;
   for (leader = 0; leader < (int)(uint)GLeaderCount; leader = leader + 1) {
     if ((((GLeaderSheets[leader])->active != '\0') &&
-        (uVar1 = ovr_randBelow((uint)(byte)((char *)0x2686a)
+        (randPick = ovr_randBelow((uint)(byte)((char *)0x2686a)
                                            [(uint)(GLeaderSheets[leader])->classStr * 0x95],0),
-        (byte)uVar1 < ((agnt_t *)((leader << 2)))->variant)) &&
+        (byte)randPick < ((agnt_t *)((leader << 2)))->variant)) &&
        ((*(char *)((int)*(uint32_t *)(leader << 2) + 0x3f) != '\0' ||
         ((GLeaderSheets[leader])->population <=
          (GLeaderSheets[leader])->housing)))) {
@@ -4719,14 +4719,14 @@ void __cdecl16far ovc22_spawnForLeaders(void)
           ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
         }
         else if ((GLeaderSheets[leader])->unitCount < 0x4b) {
-          uVar1 = ovr_randBelow(8,0);
-          if ((uVar1 & 0xff) == 0) {
+          randPick = ovr_randBelow(8,0);
+          if ((randPick & 0xff) == 0) {
             ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
           }
         }
         else {
-          uVar1 = ovr_randBelow(0x10,0);
-          if ((uVar1 & 0xff) == 0) {
+          randPick = ovr_randBelow(0x10,0);
+          if ((randPick & 0xff) == 0) {
             ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
           }
         }
@@ -4738,14 +4738,14 @@ void __cdecl16far ovc22_spawnForLeaders(void)
         ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
       }
       else if ((GLeaderSheets[leader])->unitCount < 0x32) {
-        uVar1 = ovr_randBelow(8,0);
-        if ((uVar1 & 0xff) == 0) {
+        randPick = ovr_randBelow(8,0);
+        if ((randPick & 0xff) == 0) {
           ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
         }
       }
       else {
-        uVar1 = ovr_randBelow(0x10,0);
-        if ((uVar1 & 0xff) == 0) {
+        randPick = ovr_randBelow(0x10,0);
+        if ((randPick & 0xff) == 0) {
           ovc22_usesRandBelow2((byte)leader,(uint16_t)&outFlag,_SS);
         }
       }
