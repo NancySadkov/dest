@@ -477,7 +477,7 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
   entity_t *agntPtr;
 
   agntBase = (agnt_t far *)&Agnts[agntIndex].x;
-  agntPtr = (agnt_t far *)CONCAT22(SEG_OF(Agnts),agntBase);
+  agntPtr = (agnt_t far *)MK_FP(SEG_OF(Agnts),agntBase);
   if ((((agntG_t far *)agntBase->gdata)->flags2 & 4) != 0) {
     for (otherIdx = 0; otherIdx < (int)(uint)AgntCount; otherIdx = otherIdx + 1) {
       if ((otherIdx != agntIndex) &&
@@ -489,7 +489,7 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
         if ((char)hitResult != '\0') {
           rollVal = (int)rollVal >> 1;
         }
-        ovc41_textParalyzed((agnt_t far *)CONCAT22(SEG_OF(Agnts),agntBase),
+        ovc41_textParalyzed((agnt_t far *)MK_FP(SEG_OF(Agnts),agntBase),
                             (agnt_t far *)CONCAT22(SEG_OF(Agnts),
                                                (agnt_t far *)&Agnts[otherIdx].x),rollVal,0,0,0);
       }
@@ -2677,7 +2677,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
      (in_stack_00000008 < (int)(uint)AgntCount)) {
     uVar10 = (uint16_t)((ulong)((long)in_stack_00000008 * 0x34) >> 0x10);
     targetAgnt = (agnt_t far *)(agnt_t far *)((long)in_stack_00000008 * 0x34);
-    agntPtr = (agnt_t far *)CONCAT22(SEG_OF(Agnts),targetAgnt);
+    agntPtr = (agnt_t far *)MK_FP(SEG_OF(Agnts),targetAgnt);
     if (targetAgnt->animVariant == 0x0) {
       *(undefined1 *)&targetAgnt->targetX = 0;
       *(undefined1 *)((int)&targetAgnt->targetX + 1) = 0;

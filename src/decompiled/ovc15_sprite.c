@@ -1373,7 +1373,7 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
                   (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[uStack_8].x),0x34);
         agntCopy.target = 0xff;
         ovr_ovc41_removeAgent(uStack_8,0,0);
-        pcVar4 = (char *)ovc15_usesRandBelow((agnt_t far *)CONCAT22(_SS,&agntCopy),
+        pcVar4 = (char *)ovc15_usesRandBelow((agnt_t far *)MK_FP(_SS,&agntCopy),
                                              in_stack_00000006,'\x01',in_stack_00000008);
         return pcVar4;
       }
@@ -1444,7 +1444,7 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
     else {
       agntCopy.level = 0x0;
     }
-    pcVar4 = (char *)ovc15_usesRandBelow((agnt_t far *)CONCAT22(_SS,&agntCopy),in_stack_00000006,
+    pcVar4 = (char *)ovc15_usesRandBelow((agnt_t far *)MK_FP(_SS,&agntCopy),in_stack_00000006,
                                          '\0',in_stack_00000008);
   }
   else {

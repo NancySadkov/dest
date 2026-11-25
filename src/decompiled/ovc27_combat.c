@@ -616,7 +616,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
       return 0;
     }
     uStack_8 = uVar12;
-    uVar3 = ovc27_usesRandBelow5((agnt_t far *)CONCAT22(agntSeg,paStack_6));
+    uVar3 = ovc27_usesRandBelow5((agnt_t far *)MK_FP(agntSeg,paStack_6));
     variant = (byte)uVar3;
     uVar4 = uVar3 & 0xff;
     if (uVar4 == 0) {
@@ -778,7 +778,7 @@ void __cdecl16far ovc27_usesBlitGfxRect(int agntIndex,brect_t *rect,uint16_t typ
       agnt->animFrame = agnt->animFrame + 0x1;
       agnt->health = 0x2;
       if (agnt->animFrame == 0xff) {
-        ovr_ovc41_resolveSpecialAttack((agnt_t far *)CONCAT22(SEG_OF(Agnts),agnt),(uint)agnt->target);
+        ovr_ovc41_resolveSpecialAttack((agnt_t far *)MK_FP(SEG_OF(Agnts),agnt),(uint)agnt->target);
         agnt->variant = 0x0;
         agnt->health = 0x0;
       }

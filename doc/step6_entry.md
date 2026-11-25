@@ -7338,3 +7338,51 @@ Two sub-classes need different treatment when that is done:
 
   grep_checks 40,510 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### The first 9 of the 47 segment-0 far pointers, converted to MK_FP
+
+`tmp/fix_concat_far.py` parses each `(T far *)CONCAT22(...)` with balanced-paren argument splitting and
+classifies it.  Of the 47, only a subset can be converted safely, because "the two arguments are plain
+words" is not the same as "the first argument is a segment": `CONCAT22(cmap.ofs,agnt)` and
+`CONCAT22(pcVar21,pfVar20)` are syntactically clean and semantically wrong (a `.ofs` member and a
+pointer used as segments).
+
+The nine converted were each read in context and the segment argument is unambiguous:
+
+```
+ovc03_font.c   532  CONCAT22(dst,txt)                      dst is the destination SEGMENT - it is also
+                                                            passed to ovr_blitRaw(...,0xa000,dst)
+ovc03_font.c   533  CONCAT22(Font03.seg,Font03.ofs)
+ovc15_sprite.c 1376 CONCAT22(_SS,&agntCopy)
+ovc15_sprite.c 1447 CONCAT22(_SS,&agntCopy)
+ovc27_combat.c  619 CONCAT22(agntSeg,paStack_6)             agntSeg = SEG_OF(Agnts)
+ovc27_combat.c  781 CONCAT22(SEG_OF(Agnts),agnt)
+ovc41_main.c    480 CONCAT22(SEG_OF(Agnts),agntBase)
+ovc41_main.c    492 CONCAT22(SEG_OF(Agnts),agntBase)
+ovc41_main.c   2680 CONCAT22(SEG_OF(Agnts),targetAgnt)
+```
+
+Verified in the emitted code rather than by the gates, since this changes no identifier.  `drawTextAt`'s
+`blitText` call now pushes
+
+```
+push 237 / push 207                       ; the two colour arguments
+push word ptr DGROUP:_Font03+2            ; Font03.seg
+push word ptr DGROUP:_Font03              ; Font03.ofs
+push di                                   ; dst  <- the segment
+push si                                   ; txt  <- the offset
+call far ptr _blitText
+```
+
+where before the first far argument was `push 0; push txt`, i.e. segment 0.
+
+**36 remain.**  They fall into two groups, both needing type work rather than a macro swap:
+
+* an argument is itself a pointer cast - `(agnt_t far *)CONCAT22((uint8_t *)result,agnt)`,
+  `(far_t far *)CONCAT22(pcVar21,pfVar20)`, `(agnt_t far *)CONCAT22(cmap.ofs,agnt)`.  `MK_FP` would
+  shift the whole 32-bit pointer left by 16, so the real field has to be recovered first.
+* the function still contains `in_stack_`/`unaff_` phantoms, so the argument is an uninitialised local
+  and converting the macro would only change one wrong value into another.
+
+  grep_checks 40,510 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

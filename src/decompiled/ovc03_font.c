@@ -529,8 +529,8 @@ void __cdecl16far drawTextAt(char *txt,uint16_t dst,uint16_t arg3)
     gfx.ofs = FontHandle.ofs;
     ovr_blitLoadRleGfx(gfx,dst_00,0);
     for (TextBlitY = 0x9c; TextBlitX = 0x1d, TextBlitY + 9 < 200; TextBlitY = TextBlitY + 0xb) {
-      ndrawn = blitText((char far *)CONCAT22(dst,txt),
-                      (byte far *)CONCAT22(Font03.seg,Font03.ofs),0xcf,0xed);
+      ndrawn = blitText((char far *)MK_FP(dst,txt),
+                      (byte far *)MK_FP(Font03.seg,Font03.ofs),0xcf,0xed);
       txtsz = strlen((char *)CONCAT22(dst,txt));
       if (txtsz <= ndrawn) {
         ovr_clean_ring_buffer();
