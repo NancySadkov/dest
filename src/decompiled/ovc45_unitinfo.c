@@ -333,9 +333,7 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
 
 {
   bool flag;
-  byte extraout_AH;
   uint uVar2;
-  byte extraout_AH_00;
   
   if ((BuildingTypes[bldType].flags2 & 0x10) != 0) {
     uVar2 = ovc45_usesGMapFlags(x,y + 1);
@@ -346,7 +344,7 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
     flag = ovc45_usesGMapFlags2(x,y + 1);
     if (((flag) && (flag = ovc45_usesGMapFlags2(x,y), flag)) &&
        (flag = ovc45_usesGMapFlags2(x,y + -1), flag)) {
-      return (uint)extraout_AH << 8;
+      return 0;
     }
     uVar2 = ovc45_cellBelowBlocked(x,y + 1);
     if ((((uVar2 & 0xff) == 0) && (uVar2 = ovc45_cellBelowBlocked(x,y), (uVar2 & 0xff) == 0)) &&
@@ -364,7 +362,7 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
     flag = ovc45_usesGMapFlags2(x,y);
     if (((flag) && (flag = ovc45_usesGMapFlags2(x + -1,y), flag)) &&
        (flag = ovc45_usesGMapFlags2(x + 1,y), flag)) {
-      return (uint)extraout_AH_00 << 8;
+      return 0;
     }
     uVar2 = ovc45_cellBelowBlocked(x,y);
     uVar2 = uVar2 & 0xff;
@@ -380,7 +378,7 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
       }
     }
   }
-  return CONCAT11((char)(uVar2 >> 8),1);
+  return 1;
 }
 
 
