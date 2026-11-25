@@ -3996,3 +3996,34 @@ build again.
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 50,741 -> 50,727
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### Where the remaining section-5 hits are (measured)
+
+`tmp/class_totals.py` and `tmp/hits_by_file.py` break the 29,828 matching lines down by
+class and by file:
+
+```
+[iusbc]Var         21,729   ovc22_classes 1859, ovc49_agents 1622, ovc23_bldrec 1524
+p[iusbc]Var         5,873   ovc49_agents 855, ovc22_classes 464, crtl.c 419
+[iusc]Stack_        3,967   ovc22_classes 651, ovc21_manage 319
+char [N] = ""       1,405   st_globals5 1294, st_globals4 110
+in_stack_           1,392   ovc49_agents 278, ovc15_sprite 131
+unaff_DI            1,117   ovc48_assets2 284, ovc44_strong_dat 238
+bStack_             1,005   ovc09_init 107, ovc34_unit 91
+in_REG                837   crtl.c 128, ovl.c 91
+unaff_SI              778   ovc46_assets 191, ovc19_save 108
+```
+
+Two scoping facts follow, and they matter for how the target is read:
+
+* **`crtl.c` carries 1,530 hits and `ovl.c` 880** - 2,410 of the 29,828 (8%) sit in the
+  reconstructed C runtime and the VROOMM/overlay manager, both of which AGENTS.md treats
+  as compiler-supplied and out of scope to reverse.  They are counted by the gate but are
+  not game-code recovery work.
+* **1,405 hits are the `char [N] = ""` class and 1,294 of them are `st_globals5.c`'s
+  named string objects** - i.e. recovered *data*, not decompiler temporaries.  The same
+  packed-blob treatment used for `s_absentStrings` would remove that class wholesale, at
+  the cost of replacing every symbolic reference with a blob + offset.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 50,691 -> 50,685
+  compare_state 1,627/0/0; diff_dgroup 972/1,868

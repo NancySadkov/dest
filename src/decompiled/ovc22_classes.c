@@ -4561,7 +4561,7 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
   uint uVar3;
   uint uVar4;
   uint32_t uVar5;
-  uint16_t uVar6;
+  uint16_t randPick;
   uint uVar7;
   int sheetOfs;
   int unitCount;
@@ -4579,13 +4579,13 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
   
   listIndex = ListCount;
   if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8) != '\0') {
-    uVar6 = ovr_randBelow(100,0);
-    roll = (undefined1)uVar6;
-    if ((uVar6 & 0xff) <
+    randPick = ovr_randBelow(100,0);
+    roll = (undefined1)randPick;
+    if ((randPick & 0xff) <
         ((uint)*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8) * 100) /
         (*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8) + 1)) {
-      uVar6 = ovr_randBelow((uint)*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8),0);
-      targetIdx = (char)uVar6;
+      randPick = ovr_randBelow((uint)*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8),0);
+      targetIdx = (char)randPick;
       matchIdx = '\0';
       for (listIndex = 0; listIndex < ListCount; listIndex = listIndex + 1) {
         unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
