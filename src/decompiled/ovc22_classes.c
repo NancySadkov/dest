@@ -3012,24 +3012,23 @@ void __cdecl16far ovc22_usesEntities3(int entityIndex)
 void __cdecl16far ovc22_usesEntities4(int entityIndex)
 
 {
-  char *pcVar1;
-  uint *puVar2;
-  byte bVar3;
-  uint32_t uVar4;
-  int iVar5;
-  uint16_t uVar6;
-  
-  uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-  iVar5 = (int)Entities;
+  /* Re-derived: while the entity has a party and its frames word has no bit 2, decrements
+     that party's +0xa7 counter and sets bit 2 of the entity's +0x14 word.  The export's iVar5
+     (an unused Entities offset) and uVar6 (a segment half) were dead. */
+  char *counterPtr;
+  uint *flagsPtr;
+  byte partyIdx;
+  uint32_t sheetRef;
+
   if (((AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) != -1) &&
       ((AGNT_WORD(&((entity_t *)Entities)[entityIndex], base.frames, 1) & 2) == 0)) &&
-     (bVar3 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),
-     uVar4 = *(uint32_t *)((uint)bVar3 << 2), *(char *)((int)uVar4 + 0xa7) != '\0')) {
-    uVar4 = *(uint32_t *)((uint)bVar3 << 2);
-    pcVar1 = (char *)((int)uVar4 + 0xa7);
-    *pcVar1 = *pcVar1 + -1;
-    puVar2 = (uint *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x14);
-    *puVar2 = *puVar2 | 2;
+     (partyIdx = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),
+     sheetRef = *(uint32_t *)((uint)partyIdx << 2), *(char *)((int)sheetRef + 0xa7) != '\0')) {
+    sheetRef = *(uint32_t *)((uint)partyIdx << 2);
+    counterPtr = (char *)((int)sheetRef + 0xa7);
+    *counterPtr = *counterPtr + -1;
+    flagsPtr = (uint *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x14);
+    *flagsPtr = *flagsPtr | 2;
   }
   return;
 }

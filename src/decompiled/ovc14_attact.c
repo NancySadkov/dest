@@ -167,27 +167,31 @@ uint16_t __cdecl16far attact_usesGUnits(int x,int y)
 uint __cdecl16far attact_usesSCARRY2(int x,int y,byte dir,char ignoreBlocked,uint16_t arg5,uint16_t arg6)
 
 {
-  int iVar1;
-  uint uVar2;
-  uint16_t uVar3;
-  
-  iVar1 = (int)*(char *)(dir + 0x885);
-  if ((((x + iVar1 < 2) || (iVar1 = (int)*(char *)(dir + 0x889), SCARRY2(y,iVar1) != y + iVar1 < 0))
-      || (iVar1 = (int)*(char *)(dir + 0x885), 0x91 < x + iVar1)) ||
-     (iVar1 = (int)*(char *)(dir + 0x889), 0x39 < y + iVar1)) {
-    uVar2 = CONCAT11((char)((uint)iVar1 >> 8),1);
+  /* Re-derived: bounds-checks the cell reached through the direction tables at +0x885 (dx)
+     and +0x889 (dy), then reads the two map-flag bits selected by the direction; 1 when the
+     cell is out of bounds or blocked and blocking is honoured.  The SCARRY2 idiom is Ghidra's
+     rendering of a signed comparison and is kept verbatim; the stale-AH out-of-bounds return
+     is 1. */
+  int step;
+  uint result;
+
+  step = (int)*(char *)(dir + 0x885);
+  if ((((x + step < 2) ||
+       (step = (int)*(char *)(dir + 0x889), SCARRY2(y,step) != y + step < 0)) ||
+      (step = (int)*(char *)(dir + 0x885), 0x91 < x + step)) ||
+     (step = (int)*(char *)(dir + 0x889), 0x39 < y + step)) {
+    result = 1;
   }
   else {
-    uVar3 = (uint16_t)((ulong)GMapFlags >> 0x10);
-    uVar2 = (uint)(*(short (*) [60] [148])GMapFlags)[y][x] >> (dir + 4 & 0x1f);
-    if (((uVar2 & 1) == 0) || (ignoreBlocked != '\0')) {
-      uVar2 = (uint)((byte)uVar2 & 1);
+    result = (uint)(*(short (*) [60] [148])GMapFlags)[y][x] >> (dir + 4 & 0x1f);
+    if (((result & 1) == 0) || (ignoreBlocked != '\0')) {
+      result = (uint)((byte)result & 1);
     }
     else {
-      uVar2 = (uint)(*(short (*) [60] [148])GMapFlags)[y][x] >> (dir + 8 & 0x1f) & 0xff01 ^ 1;
+      result = (uint)(*(short (*) [60] [148])GMapFlags)[y][x] >> (dir + 8 & 0x1f) & 0xff01 ^ 1;
     }
   }
-  return uVar2;
+  return result;
 }
 
 
@@ -461,27 +465,30 @@ void __cdecl16far attact_decrementCounter(char *counter)
 int __cdecl16far attact_usesAgntCount(int ownerIndex)
 
 {
-  uint uVar1;
-  int iVar2;
-  byte bVar3;
-  undefined1 uStack_3;
-  
-  uStack_3 = 0;
-  for (bVar3 = 0; bVar3 < AgntCount; bVar3 = bVar3 + 1) {
-    if (((Agnts[bVar3].owner == ownerIndex) &&
-        (Agnts[bVar3].moveState != '\x02')) &&
-       ((Agnts[bVar3].flags & 0xae4) == 0)) {
-      uStack_3 = uStack_3 + 1;
+  /* Re-derived: how many spare unit slots the owner has left - the entity's animation frame
+     divided by 0x10, minus the agents already assigned to it that are not in move state 2 and
+     have none of 0xae4 set, floored at 0. */
+  uint frameSlots;
+  int spare;
+  byte agntIdx;
+  uint8_t assigned;
+
+  assigned = 0;
+  for (agntIdx = 0; agntIdx < AgntCount; agntIdx = agntIdx + 1) {
+    if (((Agnts[agntIdx].owner == ownerIndex) &&
+        (Agnts[agntIdx].moveState != '\x02')) &&
+       ((Agnts[agntIdx].flags & 0xae4) == 0)) {
+      assigned = assigned + 1;
     }
   }
-  uVar1 = (((entity_t *)Entities)[ownerIndex].base.animFrame + 0xf) / 0x10;
-  if (uVar1 < uStack_3) {
-    iVar2 = 0;
+  frameSlots = (((entity_t *)Entities)[ownerIndex].base.animFrame + 0xf) / 0x10;
+  if (frameSlots < assigned) {
+    spare = 0;
   }
   else {
-    iVar2 = uVar1 - uStack_3;
+    spare = frameSlots - assigned;
   }
-  return iVar2;
+  return spare;
 }
 
 
