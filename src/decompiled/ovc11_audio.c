@@ -208,21 +208,28 @@ void __cdecl16far stop_audio(void)
 uint __cdecl16far audio_isPlaying(void)
 
 {
-  bool bVar1;
-  uint in_AX;
-  undefined1 extraout_AH;
-  
+  /* 3a5b:034e (file 0x2C6FE), re-derived: the original is
+
+       if (SfxRunning) { digSoundPlaying() ; if (al) return 1 }
+       if (MusRunning) { if (midGetSequenceStatus() == 1) return 1 }
+       return 0
+
+     with `mov al,1` at 0x2C711/0x2C726 and `mov al,0` at 0x2C72A.  The exported
+     `extraout_AH` / `in_AX` pseudo-registers were stale-High-byte artifacts, and the
+     `in_AX == 1` test after the second call was testing that stale value instead of
+     `midGetSequenceStatus()`'s own return (the original compares `ax` right after the
+     lcall, 0x2C721). */
   if (SfxRunning != '\0') {
-    bVar1 = ovr_digSoundPlaying();
-    in_AX = CONCAT11(extraout_AH,bVar1);
-    if (bVar1) {
-      return CONCAT11(extraout_AH,1);
+    if (ovr_digSoundPlaying()) {
+      return 1;
     }
   }
-  if ((MusRunning != '\0') && (ovr_midGetSequenceStatus(), in_AX == 1)) {
-    return 1;
+  if (MusRunning != '\0') {
+    if (ovr_midGetSequenceStatus() == 1) {
+      return 1;
+    }
   }
-  return in_AX & 0xff00;
+  return 0;
 }
 
 

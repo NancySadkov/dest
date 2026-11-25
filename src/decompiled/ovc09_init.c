@@ -1673,21 +1673,20 @@ int __cdecl16far init_sumMapCells2x2(int x,int y)
 uint16_t __cdecl16far init_compute2(int x,int y,byte direction)
 
 {
-  uint in_AX;
-  byte bStack_3;
-  
-  bStack_3 = 0;
-  while( true ) {
-    if (3 < bStack_3) {
-      return CONCAT11((char)(in_AX >> 8),1);
+  /* 3381:2452 (file 0x27AC0 / 0x27ACD), re-derived: the original ends with `mov al,0`
+     and `mov al,1`, so the result is a boolean.  The exported `in_AX` pseudo-register was
+     reused for the loop index, the direction comparison and the getMapFlags result, and
+     both returns took their high byte from it (`CONCAT11((char)(in_AX >> 8),1)` /
+     `in_AX & 0xff00`). */
+  byte d;
+
+  for (d = 0; d < 4; d = d + 1) {
+    if ((d != (direction ^ 2)) &&
+        ((char)init_getMapFlags(x + *(char *)(d + 0x885),y + *(char *)(d + 0x889)) != '\0')) {
+      return 0;
     }
-    in_AX = (uint)bStack_3;
-    if ((in_AX != (direction ^ 2)) &&
-       (in_AX = init_getMapFlags(x + *(char *)(bStack_3 + 0x885),y + *(char *)(bStack_3 + 0x889)),
-       (char)in_AX != '\0')) break;
-    bStack_3 = bStack_3 + 1;
   }
-  return in_AX & 0xff00;
+  return 1;
 }
 
 

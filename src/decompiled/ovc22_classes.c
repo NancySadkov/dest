@@ -3974,28 +3974,30 @@ bool __cdecl16far ovc22_textArena2(uint x,int y)
 uint __cdecl16far ovc22_usesAlignUp4(int x,int y,byte unitType,uint mask)
 
 {
-  byte bVar1;
-  uint uVar2;
-  uint uVar3;
-  int iVar4;
-  uint uVar5;
-  
-  iVar4 = (*(short (*) [148] [60])GUnitGrid)[x][y];
-  bVar1 = ((unit_t *)GUnits)[iVar4].unitType;
-  uVar3 = CONCAT11((char)((uint)(iVar4 * 9) >> 8),bVar1);
-  if (bVar1 == unitType) {
-    uVar2 = ovr_alignUp4(x,0,0);
-    uVar5 = 0;
-    uVar3 = uVar2;
-    for (iVar4 = -2; iVar4 < 2; iVar4 = iVar4 + 1) {
-      uVar3 = (uVar2 + iVar4) * 2;
-      uVar5 = uVar5 | (*(short (*) [60] [148])GMapFlags)[y][uVar2 + iVar4];
+  /* 5087:3c93 (file 0x46371 tail), re-derived: the original ends with `mov al,1`
+     (0x4638B) and `mov al,0` (0x4638F), so the result is a boolean - the exported
+     `return CONCAT11((char)(uVar3 >> 8),1);` / `return uVar3 & 0xff00;` were modelling
+     the stale AH that a preceding `imul` left behind, and `uVar3` was simultaneously used
+     as the loop's `(uVar2 + iVar4) * 2`, i.e. two roles in one slot. */
+  int unitIdx;
+  byte cellUnitType;
+  uint alignedX;
+  uint acc;
+  int k;
+
+  unitIdx = (*(short (*) [148] [60])GUnitGrid)[x][y];
+  cellUnitType = ((unit_t *)GUnits)[unitIdx].unitType;
+  if (cellUnitType == unitType) {
+    alignedX = ovr_alignUp4(x,0,0);
+    acc = 0;
+    for (k = -2; k < 2; k = k + 1) {
+      acc = acc | (*(short (*) [60] [148])GMapFlags)[y][alignedX + k];
     }
-    if ((mask & uVar5) == 0) {
-      return CONCAT11((char)(uVar3 >> 8),1);
+    if ((mask & acc) == 0) {
+      return 1;
     }
   }
-  return uVar3 & 0xff00;
+  return 0;
 }
 
 
