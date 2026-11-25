@@ -795,43 +795,55 @@ void __cdecl16far ovc13_drawPanelHighlight(void)
 void __cdecl16far ovc13_usesAlignUp4(void)
 
 {
+  /* Re-derived (3d16:1558).  Draws the terrain panel: for each of the 48 rows and 105
+     columns it reads the four corner cell bytes (row,col), (row,col+1), (row+1,col),
+     (row+1,col+1) plus the current and previous-row map-flag words, calls constr_compute1
+     twice with the edge mode chosen by flag bit 4, and draws with driver_compute4 (mode 1)
+     or driver_compute3 (mode 2); when either flag word has bits 0xc000 set it overlays with
+     ovc13_compute2.  The cursor cell is then highlighted with three fill spans.
+
+     Fixed against the original: the two map-flag pointers advance 2 bytes per cell
+     (`add word ptr [bp-0xe],2` / `[bp-0x12],2`) so they are uint16_t*, not uint*; and their
+     segment halves - and the cell pointers' - came from four uninitialised locals, so they
+     are now the GMapCells/GMapFlags segment words the export already uses when it builds
+     the pointers.  Everything else is a rename. */
   byte cornerB;
   byte cornerC;
   uint8_t cornerC_00;
-  int iVar1;
-  int iVar2;
+  int savedBelow;
+  int savedRow;
   uint8_t uVar3;
   uint uVar5;
   char *text;
-  byte *pbVar6;
-  short *psVar7;
-  int iVar8;
-  int iVar9;
+  byte *rowCellPtr;
+  uint16_t *flagsRowPtr;
+  int xPos;
+  int colIdx;
   uint16_t uVar10;
   uint16_t uVar11;
   uint8_t msg;
-  uint flags2;
-  uint flags;
+  uint16_t flags2;
+  uint16_t flags;
   int spanH;
   int spanX;
   uint16_t blitSeg;
-  int iStack_20;
-  int iStack_1e;
-  int iStack_1c;
-  int iStack_1a;
-  int iStack_18;
-  int iStack_16;
-  short *psStack_14;
-  uint16_t uStack_12;
-  short *psStack_10;
-  uint16_t uStack_e;
-  byte *pbStack_c;
-  uint16_t uStack_a;
-  byte *pbStack_8;
-  uint16_t uStack_6;
+  int rowPrev;
+  int rowPrevSaved;
+  int belowPrev;
+  int belowPrevSaved;
+  int rowY;
+  int rowIdx;
+  uint16_t *flagsAbove;
+  uint16_t *flagsCur;
+  byte *rowPtr;
+  byte *belowPtr;
+  uint16_t cellsSeg;
+  uint16_t flagsSeg;
   uint16_t savedDstSeg;
   uint16_t uVar4;
-  
+
+  cellsSeg = *(uint16_t *)((uint8_t *)&(GMapCells) + 2);
+  flagsSeg = *(uint16_t *)((uint8_t *)&(GMapFlags) + 2);
   Seed_2000_d110 = GfxRndSeed + -0x35;
   Seed_2000_d10e = GfxRndSeed2 + -0x18;
   if (Seed_2000_d110 < 0) {
@@ -847,88 +859,86 @@ void __cdecl16far ovc13_usesAlignUp4(void)
     Seed_2000_d10e = 0xb;
   }
   blitSeg = BlitRects[0].seg;
-  iStack_18 = 7;
-  for (iStack_16 = 0; iStack_16 < 0x30; iStack_16 = iStack_16 + 1) {
-    iVar8 = 0xc;
-    pbStack_8 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
-                                  (*(byte (*) [59] [148])GMapCells)[Seed_2000_d10e + iStack_16 + 1]
-                                  + Seed_2000_d110);
-    pbVar6 = (*(byte (*) [59] [148])GMapCells)[Seed_2000_d10e + iStack_16] + Seed_2000_d110;
-    pbStack_c = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar6);
-    psVar7 = (*(short (*) [60] [148])GMapFlags)[Seed_2000_d10e + iStack_16] + Seed_2000_d110;
-    psStack_10 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar7);
-    if (Seed_2000_d10e + iStack_16 != 0 &&
-        SCARRY2(Seed_2000_d10e,iStack_16) == Seed_2000_d10e + iStack_16 < 0) {
-      psVar7 = ((short (*) [60] [148])GMapFlags)[-1][Seed_2000_d10e + iStack_16 + 0x3b] +
-               Seed_2000_d110;
+  rowY = 7;
+  for (rowIdx = 0; rowIdx < 0x30; rowIdx = rowIdx + 1) {
+    xPos = 0xc;
+    belowPtr = (byte *)CONCAT22(cellsSeg,
+                                (*(byte (*) [59] [148])GMapCells)[Seed_2000_d10e + rowIdx + 1]
+                                + Seed_2000_d110);
+    rowCellPtr = (*(byte (*) [59] [148])GMapCells)[Seed_2000_d10e + rowIdx] + Seed_2000_d110;
+    rowPtr = (byte *)CONCAT22(cellsSeg,rowCellPtr);
+    flagsRowPtr = (*(short (*) [60] [148])GMapFlags)[Seed_2000_d10e + rowIdx] + Seed_2000_d110;
+    flagsCur = (uint16_t *)CONCAT22(flagsSeg,flagsRowPtr);
+    if (Seed_2000_d10e + rowIdx != 0 &&
+        SCARRY2(Seed_2000_d10e,rowIdx) == Seed_2000_d10e + rowIdx < 0) {
+      flagsRowPtr = ((short (*) [60] [148])GMapFlags)[-1][Seed_2000_d10e + rowIdx + 0x3b] +
+                    Seed_2000_d110;
     }
-    psStack_14 = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar7);
-    iStack_1c = (int)(char)*pbStack_8;
-    pbStack_8 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
-                                  (*(byte (*) [59] [148])GMapCells)[Seed_2000_d10e + iStack_16 + 1]
-                                  + Seed_2000_d110 + 1);
-    iStack_20 = (int)(char)*pbStack_c;
-    pbStack_c = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar6 + 1);
-    for (iVar9 = 0; iVar9 < 0x69; iVar9 = iVar9 + 1) {
-      iStack_1a = iStack_1c;
-      iVar2 = iStack_1a;
-      iStack_1e = iStack_20;
-      iVar1 = iStack_1e;
-      cornerB = *pbStack_8;
-      pbStack_8 = (byte *)CONCAT22(uStack_6,pbStack_8 + 1);
-      cornerC = *pbStack_c;
-      pbStack_c = (byte *)CONCAT22(uStack_a,pbStack_c + 1);
-      flags = *psStack_10;
-      psStack_10 = (uint *)CONCAT22(uStack_e,psStack_10 + 1);
-      flags2 = *psStack_14;
-      psStack_14 = (uint *)CONCAT22(uStack_12,psStack_14 + 1);
-      (*(uint8_t *)((uint8_t *)&(iStack_1a))) = (uint8_t)iStack_1c;
-      uVar3 = (uint8_t)iStack_1a;
-      iStack_1c = (int)(char)cornerB;
-      iStack_1a = iVar2;
+    flagsAbove = (uint16_t *)CONCAT22(flagsSeg,flagsRowPtr);
+    belowPrev = (int)(char)*belowPtr;
+    belowPtr = (byte *)CONCAT22(cellsSeg,
+                                (*(byte (*) [59] [148])GMapCells)[Seed_2000_d10e + rowIdx + 1]
+                                + Seed_2000_d110 + 1);
+    rowPrev = (int)(char)*rowPtr;
+    rowPtr = (byte *)CONCAT22(cellsSeg,rowCellPtr + 1);
+    for (colIdx = 0; colIdx < 0x69; colIdx = colIdx + 1) {
+      belowPrevSaved = belowPrev;
+      savedBelow = belowPrevSaved;
+      rowPrevSaved = rowPrev;
+      savedRow = rowPrevSaved;
+      cornerB = *belowPtr;
+      belowPtr = (byte *)CONCAT22(cellsSeg,belowPtr + 1);
+      cornerC = *rowPtr;
+      rowPtr = (byte *)CONCAT22(cellsSeg,rowPtr + 1);
+      flags = *flagsCur;
+      flagsCur = (uint16_t *)CONCAT22(flagsSeg,flagsCur + 1);
+      flags2 = *flagsAbove;
+      flagsAbove = (uint16_t *)CONCAT22(flagsSeg,flagsAbove + 1);
+      (*(uint8_t *)((uint8_t *)&(belowPrevSaved))) = (uint8_t)belowPrev;
+      uVar3 = (uint8_t)belowPrevSaved;
+      belowPrev = (int)(char)cornerB;
+      belowPrevSaved = savedBelow;
       if ((flags & 4) == 0) {
-        (*(uint8_t *)((uint8_t *)&(iStack_1e))) = (uint8_t)iStack_20;
-        cornerC_00 = (uint8_t)iStack_1e;
+        (*(uint8_t *)((uint8_t *)&(rowPrevSaved))) = (uint8_t)rowPrev;
+        cornerC_00 = (uint8_t)rowPrevSaved;
         uVar11 = blitSeg;
-        iStack_20 = (int)(char)cornerC;
-        iStack_1e = iVar1;
+        rowPrev = (int)(char)cornerC;
+        rowPrevSaved = savedRow;
         uVar4 = ovr_constr_compute1(uVar3,cornerB,cornerC_00,(byte)flags,1,0,0,0);
         uVar3 = (uint8_t)uVar4;
-        uVar4 = ovr_constr_compute1((uint8_t)iStack_1e,(uint8_t)iStack_20,(uint8_t)iStack_1c,(byte)flags,2,0,0,0);
-        ovr_driver_compute4(iVar8,(byte)iStack_18,(uint8_t)uVar4,uVar3,uVar11);
+        uVar4 = ovr_constr_compute1((uint8_t)rowPrevSaved,(uint8_t)rowPrev,
+                                    (uint8_t)belowPrev,(byte)flags,2,0,0,0);
+        ovr_driver_compute4(xPos,(byte)rowY,(uint8_t)uVar4,uVar3,uVar11);
       }
       else {
         uVar11 = blitSeg;
-        iStack_20 = (int)(char)cornerC;
+        rowPrev = (int)(char)cornerC;
         uVar4 = ovr_constr_compute1(uVar3,cornerB,cornerC,(byte)flags,2,0,0,0);
         uVar3 = (uint8_t)uVar4;
-        uVar4 = ovr_constr_compute1((uint8_t)iStack_1e,(uint8_t)iStack_20,(uint8_t)iStack_1a,(byte)flags,1,0,0,0);
-        ovr_driver_compute3(iVar8,(byte)iStack_18,(uint8_t)uVar4,uVar3,uVar11);
+        uVar4 = ovr_constr_compute1((uint8_t)rowPrevSaved,(uint8_t)rowPrev,
+                                    (uint8_t)belowPrevSaved,(byte)flags,1,0,0,0);
+        ovr_driver_compute3(xPos,(byte)rowY,(uint8_t)uVar4,uVar3,uVar11);
       }
       if (((flags | flags2) & 0xc000) != 0) {
-        ovc13_compute2(iVar8,iStack_18,(byte)(flags2 >> 0xe),(byte)(flags >> 0xe),blitSeg);
+        ovc13_compute2(xPos,rowY,(byte)(flags2 >> 0xe),(byte)(flags >> 0xe),blitSeg);
       }
-      iVar8 = iVar8 + 2;
+      xPos = xPos + 2;
     }
-    ovc13_drawPanelCell(0x69,iStack_16);
-    iStack_18 = iStack_18 + 3;
+    ovc13_drawPanelCell(0x69,rowIdx);
+    rowY = rowY + 3;
   }
   ovc13_drawPanelHighlight();
   ovc13_drawHighlightedUnits();
-  iVar8 = (GfxRndSeed - Seed_2000_d110) * 2;
-  spanX = iVar8 + 7;
+  xPos = (GfxRndSeed - Seed_2000_d110) * 2;
+  spanX = xPos + 7;
   spanH = (GfxRndSeed2 - Seed_2000_d10e) * 3 + 8;
-  ovr_driver_fillSpan(spanX,iVar8 + 0x10,(byte)spanH,0xe0,&((brect_t *)BlitRects)->x,0x2410)
-  ;
-  ovr_driver_fillSpan(spanX,spanX + 9,(char)spanH + 4,0xe0,&((brect_t *)BlitRects)->x,
-                      0x2410);
-  ovr_ovc07_usesFillRect
-            (spanX,spanH,spanX,spanH + 4,0xe0,(brect_t *)BlitRects,0x2410);
-  ovr_ovc07_usesFillRect
-            (spanX + 9,spanH,spanX + 9,spanH + 4,0xe0,(brect_t *)BlitRects,0x2410);
+  ovr_driver_fillSpan(spanX,xPos + 0x10,(byte)spanH,0xe0,&((brect_t *)BlitRects)->x,0x2410);
+  ovr_driver_fillSpan(spanX,spanX + 9,(char)spanH + 4,0xe0,&((brect_t *)BlitRects)->x,0x2410);
+  ovr_ovc07_usesFillRect(spanX,spanH,spanX,spanH + 4,0xe0,(brect_t *)BlitRects,0x2410);
+  ovr_ovc07_usesFillRect(spanX + 9,spanH,spanX + 9,spanH + 4,0xe0,(brect_t *)BlitRects,0x2410);
   ovc13_usesScreenY2();
   savedDstSeg = TextBlitDstSeg;
-  pbVar6 = (byte *)((char *)0x26510);
+  rowCellPtr = (byte *)((char *)0x26510);
   TextBlitDstSeg = BlitRects[0].seg;
   TextBlitX = 0xb6;
   TextBlitY = 10;
@@ -940,7 +950,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
     uVar5 = ovr_alignUp4(GfxRndSeed,GfxRndSeed2,0);
     text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x864,_SS),
                          (char *)CONCAT22(uVar5,(char *)0x26510));
-    ovr_blitText(text,(byte *)CONCAT22(uVar10,pbVar6),uVar11,uVar3,uVar4);
+    ovr_blitText(text,(byte *)CONCAT22(uVar10,rowCellPtr),uVar11,uVar3,uVar4);
   }
   TextBlitDstSeg = savedDstSeg;
   return;
