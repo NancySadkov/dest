@@ -7577,3 +7577,45 @@ bp+0xe - the read this turn's parent commit corrected.
 
   grep_checks 40,389 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### land_info's tile table: base and stride proven, but the table has no symbol
+
+Call count verified first: `7e7c:004b` is 2805 bytes, 1022 instructions and **52 calls**, matching
+`audit/functions_real.tsv`, so the body is complete.
+
+The tile read decodes exactly:
+
+```
+00C3  mov al, byte ptr [bp + 6]     ; tileOffset
+00C6  cwde / shl ax, 1              ; tileOffset * 2
+00C9  mov dx, 0x280 / mov bx, ax / mov es, dx
+00D0  cmp word ptr es:[bx - 0x6e29], -1
+00D8  ... same again ...
+00E5  mov ax, word ptr es:[bx - 0x6e29]
+00EA  mov dx, 0x12 / imul dx        ; record stride 0x12  <- confirmed
+```
+
+so the table is at **DGROUP + 0x91d7** (`-0x6e29` is the signed 16-bit form of 0x91d7), holds a **word
+per tile** (the record index), uses **-1 as "no record"**, and the record stride is **0x12**,
+independently confirmed by the `imul dx` with `dx = 0x12`.
+
+**The base has no symbol, in either image.** `audit/dgroup_data.csv` has `0x91d6 = cursorRecordFound`
+(a `undefined1`, one byte) and **nothing at 0x91d7**; `audit/symbols.tsv` has no label at or before it
+either (the nearest below is `__setargv_SavedReturn + 2265`).  So the array is raw DGROUP data that the
+original's own debug record did not name, and our tree does not declare it.
+
+That blocks the conversion: writing `((uint16_t *)&X)[tileOffset]` needs an `X`, and worst-case
+`MK_FP(_DS, 0x91d7)` would be wrong because our DGROUP layout differs from the original's in 83
+constant-delta runs.  Doing it properly means
+
+1. extracting the table's bytes from the original DGROUP starting at 0x91d7,
+2. sizing it (max tileOffset * 2 + 2),
+3. declaring it in our tree so that its bytes match, and only then
+4. rewriting the ~15 `*(int *)((uint)tileIdx * 2 + -0x6e29)` sites to index it.
+
+That is a self-contained piece of work, and it is the last outstanding item in `land_info` - the
+function no longer contains any `0x2410` literal, any `(T far *)CONCAT22` build, or any
+`in_stack_`/`unaff_` reference.
+
+  grep_checks 40,248 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
