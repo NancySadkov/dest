@@ -5082,3 +5082,68 @@ is not needed for the source-level rebuild: the tree calls the two routines by n
 
   grep_checks 45,444; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### `ovc15_textError`: the seven cases decoded; the exit's long arithmetic is still the blocker
+
+Full decode of 4207:26bc..0x287c.  Parameters: a **far pointer** at [bp+6] (call it `agnt`) and
+a **32-bit value** at [bp+0xa..0xc] read and returned in `dx:ax`.
+
+Selector:
+
+```
+26C3  les bx,[bp+6] ; al = es:[bx+0x1a]
+26CF  les bx,0070:[al*4] ; dx = es:[bx], ax = es:[bx+2]   -> [bp-6] = offset, [bp-4] = seg
+26E6  les bx,[bp+6] ; al = es:[bx+0xd] * 0x95
+26FB  al = es:[bx+0x271c] (es=0x60) ; [bp-1] = al ; 0xff -> 0
+270F  si = 0 ; switch ([bp-1]) with 7 cases, default -> exit
+287D  table = 2725 274B 2771 2797 27BD 27DD 2811
+```
+
+With `agnt` as the far pointer loaded from [bp-6] and `v(x) = agnt->+x`:
+
+| case | entry | rule |
+|---|---|---|
+| 0 | 2725 | `v(0x29) >= 0x10 ? 10 : v(0x29) >= 0xd ? 5 : 0` |
+| 1 | 274B | same with `v(0x2a)` |
+| 2 | 2771 | same with `v(0x2b)` |
+| 3 | 2797 | same with `v(0x2c)` |
+| 4 | 27BD | same with `v(0x29)` (identical to case 0) |
+| 5 | 27DD | `10` if `v(0x29)>=0xd && v(0x2a)>=0x10`; `5` if `v(0x29)>=0xd && v(0x2a)>=0xd`; else `0` |
+| 6 | 2811 | `10` if `v(0x29)>=0xd && v(0x2c)>=0xd`; `5` if `v(0x29)>=0xd || v(0x2c)>=0xd`; else `0` |
+
+(each case starts by reloading the far pointer with `les bx, ptr [bp-6]`; the `si` register is
+the accumulator and starts at 0, so a case that never writes it leaves 0.)
+
+Shared exit at 0x2843:
+
+```
+2843  ax = [bp+0xa]; or ax,[bp+0xc]; je return-unchanged
+284B  push 0 / push 0x64              ; the 32-bit constant 100
+284F  ax = si; cdq; add ax,0x64; adc dx,0 ;     ; dx:ax = si + 100
+2858  push ax / push dx
+285A  dx:ax = [bp+0xa..0xc]           ; the 32-bit parameter
+2860  pop cx / pop bx                 ; bx:cx = si + 100
+2862  lcall 0,0x938                    ; LXMUL
+2867  push dx / push ax
+2869  lcall 0,0x9c4                    ; LDIV
+286E  [bp+0xc] = dx; [bp+0xa] = ax     ; store the result back
+287A  pop si / leave / retf
+```
+
+So it computes roughly `(param * (si + 100)) / 100` and returns it in `dx:ax`, leaving the
+untouched value when `param == 0`.
+
+**What still blocks the rebuild**: the exact argument convention of LXMUL/LDIV here.  The pushes
+before LXMUL total 8 bytes (`0`, `0x64`, then `si+100`), of which `pop cx/pop bx` consumes 4, and
+neither `lcall` is followed by `add sp` - so the helpers must pop their own arguments.  Matching
+that to the tree's declarations (`long *LXMUL_at_(long *__return_storage_ptr__, long a, long b)`
+and `long LDIV_at_(long a, long b)`) is not something I can do by inspection alone, and the
+tree's own rendering of this very call site is visibly wrong: it passes
+`(long *)((int)&GSTARTX_SavedVectors[2].ofs + 1)` as the "return storage" - a saved-interrupt-
+vector global - and `ZEXT24(unaff_SI) << 0x10` as an operand.
+
+Rather than guess at the numeric path, the case table above is recorded so the switch half can be
+written immediately once the arithmetic convention is settled.
+
+  grep_checks 45,444; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
