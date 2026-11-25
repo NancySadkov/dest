@@ -103,7 +103,7 @@ code_r0x00061e64:
     ((char_sheet_t *)uStack_6)->stats[1] =
          *(byte *)((int)&worldMenuLabels[0xc].seg + (uint)(byte)gindex * 0x95);
   }
-  if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)(byte)gindex * 0x95) & 0x800) != 0) {
+  if ((AgntGs[(uint)(byte)gindex].flags3 & 0x800) != 0) {
     ((char_sheet_t *)uStack_6)->stats[4] = 0x12;
   }
   ((char_sheet_t *)uStack_6)->faction =
@@ -111,7 +111,7 @@ code_r0x00061e64:
   ((char_sheet_t *)uStack_6)->alignment =
        *(byte *)((int)(far_t far *)(worldMenuLabels + 9) + (uint)(byte)gindex * 0x95);
   ((char_sheet_t *)uStack_6)->hp[0] =
-       *(byte *)((int)&worldMenuLabels[6].seg + (uint)(byte)gindex * 0x95);
+       AgntGs[(uint)(byte)gindex].strength;
   ((char_sheet_t *)uStack_6)->hp[1] = ((char_sheet_t *)uStack_6)->hp[0];
   ((char_sheet_t *)uStack_6)->statMask = ((char_sheet_t *)uStack_6)->statMask | 0x16;
   ((char_sheet_t *)uStack_6)->spyReports = 0x1;

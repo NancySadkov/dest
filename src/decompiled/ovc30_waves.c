@@ -222,12 +222,12 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
   if (*(char *)((int)&worldMenuLabels[0xc].seg + (uint)gindex * 0x95) != -1) {
     sheet->stats[1] = *(byte *)((int)&worldMenuLabels[0xc].seg + (uint)gindex * 0x95);
   }
-  if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)gindex * 0x95) & 0x800) != 0) {
+  if ((AgntGs[(uint)gindex].flags3 & 0x800) != 0) {
     sheet->stats[4] = 0x12;
   }
   sheet->faction = AgntGs[(uint)gindex].ai;
   sheet->alignment = *(byte *)((int)(far_t far *)(worldMenuLabels + 9) + (uint)gindex * 0x95);
-  sheet->hp[0] = *(byte *)((int)&worldMenuLabels[6].seg + (uint)gindex * 0x95);
+  sheet->hp[0] = AgntGs[(uint)gindex].strength;
   sheet->hp[1] = sheet->hp[0];
   sheet->statMask = sheet->statMask | 0x16;
   sheet->spyReports = 0x1;
@@ -354,7 +354,7 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
         pbVar1 = (byte *)((int)uVar2 + 0x5d);
         *pbVar1 = *pbVar1 | 0x10;
       }
-      if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)gindex * 0x95) & 0x800) == 0) {
+      if ((AgntGs[(uint)gindex].flags3 & 0x800) == 0) {
         if (PlayerIndex < 2) {
           uVar2 = *(uint32_t *)((uVar6 & 0xff) << 2);
           ovr_ovc15_usesLDIV_at_
@@ -375,7 +375,7 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
           ovr_ovc18_textTypeLen(leaderIndex,uVar8,spawnY,0x2,0,0);
         }
       }
-      if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)gindex * 0x95) & 0x1000) != 0) {
+      if ((AgntGs[(uint)gindex].flags3 & 0x1000) != 0) {
         ovc30_usesRandBelow2(uVar8,spawnY,0);
       }
       uVar2 = *(uint32_t *)((uVar6 & 0xff) << 2);

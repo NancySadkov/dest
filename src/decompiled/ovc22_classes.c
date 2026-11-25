@@ -1065,8 +1065,7 @@ L_OVC22_5087_4975_4ABE:
                     else {
                       (*(uint32_t *)((uint8_t *)&(uStack_6))) = ZEXT23((far_t far *)uStack_6);
                     }
-                    if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                                  (uint)(GLeaderSheets[partyIndex])->classStr * 0x95) & 0x80) == 0) {
+                    if ((AgntGs[(uint)(GLeaderSheets[partyIndex])->classStr].flags & 0x80) == 0) {
                       uStack_6 = (far_t far *)(ulong)(uint3)uStack_6;
                     }
                     else {
@@ -1560,8 +1559,7 @@ L_OVC22_5087_0234_32B8:
                 pfVar20 = (far_t far *)(uVar23 & 0xff);
                 if (pfVar20 == (far_t far *)0x0) {
                   uVar53 = (uint16_t)((ulong)Entities >> 0x10);
-                  if ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 +
-                                (uint)((entity_t *)Entities)[(int)puStack_a].base.gindex * 0x95) &
+                  if ((AgntGs[(uint)((entity_t *)Entities)[(int)puStack_a].base.gindex].flags2 &
                       0x800) == 0) {
                     puStack_12 = (uint *)CONCAT11((*(uint8_t *)((uint8_t *)&(puStack_12) + 1)),1);
                   }
@@ -2064,8 +2062,7 @@ L_upd_units_5087_1d7d_202C:
         piVar4 = (int *)(iVar29 + 0x58);
         *piVar4 = *piVar4 + ((int)uVar22 >> 0xf) + (uint)CARRY2(uVar23,uVar22);
       }
-      if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                    (uint)((char_sheet_t *)(((int)uStack_16 << 2)))->classStr * 0x95) &
+      if ((AgntGs[(uint)((char_sheet_t *)(((int)uStack_16 << 2)))->classStr].flags &
           0x100) == 0) {
         if (((char_sheet_t *)(((int)uStack_16 << 2)))->foodProd <
             ((char_sheet_t *)(((int)uStack_16 << 2)))->population) {
@@ -2222,8 +2219,7 @@ L_upd_units_5087_1d7d_202C:
       }
       if ((((char_sheet_t *)(((int)uStack_16 << 2)))->housing <
            ((char_sheet_t *)(((int)uStack_16 << 2)))->population) &&
-         ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                    (uint)((char_sheet_t *)(((int)uStack_16 << 2)))->classStr * 0x95) & 0x80
+         ((AgntGs[(uint)((char_sheet_t *)(((int)uStack_16 << 2)))->classStr].flags & 0x80
           ) == 0)) {
         puStack_12 = (uint *)(((char_sheet_t *)(((int)uStack_16 << 2)))->population -
                              ((char_sheet_t *)(((int)uStack_16 << 2)))->housing);
@@ -2759,7 +2755,7 @@ uint __cdecl16far ovc22_usesEntities(int entityIndex)
   if (field == 0xff) {
     return 0;
   }
-  if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)e->base.gindex * 0x95) & 0x800) != 0) {
+  if ((AgntGs[(uint)e->base.gindex].flags3 & 0x800) != 0) {
     return 0;
   }
   animBase = *(char *)((int)*(uint32_t *)((uint)field << 2) + 0xa4);
@@ -3299,8 +3295,7 @@ void __cdecl16far upd_usesAlignUp4(void)
           accHi = (int *)(iVar17 + 0x58);
           *accHi = *accHi + ((int)uVar12 >> 0xf) + (uint)CARRY2(uVar23,uVar12);
         }
-        if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                      (uint)(GLeaderSheets[idx])->classStr * 0x95) & 0x100)
+        if ((AgntGs[(uint)(GLeaderSheets[idx])->classStr].flags & 0x100)
             == 0) {
           if ((GLeaderSheets[idx])->foodProd <
               (GLeaderSheets[idx])->population) {
@@ -3455,8 +3450,7 @@ void __cdecl16far upd_usesAlignUp4(void)
         }
         if (((GLeaderSheets[idx])->housing <
              (GLeaderSheets[idx])->population) &&
-           ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                      (uint)(GLeaderSheets[idx])->classStr * 0x95) & 0x80)
+           ((AgntGs[(uint)(GLeaderSheets[idx])->classStr].flags & 0x80)
             == 0)) {
           popAcc = (GLeaderSheets[idx])->population -
                       (GLeaderSheets[idx])->housing;
@@ -4624,8 +4618,7 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
   else {
     hasUnits = 0;
   }
-  if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 +
-                (uint)(GLeaderSheets[partyIndex])->classStr * 0x95) & 0x80)
+  if ((AgntGs[(uint)(GLeaderSheets[partyIndex])->classStr].flags & 0x80)
       == 0) {
     bStack_3 = 0;
   }

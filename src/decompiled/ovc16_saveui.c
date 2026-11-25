@@ -1145,7 +1145,7 @@ switchD_4000_6642_caseD_3:
         peVar14 = (entity_t *)uStack_1e;
       } while (((peVar14->base).destX == 0 && (peVar14->base).destY == 0) ||
               (*(char *)((int)&(peVar14->base).entity + 1) != '\0'));
-      bStack_3 = (*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)(peVar14->base).gindex * 0x95)
+      bStack_3 = (AgntGs[(uint)(peVar14->base).gindex].flags2
                  & 0x4000) != 0;
       entX = (uStack_1e->base).x;
       entY = (peVar14->base).y;

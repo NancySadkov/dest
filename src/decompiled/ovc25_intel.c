@@ -935,7 +935,7 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex)
      (*(int *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5e) == 0)) {
     partyClass = (GLeaderSheets[partyIndex])->classStr;
     uVar4 = (uint)*(byte *)((int)&worldMenuLabels[8].seg + (uint)partyClass * 0x95) +
-            (uint)*(byte *)((int)&worldMenuLabels[8].ofs + 1 + (uint)partyClass * 0x95) +
+            (uint)AgntGs[(uint)partyClass].rank +
             (uint)*(byte *)((int)&worldMenuLabels[8].seg + 1 + (uint)partyClass * 0x95);
     if (((uVar4 < PlayerCount) &&
         (((GLeaderSheets[partyIndex])->flags5d & 1) == 0)) &&
@@ -965,7 +965,7 @@ int __cdecl16far ovc25_compute1(byte gindex)
 
 {
   return (uint)*(byte *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95) +
-         (uint)*(byte *)((int)&worldMenuLabels[8].ofs + 1 + (uint)gindex * 0x95) +
+         (uint)AgntGs[(uint)gindex].rank +
          (uint)*(byte *)((int)&worldMenuLabels[8].seg + 1 + (uint)gindex * 0x95);
 }
 

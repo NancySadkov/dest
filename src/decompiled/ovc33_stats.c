@@ -910,7 +910,7 @@ L_OVC27_2288:
       } while( true );
     case (byte *)0x6:
       *(byte *)(*pasVar34 + 0x15) = bVar28;
-      if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)in_stack_00000004 * 0x95) & 0x800) !=
+      if ((AgntGs[(uint)in_stack_00000004].flags3 & 0x800) !=
           0) {
         *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x2d) = 0x12;
       }
@@ -919,7 +919,7 @@ L_OVC27_2288:
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x33) =
            *(undefined1 *)((int)(far_t far *)(worldMenuLabels + 9) + (uint)in_stack_00000004 * 0x95);
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x31) =
-           *(undefined1 *)((int)&worldMenuLabels[6].seg + (uint)in_stack_00000004 * 0x95);
+           AgntGs[(uint)in_stack_00000004].strength;
       *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x32) =
            *(undefined1 *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x31);
       pbVar5 = (byte *)(CONCAT11(in_stack_0000fffb,in_stack_0000fffa) + 0x28);
@@ -1961,7 +1961,7 @@ void __cdecl16far stats_openAgentDetail(int agntIndex)
       CurMusicType = 0xc;
     }
   }
-  else if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)bVar1 * 0x95) & 8) == 0) {
+  else if ((AgntGs[(uint)bVar1].flags3 & 8) == 0) {
     CurMusicType = 0x29;
   }
   else {

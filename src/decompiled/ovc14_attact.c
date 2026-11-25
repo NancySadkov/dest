@@ -805,7 +805,7 @@ void __cdecl16far attact_usesAlignUp42(void)
     }
     if (((peVar14->base).destX != 0 || (peVar14->base).destY != 0) &&
        (*(char *)((int)&(peVar14->base).entity + 1) == '\0')) {
-      flag4000 = (*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)(peVar14->base).gindex * 0x95)
+      flag4000 = (AgntGs[(uint)(peVar14->base).gindex].flags2
                  & 0x4000) != 0;
       startX = (destEnt->base).x;
       startY = (peVar14->base).y;

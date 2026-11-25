@@ -446,7 +446,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
       (*(uint32_t *)((uint8_t *)&(uStack_6))) = ZEXT23((byte *)uStack_6);
     }
     sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
-    if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + (uint)*(byte *)((int)sheetPtr + 0x3e) * 0x95) &
+    if ((AgntGs[(uint)*(byte *)((int)sheetPtr + 0x3e)].flags &
         0x80) == 0) {
       uStack_6 = (byte *)(ulong)(uint3)uStack_6;
     }
@@ -561,8 +561,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
             ovc24_usesLDIV_at_(iVar25);
             uVar26 = (uint16_t)((ulong)Entities >> 0x10);
             peVar22 = (entity_t *)Entities;
-            if ((((*(uint *)((int)&worldMenuLabels[7].ofs + 1 +
-                            (uint)peVar22[uStack_a].base.gindex * 0x95) & 4) != 0) &&
+            if ((((AgntGs[(uint)peVar22[uStack_a].base.gindex].flags2 & 4) != 0) &&
                 ((*(uint *)((int)&peVar22[iVar25].base.frames + 1) & 1) == 0)) &&
                (uVar15 = ovr_ovc27_rollToHitAgent
                                    (CONCAT13((char)((ulong)Entities >> 0x18),
@@ -590,8 +589,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
                                                     (entity_t *)Entities + iVar25)),3);
               pbVar14 = (byte *)(uVar15 & 0xff);
               if (pbVar14 == (byte *)0x0) {
-                if ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 +
-                              (uint)((entity_t *)Entities)[uStack_a].base.gindex * 0x95) & 0x800)
+                if ((AgntGs[(uint)((entity_t *)Entities)[uStack_a].base.gindex].flags2 & 0x800)
                     == 0) {
                   cVar10 = '\x01';
                 }
@@ -642,11 +640,11 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
 L_OVC24_5943_026e_0772:
         uVar26 = (uint16_t)((ulong)Entities >> 0x10);
         bVar9 = ((entity_t *)Entities)[iVar24].base.gindex;
-        if ((((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)bVar9 * 0x95) & 0x40) == 0) ||
+        if ((((AgntGs[(uint)bVar9].flags3 & 0x40) == 0) ||
             (pbVar14 = &stk_ffde + (uStack_10 ^ 1), '\x01' < (char)*pbVar14)) &&
-           ((((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)bVar9 * 0x95) & 8) == 0 ||
+           ((((AgntGs[(uint)bVar9].flags2 & 8) == 0 ||
              (pbVar14 = &stk_ffde + (uStack_10 ^ 1), '\0' < (char)*pbVar14)) &&
-            (((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)bVar9 * 0x95) & 0x10) == 0 ||
+            (((AgntGs[(uint)bVar9].flags2 & 0x10) == 0 ||
              (pbVar14 = &stk_ffdc + (uStack_10 ^ 1), -1 < (char)*pbVar14)))))) {
           bStackY_2d = ((entity_t *)Entities)[iVar24].base.level;
           pbVar14 = (byte *)CONCAT11((char)((uint)(iVar24 * 0x37) >> 8),bStackY_2d);

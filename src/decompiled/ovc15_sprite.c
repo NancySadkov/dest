@@ -686,11 +686,11 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
     ((entity_t *)Entities)[EntityCount].base.animFrame = animFrame;
     *(byte *)((int)&((entity_t *)Entities)[EntityCount].base.entity + 3) = partyIndex;
     *(undefined1 *)((int)&((entity_t *)Entities)[EntityCount].base.state + 1) =
-         *(undefined1 *)((int)&worldMenuLabels[6].seg + (uint)gindex * 0x95);
+         AgntGs[(uint)gindex].strength;
     *(undefined1 *)&((entity_t *)Entities)[EntityCount].base.flags32 =
-         *(undefined1 *)((int)&worldMenuLabels[6].seg + (uint)gindex * 0x95);
+         AgntGs[(uint)gindex].strength;
     if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x2f) != -1) {
-      uVar5 = (uint)*(byte *)((int)&worldMenuLabels[6].seg + (uint)gindex * 0x95);
+      uVar5 = (uint)AgntGs[(uint)gindex].strength;
       uVar8 = ovr_agnt_abilityModifier(partyIndex,4);
       iStack_6 = uVar5 + (int)(char)uVar8;
       if (iStack_6 < 1) {
@@ -709,8 +709,8 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
     else if ((destX == x) && (destY == y)) {
       *(undefined1 *)((int)&((entity_t *)Entities)[EntityCount].base.flags32 + 1) = 2;
     }
-    if ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)gindex * 0x95) & 0x1000) == 0) {
-      if ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)gindex * 0x95) & 0x2000) == 0) {
+    if ((AgntGs[(uint)gindex].flags2 & 0x1000) == 0) {
+      if ((AgntGs[(uint)gindex].flags2 & 0x2000) == 0) {
         lVar9 = 0x8000;
         uVar5 = rand();
         lVar9 = LDIV_at_(CONCAT22(((int)uVar5 >> 0xf) << 1 | (uint)((int)uVar5 < 0),uVar5 << 1),
@@ -832,9 +832,9 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
     *(uint16_t *)((int)&peVar6[entityIndex].base.frames + 3) = 0;
     *(char *)((int)&peVar6[entityIndex].base.entity + 3) = partySlot;
     *(undefined1 *)((int)&peVar6[entityIndex].base.state + 1) =
-         *(undefined1 *)((int)&worldMenuLabels[6].seg + (uint)gindex * 0x95);
+         AgntGs[(uint)gindex].strength;
     *(undefined1 *)&peVar6[entityIndex].base.flags32 =
-         *(undefined1 *)((int)&worldMenuLabels[6].seg + (uint)gindex * 0x95);
+         AgntGs[(uint)gindex].strength;
     lVar15 = 0x8000;
     uVar7 = rand();
     lVar15 = LDIV_at_(CONCAT22(((int)uVar7 >> 0xf) << 1 | (uint)((int)uVar7 < 0),uVar7 << 1),lVar15)

@@ -168,7 +168,7 @@ ovc18_spawnClassAgent
   bVar17 = (GLeaderSheets[classStr])->classStr;
   filename = (char *)CONCAT13((char)((ulong)in_stack_0000fffa >> 0x18),CONCAT12(bVar17,unaff_SI));
   uVar10 = 0x195d;
-  if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)bVar17 * 0x95) & 0x800) == 0) {
+  if ((AgntGs[(uint)bVar17].flags3 & 0x800) == 0) {
     if ((byte)destY < 6) {
       bVar17 = 6;
     }
@@ -757,7 +757,7 @@ L_attact_3f0b_26bd_2767:
     ovr_ovc15_usesLDIV_at_(uVar12,y,destX,destY,0xb,0,0,0,0,0,0);
   }
   else if ((uVar4 == 0xff) &&
-          ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)*(byte *)(iVar9 + 0x3e) * 0x95) &
+          ((AgntGs[(uint)*(byte *)(iVar9 + 0x3e)].flags3 &
            0x800) == 0)) {
     if (textVariant == 0x0) {
       uStackY_20 = 0x48ac;

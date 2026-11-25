@@ -6126,3 +6126,46 @@ measurement.
 
   grep_checks 42,098 -> 41,307; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### The same flattening for AgntGs: 53 sites fixed, 32 documented as blocked
+
+BuildingTypes had a second twin.  `AgntGs` lives at `195d:26d6` with a record stride of 0x95, and the
+export reads it through a **surrogate base**:
+
+```c
+*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)gindex * 0x95)
+```
+
+`worldMenuLabels` is only there because Ghidra needed *some* expression with that numeric value; it
+lives in DGROUP at 0x26f7 while `AgntGs` is in segment 195d, so the read goes to a completely
+different variable.  Using the original's `AgntGs` label as the base, each surrogate computes to a
+record offset:
+
+```
+[6].seg        0x2711 -> 0x3b  strength   (byte)
+[6].seg + 1    0x2712 -> 0x3c  flags      (word)
+[7].ofs + 1    0x2714 -> 0x3e  flags2     (word)
+[7].seg + 1    0x2716 -> 0x40  flags3     (word)
+[8].ofs + 1    0x2718 -> 0x42  rank       (byte)
+[8].seg        0x2719 -> 0x43  shortName region
+[9].ofs + 1    0x271c -> 0x46  shortName region   (30 sites - the largest single base)
+```
+
+Three of these are corroborated independently by the struct's own comments, which quote the
+original's instructions: `flags2` at +0x3e ("TEST word ptr ES:[BX+0x3e],0x40") and `flags3` at
++0x40 ("TEST ...,0x100").  `tmp/fix_agntg_fields.py` converted the five documented bases - **53
+sites across 12 modules, 0 refused** - and verified with `tmp/verify_agntgs.py`: **all 42 records'
+non-pointer tails are byte-present in REBUILT.EXE**, so the table being indexed is the original one.
+
+**The remaining 32 sites are deliberately not converted.**  They read offsets 0x43..0x48, which
+`struct agntG_t` currently *names* `shortName[13]` with a GUESS comment saying no code reads it - yet
+these sites compare those bytes to -1, 1, 0x12 and 0x0d, i.e. small enum values, not characters of a
+name string.  So the field name is wrong, and rewriting 32 reads to `AgntGs[i].shortName[3]` would
+bake the guess into code.  The offsets are known and recorded here; the field must be identified
+first.
+
+As with BuildingTypes, `grep_checks` does not move - these patterns are not among the section-5
+greps - but every one of the 53 sites was reading DGROUP garbage.
+
+  grep_checks 41,263 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

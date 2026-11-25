@@ -3657,7 +3657,7 @@ L_attact_3f0b_1082_1477:
       peVar15 = (entity_t *)peStack_1e;
     } while (((peVar15->base).destX == 0 && (peVar15->base).destY == 0) ||
             (*(char *)((int)&(peVar15->base).entity + 1) != '\0'));
-    if ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)(peVar15->base).gindex * 0x95) & 0x4000)
+    if ((AgntGs[(uint)(peVar15->base).gindex].flags2 & 0x4000)
         == 0) {
       packedByte = (uint)((ulong)auStack_6 >> 0x10) & 0xff;
     }
