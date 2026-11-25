@@ -2076,41 +2076,36 @@ byte __cdecl16far manage_findFirstLeader(void)
 
 /* [R6] touches GLeaderCount */
 
-uint16_t __cdecl16far manage_usesGLeaderCount3(byte partyIndex)
+byte __cdecl16far manage_usesGLeaderCount3(byte partyIndex)
 
 {
-  char cVar1;
-  uint32_t uVar2;
-  byte bVar3;
-  undefined1 extraout_AH;
-  uint32_t *puVar4;
-  undefined1 uVar5;
-  byte bStack_4;
-  
-  bVar3 = manage_findFirstLeader();
-  bStack_4 = partyIndex;
-  uVar5 = extraout_AH;
+  /* Re-derived from 4d05:1b51: scan leader indices from partyIndex, wrapping at
+     GLeaderCount, skipping the first leader and partyIndex itself, and return the first
+     leader whose sheet byte +0x3d is set and whose +0x3f byte equals the party's own.
+     0xff means none.  The original writes only AL (mov al,[bp-2] at 0x40A1A, mov al,0xff
+     at 0x40A3A), so the exported CONCAT11 high bytes were stale-AH noise. */
+  byte firstLeader;
+  byte leaderIdx;
+  uint32_t sheetRef;
+
+  firstLeader = manage_findFirstLeader();
+  leaderIdx = partyIndex;
   do {
-    puVar4 = (uint32_t *)CONCAT11(uVar5,bStack_4);
-    if ((((bStack_4 < GLeaderCount) &&
-         (puVar4 = (uint32_t *)CONCAT11(uVar5,bStack_4), bStack_4 != bVar3)) &&
-        (puVar4 = (uint32_t *)CONCAT11(uVar5,bStack_4), bStack_4 != partyIndex)) &&
-       (puVar4 = (uint32_t *)((uint)bStack_4 << 2), *(char *)((int)*puVar4 + 0x3d) != '\0')) {
-      uVar2 = *(uint32_t *)((uint)bStack_4 << 2);
-      cVar1 = *(char *)((int)uVar2 + 0x3f);
-      uVar5 = (undefined1)(((uint)bStack_4 << 2) >> 8);
-      puVar4 = (uint32_t *)CONCAT11(uVar5,cVar1);
-      if (cVar1 == *(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f)) {
-        return CONCAT11(uVar5,bStack_4);
+    if ((((leaderIdx < GLeaderCount) && (leaderIdx != firstLeader)) &&
+        (leaderIdx != partyIndex)) &&
+       (*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3d) != '\0')) {
+      sheetRef = *(uint32_t *)((uint)leaderIdx << 2);
+      if (*(char *)((int)sheetRef + 0x3f) ==
+          *(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f)) {
+        return leaderIdx;
       }
     }
-    bStack_4 = bStack_4 + 1;
-    uVar5 = (undefined1)((uint)puVar4 >> 8);
-    if (GLeaderCount <= bStack_4) {
-      bStack_4 = 0;
+    leaderIdx = leaderIdx + 1;
+    if (GLeaderCount <= leaderIdx) {
+      leaderIdx = 0;
     }
-  } while (bStack_4 != partyIndex);
-  return CONCAT11(uVar5,0xff);
+  } while (leaderIdx != partyIndex);
+  return 0xff;
 }
 
 

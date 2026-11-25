@@ -724,52 +724,57 @@ int __cdecl16far unrle_mirror(byte *src,byte *dst,int len)
 int16_t __cdecl16far drawLine2(char *src,char *dst,uint16_t count)
 
 {
-  byte *pbVar1;
-  byte bVar2;
-  uint uVar3;
-  byte *pbVar4;
-  byte *pbVar5;
-  byte *pbVar6;
-  int in_stack_0000000c;
-  
-  pbVar6 = (*(uint16_t *)((uint8_t *)&(dst) + 2)) + in_stack_0000000c + -1;
-  pbVar5 = (byte *)src;
+  /* Re-derived: reverse-order RLE line writer.  A control byte of 0x80 is skipped; below
+     0x80 it starts a literal run of control+1 bytes (a zero byte copies nothing but still
+     advances the destination), and 0x80 or above is a run of (0xff^control)+2 copies of the
+     following byte, or a skip of that length when that byte is zero.  The destination walks
+     downwards from the dst segment plus the fourth stack argument minus one. */
+  byte *copyPtr;
+  byte control;
+  uint runLen;
+  byte *prevPtr;
+  byte *srcPtr;
+  byte *dstPtr;
+  int in_stack_0000000c;   /* fourth stack argument; no callers in the tree */
+
+  dstPtr = (*(uint16_t *)((uint8_t *)&(dst) + 2)) + in_stack_0000000c + -1;
+  srcPtr = (byte *)src;
   do {
     do {
-      pbVar4 = pbVar5;
-      pbVar5 = pbVar4 + 1;
-      bVar2 = *pbVar4;
-    } while (bVar2 == 0x80);
-    if (bVar2 < 0x80) {
-      uVar3 = (uint)(byte)(bVar2 + 1);
+      prevPtr = srcPtr;
+      srcPtr = prevPtr + 1;
+      control = *prevPtr;
+    } while (control == 0x80);
+    if (control < 0x80) {
+      runLen = (uint)(byte)(control + 1);
       do {
-        pbVar1 = pbVar5;
-        pbVar5 = pbVar5 + 1;
-        if (*pbVar1 != 0) {
-          *pbVar6 = *pbVar1;
+        copyPtr = srcPtr;
+        srcPtr = srcPtr + 1;
+        if (*copyPtr != 0) {
+          *dstPtr = *copyPtr;
         }
-        pbVar6 = pbVar6 + -1;
-        uVar3 = uVar3 - 1;
-      } while (uVar3 != 0);
+        dstPtr = dstPtr + -1;
+        runLen = runLen - 1;
+      } while (runLen != 0);
     }
     else {
-      uVar3 = (uint)(byte)((bVar2 ^ 0xff) + 2);
-      pbVar1 = pbVar5;
-      pbVar5 = pbVar4 + 2;
-      bVar2 = *pbVar1;
-      if (bVar2 == 0) {
-        pbVar6 = pbVar6 + -uVar3;
+      runLen = (uint)(byte)((control ^ 0xff) + 2);
+      copyPtr = srcPtr;
+      srcPtr = prevPtr + 2;
+      control = *copyPtr;
+      if (control == 0) {
+        dstPtr = dstPtr + -runLen;
       }
       else {
-        for (; uVar3 != 0; uVar3 = uVar3 - 1) {
-          pbVar1 = pbVar6;
-          pbVar6 = pbVar6 + -1;
-          *pbVar1 = bVar2;
+        for (; runLen != 0; runLen = runLen - 1) {
+          copyPtr = dstPtr;
+          dstPtr = dstPtr + -1;
+          *copyPtr = control;
         }
       }
     }
-  } while ((*(uint16_t *)((uint8_t *)&(dst) + 2)) <= pbVar6);
-  return (int)pbVar5 - (int)src;
+  } while ((*(uint16_t *)((uint8_t *)&(dst) + 2)) <= dstPtr);
+  return (int)srcPtr - (int)src;
 }
 
 
