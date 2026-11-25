@@ -3073,6 +3073,9 @@ void __cdecl16far upd_usesAlignUp4(void)
 {
   byte *pbVar1;
   uint *accLo;
+  /* GUESS-free: GMapFlags is a 16-bit array, so its view is uint16_t * while accLo stays
+     uint * for the sheet gold/trade counters at +0x56/+0x60/+0x7e. */
+  uint16_t *flagWord;
   int *accHi;
   uint8_t *puVar4;
   byte bVar5;
@@ -3672,9 +3675,9 @@ void __cdecl16far upd_usesAlignUp4(void)
     }
     ovr_driver_clearMapFlagsRect((uint32_t)GMapFlags,0,0,0x93,0x3b,0xfff7,0x3b,0xf7);
     for (idx = 0; idx < SquareRecCount; idx = idx + 1) {
-      accLo = (uint *)((*(short (*) [60] [148])GMapFlags)[*(int *)((uint8_t *)&SquareRecs[idx] + 2)] +
-                       *(int *)(idx * 0x13));
-      *accLo = *accLo | 8;
+      flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[*(int *)((uint8_t *)&SquareRecs[idx] + 2)]
+                             + *(int *)(idx * 0x13));
+      *flagWord = *flagWord | 8;
     }
     if (EntityCount <= EntityScanPos) {
       EntityScanPos = 0;
