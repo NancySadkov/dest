@@ -1631,7 +1631,7 @@ void __cdecl16far attact_usesLDIV_at_2(void)
   uint uVar9;
   int iStack_1e;
   uint32_t sum;
-  char cStack_17;
+  char miceIdle;
   uint8_t rect;
   uint8_t rect2;
   
@@ -1643,24 +1643,24 @@ void __cdecl16far attact_usesLDIV_at_2(void)
   dst_00.ofs = (uint16_t)&rect;
   F_SCOPY(far_from_u32((uint32_t)(0x24100897)),dst_00);
   if (GameRunning == false) {
-    cStack_17 = MiceNeedsUpdate == '\0';
+    miceIdle = MiceNeedsUpdate == '\0';
     bVar1 = ovr_draw_textArena();
     if (bVar1) {
       attact_usesEntityCount2
                 ((uint16_t *)CONCAT22(_SS,&sum),(uint16_t *)CONCAT22(_SS,&stk_ffe0));
       if (((uint)sum == 0 && (*(uint16_t *)((uint8_t *)&(sum) + 2)) == 0) ||
          ((uint16_t)((ulong)lVar8 >> 0x10) == 0 && iStack_1e == 0)) {
-        if (cStack_17 != '\0') {
+        if (miceIdle != '\0') {
           ovr_miceRestoreArea((brect_t *)&rect,0);
         }
         attact_usesBlitLoadRleGfx();
-        if (cStack_17 != '\0') {
+        if (miceIdle != '\0') {
           ovr_miceBlitRect((brect_t *)&rect,0);
         }
       }
       else {
         if (mapViewActive != '\0') {
-          if (cStack_17 != '\0') {
+          if (miceIdle != '\0') {
             ovr_miceRestoreArea((brect_t *)&rect,0);
           }
           gfx.seg = nwpanel1Cut5Seg;
@@ -1669,11 +1669,11 @@ void __cdecl16far attact_usesLDIV_at_2(void)
           gfx_00.seg = panel01Cut3Seg;
           gfx_00.ofs = panel01Cut3Ofs;
           ovr_blitLoadRleGfx(gfx_00,far_from_u32((uint32_t)(0xa000c51d)),0x1d);
-          if (cStack_17 != '\0') {
+          if (miceIdle != '\0') {
             ovr_miceBlitRect((brect_t *)&rect,0);
           }
         }
-        if (cStack_17 != '\0') {
+        if (miceIdle != '\0') {
           ovr_miceRestoreArea((brect_t *)&rect2,0);
         }
         mapViewActive = '\0';
@@ -1721,17 +1721,17 @@ void __cdecl16far attact_usesLDIV_at_2(void)
         if (uVar5 != 0) {
           ovr_driver_fillRect(0xdf,0xc5 - uVar5,0xe2,0xc4,0x7,0xa000,7,0,0,0,0);
         }
-        if (cStack_17 != '\0') {
+        if (miceIdle != '\0') {
           ovr_miceBlitRect((brect_t *)&rect2,0);
         }
       }
     }
     else {
-      if (cStack_17 != '\0') {
+      if (miceIdle != '\0') {
         ovr_miceRestoreArea((brect_t *)&rect,0);
       }
       attact_usesBlitLoadRleGfx();
-      if (cStack_17 != '\0') {
+      if (miceIdle != '\0') {
         ovr_miceBlitRect((brect_t *)&rect,0);
       }
     }

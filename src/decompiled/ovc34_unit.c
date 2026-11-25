@@ -353,12 +353,12 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   byte *pbStack_1e;
   byte *pbStack_1c;
   far_t far *pfStack_1a;
-  uint16_t uStack_18;
+  uint16_t gfxSeg2;
   uint8_t saveArea;
   uint16_t uStack_e;
   byte *pbStack_c;
   int matchCount;
-  uint16_t uStack_8;
+  uint16_t gfxSeg;
   void *pvStack_6;
   uint16_t uStack_4;
   
@@ -395,7 +395,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   uStack_e = 0xa000;
   ovr_miceRestoreArea((brect_t *)&saveArea,0);
   pfStack_1a = ovr_stshRleCut((far_t far *)0x0,far_from_u32((uint32_t)(0xca000)),7,222,150,unaff_DI,0xc,7,0xde);
-  uStack_18 = uVar6;
+  gfxSeg2 = uVar6;
   ovr_miceBlitRect((brect_t *)&saveArea,0);
   pvStack_6 = ovr_stshAlloc(0xfa0f);
   ptr.seg = uVar6;
@@ -410,7 +410,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   pbStack_34 = (byte *)0xffff;
   input = 0x0;
   rightButtonLatch = '\0';
-  uStack_8 = uVar6;
+  gfxSeg = uVar6;
   do {
     keyPressed = keyprocessor_usesBiosKeyAvail
                       ((uint16_t *)CONCAT22(_SS,&cursorX),
@@ -422,11 +422,11 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       pbStack_1c = cursorX;
       pbStack_34 = cursorY;
       pbStack_1e = cursorY;
-      uStack_e = uStack_8;
-      (*(uint8_t *)((uint8_t *)&(gfx_00.seg))) = (char)uStack_18;
+      uStack_e = gfxSeg;
+      (*(uint8_t *)((uint8_t *)&(gfx_00.seg))) = (char)gfxSeg2;
       gfx_00.ofs = (uint16_t)pfStack_1a;
-      (*(uint8_t *)((uint8_t *)&(gfx_00.seg) + 1)) = (char)(uStack_18 >> 8);
-      dst.seg = uStack_8;
+      (*(uint8_t *)((uint8_t *)&(gfx_00.seg) + 1)) = (char)(gfxSeg2 >> 8);
+      dst.seg = gfxSeg;
       dst.ofs = 0x8cc;
       ovr_blitLoadRleGfx(gfx_00,dst,0xcc);
       gfx.seg = MiceCursors[3].seg;
@@ -483,22 +483,22 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         pbStack_20 = (byte *)((char *)0x96);
       }
       if ((pbStack_26 != pbVar12) || (pbStack_28 != pbStack_20)) {
-        uStack_e = uStack_8;
-        (*(uint8_t *)((uint8_t *)&(gfx_01.seg))) = (char)uStack_18;
+        uStack_e = gfxSeg;
+        (*(uint8_t *)((uint8_t *)&(gfx_01.seg))) = (char)gfxSeg2;
         gfx_01.ofs = (uint16_t)pfStack_1a;
-        (*(uint8_t *)((uint8_t *)&(gfx_01.seg) + 1)) = (char)(uStack_18 >> 8);
-        dst_00.seg = uStack_8;
+        (*(uint8_t *)((uint8_t *)&(gfx_01.seg) + 1)) = (char)(gfxSeg2 >> 8);
+        dst_00.seg = gfxSeg;
         dst_00.ofs = 0x8cc;
         ovr_blitLoadRleGfx(gfx_01,dst_00,0xcc);
         uVar14 = SUB21(pbVar12,0);
         ovr_driver_drawLine(pbStack_1c,(int)pbStack_1e,pbVar12,(int)pbStack_1e,0xff,uVar14,
-                            (char)pbStack_1e,0xff,uStack_8);
+                            (char)pbStack_1e,0xff,gfxSeg);
         ovr_driver_drawLine(pbStack_1c,(int)pbStack_1e,pbStack_1c,(int)pbStack_20,0xff,
-                            (char)pbStack_1c,(char)pbStack_20,0xff,uStack_8);
+                            (char)pbStack_1c,(char)pbStack_20,0xff,gfxSeg);
         ovr_driver_drawLine(pbVar12,(int)pbStack_1e,pbVar12,(int)pbStack_20,0xff,uVar14,
-                            (char)pbStack_20,0xff,uStack_8);
+                            (char)pbStack_20,0xff,gfxSeg);
         ovr_driver_drawLine(pbStack_1c,(int)pbStack_20,pbVar12,(int)pbStack_20,0xff,uVar14,
-                            (char)pbStack_20,0xff,uStack_8);
+                            (char)pbStack_20,0xff,gfxSeg);
         ovr_miceBlitRect((brect_t *)&saveArea,0);
         ovr_blitRect((brect_t *)&saveArea,0);
         ovr_miceUpdate();
@@ -661,17 +661,17 @@ L_ui_unit_order_6616_0689_1054:
   ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x2410);
   ovr_say((char *)"Region selection aborted.",0x2410);
 L_ui_unit_order_6616_0689_106E:
-  uStack_e = uStack_8;
-  (*(uint8_t *)((uint8_t *)&(gfx_02.seg))) = (char)uStack_18;
+  uStack_e = gfxSeg;
+  (*(uint8_t *)((uint8_t *)&(gfx_02.seg))) = (char)gfxSeg2;
   gfx_02.ofs = (uint16_t)pfStack_1a;
-  (*(uint8_t *)((uint8_t *)&(gfx_02.seg) + 1)) = (char)(uStack_18 >> 8);
-  dst_01.seg = uStack_8;
+  (*(uint8_t *)((uint8_t *)&(gfx_02.seg) + 1)) = (char)(gfxSeg2 >> 8);
+  dst_01.seg = gfxSeg;
   dst_01.ofs = 0x8cc;
   ovr_blitLoadRleGfx(gfx_02,dst_01,0xcc);
   ovr_miceBlitRect((brect_t *)&saveArea,0);
   ovr_blitRect((brect_t *)&saveArea,0);
   ovr_miceUpdate();
-  handle.seg = uStack_18;
+  handle.seg = gfxSeg2;
   handle.ofs = (uint16_t)pfStack_1a;
   ovr_stshFree(handle);
   handle_00.seg = uStack_4;

@@ -802,7 +802,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   uint16_t uVar11;
   uint8_t msg;
   uint uStack_2a;
-  uint uStack_28;
+  uint flags;
   int iStack_26;
   int iStack_24;
   uint16_t uStack_22;
@@ -869,7 +869,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
       pbStack_8 = (byte *)CONCAT22(uStack_6,pbStack_8 + 1);
       cornerC = *pbStack_c;
       pbStack_c = (byte *)CONCAT22(uStack_a,pbStack_c + 1);
-      uStack_28 = *psStack_10;
+      flags = *psStack_10;
       psStack_10 = (uint *)CONCAT22(uStack_e,psStack_10 + 1);
       uStack_2a = *psStack_14;
       psStack_14 = (uint *)CONCAT22(uStack_12,psStack_14 + 1);
@@ -877,27 +877,27 @@ void __cdecl16far ovc13_usesAlignUp4(void)
       uVar3 = (uint8_t)iStack_1a;
       iStack_1c = (int)(char)cornerB;
       iStack_1a = iVar2;
-      if ((uStack_28 & 4) == 0) {
+      if ((flags & 4) == 0) {
         (*(uint8_t *)((uint8_t *)&(iStack_1e))) = (uint8_t)iStack_20;
         cornerC_00 = (uint8_t)iStack_1e;
         uVar11 = uStack_22;
         iStack_20 = (int)(char)cornerC;
         iStack_1e = iVar1;
-        uVar4 = ovr_constr_compute1(uVar3,cornerB,cornerC_00,(byte)uStack_28,1,0,0,0);
+        uVar4 = ovr_constr_compute1(uVar3,cornerB,cornerC_00,(byte)flags,1,0,0,0);
         uVar3 = (uint8_t)uVar4;
-        uVar4 = ovr_constr_compute1((uint8_t)iStack_1e,(uint8_t)iStack_20,(uint8_t)iStack_1c,(byte)uStack_28,2,0,0,0);
+        uVar4 = ovr_constr_compute1((uint8_t)iStack_1e,(uint8_t)iStack_20,(uint8_t)iStack_1c,(byte)flags,2,0,0,0);
         ovr_driver_compute4(iVar8,(byte)iStack_18,(uint8_t)uVar4,uVar3,uVar11);
       }
       else {
         uVar11 = uStack_22;
         iStack_20 = (int)(char)cornerC;
-        uVar4 = ovr_constr_compute1(uVar3,cornerB,cornerC,(byte)uStack_28,2,0,0,0);
+        uVar4 = ovr_constr_compute1(uVar3,cornerB,cornerC,(byte)flags,2,0,0,0);
         uVar3 = (uint8_t)uVar4;
-        uVar4 = ovr_constr_compute1((uint8_t)iStack_1e,(uint8_t)iStack_20,(uint8_t)iStack_1a,(byte)uStack_28,1,0,0,0);
+        uVar4 = ovr_constr_compute1((uint8_t)iStack_1e,(uint8_t)iStack_20,(uint8_t)iStack_1a,(byte)flags,1,0,0,0);
         ovr_driver_compute3(iVar8,(byte)iStack_18,(uint8_t)uVar4,uVar3,uVar11);
       }
-      if (((uStack_28 | uStack_2a) & 0xc000) != 0) {
-        ovc13_compute2(iVar8,iStack_18,(byte)(uStack_2a >> 0xe),(byte)(uStack_28 >> 0xe),uStack_22);
+      if (((flags | uStack_2a) & 0xc000) != 0) {
+        ovc13_compute2(iVar8,iStack_18,(byte)(uStack_2a >> 0xe),(byte)(flags >> 0xe),uStack_22);
       }
       iVar8 = iVar8 + 2;
     }
