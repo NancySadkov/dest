@@ -5880,3 +5880,39 @@ the kind of width defect that would keep `diff_dgroup` at 972/1,868 while `compa
 
   grep_checks 42,261 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### The `-ml` error inventory, and what is still needed to measure the switch
+
+Collected the complete error list for the five modules that fail under `-ml`.  It is smaller in
+kind than the 61 count suggests: 57 conversions, but concentrated in a handful of constructs.
+
+```
+o22.c   18   (12 in ovc22_textPOPULATION, 6 in ovc22_textRingProt)
+o23.c    9   (4 in ovc23_usesAlignUp43, 5 in ovc23_textConstructionAbandoned)
+o48.c    1   Invalid combination of opcode and operands  (init_assets2, inline asm)
+o49.c   26   ovc49_body1
+stubs.c  1   Invalid combination of opcode and operands  (stsh_store, inline asm)
+```
+
+The conversion sites are not the generic `(T *)(integer)` idiom as first assumed.  Spot-checking the
+reported lines shows three distinct shapes:
+
+```
+((unit_t *)GUnits + idx)->bldType                       o23:968, 975, 982, 989
+((entity_t *)Entities)[pcVar6].base.x                   o22:233, 236, 239
+(byte *)(uint)bVar22                                    o23:1090
+```
+
+while nearby `(char *)(dir + 0x885)` (o23:961) does *not* error.  So the failing class is narrower
+than "integer to pointer": `GUnits` and `Entities` are declared `T far *` in `st_globals.h`, and
+casting a far pointer to `T *` plus array arithmetic is what the compiler rejects under large model,
+not the integer casts.  Pinning down the exact rule needs a probe compile of one construct in
+isolation - the same technique that settled the pointer model - rather than 52 blind edits.
+
+That is where the conversion stands: inventory done, mechanism not yet identified, and the build was
+returned to `-mm` (green) rather than left half-switched.  The next attempt should probe
+`((unit_t *)GUnits + idx)->bldType` alone under `-ml`, decide the fix from the compiler's actual
+message, then apply it uniformly.
+
+  grep_checks 42,261; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
