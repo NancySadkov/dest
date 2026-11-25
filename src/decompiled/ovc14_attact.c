@@ -912,7 +912,7 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force)
   uint16_t dst;
   uint8_t msg;
   uint uStack_6;
-  byte bStack_4;
+  byte menuEnabled;
   byte entryIdx;
   
   if ((itemIndex < 5) &&
@@ -920,8 +920,8 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force)
       (PrevMenuValue != uStack_6)))) {
     PrevMenuValue = uStack_6;
     ovr_resetTextBlitCycle();
-    bStack_4 = ((uint8_t *)MenuItemEnabled)[itemIndex];
-    if (bStack_4 != 0xff) {
+    menuEnabled = ((uint8_t *)MenuItemEnabled)[itemIndex];
+    if (menuEnabled != 0xff) {
       iVar1 = ovr_ovc23_findClearColumn(GfxRndSeed,GfxRndSeed2);
       if (iVar1 < 0) {
         ovr_drawTextAt((char *)"You cannot attract units to this location.",0x2410,0xa000);
@@ -936,7 +936,7 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force)
           uStack_6 = uVar2;
         }
         uVar4 = _DS;
-        entryIdx = *(byte *)((int)*(uint32_t *)((uint)bStack_4 << 2) + 0x2f);
+        entryIdx = *(byte *)((int)*(uint32_t *)((uint)menuEnabled << 2) + 0x2f);
         if (entryIdx != 0xff) {
           uVar3 = ovr_ovc41_pluralSuffix(uStack_6,0xa000);
           dst = 0x2410;

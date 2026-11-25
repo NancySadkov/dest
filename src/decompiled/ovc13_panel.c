@@ -801,7 +801,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   uint16_t uVar10;
   uint16_t uVar11;
   uint8_t msg;
-  uint uStack_2a;
+  uint flags2;
   uint flags;
   int spanH;
   int spanX;
@@ -871,7 +871,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
       pbStack_c = (byte *)CONCAT22(uStack_a,pbStack_c + 1);
       flags = *psStack_10;
       psStack_10 = (uint *)CONCAT22(uStack_e,psStack_10 + 1);
-      uStack_2a = *psStack_14;
+      flags2 = *psStack_14;
       psStack_14 = (uint *)CONCAT22(uStack_12,psStack_14 + 1);
       (*(uint8_t *)((uint8_t *)&(iStack_1a))) = (uint8_t)iStack_1c;
       uVar3 = (uint8_t)iStack_1a;
@@ -896,8 +896,8 @@ void __cdecl16far ovc13_usesAlignUp4(void)
         uVar4 = ovr_constr_compute1((uint8_t)iStack_1e,(uint8_t)iStack_20,(uint8_t)iStack_1a,(byte)flags,1,0,0,0);
         ovr_driver_compute3(iVar8,(byte)iStack_18,(uint8_t)uVar4,uVar3,uVar11);
       }
-      if (((flags | uStack_2a) & 0xc000) != 0) {
-        ovc13_compute2(iVar8,iStack_18,(byte)(uStack_2a >> 0xe),(byte)(flags >> 0xe),blitSeg);
+      if (((flags | flags2) & 0xc000) != 0) {
+        ovc13_compute2(iVar8,iStack_18,(byte)(flags2 >> 0xe),(byte)(flags >> 0xe),blitSeg);
       }
       iVar8 = iVar8 + 2;
     }

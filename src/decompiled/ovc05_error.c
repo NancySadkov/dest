@@ -12,13 +12,14 @@
 void __cdecl16far stExit(int n,...)
 
 {
-  uint8_t unaff_SI;
+  /* 3168:0004 mov si,[bp+6]: SI holds the first parameter n throughout (the other
+     SI instructions are or si,si reads and the final pop). */
   
   if ((n != 0) && (n < 0x80)) {
     printf("\n\rError %d\n");
     ovr_biosReadKey();
   }
-  ovr_biosVideoCall(0x3,unaff_SI);
+  ovr_biosVideoCall(0x3,n);
   if (n < 0x80) {
     if (n != 0) {
       printf("Error %d %d.  (Give Cathryn BOTH numbers.)\n");

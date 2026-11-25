@@ -1087,15 +1087,15 @@ uint16_t __cdecl16far ovc15_usesStExit2(byte agntIndex)
   int iVar3;
   int *piVar4;
   int iVar5;
-  int *uStack_12;
+  int *agntRec;
   uint16_t uStack_10;
   int iStack_6;
   int iStack_4;
   
   piVar1 = (int *)&Agnts[agntIndex].x;
-  uStack_12 = (int *)CONCAT22(SEG_OF(Agnts),piVar1);
-  if ((((piVar1[1] < 0x14) || (*(char *)((int)piVar1 + 0x25) == '\x01')) && (*uStack_12 < 0xd3)) &&
-     (-1 < *uStack_12)) {
+  agntRec = (int *)CONCAT22(SEG_OF(Agnts),piVar1);
+  if ((((piVar1[1] < 0x14) || (*(char *)((int)piVar1 + 0x25) == '\x01')) && (*agntRec < 0xd3)) &&
+     (-1 < *agntRec)) {
     piVar4 = (int *)(*(int *)((int)piVar1 + 0x13) + (uint)*(byte *)(piVar1 + 9) * 4);
     iVar3 = piVar4[1];
     iVar5 = *piVar4;

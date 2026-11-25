@@ -173,7 +173,7 @@ uint16_t __cdecl16far saveui_usesMouseMoved(far_t textTable,int rowLimit,int ite
   uint uVar2;
   uint rowIndex;
   int *piVar3;
-  char cStack_4;
+  char menuItem;
   
   if ((((MouseMoved == 0) && (8 < MouseX)) && (MouseX < 0x19)) &&
      ((0xb4 < MouseY && ((MouseY < 0xb6 | 0xeU) != 0)))) {
@@ -189,9 +189,9 @@ uint16_t __cdecl16far saveui_usesMouseMoved(far_t textTable,int rowLimit,int ite
          (piVar3 = (int *)(textTable.ofs + (rowIndex + itemOffset) * 4), uVar2 = 0,
          *piVar3 != 0 || piVar3[1] != 0)) {
         saveui_usesBlitLoadRleGfx2(textTable,rowIndex,itemOffset);
-        cStack_4 = (char)rowIndex;
-        GMenuItem = cStack_4 + '\x01';
-        return CONCAT11(0x24,cStack_4 + '\x01');
+        menuItem = (char)rowIndex;
+        GMenuItem = menuItem + '\x01';
+        return CONCAT11(0x24,menuItem + '\x01');
       }
     }
     uVar1 = CONCAT11((char)(uVar2 >> 8),0xff);
@@ -925,7 +925,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   undefined1 uStack_f;
   char acStack_e [6];
   uint16_t uStack_8;
-  uint16_t uStack_6;
+  uint16_t entX;
   byte bStack_4;
   byte bStack_3;
   byte bVar17;
@@ -982,7 +982,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
       pcVar11 = (char *)0x2400;
     }
     else {
-      pcVar11 = (char *)CONCAT11(0x24,GMenuItem + (char)uStack_6);
+      pcVar11 = (char *)CONCAT11(0x24,GMenuItem + (char)entX);
     }
     GMenuFlag = 0;
     return pcVar11;
@@ -1147,7 +1147,7 @@ switchD_4000_6642_caseD_3:
               (*(char *)((int)&(peVar14->base).entity + 1) != '\0'));
       bStack_3 = (*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)(peVar14->base).gindex * 0x95)
                  & 0x4000) != 0;
-      uStack_6 = (uStack_1e->base).x;
+      entX = (uStack_1e->base).x;
       uStack_8 = (peVar14->base).y;
       uStack_f = AgntGs[(uint)(peVar14->base).gindex].ai;
       if ((peVar14->base).faction < (byte)(peVar14->base).state) {
@@ -1298,7 +1298,7 @@ L_attact_3f0b_1082_1477:
       cVar6 = '\x01';
     }
     uStack_1a = CONCAT11(cVar6,(char)uStack_1a);
-    if (((uStack_6 < GfxRndSeed - 2U) || (GfxRndSeed + 1U < uStack_6)) || (GfxRndSeed2 != uStack_8))
+    if (((entX < GfxRndSeed - 2U) || (GfxRndSeed + 1U < entX)) || (GfxRndSeed2 != uStack_8))
     {
       bVar17 = 0;
     }
