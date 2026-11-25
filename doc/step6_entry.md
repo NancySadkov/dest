@@ -4443,3 +4443,42 @@ been answered), so the probe scripts and their negative results are kept in `tmp
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 49,570
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### `unaff_DI` in `ovc22_textRingProt`: closed as an artifact (third measurement)
+
+An exhaustive scan of `42BDE..4383E` for **every** instruction whose destination operand is
+DI (all mnemonics, not just `mov`/`xor`/`pop` - this catches `les di,...`, which the first
+scan missed) returns exactly six instructions:
+
+```
+0436A7  mov di, 2        ; loop 1 init
+043708  dec di           ; loop 1 step
+043712  xor di, di       ; loop 2 init
+04373F  inc di           ; loop 2 step
+```
+
+(`or di,di` and `cmp di,2` are reads.)  So DI is **never** written or read anywhere except
+between `0436A7` and `043743`, and both loops are already correctly recovered with
+`iVar29`/`iVar52`.
+
+Conclusion, now supported by three independent scans: the 98 `unaff_DI` uses in the export
+do not correspond to any DI access in the original.  They are artifacts of a mis-modelled
+value in the region the decompiler rendered as a `switch` (around decompiled line 665,
+which maps to roughly `42F90..430xx` by line/byte proportion).  Two further facts show how
+far that region is from a usable rendering:
+
+* the literals in those expressions are **data-table values**, not code immediates:
+  `0x145d` appears exactly once in the whole image at file `0x22074` and `0x195d` once at
+  `0x2C13E`, both inside descending word tables (`... 15 9f 15 86 15 77 15 62 15 ...`),
+  and neither value occurs anywhere inside `textRingProt`'s byte range;
+* `iStack`/`unaff` values there feed pointer arithmetic of the form
+  `&puVar38[-0xd8c].y + (int)unaff_DI`, i.e. the decompiler built the expression from a
+  base it could not resolve.
+
+Replacing them therefore requires re-deriving that whole `switch` region from the
+original's instructions - a per-expression job, not a rename - and none of the three
+measurements above changes what the code should say.  They have been left untouched, which
+is why the count stays at 98.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 49,533
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
