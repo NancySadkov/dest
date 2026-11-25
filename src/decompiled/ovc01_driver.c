@@ -1294,83 +1294,178 @@ void __cdecl16far midSetRelativeValue(void)
 void __cdecl16far driver_compute5(uint16_t x1,byte y1,uint16_t x2,byte y2,uint16_t x3,byte y3,uint16_t arg7,uint16_t arg8)
 
 {
-  byte bVar1;
-  byte bVar2;
-  
-  bVar2 = y3;
-  bVar1 = y2;
+  /* Re-derived from 2d63:0846 (ip 0x846..0x98a).  A scanline triangle fill: the three points
+     are sorted by y (moving x with each swap), two DDA edges are set up by dividing the x span
+     by the y span, and the area between the two cursors is filled one row at a time with
+     |cursorB - cursorA| + 1 bytes.  The block that Ghidra split out as `driver_scan2` read this
+     frame - its slots are restored here and the block is inlined at both call sites, so
+     driver_scan2 no longer exists. */
+  byte colour;
+  byte tmpY;
+  uint16_t tmpX;
+  int dX;
+  int span;
+  uint16_t stepA;
+  uint16_t stepB;
+  byte remA;
+  byte remB;
+  byte errA;
+  byte errB;
+  byte deltaA;
+  byte deltaB;
+  int signA;
+  int signB;
+  uint16_t ofsA;
+  uint16_t ofsB;
+  unsigned char far *p;
+  int i;
+  int extent;
+  int q;
+  byte oldErr;
+
+  colour = (byte)arg7;
+
+  /* sort by y, carrying x */
   if (y2 < y1) {
-    y2 = y1;
-    y1 = bVar1;
+    tmpY = y2; y2 = y1; y1 = tmpY;
+    tmpX = x2; x2 = x1; x1 = tmpX;
   }
   if (y3 < y1) {
-    y3 = y1;
-    y1 = bVar2;
+    tmpY = y3; y3 = y1; y1 = tmpY;
+    tmpX = x3; x3 = x1; x1 = tmpX;
   }
   if (y3 < y2) {
-    y2 = y3;
+    tmpY = y3; y3 = y2; y2 = tmpY;
+    tmpX = x3; x3 = x2; x2 = tmpX;
   }
-  if (y2 != y1) {
-    driver_scan2();
+
+  /* B edge: x1 -> x3 over y1..y3 */
+  dX = (int)(short)(x3 - x1);
+  signB = (dX < 0) ? -1 : 1;
+  deltaB = (byte)(y3 - y1);
+  errB = (byte)(deltaB >> 1);
+  if (deltaB != 0) {
+    q = dX / (int)deltaB;
+    stepB = (uint16_t)q + 0x140;
+    span = dX - q * (int)deltaB;
+    if (span < 0) {
+      span = -span;
+    }
+    remB = (byte)span;
   }
-  driver_scan2();
-  return;
-}
+  else {
+    stepB = 0x140;
+    remB = 0;
+  }
 
+  /* A edge: x1 -> x2 over y1..y2 */
+  dX = (int)(short)(x2 - x1);
+  signA = (dX < 0) ? -1 : 1;
+  deltaA = (byte)(y2 - y1);
+  errA = (byte)(deltaA >> 1);
+  if (deltaA != 0) {
+    q = dX / (int)deltaA;
+    stepA = (uint16_t)q + 0x140;
+    span = dX - q * (int)deltaA;
+    if (span < 0) {
+      span = -span;
+    }
+    remA = (byte)span;
+  }
+  else {
+    stepA = 0x140;
+    remA = 0;
+  }
 
+  ofsA = x1 + (uint16_t)(y1 << 8) + (uint16_t)((uint16_t)(y1 << 8) >> 2);
+  ofsB = ofsA;
 
-/* 2d63:098a */
-void __cdecl16near driver_scan2(void)
+  if (deltaA != 0) {
+    for (i = deltaA; i != 0; i = i - 1) {
+      extent = (int)ofsB - (int)ofsA;
+      if (extent >= 0) {
+        p = MK_FP(arg8,ofsA);
+        for (span = 0; span <= extent; span = span + 1) {
+          *p = colour;
+          p = p + 1;
+        }
+      }
+      else {
+        p = MK_FP(arg8,ofsA);
+        for (span = 0; span <= -extent; span = span + 1) {
+          *p = colour;
+          p = p - 1;
+        }
+      }
+      ofsA = ofsA + stepA;
+      oldErr = errA;
+      errA = (byte)(errA - remA);
+      if (oldErr < remA) {
+        ofsA = ofsA + signA;
+        errA = (byte)(errA + deltaA);
+      }
+      ofsB = ofsB + stepB;
+      oldErr = errB;
+      errB = (byte)(errB - remB);
+      if (oldErr < remB) {
+        ofsB = ofsB + signB;
+        errB = (byte)(errB + deltaB);
+      }
+    }
+  }
 
-{
-  undefined1 *puVar1;
-  byte bVar2;
-  byte bVar3;
-  undefined1 uVar4;
-  int in_CX;
-  int iVar5;
-  byte bVar6;
-  byte bVar7;
-  int unaff_BP;
-  undefined1 *unaff_SI;
-  int unaff_DI;
-  undefined1 *puVar8;
-  uint16_t unaff_ES;
-  bool bVar9;
-  
-  bVar2 = *(byte *)(unaff_BP + -6);
-  bVar3 = *(byte *)(unaff_BP + -0x10);
-  bVar6 = *(byte *)(unaff_BP + -2);
-  bVar7 = *(byte *)(unaff_BP + -0xc);
-  uVar4 = *(undefined1 *)(unaff_BP + 0x12);
-  do {
-    iVar5 = unaff_DI - (int)unaff_SI;
-    bVar9 = iVar5 < 0;
-    if (bVar9) {
-      iVar5 = -iVar5;
+  /* second segment: the A edge becomes x2 -> x3 over y2..y3, and the row count is
+     delta+1 so that the last row is included */
+  dX = (int)(short)(x3 - x2);
+  signA = (dX < 0) ? -1 : 1;
+  deltaA = (byte)(y3 - y2);
+  errA = (byte)(deltaA >> 1);
+  if (deltaA != 0) {
+    q = dX / (int)deltaA;
+    stepA = (uint16_t)q + 0x140;
+    span = dX - q * (int)deltaA;
+    if (span < 0) {
+      span = -span;
     }
-    puVar8 = unaff_SI;
-    for (iVar5 = iVar5 + 1; iVar5 != 0; iVar5 = iVar5 + -1) {
-      puVar1 = puVar8;
-      puVar8 = puVar8 + (uint)bVar9 * -2 + 1;
-      *puVar1 = uVar4;
+    remA = (byte)span;
+  }
+  else {
+    stepA = 0x140;
+    remA = 0;
+  }
+  ofsA = x2 + (uint16_t)(y2 << 8) + (uint16_t)((uint16_t)(y2 << 8) >> 2);
+
+  for (i = (int)deltaA + 1; i != 0; i = i - 1) {
+    extent = (int)ofsB - (int)ofsA;
+    if (extent >= 0) {
+      p = MK_FP(arg8,ofsA);
+      for (span = 0; span <= extent; span = span + 1) {
+        *p = colour;
+        p = p + 1;
+      }
     }
-    unaff_SI = unaff_SI + *(int *)(unaff_BP + -4);
-    bVar9 = bVar6 < bVar2;
-    bVar6 = bVar6 - bVar2;
-    if (bVar9) {
-      unaff_SI = unaff_SI + *(int *)(unaff_BP + -8);
-      bVar6 = bVar6 + *(char *)(unaff_BP + -10);
+    else {
+      p = MK_FP(arg8,ofsA);
+      for (span = 0; span <= -extent; span = span + 1) {
+        *p = colour;
+        p = p - 1;
+      }
     }
-    unaff_DI = unaff_DI + *(int *)(unaff_BP + -0xe);
-    bVar9 = bVar7 < bVar3;
-    bVar7 = bVar7 - bVar3;
-    if (bVar9) {
-      unaff_DI = unaff_DI + *(int *)(unaff_BP + -0x12);
-      bVar7 = bVar7 + (char)((char *)init_textFilename   /* hand fix: indexing a code* has unknown size; the bytes are read as chars */)[unaff_BP];
+    ofsA = ofsA + stepA;
+    oldErr = errA;
+    errA = (byte)(errA - remA);
+    if (oldErr < remA) {
+      ofsA = ofsA + signA;
+      errA = (byte)(errA + deltaA);
     }
-    in_CX = in_CX + -1;
-  } while (in_CX != 0);
+    ofsB = ofsB + stepB;
+    oldErr = errB;
+    errB = (byte)(errB - remB);
+    if (oldErr < remB) {
+      ofsB = ofsB + signB;
+      errB = (byte)(errB + deltaB);
+    }
+  }
   return;
 }
 
