@@ -6331,3 +6331,38 @@ it means `ovc49_body1` can no longer be inspected through `--asm` and needs Ghos
 
   grep_checks 41,119 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### agntG_t: 136 safe conversions, and one blanket change that would have been a regression
+
+`agnt->gdata` is already `struct agntG_t far *` and `AgntGs` lives in its own segment, yet ~150 sites
+cast it back down with `(agntG_t *)` - the same truncation just fixed for `agnt_t`.  A blanket
+`agntG_t *` -> `agntG_t far *` compiled clean (65/65) and left every gate unchanged, so the gates said
+"fine".  They were wrong, and the generated code showed it: about 18 sites cast an *integer* to the
+pointer type, e.g.
+
+```c
+(agntG_t *)((targetOfs + 0x1d))->rank
+```
+
+and Turbo C compiles an int-to-**far** cast as
+
+```
+xor  ax,ax
+mov  es,ax            ; segment 0
+test word ptr es:[bx+89],4
+```
+
+i.e. it would read the **interrupt vector table**.  The previous near form at least read DS.  So the
+blanket change was reverted and only the safe subset applied: casts whose operand is already a far
+pointer (`(agntG_t *)agnt->gdata`), where far-to-far is exact - **136 lines across 7 files**, 65/65
+clean, LINK.LOG 65 bytes / 0 problems, all gates unchanged.
+
+The 16 integer-operand sites are listed by `tmp/far_agntg_safe.py` and left in their previous form:
+each needs the agent index recovered (`Agnts[i].gdata`), and the base expressions are the
+pre-multiplied `in_AX`, `uVar2` and `targetOfs`.
+
+This is the second time in two turns that a mechanical pointer-width change compiled without error
+and was still wrong; the check that caught it was reading the emitted instructions, not the gates.
+
+  grep_checks 41,119 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

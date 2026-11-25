@@ -20,15 +20,15 @@ char __cdecl16far stats_compute1(agnt_t far *agnt)
   
   uVar3 = (uint16_t)((ulong)agnt >> 0x10);
   paVar2 = (agnt_t far *)agnt;
-  if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x04') &&
+  if ((((agntG_t far *)paVar2->gdata)->shortName[3] == '\x04') &&
      (0xb < (((entity_t *)paVar2->entity)->base).level)) {
     cVar1 = (((entity_t *)paVar2->entity)->base).level + 0x37;
   }
-  else if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x05') &&
+  else if ((((agntG_t far *)paVar2->gdata)->shortName[3] == '\x05') &&
           (9 < (((entity_t *)paVar2->entity)->base).level)) {
     cVar1 = (((entity_t *)paVar2->entity)->base).level + 0x39;
   }
-  else if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x06') &&
+  else if ((((agntG_t far *)paVar2->gdata)->shortName[3] == '\x06') &&
           (7 < (((entity_t *)paVar2->entity)->base).level)) {
     cVar1 = (((entity_t *)paVar2->entity)->base).level + 0x39;
   }
@@ -53,15 +53,15 @@ uint8_t __cdecl16far stats_compute2(agnt_t far *agnt)
   
   uVar3 = (uint16_t)((ulong)agnt >> 0x10);
   paVar2 = (agnt_t far *)agnt;
-  if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x04') &&
+  if ((((agntG_t far *)paVar2->gdata)->shortName[3] == '\x04') &&
      (0xc < (((entity_t *)paVar2->entity)->base).level)) {
     uVar1 = 0xc;
   }
-  else if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x05') &&
+  else if ((((agntG_t far *)paVar2->gdata)->shortName[3] == '\x05') &&
           (10 < (((entity_t *)paVar2->entity)->base).level)) {
     uVar1 = 0xa;
   }
-  else if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x06') &&
+  else if ((((agntG_t far *)paVar2->gdata)->shortName[3] == '\x06') &&
           (8 < (((entity_t *)paVar2->entity)->base).level)) {
     uVar1 = 0x8;
   }
@@ -107,15 +107,15 @@ undefined1 __cdecl16far stats_compute3(agnt_t far *agnt)
   
   uVar3 = (uint16_t)((ulong)agnt >> 0x10);
   paVar2 = (agnt_t far *)agnt;
-  if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x04') &&
+  if ((((agntG_t far *)paVar2->gdata)->shortName[3] == '\x04') &&
      (0xb < (((entity_t *)paVar2->entity)->base).level)) {
     result = 1;
   }
-  else if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x05') &&
+  else if ((((agntG_t far *)paVar2->gdata)->shortName[3] == '\x05') &&
           (9 < (((entity_t *)paVar2->entity)->base).level)) {
     result = 1;
   }
-  else if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x06') &&
+  else if ((((agntG_t far *)paVar2->gdata)->shortName[3] == '\x06') &&
           (7 < (((entity_t *)paVar2->entity)->base).level)) {
     result = 1;
   }
@@ -131,14 +131,14 @@ undefined1 __cdecl16far stats_compute3(agnt_t far *agnt)
 
 /* Draws the portrait of an agent type with the season palette. */
 
-void __cdecl16far stats_drawPortrait(agntG_t *gdata,byte portraitIndex,int palette)
+void __cdecl16far stats_drawPortrait(agntG_t far *gdata,byte portraitIndex,int palette)
 
 {
   far_t handle;
   far_t handle_00;
   stg_tmp_t *gfxRec;
   uint16_t in_DX;
-  agntG_t *paVar2;
+  agntG_t far *paVar2;
   uint16_t uVar3;
   uint16_t in_stack_0000000c;
   far_t gfx;
@@ -1338,7 +1338,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
   }
   TextBlitY = 0x25;
   TextBlitX = 0x87;
-  if (((agntG_t *)agnt->gdata)->shortName[3] != -1) {
+  if (((agntG_t far *)agnt->gdata)->shortName[3] != -1) {
     cVar3 = stats_compute3((agnt_t far *)CONCAT22(cmap.ofs,agnt));
     byteLo = (undefined1)Font02.seg;
     fontHi = (undefined1)(Font02.seg >> 8);
@@ -1371,9 +1371,9 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
       ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(fontHi,byteLo),uVar23,byteLo);
     }
   }
-  if ((((agntG_t *)agnt->gdata)->shortName[3] == -1) ||
+  if ((((agntG_t far *)agnt->gdata)->shortName[3] == -1) ||
      (*(char *)((int)&(((entity_t *)agnt->entity)->base).entity + 3) == -1)) {
-    uVar7 = (uint)(byte)((agntG_t *)agnt->gdata)->shortName[2];
+    uVar7 = (uint)(byte)((agntG_t far *)agnt->gdata)->shortName[2];
     nameOfs = (uint8_t *)((char *)0x26510);
     ovr_blitLabel((char *)((far_t *)GAlignmentsNames + uVar7)->ofs,
                   (uint8_t *)
@@ -1394,13 +1394,13 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
   }
   TextBlitY = 0x2f;
   TextBlitX = 0x87;
-  if ((((agntG_t *)agnt->gdata)->shortName[3] != -1) && (agnt->gdata->ai == 0)) {
+  if ((((agntG_t far *)agnt->gdata)->shortName[3] != -1) && (agnt->gdata->ai == 0)) {
     ovr_blitLabel((char *)"Experience points",
                   (uint8_t *)CONCAT22(Font02.ofs,(char *)0x26510),Font02.seg,0xde,
                   (char)Font02.seg,0xde,0xe0);
     TextBlitY = 0x36;
     TextBlitX = 0x87;
-    piVar8 = (int *)((uint)(byte)((agntG_t *)agnt->gdata)->shortName[3] * 0x94 +
+    piVar8 = (int *)((uint)(byte)((agntG_t far *)agnt->gdata)->shortName[3] * 0x94 +
                     (uint)(((entity_t *)agnt->entity)->base).level * 4);
     nameOfs = (uint8_t *)((char *)0x262b1);
     uVar5 = (undefined1)Font02.seg;
@@ -1421,7 +1421,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
       uVar26 = 0xe0;
       uVar23 = 0xde;
       strRef = (uint16_t *)
-               ((uint)(byte)((agntG_t *)agnt->gdata)->shortName[3] * 0x94 +
+               ((uint)(byte)((agntG_t far *)agnt->gdata)->shortName[3] * 0x94 +
                (uint)(((entity_t *)agnt->entity)->base).level * 4);
       nameOfs = (uint8_t *)((char *)0x262b1);
       fontOfs = Font02.ofs;
@@ -1473,7 +1473,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
                 uVar23,uVar25);
   TextBlitY = 0x4a;
   TextBlitX = 0x87;
-  iVar10 = (uint)((agntG_t *)agnt->gdata)->type * 0x95;
+  iVar10 = (uint)((agntG_t far *)agnt->gdata)->type * 0x95;
   nameOfs = (uint8_t *)((int)&BuildingTypes[0x9f].income + 1);
   uVar23 = (uint8_t)agnt;
   if (*(int *)((int)&AgntGs[0].wpn_name + iVar10) == 0 &&
@@ -1488,7 +1488,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
       uVar25 = 0xe0;
       attr = 0xde;
       fontOfs = Font02.ofs;
-      textPtr = agntGetWeaponName((char *)CONCAT22(CONCAT11(0x24,((agntG_t *)agnt->gdata)->type),
+      textPtr = agntGetWeaponName((char *)CONCAT22(CONCAT11(0x24,((agntG_t far *)agnt->gdata)->type),
                                                   _SS),0x0,(bool)field_index,uVar23,
                                  CONCAT22(Font02.ofs,cmap.ofs));
       ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),attr,uVar5,
@@ -1498,7 +1498,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
       uVar25 = 0xe0;
       attr = 0xde;
       fontOfs = Font02.ofs;
-      textPtr = agntGetWeaponName((char *)CONCAT22(CONCAT11(0x24,((agntG_t *)agnt->gdata)->type),
+      textPtr = agntGetWeaponName((char *)CONCAT22(CONCAT11(0x24,((agntG_t far *)agnt->gdata)->type),
                                                   _SS),damage,(bool)field_index,uVar23,
                                  CONCAT22(Font02.ofs,cmap.ofs));
       textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT13(99,CONCAT12(0x65,_SS)),
@@ -1512,7 +1512,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
       uVar25 = 0xe0;
       attr = 0xde;
       fontOfs = Font02.ofs;
-      textPtr = agntGetWeaponName((char *)CONCAT22(CONCAT11(0x24,((agntG_t *)agnt->gdata)->type),
+      textPtr = agntGetWeaponName((char *)CONCAT22(CONCAT11(0x24,((agntG_t far *)agnt->gdata)->type),
                                                   _SS),damage,(bool)field_index,uVar23,
                                  CONCAT22(Font02.ofs,cmap.ofs));
       textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT22(0x6370,_SS),
@@ -1550,9 +1550,9 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
     ringValue.ofs = Font02.ofs;
     (*(uint8_t *)((uint8_t *)&(ringValue.seg) + 1)) = segHi;
     fontOfs = Font02.ofs;
-    text_00 = stats_textRingProt((char *)CONCAT13(0x24,CONCAT12(((agntG_t *)agnt->gdata)->type,
+    text_00 = stats_textRingProt((char *)CONCAT13(0x24,CONCAT12(((agntG_t far *)agnt->gdata)->type,
                                                                 _SS)),
-                                 CONCAT11(0x24,((agntG_t *)agnt->gdata)->shortName[4]),
+                                 CONCAT11(0x24,((agntG_t far *)agnt->gdata)->shortName[4]),
                                  CONCAT11(0x24,damage),ringValue);
     ovr_blitLabel((char *)text_00,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),uVar23,
                   uVar5,uVar23,uVar25);

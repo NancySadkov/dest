@@ -1345,7 +1345,7 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
   uint16_t randPick;
   char *pcVar4;
   entity_t *peVar5;
-  agntG_t *paVar6;
+  agntG_t far *paVar6;
   far_t far *pfVar7;
   uint16_t unaff_DI;
   uint16_t uVar8;
@@ -1397,7 +1397,7 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
     agntCopy.strengthMax = (uint8_t)(peVar5->base).flags32;
     agntCopy.strength = *(uint8_t *)((int)&(peVar5->base).state + 1);
     bVar1 = (*(uint *)((int)&(peVar5->base).frames + 3) & 1) != 0;
-    paVar6 = (agntG_t *)agntCopy.gdata;
+    paVar6 = (agntG_t far *)agntCopy.gdata;
     uVar8 = (uint16_t)((ulong)agntCopy.gdata >> 0x10);
     if ((peVar5->base).level < 10) {
       if ((peVar5->base).level < 4) {

@@ -206,7 +206,7 @@ uint __cdecl16far ovc27_compute1(agnt_t far *agnt,int param,uint16_t arg3,uint16
   uint uVar2;
   int in_stack_00000008;
   
-  if ((((agntG_t *)agnt->gdata)->flags & 2) != 0) {
+  if ((((agntG_t far *)agnt->gdata)->flags & 2) != 0) {
     uVar1 = *(uint32_t far *)&Agnts[in_stack_00000008].gdata;
     bVar3 = (byte)((uint)(in_stack_00000008 * 0x34) >> 8);
     if (((*(uint *)((int)uVar1 + 0x3e) & 0x10) != 0) &&
@@ -215,7 +215,7 @@ uint __cdecl16far ovc27_compute1(agnt_t far *agnt,int param,uint16_t arg3,uint16
     }
     return CONCAT11(bVar3,1);
   }
-  if ((((agntG_t *)agnt->gdata)->flags & 1) != 0) {
+  if ((((agntG_t far *)agnt->gdata)->flags & 1) != 0) {
     in_AX = in_stack_00000008 * 0x34;
     uVar4 = (undefined1)(in_AX >> 8);
     if (((((agntG_t *)((in_AX + 0x1d)))->flags & 4) != 0) &&
@@ -226,7 +226,7 @@ uint __cdecl16far ovc27_compute1(agnt_t far *agnt,int param,uint16_t arg3,uint16
       return CONCAT11(uVar4,1);
     }
   }
-  if (((((agntG_t *)agnt->gdata)->flags & 0x800) == 0) ||
+  if (((((agntG_t far *)agnt->gdata)->flags & 0x800) == 0) ||
      (in_AX = in_stack_00000008 * 0x34,
      (((agntG_t *)((in_AX + 0x1d)))->flags & 4) == 0)) {
     uVar2 = in_AX & 0xff00;
@@ -314,7 +314,7 @@ uint __cdecl16far ovc27_usesRandBelow3(agnt_t far *agnt,uint32_t reqRecord,int a
   paVar7 = (agnt_t far *)agnt;
   uVar9 = (uint16_t)((ulong)agnt >> 0x10);
   if (*(char *)(recIdx + 8) == '\0') {
-    if ((((agntG_t *)paVar7->gdata)->flags & 2) == 0) {
+    if ((((agntG_t far *)paVar7->gdata)->flags & 2) == 0) {
       return uVar2 & 0xff00;
     }
     if ((((entity_t *)paVar7->entity)->base).level < (&reqLevel1)[*(byte *)(recIdx + 9)]) {
@@ -324,14 +324,14 @@ uint __cdecl16far ovc27_usesRandBelow3(agnt_t far *agnt,uint32_t reqRecord,int a
   else {
     bVar5 = (byte)(uVar2 >> 8);
     if (*(char *)(recIdx + 8) == '\x01') {
-      if ((((agntG_t *)paVar7->gdata)->flags & 1) == 0) {
+      if ((((agntG_t far *)paVar7->gdata)->flags & 1) == 0) {
         return (uint)bVar5 << 8;
       }
       if ((((entity_t *)paVar7->entity)->base).level < (&reqLevel2)[*(byte *)(recIdx + 9)]) {
         return (uint)(&reqLevel2 + *(byte *)(recIdx + 9)) & 0xff00;
       }
     }
-    else if ((*(char *)(recIdx + 8) == '\x02') && ((((agntG_t *)paVar7->gdata)->flags & 0x800) == 0))
+    else if ((*(char *)(recIdx + 8) == '\x02') && ((((agntG_t far *)paVar7->gdata)->flags & 0x800) == 0))
     {
       return (uint)bVar5 << 8;
     }
@@ -460,9 +460,9 @@ uint __cdecl16far ovc27_compute2(agnt_t far *agnt,int param,uint16_t arg3,uint16
   byte bStack_3;
   
   mode = (byte)param;
-  if ((((agntG_t *)agnt->gdata)->flags & 2) == 0) {
-    if ((((agntG_t *)agnt->gdata)->flags & 1) == 0) {
-      if (((((((agntG_t *)agnt->gdata)->flags & 0x800) != 0) &&
+  if ((((agntG_t far *)agnt->gdata)->flags & 2) == 0) {
+    if ((((agntG_t far *)agnt->gdata)->flags & 1) == 0) {
+      if (((((((agntG_t far *)agnt->gdata)->flags & 0x800) != 0) &&
            (in_AX = ovc27_rollAgainstStat(agnt,mode,5,0), (char)in_AX != '\0')) &&
           (in_AX = in_stack_00000008 * 0x34, (*(uint *)(in_AX + 0x2b) & 0x7e0) == 0)) &&
          ((in_AX = in_stack_00000008 * 0x34,
@@ -589,7 +589,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
   uint8_t *puVar7;
   char *msg;
   int iVar8;
-  agntG_t *paVar9;
+  agntG_t far *paVar9;
   int *piVar10;
   uint16_t uVar11;
   uint16_t uVar12;
@@ -608,7 +608,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
   paStack_6 = (agnt_t far *)&Agnts[agntIndex].x;
   agntSeg = SEG_OF(Agnts);
   bVar1 = (byte)((uint)paStack_6 >> 8);
-  if ((((agntG_t *)paStack_6->gdata)->flags & 0x803) == 0) {
+  if ((((agntG_t far *)paStack_6->gdata)->flags & 0x803) == 0) {
     return (uint)bVar1 << 8;
   }
   if (paStack_6->animFrame == 0xff) {
@@ -617,7 +617,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
     uVar11 = uStack_8;
     uStack_8 = SEG_OF(Agnts);
     uVar12 = uVar11;
-    if (((((((agntG_t *)paStack_6->gdata)->flags & 0x1000) != 0) &&
+    if (((((((agntG_t far *)paStack_6->gdata)->flags & 0x1000) != 0) &&
          (uVar12 = uStack_8, (((agntG_t *)((targetOfs + 0x1d)))->flags2 & 0x10) == 0))
         && ((uStack_8 = uVar11, (((agntG_t *)((targetOfs + 0x1d)))->flags2 & 8) == 0
             || (bVar1 = ovr_agnt_compute9(paStack_6,0), uVar12 = uStack_8, '\0' < (char)bVar1)))) &&
@@ -639,7 +639,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
       iVar6 = (uVar3 & 0xff) * 0x21;
       uVar2 = 0x222b;
       uVar12 = (uint16_t)((ulong)paStack_6->gdata >> 0x10);
-      paVar9 = (agntG_t *)paStack_6->gdata;
+      paVar9 = (agntG_t far *)paStack_6->gdata;
                     /* WARNING: Load size is inaccurate */
       puVar7 = ovr_ovc15_usesStshRealloc
                          (paVar9->name,*(uint16_t *)((int)&paVar9->name + 2),
@@ -821,9 +821,9 @@ uint __cdecl16far ovc27_spellHalfDamage(agnt_t far *agnt)
   
   pcVar3 = (char *)((ulong)agnt >> 0x10);
   agnt_00 = (agnt_t far *)agnt;
-  if (((((agntG_t *)agnt_00->gdata)->shortName[3] == '\x04') &&
+  if (((((agntG_t far *)agnt_00->gdata)->shortName[3] == '\x04') &&
       (0xf < (((entity_t *)agnt_00->entity)->base).level)) ||
-     ((((agntG_t *)agnt_00->gdata)->shortName[3] == '\x06' &&
+     ((((agntG_t far *)agnt_00->gdata)->shortName[3] == '\x06' &&
       (8 < (((entity_t *)agnt_00->entity)->base).level)))) {
     uVar4 = GSavedBlitSeg;
     pcVar3 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,pcVar3),0);
@@ -858,9 +858,9 @@ uint __cdecl16far ovc27_breathHalfDamage(agnt_t far *agnt,uint16_t arg2)
   uint8_t text;
   uint8_t msg;
   
-  if (((((agntG_t *)agnt->gdata)->shortName[3] == '\x05') &&
+  if (((((agntG_t far *)agnt->gdata)->shortName[3] == '\x05') &&
       (0xd < (((entity_t *)agnt->entity)->base).level)) ||
-     ((((agntG_t *)agnt->gdata)->shortName[3] == '\x06' &&
+     ((((agntG_t far *)agnt->gdata)->shortName[3] == '\x06' &&
       (0xe < (((entity_t *)agnt->entity)->base).level)))) {
     uVar4 = GSavedBlitSeg;
     pcVar1 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text,in_stack_00000006),0);
@@ -908,7 +908,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
   paStack_c = (agnt_t far *)(agnt_t far *)((long)in_stack_00000008 * 0x34);
   ptrSeg = (char *)((int)&AgntAnms[0x75].halfWidth + 1);
   if (agnt->variant == 0x1) {
-    if ((((agntG_t *)agnt->gdata)->flags3 & 1) == 0) {
+    if ((((agntG_t far *)agnt->gdata)->flags3 & 1) == 0) {
       roll = ovr_manage_rollDice((((entity_t *)agnt->entity)->base).level,'\x06');
       uVar2 = (uint)roll;
       uVar3 = ovc27_spellHalfDamage
@@ -926,7 +926,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
         uVar2 = (int)uVar2 >> 1;
       }
     }
-    if ((((agntG_t *)paStack_c->gdata)->flags3 & 1) == 0) {
+    if ((((agntG_t far *)paStack_c->gdata)->flags3 & 1) == 0) {
       iVar5 = ovc27_rollToHitEntity
                         (CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)),
                          3);

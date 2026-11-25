@@ -845,7 +845,7 @@ char __cdecl16far stats_compute1(agnt_t far *agnt);
 uint8_t __cdecl16far stats_compute2(agnt_t far *agnt);
 void __cdecl16far stats_drawStatsPanel(void);
 undefined1 __cdecl16far stats_compute3(agnt_t far *agnt);
-void __cdecl16far stats_drawPortrait(agntG_t *gdata,byte portraitIndex,int palette);
+void __cdecl16far stats_drawPortrait(agntG_t far *gdata,byte portraitIndex,int palette);
 char * __cdecl16far agntCopyNthField(uint8_t filed_index,char *dst,char *src);
 char * __cdecl16far agntGetWeaponName(char *dst,uint8_t atype,bool magical,uint8_t field_index,int32_t agent);
 far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far_t ringValue);

@@ -406,14 +406,14 @@ uint __cdecl16far ovc41_settleAgentCombat(agnt_t far *a,agnt_t far *b,uint16_t a
     }
     if (((((((entity_t *)agnt->entity)->base).animFrame == 0x0) ||
          ((uint)(((entity_t *)agnt->entity)->base).animFrame % 0x10 == 1)) ||
-        ((agnt->flags & 0xae4) != 0)) || ((((agntG_t *)agnt->gdata)->flags2 & 4) != 0)) {
+        ((agnt->flags & 0xae4) != 0)) || ((((agntG_t far *)agnt->gdata)->flags2 & 4) != 0)) {
       agnt->strength = 0x0;
       agnt->timer = 0xa;
       agnt->combatState = 0x2;
       agnt->targetY = 0;
     }
     else {
-      agnt->strength = ((agntG_t *)agnt->gdata)->strength;
+      agnt->strength = ((agntG_t far *)agnt->gdata)->strength;
       agnt->timer = 0x6;
       agnt->combatState = 0x1;
       agnt->targetY = 0;
@@ -482,7 +482,7 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
 
   agntBase = (agnt_t far *)&Agnts[agntIndex].x;
   agntPtr = (agnt_t far *)CONCAT22(SEG_OF(Agnts),agntBase);
-  if ((((agntG_t *)agntBase->gdata)->flags2 & 4) != 0) {
+  if ((((agntG_t far *)agntBase->gdata)->flags2 & 4) != 0) {
     for (otherIdx = 0; otherIdx < (int)(uint)AgntCount; otherIdx = otherIdx + 1) {
       if ((otherIdx != agntIndex) &&
          (dx = agntPtr->base.x - Agnts[otherIdx].x, dxSign = (int)dx >> 0xf,
@@ -2001,7 +2001,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
     agnt->targetY = 0;
     ovr_agnt_usesAnimFrame(agnt,uVar10);
     if (((agnt->animVariant == 0x0) && ((agnt->flags & 0x200) == 0)) &&
-       ((((agntG_t *)agnt_00->gdata)->flags & 0x40) != 0)) {
+       ((((agntG_t far *)agnt_00->gdata)->flags & 0x40) != 0)) {
       savedSeg = (undefined1)GSavedBlitSeg;
       textPtr = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&victimName >> 8),
                                                             CONCAT12((char)&victimName,sourceSeg)),0);
@@ -2020,7 +2020,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
       return resolved;
     }
     if (((agnt->animVariant == 0x0) && ((agnt->flags & 0x800) == 0)) &&
-       (((((agntG_t *)agnt_00->gdata)->flags3 & 0x100) != 0 &&
+       (((((agntG_t far *)agnt_00->gdata)->flags3 & 0x100) != 0 &&
         (uVar1 = ovr_ovc27_rollToHitEntity((uint32_t)victim,2), (uVar1 & 0xff) == 0)))) {
       savedSeg = (undefined1)GSavedBlitSeg;
       textPtr = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&victimName >> 8),
@@ -2040,9 +2040,9 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
       return resolved;
     }
     agnt->strength = agnt->strength - (char)strength;
-    if (((((agntG_t *)agnt_00->gdata)->flags & 0x8000) == 0) ||
-       ((((agntG_t *)agnt->gdata)->flags & 0x8000) == 0)) {
-      if (((agntG_t *)agnt_00->gdata)->hitSound == 0) {
+    if (((((agntG_t far *)agnt_00->gdata)->flags & 0x8000) == 0) ||
+       ((((agntG_t far *)agnt->gdata)->flags & 0x8000) == 0)) {
+      if (((agntG_t far *)agnt_00->gdata)->hitSound == 0) {
         pan = ovr_audio_panFromX(agnt,uVar10);
         uVar10 = (undefined1)pan;
         uVar8 = (undefined1)((uint)pan >> 8);
@@ -2050,7 +2050,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
         uVar5 = ovr_randBelow(2,0);
         ovr_play_sfxU((char)uVar5 + 0x3d,pan,CONCAT11(uVar8,uVar10),uVar10,0);
       }
-      else if (((agntG_t *)agnt_00->gdata)->hitSound == 0x15) {
+      else if (((agntG_t far *)agnt_00->gdata)->hitSound == 0x15) {
         uVar5 = ovr_randBelow(2,0);
         if ((uVar5 & 0xff) == 0) {
           ovr_play_sfx(21,0,0);
@@ -2059,7 +2059,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
           ovr_play_sfx(71,0,0);
         }
       }
-      else if (((agntG_t *)agnt_00->gdata)->hitSound == 3) {
+      else if (((agntG_t far *)agnt_00->gdata)->hitSound == 3) {
         pan = ovr_audio_panFromX(agnt,uVar10);
         uVar10 = (undefined1)pan;
         uVar8 = (undefined1)((uint)pan >> 8);
@@ -2068,7 +2068,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
         ovr_play_sfxU((char)uVar5 + 0x14,pan,CONCAT11(uVar8,uVar10),uVar10,0);
       }
       else {
-        ovr_play_sfx((uint)((agntG_t *)agnt_00->gdata)->hitSound,0,0);
+        ovr_play_sfx((uint)((agntG_t far *)agnt_00->gdata)->hitSound,0,0);
       }
     }
     else {
@@ -2095,13 +2095,13 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
     }
   }
   else {
-    if (((agntG_t *)agnt->gdata)->actSound == 0xff) {
+    if (((agntG_t far *)agnt->gdata)->actSound == 0xff) {
       uVar5 = ovr_audio_panFromX(agnt,uVar10);
       ovr_play_sfxU(4,0,uVar5,(char)uVar5,0);
     }
     else {
       uVar5 = ovr_audio_panFromX(agnt,uVar10);
-      ovr_play_sfxU(((agntG_t *)agnt->gdata)->actSound,0,uVar5,(char)uVar5,0);
+      ovr_play_sfxU(((agntG_t far *)agnt->gdata)->actSound,0,uVar5,(char)uVar5,0);
     }
     ovc41_settleAgentCombat(source,victim,0);
     resolved = 1;
@@ -2667,7 +2667,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
 
 {
   uint *flagsPtr;
-  agntG_t *targetGdata;
+  agntG_t far *targetGdata;
   entity_t *targetEnt;
   byte bVar4;
   uint16_t uVar5;
@@ -2704,7 +2704,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
     }
     if ((agnt->flags & 8) == 0) {
       if (agnt->variant == 0x0) {
-        if ((agnt->gindex == 0x4) && ((((agntG_t *)agnt->gdata)->flags2 & 0x200) != 0)) {
+        if ((agnt->gindex == 0x4) && ((((agntG_t far *)agnt->gdata)->flags2 & 0x200) != 0)) {
           bVar4 = agnt->strength;
           uVar5 = ovr_ovc27_breathHalfDamage(targetAgnt,0x26);
           damage = (uint)bVar4;
@@ -2713,14 +2713,14 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
           }
         }
         else {
-          bVar4 = ovr_manage_rollDice(((agntG_t *)agnt->gdata)->dmgDice,
-                                      ((agntG_t *)agnt->gdata)->dmgSides);
-          iVar6 = (uint)bVar4 + (uint)((agntG_t *)agnt->gdata)->dmgBonus;
+          bVar4 = ovr_manage_rollDice(((agntG_t far *)agnt->gdata)->dmgDice,
+                                      ((agntG_t far *)agnt->gdata)->dmgSides);
+          iVar6 = (uint)bVar4 + (uint)((agntG_t far *)agnt->gdata)->dmgBonus;
           bVar4 = ovr_agnt_compute9(agnt,uVar13);
           uVar10 = iVar6 + (char)bVar4;
           damage = uVar10;
         }
-        if ((damage != 0) && ((((agntG_t *)agnt->gdata)->flags3 & 8) != 0)) {
+        if ((damage != 0) && ((((agntG_t far *)agnt->gdata)->flags3 & 8) != 0)) {
           uVar5 = ovr_agnt_abilityModifier
                             (*(byte *)((int)&(((entity_t *)agnt->entity)->base).entity + 3),0);
           damage = damage + (int)(char)uVar5;
@@ -2741,7 +2741,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
                                              (char)agntPtr,(char)((ulong)agntPtr >> 0x10),
                                              (char)damage);
               if ((resolved == '\0') &&
-                 (((agnt->gindex == 0x0 && ((((agntG_t *)agnt->gdata)->flags2 & 2) != 0)) &&
+                 (((agnt->gindex == 0x0 && ((((agntG_t far *)agnt->gdata)->flags2 & 2) != 0)) &&
                   (damage = ovr_ovc27_rollToHitEntity((uint32_t)agntPtr,0), (damage & 0xff) == 0)))
                  ) {
                 uVar16 = (undefined1)GSavedBlitSeg;
@@ -2762,7 +2762,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
                 ;
                 resolved = '\x01';
               }
-              if (((resolved == '\0') && ((((agntG_t *)agnt->gdata)->flags2 & 4) != 0)) &&
+              if (((resolved == '\0') && ((((agntG_t far *)agnt->gdata)->flags2 & 4) != 0)) &&
                  (damage = ovr_ovc27_rollToHitEntity((uint32_t)agntPtr,0), (damage & 0xff) == 0)) {
                 uVar5 = (uint16_t)((ulong)agntPtr >> 0x10);
                 targetEnt = ((agnt_t far *)agntPtr)->entity;
@@ -2784,7 +2784,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
                   *flagsPtr = *flagsPtr | 1;
                 }
               }
-              if (((resolved == '\0') && ((((agntG_t *)agnt->gdata)->flags2 & 0x400) != 0)) &&
+              if (((resolved == '\0') && ((((agntG_t far *)agnt->gdata)->flags2 & 0x400) != 0)) &&
                  (uVar9 = ovr_randBelow((uint)(((entity_t *)agnt->entity)->base).animFrame,0),
                  (uVar9 & 0xff) == 0)) {
                 uVar5 = ovr_ovc27_usesPlay_sfxU
@@ -2816,7 +2816,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
                   ovr_uiNotify(textPtr,uVar10,(char)uVar10);
                 }
               }
-              if (((resolved == '\0') && ((((agntG_t *)agnt->gdata)->flags2 & 0x800) != 0)) &&
+              if (((resolved == '\0') && ((((agntG_t far *)agnt->gdata)->flags2 & 0x800) != 0)) &&
                  (uVar9 = ovr_randBelow((uint)(((entity_t *)agnt->entity)->base).animFrame,0),
                  (uVar9 & 0xff) == 0)) {
                 uVar5 = ovr_ovc27_usesPlay_sfxU
