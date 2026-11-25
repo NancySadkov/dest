@@ -531,8 +531,8 @@ void __cdecl16far ovc28_startCrossBlit(void)
     handle.ofs = CrossBlitPtr.ofs;
     ovr_stshFree(handle);
   }
-  src.seg = CrossBlitX;
-  src.ofs = 0xa000;
+  src.seg = 0xa000;
+  src.ofs = CrossBlitX;
   CrossBlitPtr.ofs =
        (uint16_t)
        ovr_stshRleCut((far_t *)0x0,src,CrossBlitY,CrossBlitX + 0xd,CrossBlitY + 9,unaff_BP,(char)CrossBlitY,0,0);

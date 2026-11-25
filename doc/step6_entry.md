@@ -7134,3 +7134,82 @@ still land at the right offsets) but the prototype should not stay wrong.
 
   grep_checks 40,591 -> 40,526; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### `far_t` was written in Ghidra's member order, not ours: 7 swaps fixed
+
+`uiMainMenuLoop` (the top entry of the new ranking) turned out to need more than one pass, but
+reading it exposed a class that is cheap to prove and was silently wrong.
+
+Our `struct far_t` is `{ofs, seg}`.  The export writes it as `{seg, ofs}`:
+
+```c
+items.seg = pmenu;        /* pmenu = (uint16_t)&menu, an offset */
+items.ofs = 0x2410;       /* the original image's DGROUP segment */
+```
+
+Two independent proofs:
+
+* `ovc16_saveui.c:105-106` writes `0xa000` into `src.ofs`, while line 110 writes the **same constant**
+  into `dst.seg`.  `0xa000` can only be a segment (the VGA framebuffer), so the pair at 105 is
+  reversed.
+* `ovc16_saveui.c:1712-1713` writes `dst_01.seg = _SS; dst_01.ofs = (uint16_t)&hostilityItems;` in the
+  **right** order for the same stack buffer that 1719-1720 mangle into
+  `items.seg = (uint16_t)puVar1; items.ofs = 0x2410;`.
+
+The correct segment per site is decided by where the table lives, and `uiMenu`'s third argument says
+it: `_SS` for a stack array, the heap block's segment for the saves list.  So each site is provable
+from the call itself, not guessed.
+
+**`0x2410` is never a pushed constant.**  Searching `uiMainMenuLoop`'s whole 1573 bytes for it finds
+nothing; the original pushes `ds` (`0x002A push ds / push 0x2851 / lcall 0xf8,0x3e` is the
+`ovr_say` call).  So `0x2410` is a Ghidra rendering of the DGROUP segment, and every use of it as a
+segment is wrong in this build, whose DGROUP is elsewhere.  That is a separate class from the swap.
+
+`tmp/classify_fart_swap.py` finds **32** `x.seg = <expr>; x.ofs = <const>` pairs: 10 provably swapped
+(a known segment constant in `.ofs`), 0 in the correct order with a constant, and 22 that need
+per-site reading.  **7 are fixed here** - the ones that need no other change:
+
+```
+ovc16_saveui.c 105   src.seg = 0xa000;          src.ofs = CrossBlitX;
+ovc28_ui.c     534   src.seg = 0xa000;          src.ofs = CrossBlitX;
+ovc16_saveui.c 1437  items.seg = _SS;           items.ofs = pmenu;
+ovc16_saveui.c 1454  items_00.seg = _SS;        items_00.ofs = (uint16_t)pcVar9;
+ovc16_saveui.c 1588  items_03.seg = _SS;        items_03.ofs = (uint16_t)pcVar9;
+ovc16_saveui.c 1719  items.seg = _SS;           items.ofs = (uint16_t)puVar1;
+ovc16_saveui.c 1740  items_00.seg = _SS;        items_00.ofs = (uint16_t)puVar1;
+```
+
+Verified in the emitted code - the first `uiMenu` call now reads
+
+```
+lea  ax, word ptr [bp-114]      ; &menu
+mov  word ptr [bp-6], ss        ; items.seg = _SS
+mov  word ptr [bp-8], ax        ; items.ofs = pmenu
+push 8 / push ss / push [bp-6] / push ax / push offset DGROUP:s@+18
+call far ptr _uiMenu
+```
+
+where before it pushed `0x2410` as the offset and `&menu` as the segment.
+
+### Why `uiMainMenuLoop` itself is not a single-pass job
+
+Four distinct blockers, each needing its own evidence:
+
+1. **`in_DX` is a fifth phantom.**  `entries_05 = ovr_stshAlloc(400)` returns `void far *`, so DX
+   carries the segment; Ghidra rendered it as `in_DX`, which in C is an unassigned variable.  Its 5
+   uses are all garbage.  The fix is to declare `entries_05` as `void far *` and use
+   `SEG_OF(entries_05)`.
+2. **`entries_05` is declared `void *` (near)** and then indexed as `(int)entries_05 + i * 4`, so about
+   30 expressions dereference DS-relative instead of through the heap block's segment.  Widening it is
+   a prerequisite for blocker 1 and for the three remaining `items_0N` swaps (they need
+   `SEG_OF(entries_05)`).
+3. **35 uses of `0x2410`** as the DGROUP segment, all of which must become `_DS` - and each has to be
+   classified, because some `0x2410` occurrences in the tree are data values, not segments
+   (`miceInitDriver` stores it, `miceButton0PressStates` passes it as an argument).
+4. **About 20 exported temporaries** and a switch on a hardcoded string-table offset (`0x25bd6`).
+
+That is a turn of its own.  Recording it here so the next pass starts from the diagnosis instead of
+re-discovering it.
+
+  grep_checks 40,526 (unchanged - none of this is a section-5 pattern); build 65/65 clean
+  LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0; diff_dgroup 1,444/1,868

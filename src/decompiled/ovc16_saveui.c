@@ -102,8 +102,8 @@ void __cdecl16far saveui_startCrossBlit(void)
     handle.ofs = CrossBlitPtr.ofs;
     ovr_stshFree(handle);
   }
-  src.seg = CrossBlitX;
-  src.ofs = 0xa000;
+  src.seg = 0xa000;
+  src.ofs = CrossBlitX;
   CrossBlitPtr.ofs =
        (uint16_t)
        ovr_stshRleCut((far_t *)0x0,src,CrossBlitY,CrossBlitX + 0xd,CrossBlitY + 9,unaff_BP,(char)CrossBlitY,0,0);
@@ -1434,8 +1434,8 @@ void __cdecl16far uiMainMenuLoop(void)
       uStack_18 = 0;
     }
     pmenu = (uint16_t)&menu;
-    items.seg = pmenu;
-    items.ofs = 0x2410;
+    items.seg = _SS;
+    items.ofs = pmenu;
     uiMenu((char *)"Select an option:",items,_SS,8);
     pmenuIdx = (byte)pmenu;
     ovr_say((char *)0x26832,0x2410);
@@ -1451,8 +1451,8 @@ void __cdecl16far uiMainMenuLoop(void)
         }
         else {
           pcVar9 = yesno;
-          items_00.seg = (uint16_t)pcVar9;
-          items_00.ofs = 0x2410;
+          items_00.seg = _SS;
+          items_00.ofs = (uint16_t)pcVar9;
           uiMenu((char *)"Game not saved: Are you sure?",items_00,_SS,2);
           if ((char)pcVar9 == '\x01') {
             bVar1 = true;
@@ -1585,8 +1585,8 @@ void __cdecl16far uiMainMenuLoop(void)
           else {
             saveui_blitPanel();
             pcVar9 = yesno;
-            items_03.seg = (uint16_t)pcVar9;
-            items_03.ofs = 0x2410;
+            items_03.seg = _SS;
+            items_03.ofs = (uint16_t)pcVar9;
             uiMenu((char *)"Game not saved: Are you sure?",items_03,_SS,2);
             if ((char)pcVar9 == '\x01') {
               bVar1 = true;
@@ -1716,8 +1716,8 @@ void __cdecl16far saveui_configureNewWorld(void)
   dst_02.ofs = (uint16_t)&worldItems;
   F_SCOPY(far_from_u32((uint32_t)(0x2410270b)),dst_02);
   puVar1 = &worldItems;
-  items.seg = (uint16_t)puVar1;
-  items.ofs = 0x2410;
+  items.seg = _SS;
+  items.ofs = (uint16_t)puVar1;
   uiMenu((char *)"Which new world:",items,_SS,0);
   bStack_b = (byte)puVar1;
   saveui_blitPanel();
@@ -1737,8 +1737,8 @@ void __cdecl16far saveui_configureNewWorld(void)
     srand8(CONCAT22(SeedHi,GSeed));
     worldIdx = bStack_b - 1;
     puVar1 = &hostilityItems;
-    items_00.seg = (uint16_t)puVar1;
-    items_00.ofs = 0x2410;
+    items_00.seg = _SS;
+    items_00.ofs = (uint16_t)puVar1;
     uiMenu((char *)"Hostility level:",items_00,_SS,0);
     bStack_b = (byte)puVar1;
     saveui_blitPanel();
