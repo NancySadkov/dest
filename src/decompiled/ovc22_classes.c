@@ -2733,49 +2733,53 @@ uint16_t __cdecl16far ovc22_usesPlayerCount(byte partyIndex)
 uint __cdecl16far ovc22_usesEntities(int entityIndex)
 
 {
-  char *pcVar1;
-  byte bVar2;
-  uint uVar3;
-  byte bVar4;
-  int iVar5;
-  uint16_t uVar6;
-  
-  uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-  iVar5 = (int)Entities;
-  bVar2 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
-  if (bVar2 == 0xff) {
-    uVar3 = entityIndex * 0x37 & 0xff00;
+  /* 5087:1532 (file 0x43BA2), re-derived from the original:
+
+       si = [bp+6]
+       if (AGNT_FIELD(&Entities[si], base.entity, 3) == 0xff) return 0;
+       if (*(uint *)(BuildingTypes + gindex * 0x95 + 0x2716) & 0x800) return 0;
+       animBase = sheet[field][0xa4]
+       if (sheet[field][0x3f] == 0 && sheet[field][0x5b] < sheet[field][0x4d])
+           return 0;
+       for (n = 3; n >= 1 && sheet[field][0x8c + n*2] == 0; n--) ;
+       animBase += n
+       if (Entities[si].base.animFrame < animBase) {
+           Entities[si].base.animFrame++; return 1;
+       }
+       return 0;
+
+     The original only ever sets AL (`mov al,0` / `mov al,1`), so the exported
+     `entityIndex * 0x37 & 0xff00` returns were Ghidra modelling a stale AH left by the
+     `imul dx` that computes the record offset; every caller tests `& 0xff`. */
+  entity_t *e;
+  byte field;
+  byte animBase;
+  byte n;
+
+  e = &((entity_t *)Entities)[entityIndex];
+  field = AGNT_FIELD(e, base.entity, 3);
+  if (field == 0xff) {
+    return 0;
   }
-  else {
-    uVar3 = (uint)((entity_t *)iVar5)[entityIndex].base.gindex * 0x95;
-    if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + uVar3) & 0x800) == 0) {
-      if ((*(char *)((int)*(uint32_t *)((uint)bVar2 << 2) + 0x3f) == '\0') &&
-         (uVar3 = (GLeaderSheets[bVar2])->housing,
-         uVar3 < (GLeaderSheets[bVar2])->population)) {
-        uVar3 = uVar3 & 0xff00;
-      }
-      else {
-        bVar4 = 3;
-        while ((bVar4 != 0 &&
-               (*(int *)((int)*(uint32_t *)((uint)bVar2 << 2) + (uint)bVar4 * 2 + 0x8c) == 0))) {
-          bVar4 = bVar4 - 1;
-        }
-        if (((entity_t *)iVar5)[entityIndex].base.animFrame <
-            (byte)(*(char *)((int)*(uint32_t *)((uint)bVar2 << 2) + 0xa4) + bVar4)) {
-          pcVar1 = (char *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0xe);
-          *pcVar1 = *pcVar1 + '\x01';
-          uVar3 = CONCAT11((char)((uint)(entityIndex * 0x37) >> 8),1);
-        }
-        else {
-          uVar3 = entityIndex * 0x37 & 0xff00;
-        }
-      }
-    }
-    else {
-      uVar3 = uVar3 & 0xff00;
-    }
+  if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)e->base.gindex * 0x95) & 0x800) != 0) {
+    return 0;
   }
-  return uVar3;
+  animBase = *(char *)((int)*(uint32_t *)((uint)field << 2) + 0xa4);
+  if ((*(char *)((int)*(uint32_t *)((uint)field << 2) + 0x3f) == '\0') &&
+      ((GLeaderSheets[field])->housing < (GLeaderSheets[field])->population)) {
+    return 0;
+  }
+  n = 3;
+  while ((n != 0) &&
+         (*(int *)((int)*(uint32_t *)((uint)field << 2) + (uint)n * 2 + 0x8c) == 0)) {
+    n = n - 1;
+  }
+  animBase = animBase + n;
+  if (e->base.animFrame < animBase) {
+    e->base.animFrame = e->base.animFrame + 1;
+    return 1;
+  }
+  return 0;
 }
 
 
