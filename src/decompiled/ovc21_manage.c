@@ -704,7 +704,7 @@ uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
   (*(uint8_t *)((uint8_t *)&(dst_00.seg) + 1)) = uVar7;
   F_SCOPY(far_from_u32((uint32_t)(0x241049e4)),dst_00);
   while( true ) {
-    _fsetmem((void *)CONCAT13(uVar7,CONCAT12(uVar6,&menuItems)),0x10,0);
+    _fsetmem(MK_FP(_SS,&menuItems),0x10,0);
     auStack_28[0] = 0x2410;
     menuItems = 0x4d9b;
     bStack_19 = 1;
@@ -756,7 +756,7 @@ uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
     if (cStack_1a == '\x01') break;
     abStack_17[0] = abStack_17[((uint)inputResult & 0xff) - 1];
     ovr_drawString((char *)"Select ability to adjust downwards by two points.",0x2410,0x10);
-    _fsetmem((void *)CONCAT13(uVar7,CONCAT12(uVar6,&menuItems)),0x10,0);
+    _fsetmem(MK_FP(_SS,&menuItems),0x10,0);
     auStack_28[0] = 0x2410;
     menuItems = 0x4e3a;
     bStack_19 = 1;
