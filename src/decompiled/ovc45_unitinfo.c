@@ -103,72 +103,71 @@ char * __cdecl16far
 ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,char foundFlag)
 
 {
-  uint uVar1;
-  uint uVar2;
-  int iVar3;
-  uint uVar4;
-  uint uVar5;
-  uint16_t uVar6;
-  undefined1 uStack000f;
-  char in_stack_00000010;
-  uint uStack_6;
-  uint uStack_4;
-  
-  *(undefined1 *)CONCAT13(uStack000f,CONCAT12(foundFlag,(*(uint16_t *)((uint8_t *)&(foundFlagOut) + 2)))) = 0;
-  uVar1 = ovr_alignUp4(x,0,0);
-  *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = 0xffff;
-  uStack_6 = 0xffff;
-  uVar5 = 0xffff;
-  uStack_4 = 0xffff;
-  for (uVar4 = 0; uVar4 < EntityCount; uVar4 = uVar4 + 1) {
-    uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar4].base.x,0,0);
-    if (uVar2 == uVar1) {
-      uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar3 = (int)Entities;
-      if (((entity_t *)iVar3)[uVar4].base.y == y) {
-        uVar2 = (uint)((entity_t *)iVar3)[uVar4].base.gindex * 0x95;
-        if (*(char *)((int)(char **)GMenuStrings + uVar2 + 0x1f) != '\0') {
-          return (char *)(uVar2 & 0xff00);
+  /* Re-derived from 77eb:02c1.  Both out-parameters are far pointers read directly by the
+     original, so the exported CONCAT22/CONCAT13 constructions - which mixed one parameter's
+     offset with another's segment - reduce to *foundIndex and *foundFlagOut.  The
+     in_stack_00000010 comparisons were the segment half of foundFlagOut and are really the
+     5th argument `foundFlag`.  x is reassigned by alignUp4 (`mov word ptr [bp+6], ax`). */
+  uint alignedX;
+  uint entAlignedX;
+  int entitiesOfs;
+  uint entIdx;
+  uint grpOfs;
+  uint lastParty;
+  uint selIdx;
+  uint fallbackIdx;
+
+  *foundFlagOut = 0;
+  alignedX = ovr_alignUp4(x,0,0);
+  *foundIndex = 0xffff;
+  selIdx = 0xffff;
+  fallbackIdx = 0xffff;
+  lastParty = 0xffff;
+  for (entIdx = 0; entIdx < EntityCount; entIdx = entIdx + 1) {
+    entAlignedX = ovr_alignUp4(((entity_t *)Entities)[entIdx].base.x,0,0);
+    if (entAlignedX == alignedX) {
+      entitiesOfs = (int)Entities;
+      if (((entity_t *)entitiesOfs)[entIdx].base.y == y) {
+        grpOfs = (uint)((entity_t *)entitiesOfs)[entIdx].base.gindex * 0x95;
+        if (*(char *)((int)(char **)GMenuStrings + grpOfs + 0x1f) != '\0') {
+          return (char *)(grpOfs & 0xff00);
         }
         if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 +
-                      (uint)((entity_t *)iVar3)[uVar4].base.gindex * 0x95) != -1) &&
-           (AGNT_FIELD(&((entity_t *)Entities)[uVar4], base.entity, 3) != -1)) {
-          if (AGNT_FIELD(&((entity_t *)Entities)[uVar4], base.entity, 3) == in_stack_00000010) {
-            *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = uVar4;
+                      (uint)((entity_t *)entitiesOfs)[entIdx].base.gindex * 0x95) != -1) &&
+           (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) != -1)) {
+          if (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) == foundFlag) {
+            *foundIndex = entIdx;
           }
-          else if (AGNT_FIELD(&((entity_t *)Entities)[uVar4], base.entity, 3) == selectedPartyIndex) {
-            uStack_6 = uVar4;
+          else if (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) ==
+                   selectedPartyIndex) {
+            selIdx = entIdx;
           }
-          if ((uStack_4 != 0xffff) && (AGNT_FIELD(&((entity_t *)Entities)[uVar4], base.entity, 3) != uStack_4))
-          {
-            *(undefined1 *)CONCAT13(uStack000f,CONCAT12(foundFlag,(*(uint16_t *)((uint8_t *)&(foundFlagOut) + 2)))) = 1;
+          if ((lastParty != 0xffff) &&
+             (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) != lastParty)) {
+            *foundFlagOut = 1;
           }
-          uStack_4 = (uint)AGNT_FIELD(&((entity_t *)Entities)[uVar4], base.entity, 3);
-          uVar5 = uVar4;
+          lastParty = (uint)AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3);
+          fallbackIdx = entIdx;
         }
       }
     }
   }
-  if (*(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) == 0xffff) {
-    if (uStack_6 == 0xffff) {
-      if (uVar5 == 0xffff) {
+  if (*foundIndex == 0xffff) {
+    if (selIdx == 0xffff) {
+      if (fallbackIdx == 0xffff) {
         return (char *)0x2400;
       }
-      *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = uVar5;
+      *foundIndex = fallbackIdx;
     }
     else {
-      *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) = uStack_6;
+      *foundIndex = selIdx;
     }
   }
-  uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-  iVar3 = (uint)*(byte *)((int)Entities +
-                          *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) * 0x37 + 0xd) * 0x95
-  ;
-  selectedPartyIndex =
-       *(undefined1 *)
-        ((int)Entities + *(uint *)CONCAT22((uint8_t *)foundFlagOut,foundIndex) * 0x37 + 0x1a);
-  return (char *)CONCAT11((char)((uint)iVar3 >> 8),
-                          '\x01' << (*(byte *)((int)&worldMenuLabels[9].ofs + 1 + iVar3) & 0x1f));
+  grpOfs = (uint)*(byte *)((int)Entities + *foundIndex * 0x37 + 0xd) * 0x95;
+  selectedPartyIndex = *(undefined1 *)((int)Entities + *foundIndex * 0x37 + 0x1a);
+  return (char *)CONCAT11((char)((uint)grpOfs >> 8),
+                          '\x01' << (*(byte *)((int)&worldMenuLabels[9].ofs + 1 + grpOfs) &
+                                      0x1f));
 }
 
 
