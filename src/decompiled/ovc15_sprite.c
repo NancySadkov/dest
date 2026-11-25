@@ -726,10 +726,10 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
       }
     }
     ((entity_t *)Entities)[EntityCount].base.level =
-         *(uint8_t *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95);
+         AgntGs[(uint)gindex].shortName[0];
     if (((((GLeaderSheets[partyIndex])->flags5d & 0x10) != 0) &&
-        (*(byte *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95) < 5)) &&
-       (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) != -1)) {
+        (AgntGs[(uint)gindex].shortName[0] < 5)) &&
+       (AgntGs[(uint)gindex].shortName[3] != -1)) {
       while (((entity_t *)Entities)[EntityCount].base.level < 5) {
         cVar4 =(uint16_t)( ovr_ovc15_textView()   /* hand fix: args lost by the decompiler */);
         uVar8 = (uint16_t)((ulong)Entities >> 0x10);
@@ -745,14 +745,14 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
     uVar5 = EntityCount;
     peVar7 = (entity_t *)Entities;
     uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-    if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) == -1) {
+    if (AgntGs[(uint)gindex].shortName[3] == -1) {
       iVar6 = (uint)peVar7[EntityCount].base.level * 4;
       uVar3 = *(uint16_t *)(iVar6 + -4);
       *(uint16_t *)&peVar7[EntityCount].base.frameIndex = *(uint16_t *)(iVar6 + -2);
       *(uint16_t *)&peVar7[uVar5].base.health = uVar3;
     }
     else {
-      iVar6 = (uint)*(byte *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) * 0x94 +
+      iVar6 = (uint)AgntGs[(uint)gindex].shortName[3] * 0x94 +
               (uint)peVar7[EntityCount].base.level * 4;
       uVar3 = *(uint16_t *)(iVar6 + -4);
       *(uint16_t *)&peVar7[EntityCount].base.frameIndex = *(uint16_t *)(iVar6 + -2);
@@ -821,7 +821,7 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
     Entities[entityIndex].base.target = 0xff;
     peVar6[entityIndex].base.gindex = gindex;
     peVar6[entityIndex].base.level =
-         *(uint8_t *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95);
+         AgntGs[(uint)gindex].shortName[0];
     puVar1 = &peVar6[entityIndex].base.frameIndex;
     puVar1[0] = 0x0;
     puVar1[1] = 0x0;
@@ -1499,7 +1499,7 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
   
   iVar17 = (int)((ulong)param_1 >> 0x10);
   uVar14 = (uint)param_1;
-  cVar4 = *(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)*(byte *)(uVar14 + 0xd) * 0x95);
+  cVar4 = AgntGs[(uint)*(byte *)(uVar14 + 0xd)].shortName[3];
   iVar8 = (int)((ulong)in_stack_0000fffa >> 0x10);
   uVar16 = CONCAT11(cVar4,(byte)in_stack_0000fffa);
   if (cVar4 == -1) {
@@ -1722,14 +1722,14 @@ ovc15_textView(uint32_t param_1,int *param_2,int *param_3,uint16_t param_4,uint1
       uVar10 = (uint16_t)((ulong)Entities >> 0x10);
       peVar13 = (entity_t *)Entities;
     } while (peVar13[EntityCount].base.level < 5);
-    if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)(byte)param_3 * 0x95) == -1) {
+    if (AgntGs[(uint)(byte)param_3].shortName[3] == -1) {
       iVar8 = (uint)peVar13[EntityCount].base.level * 4;
       uVar12 = *(uint16_t *)(iVar8 + -4);
       *(uint16_t *)&peVar13[EntityCount].base.frameIndex = *(uint16_t *)(iVar8 + -2);
       *(uint16_t *)&peVar13[iVar17].base.health = uVar12;
     }
     else {
-      iVar8 = (uint)*(byte *)((int)&worldMenuLabels[9].ofs + 1 + (uint)(byte)param_3 * 0x95) * 0x94
+      iVar8 = (uint)AgntGs[(uint)(byte)param_3].shortName[3] * 0x94
               + (uint)peVar13[EntityCount].base.level * 4;
       uVar12 = *(uint16_t *)(iVar8 + -4);
       *(uint16_t *)&peVar13[EntityCount].base.frameIndex = *(uint16_t *)(iVar8 + -2);

@@ -1607,8 +1607,7 @@ int __cdecl16far ovc27_rollToHitAgent(uint32_t agnt,byte column)
 
   agntOfs = (int)agnt;
   ability = *(byte *)(agntOfs + 0xf);
-  rampIdx = *(byte *)((int)&worldMenuLabels[9].ofs + 1 +
-                      (uint)*(byte *)(agntOfs + 0xd) * 0x95);
+  rampIdx = AgntGs[(uint)*(byte *)(agntOfs + 0xd)].shortName[3];
   if ((rampIdx == 0xff) &&
      (rampIdx = 0,
      *(byte *)((int)&worldMenuLabels[0xc].seg + (uint)*(byte *)(agntOfs + 0xd) * 0x95) < 4)) {
@@ -1685,7 +1684,7 @@ uint16_t __cdecl16far ovc27_compute3(uint32_t view,char frames)
   if (*(byte *)(viewIdx + 0x32) < *(byte *)(viewIdx + 0x31)) {
     *(undefined1 *)(viewIdx + 0x31) = *(undefined1 *)(viewIdx + 0x32);
   }
-  bStack_6 = *(byte *)((int)&worldMenuLabels[9].ofs + 1 + (uint)*(byte *)(viewIdx + 0xd) * 0x95);
+  bStack_6 = AgntGs[(uint)*(byte *)(viewIdx + 0xd)].shortName[3];
   if (bStack_6 == 0xff) {
     bStack_6 = 0;
   }

@@ -132,8 +132,7 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
         if (*(char *)((int)(char **)GMenuStrings + grpOfs + 0x1f) != '\0') {
           return (char *)(grpOfs & 0xff00);
         }
-        if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 +
-                      (uint)((entity_t *)entitiesOfs)[entIdx].base.gindex * 0x95) != -1) &&
+        if ((AgntGs[(uint)((entity_t *)entitiesOfs)[entIdx].base.gindex].shortName[3] != -1) &&
            (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) != -1)) {
           if (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) == foundFlag) {
             *foundIndex = entIdx;
@@ -4204,8 +4203,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
     if (menuActions == 0x1) {
       ovr_play_sfx(86,0,0);
       if (BuildingTypes[bldType].resource == '\0') {
-        if (*(char *)((int)&worldMenuLabels[9].ofs + 1 +
-                     (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95) == '\x05') {
+        if (AgntGs[(uint)((entity_t *)Entities)[entityIndex].base.gindex].shortName[3] == '\x05') {
           bStack_11 = bldType + 0x18;
         }
         else {

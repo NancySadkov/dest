@@ -603,7 +603,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
     *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa9) = 0;
     bVar17 = (GLeaderSheets[partyIndex])->classStr;
     (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)( (far_t far *)CONCAT11(bVar17,(byte)uStack_6));
-    if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar17 * 0x95) == '\x01') {
+    if (AgntGs[(uint)bVar17].shortName[3] == '\x01') {
       (*(uint32_t *)((uint8_t *)&(uStack_6))) = CONCAT12(1,(far_t far *)uStack_6);
       uVar12 = (uint3)uStack_6;
     }
@@ -612,8 +612,8 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
       uVar12 = (uint3)uStack_6;
     }
     (*(uint8_t *)((uint8_t *)&(uStack_6) + 1)) = (byte)(uVar12 >> 8);
-    if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)(*(uint8_t *)((uint8_t *)&(uStack_6) + 1)) * 0x95) == '\0') ||
-       (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)(*(uint8_t *)((uint8_t *)&(uStack_6) + 1)) * 0x95) == '\x05')) {
+    if ((AgntGs[(uint)(*(uint8_t *)((uint8_t *)&(uStack_6) + 1))].shortName[3] == '\0') ||
+       (AgntGs[(uint)(*(uint8_t *)((uint8_t *)&(uStack_6) + 1))].shortName[3] == '\x05')) {
       uStack_6 = (far_t far *)CONCAT13(1,uVar12);
     }
     else {
@@ -2482,7 +2482,7 @@ L_upd_units_5087_1d7d_202C:
       bVar56 = false;
       bVar59 = false;
       bVar58 = false;
-      if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar17 * 0x95) == -1) {
+      if (AgntGs[(uint)bVar17].shortName[3] == -1) {
         bVar56 = false;
         bVar59 = true;
       }
@@ -2569,7 +2569,7 @@ L_upd_units_5087_1d7d_202C:
         bVar56 = true;
       }
       if (bVar56) {
-        if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)(byte)uStack_6 * 0x95) != -1) &&
+        if ((AgntGs[(uint)(byte)uStack_6].shortName[3] != -1) &&
            (bVar16 != 0xff)) {
           if ((*(char *)((int)*(uint32_t *)((uint)bVar16 << 2) + 0x3f) != '\0') ||
              (Entities[(int)uStack_16].base.level <
@@ -2977,11 +2977,11 @@ void __cdecl16far ovc22_usesEntities3(int entityIndex)
              ((entity_t *)iVar6)[entityIndex].dir +
              (char)(((ulong)((entity_t *)iVar6)[entityIndex].dir / 6) % 6) * -6;
         bVar2 = ((entity_t *)Entities)[entityIndex].base.gindex;
-        if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar2 * 0x95) == '\x03') &&
+        if ((AgntGs[(uint)bVar2].shortName[3] == '\x03') &&
            ('\x01' < budgetIdx)) {
           chosenIdx = '\x01';
         }
-        if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar2 * 0x95) == '\x01') &&
+        if ((AgntGs[(uint)bVar2].shortName[3] == '\x01') &&
            ('\x02' < chosenIdx)) {
           chosenIdx = '\x02';
         }
@@ -3705,7 +3705,7 @@ void __cdecl16far upd_usesAlignUp4(void)
         bVar27 = false;
         bVar9 = false;
         bVar8 = false;
-        if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) == -1) {
+        if (AgntGs[(uint)gindex].shortName[3] == -1) {
           bVar27 = true;
         }
         else {
@@ -3786,7 +3786,7 @@ void __cdecl16far upd_usesAlignUp4(void)
           bVar9 = true;
         }
         if (bVar9) {
-          if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) != -1) &&
+          if ((AgntGs[(uint)gindex].shortName[3] != -1) &&
              (bVar5 != 0xff)) {
             if ((*(char *)((int)*(uint32_t *)((uint)bVar5 << 2) + 0x3f) != '\0') ||
                (Entities[idx].base.level <

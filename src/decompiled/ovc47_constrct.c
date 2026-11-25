@@ -422,8 +422,8 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
   bVar3 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
   if ((partyIndex != 0xff) && (bVar3 != 0xff)) {
     bVar4 = (GLeaderSheets[partyIndex])->classStr;
-    iVar9 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)bVar4 * 0x95);
-    uVar5 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)bVar4 * 0x95) * 0xf;
+    iVar9 = AGNT_WORD(&AgntGs[(uint)bVar4], shortName, 5);
+    uVar5 = AGNT_WORD(&AgntGs[(uint)bVar4], shortName, 5) * 0xf;
     iVar13 = 0;
     for (uVar12 = 0; uVar12 < EntityCount; uVar12 = uVar12 + 1) {
       uVar14 = (uint16_t)((ulong)Entities >> 0x10);

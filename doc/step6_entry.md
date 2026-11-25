@@ -6169,3 +6169,49 @@ greps - but every one of the 53 sites was reading DGROUP garbage.
 
   grep_checks 41,263 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### The `shortName` field was mis-documented, not mis-named: 49 more AgntGs sites fixed
+
+The 32 sites left blocked last time read record offsets 0x43..0x48, which `struct agntG_t` named
+`shortName[13]` with the comment "no code reader or writer exists".  The objective was to identify
+the field.  The answer is that **the name was right and the comment was wrong**.
+
+Two independent sources agree:
+
+* the original's own symbols: `AgntGs[0].shortName[3]` at `195d:271c` (= base 0x26d6 + 0x46) and
+  `AgntGs[0].shortName[4]` at `195d:271d`;
+* the disassembly at `4207:25dd`:
+
+```
+les  bx,[bp+6] / mov al,es:[bx+0x0d]     ; entity->gindex
+mov  dx,0x95 / imul dx                   ; record stride
+mov  dx,0x60 / mov es,dx                 ; the 195d data segment
+mov  al,es:[bx+0x271c]                   ; AgntGs[gindex] + 0x46
+cmp  al,0xff / jne ...                   ; 0xff -> 0
+dec  ax / cmp bx,5 / ja ...              ; switch (al - 1) case 0..5
+```
+
+So it is read as a small 0..6 code that selects a width/height pair, and `ovc15_sprite` also uses it
+as `shortName[3] * 0x94 + level*4`, i.e. an animation-set index.  The field is an animation-set
+selector that the original's debug info happened to name `shortName`; it is not text.
+
+With that settled, `tmp/fix_agntg_fields.py` was extended with the five remaining bases:
+
+```
+[8].seg     0x2719 -> 0x43 shortName[0]     [8].seg + 1 0x271a -> 0x44 shortName[1]
+[9].ofs + 1 0x271c -> 0x46 shortName[3]     [9].seg     0x271d -> 0x47 shortName[4]
+[9].seg + 1 0x271e -> 0x48 shortName[5]
+```
+
+Result: **46 sites rewritten, 0 refused**, plus 3 sites that read a *word* at 0x48 (i.e.
+shortName[5..6]) converted by hand to `AGNT_WORD(&AgntGs[i], shortName, 5)`.  The converter now
+reports `rewritten: 0, refused: 0` and doubles as a regression guard.
+
+Still unconverted, and recorded rather than guessed: about 20 sites that read the **`name` far-pointer
+halves** (`[0].seg + 1` -> 0x24, `[1].ofs + 1` -> 0x26).  They become `SEG_OF(AgntGs[i].name)` and
+`far_ofs_u32(AgntGs[i].name)`, but most of them use a pre-multiplied index (`iVar30`, `gOfs`,
+`probeOfs`) rather than an explicit `idx * 0x95`, so the index has to be traced back to the agent
+number first.  Those are a separate pass.
+
+  grep_checks 41,263 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

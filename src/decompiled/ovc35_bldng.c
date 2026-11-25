@@ -211,8 +211,7 @@ void bldng_selectBuildingType(byte partyIndex)
   char cStack_4;
   byte bitMask;
   
-  bitMask = '\x01' << (*(byte *)((int)&worldMenuLabels[9].ofs + 1 +
-                                 (uint)(GLeaderSheets[in_stack_00000004])->classStr * 0x95) & 0x1f);
+  bitMask = '\x01' << (AgntGs[(uint)(GLeaderSheets[in_stack_00000004])->classStr].shortName[3] & 0x1f);
   buildTypes = bldng_getClass(in_stack_00000004);
   buildTypes = buildTypes & 0xff;
   auStack_190[0] = *(uint16_t *)((int)&GStrangeTable[0x31].seg + buildTypes * 4);

@@ -75,8 +75,7 @@ char __cdecl16far ovc24_usesEntities(int entityIndex)
   peVar3 = (entity_t *)Entities;
   cStack_3 = peVar3[entityIndex].base.level + bVar1 +
              AgntGs[(uint)peVar3[entityIndex].base.gindex].rank +
-             *(char *)((int)&worldMenuLabels[8].seg + 1 +
-                      (uint)peVar3[entityIndex].base.gindex * 0x95) + '\t';
+             AgntGs[(uint)peVar3[entityIndex].base.gindex].shortName[1] + '\t';
   cVar2 = ovr_stats_compute4(&peVar3[entityIndex].base,uVar4);
   cStack_3 = cStack_3 - cVar2;
   if (cStack_3 < '\0') {

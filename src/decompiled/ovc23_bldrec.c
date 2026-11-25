@@ -308,11 +308,11 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
                  peVar22[partyIndex].dir + (char)(((ulong)peVar22[partyIndex].dir / 6) % 6) * -6;
             bVar9 = ((entity_t *)Entities)[partyIndex].base.gindex;
             (*(uint32_t *)((uint8_t *)&(uStack_6))) = CONCAT12(bVar9,(byte *)uStack_6);
-            if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar9 * 0x95) == '\x03') &&
+            if ((AgntGs[(uint)bVar9].shortName[3] == '\x03') &&
                ('\x01' < cVar10)) {
               (*(uint8_t *)((uint8_t *)&(uStack_8) + 1)) = '\x01';
             }
-            if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar9 * 0x95) == '\x01') &&
+            if ((AgntGs[(uint)bVar9].shortName[3] == '\x01') &&
                ('\x02' < (char)(*(uint8_t *)((uint8_t *)&(uStack_8) + 1)))) {
               (*(uint8_t *)((uint8_t *)&(uStack_8) + 1)) = '\x02';
             }

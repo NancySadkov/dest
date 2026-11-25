@@ -1084,12 +1084,12 @@ char __cdecl16far stats_compute4(agnt_t *agnt,uint16_t arg2)
   uint16_t in_stack_00000006;
   
   bVar1 = agnt->gindex;
-  if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == -1) {
-    cVar3 = *(char *)((int)&worldMenuLabels[9].seg + (uint)bVar1 * 0x95);
+  if (AgntGs[(uint)bVar1].shortName[3] == -1) {
+    cVar3 = AgntGs[(uint)bVar1].shortName[4];
   }
   else {
     bVar2 = ovr_agnt_compute10(agnt,in_stack_00000006);
-    cVar3 = *(char *)((int)&worldMenuLabels[9].seg + (uint)bVar1 * 0x95) - bVar2;
+    cVar3 = AgntGs[(uint)bVar1].shortName[4] - bVar2;
     uVar4 = ovr_agnt_abilityModifier(*(byte *)((int)&agnt->entity + 3),3);
     cVar3 = cVar3 - (char)uVar4;
   }
@@ -1940,21 +1940,21 @@ void __cdecl16far stats_openAgentDetail(int agntIndex)
   drawString((char *)0x620f,0x2410,0);
   bVar1 = ((entity_t *)Entities)[iVar2].base.gindex;
   if (AgntGs[(uint)bVar1].ai == '\0') {
-    if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\0') ||
-       (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\x04')) {
+    if ((AgntGs[(uint)bVar1].shortName[3] == '\0') ||
+       (AgntGs[(uint)bVar1].shortName[3] == '\x04')) {
       CurMusicType = 0x43;
     }
-    else if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\x02') {
+    else if (AgntGs[(uint)bVar1].shortName[3] == '\x02') {
       CurMusicType = 0x42;
     }
-    else if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\x05') ||
-            (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\x01')) {
+    else if ((AgntGs[(uint)bVar1].shortName[3] == '\x05') ||
+            (AgntGs[(uint)bVar1].shortName[3] == '\x01')) {
       CurMusicType = 0x27;
     }
-    else if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\x06') {
+    else if (AgntGs[(uint)bVar1].shortName[3] == '\x06') {
       CurMusicType = 0x28;
     }
-    else if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bVar1 * 0x95) == '\x03') {
+    else if (AgntGs[(uint)bVar1].shortName[3] == '\x03') {
       CurMusicType = 0x20;
     }
     else {

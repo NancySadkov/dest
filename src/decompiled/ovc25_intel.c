@@ -934,9 +934,9 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex)
       (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) != '\0')) &&
      (*(int *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5e) == 0)) {
     partyClass = (GLeaderSheets[partyIndex])->classStr;
-    uVar4 = (uint)*(byte *)((int)&worldMenuLabels[8].seg + (uint)partyClass * 0x95) +
+    uVar4 = (uint)AgntGs[(uint)partyClass].shortName[0] +
             (uint)AgntGs[(uint)partyClass].rank +
-            (uint)*(byte *)((int)&worldMenuLabels[8].seg + 1 + (uint)partyClass * 0x95);
+            (uint)AgntGs[(uint)partyClass].shortName[1];
     if (((uVar4 < PlayerCount) &&
         (((GLeaderSheets[partyIndex])->flags5d & 1) == 0)) &&
        (uVar2 = ovr_randBelow(100,0), (int)(uVar2 & 0xff) < (int)(PlayerCount - uVar4))) {
@@ -964,9 +964,9 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex)
 int __cdecl16far ovc25_compute1(byte gindex)
 
 {
-  return (uint)*(byte *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95) +
+  return (uint)AgntGs[(uint)gindex].shortName[0] +
          (uint)AgntGs[(uint)gindex].rank +
-         (uint)*(byte *)((int)&worldMenuLabels[8].seg + 1 + (uint)gindex * 0x95);
+         (uint)AgntGs[(uint)gindex].shortName[1];
 }
 
 

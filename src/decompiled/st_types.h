@@ -64,7 +64,13 @@ struct agntG_t { /* generic agent data, which can be shared by several agents */
     word flags2; /* 16-bit flag word: every access is a mask test, e.g. 6a8f:1cf3 TEST word ptr ES:[BX+0x3e],0x40 and 8699:0c44 TEST ...,0x200. */
     word flags3; /* 16-bit flag word: 6a8f:1dba TEST word ptr ES:[BX+0x40],0x100; 8699:0939 TEST ...,0x2000. */
     byte rank; /* rank level compared against agnt_3b1d_1bc1()'s ladder */
-    char shortName[13]; /* GUESS: inferred from layout and manual terminology; no code reader or writer exists */
+    char shortName[13]; /* Byte array at +0x43.  The original's own symbols place shortName[3] at
+                           195d:271c and shortName[4] at 195d:271d, and code reads it as a small
+                           0..6 code, not as text: 4207:25dd loads es=0x60, offset gindex*0x95 +
+                           0x271c, then `if (al == 0xff) al = 0; switch (al - 1) case 0..5` picks a
+                           width/height pair, and ovc15_sprite uses `shortName[3] * 0x94 + level*4`
+                           as an animation-set index.  So the field is really an animation-set
+                           selector that the original's debug info happened to name shortName. */
     byte hitSound; /* Hit/damage sound selector: 6a8f:1c74 compares it with 0, 0x15 and 3 and otherwise calls play_sfx(value,0) when the agent takes damage, with play_sfx values 0x3d/0x3e, 21/71 and 0x14/0x15 for the special cases. */
     uint8_t actSound; /* action sound id; 0xff = use default (4) */
     int8_t yOffset;

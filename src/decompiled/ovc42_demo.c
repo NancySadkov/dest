@@ -222,17 +222,17 @@ ovc42_showAgentStats(byte gindex,uint8_t partyIndex,char flag,far_t cmap,byte le
     (*(uint16_t *)((uint8_t *)&(agntRec) + 22)) = (*(uint16_t *)((uint8_t *)&(agntRec) + 22)) | 1;
   }
   if (level == 0) {
-    agntRec.base.level = *(uint8_t *)((int)&worldMenuLabels[8].seg + (uint)gindex * 0x95);
+    agntRec.base.level = AgntGs[(uint)gindex].shortName[0];
   }
   else {
     agntRec.base.level = level;
   }
-  if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) == -1) {
+  if (AgntGs[(uint)gindex].shortName[3] == -1) {
     (*(uint16_t *)((uint8_t *)&(agntRec) + 18)) = *(uint16_t *)((uint)agntRec.base.level * 4 + -2);
     (*(uint16_t *)((uint8_t *)&(agntRec) + 16)) = *(uint16_t *)((uint)agntRec.base.level * 4 + -4);
   }
   else {
-    iVar1 = (uint)*(byte *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) * 0x94 +
+    iVar1 = (uint)AgntGs[(uint)gindex].shortName[3] * 0x94 +
             (uint)agntRec.base.level * 4;
     (*(uint16_t *)((uint8_t *)&(agntRec) + 18)) = *(uint16_t *)(iVar1 + -2);
     (*(uint16_t *)((uint8_t *)&(agntRec) + 16)) = *(uint16_t *)(iVar1 + -4);

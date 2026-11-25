@@ -68,8 +68,7 @@ void __cdecl16far ovc41_compute3(uint32_t view,...)
   char panDelta;
 
   viewOfs = (int)view;
-  ownerIdx = *(byte *)((int)&worldMenuLabels[9].ofs + 1 +
-                       (uint)*(byte *)(viewOfs + 0xd) * 0x95);
+  ownerIdx = AgntGs[(uint)*(byte *)(viewOfs + 0xd)].shortName[3];
   if (ownerIdx == 0xff) {
     ownerIdx = 0;
   }
@@ -120,7 +119,7 @@ void __cdecl16far ovc41_compute4(agnt_t *agnt,byte flag,byte pad,agnt_t *other,u
   
   if (pad != 0) {
     retStorage = (long *)CONCAT11(other->gindex,in_stack_0000fffc);
-    if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)other->gindex * 0x95) != -1) {
+    if (AgntGs[(uint)other->gindex].shortName[3] != -1) {
       ovc41_growthForLevel(agnt,0);
       iVar4 = 0;
       paVar3 = (agnt_t *)LXMUL_at_(retStorage,CONCAT22(in_stack_00000000,unaff_BP),b);
@@ -2957,8 +2956,8 @@ int __cdecl16far ovc41_growthForLevel(agnt_t *agnt,uint16_t arg2)
   dst.ofs = (uint16_t)&growthMap;
   F_SCOPY(far_from_u32((uint32_t)(0x24106e48)),dst);
   gindex = agnt->gindex;
-  if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) == -1) {
-    iVar1 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)gindex * 0x95);
+  if (AgntGs[(uint)gindex].shortName[3] == -1) {
+    iVar1 = AGNT_WORD(&AgntGs[(uint)gindex], shortName, 5);
   }
   else {
     level = agnt->level;
