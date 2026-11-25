@@ -598,21 +598,111 @@ attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flags
 void __stdcall16far attact_usesGMapFlags3(void)
 
 {
-  uint16_t *puVar1;
-  int iVar2;
-  uint uVar3;
-  uint16_t uVar4;
-  
+  /* Re-derived from 3f0b:0c2a (1112 bytes, sub sp,0x5c).  Clears the 0x3000 bits, stamps
+     0x1000<<AgntGs[gindex].ai on every entity's cell, then walks the entities: one whose four
+     surrounding flag words are all 0x3000 either reports itself - building
+     "Intelligence reports %s unit engaged in combat. (%d, %d)" with stsprintf and showing it
+     through uiNotify - or just marks its entity byte, depending on GameRunning and the agent
+     type; one whose cell is not 0x3000 has its mark cleared and its state high byte replaced
+     by the flags32 low byte, with a sound when the cursor is on it.  Finally the game state is
+     set to 0x3d, DebugVerbose prints it, and the OVC23 entry runs. */
+  uint16_t *flagWord;
+  int entitiesOfs;
+  int entX;
+  int entY;
+  int alignedX;
+  int entIdx;
+  int k;
+  byte soundChoice;
+  uint16_t flagAcc;
+  byte sawGdataZero;
+  byte sawGdataOther;
+  byte gdataAi;
+  char msg[80];
+
   ovr_driver_clearMapFlagsRect((uint32_t)GMapFlags,0,0,0x93,0x3b,0xcfff,0,0);
-  for (uVar3 = 0; uVar3 < EntityCount; uVar3 = uVar3 + 1) {
-    uVar4 = (uint16_t)((ulong)Entities >> 0x10);
-    iVar2 = (int)Entities;
-    puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[((entity_t *)iVar2)[uVar3].base.y] +
-                     *(int *)((entity_t *)iVar2 + uVar3));
-    *puVar1 = *puVar1 | 0x1000 << (AgntGs[(uint)((entity_t *)iVar2)[uVar3].base.gindex].ai & 0x1f);
+  for (entIdx = 0; entIdx < (int)(uint)EntityCount; entIdx = entIdx + 1) {
+    entitiesOfs = (int)Entities;
+    flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[
+                                ((entity_t *)entitiesOfs)[entIdx].base.y]
+                            + *(int *)((entity_t *)entitiesOfs + entIdx));
+    *flagWord = *flagWord |
+                0x1000 << (AgntGs[(uint)((entity_t *)entitiesOfs)[entIdx].base.gindex].ai &
+                           0x1f);
   }
-  ovr_ovc15_usesAlignUp42();
-  draw_textGoldProvidesHousing();
+  soundChoice = ovr_ovc15_usesAlignUp42();
+  sawGdataZero = 0;
+  sawGdataOther = 0;
+  for (entIdx = 0; entIdx < (int)(uint)EntityCount; entIdx = entIdx + 1) {
+    entitiesOfs = (int)Entities;
+    entX = *(int *)((entity_t *)entitiesOfs + entIdx);
+    entY = ((entity_t *)entitiesOfs)[entIdx].base.y;
+    alignedX = ovr_alignUp4(entX,0,0);
+    flagAcc = 0;
+    for (k = 0; k < 4; k = k + 1) {
+      flagAcc = flagAcc |
+                (((*(short (*) [60] [148])GMapFlags)[entY][alignedX + k + -2]) & 0x3000U);
+    }
+    gdataAi = AgntGs[(uint)((entity_t *)Entities)[entIdx].base.gindex].ai;
+    if (flagAcc == 0x3000) {
+      if (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 1) != 0) {
+        continue;
+      }
+      if ((GameRunning != false) || (gdataAi != 0)) {
+        AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 1) = 1;
+      }
+      else {
+        ovr_uiNotify(stsprintf(msg,s_intelligence_reports_s_u_2410,
+                               AgntGs[(uint)((entity_t *)Entities)[entIdx].base.gindex].name,
+                               alignedX,entY),0xa000);
+        AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 1) = 1;
+      }
+      if ((char)ovr_ovc23_isCursorAt(entX,entY) == '\0') {
+        continue;
+      }
+      if (gdataAi == 0) {
+        sawGdataZero = 1;
+      }
+      else {
+        sawGdataOther = 1;
+      }
+      continue;
+    }
+    if (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 1) == 0) {
+      continue;
+    }
+    if ((char)ovr_ovc23_isCursorAt(entX,entY) != '\0') {
+      if (gdataAi != 0) {
+        ovr_play_sfx(0x24,0);
+      }
+      else {
+        ovr_play_sfx(0x26,0);
+      }
+    }
+    AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 1) = 0;
+    AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.state, 1) =
+        AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.flags32, 0);
+  }
+  if (sawGdataZero != 0 || sawGdataOther != 0) {
+    if (soundChoice != 0) {
+      if (sawGdataZero != 0) {
+        ovr_play_sfx(0x23,0);
+      }
+      else if (sawGdataOther != 0) {
+        ovr_play_sfx(0x25,0);
+      }
+    }
+    else {
+      ovr_stop_audio();
+      CurSfxType3 = 0xff;
+      ovr_play_sfx(0x5a,0);
+    }
+  }
+  GGameState = 0x3d;
+  if (DebugVerbose != false) {
+    printf(s_d,GGameState);
+  }
+  ovr_OVC23_55fe_29a2_entry();
   return;
 }
 
