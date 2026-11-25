@@ -3820,3 +3820,35 @@ the program dereferences at run time.
 
   build 64/64 clean; LINK ERRORS 0; grep_checks 50,869 -> 50,827
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### GTxtFiles: the 34 file names recovered from the original DGROUP
+
+`GTxtFiles` was the last table not resolved (1/34).  Its entries are plain file names
+(`help0.txt`, `help1.txt`, ... `cflow5.txt`) that our rebuild did not contain at all: the
+text was absent from the rebuilt DGROUP dump and from the sources.  They were recovered
+from `audit/dgroup_2410.bin` at `0x82B4..0x8417` (the original stores them in 10- or
+11-byte slots) into
+
+```c
+char s_txtFileNames[34][11] = { "help0.txt", "help1.txt", ... "cflow5.txt" };
+```
+
+and `st_fix_far_tables()` points each `GTxtFiles[i].ofs` at its row.  Verified: both
+`help0.txt` and `cflow5.txt` now appear in the rebuilt DGROUP dump.
+
+### Comparing anonymous string pointers
+
+The container then reported `GTxtFiles` as different, because its entries point at
+strings that have **no symbol** in the original's symbol table, so no offset mapping
+exists.  `word_matches` now falls back to the semantic check: when both offsets reach
+the same NUL-terminated text, the pair matches.  `GTxtFiles` compares clean again.
+
+Both runtime checkpoints are now 11 differences, all CRT/start-up bookkeeping:
+
+```
+main entry   : 1,546 identical / 11 different
+post-init_cfg: 1,545 identical / 11 different
+```
+
+  build 64/64 clean; LINK ERRORS 0; grep_checks 50,827
+  compare_state 1,627/0/0; diff_dgroup 972/1,868

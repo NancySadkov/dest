@@ -1,6 +1,7 @@
 /* Global data recovered from the original image. */
 #ifndef ST_GLOBALS_H
 #define ST_GLOBALS_H
+extern char s_txtFileNames[34][11];
 extern uint32_t DriverEntry;
 extern uint32_t BDA_TickCount;
 extern undefined1 bda_midnight;

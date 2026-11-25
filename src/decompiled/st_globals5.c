@@ -1708,6 +1708,24 @@ char s_information[] = "Information";
 char s_new_owner[] = "New Owner";
 char s_get_rid_of_s_permanently_1c0b[] = "Get rid of %s permanently. Are you sure?";
 char s_ld_experience_obtained_l_a1d8[] = "%ld experience obtained. %ld experience given to each unit. %ld gold recovered.";
+/* GTxtFiles' file names, recovered from the original DGROUP at 0x82B4..0x8417
+   (the original stores them in 10- or 11-byte slots).  Uniform rows of 11 keep
+   the addressing simple; each row is one NUL-terminated name. */
+char s_txtFileNames[34][11] = {
+  "help0.txt", "help1.txt", "help2.txt",
+  "help3.txt", "help4.txt", "help5.txt",
+  "help6.txt", "help7.txt", "text1.txt",
+  "text2.txt", "text3.txt", "text4.txt",
+  "text5.txt", "text6.txt", "house1.txt",
+  "house2.txt", "house3.txt", "house4.txt",
+  "house5.txt", "hung1.txt", "hung2.txt",
+  "hung3.txt", "hung4.txt", "hung5.txt",
+  "incom1.txt", "incom2.txt", "incom3.txt",
+  "incom4.txt", "incom5.txt", "cflow1.txt",
+  "cflow2.txt", "cflow3.txt", "cflow4.txt",
+  "cflow5.txt",
+};
+
 far_t GTxtFiles[34] = { { 0x82B4, 0x2410 }, { 0x82BE, 0x2410 }, { 0x82C8, 0x2410 }, { 0x82D2, 0x2410 },
      { 0x82DC, 0x2410 }, { 0x82E6, 0x2410 }, { 0x82F0, 0x2410 }, { 0x82FA, 0x2410 }, { 0x8304, 0x2410 },
      { 0x830E, 0x2410 }, { 0x8318, 0x2410 }, { 0x8322, 0x2410 }, { 0x832C, 0x2410 }, { 0x8336, 0x2410 },

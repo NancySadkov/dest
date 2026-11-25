@@ -160,6 +160,12 @@ void st_fix_far_tables(void)
   fixFarTable(CureSpellPtrs, 4);
   fixFarTable(PersonWordPtrs, 2);
   fixFarTable(GTxtFiles, 34);
+  {
+    uint16_t gi;
+    for (gi = 0; gi < 34; gi++) {
+      GTxtFiles[gi].ofs = (uint16_t)&s_txtFileNames[gi];
+    }
+  }
   fixFarTable(StatsTabPtrs, 9);
   {
     uint16_t gi;

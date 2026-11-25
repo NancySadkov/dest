@@ -198,6 +198,14 @@ def word_matches(a, b, i):
     m = map_off(want)
     if m is not None and m == got:
         return True
+    # Anonymous strings have no symbol to map: accept the pair when both offsets reach
+    # the same NUL-terminated text.
+    if want < len(orig_img) and got < len(ours_img):
+        eo = orig_img.find(b"\x00", want)
+        eu = ours_img.find(b"\x00", got)
+        if eo > want and eu > got and (eo - want) == (eu - got):
+            if orig_img[want:eo] == ours_img[got:eu]:
+                return True
     return False
 
 
