@@ -7697,3 +7697,74 @@ is ~20 turns of work and cannot be accelerated by tooling.
 
   grep_checks 40,248 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### ovc15_usesLDIV_at_2: the two far chains are struct reads again (40,240 -> 40,190)
+
+The source comment says `4207:16a5` (the `60bc:0f5e` in my earlier notes was the wrong function), 1033
+bytes, 378 instructions.
+
+**Chain 1 - the sprite-stash pick.** One `les` plus a byte-add plus two word loads, once per level band:
+
+```
+0229  les bx, ptr es:[bx + 0x1d]      ; Agnts[agnt].gdata
+022E  add bx, ax                      ; ax = bVar14 * 0xc  (imul dx, dx=0xc at 0215)
+0231  mov ax, word ptr es:[bx + 0xd]  ; level >= 0xa : segment half
+0235  mov dx, word ptr es:[bx + 0xb]  ;                offset half
+0283  mov ax, word ptr es:[bx + 9]    ; 4 <= level < 0xa
+0287  mov dx, word ptr es:[bx + 7]
+02CA  mov ax, word ptr es:[bx + 5]    ; level < 4
+02CE  mov dx, word ptr es:[bx + 3]
+02E4  mov word ptr es:[bx + 0x15], dx ; -> Agnts[agnt].frames.seg
+02E9  mov word ptr es:[bx + 0x13], ax ; -> Agnts[agnt].frames.ofs
+```
+
+The byte offsets are 3 / 7 / 0xb plus `bVar14*0xc`, which is `gdata->sprs[bVar14*3 + band]` - `sprs` is
+six 4-byte far pointers starting at agntG_t offset 3. The export had
+
+```c
+uVar4  = *(uint32_t far *)&Agnts[agnt].gdata;
+iVar10 = (int)uVar4 + (uint)bVar14 * 0xc;
+uVar12 = *(uint16_t *)(iVar10 + 3);
+```
+
+i.e. the far pointer folded into a `uint32_t`, then truncated to `(int)` and dereferenced
+DS-relative. `AgntGs` lives in its own segment, so every read addressed the wrong memory. Note the
+`+ bVar14*0xc` arithmetic was *faithful* - the defect was only the dropped segment, which is why the
+read offsets in the listing were always right.
+
+**Chain 2 - the animation-variant test.**
+
+```
+033B  les bx, ptr es:[bx + 0x13]                          ; Agnts[agnt].frames
+0340  mov ax, es:[bx + 0x68] / or ax, es:[bx + 0x6a]      ; frames[26] null test
+0358  les bx, ptr es:[bx + 0x13]
+035D  mov ax, es:[bx + 0x58] / or ax, es:[bx + 0x5a]      ; frames[22] null test
+```
+
+so `frames` is a `far_t` array and the tests are `frames[26]` / `frames[22]` as null pairs. The export
+reused the same `uint32_t`/`(int)` shape, giving `*(int *)(iVar10 + 0x68)`.
+
+**Also fixed from the same listing:** `faction` was
+`*(undefined1 *)*(uint32_t far *)&Agnts[agnt].gdata`; the original is `0310 les bx, ptr es:[bx+0x1d]`
+then `mov al, byte ptr es:[bx]` - `gdata->ai` at offset 0.
+
+**Dead removed:** `uVar4`, `uVar12`, `uVar13`, `iVar10` were only the truncated temporaries, and with
+them went `uVar12 = (uint16_t)((ulong)Entities >> 0x10)`, which was assigned and never read.
+
+**Verification is the listing, not the gates.** The `es:[bx+N]` offsets now present in the rebuilt
+function are exactly
+
+```
+3, 5, 7, 9, 11          the five sprs byte offsets (3 bands x bVar14)
+88, 90, 104, 106        frames[22] = 0x58/0x5a and frames[26] = 0x68/0x6a
+```
+
+all through ES, with `les bx,dword ptr es:_Agnts[bx+29]` (gdata at 0x1d), `add bx,ax`, then
+`mov ax,es:[bx+13] / mov dx,es:[bx+11]` for the level-10 band - the original's
+`les bx,ptr es:[bx+0x1d] / add bx,ax / mov ax,es:[bx+0xd] / mov dx,es:[bx+0xb]`. Before the fix those
+offsets appeared with **no `es:` prefix at all**, i.e. DS-relative - the segment was not even involved,
+which is worse than the segment-0 `CONCAT22` class because it silently reads our own DGROUP.
+
+  grep_checks 40,240 -> 40,190; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

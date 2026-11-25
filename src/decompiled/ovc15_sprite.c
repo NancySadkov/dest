@@ -801,16 +801,13 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
   uint8_t *puVar1;
   uint *puVar2;
   byte gindexCopy;
-  uint32_t uVar4;
   uint16_t uVar5;
   entity_t *peVar6;
   uint randVal;
   uint16_t uVar8;
   entity_t *peVar9;
-  int iVar10;
+  far_t far *frameTab;
   int agnt;
-  uint16_t uVar12;
-  uint16_t uVar13;
   bool bVar14;
   long lVar15;
   
@@ -845,7 +842,6 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
     }
     ovr_attact_usesGMapFlags3();
     if (AgntFlag1 != false) {
-      uVar12 = (uint16_t)((ulong)Entities >> 0x10);
       peVar9 = (entity_t *)Entities;
       if (((GfxRndSeed - 2U <= ((peVar9 + entityIndex)->base).x) &&
           (((peVar9 + entityIndex)->base).x <= GfxRndSeed + 1U)) &&
@@ -860,46 +856,38 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
                  *(undefined1 *)((int)&peVar6[entityIndex].base.state + 1);
             Agnts[agnt].strengthMax = (char)peVar6[entityIndex].base.flags32;
             bVar14 = (*(uint *)((int)&peVar6[entityIndex].base.frames + 3) & 1) != 0;
+            /* The sprite-stash pick is a chained far read in the original:
+                 0229  les bx, ptr es:[bx + 0x1d]   ; Agnts[agnt].gdata
+                 022E  add bx, ax                   ; + bVar14 * 0xc
+                 0231  mov ax, word ptr es:[bx + 0xd]   ; sprs[k].seg
+                 0235  mov dx, word ptr es:[bx + 0xb]   ; sprs[k].ofs
+               with the byte offsets 3 / 7 / 0xb (and +0xc when bVar14 is set), i.e. the three
+               entries gdata->sprs[bVar14 * 3 + band] for the level bands <4, 4..9, >=10.  The
+               export copied `gdata` into a uint32_t, cast it to (int) and dereferenced DS-relative,
+               which drops the segment - fatal, because AgntGs has its own. */
             if (peVar6[entityIndex].base.level < 10) {
               if (peVar6[entityIndex].base.level < 4) {
-                uVar4 = *(uint32_t far *)&Agnts[agnt].gdata;
-                uVar13 = (uint16_t)((ulong)uVar4 >> 0x10);
-                iVar10 = (int)uVar4 + (uint)bVar14 * 0xc;
-                uVar12 = *(uint16_t *)(iVar10 + 3);
-                AGNT_WORD(&Agnts[agnt], frames, 2) = *(uint16_t *)(iVar10 + 5);
-                AGNT_WORD(&Agnts[agnt], frames, 0) = uVar12;
+                Agnts[agnt].frames =
+                     (far_t far *)Agnts[agnt].gdata->sprs[bVar14 * 3];
               }
               else {
-                uVar4 = *(uint32_t far *)&Agnts[agnt].gdata;
-                uVar13 = (uint16_t)((ulong)uVar4 >> 0x10);
-                iVar10 = (int)uVar4 + (uint)bVar14 * 0xc;
-                uVar12 = *(uint16_t *)(iVar10 + 7);
-                AGNT_WORD(&Agnts[agnt], frames, 2) = *(uint16_t *)(iVar10 + 9);
-                AGNT_WORD(&Agnts[agnt], frames, 0) = uVar12;
+                Agnts[agnt].frames =
+                     (far_t far *)Agnts[agnt].gdata->sprs[bVar14 * 3 + 1];
               }
             }
             else {
-              uVar4 = *(uint32_t far *)&Agnts[agnt].gdata;
-              uVar13 = (uint16_t)((ulong)uVar4 >> 0x10);
-              iVar10 = (int)uVar4 + (uint)bVar14 * 0xc;
-              uVar12 = *(uint16_t *)(iVar10 + 0xb);
-              AGNT_WORD(&Agnts[agnt], frames, 2) = *(uint16_t *)(iVar10 + 0xd);
-              AGNT_WORD(&Agnts[agnt], frames, 0) = uVar12;
+              Agnts[agnt].frames =
+                   (far_t far *)Agnts[agnt].gdata->sprs[bVar14 * 3 + 2];
             }
             Agnts[agnt].animFrame = 0xff;
-            Agnts[agnt].faction =
-                 *(undefined1 *)*(uint32_t far *)&Agnts[agnt].gdata;
-            uVar4 = *(uint32_t far *)&Agnts[agnt].frames;
-            uVar12 = (uint16_t)((ulong)uVar4 >> 0x10);
-            iVar10 = (int)uVar4;
-            if ((*(int *)(iVar10 + 0x68) == 0 && *(int *)(iVar10 + 0x6a) == 0) ||
-               (uVar4 = *(uint32_t far *)&Agnts[agnt].frames,
-               uVar12 = (uint16_t)((ulong)uVar4 >> 0x10), iVar10 = (int)uVar4,
-               *(int *)(iVar10 + 0x58) == 0 && *(int *)(iVar10 + 0x5a) == 0)) {
-              uVar4 = *(uint32_t far *)&Agnts[agnt].frames;
-              uVar12 = (uint16_t)((ulong)uVar4 >> 0x10);
-              iVar10 = (int)uVar4;
-              if (*(int *)(iVar10 + 0x68) == 0 && *(int *)(iVar10 + 0x6a) == 0) {
+            /* 0310  les bx, ptr es:[bx + 0x1d]  ; gdata, then `mov al, es:[bx]` = agntG_t.ai */
+            Agnts[agnt].faction = Agnts[agnt].gdata->ai;
+            /* 033B  les bx, ptr es:[bx + 0x13]  ; Agnts[agnt].frames, then es:[bx + 0x68]/[0x6a]
+               and es:[bx + 0x58]/[0x5a] - frames[26] and frames[22] tested as null far_t pairs. */
+            frameTab = Agnts[agnt].frames;
+            if ((frameTab[26].ofs == 0 && frameTab[26].seg == 0) ||
+               (frameTab[22].ofs == 0 && frameTab[22].seg == 0)) {
+              if (frameTab[26].ofs == 0 && frameTab[26].seg == 0) {
                 Agnts[agnt].animVariant = 0;
               }
               else {
