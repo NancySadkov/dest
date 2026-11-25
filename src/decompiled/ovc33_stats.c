@@ -1590,7 +1590,6 @@ char * __cdecl16far stats_readyStatusText(byte agntIndex,char *text)
   int iVar5;
   uint16_t uVar6;
   byte in_stack_00000004;
-  undefined1 in_stack_00000007;
   
   uVar1 = *(uint32_t far *)&Agnts[in_stack_00000004].entity;
   if ((*(byte *)((int)uVar1 + 0x33) & 1) == 0) {

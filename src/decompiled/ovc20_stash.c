@@ -848,7 +848,6 @@ void __cdecl16far init_special_graphics(char *gfxBlock)
 void __cdecl16far ovc20_compute1(char *gfxBlock,uint16_t arg2)
 
 {
-  uint16_t in_stack_00000006;
   
   (gfxBlock + 0x13)[0] = '\0';
   (gfxBlock + 0x13)[1] = '\0';

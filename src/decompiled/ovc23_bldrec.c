@@ -45,7 +45,6 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   int iVar25;
   uint16_t unaff_DI;
   uint16_t uVar26;
-  uint16_t in_stack_0000000a;
   char acStackY_13e [36];
   uint16_t auStackY_11a [66];
   uint16_t auStackY_96 [23];

@@ -424,7 +424,6 @@ void __cdecl16far ovc24_removeOtherEntities(uint8_t *reportedOut)
   int iVar3;
   uint ent;
   uint16_t uVar5;
-  uint16_t in_stack_00000006;
   
   if (!GameRunning) {
     for (ent = 0; ent < EntityCount; ent = ent + 1) {

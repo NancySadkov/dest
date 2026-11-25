@@ -111,7 +111,6 @@ void __cdecl16far ovc41_compute4(agnt_t far *agnt,byte flag,byte pad,agnt_t far 
   int iVar4;
   uint16_t unaff_BP;
   uint16_t in_stack_00000000;
-  uint16_t in_stack_00000002;
   long b;
   uint16_t in_stack_0000000c;
   undefined1 in_stack_0000fffc;
@@ -189,7 +188,6 @@ void __cdecl16far ovc41_advanceAnimFrame(agnt_t far *agnt,uint16_t arg2)
 
 {
   uint8_t *puVar1;
-  uint16_t in_stack_00000006;
   
   puVar1 = &(((entity_t *)agnt->entity)->base).animFrame;
   *puVar1 = *puVar1 + 0x1;
@@ -2946,7 +2944,6 @@ int __cdecl16far ovc41_growthForLevel(agnt_t far *agnt,uint16_t arg2)
 
 {
   int iVar1;
-  uint16_t in_stack_00000006;
   far_t dst;
   uint8_t growthMap;
   byte level;

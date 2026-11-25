@@ -192,7 +192,6 @@ uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *enti
   uint16_t count;
   uint16_t unaff_DI;
   uint slotMin;
-  uint16_t in_stack_0000000a;
   uint8_t foundEntities;
   uint8_t menuItems;
   int aiStack_2c [19];
@@ -4298,7 +4297,6 @@ uint __cdecl16far ovc45_usesGfxRndSeed2(int *x)
   uint in_AX;
   undefined1 extraout_AH;
   uint uVar2;
-  uint16_t in_stack_00000006;
   byte bStack_4;
   byte bStack_3;
   

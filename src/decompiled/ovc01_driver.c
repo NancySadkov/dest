@@ -310,7 +310,6 @@ uint8_t __cdecl16far vgaSetPalette8bit(uint8_t *pal,uint16_t arg2)
 {
   uint8_t *puVar1;
   int iVar2;
-  uint16_t in_stack_00000006;
   
   out(0x3c8,0);
   iVar2 = 0x100;
@@ -1511,7 +1510,6 @@ void __cdecl16far driver_fillSpan(int x1,int x2,byte y,uint8_t colour,int *rect,
   int iVar2;
   int iVar3;
   uint8_t *puVar4;
-  uint16_t in_stack_0000000e;
   
   iVar3 = x2;
   if (x2 < x1) {

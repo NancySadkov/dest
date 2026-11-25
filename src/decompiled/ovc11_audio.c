@@ -594,7 +594,6 @@ int __cdecl16far audio_panFromX(agnt_t far *agnt,uint16_t arg2)
 
 {
   uint uVar1;
-  uint16_t in_stack_00000006;
   
   uVar1 = (uint)(((long)(int)agnt->x * 0x7f & 0xffffU) / 0xd2);
   if (0x7f < uVar1) {

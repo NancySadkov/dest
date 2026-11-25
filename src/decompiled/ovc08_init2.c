@@ -15,7 +15,6 @@ void __cdecl16far miceRestoreArea(brect_t *br,uint16_t arg2)
   int dst_x;
   int dst_y;
   uint16_t pbr;
-  uint16_t in_stack_00000006;
   
   if ((((CFG_Mice != 0) && (br->seg == 0xa000)) &&
       (MiceNeedsUpdate = 1,
@@ -52,7 +51,6 @@ void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br,uint16_t arg4)
   char *pcVar2;
   uint16_t pbr;
   uint16_t j;
-  uint16_t in_stack_0000000a;
   uint16_t src;
   uint16_t h;
   uint16_t w;

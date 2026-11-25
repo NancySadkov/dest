@@ -390,7 +390,6 @@ agnt_usesAgntCount2(agnt_t far *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *dis
 void __cdecl16far agnt_usesAnimFrame(agnt_t far *agnt,...)
 
 {
-  uint16_t in_stack_00000006;
   
   agnt->animFrame = 0xff;
   agnt->target = 0xff;
@@ -568,7 +567,6 @@ byte __cdecl16far agnt_compute8(agnt_t far *agnt,uint16_t arg2)
 
 {
   byte bVar1;
-  uint16_t in_stack_00000006;
   
   bVar1 = (byte)agnt[1].y % 6;
   if (3 < bVar1) {
@@ -587,7 +585,6 @@ byte __cdecl16far agnt_compute9(agnt_t far *agnt,uint16_t arg2)
 
 {
   byte bVar1;
-  uint16_t in_stack_00000006;
   
   bVar1 = ((entity_t *)agnt->entity)->dir % 6;
   if (3 < bVar1) {
@@ -606,7 +603,6 @@ byte __cdecl16far agnt_compute10(agnt_t far *agnt,uint16_t arg2)
 
 {
   byte bVar1;
-  uint16_t in_stack_00000006;
   
   bVar1 = (byte)(((ulong)(byte)agnt[1].y / 6) % 6);
   if (4 < bVar1) {
@@ -625,7 +621,6 @@ byte __cdecl16far agnt_compute11(agnt_t far *agnt,uint16_t arg2)
 
 {
   byte bVar1;
-  uint16_t in_stack_00000006;
   
   bVar1 = (byte)(((ulong)((entity_t *)agnt->entity)->dir / 6) % 6);
   if (4 < bVar1) {
@@ -644,7 +639,6 @@ undefined1 __cdecl16far agnt_usesAnimFrame2(agnt_t far *agnt,uint16_t arg2)
 
 {
   undefined1 uVar1;
-  uint16_t in_stack_00000006;
   
   if (agnt->animFrame == 0xff) {
     if ((char)agnt->health < '\x02') {
@@ -706,7 +700,6 @@ void __cdecl16far agnt_usesStExit(agnt_t far *agnt,anm_t *anim,stg_tmp_t *sprite
   uint uVar5;
   uint uVar6;
   int *piVar7;
-  uint16_t in_stack_0000000e;
   uint uStack_10;
   
   iVar3 = (uint)agnt->target * 0x34;
@@ -875,7 +868,6 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
 void __cdecl16far agnt_compute13(agnt_t far *agnt,uint16_t arg2)
 
 {
-  uint16_t in_stack_00000006;
   
   if ((char)agnt->state == '\0') {
     if ((agnt->flags & 0x100) == 0) {

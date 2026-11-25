@@ -63,7 +63,6 @@ int __cdecl16far constr_usesSmoothPrev(uint16_t dx,int dy,int *cell,uint16_t arg
 
 {
   int iVar1;
-  uint16_t in_stack_0000000a;
   
   iVar1 = constr_getCellAtOffset(dx,dy);
   *cell = iVar1;
@@ -183,7 +182,6 @@ void __cdecl16far blitRect(brect_t *br,uint16_t arg2)
 
 {
   uint16_t pbr;
-  uint16_t in_stack_00000006;
   
   ovr_blitRaw(br->x,br->y,br->w,br->h,br->seg,0xa000);
   return;

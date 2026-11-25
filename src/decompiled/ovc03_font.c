@@ -374,7 +374,6 @@ int __cdecl16far font_textWidth(char *text,char *font,uint16_t arg3,uint16_t arg
 {
   int iVar1;
   int iVar2;
-  uint16_t in_stack_0000000a;
   
   if (text == (char *)0x0 && (char *)font == (char *)0x0) {
     iVar1 = 0;
@@ -512,26 +511,25 @@ void __cdecl16far drawTextAt(char *txt,uint16_t dst,uint16_t arg3)
   far_t gfx;
   uint16_t ndrawn;
   uint16_t txtsz;
-  uint16_t in_stack_00000008;
   far_t dst_00;
   
   if (GameRunning) {
-    if (in_stack_00000008 != 0xa000) {
-      ovr_blitRaw(0x1d,0x9c,0xcf,199,0xa000,in_stack_00000008);
+    if (dst != 0xa000) {
+      ovr_blitRaw(0x1d,0x9c,0xcf,199,0xa000,dst);
     }
   }
   else {
     TextBlitFlag = 1;
-    TextBlitDstSeg = in_stack_00000008;
+    TextBlitDstSeg = dst;
     (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
     (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
-    dst_00.seg = in_stack_00000008;
+    dst_00.seg = dst;
     dst_00.ofs = 0xc31d;
     gfx.seg = FontHandle.seg;
     gfx.ofs = FontHandle.ofs;
     ovr_blitLoadRleGfx(gfx,dst_00,0);
     for (TextBlitY = 0x9c; TextBlitX = 0x1d, TextBlitY + 9 < 200; TextBlitY = TextBlitY + 0xb) {
-      ndrawn = blitText((char far *)CONCAT22(in_stack_00000008,txt),
+      ndrawn = blitText((char far *)CONCAT22(dst,txt),
                       (byte far *)CONCAT22(Font03.seg,Font03.ofs),0xcf,0xed);
       txtsz = strlen((char *)CONCAT22(dst,txt));
       if (txtsz <= ndrawn) {
@@ -566,9 +564,8 @@ void __cdecl16far say(char *msg,uint16_t arg2)
 
 {
   uint16_t unaff_BP;
-  char *in_stack_00000006;
   
-  drawAnimTextAt((char *)CONCAT22(0xa000,in_stack_00000006),unaff_BP);
+  drawAnimTextAt((char *)CONCAT22(0xa000,msg),unaff_BP);
   return;
 }
 
@@ -594,12 +591,11 @@ void __cdecl16far uiNotify(char *msg,uint16_t dst,uint16_t arg3)
 
 {
   uint8_t mice_no_update;
-  uint16_t in_stack_00000008;
   
   inputUpdate((ulong)MessageDelay << 1);
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
-  BlitRects[4].seg = in_stack_00000008;
+  BlitRects[4].seg = dst;
   mice_no_update = MiceNeedsUpdate == '\0';
   if ((bool)mice_no_update) {
     ovr_miceRestoreArea((brect_t *)(BlitRects + 4),0);
@@ -608,7 +604,7 @@ void __cdecl16far uiNotify(char *msg,uint16_t dst,uint16_t arg3)
   if ((bool)mice_no_update) {
     ovr_miceBlitRect((brect_t *)(BlitRects + 4),0);
   }
-  if (in_stack_00000008 != 0xa000) {
+  if (dst != 0xa000) {
     ovr_blitRect((brect_t *)(BlitRects + 4),0);
     ovr_miceUpdate();
   }

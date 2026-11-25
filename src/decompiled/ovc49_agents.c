@@ -235,7 +235,6 @@ int __cdecl16far ovc49_usesStExit(agnt_t far *agnt,uint16_t arg2)
   byte bVar6;
   uint uVar5;
   int *piVar7;
-  uint16_t in_stack_00000006;
   int iStack_6;
   int iStack_4;
   
@@ -815,7 +814,6 @@ void * __cdecl16far ovc49_fillGridCells(byte count,agnt_t far *agnt,uint16_t arg
   void *pvVar5;
   int *piVar6;
   uint16_t unaff_DI;
-  uint16_t in_stack_00000008;
   int colEnd;
   
   row = *(uint16_t *)((int)&agnt->frames + 2);
@@ -947,7 +945,6 @@ uint __cdecl16far ovc49_body1(agnt_t far *agnt,uint16_t arg2)
   brect_t *pbVar29;
   byte in_AF;
   long lVar30;
-  uint16_t in_stack_00000006;
   char *in_stack_00000008;
   char in_stack_00000010;
   uint16_t auStackY_2f2 [20];

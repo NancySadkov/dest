@@ -215,7 +215,6 @@ void __cdecl16far ovc07_usesFillRect(int x1,int y1,int x2,int y2,uint16_t colour
 {
   int iVar1;
   int iVar2;
-  uint16_t in_stack_00000010;
   
   iVar2 = y2;
   iVar1 = x2;

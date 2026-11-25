@@ -121,7 +121,6 @@ void __cdecl16far manage_rollStats(char_sheet_t *sheet,uint16_t arg2)
 {
   char cVar1;
   uint16_t uVar2;
-  uint16_t in_stack_00000006;
   byte bStack_3;
   
   for (bStack_3 = 0; bStack_3 < 6; bStack_3 = bStack_3 + 1) {
@@ -265,7 +264,6 @@ void * __cdecl16far manage_playerTitle(char_sheet_t *sheet,...)
 
 {
   char *pcVar1;
-  uint16_t in_stack_00000006;
   far_t dst;
   uint8_t titlesMap;
   
@@ -3275,7 +3273,6 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
   uint16_t uVar18;
   uint16_t unaff_ES;
   bool bVar19;
-  uint16_t in_stack_0000000a;
   far_t entries;
   char acStack_1b6 [120];
   char acStack_13e [36];

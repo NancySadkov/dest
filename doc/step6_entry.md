@@ -6440,3 +6440,46 @@ but does not read the IVT.
 
   grep_checks 41,113 -> 41,090; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### The phantom in_stack_ class splits: 40 dead declarations and 97 real uninitialised reads
+
+The earlier count treated the declaration line as a use, so a local that is declared and never
+referenced looked identical to one that is read.  Splitting on that (`tmp/split_phantom.py`) changes
+the picture:
+
+```
+dead declarations (declared, never referenced)   40   -> deleted
+real uninitialised reads                        100   -> 97 after three fixes
+```
+
+All 40 dead declarations are gone - pure leftovers with no behaviour - and three real ones are fixed
+from their use plus the original's own slots:
+
+```
+drawTextAt  302d:08ef  mov di,[bp+0xa]; cmp di,0xa000   txt is far at bp+6..9, so bp+0xa = dst
+uiNotify    302d:0a41  bp slots 06,08,0a                msg near at 06, dst at 08
+say         302d:0a1b  bp slots 06,08                   msg at 06
+```
+
+so `in_stack_00000008` -> `dst` in drawTextAt and uiNotify, `in_stack_00000006` -> `msg` in say.
+`drawAnimTextAt` is deliberately left: its single use passes the value as drawTextAt's *txt* while the
+declared `text` is passed as *dst*, so the two names appear swapped and it needs its own analysis.
+
+### Why this class cannot be scripted with one rule
+
+Tested whether Ghidra's `in_stack_XXXX` is simply `[bp + XXXX + 2]` (it names slots as if the return
+address were 2 bytes, while these are far functions with 4).  `tmp/test_shift2.py`:
+
+```
++2 shift lands on a real bp slot : 70 functions
+does not                         : 52 functions
+```
+
+so no constant rule exists - and the failures are informative.  `vgaSetPalette8bit` reads `[bp+6]`
+where the shift predicts `[bp+8]`, `driver_fillSpan` reads `[bp+0x0e]` where it predicts `[bp+0x10]`,
+`font_textWidth` reads `[bp+0x0a]` where it predicts `[bp+0x0c]` - i.e. those three are unshifted.
+Each function therefore needs its own prologue read, which is what the earlier turns concluded and
+this measurement now quantifies.
+
+  grep_checks 41,090 -> 41,047; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
