@@ -4774,3 +4774,27 @@ amount of slot naming will move it.
 
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 972/1,868; compare_runtime 1,546/11 main entry, 1,545/11 post-init_cfg
+
+### CORRECTION: two figures in the earlier section-5 split were wrong
+
+The split table recorded earlier in this document lists `in_stack_ 1392` and
+`bStack_ 878`.  Recounted with the gate's own patterns directly from git rather than from
+the splitter's output, the values at commit `b1520380` are **1,590** and **1,062**.  The
+totals in that table reconciled with the gate, so only those two rows were misreported -
+they must have been taken from a run whose columns were shifted.
+
+The same recount is the useful evidence for this turn's work, because it isolates what the
+rewrites actually did (b1520380 -> 7da6b053):
+
+```
+in_stack_[_0-9A-Za-z+]   1590 -> 1590   (+0)     <- none introduced
+bStack_                  1062 -> 1004   (-58)
+[iusbc]Var[_0-9]        30275 -> 29436  (-839)
+```
+
+so the eleven clean-function rewrites removed 839 `Var` matches and 58 `bStack_-family`
+matches, and touched no `in_stack_` at all.
+
+  grep_checks 48,982 -> 47,719 this turn (-1,263); build 65/65 clean; LINK.LOG 65 bytes /
+  0 problems; compare_state 1,627/0/0; diff_dgroup 972/1,868;
+  compare_runtime 1,546/11 main entry, 1,545/11 post-init_cfg
