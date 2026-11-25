@@ -25,7 +25,7 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
   far_t dst;
   uint8_t yOffset;
   int iStack_10;
-  int iStack_e;
+  int yStep;
   int iStack_c;
   int iStack_a;
   int iStack_8;
@@ -63,7 +63,7 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
       uVar3 = (int)uVar2 >> 0xf;
       iStack_c = (uVar2 ^ uVar3) - uVar3;
     }
-    iStack_e = ovr_ovc07_signum(y2 - y1);
+    yStep = ovr_ovc07_signum(y2 - y1);
     iStack_10 = x2 - x1 >> 1;
     bStack_3 = 0;
     for (iStack_8 = x1; iStack_8 <= x2; iStack_8 = iStack_8 + 1) {
@@ -83,7 +83,7 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
       y1 = y1 + iStack_a;
       iStack_10 = iStack_10 + iStack_c;
       if (x2 - x1 <= iStack_10) {
-        y1 = y1 + iStack_e;
+        y1 = y1 + yStep;
         iStack_10 = iStack_10 - (x2 - x1);
       }
     }
@@ -605,10 +605,10 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
   int targetOfs;
   uint16_t uStack_8;
   agnt_t *paStack_6;
-  uint16_t uStack_4;
+  uint16_t agntSeg;
   
   paStack_6 = (agnt_t *)&Agnts[agntIndex].x;
-  uStack_4 = SEG_OF(Agnts);
+  agntSeg = SEG_OF(Agnts);
   bVar1 = (byte)((uint)paStack_6 >> 8);
   if ((((agntG_t *)paStack_6->gdata)->flags & 0x803) == 0) {
     return (uint)bVar1 << 8;
@@ -627,7 +627,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
       return 0;
     }
     uStack_8 = uVar12;
-    uVar3 = ovc27_usesRandBelow5((agnt_t *)CONCAT22(uStack_4,paStack_6));
+    uVar3 = ovc27_usesRandBelow5((agnt_t *)CONCAT22(agntSeg,paStack_6));
     variant = (byte)uVar3;
     uVar4 = uVar3 & 0xff;
     if (uVar4 == 0) {

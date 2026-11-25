@@ -65,7 +65,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   undefined1 uVar33;
   undefined1 uVar34;
   uint uStack_10;
-  byte bStack_e;
+  byte bldType;
   uint uStack_c;
   uint16_t uStack_a;
   uint16_t uStack_8;
@@ -506,8 +506,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
             *piVar2 = *piVar2 - (uint)(uVar18 < uVar20);
           }
         }
-        bStack_e = (byte)uVar15;
-        ovr_createConstructionRecordFar(bStack_e,0,0,0,0,0,0,0,0);
+        bldType = (byte)uVar15;
+        ovr_createConstructionRecordFar(bldType,0,0,0,0,0,0,0,0);
       }
     }
     sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
@@ -3188,7 +3188,7 @@ uint16_t __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int re
   uint16_t unaff_DI;
   undefined1 uStack_8;
   uint8_t loopIndex;
-  undefined1 uStack_5;
+  undefined1 counter2;
   undefined1 counter;
   
   uVar3 = (uint)amount;
@@ -3200,7 +3200,7 @@ uint16_t __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int re
         loopIndex = loopIndex + 0x1;
       }
       if ((GRecords[uVar5].kind & 8) != 0) {
-        uStack_5 = uStack_5 + 1;
+        counter2 = counter2 + 1;
       }
       if ((GRecords[uVar5].kind & 0x10) != 0) {
         counter = counter + 1;
@@ -3212,7 +3212,7 @@ uint16_t __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int re
     iVar4 = recordIndex * 0x12;
     *(byte *)(iVar4 + 0xd) = *(byte *)(iVar4 + 0xd) | 0x10;
   }
-  else if (uStack_5 < *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x9b)) {
+  else if (counter2 < *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x9b)) {
     uStack_8 = (byte)((uVar3 << 3) / 100);
     iVar4 = recordIndex * 0x12;
     *(byte *)(iVar4 + 0xd) = *(byte *)(iVar4 + 0xd) | 8;

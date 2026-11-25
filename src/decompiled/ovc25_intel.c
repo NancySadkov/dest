@@ -971,10 +971,10 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
   uint16_t curSeg = _SS;
   uint8_t text;
   byte partyClass;
-  int iStack_4;
+  int classCount;
   
-  iStack_4 = ovc25_compute1((GLeaderSheets[partyIndex])->classStr);
-  if ((((((iStack_4 < (int)(uint)PlayerCount) &&
+  classCount = ovc25_compute1((GLeaderSheets[partyIndex])->classStr);
+  if ((((((classCount < (int)(uint)PlayerCount) &&
          (*(int *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5e) == 0)) &&
         (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x40) != '\0')) &&
        ((((GLeaderSheets[partyIndex])->flags5d & 1) == 0 &&
