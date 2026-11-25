@@ -358,7 +358,7 @@ void __cdecl16far blit_compute1(uint16_t dstSeg,int16_t y,int16_t x,far_t src,ui
 void __cdecl16far blit_usesStExit(far_t gfx,int x1,int y1,byte shade1,int x2,int y2,byte shade2,int *rectOfs,uint16_t arg9,uint16_t arg10,uint16_t arg11,uint16_t arg12,uint16_t arg13,uint16_t arg14,uint16_t arg15);
 void __cdecl16far gfxInitRand(void);
 void __cdecl16far blit_usesBlitGfxN2(far_t gfx,far_t gfx_00,int x1,int y1,byte shade1,int x2,int y2,byte shade2,brect_t *rect,uint16_t type,byte highlightLevel,uint16_t arg12,uint16_t arg13,uint16_t arg14,uint16_t arg15,uint16_t arg16,uint16_t arg17);
-void __cdecl16far ovc07_swapWords(uint16_t *wordA,uint16_t *wordB);
+void __cdecl16far ovc07_swapWords(uint16_t far *wordA,uint16_t far *wordB);
 uint16_t __cdecl16far ovc07_signum(int value);
 void __cdecl16far ovc07_usesBiosReadKey(int x1,int y1,int x2,int y2,int x3,int y3,uint16_t rectSeg,brect_t *rect,uint16_t arg9,uint16_t arg10,uint16_t arg11,uint16_t arg12,uint16_t arg13,uint16_t arg14);
 void __cdecl16far ovc07_usesFillRect(int x1,int y1,int x2,int y2,uint16_t colour,brect_t *rect,uint16_t arg7);

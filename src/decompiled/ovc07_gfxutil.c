@@ -11,16 +11,17 @@
 
 /* Swaps the two 16-bit values it is given. */
 
-void __cdecl16far ovc07_swapWords(uint16_t *wordA,uint16_t *wordB)
+void __cdecl16far ovc07_swapWords(uint16_t far *wordA,uint16_t far *wordB)
 
 {
-  uint16_t uVar1;
-  uint16_t *in_stack_00000004;
-  
-  uVar1 = *(uint16_t *)CONCAT22((uint16_t *)wordA,in_stack_00000004);
-  *(uint16_t *)CONCAT22((uint16_t *)wordA,in_stack_00000004) =
-       *(uint16_t *)CONCAT22((uint16_t *)wordB,(*(uint16_t *)((uint8_t *)&(wordA) + 2)));
-  *(uint16_t *)CONCAT22((uint16_t *)wordB,(*(uint16_t *)((uint8_t *)&(wordA) + 2))) = uVar1;
+  /* Re-derived from 32c9:0000 (38 bytes): tmp = *wordA; *wordA = *wordB; *wordB = tmp.  Both
+     parameters are loaded with `les`, so they are `uint16_t far *`, not the near pointers the export
+     declared; its CONCAT22 rebuilds could not address the same object. */
+  uint16_t tmp;
+
+  tmp = *wordA;
+  *wordA = *wordB;
+  *wordB = tmp;
   return;
 }
 
