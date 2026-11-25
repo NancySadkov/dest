@@ -21,6 +21,8 @@ SYMS = "audit/symbols.tsv"
 
 verbose = "--verbose" in sys.argv
 why = "--why" in sys.argv
+list_path = (sys.argv[sys.argv.index("--list") + 1]
+             if "--list" in sys.argv else None)
 
 # ---- original DGROUP symbols -------------------------------------------------
 orig = []          # (address, name)
@@ -157,6 +159,11 @@ if why:
             else:
                 cls = "no counterpart at all"
         buckets.setdefault(cls, []).append((off, name))
+    if list_path:
+        with io.open(list_path, "w", encoding="utf-8", newline="\n") as fh:
+            for off, name, reason in unmatched:
+                fh.write("%04x\t%s\t%s\n" % (off, name, reason))
+        print("unmatched list written to %s" % list_path)
     print("unmatched: %d" % len(unmatched))
     for cls, items in sorted(buckets.items(), key=lambda kv: -len(kv[1])):
         print("  %-34s %d" % (cls, len(items)))

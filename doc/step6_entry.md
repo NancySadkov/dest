@@ -3889,3 +3889,35 @@ Examples from each bucket:
 
   build 64/64 clean; LINK ERRORS 0; grep_checks 50,768
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### String-label renames: the worklist exists, blind renaming does not work
+
+`diff_dgroup.py --list PATH` now writes the unmatched labels (`off`, `name`, `reason`).
+Pairing those labels with our symbols by string content (the `GTxtFiles` method) gives:
+
+```
+string labels with known text         789
+of those, a rebuilt symbol holds it   496
+renames proposed                      489
+```
+
+but only **12** survive the three practical constraints (target name <= 31 characters so
+TLINK does not truncate it, name is a valid C identifier, and the pairing is
+unambiguous), and **all 12 collide with identifiers we already use**: our `s_mage` is a
+different variable from the string the original calls `s_mage`, and renaming
+`s_mage_2410_01d5` to `s_mage` is rejected by the compiler as a duplicate initialiser.
+References also live outside the data modules (e.g. `crtl.c`), so a rename must touch
+every file.
+
+The experiment was reverted; the tree is back to build 64/64 and LINK ERRORS 0.
+
+Conclusion: closing `diff_dgroup`'s string gap is not a bulk rename.  It needs, per
+symbol, (a) a collision check against every existing identifier, (b) updates in every
+referencing module, and (c) a decision where two different strings share one original
+name (`s_mage` appears twice).  A safer route is to make the *comparator* aware of
+content: match an original label to a rebuilt symbol when the rebuilt string at that
+symbol equals the original's text for that offset, which needs no source churn and
+still reports genuinely missing strings.
+
+  build 64/64 clean; LINK ERRORS 0; grep_checks 50,768
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
