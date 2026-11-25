@@ -5656,3 +5656,52 @@ compilation until at least half 2 exists.
 
   grep_checks 42,615; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### Measured: none of the state these routines read is observable at the checkpoints
+
+`scripts/probe_fields.py` answers the question the checkpoints cannot: for each table that
+`ovc15_textError` and `ovc23_usesAlignUp43` consume, is it visible in a DGROUP dump at all?
+Reading the two `DGR.BIN` dumps by symbol (original offsets from `audit/dgroup_data.csv`, rebuilt
+from `REBUILT.MAP`), at the main-entry checkpoint:
+
+```
+field              orig   ours   state at this checkpoint
+AgntGs             -      -      not in DGROUP  (original)
+Agnts              -      -      not in DGROUP  (original)
+GLeaderSheets      -      077c   not in DGROUP  (original)
+BuildingTypes      -      -      not in DGROUP  (original)
+GUnitGrid          8a0d   8788   unpopulated: pointer slot 0000:0000 (both)
+GUnits             8995   872c   unpopulated: pointer slot 0000:0000 (both)
+GMapFlags          8a09   8784   unpopulated: pointer slot 0000:0000 (both)
+GMapCells          8a05   8780   unpopulated: pointer slot 0000:0000 (both)
+EntityCount        9097   8bdd   identical
+GUnitCount         8999   8730   identical
+GRecordCount       91df   8c46   identical
+PlayerCount        91e6   8c4b   identical
+GLeaderCount       90e6   8c1f   identical
+
+not in DGROUP 4 | unpopulated 4 | populated 5
+```
+
+Three things follow, and they change the shape of the instrument:
+
+* **Four of the eight tables are not in DGROUP at all.**  `AgntGs`, `Agnts`, `BuildingTypes` and
+  (in the original) `GLeaderSheets` live in other segments, so **no DGROUP dump can ever see
+  them**, no matter when it is taken.  In particular the leader-sheet ability bytes
+  `+0x29..+0x2c` that `ovc15_textError` scores, and `BuildingTypes[..].byte_0x11e` that
+  `ovc23_usesAlignUp43` tests, are outside DS.
+* **The other four are far-pointer slots, and all four are `0000:0000` here.**  `GMapCells`,
+  `GMapFlags`, `GUnitGrid` and `GUnits` are reached as `les bx, ptr es:[0x8a0d]`, so the DGROUP
+  word is a pointer, not the table; at this checkpoint neither image has populated it.  A dump
+  taken earlier than initialisation therefore shows nothing even for the ones that *are* in DS.
+  (An earlier version of this script compared those offsets as if they held the table and reported
+  thousands of "differences" - that was reading unpopulated BSS, not data.  Fixed.)
+* **The five scalars are identical**, which is what `compare_state` already says.
+
+So the instrument needs three things, in order: a checkpoint after the tables are built; the
+pointer targets resolved out of the dump (since the table is not at the slot); and segments beyond
+DS captured for the four that never appear in DGROUP.  The existing stub writes only `DS:0..#FFFF`,
+which is why none of this was visible.
+
+  grep_checks 42,505; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
