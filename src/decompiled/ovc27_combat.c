@@ -544,7 +544,7 @@ uint __cdecl16far ovc27_usesRandBelow5(agnt_t far *agnt)
     bStack_3 = 0;
     for (bStack_4 = 0; bStack_4 < 0xf; bStack_4 = bStack_4 + 1) {
       uVar2 = ovc27_usesRandBelow3
-                        (agnt,CONCAT22(0x222b,(uint)bStack_4 * 0x21),(uint)((agnt_t far *)agnt)->target)
+                        (agnt,CONCAT22(0x90,(uint)bStack_4 * 0x21),(uint)((agnt_t far *)agnt)->target)
       ;
       if ((char)uVar2 != '\0') {
         (&indexMap)[bStack_3] = bStack_4 + 1;

@@ -6918,3 +6918,33 @@ parameters, not a sweep.  It is recorded here as the next class rather than star
 
   grep_checks 40,736 -> 40,734; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### The hardcoded-segment class, first site: `0x222b` was not a segment at all
+
+Taking `ovc27_usesRandBelow5`'s `CONCAT22(0x222b,(uint)bStack_4 * 0x21)` and reading both ends of the
+call settled it:
+
+* the caller (`5ded:0960`) pushes the high word as a **literal `0x90`**:
+  `mov dx,0x21 / imul dx / add ax,0 / push 0x90 / push ax / push [bp+8] / push [bp+6] / push cs / call`
+  - i.e. `f(agnt_far, 0x0090:row*0x21, target)`;
+* the callee (`5ded:052d`, `ovc27_usesRandBelow3`) dereferences that argument **21 times** with
+  `les bx, ptr [bp+0xa]`, so the parameter is a far pointer, not the `uint32_t` the tree declares;
+* `0x222b` is not a segment anywhere in the image - not DGROUP (`0x2410`), not Agnts (`0x1726`), not
+  AgntGs (`0x195d`), and not in `audit/overlay_blocks.csv` - so the export's literal is fabricated.
+
+So the literal is corrected to `0x90`, matching the binary.  `0x90` is a load-time data segment in the
+same family as the `0x60` used for `BuildingTypes` and `0x70` for `GLeaderSheets`; what *lives* there
+(a 0x21-byte record table) is still unidentified, so this is a literal correction, not yet a symbol.
+
+Verified by listing the function alone: 95 instructions against 66, and the same three calls
+(`_fmemset`, `_ovc27_usesRandBelow3`, `_ovr_randBelow`).
+
+**Left undone, and why:** `ovc27_usesRandBelow3`'s second parameter should become a far pointer type,
+since its body is `les` throughout.  That changes a prototype with callers in both `usesRandBelow5`
+and `spellNotice`, and `spellNotice`'s own call could not be located in its disassembly - the export
+claims `ovc27_usesRandBelow3(...,0x222b0108,...)` but no `call` to `5ded:052d` appears in that
+function's listing.  Until that is explained, changing the prototype would be acting on text that may
+itself be wrong.
+
+  grep_checks 40,734 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
