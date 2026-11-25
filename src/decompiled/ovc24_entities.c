@@ -506,42 +506,38 @@ L_OVC24_5943_0d5a_0E37:
 uint16_t __cdecl16far ovc24_unitAtLeader(byte leaderIndex)
 
 {
-  int iVar1;
-  byte bVar2;
-  int iVar3;
-  unit_t *puVar4;
-  short sVar5;
-  uint16_t uVar6;
-  
-  iVar3 = (GLeaderSheets[leaderIndex])->x;
-  iVar1 = (GLeaderSheets[leaderIndex])->y;
-  bVar2 = ovr_manage_findFirstLeader();
-  uVar6 = (uint16_t)((ulong)GUnitGrid >> 0x10);
-  if (leaderIndex == bVar2) {
-    sVar5 = ((short (*) [148] [60])GUnitGrid)[-1][iVar3 + 0x92][iVar1];
+  /* Re-derived: 1 when the leader's own unit stands on the leader's cell with unitType equal
+     to the leader index, the building flag word at 0x121 has bit 4 set, the leader sheet's
+     +0x3f byte is clear and the unit's level is 0. */
+  int leaderY;
+  byte firstLeader;
+  int leaderX;
+  unit_t *units;
+  short unitIdx;
+  uint bldOfs;
+
+  leaderX = (GLeaderSheets[leaderIndex])->x;
+  leaderY = (GLeaderSheets[leaderIndex])->y;
+  firstLeader = ovr_manage_findFirstLeader();
+  if (leaderIndex == firstLeader) {
+    unitIdx = ((short (*) [148] [60])GUnitGrid)[-1][leaderX + 0x92][leaderY];
   }
   else {
-    sVar5 = ((short (*) [148] [60])GUnitGrid)[-1][iVar3 + 0x93][iVar1];
+    unitIdx = ((short (*) [148] [60])GUnitGrid)[-1][leaderX + 0x93][leaderY];
   }
-  uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
-  puVar4 = (unit_t *)GUnits;
-  if (puVar4[sVar5].unitType == leaderIndex) {
-    iVar3 = (uint)(puVar4 + sVar5)->bldType * 0x27;
-    if ((*(uint *)(iVar3 + 0x121) & 4) == 0) {
-      uVar6 = CONCAT11((char)((uint)iVar3 >> 8),1);
-    }
-    else if ((*(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f) == '\0') &&
-            (puVar4[sVar5].level == 0)) {
-      uVar6 = 1;
-    }
-    else {
-      uVar6 = 0;
-    }
+  units = (unit_t *)GUnits;
+  if (units[unitIdx].unitType != leaderIndex) {
+    return 1;
   }
-  else {
-    uVar6 = CONCAT11((char)((uint)(sVar5 * 9) >> 8),1);
+  bldOfs = (uint)(units + unitIdx)->bldType * 0x27;
+  if ((*(uint *)(bldOfs + 0x121) & 4) == 0) {
+    return 1;
   }
-  return uVar6;
+  if ((*(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f) == '\0') &&
+     (units[unitIdx].level == 0)) {
+    return 1;
+  }
+  return 0;
 }
 
 

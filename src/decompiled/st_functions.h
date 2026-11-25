@@ -513,7 +513,7 @@ void __cdecl16far attact_usesAlignUp42(void);
 void __cdecl16far attact_updateAttractEntry(int itemIndex,int force);
 bool __cdecl16far attact_textArena(uint16_t *foundIndexOut,int mode,uint8_t partyIndex,uint16_t x,uint16_t y);
 bool __cdecl16far attact_textArena2(uint *foundIndexOut,uint16_t partyIndex,uint16_t x);
-bool __cdecl16far attact_textArena3(uint *foundIndexOut,uint16_t partyIndex,int x);
+bool __cdecl16far attact_textArena3(uint *foundIndexOut,uint16_t partyIndex,int x,int y);
 void __cdecl16far attact_usesAlignUp43(uint16_t *value);
 uint16_t __cdecl16far attact_usesLDIV_at_(uint8_t menuIndex);
 void __cdecl16far attact_compute2(uint16_t menuIndex,far_t pctOut,far_t remainderOut,far_t partOut);

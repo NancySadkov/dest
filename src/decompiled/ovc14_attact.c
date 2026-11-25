@@ -1072,36 +1072,38 @@ bool __cdecl16far attact_textArena2(uint *foundIndexOut,uint16_t partyIndex,uint
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "arena" */
 
-bool __cdecl16far attact_textArena3(uint *foundIndexOut,uint16_t partyIndex,int x)
+bool __cdecl16far attact_textArena3(uint *foundIndexOut,uint16_t partyIndex,int x,int y)
 
 {
-  uint uVar1;
-  uint uVar2;
-  uint uVar3;
-  uint uVar4;
-  uint uVar5;
-  uint uVar6;
-  uint16_t uVar7;
-  int in_stack_0000000c;
-  uint uStack_4;
-  
-  uStack_4 = 0;
-  uVar1 = ovr_alignUp4(x,0,0);
-  for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
-    uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-    if (*(char *)((int)&((entity_t *)Entities)[uVar6].base.entity + 3) == (char)partyIndex) {
-      uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar6].base.x,0,0);
-      uVar4 = (int)(uVar2 - uVar1) >> 0xf;
-      uVar3 = ((entity_t *)Entities)[uVar6].base.y - in_stack_0000000c;
-      uVar5 = (int)uVar3 >> 0xf;
-      uVar2 = ((uVar2 - uVar1 ^ uVar4) - uVar4) + ((uVar3 ^ uVar5) - uVar5) * 2;
-      if (uStack_4 < uVar2) {
-        *foundIndexOut = uVar6;
-        uStack_4 = uVar2;
+  /* Re-derived: the FARTHEST entity of the party by |dx| + 2*|dy| in aligned columns -
+     attact_textArena picks the nearest with the same metric.  `y` is the 4th stack argument
+     ([bp+0xc]) the export never named; the function has no callers in the tree. */
+  uint bestDist;
+  uint alignedX;
+  uint dx;
+  uint dy;
+  uint dxSign;
+  uint dySign;
+  uint dist;
+  uint entIdx;
+
+  bestDist = 0;
+  alignedX = ovr_alignUp4(x,0,0);
+  for (entIdx = 0; entIdx < EntityCount; entIdx = entIdx + 1) {
+    if (*(char *)((int)&((entity_t *)Entities)[entIdx].base.entity + 3) ==
+        (char)partyIndex) {
+      dx = ovr_alignUp4(((entity_t *)Entities)[entIdx].base.x,0,0) - alignedX;
+      dxSign = (int)dx >> 0xf;
+      dy = ((entity_t *)Entities)[entIdx].base.y - y;
+      dySign = (int)dy >> 0xf;
+      dist = ((dx ^ dxSign) - dxSign) + ((dy ^ dySign) - dySign) * 2;
+      if (bestDist < dist) {
+        *foundIndexOut = entIdx;
+        bestDist = dist;
       }
     }
   }
-  return uStack_4 != 0;
+  return bestDist != 0;
 }
 
 
