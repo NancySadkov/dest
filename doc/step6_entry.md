@@ -7548,3 +7548,32 @@ already recorded as unresolved, so it cannot be replaced independently either.
 
   grep_checks 40,500 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### uiMenuSub's heading pair verified after the item-table fix
+
+Emitted code for the heading far pointer, from `tmp/make_fn_probe.py`:
+
+```
+cmp  word ptr [bp+14],8        ; nitems (bp+0xe) against 8
+jle  ...
+mov  word ptr [bp-46],ds       ; titleSeg = _DS
+mov  word ptr [bp-44],offset DGROUP:_s_more    ; titleOfs = &s_more
+```
+
+The original at the same place is
+
+```
+00A8  cmp si, 8
+00AD  mov word ptr [bp-8], ds
+00B0  mov word ptr [bp-0xa], 0x2733
+```
+
+so both halves are right: the segment is the runtime DGROUP (not the original image's `0x2410`) and the
+offset is `s_more`'s address under *our* layout rather than the original's literal `0x2733`.  The
+`mov [bp-8],ds` is also the proof that `0x2410` was a segment literal in the export and not data.
+
+Also visible in the same window: `cmp word ptr [bp+14],8`, confirming that the count is `nitems` at
+bp+0xe - the read this turn's parent commit corrected.
+
+  grep_checks 40,389 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
