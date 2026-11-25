@@ -6215,3 +6215,41 @@ number first.  Those are a separate pass.
 
   grep_checks 41,263 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### A third flattening class: Agnts is at offset 0 of its own segment
+
+`ovc27_usesBlitGfxRect` shows the next one:
+
+```c
+targetOfs = (uint)agnt->target * 0x34;
+... *(uint *)(targetOfs + 0x26) ...      /* Agnts[target].screenX */
+```
+
+`0x26` is `agnt_t.screenX`, `0x28` is `screenY`, `0x17` is `entity`, `0x1d` is `gdata` - all correct
+*field* offsets on a base of `index * 0x34`.
+
+What makes this class different from BuildingTypes and AgntGs is that the offset is genuinely right
+relative to the original's segment: the original's `Agnts` is at **`1726:0000`**, and ours is at
+**`652A:0000`** - offset 0 of its own segment in both images.  So the arithmetic is not wrong; what is
+lost is the **segment**.  `*(uint *)(index*0x34 + 0x26)` under this build forms a DS-relative near
+pointer, and DS is DGROUP (6EFB...), not 652A, so it reads an unrelated variable.
+
+64 lines across the tree use the `* 0x34` form, in several shapes:
+
+* plain reads: `*(uint32_t *)(*cursor * 0x34 + 0x17)`
+* pointer constructions handed to callees: `(agnt_t *)((x & 0xff) * 0x34 - 0x34)`
+* offset values stored for later use: `CrossBlitX = (uint)crossAgentIndex * 0x34 + 0x26`
+
+so the fix is not a single text substitution: the two latter shapes need the segment carried
+(`MK_FP(SEG_OF(Agnts), ...)` or a real `&Agnts[i]`), and the first needs `Agnts[i].field`.  That is a
+dedicated pass, recorded here rather than started.
+
+### ovc27_usesBlitGfxRect: locals named, expressions untouched
+
+Because the body is dominated by that class, re-deriving it properly means resolving `Agnts` first.
+This commit only names the locals - `targetOfs`, `framesOfs`, `framesSeg`, `stateOfs`, `stateSeg`,
+`xPos`, `spritePtr`, `spriteSeg`, `spriteLo`, `stash`, `agnt`, and `aimX` split out of the export's
+two-role `iVar6` - with every expression kept byte-for-byte, so only register allocation differs.
+
+  grep_checks 41,263 -> 41,190; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

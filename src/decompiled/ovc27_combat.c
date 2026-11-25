@@ -703,98 +703,99 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
 void __cdecl16far ovc27_usesBlitGfxRect(int agntIndex,brect_t *rect,uint16_t type)
 
 {
-  uint16_t uVar1;
-  uint16_t uVar2;
-  agnt_t *paVar3;
-  int iVar4;
-  uint uVar5;
-  int iVar6;
-  stg_tmp_t *psVar7;
-  uint16_t uVar8;
-  uint16_t *puVar9;
+  uint16_t framesSeg;
+  uint16_t spriteLo;
+  agnt_t *agnt;
+  int targetOfs;
+  uint xPos;
+  int framesOfs;
+  int aimX;
+  stg_tmp_t *stash;
+  uint16_t spriteSeg;
+  uint16_t *spritePtr;
   far_t gfx;
   far_t gfx_00;
-  int iStack_e;
-  uint16_t uStack_c;
+  int stateOfs;
+  uint16_t stateSeg;
   
-  paVar3 = (agnt_t *)&Agnts[agntIndex].x;
-  iVar4 = (uint)paVar3->target * 0x34;
-  if (((paVar3->combatState == 0x0) && (paVar3->target != 0xff)) && (paVar3->animFrame != 0xff)) {
-    uVar1 = *(uint16_t *)((int)&paVar3->frames + 2);
-    iVar6 = *(int *)&paVar3->frames;
-    if (paVar3->animVariant == 0x0) {
-      uStack_c = *(uint16_t *)(iVar6 + 0xe);
-      iStack_e = *(int *)(iVar6 + 0xc);
+  agnt = (agnt_t *)&Agnts[agntIndex].x;
+  targetOfs = (uint)agnt->target * 0x34;
+  if (((agnt->combatState == 0x0) && (agnt->target != 0xff)) && (agnt->animFrame != 0xff)) {
+    framesSeg = *(uint16_t *)((int)&agnt->frames + 2);
+    framesOfs = *(int *)&agnt->frames;
+    if (agnt->animVariant == 0x0) {
+      stateSeg = *(uint16_t *)(framesOfs + 0xe);
+      stateOfs = *(int *)(framesOfs + 0xc);
     }
     else {
-      uStack_c = *(uint16_t *)(iVar6 + 0x12);
-      iStack_e = *(int *)(iVar6 + 0x10);
+      stateSeg = *(uint16_t *)(framesOfs + 0x12);
+      stateOfs = *(int *)(framesOfs + 0x10);
     }
-    if (paVar3->level == 0x0) {
-      uVar5 = paVar3->screenX + *(int *)(iStack_e + 0x13);
-      if (*(uint *)(iVar4 + 0x26) <= uVar5) {
-        paVar3->animFrame = 0xff;
-        paVar3->variant = 0x0;
+    if (agnt->level == 0x0) {
+      xPos = agnt->screenX + *(int *)(stateOfs + 0x13);
+      if (*(uint *)(targetOfs + 0x26) <= xPos) {
+        agnt->animFrame = 0xff;
+        agnt->variant = 0x0;
         return;
       }
     }
     else {
-      uVar5 = paVar3->screenX - *(int *)(iStack_e + 0x13);
-      if (uVar5 <= *(uint *)(iVar4 + 0x26)) {
-        paVar3->animFrame = 0xff;
-        paVar3->variant = 0x0;
+      xPos = agnt->screenX - *(int *)(stateOfs + 0x13);
+      if (xPos <= *(uint *)(targetOfs + 0x26)) {
+        agnt->animFrame = 0xff;
+        agnt->variant = 0x0;
         return;
       }
     }
-    puVar9 = (uint16_t *)(*(int *)(iVar4 + 0x13) + (uint)*(byte *)(iVar4 + 0x12) * 4);
-    uVar2 = puVar9[1];
-    uVar8 = *puVar9;
-    if ((*(int *)(iVar4 + 0x28) != 0) || (*(int *)(iVar4 + 0x26) != 0)) {
-      if (paVar3->variant == 0x1) {
-        if (paVar3->animFrame < 0xfc) {
+    spritePtr = (uint16_t *)(*(int *)(targetOfs + 0x13) + (uint)*(byte *)(targetOfs + 0x12) * 4);
+    spriteLo = spritePtr[1];
+    spriteSeg = *spritePtr;
+    if ((*(int *)(targetOfs + 0x28) != 0) || (*(int *)(targetOfs + 0x26) != 0)) {
+      if (agnt->variant == 0x1) {
+        if (agnt->animFrame < 0xfc) {
           ovc27_intelAttackingNotice
-                    (uVar5,*(int *)(iStack_e + 0x15) + paVar3->screenY,*(int *)(iVar4 + 0x26),
-                     *(int *)(iVar4 + 0x28) - (*(int *)(uVar8 + 0xd) >> 1),
+                    (xPos,*(int *)(stateOfs + 0x15) + agnt->screenY,*(int *)(targetOfs + 0x26),
+                     *(int *)(targetOfs + 0x28) - (*(int *)(spriteSeg + 0xd) >> 1),
                      (int *)CONCAT22(type,rect));
         }
-        uVar5 = paVar3->animFrame & 3;
-        gfx.seg = ((uint16_t *)&boltSpritesSeg)[uVar5 * 2];
-        gfx.ofs = ((uint16_t *)&boltSpritesOfs)[uVar5 * 2];
-        ovr_blitGfxRect(gfx,*(int16_t *)(iVar4 + 0x26),*(int *)(iVar4 + 0x28) - (*(int *)(uVar8 + 0xd) >> 1),rect,(uint8_t)type,true,0,0,0,0,0,0);
+        xPos = agnt->animFrame & 3;
+        gfx.seg = ((uint16_t *)&boltSpritesSeg)[xPos * 2];
+        gfx.ofs = ((uint16_t *)&boltSpritesOfs)[xPos * 2];
+        ovr_blitGfxRect(gfx,*(int16_t *)(targetOfs + 0x26),*(int *)(targetOfs + 0x28) - (*(int *)(spriteSeg + 0xd) >> 1),rect,(uint8_t)type,true,0,0,0,0,0,0);
       }
       else {
-        if (uVar5 < *(uint *)(iVar4 + 0x26)) {
-          *(undefined1 *)&paVar3->flags32 = 0;
-          iVar6 = *(int *)(iVar4 + 0x26) + -8;
+        if (xPos < *(uint *)(targetOfs + 0x26)) {
+          *(undefined1 *)&agnt->flags32 = 0;
+          aimX = *(int *)(targetOfs + 0x26) + -8;
         }
         else {
-          *(undefined1 *)&paVar3->flags32 = 1;
-          iVar6 = *(int *)(iVar4 + 0x26) + 8;
+          *(undefined1 *)&agnt->flags32 = 1;
+          aimX = *(int *)(targetOfs + 0x26) + 8;
         }
-        if (paVar3->animFrame < 0xfb) {
-          ovc27_usesRandBelow(uVar5,*(int *)(iStack_e + 0x15) + paVar3->screenY,iVar6,
-                              *(int *)(iVar4 + 0x28) + -6,(brect_t *)CONCAT22(type,rect),
-                              paVar3->animFrame << 1);
+        if (agnt->animFrame < 0xfb) {
+          ovc27_usesRandBelow(xPos,*(int *)(stateOfs + 0x15) + agnt->screenY,aimX,
+                              *(int *)(targetOfs + 0x28) + -6,(brect_t *)CONCAT22(type,rect),
+                              agnt->animFrame << 1);
         }
-        if (0xf8 < paVar3->animFrame) {
-          psVar7 = ovr_stash_usesStExit((stg_tmp_t *)*(uint16_t far *)((uint8_t far *)MK_FP(SprProjectiles.seg, SprProjectiles.ofs) +  0x8c),0,0);
-          gfx_00.seg = uVar8;
-          gfx_00.ofs = (uint16_t)(psVar7->cmap + 6);
-          ovr_blitGfxRect(gfx_00,*(int16_t *)(iVar4 + 0x26),*(int16_t *)(iVar4 + 0x28),rect,(uint8_t)type,true,CONCAT11((char)((uint)psVar7 >> 8),(char)paVar3->flags32),0,0,0,0,0);
+        if (0xf8 < agnt->animFrame) {
+          stash = ovr_stash_usesStExit((stg_tmp_t *)*(uint16_t far *)((uint8_t far *)MK_FP(SprProjectiles.seg, SprProjectiles.ofs) +  0x8c),0,0);
+          gfx_00.seg = spriteSeg;
+          gfx_00.ofs = (uint16_t)(stash->cmap + 6);
+          ovr_blitGfxRect(gfx_00,*(int16_t *)(targetOfs + 0x26),*(int16_t *)(targetOfs + 0x28),rect,(uint8_t)type,true,CONCAT11((char)((uint)stash >> 8),(char)agnt->flags32),0,0,0,0,0);
         }
       }
-      paVar3->animFrame = paVar3->animFrame + 0x1;
-      paVar3->health = 0x2;
-      if (paVar3->animFrame == 0xff) {
-        ovr_ovc41_resolveSpecialAttack((agnt_t *)CONCAT22(SEG_OF(Agnts),paVar3),(uint)paVar3->target);
-        paVar3->variant = 0x0;
-        paVar3->health = 0x0;
+      agnt->animFrame = agnt->animFrame + 0x1;
+      agnt->health = 0x2;
+      if (agnt->animFrame == 0xff) {
+        ovr_ovc41_resolveSpecialAttack((agnt_t *)CONCAT22(SEG_OF(Agnts),agnt),(uint)agnt->target);
+        agnt->variant = 0x0;
+        agnt->health = 0x0;
       }
     }
   }
   else {
-    paVar3->animFrame = 0xff;
-    paVar3->variant = 0x0;
+    agnt->animFrame = 0xff;
+    agnt->variant = 0x0;
   }
   return;
 }
