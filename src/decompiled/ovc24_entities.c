@@ -859,85 +859,88 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
 void __cdecl16far ovc24_intelUnitReport(int entityIndex)
 
 {
-  uint *puVar1;
-  bool bVar2;
-  byte bVar3;
-  uint uVar4;
-  uint16_t uVar5;
-  int iVar6;
+  /* Re-derived: when the entity is a "cured of disease" report, look for a neighbouring building
+     whose flags2 has 0x100 (or an agent whose AgntGs flags has bit 0 and level above 5); if one is
+     found, clear bit 0 of the entity's frames word, report it and stop.  Otherwise roll 0x28 and,
+     on a hit, scan for an entity whose AgntGs flags2 has bit 4, report the blast-spore variant and
+     apply ovc15_usesLDIV_at_2 to it.  Names only: every expression is the export's. */
+  uint *framesWordPtr;
+  bool found;
+  byte bldType;
+  uint alignedX;
+  uint sporeIdx;
+  uint16_t msgSeg;
+  uint16_t randPick;
+  int entY;
+  int dirOfs;
+  int gindexOfs;
+  int entitiesOfs;
   char *msg;
-  int iVar8;
-  uint uVar9;
-  uint16_t uVar10;
-  
-  uVar10 = (uint16_t)((ulong)Entities >> 0x10);
+  uint scanIdx;
+
   if ((AGNT_WORD(&((entity_t *)Entities)[entityIndex], base.frames, 1) & 1) != 0) {
-    uVar4 = alignUp4(((entity_t *)Entities)[entityIndex].base.x,0,0);
-    uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-    iVar8 = (int)Entities;
-    iVar6 = ((entity_t *)iVar8)[entityIndex].base.y;
+    alignedX = alignUp4(((entity_t *)Entities)[entityIndex].base.x,0,0);
+    entitiesOfs = (int)Entities;
+    entY = ((entity_t *)entitiesOfs)[entityIndex].base.y;
     if (AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 1) == '\0') {
-      bVar2 = false;
-      for (uVar9 = 0; uVar9 < EntityCount; uVar9 = uVar9 + 1) {
-        if (((AgntGs[(uint)((entity_t *)iVar8)[uVar9].base.gindex].flags & 1) != 0) &&
-           (5 < ((entity_t *)iVar8)[uVar9].base.level)) {
-          bVar2 = true;
+      found = false;
+      for (scanIdx = 0; scanIdx < EntityCount; scanIdx = scanIdx + 1) {
+        if (((AgntGs[(uint)((entity_t *)entitiesOfs)[scanIdx].base.gindex].flags & 1) != 0) &&
+           (5 < ((entity_t *)entitiesOfs)[scanIdx].base.level)) {
+          found = true;
           break;
         }
       }
-      if (!bVar2) {
-        for (iVar8 = 0; iVar8 < 4; iVar8 = iVar8 + 1) {
-          bVar3 = ovr_ovc45_getUnitType(uVar4 + iVar8 + -2,iVar6);
-          if ((BuildingTypes[bVar3].flags2 & 0x100) != 0) {
-            bVar2 = true;
+      if (!found) {
+        for (dirOfs = 0; dirOfs < 4; dirOfs = dirOfs + 1) {
+          bldType = ovr_ovc45_getUnitType(alignedX + dirOfs + -2,entY);
+          if ((BuildingTypes[bldType].flags2 & 0x100) != 0) {
+            found = true;
             break;
           }
         }
       }
-      if (bVar2) {
-        puVar1 = (uint *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x14);
-        *puVar1 = *puVar1 & 0xfffe;
-        uVar10 = (uint16_t)((ulong)Entities >> 0x10);
+      if (found) {
+        framesWordPtr = (uint *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x14);
+        *framesWordPtr = *framesWordPtr & 0xfffe;
         alignUp4(((entity_t *)Entities)[entityIndex].base.x,
                  ((entity_t *)Entities)[entityIndex].base.y,0xa000);
-        iVar6 = (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95;
+        gindexOfs = (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95;
         msg = ovr_fmVsprintf("Intelligence reports %s unit cured of disease. (%d, %d)",
                                 (char *)CONCAT22(*(uint16_t *)
-                                                  ((int)&worldMenuLabels[1].ofs + 1 + iVar6),
+                                                  ((int)&worldMenuLabels[1].ofs + 1 + gindexOfs),
                                                  (char *)*(uint16_t *)
-                                                          ((int)&worldMenuLabels[0].seg + 1 + iVar6)
+                                                          ((int)&worldMenuLabels[0].seg + 1 + gindexOfs)
                                                 ));
-        asm { mov uVar5,dx };
-        ovr_uiNotify(msg,uVar5,0);
+        asm { mov msgSeg,dx };
+        ovr_uiNotify(msg,msgSeg,0);
         return;
       }
     }
-    uVar5 = ovr_randBelow(0x28,0);
-    if ((uVar5 & 0xff) == 0) {
-      uVar4 = 0;
+    randPick = ovr_randBelow(0x28,0);
+    if ((randPick & 0xff) == 0) {
+      sporeIdx = 0;
       while( true ) {
-        iVar6 = (int)Entities;
-        uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-        if ((EntityCount <= uVar4) ||
-           ((AgntGs[(uint)((entity_t *)iVar6)[uVar4].base.gindex].flags2 & 4) != 0)) break;
-        uVar4 = uVar4 + 1;
+        entitiesOfs = (int)Entities;
+        if ((EntityCount <= sporeIdx) ||
+           ((AgntGs[(uint)((entity_t *)entitiesOfs)[sporeIdx].base.gindex].flags2 & 4) != 0)) break;
+        sporeIdx = sporeIdx + 1;
       }
-      if (uVar4 < EntityCount) {
-        alignUp4(*(int *)((entity_t *)iVar6 + entityIndex),
-                 ((entity_t *)iVar6)[entityIndex].base.y,0xa000);
-        iVar6 = (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95;
+      if (sporeIdx < EntityCount) {
+        alignUp4(*(int *)((entity_t *)entitiesOfs + entityIndex),
+                 ((entity_t *)entitiesOfs)[entityIndex].base.y,0xa000);
+        gindexOfs = (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95;
         msg = ovr_fmVsprintf("Intelligence reports %s unit succombs to blast spore disease. (%d, %d)"
                                 ,(char *)CONCAT22(*(uint16_t *)
-                                                   ((int)&worldMenuLabels[1].ofs + 1 + iVar6),
+                                                   ((int)&worldMenuLabels[1].ofs + 1 + gindexOfs),
                                                   (char *)*(uint16_t *)
-                                                           ((int)&worldMenuLabels[0].seg + 1 + iVar6
+                                                           ((int)&worldMenuLabels[0].seg + 1 + gindexOfs
                                                            )));
-        asm { mov uVar5,dx };
-        ovr_uiNotify(msg,uVar5,0);
-        uVar10 = (uint16_t)((ulong)Entities >> 0x10);
+        asm { mov msgSeg,dx };
+        ovr_uiNotify(msg,msgSeg,0);
         ovr_ovc15_usesLDIV_at_2
-                  (entityIndex,((entity_t *)Entities)[uVar4].base.gindex,
-                   *(char *)((int)&((entity_t *)Entities)[uVar4].base.entity + 3));
+                  (entityIndex,((entity_t *)Entities)[sporeIdx].base.gindex,
+                   *(char *)((int)&((entity_t *)Entities)[sporeIdx].base.entity + 3));
       }
     }
   }
