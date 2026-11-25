@@ -37,62 +37,56 @@ int __cdecl16far bldng_getClass(byte partyIndex)
 bool __cdecl16far bldng_textArena(byte bldType,char partyIndex)
 
 {
-  byte bVar1;
-  bool bVar2;
-  byte bVar3;
-  uint uVar4;
-  uint16_t uVar5;
-  byte bStack_6;
-  
-  bVar1 = BuildingTypes[bldType].flags3;
-  if (bVar1 == 1) {
-    bVar2 = true;
+  /* Re-derived: may this building type be placed for `partyIndex`?  flags3 == 1 allows it
+     outright; with bit 0x80 clear it is allowed when an entity of that party already reaches
+     (flags3 & 0x7f); otherwise the party's first leader must exist and its titleIndex must reach
+     (flags3 & 0x7f), and a hospital (unitType 0x12) additionally needs fewer than 5 existing
+     hospitals and titleIndex >= count + 4. */
+  byte reqLevel;
+  bool allowed;
+  byte leaderIndex;
+  byte hospitalCount;
+  uint entityIndex;
+  uint recIndex;
+
+  reqLevel = BuildingTypes[bldType].flags3;
+  if (reqLevel == 1) {
+    return true;
   }
-  else {
-    bVar1 = bVar1 & 0x7f;
-    if ((BuildingTypes[bldType].flags3 & 0x80) == 0) {
-      for (uVar4 = 0; uVar4 < EntityCount; uVar4 = uVar4 + 1) {
-        uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-        if ((*(char *)((int)&((entity_t *)Entities)[uVar4].base.entity + 3) == partyIndex) &&
-           (bVar1 <= ((entity_t *)Entities)[uVar4].base.level)) {
-          return true;
-        }
-      }
-      bVar2 = false;
-    }
-    else {
-      bVar3 = ovr_manage_findFirstLeader();
-      if (bVar3 == 0xff) {
-        bVar2 = false;
-      }
-      else if ((GLeaderSheets[bVar3])->titleIndex < bVar1) {
-        bVar2 = false;
-      }
-      else if (BuildingTypes[bldType].unitType == '\x12') {
-        bStack_6 = ListCount;
-        for (uVar4 = 0; uVar4 < GRecordCount; uVar4 = uVar4 + 1) {
-          if (BuildingTypes[GRecords[uVar4].reserved08].unitType == '\x12') {
-            bStack_6 = bStack_6 + 1;
-          }
-        }
-        if (bStack_6 < 5) {
-          if ((uint)(GLeaderSheets[bVar3])->titleIndex < bStack_6 + 4) {
-            bVar2 = false;
-          }
-          else {
-            bVar2 = true;
-          }
-        }
-        else {
-          bVar2 = false;
-        }
-      }
-      else {
-        bVar2 = true;
+  reqLevel = reqLevel & 0x7f;
+  if ((BuildingTypes[bldType].flags3 & 0x80) == 0) {
+    for (entityIndex = 0; entityIndex < (int)(uint)EntityCount;
+         entityIndex = entityIndex + 1) {
+      if ((AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) == partyIndex) &&
+         (reqLevel <= ((entity_t *)Entities)[entityIndex].base.level)) {
+        return true;
       }
     }
+    return false;
   }
-  return bVar2;
+  leaderIndex = ovr_manage_findFirstLeader();
+  if (leaderIndex == 0xff) {
+    return false;
+  }
+  if ((GLeaderSheets[leaderIndex])->titleIndex < reqLevel) {
+    return false;
+  }
+  if (BuildingTypes[bldType].unitType != '\x12') {
+    return true;
+  }
+  hospitalCount = ListCount;
+  for (recIndex = 0; recIndex < (int)(uint)GRecordCount; recIndex = recIndex + 1) {
+    if (BuildingTypes[GRecords[recIndex].reserved08].unitType == '\x12') {
+      hospitalCount = hospitalCount + 1;
+    }
+  }
+  if (5 <= hospitalCount) {
+    return false;
+  }
+  if ((uint)(GLeaderSheets[leaderIndex])->titleIndex < hospitalCount + 4) {
+    return false;
+  }
+  return true;
 }
 
 
