@@ -6634,3 +6634,33 @@ delete-then-reread defect that broke two earlier helpers.
 
   grep_checks 41,005 -> 40,999; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### driver_fillSpan: the span was being written into DGROUP, not the framebuffer
+
+`2d63:09c9`, 79 bytes, 40 instructions, no calls - so the body was complete and this is a decode, not
+a search.  The listing:
+
+```
+di = x1; cx = x2
+if (di > cx) xchg(di, cx)
+lds bx, ptr [bp+0xe]                 ; rect is a FAR pointer parameter
+if (di < [bx])   di = [bx]           ; rect[0]
+if (cx > [bx+4]) cx = [bx+4]         ; rect[2]
+if (cx - di < 0) return
+if (y < [bx+2]) return;  if (y > [bx+6]) return
+cx++                                 ; count
+di += y*0x100; di += y*0x40          ; y*0x140, done as two adds
+es = [bx+8]                          ; rect[4] is the DESTINATION SEGMENT
+rep stosb es:[di], colour
+```
+
+The geometry in the export was right - the clip to `rect[0]`/`rect[2]`, the y test against the rect
+bytes at +2/+6, the `y*0x140` offset.  The defect was the destination: the export wrote the span
+through a *near* pointer (`*(uint8_t *)(x1 + y*0x140)`), so every byte went into DGROUP instead of the
+segment `rect[4]` names.  On a VGA game that is the difference between drawing and corrupting memory.
+
+The rewrite builds `dst = MK_FP(rect[4], lo + y*0x140)` and fills through it; the rebuilt code loads
+it with `les bx, dword ptr [bp-6]`, which is the original's access form.
+
+  grep_checks 40,999 -> 40,970; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

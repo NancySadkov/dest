@@ -1502,30 +1502,42 @@ void __cdecl16far driver_compute5(uint16_t x1,byte y1,uint16_t x2,byte y2,uint16
 void __cdecl16far driver_fillSpan(int x1,int x2,byte y,uint8_t colour,int *rect,uint16_t arg6)
 
 {
-  uint8_t *puVar1;
-  int iVar2;
-  int iVar3;
-  uint8_t *puVar4;
-  
-  iVar3 = x2;
+  /* Re-derived from 2d63:09c9 (79 bytes, no calls).  Clips x1..x2 to rect[0]..rect[2] and y to the
+     rect's +2/+6 bytes, then fills (hi-lo+1) bytes at MK_FP(rect[4], x + y*0x140).  The original
+     loads rect with `lds`, and takes the destination segment from rect[4]; the export wrote the span
+     through a near pointer, i.e. into DGROUP rather than the framebuffer. */
+  int lo;
+  int hi;
+  uint count;
+  uint8_t far *dst;
+
+  lo = x1;
+  hi = x2;
   if (x2 < x1) {
-    iVar3 = x1;
-    x1 = x2;
+    lo = x2;
+    hi = x1;
   }
-  if (x1 < *rect) {
-    x1 = *rect;
+  if (lo < rect[0]) {
+    lo = rect[0];
   }
-  if (rect[2] < iVar3) {
-    iVar3 = rect[2];
+  if (rect[2] < hi) {
+    hi = rect[2];
   }
-  if (((x1 <= iVar3) && (*(byte *)(rect + 1) <= y)) && (y <= *(byte *)(rect + 3))) {
-    puVar4 = (uint8_t *)(x1 + (uint)y * 0x140);
-    iVar2 = rect[4];
-    for (iVar3 = (iVar3 - x1) + 1; iVar3 != 0; iVar3 = iVar3 + -1) {
-      puVar1 = puVar4;
-      puVar4 = puVar4 + 1;
-      *puVar1 = colour;
-    }
+  if ((hi - lo) < 0) {
+    return;
+  }
+  if (y < *(uint8_t *)(rect + 1)) {
+    return;
+  }
+  if (*(uint8_t *)(rect + 3) < y) {
+    return;
+  }
+  count = (hi - lo) + 1;
+  dst = (uint8_t far *)MK_FP((uint16_t)rect[4], lo + (uint)y * 0x140);
+  while (count != 0) {
+    *dst = colour;
+    dst = dst + 1;
+    count = count - 1;
   }
   return;
 }
