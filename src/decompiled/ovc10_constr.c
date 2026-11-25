@@ -490,7 +490,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
   int iStack_a;
   int iStack_8;
   int iStack_6;
-  uint16_t uStack_4;
+  uint16_t savedDstSeg;
   
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
   dst.ofs = (uint16_t)&shades;
@@ -925,7 +925,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
     if (DebugVerbose != false) {
       printf("%d \r");
     }
-    uStack_4 = TextBlitDstSeg;
+    savedDstSeg = TextBlitDstSeg;
     uVar9 = 0x2410;
     TextBlitDstSeg = BlitRects[0].seg;
     TextBlitX = 0xb6;
@@ -943,7 +943,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
       ovr_blitText(text,(byte *)CONCAT13(uVar13,CONCAT12(uVar12,uVar9)),CONCAT11(uVar15,uVar14),term
                    ,(char)uVar9,uVar12,uVar14,term,uVar16);
     }
-    TextBlitDstSeg = uStack_4;
+    TextBlitDstSeg = savedDstSeg;
     ovr_agnt_usesFmFreeAudio();
     GGameState = 0x27;
     if (DebugVerbose != false) {

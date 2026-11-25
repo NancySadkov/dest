@@ -434,8 +434,8 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   int8_t iStack_40;
   uint8_t uStack_3f;
   lbm_type_t lStack_3e;
-  uint16_t uStack_34;
-  uint16_t uStack_32;
+  uint16_t beWordB;
+  uint16_t beWordA;
   far_t fStack_30;
   char cStack_2c;
   byte bStack_2b;
@@ -456,7 +456,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   uint uStack_c;
   uint uStack_a;
   uint uStack_8;
-  int iStack_6;
+  int unitIdx;
   byte bStack_3;
   
   uStack_10 = (uint)(byte)uStack_10;
@@ -778,8 +778,8 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                 if ((psVar9 == (stg_tmp_t *)0x0) &&
                    (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags2(col), (char)psVar9 == '\x02')
                    ) {
-                  iStack_6 = ((short (*) [148] [60])GUnitGrid)[-1][col + 0x92][row];
-                  bStack_3 = ((unit_t *)GUnits + iStack_6)->bldType;
+                  unitIdx = ((short (*) [148] [60])GUnitGrid)[-1][col + 0x92][row];
+                  bStack_3 = ((unit_t *)GUnits + unitIdx)->bldType;
                   psVar9 = (stg_tmp_t *)((uint)bStack_3 * 0x27);
                   if ((psVar9->cmap[0x11b] < 2) &&
                      (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags2(col), (byte)psVar9 < 3)) {
@@ -1060,8 +1060,8 @@ bad_lbm:
          (puStack_2a = ovr_be4(puStack_2a), uStack_28 = uVar17, uVar17 != 0)) ||
         (puStack_2a != (uint32_t *)((byte *)__C0_ASM_CopyRight + 0x10))) ||
        (iVar15 = ovr_stshRead(), iVar15 != 0 || uVar17 != 0)) goto bad_lbm;
-    uStack_32 = ovr_be2(uStack_48);
-    uStack_34 = ovr_be2(uStack_46);
+    beWordA = ovr_be2(uStack_48);
+    beWordB = ovr_be2(uStack_46);
     goto L_grabLbm_0445;
   }
   if ((uStack_20 == accum) && (uStack_22 == uStack_16)) {
@@ -1129,7 +1129,7 @@ bad_lbm:
                         (stg_tmp_t *)
                         CONCAT13((char)((ulong)in_stack_00000004 >> 0x18),
                                  CONCAT12((char)((ulong)in_stack_00000004 >> 0x10),fStack_30.seg)),
-                        in_stack_00000008,uStack_32,uStack_34,unaff_SI);
+                        in_stack_00000008,beWordA,beWordB,unaff_SI);
         (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)puStack_1c;
         handle.ofs = (uint16_t)pvStack_1e;
         (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)puStack_1c >> 8);

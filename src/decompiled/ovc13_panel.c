@@ -820,7 +820,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   uint16_t uStack_a;
   byte *pbStack_8;
   uint16_t uStack_6;
-  uint16_t uStack_4;
+  uint16_t savedDstSeg;
   uint16_t uVar4;
   
   Seed_2000_d110 = GfxRndSeed + -0x35;
@@ -918,7 +918,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   ovr_ovc07_usesFillRect
             (spanX + 9,spanH,spanX + 9,spanH + 4,0xe0,(brect_t *)BlitRects,0x2410);
   ovc13_usesScreenY2();
-  uStack_4 = TextBlitDstSeg;
+  savedDstSeg = TextBlitDstSeg;
   pbVar6 = (byte *)((char *)0x26510);
   TextBlitDstSeg = BlitRects[0].seg;
   TextBlitX = 0xb6;
@@ -933,7 +933,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
                          (char *)CONCAT22(uVar5,(char *)0x26510));
     ovr_blitText(text,(byte *)CONCAT22(uVar10,pbVar6),uVar11,uVar3,uVar4);
   }
-  TextBlitDstSeg = uStack_4;
+  TextBlitDstSeg = savedDstSeg;
   return;
 }
 
