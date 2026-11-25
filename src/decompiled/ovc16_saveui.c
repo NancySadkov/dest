@@ -316,7 +316,7 @@ uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint
     uint16_t itemOfs;
   uint16_t mouseHit;
   uint readLen;
-    uint16_t *itemPtr;
+    uint16_t far *itemPtr;
     undefined1 ssLow;
     undefined1 ssHigh;
   far_t dest[7];   /* 7 far string pointers: _fsetmem zeroes 0x1c bytes and row runs 0..6 */
@@ -334,20 +334,20 @@ uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint
     ovr_blitText(title,(byte far *)MK_FP(Font03.seg,Font03.ofs),0xde,7);
   }
   scrollOfs = 0;
-  if ((int)items.seg < 9) {
-    sz = items.seg;
+  if ((int)nitems < 9) {
+    sz = nitems;
   }
   else {
     sz = 8;
   }
   for (readed = 0x0; (int)(uint)readed < (int)sz; readed = readed + 0x1) {
-    itemPtr = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + (uint)readed * 4);
+    itemPtr = (uint16_t far *)MK_FP(items.seg,(uint16_t)(items.ofs + (uint)readed * 4));
     itemOfs = *itemPtr;
     readLen = (uint)readed;
     dest[readLen].seg = itemPtr[1];
     dest[readLen].ofs = itemOfs;
   }
-  if (8 < (int)items.seg) {
+  if (8 < (int)nitems) {
     titleSeg = _DS;
     titleOfs = (uint16_t)&s_more;
   }
@@ -404,20 +404,20 @@ L_uiMenuSub_0B46:
                 textTable_00.ofs = (uint16_t)&dest;
                 saveui_usesBlitLoadRleGfx2(textTable_00,GMenuItem - 1,0);
               }
-              if (((int)items.seg < 9) || (GMenuItem != 8)) {
+              if (((int)nitems < 9) || (GMenuItem != 8)) {
                 GMenuFlag = 0;
                 return;
               }
-              if (scrollOfs + 7 < (int)items.seg) {
+              if (scrollOfs + 7 < (int)nitems) {
                 scrollOfs = scrollOfs + 7;
               }
               else {
                 scrollOfs = 0;
               }
               _fsetmem(MK_FP(_SS,&dest),0x1c,0);
-              for (readed = 0x0; (readed < 7 && ((int)((uint)readed + scrollOfs) < (int)items.seg));
+              for (readed = 0x0; (readed < 7 && ((int)((uint)readed + scrollOfs) < (int)nitems));
                   readed = readed + 0x1) {
-                itemPtr = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + scrollOfs) * 4);
+                itemPtr = (uint16_t far *)MK_FP(items.seg,(uint16_t)(items.ofs + ((uint)readed + scrollOfs) * 4));
                 itemOfs = *itemPtr;
                 readLen = (uint)readed;
                 dest[readLen].seg = itemPtr[1];
@@ -441,17 +441,17 @@ L_uiMenuSub_0B46:
         if (key == 0x5032) goto L_uiMenuSub_0903;
         if (key != 0x5100) goto L_uiMenuSub_0840;
       }
-      if (8 < (int)items.seg) {
-        if (scrollOfs + 7 < (int)items.seg) {
+      if (8 < (int)nitems) {
+        if (scrollOfs + 7 < (int)nitems) {
           scrollOfs = scrollOfs + 7;
         }
         else {
           scrollOfs = 0;
         }
         _fsetmem(MK_FP(_SS,&dest),0x1c,0);
-        for (readed = 0x0; (readed < 7 && ((int)((uint)readed + scrollOfs) < (int)items.seg));
+        for (readed = 0x0; (readed < 7 && ((int)((uint)readed + scrollOfs) < (int)nitems));
             readed = readed + 0x1) {
-          itemPtr = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + scrollOfs) * 4);
+          itemPtr = (uint16_t far *)MK_FP(items.seg,(uint16_t)(items.ofs + ((uint)readed + scrollOfs) * 4));
           itemOfs = *itemPtr;
           readLen = (uint)readed;
           dest[readLen].seg = itemPtr[1];
@@ -493,17 +493,17 @@ L_uiMenuSub_08AD:
       if (key == 0x1c0d) goto L_uiMenuSub_0B46;
       if (key == 0x4800) goto L_uiMenuSub_08AD;
     }
-    else if (((key == 0x4900) || (key == 0x4939)) && (8 < (int)items.seg)) {
+    else if (((key == 0x4900) || (key == 0x4939)) && (8 < (int)nitems)) {
       if (scrollOfs == 0) {
-        scrollOfs = ((int)(items.seg - 1) / 7) * 7;
+        scrollOfs = ((int)(nitems - 1) / 7) * 7;
       }
       else {
         scrollOfs = scrollOfs + -7;
       }
       _fsetmem(MK_FP(_SS,&dest),0x1c,0);
-      for (readed = 0x0; (readed < 7 && ((int)((uint)readed + scrollOfs) < (int)items.seg));
+      for (readed = 0x0; (readed < 7 && ((int)((uint)readed + scrollOfs) < (int)nitems));
           readed = readed + 0x1) {
-        itemPtr = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + scrollOfs) * 4);
+        itemPtr = (uint16_t far *)MK_FP(items.seg,(uint16_t)(items.ofs + ((uint)readed + scrollOfs) * 4));
         itemOfs = *itemPtr;
         readLen = (uint)readed;
         dest[readLen].seg = itemPtr[1];
