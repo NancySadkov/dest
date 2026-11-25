@@ -6742,3 +6742,31 @@ one - but 25 functions stop truncating their arguments, which is the same defect
 
   grep_checks 40,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### Five more far parameters, and an operational trap with `--asm`
+
+`tmp/analyse_callers.py` lists each remaining near->far candidate next to its call sites, because
+the prototype change is only safe where the callers convert cleanly.  That immediately separated six
+functions with **no call sites at all** - `rle_blit_decode`, `rle_line`, `unrle_mirror`, `drawLine2`,
+`copyGrayscalePalette`, `font_textWidth` - since the game calls them through `ovr_*` thunks, never by
+name.  Five were converted (the sixth did not match the pattern); each far width is from the `les`/`lds`
+load form.
+
+The effect is layout, not code shape: `rle_blit_decode` now receives `dst` as a far pointer of 4 bytes,
+so `sz` lands at bp+0xe exactly as in the original (`mov dx,[bp+0xe]`) instead of bp+0x0c.  The body
+still dereferences through near casts, so no `les` appears in the emitted code and the writes are
+unchanged - this is a correctness-of-declaration fix, not a behaviour fix, and `grep_checks` does not
+move.
+
+`font_textWidth` was checked specifically because its slot was not obvious: the original opens with
+`mov ax,[bp+6] / or ax,[bp+8]` (a null test on the 4-byte pointer at 6..9) and `les bx,ptr [bp+6]`, so
+`text` occupies 6..9 and `font` really is at bp+0xa.
+
+**Operational trap, worth recording.** After `build_standalone.py --only o01 --asm` the module
+directory holds `O01.ASM` but no `o01.obj`, and `link_standalone.py` then fails with 462 undefined
+symbols starting `Undefined symbol _MAIN` - which reads like a catastrophic source error but is only
+the missing object.  Always run a full `-c` build before linking; `--asm` is a listing tool, not a
+build.
+
+  grep_checks 40,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

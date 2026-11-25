@@ -424,7 +424,7 @@ int __cdecl16far unrle(far_t src,far_t dst,uint16_t len,uint16_t arg4,uint16_t a
 
 
 /* 2d63:0241 */
-int __cdecl16far rle_blit_decode(byte far *src, byte *dst, uint16_t sz)
+int __cdecl16far rle_blit_decode(byte far *src, byte far *dst, uint16_t sz)
 
 {
   char *pcVar1;
@@ -562,7 +562,7 @@ int16_t __cdecl16far countRunLength(char far *src, uint16_t avail, uint16_t maxR
 
 /* WARNING: Restarted to delay deadcode elimination for space: stack */
 
-int __cdecl16far rle_line(uint8_t far *src, uint8_t *dst, uint16_t npixels)
+int __cdecl16far rle_line(uint8_t far *src, uint8_t far *dst, uint16_t npixels)
 
 {
   uint8_t *puVar1;
@@ -661,7 +661,7 @@ L_rle_line_0343:
        }
    } */
 
-int __cdecl16far unrle_mirror(byte far *src, byte *dst, int len)
+int __cdecl16far unrle_mirror(byte far *src, byte far *dst, int len)
 
 {
   undefined1 *puVar1;
@@ -717,7 +717,7 @@ int __cdecl16far unrle_mirror(byte far *src, byte *dst, int len)
 
 /* 2d63:03fc */
 
-int16_t __cdecl16far drawLine2(char far *src, char *dst, uint16_t count)
+int16_t __cdecl16far drawLine2(char far *src, char far *dst, uint16_t count)
 
 {
   /* Re-derived: reverse-order RLE line writer.  A control byte of 0x80 is skipped; below
