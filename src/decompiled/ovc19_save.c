@@ -229,11 +229,10 @@ uint __cdecl16far stLoad(int handle)
                 (iVar2 = strcmp((char *)CONCAT22(_SS,&header),
                                 (char *)CONCAT22(SaveHeader.seg,SaveHeader.ofs)), iVar2 == 0)))))) {
           ovr_drawTextAt((char *)"Load complete.",0x2410,0);
-          uVar4 = (undefined1)((uint)iVar2 >> 8);
           SaveAuto = 1;
           ovr_ovc24_usesAlignUp4();
           save_usesCalcSeasonPalette();
-          return CONCAT11(uVar4,1);
+          return 1;
         }
       }
     }
@@ -243,7 +242,7 @@ L_save_49fd_01da_0800:
   if (readOk == 0) {
     ovr_drawTextAt((char *)"Load Error",0x2410,0);
   }
-  return readOk & 0xff00;
+  return 0;
 }
 
 
@@ -468,9 +467,8 @@ int __cdecl16far stSave(void)
                       (writeOk = save_writeBlock(SaveHeader.ofs,(void *)CONCAT22(0x28,SaveHeader.seg),
                                                unaff_DI,unaff_SI), (writeOk & 0xff) != 0)))))))))))) {
                 iVar2 = close(iVar2);
-                uVar4 = (undefined1)((uint)iVar2 >> 8);
                 ovr_drawTextAt((char *)"Save complete.",0x2410,0xa000);
-                return CONCAT11(uVar4,1);
+                return 1;
               }
             }
           }
@@ -482,9 +480,8 @@ L_stSave_0EE6:
     path = ovr_fmVsprintf("%ssave.%03d",&GWorkDir);
     iVar2 = unlink((char *)CONCAT22(in_DX,path));
   }
-  bVar5 = (byte)((uint)iVar2 >> 8);
   ovr_drawTextAt((char *)"Save Error",0x2410,0xa000);
-  return (uint)bVar5 << 8;
+  return 0;
 }
 
 
