@@ -559,65 +559,64 @@ void __cdecl16far ovc28_startCrossBlit(void)
 uint16_t __cdecl16far ovc28_usesScreenMode(far_t entries,uint count)
 
 {
-  uint16_t uVar1;
-  uint uVar2;
-  undefined1 uVar3;
-  int *piVar4;
-  char menuItemA;
-  char menuItemB;
-  
+  /* Re-derived: maps the mouse position onto a menu entry or the two top-bar buttons, returning
+     0 when nothing was hit, 0xff / 0xfe for the bar, or the item index.  Every exit writes only AL
+     - the exported CONCAT11(0x24, ...) high byte was stale AH (the only AH write is `mov ah,0`;
+     the div instructions can leave a quotient there) and the single caller reads (char)uVar4. */
+  uint16_t result;
+  uint index;
+  int *entryPtr;
+  char menuItem;
+
   if ((((ScreenMode == '\0') && (MouseMoved == 0)) && (8 < MouseX)) &&
      (((MouseX < 0x19 && (0xb4 < MouseY)) && ((MouseY < 0xb6 | 0xeU) != 0)))) {
-    uVar1 = 0;
+    result = 0;
   }
   else {
     if (((MouseMoved == 0) && (0xea < MouseX)) && ((0x3b < MouseY && (MouseX < 0x139)))) {
-      uVar2 = (MouseY - 0x3c) / 0xe;
-      if (((uVar2 < count) && ((MouseY - 0x3c) % 0xe < 0xc)) &&
-         (piVar4 = (int *)(entries.ofs + uVar2 * 4), *piVar4 != 0 || piVar4[1] != 0)) {
-        ovc28_blitMenuEntry(entries,uVar2);
-        menuItemB = (char)uVar2;
-        GMenuItem = menuItemB + '\x01';
-        return CONCAT11(0x24,menuItemB + '\x01');
+      index = (MouseY - 0x3c) / 0xe;
+      if (((index < count) && ((MouseY - 0x3c) % 0xe < 0xc)) &&
+         (entryPtr = (int *)(entries.ofs + index * 4), *entryPtr != 0 || entryPtr[1] != 0)) {
+        ovc28_blitMenuEntry(entries,index);
+        menuItem = (char)index;
+        GMenuItem = menuItem + '\x01';
+        return (uint16_t)(uint8_t)(menuItem + '\x01');
       }
     }
-    uVar3 = 0x24;
     if (((MouseMoved == 0) && (menuBarShown != '\0')) &&
-       ((uVar3 = 0x24, 0xf < MouseX &&
-        ((uVar3 = 0x24, 0xb2 < MouseY && (uVar3 = 0x24, MouseY < 0xbf)))))) {
-      uVar2 = (MouseX - 0x10) / 0x44;
-      uVar3 = (undefined1)((MouseX - 0x10) / 0x44 >> 8);
-      if ((uVar2 < 3) && ((MouseX - 0x10) % 0x44 < 0x43)) {
-        menuItemA = (char)uVar2;
-        GMenuItem = menuItemA + -4;
-        return CONCAT11(0x24,menuItemA + -4);
+       (0xf < MouseX && (0xb2 < MouseY && (MouseY < 0xbf)))) {
+      index = (MouseX - 0x10) / 0x44;
+      if ((index < 3) && ((MouseX - 0x10) % 0x44 < 0x43)) {
+        menuItem = (char)index;
+        GMenuItem = menuItem + -4;
+        return (uint16_t)(uint8_t)(menuItem + -4);
       }
     }
-    if (((((keyboardInputMode == '\0') || (uVar3 = 0x24, MouseMoved != 0)) ||
-         (uVar3 = 0x24, MouseX < 0xc)) ||
-        ((uVar3 = 0x24, 0xde < MouseX || (uVar3 = 0x24, MouseY < 7)))) ||
-       (uVar3 = 0x24, 0x96 < MouseY)) {
-      if (((keyboardInputMode == '\0') || (uVar3 = 0x24, MouseMoved != 0)) ||
-         ((uVar3 = 0x24, MouseX < 0xef ||
-          (((uVar3 = 0x24, 0x134 < MouseX || (uVar3 = 0x24, MouseY < 7)) ||
-           (uVar3 = 0x24, 0x36 < MouseY)))))) {
-        uVar1 = CONCAT11(uVar3,0xff);
+    if (((((keyboardInputMode == '\0') || (MouseMoved != 0)) ||
+         (MouseX < 0xc)) ||
+        ((0xde < MouseX || (MouseY < 7)))) ||
+       (0x96 < MouseY)) {
+      if (((keyboardInputMode == '\0') || (MouseMoved != 0)) ||
+         ((MouseX < 0xef ||
+          (((0x134 < MouseX || (MouseY < 7)) ||
+           (0x36 < MouseY)))))) {
+        result = 0xff;
       }
       else {
         ovc28_textHalflingCastle();
-        uVar2 = MouseX - 0xef >> 1;
-        ovr_ovc13_usesBlitLoadRleGfx3(uVar2,MouseY - 7,'\x01');
-        uVar1 = CONCAT11((char)(uVar2 >> 8),0xfe);
+        index = MouseX - 0xef >> 1;
+        ovr_ovc13_usesBlitLoadRleGfx3(index,MouseY - 7,'\x01');
+        result = 0xfe;
       }
     }
     else {
       ovc28_textHalflingCastle();
-      uVar2 = MouseX - 0xc >> 1;
-      ovr_ovc13_usesBlitLoadRleGfx2(uVar2,MouseY - 7,'\x01');
-      uVar1 = CONCAT11((char)(uVar2 >> 8),0xfe);
+      index = MouseX - 0xc >> 1;
+      ovr_ovc13_usesBlitLoadRleGfx2(index,MouseY - 7,'\x01');
+      result = 0xfe;
     }
   }
-  return uVar1;
+  return result;
 }
 
 
