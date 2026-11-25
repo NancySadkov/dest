@@ -1848,13 +1848,13 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
   uint16_t widths;
   uint16_t uVar4;
   uint8_t msg;
-  int iStack_c;
+  int agntData;
   uint16_t uStack_a;
   uint8_t unitFlags;
   
   entityIndex = Agnts[agntIndex].owner;
   uStack_a = AGNT_WORD(&Agnts[agntIndex], gdata, 2);
-  iStack_c = AGNT_WORD(&Agnts[agntIndex], gdata, 0);
+  agntData = AGNT_WORD(&Agnts[agntIndex], gdata, 0);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
   ((entity_t *)Entities)[entityIndex].base.x = iVar2;
   ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
@@ -1867,7 +1867,7 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
   *pbVar1 = *pbVar1 & 0xfd;
   ovr_attact_usesEntities(entityIndex,0,0,(uint16_t)&unitFlags,(uint16_t)_SS,0,0,0,0);
   puVar3 = ovr_ovc15_usesStshRealloc
-                     ((char *)*(uint16_t *)(iStack_c + 0x24),*(uint16_t *)(iStack_c + 0x26),0,0,0,0,0,0);
+                     ((char *)*(uint16_t *)(agntData + 0x24),*(uint16_t *)(agntData + 0x26),0,0,0,0,0,0);
   text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x644e,_SS),
                        (char *)CONCAT22(puVar3,(char *)0x26510),widths);
   drawString(text,widths,0);
@@ -2384,19 +2384,19 @@ void __cdecl16far stats_openCastlePanel(void)
   far_t handle;
   far_t handle_00;
   uint8_t palette;
-  stg_tmp_t *psStack_14;
+  stg_tmp_t *palRec;
   uint8_t dst;
   uint rectY1;
   uint rectX2;
   uint rectY2;
   void *pvStack_6;
-  uint16_t uStack_4;
+  uint16_t gfxSeg;
   
   MiceNeedsUpdate = 1;
   pvStack_6 = ovr_stshAlloc(0xfa0f);
   ptr.seg = in_DX;
   ptr.ofs = (uint16_t)pvStack_6;
-  uStack_4 = in_DX;
+  gfxSeg = in_DX;
   ovr_alignToSeg(ptr);
   rectY1 = 7;
   rectY2 = 0xc2;
@@ -2411,8 +2411,8 @@ void __cdecl16far stats_openCastlePanel(void)
   ovr_blitGfxRect(gfx,0,0,(brect_t *)&dst,SUB21(_SS,0),true,0,0,0,0,0,0);
   handle.seg = Lbm_nwpanel1.seg;
   handle.ofs = Lbm_nwpanel1.ofs;
-  psStack_14 = ovr_stshLoadGfx(handle);
-  ovr_calcSeasonPalette(psStack_14->cmap,in_DX,&palette,_SS,0,0);
+  palRec = ovr_stshLoadGfx(handle);
+  ovr_calcSeasonPalette(palRec->cmap,in_DX,&palette,_SS,0,0);
   ovr_driver_fillRect(dst,rectY1,rectX2,rectY2,0x0,0xa000,0,0,0,0,0);
   ovr_vgaSetPalette8bit(&palette,0);
   ovr_blitRect((brect_t *)&dst,0);
@@ -2424,7 +2424,7 @@ void __cdecl16far stats_openCastlePanel(void)
   }
   mapViewActive = 0xff;
   ovr_attact_usesLDIV_at_2();
-  handle_00.seg = uStack_4;
+  handle_00.seg = gfxSeg;
   handle_00.ofs = (uint16_t)pvStack_6;
   ovr_stshFree(handle_00);
   ovr_stop_audio();

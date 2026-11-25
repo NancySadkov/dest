@@ -115,7 +115,7 @@ void __cdecl16far ovc27_usesRandBelow(int x1,int y1,int x2,int y2,brect_t *rect,
   uint8_t plane1;
   uint8_t plane0;
   int iStack_10;
-  int iStack_e;
+  int yStep;
   int iStack_c;
   int iStack_a;
   int iStack_8;
@@ -159,7 +159,7 @@ void __cdecl16far ovc27_usesRandBelow(int x1,int y1,int x2,int y2,brect_t *rect,
       uVar6 = (int)uVar5 >> 0xf;
       iStack_c = (uVar5 ^ uVar6) - uVar6;
     }
-    iStack_e = ovr_ovc07_signum(y2 - y1);
+    yStep = ovr_ovc07_signum(y2 - y1);
     iStack_10 = x2 - x1 >> 1;
     bStack_3 = rectSeg;
     for (iStack_8 = x1; iStack_8 <= x2; iStack_8 = iStack_8 + 1) {
@@ -184,7 +184,7 @@ void __cdecl16far ovc27_usesRandBelow(int x1,int y1,int x2,int y2,brect_t *rect,
       y1 = y1 + iStack_a;
       iStack_10 = iStack_10 + iStack_c;
       if (x2 - x1 <= iStack_10) {
-        y1 = y1 + iStack_e;
+        y1 = y1 + yStep;
         iStack_10 = iStack_10 - (x2 - x1);
       }
     }

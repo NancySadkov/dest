@@ -913,10 +913,12 @@ ovc28_usesUiInputText(far_t entries,uint16_t count,far_t hint,uint8_t *pageOut,u
 void __cdecl16far ovc28_compute2(far_t entries,uint16_t count,far_t hint,uint16_t arg4,uint16_t arg5)
 
 {
-  uint8_t uStack_3;
+  /* GUESS: the byte whose address is passed to ovc28_usesUiInputText and then
+     discarded; the callee takes it as an out-parameter, so it is a selection value. */
+  uint8_t selected;
   
-  uStack_3 = 0x0;
-  ovc28_usesUiInputText(entries,count,hint,&uStack_3,0,0);
+  selected = 0x0;
+  ovc28_usesUiInputText(entries,count,hint,&selected,0,0);
   return;
 }
 
