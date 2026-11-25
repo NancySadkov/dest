@@ -172,29 +172,32 @@ uint __cdecl16far season_checkEndGame(byte leaderIndex)
 void __cdecl16far season_countPromotable(void)
 
 {
-  uint32_t uVar1;
-  uint uVar2;
-  unit_t *puVar3;
-  int iVar4;
-  uint uVar5;
-  uint16_t uVar6;
-  uint uStack_6;
-  
+  /* Re-derived: every unit from index 0xf8 upwards that is promotable.  A unit is
+     promotable when its building's flag word at 0x121 has both bits 0x60 clear, its
+     unitType is not 0xff, its leader sheet's byte at +0x3f is clear, and the four map
+     flag words to its right OR together to exactly 0x1000. */
+  unit_t *units;
+  uint32_t sheetRef;
+  uint alignedX;
+  uint flagAcc;
+  uint unitIdx;
+  int k;
+
   GPromotableCount = 0;
-  for (uStack_6 = 0xf8; uStack_6 < GUnitCount; uStack_6 = uStack_6 + 1) {
-    uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
-    puVar3 = (unit_t *)GUnits;
-    if ((((*(uint *)((uint)(puVar3 + uStack_6)->bldType * 0x27 + 0x121) & 0x60) == 0) &&
-        (puVar3[uStack_6].unitType != 0xff)) &&
-       (uVar1 = *(uint32_t *)((uint)puVar3[uStack_6].unitType << 2),
-       *(char *)((int)uVar1 + 0x3f) == '\0')) {
-      uVar2 = ovr_alignUp4(puVar3[uStack_6].x,0,0);
-      uVar5 = 0;
-      for (iVar4 = 0; iVar4 < 4; iVar4 = iVar4 + 1) {
-        uVar5 = uVar5 | ((short (*) [60] [148])GMapFlags)[-1][((unit_t *)GUnits)[uStack_6].y + 0x3b]
-                        [uVar2 + iVar4 + 0x92] & 0x3000U;
+  for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
+    units = (unit_t *)GUnits;
+    if ((((*(uint *)((uint)(units + unitIdx)->bldType * 0x27 + 0x121) & 0x60) == 0) &&
+        (units[unitIdx].unitType != 0xff)) &&
+       (sheetRef = *(uint32_t *)((uint)units[unitIdx].unitType << 2),
+        *(char *)((int)sheetRef + 0x3f) == '\0')) {
+      alignedX = ovr_alignUp4(units[unitIdx].x,0,0);
+      flagAcc = 0;
+      for (k = 0; k < 4; k = k + 1) {
+        flagAcc = flagAcc |
+                  ((short (*) [60] [148])GMapFlags)[-1][units[unitIdx].y + 0x3b]
+                  [alignedX + k + 0x92] & 0x3000U;
       }
-      if (uVar5 == 0x1000) {
+      if (flagAcc == 0x1000) {
         GPromotableCount = GPromotableCount + 1;
       }
     }

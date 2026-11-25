@@ -2940,26 +2940,29 @@ bool __cdecl16far ovc15_selectLeftmostAgent(void)
 bool __cdecl16far ovc15_selectRightmostAgent(void)
 
 {
-  int iVar1;
-  uint uVar2;
-  uint uVar3;
-  char cStack_3;
-  
-  cStack_3 = -1;
-  uVar2 = 0;
-  uVar3 = 0;
-  for (iVar1 = 0; iVar1 < (int)(uint)AgntCount; iVar1 = iVar1 + 1) {
-    if ((uVar2 < Agnts[iVar1].screenX) ||
-       ((Agnts[iVar1].screenX == uVar2 && (uVar3 < Agnts[iVar1].screenY)))) {
-      cStack_3 = (char)iVar1;
-      uVar2 = Agnts[iVar1].screenX;
-      uVar3 = Agnts[iVar1].screenY;
+  /* Re-derived: the agent with the greatest screenX, screenY breaking ties; the index
+     is stored into SelectedAgent and reported.  bestIdx is a char so -1 can mean
+     "none". */
+  int i;
+  uint bestX;
+  uint bestY;
+  char bestIdx;
+
+  bestIdx = -1;
+  bestX = 0;
+  bestY = 0;
+  for (i = 0; i < (int)(uint)AgntCount; i = i + 1) {
+    if ((bestX < Agnts[i].screenX) ||
+       ((Agnts[i].screenX == bestX && (bestY < Agnts[i].screenY)))) {
+      bestIdx = (char)i;
+      bestX = Agnts[i].screenX;
+      bestY = Agnts[i].screenY;
     }
   }
-  if (cStack_3 != -1) {
-    SelectedAgent = cStack_3;
+  if (bestIdx != -1) {
+    SelectedAgent = bestIdx;
   }
-  return cStack_3 != -1;
+  return bestIdx != -1;
 }
 
 

@@ -562,25 +562,31 @@ void __cdecl16far ovc25_spyReportNotice(void)
 uint __cdecl16far ovc25_hasBuildingNear(uint16_t x,int y)
 
 {
-  byte bVar1;
-  int iVar2;
-  uint uVar3;
-  uint uVar4;
-  int iVar5;
-  
-  uVar3 = ovr_alignUp4(x,0,0);
-  uVar4 = uVar3 + 3;
-  if (((((int)uVar4 < 0x94) && (-1 < (int)uVar3)) && (y < 0x3c)) && (-1 < y)) {
-    for (iVar5 = -2; iVar5 < 2; iVar5 = iVar5 + 1) {
-      iVar2 = (*(short (*) [148] [60])GUnitGrid)[uVar3 + iVar5][y];
-      bVar1 = ((unit_t *)GUnits + iVar2)->bldType;
-      uVar4 = CONCAT11((char)((uint)(iVar2 * 9) >> 8),bVar1);
-      if ((bVar1 < 0xf8) && (uVar4 = (uint)bVar1 * 0x27, *(char *)(uVar4 + 0x11a) != '\0')) {
-        return CONCAT11((char)(uVar4 >> 8),1);
+  /* 5b66:112d, re-derived.  Scans the four grid columns starting at alignUp4(x) for a
+     unit whose BuildingTypes[bldType].byte_0x11a is set; bldType >= 0xf8 means "empty".
+     The tail sets only AL (mov al,0 at 0x4E5BD and 0x4E625, mov al,1 at 0x4E61B), so the
+     exported CONCAT11 / `& 0xff00` returns were stale-AH artifacts and this is a
+     boolean. */
+  uint alignedX;
+  uint alignedEnd;
+  int gx;
+  int unitIdx;
+  byte bldType;
+  uint bldOfs;
+
+  alignedX = ovr_alignUp4(x,0,0);
+  alignedEnd = alignedX + 3;
+  if (((int)alignedEnd < 0x94) && (-1 < (int)alignedX) && (y < 0x3c) && (-1 < y)) {
+    for (gx = -2; gx < 2; gx = gx + 1) {
+      unitIdx = (*(short (*) [148] [60])GUnitGrid)[alignedX + gx][y];
+      bldType = ((unit_t *)GUnits + unitIdx)->bldType;
+      bldOfs = (uint)bldType * 0x27;
+      if ((bldType < 0xf8) && (*(char *)(bldOfs + 0x11a) != '\0')) {
+        return 1;
       }
     }
   }
-  return uVar4 & 0xff00;
+  return 0;
 }
 
 
