@@ -527,31 +527,31 @@ uint16_t __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex)
 
 {
   byte bVar1;
-  uint16_t uVar2;
+  uint16_t modifier;
   
   bVar1 = ((char_sheet_t *)(((uint)partyIndex << 2) + (uint)abilityIndex))->stats[0];
   if (bVar1 < 4) {
-    uVar2 = 0xfd;
+    modifier = 0xfd;
   }
   else if (bVar1 < 6) {
-    uVar2 = 0xfe;
+    modifier = 0xfe;
   }
   else if (bVar1 < 9) {
-    uVar2 = 0xff;
+    modifier = 0xff;
   }
   else if (bVar1 < 0xd) {
-    uVar2 = 0;
+    modifier = 0;
   }
   else if (bVar1 < 0x10) {
-    uVar2 = 1;
+    modifier = 1;
   }
   else if (bVar1 < 0x12) {
-    uVar2 = 2;
+    modifier = 2;
   }
   else {
-    uVar2 = 3;
+    modifier = 3;
   }
-  return uVar2;
+  return modifier;
 }
 
 
