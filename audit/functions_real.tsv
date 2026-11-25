@@ -1,0 +1,1476 @@
+address	name	tsv_size	real_size	call_sites	distinct	targets
+1000:0000	startx	340	338	4	2	near*3;0x301,0xc*1
+1000:0154	__cleanup	19	19	1	1	near*1
+1000:0167	__checknull	1	1	0	0	
+1000:0168	_terminate	9	8	0	0	
+1000:0171	ZeroDivision	9	7	0	0	
+1000:017a	SaveVectors	67	67	0	0	
+1000:01bd	__restorezero	45	45	0	0	
+1000:01ea	StartExit	87	87	2	2	es:[bx+2]*1;near*1
+1000:0241	ErrorDisplay	8	8	0	0	
+1000:0249	_abort	23	34	2	1	near*2
+1000:026c	audio_init	41	41	1	1	cs:[0x264]*1
+1000:0295	audio_done	28	28	1	1	cs:[0x268]*1
+1000:02c9	xms_init	102	89	2	1	cs:[0x2b1]*2
+1000:032f	xms_usesXmsHandle	147	147	2	1	cs:[0x2b1]*2
+1000:03c2	xms_usesXmsHandle2	141	141	2	1	cs:[0x2b1]*2
+1000:044f	xmsFree	35	35	1	1	cs:[0x2b1]*1
+1000:0472	stshInit_scan	54	54	1	1	cs:[0x2b1]*1
+1000:04b3	ems_init	127	127	0	0	
+1000:0532	ems_init2	129	129	0	0	
+1000:05c5	ems_memmove1	109	109	0	0	
+1000:0632	ems_memmove2	109	109	0	0	
+1000:069f	emsFree	37	37	0	0	
+1000:06c4	ems_realloc	46	46	0	0	
+1000:06f8	rand8	56	56	0	0	
+1000:0730	srand8	62	62	1	1	near*1
+1000:0776	ioErrorHndlrInstall	49	49	0	0	
+1000:07a7	ioErrorHndlr	64	60	0	0	
+1000:07e7	ioErrorHndlrUninstall	28	28	0	0	
+1000:081a	__OverlayHalt	29	27	1	1	near*1
+1000:0837	__FAR_RETURN	1	1	0	0	
+1000:0838	_atexit	45	45	0	0	
+1000:0865	chdir	24	24	1	1	near*1
+1000:087d	_dos_getdrive	18	18	0	0	
+1000:088f	_dos_setdrive	22	22	0	0	
+1000:08a5	___exit_dummy	1	1	0	0	
+1000:08a6	___exit	87	85	8	5	near*4;[bx-0x6be8]*1;[0x861a]*1;[0x861e]*1
+1000:08fd	exit	13	15	1	1	near*1
+1000:090c	__exit	16	18	1	1	near*1
+1000:091e	_cexit	13	11	1	1	near*1
+1000:092b	_c_exit	1	1	0	0	
+1000:0938	LXMUL_at_	23	23	0	0	
+1000:094f	F_SCOPY	28	26	0	0	
+1000:096b	getcurdir	29	29	1	1	near*1
+1000:0988	getdisk	26	26	1	1	near*1
+1000:09a2	setdisk	31	31	1	1	near*1
+1000:09c1	N_LDIV_at_	3	3	0	0	
+1000:09c4	LDIV_at_	4	3	0	0	
+1000:09c8	N_LUDIV_at_	3	3	0	0	
+1000:09cb	LUDIV_at_	5	4	0	0	
+1000:09d0	N_LMOD_at_	3	3	0	0	
+1000:09d3	LMOD_at_	5	4	0	0	
+1000:09d8	N_LUMOD_at_	151	136	0	0	
+1000:0a6f	N_LXLSH_at_	3	3	0	0	
+1000:0a72	LXLSH_at_	30	21	0	0	
+1000:0a90	N_LXRSH_at_	3	3	0	0	
+1000:0a93	LXRSH_at_	29	21	0	0	
+1000:0ab0	N_LXURSH_at_	3	3	0	0	
+1000:0ab3	LXURSH_at_	30	21	0	0	
+1000:0ad1	N_PADD_at_	3	3	0	0	
+1000:0ad4	PADD_at_	16	15	0	0	
+1000:0ae4	add1_at__at_	28	28	0	0	
+1000:0b00	N_PSUB_at_	19	18	0	0	
+1000:0b13	sub1_at__at_	30	30	0	0	
+1000:0b31	N_PSBP_at_	40	40	0	0	
+1000:0b59	__IOerror	57	55	0	0	
+1000:0b92	__DOSerror	18	16	1	1	near*1
+1000:0ba4	_isatty	17	17	0	0	
+1000:0bb5	__LONGTOA	130	128	0	0	
+1000:0c37	__UTOA	32	30	1	1	near*1
+1000:0c57	lseek	41	41	1	1	near*1
+1000:0c80	mkdir	24	24	1	1	near*1
+1000:0c98	N_LXMUL_at_	23	23	0	0	
+1000:0caf	N_PCMP_at_	33	33	0	0	
+1000:0cd0	_srand	17	17	0	0	
+1000:0ce1	rand	38	38	1	1	near*1
+1000:0d07	read	47	47	1	1	near*1
+1000:0d36	_setupio	182	182	4	1	near*4
+1000:0dec	_tell	24	24	1	1	near*1
+1000:0e04	tolower	44	44	0	0	
+1000:0e30	toupper	44	44	0	0	
+1000:0e5c	unlink	24	24	1	1	near*1
+1000:0e74	__vprinter_1000_0e74	7	6	1	1	near*1
+1000:0e7b	__vprinter_1000_0e7b	9	8	1	1	near*1
+1000:0e84	__vprinter_1000_0e84	8	8	0	0	
+1000:0e8c	__vprinter	26	25	0	0	
+1000:0ea6	__vprinter_1000_0ea6	13	13	0	0	
+1000:0eb3	__vprinter_1000_0eb3	9	8	0	0	
+1000:0ebc	__vprinter_1000_0ebc	52	52	1	1	near*1
+1000:0ef0	__vprinter_func_start	1066	1110	17	1	near*17
+1000:134a	__VPTR	37	35	0	0	
+1000:136f	__VRAM	122	120	0	0	
+1000:13e9	clrscr	41	41	2	1	near*2
+1000:1412	coreleft	6	6	1	1	near*1
+1000:1418	_crtinit_system	45	43	0	0	
+1000:1445	egainstalled	14	14	1	1	near*1
+1000:1453	_VideoInt	132	132	1	1	near*1
+1000:14d7	_c0crtinit	29	29	3	1	near*3
+1000:14f4	__crtinit	219	219	5	1	near*5
+1000:15cf	_FakRealCvt	5	4	0	0	
+1000:15d4	_FakScanTod	26	37	0	0	
+1000:15fa	malloc_FreeLastBlock	99	99	2	1	near*2
+1000:165d	malloc_FreeInnerBlock	91	91	1	1	near*1
+1000:16b8	malloc_JoinFreeBlocks	22	19	0	0	
+1000:16ce	malloc_PullFreeBlock	41	41	0	0	
+1000:16f7	malloc_InsertFreeBlock	55	55	0	0	
+1000:172e	farfree	41	41	2	1	near*2
+1000:1757	malloc_CreateHeap	100	100	3	1	near*3
+1000:17bb	malloc_ExtendHeap	90	90	2	1	near*2
+1000:1815	malloc_AllocatePartialBlock	35	35	0	0	
+1000:1838	malloc	10	9	0	0	
+1000:1842	farmalloc	125	125	4	1	near*4
+1000:18bf	malloc_ExpandBlock	124	124	2	1	near*2
+1000:193b	malloc_ShrinkBlock	100	100	2	1	near*2
+1000:199f	_realloc	7	6	0	0	
+1000:19a6	farrealloc	122	122	4	1	near*4
+1000:1a20	_brk_normalize	118	116	1	1	near*1
+1000:1a96	__brk	63	63	3	1	near*3
+1000:1ad5	__sbrk	142	142	5	1	near*5
+1000:1b63	_farcoreleft	80	80	1	1	near*1
+1000:1bb3	_gettext	86	86	3	1	near*3
+1000:1c09	_puttext	67	67	2	1	near*2
+1000:1c4c	_movetext	157	157	5	1	near*5
+1000:1ce9	ovr__FakRealCvt	4	1	0	0	
+1000:1ced	screenpos	56	54	0	0	
+1000:1d25	moveto	52	50	1	1	near*1
+1000:1d59	bios	202	200	8	1	near*8
+1000:1e23	__SCREENIO	60	58	2	1	near*2
+1000:1e5f	__VALIDATEXY	67	65	0	0	
+1000:1ea2	_zapline	34	32	0	0	
+1000:1ec4	__scroll	364	365	8	1	near*8
+1000:2032	__setargv	253	142	2	1	near*2
+1000:20c1	NextChar	40	147	0	0	
+1000:2157	_setblock	28	28	1	1	near*1
+1000:2173	_wherexy	10	10	1	1	near*1
+1000:217d	_wherex	15	15	1	1	near*1
+1000:218c	_wherey	19	19	1	1	near*1
+1000:219f	_atol	117	117	0	0	
+1000:2214	_atoi	17	17	1	1	near*1
+1000:2225	close	30	30	1	1	near*1
+1000:2243	CreateFile	45	43	1	1	near*1
+1000:2270	_creat	24	24	1	1	near*1
+1000:2288	_creattemp	27	27	1	1	near*1
+1000:22a3	_creatnew	27	27	1	1	near*1
+1000:22be	fflush	205	205	2	1	near*2
+1000:238b	filelength	65	65	1	1	near*1
+1000:23cc	flushall	66	66	1	1	near*1
+1000:240e	fseek_Displacement	130	128	0	0	
+1000:2490	fseek	128	128	3	1	near*3
+1000:2510	ftell	88	88	3	1	near*3
+1000:2568	getcwd	142	142	5	1	near*5
+1000:25f6	memcmp	40	40	0	0	
+1000:261e	memcpy	36	36	0	0	
+1000:2642	_fsetmem	36	36	0	0	
+1000:2666	_fmemset	31	31	1	1	near*1
+1000:2685	__fmovmem	82	82	1	1	near*1
+1000:26d7	_fmemmove	33	33	1	1	near*1
+1000:26f8	_open	79	79	1	1	near*1
+1000:2747	printf	27	27	1	1	near*1
+1000:2762	_fputc	28	28	1	1	near*1
+1000:277e	fputc	403	403	6	1	near*6
+1000:2911	fputchar	20	20	1	1	near*1
+1000:2925	__fputn	511	509	10	1	near*10
+1000:2b24	setvbuf	283	283	3	1	near*3
+1000:2c3f	sprintf_strputn	64	62	1	1	near*1
+1000:2c7f	_sprintf	34	34	1	1	near*1
+1000:2ca1	vsprintf	33	33	1	1	near*1
+1000:2cc2	strcat	63	63	0	0	
+1000:2d01	strcmp	48	48	0	0	
+1000:2d31	strcpy	41	41	0	0	
+1000:2d5a	_fstricmp	65	65	0	0	
+1000:2d9b	strlen	31	31	0	0	
+1000:2dba	__fstrncpy	49	49	0	0	
+1000:2deb	_fstrstr	110	110	0	0	
+1000:2e59	__write	335	335	5	1	near*5
+1000:2fa8	write	60	60	1	1	near*1
+1000:2fe4	_xfflush	56	56	1	1	near*1
+1301:000c	main	2241	2246	60	25	0x13d5,0x7f*8;0x12bb,0x61*6;0x13d5,0x5c*5;0x12bb,0x5c*4
+138e:0108	miceHandler	67	67	1	1	0x3aa,0x372*1
+138e:014b	miceInitDriver	91	79	0	0	
+138e:01a6	blitTillAlpha	37	37	0	0	
+13aa:000b	video_pointInButton	80	80	0	0	
+13aa:005b	video_findAgentAt	266	266	0	0	
+13aa:0165	video_usesMiceUnkState	257	257	2	1	near*2
+13aa:0266	video_copyScreenTile	134	134	1	1	0,0x261e*1
+13aa:02ec	miceBlitAtSeg	134	134	1	1	0x38e,0x1a6*1
+13aa:0372	videoMiceEvent	544	544	4	1	near*4
+1403:000d	__OVRINIT	304	302	8	1	near*8
+1403:013d	__OvrResetInterruptVector	83	83	0	0	
+1403:0190	__OVREXIT	34	34	3	1	near*3
+1403:01b2	__OvrExeOpenFilename	12	12	1	1	near*1
+1403:01be	__OvrExeOpenEnv	69	69	1	1	near*1
+1403:0203	__OvrExeOpenEnvPath	93	93	1	1	near*1
+1403:0260	OvrDoOpenFile	40	40	0	0	
+1403:0288	__OvrReadHeader	16	16	0	0	
+1403:0298	__InitModules	128	128	1	1	near*1
+1403:0318	__OvrInitReadSegs	192	192	4	2	near*3;[0x86]*1
+1403:03d8	ovl_rotateRight4	13	13	0	0	
+1403:03e5	__OvrRead	57	57	0	0	
+1403:041e	__OvrDoFixups	69	69	1	1	near*1
+1403:0463	__OvrFixupFunref	96	96	0	0	
+1403:04c3	__ReadOvrDisk	46	46	2	1	near*2
+1403:04f1	__OvrTrapHandler	102	102	3	2	near*2;[0x86]*1
+1403:0557	__OvrAllocateSpace	74	74	7	1	near*7
+1403:05a1	__OvrFixupTrap	123	119	7	1	near*7
+1403:061c	__OvrAllocEvict	24	24	2	1	near*2
+1403:0634	__OvrAddToLoadList	59	59	2	1	near*2
+1403:066f	__OvrUntrapJmpsAndStack	33	31	1	1	near*1
+1403:0690	__OvrUntrapJmps	30	30	0	0	
+1403:06ae	__OvrTrapJmpsAndStack	51	51	1	1	near*1
+1403:06e1	__OvrCompactHeap	81	81	1	1	near*1
+1403:0732	__OvrAddToLoadList_2	30	30	1	1	near*1
+1403:0750	__OvrPatchStack	12	12	1	1	near*1
+1403:075c	__OvrPatchStack_2	38	38	0	0	
+1403:0782	__OvrGetSegMemInfo	28	28	0	0	
+1403:079e	__OvrCalcCodeSz	12	12	0	0	
+1403:07aa	__OvrCalcSize	24	24	0	0	
+1403:07c2	__ISOVERLAYMOD	54	54	0	0	
+1403:07f8	__CHECKSTACK	152	152	0	0	
+1403:08e8	_OvrInitEms	224	224	2	1	near*2
+1403:09c8	OVRSWAP_1403_09c8	128	128	2	2	near*1;[0x86]*1
+1403:0a48	OVRSWAP_1403_0a48	106	106	0	0	
+1403:0ab2	_OvrInitExt	282	282	2	1	near*2
+1403:0bcc	OVRSWAP_1403_0bcc	47	47	3	2	near*2;[0x86]*1
+1403:0bfb	OVRSWAP_1403_0bfb	36	36	2	1	near*2
+1403:0c1f	OVRSWAP_1403_0c1f	12	12	0	0	
+1403:0c2b	OVRSWAP_1403_0c2b	167	167	6	1	near*6
+1403:0cd2	OVRSWAP_1403_0cd2	47	47	0	0	
+1403:0d01	OVRSWAP_1403_0d01	13	13	0	0	
+1403:0d0e	__SwapOverlay	22	22	2	1	near*2
+1403:0d24	__OvrPrepare	91	86	3	2	near*2;0,0x1842*1
+1403:0d88	__INITEMS	178	178	0	0	
+1403:0e3a	__INITEMSPAGE	101	99	0	0	
+1403:0e9f	__EXITEMS	43	43	0	0	
+1403:0eca	__INITEXT	432	432	7	2	[0x43]*6;near*1
+1403:107a	__INITEXTMEM	216	214	2	1	[0x43]*2
+1403:1152	__EXITEXT	84	84	2	1	[0x43]*2
+1403:11a6	__EXTCOPY	173	173	1	1	[0x43]*1
+1403:1253	OvrExtEmsSwapStub	1	1	0	0	
+1403:1254	OvrEmsExitStub	1	1	0	0	
+2272:003f	__BootHandler	5	36	0	0	
+22a6:0020	ovr_miceButtonsStates	5	4	0	0	
+22a6:0025	ovr_mkp	5	3	0	0	
+22a6:002a	ovr_miceButton0PressStates	5	4	0	0	
+22a6:002f	ovr_biosVideoCall	5	4	0	0	
+22a6:0034	ovr_miceDisableHandler	5	3	0	0	
+22a6:0039	ovr_driver_compute2	5	4	0	0	
+22a6:003e	ovr_driver_compute1	5	4	0	0	
+22a6:0043	ovr_blitRaw	5	4	0	0	
+22a6:0048	ovr_miceSetPosition	5	4	0	0	
+22a6:004d	ovr_be2	5	4	0	0	
+22a6:0052	ovr_be4	5	3	0	0	
+22a6:0057	ovr_biosReadKey	5	3	0	0	
+22a6:005c	ovr_lbm_combine_bitplanes	5	4	0	0	
+22a6:0061	ovr_biosKeyAvail	5	9	0	0	
+22a6:006b	ovr_lowNibble	5	31	0	0	
+22a6:008e	ovr_driver_setMapFlagsRect	5	3	0	0	
+22a6:0093	ovr_driver_clearMapFlagsRect	5	3	0	0	
+22a6:0098	ovr_vda_query	5	3	0	0	
+22a6:009d	ovr_driver_fillSpan	5	4	0	0	
+22a6:00a2	ovr_driver_compute5	5	4	0	0	
+22a6:00a7	ovr_midRegisterXMIDI	5	3	0	0	
+22a6:00ac	ovr_midSetRelativeValue	5	3	0	0	
+22a6:00b1	ovr_midGetSequenceStatus	5	3	0	0	
+22a6:00b6	ovr_midIsLoaded	5	4	0	0	
+22a6:00bb	ovr_digSoundPlaying	5	8	0	0	
+22a6:00c5	ovr_midPlaySequence	5	4	0	0	
+22a6:00ca	ovr_midLoadDriver	5	4	0	0	
+22a6:00cf	ovr_digIsInstalled	5	4	0	0	
+22a6:00d4	ovr_digPreformatSound	5	3	0	0	
+22a6:00d9	ovr_digPlayPreformatedSound	5	1	0	0	
+22a6:00de	ovr_midMidiStop	5	4	0	0	
+22a6:00e3	ovr_digStopCurrentSound	5	8	0	0	
+22a6:00ed	ovr_digSetSterioPanning	5	3	0	0	
+22a6:00f2	ovr_driver_fillRect	5	3	0	0	
+22a6:00f7	ovr_driver_compute4	5	1	0	0	
+22a6:00fc	ovr_driver_compute3	5	4	0	0	
+22a6:0101	ovr_driver_drawLine	5	8	0	0	
+22a6:010b	ovr_grabRemap	5	4	0	0	
+22a6:0110	ovr_drawLine2	5	4	0	0	
+22a6:0115	ovr_rle_line	5	3	0	0	
+22a6:011a	ovr_vgaSetPalette	5	3	0	0	
+22a6:011f	ovr_vgaSetPalette8bit	5	8	0	0	
+22a6:0129	ovr_unrle_mirror	5	3	0	0	
+22a6:012e	ovr_rle_blit_decode	5	4	0	0	
+22a6:0133	ovr_unrle	5	3	0	0	
+22a6:0138	ovr_driver_scan1	5	4	0	0	
+22a6:013d	ovr_masked_memcpy	5	153	0	0	
+22bb:0020	ovr_draw_usesBlitLoadRleGfx	5	3	0	0	
+22bb:0025	ovr_draw_usesBlitLoadRleGfx2	5	3	0	0	
+22bb:002a	ovr_draw_compute3	5	4	0	0	
+22bb:002f	ovr_draw_textArena	5	3	0	0	
+22bb:0034	ovr_draw_textProvidesMoreHousing	5	3	0	0	
+22bb:0039	ovr_draw_freeRingBuffers	5	1	0	0	
+22bb:003e	ovr_draw_usesPrintf	5	3	0	0	
+22bb:0043	ovr_draw_usesFillRect2	5	4	0	0	
+22bb:0048	ovr_draw_menuRowBar	5	8	0	0	
+22bb:0052	ovr_draw_usesGameProcessKey	5	3	0	0	
+22bb:0057	ovr_draw_usesToggle_pause	5	3	0	0	
+22bb:005c	ovr_draw_toolbarLabels	5	3	0	0	
+22bb:0061	ovr_draw_textTalkwin9Lbm	5	23	0	0	
+22bb:007a	ovr_gameProcessKey	5	3	0	0	
+22bb:007f	ovr_draw_usesBlitLoadRleGfx3	5	4	0	0	
+22bb:0084	ovr_draw_menuCursor	5	1	0	0	
+22c4:0025	ovr_stshProcessFontSub	5	3	0	0	
+22c4:002a	ovr_blitLetter	5	3	0	0	
+22c4:002f	ovr_blitText	5	3	0	0	
+22c4:0034	ovr_font_textWidth	5	1	0	0	
+22c4:0039	ovr_uiNotify	5	4	0	0	
+22c4:003e	ovr_say	5	9	0	0	
+22c4:0048	ovr_resetTextBlitCycle	5	3	0	0	
+22c4:004d	ovr_inputUpdate	5	3	0	0	
+22c4:0052	ovr_font_usesMiceBlitRect	5	3	0	0	
+22c4:0057	ovr_blitLabel	5	3	0	0	
+22c4:005c	ovr_drawTextAt	5	940	4	4	0x3fcd,0*1;near*1;0,0x2e*1;0x3fcd,3*1
+22cb:0020	ovr_grabLbm	5	3	0	0	
+22cb:0025	ovr_alignToSeg	5	883	4	4	0x3fcd,0*1;near*1;0,0x2e*1;0x3fcd,3*1
+22ce:0020	ovr_stExit	5	840	4	4	0x3fcd,0*1;near*1;0,0x2e*1;0x3fcd,3*1
+22d3:0020	ovr_stshRleCut	5	4	0	0	
+22d3:0025	ovr_stshRleType2	5	3	0	0	
+22d3:002a	ovr_blitLoadRleGfx	5	3	0	0	
+22d3:002f	ovr_blitGfx10	5	3	0	0	
+22d3:0034	ovr_blitGfxRect	5	3	0	0	
+22d3:0039	ovr_stshRleSub	5	3	0	0	
+22d3:003e	ovr_gfxRlePrepare	5	4	0	0	
+22d3:0043	ovr_blit_usesBlitGfxN	5	3	0	0	
+22d3:0048	ovr_blit_usesStExit	5	3	0	0	
+22d3:004d	ovr_gfxInitRand	5	3	0	0	
+22d3:0052	ovr_blit_usesBlitGfxN2	5	13	0	0	
+22d3:0061	ovr_blitGfxN	5	695	4	4	0x3fcd,0*1;near*1;0,0x2e*1;0x3fcd,3*1
+22da:0020	ovr_ovc07_usesBiosReadKey	5	4	0	0	
+22da:0025	ovr_ovc07_usesFillRect	5	3	0	0	
+22da:002a	ovr_ovc07_usesLDIV_at_	5	3	0	0	
+22da:002f	ovr_ovc07_signum	5	633	4	4	0x3fcd,0*1;near*1;0,0x2e*1;0x3fcd,3*1
+22de:0020	ovr_miceRestoreArea	5	3	0	0	
+22de:0025	ovr_miceBlitRect	5	4	0	0	
+22de:002a	ovr_miceInit	5	4	0	0	
+22de:002f	ovr_init2_usesCFGMice	5	3	0	0	
+22de:0034	ovr_ovr_miceButton0PressStates_entry	5	3	0	0	
+22de:0039	ovr_clearMiceProcessed	5	3	0	0	
+22de:003e	ovr_init2_updateMouseButtons	5	3	0	0	
+22de:0043	ovr_miceUpdate	5	3	0	0	
+22de:0048	ovr_miceSaveArea	5	544	4	4	0x3fcd,0*1;near*1;0,0x2e*1;0x3fcd,3*1
+22e3:0025	ovr_init_game	5	3	0	0	
+22e3:002a	ovr_init_textFilename	5	3	0	0	
+22e3:002f	ovr_init_usesClearEntities	5	3	0	0	
+22e3:0034	ovr_freeGameResources	5	4	0	0	
+22e3:0039	ovr_chpath	5	6	0	0	
+22e3:0043	ovr_init_usesBlitGfxRect	5	3	0	0	
+22e3:0048	ovr_path_strip_tail_slash	5	3	0	0	
+22e3:004d	ovr_freeLeaderData	5	3	0	0	
+22e3:0052	ovr_copyProtectionCheck	5	3	0	0	
+22e3:0057	ovr_init_grayscale_palette	5	3	0	0	
+22e3:005c	ovr_init_computeMaxSquares	5	3	1	1	near*1
+22e3:0061	ovr_init_usesRandBelow2	5	3	0	0	
+22e3:0066	ovr_init_getMapFlags	5	3	0	0	
+22e3:006b	ovr_init_rebuildAllDirectionFlags	5	1	0	0	
+22e3:0070	ovr_ensure_tail_slash	5	3	0	0	
+22e3:0075	ovr_init_paths	5	1	0	0	
+22e3:007a	ovr_init_cfg_mice	5	3	0	0	
+22e3:007f	ovr_init_cfg	5	4	0	0	
+22e3:0084	ovr_init_rebuildMapFlags	5	4	0	0	
+22e3:0089	ovr_init_initGUnits	5	4	0	0	
+22e3:008e	ovr_init_usesGMapCells	5	3	0	0	
+22e3:0093	ovr_clearEntities	5	3	0	0	
+22e3:0098	ovr_init_getMapCell	5	3	0	0	
+22e3:009d	ovr_init_setMapCell	5	14	0	0	
+22e3:00ac	ovr_init_usesRandBelow	5	364	2	2	0,0x2e*1;0x3fcd,3*1
+22ef:002a	ovr_constr_usesGMapFlags	5	8	0	0	
+22ef:0034	ovr_constr_usesBlitRect	5	4	0	0	
+22ef:0039	ovr_constr_flushDirtyRects	5	3	0	0	
+22ef:003e	ovr_blitRect	5	9	0	0	
+22ef:0048	ovr_constr_usesBlitRect4	5	4	0	0	
+22ef:004d	ovr_constr_usesScreenOriginY	5	8	0	0	
+22ef:0057	ovr_constr_compute1	5	4	0	0	
+22ef:005c	ovr_constr_blitRowObjects	5	4	0	0	
+22ef:0061	ovr_constr_usesGMapFlags2	5	13	0	0	
+22ef:0070	ovr_constr_usesSmoothPrev	5	3	0	0	
+22ef:0075	ovr_constr_setHighlightAtOffset	5	227	1	1	0x3fcd,3*1
+22f8:0020	ovr_play_sfx	5	1	0	0	
+22f8:0025	ovr_sfxInit	5	4	0	0	
+22f8:002a	ovr_stop_audio	5	3	0	0	
+22f8:002f	ovr_play_sfxU	5	1	0	0	
+22f8:0034	ovr_audio_isPlaying	5	4	0	0	
+22f8:0039	ovr_fmFreeAudio	5	4	0	0	
+22f8:003e	ovr_audio_usesLDIV_at_	5	3	0	0	
+22f8:0043	ovr_ovr_midGetSequenceStatus_entry	5	3	0	0	
+22f8:0048	ovr_audio_panFromX	5	18	0	0	
+22f8:005c	ovr_musInit	5	108	0	0	
+22ff:0020	ovr_agnt_usesAlignToSeg	5	3	0	0	
+22ff:0025	ovr_agnt_usesFmFreeAudio	5	3	0	0	
+22ff:002a	ovr_agnt_usesAgntCount6	5	3	0	0	
+22ff:002f	ovr_agnt_statusText	5	3	0	0	
+22ff:0034	ovr_agnt_usesAnimFrame	5	4	0	0	
+22ff:0039	ovr_agnt_clampX	5	4	0	0	
+22ff:003e	ovr_agnt_abilityModifier	5	4	0	0	
+22ff:0043	ovr_agnt_compute9	5	4	0	0	
+22ff:0048	ovr_agnt_compute8	5	3	0	0	
+22ff:004d	ovr_agnt_compute14	5	3	0	0	
+22ff:0052	ovr_agnt_compute11	5	4	0	0	
+22ff:0057	ovr_agnt_compute10	5	1	0	0	
+22ff:0061	ovr_agnt_acquireTarget	5	3	0	0	
+22ff:0066	ovr_agnt_compute13	5	3	0	0	
+22ff:006b	ovr_agnt_compute16_8	5	3	0	0	
+22ff:0070	ovr_agnt_usesStrengthMax	5	3	0	0	
+22ff:0075	ovr_agnt_computeFrameExtents	5	4	0	0	
+22ff:007a	ovr_agnt_compute4	5	13	0	0	
+22ff:0089	ovr_agnt_usesAgntSaved	5	8	0	0	
+22ff:0093	ovr_agnt_usesAgntCount2	5	8	0	0	
+22ff:009d	ovr_agnt_advanceAnimFrame	5	4	0	0	
+22ff:00a2	ovr_agnt_usesAnimFrame2	5	3	0	0	
+22ff:00a7	ovr_agnt_compute12	5	3	0	0	
+22ff:00ac	ovr_agnt_usesStExit	5	3	0	0	
+22ff:00b1	ovr_agnt_drawSpriteFrame	5	8	0	0	
+22ff:00bb	ovr_agnt_usesAgntCount4	5	9	0	0	
+22ff:00c5	ovr_agnt_usesAgntCount5	5	213	0	0	
+230c:0020	ovr_ovc13_usesAlignUp4	5	3	0	0	
+230c:0025	ovr_ovc13_usesBlitRects	5	4	0	0	
+230c:002a	ovr_ovc13_usesBlitLoadRleGfx2	5	4	0	0	
+230c:002f	ovr_ovc13_usesBlitLoadRleGfx3	5	3	0	0	
+230c:0034	ovr_ovc13_usesBlitRect	5	3	0	0	
+230c:0039	ovr_ovc13_blitAnimFrame	5	18	0	0	
+230c:004d	ovr_ovc13_usesMiceBlitRect	5	125	0	0	
+2315:0020	ovr_attact_usesAgntFlag1	5	1	0	0	
+2315:0025	ovr_attact_usesSquareRecCount2	5	3	0	0	
+2315:002a	ovr_clearSquareRecords	5	3	0	0	
+2315:002f	ovr_attact_usesUpdSeason	5	3	0	0	
+2315:0034	ovr_attact_usesBDADailyTimeCounter	5	4	0	0	
+2315:0039	ovr_attact_updateAttractEntry	5	1	0	0	
+2315:003e	ovr_attact_usesLDIV_at_	5	4	0	0	
+2315:0043	ovr_attact_textAbnormalProgramTermination	5	3	0	0	
+2315:0048	ovr_attact_countPartyUnits	5	4	0	0	
+2315:004d	ovr_attact_compute2	5	4	0	0	
+2315:0052	ovr_attact_compute3_2	5	3	0	0	
+2315:0057	ovr_attact_usesRandBelow	5	3	0	0	
+2315:005c	ovr_attact_usesSquareRecCount	5	3	0	0	
+2315:0061	ovr_attact_usesGMapFlags	5	8	0	0	
+2315:006b	ovr_attact_usesGUnits	5	4	0	0	
+2315:0070	ovr_attact_usesEntityCount	5	3	0	0	
+2315:0075	ovr_attact_usesLDIV_at_2	5	3	0	0	
+2315:007a	ovr_attact_usesEntities	5	3	0	0	
+2315:007f	ovr_attact_usesGMapFlags3	5	3	0	0	
+2315:0084	ovr_attact_usesSCARRY2	5	29	0	0	
+2315:00a2	ovr_attact_usesAlignUp4	5	205	0	0	
+2322:0020	ovr_ovc15_usesLDIV_at_	5	3	0	0	
+2322:0025	ovr_ovc15_usesStshRealloc	5	4	0	0	
+2322:002a	ovr_ovc15_capitalize	5	3	0	0	
+2322:002f	ovr_stshInitSprites	5	3	0	0	
+2322:0034	ovr_ovc15_removeEntity	5	4	0	0	
+2322:0039	ovr_ovc15_fillGridColumn	5	4	0	0	
+2322:003e	ovr_ovc15_textArena	5	3	0	0	
+2322:0043	ovr_ovc15_clearVisited	5	3	0	0	
+2322:0048	ovr_allocSprSeqs	5	3	0	0	
+2322:004d	ovr_ovc15_textView	5	3	0	0	
+2322:0052	ovr_ovc15_textError	5	3	0	0	
+2322:0057	ovr_ovc15_usesAlignUp42	5	28	0	0	
+2322:0075	ovr_ovc15_usesStExit	5	4	0	0	
+2322:007a	ovr_ovc15_usesLDIV_at_2	5	24	0	0	
+2322:0093	ovr_agnt_clear	5	3	0	0	
+2322:0098	ovr_ovc15_usesAgntIndex	5	7	0	0	
+232e:0020	ovr_uiMainMenuLoop	5	3	0	0	
+232e:0025	ovr_saveui_blitPanel	5	3	0	0	
+232e:002a	ovr_uiMenu	5	3	0	0	
+232e:002f	ovr_uiReadString	5	4	0	0	
+232e:0034	ovr_saveui_readLine	5	3	0	0	
+232e:0039	ovr_saveui_writeLine	5	8	1	1	near*1
+232e:0043	ovr_uiReadKey2	5	657	0	0	
+2337:0020	ovr_stshLoadGfx	5	4	0	0	
+2337:0025	ovr_stash_usesStExit	5	4	0	0	
+2337:002a	ovr_stshOpen	5	3	0	0	
+2337:002f	ovr_stshClose	5	4	0	0	
+2337:0034	ovr_stshInit	5	3	0	0	
+2337:0039	ovr_stshRead	5	3	0	0	
+2337:003e	ovr_stshSeek	5	3	0	0	
+2337:0043	ovr_stshAlloc	5	4	0	0	
+2337:0048	ovr_stshRealloc	5	3	0	0	
+2337:004d	ovr_fmVsprintf	5	4	0	0	
+2337:0052	ovr_initStshTables	5	3	0	0	
+2337:0057	ovr_stshFilesize	5	4	0	0	
+2337:005c	ovr_randBelow	5	3	0	0	
+2337:0061	ovr_creat_wait_unlock_and_disk	5	3	0	0	
+2337:0066	ovr_open_wait_unlock_and_disk	5	3	0	0	
+2337:006b	ovr_clean_ring_buffer	5	3	0	0	
+2337:0070	ovr_stshFree	5	8	0	0	
+2337:007a	ovr_stsprintf	5	3	0	0	
+2337:007f	ovr_stash_loadFromStrongDat	5	14	0	0	
+2337:008e	ovr_fmFree	5	4	0	0	
+2337:0093	ovr_fmReadIntoHimem	5	3	0	0	
+2337:0098	ovr_stshTell	5	1	0	0	
+2337:009d	ovr_fmRewindHeapPtr	5	423	0	0	
+2342:0020	ovr_ovc18_showLeaderView	5	4	0	0	
+2342:0025	ovr_ovc18_checkFortressPlacement	5	1	0	0	
+2342:002a	ovr_ovc18_textTypeLen	5	3	0	0	
+2342:002f	ovr_ovc18_textArena	5	3	0	0	
+2342:0034	ovr_ovc18_usesRandBelow	5	13	0	0	
+2342:0043	ovr_ovc18_blitPanelIfNotRunning	5	337	0	0	
+2347:0020	ovr_save_loadGameFile	5	4	0	0	
+2347:0025	ovr_stSave	5	3	0	0	
+2347:002a	ovr_save_deleteGameFile	5	1	0	0	
+2347:002f	ovr_save_loadArchiveGame	5	277	0	0	
+234c:0020	ovr_ovc20_textLenLoc	5	3	0	0	
+234c:0025	ovr_stshStoreFile	5	4	0	0	
+234c:002a	ovr_ovc20_compute1	5	6	0	0	
+234c:0034	ovr_stshWrite	5	7	0	0	
+234c:003e	ovr_stshStoreFile_2_2	5	3	0	0	
+234c:0043	ovr_stshInitAudioAssets	5	4	0	0	
+234c:0048	ovr_stshLoadAudioDrivers	5	3	0	0	
+234c:004d	ovr_stshWriteFile	5	3	0	0	
+234c:0052	ovr_stshReadFile	5	3	0	0	
+234c:0057	ovr_grabBldLbm	5	3	0	0	
+234c:005c	ovr_grabLbmTR	5	4	0	0	
+234c:0061	ovr_stshUniqueColorsRemap	5	3	0	0	
+234c:0066	ovr_stgFreeTmp	5	4	0	0	
+234c:006b	ovr_stubyBufSrcToDst	5	3	0	0	
+234c:0070	ovr_stshStubifyFromSrc	5	3	0	0	
+234c:0075	ovr_stshStubifyCopy1to0	5	13	0	0	
+234c:0084	ovr_init_ui_gfxes	5	4	0	0	
+234c:0089	ovr_StubifyCopy1to0_alt	5	3	0	0	
+234c:008e	ovr_stshSpriteStub	5	102	0	0	
+2356:0020	ovr_manage_textHalflingCastle	5	3	0	0	
+2356:0025	ovr_manage_rollStats	5	3	0	0	
+2356:002a	ovr_manage_compute1	5	3	0	0	
+2356:002f	ovr_manage_settlementScreen	5	4	0	0	
+2356:0034	ovr_manage_findFirstLeader	5	3	0	0	
+2356:0039	ovr_manage_playerTitle	5	4	0	0	
+2356:003e	ovr_manage_usesGLeaderCount	5	4	0	0	
+2356:0043	ovr_litoa10	5	3	0	0	
+2356:0048	ovr_manage_openTalkWindow	5	1	0	0	
+2356:004d	ovr_manage_mapPartySlots	5	3	0	0	
+2356:0052	ovr_manage_showSettlementScreen	5	1	0	0	
+2356:0057	ovr_manage_rollDice	5	3	0	0	
+2356:005c	ovr_manage_abilityModifier_2	5	83	0	0	
+2363:0020	ovr_ovc22_spawnForLeaders	5	1	0	0	
+2363:0025	ovr_ovc22_usesGOngoingBattle	5	3	0	0	
+2363:002a	ovr_upd_usesAlignUp4	5	3	0	0	
+2363:002f	ovr_ovc22_textRingProt	5	3	0	0	
+2363:0034	ovr_ovc22_compute3	5	3	0	0	
+2363:0039	ovr_ovc22_usesRandBelow2	5	3	0	0	
+2363:003e	ovr_ovc22_className	5	23	0	0	
+2363:0057	ovr_ovc22_textPOPULATION	5	3	0	0	
+2363:005c	ovr_ovc22_seasonalIncome	5	56	0	0	
+236f:0020	ovr_ovc23_textBuildThfres01Lbm	5	3	0	0	
+236f:0025	ovr_ovc23_textAdlibNone	5	3	0	0	
+236f:002a	ovr_createConstructionRecordFar	5	1	0	0	
+236f:002f	ovr_ovc23_removeRecord	5	3	0	0	
+236f:0034	ovr_ovc23_isCursorAt	5	3	0	0	
+236f:0039	ovr_ovc23_findRecordAt	5	4	0	0	
+236f:003e	ovr_createConstructionRecord	5	4	0	0	
+236f:0043	ovr_ovc23_rebuildDirectionFlags	5	3	0	0	
+236f:0048	ovr_ovc23_usesAlignUp43	5	4	0	0	
+236f:004d	ovr_OVC23_55fe_29a2_entry	5	3	0	0	
+236f:0052	ovr_ovc23_placeBuilding	5	3	0	0	
+236f:0057	ovr_ovc23_compute1	5	4	0	0	
+236f:005c	ovr_ovc23_tickRecordsAt	5	3	0	0	
+236f:0061	ovr_ovc23_findClearColumn	5	3	0	0	
+236f:0066	ovr_ovc23_compute2	5	259	1	1	[bp+di]*1
+2379:0020	ovr_ovc24_usesAlignUp4	5	4	0	0	
+2379:0025	ovr_ovc24_removeOtherEntities	5	3	0	0	
+2379:002a	ovr_ovc24_checkStrongholds	5	3	0	0	
+2379:002f	ovr_ovc24_textArena	5	18	1	1	[bp+di]*1
+2379:0043	ovr_alignUp4	5	134	0	0	
+237f:0020	ovr_ovc25_usesAlignUp44	5	3	0	0	
+237f:0025	ovr_ovc25_spyReportNotice	5	4	0	0	
+237f:002a	ovr_ovc25_attackingNotice	5	3	0	0	
+237f:002f	ovr_ovc25_tickCountdown	5	4	0	0	
+237f:0034	ovr_ovc25_compute1	5	53	0	0	
+2386:0020	ovr_ovc26_usesStExit	5	4	0	0	
+2386:0025	ovr_ovc26_usesRandBelow	5	1	0	0	
+2389:0020	ovr_ovc27_spellNotice	5	3	0	0	
+2389:0025	ovr_ovc27_usesBlitGfxRect	5	3	0	0	
+2389:002a	ovr_ovc27_textTakesHalfDamage3	5	1	0	0	
+2389:002f	ovr_ovc27_compute1	5	3	0	0	
+2389:0034	ovr_ovc27_compute2	5	3	0	0	
+2389:0039	ovr_ovc27_rollAgainstStat	5	3	0	0	
+2389:003e	ovr_ovc27_rollToHitEntity	5	4	0	0	
+2389:0043	ovr_ovc27_rollToHitAgent	5	3	0	0	
+2389:0048	ovr_ovc27_usesPlay_sfxU	5	3	0	0	
+2389:004d	ovr_ovc27_breathHalfDamage	5	4	0	0	
+2389:0052	ovr_ovc27_compute3	5	1272	1	1	near*1
+2391:0020	ovr_uiInputText	5	3	0	0	
+2391:0025	ovr_ovc28_compute2	5	8	0	0	
+2391:002f	ovr_toggle_pause	5	3	0	0	
+2391:0034	ovr_ovc28_usesBlitGfxRect2	5	4	0	0	
+2391:0039	ovr_ovc28_blitButton	5	3	0	0	
+2391:003e	ovr_ovc28_usesUiInputText	5	8	0	0	
+2391:0048	ovr_ovc28_usesBDADailyTimeCounter	5	9	0	0	
+2391:0052	ovr_update_pause_button	5	3	0	0	
+2391:0057	ovr_ovc28_textHalflingCastle	5	1139	1	1	near*1
+2398:0020	ovr_animInitSeqs	5	3	0	0	
+2398:0025	ovr_animAdvance	5	1077	1	1	near*1
+239b:0020	ovr_ovc30_nextWave	5	4	0	0	
+239b:0025	ovr_ovc30_compute1	5	3	0	0	
+239b:002a	ovr_ovc30_textDivideError	5	8	0	0	
+239b:0034	ovr_ovc30_usesRandBelow2	5	1014	1	1	near*1
+23a0:0020	ovr_init_base	5	3	0	0	
+23a0:0025	ovr_read_cfg	5	39	0	0	
+23a0:004d	ovr_init_strong_sav	5	909	1	1	near*1
+23a6:0020	ovr_heapInit	5	3	0	0	
+23a6:0025	ovr_heapAlloc	5	4	0	0	
+23a6:002a	ovr_heapMalloc	5	4	0	0	
+23a6:002f	ovr_heapRealloc	5	4	0	0	
+23a6:0034	ovr_heapValidateAll	5	3	0	0	
+23a6:0039	ovr_heapFree	5	8	0	0	
+23a6:0043	ovr_heapMemmove	5	823	1	1	near*1
+23ac:0020	ovr_stats_selectAgentAt	5	4	0	0	
+23ac:0025	ovr_drawAgntStats	5	9	0	0	
+23ac:002f	ovr_drawString	5	3	0	0	
+23ac:0034	ovr_stats_drawStatsPanel	5	8	0	0	
+23ac:003e	ovr_stats_openCastlePanel	5	9	0	0	
+23ac:0048	ovr_stats_compute4	5	722	1	1	near*1
+23b6:0020	ovr_unit_usesAlignUp4	5	3	0	0	
+23b6:0025	ovr_ui_textDefineRegionCommand	5	1	0	0	
+23b6:002a	ovr_unit_usesGUnits	5	592	1	1	near*1
+23ba:0025	ovr_bldng_usesGStrangeTable	5	3	0	0	
+23ba:002a	ovr_bldng_usesRandBelow	5	3	0	0	
+23ba:002f	ovr_bldng_getClass	5	3	0	0	
+23ba:0034	ovr_bldng_textArena	5	518	1	1	near*1
+23bf:0020	ovr_ovc36_usesLDIV_at_	5	458	1	1	near*1
+23c2:0020	ovr_season_checkEndGame	5	3	0	0	
+23c2:0025	ovr_season_textHalflingCastle	5	4	0	0	
+23c2:002a	ovr_season_usesGPromotableCount2	5	3	0	0	
+23c2:002f	ovr_calcSeasonPalette	5	3	0	0	
+23c2:0034	ovr_season_countPromotable	5	3	0	0	
+23c2:0039	ovr_season_usesDifficulty	5	13	0	0	
+23c2:0048	ovr_season_usesGPromotableCount	5	3	0	0	
+23c2:004d	ovr_updSeason	5	365	1	1	near*1
+23c8:0020	ovr_ovc38_usesStshAlloc	5	4	0	0	
+23c8:0025	ovr_ovc38_showAchievements	5	309	1	1	near*1
+23cc:0020	ovr_ovc39_textHalflingCastle	5	250	1	1	near*1
+23d0:0020	ovr_ovc40_usesAlignToSeg	5	3	0	0	
+23d0:0025	ovr_setSeasonPalette	5	4	0	0	
+23d0:002a	ovr_ovc40_usesVgaSetPalette8bit	5	4	0	0	
+23d0:002f	ovr_ovc40_usesCalcSeasonPalette	5	4	0	0	
+23d0:0034	ovr_ovc40_flushInput	5	166	0	0	
+23d5:0020	ovr_ovc41_usesPlay_sfxU	5	4	0	0	
+23d5:0025	ovr_ovc41_paralyzeNearbyAgents	5	4	0	0	
+23d5:002a	ovr_ovc41_usesXOfs	5	3	0	0	
+23d5:002f	ovr_ovc41_usesMiceBlitRect	5	3	0	0	
+23d5:0034	ovr_ovc41_compute3	5	3	0	0	
+23d5:0039	ovr_ovc41_pluralSuffix	5	9	0	0	
+23d5:0043	ovr_ovc41_compute4	5	8	0	0	
+23d5:004d	ovr_ovc41_removeAgent	5	13	0	0	
+23d5:005c	ovr_ovc41_unitStatusText	5	3	0	0	
+23d5:0061	ovr_ovc41_usesDebugVerbose	5	3	0	0	
+23d5:0066	ovr_ovc41_settleAgentCombat	5	8	0	0	
+23d5:0070	ovr_dbgPromoteEnemy	5	3	0	0	
+23d5:0075	ovr_ovc41_usesAgnt_clear	5	3	0	0	
+23d5:007a	ovr_ovc41_enterLeaderView	5	3	0	0	
+23d5:007f	ovr_ovc41_usesBiosKeyAvail	5	3	0	0	
+23d5:0084	ovr_ovc41_cannotSeeTerrainNotice	5	4	0	0	
+23d5:0089	ovr_ovc41_usesGMenuItem	5	1	0	0	
+23d5:008e	ovr_uiMainMenu	5	4	0	0	
+23d5:0093	ovr_ovc41_buildingNotice	5	13	0	0	
+23d5:00a2	ovr_ovc41_textParalyzed	5	3	0	0	
+23d5:00a7	ovr_ovc41_resolveSpecialAttack_2	5	3	0	0	
+23d5:00ac	ovr_ovc41_specialAttack	5	3	0	0	
+23d5:00c0	ovr_ovc41_usesAgntCount3	5	3	0	0	
+23d5:00c5	ovr_OVC41_6a8f_01e7_entry	5	3	0	0	
+23d5:00ca	ovr_ovc41_growthForLevel	5	1	0	0	
+23d5:00cf	ovr_ovc41_advanceAnimFrame	5	963	1	1	near*1
+23e3:0020	ovr_run_demo	5	3	0	0	
+23e3:0025	ovr_ovc42_usesBlitLabel	5	909	1	1	near*1
+23e9:0020	ovr_ovc43_playArchiveFli	5	3	0	0	
+23e9:0025	ovr_ovc43_playFli	5	813	1	1	near*1
+23ed:0020	ovr_stshAllocStub	5	3	0	0	
+23ed:0025	ovr_init_assets	5	1	0	0	
+23ed:002a	ovr_stshStubifyBld	5	744	1	1	near*1
+23f1:0020	ovr_ovc45_getUnitIndex	5	3	0	0	
+23f1:0025	ovr_ovc45_getUnitType	5	3	0	0	
+23f1:002a	ovr_ovc45_showLandInfo	5	4	0	0	
+23f1:002f	ovr_ovc45_compute3	5	3	0	0	
+23f1:0034	ovr_ovc45_usesLDIV_at_	5	3	0	0	
+23f1:0039	ovr_ovc45_compute9	5	13	0	0	
+23f1:0048	ovr_ovc45_findEntityAt	5	3	0	0	
+23f1:004d	ovr_ovc45_textChoosePartyBuild	5	18	0	0	
+23f1:0061	ovr_ovc45_rankPercent	5	3	0	0	
+23f1:0066	ovr_ovc45_usesGPopulationLo	5	3	0	0	
+23f1:006b	ovr_ovc45_compute4	5	8	0	0	
+23f1:0075	ovr_ovc45_buildPlacementMessage	5	8	0	0	
+23f1:007f	ovr_ovc45_textDone	5	4	0	0	
+23f1:0084	ovr_ovc45_compute6	5	3	0	0	
+23f1:0089	ovr_ovc45_textDone2	5	3	0	0	
+23f1:008e	ovr_ovc45_usesGfxRndSeed2	5	3	1	1	near*1
+23f1:0093	ovr_ovc45_usesGMapFlags4	5	4	0	0	
+23f1:0098	ovr_ovc45_compute7	5	3	0	0	
+23f1:009d	ovr_ovc45_compute8	5	3	0	0	
+23f1:00a2	ovr_ovc45_costOrIncomeLabel	5	560	0	0	
+23fd:0020	ovr_init_assets1	5	498	0	0	
+2400:0020	ovr_land_info	5	4	0	0	
+2400:0025	ovr_constrct_usesGLeaderCount	5	445	0	0	
+2404:0020	ovr_init_assets2	5	3	0	0	
+2404:0025	ovr_grabBldLbm2	5	1	0	0	
+2404:002a	ovr_stshAllocBldStubs2	5	4	0	0	
+2404:002f	ovr_stshInitTxtFiles	5	371	0	0	
+2408:0020	ovr_ovc49_fillGridCells	5	4	0	0	
+2408:0025	ovr_ovc49_body1	5	3	0	0	
+2408:002a	ovr_ovc49_usesStExit	5	1	0	0	
+2408:002f	ovr_ovc49_compute1	5	8	0	0	
+2408:0039	ovr_ovc49_drawAgents	5	297	0	0	
+240d:0020	ovr_ovc50_usesUiInputText	5	242	0	0	
+2d63:0000	mkp	22	22	0	0	
+2d63:0016	biosVideoCall	26	26	0	0	
+2d63:0030	biosReadKey	9	9	0	0	
+2d63:0039	biosKeyAvail	17	17	0	0	
+2d63:004a	miceButtonsStates	19	19	0	0	
+2d63:005d	blitRaw	77	77	0	0	
+2d63:00aa	lbm_combine_bitplanes	65	65	0	0	
+2d63:00eb	be4	17	17	0	0	
+2d63:00fc	be2	11	11	0	0	
+2d63:0107	driver_compute1	68	68	0	0	
+2d63:014b	driver_compute2	47	47	0	0	
+2d63:017a	miceDisableHandler	22	22	0	0	
+2d63:0190	miceButton0PressStates	23	23	0	0	
+2d63:01a7	miceSetPosition	24	24	0	0	
+2d63:01bf	vgaSetPalette	32	32	0	0	
+2d63:01df	vgaSetPalette8bit	36	36	0	0	
+2d63:0203	unrle	62	62	0	0	
+2d63:0241	rle_blit_decode	81	81	0	0	
+2d63:0292	grabRemap	35	35	0	0	
+2d63:02b5	masked_memcpy	73	73	0	0	
+2d63:02fe	countRunLength	47	47	0	0	
+2d63:032d	rle_line	137	137	0	0	
+2d63:03b6	unrle_mirror	70	70	0	0	
+2d63:03fc	drawLine2	82	82	0	0	
+2d63:044e	driver_scan1	105	105	0	0	
+2d63:04b7	driver_drawLine	226	226	3	1	near*3
+2d63:0599	driver_drawLine_compute	16	16	0	0	
+2d63:05a9	driver_loop1	60	60	0	0	
+2d63:05e5	driver_fillRect	109	109	0	0	
+2d63:0652	driver_compute3	53	53	0	0	
+2d63:0687	driver_compute4	56	56	0	0	
+2d63:06bf	digSoundPlaying	18	18	0	0	
+2d63:06d1	digPlayPreformatedSound	21	21	0	0	
+2d63:06e6	digPlayPreformatedData	21	21	0	0	
+2d63:06fb	digStopCurrentSound	18	18	0	0	
+2d63:070d	digPreformatSound	17	17	0	0	
+2d63:071e	digIsInstalled	65	61	0	0	
+2d63:075f	midPlaySequence	21	21	0	0	
+2d63:0774	midSegueSequence	24	24	0	0	
+2d63:078c	midRegisterXMIDI	30	30	0	0	
+2d63:07aa	midMidiStop	18	18	0	0	
+2d63:07bc	midGetSequenceStatus	18	18	0	0	
+2d63:07ce	midIsLoaded	45	41	0	0	
+2d63:07fb	midLoadDriver	30	30	0	0	
+2d63:0819	digSetSterioPanning	21	21	0	0	
+2d63:082e	midSetRelativeValue	24	24	0	0	
+2d63:0846	driver_compute5	324	324	2	1	near*2
+2d63:098a	driver_scan2	63	63	0	0	
+2d63:09c9	driver_fillSpan	79	79	0	0	
+2d63:0a18	vda_query	12	12	0	0	
+2d63:0a24	driver_setMapFlagsRect	67	67	0	0	
+2d63:0a67	driver_clearMapFlagsRect	69	69	0	0	
+2d63:0aac	driver_unrleScreen	75	75	0	0	
+2d63:0af7	driver_unrleSprite	86	86	0	0	
+2d63:0b4d	vgaDoSomethingWithPalette	62	62	0	0	
+2d63:0b8b	vgaWaitVerticalRetrace	9	9	0	0	
+2d63:0b94	lowNibble	25	25	0	0	
+2d63:0bad	driver_copyWords	27	27	0	0	
+2d63:0bc8	driver_zeroWords	22	22	0	0	
+2d63:0bde	driver_loop3	56	56	0	0	
+2e25:0000	draw_menuRowBar	152	152	3	2	0xe0,0xf2*2;0x158,0x3e*1
+2e25:0098	draw_usesFillRect2	242	242	7	5	near*2;0xe0,0xf2*2;0x158,0x48*1;0x1a0,0x61*1
+2e25:018a	draw_compute1	97	97	0	0	
+2e25:01eb	draw_compute2	44	44	0	0	
+2e25:0217	draw_usesCrossBlitX	46	46	0	0	
+2e25:0245	draw_compute3	21	21	0	0	
+2e25:025a	draw_textTalkwin9Lbm	515	515	8	6	near*3;0x170,0x70*1;0x158,0x3e*1;0x118,0x20*1
+2e25:046b	draw_usesBlitLoadRleGfx	264	264	4	3	0x118,0x2a*2;0x128,0x20*1;0x128,0x25*1
+2e25:0573	draw_usesBlitLoadRleGfx2	118	118	2	2	0x118,0x2a*1;0x170,0x70*1
+2e25:05e9	draw_usesPlay_sfx	847	847	9	9	0x158,0x34*1;0x1a0,0x34*1;0x140,0x20*1;0x198,0x25*1
+2e25:0938	draw_usesPrintf	409	409	13	8	0,0x2747*5;near*2;0x148,0x20*1;0x160,0x57*1
+2e25:0ad1	draw_usesResetTextBlitCycle	14	14	2	2	near*1;0xf8,0x48*1
+2e25:0adf	gameProcessKey	598	598	22	16	0x140,0x2a*2;0x128,0x25*2;0x128,0x20*2;0x230,0x93*2
+2e25:0d35	draw_usesGameProcessKey	456	456	16	6	near*6;0x128,0x20*3;0,0x2747*3;0xe0,0x61*2
+2e25:0efd	draw_usesBlitLoadRleGfx3	458	458	11	5	near*3;0xe0,0xa2*3;0xe0,0x101*3;0x118,0x2a*1
+2e25:10c7	draw_menuCursor	579	579	8	4	0xe0,0xa2*3;0xe0,0x101*3;0xe0,0xf2*1;near*1
+2e25:130a	draw_toolbarLabels	716	716	15	8	0xf8,0x2f*5;0x118,0x2a*3;near*2;0x170,0x43*1
+2e25:15d6	draw_textArena	140	140	0	0	
+2e25:1662	draw_freeRingBuffers	247	247	6	3	0x170,0x70*4;0x170,0x6b*1;0x128,0x39*1
+2e25:1759	draw_compute4	90	90	0	0	
+2e25:17b3	draw_usesToggle_pause	1481	1481	38	17	near*18;0x230,0x5c*3;0x158,0x39*3;0,0x2747*1
+2e25:1d7c	draw_textProvidesMoreHousing	80	80	4	4	0xe0,0x20*1;0xe0,0x61*1;near*1;0x140,0x3e*1
+2e25:1e42	draw_textGoldProvidesHousing	171	169	0	0	
+302d:0000	stshCopyFontChar	53	53	1	1	0,0x261e*1
+302d:0035	stshProcessFontSub	485	485	6	3	0x108,0x20*4;0x170,0x43*1;near*1
+302d:021a	stshProcessFont	114	114	5	4	0x170,0x70*2;0x100,0x20*1;0x108,0x20*1;near*1
+302d:028c	blitLetter	607	607	3	3	0x118,0x2a*1;0,0x2747*1;0xe0,0x57*1
+302d:04eb	fontChWidth	31	31	0	0	
+302d:050a	blitText	298	298	3	1	near*3
+302d:0634	blitLabel	182	182	1	1	near*1
+302d:06ea	font_textWidth	65	65	0	0	
+302d:072b	inputUpdate	224	224	6	5	0xf0,0x34*2;0x128,0x25*1;0xf0,0x20*1;0x158,0x34*1
+302d:080b	font_usesMiceBlitRect	228	228	8	6	0x140,0x43*2;0xf0,0x34*2;near*1;0x128,0x25*1
+302d:08ef	drawTextAt	262	262	5	5	0xe0,0x43*1;0x118,0x2a*1;near*1;0,0x2d9b*1
+302d:09f5	drawAnimTextAt	38	38	2	1	near*2
+302d:0a1b	say	21	21	1	1	near*1
+302d:0a30	resetTextBlitCycle	17	17	0	0	
+302d:0a41	uiNotify	174	174	6	5	near*2;0x128,0x20*1;0x128,0x25*1;0x138,0x3e*1
+30e6:0000	alignToSeg	36	36	0	0	
+30e6:0024	lbm_decode_body	765	765	18	11	0x170,0x43*3;0,0x26d7*3;0xe0,0x133*2;0xe0,0x5c*2
+30e6:0321	grabLbm	1171	1171	36	14	0x170,0x39*12;0xe0,0x52*4;0x170,0x70*3;0x108,0x20*2
+3168:0000	stExit	282	288	15	11	0,0x2747*3;0,0x295*2;0,0x8fd*2;0xe0,0x57*1
+317e:0000	stshRleSub	328	328	4	4	0x170,0x43*1;0xe0,0x115*1;0x108,0x20*1;0x170,0x48*1
+317e:0148	stshRleCut	32	32	1	1	near*1
+317e:0168	stshRleType2	74	74	1	1	near*1
+317e:01b2	blitLoadRleGfx	135	135	3	3	0x170,0x20*1;0x108,0x20*1;0xe0,0x12e*1
+317e:0239	drawGfx	112	112	2	2	near*1;0xe0,0x110*1
+317e:02a9	blitGfx10	537	537	5	5	0x170,0x20*1;0x108,0x20*1;near*1;[bp-4]*1
+317e:04c2	blit_usesDrawGfx	506	506	5	5	0x170,0x20*1;0x108,0x20*1;near*1;0xe0,0x133*1
+317e:06bc	blitGfxN	445	445	5	5	0x170,0x20*1;0x108,0x20*1;near*1;[bp-4]*1
+317e:0879	blit_usesRandBelow	65	65	1	1	0x170,0x5c*1
+317e:08ba	copyGrayscalePalette	51	51	0	0	
+317e:08ed	gfxRlePrepare	773	773	8	6	[bp-4]*2;0xe0,0x13d*2;0x170,0x20*1;0x108,0x20*1
+317e:0bf2	blitGfxRect	453	453	9	4	near*6;0x170,0x20*1;0,0x2747*1;0xe0,0x57*1
+317e:0db7	blit_usesBlitGfxN	263	263	2	2	0x120,0x2f*1;near*1
+317e:0ebe	blit_compute1	191	191	0	0	
+317e:0f7d	blit_usesStExit	627	627	5	5	0x170,0x20*1;0x108,0x20*1;0x120,0x2f*1;[bp-4]*1
+317e:11f0	gfxInitRand	80	80	2	2	0,0x730*1;0x170,0x5c*1
+317e:1240	blit_usesBlitGfxN2	519	519	5	3	0x120,0x2f*2;near*2;0x120,0x2a*1
+32c9:0000	ovc07_swapWords	38	38	0	0	
+32c9:0026	ovc07_signum	30	30	0	0	
+32c9:0044	ovc07_usesBiosReadKey	896	896	8	5	near*3;0xe0,0x9d*2;0xe0,0xa2*1;0,0x2747*1
+32c9:03c4	ovc07_usesFillRect	162	162	1	1	0xe0,0xf2*1
+32c9:0466	ovc07_usesLDIV_at_	610	610	9	3	0,0x938*4;0,0x9c4*4;0xe0,0x101*1
+3338:0000	miceRestoreArea	254	254	1	1	0x18,0x2ec*1
+3338:00fe	miceSaveArea	295	295	1	1	0,0x261e*1
+3338:0225	miceUpdate	49	49	1	1	0xe0,0x48*1
+3338:0256	miceBlitRect	244	244	4	3	near*2;0x18,0x372*1;0x18,0x2ec*1
+3338:034a	miceInit	62	62	3	3	0,0x2747*1;0x10,0x14b*1;0x108,0x20*1
+3338:0388	init2_usesCFGMice	121	121	2	2	0x140,0x3e*1;near*1
+3338:0401	ovr_miceButton0PressStates_entry	20	20	1	1	0xe0,0x2a*1
+3338:0415	init2_updateMouseButtons	41	41	1	1	0xe0,0x2a*1
+3338:043e	clearMiceProcessed	16	16	0	0	
+3381:0000	init_usesBlitGfxRect	154	154	4	2	0x118,0x2a*3;0x118,0x34*1
+3381:009a	append_name_to_path	100	100	3	3	0,0x2d31*1;0,0x2d9b*1;0,0x2cc2*1
+3381:00fe	path_strip_tail_slash	52	52	1	1	0,0x2d9b*1
+3381:0132	ensure_tail_slash	58	58	1	1	0,0x2d9b*1
+3381:016c	chpath	92	92	4	3	0,0xe30*2;0,0x865*1;0,0x9a2*1
+3381:01c8	init_paths	116	116	7	4	near*4;0,0x2568*1;0,0x2d31*1;0,0x2cc2*1
+3381:023c	init_cfg_mice	17	17	0	0	
+3381:024d	init_cfg	812	812	31	10	0x108,0x20*9;0,0x2fa8*8;0x1e0,0x25*4;0x170,0x7a*2
+3381:0579	init_game	282	282	25	20	near*4;0,0x2d01*2;0x248,0x25*2;0x20,0xab2*1
+3381:0693	init_rebuildMapFlags	585	585	0	0	
+3381:08dc	init_textFilename	3507	3507	60	5	0x170,0x5c*43;near*7;0x138,0x2a*6;0,0x2642*2
+3381:1697	init_initGUnits	88	88	0	0	
+3381:16ef	init_buffers	249	249	9	3	0x170,0x43*6;near*2;0,0x2642*1
+3381:17e8	init_computeMaxSquares	1845	1845	9	4	0x108,0x20*4;0,0x2747*2;0xf0,0x7a*2;0,0x94f*1
+3381:1f1d	init_usesGMapCells	140	140	0	0	
+3381:1fa9	clearEntities	17	17	0	0	
+3381:1fba	freeLeaderData	308	308	7	3	0x170,0x70*5;0x170,0x6b*1;0x128,0x39*1
+3381:20ee	freeGameResources	19	19	2	2	0x140,0x39*1;near*1
+3381:2101	init_usesClearEntities	573	573	13	9	near*4;0x170,0x5c*2;0x158,0x2a*1;0x1a8,0x20*1
+3381:233e	init_getMapCell	60	60	0	0	
+3381:237a	init_setMapCell	59	59	0	0	
+3381:23b5	init_getMapFlags	68	68	0	0	
+3381:23f9	init_sumMapCells2x2	89	89	4	1	near*4
+3381:2452	init_compute2	113	113	1	1	near*1
+3381:24c3	init_usesRandBelow	398	398	4	2	near*3;0x170,0x5c*1
+3381:2651	init_usesGMapFlags3	562	562	0	0	
+3381:2883	init_usesRandBelow2	1203	1203	28	3	near*23;0x170,0x5c*3;0,0x94f*2
+3381:2d36	init_rebuildAllDirectionFlags	104	104	1	1	0x1a0,0x48*1
+3381:2d9e	init_grayscale_palette	252	252	3	3	0,0x94f*1;0x170,0x43*1;0x170,0x20*1
+3381:2e9a	init_normalizeName	72	72	1	1	0,0xe04*1
+3381:2ee2	copyProtectionCheck	581	581	18	11	0xf8,0x2f*4;0x180,0x25*2;0x108,0x20*2;0x168,0x25*2
+36ce:0000	constr_getCellAtOffset	128	128	0	0	
+36ce:0080	constr_getFlagsAtOffset	129	129	0	0	
+36ce:0101	constr_usesSmoothPrev	88	88	1	1	near*1
+36ce:0159	constr_setHighlightAtOffset	227	227	0	0	
+36ce:023c	constr_usesSmoothPrev2	180	180	5	1	near*5
+36ce:02f0	constr_usesGOngoingBattle	35	35	3	3	0x150,0x20*1;0x150,0x25*1;0x158,0x75*1
+36ce:0313	blitRect	50	50	1	1	0xe0,0x43*1
+36ce:0345	constr_blitRawToScreen	97	97	3	3	0x128,0x20*1;0xe0,0x43*1;0x128,0x25*1
+36ce:03a6	constr_usesBlitRect	249	249	15	11	0x128,0x20*2;0x128,0x25*2;near*2;0x128,0x43*2
+36ce:049f	constr_compute1	37	37	1	1	0xe0,0x3e*1
+36ce:04c4	constr_compute2	37	37	1	1	0xe0,0x39*1
+36ce:04e9	constr_usesScreenOriginY	1029	1029	20	5	near*12;0x120,0x20*4;0x120,0x2a*2;0x118,0x43*1
+36ce:08ee	constr_blitRowObjects	167	167	2	2	near*1;0x118,0x34*1
+36ce:0995	constr_usesAgnt_clear	5151	5151	72	20	near*32;0x120,0x20*8;0,0x2747*7;0x118,0x34*5
+36ce:1db4	constr_flushDirtyRects	194	194	11	7	near*3;0x128,0x20*2;0x128,0x25*2;0x170,0x43*1
+36ce:1e76	constr_usesBlitRect3	134	134	8	7	near*2;0x170,0x43*1;0x100,0x25*1;0x128,0x20*1
+36ce:1efc	constr_usesBlitRect4	157	157	6	4	near*3;0x170,0x43*1;0x100,0x25*1;0x170,0x70*1
+36ce:1f99	constr_usesBlitGfxRect2	4306	4306	65	11	near*35;0x120,0x20*12;0x118,0x34*6;0x118,0x43*3
+36ce:306b	constr_usesGMapFlags	263	263	0	0	
+36ce:3172	constr_usesGMapFlags2	624	624	4	1	0xe0,0x39*4
+3a5b:0000	audio_usesLDIV_at_	623	623	24	6	0x170,0x5c*15;near*5;0xe0,0xbb*1;0x158,0x34*1
+3a5b:026f	fmFreeAudio	191	191	8	5	0xe0,0xbb*2;0x170,0x70*2;0xe0,0xb1*2;0xe0,0xe3*1
+3a5b:032e	stop_audio	32	32	1	1	near*1
+3a5b:034e	audio_isPlaying	48	48	2	2	0xe0,0xbb*1;0xe0,0xb1*1
+3a5b:037e	ovr_midGetSequenceStatus_entry	28	28	1	1	0xe0,0xb1*1
+3a5b:039a	play_sfxU	665	665	12	10	0xe0,0xbb*3;0x108,0x20*1;near*1;0xe0,0xe3*1
+3a5b:0633	play_sfx	21	21	1	1	near*1
+3a5b:0648	audio_textMidiError	281	281	9	8	0xe0,0xb1*2;0xe0,0xde*1;0x170,0x70*1;0x170,0x7f*1
+3a5b:0761	audio_usesAlignToSeg	97	97	3	2	0x100,0x25*2;0,0x26d7*1
+3a5b:07c2	audio_parseHexDigit	92	92	0	0	
+3a5b:081e	sfxInit	312	312	7	6	near*2;0xe0,0xcf*1;0x170,0x20*1;0x188,0x2a*1
+3a5b:0956	musInit	423	423	12	7	0x170,0x20*3;0x188,0x2a*3;near*2;0xe0,0xb6*1
+3a5b:0afd	audio_panFromX	46	46	0	0	
+3b1d:0000	agnt_isAnimating	50	50	0	0	
+3b1d:0032	agnt_compute1	44	44	0	0	
+3b1d:005e	agnt_clampX	27	27	0	0	
+3b1d:0079	agnt_compute3	62	62	1	1	0x270,0x2a*1
+3b1d:00b7	agnt_compute4	23	23	0	0	
+3b1d:00ce	agnt_computeFrameExtents	856	856	1	1	near*1
+3b1d:0426	agnt_usesStrengthMax	1304	1304	1	1	near*1
+3b1d:093e	agnt_usesAgntCount2	277	277	2	1	0x120,0x2f*2
+3b1d:0a53	agnt_usesAnimFrame	58	58	0	0	
+3b1d:0a8d	agnt_compute5	18	18	0	0	
+3b1d:0a9f	agnt_advanceAnimFrame	33	33	1	1	near*1
+3b1d:0ac0	agnt_statusText	350	350	7	1	0x170,0x7a*7
+3b1d:0c1e	agnt_abilityModifier	94	94	0	0	
+3b1d:0c7c	agnt_compute8	35	35	0	0	
+3b1d:0c9f	agnt_compute9	39	39	0	0	
+3b1d:0cc6	agnt_compute10	41	41	0	0	
+3b1d:0cef	agnt_compute11	45	45	0	0	
+3b1d:0d1c	agnt_usesAnimFrame2	49	49	0	0	
+3b1d:0d4d	agnt_compute12	53	53	0	0	
+3b1d:0d82	agnt_usesStExit	691	691	7	3	near*4;0x230,0xa7*2;0x108,0x20*1
+3b1d:1035	agnt_drawSpriteFrame	396	396	3	3	0x170,0x25*1;0x118,0x34*1;near*1
+3b1d:11c1	agnt_compute13	74	74	0	0	
+3b1d:120b	agnt_remapGridRefs	946	946	0	0	
+3b1d:15bd	agnt_usesAgntCount4	272	272	0	0	
+3b1d:16cd	agnt_usesAgntCount5	178	178	0	0	
+3b1d:177f	agnt_usesAgntSaved	492	492	8	3	0,0x261e*4;0,0x26d7*2;near*2
+3b1d:196b	agnt_usesAgntCount6	117	117	0	0	
+3b1d:19e0	agnt_usesFmFreeAudio	248	248	9	6	0x170,0x70*2;0x140,0x39*2;0x118,0x20*2;0x160,0x98*1
+3b1d:1ad8	agnt_usesAlignToSeg	233	233	12	10	near*3;0,0x94f*1;0x170,0x43*1;0x100,0x25*1
+3b1d:1bc1	agnt_compute14	52	52	0	0	
+3b1d:1bf5	agnt_compute15	49	49	1	1	near*1
+3b1d:1c26	agnt_acquireTarget	230	230	3	3	near*1;0x140,0x48*1;0x140,0x2f*1
+3b1d:1d0c	agnt_blitCrossFrame	153	153	1	1	0x118,0x2a*1
+3b1d:1da5	agnt_compute16	95	95	1	1	near*1
+3d16:0000	ovc13_blitAnimFrame	91	91	1	1	0x118,0x2a*1
+3d16:005b	ovc13_usesMiceBlitRect	299	299	10	6	0xe0,0x11a*3;0,0x94f*2;0x158,0x34*2;0x128,0x20*1
+3d16:0186	ovc13_readPixel	30	30	0	0	
+3d16:01a4	ovc13_usesSeedD110	87	87	0	0	
+3d16:01fb	ovc13_usesSeedD1102	90	90	0	0	
+3d16:0255	ovc13_drawPanelEntitiesAll	541	541	4	2	near*2;0xe0,0x9d*2
+3d16:0472	ovc13_drawPanelEntities	560	560	4	2	near*2;0xe0,0x9d*2
+3d16:06a2	ovc13_drawPanelLeaders	481	481	7	2	0xe0,0x9d*6;0x190,0x34*1
+3d16:0883	ovc13_compute2	107	107	0	0	
+3d16:08ee	ovc13_usesBlitRects	820	820	13	6	0x138,0x57*4;near*3;0xe0,0x9d*2;0x120,0x25*2
+3d16:0c22	ovc13_drawPanelCell	481	481	17	3	0xe0,0x9d*8;near*5;0x138,0x57*4
+3d16:0e03	ovc13_usesScreenY2	578	578	4	2	near*2;0xe0,0x9d*2
+3d16:1045	ovc13_usesEntities	248	248	0	0	
+3d16:113d	ovc13_drawWindowEntities	544	544	4	2	near*2;0xe0,0x9d*2
+3d16:135d	ovc13_drawPanelHighlight	507	507	7	2	0xe0,0x9d*6;0x190,0x34*1
+3d16:1558	ovc13_usesAlignUp4	1005	1005	18	9	near*5;0x138,0x57*4;0xe0,0x9d*2;0x120,0x25*2
+3d16:1945	ovc13_usesBlitLoadRleGfx2	188	188	3	3	0x118,0x2a*1;0x158,0x20*1;0x230,0x75*1
+3d16:1a01	ovc13_usesBlitLoadRleGfx3	188	188	3	3	0x118,0x2a*1;0x158,0x20*1;0x230,0x75*1
+3d16:1abd	ovc13_usesBlitRect	126	126	5	5	0x128,0x20*1;near*1;0x128,0x25*1;0x138,0x3e*1
+3d16:1b3b	ovc13_drawHighlightedUnits	505	505	3	1	0xe0,0x9d*3
+3f0b:0000	attact_usesGMapFlags	126	126	0	0	
+3f0b:007e	attact_usesGMapFlags2	90	90	0	0	
+3f0b:00d8	attact_isTerrainFlat	276	276	0	0	
+3f0b:01ec	attact_usesGUnits	145	145	2	1	near*2
+3f0b:027d	attact_usesSCARRY2	229	229	0	0	
+3f0b:0362	attact_usesSCARRY22	239	239	0	0	
+3f0b:0451	attact_countPartyUnits	239	239	0	0	
+3f0b:0540	attact_textAbnormalProgramTermination	58	58	3	3	near*1;0,0x938*1;0,0x9c4*1
+3f0b:057a	clearSquareRecords	11	11	0	0	
+3f0b:0585	attact_usesSquareRecCount	90	90	0	0	
+3f0b:05df	attact_usesSquareRecCount2	166	166	2	1	0,0x261e*2
+3f0b:0685	attact_usesAgntFlag1	426	426	9	5	near*3;0,0x25f6*2;0,0x26d7*2;0x160,0x57*1
+3f0b:082f	attact_usesBDADailyTimeCounter	81	81	0	0	
+3f0b:0880	attact_decrementCounter	20	20	0	0	
+3f0b:0894	attact_usesAgntCount	173	173	0	0	
+3f0b:0941	attact_usesAlignUp4	413	413	5	2	0x1a8,0x43*4;0x230,0x2f*1
+3f0b:0ade	attact_usesEntities	332	332	2	1	near*2
+3f0b:0c2a	attact_usesGMapFlags3	221	1112	16	10	0x140,0x20*5;0x1a8,0x43*2;0x1a0,0x34*2;0xe0,0x93*1
+3f0b:1082	attact_usesAlignUp42	2172	2172	40	16	near*12;0x1a8,0x43*8;0,0x2747*5;0x120,0x2f*2
+3f0b:18fe	attact_updateAttractEntry	305	305	7	6	0xf8,0x5c*2;0xf8,0x48*1;0x1a0,0x61*1;near*1
+3f0b:1a2f	attact_textArena	461	461	3	1	0x1a8,0x43*3
+3f0b:1bfc	attact_textArena2	255	255	3	1	0x1a8,0x43*3
+3f0b:1cfb	attact_textArena3	182	182	2	1	0x1a8,0x43*2
+3f0b:1db1	attact_usesAlignUp43	118	1086	9	2	near*7;0x1a8,0x43*2
+3f0b:21ef	attact_usesLDIV_at_	99	99	3	3	near*1;0,0x938*1;0,0x9c4*1
+3f0b:2252	attact_compute2	177	177	0	0	
+3f0b:2303	attact_compute3	168	168	0	0	
+3f0b:23ab	attact_usesAlignUp44	133	133	4	2	near*2;0x1a8,0x43*2
+3f0b:2430	attact_usesRandBelow	237	237	4	3	near*2;0x170,0x5c*1;0x1a0,0x66*1
+3f0b:251d	attact_usesUpdSeason	416	416	13	8	0,0x2747*5;0x210,0x4d*2;near*1;0x1b0,0x25*1
+3f0b:26bd	attact_usesEntityCount	190	190	3	3	0x1a0,0x34*1;near*1;0x160,0x3e*1
+3f0b:277b	attact_usesEntityCount2	368	368	1	1	0x1a0,0x34*1
+3f0b:28eb	attact_usesAgntCount2	172	172	0	0	
+3f0b:2997	attact_usesBlitLoadRleGfx	114	114	2	2	0x118,0x2a*1;0x150,0x39*1
+3f0b:2a09	attact_usesLDIV_at_2	658	658	23	9	0x128,0x20*4;near*4;0x128,0x25*4;0,0x94f*2
+4207:0000	stshRleAnims	940	940	7	4	0x108,0x20*4;0xe0,0x25*1;0,0x2642*1;0x118,0x39*1
+4207:03ac	stshSprite	182	182	7	5	near*2;0x170,0x70*2;0x188,0x8e*1;0x100,0x20*1
+4207:0462	allocSprSeqs	25	25	1	1	0x170,0x43*1
+4207:047b	stshInitSprites	1674	1674	13	8	near*5;0x248,0x20*2;0x100,0x20*1;0x188,0x61*1
+4207:0b05	agnt_clear	80	80	2	1	0,0x2642*2
+4207:0b55	ovc15_fillGridColumn	51	51	0	0	
+4207:0b88	ovc15_clearVisited	47	47	0	0	
+4207:0bb7	ovc15_usesAgntIndex	608	608	4	2	near*3;0x230,0x4d*1
+4207:0e17	ovc15_removeEntity	473	473	3	3	0,0x26d7*1;0x158,0xa2*1;0x158,0x7f*1
+4207:0ff0	ovc15_usesAlignUp4	179	179	2	1	0x1a8,0x43*2
+4207:10a3	ovc15_usesLDIV_at_	1538	1538	13	7	near*7;0x108,0x20*1;0,0x2642*1;0x148,0x3e*1
+4207:16a5	ovc15_usesLDIV_at_2	1033	1033	6	6	0,0xce1*1;0,0x9c4*1;0x158,0x7f*1;0x170,0x5c*1
+4207:1aae	ovc15_usesStExit	360	360	3	3	0x108,0x20*1;0,0x261e*1;0x158,0x7f*1
+4207:1c16	ovc15_usesStshRealloc	99	99	4	4	0,0x2d9b*1;0x170,0x48*1;0,0x2d31*1;0,0xe30*1
+4207:1c79	ovc15_capitalize	53	53	2	2	0,0x2d31*1;0,0xe30*1
+4207:1cae	stshStoreSprite	217	217	2	1	0x188,0x25*2
+4207:1d87	ovc15_usesStExit2	468	468	1	1	0x108,0x20*1
+4207:1f5b	ovc15_compute1	163	163	2	1	0x148,0x39*2
+4207:1ffe	ovc15_usesRandBelow	771	771	14	10	0x170,0x5c*4;0x270,0x25*2;0,0x94f*1;0x270,0x2f*1
+4207:2301	ovc15_textArena	732	732	11	6	near*4;0x170,0x5c*3;0x270,0x2f*1;0,0x26d7*1
+4207:25dd	ovc15_textView	211	211	2	2	0x190,0x57*1;0x148,0x3e*1
+4207:26bc	ovc15_textError	163	449	2	2	0,0x938*1;0,0x9c4*1
+4207:288b	ovc15_usesAlignUp42	111	111	1	1	0x1a8,0x43*1
+4207:28fa	ovc15_positionCrosshair	103	103	0	0	
+4207:2961	ovc15_selectLeftmostAgent	173	173	0	0	
+4207:2a0e	ovc15_selectRightmostAgent	171	171	0	0	
+4207:2ab9	ovc15_textArena4	351	351	0	0	
+4207:2c18	ovc15_textArena5	349	349	0	0	
+4207:2d75	ovc15_usesRandBelow2	515	515	5	2	0x170,0x5c*3;0x1a0,0x34*2
+4528:0000	uiReadKey2	434	434	16	10	0x128,0x20*3;0xf0,0x25*3;0xf8,0x48*3;0x128,0x34*1
+4528:01b2	saveui_startCrossBlit	329	329	5	5	0x170,0x70*1;0x118,0x20*1;0x118,0x2a*1;0xf0,0x2a*1
+4528:02fb	saveui_usesBlitLoadRleGfx2	265	265	5	3	0x118,0x2a*2;0xf8,0x2f*2;0x1c8,0x48*1
+4528:0404	saveui_usesMouseMoved	303	303	1	1	near*1
+4528:0533	saveui_blitPanel	40	40	2	2	0x178,0x43*1;0x118,0x34*1
+4528:055b	saveui_usesBlitGfx10	265	265	5	4	0x118,0x2f*2;0,0x94f*1;0xf8,0x2f*1;0xf8,0x2a*1
+4528:0664	saveui_usesBlitLoadRleGfx3	162	162	2	2	0x118,0x2a*1;0xf8,0x2f*1
+4528:0706	uiMenuSub	1426	1426	24	4	near*16;0xf8,0x2f*4;0,0x2642*3;0x228,0x34*1
+4528:0c98	uiReadString	1040	1040	20	10	0x170,0x70*6;near*4;0,0x2d31*2;0xf8,0x34*2
+4528:10a8	uiMenu	29	29	1	1	near*1
+4528:10c5	saveui_writeLine	63	63	3	2	0,0x2fa8*2;0,0x2d9b*1
+4528:1104	saveui_readLine	113	113	3	3	0,0xd07*1;0x170,0x43*1;0,0x2d31*1
+4528:1175	saveui_readSavesList	152	152	7	6	near*2;0x170,0x4d*1;0x170,0x66*1;0,0x219f*1
+4528:120d	saveui_writeSavesList	123	123	6	5	near*2;0x170,0x4d*1;0x170,0x61*1;0,0x2c7f*1
+4528:1288	saveui_freeLines	123	123	2	2	0,0x2d01*1;0x170,0x70*1
+4528:1303	saveui_configureMessageDelay	210	321	9	4	0xf8,0x3e*3;0xf8,0x48*2;near*2;0x170,0x4d*2
+4528:144e	saveui_usesBlitLoadRleGfx4	34	34	1	1	0x118,0x2a*1
+4528:1470	saveui_drawCancel	65	65	2	2	near*1;0xf8,0x2f*1
+4528:14b1	uiMainMenuLoop	332	1573	69	17	near*46;0,0x2d01*3;0x170,0x70*3;0,0x94f*2
+4528:1ae8	saveui_configureNewWorld	551	551	21	6	near*12;0,0x94f*3;0xf8,0x3e*3;0x180,0x2f*1
+4528:1d0f	saveui_parseNumber	70	70	0	0	
+4528:1d55	saveui_usesBlitText	588	588	12	6	near*5;0xf8,0x34*2;0x170,0x70*2;0xf8,0x2f*1
+474a:0000	stshOpen	78	78	1	1	near*1
+474a:004e	stshClose	65	65	1	1	0,0x2225*1
+474a:008f	stshRead	993	993	11	8	0xe0,0x25*3;0,0xab3*2;0,0x32f*1;0,0x5c5*1
+474a:0470	stshInit	523	523	12	8	near*3;0,0x2666*2;0,0x6c4*2;0,0x238b*1
+474a:067b	stshSeek	131	131	2	1	0,0xc57*2
+474a:06fe	stshTell	26	26	0	0	
+474a:0718	stshFree	66	66	2	2	0x1e8,0x39*1;0,0x172e*1
+474a:075a	stshAlloc	200	200	7	6	0,0x1842*2;0x140,0x39*1;0x108,0x20*1;0x1e8,0x25*1
+474a:0822	stshRealloc	175	175	6	5	near*2;0x140,0x39*1;0x108,0x20*1;0x1e8,0x2f*1
+474a:08d1	fmMalloc	130	130	5	5	0x140,0x39*1;0x108,0x20*1;0x1e8,0x2a*1;0,0x1842*1
+474a:0953	fmVsprintf	140	140	3	3	0,0x2ca1*1;near*1;0,0x2d31*1
+474a:09df	stsprintf	49	49	1	1	0,0x2ca1*1
+474a:0a10	clean_ring_buffer	90	90	1	1	near*1
+474a:0a6a	initStshTables	61	61	1	1	0,0x2666*1
+474a:0aa7	stshFilesize	127	127	3	3	near*1;0,0x238b*1;0,0x2225*1
+474a:0b26	randBelow	18	18	1	1	0,0x6f8*1
+474a:0b38	creat_wait_unlock_and_disk	56	56	3	3	0,0x776*1;0,0x2270*1;0,0x7e7*1
+474a:0b70	open_wait_unlock_and_disk	56	56	3	3	0,0x776*1;0,0x26f8*1;0,0x7e7*1
+474a:0ba8	fmReadIntoHimem	336	336	10	7	near*4;0,0x238b*1;0,0xc57*1;0,0xd07*1
+474a:0cf8	stshLoadGfx	419	419	6	3	near*3;0xe0,0x25*2;0x108,0x20*1
+474a:0e9b	stash_loadFromStrongDat	529	529	8	4	near*3;0xe0,0x25*2;0,0x261e*2;0x1e8,0x2a*1
+474a:10ac	stash_usesStExit	135	135	4	2	0x108,0x20*3;near*1
+474a:1133	fmRewindHeapPtr	99	99	0	0	
+474a:1196	fmMallocRecover	190	190	5	3	0x140,0x39*2;near*2;0x108,0x20*1
+474a:1254	fmFree	136	136	3	2	near*2;0x140,0x39*1
+474a:12dc	fmOutOfMemory	482	482	7	4	0x140,0x39*3;near*2;0,0xa93*1;0x108,0x20*1
+48ac:0000	ovc18_blitTriangles	39	39	1	1	0x118,0x2a*1
+48ac:0027	ovc18_blitPanelIfNotRunning	42	42	1	1	0x118,0x2a*1
+48ac:0051	ovc18_showLeaderView	512	512	15	5	0xf8,0x3e*5;near*5;0x170,0x4d*3;0,0x2666*1
+48ac:0251	ovc18_spawnClassAgent	295	295	4	2	0x160,0x20*3;0x170,0x5c*1
+48ac:0382	ovc18_textTypeLen	373	616	16	3	0x160,0x20*12;0x170,0x5c*3;near*1
+48ac:05f2	ovc18_checkFortressPlacement	1538	1538	36	14	0x1f0,0x3e*7;0xf8,0x3e*7;0x138,0x2a*6;0x1a8,0x43*2
+48ac:0bf4	ovc18_usesRandBelow	1070	1070	5	2	0x170,0x5c*4;0x138,0x61*1
+48ac:1022	ovc18_textArena	112	112	2	1	0x1a8,0x43*2
+48ac:1092	ovc18_usesAlignUp4	647	647	7	3	0x138,0x2a*4;0x1a8,0x43*2;0xf0,0x2f*1
+49fd:0000	save_readBlock	53	53	1	1	0,0xd07*1
+49fd:0035	save_usesCalcSeasonPalette	421	421	10	8	0x1a0,0x43*3;0x108,0x20*1;0x158,0x7f*1;0x210,0x34*1
+49fd:01da	stLoad	1604	1604	61	7	near*52;0xf8,0x5c*3;0,0x2d01*2;0x140,0x2a*1
+49fd:081e	save_loadGameFile	69	69	4	4	0x170,0x4d*1;0x170,0x66*1;near*1;0,0x2225*1
+49fd:0863	save_loadArchiveGame	119	119	4	4	0x170,0x66*1;0,0xc57*1;near*1;0,0x2225*1
+49fd:08da	save_writeBlock	53	53	1	1	0,0x2fa8*1
+49fd:090f	stSave	1559	1559	61	7	near*51;0xf8,0x5c*3;0x170,0x4d*2;0,0x2225*2
+49fd:0f26	save_deleteGameFile	69	69	4	3	0xf8,0x5c*2;0x170,0x4d*1;0,0xe5c*1
+4b0a:0000	stshUniqueColorsRemap	268	268	1	1	0,0x26d7*1
+4b0a:010c	ovc20_textLenLoc	236	236	6	2	0,0x2747*4;0xf0,0x7a*2
+4b0a:01f8	grabLbmTR	86	86	3	2	0xe0,0x10b*2;0x100,0x20*1
+4b0a:024e	stgFreeTmp	40	40	2	1	0x170,0x70*2
+4b0a:0276	stubyBufSrcToDst	182	182	0	0	
+4b0a:032c	stshStubifyFromSrc	161	161	0	0	
+4b0a:03cd	StubifyCopy1to0_alt	218	218	0	0	
+4b0a:04a7	stshStubifyCopy1to0	634	634	0	0	
+4b0a:0721	stshWriteFile	89	89	2	2	0xe0,0x25*1;0,0x2fa8*1
+4b0a:077a	stshReadFile	89	89	2	2	0xe0,0x25*1;0,0xd07*1
+4b0a:07d3	stshSpriteStub	283	283	5	4	0x248,0x20*2;0xe0,0x25*1;0x108,0x20*1;0,0x2642*1
+4b0a:08ee	ovc20_allocBlock	224	224	6	6	0,0x938*1;0,0xad4*1;0xe0,0x25*1;0x108,0x20*1
+4b0a:09ce	stshStoreFile	411	411	9	8	0x108,0x20*2;0,0x938*1;0,0xad4*1;0xe0,0x25*1
+4b0a:0b75	stshDecVocSampleRate	39	39	1	1	0,0x9c4*1
+4b0a:0b9c	stshInitAudioAssets	830	830	17	10	0x170,0x39*3;0x108,0x20*3;0x170,0x2a*2;0x170,0x43*2
+4b0a:0eda	stshAlloc_2	187	187	4	4	0,0x938*1;0,0xad4*1;0xe0,0x25*1;0x108,0x20*1
+4b0a:0f95	stshWrite	59	59	3	2	near*2;0x108,0x20*1
+4b0a:0fd0	stshStoreFile_2	282	282	11	9	near*2;0x170,0x43*2;0x170,0x66*1;0x108,0x20*1
+4b0a:10ea	init_special_graphics	67	67	1	1	0x170,0x70*1
+4b0a:112d	ovc20_compute1	35	35	0	0	
+4b0a:1150	init_ui_gfxes	643	643	29	12	near*7;0xe0,0xf2*4;0x118,0x2a*4;0xf8,0x25*3
+4b0a:13d3	stshLoadAudioDrivers	1101	1101	34	2	near*17;0x248,0x20*17
+4b0a:1820	grabBldLbm	1377	1377	40	2	near*22;0x118,0x25*18
+4d05:0000	manage_mapPartySlots	129	129	0	0	
+4d05:0081	manage_openTalkWindow	229	229	7	5	0x118,0x34*3;0x170,0x20*1;0x210,0x2f*1;0xe0,0xf2*1
+4d05:0166	manage_blitTalkWindow	61	61	2	2	0,0x94f*1;0x118,0x34*1
+4d05:01a3	manage_rollDice	49	49	1	1	0x170,0x5c*1
+4d05:01d4	manage_rollStats	102	102	2	2	near*1;0x170,0x5c*1
+4d05:023a	manage_compute1	99	99	0	0	
+4d05:029d	manage_compute2	84	84	0	0	
+4d05:02f1	manage_compute3	79	79	0	0	
+4d05:0340	manage_compute4	100	100	0	0	
+4d05:03a4	manage_playerTitle	170	170	1	1	0,0x94f*1
+4d05:044e	manage_usesGLeaderCount	120	120	0	0	
+4d05:04c6	manage_blitLabelRight	83	83	2	2	0xf8,0x34*1;0xf8,0x57*1
+4d05:0519	manage_usesBlitLabel2	85	85	2	2	0xf8,0x34*1;0xf8,0x57*1
+4d05:056e	manage_usesLitoa10	2061	2061	70	10	near*35;0xf8,0x57*19;0x170,0x7a*8;0x170,0x4d*2
+4d05:0d7b	manage_statSelectable	67	67	0	0	
+4d05:0dbe	abilitiesDlg	727	727	12	5	near*4;0,0x94f*2;0,0x2642*2;0x1f0,0x2f*2
+4d05:1095	alignmentDlg	177	177	5	3	0x1f0,0x2f*2;0x1c8,0x20*2;0,0x94f*1
+4d05:1146	uiPickGender	69	69	2	2	0x1f0,0x2f*1;0x1c8,0x20*1
+4d05:118b	manage_abilityModifier	64	64	0	0	
+4d05:11cb	manage_rollHitPoints	145	145	3	3	0,0x94f*1;0x170,0x5c*1;near*1
+4d05:125c	chargen_switch	44	44	0	0	
+4d05:1296	chargen	1329	1329	34	13	near*16;0x1f0,0x2f*5;0x1c8,0x20*2;0x170,0x70*2
+4d05:17c7	manage_showSettlementScreen	110	110	6	6	0x158,0x20*1;0xf0,0x39*1;0x140,0x2a*1;near*1
+4d05:1835	manage_textHalflingCastle	744	744	25	15	0x230,0x89*5;near*4;0x1f0,0x3e*3;0x178,0x25*2
+4d05:1b1d	manage_findFirstLeader	52	52	0	0	
+4d05:1b51	manage_usesGLeaderCount3	157	157	1	1	near*1
+4d05:1bee	manage_settlementScreen	1052	1402	24	9	near*10;0x170,0x7a*4;0x150,0x34*3;0x160,0x2a*2
+4d05:217a	litoa10	313	313	11	4	0,0x2d9b*4;0,0x26d7*3;0,0x9d3*2;0,0x9c4*2
+4d05:22b3	manage_4d05_22cf_entry	28	26	0	0	
+4d05:22cf	manage_usesEntities	160	161	0	0	
+4d05:2371	manage_usesEntities2	139	139	0	0	
+4d05:23fc	manage_usesGUnitCount	75	325	0	0	
+4d05:2543	manage_usesGUnits	687	435	0	0	
+4d05:26f6	manage_textAllProperty	132	129	2	2	0,0x94f*1;near*1
+4d05:277a	manage_textAllProperty2	911	910	30	5	near*19;0x170,0x7a*5;0xf8,0x57*4;0x118,0x34*1
+4d05:2b09	manage_usesCurSfxType3	187	187	4	2	near*3;0x1c8,0x3e*1
+4d05:2bc4	manage_highlightStructures	437	437	11	5	0xf8,0x3e*4;0x170,0x7a*3;0x198,0x3e*2;0x1f0,0x3e*1
+4d05:2d79	manage_textTotalPopulation	1427	1427	26	7	0xf8,0x57*8;near*6;0xf8,0x34*4;0,0x94f*3
+4d05:330c	manage_applyUnitFilter	346	346	11	5	0xf8,0x3e*4;0x170,0x7a*3;0x198,0x3e*2;0x1f0,0x3e*1
+5087:0000	ovc22_textArena	281	281	0	0	
+5087:0119	ovc22_className	67	67	0	0	
+5087:015c	ovc22_compute1	51	51	0	0	
+5087:018f	ovc22_applyRankBonus	165	165	0	0	
+5087:0234	ovc22_textPOPULATION	469	469	3	2	near*2;0x138,0x61*1
+5087:0411	ovc22_seasonalIncome	349	349	2	1	near*2
+5087:056e	ovc22_textRingProt	3168	3798	11	4	0,0x2666*6;near*3;0x1a8,0x43*1;0x208,0x20*1
+5087:1470	ovc22_usesPlayerCount	194	194	0	0	
+5087:1532	ovc22_usesEntities	322	322	0	0	
+5087:1674	ovc22_usesGUnits	578	578	5	2	0x1a0,0x2a*4;near*1
+5087:18b6	ovc22_usesLUDIV_at_	199	199	1	1	0,0x9cb*1
+5087:197d	ovc22_compute3	20	20	0	0	
+5087:1991	ovc22_usesEntities2	304	304	2	2	0x148,0x48*1;near*1
+5087:1ac1	ovc22_usesEntities3	483	483	2	2	0x148,0x57*1;near*1
+5087:1ca4	ovc22_usesEntities4	166	166	0	0	
+5087:1d4a	ovc22_usesLUDIV_at_2	51	51	2	2	0,0x938*1;0,0x9cb*1
+5087:1d7d	upd_usesAlignUp4	7406	7406	53	23	near*12;0x170,0x5c*10;0,0x2747*7;0x1a8,0x43*3
+5087:3a6b	ovc22_textArena2	552	552	1	1	near*1
+5087:3c93	ovc22_usesAlignUp4	146	146	1	1	0x1a8,0x43*1
+5087:3d25	ovc22_usesGUnitGrid	162	162	1	1	0x1a0,0x39*1
+5087:3dc7	ovc22_usesGUnitGrid2	234	234	1	1	0x1a0,0x39*1
+5087:3eb1	ovc22_buildingTypeAt	138	138	1	1	0x1a0,0x39*1
+5087:3f3b	ovc22_testMapFlags	82	82	1	1	near*1
+5087:3f8d	ovc22_usesGMapFlags2	288	288	2	1	0x120,0x2f*2
+5087:40ad	ovc22_usesAlignUp42	193	193	1	1	0x1a8,0x43*1
+5087:416e	ovc22_searchCellsAround	1032	1032	18	1	near*18
+5087:4576	ovc22_usesRandBelow	1023	1023	15	4	0x170,0x5c*11;near*2;0x200,0x2f*1;0x200,0x2a*1
+5087:4975	ovc22_usesRandBelow2	1124	1124	8	4	0x178,0x2a*3;0x170,0x5c*2;near*2;0x1a0,0x2a*1
+5087:4dd9	ovc22_spawnForLeaders	612	612	15	4	near*8;0x170,0x5c*5;0x138,0x39*1;0x138,0x34*1
+5087:503d	ovc22_usesGOngoingBattle	209	209	0	0	
+5087:510e	ovc22_usesGOngoingBattle2	207	207	0	0	
+55fe:0000	ovc23_textAdlibNone	1028	1149	7	6	0,0x2666*2;0x1a8,0x43*1;0x250,0x20*1;0x250,0x25*1
+55fe:0487	ovc23_tickRecordsAt	340	340	1	1	0x1a8,0x43*1
+55fe:05db	ovc23_isCursorAt	60	60	2	1	0x1a8,0x43*2
+55fe:0617	ovc23_usesCornerBR	337	337	8	1	0x138,0x70*8
+55fe:0768	ovc23_usesCornerBR2	251	251	8	1	0x138,0x70*8
+55fe:0863	ovc23_textBuildThfres01Lbm	499	499	8	4	near*5;0x138,0x75*1;0x1d0,0x25*1;0x138,0x4d*1
+55fe:0a56	ovc23_isLargeBuilding	100	100	0	0	
+55fe:0aba	ovc23_usesGfxRndSeed2	59	59	0	0	
+55fe:0af5	ovc23_usesAlignUp43	107	482	1	1	0x158,0x6b*1
+55fe:0cdf	ovc23_textConstructionAbandoned	107	594	1	1	0x158,0x6b*1
+55fe:0f39	ovc23_rebuildDirectionFlags	204	204	2	1	near*2
+55fe:1005	ovc23_placeBuilding	2046	2046	56	4	near*50;0x250,0x25*4;0x178,0x34*1;0x1f8,0x20*1
+55fe:1803	ovc23_removeRecord	75	75	2	2	0,0x26d7*1;near*1
+55fe:184e	createConstructionRecord	1593	1593	19	4	near*12;0x198,0x25*5;0,0x26d7*1;0,0x2666*1
+55fe:1e87	createConstructionRecordFar	34	34	1	1	near*1
+55fe:1ea9	ovc23_usesBlitGfxRect	1327	1327	13	1	0x118,0x34*13
+55fe:23d8	ovc23_usesBlitGfxRect2	1375	1375	15	2	0x118,0x34*13;near*2
+55fe:2937	ovc23_findRecordAt	107	107	0	0	
+55fe:29a2	ovc23_abandonConstruction	480	480	6	5	near*2;0x1a8,0x43*1;0x1a8,0x2f*1;0xf8,0x3e*1
+55fe:2b82	OVC23_55fe_29a2_entry	28	28	1	1	near*1
+55fe:2b9e	ovc23_compute1	517	517	14	2	near*8;0x250,0x25*6
+55fe:2da3	ovc23_findClearColumn	136	136	1	1	0x1a8,0x43*1
+55fe:2e2b	ovc23_compute2	33	33	1	1	near*1
+55fe:2e4c	ovc23_drownUnitsAt	324	324	5	5	near*1;0x160,0x2a*1;0x170,0x7a*1;0xf8,0x39*1
+55fe:2f90	ovc23_usesGRecordCount3	360	360	1	1	0,0x2666*1
+55fe:3450	alignUp4	14	14	0	0	
+5943:000e	ovc24_usesAlignUp4	392	392	2	1	near*2
+5943:0196	ovc24_usesEntities	216	216	2	2	0x148,0x48*1;0x1f0,0x48*1
+5943:026e	ovc24_textKill	2796	2796	39	15	near*8;0x170,0x5c*6;0x148,0x48*4;0,0x2666*3
+5943:0d5a	ovc24_removeOtherEntities	685	685	12	6	near*5;0x140,0x20*2;0x160,0x34*2;0x1a0,0x34*1
+5943:1007	ovc24_unitAtLeader	295	295	1	1	0x190,0x34*1
+5943:112e	ovc24_checkStrongholds	1775	1775	51	23	near*6;0xf8,0x39*5;0x140,0x2a*4;0x140,0x20*4
+5943:181d	ovc24_usesLDIV_at_	238	238	5	5	0,0xce1*1;0,0xa72*1;0,0x9c4*1;0x148,0x48*1
+5943:190b	ovc24_usesGLeaderCount	756	756	0	0	
+5943:1bff	ovc24_intelUnitReport	748	748	10	6	near*3;0x170,0x4d*2;0xf8,0x39*2;0x250,0x25*1
+5943:1eeb	ovc24_textArena	148	148	2	1	near*2
+5b66:0000	ovc25_usesAlignUp4	255	255	4	1	0x1a8,0x43*4
+5b66:00ff	ovc25_usesAlignUp42	398	398	5	2	0x1a8,0x43*4;near*1
+5b66:028d	ovc25_textArena	256	256	2	1	0x1a8,0x43*2
+5b66:038d	ovc25_usesAlignUp43	419	419	5	2	0x1a8,0x43*4;near*1
+5b66:0530	ovc25_usesAlignUp44	498	498	5	2	near*3;0x1a8,0x43*2
+5b66:0722	ovc25_findUnitCell	237	237	1	1	0x158,0x6b*1
+5b66:080f	ovc25_usesEntityCount	78	78	0	0	
+5b66:085d	ovc25_spyReportNotice	2256	2256	18	5	near*11;0x1a8,0x43*3;0x170,0x5c*2;0x170,0x7a*1
+5b66:112d	ovc25_hasBuildingNear	158	158	1	1	0x1a8,0x43*1
+5b66:11cb	ovc25_usesAlignUp46	275	275	3	1	0x1a8,0x43*3
+5b66:12de	ovc25_clearEntityFlags	65	63	0	0	
+5b66:131f	ovc25_usesAlignUp47	840	838	6	4	0x1a8,0x43*3;0x170,0x5c*1;0x158,0x6b*1;near*1
+5b66:1667	ovc25_usesEntities	165	166	0	0	
+5b66:170e	ovc25_usesAlignUp48	21	19	0	0	
+5b66:1723	OVC25_5b66_131f_entry	24	24	0	0	
+5b66:173b	ovc25_attackingNotice	401	401	5	5	0x170,0x5c*1;0x140,0x20*1;0x160,0x25*1;0x170,0x7a*1
+5b66:18cc	ovc25_compute1	93	93	0	0	
+5b66:1929	ovc25_intelAttackingNotice	543	543	8	6	0x170,0x5c*3;near*1;0x140,0x20*1;0x160,0x25*1
+5b66:1b48	ovc25_tickCountdown	161	161	0	0	
+5d45:0000	ovc26_usesFillGrid	799	799	5	2	0x158,0x84*4;0,0x2666*1
+5d45:031f	ovc26_usesStExit	977	977	3	3	near*1;0x108,0x20*1;0,0x2666*1
+5d45:06f0	ovc26_usesRandBelow	807	807	7	6	0x120,0x2f*2;0x170,0x5c*1;0x250,0x25*1;0x1a0,0x2a*1
+5ded:0000	ovc27_intelAttackingNotice	428	428	2	2	0,0x94f*1;0x120,0x2f*1
+5ded:01ac	ovc27_usesRandBelow	600	600	7	3	0,0x94f*3;0x170,0x5c*3;0x120,0x2f*1
+5ded:0404	ovc27_compute1	201	201	0	0	
+5ded:04cd	ovc27_rollAgainstStat	96	96	1	1	0x170,0x5c*1
+5ded:052d	ovc27_usesRandBelow3	624	624	3	2	0,0x94f*2;0x170,0x5c*1
+5ded:079d	ovc27_usesRandBelow4	51	51	1	1	0x170,0x5c*1
+5ded:07d0	ovc27_compute2	400	400	7	1	near*7
+5ded:0960	ovc27_usesRandBelow5	165	165	3	3	0,0x2666*1;near*1;0x170,0x5c*1
+5ded:0a05	ovc27_spellNotice	701	701	13	10	0x170,0x5c*2;0x140,0x48*2;0x140,0x2f*2;0x148,0x43*1
+5ded:0cc2	ovc27_usesBlitGfxRect	784	784	6	4	near*2;0x118,0x34*2;0x170,0x25*1;0x230,0xa7*1
+5ded:0fd2	ovc27_spellHalfDamage	140	140	4	4	0x148,0x2f*1;0x160,0x25*1;0x170,0x7a*1;0xf8,0x39*1
+5ded:105e	ovc27_breathHalfDamage	140	140	4	4	0x148,0x2f*1;0x160,0x25*1;0x170,0x7a*1;0xf8,0x39*1
+5ded:10ea	ovc27_textTakesHalfDamage3	956	956	36	11	0x148,0x2f*7;near*6;0x160,0x25*4;0x170,0x7a*4
+5ded:14a8	ovc27_textTakesHalfDamage4	1855	1853	68	11	0x148,0x2f*12;near*10;0x140,0x48*7;0x140,0x2f*7
+5ded:1be7	emptyFunction	4	4	0	0	
+5ded:1beb	ovc27_usesAgntCount	169	169	1	1	near*1
+5ded:1c94	ovc27_rollToHitEntity	250	250	2	2	0x190,0x5c*1;0x170,0x5c*1
+5ded:1d8e	ovc27_rollToHitAgent	297	297	2	2	0x190,0x5c*1;0x170,0x5c*1
+5ded:1eb7	ovc27_compute3	298	298	1	1	0x160,0x4d*1
+5ded:1fe1	ovc27_usesPlay_sfxU	293	293	4	4	near*1;0x230,0x66*1;0x140,0x48*1;0x140,0x2f*1
+5ded:218c	caseD_0_3	3	0	0	0	
+6018:0000	ovc28_usesBDADailyTimeCounter	72	72	0	0	
+6018:0048	ovc28_usesBlitLoadRleGfx	54	54	2	2	0x178,0x43*1;0x118,0x2a*1
+6018:007e	update_pause_button	248	248	5	3	0x118,0x34*2;0xf8,0x57*2;0x160,0x57*1
+6018:0176	ovc28_blitButton	57	57	3	2	near*2;0x118,0x34*1
+6018:01af	ovc28_usesBlitGfxRect2	162	162	4	2	0x118,0x34*3;0xf0,0x2f*1
+6018:0251	ovc28_textHalflingCastle	386	386	9	7	0x118,0x2a*2;near*2;0x178,0x43*1;0x118,0x2f*1
+6018:03d3	toggle_pause	131	131	5	3	0xf8,0x5c*3;0x160,0x57*1;near*1
+6018:0456	ovc28_usesBlitGfx10	478	478	9	5	0x250,0x39*3;0xf8,0x57*3;0x118,0x2f*1;0x118,0x2a*1
+6018:0634	ovc28_drawGold	479	479	14	4	0xf8,0x34*4;0xf8,0x2f*4;0x190,0x43*3;0x250,0x34*3
+6018:0813	ovc28_drawButton	665	665	15	5	0x250,0x39*6;0xf8,0x57*4;0x118,0x2a*2;0xf8,0x2f*2
+6018:0aac	ovc28_blitMenuEntry	67	67	1	1	near*1
+6018:0aef	ovc28_startCrossBlit	391	391	5	5	0x170,0x70*1;0x118,0x20*1;0x118,0x2a*1;0xf0,0x2a*1
+6018:0c76	ovc28_usesScreenMode	691	691	5	3	near*3;0x150,0x2a*1;0x150,0x2f*1
+6018:0f29	uiInputText	1135	1135	13	6	near*8;0x1f0,0x2f*1;0xf8,0x5c*1;0x228,0x34*1
+6018:1398	ovc28_usesUiInputText	399	399	2	1	near*2
+6018:1527	ovc28_compute2	39	39	1	1	near*1
+6190:0000	animInitSeqs	57	57	1	1	0x170,0x43*1
+6190:0039	animAdvance	116	116	1	1	0x118,0x34*1
+619c:0000	ovc30_difficultyFactor	78	78	0	0	
+619c:004e	ovc30_nextWave	527	527	19	6	near*10;0x170,0x5c*3;0xf8,0x39*2;0xf8,0x4d*2
+619c:025d	ovc30_usesRandBelow	192	192	1	1	0x170,0x5c*1
+619c:031d	ovc30_compute1	28	28	0	0	
+619c:0339	ovc30_createLeader	620	620	8	8	0x108,0x20*1;0x140,0x39*1;0x170,0x43*1;0,0x2666*1
+619c:05a5	ovc30_textDivideError	1209	1209	19	8	0x170,0x5c*5;near*4;0x160,0x20*3;0x138,0x2a*2
+619c:0a5e	ovc30_usesRandBelow2	133	133	3	2	0x170,0x5c*2;0x250,0x6b*1
+6257:0000	creat_wait_unlock	59	59	3	3	0,0x776*1;0,0x2270*1;0,0x7e7*1
+6257:003b	file_open_rdonly	60	60	3	3	0,0x776*1;0,0x26f8*1;0,0x7e7*1
+6257:0077	ovc31_fileExists	40	40	2	2	near*1;0,0x2225*1
+6257:009f	write_game_cfg	301	301	13	6	0,0x2d9b*6;0,0x2fa8*3;0,0xc80*1;near*1
+6257:01cc	read_cfg	82	82	2	1	0,0xd07*2
+6257:021e	is_printable	129	129	0	0	
+6257:029f	input_folder_name	166	166	6	4	0,0x2747*3;0xe0,0x57*1;0,0x8fd*1;near*1
+6257:0345	init_strong_sav	293	293	15	8	near*6;0,0x2225*3;0,0xc80*1;0,0xe5c*1
+6257:046a	init_base	1559	1559	82	8	0,0x2747*23;0xe0,0x57*20;0,0x13e9*12;0,0x8fd*11
+6257:0a81	init_check_mem	123	123	5	4	0,0x2747*2;0,0xa72*1;0x190,0x43*1;0,0x8fd*1
+6316:0000	heapIsBadPtr	57	57	3	2	0xe0,0x57*2;0,0x2747*1
+6316:0039	heapMemmove	120	120	3	2	0xe0,0x25*2;0,0x26d7*1
+6316:00b1	heapInit	112	112	2	2	0,0x1412*1;0,0x1842*1
+6316:0121	heapValidate	152	152	4	2	0,0x2747*2;0xe0,0x57*2
+6316:01b9	heapFreeSub	52	52	1	1	near*1
+6316:01ed	heapAlloc	183	183	3	2	near*2;0,0xa93*1
+6316:02a4	heapRealloc	584	584	11	3	near*9;0,0xa93*1;0,0xa72*1
+6316:04ec	heapMalloc	190	190	3	2	near*2;0,0xa93*1
+6316:05aa	heapValidateAll	86	86	3	3	near*1;0,0x2747*1;0xe0,0x57*1
+6316:0600	heapFree	199	199	5	4	near*2;0xe0,0x25*1;0,0x2747*1;0xe0,0x57*1
+6386:0000	stats_compute1	136	136	0	0	
+6386:0088	stats_compute2	112	112	0	0	
+6386:00f8	stats_drawStatsPanel	69	69	2	2	0x118,0x2f*1;0x118,0x2a*1
+6386:013d	stats_compute3	103	103	0	0	
+6386:01a4	stats_drawPortrait	311	311	8	6	0x170,0x20*2;0,0x261e*2;0x210,0x2f*1;0xe0,0x11f*1
+6386:02db	agntCopyNthField	140	140	2	2	0,0x2d9b*1;0,0x2d31*1
+6386:0367	agntGetWeaponName	170	170	4	2	0,0x2d31*3;near*1
+6386:0411	stats_textRingProt	182	422	16	2	0,0x2d31*15;0x170,0x7a*1
+6386:05d3	stats_compute4	137	137	2	2	0x148,0x57*1;0x148,0x3e*1
+6386:065c	stats_formatThousands	113	113	4	3	0x190,0x43*2;0,0x9c4*1;0,0x2d9b*1
+6386:06cd	drawAgntStats	3050	3050	72	14	0xf8,0x57*25;near*17;0x170,0x7a*12;0x118,0x34*6
+6386:12b7	stats_readyStatusText	156	156	4	2	0x160,0x25*2;0x170,0x7a*2
+6386:1353	stats_usesEntityCount	78	78	0	0	
+6386:13a1	stats_unreadyNotice	465	465	9	4	near*5;0x170,0x7a*2;0x158,0x7a*1;0x160,0x25*1
+6386:1572	stats_usesAlignUp4	304	304	4	1	0x1a8,0x43*4
+6386:16a2	stats_setAgentBase	405	405	7	6	near*2;0x1a0,0x66*1;0x158,0x7a*1;0x1a8,0x43*1
+6386:1837	stats_calledAwayNotice	352	352	6	5	near*2;0x1a0,0x66*1;0x158,0x7a*1;0x160,0x25*1
+6386:1997	stats_nextAgentByOwner	130	130	0	0	
+6386:1a19	stats_prevAgentByOwner	130	130	0	0	
+6386:1a9b	stats_compute5	35	35	1	1	0x160,0x75*1
+6386:1abe	stats_openAgentDetail	481	481	5	4	near*2;0x190,0x48*1;0x140,0x34*1;0x140,0x20*1
+6386:1c9f	stats_usesAlignUp42	1618	1618	30	12	near*14;0x1a8,0x43*4;0x140,0x2a*2;0x220,0x20*2
+6386:22fd	stats_selectAgentAt	48	48	2	2	0x18,0x5b*1;near*1
+6386:232d	stats_openCastlePanel	405	405	16	15	0xe0,0xf2*2;0x170,0x43*1;0x100,0x25*1;0x118,0x2f*1
+6386:24c2	drawString	263	263	5	5	0,0x261e*1;0x118,0x34*1;0xf8,0x2f*1;0,0x2d9b*1
+6616:0000	unit_usesGUnits	216	216	1	1	0x138,0x61*1
+6616:00d8	unit_usesAlignUp4	741	741	8	4	0x1a8,0x43*4;0xe0,0x8e*2;0xe0,0x93*1;near*1
+6616:03bd	keyprocessor_usesBiosKeyAvail	716	716	5	3	0xe0,0x61*2;0xf0,0x7a*2;0x150,0x4d*1
+6616:0689	ui_textDefineRegionCommand	2636	2636	64	26	0x170,0x7a*6;0xf8,0x3e*6;0x128,0x25*5;0x230,0x39*5
+6616:10d5	unit_usesAlignUp42	505	505	9	4	0,0x261e*3;0x1a8,0x43*2;0,0x25f6*2;0,0x26d7*2
+6616:12ce	unit_usesEntities	277	277	2	1	0x158,0x7a*2
+676c:0000	bldng_getClass	61	61	0	0	
+676c:003d	bldng_textArena	371	371	1	1	0x190,0x34*1
+676c:01b0	bldng_buildMenuEntries	483	483	7	2	near*6;0x250,0x2f*1
+676c:0393	bldng_compute2	74	74	2	2	near*1;0x190,0x34*1
+676c:03dd	bldng_selectBuildingType	463	463	8	3	near*6;0x170,0x7a*1;0x1c8,0x25*1
+676c:05ac	bldng_usesGStrangeTable	23	23	0	0	
+676c:05c3	bldng_usesRandBelow	59	59	1	1	0x170,0x5c*1
+67d1:0000	ovc36_usesLDIV_at_	311	311	6	2	0,0x938*3;0,0x9c4*3
+67e7:0000	season_textMainCastle	77	77	0	0	
+67e7:004d	season_textHalflingCastle	541	541	20	16	near*2;0x160,0x2a*2;0x228,0x20*2;0x140,0x2a*2
+67e7:026a	season_checkEndGame	160	160	2	2	0x1d8,0x25*1;near*1
+67e7:030a	season_countPromotable	289	289	1	1	0x1a8,0x43*1
+67e7:042b	season_usesGPromotableCount	100	100	6	3	near*4;0x190,0x34*1;0x190,0x3e*1
+67e7:048f	season_usesGPromotableCount2	86	86	1	1	0x190,0x34*1
+67e7:04e5	season_usesDifficulty	168	168	1	1	0x190,0x34*1
+67e7:058d	calcSeasonPalette	433	433	13	3	0,0x26d7*8;0,0x94f*4;0x170,0x20*1
+67e7:073e	updSeason	635	635	14	10	near*3;0x170,0x20*2;0xf8,0x39*2;0,0x94f*1
+67e7:09b9	season_usesAlignUp42	163	163	1	1	0x1a8,0x43*1
+67e7:0a5c	season_repairBuildings	267	267	5	5	near*1;0xf8,0x4d*1;0x230,0x39*1;0x170,0x7a*1
+68ac:0000	ovc38_loadHighScores	138	138	4	4	0x170,0x7a*1;0x170,0x66*1;0x168,0x34*1;0,0x2225*1
+68ac:008a	ovc38_saveHighScores	115	115	4	4	0x170,0x7a*1;0x170,0x61*1;0x168,0x39*1;0,0x2225*1
+68ac:00fd	ovc38_usesStshFree	75	75	2	1	0x170,0x70*2
+68ac:0148	ovc38_showAchievements	497	497	12	6	0xf8,0x2f*5;near*2;0x168,0x25*2;0x170,0x43*1
+68ac:0339	ovc38_scan1	195	195	0	0	
+68ac:03fc	ovc38_usesStshAlloc	403	403	12	8	near*4;0x170,0x43*2;0x190,0x34*1;0x170,0x70*1
+690b:0000	ovc39_loadArchiveEntry	209	209	4	3	0x170,0x43*2;0x170,0x20*1;0,0x261e*1
+690b:00d1	ovc39_lordOrLady	64	64	1	1	0x190,0x34*1
+690b:0111	ovc39_findBuildingAt	111	111	2	2	0x250,0x25*1;0x250,0x20*1
+690b:0180	ovc39_textHalflingCastle	2450	2450	48	7	near*19;0x170,0x7a*9;0x1f0,0x2f*9;0x170,0x70*8
+69c8:0000	ovc40_usesBlitLabel	286	286	4	3	0xf8,0x34*2;0x238,0x25*1;0xf8,0x57*1
+69c8:011e	ovc40_usesVgaSetPalette8bit	142	142	1	1	0xe0,0x11f*1
+69c8:01ac	setSeasonPalette	142	142	1	1	0xe0,0x11f*1
+69c8:023a	ovc40_usesStshLoadGfx	221	221	7	2	0x170,0x20*4;0,0x26d7*3
+69c8:0317	ovc40_usesCalcSeasonPalette	92	92	4	3	near*2;0x170,0x20*1;0x210,0x2f*1
+69c8:0373	ovc40_usesBlitGfx10	268	268	6	3	0x118,0x2f*4;0x118,0x2a*1;0x138,0x3e*1
+69c8:047f	ovc40_flushInput	71	71	3	3	0xe0,0x61*1;0xf0,0x7a*1;0xe0,0x20*1
+69c8:04c6	ovc40_usesAlignToSeg	1717	1717	70	25	near*29;0x170,0x7a*6;0x118,0x2a*4;0,0x94f*3
+6a8f:0000	ovc41_pluralSuffix	23	23	0	0	
+6a8f:0017	ovc41_compute2	23	23	0	0	
+6a8f:002e	ovc41_compute3	317	317	1	1	0x160,0x4d*1
+6a8f:016b	ovc41_compute4	124	124	4	3	near*2;0,0x938*1;0x160,0x52*1
+6a8f:01e7	ovc41_markAgentDead	66	66	1	1	0,0x2747*1
+6a8f:0229	OVC41_6a8f_01e7_entry	29	29	1	1	near*1
+6a8f:0246	ovc41_advanceAnimFrame	16	16	0	0	
+6a8f:0256	ovc41_removeAgent	460	460	3	3	0x148,0xbb*1;0,0x26d7*1;0x158,0x57*1
+6a8f:0422	ovc41_usesMenuItemEnabled	135	135	0	0	
+6a8f:04a9	ovc41_isAre	23	23	0	0	
+6a8f:04c0	ovc41_unitStatusText	237	237	5	4	near*2;0x158,0x4d*1;0x170,0x7a*1;0xf8,0x5c*1
+6a8f:05ad	ovc41_usesDebugVerbose	146	146	0	0	
+6a8f:063f	ovc41_settleAgentCombat	304	304	4	3	near*2;0x148,0x34*1;0x1b0,0x2a*1
+6a8f:076f	ovc41_usesPlay_sfxU	152	152	4	4	near*1;0x140,0x48*1;0x140,0x2f*1;0x158,0x70*1
+6a8f:0807	ovc41_paralyzeNearbyAgents	187	187	3	3	0x190,0x57*1;0x1c0,0x3e*1;near*1
+6a8f:08c2	ovc41_usesXOfs	387	387	1	1	0,0x94f*1
+6a8f:0a45	ovc41_compute6	98	98	1	1	0x148,0x4d*1
+6a8f:0aa7	ovc41_rollStatDice	99	99	4	2	0x190,0x57*3;0x148,0x4d*1
+6a8f:0b0a	ovc41_compute8	47	47	1	1	0x148,0x4d*1
+6a8f:0b39	ovc41_turnUndeadNotice	1160	1160	27	9	near*5;0x148,0x2f*4;0x160,0x25*4;0x170,0x7a*4
+6a8f:0fc1	ovc41_buildingNotice	201	201	3	3	0x138,0x39*1;0x170,0x7a*1;0xf8,0x3e*1
+6a8f:108a	dbgPromoteEnemy	328	328	3	3	0x170,0x7a*1;0xf8,0x3e*1;near*1
+6a8f:11d2	ovc41_usesAgnt_clear	846	846	30	18	0,0x2747*12;near*2;0xf0,0x39*1;0x140,0x2a*1
+6a8f:1520	ovc41_enterLeaderView	128	128	10	9	near*2;0x118,0x4d*1;0xf8,0x48*1;0x160,0x93*1
+6a8f:15a0	ovc41_usesBiosKeyAvail	237	663	21	6	0xf0,0x5c*8;0x158,0x20*8;0,0x2747*2;0x118,0x2a*1
+6a8f:1847	ovc41_cannotSeeTerrainNotice	127	127	8	7	0x140,0x2a*2;0x1c8,0x39*1;0xf0,0x2f*1;0xf8,0x3e*1
+6a8f:18c6	ovc41_usesGMenuItem	214	214	4	4	0xf0,0x25*1;near*1;0xf0,0x5c*1;0xf0,0x61*1
+6a8f:199c	uiMainMenu	176	176	8	5	0x118,0x2a*4;0xf0,0x39*1;0x140,0x2a*1;0x168,0x20*1
+6a8f:1a4c	ovc41_initIndexPerms	85	85	4	1	0,0x261e*4
+6a8f:1aa1	ovc41_removeIndexPerm	319	319	0	0	
+6a8f:1be0	ovc41_usesMiceBlitRect	148	148	4	4	0x128,0x20*1;0xf0,0x43*1;0xf0,0x48*1;0x128,0x25*1
+6a8f:1c74	ovc41_textParalyzed	1040	1040	45	12	0x140,0x48*7;0x140,0x2f*7;0x148,0x2f*5;near*4
+6a8f:2084	ovc41_textOnlyPlaceSingle	438	575	15	9	0x190,0x57*5;near*2;0x148,0x2f*2;0,0x94f*1
+6a8f:22cb	ovc41_specialAttack	1714	1714	69	15	0x148,0x2f*15;0x160,0x25*9;0x170,0x7a*9;0xf8,0x39*9
+6a8f:297d	ovc41_resolveSpecialAttack	35	35	2	2	near*1;0x148,0x9d*1
+6a8f:29a0	ovc41_usesAgntCount3	74	74	1	1	near*1
+6a8f:29ea	ovc41_growthForLevel	137	137	1	1	0,0x94f*1
+6d7a:0000	ovc42_textProvidesMoreHousing	155	155	4	4	0xe0,0x61*1;0xf0,0x7a*1;0x128,0x3e*1;0x158,0x34*1
+6d7a:009b	ovc42_usesMiceBlitRect	245	245	6	5	0xf0,0x34*2;0x128,0x25*1;0xf0,0x3e*1;0x158,0x34*1
+6d7a:0190	ovc42_endDemo	283	283	12	10	0x228,0x2f*2;0x118,0x2a*2;near*1;0xf8,0x4d*1
+6d7a:02ab	ovc42_usesEntityCount	147	147	0	0	
+6d7a:033e	ovc42_showAgentStats	436	436	6	5	0,0x2666*2;0xf0,0x39*1;0,0x261e*1;0x118,0x34*1
+6d7a:04f2	ovc42_populateArea	337	337	10	5	0x170,0x5c*4;0,0x94f*2;0x1a8,0x43*2;0x138,0x2a*1
+6d7a:0643	ovc42_usesGfxRndSeed	243	243	1	1	0x138,0x2a*1
+6d7a:0736	ovc42_copy1	89	89	1	1	0,0x26d7*1
+6d7a:078f	ovc42_drawTextRow	193	193	4	4	0,0x94f*1;0x118,0x2f*1;0x170,0x20*1;0xf8,0x57*1
+6d7a:0850	ovc42_usesBlitLabel	143	143	2	2	0x170,0x20*1;0xf8,0x57*1
+6d7a:08df	run_demo	5702	5702	254	29	near*84;0x128,0x20*21;0x160,0x20*20;0x128,0x25*19
+6d7a:1f25	ovc42_usesAgntCount	324	324	4	1	0x148,0x20*4
+6fbe:0000	ovc43_usesFmFreeAudio	120	302	9	9	0xe0,0x70*1;0xe0,0x7a*1;0,0x26d7*1;0xe0,0x11a*1
+6fbe:013a	ovc43_usesStExit	111	111	4	3	0x170,0x39*2;0x108,0x20*1;near*1
+6fbe:01a9	ovc43_playFliFrames	377	377	11	10	near*2;0x170,0x39*1;0x108,0x20*1;0x170,0x43*1
+6fbe:0322	ovc43_playArchiveFli	61	61	2	2	0x170,0x3e*1;near*1
+6fbe:035f	ovc43_playFli	75	75	3	3	0x170,0x2a*1;near*1;0x170,0x2f*1
+6ffe:0000	stshAllocStub	155	155	2	2	0x108,0x20*1;0xe0,0x25*1
+6ffe:009b	stshTR_S_stubify0	298	298	9	1	near*9
+6ffe:01c5	stshStubifyBld	306	306	10	1	near*10
+6ffe:02f7	init_assets	28741	8188	253	20	0x188,0x25*91;0x118,0x25*78;near*26;0x188,0x66*14
+6ffe:733c	stshInitPtrs	521	521	21	3	0,0xad4*10;0xe0,0x25*6;0,0x938*5
+77eb:0121	ovc45_getUnitType	88	88	0	0	
+77eb:0179	ovc45_getUnitIndex	66	66	0	0	
+77eb:01bb	ovc45_usesAlignUp4	262	262	1	1	0x1a8,0x43*1
+77eb:02c1	ovc45_findEntityAt	535	535	2	1	0x1a8,0x43*2
+77eb:04d8	ovc45_textChoosePartyBuild	427	427	5	5	0x1a8,0x43*1;near*1;0x198,0x3e*1;0x170,0x4d*1
+77eb:0683	ovc45_usesGMapFlags	133	133	1	1	near*1
+77eb:0708	ovc45_usesGMapFlags2	58	58	0	0	
+77eb:0742	ovc45_cellBelowBlocked	54	54	0	0	
+77eb:0778	ovc45_compute1	396	396	18	1	near*18
+77eb:0904	ovc45_usesLDIV_at_	114	114	2	2	0,0x938*1;0,0x9c4*1
+77eb:0976	ovc45_rankPercent	75	75	0	0	
+77eb:09c1	ovc45_compute3	65	65	1	1	near*1
+77eb:0a02	ovc45_usesGPopulationLo	232	232	1	1	near*1
+77eb:0aea	ovc45_compute4	215	215	6	3	near*4;0x138,0x2a*1;0x1a0,0x39*1
+77eb:0bc1	ovc45_compute5	117	117	1	1	0x190,0x34*1
+77eb:0c36	ovc45_textArena2	299	299	0	0	
+77eb:0d61	ovc45_buildPlacementMessage	1752	2375	58	19	near*17;0,0x2cc2*10;0x170,0x7a*9;0x160,0x25*2
+77eb:16b2	ovc45_usesRandBelow	162	162	3	1	0x170,0x5c*3
+77eb:1754	ovc45_textDone	1102	1102	26	11	0x1a0,0x2a*5;0x140,0x20*4;0xf8,0x3e*4;near*3
+77eb:1ba2	ovc45_compute6	17	17	0	0	
+77eb:1bb3	ovc45_textDone2	1333	1333	20	14	near*3;0x170,0x4d*2;0x140,0x20*2;0xf8,0x3e*2
+77eb:20e8	ovc45_usesGfxRndSeed2	114	114	1	1	near*1
+77eb:215a	ovc45_usesGMapFlags4	121	121	0	0	
+77eb:21d3	ovc45_compute7	30	30	0	0	
+77eb:21f1	ovc45_showLandInfo	53	53	2	2	0x18,0xb*1;0x260,0x20*1
+77eb:2226	ovc45_compute8	49	49	0	0	
+77eb:2257	ovc45_costOrIncomeLabel	23	23	0	0	
+77eb:226e	ovc45_compute9	220	220	3	1	0xf8,0x34*3
+77eb:234a	ovc45_usesGMapFlags5	285	285	0	0	
+7a57:0000	init_assets1	15626	8188	212	8	0x118,0x25*75;0x188,0x25*75;0x248,0x20*18;0x188,0x5c*17
+7e7c:0000	constrct_usesGLeaderCount	75	75	2	2	0x198,0x39*1;0x138,0x39*1
+7e7c:004b	land_info	2805	2805	52	25	0,0x2d31*8;0x170,0x4d*7;0x160,0x25*6;0x250,0x39*5
+7e7c:0b40	constrct_compute1	92	92	1	1	0x190,0x34*1
+7e7c:0b9c	constrct_buildInfoText	6106	8096	187	28	0x170,0x4d*44;0x160,0x25*41;0,0x2d31*32;0x250,0x84*9
+7e7c:2b4c	constrct_usesLDIV_at_	834	834	9	7	0x1a0,0x34*2;0,0x9c4*2;0,0x938*1;0x170,0x7a*1
+7e7c:2e8e	constrct_unitFlagsClear	224	224	1	1	0x1a8,0x43*1
+81b9:0000	stshInitTxtFiles	134	134	3	3	0,0x94f*1;0x188,0x3e*1;0x248,0x20*1
+81b9:0086	init_assets2	15870	8192	247	11	0x188,0x25*68;0x118,0x25*48;0x248,0x20*47;0x188,0x66*22
+81b9:3e84	grabBldLbm2	1389	1389	40	4	0x118,0x25*18;0x188,0x25*18;0x188,0x5c*2;0x188,0x66*2
+81b9:43f1	stshAllocBldStubs2	604	604	18	1	0x248,0x20*18
+8699:0000	ovc49_usesFrameIndex	878	878	1	1	0x148,0x7a*1
+8699:036e	ovc49_usesFrameIndex2	878	878	1	1	0x148,0x7a*1
+8699:06dc	ovc49_usesStExit	365	365	1	1	0x108,0x20*1
+8699:0849	ovc49_compute1	43	43	0	0	
+8699:0874	ovc49_textLongerParalyzed	3741	3741	75	20	0x170,0x5c*24;near*8;0x148,0x75*5;0x1c0,0x39*4
+8699:1711	ovc49_agentIsActive	66	66	0	0	
+8699:1753	ovc49_fillGridCells	369	369	5	1	0,0x2666*5
+8699:18c4	ovc49_body1	150	1329	3	3	0x148,0x39*1;0x170,0x5c*1;0x148,0x34*1
+8699:1e09	ovc49_drawAgents	8643	8190	96	32	near*15;0,0x2747*8;0x170,0x5c*8;0x118,0x34*7
+8adb:0000	ovc50_usesBlitText	131	131	2	2	0xf8,0x2f*1;0,0x2d9b*1
+8adb:0083	ovc50_usesStshLoadGfx	110	110	2	2	0x170,0x20*1;near*1
+8adb:00f1	ovc50_usesUiInputText	111	111	4	4	0,0x94f*1;0x190,0x48*1;near*1;0x1c8,0x20*1

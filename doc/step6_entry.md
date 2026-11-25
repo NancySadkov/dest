@@ -5303,3 +5303,57 @@ which also invalidates any earlier estimate built on them.
 
   grep_checks 45,383; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### Measured extents for every function, and 13 badly understated sizes
+
+`tmp/measure_extents.py` sweeps each recorded function start linearly to the first `retf`
+(capped at the next recorded start or 0x2000 bytes) and writes
+**`audit/functions_real.tsv`** with columns
+`address, name, tsv_size, real_size, call_sites, distinct, targets`.
+
+1475 functions measured.  Excluding the `ovr_*` 5-byte thunks (where a sweep is meaningless -
+it just runs into whatever follows), **13 functions have a recorded size more than twice too
+small**:
+
+```
+attact_usesAlignUp43               3f0b:1db1  tsv   118  real  1086  (9.2x)
+ovc49_body1                        8699:18c4  tsv   150  real  1329  (8.9x)
+__BootHandler                      2272:003f  tsv     5  real    36  (7.2x)
+ovc23_textConstructionAbandoned    55fe:0cdf  tsv   107  real   594  (5.6x)
+attact_usesGMapFlags3              3f0b:0c2a  tsv   221  real  1112  (5.0x)
+uiMainMenuLoop                     4528:14b1  tsv   332  real  1573  (4.7x)
+ovc23_usesAlignUp43                55fe:0af5  tsv   107  real   482  (4.5x)
+manage_usesGUnitCount              4d05:23fc  tsv    75  real   325  (4.3x)
+NextChar                           1000:20c1  tsv    40  real   147  (3.7x)
+ovc41_usesBiosKeyAvail             6a8f:15a0  tsv   237  real   663  (2.8x)
+ovc15_textError                    4207:26bc  tsv   163  real   449  (2.8x)
+ovc43_usesFmFreeAudio              6fbe:0000  tsv   120  real   302  (2.5x)
+```
+
+### `ovc23_usesAlignUp43` is mis-attributed too (content mismatch)
+
+Its 923-line body calls about fifteen distinct functions - `ovr_randBelow` x10, `printf` x6,
+`ovc22_usesGUnits` x3, `ovr_alignUp4` x3, `_fmemset`, `ovr_fmVsprintf`, `ovr_play_sfx`,
+`ovr_ovc25_tickCountdown`, ... - while its 482-byte range at 55fe:0af5 contains **one** call
+site (`0x158:0x6b`).  Same defect as `ovc15_textError`.  Note the body also calls
+`ovc23_usesAlignUp43` once, which is the handle for finding its true owner: whatever function
+that body belongs to is a caller of this address.
+
+### A caution about rewrites already made
+
+The `attact_usesAlignUp43` entry is the worst of the 13 (tsv 118, **real 1086**, 9.2x).  That
+function was rewritten earlier this session from a ~90-line exported body - so if the real
+function is 1086 bytes, that rewrite covered **only the part the exporter emitted**, and the rest
+of the function is absent from the tree.  The same question applies to the other large-ratio
+entries that were touched.  This is not a naming problem; it means a body can be both correct as
+far as it goes and incomplete, and neither `grep_checks` nor `compare_state` can see the
+difference.
+
+Consequence for planning: **use `audit/functions_real.tsv`, not `functions.tsv`**, and treat any
+function whose body is much shorter than its measured extent as "partially recovered" rather than
+"done".  The earlier session estimate of remaining work, which used `functions.tsv`, was
+therefore optimistic on this axis at least, though it does not change the grep_checks total,
+which is measured directly from the sources.
+
+  grep_checks 45,332; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
