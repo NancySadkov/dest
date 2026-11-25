@@ -973,7 +973,7 @@ bld_inst_t BldInstances[75] = { { 0x3268, 0x6C2E, { 0x62, 0x6D, 0x0, 0x62, 0x75,
      0x6200, { 0x75, 0x74, 0x74, 0x6F, 0x6E, 0x32, 0x2E, 0x6C } }, { 0x6D62, 0x4600, { 0x69, 0x6C, 0x65,
      0x20, 0x72, 0x65, 0x61, 0x64 } }, { 0x6520, 0x7272, { 0x6F, 0x72, 0x20, 0x25, 0x73, 0x20, 0xD, 0x0 } } };
 undefined1 MsgShown = 0x00;
-char far *PlaceErrPtrs[3] = { (char far *)&s_Strongholds_cannot__2410_461f[0], (char far *)&s_Strongholds_cannot__2410_4647[0], (char far *)&s_The_ground_is_too_ste_2410_466f[0] };
+char far *PlaceErrPtrs[3] = { (char far *)&s_Strongholds_cannot__2410_461f[0], (char far *)&s_Strongholds_cannot__2410_4647[0], (char far *)&s_tooSteep_2410_466f[0] };
 /* 45c5: "View %s." (9 bytes) */
 char s_View_s_2410_45c5[] = "View %s.";
 char s_place_s[] = "Place %s.";
@@ -983,7 +983,7 @@ char s_create_party_member[] = "Create party member.";
 char s_Strongholds_cannot__2410_461f[] = "Strongholds cannot be placed on rivers.";
 char s_Strongholds_cannot__2410_4647[] = "Strongholds cannot be placed over seas.";
 /* 466f: "The ground is too steep.." (26 bytes) */
-char s_The_ground_is_too_ste_2410_466f[] = "The ground is too steep..";
+char s_tooSteep_2410_466f[] = "The ground is too steep..";
 char s_a_fortress_cannot_be_pla_caf6[] = "A fortress cannot be placed among enemy units.";
 char s_cannot_place_another_for_4fbc[] = "Cannot place another fortress here.";
 char s_this_location_is_unsuita_f1c7[] = "This location is unsuitable for a main stronghold.  %s";

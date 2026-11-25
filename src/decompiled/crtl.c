@@ -26,7 +26,10 @@ static void fixFarTable(far_t *tbl, uint16_t n)
      not run when the stock C0 startup is the entry. */
   uint16_t ds = (uint16_t)((unsigned long)(char far *)tbl >> 16);
   for (i = 0; i < n; i++) {
-    tbl[i].seg = ds;
+    /* null terminators stay null: the original keeps { 0, 0 } entries */
+    if (tbl[i].ofs != 0 || tbl[i].seg != 0) {
+      tbl[i].seg = ds;
+    }
   }
 }
 

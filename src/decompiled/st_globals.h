@@ -1124,7 +1124,7 @@ extern char s_create_baron_or_baroness[];
 extern char s_create_party_member[];
 extern char s_Strongholds_cannot__2410_461f[];
 extern char s_Strongholds_cannot__2410_4647[];
-extern char s_The_ground_is_too_ste_2410_466f[];
+extern char s_tooSteep_2410_466f[];
 extern char s_a_fortress_cannot_be_pla_caf6[];
 extern char s_cannot_place_another_for_4fbc[];
 extern char s_this_location_is_unsuita_f1c7[];

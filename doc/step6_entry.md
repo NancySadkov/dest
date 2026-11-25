@@ -3736,3 +3736,32 @@ original DGROUP offset).
   build 64/64 clean; LINK ERRORS 0; grep_checks 50,869
   compare_state 1,627/0/0; diff_dgroup 972/1,868
   compare_runtime 1,543/13 (main entry), 1,542/13 (post-init_cfg)
+
+### Far-pointer tables: offsets repaired, and null terminators left null
+
+Two more repairs on the far-pointer tables:
+
+1. `fixFarTable` set a segment on **every** entry, including `{ 0, 0 }` terminators, so
+   `LevelRangeLabels[3]` became `0000:7C0D` while the original keeps `0000:0000`.  Null
+   entries are now skipped.
+2. `LevelRangeLabels`' three real entries were addressed by symbol (see above) rather
+   than by the original image's offsets.
+
+A third defect surfaced in the checker: our copy of the string at original `0x466f` is
+named `s_The_ground_is_too_ste_2410_466f`, whose public name TLINK truncates to
+`_S_THE_GROUND_IS_TOO_STE_2410_466` - the last hex digit is lost, so the `_2410_XXXX`
+identity used for pairing becomes unreadable and `PlaceErrPtrs` could not match.  The
+symbol is now `s_tooSteep_2410_466f`, short enough that the suffix survives
+(`_S_TOOSTEEP_2410_466F`).
+
+Measured:
+
+```
+post-init_cfg : 1,542 identical / 13 different  ->  1,545 / 11
+main entry    : 1,543 identical / 13 different  ->  1,545 / 12
+symbols matched: 1556 -> 1557
+words using the original link-time segment 0x2410: 0
+```
+
+  build 64/64 clean; LINK ERRORS 0; grep_checks 50,869
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
