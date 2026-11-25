@@ -592,7 +592,7 @@ attact_usesEntities(int entityIndex,uint16_t destX,uint16_t destY,uint16_t flags
 void __stdcall16far attact_usesGMapFlags3(void)
 
 {
-  uint *puVar1;
+  uint16_t *puVar1;
   int iVar2;
   uint uVar3;
   uint16_t uVar4;
@@ -601,7 +601,7 @@ void __stdcall16far attact_usesGMapFlags3(void)
   for (uVar3 = 0; uVar3 < EntityCount; uVar3 = uVar3 + 1) {
     uVar4 = (uint16_t)((ulong)Entities >> 0x10);
     iVar2 = (int)Entities;
-    puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[((entity_t *)iVar2)[uVar3].base.y] +
+    puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[((entity_t *)iVar2)[uVar3].base.y] +
                      *(int *)((entity_t *)iVar2 + uVar3));
     *puVar1 = *puVar1 | 0x1000 << (AgntGs[(uint)((entity_t *)iVar2)[uVar3].base.gindex].ai & 0x1f);
   }

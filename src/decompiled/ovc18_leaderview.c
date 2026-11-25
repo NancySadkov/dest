@@ -969,7 +969,7 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
 uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,uint16_t arg5,uint16_t arg6)
 
 {
-  uint *puVar1;
+  uint16_t *puVar1;
   uint uVar2;
   uint16_t randDraw;
   short (*paasVar4) [148] [60];
@@ -992,7 +992,7 @@ uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,uin
       ((unit_t *)GUnits)[unaff_SI].unitType = 0xff;
       (*(short (*) [148] [60])GUnitGrid)[x][y] = 0;
     }
-    puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+    puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
     *puVar1 = *puVar1 & 0x3fff;
   }
   else {

@@ -2200,23 +2200,23 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
 void __cdecl16far ovc23_rebuildDirectionFlags(int x,int y)
 
 {
-  uint *puVar1;
+  uint16_t *puVar1;
   bool bVar2;
   uint *puVar3;
   byte bStack_3;
   
   if ((((x < 0x94) && (-1 < x)) && (y < 0x3c)) && (-1 < y)) {
-    puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+    puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
     *puVar1 = *puVar1 & 0xff0f;
     for (bStack_3 = 0; bStack_3 < 4; bStack_3 = bStack_3 + 1) {
       puVar3 = ovc23_usesAlignUp43(x,y,bStack_3);
       if ((char)puVar3 != '\0') {
-        puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+        puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
         *puVar1 = *puVar1 | 0x10 << (bStack_3 & 0x1f);
       }
       bVar2 = ovc23_textConstructionAbandoned((char *)x,(uint8_t *)y,bStack_3);
       if (bVar2) {
-        puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+        puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
         *puVar1 = *puVar1 | 0x100 << (bStack_3 & 0x1f);
       }
     }
@@ -2234,7 +2234,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
 
 {
   byte *unitFlagsPtr;
-  uint *flagPtr;
+  uint16_t *flagPtr;
   byte cellBldType;
   int unitIdx;
   uint16_t cellType;
@@ -2270,14 +2270,14 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
     if (((*(short (*) [60] [148])GMapFlags)[y + 1][x] & 3U) != 0) {
       unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
       *unitFlagsPtr = *unitFlagsPtr | 4;
-      flagPtr = (uint *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x);
+      flagPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x);
       *flagPtr = *flagPtr & 0xfffc;
     }
     if ((BuildingTypes[bldType].flags & 4) != 0) {
       if (((*(short (*) [60] [148])GMapFlags)[y][x + 0x93] & 3U) != 0) {
         unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
         *unitFlagsPtr = *unitFlagsPtr | 8;
-        flagPtr = (uint *)((*(short (*) [60] [148])GMapFlags)[y] + x + 0x93);
+        flagPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x + 0x93);
         *flagPtr = *flagPtr & 0xfffc;
         ovc23_rebuildDirectionFlags(x + -2,y);
         ovc23_rebuildDirectionFlags(x + -1,y + -1);
@@ -2286,7 +2286,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
       if (((*(short (*) [60] [148])GMapFlags)[y + 1][x + 1] & 3U) != 0) {
         unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
         *unitFlagsPtr = *unitFlagsPtr | 0x10;
-        flagPtr = (uint *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x + 1);
+        flagPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x + 1);
         *flagPtr = *flagPtr & 0xfffc;
         ovc23_rebuildDirectionFlags(x + 1,y + -1);
         ovc23_rebuildDirectionFlags(x + 1,y + 1);
@@ -2297,7 +2297,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
       if (((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) != 0) {
         unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
         *unitFlagsPtr = *unitFlagsPtr | 8;
-        flagPtr = (uint *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+        flagPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
         *flagPtr = *flagPtr & 0xfffc;
         ovc23_rebuildDirectionFlags(x + -1,y + -1);
         ovc23_rebuildDirectionFlags(x + 1,y + -1);
@@ -2306,7 +2306,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
       if (((*(short (*) [60] [148])GMapFlags)[y + 2][x] & 3U) != 0) {
         unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
         *unitFlagsPtr = *unitFlagsPtr | 0x10;
-        flagPtr = (uint *)((*(short (*) [60] [148])GMapFlags)[y + 2] + x);
+        flagPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y + 2] + x);
         *flagPtr = *flagPtr & 0xfffc;
         ovc23_rebuildDirectionFlags(x + -1,y + 1);
         ovc23_rebuildDirectionFlags(x + 1,y + 1);
@@ -3133,7 +3133,7 @@ int __cdecl16far ovc23_compute2(int x,uint16_t y)
 void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
 
 {
-  uint *puVar1;
+  uint16_t *puVar1;
   char *pcVar2;
   uint16_t dst;
   uint entityIndex;
@@ -3145,7 +3145,7 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
   int clearCol;
   byte gindex;
   
-  puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x);
+  puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x);
   *puVar1 = *puVar1 | 3;
   entityIndex = EntityCount;
   while (entityIndex = entityIndex - 1, -1 < (int)entityIndex) {
