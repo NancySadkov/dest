@@ -4251,3 +4251,30 @@ point for that work.
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 49,708 -> 49,687 -> 49,662
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### `ovc22_textRingProt` rework: scope measured (70 distinct use patterns)
+
+Before touching the 98 `unaff_DI` uses, they were classified:
+
+```
+ 9  I)[((I)I % #) * #]
+ 6  I = (I *                     <- an assignment to the pseudo-register
+ 6  I *)((I)I + I
+ 3  I + (I)I)->I
+ 3  I)[(I)I].I.I
+ 2  I = I;                       <- another assignment
+```
+
+70 distinct expression shapes, two of which assign to the pseudo-register itself.  That
+rules out a type change or a blanket substitution: the decompiler folded the two DI loops
+*and* their index arithmetic into expressions that use DI as if it were a base pointer,
+so the loops and every use have to be re-derived together.  The two loop addresses are
+`0436A7` (mov di,2 / dec / jge) and `043712` (xor di,di / inc / cmp di,2 / jle, indexing
+`es:[bx+di+0xaa]`).
+
+This is a dedicated recovery task for a 2,300-line function; a speculative edit was
+rejected because a wrong index would change game logic silently while every gate stayed
+green.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 49,662 -> 49,642
+  compare_state 1,627/0/0; diff_dgroup 972/1,868

@@ -207,11 +207,11 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,uint16_t arg3)
   uint16_t uVar4;
   bool bVar5;
   uint uVar6;
-  entity_t *uStack_8;   /* hand fix: dereferenced as uStack_8->base.x */
+  entity_t *agntPtr;   /* hand fix: dereferenced as agntPtr->base.x */
   
   uVar2 = AGNT_WORD(&Agnts[agntIndex], entity, 2);
   agnt = (agnt_t *)AGNT_WORD(&Agnts[agntIndex], entity, 0);
-  uStack_8 = (agnt_t *)CONCAT22(uVar2,agnt);
+  agntPtr = (agnt_t *)CONCAT22(uVar2,agnt);
   iVar3 = Agnts[agntIndex].owner;
   ovr_agnt_usesAgntCount4(agntIndex + 1);
   bVar5 = false;
@@ -236,7 +236,7 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,uint16_t arg3)
   }
   AgntCount = AgntCount - 1;
   if ((((notify != 0) && (!bVar5)) && (agnt->y == GfxRndSeed2)) &&
-     ((GfxRndSeed - 2U <= uStack_8->base.x && (GfxRndSeed - 2U <= uStack_8->base.x)))) {
+     ((GfxRndSeed - 2U <= agntPtr->base.x && (GfxRndSeed - 2U <= agntPtr->base.x)))) {
     agnt->destX = agnt->targetX;
     uVar4 = agnt->targetY;
     agnt->destY = uVar4;
@@ -1065,7 +1065,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
   char cStack_1f;
   char cStack_1e;
   char cStack_1d;
-  stg_tmp_t *psStack_1c;
+  stg_tmp_t *palRec;
   uint16_t uStack_1a;
   uint16_t uStack_18;
   uint16_t uStack_16;
@@ -1745,9 +1745,9 @@ L_OVC40_69c8_04c6_0AF0:
   handle.ofs = uStack_18;
   (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)uStack_16 >> 8);
   ovr_stshFree(handle);
-  psStack_1c = ovc40_usesStshLoadGfx(0xde);
+  palRec = ovc40_usesStshLoadGfx(0xde);
   (*(uint8_t *)((uint8_t *)&(palette.seg))) = (char)backdropSeg;
-  palette.ofs = (uint16_t)psStack_1c;
+  palette.ofs = (uint16_t)palRec;
   (*(uint8_t *)((uint8_t *)&(palette.seg) + 1)) = (char)((uint)backdropSeg >> 8);
   uStack_1a = backdropSeg;
   ovc40_usesVgaSetPalette8bit(palette);
@@ -2163,9 +2163,9 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
   uint16_t uVar22;
   uint8_t uStack_120;
   undefined1 uStack_11f;
-  undefined1 uStack_11e;
-  undefined1 uStack_11d;
-  uint16_t uStack_10e;
+  undefined1 segLo;
+  undefined1 segHi;
+  uint16_t handle;
   uint8_t text;
   uint8_t msg;
   char acStack_80 [62];
@@ -2328,12 +2328,12 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
             pbVar8 = (byte *)0x0;
             iVar12 = unaff_SI;
           }
-          uStack_11e = (undefined1)butt01Cut5Seg;
-          uStack_11d = (undefined1)((uint)butt01Cut5Seg >> 8);
+          segLo = (undefined1)butt01Cut5Seg;
+          segHi = (undefined1)((uint)butt01Cut5Seg >> 8);
           uStack_120 = (uint8_t)butt01Cut5Ofs;
-          (*(uint8_t *)((uint8_t *)&(gfx_03.seg))) = uStack_11e;
+          (*(uint8_t *)((uint8_t *)&(gfx_03.seg))) = segLo;
           gfx_03.ofs = butt01Cut5Ofs;
-          (*(uint8_t *)((uint8_t *)&(gfx_03.seg) + 1)) = uStack_11d;
+          (*(uint8_t *)((uint8_t *)&(gfx_03.seg) + 1)) = segHi;
           (*(uint8_t *)((uint8_t *)&(dst_03.seg))) = 0;
           dst_03.ofs = uStack_8 + (int)unaff_DI * 0x140;
           (*(uint8_t *)((uint8_t *)&(dst_03.seg) + 1)) = 0xa0;
@@ -2614,8 +2614,8 @@ L_ui_unit_order_6616_0689_1054:
       ovr_blitRect(br,0);
       ovr_miceUpdate();
       stk_fef4 = uStack_18;
-      uStack_10e = uStack_1a;
-      ovr_stshFree(uStack_10e);
+      handle = uStack_1a;
+      ovr_stshFree(handle);
       ovr_stshFree(fStack_6);
       ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0);
       return (byte *)br;
