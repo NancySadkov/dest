@@ -5023,3 +5023,62 @@ Re-deriving it means reading all seven cases plus the semantics of `lcall 0,0x93
 
   grep_checks 45,444; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### The two 32-bit helpers in `ovc15_textError` are LXMUL and LDIV
+
+`lcall 0,0x938` and `lcall 0,0x9c4` were the blocker.  Reading the code at those two module
+offsets settles them (load module starts at file 0x1E00, so offset 0x938 is file 0x2738):
+
+**0x938 = long multiply (LXMUL).**
+
+```
+2738  56        push si
+2739  96        xchg si, ax
+273A  92        xchg dx, ax
+273B  85 c0     test ax, ax
+273D  74 02     je  ...
+273F  f7 e3     mul  bx
+2741  e3 05     jcxz ...
+2743  91        xchg cx, ax
+2744  f7 e6     mul  si
+2746  03 c1     add  ax, cx
+2748  96        xchg si, ax
+2749  f7 e3     mul  bx
+274B  03 d6     add  dx, si
+274D  5e        pop  si
+274E  cb        retf
+```
+
+the three `mul` with the `jcxz` shortcut is Turbo C's 32x32 multiply.
+
+**0x9c4 = long divide (LDIV) entry dispatcher.**
+
+```
+27C4  33 c9           xor cx, cx        ; unsigned case
+27C6  eb 16           jmp  shared
+27C8  59 0e 51 b9 01  pop cx / push cs / push cx / mov cx,1
+27D0  59 0e 51 b9 02  ...            mov cx,2
+...
+27D8  55 56 57 8b ec 8b f9             push bp / push si / push di / mov bp,sp / mov di,cx
+```
+
+the four entries tag the sign case in CX and fall into the shared body, which is the LDIV/LUDIV
+family.
+
+**Corroboration**: the recovered tree already renders exactly these two call sites as
+`LXMUL_at_` and `LDIV_at_` (ovc15_sprite.c:2000 and :2002), so the identification agrees with
+what the decompiler concluded independently.
+
+The same lines also show how mangled that region still is: the multiply's return storage is
+rendered as `(long *)((int)&GSTARTX_SavedVectors[2].ofs + 1)` - a saved-interrupt-vector global,
+not a return slot - and its first argument as `ZEXT24(unaff_SI) << 0x10`.  The `unaff_SI`
+fragment and the bogus return storage have to be resolved as part of re-deriving the function,
+not just its switch.
+
+Note: neither `lcall` has an MZ relocation covering its segment word (the file value is 0 and no
+relocation entry lands on module offsets 0x348D5/0x348DC, checking both indexing conventions),
+so segment 0 there is not DOS-patched.  How it resolves at run time is still unexplained, but it
+is not needed for the source-level rebuild: the tree calls the two routines by name.
+
+  grep_checks 45,444; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
