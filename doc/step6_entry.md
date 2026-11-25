@@ -5834,3 +5834,49 @@ One fix did survive from that attempt, because it does not depend on the pointer
 
   grep_checks 42,261; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### The large-model experiment: 60/65 modules compile, the image does not link
+
+The original's pointer model is confirmed from the callee side rather than inferred.  In
+`agnt_drawSpriteFrame` (3b1d:1035) the parameters sit at
+
+```
+[bp+6]  byte  index
+[bp+8]  word  rect.offset
+[bp+0xa] word rect.segment      <- a 4-byte pointer argument
+[bp+0xc] word type
+```
+
+and the function pushes `[bp+8]`/`[bp+0xa]` when forwarding `rect` to `blitGfxRect`.  So the
+original passes pointer arguments as **two words** - far data, i.e. large model (code is far in both
+medium and large, so the data width is the discriminator).
+
+The one-flag experiment (`-mm` -> `-ml`), run on the whole tree:
+
+```
+compiled 60/65 modules, 61 errors in 5 modules
+  o22.c    19   Nonportable pointer conversion in ovc22_textPOPULATION
+  o23.c    10   Nonportable pointer conversion in ovc23_usesAlignUp43
+  o48.c     2   Invalid combination of opcode and operands in init_assets2
+  o49.c    28   Nonportable pointer conversion in ovc49_body1
+  stubs.c   2   Invalid combination of opcode and operands in stsh_store
+```
+
+So 57 of the 61 are the **same class**, and it is the class the recovered code is saturated with:
+`(T *)(integer)` conversions, which are near-pointer constructions under medium model and illegal
+under large.  `ovc23_usesAlignUp43` is my own code - `(char *)(dir + 0x885)` is a DGROUP offset
+turned into a pointer, exactly the idiom that has to become `MK_FP(_DS, ...)` for far data.  The
+other four errors are inline-asm cases.
+
+**The experiment is therefore inconclusive about `diff_dgroup`**: the image cannot link, so there is
+nothing to compare.  It was reverted and `CFLAGS` is `-mm` again, now with a comment that states
+what `-mm` actually is.  The earlier comment claiming `-mm` was "large model (all pointers far,
+matching the original)" was wrong and is corrected.
+
+What the experiment does establish: the switch is **bounded** - five modules, one dominant error
+class, mechanically fixable by making those conversions explicit - and it is worth doing because
+under medium model every `(T *)(integer)` silently truncates to a 16-bit offset, which is precisely
+the kind of width defect that would keep `diff_dgroup` at 972/1,868 while `compare_state` passes.
+
+  grep_checks 42,261 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
