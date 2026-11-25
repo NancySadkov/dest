@@ -4511,44 +4511,43 @@ int __cdecl16far ovc45_compute9(char *dest,char *src,char *font,uint maxWidth,ch
 uint __cdecl16far ovc45_usesGMapFlags5(char mode,uint x,int y)
 
 {
-  uint uVar1;
-  short *in_AX;
-  undefined1 uVar3;
-  short *psVar2;
-  byte bVar4;
-  
+  /* Re-derived: 1 when the cell passes its mode's geometry test, 0 otherwise.  mode 1 tests the
+     word at GMapFlags[y+1][x]: with bit 4 clear it wants bit 1 set, with bit 4 set it wants bit 2
+     set.  mode 2 requires GMapFlags[y+1][x] bit 1, GMapFlags[y][x] bit 1, GMapFlags[y+1][x-1] bit
+     2 and GMapFlags[y-1][x-1] bit 2.  Any other mode returns 0.  Every exported `& 0xff00`,
+     CONCAT11 and `<< 8` return was stale AH: the exits write only AL (1 at 0x45, 0x56, 0x113). */
+  short (*flags) [60] [148];
+  uint word;
+
+  flags = (short (*) [60] [148])GMapFlags;
   if (mode == '\x01') {
-    in_AX = (*(short (*) [60] [148])GMapFlags)[y] + x;
-    uVar1 = in_AX[0x94];
-    uVar3 = (undefined1)((uint)in_AX >> 8);
-    if ((uVar1 & 4) == 0) {
-      if ((uVar1 & 1) != 0) {
-        return CONCAT11(uVar3,1);
+    word = ((*flags)[y] + x)[0x94];
+    if ((word & 4) == 0) {
+      if ((word & 1) != 0) {
+        return 1;
       }
     }
-    else if ((uVar1 & 2) != 0) {
-      return CONCAT11(uVar3,1);
+    else if ((word & 2) != 0) {
+      return 1;
     }
+    return 0;
   }
-  else if (mode == '\x02') {
-    psVar2 = (*(short (*) [60] [148])GMapFlags)[y] + x;
-    if ((psVar2[0x94] & 1U) == 0) {
-      return (uint)psVar2 & 0xff00;
+  if (mode == '\x02') {
+    if ((((*flags)[y] + x)[0x94] & 1U) == 0) {
+      return 0;
     }
-    if (((*(short (*) [60] [148])GMapFlags)[y][x] & 1U) == 0) {
-      return ((x & 0x7fff) >> 7) << 8;
+    if (((*flags)[y][x] & 1U) == 0) {
+      return 0;
     }
-    psVar2 = (*(short (*) [60] [148])GMapFlags)[y] + x;
-    if ((psVar2[0x93] & 2U) == 0) {
-      return (uint)psVar2 & 0xff00;
+    if ((((*flags)[y] + x)[0x93] & 2U) == 0) {
+      return 0;
     }
-    bVar4 = (byte)(x * 2 >> 8);
     if ((((short (*) [60] [148])GMapFlags)[-1][y + 0x3b][x + 0x93] & 2U) == 0) {
-      return (uint)bVar4 << 8;
+      return 0;
     }
-    return CONCAT11(bVar4,1);
+    return 1;
   }
-  return (uint)in_AX & 0xff00;
+  return 0;
 }
 
 
