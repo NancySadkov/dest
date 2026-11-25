@@ -619,26 +619,29 @@ uint __cdecl16far ovc45_compute5(void)
 bool __cdecl16far ovc45_textArena2(byte bldType)
 
 {
-  byte bVar1;
-  uint32_t uVar2;
-  uint uVar3;
-  uint16_t uVar4;
-  
+  /* Re-derived: true when a unit of the queried building type exists among the placed units
+     or among the construction records, counting only entries whose leader sheet +0x3f byte is
+     clear.  The segment half uVar4 was dead. */
+  byte unitType;
+  uint32_t sheetRef;
+  uint idx;
+
   if (BuildingTypes[bldType].unitType == '\x17') {
-    for (uVar3 = 0xf8; uVar3 < GUnitCount; uVar3 = uVar3 + 1) {
-      uVar4 = (uint16_t)((ulong)GUnits >> 0x10);
-      bVar1 = ((unit_t *)GUnits)[uVar3].unitType;
-      if (((*(char *)((uint)((unit_t *)GUnits + uVar3)->bldType * 0x27 + 0x133) == '\x17') &&
-          (bVar1 != 0xff)) &&
-         (uVar2 = *(uint32_t *)((uint)bVar1 << 2), *(char *)((int)uVar2 + 0x3f) == '\0')) {
+    for (idx = 0xf8; idx < GUnitCount; idx = idx + 1) {
+      unitType = ((unit_t *)GUnits)[idx].unitType;
+      if (((*(char *)((uint)((unit_t *)GUnits + idx)->bldType * 0x27 + 0x133) == '\x17') &&
+          (unitType != 0xff)) &&
+         (sheetRef = *(uint32_t *)((uint)unitType << 2),
+          *(char *)((int)sheetRef + 0x3f) == '\0')) {
         return true;
       }
     }
-    for (uVar3 = 0; uVar3 < GRecordCount; uVar3 = uVar3 + 1) {
-      bVar1 = GRecords[uVar3].party;
-      if (((BuildingTypes[GRecords[uVar3].reserved08].unitType == '\x17') &&
-          (bVar1 != 0xff)) &&
-         (uVar2 = *(uint32_t *)((uint)bVar1 << 2), *(char *)((int)uVar2 + 0x3f) == '\0')) {
+    for (idx = 0; idx < GRecordCount; idx = idx + 1) {
+      unitType = GRecords[idx].party;
+      if (((BuildingTypes[GRecords[idx].reserved08].unitType == '\x17') &&
+          (unitType != 0xff)) &&
+         (sheetRef = *(uint32_t *)((uint)unitType << 2),
+          *(char *)((int)sheetRef + 0x3f) == '\0')) {
         return true;
       }
     }

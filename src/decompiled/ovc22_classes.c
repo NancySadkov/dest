@@ -4213,31 +4213,34 @@ uint16_t __cdecl16far
 ovc22_usesAlignUp42(uint16_t *xOut,uint16_t *yOut,uint8_t classIndex,uint16_t blockedFlags)
 
 {
-  uint16_t uVar1;
-  uint uVar2;
-  int iVar3;
-  uint uVar4;
-  uint uStack_4;
-  
-  uStack_4 = 0;
+  /* Re-derived: the first construction record of the given class whose five map-flag words
+     around alignUp4(x) share no bits with blockedFlags, returning its aligned column and row;
+     1 when found, 0 otherwise.  The stale-AH success return is simply 1. */
+  uint16_t recY;
+  uint recX;
+  int k;
+  uint flagAcc;
+  uint recIdx;
+
+  recIdx = 0;
   do {
-    if (GRecordCount <= uStack_4) {
+    if (GRecordCount <= recIdx) {
       return 0;
     }
-    if (GRecords[uStack_4].party == classIndex) {
-      uVar2 = ovr_alignUp4(GRecords[uStack_4].x,0,0);
-      uVar1 = GRecords[uStack_4].y;
-      uVar4 = 0;
-      for (iVar3 = -2; iVar3 < 2; iVar3 = iVar3 + 1) {
-        uVar4 = uVar4 | (*(short (*) [60] [148])GMapFlags)[uVar1][uVar2 + iVar3];
+    if (GRecords[recIdx].party == classIndex) {
+      recX = ovr_alignUp4(GRecords[recIdx].x,0,0);
+      recY = GRecords[recIdx].y;
+      flagAcc = 0;
+      for (k = -2; k < 2; k = k + 1) {
+        flagAcc = flagAcc | (*(short (*) [60] [148])GMapFlags)[recY][recX + k];
       }
-      if ((blockedFlags & uVar4) == 0) {
-        *xOut = uVar2;
-        *yOut = uVar1;
-        return CONCAT11((char)(uVar1 >> 8),1);
+      if ((blockedFlags & flagAcc) == 0) {
+        *xOut = recX;
+        *yOut = recY;
+        return 1;
       }
     }
-    uStack_4 = uStack_4 + 1;
+    recIdx = recIdx + 1;
   } while( true );
 }
 

@@ -469,28 +469,34 @@ void __cdecl16far ovc41_usesPlay_sfxU(void)
 void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
 
 {
-  byte bVar1;
-  agnt_t *paVar2;
-  uint uVar3;
-  int iVar4;
-  uint uVar5;
-  int iVar6;
-  entity_t *agntPtr;   /* hand fix: dereferenced as agntPtr->base.x */
-  
-  paVar2 = (agnt_t *)&Agnts[agntIndex].x;
-  agntPtr = (agnt_t *)CONCAT22(SEG_OF(Agnts),paVar2);
-  if ((((agntG_t *)paVar2->gdata)->flags2 & 4) != 0) {
-    for (iVar6 = 0; iVar6 < (int)(uint)AgntCount; iVar6 = iVar6 + 1) {
-      if ((iVar6 != agntIndex) &&
-         (uVar3 = agntPtr->base.x - Agnts[iVar6].x, uVar5 = (int)uVar3 >> 0xf,
-         (int)((uVar3 ^ uVar5) - uVar5) < 0x32)) {
-        bVar1 = ovr_manage_rollDice('\x06','\x06');
-        uVar3 = (uint)bVar1;
-        iVar4 = ovr_ovc27_rollToHitEntity(CONCAT22(SEG_OF(Agnts),iVar6 * 0x34),1);
-        if ((char)iVar4 != '\0') {
-          uVar3 = (int)uVar3 >> 1;
+  /* Re-derived: when the agent's gdata has flag 4 set, every other agent within 0x31 columns
+     is struck - a 6d6 roll, halved when the to-hit test succeeds - and handed to
+     ovc41_textParalyzed for both this agent and the target. */
+  byte diceRoll;
+  agnt_t *agntBase;
+  uint dx;
+  uint dxSign;
+  int hitResult;
+  int otherIdx;
+  uint rollVal;
+  entity_t *agntPtr;
+
+  agntBase = (agnt_t *)&Agnts[agntIndex].x;
+  agntPtr = (agnt_t *)CONCAT22(SEG_OF(Agnts),agntBase);
+  if ((((agntG_t *)agntBase->gdata)->flags2 & 4) != 0) {
+    for (otherIdx = 0; otherIdx < (int)(uint)AgntCount; otherIdx = otherIdx + 1) {
+      if ((otherIdx != agntIndex) &&
+         (dx = agntPtr->base.x - Agnts[otherIdx].x, dxSign = (int)dx >> 0xf,
+         (int)((dx ^ dxSign) - dxSign) < 0x32)) {
+        diceRoll = ovr_manage_rollDice('\x06','\x06');
+        rollVal = (uint)diceRoll;
+        hitResult = ovr_ovc27_rollToHitEntity(CONCAT22(SEG_OF(Agnts),otherIdx * 0x34),1);
+        if ((char)hitResult != '\0') {
+          rollVal = (int)rollVal >> 1;
         }
-        ovc41_textParalyzed((agnt_t *)CONCAT22(SEG_OF(Agnts),paVar2),(agnt_t *)CONCAT22(SEG_OF(Agnts),(agnt_t *)&Agnts[iVar6].x),uVar3,0,0,0);
+        ovc41_textParalyzed((agnt_t *)CONCAT22(SEG_OF(Agnts),agntBase),
+                            (agnt_t *)CONCAT22(SEG_OF(Agnts),
+                                               (agnt_t *)&Agnts[otherIdx].x),rollVal,0,0,0);
       }
     }
   }
