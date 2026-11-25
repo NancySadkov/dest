@@ -57,141 +57,149 @@ void __cdecl16far
 ovc07_usesBiosReadKey(int x1,int y1,int x2,int y2,int x3,int y3,uint16_t rectSeg,brect_t *rect,uint16_t arg9,uint16_t arg10,uint16_t arg11,uint16_t arg12,uint16_t arg13,uint16_t arg14)
 
 {
-  int iVar1;
-  int iVar2;
-  int iVar3;
-  int iVar4;
-  int iVar5;
-  uint uVar6;
-  uint uVar7;
-  brect_t *rect_00;
-  int iVar8;
-  int iVar9;
-  uint16_t uVar10;
-  int iStack_1a;
-  int iStack_18;
-  int iStack_16;
-  int iStack_12;
-  int iStack_10;
-  int iStack_c;
-  int iStack_a;
-  int iStack_8;
-  int iStack_6;
-  int iStack_4;
-  
-  iVar4 = y2;
-  iVar9 = x1;
-  iVar5 = rect->x;
-  uVar10 = (uint16_t)((ulong)rect >> 0x10);
-  rect_00 = (brect_t *)rect;
-  iVar1 = rect_00->y;
-  iVar2 = rect_00->w;
-  iVar3 = rect_00->h;
-  if (((((((x1 < iVar5) || (iVar2 < x1)) || (y1 < iVar1)) || ((iVar3 < y1 || (x2 < iVar5)))) ||
-       ((iVar2 < x2 || ((y2 < iVar1 || (iVar3 < y2)))))) || (x3 < iVar5)) ||
-     (((iVar2 < x3 || (y3 < iVar1)) || (iVar3 < y3)))) {
+  /* 32c9:0044, re-derived.  Triangle rasteriser.  When the triangle is not wholly
+     inside the clip rectangle its vertices are sorted by y ascending and two DDA edge
+     walks fill the spans between the (x1,y1)-(x2,y2) edge and the (x1,y1)-(x3,y3) edge;
+     when it is wholly inside, the driver helper draws it directly. */
+  int clipX;
+  int clipY;
+  int clipW;
+  int clipH;
+  uint16_t clipSeg;
+  brect_t *clip;
+  int swapX;
+  int swapY;
+  int tmpY;
+  int yB;
+  int xEdge;
+  int curX;
+  int rowY;
+  int slope1;
+  int frac1;
+  int err1;
+  int stepX1;
+  int slope2;
+  int frac2;
+  int err2;
+  int stepX2;
+  uint rem;
+  uint sgn;
+
+  swapY = y2;
+  swapX = x1;
+  clipX = rect->x;
+  clipSeg = (uint16_t)((ulong)rect >> 0x10);
+  clip = (brect_t *)rect;
+  clipY = clip->y;
+  clipW = clip->w;
+  clipH = clip->h;
+  if (((((((x1 < clipX) || (clipW < x1)) || (y1 < clipY)) ||
+        ((clipH < y1 || (x2 < clipX)))) ||
+       ((clipW < x2 || ((y2 < clipY || (clipH < y2)))))) || (x3 < clipX)) ||
+     (((clipW < x3 || (y3 < clipY)) || (clipH < y3)))) {
     if (y2 < y1) {
       y2 = y1;
       x1 = x2;
-      x2 = iVar9;
-      y1 = iVar4;
+      x2 = swapX;
+      y1 = swapY;
     }
-    iVar4 = x2;
-    iVar9 = x1;
-    iVar8 = y3;
+    swapY = x2;
+    swapX = x1;
+    tmpY = y3;
     if (y3 < y1) {
       x1 = x3;
-      x3 = iVar9;
-      iVar8 = y1;
+      x3 = swapX;
+      tmpY = y1;
       y1 = y3;
     }
-    iVar9 = iVar8;
-    if (iVar8 < y2) {
+    yB = tmpY;
+    if (tmpY < y2) {
       x2 = x3;
-      x3 = iVar4;
-      iVar9 = y2;
-      y2 = iVar8;
+      x3 = swapY;
+      yB = y2;
+      y2 = tmpY;
     }
-    if ((((y1 <= iVar3) && (iVar1 <= iVar9)) && ((iVar5 <= x1 || ((iVar5 <= x2 || (iVar5 <= x3))))))
-       && ((x1 <= iVar2 || ((x2 <= iVar2 || (x3 <= iVar2)))))) {
+    if ((((y1 <= clipH) && (clipY <= yB)) &&
+        ((clipX <= x1 || ((clipX <= x2 || (clipX <= x3)))))) &&
+       ((x1 <= clipW || ((x2 <= clipW || (x3 <= clipW)))))) {
       if (199 < y1) {
         printf("y1 %d yn %d y3 %d yx %d ");
         ovr_biosReadKey();
       }
-      iStack_8 = x1;
-      if (y1 != iVar9) {
-        iStack_16 = (x3 - x1) / (iVar9 - y1);
-        uVar6 = (x3 - x1) % (iVar9 - y1);
-        uVar7 = (int)uVar6 >> 0xf;
-        iStack_18 = (uVar6 ^ uVar7) - uVar7;
-        iStack_1a = ovc07_signum(x3 - x1);
-        iStack_a = iVar9 - y1 >> 1;
+      xEdge = x1;
+      if (y1 != yB) {
+        slope1 = (x3 - x1) / (yB - y1);
+        rem = (x3 - x1) % (yB - y1);
+        sgn = (int)rem >> 0xf;
+        frac1 = (rem ^ sgn) - sgn;
+        stepX1 = ovc07_signum(x3 - x1);
+        err1 = yB - y1 >> 1;
       }
-      iStack_4 = x1;
-      iStack_6 = y2 - y1 >> 1;
-      iVar5 = ovc07_signum(x2 - x1);
-      iStack_c = y1;
+      curX = x1;
+      err2 = y2 - y1 >> 1;
+      stepX2 = ovc07_signum(x2 - x1);
+      rowY = y1;
       if (y1 == y2) {
-        iStack_10 = 0;
-        iStack_12 = 0;
+        slope2 = 0;
+        frac2 = 0;
       }
       else {
-        iStack_10 = (x2 - x1) / (y2 - y1);
-        uVar6 = (x2 - x1) % (y2 - y1);
-        uVar7 = (int)uVar6 >> 0xf;
-        iStack_12 = (uVar6 ^ uVar7) - uVar7;
+        slope2 = (x2 - x1) / (y2 - y1);
+        rem = (x2 - x1) % (y2 - y1);
+        sgn = (int)rem >> 0xf;
+        frac2 = (rem ^ sgn) - sgn;
       }
-      for (; iStack_c < y2; iStack_c = iStack_c + 1) {
-        if ((iVar1 <= iStack_c) && (iStack_c <= iVar3)) {
-          ovr_driver_fillSpan(iStack_4,iStack_8,(byte)iStack_c,(uint8_t)rectSeg,&rect_00->x,uVar10);
+      for (; rowY < y2; rowY = rowY + 1) {
+        if ((clipY <= rowY) && (rowY <= clipH)) {
+          ovr_driver_fillSpan(curX,xEdge,(byte)rowY,(uint8_t)rectSeg,&clip->x,clipSeg);
         }
-        iStack_4 = iStack_4 + iStack_10;
-        iStack_6 = iStack_6 + iStack_12;
-        if (y2 - y1 <= iStack_6) {
-          iStack_4 = iStack_4 + iVar5;
-          iStack_6 = iStack_6 - (y2 - y1);
+        curX = curX + slope2;
+        err2 = err2 + frac2;
+        if (y2 - y1 <= err2) {
+          curX = curX + stepX2;
+          err2 = err2 - (y2 - y1);
         }
-        iStack_8 = iStack_8 + iStack_16;
-        iStack_a = iStack_a + iStack_18;
-        if (iVar9 - y1 <= iStack_a) {
-          iStack_8 = iStack_8 + iStack_1a;
-          iStack_a = iStack_a - (iVar9 - y1);
+        xEdge = xEdge + slope1;
+        err1 = err1 + frac1;
+        if (yB - y1 <= err1) {
+          xEdge = xEdge + stepX1;
+          err1 = err1 - (yB - y1);
         }
       }
-      iStack_4 = x2;
-      iStack_6 = iVar9 - y2 >> 1;
-      iVar5 = ovc07_signum(x3 - x2);
-      if (y2 == iVar9) {
-        iStack_10 = 0;
-        iStack_12 = 0;
+      curX = x2;
+      err2 = yB - y2 >> 1;
+      stepX2 = ovc07_signum(x3 - x2);
+      if (y2 == yB) {
+        slope2 = 0;
+        frac2 = 0;
       }
       else {
-        iStack_10 = (x3 - x2) / (iVar9 - y2);
-        uVar6 = (x3 - x2) % (iVar9 - y2);
-        uVar7 = (int)uVar6 >> 0xf;
-        iStack_12 = (uVar6 ^ uVar7) - uVar7;
+        slope2 = (x3 - x2) / (yB - y2);
+        rem = (x3 - x2) % (yB - y2);
+        sgn = (int)rem >> 0xf;
+        frac2 = (rem ^ sgn) - sgn;
       }
-      for (iStack_c = y2; iStack_c <= iVar9; iStack_c = iStack_c + 1) {
-        if ((iVar1 <= iStack_c) && (iStack_c <= iVar3)) {
-          ovr_driver_fillSpan(iStack_4,iStack_8,(byte)iStack_c,(uint8_t)rectSeg,&rect_00->x,uVar10);
+      for (rowY = y2; rowY <= yB; rowY = rowY + 1) {
+        if ((clipY <= rowY) && (rowY <= clipH)) {
+          ovr_driver_fillSpan(curX,xEdge,(byte)rowY,(uint8_t)rectSeg,&clip->x,clipSeg);
         }
-        iStack_4 = iStack_4 + iStack_10;
-        iStack_6 = iStack_6 + iStack_12;
-        if (iVar9 - y2 <= iStack_6) {
-          iStack_4 = iStack_4 + iVar5;
-          iStack_6 = iStack_6 - (iVar9 - y2);
+        curX = curX + slope2;
+        err2 = err2 + frac2;
+        if (yB - y2 <= err2) {
+          curX = curX + stepX2;
+          err2 = err2 - (yB - y2);
         }
-        iStack_8 = iStack_8 + iStack_16;
-        iStack_a = iStack_a + iStack_18;
-        if (iVar9 - y1 <= iStack_a) {
-          iStack_8 = iStack_8 + iStack_1a;
-          iStack_a = iStack_a - (iVar9 - y1);
+        xEdge = xEdge + slope1;
+        err1 = err1 + frac1;
+        if (yB - y1 <= err1) {
+          xEdge = xEdge + stepX1;
+          err1 = err1 - (yB - y1);
         }
       }
     }
   }
   else {
-    ovr_driver_compute5(x1,(byte)y1,x2,(byte)y2,x3,(byte)y3,rectSeg,rect_00->seg);
+    ovr_driver_compute5(x1,(byte)y1,x2,(byte)y2,x3,(byte)y3,rectSeg,clip->seg);
   }
   return;
 }
