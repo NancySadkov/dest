@@ -360,7 +360,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   int matchCount;
   uint16_t gfxSeg;
   void *pvStack_6;
-  uint16_t uStack_4;
+  uint16_t gfxSeg3;
   
   if (GOngoingBattle == '\0') {
     return;
@@ -400,7 +400,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   pvStack_6 = ovr_stshAlloc(0xfa0f);
   ptr.seg = uVar6;
   ptr.ofs = (uint16_t)pvStack_6;
-  uStack_4 = uVar6;
+  gfxSeg3 = uVar6;
   ovr_alignToSeg(ptr);
   pbStack_2a = mouseX;
   pbStack_2c = mouseY;
@@ -674,7 +674,7 @@ L_ui_unit_order_6616_0689_106E:
   handle.seg = gfxSeg2;
   handle.ofs = (uint16_t)pfStack_1a;
   ovr_stshFree(handle);
-  handle_00.seg = uStack_4;
+  handle_00.seg = gfxSeg3;
   handle_00.ofs = (uint16_t)pvStack_6;
   ovr_stshFree(handle_00);
   ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x2410);

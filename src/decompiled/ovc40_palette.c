@@ -171,12 +171,12 @@ void __cdecl16far ovc40_usesCalcSeasonPalette(char useVgaPalette)
   far_t palette;
   far_t palette_00;
   uint8_t pal;
-  stg_tmp_t *psStack_6;
+  stg_tmp_t *palRec;
   
   handle.seg = Lbm_nwpanel1.seg;
   handle.ofs = Lbm_nwpanel1.ofs;
-  psStack_6 = ovr_stshLoadGfx(handle);
-  ovr_calcSeasonPalette(psStack_6->cmap,in_DX,&pal,_SS,0,0);
+  palRec = ovr_stshLoadGfx(handle);
+  ovr_calcSeasonPalette(palRec->cmap,in_DX,&pal,_SS,0,0);
   if (useVgaPalette == '\0') {
     palette_00.seg = _SS;
     palette_00.ofs = (uint16_t)&pal;

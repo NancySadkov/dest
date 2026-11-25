@@ -134,7 +134,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   byte bStack_d;
   byte bStack_c;
   byte bStack_b;
-  byte bStack_a;
+  byte unitType;
   byte unitBldType;
   uint seedAligned;
   int archEntry;
@@ -152,10 +152,10 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
           units = (unit_t *)GUnits;
           unitBldType = (units + iVar2)->bldType;
           nameOfs = (char *)0x26510;
-          bStack_a = units[iVar2].unitType;
+          unitType = units[iVar2].unitType;
           if ((((bStack_b == 0) &&
                (nameOfs = (char *)0x2627a,
-               *(char *)((int)*(uint32_t *)((uint)bStack_a << 2) + 0x3f) == '\0')) &&
+               *(char *)((int)*(uint32_t *)((uint)unitType << 2) + 0x3f) == '\0')) &&
               (0xf7 < iVar2)) && (nameOfs = (char *)0x26510, units[iVar2].level < 8)) {
             nameOfs = (char *)&AgntAnms[0x88].missileDy;
             if ((BuildingTypes[unitBldType].flags2 & 0x80) == 0) {

@@ -238,9 +238,9 @@ void bldng_selectBuildingType(byte partyIndex)
   char acStack_ce [200];
   int iStack_6;
   char cStack_4;
-  byte bStack_3;
+  byte bitMask;
   
-  bStack_3 = '\x01' << (*(byte *)((int)&worldMenuLabels[9].ofs + 1 +
+  bitMask = '\x01' << (*(byte *)((int)&worldMenuLabels[9].ofs + 1 +
                                  (uint)(GLeaderSheets[in_stack_00000004])->classStr * 0x95) & 0x1f);
   buildTypes = bldng_getClass(in_stack_00000004);
   buildTypes = buildTypes & 0xff;
@@ -251,7 +251,7 @@ void bldng_selectBuildingType(byte partyIndex)
   while( true ) {
     if (0x30 < iStack_6) break;
     uVar2 = bldng_usesGStrangeTable((byte)iStack_6);
-    if ((*(byte *)((uVar2 & 0xff) * 0x27 + 0x11f) & bStack_3) != 0) {
+    if ((*(byte *)((uVar2 & 0xff) * 0x27 + 0x11f) & bitMask) != 0) {
       uVar2 = bldng_usesGStrangeTable((byte)iStack_6);
       if (*(char *)((uVar2 & 0xff) * 0x27 + 0x12d) == '\0') {
         uVar3 = bldng_compute2((uint8_t)iStack_6,in_stack_00000004);

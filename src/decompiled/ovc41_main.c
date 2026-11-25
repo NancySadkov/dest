@@ -472,14 +472,14 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
   int iVar4;
   uint uVar5;
   int iVar6;
-  entity_t *uStack_6;   /* hand fix: dereferenced as uStack_6->base.x */
+  entity_t *agntPtr;   /* hand fix: dereferenced as agntPtr->base.x */
   
   paVar2 = (agnt_t *)&Agnts[agntIndex].x;
-  uStack_6 = (agnt_t *)CONCAT22(SEG_OF(Agnts),paVar2);
+  agntPtr = (agnt_t *)CONCAT22(SEG_OF(Agnts),paVar2);
   if ((((agntG_t *)paVar2->gdata)->flags2 & 4) != 0) {
     for (iVar6 = 0; iVar6 < (int)(uint)AgntCount; iVar6 = iVar6 + 1) {
       if ((iVar6 != agntIndex) &&
-         (uVar3 = uStack_6->base.x - Agnts[iVar6].x, uVar5 = (int)uVar3 >> 0xf,
+         (uVar3 = agntPtr->base.x - Agnts[iVar6].x, uVar5 = (int)uVar3 >> 0xf,
          (int)((uVar3 ^ uVar5) - uVar5) < 0x32)) {
         bVar1 = ovr_manage_rollDice('\x06','\x06');
         uVar3 = (uint)bVar1;
