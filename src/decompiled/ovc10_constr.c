@@ -483,8 +483,8 @@ void __cdecl16far constr_usesAgnt_clear(void)
   int iStack_1a;
   uint8_t shades;
   byte abStack_17 [5];
-  int iStack_12;
-  uint uStack_10;
+  int seedOffset;
+  uint shadeBias;
   int bldIndex;
   byte bStack_b;
   int iStack_a;
@@ -504,26 +504,26 @@ void __cdecl16far constr_usesAgnt_clear(void)
     if (DebugVerbose != false) {
       printf("%d \r");
     }
-    iStack_12 = GfxRndSeed >> 2;
-    if (0xb < 0x14bU - iStack_12) {
+    seedOffset = GfxRndSeed >> 2;
+    if (0xb < 0x14bU - seedOffset) {
       (*(uint8_t *)((uint8_t *)&(gfx_06.seg))) =
            (char)((uint16_t *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       gfx_06.ofs = ((uint16_t *)&l1Cut1Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       (*(uint8_t *)((uint8_t *)&(gfx_06.seg) + 1)) =
            (char)((uint)((uint16_t *)&l1Cut1Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
-      ovr_blitGfxRect(gfx_06,0xc - iStack_12,7,(brect_t *)BlitRects,0x10,true,
-                      (char)(0xc - iStack_12),7,0x40,0x10,0x10,0);
+      ovr_blitGfxRect(gfx_06,0xc - seedOffset,7,(brect_t *)BlitRects,0x10,true,
+                      (char)(0xc - seedOffset),7,0x40,0x10,0x10,0);
     }
-    if (0x14cU - iStack_12 < 0xdf) {
+    if (0x14cU - seedOffset < 0xdf) {
       (*(uint8_t *)((uint8_t *)&(gfx_07.seg))) =
            (char)((uint16_t *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       gfx_07.ofs = ((uint16_t *)&l1Cut3Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 4];
       (*(uint8_t *)((uint8_t *)&(gfx_07.seg) + 1)) =
            (char)((uint)((uint16_t *)&l1Cut3Seg)[((uint)seasonGroupBase + (uint)GSeason) * 4] >> 8
                  );
-      ovr_blitGfxRect(gfx_07,0x14c - iStack_12,7,(brect_t *)BlitRects,0x10,true,
-                      (char)(0x14c - iStack_12),7,0x40,0x10,0x10,0);
+      ovr_blitGfxRect(gfx_07,0x14c - seedOffset,7,(brect_t *)BlitRects,0x10,true,
+                      (char)(0x14c - seedOffset),7,0x40,0x10,0x10,0);
     }
     ovr_driver_fillRect(0xc,0x43,0xde,0x56,0xf0,BlitRects[0].seg,0x43,0xde,0x56,0xf0,
                         (char)BlitRects[0].seg);
@@ -689,20 +689,20 @@ void __cdecl16far constr_usesAgnt_clear(void)
                   smoothBR = constr_usesSmoothPrev
                                         (sqCol + 2,row,(int *)&cornerBR,uVar12,(char)&cornerBR);
                 }
-                uStack_10 = (uint)*(byte *)(row + 0x73c);
+                shadeBias = (uint)*(byte *)(row + 0x73c);
                 avgDy = smoothBL + smoothTL + smoothTR + smoothBR >> 2;
-                if ((int)(smoothTL - uStack_10) < (int)(smoothTR - uStack_10)) {
-                  sqRight = smoothTL - uStack_10;
+                if ((int)(smoothTL - shadeBias) < (int)(smoothTR - shadeBias)) {
+                  sqRight = smoothTL - shadeBias;
                 }
                 else {
-                  sqRight = smoothTR - uStack_10;
+                  sqRight = smoothTR - shadeBias;
                 }
                 if (avgDy < sqRight) {
-                  if ((int)(smoothTL - uStack_10) < (int)(smoothTR - uStack_10)) {
-                    avgDy = smoothTL - uStack_10;
+                  if ((int)(smoothTL - shadeBias) < (int)(smoothTR - shadeBias)) {
+                    avgDy = smoothTL - shadeBias;
                   }
                   else {
-                    avgDy = smoothTR - uStack_10;
+                    avgDy = smoothTR - shadeBias;
                   }
                 }
                 if (*(char *)((uint8_t *)&BuildingTypes[bldIndex] + 16) == '\0') {

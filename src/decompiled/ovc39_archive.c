@@ -135,7 +135,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   byte bStack_c;
   byte bStack_b;
   byte bStack_a;
-  byte bStack_9;
+  byte unitBldType;
   uint uStack_8;
   int archEntry;
   char *name;
@@ -150,7 +150,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
           iVar2 = ovc39_findBuildingAt(uStack_8 + iVar6,GfxRndSeed2);
           uVar7 = (uint16_t)((ulong)GUnits >> 0x10);
           units = (unit_t *)GUnits;
-          bStack_9 = (units + iVar2)->bldType;
+          unitBldType = (units + iVar2)->bldType;
           nameOfs = (char *)0x26510;
           bStack_a = units[iVar2].unitType;
           if ((((bStack_b == 0) &&
@@ -158,7 +158,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
                *(char *)((int)*(uint32_t *)((uint)bStack_a << 2) + 0x3f) == '\0')) &&
               (0xf7 < iVar2)) && (nameOfs = (char *)0x26510, units[iVar2].level < 8)) {
             nameOfs = (char *)&AgntAnms[0x88].missileDy;
-            if ((BuildingTypes[bStack_9].flags2 & 0x80) == 0) {
+            if ((BuildingTypes[unitBldType].flags2 & 0x80) == 0) {
               archEntry = ovc39_loadArchiveEntry(8);
             }
             else {
@@ -177,7 +177,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
           }
           if (((bStack_b == 1) && (iVar2 < 0xf8)) &&
              (nameOfs = (char *)&AgntAnms[0x88].missileDy,
-             (BuildingTypes[bStack_9].flags2 & 2) != 0)) {
+             (BuildingTypes[unitBldType].flags2 & 2) != 0)) {
             archEntry = ovc39_loadArchiveEntry(10);
             name = nameOfs;
             textPtr = ovc39_lordOrLady();
@@ -192,7 +192,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
           }
           if (((bStack_b == 2) && (iVar2 < 0xf8)) &&
              (nameOfs = (char *)&AgntAnms[0x88].missileDy,
-             (BuildingTypes[bStack_9].flags2 & 0x20) != 0)) {
+             (BuildingTypes[unitBldType].flags2 & 0x20) != 0)) {
             archEntry = ovc39_loadArchiveEntry(0xb);
             name = nameOfs;
             textPtr = ovc39_lordOrLady();
@@ -222,7 +222,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
           }
           if (((bStack_b == 4) && (iVar2 < 0xf8)) &&
              (nameOfs = (char *)&AgntAnms[0x88].missileDy,
-             (BuildingTypes[bStack_9].flags2 & 0x400) != 0)) {
+             (BuildingTypes[unitBldType].flags2 & 0x400) != 0)) {
             archEntry = ovc39_loadArchiveEntry(0xd);
             name = nameOfs;
             textPtr = ovc39_lordOrLady();

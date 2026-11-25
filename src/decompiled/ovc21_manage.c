@@ -3297,7 +3297,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
   char acStack_e [6];
   uint16_t uStack_8;
   uint32_t auStack_6;   /* hand fix: CONCAT12/13/22 target, read as uint3 */
-  uint16_t uStack_4;
+  uint16_t packedByte;
   
   dst.seg = (uint16_t)_SS;
   dst.ofs = (uint16_t)&bandLabels;
@@ -3374,7 +3374,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
            (char)((entity_t *)Entities)[(int)pcVar17].base.flags32;
       if (EntityCount <= pcVar17 + 1) {
         if ((acStack_e[0] != '\0') || (acStack_e[1] != '\0')) {
-          if ((*(uint8_t *)((uint8_t *)&(uStack_4) + 1)) == '\0') {
+          if ((*(uint8_t *)((uint8_t *)&(packedByte) + 1)) == '\0') {
             ovr_stop_audio();
             CurSfxType3 = 0xff;
             ovr_play_sfx(90,0,0);
@@ -3525,8 +3525,8 @@ L_attact_3f0b_1082_1477:
           auStack_6 = CONCAT12(*(undefined1 *)((int)uVar3 + 0x89),auStack_6);
         }
         uVar3 = auStack_6;
-        (*(uint8_t *)((uint8_t *)&(uStack_4))) = (byte)((uint3)auStack_6 >> 0x10);
-        bVar19 = (byte)uStack_4 != -1;
+        (*(uint8_t *)((uint8_t *)&(packedByte))) = (byte)((uint3)auStack_6 >> 0x10);
+        bVar19 = (byte)packedByte != -1;
         auStack_6 = uVar3;
         if (bVar19) {
           for (uVar6 = 0; uVar6 < SquareRecCount; uVar6 = uVar6 + 1) {
@@ -3539,7 +3539,7 @@ L_attact_3f0b_1082_1477:
                 uVar6 = ovr_alignUp4(*(int *)(uVar6 * 0x13),0,0);
                 aligned = ovr_alignUp4(GfxRndSeed,0,0);
                 if (uVar6 == aligned) {
-                  acStack_e[(byte)uStack_4] = '\x01';
+                  acStack_e[(byte)packedByte] = '\x01';
                 }
               }
               break;
@@ -3659,12 +3659,12 @@ L_attact_3f0b_1082_1477:
             (*(char *)((int)&(peVar15->base).entity + 1) != '\0'));
     if ((*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)(peVar15->base).gindex * 0x95) & 0x4000)
         == 0) {
-      uStack_4 = (uint)((ulong)auStack_6 >> 0x10) & 0xff;
+      packedByte = (uint)((ulong)auStack_6 >> 0x10) & 0xff;
     }
     else {
       auStack_6 = CONCAT13(1,auStack_6);
     }
-    auStack_6 = CONCAT22(uStack_4,(peStack_1e->base).x);
+    auStack_6 = CONCAT22(packedByte,(peStack_1e->base).x);
     uStack_8 = (peVar15->base).y;
     iStack_12 = CONCAT13(AgntGs[(uint)(peVar15->base).gindex].ai
                           ,iStack_12);

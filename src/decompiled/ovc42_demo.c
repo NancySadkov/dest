@@ -484,10 +484,10 @@ uint16_t __cdecl16far run_demo(void)
   stg_tmp_t *gfxPtr;
   uint16_t uStack_a;
   byte bStack_7;
-  byte bStack_6;
+  byte colorC;
   byte bStack_5;
-  byte bStack_4;
-  byte bStack_3;
+  byte colorB;
+  byte colorA;
   
   srand8(100);
   MenuMode = 0;
@@ -499,21 +499,21 @@ uint16_t __cdecl16far run_demo(void)
   srand8(0xda);
   demoCenterX = 0x58;
   demoCenterY = 0x24;
-  bStack_4 = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
+  colorB = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
   GfxRndSeed = demoCenterX;
   GfxRndSeed2 = demoCenterY;
-  uVar3 = ((uint16_t *)((uint)bStack_4 * 4))[1];
+  uVar3 = ((uint16_t *)((uint)colorB * 4))[1];
   strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
-                          CONCAT12((char)uVar3,*(uint16_t *)((uint)bStack_4 * 4))),"Nasher");
+                          CONCAT12((char)uVar3,*(uint16_t *)((uint)colorB * 4))),"Nasher");
   bStack_5 = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
   uVar3 = ((uint16_t *)((uint)bStack_5 * 4))[1];
   strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
                           CONCAT12((char)uVar3,*(uint16_t *)((uint)bStack_5 * 4))),"Fordor");
-  bStack_6 = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
-  uVar3 = ((uint16_t *)((uint)bStack_6 * 4))[1];
+  colorC = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
+  uVar3 = ((uint16_t *)((uint)colorC * 4))[1];
   strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
-                          CONCAT12((char)uVar3,*(uint16_t *)((uint)bStack_6 * 4))),"Kaunas");
-  ovc42_populateArea(bStack_4);
+                          CONCAT12((char)uVar3,*(uint16_t *)((uint)colorC * 4))),"Kaunas");
+  ovc42_populateArea(colorB);
   for (iVar8 = -2; iVar8 < 3; iVar8 = iVar8 + 1) {
     for (iVar7 = -1; iVar7 < 1; iVar7 = iVar7 + 1) {
       ovr_ovc18_usesRandBelow(iVar8 + 0x48,iVar7 + 0x24,0,0xff,(char)(iVar7 + 0x24),0);
@@ -525,11 +525,11 @@ uint16_t __cdecl16far run_demo(void)
   ovr_ovc18_usesRandBelow(GfxRndSeed,GfxRndSeed2,0,0xff,(char)GfxRndSeed2,0);
   ovr_ovc18_usesRandBelow(GfxRndSeed - 1,GfxRndSeed2,0x8c,0xff,(char)GfxRndSeed2,0x8c);
   ovr_ovc30_textDivideError(4,1,'\x01',100,1,1);
-  bStack_3 = ovr_ovc30_textDivideError(0x1a,1,'\x01',100,1,1);
+  colorA = ovr_ovc30_textDivideError(0x1a,1,'\x01',100,1,1);
   uVar6 = _DS;
-  uVar3 = ((uint16_t *)((uint)bStack_3 * 4))[1];
+  uVar3 = ((uint16_t *)((uint)colorA * 4))[1];
   strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
-                          CONCAT12((char)uVar3,*(uint16_t *)((uint)bStack_3 * 4))),"Mindark");
+                          CONCAT12((char)uVar3,*(uint16_t *)((uint)colorA * 4))),"Mindark");
   ovr_ovc15_usesLDIV_at_(0x48,0x24,0x48,0x24,1,0x1,1,0x48,0x24,1,1);
   ovr_ovc15_usesLDIV_at_(0x48,0x24,0x48,0x24,2,0x1,1,0x48,0x24,2,1);
   ovr_ovc15_usesLDIV_at_(0x48,0x24,0x48,0x24,2,0x1,1,0x48,0x24,2,1);
@@ -663,7 +663,7 @@ uint16_t __cdecl16far run_demo(void)
                       (*(uint8_t *)((uint8_t *)&(cmap.seg))) = uVar5;
                       cmap.ofs = (uint16_t)palette;
                       (*(uint8_t *)((uint8_t *)&(cmap.seg) + 1)) = ssHi;
-                      ovc42_showAgentStats(0,bStack_4,'\0',cmap,0);
+                      ovc42_showAgentStats(0,colorB,'\0',cmap,0);
                       ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                       MiceUnkState = 0;
                       (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
@@ -692,7 +692,7 @@ uint16_t __cdecl16far run_demo(void)
                           (*(uint8_t *)((uint8_t *)&(cmap_01.seg))) = uVar5;
                           cmap_01.ofs = (uint16_t)palette;
                           (*(uint8_t *)((uint8_t *)&(cmap_01.seg) + 1)) = ssHi;
-                          ovc42_showAgentStats(8,bStack_6,'\x01',cmap_01,0);
+                          ovc42_showAgentStats(8,colorC,'\x01',cmap_01,0);
                           ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                           (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
                           (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
@@ -706,7 +706,7 @@ uint16_t __cdecl16far run_demo(void)
                             (*(uint8_t *)((uint8_t *)&(cmap_02.seg))) = uVar5;
                             cmap_02.ofs = (uint16_t)palette;
                             (*(uint8_t *)((uint8_t *)&(cmap_02.seg) + 1)) = ssHi;
-                            ovc42_showAgentStats(1,bStack_6,'\0',cmap_02,0xc);
+                            ovc42_showAgentStats(1,colorC,'\0',cmap_02,0xc);
                             ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                             (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
                             (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
@@ -723,7 +723,7 @@ uint16_t __cdecl16far run_demo(void)
                               (*(uint8_t *)((uint8_t *)&(cmap_03.seg))) = uVar5;
                               cmap_03.ofs = (uint16_t)palette;
                               (*(uint8_t *)((uint8_t *)&(cmap_03.seg) + 1)) = ssHi;
-                              ovc42_showAgentStats(0x15,bStack_3,'\x01',cmap_03,0);
+                              ovc42_showAgentStats(0x15,colorA,'\x01',cmap_03,0);
                               ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                               (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
                               (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
@@ -737,7 +737,7 @@ uint16_t __cdecl16far run_demo(void)
                                 (*(uint8_t *)((uint8_t *)&(cmap_04.seg))) = uVar5;
                                 cmap_04.ofs = (uint16_t)palette;
                                 (*(uint8_t *)((uint8_t *)&(cmap_04.seg) + 1)) = ssHi;
-                                ovc42_showAgentStats(0x24,bStack_3,'\x01',cmap_04,0);
+                                ovc42_showAgentStats(0x24,colorA,'\x01',cmap_04,0);
                                 ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                                 (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
                                 (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
@@ -751,7 +751,7 @@ uint16_t __cdecl16far run_demo(void)
                                   (*(uint8_t *)((uint8_t *)&(cmap_05.seg))) = uVar5;
                                   cmap_05.ofs = (uint16_t)palette;
                                   (*(uint8_t *)((uint8_t *)&(cmap_05.seg) + 1)) = ssHi;
-                                  ovc42_showAgentStats(0xe,bStack_3,'\x01',cmap_05,0);
+                                  ovc42_showAgentStats(0xe,colorA,'\x01',cmap_05,0);
                                   ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                                   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) =
                                        *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
@@ -851,7 +851,7 @@ uint16_t __cdecl16far run_demo(void)
                                             (*(uint8_t *)((uint8_t *)&(cmap_06.seg))) = uVar5;
                                             cmap_06.ofs = (uint16_t)palette;
                                             (*(uint8_t *)((uint8_t *)&(cmap_06.seg) + 1)) = ssHi;
-                                            ovc42_showAgentStats(0x29,bStack_3,'\x01',cmap_06,0);
+                                            ovc42_showAgentStats(0x29,colorA,'\x01',cmap_06,0);
                                             ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                                             MiceUnkState = 0;
                                             uVar6 = ovr_inputUpdate(0x78);
@@ -874,7 +874,7 @@ uint16_t __cdecl16far run_demo(void)
                                                                      (0xb,1,'\x02',100,1,2);
                                                 GfxRndSeed = demoCenterX;
                                                 GfxRndSeed2 = demoCenterY + 2;
-                                                ovc42_populateArea(bStack_4);
+                                                ovc42_populateArea(colorB);
                                                 ovr_ovc18_usesRandBelow
                                                           (GfxRndSeed - 1,GfxRndSeed2 - 2,0,bStack_7
                                                            ,(char)(GfxRndSeed2 - 2),0);
