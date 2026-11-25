@@ -4062,3 +4062,28 @@ Stage 1 was reverted; all gates are back to their previous values.
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 50,685
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### The `unaff_` family is a code problem, not a naming problem
+
+Looking at the largest `unaff_SI` user, `ovc46_assets.c` (191 uses), the pattern is
+uniform and revealing:
+
+```c
+far_t *unaff_SI;                       /* line 21, file scope */
+rleRec = ovr_stshRleType2(..., -6, (int16_t)unaff_SI, 0, ...);   /* and 4 more calls */
+```
+
+The decompiler invented a file-scope variable because the original threaded a value
+through the SI register; every call passes it identically, so it *is* a single role - but
+nothing in these uses says **what** it holds.  Naming it would be a guess, and giving it
+a name would not fix the code: the original must have set SI in the caller, which is
+where the evidence is (the calling function's disassembly, not this callee).
+
+The same shape holds for `unaff_DI`.  So this family (1,895 lines) cannot be reduced by
+the rename ratchet at all; each case needs the original instruction sequence that set
+the register, i.e. a per-function recovery.  That is why the ratchet batches never
+produced a candidate from it - `tmp/cand2.py` only reports slots that are *assigned*,
+and pseudo-registers never are.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 50,116 -> 50,070
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
