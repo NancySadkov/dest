@@ -6948,3 +6948,44 @@ itself be wrong.
 
   grep_checks 40,734 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### spellNotice is not mis-attributed, and every `0x222b` was really `0x90`
+
+The question was whether `ovc27_spellNotice` (`5ded:0a05`, 701 bytes) is a merged body, because the
+export appeared to call `ovc27_usesRandBelow3` with `0x222b0108` while no call to `5ded:052d` exists in
+its listing.  Its full call list settles it:
+
+```
+lcall 0x108,0x20   lcall 0x140,0x2f x2   lcall 0x140,0x48 x2   lcall 0x148,0x34
+lcall 0x148,0x43   lcall 0x160,0x25      lcall 0x170,0x5c x2   lcall 0x170,0x7a
+lcall 0xf8,0x39    near 5ded:0960
+```
+
+Thirteen calls, and the near one goes to `5ded:0960` = `ovc27_usesRandBelow5`, which is exactly what
+the body calls.  So `spellNotice` is **not** mis-attributed - the `0x222b0108` call is in
+`ovc27_compute2`, and I had attributed it to the wrong function two turns ago.
+
+That misattribution is what the wider check then corrected.  Every remaining `0x222b` in the tree was
+in fact `0x90`:
+
+```
+ovc27_compute2     5ded:07d0   push 0x90 / push 0x108   -> CONCAT22(0x90,0x108)
+                               push 0x90 / push 0x14a   -> CONCAT22(0x90,0x14a)
+ovc27_usesAgntCount 5ded:1beb  push 0x90 / push ax
+ovc27_spellNotice  5ded:0a05   mov dx,0x90  (five times)
+```
+
+All four sites corrected, and `0x222b` no longer appears in the tree.  Verified by listing
+`spellNotice` alone: 353 instructions against 238, with the same **13 calls**.
+
+So the "hardcoded segment" framing was wrong twice over: `0x222b` was never a segment, and it was not a
+per-site puzzle either - Ghidra had substituted one bogus constant consistently, and one disassembly
+read resolved all four occurrences.
+
+`ovc27_usesRandBelow3`'s second parameter is still declared `uint32_t` although its body is `les`
+throughout; changing it now would touch `usesRandBelow5`, `usesAgntCount` and `compute2`, and
+`compute2`'s body uses that same parameter as `mode`, so the split-parameter question there has to be
+settled first.
+
+  grep_checks 40,734 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

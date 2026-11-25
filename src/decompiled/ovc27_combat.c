@@ -465,9 +465,9 @@ uint __cdecl16far ovc27_compute2(agnt_t far *agnt,int param,uint16_t arg3,uint16
       uVar2 = in_AX & 0xff00;
     }
     else {
-      uVar3 = ovc27_usesRandBelow3((agnt_t far *)CONCAT22(param,agnt),0x222b0108,param);
+      uVar3 = ovc27_usesRandBelow3((agnt_t far *)CONCAT22(param,agnt),0x900108,param);
       if ((char)uVar3 == '\0') {
-        uVar2 = ovc27_usesRandBelow3((agnt_t far *)CONCAT22(param,agnt),0x222b014a,param);
+        uVar2 = ovc27_usesRandBelow3((agnt_t far *)CONCAT22(param,agnt),0x90014a,param);
         if ((char)uVar2 == '\0') {
           return uVar2 & 0xff00;
         }
@@ -628,7 +628,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
       iVar8 = (int)*(uint32_t *)(targetOfs + 0x1d);
       iVar5 = (uVar3 & 0xff) * 0x21;
       iVar6 = (uVar3 & 0xff) * 0x21;
-      uVar2 = 0x222b;
+      uVar2 = 0x90;
       uVar12 = (uint16_t)((ulong)paStack_6->gdata >> 0x10);
       paVar9 = (agntG_t far *)paStack_6->gdata;
                     /* WARNING: Load size is inaccurate */
@@ -1516,7 +1516,7 @@ int __cdecl16far ovc27_usesAgntCount(agnt_t far *agnt,byte recIndex,byte maxLeve
     uVar2 = *(uint32_t *)(*cursor * 0x34 + 0x17);
     if (((*(byte *)((int)uVar2 + 0xf) <= maxLevel) &&
         (*(uint8_t *)*(uint32_t *)(*cursor * 0x34 + 0x1d) != ((agnt_t far *)agnt)->faction)) &&
-       (uVar3 = ovc27_usesRandBelow3(agnt,CONCAT22(0x222b,(uint)recIndex * 0x21),*cursor),
+       (uVar3 = ovc27_usesRandBelow3(agnt,CONCAT22(0x90,(uint)recIndex * 0x21),*cursor),
        (char)uVar3 != '\0')) break;
     *cursor = *cursor + 1;
   }
