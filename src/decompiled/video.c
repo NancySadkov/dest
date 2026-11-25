@@ -36,28 +36,28 @@ uint16_t __cdecl16far video_pointInButton(int x,int y)
 int __cdecl16far video_findAgentAt(int x,int y)
 
 {
-  uint16_t uVar1;
-  int iVar2;
-  int iVar3;
-  int *piVar4;
-  int iVar5;
-  
-  iVar5 = 0;
+  /* Re-derived: the first agent whose frame rectangle contains (x,y), else -1.  The frame
+     entry is a far pointer pair and only its offset half is read here, so the exporter's
+     unused `AGNT_WORD(..., frames, 2)` word and the `piVar4[1]` segment are gone. */
+  int agentIdx;
+  int frameOfs;
+  int *framePtr;
+
+  agentIdx = 0;
   while( true ) {
-    if ((int)(uint)AgntCount <= iVar5) {
+    if ((int)(uint)AgntCount <= agentIdx) {
       return -1;
     }
-    uVar1 = AGNT_WORD(&Agnts[iVar5], frames, 2);
-    piVar4 = (int *)(AGNT_WORD(&Agnts[iVar5], frames, 0) + (uint)Agnts[iVar5].frameIndex * 4);
-    iVar2 = piVar4[1];
-    iVar3 = *piVar4;
-    if (((((Agnts[iVar5].screenX - *(int *)(iVar3 + 0x17)) + -0xc <= x) &&
-         (x <= Agnts[iVar5].screenX + *(int *)(iVar3 + 0x17) + -0xc)) &&
-        ((Agnts[iVar5].screenY - *(int *)(iVar3 + 0xd)) + -7 <= y)) &&
-       (y <= Agnts[iVar5].screenY + -7)) break;
-    iVar5 = iVar5 + 1;
+    framePtr = (int *)(AGNT_WORD(&Agnts[agentIdx], frames, 0) +
+                       (uint)Agnts[agentIdx].frameIndex * 4);
+    frameOfs = *framePtr;
+    if (((((Agnts[agentIdx].screenX - *(int *)(frameOfs + 0x17)) + -0xc <= x) &&
+         (x <= Agnts[agentIdx].screenX + *(int *)(frameOfs + 0x17) + -0xc)) &&
+        ((Agnts[agentIdx].screenY - *(int *)(frameOfs + 0xd)) + -7 <= y)) &&
+       (y <= Agnts[agentIdx].screenY + -7)) break;
+    agentIdx = agentIdx + 1;
   }
-  return iVar5;
+  return agentIdx;
 }
 
 

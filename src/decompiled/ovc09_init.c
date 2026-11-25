@@ -1402,24 +1402,22 @@ void __cdecl16far init_computeMaxSquares(void)
 uint __cdecl16far init_usesGMapCells(int x,int y)
 
 {
-  byte (*pabVar1) [148];
-  uint uVar2;
-  byte (*paabVar3) [59] [148];
-  uint16_t uVar4;
-  
-  pabVar1 = (byte (*) [148])(y * 0x94);
-  uVar4 = (uint16_t)((ulong)GMapCells >> 0x10);
-  paabVar3 = (byte (*) [59] [148])GMapCells;
-  if (((((*paabVar3)[0][(int)(*pabVar1 + x)] == 0) ||
-       (pabVar1 = (byte (*) [148])(y * 0x94), (*paabVar3)[0][(int)(*pabVar1 + x + 1)] == 0)) ||
-      (pabVar1 = *paabVar3 + y, pabVar1[1][x] == 0)) ||
-     (pabVar1 = *paabVar3 + y, pabVar1[1][x] == 0)) {
-    uVar2 = (uint)pabVar1 & 0xff00;
+  /* Re-derived (3381:1f1d): 0 when the cell at (x,y) or the two cells checked beside it are
+     empty, otherwise 1.  The tail writes only AL (mov al,1 at 0x275AF, mov al,0 at
+     0x275B3), so the exported `& 0xff00` / CONCAT11 returns were stale-AH artifacts.  The
+     export repeats the `rowPtr[1][x] == 0` clause twice; it is idempotent and kept once. */
+  byte (*rowPtr) [148];
+  byte (*cells) [59] [148];
+
+  rowPtr = (byte (*) [148])(y * 0x94);
+  cells = (byte (*) [59] [148])GMapCells;
+  if (((((*cells)[0][(int)(*rowPtr + x)] == 0) ||
+       (rowPtr = (byte (*) [148])(y * 0x94),
+        (*cells)[0][(int)(*rowPtr + x + 1)] == 0)) ||
+      (rowPtr = *cells + y, rowPtr[1][x] == 0))) {
+    return 0;
   }
-  else {
-    uVar2 = CONCAT11((char)((uint)pabVar1 >> 8),1);
-  }
-  return uVar2;
+  return 1;
 }
 
 

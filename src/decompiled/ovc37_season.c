@@ -481,26 +481,27 @@ void __cdecl16far updSeason(void)
 int __cdecl16far season_usesAlignUp42(int unitIndex,byte partyIndex)
 
 {
-  uint uVar1;
-  byte bVar2;
-  int iVar3;
-  uint uVar4;
-  
-  uVar1 = ovr_alignUp4(((unit_t *)GUnits)[unitIndex].x,0,0);
-  uVar4 = 0;
-  for (iVar3 = 0; iVar3 < 4; iVar3 = iVar3 + 1) {
-    uVar4 = uVar4 | ((short (*) [60] [148])GMapFlags)[-1][((unit_t *)GUnits)[unitIndex].y + 0x3b]
-                    [uVar1 + iVar3 + 0x92] & 0x3000U;
+  /* Re-derived (67e7:09b9): 1 when the four map-flag words to the right of the unit's cell
+     OR to exactly 0x1000 << (party sheet byte 0x3f), else 0.  The tail writes only AL
+     (mov al,1 at 0x5A6C2, mov al,0 at 0x5A6C6), so the exported CONCAT11 / <<8 values were
+     stale-AH artifacts of that shift. */
+  uint alignedX;
+  uint flags;
+  uint expected;
+  int k;
+
+  alignedX = ovr_alignUp4(((unit_t *)GUnits)[unitIndex].x,0,0);
+  flags = 0;
+  for (k = 0; k < 4; k = k + 1) {
+    flags = flags |
+            ((short (*) [60] [148])GMapFlags)[-1][((unit_t *)GUnits)[unitIndex].y + 0x3b]
+            [alignedX + k + 0x92] & 0x3000U;
   }
-  uVar1 = 0x1000 << (*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) & 0x1f);
-  bVar2 = (byte)(uVar1 >> 8);
-  if (uVar1 == uVar4) {
-    iVar3 = CONCAT11(bVar2,1);
+  expected = 0x1000 << (*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) & 0x1f);
+  if (expected == flags) {
+    return 1;
   }
-  else {
-    iVar3 = (uint)bVar2 << 8;
-  }
-  return iVar3;
+  return 0;
 }
 
 
