@@ -4608,3 +4608,38 @@ Still open from the same scan (tails not yet read): `attact_usesSCARRY22`,
 
   grep_checks 49,229 -> 49,186 -> 49,176; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,546/11, 1,545/11
+
+### `ovc23_textAdlibNone` (55fe:0000, file 0x47DE0): the body is the problem, not the signature
+
+An earlier note said its callers push no arguments (the call at 0x4A925 is `push cs; call
+0x47de0`) and inferred that the three-parameter declaration was simply wrong.  Read
+properly, the picture is different and the function cannot be fixed by editing its
+signature:
+
+* `audit/functions.tsv` gives it **1028 bytes**, so it spans `0x47DE0..0x481E3`; the next
+  function (`ovc23_tickRecordsAt`) starts at `55fe:0487` = file `0x48267`, and the switch
+  cases at `0x481E0..0x4825x` (the `jmp word ptr cs:[bx + 0x47d]` at 0x481DB dispatches to
+  them) fill the gap;
+* scanning exactly that extent finds **no** `[bp+6]`, `[bp+8]` or `[bp+0xa]` access - the
+  only such reads in the neighbourhood are at `0x4826F`, `0x48299`, `0x4832E`, `0x483BE`,
+  all inside `ovc23_tickRecordsAt` or `ovc23_isCursorAt`;
+* yet the exported body uses `partyIndex` **33 times and never assigns it**, plus `outFlag`
+  once and `agnt` twice.
+
+So all three declared parameters are phantom in the export: they are not read from the
+stack, and nothing in the body writes them.  Declaring the function `(void)` would simply
+turn those 33 uses into an undeclared identifier, and inventing a local would be worse.  The
+real value must come from a register or a frame slot that Ghidra misattributed, which needs
+the whole 1028-byte body re-derived - the largest single remaining function (674 decompiled
+lines, 985 section-5 hits), and a multi-session job.
+
+What *was* fixed in the same area, with full evidence:
+
+**`ovc23_isCursorAt`** (`55fe:05db`, file `0x483BB`) - the 60-byte body reads only `[bp+6]`
+(0x483BE) and `[bp+8]` (0x483EA) and ends `mov al,1` / `mov al,0` (0x483EF / 0x483F3).  The
+declaration invented a third parameter that all three call sites passed as a literal 0, and
+typed the boolean as `uint`.  Now `bool ovc23_isCursorAt(uint16_t x,int y)` with the call
+sites updated.
+
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; grep_checks 49,085
+  compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,546/11, 1,545/11
