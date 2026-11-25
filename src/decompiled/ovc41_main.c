@@ -2211,7 +2211,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t far *agntPtr,int agntIndex)
   dst.ofs = (uint16_t)&agnt;
   count = _SS;
   F_SCOPY(far_from_u32((uint32_t)(0x24106e38)),dst);
-  paVar4 = (agnt_t far *)((long)agntIndex * 0x34);
+  paVar4 = (agnt_t *)((long)agntIndex * 0x34);
   paVar9 = (agnt_t far *)paVar4;
   paStack_c = paVar9;
   iStack_a = SEG_OF(Agnts);
@@ -2452,10 +2452,10 @@ switchD_6000_ca06_caseD_1:
           ovr_miceBlitRect(&bStack_16,0);
           ovr_blitRect(&bStack_16,0);
           ovr_miceUpdate();
-          paVar17 = (agnt_t far *)((int)&paStack_20[-1].flags / 3 + Seed_2000_d10e);
-          paVar15 = (agnt_t far *)(Seed_2000_d110 + ((uint)&paVar9[-1].screenY >> 1) + 2 & 0xfffc);
-          paStack_24 = (agnt_t far *)((int)&paStack_1e[-1].flags / 3 + Seed_2000_d10e);
-          paStack_22 = (agnt_t far *)(Seed_2000_d110 + ((uint)&agnt[-1].screenY >> 1) + 2 & 0xfffc);
+          paVar17 = (agnt_t *)((int)&paStack_20[-1].flags / 3 + Seed_2000_d10e);
+          paVar15 = (agnt_t *)(Seed_2000_d110 + ((uint)&paVar9[-1].screenY >> 1) + 2 & 0xfffc);
+          paStack_24 = (agnt_t *)((int)&paStack_1e[-1].flags / 3 + Seed_2000_d10e);
+          paStack_22 = (agnt_t *)(Seed_2000_d110 + ((uint)&agnt[-1].screenY >> 1) + 2 & 0xfffc);
           paStack_26 = paVar15;
           if ((int)paVar15 < (int)paStack_22) {
             paStack_26 = paStack_22;
@@ -2519,9 +2519,9 @@ L_ui_unit_order_6616_0689_1054:
         ovr_say((char *)"Region selection aborted.",0);
       }
       else {
-        paVar17 = (agnt_t far *)((int)&paStack_20[-1].flags / 3 + Seed_2000_d10e);
-        paVar15 = (agnt_t far *)(Seed_2000_d110 + ((uint)&paVar9[-1].screenY >> 1) + 2 & 0xfffc);
-        paVar9 = (agnt_t far *)((int)&paStack_1e[-1].flags / 3 + Seed_2000_d10e);
+        paVar17 = (agnt_t *)((int)&paStack_20[-1].flags / 3 + Seed_2000_d10e);
+        paVar15 = (agnt_t *)(Seed_2000_d110 + ((uint)&paVar9[-1].screenY >> 1) + 2 & 0xfffc);
+        paVar9 = (agnt_t *)((int)&paStack_1e[-1].flags / 3 + Seed_2000_d10e);
         uVar16 = Seed_2000_d110 + ((uint)&agnt[-1].screenY >> 1) + 2;
         paStack_22 = (agnt_t far *)(uVar16 & 0xfffc);
         paStack_26 = paVar15;

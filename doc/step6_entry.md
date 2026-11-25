@@ -6408,3 +6408,35 @@ rather than on a text substitution.
 
   grep_checks 41,119 -> 41,113; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### Four phantom parameters fixed, and a segment-0 regression from the agnt_t change reverted
+
+`in_stack_00000008` was settled for all four functions by reading their prologues, not by assuming a
+fixed offset:
+
+```
+ovc27_compute1             5ded:0404  les bx,[bp+6] and mov si,[bp+0xa]; bp+8 never read
+ovc27_compute2             5ded:07d0  same two; the only bp+8 uses are `push [bp+8]/push [bp+6]`,
+                                      i.e. re-pushing agnt, not a separate value
+ovc27_rollAgainstStat      5ded:04cd  [bp+6] and [bp+0x0a] only
+ovc27_textTakesHalfDamage3 5ded:10ea  [bp+6] and [bp+0x0a]; bp+8 only in the pointer re-push
+```
+
+So in all four the phantom local is a declared parameter - `param` in the two compute functions,
+`mode` in rollAgainstStat, `agntIndex` in textTakesHalfDamage3 - and **14 reads** that were
+uninitialised now read the real argument.  The two agntG_t sites in compute1/compute2 became
+`Agnts[param].gdata->flags`, closing the last of the sixteen integer-operand casts.
+
+The same investigation turned up a regression of my own.  The blanket `agnt_t *` -> `agnt_t far *`
+change also rewrote casts whose operand is an **integer**, and Turbo C compiles int-to-far as
+`xor ax,ax / mov es,ax` - segment 0, the interrupt vector table.  I had checked that trap for
+`agntG_t` and not for `agnt_t`.  Nine sites were affected, all in `ovc41_main.c` except one double
+cast in `ovc27_combat.c`; they are reverted to the near form, which is no better in substance (the
+expressions are nonsense decompiler output such as `(int)&paStack_20[-1].flags / 3 + Seed_2000_d10e`)
+but does not read the IVT.
+
+`tmp/find_bad_agnt_casts.py` now reports **0**, so the check is a standing guard, and
+`tmp/where_instack08.py` reports no `in_stack_00000008` left in ovc27_combat.c.
+
+  grep_checks 41,113 -> 41,090; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

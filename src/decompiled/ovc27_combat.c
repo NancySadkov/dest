@@ -204,11 +204,10 @@ uint __cdecl16far ovc27_compute1(agnt_t far *agnt,int param,uint16_t arg3,uint16
   byte bVar3;
   undefined1 uVar4;
   uint uVar2;
-  int in_stack_00000008;
   
   if ((((agntG_t far *)agnt->gdata)->flags & 2) != 0) {
-    uVar1 = *(uint32_t far *)&Agnts[in_stack_00000008].gdata;
-    bVar3 = (byte)((uint)(in_stack_00000008 * 0x34) >> 8);
+    uVar1 = *(uint32_t far *)&Agnts[param].gdata;
+    bVar3 = (byte)((uint)(param * 0x34) >> 8);
     if (((*(uint *)((int)uVar1 + 0x3e) & 0x10) != 0) &&
        ((((entity_t *)agnt->entity)->base).level < 3)) {
       return (uint)bVar3 << 8;
@@ -216,9 +215,9 @@ uint __cdecl16far ovc27_compute1(agnt_t far *agnt,int param,uint16_t arg3,uint16
     return CONCAT11(bVar3,1);
   }
   if ((((agntG_t far *)agnt->gdata)->flags & 1) != 0) {
-    in_AX = in_stack_00000008 * 0x34;
+    in_AX = param * 0x34;
     uVar4 = (undefined1)(in_AX >> 8);
-    if (((((agntG_t *)((in_AX + 0x1d)))->flags & 4) != 0) &&
+    if (((Agnts[param].gdata->flags & 4) != 0) &&
        (3 < (((entity_t *)agnt->entity)->base).level)) {
       return CONCAT11(uVar4,1);
     }
@@ -227,8 +226,8 @@ uint __cdecl16far ovc27_compute1(agnt_t far *agnt,int param,uint16_t arg3,uint16
     }
   }
   if (((((agntG_t far *)agnt->gdata)->flags & 0x800) == 0) ||
-     (in_AX = in_stack_00000008 * 0x34,
-     (((agntG_t *)((in_AX + 0x1d)))->flags & 4) == 0)) {
+     (in_AX = param * 0x34,
+     (Agnts[param].gdata->flags & 4) == 0)) {
     uVar2 = in_AX & 0xff00;
   }
   else {
@@ -252,7 +251,6 @@ int __cdecl16far ovc27_rollAgainstStat(agnt_t far *agnt,byte mode,uint16_t arg3,
   byte bVar5;
   int iVar4;
   undefined1 uStack0007;
-  byte in_stack_00000008;
   byte bStack_4;
   
   agnt = CONCAT13(uStack0007,CONCAT12(mode,agnt));
@@ -262,7 +260,7 @@ int __cdecl16far ovc27_rollAgainstStat(agnt_t far *agnt,byte mode,uint16_t arg3,
   }
   else {
     uVar1 = *(uint32_t *)((uint)bVar5 << 2);
-    bStack_4 = *(byte *)((int)uVar1 + (uint)in_stack_00000008 + 0x29);
+    bStack_4 = *(byte *)((int)uVar1 + (uint)mode + 0x29);
   }
   uVar2 = ovr_randBelow(0x28,0);
   uVar3 = (uVar2 & 0xff) + 1;
@@ -455,7 +453,6 @@ uint __cdecl16far ovc27_compute2(agnt_t far *agnt,int param,uint16_t arg3,uint16
   uint in_AX;
   uint uVar2;
   uint16_t uVar3;
-  int in_stack_00000008;
   byte mode;
   byte bStack_3;
   
@@ -464,19 +461,19 @@ uint __cdecl16far ovc27_compute2(agnt_t far *agnt,int param,uint16_t arg3,uint16
     if ((((agntG_t far *)agnt->gdata)->flags & 1) == 0) {
       if (((((((agntG_t far *)agnt->gdata)->flags & 0x800) != 0) &&
            (in_AX = ovc27_rollAgainstStat(agnt,mode,5,0), (char)in_AX != '\0')) &&
-          (in_AX = in_stack_00000008 * 0x34, (*(uint *)(in_AX + 0x2b) & 0x7e0) == 0)) &&
-         ((in_AX = in_stack_00000008 * 0x34,
-          (((agntG_t *)((in_AX + 0x1d)))->flags3 & 0x80) == 0 &&
-          (in_AX = in_stack_00000008 * 0x34,
-          (((agntG_t *)((in_AX + 0x1d)))->flags & 4) != 0)))) {
+          (in_AX = param * 0x34, (*(uint *)(in_AX + 0x2b) & 0x7e0) == 0)) &&
+         ((in_AX = param * 0x34,
+          (Agnts[param].gdata->flags3 & 0x80) == 0 &&
+          (in_AX = param * 0x34,
+          (Agnts[param].gdata->flags & 4) != 0)))) {
         return CONCAT11((char)(in_AX >> 8),1);
       }
       uVar2 = in_AX & 0xff00;
     }
     else {
-      uVar3 = ovc27_usesRandBelow3((agnt_t far *)CONCAT22(param,agnt),0x222b0108,in_stack_00000008);
+      uVar3 = ovc27_usesRandBelow3((agnt_t far *)CONCAT22(param,agnt),0x222b0108,param);
       if ((char)uVar3 == '\0') {
-        uVar2 = ovc27_usesRandBelow3((agnt_t far *)CONCAT22(param,agnt),0x222b014a,in_stack_00000008);
+        uVar2 = ovc27_usesRandBelow3((agnt_t far *)CONCAT22(param,agnt),0x222b014a,param);
         if ((char)uVar2 == '\0') {
           return uVar2 & 0xff00;
         }
@@ -506,7 +503,7 @@ uint __cdecl16far ovc27_compute2(agnt_t far *agnt,int param,uint16_t arg3,uint16
       uVar2 = 0;
     }
     else {
-      uVar1 = *(uint32_t far *)&Agnts[in_stack_00000008].gdata;
+      uVar1 = *(uint32_t far *)&Agnts[param].gdata;
       if (((*(uint *)((int)uVar1 + 0x3e) & 0x10) == 0) ||
          (2 < (((entity_t *)agnt->entity)->base).level)) {
         uVar2 = ovc27_rollAgainstStat(agnt,mode,1,0);
@@ -518,7 +515,7 @@ uint __cdecl16far ovc27_compute2(agnt_t far *agnt,int param,uint16_t arg3,uint16
         }
       }
       else {
-        uVar2 = in_stack_00000008 * 0x34 & 0xff00;
+        uVar2 = param * 0x34 & 0xff00;
       }
     }
   }
@@ -893,7 +890,6 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
   char *pcVar6;
   uint8_t *bufPtr;
   uint16_t uVar8;
-  int in_stack_00000008;
   undefined1 uVar9;
   undefined1 uVar10;
   undefined1 uVar11;
@@ -904,8 +900,8 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
   char *ptrSeg;
   int levelBonus;
   
-  uVar8 = (uint16_t)((ulong)((long)in_stack_00000008 * 0x34) >> 0x10);
-  paStack_c = (agnt_t far *)(agnt_t far *)((long)in_stack_00000008 * 0x34);
+  uVar8 = (uint16_t)((ulong)((long)agntIndex * 0x34) >> 0x10);
+  paStack_c = (agnt_t *)((long)agntIndex * 0x34);
   ptrSeg = (char *)((int)&AgntAnms[0x75].halfWidth + 1);
   if (agnt->variant == 0x1) {
     if ((((agntG_t far *)agnt->gdata)->flags3 & 1) == 0) {
