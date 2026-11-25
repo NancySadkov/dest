@@ -1489,56 +1489,44 @@ void __cdecl16far driver_clearMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int
 void __cdecl16far driver_unrleScreen(far_t src,far_t dst)
 
 {
-  byte bVar1;
-  byte *pbVar2;
-  byte *pbVar3;
-  uint uVar4;
-  byte bVar5;
-  int iVar6;
-  byte *pbVar7;
-  byte *pbVar8;
-  byte *pbVar9;
-  byte *pbVar10;
-  uint16_t uVar11;
-  
-  uVar11 = src.seg;
-  pbVar7 = (byte *)src.ofs;
-  pbVar9 = (byte *)dst.ofs;
-  iVar6 = 200;
-  do {
-    pbVar8 = pbVar7 + 1;
-    pbVar10 = pbVar9;
-    for (bVar5 = *pbVar7; pbVar7 = pbVar8, bVar5 != 0; bVar5 = bVar5 - 1) {
-      while( true ) {
-        pbVar8 = pbVar7 + 1;
-        bVar1 = *pbVar7;
-        uVar4 = (uint)bVar1;
-        if ((char)bVar1 < '\0') break;
-        pbVar7 = pbVar7 + 2;
-        bVar1 = *pbVar8;
-        for (; uVar4 != 0; uVar4 = uVar4 - 1) {
-          pbVar2 = pbVar10;
-          pbVar10 = pbVar10 + 1;
-          *pbVar2 = bVar1;
+  /* RLE screen decoder: 200 rows of 0x140 bytes.  Per row a chunk count, then that many
+     chunks.  Control byte top bit clear -> `count, value`: replicate value count times.
+     Top bit set -> `count` then -count literal bytes copied in order. */
+  byte *rleSrc;
+  byte *rowBase;
+  byte *rleDst;
+  byte runByte;
+  byte chunkCount;
+  uint n;
+  int rowIndex;
+
+  rleSrc = (byte *)src.ofs;
+  rowBase = (byte *)dst.ofs;
+  for (rowIndex = 200; rowIndex != 0; rowIndex = rowIndex - 1) {
+    rleDst = rowBase;
+    chunkCount = *rleSrc;
+    rleSrc = rleSrc + 1;
+    while (chunkCount != 0) {
+      runByte = *rleSrc;
+      if ((char)runByte < '\0') {
+        rleSrc = rleSrc + 1;
+        for (n = (uint)(byte)-runByte; n != 0; n = n - 1) {
+          *rleDst = *rleSrc;
+          rleDst = rleDst + 1;
+          rleSrc = rleSrc + 1;
         }
-        bVar5 = bVar5 - 1;
-        if (bVar5 == 0) goto L_driver_2d63_0aac_0AE8;
       }
-      for (uVar4 = (uint)(byte)-bVar1; uVar4 != 0; uVar4 = uVar4 - 1) {
-        pbVar3 = pbVar10;
-        pbVar10 = pbVar10 + 1;
-        pbVar2 = pbVar8;
-        pbVar8 = pbVar8 + 1;
-        *pbVar3 = *pbVar2;
+      else {
+        for (n = (uint)runByte; n != 0; n = n - 1) {
+          *rleDst = rleSrc[1];
+          rleDst = rleDst + 1;
+        }
+        rleSrc = rleSrc + 2;
       }
+      chunkCount = chunkCount - 1;
     }
-L_driver_2d63_0aac_0AE8:
-    pbVar9 = pbVar9 + 0x140;
-    iVar6 = iVar6 + -1;
-    if (iVar6 == 0) {
-      return;
-    }
-  } while( true );
+    rowBase = rowBase + 0x140;
+  }
 }
 
 
@@ -1550,57 +1538,48 @@ L_driver_2d63_0aac_0AE8:
 void __cdecl16far driver_unrleSprite(int *spr,far_t dst)
 
 {
-  byte *pbVar1;
-  byte *pbVar2;
-  byte bVar3;
-  byte bVar4;
-  byte *pbVar5;
-  uint uVar6;
-  byte bVar7;
-  int iVar8;
-  byte *pbVar9;
-  byte *pbVar10;
-  byte *pbVar11;
-  uint16_t uVar12;
-  
-  uVar12 = (uint16_t)((ulong)spr >> 0x10);
-  pbVar10 = (byte *)(dst.ofs + *spr * 0x140);
-  pbVar9 = (byte *)((int *)spr + 2);
-  iVar8 = ((int *)spr)[1];
-  do {
-    pbVar11 = pbVar10;
-    for (bVar7 = *pbVar9; pbVar9 = pbVar9 + 1, bVar7 != 0; bVar7 = bVar7 - 1) {
-      while( true ) {
-        pbVar2 = pbVar9 + 1;
-        pbVar11 = pbVar11 + *pbVar9;
-        pbVar9 = pbVar9 + 2;
-        bVar3 = *pbVar2;
-        uVar6 = (uint)bVar3;
-        if ((char)bVar3 < '\0') break;
-        for (; uVar6 != 0; uVar6 = uVar6 - 1) {
-          pbVar5 = pbVar11;
-          pbVar11 = pbVar11 + 1;
-          pbVar1 = pbVar9;
-          pbVar9 = pbVar9 + 1;
-          *pbVar5 = *pbVar1;
+  /* RLE sprite decoder with a per-chunk x-skip.  spr[0] is the source row, spr[1] the
+     row count, the stream starts at spr+4.  A chunk is `skip, control`: the destination
+     cursor advances by skip; a non-negative control copies that many literal bytes, a
+     negative one replicates the following byte -control times and consumes it. */
+  byte *rleSrc;
+  byte *rowBase;
+  byte *rleDst;
+  byte runByte;
+  byte chunkCount;
+  byte runVal;
+  uint n;
+  int rowIndex;
+
+  rowBase = (byte *)(dst.ofs + *spr * 0x140);
+  rleSrc = (byte *)((int *)spr + 2);
+  for (rowIndex = ((int *)spr)[1]; rowIndex != 0; rowIndex = rowIndex - 1) {
+    rleDst = rowBase;
+    chunkCount = *rleSrc;
+    rleSrc = rleSrc + 1;
+    while (chunkCount != 0) {
+      rleDst = rleDst + *rleSrc;
+      runByte = rleSrc[1];
+      rleSrc = rleSrc + 2;
+      if ((char)runByte < '\0') {
+        runVal = *rleSrc;
+        for (n = (uint)(byte)-runByte; n != 0; n = n - 1) {
+          *rleDst = runVal;
+          rleDst = rleDst + 1;
         }
-        bVar7 = bVar7 - 1;
-        if (bVar7 == 0) goto L_driver_2d63_0af7_0B3E;
+        rleSrc = rleSrc + 1;
       }
-      bVar4 = *pbVar9;
-      for (uVar6 = (uint)(byte)-bVar3; uVar6 != 0; uVar6 = uVar6 - 1) {
-        pbVar1 = pbVar11;
-        pbVar11 = pbVar11 + 1;
-        *pbVar1 = bVar4;
+      else {
+        for (n = (uint)runByte; n != 0; n = n - 1) {
+          *rleDst = *rleSrc;
+          rleDst = rleDst + 1;
+          rleSrc = rleSrc + 1;
+        }
       }
+      chunkCount = chunkCount - 1;
     }
-L_driver_2d63_0af7_0B3E:
-    pbVar10 = pbVar10 + 0x140;
-    iVar8 = iVar8 + -1;
-    if (iVar8 == 0) {
-      return;
-    }
-  } while( true );
+    rowBase = rowBase + 0x140;
+  }
 }
 
 
