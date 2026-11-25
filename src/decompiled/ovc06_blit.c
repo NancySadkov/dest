@@ -723,46 +723,53 @@ void __cdecl16far
 blit_usesBlitGfxN(far_t gfx,int16_t x,int y,byte shade1,int y2,byte shade2,brect_t *rect,uint16_t type,uint16_t arg9,uint16_t arg10,uint16_t arg11,uint16_t arg12,uint16_t arg13,uint16_t arg14,uint16_t arg15)
 
 {
-  byte bVar1;
-  uint uVar2;
-  int iVar3;
-  int iVar4;
-  uint uVar5;
-  uint uVar6;
-  uint16_t uStack_c;
-  uint16_t uStack_a;
-  uint16_t uStack_4;
-  
-  bVar1 = shade1;
-  iVar3 = y;
+  /* Re-derived: vertical gradient blit.  When y2 < y the endpoints and their shade bytes
+     are swapped, then the shade walks from shade1 to shade2 by a Bresenham step over
+     (y2-y)/2, drawing one row every 2 lines. */
+  byte savedShade;
+  int savedY;
+  uint halfSpan;
+  int shadeStep;
+  uint shadeRem;
+  uint remSign;
+  uint shadeFrac;
+  int shadeStepSign;
+  uint spanSign;
+  uint spanAbs;
+  int shadeErr;
+  uint16_t shadeCur;
+
+  savedShade = shade1;
+  savedY = y;
   if (y2 < y) {
     y = y2;
-    y2 = iVar3;
+    y2 = savedY;
     shade1 = shade2;
-    shade2 = bVar1;
+    shade2 = savedShade;
   }
-  uVar2 = y2 - y >> 1;
-  if (uVar2 == 0) {
-    uStack_a = 0;
-    uStack_c = 0;
+  halfSpan = y2 - y >> 1;
+  if (halfSpan == 0) {
+    shadeStep = 0;
+    shadeFrac = 0;
   }
   else {
-    uStack_a = (int)((uint)shade2 - (uint)shade1) / (int)uVar2;
-    uVar6 = (int)((uint)shade2 - (uint)shade1) % (int)uVar2;
-    uVar5 = (int)uVar6 >> 0xf;
-    uStack_c = (uVar6 ^ uVar5) - uVar5;
+    shadeStep = (int)((uint)shade2 - (uint)shade1) / (int)halfSpan;
+    shadeRem = (int)((uint)shade2 - (uint)shade1) % (int)halfSpan;
+    remSign = (int)shadeRem >> 0xf;
+    shadeFrac = (shadeRem ^ remSign) - remSign;
   }
-  iVar3 = ovr_ovc07_signum((uint)shade2 - (uint)shade1);
-  uVar6 = y2 - y >> 0xf;
-  iVar4 = (int)((uVar2 ^ uVar6) - uVar6) >> 1;
-  uStack_4 = (uint)shade1;
+  shadeStepSign = ovr_ovc07_signum((uint)shade2 - (uint)shade1);
+  spanSign = y2 - y >> 0xf;
+  spanAbs = (halfSpan ^ spanSign) - spanSign;
+  shadeErr = (int)spanAbs >> 1;
+  shadeCur = (uint)shade1;
   for (; y <= y2; y = y + 2) {
-    blitGfxN(gfx,x,y,(brect_t *)CONCAT22(type,rect),(uint8_t)uStack_4,false);
-    uStack_4 = uStack_4 + uStack_a;
-    iVar4 = iVar4 + uStack_c;
-    if ((int)((uVar2 ^ uVar6) - uVar6) <= iVar4) {
-      iVar4 = iVar4 - ((uVar2 ^ uVar6) - uVar6);
-      uStack_4 = uStack_4 + iVar3;
+    blitGfxN(gfx,x,y,(brect_t *)CONCAT22(type,rect),(uint8_t)shadeCur,false);
+    shadeCur = shadeCur + shadeStep;
+    shadeErr = shadeErr + shadeFrac;
+    if ((int)spanAbs <= shadeErr) {
+      shadeErr = shadeErr - spanAbs;
+      shadeCur = shadeCur + shadeStepSign;
     }
   }
   return;
@@ -994,84 +1001,95 @@ void __cdecl16far
 blit_usesBlitGfxN2(far_t gfx,far_t gfx_00,int x1,int y1,byte shade1,int x2,int y2,byte shade2,brect_t *rect,uint16_t type,byte highlightLevel,uint16_t arg12,uint16_t arg13,uint16_t arg14,uint16_t arg15,uint16_t arg16,uint16_t arg17)
 
 {
-  byte *pbVar1;
-  byte bVar2;
-  int iVar3;
-  int iVar4;
-  int iVar5;
-  uint uVar6;
-  uint uVar7;
-  int iStack_1a;
-  int iStack_16;
-  int iStack_14;
-  int iStack_12;
-  int iStack_e;
-  int iStack_c;
-  uint uStack_8;
-  int iStack_6;
-  byte *pbStack_4;
-  
-  iVar4 = x2;
-  bVar2 = shade1;
-  iVar3 = y1 + ((int)((uint)shade1 * 0x38) >> 4);
+  /* Re-derived: two-edge gradient blit.  y1/y2 are shifted by shade*0x38>>4 before
+     ovc07_usesLDIV_at_ decides whether the band is drawn; after the optional endpoint
+     swap the span becomes (y2-y1)/4 bands, the shade walks with one DDA and x with
+     another, and each band picks gfx or gfx_00 from (byte at x1<<2) & 7 against
+     highlightLevel. */
+  byte *highlightPtr;
+  byte *highlightByte;
+  byte savedShade;
+  int savedX2;
+  int y1adj;
+  int bandCount;
+  int shadeStep;
+  uint shadeRem;
+  uint remSign;
+  int shadeFrac;
+  int shadeStepSign;
+  int errInit;
+  int shadeErr;
+  int xErr;
+  int xStep;
+  int xFrac;
+  int xStepSign;
+  uint16_t shadeCur;
+  int rowY;
+
+  savedX2 = x2;
+  savedShade = shade1;
+  y1adj = y1 + ((int)((uint)shade1 * 0x38) >> 4);
   y2 = y2 + ((int)((uint)shade2 * 0x38) >> 4);
-  ovr_ovc07_usesLDIV_at_(x1,iVar3,x2,y2,0x35,rect,type);
-  y1 = iVar3;
-  if (y2 < iVar3) {
+  ovr_ovc07_usesLDIV_at_(x1,y1adj,x2,y2,0x35,rect,type);
+  y1 = y1adj;
+  if (y2 < y1adj) {
     x2 = x1;
     shade1 = shade2;
-    shade2 = bVar2;
-    x1 = iVar4;
+    shade2 = savedShade;
+    x1 = savedX2;
     y1 = y2;
-    y2 = iVar3;
+    y2 = y1adj;
   }
-  iVar3 = (y2 - y1) / 4;
-  if (iVar3 == 0) {
-    iStack_c = 0;
-    iStack_e = 0;
-  }
-  else {
-    iStack_c = (int)((uint)shade2 - (uint)shade1) / iVar3;
-    uVar6 = (int)((uint)shade2 - (uint)shade1) % iVar3;
-    uVar7 = (int)uVar6 >> 0xf;
-    iStack_e = (uVar6 ^ uVar7) - uVar7;
-  }
-  iVar4 = ovr_ovc07_signum((uint)shade2 - (uint)shade1);
-  iStack_1a = iVar3 >> 1;
-  if (iVar3 == 0) {
-    iStack_14 = 0;
-    iStack_16 = 0;
+  bandCount = (y2 - y1) / 4;
+  if (bandCount == 0) {
+    shadeStep = 0;
+    shadeFrac = 0;
   }
   else {
-    iStack_14 = (x2 - x1) / iVar3;
-    uVar6 = (x2 - x1) % iVar3;
-    uVar7 = (int)uVar6 >> 0xf;
-    iStack_16 = (uVar6 ^ uVar7) - uVar7;
+    shadeStep = (int)((uint)shade2 - (uint)shade1) / bandCount;
+    shadeRem = (int)((uint)shade2 - (uint)shade1) % bandCount;
+    remSign = (int)shadeRem >> 0xf;
+    shadeFrac = (shadeRem ^ remSign) - remSign;
   }
-  iVar5 = ovr_ovc07_signum(x2 - x1);
-  uStack_8 = (uint)shade1;
-  pbStack_4 = (byte *)(x1 << 2);
-  iStack_12 = iStack_1a;
-  for (iStack_6 = y1; iStack_6 <= y2; iStack_6 = iStack_6 + 4) {
-    pbVar1 = (byte *)((uint)pbStack_4 & 0xff);
-    pbStack_4 = pbVar1 + 1;
-    if ((*pbVar1 & 7) < highlightLevel) {
-      blitGfxN(gfx,x1 + -7,iStack_6 + -2,(brect_t *)CONCAT22(type,rect),(uint8_t)uStack_8,false);
+  shadeStepSign = ovr_ovc07_signum((uint)shade2 - (uint)shade1);
+  errInit = bandCount >> 1;
+  if (bandCount == 0) {
+    xStep = 0;
+    xFrac = 0;
+  }
+  else {
+    xStep = (x2 - x1) / bandCount;
+    shadeRem = (x2 - x1) % bandCount;
+    remSign = (int)shadeRem >> 0xf;
+    xFrac = (shadeRem ^ remSign) - remSign;
+  }
+  xStepSign = ovr_ovc07_signum(x2 - x1);
+  shadeCur = (uint)shade1;
+  highlightPtr = (byte *)(x1 << 2);
+  xErr = errInit;
+  shadeErr = errInit;
+  for (rowY = y1; rowY <= y2; rowY = rowY + 4) {
+    highlightByte = (byte *)((uint)highlightPtr & 0xff);
+    highlightPtr = highlightByte + 1;
+    if ((*highlightByte & 7) < highlightLevel) {
+      blitGfxN(gfx,x1 + -7,rowY + -2,(brect_t *)CONCAT22(type,rect),
+               (uint8_t)shadeCur,false);
     }
     else {
-      blitGfxN(gfx_00,x1 + -7,iStack_6 + -2,(brect_t *)CONCAT22(type,rect),(uint8_t)uStack_8,false);
+      blitGfxN(gfx_00,x1 + -7,rowY + -2,(brect_t *)CONCAT22(type,rect),
+               (uint8_t)shadeCur,false);
     }
-    uStack_8 = uStack_8 + iStack_c;
-    iStack_12 = iStack_12 + iStack_e;
-    if (iVar3 <= iStack_12) {
-      iStack_12 = iStack_12 - iVar3;
-      uStack_8 = uStack_8 + iVar4;
+    shadeCur = shadeCur + shadeStep;
+    shadeErr = shadeErr + shadeFrac;
+    if (bandCount <= shadeErr) {
+      shadeErr = shadeErr - bandCount;
+      shadeCur = shadeCur + shadeStepSign;
     }
-    x1 = x1 + iStack_14;
-    iStack_1a = iStack_1a + iStack_16;
-    if (iVar3 <= iStack_1a) {
-      iStack_1a = iStack_1a - iVar3;
-      x1 = x1 + iVar5;
+    x1 = x1 + xStep;
+    xErr = xErr + xFrac;
+    if (bandCount <= xErr) {
+      xErr = xErr - bandCount;
+      x1 = x1 + xStepSign;
     }
   }
   return;
