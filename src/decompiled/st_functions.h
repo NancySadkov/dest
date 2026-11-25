@@ -723,7 +723,7 @@ int __cdecl16far ovc23_usesCornerBR2(int x,int step);
 void __cdecl16far ovc23_textBuildThfres01Lbm(far_t dst);
 int __cdecl16far ovc23_isLargeBuilding(int x,int y);
 void __cdecl16far ovc23_usesGfxRndSeed2(int x,int y);
-uint * __cdecl16far ovc23_usesAlignUp43(int16_t x,uint16_t unitIndex,byte dir);
+uint __cdecl16far ovc23_usesAlignUp43(int x,int y,byte dir);
 bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte dir);
 void __cdecl16far ovc23_rebuildDirectionFlags(int x,int y);
 void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType);
