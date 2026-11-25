@@ -1741,10 +1741,10 @@ void __cdecl16far attact_usesLDIV_at_2(void)
   lVar8 = CONCAT22((uint16_t)((ulong)in_stack_0000ffde >> 0x10),unaff_SI);
   dst.seg = _SS;
   dst.ofs = (uint16_t)&rect2;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410088d)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410088d)),dst,10);
   dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&rect;
-  F_SCOPY(far_from_u32((uint32_t)(0x24100897)),dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x24100897)),dst_00,10);
   if (GameRunning == false) {
     miceIdle = MiceNeedsUpdate == '\0';
     bVar1 = ovr_draw_textArena();

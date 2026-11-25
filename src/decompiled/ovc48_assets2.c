@@ -21,7 +21,7 @@ void __cdecl16far stshInitTxtFiles(char grab)
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&stk_ff74;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410822c)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410822c)),dst,136);
   for (i = 0x0; i < 0x22; i = i + 0x1) {
     if (grab == '\0') {
       pfVar1 = ovr_stshAllocStub(in_stack_0000ff74);

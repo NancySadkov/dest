@@ -42,7 +42,7 @@ void __cdecl16far __exit(uint16_t status);
 void _cexit(void);
 void __cdecl16far _c_exit(void);
 long * __cdecl16far LXMUL_at_(long *__return_storage_ptr__,long a,long b);
-void __cdecl16far F_SCOPY(far_t src,far_t dst);
+void __cdecl16far F_SCOPY(far_t src,far_t dst,uint16_t n);
 int __cdecl16far getcurdir(int drive,char *direc);
 int __cdecl16far getdisk(void);
 int __cdecl16far setdisk(int drive);

@@ -82,7 +82,7 @@ void __cdecl16far manage_blitTalkWindow(void)
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&rect;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410493b)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410493b)),dst,10);
   gfx.seg = talkwin9Cut1Seg;
   gfx.ofs = talkwin9Cut1Ofs;
   ovr_blitGfxRect(gfx,0,0,(brect_t *)&rect,(uint8_t)_SS,true,0,0,0,0,0,0);
@@ -269,7 +269,7 @@ void * __cdecl16far manage_playerTitle(char_sheet_t *sheet,...)
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&titlesMap;
-  F_SCOPY(far_from_u32((uint32_t)(0x241049a5)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x241049a5)),dst,56);
   if (sheet->cls == 0xff) {
     pcVar1 = (char *)0x28c75;
   }
@@ -698,11 +698,11 @@ uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = uVar6;
   dst.ofs = (uint16_t)&classStatMap1;
   (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = uVar7;
-  F_SCOPY(far_from_u32((uint32_t)(0x241049dd)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x241049dd)),dst,7);
   (*(uint8_t *)((uint8_t *)&(dst_00.seg))) = uVar6;
   dst_00.ofs = (uint16_t)&classStatMap2;
   (*(uint8_t *)((uint8_t *)&(dst_00.seg) + 1)) = uVar7;
-  F_SCOPY(far_from_u32((uint32_t)(0x241049e4)),dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x241049e4)),dst_00,7);
   while( true ) {
     _fsetmem(MK_FP(_SS,&menuItems),0x10,0);
     auStack_28[0] = 0x2410;
@@ -809,7 +809,7 @@ uint16_t __cdecl16far alignmentDlg(char_sheet_t *sheet)
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
   dst.ofs = (uint16_t)&inputBuf;
   (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)(_SS >> 8);
-  F_SCOPY(far_from_u32((uint32_t)(0x24104a03)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24104a03)),dst,8);
   do {
     ovr_drawString((char *)"Select an alignment.",0x2410,0x10);
     inputResult = ovr_uiInputText(far_from_u32((uint32_t)(0x24104927)),3,far_from_u32((uint32_t)(0x0)),0x0,0);
@@ -917,7 +917,7 @@ void __cdecl16far manage_rollHitPoints(char_sheet_t *sheet)
 
   dst.seg = _SS;
   dst.ofs = (uint16_t)&classLimits;
-  F_SCOPY(far_from_u32((uint32_t)(0x24104a0b)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24104a0b)),dst,7);
   total = 0;
   for (i = 0; sh = (char_sheet_t *)sheet, i < (int)(uint)sh->race; i = i + 1) {
     roll = ovr_randBelow((uint)(&classLimits)[sh->cls],0);
@@ -1702,7 +1702,7 @@ char_sheet_t * __cdecl16far chargen(void)
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
   dst.ofs = (uint16_t)&keepDiscard;
   (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)_SS >> 8);
-  F_SCOPY(far_from_u32((uint32_t)(0x24104a16)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24104a16)),dst,8);
   ovr_fmFreeAudio(1);
   ovr_ovc13_usesBlitRect();
   sheet = ovr_stshAlloc(0xae);
@@ -1940,7 +1940,7 @@ void __cdecl16far manage_textHalflingCastle(void)
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
   dst.ofs = (uint16_t)&inputBuf;
   (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)(_SS >> 8);
-  F_SCOPY(far_from_u32((uint32_t)(0x24104a1e)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24104a1e)),dst,8);
   gfx.seg = FontHandle.seg;
   gfx.ofs = FontHandle.ofs;
   ovr_blitLoadRleGfx(gfx,far_from_u32((uint32_t)(0xa000c31d)),0);
@@ -2581,7 +2581,7 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
   
   dst.seg = (uint16_t)_SS;
   dst.ofs = (uint16_t)&resultPtrs;
-  F_SCOPY(far_from_u32((uint32_t)(0x24104ada)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24104ada)),dst,20);
   for (iVar7 = 0; iVar7 < 5; iVar7 = iVar7 + 1) {
     uVar6 = *(uint16_t *)(&resultPtrs + iVar7 * 4);
     auStack_142[iVar7 * 2] = auStack_156[iVar7 * 2];
@@ -3298,14 +3298,14 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
   
   dst.seg = (uint16_t)_SS;
   dst.ofs = (uint16_t)&bandLabels;
-  F_SCOPY(far_from_u32((uint32_t)(0x24104b06)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24104b06)),dst,48);
   dst_00.seg = (uint16_t)_SS;
   dst_00.ofs = (uint16_t)&bandLabels2;
-  F_SCOPY(far_from_u32((uint32_t)(0x24104b36)),dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x24104b36)),dst_00,48);
   pbVar13 = (byte *)__C0_ASM_CopyRight + 3;
   dst_01.seg = (uint16_t)_SS;
   dst_01.ofs = (uint16_t)(acStack_e + 4);
-  F_SCOPY(far_from_u32((uint32_t)(0x24104b66)),dst_01);
+  F_SCOPY(far_from_u32((uint32_t)(0x24104b66)),dst_01,7);
   acStack_e[2] = '\0';
   if (charIndex == 0xff) {
     acStack_e[3] = 0xc;

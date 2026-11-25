@@ -46,10 +46,10 @@ void __cdecl16far ovc13_usesMiceBlitRect(void)
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&stk_ffe2;
-  F_SCOPY(far_from_u32((uint32_t)(0x24100846)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24100846)),dst,18);
   dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&rect;
-  F_SCOPY(far_from_u32((uint32_t)(0x24100858)),dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x24100858)),dst_00,10);
   puVar1 = ovr_attact_usesBDADailyTimeCounter(flashTickLo,CONCAT22(in_stack_0000ffe2,flashTickHi),0);
   if ((in_DX == 0) && (puVar1 <= (byte *)__C0_ASM_CopyRight + 4)) {
     paletteOfs = (uint8_t *)0x0;

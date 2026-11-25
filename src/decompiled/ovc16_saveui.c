@@ -237,7 +237,7 @@ void __cdecl16far saveui_usesBlitGfx10(far_t gfx,char *text,byte *widths,uint *c
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&rect;
-  F_SCOPY(far_from_u32((uint32_t)(0x241026ad)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x241026ad)),dst,10);
   rect = *(uint *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2)));
   iStack_a = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
   iStack_6 = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x28;
@@ -1402,10 +1402,10 @@ void __cdecl16far uiMainMenuLoop(void)
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&menu;
-  F_SCOPY(far_from_u32((uint32_t)(0x241026b7)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x241026b7)),dst,32);
   dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)yesno;
-  F_SCOPY(far_from_u32((uint32_t)(0x241026d7)),dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x241026d7)),dst_00,8);
   ovr_say((char *)"Stronghold V 1.00",0x2410);
   gfx.seg = GMenuGfxSeg;
   gfx.ofs = GMenuGfxOfs;
@@ -1706,13 +1706,13 @@ void __cdecl16far saveui_configureNewWorld(void)
   
   dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&dst;
-  F_SCOPY(far_from_u32((uint32_t)(0x241026e3)),dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x241026e3)),dst_00,20);
   dst_01.seg = _SS;
   dst_01.ofs = (uint16_t)&hostilityItems;
-  F_SCOPY(far_from_u32((uint32_t)(0x241026f7)),dst_01);
+  F_SCOPY(far_from_u32((uint32_t)(0x241026f7)),dst_01,20);
   dst_02.seg = _SS;
   dst_02.ofs = (uint16_t)&worldItems;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410270b)),dst_02);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410270b)),dst_02,32);
   puVar1 = &worldItems;
   items.seg = _SS;
   items.ofs = (uint16_t)puVar1;

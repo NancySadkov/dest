@@ -1226,7 +1226,7 @@ int __cdecl16far ovc15_usesRandBelow(agnt_t far *agnt,int xSide,char keepPos,cha
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)xOffsets;
-  F_SCOPY(far_from_u32((uint32_t)(0x24101d09)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24101d09)),dst,8);
   agnt_00 = (agnt_t far *)agnt;
   uVar7 = (uint16_t)((ulong)agnt >> 0x10);
   if (keepPos == '\0') {

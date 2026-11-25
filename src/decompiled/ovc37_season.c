@@ -330,16 +330,16 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&seasonPalette;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410693b)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410693b)),dst,135);
   dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&colorA;
-  F_SCOPY(far_from_u32((uint32_t)(0x241069c2)),dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x241069c2)),dst_00,3);
   dst_01.seg = _SS;
   dst_01.ofs = (uint16_t)&colorB;
-  F_SCOPY(far_from_u32((uint32_t)(0x241069c5)),dst_01);
+  F_SCOPY(far_from_u32((uint32_t)(0x241069c5)),dst_01,3);
   dst_02.seg = _SS;
   dst_02.ofs = (uint16_t)&colorC;
-  F_SCOPY(far_from_u32((uint32_t)(0x241069c8)),dst_02);
+  F_SCOPY(far_from_u32((uint32_t)(0x241069c8)),dst_02,3);
   _fmemmove((char *)CONCAT22(dstSeg,dstOfs),(char *)CONCAT22(srcSeg,srcOfs),0x300);
   uStack_16 = ((uint16_t *)&l1Cut2Seg)[((uint)seasonGroupBase + (uint)GSeason) * 2];
   uVar1 = ((uint16_t *)&l1Cut2Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 2];
@@ -389,7 +389,7 @@ void __cdecl16far updSeason(void)
   
   dst.seg = (uint16_t)_SS;
   dst.ofs = (uint16_t)snames;
-  F_SCOPY(far_from_u32((uint32_t)(0x241069cb)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x241069cb)),dst,12);
   seaon2 = GSeason;
   season = GSeason;
   GTimeLo = GTimeLo + 1;

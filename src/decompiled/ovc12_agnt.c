@@ -1208,7 +1208,7 @@ void __cdecl16far agnt_usesAlignToSeg(void)
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&mouseRect;
-  F_SCOPY(far_from_u32((uint32_t)(0x241007ec)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x241007ec)),dst,10);
   constructionDirty = '\0';
   animating = agnt_isAnimating();
   if (animating) {

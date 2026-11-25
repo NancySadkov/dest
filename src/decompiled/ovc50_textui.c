@@ -84,7 +84,7 @@ void __cdecl16far ovc50_usesUiInputText(void)
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
   dst.ofs = (uint16_t)&tabPtrs;
   (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)(_SS >> 8);
-  F_SCOPY(far_from_u32((uint32_t)(0x241084a8)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x241084a8)),dst,36);
   bStack_5 = 0;
   do {
     ovr_manage_openTalkWindow();

@@ -1232,7 +1232,7 @@ void __cdecl16far init_computeMaxSquares(void)
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&scaleRow;
-  F_SCOPY(far_from_u32((uint32_t)(0x241004e8)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x241004e8)),dst,10);
   GMaxSquare = 0;
   row = '\b';
   do {
@@ -1871,10 +1871,10 @@ void __cdecl16far init_usesRandBelow2(void)
 
   dst.seg = _SS;
   dst.ofs = (uint16_t)&edgeMasks;
-  F_SCOPY(far_from_u32((uint32_t)(0x241004f2)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x241004f2)),dst,16);
   dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&neighbourOfs;
-  F_SCOPY(far_from_u32((uint32_t)(0x24100502)),dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x24100502)),dst_00,8);
   featureIdx = 0;
   do {
     if ((int)(uint)randomFeatureCount <= featureIdx) {
@@ -2018,7 +2018,7 @@ void __cdecl16far init_grayscale_palette(void)
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)buf;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410050e)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410050e)),dst,11);
   if (GrayscalePalette.ofs == 0 && GrayscalePalette.seg == 0) {
     GrayscalePalette.ofs = (uint16_t)ovr_stshAlloc(0x100);
     GrayscalePalette.seg = in_DX;

@@ -3515,7 +3515,7 @@ void __cdecl16far ovc49_drawAgents(void)
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = type;
   dst.ofs = (uint16_t)&agentRect;
   (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = ssHi;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410842c)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410842c)),dst,10);
   AgentsChanged = '\0';
   agentRect.seg = GSavedBlitSeg;
   GGameState = 0x2b;

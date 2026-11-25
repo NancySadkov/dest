@@ -377,15 +377,15 @@ ovc40_usesAlignToSeg
   (*(uint8_t *)((uint8_t *)&(dst_00.seg))) = uVar12;
   dst_00.ofs = (uint16_t)&rankMsg;
   (*(uint8_t *)((uint8_t *)&(dst_00.seg) + 1)) = uVar14;
-  F_SCOPY(far_from_u32((uint32_t)(0x24106b3a)),dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x24106b3a)),dst_00,60);
   (*(uint8_t *)((uint8_t *)&(dst_01.seg))) = uVar12;
   dst_01.ofs = (uint16_t)&dst;
   (*(uint8_t *)((uint8_t *)&(dst_01.seg) + 1)) = uVar14;
-  F_SCOPY(far_from_u32((uint32_t)(0x24106b76)),dst_01);
+  F_SCOPY(far_from_u32((uint32_t)(0x24106b76)),dst_01,16);
   (*(uint8_t *)((uint8_t *)&(dst_02.seg))) = uVar12;
   dst_02.ofs = (uint16_t)&rect;
   (*(uint8_t *)((uint8_t *)&(dst_02.seg) + 1)) = uVar14;
-  F_SCOPY(far_from_u32((uint32_t)(0x24106b86)),dst_02);
+  F_SCOPY(far_from_u32((uint32_t)(0x24106b86)),dst_02,10);
   cStack_1d = '\0';
   ovr_stop_audio();
   ovc40_flushInput();

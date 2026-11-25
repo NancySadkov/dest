@@ -493,7 +493,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
   dst.ofs = (uint16_t)&shades;
   (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)((uint)_SS >> 8);
-  F_SCOPY(far_from_u32((uint32_t)(0x24100745)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24100745)),dst,6);
   if (GOngoingBattle == '\0') {
     ovr_ovc13_usesBlitRects();
     constr_usesSmoothPrev2();
@@ -1107,7 +1107,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
   
   dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)bandY;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410074f)),dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410074f)),dst_00,6);
   textArenaDrawn = ovr_draw_textArena();
   if (textArenaDrawn) {
     scrollOfs = GfxRndSeed * 6 >> 6;

@@ -272,10 +272,10 @@ void __cdecl16far ovc42_populateArea(byte partyIndex)
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&unitTypeMap;
-  F_SCOPY(far_from_u32((uint32_t)(0x24107145)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24107145)),dst,14);
   dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&spawnGindexMap;
-  F_SCOPY(far_from_u32((uint32_t)(0x24107153)),dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x24107153)),dst_00,8);
   iStack_4 = -0x14;
   do {
     if (10 < iStack_4) {
@@ -384,7 +384,7 @@ void __cdecl16far ovc42_drawTextRow(char *text,byte row)
   
   dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&dst;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410715b)),dst_00);
+  F_SCOPY(far_from_u32((uint32_t)(0x2410715b)),dst_00,10);
   if (row == 0) {
     gfx.seg = fullScreenGfxSeg;
     gfx.ofs = fullScreenGfxOfs;

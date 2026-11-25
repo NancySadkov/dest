@@ -513,7 +513,7 @@ void __cdecl16far ovc41_usesXOfs(int agntIndex)
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&xOfs;
-  F_SCOPY(far_from_u32((uint32_t)(0x24106e00)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24106e00)),dst,8);
   uVar1 = (uint)Agnts[agntIndex].target;
   iStack_c = Agnts[agntIndex].targetY;
   if (2 < iStack_c) {
@@ -2190,7 +2190,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t far *agntPtr,int agntIndex)
   dst.seg = (uint16_t)_SS;
   dst.ofs = (uint16_t)&agnt;
   count = _SS;
-  F_SCOPY(far_from_u32((uint32_t)(0x24106e38)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24106e38)),dst,16);
   paVar4 = (agnt_t *)((long)agntIndex * 0x34);
   paVar9 = (agnt_t far *)paVar4;
   paStack_c = paVar9;
@@ -2933,7 +2933,7 @@ int __cdecl16far ovc41_growthForLevel(agnt_t far *agnt,uint16_t arg2)
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&growthMap;
-  F_SCOPY(far_from_u32((uint32_t)(0x24106e48)),dst);
+  F_SCOPY(far_from_u32((uint32_t)(0x24106e48)),dst,44);
   gindex = agnt->gindex;
   if (AgntGs[(uint)gindex].shortName[3] == -1) {
     iVar1 = AGNT_WORD(&AgntGs[(uint)gindex], shortName, 5);
