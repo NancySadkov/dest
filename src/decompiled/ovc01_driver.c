@@ -847,62 +847,100 @@ driver_scan1(far_t buf,uint16_t count,uint8_t fill,uint8_t threshold,far_t patte
 void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,uint8_t colour,uint16_t arg6,uint16_t arg7,uint16_t arg8,uint16_t arg9)
 
 {
-  /* Re-derived: draws a vertical or horizontal line between two screen offsets.  Equal
-     columns step 0x140 per row; otherwise the endpoints are ordered, the DDA variant is taken
-     from the CPKeys table (+5 shallow, +0xb steep) and jumped to after
-     driver_drawLine_compute.  The exported `unaff_ES` was declared and never read. */
-  uint8_t *storePtr;
-  int delta;
-  int count;
-  int savedRow;
-  far_t *drawFn;
+  /* Re-derived from 2d63:04b7 (ip 0x4b7..0x598).  The 16-byte helper
+     driver_drawLine_compute did only `bx = x + y*320; es = [bp+0x10]`, so inlining it makes
+     this expressible: the two coordinates are ordered, then a Bresenham walk draws max+1
+     pixels with a shallow or a steep variant chosen by which delta is larger, plus dedicated
+     vertical and horizontal cases. */
+  int x1;
+  int y1;
+  int x2;
+  int y2;
+  int dx;
+  int dy;
+  int max;
+  int twoMinor;
+  int step2;
+  int err;
+  uint16_t rowStep;
+  uint16_t ofs;
+  int i;
+  int tmp;
+  bool steep;
 
-  savedRow = row1;
-  delta = (int)ofs2 - (int)ofs1;
-  if (delta == 0) {
-    count = row2 - row1;
-    if (row2 < row1) {
-      count = -count;
+  x1 = (int)ofs1;
+  y1 = row1;
+  x2 = (int)ofs2;
+  y2 = row2;
+  rowStep = 0x140;
+
+  dx = x2 - x1;
+  if (dx == 0) {
+    /* vertical: one pixel per row */
+    dy = y2 - y1;
+    if (dy < 0) {
+      dy = -dy;
+      y1 = y2;
     }
-    count = count + 1;
-    driver_drawLine_compute();
-    do {
-      *ofs1 = colour;
-      ofs1 = ofs1 + 0x140;
-      count = count + -1;
-    } while (count != 0);
+    ofs = (uint16_t)(x1 + (uint16_t)(y1 << 8) + (uint16_t)((uint16_t)(y1 << 8) >> 2));
+    for (i = 0; i <= dy; i = i + 1) {
+      *(unsigned char far *)MK_FP(arg6,ofs) = colour;
+      ofs = (uint16_t)(ofs + 0x140);
+    }
+    return;
+  }
+  if (dx < 0) {
+    dx = -dx;
+    tmp = x1; x1 = x2; x2 = tmp;
+    tmp = y1; y1 = y2; y2 = tmp;
+  }
+  dy = y2 - y1;
+  if (dy == 0) {
+    /* horizontal: dx + 1 pixels */
+    ofs = (uint16_t)(x1 + (uint16_t)(y1 << 8) + (uint16_t)((uint16_t)(y1 << 8) >> 2));
+    for (i = 0; i <= dx; i = i + 1) {
+      *(unsigned char far *)MK_FP(arg6,(uint16_t)(ofs + i)) = colour;
+    }
+    return;
+  }
+  if (dy < 0) {
+    dy = -dy;
+    rowStep = (uint16_t)-0x140;
+  }
+  if (dy > dx) {
+    tmp = dx; dx = dy; dy = tmp;
+    steep = true;
   }
   else {
-    if (delta < 0) {
-      delta = -delta;
-      LOCK();
-      ofs1 = ofs2;
-      UNLOCK();
-      LOCK();
-      row1 = row2;
-      UNLOCK();
-      row2 = savedRow;
-    }
-    count = row2 - row1;
-    if (count != 0) {
-      if (count < 0) {
-        count = -count;
+    steep = false;
+  }
+  max = dx;
+  twoMinor = dy << 1;
+  err = twoMinor - max;
+  step2 = twoMinor - (max << 1);
+
+  ofs = (uint16_t)(x1 + (uint16_t)(y1 << 8) + (uint16_t)((uint16_t)(y1 << 8) >> 2));
+  for (i = 0; i <= max; i = i + 1) {
+    *(unsigned char far *)MK_FP(arg6,ofs) = colour;
+    ofs = (uint16_t)(ofs + 1);
+    if (steep) {
+      ofs = (uint16_t)(ofs + rowStep);
+      if (err >= 0) {
+        err = err + step2;
       }
-      drawFn = (far_t *)(CPKeys + 5);
-      if (delta < count) {
-        drawFn = (far_t *)(CPKeys + 0xb);
+      else {
+        err = err + twoMinor;
+        ofs = (uint16_t)(ofs - 1);
       }
-      driver_drawLine_compute();
-                    /* WARNING: Could not recover jumptable at 0x0002db51. Too many branches */
-                    /* WARNING: Treating indirect jump as call */
-      (*(code *)drawFn)();
-      return;
     }
-    driver_drawLine_compute();
-    for (delta = delta + 1; delta != 0; delta = delta + -1) {
-      storePtr = ofs1;
-      ofs1 = ofs1 + 1;
-      *storePtr = colour;
+    else {
+      if (err >= 0) {
+        err = err + step2;
+        ofs = (uint16_t)(ofs + rowStep);
+      }
+      else {
+        err = err + twoMinor;
+      }
     }
   }
   return;
@@ -913,14 +951,6 @@ void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,
 /* 2d63:0599 */
 
 /* [R5] only caller driver_drawLine */
-
-uint16_t __cdecl16near driver_drawLine_compute(void)
-
-{
-  int unaff_BP;
-  
-  return *(uint16_t *)(unaff_BP + 0x10);
-}
 
 
 
