@@ -145,7 +145,7 @@ void __cdecl16far audio_usesLDIV_at_(void)
 bool __cdecl16far fmFreeAudio(uint16_t force)
 
 {
-  bool bVar1;
+  bool playing;
   uint uVar2;
   far_t handle;
   far_t handle_00;
@@ -153,10 +153,10 @@ bool __cdecl16far fmFreeAudio(uint16_t force)
   
   result = 0x0;
   if ((((SfxRunning != '\0') && (DIGHandle.ofs != 0 || DIGHandle.seg != 0)) &&
-      (((char)force != '\0' || (bVar1 = ovr_digSoundPlaying(), !bVar1)))) && (DIG_2410_07a8 == '\0')
+      (((char)force != '\0' || (playing = ovr_digSoundPlaying(), !playing)))) && (DIG_2410_07a8 == '\0')
      ) {
-    bVar1 = ovr_digSoundPlaying();
-    if (bVar1) {
+    playing = ovr_digSoundPlaying();
+    if (playing) {
       ovr_digStopCurrentSound();
     }
     handle.seg = DIGHandle.seg;

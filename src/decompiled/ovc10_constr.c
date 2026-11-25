@@ -37,20 +37,20 @@ uint16_t __cdecl16far constr_getFlagsAtOffset(int dx,int dy)
 
 {
   int iVar1;
-  uint16_t uVar2;
+  uint16_t packed;
   
   iVar1 = 0x2410;
   if ((((dx + GfxRndSeed < 0x94) && (iVar1 = 0x2410, SCARRY2(dx,GfxRndSeed) == dx + GfxRndSeed < 0))
       && (iVar1 = GfxRndSeed2 - dy, iVar1 < 0x3c)) && (iVar1 = GfxRndSeed2 - dy, dy <= GfxRndSeed2))
   {
-    uVar2 = CONCAT11(0x24,*(undefined1 *)
+    packed = CONCAT11(0x24,*(undefined1 *)
                            ((int)(short (*) [60] [148])GMapFlags +
                            (dx + GfxRndSeed) * 2 + (GfxRndSeed2 - dy) * 0x128));
   }
   else {
-    uVar2 = CONCAT11((char)((uint)iVar1 >> 8),3);
+    packed = CONCAT11((char)((uint)iVar1 >> 8),3);
   }
-  return uVar2;
+  return packed;
 }
 
 

@@ -408,7 +408,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   uint extraout_DX;
   uint uVar11;
   uint uVar12;
-  byte (*paabVar13) [59] [148];
+  byte (*mapCells) [59] [148];
   short (*paasVar14) [148] [60];
   uint16_t unaff_SI;
   int row;   /* map row, 0..0x93 */
@@ -714,12 +714,12 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
       psVar9 = (stg_tmp_t *)(row * 0x94);
       if ((col != 0x93) && (row != 0x3c)) {
         uVar18 = (uint16_t)((ulong)GMapCells >> 0x10);
-        paabVar13 = (byte (*) [59] [148])GMapCells;
-        uVar17 = (int)(char)(*paabVar13)[row + 1][col] -
-                 (int)(char)(*paabVar13)[row][col + 1];
+        mapCells = (byte (*) [59] [148])GMapCells;
+        uVar17 = (int)(char)(*mapCells)[row + 1][col] -
+                 (int)(char)(*mapCells)[row][col + 1];
         uVar11 = (int)uVar17 >> 0xf;
-        uVar8 = (int)(char)(*paabVar13)[row][col] -
-                (int)(char)(*paabVar13)[row + 1][col + 1];
+        uVar8 = (int)(char)(*mapCells)[row][col] -
+                (int)(char)(*mapCells)[row + 1][col + 1];
         uVar12 = (int)uVar8 >> 0xf;
         psVar9 = (stg_tmp_t *)((uVar8 ^ uVar12) - uVar12);
         if ((int)((uVar17 ^ uVar11) - uVar11) < (int)psVar9) {
@@ -743,33 +743,33 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
           if (psVar9 == (stg_tmp_t *)0x0) {
             psVar9 = (stg_tmp_t *)(row * 0x94);
             uVar18 = (uint16_t)((ulong)GMapCells >> 0x10);
-            paabVar13 = (byte (*) [59] [148])GMapCells;
-            if ((((((psVar9->cmap[(int)(*paabVar13 + -1) + 0x93 + col] != 0) &&
-                   (psVar9 = (stg_tmp_t *)(*paabVar13 + row), psVar9->cmap[col + 0x93] != 0))
+            mapCells = (byte (*) [59] [148])GMapCells;
+            if ((((((psVar9->cmap[(int)(*mapCells + -1) + 0x93 + col] != 0) &&
+                   (psVar9 = (stg_tmp_t *)(*mapCells + row), psVar9->cmap[col + 0x93] != 0))
                   && (psVar9 = (stg_tmp_t *)(row * 0x94),
-                     psVar9->cmap[(int)((*paabVar13)[0] + col)] != 0)) &&
-                 ((psVar9 = (stg_tmp_t *)(*paabVar13 + row), psVar9->cmap[col + 0x94] != 0 &&
+                     psVar9->cmap[(int)((*mapCells)[0] + col)] != 0)) &&
+                 ((psVar9 = (stg_tmp_t *)(*mapCells + row), psVar9->cmap[col + 0x94] != 0 &&
                   (psVar9 = (stg_tmp_t *)(row * 0x94),
-                  psVar9->cmap[(int)((*paabVar13)[0] + col + 1)] != 0)))) &&
-                (psVar9 = (stg_tmp_t *)(*paabVar13 + row), psVar9->cmap[col + 0x95] != 0)) &&
-               (((bVar4 = (*paabVar13)[row][col],
+                  psVar9->cmap[(int)((*mapCells)[0] + col + 1)] != 0)))) &&
+                (psVar9 = (stg_tmp_t *)(*mapCells + row), psVar9->cmap[col + 0x95] != 0)) &&
+               (((bVar4 = (*mapCells)[row][col],
                  psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(row * 0x94) >> 8),bVar4),
-                 (char)bVar4 <= (char)(*paabVar13)[row][col + 1] &&
-                 (bVar4 = (*paabVar13)[row][col],
+                 (char)bVar4 <= (char)(*mapCells)[row][col + 1] &&
+                 (bVar4 = (*mapCells)[row][col],
                  psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(row * 0x94) >> 8),bVar4),
-                 (char)bVar4 <= (char)paabVar13[-1][row + 0x3a][col + 0x93])) &&
-                ((bVar4 = (*paabVar13)[row][col],
+                 (char)bVar4 <= (char)mapCells[-1][row + 0x3a][col + 0x93])) &&
+                ((bVar4 = (*mapCells)[row][col],
                  psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(row * 0x94) >> 8),bVar4),
-                 (char)bVar4 <= (char)paabVar13[-1][row + 0x3a][col] &&
-                 (((bVar4 = (*paabVar13)[row][col + 1],
+                 (char)bVar4 <= (char)mapCells[-1][row + 0x3a][col] &&
+                 (((bVar4 = (*mapCells)[row][col + 1],
                    psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(row * 0x94) >> 8),bVar4),
-                   (char)bVar4 <= (char)paabVar13[-1][row + 0x3a][col + 1] &&
-                   (bVar4 = (*paabVar13)[row][col],
+                   (char)bVar4 <= (char)mapCells[-1][row + 0x3a][col + 1] &&
+                   (bVar4 = (*mapCells)[row][col],
                    psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(row * 0x94) >> 8),bVar4),
-                   (char)bVar4 <= (char)(*paabVar13)[row + 1][col])) &&
-                  (bVar4 = (*paabVar13)[row][col + 1],
+                   (char)bVar4 <= (char)(*mapCells)[row + 1][col])) &&
+                  (bVar4 = (*mapCells)[row][col + 1],
                   psVar9 = (stg_tmp_t *)CONCAT11((char)((uint)(row * 0x94) >> 8),bVar4),
-                  (char)bVar4 <= (char)(*paabVar13)[row + 1][col + 1])))))))) {
+                  (char)bVar4 <= (char)(*mapCells)[row + 1][col + 1])))))))) {
               uVar17 = ovr_init_getMapFlags(col);
               psVar9 = (stg_tmp_t *)(uVar17 & 0xff);
               if (psVar9 == (stg_tmp_t *)0x0) {
@@ -804,13 +804,13 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
     for (row = 0; row < 0x93; row = row + 1) {
       psVar9 = (stg_tmp_t *)((int)retStorage * 0x94);
       uVar18 = (uint16_t)((ulong)GMapCells >> 0x10);
-      paabVar13 = (byte (*) [59] [148])GMapCells;
-      if (((psVar9->cmap[(int)((*paabVar13)[0] + row)] != 0) &&
+      mapCells = (byte (*) [59] [148])GMapCells;
+      if (((psVar9->cmap[(int)((*mapCells)[0] + row)] != 0) &&
           (psVar9 = (stg_tmp_t *)((int)retStorage * 0x94),
-          psVar9->cmap[(int)((*paabVar13)[0] + row + 1)] != 0)) &&
-         ((psVar9 = (stg_tmp_t *)(*paabVar13 + (int)retStorage),
+          psVar9->cmap[(int)((*mapCells)[0] + row + 1)] != 0)) &&
+         ((psVar9 = (stg_tmp_t *)(*mapCells + (int)retStorage),
           psVar9->cmap[row + 0x94] != 0 &&
-          (psVar9 = (stg_tmp_t *)(*paabVar13 + (int)retStorage),
+          (psVar9 = (stg_tmp_t *)(*mapCells + (int)retStorage),
           psVar9->cmap[row + 0x94] != 0)))) {
         uVar17 = ovr_init_getMapFlags(row);
         psVar9 = (stg_tmp_t *)(uVar17 & 0xff);
