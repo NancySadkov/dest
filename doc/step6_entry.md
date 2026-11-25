@@ -5780,3 +5780,57 @@ behavioural.
 
   grep_checks 42,341; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### MEASURED: this build passes data pointers as near - `-mm` is Turbo C's MEDIUM model
+
+Trying to give the far-returning overlay wrappers real declarations exposed something larger.  A
+one-module probe settles the pointer model:
+
+```c
+char *gp;
+void probe_far(void) { *gp = 1; }
+```
+
+compiles with the tree's own flags to
+
+```
+_probe_far proc far
+  push bp / mov bp,sp
+  mov  bx, word ptr DGROUP:_gp        ; one word
+  mov  byte ptr [bx],1
+  pop bp / ret
+```
+
+A one-word load.  So `char *` is a **near** pointer, which means `-mm` in Turbo C 3.0 is **medium
+model** (near data, far code) - not large, as the comment in `scripts/build_standalone.py` states
+("large model (all pointers far, matching the original)").  That comment is wrong.
+
+What follows:
+
+* a far-returning declaration cannot help.  I changed `undefined ovr_stsprintf();` and
+  `undefined ovr_stash_usesStExit();` to `char *` / `stg_tmp_t *` returning and rebuilt: the
+  generated code was unchanged, storing only AX after the call, because a `char *` return is one
+  word here.  The `ovr_*` symbols are far-jump thunks, so DX *does* carry the segment - the C type
+  is what discards it.  Those declaration changes were reverted rather than left in as decoration.
+* `(char *)CONCAT22(seg,ofs)` truncates to the offset.  This idiom is used throughout the tree for
+  far strings and tables; under medium model the segment half is discarded and DS is assumed to be
+  DGROUP.  That works for things inside DGROUP and cannot work for anything else.
+* pointer **parameters** are one word where the original passes two.  `agnt_drawSpriteFrame`'s
+  `brect_t *rect` is illustrative: the original pushes `[bp+8]` and `[bp+0xa]` for it, while a
+  medium-model `brect_t *` is a single word.  The rebuild is internally consistent - every module
+  is compiled the same way - but its pointer ABI differs from the original's.
+
+This is a build-configuration question, not a per-function one, and it plausibly contributes to
+`diff_dgroup` sitting at 972/1,868 while `compare_state` passes: symbol *values* match because the
+comparison resolves them by name, but their *widths* need not.
+
+Not changed here.  Switching the model is a large, measurable experiment (rebuild everything,
+then compare `diff_dgroup`, `compare_state` and the runtime checkpoints) and should be done
+deliberately rather than as a side effect of one function.
+
+One fix did survive from that attempt, because it does not depend on the pointer model:
+`agnt_drawSpriteFrame` now passes the constant `0x10` for the blitter type, as the original does
+(the third parameter `type` is never pushed), instead of forwarding `(uint8_t)type`.
+
+  grep_checks 42,261; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868

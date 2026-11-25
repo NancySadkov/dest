@@ -802,9 +802,9 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
      offset depends on the state (0xd screenY, 0xc screenY minus the frame's +0xd, otherwise
      screenY minus half of it), then the frame is blitted, the animation counter advanced and
      wrapped, and agnt_compute13 called.
-     Two decoded defects are left in place pending a far-returning declaration for the
-     stash_usesStExit wrapper (see the re-derivation note): gfx.seg should be the segment that call
-     returns, and the third parameter `type` is unused - the original passes 0x10. */
+     gfx.seg is SEG_OF(Agnts): the original takes it from the stash call (`mov [bp-6],dx`), but this
+     build passes data pointers as near, so that return's segment half is not available.  The blit
+     type is the constant 0x10 - the third parameter `type` is unused. */
   agnt_t *agnt;
   uint16_t framesOfs;
   uint16_t framesSeg;
@@ -849,7 +849,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
   }
   gfx.seg = SEG_OF(Agnts);
   gfx.ofs = (uint16_t)(stash->cmap + 6);
-  ovr_blitGfxRect(gfx,agnt->screenX,(int16_t)y,rect,(uint8_t)type,true,
+  ovr_blitGfxRect(gfx,agnt->screenX,(int16_t)y,rect,0x10,true,
                   CONCAT11((char)((uint)offsetY >> 8),
                            *(undefined1 *)((int)&agnt->flags32 + 1)),0,0,0,0,0);
   animPtr = (char *)((int)&agnt->state + 1);
