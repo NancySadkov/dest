@@ -281,40 +281,44 @@ void __cdecl16far ovc13_drawPanelEntities(void)
 void __cdecl16far ovc13_drawPanelLeaders(void)
 
 {
-  char cVar1;
-  byte bVar2;
-  int iVar3;
-  int iVar4;
-  byte bStack_3;
-  
-  bVar2 = ovr_manage_findFirstLeader();
-  for (bStack_3 = 0; bStack_3 < GLeaderCount; bStack_3 = bStack_3 + 1) {
-    if ((GLeaderSheets[bStack_3])->active != '\0') {
-      iVar3 = (GLeaderSheets[bStack_3])->x;
-      iVar4 = (GLeaderSheets[bStack_3])->y;
-      if ((((*(char *)((int)*(uint32_t *)((uint)bStack_3 << 2) + 0x3f) == '\0') ||
+  /* Re-derived: for every active leader inside the panel window, fill three rows of its
+     bar - wider when it is the selected leader, narrower otherwise. */
+  char rowOffset;
+  byte selectedLeader;
+  int leaderX;
+  int leaderY;
+  int xPix;
+  int leftX;
+  byte panelIdx;
+
+  selectedLeader = ovr_manage_findFirstLeader();
+  for (panelIdx = 0; panelIdx < GLeaderCount; panelIdx = panelIdx + 1) {
+    if ((GLeaderSheets[panelIdx])->active != '\0') {
+      leaderX = (GLeaderSheets[panelIdx])->x;
+      leaderY = (GLeaderSheets[panelIdx])->y;
+      if ((((*(char *)((int)*(uint32_t *)((uint)panelIdx << 2) + 0x3f) == '\0') ||
            (DebugVerbose != false)) ||
-          (((*(short (*) [60] [148])GMapFlags)[iVar4][iVar3] & 8U) != 0)) &&
-         (((PanelGridX <= iVar3 && (iVar3 <= PanelGridX + 0x22)) &&
-          ((PanelGridY <= iVar4 + 1 && (iVar4 <= PanelGridY + 0xf)))))) {
-        cVar1 = ((char)iVar4 - (char)PanelGridY) * '\x03';
-        iVar3 = (iVar3 - PanelGridX) * 2;
-        iVar4 = iVar3 + 0xed;
-        if (bVar2 == bStack_3) {
-          ovr_driver_fillSpan(iVar3 + 0xeb,iVar3 + 0xf2,cVar1 + 9U,0x75,
+          (((*(short (*) [60] [148])GMapFlags)[leaderY][leaderX] & 8U) != 0)) &&
+         (((PanelGridX <= leaderX && (leaderX <= PanelGridX + 0x22)) &&
+          ((PanelGridY <= leaderY + 1 && (leaderY <= PanelGridY + 0xf)))))) {
+        rowOffset = ((char)leaderY - (char)PanelGridY) * '\x03';
+        xPix = (leaderX - PanelGridX) * 2;
+        leftX = xPix + 0xed;
+        if (selectedLeader == panelIdx) {
+          ovr_driver_fillSpan(xPix + 0xeb,xPix + 0xf2,rowOffset + 9U,0x75,
                               &((brect_t *)(BlitRects + 3))->x,0x2410);
-          ovr_driver_fillSpan(iVar3 + 0xeb,iVar3 + 0xf2,cVar1 + 10,0x75,
+          ovr_driver_fillSpan(xPix + 0xeb,xPix + 0xf2,rowOffset + 10,0x75,
                               &((brect_t *)(BlitRects + 3))->x,0x2410);
-          ovr_driver_fillSpan(iVar3 + 0xeb,iVar3 + 0xf2,cVar1 + 0xb,0x75,
+          ovr_driver_fillSpan(xPix + 0xeb,xPix + 0xf2,rowOffset + 0xb,0x75,
                               &((brect_t *)(BlitRects + 3))->x,0x2410);
         }
         else {
-          ovr_driver_fillSpan(iVar4,iVar3 + 0xf0,cVar1 + 9U,0x75,&((brect_t *)(BlitRects + 3))->x,
-                              0x2410);
-          ovr_driver_fillSpan(iVar4,iVar3 + 0xf0,cVar1 + 10,0x75,&((brect_t *)(BlitRects + 3))->x,
-                              0x2410);
-          ovr_driver_fillSpan(iVar4,iVar3 + 0xf0,cVar1 + 0xb,0x75,&((brect_t *)(BlitRects + 3))->x,
-                              0x2410);
+          ovr_driver_fillSpan(leftX,xPix + 0xf0,rowOffset + 9U,0x75,
+                              &((brect_t *)(BlitRects + 3))->x,0x2410);
+          ovr_driver_fillSpan(leftX,xPix + 0xf0,rowOffset + 10,0x75,
+                              &((brect_t *)(BlitRects + 3))->x,0x2410);
+          ovr_driver_fillSpan(leftX,xPix + 0xf0,rowOffset + 0xb,0x75,
+                              &((brect_t *)(BlitRects + 3))->x,0x2410);
         }
       }
     }

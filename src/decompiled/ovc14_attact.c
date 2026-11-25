@@ -963,46 +963,54 @@ bool __cdecl16far
 attact_textArena(uint16_t *foundIndexOut,int mode,uint8_t partyIndex,uint16_t x,uint16_t y)
 
 {
-  uint uVar1;
-  uint uVar2;
-  uint uVar3;
-  uint uVar4;
-  uint uVar5;
-  int iVar6;
-  uint uVar7;
-  uint16_t uVar8;
-  uint uStack_4;
-  
-  uStack_4 = 0xffff;
-  uVar1 = ovr_alignUp4(x,0,0);
-  for (uVar7 = 0; uVar7 < EntityCount; uVar7 = uVar7 + 1) {
-    uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-    if (*(char *)((int)&((entity_t *)Entities)[uVar7].base.entity + 3) == partyIndex) {
-      uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar7].base.x,0,0);
-      uVar4 = (int)(uVar2 - uVar1) >> 0xf;
-      uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-      uVar3 = ((entity_t *)Entities)[uVar7].base.y - y;
-      uVar5 = (int)uVar3 >> 0xf;
-      uVar2 = ((uVar2 - uVar1 ^ uVar4) - uVar4) + ((uVar3 ^ uVar5) - uVar5) * 2;
-      if ((uVar2 != 0) && (uVar2 < uStack_4)) {
-        uVar3 = ovr_alignUp4(((entity_t *)Entities)[uVar7].base.destX,0,0);
-        iVar6 = (int)Entities;
-        uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-        if (((uVar3 != uVar1) || (((entity_t *)iVar6)[uVar7].base.destY != y)) &&
-           ((((mode == 0 && ((AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.flags32, 1) & 2) == 0)) ||
-             ((mode == 1 &&
-              (((((entity_t *)iVar6)[uVar7].base.destX == 0 &&
-                (((entity_t *)iVar6)[uVar7].base.destY == 0)) &&
-               ((AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.flags32, 1) & 2) == 0)))))) ||
-            (((mode == 2 && ((AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.flags32, 1) & 1) != 0)) ||
-             ((mode == 3 && ((AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.flags32, 1) & 4) != 0)))))))) {
-          *foundIndexOut = uVar7;
-          uStack_4 = uVar2;
+  /* Re-derived: nearest entity of the given party, by |dx| + 2*|dy| in aligned columns.
+     `mode` selects which candidates qualify (0: destination not set, 1: destination still
+     at the origin, 2: flag bit 1, 3: flag bit 4).  Returns whether a candidate was found
+     and stores its index. */
+  uint targetAlignedX;
+  uint bestDist;
+  uint dx;
+  uint dxSign;
+  uint dy;
+  uint dySign;
+  uint dist;
+  uint destAlignedX;
+  int entitiesOfs;
+  uint entIdx;
+  bool qualifies;
+
+  bestDist = 0xffff;
+  targetAlignedX = ovr_alignUp4(x,0,0);
+  for (entIdx = 0; entIdx < EntityCount; entIdx = entIdx + 1) {
+    if (*(char *)((int)&((entity_t *)Entities)[entIdx].base.entity + 3) == partyIndex) {
+      dx = ovr_alignUp4(((entity_t *)Entities)[entIdx].base.x,0,0) - targetAlignedX;
+      dxSign = (int)dx >> 0xf;
+      dy = ((entity_t *)Entities)[entIdx].base.y - y;
+      dySign = (int)dy >> 0xf;
+      dist = ((dx ^ dxSign) - dxSign) + ((dy ^ dySign) - dySign) * 2;
+      if ((dist != 0) && (dist < bestDist)) {
+        destAlignedX = ovr_alignUp4(((entity_t *)Entities)[entIdx].base.destX,0,0);
+        entitiesOfs = (int)Entities;
+        qualifies =
+            (mode == 0 &&
+             ((AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.flags32, 1) & 2) == 0)) ||
+            (mode == 1 &&
+             ((entity_t *)entitiesOfs)[entIdx].base.destX == 0 &&
+             ((entity_t *)entitiesOfs)[entIdx].base.destY == 0 &&
+             ((AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.flags32, 1) & 2) == 0)) ||
+            (mode == 2 &&
+             ((AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.flags32, 1) & 1) != 0)) ||
+            (mode == 3 &&
+             ((AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.flags32, 1) & 4) != 0));
+        if (((destAlignedX != targetAlignedX) ||
+            (((entity_t *)entitiesOfs)[entIdx].base.destY != y)) && qualifies) {
+          *foundIndexOut = entIdx;
+          bestDist = dist;
         }
       }
     }
   }
-  return uStack_4 != 0xffff;
+  return bestDist != 0xffff;
 }
 
 
@@ -1489,45 +1497,42 @@ void __cdecl16far attact_usesEntityCount(void)
 void __cdecl16far attact_usesEntityCount2(uint16_t *sum,uint16_t *enemySum)
 
 {
-  uint16_t *puVar1;
-  uint uVar2;
-  uint uVar3;
-  int iVar4;
-  uint uVar5;
-  uint16_t uVar6;
-  uint16_t uVar7;
-  uint16_t uVar8;
-  
-  uVar6 = (uint16_t)((ulong)enemySum >> 0x10);
-  ((uint16_t *)enemySum)[1] = 0;
+  /* Re-derived: accumulates animFrame*level*level per entity into two 32-bit sums, split
+     by whether AgntGs[gindex].ai is zero (own units vs enemies).  Only entities under the
+     cursor are counted. */
+  uint16_t *hiPtr;
+  uint oldLo;
+  uint addend;
+  int entitiesOfs;
+  uint entIdx;
+  uint16_t hit;
+
+  enemySum[1] = 0;
   *enemySum = 0;
-  uVar7 = (uint16_t)((ulong)sum >> 0x10);
-  ((uint16_t *)sum)[1] = 0;
+  sum[1] = 0;
   *sum = 0;
-  for (uVar5 = 0; uVar5 < EntityCount; uVar5 = uVar5 + 1) {
-    uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-    uVar8 = ovr_ovc23_isCursorAt
-                      (((entity_t *)Entities)[uVar5].base.x,((entity_t *)Entities)[uVar5].base.y,0);
-    if ((char)uVar8 != '\0') {
-      uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar4 = (int)Entities;
-      if (AgntGs[(uint)((entity_t *)iVar4)[uVar5].base.gindex].ai == '\0') {
-        uVar3 = (uint)((entity_t *)iVar4)[uVar5].base.animFrame *
-                (uint)((entity_t *)iVar4)[uVar5].base.level *
-                (uint)((entity_t *)iVar4)[uVar5].base.level;
-        uVar2 = *sum;
-        *sum = *sum + uVar3;
-        puVar1 = (uint16_t *)sum + 1;
-        *puVar1 = *puVar1 + ((int)uVar3 >> 0xf) + (uint)CARRY2(uVar2,uVar3);
+  for (entIdx = 0; entIdx < EntityCount; entIdx = entIdx + 1) {
+    hit = ovr_ovc23_isCursorAt(((entity_t *)Entities)[entIdx].base.x,
+                               ((entity_t *)Entities)[entIdx].base.y);
+    if ((char)hit != '\0') {
+      entitiesOfs = (int)Entities;
+      if (AgntGs[(uint)((entity_t *)entitiesOfs)[entIdx].base.gindex].ai == '\0') {
+        addend = (uint)((entity_t *)entitiesOfs)[entIdx].base.animFrame *
+                 (uint)((entity_t *)entitiesOfs)[entIdx].base.level *
+                 (uint)((entity_t *)entitiesOfs)[entIdx].base.level;
+        oldLo = *sum;
+        *sum = *sum + addend;
+        hiPtr = (uint16_t *)sum + 1;
+        *hiPtr = *hiPtr + ((int)addend >> 0xf) + (uint)CARRY2(oldLo,addend);
       }
       else {
-        uVar3 = (uint)((entity_t *)iVar4)[uVar5].base.animFrame *
-                (uint)((entity_t *)iVar4)[uVar5].base.level *
-                (uint)((entity_t *)iVar4)[uVar5].base.level;
-        uVar2 = *enemySum;
-        *enemySum = *enemySum + uVar3;
-        puVar1 = (uint16_t *)enemySum + 1;
-        *puVar1 = *puVar1 + ((int)uVar3 >> 0xf) + (uint)CARRY2(uVar2,uVar3);
+        addend = (uint)((entity_t *)entitiesOfs)[entIdx].base.animFrame *
+                 (uint)((entity_t *)entitiesOfs)[entIdx].base.level *
+                 (uint)((entity_t *)entitiesOfs)[entIdx].base.level;
+        oldLo = *enemySum;
+        *enemySum = *enemySum + addend;
+        hiPtr = (uint16_t *)enemySum + 1;
+        *hiPtr = *hiPtr + ((int)addend >> 0xf) + (uint)CARRY2(oldLo,addend);
       }
     }
   }

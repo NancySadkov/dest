@@ -902,35 +902,36 @@ undefined1 __cdecl16far manage_abilityModifier(byte abilityScore)
 void __cdecl16far manage_rollHitPoints(char_sheet_t *sheet)
 
 {
-  char cVar1;
-  uint16_t uVar2;
-  uint uVar3;
-  int iVar4;
-  char_sheet_t *pcVar5;
-  int iVar6;
-  uint16_t uVar7;
+  /* Re-derived: one hit die per race, rolled below the class limit, plus the constitution
+     modifier and one, floored at 1; the total goes into both hp bytes and the 0x10 stat
+     mask bit is set. */
+  char conBonus;
+  uint16_t roll;
+  uint rollLo;
+  int addend;
+  char_sheet_t *sh;
+  int i;
   far_t dst;
   uint8_t classLimits;
-  int iStack_4;
-  
+  int total;
+
   dst.seg = _SS;
   dst.ofs = (uint16_t)&classLimits;
   F_SCOPY(far_from_u32((uint32_t)(0x24104a0b)),dst);
-  iStack_4 = 0;
-  for (iVar6 = 0; uVar7 = (uint16_t)((ulong)sheet >> 0x10), pcVar5 = (char_sheet_t *)sheet,
-      iVar6 < (int)(uint)pcVar5->race; iVar6 = iVar6 + 1) {
-    uVar2 = ovr_randBelow((uint)(&classLimits)[pcVar5->cls],0);
-    uVar3 = uVar2 & 0xff;
-    cVar1 = manage_abilityModifier(pcVar5->stats[4]);
-    iVar4 = uVar3 + (int)cVar1 + 1;
-    if (iVar4 < 1) {
-      iVar4 = 1;
+  total = 0;
+  for (i = 0; sh = (char_sheet_t *)sheet, i < (int)(uint)sh->race; i = i + 1) {
+    roll = ovr_randBelow((uint)(&classLimits)[sh->cls],0);
+    rollLo = roll & 0xff;
+    conBonus = manage_abilityModifier(sh->stats[4]);
+    addend = rollLo + (int)conBonus + 1;
+    if (addend < 1) {
+      addend = 1;
     }
-    iStack_4 = iStack_4 + iVar4;
+    total = total + addend;
   }
-  pcVar5->hp[0] = (byte)iStack_4;
-  pcVar5->hp[1] = (byte)iStack_4;
-  pcVar5->statMask = pcVar5->statMask | 0x10;
+  sh->hp[0] = (byte)total;
+  sh->hp[1] = (byte)total;
+  sh->statMask = sh->statMask | 0x10;
   return;
 }
 

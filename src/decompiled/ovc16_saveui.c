@@ -849,33 +849,31 @@ void __cdecl16far saveui_writeSavesList(far_t entries,uint count)
 void __cdecl16far saveui_freeLines(far_t entries,uint count)
 
 {
-  int iVar1;
-  uint16_t uVar2;
-  int *piVar3;
-  uint16_t *puVar4;
-  uint16_t *puVar5;
-  uint uVar6;
-  uint16_t uVar7;
+  /* Re-derived: frees every non-empty entry of the far handle array and clears it;
+     entries equal to GSPEmpty are shared and only cleared. */
+  int cmpResult;
+  uint16_t entriesOfs;
+  int *entryI;
+  uint16_t *entryW;
+  uint entryIdx;
   far_t handle;
-  
-  for (uVar6 = 0; uVar6 < count; uVar6 = uVar6 + 1) {
-    uVar7 = entries.seg;
-    uVar2 = entries.ofs;
-    piVar3 = (int *)(uVar2 + uVar6 * 4);
-    if (*piVar3 != 0 || piVar3[1] != 0) {
-      puVar4 = (uint16_t *)(uVar2 + uVar6 * 4);
-      iVar1 = strcmp((char *)CONCAT22(puVar4[1],(char *)*puVar4),
-                     (char *)CONCAT22(GSPEmpty.seg,GSPEmpty.ofs));
-      if (iVar1 != 0) {
-        puVar5 = (uint16_t *)(uVar2 + uVar6 * 4);
-        handle.seg = puVar5[1];
-        handle.ofs = *puVar5;
+
+  entriesOfs = entries.ofs;
+  for (entryIdx = 0; entryIdx < count; entryIdx = entryIdx + 1) {
+    entryI = (int *)(entriesOfs + entryIdx * 4);
+    if (*entryI != 0 || entryI[1] != 0) {
+      entryW = (uint16_t *)(entriesOfs + entryIdx * 4);
+      cmpResult = strcmp((char *)CONCAT22(entryW[1],(char *)*entryW),
+                         (char *)CONCAT22(GSPEmpty.seg,GSPEmpty.ofs));
+      if (cmpResult != 0) {
+        handle.seg = entryW[1];
+        handle.ofs = *entryW;
         ovr_stshFree(handle);
       }
     }
-    puVar4 = (uint16_t *)(uVar2 + uVar6 * 4);
-    puVar4[1] = 0;
-    *puVar4 = 0;
+    entryW = (uint16_t *)(entriesOfs + entryIdx * 4);
+    entryW[1] = 0;
+    *entryW = 0;
   }
   return;
 }

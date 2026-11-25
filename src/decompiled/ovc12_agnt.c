@@ -984,31 +984,34 @@ void __cdecl16far agnt_remapGridRefs(uint fromIndex,int toIndex)
 void __cdecl16far agnt_usesAgntCount4(uint agntIndex)
 
 {
-  char *pcVar1;
-  int iVar2;
-  int iVar3;
-  
-  for (iVar3 = 0; iVar3 < 10; iVar3 = iVar3 + 1) {
-    for (iVar2 = 0; iVar2 < 0x69; iVar2 = iVar2 + 1) {
-      if ((AgntCount < AgntArrayA[iVar3][iVar2]) ||
-         ((int)(uint)AgntArrayA[iVar3][iVar2] <= (int)agntIndex)) {
-        if (AgntArrayA[iVar3][iVar2] == agntIndex) {
-          AgntArrayA[iVar3][iVar2] = 0;
+  /* Re-derived: removes agntIndex from both agent-index arrays.  A cell greater than the
+     index is decremented, a matching cell is zeroed.  The decrement keeps the export's
+     byte semantics - a char pointer into the cell, so only its low byte changes. */
+  char *cellPtr;
+  int colIdx;
+  int rowIdx;
+
+  for (rowIdx = 0; rowIdx < 10; rowIdx = rowIdx + 1) {
+    for (colIdx = 0; colIdx < 0x69; colIdx = colIdx + 1) {
+      if ((AgntCount < AgntArrayA[rowIdx][colIdx]) ||
+         ((int)(uint)AgntArrayA[rowIdx][colIdx] <= (int)agntIndex)) {
+        if (AgntArrayA[rowIdx][colIdx] == agntIndex) {
+          AgntArrayA[rowIdx][colIdx] = 0;
         }
       }
       else {
-        pcVar1 = (char *)(&AgntArrayA[iVar3][iVar2]);
-        *pcVar1 = *pcVar1 + -1;
+        cellPtr = (char *)(&AgntArrayA[rowIdx][colIdx]);
+        *cellPtr = *cellPtr + -1;
       }
-      if ((AgntCount < AgntArrayB[iVar3][iVar2]) ||
-         ((int)(uint)AgntArrayB[iVar3][iVar2] <= (int)agntIndex)) {
-        if (AgntArrayB[iVar3][iVar2] == agntIndex) {
-          AgntArrayB[iVar3][iVar2] = 0;
+      if ((AgntCount < AgntArrayB[rowIdx][colIdx]) ||
+         ((int)(uint)AgntArrayB[rowIdx][colIdx] <= (int)agntIndex)) {
+        if (AgntArrayB[rowIdx][colIdx] == agntIndex) {
+          AgntArrayB[rowIdx][colIdx] = 0;
         }
       }
       else {
-        pcVar1 = (char *)(&AgntArrayB[iVar3][iVar2]);
-        *pcVar1 = *pcVar1 + -1;
+        cellPtr = (char *)(&AgntArrayB[rowIdx][colIdx]);
+        *cellPtr = *cellPtr + -1;
       }
     }
   }
