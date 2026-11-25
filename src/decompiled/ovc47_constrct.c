@@ -40,27 +40,28 @@ void __cdecl16far land_info(byte tileOffset)
   far_t entries;
   far_t entries_00;
   far_t entries_01;
-  char cVar1;
+  char keyPressed;
   uint tileVal;
   uint unitIdx;
   uint menuCount;
-  uint16_t uVar3;
+  uint16_t sfxRoll;
+  uint16_t retSegB;
   char *textMsg;
   uint16_t *puVar5;
   int computed;
   uint8_t *stashOfs;
-  uint16_t uVar8;
-  int iVar9;
+  uint16_t retSeg;
+  uint16_t entrySeg;
+  int pctRemaining;
   unit_t *puVar10;
   uint16_t gUnitsSeg;
   uint16_t entitiesSeg;
   uint16_t mapFlag;
   uint16_t compute7Result;
-  uint16_t entrySeg;
   uint16_t msgSeg;
   uint16_t choice;
-  uint16_t retSeg;
-  undefined1 uVar12;
+  undefined1 entryLo;
+  undefined1 delayArg;
   undefined1 uVar13;
   undefined1 uVar14;
   int16_t type;
@@ -80,18 +81,19 @@ void __cdecl16far land_info(byte tileOffset)
   uint8_t entityIndex;
   uint8_t outFlag;
   byte bldType;
-  char cStack_1c;
+  char resultCode;
+  char choiceCode;
   char itemCode;
   uint8_t tileX;
   uint8_t gfxOfs;
-  uint16_t uStack_16;
+  uint16_t blitSeg;
   undefined1 auStack_14 [10];
   uint8_t menuLabel;
-  uint16_t uStack_8;
-  uint16_t uStack_6;
-  uint16_t uStack_4;
+  uint16_t tableOfs;
+  uint16_t arg2Pair;
+  uint16_t tableSeg;
   
-  uStack_16 = far_t_2410_78e4.seg;
+  blitSeg = far_t_2410_78e4.seg;
   gfxOfs = far_t_2410_78e4.ofs;
   ovr_attact_usesAgntFlag1();
   savedMenuItem = GMenuItem;
@@ -123,20 +125,20 @@ void __cdecl16far land_info(byte tileOffset)
   if (((BuildingTypes[bldType].flags2 & 0x80) == 0) &&
      (((unit_t *)GUnits)[unitIdx].level < 3)) {
     type = 0;
-    uVar3 = ovr_randBelow(2,0);
-    ovr_play_sfx(CONCAT11((char)(uVar3 >> 8),(char)uVar3 + '?'),type,0);
+    sfxRoll = ovr_randBelow(2,0);
+    ovr_play_sfx(CONCAT11((char)(sfxRoll >> 8),(char)sfxRoll + '?'),type,0);
   }
   uVar13 = SUB21(_SS,0);
   uVar14 = (undefined1)((uint)_SS >> 8);
   textMsg = ovr_ovc45_findEntityAt
                      (GfxRndSeed,GfxRndSeed2,(uint *)&entityIndex,(char)GfxRndSeed2,
                       (char)&entityIndex);
-  cStack_1c = (char)textMsg;
-  if (cStack_1c == -1) {
+  resultCode = (char)textMsg;
+  if (resultCode == -1) {
     ovr_ovc41_enterLeaderView();
   }
   else {
-    if (cStack_1c == '\0') {
+    if (resultCode == '\0') {
       if (tileIdx == 0xff) {
         gUnitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
         puVar10 = (unit_t *)GUnits;
@@ -165,9 +167,9 @@ void __cdecl16far land_info(byte tileOffset)
         else if (BuildingTypes[bldType].durability == 'd') {
           stashOfs = ovr_ovc15_usesStshRealloc
                              ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),BLD_WORD(&BuildingTypes[bldType], name, 2),*(uint16_t *)((uint)puVar10[unitIdx].unitType * 4),0,0,0,0,0);
-          asm { mov uVar8,dx };
-          textMsg = ovr_fmVsprintf("%s: Held by %s.",(char *)CONCAT22(uVar8,stashOfs));
-          strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(uVar8,textMsg));
+          asm { mov retSeg,dx };
+          textMsg = ovr_fmVsprintf("%s: Held by %s.",(char *)CONCAT22(retSeg,stashOfs));
+          strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(retSeg,textMsg));
         }
         else {
           b = BuildingTypes[bldType].durability;
@@ -176,13 +178,13 @@ void __cdecl16far land_info(byte tileOffset)
                                       *(uint16_t *)((uint)puVar10[unitIdx].unitType * 4));
           stashOfs = ovr_ovc15_usesStshRealloc
                              ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),(char)BLD_WORD(&BuildingTypes[bldType], name, 2),(char)computed,0,0,0,0,0);
-          asm { mov uVar8,dx };
+          asm { mov retSeg,dx };
           textMsg = ovr_fmVsprintf("%s (%u/%u): Held by %s.",
-                                  (char *)CONCAT13((char)((uint)uVar8 >> 8),
-                                                   CONCAT12((char)uVar8,stashOfs)));
-          strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(uVar8,textMsg));
-          cVar1 = func_0x0007164e(0x1000);
-          if (cVar1 != '\0') {
+                                  (char *)CONCAT13((char)((uint)retSeg >> 8),
+                                                   CONCAT12((char)retSeg,stashOfs)));
+          strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(retSeg,textMsg));
+          keyPressed = func_0x0007164e(0x1000);
+          if (keyPressed != '\0') {
             strcat((char *)CONCAT22(_SS,&msg)," Home a unit here to halt damage.");
           }
         }
@@ -192,14 +194,14 @@ void __cdecl16far land_info(byte tileOffset)
         puVar5 = (uint16_t *)
                  ((uint)*(byte *)(*(int *)((uint)tileIdx * 2 + -0x6e29) * 0x12 + 9) * 4);
         entrySeg = puVar5[1];
-        uVar8 = *puVar5;
-        uVar12 = (undefined1)uVar8;
+        entrySeg = *puVar5;
+        entryLo = (undefined1)entrySeg;
         computed = ovr_ovc45_compute9((char *)&text1,
-                                   (char *)CONCAT13((char)((uint)uVar8 >> 8),
-                                                    CONCAT12(uVar12,_SS)),
+                                   (char *)CONCAT13((char)((uint)entrySeg >> 8),
+                                                    CONCAT12(entryLo,_SS)),
                                    (char *)CONCAT13((char)(Font03.ofs >> 8),
                                                     CONCAT12((char)Font03.ofs,entrySeg)),Font03.seg,
-                                   -0x47,uVar12,(char)entrySeg,(char)Font03.ofs);
+                                   -0x47,entryLo,(char)entrySeg,(char)Font03.ofs);
         stashOfs = ovr_ovc15_usesStshRealloc
                            ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),(char)BLD_WORD(&BuildingTypes[bldType], name, 2),100 - ((uint)*(byte *)(*(int *)((uint)tileIdx * 2 + -0x6e29) * 0x12 +
                                                   0xb) * 100) /
@@ -277,12 +279,12 @@ void __cdecl16far land_info(byte tileOffset)
           computed = ovr_ovc45_compute9((char *)&text1,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT22(Font03.ofs,(char *)puVar5[1]),Font03.seg,'J',
                                      0x4a,2,(char)computed,msgSeg);
-          iVar9 = 100 - ((uint)*(byte *)(*(int *)((uint)tileIdx * 2 + -0x6e29) * 0x12 + 0xb) * 100
+          pctRemaining = 100 - ((uint)*(byte *)(*(int *)((uint)tileIdx * 2 + -0x6e29) * 0x12 + 0xb) * 100
                         ) / (uint)*(byte *)(*(int *)((uint)tileIdx * 2 + -0x6e29) * 0x12 + 0xc);
           textMsg = ovr_fmVsprintf("Clearing of land: %d%% complete. Owned by %s. Active party is %s the %s."
                                   ,(char *)CONCAT13((char)((uint)computed >> 8),
-                                                    CONCAT12((char)computed,iVar9)));
-          strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(iVar9,textMsg));
+                                                    CONCAT12((char)computed,pctRemaining)));
+          strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(pctRemaining,textMsg));
         }
         else {
           textMsg = ovr_ovc22_className(AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),0);
@@ -295,7 +297,7 @@ void __cdecl16far land_info(byte tileOffset)
           ;
           puVar5 = (uint16_t *)
                    ((uint)*(byte *)(*(int *)((uint)tileIdx * 2 + -0x6e29) * 0x12 + 9) * 4);
-          uVar12 = 0x7a;
+          delayArg = 0x7a;
           computed = ovr_ovc45_compute9((char *)&text1,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT22(Font03.ofs,(char *)puVar5[1]),Font03.seg,'_',
                                      0x5f,2,(char)computed,msgSeg);
@@ -303,7 +305,7 @@ void __cdecl16far land_info(byte tileOffset)
                              ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),BLD_WORD(&BuildingTypes[bldType], name, 2),100 - ((uint)*(byte *)(*(int *)((uint)tileIdx * 2 + -0x6e29) * 0x12
                                                     + 0xb) * 100) /
                                     (uint)*(byte *)(*(int *)((uint)tileIdx * 2 + -0x6e29) * 0x12 +
-                                                   0xc),(char)computed,uVar12,0,0,0);
+                                                   0xc),(char)computed,delayArg,0,0,0);
           asm { mov retSeg,dx };
           textMsg = ovr_fmVsprintf("%s: %d%% complete. Owned by %s. Active party is %s the %s.",
                                   (char *)CONCAT22(retSeg,stashOfs));
@@ -323,16 +325,16 @@ void __cdecl16far land_info(byte tileOffset)
           itemCode = auStack_14[((uint)stashOfs & 0xff) - 1];
         }
         if (itemCode == '\x01') {
-          uStack_8 = segTable[0];
+          tableOfs = segTable[0];
           menuLabel = menuItems;
-          uStack_4 = 0x2410;
-          uStack_6 = 0x7a02;
+          tableSeg = _DS;
+          arg2Pair = 0x7a02;
           stashOfs = ovr_ovc15_usesStshRealloc
                              ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),0,0,0,0,0,0,0);
-          asm { mov uVar3,dx };
+          asm { mov retSegB,dx };
           textMsg = ovr_fmVsprintf("Construction of %s will be permanently suspended. Are you sure?",
-                                  (char *)CONCAT22(uVar3,stashOfs));
-          hint_01.seg = uVar3;
+                                  (char *)CONCAT22(retSegB,stashOfs));
+          hint_01.seg = retSegB;
           hint_01.ofs = (uint16_t)textMsg;
           stashOfs = &menuLabel;
           (*(uint8_t *)((uint8_t *)&(entries_01.seg))) = uVar13;
@@ -348,8 +350,8 @@ void __cdecl16far land_info(byte tileOffset)
         else if (itemCode == '\x02') {
           choice = ovr_ovc45_textChoosePartyBuild
                              ((GfxRndSeed + (int)(char)tileOffset) - 2,GfxRndSeed2,(int *)&entityIndex,0);
-          cStack_1c = (char)choice;
-          if (cStack_1c == -1) {
+          choiceCode = (char)choice;
+          if (choiceCode == -1) {
             again = '\x01';
           }
         }
