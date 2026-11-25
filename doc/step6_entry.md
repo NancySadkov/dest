@@ -7652,3 +7652,48 @@ carefully (or the change abandoned).
 
   grep_checks 40,248 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### The `+2` batch rule for phantom `in_stack_` reads yields zero trustworthy sites
+
+`tmp/phantom_fixed.py` applies three checks together:
+
+1. the slot `XXXX + 2` must actually be read by the function's disassembly;
+2. the parameter covering that slot must have a **meaningful** name - `arg2`/`arg3` carry no
+   information, and the export's own naming is what the substitution is meant to improve;
+3. the substitution must not collide: if the parameter's name already appears anywhere in the body, C
+   forbids it being both a parameter and a local, so the mapping chose the wrong slot.
+
+Measured result: **0 functions pass all three.**
+
+The intermediate numbers show why. Checking only (1) accepts 54 phantoms, but of those the ones with a
+meaningful parameter name all fail (3):
+
+```
+ovc11_audio      audio_usesAlignToSeg   in_stack_00000004 -> ofs              collides
+ovc41_main       ovc41_specialAttack    in_stack_00000008 -> targetIndex      collides
+ovc45_unitinfo   ovc45_usesAlignUp4     in_stack_0000000a -> entityIndexOut   collides
+ovc15_sprite     stshRleAnims           in_stack_00000004 -> src              collides
+ovc16_saveui     saveui_usesBlitGfx10   in_stack_00000004 -> gfx              collides
+```
+
+A collision is *positive evidence the slot is wrong*: a parameter and a local cannot share a name, so if
+the name is already in scope the +2 rule landed on something else. That is consistent with the earlier
+measurement (the shift held in only 70 of 122 functions), and it means the rule cannot be used as a
+batch heuristic at all - the informative cases are exactly the ones where it fails.
+
+Two further defects found while building the tool, both worth keeping in the script:
+* a per-declaration regex misses multi-declarator lines (`char *src, *dst;`), so the collision test has
+  to match the identifier anywhere in the body;
+* the ADDR-to-function attribution was producing false candidates (`ovc25_findUnitCell` was listed as
+  having `in_stack_00000004` while its body - already re-derived - contains none), so the phantom's
+  declaration and uses must both be inside the function's own extent.
+
+**Consequence for the in_stack_ class (1,303 occurrences, ~84 after earlier passes):** it cannot be
+reduced by a batch rule. Each function needs its prologue read and the parameter at each slot
+established from the load widths, which is what the earlier per-function turns did
+(`chpath`, `path_strip_tail_slash`, `ensure_tail_slash`, the two path segments, `drawTextAt`,
+`uiNotify`, `say`, `rle_blit_decode`/`rle_line`/`unrle_mirror`, `drawLine2`).  At 3-5 per turn that class
+is ~20 turns of work and cannot be accelerated by tooling.
+
+  grep_checks 40,248 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
