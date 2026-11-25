@@ -5243,3 +5243,63 @@ unknown is the C idiom for the selector byte read at segment 0x60 offset `+0x271
 
   grep_checks 45,383; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### Density check across the tree: it flags size-table errors, not mis-attributions
+
+`tmp/density_check.py` compares each C body's line count with the size in
+`audit/functions.tsv`.  Ten of 255 functions exceed 1.0 lines/byte:
+
+```
+lines/tsv  lines  tsv   module          function
+17.27       2591  150   ovc49_agents.c  ovc49_body1                 8699:18c4
+ 8.61        921  107   ovc23_bldrec.c  ovc23_usesAlignUp43         55fe:0af5
+ 5.94        969  163   ovc15_sprite.c  ovc15_textError             4207:26bc
+ 4.40        801  182   ovc33_stats.c   stats_textRingProt          6386:0411
+ 3.23        766  237   ovc41_main.c    ovc41_usesBiosKeyAvail      6a8f:15a0
+ 2.94        315  107   ovc23_bldrec.c  ovc23_textConstructionAbandoned 55fe:0cdf
+```
+
+**But the ratio against the recorded size is the wrong test**, because those sizes are badly
+understated for switch functions.  Measuring each function's real extent (linear sweep to the
+`retf`) shows:
+
+```
+function                          tsv   real   lines  lines/real
+ovc49_body1                       150   1329    2591    1.95     <- tsv 9x too small
+ovc23_usesAlignUp43               107    482     921    1.91
+ovc15_textError                   163    449     969    2.16
+stats_textRingProt                182    422     801    1.90
+ovc41_usesBiosKeyAvail            237    663     766    1.16
+ovc23_textConstructionAbandoned   107    594     315    0.53     <- body is fine
+```
+
+Against real extents the band is 0.5-2.2, which is ordinary, so **density cannot identify a
+mis-attributed body**.  My previous turn's claim that the density test would "find others in one
+pass" was wrong on that point and is withdrawn.
+
+**The test that works is content**: list the call sites inside the real byte range and compare
+them with what the C body calls.
+
+```
+function                real  instrs  call sites  distinct  targets
+ovc49_body1             1329    429        3         3      0x148:0x39, 0x170:0x5c, 0x148:0x34
+ovc23_usesAlignUp43      482    184        1         1      0x158:0x6b
+ovc15_textError          449    155        2         2      0:0x938 (LXMUL), 0:0x9c4 (LDIV)
+stats_textRingProt       422    151       16         2      0:0x2d31 x15, 0x170:0x7a
+```
+
+`ovc15_textError` is conclusively mis-attributed: its range contains **only** the two long-arithmetic
+calls, while the body under that name uses `LXRSH_at_`, `HeapPtr`, `MUSHandle` and `DIGHandle`.
+
+**New suspect**: `ovc23_usesAlignUp43` (55fe:0af5) has **one** call site in 482 bytes but a 921-line
+body - the same shape of mismatch, and worth the same treatment.  By contrast `ovc49_body1` (3
+calls / 1329 bytes), `stats_textRingProt` (15 identical calls in a loop) and
+`ovc41_usesBiosKeyAvail` are structurally consistent with their extents; they are large, not
+wrong.
+
+So: one confirmed mis-attribution (`ovc15_textError`), one to check (`ovc23_usesAlignUp43`), and
+the important by-product that **`audit/functions.tsv` sizes cannot be trusted** (up to 9x low) -
+which also invalidates any earlier estimate built on them.
+
+  grep_checks 45,383; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
