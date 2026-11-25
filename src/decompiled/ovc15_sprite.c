@@ -590,35 +590,38 @@ void __cdecl16far ovc15_removeEntity(uint entityIndex)
 uint __cdecl16far ovc15_usesAlignUp4(uint16_t x,uint16_t y)
 
 {
-  uint32_t uVar1;
-  uint uVar2;
-  uint uVar3;
-  int iVar4;
-  uint uVar5;
-  uint16_t uVar6;
-  
-  uVar2 = ovr_alignUp4(x,0,0);
-  uVar5 = 0;
-  uVar3 = uVar2;
+  /* Re-derived: the first entity whose target cell is alignUp4(x)/y with flags byte bit 1
+     set (+0x33), whose +0x1a byte is not -1, and whose leader sheet's +0x3f byte is zero. */
+  uint32_t sheetRef;
+  uint alignedX;
+  uint entOfs;
+  int entitiesOfs;
+  uint i;
+  uint16_t targetY;
+  uint targetAlignedX;
+  uint sheetFlag;
+
+  alignedX = ovr_alignUp4(x,0,0);
+  i = 0;
   do {
-    if (EntityCount <= uVar5) {
+    if (EntityCount <= i) {
       return 0;
     }
-    uVar3 = uVar5 * 0x37;
-    uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-    iVar4 = (int)Entities;
-    if ((((*(byte *)(iVar4 + uVar3 + 0x33) & 2) != 0) &&
-        (uVar3 = ((entity_t *)iVar4)[uVar5].base.targetY, uVar3 == y)) &&
-       (uVar3 = ovr_alignUp4(((entity_t *)iVar4)[uVar5].base.targetX,0,0), uVar3 == uVar2)) {
-      uVar3 = uVar5 * 0x37;
-      uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-      if ((*(char *)((int)Entities + uVar3 + 0x1a) != -1) &&
-         (uVar1 = *(uint32_t *)((uint)AGNT_FIELD(&((entity_t *)Entities)[uVar5], base.entity, 3) << 2),
-         uVar3 = (uint)*(byte *)((int)uVar1 + 0x3f), uVar3 == 0)) {
+    entOfs = i * 0x37;
+    entitiesOfs = (int)Entities;
+    if ((((*(byte *)(entitiesOfs + entOfs + 0x33) & 2) != 0) &&
+        (targetY = ((entity_t *)entitiesOfs)[i].base.targetY, targetY == y)) &&
+       (targetAlignedX = ovr_alignUp4(((entity_t *)entitiesOfs)[i].base.targetX,0,0),
+        targetAlignedX == alignedX)) {
+      entOfs = i * 0x37;
+      if ((*(char *)((int)Entities + entOfs + 0x1a) != -1) &&
+         (sheetRef = *(uint32_t *)
+                     ((uint)AGNT_FIELD(&((entity_t *)Entities)[i], base.entity, 3) << 2),
+         sheetFlag = (uint)*(byte *)((int)sheetRef + 0x3f), sheetFlag == 0)) {
         return 1;
       }
     }
-    uVar5 = uVar5 + 1;
+    i = i + 1;
   } while( true );
 }
 
@@ -2909,26 +2912,28 @@ void __cdecl16far ovc15_positionCrosshair(void)
 bool __cdecl16far ovc15_selectLeftmostAgent(void)
 
 {
-  int iVar1;
-  uint uVar2;
-  uint uVar3;
-  char cStack_3;
-  
-  cStack_3 = -1;
-  uVar2 = 0x7fff;
-  uVar3 = 0x7fff;
-  for (iVar1 = 0; iVar1 < (int)(uint)AgntCount; iVar1 = iVar1 + 1) {
-    if ((Agnts[iVar1].screenX < uVar2) ||
-       ((Agnts[iVar1].screenX == uVar2 && (Agnts[iVar1].screenY < uVar3)))) {
-      cStack_3 = (char)iVar1;
-      uVar2 = Agnts[iVar1].screenX;
-      uVar3 = Agnts[iVar1].screenY;
+  /* Re-derived: the mirror of ovc15_selectRightmostAgent - smallest screenX, screenY
+     breaking ties, starting from 0x7fff.  bestIdx is a char so -1 can mean "none". */
+  int i;
+  uint bestX;
+  uint bestY;
+  char bestIdx;
+
+  bestIdx = -1;
+  bestX = 0x7fff;
+  bestY = 0x7fff;
+  for (i = 0; i < (int)(uint)AgntCount; i = i + 1) {
+    if ((Agnts[i].screenX < bestX) ||
+       ((Agnts[i].screenX == bestX && (Agnts[i].screenY < bestY)))) {
+      bestIdx = (char)i;
+      bestX = Agnts[i].screenX;
+      bestY = Agnts[i].screenY;
     }
   }
-  if (cStack_3 != -1) {
-    SelectedAgent = cStack_3;
+  if (bestIdx != -1) {
+    SelectedAgent = bestIdx;
   }
-  return cStack_3 != -1;
+  return bestIdx != -1;
 }
 
 

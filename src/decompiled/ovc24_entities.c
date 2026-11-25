@@ -15,42 +15,42 @@
 void __cdecl16far ovc24_usesAlignUp4(void)
 
 {
-  char cVar1;
-  uint uVar2;
-  uint uVar3;
-  int iVar4;
-  int iVar5;
-  uint uVar6;
-  uint uVar7;
-  uint16_t uVar8;
-  
-  for (uVar7 = 0; uVar7 < EntityCount; uVar7 = uVar7 + 1) {
-    AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.entity, 1) = 0;
+  /* Re-derived.  Clears the shared-cell flag on every entity, then flags each pair of
+     entities that share alignUp4(x) and y but whose AgntGs[gindex].ai values differ. */
+  char aiType;
+  uint entAlignedX;
+  uint otherAlignedX;
+  int entitiesOfs;
+  int j;
+  int entY;
+  uint i;
+
+  for (i = 0; i < EntityCount; i = i + 1) {
+    AGNT_FIELD(&((entity_t *)Entities)[i], base.entity, 1) = 0;
   }
-  uVar7 = 0;
+  i = 0;
   do {
-    if (EntityCount <= uVar7) {
+    if (EntityCount <= i) {
       return;
     }
-    uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-    iVar4 = (int)Entities;
-    if (AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.entity, 1) == '\0') {
-      cVar1 = AgntGs[(uint)((entity_t *)iVar4)[uVar7].base.gindex].ai;
-      uVar2 = alignUp4(*(int *)((entity_t *)iVar4 + uVar7),0,0);
-      iVar4 = ((entity_t *)Entities)[uVar7].base.y;
-      for (uVar6 = 0; uVar6 < EntityCount; uVar6 = uVar6 + 1) {
-        uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-        iVar5 = (int)Entities;
-        if (((((entity_t *)iVar5)[uVar6].base.y == iVar4) &&
-            (AgntGs[(uint)((entity_t *)iVar5)[uVar6].base.gindex].ai != cVar1)) &&
-           (uVar3 = alignUp4(*(int *)((entity_t *)iVar5 + uVar6),0,0), uVar3 == uVar2)) {
-          AGNT_FIELD(&((entity_t *)Entities)[uVar7], base.entity, 1) = 1;
-          AGNT_FIELD(&((entity_t *)Entities)[uVar6], base.entity, 1) = 1;
+    entitiesOfs = (int)Entities;
+    if (AGNT_FIELD(&((entity_t *)Entities)[i], base.entity, 1) == '\0') {
+      aiType = AgntGs[(uint)((entity_t *)entitiesOfs)[i].base.gindex].ai;
+      entAlignedX = alignUp4(*(int *)((entity_t *)entitiesOfs + i),0,0);
+      entY = ((entity_t *)Entities)[i].base.y;
+      for (j = 0; j < EntityCount; j = j + 1) {
+        entitiesOfs = (int)Entities;
+        if (((((entity_t *)entitiesOfs)[j].base.y == entY) &&
+            (AgntGs[(uint)((entity_t *)entitiesOfs)[j].base.gindex].ai != aiType)) &&
+           (otherAlignedX = alignUp4(*(int *)((entity_t *)entitiesOfs + j),0,0),
+            otherAlignedX == entAlignedX)) {
+          AGNT_FIELD(&((entity_t *)Entities)[i], base.entity, 1) = 1;
+          AGNT_FIELD(&((entity_t *)Entities)[j], base.entity, 1) = 1;
           break;
         }
       }
     }
-    uVar7 = uVar7 + 1;
+    i = i + 1;
   } while( true );
 }
 
