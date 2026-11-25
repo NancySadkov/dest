@@ -731,9 +731,8 @@ int16_t __cdecl16far drawLine2(char *src,char *dst,uint16_t count)
   byte *prevPtr;
   byte *srcPtr;
   byte *dstPtr;
-  int in_stack_0000000c;   /* fourth stack argument; no callers in the tree */
 
-  dstPtr = (*(uint16_t *)((uint8_t *)&(dst) + 2)) + in_stack_0000000c + -1;
+  dstPtr = (int)dst + count + -1;
   srcPtr = (byte *)src;
   do {
     do {
