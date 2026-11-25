@@ -49,31 +49,33 @@ void __cdecl16far ovc40_usesBlitLabel(far_t text1,far_t text2,byte row,byte term
 void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette)
 
 {
-  int iVar1;
-  int iVar2;
-  uint8_t pal;
-  int iStack_6;
-  int iStack_4;
-  
-  iStack_4 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-  iStack_6 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-  iVar2 = 10;
+  /* Re-derived: the mirror fade, from the full palette down to black, stopping once the factor
+     goes below zero.  Same 768-byte buffer fix as setSeasonPalette. */
+  int palIndex;
+  int factor;
+  uint8_t pal [0x300];
+  int savedHi;
+  int savedLo;
+
+  savedHi = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  savedLo = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+  factor = 10;
   do {
-    if (iVar2 < 0) {
+    if (factor < 0) {
       return;
     }
-    for (iVar1 = 0; iVar1 < 0x300; iVar1 = iVar1 + 1) {
-      (&pal)[iVar1] =
-           (uint8_t)(((long)(int)(uint)*(byte *)(palette.ofs + iVar1) * (long)iVar2 & 0xffffU) / 10)
-      ;
+    for (palIndex = 0; palIndex < 0x300; palIndex = palIndex + 1) {
+      pal[palIndex] =
+          (uint8_t)(((long)(int)(uint)*(byte *)(palette.ofs + palIndex) * (long)factor & 0xffffU)
+                    / 10);
     }
-    ovr_vgaSetPalette8bit(&pal,0);
+    ovr_vgaSetPalette8bit(pal,0);
     do {
-      if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != iStack_4) break;
-    } while (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */ == iStack_6);
-    iStack_4 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-    iStack_6 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-    iVar2 = iVar2 + -1;
+      if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != savedHi) break;
+    } while (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) == savedLo);
+    savedHi = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    savedLo = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+    factor = factor + -1;
   } while( true );
 }
 
@@ -82,31 +84,35 @@ void __cdecl16far ovc40_usesVgaSetPalette8bit(far_t palette)
 void __cdecl16far setSeasonPalette(far_t palette)
 
 {
-  uint uVar1;
-  uint uVar2;
-  uint8_t pal;
-  int iStack_6;
-  int iStack_4;
-  
-  iStack_4 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-  iStack_6 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-  uVar2 = 0;
+  /* Re-derived: fades the palette in from black.  Each step scales every one of the 0x300 channel
+     bytes by factor/10, sets the palette, then busy-waits on the BIOS daily tick counter before
+     the next step; it stops once the factor passes 10.  The buffer was declared as a single byte
+     while indexed to 0x2ff - a 768-byte stack overrun - and is now the array it really is. */
+  uint palIndex;
+  uint factor;
+  uint8_t pal [0x300];
+  int savedHi;
+  int savedLo;
+
+  savedHi = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+  savedLo = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+  factor = 0;
   do {
-    if (10 < uVar2) {
+    if (10 < factor) {
       return;
     }
-    for (uVar1 = 0; uVar1 < 0x300; uVar1 = uVar1 + 1) {
-      (&pal)[uVar1] =
-           (uint8_t)(((long)(int)(uint)*(byte *)(palette.ofs + uVar1) * (long)(int)uVar2 & 0xffffU)
-                    / 10);
+    for (palIndex = 0; palIndex < 0x300; palIndex = palIndex + 1) {
+      pal[palIndex] =
+          (uint8_t)(((long)(int)(uint)*(byte *)(palette.ofs + palIndex) * (long)(int)factor &
+                     0xffffU) / 10);
     }
-    ovr_vgaSetPalette8bit(&pal,0);
+    ovr_vgaSetPalette8bit(pal,0);
     do {
-      if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != iStack_4) break;
-    } while (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */ == iStack_6);
-    iStack_4 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-    iStack_6 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-    uVar2 = uVar2 + 1;
+      if (*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != savedHi) break;
+    } while (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) == savedLo);
+    savedHi = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+    savedLo = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+    factor = factor + 1;
   } while( true );
 }
 
