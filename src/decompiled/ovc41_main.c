@@ -490,7 +490,7 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
           rollVal = (int)rollVal >> 1;
         }
         ovc41_textParalyzed((agnt_t far *)MK_FP(SEG_OF(Agnts),agntBase),
-                            (agnt_t far *)CONCAT22(SEG_OF(Agnts),
+                            (agnt_t far *)MK_FP(SEG_OF(Agnts),
                                                (agnt_t far *)&Agnts[otherIdx].x),rollVal,0,0,0);
       }
     }
@@ -725,7 +725,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t far *agnt)
           ovr_agnt_usesAnimFrame((agnt_t far *)&Agnts[i].x);
         }
         else {
-          ovc41_settleAgentCombat(agnt,(agnt_t far *)CONCAT22(SEG_OF(Agnts),(agnt_t far *)&Agnts[i].x),0);
+          ovc41_settleAgentCombat(agnt,(agnt_t far *)MK_FP(SEG_OF(Agnts),(agnt_t far *)&Agnts[i].x),0);
         }
         hitCount = hitCount + 1;
         if ((int)levelBudget < (int)(uint)Agnts[i].entity->base.level) {
@@ -2910,7 +2910,7 @@ void __cdecl16far ovc41_usesAgntCount3(void)
   
   for (iVar1 = 0; iVar1 < (int)(uint)AgntCount; iVar1 = iVar1 + 1) {
     if (Agnts[iVar1].faction != '\0') {
-      ovc41_settleAgentCombat((agnt_t far *)0x0,(agnt_t far *)CONCAT22(SEG_OF(Agnts),(agnt_t far *)&Agnts[iVar1].x),0);
+      ovc41_settleAgentCombat((agnt_t far *)0x0,(agnt_t far *)MK_FP(SEG_OF(Agnts),(agnt_t far *)&Agnts[iVar1].x),0);
     }
   }
   return;
