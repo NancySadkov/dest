@@ -2942,14 +2942,14 @@ int __cdecl16far ovc41_growthForLevel(agnt_t *agnt,uint16_t arg2)
   far_t dst;
   uint8_t growthMap;
   byte level;
-  byte bStack_3;
+  byte gindex;
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&growthMap;
   F_SCOPY(far_from_u32((uint32_t)(0x24106e48)),dst);
-  bStack_3 = agnt->gindex;
-  if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bStack_3 * 0x95) == -1) {
-    iVar1 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)bStack_3 * 0x95);
+  gindex = agnt->gindex;
+  if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) == -1) {
+    iVar1 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)gindex * 0x95);
   }
   else {
     level = agnt->level;

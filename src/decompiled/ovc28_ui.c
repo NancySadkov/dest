@@ -554,8 +554,8 @@ uint16_t __cdecl16far ovc28_usesScreenMode(far_t entries,uint count)
   uint uVar2;
   undefined1 uVar3;
   int *piVar4;
-  char cStack_8;
-  char cStack_4;
+  char menuItemA;
+  char menuItemB;
   
   if ((((ScreenMode == '\0') && (MouseMoved == 0)) && (8 < MouseX)) &&
      (((MouseX < 0x19 && (0xb4 < MouseY)) && ((MouseY < 0xb6 | 0xeU) != 0)))) {
@@ -567,9 +567,9 @@ uint16_t __cdecl16far ovc28_usesScreenMode(far_t entries,uint count)
       if (((uVar2 < count) && ((MouseY - 0x3c) % 0xe < 0xc)) &&
          (piVar4 = (int *)(entries.ofs + uVar2 * 4), *piVar4 != 0 || piVar4[1] != 0)) {
         ovc28_blitMenuEntry(entries,uVar2);
-        cStack_4 = (char)uVar2;
-        GMenuItem = cStack_4 + '\x01';
-        return CONCAT11(0x24,cStack_4 + '\x01');
+        menuItemB = (char)uVar2;
+        GMenuItem = menuItemB + '\x01';
+        return CONCAT11(0x24,menuItemB + '\x01');
       }
     }
     uVar3 = 0x24;
@@ -579,9 +579,9 @@ uint16_t __cdecl16far ovc28_usesScreenMode(far_t entries,uint count)
       uVar2 = (MouseX - 0x10) / 0x44;
       uVar3 = (undefined1)((MouseX - 0x10) / 0x44 >> 8);
       if ((uVar2 < 3) && ((MouseX - 0x10) % 0x44 < 0x43)) {
-        cStack_8 = (char)uVar2;
-        GMenuItem = cStack_8 + -4;
-        return CONCAT11(0x24,cStack_8 + -4);
+        menuItemA = (char)uVar2;
+        GMenuItem = menuItemA + -4;
+        return CONCAT11(0x24,menuItemA + -4);
       }
     }
     if (((((keyboardInputMode == '\0') || (uVar3 = 0x24, MouseMoved != 0)) ||

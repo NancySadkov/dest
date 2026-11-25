@@ -4127,3 +4127,35 @@ the file-offset rule exists.
 
   build 65/65 clean; LINK ERRORS 0; compare_state 1,627/0/0
   diff_dgroup 972/1,868; compare_runtime 1,546/11 main entry, 1,545/11 post-init_cfg
+
+### `stLoad` / `stSave` (the next `unaff_` users): SI is not one constant
+
+`ovc19_save.c` has 108 `unaff_` uses, split evenly between two functions:
+
+```
+save_readBlock        49fd:0000   SI 2
+stLoad                49fd:01da   SI 52 DI 52
+save_loadArchiveGame  49fd:0863   SI 2
+stSave                49fd:090f   SI 52 DI 52
+```
+
+Disassembling their prologues (file = seg*16-0xE200):
+
+```
+stLoad 03BFB0  push si
+       03BFB2  mov  si, word ptr [bp + 6]     ; SI = first argument (handle)
+       03BFB5  lcall ...
+stSave 03C71A  mov  si, ax                     ; SI = the result of the preceding call
+       03C71C  or   si, si
+```
+
+and `stLoad`'s DI is a counter (`03C154 xor di,di`, `03C1A1 inc di`), while SI is
+**rewritten** later in the same function (`03C617 mov si,ax`).
+
+So unlike `init_assets1` - where SI was the fixed constant 0xAB - these two need flow
+analysis: `unaff_SI` is `handle` only up to the point where SI is reloaded from AX, and
+`unaff_DI` is a running count.  A blanket replacement would be wrong on those paths, so
+the change was not made; the addresses above are the evidence the next attempt needs.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 49,797 -> 49,777
+  compare_state 1,627/0/0; diff_dgroup 972/1,868

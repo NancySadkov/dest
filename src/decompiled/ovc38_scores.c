@@ -247,14 +247,14 @@ void __cdecl16far ovc38_usesStshAlloc(void)
   far_t handle_00;
   uint8_t msg;
   void *pvStack_8;
-  uint16_t uStack_6;
+  uint16_t blkSeg;
   byte leaderIdx;
   
   if ((GHighScoreSaved == '\0') && (leaderIdx = ovr_manage_findFirstLeader(), leaderIdx != 0xff)) {
     pvStack_8 = ovr_stshAlloc(0x18);
     entries.seg = in_DX;
     entries.ofs = (uint16_t)pvStack_8;
-    uStack_6 = in_DX;
+    blkSeg = in_DX;
     ovc38_loadHighScores(entries);
     if (*(int *)((int)pvStack_8 + 0x14) != 0 || *(int *)((int)pvStack_8 + 0x16) != 0) {
       handle.seg = *(uint16_t *)((int)pvStack_8 + 0x16);
@@ -287,10 +287,10 @@ void __cdecl16far ovc38_usesStshAlloc(void)
     *puVar6 = (uint16_t)pvVar3;   /* hand fix: 2-byte slot */
     puVar6 = (uint16_t *)((int)pvStack_8 + iVar5 * 4);
     strcpy((char *)CONCAT22(puVar6[1],(char *)*puVar6),(char *)CONCAT22(_SS,&msg));
-    entries_00.seg = uStack_6;
+    entries_00.seg = blkSeg;
     entries_00.ofs = (uint16_t)pvStack_8;
     ovc38_saveHighScores(entries_00);
-    handle_00.seg = uStack_6;
+    handle_00.seg = blkSeg;
     handle_00.ofs = (uint16_t)pvStack_8;
     ovc38_usesStshFree(handle_00);
     GHighScoreSaved = '\x01';

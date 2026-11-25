@@ -903,7 +903,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
   uint8_t msg;
   agnt_t *paStack_c;
   char *ptrSeg;
-  int iStack_8;
+  int levelBonus;
   
   uVar8 = (uint16_t)((ulong)((long)in_stack_00000008 * 0x34) >> 0x10);
   paStack_c = (agnt_t *)(agnt_t *)((long)in_stack_00000008 * 0x34);
@@ -956,9 +956,9 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
     return;
   }
   if (agnt->variant == 0x2) {
-    iStack_8 = ((((entity_t *)agnt->entity)->base).level / 5) * 2 + 1;
-    roll = ovr_manage_rollDice((char)iStack_8,'\x06');
-    uVar2 = (uint)roll + iStack_8;
+    levelBonus = ((((entity_t *)agnt->entity)->base).level / 5) * 2 + 1;
+    roll = ovr_manage_rollDice((char)levelBonus,'\x06');
+    uVar2 = (uint)roll + levelBonus;
     uVar3 = ovc27_spellHalfDamage
                       ((agnt_t *)
                        CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)));
