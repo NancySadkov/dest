@@ -1406,49 +1406,42 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
 uint __cdecl16far constr_usesGMapFlags(int x,int y,uint16_t arg3)
 
 {
-  uint in_AX;
-  uint uVar1;
-  short *psVar2;
-  int iVar3;
-  byte bVar4;
-  int iVar5;
-  uint16_t uVar6;
-  int iStack_4;
-  
-  if ((((x < 0) || (y < 0)) || (in_AX = x + 1, 0x93 < (int)in_AX)) ||
-     (in_AX = y + 1, 0x3b < (int)in_AX)) {
+  /* Re-derived: validates a 2x1 placement cell.  Returns 1 only when in bounds, both
+     map-flag words have their low two bits clear, and the two GMapCells heights differ by
+     less than 9; otherwise sets placementStatus (2 out of bounds, 1 blocked) and returns 0.
+     The exported `in_AX & 0xff00` / `CONCAT11(bVar4,1)` returns were stale-AH artifacts:
+     bVar4 is (byte)((max-min) >> 8) with max-min in 0..255, i.e. provably 0. */
+  short *flagPtr;
+  int cellA;
+  int cellB;
+  int cellLo;
+
+  if ((((x < 0) || (y < 0)) || (0x93 < x + 1)) || (0x3b < y + 1)) {
     placementStatus = 2;
-    uVar1 = in_AX & 0xff00;
+    return 0;
   }
-  else {
-    uVar6 = (uint16_t)((ulong)GMapFlags >> 0x10);
-    psVar2 = (short *)(x * 2);
-    if ((((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) == 0) &&
-       (psVar2 = (*(short (*) [60] [148])GMapFlags)[y] + x, (psVar2[0x94] & 3U) == 0)) {
-      iStack_4 = (int)(char)(*(byte (*) [59] [148])GMapCells)[y + 1][x];
-      iVar3 = (int)(char)(*(byte (*) [59] [148])GMapCells)[y + 1][x + 1];
-      iVar5 = iStack_4;
-      if (iVar3 < iStack_4) {
-        iVar5 = iVar3;
+  flagPtr = (short *)(x * 2);
+  if (((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) == 0) {
+    flagPtr = (*(short (*) [60] [148])GMapFlags)[y] + x;
+    if ((flagPtr[0x94] & 3U) == 0) {
+      cellA = (int)(char)(*(byte (*) [59] [148])GMapCells)[y + 1][x];
+      cellB = (int)(char)(*(byte (*) [59] [148])GMapCells)[y + 1][x + 1];
+      cellLo = cellA;
+      if (cellB < cellA) {
+        cellLo = cellB;
       }
-      if (iStack_4 < iVar3) {
-        iStack_4 = iVar3;
+      if (cellA < cellB) {
+        cellA = cellB;
       }
-      bVar4 = (byte)((uint)(iStack_4 - iVar5) >> 8);
-      if (iStack_4 - iVar5 < 9) {
+      if (cellA - cellLo < 9) {
         placementStatus = 3;
-        uVar1 = CONCAT11(bVar4,1);
+        return 1;
       }
-      else {
-        uVar1 = (uint)bVar4 << 8;
-      }
-    }
-    else {
-      placementStatus = 1;
-      uVar1 = (uint)psVar2 & 0xff00;
+      return 0;
     }
   }
-  return uVar1;
+  placementStatus = 1;
+  return 0;
 }
 
 
@@ -1460,62 +1453,52 @@ uint __cdecl16far constr_usesGMapFlags(int x,int y,uint16_t arg3)
 uint __cdecl16far constr_usesGMapFlags2(int x,int y)
 
 {
+  /* Re-derived (36ce:3172): 4x4 placement quality.  0 when the cell or any of its eight
+     neighbours has the low two map-flag bits set, 1 when one of the two mask tests below is
+     set, otherwise 2/3/4 by how far the two computed edge values are from 0xfa/0xf5.  Every
+     return site writes only AL and the function contains no `mov ah`, so the exported
+     CONCAT11(uVar3,...) high bytes and extraout_AH locals were noise. */
+  short (*flags) [60] [148];
+  uint cellFlags;
+  uint neighbourFlags;
   byte cornerA;
   byte cornerB;
   byte cornerA_00;
   byte cornerB_00;
-  uint uVar1;
-  uint uVar2;
-  undefined1 extraout_AH;
-  undefined1 extraout_AH_00;
-  undefined1 uVar3;
-  short (*paasVar4) [60] [148];
-  uint16_t uVar5;
   byte edgeA;
   byte edgeB;
-  
-  uVar5 = (uint16_t)((ulong)GMapFlags >> 0x10);
-  paasVar4 = (short (*) [60] [148])GMapFlags;
-  uVar1 = (*paasVar4)[y][x];
-  if ((uVar1 & 3) == 0) {
-    uVar2 = paasVar4[-1][y + 0x3a][x + 0x93] | paasVar4[-1][y + 0x3b][x] |
-            paasVar4[-1][y + 0x3b][x + 1] | paasVar4[-1][y + 0x3b][x + 0x93] | (*paasVar4)[y][x + 1]
-            | (*paasVar4)[y][x + 0x93] | (*paasVar4)[y + 1][x] | (*paasVar4)[y + 1][x + 1];
-    if ((uVar2 & 3) == 0) {
-      cornerA = (*(byte (*) [59] [148])GMapCells)[y + 1][x];
-      cornerB = (*(byte (*) [59] [148])GMapCells)[y + 1][x + 1];
-      cornerA_00 = (*(byte (*) [59] [148])GMapCells)[y][x];
-      cornerB_00 = (*(byte (*) [59] [148])GMapCells)[y][x + 1];
-      if ((uVar1 & 4) == 0) {
-        edgeB = ovr_driver_compute2(cornerA_00,cornerB_00,cornerB);
-        edgeA = ovr_driver_compute2(cornerA,cornerB,cornerA_00);
-        uVar3 = extraout_AH_00;
-      }
-      else {
-        edgeB = ovr_driver_compute2(cornerA_00,cornerB_00,cornerA);
-        edgeA = ovr_driver_compute2(cornerA,cornerB,cornerB_00);
-        uVar3 = extraout_AH;
-      }
-      if ((edgeB < 0xfa) && (edgeA < 0xfa)) {
-        if ((edgeB < 0xf5) && (edgeA < 0xf5)) {
-          uVar1 = CONCAT11(uVar3,2);
-        }
-        else {
-          uVar1 = CONCAT11(uVar3,3);
-        }
-      }
-      else {
-        uVar1 = CONCAT11(uVar3,4);
-      }
-    }
-    else {
-      uVar1 = CONCAT11((char)(uVar2 >> 8),1);
-    }
+
+  flags = (short (*) [60] [148])GMapFlags;
+  cellFlags = (*flags)[y][x];
+  if ((cellFlags & 3) != 0) {
+    return 0;
+  }
+  neighbourFlags = flags[-1][y + 0x3a][x + 0x93] | flags[-1][y + 0x3b][x] |
+                   flags[-1][y + 0x3b][x + 1] | flags[-1][y + 0x3b][x + 0x93] |
+                   (*flags)[y][x + 1] | (*flags)[y][x + 0x93] | (*flags)[y + 1][x] |
+                   (*flags)[y + 1][x + 1];
+  if ((neighbourFlags & 3) != 0) {
+    return 1;
+  }
+  cornerA = (*(byte (*) [59] [148])GMapCells)[y + 1][x];
+  cornerB = (*(byte (*) [59] [148])GMapCells)[y + 1][x + 1];
+  cornerA_00 = (*(byte (*) [59] [148])GMapCells)[y][x];
+  cornerB_00 = (*(byte (*) [59] [148])GMapCells)[y][x + 1];
+  if ((cellFlags & 4) == 0) {
+    edgeB = ovr_driver_compute2(cornerA_00,cornerB_00,cornerB);
+    edgeA = ovr_driver_compute2(cornerA,cornerB,cornerA_00);
   }
   else {
-    uVar1 = uVar1 & 0xff00;
+    edgeB = ovr_driver_compute2(cornerA_00,cornerB_00,cornerA);
+    edgeA = ovr_driver_compute2(cornerA,cornerB,cornerB_00);
   }
-  return uVar1;
+  if ((edgeB < 0xfa) && (edgeA < 0xfa)) {
+    if ((edgeB < 0xf5) && (edgeA < 0xf5)) {
+      return 2;
+    }
+    return 3;
+  }
+  return 4;
 }
 
 

@@ -1467,28 +1467,31 @@ void __cdecl16far driver_setMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int y
 void __cdecl16far driver_clearMapFlagsRect(uint32_t buf,int x1,int y1,int x2,int y2,uint mask,uint16_t arg7,uint16_t arg8)
 
 {
-  int iVar1;
-  int iVar2;
-  int iVar3;
-  uint *puVar4;
-  uint *puVar5;
-  
-  puVar4 = (uint *)((int)buf + x1 * 2 + y1 * 0x128);
-  iVar1 = (y2 - y1) + 1;
-  iVar3 = (x2 - x1) + 1;
-  iVar2 = iVar3;
-  puVar5 = puVar4;
+  /* Re-derived: AND `mask` into every word of the rectangle - the twin of
+     driver_setMapFlagsRect.  buf is the near offset of the map-flag plane and rows are
+     0x94 words (0x128 bytes) apart. */
+  int rows;
+  int colCount;
+  int width;
+  uint *dstPtr;
+  uint *rowBase;
+
+  dstPtr = (uint *)((int)buf + x1 * 2 + y1 * 0x128);
+  rows = (y2 - y1) + 1;
+  width = (x2 - x1) + 1;
+  colCount = width;
+  rowBase = dstPtr;
   do {
     do {
-      *puVar4 = *puVar4 & mask;
-      puVar4 = puVar4 + 1;
-      iVar2 = iVar2 + -1;
-    } while (iVar2 != 0);
-    puVar4 = puVar5 + 0x94;
-    iVar1 = iVar1 + -1;
-    iVar2 = iVar3;
-    puVar5 = puVar4;
-  } while (iVar1 != 0);
+      *dstPtr = *dstPtr & mask;
+      dstPtr = dstPtr + 1;
+      colCount = colCount + -1;
+    } while (colCount != 0);
+    dstPtr = rowBase + 0x94;
+    rows = rows + -1;
+    colCount = width;
+    rowBase = dstPtr;
+  } while (rows != 0);
   return;
 }
 
