@@ -796,65 +796,70 @@ void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite,uin
 void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
 
 {
-  char *pcVar1;
-  int iVar2;
-  int iVar3;
-  int iVar4;
-  int iVar5;
+  /* Re-derived from 3b1d:1035 (396 bytes).  frames is the agent's frame table; frame is the entry
+     for its current animation frame, stateFrame the one for its state (falling back to
+     SprProjectiles when that entry is null).  The sprite comes from stash_usesStExit, the vertical
+     offset depends on the state (0xd screenY, 0xc screenY minus the frame's +0xd, otherwise
+     screenY minus half of it), then the frame is blitted, the animation counter advanced and
+     wrapped, and agnt_compute13 called.
+     Two decoded defects are left in place pending a far-returning declaration for the
+     stash_usesStExit wrapper (see the re-derivation note): gfx.seg should be the segment that call
+     returns, and the third parameter `type` is unused - the original passes 0x10. */
   agnt_t *agnt;
-  stg_tmp_t *psVar6;
-  stg_tmp_t *psVar7;
-  uint16_t uVar8;
-  stg_tmp_t *y;
-  int *piVar9;
-  int iVar10;
+  uint16_t framesOfs;
+  uint16_t framesSeg;
+  int frameOfs;
+  int frameSeg;
+  int stateFrameOfs;
+  int stateFrameSeg;
+  stg_tmp_t *stash;
+  int offsetY;
+  int y;
   far_t gfx;
-  uint16_t uStack_e;
-  uint16_t uStack_c;
-  
+  byte *animPtr;
+
   agnt = (agnt_t *)&Agnts[index].x;
-  uStack_c = *(uint16_t *)((int)&agnt->frames + 2);
-  uStack_e = *(uint16_t *)&agnt->frames;
-  piVar9 = (int *)(uStack_e + (uint)agnt->frameIndex * 4);
-  iVar2 = piVar9[1];
-  iVar3 = *piVar9;
-  piVar9 = (int *)(uStack_e + (uint)(byte)agnt->state * 4);
-  if (*piVar9 == 0 && piVar9[1] == 0) {
-    uStack_e = SprProjectiles.ofs;
-    uStack_c = SprProjectiles.seg;
+  framesSeg = *(uint16_t *)((int)&agnt->frames + 2);
+  framesOfs = *(uint16_t *)&agnt->frames;
+  frameSeg = *(int *)(framesOfs + (uint)agnt->frameIndex * 4 + 2);
+  frameOfs = *(int *)(framesOfs + (uint)agnt->frameIndex * 4);
+  if ((*(int *)(framesOfs + (uint)(byte)agnt->state * 4) == 0) &&
+     (*(int *)(framesOfs + (uint)(byte)agnt->state * 4 + 2) == 0)) {
+    framesOfs = SprProjectiles.ofs;
+    framesSeg = SprProjectiles.seg;
   }
-  piVar9 = (int *)(uStack_e + (uint)(byte)agnt->state * 4);
-  iVar4 = piVar9[1];
-  iVar5 = *piVar9;
-  uVar8 = SEG_OF(Agnts);
-  iVar10 = uStack_e + (uint)(byte)agnt->state * 4;
-  psVar6 = ovr_stash_usesStExit
-                     ((stg_tmp_t *)*(uint16_t *)(iVar10 + 0x58),*(uint16_t *)(iVar10 + 0x5a),
-                      CONCAT11((char)((uint)index * 0x34 >> 8),
-                               AGNT_FIELD(&Agnts[index], state, 1)));
+  stateFrameSeg = *(int *)(framesOfs + (uint)(byte)agnt->state * 4 + 2);
+  stateFrameOfs = *(int *)(framesOfs + (uint)(byte)agnt->state * 4);
+  stash = ovr_stash_usesStExit(
+              (stg_tmp_t *)*(uint16_t *)(framesOfs + (uint)(byte)agnt->state * 4 + 0x58),
+              *(uint16_t *)(framesOfs + (uint)(byte)agnt->state * 4 + 0x5a),
+              CONCAT11((char)((uint)index * 0x34 >> 8),
+                       AGNT_FIELD(&Agnts[index], state, 1)));
   if ((char)agnt->state == '\r') {
-    psVar7 = psVar6;
-    y = (stg_tmp_t *)agnt->screenY;
+    offsetY = (int)stash;
+    y = agnt->screenY;
   }
   else if ((char)agnt->state == '\f') {
-    psVar7 = (stg_tmp_t *)(agnt->screenY - *(int *)(iVar3 + 0xd));
-    y = psVar7;
+    offsetY = agnt->screenY - *(int *)(frameOfs + 0xd);
+    y = offsetY;
   }
   else {
-    psVar7 = (stg_tmp_t *)(*(int *)(iVar3 + 0xd) >> 1);
-    y = (stg_tmp_t *)(agnt->screenY - (int)psVar7);
+    offsetY = *(int *)(frameOfs + 0xd) >> 1;
+    y = agnt->screenY - offsetY;
   }
-  gfx.seg = uVar8;
-  gfx.ofs = (uint16_t)(psVar6->cmap + 6);
-  ovr_blitGfxRect(gfx,agnt->screenX,(int16_t)y,rect,(uint8_t)type,true,CONCAT11((char)((uint)psVar7 >> 8),*(undefined1 *)((int)&agnt->flags32 + 1)),0,0,0,0,0);
-  pcVar1 = (char *)((int)&agnt->state + 1);
-  *pcVar1 = *pcVar1 + '\x01';
-  if (*(byte *)(iVar5 + 0x1b) <= *(byte *)((int)&agnt->state + 1)) {
-    if (*(char *)(iVar5 + 0x1a) == -1) {
+  gfx.seg = SEG_OF(Agnts);
+  gfx.ofs = (uint16_t)(stash->cmap + 6);
+  ovr_blitGfxRect(gfx,agnt->screenX,(int16_t)y,rect,(uint8_t)type,true,
+                  CONCAT11((char)((uint)offsetY >> 8),
+                           *(undefined1 *)((int)&agnt->flags32 + 1)),0,0,0,0,0);
+  animPtr = (char *)((int)&agnt->state + 1);
+  *animPtr = *animPtr + '\x01';
+  if (*(byte *)(stateFrameOfs + 0x1b) <= *(byte *)((int)&agnt->state + 1)) {
+    if (*(char *)(stateFrameOfs + 0x1a) == -1) {
       *(undefined1 *)&agnt->state = 0;
     }
     else {
-      *(undefined1 *)((int)&agnt->state + 1) = *(undefined1 *)(iVar5 + 0x1a);
+      *(undefined1 *)((int)&agnt->state + 1) = *(undefined1 *)(stateFrameOfs + 0x1a);
     }
   }
   agnt_compute13(agnt,SEG_OF(Agnts));
