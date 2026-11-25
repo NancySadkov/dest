@@ -43,6 +43,35 @@ void st_fix_far_tables(void)
       (uint16_t)((unsigned long)(char far *)GUnitDescriptions >> 16);
   fixFarTable(GUnitDescriptions, 28);
   fixFarTable(CPKeys, 25);
+  /* The initialiser holds the original image's offsets; address the rebuild's
+     own copies of those strings instead.  Verified by running the post-init_cfg
+     checkpoint. */
+  CPKeys[0].ofs = (uint16_t)&s_choose_2410_05f9;
+  CPKeys[1].ofs = (uint16_t)&s_movement_2410_0600;
+  CPKeys[2].ofs = (uint16_t)&s_button_2410_0609;
+  CPKeys[3].ofs = (uint16_t)&s_gold_2410_0610;
+  CPKeys[4].ofs = (uint16_t)&s_plan_2410_0615;
+  CPKeys[5].ofs = (uint16_t)&s_hit_2410_061a;
+  CPKeys[6].ofs = (uint16_t)&s_squares_2410_061e;
+  CPKeys[7].ofs = (uint16_t)&s_swamps_2410_0626;
+  CPKeys[8].ofs = (uint16_t)&s_would_2410_062d;
+  CPKeys[9].ofs = (uint16_t)&s_repair_2410_0633;
+  CPKeys[10].ofs = (uint16_t)&s_controlling_2410_063a;
+  CPKeys[11].ofs = (uint16_t)&s_setting_2410_0646;
+  CPKeys[12].ofs = (uint16_t)&s_sage_2410_064e;
+  CPKeys[13].ofs = (uint16_t)&s_when_2410_0653;
+  CPKeys[14].ofs = (uint16_t)&s_home_2410_0658;
+  CPKeys[15].ofs = (uint16_t)&s_needed_2410_065d;
+  CPKeys[16].ofs = (uint16_t)&s_screen_2410_0664;
+  CPKeys[17].ofs = (uint16_t)&s_spellcasting_2410_066b;
+  CPKeys[18].ofs = (uint16_t)&s_opponents_2410_0678;
+  CPKeys[19].ofs = (uint16_t)&s_expense_2410_0682;
+  CPKeys[20].ofs = (uint16_t)&s_after_2410_068a;
+  CPKeys[21].ofs = (uint16_t)&s_dots_2410_0690;
+  CPKeys[22].ofs = (uint16_t)&s_longbow_2410_0695;
+  CPKeys[23].ofs = (uint16_t)&s_spells_2410_069d;
+  CPKeys[24].ofs = (uint16_t)&s_constructing_2410_06a4;
+
   fixFarTable(worldMenuLabels, 13);
   fixFarTable(GStatsLabels, 6);
   fixFarTable(GPlayerTitles, 32);

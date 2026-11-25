@@ -3765,3 +3765,34 @@ words using the original link-time segment 0x2410: 0
 
   build 64/64 clean; LINK ERRORS 0; grep_checks 50,869
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### CPKeys offsets repaired; the remaining checkpoint differences are CRT bookkeeping
+
+`CPKeys` (25 entries) was fully resolvable from `st_globals.h` (every offset has an
+`extern char s_..._2410_XXXX[]`), so `st_fix_far_tables()` now assigns all 25 `.ofs`
+from the rebuild's own symbols (verified: `_CPKEYS` at `73F5:0F23` and the first target
+`_S_CHOOSE_2410_05F9` at `0x0FD0`).  The gate count does not change, because the
+comparator already mapped the original offsets; the repair is about what the *program*
+dereferences, not about the number.
+
+The post-init_cfg checkpoint now reports 1,545 identical / 11 different, and every one
+of the 11 is CRT or start-up bookkeeping rather than game data:
+
+```
+0000 _DATA                 header word
+005b GSTARTX_SavedVectors  original saved the interrupt vectors, ours run under the
+                           stock C0 startup and leave them zero
+0081 _StartTime            BIOS tick count at start - depends on when the run happened
+008b _brklvl               heap break - depends on image size
+861a _exitbuf / _exitfopen / _exitopen / _streams   CRT file bookkeeping
+88ac _video                video state left by the CRT
+88f6 brk_normalize_xsize / 88fe __setargv_SavedReturn   start-up bookkeeping
+```
+
+None of these is game state; the game tables that used to dominate the difference list
+(`LevelRangeLabels`, `PlaceErrPtrs`, `CPKeys`, `GLevelbandLabels`, the string tables)
+now compare clean.
+
+  build 64/64 clean; LINK ERRORS 0; grep_checks 50,869
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
+  compare_runtime 1,545/12 (main entry), 1,545/11 (post-init_cfg)
