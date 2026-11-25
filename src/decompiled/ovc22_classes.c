@@ -3914,52 +3914,42 @@ void __cdecl16far upd_usesAlignUp4(void)
 bool __cdecl16far ovc22_textArena2(uint x,int y)
 
 {
-  bool bVar1;
-  short (*paasVar2) [148] [60];
-  unit_t *puVar3;
-  uint uVar4;
-  
-  bVar1 = ovc22_textArena(x,y);
-  if (bVar1) {
-    paasVar2 = (short (*) [148] [60])GUnitGrid;
-    puVar3 = (unit_t *)GUnits;
-    if (((puVar3 + (*paasVar2)[x][y])->bldType == 0) ||
-       ((*(uint *)((uint)(puVar3 + (*paasVar2)[x][y])->bldType * 0x27 + 0x121) & 0x1000) != 0)) {
-      if ((int)x < 4) {
-        bVar1 = false;
-      }
-      else if (*(byte *)((uint)(puVar3 + paasVar2[-1][x + 0x93][y])->bldType * 0x27 + 0x11b) < 2) {
-        if (*(byte *)((uint)(puVar3 + paasVar2[-1][x + 0x92][y])->bldType * 0x27 + 0x11b) < 3) {
-          if (*(byte *)((uint)(puVar3 + paasVar2[-1][x + 0x91][y])->bldType * 0x27 + 0x11b) < 4) {
-            for (uVar4 = 0; uVar4 < GRecordCount; uVar4 = uVar4 + 1) {
-              if (((GRecords[uVar4].y == y) && (GRecords[uVar4].x <= x)) &&
-                 (x < GRecords[uVar4].x +
-                      (uint)BuildingTypes[GRecords[uVar4].reserved08].size)) {
-                return false;
-              }
-            }
-            bVar1 = true;
-          }
-          else {
-            bVar1 = false;
-          }
-        }
-        else {
-          bVar1 = false;
-        }
-      }
-      else {
-        bVar1 = false;
-      }
-    }
-    else {
-      bVar1 = false;
+  /* Re-derived: requires ovc22_textArena(x, y); the unit on GUnitGrid[x][y] must have a non-zero
+     bldType and no 0x1000 bit in BuildingTypes[..].word_0x121; x must be at least 4 with the three
+     cells to its left holding byte_0x11b below 2, 3 and 4; and no construction record may cover
+     the cell.  The export's `[-1]` row trick becomes GUnitGrid[x-1] etc. */
+  short (*grid) [148] [60];
+  unit_t *units;
+  uint recIdx;
+
+  if (ovc22_textArena(x,y) == false) {
+    return false;
+  }
+  grid = (short (*) [148] [60])GUnitGrid;
+  units = (unit_t *)GUnits;
+  if ((units[(*grid)[x][y]].bldType != 0) &&
+     ((*(uint *)((uint)units[(*grid)[x][y]].bldType * 0x27 + 0x121) & 0x1000) == 0)) {
+    return false;
+  }
+  if ((int)x < 4) {
+    return false;
+  }
+  if (*(byte *)((uint)units[(*grid)[x + -1][y]].bldType * 0x27 + 0x11b) >= 2) {
+    return false;
+  }
+  if (*(byte *)((uint)units[(*grid)[x + -2][y]].bldType * 0x27 + 0x11b) >= 3) {
+    return false;
+  }
+  if (*(byte *)((uint)units[(*grid)[x + -3][y]].bldType * 0x27 + 0x11b) >= 4) {
+    return false;
+  }
+  for (recIdx = 0; recIdx < (int)(uint)GRecordCount; recIdx = recIdx + 1) {
+    if (((GRecords[recIdx].y == y) && (GRecords[recIdx].x <= x)) &&
+       (x < GRecords[recIdx].x + (uint)BuildingTypes[GRecords[recIdx].reserved08].size)) {
+      return false;
     }
   }
-  else {
-    bVar1 = false;
-  }
-  return bVar1;
+  return true;
 }
 
 
