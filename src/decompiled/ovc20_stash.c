@@ -60,27 +60,31 @@ void __cdecl16far stshUniqueColorsRemap(stg_tmp_t *gfx,uint16_t arg2)
 void __cdecl16far ovc20_textLenLoc(void)
 
 {
-  uint16_t *puVar1;
-  uint16_t uStack_6;
-  uint16_t uStack_4;
-  
-  uStack_4 = StshCtPtr2.seg;
-  uStack_6 = StshCtPtr2.ofs;
-  while (uStack_6 != 0 || uStack_4 != 0) {
+  /* Re-derived: walks the two stash chains, printing each node's statistics, and waits for a
+     key after each pass.  `StshCtPtr2` links through +0x9 (next offset) / +0xb (next segment);
+     `Stsh_2410_47f6` through +0xd / +0xf.  The printf calls carry format strings only - their
+     variadic arguments live on the stack and the exporter did not recover them. */
+  uint16_t *nextSegPtr;
+  uint16_t cursorOfs;
+  uint16_t cursorSeg;
+
+  cursorSeg = StshCtPtr2.seg;
+  cursorOfs = StshCtPtr2.ofs;
+  while (cursorOfs != 0 || cursorSeg != 0) {
     printf("uc%lx %d len %ld loc %ld \r");
-    puVar1 = (uint16_t *)(uStack_6 + 0xb);
-    uStack_6 = *(uint16_t *)(uStack_6 + 9);
-    uStack_4 = *puVar1;
+    nextSegPtr = (uint16_t *)(cursorOfs + 0xb);
+    cursorOfs = *(uint16_t *)(cursorOfs + 9);
+    cursorSeg = *nextSegPtr;
   }
   printf("N UP = %d \r");
   ovr_gameProcessKey();
-  uStack_4 = Stsh_2410_47f6.seg;
-  uStack_6 = Stsh_2410_47f6.ofs;
-  while (uStack_6 != 0 || uStack_4 != 0) {
+  cursorSeg = Stsh_2410_47f6.seg;
+  cursorOfs = Stsh_2410_47f6.ofs;
+  while (cursorOfs != 0 || cursorSeg != 0) {
     printf("dc%lx %d ln %ld lc %ld @%lx \r");
-    puVar1 = (uint16_t *)(uStack_6 + 0xf);
-    uStack_6 = *(uint16_t *)(uStack_6 + 0xd);
-    uStack_4 = *puVar1;
+    nextSegPtr = (uint16_t *)(cursorOfs + 0xf);
+    cursorOfs = *(uint16_t *)(cursorOfs + 0xd);
+    cursorSeg = *nextSegPtr;
   }
   printf("N DOWN = %d \r");
   ovr_gameProcessKey();

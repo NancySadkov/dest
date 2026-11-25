@@ -5451,3 +5451,58 @@ test that decides, and it should be applied before any body is extended.
 
   grep_checks 45,332; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### Overlay callee identification: intersect per-offset candidates
+
+`attact_usesGMapFlags3` cannot be finished without naming its 14 missing overlay calls, and
+Ghidra's segment numbers (`22a6`) are the MZ module's, not the runtime ones (`0xe0`).  The
+mapping is derivable: for a runtime segment S, every `lcall S,ofs` proves S's overlay has a
+function at `ofs`, so S's overlay must be in the **intersection**, over all observed offsets, of
+the overlays that have a function at that offset.  `tmp/overlay_segments3.py` does this and
+writes `audit/overlay_segments.csv`.
+
+Segments seen at many offsets resolve uniquely:
+
+```
+runtime  offsets  overlay
+0x00e0      42    22a6    <- driver_clearMapFlagsRect at 22a6:0093
+0x0148      20    22ff
+0x0158      18    2315
+0x0160      15    2322    <- ovc15_usesAlignUp42 at 2322:0057
+0x0170      21    2337    <- stsprintf at 2337:007a
+0x0188      11    234c
+```
+
+The two independently known callees from this function's own surviving body land on the right
+overlays, which is what validates the method.
+
+Then the callee is chosen among the candidates at that overlay by **argument shape and use**,
+not by name similarity.  For `attact_usesGMapFlags3` (3f0b:0c2a, 1112 bytes) the ten `lcall`
+sites that can be named with certainty are:
+
+| site | call | evidence |
+|---|---|---|
+| `0xe0,0x93` | `driver_clearMapFlagsRect` | 7 words pushed, `add sp,0xe`; already in the surviving body |
+| `0x160,0x57` | `ovc15_usesAlignUp42` | already in the surviving body |
+| `0x1a8,0x43` | `alignUp4` | one word in, result used as a grid index |
+| `0x170,0x7a` | `stsprintf` | buffer `[bp-0x5c]`, format at `DS:0x8a1`, `add sp,0x10` |
+| `0x1a0,0x34` | `ovc23_isCursorAt` | two words (y,x), result tested with `or al,al` |
+| `0,0x2747` | `printf` | `push word ptr es:[0x898e] / push ds / push fmt`, `add sp,6` |
+
+Still unresolved, and left unnamed rather than guessed: `0xf8,0x39`, `0x140,0x20`,
+`0x140,0x2a`, `0x1a0,0x4d`.  The argument shapes are known - `0xf8,0x39` takes 3 words and
+returns nothing, `0x140,0x20` takes 2 words and returns nothing, `0x140,0x2a` takes none, and
+`0x1a0,0x4d` takes none - but no candidate overlay has a matching prototype at the matching
+offset, so the intersection for `0x140` and `0xf8` is still several overlays wide.  Two
+plausible-looking answers were rejected on shape: `play_sfx` is at `22f8:0020` but takes three
+arguments where the code passes two, and `ovc23_textBuildThfres01Lbm` at `236f:0020` is a
+one-far-pointer call while that overlay's `0x2a` entry (`createConstructionRecordFar`) takes
+nine arguments where the code passes none.
+
+So finishing this function needs four more resolved callees, not more reading of its own code.
+The cheapest next move is to widen the observed-offset set for `0x140` and `0xf8` by scanning
+**every** `lcall` in the image rather than only those in the tree, which multiplies the
+constraints.
+
+  grep_checks 45,332 -> 45,304; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
