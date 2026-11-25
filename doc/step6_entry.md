@@ -7489,3 +7489,62 @@ one site at a time.
 
   grep_checks 40,507; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### uiMainMenuLoop's `pmenuIdx` is uiMenu's return - but uiMenu is mis-recovered, so the fix must wait
+
+The instructions after the menu call settle what feeds `pmenuIdx`:
+
+```
+00D2  push 8                          ; arg4
+00D4  push ss                         ; arg3 = _SS
+00D5  lea  ax,[bp-0x32]               ; &menu (the 32-byte table)
+00D8  push ax                        ; arg2
+00D9  push ds / push 0x2863           ; arg1, a FAR pointer
+00DD  push cs
+00DE  call uiMenu
+00E1  add  sp,0xa                     ; 10 bytes = 2 + 2 + 2 + 4
+00E4  mov  byte ptr [bp-0x11], al     ; pmenuIdx = the RETURN value
+00F3  mov  al,[bp-0x11] / mov bx,ax / cmp bx,8 / jbe ...
+```
+
+So `pmenuIdx` is `(byte)uiMenu(...)` - the AL return - and `&menu` is only ever the items pointer.
+The tree has `pmenuIdx = (byte)pmenu` with `pmenu = (uint16_t)&menu`, i.e. it reads the *address* of
+the buffer, and it discards the call's return because `uiMenu` is declared `void`.
+
+Two further facts from the same listing:
+
+* **the declared signature has the argument widths the wrong way round.**  `add sp,0xa` accounts for
+  arg4 (2) + arg3 (2) + arg2 (2) + arg1 (4), i.e. **arg1 is far and arg2 is near**; the declaration is
+  `uiMenu(char *title, far_t items, int nitems, uint16_t arg4)` - near title, far items - which is the
+  reverse.  That is why the export had to split a far_t into `items.seg/_ofs` around a near pointer.
+* **`uiMenu` itself is mis-recovered.**  Its whole body is a thin wrapper:
+
+  ```c
+  void __cdecl16far uiMenu(char *title,far_t items,int nitems,uint16_t arg4)
+  {
+    uint16_t unaff_BP;
+    uint16_t in_stack_0000000c;
+    far_t items_00;
+    items_00.seg = in_stack_0000000c;
+    items_00.ofs = nitems;
+    uiMenuSub((char *)MK_FP(items.seg, items.ofs),items_00,1,unaff_BP);
+    return;
+  }
+  ```
+
+  The stack slots confirm the conflation: with `title` at bp+6, `items` at bp+8..0xb, and `nitems` at
+  bp+0xc, `in_stack_0000000c` *is* bp+0xc - the same slot as `nitems`.  So the export names one
+  parameter twice and uses it as both the segment and the offset of `items_00`, which cannot be what
+  the instruction stream does.
+
+Fixing `pmenuIdx` therefore means changing `uiMenu`'s return type **and** recovering `uiMenu`'s own
+body and signature first - three coupled changes, not one line.  Doing the `pmenuIdx` edit alone would
+mean reading a return value from a function whose body we know is wrong.
+
+The other item named in this step, `notifyValue = SEG_OF(Agnts)` inside the loop, has no corresponding
+instruction at all: the loop tail is `mov al,byte ptr es:[0x8ffe]` (AgntCount) then the counter compare.
+So that assignment is an artefact - but it feeds two variadic call arguments whose push sequences are
+already recorded as unresolved, so it cannot be replaced independently either.
+
+  grep_checks 40,500 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
