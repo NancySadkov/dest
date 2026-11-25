@@ -5406,3 +5406,48 @@ becomes less complete, and the sessions' reductions should not be read as pure p
 
   grep_checks 45,332; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### CORRECTION: most of the "truncated bodies" were false positives; the real test is call counts
+
+The 19-function list from `tmp/under_recovered.py` was read as bodies that cover only a fragment of
+their function.  Comparing, for each one, the number of **call sites inside the measured range**
+with the number of **call-like names in the body** shows that most were false positives, because
+bodies written by hand are much more compact than Ghidra's output - 4-6 instructions per line
+against ~1 - so a low lines/byte ratio alone proves nothing.
+
+```
+lines bytes sites calls  function                        verdict
+18    1112    16     5   attact_usesGMapFlags3           TRUNCATED  (11 missing calls)
+38     579     8     9   draw_menuCursor                 complete
+71    1029    20    21   constr_usesScreenOriginY        complete
+146   2046    56    68   ovc23_placeBuilding             complete  <- earlier rewrite IS full
+333   4306    65    66   constr_usesBlitGfxRect2         complete
+96    1086     9    13   attact_usesAlignUp43            complete  <- earlier rewrite IS full
+26     340     1     2   ovc23_tickRecordsAt             complete
+39     562     0    16   init_usesGMapFlags3             SUSPECT: 0 sites vs 16 calls
+45     585     0    16   init_rebuildMapFlags            SUSPECT: 0 sites vs 16 calls
+24     266     0     4   video_findAgentAt               SUSPECT: 0 sites vs 4 calls
+82     946     0     1   agnt_remapGridRefs              SUSPECT
+```
+
+So the earlier alarm was mostly wrong, and two specific things follow:
+
+* **`ovc23_placeBuilding` (56 sites / 68 calls) and `attact_usesAlignUp43` (9/13) are complete.**
+  The previous entry's note that those rewrites "may cover only part of their functions" is
+  withdrawn - the call counts match, so my compact rewrites do cover the whole functions.
+* **`attact_usesGMapFlags3` really is truncated.**  Its 1112-byte range has 16 call sites; the
+  18-line body references 5 (`driver_clearMapFlagsRect`, `ovc15_usesAlignUp42`,
+  `draw_textGoldProvidesHousing` and the two tail calls).  Verified by instruction: the body
+  covers the prologue (`lcall 0xe0,0x93`), the entity loop and the last two `lcall`s, while the
+  region `0x0CFA..0x1042` - 14 call sites: `0x160,0x57`, `0x1a8,0x43` twice, `0x170,0x7a`,
+  `0xf8,0x39`, `0x1a0,0x34` twice, `0x140,0x20` five times, `0x140,0x2a` - is absent.
+* **A new class: bodies with many calls but a range with none.**  `init_usesGMapFlags3` and
+  `init_rebuildMapFlags` each reference 16 call-like names while their measured ranges contain no
+  call at all.  That is not truncation; it points at either a mis-attributed body or a wrong
+  extent, and each needs the same content check used for `ovc15_textError`.
+
+So `tmp/under_recovered.py` is useful only as a triage list; the **call-count comparison** is the
+test that decides, and it should be applied before any body is extended.
+
+  grep_checks 45,332; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
