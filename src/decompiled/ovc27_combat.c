@@ -1542,43 +1542,50 @@ int __cdecl16far ovc27_usesAgntCount(agnt_t *agnt,byte recIndex,byte maxLevel,in
 int __cdecl16far ovc27_rollToHitEntity(uint32_t agnt,byte column)
 
 {
-  uint32_t uVar1;
-  char cVar2;
-  uint16_t uVar3;
-  int iVar4;
-  uint16_t uVar5;
-  byte bStack_9;
-  byte bStack_8;
-  byte bStack_7;
-  undefined1 *uStack_6;   /* hand fix: dereferenced as *uStack_6, compared with 0xff */
-  
-  uVar5 = (uint16_t)(agnt >> 0x10);
-  iVar4 = (int)agnt;
-  bStack_7 = *(byte *)((int)*(uint32_t *)(iVar4 + 0x17) + 0xf);
-  bStack_8 = *(byte *)((int)*(uint32_t *)(iVar4 + 0x1d) + 0x46);
-  if ((bStack_8 == 0xff) && (bStack_8 = 0, *(byte *)((int)*(uint32_t *)(iVar4 + 0x1d) + 0x53) < 4)
-     ) {
-    bStack_7 = bStack_7 >> 1;
+  /* Re-derived.  `ability` is read through the agent record; the ramp index comes from
+     the leader sheet (0xff normalises to 0, and a negative ?sheet value < 4 halves the
+     ability).  RampTables[rampIdx] is a far table row of 6-byte strides, walked until
+     its first byte is 0xff or not less than ability; the column+1 byte of that row is
+     the target number.  Column 3 subtracts the ability modifier.  The return arithmetic
+     is left exactly as the export has it. */
+  uint32_t sheetRef;
+  char abilityMod;
+  uint16_t roll;
+  int agntOfs;
+  byte ability;
+  byte rampIdx;
+  byte toHit;
+  byte *rampRow;
+  int result;
+
+  agntOfs = (int)agnt;
+  ability = *(byte *)((int)*(uint32_t *)(agntOfs + 0x17) + 0xf);
+  rampIdx = *(byte *)((int)*(uint32_t *)(agntOfs + 0x1d) + 0x46);
+  if ((rampIdx == 0xff) &&
+     (rampIdx = 0, *(byte *)((int)*(uint32_t *)(agntOfs + 0x1d) + 0x53) < 4)) {
+    ability = ability >> 1;
   }
-  uStack_6 = (byte *)CONCAT22(*(uint16_t *)((int)&RampTables[0].seg + (uint)bStack_8 * 4),
-                              (byte *)((far_t far *)RampTables + bStack_8)->ofs);
-  while ((*uStack_6 != 0xff && (*uStack_6 < bStack_7))) {
-    uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 6);
+  rampRow = (byte *)CONCAT22(*(uint16_t *)((int)&RampTables[0].seg + (uint)rampIdx * 4),
+                             (byte *)((far_t far *)RampTables + rampIdx)->ofs);
+  while ((*rampRow != 0xff && (*rampRow < ability))) {
+    rampRow = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(rampRow) + 2)),
+                               (byte *)rampRow + 6);
   }
-  bStack_9 = ((byte *)uStack_6)[column + 1];
-  if ((column == 3) && (*(char *)((int)*(uint32_t *)(iVar4 + 0x17) + 0x1a) != -1)) {
-    uVar1 = *(uint32_t *)((uint)*(byte *)((int)*(uint32_t *)(iVar4 + 0x17) + 0x1a) << 2);
-    cVar2 = ovr_manage_abilityModifier(*(byte *)((int)uVar1 + 0x2b));
-    bStack_9 = bStack_9 - cVar2;
+  toHit = ((byte *)rampRow)[column + 1];
+  if ((column == 3) && (*(char *)((int)*(uint32_t *)(agntOfs + 0x17) + 0x1a) != -1)) {
+    sheetRef = *(uint32_t *)((uint)*(byte *)((int)*(uint32_t *)(agntOfs + 0x17) + 0x1a)
+                             << 2);
+    abilityMod = ovr_manage_abilityModifier(*(byte *)((int)sheetRef + 0x2b));
+    toHit = toHit - abilityMod;
   }
-  uVar3 = ovr_randBelow(0x14,0);
-  if ((int)((uVar3 & 0xff) + 1) < (int)(char)bStack_9) {
-    iVar4 = (uint)(byte)((char)bStack_9 >> 7) << 8;
+  roll = ovr_randBelow(0x14,0);
+  if ((int)((roll & 0xff) + 1) < (int)(char)toHit) {
+    result = (uint)(byte)((char)toHit >> 7) << 8;
   }
   else {
-    iVar4 = CONCAT11((char)bStack_9 >> 7,1);
+    result = CONCAT11((char)toHit >> 7,1);
   }
-  return iVar4;
+  return result;
 }
 
 
@@ -1586,46 +1593,51 @@ int __cdecl16far ovc27_rollToHitEntity(uint32_t agnt,byte column)
 int __cdecl16far ovc27_rollToHitAgent(uint32_t agnt,byte column)
 
 {
-  uint32_t uVar1;
-  char cVar2;
-  uint16_t uVar3;
-  int iVar4;
-  uint16_t uVar5;
-  byte bStack_9;
-  byte bStack_8;
-  byte bStack_7;
-  undefined1 *uStack_6;   /* hand fix: same idiom */
-  
-  uVar5 = (uint16_t)(agnt >> 0x10);
-  iVar4 = (int)agnt;
-  bStack_7 = *(byte *)(iVar4 + 0xf);
-  bStack_8 = *(byte *)((int)&worldMenuLabels[9].ofs + 1 + (uint)*(byte *)(iVar4 + 0xd) * 0x95);
-  if ((bStack_8 == 0xff) &&
-     (bStack_8 = 0,
-     *(byte *)((int)&worldMenuLabels[0xc].seg + (uint)*(byte *)(iVar4 + 0xd) * 0x95) < 4)) {
-    bStack_7 = bStack_7 >> 1;
+  /* Re-derived; same shape as ovc27_rollToHitEntity but the ability and ramp index are
+     read straight out of the agent record, and column 3 first stores 0x12 into the
+     sheet's +0x2b byte before taking the ability modifier.  The return arithmetic is
+     left exactly as the export has it. */
+  uint32_t sheetRef;
+  char abilityMod;
+  uint16_t roll;
+  int agntOfs;
+  byte ability;
+  byte rampIdx;
+  byte toHit;
+  byte *rampRow;
+  int result;
+
+  agntOfs = (int)agnt;
+  ability = *(byte *)(agntOfs + 0xf);
+  rampIdx = *(byte *)((int)&worldMenuLabels[9].ofs + 1 +
+                      (uint)*(byte *)(agntOfs + 0xd) * 0x95);
+  if ((rampIdx == 0xff) &&
+     (rampIdx = 0,
+     *(byte *)((int)&worldMenuLabels[0xc].seg + (uint)*(byte *)(agntOfs + 0xd) * 0x95) < 4)) {
+    ability = ability >> 1;
   }
-  uStack_6 = (byte *)CONCAT22(*(uint16_t *)((int)&RampTables[0].seg + (uint)bStack_8 * 4),
-                              (byte *)((far_t far *)RampTables + bStack_8)->ofs);
-  while ((*uStack_6 != 0xff && (*uStack_6 < bStack_7))) {
-    uStack_6 = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(byte *)uStack_6 + 6);
+  rampRow = (byte *)CONCAT22(*(uint16_t *)((int)&RampTables[0].seg + (uint)rampIdx * 4),
+                             (byte *)((far_t far *)RampTables + rampIdx)->ofs);
+  while ((*rampRow != 0xff && (*rampRow < ability))) {
+    rampRow = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(rampRow) + 2)),
+                               (byte *)rampRow + 6);
   }
-  bStack_9 = ((byte *)uStack_6)[column + 1];
-  if ((column == 3) && (*(char *)(iVar4 + 0x1a) != -1)) {
-    uVar1 = *(uint32_t *)((uint)*(byte *)(iVar4 + 0x1a) << 2);
-    *(undefined1 *)((int)uVar1 + 0x2b) = 0x12;
-    uVar1 = *(uint32_t *)((uint)*(byte *)(iVar4 + 0x1a) << 2);
-    cVar2 = ovr_manage_abilityModifier(*(byte *)((int)uVar1 + 0x2b));
-    bStack_9 = bStack_9 - cVar2;
+  toHit = ((byte *)rampRow)[column + 1];
+  if ((column == 3) && (*(char *)(agntOfs + 0x1a) != -1)) {
+    sheetRef = *(uint32_t *)((uint)*(byte *)(agntOfs + 0x1a) << 2);
+    *(undefined1 *)((int)sheetRef + 0x2b) = 0x12;
+    sheetRef = *(uint32_t *)((uint)*(byte *)(agntOfs + 0x1a) << 2);
+    abilityMod = ovr_manage_abilityModifier(*(byte *)((int)sheetRef + 0x2b));
+    toHit = toHit - abilityMod;
   }
-  uVar3 = ovr_randBelow(0x14,0);
-  if ((int)((uVar3 & 0xff) + 1) < (int)(char)bStack_9) {
-    iVar4 = (uint)(byte)((char)bStack_9 >> 7) << 8;
+  roll = ovr_randBelow(0x14,0);
+  if ((int)((roll & 0xff) + 1) < (int)(char)toHit) {
+    result = (uint)(byte)((char)toHit >> 7) << 8;
   }
   else {
-    iVar4 = CONCAT11((char)bStack_9 >> 7,1);
+    result = CONCAT11((char)toHit >> 7,1);
   }
-  return iVar4;
+  return result;
 }
 
 

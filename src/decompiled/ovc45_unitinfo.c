@@ -466,50 +466,53 @@ int __cdecl16far ovc45_compute3(byte partyIndex)
 void __cdecl16far ovc45_usesGPopulationLo(byte partyIndex,uint goldLo,int goldHi)
 
 {
-  uint *puVar1;
-  int *piVar2;
-  uint uVar3;
-  uint uVar4;
-  int iVar5;
-  int iVar6;
-  int iVar7;
-  uint16_t uVar8;
-  bool bVar9;
-  
-  uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-  iVar5 = (int)*(uint32_t *)((uint)partyIndex << 2);
-  iVar6 = *(int *)(iVar5 + 0x58);
-  if ((iVar6 < goldHi) || ((iVar6 == goldHi && (*(uint *)(iVar5 + 0x56) < goldLo)))) {
-    uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-    iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
-    uVar4 = *(uint *)(iVar6 + 0x56);
-    uVar3 = goldLo - uVar4;
-    iVar6 = (goldHi - *(int *)(iVar6 + 0x58)) - (uint)(goldLo < uVar4);
-    iVar5 = _DS;
-    uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-    iVar7 = (int)*(uint32_t *)((uint)partyIndex << 2);
-    *(uint16_t *)(iVar7 + 0x58) = 0;
-    *(uint16_t *)(iVar7 + 0x56) = 0;
-    uVar4 = ovc45_usesLDIV_at_(partyIndex,0,0);
-    if ((iVar6 < iVar5) || ((iVar6 == iVar5 && (uVar3 < uVar4)))) {
-      bVar9 = GPopulationLo < uVar3;
-      GPopulationLo = GPopulationLo - uVar3;
-      GPopulationHi = (GPopulationHi - iVar6) - (uint)bVar9;
+  /* Re-derived.  The party sheet keeps a 32-bit gold value at +0x56 (low) and +0x58
+     (high).  When the sheet cannot cover goldLo/goldHi the sheet is zeroed and the
+     remainder is taken from the population counters instead, split between the
+     ovc45_usesLDIV_at_ result and the shortfall by comparing both halves.  The dead
+     segment half (uVar8) is gone; the export's iVar5 carried two roles (party offset,
+     then _DS) and is split into partyOfs / dsValue. */
+  uint *goldLoPtr;
+  int *goldHiPtr;
+  uint oldLo;
+  uint costLo;
+  int costHi;
+  int partyOfs;
+  int dsValue;
+  uint availLo;
+  int sheetHi;
+  bool borrow;
+
+  partyOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+  sheetHi = *(int *)(partyOfs + 0x58);
+  if ((sheetHi < goldHi) || ((sheetHi == goldHi && (*(uint *)(partyOfs + 0x56) < goldLo)))) {
+    partyOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+    oldLo = *(uint *)(partyOfs + 0x56);
+    costLo = goldLo - oldLo;
+    costHi = (goldHi - *(int *)(partyOfs + 0x58)) - (uint)(goldLo < oldLo);
+    dsValue = _DS;
+    partyOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+    *(uint16_t *)(partyOfs + 0x58) = 0;
+    *(uint16_t *)(partyOfs + 0x56) = 0;
+    availLo = ovc45_usesLDIV_at_(partyIndex,0,0);
+    if ((costHi < dsValue) || ((costHi == dsValue && (costLo < availLo)))) {
+      borrow = GPopulationLo < costLo;
+      GPopulationLo = GPopulationLo - costLo;
+      GPopulationHi = (GPopulationHi - costHi) - (uint)borrow;
     }
     else {
-      bVar9 = GPopulationLo < uVar4;
-      GPopulationLo = GPopulationLo - uVar4;
-      GPopulationHi = (GPopulationHi - iVar5) - (uint)bVar9;
+      borrow = GPopulationLo < availLo;
+      GPopulationLo = GPopulationLo - availLo;
+      GPopulationHi = (GPopulationHi - dsValue) - (uint)borrow;
     }
   }
   else {
-    uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-    iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
-    puVar1 = (uint *)(iVar6 + 0x56);
-    uVar3 = *puVar1;
-    *puVar1 = *puVar1 - goldLo;
-    piVar2 = (int *)(iVar6 + 0x58);
-    *piVar2 = (*piVar2 - goldHi) - (uint)(uVar3 < goldLo);
+    partyOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+    goldLoPtr = (uint *)(partyOfs + 0x56);
+    oldLo = *goldLoPtr;
+    *goldLoPtr = *goldLoPtr - goldLo;
+    goldHiPtr = (int *)(partyOfs + 0x58);
+    *goldHiPtr = (*goldHiPtr - goldHi) - (uint)(oldLo < goldLo);
   }
   return;
 }
