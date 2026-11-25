@@ -330,7 +330,6 @@ uint __cdecl16far ovc49_compute1(int x)
 void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
 
 {
-  uint32_t uVar1;
   char ok;
   bool bVar3;
   uint16_t roll;
@@ -498,8 +497,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
                               (ok = ovc49_usesFrameIndex
                                                  (agnt,(byte *)CONCAT22(_SS,&agntIndex)),
                               ok != '\0')) &&
-                             (uVar1 = *(uint32_t far *)&Agnts[agntIndex - 1].gdata,
-                             (*(uint *)((int)uVar1 + 0x3e) & 0x80) != 0)))) {
+                             ((Agnts[agntIndex - 1].gdata->flags2 & 0x80) != 0)))) {
                       roll = ovr_audio_panFromX((agnt_t far *)&Agnts[param].x,SEG_OF(Agnts));
                       ovr_play_sfxU(0x1e,0,roll,0,0);
                       agnt_00->target = agntIndex + 0xff;
@@ -519,8 +517,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
                                                   agntSeg)),mode,uVar11,SEG_OF(Agnts)),
                                 (char)uVar7 != '\0')) &&
                                ((Agnts[agntIndex - 1].flags & 0x800) == 0)) &&
-                              (uVar1 = *(uint32_t far *)&Agnts[agntIndex - 1].gdata,
-                              (*(uint *)((int)uVar1 + 0x3c) & 4) != 0)))))) {
+                              ((Agnts[agntIndex - 1].gdata->flags & 4) != 0)))))) {
                       roll = ovr_audio_panFromX((agnt_t far *)&Agnts[param].x,SEG_OF(Agnts));
                       ovr_play_sfxU(0x1f,0,roll,0,0);
                       agnt_00->target = agntIndex + 0xff;
@@ -3390,12 +3387,12 @@ L_OVC49_8699_1e09_3CF7:
       cVar40 = '\x01';
       AGNT_FIELD(&Agnts[uStackY_22], state, 0) = 0;
       if ((((Agnts[uStackY_22].flags & 0x800) == 0) &&
-          ((*(char *)*(uint32_t far *)&Agnts[uStackY_22].gdata == '\0' || (cVar6 != '\0')))) &&
-         ((*(char *)*(uint32_t far *)&Agnts[uStackY_22].gdata != '\0' || (cVar8 != '\0')))) {
+          ((Agnts[uStackY_22].gdata->ai == '\0' || (cVar6 != '\0')))) &&
+         ((Agnts[uStackY_22].gdata->ai != '\0' || (cVar8 != '\0')))) {
         puVar3 = (uint *)&Agnts[uStackY_22].flags;
         *puVar3 = *puVar3 & 0xf51b;
         Agnts[uStackY_22].faction =
-             *(undefined1 *)*(uint32_t far *)&Agnts[uStackY_22].gdata;
+             Agnts[uStackY_22].gdata->ai;
         ovr_ovc41_advanceAnimFrame((agnt_t far *)&Agnts[uStackY_22].x,0);
       }
       else {
@@ -4151,12 +4148,12 @@ L_OVC49_8699_1e09_3CF7:
       cStack_6 = '\x01';
       AGNT_FIELD(&Agnts[agentIndex], state, 0) = 0;
       if ((((Agnts[agentIndex].flags & 0x800) == 0) &&
-          ((*(char *)*(uint32_t far *)&Agnts[agentIndex].gdata == '\0' || (cStack_4 != '\0')))) &&
-         ((*(char *)*(uint32_t far *)&Agnts[agentIndex].gdata != '\0' || (cStack_3 != '\0')))) {
+          ((Agnts[agentIndex].gdata->ai == '\0' || (cStack_4 != '\0')))) &&
+         ((Agnts[agentIndex].gdata->ai != '\0' || (cStack_3 != '\0')))) {
         puVar3 = (uint *)&Agnts[agentIndex].flags;
         *puVar3 = *puVar3 & 0xf51b;
         Agnts[agentIndex].faction =
-             *(undefined1 *)*(uint32_t far *)&Agnts[agentIndex].gdata;
+             Agnts[agentIndex].gdata->ai;
         ovr_ovc41_advanceAnimFrame((agnt_t far *)&Agnts[agentIndex].x,0x26);
       }
       else {

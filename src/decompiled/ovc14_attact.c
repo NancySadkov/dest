@@ -359,8 +359,6 @@ void __cdecl16far attact_usesSquareRecCount2(void)
 void __cdecl16far attact_usesAgntFlag1(void)
 
 {
-  uint32_t uVar1;
-  uint32_t uVar2;
   bool bVar3;
   int16_t iVar4;
   int iVar5;
@@ -369,15 +367,14 @@ void __cdecl16far attact_usesAgntFlag1(void)
     bVar3 = ovr_ovc15_usesAlignUp42();
     if (bVar3) {
       for (iVar5 = 0; iVar5 < (int)(uint)AgntCount; iVar5 = iVar5 + 1) {
-        uVar1 = *(uint32_t far *)&Agnts[iVar5].entity;
-        *(undefined1 *)((int)uVar1 + 0x31) = Agnts[iVar5].strength;
+        *(uint8_t far *)((uint8_t far *)&Agnts[iVar5].entity->base.state + 1) =
+             Agnts[iVar5].strength;
       }
     }
     else {
       for (iVar5 = 0; iVar5 < (int)(uint)AgntCount; iVar5 = iVar5 + 1) {
-        uVar1 = *(uint32_t far *)&Agnts[iVar5].entity;
-        uVar2 = *(uint32_t far *)&Agnts[iVar5].entity;
-        *(undefined1 *)((int)uVar2 + 0x31) = *(undefined1 *)((int)uVar1 + 0x32);
+        *(uint8_t far *)((uint8_t far *)&Agnts[iVar5].entity->base.state + 1) =
+             *(uint8_t far *)&Agnts[iVar5].entity->base.flags32;
       }
     }
   }

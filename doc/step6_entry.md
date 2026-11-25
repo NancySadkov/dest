@@ -7896,3 +7896,57 @@ phantom work rather than here.
   grep_checks 40,180 -> 40,160; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### Four more functions freed of truncated far reads (40,160 -> 40,145)
+
+**attact_usesAgntFlag1** (`3f0b:0685`):
+
+```
+0043  les bx, ptr es:[bx + 0x17] / pop ax / mov byte ptr es:[bx + 0x31], al
+0071  les bx, ptr es:[bx + 0x17] / mov al, byte ptr es:[bx + 0x32] / push ax
+0089  les bx, ptr es:[bx + 0x17] / pop ax / mov byte ptr es:[bx + 0x31], al
+```
+
+Both stores write the entity record's byte `0x31` (`base.state + 1`) and the second reads `0x32`
+(`base.flags32`).  The export went through `uVar1`/`uVar2 = *(uint32_t far *)&Agnts[i].entity` and
+`(int)uVar1 + 0x31`; both temporaries are now gone and the emitted code is
+
+```
+les  bx,dword ptr es:_Agnts[bx+23]     ; entity at 0x17
+pop  ax
+mov  byte ptr es:[bx+49],al            ; 0x31
+```
+
+with the function's `es:[bx+N]` set exactly `{49, 50}` = `{0x31, 0x32}`.
+
+**ovc41_unitStatusText** (`6a8f:04c0`) - `les bx,ptr es:[bx+0x17] / cmp al, byte ptr es:[bx+0x1a]`,
+which is `base.entity` byte 3, the same field `stats_unreadyNotice` already reads with `AGNT_FIELD`.
+Emitted `les bx,dword ptr es:_Agnts[bx+23] / cmp al,byte ptr es:[bx+26]`.
+
+**ovc49_agents.c** - eight inline reads of `*(T *)*(uint32_t far *)&Agnts[i].gdata`, written by the
+export without even a temporary:
+
+```
+ovc49_textLongerParalyzed  3393/3394/3398   gdata->ai
+ovc49_drawAgents           4154/4155/4159   gdata->ai
+ovc49_textLongerParalyzed   501/502         gdata->flags2 & 0x80
+ovc49_textLongerParalyzed   522/523         gdata->flags  & 4
+```
+
+Verified by listing `ovc49_textLongerParalyzed` alone (o49 still cannot list as a module - "Compiler
+table limit exceeded in ovc49_body1"): `es:[bx]` x14, `es:[bx+60]` x6, `[bx+62]` x6, `[bx+64]` x7, and
+the flags2 chain reads `les bx,dword ptr es:[bx+29] / test word ptr es:[bx+62],1`.  `uVar1` existed
+only for the two comma-expression copies, so its declaration is removed.
+
+#### Note on the queue metric
+
+`tmp/find_truncfar.py` still reports 13 reads in 5 functions because its `TRUNC` regex only matches the
+*assignment* form (`x = *(uint32_t far *)&...`).  The inline forms (`*(char *)*(uint32_t far *)&...`)
+are invisible to it, so the queue undercounts.  The gate itself moved by 5 for eight fixed sites, which
+is a better indicator of the actual remaining work than the scanner's total.  Remaining known sites:
+`stats_openAgentDetail` 4, `stats_readyStatusText` 3 (behind `in_stack_00000004`), plus the `uVar31`
+group in `ovc49_body1` (2944/2979/3184) and `ovc49_drawAgents` (3955/3971) which the scanner does see.
+
+  grep_checks 40,160 -> 40,145; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

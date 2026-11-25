@@ -321,8 +321,8 @@ void __cdecl16far ovc41_unitStatusText(byte menuIndex)
     count = 0;
     for (uVar4 = 0; uVar4 < AgntCount; uVar4 = uVar4 + 1) {
       uVar3 = SEG_OF(Agnts);
-      uVar6 = *(uint32_t far *)&Agnts[uVar4].entity;
-      if (((uint8_t *)MenuItemEnabled)[menuIndex] == *(uint8_t *)((int)uVar6 + 0x1a)) {
+      if (((uint8_t *)MenuItemEnabled)[menuIndex] ==
+          AGNT_FIELD(Agnts[uVar4].entity, base.entity, 3)) {
         count = count + 1;
       }
     }
