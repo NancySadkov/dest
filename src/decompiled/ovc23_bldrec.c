@@ -688,35 +688,33 @@ L_OVC24_5943_026e_08A7:
 
 /* Stamps GameTick on the records overlapping a column and counts down their timers. */
 
-undefined1 __cdecl16far ovc23_tickRecordsAt(uint16_t x,int y,char excluded,uint16_t arg4)
+bool __cdecl16far ovc23_tickRecordsAt(uint16_t x,int y,char excluded,uint16_t arg4)
 
 {
-  char *pcVar1;
-  byte bVar2;
-  uint32_t uVar3;
-  uint uVar4;
-  uint uVar5;
-  undefined1 uStack_3;
+  byte party;
+  uint32_t sheetRef;
+  uint alignedX;
+  uint i;
+  bool found;
   
-  uVar4 = ovr_alignUp4(x,0,0);
-  uStack_3 = 0;
-  for (uVar5 = 0; uVar5 < GRecordCount; uVar5 = uVar5 + 1) {
-    if ((((GRecords[uVar5].y == y) && (GRecords[uVar5].x <= uVar4 + 1)) &&
-        (uVar4 - 2 <= (GRecords[uVar5].x + (uint)GRecords[uVar5].width) - 1)) &&
-       ((bVar2 = GRecords[uVar5].party, bVar2 != 0xff &&
-        (uVar3 = *(uint32_t *)((uint)bVar2 << 2), *(char *)((int)uVar3 + 0x3f) == excluded)))) {
-      GRecords[uVar5].tick = GameTick;
-      if (GRecords[uVar5].countdown != '\0') {
-        pcVar1 = (char *)&GRecords[uVar5].countdown;
-        *pcVar1 = *pcVar1 + -1;
+  alignedX = ovr_alignUp4(x,0,0);
+  found = 0;
+  for (i = 0; i < GRecordCount; i = i + 1) {
+    if ((((GRecords[i].y == y) && (GRecords[i].x <= alignedX + 1)) &&
+        (alignedX - 2 <= (GRecords[i].x + (uint)GRecords[i].width) - 1)) &&
+       ((party = GRecords[i].party, party != 0xff &&
+        (sheetRef = *(uint32_t *)((uint)party << 2), *(char *)((int)sheetRef + 0x3f) == excluded)))) {
+      GRecords[i].tick = GameTick;
+      if (GRecords[i].countdown != '\0') {
+        GRecords[i].countdown = GRecords[i].countdown - 1;
       }
-      if (GRecords[uVar5].countdown == '\0') {
-        GRecords[uVar5].state = 1;
+      if (GRecords[i].countdown == '\0') {
+        GRecords[i].state = 1;
       }
-      uStack_3 = 1;
+      found = 1;
     }
   }
-  return uStack_3;
+  return found;
 }
 
 
