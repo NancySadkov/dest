@@ -2924,50 +2924,59 @@ uint __cdecl16far ovc23_findRecordAt(int x,int y,uint16_t arg3)
 void __cdecl16far ovc23_abandonConstruction(int recordIndex)
 
 {
-  byte *pbVar1;
-  byte bVar2;
-  uint y;
-  uint32_t uVar3;
-  bool bVar4;
-  uint x;
-  uint16_t uVar5;
-  uint16_t unaff_SI;
-  uint unaff_DI;
-  uint uVar6;
-  uint uVar7;
-  agnt_t *agnt;
-  byte bVar8;
-  
-  bVar2 = GRecords[recordIndex].party;
-  uVar7 = (uint)bVar2;
-  uVar3 = *(uint32_t *)((uint)bVar2 << 2);
-  if (*(char *)((int)uVar3 + 0x3f) == '\0') {
+  /* 55fe:29a2 (file 0x4A782), re-derived from the original:
+
+       party = GRecords[idx].party                      ; +9
+       if (GLeaderSheets[party][0x3f] != 0) return       ; 0x70 table, stride 4
+       x = alignUp4(GRecords[idx].x)                     ; +2
+       y = GRecords[idx].y                               ; +4
+       mask1 = 0x1000 << sheet[0x3f]
+       mask2 = 0x1000 << (sheet[0x3f] ^ 1)
+       for (b = 0; b < 4; b++)                           ; 0x4A840..0x4A874
+           acc |= word[GMapFlags + y*0x128 + (x+b)*2 - 4] & 0x3000
+       if ((kind & 3) == 1 && acc == mask2 &&
+           ovc24_textArena(x, y, sheet[0x3f]) == 0) {     ; 0x4A896..0x4A8C9
+           if (ovc23_isCursorAt(x, y, 0)) ovr_say("Construction abandoned.");
+           if (idx + 1 < GRecordCount) fmemmove(...);
+           GRecordCount--;
+           ovc23_textAdlibNone();                        ; push cs / call, no arguments
+       }
+       else if ((kind & 1) == 0 && (mask1 & acc) != 0) {
+           kind |= 1;
+       }
+
+     Corrections to the exported form: the loop counter is a plain byte 0..3 (the export
+     packed it together with the party index through CONCAT11 and named the result `agnt`,
+     then recovered the counter with `(byte)((uint)agnt >> 8)`), and the four repeated reads
+     of the 0x70 sheet pointer collapse to one local.
+
+     Recorded defect: the tail call is `push cs; call 0x47de0` (55fe:0000) with no `add sp`
+     afterwards, i.e. ovc23_textAdlibNone takes NO arguments, while our declaration gives it
+     three - the three pseudo-registers the export passed were never real arguments.  The
+     zeros below are the closest expressible form; the declaration needs fixing separately. */
+  byte party;
+  uint16_t x;
+  uint16_t y;
+  uint16_t mask1;
+  uint16_t mask2;
+  uint16_t acc;
+  byte b;
+  uint32_t sheetRef;
+
+  party = GRecords[recordIndex].party;
+  sheetRef = *(uint32_t *)((uint)party << 2);
+  if (*(char *)((int)sheetRef + 0x3f) == '\0') {
     x = ovr_alignUp4(GRecords[recordIndex].x,0,0);
     y = GRecords[recordIndex].y;
-    uVar3 = *(uint32_t *)((uVar7 & 0xff) << 2);
-    bVar2 = *(byte *)((int)uVar3 + 0x3f);
-    uVar3 = *(uint32_t *)((uVar7 & 0xff) << 2);
-    uVar6 = 0;
-    agnt = (agnt_t *)(uVar7 & 0xff);
-    while( true ) {
-      bVar8 = (byte)((uint)agnt >> 8);
-      if (3 < bVar8) break;
-      uVar6 = uVar6 | ((short (*) [60] [148])GMapFlags)[-1][y + 0x3b][x + bVar8 + 0x92] & 0x3000U;
-      agnt = (agnt_t *)CONCAT11(bVar8 + 1,(char)agnt);
+    mask1 = 0x1000 << (*(byte *)((int)sheetRef + 0x3f) & 0x1f);
+    mask2 = 0x1000 << ((*(byte *)((int)sheetRef + 0x3f) ^ 1) & 0x1f);
+    acc = 0;
+    for (b = 0; b < 4; b++) {
+      acc = acc | ((short (*) [60] [148])GMapFlags)[-1][y + 0x3b][x + b + 0x92] & 0x3000U;
     }
-    if ((((GRecords[recordIndex].kind & 3) != 1) ||
-        (uVar6 != 0x1000 << ((*(byte *)((int)uVar3 + 0x3f) ^ 1) & 0x1f))) ||
-       (uVar3 = *(uint32_t *)(((uint)agnt & 0xff) << 2),
-       bVar4 = ovr_ovc24_textArena(x,y,*(char *)((int)uVar3 + 0x3f)), bVar4)) {
-      if (((GRecords[recordIndex].kind & 1) == 0) &&
-         ((0x1000 << (bVar2 & 0x1f) & uVar6) != 0)) {
-        pbVar1 = (byte *)&GRecords[recordIndex].kind;
-        *pbVar1 = *pbVar1 | 1;
-      }
-    }
-    else {
-      uVar5 = ovc23_isCursorAt(x,y,0);
-      if ((char)uVar5 != '\0') {
+    if (((GRecords[recordIndex].kind & 3) == 1) && (acc == mask2) &&
+        (ovr_ovc24_textArena(x,y,*(char *)((int)sheetRef + 0x3f)) == 0)) {
+      if ((char)ovc23_isCursorAt(x,y,0) != '\0') {
         ovr_say((char *)"Construction abandoned.",0x2410);
       }
       if (recordIndex + 1U < GRecordCount) {
@@ -2976,7 +2985,10 @@ void __cdecl16far ovc23_abandonConstruction(int recordIndex)
                   ((GRecordCount - recordIndex) + -1) * 0x12);
       }
       GRecordCount = GRecordCount - 1;
-      ovc23_textAdlibNone(unaff_DI,unaff_SI,agnt);
+      ovc23_textAdlibNone(0,0,0);
+    }
+    else if (((GRecords[recordIndex].kind & 1) == 0) && ((mask1 & acc) != 0)) {
+      GRecords[recordIndex].kind = GRecords[recordIndex].kind | 1;
     }
   }
   return;
