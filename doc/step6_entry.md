@@ -4027,3 +4027,38 @@ Two scoping facts follow, and they matter for how the target is read:
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 50,691 -> 50,685
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### Why the `char [N] = ""` class cannot be removed mechanically (measured)
+
+The plan was to convert the 1,404 named string objects (1,294 of them in
+`st_globals5.c`) into packed blobs plus offsets, the pattern used for
+`s_absentStrings`.  Two measurements stop it:
+
+1. **DGROUP headroom.**  `REBUILT.MAP` shows DGROUP (`740d`) using **51,374 of 65,536
+   bytes** - 14,090 free - while the string literals total **22,560 bytes**.  Keeping the
+   named arrays *and* adding a blob therefore overflows by ~8,470 bytes
+   (`Segment _DATA exceeds 64K`, which is exactly what the first attempt produced for
+   `s_absentStrings` when it was written as an array of rows).
+2. **Static initialisers need the address as a constant.**  Converting one string,
+   `s_vdisk_fake`, to a macro into a blob built and linked cleanly and left
+   `compare_state` at 1,627/0/0 - but converting `st_globals4.c`'s 110 objects failed
+   with
+
+   ```
+   glob4.c Error glob4.c 338: Illegal initialization
+   ```
+
+   because `GErrorStrings[5]` is initialised as
+   `{ (char far *)s_Bad_game_cfg_2410_0352[0], ... }`: a macro into a blob is not a
+   constant expression, so the table can no longer be initialised.  Such tables exist
+   throughout the data modules (`GYesNo`, `GMenuStrings`, `PlaceErrPtrs`, ...).
+
+So the class is structural, not cosmetic: those objects must remain named arrays because
+their addresses are used in constant initialisers, and the blob cannot be added beside
+them for lack of DGROUP space.  Removing the class would require moving the data out of
+DGROUP entirely (a different data model), not a source rewrite.
+
+Stage 1 was reverted; all gates are back to their previous values.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 50,685
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
