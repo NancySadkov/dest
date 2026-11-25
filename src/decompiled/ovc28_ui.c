@@ -235,33 +235,35 @@ void __cdecl16far toggle_pause(void)
 void __cdecl16far ovc28_usesBlitGfx10(far_t entries,int count)
 
 {
+  /* Re-derived: paints the full-screen backdrop, then lays out up to `count` entries of a
+     4-byte-stride far-pointer list at x=0xeb, 0xe apart per row.  Each non-null entry gets the
+     button graphic blitted at that cell and is drawn as a label: a leading 0x25 in letter type 2,
+     a leading 0x40 and anything else in the normal type. */
+  far_t screenGfx;
   far_t gfx;
-  char *pcVar1;
-  uint8_t *puVar2;
-  uint16_t uVar3;
-  int *piVar4;
-  uint16_t *puVar5;
-  int idx;
-  int y;
-  uint16_t uVar8;
-  far_t gfx_00;
-  uint16_t max_width;
-  uint8_t uVar9;
   far_t dst;
-  uint8_t text;
+  char *labelText;
+  uint8_t *entryOfs;
+  uint16_t entrySeg;
+  int entryIdx;
+  int y;
+  uint16_t fontSeg;
+  uint8_t textAttr;
+  far_t entriesFar;
+  uint8_t textBuf;
   int x;
-  undefined1 *uStack_6;   /* hand fix: dereferenced as *uStack_6 */
-  
-  gfx_00.seg = fullScreenGfxSeg;
-  gfx_00.ofs = fullScreenGfxOfs;
-  ovr_blitGfx10(gfx_00,0,0,(brect_t *)0x5ce5,true,0,0);
+  uint8_t *entryText;
+
+  screenGfx.seg = fullScreenGfxSeg;
+  screenGfx.ofs = fullScreenGfxOfs;
+  ovr_blitGfx10(screenGfx,0,0,(brect_t *)0x5ce5,true,0,0);
   x = 0xeb;
   y = 0x3c;
-  for (idx = 0; idx < count; idx = idx + 1) {
-    uVar8 = entries.seg;
-    uVar3 = entries.ofs;
-    piVar4 = (int *)(uVar3 + idx * 4);
-    if (*piVar4 != 0 || piVar4[1] != 0) {
+  for (entryIdx = 0; entryIdx < count; entryIdx = entryIdx + 1) {
+    entriesFar = entries;
+    entryIdx = entryIdx;
+    if ((*(int *)(entriesFar.ofs + entryIdx * 4) != 0) ||
+        (*(int *)(entriesFar.ofs + entryIdx * 4 + 2) != 0)) {
       dst.seg = 0xa000;
       dst.ofs = x + y * 0x140;
       gfx.seg = butt01Cut5Seg;
@@ -270,39 +272,37 @@ void __cdecl16far ovc28_usesBlitGfx10(far_t entries,int count)
       TextBlitDstSeg = 0xa000;
       TextBlitX = x + 6;
       TextBlitY = y + 2;
-      puVar5 = (uint16_t *)(uVar3 + idx * 4);
-      pcVar1 = (char *)puVar5[1];
-      puVar2 = (uint8_t *)*puVar5;
-      uStack_6 = (uint8_t *)CONCAT22(pcVar1,puVar2);
-      if (*uStack_6 == 0x25) {
+      entrySeg = *(uint16_t *)(entriesFar.ofs + entryIdx * 4 + 2);
+      entryOfs = (uint8_t *)*(uint16_t *)(entriesFar.ofs + entryIdx * 4);
+      entryText = (uint8_t *)CONCAT22(entrySeg,entryOfs);
+      if (*entryText == 0x25) {
         BlitLetterType = 2;
-        uVar9 = 0x3f;
-        uVar3 = FontMain.ofs;
-        uVar8 = FontMain.seg;
-        pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22(puVar2 + 1,_SS),
-                                            (char *)CONCAT22(FontMain.ofs,pcVar1),FontMain.seg,'E',3
-                                           );
-        ovr_blitLabel(pcVar1,(uint8_t *)CONCAT22(uVar3,puVar2),uVar8,uVar9);
+        textAttr = 0x3f;
+        labelText = (char *)ovr_ovc45_compute9((char *)&textBuf,
+                                               (char *)CONCAT22(entryOfs + 1,_SS),
+                                               (char *)CONCAT22(FontMain.ofs,entrySeg),
+                                               FontMain.seg,'E',3);
+        ovr_blitLabel(labelText,(uint8_t *)CONCAT22(FontMain.ofs,entryOfs),FontMain.seg,textAttr);
         BlitLetterType = 0;
       }
-      else if (*uStack_6 == 0x40) {
-        uVar9 = 0x3f;
-        uVar3 = FontMain.ofs;
-        uVar8 = FontMain.seg;
-        pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22(puVar2 + 1,_SS),
-                                            (char *)CONCAT22(FontMain.ofs,pcVar1),FontMain.seg,'E',3
-                                           );
-        ovr_blitLabel(pcVar1,(uint8_t *)CONCAT22(uVar3,puVar2),uVar8,uVar9);
+      else if (*entryText == 0x40) {
+        textAttr = 0x3f;
+        labelText = (char *)ovr_ovc45_compute9((char *)&textBuf,
+                                               (char *)CONCAT22(entryOfs + 1,_SS),
+                                               (char *)CONCAT22(FontMain.ofs,entrySeg),
+                                               FontMain.seg,'E',3);
+        ovr_blitLabel(labelText,(uint8_t *)CONCAT22(FontMain.ofs,entryOfs),FontMain.seg,textAttr);
       }
       else {
-        uVar9 = 0x3f;
-        puVar5 = (uint16_t *)(uVar3 + idx * 4);
-        uVar3 = FontMain.ofs;
-        max_width = FontMain.seg;
-        pcVar1 = (char *)ovr_ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar5,_SS),
-                                            (char *)CONCAT22(FontMain.ofs,(char *)puVar5[1]),
-                                            FontMain.seg,'E',3);
-        ovr_blitLabel(pcVar1,(uint8_t *)CONCAT22(uVar3,puVar2),max_width,uVar9);
+        textAttr = 0x3f;
+        fontSeg = FontMain.seg;
+        labelText = (char *)ovr_ovc45_compute9(
+                        (char *)&textBuf,
+                        (char *)CONCAT22(*(uint16_t *)(entriesFar.ofs + entryIdx * 4),_SS),
+                        (char *)CONCAT22(FontMain.ofs,
+                                         (char *)*(uint16_t *)(entriesFar.ofs + entryIdx * 4 + 2)),
+                        FontMain.seg,'E',3);
+        ovr_blitLabel(labelText,(uint8_t *)CONCAT22(FontMain.ofs,entryOfs),fontSeg,textAttr);
       }
     }
     y = y + 0xe;

@@ -2696,31 +2696,30 @@ L_upd_units_5087_1d7d_202C:
 uint16_t __cdecl16far ovc22_usesPlayerCount(byte partyIndex)
 
 {
-  uint32_t uVar1;
-  byte bVar2;
-  char cVar3;
-  int iVar4;
-  uint16_t uVar5;
-  
+  /* Re-derived: the party's allowed unit count.  For the human party (leader-sheet byte +0x3f
+     clear) it is unitCount/10 + 2, raised to + 4 when foodProd covers 1.5x the sheet's +0x4d;
+     for the computer party it is PlayerCount/2 + 1.  Capped at 10 and stored at sheet +0xa4. */
+  byte count;
+  char baseCount;
+  int sheetOfs;
+
   if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0') {
-    cVar3 = (char)((ulong)(GLeaderSheets[partyIndex])->unitCount / 10);
-    bVar2 = cVar3 + 2;
-    uVar5 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-    iVar4 = (int)*(uint32_t *)((uint)partyIndex << 2);
-    if ((uint)(*(int *)(iVar4 + 0x4d) * 2 + *(int *)(iVar4 + 0x4d)) >> 1 <=
+    baseCount = (char)((ulong)(GLeaderSheets[partyIndex])->unitCount / 10);
+    count = baseCount + 2;
+    sheetOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+    if ((uint)(*(int *)(sheetOfs + 0x4d) * 2 + *(int *)(sheetOfs + 0x4d)) >> 1 <=
         (GLeaderSheets[partyIndex])->foodProd) {
-      bVar2 = cVar3 + 4;
+      count = baseCount + 4;
     }
   }
   else {
-    bVar2 = PlayerCount / 2 + 1;
+    count = PlayerCount / 2 + 1;
   }
-  if (10 < bVar2) {
-    bVar2 = 10;
+  if (10 < count) {
+    count = 10;
   }
-  uVar1 = *(uint32_t *)((uint)partyIndex << 2);
-  *(byte *)((int)uVar1 + 0xa4) = bVar2;
-  return bVar2;
+  *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa4) = count;
+  return count;
 }
 
 
