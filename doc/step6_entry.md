@@ -4562,3 +4562,49 @@ naming.
   grep_checks 49,387 -> 49,357 -> 49,315 (-72); build 65/65 clean; LINK.LOG 65 bytes /
   0 problems; compare_state 1,627/0/0; diff_dgroup 972/1,868;
   compare_runtime 1,546/11 main entry, 1,545/11 post-init_cfg
+
+### Defect class: stale `AH` in return values (seven functions fixed)
+
+The whole-function re-derivations exposed a systematic decompiler error: after an `imul dx`
+(or any call), Ghidra treats the leftover `AH` as part of the function's result and emits
+
+```c
+return CONCAT11((char)((uint)X >> 8),1);     /* the "1" result with a fake high byte */
+return X & 0xff00;                            /* the "0" result with the high byte kept  */
+```
+
+while the original only ever executes `mov al,0` / `mov al,1` before `retf`.  Every caller of
+such a function tests `& 0xff` or the truth value, so the high byte is pure noise - and the
+pseudo-registers it drags in (`in_AX`, `extraout_AH`, and a recycled `uVar3`) make the body
+wrong as well as unreadable.
+
+Two tools make this mechanical:
+
+* `tmp/find_stale_ah.py` - greps the tree for `return CONCAT11(...)` and `return X & 0xff00`
+  and prints the enclosing function and its declared return type;
+* `tmp/check_ah_tails.py` - maps each candidate through `file = seg*16-0xE200` (size from
+  `audit/functions.tsv`) and disassembles the tail, so the tail's final `mov al,` sequence is
+  the evidence rather than an assumption.
+
+Confirmed by tail and fixed:
+
+| function | address | tail | fix |
+|---|---|---|---|
+| `ovc22_usesAlignUp4` | 5087:3c93 | `mov al,1` 0x4638B, `mov al,0` 0x4638F | rewritten (5 temporaries, `uVar3` had two roles) |
+| `init_compute2` | 3381:2452 | `mov al,0` 0x27AC0, `mov al,1` 0x27ACD | rewritten |
+| `audio_isPlaying` | 3a5b:034e | `mov al,1` 0x2C711/0x2C726, `mov al,0` 0x2C72A | rewritten; the `in_AX == 1` test after the second call was testing a stale value instead of `midGetSequenceStatus()`'s own return (compared in `ax` at 0x2C721) |
+| `ovc22_usesGMapFlags2` | 5087:3f8d | `mov al,1` 0x46700 | returns 1/0 |
+| `agnt_compute12` | 3b1d:0d4d | `mov al,1` 0x2DD38/0x2DD4A, `mov al,0` 0x2DD4E | returns 1/0 |
+| `ovc15_usesAlignUp4` | 4207:0ff0 | `mov al,1` 0x34EFF, `mov al,0` 0x34F0D | `& 0xff00` -> 0 |
+| `ovc18_usesAlignUp4` | 48ac:1092 | `mov al,0` 0x3BBCF, `mov al,1` 0x3BBD3 | `& 0xff00` -> 0 |
+
+Deliberately **not** changed, because the high byte is real: `CONCAT11(0x24,...)` in
+`inputUpdate` and `saveui_usesMouseMoved` (0x24 is the extended-key prefix), and `be2`'s
+byte swap.  The tail check distinguishes them: those functions do set `AH`.
+
+Still open from the same scan (tails not yet read): `attact_usesSCARRY22`,
+`attact_usesAlignUp44`, `abilitiesDlg`, `ovc22_usesPlayerCount`, `stLoad`/`stSave`,
+`fmMallocRecover`, `ovc15_compute1`.
+
+  grep_checks 49,229 -> 49,186 -> 49,176; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,546/11, 1,545/11
