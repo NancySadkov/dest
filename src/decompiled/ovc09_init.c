@@ -1840,133 +1840,130 @@ void __cdecl16far init_usesGMapFlags3(int x,int y)
 void __cdecl16far init_usesRandBelow2(void)
 
 {
-  uint *puVar1;
+  /* Re-derived (3381:2883).  The flag writes go through uint16_t* - the original is
+     `or word ptr es:[bx], 3` at 0x0280F2 - not the export's `uint *`, which writes four
+     bytes and would corrupt the adjacent cell.  The two byte writes that built dst.seg from
+     _SS are simply `dst.seg = _SS`, and the two dead segment copies are gone. */
+  uint16_t *flagWordPtr;
   far_t dst;
   far_t dst_00;
-  uint16_t uVar2;
-  uint cellValue;
-  int iVar4;
-  byte (*paabVar5) [59] [148];
-  short (*paasVar6) [60] [148];
+  uint16_t randVal;
+  uint16_t cellValue;
+  int cellY;
+  byte (*cells) [59] [148];
+  short (*flags) [60] [148];
   uint x;
   uint y;
-  uint16_t uVar7;
-  undefined1 uVar8;
   uint8_t edgeMasks;
-  byte bStack_14;
-  byte bStack_13;
-  int iStack_12;
+  byte dir;
+  byte prevDir;
+  int featureIdx;
   uint8_t sameDirCount;
   uint8_t lastDir;
   byte cellMin;
-  byte bStack_c;
-  byte bStack_b;
+  byte cellByte;
+  uint8_t minCell;
   uint8_t neighbourOfs;
-  byte abStack_9 [7];
-  
-  uVar8 = (undefined1)((uint)_SS >> 8);
-  (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
+  byte dirTable [7];
+
+  dst.seg = _SS;
   dst.ofs = (uint16_t)&edgeMasks;
-  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = uVar8;
   F_SCOPY(far_from_u32((uint32_t)(0x241004f2)),dst);
-  (*(uint8_t *)((uint8_t *)&(dst_00.seg))) = (char)_SS;
+  dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&neighbourOfs;
-  (*(uint8_t *)((uint8_t *)&(dst_00.seg) + 1)) = uVar8;
   F_SCOPY(far_from_u32((uint32_t)(0x24100502)),dst_00);
-  iStack_12 = 0;
+  featureIdx = 0;
   do {
-    if ((int)(uint)randomFeatureCount <= iStack_12) {
+    if ((int)(uint)randomFeatureCount <= featureIdx) {
       return;
     }
-    uVar2 = ovr_randBelow(0x93,0);
-    x = uVar2 & 0xff;
-    uVar2 = ovr_randBelow(0x3b,0);
-    y = uVar2 & 0xff;
-    bStack_b = 100;
-    cellValue = init_getMapCell(x,uVar2 & 0xff,(char)uVar2);
-    bStack_c = (byte)cellValue;
-    if (bStack_c < bStack_b) {
-      bStack_b = bStack_c;
+    randVal = ovr_randBelow(0x93,0);
+    x = randVal & 0xff;
+    randVal = ovr_randBelow(0x3b,0);
+    y = randVal & 0xff;
+    minCell = 100;
+    cellValue = init_getMapCell(x,randVal & 0xff,(char)randVal);
+    cellByte = (byte)cellValue;
+    if (cellByte < minCell) {
+      minCell = cellByte;
     }
-    cellValue = init_getMapCell(x + 1,uVar2 & 0xff,(char)uVar2);
-    bStack_c = (byte)cellValue;
-    if (bStack_c < bStack_b) {
-      bStack_b = bStack_c;
+    cellValue = init_getMapCell(x + 1,randVal & 0xff,(char)randVal);
+    cellByte = (byte)cellValue;
+    if (cellByte < minCell) {
+      minCell = cellByte;
     }
     cellValue = init_getMapCell(x,y + 1,(char)(y + 1));
-    bStack_c = (byte)cellValue;
-    if (bStack_c < bStack_b) {
-      bStack_b = bStack_c;
+    cellByte = (byte)cellValue;
+    if (cellByte < minCell) {
+      minCell = cellByte;
     }
     cellValue = init_getMapCell(x + 1,y + 1,(char)(y + 1));
-    bStack_c = (byte)cellValue;
-    if (bStack_c < bStack_b) {
-      bStack_b = bStack_c;
+    cellByte = (byte)cellValue;
+    if (cellByte < minCell) {
+      minCell = cellByte;
     }
-    init_setMapCell(x,y,bStack_b);
-    init_setMapCell(x + 1,y,bStack_b);
-    init_setMapCell(x,y + 1,bStack_b);
-    init_setMapCell(x + 1,y + 1,bStack_b);
-    if (bStack_b == 0) {
-      init_usesGMapFlags3(x,uVar2 & 0xff);
-      init_usesGMapFlags3(x - 1,uVar2 & 0xff);
-      init_usesGMapFlags3(x + 1,uVar2 & 0xff);
+    init_setMapCell(x,y,minCell);
+    init_setMapCell(x + 1,y,minCell);
+    init_setMapCell(x,y + 1,minCell);
+    init_setMapCell(x + 1,y + 1,minCell);
+    if (minCell == 0) {
+      init_usesGMapFlags3(x,randVal & 0xff);
+      init_usesGMapFlags3(x - 1,randVal & 0xff);
+      init_usesGMapFlags3(x + 1,randVal & 0xff);
       init_usesGMapFlags3(x,y - 1);
       init_usesGMapFlags3(x,y + 1);
     }
     lastDir = 0x0;
     sameDirCount = 0x0;
-    uVar2 = ovr_randBelow(4,0);
-    bStack_13 = (byte)uVar2;
+    randVal = ovr_randBelow(4,0);
+    prevDir = (byte)randVal;
     for (; ((((int)x < 0x93 && (-1 < (int)x)) && ((int)y < 0x3b)) && (-1 < (int)y));
-        y = y + (int)*(char *)(bStack_14 + 0x889)) {
-      uVar7 = (uint16_t)((ulong)GMapCells >> 0x10);
-      paabVar5 = (byte (*) [59] [148])GMapCells;
-      if ((((*paabVar5)[y][x] == 0) && ((*paabVar5)[y][x + 1] == 0)) &&
-         (((*paabVar5)[y + 1][x] == 0 && ((*paabVar5)[y + 1][x + 1] == 0)))) break;
-      uVar7 = (uint16_t)((ulong)GMapFlags >> 0x10);
-      paasVar6 = (short (*) [60] [148])GMapFlags;
-      if (((*paasVar6)[y][x] & 3U) == 3) break;
-      if (((*paasVar6)[y][x] & 3U) != 0) {
-        puVar1 = (uint *)((*paasVar6)[y] + x);
-        *puVar1 = *puVar1 | 3;
+        y = y + (int)*(char *)(dir + 0x889)) {
+      cells = (byte (*) [59] [148])GMapCells;
+      if ((((*cells)[y][x] == 0) && ((*cells)[y][x + 1] == 0)) &&
+         (((*cells)[y + 1][x] == 0 && ((*cells)[y + 1][x + 1] == 0)))) break;
+      flags = (short (*) [60] [148])GMapFlags;
+      if (((*flags)[y][x] & 3U) == 3) break;
+      if (((*flags)[y][x] & 3U) != 0) {
+        flagWordPtr = (uint16_t *)((*flags)[y] + x);
+        *flagWordPtr = *flagWordPtr | 3;
       }
-      uVar2 = init_usesRandBelow(x,y,bStack_13,&lastDir,(uint8_t *)CONCAT22(&sameDirCount,_SS))
-      ;
-      bStack_14 = (byte)uVar2;
-      if (((bStack_14 == 0xff) || (bStack_13 == (bStack_14 ^ 2))) ||
-         ((&edgeMasks)[(uint)bStack_13 * 4 + (uVar2 & 0xff)] == 0x0)) break;
-      puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[y] + x);
-      *puVar1 = *puVar1 & 0xfffb;
-      puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[y] + x);
-      *puVar1 = *puVar1 | (uint)(&edgeMasks)[(uint)bStack_13 * 4 + (uVar2 & 0xff)];
-      iVar4 = y + ((int)(uint)abStack_9[(uint)bStack_13 * 2 + -1] >> 1);
-      cellValue = init_getMapCell(x + (abStack_9[(uint)bStack_13 * 2 + -1] & 1),iVar4,(char)iVar4);
-      bStack_c = (byte)cellValue;
-      iVar4 = y + ((int)(uint)abStack_9[(uint)bStack_13 * 2] >> 1);
-      cellValue = init_getMapCell(x + (abStack_9[(uint)bStack_13 * 2] & 1),iVar4,(char)iVar4);
+      randVal = init_usesRandBelow(x,y,prevDir,&lastDir,
+                                   (uint8_t *)CONCAT22(&sameDirCount,_SS));
+      dir = (byte)randVal;
+      if (((dir == 0xff) || (prevDir == (dir ^ 2))) ||
+         ((&edgeMasks)[(uint)prevDir * 4 + (randVal & 0xff)] == 0x0)) break;
+      flagWordPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+      *flagWordPtr = *flagWordPtr & 0xfffb;
+      flagWordPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+      *flagWordPtr = *flagWordPtr | (uint)(&edgeMasks)[(uint)prevDir * 4 + (randVal & 0xff)];
+      cellY = y + ((int)(uint)dirTable[(uint)prevDir * 2 + -1] >> 1);
+      cellValue = init_getMapCell(x + (dirTable[(uint)prevDir * 2 + -1] & 1),cellY,(char)cellY);
+      cellByte = (byte)cellValue;
+      cellY = y + ((int)(uint)dirTable[(uint)prevDir * 2] >> 1);
+      cellValue = init_getMapCell(x + (dirTable[(uint)prevDir * 2] & 1),cellY,(char)cellY);
       cellMin = (byte)cellValue;
-      if (bStack_c < bStack_b) {
-        bStack_b = bStack_c;
+      if (cellByte < minCell) {
+        minCell = cellByte;
       }
-      if (cellMin < bStack_b) {
-        bStack_b = cellMin;
+      if (cellMin < minCell) {
+        minCell = cellMin;
       }
-      init_setMapCell(x + (abStack_9[(uint)bStack_14 * 2 + -1] & 1),
-                      y + ((int)(uint)abStack_9[(uint)bStack_14 * 2 + -1] >> 1),bStack_b);
-      init_setMapCell(x + (abStack_9[(uint)bStack_14 * 2] & 1),
-                      y + ((int)(uint)abStack_9[(uint)bStack_14 * 2] >> 1),bStack_b);
-      if (bStack_b == 0) {
+      init_setMapCell(x + (dirTable[(uint)dir * 2 + -1] & 1),
+                      y + ((int)(uint)dirTable[(uint)dir * 2 + -1] >> 1),minCell);
+      init_setMapCell(x + (dirTable[(uint)dir * 2] & 1),
+                      y + ((int)(uint)dirTable[(uint)dir * 2] >> 1),minCell);
+      if (minCell == 0) {
         init_usesGMapFlags3(x,y);
         init_usesGMapFlags3(x - 1,y);
         init_usesGMapFlags3(x + 1,y);
         init_usesGMapFlags3(x,y - 1);
         init_usesGMapFlags3(x,y + 1);
       }
-      x = x + (int)*(char *)(bStack_14 + 0x885);
-      bStack_13 = bStack_14;
+      x = x + (int)*(char *)(dir + 0x885);
+      prevDir = dir;
     }
-    iStack_12 = iStack_12 + 1;
+    featureIdx = featureIdx + 1;
   } while( true );
 }
 
