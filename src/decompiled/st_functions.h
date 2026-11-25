@@ -718,7 +718,7 @@ uint16_t __cdecl16far ovc22_usesGOngoingBattle(byte x,byte y);
 uint16_t __cdecl16far ovc22_usesGOngoingBattle2(byte x,byte y);
 byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t *agnt);
 undefined1 __cdecl16far ovc23_tickRecordsAt(uint16_t x,int y,char excluded,uint16_t arg4);
-uint __cdecl16far ovc23_isCursorAt(uint16_t x,int y,uint16_t arg3);
+bool __cdecl16far ovc23_isCursorAt(uint16_t x,int y);
 int __cdecl16far ovc23_usesCornerBR(int x,int bldType);
 int __cdecl16far ovc23_usesCornerBR2(int x,int step);
 void __cdecl16far ovc23_textBuildThfres01Lbm(far_t dst);

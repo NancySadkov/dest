@@ -725,7 +725,7 @@ undefined1 __cdecl16far ovc23_tickRecordsAt(uint16_t x,int y,char excluded,uint1
 
 /* Returns whether the point matches the cell in GfxRndSeed/GfxRndSeed2. */
 
-uint __cdecl16far ovc23_isCursorAt(uint16_t x,int y,uint16_t arg3)
+bool __cdecl16far ovc23_isCursorAt(uint16_t x,int y)
 
 {
   uint uVar1;
@@ -1972,7 +1972,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
         }
       }
       else {
-        uVar36 = ovc23_isCursorAt((uint16_t)in_stack_0000fffc,unaff_SI,0);
+        uVar36 = ovc23_isCursorAt((uint16_t)in_stack_0000fffc,unaff_SI);
         if ((char)uVar36 != '\0') {
           ovr_say((char *)"Construction abandoned.",0);
         }
@@ -2932,7 +2932,7 @@ void __cdecl16far ovc23_abandonConstruction(int recordIndex)
            acc |= word[GMapFlags + y*0x128 + (x+b)*2 - 4] & 0x3000
        if ((kind & 3) == 1 && acc == mask2 &&
            ovc24_textArena(x, y, sheet[0x3f]) == 0) {     ; 0x4A896..0x4A8C9
-           if (ovc23_isCursorAt(x, y, 0)) ovr_say("Construction abandoned.");
+           if (ovc23_isCursorAt(x, y)) ovr_say("Construction abandoned.");
            if (idx + 1 < GRecordCount) fmemmove(...);
            GRecordCount--;
            ovc23_textAdlibNone();                        ; push cs / call, no arguments
@@ -2972,7 +2972,7 @@ void __cdecl16far ovc23_abandonConstruction(int recordIndex)
     }
     if (((GRecords[recordIndex].kind & 3) == 1) && (acc == mask2) &&
         (ovr_ovc24_textArena(x,y,*(char *)((int)sheetRef + 0x3f)) == 0)) {
-      if ((char)ovc23_isCursorAt(x,y,0) != '\0') {
+      if ((char)ovc23_isCursorAt(x,y) != '\0') {
         ovr_say((char *)"Construction abandoned.",0x2410);
       }
       if (recordIndex + 1U < GRecordCount) {
