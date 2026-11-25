@@ -326,7 +326,7 @@ void __cdecl16far uiMenuSub(char *title,far_t items,uint16_t nitems,uint16_t def
   uint16_t sz;
   int iStack_6;
   uint8_t readed;
-  byte bStack_3;
+  byte menuId;
   
   TextBlitDstSeg = 0xa000;
   if (in_stack_00000004 != (char *)0x0 || (char *)title != (char *)0x0) {
@@ -396,9 +396,9 @@ L_uiMenuSub_0903:
             textTable.seg = _SS;
             textTable.ofs = (uint16_t)&dest;
             uVar3 = saveui_usesMouseMoved(textTable,sz,0);
-            bStack_3 = (byte)uVar3;
-            bVar1 = bStack_3;
-            if (bStack_3 != 0xff) {
+            menuId = (byte)uVar3;
+            bVar1 = menuId;
+            if (menuId != 0xff) {
 L_uiMenuSub_0B46:
               GMenuItem = bVar1;
               if (GMenuItem != 0) {
@@ -1395,7 +1395,7 @@ void __cdecl16far uiMainMenuLoop(void)
   uint16_t uStack_2e;
   uint16_t uStack_18;
   uint16_t uStack_16;
-  byte bStack_13;
+  byte pmenuIdx;
   char yesno [9];
   uint8_t yes_picked;
   
@@ -1437,12 +1437,12 @@ void __cdecl16far uiMainMenuLoop(void)
     items.seg = pmenu;
     items.ofs = 0x2410;
     uiMenu((char *)"Select an option:",items,_SS,8);
-    bStack_13 = (byte)pmenu;
+    pmenuIdx = (byte)pmenu;
     ovr_say((char *)0x26832,0x2410);
-    if (bStack_13 < 9) {
+    if (pmenuIdx < 9) {
                     /* WARNING: Switch is manually overridden */
       switch((uint32_t)
-             *(uint16_t *)((char *)0x25bd6 + (uint)bStack_13 * 2)) {
+             *(uint16_t *)((char *)0x25bd6 + (uint)pmenuIdx * 2)) {
       case 288826:
         saveui_blitPanel();
         bVar1 = false;

@@ -499,16 +499,16 @@ char * __cdecl16far fmVsprintf(char *fmt,char *arg)
   uint uVar4;
   uint8_t *src;
   uint8_t buf;
-  int16_t iStack_8;
+  int16_t vlen;
   char **ppcStack_6;
   
   FMRingIndex = FMRingIndex + 1 & 7;
   ppcStack_6 = &arg;
-  iStack_8 = vsprintf((char *)CONCAT22(_SS,&buf),fmt,(uint16_t)ppcStack_6);
+  vlen = vsprintf((char *)CONCAT22(_SS,&buf),fmt,(uint16_t)ppcStack_6);
   src = (uint8_t *)CONCAT22(_SS,&buf);
-  iVar3 = iStack_8 + 1 >> 0xf;
+  iVar3 = vlen + 1 >> 0xf;
   puVar1 = stshRealloc(CONCAT22(*(uint16_t *)((int)&FMRingBuf[0].seg + (uint)FMRingIndex * 4),
-                                ((far_t *)FMRingBuf + FMRingIndex)->ofs),(long)(iStack_8 + 1));
+                                ((far_t *)FMRingBuf + FMRingIndex)->ofs),(long)(vlen + 1));
                     /* Copy sprintfed string to dst */
   pcVar2 = strcpy((char *)CONCAT22(iVar3,puVar1),(char *)src);
   uVar4 = (uint)FMRingIndex;

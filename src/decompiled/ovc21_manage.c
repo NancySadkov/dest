@@ -2570,7 +2570,7 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
   char acStack_68 [80];
   uint8_t uStack_18;
   char cStack_17;
-  int iStack_16;
+  int unitCount;
   int iStack_14;
   int iStack_12;
   int iStack_10;
@@ -2579,7 +2579,7 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
   int iStack_a;
   int iStack_8;
   char_sheet_t *pcStack_6;
-  char *pcStack_4;
+  char *titlePtr;
   
   dst.seg = (uint16_t)_SS;
   dst.ofs = (uint16_t)&resultPtrs;
@@ -2618,15 +2618,15 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
                   Font02.seg,0xde,uVar10,0xde,0x50);
   }
   else {
-    pcStack_4 = (char *)((uint16_t *)((uint)in_stack_00000004 * 4))[1];
+    titlePtr = (char *)((uint16_t *)((uint)in_stack_00000004 * 4))[1];
     pcVar5 = (char_sheet_t *)*(uint16_t *)((uint)in_stack_00000004 * 4);
     uVar6 = 0x50;
     term = 0xde;
     uVar9 = Font02.ofs;
     pcStack_6 = pcVar5;
     iVar7 = ovr_ovc45_compute9(acStack_68,(char *)CONCAT22(pcVar5,_SS),
-                               (char *)CONCAT22(Font02.ofs,pcStack_4),Font02.seg,'i',0x69,3);
-    pvVar2 = manage_playerTitle(pcStack_6,pcStack_4,(char)iVar7,pcVar5);
+                               (char *)CONCAT22(Font02.ofs,titlePtr),Font02.seg,'i',0x69,3);
+    pvVar2 = manage_playerTitle(pcStack_6,titlePtr,(char)iVar7,pcVar5);
     numText = ovr_stsprintf(acStack_b8,(char *)CONCAT22(0x52a1,_SS),
                            (char *)CONCAT22(pvVar2,(char *)0x26510),pcVar5);
     ovr_blitLabel(numText,(uint8_t *)CONCAT22(uVar9,pcVar5),CONCAT11(uVar11,uVar10),term,uVar10,term,
@@ -2663,7 +2663,7 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
                     Font02.seg,0xde,(char)Font02.seg,0xde,0xe0);
       lVar1 = (long)(iVar8 + iVar7) * 6;
       uVar6 = (uint16_t)((ulong)lVar1 >> 0x10);
-      iStack_16 = manage_usesGUnitCount
+      unitCount = manage_usesGUnitCount
                             (in_stack_00000004,(&((unk01_t *)GStructures)->type)[(int)lVar1],
                              (int *)CONCAT22(_SS,&iStack_8),(int *)CONCAT22(_SS,&iStack_a)
                              ,(int *)CONCAT22(_SS,&iStack_c),
@@ -2671,8 +2671,8 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
       if (iStack_e == 0) {
         iVar3 = 100;
         numText = litoa10(acStack_68,
-                         CONCAT13((char)((uint)iStack_16 >> 8),CONCAT12((char)iStack_16,_SS)),
-                         (char)iStack_16,0);
+                         CONCAT13((char)((uint)unitCount >> 8),CONCAT12((char)unitCount,_SS)),
+                         (char)unitCount,0);
         manage_blitLabelRight
                   ((char *)CONCAT13((char)((uint)uVar6 >> 8),CONCAT12((char)uVar6,numText)),iVar3);
       }

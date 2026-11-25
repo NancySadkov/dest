@@ -4185,3 +4185,26 @@ control flow, which the addresses above now make easy to obtain.
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 49,777 -> 49,756
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### All 114 `unaff_` holders classified: none repeats the init_assets1 pattern
+
+`tmp/unaff_classify.py` walks every module, maps each holder with the `seg*16-0xE200`
+rule, disassembles its prologue and counts later writes to the same register.  Result:
+
+* **114 holders** use a pseudo-register; none is a single prologue constant that is never
+  reloaded.  The categories are:
+  - *register-convention fragments* with no arguments and no write at all -
+    `draw_textTalkwin9Lbm` (`2e25:025a`, 22 uses, zero SI writes in 0x300 bytes),
+    `manage_usesEntities`, `manage_usesEntities2`, `grabLbm`;
+  - *scratch values set per branch* - `ovc15_textError` (SI := 0, 5, 0xa),
+    `__setargv` (`mov si,0x80` but 13 later writes);
+  - *parameters used before any assignment* - `stExit` (`mov si,[bp+6]`) but reloaded
+    later in the body.
+
+So `init_assets1` (SI = 0xAB, -191 hits) was the family's one mechanical case, and the
+remaining ~1,700 hits need control flow: either merging register-convention fragments back
+into their callers or giving each scratch value a local with the assignments the
+decompiler dropped.  The file offsets in the table above make that work addressable.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 49,756 -> 49,731
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
