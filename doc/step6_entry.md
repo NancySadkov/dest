@@ -4684,3 +4684,43 @@ nothing - the registers they named carry unrelated caller state.
 
   grep_checks 49,085 -> 49,077; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,546/11, 1,545/11
+
+### CORRECTION: `in_stack_00000004` is the first argument, not the return CS
+
+Two earlier commits claimed that `ovc23_usesBlitGfxRect` / `ovc23_usesBlitGfxRect2` were
+"short by a word" because `in_stack_00000004` was `[bp+4]`, the far return CS, yet used as an
+X coordinate.  **That is wrong.**
+
+`ovc23_usesBlitGfxRect2` (`55fe:23d8`, file 0x4A1B8) touches exactly five stack slots:
+
+```
+04A1C0  mov si, word ptr [bp + 6]     ; arg 1, used as the blit X
+all [bp + N] accesses in its 0x94-byte body: 6, 8, 0xa, 0xc, 0xe
+```
+
+which matches its five declared parameters `(int x, int y, int recordIndex, brect_t *rect,
+uint16_t type)` one for one, and the callers push five words (`add sp, 0xa`).  So `[bp+6]` is
+the first argument, and Ghidra's `in_stack_00000004` **aliases that same argument** - it is a
+duplicate stack-parameter name, not a mis-sized frame.
+
+A scanner for the pattern (`tmp/find_cs_slots.py`) shows how widespread the alias is:
+
+```
+functions using in_stack_00000004/6: 45 (far: 31  near: 14)
+largest: init_assets 48 uses, ovc22_usesGMapFlags2 31, stshRead 24,
+         stats_textRingProt 24, ovc18_showLeaderView 15,
+         ovc23_usesBlitGfxRect 10, ovc23_usesBlitGfxRect2 10
+```
+
+For the 31 `__cdecl16far` entries the slot is the first argument, so those uses are
+replaceable by the real parameter name; for the 14 `__cdecl16near` entries the numbering
+shifts by two words and `[bp+4]` is a genuine first argument, so they are not aliases of the
+same kind.  No substitution was made here: the two interpretations differ only by which
+vintage of Ghidra's stack model produced them, and I would rather leave the code as it is
+than rename 250 uses on a reading I have already got wrong once.
+
+What the scanner does establish is that the earlier "signature short by a word" note must not
+be acted on for these two functions - their five arguments are all read.
+
+  grep_checks 49,020; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,546/11, 1,545/11
