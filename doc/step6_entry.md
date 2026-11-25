@@ -6565,3 +6565,44 @@ but it is not what the original does, and it would break if Entities ever moved.
 
   grep_checks 41,039 -> 41,014; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### Resolving the ambiguous phantom parameters by parameter width
+
+The three functions blocked last turn were blocked because the export's declaration could not say
+whether a slot held a near or a far pointer.  The original's load form says it directly, and that in
+turn fixes which declared parameter sits at the `in_stack_` slot.  `tmp/classify_params.py` reports it
+per slot:
+
+```
+les/lds [bp+N]            -> far pointer, 4 bytes, occupying N..N+3
+mov X, byte ptr [bp+N]    -> a byte
+mov X, word ptr [bp+N]    -> a near word
+```
+
+**blitGfx10** `317e:02a9`
+
+```
+bp+0x0e  les bx, ptr [bp+0xe]      -> dst is a FAR brect_t*, 0xe..0x11
+bp+0x10  never read                -> covered by that far pointer
+bp+0x12  mov al, byte ptr [bp+0x12]  -> a byte = the `type` parameter
+```
+
+so `in_stack_00000010` == `type`.  It is now used in all three places (`CONCAT12(type,dst)` and the
+`type == false` test), where before the parameter and the phantom were separate objects.
+
+**gfxRlePrepare** `317e:08ed` - same reading: `bp+0x0e` is loaded with `les` (so `rectOfs` is far,
+0xe..0x11), `bp+0x10` is never read, and `bp+0x12`/`bp+0x14` are single bytes.  So
+`in_stack_00000012 == scale` and `in_stack_00000014 == flip`.  The resulting code is coherent -
+`if (scale == '\0')` and `(byte)flip * frac` treating flip as a fraction - which is what confirms the
+mapping rather than just permitting it.
+
+Its `in_stack_00000016`/`_18` are deliberately left: the declared `arg7`/`arg8` are `uint16_t` while
+the original reads single bytes at those slots, so declaration and use disagree.
+
+`miceBlitRect` is also left, and for a different reason: it does `les bx,[bp+6]` on a parameter
+declared `brect_t *br`, so `br` is far and occupies 6..9, leaving no slot for the phantom - the
+declaration and the code cannot both be right, and settling it is a re-derivation rather than a
+substitution.
+
+  grep_checks 41,014 -> 41,005; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

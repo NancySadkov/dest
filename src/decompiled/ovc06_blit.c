@@ -174,7 +174,6 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
   uint16_t uVar3;
   uint16_t uVar4;
   undefined1 uStack000f;
-  bool in_stack_00000010;
   far_t dst_01;
   uint8_t rowBuf;
   uint16_t dst_h;
@@ -215,7 +214,7 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
     if (((((int)x < (int)dst_x) || ((int)y < (int)dst_y)) ||
         ((int)dst_w < (int)(x + *(int *)(gfx.ofs + 5) + -1))) ||
        ((int)dst_h < (int)(y + *(int *)(gfx.ofs + 7) + -1))) {
-      if (in_stack_00000010 == false) {
+      if (type == false) {
         pfn = 0x133;
       }
       else {
@@ -268,7 +267,7 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
     else {
       dst_00.seg = dst->seg;
       dst_00.ofs = x + y * 0x140;
-      drawGfx(gfx,dst_00,in_stack_00000010);
+      drawGfx(gfx,dst_00,type);
     }
   }
   return;
@@ -515,8 +514,6 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
   uint16_t uVar4;
   uint16_t uVar5;
   undefined1 uStack000f;
-  char in_stack_00000012;
-  uint8_t in_stack_00000014;
   uint8_t in_stack_00000016;
   byte in_stack_00000018;
   uint8_t skip;
@@ -552,7 +549,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
     rectTop = rectOfs[1];
     rectRight = rectOfs[2];
     rectBottom = rectOfs[3];
-    if (in_stack_00000012 == '\0') {
+    if (scale == '\0') {
       uVar1 = (int)((uint)(byte)flip * *(int *)(gfx.ofs + 1)) >> 4;
     }
     else {
@@ -576,7 +573,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
       pcStack_1a = (char *)((int)pcStack_e + uVar1 * 0x140);
       srcPtr = (char *)rectOfs[4];
       uVar3 = 1;
-      if (in_stack_00000012 == '\0') {
+      if (scale == '\0') {
         pfStack_6 = (far_t *)(GUnitDescriptions + 0x12);
       }
       else {
@@ -586,7 +583,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
       iStack_1e = gfx.ofs + 0xe;
       gfxSeg = gfx.seg;
       pcStack_e = pcStack_1a;
-      if (in_stack_00000014 == 0xff) {
+      if (flip == 0xff) {
         uStack_8 = 0;
         while ((uStack_8 < *(uint *)(gfx.ofs + 0xc) && (uVar1 <= rectBottom))) {
           iVar2 = (*(code *)pfStack_6)(uVar5,iStack_1e,gfxSeg,&skip);
@@ -622,7 +619,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
             if (rectTop <= uVar1) {
               buf.seg = _SS;
               buf.ofs = (uint16_t)(&skip + uStack_a);
-              ovr_driver_scan1(buf,*(int *)(gfx.ofs + 10) - uStack_a,in_stack_00000014,
+              ovr_driver_scan1(buf,*(int *)(gfx.ofs + 10) - uStack_a,flip,
                                in_stack_00000016,far_from_u32((uint32_t)(0x15290000)),(uint)in_stack_00000018);
               in_stack_00000018 = in_stack_00000018 + (*(char *)(gfx.ofs + 10) - (char)uStack_a);
               uVar5 = 0x22a6;
