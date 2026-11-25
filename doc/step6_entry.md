@@ -4935,3 +4935,51 @@ Their value is entirely that the data written is now the right width.
 
   grep_checks 46,469 (unchanged by the eight width fixes); build 65/65 clean;
   LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### Caller-side analysis of `driver_scan2`: it is a tail block of a stub
+
+`driver_scan2` (2d63:098a) is `__cdecl16near`, so its caller must be in the same segment.
+Scanning segment 2d63 for `e8 rel16` with `ip+3+rel == 0x098a` finds exactly two sites:
+
+```
+file 0x1FD62  ip 0932   call 0x1FDBA
+file 0x1FDAF  ip 097F   call 0x1FDBA
+```
+
+and the second is immediately followed by the routine's epilogue
+(`pop ds / pop es / pop di / pop si / mov sp,bp / pop bp / retf` at ip 0982-0989).  The
+enclosing routine is `driver_compute5` (2d63:0846, 324 bytes, i.e. 0x846..0x98a), so
+`driver_scan2` is not a function at all - it is a block of `driver_compute5` that was split
+out and reached with `call`, relying on `driver_compute5`'s frame.
+
+That also identifies every "unauthenticated" register: `unaff_BP` is the caller's BP,
+`unaff_SI`/`unaff_DI` are the two cursors, `in_CX` is the caller's loop count, and the block
+reads the caller's locals:
+
+```
+01FDBA  mov bl, [bp - 6]      ; DDA remainder step      (byte)
+01FDBD  mov bh, [bp - 0x10]   ; y-step base             (byte)
+01FDC0  mov dl, [bp - 2]      ; x delta / 2             (byte)
+01FDC3  mov dh, [bp - 0xc]    ; y delta                 (byte)
+01FDC6  mov al, [bp + 0x12]   ; colour - a *parameter*  (byte)
+01FDDB  add si, [bp - 4]      ; cursor step             (word)
+01FDE2  add si, [bp - 8]      ; major-axis bias         (word)
+01FDE5  add dl, [bp - 0xa]    ; ...                     (byte)
+01FDE8  add di, [bp - 0xe]    ; ...                     (word)
+```
+
+**The important part.**  Our `driver_compute5` is a 23-line stub: it sorts `y1`/`y2`/`y3` and
+calls `driver_scan2()` twice.  Nothing in it computes `[bp-2]`, `[bp-4]`, `[bp-6]`, `[bp-8]`,
+`[bp-0xa]`, `[bp-0xc]`, `[bp-0xe]`, `[bp-0x10]` or `[bp-0x12]` - those assignments live in the
+324-byte body that was attributed to `driver_scan2` and lost.  So this routine is not
+"misnamed": as recovered it draws nothing, because the block reads a frame nobody fills and
+our build gives it an uninitialised `unaff_BP`.  The same is true of `driver_drawLine`'s
+`driver_drawLine_compute()` sub-call and the other `*_compute` fragments.
+
+Fixing it properly means re-deriving all 324 bytes of `driver_compute5` (ip 0x846..0x98a) and
+inlining the block at both call sites - a full function rewrite against the disassembly, not a
+rename.  Deliberately not attempted in a cramped pass, because a wrong DDA silently corrupts
+every line the game draws.
+
+  grep_checks 45,571; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
