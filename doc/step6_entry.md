@@ -4842,3 +4842,41 @@ Two things this unlocks for later turns:
 
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; grep_checks 47,227
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### `--asm` limitation: assembly output can hit a compiler table limit, and the probe workaround
+
+`scripts/build_standalone.py --asm` is not usable on every module.  `o45.c` (the build's name
+for `ovc45_unitinfo.c`) fails with
+
+```
+Error o45.c 3853: Compiler table limit exceeded in function ovc45_buildPlacementMessage
+```
+
+under `-S` even though the same module compiles cleanly with `-c`.  `-S` keeps the same
+backend but writes assembly, and that path hits an internal table limit in a different
+(large) function, so the whole module is rejected and no listing is produced.
+
+Workaround, used for `ovc45_compute1`: extract just the function into a one-module probe and
+compile that with `--keep-stage`, so staging does not overwrite it:
+
+```
+tmp/buildsrc/probe.c  =  #include "st.h"  +  <the function>
+python scripts/build_standalone.py --keep-stage --only probe --asm
+```
+
+That yields a listing of exactly the function under study.  Delete `probe.c` afterwards: a
+stray definition of a function that also lives in its real module breaks the next link with
+a duplicate-symbol error.
+
+The listing settled `ovc45_compute1` completely: our rebuild has 6 return-0 sites
+(`xor ax,ax` followed by the epilogue) and 1 return-1 site, matching the original's six
+`mov al,0` (0x6A483, 0x6A4B5, 0x6A4ED, 0x6A542, 0x6A573, 0x6A5AA) and one `mov al,1`
+(0x6A5AE).
+
+Note also that this class of fix barely moves the gate: `extraout_AH` is not one of the
+section-5 patterns, so correcting three garbage returns moved `grep_checks` by 1.  It is
+worth doing for behaviour, but it is not a way to reach zero.
+
+  grep_checks 46,742 -> 46,741; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868;
+  compare_runtime 1,546/11 main entry, 1,545/11 post-init_cfg
