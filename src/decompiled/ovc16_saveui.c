@@ -331,8 +331,7 @@ uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint
   if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
     TextBlitX = 0x16;
     TextBlitY = 0xb;
-    ovr_blitText((char *)far_ofs_u32(title),(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg,0xde,0xde,7
-                );
+    ovr_blitText(title,(byte far *)MK_FP(Font03.seg,Font03.ofs),0xde,7);
   }
   iStack_6 = 0;
   if ((int)items.seg < 9) {
@@ -428,8 +427,7 @@ L_uiMenuSub_0B46:
               if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
                 TextBlitX = 0x16;
                 TextBlitY = 0xb;
-                ovr_blitText((char *)far_ofs_u32(title),(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg
-                             ,0xde,0xde,7);
+                ovr_blitText(title,(byte far *)MK_FP(Font03.seg,Font03.ofs),0xde,7);
               }
               (*(uint8_t *)((uint8_t *)&(entries_02.seg))) = uVar6;
               entries_02.ofs = (uint16_t)&dest;
@@ -463,8 +461,7 @@ L_uiMenuSub_0B46:
         if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
           TextBlitX = 0x16;
           TextBlitY = 0xb;
-          ovr_blitText((char *)far_ofs_u32(title),(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg,0xde,
-                       0xde,7);
+          ovr_blitText(title,(byte far *)MK_FP(Font03.seg,Font03.ofs),0xde,7);
         }
         (*(uint8_t *)((uint8_t *)&(entries_01.seg))) = uVar6;
         entries_01.ofs = (uint16_t)&dest;
@@ -516,8 +513,7 @@ L_uiMenuSub_08AD:
       if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
         TextBlitX = 0x16;
         TextBlitY = 0xb;
-        ovr_blitText((char *)far_ofs_u32(title),(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg,0xde,
-                     0xde,7);
+        ovr_blitText(title,(byte far *)MK_FP(Font03.seg,Font03.ofs),0xde,7);
       }
       (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = uVar6;
       entries_00.ofs = (uint16_t)&dest;
