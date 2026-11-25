@@ -7274,3 +7274,67 @@ cast).  The original's call at `0x0068..0x0073` pushes four words (0, 400, seg, 
 fill with the `(dest, len, val)` order.  So the first parameter must become `void far *` and the eight
 `(void *)CONCAT22(...)` sites must become `(void far *)`.  Left alone here because it is a 17-site
 class of its own and changing the prototype without all of them would be worse than leaving it.
+
+### MEASURED: `CONCAT22(seg, ofs)` cannot build a far pointer - it yields segment 0
+
+`st_compat.h` defines
+
+```c
+#define CONCAT22(a,b) ((uint32_t)(((uint16_t)(a) << 16) | (uint16_t)(b)))
+```
+
+The `<< 16` is applied to a **16-bit `uint16_t`**, promoted to a 16-bit `int`, so the shift is a no-op
+and the result is just `b`.  The high word is discarded.  A one-construct probe shows it:
+
+```c
+void far *p_concat(void) { return (void far *)CONCAT22(0x1234, 0x5678); }
+void far *p_mkfp(void)   { return MK_FP(0x1234, 0x5678); }
+```
+
+```
+p_concat:   xor dx,dx / mov ax,22136     -> DX:AX = 0x0000:0x5678    SEGMENT LOST
+p_mkfp:     mov dx,4660 / mov ax,22136   -> DX:AX = 0x1234:0x5678    correct
+```
+
+`MK_FP` escapes the problem because it casts *before* shifting: `((uint32_t)(seg) << 16) | (uint16_t)(ofs)`.
+
+**Consequence:** every `(T far *)CONCAT22(seg, ofs)` in the tree is a far pointer into **segment 0** -
+the interrupt vector table.  `tmp/find_concat_far.py` counts **47** such casts (against 1,051 casts to
+*near* pointers, which truncate to the offset deliberately and are a different question).  They cluster
+in the functions already known to be dirty:
+
+```
+ovc41_main.c 9   ovc12_agnt.c 7   ovc18_leaderview.c 7   ovc22_classes.c 7
+ovc27_combat.c 6  ovc15_sprite.c 5   ovc33_stats.c 3   ovc03_font.c 2   ovc06_blit.c 1
+```
+
+This also **retracts a fix attempted in this same turn**: changing `_fsetmem`'s destination to
+`void far *` and its call-site casts to `(void far *)CONCAT22(seg,ofs)` compiled clean and looked
+right, but the emitted code was
+
+```
+push 0
+push 400
+shl  ax,16              ; a no-op on a 16-bit register
+or   ax,word ptr [bp-88]
+push 0                  ; <-- segment 0
+push ax
+call far ptr __fsetmem
+```
+
+which is *worse* than the near declaration it replaced (that at least stayed in DS).  It was reverted.
+The lesson is the one this session keeps re-teaching: for pointer width and provenance, the build and
+the gates say nothing - only the emitted instructions do.  The `_fsetmem` class (a far destination with
+the `(dest, len, val)` order, 17 call sites) still needs doing, but each site must become
+`MK_FP(seg, ofs)` and not `CONCAT22`.
+
+Two sub-classes need different treatment when that is done:
+
+* the clean ones, where both arguments are plain words - `(byte far *)CONCAT22(Font03.seg,Font03.ofs)`,
+  `(agnt_t far *)CONCAT22(_SS,&agntCopy)` - convert directly to `MK_FP(a,b)`;
+* the already-garbled ones, where an argument is itself a pointer cast -
+  `(agnt_t far *)CONCAT22((agnt_t far *)b,a)` - cannot, because `MK_FP` would shift the whole 32-bit
+  pointer left by 16.  Those are upstream type errors and need the real field, not a macro swap.
+
+  grep_checks 40,510 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
