@@ -20,6 +20,7 @@ MAP = "tmp/buildsrc/REBUILT.MAP"
 SYMS = "audit/symbols.tsv"
 
 verbose = "--verbose" in sys.argv
+why = "--why" in sys.argv
 
 # ---- original DGROUP symbols -------------------------------------------------
 orig = []          # (address, name)
@@ -78,12 +79,14 @@ for k in ours_by_key:
     ours_by_key[k].sort()
 
 matched = []
+unmatched = []      # (off, name, reason)
 last = -1
 used = set()
 for off, name in orig:
     k = key(name)
     cands = ours_by_key.get(k)
     if not cands:
+        unmatched.append((off, name, "no name with this key"))
         continue
     # duplicate names (the original reuses s_mage for "Mage" and "mage"):
     # consume the next public in address order so each maps once
@@ -98,6 +101,7 @@ for off, name in orig:
                 pick = (oofs, oname)
                 break
     if pick is None:
+        unmatched.append((off, name, "candidate already consumed"))
         continue
     used.add(pick[0])
     last = pick[0]
@@ -118,6 +122,50 @@ for off, name, oofs, seg in matched:
         runs.append([d, off, name, 1])
     else:
         runs[-1][3] += 1
+
+if why:
+    # classify: interior labels have no counterpart by construction; the rest are
+    # either a name variant of one of our symbols or genuinely absent.
+    def strip_suffix(n):
+        return re.sub(r"_2410_[0-9A-Fa-f]{4}$", "", n.upper().lstrip("_"))
+
+    ours_stripped = {}
+    for nm, (seg, ofs) in ours.items():
+        if seg == dgroup_seg:
+            ours_stripped.setdefault(strip_suffix(nm), []).append(nm)
+
+    buckets = {}
+    variants = []
+    for off, name, reason in unmatched:
+        if "+" in name:
+            cls = "interior label (+N) - not a symbol"
+        elif name.upper() in ("DATASEG", "DGROUP", "_DATA", "_BSS", "_TEXT"):
+            cls = "group/segment name - not a variable"
+        elif re.search(r"\.(seg|ofs)$", name):
+            cls = "C0 record field label - not a variable"
+        elif reason.startswith("candidate already"):
+            cls = "duplicate name, all twins consumed"
+        elif name.startswith("s_") or name.startswith("S_"):
+            cls = "string literal whose name we do not have"
+        elif reason.startswith("candidate already"):
+            cls = "duplicate name, all twins consumed"
+        else:
+            v = ours_stripped.get(strip_suffix(name))
+            if v:
+                cls = "name variant of our symbol"
+                variants.append((off, name, v[0]))
+            else:
+                cls = "no counterpart at all"
+        buckets.setdefault(cls, []).append((off, name))
+    print("unmatched: %d" % len(unmatched))
+    for cls, items in sorted(buckets.items(), key=lambda kv: -len(kv[1])):
+        print("  %-34s %d" % (cls, len(items)))
+        for off, name in items[:6]:
+            print("      %04x %s" % (off, name))
+    if variants:
+        print("  name variants (first 6):")
+        for off, name, oname in variants[:6]:
+            print("      %04x %-28s ours=%s" % (off, name, oname))
 
 print("distinct layout deltas: %d" % len(runs))
 for i, (d, off, name, count) in enumerate(runs):

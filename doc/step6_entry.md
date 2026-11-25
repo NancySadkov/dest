@@ -3852,3 +3852,40 @@ post-init_cfg: 1,545 identical / 11 different
 
   build 64/64 clean; LINK ERRORS 0; grep_checks 50,827
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### `diff_dgroup --why`: the 972/1,868 gap as a worklist
+
+`scripts/diff_dgroup.py` matched 972 of 1,868 original DGROUP labels and silently
+skipped the rest.  `--why` now classifies every unmatched label with the same matching
+rules the tool already uses:
+
+```
+unmatched: 896
+  string literal whose name we do not have        754
+  interior label (+N) - not a symbol               63
+  duplicate name, all twins consumed               35
+  no counterpart at all                            25
+  C0 record field label - not a variable           17
+  group/segment name - not a variable               2
+```
+
+So the gate's ceiling is not 1,868: 82 of the 896 can never match (interior labels,
+group/segment names, C0 record fields), and 35 are duplicate spellings of names we do
+have.  The addressable remainder is **779**, of which **754 are string literals** -
+i.e. `diff_dgroup` is now, above all, a question of giving our string data the original
+names (the same content-based pairing that resolved `GTxtFiles`, applied to the symbol
+table rather than to a far-pointer table).
+
+Examples from each bucket:
+
+```
+009a s_sorry_you_may_not_pass_time_during_a_battle        string
+0002 _DATA+2                                              interior
+01d5 s_mage                                               duplicate
+002c PSPEnv                                               no counterpart
+0304 IdFORM.hi                                            C0 record field
+0000 DATASEG                                              group name
+```
+
+  build 64/64 clean; LINK ERRORS 0; grep_checks 50,768
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
