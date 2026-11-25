@@ -3293,7 +3293,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
   int iStack_16;
   int iStack_14;
   int iStack_12;
-  uint16_t uStack_10;
+  uint16_t fontSeg;
   char acStack_e [6];
   uint16_t uStack_8;
   uint32_t auStack_6;   /* hand fix: CONCAT12/13/22 target, read as uint3 */
@@ -3401,11 +3401,11 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
       ovr_say((char *)"The damaged structures belonging to all leaders are highlighted in red.",0);
       return pcVar17;
     }
-    uStack_10 =(uint16_t)( (char *)((int *)((uint)charIndex * 4))[1]);
+    fontSeg =(uint16_t)( (char *)((int *)((uint)charIndex * 4))[1]);
     iStack_12 = *(int *)((uint)charIndex * 4);
     uVar5 = Font02.ofs;
     ovr_ovc45_compute9(acStack_1b6,(char *)CONCAT22(iStack_12,_SS),
-                       (char *)CONCAT22(Font02.ofs,uStack_10),Font02.seg,'K');
+                       (char *)CONCAT22(Font02.ofs,fontSeg),Font02.seg,'K');
     SUB_5b66_1d94();
     puVar14 = (uint8_t *)((char *)0x26510);
     pcVar17 = ovr_stsprintf(acStack_13e,(char *)CONCAT22(0x550a,_SS),
@@ -3670,7 +3670,7 @@ L_attact_3f0b_1082_1477:
                           ,iStack_12);
   } while ((peVar15->base).faction < (byte)(peVar15->base).state);
   uVar18 = ovr_ovc07_signum((peVar15->base).destX - (peStack_1e->base).x);
-  iStack_12 = CONCAT22(uStack_10,uVar18);
+  iStack_12 = CONCAT22(fontSeg,uVar18);
   uVar18 = (uint16_t)((ulong)peStack_1e >> 0x10);
   iStack_14 = ovr_ovc07_signum((((entity_t *)peStack_1e)->base).destY -
                                (((entity_t *)peStack_1e)->base).y);

@@ -3136,7 +3136,7 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
   uint16_t uVar5;
   uint8_t text2;
   uint8_t text;
-  int iStack_6;
+  int clearCol;
   byte bStack_3;
   
   puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x);
@@ -3146,9 +3146,9 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
     uVar3 = (uint16_t)((ulong)Entities >> 0x10);
     if ((((entity_t *)Entities)[entityIndex].base.x == x) &&
        (((entity_t *)Entities)[entityIndex].base.y == y)) {
-      iStack_6 = ovc23_findClearColumn(x,y);
+      clearCol = ovc23_findClearColumn(x,y);
       uVar3 = (uint16_t)((ulong)Entities >> 0x10);
-      if (iStack_6 < 0) {
+      if (clearCol < 0) {
         bStack_3 = ((entity_t *)Entities)[entityIndex].base.gindex;
         if (AgntGs[(uint)bStack_3].ai == '\0') {
           uVar3 = 0xa000;
@@ -3164,7 +3164,7 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
         ovr_ovc15_removeEntity(entityIndex);
       }
       else {
-        ((entity_t *)Entities)[entityIndex].base.x = iStack_6;
+        ((entity_t *)Entities)[entityIndex].base.x = clearCol;
       }
     }
   }
@@ -3189,11 +3189,11 @@ uint16_t __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int re
   undefined1 uStack_8;
   uint8_t loopIndex;
   undefined1 uStack_5;
-  undefined1 uStack_4;
+  undefined1 counter;
   
   uVar3 = (uint)amount;
   uStack_8 = amount;
-  _fmemset(MK_FP(_SS, &uStack_4), 0, 3);
+  _fmemset(MK_FP(_SS, &counter), 0, 3);
   for (uVar5 = 0; uVar5 < GRecordCount; uVar5 = uVar5 + 1) {
     if (GRecords[uVar5].party == partyIndex) {
       if ((GRecords[uVar5].kind & 4) != 0) {
@@ -3203,11 +3203,11 @@ uint16_t __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int re
         uStack_5 = uStack_5 + 1;
       }
       if ((GRecords[uVar5].kind & 0x10) != 0) {
-        uStack_4 = uStack_4 + 1;
+        counter = counter + 1;
       }
     }
   }
-  if (uStack_4 < *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x9c)) {
+  if (counter < *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x9c)) {
     uStack_8 = (byte)((ulong)((long)(int)uVar3 * 7) / 10);
     iVar4 = recordIndex * 0x12;
     *(byte *)(iVar4 + 0xd) = *(byte *)(iVar4 + 0xd) | 0x10;

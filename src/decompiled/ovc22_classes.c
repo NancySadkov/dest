@@ -3108,8 +3108,8 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint8_t successWeight;
   char cStack_1d;
   uint8_t found;
-  byte bStack_1b;
-  uint16_t uStack_1a;
+  byte partySlot;
+  uint16_t entY;
   uint entX;
   uint idx;
   uint uStack_14;
@@ -3697,12 +3697,12 @@ void __cdecl16far upd_usesAlignUp4(void)
           bVar27 = true;
         }
         else {
-          bStack_1b = (GLeaderSheets[bVar5])->partySlot;
-          if (bStack_1b < 5) {
-            uStack_1a = peVar20[idx].base.y;
+          partySlot = (GLeaderSheets[bVar5])->partySlot;
+          if (partySlot < 5) {
+            entY = peVar20[idx].base.y;
             entX = ovr_alignUp4(((peVar20 + idx)->base).x,0,0);
             randVal = 0x2410;
-            if (((*(short (*) [60] [148])GMapFlags)[uStack_1a][entX] & 8U) == 0) {
+            if (((*(short (*) [60] [148])GMapFlags)[entY][entX] & 8U) == 0) {
               successWeight = 0x22;
               partialWeight = 0x21;
               bldType = 0x22;
@@ -3713,10 +3713,10 @@ void __cdecl16far upd_usesAlignUp4(void)
               puVar32 = &successWeight;
               puVar30 = &partialWeight;
               puVar28 = &bldType;
-              index = CONCAT11((char)((uint)puVar28 >> 8),bStack_1b);
+              index = CONCAT11((char)((uint)puVar28 >> 8),partySlot);
               uVar29 = _SS;
               uVar31 = _SS;
-              uVar14 = ovr_attact_usesSquareRecCount(entX,uStack_1a);
+              uVar14 = ovr_attact_usesSquareRecCount(entX,entY);
               table.seg = randVal;
               table.ofs = uVar14;
               pctOut.seg = uVar29;

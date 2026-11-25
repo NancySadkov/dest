@@ -4159,3 +4159,29 @@ the change was not made; the addresses above are the evidence the next attempt n
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 49,797 -> 49,777
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### The other `unaff_` holders are not prologue constants
+
+Three more functions were disassembled with the `seg*16-0xE200` rule; none is a repeat of
+`init_assets1`:
+
+```
+manage_usesEntities   4d05:22cf   starts at cmp cl,0xff - a mid-function fragment
+manage_usesEntities2  4d05:2371   same shape
+ovc15_textError       4207:26bc   push si but no initial mov si; SI is later set to
+                                  0, 5 and 0xa in different branches
+```
+
+* the two `manage_usesEntities` bodies take **no arguments** and read SI (entity index),
+  CL (entity type) and BP (outer frame) - a register-based convention.  Our recovery split
+  one original function into two fragments, so fixing them means restructuring (adding
+  parameters and merging the call sites), not renaming;
+* `ovc15_textError` assigns SI several different constants per branch, so it is a scratch
+  variable whose assignments the decompiler lost - again a code change, not a rename.
+
+So of the `unaff_` family only the "single constant set in the prologue and never
+reloaded" case (init_assets1, -191 hits) is mechanical.  The rest need the original's
+control flow, which the addresses above now make easy to obtain.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 49,777 -> 49,756
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
