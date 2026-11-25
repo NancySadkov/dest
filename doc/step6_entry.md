@@ -6851,3 +6851,36 @@ closed.
 
   grep_checks 40,885 -> 40,771; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### ovc41_removeAgent: the entity pointer was rebuilt into segment 0
+
+`6a8f:0256`, 460 bytes, 174 instructions, **3 calls** - the body makes exactly three
+(`ovr_agnt_usesAgntCount4`, `_fmemmove`, `ovr_attact_usesRandBelow`), so it was complete.
+
+The defect is in the first three lines:
+
+```c
+uVar2   = AGNT_WORD(&Agnts[agntIndex], entity, 2);                  /* the segment half  */
+agnt    = (agnt_t far *)AGNT_WORD(&Agnts[agntIndex], entity, 0);     /* the OFFSET, cast  */
+agntPtr = (agnt_t far *)CONCAT22(uVar2,agnt);                       /* into a near local */
+```
+
+An int cast to a far pointer compiles to **segment 0** under Turbo C, and `agntPtr` is declared
+`entity_t *` - near - so the base truncated anyway.  Everything the function then does goes through
+that pointer: `y` at +2, `x` at +0, `targetX` at +4, `targetY` at +6, `destX` at +8, `destY` at +0xa,
+`target` at +0xc, all reached with `les bx,[bp-6]` in the original.  It is simply `Agnts[i].entity`,
+held in an `entity_t far *`.
+
+Verified against a listing of the function alone (o41 cannot list as a module):
+
+```
+instructions: 187 (original 174)
+calls: 3 (original 3)
+les  bx, dword ptr [bp-6]
+```
+
+One `les` rather than the original's repeated reloads, because our compiler keeps ES live across the
+field reads; the pointer is far in both.
+
+  grep_checks 40,771 -> 40,736; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

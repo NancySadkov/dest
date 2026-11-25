@@ -200,32 +200,31 @@ void __cdecl16far ovc41_advanceAnimFrame(agnt_t far *agnt,uint16_t arg2)
 void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,uint16_t arg3)
 
 {
-  char *pcVar1;
-  uint16_t uVar2;
-  agnt_t far *agnt;
-  int iVar3;
-  uint16_t uVar4;
-  bool bVar5;
-  uint uVar6;
-  entity_t *agntPtr;   /* hand fix: dereferenced as agntPtr->base.x */
-  
-  uVar2 = AGNT_WORD(&Agnts[agntIndex], entity, 2);
-  agnt = (agnt_t far *)AGNT_WORD(&Agnts[agntIndex], entity, 0);
-  agntPtr = (agnt_t far *)CONCAT22(uVar2,agnt);
-  iVar3 = Agnts[agntIndex].owner;
+  /* Re-derived from 6a8f:0256.  The entity pointer is Agnts[i].entity, loaded with `les` in the
+     original and used for y (+2), x (+0), targetX (+4), targetY (+6), destX (+8), destY (+0xa) and
+     target (+0xc).  The export rebuilt it from the two halves of the field and cast them to a near
+     entity_t*, which truncated and, for the offset half, produced segment 0. */
+  byte *targetPtr;
+  entity_t far *ent;
+  int owner;
+  bool sharedOwner;
+  uint i;
+
+  ent = Agnts[agntIndex].entity;
+  owner = Agnts[agntIndex].owner;
   ovr_agnt_usesAgntCount4(agntIndex + 1);
-  bVar5 = false;
-  for (uVar6 = 0; (int)uVar6 < (int)(uint)AgntCount; uVar6 = uVar6 + 1) {
-    if ((uVar6 != agntIndex) && (Agnts[uVar6].owner == iVar3)) {
-      bVar5 = true;
+  sharedOwner = false;
+  for (i = 0; (int)i < (int)(uint)AgntCount; i = i + 1) {
+    if ((i != agntIndex) && (Agnts[i].owner == owner)) {
+      sharedOwner = true;
     }
-    if (Agnts[uVar6].target != -1) {
-      if ((int)agntIndex < (int)(uint)Agnts[uVar6].target) {
-        pcVar1 = (char *)&Agnts[uVar6].target;
-        *pcVar1 = *pcVar1 + -1;
+    if (Agnts[i].target != -1) {
+      if ((int)agntIndex < (int)(uint)Agnts[i].target) {
+        targetPtr = (byte *)&Agnts[i].target;
+        *targetPtr = *targetPtr + -1;
       }
-      else if (Agnts[uVar6].target == agntIndex) {
-        Agnts[uVar6].target = 0xff;
+      else if (Agnts[i].target == agntIndex) {
+        Agnts[i].target = 0xff;
       }
     }
   }
@@ -235,12 +234,11 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,uint16_t arg3)
               ((AgntCount - agntIndex) + -1) * 0x34);
   }
   AgntCount = AgntCount - 1;
-  if ((((notify != 0) && (!bVar5)) && (agnt->y == GfxRndSeed2)) &&
-     ((GfxRndSeed - 2U <= agntPtr->base.x && (GfxRndSeed - 2U <= agntPtr->base.x)))) {
-    agnt->destX = agnt->targetX;
-    uVar4 = agnt->targetY;
-    agnt->destY = uVar4;
-    ovr_attact_usesRandBelow(agnt,(byte)uVar2,CONCAT11((char)(uVar4 >> 8),agnt->target),0);
+  if ((((notify != 0) && (!sharedOwner)) && (ent->base.y == GfxRndSeed2)) &&
+     ((GfxRndSeed - 2U <= ent->base.x && (GfxRndSeed - 2U <= ent->base.x)))) {
+    ent->base.destX = ent->base.targetX;
+    ent->base.destY = ent->base.targetY;
+    ovr_attact_usesRandBelow((agnt_t far *)ent,(byte)ent->base.target,0,0);
   }
   return;
 }
