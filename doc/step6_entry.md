@@ -7069,3 +7069,68 @@ cannot replace without decoding that region.
 
   grep_checks 40,734 -> 40,591; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### stats_unreadyNotice re-derived (40,591 -> 40,526, -65)
+
+`6386:13a1`, 465 bytes, 183 instructions, and the same defect shape as the previous entry - two
+chained far dereferences truncated through `uint32_t` locals:
+
+```
+0018  les bx, ptr es:[bx + 0x17]     ; Agnts[id].entity
+001D  mov al, byte ptr es:[bx+0x33]  ; the flag byte
+0021  xor al, 1
+003D  mov byte ptr es:[bx+0x33], al  ; written back through another les chain
+0074  mov al, byte ptr es:[bx+0x1a]  ; entity->base.entity byte 3 (= 0x17 + 3)
+```
+
+`entity+0x33` is the last byte of the 0x34-byte `agnt_t` inside `entity_t`, i.e. the high byte of
+`base.flags32` (struct tail: flags 0x2b, visited 0x2d, variant 0x2e, faction 0x2f, state 0x30,
+flags32 0x32; `entity_t.tick` is at 0x34 per its comment and per symbols.tsv).  It may really be a
+one-byte field the struct folds into `flags32` - either way the code touches that one byte, so it is
+expressed as `(uint8_t far *)&...flags32 + 1`.
+
+`gdata->name` is at 0x24 (agntG_t: sprs[6] 0x03..0x1a, extents[3][3] 0x1b..0x23), so the export's
+`*(uint16_t *)(iVar7 + 0x24)` and `+ 0x26` are the offset and segment halves of `gdata->name`.
+
+**One real arity defect found and fixed.**  The export called
+
+```c
+drawAgntStats((agnt_t far *)&Agnts[agnt_id].x, far_from_u32((uint32_t)(SEG_OF(Agnts))), 0);
+```
+
+`SEG_OF(Agnts)` is `0x50`, so `far_from_u32` produced `{ofs:0x50, seg:0}` - segment 0.  The original
+pushes two literal zeros:
+
+```
+011F  push 0          ; cmap.ofs
+0121  push 0          ; cmap.seg
+0130  push 0x50       ; agnt segment
+0133  push ax         ; agnt offset
+0134  push cs         ; far call within the segment
+0135  call near
+```
+
+so the argument is an all-zero `far_t`, now built explicitly in a local.  That also removed the
+`far_from_u32` call the export inserted and took the function from 10 emitted calls to **9, matching
+the original**.
+
+Dead and removed: `uVar8` (a junk round-trip of the uninitialised `text` - saved at 1667, restored at
+1679, re-assigned and never read at 1698), and two `CONCAT22(text,agntSeg)` stores whose value no
+following statement reads.
+
+Verified by listing the function alone:
+
+```
+instructions: 184   (original 183)
+call instructions: 9   (original 9)
+```
+
+**Recorded, not fixed:** the original pushes 4 argument words for this call, but the declared
+prototype `drawAgntStats(agnt_t far *, far_t, uint16_t)` needs 5 (2 + 2 + 1).  So `arg3` appears to be
+spurious - the callee only ever receives a far agent and a `far_t`.  Settling it means reading
+`drawAgntStats` itself at `ovc33_stats.c:1129` and its three other call sites, so it is left as the
+next lead rather than changed here.  Our extra word is harmless for this call (cdecl, agent and cmap
+still land at the right offsets) but the prototype should not stay wrong.
+
+  grep_checks 40,591 -> 40,526; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

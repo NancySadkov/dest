@@ -1649,68 +1649,62 @@ void __cdecl16far stats_usesEntityCount(char partyIndex)
 void __cdecl16far stats_unreadyNotice(byte agnt_id)
 
 {
-  byte *pbVar1;
-  uint32_t entityFar;
-  uint32_t uVar3;
-  uint8_t *puVar4;
-  char *pcVar5;
+  /* Re-derived from 6386:13a1 (465 bytes).  Toggles bit 0 of the agent entity's last flag byte,
+     reports the change, redraws the stats panel, then either prints the agent's generic name or the
+     "ready" status text depending on that bit.
+
+     The entity byte is reached as `les bx,es:[bx+0x17]` then `es:[bx+0x33]` - a chained far deref
+     that the export truncated through a `uint32_t` local and an `(int)` cast.  `entity` and `gdata`
+     are far pointer fields, so the accesses below are direct.
+
+     The argument lists of ovc15_usesStshRealloc / stsprintf / drawString / attact_usesEntities /
+     stats_readyStatusText and the declared sizes of `text` and `msg` are kept exactly as exported:
+     the frame is `sub sp,0xd0` with a far buffer at `SS:[bp-0xa8]`, so those buffers are larger than
+     declared and their true extents are not established here. */
+  uint8_t *allocPtr;
+  char *textPtr;
+  char *textFar;
   uint16_t agntSeg;
-  int iVar7;
-  uint16_t uVar8;
   uint8_t text;
-  char *pcStack_d4;
   uint8_t msg;
   uint8_t unitFlags;
   int owner;
-  
-  entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
-  uVar8 = text;
-  pcStack_d4 = (char *)(CONCAT22(text,(uint)*(byte *)((int)entityFar + 0x33)) ^ 1);
-  entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
-  *(undefined1 *)((int)entityFar + 0x33) = (char)pcStack_d4;
-  entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
-  if ((*(byte *)((int)entityFar + 0x33) & 1) == 0) {
-    entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
-    pbVar1 = (byte *)((int)entityFar + 0x33);
-    *pbVar1 = *pbVar1 & 0xfb;
+  uint8_t far *flagByte;
+  far_t noCmap;
+
+  /* entity + 0x33: the high byte of base.flags32, the last byte of the agent record */
+  flagByte = (uint8_t far *)&Agnts[agnt_id].entity->base.flags32 + 1;
+  *flagByte = *flagByte ^ 1;
+  if ((*flagByte & 1) == 0) {
+    *flagByte = *flagByte & 0xfb;
   }
   else {
-    entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
-    text = uVar8;
-    stats_usesEntityCount(*(char *)((int)entityFar + 0x1a));
-    entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
-    pbVar1 = (byte *)((int)entityFar + 0x33);
-    *pbVar1 = *pbVar1 | 4;
+    stats_usesEntityCount(AGNT_FIELD(Agnts[agnt_id].entity, base.entity, 3));
+    *flagByte = *flagByte | 4;
     owner = Agnts[agnt_id].owner;
-    pcStack_d4 = (char *)CONCAT22(text,_SS);
+    textFar = (char *)CONCAT22(text,_SS);
     ovr_attact_usesEntities(owner,0,0,(uint16_t)&unitFlags,(uint16_t)_SS,0,0,0,0);
   }
-  entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
-  uVar3 = *(uint32_t far *)&Agnts[agnt_id].entity;
-  *(byte *)((int)uVar3 + 0x33) = *(byte *)((int)entityFar + 0x33) & 0xfd;
-  pcStack_d4 = (char *)((ulong)pcStack_d4 & 0xffff0000);
-  drawAgntStats((agnt_t far *)&Agnts[agnt_id].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
+  *flagByte = *flagByte & 0xfd;
+  noCmap.ofs = 0;
+  noCmap.seg = 0;
+  drawAgntStats((agnt_t far *)&Agnts[agnt_id].x,noCmap,0);
   agntSeg = SEG_OF(Agnts);
-  entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
-  if ((*(byte *)((int)entityFar + 0x33) & 1) == 0) {
+  if ((*flagByte & 1) == 0) {
     agntSeg = SEG_OF(Agnts);
-    entityFar = *(uint32_t far *)&Agnts[agnt_id].gdata;
-    uVar8 = (uint16_t)((ulong)entityFar >> 0x10);
-    iVar7 = (int)entityFar;
-    puVar4 = ovr_ovc15_usesStshRealloc
-                       ((char *)*(uint16_t *)(iVar7 + 0x24),*(uint16_t *)(iVar7 + 0x26),0,0,0,0,0,0);
-    pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x63b1,_SS),
-                           (char *)CONCAT22(puVar4,(char *)0x26510),agntSeg);
-    pcStack_d4 = (char *)CONCAT22(text,agntSeg);
-    drawString(pcVar5,agntSeg,0);
+    allocPtr = ovr_ovc15_usesStshRealloc
+                       ((char *)(uint16_t)far_ofs_u32(Agnts[agnt_id].gdata->name),
+                        (uint16_t)SEG_OF(Agnts[agnt_id].gdata->name),0,0,0,0,0,0);
+    textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x63b1,_SS),
+                            (char *)CONCAT22(allocPtr,(char *)0x26510),agntSeg);
+    drawString(textPtr,agntSeg,0);
   }
   else {
-    pcStack_d4 = (char *)CONCAT22(text,_SS);
-    pcVar5 = stats_readyStatusText((byte)&text,pcStack_d4);
-    pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x63c8,_SS),
-                           (char *)CONCAT22(pcVar5,(char *)0x26510),agntSeg);
-    pcStack_d4 = (char *)CONCAT22(text,agntSeg);
-    drawString(pcVar5,agntSeg,0);
+    textFar = (char *)CONCAT22(text,_SS);
+    textPtr = stats_readyStatusText((byte)&text,textFar);
+    textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x63c8,_SS),
+                            (char *)CONCAT22(textPtr,(char *)0x26510),agntSeg);
+    drawString(textPtr,agntSeg,0);
   }
   return;
 }
