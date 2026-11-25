@@ -125,7 +125,7 @@ int __cdecl16far ovc22_applyRankBonus(byte partyIndex,int cost)
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
 /* [R2] string "POPULATION" */
 
-char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t *agnt,uint16_t arg4,uint16_t arg5)
+char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t far *agnt,uint16_t arg4,uint16_t arg5)
 
 {
   undefined1 stk_bac4;   /* stack slot bac4 */
@@ -514,7 +514,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
   undefined1 uVar69;
   uint16_t in_stack_0000ffbe;
   uint16_t in_stack_0000ffc0;
-  agnt_t *in_stack_0000ffc2;
+  agnt_t far *in_stack_0000ffc2;
   int iStack_3c;
   uint uStack_38;
   int iStack_36;
@@ -1430,7 +1430,7 @@ L_OVC22_5087_0234_32B8:
                   do {
                     puVar50 = (uint *)((int)puVar50 + 1);
                     if ((int)(uint)AgntCount <= (int)puVar50) {
-                      iVar30 = ovr_audio_panFromX((agnt_t *)CONCAT11(uStack0009,bStack0008),0);
+                      iVar30 = ovr_audio_panFromX((agnt_t far *)CONCAT11(uStack0009,bStack0008),0);
                       uVar19 = (undefined1)((uint)iVar30 >> 8);
                       ovr_play_sfxU(0x1c,0,0,0,0);
                       return (far_t far *)CONCAT11(uVar19,1);
@@ -1824,7 +1824,7 @@ L_OVC22_5087_0234_32B8:
       uStack_24 = 10;
     }
     uStack_24 = (int)&in_stack_0000ffc2->x + uStack_24;
-    if (in_stack_0000ffc2 == (agnt_t *)0x0) {
+    if (in_stack_0000ffc2 == (agnt_t far *)0x0) {
       if (in_stack_0000ffc0 == 0) {
         if (in_stack_0000ffbe == 0) {
           *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x53) = 4;
@@ -2920,7 +2920,7 @@ void __cdecl16far ovc22_usesEntities2(int entityIndex)
   
   entSeg = (uint16_t)((ulong)Entities >> 0x10);
   if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) != -1) {
-    dirLevel = ovr_agnt_compute8((agnt_t *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),entSeg);
+    dirLevel = ovr_agnt_compute8((agnt_t far *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),entSeg);
     partyId = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
     for (budgetIdx = '\0'; budgetIdx < '\x03'; budgetIdx = budgetIdx + '\x01') {
       gdataPtr = *(uint32_t *)((uint)partyId << 2);
@@ -2962,7 +2962,7 @@ void __cdecl16far ovc22_usesEntities3(int entityIndex)
   
   entSeg = (uint16_t)((ulong)Entities >> 0x10);
   if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) != -1) {
-    dirLevel = ovr_agnt_compute10((agnt_t *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),entSeg);
+    dirLevel = ovr_agnt_compute10((agnt_t far *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),entSeg);
     bVar2 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
     for (budgetIdx = '\0'; budgetIdx < '\x04'; budgetIdx = budgetIdx + '\x01') {
       gdataPtr = *(uint32_t *)((uint)bVar2 << 2);
@@ -3087,7 +3087,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   uint16_t index;
   uint16_t uVar14;
   long *plVar15;
-  agnt_t *valueLo;
+  agnt_t far *valueLo;
   unit_t *units;
   int iVar17;
   int iVar18;
@@ -3801,7 +3801,7 @@ void __cdecl16far upd_usesAlignUp4(void)
               plVar15 = LXMUL_at_((long *)CONCAT11(uVar33,uVar34),a,in_stack_0000ffd2);
               peVar20 = Entities + idx;
               valueLo = ovr_ovc15_textError((entity_t *)CONCAT22(DAT_2000_d190,peVar20),
-                                            (agnt_t *)(CONCAT12((uVar23 & 1) != 0,plVar15) >> 1));
+                                            (agnt_t far *)(CONCAT12((uVar23 & 1) != 0,plVar15) >> 1));
               uVar12 = ovc22_usesLUDIV_at_2
                                  ((uint16_t)valueLo,(uint16_t)peVar20,CONCAT11(uVar33,uVar34));
               unitsSeg = (uint16_t)((ulong)Entities >> 0x10);
@@ -4708,7 +4708,7 @@ void __cdecl16far ovc22_spawnForLeaders(void)
     if ((((GLeaderSheets[leader])->active != '\0') &&
         (randPick = ovr_randBelow((uint)(byte)((char *)0x2686a)
                                            [(uint)(GLeaderSheets[leader])->classStr * 0x95],0),
-        (byte)randPick < ((agnt_t *)((leader << 2)))->variant)) &&
+        (byte)randPick < ((agnt_t far *)((leader << 2)))->variant)) &&
        ((*(char *)((int)*(uint32_t *)(leader << 2) + 0x3f) != '\0' ||
         ((GLeaderSheets[leader])->population <=
          (GLeaderSheets[leader])->housing)))) {

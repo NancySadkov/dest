@@ -4222,7 +4222,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
                           AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3)),0);
       BuildingTypes[bStack_11].expinc = (undefined1)uStack_14;
       bVar3 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
-      pcStack_16 = ovr_ovc22_textPOPULATION(bStack_11,bVar3,(agnt_t *)agnt,bVar3,(char)GfxRndSeed2);
+      pcStack_16 = ovr_ovc22_textPOPULATION(bStack_11,bVar3,(agnt_t far *)agnt,bVar3,(char)GfxRndSeed2);
       uVar14 = 0x10;
       partyIndex = *(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
       uStack_18 = ovr_ovc22_seasonalIncome(bStack_11,partyIndex,partyIndex,agnt,(char)GfxRndSeed2);

@@ -67,16 +67,16 @@ int __cdecl16far agnt_clampX(int x)
 
 /* [R7] body shape: compute */
 
-undefined1 __cdecl16far agnt_compute3(agnt_t *agnt)
+undefined1 __cdecl16far agnt_compute3(agnt_t far *agnt)
 
 {
   undefined1 uVar1;
   int iVar2;
-  agnt_t *agnt_00;
+  agnt_t far *agnt_00;
   uint16_t uVar3;
   
   uVar3 = (uint16_t)((ulong)agnt >> 0x10);
-  agnt_00 = (agnt_t *)agnt;
+  agnt_00 = (agnt_t far *)agnt;
   if (((((int)agnt_00->y < 0x15) || (agnt_00->moveState == 0x1)) && ((int)agnt->x < 0xd3)) &&
      (-1 < (int)agnt->x)) {
     iVar2 = ovr_ovc49_usesStExit(agnt_00,uVar3);
@@ -106,7 +106,7 @@ bool __cdecl16far agnt_compute4(char *flag)
 
 /* Computes the screen extents of the agent's current animation frame. */
 
-undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,uint16_t arg3)
+undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t far *agnt,uint8_t *result,uint16_t arg3)
 
 {
   uint8_t uVar1;
@@ -139,7 +139,7 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,ui
     if (agnt->level == 0x0) {
       cStack_d = '\x01';
       iStack_a = ((int)((int)(*(((agntG_t *)agnt->gdata)->extents + 2))[0] + *(int *)(iVar3 + 0x17)
-                       + ((agnt_t *)CONCAT22((uint8_t *)result,agnt))->x) >> 1) + -1;
+                       + ((agnt_t far *)CONCAT22((uint8_t *)result,agnt))->x) >> 1) + -1;
       iStack_c = iStack_a +
                  ((int)((agntG_t *)agnt->gdata)->extents[2][1] -
                   (int)(*(((agntG_t *)agnt->gdata)->extents + 2))[0] >> 1);
@@ -148,7 +148,7 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,ui
       cStack_d = -1;
       iStack_a = ((int)((-*(int *)(iVar3 + 0x17) -
                         (int)(*(((agntG_t *)agnt->gdata)->extents + 2))[0]) +
-                       ((agnt_t *)CONCAT22((uint8_t *)result,agnt))->x) >> 1) + 1;
+                       ((agnt_t far *)CONCAT22((uint8_t *)result,agnt))->x) >> 1) + 1;
       iStack_c = iStack_a -
                  ((int)((agntG_t *)agnt->gdata)->extents[2][1] -
                   (int)(*(((agntG_t *)agnt->gdata)->extents + 2))[0] >> 1);
@@ -216,7 +216,7 @@ undefined1 __cdecl16far agnt_computeFrameExtents(agnt_t *agnt,uint8_t *result,ui
 /* WARNING: Type propagation algorithm not settling */
 /* [R6] touches strengthMax, frameIndex */
 
-undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
+undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t far *agnt,byte *out)
 
 {
   uint8_t factionId;
@@ -257,7 +257,7 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
     if (agnt->level == 0x0) {
       levelSign = '\x01';
       colA = ((int)((int)(*((agntG_t *)agnt->gdata)->extents)[0] + *(int *)(frameOfs + 0x17) +
-                       ((agnt_t *)CONCAT22((byte *)out,agnt))->x) >> 1) + -1;
+                       ((agnt_t far *)CONCAT22((byte *)out,agnt))->x) >> 1) + -1;
       colB = colA +
                  ((int)((agntG_t *)agnt->gdata)->extents[0][1] -
                   (int)(*((agntG_t *)agnt->gdata)->extents)[0] >> 1);
@@ -265,7 +265,7 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
     else {
       levelSign = -1;
       colA = ((int)((-*(int *)(frameOfs + 0x17) - (int)(*((agntG_t *)agnt->gdata)->extents)[0]) +
-                       ((agnt_t *)CONCAT22((byte *)out,agnt))->x) >> 1) + 1;
+                       ((agnt_t far *)CONCAT22((byte *)out,agnt))->x) >> 1) + 1;
       colB = colA -
                  ((int)((agntG_t *)agnt->gdata)->extents[0][1] -
                   (int)(*((agntG_t *)agnt->gdata)->extents)[0] >> 1);
@@ -343,7 +343,7 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t *agnt,byte *out)
 /* [R6] touches AgntCount */
 
 bool __cdecl16far
-agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distance)
+agnt_usesAgntCount2(agnt_t far *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distance)
 
 {
   /* Re-derived from 3b1d:093e.  All four parameters are far pointers read directly by the
@@ -387,7 +387,7 @@ agnt_usesAgntCount2(agnt_t *agnt,uint16_t *xDir,uint16_t *yDir,uint16_t *distanc
 
 /* [R6] touches animFrame */
 
-void __cdecl16far agnt_usesAnimFrame(agnt_t *agnt,...)
+void __cdecl16far agnt_usesAnimFrame(agnt_t far *agnt,...)
 
 {
   uint16_t in_stack_00000006;
@@ -408,10 +408,10 @@ void __cdecl16far agnt_usesAnimFrame(agnt_t *agnt,...)
 
 /* [R7] body shape: compute */
 
-void __cdecl16far agnt_compute5(agnt_t *agnt)
+void __cdecl16far agnt_compute5(agnt_t far *agnt)
 
 {
-  ((agnt_t *)agnt)->health = 0x0;
+  ((agnt_t far *)agnt)->health = 0x0;
   animBranchCode = 0;
   return;
 }
@@ -422,7 +422,7 @@ void __cdecl16far agnt_compute5(agnt_t *agnt)
 
 /* Advances the agent's animation frame unless bit 2 of its type record (agntG_t+0) is set. */
 
-void __cdecl16far agnt_advanceAnimFrame(agnt_t *agnt,uint16_t arg2)
+void __cdecl16far agnt_advanceAnimFrame(agnt_t far *agnt,uint16_t arg2)
 
 {
   uint16_t in_stack_00000006;
@@ -439,7 +439,7 @@ void __cdecl16far agnt_advanceAnimFrame(agnt_t *agnt,uint16_t arg2)
 
 /* Builds the agent's status text from its flags (charmed / diseased / held / paralyzed). */
 
-char * __cdecl16far agnt_statusText(agnt_t *agnt,char *text,uint16_t arg3)
+char * __cdecl16far agnt_statusText(agnt_t far *agnt,char *text,uint16_t arg3)
 
 {
   char *pcVar1;
@@ -564,7 +564,7 @@ uint16_t __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute8(agnt_t *agnt,uint16_t arg2)
+byte __cdecl16far agnt_compute8(agnt_t far *agnt,uint16_t arg2)
 
 {
   byte bVar1;
@@ -583,7 +583,7 @@ byte __cdecl16far agnt_compute8(agnt_t *agnt,uint16_t arg2)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute9(agnt_t *agnt,uint16_t arg2)
+byte __cdecl16far agnt_compute9(agnt_t far *agnt,uint16_t arg2)
 
 {
   byte bVar1;
@@ -602,7 +602,7 @@ byte __cdecl16far agnt_compute9(agnt_t *agnt,uint16_t arg2)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute10(agnt_t *agnt,uint16_t arg2)
+byte __cdecl16far agnt_compute10(agnt_t far *agnt,uint16_t arg2)
 
 {
   byte bVar1;
@@ -621,7 +621,7 @@ byte __cdecl16far agnt_compute10(agnt_t *agnt,uint16_t arg2)
 
 /* [R7] body shape: compute */
 
-byte __cdecl16far agnt_compute11(agnt_t *agnt,uint16_t arg2)
+byte __cdecl16far agnt_compute11(agnt_t far *agnt,uint16_t arg2)
 
 {
   byte bVar1;
@@ -640,7 +640,7 @@ byte __cdecl16far agnt_compute11(agnt_t *agnt,uint16_t arg2)
 
 /* [R6] touches animFrame */
 
-undefined1 __cdecl16far agnt_usesAnimFrame2(agnt_t *agnt,uint16_t arg2)
+undefined1 __cdecl16far agnt_usesAnimFrame2(agnt_t far *agnt,uint16_t arg2)
 
 {
   undefined1 uVar1;
@@ -669,13 +669,13 @@ undefined1 __cdecl16far agnt_usesAnimFrame2(agnt_t *agnt,uint16_t arg2)
 
 /* [R7] body shape: compute */
 
-uint __cdecl16far agnt_compute12(agnt_t *a,agnt_t *b,uint16_t arg3,uint16_t arg4,uint16_t arg5)
+uint __cdecl16far agnt_compute12(agnt_t far *a,agnt_t far *b,uint16_t arg3,uint16_t arg4,uint16_t arg5)
 
 {
   uint uVar1;
   uint16_t in_stack_0000000a;
   
-  uVar1 = ((agnt_t *)CONCAT22((agnt_t *)b,a))->x;
+  uVar1 = ((agnt_t far *)CONCAT22((agnt_t far *)b,a))->x;
   if ((int)uVar1 < *(int *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(b) + 2)))) {
     if (*(char *)((int)(*(uint16_t *)((uint8_t *)&(b) + 2)) + 0xf) != '\0') {
       return 1;
@@ -696,7 +696,7 @@ uint __cdecl16far agnt_compute12(agnt_t *a,agnt_t *b,uint16_t arg3,uint16_t arg4
 
 /* [R4] calls ovr_stExit */
 
-void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite,uint16_t arg4,uint16_t arg5,uint16_t arg6,uint16_t arg7)
+void __cdecl16far agnt_usesStExit(agnt_t far *agnt,anm_t *anim,stg_tmp_t *sprite,uint16_t arg4,uint16_t arg5,uint16_t arg6,uint16_t arg7)
 
 {
   int iVar1;
@@ -721,7 +721,7 @@ void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite,uin
   uStack_10 = (*(int *)(iVar3 + 0x28) - (uint)(byte)agnt->destY) - (*(int *)(iVar2 + 0xd) >> 1);
   if (((int)((uVar4 ^ (int)uVar4 >> 0xf) - ((int)uVar4 >> 0xf)) < 4) &&
      ((int)((uStack_10 ^ (int)uStack_10 >> 0xf) - ((int)uStack_10 >> 0xf)) < 4)) {
-    ovr_ovc41_resolveSpecialAttack((agnt_t *)CONCAT22((anm_t *)anim,agnt),(uint)agnt->target);
+    ovr_ovc41_resolveSpecialAttack((agnt_t far *)CONCAT22((anm_t *)anim,agnt),(uint)agnt->target);
     animBranchCode = 3;
     agnt_usesAnimFrame(agnt,(anm_t *)anim);
   }
@@ -763,7 +763,7 @@ void __cdecl16far agnt_usesStExit(agnt_t *agnt,anm_t *anim,stg_tmp_t *sprite,uin
     uVar6 = (int)uVar4 >> 0xf;
     if (((int)((uVar4 ^ uVar6) - uVar6) < 4) &&
        (uVar4 = (int)uVar5 >> 0xf, (int)((uVar5 ^ uVar4) - uVar4) < 4)) {
-      ovr_ovc41_resolveSpecialAttack((agnt_t *)CONCAT22((anm_t *)anim,agnt),(uint)agnt->target);
+      ovr_ovc41_resolveSpecialAttack((agnt_t far *)CONCAT22((anm_t *)anim,agnt),(uint)agnt->target);
       animBranchCode = 5;
       agnt_usesAnimFrame(agnt,(anm_t *)anim);
     }
@@ -805,7 +805,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
      gfx.seg is SEG_OF(Agnts): the original takes it from the stash call (`mov [bp-6],dx`), but this
      build passes data pointers as near, so that return's segment half is not available.  The blit
      type is the constant 0x10 - the third parameter `type` is unused. */
-  agnt_t *agnt;
+  agnt_t far *agnt;
   uint16_t framesOfs;
   uint16_t framesSeg;
   int frameOfs;
@@ -818,7 +818,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
   far_t gfx;
   byte *animPtr;
 
-  agnt = (agnt_t *)&Agnts[index].x;
+  agnt = (agnt_t far *)&Agnts[index].x;
   framesSeg = *(uint16_t *)((int)&agnt->frames + 2);
   framesOfs = *(uint16_t *)&agnt->frames;
   frameSeg = *(int *)(framesOfs + (uint)agnt->frameIndex * 4 + 2);
@@ -872,7 +872,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
 
 /* [R7] body shape: compute */
 
-void __cdecl16far agnt_compute13(agnt_t *agnt,uint16_t arg2)
+void __cdecl16far agnt_compute13(agnt_t far *agnt,uint16_t arg2)
 
 {
   uint16_t in_stack_00000006;
@@ -1309,7 +1309,7 @@ int __cdecl16far agnt_compute15(byte rank,uint8_t level)
 
 /* Selects an enemy agent as target, flags it and reports the index with the attack sound. */
 
-uint __cdecl16far agnt_acquireTarget(agnt_t *agnt,char *agntIndex,uint16_t arg3)
+uint __cdecl16far agnt_acquireTarget(agnt_t far *agnt,char *agntIndex,uint16_t arg3)
 
 {
   uint32_t uVar1;
@@ -1376,7 +1376,7 @@ void __cdecl16far agnt_blitCrossFrame(void)
 
 /* [R7] body shape: compute */
 
-undefined1 __cdecl16far agnt_compute16(agnt_t *a,agnt_t *b)
+undefined1 __cdecl16far agnt_compute16(agnt_t far *a,agnt_t far *b)
 
 {
   agntG_t *paVar1;
@@ -1385,16 +1385,16 @@ undefined1 __cdecl16far agnt_compute16(agnt_t *a,agnt_t *b)
   uint16_t uVar4;
   
   uVar4 = (uint16_t)((ulong)a >> 0x10);
-  paVar1 = ((agnt_t *)a)->gdata;
+  paVar1 = ((agnt_t far *)a)->gdata;
   if ((((agntG_t *)paVar1)->flags & 2) == 0) {
     uVar2 = 1;
   }
   else {
-    bVar3 = agnt_compute9((agnt_t *)a,uVar4);
+    bVar3 = agnt_compute9((agnt_t far *)a,uVar4);
     uVar4 = (uint16_t)((ulong)b >> 0x10);
-    paVar1 = ((agnt_t *)b)->gdata;
+    paVar1 = ((agnt_t far *)b)->gdata;
     if (((((agntG_t *)paVar1)->flags3 & 0x40) == 0) || ('\x01' < (char)bVar3)) {
-      paVar1 = ((agnt_t *)b)->gdata;
+      paVar1 = ((agnt_t far *)b)->gdata;
       if (((((agntG_t *)paVar1)->flags2 & 8) == 0) || ('\0' < (char)bVar3)) {
         uVar2 = 1;
       }

@@ -102,12 +102,12 @@ void __cdecl16far ovc41_compute3(uint32_t view,...)
 
 /* [R7] body shape: compute */
 
-void __cdecl16far ovc41_compute4(agnt_t *agnt,byte flag,byte pad,agnt_t *other,uint16_t arg5,uint16_t arg6,uint16_t arg7,uint16_t arg8)
+void __cdecl16far ovc41_compute4(agnt_t far *agnt,byte flag,byte pad,agnt_t far *other,uint16_t arg5,uint16_t arg6,uint16_t arg7,uint16_t arg8)
 
 {
   uint *puVar1;
   uint uVar2;
-  agnt_t *paVar3;
+  agnt_t far *paVar3;
   int iVar4;
   uint16_t unaff_BP;
   uint16_t in_stack_00000000;
@@ -122,8 +122,8 @@ void __cdecl16far ovc41_compute4(agnt_t *agnt,byte flag,byte pad,agnt_t *other,u
     if (AgntGs[(uint)other->gindex].shortName[3] != -1) {
       ovc41_growthForLevel(agnt,0);
       iVar4 = 0;
-      paVar3 = (agnt_t *)LXMUL_at_(retStorage,CONCAT22(in_stack_00000000,unaff_BP),b);
-      paVar3 = ovr_ovc15_textError((agnt_t *)CONCAT22(in_stack_0000000c,other),paVar3);
+      paVar3 = (agnt_t far *)LXMUL_at_(retStorage,CONCAT22(in_stack_00000000,unaff_BP),b);
+      paVar3 = ovr_ovc15_textError((agnt_t far *)CONCAT22(in_stack_0000000c,other),paVar3);
       puVar1 = (uint *)&other->health;
       uVar2 = *puVar1;
       *puVar1 = (int)&paVar3->x + *puVar1;
@@ -141,7 +141,7 @@ void __cdecl16far ovc41_compute4(agnt_t *agnt,byte flag,byte pad,agnt_t *other,u
 
 /* Marks an agent for death: steps the animFrame back and flags the agent list changed. */
 
-void __cdecl16far ovc41_markAgentDead(agnt_t *agnt)
+void __cdecl16far ovc41_markAgentDead(agnt_t far *agnt)
 
 {
   uint8_t *puVar1;
@@ -152,9 +152,9 @@ void __cdecl16far ovc41_markAgentDead(agnt_t *agnt)
     printf("kill 4\r");
   }
   uVar3 = (uint16_t)((ulong)agnt >> 0x10);
-  peVar2 = ((agnt_t *)agnt)->entity;
+  peVar2 = ((agnt_t far *)agnt)->entity;
   if ((((entity_t *)peVar2)->base).animFrame != 0x0) {
-    peVar2 = ((agnt_t *)agnt)->entity;
+    peVar2 = ((agnt_t far *)agnt)->entity;
     puVar1 = &(((entity_t *)peVar2)->base).animFrame;
     *puVar1 = *puVar1 + 0xff;
   }
@@ -168,13 +168,13 @@ void __cdecl16far ovc41_markAgentDead(agnt_t *agnt)
 
 /* [R1] forwards to OVC41_6a8f_01e7 */
 
-void __cdecl16far OVC41_6a8f_01e7_entry(agnt_t *agnt,uint16_t arg2)
+void __cdecl16far OVC41_6a8f_01e7_entry(agnt_t far *agnt,uint16_t arg2)
 
 {
   uint16_t in_stack_00000006;
   
   if ((agnt->flags & 0xae4) == 0) {
-    ovc41_markAgentDead((agnt_t *)CONCAT22(in_stack_00000006,agnt));
+    ovc41_markAgentDead((agnt_t far *)CONCAT22(in_stack_00000006,agnt));
   }
   return;
 }
@@ -185,7 +185,7 @@ void __cdecl16far OVC41_6a8f_01e7_entry(agnt_t *agnt,uint16_t arg2)
 
 /* Increments the animFrame byte of the entity the agent belongs to. */
 
-void __cdecl16far ovc41_advanceAnimFrame(agnt_t *agnt,uint16_t arg2)
+void __cdecl16far ovc41_advanceAnimFrame(agnt_t far *agnt,uint16_t arg2)
 
 {
   uint8_t *puVar1;
@@ -204,7 +204,7 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,uint16_t arg3)
 {
   char *pcVar1;
   uint16_t uVar2;
-  agnt_t *agnt;
+  agnt_t far *agnt;
   int iVar3;
   uint16_t uVar4;
   bool bVar5;
@@ -212,8 +212,8 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,uint16_t arg3)
   entity_t *agntPtr;   /* hand fix: dereferenced as agntPtr->base.x */
   
   uVar2 = AGNT_WORD(&Agnts[agntIndex], entity, 2);
-  agnt = (agnt_t *)AGNT_WORD(&Agnts[agntIndex], entity, 0);
-  agntPtr = (agnt_t *)CONCAT22(uVar2,agnt);
+  agnt = (agnt_t far *)AGNT_WORD(&Agnts[agntIndex], entity, 0);
+  agntPtr = (agnt_t far *)CONCAT22(uVar2,agnt);
   iVar3 = Agnts[agntIndex].owner;
   ovr_agnt_usesAgntCount4(agntIndex + 1);
   bVar5 = false;
@@ -385,24 +385,24 @@ void __cdecl16far ovc41_usesDebugVerbose(void)
 /* Applies the combat outcome to an agent: sets the dead state or restores its strength and timer.
     */
 
-uint __cdecl16far ovc41_settleAgentCombat(agnt_t *a,agnt_t *b,uint16_t arg3)
+uint __cdecl16far ovc41_settleAgentCombat(agnt_t far *a,agnt_t far *b,uint16_t arg3)
 
 {
   uint in_AX;
   uint uVar1;
   int iVar2;
   byte bVar3;
-  agnt_t *agnt;
+  agnt_t far *agnt;
   uint16_t uVar4;
   
   uVar4 = (uint16_t)((ulong)b >> 0x10);
-  agnt = (agnt_t *)b;
+  agnt = (agnt_t far *)b;
   if (agnt->combatState == 0x2) {
     uVar1 = in_AX & 0xff00;
   }
   else {
-    if ((a != (agnt_t *)0x0) && (((agnt_t *)a)->gdata->ai == ((agnt_t *)a)->faction)) {
-      ovc41_compute4(*(agnt_t **)&agnt->entity,(byte)*(uint16_t *)((int)&agnt->entity + 2),1,*(agnt_t **)&((agnt_t *)a)->entity,0,0,0,0);
+    if ((a != (agnt_t far *)0x0) && (((agnt_t far *)a)->gdata->ai == ((agnt_t far *)a)->faction)) {
+      ovc41_compute4(*(agnt_t far **)&agnt->entity,(byte)*(uint16_t *)((int)&agnt->entity + 2),1,*(agnt_t far **)&((agnt_t far *)a)->entity,0,0,0,0);
     }
     if (((((((entity_t *)agnt->entity)->base).animFrame == 0x0) ||
          ((uint)(((entity_t *)agnt->entity)->base).animFrame % 0x10 == 1)) ||
@@ -449,10 +449,10 @@ void __cdecl16far ovc41_usesPlay_sfxU(void)
   if (AgntFlag1) {
     for (iVar2 = 0; iVar2 < (int)(uint)AgntCount; iVar2 = iVar2 + 1) {
       if ((Agnts[iVar2].flags & 0x800) == 0) {
-        OVC41_6a8f_01e7_entry((agnt_t *)&Agnts[iVar2].x,SEG_OF(Agnts));
+        OVC41_6a8f_01e7_entry((agnt_t far *)&Agnts[iVar2].x,SEG_OF(Agnts));
         puVar1 = (uint *)&Agnts[iVar2].flags;
         *puVar1 = *puVar1 | 0x800;
-        unk = ovr_audio_panFromX((agnt_t *)&Agnts[iVar2].x,SEG_OF(Agnts));
+        unk = ovr_audio_panFromX((agnt_t far *)&Agnts[iVar2].x,SEG_OF(Agnts));
         ovr_play_sfxU(0x1b,0,unk,0,0);
         ovr_attact_usesEntityCount();
         return;
@@ -472,7 +472,7 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
      is struck - a 6d6 roll, halved when the to-hit test succeeds - and handed to
      ovc41_textParalyzed for both this agent and the target. */
   byte diceRoll;
-  agnt_t *agntBase;
+  agnt_t far *agntBase;
   uint dx;
   uint dxSign;
   int hitResult;
@@ -480,8 +480,8 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
   uint rollVal;
   entity_t *agntPtr;
 
-  agntBase = (agnt_t *)&Agnts[agntIndex].x;
-  agntPtr = (agnt_t *)CONCAT22(SEG_OF(Agnts),agntBase);
+  agntBase = (agnt_t far *)&Agnts[agntIndex].x;
+  agntPtr = (agnt_t far *)CONCAT22(SEG_OF(Agnts),agntBase);
   if ((((agntG_t *)agntBase->gdata)->flags2 & 4) != 0) {
     for (otherIdx = 0; otherIdx < (int)(uint)AgntCount; otherIdx = otherIdx + 1) {
       if ((otherIdx != agntIndex) &&
@@ -493,9 +493,9 @@ void __cdecl16far ovc41_paralyzeNearbyAgents(int agntIndex)
         if ((char)hitResult != '\0') {
           rollVal = (int)rollVal >> 1;
         }
-        ovc41_textParalyzed((agnt_t *)CONCAT22(SEG_OF(Agnts),agntBase),
-                            (agnt_t *)CONCAT22(SEG_OF(Agnts),
-                                               (agnt_t *)&Agnts[otherIdx].x),rollVal,0,0,0);
+        ovc41_textParalyzed((agnt_t far *)CONCAT22(SEG_OF(Agnts),agntBase),
+                            (agnt_t far *)CONCAT22(SEG_OF(Agnts),
+                                               (agnt_t far *)&Agnts[otherIdx].x),rollVal,0,0,0);
       }
     }
   }
@@ -632,7 +632,7 @@ int __cdecl16far ovc41_compute8(byte rank,uint8_t level)
 
 /* Rolls the turn-undead attempt and reports its result. */
 
-int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
+int __cdecl16far ovc41_turnUndeadNotice(agnt_t far *agnt)
 
 {
   uint *flagsPtr;
@@ -645,7 +645,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
   undefined1 savedSeg;
   int iVar5;
   uint16_t uVar6;
-  agnt_t *agnt_00;
+  agnt_t far *agnt_00;
   uint uVar9;
   char *pcVar10;
   uint32_t agntPtr2;
@@ -659,7 +659,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
   char stateVal;
   
   pcVar10 = (char *)((ulong)agnt >> 0x10);
-  agnt_00 = (agnt_t *)agnt;
+  agnt_00 = (agnt_t far *)agnt;
   bVar7 = (byte)((uint)in_AX >> 8);
   if ((agnt_00->flags & 2) == 0) {
     iVar5 = (uint)bVar7 << 8;
@@ -725,7 +725,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
               }
               while ((stateVal != '\0' && (uVar9 != 0))) {
                 if (cStack_4 == '\0') {
-                  OVC41_6a8f_01e7_entry((agnt_t *)&Agnts[iVar5].x,0);
+                  OVC41_6a8f_01e7_entry((agnt_t far *)&Agnts[iVar5].x,0);
                   AGNT_FIELD(&Agnts[iVar5], targetX, 0) = 0;
                   AGNT_FIELD(&Agnts[iVar5], targetX, 1) = 0;
                   flagsPtr = (uint *)&Agnts[iVar5].flags;
@@ -733,10 +733,10 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t *agnt)
                   Agnts[iVar5].combatState = 1;
                   Agnts[iVar5].targetY = 0;
                   Agnts[iVar5].timer = 5;
-                  ovr_agnt_usesAnimFrame((agnt_t *)&Agnts[iVar5].x);
+                  ovr_agnt_usesAnimFrame((agnt_t far *)&Agnts[iVar5].x);
                 }
                 else {
-                  ovc41_settleAgentCombat(agnt,(agnt_t *)CONCAT22(SEG_OF(Agnts),(agnt_t *)&Agnts[iVar5].x),0);
+                  ovc41_settleAgentCombat(agnt,(agnt_t far *)CONCAT22(SEG_OF(Agnts),(agnt_t far *)&Agnts[iVar5].x),0);
                 }
                 bStack_5 = bStack_5 + 1;
                 agntPtr2 = *(uint32_t far *)&Agnts[iVar5].entity;
@@ -1965,7 +1965,7 @@ void __cdecl16far ovc41_usesMiceBlitRect(uint menuIndex)
 
 /* [R2] string "%s is paralyzed by %s." */
 
-undefined1 __cdecl16far ovc41_textParalyzed(agnt_t *source,agnt_t *victim,uint strength,uint16_t arg4,uint16_t arg5,uint16_t arg6)
+undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victim,uint strength,uint16_t arg4,uint16_t arg5,uint16_t arg6)
 
 {
   uint uVar1;
@@ -1974,8 +1974,8 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t *source,agnt_t *victim,uint s
   uint8_t *stashOfs;
   uint16_t uVar5;
   uint16_t in_DX;
-  agnt_t *agnt;
-  agnt_t *agnt_00;
+  agnt_t far *agnt;
+  agnt_t far *agnt_00;
   char *pcVar6;
   uint16_t sourceSeg;
   undefined1 uVar8;
@@ -1988,11 +1988,11 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t *source,agnt_t *victim,uint s
   
   resolved = 0;
   pcVar6 = (char *)((ulong)victim >> 0x10);
-  agnt = (agnt_t *)victim;
+  agnt = (agnt_t far *)victim;
   if ((agnt->flags & 0x80) != 0) {
     strength = (uint)agnt->strength;
   }
-  agnt_00 = (agnt_t *)source;
+  agnt_00 = (agnt_t far *)source;
   sourceSeg = (uint16_t)((ulong)source >> 0x10);
   uVar10 = (undefined1)((ulong)victim >> 0x10);
   if ((int)strength < (int)(uint)agnt->strength) {
@@ -2113,7 +2113,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t *source,agnt_t *victim,uint s
 
 
 /* 6a8f:2084 */
-byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
+byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t far *agntPtr,int agntIndex)
 
 {
   undefined1 stk_6ffe;   /* stack slot 6ffe */
@@ -2129,7 +2129,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
   char *pcVar1;
   uint16_t uVar2;
   char cVar3;
-  agnt_t *paVar4;
+  agnt_t far *paVar4;
   code *pcVar5;
   far_t dst;
   far_t gfx;
@@ -2146,15 +2146,15 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
   byte *pbVar8;
   undefined1 extraout_AH;
   brect_t *br;
-  agnt_t *paVar9;
+  agnt_t far *paVar9;
   uint16_t uVar10;
   uint8_t *puVar11;
   int iVar12;
   char cVar13;
   uint8_t *puVar14;
-  agnt_t *paVar15;
+  agnt_t far *paVar15;
   uint uVar16;
-  agnt_t *paVar17;
+  agnt_t far *paVar17;
   undefined1 *puVar18;
   int unaff_SI;
   uint16_t *unaff_DI;
@@ -2181,25 +2181,25 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
   byte bStack_3c;
   byte bStack_3b;
   uint uStack_3a;
-  agnt_t *paStack_38;
-  agnt_t *paStack_36;
-  agnt_t *paStack_34;
-  agnt_t *paStack_32;
-  agnt_t *paStack_30;
-  agnt_t *paStack_2e;
-  agnt_t *paStack_2c;
-  agnt_t *paStack_2a;
-  agnt_t *paStack_28;
-  agnt_t *paStack_26;
-  agnt_t *paStack_24;
-  agnt_t *paStack_22;
-  agnt_t *paStack_20;
-  agnt_t *paStack_1e;
-  agnt_t *agnt;   /* hand fix: assigned from agnt_t * paStack_N and indexed */
+  agnt_t far *paStack_38;
+  agnt_t far *paStack_36;
+  agnt_t far *paStack_34;
+  agnt_t far *paStack_32;
+  agnt_t far *paStack_30;
+  agnt_t far *paStack_2e;
+  agnt_t far *paStack_2c;
+  agnt_t far *paStack_2a;
+  agnt_t far *paStack_28;
+  agnt_t far *paStack_26;
+  agnt_t far *paStack_24;
+  agnt_t far *paStack_22;
+  agnt_t far *paStack_20;
+  agnt_t far *paStack_1e;
+  agnt_t far *agnt;   /* hand fix: assigned from agnt_t far * paStack_N and indexed */
   uint16_t uStack_1a;
   uint16_t uStack_18;
   brect_t bStack_16;
-  agnt_t *paStack_c;
+  agnt_t far *paStack_c;
   int iStack_a;
   uint16_t uStack_8;
   far_t fStack_6;
@@ -2211,13 +2211,13 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
   dst.ofs = (uint16_t)&agnt;
   count = _SS;
   F_SCOPY(far_from_u32((uint32_t)(0x24106e38)),dst);
-  paVar4 = (agnt_t *)((long)agntIndex * 0x34);
-  paVar9 = (agnt_t *)paVar4;
+  paVar4 = (agnt_t far *)((long)agntIndex * 0x34);
+  paVar9 = (agnt_t far *)paVar4;
   paStack_c = paVar9;
   iStack_a = SEG_OF(Agnts);
   if ((paVar9->flags & 0x820) == 0) {
     pcVar19 = (char *)((ulong)agntPtr >> 0x10);
-    paVar17 = (agnt_t *)agntPtr;
+    paVar17 = (agnt_t far *)agntPtr;
     paVar17->flags = paVar17->flags & 0xfff7;
     if ((((entity_t *)paVar17->entity)->base).level < 8) {
       fStack_6 = far_from_u32((uint32_t)(far_to_u32(fStack_6) & 0xffffff));
@@ -2284,9 +2284,9 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
           TextBlitDstSeg = 0xa000;
           TextBlitX = uStack_8 + 6;
           TextBlitY = (uint16_t)(unaff_DI + 1);
-          (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)(&paVar17->x + unaff_SI * 2)[1];
+          (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)(&paVar17->x + unaff_SI * 2)[1];
           puVar14 = (uint8_t *)(&paVar17->x)[unaff_SI * 2];
-          fStack_6.seg = (uint16_t)(agnt_t *)drawPtr;
+          fStack_6.seg = (uint16_t)(agnt_t far *)drawPtr;
           fStack_6.ofs = (uint16_t)puVar14;
           iVar12 = unaff_SI;
           if (*(uint8_t *)MK_FP(fStack_6.seg, fStack_6.ofs) == 0x25) {
@@ -2294,7 +2294,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
             uVar22 = 0x13f;
             (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = FontMain.ofs;
             pcVar7 = (char *)ovr_ovc45_compute9(acStack_80,(char *)CONCAT22(puVar14 + 1,_SS),
-                                                (char *)CONCAT22(FontMain.ofs,(agnt_t *)drawPtr),
+                                                (char *)CONCAT22(FontMain.ofs,(agnt_t far *)drawPtr),
                                                 FontMain.seg,'E');
             ovr_blitLabel(pcVar7,(uint8_t *)CONCAT22(uVar22,puVar14),15,uStack_120);
             pbVar8 = (byte *)((char *)0x2410);
@@ -2304,7 +2304,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
             uVar22 = 0x13f;
             (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = FontMain.ofs;
             pcVar7 = (char *)ovr_ovc45_compute9(acStack_80,(char *)CONCAT22(puVar14 + 1,_SS),
-                                                (char *)CONCAT22(FontMain.ofs,(agnt_t *)drawPtr),
+                                                (char *)CONCAT22(FontMain.ofs,(agnt_t far *)drawPtr),
                                                 FontMain.seg,'E');
             pbVar8 = (byte *)ovr_blitLabel(pcVar7,(uint8_t *)CONCAT22(uVar22,puVar14),15,uStack_120)
             ;
@@ -2312,11 +2312,11 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
           else {
             uVar22 = 0x13f;
             (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = FontMain.ofs;
-            (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)(&paVar17->x + unaff_SI * 2)[1];
+            (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)(&paVar17->x + unaff_SI * 2)[1];
             pcVar7 = (char *)ovr_ovc45_compute9(acStack_80,
                                                 (char *)CONCAT22((&paVar17->x)[unaff_SI * 2],
                                                                  _SS),
-                                                (char *)CONCAT22(FontMain.ofs,(agnt_t *)drawPtr),
+                                                (char *)CONCAT22(FontMain.ofs,(agnt_t far *)drawPtr),
                                                 FontMain.seg,'E');
             pbVar8 = (byte *)ovr_blitLabel(pcVar7,(uint8_t *)CONCAT22(uVar22,puVar14),15,uStack_120)
             ;
@@ -2351,7 +2351,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t *agntPtr,int agntIndex)
 switchD_6000_ca06_caseD_1:
       (&stk_fffe)[(int)unaff_DI] = (&stk_fffe)[(int)unaff_DI] + (char)iVar12;
       *(undefined1 *)((int)unaff_DI + 0x15) = 0;
-      (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)0x6a64;
+      (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0x6a64;
       (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = iVar20;
       bStack_3b = ovr_init2_usesCFGMice
                             ((uint16_t *)&paStack_2e,(uint16_t *)
@@ -2367,7 +2367,7 @@ switchD_6000_ca06_caseD_1:
         }
         if (bStack_3b != 0) break;
         (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = 0x22de;
-        (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)0x69b5;
+        (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0x69b5;
         uVar22 = keyprocessor_usesBiosKeyAvail
                            ((uint16_t *)CONCAT13(uVar21,CONCAT12(type,&paStack_36)),
                             (uint16_t *)CONCAT22(_SS,&paStack_38),
@@ -2400,17 +2400,17 @@ switchD_6000_ca06_caseD_1:
          (0x96 < (int)paStack_1e)) goto L_ui_unit_order_6616_0689_1054;
       do {
         iVar12 = 0x22de;
-        (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)0x6ae3;
+        (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0x6ae3;
         bVar6 = ovr_init2_usesCFGMice
                           ((uint16_t *)&paStack_2e,(uint16_t *)CONCAT22(&paStack_30,_SS),0);
       } while (CONCAT11(extraout_AH,bVar6) != 0);
-      paStack_26 = (agnt_t *)0xffff;
-      paStack_28 = (agnt_t *)0xffff;
+      paStack_26 = (agnt_t far *)0xffff;
+      paStack_28 = (agnt_t far *)0xffff;
       paStack_20 = paStack_1e;
       bStack_3b = 0;
       paVar9 = agnt;
       do {
-        (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)0x6b14;
+        (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0x6b14;
         (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = iVar12;
         uVar22 = keyprocessor_usesBiosKeyAvail
                            ((uint16_t *)CONCAT13(uVar21,CONCAT12(type,&paStack_36)),
@@ -2424,16 +2424,16 @@ switchD_6000_ca06_caseD_1:
           paVar9 = paStack_36;
         }
         if ((int)paVar9 < 0xc) {
-          paVar9 = (agnt_t *)((byte *)__C0_ASM_CopyRight + 8);
+          paVar9 = (agnt_t far *)((byte *)__C0_ASM_CopyRight + 8);
         }
         if (0xde < (int)paVar9) {
-          paVar9 = (agnt_t *)0xde;
+          paVar9 = (agnt_t far *)0xde;
         }
         if ((int)paStack_20 < 7) {
-          paStack_20 = (agnt_t *)((byte *)__C0_ASM_CopyRight + 3);
+          paStack_20 = (agnt_t far *)((byte *)__C0_ASM_CopyRight + 3);
         }
         if (0x96 < (int)paStack_20) {
-          paStack_20 = (agnt_t *)((char *)0x96);
+          paStack_20 = (agnt_t far *)((char *)0x96);
         }
         if ((paStack_26 != paVar9) || (paStack_28 != paStack_20)) {
           bStack_16.seg = uStack_8;
@@ -2452,10 +2452,10 @@ switchD_6000_ca06_caseD_1:
           ovr_miceBlitRect(&bStack_16,0);
           ovr_blitRect(&bStack_16,0);
           ovr_miceUpdate();
-          paVar17 = (agnt_t *)((int)&paStack_20[-1].flags / 3 + Seed_2000_d10e);
-          paVar15 = (agnt_t *)(Seed_2000_d110 + ((uint)&paVar9[-1].screenY >> 1) + 2 & 0xfffc);
-          paStack_24 = (agnt_t *)((int)&paStack_1e[-1].flags / 3 + Seed_2000_d10e);
-          paStack_22 = (agnt_t *)(Seed_2000_d110 + ((uint)&agnt[-1].screenY >> 1) + 2 & 0xfffc);
+          paVar17 = (agnt_t far *)((int)&paStack_20[-1].flags / 3 + Seed_2000_d10e);
+          paVar15 = (agnt_t far *)(Seed_2000_d110 + ((uint)&paVar9[-1].screenY >> 1) + 2 & 0xfffc);
+          paStack_24 = (agnt_t far *)((int)&paStack_1e[-1].flags / 3 + Seed_2000_d10e);
+          paStack_22 = (agnt_t far *)(Seed_2000_d110 + ((uint)&agnt[-1].screenY >> 1) + 2 & 0xfffc);
           paStack_26 = paVar15;
           if ((int)paVar15 < (int)paStack_22) {
             paStack_26 = paStack_22;
@@ -2473,10 +2473,10 @@ switchD_6000_ca06_caseD_1:
             uVar22 = (uint16_t)((ulong)Entities >> 0x10);
             iVar12 = (int)Entities;
             if ((((AGNT_FIELD(&((entity_t *)Entities)[uVar16], base.entity, 3) == bStack_3c) &&
-                 (paStack_22 <= (agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
-                ((agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26)) &&
-               ((paStack_24 <= (agnt_t *)((entity_t *)iVar12)[uVar16].base.y &&
-                ((agnt_t *)((entity_t *)iVar12)[uVar16].base.y <= paStack_28)))) {
+                 (paStack_22 <= (agnt_t far *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
+                ((agnt_t far *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26)) &&
+               ((paStack_24 <= (agnt_t far *)((entity_t *)iVar12)[uVar16].base.y &&
+                ((agnt_t far *)((entity_t *)iVar12)[uVar16].base.y <= paStack_28)))) {
               iStack_a = iStack_a + 1;
             }
           }
@@ -2497,7 +2497,7 @@ switchD_6000_ca06_caseD_1:
         paStack_26 = paVar9;
         if (bStack_3b == 0) {
           iVar12 = 0x22de;
-          (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)0x6e04;
+          (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0x6e04;
           bStack_3b = ovr_init2_usesCFGMice
                                 ((uint16_t *)&paStack_2e,(uint16_t *)CONCAT22(&paStack_30,_SS),0)
           ;
@@ -2519,14 +2519,14 @@ L_ui_unit_order_6616_0689_1054:
         ovr_say((char *)"Region selection aborted.",0);
       }
       else {
-        paVar17 = (agnt_t *)((int)&paStack_20[-1].flags / 3 + Seed_2000_d10e);
-        paVar15 = (agnt_t *)(Seed_2000_d110 + ((uint)&paVar9[-1].screenY >> 1) + 2 & 0xfffc);
-        paVar9 = (agnt_t *)((int)&paStack_1e[-1].flags / 3 + Seed_2000_d10e);
+        paVar17 = (agnt_t far *)((int)&paStack_20[-1].flags / 3 + Seed_2000_d10e);
+        paVar15 = (agnt_t far *)(Seed_2000_d110 + ((uint)&paVar9[-1].screenY >> 1) + 2 & 0xfffc);
+        paVar9 = (agnt_t far *)((int)&paStack_1e[-1].flags / 3 + Seed_2000_d10e);
         uVar16 = Seed_2000_d110 + ((uint)&agnt[-1].screenY >> 1) + 2;
-        paStack_22 = (agnt_t *)(uVar16 & 0xfffc);
+        paStack_22 = (agnt_t far *)(uVar16 & 0xfffc);
         paStack_26 = paVar15;
         if ((int)paVar15 < (int)paStack_22) {
-          paStack_c = (agnt_t *)(uVar16 & 0xfffc);
+          paStack_c = (agnt_t far *)(uVar16 & 0xfffc);
           paStack_26 = paStack_c;
           paStack_22 = paVar15;
         }
@@ -2546,10 +2546,10 @@ L_ui_unit_order_6616_0689_1054:
           uVar22 = (uint16_t)((ulong)Entities >> 0x10);
           iVar12 = (int)Entities;
           if (((AGNT_FIELD(&((entity_t *)Entities)[uVar16], base.entity, 3) == bStack_3c) &&
-              (paStack_22 <= (agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
-             (((agnt_t *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26 &&
-              ((paStack_24 <= (agnt_t *)((entity_t *)iVar12)[uVar16].base.y &&
-               ((agnt_t *)((entity_t *)iVar12)[uVar16].base.y <= paStack_28)))))) {
+              (paStack_22 <= (agnt_t far *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
+             (((agnt_t far *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26 &&
+              ((paStack_24 <= (agnt_t far *)((entity_t *)iVar12)[uVar16].base.y &&
+               ((agnt_t far *)((entity_t *)iVar12)[uVar16].base.y <= paStack_28)))))) {
             if (bStack_3b < 2) {
               unit_usesAlignUp42((byte)agntPtr,*(uint16_t *)((entity_t *)iVar12 + uVar16),
                                  ((entity_t *)iVar12)[uVar16].base.y);
@@ -2568,13 +2568,13 @@ L_ui_unit_order_6616_0689_1054:
         }
         ovr_constr_flushDirtyRects();
         (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = 0x22ef;
-        (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)0x7063;
+        (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0x7063;
         ovr_resetTextBlitCycle();
         if (bStack_3b == 1) {
           (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = 0x7071;
           ovr_ovc41_pluralSuffix(iStack_a);
           (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = iStack_a;
-          (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)0x2410;
+          (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&drawPtr,(char *)CONCAT22(0x6522,_SS),
                                   (char *)CONCAT22(iStack_a,(char *)0x2410));
           ovr_say(pcVar19,0);
@@ -2583,7 +2583,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = 0x70bf;
           ovr_ovc41_pluralSuffix(iStack_a);
           (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = iStack_a;
-          (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)0x2410;
+          (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&drawPtr,(char *)CONCAT22(0x6543,_SS),
                                   (char *)CONCAT22(iStack_a,(char *)0x2410));
           ovr_say(pcVar19,0);
@@ -2592,7 +2592,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = 0x710d;
           ovr_ovc41_pluralSuffix(iStack_a);
           (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = iStack_a;
-          (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)0x2410;
+          (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&drawPtr,(char *)CONCAT22(0x6557,_SS),
                                   (char *)CONCAT22(iStack_a,(char *)0x2410));
           ovr_say(pcVar19,0);
@@ -2601,7 +2601,7 @@ L_ui_unit_order_6616_0689_1054:
           (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = 0x715a;
           ovr_ovc41_pluralSuffix(iStack_a);
           (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = iStack_a;
-          (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)0x2410;
+          (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0x2410;
           pcVar19 = ovr_stsprintf((char *)&drawPtr,(char *)CONCAT22(0x6568,_SS),
                                   (char *)CONCAT22(iStack_a,(char *)0x2410));
           ovr_say(pcVar19,0);
@@ -2634,7 +2634,7 @@ L_ui_unit_order_6616_0689_1054:
       paVar9->strength = paVar9->strengthMax;
     }
     puVar14 = &paVar9->strength;
-    paVar9 = (agnt_t *)(uint)*puVar14;
+    paVar9 = (agnt_t far *)(uint)*puVar14;
     if (*puVar14 != bVar6) {
       (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = 0xcae7;
       (*(uint8_t *)((uint8_t *)&(uStack_8) + 1)) = bVar6;
@@ -2643,7 +2643,7 @@ L_ui_unit_order_6616_0689_1054:
       ovc41_pluralSuffix((uint)paStack_c->strength);
       ovc41_pluralSuffix((uint)paStack_c->strength - (uint)(*(uint8_t *)((uint8_t *)&(uStack_8) + 1)));
       (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = 0x22f8;
-      (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)0xcb5a;
+      (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0xcb5a;
       ovr_agnt_statusText(paStack_c,(char *)CONCAT13((char)((uint)&stk_fecc >> 8),
                                            CONCAT12((char)&stk_fecc,iStack_a)),0);
       puVar14 = &agnt;
@@ -2651,8 +2651,8 @@ L_ui_unit_order_6616_0689_1054:
       pcVar19 = ovr_agnt_statusText(paVar17,(char *)CONCAT22(&text,pcVar19),0);
       puVar11 = ovr_ovc15_usesStshRealloc(pcVar19,0,0,0,0,0,0,0);
       (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = 0x2322;
-      (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t *)0xcba4;
-      paVar9 = (agnt_t *)
+      (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0xcba4;
+      paVar9 = (agnt_t far *)
                ovr_stsprintf((char *)&msg,(char *)CONCAT13(0x6f,CONCAT12(0xeb,_SS)),
                              (char *)CONCAT22(puVar11,(char *)0x2410));
       ovr_uiNotify((char *)paVar9,(uint16_t)puVar14,0);
@@ -2663,7 +2663,7 @@ L_ui_unit_order_6616_0689_1054:
 
 
 /* 6a8f:22cb */
-void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3,uint16_t arg4)
+void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t arg3,uint16_t arg4)
 
 {
   uint *flagsPtr;
@@ -2671,7 +2671,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
   entity_t *targetEnt;
   byte bVar4;
   uint16_t uVar5;
-  agnt_t *targetAgnt;
+  agnt_t far *targetAgnt;
   int iVar6;
   char *textPtr;
   uint8_t *stashOfs;
@@ -2687,17 +2687,17 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
   uint8_t actorName;
   uint8_t targetName;
   uint8_t msg;
-  agnt_t far *agntPtr;   /* was uint32_t: assigned agnt_t * values */
+  agnt_t far *agntPtr;   /* was uint32_t: assigned agnt_t far * values */
   char resolved;
   
   uVar13 = (undefined1)targetIndex;
   uVar14 = (undefined1)((uint)targetIndex >> 8);
-  uVar5 = ovc41_turnUndeadNotice((agnt_t *)CONCAT13(uVar14,CONCAT12(uVar13,agnt)));
+  uVar5 = ovc41_turnUndeadNotice((agnt_t far *)CONCAT13(uVar14,CONCAT12(uVar13,agnt)));
   if ((((char)uVar5 == '\0') && (-1 < in_stack_00000008)) &&
      (in_stack_00000008 < (int)(uint)AgntCount)) {
     uVar10 = (uint16_t)((ulong)((long)in_stack_00000008 * 0x34) >> 0x10);
-    targetAgnt = (agnt_t *)(agnt_t *)((long)in_stack_00000008 * 0x34);
-    agntPtr = (agnt_t *)CONCAT22(SEG_OF(Agnts),targetAgnt);
+    targetAgnt = (agnt_t far *)(agnt_t far *)((long)in_stack_00000008 * 0x34);
+    agntPtr = (agnt_t far *)CONCAT22(SEG_OF(Agnts),targetAgnt);
     if (targetAgnt->animVariant == 0x0) {
       *(undefined1 *)&targetAgnt->targetX = 0;
       *(undefined1 *)((int)&targetAgnt->targetX + 1) = 0;
@@ -2728,16 +2728,16 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
             damage = 1;
           }
         }
-        targetGdata = ((agnt_t *)agntPtr)->gdata;
+        targetGdata = ((agnt_t far *)agntPtr)->gdata;
         if (((((agntG_t *)targetGdata)->flags2 & 8) == 0) ||
            (bVar4 = ovr_agnt_compute9(agnt,uVar13), '\0' < (char)bVar4)) {
-          targetGdata = ((agnt_t *)agntPtr)->gdata;
+          targetGdata = ((agnt_t far *)agntPtr)->gdata;
           if (((((agntG_t *)targetGdata)->flags3 & 0x40) == 0) ||
              (bVar4 = ovr_agnt_compute9(agnt,uVar13), '\x01' < (char)bVar4)) {
             uVar5 = (uint16_t)((ulong)agntPtr >> 0x10);
-            targetGdata = ((agnt_t *)agntPtr)->gdata;
+            targetGdata = ((agnt_t far *)agntPtr)->gdata;
             if (((((agntG_t *)targetGdata)->flags2 & 0x10) == 0) || (agnt->gindex != 0x2)) {
-              resolved = ovc41_textParalyzed((agnt_t *)CONCAT22(targetIndex,agnt),(agnt_t *)agntPtr,damage,
+              resolved = ovc41_textParalyzed((agnt_t far *)CONCAT22(targetIndex,agnt),(agnt_t far *)agntPtr,damage,
                                              (char)agntPtr,(char)((ulong)agntPtr >> 0x10),
                                              (char)damage);
               if ((resolved == '\0') &&
@@ -2745,7 +2745,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
                   (damage = ovr_ovc27_rollToHitEntity((uint32_t)agntPtr,0), (damage & 0xff) == 0)))
                  ) {
                 uVar16 = (undefined1)GSavedBlitSeg;
-                textPtr = ovr_agnt_statusText((agnt_t *)agntPtr,(char *)CONCAT13((char)((uint)&actorName >> 8),
+                textPtr = ovr_agnt_statusText((agnt_t far *)agntPtr,(char *)CONCAT13((char)((uint)&actorName >> 8),
                                                               CONCAT12((char)&actorName,
                                                                        (*(uint16_t *)((uint8_t *)&(agntPtr) + 2)))),0);
                 uVar15 = (undefined1)uVar10;
@@ -2758,17 +2758,17 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
                 uVar9 = ovr_audio_panFromX(agnt,uVar13);
                 ovr_play_sfxU(0x55,0,uVar9,0,(char)uVar9);
                 ovc41_settleAgentCombat
-                          ((agnt_t *)CONCAT13(uVar14,CONCAT12(uVar13,agnt)),(agnt_t *)agntPtr,(char)agntPtr)
+                          ((agnt_t far *)CONCAT13(uVar14,CONCAT12(uVar13,agnt)),(agnt_t far *)agntPtr,(char)agntPtr)
                 ;
                 resolved = '\x01';
               }
               if (((resolved == '\0') && ((((agntG_t *)agnt->gdata)->flags2 & 4) != 0)) &&
                  (damage = ovr_ovc27_rollToHitEntity((uint32_t)agntPtr,0), (damage & 0xff) == 0)) {
                 uVar5 = (uint16_t)((ulong)agntPtr >> 0x10);
-                targetEnt = ((agnt_t *)agntPtr)->entity;
+                targetEnt = ((agnt_t far *)agntPtr)->entity;
                 if ((*(uint *)((int)&(((entity_t *)targetEnt)->base).frames + 1) & 1) == 0) {
                   uVar12 = (undefined1)GSavedBlitSeg;
-                  textPtr = ovr_agnt_statusText((agnt_t *)agntPtr,(char *)CONCAT13((char)((uint)&actorName >> 8),
+                  textPtr = ovr_agnt_statusText((agnt_t far *)agntPtr,(char *)CONCAT13((char)((uint)&actorName >> 8),
                                                                 CONCAT12((char)&actorName,uVar5)),0);
                   uVar14 = (undefined1)uVar10;
                   uVar13 = SUB21(textPtr,0);
@@ -2777,9 +2777,9 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
                   textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x70c4,_SS),
                                          (char *)CONCAT22(stashOfs,(char *)0x2410),uVar10);
                   ovr_uiNotify(textPtr,uVar10,(char)uVar10);
-                  uVar9 = ovr_audio_panFromX((agnt_t *)agntPtr,(char)((ulong)agntPtr >> 0x10));
+                  uVar9 = ovr_audio_panFromX((agnt_t far *)agntPtr,(char)((ulong)agntPtr >> 0x10));
                   ovr_play_sfxU(5,0,uVar9,0,(char)uVar9);
-                  targetEnt = ((agnt_t *)agntPtr)->entity;
+                  targetEnt = ((agnt_t far *)agntPtr)->entity;
                   flagsPtr = (uint *)((int)&(((entity_t *)targetEnt)->base).frames + 1);
                   *flagsPtr = *flagsPtr | 1;
                 }
@@ -2792,7 +2792,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
                                    (char)((ulong)agntPtr >> 0x10));
                 uVar13 = (undefined1)GSavedBlitSeg;
                 if ((char)uVar5 == '\0') {
-                  textPtr = ovr_agnt_statusText((agnt_t *)agntPtr,(char *)CONCAT13((char)((uint)&actorName >> 8),
+                  textPtr = ovr_agnt_statusText((agnt_t far *)agntPtr,(char *)CONCAT13((char)((uint)&actorName >> 8),
                                                                 CONCAT12((char)&actorName,
                                                                          (*(uint16_t *)((uint8_t *)&(agntPtr) + 2)))),0);
                   uVar12 = (undefined1)uVar10;
@@ -2804,7 +2804,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
                   ovr_uiNotify(textPtr,uVar10,(char)uVar10);
                 }
                 else {
-                  textPtr = ovr_agnt_statusText((agnt_t *)agntPtr,(char *)CONCAT13((char)((uint)&actorName >> 8),
+                  textPtr = ovr_agnt_statusText((agnt_t far *)agntPtr,(char *)CONCAT13((char)((uint)&actorName >> 8),
                                                                 CONCAT12((char)&actorName,
                                                                          (*(uint16_t *)((uint8_t *)&(agntPtr) + 2)))),0);
                   uVar12 = (undefined1)uVar10;
@@ -2824,7 +2824,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
                                    (char)((ulong)agntPtr >> 0x10));
                 uVar13 = (undefined1)GSavedBlitSeg;
                 if ((char)uVar5 == '\0') {
-                  textPtr = ovr_agnt_statusText((agnt_t *)agntPtr,(char *)CONCAT13((char)((uint)&actorName >> 8),
+                  textPtr = ovr_agnt_statusText((agnt_t far *)agntPtr,(char *)CONCAT13((char)((uint)&actorName >> 8),
                                                                 CONCAT12((char)&actorName,
                                                                          (*(uint16_t *)((uint8_t *)&(agntPtr) + 2)))),0);
                   uVar12 = (undefined1)uVar10;
@@ -2836,7 +2836,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
                   ovr_uiNotify(textPtr,uVar10,(char)uVar10);
                 }
                 else {
-                  textPtr = ovr_agnt_statusText((agnt_t *)agntPtr,(char *)CONCAT13((char)((uint)&actorName >> 8),
+                  textPtr = ovr_agnt_statusText((agnt_t far *)agntPtr,(char *)CONCAT13((char)((uint)&actorName >> 8),
                                                                 CONCAT12((char)&actorName,
                                                                          (*(uint16_t *)((uint8_t *)&(agntPtr) + 2)))),0);
                   uVar12 = (undefined1)uVar10;
@@ -2851,7 +2851,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
             }
             else {
               uVar13 = (undefined1)GSavedBlitSeg;
-              textPtr = ovr_agnt_statusText((agnt_t *)agntPtr,(char *)CONCAT13((char)((uint)&targetName >> 8),
+              textPtr = ovr_agnt_statusText((agnt_t far *)agntPtr,(char *)CONCAT13((char)((uint)&targetName >> 8),
                                                             CONCAT12((char)&targetName,uVar5)),0);
               stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)uVar10,uVar13,0,0,0,0,0);
               textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x708c,_SS),
@@ -2859,13 +2859,13 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
                                                       CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,
                                      (char)uVar10);
               ovr_uiNotify(textPtr,uVar10,(char)uVar10);
-              uVar10 = ovr_audio_panFromX((agnt_t *)agntPtr,(char)((ulong)agntPtr >> 0x10));
+              uVar10 = ovr_audio_panFromX((agnt_t far *)agntPtr,(char)((ulong)agntPtr >> 0x10));
               ovr_play_sfxU(0x16,0,uVar10,0,(char)uVar10);
             }
           }
           else {
             uVar13 = (undefined1)GSavedBlitSeg;
-            textPtr = ovr_agnt_statusText((agnt_t *)agntPtr,(char *)CONCAT13((char)((uint)&targetName >> 8),
+            textPtr = ovr_agnt_statusText((agnt_t far *)agntPtr,(char *)CONCAT13((char)((uint)&targetName >> 8),
                                                           CONCAT12((char)&targetName,(*(uint16_t *)((uint8_t *)&(agntPtr) + 2)))
                                                          ),0);
             stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)uVar10,uVar13,0,0,0,0,0);
@@ -2874,13 +2874,13 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
                                                     CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,
                                    (char)uVar10);
             ovr_uiNotify(textPtr,uVar10,(char)uVar10);
-            uVar10 = ovr_audio_panFromX((agnt_t *)agntPtr,(char)((ulong)agntPtr >> 0x10));
+            uVar10 = ovr_audio_panFromX((agnt_t far *)agntPtr,(char)((ulong)agntPtr >> 0x10));
             ovr_play_sfxU(0x16,0,uVar10,0,(char)uVar10);
           }
         }
         else {
           uVar13 = (undefined1)GSavedBlitSeg;
-          textPtr = ovr_agnt_statusText((agnt_t *)agntPtr,(char *)CONCAT13((char)((uint)&targetName >> 8),
+          textPtr = ovr_agnt_statusText((agnt_t far *)agntPtr,(char *)CONCAT13((char)((uint)&targetName >> 8),
                                                         CONCAT12((char)&targetName,(*(uint16_t *)((uint8_t *)&(agntPtr) + 2)))),0)
           ;
           stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)uVar10,uVar13,0,0,0,0,0);
@@ -2889,7 +2889,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
                                                   CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,
                                  (char)uVar10);
           ovr_uiNotify(textPtr,uVar10,(char)uVar10);
-          uVar10 = ovr_audio_panFromX((agnt_t *)agntPtr,(char)((ulong)agntPtr >> 0x10));
+          uVar10 = ovr_audio_panFromX((agnt_t far *)agntPtr,(char)((ulong)agntPtr >> 0x10));
           ovr_play_sfxU(0x16,0,uVar10,0,(char)uVar10);
         }
       }
@@ -2898,7 +2898,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
       }
     }
     else {
-      ovc41_textOnlyPlaceSingle((agnt_t *)CONCAT13(uVar14,CONCAT12(uVar13,agnt)),in_stack_00000008);
+      ovc41_textOnlyPlaceSingle((agnt_t far *)CONCAT13(uVar14,CONCAT12(uVar13,agnt)),in_stack_00000008);
     }
   }
   return;
@@ -2909,11 +2909,11 @@ void __cdecl16far ovc41_specialAttack(agnt_t *agnt,int targetIndex,uint16_t arg3
 
 /* Applies the special attack to an agent and then runs the follow-up tick. */
 
-void __cdecl16far ovc41_resolveSpecialAttack(agnt_t *agnt,uint16_t param)
+void __cdecl16far ovc41_resolveSpecialAttack(agnt_t far *agnt,uint16_t param)
 
 {
-  ovc41_specialAttack((agnt_t *)agnt,(*(uint16_t *)((uint8_t *)&(agnt) + 2)),param,0);
-  ovr_agnt_advanceAnimFrame((agnt_t *)agnt,(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
+  ovc41_specialAttack((agnt_t far *)agnt,(*(uint16_t *)((uint8_t *)&(agnt) + 2)),param,0);
+  ovr_agnt_advanceAnimFrame((agnt_t far *)agnt,(*(uint16_t *)((uint8_t *)&(agnt) + 2)));
   return;
 }
 
@@ -2930,7 +2930,7 @@ void __cdecl16far ovc41_usesAgntCount3(void)
   
   for (iVar1 = 0; iVar1 < (int)(uint)AgntCount; iVar1 = iVar1 + 1) {
     if (Agnts[iVar1].faction != '\0') {
-      ovc41_settleAgentCombat((agnt_t *)0x0,(agnt_t *)CONCAT22(SEG_OF(Agnts),(agnt_t *)&Agnts[iVar1].x),0);
+      ovc41_settleAgentCombat((agnt_t far *)0x0,(agnt_t far *)CONCAT22(SEG_OF(Agnts),(agnt_t far *)&Agnts[iVar1].x),0);
     }
   }
   return;
@@ -2942,7 +2942,7 @@ void __cdecl16far ovc41_usesAgntCount3(void)
 
 /* Returns the growth requirement for an agent's level, from the growth table or its type record. */
 
-int __cdecl16far ovc41_growthForLevel(agnt_t *agnt,uint16_t arg2)
+int __cdecl16far ovc41_growthForLevel(agnt_t far *agnt,uint16_t arg2)
 
 {
   int iVar1;

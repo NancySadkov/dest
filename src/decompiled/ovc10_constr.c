@@ -499,7 +499,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
   if (GOngoingBattle == '\0') {
     ovr_ovc13_usesBlitRects();
     constr_usesSmoothPrev2();
-    ovr_ovc23_textAdlibNone(unaff_DI,unaff_SI,(agnt_t *)(*(uint16_t *)((uint8_t *)&(buf))));
+    ovr_ovc23_textAdlibNone(unaff_DI,unaff_SI,(agnt_t far *)(*(uint16_t *)((uint8_t *)&(buf))));
     GGameState = 0x24;
     if (DebugVerbose != false) {
       printf("%d \r");

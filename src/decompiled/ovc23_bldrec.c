@@ -8,7 +8,7 @@
 
 
 /* 55fe:0000 */
-byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t *agnt)
+byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t far *agnt)
 
 {
   undefined1 stk_02c2;   /* stack slot 02c2 */
@@ -1247,7 +1247,7 @@ void __cdecl16far ovc23_removeRecord(int recordIndex)
 {
   uint16_t unaff_BP;
   uint unaff_SI;
-  agnt_t *in_stack_00000000;
+  agnt_t far *in_stack_00000000;
   
   if (recordIndex + 1U < GRecordCount) {
     _fmemmove((char *)CONCAT22(_DS,(char *)&GREC_FIELD(&GRecords[recordIndex], buildTimer, 0)),
@@ -1283,7 +1283,7 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
   undefined1 uStack000d;
   byte in_stack_0000000e;
   char in_stack_00000010;
-  agnt_t *in_stack_0000fff6;
+  agnt_t far *in_stack_0000fff6;
   uint uStack_8;
   byte bStack_5;
   byte bStack_3;
@@ -1291,7 +1291,7 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
   outFlag = (undefined1 *)CONCAT13(uStack000d,CONCAT12(partyIndex,outFlag));
   for (uStack_8 = 0; (int)uStack_8 < (int)(uint)BuildingTypes[bldType].size;
       uStack_8 = uStack_8 + 1) {
-    in_stack_0000fff6 = (agnt_t *)ovc23_findRecordAt(x + uStack_8,y,0);
+    in_stack_0000fff6 = (agnt_t far *)ovc23_findRecordAt(x + uStack_8,y,0);
     if (-1 < (int)in_stack_0000fff6) {
       ovc23_removeRecord((int)in_stack_0000fff6);
     }

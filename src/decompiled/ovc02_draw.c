@@ -775,7 +775,7 @@ void __cdecl16far draw_usesPlay_sfx(void)
   uint rec;
   ulong prevTick;
   uint16_t outFlag;
-  agnt_t *in_stack_0000fffa;
+  agnt_t far *in_stack_0000fffa;
   byte col;
   
   prevTick = CONCAT22(unaff_SI,(*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)));
@@ -812,7 +812,7 @@ void __cdecl16far draw_usesPlay_sfx(void)
         else {
           GRecords[rec].state = 2;
           x = GRecords[rec].x;
-          in_stack_0000fffa = (agnt_t *)GRecords[rec].y;
+          in_stack_0000fffa = (agnt_t far *)GRecords[rec].y;
           uVar5 = ovr_ovc23_isCursorAt(x,(int)in_stack_0000fffa,0);
           if (((char)uVar5 != '\0') && (GRecords[rec].reserved08 != '\0')) {
             ovr_play_sfx(80,0,0);

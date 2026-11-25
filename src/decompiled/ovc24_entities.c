@@ -759,7 +759,7 @@ void __cdecl16far ovc24_usesLDIV_at_(int entityIndex)
   if ((int)lVar7 == 0) {
     uVar10 = (uint16_t)((ulong)Entities >> 0x10);
     if (((AgntGs[(uint)((entity_t *)Entities)[entityIndex].base.gindex].flags & 0x2000) != 0
-        ) && (bVar1 = ovr_agnt_compute8((agnt_t *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),uVar10),
+        ) && (bVar1 = ovr_agnt_compute8((agnt_t far *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),uVar10),
              -1 < (char)bVar1)) {
       uVar10 = (uint16_t)((ulong)Entities >> 0x10);
       cVar2 = ((entity_t *)Entities)[entityIndex].dir -

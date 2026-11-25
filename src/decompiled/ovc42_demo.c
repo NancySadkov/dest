@@ -244,7 +244,7 @@ ovc42_showAgentStats(byte gindex,uint8_t partyIndex,char flag,far_t cmap,byte le
   }
   cmap_00.seg = cmap.ofs;
   cmap_00.ofs = _SS;
-  ovr_drawAgntStats((agnt_t *)&agntTmp,cmap_00,cmap.seg);
+  ovr_drawAgntStats((agnt_t far *)&agntTmp,cmap_00,cmap.seg);
   return;
 }
 

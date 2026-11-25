@@ -1438,7 +1438,7 @@ uint __cdecl16far attact_usesAlignUp44(int *xPtr,int y,uint8_t dir)
 
 
 /* 3f0b:2430 */
-void __cdecl16far attact_usesRandBelow(agnt_t *agnt,byte dir,uint16_t arg3,uint16_t arg4)
+void __cdecl16far attact_usesRandBelow(agnt_t far *agnt,byte dir,uint16_t arg3,uint16_t arg4)
 
 {
   uint16_t uVar1;

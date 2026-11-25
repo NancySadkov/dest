@@ -998,7 +998,7 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
        ((partyClass = *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x49),
         (GLeaderSheets[partyClass])->unitCount < 0x50 ||
         (uVar3 = ovr_randBelow(0x28,0), (char)uVar3 == '\0')))))) &&
-     (8 < ((agnt_t *)(((uint)partyIndex << 2)))->teamCode)) {
+     (8 < ((agnt_t far *)(((uint)partyIndex << 2)))->teamCode)) {
     if ((GLeaderSheets[partyClass])->unitCount < 0x28) {
       if ((GLeaderSheets[partyClass])->unitCount < 0x14) {
         return;

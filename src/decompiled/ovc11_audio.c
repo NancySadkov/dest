@@ -590,7 +590,7 @@ void __cdecl16far musInit(void)
 /* WARNING: Removing unreachable block (ram,0x0003b0c9) */
 /* Returns a 0..0x7f pan value from an agent's x (0x7f - clamp(x*127/210)). */
 
-int __cdecl16far audio_panFromX(agnt_t *agnt,uint16_t arg2)
+int __cdecl16far audio_panFromX(agnt_t far *agnt,uint16_t arg2)
 
 {
   uint uVar1;

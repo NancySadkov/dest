@@ -985,7 +985,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
   uint32_t packed;
   uint16_t uVar29;
   char *in_stack_00000000;
-  agnt_t *paStack0008;
+  agnt_t far *paStack0008;
   uint16_t uStack000a;
   char acStack_1b6 [120];
   char acStack_13e [36];
@@ -3467,7 +3467,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
         do {
           iVar10 = iVar10 + 1;
           if ((int)(uint)AgntCount <= iVar10) {
-            iVar9 = ovr_audio_panFromX((agnt_t *)sheet,0);
+            iVar9 = ovr_audio_panFromX((agnt_t far *)sheet,0);
             uVar12 = (undefined1)((uint)iVar9 >> 8);
             ovr_play_sfxU(0x1c,0,0,0,0);
             return (char *)CONCAT11(uVar12,1);

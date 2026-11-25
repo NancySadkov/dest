@@ -11,15 +11,15 @@
 
 /* [R7] body shape: compute */
 
-char __cdecl16far stats_compute1(agnt_t *agnt)
+char __cdecl16far stats_compute1(agnt_t far *agnt)
 
 {
   char cVar1;
-  agnt_t *paVar2;
+  agnt_t far *paVar2;
   uint16_t uVar3;
   
   uVar3 = (uint16_t)((ulong)agnt >> 0x10);
-  paVar2 = (agnt_t *)agnt;
+  paVar2 = (agnt_t far *)agnt;
   if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x04') &&
      (0xb < (((entity_t *)paVar2->entity)->base).level)) {
     cVar1 = (((entity_t *)paVar2->entity)->base).level + 0x37;
@@ -44,15 +44,15 @@ char __cdecl16far stats_compute1(agnt_t *agnt)
 
 /* [R7] body shape: compute */
 
-uint8_t __cdecl16far stats_compute2(agnt_t *agnt)
+uint8_t __cdecl16far stats_compute2(agnt_t far *agnt)
 
 {
   uint8_t uVar1;
-  agnt_t *paVar2;
+  agnt_t far *paVar2;
   uint16_t uVar3;
   
   uVar3 = (uint16_t)((ulong)agnt >> 0x10);
-  paVar2 = (agnt_t *)agnt;
+  paVar2 = (agnt_t far *)agnt;
   if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x04') &&
      (0xc < (((entity_t *)paVar2->entity)->base).level)) {
     uVar1 = 0xc;
@@ -98,15 +98,15 @@ void __cdecl16far stats_drawStatsPanel(void)
 
 /* [R7] body shape: compute */
 
-undefined1 __cdecl16far stats_compute3(agnt_t *agnt)
+undefined1 __cdecl16far stats_compute3(agnt_t far *agnt)
 
 {
   undefined1 result;
-  agnt_t *paVar2;
+  agnt_t far *paVar2;
   uint16_t uVar3;
   
   uVar3 = (uint16_t)((ulong)agnt >> 0x10);
-  paVar2 = (agnt_t *)agnt;
+  paVar2 = (agnt_t far *)agnt;
   if ((((agntG_t *)paVar2->gdata)->shortName[3] == '\x04') &&
      (0xb < (((entity_t *)paVar2->entity)->base).level)) {
     result = 1;
@@ -1074,7 +1074,7 @@ L_OVC28_6018_0c76_0EAD:
 
 /* [R7] body shape: compute */
 
-char __cdecl16far stats_compute4(agnt_t *agnt,uint16_t arg2)
+char __cdecl16far stats_compute4(agnt_t far *agnt,uint16_t arg2)
 
 {
   byte bVar1;
@@ -1126,7 +1126,7 @@ char * __cdecl16far stats_formatThousands(char *text,uint32_t value)
 
 /* 6386:06cd */
 
-void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,uint16_t arg3)
+void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
 
 {
   uint32_t uVar1;
@@ -1339,18 +1339,18 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,uint16_t arg3)
   TextBlitY = 0x25;
   TextBlitX = 0x87;
   if (((agntG_t *)agnt->gdata)->shortName[3] != -1) {
-    cVar3 = stats_compute3((agnt_t *)CONCAT22(cmap.ofs,agnt));
+    cVar3 = stats_compute3((agnt_t far *)CONCAT22(cmap.ofs,agnt));
     byteLo = (undefined1)Font02.seg;
     fontHi = (undefined1)(Font02.seg >> 8);
     if (cVar3 == '\0') {
       uVar25 = 0xe0;
       uVar23 = 0xde;
       fontOfs = Font02.ofs;
-      value = stats_compute2((agnt_t *)CONCAT22(cmap.ofs,agnt));
+      value = stats_compute2((agnt_t far *)CONCAT22(cmap.ofs,agnt));
       textPtr = ovr_manage_compute1((uint)value,0);
       uVar14 = SUB21(textPtr,0);
       nameOfs = in_DX;
-      uVar5 = stats_compute2((agnt_t *)CONCAT13(segHi,CONCAT12(uVar5,agnt)));
+      uVar5 = stats_compute2((agnt_t far *)CONCAT13(segHi,CONCAT12(uVar5,agnt)));
       textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT22(0x6323,_SS),
                              (char *)(ulong)CONCAT12(uVar5,0x2410),0x10,uVar5,uVar14,nameOfs);
       ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(fontHi,byteLo),uVar23,byteLo,
@@ -1359,13 +1359,13 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,uint16_t arg3)
     else {
       uVar23 = 0xde;
       fontOfs = Font02.ofs;
-      cVar3 = stats_compute1((agnt_t *)CONCAT22(cmap.ofs,agnt));
+      cVar3 = stats_compute1((agnt_t far *)CONCAT22(cmap.ofs,agnt));
       iVar10 = (int)cVar3;
-      value = stats_compute2((agnt_t *)CONCAT13(segHi,CONCAT12(uVar5,agnt)));
+      value = stats_compute2((agnt_t far *)CONCAT13(segHi,CONCAT12(uVar5,agnt)));
       textPtr = ovr_manage_compute1((uint)value,iVar10);
       uVar16 = SUB21(in_DX,0);
       uVar14 = SUB21(textPtr,0);
-      uVar5 = stats_compute2((agnt_t *)CONCAT13(segHi,CONCAT12(uVar5,agnt)));
+      uVar5 = stats_compute2((agnt_t far *)CONCAT13(segHi,CONCAT12(uVar5,agnt)));
       textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT22(0x6313,_SS),
                              (char *)(ulong)CONCAT12(uVar5,0x2410),uVar5,uVar14,uVar16);
       ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),CONCAT11(fontHi,byteLo),uVar23,byteLo);
@@ -1452,7 +1452,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,uint16_t arg3)
     segHi = (undefined1)(Font02.seg >> 8);
     fontOfs = Font02.ofs;
     iVar10 = ovr_ovc41_growthForLevel
-                       (*(agnt_t **)&agnt->entity,*(uint16_t *)((int)&agnt->entity + 2));
+                       (*(agnt_t far **)&agnt->entity,*(uint16_t *)((int)&agnt->entity + 2));
     textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT13(99,CONCAT12(0x48,_SS)),
                            (char *)CONCAT13((char)((uint)iVar10 >> 8),CONCAT12((char)iVar10,0x2410))
                            ,0x48,0x10,(char)iVar10,nameOfs);
@@ -1535,7 +1535,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,uint16_t arg3)
   uVar5 = (undefined1)Font02.seg;
   segHi = (undefined1)(Font02.seg >> 8);
   fontOfs = Font02.ofs;
-  stats_compute4(*(agnt_t **)&agnt->entity,*(uint16_t *)((int)&agnt->entity + 2));
+  stats_compute4(*(agnt_t far **)&agnt->entity,*(uint16_t *)((int)&agnt->entity + 2));
   textPtr = ovr_stsprintf((char *)&line);
   ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,nameOfs),CONCAT11(segHi,uVar5),uVar23,uVar5,
                 uVar23,uVar25);
@@ -1690,7 +1690,7 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
   uVar3 = *(uint32_t far *)&Agnts[agnt_id].entity;
   *(byte *)((int)uVar3 + 0x33) = *(byte *)((int)entityFar + 0x33) & 0xfd;
   pcStack_d4 = (char *)((ulong)pcStack_d4 & 0xffff0000);
-  drawAgntStats((agnt_t *)&Agnts[agnt_id].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
+  drawAgntStats((agnt_t far *)&Agnts[agnt_id].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
   agntSeg = SEG_OF(Agnts);
   entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
   if ((*(byte *)((int)entityFar + 0x33) & 1) == 0) {
@@ -1807,7 +1807,7 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6406,_SS),
                        (char *)CONCAT22(puVar3,(char *)0x26510),widths);
   drawString(text,widths,0);
-  drawAgntStats((agnt_t *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
+  drawAgntStats((agnt_t far *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
   return;
 }
 
@@ -1852,7 +1852,7 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
   text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x644e,_SS),
                        (char *)CONCAT22(puVar3,(char *)0x26510),widths);
   drawString(text,widths,0);
-  drawAgntStats((agnt_t *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
+  drawAgntStats((agnt_t far *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
   return;
 }
 
@@ -1936,7 +1936,7 @@ void __cdecl16far stats_openAgentDetail(int agntIndex)
   iVar2 = Agnts[agntIndex].owner;
   ovr_manage_openTalkWindow();
   ScreenMode = 2;
-  drawAgntStats((agnt_t *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
+  drawAgntStats((agnt_t far *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
   drawString((char *)0x620f,0x2410,0);
   bVar1 = ((entity_t *)Entities)[iVar2].base.gindex;
   if (AgntGs[(uint)bVar1].ai == '\0') {

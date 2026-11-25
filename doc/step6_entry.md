@@ -6289,3 +6289,45 @@ broken now and fixed by the switch.  The switch is still blocked on the three ty
 
   grep_checks 41,190 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### Agent pointers are far now: 507 conversions, and the Agnts class mostly dissolves
+
+The previous entry concluded that the remaining Agnts/0x34 sites could not be fixed under the medium
+model because callees were declared with a near `agnt_t *`.  The remedy is the prototypes, not the
+call sites: `agnt_t *` -> `agnt_t far *` everywhere (prototypes, definitions, locals, casts - 507
+occurrences across 18 files).  Agents live in their own segment (original `1726:0000`, ours
+`652A:0000`) while DS is DGROUP, so a near pointer could never reach them; far is also what the
+original uses.
+
+**It compiles and links clean on the first try**: 65/65 modules, LINK.LOG 65 bytes / 0 problems, and
+every gate unchanged (grep_checks 41,119; compare_state 1,627/0/0; diff_dgroup 1,444/1,868;
+compare_runtime 1,545/12).  The image grew 534,422 -> 536,822 bytes, which is the expected cost of
+far accesses.
+
+Verified at the instruction level rather than by the gates, since the gates cannot see pointer widths.
+`agnt_usesStrengthMax` now begins:
+
+```
+les  bx, dword ptr [bp+6]      ; a 4-byte far pointer parameter
+mov  al, byte ptr es:[bx+33]   ; +0x21 strength
+cmp  al, byte ptr es:[bx+34]   ; +0x22 strengthMax
+test word ptr es:[bx+43],2080  ; +0x2b flags
+mov  bx, word ptr es:[bx+29]   ; +0x1d gdata (far pointer)
+test word ptr [bx+60],32       ; agntG_t + 0x3c = flags
+```
+
+That is the original's whole chain - far agent, far `gdata`, into `agntG_t.flags` - and it was
+previously four truncations.
+
+What it fixes, by count:
+
+* **52** functions taking an agent now declare and receive a far pointer;
+* **79** call sites that cast `(agnt_t *)&Agnts[i]` no longer truncate to the offset;
+* **2** sites that pass `MK_FP(SEG_OF(Agnts), index * 0x34)` now reach a callee that can accept it.
+
+One side effect to note: `build_standalone.py --asm` now fails on `o49` with "Compiler table limit
+exceeded in function ovc49_body1".  That is a listing-mode limit only - the `-c` build is clean - but
+it means `ovc49_body1` can no longer be inspected through `--asm` and needs Ghost/Ghidra instead.
+
+  grep_checks 41,119 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
