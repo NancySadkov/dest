@@ -5748,3 +5748,35 @@ the dump is taken at its first call in the original; (b) drive the game there wi
 
   grep_checks 42,463; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### CORRECTION: the stLoad/stSave stale-AH fix is shape-only, not a behaviour fix
+
+Commit 4d904931 said "the two error paths were not benign" and implied that `return readOk & 0xff00`
+misreported failure.  That is wrong, and the evidence is in the callers:
+
+```
+264  uVar1 = stLoad(handle);
+266  return (char)uVar1;
+
+288  uVar1 = stLoad(handle);
+292  return (char)uVar1;
+```
+
+Both callers take the **low byte**, and in both cases the low byte was already correct before the
+fix: the success exit was `CONCAT11(uVar4,1)` (low byte 1) and the failure exit `readOk & 0xff00`
+(low byte 0).  `stSave` is the same - `CONCAT11(uVar4,1)` on success and `(uint)bVar5 << 8` on
+failure, both with a correct low byte, and it has no in-tree callers at all.
+
+So replacing those four returns with 1/0 changes only the **high byte**, which no caller reads.
+The change is still right - the function returns 0/1 and the disassembly says so (`mov al,1` /
+`mov al,0` at each exit) - but it is a shape and clarity fix, worth -9 on `grep_checks`, not a
+correction of a live bug.  The dead `uVar4 = ...` stores that fed the old high byte are gone, which
+is what makes the success path read `return 1;`.
+
+The general lesson is the one already recorded for `ovc45_compute1` and `attact_isTerrainFlat`:
+a stale-AH return is only a *behaviour* defect when some caller reads the high byte.  The
+stale-AH scanner should therefore be paired with a caller check before the fix is described as
+behavioural.
+
+  grep_checks 42,341; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
