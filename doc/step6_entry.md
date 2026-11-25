@@ -5705,3 +5705,46 @@ which is why none of this was visible.
 
   grep_checks 42,505; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### The multi-segment dump works, and a DGROUP dump is not byte-stable
+
+`scripts/dump_extra_segment.py` builds a stub that dumps **two** segments: first `DS:0..#FFFF`,
+then - after `pop ds` restores DGROUP - the segment named by a 4-byte far pointer at a chosen
+DGROUP slot:
+
+```
+  push ds
+  mov bx,1 / mov cx,0xFFFF / mov dx,0 / mov ah,0x40 / int 21h     ; DS dump
+  pop ds
+  mov ax,[slot]                                                    ; offset
+  mov ds,[slot+2]                                                  ; segment
+  mov dx,ax / mov bx,1 / mov cx,0xFFFF / mov ah,0x40 / int 21h     ; target dump
+```
+
+39 bytes.  Tested with slot `0x033e`, which holds `1C33:0352` in the original's DGROUP - a pointer
+back into DGROUP, chosen because no *non-DGROUP* pointer is populated at the main-entry checkpoint.
+The run produced **131,070 bytes = 2 x 0xFFFF**, so the second write path works.  Both images get
+the same stub shape with their own slot offsets, which is what makes the two dumps comparable.
+
+Two things the test measured that the instrument has to account for:
+
+* **The two blocks are not identical even when they name the same segment** - 7 bytes differ
+  (first at `0x7001`).  That is not a stub bug: `int 21h` is issued twice and the bytes at the tail
+  of the first write are re-read after DOS has touched the user's segment.
+* **More importantly, the dump is not byte-stable between runs of the same binary.**  Two runs of
+  the original differed in **26 bytes**: `0x0081..0x0083` (`_StartTime`) and a cluster at
+  `0xa86e..0xa881`.  So a differential checkpoint cannot compare raw dumps; it needs an ignore set
+  for these volatile bytes, the same way `compare_runtime` already tolerates its 12 CRT
+  differences.
+
+That settles why the existing checkpoints report "5 boundaries identical, 12 different": a handful
+of CRT/start-up bytes move on every run regardless of the code under test.
+
+Next for the instrument, in order: (a) choose a trigger function that both binaries reach after
+initialisation - the natural choice is the function under test itself, patched at its entry, so
+the dump is taken at its first call in the original; (b) drive the game there with
+`AUTOTYPE` lines in the batch, which needs no runner change because DOSBox-X executes them from
+`GO.BAT`; (c) compare with the volatile-byte ignore set above.
+
+  grep_checks 42,463; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
