@@ -100,92 +100,90 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
 void __cdecl16far ovc27_usesRandBelow(int x1,int y1,int x2,int y2,brect_t *rect,byte rectSeg)
 
 {
-  int iVar1;
-  int iVar2;
-  uint8_t *puVar3;
+  /* Re-derived from 5ded:01ac (600 bytes).  Copies the three dither planes out of
+     ditherPlane0/1/2, clamps the segment to the rect, then walks x at a Bresenham-ish step,
+     picking a random dither column per pixel and writing the three planes at row offsets 0,
+     0x140 and 0x280.  The planes are 0x20-byte buffers (the frame is sub sp,0x6e), not the
+     single bytes the export declared. */
+  int savedY2;
+  int savedX2;
+  uint8_t *rowPtr;
   uint16_t randPick;
-  uint uVar5;
-  uint uVar6;
-  brect_t *pbVar7;
-  uint16_t uVar8;
-  far_t dst;
-  far_t dst_00;
-  far_t dst_01;
-  uint8_t plane2;
-  uint8_t plane1;
-  uint8_t plane0;
-  int iStack_10;
-  int yStep;
-  int iStack_c;
-  int iStack_a;
-  int iStack_8;
-  int iStack_6;
-  byte bStack_3;
-  
-  iVar1 = y2;
-  iVar2 = x2;
-  dst.seg = _SS;
-  dst.ofs = (uint16_t)&plane0;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410594a)),dst);
-  dst_00.seg = _SS;
-  dst_00.ofs = (uint16_t)&plane1;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410596a)),dst_00);
-  dst_01.seg = _SS;
-  dst_01.ofs = (uint16_t)&plane2;
-  F_SCOPY(far_from_u32((uint32_t)(0x2410598a)),dst_01);
+  uint plane0Rem;
+  uint plane0Sign;
+  int rowY;
+  int slopeY;
+  int dirY;
+  int stepFrac;
+  int err;
+  int x;
+  byte ditherPhase;
+  byte plane0 [0x20];
+  byte plane1 [0x20];
+  byte plane2 [0x20];
+  far_t dstPlane;
+
+  savedY2 = y2;
+  savedX2 = x2;
+  dstPlane.seg = _SS;
+  dstPlane.ofs = (uint16_t)plane0;
+  F_SCOPY(far_from_u32((uint32_t)(0x2410594a)),dstPlane);
+  dstPlane.seg = _SS;
+  dstPlane.ofs = (uint16_t)plane1;
+  F_SCOPY(far_from_u32((uint32_t)(0x2410596a)),dstPlane);
+  dstPlane.seg = _SS;
+  dstPlane.ofs = (uint16_t)plane2;
+  F_SCOPY(far_from_u32((uint32_t)(0x2410598a)),dstPlane);
   if (x2 < x1) {
     x2 = x1;
-    x1 = iVar2;
-    iStack_6 = y2;
+    x1 = savedX2;
     y2 = y1;
-    y1 = iVar1;
+    y1 = savedY2;
   }
   if (x1 < rect->x) {
     x1 = rect->x;
   }
-  uVar8 = (uint16_t)((ulong)rect >> 0x10);
-  pbVar7 = (brect_t *)rect;
-  if (pbVar7->w < x2) {
-    x2 = pbVar7->w;
+  if (rect->w < x2) {
+    x2 = rect->w;
   }
   if (x1 <= x2) {
     if (x1 == x2) {
-      iStack_a = 0;
-      iStack_c = 0;
+      slopeY = 0;
+      stepFrac = 0;
     }
     else {
-      iStack_a = (y2 - y1) / (x2 - x1);
-      uVar5 = (y2 - y1) % (x2 - x1);
-      uVar6 = (int)uVar5 >> 0xf;
-      iStack_c = (uVar5 ^ uVar6) - uVar6;
+      slopeY = (y2 - y1) / (x2 - x1);
+      plane0Rem = (y2 - y1) % (x2 - x1);
+      plane0Sign = (int)plane0Rem >> 0xf;
+      stepFrac = (plane0Rem ^ plane0Sign) - plane0Sign;
     }
-    yStep = ovr_ovc07_signum(y2 - y1);
-    iStack_10 = x2 - x1 >> 1;
-    bStack_3 = rectSeg;
-    for (iStack_8 = x1; iStack_8 <= x2; iStack_8 = iStack_8 + 1) {
-      bStack_3 = bStack_3 + 1 & 0xf;
-      iVar2 = y1 + -1;
-      puVar3 = (uint8_t *)(iVar2 * 0x140 + iStack_8);
-      if ((((pbVar7->y <= iVar2) && (iVar2 <= pbVar7->h)) &&
-          (*(int *)(&plane0 + (uint)bStack_3 * 2) != 0)) &&
+    dirY = ovr_ovc07_signum(y2 - y1);
+    err = x2 - x1 >> 1;
+    ditherPhase = rectSeg;
+    for (x = x1; x <= x2; x = x + 1) {
+      ditherPhase = ditherPhase + 1 & 0xf;
+      rowY = y1 + -1;
+      rowPtr = (uint8_t *)(rowY * 0x140 + x);
+      if ((((rect->y <= rowY) && (rowY <= rect->h)) &&
+          (*(uint16_t *)(plane0 + (uint)ditherPhase * 2) != 0)) &&
          (randPick = ovr_randBelow(3,0), (randPick & 0xff) == 0)) {
-        *puVar3 = (&plane0)[(uint)bStack_3 * 2];
+        *rowPtr = plane0[(uint)ditherPhase * 2];
       }
-      if (((pbVar7->y <= y1) && (y1 <= pbVar7->h)) &&
-         ((*(int *)(&plane1 + (uint)bStack_3 * 2) != 0 &&
+      if (((rect->y <= y1) && (y1 <= rect->h)) &&
+         ((*(uint16_t *)(plane1 + (uint)ditherPhase * 2) != 0 &&
           (randPick = ovr_randBelow(3,0), (randPick & 0xff) == 0)))) {
-        puVar3[0x140] = (&plane1)[(uint)bStack_3 * 2];
+        rowPtr[0x140] = plane1[(uint)ditherPhase * 2];
       }
-      if (((pbVar7->y <= y1 + 1) && (y1 + 1 <= pbVar7->h)) &&
-         ((*(int *)(&plane2 + (uint)bStack_3 * 2) != 0 &&
+      if (((rect->y <= y1 + 1) && (y1 + 1 <= rect->h)) &&
+         ((*(uint16_t *)(plane2 + (uint)ditherPhase * 2) != 0 &&
           (randPick = ovr_randBelow(3,0), (randPick & 0xff) == 0)))) {
-        puVar3[0x280] = (&plane2)[(uint)bStack_3 * 2];
+        rowPtr[0x280] = plane2[(uint)ditherPhase * 2];
       }
-      y1 = y1 + iStack_a;
-      iStack_10 = iStack_10 + iStack_c;
-      if (x2 - x1 <= iStack_10) {
-        y1 = y1 + yStep;
-        iStack_10 = iStack_10 - (x2 - x1);
+      y1 = y1 + slopeY;
+      err = err + stepFrac;
+      if (x2 - x1 <= err) {
+        y1 = y1 + dirY;
+        err = err - (x2 - x1);
       }
     }
   }
