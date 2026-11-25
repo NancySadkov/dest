@@ -964,28 +964,28 @@ uint __cdecl16far ovc23_usesAlignUp43(int x,int y,byte dir)
   }
   switch(dir) {
   case 0:
-    idx = ((short (*) [148] [60])GUnitGrid)[x][y + -1];
+    idx = (*(short (*) [148] [60])GUnitGrid)[x][y + -1];
     bldType = ((unit_t *)GUnits + idx)->bldType;
     if ((bldType < 0xf8) && ((*(byte *)((uint)bldType * 0x27 + 0x11e) & 1) != 0)) {
       return 1;
     }
     break;
   case 1:
-    idx = ((short (*) [148] [60])GUnitGrid)[x + 1][y];
+    idx = (*(short (*) [148] [60])GUnitGrid)[x + 1][y];
     bldType = ((unit_t *)GUnits + idx)->bldType;
     if ((bldType < 0xf8) && ((*(byte *)((uint)bldType * 0x27 + 0x11e) & 2) != 0)) {
       return 1;
     }
     break;
   case 2:
-    idx = ((short (*) [148] [60])GUnitGrid)[x][y];
+    idx = (*(short (*) [148] [60])GUnitGrid)[x][y];
     bldType = ((unit_t *)GUnits + idx)->bldType;
     if ((bldType < 0xf8) && ((*(byte *)((uint)bldType * 0x27 + 0x11e) & 1) != 0)) {
       return 1;
     }
     break;
   case 3:
-    idx = ((short (*) [148] [60])GUnitGrid)[x][y];
+    idx = (*(short (*) [148] [60])GUnitGrid)[x][y];
     bldType = ((unit_t *)GUnits + idx)->bldType;
     if ((bldType < 0xf8) && ((*(byte *)((uint)bldType * 0x27 + 0x11e) & 2) != 0)) {
       return 1;

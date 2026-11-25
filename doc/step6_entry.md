@@ -5916,3 +5916,50 @@ message, then apply it uniformly.
 
   grep_checks 42,261; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### MEASURED: the `-ml` fix is the explicit dereference, not the `far` qualifier
+
+The one-construct probe under `-ml` that settles the 57 conversions:
+
+```c
+byte p1(int x,int y){ return ((short (*) [148] [60])GUnitGrid)[x][y]; }          /* ERROR  */
+byte p2(int x,int y){ short (*g)[148][60] = (short (*)[148][60])GUnitGrid;
+                      return g[x][y]; }                                          /* ERROR  */
+byte p3(int x,int y){ return GUnitGrid[x][y]; }                                   /* ok     */
+byte p4(int x,int y){ return (*(short far (*) [148] [60])GUnitGrid)[x][y]; }      /* ok     */
+```
+
+`p1` is exactly what the recovered tree writes, and it is rejected.  `p3` (no cast at all) and `p4`
+compile, and `p4` differs from `p1` in *two* ways, so the rule had to be narrowed by experiment:
+
+* **adding `far` to the cast alone does nothing.**  `tmp/fix_far_casts.py` rewrote 7 of `o23`'s 9
+  error lines to `(short far (*) [148] [60])` and the error set stayed identical - same 9 lines.
+* **the explicit dereference is what works.**  Rewriting the four `GUnitGrid` reads to
+  `(*(short (*) [148] [60])GUnitGrid)[x][y]` took `o23` from **9 errors to 5**, and the module
+  compiles those four clean.
+
+So the conversion rule is: a far pointer-to-array index must be written as an explicit dereference
+of the cast, `(*(T (*) [..] [..])ptr)[i][j]`, rather than indexing the cast directly,
+`((T (*) [..] [..])ptr)[i][j]`.  That is the form the compiler accepts when data is far.
+
+The five errors left in `o23` are all real `(T *)(integer)` constructions and are *not* fixed by
+this rule, because they are the thing the rule cannot express - a segment has to be supplied:
+
+```
+1086  (uint32_t *)((uint)(byte)(uVar43 >> 0x10) << 2)
+1090  (byte *)(uint)bVar22
+1093  pbVar20[0xd]                       (via 1090)
+1103  (char *)CONCAT22(_DS, (char *)&GREC_FIELD(...))
+1104  ...
+```
+
+These need `MK_FP(_DS, ofs)` (or a pointer taken from the object itself) instead of an integer cast.
+That is the remaining work for the switch, and it is now a well-defined mechanical pass rather than
+an open question.
+
+The four dereference forms that do compile were applied to `ovc23_bldrec.c` and kept: they are
+semantically identical to the cast form under `-mm` (which is why `grep_checks` does not move) and
+are a prerequisite for the switch.
+
+  grep_checks 42,261; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
