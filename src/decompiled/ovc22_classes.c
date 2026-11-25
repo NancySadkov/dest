@@ -2787,46 +2787,60 @@ uint __cdecl16far ovc22_usesEntities(int entityIndex)
 void __cdecl16far ovc22_usesGUnits(int unitIndex,uint8_t *outFlag)
 
 {
-  byte bVar1;
-  uint16_t uVar2;
-  unit_t *puVar3;
-  char unaff_DI;
-  uint uVar4;
-  uint8_t *in_stack_00000006;
-  
-  uVar4 = 0;
-  while( true ) {
-    puVar3 = (unit_t *)GUnits;
-    uVar2 = (uint16_t)((ulong)GUnits >> 0x10);
-    if (GRecordCount <= uVar4) {
-      bVar1 = (puVar3 + unitIndex)->bldType;
-      if ((BuildingTypes[bVar1].flags2 & 4) == 0) {
-        uVar2 = ovc22_usesGOngoingBattle
-                          (*(byte *)&puVar3[unitIndex].x,*(byte *)&puVar3[unitIndex].y);
-        if ((char)uVar2 != '\0') {
-          *(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006) = 0x1;
-        }
-        uVar2 = (uint16_t)((ulong)GUnits >> 0x10);
-        ovr_createConstructionRecordFar
-                  (0,((unit_t *)GUnits)[unitIndex].x,((unit_t *)GUnits)[unitIndex].y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0)
-        ;
-        if ((1 < BuildingTypes[bVar1].size) &&
-           (uVar2 = (uint16_t)((ulong)GUnits >> 0x10),
-           ovr_createConstructionRecordFar
-                     (0,((unit_t *)GUnits)[unitIndex].x + 1,((unit_t *)GUnits)[unitIndex].y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0), 3 < BuildingTypes[bVar1].size)) {
-          uVar2 = (uint16_t)((ulong)GUnits >> 0x10);
-          ovr_createConstructionRecordFar
-                    (0,((unit_t *)GUnits)[unitIndex].x + 2,((unit_t *)GUnits)[unitIndex].y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0);
-          uVar2 = (uint16_t)((ulong)GUnits >> 0x10);
-          ovr_createConstructionRecordFar
-                    (0,((unit_t *)GUnits)[unitIndex].x + 3,((unit_t *)GUnits)[unitIndex].y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0);
-        }
-      }
+  /* 5087:1674 (file 0x43CE4), re-derived from the original:
+
+       si = [bp+6] ; di = 0
+       while (di < GRecordCount)
+           if (GRecords[di] matches GUnits[si] in both coordinates) return;
+           else di++;
+       bldType = GUnits[si].bldType
+       if (BuildingTypes[bldType].flags2 & 4) return
+       if (ovc22_usesGOngoingBattle(x, y)) *outFlag = 1
+       create(0, x,   y, ...)
+       if (BuildingTypes[bldType].size >= 2) {
+           create(0, x+1, y, ...)
+           if (BuildingTypes[bldType].size >= 4) { create(0, x+2, y, ...);
+                                                   create(0, x+3, y, ...); }
+       }
+
+     Corrections to the exported form: the unit record is fetched once instead of
+     re-loading GUnits and recomputing si*9 for every field, and the `!= 0` test on the
+     +1 create's return value is gone - the original has no `or al,al` after that call
+     (0x43E17) and tests only the building size, so the exported condition skipped the
+     +2/+3 records whenever the call returned zero.
+
+     Remaining defect, deliberately not changed here: the original takes `outFlag` as a
+     FAR pointer (offset at [bp+8], segment at [bp+0xa]) and a fourth argument at
+     [bp+0xc], then stores through ES:BX.  Our 2-argument prototype reads the caller's
+     stack for both, which is what `in_stack_00000006` and `unaff_DI` below really are. */
+  unit_t *u;
+  uint16_t bldType;
+  int i;
+
+  u = (unit_t *)GUnits + unitIndex;
+  for (i = 0; i < (int)GRecordCount; i++) {
+    if ((GRecords[i].x == u->x) && (GRecords[i].y == u->y)) {
       return;
     }
-    if ((GRecords[uVar4].x == puVar3[unitIndex].x) &&
-       (GRecords[uVar4].y == puVar3[unitIndex].y)) break;
-    uVar4 = uVar4 + 1;
+  }
+  bldType = u->bldType;
+  if ((BuildingTypes[bldType].flags2 & 4) == 0) {
+    if ((char)ovc22_usesGOngoingBattle(*(byte *)&u->x,*(byte *)&u->y) != '\0') {
+      *(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006) = 0x1;
+    }
+    ovr_createConstructionRecordFar
+              (0,u->x,u->y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0)
+    ;
+    if (1 < BuildingTypes[bldType].size) {
+      ovr_createConstructionRecordFar
+                (0,u->x + 1,u->y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0);
+      if (3 < BuildingTypes[bldType].size) {
+        ovr_createConstructionRecordFar
+                  (0,u->x + 2,u->y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0);
+        ovr_createConstructionRecordFar
+                  (0,u->x + 3,u->y,(uint8_t *)CONCAT22((uint8_t *)outFlag,in_stack_00000006),(*(uint8_t *)((uint8_t *)&(outFlag) + 2)),unaff_DI,0,0,0);
+      }
+    }
   }
   return;
 }
