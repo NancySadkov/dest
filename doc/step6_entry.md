@@ -4983,3 +4983,43 @@ every line the game draws.
 
   grep_checks 45,571; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### `ovc15_textError` is 449 bytes with a 7-case jump table, not 163
+
+`audit/functions.tsv` lists 163 bytes, which is what made the "163 bytes of code, 971 lines of
+C" ratio look impossible.  Measuring the code directly settles it: the function spans
+ip **0x26bc..0x287c**, ending at the `retf` at 0x287C, so **449 bytes** - the same
+functions.tsv understatement already recorded for `ovc23_textAdlibNone`.
+
+What it actually is:
+
+```
+ip 26C3  les bx,[bp+6] ; al = es:[bx+0x1a]        ; a far pointer parameter
+ip 26CF  les bx,0070:[al*4] ; dx = es:[bx], ax = es:[bx+2]
+ip 26E6  les bx,[bp+6] ; al = es:[bx+0xd] ; *0x95
+ip 26FB  al = es:[bx+0x271c] ; [bp-1] = al ; 0xff -> 0
+ip 270F  cmp bx,6 / ja default / jmp word ptr cs:[bx+0x287d]
+ip 287D  jump table = 2725 274B 2771 2797 27BD 27DD 2811
+ip 2843  exit: ax:dx = [bp+0xa..0xc]; if zero return it unchanged
+         else push 0 / push 0x64 / push (si+0x64 as 32-bit)
+              lcall 0,0x938 then lcall 0,0x9c4, store dx:ax back
+ip 287A  pop si / leave / retf
+```
+
+So the seven cases compare bytes `agnt->+0x29`, `+0x2a`, `+0x2c` against thresholds and set `si`
+to 0, 5 or 0xa, and the shared exit scales that via two 32-bit runtime calls.  The declared
+signature `(uint32_t partyIndex, agnt_t *agnt)` is also wrong: the original's first parameter is
+a **far pointer** (`les bx, ptr [bp+6]`) and its second is a **32-bit value at [bp+0xa..0xc]**
+that is both read and returned in `dx:ax`.
+
+**Correction to the previous entry.**  The label `L_attact_3f0b_1082_130A` appearing inside the
+body is a Ghidra *block* label, not proof that segment-3f0b code was absorbed: the block it
+names is this function's own shared exit at ip 0x2843.  The 971-line C body is large because the
+switch has seven cases with long expressions and the exit does 32-bit arithmetic - not because
+foreign code was merged in.  The earlier note saying otherwise is withdrawn.
+
+Re-deriving it means reading all seven cases plus the semantics of `lcall 0,0x938` and
+`lcall 0,0x9c4`; it is a self-contained ~449-byte routine and a proper next job.
+
+  grep_checks 45,444; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
