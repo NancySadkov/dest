@@ -316,7 +316,6 @@ uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint
   uint16_t uVar3;
   uint readLen;
   uint16_t *puVar5;
-  char *in_stack_00000004;
   undefined1 uVar6;
   undefined1 uVar7;
   uint8_t dest;
@@ -329,10 +328,10 @@ uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint
   byte menuId;
   
   TextBlitDstSeg = 0xa000;
-  if (in_stack_00000004 != (char *)0x0 || (char *)title != (char *)0x0) {
+  if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
     TextBlitX = 0x16;
     TextBlitY = 0xb;
-    ovr_blitText(in_stack_00000004,(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg,0xde,0xde,7
+    ovr_blitText((char *)far_ofs_u32(title),(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg,0xde,0xde,7
                 );
   }
   iStack_6 = 0;
@@ -426,10 +425,10 @@ L_uiMenuSub_0B46:
                 *(uint16_t *)(&dest + readLen * 4) = uVar3;
               }
               saveui_blitPanel();
-              if (in_stack_00000004 != (char *)0x0 || (char *)title != (char *)0x0) {
+              if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
                 TextBlitX = 0x16;
                 TextBlitY = 0xb;
-                ovr_blitText(in_stack_00000004,(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg
+                ovr_blitText((char *)far_ofs_u32(title),(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg
                              ,0xde,0xde,7);
               }
               (*(uint8_t *)((uint8_t *)&(entries_02.seg))) = uVar6;
@@ -461,10 +460,10 @@ L_uiMenuSub_0B46:
           *(uint16_t *)(&dest + readLen * 4) = uVar3;
         }
         saveui_blitPanel();
-        if (in_stack_00000004 != (char *)0x0 || (char *)title != (char *)0x0) {
+        if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
           TextBlitX = 0x16;
           TextBlitY = 0xb;
-          ovr_blitText(in_stack_00000004,(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg,0xde,
+          ovr_blitText((char *)far_ofs_u32(title),(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg,0xde,
                        0xde,7);
         }
         (*(uint8_t *)((uint8_t *)&(entries_01.seg))) = uVar6;
@@ -514,10 +513,10 @@ L_uiMenuSub_08AD:
         *(uint16_t *)(&dest + readLen * 4) = uVar3;
       }
       saveui_blitPanel();
-      if (in_stack_00000004 != (char *)0x0 || (char *)title != (char *)0x0) {
+      if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
         TextBlitX = 0x16;
         TextBlitY = 0xb;
-        ovr_blitText(in_stack_00000004,(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg,0xde,
+        ovr_blitText((char *)far_ofs_u32(title),(byte *)CONCAT22(Font03.ofs,(char *)title),Font03.seg,0xde,
                      0xde,7);
       }
       (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = uVar6;
