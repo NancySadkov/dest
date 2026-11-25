@@ -45,14 +45,14 @@ void __cdecl16far manage_openTalkWindow(void)
   far_t gfx_01;
   far_t handle;
   uint8_t palette;
-  stg_tmp_t *psStack_6;
+  stg_tmp_t *palRec;
   
   mapViewActive = 0xff;
   ScreenMode = 1;
   handle.seg = talkwin9Cut5Seg;
   handle.ofs = talkwin9Cut5Ofs;
-  psStack_6 = ovr_stshLoadGfx(handle);
-  ovr_calcSeasonPalette(psStack_6->cmap,in_DX,&palette,_SS,0,0);
+  palRec = ovr_stshLoadGfx(handle);
+  ovr_calcSeasonPalette(palRec->cmap,in_DX,&palette,_SS,0,0);
   ovr_driver_fillRect(0xc,7,0xde,0x96,0xec,0xa000,0,0,0,0,0);
   ovr_vgaSetPalette8bit(&palette,0);
   gfx.seg = talkwin9Cut1Seg;
@@ -2576,11 +2576,11 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
   int iStack_14;
   int iStack_12;
   int iStack_10;
-  int iStack_e;
+  int resultFlag;
   int iStack_c;
   int iStack_a;
   int iStack_8;
-  char_sheet_t *pcStack_6;
+  char_sheet_t *sheetPtr;
   char *titlePtr;
   
   dst.seg = (uint16_t)_SS;
@@ -2625,10 +2625,10 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
     uVar6 = 0x50;
     term = 0xde;
     uVar9 = Font02.ofs;
-    pcStack_6 = pcVar5;
+    sheetPtr = pcVar5;
     iVar7 = ovr_ovc45_compute9(acStack_68,(char *)CONCAT22(pcVar5,_SS),
                                (char *)CONCAT22(Font02.ofs,titlePtr),Font02.seg,'i',0x69,3);
-    pvVar2 = manage_playerTitle(pcStack_6,titlePtr,(char)iVar7,pcVar5);
+    pvVar2 = manage_playerTitle(sheetPtr,titlePtr,(char)iVar7,pcVar5);
     numText = ovr_stsprintf(acStack_b8,(char *)CONCAT22(0x52a1,_SS),
                            (char *)CONCAT22(pvVar2,(char *)0x26510),pcVar5);
     ovr_blitLabel(numText,(uint8_t *)CONCAT22(uVar9,pcVar5),CONCAT11(uVar11,uVar10),term,uVar10,term,
@@ -2669,8 +2669,8 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
                             (in_stack_00000004,(&((unk01_t *)GStructures)->type)[(int)lVar1],
                              (int *)CONCAT22(_SS,&iStack_8),(int *)CONCAT22(_SS,&iStack_a)
                              ,(int *)CONCAT22(_SS,&iStack_c),
-                             (int *)CONCAT22(_SS,&iStack_e));
-      if (iStack_e == 0) {
+                             (int *)CONCAT22(_SS,&resultFlag));
+      if (resultFlag == 0) {
         iVar3 = 100;
         numText = litoa10(acStack_68,
                          CONCAT13((char)((uint)unitCount >> 8),CONCAT12((char)unitCount,_SS)),
@@ -3177,19 +3177,19 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
   int iVar4;
   uint8_t msg;
   uint16_t savedSeed;
-  uint16_t uStack_4;
+  uint16_t savedSeed2;
   
   Highlight1 = (undefined1)structType;
   Highlight1 = partyIndex;
   if (ScreenMode != '\0') {
     ovr_stats_openCastlePanel();
   }
-  uStack_4 = GfxRndSeed;
+  savedSeed2 = GfxRndSeed;
   savedSeed = GfxRndSeed2;
   GfxRndSeed = Seed_2000_d1da;
   GfxRndSeed2 = Seed_2000_d1d8;
   ovr_ovc13_usesAlignUp4();
-  GfxRndSeed = uStack_4;
+  GfxRndSeed = savedSeed2;
   GfxRndSeed2 = savedSeed;
   Highlight1 = 0xff;
   Highlight1 = 0xff;
@@ -3740,19 +3740,19 @@ void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,ch
   uint16_t uVar3;
   uint8_t msg;
   uint16_t savedSeed;
-  uint16_t uStack_4;
+  uint16_t savedSeed3;
   
   unitTypeFilter = (undefined1)unitType;
   partyFilter = partyIndex;
   if (ScreenMode != '\0') {
     ovr_stats_openCastlePanel();
   }
-  uStack_4 = GfxRndSeed;
+  savedSeed3 = GfxRndSeed;
   savedSeed = GfxRndSeed2;
   GfxRndSeed = Seed_2000_d1da;
   GfxRndSeed2 = Seed_2000_d1d8;
   ovr_ovc13_usesAlignUp4();
-  GfxRndSeed = uStack_4;
+  GfxRndSeed = savedSeed3;
   GfxRndSeed2 = savedSeed;
   unitTypeFilter = 0xff;
   partyFilter = 0xff;
