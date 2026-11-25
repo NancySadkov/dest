@@ -311,19 +311,20 @@ uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint
   far_t entries_00;
   far_t entries_01;
   far_t entries_02;
-  byte bVar1;
-  uint16_t uVar2;
-  uint16_t uVar3;
+    byte selIndex;
+    uint16_t key;
+    uint16_t itemOfs;
+  uint16_t mouseHit;
   uint readLen;
-  uint16_t *puVar5;
-  undefined1 uVar6;
-  undefined1 uVar7;
+    uint16_t *itemPtr;
+    undefined1 ssLow;
+    undefined1 ssHigh;
   uint8_t dest;
   uint16_t auStack_26 [13];
-  uint16_t uStack_c;
-  uint16_t uStack_a;
+    uint16_t titleOfs;
+    uint16_t titleSeg;
   uint16_t sz;
-  int iStack_6;
+    int scrollOfs;
   uint8_t readed;
   byte menuId;
   
@@ -333,7 +334,7 @@ uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint
     TextBlitY = 0xb;
     ovr_blitText(title,(byte far *)MK_FP(Font03.seg,Font03.ofs),0xde,7);
   }
-  iStack_6 = 0;
+  scrollOfs = 0;
   if ((int)items.seg < 9) {
     sz = items.seg;
   }
@@ -341,21 +342,21 @@ uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint
     sz = 8;
   }
   for (readed = 0x0; (int)(uint)readed < (int)sz; readed = readed + 0x1) {
-    puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + (uint)readed * 4);
-    uVar3 = *puVar5;
+    itemPtr = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + (uint)readed * 4);
+    itemOfs = *itemPtr;
     readLen = (uint)readed;
-    auStack_26[readLen * 2] = puVar5[1];
-    *(uint16_t *)(&dest + readLen * 4) = uVar3;
+    auStack_26[readLen * 2] = itemPtr[1];
+    *(uint16_t *)(&dest + readLen * 4) = itemOfs;
   }
   if (8 < (int)items.seg) {
-    uStack_a = 0x2410;
-    uStack_c = 0x2733;
+    titleSeg = 0x2410;
+    titleOfs = 0x2733;
   }
-  uVar6 = (undefined1)_SS;
-  uVar7 = (undefined1)(_SS >> 8);
-  (*(uint8_t *)((uint8_t *)&(entries.seg))) = uVar6;
+  ssLow = (undefined1)_SS;
+  ssHigh = (undefined1)(_SS >> 8);
+  (*(uint8_t *)((uint8_t *)&(entries.seg))) = ssLow;
   entries.ofs = (uint16_t)&dest;
-  (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = uVar7;
+  (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = ssHigh;
   saveui_usesBlitLoadRleGfx3(entries,sz);
   GMenuItem = (byte)nitems;
   while (((int)(uint)GMenuItem <= (int)sz &&
@@ -371,7 +372,7 @@ uint16_t __cdecl16far uiMenuSub(char far *title,far_t items,uint16_t nitems,uint
   GMenuFlag = 1;
 L_uiMenuSub_0840:
   do {
-    while (uVar2 = uiReadKey2(), uVar2 == 0x5000) {
+    while (key = uiReadKey2(), key == 0x5000) {
 L_uiMenuSub_0903:
       do {
         GMenuItem = GMenuItem + 1;
@@ -383,22 +384,22 @@ L_uiMenuSub_0903:
                *(int *)(&stk_ffd6 + (uint)GMenuItem * 4) == 0));
       saveui_startCrossBlit();
     }
-    if (0x5000 < uVar2) {
-      if (uVar2 != 0x5133) {
-        if (0x5133 < uVar2) {
-          if (uVar2 == 0xfffe) {
+    if (0x5000 < key) {
+      if (key != 0x5133) {
+        if (0x5133 < key) {
+          if (key == 0xfffe) {
             GMenuFlag = 0;
             return;
           }
-          if (uVar2 == 0xffff) {
+          if (key == 0xffff) {
             textTable.seg = _SS;
             textTable.ofs = (uint16_t)&dest;
-            uVar3 = saveui_usesMouseMoved(textTable,sz,0);
-            menuId = (byte)uVar3;
-            bVar1 = menuId;
+            mouseHit = saveui_usesMouseMoved(textTable,sz,0);
+            menuId = (byte)mouseHit;
+            selIndex = menuId;
             if (menuId != 0xff) {
 L_uiMenuSub_0B46:
-              GMenuItem = bVar1;
+              GMenuItem = selIndex;
               if (GMenuItem != 0) {
                 textTable_00.seg = _SS;
                 textTable_00.ofs = (uint16_t)&dest;
@@ -408,20 +409,20 @@ L_uiMenuSub_0B46:
                 GMenuFlag = 0;
                 return;
               }
-              if (iStack_6 + 7 < (int)items.seg) {
-                iStack_6 = iStack_6 + 7;
+              if (scrollOfs + 7 < (int)items.seg) {
+                scrollOfs = scrollOfs + 7;
               }
               else {
-                iStack_6 = 0;
+                scrollOfs = 0;
               }
               _fsetmem(MK_FP(_SS,&dest),0x1c,0);
-              for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
+              for (readed = 0x0; (readed < 7 && ((int)((uint)readed + scrollOfs) < (int)items.seg));
                   readed = readed + 0x1) {
-                puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
-                uVar3 = *puVar5;
+                itemPtr = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + scrollOfs) * 4);
+                itemOfs = *itemPtr;
                 readLen = (uint)readed;
-                auStack_26[readLen * 2] = puVar5[1];
-                *(uint16_t *)(&dest + readLen * 4) = uVar3;
+                auStack_26[readLen * 2] = itemPtr[1];
+                *(uint16_t *)(&dest + readLen * 4) = itemOfs;
               }
               saveui_blitPanel();
               if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
@@ -429,33 +430,33 @@ L_uiMenuSub_0B46:
                 TextBlitY = 0xb;
                 ovr_blitText(title,(byte far *)MK_FP(Font03.seg,Font03.ofs),0xde,7);
               }
-              (*(uint8_t *)((uint8_t *)&(entries_02.seg))) = uVar6;
+              (*(uint8_t *)((uint8_t *)&(entries_02.seg))) = ssLow;
               entries_02.ofs = (uint16_t)&dest;
-              (*(uint8_t *)((uint8_t *)&(entries_02.seg) + 1)) = uVar7;
+              (*(uint8_t *)((uint8_t *)&(entries_02.seg) + 1)) = ssHigh;
               saveui_usesBlitLoadRleGfx3(entries_02,8);
               saveui_startCrossBlit();
             }
           }
           goto L_uiMenuSub_0840;
         }
-        if (uVar2 == 0x5032) goto L_uiMenuSub_0903;
-        if (uVar2 != 0x5100) goto L_uiMenuSub_0840;
+        if (key == 0x5032) goto L_uiMenuSub_0903;
+        if (key != 0x5100) goto L_uiMenuSub_0840;
       }
       if (8 < (int)items.seg) {
-        if (iStack_6 + 7 < (int)items.seg) {
-          iStack_6 = iStack_6 + 7;
+        if (scrollOfs + 7 < (int)items.seg) {
+          scrollOfs = scrollOfs + 7;
         }
         else {
-          iStack_6 = 0;
+          scrollOfs = 0;
         }
         _fsetmem(MK_FP(_SS,&dest),0x1c,0);
-        for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
+        for (readed = 0x0; (readed < 7 && ((int)((uint)readed + scrollOfs) < (int)items.seg));
             readed = readed + 0x1) {
-          puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
-          uVar3 = *puVar5;
+          itemPtr = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + scrollOfs) * 4);
+          itemOfs = *itemPtr;
           readLen = (uint)readed;
-          auStack_26[readLen * 2] = puVar5[1];
-          *(uint16_t *)(&dest + readLen * 4) = uVar3;
+          auStack_26[readLen * 2] = itemPtr[1];
+          *(uint16_t *)(&dest + readLen * 4) = itemOfs;
         }
         saveui_blitPanel();
         if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
@@ -463,16 +464,16 @@ L_uiMenuSub_0B46:
           TextBlitY = 0xb;
           ovr_blitText(title,(byte far *)MK_FP(Font03.seg,Font03.ofs),0xde,7);
         }
-        (*(uint8_t *)((uint8_t *)&(entries_01.seg))) = uVar6;
+        (*(uint8_t *)((uint8_t *)&(entries_01.seg))) = ssLow;
         entries_01.ofs = (uint16_t)&dest;
-        (*(uint8_t *)((uint8_t *)&(entries_01.seg) + 1)) = uVar7;
+        (*(uint8_t *)((uint8_t *)&(entries_01.seg) + 1)) = ssHigh;
         saveui_usesBlitLoadRleGfx3(entries_01,8);
         GMenuItem = 8;
         saveui_startCrossBlit();
       }
       goto L_uiMenuSub_0840;
     }
-    if (uVar2 == 0x4838) {
+    if (key == 0x4838) {
 L_uiMenuSub_08AD:
       do {
         GMenuItem = GMenuItem - 1;
@@ -484,30 +485,30 @@ L_uiMenuSub_08AD:
                *(int *)(&stk_ffd6 + (uint)GMenuItem * 4) == 0));
       saveui_startCrossBlit();
     }
-    else if (uVar2 < 0x4839) {
-      if (uVar2 == 0x11b) {
+    else if (key < 0x4839) {
+      if (key == 0x11b) {
         GMenuFlag = 0;
         return;
       }
-      bVar1 = GMenuItem;
-      if (uVar2 == 0x1c0d) goto L_uiMenuSub_0B46;
-      if (uVar2 == 0x4800) goto L_uiMenuSub_08AD;
+      selIndex = GMenuItem;
+      if (key == 0x1c0d) goto L_uiMenuSub_0B46;
+      if (key == 0x4800) goto L_uiMenuSub_08AD;
     }
-    else if (((uVar2 == 0x4900) || (uVar2 == 0x4939)) && (8 < (int)items.seg)) {
-      if (iStack_6 == 0) {
-        iStack_6 = ((int)(items.seg - 1) / 7) * 7;
+    else if (((key == 0x4900) || (key == 0x4939)) && (8 < (int)items.seg)) {
+      if (scrollOfs == 0) {
+        scrollOfs = ((int)(items.seg - 1) / 7) * 7;
       }
       else {
-        iStack_6 = iStack_6 + -7;
+        scrollOfs = scrollOfs + -7;
       }
       _fsetmem(MK_FP(_SS,&dest),0x1c,0);
-      for (readed = 0x0; (readed < 7 && ((int)((uint)readed + iStack_6) < (int)items.seg));
+      for (readed = 0x0; (readed < 7 && ((int)((uint)readed + scrollOfs) < (int)items.seg));
           readed = readed + 0x1) {
-        puVar5 = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + iStack_6) * 4);
-        uVar3 = *puVar5;
+        itemPtr = (uint16_t *)((*(uint16_t *)((uint8_t *)&(title) + 2)) + ((uint)readed + scrollOfs) * 4);
+        itemOfs = *itemPtr;
         readLen = (uint)readed;
-        auStack_26[readLen * 2] = puVar5[1];
-        *(uint16_t *)(&dest + readLen * 4) = uVar3;
+        auStack_26[readLen * 2] = itemPtr[1];
+        *(uint16_t *)(&dest + readLen * 4) = itemOfs;
       }
       saveui_blitPanel();
       if ((char *)far_ofs_u32(title) != (char *)0x0 || (char *)title != (char *)0x0) {
@@ -515,9 +516,9 @@ L_uiMenuSub_08AD:
         TextBlitY = 0xb;
         ovr_blitText(title,(byte far *)MK_FP(Font03.seg,Font03.ofs),0xde,7);
       }
-      (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = uVar6;
+      (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = ssLow;
       entries_00.ofs = (uint16_t)&dest;
-      (*(uint8_t *)((uint8_t *)&(entries_00.seg) + 1)) = uVar7;
+      (*(uint8_t *)((uint8_t *)&(entries_00.seg) + 1)) = ssHigh;
       saveui_usesBlitLoadRleGfx3(entries_00,8);
       GMenuItem = 8;
       saveui_startCrossBlit();
