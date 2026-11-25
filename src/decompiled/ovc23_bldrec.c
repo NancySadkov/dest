@@ -1982,7 +1982,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
                     (int)(GRecordCount + (-1 - (int)pcVar12)) * 0x12);
         }
         GRecordCount = GRecordCount + -1;
-        pbVar20 = ovc23_textAdlibNone(uVar18,unaff_SI,in_stack_0000fffc);
+        pbVar20 = ovc23_textAdlibNone(0,0,0);
       }
       return SUB21(pbVar20,0);
     case (uint16_t)0x3:
@@ -2401,7 +2401,7 @@ void __cdecl16far ovc23_removeRecord(int recordIndex)
               ((GRecordCount - recordIndex) + -1) * 0x12);
   }
   GRecordCount = GRecordCount - 1;
-  ovc23_textAdlibNone(unaff_SI,unaff_BP,in_stack_00000000);
+  ovc23_textAdlibNone(0,0,0);
   return;
 }
 
@@ -2555,7 +2555,7 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
     uVar8 = GRecordCount;
     GRecordCount = GRecordCount + 1;
     ovc23_abandonConstruction(uVar8);
-    ovc23_textAdlibNone(unaff_DI,unaff_SI,in_stack_0000fff6);
+    ovc23_textAdlibNone(0,0,0);
   }
   else {
     ovc23_placeBuilding(x,y,bldType,in_stack_0000000e);

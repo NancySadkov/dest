@@ -4643,3 +4643,44 @@ sites updated.
 
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; grep_checks 49,085
   compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,546/11, 1,545/11
+
+### `ovc23_textAdlibNone`: what the phantom `partyIndex` really is (measured)
+
+Following the call site as planned settled it.  Immediately before `push cs; call 0x47de0`
+at `0x4A925` the only instruction is `dec word ptr [0x91df]` (GRecordCount--), so **nothing
+is set up for the callee**: SI still holds the caller's record index and DI its accumulated
+`0x3000` flags.  Those are the values the export passed as `unaff_SI` / `unaff_DI`.
+
+Inside the callee, the value that indexes the `0x70` leader-sheet table is the **byte local
+`[bp-2]`**, and its whole life in the 1028-byte body is four instructions:
+
+```
+047FEC  mov ax, 0x280 / 047FF1 mov ax, es:[0x899f] / add ax, si     ; GUnits + unitIdx
+047FF8  lcall 0x250, 0x25                                            ;  == ovc45_getUnitType? no:
+                                                                     ;  this is inside the loop
+04800B  mov dx, 0x280 / les bx, es:[0x8995] / add bx, ax             ; GUnits + unitIdx*9
+048017  mov al, byte ptr es:[bx + 2]                                 ; the byte at +2
+04801B  mov byte ptr [bp - 2], al                                    ; the only write
+048025  cmp byte ptr [bp - 2], 0xff                                  ; compared with 0xff
+04802B  mov al, byte ptr [bp - 2] / shl ax, 2 / mov dx, 0x70 / les bx ; 0x70 sheet lookup
+048081  mov al, byte ptr [bp - 2]                                    ; second lookup
+```
+
+Our `unit_t` is `{ byte bldType; byte level; byte unitType; byte flags; short x; short y;
+byte timer; }`, so **offset +2 is `unitType`**.  Therefore the exported "parameter"
+`partyIndex` is really `GUnits[unitIdx].unitType`, loaded once into a byte local and tested
+against `0xff` - it is a *field load*, not an argument, and Ghidra lost the assignment
+because it had already decided the slot was a parameter.
+
+That converts the blocker into a concrete re-derivation step: insert
+`partyIndex = ((unit_t *)GUnits)[unitIdx].unitType;` at the matching place in the body and
+drop the parameter.  It is not done here because the 674-line body must be aligned with the
+original first so the assignment lands in the right iteration.
+
+Measured in the same pass: the three remaining call sites that passed pseudo-registers
+(`uVar18,unaff_SI,in_stack_0000fffc`; `unaff_SI,unaff_BP,in_stack_00000000`;
+`unaff_DI,unaff_SI,in_stack_0000fff6`) now pass `0,0,0`, matching the callee that reads
+nothing - the registers they named carry unrelated caller state.
+
+  grep_checks 49,085 -> 49,077; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,546/11, 1,545/11
