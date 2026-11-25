@@ -2235,54 +2235,50 @@ void __cdecl16far ovc23_rebuildDirectionFlags(int x,int y)
 void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
 
 {
-  byte *pbVar1;
+  byte *unitFlagsPtr;
   uint *flagPtr;
-  byte bVar3;
-  int iVar4;
-  byte cellType;
-  uint uVar6;
-  undefined1 extraout_AH;
-  undefined1 extraout_AH_00;
-  undefined1 extraout_AH_01;
-  undefined1 extraout_AH_02;
+  byte cellBldType;
+  int unitIdx;
+  uint16_t cellType;
+  uint newUnitIdx;
   
-  iVar4 = (*(short (*) [148] [60])GUnitGrid)[x][y];
-  bVar3 = ((unit_t *)GUnits + iVar4)->bldType;
-  if ((BuildingTypes[bVar3].flags2 & 4) != 0) {
+  unitIdx = (*(short (*) [148] [60])GUnitGrid)[x][y];
+  cellBldType = ((unit_t *)GUnits + unitIdx)->bldType;
+  if ((BuildingTypes[cellBldType].flags2 & 4) != 0) {
     strongholdCheckPending = 1;
   }
-  uVar6 = ovr_ovc18_usesRandBelow(x,y,bldType,unitType,0,0);
+  newUnitIdx = ovr_ovc18_usesRandBelow(x,y,bldType,unitType,0,0);
   if ((BuildingTypes[bldType].flags & 2) == 2) {
     ovc23_usesGfxRndSeed2(x,y);
   }
   if (((BuildingTypes[bldType].flags & 0xf) != 0) ||
-     ((BuildingTypes[bVar3].flags & 0xf) != 0)) {
+     ((BuildingTypes[cellBldType].flags & 0xf) != 0)) {
     ovc23_rebuildDirectionFlags(x,y);
   }
-  if (((BuildingTypes[bVar3].flags & 1) != 0) ||
+  if (((BuildingTypes[cellBldType].flags & 1) != 0) ||
      ((BuildingTypes[bldType].flags & 1) != 0)) {
     ovc23_rebuildDirectionFlags(x,y + 1);
   }
   if (((BuildingTypes[bldType].flags & 2) != 0) ||
-     ((BuildingTypes[bVar3].flags & 2) != 0)) {
+     ((BuildingTypes[cellBldType].flags & 2) != 0)) {
     ovc23_rebuildDirectionFlags(x + -1,y);
   }
   if (((BuildingTypes[bldType].flags & 3) == 3) ||
-     ((BuildingTypes[bVar3].flags & 3) == 3)) {
+     ((BuildingTypes[cellBldType].flags & 3) == 3)) {
     ovc23_rebuildDirectionFlags(x + 1,y);
     ovc23_rebuildDirectionFlags(x,y + 1);
   }
   if (BuildingTypes[bldType].kind == '\x02') {
     if (((*(short (*) [60] [148])GMapFlags)[y + 1][x] & 3U) != 0) {
-      pbVar1 = &((unit_t *)GUnits)[uVar6].flags;
-      *pbVar1 = *pbVar1 | 4;
+      unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
+      *unitFlagsPtr = *unitFlagsPtr | 4;
       flagPtr = (uint *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x);
       *flagPtr = *flagPtr & 0xfffc;
     }
     if ((BuildingTypes[bldType].flags & 4) != 0) {
       if (((*(short (*) [60] [148])GMapFlags)[y][x + 0x93] & 3U) != 0) {
-        pbVar1 = &((unit_t *)GUnits)[uVar6].flags;
-        *pbVar1 = *pbVar1 | 8;
+        unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
+        *unitFlagsPtr = *unitFlagsPtr | 8;
         flagPtr = (uint *)((*(short (*) [60] [148])GMapFlags)[y] + x + 0x93);
         *flagPtr = *flagPtr & 0xfffc;
         ovc23_rebuildDirectionFlags(x + -2,y);
@@ -2290,8 +2286,8 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
         ovc23_rebuildDirectionFlags(x + -1,y + 1);
       }
       if (((*(short (*) [60] [148])GMapFlags)[y + 1][x + 1] & 3U) != 0) {
-        pbVar1 = &((unit_t *)GUnits)[uVar6].flags;
-        *pbVar1 = *pbVar1 | 0x10;
+        unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
+        *unitFlagsPtr = *unitFlagsPtr | 0x10;
         flagPtr = (uint *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x + 1);
         *flagPtr = *flagPtr & 0xfffc;
         ovc23_rebuildDirectionFlags(x + 1,y + -1);
@@ -2301,8 +2297,8 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
     }
     if ((BuildingTypes[bldType].flags & 8) != 0) {
       if (((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) != 0) {
-        pbVar1 = &((unit_t *)GUnits)[uVar6].flags;
-        *pbVar1 = *pbVar1 | 8;
+        unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
+        *unitFlagsPtr = *unitFlagsPtr | 8;
         flagPtr = (uint *)((*(short (*) [60] [148])GMapFlags)[y] + x);
         *flagPtr = *flagPtr & 0xfffc;
         ovc23_rebuildDirectionFlags(x + -1,y + -1);
@@ -2310,8 +2306,8 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
         ovc23_rebuildDirectionFlags(x,y + -2);
       }
       if (((*(short (*) [60] [148])GMapFlags)[y + 2][x] & 3U) != 0) {
-        pbVar1 = &((unit_t *)GUnits)[uVar6].flags;
-        *pbVar1 = *pbVar1 | 0x10;
+        unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
+        *unitFlagsPtr = *unitFlagsPtr | 0x10;
         flagPtr = (uint *)((*(short (*) [60] [148])GMapFlags)[y + 2] + x);
         *flagPtr = *flagPtr & 0xfffc;
         ovc23_rebuildDirectionFlags(x + -1,y + 1);
@@ -2325,14 +2321,14 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
     ovc23_rebuildDirectionFlags(x,y + -1);
     ovc23_rebuildDirectionFlags(x,y + 1);
   }
-  if (BuildingTypes[bVar3].kind == '\x02') {
+  if (BuildingTypes[cellBldType].kind == '\x02') {
     ovc23_usesGfxRndSeed2(x,y);
-    if ((((unit_t *)GUnits)[iVar4].flags & 4) != 0) {
+    if ((((unit_t *)GUnits)[unitIdx].flags & 4) != 0) {
       ovc23_drownUnitsAt(x,y);
     }
-    if (BuildingTypes[bVar3].flags == '\x04') {
+    if (BuildingTypes[cellBldType].flags == '\x04') {
       cellType = ovr_ovc45_getUnitType(x + -1,y);
-      if ((CONCAT11(extraout_AH,cellType) == 0) && ((((unit_t *)GUnits)[iVar4].flags & 8) != 0)) {
+      if ((cellType == 0) && ((((unit_t *)GUnits)[unitIdx].flags & 8) != 0)) {
         ovc23_usesGfxRndSeed2(x + -1,y);
         ovc23_drownUnitsAt(x - 1,y);
         ovc23_rebuildDirectionFlags(x + -1,y + -1);
@@ -2340,7 +2336,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
         ovc23_rebuildDirectionFlags(x + -2,y);
       }
       cellType = ovr_ovc45_getUnitType(x + 1,y);
-      if ((CONCAT11(extraout_AH_00,cellType) == 0) && ((((unit_t *)GUnits)[iVar4].flags & 0x10) != 0))
+      if ((cellType == 0) && ((((unit_t *)GUnits)[unitIdx].flags & 0x10) != 0))
       {
         ovc23_usesGfxRndSeed2(x + 1,y);
         ovc23_drownUnitsAt(x + 1,y);
@@ -2349,9 +2345,9 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
         ovc23_rebuildDirectionFlags(x + 2,y);
       }
     }
-    else if (BuildingTypes[bVar3].flags == '\b') {
+    else if (BuildingTypes[cellBldType].flags == '\b') {
       cellType = ovr_ovc45_getUnitType(x,y + -1);
-      if ((CONCAT11(extraout_AH_01,cellType) == 0) && ((((unit_t *)GUnits)[iVar4].flags & 8) != 0)) {
+      if ((cellType == 0) && ((((unit_t *)GUnits)[unitIdx].flags & 8) != 0)) {
         ovc23_usesGfxRndSeed2(x,y + -1);
         ovc23_drownUnitsAt(x,y - 1);
         ovc23_rebuildDirectionFlags(x + -1,y + -1);
@@ -2359,7 +2355,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
         ovc23_rebuildDirectionFlags(x,y + -2);
       }
       cellType = ovr_ovc45_getUnitType(x,y + 1);
-      if ((CONCAT11(extraout_AH_02,cellType) == 0) && ((((unit_t *)GUnits)[iVar4].flags & 0x10) != 0))
+      if ((cellType == 0) && ((((unit_t *)GUnits)[unitIdx].flags & 0x10) != 0))
       {
         ovc23_usesGfxRndSeed2(x,y + 1);
         ovc23_drownUnitsAt(x,y + 1);
@@ -2375,10 +2371,10 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
     ovc23_rebuildDirectionFlags(x,y + 1);
   }
   if ((BuildingTypes[bldType].unitType == '\x12') && (ListCount < 5)) {
-    *(uint *)((uint)ListCount * 2 + -0x6d44) = uVar6;
+    *(uint *)((uint)ListCount * 2 + -0x6d44) = newUnitIdx;
     ListCount = ListCount + 1;
   }
-  if ((BuildingTypes[bldType].sight != 0) || (BuildingTypes[bVar3].sight != 0))
+  if ((BuildingTypes[bldType].sight != 0) || (BuildingTypes[cellBldType].sight != 0))
   {
     ovr_unit_usesAlignUp4();
   }
