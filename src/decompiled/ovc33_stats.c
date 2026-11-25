@@ -1662,7 +1662,7 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
   char *pcStack_d4;
   uint8_t msg;
   uint8_t unitFlags;
-  int iStack_4;
+  int owner;
   
   entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
   uVar8 = text;
@@ -1682,9 +1682,9 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
     entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
     pbVar1 = (byte *)((int)entityFar + 0x33);
     *pbVar1 = *pbVar1 | 4;
-    iStack_4 = Agnts[agnt_id].owner;
+    owner = Agnts[agnt_id].owner;
     pcStack_d4 = (char *)CONCAT22(text,_SS);
-    ovr_attact_usesEntities(iStack_4,0,0,(uint16_t)&unitFlags,(uint16_t)_SS,0,0,0,0);
+    ovr_attact_usesEntities(owner,0,0,(uint16_t)&unitFlags,(uint16_t)_SS,0,0,0,0);
   }
   entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
   uVar3 = *(uint32_t far *)&Agnts[agnt_id].entity;
@@ -1800,13 +1800,13 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   uint16_t widths;
   uint16_t uVar4;
   uint8_t msg;
-  int iStack_c;
+  int agntData;
   uint16_t uStack_a;
   uint8_t unitFlags;
   
   entityIndex = Agnts[agntIndex].owner;
   uStack_a = AGNT_WORD(&Agnts[agntIndex], gdata, 2);
-  iStack_c = AGNT_WORD(&Agnts[agntIndex], gdata, 0);
+  agntData = AGNT_WORD(&Agnts[agntIndex], gdata, 0);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
   ((entity_t *)Entities)[entityIndex].base.x = iVar2;
   ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
@@ -1822,7 +1822,7 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   ovr_attact_usesEntities(entityIndex,0,0,(uint16_t)&unitFlags,(uint16_t)_SS,0,0,0,0);
   ovr_alignUp4(GfxRndSeed,GfxRndSeed2,0);
   puVar3 = ovr_ovc15_usesStshRealloc
-                     ((char *)*(uint16_t *)(iStack_c + 0x24),*(uint16_t *)(iStack_c + 0x26),0,0,0,0,0,0);
+                     ((char *)*(uint16_t *)(agntData + 0x24),*(uint16_t *)(agntData + 0x26),0,0,0,0,0,0);
   text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6406,_SS),
                        (char *)CONCAT22(puVar3,(char *)0x26510),widths);
   drawString(text,widths,0);
@@ -2386,9 +2386,9 @@ void __cdecl16far stats_openCastlePanel(void)
   uint8_t palette;
   stg_tmp_t *psStack_14;
   uint8_t dst;
-  uint uStack_e;
-  uint uStack_c;
-  uint uStack_a;
+  uint rectY1;
+  uint rectX2;
+  uint rectY2;
   void *pvStack_6;
   uint16_t uStack_4;
   
@@ -2398,10 +2398,10 @@ void __cdecl16far stats_openCastlePanel(void)
   ptr.ofs = (uint16_t)pvStack_6;
   uStack_4 = in_DX;
   ovr_alignToSeg(ptr);
-  uStack_e = 7;
-  uStack_a = 0xc2;
+  rectY1 = 7;
+  rectY2 = 0xc2;
   dst = 8;
-  uStack_c = 0xe2;
+  rectX2 = 0xe2;
   ovr_driver_fillRect(8,7,0xe2,0xc2,0x0,in_DX,0,0,0,0,0);
   gfx_00.seg = fullScreenGfxSeg;
   gfx_00.ofs = fullScreenGfxOfs;
@@ -2413,7 +2413,7 @@ void __cdecl16far stats_openCastlePanel(void)
   handle.ofs = Lbm_nwpanel1.ofs;
   psStack_14 = ovr_stshLoadGfx(handle);
   ovr_calcSeasonPalette(psStack_14->cmap,in_DX,&palette,_SS,0,0);
-  ovr_driver_fillRect(dst,uStack_e,uStack_c,uStack_a,0x0,0xa000,0,0,0,0,0);
+  ovr_driver_fillRect(dst,rectY1,rectX2,rectY2,0x0,0xa000,0,0,0,0,0);
   ovr_vgaSetPalette8bit(&palette,0);
   ovr_blitRect((brect_t *)&dst,0);
   TextBlitDstSeg = 0xa000;
