@@ -1120,10 +1120,9 @@ void __cdecl16far agnt_usesAgntCount6(entity_t *ptr,uint16_t arg2)
 
 {
   uint16_t i;
-  int in_stack_00000006;
   
   for (i = 0; (int)i < (int)(uint)AgntCount; i = i + 1) {
-    if ((AGNT_WORD(&Agnts[i], entity, 2) == in_stack_00000006) &&
+    if ((AGNT_WORD(&Agnts[i], entity, 2) == arg2) &&
        ((entity_t *)AGNT_WORD(&Agnts[i], entity, 0) == ptr)) {
       if (Agnts[i].moveState < 2) {
         Agnts[i].moveState = 1;

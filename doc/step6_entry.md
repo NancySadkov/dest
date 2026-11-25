@@ -6884,3 +6884,37 @@ field reads; the pointer is far in both.
 
   grep_checks 40,771 -> 40,736; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### Scanning the two-half far-pointer pattern: one instance left, and a different class behind it
+
+`tmp/find_half_ptr.py` looks for the three shapes that produced the last several defects.  Restricting
+to the exact one from `ovc41_removeAgent` - a `AGNT_WORD`/`GREC_WORD` half cast straight to a pointer
+type - finds **exactly one** remaining site, in `agnt_usesAgntCount6`:
+
+```c
+if ((AGNT_WORD(&Agnts[i], entity, 2) == in_stack_00000006) &&
+   ((entity_t *)AGNT_WORD(&Agnts[i], entity, 0) == ptr)) {
+```
+
+The disassembly settles it: `cmp ax,[bp+8]` on the entity's segment and `cmp dx,[bp+6]` on its offset,
+i.e. the second parameter is the pointer's segment half and the local `in_stack_00000006` was a phantom
+standing in for it.  Replaced with `arg2` and the declaration dropped; the offset-versus-`ptr`
+comparison on the next line is consistent (both are 16-bit offsets there), so it is left.
+
+So that shape is closed.  What the same scan surfaced instead is a *different* class, 21 sites, of the
+form
+
+```c
+CONCAT22(0xad0,   (uint8_t *)uStackY_24)      ovc18_showLeaderView
+CONCAT22(0x277c,  (entity_t *)uStack_1e)      saveui_configureMessageDelay
+CONCAT22(0x638d,  (char *)text)               stats_readyStatusText
+CONCAT22(0x222b,  (uint)bStack_4 * 0x21)      ovc27_usesRandBelow5
+```
+
+a far pointer built from a **hardcoded segment** plus a near offset.  Those segments are the original
+image's, like the `0x1726` that had to be replaced with `SEG_OF(Agnts)` earlier, so each needs the
+owning symbol identified before it can be corrected - the same per-site reasoning as the near->far
+parameters, not a sweep.  It is recorded here as the next class rather than started.
+
+  grep_checks 40,736 -> 40,734; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
