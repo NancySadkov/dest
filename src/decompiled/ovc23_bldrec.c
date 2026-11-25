@@ -3137,7 +3137,7 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
   uint8_t text2;
   uint8_t text;
   int clearCol;
-  byte bStack_3;
+  byte gindex;
   
   puVar1 = (uint *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x);
   *puVar1 = *puVar1 | 3;
@@ -3149,8 +3149,8 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
       clearCol = ovc23_findClearColumn(x,y);
       uVar3 = (uint16_t)((ulong)Entities >> 0x10);
       if (clearCol < 0) {
-        bStack_3 = ((entity_t *)Entities)[entityIndex].base.gindex;
-        if (AgntGs[(uint)bStack_3].ai == '\0') {
+        gindex = ((entity_t *)Entities)[entityIndex].base.gindex;
+        if (AgntGs[(uint)gindex].ai == '\0') {
           uVar3 = 0xa000;
           dst = 0x195d;
           uVar4 = x;

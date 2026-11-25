@@ -846,14 +846,14 @@ bool __cdecl16far uiPickGender(char_sheet_t *sheet)
 {
   char *pcVar1;
   bool bVar2;
-  char cStack_4;
+  char gender;
   
   ovr_drawString((char *)"Male or female?",0x2410,0);
   pcVar1 = ovr_uiInputText(far_from_u32((uint32_t)(0x24104933)),2,far_from_u32((uint32_t)(0x0)),0x0,0);
   bVar2 = ((uint)pcVar1 & 0xff) != 0;
   if (bVar2) {
-    cStack_4 = (char)pcVar1;
-    ((char_sheet_t *)sheet)->gender = cStack_4 - 1;
+    gender = (char)pcVar1;
+    ((char_sheet_t *)sheet)->gender = gender - 1;
   }
   return bVar2;
 }
@@ -2568,7 +2568,9 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
   uint16_t auStack_12e [59];
   char acStack_b8 [80];
   char acStack_68 [80];
-  uint8_t uStack_18;
+  /* GUESS: byte whose address is passed to ovc28_usesUiInputText and then used as the
+     choice; the callee takes it as an out-parameter. */
+  uint8_t selected;
   char cStack_17;
   int unitCount;
   int iStack_14;
@@ -2596,7 +2598,7 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
   }
   cStack_17 = '\x02';
   manage_openTalkWindow();
-  uStack_18 = 0x0;
+  selected = 0x0;
   if (((cStack_17 != '\x02') && (cStack_17 != '\x03')) && (cStack_17 != '\x04')) {
     manage_usesCurSfxType3();
     return;
@@ -2736,7 +2738,7 @@ void __cdecl16near manage_textAllProperty(uint16_t partyIndex)
   (*(uint8_t *)((uint8_t *)&(entries.seg))) = (char)_SS;
   entries.ofs = (uint16_t)&menuItems;
   (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = (char)((uint)_SS >> 8);
-  uVar6 = ovr_ovc28_usesUiInputText(entries,0x23,far_from_u32((uint32_t)(0x0)),&uStack_18,0,(char)&uStack_18);
+  uVar6 = ovr_ovc28_usesUiInputText(entries,0x23,far_from_u32((uint32_t)(0x0)),&selected,0,(char)&selected);
   cStack_17 = (char)uVar6;
   keyboardInputMode = 0;
   if (((cStack_17 != '\0') && (cStack_17 != '\x01')) && (cStack_17 != -2)) {
@@ -3295,7 +3297,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
   int iStack_12;
   uint16_t fontSeg;
   char acStack_e [6];
-  uint16_t uStack_8;
+  uint16_t entY;
   uint32_t auStack_6;   /* hand fix: CONCAT12/13/22 target, read as uint3 */
   uint16_t packedByte;
   
@@ -3558,7 +3560,7 @@ L_attact_3f0b_1082_1477:
         cStack_19 = '\x01';
       }
       if ((((uint)auStack_6 < GfxRndSeed - 2U) || (GfxRndSeed + 1U < (uint)auStack_6)) ||
-         (GfxRndSeed2 != uStack_8)) {
+         (GfxRndSeed2 != entY)) {
         cStack_18 = '\0';
       }
       else {
@@ -3665,7 +3667,7 @@ L_attact_3f0b_1082_1477:
       auStack_6 = CONCAT13(1,auStack_6);
     }
     auStack_6 = CONCAT22(packedByte,(peStack_1e->base).x);
-    uStack_8 = (peVar15->base).y;
+    entY = (peVar15->base).y;
     iStack_12 = CONCAT13(AgntGs[(uint)(peVar15->base).gindex].ai
                           ,iStack_12);
   } while ((peVar15->base).faction < (byte)(peVar15->base).state);

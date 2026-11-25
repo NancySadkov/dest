@@ -4567,7 +4567,7 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
   int unitCount;
   char unaff_SI;
   uint16_t unitsSeg;
-  byte bStack_e;
+  byte bldType;
   uint16_t y;
   uint16_t x;
   byte listIndex;
@@ -4667,9 +4667,9 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
           *piVar2 = *piVar2 - (uint)(uVar3 < uVar4);
         }
       }
-      bStack_e = (byte)uVar7;
+      bldType = (byte)uVar7;
       ovr_createConstructionRecordFar
-                (bStack_e,x,y,
+                (bldType,x,y,
                  (uint8_t *)CONCAT13((char)(outFlagSeg >> 8),CONCAT12((char)outFlagSeg,outFlag)),
                  partyIndex,unaff_SI,(char)y,(char)outFlag,(char)outFlagSeg);
     }
