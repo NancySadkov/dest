@@ -1093,95 +1093,97 @@ bool __cdecl16far attact_textArena3(uint *foundIndexOut,uint16_t partyIndex,int 
 void __cdecl16far attact_usesAlignUp43(uint16_t *value)
 
 {
-  byte *pbVar1;
-  char cVar2;
-  bool bVar3;
-  uint uVar4;
-  uint uVar5;
-  uint16_t *puVar6;
-  uint uVar7;
-  uint uVar8;
-  uint16_t uVar9;
-  uint16_t uVar10;
-  uint16_t uStack_8;
-  uint16_t ent;
-  byte bStack_3;
-  
-  uVar4 = ovr_alignUp4(*value,0,0);
-  uStack_8 = *value;
-  uVar9 = (uint16_t)((ulong)value >> 0x10);
-  puVar6 = (uint16_t *)value;
-  cVar2 = func_0x0004f29c(0x2379,uStack_8,puVar6[1]);
-  if (cVar2 == '\0') {
-    ent = 0xfffe;
-    while (((int)ent < 2 &&
-           (cVar2 = func_0x0004f29c(0x2379,uStack_8 + ent,puVar6[1]), cVar2 == '\0'))) {
-      ent = ent + 1;
+  /* Re-derived.  alignUp4(*value) is the target column; if that cell is blocked the free
+     offset in -2..1 nearest to it is used instead.  For each of the five party slots the
+     function counts the entities already heading there, then moves further entities in by
+     decreasing priority flag (3 down to 0) and finally sends the surplus back to their own
+     targets. */
+  byte *flagsPtr;
+  char blitOk;
+  bool movedOk;
+  uint targetAligned;
+  uint entityAligned;
+  uint16_t *valuePtr;
+  uint placedCount;
+  uint slot;
+  int entIdx;
+  uint16_t destX;
+  byte partyIdx;
+  byte menuState;
+
+  targetAligned = ovr_alignUp4(*value,0,0);
+  destX = *value;
+  valuePtr = (uint16_t *)value;
+  blitOk = func_0x0004f29c(0x2379,destX,valuePtr[1]);
+  if (blitOk == '\0') {
+    entIdx = -2;
+    while ((entIdx < 2 &&
+           (blitOk = func_0x0004f29c(0x2379,destX + entIdx,valuePtr[1]),
+           blitOk == '\0'))) {
+      entIdx = entIdx + 1;
     }
-    if ((int)ent < 2) {
-      uStack_8 = uStack_8 + ent;
+    if (entIdx < 2) {
+      destX = destX + entIdx;
     }
   }
-  for (uVar8 = 0; (int)uVar8 < 5; uVar8 = uVar8 + 1) {
-    uVar7 = 0;
-    for (ent = 0; ent < EntityCount; ent = ent + 1) {
-      uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-      bStack_3 = AGNT_FIELD(&((entity_t *)Entities)[ent], base.entity, 3);
-      if ((((bStack_3 != 0xff) &&
-           ((GLeaderSheets[bStack_3])->partySlot == uVar8)) &&
-          (uVar5 = ovr_alignUp4(((entity_t *)Entities)[ent].base.destX,0,0), uVar5 == uVar4)) &&
-         (((entity_t *)Entities)[ent].base.destY == puVar6[1])) {
-        uVar7 = uVar7 + 1;
+  for (slot = 0; (int)slot < 5; slot = slot + 1) {
+    placedCount = 0;
+    for (entIdx = 0; entIdx < EntityCount; entIdx = entIdx + 1) {
+      partyIdx = AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3);
+      if ((((partyIdx != 0xff) &&
+           ((GLeaderSheets[partyIdx])->partySlot == slot)) &&
+          (entityAligned = ovr_alignUp4(((entity_t *)Entities)[entIdx].base.destX,0,0),
+           entityAligned == targetAligned)) &&
+         (((entity_t *)Entities)[entIdx].base.destY == valuePtr[1])) {
+        placedCount = placedCount + 1;
       }
     }
-    bStack_3 = ((uint8_t *)MenuItemEnabled)[uVar8];
-    if (*(byte *)((int)puVar6 + uVar8 + 0xe) != uVar7) {
-      while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(_SS,&ent),3,bStack_3,*value,
-                                       puVar6[1]), bVar3))) {
-        ((entity_t *)Entities)[ent].base.state = 0;
-        ((entity_t *)Entities)[ent].base.destX = uStack_8;
-        ((entity_t *)Entities)[ent].base.destY = puVar6[1];
-        pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[ent] + 0x33);
-        *pbVar1 = *pbVar1 & 0xfb;
-        uVar7 = uVar7 + 1;
-      }
-      while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(_SS,&ent),2,bStack_3,*value,
-                                       puVar6[1]), bVar3))) {
-        ((entity_t *)Entities)[ent].base.state = 0;
-        ((entity_t *)Entities)[ent].base.destX = uStack_8;
-        ((entity_t *)Entities)[ent].base.destY = puVar6[1];
-        uVar7 = uVar7 + 1;
-      }
-      while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(_SS,&ent),1,bStack_3,*value,
-                                       puVar6[1]), bVar3))) {
-        ((entity_t *)Entities)[ent].base.state = 0;
-        ((entity_t *)Entities)[ent].base.destX = uStack_8;
-        ((entity_t *)Entities)[ent].base.destY = puVar6[1];
-        uVar7 = uVar7 + 1;
-      }
-      while (((int)uVar7 < (int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) &&
-             (bVar3 = attact_textArena((uint16_t *)CONCAT22(_SS,&ent),0,bStack_3,*value,
-                                       puVar6[1]), bVar3))) {
-        ((entity_t *)Entities)[ent].base.state = 0;
-        ((entity_t *)Entities)[ent].base.destX = uStack_8;
-        ((entity_t *)Entities)[ent].base.destY = puVar6[1];
-        uVar7 = uVar7 + 1;
-      }
-      while (((int)(uint)*(byte *)((int)puVar6 + uVar8 + 0xe) < (int)uVar7 &&
-             (bVar3 = attact_textArena2((uint *)CONCAT22(_SS,&ent),(uint)bStack_3,*value),
-             bVar3))) {
-        ((entity_t *)Entities)[ent].base.state = 0;
-        uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-        ((entity_t *)Entities)[ent].base.destX =
-             ((entity_t *)Entities)[ent].base.targetX;
-        uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-        ((entity_t *)Entities)[ent].base.destY =
-             ((entity_t *)Entities)[ent].base.targetY;
-        uVar7 = uVar7 - 1;
-      }
+    menuState = ((uint8_t *)MenuItemEnabled)[slot];
+    if (*(byte *)((int)valuePtr + slot + 0xe) != placedCount) {
+    while (((int)placedCount < (int)(uint)*(byte *)((int)valuePtr + slot + 0xe) &&
+           (movedOk = attact_textArena((uint16_t *)CONCAT22(_SS,&entIdx),3,menuState,
+                                      *value,valuePtr[1]), movedOk))) {
+      ((entity_t *)Entities)[entIdx].base.state = 0;
+      ((entity_t *)Entities)[entIdx].base.destX = destX;
+      ((entity_t *)Entities)[entIdx].base.destY = valuePtr[1];
+      flagsPtr = (byte *)((uint8_t *)&((entity_t *)Entities)[entIdx] + 0x33);
+      *flagsPtr = *flagsPtr & 0xfb;
+      placedCount = placedCount + 1;
+    }
+    while (((int)placedCount < (int)(uint)*(byte *)((int)valuePtr + slot + 0xe) &&
+           (movedOk = attact_textArena((uint16_t *)CONCAT22(_SS,&entIdx),2,menuState,
+                                      *value,valuePtr[1]), movedOk))) {
+      ((entity_t *)Entities)[entIdx].base.state = 0;
+      ((entity_t *)Entities)[entIdx].base.destX = destX;
+      ((entity_t *)Entities)[entIdx].base.destY = valuePtr[1];
+      placedCount = placedCount + 1;
+    }
+    while (((int)placedCount < (int)(uint)*(byte *)((int)valuePtr + slot + 0xe) &&
+           (movedOk = attact_textArena((uint16_t *)CONCAT22(_SS,&entIdx),1,menuState,
+                                      *value,valuePtr[1]), movedOk))) {
+      ((entity_t *)Entities)[entIdx].base.state = 0;
+      ((entity_t *)Entities)[entIdx].base.destX = destX;
+      ((entity_t *)Entities)[entIdx].base.destY = valuePtr[1];
+      placedCount = placedCount + 1;
+    }
+    while (((int)placedCount < (int)(uint)*(byte *)((int)valuePtr + slot + 0xe) &&
+           (movedOk = attact_textArena((uint16_t *)CONCAT22(_SS,&entIdx),0,menuState,
+                                      *value,valuePtr[1]), movedOk))) {
+      ((entity_t *)Entities)[entIdx].base.state = 0;
+      ((entity_t *)Entities)[entIdx].base.destX = destX;
+      ((entity_t *)Entities)[entIdx].base.destY = valuePtr[1];
+      placedCount = placedCount + 1;
+    }
+while (((int)(uint)*(byte *)((int)valuePtr + slot + 0xe) < (int)placedCount &&
+           (movedOk = attact_textArena2((uint *)CONCAT22(_SS,&entIdx),(uint)menuState,
+                                       *value), movedOk))) {
+      ((entity_t *)Entities)[entIdx].base.state = 0;
+        ((entity_t *)Entities)[entIdx].base.destX =
+             ((entity_t *)Entities)[entIdx].base.targetX;
+        ((entity_t *)Entities)[entIdx].base.destY =
+             ((entity_t *)Entities)[entIdx].base.targetY;
+        placedCount = placedCount - 1;
+    }
     }
   }
   return;
