@@ -357,7 +357,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
   uint uVar2;
   uint dy;
   char *msg;
-  uint16_t uVar4;
+  uint16_t randPick;
   uint uVar5;
   uint uVar6;
   int iVar7;
@@ -485,17 +485,17 @@ void __cdecl16far ovc25_spyReportNotice(void)
             classIdx = (GLeaderSheets[leaderIdx])->classStr;
             classValue = ovc25_compute1(classIdx);
             if ((int)(uint)PlayerCount < classValue) {
-              uVar4 = ovr_randBelow(0x28,0);
+              randPick = ovr_randBelow(0x28,0);
               spawnX = (GLeaderSheets[leaderIdx])->x + -0x14 +
-                         (uVar4 & 0xff);
+                         (randPick & 0xff);
               if ((int)spawnX < 4) {
                 spawnX = 4;
               }
               if (0x8c < (int)spawnX) {
                 spawnX = 0x8b;
               }
-              uVar4 = ovr_randBelow(0x14,0);
-              spawnY = (GLeaderSheets[leaderIdx])->y + -10 + (uVar4 & 0xff)
+              randPick = ovr_randBelow(0x14,0);
+              spawnY = (GLeaderSheets[leaderIdx])->y + -10 + (randPick & 0xff)
               ;
               if ((int)spawnY < 1) {
                 spawnY = 1;
@@ -525,8 +525,8 @@ void __cdecl16far ovc25_spyReportNotice(void)
                                                     ((int)&worldMenuLabels[0].seg + 1 + iVar7),
                                                    (char *)0x26510),
                                   *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + iVar7),uVar2);
-              asm { mov uVar4,dx };
-              ovr_uiNotify(msg,uVar4,0);
+              asm { mov randPick,dx };
+              ovr_uiNotify(msg,randPick,0);
             }
           }
           ovc25_usesAlignUp43((byte)leaderIdx,0xf,

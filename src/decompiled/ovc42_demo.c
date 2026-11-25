@@ -57,7 +57,7 @@ char * __cdecl16far ovc42_textProvidesMoreHousing(uint32_t timeoutTicks)
 uint16_t __cdecl16far ovc42_usesMiceBlitRect(byte timeoutTicks)
 
 {
-  bool bVar1;
+  bool housingFlag;
   undefined1 extraout_AH;
   ulong *puVar2;
   undefined1 uVar3;
@@ -76,8 +76,8 @@ uint16_t __cdecl16far ovc42_usesMiceBlitRect(byte timeoutTicks)
   }
   do {
     prevTick = prevTick & 0xffff0000;
-    bVar1 = ovr_draw_textProvidesMoreHousing();
-  } while (bVar1);
+    housingFlag = ovr_draw_textProvidesMoreHousing();
+  } while (housingFlag);
   while( true ) {
     uVar3 = (undefined1)(prevTick >> 0x18);
     uVar4 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
@@ -88,11 +88,11 @@ uint16_t __cdecl16far ovc42_usesMiceBlitRect(byte timeoutTicks)
       InputEventTime.lo = uVar4;
       ovr_draw_usesPrintf();
     }
-    bVar1 = ovr_draw_textProvidesMoreHousing();
-    puVar2 = (ulong *)CONCAT11(extraout_AH,bVar1);
-    prevTick = (ulong)CONCAT11(uVar3,bVar1) << 0x10;
-    if (bVar1) break;
-    prevTick = CONCAT22(CONCAT11(uVar3,bVar1),(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));
+    housingFlag = ovr_draw_textProvidesMoreHousing();
+    puVar2 = (ulong *)CONCAT11(extraout_AH,housingFlag);
+    prevTick = (ulong)CONCAT11(uVar3,housingFlag) << 0x10;
+    if (housingFlag) break;
+    prevTick = CONCAT22(CONCAT11(uVar3,housingFlag),(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));
     puVar2 = ovr_attact_usesBDADailyTimeCounter((ulong *)TextBlitCycle,prevTick,0);
     if ((uVar4 != 0) || ((ulong *)(uint)timeoutTicks <= puVar2)) break;
   }

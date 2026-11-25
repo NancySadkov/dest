@@ -525,7 +525,7 @@ void __cdecl16far ovc45_usesGPopulationLo(byte partyIndex,uint goldLo,int goldHi
 uint __cdecl16far ovc45_compute4(int x,uint16_t y,uint16_t arg3)
 
 {
-  byte bVar1;
+  byte cellType;
   uint uVar2;
   byte extraout_AH;
   byte bVar3;
@@ -537,15 +537,15 @@ uint __cdecl16far ovc45_compute4(int x,uint16_t y,uint16_t arg3)
   else {
     uVar2 = ovr_ovc23_findRecordAt(x,y,0);
     if (uVar2 == 0xffff) {
-      bVar1 = ovc45_getUnitType(x,y);
-      if (CONCAT11(extraout_AH,bVar1) == 0) {
-        bVar1 = ovc45_getUnitType(x + -1,y);
-        if (BuildingTypes[bVar1].size < 2) {
-          bVar1 = ovc45_getUnitType(x + -2,y);
-          if (BuildingTypes[bVar1].size < 3) {
-            bVar1 = ovc45_getUnitType(x + -3,y);
-            bVar3 = (byte)((uint)bVar1 * 0x27 >> 8);
-            if (BuildingTypes[bVar1].size < 4) {
+      cellType = ovc45_getUnitType(x,y);
+      if (CONCAT11(extraout_AH,cellType) == 0) {
+        cellType = ovc45_getUnitType(x + -1,y);
+        if (BuildingTypes[cellType].size < 2) {
+          cellType = ovc45_getUnitType(x + -2,y);
+          if (BuildingTypes[cellType].size < 3) {
+            cellType = ovc45_getUnitType(x + -3,y);
+            bVar3 = (byte)((uint)cellType * 0x27 >> 8);
+            if (BuildingTypes[cellType].size < 4) {
               uVar2 = CONCAT11(bVar3,1);
             }
             else {
@@ -553,11 +553,11 @@ uint __cdecl16far ovc45_compute4(int x,uint16_t y,uint16_t arg3)
             }
           }
           else {
-            uVar2 = (uint)bVar1 * 0x27 & 0xff00;
+            uVar2 = (uint)cellType * 0x27 & 0xff00;
           }
         }
         else {
-          uVar2 = (uint)bVar1 * 0x27 & 0xff00;
+          uVar2 = (uint)cellType * 0x27 & 0xff00;
         }
       }
       else {

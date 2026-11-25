@@ -104,7 +104,7 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   uint uVar6;
   uint uVar7;
   long *plVar8;
-  uint16_t uVar9;
+  uint16_t randPick;
   uint16_t uVar10;
   uint16_t uVar11;
   int gOfs;
@@ -229,13 +229,13 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   factionTimer[1] = LDIV_at_(CONCAT13((char)((uint)entitiesSeg >> 8),CONCAT12((char)entitiesSeg,plVar8)),
                        CONCAT13(uVar27,CONCAT12(uVar23,CONCAT11(uVar21,uVar18))));
   factionTimer[1] = factionTimer[1] + 0x14;
-  uVar9 = ovr_randBelow((uint16_t)(long *)factionTimer[0],0);
+  randPick = ovr_randBelow((uint16_t)(long *)factionTimer[0],0);
   uVar10 = ovr_randBelow((uint16_t)(long *)factionTimer[1],0);
   uVar11 = ovr_randBelow((uint16_t)(long *)factionTimer[0],0);
   uStack_8 = uVar11 & 0xff;
   uVar11 = ovr_randBelow((uint16_t)(long *)factionTimer[1],0);
   uVar16 = uVar11 & 0xff;
-  if ((uVar10 & 0xff) < (uVar9 & 0xff)) {
+  if ((uVar10 & 0xff) < (randPick & 0xff)) {
     uStack_8 = uStack_8 / (uVar16 + 1);
     bStack_10 = 1;
   }
@@ -389,8 +389,8 @@ L_OVC24_5943_026e_0772:
             }
           }
           else if (peVar15[entityIndex].base.level == gindex) {
-            uVar9 = ovr_randBelow(3,0);
-            if ((uVar9 & 0xff) == 0) goto L_OVC24_5943_026e_0772;
+            randPick = ovr_randBelow(3,0);
+            if ((randPick & 0xff) == 0) goto L_OVC24_5943_026e_0772;
           }
         }
         else {
@@ -402,8 +402,8 @@ L_OVC24_5943_026e_088A:
             otherIdx = entityIndex;
           }
           else if (peVar15[entityIndex].base.level == gindex) {
-            uVar9 = ovr_randBelow(3,0);
-            if ((uVar9 & 0xff) == 0) goto L_OVC24_5943_026e_088A;
+            randPick = ovr_randBelow(3,0);
+            if ((randPick & 0xff) == 0) goto L_OVC24_5943_026e_088A;
           }
         }
       }

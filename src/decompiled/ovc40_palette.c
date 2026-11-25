@@ -14,7 +14,7 @@
 void __cdecl16far ovc40_usesBlitLabel(far_t text1,far_t text2,byte row,byte term)
 
 {
-  int iVar1;
+  int textWidth2;
   
   TextBlitFlag = 1;
   TextBlitDstSeg = 0xa000;
@@ -24,15 +24,15 @@ void __cdecl16far ovc40_usesBlitLabel(far_t text1,far_t text2,byte row,byte term
   else {
     TextBlitX = 0;
     TextBlitY = (uint)row * 0xb + 0x98;
-    iVar1 = ovr_font_textWidth((char *)text1.ofs,(char *)CONCAT22(Font03.ofs,text1.seg),Font03.seg,0,0);
-    if ((text2.ofs == 0 && text2.seg == 0) || (iVar1 < 0x140)) {
-      TextBlitX = TextBlitX + (0x140U - iVar1 >> 1);
+    textWidth2 = ovr_font_textWidth((char *)text1.ofs,(char *)CONCAT22(Font03.ofs,text1.seg),Font03.seg,0,0);
+    if ((text2.ofs == 0 && text2.seg == 0) || (textWidth2 < 0x140)) {
+      TextBlitX = TextBlitX + (0x140U - textWidth2 >> 1);
     }
     else {
       text1 = text2;
-      iVar1 = ovr_font_textWidth((char *)text2.ofs,(char *)CONCAT22(Font03.ofs,text2.seg),Font03.seg,0,0);
-      if (iVar1 < 0x140) {
-        TextBlitX = TextBlitX + (0x140U - iVar1 >> 1);
+      textWidth2 = ovr_font_textWidth((char *)text2.ofs,(char *)CONCAT22(Font03.ofs,text2.seg),Font03.seg,0,0);
+      if (textWidth2 < 0x140) {
+        TextBlitX = TextBlitX + (0x140U - textWidth2 >> 1);
       }
     }
     BlitLetterType = 1;
