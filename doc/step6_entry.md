@@ -4087,3 +4087,43 @@ and pseudo-registers never are.
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 50,116 -> 50,070
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### A general map from original segment to file offset
+
+Two independent derivations earlier in the project agree on one linear rule:
+
+```
+file_offset = seg*16 - 0xE200
+```
+
+Check: `init_cfg` at 0x3381 -> 0x3381*16 - 0xE200 = 0x25610 (which is where its
+prologue, `55 8b ec`, was found); OVC31 at 0x6257 -> 0x54370 (init_check_mem's base).
+The resident image start fits too: segment 0x1000 -> 0x1E00, the EXE's `e_cparhdr*16`.
+
+That makes any recovered `/* seg:ofs */` comment directly addressable, so no
+string-reference anchor is needed to disassemble a function in the original.
+
+### `unaff_SI` in init_assets1 resolved: SI is set to 0xAB
+
+`ovc46_assets.c` holds 191 of the 1,895 `unaff_` hits, all in `init_assets1`
+(`7A57:0000`).  With the rule above its prologue is at file `0x6C370`:
+
+```
+06C370  push bp / mov bp,sp / sub sp,4
+06C376  push si
+06C377  mov  si, 0xab          ; <-- SI is the constant 0xAB
+06C37A  cmp  byte ptr [bp+6],0 ; grab
+```
+
+So the pseudo-register was never an unknown pointer: the body threads the constant
+`0xAB` through every `(int16_t)unaff_SI` and `stshAllocStub(unaff_SI)` call.  The
+declaration `far_t *unaff_SI;` is now `uint16_t siArg = 0xAB;` with the instruction
+cited in the comment, and all 190 remaining occurrences were replaced.
+
+Result: **grep_checks 49,988 -> 49,797 (-191)** in one change, with every gate unchanged.
+This is the first member of the `unaff_` family fixed by recovering the register's value
+instead of renaming, and it shows the family is tractable one function at a time now that
+the file-offset rule exists.
+
+  build 65/65 clean; LINK ERRORS 0; compare_state 1,627/0/0
+  diff_dgroup 972/1,868; compare_runtime 1,546/11 main entry, 1,545/11 post-init_cfg
