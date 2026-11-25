@@ -7833,3 +7833,66 @@ these are recorded rather than guessed.
   grep_checks 40,190 -> 40,180; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### stats_usesAlignUp42: 11 chained far reads restored (40,180 -> 40,160)
+
+`6386:1c9f`, 1618 bytes, 581 instructions, 340 lines - the largest single target left in the
+truncated-far class (14 of the 27 remaining reads).  Every chain was confirmed from the listing first:
+
+```
+0096  les bx, ptr es:[bx + 0x1d] / mov al, byte ptr es:[bx + 0x46]      gdata->shortName[3]
+00CA  les bx, ptr es:[bx + 0x17] / mov al, byte ptr es:[bx + 0xf]       entity->base.level
+010D  same                                                             entity->base.level
+021C  les bx, ptr es:[bx + 0x17] / mov al, byte ptr es:[bx + 0x1a]      base.entity byte 3
+02CB  les bx, ptr es:[bx + 0x17] / cmp byte ptr es:[bx + 0x1a], 0xff    base.entity byte 3
+0344  les bx, ptr es:[bx + 0x1d] / mov al, byte ptr es:[bx]             gdata->ai
+0402  les bx, ptr es:[bx + 0x17] / mov al, byte ptr es:[bx + 0x33]      flags32 high byte
+046E  les bx, ptr es:[bx + 0x17] / test byte ptr es:[bx + 0x33], 1      flags32 high byte
+0507  les bx, ptr es:[bx + 0x17] / cmp byte ptr es:[bx + 0x1a], 0xff    base.entity byte 3
+0537  les bx, ptr es:[bx + 0x17] / mov al, byte ptr es:[bx + 0x1a]      base.entity byte 3
+05EB  les bx, ptr es:[bx + 0x17] / mov al, byte ptr es:[bx + 0x1a]      base.entity byte 3
+```
+
+Eleven blocks became struct reads.  Verified in the emitted listing - the `es:[bx+N]` offsets in the
+rebuilt function are now exactly
+
+```
+0     gdata->ai              les bx,es:_Agnts[bx+29] / cmp byte ptr es:[bx],0
+15    entity->base.level     x2
+26    base.entity byte 3     x5
+51    flags32 high byte      x2
+70    gdata->shortName[3]    x1
+```
+
+against the original's 0x0 / 0xf / 0x1a / 0x33 / 0x46.
+
+#### A swapped pair of stores, found and left
+
+The block at lines 2056-2060 reads two words from a table and writes them into the entity record.  The
+original stores them the opposite way round from the export:
+
+```
+0123  mov ax, word ptr es:[bx + 2]      ; table word 1
+0128  mov dx, word ptr es:[bx]          ; table word 0
+0149  mov word ptr es:[bx + 0x12], dx   ; entity + 0x12 <- table[0]
+014D  mov word ptr es:[bx + 0x10], ax   ; entity + 0x10 <- table[1]
+```
+
+```c
+*(uint16_t *)(iVar14 + 0x12) = puVar13[1];   /* export: table[1] */
+*(uint16_t *)(iVar14 + 0x10) = uVar16;       /* export: table[0] */
+```
+
+Two reasons not to guess the correction: the table is reached with `mov ax,0x80 / mov es,ax` - segment
+**0x80** - which the export turned into a NEAR pointer, so both the reads and the store targets need that
+segment identified first; and a word store at `entity+0x12` spans `frameIndex` and the low byte of
+`frames`, so the field pair has to be named from the record layout rather than invented.
+
+**Queue after this:** 17 reads in 7 functions - `stats_openAgentDetail` 4, `attact_usesAgntFlag1` 3,
+`stats_readyStatusText` 3, `ovc49_drawAgents` 3, `ovc49_body1` 2, `ovc41_unitStatusText` 1,
+`ovc27_compute2` 1.  `stats_readyStatusText` sits behind `in_stack_00000004`, so it belongs with the
+phantom work rather than here.
+
+  grep_checks 40,180 -> 40,160; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

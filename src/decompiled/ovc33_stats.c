@@ -2042,16 +2042,13 @@ stats_usesAlignUp42(byte agntIndex,byte gfxIndex,int16_t x,int16_t y,brect_t *re
   CurMusicType = 0xff;
 L_stats_6386_1c9f_1E1D:
   for (; GCharLevelsInc != '\0'; GCharLevelsInc = GCharLevelsInc + -1) {
-    uVar1 = *(uint32_t far *)&Agnts[agntIndex].gdata;
-    bStack_3 = *(byte *)((int)uVar1 + 0x46);
+    bStack_3 = Agnts[agntIndex].gdata->shortName[3];
     if (bStack_3 == 0xff) {
       bStack_3 = 0;
     }
-    uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
-    piVar12 = (int *)((uint)bStack_3 * 0x94 + (uint)*(byte *)((int)uVar1 + 0xf) * 4);
+    piVar12 = (int *)((uint)bStack_3 * 0x94 + (uint)Agnts[agntIndex].entity->base.level * 4);
     if (*piVar12 != 0 || piVar12[1] != 0) {
-      uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
-      puVar13 = (uint16_t *)((uint)bStack_3 * 0x94 + (uint)*(byte *)((int)uVar1 + 0xf) * 4);
+      puVar13 = (uint16_t *)((uint)bStack_3 * 0x94 + (uint)Agnts[agntIndex].entity->base.level * 4);
       uVar16 = *puVar13;
       uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
       uVar15 = (uint16_t)((ulong)uVar1 >> 0x10);
@@ -2073,8 +2070,7 @@ L_stats_6386_1c9f_1E1D:
     uVar18 = (undefined1)(uVar5 >> 8);
     uVar5 = ovr_alignUp4(GfxRndSeed,0,0);
     if (CONCAT11(uVar18,uVar17) == uVar5) {
-      uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
-      ovr_ovc39_textHalflingCastle(*(byte *)((int)uVar1 + 0x1a));
+      ovr_ovc39_textHalflingCastle(AGNT_FIELD(Agnts[agntIndex].entity, base.entity, 3));
     }
   }
 L_stats_6386_1c9f_1ECD:
@@ -2099,8 +2095,7 @@ L_stats_6386_1c9f_1ECD:
   }
   uStack_f = 5;
   uStack_e = 7;
-  uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
-  if (*(char *)((int)uVar1 + 0x1a) == -1) {
+  if ((char)AGNT_FIELD(Agnts[agntIndex].entity, base.entity, 3) == -1) {
     uStack_2e = 0;
     uStack_30 = 0;
   }
@@ -2115,7 +2110,7 @@ L_stats_6386_1c9f_1ECD:
   uStack_26 = 0x2410;
   uStack_28 = 0x6401;
   puVar9 = (uint8_t *)((int)&AgntAnms[0x75].halfWidth + 1);
-  if (*(char *)*(uint32_t far *)&Agnts[agntIndex].gdata == '\0') {
+  if (Agnts[agntIndex].gdata->ai == '\0') {
     menuBarShown = 1;
   }
   entries_00.seg = _SS;
@@ -2246,19 +2241,16 @@ switchD_6000_58bf_caseD_5:
     }
   }
   else if (uVar5 == 0xfc) {
-    uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
-    if ((*(byte *)((int)uVar1 + 0x33) & 1) == 0) {
+    if ((*(uint8_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.flags32 + 1) & 1) == 0) {
       stats_unreadyNotice(agntIndex);
     }
   }
   else if (uVar5 < 0xfd) {
     if (uVar5 == 7) {
-      uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
-      if (*(char *)((int)uVar1 + 0x1a) != -1) {
+      if ((char)AGNT_FIELD(Agnts[agntIndex].entity, base.entity, 3) != -1) {
         ovr_stop_audio();
         CurMusicType = 0xff;
-        uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
-        ovr_manage_settlementScreen(*(byte *)((int)uVar1 + 0x1a));
+        ovr_manage_settlementScreen(AGNT_FIELD(Agnts[agntIndex].entity, base.entity, 3));
         if (Cancelled == 0) {
           iVar14 = Agnts[agntIndex].owner;
           stats_openAgentDetail((uint)agntIndex);
@@ -2269,8 +2261,7 @@ switchD_6000_58bf_caseD_5:
             uVar18 = (undefined1)(uVar5 >> 8);
             uVar5 = ovr_alignUp4(GfxRndSeed,0,0);
             if (CONCAT11(uVar18,uVar17) == uVar5) {
-              uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
-              ovr_ovc39_textHalflingCastle(*(byte *)((int)uVar1 + 0x1a));
+              ovr_ovc39_textHalflingCastle(AGNT_FIELD(Agnts[agntIndex].entity, base.entity, 3));
             }
           }
         }
@@ -2295,8 +2286,7 @@ L_stats_6386_1c9f_20C5:
     }
   }
   else if (uVar5 == 0xfe) {
-    uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
-    if ((*(byte *)((int)uVar1 + 0x33) & 1) != 0) {
+    if ((*(uint8_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.flags32 + 1) & 1) != 0) {
       stats_unreadyNotice(agntIndex);
     }
     uVar5 = stats_usesAlignUp4(Agnts[agntIndex].owner);
