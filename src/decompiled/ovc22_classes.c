@@ -2720,7 +2720,7 @@ uint16_t __cdecl16far ovc22_usesPlayerCount(byte partyIndex)
   }
   uVar1 = *(uint32_t *)((uint)partyIndex << 2);
   *(byte *)((int)uVar1 + 0xa4) = bVar2;
-  return CONCAT11((char)(((uint)partyIndex << 2) >> 8),bVar2);
+  return bVar2;
 }
 
 

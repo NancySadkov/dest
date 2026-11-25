@@ -1314,7 +1314,7 @@ uint __cdecl16far attact_usesAlignUp44(int *xPtr,int y,uint8_t dir)
     do {
       uVar2 = ovr_EXT_FUN_8000_f2fa(uVar2,*xPtr,y,dir,in_stack_0000000c);
       if ((char)uVar2 != '\0') {
-        return CONCAT11((char)((uint)uVar2 >> 8),1);
+        return 1;
       }
       value = value + *(char *)(dir + 0x885);
       uVar3 = ovr_alignUp4(*xPtr,0,0);
@@ -1322,7 +1322,8 @@ uint __cdecl16far attact_usesAlignUp44(int *xPtr,int y,uint8_t dir)
       uVar1 = ovr_alignUp4(value,0,0);
     } while (uVar3 == uVar1);
     *xPtr = value;
-    uVar1 = uVar1 & 0xff00;
+    /* 0x332DA mov al,0: this path returns zero; the exported mask kept a stale AH. */
+    uVar1 = 0;
   }
   return uVar1;
 }
