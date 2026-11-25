@@ -543,29 +543,29 @@ uint16_t __cdecl16far ovc41_compute6(byte rank,uint8_t level)
 
 {
   byte bVar1;
-  uint16_t uVar2;
+  uint16_t packed;
   undefined1 uVar3;
   
   bVar1 = ovr_agnt_compute14(level);
   if (bVar1 + 2 < (uint)rank) {
-    uVar2 = CONCAT11((char)(bVar1 + 2 >> 8),0xd);
+    packed = CONCAT11((char)(bVar1 + 2 >> 8),0xd);
   }
   else if (bVar1 + 2 == (uint)rank) {
-    uVar2 = CONCAT11((char)(bVar1 + 2 >> 8),0xb);
+    packed = CONCAT11((char)(bVar1 + 2 >> 8),0xb);
   }
   else {
     uVar3 = (undefined1)(bVar1 + 1 >> 8);
     if (bVar1 + 1 == (uint)rank) {
-      uVar2 = CONCAT11(uVar3,9);
+      packed = CONCAT11(uVar3,9);
     }
     else if (bVar1 == rank) {
-      uVar2 = CONCAT11(uVar3,7);
+      packed = CONCAT11(uVar3,7);
     }
     else {
-      uVar2 = CONCAT11(uVar3,2);
+      packed = CONCAT11(uVar3,2);
     }
   }
-  return uVar2;
+  return packed;
 }
 
 

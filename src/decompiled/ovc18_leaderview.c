@@ -52,7 +52,7 @@ void __cdecl16far ovc18_showLeaderView(void)
 
 {
   bool bVar1;
-  char *pcVar2;
+  char *msg;
   uint uVar3;
   char *pcVar4;
   uint16_t unaff_SI;
@@ -81,8 +81,8 @@ void __cdecl16far ovc18_showLeaderView(void)
         pcVar4 = (char *)*(uint16_t *)(iVar5 * 4);
         pcStack_6 = pcVar4;
         if (GameRunning == false) {
-          pcVar2 = ovr_fmVsprintf("View %s.",(char *)CONCAT22(uStack_4,pcVar4));
-          ovr_say(pcVar2,pcVar4);
+          msg = ovr_fmVsprintf("View %s.",(char *)CONCAT22(uStack_4,pcVar4));
+          ovr_say(msg,pcVar4);
         }
         ovc18_blitTriangles();
         return;
@@ -94,12 +94,12 @@ void __cdecl16far ovc18_showLeaderView(void)
       pcStack_6 = pcVar4;
       uVar3 = ovc18_usesAlignUp4();
       if ((char)uVar3 == '\0') {
-        pcVar2 = ovr_fmVsprintf("View %s. (Cannot place)",(char *)CONCAT22(uStack_4,pcStack_6));
-        ovr_say(pcVar2,pcVar4);
+        msg = ovr_fmVsprintf("View %s. (Cannot place)",(char *)CONCAT22(uStack_4,pcStack_6));
+        ovr_say(msg,pcVar4);
       }
       else {
-        pcVar2 = ovr_fmVsprintf("Place %s.",(char *)CONCAT22(uStack_4,pcStack_6));
-        ovr_say(pcVar2,pcVar4);
+        msg = ovr_fmVsprintf("Place %s.",(char *)CONCAT22(uStack_4,pcStack_6));
+        ovr_say(msg,pcVar4);
       }
       trianglesShown = 1;
       ovc18_blitTriangles();

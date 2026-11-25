@@ -678,7 +678,7 @@ uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
   byte bVar2;
   undefined1 extraout_AH;
   uint8_t *puVar3;
-  char *pcVar4;
+  char *inputResult;
   uint uVar5;
   far_t entries;
   far_t entries_00;
@@ -748,13 +748,13 @@ uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
                    ,0x2410,0x10);
     entries.seg = _SS;
     entries.ofs = (uint16_t)&menuItems;
-    pcVar4 = ovr_uiInputText(entries,(uint)bStack_19,far_from_u32((uint32_t)(0x0)),0x0,0);
-    cStack_1a = (char)pcVar4;
+    inputResult = ovr_uiInputText(entries,(uint)bStack_19,far_from_u32((uint32_t)(0x0)),0x0,0);
+    cStack_1a = (char)inputResult;
     if (cStack_1a == '\0') {
       return 0;
     }
     if (cStack_1a == '\x01') break;
-    abStack_17[0] = abStack_17[((uint)pcVar4 & 0xff) - 1];
+    abStack_17[0] = abStack_17[((uint)inputResult & 0xff) - 1];
     ovr_drawString((char *)"Select ability to adjust downwards by two points.",0x2410,0x10);
     _fsetmem((void *)CONCAT13(uVar7,CONCAT12(uVar6,&menuItems)),0x10,0);
     auStack_28[0] = 0x2410;
@@ -772,16 +772,16 @@ uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
     }
     entries_00.seg = _SS;
     entries_00.ofs = (uint16_t)&menuItems;
-    pcVar4 = ovr_uiInputText(entries_00,(uint)bStack_19,far_from_u32((uint32_t)(0x0)),0x0,0);
-    cStack_1a = (char)pcVar4;
+    inputResult = ovr_uiInputText(entries_00,(uint)bStack_19,far_from_u32((uint32_t)(0x0)),0x0,0);
+    cStack_1a = (char)inputResult;
     if (cStack_1a == '\0') {
       return 0;
     }
     if (cStack_1a != '\x01') {
       ((char_sheet_t *)sheet)->stats[abStack_17[0]] =
            ((char_sheet_t *)sheet)->stats[abStack_17[0]] + 1;
-      ((char_sheet_t *)sheet)->stats[abStack_17[((uint)pcVar4 & 0xff) - 1]] =
-           ((char_sheet_t *)sheet)->stats[abStack_17[((uint)pcVar4 & 0xff) - 1]] - 2;
+      ((char_sheet_t *)sheet)->stats[abStack_17[((uint)inputResult & 0xff) - 1]] =
+           ((char_sheet_t *)sheet)->stats[abStack_17[((uint)inputResult & 0xff) - 1]] - 2;
       manage_openTalkWindow();
       manage_usesLitoa10(sheet);
     }

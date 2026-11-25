@@ -332,7 +332,7 @@ int __cdecl16far ovc45_cellBelowBlocked(int x,int y)
 uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
 
 {
-  bool bVar1;
+  bool flag;
   byte extraout_AH;
   uint uVar2;
   byte extraout_AH_00;
@@ -343,9 +343,9 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
        (uVar2 = ovc45_usesGMapFlags(x,y + -1), (uVar2 & 0xff) == 0)) {
       return 0;
     }
-    bVar1 = ovc45_usesGMapFlags2(x,y + 1);
-    if (((bVar1) && (bVar1 = ovc45_usesGMapFlags2(x,y), bVar1)) &&
-       (bVar1 = ovc45_usesGMapFlags2(x,y + -1), bVar1)) {
+    flag = ovc45_usesGMapFlags2(x,y + 1);
+    if (((flag) && (flag = ovc45_usesGMapFlags2(x,y), flag)) &&
+       (flag = ovc45_usesGMapFlags2(x,y + -1), flag)) {
       return (uint)extraout_AH << 8;
     }
     uVar2 = ovc45_cellBelowBlocked(x,y + 1);
@@ -361,9 +361,9 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
        (uVar2 = ovc45_usesGMapFlags(x + 1,y), (uVar2 & 0xff) == 0)) {
       return 0;
     }
-    bVar1 = ovc45_usesGMapFlags2(x,y);
-    if (((bVar1) && (bVar1 = ovc45_usesGMapFlags2(x + -1,y), bVar1)) &&
-       (bVar1 = ovc45_usesGMapFlags2(x + 1,y), bVar1)) {
+    flag = ovc45_usesGMapFlags2(x,y);
+    if (((flag) && (flag = ovc45_usesGMapFlags2(x + -1,y), flag)) &&
+       (flag = ovc45_usesGMapFlags2(x + 1,y), flag)) {
       return (uint)extraout_AH_00 << 8;
     }
     uVar2 = ovc45_cellBelowBlocked(x,y);

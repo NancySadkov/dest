@@ -216,7 +216,7 @@ L_OVC25_5b66_038d_0482:
 void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,uint16_t destY)
 
 {
-  bool bVar1;
+  bool ok;
   uint uVar2;
   uint uVar3;
   int iVar4;
@@ -238,24 +238,24 @@ void __cdecl16far ovc25_usesAlignUp44(char partyIndex,byte count,uint16_t destX,
       }
     }
     while ((iVar4 < (int)(uint)count &&
-           (bVar1 = ovc25_textArena((uint *)CONCAT22(curSeg,&entityIndex),'\x02',
-                                    (uint)(byte)partyIndex,destX), bVar1))) {
+           (ok = ovc25_textArena((uint *)CONCAT22(curSeg,&entityIndex),'\x02',
+                                    (uint)(byte)partyIndex,destX), ok))) {
       ((entity_t *)Entities)[entityIndex].base.state = 0;
       ((entity_t *)Entities)[entityIndex].base.destX = destX;
       ((entity_t *)Entities)[entityIndex].base.destY = destY;
       iVar4 = iVar4 + 1;
     }
     while ((iVar4 < (int)(uint)count &&
-           (bVar1 = ovc25_textArena((uint *)CONCAT22(curSeg,&entityIndex),'\x01',
-                                    (uint)(byte)partyIndex,destX), bVar1))) {
+           (ok = ovc25_textArena((uint *)CONCAT22(curSeg,&entityIndex),'\x01',
+                                    (uint)(byte)partyIndex,destX), ok))) {
       ((entity_t *)Entities)[entityIndex].base.state = 0;
       ((entity_t *)Entities)[entityIndex].base.destX = destX;
       ((entity_t *)Entities)[entityIndex].base.destY = destY;
       iVar4 = iVar4 + 1;
     }
     while ((iVar4 < (int)(uint)count &&
-           (bVar1 = ovc25_textArena((uint *)CONCAT22(curSeg,&entityIndex),'\0',
-                                    (uint)(byte)partyIndex,destX), bVar1))) {
+           (ok = ovc25_textArena((uint *)CONCAT22(curSeg,&entityIndex),'\0',
+                                    (uint)(byte)partyIndex,destX), ok))) {
       ((entity_t *)Entities)[entityIndex].base.state = 0;
       ((entity_t *)Entities)[entityIndex].base.destX = destX;
       ((entity_t *)Entities)[entityIndex].base.destY = destY;
