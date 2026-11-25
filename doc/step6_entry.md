@@ -4208,3 +4208,22 @@ decompiler dropped.  The file offsets in the table above make that work addressa
 
   build 65/65 clean; LINK ERRORS 0; grep_checks 49,756 -> 49,731
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### `unaff_` holders whose register is never set at all
+
+`tmp/unaff_classify.py` also reports holders where the register is never written in the
+first 0x300 bytes.  Two were checked:
+
+* `ovc22_textRingProt` (`5087:056e`, 98 `unaff_DI`): the function pushes DI and never
+  sets it early, but the whole body does write it - `0436A7 mov di,2`, `043712 xor di,di`,
+  `04373F inc di` - i.e. it is a loop counter the decompiler uses before its assignment.
+  Binding it means restructuring the loop, not deleting a local;
+* `saveui_configureMessageDelay` (`4528:1303`, 16 SI + 17 DI): same shape.
+
+So the "prologue never writes it" list is not the `init_assets1`/`stExit` pattern; those
+two were cases where the register *was* written once, from a constant or a parameter.
+This closes the mechanical part of the family: what remains needs the original's control
+flow per function.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 49,708 -> 49,687
+  compare_state 1,627/0/0; diff_dgroup 972/1,868

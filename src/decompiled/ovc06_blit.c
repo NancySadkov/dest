@@ -521,10 +521,10 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
   byte in_stack_00000018;
   uint8_t skip;
   int iStack_1e;
-  uint16_t uStack_1c;
+  uint16_t gfxSeg;
   char *pcStack_1a;
   char *pcStack_18;
-  uint uStack_16;
+  uint rectBottom;
   int iStack_14;
   uint uStack_12;
   int rectLeft;
@@ -551,7 +551,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
     uVar4 = (uint16_t)((ulong)rectOfs >> 0x10);
     uStack_12 = rectOfs[1];
     iStack_14 = rectOfs[2];
-    uStack_16 = rectOfs[3];
+    rectBottom = rectOfs[3];
     if (in_stack_00000012 == '\0') {
       uVar1 = (int)((uint)(byte)flip * *(int *)(gfx.ofs + 1)) >> 4;
     }
@@ -584,12 +584,12 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
       }
       pfStack_4 = (far_t *)0x22a6;
       iStack_1e = gfx.ofs + 0xe;
-      uStack_1c = gfx.seg;
+      gfxSeg = gfx.seg;
       pcStack_e = pcStack_1a;
       if (in_stack_00000014 == 0xff) {
         uStack_8 = 0;
-        while ((uStack_8 < *(uint *)(gfx.ofs + 0xc) && (uVar1 <= uStack_16))) {
-          iVar2 = (*(code *)pfStack_6)(uVar5,iStack_1e,uStack_1c,&skip);
+        while ((uStack_8 < *(uint *)(gfx.ofs + 0xc) && (uVar1 <= rectBottom))) {
+          iVar2 = (*(code *)pfStack_6)(uVar5,iStack_1e,gfxSeg,&skip);
           iStack_1e = iStack_1e + iVar2;
           if ((*(uint *)((uint)(byte)flip * 2 + 0x470) & uVar3) != 0) {
             if (uStack_12 <= uVar1) {
@@ -615,8 +615,8 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
       }
       else {
         uStack_8 = 0;
-        while ((uStack_8 < *(uint *)(gfx.ofs + 0xc) && (uVar1 <= uStack_16))) {
-          iVar2 = (*(code *)pfStack_6)(uVar5,iStack_1e,uStack_1c,&skip);
+        while ((uStack_8 < *(uint *)(gfx.ofs + 0xc) && (uVar1 <= rectBottom))) {
+          iVar2 = (*(code *)pfStack_6)(uVar5,iStack_1e,gfxSeg,&skip);
           iStack_1e = iStack_1e + iVar2;
           if ((*(uint *)((uint)(byte)flip * 2 + 0x470) & uVar3) != 0) {
             if (uStack_12 <= uVar1) {

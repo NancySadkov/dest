@@ -449,7 +449,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   uint32_t *puStack_1c;
   byte *pbStack_18;
   uint uStack_16;
-  uint uStack_14;
+  uint accum;
   uint sampleHi;
   uint16_t uStack_10;
   uint16_t fileIdx;
@@ -858,12 +858,12 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                         psVar9 = (stg_tmp_t *)(row + (int)retStorage);
                         if ((int)puStack_1c <= (int)psVar9) {
                           psVar9 = memcpy((char *)CONCAT13((char)(sampleHi >> 8),
-                                                           CONCAT12((char)sampleHi,uStack_14)),
+                                                           CONCAT12((char)sampleHi,accum)),
                                           (char *)CONCAT13((char)((uint)_SS >> 8),
                                                            CONCAT12((char)_SS,
                                                                     auStackY_160 + uStack_c)),
                                           fileIdx);
-                          uStack_14 = uStack_14 + 0x140;
+                          accum = accum + 0x140;
                         }
                         row = row + 1;
                         if (((int)uStack_10 <= row) ||
@@ -1064,7 +1064,7 @@ bad_lbm:
     uStack_34 = ovr_be2(uStack_46);
     goto L_grabLbm_0445;
   }
-  if ((uStack_20 == uStack_14) && (uStack_22 == uStack_16)) {
+  if ((uStack_20 == accum) && (uStack_22 == uStack_16)) {
     uVar17 = uStack_22;
     ovr_stshRead();
     puStack_2a = ovr_be4(puStack_2a);
@@ -1861,7 +1861,7 @@ void __cdecl16far init_usesRandBelow2(void)
   int iStack_12;
   uint8_t sameDirCount;
   uint8_t lastDir;
-  byte bStack_d;
+  byte cellMin;
   byte bStack_c;
   byte bStack_b;
   uint8_t neighbourOfs;
@@ -1948,12 +1948,12 @@ void __cdecl16far init_usesRandBelow2(void)
       bStack_c = (byte)cellValue;
       iVar4 = y + ((int)(uint)abStack_9[(uint)bStack_13 * 2] >> 1);
       cellValue = init_getMapCell(x + (abStack_9[(uint)bStack_13 * 2] & 1),iVar4,(char)iVar4);
-      bStack_d = (byte)cellValue;
+      cellMin = (byte)cellValue;
       if (bStack_c < bStack_b) {
         bStack_b = bStack_c;
       }
-      if (bStack_d < bStack_b) {
-        bStack_b = bStack_d;
+      if (cellMin < bStack_b) {
+        bStack_b = cellMin;
       }
       init_setMapCell(x + (abStack_9[(uint)bStack_14 * 2 + -1] & 1),
                       y + ((int)(uint)abStack_9[(uint)bStack_14 * 2 + -1] >> 1),bStack_b);
