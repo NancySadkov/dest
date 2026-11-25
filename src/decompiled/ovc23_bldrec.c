@@ -2200,24 +2200,27 @@ bool __cdecl16far ovc23_textConstructionAbandoned(char *ofs,uint8_t *seg,byte di
 void __cdecl16far ovc23_rebuildDirectionFlags(int x,int y)
 
 {
-  uint16_t *puVar1;
-  bool bVar2;
-  uint *puVar3;
-  byte bStack_3;
-  
+  /* Re-derived: clears the four direction bits in the cell's flag word (& 0xff0f), then for
+     each of the four directions sets 0x10<<d when ovc23_usesAlignUp43 reports the direction is
+     usable and 0x100<<d when the construction there is abandoned. */
+  uint16_t *flagWord;
+  bool abandoned;
+  uint *dirResult;
+  byte dir;
+
   if ((((x < 0x94) && (-1 < x)) && (y < 0x3c)) && (-1 < y)) {
-    puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
-    *puVar1 = *puVar1 & 0xff0f;
-    for (bStack_3 = 0; bStack_3 < 4; bStack_3 = bStack_3 + 1) {
-      puVar3 = ovc23_usesAlignUp43(x,y,bStack_3);
-      if ((char)puVar3 != '\0') {
-        puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
-        *puVar1 = *puVar1 | 0x10 << (bStack_3 & 0x1f);
+    flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+    *flagWord = *flagWord & 0xff0f;
+    for (dir = 0; dir < 4; dir = dir + 1) {
+      dirResult = ovc23_usesAlignUp43(x,y,dir);
+      if ((char)dirResult != '\0') {
+        flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+        *flagWord = *flagWord | 0x10 << (dir & 0x1f);
       }
-      bVar2 = ovc23_textConstructionAbandoned((char *)x,(uint8_t *)y,bStack_3);
-      if (bVar2) {
-        puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
-        *puVar1 = *puVar1 | 0x100 << (bStack_3 & 0x1f);
+      abandoned = ovc23_textConstructionAbandoned((char *)x,(uint8_t *)y,dir);
+      if (abandoned) {
+        flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
+        *flagWord = *flagWord | 0x100 << (dir & 0x1f);
       }
     }
   }

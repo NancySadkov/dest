@@ -494,47 +494,53 @@ int __cdecl16far attact_usesAgntCount(int ownerIndex)
 void __cdecl16far attact_usesAlignUp4(uint16_t x,uint16_t y,char partyIndex,uint32_t flags,uint16_t arg5)
 
 {
-  uint uVar1;
-  uint uVar2;
-  uint uVar3;
-  uint uVar4;
-  uint16_t uVar5;
-  uint uStack_8;
-  byte bStack_3;
-  
+  /* Re-derived: for the menu slot matching the party, finds the square record at the cell,
+     counts the entities of that party whose destination is the cell, and updates the stored
+     count when it differs; if the cursor sits on the cell it either highlights the slot or
+     sets a byte in the caller's flag array. */
+  uint alignedX;
+  uint entAlignedX;
+  uint foundAligned;
+  uint recIdx;
+  uint entIdx;
+  uint16_t count;
+  uint seedAligned;
+  byte slot;
+
   if (partyIndex != -1) {
-    uVar1 = ovr_alignUp4(x,0,0);
-    for (bStack_3 = 0; bStack_3 < 5; bStack_3 = bStack_3 + 1) {
-      if (((uint8_t *)MenuItemEnabled)[bStack_3] == partyIndex) {
-        uVar3 = 0;
-        while ((uVar3 < SquareRecCount &&
-               ((uVar4 = ovr_alignUp4(*(int *)(uVar3 * 0x13),0,0), uVar4 != uVar1 ||
-                (*(uint16_t *)((uint8_t *)&SquareRecs[uVar3] + 2) != y))))) {
-          uVar3 = uVar3 + 1;
+    alignedX = ovr_alignUp4(x,0,0);
+    for (slot = 0; slot < 5; slot = slot + 1) {
+      if (((uint8_t *)MenuItemEnabled)[slot] == partyIndex) {
+        recIdx = 0;
+        while ((recIdx < SquareRecCount &&
+               ((foundAligned = ovr_alignUp4(*(int *)(recIdx * 0x13),0,0),
+                 foundAligned != alignedX ||
+                 (*(uint16_t *)((uint8_t *)&SquareRecs[recIdx] + 2) != y))))) {
+          recIdx = recIdx + 1;
         }
-        if (SquareRecCount <= uVar3) {
+        if (SquareRecCount <= recIdx) {
           return;
         }
-        uStack_8 = 0;
-        for (uVar4 = 0; uVar4 < EntityCount; uVar4 = uVar4 + 1) {
-          uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar4].base.destX,0,0);
-          if (uVar2 == uVar1) {
-            uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-            if ((((entity_t *)Entities)[uVar4].base.destY == y) &&
-               (*(char *)((int)&((entity_t *)Entities)[uVar4].base.entity + 3) == partyIndex)) {
-              uStack_8 = uStack_8 + 1;
+        count = 0;
+        for (entIdx = 0; entIdx < EntityCount; entIdx = entIdx + 1) {
+          entAlignedX = ovr_alignUp4(((entity_t *)Entities)[entIdx].base.destX,0,0);
+          if (entAlignedX == alignedX) {
+            if ((((entity_t *)Entities)[entIdx].base.destY == y) &&
+               (*(char *)((int)&((entity_t *)Entities)[entIdx].base.entity + 3) ==
+                partyIndex)) {
+              count = count + 1;
             }
           }
         }
-        if (*(byte *)(uVar3 * 0x13 + (uint)bStack_3 + 0xe) != uStack_8) {
-          *(undefined1 *)(uVar3 * 0x13 + (uint)bStack_3 + 0xe) = (undefined1)uStack_8;
-          uVar3 = ovr_alignUp4(GfxRndSeed,0,0);
-          if ((uVar3 == uVar1) && (GfxRndSeed2 == y)) {
+        if (*(byte *)(recIdx * 0x13 + (uint)slot + 0xe) != count) {
+          *(undefined1 *)(recIdx * 0x13 + (uint)slot + 0xe) = (undefined1)count;
+          seedAligned = ovr_alignUp4(GfxRndSeed,0,0);
+          if ((seedAligned == alignedX) && (GfxRndSeed2 == y)) {
             if (flags == 0) {
-              ovr_ovc41_usesMiceBlitRect((uint)bStack_3);
+              ovr_ovc41_usesMiceBlitRect((uint)slot);
             }
             else {
-              *(undefined1 *)((int)flags + (uint)bStack_3) = 1;
+              *(undefined1 *)((int)flags + (uint)slot) = 1;
             }
           }
         }
