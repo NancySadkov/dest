@@ -7619,3 +7619,36 @@ function no longer contains any `0x2410` literal, any `(T far *)CONCAT22` build,
 
   grep_checks 40,248 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+#### The tile table is a zero-initialised BSS buffer, not static data
+
+Reading the original's DGROUP at the derived base settles what the "missing symbol" is:
+
+```
+DGROUP link segment 0x2410, file offset = 0x2410*16 - 0xE200 + ofs
+0x91d7 -> file 0x1f0d7
+bytes: 00 00 00 00 ... (64 of them, all zero)
+```
+
+So the region is **uninitialised BSS**, zeroed by the loader and filled at runtime - which is exactly
+why neither the original's symbol table nor ours has a label there, and why `dgroup_data.csv` jumps
+from `cursorRecordFound` at 0x91d6 to nothing.
+
+That makes the fix straightforward rather than blocked: a plain zero-initialised array reproduces the
+bytes exactly, because they are all zero. So
+
+```c
+uint16_t GTileRecords[256];      /* BSS: zero-filled at load, populated at runtime */
+```
+
+and the ~15 sites become `GTileRecords[tileOffset]` instead of
+`*(int *)((uint)tileOffset * 2 + -0x6e29)`.
+
+The one thing to verify before committing that is **DGROUP layout**: adding 512 bytes of BSS must not
+shift any symbol that `diff_dgroup` pairs, since our layout still differs from the original's in 83
+constant-delta runs.  The check is mechanical - add the array, rebuild, and confirm `diff_dgroup` stays
+83 deltas and `compare_state` stays 1,627/0/0; if either moves, the array has to be placed more
+carefully (or the change abandoned).
+
+  grep_checks 40,248 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
