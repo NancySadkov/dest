@@ -1036,30 +1036,33 @@ int __cdecl16far fmMallocRecover(void)
 void __cdecl16far fmFree(void)
 
 {
-  uint16_t *puVar1;
-  int iVar2;
+  /* Re-derived: stops the audio, then walks the StshCtPtr2 chain.  Each node's handle at +0x11
+     (offset) / +0x13 (segment) is freed and cleared, and when that segment equals the current
+     HeapPtr the heap pointer is rewound.  Nodes link through +0x9 / +0xb. */
+  uint16_t *nextSegPtr;
+  int handleSeg;
   far_t handle;
-  uint16_t uStack_6;
-  uint16_t uStack_4;
-  
+  uint16_t cursorOfs;
+  uint16_t cursorSeg;
+
   ovr_fmFreeAudio(1);
-  uStack_4 = StshCtPtr2.seg;
-  uStack_6 = StshCtPtr2.ofs;
-  while (uStack_6 != 0 || uStack_4 != 0) {
-    if (*(int *)(uStack_6 + 0x11) != 0 || *(int *)(uStack_6 + 0x13) != 0) {
-      handle.seg = *(uint16_t *)(uStack_6 + 0x13);
-      handle.ofs = *(uint16_t *)(uStack_6 + 0x11);
+  cursorSeg = StshCtPtr2.seg;
+  cursorOfs = StshCtPtr2.ofs;
+  while (cursorOfs != 0 || cursorSeg != 0) {
+    if ((*(int *)(cursorOfs + 0x11) != 0) || (*(int *)(cursorOfs + 0x13) != 0)) {
+      handle.seg = *(uint16_t *)(cursorOfs + 0x13);
+      handle.ofs = *(uint16_t *)(cursorOfs + 0x11);
       stshFree(handle);
-      iVar2 = *(int *)(uStack_6 + 0x13);
-      *(uint16_t *)(uStack_6 + 0x13) = 0;
-      *(uint16_t *)(uStack_6 + 0x11) = 0;
-      if (HeapPtr == iVar2) {
+      handleSeg = *(int *)(cursorOfs + 0x13);
+      *(uint16_t *)(cursorOfs + 0x13) = 0;
+      *(uint16_t *)(cursorOfs + 0x11) = 0;
+      if (HeapPtr == handleSeg) {
         fmRewindHeapPtr();
       }
     }
-    puVar1 = (uint16_t *)(uStack_6 + 0xb);
-    uStack_6 = *(uint16_t *)(uStack_6 + 9);
-    uStack_4 = *puVar1;
+    nextSegPtr = (uint16_t *)(cursorOfs + 0xb);
+    cursorOfs = *(uint16_t *)(cursorOfs + 9);
+    cursorSeg = *nextSegPtr;
   }
   return;
 }

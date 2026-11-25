@@ -761,30 +761,30 @@ void __cdecl16far
 unit_usesEntities(char state,int entityIndex,uint16_t unitFlags,uint16_t unitFlagsSeg)
 
 {
-  byte *pbVar1;
-  int iVar2;
-  uint16_t uVar3;
-  uint16_t uVar4;
-  
-  pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
-  *pbVar1 = *pbVar1 & 0xf8;
+  /* Re-derived: clears the low three bits of the entity's +0x33 flags byte, then for state 3 sets
+     bit 0 and for state 4 sets bit 1, copies the entity's x/y into targetX/targetY and clears bit
+     2; both then hand off to attact_usesEntities.  State 2 does nothing beyond the clear.  The
+     exported uVar3/uVar4 segment halves were dead. */
+  byte *flagsPtr;
+  uint16_t entY;
+
+  flagsPtr = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
+  *flagsPtr = *flagsPtr & 0xf8;
   if (state != '\x02') {
-    uVar3 = (uint16_t)((ulong)Entities >> 0x10);
     if (state == '\x03') {
-      pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
-      *pbVar1 = *pbVar1 | 1;
+      flagsPtr = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
+      *flagsPtr = *flagsPtr | 1;
       ovr_attact_usesEntities(entityIndex,0,0,unitFlags,unitFlagsSeg,0,0,0,0);
     }
     else if (state == '\x04') {
-      pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
-      *pbVar1 = *pbVar1 | 2;
-      uVar4 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar2 = (int)Entities;
-      uVar3 = ((entity_t *)iVar2)[entityIndex].base.y;
-      ((entity_t *)iVar2)[entityIndex].base.targetX = *(uint16_t *)((entity_t *)iVar2 + entityIndex);
-      ((entity_t *)Entities)[entityIndex].base.targetY = uVar3;
-      pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
-      *pbVar1 = *pbVar1 & 0xfa;
+      flagsPtr = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
+      *flagsPtr = *flagsPtr | 2;
+      entY = ((entity_t *)Entities)[entityIndex].base.y;
+      ((entity_t *)Entities)[entityIndex].base.targetX =
+          ((entity_t *)Entities)[entityIndex].base.x;
+      ((entity_t *)Entities)[entityIndex].base.targetY = entY;
+      flagsPtr = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
+      *flagsPtr = *flagsPtr & 0xfa;
       ovr_attact_usesEntities(entityIndex,0,0,unitFlags,unitFlagsSeg,0,0,0,0);
     }
   }

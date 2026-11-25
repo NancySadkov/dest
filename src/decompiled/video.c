@@ -115,27 +115,29 @@ uint8_t __cdecl16far video_usesMiceUnkState(void)
 void __cdecl16far video_copyScreenTile(uint16_t srcSeg,int x,int y)
 
 {
-  int iVar1;
-  char *pcVar2;
-  uint uStack_8;
-  uint uStack_6;
-  word wStack_4;
-  
-  iVar1 = 0;
-  pcVar2 = (char *)0x0;
-  wStack_4 = 0x140 - x;
-  uStack_6 = 200 - y;
-  if (0x11 < wStack_4) {
-    wStack_4 = 0x11;
+  /* Re-derived: copies an at-most 17x17 tile from srcSeg:(x + y*0x140) to the 0x224a segment,
+     0x11 apart per row, with a 0x140 row stride in the source. */
+  int srcOfs;
+  char *dstOfs;
+  uint width;
+  uint height;
+  uint row;
+
+  srcOfs = 0;
+  dstOfs = (char *)0x0;
+  width = 0x140 - x;
+  height = 200 - y;
+  if (0x11 < width) {
+    width = 0x11;
   }
-  if (0x11 < uStack_6) {
-    uStack_6 = 0x11;
+  if (0x11 < height) {
+    height = 0x11;
   }
-  for (uStack_8 = 0; uStack_8 < uStack_6; uStack_8 = uStack_8 + 1) {
-    memcpy((char *)CONCAT22(0x224a,pcVar2),(char *)CONCAT22(srcSeg,(char *)(x + y * 0x140 + iVar1)),
-           wStack_4);
-    iVar1 = iVar1 + 0x140;
-    pcVar2 = pcVar2 + 0x11;
+  for (row = 0; row < height; row = row + 1) {
+    memcpy((char *)CONCAT22(0x224a,dstOfs),
+           (char *)CONCAT22(srcSeg,(char *)(x + y * 0x140 + srcOfs)),width);
+    srcOfs = srcOfs + 0x140;
+    dstOfs = dstOfs + 0x11;
   }
   return;
 }
