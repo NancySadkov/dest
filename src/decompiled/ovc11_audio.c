@@ -248,7 +248,7 @@ uint __cdecl16far ovr_midGetSequenceStatus_entry(void)
 void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,uint16_t arg4,uint16_t arg5)
 
 {
-  bool bVar1;
+  bool playing;
   uint8_t *puVar2;
   uint16_t uVar3;
   uint16_t uVar4;
@@ -265,15 +265,15 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,uint16_t arg4,uint16_
     }
     else if ((((AudioAssetsReady1 != '\0') && (SfxRunning != '\0')) &&
              ((CurrentlyPlayingSfx == fid ||
-              ((type != 1 || (bVar1 = ovr_digSoundPlaying(), !bVar1)))))) &&
+              ((type != 1 || (playing = ovr_digSoundPlaying(), !playing)))))) &&
             (((CFG_Sfx != '1' && ((CFG_Sfx != '4' && (CFG_Sfx != '9')))) ||
              ((type != 3 && (type != 4)))))) {
       do {
         if (type != 2) break;
-        bVar1 = ovr_digSoundPlaying();
-      } while (bVar1);
-      bVar1 = ovr_digSoundPlaying();
-      if (bVar1) {
+        playing = ovr_digSoundPlaying();
+      } while (playing);
+      playing = ovr_digSoundPlaying();
+      if (playing) {
         ovr_digStopCurrentSound();
       }
       DIG_2410_07a8 = 1;

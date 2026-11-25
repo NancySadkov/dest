@@ -396,7 +396,7 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay)
 
 {
   bool bVar1;
-  bool bVar2;
+  bool housing;
   ulong *puVar3;
   uint16_t uVar4;
   bool bVar5;
@@ -416,8 +416,8 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay)
   GDebug = false;
   do {
     in_stack_0000fff8 = in_stack_0000fff8 & 0xffff0000;
-    bVar2 = ovr_draw_textProvidesMoreHousing();
-  } while (bVar2);
+    housing = ovr_draw_textProvidesMoreHousing();
+  } while (housing);
   do {
     uVar7 = (uint)(in_stack_0000fff8 >> 0x10);
     uVar4 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
@@ -429,9 +429,9 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay)
       ovr_draw_usesBlitLoadRleGfx();
     }
     lVar6 = (ulong)uVar7 << 0x10;
-    bVar2 = ovr_draw_textProvidesMoreHousing();
-    uVar8 = (uint16_t)(CONCAT13(bVar2,(int3)lVar6) >> 0x10);
-    if (bVar2) break;
+    housing = ovr_draw_textProvidesMoreHousing();
+    uVar8 = (uint16_t)(CONCAT13(housing,(int3)lVar6) >> 0x10);
+    if (housing) break;
     in_stack_0000fff8 = CONCAT22(uVar8,(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));
     puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)TextBlitCycle,in_stack_0000fff8,0);
     uVar8 = (uint16_t)(in_stack_0000fff8 >> 0x10);

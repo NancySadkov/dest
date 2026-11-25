@@ -136,7 +136,7 @@ void __cdecl16far stats_drawPortrait(agntG_t *gdata,byte portraitIndex,int palet
 {
   far_t handle;
   far_t handle_00;
-  stg_tmp_t *psVar1;
+  stg_tmp_t *gfxRec;
   uint16_t in_DX;
   agntG_t *paVar2;
   uint16_t uVar3;
@@ -146,21 +146,21 @@ void __cdecl16far stats_drawPortrait(agntG_t *gdata,byte portraitIndex,int palet
   
   handle.seg = talkwin9Cut5Seg;
   handle.ofs = talkwin9Cut5Ofs;
-  psVar1 = ovr_stshLoadGfx(handle);
+  gfxRec = ovr_stshLoadGfx(handle);
   ovr_calcSeasonPalette
-            (psVar1->cmap,in_DX,(uint8_t *)palette,in_stack_0000000c,(char)in_DX,(char)palette);
+            (gfxRec->cmap,in_DX,(uint8_t *)palette,in_stack_0000000c,(char)in_DX,(char)palette);
   uVar3 = (uint16_t)((ulong)gdata >> 0x10);
   paVar2 = (agntG_t *)gdata;
   if (((paVar2->prts + portraitIndex)->ofs != 0 || paVar2->prts[portraitIndex].seg != 0) &&
      ((paVar2->prtpals + portraitIndex)->ofs != 0 || paVar2->prtpals[portraitIndex].seg != 0)) {
     handle_00.seg = paVar2->prtpals[portraitIndex].seg;
     handle_00.ofs = (paVar2->prtpals + portraitIndex)->ofs;
-    psVar1 = ovr_stshLoadGfx(handle_00);
+    gfxRec = ovr_stshLoadGfx(handle_00);
     uVar4 = (undefined1)(in_DX >> 8);
     memcpy((char *)CONCAT22(in_stack_0000000c,(char *)(palette + 3)),
-           (char *)CONCAT13(uVar4,CONCAT12((char)in_DX,psVar1->cmap + 3)),0xed);
+           (char *)CONCAT13(uVar4,CONCAT12((char)in_DX,gfxRec->cmap + 3)),0xed);
     memcpy((char *)CONCAT22(in_stack_0000000c,(char *)(palette + 0x1e0)),
-           (char *)CONCAT13(uVar4,CONCAT12((char)in_DX,psVar1->cmap + 0x1e0)),0x90);
+           (char *)CONCAT13(uVar4,CONCAT12((char)in_DX,gfxRec->cmap + 0x1e0)),0x90);
   }
   if (GameRunning == false) {
     ovr_vgaSetPalette8bit((uint8_t *)palette,in_stack_0000000c);
@@ -1655,7 +1655,7 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
   uint32_t uVar3;
   uint8_t *puVar4;
   char *pcVar5;
-  uint16_t uVar6;
+  uint16_t agntSeg;
   int iVar7;
   uint16_t uVar8;
   uint8_t text;
@@ -1691,27 +1691,27 @@ void __cdecl16far stats_unreadyNotice(byte agnt_id)
   *(byte *)((int)uVar3 + 0x33) = *(byte *)((int)entityFar + 0x33) & 0xfd;
   pcStack_d4 = (char *)((ulong)pcStack_d4 & 0xffff0000);
   drawAgntStats((agnt_t *)&Agnts[agnt_id].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
-  uVar6 = SEG_OF(Agnts);
+  agntSeg = SEG_OF(Agnts);
   entityFar = *(uint32_t far *)&Agnts[agnt_id].entity;
   if ((*(byte *)((int)entityFar + 0x33) & 1) == 0) {
-    uVar6 = SEG_OF(Agnts);
+    agntSeg = SEG_OF(Agnts);
     entityFar = *(uint32_t far *)&Agnts[agnt_id].gdata;
     uVar8 = (uint16_t)((ulong)entityFar >> 0x10);
     iVar7 = (int)entityFar;
     puVar4 = ovr_ovc15_usesStshRealloc
                        ((char *)*(uint16_t *)(iVar7 + 0x24),*(uint16_t *)(iVar7 + 0x26),0,0,0,0,0,0);
     pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x63b1,_SS),
-                           (char *)CONCAT22(puVar4,(char *)0x26510),uVar6);
-    pcStack_d4 = (char *)CONCAT22(text,uVar6);
-    drawString(pcVar5,uVar6,0);
+                           (char *)CONCAT22(puVar4,(char *)0x26510),agntSeg);
+    pcStack_d4 = (char *)CONCAT22(text,agntSeg);
+    drawString(pcVar5,agntSeg,0);
   }
   else {
     pcStack_d4 = (char *)CONCAT22(text,_SS);
     pcVar5 = stats_readyStatusText((byte)&text,pcStack_d4);
     pcVar5 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x63c8,_SS),
-                           (char *)CONCAT22(pcVar5,(char *)0x26510),uVar6);
-    pcStack_d4 = (char *)CONCAT22(text,uVar6);
-    drawString(pcVar5,uVar6,0);
+                           (char *)CONCAT22(pcVar5,(char *)0x26510),agntSeg);
+    pcStack_d4 = (char *)CONCAT22(text,agntSeg);
+    drawString(pcVar5,agntSeg,0);
   }
   return;
 }

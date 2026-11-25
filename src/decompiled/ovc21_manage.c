@@ -799,7 +799,7 @@ uint16_t __cdecl16far alignmentDlg(char_sheet_t *sheet)
   uint16_t widths;
   far_t dst;
   uint8_t done;
-  char *pcVar2;
+  char *inputResult;
   uint uVar3;
   uint16_t uVar4;
   far_t entries;
@@ -812,13 +812,13 @@ uint16_t __cdecl16far alignmentDlg(char_sheet_t *sheet)
   F_SCOPY(far_from_u32((uint32_t)(0x24104a03)),dst);
   do {
     ovr_drawString((char *)"Select an alignment.",0x2410,0x10);
-    pcVar2 = ovr_uiInputText(far_from_u32((uint32_t)(0x24104927)),3,far_from_u32((uint32_t)(0x0)),0x0,0);
-    uVar3 = (uint)pcVar2 & 0xff;
+    inputResult = ovr_uiInputText(far_from_u32((uint32_t)(0x24104927)),3,far_from_u32((uint32_t)(0x0)),0x0,0);
+    uVar3 = (uint)inputResult & 0xff;
     if (uVar3 == 0) {
       return 0;
     }
     uVar4 = (uint16_t)((ulong)sheet >> 0x10);
-    cStack_c = (char)pcVar2;
+    cStack_c = (char)inputResult;
     ((char_sheet_t *)sheet)->alignment = cStack_c - 1;
     pbVar1 = &((char_sheet_t *)sheet)->statMask;
     *pbVar1 = *pbVar1 | 4;
@@ -829,11 +829,11 @@ uint16_t __cdecl16far alignmentDlg(char_sheet_t *sheet)
     ovr_drawString((char *)((far_t *)&GAlignmentString + uVar3)->ofs,widths,(char)widths);
     entries.seg = _SS;
     entries.ofs = (uint16_t)&inputBuf;
-    pcVar2 = ovr_uiInputText(entries,2,far_from_u32((uint32_t)(0x0)),0x0,0);
-    if (((uint)pcVar2 & 0xff) == 0) {
+    inputResult = ovr_uiInputText(entries,2,far_from_u32((uint32_t)(0x0)),0x0,0);
+    if (((uint)inputResult & 0xff) == 0) {
       return 0;
     }
-  } while (((uint)pcVar2 & 0xff) != 1);
+  } while (((uint)inputResult & 0xff) != 1);
   return 1;
 }
 
@@ -2127,7 +2127,7 @@ char * __cdecl16far litoa10(char *buf,long n,uint16_t arg3,uint16_t arg4)
 
 {
   bool bVar1;
-  size_t sVar2;
+  size_t textLen;
   uint16_t len;
   bool bVar3;
   uint32_t digit;
@@ -2150,23 +2150,23 @@ char * __cdecl16far litoa10(char *buf,long n,uint16_t arg3,uint16_t arg4)
   *(char *)CONCAT22((uint16_t)n,buf) = (char)digit + '0';
   buf[1] = '\0';
   while (lVar4 = LDIV_at_(dividend,10), lVar4 != 0) {
-    sVar2 = strlen((char *)CONCAT22((uint16_t)n,buf));
-    if ((sVar2 & 3) == 3) {
-      len = strlen((char *)CONCAT22((uint16_t)n,buf));
+    textLen = strlen((char *)CONCAT22((uint16_t)n,buf));
+    if ((textLen & 3) == 3) {
+      textLen = strlen((char *)CONCAT22((uint16_t)n,buf));
       _fmemmove((char *)CONCAT22((uint16_t)n,buf + 1),(char *)CONCAT22((uint16_t)n,buf),len + 1)
       ;
       *(char *)CONCAT22((uint16_t)n,buf) = ',';
     }
-    sVar2 = strlen((char *)CONCAT22((uint16_t)n,buf));
-    _fmemmove((char *)CONCAT22((uint16_t)n,buf + 1),(char *)CONCAT22((uint16_t)n,buf),sVar2 + 1)
+    textLen = strlen((char *)CONCAT22((uint16_t)n,buf));
+    _fmemmove((char *)CONCAT22((uint16_t)n,buf + 1),(char *)CONCAT22((uint16_t)n,buf),len + 1)
     ;
     dividend = LDIV_at_(dividend,10);
     lVar4 = LMOD_at_(dividend,10);
     *(char *)CONCAT22((uint16_t)n,buf) = (char)lVar4 + '0';
   }
   if (bVar1) {
-    sVar2 = strlen((char *)CONCAT22((uint16_t)n,buf));
-    _fmemmove((char *)CONCAT22((uint16_t)n,buf + 1),(char *)CONCAT22((uint16_t)n,buf),sVar2 + 1)
+    textLen = strlen((char *)CONCAT22((uint16_t)n,buf));
+    _fmemmove((char *)CONCAT22((uint16_t)n,buf + 1),(char *)CONCAT22((uint16_t)n,buf),len + 1)
     ;
     *(char *)CONCAT22((uint16_t)n,buf) = '-';
   }

@@ -1339,7 +1339,7 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
 {
   bool bVar1;
   uint uVar2;
-  uint16_t uVar3;
+  uint16_t randPick;
   char *pcVar4;
   entity_t *peVar5;
   agntG_t *paVar6;
@@ -1424,18 +1424,18 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
       }
     }
     else {
-      uVar3 = ovr_randBelow(2,0);
-      agntCopy.animVariant = (uint8_t)uVar3;
+      randPick = ovr_randBelow(2,0);
+      agntCopy.animVariant = (uint8_t)randPick;
     }
-    uVar3 = ovr_randBelow(2,0);
-    (*(uint8_t *)((uint8_t *)&(agntCopy.targetX))) = (char)uVar3 * '\x02' + -1;
+    randPick = ovr_randBelow(2,0);
+    (*(uint8_t *)((uint8_t *)&(agntCopy.targetX))) = (char)randPick * '\x02' + -1;
     if ((char)agntCopy.targetX < '\x01') {
       if ((char)agntCopy.targetX < '\0') {
         agntCopy.level = 0x1;
       }
       else {
-        uVar3 = ovr_randBelow(2,0);
-        agntCopy.level = (uint8_t)uVar3;
+        randPick = ovr_randBelow(2,0);
+        agntCopy.level = (uint8_t)randPick;
       }
     }
     else {

@@ -24,7 +24,7 @@ int __cdecl16far ovc39_loadArchiveEntry(byte fileId)
   bool bVar6;
   word wStack_e;
   int iStack_c;
-  char *pcStack_a;
+  char *buf;
   stg_tmp_t *psStack_8;
   
   if (fileId < 0x22) {
@@ -43,16 +43,16 @@ int __cdecl16far ovc39_loadArchiveEntry(byte fileId)
       iStack_c = iStack_c + (uint)bVar6;
     }
     psStack_8 = psVar2;
-    pcStack_a = ovr_stshAlloc(CONCAT22(iStack_c,wStack_e));
-    memcpy((char *)CONCAT22(psStack_8,pcStack_a),(char *)CONCAT22(uVar3,psVar2),wStack_e);
+    buf = ovr_stshAlloc(CONCAT22(iStack_c,wStack_e));
+    memcpy((char *)CONCAT22(psStack_8,buf),(char *)CONCAT22(uVar3,psVar2),wStack_e);
   }
   else {
-    pcStack_a = ovr_stshAlloc(1);
+    buf = ovr_stshAlloc(1);
     wStack_e = 1;
     psStack_8 = in_DX;
   }
-  pcStack_a[wStack_e - 1] = '\0';
-  return (int)pcStack_a;
+  buf[wStack_e - 1] = '\0';
+  return (int)buf;
 }
 
 
