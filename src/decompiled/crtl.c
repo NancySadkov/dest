@@ -48,6 +48,13 @@ void st_fix_far_tables(void)
   fixFarTable(ManageResultPtrs, 5);
   fixFarTable(LevelBandLabels, 20);
   fixFarTable(LevelRangeLabels, 4);
+  /* The initialiser carries the original image's offsets (0x54BF..); the
+     rebuild's copies of those strings live elsewhere, so address them by
+     symbol.  Entry 3 is { 0, 0 } in the original and stays null. */
+  LevelRangeLabels[0].ofs = (uint16_t)&s_levels_6_8c_2410_54bf;
+  LevelRangeLabels[1].ofs = (uint16_t)&s_levels_8d_8h_2410_54cb;
+  LevelRangeLabels[2].ofs = (uint16_t)&s_levels_8i_8k_2410_54d8;
+
   fixFarTable(RampTables, 7);
   fixFarTable(GStrangeTable, 98);
   fixFarTable(GSeasonNames, 3);
