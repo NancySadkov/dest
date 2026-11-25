@@ -979,7 +979,7 @@ char * __cdecl16far chargen_switch(uint16_t index)
   char *unaff_SI;
   char *unaff_DI;
   uint16_t unaff_ES;
-  uint32_t uVar28;
+  uint32_t packed;
   uint16_t uVar29;
   char *in_stack_00000000;
   agnt_t *paStack0008;
@@ -1211,25 +1211,25 @@ char * __cdecl16far chargen_switch(uint16_t index)
                       (uint16_t)((ulong)in_stack_00000000 >> 0x10));
     index = (uint16_t)CONCAT22(uVar13,puVar17);   /* hand fix: 16-bit slot keeps the offset */
     if ((char)*(uint8_t *)(uint)index == '\0') {   /* hand fix: deref the offset */
-      uVar28 = CONCAT22((int)((ulong)in_stack_00000000 >> 0x10),*(uint16_t *)((int)puVar17 + 7));
+      packed = CONCAT22((int)((ulong)in_stack_00000000 >> 0x10),*(uint16_t *)((int)puVar17 + 7));
       uVar26 = uVar13;
-      pfVar18 = fmMalloc((far_t *)*(uint16_t *)((int)puVar17 + 5),uVar28);
+      pfVar18 = fmMalloc((far_t *)*(uint16_t *)((int)puVar17 + 5),packed);
       uVar25 = SUB21(pfVar18,0);
       uVar32 = (undefined1)((uint)pfVar18 >> 8);
       if (pfVar18 == (far_t far *)0x0 && uVar26 == 0) {
         puVar17 = (uint32_t *)0x0;
       }
       else {
-        uVar29 = (uint16_t)(uVar28 >> 0x10);
+        uVar29 = (uint16_t)(packed >> 0x10);
         if (*(int *)((int)puVar17 + 0x11) == 0 && *(int *)((int)puVar17 + 0x13) == 0) {
           stshSeek(StshStrongDatHnd,
                    CONCAT22(*(uint16_t *)((int)puVar17 + 3),*(uint16_t *)((int)puVar17 + 1)));
           uVar33 = 0xfd;
           uVar34 = 0x83;
           stshRead();
-          uVar28 = CONCAT22(uVar29,*(uint16_t *)((int)puVar17 + 7));
-          pfVar18 = ovr_heapMalloc((far_t far *)*(uint16_t *)((int)puVar17 + 5),uVar28);
-          uVar29 = (uint16_t)(uVar28 >> 0x10);
+          packed = CONCAT22(uVar29,*(uint16_t *)((int)puVar17 + 7));
+          pfVar18 = ovr_heapMalloc((far_t far *)*(uint16_t *)((int)puVar17 + 5),packed);
+          uVar29 = (uint16_t)(packed >> 0x10);
           *(uint16_t *)((int)puVar17 + 0x13) = uVar26;
           *(uint16_t *)((int)puVar17 + 0x11) =(uint16_t)( pfVar18);
           if (*(int *)((int)puVar17 + 0x11) == 0 && *(int *)((int)puVar17 + 0x13) == 0) {

@@ -42,7 +42,7 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
   byte extraout_AH;
   uint uVar3;
   size_t sVar4;
-  char *pcVar5;
+  char *capText;
   undefined1 extraout_AH_00;
   undefined1 extraout_AH_01;
   undefined1 uVar6;
@@ -96,17 +96,17 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
       if (cStack_4 == '\0') {
         uVar8 = (ulong)CONCAT12(formatIndex,_SS);
         puVar7 = &text;
-        pcVar5 = ovr_ovc15_capitalize((char *)&text2);
+        capText = ovr_ovc15_capitalize((char *)&text2);
         ovr_ovc40_usesAlignToSeg
-                  ('\0',pcVar5,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)uVar8,(byte)(uVar8 >> 0x10),0,0,0,0);
+                  ('\0',capText,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)uVar8,(byte)(uVar8 >> 0x10),0,0,0,0);
         uVar6 = extraout_AH_01;
       }
       else {
         uVar8 = (ulong)CONCAT12(formatIndex,_SS);
         puVar7 = &text;
-        pcVar5 = ovr_ovc15_capitalize((char *)&text2);
+        capText = ovr_ovc15_capitalize((char *)&text2);
         ovr_ovc40_usesAlignToSeg
-                  ('\x02',pcVar5,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)uVar8,(byte)(uVar8 >> 0x10),0,0,0,0);
+                  ('\x02',capText,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)uVar8,(byte)(uVar8 >> 0x10),0,0,0,0);
         uVar6 = extraout_AH_00;
       }
       if (cStack_4 != '\0') {
@@ -379,7 +379,7 @@ void __cdecl16far updSeason(void)
   char snames [12];
   uint8_t text;
   uint8_t seaon2;
-  stg_tmp_t *psStack_8;
+  stg_tmp_t *gfxRec;
   char *pcStack_6;
   uint8_t s;
   uint8_t season;
@@ -413,8 +413,8 @@ void __cdecl16far updSeason(void)
     }
     handle.seg = Lbm_nwpanel1.seg;
     handle.ofs = Lbm_nwpanel1.ofs;
-    psStack_8 = ovr_stshLoadGfx(handle);
-    calcSeasonPalette(psStack_8->cmap,(uint16_t)in_DX,palette,(uint16_t)_SS,0,0);
+    gfxRec = ovr_stshLoadGfx(handle);
+    calcSeasonPalette(gfxRec->cmap,(uint16_t)in_DX,palette,(uint16_t)_SS,0,0);
     palette_00.seg = (uint16_t)_SS;
     palette_00.ofs = (uint16_t)palette;
     ovr_ovc40_usesVgaSetPalette8bit(palette_00);
@@ -435,9 +435,9 @@ void __cdecl16far updSeason(void)
     }
     handle_00.seg = Lbm_nwpanel1.seg;
     handle_00.ofs = Lbm_nwpanel1.ofs;
-    psStack_8 = ovr_stshLoadGfx(handle_00);
+    gfxRec = ovr_stshLoadGfx(handle_00);
     pcStack_6 = in_DX;
-    calcSeasonPalette(psStack_8->cmap,(uint16_t)in_DX,palette,(uint16_t)_SS,0,0);
+    calcSeasonPalette(gfxRec->cmap,(uint16_t)in_DX,palette,(uint16_t)_SS,0,0);
     palette_01.seg = (uint16_t)_SS;
     palette_01.ofs = (uint16_t)palette;
     ovr_setSeasonPalette(palette_01);

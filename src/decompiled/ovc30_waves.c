@@ -407,20 +407,20 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
 void __cdecl16far ovc30_usesRandBelow2(int centerX,int centerY,uint16_t arg3)
 
 {
-  uint16_t uVar1;
+  uint16_t randPick;
   uint uVar2;
   int iVar3;
   int iStack_6;
   
   for (iStack_6 = -0xc; iStack_6 < 0xd; iStack_6 = iStack_6 + 1) {
     for (iVar3 = -8; iVar3 < 9; iVar3 = iVar3 + 1) {
-      uVar1 = ovr_randBelow(2,0);
-      if ((uVar1 & 0xff) == 0) {
+      randPick = ovr_randBelow(2,0);
+      if ((randPick & 0xff) == 0) {
         uVar2 = ovr_ovc45_compute4(centerX + iStack_6,centerY + iVar3,0);
         if ((char)uVar2 != '\0') {
-          uVar1 = ovr_randBelow(9,0);
+          randPick = ovr_randBelow(9,0);
           (*(short (*) [148] [60])GUnitGrid)[centerX + iStack_6][centerY + iVar3] =
-               (uVar1 & 0xff) + 0xef;
+               (randPick & 0xff) + 0xef;
         }
       }
     }

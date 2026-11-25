@@ -308,7 +308,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   far_t dst_01;
   far_t handle;
   far_t handle_00;
-  byte bVar1;
+  byte mouseStatus;
   char *textPtr;
   undefined1 extraout_AH;
   uint16_t uVar3;
@@ -386,8 +386,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   do {
     type = SUB21(_SS,0);
     uVar13 = (undefined1)((uint)_SS >> 8);
-    bVar1 = ovr_init2_usesCFGMice((uint16_t *)&mouseX,0,0);
-  } while (CONCAT11(extraout_AH,bVar1) != 0);
+    mouseStatus = ovr_init2_usesCFGMice((uint16_t *)&mouseX,0,0);
+  } while (CONCAT11(extraout_AH,mouseStatus) != 0);
   while (uVar3 = ovr_biosKeyAvail(), (char)uVar3 != '\0') {
     ovr_gameProcessKey();
   }
@@ -451,8 +451,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   if ((((0xb < (int)pbStack_1c) && ((int)pbStack_1c < 0xdf)) && (6 < (int)pbStack_1e)) &&
      ((int)pbStack_1e < 0x97)) {
     do {
-      bVar1 = ovr_init2_usesCFGMice((uint16_t *)&mouseX,0,0);
-    } while (CONCAT11(extraout_AH_00,bVar1) != 0);
+      mouseStatus = ovr_init2_usesCFGMice((uint16_t *)&mouseX,0,0);
+    } while (CONCAT11(extraout_AH_00,mouseStatus) != 0);
     pbStack_26 = (byte *)0xffff;
     pbStack_28 = (byte *)0xffff;
     pbStack_20 = pbStack_1e;

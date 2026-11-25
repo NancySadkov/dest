@@ -180,7 +180,7 @@ void __cdecl16far stats_drawPortrait(agntG_t *gdata,byte portraitIndex,int palet
 char * __cdecl16far agntCopyNthField(uint8_t filed_index,char *dst,char *src)
 
 {
-  int iVar1;
+  int packed;
   char *pcVar2;
   bool bVar3;
   uint16_t len;
@@ -190,25 +190,25 @@ char * __cdecl16far agntCopyNthField(uint8_t filed_index,char *dst,char *src)
   uint8_t j;
   uint8_t found;
   
-  iVar1 = CONCAT11(in_stack_00000007,filed_index);
+  packed = CONCAT11(in_stack_00000007,filed_index);
   j = 0x0;
   bVar3 = false;
   i = 0;
   while( true ) {
-    in_stack_00000007 = (undefined1)((uint)iVar1 >> 8);
-    filed_index = (uint8_t)iVar1;
+    in_stack_00000007 = (undefined1)((uint)packed >> 8);
+    filed_index = (uint8_t)packed;
     pcVar2 = (char *)src;
     len = strlen((char *)CONCAT22(pcVar2,(*(uint16_t *)((uint8_t *)&(dst) + 2))));
-    iVar1 = CONCAT11(in_stack_00000007,filed_index);
+    packed = CONCAT11(in_stack_00000007,filed_index);
     if (len <= i) break;
     if ((*(char *)((int)*(uint16_t *)((uint8_t *)&(dst) + 2) + i)) == ',') {
       j = j + 0x1;
-      iVar1 = CONCAT11(in_stack_00000007,filed_index);
+      packed = CONCAT11(in_stack_00000007,filed_index);
       if (bVar3) break;
     }
     else if (j == in_stack_00000004) {
       *(char *)((int)*(uint16_t *)((uint8_t *)&(dst) + 2) + (int)(char)CONCAT11(in_stack_00000007,filed_index)) = (*(char *)((int)*(uint16_t *)((uint8_t *)&(dst) + 2) + i));
-      iVar1 = CONCAT11(in_stack_00000007,filed_index) + 1;
+      packed = CONCAT11(in_stack_00000007,filed_index) + 1;
       bVar3 = true;
     }
     i = i + 1;
@@ -1139,7 +1139,7 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,uint16_t arg3)
   far_t ringValue;
   far_t palette;
   char cVar3;
-  byte bVar4;
+  byte value;
   undefined1 uVar5;
   char *textPtr;
   uint uVar7;
@@ -1346,8 +1346,8 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,uint16_t arg3)
       uVar25 = 0xe0;
       uVar23 = 0xde;
       fontOfs = Font02.ofs;
-      bVar4 = stats_compute2((agnt_t *)CONCAT22(cmap.ofs,agnt));
-      textPtr = ovr_manage_compute1((uint)bVar4,0);
+      value = stats_compute2((agnt_t *)CONCAT22(cmap.ofs,agnt));
+      textPtr = ovr_manage_compute1((uint)value,0);
       uVar14 = SUB21(textPtr,0);
       nameOfs = in_DX;
       uVar5 = stats_compute2((agnt_t *)CONCAT13(segHi,CONCAT12(uVar5,agnt)));
@@ -1361,8 +1361,8 @@ void __cdecl16far drawAgntStats(agnt_t *agnt,far_t cmap,uint16_t arg3)
       fontOfs = Font02.ofs;
       cVar3 = stats_compute1((agnt_t *)CONCAT22(cmap.ofs,agnt));
       iVar10 = (int)cVar3;
-      bVar4 = stats_compute2((agnt_t *)CONCAT13(segHi,CONCAT12(uVar5,agnt)));
-      textPtr = ovr_manage_compute1((uint)bVar4,iVar10);
+      value = stats_compute2((agnt_t *)CONCAT13(segHi,CONCAT12(uVar5,agnt)));
+      textPtr = ovr_manage_compute1((uint)value,iVar10);
       uVar16 = SUB21(in_DX,0);
       uVar14 = SUB21(textPtr,0);
       uVar5 = stats_compute2((agnt_t *)CONCAT13(segHi,CONCAT12(uVar5,agnt)));
@@ -1586,7 +1586,7 @@ char * __cdecl16far stats_readyStatusText(byte agntIndex,char *text)
   uint32_t uVar1;
   uint8_t *puVar2;
   char *pcVar3;
-  uint16_t uVar4;
+  uint16_t agntSeg;
   int iVar5;
   uint16_t uVar6;
   byte in_stack_00000004;
@@ -1594,24 +1594,24 @@ char * __cdecl16far stats_readyStatusText(byte agntIndex,char *text)
   
   uVar1 = *(uint32_t far *)&Agnts[in_stack_00000004].entity;
   if ((*(byte *)((int)uVar1 + 0x33) & 1) == 0) {
-    uVar4 = SEG_OF(Agnts);
+    agntSeg = SEG_OF(Agnts);
     uVar1 = *(uint32_t far *)&Agnts[in_stack_00000004].gdata;
     uVar6 = (uint16_t)((ulong)uVar1 >> 0x10);
     iVar5 = (int)uVar1;
     puVar2 = ovr_ovc15_usesStshRealloc
                        ((char *)*(uint16_t *)(iVar5 + 0x24),*(uint16_t *)(iVar5 + 0x26),0,0,0,0,0,0);
     pcVar3 = ovr_stsprintf(agntIndex,(char *)CONCAT22(0x638d,(char *)text),
-                           (char *)CONCAT22(puVar2,(char *)0x26510),uVar4);
+                           (char *)CONCAT22(puVar2,(char *)0x26510),agntSeg);
   }
   else {
-    uVar4 = SEG_OF(Agnts);
+    agntSeg = SEG_OF(Agnts);
     uVar1 = *(uint32_t far *)&Agnts[in_stack_00000004].gdata;
     uVar6 = (uint16_t)((ulong)uVar1 >> 0x10);
     iVar5 = (int)uVar1;
     puVar2 = ovr_ovc15_usesStshRealloc
                        ((char *)*(uint16_t *)(iVar5 + 0x24),*(uint16_t *)(iVar5 + 0x26),0,0,0,0,0,0);
     pcVar3 = ovr_stsprintf(agntIndex,(char *)CONCAT22(0x63a2,(char *)text),
-                           (char *)CONCAT22(puVar2,(char *)0x26510),uVar4);
+                           (char *)CONCAT22(puVar2,(char *)0x26510),agntSeg);
   }
   return pcVar3;
 }
