@@ -3289,7 +3289,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
   char cStack_1a;
   char cStack_19;
   char cStack_18;
-  uint8_t uStack_17;
+  uint8_t changedFlag;
   int iStack_16;
   int iStack_14;
   int iStack_12;
@@ -3508,7 +3508,7 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
       *(undefined1 *)&(peVar15->base).state = 0;
     }
 L_attact_3f0b_1082_1477:
-    uStack_17 = 0x1;
+    changedFlag = 0x1;
     uVar6 = ovr_alignUp4((((entity_t *)peStack_1e)->base).destX,0,0);
     aligned = ovr_alignUp4((peStack_1e->base).x,0,0);
     if (uVar6 == aligned) {
@@ -3622,9 +3622,9 @@ L_attact_3f0b_1082_1477:
         if (DebugVerbose != false) {
           printf("%d %d %d  \r");
         }
-        ovr_ovc24_removeOtherEntities(&uStack_17);
+        ovr_ovc24_removeOtherEntities(&changedFlag);
         GGameState = 0x1f;
-        if (uStack_17 != 0x0) {
+        if (changedFlag != 0x0) {
           ovr_constr_usesBlitRect();
           GGameState = 0x13;
         }
@@ -3680,7 +3680,7 @@ L_attact_3f0b_1082_1477:
       if ((iStack_12 == 0) || (cVar4 = sub_OVC21_manage_c_23C2(), cVar4 != '\0')) {
         uVar6 = ovr_ovc26_usesStExit((int)count);
         if ((char)uVar6 == '\0') {
-          uVar6 = ovr_ovc26_usesRandBelow((int)count,(uint16_t)&uStack_17);
+          uVar6 = ovr_ovc26_usesRandBelow((int)count,(uint16_t)&changedFlag);
           if (((uVar6 & 0xff) == 0) &&
              (AgntGs[(uint)(((entity_t *)peStack_1e)->base).gindex].ai == '\0')) {
             manage_usesCurSfxType32();

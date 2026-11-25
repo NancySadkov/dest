@@ -450,7 +450,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
   byte *pbStack_18;
   uint uStack_16;
   uint uStack_14;
-  uint uStack_12;
+  uint sampleHi;
   uint16_t uStack_10;
   uint16_t fileIdx;
   uint uStack_c;
@@ -857,8 +857,8 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                         pbStack_18 = psVar9->cmap + (int)pbStack_18;
                         psVar9 = (stg_tmp_t *)(row + (int)retStorage);
                         if ((int)puStack_1c <= (int)psVar9) {
-                          psVar9 = memcpy((char *)CONCAT13((char)(uStack_12 >> 8),
-                                                           CONCAT12((char)uStack_12,uStack_14)),
+                          psVar9 = memcpy((char *)CONCAT13((char)(sampleHi >> 8),
+                                                           CONCAT12((char)sampleHi,uStack_14)),
                                           (char *)CONCAT13((char)((uint)_SS >> 8),
                                                            CONCAT12((char)_SS,
                                                                     auStackY_160 + uStack_c)),
@@ -1017,7 +1017,7 @@ switchD_3000_4a6e_caseD_3:
       sample = ovr_constr_usesSmoothPrev(uStack_24,0,0,0,0);
       uStack_10 = sample / 3;
       sample = ovr_constr_usesSmoothPrev(uStack_24 + 1,0,0,0,0);
-      uStack_12 = sample / 3;
+      sampleHi = sample / 3;
       psVar9 = (stg_tmp_t *)constr_getFlagsAtOffset(uStack_24,-1);
       bStack_2b = (byte)psVar9;
       if (((uint)psVar9 & 4) != 0) break;
@@ -1104,7 +1104,7 @@ bad_lbm:
     }
   }
   else {
-    if ((uStack_20 == uStack_10) && (uStack_22 == uStack_12)) {
+    if ((uStack_20 == uStack_10) && (uStack_22 == sampleHi)) {
       if (cStack_2c != '\0') {
         ovr_stshRead();
         puStack_1c = ovr_be4(puStack_2a);

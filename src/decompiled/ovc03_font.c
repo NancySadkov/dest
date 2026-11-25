@@ -460,7 +460,7 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay)
   uint16_t uVar4;
   undefined1 extraout_AH;
   undefined1 uVar5;
-  undefined1 uStack_3;
+  undefined1 housing;
   
   rightButtonLatch = 0;
   uVar3 = ovr_ovr_midGetSequenceStatus_entry();
@@ -490,14 +490,14 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay)
         InputEventTime.lo = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
         ovr_draw_usesBlitLoadRleGfx();
       }
-      uStack_3 = ovr_draw_textProvidesMoreHousing();
-      uVar3 = CONCAT11(extraout_AH,uStack_3);
-    } while (!(bool)uStack_3);
+      housing = ovr_draw_textProvidesMoreHousing();
+      uVar3 = CONCAT11(extraout_AH,housing);
+    } while (!(bool)housing);
     uVar5 = (undefined1)(uVar3 >> 8);
     if (bVar1) {
       ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0);
     }
-    uVar3 = CONCAT11(uVar5,uStack_3);
+    uVar3 = CONCAT11(uVar5,housing);
   }
   return uVar3;
 }

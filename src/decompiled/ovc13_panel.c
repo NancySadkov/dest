@@ -805,7 +805,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   uint flags;
   int spanH;
   int spanX;
-  uint16_t uStack_22;
+  uint16_t blitSeg;
   int iStack_20;
   int iStack_1e;
   int iStack_1c;
@@ -837,7 +837,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   if (0x3a < Seed_2000_d10e + 0x2fU) {
     Seed_2000_d10e = 0xb;
   }
-  uStack_22 = BlitRects[0].seg;
+  blitSeg = BlitRects[0].seg;
   iStack_18 = 7;
   for (iStack_16 = 0; iStack_16 < 0x30; iStack_16 = iStack_16 + 1) {
     iVar8 = 0xc;
@@ -880,7 +880,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
       if ((flags & 4) == 0) {
         (*(uint8_t *)((uint8_t *)&(iStack_1e))) = (uint8_t)iStack_20;
         cornerC_00 = (uint8_t)iStack_1e;
-        uVar11 = uStack_22;
+        uVar11 = blitSeg;
         iStack_20 = (int)(char)cornerC;
         iStack_1e = iVar1;
         uVar4 = ovr_constr_compute1(uVar3,cornerB,cornerC_00,(byte)flags,1,0,0,0);
@@ -889,7 +889,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
         ovr_driver_compute4(iVar8,(byte)iStack_18,(uint8_t)uVar4,uVar3,uVar11);
       }
       else {
-        uVar11 = uStack_22;
+        uVar11 = blitSeg;
         iStack_20 = (int)(char)cornerC;
         uVar4 = ovr_constr_compute1(uVar3,cornerB,cornerC,(byte)flags,2,0,0,0);
         uVar3 = (uint8_t)uVar4;
@@ -897,7 +897,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
         ovr_driver_compute3(iVar8,(byte)iStack_18,(uint8_t)uVar4,uVar3,uVar11);
       }
       if (((flags | uStack_2a) & 0xc000) != 0) {
-        ovc13_compute2(iVar8,iStack_18,(byte)(uStack_2a >> 0xe),(byte)(flags >> 0xe),uStack_22);
+        ovc13_compute2(iVar8,iStack_18,(byte)(uStack_2a >> 0xe),(byte)(flags >> 0xe),blitSeg);
       }
       iVar8 = iVar8 + 2;
     }

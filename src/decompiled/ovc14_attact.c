@@ -913,7 +913,7 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force)
   uint8_t msg;
   uint uStack_6;
   byte bStack_4;
-  byte bStack_3;
+  byte entryIdx;
   
   if ((itemIndex < 5) &&
      ((uStack_6 = (uint)((uint8_t *)menuItemRow)[itemIndex], force != 0 ||
@@ -936,14 +936,14 @@ void __cdecl16far attact_updateAttractEntry(int itemIndex,int force)
           uStack_6 = uVar2;
         }
         uVar4 = _DS;
-        bStack_3 = *(byte *)((int)*(uint32_t *)((uint)bStack_4 << 2) + 0x2f);
-        if (bStack_3 != 0xff) {
+        entryIdx = *(byte *)((int)*(uint32_t *)((uint)bStack_4 << 2) + 0x2f);
+        if (entryIdx != 0xff) {
           uVar3 = ovr_ovc41_pluralSuffix(uStack_6,0xa000);
           dst = 0x2410;
           txt = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x921,_SS),
                               (char *)CONCAT22(uStack_6,(char *)0x26510),callResultTemp,
-                              *(uint16_t *)((uint)bStack_3 * 4 + 0x13f),
-                              *(uint16_t *)((uint)bStack_3 * 4 + 0x141),uVar3,uVar4);
+                              *(uint16_t *)((uint)entryIdx * 4 + 0x13f),
+                              *(uint16_t *)((uint)entryIdx * 4 + 0x141),uVar3,uVar4);
           ovr_drawTextAt(txt,dst,0);
         }
       }

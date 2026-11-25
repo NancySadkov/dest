@@ -480,7 +480,7 @@ void __cdecl16far constr_usesAgnt_clear(void)
   int smoothTR;
   int smoothTL;
   int iStack_1c;
-  int iStack_1a;
+  int cornerBLval;
   uint8_t shades;
   byte abStack_17 [5];
   int seedOffset;
@@ -888,20 +888,20 @@ void __cdecl16far constr_usesAgnt_clear(void)
     {
       if ((0xb < *(int *)(&mapSquareRightX[sq])) && (*(int *)(&mapSquareLeftX[sq]) < 0xdf)) {
         sqCol = *(uint16_t *)(&mapSquareColumn[sq]);
-        iStack_1a = constr_usesSmoothPrev(sqCol,-1,(int *)&cornerBL,0xff,(char)&cornerBL);
+        cornerBLval = constr_usesSmoothPrev(sqCol,-1,(int *)&cornerBL,0xff,(char)&cornerBL);
         iStack_1c = constr_usesSmoothPrev(sqCol + 1,-1,(int *)&cornerBR,0xff,(char)&cornerBR);
         uVar4 = constr_getFlagsAtOffset(sqCol,-1);
         bStack_b = (byte)uVar4;
-        iVar8 = ScreenOriginY[0] - iStack_1a;
+        iVar8 = ScreenOriginY[0] - cornerBLval;
         sqRight2 = *(int *)(&mapSquareRightX[sq]);
         sqRight = *(int *)(&mapSquareLeftX[sq]);
         for (drawX = *(int *)(&mapSquareLeftX[sq]); drawX <= *(int *)(&mapSquareRightX[sq]);
             drawX = drawX + 1) {
           if ((0xb < drawX) && (drawX < 0xdf)) {
             *(int *)((drawX + -0xc) * 2 + 0x34c) =
-                 iVar8 + ((iStack_1a - iStack_1c) * (drawX - *(int *)(&mapSquareLeftX[sq]))) /
+                 iVar8 + ((cornerBLval - iStack_1c) * (drawX - *(int *)(&mapSquareLeftX[sq]))) /
                          (row - sqRight);
-            *(int *)((drawX + -0xc) * 2 + 0x1a6) = -(iStack_1a - iStack_1c);
+            *(int *)((drawX + -0xc) * 2 + 0x1a6) = -(cornerBLval - iStack_1c);
             if ((uVar4 & 3) == 0) {
               *(uint16_t *)((drawX + -0xc) * 2) = 1;
             }

@@ -527,9 +527,9 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
   uint uStack_16;
   int iStack_14;
   uint uStack_12;
-  int iStack_10;
+  int rectLeft;
   char *pcStack_e;
-  uint uStack_c;
+  uint spanH;
   uint uStack_a;
   uint uStack_8;
   far_t *pfStack_6;
@@ -547,7 +547,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
                     /* WARNING: Subroutine does not return */
       ovr_stExit(0x1a);
     }
-    iStack_10 = *rectOfs;
+    rectLeft = *rectOfs;
     uVar4 = (uint16_t)((ulong)rectOfs >> 0x10);
     uStack_12 = rectOfs[1];
     iStack_14 = rectOfs[2];
@@ -560,9 +560,9 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
     }
     x = x - uVar1;
     uVar1 = y - ((int)((uint)(byte)flip * *(int *)(gfx.ofs + 3)) >> 4);
-    if (x < iStack_10) {
-      uStack_a = iStack_10 - x;
-      pcStack_e = (char *)iStack_10;
+    if (x < rectLeft) {
+      uStack_a = rectLeft - x;
+      pcStack_e = (char *)rectLeft;
       if (*(uint *)(gfx.ofs + 10) <= uStack_a) {
         return;
       }
@@ -571,8 +571,8 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
       pcStack_e = (char *)x;
       uStack_a = 0;
     }
-    uStack_c = (iStack_14 - (int)pcStack_e) + 1;
-    if (0 < (int)uStack_c) {
+    spanH = (iStack_14 - (int)pcStack_e) + 1;
+    if (0 < (int)spanH) {
       pcStack_1a = (char *)((int)pcStack_e + uVar1 * 0x140);
       pcStack_18 = (char *)rectOfs[4];
       uVar3 = 1;
@@ -598,7 +598,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
                          *(int *)(gfx.ofs + 10) - uStack_a);
               uVar5 = 0x22a6;
               ovr_masked_memcpy(pcStack_1a,(char *)CONCAT22(&skip,pcStack_18),_SS,uStack_a,
-                                *(int *)(gfx.ofs + 10),uStack_c,
+                                *(int *)(gfx.ofs + 10),spanH,
                                 *(uint16_t *)((uint)(byte)flip * 2 + 0x470));
             }
             pcStack_1a = pcStack_1a + 0x140;
@@ -627,7 +627,7 @@ void __cdecl16far gfxRlePrepare(far_t gfx,int x,int y,int *rectOfs,char scale,ch
               in_stack_00000018 = in_stack_00000018 + (*(char *)(gfx.ofs + 10) - (char)uStack_a);
               uVar5 = 0x22a6;
               ovr_masked_memcpy(pcStack_1a,(char *)CONCAT22(&skip,pcStack_18),_SS,uStack_a,
-                                *(int *)(gfx.ofs + 10),uStack_c,
+                                *(int *)(gfx.ofs + 10),spanH,
                                 *(uint16_t *)((uint)(byte)flip * 2 + 0x470));
             }
             pcStack_1a = pcStack_1a + 0x140;
