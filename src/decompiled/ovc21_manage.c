@@ -1695,7 +1695,7 @@ char_sheet_t * __cdecl16far chargen(void)
   int statIdx;
   uint choice;
   char *pcStack_e;
-  uint16_t uStack_c;
+  uint16_t widSeg;
   uint8_t keepDiscard;
   
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
@@ -1834,7 +1834,7 @@ L_chargen_1661:
           do {
             manage_blitTalkWindow();
             ovr_drawString((char *)"Select the character\'s name.",0x2410,0x10);
-            while (pcStack_e = ovr_uiReadString((char *)0x0,0,6,(char *)0x0,0,0), uStack_c = widths,
+            while (pcStack_e = ovr_uiReadString((char *)0x0,0,6,(char *)0x0,0,0), widSeg = widths,
                   pcStack_e == (char *)0x0 && widths == 0) {
               if (inputCancelled != '\0') {
                 if (UserWantsExit == '\0') goto L_chargen_1661;
@@ -1845,11 +1845,11 @@ L_chargen_1661:
               ;
             }
             ovr_drawString((char *)0x28c75,0x2410,0x10);
-            __fstrncpy((char *)CONCAT22(sheetSeg,sheet),(char *)CONCAT22(uStack_c,pcStack_e),
+            __fstrncpy((char *)CONCAT22(sheetSeg,sheet),(char *)CONCAT22(widSeg,pcStack_e),
                        0x27);
-            (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)uStack_c;
+            (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)widSeg;
             handle.ofs = (uint16_t)pcStack_e;
-            (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)(uStack_c >> 8);
+            (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)(widSeg >> 8);
             ovr_stshFree(handle);
             pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x505a,_SS),
                                    (char *)CONCAT22(sheet,(char *)0x26510),
@@ -3174,7 +3174,7 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
   uint16_t uVar3;
   int iVar4;
   uint8_t msg;
-  uint16_t uStack_6;
+  uint16_t savedSeed;
   uint16_t uStack_4;
   
   Highlight1 = (undefined1)structType;
@@ -3183,12 +3183,12 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
     ovr_stats_openCastlePanel();
   }
   uStack_4 = GfxRndSeed;
-  uStack_6 = GfxRndSeed2;
+  savedSeed = GfxRndSeed2;
   GfxRndSeed = Seed_2000_d1da;
   GfxRndSeed2 = Seed_2000_d1d8;
   ovr_ovc13_usesAlignUp4();
   GfxRndSeed = uStack_4;
-  GfxRndSeed2 = uStack_6;
+  GfxRndSeed2 = savedSeed;
   Highlight1 = 0xff;
   Highlight1 = 0xff;
   if (structType == 0xfe) {
@@ -3197,7 +3197,7 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
               0x2410);
     }
     else {
-      uVar2 = uStack_6;
+      uVar2 = savedSeed;
       pcVar1 = ovr_ovc22_className(partyIndex,0);
       uVar3 = _DS;
       pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x535b,_SS),
@@ -3209,7 +3209,7 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
   }
   else {
     iVar4 = 0;
-    uVar2 = uStack_6;
+    uVar2 = savedSeed;
     while ((iVar4 < 0x1e &&
            (uVar2 = (uint16_t)((ulong)((long)iVar4 * 6) >> 0x10),
            (uint)(&((unk01_t *)GStructures)->type)[(int)((long)iVar4 * 6)] != structType))) {

@@ -2941,7 +2941,7 @@ int __cdecl16far ovc41_growthForLevel(agnt_t *agnt,uint16_t arg2)
   uint16_t in_stack_00000006;
   far_t dst;
   uint8_t growthMap;
-  byte bStack_4;
+  byte level;
   byte bStack_3;
   
   dst.seg = _SS;
@@ -2952,12 +2952,12 @@ int __cdecl16far ovc41_growthForLevel(agnt_t *agnt,uint16_t arg2)
     iVar1 = *(int *)((int)&worldMenuLabels[9].seg + 1 + (uint)bStack_3 * 0x95);
   }
   else {
-    bStack_4 = agnt->level;
-    if (bStack_4 < 0x16) {
-      iVar1 = *(int *)(&growthMap + (uint)bStack_4 * 2);
+    level = agnt->level;
+    if (level < 0x16) {
+      iVar1 = *(int *)(&growthMap + (uint)level * 2);
     }
     else {
-      iVar1 = (uint)bStack_4 * 0xfa + -0xabe;
+      iVar1 = (uint)level * 0xfa + -0xabe;
     }
   }
   return iVar1;

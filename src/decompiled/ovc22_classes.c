@@ -3119,7 +3119,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   int iStack_c;
   uint uStack_a;
   uint16_t uStack_8;
-  byte bStack_6;
+  byte gindex;
   byte bStack_5;
   uint sheetAA;
   
@@ -3687,13 +3687,13 @@ void __cdecl16far upd_usesAlignUp4(void)
       peVar20 = (entity_t *)Entities;
       if (((*(char *)((int)&peVar20[idx].base.entity + 1) == '\0') &&
           (peVar20[idx].base.destX == 0)) && (peVar20[idx].base.destY == 0)) {
-        bStack_6 = peVar20[idx].base.gindex;
-        sheetFaction = AgntGs[(uint)bStack_6].ai;
+        gindex = peVar20[idx].base.gindex;
+        sheetFaction = AgntGs[(uint)gindex].ai;
         bVar5 = *(byte *)((int)&peVar20[idx].base.entity + 3);
         bVar27 = false;
         bVar9 = false;
         bVar8 = false;
-        if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bStack_6 * 0x95) == -1) {
+        if (*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) == -1) {
           bVar27 = true;
         }
         else {
@@ -3774,7 +3774,7 @@ void __cdecl16far upd_usesAlignUp4(void)
           bVar9 = true;
         }
         if (bVar9) {
-          if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)bStack_6 * 0x95) != -1) &&
+          if ((*(char *)((int)&worldMenuLabels[9].ofs + 1 + (uint)gindex * 0x95) != -1) &&
              (bVar5 != 0xff)) {
             if ((*(char *)((int)*(uint32_t *)((uint)bVar5 << 2) + 0x3f) != '\0') ||
                (Entities[idx].base.level <

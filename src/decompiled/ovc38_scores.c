@@ -248,9 +248,9 @@ void __cdecl16far ovc38_usesStshAlloc(void)
   uint8_t msg;
   void *pvStack_8;
   uint16_t uStack_6;
-  byte bStack_3;
+  byte leaderIdx;
   
-  if ((GHighScoreSaved == '\0') && (bStack_3 = ovr_manage_findFirstLeader(), bStack_3 != 0xff)) {
+  if ((GHighScoreSaved == '\0') && (leaderIdx = ovr_manage_findFirstLeader(), leaderIdx != 0xff)) {
     pvStack_8 = ovr_stshAlloc(0x18);
     entries.seg = in_DX;
     entries.ofs = (uint16_t)pvStack_8;
@@ -262,9 +262,9 @@ void __cdecl16far ovc38_usesStshAlloc(void)
       ovr_stshFree(handle);
     }
     ovr_manage_playerTitle
-              ((char_sheet_t *)*(uint16_t *)((uint)bStack_3 * 4),
-               ((uint16_t *)((uint)bStack_3 * 4))[1],*(uint16_t *)((uint)bStack_3 * 4),
-               ((uint16_t *)((uint)bStack_3 * 4))[1]);
+              ((char_sheet_t *)*(uint16_t *)((uint)leaderIdx * 4),
+               ((uint16_t *)((uint)leaderIdx * 4))[1],*(uint16_t *)((uint)leaderIdx * 4),
+               ((uint16_t *)((uint)leaderIdx * 4))[1]);
     uVar4 = _DS;
     sprintf((char *)CONCAT22(_SS,&msg),"%c%s%s@%d");
     iVar5 = 5;

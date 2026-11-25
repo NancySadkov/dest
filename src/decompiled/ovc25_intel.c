@@ -913,15 +913,15 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex)
   uint uVar4;
   uint16_t curSeg = _SS;
   uint8_t text;
-  byte bStack_3;
+  byte partyClass;
   
   if (((partyIndex != 0xff) &&
       (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) != '\0')) &&
      (*(int *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5e) == 0)) {
-    bStack_3 = (GLeaderSheets[partyIndex])->classStr;
-    uVar4 = (uint)*(byte *)((int)&worldMenuLabels[8].seg + (uint)bStack_3 * 0x95) +
-            (uint)*(byte *)((int)&worldMenuLabels[8].ofs + 1 + (uint)bStack_3 * 0x95) +
-            (uint)*(byte *)((int)&worldMenuLabels[8].seg + 1 + (uint)bStack_3 * 0x95);
+    partyClass = (GLeaderSheets[partyIndex])->classStr;
+    uVar4 = (uint)*(byte *)((int)&worldMenuLabels[8].seg + (uint)partyClass * 0x95) +
+            (uint)*(byte *)((int)&worldMenuLabels[8].ofs + 1 + (uint)partyClass * 0x95) +
+            (uint)*(byte *)((int)&worldMenuLabels[8].seg + 1 + (uint)partyClass * 0x95);
     if (((uVar4 < PlayerCount) &&
         (((GLeaderSheets[partyIndex])->flags5d & 1) == 0)) &&
        (uVar2 = ovr_randBelow(100,0), (int)(uVar2 & 0xff) < (int)(PlayerCount - uVar4))) {
@@ -970,7 +970,7 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
   char *msg;
   uint16_t curSeg = _SS;
   uint8_t text;
-  byte bStack_5;
+  byte partyClass;
   int iStack_4;
   
   iStack_4 = ovc25_compute1((GLeaderSheets[partyIndex])->classStr);
@@ -980,12 +980,12 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
        ((((GLeaderSheets[partyIndex])->flags5d & 1) == 0 &&
         (9 < (GLeaderSheets[partyIndex])->unitCount)))) &&
       ((*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x49) != -1 &&
-       ((bStack_5 = *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x49),
-        (GLeaderSheets[bStack_5])->unitCount < 0x50 ||
+       ((partyClass = *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x49),
+        (GLeaderSheets[partyClass])->unitCount < 0x50 ||
         (uVar3 = ovr_randBelow(0x28,0), (char)uVar3 == '\0')))))) &&
      (8 < ((agnt_t *)(((uint)partyIndex << 2)))->teamCode)) {
-    if ((GLeaderSheets[bStack_5])->unitCount < 0x28) {
-      if ((GLeaderSheets[bStack_5])->unitCount < 0x14) {
+    if ((GLeaderSheets[partyClass])->unitCount < 0x28) {
+      if ((GLeaderSheets[partyClass])->unitCount < 0x14) {
         return;
       }
       uVar3 = ovr_randBelow(0x78,0);

@@ -136,18 +136,18 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   byte bStack_b;
   byte bStack_a;
   byte unitBldType;
-  uint uStack_8;
+  uint seedAligned;
   int archEntry;
   char *name;
   
   if ((partyIndex != 0xff) &&
      (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0')) {
-    uStack_8 = ovr_alignUp4(GfxRndSeed,0,0);
+    seedAligned = ovr_alignUp4(GfxRndSeed,0,0);
     for (bStack_b = 0; bStack_b < 4; bStack_b = bStack_b + 1) {
       for (iVar6 = -2; iVar6 < 2; iVar6 = iVar6 + 1) {
-        uVar1 = ovr_ovc23_findRecordAt(uStack_8 + iVar6,GfxRndSeed2,(char)GfxRndSeed2);
+        uVar1 = ovr_ovc23_findRecordAt(seedAligned + iVar6,GfxRndSeed2,(char)GfxRndSeed2);
         if (uVar1 == 0xffff) {
-          iVar2 = ovc39_findBuildingAt(uStack_8 + iVar6,GfxRndSeed2);
+          iVar2 = ovc39_findBuildingAt(seedAligned + iVar6,GfxRndSeed2);
           uVar7 = (uint16_t)((ulong)GUnits >> 0x10);
           units = (unit_t *)GUnits;
           unitBldType = (units + iVar2)->bldType;
@@ -206,7 +206,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             return;
           }
           if ((bStack_b == 3) &&
-             (uVar1 = ovr_ovc45_compute4(uStack_8 + iVar6,GfxRndSeed2,(char)GfxRndSeed2),
+             (uVar1 = ovr_ovc45_compute4(seedAligned + iVar6,GfxRndSeed2,(char)GfxRndSeed2),
              (char)uVar1 != '\0')) {
             archEntry = ovc39_loadArchiveEntry(0xc);
             name = nameOfs;
