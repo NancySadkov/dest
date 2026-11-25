@@ -847,58 +847,62 @@ driver_scan1(far_t buf,uint16_t count,uint8_t fill,uint8_t threshold,far_t patte
 void __cdecl16far driver_drawLine(uint8_t *ofs1,int row1,uint8_t *ofs2,int row2,uint8_t colour,uint16_t arg6,uint16_t arg7,uint16_t arg8,uint16_t arg9)
 
 {
-  uint8_t *puVar1;
-  int iVar2;
-  int iVar3;
-  uint16_t unaff_ES;
-  far_t *pfStack_8;
-  
-  iVar3 = row1;
-  iVar2 = (int)ofs2 - (int)ofs1;
-  if (iVar2 == 0) {
-    iVar3 = row2 - row1;
+  /* Re-derived: draws a vertical or horizontal line between two screen offsets.  Equal
+     columns step 0x140 per row; otherwise the endpoints are ordered, the DDA variant is taken
+     from the CPKeys table (+5 shallow, +0xb steep) and jumped to after
+     driver_drawLine_compute.  The exported `unaff_ES` was declared and never read. */
+  uint8_t *storePtr;
+  int delta;
+  int count;
+  int savedRow;
+  far_t *drawFn;
+
+  savedRow = row1;
+  delta = (int)ofs2 - (int)ofs1;
+  if (delta == 0) {
+    count = row2 - row1;
     if (row2 < row1) {
-      iVar3 = -iVar3;
+      count = -count;
     }
-    iVar3 = iVar3 + 1;
+    count = count + 1;
     driver_drawLine_compute();
     do {
       *ofs1 = colour;
       ofs1 = ofs1 + 0x140;
-      iVar3 = iVar3 + -1;
-    } while (iVar3 != 0);
+      count = count + -1;
+    } while (count != 0);
   }
   else {
-    if (iVar2 < 0) {
-      iVar2 = -iVar2;
+    if (delta < 0) {
+      delta = -delta;
       LOCK();
       ofs1 = ofs2;
       UNLOCK();
       LOCK();
       row1 = row2;
       UNLOCK();
-      row2 = iVar3;
+      row2 = savedRow;
     }
-    iVar3 = row2 - row1;
-    if (iVar3 != 0) {
-      if (iVar3 < 0) {
-        iVar3 = -iVar3;
+    count = row2 - row1;
+    if (count != 0) {
+      if (count < 0) {
+        count = -count;
       }
-      pfStack_8 = (far_t *)(CPKeys + 5);
-      if (iVar2 < iVar3) {
-        pfStack_8 = (far_t *)(CPKeys + 0xb);
+      drawFn = (far_t *)(CPKeys + 5);
+      if (delta < count) {
+        drawFn = (far_t *)(CPKeys + 0xb);
       }
       driver_drawLine_compute();
                     /* WARNING: Could not recover jumptable at 0x0002db51. Too many branches */
                     /* WARNING: Treating indirect jump as call */
-      (*(code *)pfStack_8)();
+      (*(code *)drawFn)();
       return;
     }
     driver_drawLine_compute();
-    for (iVar2 = iVar2 + 1; iVar2 != 0; iVar2 = iVar2 + -1) {
-      puVar1 = ofs1;
+    for (delta = delta + 1; delta != 0; delta = delta + -1) {
+      storePtr = ofs1;
       ofs1 = ofs1 + 1;
-      *puVar1 = colour;
+      *storePtr = colour;
     }
   }
   return;
