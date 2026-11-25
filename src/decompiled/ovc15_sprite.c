@@ -1174,17 +1174,17 @@ uint16_t __cdecl16far ovc15_compute1(uint16_t *agnt)
   uint16_t *puVar6;
   uint16_t uVar7;
   undefined1 uStack_c;
-  int *uStack_6;
+  int *intPtr;
   uint16_t uStack_4;
   
   uVar7 = (uint16_t)((ulong)agnt >> 0x10);
   puVar6 = (uint16_t *)agnt;
   uVar1 = *(uint16_t *)((int)puVar6 + 0x15);
   piVar2 = (int *)*(int *)((int)puVar6 + 0x13);
-  uStack_6 = (int *)CONCAT22(uVar1,piVar2);
+  intPtr = (int *)CONCAT22(uVar1,piVar2);
   if (*(char *)((int)puVar6 + 0x11) == '\0') {
     iVar5 = piVar2[1];
-    iVar3 = *uStack_6;
+    iVar3 = *intPtr;
     clampedX = ovr_agnt_clampX(*agnt);
     iVar5 = (*(int *)(iVar3 + 0xd) - *(int *)(&columnScreenY[clampedX])) + 0x93;
     uStack_c = (undefined1)iVar5;

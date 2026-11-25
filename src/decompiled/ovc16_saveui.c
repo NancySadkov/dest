@@ -18,8 +18,8 @@ uint16_t __cdecl16far uiReadKey2(void)
   byte bVar4;
   uint16_t uVar5;
   undefined1 extraout_AH;
-  int iStack_8;
-  int iStack_6;
+  int startTick;
+  int prevTick;
   
   MiceUnkState = 0;
   ovr_ovr_miceButton0PressStates_entry();
@@ -30,10 +30,10 @@ uint16_t __cdecl16far uiReadKey2(void)
   bVar1 = false;
   MouseMoved = 0;
   while( true ) {
-    if ((*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != iStack_6) ||
-       (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) != iStack_8)) {
-      iStack_6 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-      iStack_8 = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+    if ((*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != prevTick) ||
+       (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) != startTick)) {
+      prevTick = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      startTick = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
       ovr_draw_usesBlitLoadRleGfx();
       ovr_ovc13_usesMiceBlitRect();
     }
@@ -926,7 +926,7 @@ char * __cdecl16far saveui_configureMessageDelay(void)
   int iStack_12;
   undefined1 uStack_f;
   char acStack_e [6];
-  uint16_t uStack_8;
+  uint16_t entY;
   uint16_t entX;
   byte bStack_4;
   byte bStack_3;
@@ -1150,7 +1150,7 @@ switchD_4000_6642_caseD_3:
       bStack_3 = (*(uint *)((int)&worldMenuLabels[7].ofs + 1 + (uint)(peVar14->base).gindex * 0x95)
                  & 0x4000) != 0;
       entX = (uStack_1e->base).x;
-      uStack_8 = (peVar14->base).y;
+      entY = (peVar14->base).y;
       uStack_f = AgntGs[(uint)(peVar14->base).gindex].ai;
       if ((peVar14->base).faction < (byte)(peVar14->base).state) {
         sVar13 = ((peVar14->base).faction & 3) << 1;
@@ -1300,7 +1300,7 @@ L_attact_3f0b_1082_1477:
       cVar6 = '\x01';
     }
     uStack_1a = CONCAT11(cVar6,(char)uStack_1a);
-    if (((entX < GfxRndSeed - 2U) || (GfxRndSeed + 1U < entX)) || (GfxRndSeed2 != uStack_8))
+    if (((entX < GfxRndSeed - 2U) || (GfxRndSeed + 1U < entX)) || (GfxRndSeed2 != entY))
     {
       bVar17 = 0;
     }
@@ -1701,7 +1701,7 @@ void __cdecl16far saveui_configureNewWorld(void)
   uint8_t seedTable;
   uint16_t auStack_26 [3];
   uint8_t dst;
-  char cStack_c;
+  char worldIdx;
   byte bStack_b;
   int iStack_a;
   int iStack_8;
@@ -1737,7 +1737,7 @@ void __cdecl16far saveui_configureNewWorld(void)
       GSeed = *(uint16_t *)(&seedTable + (uint)bStack_b * 4);
     }
     srand8(CONCAT22(SeedHi,GSeed));
-    cStack_c = bStack_b - 1;
+    worldIdx = bStack_b - 1;
     puVar1 = &hostilityItems;
     items_00.seg = (uint16_t)puVar1;
     items_00.ofs = 0x2410;
@@ -1788,7 +1788,7 @@ void __cdecl16far saveui_configureNewWorld(void)
         secondWaveSize[0] = (uint8_t)iStack_4;
       }
       Difficulty = bStack_b;
-      worldIndex = cStack_c;
+      worldIndex = worldIdx;
       ovr_say((char *)"Resetting game...",0);
       ovr_init_usesClearEntities();
       ovr_say((char *)"New world complete.",0);
