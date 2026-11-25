@@ -228,80 +228,76 @@ undefined1 __cdecl16far ovc49_usesFrameIndex2(agnt_t far *agnt,byte *out)
 int __cdecl16far ovc49_usesStExit(agnt_t far *agnt,uint16_t arg2)
 
 {
-  uint16_t uVar1;
-  int iVar2;
-  int iVar3;
-  int iVar4;
-  byte bVar6;
-  uint uVar5;
-  int *piVar7;
-  int iStack_6;
-  int iStack_4;
-  
-  uVar1 = *(uint16_t *)((int)&agnt->frames + 2);
-  /* 8699:1793: the row is (agnt+2)>>1 clamped to 0..7 */
-  if ((int16_t)uVar1 < 0) {
-    uVar1 = 0;
+  /* Re-derived: row = (agnt->y >> 1) clamped 0..7; the column bounds come from agnt->x +- the frame's
+     width (frameOfs + 0x17) halved and clamped 0..0x68; if they cross, the game exits.  Then
+     AgntArrayA (variant 0) or AgntArrayB is scanned for a non-zero cell alongside two further
+     [row][col] tables at +0x963 (A path) or +0x549/+0x5b2 (B path), all with the 0x69 row stride.
+     The return packs the row offset's high byte in AH, which is deliberate: every success exit in the
+     original is `mov ax,di / mov al,1` with di = row*0x69.  Removed as dead: the frames segment
+     (loaded and clamped but never read) and the frame segment load. */
+  int frameOfs;
+  int row;
+  int colStart;
+  int colEnd;
+  int rowOfs;
+  byte retHi;
+  uint variant;
+  int *frameEntry;
+
+  frameEntry = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
+  frameOfs = *frameEntry;
+  row = (int)agnt->y >> 1;
+  if (row < 0) {
+    row = 0;
   }
-  if (7 < (int16_t)uVar1) {
-    uVar1 = 7;
+  if (7 < row) {
+    row = 7;
   }
-  piVar7 = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
-  iVar4 = piVar7[1];
-  iVar2 = *piVar7;
-  iVar3 = (int)agnt->y >> 1;
-  if (iVar3 < 0) {
-    iVar3 = 0;
+  colStart = (int)(agnt->x - *(int *)(frameOfs + 0x17)) >> 1;
+  colEnd = (int)(agnt->x + *(int *)(frameOfs + 0x17)) >> 1;
+  if (colStart < 0) {
+    colStart = 0;
   }
-  if (7 < iVar3) {
-    iVar3 = 7;
+  if (colEnd < 0) {
+    colEnd = 0;
   }
-  iStack_4 = (int)(agnt->x - *(int *)(iVar2 + 0x17)) >> 1;
-  iStack_6 = (int)(agnt->x + *(int *)(iVar2 + 0x17)) >> 1;
-  if (iStack_4 < 0) {
-    iStack_4 = 0;
+  if (0x68 < colStart) {
+    colStart = 0x68;
   }
-  if (iStack_6 < 0) {
-    iStack_6 = 0;
+  if (0x68 < colEnd) {
+    colEnd = 0x68;
   }
-  if (0x68 < iStack_4) {
-    iStack_4 = 0x68;
-  }
-  if (0x68 < iStack_6) {
-    iStack_6 = 0x68;
-  }
-  if (iStack_6 < iStack_4) {
-                    /* WARNING: Subroutine does not return */
+  if (colEnd < colStart) {
     ovr_stExit(0x1e);
   }
-  uVar5 = (uint)agnt->animVariant;
-  if (uVar5 == 0) {
-    iVar4 = 0;
-    for (; bVar6 = (byte)((uint)iVar4 >> 8), iStack_4 <= iStack_6; iStack_4 = iStack_4 + 1) {
-      if (AgntArrayA[iVar3][iStack_4] != '\0') {
-        return CONCAT11((char)((uint)(iVar3 * 0x69) >> 8),1);
+  variant = (uint)agnt->animVariant;
+  if (variant == 0) {
+    rowOfs = 0;
+    for (; retHi = (byte)((uint)rowOfs >> 8), colStart <= colEnd; colStart = colStart + 1) {
+      if (AgntArrayA[row][colStart] != '\0') {
+        return CONCAT11((char)((uint)(row * 0x69) >> 8),1);
       }
-      iVar4 = iVar3 * 0x69;
-      if (*(char *)(iVar4 + iStack_4 + 0x963) != '\0') {
-        return CONCAT11((char)((uint)iVar4 >> 8),1);
+      rowOfs = row * 0x69;
+      if (*(char *)(rowOfs + colStart + 0x963) != '\0') {
+        return CONCAT11((char)((uint)rowOfs >> 8),1);
       }
     }
   }
   else {
-    for (; bVar6 = (byte)(uVar5 >> 8), iStack_4 <= iStack_6; iStack_4 = iStack_4 + 1) {
-      if (AgntArrayB[iVar3][iStack_4] != '\0') {
-        return CONCAT11((char)((uint)(iVar3 * 0x69) >> 8),1);
+    for (; retHi = (byte)(variant >> 8), colStart <= colEnd; colStart = colStart + 1) {
+      if (AgntArrayB[row][colStart] != '\0') {
+        return CONCAT11((char)((uint)(row * 0x69) >> 8),1);
       }
-      if (*(char *)(iVar3 * 0x69 + iStack_4 + 0x549) != '\0') {
-        return CONCAT11((char)((uint)(iVar3 * 0x69) >> 8),1);
+      if (*(char *)(row * 0x69 + colStart + 0x549) != '\0') {
+        return CONCAT11((char)((uint)(row * 0x69) >> 8),1);
       }
-      uVar5 = iVar3 * 0x69;
-      if (*(char *)(uVar5 + iStack_4 + 0x5b2) != '\0') {
-        return CONCAT11((char)(uVar5 >> 8),1);
+      rowOfs = row * 0x69;
+      if (*(char *)(rowOfs + colStart + 0x5b2) != '\0') {
+        return CONCAT11((char)((uint)rowOfs >> 8),1);
       }
     }
   }
-  return (uint)bVar6 << 8;
+  return (uint)retHi << 8;
 }
 
 

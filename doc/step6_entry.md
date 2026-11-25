@@ -6770,3 +6770,37 @@ build.
 
   grep_checks 40,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### ovc49_usesStExit: the AH byte in the return is deliberate, and two loads were dead
+
+`8699:06dc`, 365 bytes, 141 instructions, **1 call** - verified against the extent before rewriting, so
+the body was complete.  The decoded shape:
+
+```
+row      = (agnt->y >> 1) clamped 0..7
+colStart = (agnt->x - frameWidth) >> 1        frameWidth = *(int *)(frameOfs + 0x17)
+colEnd   = (agnt->x + frameWidth) >> 1        both clamped 0..0x68
+if (colEnd < colStart) ovr_stExit(0x1e)
+variant == 0 -> scan AgntArrayA[row][col] plus the table at +0x963
+variant != 0 -> scan AgntArrayB[row][col] plus the tables at +0x549 and +0x5b2
+all tables use the 0x69 row stride
+return 1 | (rowOfs & 0xff00), or (rowOfs & 0xff00) alone when nothing is found
+```
+
+**The high byte is real, not stale AH.** Every success exit in the listing is `mov ax,di` followed by
+`mov al,1`, with `di` holding `row * 0x69`, so AX deliberately keeps di's high byte.  That is why the
+exported `CONCAT11(...,1)` and `(uint)bVar6 << 8` were kept rather than "corrected" - a reminder that
+the stale-AH rule needs checking per function, and here it would have introduced a bug.
+
+Two loads were dead and are removed: `uVar1` (the frames *segment*, read into a local and clamped to
+0..7 but never used) and the frame segment load `piVar7[1]`, whose value never reaches a read.
+
+76 -> 72 lines and **grep_checks 40,962 -> 40,885 (-77)**, mostly from the typed locals replacing
+`iVar2`..`iVar4`, `iStack_4`/`_6`, `piVar7`, `bVar6` and the dual-role `uVar5`.
+
+`--asm` on o49 remains unusable (compiler table limit in `ovc49_body1`), so the emitted listing could
+not be inspected for this function; the evidence here is the decode plus a clean build and unchanged
+gates.  The full `-c` build was rerun before linking, per the trap recorded last turn.
+
+  grep_checks 40,962 -> 40,885; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
