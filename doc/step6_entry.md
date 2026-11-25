@@ -6366,3 +6366,45 @@ and was still wrong; the check that caught it was reading the emitted instructio
 
   grep_checks 41,119 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### 12 of the 16 integer-operand agntG_t casts, and a bigger class found on the way
+
+Fixed the twelve sites whose agent index is explicit in the C (a named local holding `index * 0x34`):
+
+```
+ovc27_usesRandBelow3    uVar2 = agntIndex * 0x34              -> Agnts[agntIndex].gdata
+ovc27_spellNotice       targetOfs = paStack_6->target * 0x34   -> Agnts[paStack_6->target].gdata
+ovc41_turnUndeadNotice  targetOfs = agnt_00->target * 0x34     -> Agnts[agnt_00->target].gdata
+```
+
+(One trap: replacing `->flags` first also matched the `->flags` prefix of `->flags2`/`->flags3`.  It is
+harmless here because the trailing digit survives, but it means the later two patterns report "not
+found" while the code is correct - checked by reading the result, not by trusting the counts.)
+
+The four sites in `ovc27_compute1` and `ovc27_compute2` are still open because their index comes from
+a local named `in_stack_00000008`, and that turned out to be the more interesting problem.
+
+**`in_stack_00000008` is a phantom parameter - a local that is never assigned.**  In
+`ovc27_compute1` the body declares `int in_stack_00000008;`, reads it four times as an agent index,
+and never writes it, while the declared parameter `param` is never used.  The original reads
+`[bp+0x0a]`, which is the second parameter, so the two are the same object and Ghidra failed to link
+them.  Every read is uninitialised - the same class as the `AgntGs[iStack_c]` and `iVar6` defects
+found earlier.
+
+A scanner for it (`tmp/find_phantom_inparams.py`) reports **147 never-assigned positive-offset
+`in_stack_` locals in 126 functions**, 136 of them outside the CRT.  That is the largest single
+correctness class found so far, and the fix for each is mechanical but needs the parameter mapping
+settled per function:
+
+* for most functions the mapping is 1:1 - `agnt_usesStrengthMax` uses `in_stack_0000000a`/`_0000000c`
+  and the disassembly reads `[bp+0x0a]`/`[bp+0x0b]`, `agnt_usesStExit` uses `_0000000e` and reads
+  `[bp+0x0e]`;
+* but `ovc27_compute1` uses `in_stack_00000008` where the original reads `[bp+0x0a]`, and
+  `ovc27_compute2` uses the same name for what must be its *third* parameter (it is passed as the
+  `agntIndex` argument of `ovc27_usesRandBelow3` while `param` is separately used as `mode`).
+
+So the name is not a fixed offset, and the four remaining sites wait on per-function disassembly
+rather than on a text substitution.
+
+  grep_checks 41,119 -> 41,113; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868

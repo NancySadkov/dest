@@ -673,14 +673,14 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t far *agnt)
     else {
       targetOfs = (uint)agnt_00->target * 0x34;
       uStack_8 = SEG_OF(Agnts);
-      bStack_6 = ((agntG_t *)((targetOfs + 0x1d)))->rank;
+      bStack_6 = Agnts[agnt_00->target].gdata->rank;
       if (bStack_6 == 0) {
         iVar5 = 0;
       }
       else {
         cVar2 = ovr_manage_rollDice('\x02','\x06');
         uVar6 = CONCAT11(extraout_AH,cVar2);
-        uVar3 = ovc41_compute6(((agntG_t *)((targetOfs + 0x1d)))->rank,
+        uVar3 = ovc41_compute6(Agnts[agnt_00->target].gdata->rank,
                                (((entity_t *)agnt_00->entity)->base).level);
         if ((byte)uVar6 < (byte)uVar3) {
           pcVar10 = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
@@ -696,11 +696,11 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t far *agnt)
           iVar5 = CONCAT11(savedSeg,1);
         }
         else {
-          bVar7 = ((agntG_t *)((targetOfs + 0x1d)))->rank;
+          bVar7 = Agnts[agnt_00->target].gdata->rank;
           uVar9 = (uint)bVar7;
           ovc41_rollStatDice(bVar7,(((entity_t *)agnt_00->entity)->base).level);
           uVar9 = uVar9 & 0xff;
-          iVar5 = ovc41_compute8(((agntG_t *)((targetOfs + 0x1d)))->rank,
+          iVar5 = ovc41_compute8(Agnts[agnt_00->target].gdata->rank,
                                  (((entity_t *)agnt_00->entity)->base).level);
           cStack_4 = (char)iVar5;
           bStack_5 = 0;

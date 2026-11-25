@@ -336,25 +336,25 @@ uint __cdecl16far ovc27_usesRandBelow3(agnt_t far *agnt,uint32_t reqRecord,int a
       return (uint)bVar5 << 8;
     }
   }
-  if ((((agntG_t *)((uVar2 + 0x1d)))->flags & *(uint *)(recIdx + 0x15)) == 0) {
-    if ((((agntG_t *)((uVar2 + 0x1d)))->flags2 & *(uint *)(recIdx + 0x19)) == 0) {
-      if ((((agntG_t *)((uVar2 + 0x1d)))->flags3 & *(uint *)(recIdx + 0x1d)) == 0) {
+  if ((Agnts[agntIndex].gdata->flags & *(uint *)(recIdx + 0x15)) == 0) {
+    if ((Agnts[agntIndex].gdata->flags2 & *(uint *)(recIdx + 0x19)) == 0) {
+      if ((Agnts[agntIndex].gdata->flags3 & *(uint *)(recIdx + 0x1d)) == 0) {
         if ((*(uint *)(uVar2 + 0x2b) & *(uint *)(recIdx + 0xf)) == 0) {
           uVar3 = (uint)*(byte *)(recIdx + 0x13);
           if ((*(uint *)((int)*(uint32_t *)(uVar2 + 0x17) + 0x14) & uVar3) == 0) {
             if ((*(int *)(recIdx + 0x17) != 0) &&
                (uVar3 = *(uint *)(recIdx + 0x17),
-               (((agntG_t *)((uVar2 + 0x1d)))->flags & uVar3) == 0)) {
+               (Agnts[agntIndex].gdata->flags & uVar3) == 0)) {
               return uVar3 & 0xff00;
             }
             if ((*(int *)(recIdx + 0x1b) != 0) &&
                (uVar3 = *(uint *)(recIdx + 0x1b),
-               (((agntG_t *)((uVar2 + 0x1d)))->flags2 & uVar3) == 0)) {
+               (Agnts[agntIndex].gdata->flags2 & uVar3) == 0)) {
               return uVar3 & 0xff00;
             }
             if ((*(int *)(recIdx + 0x1f) != 0) &&
                (uVar3 = *(uint *)(recIdx + 0x1f),
-               (((agntG_t *)((uVar2 + 0x1d)))->flags3 & uVar3) == 0)) {
+               (Agnts[agntIndex].gdata->flags3 & uVar3) == 0)) {
               return uVar3 & 0xff00;
             }
             if ((*(int *)(recIdx + 0x11) != 0) &&
@@ -618,8 +618,8 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
     uStack_8 = SEG_OF(Agnts);
     uVar12 = uVar11;
     if (((((((agntG_t far *)paStack_6->gdata)->flags & 0x1000) != 0) &&
-         (uVar12 = uStack_8, (((agntG_t *)((targetOfs + 0x1d)))->flags2 & 0x10) == 0))
-        && ((uStack_8 = uVar11, (((agntG_t *)((targetOfs + 0x1d)))->flags2 & 8) == 0
+         (uVar12 = uStack_8, (Agnts[paStack_6->target].gdata->flags2 & 0x10) == 0))
+        && ((uStack_8 = uVar11, (Agnts[paStack_6->target].gdata->flags2 & 8) == 0
             || (bVar1 = ovr_agnt_compute9(paStack_6,0), uVar12 = uStack_8, '\0' < (char)bVar1)))) &&
        (uVar2 = ovr_randBelow(2,0), uVar12 = uStack_8, (uVar2 & 0xff) == 0)) {
       return 0;
