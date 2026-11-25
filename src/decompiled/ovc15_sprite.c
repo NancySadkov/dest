@@ -3050,68 +3050,74 @@ bool __cdecl16far ovc15_textArena5(void)
 uint __cdecl16far ovc15_usesRandBelow2(void)
 
 {
+  /* Re-derived: pick a random entity belonging to the leader with the most units.  One
+     pass over GLeaderCount tracks two candidates - the best leader whose sheet +0x3f is
+     clear (own) and the best one where it is set.  If that candidate has more than 0xe
+     units (0x1d for the own leader) a random start index is walked forward until an entity
+     of that leader is found that is not under the cursor (and, for the own leader, whose
+     flags32 high byte has bits 0-1 clear).  Falls back to a plain random index. */
   uint16_t randPick;
-  uint uVar2;
-  int iVar3;
-  uint uVar4;
-  uint16_t uVar5;
-  byte bStack_9;
-  byte bStack_8;
-  byte bStack_7;
-  uint uStack_6;
-  uint uStack_4;
-  
-  uStack_4 = 0;
-  bStack_8 = 0xff;
-  uStack_6 = 0;
-  bStack_9 = 0xff;
-  for (bStack_7 = 0; bStack_7 < GLeaderCount; bStack_7 = bStack_7 + 1) {
-    if ((*(char *)((int)*(uint32_t *)((uint)bStack_7 << 2) + 0x3f) == '\0') &&
-       (uStack_4 < (GLeaderSheets[bStack_7])->unitCount)) {
-      bStack_8 = bStack_7;
-      uStack_4 = (GLeaderSheets[bStack_7])->unitCount;
+  uint cursorFree;
+  int entitiesOfs;
+  uint entIdx;
+  byte activeLeader;
+  byte ownLeader;
+  byte leaderIdx;
+  uint bestActiveCount;
+  uint bestOwnCount;
+
+  bestOwnCount = 0;
+  ownLeader = 0xff;
+  bestActiveCount = 0;
+  activeLeader = 0xff;
+  for (leaderIdx = 0; leaderIdx < GLeaderCount; leaderIdx = leaderIdx + 1) {
+    if ((*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3f) == '\0') &&
+       (bestOwnCount < (GLeaderSheets[leaderIdx])->unitCount)) {
+      ownLeader = leaderIdx;
+      bestOwnCount = (GLeaderSheets[leaderIdx])->unitCount;
     }
-    if ((*(char *)((int)*(uint32_t *)((uint)bStack_7 << 2) + 0x3f) != '\0') &&
-       (uStack_6 < (GLeaderSheets[bStack_7])->unitCount)) {
-      bStack_9 = bStack_7;
-      uStack_6 = (GLeaderSheets[bStack_7])->unitCount;
+    if ((*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3f) != '\0') &&
+       (bestActiveCount < (GLeaderSheets[leaderIdx])->unitCount)) {
+      activeLeader = leaderIdx;
+      bestActiveCount = (GLeaderSheets[leaderIdx])->unitCount;
     }
   }
-  if ((bStack_9 != 0xff) && (0xe < uStack_6)) {
+  if ((activeLeader != 0xff) && (0xe < bestActiveCount)) {
     randPick = ovr_randBelow(EntityCount,0);
-    uVar4 = randPick & 0xff;
+    entIdx = randPick & 0xff;
     do {
-      uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar3 = (int)Entities;
-      if ((AGNT_FIELD(&((entity_t *)Entities)[uVar4], base.entity, 3) == bStack_9) &&
-         (uVar2 = ovr_ovc23_isCursorAt
-                            (*(uint16_t *)((entity_t *)iVar3 + uVar4),((entity_t *)iVar3)[uVar4].base.y,0)
-         , (uVar2 & 0xff) == 0)) {
-        return uVar4;
+      entitiesOfs = (int)Entities;
+      if ((AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) == activeLeader) &&
+         (cursorFree = ovr_ovc23_isCursorAt
+                         (*(uint16_t *)((entity_t *)entitiesOfs + entIdx),
+                          ((entity_t *)entitiesOfs)[entIdx].base.y),
+          (cursorFree & 0xff) == 0)) {
+        return entIdx;
       }
-      uVar4 = uVar4 + 1;
-      if (EntityCount <= uVar4) {
-        uVar4 = 0;
+      entIdx = entIdx + 1;
+      if (EntityCount <= entIdx) {
+        entIdx = 0;
       }
-    } while (uVar4 != (randPick & 0xff));
+    } while (entIdx != (randPick & 0xff));
   }
-  if ((bStack_8 != 0xff) && (0x1d < uStack_4)) {
+  if ((ownLeader != 0xff) && (0x1d < bestOwnCount)) {
     randPick = ovr_randBelow(EntityCount,0);
-    uVar4 = randPick & 0xff;
+    entIdx = randPick & 0xff;
     do {
-      uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar3 = (int)Entities;
-      if (((AGNT_FIELD(&((entity_t *)Entities)[uVar4], base.entity, 3) == bStack_8) &&
-          (uVar2 = ovr_ovc23_isCursorAt
-                             (*(uint16_t *)((entity_t *)iVar3 + uVar4),((entity_t *)iVar3)[uVar4].base.y,0), (uVar2 & 0xff) == 0)) &&
-         ((*((uint8_t far *)&((entity_t *)Entities)[uVar4].base.flags32 + 1) & 3) == 0)) {
-        return uVar4;
+      entitiesOfs = (int)Entities;
+      if (((AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) == ownLeader) &&
+          (cursorFree = ovr_ovc23_isCursorAt
+                          (*(uint16_t *)((entity_t *)entitiesOfs + entIdx),
+                           ((entity_t *)entitiesOfs)[entIdx].base.y),
+           (cursorFree & 0xff) == 0)) &&
+         ((*((uint8_t far *)&((entity_t *)Entities)[entIdx].base.flags32 + 1) & 3) == 0)) {
+        return entIdx;
       }
-      uVar4 = uVar4 + 1;
-      if (EntityCount <= uVar4) {
-        uVar4 = 0;
+      entIdx = entIdx + 1;
+      if (EntityCount <= entIdx) {
+        entIdx = 0;
       }
-    } while (uVar4 != (randPick & 0xff));
+    } while (entIdx != (randPick & 0xff));
   }
   randPick = ovr_randBelow(EntityCount,0);
   return randPick & 0xff;

@@ -1003,7 +1003,7 @@ void __cdecl16far constrct_usesGLeaderCount(void);
 void __cdecl16far land_info(byte tileOffset);
 int __cdecl16far constrct_compute1(void);
 void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex);
-uint __cdecl16far constrct_unitFlagsClear(int unitIndex);
+byte __cdecl16far constrct_unitFlagsClear(int unitIndex);
 void __cdecl16far stshInitTxtFiles(char grab);
 void __cdecl16far init_assets2(bool grab);
 void __cdecl16far grabBldLbm2(int16_t index,int16_t normal,int16_t ruin,uint16_t arg4);

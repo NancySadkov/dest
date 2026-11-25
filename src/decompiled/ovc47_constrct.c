@@ -487,48 +487,42 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
 
 /* Returns whether none of the four map-flag words covering the unit's footprint is set. */
 
-uint __cdecl16far constrct_unitFlagsClear(int unitIndex)
+byte __cdecl16far constrct_unitFlagsClear(int unitIndex)
 
 {
-  uint32_t uVar1;
-  uint uVar2;
-  uint uVar3;
-  uint uVar4;
-  byte bVar5;
-  unit_t *puVar6;
-  int iVar7;
-  uint uVar8;
-  uint16_t uVar9;
-  
-  uVar9 = (uint16_t)((ulong)GUnits >> 0x10);
-  puVar6 = (unit_t *)GUnits;
-  if (puVar6[unitIndex].unitType == 0xff) {
-    uVar2 = unitIndex * 9 & 0xff00;
+  /* Re-derived (7e7c:2e8e): 1 when none of the four map-flag words to the right of the
+     unit's cell has bit 0x1000 set; 0 when the unit type is 0xff, when the leader sheet's
+     +0x3f byte is set, or when any of the four words has the bit.  All three exits set only
+     AL, so the exported CONCAT11 / <<8 returns were stale-AH artifacts of the
+     `and ax,0x1000` inside the loop. */
+  uint32_t sheetRef;
+  unit_t *units;
+  uint entY;
+  uint alignedX;
+  uint flagWord;
+  uint flags;
+  int k;
+
+  units = (unit_t *)GUnits;
+  if (units[unitIndex].unitType == 0xff) {
+    return 0;
   }
-  else {
-    uVar1 = *(uint32_t *)((uint)puVar6[unitIndex].unitType << 2);
-    if (*(char *)((int)uVar1 + 0x3f) == '\0') {
-      uVar3 = ovr_alignUp4(puVar6[unitIndex].x,0,0);
-      uVar2 = ((unit_t *)GUnits)[unitIndex].y;
-      uVar8 = 0;
-      uVar4 = uVar2;
-      for (iVar7 = 0; iVar7 < 4; iVar7 = iVar7 + 1) {
-        uVar4 = ((short (*) [60] [148])GMapFlags)[-1][uVar2 + 0x3b][uVar3 + iVar7 + 0x92] & 0x1000;
-        uVar8 = uVar8 | uVar4;
-      }
-      bVar5 = (byte)(uVar4 >> 8);
-      if (uVar8 == 0) {
-        uVar2 = CONCAT11(bVar5,1);
-      }
-      else {
-        uVar2 = (uint)bVar5 << 8;
-      }
-    }
-    else {
-      uVar2 = (uint)(puVar6[unitIndex].unitType >> 6) << 8;
-    }
+  sheetRef = *(uint32_t *)((uint)units[unitIndex].unitType << 2);
+  if (*(char *)((int)sheetRef + 0x3f) != '\0') {
+    return 0;
   }
-  return uVar2;
+  alignedX = ovr_alignUp4(units[unitIndex].x,0,0);
+  entY = ((unit_t *)GUnits)[unitIndex].y;
+  flags = 0;
+  for (k = 0; k < 4; k = k + 1) {
+    flagWord = ((short (*) [60] [148])GMapFlags)[-1][entY + 0x3b][alignedX + k + 0x92] &
+               0x1000;
+    flags = flags | flagWord;
+  }
+  if (flags == 0) {
+    return 1;
+  }
+  return 0;
 }
 
 
