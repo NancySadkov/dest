@@ -63,6 +63,12 @@ def key(name):
     k = name.upper().lstrip("_")
     k = re.sub(r"\[[0-9]+\]$", "", k)
     k = re.sub(r"_[0-9]$", "", k)
+    # Some original DGROUP labels are not legal C identifiers ("s_bighous1.lbm",
+    # "s_Mouse_error.", "s_anim\2rdrag0.lbm"), so the build necessarily emits them with
+    # '_' in place of the illegal character.  Apply the same sanitiser to both sides;
+    # without it the pair is reported as a miss although it is one object at one place,
+    # and the mis-pairing also derails the constant-delta runs.
+    k = re.sub(r"[^A-Z0-9_]", "_", k)
     return k
 
 # our DGROUP segment: the map's _DATA segment (all our near data lives there)

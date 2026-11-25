@@ -5963,3 +5963,73 @@ are a prerequisite for the switch.
 
   grep_checks 42,261; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### diff_dgroup 972 -> 1444: the pairing rule was comparing two different namespaces
+
+`diff_dgroup --why` reports **`text absent from our data: 0`**.  Every string the original's DGROUP
+holds is present in the rebuilt data.  So the 896 "unmatched" symbols were never a data gap, and the
+question was why they were unmatched.
+
+The answer is that the original's DGROUP contains labels that are **not legal C identifiers**:
+
+```
+2410:2a93  s_bighous1.lbm
+2410:03e2  s_Mouse_error.
+2410:2ad3  s_anim\2rdrag0.lbm
+2410:0352  s_Bad_'game.cfg'_file._Please_reco_2410_0352
+```
+
+The build necessarily emits them with `_` in place of each illegal character
+(`_S_BIGHOUS1_LBM_2410_2A93`), and `key()` compared the two names verbatim.  It was therefore
+pairing a C-invalid name against its own sanitised form and reporting a miss.
+
+Fix: apply the same sanitiser to both sides in `scripts/diff_dgroup.py`'s `key()`:
+
+```python
+k = re.sub(r"[^A-Z0-9_]", "_", k)
+```
+
+Measured effect: **matched 972 -> 1444 of 1868 (+472)**, while `distinct layout deltas` stays at 83.
+
+That last number is the honest part of this entry: **the delta structure did not improve**, so no
+layout gap was closed.  What changed is pairing accuracy - 472 symbols that were always the right
+object in the right place are now correctly paired.
+
+Bucket breakdown of the remaining 424, measured by `tmp/classify_unmatched.py`:
+
+```
+name > 30 chars (Turbo C public limit)   217
+interior label (+N)                       63
+C0 record field (.seg/.hi/...)            25
+group/segment name (DATASEG/DGROUP)        2
+other                                    117
+```
+
+Two of those are hard limits, not gaps:
+
+* **Turbo C truncates publics at 31 significant characters**, so a 48-character original name such as
+  `s_sorry_you_may_not_pass_time_during_a_battle` cannot be emitted at all.  Our build has
+  `_S_SORRY_YOU_MAY_NOT_PASS_T_059E` - same string, truncated plus a discriminator.
+* **Interior labels** (`s_divide_error+1`, `_DATA+2`) and **C0 record fields**
+  (`_brklvl.seg`) are the original's debug record, not variables, and can never be publics.
+
+### What the residual delta actually is: CRT link order, not missing data
+
+The largest delta jump is at the very start of DGROUP, and the two layouts show why:
+
+```
+original : __C0_ASM_CopyRight 0004   s_divide_error 002f   _StartTime 0081
+rebuilt  : __STARTTIME        0096   ___C0_ASM_COPYRIGHT 09f0   _S_DIVIDE_ERROR 0a1b
+```
+
+The original places the CRT's copyright string and the divide-error string *before* `_StartTime`;
+our build places them ~2500 bytes *after* it.  Same objects, same bytes, different **order within
+DGROUP**.  That ordering comes from the link order of the CO* modules, so it is a link-line
+property, not a decompilation result - and it is harmless: every reference is symbolic, which is
+why `compare_state` is 1627/0/0 and the runtime DGROUP checkpoints agree on every game symbol.
+
+So `diff_dgroup`'s residual is now understood as: ~332 structurally unpairable symbols, plus a CRT
+module-ordering difference, and no evidence of missing or wrong data.
+
+  grep_checks 42,181; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1444/1,868 (83 distinct deltas, unchanged)
