@@ -111,23 +111,25 @@ void __cdecl16far ovc38_usesStshFree(far_t handle)
 void __cdecl16far ovc38_showAchievements(void)
 
 {
+  /* Re-derived: loads and displays the high-score table.  The allocated block's segment came
+     from an `in_DX` pseudo-register; it is the ST_SEG of the stshAlloc result, the same idiom
+     used elsewhere in the tree.  unaff_DI and uVar4 were declared/assigned but never read. */
   far_t entries;
-  uint16_t in_DX;
-  int *piVar1;
-  int iVar2;
-  uint16_t unaff_DI;
-  int iVar3;
-  uint16_t uVar4;
-  uint8_t menuState;
+  int *itemPtr;
+  int nameLen;
+  int row;
+  uint8_t nameBuf;
   far_t menuItems[10];   /* the SS:[BP-0x80] menu array */
-  uint8_t text;
-  far_t fStack_a;
-  undefined1 *uStack_6;   /* hand fix: dereferenced as *uStack_6 */
-  
-  fStack_a.ofs = (uint16_t)ovr_stshAlloc(0x18);
-  fStack_a.seg = in_DX;
-  entries.seg = in_DX;
-  entries.ofs = fStack_a.ofs;
+  uint8_t *namePtr;
+  far_t block;
+
+  {
+    void far *p = ovr_stshAlloc(0x18);
+    block.ofs = ST_OFF(p);
+    block.seg = ST_SEG(p);
+  }
+  entries.seg = block.seg;
+  entries.ofs = block.ofs;
   ovc38_loadHighScores(entries);
   ovr_saveui_blitPanel();
   TextBlitX = 0x16;
@@ -141,27 +143,30 @@ void __cdecl16far ovc38_showAchievements(void)
   TextBlitX = 0xae;
   ovr_blitText((char *)"Enemies",(byte *)CONCAT22(Font03.ofs,(char *)0x2410),Font03.seg,
                0xde,0xde,7);
-  for (iVar3 = 0; iVar3 < 6; iVar3 = iVar3 + 1) {
+  for (row = 0; row < 6; row = row + 1) {
     TextBlitX = 0x16;
-    TextBlitY = iVar3 * 0xf + 0x2a;
-    uVar4 = fStack_a.seg;
-    piVar1 = (int *)((int)fStack_a.ofs + iVar3 * 4);
-    if (*piVar1 != 0 || piVar1[1] != 0) {
-      piVar1 = (int *)((int)fStack_a.ofs + iVar3 * 4);
-      iVar2 = 0;
-      uStack_6 = (uint8_t *)CONCAT22(piVar1[1],(uint8_t *)(*piVar1 + 1));
-      while (((iVar2 < 0x4f && (*uStack_6 != 0x40)) && (*uStack_6 != 0x0))) {
-        (&text)[iVar2] = *uStack_6;
-        iVar2 = iVar2 + 1;
-        uStack_6 = (uint8_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(uint8_t *)uStack_6 + 1);
+    TextBlitY = row * 0xf + 0x2a;
+    itemPtr = (int *)((int)block.ofs + row * 4);
+    if (*itemPtr != 0 || itemPtr[1] != 0) {
+      itemPtr = (int *)((int)block.ofs + row * 4);
+      nameLen = 0;
+      namePtr = (uint8_t *)CONCAT22(itemPtr[1],(uint8_t *)(*itemPtr + 1));
+      while (((nameLen < 0x4f && (*namePtr != 0x40)) && (*namePtr != 0x0))) {
+        (&nameBuf)[nameLen] = *namePtr;
+        nameLen = nameLen + 1;
+        namePtr = (uint8_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(namePtr) + 2)),
+                                      (uint8_t *)namePtr + 1);
       }
-      (&text)[iVar2] = 0x0;
-      ovr_blitText((char *)&text,(byte *)CONCAT22(Font03.ofs,_SS),Font03.seg,0xde,0xde,8);
+      (&nameBuf)[nameLen] = 0x0;
+      ovr_blitText((char *)&nameBuf,(byte *)CONCAT22(Font03.ofs,_SS),Font03.seg,0xde,0xde,8);
       TextBlitX = 0xc2;
-      if (*uStack_6 == 0x40) {
-        uStack_6 = (uint8_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),(uint8_t *)uStack_6 + 1);
+      if (*namePtr == 0x40) {
+        namePtr = (uint8_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(namePtr) + 2)),
+                                      (uint8_t *)namePtr + 1);
       }
-      ovr_blitText((char *)(uint8_t *)uStack_6,(byte *)CONCAT22(Font03.ofs,(*(uint16_t *)((uint8_t *)&(uStack_6) + 2))),
+      ovr_blitText((char *)(uint8_t *)namePtr,
+                   (byte *)CONCAT22(Font03.ofs,
+                                    (*(uint16_t *)((uint8_t *)&(namePtr) + 2))),
                    Font03.seg,0xde,0xde,8);
     }
   }
@@ -169,7 +174,7 @@ void __cdecl16far ovc38_showAchievements(void)
   menuItems[7].ofs = (uint16_t)s_done;        /* 0x6AB4 */
   menuItems[7].seg = (uint16_t)_DS;
   ovr_uiMenu(0, 0, (uint16_t)menuItems, (uint16_t)_SS, 8);
-  ovc38_usesStshFree(fStack_a);
+  ovc38_usesStshFree(block);
   ovr_saveui_blitPanel();
   return;
 }
