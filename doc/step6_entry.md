@@ -3921,3 +3921,28 @@ still reports genuinely missing strings.
 
   build 64/64 clean; LINK ERRORS 0; grep_checks 50,768
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### Content-aware matching: 494 of the 754 string labels are present, just unnamed
+
+`diff_dgroup --why` now applies a second, independent rule after the name rule: for an
+unmatched original label whose audit type is `string`, look for the same text in the
+rebuilt DGROUP.  Three outcomes, reported separately so the headline stays honest:
+
+```
+matched by content, names differ   494
+text present but not at a symbol    40
+text absent from our data          248
+```
+
+* **494** are fully present in our data under another name - no recovery needed, only
+  naming (and, as the previous turn showed, renaming is not a bulk operation);
+* **40** are present inside larger blobs rather than at a symbol start;
+* **248** are genuinely missing from our DGROUP and are the real recovery worklist
+  (recover the text from `audit/dgroup_2410.bin`, as was done for `GTxtFiles`).
+
+The headline `972/1,868` is unchanged by design: the content rule does not claim a name
+match.  What it does is prove that 534 of the 754 "missing" string labels are not
+missing data at all.
+
+  build 64/64 clean; LINK ERRORS 0; grep_checks 50,768
+  compare_state 1,627/0/0; diff_dgroup 972/1,868

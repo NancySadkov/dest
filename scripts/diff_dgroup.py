@@ -164,6 +164,50 @@ if why:
             for off, name, reason in unmatched:
                 fh.write("%04x\t%s\t%s\n" % (off, name, reason))
         print("unmatched list written to %s" % list_path)
+    # ---- content-aware matching (additional rule) ----------------------------
+    import csv
+    import os
+    texts = {}
+    try:
+        for r in csv.DictReader(io.open("audit/dgroup.csv", encoding="latin-1")):
+            if r.get("type") == "string":
+                texts[int(r["offset"], 16)] = r.get("repr", "")
+    except OSError:
+        texts = {}
+    dump = b""
+    dpath = os.path.join("tmp", "ours_postcfg.bin")
+    if os.path.exists(dpath):
+        dump = io.open(dpath, "rb").read()
+    seg_off = {o: n for n, (s, o) in ours.items() if s == dgroup_seg}
+    by_content = []
+    inside = []
+    absent = []
+    for off, name, reason in unmatched:
+        if "+" in name:
+            continue
+        text = texts.get(off, "")
+        if not text:
+            continue
+        want = text.encode("latin-1", "replace")
+        hits = [n for o, n in seg_off.items()
+                if dump[o:o + len(want)] == want
+                and dump[o + len(want):o + len(want) + 1] == b"\x00"]
+        if hits:
+            by_content.append((off, name, hits[0]))
+        elif dump.find(want) >= 0:
+            inside.append((off, name, text, dump.find(want)))
+        else:
+            absent.append((off, name, text))
+    print("  matched by content, names differ : %d" % len(by_content))
+    for off, name, oname in by_content[:8]:
+        print("      %04x %-40s ours=%s" % (off, name[:40], oname))
+    print("  text present but not at a symbol: %d" % len(inside))
+    for off, name, text, at in inside[:6]:
+        print("      %04x %-40s at %04x" % (off, name[:40], at))
+    print("  text absent from our data       : %d" % len(absent))
+    for off, name, text in absent[:8]:
+        print("      %04x %-40s %r" % (off, name[:40], text[:30]))
+
     print("unmatched: %d" % len(unmatched))
     for cls, items in sorted(buckets.items(), key=lambda kv: -len(kv[1])):
         print("  %-34s %d" % (cls, len(items)))
