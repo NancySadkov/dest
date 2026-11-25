@@ -5357,3 +5357,52 @@ which is measured directly from the sources.
 
   grep_checks 45,332; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### Partially recovered bodies: the complement scan, and the worst case verified
+
+`tmp/under_recovered.py` is the complement of the density check: it lists functions whose C body
+is far *shorter* than the extent in `audit/functions_real.tsv`.  Normal functions sit at 0.1-0.6
+lines/byte; below 0.10 the body covers only a fragment.
+
+19 functions with an extent of at least 200 bytes fall below 0.10, worst first:
+
+```
+lines/B lines bytes module          function
+0.016     18  1112 ovc14_attact.c  attact_usesGMapFlags3       3f0b:0c2a
+0.066     38   579 ovc02_draw.c    draw_menuCursor             2e25:10c7
+0.069     71  1029 ovc10_constr.c  constr_usesScreenOriginY    36ce:04e9
+0.069     35   505 ovc13_panel.c   ovc13_drawHighlightedUnits  3d16:1b3b
+0.069     39   562 ovc09_init.c    init_usesGMapFlags3         3381:2651
+0.071    146  2046 ovc23_bldrec.c  ovc23_placeBuilding         55fe:1005
+...
+0.077     45   585 ovc09_init.c    init_rebuildMapFlags        3381:0693
+0.077     48   624 ovc10_constr.c  constr_usesGMapFlags2       36ce:3172
+0.077    333  4306 ovc10_constr.c  constr_usesBlitGfxRect2     36ce:1f99
+```
+
+**Caveat and verification.**  The sweep can over-reach when a function ends with a `jmp` to a
+shared epilogue, so a low ratio is a candidate, not proof.  The worst case was checked directly:
+`attact_usesGMapFlags3` at 3f0b:0c2a begins `push bp / mov bp,sp / sub sp,0x5c` (a 92-byte frame)
+and has **no `retf` in the first 1112 bytes**, all its jumps staying inside the function
+(`0x0CE3`, `0x0D04`, ...).  So it really is a large function and the 18-line body is a fragment -
+confirmed, not a sweep artefact.
+
+That makes three distinct integrity classes in the tree, all invisible to every gate:
+
+1. **mis-attributed bodies** (`ovc15_textError`, `ovc23_usesAlignUp43`) - a body under the wrong
+   name/address, provable by content mismatch;
+2. **truncated bodies** (this scan) - a body covering only part of its function, provable by
+   extent vs line count;
+3. **understated size table** - `functions.tsv` up to 9x low, superseded by
+   `audit/functions_real.tsv`.
+
+Note `ovc23_placeBuilding` (0.071) is in this list, and it was re-derived earlier this session
+from a 152-line exported body against a 2046-byte extent - so that rewrite, like
+`attact_usesAlignUp43`, may cover only the exported fragment.
+
+What this means concretely: **`grep_checks` counts tokens in whatever body exists, so a truncated
+body scores as well as a complete one.**  The gate can therefore fall while the recovered program
+becomes less complete, and the sessions' reductions should not be read as pure progress.
+
+  grep_checks 45,332; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
