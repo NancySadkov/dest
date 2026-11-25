@@ -23,6 +23,8 @@ verbose = "--verbose" in sys.argv
 why = "--why" in sys.argv
 list_path = (sys.argv[sys.argv.index("--list") + 1]
              if "--list" in sys.argv else None)
+absent_path = (sys.argv[sys.argv.index("--list-absent") + 1]
+               if "--list-absent" in sys.argv else None)
 
 # ---- original DGROUP symbols -------------------------------------------------
 orig = []          # (address, name)
@@ -188,7 +190,11 @@ if why:
         text = texts.get(off, "")
         if not text:
             continue
-        want = text.encode("latin-1", "replace")
+        try:
+            want = (text.encode("latin-1").decode("unicode_escape")
+                    .encode("latin-1", "replace"))
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            want = text.encode("latin-1", "replace")
         hits = [n for o, n in seg_off.items()
                 if dump[o:o + len(want)] == want
                 and dump[o + len(want):o + len(want) + 1] == b"\x00"]
@@ -204,6 +210,11 @@ if why:
     print("  text present but not at a symbol: %d" % len(inside))
     for off, name, text, at in inside[:6]:
         print("      %04x %-40s at %04x" % (off, name[:40], at))
+    if absent_path:
+        with io.open(absent_path, "w", encoding="utf-8", newline="\n") as fh:
+            for off, name, text in absent:
+                fh.write("%04x\t%s\t%s\n" % (off, name, text))
+        print("  absent list written to %s" % absent_path)
     print("  text absent from our data       : %d" % len(absent))
     for off, name, text in absent[:8]:
         print("      %04x %-40s %r" % (off, name[:40], text[:30]))

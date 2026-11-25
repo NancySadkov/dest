@@ -3946,3 +3946,37 @@ missing data at all.
 
   build 64/64 clean; LINK ERRORS 0; grep_checks 50,768
   compare_state 1,627/0/0; diff_dgroup 972/1,868
+
+### The 248 "absent" strings are recovered: none of the original's string data is missing
+
+`diff_dgroup --list-absent PATH` writes the strings the content rule could not find.
+All 248 were recovered from `audit/dgroup_2410.bin` into `src/decompiled/stmiss.c`,
+packed as one blob with an offset table (5,650 bytes; a plain array-per-string form was
+tried first and pushed DGROUP past 64 KB, and also inflated the section-5
+`char X[] = "..."` count by 248).
+
+Also fixed in the content rule itself: `audit/dgroup.csv`'s `repr` column escapes control
+characters (`%d \r`), so the text is decoded with `unicode_escape` before comparing.
+That alone moved 248 labels from "absent" to "present": many strings were in our data
+all along and had looked missing only because of the escaping.
+
+Result of `diff_dgroup --why` after the recovery:
+
+```
+matched by content, names differ : 742 -> 675 (individual arrays -> blob)
+text present but not at a symbol :  40 -> 107
+text absent from our data        : 248 ->   0
+```
+
+Every string label with known text is now accounted for: 675 at a rebuilt symbol and
+107 inside the blob.  The headline `972/1,868` is unchanged, because that counts **name**
+matches and the recovered strings carry `s_absentStrings` positions rather than the
+original labels.
+
+Note: the main-entry dump reported one extra difference (`s_n_d_w_u_s_u`, `%u s` vs
+`%k_s`) while the post-init_cfg dump holds the correct text at the same offset - the
+main-entry dump came from a different binary than the current build, so that number
+(1,545/12) should be re-sampled before it is trusted.
+
+  build 65/65 clean; LINK ERRORS 0; grep_checks 50,741
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
