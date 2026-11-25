@@ -776,7 +776,7 @@ void __cdecl16far draw_usesPlay_sfx(void)
   ulong prevTick;
   uint16_t outFlag;
   agnt_t *in_stack_0000fffa;
-  byte bStack_4;
+  byte col;
   
   prevTick = CONCAT22(unaff_SI,(*(uint16_t *)((uint8_t *)&(recordUpdateTick) + 2)));
   puVar3 = ovr_attact_usesBDADailyTimeCounter((ulong *)recordUpdateTick,prevTick,0);
@@ -817,8 +817,8 @@ void __cdecl16far draw_usesPlay_sfx(void)
           if (((char)uVar5 != '\0') && (GRecords[rec].reserved08 != '\0')) {
             ovr_play_sfx(80,0,0);
           }
-          bStack_4 = (byte)x;
-          uVar5 = ovr_ovc22_usesGOngoingBattle(bStack_4,(byte)in_stack_0000fffa);
+          col = (byte)x;
+          uVar5 = ovr_ovc22_usesGOngoingBattle(col,(byte)in_stack_0000fffa);
           if ((char)uVar5 != '\0') {
             outFlag = CONCAT11(1,(char)outFlag);
           }

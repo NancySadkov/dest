@@ -18,7 +18,7 @@ int __cdecl16far main(int argc,str_t *argv,str_t *envp)
   uint16_t key;
   str_t *psVar5;
   uint16_t uVar6;
-  byte bStack_6;
+  byte keyByte;
 
   /* Far-pointer tables initialised with the original image link-time DGROUP must be
      repaired whichever startup is the entry point; our startx does this too. */
@@ -97,8 +97,8 @@ L_main_081F:
         else if (key < 0xd2c) {
           if (key == 0x433) {
 L_main_0532:
-            bStack_6 = (byte)key;
-            bVar1 = (bStack_6 & 0xf) - 1;
+            keyByte = (byte)key;
+            bVar1 = (keyByte & 0xf) - 1;
             if (((uint8_t *)MenuItemEnabled)[bVar1] != 0xff) {
               if ((GMenuItem == bVar1) && (MenuMode == '\x01')) {
                 MenuMode = '\x02';

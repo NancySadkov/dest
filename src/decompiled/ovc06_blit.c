@@ -185,8 +185,8 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
   uint16_t gfxSeg;
   uint16_t uStack_18;
   uint16_t savedDstSeg;
-  int iStack_14;
-  uint16_t uStack_12;
+  int spanH;
+  uint16_t spanW;
   int iStack_10;
   uint16_t uStack_e;
   uint16_t uStack_c;
@@ -235,7 +235,7 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
         if ((int)(x + *(int *)(gfx.ofs + 5) + -1) <= (int)dst_w) {
           uStack_c = (x + *(int *)(gfx.ofs + 5)) - 1;
         }
-        uStack_12 = (uStack_c - uStack_8) + 1;
+        spanW = (uStack_c - uStack_8) + 1;
         uStack_a = dst_y;
         if ((int)dst_y <= (int)y) {
           uStack_a = y;
@@ -244,12 +244,12 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
         if ((int)(y + *(int *)(gfx.ofs + 7) + -1) <= (int)dst_h) {
           uStack_e = (y + *(int *)(gfx.ofs + 7)) - 1;
         }
-        iStack_14 = (uStack_e - y) + 1;
+        spanH = (uStack_e - y) + 1;
         uStack_18 = uStack_8 + uStack_a * 0x140;
         savedDstSeg = dst->seg;
         iStack_1c = gfx.ofs + 9;
         gfxSeg = gfx.seg;
-        for (iVar2 = 0; (iVar2 < iStack_14 && ((int)(iVar2 + y) <= (int)dst_h)); iVar2 = iVar2 + 1)
+        for (iVar2 = 0; (iVar2 < spanH && ((int)(iVar2 + y) <= (int)dst_h)); iVar2 = iVar2 + 1)
         {
           iVar1 = (*(code *)pfn)(uVar4,iStack_1c,gfxSeg,&rowBuf);
           iStack_1c = iStack_1c + iVar1;
@@ -259,7 +259,7 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
             uVar4 = 0x138e;
             src.seg = _SS;
             src.ofs = (uint16_t)(&rowBuf + iStack_10);
-            blitTillAlpha(dst_01,src,uStack_12);
+            blitTillAlpha(dst_01,src,spanW);
             uStack_18 = uStack_18 + 0x140;
           }
         }
