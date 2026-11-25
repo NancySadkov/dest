@@ -53,7 +53,7 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
   uint16_t uVar4;
   far_t handle;
   uint8_t palette;
-  stg_tmp_t *psStack_6;
+  stg_tmp_t *palRec;
   uint16_t uStack_4;
   
   iVar3 = 0;
@@ -84,9 +84,9 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
     ovr_season_countPromotable();
     handle.seg = Lbm_nwpanel1.seg;
     handle.ofs = Lbm_nwpanel1.ofs;
-    psStack_6 = ovr_stshLoadGfx(handle);
+    palRec = ovr_stshLoadGfx(handle);
     uStack_4 = in_DX;
-    ovr_calcSeasonPalette(psStack_6->cmap,in_DX,&palette,_SS,0,0);
+    ovr_calcSeasonPalette(palRec->cmap,in_DX,&palette,_SS,0,0);
     ovr_vgaSetPalette8bit(&palette,0);
     ovr_manage_mapPartySlots();
     strongholdCheckPending = 0;

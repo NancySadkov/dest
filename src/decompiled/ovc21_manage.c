@@ -803,7 +803,7 @@ uint16_t __cdecl16far alignmentDlg(char_sheet_t *sheet)
   uint uVar3;
   uint16_t uVar4;
   far_t entries;
-  char cStack_c;
+  char align;
   uint8_t inputBuf;
   
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
@@ -818,8 +818,8 @@ uint16_t __cdecl16far alignmentDlg(char_sheet_t *sheet)
       return 0;
     }
     uVar4 = (uint16_t)((ulong)sheet >> 0x10);
-    cStack_c = (char)inputResult;
-    ((char_sheet_t *)sheet)->alignment = cStack_c - 1;
+    align = (char)inputResult;
+    ((char_sheet_t *)sheet)->alignment = align - 1;
     pbVar1 = &((char_sheet_t *)sheet)->statMask;
     *pbVar1 = *pbVar1 | 4;
     if (CurPartySlot != '\0') {

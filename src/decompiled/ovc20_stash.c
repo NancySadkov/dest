@@ -878,28 +878,28 @@ void __cdecl16far init_ui_gfxes(void)
   uint16_t i;
   uint16_t unaff_DI;
   uint8_t palette;
-  stg_tmp_t *psStack_e;
-  stg_tmp_t *psStack_a;
+  stg_tmp_t *gfxRec;
+  stg_tmp_t *palRec;
   void *pvStack_6;
-  uint16_t uStack_4;
+  uint16_t gfxSeg;
   
   handle.seg = Lbm_nwpanel1.seg;
   handle.ofs = Lbm_nwpanel1.ofs;
-  psStack_a = ovr_stshLoadGfx(handle);
-  pcVar1 = (char *)ovr_calcSeasonPalette(psStack_a->cmap,in_DX,&palette,_SS,(char)&palette,0);
+  palRec = ovr_stshLoadGfx(handle);
+  pcVar1 = (char *)ovr_calcSeasonPalette(palRec->cmap,in_DX,&palette,_SS,(char)&palette,0);
   init_special_graphics((char *)CONCAT22(in_DX,pcVar1));
   ovr_vgaSetPalette8bit(&palette,0);
   init_special_graphics((char *)CONCAT22(Lbm_nwpanel1.seg,Lbm_nwpanel1.ofs));
   handle_00.seg = specialColorsSeg;
   handle_00.ofs = (uint16_t)specialColorsOfs;
-  psStack_e = ovr_stshLoadGfx(handle_00);
-  memcpy((char *)SpecialColors,(char *)CONCAT13((char)(in_DX >> 8),CONCAT12((char)in_DX,psStack_e)),
+  gfxRec = ovr_stshLoadGfx(handle_00);
+  memcpy((char *)SpecialColors,(char *)CONCAT13((char)(in_DX >> 8),CONCAT12((char)in_DX,gfxRec)),
          8);
   init_special_graphics((char *)CONCAT22(specialColorsSeg,specialColorsOfs));
   pvStack_6 = ovr_stshAlloc(0xfa0f);
   ptr.seg = in_DX;
   ptr.ofs = (uint16_t)pvStack_6;
-  uStack_4 = in_DX;
+  gfxSeg = in_DX;
   ovr_alignToSeg(ptr);
   uVar4 = in_DX;
   ovr_driver_fillRect(0,0,0x13f,199,0x0,in_DX,0,0,0,0,0);
@@ -947,7 +947,7 @@ void __cdecl16far init_ui_gfxes(void)
     memcpy((char *)CONCAT22(*(uint16_t *)((int)&MicePtrs.seg + i * 4),
                             (char *)((far_t far *)&MicePtrs + i)->ofs),(char *)MiceSaveBuf,0x121);
   }
-  handle_01.seg = uStack_4;
+  handle_01.seg = gfxSeg;
   handle_01.ofs = (uint16_t)pvStack_6;
   ovr_stshFree(handle_01);
   return;
