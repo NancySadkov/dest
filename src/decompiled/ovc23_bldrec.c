@@ -32,7 +32,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   byte *pbVar14;
   uint uVar15;
   uint16_t uVar16;
-  uint16_t uVar17;
+  uint16_t randPick;
   uint uVar18;
   char *pcVar19;
   char in_CL;
@@ -192,12 +192,12 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     *(char *)((int)pbVar14 * 2) = *(char *)((int)pbVar14 * 2) + (char)(in_DX >> 8);
     uStack_c = (uint)(byte)((byte)uVar15 & (byte)*(uint16_t *)(&stk_02c2 + iVar24));
     uVar16 = ovr_randBelow(in_stack_0000ffd8,0);
-    uVar17 = ovr_randBelow(uStackY_2c,0);
-    uStack_6 = (byte *)(CONCAT22(uVar17,(byte *)uStack_6) & 0xffffff);
+    randPick = ovr_randBelow(uStackY_2c,0);
+    uStack_6 = (byte *)(CONCAT22(randPick,(byte *)uStack_6) & 0xffffff);
     uVar33 = 0x83;
     uVar34 = 0x9a;
-    uVar17 = ovr_randBelow(in_stack_0000ffd8,0);
-    uStack_6 = (byte *)(CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),uVar17) & 0xffff00ff);
+    randPick = ovr_randBelow(in_stack_0000ffd8,0);
+    uStack_6 = (byte *)(CONCAT22((*(uint16_t *)((uint8_t *)&(uStack_6) + 2)),randPick) & 0xffff00ff);
     if ((uVar16 & 0xff) < uStack_c) {
       uVar15 = (uint)(*(uint16_t *)((uint8_t *)&(uStack_6) + 2)) / (uint)((byte *)uStack_6 + 1);
       uStack_10 = 1;

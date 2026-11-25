@@ -886,7 +886,7 @@ uint __cdecl16far ovc27_breathHalfDamage(agnt_t *agnt,uint16_t arg2)
 void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uint16_t arg3,uint16_t arg4)
 
 {
-  byte bVar1;
+  byte roll;
   uint uVar2;
   uint16_t uVar3;
   uint16_t uVar4;
@@ -910,8 +910,8 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
   ptrSeg = (char *)((int)&AgntAnms[0x75].halfWidth + 1);
   if (agnt->variant == 0x1) {
     if ((((agntG_t *)agnt->gdata)->flags3 & 1) == 0) {
-      bVar1 = ovr_manage_rollDice((((entity_t *)agnt->entity)->base).level,'\x06');
-      uVar2 = (uint)bVar1;
+      roll = ovr_manage_rollDice((((entity_t *)agnt->entity)->base).level,'\x06');
+      uVar2 = (uint)roll;
       uVar3 = ovc27_spellHalfDamage
                         ((agnt_t *)
                          CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)))
@@ -957,8 +957,8 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t *agnt,uint16_t agntIndex,uin
   }
   if (agnt->variant == 0x2) {
     iStack_8 = ((((entity_t *)agnt->entity)->base).level / 5) * 2 + 1;
-    bVar1 = ovr_manage_rollDice((char)iStack_8,'\x06');
-    uVar2 = (uint)bVar1 + iStack_8;
+    roll = ovr_manage_rollDice((char)iStack_8,'\x06');
+    uVar2 = (uint)roll + iStack_8;
     uVar3 = ovc27_spellHalfDamage
                       ((agnt_t *)
                        CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)));

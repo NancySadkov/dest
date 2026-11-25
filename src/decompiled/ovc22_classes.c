@@ -136,7 +136,7 @@ char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t *ag
   uint16_t uVar5;
   char *pcVar6;
   uint uVar7;
-  uint uVar8;
+  uint aligned;
   char in_CL;
   uint16_t uVar9;
   uint16_t unaff_BP;
@@ -231,14 +231,14 @@ L_OVC25_5b66_00ff_01D9:
                 uVar5 = (uint16_t)((ulong)Entities >> 0x10);
               } while (AGNT_FIELD(&((entity_t *)Entities)[pcVar6], base.entity, 3) != bldType);
               uVar7 = ovr_alignUp4(((entity_t *)Entities)[pcVar6].base.x,0,0);
-              uVar8 = ovr_alignUp4(unaff_DI,0,0);
+              aligned = ovr_alignUp4(unaff_DI,0,0);
               uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-              if ((uVar7 == uVar8) &&
+              if ((uVar7 == aligned) &&
                  (((entity_t *)Entities)[pcVar6].base.y == in_stack_0000000a))
               break;
               uVar7 = ovr_alignUp4(((entity_t *)Entities)[pcVar6].base.destX,0,0);
-              uVar8 = ovr_alignUp4(unaff_DI,0,0);
-              if (uVar7 == uVar8) goto code_r0x0005b805;
+              aligned = ovr_alignUp4(unaff_DI,0,0);
+              if (uVar7 == aligned) goto code_r0x0005b805;
             }
           } while( true );
         case 2:
@@ -3069,7 +3069,7 @@ void __cdecl16far upd_usesAlignUp4(void)
   char sheetFaction;
   uint16_t randVal;
   uint uVar12;
-  char *pcVar13;
+  char *msg;
   uint16_t index;
   uint16_t uVar14;
   long *plVar15;
@@ -3638,9 +3638,9 @@ void __cdecl16far upd_usesAlignUp4(void)
             uVar35 = (undefined1)((uint)sVar6 >> 8);
             uVar34 = 0x10;
             uVar12 = ovr_alignUp4(((unit_t *)GUnits)[unitIdx].x,0,0);
-            pcVar13 = ovr_fmVsprintf("Mine exhausted at (%d, %d).",
+            msg = ovr_fmVsprintf("Mine exhausted at (%d, %d).",
                                      (char *)CONCAT13(uVar35,CONCAT12(uVar33,uVar12)));
-            ovr_say(pcVar13,uVar34);
+            ovr_say(msg,uVar34);
             ovr_inputUpdate((ulong)((uint)MessageDelay * 2 + 0x24));
           }
           ovc22_usesGUnits(unitIdx,(uint8_t *)
@@ -3865,14 +3865,14 @@ void __cdecl16far upd_usesAlignUp4(void)
           if (AgntGs[(uint)peVar20[idx].base.gindex].ai == '\0') {
             ovr_alignUp4(((peVar20 + idx)->base).x,(char)peVar20[idx].base.y,0);
             iVar17 = (uint)((entity_t *)Entities)[idx].base.gindex * 0x95;
-            pcVar13 = ovr_fmVsprintf("Intelligence reports %s unit died of starvation. (%d, %d)",
+            msg = ovr_fmVsprintf("Intelligence reports %s unit died of starvation. (%d, %d)",
                                      (char *)CONCAT22(*(uint16_t *)
                                                        ((int)&worldMenuLabels[1].ofs + 1 + iVar17),
                                                       (char *)*(uint16_t *)
                                                                ((int)&worldMenuLabels[0].seg + 1 +
                                                                iVar17)));
             asm { mov randVal,dx };
-            ovr_uiNotify(pcVar13,randVal,(char)randVal);
+            ovr_uiNotify(msg,randVal,(char)randVal);
           }
           ovr_ovc15_removeEntity(idx);
           uVar23 = idx;

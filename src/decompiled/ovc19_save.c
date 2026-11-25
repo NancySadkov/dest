@@ -337,7 +337,7 @@ int __cdecl16far save_writeBlock(int handle,void *buf,uint16_t bufSeg,uint16_t c
 int __cdecl16far stSave(void)
 
 {
-  char *pcVar1;
+  char *path;
   int iVar2;
   uint writeOk;
   undefined1 uVar4;
@@ -349,8 +349,8 @@ int __cdecl16far stSave(void)
   
   ovr_drawTextAt((char *)"Saving...",0x2410,0xa000);
   ovr_stop_audio();
-  pcVar1 = ovr_fmVsprintf("%ssave.%03d",&GWorkDir);
-  iVar2 = ovr_creat_wait_unlock_and_disk(pcVar1,in_DX);
+  path = ovr_fmVsprintf("%ssave.%03d",&GWorkDir);
+  iVar2 = ovr_creat_wait_unlock_and_disk(path,in_DX);
   if (-1 < iVar2) {
     writeOk = save_writeBlock(SaveHeader.ofs,(void *)CONCAT22(0x28,SaveHeader.seg),unaff_DI,unaff_SI);
     if ((((((writeOk & 0xff) != 0) &&
@@ -483,8 +483,8 @@ int __cdecl16far stSave(void)
     }
 L_stSave_0EE6:
     close(iVar2);
-    pcVar1 = ovr_fmVsprintf("%ssave.%03d",&GWorkDir);
-    iVar2 = unlink((char *)CONCAT22(in_DX,pcVar1));
+    path = ovr_fmVsprintf("%ssave.%03d",&GWorkDir);
+    iVar2 = unlink((char *)CONCAT22(in_DX,path));
   }
   bVar5 = (byte)((uint)iVar2 >> 8);
   ovr_drawTextAt((char *)"Save Error",0x2410,0xa000);

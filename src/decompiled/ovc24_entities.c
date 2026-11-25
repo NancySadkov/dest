@@ -106,7 +106,7 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   long *plVar8;
   uint16_t randPick;
   uint16_t uVar10;
-  uint16_t uVar11;
+  uint16_t randPick2;
   int gOfs;
   char *msg;
   uint16_t startY;
@@ -231,10 +231,10 @@ void __cdecl16far ovc24_textKill(uint entityIndex)
   factionTimer[1] = factionTimer[1] + 0x14;
   randPick = ovr_randBelow((uint16_t)(long *)factionTimer[0],0);
   uVar10 = ovr_randBelow((uint16_t)(long *)factionTimer[1],0);
-  uVar11 = ovr_randBelow((uint16_t)(long *)factionTimer[0],0);
-  uStack_8 = uVar11 & 0xff;
-  uVar11 = ovr_randBelow((uint16_t)(long *)factionTimer[1],0);
-  uVar16 = uVar11 & 0xff;
+  randPick2 = ovr_randBelow((uint16_t)(long *)factionTimer[0],0);
+  uStack_8 = randPick2 & 0xff;
+  randPick2 = ovr_randBelow((uint16_t)(long *)factionTimer[1],0);
+  uVar16 = randPick2 & 0xff;
   if ((uVar10 & 0xff) < (randPick & 0xff)) {
     uStack_8 = uStack_8 / (uVar16 + 1);
     bStack_10 = 1;
@@ -556,7 +556,7 @@ void __cdecl16far ovc24_checkStrongholds(void)
   bool bVar1;
   bool bVar2;
   uint16_t uVar3;
-  uint uVar4;
+  uint aligned;
   char *pcVar5;
   uint uVar6;
   uint16_t uVar7;
@@ -619,16 +619,16 @@ L_OVC24_5943_112e_1255:
         }
         uVar7 = 0x195d;
         if ((*(uint *)((int)&worldMenuLabels[7].seg + 1 + (uint)leaderClass * 0x95) & 0x800) == 0) {
-          uVar4 = alignUp4((GLeaderSheets[leaderIndex])->x,uVar6,0);
+          aligned = alignUp4((GLeaderSheets[leaderIndex])->x,uVar6,0);
           pcVar5 = ovr_ovc15_capitalize((char *)&text);
           pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x578d,_SS),
-                                 (char *)CONCAT22(pcVar5,(char *)0x26510),uVar7,uVar4);
+                                 (char *)CONCAT22(pcVar5,(char *)0x26510),uVar7,aligned);
           ovr_uiNotify(pcVar5,uVar7,0);
         }
         else {
-          uVar4 = alignUp4((GLeaderSheets[leaderIndex])->x,uVar6,0);
+          aligned = alignUp4((GLeaderSheets[leaderIndex])->x,uVar6,0);
           pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x576a,_SS),
-                                 (char *)CONCAT22(uVar4,(char *)0x26510));
+                                 (char *)CONCAT22(aligned,(char *)0x26510));
           ovr_uiNotify(pcVar5,uVar7,0);
         }
         if (firstLeader == leaderIndex) {
@@ -875,7 +875,7 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
   uint uVar4;
   uint16_t uVar5;
   int iVar6;
-  char *pcVar7;
+  char *msg;
   int iVar8;
   uint uVar9;
   uint16_t uVar10;
@@ -912,14 +912,14 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
         alignUp4(((entity_t *)Entities)[entityIndex].base.x,
                  ((entity_t *)Entities)[entityIndex].base.y,0xa000);
         iVar6 = (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95;
-        pcVar7 = ovr_fmVsprintf("Intelligence reports %s unit cured of disease. (%d, %d)",
+        msg = ovr_fmVsprintf("Intelligence reports %s unit cured of disease. (%d, %d)",
                                 (char *)CONCAT22(*(uint16_t *)
                                                   ((int)&worldMenuLabels[1].ofs + 1 + iVar6),
                                                  (char *)*(uint16_t *)
                                                           ((int)&worldMenuLabels[0].seg + 1 + iVar6)
                                                 ));
         asm { mov uVar5,dx };
-        ovr_uiNotify(pcVar7,uVar5,0);
+        ovr_uiNotify(msg,uVar5,0);
         return;
       }
     }
@@ -938,14 +938,14 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
         alignUp4(*(int *)((entity_t *)iVar6 + entityIndex),
                  ((entity_t *)iVar6)[entityIndex].base.y,0xa000);
         iVar6 = (uint)((entity_t *)Entities)[entityIndex].base.gindex * 0x95;
-        pcVar7 = ovr_fmVsprintf("Intelligence reports %s unit succombs to blast spore disease. (%d, %d)"
+        msg = ovr_fmVsprintf("Intelligence reports %s unit succombs to blast spore disease. (%d, %d)"
                                 ,(char *)CONCAT22(*(uint16_t *)
                                                    ((int)&worldMenuLabels[1].ofs + 1 + iVar6),
                                                   (char *)*(uint16_t *)
                                                            ((int)&worldMenuLabels[0].seg + 1 + iVar6
                                                            )));
         asm { mov uVar5,dx };
-        ovr_uiNotify(pcVar7,uVar5,0);
+        ovr_uiNotify(msg,uVar5,0);
         uVar10 = (uint16_t)((ulong)Entities >> 0x10);
         ovr_ovc15_usesLDIV_at_2
                   (entityIndex,((entity_t *)Entities)[uVar4].base.gindex,
