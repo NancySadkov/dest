@@ -318,25 +318,26 @@ L_OVC42_6d7a_04f2_0627:
 void __cdecl16far ovc42_usesGfxRndSeed(void)
 
 {
-  byte bVar1;
+  /* Re-derived: walks a 21 x 23 window around the cursor and, for every cell whose construction
+     flags are set, replaces the stored unit index by bldType + the building's halfWidth.  The
+     exported uVar4 segment half was dead. */
+  byte bldType;
+  int dx;
+  int dy;
+  uint ok;
   int x;
   int y;
-  uint uVar2;
-  int iVar3;
-  uint16_t uVar4;
-  int iStack_a;
-  
-  for (iStack_a = -10; iStack_a < 0xb; iStack_a = iStack_a + 1) {
-    for (iVar3 = -0x14; iVar3 < 3; iVar3 = iVar3 + 1) {
-      x = GfxRndSeed + iStack_a;
-      y = GfxRndSeed2 + iVar3;
-      uVar2 = ovr_constr_usesGMapFlags(x,y,0);
-      if ((char)uVar2 != '\0') {
-        uVar4 = (uint16_t)((ulong)GUnitGrid >> 0x10);
-        bVar1 = ((unit_t *)GUnits + (*(short (*) [148] [60])GUnitGrid)[x][y])->bldType;
-        if (BLD_FIELD(&BuildingTypes[bVar1], halfWidth, 0) != '\0') {
+
+  for (dx = -10; dx < 0xb; dx = dx + 1) {
+    for (dy = -0x14; dy < 3; dy = dy + 1) {
+      x = GfxRndSeed + dx;
+      y = GfxRndSeed2 + dy;
+      ok = ovr_constr_usesGMapFlags(x,y,0);
+      if ((char)ok != '\0') {
+        bldType = ((unit_t *)GUnits + (*(short (*) [148] [60])GUnitGrid)[x][y])->bldType;
+        if (BLD_FIELD(&BuildingTypes[bldType], halfWidth, 0) != '\0') {
           (*(short (*) [148] [60])GUnitGrid)[x][y] =
-               (uint)bVar1 + (uint)BLD_FIELD(&BuildingTypes[bVar1], halfWidth, 0);
+              (uint)bldType + (uint)BLD_FIELD(&BuildingTypes[bldType], halfWidth, 0);
         }
       }
     }
