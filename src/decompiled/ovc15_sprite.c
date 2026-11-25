@@ -1169,37 +1169,34 @@ uint16_t __cdecl16far ovc15_usesStExit2(byte agntIndex)
 uint16_t __cdecl16far ovc15_compute1(uint16_t *agnt)
 
 {
-  uint16_t uVar1;
-  int *piVar2;
-  int iVar3;
+  /* Re-derived: the sprite's y position relative to its screen column, offset by 0x93
+     normally or 0xac when agnt[0x11] is set.  The exported
+     CONCAT11((char)((uint)iVar5 >> 8), uStack_c) only reassembles iVar5 from its own bytes
+     (uStack_c = (undefined1)iVar5), so it is returned directly; the reads assigned to
+     iVar5 before the real computation (piVar2[1], piVar2[9]) are dead. */
+  uint16_t agntSeg;
+  int *frameOfs;
+  int frameWord;
+  int yValue;
   int clampedX;
-  int iVar5;
-  uint16_t *puVar6;
-  uint16_t uVar7;
-  undefined1 uStack_c;
-  int *intPtr;
-  uint16_t uStack_4;
-  
-  uVar7 = (uint16_t)((ulong)agnt >> 0x10);
-  puVar6 = (uint16_t *)agnt;
-  uVar1 = *(uint16_t *)((int)puVar6 + 0x15);
-  piVar2 = (int *)*(int *)((int)puVar6 + 0x13);
-  intPtr = (int *)CONCAT22(uVar1,piVar2);
-  if (*(char *)((int)puVar6 + 0x11) == '\0') {
-    iVar5 = piVar2[1];
-    iVar3 = *intPtr;
+  uint16_t *agntWord;
+  int *frameBase;
+
+  agntWord = (uint16_t *)agnt;
+  agntSeg = *(uint16_t *)((int)agntWord + 0x15);
+  frameOfs = (int *)*(int *)((int)agntWord + 0x13);
+  frameBase = (int *)CONCAT22(agntSeg,frameOfs);
+  if (*(char *)((int)agntWord + 0x11) == '\0') {
+    frameWord = *frameBase;
     clampedX = ovr_agnt_clampX(*agnt);
-    iVar5 = (*(int *)(iVar3 + 0xd) - *(int *)(&columnScreenY[clampedX])) + 0x93;
-    uStack_c = (undefined1)iVar5;
+    yValue = (*(int *)(frameWord + 0xd) - *(int *)(&columnScreenY[clampedX])) + 0x93;
   }
   else {
-    iVar5 = piVar2[9];
-    iVar3 = piVar2[8];
+    frameWord = frameOfs[8];
     clampedX = ovr_agnt_clampX(*agnt);
-    iVar5 = (*(int *)(iVar3 + 0xd) - *(int *)(&columnScreenY[clampedX])) + 0xac;
-    uStack_c = (undefined1)iVar5;
+    yValue = (*(int *)(frameWord + 0xd) - *(int *)(&columnScreenY[clampedX])) + 0xac;
   }
-  return CONCAT11((char)((uint)iVar5 >> 8),uStack_c);
+  return yValue;
 }
 
 

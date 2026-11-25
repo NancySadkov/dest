@@ -299,23 +299,25 @@ void * __cdecl16far manage_playerTitle(char_sheet_t *sheet,...)
 uint __cdecl16far manage_usesGLeaderCount(void)
 
 {
-  byte bVar1;
-  int iVar2;
-  uint uVar3;
-  
-  uVar3 = 0;
-  bVar1 = 0;
-  for (iVar2 = 0; iVar2 < (int)(uint)GLeaderCount; iVar2 = iVar2 + 1) {
-    if (((GLeaderSheets[iVar2])->active != '\0') &&
-       (*(char *)((int)*(uint32_t *)(iVar2 << 2) + 0x3f) == '\0')) {
-      uVar3 = uVar3 + (GLeaderSheets[iVar2])->popularity;
-      bVar1 = bVar1 + 1;
+  /* Re-derived: the mean popularity of the active leaders whose sheet +0x3f byte is clear,
+     or 0 when there are none. */
+  byte activeCount;
+  int leaderIdx;
+  uint sum;
+
+  sum = 0;
+  activeCount = 0;
+  for (leaderIdx = 0; leaderIdx < (int)(uint)GLeaderCount; leaderIdx = leaderIdx + 1) {
+    if (((GLeaderSheets[leaderIdx])->active != '\0') &&
+       (*(char *)((int)*(uint32_t *)((leaderIdx << 2)) + 0x3f) == '\0')) {
+      sum = sum + (GLeaderSheets[leaderIdx])->popularity;
+      activeCount = activeCount + 1;
     }
   }
-  if (bVar1 != 0) {
-    uVar3 = uVar3 / bVar1;
+  if (activeCount != 0) {
+    sum = sum / activeCount;
   }
-  return uVar3;
+  return sum;
 }
 
 

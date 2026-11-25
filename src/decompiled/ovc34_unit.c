@@ -14,29 +14,31 @@
 int __cdecl16far unit_usesGUnits(int unitIndex)
 
 {
-  byte bVar1;
-  uint32_t uVar2;
-  uint uVar3;
-  unit_t *puVar4;
-  int iVar5;
-  uint16_t uVar6;
-  
-  uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
-  puVar4 = (unit_t *)GUnits;
-  iVar5 = *(int *)((uint)(puVar4 + unitIndex)->bldType * 0x27 + 0x12e);
-  uVar3 = ovr_constr_usesGMapFlags2(puVar4[unitIndex].x,puVar4[unitIndex].y);
-  if ((uVar3 & 0xff) == 3) {
-    iVar5 = iVar5 * 3 >> 1;
+  /* Re-derived: the building's value from BuildingTypes[..].word_0x12e, scaled by the
+     placement quality (3 -> *3/2, 4 -> *2), plus 5 when the unit type's sheet byte +0x5d
+     has bit 8 set. */
+  byte unitType;
+  uint32_t sheetRef;
+  uint quality;
+  unit_t *units;
+  int value;
+
+  units = (unit_t *)GUnits;
+  value = *(int *)((uint)(units + unitIndex)->bldType * 0x27 + 0x12e);
+  quality = ovr_constr_usesGMapFlags2(units[unitIndex].x,units[unitIndex].y);
+  if ((quality & 0xff) == 3) {
+    value = value * 3 >> 1;
   }
-  else if ((uVar3 & 0xff) == 4) {
-    iVar5 = iVar5 << 1;
+  else if ((quality & 0xff) == 4) {
+    value = value << 1;
   }
-  bVar1 = ((unit_t *)GUnits)[unitIndex].unitType;
-  if ((bVar1 != 0xff) &&
-     (uVar2 = *(uint32_t *)((uint)bVar1 << 2), (*(byte *)((int)uVar2 + 0x5d) & 8) != 0)) {
-    iVar5 = iVar5 + 5;
+  unitType = ((unit_t *)GUnits)[unitIndex].unitType;
+  if ((unitType != 0xff) &&
+     (sheetRef = *(uint32_t *)((uint)unitType << 2),
+      (*(byte *)((int)sheetRef + 0x5d) & 8) != 0)) {
+    value = value + 5;
   }
-  return iVar5;
+  return value;
 }
 
 
