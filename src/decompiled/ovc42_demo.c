@@ -483,9 +483,9 @@ uint16_t __cdecl16far run_demo(void)
   uint8_t palette[0x300];   /* palette buffer, cleared at 6d7a:0cc6 */
   stg_tmp_t *gfxPtr;
   uint16_t uStack_a;
-  byte bStack_7;
+  byte colorD;
   byte colorC;
-  byte bStack_5;
+  byte colorE;
   byte colorB;
   byte colorA;
   
@@ -505,10 +505,10 @@ uint16_t __cdecl16far run_demo(void)
   uVar3 = ((uint16_t *)((uint)colorB * 4))[1];
   strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
                           CONCAT12((char)uVar3,*(uint16_t *)((uint)colorB * 4))),"Nasher");
-  bStack_5 = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
-  uVar3 = ((uint16_t *)((uint)bStack_5 * 4))[1];
+  colorE = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
+  uVar3 = ((uint16_t *)((uint)colorE * 4))[1];
   strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
-                          CONCAT12((char)uVar3,*(uint16_t *)((uint)bStack_5 * 4))),"Fordor");
+                          CONCAT12((char)uVar3,*(uint16_t *)((uint)colorE * 4))),"Fordor");
   colorC = ovr_ovc30_textDivideError(10,1,'\x02',100,1,2);
   uVar3 = ((uint16_t *)((uint)colorC * 4))[1];
   strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
@@ -678,7 +678,7 @@ uint16_t __cdecl16far run_demo(void)
                         (*(uint8_t *)((uint8_t *)&(cmap_00.seg))) = uVar5;
                         cmap_00.ofs = (uint16_t)palette;
                         (*(uint8_t *)((uint8_t *)&(cmap_00.seg) + 1)) = ssHi;
-                        ovc42_showAgentStats(3,bStack_5,'\x01',cmap_00,0);
+                        ovc42_showAgentStats(3,colorE,'\x01',cmap_00,0);
                         ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x10);
                         (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
                         (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
@@ -870,23 +870,23 @@ uint16_t __cdecl16far run_demo(void)
                                                 ;
                                                 demoCenterX = 0x58;
                                                 demoCenterY = 0x1e;
-                                                bStack_7 = ovr_ovc30_textDivideError
+                                                colorD = ovr_ovc30_textDivideError
                                                                      (0xb,1,'\x02',100,1,2);
                                                 GfxRndSeed = demoCenterX;
                                                 GfxRndSeed2 = demoCenterY + 2;
                                                 ovc42_populateArea(colorB);
                                                 ovr_ovc18_usesRandBelow
-                                                          (GfxRndSeed - 1,GfxRndSeed2 - 2,0,bStack_7
+                                                          (GfxRndSeed - 1,GfxRndSeed2 - 2,0,colorD
                                                            ,(char)(GfxRndSeed2 - 2),0);
                                                 ovr_ovc18_usesRandBelow
-                                                          (GfxRndSeed,GfxRndSeed2 - 2,0,bStack_7,
+                                                          (GfxRndSeed,GfxRndSeed2 - 2,0,colorD,
                                                            (char)(GfxRndSeed2 - 2),0);
                                                 ovr_ovc18_usesRandBelow
-                                                          (GfxRndSeed + 1,GfxRndSeed2 - 2,0,bStack_7
+                                                          (GfxRndSeed + 1,GfxRndSeed2 - 2,0,colorD
                                                            ,(char)(GfxRndSeed2 - 2),0);
                                                 ovr_ovc18_usesRandBelow
                                                           (GfxRndSeed - 2,GfxRndSeed2 - 2,0x8b,
-                                                           bStack_7,(char)(GfxRndSeed2 - 2),0x8b);
+                                                           colorD,(char)(GfxRndSeed2 - 2),0x8b);
                                                 AgntFlag1 = false;
                                                 ovr_ovc41_usesAgnt_clear('\0');
                                                 ovr_ovc40_usesCalcSeasonPalette('\x01');

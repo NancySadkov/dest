@@ -803,8 +803,8 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   uint8_t msg;
   uint uStack_2a;
   uint flags;
-  int iStack_26;
-  int iStack_24;
+  int spanH;
+  int spanX;
   uint16_t uStack_22;
   int iStack_20;
   int iStack_1e;
@@ -907,16 +907,16 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   ovc13_drawPanelHighlight();
   ovc13_drawHighlightedUnits();
   iVar8 = (GfxRndSeed - Seed_2000_d110) * 2;
-  iStack_24 = iVar8 + 7;
-  iStack_26 = (GfxRndSeed2 - Seed_2000_d10e) * 3 + 8;
-  ovr_driver_fillSpan(iStack_24,iVar8 + 0x10,(byte)iStack_26,0xe0,&((brect_t *)BlitRects)->x,0x2410)
+  spanX = iVar8 + 7;
+  spanH = (GfxRndSeed2 - Seed_2000_d10e) * 3 + 8;
+  ovr_driver_fillSpan(spanX,iVar8 + 0x10,(byte)spanH,0xe0,&((brect_t *)BlitRects)->x,0x2410)
   ;
-  ovr_driver_fillSpan(iStack_24,iStack_24 + 9,(char)iStack_26 + 4,0xe0,&((brect_t *)BlitRects)->x,
+  ovr_driver_fillSpan(spanX,spanX + 9,(char)spanH + 4,0xe0,&((brect_t *)BlitRects)->x,
                       0x2410);
   ovr_ovc07_usesFillRect
-            (iStack_24,iStack_26,iStack_24,iStack_26 + 4,0xe0,(brect_t *)BlitRects,0x2410);
+            (spanX,spanH,spanX,spanH + 4,0xe0,(brect_t *)BlitRects,0x2410);
   ovr_ovc07_usesFillRect
-            (iStack_24 + 9,iStack_26,iStack_24 + 9,iStack_26 + 4,0xe0,(brect_t *)BlitRects,0x2410);
+            (spanX + 9,spanH,spanX + 9,spanH + 4,0xe0,(brect_t *)BlitRects,0x2410);
   ovc13_usesScreenY2();
   uStack_4 = TextBlitDstSeg;
   pbVar6 = (byte *)((char *)0x26510);

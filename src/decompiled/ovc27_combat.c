@@ -597,12 +597,12 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
   uint16_t uVar12;
   long lVar13;
   uint8_t text;
-  byte bStack_13;
+  byte variant;
   int iStack_12;
   uint16_t uStack_10;
   int iStack_e;
   int iStack_c;
-  int iStack_a;
+  int targetOfs;
   uint16_t uStack_8;
   agnt_t *paStack_6;
   uint16_t uStack_4;
@@ -614,29 +614,29 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
     return (uint)bVar1 << 8;
   }
   if (paStack_6->animFrame == 0xff) {
-    iStack_a = (uint)paStack_6->target * 0x34;
+    targetOfs = (uint)paStack_6->target * 0x34;
     uStack_8 = SEG_OF(Agnts);
     uVar11 = uStack_8;
     uStack_8 = SEG_OF(Agnts);
     uVar12 = uVar11;
     if (((((((agntG_t *)paStack_6->gdata)->flags & 0x1000) != 0) &&
-         (uVar12 = uStack_8, (((agntG_t *)((iStack_a + 0x1d)))->flags2 & 0x10) == 0))
-        && ((uStack_8 = uVar11, (((agntG_t *)((iStack_a + 0x1d)))->flags2 & 8) == 0
+         (uVar12 = uStack_8, (((agntG_t *)((targetOfs + 0x1d)))->flags2 & 0x10) == 0))
+        && ((uStack_8 = uVar11, (((agntG_t *)((targetOfs + 0x1d)))->flags2 & 8) == 0
             || (bVar1 = ovr_agnt_compute9(paStack_6,0), uVar12 = uStack_8, '\0' < (char)bVar1)))) &&
        (uVar2 = ovr_randBelow(2,0), uVar12 = uStack_8, (uVar2 & 0xff) == 0)) {
       return 0;
     }
     uStack_8 = uVar12;
     uVar3 = ovc27_usesRandBelow5((agnt_t *)CONCAT22(uStack_4,paStack_6));
-    bStack_13 = (byte)uVar3;
+    variant = (byte)uVar3;
     uVar4 = uVar3 & 0xff;
     if (uVar4 == 0) {
       ovr_agnt_usesAnimFrame(paStack_6);
       uVar4 = uVar4 & 0xff00;
     }
     else {
-      uVar11 = (uint16_t)((ulong)*(uint32_t *)(iStack_a + 0x1d) >> 0x10);
-      iVar8 = (int)*(uint32_t *)(iStack_a + 0x1d);
+      uVar11 = (uint16_t)((ulong)*(uint32_t *)(targetOfs + 0x1d) >> 0x10);
+      iVar8 = (int)*(uint32_t *)(targetOfs + 0x1d);
       iVar5 = (uVar3 & 0xff) * 0x21;
       iVar6 = (uVar3 & 0xff) * 0x21;
       uVar2 = 0x222b;
@@ -651,8 +651,8 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
       msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5ba4,_SS),
                           (char *)CONCAT22(puVar7,(char *)0x26510),uVar2);
       ovr_uiNotify(msg,uVar2,0);
-      paStack_6->variant = bStack_13;
-      if (*(char *)((uint)bStack_13 * 0x21 + -0x17) == '9') {
+      paStack_6->variant = variant;
+      if (*(char *)((uint)variant * 0x21 + -0x17) == '9') {
         uVar3 = ovr_audio_panFromX(paStack_6,0);
         lVar13 = (ulong)uVar3 << 0x10;
         uVar2 = ovr_randBelow(2,0);
@@ -660,9 +660,9 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
       }
       else {
         uVar2 = ovr_audio_panFromX(paStack_6,0);
-        ovr_play_sfxU(*(byte *)((uint)bStack_13 * 0x21 + -0x17),0,uVar2,0,0);
+        ovr_play_sfxU(*(byte *)((uint)variant * 0x21 + -0x17),0,uVar2,0,0);
       }
-      if (*(char *)((uint)bStack_13 * 0x21 + -0x16) == '\0') {
+      if (*(char *)((uint)variant * 0x21 + -0x16) == '\0') {
         paStack_6->animFrame = 0xf5;
         uVar4 = 1;
       }

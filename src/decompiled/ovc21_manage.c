@@ -3737,7 +3737,7 @@ void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,ch
   uint16_t uVar2;
   uint16_t uVar3;
   uint8_t msg;
-  uint16_t uStack_6;
+  uint16_t savedSeed;
   uint16_t uStack_4;
   
   unitTypeFilter = (undefined1)unitType;
@@ -3746,12 +3746,12 @@ void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,ch
     ovr_stats_openCastlePanel();
   }
   uStack_4 = GfxRndSeed;
-  uStack_6 = GfxRndSeed2;
+  savedSeed = GfxRndSeed2;
   GfxRndSeed = Seed_2000_d1da;
   GfxRndSeed2 = Seed_2000_d1d8;
   ovr_ovc13_usesAlignUp4();
   GfxRndSeed = uStack_4;
-  GfxRndSeed2 = uStack_6;
+  GfxRndSeed2 = savedSeed;
   unitTypeFilter = 0xff;
   partyFilter = 0xff;
   if (unitType == 0xfe) {
@@ -3759,7 +3759,7 @@ void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,ch
       ovr_say((char *)"All units are displayed.",0x2410);
     }
     else {
-      uVar3 = uStack_6;
+      uVar3 = savedSeed;
       pcVar1 = ovr_ovc22_className(partyIndex,0);
       uVar2 = _DS;
       pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5538,_SS),
@@ -3770,14 +3770,14 @@ void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,ch
     }
   }
   else if (partyIndex == 0xff) {
-    uVar3 = uStack_6;
+    uVar3 = savedSeed;
     pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x55b0,_SS),
                            (char *)CONCAT22((char *)unitName,(char *)0x26510),
                            (*(uint16_t *)((uint8_t *)&(unitName) + 2)));
     ovr_say(pcVar1,uVar3);
   }
   else {
-    uVar3 = uStack_6;
+    uVar3 = savedSeed;
     pcVar1 = ovr_ovc22_className(partyIndex,0);
     uVar2 = _DS;
     pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x557d,_SS),
