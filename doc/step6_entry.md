@@ -6664,3 +6664,33 @@ it with `les bx, dword ptr [bp-6]`, which is the original's access form.
 
   grep_checks 40,999 -> 40,970; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+
+### append_name_to_path: semantics clear, call form not yet
+
+The body is only 13 lines and its intent is unmistakable - copy the path, strip back to the last
+separator, append the name:
+
+```c
+strcpy(&GStaticBuffer, path);
+for (l = strlen(&GStaticBuffer); (0 < l && ((undefined1 *)&randomFeatureCount)[l] != 0x5c); l--);
+((undefined *)&GStaticBuffer)[l] = 0;
+strcat(&GStaticBuffer, name);
+```
+
+but both calls are written with mangled far-pointer builds:
+
+```c
+strcpy(&GStaticBuffer,(char *)CONCAT22((char *)path,in_stack_00000004));
+strcat(&GStaticBuffer,(char *)CONCAT22((char *)name,(*(uint16_t *)((uint8_t *)&(path) + 2))));
+```
+
+In the first, `path` is the high word (segment) and the phantom the low one; in the second `name` is
+the high word and the segment half of `path` the low one.  That is Ghidra splitting a far `char *`
+parameter into halves and reassembling them in the wrong order, not code the original contains.
+
+The prologue pushes `[bp+8], [bp+6], 0x280, 0x8bb1` before `lcall 0,0x2d31`, i.e. four words for the
+first call, so the exact seg/ofs push order has to be established before the two calls can be
+rewritten.  Left unchanged for that reason: the semantic guess (`strcpy(dst, path)`) is very likely
+right, and "very likely" is what produced the segment-0 regression earlier in this session.
+
+  grep_checks 40,970; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
