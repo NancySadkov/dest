@@ -1864,6 +1864,7 @@ extern far_t FontMain;
 extern far_t Font01;
 extern far_t Font02;
 extern far_t Font03;
+extern uint16_t GTileRecords[256];
 extern uint16_t csite5Ofs;
 extern uint16_t csite5Seg;
 extern uint16_t csite5_3Ofs;
