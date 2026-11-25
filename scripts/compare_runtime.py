@@ -136,6 +136,32 @@ if gyn:
     ours_seg = int.from_bytes(ours_img[gyn[2] + 2:gyn[2] + 4], "little")
 else:
     orig_seg, ours_seg = 0, dgroup_seg
+# Cross-check the rebuilt DGROUP segment: every original word that holds the
+# original's runtime DGROUP segment must hold whichever segment the rebuild uses for
+# the same data.  Take the most frequent such value, so one odd table cannot skew the
+# whole comparison.
+from collections import Counter
+_tally = Counter()
+for off, name, oofs in matched:
+    ln = min(length.get((off, name), 8), 64)
+    if off + ln > len(orig_img) or oofs + ln > len(ours_img):
+        continue
+    a = orig_img[off:off + ln]
+    b = ours_img[oofs:oofs + ln]
+    for i in range(0, len(a) - 1, 2):
+        if int.from_bytes(a[i:i + 2], "little") == orig_seg:
+            _tally[int.from_bytes(b[i:i + 2], "little")] += 1
+alt_seg = None
+if _tally:
+    learned, count = _tally.most_common(1)[0]
+    if learned != ours_seg:
+        alt_seg = learned
+        print("  pointer words also encode DGROUP as %04x (%d words; the runtime "
+              "segment is %04x)" % (learned, count, ours_seg or 0))
+        if learned == 0x2410:
+            print("  NOTE: 0x2410 is the ORIGINAL image's link-time DGROUP; the "
+                  "original's own dump never contains it (its loader relocates those "
+                  "initialisers).  Words using it are a data defect, counted below.")
 print("  original DGROUP segment %04x, rebuilt %04x" % (orig_seg, ours_seg or 0))
 
 off_map = {}
@@ -155,6 +181,9 @@ def map_off(w):
     return None
 
 
+linktime_seg_hits = []
+
+
 def word_matches(a, b, i):
     if a == b:
         return True
@@ -162,7 +191,9 @@ def word_matches(a, b, i):
     got = int.from_bytes(b, "little")
     if want == 0 and got == 0:
         return True
-    if want == orig_seg and got == ours_seg:
+    if want == orig_seg and got in (ours_seg, alt_seg):
+        if alt_seg is not None and got == alt_seg:
+            linktime_seg_hits.append(1)
         return True
     m = map_off(want)
     if m is not None and m == got:
@@ -217,6 +248,8 @@ print("  symbols matched: %d" % len(matched))
 print("  identical state: %d" % same)
 print("  DIFFERENT state: %d" % differ)
 print("  skipped (outside a dump): %d" % skipped)
+print("  words using the original link-time segment 0x2410: %d"
+      % len(linktime_seg_hits))
 print("  of the identical ones, %d match after segment/offset normalisation"
       % semantic)
 for off, name, oofs, ln, a, b in diffs:

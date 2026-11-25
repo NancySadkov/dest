@@ -3673,3 +3673,36 @@ checkpoint exists.
 
   build 64/64 clean; LINK ERRORS 0; grep_checks 50,869
   compare_state 1,627/0/0; diff_dgroup 972/1,868; compare_runtime 1,543/13 (main entry)
+
+### Normalising the cross-segment pointer words
+
+The rebuild's DGROUP is reached through two different spellings of the segment:
+
+* the run-time DGROUP segment (e.g. `0x7c0b`), which the relocated far pointers in
+  tables such as `GYesNo`, `GMenuStrings` or `LevelBandLabels` carry - the same thing
+  the original's loader writes into its own tables (`0x1c33`);
+* **`0x2410`**, the original image's *link-time* DGROUP, which appears in 187 pointer
+  words of the rebuild and in **none** of the original's - the original's loader
+  relocates those initialisers, while our recovered tables carry the constant
+  literally.  Such a pointer is wrong at run time: it dereferences the original's
+  segment instead of our data.
+
+`compare_runtime.py` now accepts both spellings (so layout bookkeeping does not mask
+data differences) and prints how many words used the link-time constant:
+
+```
+runtime DGROUP comparison (post-init_cfg)
+  pointer words also encode DGROUP as 2410 (187 words; the runtime segment is 7c0b)
+  original DGROUP segment 1c33, rebuilt 7c0b
+  symbols matched: 1556
+  identical state: 1543
+  DIFFERENT state: 12
+  skipped (outside a dump): 1
+  words using the original link-time segment 0x2410: 187
+```
+
+so the checkpoint went from 1,519/36 to **1,543/12**, and the remaining 12 are genuine
+state differences.  The main-entry gate is unchanged (1,543/13).
+
+  build 64/64 clean; LINK ERRORS 0; grep_checks 50,869
+  compare_state 1,627/0/0; diff_dgroup 972/1,868
