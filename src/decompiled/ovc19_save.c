@@ -46,38 +46,35 @@ int __cdecl16far save_readBlock(int handle,void *buf,uint16_t bufSeg,uint count)
 void __cdecl16far save_usesCalcSeasonPalette(void)
 
 {
-  uint16_t in_DX;
-  unit_t *puVar1;
-  uint uVar2;
-  int iVar3;
-  uint16_t uVar4;
+  /* Re-derived: resets any entity animation frame above 100 to 0xf and counts them; when none
+     was reset it rebuilds the direction flags of every placed building with a non-zero
+     building-type mask, reloads the seasonal palette and re-maps the party slots.  `in_DX` was
+     only ever assigned 0x2410 - the DGROUP segment constant the codebase passes literally - so
+     it is that constant here, and uStack_4 (assigned from it, never read) is gone. */
+  unit_t *units;
+  uint entIdx;
+  uint unitIdx;
+  int resetCount;
   far_t handle;
   uint8_t palette;
   stg_tmp_t *palRec;
-  uint16_t uStack_4;
-  
-  iVar3 = 0;
-  for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
-    uVar4 = (uint16_t)((ulong)Entities >> 0x10);
-    if (100 < ((entity_t *)Entities)[uVar2].base.animFrame) {
-      ((entity_t *)Entities)[uVar2].base.animFrame = 0xf;
-      iVar3 = iVar3 + 1;
+
+  resetCount = 0;
+  for (entIdx = 0; entIdx < EntityCount; entIdx = entIdx + 1) {
+    if (100 < ((entity_t *)Entities)[entIdx].base.animFrame) {
+      ((entity_t *)Entities)[entIdx].base.animFrame = 0xf;
+      resetCount = resetCount + 1;
     }
-    in_DX = 0x2410;
   }
-  if (iVar3 == 0) {
-    for (uVar2 = 0xf8; uVar2 < GUnitCount; uVar2 = uVar2 + 1) {
-      uVar4 = (uint16_t)((ulong)GUnits >> 0x10);
-      puVar1 = (unit_t *)GUnits;
-      if ((*(byte *)((uint)(puVar1 + uVar2)->bldType * 0x27 + 0x11e) & 3) != 0) {
-        ovr_ovc23_rebuildDirectionFlags(puVar1[uVar2].x,puVar1[uVar2].y);
-        uVar4 = (uint16_t)((ulong)GUnits >> 0x10);
-        ovr_ovc23_rebuildDirectionFlags
-                  (((unit_t *)GUnits)[uVar2].x + -1,((unit_t *)GUnits)[uVar2].y);
-        uVar4 = (uint16_t)((ulong)GUnits >> 0x10);
-        in_DX = 0x2410;
-        ovr_ovc23_rebuildDirectionFlags(((unit_t *)GUnits)[uVar2].x,((unit_t *)GUnits)[uVar2].y + 1)
-        ;
+  if (resetCount == 0) {
+    for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
+      units = (unit_t *)GUnits;
+      if ((*(byte *)((uint)(units + unitIdx)->bldType * 0x27 + 0x11e) & 3) != 0) {
+        ovr_ovc23_rebuildDirectionFlags(units[unitIdx].x,units[unitIdx].y);
+        ovr_ovc23_rebuildDirectionFlags(((unit_t *)GUnits)[unitIdx].x + -1,
+                                        ((unit_t *)GUnits)[unitIdx].y);
+        ovr_ovc23_rebuildDirectionFlags(((unit_t *)GUnits)[unitIdx].x,
+                                        ((unit_t *)GUnits)[unitIdx].y + 1);
       }
     }
     ovr_attact_usesGMapFlags3();
@@ -85,8 +82,7 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
     handle.seg = Lbm_nwpanel1.seg;
     handle.ofs = Lbm_nwpanel1.ofs;
     palRec = ovr_stshLoadGfx(handle);
-    uStack_4 = in_DX;
-    ovr_calcSeasonPalette(palRec->cmap,in_DX,&palette,_SS,0,0);
+    ovr_calcSeasonPalette(palRec->cmap,0x2410,&palette,_SS,0,0);
     ovr_vgaSetPalette8bit(&palette,0);
     ovr_manage_mapPartySlots();
     strongholdCheckPending = 0;
