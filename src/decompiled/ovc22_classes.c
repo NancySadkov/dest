@@ -3917,14 +3917,10 @@ bool __cdecl16far ovc22_textArena2(uint x,int y)
   short (*paasVar2) [148] [60];
   unit_t *puVar3;
   uint uVar4;
-  uint16_t uVar5;
-  uint16_t uVar6;
   
   bVar1 = ovc22_textArena(x,y);
   if (bVar1) {
-    uVar5 = (uint16_t)((ulong)GUnitGrid >> 0x10);
     paasVar2 = (short (*) [148] [60])GUnitGrid;
-    uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
     puVar3 = (unit_t *)GUnits;
     if (((puVar3 + (*paasVar2)[x][y])->bldType == 0) ||
        ((*(uint *)((uint)(puVar3 + (*paasVar2)[x][y])->bldType * 0x27 + 0x121) & 0x1000) != 0)) {
