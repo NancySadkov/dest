@@ -3189,57 +3189,68 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
 
 /* [R6] touches GRecordCount */
 
-uint16_t __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int recordIndex)
+byte __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int recordIndex)
 
 {
-  byte bVar1;
-  uint32_t uVar2;
-  uint uVar3;
-  int iVar4;
-  uint uVar5;
-  uint16_t unaff_DI;
-  undefined1 uStack_8;
-  uint8_t loopIndex;
-  undefined1 counter2;
-  undefined1 counter;
-  
-  uVar3 = (uint)amount;
-  uStack_8 = amount;
-  _fmemset(MK_FP(_SS, &counter), 0, 3);
-  for (uVar5 = 0; uVar5 < GRecordCount; uVar5 = uVar5 + 1) {
-    if (GRecords[uVar5].party == partyIndex) {
-      if ((GRecords[uVar5].kind & 4) != 0) {
-        loopIndex = loopIndex + 0x1;
+  /* 55fe:2f90 (file 0x4AD70), re-derived from the original:
+
+       [bp-6] = (word)amount
+       memset(&[bp-4], 0, 3)                         ; three byte counters
+       for (si = 0; si < GRecordCount; si++) {
+           if (GRecords[si].party != partyIndex) continue;
+           if (GRecords[si].kind & 4)    [bp-4]++;
+           if (GRecords[si].kind & 8)    [bp-3]++;
+           if (GRecords[si].kind & 0x10) [bp-2]++;
+       }
+       sheet = GLeaderSheets[partyIndex]
+       if (sheet[0x9c] > [bp-2])      { amount = amount*7/10;  kind |= 0x10; }
+       else if (sheet[0x9b] > [bp-3]) { amount = amount*8/100; kind |= 8; }
+       else if (sheet[0x9a] > [bp-4]) { amount = amount*9/10;  kind |= 4; }
+       return amount                  ; only `mov al,[bp-6]` at 0x4AED1
+
+     Corrections: the counters are named for the flag they count and are initialised
+     directly instead of relying on a memset over three adjacent stack slots in declaration
+     order; the return is a byte because the original sets only AL - the exported
+     CONCAT11((char)((uint)iVar4 >> 8), uStack_8) was modelling a stale AH; and the repeated
+     `*(uint32_t *)((uint)partyIndex << 2)` reads collapse to one local. */
+  byte kind4Count;
+  byte kind8Count;
+  byte kind10Count;
+  byte value;
+  uint i;
+  uint32_t sheetRef;
+
+  value = amount;
+  kind4Count = 0;
+  kind8Count = 0;
+  kind10Count = 0;
+  for (i = 0; i < GRecordCount; i++) {
+    if (GRecords[i].party == partyIndex) {
+      if ((GRecords[i].kind & 4) != 0) {
+        kind4Count = kind4Count + 1;
       }
-      if ((GRecords[uVar5].kind & 8) != 0) {
-        counter2 = counter2 + 1;
+      if ((GRecords[i].kind & 8) != 0) {
+        kind8Count = kind8Count + 1;
       }
-      if ((GRecords[uVar5].kind & 0x10) != 0) {
-        counter = counter + 1;
+      if ((GRecords[i].kind & 0x10) != 0) {
+        kind10Count = kind10Count + 1;
       }
     }
   }
-  if (counter < *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x9c)) {
-    uStack_8 = (byte)((ulong)((long)(int)uVar3 * 7) / 10);
-    iVar4 = recordIndex * 0x12;
-    *(byte *)(iVar4 + 0xd) = *(byte *)(iVar4 + 0xd) | 0x10;
+  sheetRef = *(uint32_t *)((uint)partyIndex << 2);
+  if (*(byte *)((int)sheetRef + 0x9c) > kind10Count) {
+    value = (byte)((uint)value * 7 / 10);
+    GRecords[recordIndex].kind = GRecords[recordIndex].kind | 0x10;
   }
-  else if (counter2 < *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x9b)) {
-    uStack_8 = (byte)((uVar3 << 3) / 100);
-    iVar4 = recordIndex * 0x12;
-    *(byte *)(iVar4 + 0xd) = *(byte *)(iVar4 + 0xd) | 8;
+  else if (*(byte *)((int)sheetRef + 0x9b) > kind8Count) {
+    value = (byte)(((uint)value << 3) / 100);
+    GRecords[recordIndex].kind = GRecords[recordIndex].kind | 8;
   }
-  else {
-    uVar2 = *(uint32_t *)((uint)partyIndex << 2);
-    bVar1 = *(byte *)((int)uVar2 + 0x9a);
-    iVar4 = CONCAT11((char)(((uint)partyIndex << 2) >> 8),bVar1);
-    if (loopIndex < bVar1) {
-      uStack_8 = (byte)((ulong)((long)(int)uVar3 * 9) / 10);
-      iVar4 = recordIndex * 0x12;
-      *(byte *)(iVar4 + 0xd) = *(byte *)(iVar4 + 0xd) | 4;
-    }
+  else if (*(byte *)((int)sheetRef + 0x9a) > kind4Count) {
+    value = (byte)((uint)value * 9 / 10);
+    GRecords[recordIndex].kind = GRecords[recordIndex].kind | 4;
   }
-  return CONCAT11((char)((uint)iVar4 >> 8),uStack_8);
+  return value;
 }
 
 

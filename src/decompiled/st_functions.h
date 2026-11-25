@@ -740,7 +740,7 @@ uint __cdecl16far ovc23_compute1(int x,int y,byte bldType,uint8_t unitType);
 int __cdecl16far ovc23_findClearColumn(int x,int y);
 int __cdecl16far ovc23_compute2(int x,uint16_t y);
 void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y);
-uint16_t __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int recordIndex);
+byte __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int recordIndex);
 uint __cdecl16far alignUp4(int value,uint16_t arg2,uint16_t arg3);
 void __cdecl16far ovc24_usesAlignUp4(void);
 char __cdecl16far ovc24_usesEntities(int entityIndex);
