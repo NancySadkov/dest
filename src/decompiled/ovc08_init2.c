@@ -46,14 +46,14 @@ void __cdecl16far miceRestoreArea(brect_t far *br, uint16_t arg2)
 void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br,uint16_t arg4)
 
 {
-  uint16_t uVar1;
-  char *pcVar2;
+  uint16_t brSeg;
+  char *saveOfs;
   uint16_t j;
   uint16_t src;
   uint16_t h;
   uint16_t w;
-  int iStack_a;
-  int iStack_8;
+  int y2;
+  int x2;
   uint16_t sy;
   uint16_t sx;
   
@@ -70,23 +70,23 @@ void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br,uint16_t arg4)
     sy = br->y;
   }
   if (x + 0x10 < (uint)br->w) {
-    iStack_8 = x + 0x10;
+    x2 = x + 0x10;
   }
   else {
-    iStack_8 = br->w;
+    x2 = br->w;
   }
   if (y + 0x10 < (uint)br->h) {
-    iStack_a = y + 0x10;
+    y2 = y + 0x10;
   }
   else {
-    iStack_a = br->h;
+    y2 = br->h;
   }
-  if (((int)sx <= iStack_8) && ((int)sy <= iStack_a)) {
+  if (((int)sx <= x2) && ((int)sy <= y2)) {
     src = sx + sy * 0x140;
-    uVar1 = br->seg;
-    pcVar2 = (char *)(((sy - y) * 0x11 + sx) - x);
-    w = (iStack_8 - sx) + 1;
-    h = (iStack_a - sy) + 1;
+    brSeg = br->seg;
+    saveOfs = (char *)(((sy - y) * 0x11 + sx) - x);
+    w = (x2 - sx) + 1;
+    h = (y2 - sy) + 1;
     if (0x11 < w) {
       w = 0x11;
     }
@@ -94,9 +94,9 @@ void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br,uint16_t arg4)
       h = 0x11;
     }
     for (j = 0; j < h; j = j + 1) {
-      _fmemmove((char far *)MK_FP(0x224a,pcVar2),(char far *)MK_FP(uVar1,src),w);
+      _fmemmove((char far *)MK_FP(0x224a,saveOfs),(char far *)MK_FP(brSeg,src),w);
       src = src + 0x140;
-      pcVar2 = pcVar2 + 0x11;
+      saveOfs = saveOfs + 0x11;
     }
   }
   return;

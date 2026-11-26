@@ -1085,25 +1085,25 @@ void __cdecl16far ovc13_drawHighlightedUnits(void)
   char rowY;
   int x1;
   int spanW;
-  unit_t *puVar6;
+  unit_t *units;
   uint unitIndex;
   
   if (Highlight1 != -1) {
     for (unitIndex = 0xf8; unitIndex < GUnitCount; unitIndex = unitIndex + 1) {
-      puVar6 = GUnits;
-      if (((puVar6[unitIndex].unitType != 0xff) &&
-          (unitRec = *(uint32_t *)((uint)puVar6[unitIndex].unitType << 2),
+      units = GUnits;
+      if (((units[unitIndex].unitType != 0xff) &&
+          (unitRec = *(uint32_t *)((uint)units[unitIndex].unitType << 2),
           *(char *)((int)unitRec + 0x3f) == '\0')) &&
-         ((puVar6[unitIndex].unitType == Highlight1 || (Highlight1 == 0xff)))) {
-        ux = puVar6[unitIndex].x;
-        uy = puVar6[unitIndex].y;
-        if (((((Highlight1 == -2) && (puVar6[unitIndex].level < 8)) ||
-             (BuildingTypes[(uint)(puVar6 + unitIndex)->bldType].unitType == Highlight1)) &&
+         ((units[unitIndex].unitType == Highlight1 || (Highlight1 == 0xff)))) {
+        ux = units[unitIndex].x;
+        uy = units[unitIndex].y;
+        if (((((Highlight1 == -2) && (units[unitIndex].level < 8)) ||
+             (BuildingTypes[(uint)(units + unitIndex)->bldType].unitType == Highlight1)) &&
             ((Seed_2000_d110 <= (int)ux && (ux <= Seed_2000_d110 + 0x69U)))) &&
            ((Seed_2000_d10e <= (int)uy && (uy <= Seed_2000_d10e + 0x2fU)))) {
           rowY = ((char)uy - (char)Seed_2000_d10e) * '\x03';
           x1 = (ux - Seed_2000_d110) * 2 + 0xc;
-          spanW = (uint)BuildingTypes[(uint)(puVar6 + unitIndex)->bldType].size * 2 + -1;
+          spanW = (uint)BuildingTypes[(uint)(units + unitIndex)->bldType].size * 2 + -1;
           ovr_driver_fillSpan(x1,x1 + spanW,rowY + 9,0x75,&((brect_t *)BlitRects)->x,0x2410);
           ovr_driver_fillSpan(x1,x1 + spanW,rowY + 10,0x75,&((brect_t *)BlitRects)->x,0x2410);
           ovr_driver_fillSpan(x1,x1 + spanW,rowY + 0xb,0x75,&((brect_t *)BlitRects)->x,0x2410);

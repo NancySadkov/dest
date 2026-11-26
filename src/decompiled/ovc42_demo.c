@@ -353,15 +353,15 @@ void __cdecl16far ovc42_usesGfxRndSeed(void)
 void __cdecl16far ovc42_copy1(char *buf)
 
 {
-  byte bVar1;
-  byte *pbVar2;
+  byte px;
+  byte *pixPtr;
   
   _fmemmove((char far *)MK_FP((*(uint16_t *)((uint8_t *)&(buf) + 2)),(char *)buf + 0x210),
             (char far *)MK_FP((*(uint16_t *)((uint8_t *)&(buf) + 2)),(char *)buf + 0xf0),0xf0);
-  for (pbVar2 = (byte *)0x0; pbVar2 < (byte *)0xfa00; pbVar2 = pbVar2 + 1) {
-    bVar1 = *pbVar2;
-    if ((0x4f < bVar1) && (bVar1 < 0xa0)) {
-      *pbVar2 = bVar1 + 0x60;
+  for (pixPtr = (byte *)0x0; pixPtr < (byte *)0xfa00; pixPtr = pixPtr + 1) {
+    px = *pixPtr;
+    if ((0x4f < px) && (px < 0xa0)) {
+      *pixPtr = px + 0x60;
     }
   }
   return;

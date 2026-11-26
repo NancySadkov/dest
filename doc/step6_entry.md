@@ -14104,3 +14104,33 @@ LESSON: a delta profile is not monotone, so "adding bytes always hurts while the
 positive" is false.  The correct test is the change in the sum over *all* following symbols,
 including the negative tail, and only measurement settles it.  The previous doc entry drew
 the wrong conclusion from a local argument and is corrected in place.
+
+### ovc42_copy1, ovc13_drawHighlightedUnits and miceSaveArea (36,016 -> 35,954)
+ovc42_copy1, ovc13_drawHighlightedUnits and miceSaveArea (36,016 -> 35,954)
+
+ovc42_copy1 (16 lines)
+    bVar1   356, 362, 363, 364   the byte being re-mapped          -> px     (5)
+    pbVar2  357, 361, 362, 364   the 0..0xfa00 screen scan pointer -> pixPtr (7)
+
+ovc13_drawHighlightedUnits (37 lines)
+    puVar6  1088, 1093..1101, 1106  the GUnits base pointer       -> units (10)
+
+    Lines 1101/1106 spell it `(puVar6 + unitIndex)->bldType` while the others use
+    `puVar6[unitIndex]`; it is one object with two spellings from the export, so one name.
+
+miceSaveArea (58 lines)
+    uVar1     49, 86, 97   br->seg, the source segment             -> brSeg   (3)
+    pcVar2    50, 87, 97, 99  the save-area cursor offset          -> saveOfs (5)
+    iStack_8  55, 73, 76, 84, 88, 90  the clipped right edge       -> x2      (5)
+    iStack_a  56, 79, 82, 84, 89, 93  the clipped bottom edge      -> y2      (5)
+
+`ovc42_usesMiceBlitRect` was screened out: `prevTick` is reused as a tick counter, a packed
+return value and a shift source inside one loop, and the function carries two
+`/* hand fix */` comments - naming it would assert a meaning the export does not have.
+
+No expression changed.
+
+  grep_checks 36,016 -> 35,954; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (47 runs, sum|delta| 193,093, mean 122, worst 14,562)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
