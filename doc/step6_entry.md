@@ -13899,3 +13899,42 @@ MEASURED (HEAD fd2c5714 -> this commit)
   build 65/65, LINK.LOG 65 bytes / 0 problems
 
 Excluding the known `_doserrno` mis-pairing, sum|delta| is about 201,100.
+
+### layout: six pure-data objects widened from 1 byte (215,492 -> 198,185)
+layout: six pure-data objects were declared as single bytes (215,492 -> 198,185)
+
+Every one of these is unreferenced by any code, so their sizes come straight from
+audit/dgroup_2410.bin rather than from any guess about how they are used:
+
+    0x6e00  xOfsTable       1 -> 56 bytes   (word offsets, then a byte ramp)
+    0x6e48  growthTable     1 -> 47 bytes   (the 5, 10, 20, 35, 75, 175, ... cost curve)
+    0x7145  unitTypeTable   1 -> 14 bytes
+    0x6b86  fullWidthRect   1 -> brect_t {  0,   0, 319, 143, 0xA000 }
+    0x715b  lowerScreenRect 1 -> brect_t {  0, 152, 319, 199, 0xA000 }
+    0x842c  agentClipRect   1 -> brect_t { 12,   7, 222, 150, 0xA000 }
+
+The three rectangles are ten-byte `brect_t` values - the same shape as the existing
+`BlitRects[5]` initialiser - so they are written as structs, not as byte blobs; the
+coordinates fall out of the image little-endian and are self-consistent (all three end in
+the 0xA000 video segment).
+
+MEASURED (HEAD d8dff716 -> this commit)
+
+  diff_dgroup matched        1,581 -> 1,581   (unchanged)
+  diff_dgroup delta runs        58 ->    52   (-6)
+  diff_dgroup sum|delta|   215,492 -> 198,185 (-17,307)
+  diff_dgroup mean             136 ->   125
+  grep_checks              36,183 -> 36,183
+  compare_state            1,627/0/0 unchanged
+  compare_runtime          1,630 matched, 1,620 identical / 10 different
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+Two layout commits this turn: 235,338 -> 198,185 (-37,153), runs 64 -> 52.
+
+DELIBERATELY NOT CHANGED, although size_deficit.py lists them: `BlitRects` (82 vs 50),
+`s_empty` (33 vs 3), `MiceFlag`/`SeedHi`/`SquareRecY`/`TextBlitFlag` (11..22 vs 1..2),
+`s_leather_armor` and the other armour strings.  For each of these the original "span" runs
+into the *next* object's bytes - BlitRects' 82 bytes already turn into a dithering pattern
+after the fifth rectangle - so widening them to the span would be inventing data, not
+recovering it.  The six above are distinguishable because their whole span is a single
+coherent value type or table.
