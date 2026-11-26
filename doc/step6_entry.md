@@ -9627,3 +9627,30 @@ determines its design so it is not re-derived.
   grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### season_textHalflingCastle: leader table read far (39,962 -> 39,953)
+season_textHalflingCastle: the leader table was read near; renamed its index (39,962 -> 39,953)
+
+season_textHalflingCastle (ovc37_season.c) is a phantom-free 99-line function with 65 section-5 matches.
+Its first four statements are the GLeaderSheets near-table defect again, in the same function that already
+uses the correct form eight lines later:
+
+  59  leaderIdx = ovr_manage_findFirstLeader();
+  64  uVar3 = ((int *)((uint)leaderIdx * 4))[1];        <- near read of DS:idx*4
+  65  iVar1 = *(int *)((uint)leaderIdx * 4);             <- ditto
+  ...
+  82  (GLeaderSheets[leaderIdx])->alignment == '\x02'    <- the same slot, read correctly
+
+Fixed as
+
+  uVar3 = (uint16_t)SEG_OF(GLeaderSheets[leaderIdx]);
+  iVar1 = (int)far_ofs_u32(GLeaderSheets[leaderIdx]);
+
+which yields exactly the two halves the following `iStack_8 = CONCAT22(uVar3,iVar1)` reassembles.
+
+Also renamed `bStack_3` -> `leaderIdx` (9 uses): it is the leader index returned by
+ovr_manage_findFirstLeader, compared to 0xff and used only to index GLeaderSheets.
+
+  grep_checks 39,962 -> 39,953; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

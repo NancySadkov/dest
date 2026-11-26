@@ -54,15 +54,15 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
   int iStack_8;
   uint uStack_6;
   char cStack_4;
-  byte bStack_3;
+  byte leaderIdx;
   
-  bStack_3 = ovr_manage_findFirstLeader();
-  if (bStack_3 == 0xff) {
+  leaderIdx = ovr_manage_findFirstLeader();
+  if (leaderIdx == 0xff) {
     uVar3 = (uint)extraout_AH << 8;
   }
   else {
-    uVar3 = ((int *)((uint)bStack_3 * 4))[1];
-    iVar1 = *(int *)((uint)bStack_3 * 4);
+    uVar3 = (uint16_t)SEG_OF(GLeaderSheets[leaderIdx]);
+    iVar1 = (int)far_ofs_u32(GLeaderSheets[leaderIdx]);
     iStack_8 = CONCAT22(uVar3,iVar1);
     if (*(byte *)(iVar1 + 0x86) < 9) {
       *(char *)(iVar1 + 0x86) = *(char *)(iVar1 + 0x86) + '\x01';
@@ -79,14 +79,14 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
       if ((GHighScoreSaved == '\0') &&
          ((((1 < PlayerIndex &&
             (capTextSeg = (uint8_t *)((char *)0x2627a),
-            (GLeaderSheets[bStack_3])->alignment == '\x02')) &&
+            (GLeaderSheets[leaderIdx])->alignment == '\x02')) &&
            (bVar2 = season_textMainCastle(), bVar2)) ||
           ((capTextSeg = (uint8_t *)((char *)0x2627a),
-           8 < (GLeaderSheets[bStack_3])->titleIndex &&
+           8 < (GLeaderSheets[leaderIdx])->titleIndex &&
            ((capTextSeg = (uint8_t *)((char *)0x2627a),
-            (GLeaderSheets[bStack_3])->alignment == '\0' ||
+            (GLeaderSheets[leaderIdx])->alignment == '\0' ||
             ((capTextSeg = (uint8_t *)((char *)0x2627a),
-             (GLeaderSheets[bStack_3])->alignment == '\x01' &&
+             (GLeaderSheets[leaderIdx])->alignment == '\x01' &&
              (bVar2 = season_textMainCastle(), bVar2)))))))))) {
         cStack_4 = '\x01';
       }
