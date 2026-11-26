@@ -3143,9 +3143,11 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
 
 {
   char *pcVar1;
-  uint16_t uVar2;
-  uint16_t uVar3;
-  int iVar4;
+  uint16_t seedArg;
+  uint16_t strSeg;
+  uint16_t saySeg;
+  int structIdx;
+  int nameOfs;
   uint8_t msg;
   uint16_t savedSeed;
   uint16_t savedSeed2;
@@ -3170,45 +3172,45 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
               0x2410);
     }
     else {
-      uVar2 = savedSeed;
+      seedArg = savedSeed;
       pcVar1 = ovr_ovc22_className(partyIndex,0);
-      uVar3 = _DS;
+      saySeg = _DS;
       pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x535b,_SS),
                              (char *)CONCAT22(*(uint16_t *)((uint)partyIndex * 4),
                                               (char *)0x26510),
-                             ((uint16_t *)((uint)partyIndex * 4))[1],pcVar1,uVar2);
-      ovr_say(pcVar1,uVar3);
+                             ((uint16_t *)((uint)partyIndex * 4))[1],pcVar1,seedArg);
+      ovr_say(pcVar1,saySeg);
     }
   }
   else {
-    iVar4 = 0;
-    uVar2 = savedSeed;
-    while ((iVar4 < 0x1e &&
-           (uVar2 = (uint16_t)((ulong)((long)iVar4 * 6) >> 0x10),
-           (uint)(&((unk01_t *)GStructures)->type)[(int)((long)iVar4 * 6)] != structType))) {
-      iVar4 = iVar4 + 1;
+    structIdx = 0;
+    strSeg = savedSeed;
+    while ((structIdx < 0x1e &&
+           (strSeg = (uint16_t)((ulong)((long)structIdx * 6) >> 0x10),
+           (uint)(&((unk01_t *)GStructures)->type)[(int)((long)structIdx * 6)] != structType))) {
+      structIdx = structIdx + 1;
     }
-    if (iVar4 != 0x1e) {
+    if (structIdx != 0x1e) {
       if (partyIndex == 0xff) {
-        uVar2 = (uint16_t)((ulong)((long)iVar4 * 6) >> 0x10);
-        iVar4 = (int)((long)iVar4 * 6);
+        strSeg = (uint16_t)((ulong)((long)structIdx * 6) >> 0x10);
+        nameOfs = (int)((long)nameOfs * 6);
         pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5323,_SS),
-                               (char *)CONCAT22(*(uint16_t *)((int)&GStructures[0].name + iVar4),
+                               (char *)CONCAT22(*(uint16_t *)((int)&GStructures[0].name + nameOfs),
                                                 (char *)0x26510),
-                               *(uint16_t *)((int)&GStructures[0].name + 2 + iVar4));
-        ovr_say(pcVar1,uVar2);
+                               *(uint16_t *)((int)&GStructures[0].name + 2 + nameOfs));
+        ovr_say(pcVar1,strSeg);
       }
       else {
         pcVar1 = ovr_ovc22_className(partyIndex,0);
-        uVar3 = (uint16_t)((ulong)((long)iVar4 * 6) >> 0x10);
-        iVar4 = (int)((long)iVar4 * 6);
+        saySeg = (uint16_t)((ulong)((long)structIdx * 6) >> 0x10);
+        nameOfs = (int)((long)nameOfs * 6);
         pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x52ed,_SS),
-                               (char *)CONCAT22(*(uint16_t *)((int)&GStructures[0].name + iVar4),
+                               (char *)CONCAT22(*(uint16_t *)((int)&GStructures[0].name + nameOfs),
                                                 (char *)0x26510),
-                               *(uint16_t *)((int)&GStructures[0].name + 2 + iVar4),
+                               *(uint16_t *)((int)&GStructures[0].name + 2 + nameOfs),
                                *(uint16_t *)((uint)partyIndex * 4),
-                               ((uint16_t *)((uint)partyIndex * 4))[1],pcVar1,uVar2);
-        ovr_say(pcVar1,uVar3);
+                               ((uint16_t *)((uint)partyIndex * 4))[1],pcVar1,strSeg);
+        ovr_say(pcVar1,saySeg);
       }
     }
   }
