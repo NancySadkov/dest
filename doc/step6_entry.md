@@ -9322,3 +9322,46 @@ reverted three times this session.  The shape is now fully known, so the next pa
   grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### BLOCKER: agnt_statusText must return char far * (52 call sites)
+BLOCKER: finishing ovc27_textTakesHalfDamage3 needs a prototype change with 52 call sites
+
+Applying the decoded shapes requires `pcVar6` to hold a FAR pointer, because `lcall 0x160,0x25` pushes
+four bytes - the whole DX:AX return of `ovc27_agnt_statusText`:
+
+  00B0  9a 2f 00 48 01 lcall 0x148, 0x2f     ; ovr_agnt_statusText
+  00B5  83 c4 08      add sp, 8
+  00B8  52            push dx                ; segment
+  00B9  50            push ax                ; offset
+
+but the tree declares it near:
+
+  char * __cdecl16far agnt_statusText(agnt_t far *agnt,char *text,uint16_t arg3);
+  undefined ovr_agnt_statusText();
+
+and it is called from 52 places across src/decompiled.  So:
+
+  char far *pcVar6;  ... = ovr_agnt_statusText(...)
+
+does not compile without either changing the prototype (and every caller's expectations) or casting at
+each site.  Changing the prototype is the correct fix - the callee demonstrably returns DX:AX - but it is
+a cross-cutting change: 52 call sites, most of which assign the result to `char *` locals and pass it on
+to other functions, so each needs checking for its own downstream truncation.
+
+That is why the three remaining temporaries (`agntSeg`, `ptrSeg` and, for the same reason, the fabricated
+`0x26510` in the CONCAT22) cannot be deleted yet: they exist to reconstruct the segment that the near
+prototype discards.
+
+What this turn established, concretely:
+
+  lcall 0x160,0x25 -> usesStshRealloc(far statusText-result)          one far argument
+  lcall 0x170,0x7a -> stsprintf(MK_FP(_SS,&msg), MK_FP(_DS,0x5c0a), far-result)
+                                                                      three far arguments
+  and therefore: agnt_statusText RETURNS A FAR POINTER, contrary to its declaration.
+
+The next step is a prototype change plus its 52 call sites, done as one deliberate pass with the build and
+gates run at the end - not a per-function edit.
+
+  grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
