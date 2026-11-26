@@ -8168,3 +8168,67 @@ so the last of that class belongs with the phantom work.
   grep_checks 40,129 -> 40,122; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+#### stats_readyStatusText: the phantom is the parameter, and the truncated-far class closes (40,122 -> 40,099)
+
+The prologue of `6386:12b7` settles it in three instructions:
+
+```
+0003  mov al, byte ptr [bp + 6]
+0008  mov dx, 0x34 / imul dx        ; agntIndex * sizeof(agnt_t)
+```
+
+`bp+6` is used as the agent index before anything else, and it is the declared first parameter
+(`byte agntIndex`).  So `in_stack_00000004` is `agntIndex` - the `+2` shift holds *here*, and unlike the
+batch attempts earlier the substituted name is meaningful and appears nowhere else in the body, so the
+mapping is proved rather than guessed.
+
+With the phantom gone, the last three truncated reads became struct accesses:
+
+```c
+if ((*(uint8_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.flags32 + 1) & 1) == 0) {
+  ...
+  puVar2 = ovr_ovc15_usesStshRealloc
+                     ((char *)far_ofs_u32(Agnts[agntIndex].gdata->name),
+                      (uint16_t)SEG_OF(Agnts[agntIndex].gdata->name),0,0,0,0,0,0);
+```
+
+Emitted:
+
+```
+les  bx,dword ptr es:_Agnts[bx+23]     ; entity 0x17
+test byte ptr es:[bx+51],1             ; 0x33 - flags32 high byte
+les  bx,dword ptr es:_Agnts[bx+29]     ; gdata 0x1d
+push word ptr es:[bx+36]               ; 0x24 - name.ofs
+```
+
+against `les bx,ptr es:[bx+0x17] / mov al, byte ptr es:[bx+0x33] / test ax,1`.
+`uint32_t uVar1`, `uint16_t uVar6` and `int iVar5` existed only for the removed copies.
+
+#### The truncated-far class is empty
+
+`tmp/find_truncfar.py` now reports **0 reads in 0 functions**, down from 31 in 9 at the start of this run.
+The whole class, across nine turns, was:
+
+| turn | function | reads | delta |
+|---|---|---|---|
+| 1 | ovc41_turnUndeadNotice | 5 | -143 (with other work) |
+| 2-3 | ovc33_stats drawAgntStats sites | 6 | -3 |
+| 4 | ovc41 SEG_OF(CONCAT22) sites | 3 | 0 |
+| 5 | ovc15_usesLDIV_at_2 | 2 chains | -50 |
+| 6 | ovc42/ovc27_compute1/compute2 | 5 | -10 |
+| 7 | stats_usesAlignUp42 | 11 | -20 |
+| 8 | attact_usesAgntFlag1, ovc41_unitStatusText, ovc49 x8 | 14 | -15 |
+| 9 | ovc49_body1 x3 | 3 | -6 |
+| 10 | agnt_usesStrengthMax, agnt_acquireTarget, ovc27_compute2 | 6 | -4 |
+| 11 | ovc49_drawAgents x4, ovc33 type x3 | 7 | -6 |
+| 12 | stats_usesAlignUp42 stores (swapped) | 1 | -7 |
+| 13 | stats_readyStatusText | 3 | -23 |
+
+Every site had the same root cause: a far pointer folded into a `uint32_t` (or a record offset used
+directly as a DS pointer), so the read or write went to DGROUP instead of the record's own segment.
+`Agnts`, `AgntGs` and `Entities` all live outside DGROUP, which is why none of these were harmless.
+
+  grep_checks 40,122 -> 40,099; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

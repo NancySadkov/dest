@@ -1583,32 +1583,23 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
 char * __cdecl16far stats_readyStatusText(byte agntIndex,char *text)
 
 {
-  uint32_t uVar1;
   uint8_t *puVar2;
   char *msg;
   uint16_t agntSeg;
-  int iVar5;
-  uint16_t uVar6;
-  byte in_stack_00000004;
-  
-  uVar1 = *(uint32_t far *)&Agnts[in_stack_00000004].entity;
-  if ((*(byte *)((int)uVar1 + 0x33) & 1) == 0) {
+
+  if ((*(uint8_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.flags32 + 1) & 1) == 0) {
     agntSeg = SEG_OF(Agnts);
-    uVar1 = *(uint32_t far *)&Agnts[in_stack_00000004].gdata;
-    uVar6 = (uint16_t)((ulong)uVar1 >> 0x10);
-    iVar5 = (int)uVar1;
     puVar2 = ovr_ovc15_usesStshRealloc
-                       ((char *)*(uint16_t *)(iVar5 + 0x24),*(uint16_t *)(iVar5 + 0x26),0,0,0,0,0,0);
+                       ((char *)far_ofs_u32(Agnts[agntIndex].gdata->name),
+                        (uint16_t)SEG_OF(Agnts[agntIndex].gdata->name),0,0,0,0,0,0);
     msg = ovr_stsprintf(agntIndex,(char *)CONCAT22(0x638d,(char *)text),
                            (char *)CONCAT22(puVar2,(char *)0x26510),agntSeg);
   }
   else {
     agntSeg = SEG_OF(Agnts);
-    uVar1 = *(uint32_t far *)&Agnts[in_stack_00000004].gdata;
-    uVar6 = (uint16_t)((ulong)uVar1 >> 0x10);
-    iVar5 = (int)uVar1;
     puVar2 = ovr_ovc15_usesStshRealloc
-                       ((char *)*(uint16_t *)(iVar5 + 0x24),*(uint16_t *)(iVar5 + 0x26),0,0,0,0,0,0);
+                       ((char *)far_ofs_u32(Agnts[agntIndex].gdata->name),
+                        (uint16_t)SEG_OF(Agnts[agntIndex].gdata->name),0,0,0,0,0,0);
     msg = ovr_stsprintf(agntIndex,(char *)CONCAT22(0x63a2,(char *)text),
                            (char *)CONCAT22(puVar2,(char *)0x26510),agntSeg);
   }
