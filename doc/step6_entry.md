@@ -11002,3 +11002,62 @@ block into the CRT object, which AGENTS.md treats as supplied-by-toolchain.
   grep_checks 38,916 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (72 runs, sum|delta| 411,815)
   compare_runtime 1,577 identical / 10 different
+
+### DGROUP: migrate the 0x5100-0x5ea3 holes (sum|delta| 411,815 -> 295,448)
+DGROUP: migrate the 0x5100-0x5ea3 string holes (sum|delta| 411,815 -> 295,448, runtime 1,577 -> 1,604)
+
+With the declaration order fixed, `diff_dgroup` showed a -640 step at
+`GStrangeTable` (0x6601), i.e. our layout had lost ~640 bytes in the span
+0x4f8f..0x6601.  `tmp/missing_runs.py` listed the holes inside it.
+
+`tmp/migrate_run.py 5100 5ea3` migrated all of them in one pass: 27 symbols,
+everything from `%s will now build homes automatically` through the
+`strong.sav\strong.$$$` path strings, including the interleaved non-string bytes
+(`\x01`, `\x02`, `\xff\xff`, ...) that the spans cover.  Only 2 of the 30 pieces
+existed in stmiss.c's blob, so most of this text was genuinely absent from our
+DGROUP rather than merely misplaced.
+
+MEASURED (fresh dump, HEAD 1620c8c3 -> this commit)
+
+                                     before        after
+  grep_checks                        38,916        38,916
+  compare_state                   1,627/0/0     1,627/0/0
+  diff_dgroup matched                1,449         1,449
+  diff_dgroup delta runs                72            72
+  diff_dgroup sum|delta|           411,815       295,448   (mean 284 -> 203)
+  compare_runtime symbols matched    1,587         1,614   (+27)
+  compare_runtime identical state    1,577         1,604   (+27)
+  compare_runtime DIFFERENT state       10            10
+
+CUMULATIVE FOR THE TWO COMMITS THIS SESSION
+
+  diff_dgroup delta runs         74 -> 72
+  diff_dgroup sum|delta|  3,223,256 -> 295,448   (-91%; mean 2,224 -> 203)
+  compare_runtime identical      1,577 -> 1,604   (+27)
+  grep_checks                   38,916 -> 38,916
+  compare_state               1,627/0/0 unchanged
+
+The offset profile now:
+
+  +182 at 0x0094, +182 at 0x1e1d, +138 at 0x291e, +557 at GStrangeTable
+
+`GStrangeTable` moved from -640 to +557: that batch overshot by a little, but the
+absolute error there still fell (23,680 -> 20,609).
+
+REMAINING, measured (tmp/delta_rank.py):
+
+  83,628  +138 x 606  s_Aggressive_2410_291e   residual drift from the C0 block
+  39,312  +182 x 216  s__2410_0094
+  30,723  +147 x 209  s_halfling_abode_2410_1f0c
+  18,808  -18808 x 1  StshFileName              single-symbol mis-pairing
+  15,436  +15436 x 1  _doserrno                 single-symbol mis-pairing
+
+The two single-symbol entries are 34,244 of the 295,448 - a name-pairing artefact,
+not layout.  The three positive runs (153,663) are the residual +182, caused by
+C0M.OBJ's startup scalars (`_StartTime`, `_brklvl`, `_heaptop`) being linked before
+GLOB.OBJ's data while the original puts the C0 header block first.  Closing that
+means moving the block into the CRT object, which AGENTS.md treats as supplied.
+
+  grep_checks 38,916 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (72 runs, sum|delta| 295,448)
+  compare_runtime 1,604 identical / 10 different

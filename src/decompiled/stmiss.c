@@ -188,8 +188,6 @@ char s_absentBlob[] =
   "Select the character's name.\x00"
   "Keep %s.\x00"
   "strong.sav\\game.cfg\x00"
-  "strong.sav\\game.cfg\x00"
-  "strong.sav\\strong.$$$\x00"
   "strong.sav\\strong.$$$\x00"
   "Path to write game data:\n"
   "\x00"
