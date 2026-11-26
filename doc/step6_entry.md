@@ -8119,3 +8119,52 @@ The `+0x10`/`+0x12` block at `0149`/`014D` stores `table[0]` to `entity+0x12` an
   grep_checks 40,135 -> 40,129; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+#### The swapped stores in stats_usesAlignUp42 are fixed (40,129 -> 40,122)
+
+```
+0123  mov ax, word ptr es:[bx + 2]      ; table word 1
+0128  mov dx, word ptr es:[bx]          ; table word 0
+0135  push ax / 0138 push dx
+0142  les bx, ptr es:[bx + 0x17]        ; Agnts[agntIndex].entity
+0147  pop ax / 0148 pop dx
+0149  mov word ptr es:[bx + 0x12], dx   ; entity + 0x12 <- table[0]
+014D  mov word ptr es:[bx + 0x10], ax   ; entity + 0x10 <- table[1]
+```
+
+The export had **both** the order and the segment wrong: `*(uint16_t *)(iVar14 + 0x12) = puVar13[1]`
+and `*(uint16_t *)(iVar14 + 0x10) = uVar16` with `iVar14 = (int)uVar1`, so the two words were swapped
+*and* the stores went to DS instead of the entity's segment.  Now
+
+```c
+*(uint16_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.frameIndex) = uVar16;
+*(uint16_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.health) = puVar13[1];
+```
+
+(0x10 = `health`, 0x12 = `frameIndex`; both stay word-sized because the original stores words - a word
+at 0x12 spans `frameIndex` and the low byte of `frames`, which is what the machine does.)
+
+Emitted, matching the original:
+
+```
+113  les bx,dword ptr es:_Agnts[bx+23]
+114  mov ax,word ptr [bp-52]          ; table[0]
+115  mov word ptr es:[bx+18],ax       ; entity + 0x12
+123  les bx,dword ptr es:_Agnts[bx+23]
+125  mov ax,word ptr [si+2]           ; table[1]
+126  mov word ptr es:[bx+16],ax       ; entity + 0x10
+```
+
+**The table itself is still unnamed.**  The original reaches it with `mov ax,0x80 / mov es,ax`, and
+segment 0x80 appears nowhere in `audit/symbols.tsv` - the segments it does list are 0x0ff0, 0x1000,
+0x1301, 0x1726, 0x195d, 0x2000, 0x217a, 0x218e, 0x21b1, 0x21f2 ...  So it is runtime data, most likely
+a `stshAlloc` block, and naming it needs the allocation site rather than the read site.  The two reads
+keep the export's near pointer; fixing the stores is strictly closer to the original and does not depend
+on identifying it.
+
+**Truncated-far class: 4 -> 3**, all in `stats_readyStatusText` and all through `in_stack_00000004`,
+so the last of that class belongs with the phantom work.
+
+  grep_checks 40,129 -> 40,122; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

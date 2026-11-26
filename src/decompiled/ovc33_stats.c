@@ -2050,11 +2050,9 @@ L_stats_6386_1c9f_1E1D:
     if (*piVar12 != 0 || piVar12[1] != 0) {
       puVar13 = (uint16_t *)((uint)bStack_3 * 0x94 + (uint)Agnts[agntIndex].entity->base.level * 4);
       uVar16 = *puVar13;
-      uVar1 = *(uint32_t far *)&Agnts[agntIndex].entity;
-      uVar15 = (uint16_t)((ulong)uVar1 >> 0x10);
-      iVar14 = (int)uVar1;
-      *(uint16_t *)(iVar14 + 0x12) = puVar13[1];
-      *(uint16_t *)(iVar14 + 0x10) = uVar16;
+      /* 0149: entity + 0x12 takes table[0];  014D: entity + 0x10 takes table[1]. */
+      *(uint16_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.frameIndex) = uVar16;
+      *(uint16_t far *)((uint8_t far *)&Agnts[agntIndex].entity->base.health) = puVar13[1];
       uVar16 = AGNT_WORD(&Agnts[agntIndex], entity, 2);
       ovr_ovc41_compute3(CONCAT13((char)((uint)uVar16 >> 8),
                                   CONCAT12((char)uVar16,
