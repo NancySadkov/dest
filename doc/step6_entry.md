@@ -9543,3 +9543,40 @@ one comparison per site and it needs no interpretation of what the arguments mea
   grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### DECODED: ovc23_bldrec.c:2020 - the argument count is wrong
+DECODED: ovc23_bldrec.c:2020 - the argument count is wrong, and the fix needs one more push
+
+`55fe:2e4c` (`ovc23_drownUnitsAt`), the site at source line 2020:
+
+  0112  52        push dx               ; the far return of lcall 0x160,0x2a
+  0113  50        push ax               ;   (a far pointer argument)
+  0114  1e        push ds
+  0115  68 65 56  push 0x5665          ; the format string, DS:0x5665
+  0118  16        push ss
+  0119  8d 46 ac  lea  ax,[bp - 0x54]   ; the output buffer, SS:[bp-0x54]
+  011C  50        push ax
+  011D  9a 7a 00 70 01 lcall 0x170, 0x7a
+  0122  83 c4 10  add sp, 0x10         ; 16 bytes = 8 words
+
+Six pushes are visible but eight words are popped, so there is at least one more argument (two words)
+whose pushes sit before 0104 and outside the window.  What is already certain:
+
+  * `CONCAT22(0x5665,_SS)` in the C is REVERSED - the original pushes `ds` then `0x5665`, i.e.
+    MK_FP(_DS,0x5665), not 0x5665 as the segment;
+  * the C's third argument `CONCAT22(pcVar2,(char *)0x26510)` decodes to nothing; what the original
+    pushes there is the far return of a *different* call (`lcall 0x160,0x2a`), i.e. the whole far pointer,
+    not a CONCAT over a near pointer and a literal;
+  * the C has FOUR further arguments (`dst`, `uVar4`, `uVar5`, `uVar3`) but the popped count leaves room
+    for one more only.
+
+So the C's argument list is wrong in composition, not merely in spelling.  Fixing it needs the pushes
+between the function's entry and 0104 to identify the remaining argument - one more read, not a guess.
+
+This confirms the inverted detector the last turn proposed is the right next step: compare the C argument
+count against `add sp,N` after each lcall, which needs no interpretation of meaning and would rank the 425
+sites by how badly their lists are wrong.  I did not have the budget to write and run it this turn.
+
+  grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
