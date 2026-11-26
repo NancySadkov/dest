@@ -895,7 +895,7 @@ void __cdecl16far ovc38_loadHighScores(far_t entries);
 void __cdecl16far ovc38_saveHighScores(far_t entries);
 void __cdecl16far ovc38_usesStshFree(far_t handle);
 void __cdecl16far ovc38_showAchievements(void);
-int16_t __cdecl16far ovc38_scan1(char *s1,char *s2);
+int16_t __cdecl16far ovc38_scan1(char far *s1,char far *s2);
 void __cdecl16far ovc38_usesStshAlloc(void);
 int __cdecl16far ovc39_loadArchiveEntry(byte fileId);
 char * __cdecl16far ovc39_lordOrLady(void);

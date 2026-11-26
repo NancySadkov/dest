@@ -11432,3 +11432,55 @@ Renaming and one split only; no expression changed.
   grep_checks 38,147 -> 38,118; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
   compare_runtime 1,605 identical / 10 different
+
+### ovc38_scan1: parameters are far pointers
+ovc38_scan1: the parameters are far pointers, not near
+
+The body already walked `s2` as a far pointer:
+
+    s2 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(s2) + 2)), (char *)s2 + 1);
+
+but the signature said `char *s2`, so the `+ 2` read was the adjacent stack word and
+every `*s1` / `*s2` dereference was DS-relative instead of using the stash segment.
+Both arguments are built as `CONCAT22(seg, ofs)` at the only call site, so both
+parameters are far:
+
+    int16_t __cdecl16far ovc38_scan1(char far *s1,char far *s2)
+
+  * the null test is `s2 == (char far *)0`
+  * segHi is `(byte)((far_ofs_u32(s2) | SEG_OF(s2)) >> 8)`
+  * the three pointer walks fold to `s2 = s2 + 1`
+
+The call site had to change too - `(char *)CONCAT22(...)` is a NEAR cast, which would
+have dropped the segment and re-widened it wrongly at the callee:
+
+    ovc38_scan1((char far *)MK_FP(_SS,(uint16_t)&msg),
+                (char far *)MK_FP(*(uint16_t far *)(blk + slotIdx * 4 - 2),
+                                   *(uint16_t far *)(blk + slotIdx * 4 - 4)))
+
+VERIFIED in the listing - the callee reads through ES and the caller pushes segment
+pairs:
+
+    les  bx,dword ptr [bp+6]
+    mov  al,byte ptr es:[bx]          ; *s1 through its own segment
+
+    push ax / push dx                  ; the slot far pointer
+    push ss / push ax                  ; lea ax,[bp-31] = &msg, with SS
+    call far ptr _ovc38_scan1
+
+`les` sites 8, `es:` operands 11 in ovc38_scan1.
+
+  grep_checks 38,118 unchanged (a signature is not a section-5 pattern)
+  build 65/65; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different
+
+NOTED, not changed: the same function's caller formats its message with
+
+    sprintf((char *)CONCAT22(_SS,&msg), "%c%s%s@%d");
+
+`sprintf` is declared `void __cdecl16far sprintf(char *buf, char *fmt, ...)`, so the
+destination is a near pointer and `&msg` - a stack local - is truncated to a
+DS-relative offset.  `msg` is also declared as a single `uint8_t` for what is a
+formatted string.  That is a second, separate defect in the same function and needs
+the buffer sized and the call form decided; it is not part of this signature fix.

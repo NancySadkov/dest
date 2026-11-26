@@ -184,7 +184,7 @@ void __cdecl16far ovc38_showAchievements(void)
 
 /* [R7] body shape: scan */
 
-int16_t __cdecl16far ovc38_scan1(char *s1,char *s2)
+int16_t __cdecl16far ovc38_scan1(char far *s1,char far *s2)
 
 {
   char firstDigit;
@@ -193,8 +193,8 @@ int16_t __cdecl16far ovc38_scan1(char *s1,char *s2)
   uint parsedNumber;
   uint parsedCount;
   
-  segHi = (byte)(((uint)(char *)s2 | (*(uint16_t *)((uint8_t *)&(s2) + 2))) >> 8);
-  if (((uint)(char *)s2 | (*(uint16_t *)((uint8_t *)&(s2) + 2))) == 0) {
+  segHi = (byte)(((uint)far_ofs_u32(s2) | (uint)SEG_OF(s2)) >> 8);
+  if (((uint)far_ofs_u32(s2) | (uint)SEG_OF(s2)) == 0) {
     result = 0;
   }
   else if ((byte)*s1 < (byte)*s2) {
@@ -205,16 +205,16 @@ int16_t __cdecl16far ovc38_scan1(char *s1,char *s2)
   }
   else {
     while ((*s2 != '\0' && (*s2 != '@'))) {
-      s2 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(s2) + 2)),(char *)s2 + 1);
+      s2 = s2 + 1;
     }
     if (*s2 == '@') {
-      s2 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(s2) + 2)),(char *)s2 + 1);
+      s2 = s2 + 1;
     }
     parsedNumber = (uint)*s2;
     parsedCount = 0;
     if ((((byte *)_ctype + 1)[parsedNumber] & 2) != 0) {
       firstDigit = *s2;
-      s2 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(s2) + 2)),(char *)s2 + 1);
+      s2 = s2 + 1;
       parsedNumber = (uint)*s2;
       parsedCount = (int)firstDigit - 0x30U;
       if ((((byte *)_ctype + 1)[parsedNumber] & 2) != 0) {
@@ -276,9 +276,10 @@ void __cdecl16far ovc38_usesStshAlloc(void)
     sprintf((char *)CONCAT22(_SS,&msg),"%c%s%s@%d");
     slotIdx = 5;
     while ((0 < slotIdx &&
-           (scanResult = ovc38_scan1((char *)CONCAT22(_SS,&msg),
-                                (char *)CONCAT22(*(uint16_t far *)(blk + slotIdx * 4 + -2),
-                                                 (char *)*(uint16_t far *)(blk + slotIdx * 4 - 4))),
+           (scanResult = ovc38_scan1((char far *)MK_FP(_SS,(uint16_t)&msg),
+                                (char far *)MK_FP(
+                                    *(uint16_t far *)(blk + slotIdx * 4 - 2),
+                                    *(uint16_t far *)(blk + slotIdx * 4 - 4))),
            (char)scanResult == '\0'))) {
       slotWord = *(uint16_t far *)(blk + slotIdx * 4 + -4);
       slotPtr = (uint16_t far *)(blk + slotIdx * 4);
