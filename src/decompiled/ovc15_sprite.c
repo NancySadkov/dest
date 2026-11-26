@@ -906,43 +906,40 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
 void __cdecl16far ovc15_usesStExit(int entityIndex)
 
 {
-  uint8_t *puVar1;
-  uint uVar2;
-  entity_t *peVar3;
-  int iVar4;
-  uint uVar5;
-  uint16_t uVar6;
-  char cStack_5;
+  uint8_t *animFramePtr;
+  uint newIndex;
+  entity_t *newEntity;
+  int agntIdx;
+  uint remaining;
+  char toggle;
   
   if (EntityCount < 0x259) {
     if (EntityCount != 600) {
       memcpy((char *)CONCAT22(DAT_2000_d190,Entities + EntityCount),
              (char *)CONCAT22(DAT_2000_d190,Entities + entityIndex),0x37);
-      uVar6 = (uint16_t)((ulong)Entities >> 0x10);
       (Entities)[EntityCount].base.animFrame =
            (uint8_t)((int)(uint)(Entities)[entityIndex].base.animFrame >> 1);
-      uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-      puVar1 = &(Entities)[entityIndex].base.animFrame;
-      *puVar1 = *puVar1 - (Entities)[EntityCount].base.animFrame;
-      uVar2 = EntityCount;
-      uVar5 = (uint)(Entities)[EntityCount].base.animFrame;
+      animFramePtr = &(Entities)[entityIndex].base.animFrame;
+      *animFramePtr = *animFramePtr - (Entities)[EntityCount].base.animFrame;
+      newIndex = EntityCount;
+      remaining = (uint)(Entities)[EntityCount].base.animFrame;
       EntityCount = EntityCount + 1;
       ovr_attact_usesGMapFlags3();
       if (AgntFlag1 != false) {
-        cStack_5 = '\0';
-        iVar4 = 0;
-        while ((iVar4 < (int)(uint)AgntCount && (uVar5 != 0))) {
-          if (Agnts[iVar4].owner == entityIndex) {
-            if (cStack_5 == '\0') {
-              Agnts[iVar4].owner = uVar2;
-              peVar3 = Entities + uVar2;
-              AGNT_WORD(&Agnts[iVar4], entity, 2) = DAT_2000_d190;
-              AGNT_WORD(&Agnts[iVar4], entity, 0) =(uint16_t)( peVar3);
-              uVar5 = uVar5 - 1;
+        toggle = '\0';
+        agntIdx = 0;
+        while ((agntIdx < (int)(uint)AgntCount && (remaining != 0))) {
+          if (Agnts[agntIdx].owner == entityIndex) {
+            if (toggle == '\0') {
+              Agnts[agntIdx].owner = newIndex;
+              newEntity = Entities + newIndex;
+              AGNT_WORD(&Agnts[agntIdx], entity, 2) = DAT_2000_d190;
+              AGNT_WORD(&Agnts[agntIdx], entity, 0) =(uint16_t)( newEntity);
+              remaining = remaining - 1;
             }
-            cStack_5 = '\x01' - (cStack_5 != '\0');
+            toggle = '\x01' - (toggle != '\0');
           }
-          iVar4 = iVar4 + 1;
+          agntIdx = agntIdx + 1;
         }
       }
     }

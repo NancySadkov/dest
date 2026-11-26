@@ -11604,3 +11604,20 @@ the same file (`ovc38_scores.c:23` and `:63`) declare `uint8_t msg;` and pass
   grep_checks 38,019 unchanged; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
   compare_runtime 1,605 identical / 10 different
+
+### ovc15_usesStExit: entity-copy locals (38,019 -> 37,985)
+ovc15_usesStExit: name the entity-copy/relink locals (38,019 -> 37,985)
+
+  puVar1    &Entities[entityIndex].base.animFrame   -> animFramePtr (3)
+  uVar2     EntityCount, the new entity's index     -> newIndex     (4)
+  peVar3    Entities + newIndex                     -> newEntity    (3)
+  iVar4     the Agnts scan index                    -> agntIdx      (8)
+  uVar5     Entities[EntityCount].base.animFrame    -> remaining    (4)
+  cStack_5  the alternating owner-rewrite flag      -> toggle       (4)
+
+`uVar6` was `(uint16_t)((ulong)Entities >> 0x10)` assigned twice and never read, so
+the declaration and both stores are removed.
+
+  grep_checks 38,019 -> 37,985; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
+  compare_runtime 1,605 identical / 10 different
