@@ -69,8 +69,8 @@ void __cdecl16far ovc18_showLeaderView(void)
     _fmemset(MK_FP(_SS, &pcStack_6), 0, 2);
     for (iVar5 = 0; iVar5 < (int)(uint)GLeaderCount; iVar5 = iVar5 + 1) {
       if ((((GLeaderSheets[iVar5])->active != '\0') &&
-          ((&partyCounts)[*(byte *)((int)*(uint32_t *)(iVar5 << 2) + 0x3f)] =
-                (&partyCounts)[*(byte *)((int)*(uint32_t *)(iVar5 << 2) + 0x3f)] + 0x1,
+          ((&partyCounts)[*((uint8_t far *)GLeaderSheets[iVar5] + 0x3f)] =
+                (&partyCounts)[*((uint8_t far *)GLeaderSheets[iVar5] + 0x3f)] + 0x1,
           (GLeaderSheets[iVar5])->x == GfxRndSeed)) &&
          ((GLeaderSheets[iVar5])->y == GfxRndSeed2)) {
         bVar1 = ovr_draw_textArena();
@@ -895,7 +895,7 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
       foundIdx = 0xffff;
       for (leaderIndex = 0; leaderIndex < (int)(uint)GLeaderCount; leaderIndex = leaderIndex + 1) {
         if ((((GLeaderSheets[leaderIndex])->active != '\0') &&
-            (*(char *)((int)*(uint32_t *)(leaderIndex << 2) + 0x3f) == '\0')) &&
+            (*((char far *)GLeaderSheets[leaderIndex] + 0x3f) == '\0')) &&
            (entityIndex = (GLeaderSheets[leaderIndex])->x - GfxRndSeed,
            uVar6 = (int)entityIndex >> 0xf,
            uVar3 = (GLeaderSheets[leaderIndex])->y - GfxRndSeed2,
@@ -1163,7 +1163,7 @@ byte __cdecl16far ovc18_usesAlignUp4(void)
     bestDist = 0xffff;
     for (leaderIdx = 0; leaderIdx < (int)(uint)GLeaderCount; leaderIdx = leaderIdx + 1) {
       if (((GLeaderSheets[leaderIdx])->active != '\0') &&
-         (*(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x3f) == '\0')) {
+         (*((char far *)GLeaderSheets[leaderIdx] + 0x3f) == '\0')) {
         dx = (GLeaderSheets[leaderIdx])->x - GfxRndSeed;
         dxSign = (int)dx >> 0xf;
         dy = (GLeaderSheets[leaderIdx])->y - GfxRndSeed2;

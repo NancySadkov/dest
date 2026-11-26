@@ -8328,3 +8328,56 @@ class.
   grep_checks 40,097 -> 40,071; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### ovc18_leaderview: four near-table reads are GLeaderSheets
+
+Four `*(byte *)((int)*(uint32_t *)(idx << 2) + 0x3f)` reads - the defect proved for
+`ovc22_usesLUDIV_at_` last turn.  Here the table needs no investigation, because the correct form sits in
+the same expression:
+
+```
+71  if ((((GLeaderSheets[iVar5])->active != '\0') &&
+72      ((&partyCounts)[*(byte *)((int)*(uint32_t *)(iVar5 << 2) + 0x3f)] = ...
+74      (GLeaderSheets[iVar5])->x == GfxRndSeed)) &&
+```
+
+so `*(uint32_t *)(iVar5 << 2)` is `GLeaderSheets[iVar5]`, and 0x3f is a single byte:
+
+```c
+*((uint8_t far *)GLeaderSheets[iVar5] + 0x3f)
+```
+
+Four sites: `ovc18_showLeaderView` (line 72, both occurrences of the increment),
+`ovc18_checkFortressPlacement` (898), `ovc18_usesAlignUp4` (1166).  Emitted for the second of those:
+
+```
+mov  bx,di / shl bx,2
+mov  bx,word ptr DGROUP:_GLeaderSheets[bx]
+cmp  byte ptr es:[bx+63],0            ; 0x3f
+```
+
+with ES carrying the segment from the preceding `les ... _GLeaderSheets[bx]` for the same index.
+
+### ovc20_stash.c: the table's segment is 0x48, its symbol is not known
+
+The four sites at 613/614/615/618 reference a far-pointer table, and the disassembly names its segment:
+
+```
+4b0a:0b9c, at 0146:
+  0146  mov bx, si / 0148 shl bx, 2      ; i * 4
+  014B  mov ax, 0x48 / 014E mov es, ax   ; segment 0x48
+  0150  les bx, ptr es:[bx]              ; far pointer at table[i]
+  0155  mov word ptr es:[bx + 3], 0
+  015B  mov word ptr es:[bx + 1], 0
+  0173  mov word ptr es:[bx + 5], ax
+```
+
+The freshly allocated pointer is stored back into the same table (the export's
+`((uint16_t *)(i * 4))[1]` / `*(uint16_t *)(i * 4)` pair), so it is one array of far pointers in
+**segment 0x48**, not at DS offset 0.  Segment 0x48 appears in neither `audit/symbols.tsv` nor the tree,
+so the base symbol is unidentified - the same blocker as segment 0x80 in `stats_usesAlignUp42`.  Left
+unchanged rather than pointed at a guessed symbol.
+
+  grep_checks 40,071 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
