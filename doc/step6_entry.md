@@ -9580,3 +9580,50 @@ sites by how badly their lists are wrong.  I did not have the budget to write an
   grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### MEASURED: `add sp,N` is the authoritative argument count
+MEASURED: `add sp,N` after the lcall is the authoritative argument count, not the push run
+
+Decoding ovc23_bldrec.c:2020 (`55fe:2e4c`) turned up something that changes the detector's design.
+
+At `lcall 0x170, 0x7a` (011D) the visible pushes are
+
+  0112  push dx / 0113 push ax            ; far return of lcall 0x160,0x2a
+  0114  push ds / 0115 push 0x5665        ; format
+  0118  push ss / 0119 lea ax,[bp-0x54] / 011C push ax
+
+i.e. six words, but `0122  add sp, 0x10` pops **eight**.  The same inconsistency appears at the
+preceding call: `010A  lcall 0x160, 0x2a` is preceded by only `push ss / lea ax,[bp-0xa4] / push ax`
+(two words) yet followed by `010F  add sp, 8` (four).
+
+Two words are missing at each site, and the pattern is consistent: **arguments are pushed well before the
+instruction window**, interleaved with earlier calls' setup, so counting a contiguous run of `push`
+instructions undercounts.
+
+That makes `add sp,N` / 2 the reliable argument-word count for a cdecl call, and it is exactly what the
+inverted detector needs:
+
+  for each lcall in a function:  argWords = (the N in the following `add sp,N`) / 2
+  for each ovr_ call in the C:   argWords = sum of the arguments' widths
+
+The second half is the hard part - a C argument is 1 word, 2 if it is a near pointer or an int, 4 if it is
+a `far *` or a `long`.  Comparing only the COUNTS therefore needs an assumption about widths; comparing
+`argWords` against `nargs` (each argument one word) is only valid for all-word argument lists such as
+`play_sfxU(0x1b, 0, x)` - which is how the ovc27 sites were confirmed.
+
+So the detector should report two numbers per site and let the mismatch speak:
+
+  original:  argWords  (= add sp,N / 2)
+  C:         nargs     (balanced-paren count)
+
+and rank by |argWords - nargs|.  Sites where they agree are consistent with an all-word list; sites where
+they differ by 2 or more are the ones with invented or missing arguments (ovc23_bldrec.c:2020 has
+nargs = 7 and argWords = 8, but with three far arguments its C should account for 8 words, not 7 - so the
+list is short by one argument *and* mis-typed).
+
+I did not have the budget to write and validate that detector this turn; recording the measurement that
+determines its design so it is not re-derived.
+
+  grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
