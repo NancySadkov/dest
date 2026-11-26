@@ -3449,7 +3449,6 @@ void __cdecl16far ovc49_drawAgents(void)
   uint *puVar3;
   byte bVar4;
   bool bVar5;
-  uint32_t unitPtr;
   far_t gfx;
   far_t gfx_00;
   far_t dst;
@@ -3771,9 +3770,8 @@ void __cdecl16far ovc49_drawAgents(void)
     }
     else {
       iVar14 = ovr_agnt_clampX(Agnts[agentIndex].x);
-      unitPtr = *(uint32_t far *)&Agnts[agentIndex].gdata;
       scrY = *(int *)(&columnScreenY[iVar14]) + Agnts[agentIndex].y +
-                  (int)*(char *)((int)unitPtr + 0x52) + -0x16;
+                  (int)Agnts[agentIndex].gdata->yOffset + -0x16;
     }
     Agnts[agentIndex].screenX = iVar17;
     Agnts[agentIndex].screenY = scrY;
@@ -3796,8 +3794,7 @@ void __cdecl16far ovc49_drawAgents(void)
         }
       }
       else if (Agnts[agentIndex].combatState == '\x01') {
-        unitPtr = *(uint32_t far *)&Agnts[agentIndex].gdata;
-        if ((*(uint *)((int)unitPtr + 0x40) & 2) == 0) {
+        if ((Agnts[agentIndex].gdata->flags3 & 2) == 0) {
           gfx_07.seg = uStack_16;
           gfx_07.ofs = (uint16_t)(stgFar->cmap + 6);
           ovr_blitGfxRect(gfx_07,iVar17,scrY,&agentRect,type,(*(uint8_t *)((uint8_t *)&(scrY))),0,0,0,0,0,0);
@@ -3946,8 +3943,7 @@ void __cdecl16far ovc49_drawAgents(void)
           AGNT_FIELD(&Agnts[agentIndex], destY, 1) = Agnts[agentIndex].level;
         }
         else if ((Agnts[agentIndex].gindex == '\0') &&
-                (unitPtr = *(uint32_t far *)&Agnts[agentIndex].gdata,
-                (*(uint *)((int)unitPtr + 0x3c) & 8) == 0)) {
+                ((Agnts[agentIndex].gdata->flags & 8) == 0)) {
           uVar12 = ovr_audio_panFromX((agnt_t far *)&Agnts[agentIndex].x,0x26);
           ovr_play_sfxU(*(byte *)((int)recPtr + 0x1d),0,uVar12,0,(char)uVar12);
           ovr_ovc41_resolveSpecialAttack
@@ -3962,8 +3958,8 @@ void __cdecl16far ovc49_drawAgents(void)
                                       CONCAT13((char)((uint)iVar17 >> 8),CONCAT12(uVar22,SEG_OF(Agnts))),
                                       0x26,uVar22,0x26);
           if (((char)uVar10 != '\0') && ((Agnts[agntIndex - 1].flags & 0x800) == 0)) {
-            unitPtr = *(uint32_t far *)&Agnts[agntIndex - 1].entity;
-            if (((*(uint *)((int)unitPtr + 0x14) & 2) == 0) ||
+            if (((*(uint16_t far *)((uint8_t far *)&Agnts[agntIndex - 1].entity->base.frames + 1)
+                   & 2) == 0) ||
                ((uVar12 = ovr_randBelow(2,0), (uVar12 & 0xff) != 0 ||
                 ((Agnts[agentIndex].flags & 0x800) == 0)))) {
               ovr_OVC41_6a8f_01e7_entry((agnt_t far *)&Agnts[agntIndex - 1].x,0x26);

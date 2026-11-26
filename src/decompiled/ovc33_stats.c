@@ -2150,17 +2150,14 @@ L_stats_6386_1c9f_1ECD:
             ovr_agnt_usesAlignToSeg();
             return bVar3;
           }
-          uVar1 = *(uint32_t far *)&Agnts[uVar5].gdata;
           uVar8 = uVar5;
-          if (*(char *)((int)uVar1 + 1) == '\x02') break;
-          uVar1 = *(uint32_t far *)&Agnts[uVar5].gdata;
-          if (*(char *)((int)uVar1 + 1) == '\x01') {
+          if (Agnts[uVar5].gdata->type == '\x02') break;
+          if (Agnts[uVar5].gdata->type == '\x01') {
             Agnts[uVar5].x = 0x3d;
             Agnts[uVar5].y = 0x12;
           }
           else {
-            uVar1 = *(uint32_t far *)&Agnts[uVar5].gdata;
-            if (*(char *)((int)uVar1 + 1) == '\v') {
+            if (Agnts[uVar5].gdata->type == '\v') {
               Agnts[uVar5].x = 0x56;
               Agnts[uVar5].y = 0x14;
             }

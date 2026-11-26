@@ -8066,3 +8066,56 @@ block whose store order is also swapped), `ovc49_drawAgents` 4 (one is a word at
   grep_checks 40,139 -> 40,135; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### The truncated-far class is down to 4 reads (40,135 -> 40,129)
+
+**ovc49_drawAgents** (`8699:1e09`) held four, each confirmed from the listing:
+
+```
+1859  les bx, ptr es:[bx] / test word ptr es:[bx + 0x14], 2            word inside base.frames
+0D7C  les bx, ptr es:[bx + 0x1d] / mov al, byte ptr es:[bx + 0x52]    agntG_t.yOffset
+0F69  les bx, ptr es:[bx + 0x1d] / test word ptr es:[bx + 0x40], 2    agntG_t.flags3
+      (plus a 0x3c flags test, offset pinned by probe)
+```
+
+The `+0x14` one is **not** a named field: `0x13` is `frames`, a 4-byte `far_t`, so `0x14` is a two-byte
+read one byte into it.  Written with an explicit byte offset so the operand comes out right:
+
+```c
+*(uint16_t far *)((uint8_t far *)&Agnts[agntIndex - 1].entity->base.frames + 1)
+```
+
+pinned by probe: `les bx,dword ptr es:[bx+23] / mov ax,word ptr es:[bx+20]` — 0x17 then 0x14.  The other
+three became `gdata->yOffset`, `gdata->flags3 & 2`, `gdata->flags & 8`, and `uint32_t unitPtr` is gone.
+**`ovc49_agents.c` now contains no `uint32_t far *` at all.**
+
+**ovc33_stats.c** - three `gdata + 1` reads became `gdata->type`:
+
+```
+les  bx,dword ptr es:_Agnts[bx+29]
+cmp  byte ptr es:[bx+1],2
+```
+
+These three lines sit in a region the export merged into `stats_openAgentDetail`, but that function's
+581 instructions contain **no** `es:[bx + 1]` access at all - the `switchD_6000_58bf` label in the same
+body says the merge came from segment 0x6000.  So their original home is unknown; the construct is
+unambiguous anyway (`gdata` truncated to `(int)` then read at +1 is `agntG_t.type`), and the surrounding
+constants `0x3d/0x12`, `0x56/0x14`, `0x6e/0xb` are exactly `ovc42_usesAgntCount`'s, which already reads
+`gdata->type`.  The change that matters is the **segment**: `AgntGs` is not in DGROUP.
+
+#### What is left, and why each is blocked
+
+```
+stats_readyStatusText  3   all through in_stack_00000004  -> belongs with the phantom work
+stats_openAgentDetail  1   the segment-0x80 table block   -> table unnamed in either image,
+                                                            and its two stores are swapped
+```
+
+The `+0x10`/`+0x12` block at `0149`/`014D` stores `table[0]` to `entity+0x12` and `table[1]` to
+`entity+0x10`; the export has them the other way round.  Finishing it needs segment **0x80** identified -
+`audit/symbols.tsv` has no such segment at all (its segments are 0x0ff0, 0x1000, 0x1301, 0x1726, 0x195d,
+0x2000, ...), so it is runtime data, most likely a `stshAlloc` block.  That is a separate investigation.
+
+  grep_checks 40,135 -> 40,129; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
