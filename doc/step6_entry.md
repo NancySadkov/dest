@@ -12770,3 +12770,27 @@ place the missing tail content), which is a larger, single-measurement job.
   grep_checks 37,460 -> 37,437; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,569/1,805 (74 runs, sum|delta| 251,810)
   compare_runtime 1,615 matched, 1,605 identical / 10 different
+
+### ovc24_removeOtherEntities: dead segment stores dropped (37,437 -> 37,415)
+ovc24_removeOtherEntities: dead segment stores dropped, four roles split (37,437 -> 37,415)
+
+  uVar5   `(uint16_t)((ulong)Entities >> 0x10)`, assigned 3x and never read -> removed
+  uVar5   ovr_ovc23_isCursorAt(...) result                                  -> cursorHit
+  uVar1   alignUp4(Entities[ent].x,0,0)                                     -> alignedX
+  uVar1   the Agnts scan index -1..AgntCount-1                              -> agntIdx
+  uVar2   alignUp4(GfxRndSeed,0,0)                                          -> alignedSeed
+  iVar3   Entities[ent].base.gindex * 0x95, the label row offset             -> labelOfs
+
+The self-reference that blocked this last turn turned out not to be one: the statement is
+
+    (cursorHit = ovr_ovc23_isCursorAt(x, y, 0), (char)cursorHit != '\0')
+
+i.e. assign-then-test-the-low-byte, a normal comma expression.  The earlier attempt renamed
+only the assignment target and left `(char)uVar5` behind; once the three dead stores are
+gone every surviving occurrence is that result, so a single rename covers both.
+
+No expression changed.
+
+  grep_checks 37,437 -> 37,415; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,569/1,805 (74 runs, sum|delta| 251,810)
+  compare_runtime 1,615 matched, 1,605 identical / 10 different

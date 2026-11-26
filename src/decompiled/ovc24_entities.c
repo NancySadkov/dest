@@ -414,26 +414,26 @@ L_OVC24_5943_026e_088A:
 void __cdecl16far ovc24_removeOtherEntities(uint8_t far *reportedOut)
 
 {
-  uint uVar1;
-  uint uVar2;
+  uint alignedX;
+  uint agntIdx;
+  uint alignedSeed;
   char *msg;
   uint16_t dst;
-  int iVar3;
+  int labelOfs;
   uint ent;
-  uint16_t uVar5;
+  uint16_t cursorHit;
   
   if (!GameRunning) {
     for (ent = 0; ent < EntityCount; ent = ent + 1) {
       AGNT_FIELD(&(Entities)[ent], base.entity, 2) = 0;
     }
     for (ent = 0; ent < EntityCount; ent = ent + 1) {
-      uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       if ((AGNT_FIELD(&(Entities)[ent], base.entity, 1) != '\0') &&
          (AGNT_FIELD(&(Entities)[ent], base.entity, 2) == '\0')) {
         if ((GOngoingBattle == '\0') && (((entity_t far *)Entities)[ent].base.y == GfxRndSeed2)) {
-          uVar1 = alignUp4(*(int *)((entity_t far *)Entities + ent),0,0);
-          uVar2 = alignUp4(GfxRndSeed,0,0);
-          if (uVar1 == uVar2) goto L_OVC24_5943_0d5a_0E37;
+          alignedX = alignUp4(*(int *)((entity_t far *)Entities + ent),0,0);
+          alignedSeed = alignUp4(GfxRndSeed,0,0);
+          if (alignedX == alignedSeed) goto L_OVC24_5943_0d5a_0E37;
         }
         ovc24_textKill(ent);
       }
@@ -443,17 +443,16 @@ L_OVC24_5943_0d5a_0E37:
     GGameState = 0x20;
     ent = EntityCount;
     while (ent = ent - 1, -1 < (int)ent) {
-      uVar5 = (uint16_t)((ulong)Entities >> 0x10);
       if (((entity_t far *)Entities)[ent].base.animFrame == '\0') {
         if ((GOngoingBattle == '\0') &&
-           (uVar5 = ovr_ovc23_isCursorAt
-                              (*(uint16_t *)((entity_t far *)Entities + ent),((entity_t far *)Entities)[ent].base.y,0), (char)uVar5 != '\0')) {
-          uVar1 = (uint)AgntCount;
+           (cursorHit = ovr_ovc23_isCursorAt
+                              (*(uint16_t *)((entity_t far *)Entities + ent),((entity_t far *)Entities)[ent].base.y,0), (char)cursorHit != '\0')) {
+          agntIdx = (uint)AgntCount;
           do {
-            uVar1 = uVar1 - 1;
-            if ((int)uVar1 < 0) break;
-          } while (Agnts[uVar1].owner != ent);
-          if ((int)uVar1 < 0) {
+            agntIdx = agntIdx - 1;
+            if ((int)agntIdx < 0) break;
+          } while (Agnts[agntIdx].owner != ent);
+          if ((int)agntIdx < 0) {
             if (AgntGs[(uint)(Entities)[ent].base.gindex].ai == '\0'
                ) {
               ovr_play_sfx(8,0,0);
@@ -465,15 +464,14 @@ L_OVC24_5943_0d5a_0E37:
           }
         }
         else {
-          uVar5 = (uint16_t)((ulong)Entities >> 0x10);
           alignUp4((Entities)[ent].base.x,
                    (Entities)[ent].base.y,0xa000);
-          iVar3 = (uint)(Entities)[ent].base.gindex * 0x95;
+          labelOfs = (uint)(Entities)[ent].base.gindex * 0x95;
           msg = ovr_fmVsprintf("Intelligence reports %s unit destroyed. (%d, %d)",
                                (char *)CONCAT22(*(uint16_t *)
-                                                 ((int)&worldMenuLabels[1].ofs + 1 + iVar3),
+                                                 ((int)&worldMenuLabels[1].ofs + 1 + labelOfs),
                                                 (char *)*(uint16_t *)
-                                                         ((int)&worldMenuLabels[0].seg + 1 + iVar3))
+                                                         ((int)&worldMenuLabels[0].seg + 1 + labelOfs))
                               );
           asm { mov dst,dx };
           ovr_uiNotify(msg,dst,0);
