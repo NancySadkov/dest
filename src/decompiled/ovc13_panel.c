@@ -371,28 +371,23 @@ void __cdecl16far ovc13_usesBlitRects(void)
   byte cornerC;
   byte cornerB;
   byte cornerB_00;
-  uint uVar1;
-  uint uVar2;
+  uint flagsHereWord;
+  uint flagsAboveWord;
   uint16_t seg;
-  uint8_t uVar3;
+  uint8_t edgeVal;
   int x1;
   int y1;
-  byte *pbVar5;
-  short *psVar6;
+  byte *cellsOfs;
+  short *flagsOfs;
   int destX;
   int offY;
   int col;
   int offX;
-  uint16_t uVar9;
   byte flagsLo;
   short *flagsAbove;
-  uint16_t uStack_1a;
   short *flagsHere;
-  uint16_t uStack_16;
   byte *cellsHere;
-  uint16_t uStack_12;
   byte *cellsBelow;
-  uint16_t uStack_e;
   int destY;
   int row;
   uint16_t edge;
@@ -418,46 +413,44 @@ void __cdecl16far ovc13_usesBlitRects(void)
     cellsBelow = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
                                    (*(byte (*) [59] [148])GMapCells)[PanelGridY + row + 1] +
                                    PanelGridX);
-    pbVar5 = (*(byte (*) [59] [148])GMapCells)[PanelGridY + row] + PanelGridX;
-    cellsHere = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar5);
-    psVar6 = (*(short (*) [60] [148])GMapFlags)[PanelGridY + row] + PanelGridX;
-    flagsHere = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar6);
+    cellsOfs = (*(byte (*) [59] [148])GMapCells)[PanelGridY + row] + PanelGridX;
+    cellsHere = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),cellsOfs);
+    flagsOfs = (*(short (*) [60] [148])GMapFlags)[PanelGridY + row] + PanelGridX;
+    flagsHere = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),flagsOfs);
     if (PanelGridY + row != 0 && SCARRY2(PanelGridY,row) == PanelGridY + row < 0) {
-      psVar6 = ((short (*) [60] [148])GMapFlags)[-1][PanelGridY + row + 0x3b] + PanelGridX;
+      flagsOfs = ((short (*) [60] [148])GMapFlags)[-1][PanelGridY + row + 0x3b] + PanelGridX;
     }
-    flagsAbove = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),psVar6);
+    flagsAbove = (uint *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),flagsOfs);
     cornerA = *cellsBelow;
     cellsBelow = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),
                                    (*(byte (*) [59] [148])GMapCells)[PanelGridY + row + 1] +
                                    PanelGridX + 1);
     cornerC = *cellsHere;
-    cellsHere = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),pbVar5 + 1);
+    cellsHere = (byte *)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapCells) + 2)),cellsOfs + 1);
     for (col = 0; col < 0x23; col = col + 1) {
       cornerB = *cellsBelow;
-      cellsBelow = (byte *)CONCAT22(uStack_e,cellsBelow + 1);
+      cellsBelow = (byte *)CONCAT22(SEG_OF(cellsBelow),cellsBelow + 1);
       cornerB_00 = *cellsHere;
-      cellsHere = (byte *)CONCAT22(uStack_12,cellsHere + 1);
-      uVar1 = *flagsHere;
-      flagsHere = (uint *)CONCAT22(uStack_16,flagsHere + 1);
-      uVar2 = *flagsAbove;
-      flagsAbove = (uint *)CONCAT22(uStack_1a,flagsAbove + 1);
-      flagsLo = (byte)uVar1;
-      if ((uVar1 & 4) == 0) {
-        uVar9 = seg;
-        edge = ovr_constr_compute1(cornerA,cornerB,cornerC,flagsLo,1,0,0,0);
-        uVar3 = (uint8_t)edge;
+      cellsHere = (byte *)CONCAT22(SEG_OF(cellsHere),cellsHere + 1);
+      flagsHereWord = *flagsHere;
+      flagsHere = (uint *)CONCAT22(SEG_OF(flagsHere),flagsHere + 1);
+      flagsAboveWord = *flagsAbove;
+      flagsAbove = (uint *)CONCAT22(SEG_OF(flagsAbove),flagsAbove + 1);
+      flagsLo = (byte)flagsHereWord;
+      if ((flagsHereWord & 4) == 0) {
+            edge = ovr_constr_compute1(cornerA,cornerB,cornerC,flagsLo,1,0,0,0);
+        edgeVal = (uint8_t)edge;
         edge = ovr_constr_compute1(cornerC,cornerB_00,cornerB,flagsLo,2,0,0,0);
-        ovr_driver_compute4(destX,(byte)destY,(uint8_t)edge,uVar3,uVar9);
+        ovr_driver_compute4(destX,(byte)destY,(uint8_t)edge,edgeVal,seg);
       }
       else {
-        uVar9 = seg;
-        edge = ovr_constr_compute1(cornerA,cornerB,cornerB_00,flagsLo,2,0,0,0);
-        uVar3 = (uint8_t)edge;
+            edge = ovr_constr_compute1(cornerA,cornerB,cornerB_00,flagsLo,2,0,0,0);
+        edgeVal = (uint8_t)edge;
         edge = ovr_constr_compute1(cornerC,cornerB_00,cornerA,flagsLo,1,0,0,0);
-        ovr_driver_compute3(destX,(byte)destY,(uint8_t)edge,uVar3,uVar9);
+        ovr_driver_compute3(destX,(byte)destY,(uint8_t)edge,edgeVal,seg);
       }
-      if (((uVar1 | uVar2) & 0xc000) != 0) {
-        ovc13_compute2(destX,destY,(byte)(uVar2 >> 0xe),(byte)(uVar1 >> 0xe),seg);
+      if (((flagsHereWord | flagsAboveWord) & 0xc000) != 0) {
+        ovc13_compute2(destX,destY,(byte)(flagsAboveWord >> 0xe),(byte)(flagsHereWord >> 0xe),seg);
       }
       destX = destX + 2;
       cornerC = cornerB_00;

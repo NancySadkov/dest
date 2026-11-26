@@ -11222,3 +11222,22 @@ Names: slotIdx, slotWord, slotPtr, scanResult, nameBlk, nameLen.
   grep_checks 38,385 -> 38,341; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
   compare_runtime 1,605 identical / 10 different
+
+### ovc13_usesBlitRects: four stale segment locals removed (38,341 -> 38,295)
+ovc13_usesBlitRects: name the flag/cell temporaries, drop four stale segments (38,341 -> 38,295)
+
+The four `uStack_*` words were uninitialised locals used as the segment half of a
+CONCAT22 that rebuilds a pointer it already holds:
+
+    flagsAbove = (uint *)CONCAT22(uStack_1a, flagsAbove + 1);
+
+`SEG_OF(flagsAbove)` is exactly that segment, so all four locals are gone.
+
+`uVar9` only forwarded `seg` (`uVar9 = seg;` then the call), so it is `seg`.
+
+Names: uVar1 -> flagsHereWord, uVar2 -> flagsAboveWord, uVar3 -> edgeVal,
+       pbVar5 -> cellsOfs, psVar6 -> flagsOfs.
+
+  grep_checks 38,341 -> 38,295; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
+  compare_runtime 1,605 identical / 10 different
