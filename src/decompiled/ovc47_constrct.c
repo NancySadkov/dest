@@ -47,13 +47,13 @@ void __cdecl16far land_info(byte tileOffset)
   uint16_t sfxRoll;
   uint16_t retSegB;
   char *textMsg;
-  uint16_t *puVar5;
+  uint16_t *wordPair;
   int computed;
   uint8_t *stashOfs;
   uint16_t retSeg;
   uint16_t entrySeg;
   int pctRemaining;
-  unit_t *puVar10;
+  unit_t *units;
   uint16_t gUnitsSeg;
   uint16_t entitiesSeg;
   uint16_t mapFlag;
@@ -85,7 +85,7 @@ void __cdecl16far land_info(byte tileOffset)
   char itemCode;
   uint8_t tileX;
   uint8_t gfxOfs;
-  undefined1 auStack_14 [10];
+  undefined1 menuCodes [10];
   uint8_t menuLabel;
   uint16_t tableOfs;
   uint16_t arg2Pair;
@@ -138,8 +138,8 @@ void __cdecl16far land_info(byte tileOffset)
     if (resultCode == '\0') {
       if (tileIdx == 0xff) {
         gUnitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
-        puVar10 = GUnits;
-        if (puVar10[unitIdx].unitType == 0xff) {
+        units = GUnits;
+        if (units[unitIdx].unitType == 0xff) {
           if (bldType == 0) {
             mapFlag = ovr_ovc45_usesGMapFlags4(tileX,GfxRndSeed2);
             tileClass = (char)mapFlag;
@@ -163,16 +163,16 @@ void __cdecl16far land_info(byte tileOffset)
         }
         else if (BuildingTypes[bldType].durability == 'd') {
           stashOfs = ovr_ovc15_usesStshRealloc
-                             ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),BLD_WORD(&BuildingTypes[bldType], name, 2),*(uint16_t *)((uint)puVar10[unitIdx].unitType * 4),0,0,0,0,0);
+                             ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),BLD_WORD(&BuildingTypes[bldType], name, 2),*(uint16_t *)((uint)units[unitIdx].unitType * 4),0,0,0,0,0);
           asm { mov retSeg,dx };
           textMsg = ovr_fmVsprintf("%s: Held by %s.",(char *)CONCAT22(retSeg,stashOfs));
           strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(retSeg,textMsg));
         }
         else {
           b = BuildingTypes[bldType].durability;
-          computed = ovr_ovc45_compute7(puVar10[unitIdx].level,b,b,
+          computed = ovr_ovc45_compute7(units[unitIdx].level,b,b,
                                       (uint)BuildingTypes[bldType].durability,
-                                      *(uint16_t *)((uint)puVar10[unitIdx].unitType * 4));
+                                      *(uint16_t *)((uint)units[unitIdx].unitType * 4));
           stashOfs = ovr_ovc15_usesStshRealloc
                              ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),(char)BLD_WORD(&BuildingTypes[bldType], name, 2),(char)computed,0,0,0,0,0);
           asm { mov retSeg,dx };
@@ -188,10 +188,10 @@ void __cdecl16far land_info(byte tileOffset)
       }
       else {
         bldType = *(byte *)(GTileRecords[tileIdx] * 0x12 + 8);
-        puVar5 = (uint16_t *)
+        wordPair = (uint16_t *)
                  ((uint)*(byte *)(GTileRecords[tileIdx] * 0x12 + 9) * 4);
-        entrySeg = puVar5[1];
-        entrySeg = *puVar5;
+        entrySeg = wordPair[1];
+        entrySeg = *wordPair;
         entryLo = (undefined1)entrySeg;
         computed = ovr_ovc45_compute9(text1,
                                    (char *)CONCAT13((char)((uint)entrySeg >> 8),
@@ -247,34 +247,34 @@ void __cdecl16far land_info(byte tileOffset)
       if (bldType != 0) {
         segTable[0] = _DS;
         menuItems = 0x7969;
-        auStack_14[0] = 1;
+        menuCodes[0] = 1;
       }
       menuCount = (uint)(bldType != 0);
       if (foundFlag != 0x0) {
         segTable[menuCount * 2] = _DS;   /* hand fix: this slot holds the DGROUP segment half, exactly as segTable[0] = 0x2410 above; the literal offset Ghidra printed is that same value */
         *(char **)(&menuItems + menuCount * 4) = (char *)"Change party";
-        auStack_14[menuCount] = 2;
+        menuCodes[menuCount] = 2;
         menuCount = menuCount + 1;
       }
       segTable[menuCount * 2] = _DS;   /* hand fix: this slot holds the DGROUP segment half, exactly as segTable[0] = 0x2410 above; the literal offset Ghidra printed is that same value */
       *(char **)(&menuItems + menuCount * 4) = (char *)"Done";
-      auStack_14[menuCount] = 3;
+      menuCodes[menuCount] = 3;
       again = '\0';
       do {
         entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
         if (bldType == 0) {
           textMsg = ovr_ovc22_className(AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),0);
-          puVar5 = (uint16_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) * 4);
+          wordPair = (uint16_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) * 4);
           msgSeg = _DS;
-          computed = ovr_ovc45_compute9(text2,(char *)CONCAT22(*puVar5,_SS),
+          computed = ovr_ovc45_compute9(text2,(char *)CONCAT22(*wordPair,_SS),
                                      (char *)CONCAT13((char)(Font03.ofs >> 8),
-                                                      CONCAT12((char)Font03.ofs,puVar5[1])),
+                                                      CONCAT12((char)Font03.ofs,wordPair[1])),
                                      Font03.seg,'J',(char)Font03.ofs,(char)Font03.seg,0x4a,3,textMsg)
           ;
-          puVar5 = (uint16_t *)
+          wordPair = (uint16_t *)
                    ((uint)*(byte *)(GTileRecords[tileIdx] * 0x12 + 9) * 4);
-          computed = ovr_ovc45_compute9(text1,(char *)CONCAT22(*puVar5,_SS),
-                                     (char *)CONCAT22(Font03.ofs,(char *)puVar5[1]),Font03.seg,'J',
+          computed = ovr_ovc45_compute9(text1,(char *)CONCAT22(*wordPair,_SS),
+                                     (char *)CONCAT22(Font03.ofs,(char *)wordPair[1]),Font03.seg,'J',
                                      0x4a,2,(char)computed,msgSeg);
           pctRemaining = 100 - ((uint)*(byte *)(GTileRecords[tileIdx] * 0x12 + 0xb) * 100
                         ) / (uint)*(byte *)(GTileRecords[tileIdx] * 0x12 + 0xc);
@@ -285,18 +285,18 @@ void __cdecl16far land_info(byte tileOffset)
         }
         else {
           textMsg = ovr_ovc22_className(AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),0);
-          puVar5 = (uint16_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) * 4);
+          wordPair = (uint16_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) * 4);
           msgSeg = _DS;
-          computed = ovr_ovc45_compute9(text2,(char *)CONCAT22(*puVar5,_SS),
+          computed = ovr_ovc45_compute9(text2,(char *)CONCAT22(*wordPair,_SS),
                                      (char *)CONCAT13((char)(Font03.ofs >> 8),
-                                                      CONCAT12((char)Font03.ofs,puVar5[1])),
+                                                      CONCAT12((char)Font03.ofs,wordPair[1])),
                                      Font03.seg,'_',(char)Font03.ofs,(char)Font03.seg,0x5f,3,textMsg)
           ;
-          puVar5 = (uint16_t *)
+          wordPair = (uint16_t *)
                    ((uint)*(byte *)(GTileRecords[tileIdx] * 0x12 + 9) * 4);
           delayArg = 0x7a;
-          computed = ovr_ovc45_compute9(text1,(char *)CONCAT22(*puVar5,_SS),
-                                     (char *)CONCAT22(Font03.ofs,(char *)puVar5[1]),Font03.seg,'_',
+          computed = ovr_ovc45_compute9(text1,(char *)CONCAT22(*wordPair,_SS),
+                                     (char *)CONCAT22(Font03.ofs,(char *)wordPair[1]),Font03.seg,'_',
                                      0x5f,2,(char)computed,msgSeg);
           stashOfs = ovr_ovc15_usesStshRealloc
                              ((char *)BLD_WORD(&BuildingTypes[bldType], name, 0),BLD_WORD(&BuildingTypes[bldType], name, 2),100 - ((uint)*(byte *)(GTileRecords[tileIdx] * 0x12
@@ -319,7 +319,7 @@ void __cdecl16far land_info(byte tileOffset)
         itemCode = (char)stashOfs;
         goldPartyIndex = 0xff;
         if (itemCode != '\0') {
-          itemCode = auStack_14[((uint)stashOfs & 0xff) - 1];
+          itemCode = menuCodes[((uint)stashOfs & 0xff) - 1];
         }
         if (itemCode == '\x01') {
           tableOfs = segTable[0];

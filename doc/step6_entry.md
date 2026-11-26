@@ -13453,3 +13453,27 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### land_info: three single-role names (36,871 -> 36,822)
+land_info: three single-role names (36,871 -> 36,822)
+
+  puVar5     191..194, 267..277, 288..299   pointers to a uint16 pair from a lookup
+                                            table, read as [0] / [1]        -> wordPair  (16)
+  puVar10    141, 142, 166, 173, 175        GUnits                          -> units     (6)
+  auStack_14 88, 250, 256, 261, 322         the byte menu-code table        -> menuCodes (5)
+
+All three keep one role at every use, so a whole-function substitution is correct; the
+declaration lines are renamed in the same pass and the script asserts that
+`uint16_t *wordPair;`, `unit_t *units;` and `undefined1 menuCodes [10];` are what remain.
+
+`puVar10` had a sixth use on a 180-character line that the per-line listing truncated
+(`ovr_ovc45_compute7`... `*(uint16_t *)((uint)units[unitIdx].unitType * 4)`); the
+whole-function substitution covered it, and reading that line afterwards confirms the role
+is the same `GUnits` record.
+
+No expression changed.
+
+  grep_checks 36,871 -> 36,822; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
