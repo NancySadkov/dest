@@ -11372,3 +11372,18 @@ table lookup was wrong for these addresses and is disabled.
   build 65/65; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
   compare_runtime 1,605 identical / 10 different at main entry (gate definition)
+
+### ovc23_compute1: flags, neighbour type, record offset split (38,250 -> 38,214)
+ovc23_compute1: name the building-type flags and split the record offset (38,250 -> 38,214)
+
+  bldFlags      BuildingTypes[bldType].flags          (7)
+  neighbourType ovr_ovc45_getUnitType(...)            (17)
+  recOfs        (uint)neighbourType * 0x27, read at +0x11e  (4)
+  stepCoord     x-1 / y+1, used as a coordinate        (7)
+  result        the value returned                     (16)
+
+Renaming and one split; no expression changed.
+
+  grep_checks 38,250 -> 38,214; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
+  compare_runtime 1,605 identical / 10 different
