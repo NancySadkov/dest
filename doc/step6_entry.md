@@ -11533,3 +11533,20 @@ in the same expressions: the local for `.unitType` is `gunitType`, and for
   grep_checks 38,066 -> 38,032; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
   compare_runtime 1,605 identical / 10 different
+
+### ovc13_usesAlignUp4: three single-role locals (38,032 -> 38,019)
+ovc13_usesAlignUp4: three single-role locals named (38,032 -> 38,019)
+
+  uVar5    ovr_alignUp4(GfxRndSeed, GfxRndSeed2, 0)              -> alignResult (3)
+  uVar10   Font02.ofs                                            -> fontOfs     (3)
+  uVar11   blitSeg / Font02.seg, the segment of the draw calls    -> drawSeg     (7)
+
+`uVar3` and `uVar4` are deliberately left.  `uVar4` holds both the
+`ovr_constr_compute1` results and the blit colour `0xe0`; `uVar3` holds two
+different saved corner bytes, a compute result and the attribute `0x3f`.  That is
+the shared-scratch case the screening rejects, so the pass takes only the three
+locals whose whole lifetime is one role.
+
+  grep_checks 38,032 -> 38,019; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
+  compare_runtime 1,605 identical / 10 different

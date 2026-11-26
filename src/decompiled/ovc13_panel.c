@@ -819,14 +819,14 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   int savedBelow;
   int savedRow;
   uint8_t uVar3;
-  uint uVar5;
+  uint alignResult;
   char *text;
   byte *rowCellPtr;
   uint16_t *flagsRowPtr;
   int xPos;
   int colIdx;
-  uint16_t uVar10;
-  uint16_t uVar11;
+  uint16_t fontOfs;
+  uint16_t drawSeg;
   uint8_t msg;
   uint16_t flags2;
   uint16_t flags;
@@ -907,23 +907,23 @@ void __cdecl16far ovc13_usesAlignUp4(void)
       if ((flags & 4) == 0) {
         (*(uint8_t *)((uint8_t *)&(rowPrevSaved))) = (uint8_t)rowPrev;
         cornerC_00 = (uint8_t)rowPrevSaved;
-        uVar11 = blitSeg;
+        drawSeg = blitSeg;
         rowPrev = (int)(char)cornerC;
         rowPrevSaved = savedRow;
         uVar4 = ovr_constr_compute1(uVar3,cornerB,cornerC_00,(byte)flags,1,0,0,0);
         uVar3 = (uint8_t)uVar4;
         uVar4 = ovr_constr_compute1((uint8_t)rowPrevSaved,(uint8_t)rowPrev,
                                     (uint8_t)belowPrev,(byte)flags,2,0,0,0);
-        ovr_driver_compute4(xPos,(byte)rowY,(uint8_t)uVar4,uVar3,uVar11);
+        ovr_driver_compute4(xPos,(byte)rowY,(uint8_t)uVar4,uVar3,drawSeg);
       }
       else {
-        uVar11 = blitSeg;
+        drawSeg = blitSeg;
         rowPrev = (int)(char)cornerC;
         uVar4 = ovr_constr_compute1(uVar3,cornerB,cornerC,(byte)flags,2,0,0,0);
         uVar3 = (uint8_t)uVar4;
         uVar4 = ovr_constr_compute1((uint8_t)rowPrevSaved,(uint8_t)rowPrev,
                                     (uint8_t)belowPrevSaved,(byte)flags,1,0,0,0);
-        ovr_driver_compute3(xPos,(byte)rowY,(uint8_t)uVar4,uVar3,uVar11);
+        ovr_driver_compute3(xPos,(byte)rowY,(uint8_t)uVar4,uVar3,drawSeg);
       }
       if (((flags | flags2) & 0xc000) != 0) {
         ovc13_compute2(xPos,rowY,(byte)(flags2 >> 0xe),(byte)(flags >> 0xe),blitSeg);
@@ -951,12 +951,12 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   if (GameRunning == false) {
     uVar4 = 0xe0;
     uVar3 = 0x3f;
-    uVar11 = Font02.seg;
-    uVar10 = Font02.ofs;
-    uVar5 = ovr_alignUp4(GfxRndSeed,GfxRndSeed2,0);
+    drawSeg = Font02.seg;
+    fontOfs = Font02.ofs;
+    alignResult = ovr_alignUp4(GfxRndSeed,GfxRndSeed2,0);
     text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x864,_SS),
-                         (char *)CONCAT22(uVar5,(char *)0x26510));
-    ovr_blitText(text,(byte *)CONCAT22(uVar10,rowCellPtr),uVar11,uVar3,uVar4);
+                         (char *)CONCAT22(alignResult,(char *)0x26510));
+    ovr_blitText(text,(byte *)CONCAT22(fontOfs,rowCellPtr),drawSeg,uVar3,uVar4);
   }
   TextBlitDstSeg = savedDstSeg;
   return;
