@@ -8754,3 +8754,42 @@ have to be converted together, which is more than one mechanical pass; reverted 
   grep_checks 40,045 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### DIAGNOSED: the 129 uStack_16 sites are a dual-role temporary
+DIAGNOSED: the 129 uStack_16 sites are one mis-typed loop counter, not a table problem
+
+Third attempt on this group, and the cause is finally identified precisely.  In ovc22_classes.c:
+
+  539   far_t far *uStack_16;                 /* declaration - in the file's first merged function */
+  630   uStack_16 =(uint16_t)( (far_t far *)ovr_alignUp4(units[(int)puVar49].x,0,0));
+  639   [(int)uStack_16 + (uStack_1a & 0xff) + 0x92] & 0x3000U);
+  ...
+  1964  for (uStack_16 = (far_t far *)0x0; (int)uStack_16 < (int)(uint)GLeaderCount;
+  1965      uStack_16 = (far_t far *)((int)uStack_16 + 1)) {
+  1966    if ((GLeaderSheets[uStack_16])->active != '\0') {
+
+So `uStack_16` is a DUAL-ROLE temporary in one merged function: at 630-648 it holds a computed pointer,
+and at 1964-1972 it is an integer loop counter over GLeaderCount.  The 129 `uStack_16` sites are therefore
+not one table lookup with a bad base - they are two different variables that Ghidra merged under one name.
+
+That is why the sweep failed three times:
+
+* attempt 1 replaced only `*(uint32_t *)((int)uStack_16 << 2)` and left the 31 near casts
+  `(char_sheet_t *)(((int)uStack_16 << 2))` -> 28 "Nonportable pointer conversion" errors;
+* attempt 2 added those 31 and still failed, because the remaining near casts of the same pointer were
+  then invalid;
+* attempt 3 (this turn) replaced all 129 in one pass and failed for the same reason: `GLeaderSheets[x]`
+  demands an integer, and `uStack_16` is declared a far pointer.
+
+The correct fix is therefore a *split*, exactly like the dual-role locals handled in land_info:
+
+  1. declare a new integer loop variable (say `leaderSlot`) and use it at 1964-1972;
+  2. leave `uStack_16` as the pointer it is at 630-648;
+  3. then the 129 sites in the loop become `GLeaderSheets[leaderSlot]` with far field reads.
+
+Reverted to HEAD; tree green.  Recorded so the next attempt starts from the split rather than repeating
+the sweep.
+
+  grep_checks 40,045 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
