@@ -11417,3 +11417,18 @@ signature and every call site, so it belongs in its own pass.
   grep_checks 38,214 -> 38,147; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
   compare_runtime 1,605 identical / 10 different
+
+### ovc23_usesCornerBR: corner samples and shade minimum (38,147 -> 38,118)
+ovc23_usesCornerBR: corner samples and the shade minimum (38,147 -> 38,118)
+
+  iVar1     ovr_constr_usesSmoothPrev(x, -1, &cornerTL)  -> smoothTL   (7)
+  iVar2     ovr_constr_usesSmoothPrev(x,  0, &cornerBL)  -> smoothBL   (3)
+  iVar2     min(smoothTL, cornerSample) - shadeBias      -> minEdge    (3)
+  uVar3     (uint)cornerShadeBias[0]                     -> shadeBias  (8)
+  iStack_4  the four-corner average, then the minimum    -> minShade   (6)
+
+Renaming and one split only; no expression changed.
+
+  grep_checks 38,147 -> 38,118; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
+  compare_runtime 1,605 identical / 10 different

@@ -746,19 +746,20 @@ bool __cdecl16far ovc23_isCursorAt(uint16_t x,int y)
 int __cdecl16far ovc23_usesCornerBR(int x,int bldType)
 
 {
-  int iVar1;
-  int iVar2;
-  uint uVar3;
+  int smoothTL;
+  int smoothBL;
+  int minEdge;
+  uint shadeBias;
   int cornerSampleBR;
   int cornerSample;
   uint8_t cornerBR;
   uint8_t cornerBL;
   uint8_t cornerTR;
   uint8_t cornerTL;
-  int iStack_4;
+  int minShade;
   
-  iVar1 = ovr_constr_usesSmoothPrev(x,-1,(int *)&cornerTL,0,0);
-  iVar2 = ovr_constr_usesSmoothPrev(x,0,(int *)&cornerBL,0,0);
+  smoothTL = ovr_constr_usesSmoothPrev(x,-1,(int *)&cornerTL,0,0);
+  smoothBL = ovr_constr_usesSmoothPrev(x,0,(int *)&cornerBL,0,0);
   if (*(byte *)((uint8_t *)&BuildingTypes[bldType] + 13) < 2) {
     cornerSample = ovr_constr_usesSmoothPrev(x + 1,-1,(int *)&cornerTR,0,0);
     cornerSampleBR = ovr_constr_usesSmoothPrev(x + 1,0,(int *)&cornerBR,0,0);
@@ -771,23 +772,23 @@ int __cdecl16far ovc23_usesCornerBR(int x,int bldType)
     cornerSample = ovr_constr_usesSmoothPrev(x + 4,-1,(int *)&cornerTR,0,0);
     cornerSampleBR = ovr_constr_usesSmoothPrev(x + 4,0,(int *)&cornerBR,0,0);
   }
-  uVar3 = (uint)cornerShadeBias[0];
-  iStack_4 = iVar2 + iVar1 + cornerSample + cornerSampleBR >> 2;
-  if ((int)(iVar1 - uVar3) < (int)(cornerSample - uVar3)) {
-    iVar2 = iVar1 - uVar3;
+  shadeBias = (uint)cornerShadeBias[0];
+  minShade = smoothBL + smoothTL + cornerSample + cornerSampleBR >> 2;
+  if ((int)(smoothTL - shadeBias) < (int)(cornerSample - shadeBias)) {
+    minEdge = smoothTL - shadeBias;
   }
   else {
-    iVar2 = cornerSample - uVar3;
+    minEdge = cornerSample - shadeBias;
   }
-  if (iStack_4 < iVar2) {
-    if ((int)(iVar1 - uVar3) < (int)(cornerSample - uVar3)) {
-      iStack_4 = iVar1 - uVar3;
+  if (minShade < minEdge) {
+    if ((int)(smoothTL - shadeBias) < (int)(cornerSample - shadeBias)) {
+      minShade = smoothTL - shadeBias;
     }
     else {
-      iStack_4 = cornerSample - uVar3;
+      minShade = cornerSample - shadeBias;
     }
   }
-  return iStack_4;
+  return minShade;
 }
 
 
