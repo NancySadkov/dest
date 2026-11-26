@@ -13083,3 +13083,52 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### ovc41_textParalyzed: four interleaved names split by line range (37,323 -> 37,261)
+ovc41_textParalyzed: four names, 2-3 roles each, split by line range (37,323 -> 37,261)
+
+`tmp/drop_dead_locals.py` and `tmp/drop_dead_stores.py` were re-run first and both still
+find 0 - the renames did not expose new write-only locals, so the sweep vein stays
+exhausted.
+
+ovc41_textParalyzed is the opposite case: four names whose roles are *interleaved*, so the
+split has to be positional.  The line ranges are the discriminator, because the same
+statement text carries different roles in different blocks.
+
+uVar10 (undefined1), 3 roles:
+
+    1972..2021   the segment of the `victim` far pointer  -> victimSeg  (7)
+    2022..2055   the low byte of `pan`                     -> panLo      (11)
+    2056..2079   the low byte of GSavedBlitSeg             -> blitSegLo  (4)
+
+uVar5 (uint16_t), 3 roles:
+
+    1984..1986, 2004..2006   the stash segment copy of in_DX -> stashSeg (4)
+    1990..1991, 2011..2012, 2074..2079  panFromX result     -> sfxPan   (12)
+    2025..2055               ovr_randBelow(2,0) result      -> roll      (8)
+
+uVar8 (undefined1), 2 roles:   SUB21(textPtr,0) -> textLo (2 + 2 in the realloc argument
+lists);  `(undefined1)((uint)pan >> 8)` -> panHi (3 + 3 in CONCAT11).
+
+uVar1:  ovr_ovc27_rollToHitEntity(...) result -> hitResult (2).
+
+53 occurrences renamed by range, plus 5 more found afterwards: the earlier per-line listing
+had truncated at 104 characters, so `usesStshRealloc(textPtr,in_DX,uVar8,...)` and
+`CONCAT11(uVar8,panLo)` carried occurrences the listing did not show.  The build caught
+them (`Undefined symbol 'uVar8'`), and they were mapped to textLo / panHi by inspection.
+
+`in_DX` is left as it is: the callees return the segment in DX and this routine never
+assigns it - naming it would invent a meaning.
+
+No expression changed; the code now reads as
+
+    pan = ovr_audio_panFromX(agnt,victimSeg);
+    panLo = (undefined1)pan;
+    panHi = (undefined1)((uint)pan >> 8);
+    roll = ovr_randBelow(2,0);
+    ovr_play_sfxU((char)roll + 0x3d,pan,CONCAT11(panHi,panLo),panLo,0);
+
+  grep_checks 37,323 -> 37,261; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different

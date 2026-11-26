@@ -1943,19 +1943,24 @@ void __cdecl16far ovc41_usesMiceBlitRect(uint menuIndex)
 undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victim,uint strength,uint16_t arg4,uint16_t arg5,uint16_t arg6)
 
 {
-  uint uVar1;
+  uint hitResult;
   char *textPtr;
   int pan;
   uint8_t *stashOfs;
-  uint16_t uVar5;
+  uint16_t stashSeg;
+  uint16_t sfxPan;
+  uint16_t roll;
   uint16_t in_DX;
   agnt_t far *agnt;
   agnt_t far *agnt_00;
   char *pcVar6;
   uint16_t sourceSeg;
-  undefined1 uVar8;
+  undefined1 textLo;
+  undefined1 panHi;
   undefined1 savedSeg;
-  undefined1 uVar10;
+  undefined1 victimSeg;
+  undefined1 panLo;
+  undefined1 blitSegLo;
   uint8_t victimName;
   uint8_t sourceName;
   static char msg[64];   /* DGROUP-backed formatting buffer */
@@ -1969,48 +1974,48 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
   }
   agnt_00 = (agnt_t far *)source;
   sourceSeg = (uint16_t)((ulong)source >> 0x10);
-  uVar10 = (undefined1)((ulong)victim >> 0x10);
+  victimSeg = (undefined1)((ulong)victim >> 0x10);
   if ((int)strength < (int)(uint)agnt->strength) {
     agnt->timer = 0x6;
     agnt->combatState = 0x1;
     agnt->targetY = 0;
-    ovr_agnt_usesAnimFrame(agnt,uVar10);
+    ovr_agnt_usesAnimFrame(agnt,victimSeg);
     if (((agnt->animVariant == 0x0) && ((agnt->flags & 0x200) == 0)) &&
        ((((agntG_t far *)agnt_00->gdata)->flags & 0x40) != 0)) {
       savedSeg = (undefined1)GSavedBlitSeg;
       textPtr = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&victimName >> 8),
                                                             CONCAT12((char)&victimName,sourceSeg)),0);
-      uVar8 = SUB21(textPtr,0);
-      uVar5 = in_DX;
+      textLo = SUB21(textPtr,0);
+      stashSeg = in_DX;
       textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&sourceName,pcVar6),0);
-      stashOfs = ovr_ovc15_usesStshRealloc(textPtr,in_DX,uVar8,uVar5,savedSeg,0,0,0);
+      stashOfs = ovr_ovc15_usesStshRealloc(textPtr,in_DX,textLo,stashSeg,savedSeg,0,0,0);
       textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6f63,_SS),
                              (char *)CONCAT22(stashOfs,(char *)0x26510),in_DX);
       ovr_uiNotify(textPtr,in_DX,0);
-      uVar5 = ovr_audio_panFromX(agnt,uVar10);
-      ovr_play_sfxU(3,0,uVar5,(char)uVar5,0);
-      OVC41_6a8f_01e7_entry(agnt,uVar10);
+      sfxPan = ovr_audio_panFromX(agnt,victimSeg);
+      ovr_play_sfxU(3,0,sfxPan,(char)sfxPan,0);
+      OVC41_6a8f_01e7_entry(agnt,victimSeg);
       agnt->flags = agnt->flags | 0x200;
       ovr_attact_usesLDIV_at_2();
       return resolved;
     }
     if (((agnt->animVariant == 0x0) && ((agnt->flags & 0x800) == 0)) &&
        (((((agntG_t far *)agnt_00->gdata)->flags3 & 0x100) != 0 &&
-        (uVar1 = ovr_ovc27_rollToHitEntity((uint32_t)victim,2), (uVar1 & 0xff) == 0)))) {
+        (hitResult = ovr_ovc27_rollToHitEntity((uint32_t)victim,2), (hitResult & 0xff) == 0)))) {
       savedSeg = (undefined1)GSavedBlitSeg;
       textPtr = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&victimName >> 8),
                                                             CONCAT12((char)&victimName,sourceSeg)),0);
-      uVar8 = SUB21(textPtr,0);
-      uVar5 = in_DX;
+      textLo = SUB21(textPtr,0);
+      stashSeg = in_DX;
       textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&sourceName,pcVar6),0);
-      stashOfs = ovr_ovc15_usesStshRealloc(textPtr,in_DX,uVar8,uVar5,savedSeg,0,0,0);
+      stashOfs = ovr_ovc15_usesStshRealloc(textPtr,in_DX,textLo,stashSeg,savedSeg,0,0,0);
       textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6f7a,_SS),
                              (char *)CONCAT22(stashOfs,(char *)0x26510),in_DX);
       ovr_uiNotify(textPtr,in_DX,0);
       agnt->flags = agnt->flags | 0x800;
-      uVar5 = ovr_audio_panFromX(agnt,uVar10);
-      ovr_play_sfxU(0x1b,0,uVar5,(char)uVar5,0);
-      OVC41_6a8f_01e7_entry(agnt,uVar10);
+      sfxPan = ovr_audio_panFromX(agnt,victimSeg);
+      ovr_play_sfxU(0x1b,0,sfxPan,(char)sfxPan,0);
+      OVC41_6a8f_01e7_entry(agnt,victimSeg);
       ovr_attact_usesLDIV_at_2();
       return resolved;
     }
@@ -2018,16 +2023,16 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
     if (((((agntG_t far *)agnt_00->gdata)->flags & 0x8000) == 0) ||
        ((((agntG_t far *)agnt->gdata)->flags & 0x8000) == 0)) {
       if (((agntG_t far *)agnt_00->gdata)->hitSound == 0) {
-        pan = ovr_audio_panFromX(agnt,uVar10);
-        uVar10 = (undefined1)pan;
-        uVar8 = (undefined1)((uint)pan >> 8);
+        pan = ovr_audio_panFromX(agnt,victimSeg);
+        panLo = (undefined1)pan;
+        panHi = (undefined1)((uint)pan >> 8);
         pan = 0;
-        uVar5 = ovr_randBelow(2,0);
-        ovr_play_sfxU((char)uVar5 + 0x3d,pan,CONCAT11(uVar8,uVar10),uVar10,0);
+        roll = ovr_randBelow(2,0);
+        ovr_play_sfxU((char)roll + 0x3d,pan,CONCAT11(panHi,panLo),panLo,0);
       }
       else if (((agntG_t far *)agnt_00->gdata)->hitSound == 0x15) {
-        uVar5 = ovr_randBelow(2,0);
-        if ((uVar5 & 0xff) == 0) {
+        roll = ovr_randBelow(2,0);
+        if ((roll & 0xff) == 0) {
           ovr_play_sfx(21,0,0);
         }
         else {
@@ -2035,31 +2040,31 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
         }
       }
       else if (((agntG_t far *)agnt_00->gdata)->hitSound == 3) {
-        pan = ovr_audio_panFromX(agnt,uVar10);
-        uVar10 = (undefined1)pan;
-        uVar8 = (undefined1)((uint)pan >> 8);
+        pan = ovr_audio_panFromX(agnt,panLo);
+        panLo = (undefined1)pan;
+        panHi = (undefined1)((uint)pan >> 8);
         pan = 0;
-        uVar5 = ovr_randBelow(2,0);
-        ovr_play_sfxU((char)uVar5 + 0x14,pan,CONCAT11(uVar8,uVar10),uVar10,0);
+        roll = ovr_randBelow(2,0);
+        ovr_play_sfxU((char)roll + 0x14,pan,CONCAT11(panHi,panLo),panLo,0);
       }
       else {
         ovr_play_sfx((uint)((agntG_t far *)agnt_00->gdata)->hitSound,0,0);
       }
     }
     else {
-      pan = ovr_audio_panFromX(agnt,uVar10);
-      uVar10 = (undefined1)pan;
-      uVar8 = (undefined1)((uint)pan >> 8);
+      pan = ovr_audio_panFromX(agnt,panLo);
+      panLo = (undefined1)pan;
+      panHi = (undefined1)((uint)pan >> 8);
       pan = 0;
-      uVar5 = ovr_randBelow(2,0);
-      ovr_play_sfxU((char)uVar5 + 0x14,pan,CONCAT11(uVar8,uVar10),uVar10,0);
+      roll = ovr_randBelow(2,0);
+      ovr_play_sfxU((char)roll + 0x14,pan,CONCAT11(panHi,panLo),panLo,0);
     }
     if ((agnt_00->flags & 0x20) != 0) {
       agnt_00->flags = agnt_00->flags & 0xffdf;
-      uVar10 = (undefined1)GSavedBlitSeg;
+      blitSegLo = (undefined1)GSavedBlitSeg;
       pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&sourceName >> 8),
                                                          CONCAT12((char)&sourceName,pcVar6)),0);
-      stashOfs = ovr_ovc15_usesStshRealloc(pcVar6,in_DX,uVar10,0,0,0,0,0);
+      stashOfs = ovr_ovc15_usesStshRealloc(pcVar6,in_DX,blitSegLo,0,0,0,0,0);
       pcVar6 = ovr_stsprintf(msg,(char *)CONCAT22(0x6f8e,_SS),
                              (char *)CONCAT13((char)((uint)stashOfs >> 8),
                                               CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,in_DX);
@@ -2071,12 +2076,12 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
   }
   else {
     if (((agntG_t far *)agnt->gdata)->actSound == 0xff) {
-      uVar5 = ovr_audio_panFromX(agnt,uVar10);
-      ovr_play_sfxU(4,0,uVar5,(char)uVar5,0);
+      sfxPan = ovr_audio_panFromX(agnt,blitSegLo);
+      ovr_play_sfxU(4,0,sfxPan,(char)sfxPan,0);
     }
     else {
-      uVar5 = ovr_audio_panFromX(agnt,uVar10);
-      ovr_play_sfxU(((agntG_t far *)agnt->gdata)->actSound,0,uVar5,(char)uVar5,0);
+      sfxPan = ovr_audio_panFromX(agnt,blitSegLo);
+      ovr_play_sfxU(((agntG_t far *)agnt->gdata)->actSound,0,sfxPan,(char)sfxPan,0);
     }
     ovc41_settleAgentCombat(source,victim,0);
     resolved = 1;
