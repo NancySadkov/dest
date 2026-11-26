@@ -13938,3 +13938,41 @@ into the *next* object's bytes - BlitRects' 82 bytes already turn into a ditheri
 after the fifth rectangle - so widening them to the span would be inventing data, not
 recovering it.  The six above are distinguishable because their whole span is a single
 coherent value type or table.
+
+### six more small functions: twelve names, one alias (36,183 -> 36,058)
+six more small functions: twelve names, one alias (36,183 -> 36,058)
+
+manage_compute3 (21 lines)
+    pcVar2  `pcVar2 = sheet;` a no-op alias of the parameter  -> removed (6 uses)
+    bVar1   the value returned                                -> result (6)
+
+init_rebuildAllDirectionFlags (22 lines)
+    puVar1   1979, 1990, 1991  &GMapFlags[unitIndex][x]       -> flagPtr  (4)
+    puVar2   1980, 1988, 1989  ovc23_usesAlignUp43's result,
+                               only ever tested for null      -> slotUsed (3)
+    bStack_3 1983, 1987, 1991  the 0..3 direction index       -> dir      (7)
+
+gfxInitRand (16 lines)
+    uVar1   974, 978, 979   GfxRndSeed * 0x100                -> seedScaled (5)
+    uVar2   975, 982, 983   ovr_randBelow(0x100,0)            -> randByte   (3)
+    puVar3  976, 981, 983   the 0..255 cursor into the table at address 0 -> tblPtr (6)
+
+countRunLength (17 lines)
+    pcVar1  532, 538, 542..544  the run's start pointer       -> runStart (5)
+    pcVar2  533, 539, 541..544  the advancing scan pointer    -> scan     (7)
+
+ovc13_compute2 (21 lines)
+    puVar1   343, 346, 347, 349, 350, 354, 356, 357  the plane offset -> cellPtr (8)
+    uStack_6 344, 347, 353   CONCAT22(seg, cellPtr), the far cell      -> segCell (4)
+
+drawGfx (22 lines)
+    iVar1     142, 150, 151  ovr_drawLine2's result (the stride)   -> lineLen (3)
+    iVar2     143, 149       the row counter                       -> rows    (5)
+    pcStack_6 144, 148, 151  the running pointer into the gfx data -> linePtr (5)
+
+No expression changed.
+
+  grep_checks 36,183 -> 36,058; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (52 runs, sum|delta| 198,185, mean 125, worst 14,494)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different

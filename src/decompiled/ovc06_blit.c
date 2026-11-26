@@ -139,16 +139,16 @@ void __cdecl16far blitLoadRleGfx(far_t gfx,far_t dst,uint16_t arg3)
 void __cdecl16far drawGfx(far_t gfx,far_t dst,bool type)
 
 {
-  int16_t iVar1;
-  int iVar2;
-  char *pcStack_6;
+  int16_t lineLen;
+  int rows;
+  char *linePtr;
   
   if (type) {
     if (gfx.ofs != 0 || gfx.seg != 0) {
-      pcStack_6 = (char *)(gfx.ofs + 9);
-      for (iVar2 = *(int *)(gfx.ofs + 7); iVar2 != 0; iVar2 = iVar2 + -1) {
-        iVar1 = ovr_drawLine2(pcStack_6,(char *)CONCAT22(dst.ofs,gfx.seg),dst.seg);
-        pcStack_6 = pcStack_6 + iVar1;
+      linePtr = (char *)(gfx.ofs + 9);
+      for (rows = *(int *)(gfx.ofs + 7); rows != 0; rows = rows + -1) {
+        lineLen = ovr_drawLine2(linePtr,(char *)CONCAT22(dst.ofs,gfx.seg),dst.seg);
+        linePtr = linePtr + lineLen;
         dst.ofs = dst.ofs + 0x140;
       }
     }
@@ -971,16 +971,16 @@ blit_usesStExit(far_t gfx,int x1,int y1,byte shade1,int x2,int y2,byte shade2,in
 void __cdecl16far gfxInitRand(void)
 
 {
-  uint uVar1;
-  uint16_t uVar2;
-  undefined1 *puVar3;
+  uint seedScaled;
+  uint16_t randByte;
+  undefined1 *tblPtr;
   
-  uVar1 = GfxRndSeed * 0x100;
-  srand8(CONCAT22(((int)GfxRndSeed2 >> 0xf) + ((int)uVar1 >> 0xf) + (uint)CARRY2(GfxRndSeed2,uVar1),
-                  GfxRndSeed2 + uVar1));
-  for (puVar3 = (undefined1 *)0x0; (int)puVar3 < 0x100; puVar3 = puVar3 + 1) {
-    uVar2 = ovr_randBelow(0x100,0);
-    *puVar3 = (char)uVar2;
+  seedScaled = GfxRndSeed * 0x100;
+  srand8(CONCAT22(((int)GfxRndSeed2 >> 0xf) + ((int)seedScaled >> 0xf) + (uint)CARRY2(GfxRndSeed2,seedScaled),
+                  GfxRndSeed2 + seedScaled));
+  for (tblPtr = (undefined1 *)0x0; (int)tblPtr < 0x100; tblPtr = tblPtr + 1) {
+    randByte = ovr_randBelow(0x100,0);
+    *tblPtr = (char)randByte;
   }
   return;
 }

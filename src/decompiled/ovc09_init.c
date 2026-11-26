@@ -1976,19 +1976,19 @@ void __cdecl16far init_usesRandBelow2(void)
 void __cdecl16far init_rebuildAllDirectionFlags(void)
 
 {
-  uint16_t *puVar1;
-  uint *puVar2;
+  uint16_t *flagPtr;
+  uint *slotUsed;
   uint16_t unitIndex;
   int x;
-  byte bStack_3;
+  byte dir;
   
   for (x = 0; x < 0x94; x = x + 1) {
     for (unitIndex = 0; (int)unitIndex < 0x3c; unitIndex = unitIndex + 1) {
-      for (bStack_3 = 0; bStack_3 < 4; bStack_3 = bStack_3 + 1) {
-        puVar2 = ovr_ovc23_usesAlignUp43(x,unitIndex,bStack_3);
-        if ((char)puVar2 != '\0') {
-          puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[unitIndex] + x);
-          *puVar1 = *puVar1 | 0x10 << (bStack_3 & 0x1f);
+      for (dir = 0; dir < 4; dir = dir + 1) {
+        slotUsed = ovr_ovc23_usesAlignUp43(x,unitIndex,dir);
+        if ((char)slotUsed != '\0') {
+          flagPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[unitIndex] + x);
+          *flagPtr = *flagPtr | 0x10 << (dir & 0x1f);
         }
       }
     }

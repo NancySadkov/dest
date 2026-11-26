@@ -529,19 +529,19 @@ void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_
 int16_t __cdecl16far countRunLength(char far *src, uint16_t avail, uint16_t maxRun)
 
 {
-  char *pcVar1;
-  char *pcVar2;
+  char *runStart;
+  char *scan;
   
   if (maxRun < avail) {
     avail = maxRun;
   }
-  pcVar1 = (char *)src;
-  pcVar2 = pcVar1;
+  runStart = (char *)src;
+  scan = runStart;
   do {
-    pcVar2 = pcVar2 + 1;
-    if (pcVar1 + avail <= pcVar2) break;
-  } while (*src == *pcVar2);
-  return (int)pcVar2 - (int)pcVar1;
+    scan = scan + 1;
+    if (runStart + avail <= scan) break;
+  } while (*src == *scan);
+  return (int)scan - (int)runStart;
 }
 
 
