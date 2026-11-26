@@ -11241,3 +11241,51 @@ Names: uVar1 -> flagsHereWord, uVar2 -> flagsAboveWord, uVar3 -> edgeVal,
   grep_checks 38,341 -> 38,295; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
   compare_runtime 1,605 identical / 10 different
+
+### Step 6: first post-main DGROUP sample at _INIT_GAME
+Step 6: first post-`main` DGROUP sample - at `_INIT_GAME` every game symbol matches
+
+NEW TOOL: tmp/dump_at.py samples DGROUP at the entry of any routine that exists in
+both images, instead of only at `main`:
+
+  * the original's address comes from audit/functions_real.tsv, with load base
+    0x1000 - the value that puts `main` (1301:000c) at file offset 0x301C, which
+    the existing dumper already relies on;
+  * ours comes from REBUILT.MAP using the base derived from _STARTX;
+  * both EXEs get the same `write 64 KB at DS:0 to stdout` stub and the batch
+    redirects it, so tmp/dgrun2_{orig,ours}/DGR.BIN are replaced and
+    scripts/compare_runtime.py works unchanged.
+
+1302 function names are present in both tables, so any resident routine is a
+candidate sample point.
+
+MEASURED at `_INIT_GAME` (ours 10C7:0516, original 3381:0579)
+
+    symbols matched   1,615
+    identical state   1,606   (vs 1,605 at main entry)
+    DIFFERENT state       9   (vs 10 at main entry)
+
+and every one of the nine is C-runtime or timestamp bookkeeping, not game state:
+
+    _StartTime              wall-clock tick count at startup
+    _brklvl                 heap break level
+    _exitbuf _exitfopen _exitopen _streams   stdio stream table
+    _video                  same 16 bytes, reported different by segment
+    brk_normalize_xsize     C0M startup variable
+    __setargv_SavedReturn   C0M startup variable
+
+So by the time the game's own code starts, **every game DGROUP symbol we can pair
+is byte-identical**; what differs is the Turbo C startup's file/heap bookkeeping and
+the clock.  That is the first measured statement about behaviour after `main`, as
+opposed to DGROUP as it sits at load time.
+
+WHERE IT STOPS, measured: patching `_INIT_USESGMAPFLAGS3` (3381:2651, same resident
+segment), `_INIT_ASSETS` or `_RUN_DEMO` produced **no dump in either image**, so
+neither program reaches them in a 40-second headless run - the run blocks during
+`init_game`, most likely on the base/config setup before `ovc13_usesGMapFlags3` is
+called.  Going deeper needs the blocking input to be neutralised in both images,
+which is the next prerequisite for sampling during play.
+
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different at main entry (gate definition)
