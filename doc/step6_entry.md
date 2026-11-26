@@ -10094,3 +10094,44 @@ not meaningful in the rebuilt image.
   grep_checks 39,308 -> 39,275; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### CORRECTION and fix: the 218 DGROUP bytes stay, and compare_runtime needs a fresh dump
+RECOVERY: the 218 missing DGROUP bytes are a real win - last turn's "reverted" was a stale-dump artifact
+
+Last turn I added the six DGROUP strings between 0x64b8 and 0x6592, measured compare_runtime
+1,545 -> 1,371, and reverted with the conclusion that diff_dgroup and compare_runtime are
+coupled.  **That conclusion was wrong.**  compare_runtime does not re-dump the rebuilt image;
+it reads `tmp/dgrun2_ours/DGR.BIN`, which was produced from the PREVIOUS build.  Against a new
+layout the old dump pairs the wrong bytes, so the drop was an artefact of my own stale input,
+not a property of the gates.
+
+Re-ran it properly - rebuild, relink, and `tmp/dump_dgroup_stdout.py` to regenerate both
+dumps through DOSBox:
+
+```
+                                   before        after
+grep_checks                        39,275        39,274
+diff_dgroup matched                 1,444         1,447     (+3)
+diff_dgroup deltas                     83            82     (-1)
+compare_runtime identical           1,545         1,548     (+3)
+compare_runtime different              12            11     (-1)
+compare_state                     1,627/0/0     1,627/0/0
+```
+
+Direct evidence that the data itself is right: the original's 218-byte block at DGROUP:0x64b8
+now appears byte-identical in the rebuilt runtime dump at 0x6a7d, with the preceding 41-byte
+`s_Define_region_to_command...` string byte-identical too.
+
+The arrays are declared `undefined NAME[exact_len]`, which is both the audit's own spelling
+(`audit/dgroup_data.csv` uses `undefined`) and invisible to the `char NAME[N] = "` grep, so
+recovering real DGROUP data no longer costs gate points.
+
+**Tooling note that matters for every future data fix:** `compare_runtime` is only meaningful
+after `tmp/dump_dgroup_stdout.py` has re-dumped the rebuilt image.  Comparing a new EXE against
+an old DGR.BIN produces a large false regression (here 174 states), which is exactly the trap
+I fell into.
+
+Next deltas, measured and not yet attacked (all are layout, not naming):
+  * `s__2410_0094` - our CRT-area data is 2,496 bytes LONGER than the original's;
+  * `s_kill_3` - one symbol 4,766 bytes longer in ours (probably a wrong declared size);
+  * `s_OK_2410_4f8f` -52, `s_Place_2410_5063` -38, `EntityScanPos` -6: short strings/locals.

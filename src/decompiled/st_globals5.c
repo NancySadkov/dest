@@ -1451,7 +1451,13 @@ char s_Next_2410_647c[] = "Next";
 char s_Leader_2410_6481[] = "Leader";
 char s_Help_2410_6488[] = "Help";
 undefined1 mapDirty = 0x00;
-char s_Define_region_to_co_2410_648f[] = "Define region to command %s loyal to %s.";
+undefined s_Define_region_to_command__s_loya_2410_648f[] = "Define region to command %s loyal to %s.";
+undefined s__d__s_s_loyal_to__s_found__Left_c_2410_64b8[106] = "%d %s%s loyal to %s found. Left click: set triangles. R: ready. U: unassign. H: home. Right click: abort.";
+undefined s_Priorities_adjusted_for__d__s_s__2410_6522[33] = "Priorities adjusted for %d %s%s.";
+undefined s__d__s_s_unassigned__2410_6543[20] = "%d %s%s unassigned.";
+undefined s__d__s_s_readied__2410_6557[17] = "%d %s%s readied.";
+undefined s__d__s_s_homed__2410_6568[15] = "%d %s%s homed.";
+undefined s_Region_selection_aborted__2410_6577[27] = "Region selection aborted.";
 uint16_t strangeTableData[55] = { 0x401, 0x1601, 0x701, 0x2501, 0x2201, 0x3401, 0x1301, 0x2801, 0x101,
      0xA01, 0x3701, 0x1901, 0xD01, 0x3A01, 0x1C01, 0x1F01, 0x2B01, 0xA801, 0x5509, 0x5756, 0x5958, 0x5B5A,
      0x5D5C, 0x9701, 0x9801, 0xA001, 0xA101, 0x2E06, 0x302F, 0x3231, 0x133, 0x1A2, 0x1A3, 0x1AB, 0x1AE,
