@@ -12487,3 +12487,56 @@ No expression changed.
   grep_checks 37,590 -> 37,528; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,805 (68 runs, sum|delta| 229,747)
   compare_runtime 1,615 matched, 1,605 identical / 10 different
+
+### data: _exitbuf/_exitfopen/_exitopen point at ___exit_dummy
+data: `_exitbuf` / `_exitfopen` / `_exitopen` point at `___exit_dummy`
+
+The three handlers were the literal link-time pair from the original image:
+
+    far_t _exitbuf   = { 0x8A5, 0x1000 };
+    far_t _exitfopen = { 0x8A5, 0x1000 };
+    far_t _exitopen  = { 0x8A5, 0x1000 };
+
+and 1000:08A5 is *exactly* `___exit_dummy` (crtl.c carries the comments
+`/* 1000:08a5 */` above `___exit_dummy` and `/* 1000:08a6 */` above `___exit`), so these
+are function pointers that C0 sets to the no-op handler, not data.
+
+The original's runtime values confirm it: at `_INIT_CFG` they are `0891:08A5` - the dummy,
+relocated - except `_exitbuf`, which the startup replaces with the real buffer-flush
+routine (`0891:2FE4`).
+
+Ours were stale: `.ofs` = 0x08A5 was an offset into the middle of crtl.c's code segment,
+and `___exit` calls through them:
+
+    (*(code *)_exitbuf.ofs)(0x1000);
+
+FIX, two parts:
+
+1. the initialiser names the symbol, so the linker supplies the right offset:
+
+       far_t _exitbuf = { (uint16_t)___exit_dummy, 0x1000 };
+
+   The static image now contains `D7 10 00 10` three times (0x10D7 = our dummy) and the
+   old `A5 08 00 10` is gone from the EXE.
+
+2. `st_fix_far_tables` repairs the segment half to `_CS`, for the same reason as the
+   other far tables there - the original's loader relocated these and ours cannot:
+
+       _exitbuf.seg = _CS;  _exitfopen.seg = _CS;  _exitopen.seg = _CS;
+
+MEASURED at _INIT_CFG after the fix, our DGROUP 0x85D9..0x85E4 is
+
+    e3 10 24 0c   e3 10 24 0c   e3 10 24 0c      = 0C24:10E3 x3
+
+i.e. our loaded code segment (`0393 + 0x891` relocation) and our `___exit_dummy`, instead
+of `1000:08A5`.
+
+GATES: none move, and none can - `compare_runtime` compares absolute addresses, which legitimately
+differ from the original's.  After the change the same ten symbols differ:
+_StartTime, _brklvl, _exitbuf, _exitfopen, _exitopen, _streams, _doserrno, _video,
+brk_normalize_xsize, __setargv_SavedReturn.
+
+  grep_checks 37,528 | compare_state 1,627/0/0
+  diff_dgroup 1,450/1,805, 68 runs, sum|delta| 229,747 (DGROUP segment moved 6F75 -> 6F76
+  because crtl.c grew; symbol-relative measurements unchanged)
+  compare_runtime (main entry) 1,615 matched, 1,605 identical / 10 different

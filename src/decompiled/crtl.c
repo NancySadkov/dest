@@ -41,6 +41,13 @@ void st_fix_far_tables(void)
 {
   uint16_t ds_seg =
       (uint16_t)((unsigned long)(char far *)GUnitDescriptions >> 16);
+  /* The three exit handlers are C0's far function pointers to ___exit_dummy; the
+     initialiser supplies the offset (our symbol) and the original's link-time segment,
+     which the original's loader relocated.  Repair the segment here for the same
+     reason as the tables below. */
+  _exitbuf.seg = _CS;
+  _exitfopen.seg = _CS;
+  _exitopen.seg = _CS;
   fixFarTable(GUnitDescriptions, 28);
   GUnitDescriptions[0].ofs = (uint16_t)&s_Fighter_2410_0169;
   GUnitDescriptions[1].ofs = (uint16_t)&s_mage;
