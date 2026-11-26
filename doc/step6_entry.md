@@ -8793,3 +8793,40 @@ the sweep.
   grep_checks 40,045 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### MEASURED: uStack_16 has four roles
+MEASURED: uStack_16 has FOUR roles in one merged function; splitting it is not mechanical
+
+The split attempt (retype `uStack_16` to int, fix its 3 non-loop uses) got the error count from 28 to 8
+and then stopped, because the name is used in four distinct ways inside the single merged function
+`ovc22_textRingProt` (which spans roughly lines 500-2900 of ovc22_classes.c):
+
+  539   far_t far *uStack_16;                       declaration
+  630   uStack_16 = (uint16_t)((far_t far *)ovr_alignUp4(...));   integer (cast through a pointer)
+  639   [(int)uStack_16 + (uStack_1a & 0xff) + 0x92]              integer index into GMapFlags
+  648   same                                                       integer index
+  1964  for (uStack_16 = (far_t far *)0x0; ... < GLeaderCount;     integer LOOP COUNTER
+         uStack_16 = (far_t far *)((int)uStack_16 + 1))
+  1966  (GLeaderSheets[uStack_16])->active                        integer index into GLeaderSheets
+  2442  uStack_16 = (far_t far *)((int)uStack_16 + 1)             pointer increment
+  2658  uStack_16[-1].seg                                         POINTER CURSOR into a far_t array
+
+So it is not one mis-typed variable: it is at least three (an integer index, an integer loop counter, and
+a far_t cursor), all emitted under one name by the decompiler because they occupy the same stack slot in
+different scopes of the merged body.  Retyping it as int fixed the 639/648/1964 uses and broke 2442/2658;
+the reverse would break the others.
+
+That is why four attempts have failed.  Splitting it correctly means, per region:
+  * give 630/639/648 their own integer local,
+  * give 1964-1972 its own integer loop variable,
+  * leave 2442/2658 as the far_t cursor,
+and each region has to be read against its own disassembly because the merged function's scopes are not
+visible in the C.  That is a multi-turn job on one function, not a sweep, and I am not going to guess at
+which regions belong together.
+
+Reverted; tree green.  The uStack_16 group (129 sites) is therefore parked with this diagnosis rather
+than attempted again blind.
+
+  grep_checks 40,045 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
