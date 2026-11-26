@@ -8830,3 +8830,33 @@ than attempted again blind.
   grep_checks 40,045 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### ovc25_intel: 18 table reads + 12 far derefs
+ovc25_intel: 18 leaderIdx/partyIndex table reads and 12 far dereferences fixed
+
+Moved off ovc22_classes.c (whose merged body reuses one temporary name for four variables) to a small,
+unmerged module, and applied the two-step that has worked: check the index's declaration, then sweep.
+
+  ovc25_intel.c:  uint idx;  uint leaderIdx;      <- both integers, so indexing an array of far
+                                                    pointers is well-typed
+
+18 sites converted:
+
+  *(uint32_t *)((leaderIdx << 2))   ->  (uint32_t)GLeaderSheets[leaderIdx]
+  *(uint32_t *)(leaderIdx << 2)     ->  (uint32_t)GLeaderSheets[leaderIdx]
+  ... same for partyIndex and idx
+
+plus 12 far field dereferences:
+
+  *(char *)((int)(uint32_t)GLeaderSheets[leaderIdx] + 0x3f)
+     ->  *((char far *)GLeaderSheets[leaderIdx] + 0x3f)
+
+which is the same shape already verified in ovc22_usesRandBelow (les + es:[bx+93]) and in ovc13_panel.c.
+
+The remaining `*(uint32_t *)(leaderIdx << 2)` forms in ovc39_archive.c and ovc23_bldrec.c were NOT swept:
+ovc23_bldrec.c's occurrences now use `uStack_a` (2 sites) and ovc39_archive.c has none left in this
+spelling, so there is nothing of this shape there to convert.
+
+  grep_checks 40,045 (unchanged - not section-5 patterns)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry

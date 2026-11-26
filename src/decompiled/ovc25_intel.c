@@ -406,23 +406,23 @@ void __cdecl16far ovc25_spyReportNotice(void)
           dy = (GLeaderSheets[leaderIdx])->y -
                   ((entity_t *)iVar7)[idx].base.y;
           uVar6 = (int)dy >> 0xf;
-          piVar1 = (int *)((int)*(uint32_t *)(leaderIdx << 2) + 0x45);
+          piVar1 = (int *)((int)(uint32_t)GLeaderSheets[leaderIdx] + 0x45);
           *piVar1 = *piVar1 + 1;
           if ((int)((uVar2 ^ uVar5) - uVar5) / 2 + ((dy ^ uVar6) - uVar6) < 10) {
-            piVar1 = (int *)((int)*(uint32_t *)(leaderIdx << 2) + 0x41);
+            piVar1 = (int *)((int)(uint32_t)GLeaderSheets[leaderIdx] + 0x41);
             *piVar1 = *piVar1 + 1;
             uVar8 = (uint16_t)((ulong)Entities >> 0x10);
             if (((GLeaderSheets[leaderIdx])->y ==
                  ((entity_t *)Entities)[idx].base.y) &&
                (uVar2 = ovr_alignUp4(((entity_t *)Entities)[idx].base.x,0,0), uVar2 == leaderX
                )) {
-              piVar1 = (int *)((int)*(uint32_t *)(leaderIdx << 2) + 0x47);
+              piVar1 = (int *)((int)(uint32_t)GLeaderSheets[leaderIdx] + 0x47);
               *piVar1 = *piVar1 + 1;
             }
           }
         }
         else if (AgntGs[(uint)((entity_t *)iVar7)[idx].base.gindex].ai !=
-                 *(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x3f)) {
+                 *((char far *)GLeaderSheets[leaderIdx] + 0x3f)) {
           uVar2 = (GLeaderSheets[leaderIdx])->x -
                   *(int *)((entity_t *)iVar7 + idx);
           uVar5 = (int)uVar2 >> 0xf;
@@ -435,18 +435,18 @@ void __cdecl16far ovc25_spyReportNotice(void)
             enemyDist = uVar2;
           }
           if (uVar2 < 10) {
-            piVar1 = (int *)((int)*(uint32_t *)(leaderIdx << 2) + 0x43);
+            piVar1 = (int *)((int)(uint32_t)GLeaderSheets[leaderIdx] + 0x43);
             *piVar1 = *piVar1 + 1;
           }
         }
       }
       (GLeaderSheets[leaderIdx])->nearestEnemy = enemyIdx;
       otherIdx = 0xff;
-      if (*(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x40) != '\0') {
+      if (*((char far *)GLeaderSheets[leaderIdx] + 0x40) != '\0') {
         otherDist = 0xffff;
         for (idx = 0; (int)idx < (int)(uint)GLeaderCount; idx = idx + 1) {
-          if ((*(char *)((int)*(uint32_t *)(idx << 2) + 0x3f) !=
-               *(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x3f)) &&
+          if ((*((char far *)GLeaderSheets[idx] + 0x3f) !=
+               *((char far *)GLeaderSheets[leaderIdx] + 0x3f)) &&
              (uVar2 = (GLeaderSheets[leaderIdx])->x -
                       (GLeaderSheets[idx])->x,
              uVar5 = (int)uVar2 >> 0xf,
@@ -459,11 +459,11 @@ void __cdecl16far ovc25_spyReportNotice(void)
           }
         }
       }
-      *(undefined1 *)((int)*(uint32_t *)(leaderIdx << 2) + 0x49) = otherIdx;
+      *((undefined1 far *)GLeaderSheets[leaderIdx] + 0x49) = otherIdx;
     }
   }
   for (leaderIdx = 0; (int)leaderIdx < (int)(uint)GLeaderCount; leaderIdx = leaderIdx + 1) {
-    if ((*(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x40) != '\0') &&
+    if ((*((char far *)GLeaderSheets[leaderIdx] + 0x40) != '\0') &&
        ((GLeaderSheets[leaderIdx])->active != '\0')) {
       ovc25_intelAttackingNotice((byte)leaderIdx);
       if ((GLeaderSheets[leaderIdx])->nearestEnemy == -1) {
@@ -481,7 +481,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
         enemyDist2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((dy ^ uVar6) - uVar6);
       }
       if (((GLeaderSheets[leaderIdx])->enemiesNear == 0) || (9 < enemyDist2)) {
-        if ((*(char *)((int)*(uint32_t *)(leaderIdx << 2) + 0x49) == -1) ||
+        if ((*((char far *)GLeaderSheets[leaderIdx] + 0x49) == -1) ||
            (((GLeaderSheets[leaderIdx])->flags5d & 1) == 0)) {
           if ((GLeaderSheets[leaderIdx])->unitsOnTile < 10) {
             ovc25_usesAlignUp43((byte)leaderIdx,10,
@@ -518,7 +518,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
         }
         else {
           ovc25_usesEntityCount((byte)leaderIdx);
-          otherLeaderIdx = *(byte *)((int)*(uint32_t *)(leaderIdx << 2) + 0x49);
+          otherLeaderIdx = *((byte far *)GLeaderSheets[leaderIdx] + 0x49);
           if (0xe < (GLeaderSheets[leaderIdx])->unitsOnTile) {
             ovc25_usesAlignUp42((byte)leaderIdx,10,
                                 (GLeaderSheets[otherLeaderIdx])->x,
@@ -1038,13 +1038,13 @@ void __cdecl16far ovc25_tickCountdown(int partyIndex)
   int *piVar1;
   byte *pbVar2;
   
-  if ((((*(char *)((int)*(uint32_t *)(partyIndex << 2) + 0x3f) != '\0') &&
-       (*(int *)((int)*(uint32_t *)(partyIndex << 2) + 0x5e) != 0)) &&
-      (piVar1 = (int *)((int)*(uint32_t *)(partyIndex << 2) + 0x5e), *piVar1 = *piVar1 + -1,
+  if ((((*((char far *)GLeaderSheets[partyIndex] + 0x3f) != '\0') &&
+       (*((int far *)GLeaderSheets[partyIndex] + 0x5e) != 0)) &&
+      (piVar1 = (int *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x5e), *piVar1 = *piVar1 + -1,
       ((GLeaderSheets[partyIndex])->flags5d & 1) != 0)) &&
-     (*(int *)((int)*(uint32_t *)(partyIndex << 2) + 0x5e) == 0)) {
-    *(uint16_t *)((int)*(uint32_t *)(partyIndex << 2) + 0x5e) = 10;
-    pbVar2 = (byte *)((int)*(uint32_t *)(partyIndex << 2) + 0x5d);
+     (*((int far *)GLeaderSheets[partyIndex] + 0x5e) == 0)) {
+    *((uint16_t far *)GLeaderSheets[partyIndex] + 0x5e) = 10;
+    pbVar2 = (byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x5d);
     *pbVar2 = *pbVar2 & 0xfe;
   }
   return;
