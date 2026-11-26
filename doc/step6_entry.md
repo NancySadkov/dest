@@ -14683,3 +14683,29 @@ The same scan over 0x6e00..0x7aa5 finds no further under-sized or missing object
 accumulated -104..-139 offset in the tail does not come from this range: it predates 0x6e00.
 The visible steps above 0x6e00 are still the game-data ones (-21 at agentClipRect, -5 at
 StatsTabPtrs, -5 at _atexitcnt), i.e. a few bytes each rather than a missing object.
+
+### layout+section5: two 1-byte objects and chargen pcVar3 (runs 37 -> 36)
+layout+section5: two 1-byte objects and chargen's three-role pcVar3 (runs 37 -> 36, grep 35,717 -> 35,699)
+
+Data, from `tmp/band2.py` on 0x8360..0x8560 - the two objects it flagged as ours-shorter:
+
+    0x850c  s_Done_2410_850c   original span 6, ours 5
+            declared `char s_Done_2410_850c[] = "Done";` - the image has "Done\0" plus one pad
+            byte; now `[6]`
+    0x8518  _ctype             original span 258, ours 257 -> `[258]`
+
+Both are only a byte, but each was the whole of a -1 delta run.
+
+chargen's `pcVar3` was three objects sharing one slot, resolved by the assigning statement:
+
+    pcVar3  ovr_uiInputText's result  -> textInput   (4)
+    pcVar3  chargen_switch's result   -> switchVal   (2)
+    pcVar3  ovr_stsprintf's result    -> statusText  (2)
+
+chargen is now clean apart from `in_DX` (the ABI register the callees return the segment in).
+
+  build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,621/1,805 matched, 36 runs, sum|delta| 194,118, mean 119, worst 14,382
+  compare_runtime 1,675 matched, 1,666 identical / 9 different
+  grep_checks 35,717 -> 35,699

@@ -1674,7 +1674,9 @@ char_sheet_t * __cdecl16far chargen(void)
   far_t handle;
   far_t handle_00;
   bool genderPicked;
-  char *pcVar3;
+  char *textInput;
+  char *switchVal;
+  char *statusText;
   int entryPos;
   int nameOfs;
   uint dlgResult;
@@ -1764,8 +1766,8 @@ char_sheet_t * __cdecl16far chargen(void)
                        0x10);
         entries.seg = (uint16_t)_SS;
         entries.ofs = (uint16_t)&menuItems;
-        pcVar3 = ovr_uiInputText(entries,9,far_from_u32((uint32_t)(0x0)),0x0,0);
-        choice = (uint)pcVar3 & 0xff;
+        textInput = ovr_uiInputText(entries,9,far_from_u32((uint32_t)(0x0)),0x0,0);
+        choice = (uint)textInput & 0xff;
         if (choice != 0) {
           choice = (uint)(char)(&stk_ff61)[choice];
         }
@@ -1782,8 +1784,8 @@ char_sheet_t * __cdecl16far chargen(void)
         sheet->flags5d = sheet->flags5d | 6;
       }
       sheet->cls = (char)choice - 1;
-      pcVar3 = chargen_switch(CONCAT11(0x24,sheet->cls));
-      sheet->classStr = (byte)pcVar3;
+      switchVal = chargen_switch(CONCAT11(0x24,sheet->cls));
+      sheet->classStr = (byte)switchVal;
       sheet->race = 6;
       nameOfs = (uint)sheet->cls * 0x94 + (uint)sheet->race * 4;
       widths = *(uint16_t *)(nameOfs + -4);
@@ -1846,14 +1848,14 @@ L_chargen_1661:
             handle.ofs = (uint16_t)inputText;
             (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)(widSeg >> 8);
             ovr_stshFree(handle);
-            pcVar3 = ovr_stsprintf(msg,(char *)CONCAT22(0x505a,_SS),
+            statusText = ovr_stsprintf(msg,(char *)CONCAT22(0x505a,_SS),
                                    (char *)CONCAT22(sheet,(char *)0x26510),
                                    (char)sheetSeg);
-            ovr_drawString(pcVar3,widths,(char)widths);
+            ovr_drawString(statusText,widths,(char)widths);
             entries_00.seg = (uint16_t)_SS;
             entries_00.ofs = (uint16_t)&keepDiscard;
-            pcVar3 = ovr_uiInputText(entries_00,2,far_from_u32((uint32_t)(0x0)),0x0,0);
-            choice = (uint)pcVar3 & 0xff;
+            textInput = ovr_uiInputText(entries_00,2,far_from_u32((uint32_t)(0x0)),0x0,0);
+            choice = (uint)textInput & 0xff;
             if (choice != 0) {
               if (choice != 2) {
                 sheet->statMask = sheet->statMask | 2;
