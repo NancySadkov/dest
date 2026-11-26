@@ -9022,3 +9022,46 @@ several `ovc27_text*` entries) - a boundary problem, not a naming one.
   grep_checks 40,000 (unchanged - this is an addressing fix, not a naming one)
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
+
+### CORRECTION: ovc27_textTakesHalfDamage3 is complete
+CORRECTION: ovc27_textTakesHalfDamage3 is COMPLETE; my "104 calls" was a bad extent
+
+Last turn I reported that our C function emits 51 call instructions against the original's 104 and
+concluded the exported body was missing about half its calls.  That conclusion was wrong, and the error
+was mine.
+
+audit/functions_real.tsv gives the function's real extent:
+
+  5ded:10ea  ovc27_textTakesHalfDamage3  956 bytes
+  signature summary: 0x148,0x2f*7; near*6; 0x160,0x25*4; 0x170,0x7a*4
+
+Disassembling exactly 956 bytes:
+
+  instructions: 345
+  call instructions: 36
+     lcall 0x140,0x2f  x2      lcall 0x140,0x48  x2
+     lcall 0x148,0x2f  x7      lcall 0x160,0x25  x4
+     lcall 0x170,0x5c  x1      lcall 0x170,0x7a  x4
+     lcall 0x190,0x57  x2      lcall 0x230,0xa2  x2
+     lcall 0x230,0xc5  x2      lcall 0xf8,0x39   x4
+     near              x6
+
+The "104" came from my early profiling script, which disassembled until the first `retf` in a large
+window.  That `retf` is at +0xB00 - a NEIGHBOUR's - so it counted 997 instructions spanning several
+functions.  The real function is 345 instructions with 36 calls.
+
+So our function emits 51 calls where the original makes 36: MORE, not fewer.  That is the normal
+direction for decompiled C (helpers the original inlined become explicit calls), and it means the body is
+complete and this function IS finishable by editing - the opposite of what I recorded last turn.
+
+The remaining work in it is therefore the ordinary kind: the 35 paStack_c / 27 ptrSeg / 30 agntSeg
+references (of which the five far-pointer constructions and agntRec are already done) plus the remaining
+uVar3/uVar4/iVar5/uVar9/uVar10/uVar11 renames.
+
+Lesson, and it is the same one as three turns ago in a different guise: a "count mismatch" is only
+evidence once the EXTENT is right.  I compared our function against a window that spanned four functions
+and drew a structural conclusion from it.
+
+  grep_checks 40,000 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
