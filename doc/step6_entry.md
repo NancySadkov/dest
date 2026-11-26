@@ -9223,3 +9223,54 @@ argument lists.  Deleting them now would break the build.
   grep_checks 39,962 (unchanged - this is an argument-list fix, not a naming one)
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
+
+### ovc27_textTakesHalfDamage3: the last two call shapes decoded
+ovc27_textTakesHalfDamage3: the last two call sites decoded - panFromX takes one pointer, play_sfxU three words
+
+Decoded both remaining call shapes from 5ded:10ea:
+
+  lcall 0x140,0x48   (2 sites)
+
+    025B  ff 76 f8      push word ptr [bp - 8]     ; agntRec.seg
+    025E  ff 76 f6      push word ptr [bp - 0xa]   ; agntRec.ofs
+    0261  9a 48 00 40 01 lcall 0x140, 0x48
+    0266  83 c4 04      add sp, 4
+
+    Four bytes pushed and four popped = ONE far-pointer argument.  The export had
+    `ovr_audio_panFromX(agntRec,(char)ptrSeg)` - an invented second argument, whose only purpose was to
+    consume the fabricated `ptrSeg`.
+
+  lcall 0x140,0x2f   (2 sites)
+
+    0269  50        push ax                     ; the result of the call above
+    026A  6a 00     push 0
+    026C  6a 1b     push 0x1b
+    026E  9a 2f 00 40 01 lcall 0x140, 0x2f
+    0273  83 c4 06  add sp, 6
+
+    Three words = `play_sfxU(0x1b, 0, <pan>)`.  The export had five arguments,
+    `ovr_play_sfxU(0x1b,0,agntSeg,0,(char)agntSeg)`, again padded with fabricated values.
+
+Now:
+
+  agntSeg = ovr_audio_panFromX(agntRec);
+  ovr_play_sfxU(0x1b,0,agntSeg);
+
+Verified in the emitted listing - identical to the original's shape:
+
+  add  sp,4
+  mov  word ptr [bp-14],ax
+  push ax
+  push 0
+  push 27
+  call far ptr _ovr_play_sfxU
+
+  instructions 609 (was 623)  calls 50  les 17        (extent: 345 / 36 / -)
+
+`agntSeg` and `ptrSeg` still cannot be deleted: `ptrSeg` survives in the `usesStshRealloc` argument lists
+and `agntSeg` in `usesStshRealloc` / `uiNotify` / `stsprintf` - the `lcall 0x160,0x25` (x4) and
+`lcall 0x170,0x7a` (x4) sites, which are the next thing to decode.
+
+  grep_checks 39,962 (unchanged - argument lists, not names)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry

@@ -984,8 +984,8 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
       ovr_OVC41_6a8f_01e7_entry(agntRec,(char)ptrSeg);
       agntRec->faction = agnt->faction;
       agntRec->flags = agntRec->flags | 0x20;
-      agntSeg = ovr_audio_panFromX(agntRec,(char)ptrSeg);
-      ovr_play_sfxU(0x1b,0,agntSeg,0,(char)agntSeg);
+      agntSeg = ovr_audio_panFromX(agntRec);
+      ovr_play_sfxU(0x1b,0,agntSeg);
       emptyFunction();
       return;
     }
@@ -1025,8 +1025,8 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     agntRec->faction = agnt->faction;
     ovr_OVC41_6a8f_01e7_entry(agntRec,(char)ptrSeg);
     agntRec->flags = agntRec->flags | 0x20;
-    agntSeg = ovr_audio_panFromX(agntRec,(char)ptrSeg);
-    ovr_play_sfxU(0x1b,0,agntSeg,0,(char)agntSeg);
+    agntSeg = ovr_audio_panFromX(agntRec);
+    ovr_play_sfxU(0x1b,0,agntSeg);
     emptyFunction();
     return;
   }
