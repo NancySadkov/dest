@@ -1899,7 +1899,6 @@ void __cdecl16far stshAllocBldStubs2(int16_t index)
 
 {
   far_t *pfVar1;
-  uint16_t in_DX;
   uint16_t segArg;
   uint16_t segArg2;
   far_t *unaff_SI;

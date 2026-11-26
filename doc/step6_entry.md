@@ -8510,3 +8510,36 @@ worth their own pass: `grep '(stg_tmp_t \*)(row \* 0x94)' *.c`.
   grep_checks 40,067 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### Five dead in_* locals; segment 0x80 has no writer
+remove five dead in_* register locals; segment 0x80 is read-only in static code (40,067 -> 40,064)
+
+DEAD in_* LOCALS.  Ghidra declares e.g. `uint16_t in_AX;` for a register it could not attribute, and
+sometimes never uses it.  `tmp/dead_inreg.py` finds declarations of `in_XX` with no other reference in the
+same function body.  Five exist tree-wide, all removed (behaviour-neutral by construction):
+
+  ovc02_draw.c    in_FS (205), in_GS (1641)
+  ovc09_init.c    in_DX (1189)
+  ovc15_sprite.c  in_DX (184)
+  ovc48_assets2.c in_DX (1902)
+
+in_REG 838 -> 835.  (crtl.c and ovl.c are excluded as CRT/overlay.)
+
+SEGMENT 0x80 IS READ-ONLY.  `mov ax,0x80 / mov es,ax` occurs exactly three times in the whole image, and
+all three sites only READ the table:
+
+  0x35420  (in a function that reads es:[bx-2] and es:[bx-4])
+  0x573da  es:[bx] / es:[bx+2]  null test
+  0x5741d  es:[bx] / es:[bx+2]  -> the stats_usesAlignUp42 read
+
+There is no writer anywhere in static code.  So the array cannot be sized by reading the loop that fills
+it - it is populated at runtime (BSS, or a loader copy of an unknown segment), which means nClasses is not
+derivable from the image and declaring `far_t far far X[nClasses][37]` would invent it.
+
+Also note the two index conventions in use: 0x573da/0x5741d reach `classId*0x94 + level*4` and read at
++0 and +2, while 0x35420 reaches the same table and reads at -2 and -4.  That is consistent with two
+different base pointers into one table, and is worth keeping in mind when the array is finally named.
+
+  grep_checks 40,067 -> 40,064; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

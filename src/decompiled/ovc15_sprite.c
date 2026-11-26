@@ -181,7 +181,6 @@ stshSprite(far_t *retStorage,int16_t file_id,anm_t *anms,uint16_t nanims,bool gr
 void __cdecl16far allocSprSeqs(void)
 
 {
-  uint16_t in_DX;
   
   StshSprites = ovr_stshAlloc(0x3650);
   return;

@@ -1186,7 +1186,6 @@ void __cdecl16far init_initGUnits(void)
 void __cdecl16far init_buffers(void)
 
 {
-  uint16_t in_DX;
   
   GUnits = ovr_stshAlloc(0x2a30);
   _fsetmem(GUnits, 0x2a30, 0);

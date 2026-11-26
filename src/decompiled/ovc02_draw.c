@@ -202,7 +202,6 @@ void __cdecl16far draw_textTalkwin9Lbm(void)
   int unaff_DI;
   uint16_t uVar51;
   uint16_t uVar52;
-  uint16_t in_FS;
   bool bVar53;
   byte in_AF;
   bool bVar54;
@@ -1638,7 +1637,6 @@ void __stdcall16far draw_textGoldProvidesHousing(void)
   uint uVar22;
   byte *pbVar23;
   uint16_t unaff_ES;
-  uint16_t in_GS;
   uint16_t uStack_4;
   
   uVar6 = CONCAT11((char)((uint)in_AX >> 8),(char)in_AX + -0x3a);
