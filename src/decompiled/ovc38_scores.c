@@ -57,21 +57,19 @@ void __cdecl16far ovc38_saveHighScores(far_t entries)
   char *path;
   int handle;
   uint16_t in_DX;
-  int *piVar1;
-  uint16_t *puVar2;
-  int iVar3;
-  uint16_t uVar4;
+  int *entryPtr;
+  uint16_t *entryWords;
+  int idx;
   static char msg[64];   /* file path; DGROUP so the near buffer is valid */
   
   path = ovr_stsprintf(msg,(char *)CONCAT22(0x6a89,_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410);
   handle = ovr_creat_wait_unlock_and_disk(path,in_DX);
   if (-1 < handle) {
-    for (iVar3 = 0; iVar3 < 6; iVar3 = iVar3 + 1) {
-      uVar4 = entries.seg;
-      piVar1 = (int *)(entries.ofs + iVar3 * 4);
-      if (*piVar1 != 0 || piVar1[1] != 0) {
-        puVar2 = (uint16_t *)(entries.ofs + iVar3 * 4);
-        ovr_saveui_writeLine(handle,(char *)*puVar2,puVar2[1]);
+    for (idx = 0; idx < 6; idx = idx + 1) {
+      entryPtr = (int *)(entries.ofs + idx * 4);
+      if (*entryPtr != 0 || entryPtr[1] != 0) {
+        entryWords = (uint16_t *)(entries.ofs + idx * 4);
+        ovr_saveui_writeLine(handle,(char *)*entryWords,entryWords[1]);
       }
     }
     close(handle);

@@ -266,25 +266,23 @@ void __cdecl16far saveui_usesBlitLoadRleGfx3(far_t entries,int count)
 
 {
   far_t gfx;
-  int *piVar1;
-  uint16_t *puVar2;
-  int iVar3;
-  uint16_t uVar4;
+  int *entryPtr;
+  uint16_t *entryWords;
+  int idx;
   far_t dst;
   
-  for (iVar3 = 0; iVar3 < count; iVar3 = iVar3 + 1) {
-    uVar4 = entries.seg;
-    piVar1 = (int *)(entries.ofs + iVar3 * 4);
-    if (*piVar1 != 0 || piVar1[1] != 0) {
+  for (idx = 0; idx < count; idx = idx + 1) {
+    entryPtr = (int *)(entries.ofs + idx * 4);
+    if (*entryPtr != 0 || entryPtr[1] != 0) {
       dst.seg = 0xa000;
-      dst.ofs = iVar3 * 0x12c0 + 0x2096;
+      dst.ofs = idx * 0x12c0 + 0x2096;
       gfx.seg = trianglsCut4Seg;
       gfx.ofs = trianglsCut4Ofs;
       ovr_blitLoadRleGfx(gfx,dst,0);
       TextBlitX = 0x2a;
-      TextBlitY = iVar3 * 0xf + 0x1d;
-      puVar2 = (uint16_t *)(entries.ofs + iVar3 * 4);
-      ovr_blitText((char *)*puVar2,(byte *)CONCAT22(Font03.ofs,(byte *)puVar2[1]),Font03.seg,0xde);
+      TextBlitY = idx * 0xf + 0x1d;
+      entryWords = (uint16_t *)(entries.ofs + idx * 4);
+      ovr_blitText((char *)*entryWords,(byte *)CONCAT22(Font03.ofs,(byte *)entryWords[1]),Font03.seg,0xde);
     }
   }
   return;

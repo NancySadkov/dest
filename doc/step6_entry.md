@@ -13625,3 +13625,49 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### four more functions: entry-table loops, alias, config reader (36,606 -> 36,507)
+four more functions: two entry-table loops, one alias, one config reader (36,606 -> 36,507)
+
+saveui_usesBlitLoadRleGfx3 (27 lines)
+    iVar3   0..count-1 loop index                         -> idx        (9)
+    piVar1  (int *)(entries.ofs + i*4), tested for null   -> entryPtr   (4)
+    puVar2  the same slot read as uint16_t *             -> entryWords (4)
+    uVar4   entries.seg, assigned and never read         -> removed
+
+ovc38_saveHighScores (27 lines)
+    iVar3   0..5 loop index                               -> idx        (7)
+    piVar1  (int *)(entries.ofs + i*4), tested for null   -> entryPtr   (4)
+    puVar2  the same slot read as uint16_t *             -> entryWords (4)
+    uVar4   entries.seg, assigned and never read         -> removed
+    in_DX   left: ABI register passed to creat_wait_unlock
+
+manage_compute4 (21 lines)
+    pcVar2  `pcVar2 = sheet;` - a no-op alias of the parameter -> removed (9 uses folded)
+    bVar1   the value returned                                 -> result  (6)
+
+init_strong_sav (48 lines)
+    cVar1   the current character read from game.cfg, re-read at each validation
+            step                                                         -> cfgChar (19)
+    in_DX   left: ABI register passed to ovr_chpath
+
+The two entry-table functions are the same shape as the high-score reader renamed earlier:
+`(int *)` view for the null test, `(uint16_t *)` view for the write, so the two names are
+`entryPtr` / `entryWords` rather than one.  Both carried the identical dead store
+`uVar4 = entries.seg;` - one assignment, no read.
+
+`manage_compute4` is the cleanest alias case so far: `pcVar2 = sheet;` where the parameter is
+already `char_sheet_t far *`, so the alias and its declaration both go and the nine uses
+become `sheet->...`.
+
+`tmp/rank3.py`'s tight column is what found these; `saveui_usesMouseMoved` (23 matches) was
+screened out because its `uVar2` is genuine compiler scratch - `uVar2 = 0x2410` is forced
+into the same condition three times - and naming it would invent a role the code does not
+have.
+
+No expression changed.
+
+  grep_checks 36,606 -> 36,507; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different

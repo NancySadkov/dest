@@ -226,7 +226,7 @@ void __cdecl16far input_folder_name(char *result)
 byte __cdecl16far init_strong_sav(void)
 
 {
-  char cVar1;
+  char cfgChar;
   uint16_t file;
   int handle;
   uint16_t result;
@@ -237,13 +237,13 @@ byte __cdecl16far init_strong_sav(void)
   do {
     file = file_open_rdonly("strong.sav\\game.cfg");
     if (-1 < (int)file) {
-      cVar1 = read_cfg(file);
-      if ((((cVar1 == '\0') ||
-           ((((cVar1 < '1' || ('9' < cVar1)) && ((cVar1 < 'A' || ('B' < cVar1)))) ||
-            (cVar1 = read_cfg(file), cVar1 == '\0')))) ||
-          (((cVar1 < '1' || ('9' < cVar1)) && ((cVar1 < 'A' || ('B' < cVar1)))))) ||
-         ((cVar1 = read_cfg(file), cVar1 == '\0' ||
-          (((cVar1 < '0' || ('9' < cVar1)) && ((cVar1 < 'A' || ('F' < cVar1)))))))) {
+      cfgChar = read_cfg(file);
+      if ((((cfgChar == '\0') ||
+           ((((cfgChar < '1' || ('9' < cfgChar)) && ((cfgChar < 'A' || ('B' < cfgChar)))) ||
+            (cfgChar = read_cfg(file), cfgChar == '\0')))) ||
+          (((cfgChar < '1' || ('9' < cfgChar)) && ((cfgChar < 'A' || ('B' < cfgChar)))))) ||
+         ((cfgChar = read_cfg(file), cfgChar == '\0' ||
+          (((cfgChar < '0' || ('9' < cfgChar)) && ((cfgChar < 'A' || ('F' < cfgChar)))))))) {
         close(file);
 l_made_new_strong_sav:
                     /* Needs new game.cfg */

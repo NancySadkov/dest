@@ -228,23 +228,21 @@ byte __cdecl16far manage_compute3(char_sheet_t far *sheet)
 byte __cdecl16far manage_compute4(char_sheet_t far *sheet)
 
 {
-  byte bVar1;
-  char_sheet_t far *pcVar2;
+  byte result;
   
-  pcVar2 = sheet;
-  if ((pcVar2->cls == 4) && (0xb < pcVar2->race)) {
-    bVar1 = pcVar2->race + 0x37;
+  if ((sheet->cls == 4) && (0xb < sheet->race)) {
+    result = sheet->race + 0x37;
   }
-  else if ((pcVar2->cls == 5) && (9 < pcVar2->race)) {
-    bVar1 = pcVar2->race + 0x39;
+  else if ((sheet->cls == 5) && (9 < sheet->race)) {
+    result = sheet->race + 0x39;
   }
-  else if ((pcVar2->cls == 6) && (7 < pcVar2->race)) {
-    bVar1 = pcVar2->race + 0x39;
+  else if ((sheet->cls == 6) && (7 < sheet->race)) {
+    result = sheet->race + 0x39;
   }
   else {
-    bVar1 = 0x30;
+    result = 0x30;
   }
-  return bVar1;
+  return result;
 }
 
 
