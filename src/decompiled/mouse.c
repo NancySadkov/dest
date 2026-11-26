@@ -56,22 +56,22 @@ miceHandler(uint16_t mask,uint16_t buttons,uint16_t x,uint16_t y,uint16_t dx,uin
 bool __cdecl16far miceInitDriver(void)
 
 {
-  code *pcVar1;
-  int iVar2;
+  code *mouseSwi;
+  int resetResult;
   
                     /* WARNING: Read-only address (ram,0x00010102) is written */
   uRam00010102 = 0x2410;
-  pcVar1 = (code *)swi(0x33);
-  iVar2 = (*pcVar1)();
-  if (iVar2 == -1) {
-    pcVar1 = (code *)swi(0x33);
-    (*pcVar1)();
-    pcVar1 = (code *)swi(0x33);
-    (*pcVar1)();
-    pcVar1 = (code *)swi(0x33);
-    (*pcVar1)();
-    pcVar1 = (code *)swi(0x33);
-    (*pcVar1)();
+  mouseSwi = (code *)swi(0x33);
+  resetResult = (*mouseSwi)();
+  if (resetResult == -1) {
+    mouseSwi = (code *)swi(0x33);
+    (*mouseSwi)();
+    mouseSwi = (code *)swi(0x33);
+    (*mouseSwi)();
+    mouseSwi = (code *)swi(0x33);
+    (*mouseSwi)();
+    mouseSwi = (code *)swi(0x33);
+    (*mouseSwi)();
     return false;
   }
   return true;

@@ -13809,3 +13809,38 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### three more small functions: nine names (36,246 -> 36,184)
+three more small functions: nine names (36,246 -> 36,184)
+
+ovc50_usesUiInputText (33 lines)
+    pcVar1    77, 94, 95      ovr_uiInputText's result              -> inputResult (3)
+    bStack_5  80, 88, 91, 101 the page index passed to usesStshLoadGfx -> pageIdx    (4)
+    cStack_4  81, 97, 100, 103  the loop's "leave now" flag          -> done        (4)
+    cStack_3  82, 95, 96, 101   the key character                    -> keyChar     (5)
+
+stshProcessFont (26 lines)
+    psVar1  129, 133, 134, 138..142, 145  ovr_grabLbm's result        -> lbm   (9)
+    pfVar2  130, 140, 147                 stshProcessFontSub's result -> font  (3)
+    in_DX   left: read at 134 and 144 without an assignment (ABI register)
+
+miceInitDriver (23 lines)
+    pcVar1  59, 64..74  (code *)swi(0x33), called four extra times on
+                        the -1 path                                 -> mouseSwi    (11)
+    iVar2   60, 65, 66  the INT 33h reset result                    -> resetResult (3)
+
+`pcVar1` in miceInitDriver has eleven occurrences, not the six the first listing suggested:
+lines 67..74 each carry both `pcVar1 = (code *)swi(0x33);` and `(*pcVar1)();`, and the
+104-character preview hid the second half of each line.  The whole-function substitution
+covered them and the post-rename assertion confirmed the name is gone.
+
+`uRam00010102 = 0x2410;` is left exactly as the export has it, with its existing
+"Read-only address (ram,0x00010102) is written" warning; it is not a section-5 name and
+inventing one would hide the oddity rather than record it.
+
+No expression changed.
+
+  grep_checks 36,246 -> 36,184; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different

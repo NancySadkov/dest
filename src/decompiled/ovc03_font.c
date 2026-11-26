@@ -126,25 +126,25 @@ far_t * __cdecl16far stshProcessFont(far_t *retStorage,int16_t file_id)
   far_t handle;
   far_t handle_00;
   far_t hndl;
-  stg_tmp_t *psVar1;
-  far_t *pfVar2;
+  stg_tmp_t *lbm;
+  far_t *font;
   uint16_t in_DX;
   
-  psVar1 = ovr_grabLbm((int16_t)retStorage,0,0,0,0);
-  if (psVar1 == (stg_tmp_t *)0x0 && in_DX == 0) {
+  lbm = ovr_grabLbm((int16_t)retStorage,0,0,0,0);
+  if (lbm == (stg_tmp_t *)0x0 && in_DX == 0) {
                     /* WARNING: Subroutine does not return */
     ovr_stExit(6);
   }
-  hndl.seg = (uint16_t)psVar1;
-  hndl.ofs = (psVar1->aptr).seg;
-  pfVar2 = stshProcessFontSub((far_t *)(&psVar1->aptr)->ofs,hndl,0);
-  handle.seg = (psVar1->bptr).seg;
-  handle.ofs = (&psVar1->bptr)->ofs;
+  hndl.seg = (uint16_t)lbm;
+  hndl.ofs = (lbm->aptr).seg;
+  font = stshProcessFontSub((far_t *)(&lbm->aptr)->ofs,hndl,0);
+  handle.seg = (lbm->bptr).seg;
+  handle.ofs = (&lbm->bptr)->ofs;
   ovr_stshFree(handle);
   handle_00.seg = in_DX;
-  handle_00.ofs = (uint16_t)psVar1;
+  handle_00.ofs = (uint16_t)lbm;
   ovr_stshFree(handle_00);
-  return pfVar2;
+  return font;
 }
 
 

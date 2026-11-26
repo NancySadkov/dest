@@ -74,33 +74,33 @@ void __cdecl16far ovc50_usesUiInputText(void)
 
 {
   far_t dst;
-  char *pcVar1;
+  char *inputResult;
   far_t entries;
   uint8_t tabPtrs;
-  byte bStack_5;
-  char cStack_4;
-  char cStack_3;
+  byte pageIdx;
+  char done;
+  char keyChar;
   
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
   dst.ofs = (uint16_t)&tabPtrs;
   (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = (char)(_SS >> 8);
   F_SCOPY(far_from_u32((uint32_t)(0x241084a8)),dst,36);
-  bStack_5 = 0;
+  pageIdx = 0;
   do {
     ovr_manage_openTalkWindow();
-    ovc50_usesStshLoadGfx(bStack_5);
+    ovc50_usesStshLoadGfx(pageIdx);
     entries.seg = _SS;
     entries.ofs = (uint16_t)&tabPtrs;
-    pcVar1 = ovr_uiInputText(entries,9,far_from_u32((uint32_t)(0x0)),0x0,0);
-    cStack_3 = (char)pcVar1;
-    if ((cStack_3 == '\t') || (cStack_3 == '\0')) {
-      cStack_4 = '\x01';
+    inputResult = ovr_uiInputText(entries,9,far_from_u32((uint32_t)(0x0)),0x0,0);
+    keyChar = (char)inputResult;
+    if ((keyChar == '\t') || (keyChar == '\0')) {
+      done = '\x01';
     }
     else {
-      cStack_4 = '\0';
-      bStack_5 = cStack_3 - 1;
+      done = '\0';
+      pageIdx = keyChar - 1;
     }
-  } while (cStack_4 == '\0');
+  } while (done == '\0');
   return;
 }
 
