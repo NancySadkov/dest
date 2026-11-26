@@ -10836,3 +10836,47 @@ the real work, and it is a different operation from replacing existing symbols.
 
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,449/1,868 (74 deltas); compare_runtime 1,549 identical / 11 different
+
+### MEASURED: inserting missing DGROUP symbols - three guards needed
+MEASURED: inserting the missing DGROUP symbols works mechanically but needs three guards
+
+First attempt at the operation the 218-byte fix proved moves `diff_dgroup` (+3 matched, -1 delta):
+declare the DGROUP symbols the tree lacks, in original order, with bytes from
+`audit/dgroup_2410.bin`.
+
+Scale, measured with `tmp/missing_dgroup.py` / `tmp/insert_missing2.py`:
+
+  original DGROUP symbols (after diff_dgroup's own filters)   1,868
+  of which interior `name+N` labels                                 63   <- can never match
+  declared by our tree with a known original offset             1,546
+  missing and unused anywhere in the tree, below offset 0x3000     27
+
+Three failures, each caught by the compiler, and each a guard the script needs:
+
+1. **v1 inserted 114 declarations and broke 43 modules.** It had not applied `diff_dgroup`'s
+   prefix filter, so it re-declared CRT names (`_psp`, `__C0*`, ...) that already exist elsewhere
+   with different types: "Type mismatch in redeclaration of '_psp'", "Variable 'AgntAnms' is
+   initialized more than once".
+
+2. **v2 (prefix filter + tree-wide duplicate check over `*.c`) inserted 30 and broke 6.**
+   `DIGHandle_seg` and `s_fighters__residence_2410_1e09` are declared in the tree's **headers**
+   too, which the check did not read: "Type mismatch in redeclaration",
+   "initialized more than once".
+
+3. **v3 (checks `*.h` as well) inserted 27 and broke 1.** The remaining duplicate is a
+   duplicate-name problem, not a declaration problem: `symbols.tsv` lists `DIGHandle_seg` at two
+   offsets, so the name was inserted twice with the same identifier. The original reuses label
+   names (the same reason `s_kill_3` already produced a false +4766 delta), so insertion must
+   de-duplicate by identifier and pick one offset.
+
+All three attempts were reverted with `git checkout -- src`; the tree is unchanged and green.
+
+**What this establishes:** the insertion machinery (offset-ordered groups anchored on the next
+declared symbol, `undefined NAME[len] = { bytes }`) is written and runs; what blocks a commit is
+that `audit/symbols.tsv` is not a clean one-symbol-per-name table — it has 63 interior labels and
+repeated names, and the tree declares some symbols in headers. Fixing the selection is a small,
+well-defined change (de-duplicate by identifier, prefer the lowest offset) and is the next step.
+
+  grep_checks 38,916 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different
