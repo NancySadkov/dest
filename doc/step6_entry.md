@@ -15077,3 +15077,90 @@ REJECTED CANDIDATES, with reasons recorded so they are not re-examined:
   * ovc26_usesStExit's `peVar11` (28 uses) is not a section-5 name, and the section-5 part is
     `uVar5` (21 uses) spread over 138 lines of loop scratch.
   * ovc41_textParalyzed is down to `in_DX` alone, which is the ABI register.
+
+### layout analysis: the C0 words block is not a duplicate (+ correction)
+layout analysis: the C0 words block is NOT a duplicate, and a correction about GSTARTX_SavedVectors
+
+## Correction to the previous commit
+
+The commit 90f266f1 says `GSTARTX_SavedVectors` "does not appear in the original's symbol table
+(only startx code labels do)".  That is wrong.  It is there, at DGROUP:0x005b, 16 bytes:
+
+    2410:005b  GSTARTX_SavedVectors
+    2410:005d  GSTARTX_SavedVectors[0].seg
+    2410:005f  GSTARTX_SavedVectors[1].ofs
+    ... through [3].seg at 0x0069
+
+My grep had matched `1000_TEXT_crtl`'s `startx` labels first and I read only the first eight
+results.  The consequence is measured and small, but it is a real cost of that change:
+compare_state 1,626 -> 1,625 and diff_dgroup matched 1,627 -> 1,626.
+
+## What it would cost to recover the three lost comparison symbols
+
+Three original symbols currently have no counterpart on our side, all for the same reason - the
+bytes exist in C0M's private `DATASEG` but that segment exports no members:
+
+    offset  size  symbol
+    0x002f   14   s_divide_error                  (C0M copy lives at 0x48 in our image)
+    0x003d   30   s_abnormal_program_termination  (C0M copy at 0x56)
+    0x005b   16   GSTARTX_SavedVectors            (C0M copies: __Int0Vector..__Int6Vector at 0x74)
+
+Each placeable copy costs `size x ~1600` on sum|delta|, because our layout is still ~92 bytes too
+long at the head and any byte added there lengthens every following symbol:
+
+    re-add the two error strings at the head   44 bytes  -> sum  88,497 -> ~158,000  (measured A/B
+                                                           earlier: +70,520 for exactly these 44)
+    re-add the vectors at the head             16 bytes  -> sum  88,497 -> ~114,000
+    re-add the vectors at the end (0xaf00)     16 bytes  -> sum  88,497 -> ~133,000, because
+                                                           diff_dgroup pairs by name and scores the
+                                                           move itself (+0xae00 on one symbol)
+
+So recovering all three would roughly double sum|delta| to buy 3 of 1,625 comparison rows and 3 of
+1,805 matched symbols.  I have left them out deliberately rather than by oversight.
+
+## The way to recover them at zero cost, for a later turn
+
+A linker-level alias emits the *name* without emitting bytes.  The thunk module is assembled by
+TASM (`src/decompiled/ovr_thunks.asm`, copied to `ovr.asm` by scripts/stage_build.py), so either
+
+    extrn __Int0Vector:word
+    alias <_GSTARTX_SavedVectors> = <__Int0Vector>
+
+or a zero-length label placed inside C0M's own segment
+
+    DATASEG segment public 'DATASEG'
+        org 074h
+        public _GSTARTX_SavedVectors
+    _GSTARTX_SavedVectors label byte
+    DATASEG ends
+
+would give the map an entry at DGROUP:0x74 with no bytes.  Both depend on TASM/TLINK details
+(ALIAS support; exact SEGDEF name and class of C0M's `DATASEG`, which the map prints as
+`DATASEG@`) that I could not establish without spending build cycles on trial and error, and a
+failed guess breaks the link.  Note also that the first form gives the *same* address as
+`__Int0Vector`, so compare_state would compare the same 16 zero bytes on both sides, which is what
+it did before the deletion.
+
+## The 18-byte C0 words block is NOT a duplicate - it must stay
+
+The original's header and C0M's occupy similar space but are a different *shape*:
+
+    original (0x6b..0x7f)                C0M (0x84..0x94)
+    __C0argc      2                      __C0argc        2
+    __C0argv      4  (0x6d + 0x6f)       __C0argv        2
+    __C0environ   4  (0x71 + 0x73)       __C0environ     2
+    _env          2                      __envLng        2
+    _envseg_at_   2                      __envseg        2
+    _envSize_at_  2                      __envSize       2
+    _psp          2                      __psp           2
+    DosVersion    2  (0x7d + minor)      __osmajor/minor 2 (0x92/0x93)
+
+The original's C0 uses 4-byte argv and environ far pointers; C0M's uses 2-byte words.  A 1:1 word
+alias would therefore make `(str_t *)__C0argv` read C0M's environ word as the argv segment, and the
+last word would spill over `_errno` - a real corruption of state that compare_runtime checks.  So
+those 18 bytes are the original's own data, which C0M cannot supply, and they stay.
+
+Only `__C0argc` (2 bytes, identical name and meaning) and `DosVersion` (2 bytes, C0M's
+`__osversion` covers major+minor) are semantic matches; together they would save 4 bytes
+(~6,400 on sum) but `_envSize_at_` is written as a 4-byte store that currently spills into
+`DosVersion`, so removing it needs that defect fixed first.  Not attempted here.
