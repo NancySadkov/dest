@@ -8381,3 +8381,41 @@ unchanged rather than pointed at a guessed symbol.
   grep_checks 40,071 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### Segment 0x48 is `AudioHandles` - and the retry was reverted unverified
+
+**The identification stands.**  `st_globals.h:63` declares
+
+```c
+extern DW far far AudioHandles[140];
+```
+
+the only `far far` dword array in this module's neighbourhood, and `far far` is exactly what places an
+array in its own segment - the same mechanism that puts `Agnts` and `AgntGs` there.  With the
+disassembly (`0146 mov bx,si / 0148 shl bx,2 / 014B mov ax,0x48 / 014E mov es,ax / 0150 les bx,ptr
+es:[bx]`) and line 605's existing `&AudioHandles[i]` test, segment 0x48 is `AudioHandles`.
+
+**The rewrite was reverted.**  I rewrote lines 611-618 as
+
+```c
+((uint16_t far *)((uint8_t far *)&AudioHandles[0] + i * 4))[1] = iVar10;
+handle = (uint8_t far *)*(uint32_t far *)&AudioHandles[i];
+*handle = 3;
+*(uint16_t far *)(handle + 3) = 0;
+...
+```
+
+It compiled clean and passed every gate, but the emitted listing for `stshInitAudioAssets` contains **no**
+`es:[bx+2]` store, and other accesses to the table appear as `mov word ptr _AudioHandles[bx]` -
+DS-relative.  The far store I intended did not materialise, so there is no evidence the fix changes the
+addressing.  Committing it would be the same failure mode as the `_fsetmem` `CONCAT22` attempt and the
+blanket `agntG_t` cast earlier in this session.
+
+**Open question to settle before retrying:** why `&AudioHandles[0]` does not produce a far pointer here.
+`Agnts` is declared identically (`agnt_t far far Agnts[24]`) and its accesses *do* emit
+`mov dx,seg _Agnts / mov es,dx`, so the qualifier works.  The difference is either that `DW` is a struct
+typedef rather than a scalar, or that the `(uint8_t far *)` cast in between discards the segment.
+
+  grep_checks 40,071 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
