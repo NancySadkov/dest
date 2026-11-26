@@ -9855,3 +9855,19 @@ Left alone in this function, both deliberate:
   grep_checks 39,810 -> 39,728; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### constr_usesBlitGfxRect2: uVar7 split (39,728 -> 39,694)
+constr_usesBlitGfxRect2: split uVar7 into column / colIndex (39,728 -> 39,694)
+
+  column    = squareColumn[sq] and every helper argument derived from it
+              (usesSmoothPrev / getFlagsAtOffset / getCellAtOffset / usesGMapFlags)   25 uses
+  colIndex  = the square index walked in the band loop, indexing SquareLeftX
+              (1332 for-header, 1370-1393)                                            5 uses
+
+Renaming and splitting only.  With this the function has no §5-named local left:
+tileFlags, piece, fillPiece, mapFlagRes, flagsLo, highlightLo, textDy, sideOfs,
+packWord, column, colIndex.
+
+  grep_checks 39,728 -> 39,694; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

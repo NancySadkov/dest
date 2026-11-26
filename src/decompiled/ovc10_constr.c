@@ -1085,7 +1085,8 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
   undefined1 extraout_AH_00;
   int dy;
   uint16_t sq;
-  uint16_t uVar7;
+  uint16_t column;
+  uint16_t colIndex;
   far_t gfx_08;
   far_t gfx_09;
   far_t gfx_10;
@@ -1139,19 +1140,19 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
     for (dy = 2; sq = rowBandSquareFirst[0], -1 < dy; dy = dy + -1) {
       for (sq = ((uint16_t *)rowBandSquareFirst)[dy];
           (int)sq < (int)((uint16_t *)rowBandSquareEnd)[dy]; sq = sq + 1) {
-        uVar7 = ((uint16_t *)squareColumn)[sq];
-        smoothTL = constr_usesSmoothPrev(uVar7,dy + -1,(int *)&cornerTL,0,0);
+        column = ((uint16_t *)squareColumn)[sq];
+        smoothTL = constr_usesSmoothPrev(column,dy + -1,(int *)&cornerTL,0,0);
         smoothTL = smoothTL / 3;
-        smoothTR = constr_usesSmoothPrev(uVar7 + 1,dy + -1,(int *)&cornerTR,0,0);
+        smoothTR = constr_usesSmoothPrev(column + 1,dy + -1,(int *)&cornerTR,0,0);
         smoothTR = smoothTR / 3;
-        smoothBL = constr_usesSmoothPrev(uVar7,dy,(int *)&cornerBL,0,0);
+        smoothBL = constr_usesSmoothPrev(column,dy,(int *)&cornerBL,0,0);
         smoothBL = smoothBL / 3;
-        smoothBR = constr_usesSmoothPrev(uVar7 + 1,dy,(int *)&cornerBR,0,0);
+        smoothBR = constr_usesSmoothPrev(column + 1,dy,(int *)&cornerBR,0,0);
         smoothBR = smoothBR / 3;
-        tileFlags = constr_getFlagsAtOffset(uVar7,dy);
+        tileFlags = constr_getFlagsAtOffset(column,dy);
         flagsLo = (byte)tileFlags;
         if ((tileFlags & 4) == 0) {
-          if ((int)uVar7 < 0) {
+          if ((int)column < 0) {
             packed = CONCAT22(1,tileFlags) & 0xffff00ff;
             packWord = (ulong)CONCAT12(cornerBL,cornerTR) & 0xffff00ff;
             piece = constr_compute1(cornerTL,(uint8_t)packWord,(uint8_t)(packWord >> 0x10),(byte)packed,(byte)(packed >> 0x10),0,0,0);
@@ -1171,7 +1172,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
                       (((uint16_t *)SquareTopY)[sq],((uint16_t *)RowScreenX)[dy] - smoothBL,((uint16_t *)SquareLeftX)[sq],((uint16_t *)RowScreenY)[dy] - smoothTL,((uint16_t *)SquareRightX)[sq],((uint16_t *)RowScreenY)[dy] - smoothTR,piece & 0xff,BlitRects + 3,(char)((uint16_t *)SquareLeftX)[sq],0,0,0,0,0);
           }
         }
-        else if ((int)uVar7 < 0) {
+        else if ((int)column < 0) {
           packWord = CONCAT22(1,piece) & 0xffff00ff;
           piece = constr_compute1(cornerBL,cornerBR,cornerTL,(byte)packWord,(byte)(packWord >> 0x10),0,0,0);
           ovr_ovc07_usesBiosReadKey
@@ -1193,30 +1194,30 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
       }
       for (sq = ((uint16_t *)rowBandSquareFirst)[dy];
           (int)sq < (int)((uint16_t *)rowBandSquareEnd)[dy]; sq = sq + 1) {
-        uVar7 = ((uint16_t *)squareColumn)[sq];
-        highlightLo = constr_setHighlightAtOffset(uVar7,dy,0);
+        column = ((uint16_t *)squareColumn)[sq];
+        highlightLo = constr_setHighlightAtOffset(column,dy,0);
         bldIndex = CONCAT11(extraout_AH,highlightLo);
         if (bldIndex != 0) {
-          smoothTL = constr_usesSmoothPrev(uVar7,dy + -1,(int *)&cornerTL,0,0);
+          smoothTL = constr_usesSmoothPrev(column,dy + -1,(int *)&cornerTL,0,0);
           smoothTL = smoothTL / 3;
-          smoothBL = constr_usesSmoothPrev(uVar7,dy,(int *)&cornerBL,0,0);
+          smoothBL = constr_usesSmoothPrev(column,dy,(int *)&cornerBL,0,0);
           smoothBL = smoothBL / 3;
           if (*(byte *)((uint8_t *)&BuildingTypes[bldIndex] + 13) < 2) {
-            smoothTR = constr_usesSmoothPrev(uVar7 + 1,dy + -1,(int *)&cornerTR,0,0);
+            smoothTR = constr_usesSmoothPrev(column + 1,dy + -1,(int *)&cornerTR,0,0);
             smoothTR = smoothTR / 3;
-            smoothBR = constr_usesSmoothPrev(uVar7 + 1,dy,(int *)&cornerBR,0,0);
+            smoothBR = constr_usesSmoothPrev(column + 1,dy,(int *)&cornerBR,0,0);
             smoothBR = smoothBR / 3;
           }
           else if (*(byte *)((uint8_t *)&BuildingTypes[bldIndex] + 13) < 3) {
-            smoothTR = constr_usesSmoothPrev(uVar7 + 2,dy + -1,(int *)&cornerTR,0,0);
+            smoothTR = constr_usesSmoothPrev(column + 2,dy + -1,(int *)&cornerTR,0,0);
             smoothTR = smoothTR / 3;
-            smoothBR = constr_usesSmoothPrev(uVar7 + 2,dy,(int *)&cornerBR,0,0);
+            smoothBR = constr_usesSmoothPrev(column + 2,dy,(int *)&cornerBR,0,0);
             smoothBR = smoothBR / 3;
           }
           else {
-            smoothTR = constr_usesSmoothPrev(uVar7 + 4,dy + -1,(int *)&cornerTR,0,0);
+            smoothTR = constr_usesSmoothPrev(column + 4,dy + -1,(int *)&cornerTR,0,0);
             smoothTR = smoothTR / 3;
-            smoothBR = constr_usesSmoothPrev(uVar7 + 4,dy,(int *)&cornerBR,0,0);
+            smoothBR = constr_usesSmoothPrev(column + 4,dy,(int *)&cornerBR,0,0);
             smoothBR = smoothBR / 3;
           }
           avgDy = smoothBL + smoothTL + smoothTR + smoothBR >> 2;
@@ -1329,18 +1330,18 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
         }
       }
     }
-    for (; uVar7 = rowBandSquareFirst[0], (int)sq < (int)rowBandSquareEnd[0]; sq = sq + 1)
+    for (; colIndex = rowBandSquareFirst[0], (int)sq < (int)rowBandSquareEnd[0]; sq = sq + 1)
     {
       if ((0xee < (int)((uint16_t *)SquareRightX)[sq]) &&
          ((int)((uint16_t *)SquareLeftX)[sq] < 0x135)) {
-        uVar7 = ((uint16_t *)squareColumn)[sq];
-        cornerTL = constr_getCellAtOffset(uVar7,-2);
-        cornerTR = constr_getCellAtOffset(uVar7 + 1,-2);
-        smoothLeft = constr_usesSmoothPrev(uVar7,-1,(int *)&cornerBL,0,0);
+        column = ((uint16_t *)squareColumn)[sq];
+        cornerTL = constr_getCellAtOffset(column,-2);
+        cornerTR = constr_getCellAtOffset(column + 1,-2);
+        smoothLeft = constr_usesSmoothPrev(column,-1,(int *)&cornerBL,0,0);
         smoothLeft = smoothLeft / 3;
-        smoothRight = constr_usesSmoothPrev(uVar7 + 1,-1,(int *)&cornerBR,0,0);
+        smoothRight = constr_usesSmoothPrev(column + 1,-1,(int *)&cornerBR,0,0);
         smoothRight = smoothRight / 3;
-        tileFlags = constr_getFlagsAtOffset(uVar7,-1);
+        tileFlags = constr_getFlagsAtOffset(column,-1);
         flagsLo = (byte)tileFlags;
         if ((tileFlags & 4) == 0) {
           fillColor = constr_compute2(cornerBL,cornerBR,cornerTR,flagsLo,2);
@@ -1360,15 +1361,15 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
           ovr_ovc07_usesBiosReadKey
                     (((uint16_t *)SquareRightX)[sq],RowScreenY[0] - smoothRight,((uint16_t *)SquareLeftX)[sq],0x36,((uint16_t *)SquareRightX)[sq],0x36,fillPiece & 0xff,BlitRects + 3,(char)((uint16_t *)SquareLeftX)[sq],0,0,0,0,0);
         }
-        mapFlagRes = constr_usesGMapFlags(uVar7 + GfxRndSeed,GfxRndSeed2,0);
+        mapFlagRes = constr_usesGMapFlags(column + GfxRndSeed,GfxRndSeed2,0);
         if ((char)mapFlagRes != '\0') {
           ovr_ovc07_usesLDIV_at_
                     (((uint16_t *)SquareLeftX)[sq],RowScreenY[0] - smoothLeft,((uint16_t *)SquareRightX)[sq],RowScreenY[0] - smoothRight,(char)fillColor + 0xff,(brect_t *)(BlitRects + 3),0);
         }
       }
     }
-    for (; (int)uVar7 < (int)rowBandSquareEnd[0]; uVar7 = uVar7 + 1) {
-      sq = ((uint16_t *)squareColumn)[uVar7];
+    for (; (int)colIndex < (int)rowBandSquareEnd[0]; colIndex = colIndex + 1) {
+      sq = ((uint16_t *)squareColumn)[colIndex];
       highlightLo = constr_setHighlightAtOffset(sq,0,0);
       bldIndex = CONCAT11(extraout_AH_00,highlightLo);
       if ((*(byte *)((uint8_t *)&BuildingTypes[bldIndex] + 16) & 2) != 0) {
@@ -1379,7 +1380,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
         gfx_01.ofs = *(uint16_t *)
                       ((char *)0x28ed4 + bldIndex * 0xc);
         ovr_blit_usesBlitGfxN
-                  (gfx_01,((uint16_t *)SquareLeftX)[uVar7],(uint)rowBandOrigin[0] - smoothLeft,6,0x27,6,(brect_t *)(BlitRects + 3),0x2410,(char)((uint16_t *)SquareLeftX)[uVar7],0,0,0,0,0,0);
+                  (gfx_01,((uint16_t *)SquareLeftX)[colIndex],(uint)rowBandOrigin[0] - smoothLeft,6,0x27,6,(brect_t *)(BlitRects + 3),0x2410,(char)((uint16_t *)SquareLeftX)[colIndex],0,0,0,0,0,0);
       }
       if ((*(byte *)((uint8_t *)&BuildingTypes[bldIndex] + 16) & 1) != 0) {
         (*(uint8_t *)((uint8_t *)&(gfx_07.seg))) =
@@ -1390,7 +1391,7 @@ void __cdecl16far constr_usesBlitGfxRect2(void)
         (*(uint8_t *)((uint8_t *)&(gfx_07.seg) + 1)) =
              (char)((uint)*(uint16_t *)
                            ((char *)0x28eda + bldIndex * 0xc) >> 8);
-        ovr_blitGfxRect(gfx_07,((uint16_t *)SquareLeftX)[uVar7],51,(brect_t *)(BlitRects + 3),0x10,bandY[2],0,0,0,0,0,0);
+        ovr_blitGfxRect(gfx_07,((uint16_t *)SquareLeftX)[colIndex],51,(brect_t *)(BlitRects + 3),0x10,bandY[2],0,0,0,0,0,0);
       }
     }
   }
