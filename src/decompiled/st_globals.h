@@ -2359,3 +2359,7 @@ extern char s_s_Owned_by_s_2410_7a79[44];
 
 /* 0x8072 */
 extern char s_Salvage_value_d_gold_2410_8072[24];
+
+/* 0x8417 / 0x8422 */
+extern char s_bolt12_fli_2410_8417[11];
+extern char s_save_999_2410_8422[10];

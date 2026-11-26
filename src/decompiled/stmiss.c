@@ -226,8 +226,6 @@ char s_absentBlob[] =
   "\0"
   " Repair costs %d gp.\0"
   " Upgrade costs %d gp.\0"
-  "bolt12.fli\0"
-  "save.999\0"
   "%d \r"
   "\0"
   "print scanf : floating point formats not linked\r"

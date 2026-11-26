@@ -14709,3 +14709,39 @@ chargen is now clean apart from `in_DX` (the ABI register the callees return the
   diff_dgroup 1,621/1,805 matched, 36 runs, sum|delta| 194,118, mean 119, worst 14,382
   compare_runtime 1,675 matched, 1,666 identical / 9 different
   grep_checks 35,717 -> 35,699
+
+### layout: bolt12.fli and save.999 move into place (runs 36 -> 35)
+layout: bolt12.fli and save.999 move into place (runs 36 -> 35, matched 1,621 -> 1,623)
+
+Original order:
+    0x840c  11  s_cflow5.txt
+    0x8417  11  "bolt12.fli"
+    0x8422  10  "save.999" (eight characters, NUL, one pad byte)
+    0x842c  10  agentClipRect
+
+Both strings existed only as stmiss.c blob entries (lines 229-230) plus literals in
+ovc48_assets2.c and ovc49_agents.c.  O49 is excluded from the link but **O48 is not**, so its
+literals were real DGROUP copies: they are repointed at the new symbols, and the blob entries
+removed, so the 21 bytes are moved rather than duplicated.
+
+Two process notes:
+
+  * my first attempt took `raw[:-1]` as the text, which for "save.999\0\0" leaves an embedded
+    NUL, so the declaration carried a raw NUL and the blob match failed mid-script - leaving the
+    two declarations in place but the blob and literals untouched.  Reverted and fixed to
+    `raw.rstrip(b"\x00")`, with the declared size still the full span so the pad byte is kept.
+  * `save.999` is eight characters in a 10-byte object, so `char x[10] = "save.999";` is the
+    honest form: the initialiser is 9 bytes and the array pads to 10.
+
+MEASURED (HEAD 432e5dfb -> this commit)
+
+  diff_dgroup matched        1,621 -> 1,623
+  diff_dgroup runs              36 -> 35
+  diff_dgroup sum|delta|   194,118 -> 193,663
+  compare_runtime matched    1,675 -> 1,677
+  compare_runtime identical  1,666 -> 1,668
+  compare_state              1,627/0/0
+  grep_checks               35,699 -> 35,701
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+Next steps in the profile: -5 at StatsTabPtrs (0x84a8) and -4 at _atexitcnt (0x8516).
