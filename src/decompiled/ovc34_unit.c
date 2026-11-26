@@ -685,42 +685,42 @@ L_ui_unit_order_6616_0689_106E:
 void __cdecl16far unit_usesAlignUp42(byte menuIndex,uint16_t x,int y)
 
 {
-  uint uVar1;
-  uint uVar2;
-  int16_t iVar3;
-  uint uVar4;
+  uint alignedX;
+  uint recAlignedX;
+  int16_t cmpResult;
+  uint recIdx;
   uint8_t rec;
-  int iStack_14;
+  int recY;
   uint8_t savedCursorX;
   uint8_t savedCursorY;
   
-  uVar1 = ovr_alignUp4(x,0,0);
-  uVar4 = 0;
+  alignedX = ovr_alignUp4(x,0,0);
+  recIdx = 0;
   do {
-    if (SquareRecCount <= uVar4) {
+    if (SquareRecCount <= recIdx) {
 L_unit_6616_10d5_1152:
-      if (SquareRecCount <= uVar4) {
+      if (SquareRecCount <= recIdx) {
         memcpy((char *)CONCAT22(_SS,&rec),(char *)&SquareRecX,0x13);
       }
       rec = GfxRndSeed;
-      iStack_14 = GfxRndSeed2;
+      recY = GfxRndSeed2;
       (&savedCursorX)[menuIndex] = ((undefined *)&menuCursorX)[menuIndex];
       (&savedCursorY)[menuIndex] = ((undefined *)&menuCursorY)[menuIndex];
-      if (uVar4 < SquareRecCount) {
-        if (uVar4 + 1 < SquareRecCount) {
-          _fmemmove((char *)CONCAT22(0x17f8,(char *)(uVar4 * 0x13)),
-                    (char *)CONCAT22(0x17f8,(char *)(uVar4 * 0x13 + 0x13)),
-                    ((SquareRecCount - uVar4) + -1) * 0x13);
+      if (recIdx < SquareRecCount) {
+        if (recIdx + 1 < SquareRecCount) {
+          _fmemmove((char *)CONCAT22(0x17f8,(char *)(recIdx * 0x13)),
+                    (char *)CONCAT22(0x17f8,(char *)(recIdx * 0x13 + 0x13)),
+                    ((SquareRecCount - recIdx) + -1) * 0x13);
         }
         SquareRecCount = SquareRecCount - 1;
-        iVar3 = memcmp((char *)&SquareRecX,(char *)CONCAT22(_SS,&rec),0x13);
-        if (iVar3 == 0) {
+        cmpResult = memcmp((char *)&SquareRecX,(char *)CONCAT22(_SS,&rec),0x13);
+        if (cmpResult == 0) {
           return;
         }
       }
       else {
-        iVar3 = memcmp((char *)&SquareRecX,(char *)CONCAT22(_SS,&rec),0x13);
-        if (iVar3 == 0) {
+        cmpResult = memcmp((char *)&SquareRecX,(char *)CONCAT22(_SS,&rec),0x13);
+        if (cmpResult == 0) {
           return;
         }
         if (299 < SquareRecCount) {
@@ -728,19 +728,19 @@ L_unit_6616_10d5_1152:
           SquareRecCount = 299;
         }
       }
-      iStack_14 = y;
-      rec = uVar1;
+      recY = y;
+      rec = alignedX;
       memcpy((char *)CONCAT22(0x17f8,(char *)(SquareRecCount * 0x13)),
              (char *)CONCAT22(_SS,&rec),0x13);
       SquareRecCount = SquareRecCount + 1;
       return;
     }
-    uVar2 = ovr_alignUp4(*(int *)(uVar4 * 0x13),0,0);
-    if ((uVar2 == uVar1) && (*(int *)((uint8_t *)&SquareRecs[uVar4] + 2) == y)) {
-      memcpy((char *)CONCAT22(_SS,&rec),(char *)CONCAT22(0x17f8,(char *)(uVar4 * 0x13)),0x13);
+    recAlignedX = ovr_alignUp4(*(int *)(recIdx * 0x13),0,0);
+    if ((recAlignedX == alignedX) && (*(int *)((uint8_t *)&SquareRecs[recIdx] + 2) == y)) {
+      memcpy((char *)CONCAT22(_SS,&rec),(char *)CONCAT22(0x17f8,(char *)(recIdx * 0x13)),0x13);
       goto L_unit_6616_10d5_1152;
     }
-    uVar4 = uVar4 + 1;
+    recIdx = recIdx + 1;
   } while( true );
 }
 

@@ -11841,3 +11841,21 @@ MEASURED - unchanged, as intended for a correctness sweep:
     grep_checks 37,880 | compare_state 1,627/0/0
     diff_dgroup 1,450/1,868, 71 runs, sum|delta| 276,979
     compare_runtime 1,605 identical / 10 different
+
+### unit_usesAlignUp42: scan index and aligned values (37,880 -> 37,849)
+unit_usesAlignUp42: name the scan index, aligned values and record y (37,880 -> 37,849)
+
+  uVar1      ovr_alignUp4(x,0,0)                     -> alignedX    (4)
+  uVar2      ovr_alignUp4(SquareRecs[recIdx].x,0,0)  -> recAlignedX (3)
+  uVar4      the SquareRecs scan index               -> recIdx      (13)
+  iVar3      memcmp(...) result                      -> cmpResult   (5)
+  iStack_14  GfxRndSeed2, then y - the record's y    -> recY        (3)
+
+`rec` is deliberately left: it is a `uint8_t` that is also written as a scalar
+(`rec = GfxRndSeed;`) yet memcpy'd as 0x13 bytes, so the truthful declaration is a
+`squarerec_t` with named fields.  That is a type change and needs the struct's field
+layout confirmed, not a rename.
+
+  grep_checks 37,880 -> 37,849; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different
