@@ -127,7 +127,6 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   char *nameOfs;
   unit_t *units;
   int iVar6;
-  uint16_t uVar7;
   uint8_t msg;
   byte bStack_f;
   byte bStack_e;
@@ -141,14 +140,13 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   char *name;
   
   if ((partyIndex != 0xff) &&
-     (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0')) {
+     (*((char far *)GLeaderSheets[partyIndex] + 0x3f) == '\0')) {
     seedAligned = ovr_alignUp4(GfxRndSeed,0,0);
     for (bStack_b = 0; bStack_b < 4; bStack_b = bStack_b + 1) {
       for (iVar6 = -2; iVar6 < 2; iVar6 = iVar6 + 1) {
         uVar1 = ovr_ovc23_findRecordAt(seedAligned + iVar6,GfxRndSeed2,(char)GfxRndSeed2);
         if (uVar1 == 0xffff) {
           iVar2 = ovc39_findBuildingAt(seedAligned + iVar6,GfxRndSeed2);
-          uVar7 = (uint16_t)((ulong)GUnits >> 0x10);
           units = (unit_t *)GUnits;
           unitBldType = (units + iVar2)->bldType;
           nameOfs = (char *)0x26510;
@@ -238,16 +236,12 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
         }
       }
     }
-    uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-    iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
     if ((GLeaderSheets[partyIndex])->foodProd <
-        (uint)(*(int *)(iVar6 + 0x4d) * 2 + *(int *)(iVar6 + 0x4d)) >> 1) {
+        (uint)((int)(GLeaderSheets[partyIndex])->population * 2 + (int)(GLeaderSheets[partyIndex])->population) >> 1) {
       if ((GLeaderSheets[partyIndex])->foodProd <
           (GLeaderSheets[partyIndex])->population) {
-        uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-        iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
         if ((GLeaderSheets[partyIndex])->foodProd <
-            (uint)(*(int *)(iVar6 + 0x4d) * 2 + *(int *)(iVar6 + 0x4d)) >> 2) {
+            (uint)((int)(GLeaderSheets[partyIndex])->population * 2 + (int)(GLeaderSheets[partyIndex])->population) >> 2) {
           if ((GLeaderSheets[partyIndex])->foodProd <
               (GLeaderSheets[partyIndex])->population >> 1) {
             if ((GLeaderSheets[partyIndex])->foodProd <
@@ -273,41 +267,31 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
     else {
       bStack_c = 0;
     }
-    uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-    iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
-    iVar6 = *(int *)(iVar2 + 0x62);
+    iVar6 = (int)((GLeaderSheets[partyIndex])->foodStored >> 16);
     if ((iVar6 < 0) ||
        ((iVar6 == 0 &&
-        (*(uint *)(iVar2 + 0x60) <
+        ((uint16_t)(GLeaderSheets[partyIndex])->foodStored <
          (uint)((GLeaderSheets[partyIndex])->population * 0x28))))) {
-      uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-      iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
-      iVar6 = *(int *)(iVar2 + 0x62);
+      iVar6 = (int)((GLeaderSheets[partyIndex])->foodStored >> 16);
       if ((iVar6 < 0) ||
          ((iVar6 == 0 &&
-          (*(uint *)(iVar2 + 0x60) <
+          ((uint16_t)(GLeaderSheets[partyIndex])->foodStored <
            (uint)((GLeaderSheets[partyIndex])->population * 0x14))))) {
-        uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-        iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
-        iVar6 = *(int *)(iVar2 + 0x62);
+        iVar6 = (int)((GLeaderSheets[partyIndex])->foodStored >> 16);
         if ((iVar6 < 0) ||
            ((iVar6 == 0 &&
-            (*(uint *)(iVar2 + 0x60) <
+            ((uint16_t)(GLeaderSheets[partyIndex])->foodStored <
              (uint)((GLeaderSheets[partyIndex])->population * 0x3c) >> 2)))) {
-          uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-          iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
-          iVar6 = *(int *)(iVar2 + 0x62);
+          iVar6 = (int)((GLeaderSheets[partyIndex])->foodStored >> 16);
           if ((iVar6 < 0) ||
              ((iVar6 == 0 &&
-              (*(uint *)(iVar2 + 0x60) <
+              ((uint16_t)(GLeaderSheets[partyIndex])->foodStored <
                (uint)((GLeaderSheets[partyIndex])->population * 0x14) >> 1))))
           {
-            uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-            iVar2 = (int)*(uint32_t *)((uint)partyIndex << 2);
-            iVar6 = *(int *)(iVar2 + 0x62);
+            iVar6 = (int)((GLeaderSheets[partyIndex])->foodStored >> 16);
             if ((iVar6 < 0) ||
                ((iVar6 == 0 &&
-                (*(uint *)(iVar2 + 0x60) <
+                ((uint16_t)(GLeaderSheets[partyIndex])->foodStored <
                  (uint)((GLeaderSheets[partyIndex])->population * 0x14) >> 2)))
                ) {
               bStack_f = 5;
@@ -334,16 +318,12 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
     if (bStack_f < bStack_c) {
       bStack_c = bStack_f;
     }
-    uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-    iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
     if ((GLeaderSheets[partyIndex])->housing <
-        (uint)(*(int *)(iVar6 + 0x4d) * 2 + *(int *)(iVar6 + 0x4d)) >> 1) {
+        (uint)((int)(GLeaderSheets[partyIndex])->population * 2 + (int)(GLeaderSheets[partyIndex])->population) >> 1) {
       if ((GLeaderSheets[partyIndex])->housing <
           (GLeaderSheets[partyIndex])->population) {
-        uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-        iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
         if ((GLeaderSheets[partyIndex])->housing <
-            (uint)(*(int *)(iVar6 + 0x4d) * 2 + *(int *)(iVar6 + 0x4d)) >> 2) {
+            (uint)((int)(GLeaderSheets[partyIndex])->population * 2 + (int)(GLeaderSheets[partyIndex])->population) >> 2) {
           if ((GLeaderSheets[partyIndex])->housing <
               (GLeaderSheets[partyIndex])->population >> 1) {
             if ((GLeaderSheets[partyIndex])->housing <

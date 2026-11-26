@@ -9684,3 +9684,49 @@ The identifying evidence is the same in both files: the index comes straight fro
   grep_checks 39,953 (unchanged - this is addressing, not naming)
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
+
+### ovc39_textHalflingCastle: ten near table reads (39,953 -> 39,915)
+ovc39_textHalflingCastle: ten near table reads of GLeaderSheets, and a dead local (39,953 -> 39,915)
+
+The function already read `(GLeaderSheets[partyIndex])->foodProd` correctly on lines 243/245/246,
+but every neighbouring access went through a NEAR read of DS:partyIndex*4 whose halves were kept
+in `uVar7` (segment) and `iVar6` (offset):
+
+    uVar7 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
+    iVar6 = (int)*(uint32_t *)((uint)partyIndex << 2);
+    ... *(int *)(iVar6 + 0x4d) ...
+
+Three separate defects:
+
+1. `uVar7` is assigned 10 times and NEVER read - a pure dead store, so it goes entirely,
+   together with the pointer halves it was computing.
+
+2. `*(int *)(iVar6 + 0x4d)` is `char_sheet_t.population`.  The three comparison cadences prove it:
+   the function tests `foodProd < population*3/2`, `housing < population*3/2`, then `*3/4`, then
+   `<<1`/`>>1`/`>>2` against `population` directly - always the same +0x4d word.
+
+3. `*(int *)(iVar2 + 0x62)` / `*(uint *)(iVar2 + 0x60)` are the high and low words of
+   `char_sheet_t.foodStored` (a long at 0x60).  They stay a SPLIT rather than becoming one `<`
+   on `long`: high word signed, low word unsigned is exactly how a signed 32-bit compare is
+   written with 16-bit registers, and collapsing it would change the low word's signedness.
+
+Offsets pinned by probe (`char_sheet_t far *`):
+
+    population   -> mov ax,word ptr es:[bx+77]        = 0x4d
+    foodStored   -> mov dx,es:[bx+98] / mov ax,es:[bx+96]   = 0x62 / 0x60
+
+and in the rebuilt function:
+
+    les  bx,dword ptr DGROUP:_GLeaderSheets[bx]
+    mov  ax,word ptr es:[bx+77]        ; population        x10
+    ...
+    mov  ax,word ptr es:[bx+98]        ; foodStored high
+    cwd
+    ...
+    cmp  word ptr es:[bx+96],ax        ; foodStored low     x5
+
+against the original's `mov ax,0x70 / mov es,ax / les bx,ptr es:[bx]` + field reads.
+
+  grep_checks 39,953 -> 39,915; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
