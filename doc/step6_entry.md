@@ -14590,3 +14590,20 @@ MEASURED (HEAD 9dd222db -> this commit)
   build 65/65, LINK.LOG 65 bytes / 0 problems
 
 The next step in the profile is now the -47 at 0x7aa5 with nothing between 0x76e9 and it.
+
+### chargen: menu tables and text input (35,742 -> 35,715)
+chargen: name the menu tables and the text input (35,742 -> 35,715)
+
+    auStack_90[21]  uint16_t  the segment halves of the menu's far pointers,
+                              `auStack_90[entryPos * 2] = GUnitDescriptions[n].seg` -> itemSegs  (11)
+    acStack_9d[11]  char      the parallel control-code array indexed by entryPos   -> itemHotkeys (6)
+    pcStack_e       char *    ovr_uiReadString's result                             -> inputText  (5)
+
+These are ordinary locals placed on the stack because they are arrays, not compiler scratch:
+every use is a plain index.  chargen is now clean apart from `in_DX`, which is left as the ABI
+register the callees return the segment in.
+
+  grep_checks 35,742 -> 35,715; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,619/1,805 (39 runs, sum|delta| 200,634, mean 123, worst 14,380)
+  compare_runtime 1,673 matched, 1,664 identical / 9 different

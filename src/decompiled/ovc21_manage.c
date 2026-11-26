@@ -1681,15 +1681,15 @@ char_sheet_t * __cdecl16far chargen(void)
   uint in_DX;
   uint16_t widths;
   int entryIdx;
-  char acStack_9d [11];
+  char itemHotkeys [11];
   uint8_t menuItems;
-  uint16_t auStack_90 [21];
+  uint16_t itemSegs [21];
   static char msg[64];   /* DGROUP-backed formatting buffer */
   char_sheet_t *sheet;
   uint sheetSeg;
   int statIdx;
   uint choice;
-  char *pcStack_e;
+  char *inputText;
   uint16_t widSeg;
   uint8_t keepDiscard;
   
@@ -1715,49 +1715,49 @@ char_sheet_t * __cdecl16far chargen(void)
         manage_rollStats(sheet,(char)sheetSeg);
         manage_usesLitoa10((char_sheet_t *)
                            CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
-        auStack_90[0] = 0x2410;
+        itemSegs[0] = 0x2410;
         menuItems = 0x4fce;
-        acStack_9d[0] = '\0';
-        auStack_90[2] = 0;
-        auStack_90[1] = 0;
+        itemHotkeys[0] = '\0';
+        itemSegs[2] = 0;
+        itemSegs[1] = 0;
         entryPos = 1;
         for (statIdx = 0; entryIdx = entryPos + 1, statIdx < 4; statIdx = statIdx + 1) {
-          acStack_9d[entryPos] = (char)statIdx + '\x02';
+          itemHotkeys[entryPos] = (char)statIdx + '\x02';
           descWord = *(uint16_t *)(&GUnitDescriptions[statIdx]);
-          auStack_90[entryIdx * 2] = *(uint16_t *)((uint8_t *)&GUnitDescriptions[statIdx] + 2);
+          itemSegs[entryIdx * 2] = *(uint16_t *)((uint8_t *)&GUnitDescriptions[statIdx] + 2);
           *(uint16_t *)(&menuItems + entryIdx * 4) = descWord;
           entryPos = entryIdx;
         }
-        acStack_9d[entryPos] = '\x06';
+        itemHotkeys[entryPos] = '\x06';
         if (sheet->stats[4] < 9) {
-          auStack_90[entryIdx * 2] = 0;
+          itemSegs[entryIdx * 2] = 0;
           (&menuItems + entryIdx * 4)[0] = 0x0;
           (&menuItems + entryIdx * 4)[1] = 0x0;
         }
         else {
-          auStack_90[entryIdx * 2] = GUnitDescriptions[4].seg;
+          itemSegs[entryIdx * 2] = GUnitDescriptions[4].seg;
           *(uint16_t *)(&menuItems + entryIdx * 4) = GUnitDescriptions[4].ofs;
         }
         entryIdx = entryPos + 2;
-        acStack_9d[entryPos + 1] = '\a';
+        itemHotkeys[entryPos + 1] = '\a';
         if (sheet->stats[1] < 9) {
-          auStack_90[entryIdx * 2] = 0;
+          itemSegs[entryIdx * 2] = 0;
           (&menuItems + entryIdx * 4)[0] = 0x0;
           (&menuItems + entryIdx * 4)[1] = 0x0;
         }
         else {
-          auStack_90[entryIdx * 2] = GUnitDescriptions[5].seg;
+          itemSegs[entryIdx * 2] = GUnitDescriptions[5].seg;
           *(uint16_t *)(&menuItems + entryIdx * 4) = GUnitDescriptions[5].ofs;
         }
         entryIdx = entryPos + 3;
-        acStack_9d[entryPos + 2] = '\b';
+        itemHotkeys[entryPos + 2] = '\b';
         if ((sheet->stats[4] < 9) || (sheet->stats[3] < 9)) {
-          auStack_90[entryIdx * 2] = 0;
+          itemSegs[entryIdx * 2] = 0;
           (&menuItems + entryIdx * 4)[0] = 0x0;
           (&menuItems + entryIdx * 4)[1] = 0x0;
         }
         else {
-          auStack_90[entryIdx * 2] = GUnitDescriptions[6].seg;
+          itemSegs[entryIdx * 2] = GUnitDescriptions[6].seg;
           *(uint16_t *)(&menuItems + entryIdx * 4) = GUnitDescriptions[6].ofs;
         }
         ovr_drawString((char *)"Reroll ability scores, or select the character\'s class.",0x2410,
@@ -1829,8 +1829,8 @@ L_chargen_1661:
           do {
             manage_blitTalkWindow();
             ovr_drawString((char *)"Select the character\'s name.",0x2410,0x10);
-            while (pcStack_e = ovr_uiReadString((char *)0x0,0,6,(char *)0x0,0,0), widSeg = widths,
-                  pcStack_e == (char *)0x0 && widths == 0) {
+            while (inputText = ovr_uiReadString((char *)0x0,0,6,(char *)0x0,0,0), widSeg = widths,
+                  inputText == (char *)0x0 && widths == 0) {
               if (inputCancelled != '\0') {
                 if (UserWantsExit == '\0') goto L_chargen_1661;
                 goto L_chargen_17B2;
@@ -1840,10 +1840,10 @@ L_chargen_1661:
               ;
             }
             ovr_drawString((char *)0x28c75,0x2410,0x10);
-            __fstrncpy((char *)CONCAT22(sheetSeg,sheet),(char *)CONCAT22(widSeg,pcStack_e),
+            __fstrncpy((char *)CONCAT22(sheetSeg,sheet),(char *)CONCAT22(widSeg,inputText),
                        0x27);
             (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)widSeg;
-            handle.ofs = (uint16_t)pcStack_e;
+            handle.ofs = (uint16_t)inputText;
             (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)(widSeg >> 8);
             ovr_stshFree(handle);
             pcVar3 = ovr_stsprintf(msg,(char *)CONCAT22(0x505a,_SS),
