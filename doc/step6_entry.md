@@ -13132,3 +13132,37 @@ No expression changed; the code now reads as
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### land_info and chargen: five names from two files (37,261 -> 37,232)
+land_info and chargen: five names from two files (37,261 -> 37,232)
+
+land_info (ovc47_constrct.c) - `uVar13` / `uVar14` are the two bytes of `_SS`, stored into
+the seg field of three different `entries` records:
+
+    uVar13 = SUB21(_SS,0)                  -> ssLo (5)
+    uVar14 = (undefined1)((uint)_SS >> 8)  -> ssHi (5)
+
+chargen (ovc21_manage.c) - four names, one of them with two roles:
+
+    uVar1   *(uint16_t *)(&GUnitDescriptions[statIdx])  -> descWord     (3)
+    bVar2   uiPickGender(...) result                    -> genderPicked (3)
+    iVar4   the stack entry position, lines 1727..1757  -> entryPos     (9)
+    iVar4   cls*0x94 + race*4, lines 1792..1794         -> nameOfs      (3)
+
+`iVar4` is split by line range because the same slot holds a menu-entry index in the first
+half of the function and the class-record offset in the second.  `in_DX` is left (ABI
+register the callees return a segment in).
+
+VERIFIED in the listing (tmp/make_fn_probe.py chargen, 659 instructions): the class-record
+stride is emitted as
+
+    mov  ah,0
+    mov  dx,148
+    imul dx
+
+i.e. the 0x94 multiply that `nameOfs` names, with no other imul in the function.
+
+  grep_checks 37,261 -> 37,232; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different

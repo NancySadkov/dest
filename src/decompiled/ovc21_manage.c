@@ -1672,15 +1672,16 @@ char_sheet_t * __cdecl16far chargen(void)
 
 {
   undefined1 stk_ff61;   /* stack slot ff61 */
-  uint16_t uVar1;
+  uint16_t descWord;
   far_t entries;
   far_t entries_00;
   far_t dst;
   far_t handle;
   far_t handle_00;
-  bool bVar2;
+  bool genderPicked;
   char *pcVar3;
-  int iVar4;
+  int entryPos;
+  int nameOfs;
   uint dlgResult;
   uint in_DX;
   uint16_t widths;
@@ -1724,15 +1725,15 @@ char_sheet_t * __cdecl16far chargen(void)
         acStack_9d[0] = '\0';
         auStack_90[2] = 0;
         auStack_90[1] = 0;
-        iVar4 = 1;
-        for (statIdx = 0; entryIdx = iVar4 + 1, statIdx < 4; statIdx = statIdx + 1) {
-          acStack_9d[iVar4] = (char)statIdx + '\x02';
-          uVar1 = *(uint16_t *)(&GUnitDescriptions[statIdx]);
+        entryPos = 1;
+        for (statIdx = 0; entryIdx = entryPos + 1, statIdx < 4; statIdx = statIdx + 1) {
+          acStack_9d[entryPos] = (char)statIdx + '\x02';
+          descWord = *(uint16_t *)(&GUnitDescriptions[statIdx]);
           auStack_90[entryIdx * 2] = *(uint16_t *)((uint8_t *)&GUnitDescriptions[statIdx] + 2);
-          *(uint16_t *)(&menuItems + entryIdx * 4) = uVar1;
-          iVar4 = entryIdx;
+          *(uint16_t *)(&menuItems + entryIdx * 4) = descWord;
+          entryPos = entryIdx;
         }
-        acStack_9d[iVar4] = '\x06';
+        acStack_9d[entryPos] = '\x06';
         if (sheet->stats[4] < 9) {
           auStack_90[entryIdx * 2] = 0;
           (&menuItems + entryIdx * 4)[0] = 0x0;
@@ -1742,8 +1743,8 @@ char_sheet_t * __cdecl16far chargen(void)
           auStack_90[entryIdx * 2] = GUnitDescriptions[4].seg;
           *(uint16_t *)(&menuItems + entryIdx * 4) = GUnitDescriptions[4].ofs;
         }
-        entryIdx = iVar4 + 2;
-        acStack_9d[iVar4 + 1] = '\a';
+        entryIdx = entryPos + 2;
+        acStack_9d[entryPos + 1] = '\a';
         if (sheet->stats[1] < 9) {
           auStack_90[entryIdx * 2] = 0;
           (&menuItems + entryIdx * 4)[0] = 0x0;
@@ -1753,8 +1754,8 @@ char_sheet_t * __cdecl16far chargen(void)
           auStack_90[entryIdx * 2] = GUnitDescriptions[5].seg;
           *(uint16_t *)(&menuItems + entryIdx * 4) = GUnitDescriptions[5].ofs;
         }
-        entryIdx = iVar4 + 3;
-        acStack_9d[iVar4 + 2] = '\b';
+        entryIdx = entryPos + 3;
+        acStack_9d[entryPos + 2] = '\b';
         if ((sheet->stats[4] < 9) || (sheet->stats[3] < 9)) {
           auStack_90[entryIdx * 2] = 0;
           (&menuItems + entryIdx * 4)[0] = 0x0;
@@ -1789,9 +1790,9 @@ char_sheet_t * __cdecl16far chargen(void)
       pcVar3 = chargen_switch(CONCAT11(0x24,sheet->cls));
       sheet->classStr = (byte)pcVar3;
       sheet->race = 6;
-      iVar4 = (uint)sheet->cls * 0x94 + (uint)sheet->race * 4;
-      widths = *(uint16_t *)(iVar4 + -4);
-      (sheet->name).seg = *(uint16_t *)(iVar4 + -2);
+      nameOfs = (uint)sheet->cls * 0x94 + (uint)sheet->race * 4;
+      widths = *(uint16_t *)(nameOfs + -4);
+      (sheet->name).seg = *(uint16_t *)(nameOfs + -2);
       (&sheet->name)->ofs = widths;
       sheet->statMask = sheet->statMask | 8;
       sheet->statMask = sheet->statMask | 1;
@@ -1827,9 +1828,9 @@ L_chargen_1661:
         manage_openTalkWindow();
         manage_usesLitoa10((char_sheet_t *)
                            CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
-        bVar2 = uiPickGender((char_sheet_t *)
+        genderPicked = uiPickGender((char_sheet_t *)
                              CONCAT13((char)(sheetSeg >> 8),CONCAT12((char)sheetSeg,sheet)));
-        if (bVar2) {
+        if (genderPicked) {
           do {
             manage_blitTalkWindow();
             ovr_drawString((char *)"Select the character\'s name.",0x2410,0x10);

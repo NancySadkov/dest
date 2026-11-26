@@ -61,8 +61,8 @@ void __cdecl16far land_info(byte tileOffset)
   uint16_t choice;
   undefined1 entryLo;
   undefined1 delayArg;
-  undefined1 uVar13;
-  undefined1 uVar14;
+  undefined1 ssLo;
+  undefined1 ssHi;
   int16_t type;
   far_t hint;
   far_t hint_00;
@@ -125,8 +125,8 @@ void __cdecl16far land_info(byte tileOffset)
     sfxRoll = ovr_randBelow(2,0);
     ovr_play_sfx(CONCAT11((char)(sfxRoll >> 8),(char)sfxRoll + '?'),type,0);
   }
-  uVar13 = SUB21(_SS,0);
-  uVar14 = (undefined1)((uint)_SS >> 8);
+  ssLo = SUB21(_SS,0);
+  ssHi = (undefined1)((uint)_SS >> 8);
   textMsg = ovr_ovc45_findEntityAt
                      (GfxRndSeed,GfxRndSeed2,(uint *)&entityIndex,(char)GfxRndSeed2,
                       (char)&entityIndex);
@@ -213,9 +213,9 @@ void __cdecl16far land_info(byte tileOffset)
       hint.seg = (uint16_t)_SS;
       hint.ofs = (uint16_t)&msg;
       stashOfs = &gfxOfs;
-      (*(uint8_t *)((uint8_t *)&(entries.seg))) = uVar13;
+      (*(uint8_t *)((uint8_t *)&(entries.seg))) = ssLo;
       entries.ofs = (uint16_t)stashOfs;
-      (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = uVar14;
+      (*(uint8_t *)((uint8_t *)&(entries.seg) + 1)) = ssHi;
       ovr_ovc28_compute2(entries,1,hint,0,0);
       itemCode = (char)stashOfs;
     }
@@ -312,9 +312,9 @@ void __cdecl16far land_info(byte tileOffset)
         hint_00.seg = (uint16_t)_SS;
         hint_00.ofs = (uint16_t)&msg;
         stashOfs = &menuItems;
-        (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = uVar13;
+        (*(uint8_t *)((uint8_t *)&(entries_00.seg))) = ssLo;
         entries_00.ofs = (uint16_t)stashOfs;
-        (*(uint8_t *)((uint8_t *)&(entries_00.seg) + 1)) = uVar14;
+        (*(uint8_t *)((uint8_t *)&(entries_00.seg) + 1)) = ssHi;
         ovr_ovc28_compute2(entries_00,menuCount + 1,hint_00,0,0);
         itemCode = (char)stashOfs;
         goldPartyIndex = 0xff;
@@ -334,9 +334,9 @@ void __cdecl16far land_info(byte tileOffset)
           hint_01.seg = retSegB;
           hint_01.ofs = (uint16_t)textMsg;
           stashOfs = &menuLabel;
-          (*(uint8_t *)((uint8_t *)&(entries_01.seg))) = uVar13;
+          (*(uint8_t *)((uint8_t *)&(entries_01.seg))) = ssLo;
           entries_01.ofs = (uint16_t)stashOfs;
-          (*(uint8_t *)((uint8_t *)&(entries_01.seg) + 1)) = uVar14;
+          (*(uint8_t *)((uint8_t *)&(entries_01.seg) + 1)) = ssHi;
           ovr_ovc28_compute2(entries_01,2,hint_01,0,0);
           itemCode = (char)stashOfs;
           if (itemCode == '\x01') {
