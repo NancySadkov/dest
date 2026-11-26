@@ -1746,10 +1746,10 @@ uint __cdecl16far stats_usesAlignUp4(int entityIndex)
 void __cdecl16far stats_setAgentBase(byte agntIndex)
 
 {
-  byte *pbVar1;
+  byte *flagPtr;
   int entityIndex;
-  int iVar2;
-  uint8_t *puVar3;
+  int newX;
+  uint8_t *stashPtr;
   char *text;
   uint16_t widths;
   static char msg[64];   /* DGROUP-backed formatting buffer */
@@ -1758,23 +1758,23 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   
   entityIndex = Agnts[agntIndex].owner;
   agntData = AGNT_WORD(&Agnts[agntIndex], gdata, 0);
-  iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
-  (Entities)[entityIndex].base.x = iVar2;
+  newX = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
+  (Entities)[entityIndex].base.x = newX;
   (Entities)[entityIndex].base.y = GfxRndSeed2;
   (Entities)[entityIndex].base.targetX =
        (Entities)[entityIndex].base.x;
   (Entities)[entityIndex].base.targetY = GfxRndSeed2;
-  pbVar1 = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
-  *pbVar1 = *pbVar1 | 2;
+  flagPtr = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
+  *flagPtr = *flagPtr | 2;
   widths = 0x2410;
-  pbVar1 = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
-  *pbVar1 = *pbVar1 & 0xfa;
+  flagPtr = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
+  *flagPtr = *flagPtr & 0xfa;
   ovr_attact_usesEntities(entityIndex,0,0,(uint16_t)&unitFlags,(uint16_t)_SS,0,0,0,0);
   ovr_alignUp4(GfxRndSeed,GfxRndSeed2,0);
-  puVar3 = ovr_ovc15_usesStshRealloc
+  stashPtr = ovr_ovc15_usesStshRealloc
                      ((char *)*(uint16_t *)(agntData + 0x24),*(uint16_t *)(agntData + 0x26),0,0,0,0,0,0);
   text = ovr_stsprintf(msg,(char *)CONCAT22(0x6406,_SS),
-                       (char *)CONCAT22(puVar3,(char *)0x26510),widths);
+                       (char *)CONCAT22(stashPtr,(char *)0x26510),widths);
   drawString(text,widths,0);
   drawAgntStats((agnt_t far *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
   return;

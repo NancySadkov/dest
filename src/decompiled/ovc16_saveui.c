@@ -12,11 +12,12 @@
 uint16_t __cdecl16far uiReadKey2(void)
 
 {
-  bool bVar1;
-  int iVar2;
-  int iVar3;
-  byte bVar4;
-  uint16_t uVar5;
+  bool firstPass;
+  int startX;
+  int startY;
+  byte miceResult;
+  uint16_t keyAvail;
+  uint16_t key;
   undefined1 extraout_AH;
   int startTick;
   int prevTick;
@@ -25,9 +26,9 @@ uint16_t __cdecl16far uiReadKey2(void)
   ovr_ovr_miceButton0PressStates_entry();
   MiceProcessed = 0;
   ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x2410);
-  iVar3 = MouseY;
-  iVar2 = MouseX;
-  bVar1 = false;
+  startY = MouseY;
+  startX = MouseX;
+  firstPass = false;
   MouseMoved = 0;
   while( true ) {
     if ((*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != prevTick) ||
@@ -37,14 +38,14 @@ uint16_t __cdecl16far uiReadKey2(void)
       ovr_draw_usesBlitLoadRleGfx();
       ovr_ovc13_usesMiceBlitRect();
     }
-    uVar5 = ovr_biosKeyAvail();
-    if ((char)uVar5 != '\0') break;
-    bVar4 = ovr_init2_usesCFGMice((uint16_t *)&MouseX,(uint16_t *)&MouseY,0x2410);
-    if (CONCAT11(extraout_AH,bVar4) == 0) {
-      bVar1 = true;
+    keyAvail = ovr_biosKeyAvail();
+    if ((char)keyAvail != '\0') break;
+    miceResult = ovr_init2_usesCFGMice((uint16_t *)&MouseX,(uint16_t *)&MouseY,0x2410);
+    if (CONCAT11(extraout_AH,miceResult) == 0) {
+      firstPass = true;
     }
-    else if (((bVar1) || (MouseX != iVar2)) || (MouseY != iVar3)) {
-      if (!bVar1) {
+    else if (((firstPass) || (MouseX != startX)) || (MouseY != startY)) {
+      if (!firstPass) {
         MouseMoved = 1;
       }
       ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x2410);
@@ -64,8 +65,8 @@ uint16_t __cdecl16far uiReadKey2(void)
   ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x2410);
   ovr_draw_usesBlitLoadRleGfx2();
   ovr_resetTextBlitCycle();
-  uVar5 = ovr_gameProcessKey();
-  return uVar5;
+  key = ovr_gameProcessKey();
+  return key;
 }
 
 

@@ -14030,3 +14030,32 @@ There ARE no genuine over-declarations to remove in exchange: every entry in the
 longer" list is an artefact of the original's `.ofs` / `.hi` sub-labels (e.g. `IdFORM` and
 `IdFORM.hi` are two original labels for one four-byte far pointer, so the original span is 2
 and ours is 4).
+
+### uiReadKey2 and stats_setAgentBase (36,058 -> 36,016)
+uiReadKey2 and stats_setAgentBase (36,058 -> 36,016)
+
+uiReadKey2 (58 lines)
+    bVar1  15, 30, 44, 46, 47   "first poll since the mouse moved"   -> firstPass  (5)
+    iVar2  16, 29, 46           the MouseX snapshot before the loop  -> startX     (3)
+    iVar3  17, 28, 46           the MouseY snapshot before the loop  -> startY     (3)
+    bVar4  18, 42, 43           ovr_init2_usesCFGMice's result        -> miceResult (3)
+    uVar5  before 67 (40, 41)   ovr_biosKeyAvail's result             -> keyAvail   (3)
+    uVar5  from 67 (67, 68)     ovr_gameProcessKey's result           -> key        (2)
+
+The `uVar5` split is positional, as in ovc25_intelAttackingNotice: everything before line 67
+asks "is a key waiting", and the two uses at 67/68 are the key the function returns.
+
+stats_setAgentBase (36 lines)
+    pbVar1  1749, 1767, 1768, 1770, 1771  &entity + 0x33, set then cleared -> flagPtr  (7)
+    iVar2   1751, 1761, 1762   ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2)   -> newX     (3)
+    puVar3  1752, 1774, 1777   ovr_ovc15_usesStshRealloc's result            -> stashPtr (3)
+
+`flagPtr` is used twice on 1767/1768 and twice more on 1770/1771 (the same `+0x33` byte,
+OR-ed with 2 and then AND-ed with 0xfa), so it is one name for one field, not two.
+
+No expression changed.
+
+  grep_checks 36,058 -> 36,016; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (52 runs, sum|delta| 198,185, mean 125, worst 14,494)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
