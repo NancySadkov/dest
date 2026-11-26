@@ -13058,3 +13058,28 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### attact_usesAlignUp42: the other seven names (37,346 -> 37,323)
+attact_usesAlignUp42: the other seven names, all single-role (37,346 -> 37,323)
+
+  bVar6     destEnt inside a 5-wide window of the seed      -> destNearSeed (5)
+  bVar7     (startX,startY) inside the same window           -> startNearSeed (5)
+  uStack_c  the 5-byte stack scratch zeroed by _fmemset      -> zeroScratch  (2)
+  uVar10    ovr_randBelow(2,0) result                        -> coinFlip     (3)
+  uVar11    ovr_alignUp4(destEnt->base.x,0,0)                -> alignedEntX  (3)
+  uVar3     (uint32_t)GLeaderSheets[...], then read at +0x89 -> sheetPtr     (3)
+  uVar4     DAT_2000_d190, assigned once and never read      -> removed
+
+`uVar4` was a genuine dead store: the declaration plus one assignment and no read, so both
+lines are gone.  The two flags come from the same shape of test applied to two different
+points, which is why they get two names rather than one:
+
+    if (destEnt->x outside seed-2..seed+1 || peVar14->base.y != seed2) destNearSeed = false
+    if (startX  outside seed-2..seed+1 || startY != seed2)             startNearSeed = false
+
+No expression changed.
+
+  grep_checks 37,346 -> 37,323; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different

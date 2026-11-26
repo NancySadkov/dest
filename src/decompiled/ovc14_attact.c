@@ -700,11 +700,10 @@ void __cdecl16far attact_usesAlignUp42(void)
 {
   uint16_t *yPtr;
   uint8_t *factionPtr;
-  uint32_t uVar3;
-  uint16_t uVar4;
+  uint32_t sheetPtr;
   char ok;
-  bool bVar6;
-  bool bVar7;
+  bool destNearSeed;
+  bool startNearSeed;
   uint reportIdx;
   uint alignedDest;
   uint ownerByte;
@@ -714,8 +713,8 @@ void __cdecl16far attact_usesAlignUp42(void)
   uint alignedRec;
   uint alignedX;
   undefined1 valHi;
-  uint16_t uVar10;
-  uint uVar11;
+  uint16_t coinFlip;
+  uint alignedEntX;
   char *pcVar12;
   entity_t *peVar14;
   uint16_t index;
@@ -725,7 +724,7 @@ void __cdecl16far attact_usesAlignUp42(void)
   uint8_t reported;
   int targetSrc;
   int dySign;
-  uint16_t uStack_c;   /* [BP-0xc], cleared by _fmemset at 3f0b:1092 */
+  uint16_t zeroScratch;   /* [BP-0xc], cleared by _fmemset at 3f0b:1092 */
   int dxSign;
   undefined1 animByte;
   uint8_t reportedUnits;
@@ -736,7 +735,7 @@ void __cdecl16far attact_usesAlignUp42(void)
   
   func_0x0004f735(0x3f0b);
   reported = 0x0;
-  _fmemset(MK_FP(_SS, &uStack_c), 0, 5);
+  _fmemset(MK_FP(_SS, &zeroScratch), 0, 5);
   GGameState = 0x3f;
   if (DebugVerbose != false) {
     printf("%d %d %d \r");
@@ -746,7 +745,6 @@ void __cdecl16far attact_usesAlignUp42(void)
   debugEmptyCellCount = 0;
   index = 0;
   do {
-    uVar4 = DAT_2000_d190;
     if (EntityCount <= index) {
       GGameState = 0x3c;
       if (DebugVerbose != false) {
@@ -829,8 +827,8 @@ void __cdecl16far attact_usesAlignUp42(void)
         dySign = ovr_ovc07_signum((peVar14->base).destY - (peVar14->base).y);
         if (dxSign != 0) {
           segArg = 0x2337;
-          uVar10 = ovr_randBelow(2,0);
-          if ((char)uVar10 != '\0') {
+          coinFlip = ovr_randBelow(2,0);
+          if ((char)coinFlip != '\0') {
             ok = sub_OVC21_manage_c_23C2(0x2337,startX,startY,'\x02' - (char)dxSign,animByte,
                                     flag4000);
             if (ok == '\0') {
@@ -898,14 +896,14 @@ L_attact_3f0b_1082_1477:
           defByte = 0xff;
         }
         else {
-          uVar3 = (uint32_t)GLeaderSheets[*(byte *)((int)&(peVar14->base).entity + 3)];
-          defByte = *(byte *)((int)uVar3 + 0x89);
+          sheetPtr = (uint32_t)GLeaderSheets[*(byte *)((int)&(peVar14->base).entity + 3)];
+          defByte = *(byte *)((int)sheetPtr + 0x89);
         }
         if (defByte != 0xff) {
           for (recIdx = 0; recIdx < SquareRecCount; recIdx = recIdx + 1) {
             alignedX = ovr_alignUp4(*(int *)(recIdx * 0x13),0,0);
-            uVar11 = ovr_alignUp4((destEnt->base).x,0,0);
-            if ((alignedX == uVar11) && (*(uint16_t *)((uint8_t *)&SquareRecs[recIdx] + 2) == (peVar14->base).y)) {
+            alignedEntX = ovr_alignUp4((destEnt->base).x,0,0);
+            if ((alignedX == alignedEntX) && (*(uint16_t *)((uint8_t *)&SquareRecs[recIdx] + 2) == (peVar14->base).y)) {
               func_0x0004f930(0x2379,recIdx * 0x13 + (uint)defByte + 0xe,0x17f8);
               if (*(uint16_t *)((uint8_t *)&SquareRecs[recIdx] + 2) == GfxRndSeed2) {
                 alignedRec = ovr_alignUp4(*(int *)(recIdx * 0x13),0,0);
@@ -923,21 +921,21 @@ L_attact_3f0b_1082_1477:
       if (AgntFlag1 != false) {
         if ((((destEnt->base).x < GfxRndSeed - 2U) || (GfxRndSeed + 1U < (destEnt->base).x)) ||
            ((peVar14->base).y != GfxRndSeed2)) {
-          bVar6 = false;
+          destNearSeed = false;
         }
         else {
-          bVar6 = true;
+          destNearSeed = true;
         }
         if (((startX < GfxRndSeed - 2U) || (GfxRndSeed + 1U < startX)) ||
            (GfxRndSeed2 != startY)) {
-          bVar7 = false;
+          startNearSeed = false;
         }
         else {
-          bVar7 = true;
+          startNearSeed = true;
         }
-        if (bVar7 || bVar6) {
-          if (bVar7) {
-            if (bVar6) {
+        if (startNearSeed || destNearSeed) {
+          if (startNearSeed) {
+            if (destNearSeed) {
               for (rowsLeft = manage_usesLitoa103(); rowsLeft != '\0'; rowsLeft = rowsLeft + -1) {
                 if (((peVar14->base).target & 1) == 0) {
                   targetSrc = 0;
