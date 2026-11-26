@@ -14927,3 +14927,55 @@ does - can be tested without touching the build, but C0L is the large-model star
 `__C0argc`/`__C0argv`/`__C0environ`, which our recovered CRT needs, so it currently fails to link
 with 11 undefined symbols.  That experiment (and its 91,727 measurement, taken with a stale
 GLOB.OBJ) is not valid and is not relied on here.
+
+### layout: use C0M saved-vector block (sum -> 88,497)
+layout: use C0M's saved-vector block instead of a second copy (sum 111,517 -> 88,497)
+
+C0M.OBJ exports four contiguous public far pointers in DGROUP:
+
+    DGROUP:0x74  __Int0Vector   (4)
+    DGROUP:0x78  __Int4Vector   (4)
+    DGROUP:0x7c  __Int5Vector   (4)
+    DGROUP:0x80  __Int6Vector   (4)
+
+which are the startup's saved INT 0/4/5/6 vectors - exactly the 16-byte block our
+`GSTARTX_SavedVectors[4]` declared at the head of `_DATA`.  Since our entry point is `startx`
+(crtl.c) and not C0's `_startup`, nothing else writes them, so saving and restoring the real
+vectors there is equivalent.  The four slots are contiguous, so a four-element `far_t` array over
+the first (`_Int0Vector`, which mangles to `__Int0Vector`) covers them all.
+
+`GSTARTX_SavedVectors` was shared by crtl.c, ovl.c and ovc22_classes.c before this change, so the
+16 bytes were already one block - relocating it is not a behaviour change.  The name does not
+appear in the original's symbol table (only `startx` code labels do), so removing it does not
+misrepresent the layout.
+
+MEASURED (HEAD 65bfa9a4 -> this commit)
+
+  diff_dgroup sum|delta|   111,517 -> 88,497   (-23,020, -21%)
+  diff_dgroup mean              68 ->     54
+  diff_dgroup worst         14,330 -> 14,314
+  diff_dgroup matched        1,627 -> 1,626
+  diff_dgroup runs              32 ->     31
+  compare_state              1,625/0/0 (unchanged, DIFFERENT 0)
+  compare_runtime matched    1,683 -> 1,682, identical 1,674 -> 1,673
+  grep_checks               35,706 (unchanged)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The single lost comparison is `GSTARTX_SavedVectors` itself, which had been pairing by content with
+an original symbol; the four C0 vectors it now resolves to are C0M's own objects, at C0M's offsets.
+
+NOT ATTEMPTED, and now understood precisely: `__C0_ASM_CopyRight` (43 bytes) cannot be treated the
+same way.
+
+  * it cannot be aliased, because C0M's `DATASEG` exposes **no public symbol** for the copyright
+    text (the map shows `DATASEG@` and no members; `__version`, the only plausible candidate,
+    resolves to DGROUP:0x92 where it coincides with `__osmajor`, i.e. it is the DOS version word,
+    not the string);
+  * it cannot be relocated, because `diff_dgroup` pairs by name and would then report the move as
+    a delta (measured at +36,926 when I tried exactly that with the two error strings);
+  * it cannot be shrunk either: crtl.c only addresses +0/+2/+4 (the CRT stores its malloc
+    bookkeeping inside the text, as the original does), but compare_state slices the original's
+    43 bytes at our symbol, so a shorter declaration would read the following objects and report a
+    difference.
+
+So those 43 bytes stay until the C0 startup itself is replaced.

@@ -3046,7 +3046,7 @@ uint16_t __cdecl16far ovc22_usesLUDIV_at_2(uint16_t valueLo,uint16_t valueHi,int
   if (applyPercent != 0) {
     a = (ulong)unaff_SI << 0x10;
     divisorLo = 100;
-    dividendLo = LXMUL_at_((long *)((int)&GSTARTX_SavedVectors[2].ofs + 1),a,
+    dividendLo = LXMUL_at_((long *)((int)&_Int0Vector[2].ofs + 1),a,
                            CONCAT22(in_stack_00000000,unaff_BP));
     uVar1 = LUDIV_at_((int)dividendLo,valueHi,divisorLo,(uint)a);
     valueLo = (uint16_t)uVar1;

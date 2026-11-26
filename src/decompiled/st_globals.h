@@ -88,7 +88,9 @@ extern uint32_t _DATA;
 extern byte __C0_ASM_CopyRight[43];
 
 
-extern far_t GSTARTX_SavedVectors[4];
+/* C0M's own saved INT 0/4/5/6 vectors, DGROUP:0x74..0x84.  The four 4-byte slots are
+   contiguous, so one array over the first covers them all. */
+extern far_t _Int0Vector[4];
 extern uint16_t __C0argc;
 extern uint16_t __C0argv;
 extern uint16_t __C0argv_2;
