@@ -14180,3 +14180,42 @@ MEASURED (HEAD 9cf744b6 -> this commit)
 The runtime change is incidental, not the point of the commit: `_doserrno` left the
 DIFFERENT list (it now reads 0 on both sides).  The eight remaining entries plus
 `_StartTime` are the CRT/timestamp state recorded in doc/step6_entry.md.
+
+### layout: the +152 prefix is a C0M.OBJ content difference
+layout: the +152 prefix is a C0M.OBJ content difference, not a segment-ordering problem
+
+Comparing the live DGROUP heads byte for byte settles what the prefix is:
+
+    0x0000  both: 00 00 00 00                      (_DATA's 4-byte prologue)
+    0x0004  both: "Borland C++ - Copyright 1991 Borland Intl.\0"   (43 bytes)
+    0x002f  ours: 00 "Null pointer assignment\r\n" "Divide error\r\n" "Abnormal ..."
+            orig:    "Divide error\r\n" "Abnormal program termination\r\n"
+
+So we carry a 25-byte "Null pointer assignment\r\n" string the original does not have at that
+position, and from there the two blocks diverge further: the original's string run ends at
+0x005b followed by 57 bytes of saved vectors and startup words up to the string block at
+0x0094, while ours runs to roughly 0x012e.
+
+**"Null pointer assignment" does not appear anywhere in our tree.** It is Turbo C's own C0M
+startup data, emitted by the toolchain's C0M.OBJ.
+
+That rules out the "reorder the link so _DATA comes first" theory on its own: reordering
+cannot remove bytes that C0M contributes, and it explains the earlier measured failure -
+
+    C0M.OBJ linked last  ->  Error: Group DGROUP exceeds 64K
+
+because the reorder pulls the far arrays into DGROUP without removing the C0 data.
+
+The remaining lever is therefore to *replace* the C0 startup data - provide our own
+`_DATA` contents for the startup and exclude C0M.OBJ, or supply the original's exact 148-byte
+header block and suppress the toolchain's.  That changes the entry-point path the whole image
+runs through, and the objective records that it needs the user's go-ahead before being
+attempted.  It has NOT been attempted.
+
+What the layout axis has achieved without it:
+
+    start of session   235,338 sum|delta|, 64 runs
+    now                193,093 sum|delta|, 47 runs
+
+all from data fidelity (the 0x5906 object, SeasonPalettes, six 1-byte tables, five string
+runs), with no size shortfalls or surpluses left to correct.
