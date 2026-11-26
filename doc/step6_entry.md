@@ -14407,3 +14407,53 @@ strings individually at their real lengths and to recompute crtl.c's
 \GTxtFiles[gi].ofs\ from the initialiser's own original offset
 (\&s_txtFileNames[0] + (origOfs - 0x82B4)\), which needs no extra DGROUP data.  That is the
 next measured step, not a one-line move.
+
+### layout+runtime: the 34 help-text filenames at real lengths
+layout+runtime: model the 34 help-text filenames at their real lengths
+
+The original:
+    0x822c  GTxtFiles        136 bytes (34 far pointers)
+    0x82b4  help0.txt ...    the 34 filename strings, 355 bytes:
+                              14 x 10-byte (help0..7, text1..6)
+                               5 x 11-byte (house1..5)
+                               5 x 10-byte (hung1..5)
+                              10 x 11-byte (incom1..5, cflow1..5)
+
+We had a rectangular `s_txtFileNames[34][11]` (374 bytes) declared BEFORE GTxtFiles, plus a
+separate `s_house1_txt` that duplicated one entry.  Both the order and the shape were wrong.
+
+That was not only a layout error but a **functional one**: `crtl.c` did
+
+    GTxtFiles[gi].ofs = (uint16_t)&s_txtFileNames[gi];
+
+which assumes an 11-byte stride.  Fourteen of the entries are 10 bytes, so from the first
+10-byte entry onward every pointer was off, and the rebuilt game would open the wrong help
+file.  `fixFarTable` leaves `.ofs` untouched, so each entry still carries the original's
+link-time offset and the correct address is
+
+    &s_help0_txt_2410_82b4[0] + (origOfs - 0x82B4)
+
+which needs no extra DGROUP data.
+
+MEASURED (HEAD d2bfe352 -> this commit)
+
+  compare_runtime matched        1,633 -> 1,666   (+33)
+  compare_runtime identical      1,624 -> 1,657   (+33)
+  compare_runtime different          9 -> 9
+  diff_dgroup matched            1,583 -> 1,615   (+32)
+  diff_dgroup sum|delta|       198,159 -> 219,813
+  diff_dgroup runs                  45 -> 45
+  grep_checks                   35,704 -> 35,737  (+33)
+  compare_state                1,627/0/0 unchanged
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The +482 / -140 / -225 oscillation at 0x80f0 is **gone**; the region is now uniformly -357,
+i.e. the remaining gap is upstream (a -155 step at 0x7e65 and a -47 at 0x7aa5) rather than
+inside this run.  `sum|delta|` rose for the usual two reasons: 32 more symbols are now
+measured, and each sits at that upstream -357.  `grep_checks` rose because 34 declarations of
+the form `char name[10] = "help0.txt";` are now in the char-string class - the readable form,
+which I chose over a hex byte array deliberately.
+
+Left as-is: `bolt12.fli` (0x8417) and `save.999` (0x8422) follow these 34 in the original.
+They are still carried as code literals in ovc48/ovc49 plus stmiss blob entries, so this
+change leaves a 21-byte gap at the end of the run rather than duplicating them.

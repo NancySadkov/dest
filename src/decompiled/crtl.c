@@ -168,9 +168,13 @@ void st_fix_far_tables(void)
   fixFarTable(PersonWordPtrs, 2);
   fixFarTable(GTxtFiles, 34);
   {
+    /* The 34 filenames are 10 or 11 bytes each, so the entry stride is not constant.
+       `fixFarTable` leaves .ofs alone, so each entry still holds the original's link-time
+       offset and the address is the block base plus that offset relative to 0x82B4. */
     uint16_t gi;
     for (gi = 0; gi < 34; gi++) {
-      GTxtFiles[gi].ofs = (uint16_t)&s_txtFileNames[gi];
+      uint16_t origOfs = GTxtFiles[gi].ofs;
+      GTxtFiles[gi].ofs = (uint16_t)(&s_help0_txt_2410_82b4[0]) + (origOfs - 0x82B4);
     }
   }
   fixFarTable(StatsTabPtrs, 9);

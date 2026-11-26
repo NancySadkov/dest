@@ -1,7 +1,7 @@
 /* Global data recovered from the original image. */
 #ifndef ST_GLOBALS_H
 #define ST_GLOBALS_H
-extern char s_txtFileNames[34][11];
+
 extern uint32_t DriverEntry;
 extern uint32_t BDA_TickCount;
 extern undefined1 bda_midnight;
@@ -1749,7 +1749,7 @@ extern char s_new_owner[];
 extern char s_get_rid_of_s_permanently_1c0b[];
 extern char s_ld_experience_obtained_l_a1d8[];
 extern far_t GTxtFiles[34];
-extern char s_house1_txt[];
+
 extern brect_t agentClipRect;
 extern char s_s_is_no_longer_paralyzed[];
 extern char s_s_breaks_free_of_the_web[];
@@ -2304,3 +2304,39 @@ extern undefined1 s_Sound_Blaster__1_2410_6071[];
 /* restored from audit/dgroup_2410.bin */
 extern char s_of_nobility_2410_6cb7[42];
 extern char s_of_your_2410_6ce1[11];
+
+/* help-text filenames, real lengths */
+extern char s_help0_txt_2410_82b4[10];
+extern char s_help1_txt_2410_82be[10];
+extern char s_help2_txt_2410_82c8[10];
+extern char s_help3_txt_2410_82d2[10];
+extern char s_help4_txt_2410_82dc[10];
+extern char s_help5_txt_2410_82e6[10];
+extern char s_help6_txt_2410_82f0[10];
+extern char s_help7_txt_2410_82fa[10];
+extern char s_text1_txt_2410_8304[10];
+extern char s_text2_txt_2410_830e[10];
+extern char s_text3_txt_2410_8318[10];
+extern char s_text4_txt_2410_8322[10];
+extern char s_text5_txt_2410_832c[10];
+extern char s_text6_txt_2410_8336[10];
+extern char s_house1_txt_2410_8340[11];
+extern char s_house2_txt_2410_834b[11];
+extern char s_house3_txt_2410_8356[11];
+extern char s_house4_txt_2410_8361[11];
+extern char s_house5_txt_2410_836c[11];
+extern char s_hung1_txt_2410_8377[10];
+extern char s_hung2_txt_2410_8381[10];
+extern char s_hung3_txt_2410_838b[10];
+extern char s_hung4_txt_2410_8395[10];
+extern char s_hung5_txt_2410_839f[10];
+extern char s_incom1_txt_2410_83a9[11];
+extern char s_incom2_txt_2410_83b4[11];
+extern char s_incom3_txt_2410_83bf[11];
+extern char s_incom4_txt_2410_83ca[11];
+extern char s_incom5_txt_2410_83d5[11];
+extern char s_cflow1_txt_2410_83e0[11];
+extern char s_cflow2_txt_2410_83eb[11];
+extern char s_cflow3_txt_2410_83f6[11];
+extern char s_cflow4_txt_2410_8401[11];
+extern char s_cflow5_txt_2410_840c[11];
