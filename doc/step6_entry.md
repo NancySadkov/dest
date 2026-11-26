@@ -9824,3 +9824,34 @@ textY, fontOfs, diffValue, dsSegment, xOffset, difficulty, fontSegment, leaderCo
   grep_checks 39,839 -> 39,810; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### constr_usesBlitGfxRect2: four multi-role temporaries split (39,810 -> 39,728)
+constr_usesBlitGfxRect2: split four multi-role temporaries, rename packWord (39,810 -> 39,728)
+
+  uVar4  constr_getFlagsAtOffset result         -> tileFlags   (7 uses)
+  uVar4  constr_compute1 result                 -> piece       (19)
+  uVar4  constr_compute2 result                 -> fillPiece   (4)
+  uVar4  constr_usesGMapFlags result            -> mapFlagRes  (2)
+
+  bVar3  the flags word's low byte              -> flagsLo     (10)
+  bVar3  constr_setHighlightAtOffset result     -> highlightLo (4)
+
+  iVar5  smoothTL/TR - rowBase                  -> textDy      (3)
+  iVar5  bldIndex*0xc + squareSide*4            -> sideOfs     (16)
+
+  uVar8  the CONCAT22/<<0x10 packing temp       -> packWord    (13)
+
+Renaming and splitting only; no expression changed.  The declarations were replaced inside
+this function only - a whole-file `.replace` would have hit the same names in
+constr_usesScreenOriginY earlier in the file, which the compiler caught on the first attempt
+(`Undefined symbol 'uVar4'`) before anything was committed.
+
+Left alone in this function, both deliberate:
+  * line 1236/1251/1253 `*(int *)(sideOfs + 0x4230)` reads a DGROUP table through the
+    original's literal offset - our DGROUP layout differs, so this is the same base-symbol
+    problem as `_backdropIndex` and `0xeb` in manage_usesLitoa10.
+  * `((char *)0x28ed0 + sideOfs)` / `0x28ed2` are the same table again, as literal offsets.
+
+  grep_checks 39,810 -> 39,728; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
