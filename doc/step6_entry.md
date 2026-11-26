@@ -11192,3 +11192,33 @@ function in ovc17_stash.c.  The rename was reverted; the `Var` suffix stays.
   compare_state 1,627/0/0
   diff_dgroup 1,450/1,868, 71 delta runs, sum|delta| 276,979 (was 295,448)
   compare_runtime 1,605 identical / 10 different (was 1,604)
+
+### ovc38_usesStshAlloc: far stash block (38,385 -> 38,341)
+ovc38_usesStshAlloc: the stash block is far, and GLeaderSheets read as a near table (38,385 -> 38,341)
+
+    pvStack_8 = ovr_stshAlloc(0x18);      /* ofs in the return, seg in DX */
+    entries.seg = in_DX;
+    ... *(int *)((int)pvStack_8 + 0x14)   /* DS-relative - wrong segment */
+
+The 0x18-byte block lives in the stash segment, so all eight reads through it were
+DS-relative.  `blk = MK_FP(blkSeg,(uint16_t)pvStack_8)` is built once and every read
+becomes `*(T far *)(blk + N)`; `slotPtr` becomes `uint16_t far *`.
+
+Verified in the listing:
+
+    les  bx,dword ptr [bp-36]
+    cmp  word ptr es:[bx+20],0        ; block + 0x14
+    jne  short @1@226
+    cmp  word ptr es:[bx+22],0        ; + 0x16
+
+`les` sites 4.
+
+The leader-sheet argument was the near-table form again
+(`(char_sheet_t *)*(uint16_t *)((uint)leaderIdx * 4)` and the `[1]` twin), now
+far_ofs_u32 / SEG_OF of `GLeaderSheets[leaderIdx]`.
+
+Names: slotIdx, slotWord, slotPtr, scanResult, nameBlk, nameLen.
+
+  grep_checks 38,385 -> 38,341; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
+  compare_runtime 1,605 identical / 10 different
