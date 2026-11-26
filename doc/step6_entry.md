@@ -15253,3 +15253,79 @@ The original's band is `s_magic_mill` 12, `s_armory` 8, then this string, then
 
 The band 0x6601..0x6f63 is now a uniform +16 instead of +1239/-30, which is what the previous
 report claimed but had not achieved.
+
+### second runtime sample point + the double-fixup bug it exposed
+second runtime sample point + the double-fixup bug it exposed
+
+## Tooling: the sample point now works
+
+`tmp/dump_at.py` could already target any routine present in both images, but its fallback lookup
+required the literal `idle ` marker, so a symbol the build actually references was reported as
+"not in REBUILT.MAP".  Making that group optional is what enables ordinary functions.
+
+`python tmp/dump_at.py init_game` then runs both images and writes tmp/dgrun2_{orig,ours}/DGR.BIN,
+so compare_runtime samples DGROUP **after** `_INIT_CFG`.  (`init_game` is resident at 3381:0579 in
+the original; its file offset is the one the tool documents as verified.)
+
+## The bug it found: st_fix_far_tables() ran twice
+
+`crtl.c:433` calls `st_fix_far_tables()` immediately before `main(...)`, because `startx` is the
+entry point.  `main.c` then called it again as its first statement.  The GTxtFiles loop is not
+idempotent - it computes each entry from the value it finds there:
+
+    first  pass:  base + 0
+    second pass:  (base + 0) + (base + 0 - 0x82B4) = base - 6   for our layout
+
+and the init_game sample measured exactly that: our filenames live at 0x82ae but GTxtFiles[0].ofs
+held 0x82a8.  That is a functional defect, not a measurement artefact - the game would have opened
+a path six bytes before "help0.txt".
+
+The original's `main` (1301:000c) begins with the argv handling, not with table repair, so the
+duplicate call is removed.  The GTxtFiles loop is also rewritten to walk the filenames
+(`acc += strlen(acc) + 1`) instead of trusting the initialiser, so it is idempotent if it is ever
+called again; that needs no data in DGROUP.
+
+MEASURED, same build, two sample points:
+
+    main entry    symbols matched 1,682, identical 1,673, DIFFERENT  9
+    init_game     symbols matched 1,682, identical 1,673, DIFFERENT  9   <- was 1,672 / 10
+
+So there is now **no DGROUP divergence past `_INIT_CFG`** at this sample point: the 9 differences are
+the same CRT/timestamp state seen at main entry (`_StartTime`, `_brklvl`, `_exitbuf`,
+`_exitfopen`, `_exitopen`, `_streams`, `_video`, `brk_normalize_xsize`, `__setargv_SavedReturn`).
+Before the fix the extra one was GTxtFiles.
+
+## Also: a misplacement I introduced earlier, now corrected
+
+Commit 2e1f7623 put `s_Building_is_now_2410_690b` (46 bytes) before `xOfsTable` in st_globals5.c,
+assuming that anchor line was DGROUP:0x690b.  Source order is link order and `xOfsTable` is at
+0x6e00, so the string landed at 0x6de2 - 1239 bytes late.  diff_dgroup showed
+`+1239 from s_Building_is_now..._690b` then `-1269 from s_empty_2410_6939`.
+
+The original's band is s_magic_mill 12, s_armory 8, this string, s_empty_2410_6939; our source has
+`s_armory` (line 1549) immediately followed by `s_empty_2410_6939`, so it belongs between them:
+
+    diff_dgroup sum|delta|   88,497 -> 86,658
+    diff_dgroup runs              31 -> 28
+    diff_dgroup mean              54 -> 53
+    diff_dgroup matched        1,626 -> 1,626
+    compare_state              1,625/0/0 (unchanged)
+    grep_checks               35,567 (unchanged)
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+
+## unresolved.tsv: reviewed, all 19 entries stand
+
+  * 8 `func_0x...` VROOMM funref targets resolve into the *interior* of a known overlay function
+    (`ovc26_usesFillGrid +0x4C`, `ovc26_usesStExit +0x120/+0x1C6/+0x3C1`, etc.); the overlay
+    manager patches them at load time, and the original's own symbol table has no label there, so
+    there is nothing to recover beyond the containing function + offset, which the entries record.
+  * 2 OVERLAY.LIB EMS/EXT trampolines and `EXT_FUN_8000_f2fa` - VROOMM/EMS runtime.
+  * `func_0x0007ffe0` - `push cs; call 0`; 299 call sites verified by use, only the numeric
+    segment (supplied by the overlay loader) is unrecovered.
+  * `halt_baddata` - Ghidra "Bad instruction - Truncating control flow" at 17 sites, i.e. data
+    inside the code segment; no game logic to recover.
+  * `_emu`, `_fperror`, `F_FTOL@` - Borland floating-point runtime data/helpers.
+  * `smm_restore_state`, `ovr_season_usesGPromotable_e11a`, `swi` - CRT/overlay helpers; `swi`
+    performs the INT itself, only its register outputs are unrecovered.
+
+No entry can be closed by data recovery; they are runtime-owned or non-code.

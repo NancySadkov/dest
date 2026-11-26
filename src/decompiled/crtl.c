@@ -168,13 +168,17 @@ void st_fix_far_tables(void)
   fixFarTable(PersonWordPtrs, 2);
   fixFarTable(GTxtFiles, 34);
   {
-    /* The 34 filenames are 10 or 11 bytes each, so the entry stride is not constant.
-       `fixFarTable` leaves .ofs alone, so each entry still holds the original's link-time
-       offset and the address is the block base plus that offset relative to 0x82B4. */
+    /* The 34 filenames are 10 or 11 bytes each, so the stride is not constant and cannot be
+       derived from a single stride factor.  Walk the block instead of reading the initialiser
+       back: the initialiser is not guaranteed to still hold the original's link-time offset, and
+       an earlier version of this loop produced base - 6 because of exactly that.
+       Lengths in declaration order (help0-7, text1-6, house1-5, hung1-5, incom1-5, cflow1-5)
+       sum to 355, the original span 0x82b4..0x842c. */
     uint16_t gi;
+    uint16_t acc = (uint16_t)(&s_help0_txt_2410_82b4[0]);
     for (gi = 0; gi < 34; gi++) {
-      uint16_t origOfs = GTxtFiles[gi].ofs;
-      GTxtFiles[gi].ofs = (uint16_t)(&s_help0_txt_2410_82b4[0]) + (origOfs - 0x82B4);
+      GTxtFiles[gi].ofs = acc;
+      acc = acc + (uint16_t)strlen((char *)acc) + 1;
     }
   }
   fixFarTable(StatsTabPtrs, 9);
