@@ -12844,3 +12844,68 @@ What is missing, measured with tmp/tail_gap.py (text spans in 0x606F..0x7A00):
 So the coupled change needs the missing-text pass first (the same declare-and-dedupe
 treatment applied to 0x606F..0x648E), and only then does removing the duplicates pay off.
 Doing the two halves in the other order is what these measurements rule out.
+
+### layout: three tail variants measured, all net-negative
+layout: three tail variants measured, all net-negative; the shortfall is a move, not an add
+
+Measured this turn, each reverted, tree left at the 6f3da3cf baseline (grep 37,415,
+diff_dgroup 1,569/1,805, 74 runs, sum|delta| 251,810).
+
+## 1. What is actually undeclared in 0x606F..0xC000
+
+tmp/missing_tail.py (presence = our name key, or a generated `_2410_XXXX` matching the
+offset): **125 symbols, 4,020 bytes** are not declared by us.  tmp/declare_tail.py
+declares them all in front of the first existing declaration with a larger offset,
+keeping every comment/blank line, and replaces 43 matching code literals with the symbols.
+
+    matched    1,569 -> 1,629   (+60)
+    sum|delta| 251,810 -> 824,430  (+572,620)
+
+Reverted.  The tail is only ~1,100 bytes short (the negative drift after 0x606F measured in
+the duplicate-deleted state), so declaring 4,020 bytes of "missing" symbols overshoots by
+about 2,900 - i.e. **~2,900 of those bytes already exist elsewhere in our image** (module
+literals and stmiss.c's blob).  Adding them duplicates; they have to be *moved*.
+
+## 2. The coupled change (duplicates deleted + sound run migrated + interleaved)
+
+    matched    1,569 -> 1,576   (+7)
+    sum|delta| 251,810 -> 289,150  (+37,340)
+
+Reverted.  The mid-region becomes correct (deltas +61/+59/+57/+55/+53 across 0x5F00..0x6000
+instead of oscillating by +/-120..250), but the tail then runs -31..-203 and keeps going.
+
+## 3. NEW TOOL: tmp/size_deficit.py - per-symbol size comparison
+
+For every original symbol we pair, compare the original's span with our symbol's span
+(deduplicating our map's aliases first).  Result:
+
+    paired symbols with a size difference : 84
+    of which ours is shorter              : 46, total -573 bytes
+
+    -134  0x693b SeasonPalettes             orig 135  ours   1
+     -55  0x6e00 xOfsTable                  orig  56  ours   1
+     -46  0x6e48 growthTable                orig  47  ours   1
+     -34  0x623b s_leather_armor_2410_623b  orig  48  ours  14
+     -32  0x0440 BlitRects                  orig  82  ours  50
+     -30  0x611f s_empty                    orig  33  ours   3
+     -20  0x04b8 MiceFlag                   orig  22  ours   2
+     -20  0x26e1 SeedHi                    orig  22  ours   2
+     -20  0x62a1 s_plate_and_shield_2410_62a1  orig 37 ours 17
+    ...
+
+So only ~573 bytes of the shortfall are *under-sized declarations* (several of which are
+almost certainly aliasing artifacts of adjacent symbols rather than real defects).  The
+remaining ~500 is missing symbols whose bytes are already present somewhere else.
+
+## What this rules out, and what is left
+
+  * enumerating undeclared names and declaring them: measured +572,620 - the bytes exist;
+  * deleting the duplicates first: measured +37,340 - the tail is then short;
+  * any partial combination, because the two halves are ~1,100 bytes each and cancel only
+    when both are complete.
+
+The remaining sound approach is per-run **move** semantics: for one contiguous original
+run at a time, declare it at its offset *and* delete the specific copy already in our image
+(module literal or the stmiss blob entry), then measure.  That is what made 0x5100..0x5EA3
+and the 0x7AF9/0x7FB5/0x80F0 runs work earlier; the runs that failed are the ones where the
+copy could not be located (`5. Roland`, the 0x5F72 block before the duplicates were found).
