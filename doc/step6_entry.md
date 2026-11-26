@@ -13166,3 +13166,35 @@ i.e. the 0x94 multiply that `nameOfs` names, with no other imul in the function.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### init_cfg: seven names, one two-phase (37,232 -> 37,195)
+init_cfg: seven names, one two-phase (37,232 -> 37,195)
+
+  bVar1   set false at 194, true at 249, tested at 262       -> needWrite    (4)
+  uVar2   the char read from the cfg, sometimes uppercased    -> cfgChar      (7)
+  iVar3   265..277, the *write* handle                        -> writeHnd    (10)
+  iVar3   278..279, the close() result                        -> closeResult (3)
+  iVar4   write() return for CFG_Sfx                          -> wroteSfx    (3)
+  iVar5   write() return for the first CRLF                   -> wroteCrlf1  (3)
+  iVar6   write() return for CFG_Irq                          -> wroteIrq    (3)
+  iVar7   write() return for the second CRLF                  -> wroteCrlf2  (3)
+
+`fh` already holds the handle used by the read phase (203..261), so the write-phase handle
+needed its own name rather than reusing it - the two are different file descriptors.
+
+Line 278 carries both iVar3 roles and was split explicitly rather than by range:
+
+    iVar3 = close(iVar3);   ->   closeResult = close(writeHnd);
+
+The first attempt stopped the writeHnd range at 273 and left `write(iVar3, ...)` at
+274..277 unmapped; the build-time assertion in the script caught it (`AssertionError:
+iVar3`) before the file was written.
+
+`in_DX` is left: ABI register the callees return the segment in.
+
+No expression changed.
+
+  grep_checks 37,232 -> 37,195; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different

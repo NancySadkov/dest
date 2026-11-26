@@ -172,16 +172,17 @@ void __cdecl16far init_cfg_mice(void)
 void __cdecl16far init_cfg(void)
 
 {
-  bool bVar1;
-  uint8_t uVar2;
+  bool needWrite;
+  uint8_t cfgChar;
   uint16_t cfgPath;
   uint16_t fh;
   char *path;
-  int iVar3;
-  int iVar4;
-  int iVar5;
-  int iVar6;
-  int iVar7;
+  int writeHnd;
+  int closeResult;
+  int wroteSfx;
+  int wroteCrlf1;
+  int wroteIrq;
+  int wroteCrlf2;
   uint16_t in_DX;
   char lbuf [80];
   /* static: write() takes a near buffer (BC30 io.h, _FAR is empty for the
@@ -191,7 +192,7 @@ void __cdecl16far init_cfg(void)
   uint8_t c;
   
   crlf = GCrLf;
-  bVar1 = false;
+  needWrite = false;
   /* Recovered address pair: the format at DGROUP:0x5BC is (char *)GCfgFileName (verified in
      audit/dgroup_2410.bin) and the argument was the buffer at 0x2410:0x8C6C,
      which is empty at startup and has no symbol - it is the data-path prefix,
@@ -210,29 +211,29 @@ void __cdecl16far init_cfg(void)
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0x80);
   }
-  uVar2 = c;
+  cfgChar = c;
   if ((((char)c < '1') || ('9' < (char)c)) && (((char)c < 'A' || ('B' < (char)c)))) {
     if (((char)c < 'a') || ('b' < (char)c)) {
                     /* WARNING: Subroutine does not return */
       ovr_stExit(0x80);
     }
-    uVar2 = toupper((int)(char)c);
+    cfgChar = toupper((int)(char)c);
   }
-  CFG_Sfx = uVar2;
+  CFG_Sfx = cfgChar;
   c = ovr_read_cfg(fh);
   if (c == 0x0) {
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0x80);
   }
-  uVar2 = c;
+  cfgChar = c;
   if ((((char)c < '1') || ('9' < (char)c)) && (((char)c < 'A' || ('B' < (char)c)))) {
     if (((char)c < 'a') || ('b' < (char)c)) {
                     /* WARNING: Subroutine does not return */
       ovr_stExit(0x80);
     }
-    uVar2 = toupper((int)(char)c);
+    cfgChar = toupper((int)(char)c);
   }
-  CFG_Mus = uVar2;
+  CFG_Mus = cfgChar;
   c = ovr_read_cfg(fh);
   if (c == 0x0) {
                     /* WARNING: Subroutine does not return */
@@ -246,7 +247,7 @@ void __cdecl16far init_cfg(void)
   mice = ovr_read_cfg(fh);
   if ((mice < '1') || ('2' < mice)) {
     init_cfg_mice();
-    bVar1 = true;
+    needWrite = true;
     mice = '2';
     if (CFG_Mice != 0) {
       mice = '1';
@@ -259,24 +260,24 @@ void __cdecl16far init_cfg(void)
     CFG_Mice = 0;
   }
   close(fh);
-  if (bVar1) {
+  if (needWrite) {
     sprintf(lbuf,(char *)GCfgFileName,(char *)&GWorkDir);
   path = (char *)lbuf;
-    iVar3 = ovr_creat_wait_unlock_and_disk(path,in_DX);
-    if (iVar3 < 0) {
+    writeHnd = ovr_creat_wait_unlock_and_disk(path,in_DX);
+    if (writeHnd < 0) {
                     /* WARNING: Subroutine does not return */
       ovr_stExit(0x83);
     }
-    write(iVar3,&CFG_Sfx,1);
-    write(iVar3,(void *)&crlf,2);
-    write(iVar3,&CFG_Mus,1);
-    write(iVar3,(void *)&crlf,2);
-    iVar4 = write(iVar3,&CFG_Irq,1);
-    iVar5 = write(iVar3,(void *)&crlf,2);
-    iVar6 = write(iVar3,(void *)&mice,1);
-    iVar7 = write(iVar3,(void *)&crlf,2);
-    iVar3 = close(iVar3);
-    if ((((iVar4 != 1 || iVar5 != 2) || iVar6 != 1) || iVar7 != 2) || (char)iVar3 != '\0') {
+    write(writeHnd,&CFG_Sfx,1);
+    write(writeHnd,(void *)&crlf,2);
+    write(writeHnd,&CFG_Mus,1);
+    write(writeHnd,(void *)&crlf,2);
+    wroteSfx = write(writeHnd,&CFG_Irq,1);
+    wroteCrlf1 = write(writeHnd,(void *)&crlf,2);
+    wroteIrq = write(writeHnd,(void *)&mice,1);
+    wroteCrlf2 = write(writeHnd,(void *)&crlf,2);
+    closeResult = close(writeHnd);
+    if ((((wroteSfx != 1 || wroteCrlf1 != 2) || wroteIrq != 1) || wroteCrlf2 != 2) || (char)closeResult != '\0') {
                     /* WARNING: Subroutine does not return */
       ovr_stExit(0x80);
     }
