@@ -781,33 +781,33 @@ uint __cdecl16far ovc27_spellHalfDamage(agnt_t far *agnt)
 
 {
   uint in_AX;
-  uint8_t *puVar1;
-  uint uVar2;
+  uint8_t *stashPtr;
+  uint result;
   uint16_t in_DX;
-  agnt_t far *agnt_00;
-  char *pcVar3;
-  uint16_t uVar4;
+  char *agntSegWord;
+  char *statusText;
+  char *notifyPtr;
+  uint16_t blitSeg;
   uint8_t text;
   static char msg[64];   /* DGROUP-backed formatting buffer */
   
-  pcVar3 = (char *)((ulong)agnt >> 0x10);
-  agnt_00 = (agnt_t far *)agnt;
-  if (((((agntG_t far *)agnt_00->gdata)->shortName[3] == '\x04') &&
-      (0xf < (((entity_t *)agnt_00->entity)->base).level)) ||
-     ((((agntG_t far *)agnt_00->gdata)->shortName[3] == '\x06' &&
-      (8 < (((entity_t *)agnt_00->entity)->base).level)))) {
-    uVar4 = GSavedBlitSeg;
-    pcVar3 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,pcVar3),0);
-    puVar1 = ovr_ovc15_usesStshRealloc(pcVar3,in_DX,uVar4,0,0,0,0,0);
-    pcVar3 = ovr_stsprintf(msg,(char *)CONCAT22(0x5bbf,_SS),
-                           (char *)CONCAT22(puVar1,(char *)0x26510),in_DX);
-    ovr_uiNotify(pcVar3,in_DX,0);
-    uVar2 = CONCAT11((char)((uint)pcVar3 >> 8),1);
+  agntSegWord = (char *)((ulong)agnt >> 0x10);
+  if (((((agntG_t far *)agnt->gdata)->shortName[3] == '\x04') &&
+      (0xf < (((entity_t *)agnt->entity)->base).level)) ||
+     ((((agntG_t far *)agnt->gdata)->shortName[3] == '\x06' &&
+      (8 < (((entity_t *)agnt->entity)->base).level)))) {
+    blitSeg = GSavedBlitSeg;
+    statusText = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text,agntSegWord),0);
+    stashPtr = ovr_ovc15_usesStshRealloc(statusText,in_DX,blitSeg,0,0,0,0,0);
+    notifyPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x5bbf,_SS),
+                           (char *)CONCAT22(stashPtr,(char *)0x26510),in_DX);
+    ovr_uiNotify(notifyPtr,in_DX,0);
+    result = CONCAT11((char)((uint)notifyPtr >> 8),1);
   }
   else {
-    uVar2 = in_AX & 0xff00;
+    result = in_AX & 0xff00;
   }
-  return uVar2;
+  return result;
 }
 
 

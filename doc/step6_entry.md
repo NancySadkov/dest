@@ -13309,3 +13309,44 @@ TWO MISTAKES CAUGHT, both worth recording:
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### ovc27_spellHalfDamage: four names split, one mis-split caught (37,036 -> 37,007)
+ovc27_spellHalfDamage: four names split, plus a real mis-split caught by the listing (37,036 -> 37,007)
+
+  pcVar3  793       (char *)((ulong)agnt >> 0x10)          -> agntSegWord (1)
+  pcVar3  800, 801  ovr_agnt_statusText's result            -> statusText  (3)
+  pcVar3  802,804,805  ovr_stsprintf's result               -> notifyPtr   (3)
+  puVar1  801, 803  ovr_ovc15_usesStshRealloc's block       -> stashPtr    (2)
+  uVar2   805, 808, 810  the value returned                 -> result      (3)
+  uVar4   799, 801  GSavedBlitSeg                           -> blitSeg     (2)
+
+`agnt_00 = (agnt_t far *)agnt;` was a no-op cast of the parameter: the declaration and the
+assignment are removed and its five uses go through `agnt`.
+
+A REAL DEFECT, CAUGHT BY THE LISTING, NOT BY THE GATES.  Line 800 carries two `pcVar3`
+occurrences with different roles - the assignment target (the statusText result) and the
+argument `CONCAT22(&text, pcVar3)` (the segment word read at 793).  The first pass renamed
+both to `statusText`, which made the function read its own uninitialised result:
+
+    statusText = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text,statusText),0);
+
+That compiles and every gate stayed green (compare_runtime samples DGROUP at main entry,
+and this path is not reached there), so only reading the emitted code showed it.  The
+argument is restored to `agntSegWord`, which is what the original reads.
+
+VERIFIED in the listing (tmp/make_fn_probe.py ovc27_spellHalfDamage, 83 instructions):
+
+    lea  ax,word ptr [bp-13]      ; &text
+    shl  ax,16
+    or   ax,word ptr [bp-6]       ; the agnt segment word
+    push ax
+    push word ptr [bp+8]
+    push word ptr [bp+6]
+    call far ptr _ovr_agnt_statusText
+
+and the result goes to a different slot ([bp-8]), so the two roles are genuinely distinct.
+
+  grep_checks 37,036 -> 37,007; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
