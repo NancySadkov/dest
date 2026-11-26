@@ -8860,3 +8860,37 @@ spelling, so there is nothing of this shape there to convert.
   grep_checks 40,045 (unchanged - not section-5 patterns)
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
+
+### MEASURED: the _backdropIndex group is DGROUP-relative
+MEASURED: the `_backdropIndex` group is DGROUP-relative, not a separate segment
+
+Checked the enclosing function of the 38 `((uint)_backdropIndex & 0xff) << 2` sites in ovc41_main.c
+(6a8f:15a0, 201 instructions).  Every `mov es,` in it is `mov ax,0x280 / mov es,ax` - DGROUP - and there
+is no `mov dx,0x70` / `les ... es:[bx]` far-array chain anywhere:
+
+  0009  b8 80 02   mov ax, 0x280
+  000C  8e c0      mov es, ax
+  000E  26 ff 36 03 8a push word ptr es:[0x8a03]     ; a DGROUP global
+  0020  80 7e 08 00 cmp byte ptr [bp + 8], 0
+  0029  8a 46 06   mov al, byte ptr [bp + 6]
+  0030  83 fb 03   cmp bx, 3
+  0038  d1 e3      shl bx, 1
+  003A  2e ff a7 3f 18 jmp word ptr cs:[bx + 0x183f] ; jump table over the argument
+
+So this group is NOT the GLeaderSheets class: the original reads a DGROUP table, which means the export's
+`*(uint32_t *)(backdropIndex << 2)` is already in the right segment.  What it lacks is the array's base
+symbol - the same situation as segment 0x80 and as `(char_sheet_t *)((int)i << 2)` in the uStack_16 group.
+
+Converting it to a `far` array read would therefore be wrong: it would move a correct DGROUP access into a
+symbol we do not have.  The honest state is that the base symbol must be identified first (which DGROUP
+array of far pointers is indexed by `_backdropIndex`), and `_backdropIndex` itself is not even declared in
+the tree's headers - it only appears as a use.
+
+Consequence for the remaining queue: the `(uint)bStack_10`, `(uint)bVar3`, `(uint)bVar5`, `(uint)bVar16`
+groups are each ~10 sites and each needs this same first question answered - "is the table in DGROUP or in
+its own segment?" - before any conversion.  Only the latter needs a `far` rewrite; the former needs a base
+symbol, which is data work rather than an addressing fix.
+
+  grep_checks 40,045 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
