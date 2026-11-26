@@ -11484,3 +11484,28 @@ destination is a near pointer and `&msg` - a stack local - is truncated to a
 DS-relative offset.  `msg` is also declared as a single `uint8_t` for what is a
 formatted string.  That is a second, separate defect in the same function and needs
 the buffer sized and the call form decided; it is not part of this signature fix.
+
+### Two rand wrappers named (38,118 -> 38,066)
+Two rand wrappers named (38,118 -> 38,066)
+
+ovc45_usesRandBelow
+  cVar1     the entity's class byte (+0x2f)           -> entityClass  (4)
+  uVar2     the 32-bit entity pointer from the table  -> entityPtr    (3)
+  uVar3     the value returned                        -> result       (9)
+  bVar5     the high byte of the randBelow draw       -> drawHi       (10)
+
+ovc27_usesRandBelow5
+  uVar1     the value returned                        -> result       (5)
+  uVar2     ovc27_usesRandBelow3(...) result          -> rollResult   (3)
+  uVar3     ovr_randBelow(...) result                 -> pick         (3)
+  bStack_4  the 0xf-sized scan index                  -> mapIdx       (4)
+  bStack_3  how many candidates qualified             -> count        (6)
+
+`in_AX` is deliberately left in ovc27_usesRandBelow5: it is read before any
+assignment (`uVar1 = in_AX & 0xff00;` on the target==0xff path), so it is the
+incoming ABI register, not a result.  Naming it would be inventing a meaning for a
+value the source never sets.
+
+  grep_checks 38,118 -> 38,066; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
+  compare_runtime 1,605 identical / 10 different

@@ -3859,50 +3859,50 @@ L_init_assets_4EA5:
 uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
 
 {
-  char cVar1;
-  uint32_t uVar2;
-  uint uVar3;
-  byte bVar5;
+  char entityClass;
+  uint32_t entityPtr;
+  uint result;
+  byte drawHi;
   uint16_t randDraw;
   
   if (*(char *)((int)&(Entities)[entityIndex].base.entity + 3) == -1) {
-    uVar3 = entityIndex * 0x37 & 0xff00;
+    result = entityIndex * 0x37 & 0xff00;
   }
   else {
-    uVar2 = *(uint32_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) << 2);
-    cVar1 = *(char *)((int)uVar2 + 0x2f);
-    if (cVar1 == '\x04') {
+    entityPtr = *(uint32_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) << 2);
+    entityClass = *(char *)((int)entityPtr + 0x2f);
+    if (entityClass == '\x04') {
       randDraw = ovr_randBelow(5,0);
-      bVar5 = (byte)(randDraw >> 8);
+      drawHi = (byte)(randDraw >> 8);
       if ((byte)randDraw < 4) {
-        uVar3 = CONCAT11(bVar5,1);
+        result = CONCAT11(drawHi,1);
       }
       else {
-        uVar3 = (uint)bVar5 << 8;
+        result = (uint)drawHi << 8;
       }
     }
-    else if (cVar1 == '\x05') {
+    else if (entityClass == '\x05') {
       randDraw = ovr_randBelow(3,0);
-      bVar5 = (byte)(randDraw >> 8);
+      drawHi = (byte)(randDraw >> 8);
       if ((char)randDraw == '\0') {
-        uVar3 = CONCAT11(bVar5,1);
+        result = CONCAT11(drawHi,1);
       }
       else {
-        uVar3 = (uint)bVar5 << 8;
+        result = (uint)drawHi << 8;
       }
     }
     else {
       randDraw = ovr_randBelow(4,0);
-      bVar5 = (byte)(randDraw >> 8);
+      drawHi = (byte)(randDraw >> 8);
       if ((byte)randDraw < 2) {
-        uVar3 = CONCAT11(bVar5,1);
+        result = CONCAT11(drawHi,1);
       }
       else {
-        uVar3 = (uint)bVar5 << 8;
+        result = (uint)drawHi << 8;
       }
     }
   }
-  return uVar3;
+  return result;
 }
 
 

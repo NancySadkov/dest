@@ -516,37 +516,37 @@ uint __cdecl16far ovc27_usesRandBelow5(agnt_t far *agnt)
 
 {
   uint in_AX;
-  uint uVar1;
-  uint16_t uVar2;
-  uint16_t uVar3;
+  uint result;
+  uint16_t rollResult;
+  uint16_t pick;
   uint8_t indexMap;
-  byte bStack_4;
-  byte bStack_3;
+  byte mapIdx;
+  byte count;
   
   if (((agnt_t far *)agnt)->target == 0xff) {
-    uVar1 = in_AX & 0xff00;
+    result = in_AX & 0xff00;
   }
   else {
     _fmemset(MK_FP(_SS, &indexMap), 0, 0xf);
-    bStack_3 = 0;
-    for (bStack_4 = 0; bStack_4 < 0xf; bStack_4 = bStack_4 + 1) {
-      uVar2 = ovc27_usesRandBelow3
-                        (agnt,CONCAT22(0x90,(uint)bStack_4 * 0x21),(uint)((agnt_t far *)agnt)->target)
+    count = 0;
+    for (mapIdx = 0; mapIdx < 0xf; mapIdx = mapIdx + 1) {
+      rollResult = ovc27_usesRandBelow3
+                        (agnt,CONCAT22(0x90,(uint)mapIdx * 0x21),(uint)((agnt_t far *)agnt)->target)
       ;
-      if ((char)uVar2 != '\0') {
-        (&indexMap)[bStack_3] = bStack_4 + 1;
-        bStack_3 = bStack_3 + 1;
+      if ((char)rollResult != '\0') {
+        (&indexMap)[count] = mapIdx + 1;
+        count = count + 1;
       }
     }
-    if (bStack_3 == 0) {
-      uVar1 = 0;
+    if (count == 0) {
+      result = 0;
     }
     else {
-      uVar3 = ovr_randBelow((uint)bStack_3,0);
-      uVar1 = CONCAT11((char)((uint)(&indexMap + (uVar3 & 0xff)) >> 8),(&indexMap)[uVar3 & 0xff]);
+      pick = ovr_randBelow((uint)count,0);
+      result = CONCAT11((char)((uint)(&indexMap + (pick & 0xff)) >> 8),(&indexMap)[pick & 0xff]);
     }
   }
-  return uVar1;
+  return result;
 }
 
 
