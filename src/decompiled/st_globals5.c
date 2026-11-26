@@ -1840,6 +1840,7 @@ brect_t agentClipRect = { 12, 7, 222, 150, 0xA000 };  /* 0x842c */
 char s_s_is_no_longer_paralyzed[] = "%s is no longer paralyzed.";
 char s_s_breaks_free_of_the_web[] = "%s breaks free of the web.";
 char s_s_regenerates_3_hitpoint_5ade[] = "%s regenerates 3 hitpoints to a total of %d hitpoints.";
+char s_d_2410_84a3[5] = "%d \r";
 far_t StatsTabPtrs[9] = { { 0x84CC, 0x2410 }, { 0x84D4, 0x2410 }, { 0x84DE, 0x2410 }, { 0x84E3, 0x2410 },
      { 0x84ED, 0x2410 }, { 0x84F3, 0x2410 }, { 0x84FE, 0x2410 }, { 0x8505, 0x2410 }, { 0x850C, 0x2410 } };
 char s_Summary_2410_84cc[] = "Summary";
@@ -1851,7 +1852,9 @@ char s_Popularity_2410_84f3[] = "Popularity";
 char s_Combat_2410_84fe[] = "Combat";
 char s_Winter_2410_8505[] = "Winter";
 char s_Done_2410_850c[6] = "Done";
-/* __OvrSize: owned by OVERLAY.LIB (VROOMM manager). */
+/* __OvrSize: the VROOMM manager's own 4-byte datum (0x8512).  Declared here so that
+   _atexitcnt and everything after it land at the original's offsets. */
+undefined1 __OvrSize[4] = { 0x00, 0x00, 0x00, 0x00 };  /* GUESS: VROOMM-owned */
 uint16_t _atexitcnt = 0x0000;
 byte _ctype[258] = { 0x0, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x21, 0x21, 0x21, 0x21,
      0x21, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20,

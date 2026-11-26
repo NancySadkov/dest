@@ -14745,3 +14745,37 @@ MEASURED (HEAD 432e5dfb -> this commit)
   build 65/65, LINK.LOG 65 bytes / 0 problems
 
 Next steps in the profile: -5 at StatsTabPtrs (0x84a8) and -4 at _atexitcnt (0x8516).
+
+### layout: -5 at StatsTabPtrs and -4 at _atexitcnt (runs 35 -> 33)
+layout: close the -5 at StatsTabPtrs and the -4 at _atexitcnt (runs 35 -> 33)
+
+Two absent objects at the very end of the game-data area:
+
+    0x84a3   5  s_d  "%d \r"
+        The original carries this string **14 times** (0x95, 0x24c, 0x2fd, 0x5e0, 0x5f4,
+        0x755, 0x766, 0x8da, 0x8e5, 0x4824, 0x4850, 0x55e0, 0x6f3d, 0x84a3) and the sources use
+        72 such literals, so it is a legitimate constant, not a duplicate: the one at 0x84a3 was
+        simply absent from our layout.  Declared immediately before StatsTabPtrs.
+
+    0x8512   4  __OvrSize
+        The VROOMM manager's own datum.  The original image has it between
+        s_Done_2410_850c and _atexitcnt; our link puts it nowhere (the map has no OVRSIZE
+        symbol), and the declaration was previously a comment.  It is now emitted as
+        undefined1 __OvrSize[4] and the link accepts it without a duplicate-symbol error, so
+        OVERLAY.LIB does not contribute it to DGROUP here.  Marked GUESS because the 4 zero
+        bytes are taken from the original image rather than from our own startup code.
+
+MEASURED (HEAD fc520d36 -> this commit)
+
+  diff_dgroup matched        1,623 -> 1,624
+  diff_dgroup runs              35 -> 33
+  diff_dgroup sum|delta|   193,663 -> 193,566
+  compare_runtime matched    1,677 -> 1,679
+  compare_runtime identical  1,668 -> 1,670
+  compare_state              1,627/0/0
+  grep_checks               35,701 -> 35,702
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The remaining large steps in the profile are upstream: -46 at 0x6939, -30 at 0x6a6e, -5 at
+0x6ab9, -11 at 0x6d4c, -24 at 0x6daf and -50 at 0x6e00.  That cluster is where the accumulated
+offset enters, so it is the next band to scan with tmp/band2.py.
