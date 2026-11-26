@@ -1322,7 +1322,7 @@ L_OVC49_8699_18c4_1CA7:
           auStackY_2f2[iVar14 * 2] =(uint16_t)(unsigned long)(unsigned long)( (char *)"Upgrade");
           iVar14 = iVar14 + 1;
           uVar27 = 0x195d;
-          pcVar10 = (char *)BuildingTypes[((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) +
+          pcVar10 = (char far *)BuildingTypes[((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) +
                                       (uint)*(byte *)((uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1)) * 0x27 + 300))].cost;
           in_stack_0000ffe0 = (uint16_t)((char *)(ZEXT24(pcVar10) << 0x10));
           if ((*(uint8_t *)((uint8_t *)&(bStackY_32.seg) + 1)) == '\0') {

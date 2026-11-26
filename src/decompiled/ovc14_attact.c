@@ -396,7 +396,7 @@ void __cdecl16far attact_usesAgntFlag1(void)
       return;
     }
     if (299 < SquareRecCount) {
-      _fmemmove((char *)SquareRecs,(char *)(SquareRecs + 1),0x1631);
+      _fmemmove((char far *)SquareRecs,(char *)(SquareRecs + 1),0x1631);
       SquareRecCount = 299;
     }
   }

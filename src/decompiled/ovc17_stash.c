@@ -16,9 +16,9 @@ uint16_t __cdecl16far stshOpen(uint16_t file_id)
   
   fh = open_wait_unlock_and_disk
                  ((char *)*(uint16_t *)(file_id * 4),((uint16_t *)(file_id * 4))[1]);
-  ((int *)StshHandles)[file_id] = fh;
-  *(uint16_t *)((int)(long *)StshPtrs + file_id * 4 + 2) = 0;
-  *(uint16_t *)((long *)StshPtrs + file_id) = 0;
+  ((int far *)StshHandles)[file_id] = fh;
+  *(uint16_t *)((int)(long far *)StshPtrs + file_id * 4 + 2) = 0;
+  *(uint16_t *)((long far *)StshPtrs + file_id) = 0;
   return file_id;
 }
 
@@ -29,10 +29,10 @@ uint16_t __cdecl16far stshOpen(uint16_t file_id)
 void __cdecl16far stshClose(uint16_t file_id)
 
 {
-  if (((int *)StshHandles)[file_id] != -1) {
-    close(((int *)StshHandles)[file_id]);
+  if (((int far *)StshHandles)[file_id] != -1) {
+    close(((int far *)StshHandles)[file_id]);
   }
-  ((int *)StshHandles)[file_id] = -1;
+  ((int far *)StshHandles)[file_id] = -1;
   return;
 }
 
@@ -81,19 +81,19 @@ uint __cdecl16far stshRead(void)
   
   uVar3 = in_stack_0000000a;
   srcPtr = CONCAT22(pbuf,unaff_SI);
-  uVar5 = *(uint *)((int)(long *)StshPtrs + in_stack_00000004 * 4 + 2);
+  uVar5 = *(uint *)((int)(long far *)StshPtrs + in_stack_00000004 * 4 + 2);
   uVar6 = *(uint *)((uint8_t *)&StshSizes[in_stack_00000004] + 2);
   if ((uVar5 < uVar6) ||
      ((uVar5 == uVar6 &&
-      (*(uint *)((long *)StshPtrs + in_stack_00000004) < *(uint *)(&StshSizes[in_stack_00000004]))))
+      (*(uint *)((long far *)StshPtrs + in_stack_00000004) < *(uint *)(&StshSizes[in_stack_00000004]))))
      ) {
-    uVar6 = in_stack_0000000c + *(int *)((int)(long *)StshPtrs + in_stack_00000004 * 4 + 2) +
-            (uint)CARRY2(in_stack_0000000a,*(uint *)((long *)StshPtrs + in_stack_00000004));
+    uVar6 = in_stack_0000000c + *(int *)((int)(long far *)StshPtrs + in_stack_00000004 * 4 + 2) +
+            (uint)CARRY2(in_stack_0000000a,*(uint *)((long far *)StshPtrs + in_stack_00000004));
     uVar5 = *(uint *)((uint8_t *)&StshSizes[in_stack_00000004] + 2);
     if ((uVar5 <= uVar6) &&
        ((uVar5 < uVar6 ||
         (*(uint *)(&StshSizes[in_stack_00000004]) <
-         in_stack_0000000a + *(uint *)((long *)StshPtrs + in_stack_00000004))))) {
+         in_stack_0000000a + *(uint *)((long far *)StshPtrs + in_stack_00000004))))) {
       uVar5 = *(uint *)(&StshSizes[in_stack_00000004]);
       puVar1 = (uint *)((int)&AgntAnms[0x53].y + 1 + in_stack_00000004 * 4);
       in_stack_0000000a = uVar5 - *puVar1;
@@ -249,8 +249,8 @@ void __cdecl16far stshInit(void)
     }
     *(uint16_t *)((uint8_t *)&StshSizes[file_id] + 2) = szhi;
     *(uint16_t *)(&StshSizes[file_id]) = szlo;
-    *(uint16_t *)((int)(long *)StshPtrs + file_id * 4 + 2) = 0;
-    *(uint16_t *)((long *)StshPtrs + file_id) = 0;
+    *(uint16_t *)((int)(long far *)StshPtrs + file_id * 4 + 2) = 0;
+    *(uint16_t *)((long far *)StshPtrs + file_id) = 0;
     (*(uint16_t *)((uint8_t *)&(flen) + 2)) = szhi;
   }
   (*(uint16_t *)((uint8_t *)&(FMXmsHandle))) =(uint16_t) xms_init(unaff_DI);
@@ -260,10 +260,10 @@ void __cdecl16far stshInit(void)
   if ((uint32_t *)FMXmsHandle != (uint32_t *)0x0 || (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) != 0) {
     if (((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) <= (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2))) &&
        (((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) < (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) ||
-        ((uint32_t *)StshSizes[0] < (uint32_t *)FMXmsHandle)))) {
-      stshInit_scan((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)),(uint32_t *)StshSizes[0]));
+        ((uint32_t far *)StshSizes[0] < (uint32_t *)FMXmsHandle)))) {
+      stshInit_scan((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)),(uint32_t far *)StshSizes[0]));
       (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) = (*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2));
-      (*(uint16_t *)((uint8_t *)&(FMXmsHandle))) =(uint16_t) (uint32_t *)StshSizes[0];
+      (*(uint16_t *)((uint8_t *)&(FMXmsHandle))) =(uint16_t) (uint32_t far *)StshSizes[0];
     }
     fmReadIntoHimem((char *)StshNames[0],(*(uint16_t *)((uint8_t *)&(StshNames[0]) + 2)),0,0,'\0',
                     (uint16_t)(uint32_t *)FMXmsHandle,(*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)),0);
@@ -271,7 +271,7 @@ void __cdecl16far stshInit(void)
   if ((((uint32_t *)FMEmsHandle == (uint32_t *)0x0 && (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) == 0) ||
       ((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) < (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)))) ||
      (((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) <= (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2)) &&
-      ((uint32_t *)StshSizes[0] <= (uint32_t *)FMXmsHandle)))) {
+      ((uint32_t far *)StshSizes[0] <= (uint32_t *)FMXmsHandle)))) {
     if ((uint32_t *)FMEmsHandle != (uint32_t *)0x0 || (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) != 0) {
       ems_realloc(0);
     }
@@ -283,13 +283,13 @@ void __cdecl16far stshInit(void)
             (uint)CARRY2((uint)(uint32_t *)FMXmsHandle,(uint)(uint32_t *)FMEmsHandle);
     if (((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) <= uVar1) &&
        (((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) < uVar1 ||
-        ((uint32_t *)StshSizes[0] <
+        ((uint32_t far *)StshSizes[0] <
          (uint32_t *)((int)(uint32_t *)FMXmsHandle + (int)(uint32_t *)FMEmsHandle))))) {
-      (*(uint16_t *)((uint8_t *)&(FMEmsHandle))) = (uint16_t)((uint32_t *)((int)(uint32_t *)StshSizes[0] - (int)(uint32_t *)FMXmsHandle))
+      (*(uint16_t *)((uint8_t *)&(FMEmsHandle))) = (uint16_t)((uint32_t *)((int)(uint32_t far *)StshSizes[0] - (int)(uint32_t *)FMXmsHandle))
       ;
       (*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)) =
            ((*(uint16_t *)((uint8_t *)&(StshSizes[0]) + 2)) - (*(uint16_t *)((uint8_t *)&(FMXmsHandle) + 2))) -
-           (uint)((uint32_t *)StshSizes[0] < (uint32_t *)FMXmsHandle);
+           (uint)((uint32_t far *)StshSizes[0] < (uint32_t *)FMXmsHandle);
       ems_realloc((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(FMEmsHandle) + 2)),(uint32_t *)FMEmsHandle));
     }
     fmReadIntoHimem((char *)StshNames[0],(*(uint16_t *)((uint8_t *)&(StshNames[0]) + 2)),(int)(uint32_t *)FMXmsHandle,

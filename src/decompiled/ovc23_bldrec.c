@@ -627,7 +627,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
       }
       return pbVar14;
     }
-    pbVar14 = (byte *)Entities[iVar24].base.y;
+    pbVar14 = (byte far *)Entities[iVar24].base.y;
     if ((pbVar14 != (byte *)CONCAT11(uVar28,uVar27)) ||
        (pbVar14 = (byte *)alignUp4(((Entities + iVar24)->base).x,0,0),
        pbVar14 != (byte *)CONCAT11(uVar30,uVar29))) goto L_OVC24_5943_026e_08A7;

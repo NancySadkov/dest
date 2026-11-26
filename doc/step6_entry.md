@@ -10640,3 +10640,40 @@ Left alone: ovc49_drawAgents' `recPtr`, which is declared `uint16_t` but assigne
 halves are used separately (`(ulong)recPtr >> 0x10`).  Changing its type interacts with those
 extractions inside a 1400-line function that cannot even be listed (compiler table limit), so it
 needs its own careful pass.
+
+### 70 more near casts of far globals widened
+70 more near casts of far-segment globals widened
+
+The same defect as the 653 casts removed last turn, at the sites where the cast had to be kept for
+its type:
+
+    (long      *)StshPtrs        StshPtrs is `long far far[]`
+    (uint32_t  *)StshSizes       `uint32_t far far[]`
+    (int       *)StshHandles     `int far far[]`
+    (far_t     *)BldGfxRuin      `far_t far far[]`   (and BldGfxNormal)
+    (spr_t     *)StshSprites     `spr_t far *` variable
+    (char      *)SquareRecs      `squarerec_t far far[]`
+    (byte      *)Entities        `entity_t far *` variable
+    (char      *)BuildingTypes   `bldtp_t far far[]`
+
+Each is now `(T far *)`, which keeps the expression's type and restores only the segment.
+
+Per file: ovc17_stash 20, ovc20_stash 15, ovc44_strong_dat 8, ovc45_unitinfo 8,
+ovc18_leaderview 3, ovc21_manage 3, ovc27_combat 3, ovc48_assets2 2, ovc23_bldrec 1,
+ovc34_unit 1, ovc49_agents 1.
+
+Verified in the emitted listing (stubyBufSrcToDst, ovc20_stash):
+
+    mov  ax,seg _BldGfxNormal
+    mov  es,ax
+    mov  ax,word ptr es:_BldGfxNormal[bx]      ; was a DS-relative read
+
+The detector's queue is now down to **39 functions / 273 reads** (from 50/348 before these two
+turns), and the top entry `ovc41_usesBiosKeyAvail` is the known FALSE POSITIVE: its
+`backdropRec*` values come from the DGROUP-resident `_backdropIndex` table, so a near read there
+is correct.
+
+  grep_checks 39,020 (unchanged - a cast is not a section-5 name)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different

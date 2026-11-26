@@ -147,14 +147,14 @@ void __cdecl16far stubyBufSrcToDst(int src,int dst,uint16_t arg3)
   
   for (i = 0; (int)i < 3; i = i + 1) {
     for (j = 0; (int)j < 3; j = j + 1) {
-      uVar1 = ((far_t *)BldGfxNormal + j + (src + i) * 3)->ofs;
+      uVar1 = ((far_t far *)BldGfxNormal + j + (src + i) * 3)->ofs;
       *(uint16_t *)((int)&BldGfxNormal[0].seg + (dst + i) * 0xc + j * 4) =
            *(uint16_t *)((int)&BldGfxNormal[0].seg + (src + i) * 0xc + j * 4);
-      ((far_t *)BldGfxNormal + j + (dst + i) * 3)->ofs = uVar1;
-      uVar1 = ((far_t *)BldGfxRuin + j + (src + i) * 3)->ofs;
+      ((far_t far *)BldGfxNormal + j + (dst + i) * 3)->ofs = uVar1;
+      uVar1 = ((far_t far *)BldGfxRuin + j + (src + i) * 3)->ofs;
       *(uint16_t *)((int)&BldGfxRuin[0].seg + (dst + i) * 0xc + j * 4) =
            *(uint16_t *)((int)&BldGfxRuin[0].seg + (src + i) * 0xc + j * 4);
-      ((far_t *)BldGfxRuin + j + (dst + i) * 3)->ofs = uVar1;
+      ((far_t far *)BldGfxRuin + j + (dst + i) * 3)->ofs = uVar1;
     }
   }
   return;
@@ -171,14 +171,14 @@ void __cdecl16far stshStubifyFromSrc(int src,int dst,uint16_t arg3)
   uint16_t i;
   
   for (i = 0; (int)i < 3; i = i + 1) {
-    uVar1 = ((far_t *)BldGfxNormal + i + src * 3)->ofs;
+    uVar1 = ((far_t far *)BldGfxNormal + i + src * 3)->ofs;
     *(uint16_t *)((int)&BldGfxNormal[0].seg + dst * 0xc + i * 4) =
          *(uint16_t *)((int)&BldGfxNormal[0].seg + src * 0xc + i * 4);
-    ((far_t *)BldGfxNormal + i + dst * 3)->ofs = uVar1;
-    uVar1 = ((far_t *)BldGfxRuin + i + src * 3)->ofs;
+    ((far_t far *)BldGfxNormal + i + dst * 3)->ofs = uVar1;
+    uVar1 = ((far_t far *)BldGfxRuin + i + src * 3)->ofs;
     *(uint16_t *)((int)&BldGfxRuin[0].seg + dst * 0xc + i * 4) =
          *(uint16_t *)((int)&BldGfxRuin[0].seg + src * 0xc + i * 4);
-    ((far_t *)BldGfxRuin + i + dst * 3)->ofs = uVar1;
+    ((far_t far *)BldGfxRuin + i + dst * 3)->ofs = uVar1;
   }
   return;
 }
@@ -195,7 +195,7 @@ void __cdecl16far StubifyCopy1to0_alt(int index)
   uVar1 = ((far_t *)(BldGfxNormal + 1) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxNormal[0].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxNormal[1].seg + index * 0xc);
-  ((far_t *)BldGfxNormal + index * 3)->ofs = uVar1;
+  ((far_t far *)BldGfxNormal + index * 3)->ofs = uVar1;
   uVar1 = ((far_t *)(BldGfxNormal + 1) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxNormal[2].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxNormal[1].seg + index * 0xc);
@@ -203,7 +203,7 @@ void __cdecl16far StubifyCopy1to0_alt(int index)
   uVar1 = ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxRuin[0].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxRuin[1].seg + index * 0xc);
-  ((far_t *)BldGfxRuin + index * 3)->ofs = uVar1;
+  ((far_t far *)BldGfxRuin + index * 3)->ofs = uVar1;
   uVar1 = ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxRuin[2].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxRuin[1].seg + index * 0xc);
@@ -223,7 +223,7 @@ void __cdecl16far stshStubifyCopy1to0(int index)
   gfxOfs = ((far_t *)(BldGfxNormal + 1) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxNormal[0].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxNormal[1].seg + index * 0xc);
-  ((far_t *)BldGfxNormal + index * 3)->ofs = gfxOfs;
+  ((far_t far *)BldGfxNormal + index * 3)->ofs = gfxOfs;
   gfxOfs = ((far_t *)(BldGfxNormal + 1) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxNormal[2].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxNormal[1].seg + index * 0xc);
@@ -247,7 +247,7 @@ void __cdecl16far stshStubifyCopy1to0(int index)
   gfxOfs = ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxRuin[0].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxRuin[1].seg + index * 0xc);
-  ((far_t *)BldGfxRuin + index * 3)->ofs = gfxOfs;
+  ((far_t far *)BldGfxRuin + index * 3)->ofs = gfxOfs;
   gfxOfs = ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs;
   *(uint16_t *)((int)&BldGfxRuin[2].seg + index * 0xc) =
        *(uint16_t *)((int)&BldGfxRuin[1].seg + index * 0xc);
@@ -354,7 +354,7 @@ spr_t * __cdecl16far stshSpriteStub(anm_t *anms,uint16_t nanims)
   uint16_t sdst;
   
   if (StshSprIndex < 0x4f) {
-    dst.seg = (uint16_t)((spr_t *)StshSprites + StshSprIndex);
+    dst.seg = (uint16_t)((spr_t far *)StshSprites + StshSprIndex);
     StshSprIndex = StshSprIndex + 1;
     dst.ofs = (uint16_t)ovr_mkp((uint32_t *)dst.seg,(*(uint16_t *)((uint8_t *)&(StshSprites) + 2)),(uint16_t)unaff_DI);
     _fsetmem(MK_FP(dst.seg,dst.ofs),0xb0,0);
@@ -1119,7 +1119,7 @@ void __cdecl16far grabBldLbm(int16_t file_normal,int16_t file_ruin,uint16_t inde
   asm { mov segArg,dx };
   stored = stsh_store((uint8_t *)pfVar1, segArg, &stshSegTmp);
   *(uint16_t *)((int)&BldGfxNormal[0].seg + index * 0xc) = stshSegTmp;
-  ((far_t *)BldGfxNormal + index * 3)->ofs = (uint16_t)stored;
+  ((far_t far *)BldGfxNormal + index * 3)->ofs = (uint16_t)stored;
   pixels_00.seg = 100;
   pixels_00.ofs = (tg->aptr).seg;
   pfVar1 = ovr_stshRleType2((far_t *)(&tg->aptr)->ofs,pixels_00,130,199,194,26,-1,unaff_DI,0,0);
@@ -1186,7 +1186,7 @@ void __cdecl16far grabBldLbm(int16_t file_normal,int16_t file_ruin,uint16_t inde
     (*(uint16_t *)((uint8_t *)&(p) + 2)) = uVar3;
     stored = stsh_store((uint8_t *)(far_t *)p, uVar3, &stshSegTmp);
     *(uint16_t *)((int)&BldGfxRuin[0].seg + index * 0xc) = stshSegTmp;
-    ((far_t *)BldGfxRuin + index * 3)->ofs = (uint16_t)stored;
+    ((far_t far *)BldGfxRuin + index * 3)->ofs = (uint16_t)stored;
     pixels_09.seg = 100;
     pixels_09.ofs = *(uint16_t *)(pg + 0x302);
     pfVar1 = ovr_stshRleType2((far_t *)*(uint16_t *)(pg + 0x300),pixels_09,130,199,194,26,-1,unaff_DI,0,0);

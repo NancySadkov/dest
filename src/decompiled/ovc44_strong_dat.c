@@ -45,7 +45,7 @@ void __cdecl16far stshTR_S_stubify0(int index)
   
   res = func_0x0007ffe0(0x6ffe);
   *(uint16_t *)((int)&BldGfxNormal[0].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)BldGfxNormal + index * 3)->ofs = (uint16_t)res;
+  ((far_t far *)BldGfxNormal + index * 3)->ofs = (uint16_t)res;
   res = func_0x0007ffe0(0x6ffe);
   *(uint16_t *)((int)&BldGfxNormal[1].seg + index * 0xc) = (int)((ulong)res >> 0x10);
   ((far_t *)(BldGfxNormal + 1) + index * 3)->ofs = (uint16_t)res;
@@ -85,7 +85,7 @@ void __cdecl16far stshStubifyBld(uint16_t index)
   stshTR_S_stubify0(index);
   res = func_0x0007ffe0(0x6ffe);
   *(uint16_t *)((int)&BldGfxRuin[0].seg + index * 0xc) = (int)((ulong)res >> 0x10);
-  ((far_t *)BldGfxRuin + index * 3)->ofs = (uint16_t)res;
+  ((far_t far *)BldGfxRuin + index * 3)->ofs = (uint16_t)res;
   res = func_0x0007ffe0(0x6ffe);
   *(uint16_t *)((int)&BldGfxRuin[1].seg + index * 0xc) = (int)((ulong)res >> 0x10);
   ((far_t *)(BldGfxRuin + 1) + index * 3)->ofs = (uint16_t)res;

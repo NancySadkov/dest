@@ -376,9 +376,9 @@ ovc18_spawnClassAgent
       }
       return txt;
     case (uint16_t)0x3:
-      ((int *)StshHandles)[(int)in_stack_00000004] = (int)pfVar8;
-      *(uint16_t *)((int)(long *)StshPtrs + (int)in_stack_00000004 * 4 + 2) = 0;
-      *(uint16_t *)((long *)StshPtrs + (int)in_stack_00000004) = 0;
+      ((int far *)StshHandles)[(int)in_stack_00000004] = (int)pfVar8;
+      *(uint16_t *)((int)(long far *)StshPtrs + (int)in_stack_00000004 * 4 + 2) = 0;
+      *(uint16_t *)((long far *)StshPtrs + (int)in_stack_00000004) = 0;
       return (uint8_t *)in_stack_00000004;
     case (uint16_t)0x4:
       smm_restore_state();

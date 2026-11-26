@@ -1105,9 +1105,9 @@ char * __cdecl16far chargen_switch(uint16_t index)
     }
     return pcVar16;
   case 2:
-    ((int *)StshHandles)[(int)unaff_SI] = uVar14;
-    *(uint16_t *)((int)(long *)StshPtrs + (int)unaff_SI * 4 + 2) = 0;
-    *(uint16_t *)((long *)StshPtrs + (int)unaff_SI) = 0;
+    ((int far *)StshHandles)[(int)unaff_SI] = uVar14;
+    *(uint16_t *)((int)(long far *)StshPtrs + (int)unaff_SI * 4 + 2) = 0;
+    *(uint16_t *)((long far *)StshPtrs + (int)unaff_SI) = 0;
     return unaff_SI;
   case 3:
     for (iVar23 = 0; iVar23 < (int)(uint)GLeaderCount; iVar23 = iVar23 + 1) {

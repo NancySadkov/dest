@@ -42,7 +42,7 @@ spr_t * __cdecl16far stshRleAnims(uint8_t *src,anm_t *anms,uint16_t nanims)
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0x36);
   }
-  dst.seg = (uint16_t)((spr_t *)StshSprites + StshSprIndex);
+  dst.seg = (uint16_t)((spr_t far *)StshSprites + StshSprIndex);
   StshSprIndex = StshSprIndex + 1;
   dst.ofs = (uint16_t)ovr_mkp((uint32_t *)dst.seg,(*(uint16_t *)((uint8_t *)&(StshSprites) + 2)),unaff_DI);
   _fsetmem(MK_FP(dst.seg,dst.ofs),0xb0,0);

@@ -730,7 +730,7 @@ L_unit_6616_10d5_1152:
           return;
         }
         if (299 < SquareRecCount) {
-          _fmemmove((char *)SquareRecs,(char *)(SquareRecs + 1),0x1631);
+          _fmemmove((char far *)SquareRecs,(char *)(SquareRecs + 1),0x1631);
           SquareRecCount = 299;
         }
       }
