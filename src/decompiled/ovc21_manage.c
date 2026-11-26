@@ -679,75 +679,75 @@ byte __cdecl16far manage_statSelectable(byte statIndex,char_sheet_t *sheet)
 uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
 
 {
-  uint16_t uVar1;
+  uint16_t labelOfs;
   far_t dst;
   far_t dst_00;
-  byte bVar2;
+  byte selectable;
   undefined1 extraout_AH;
   uint8_t *puVar3;
   char *inputResult;
-  uint uVar5;
+  uint itemIndex;
   far_t entries;
   far_t entries_00;
-  undefined1 uVar6;
-  undefined1 uVar7;
+  undefined1 ssLo;
+  undefined1 ssHi;
   uint8_t menuItems;
   uint16_t auStack_28 [7];
-  char cStack_1a;
-  byte bStack_19;
+  char inputCode;
+  byte itemCount;
   uint8_t statIndex;
   byte abStack_17 [5];
   uint8_t classStatMap2;
   uint8_t classStatMap1;
   
-  uVar6 = (undefined1)_SS;
-  uVar7 = (undefined1)(_SS >> 8);
-  (*(uint8_t *)((uint8_t *)&(dst.seg))) = uVar6;
+  ssLo = (undefined1)_SS;
+  ssHi = (undefined1)(_SS >> 8);
+  (*(uint8_t *)((uint8_t *)&(dst.seg))) = ssLo;
   dst.ofs = (uint16_t)&classStatMap1;
-  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = uVar7;
+  (*(uint8_t *)((uint8_t *)&(dst.seg) + 1)) = ssHi;
   F_SCOPY(far_from_u32((uint32_t)(0x241049dd)),dst,7);
-  (*(uint8_t *)((uint8_t *)&(dst_00.seg))) = uVar6;
+  (*(uint8_t *)((uint8_t *)&(dst_00.seg))) = ssLo;
   dst_00.ofs = (uint16_t)&classStatMap2;
-  (*(uint8_t *)((uint8_t *)&(dst_00.seg) + 1)) = uVar7;
+  (*(uint8_t *)((uint8_t *)&(dst_00.seg) + 1)) = ssHi;
   F_SCOPY(far_from_u32((uint32_t)(0x241049e4)),dst_00,7);
   while( true ) {
     _fsetmem(MK_FP(_SS,&menuItems),0x10,0);
     auStack_28[0] = 0x2410;
     menuItems = 0x4d9b;
-    bStack_19 = 1;
-    bVar2 = manage_statSelectable
+    itemCount = 1;
+    selectable = manage_statSelectable
                       ((&classStatMap1)[((char_sheet_t *)sheet)->cls],
                        (char_sheet_t *)CONCAT22(0x4d9b,(*(uint16_t *)((uint8_t *)&(sheet) + 2))));
-    if (bVar2 != 0) {
-      abStack_17[bStack_19] = (&classStatMap1)[((char_sheet_t *)sheet)->cls];
-      uVar1 = ((far_t far *)GStatsLabels + (&classStatMap1)[((char_sheet_t *)sheet)->cls])->ofs;
-      uVar5 = (uint)bStack_19;
-      auStack_28[uVar5 * 2] =
+    if (selectable != 0) {
+      abStack_17[itemCount] = (&classStatMap1)[((char_sheet_t *)sheet)->cls];
+      labelOfs = ((far_t far *)GStatsLabels + (&classStatMap1)[((char_sheet_t *)sheet)->cls])->ofs;
+      itemIndex = (uint)itemCount;
+      auStack_28[itemIndex * 2] =
            *(uint16_t *)
             ((int)&GStatsLabels[0].seg + (uint)(&classStatMap1)[((char_sheet_t *)sheet)->cls] * 4);
-      *(uint16_t *)(&menuItems + uVar5 * 4) = uVar1;
-      bStack_19 = bStack_19 + 1;
+      *(uint16_t *)(&menuItems + itemIndex * 4) = labelOfs;
+      itemCount = itemCount + 1;
     }
     puVar3 = &classStatMap2 + ((char_sheet_t *)sheet)->cls;
     if (*puVar3 != 0xff) {
-      bVar2 = manage_statSelectable
+      selectable = manage_statSelectable
                         ((&classStatMap2)[((char_sheet_t *)sheet)->cls],
                          (char_sheet_t *)CONCAT22(menuItems,(*(uint16_t *)((uint8_t *)&(sheet) + 2))));
-      puVar3 = (uint8_t *)CONCAT11(extraout_AH,bVar2);
-      if (bVar2 != 0) {
-        abStack_17[bStack_19] = (&classStatMap2)[((char_sheet_t *)sheet)->cls];
+      puVar3 = (uint8_t *)CONCAT11(extraout_AH,selectable);
+      if (selectable != 0) {
+        abStack_17[itemCount] = (&classStatMap2)[((char_sheet_t *)sheet)->cls];
         puVar3 = (uint8_t *)
                  *(uint16_t *)
                   ((int)&GStatsLabels[0].seg +
                   (uint)(&classStatMap2)[((char_sheet_t *)sheet)->cls] * 4);
-        uVar1 = ((far_t far *)GStatsLabels + (&classStatMap2)[((char_sheet_t *)sheet)->cls])->ofs;
-        uVar5 = (uint)bStack_19;
-        auStack_28[uVar5 * 2] =(uint16_t)( puVar3);
-        *(uint16_t *)(&menuItems + uVar5 * 4) = uVar1;
-        bStack_19 = bStack_19 + 1;
+        labelOfs = ((far_t far *)GStatsLabels + (&classStatMap2)[((char_sheet_t *)sheet)->cls])->ofs;
+        itemIndex = (uint)itemCount;
+        auStack_28[itemIndex * 2] =(uint16_t)( puVar3);
+        *(uint16_t *)(&menuItems + itemIndex * 4) = labelOfs;
+        itemCount = itemCount + 1;
       }
     }
-    if (bStack_19 == 1) {
+    if (itemCount == 1) {
       return CONCAT11((char)((uint)puVar3 >> 8),1);
     }
     ovr_drawString((char *)
@@ -755,36 +755,36 @@ uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
                    ,0x2410,0x10);
     entries.seg = _SS;
     entries.ofs = (uint16_t)&menuItems;
-    inputResult = ovr_uiInputText(entries,(uint)bStack_19,far_from_u32((uint32_t)(0x0)),0x0,0);
-    cStack_1a = (char)inputResult;
-    if (cStack_1a == '\0') {
+    inputResult = ovr_uiInputText(entries,(uint)itemCount,far_from_u32((uint32_t)(0x0)),0x0,0);
+    inputCode = (char)inputResult;
+    if (inputCode == '\0') {
       return 0;
     }
-    if (cStack_1a == '\x01') break;
+    if (inputCode == '\x01') break;
     abStack_17[0] = abStack_17[((uint)inputResult & 0xff) - 1];
     ovr_drawString((char *)"Select ability to adjust downwards by two points.",0x2410,0x10);
     _fsetmem(MK_FP(_SS,&menuItems),0x10,0);
     auStack_28[0] = 0x2410;
     menuItems = 0x4e3a;
-    bStack_19 = 1;
+    itemCount = 1;
     for (statIndex = 0x0; statIndex < 3; statIndex = statIndex + 0x1) {
       if ((10 < ((char_sheet_t *)sheet)->stats[statIndex]) && (abStack_17[0] != statIndex)) {
-        abStack_17[bStack_19] = statIndex;
-        uVar1 = ((far_t far *)GStatsLabels + statIndex)->ofs;
-        uVar5 = (uint)bStack_19;
-        auStack_28[uVar5 * 2] = *(uint16_t *)((int)&GStatsLabels[0].seg + (uint)statIndex * 4);
-        *(uint16_t *)(&menuItems + uVar5 * 4) = uVar1;
-        bStack_19 = bStack_19 + 1;
+        abStack_17[itemCount] = statIndex;
+        labelOfs = ((far_t far *)GStatsLabels + statIndex)->ofs;
+        itemIndex = (uint)itemCount;
+        auStack_28[itemIndex * 2] = *(uint16_t *)((int)&GStatsLabels[0].seg + (uint)statIndex * 4);
+        *(uint16_t *)(&menuItems + itemIndex * 4) = labelOfs;
+        itemCount = itemCount + 1;
       }
     }
     entries_00.seg = _SS;
     entries_00.ofs = (uint16_t)&menuItems;
-    inputResult = ovr_uiInputText(entries_00,(uint)bStack_19,far_from_u32((uint32_t)(0x0)),0x0,0);
-    cStack_1a = (char)inputResult;
-    if (cStack_1a == '\0') {
+    inputResult = ovr_uiInputText(entries_00,(uint)itemCount,far_from_u32((uint32_t)(0x0)),0x0,0);
+    inputCode = (char)inputResult;
+    if (inputCode == '\0') {
       return 0;
     }
-    if (cStack_1a != '\x01') {
+    if (inputCode != '\x01') {
       ((char_sheet_t *)sheet)->stats[abStack_17[0]] =
            ((char_sheet_t *)sheet)->stats[abStack_17[0]] + 1;
       ((char_sheet_t *)sheet)->stats[abStack_17[((uint)inputResult & 0xff) - 1]] =

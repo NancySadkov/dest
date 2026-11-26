@@ -9920,3 +9920,20 @@ puVar1/piVar2/iVar5/uVar3/uVar6 are gone with the block that used them.
   grep_checks 39,694 -> 39,630; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### abilitiesDlg: seven single-role locals named (39,630 -> 39,574)
+abilitiesDlg: seven single-role locals named (39,630 -> 39,574)
+
+  bStack_19  menu item counter, starts at 1 and increments    -> itemCount  (18)
+  uVar5      (uint)itemCount, used as the array index         -> itemIndex  (10)
+  uVar1      ((far_t far *)GStatsLabels + i)->ofs             -> labelOfs   (7)
+  bVar2      manage_statSelectable(...) result                -> selectable (6)
+  cStack_1a  (char)inputResult, compared with 0 / 1            -> inputCode  (7)
+  uVar6      (undefined1)_SS                                  -> ssLo       (4)
+  uVar7      (undefined1)(_SS >> 8)                           -> ssHi       (4)
+
+Renaming only; no expression changed.
+
+  grep_checks 39,630 -> 39,574; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
