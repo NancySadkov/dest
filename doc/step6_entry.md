@@ -12909,3 +12909,53 @@ run at a time, declare it at its offset *and* delete the specific copy already i
 (module literal or the stmiss blob entry), then measure.  That is what made 0x5100..0x5EA3
 and the 0x7AF9/0x7FB5/0x80F0 runs work earlier; the runs that failed are the ones where the
 copy could not be located (`5. Roland`, the 0x5F72 block before the duplicates were found).
+
+### layout: bounded 0x606F..0x648E move reaches 219,507 but breaks runtime pairing
+layout: the bounded 0x606F..0x648E move DOES pay off (219,507) but the runtime pairing does not - reverted at the gate
+
+Applied per-run move semantics to the bounded block, on top of the duplicate deletion and
+the 0x5F00..0x6047 sound run, and measured two variants.
+
+The block has only **8** missing symbols (343 bytes), not the 125 the full-range scan
+suggested - the rest of 0x606F..0xC000 is out of this boundary:
+
+    0x6071  38  Sound Blaster (1. Original  2.  Pro):          in stmiss blob
+    0x6099  46  Pro Audio Spectrum (1. Plus  2. Spectrum 16):  in stmiss blob
+    0x60c9  30  Adlib (1. Original  2. Gold):                  in stmiss blob
+    0x60e9  54  Sound IRQ is %c (1. Don't change ...)          binary, no copy found
+    0x630a   9  L. to %s                                      in stmiss blob
+    0x63c8  57  Ready characters are the first to come ...     already declared (renamed)
+    0x6406  72  %s is now based at (%d, %d). ...               already declared (renamed)
+    0x644e  37  %s can now be called away from home.           already declared (renamed)
+
+VARIANT A - block declared, three of the eight inserted as new declarations
+(the other five taken from the blob / renamed):
+
+    matched    1,569 -> 1,581   (+12)
+    delta runs     74 ->    63
+    sum|delta| 251,810 -> 219,507   (-32,303)
+    worst      15,444 ->  14,350
+    compare_runtime 1,615/1,605 -> 1,609/1,599   (-6 / -6)
+
+sum|delta| falls below the 251,810 target and `matched` rises, but three of the eight were
+duplicates (the same text already declared at the right offset under a hash-suffixed name),
+and compare_runtime lost six pairs.
+
+VARIANT B - the same, with those three duplicates removed and the originals renamed to the
+`_2410_XXXX` scheme:
+
+    matched 1,581, runs 63, sum|delta| 243,636, worst 14,184
+    compare_runtime still 1,609/1,599
+
+so removing the duplicates costs 24,129 of the gain and does not restore the runtime pairs.
+
+VARIANT C - deleting all 20 duplicates and renaming the correctly-placed copies by their
+string text: the header extern for `s_intelligence_reports_s_u_2410` is still referenced by
+ovc14, so the build fails (2 errors, link 21 problems).  Reverted rather than patched
+blind - the rename needs its reference in the code updated too, not only the declaration.
+
+Tree left at the 8c144215 baseline.  The finding worth keeping: **a bounded per-run move
+does beat the target on sum|delta| (219,507 vs 251,810)**; what blocks keeping it is that
+compare_runtime pairs six fewer symbols, and that is a naming/pairing consequence of the
+deleted duplicates, not a data difference.  Fixing it means completing variant C properly
+(declaration + header extern + every code reference), which is the next step.
