@@ -1927,22 +1927,17 @@ void __cdecl16far manage_showSettlementScreen(uint8_t partySlot)
 void __cdecl16far manage_textHalflingCastle(void)
 
 {
-  uint *puVar1;
-  int *piVar2;
   far_t gfx;
   far_t dst;
   far_t handle;
-  uint uVar3;
   char *pcVar4;
   char_sheet_t *widths;
-  int iVar5;
-  uint16_t uVar6;
   far_t entries;
   char_sheet_t *pcStack_12;
-  int iStack_10;
+  int sheetSeg;
   uint8_t inputBuf;
-  uint uStack_6;
-  int iStack_4;
+  uint inputResult;
+  int leaderIdx;
   
   (*(uint8_t *)((uint8_t *)&(dst.seg))) = (char)_SS;
   dst.ofs = (uint16_t)&inputBuf;
@@ -1958,22 +1953,16 @@ void __cdecl16far manage_textHalflingCastle(void)
   savedMenuItem = GMenuItem;
   MenuModeSaved = MenuMode;
   TextBlitDstSeg = 0xa000;
-  for (iStack_4 = 0; iStack_10 = 0x2410, iStack_4 < (int)(uint)GLeaderCount; iStack_4 = iStack_4 + 1
+  for (leaderIdx = 0; sheetSeg = 0x2410, leaderIdx < (int)(uint)GLeaderCount; leaderIdx = leaderIdx + 1
       ) {
-    if ((((GLeaderSheets[iStack_4])->active != '\0') &&
-        ((GLeaderSheets[iStack_4])->x == GfxRndSeed)) &&
-       ((GLeaderSheets[iStack_4])->y == GfxRndSeed2)) {
+    if ((((GLeaderSheets[leaderIdx])->active != '\0') &&
+        ((GLeaderSheets[leaderIdx])->x == GfxRndSeed)) &&
+       ((GLeaderSheets[leaderIdx])->y == GfxRndSeed2)) {
       if (GCharLevelsInc != '\0') {
-        uVar6 = (uint16_t)((ulong)*(uint32_t *)(iStack_4 << 2) >> 0x10);
-        iVar5 = (int)*(uint32_t *)(iStack_4 << 2);
-        puVar1 = (uint *)(iVar5 + 0x56);
-        uVar3 = *puVar1;
-        *puVar1 = *puVar1 + 10000;
-        piVar2 = (int *)(iVar5 + 0x58);
-        *piVar2 = *piVar2 + (uint)(0xd8ef < uVar3);
+        GLeaderSheets[leaderIdx]->gold = GLeaderSheets[leaderIdx]->gold + 10000;
         GCharLevelsInc = '\0';
       }
-      manage_settlementScreen((byte)iStack_4);
+      manage_settlementScreen((byte)leaderIdx);
       ovr_stats_openCastlePanel();
       ovr_ovc41_usesGMenuItem();
       return;
@@ -1986,22 +1975,20 @@ void __cdecl16far manage_textHalflingCastle(void)
       return;
     }
     pcStack_12 = chargen();
-    if (pcStack_12 == (char_sheet_t *)0x0 && iStack_10 == 0) {
+    if (pcStack_12 == (char_sheet_t *)0x0 && sheetSeg == 0) {
       ovr_stats_openCastlePanel();
       ovr_ovc41_usesGMenuItem();
       return;
     }
-    iStack_4 = 0;
-    while ((iStack_4 < (int)(uint)GLeaderCount &&
-           ((GLeaderSheets[iStack_4])->statMask != '\0'))) {
-      iStack_4 = iStack_4 + 1;
+    leaderIdx = 0;
+    while ((leaderIdx < (int)(uint)GLeaderCount &&
+           ((GLeaderSheets[leaderIdx])->statMask != '\0'))) {
+      leaderIdx = leaderIdx + 1;
     }
-    if (iStack_4 < (int)(uint)GLeaderCount) {
-      PartyCount = (byte)iStack_4 + 1;
-      uVar6 = *(uint16_t *)((uint)PartyCount * 4 + -2);
-      (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)uVar6;
-      handle.ofs = *(uint16_t *)((uint)PartyCount * 4 + -4);
-      (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)((uint)uVar6 >> 8);
+    if (leaderIdx < (int)(uint)GLeaderCount) {
+      PartyCount = (byte)leaderIdx + 1;
+      handle.ofs = far_ofs_u32(GLeaderSheets[PartyCount - 1]);
+      handle.seg = (uint16_t)SEG_OF(GLeaderSheets[PartyCount - 1]);
       ovr_stshFree(handle);
     }
     else {
@@ -2014,10 +2001,9 @@ void __cdecl16far manage_textHalflingCastle(void)
     }
     pcStack_12->statMask = pcStack_12->statMask | 0x40;
     pcStack_12->charIndex = PartyCount - 1;
-    uVar3 = (uint)PartyCount;
     widths = (char_sheet_t *)((char *)0x2627a);
-    *(int *)(uVar3 * 4 + -2) = iStack_10;
-    *(uint16_t *)(uVar3 * 4 + -4) =(uint16_t)( pcStack_12);
+    GLeaderSheets[PartyCount - 1] =
+        (char_sheet_t far *)MK_FP((uint16_t)sheetSeg, (uint16_t)pcStack_12);
     if (CurPartySlot == 0) {
       pcStack_12->titleIndex = 1;
     }
@@ -2025,22 +2011,22 @@ void __cdecl16far manage_textHalflingCastle(void)
   }
   else {
     manage_openTalkWindow();
-    iStack_10 = *(int *)((uint)PartyCount * 4 + -2);
-    pcStack_12 = (char_sheet_t *)*(uint16_t *)((uint)PartyCount * 4 + -4);
+    sheetSeg = (int)SEG_OF(GLeaderSheets[PartyCount - 1]);
+    pcStack_12 = (char_sheet_t *)far_ofs_u32(GLeaderSheets[PartyCount - 1]);
     widths = pcStack_12;
     manage_usesLitoa10((char_sheet_t *)
-                       CONCAT13((char)((uint)iStack_10 >> 8),CONCAT12((char)iStack_10,pcStack_12)));
+                       CONCAT13((char)((uint)sheetSeg >> 8),CONCAT12((char)sheetSeg,pcStack_12)));
   }
   pcVar4 = ovr_fmVsprintf("Place %s here.",
-                          (char *)CONCAT13((char)((uint)iStack_10 >> 8),
-                                           CONCAT12((char)iStack_10,pcStack_12)));
+                          (char *)CONCAT13((char)((uint)sheetSeg >> 8),
+                                           CONCAT12((char)sheetSeg,pcStack_12)));
   ovr_drawString(pcVar4,(uint16_t)widths,(char)widths);
   entries.seg = _SS;
   entries.ofs = (uint16_t)&inputBuf;
   pcVar4 = ovr_uiInputText(entries,2,far_from_u32((uint32_t)(0x0)),0x0,0);
-  uStack_6 = (uint)pcVar4 & 0xff;
-  if (uStack_6 == 1) {
-    iStack_4 = PartyCount - 1;
+  inputResult = (uint)pcVar4 & 0xff;
+  if (inputResult == 1) {
+    leaderIdx = PartyCount - 1;
     if (CurPartySlot == 1) {
       ovr_ovc18_checkFortressPlacement('\x02');
     }

@@ -9871,3 +9871,52 @@ packWord, column, colIndex.
   grep_checks 39,728 -> 39,694; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### manage_textHalflingCastle: PartyCount*4 is GLeaderSheets (39,694 -> 39,630)
+manage_textHalflingCastle: PartyCount*4 was GLeaderSheets, and the gold add was a manual carry (39,694 -> 39,630)
+
+The function already read `(GLeaderSheets[iStack_4])->active/x/y` correctly, and the
+`PartyCount * 4 - 4` / `- 2` accesses are the SAME array:
+
+  GLeaderSheets entry  = { ofs at +0, seg at +2 }  (a DGROUP array of far pointers -
+                                                    `les bx,dword ptr DGROUP:_GLeaderSheets[bx]`)
+  (PartyCount-1)*4 + 0 = ofs,  +2 = seg            <- exactly `*(uint16_t*)(PartyCount*4 - 4)`
+                                                       and `*(int*)(PartyCount*4 - 2)`
+
+so all three sites were the leader-sheet pointer table read as a raw DS offset:
+
+  1990  handle.ofs = far_ofs_u32(GLeaderSheets[PartyCount - 1]);
+  1991  handle.seg = (uint16_t)SEG_OF(GLeaderSheets[PartyCount - 1]);
+
+  2005  GLeaderSheets[PartyCount - 1] =
+  2006      (char_sheet_t far *)MK_FP((uint16_t)sheetSeg, (uint16_t)pcStack_12);
+
+  2014  sheetSeg  = (int)SEG_OF(GLeaderSheets[PartyCount - 1]);
+  2015  pcStack_12 = (char_sheet_t *)far_ofs_u32(GLeaderSheets[PartyCount - 1]);
+
+The gold block was a hand-written 32-bit add:
+
+  puVar1 = (uint *)(iVar5 + 0x56);  uVar3 = *puVar1;  *puVar1 += 10000;
+  piVar2 = (int *)(iVar5 + 0x58);   *piVar2 += (0xd8ef < uVar3);
+
+0x56 is char_sheet_t.gold (probe: `mov dx,es:[bx+88] / mov ax,es:[bx+86]`), and
+`0xd8ef < low` is exactly the carry of `+10000`, so the whole block is one statement:
+
+  GLeaderSheets[leaderIdx]->gold = GLeaderSheets[leaderIdx]->gold + 10000;
+
+The compiler regenerates the same word-wise sequence, now through the sheet's segment:
+
+  mov  bx,word ptr DGROUP:_GLeaderSheets[bx]
+  mov  ax,word ptr es:[bx+88]
+  mov  dx,word ptr es:[bx+86]
+  add  dx,10000
+  adc  ax,0
+  mov  word ptr es:[bx+88],ax
+  mov  word ptr es:[bx+86],dx
+
+Renames: iStack_4 -> leaderIdx (19), iStack_10 -> sheetSeg (9), uStack_6 -> inputResult (3);
+puVar1/piVar2/iVar5/uVar3/uVar6 are gone with the block that used them.
+
+  grep_checks 39,694 -> 39,630; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
