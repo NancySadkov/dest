@@ -13589,3 +13589,39 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### manage_usesLitoa10: sheet word split from the label text (36,632 -> 36,606)
+manage_usesLitoa10: sheet word split from the label text (36,632 -> 36,606)
+
+  pcVar9  388, 413, 421, 422   (char *)((ulong)sheet >> 0x10) and the three
+                               places that word is passed        -> sheetWord (4)
+  pcVar9  608, 611, 615, 619, 628, 631, 636, 640
+                               ovr_stsprintf's result, handed to
+                               manage_blitLabelRight              -> labelText (8)
+  pvVar2  422, 424             manage_playerTitle's result, then
+                               the CONCAT22 high word             -> titleWord (2)
+
+`in_DX` is deliberately left: it is *read* at 414 / 422 / 424 / 425 before its only
+assignment at 443, so it carries a value in from the caller - the truncated-far-pointer
+artifact - rather than being a variable this function gives a meaning to.
+
+`sheetWord` is a neutral name on purpose.  The export assigns it the high word of `sheet` at
+388 but passes it as the *low* word of `CONCAT22(Font02.ofs, pcVar9)` at 421, which is one
+of the decompiler's truncated-pointer muddles; naming it after either half would assert
+something the code contradicts, and fixing it is a separate job that needs the original
+operand evidence.
+
+Line 422 carries both names (`pvVar2 = manage_playerTitle(sheet_00,pcVar9,...)`), so
+`titleWord` is substituted first.
+
+MEASURED DETAIL WORTH KEEPING: `pvVar2` contributes **nothing** to grep_checks.  Its `v` is
+outside both character classes (`[iusbc]Var` needs i/u/s/b/c before `Var`, and
+`p[iusbc]Var` needs the same after the `p`), so the -26 is entirely `pcVar9`: 13 occurrences
+(12 uses + the declaration, which matches through `cVar9`) x 2 patterns.
+
+No expression changed.
+
+  grep_checks 36,632 -> 36,606; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different

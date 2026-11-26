@@ -359,7 +359,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
 {
   char xOffset;
   char difficulty;
-  void *pvVar2;
+  void *titleWord;
   char *textPtr;
   uint16_t diffValue;
   uint16_t dsSegment;
@@ -374,7 +374,8 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
   int promotableCount;
   uint16_t textY;
   uint16_t fontOfs;
-  char *pcVar9;
+  char *sheetWord;
+  char *labelText;
   uint16_t fontSegment;
   undefined1 loByte;
   uint8_t attr;
@@ -385,7 +386,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
   byte firstLeader;
   int textWidth;
   
-  pcVar9 = (char *)((ulong)sheet >> 0x10);
+  sheetWord = (char *)((ulong)sheet >> 0x10);
   sheet_00 = (char_sheet_t *)sheet;
   statMask = sheet_00->statMask;
   if ((statMask & 0x20) != 0) {
@@ -410,7 +411,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     TextBlitX = 0x15;
     loByte = (undefined1)Font02.ofs;
     hiByte = (undefined1)(Font02.ofs >> 8);
-    textPtr = manage_playerTitle(sheet_00,pcVar9,loByte,(char)Font02.seg);
+    textPtr = manage_playerTitle(sheet_00,sheetWord,loByte,(char)Font02.seg);
     textWidth = ovr_font_textWidth(textPtr,(char *)CONCAT13(hiByte,CONCAT12(loByte,in_DX)),0,0,0);
     loByte = 0x50;
     attr = 0xde;
@@ -418,10 +419,10 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     fontOfs = Font02.ofs;
     fontSegment = Font02.seg;
     titleResult = ovr_ovc45_compute9((char *)&msg,(char *)CONCAT22(sheet_00,_SS),
-                               (char *)CONCAT22(Font02.ofs,pcVar9),Font02.seg,xOffset,xOffset,3);
-    pvVar2 = manage_playerTitle(sheet_00,pcVar9,(char)titleResult,in_DX);
+                               (char *)CONCAT22(Font02.ofs,sheetWord),Font02.seg,xOffset,xOffset,3);
+    titleWord = manage_playerTitle(sheet_00,sheetWord,(char)titleResult,in_DX);
     textPtr = ovr_stsprintf(textBuf,(char *)CONCAT22(0x4cd4,_SS),
-                           (char *)CONCAT22(pvVar2,(char *)0x26510),in_DX);
+                           (char *)CONCAT22(titleWord,(char *)0x26510),in_DX);
     ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),fontSegment,attr,attr,loByte);
   }
   if ((statMask & 4) != 0) {
@@ -605,18 +606,18 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
       loByte = 0x7d;
       hiByte = 0;
       leaderCount = manage_usesGLeaderCount();
-      pcVar9 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4d8b,_SS),
+      labelText = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4d8b,_SS),
                              (char *)CONCAT13((char)(leaderCount >> 8),CONCAT12((char)leaderCount,0x2410)));
       manage_blitLabelRight
-                ((char *)CONCAT13((char)((uint)dsSegment >> 8),CONCAT12((char)dsSegment,pcVar9)),
+                ((char *)CONCAT13((char)((uint)dsSegment >> 8),CONCAT12((char)dsSegment,labelText)),
                  CONCAT11(hiByte,loByte));
       loByte = 0xdc;
       hiByte = 0;
-      pcVar9 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4cd1,_SS),
+      labelText = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4cd1,_SS),
                              (char *)CONCAT13((char)((uint)GPromotableCount >> 8),
                                               CONCAT12((char)GPromotableCount,0x2410)));
       manage_blitLabelRight
-                ((char *)CONCAT13((char)((uint)dsSegment >> 8),CONCAT12((char)dsSegment,pcVar9)),
+                ((char *)CONCAT13((char)((uint)dsSegment >> 8),CONCAT12((char)dsSegment,labelText)),
                  CONCAT11(hiByte,loByte));
       TextBlitY = TextBlitY + 10;
       TextBlitX = 0x11;
@@ -625,19 +626,19 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
       loByte = 0x7d;
       hiByte = 0;
       difficulty = ovr_season_usesDifficulty();
-      pcVar9 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4d8b,_SS),
+      labelText = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4d8b,_SS),
                              (char *)(ulong)CONCAT12(difficulty,0x2410));
       manage_blitLabelRight
-                ((char *)CONCAT13((char)((uint)dsSegment >> 8),CONCAT12((char)dsSegment,pcVar9)),
+                ((char *)CONCAT13((char)((uint)dsSegment >> 8),CONCAT12((char)dsSegment,labelText)),
                  CONCAT11(hiByte,loByte));
       loByte = 0xdc;
       hiByte = 0;
       promotableCount = ovr_season_usesGPromotableCount2();
-      pcVar9 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4cd1,_SS),
+      labelText = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4cd1,_SS),
                              (char *)CONCAT13((char)((uint)promotableCount >> 8),CONCAT12((char)promotableCount,0x2410))
                             );
       manage_blitLabelRight
-                ((char *)CONCAT13((char)((uint)dsSegment >> 8),CONCAT12((char)dsSegment,pcVar9)),
+                ((char *)CONCAT13((char)((uint)dsSegment >> 8),CONCAT12((char)dsSegment,labelText)),
                  CONCAT11(hiByte,loByte));
     }
   }
