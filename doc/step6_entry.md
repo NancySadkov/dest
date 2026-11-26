@@ -8943,3 +8943,43 @@ half-damage roll result, 7), iVar5 (5), uVar4 (3).  The body is still structural
 `paStack_c = (agnt_t *)((long)agntIndex * 0x34)` - a near pointer built from an offset - and the
 `CONCAT13((char)((uint)ptrSeg >> 8), CONCAT12((char)ptrSeg, paStack_c))` shuffles, so the rest needs a
 re-derivation against the disassembly rather than more renaming.
+
+### DECODED: ovc27_textTakesHalfDamage3's near/far confusion
+DECODED: ovc27_textTakesHalfDamage3's near/far confusion, precisely
+
+The prologue settles what `agntSeg` / `paStack_c` / `ptrSeg` are:
+
+  0009  mov di, word ptr [bp + 0xa]        ; agntIndex (the 2nd parameter)
+  000C  mov ax, di
+  000E  mov dx, 0x34 / imul dx             ; agntIndex * sizeof(agnt_t)
+  0013  add ax, 0
+  0016  mov word ptr [bp - 8], 0x50        ; SEGMENT = Agnts' link-time segment literal
+  001B  mov word ptr [bp - 0xa], ax        ; OFFSET  = agntIndex * 0x34
+  001E  les bx, ptr [bp + 6]               ; the `agnt` parameter is a FAR pointer
+  ...
+  0045  push word ptr [bp - 8]             ; push the constructed far pointer
+  0048  push word ptr [bp - 0xa]           ;   seg then ofs
+  004B  push cs
+  004C  call ovc27_spellHalfDamage
+
+So `agntSeg` + `paStack_c` are the two halves of ONE far pointer: `&Agnts[agntIndex]`, whose segment the
+original writes as the literal 0x50 (the Agnts link-time segment, like 0x70 for GLeaderSheets and 0x48 for
+AudioHandles).  It should be:
+
+  agnt_t far *agntRec = (agnt_t far *)MK_FP(SEG_OF(Agnts), (uint16_t)(agntIndex * 0x34));
+
+and every `CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c))` (5 sites) is just
+`agntRec`.  `ptrSeg` - initialised as `(char *)((int)&AgntAnms[0x75].halfWidth + 1)` - is a fabricated
+segment value that never corresponded to anything; the disassembly never loads a segment from that
+expression.  That is the same `CONCAT13`-loses-the-segment defect measured earlier in this session, now
+with the correct target identified.
+
+NOT ATTEMPTED THIS TURN: the rewrite touches 35 `paStack_c` uses, 27 `ptrSeg` uses and 30 `agntSeg` uses
+in a 163-line function, and it has to be verified by call count plus es:[bx+N] offsets.  I did not have
+the budget left to do that safely and check it, and shipping it unverified is the failure mode I have hit
+three times already (the _fsetmem CONCAT22 attempt, the blanket agntG_t cast, the ovc20 stash revert).
+The structure is now decoded; the edit is a full turn's work.
+
+  grep_checks 40,000 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
