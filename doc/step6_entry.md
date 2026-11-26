@@ -9806,3 +9806,21 @@ meaningful in the rebuilt image and the table has no declaration in the tree.
   grep_checks 39,878 -> 39,839; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### manage_usesLitoa10: uVar8/uVar4/cVar1 split (39,839 -> 39,810)
+manage_usesLitoa10: split uVar8, uVar4 and cVar1 into six single-role locals (39,839 -> 39,810)
+
+  uVar8  0x1b then +10, feeding TextBlitY          -> textY      (3 uses)
+  uVar8  Font02.ofs, six uses                      -> fontOfs    (6)
+  uVar4  ovc45_usesLDIV_at_ result                 -> diffValue  (2)
+  uVar4  _DS, then four CONCAT13 far rebuilds      -> dsSegment  (5)
+  cVar1  0x7d - textWidth                          -> xOffset    (3)
+  cVar1  season_usesDifficulty()                   -> difficulty (2)
+
+Renaming and splitting only; no expression changed.  With this the function's exported
+temporaries are all single-role: statIndex, titleResult, classOfs, statValue, promotableCount,
+textY, fontOfs, diffValue, dsSegment, xOffset, difficulty, fontSegment, leaderCount.
+
+  grep_checks 39,839 -> 39,810; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

@@ -363,10 +363,12 @@ void __cdecl16far manage_usesBlitLabel2(char *text,int x)
 void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
 
 {
-  char cVar1;
+  char xOffset;
+  char difficulty;
   void *pvVar2;
   char *textPtr;
-  uint16_t uVar4;
+  uint16_t diffValue;
+  uint16_t dsSegment;
   uint leaderCount;
   uint8_t *in_DX;
   int signWord;
@@ -376,7 +378,8 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
   int classOfs;
   int statValue;
   int promotableCount;
-  uint16_t uVar8;
+  uint16_t textY;
+  uint16_t fontOfs;
   char *pcVar9;
   uint16_t fontSegment;
   undefined1 loByte;
@@ -392,10 +395,10 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
   sheet_00 = (char_sheet_t *)sheet;
   statMask = sheet_00->statMask;
   if ((statMask & 0x20) != 0) {
-    uVar8 = 0x1b;
+    textY = 0x1b;
     for (statIndex = 0; statIndex < 6; statIndex = statIndex + 1) {
       TextBlitX = 0x15;
-      TextBlitY = uVar8;
+      TextBlitY = textY;
       ovr_blitLabel((char *)((far_t *)GStatsLabels + statIndex)->ofs,
                     (uint8_t *)
                     CONCAT22(Font02.ofs,
@@ -405,7 +408,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                     (char *)(ulong)CONCAT12(sheet_00->stats[statIndex],0x2410),0x10);
       manage_blitLabelRight
                 ((char *)CONCAT13((char)((uint)_SS >> 8),CONCAT12((char)_SS,&msg)),0x31);
-      uVar8 = uVar8 + 10;
+      textY = textY + 10;
     }
   }
   TextBlitY = 0xc;
@@ -417,38 +420,38 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     textWidth = ovr_font_textWidth(textPtr,(char *)CONCAT13(hiByte,CONCAT12(loByte,in_DX)),0,0,0);
     loByte = 0x50;
     attr = 0xde;
-    cVar1 = (char)(0x7d - textWidth);
-    uVar8 = Font02.ofs;
+    xOffset = (char)(0x7d - textWidth);
+    fontOfs = Font02.ofs;
     fontSegment = Font02.seg;
     titleResult = ovr_ovc45_compute9((char *)&msg,(char *)CONCAT22(sheet_00,_SS),
-                               (char *)CONCAT22(Font02.ofs,pcVar9),Font02.seg,cVar1,cVar1,3);
+                               (char *)CONCAT22(Font02.ofs,pcVar9),Font02.seg,xOffset,xOffset,3);
     pvVar2 = manage_playerTitle(sheet_00,pcVar9,(char)titleResult,in_DX);
     textPtr = ovr_stsprintf(textBuf,(char *)CONCAT22(0x4cd4,_SS),
                            (char *)CONCAT22(pvVar2,(char *)0x26510),in_DX);
-    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(uVar8,in_DX),fontSegment,attr,attr,loByte);
+    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),fontSegment,attr,attr,loByte);
   }
   if ((statMask & 4) != 0) {
     loByte = 0x50;
     attr = 0xde;
-    uVar8 = Font02.ofs;
+    fontOfs = Font02.ofs;
     fontSegment = Font02.seg;
     textPtr = ovr_fmVsprintf("%s ",(char *)CONCAT22(*(uint16_t *)
                                                     ((int)&GAlignmentsNames[0].seg +
                                                     (uint)sheet_00->alignment * 4),
                                                    (char *)((far_t *)GAlignmentsNames +
                                                            sheet_00->alignment)->ofs));
-    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(uVar8,in_DX),fontSegment,attr,attr,loByte);
+    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),fontSegment,attr,attr,loByte);
   }
   if ((statMask & 1) != 0) {
     loByte = 0x50;
     attr = 0xde;
     classOfs = (uint)sheet_00->cls * 4;
     in_DX = (uint8_t *)((char *)0x26510);
-    uVar8 = Font02.ofs;
+    fontOfs = Font02.ofs;
     fontSegment = Font02.seg;
     textPtr = ovr_fmVsprintf("%s",(char *)CONCAT22(*(uint16_t *)(classOfs + 0xed),
                                                   (char *)*(uint16_t *)(classOfs + 0xeb)));
-    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(uVar8,in_DX),fontSegment,attr,attr,loByte);
+    ovr_blitLabel(textPtr,(uint8_t *)CONCAT22(fontOfs,in_DX),fontSegment,attr,attr,loByte);
   }
   TextBlitY = TextBlitY + 10;
   if (((statMask & 0x40) != 0) || (DebugVerbose != false)) {
@@ -580,8 +583,8 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                   Font02.seg,0xde,0xde,0xe0);
     loByte = 0xdc;
     hiByte = 0;
-    uVar4 = ovr_ovc45_usesLDIV_at_(sheet_00->charIndex,0,0);
-    textPtr = litoa10(textBuf,(long)CONCAT22(uVar4,_SS),(char)signWord,0);
+    diffValue = ovr_ovc45_usesLDIV_at_(sheet_00->charIndex,0,0);
+    textPtr = litoa10(textBuf,(long)CONCAT22(diffValue,_SS),(char)signWord,0);
     manage_blitLabelRight
               ((char *)CONCAT13((char)((uint)signWord >> 8),CONCAT12((char)signWord,textPtr)),
                CONCAT11(hiByte,loByte));
@@ -598,7 +601,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
     firstLeader = manage_findFirstLeader();
     TextBlitY = TextBlitY + 0xf;
     if (((sheet_00->titleIndex != 0) && (firstLeader != 0xff)) &&
-       (uVar4 = _DS, (GLeaderSheets[firstLeader])->titleIndex < 9)) {
+       (dsSegment = _DS, (GLeaderSheets[firstLeader])->titleIndex < 9)) {
       manage_usesBlitLabel2("popularity",0x7d);
       manage_usesBlitLabel2("city blocks",0xdc);
       TextBlitY = TextBlitY + 10;
@@ -611,7 +614,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
       pcVar9 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4d8b,_SS),
                              (char *)CONCAT13((char)(leaderCount >> 8),CONCAT12((char)leaderCount,0x2410)));
       manage_blitLabelRight
-                ((char *)CONCAT13((char)((uint)uVar4 >> 8),CONCAT12((char)uVar4,pcVar9)),
+                ((char *)CONCAT13((char)((uint)dsSegment >> 8),CONCAT12((char)dsSegment,pcVar9)),
                  CONCAT11(hiByte,loByte));
       loByte = 0xdc;
       hiByte = 0;
@@ -619,7 +622,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                              (char *)CONCAT13((char)((uint)GPromotableCount >> 8),
                                               CONCAT12((char)GPromotableCount,0x2410)));
       manage_blitLabelRight
-                ((char *)CONCAT13((char)((uint)uVar4 >> 8),CONCAT12((char)uVar4,pcVar9)),
+                ((char *)CONCAT13((char)((uint)dsSegment >> 8),CONCAT12((char)dsSegment,pcVar9)),
                  CONCAT11(hiByte,loByte));
       TextBlitY = TextBlitY + 10;
       TextBlitX = 0x11;
@@ -627,11 +630,11 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                     Font02.seg,0xde,0xde,0xe0);
       loByte = 0x7d;
       hiByte = 0;
-      cVar1 = ovr_season_usesDifficulty();
+      difficulty = ovr_season_usesDifficulty();
       pcVar9 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x4d8b,_SS),
-                             (char *)(ulong)CONCAT12(cVar1,0x2410));
+                             (char *)(ulong)CONCAT12(difficulty,0x2410));
       manage_blitLabelRight
-                ((char *)CONCAT13((char)((uint)uVar4 >> 8),CONCAT12((char)uVar4,pcVar9)),
+                ((char *)CONCAT13((char)((uint)dsSegment >> 8),CONCAT12((char)dsSegment,pcVar9)),
                  CONCAT11(hiByte,loByte));
       loByte = 0xdc;
       hiByte = 0;
@@ -640,7 +643,7 @@ void __cdecl16far manage_usesLitoa10(char_sheet_t *sheet)
                              (char *)CONCAT13((char)((uint)promotableCount >> 8),CONCAT12((char)promotableCount,0x2410))
                             );
       manage_blitLabelRight
-                ((char *)CONCAT13((char)((uint)uVar4 >> 8),CONCAT12((char)uVar4,pcVar9)),
+                ((char *)CONCAT13((char)((uint)dsSegment >> 8),CONCAT12((char)dsSegment,pcVar9)),
                  CONCAT11(hiByte,loByte));
     }
   }
