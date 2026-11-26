@@ -8014,3 +8014,55 @@ which is why the previous three turns kept reporting the class as nearly empty.
   grep_checks 40,145 -> 40,139; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### agnt_usesStrengthMax and two singles: six more far reads restored (40,139 -> 40,135)
+
+**agnt_usesStrengthMax** (`3b1d:0426`) indexes two column tables and reads the record at
+`Agnts[AgntArrayX[i][colA] - 1]`.  The chain uses a **negative displacement**, which is why it was easy to
+misread:
+
+```
+028F  les bx, ptr es:[bx - 0x17] / mov al, byte ptr es:[bx]             agntG_t.ai
+02C0  les bx, ptr es:[bx - 0x17] / test word ptr es:[bx + 0x3c], 0x20   agntG_t.flags
+0488  same pair again for the AgntArrayB side
+```
+
+`bx` already holds `idx*0x34` at that point, so `[bx-0x17]` is `(idx-1)*0x34 + 0x1d` -
+`Agnts[idx-1].gdata`.  The export had
+
+```c
+*(uint8_t *)*(uint32_t far *)&Agnts[AgntArrayA[iVar7][colA] - 1].gdata == factionId
+(gdataFar = *(uint32_t far *)&Agnts[...].gdata, (*(uint *)((int)gdataFar + 0x3c) & 0x20) == 0)
+```
+
+now `...gdata->ai == factionId` and `(...gdata->flags & 0x20) == 0`, and `uint32_t gdataFar` is gone.
+Emitted, matching the original:
+
+```
+261  les  bx,dword ptr es:_Agnts[bx-23]
+262  mov  al,byte ptr es:[bx]
+263  cmp  al,byte ptr [bp-1]
+284  les  bx,dword ptr es:[bx]
+285  test word ptr es:[bx+60],32
+```
+
+**agnt_acquireTarget** - `*(byte *)((int)uVar1 + 0x42)` is `agntG_t.rank`, emitted as
+`les bx,dword ptr es:_Agnts[bx+29] / mov al,byte ptr es:[bx+66]` (0x42).
+
+**ovc27_compute2** - `*(uint *)((int)uVar1 + 0x3e) & 0x10` is `agntG_t.flags2`, emitted as
+`les bx,dword ptr es:_Agnts[bx+29] / test word ptr es:[bx+62],16` (0x3e).
+
+#### A self-inflicted error, caught
+
+The `AgntArrayB` substitution lost its opening parenthesis: the original wrapped the cast in a group
+(`(*(uint8_t *) ... == factionId)`), and my replacement dropped the `(` while keeping both `)`.  The
+compiler reported `Expression syntax` immediately, and the paren was restored before anything was
+committed.  The `AgntArrayA` form was fine because that one really had two opening parens.
+
+**Queue after this:** 11 reads in 3 functions - `stats_openAgentDetail` 4 (one is the segment-0x80 table
+block whose store order is also swapped), `ovc49_drawAgents` 4 (one is a word at `entity+0x14`, spanning
+`frames`' second byte), `stats_readyStatusText` 3 (behind `in_stack_00000004`).
+
+  grep_checks 40,139 -> 40,135; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

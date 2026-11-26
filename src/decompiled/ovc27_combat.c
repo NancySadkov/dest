@@ -496,8 +496,7 @@ uint __cdecl16far ovc27_compute2(agnt_t far *agnt,int param,uint16_t arg3,uint16
       uVar2 = 0;
     }
     else {
-      uVar1 = *(uint32_t far *)&Agnts[param].gdata;
-      if (((*(uint *)((int)uVar1 + 0x3e) & 0x10) == 0) ||
+      if (((Agnts[param].gdata->flags2 & 0x10) == 0) ||
          (2 < (((entity_t *)agnt->entity)->base).level)) {
         uVar2 = ovc27_rollAgainstStat(agnt,mode,1,0);
         if ((uVar2 & 0xff) == 0) {

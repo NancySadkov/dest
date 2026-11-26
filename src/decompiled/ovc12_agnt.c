@@ -222,7 +222,6 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t far *agnt,byte *out)
   uint8_t factionId;
   uint16_t uVar2;
   int frameOfs;
-  uint32_t gdataFar;
   bool bVar5;
   undefined1 result;
   int iVar7;
@@ -295,11 +294,9 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t far *agnt,byte *out)
                    Agnts[AgntArrayA[iVar7][colA] - 1].strengthMax)) &&
                  (Agnts[AgntArrayA[iVar7][colA] - 1].faction ==
                   factionId)) &&
-                ((*(uint8_t *)
-                   *(uint32_t far *)&Agnts[AgntArrayA[iVar7][colA] - 1].gdata
-                  == factionId &&
-                 (gdataFar = *(uint32_t far *)&Agnts[AgntArrayA[iVar7][colA] - 1].gdata,
-                 (*(uint *)((int)gdataFar + 0x3c) & 0x20) == 0)))))) {
+                ((Agnts[AgntArrayA[iVar7][colA] - 1].gdata->ai
+                   == factionId &&
+                 ((Agnts[AgntArrayA[iVar7][colA] - 1].gdata->flags & 0x20) == 0)))))) {
               *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
                    AgntArrayA[iVar7][colA];
               bVar5 = agnt_compute4((char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))));
@@ -316,11 +313,9 @@ undefined1 __cdecl16far agnt_usesStrengthMax(agnt_t far *agnt,byte *out)
                 (Agnts[AgntArrayB[iVar7][colA] - 1].strength <
                  Agnts[AgntArrayB[iVar7][colA] - 1].strengthMax)) &&
                (((Agnts[AgntArrayB[iVar7][colA] - 1].faction ==
-                  factionId && (*(uint8_t *)
-                             *(uint32_t far *)&Agnts[AgntArrayB[iVar7][colA] - 1].gdata ==
+                  factionId && (Agnts[AgntArrayB[iVar7][colA] - 1].gdata->ai ==
                             factionId)) &&
-                (gdataFar = *(uint32_t far *)&Agnts[AgntArrayB[iVar7][colA] - 1].gdata,
-                (*(uint *)((int)gdataFar + 0x3c) & 0x20) == 0)))) {
+                ((Agnts[AgntArrayB[iVar7][colA] - 1].gdata->flags & 0x20) == 0)))) {
               *(byte *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(out) + 2))) =
                    AgntArrayB[iVar7][colA];
               return AgntArrayB[iVar7][colA];
@@ -1316,8 +1311,7 @@ uint __cdecl16far agnt_acquireTarget(agnt_t far *agnt,char *agntIndex,uint16_t a
       if ((((Agnts[iStack_4].faction != agnt->faction) &&
            ((Agnts[iStack_4].flags & 0xae4) == 0)) &&
           (Agnts[iStack_4].combatState == '\0')) &&
-         (uVar1 = *(uint32_t far *)&Agnts[iStack_4].gdata,
-         iVar3 = agnt_compute15(*(byte *)((int)uVar1 + 0x42),
+         (iVar3 = agnt_compute15(Agnts[iStack_4].gdata->rank,
                                 (((entity_t *)agnt->entity)->base).level), (char)iVar3 != '\0')) {
         agnt->flags = agnt->flags | 3;
         *(char *)CONCAT22(in_stack_0000000a,(*(uint16_t *)((uint8_t *)&(agntIndex) + 2))) = (char)iStack_4 + '\x01';
