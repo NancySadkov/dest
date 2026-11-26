@@ -474,8 +474,8 @@ uint16_t __cdecl16far run_demo(void)
   undefined1 uVar5;
   uint8_t *pal;
   uint16_t uVar6;
-  int iVar7;
-  int iVar8;
+  int jitterX;
+  int jitterY;
   undefined1 ssHi;
   uint8_t palette[0x300];   /* palette buffer, cleared at 6d7a:0cc6 */
   stg_tmp_t *gfxPtr;
@@ -511,9 +511,9 @@ uint16_t __cdecl16far run_demo(void)
   strcpy((char *)CONCAT13((char)((uint)uVar3 >> 8),
                           CONCAT12((char)uVar3,*(uint16_t *)((uint)colorC * 4))),"Kaunas");
   ovc42_populateArea(colorB);
-  for (iVar8 = -2; iVar8 < 3; iVar8 = iVar8 + 1) {
-    for (iVar7 = -1; iVar7 < 1; iVar7 = iVar7 + 1) {
-      ovr_ovc18_usesRandBelow(iVar8 + 0x48,iVar7 + 0x24,0,0xff,(char)(iVar7 + 0x24),0);
+  for (jitterY = -2; jitterY < 3; jitterY = jitterY + 1) {
+    for (jitterX = -1; jitterX < 1; jitterX = jitterX + 1) {
+      ovr_ovc18_usesRandBelow(jitterY + 0x48,jitterX + 0x24,0,0xff,(char)(jitterX + 0x24),0);
     }
   }
   ovr_ovc18_usesRandBelow(0x49,0x24,0x40,0xff,0x24,0x40);

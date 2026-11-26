@@ -14299,3 +14299,40 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (47 runs, sum|delta| 193,093, mean 122, worst 14,562)
   compare_runtime 1,630 matched, 1,621 identical / 9 different
+
+### run_demo counters, ovc49_usesFrameIndex2, ovc45_compute4 (35,762 -> 35,702)
+run_demo counters, ovc49_usesFrameIndex2, ovc45_compute4 (35,762 -> 35,702)
+
+run_demo (786 lines) - only its two tight names; uVar3 (97 uses), uVar5 (35) and uVar6 (30)
+span nearly the whole body and are compiler scratch:
+    iVar8  514, 516  the -2..2 vertical jitter loop    -> jitterY (6)
+    iVar7  515, 516  the -1..0 horizontal jitter loop  -> jitterX (7)
+
+ovc49_usesFrameIndex2 (98 lines) - the sibling of the function done last turn, same shape:
+    paVar6  no-op alias of the `agnt` parameter        -> removed (14 uses folded)
+    piVar7  (int *)(frames + frameIndex * 4)           -> framePtr  (4)
+    iVar3   *piVar7, the frame data offset             -> frameOfs  (4)
+    iVar5   piVar7[1], the frames pointer's high word  -> frameSeg  (2)
+    iVar5   row + radius * side, the candidate row     -> testRow   (13)
+    uVar2   *(uint16_t *)((int)&agnt->frames + 2), one assignment and no read
+                                                       -> removed
+
+ovc45_compute4 (48 lines)
+    bVar3  527, 543..548  (cellType * 0x27) >> 8           -> sizeHi  (4)
+    uVar2  529, 530       ovr_constr_usesGMapFlags, tested -> flagVal (2)
+    uVar2  534, 535       ovr_ovc23_findRecordAt, tested   -> recIdx  (2)
+    uVar2  531, 545, 548, 552, 556, 560, 564, 567  the returned value -> result (9)
+
+ONE MISTAKE, caught by the build: in ovc49_usesFrameIndex2 the `iVar5` cut renames the
+declaration line to `int frameSeg;` (it sits before the cut), so `testRow` was used without a
+declaration and the compiler said `Undefined symbol 'testRow' in function
+ovc49_usesFrameIndex2`.  The declaration was split and the whole gate suite re-run - the
+numbers below are from the clean run.  The general fix is the same as for the earlier
+uVar2/notifySeg case: whenever a name is cut, its declaration must be split explicitly.
+
+No expression changed.
+
+  grep_checks 35,762 -> 35,702; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (47 runs, sum|delta| 193,093, mean 122, worst 14,562)
+  compare_runtime 1,630 matched, 1,621 identical / 9 different

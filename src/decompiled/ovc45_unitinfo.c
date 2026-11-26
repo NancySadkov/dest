@@ -522,17 +522,19 @@ uint __cdecl16far ovc45_compute4(int x,uint16_t y,uint16_t arg3)
 
 {
   byte cellType;
-  uint uVar2;
+  uint flagVal;
+  uint recIdx;
+  uint result;
   byte extraout_AH;
-  byte bVar3;
+  byte sizeHi;
   
-  uVar2 = ovr_constr_usesGMapFlags(x,y,0);
-  if ((uVar2 & 0xff) == 0) {
-    uVar2 = 0;
+  flagVal = ovr_constr_usesGMapFlags(x,y,0);
+  if ((flagVal & 0xff) == 0) {
+    result = 0;
   }
   else {
-    uVar2 = ovr_ovc23_findRecordAt(x,y,0);
-    if (uVar2 == 0xffff) {
+    recIdx = ovr_ovc23_findRecordAt(x,y,0);
+    if (recIdx == 0xffff) {
       cellType = ovc45_getUnitType(x,y);
       if (CONCAT11(extraout_AH,cellType) == 0) {
         cellType = ovc45_getUnitType(x + -1,y);
@@ -540,31 +542,31 @@ uint __cdecl16far ovc45_compute4(int x,uint16_t y,uint16_t arg3)
           cellType = ovc45_getUnitType(x + -2,y);
           if (BuildingTypes[cellType].size < 3) {
             cellType = ovc45_getUnitType(x + -3,y);
-            bVar3 = (byte)((uint)cellType * 0x27 >> 8);
+            sizeHi = (byte)((uint)cellType * 0x27 >> 8);
             if (BuildingTypes[cellType].size < 4) {
-              uVar2 = CONCAT11(bVar3,1);
+              result = CONCAT11(sizeHi,1);
             }
             else {
-              uVar2 = (uint)bVar3 << 8;
+              result = (uint)sizeHi << 8;
             }
           }
           else {
-            uVar2 = (uint)cellType * 0x27 & 0xff00;
+            result = (uint)cellType * 0x27 & 0xff00;
           }
         }
         else {
-          uVar2 = (uint)cellType * 0x27 & 0xff00;
+          result = (uint)cellType * 0x27 & 0xff00;
         }
       }
       else {
-        uVar2 = (uint)extraout_AH << 8;
+        result = (uint)extraout_AH << 8;
       }
     }
     else {
-      uVar2 = uVar2 & 0xff00;
+      result = result & 0xff00;
     }
   }
-  return uVar2;
+  return result;
 }
 
 
