@@ -14607,3 +14607,16 @@ register the callees return the segment in.
   compare_state 1,627/0/0
   diff_dgroup 1,619/1,805 (39 runs, sum|delta| 200,634, mean 123, worst 14,380)
   compare_runtime 1,673 matched, 1,664 identical / 9 different
+
+NOTE on the -47 step at 0x7aa5: investigated and NOT a missing-bytes problem.
+
+13 original symbols in 0x76e9..0x7aa5 fail the *name* pairing in diff_dgroup, but every one of
+their texts is present in the tree - "Search this location for minerals" is declared as
+`s_s_search_this_location_f_02b8` (line 1705) and "Home a unit here to halt damage" as
+`s_home_a_unit_here_to_halt_1af9` (line 1732).  They carry hash-suffixed names rather than
+`_2410_<offset>` names, so they pair only through the content fallback, and the -47 is a
+residual byte difference rather than an absent string.
+
+Fixing it means renaming that whole family to the offset scheme (13 renames plus their
+externs), which is a different kind of change from the additions that closed 0x8080..0x80f0,
+and it should be measured on its own.
