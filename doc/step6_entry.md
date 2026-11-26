@@ -10162,3 +10162,37 @@ reads a stored DGR.BIN rather than the current EXE:
   grep_checks 39,274 -> 39,229; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,447/1,868 (82 deltas)
   compare_runtime 1,548 identical / 11 different
+
+### DGROUP: s_OK / s_Place regions filled (1,447 -> 1,449)
+dgroup: fill the s_OK / s_Place regions with exact bytes (1,447 -> 1,449 matched, 82 -> 80 deltas)
+
+`diff_dgroup` reported -52 at `s_OK_2410_4f8f` and -38 at `s_Place_2410_5063`.  Reading
+STRONG.EXE at those offsets shows four symbols absent from our tree and one of the wrong
+length:
+
+  4f1d 69  has destroyed all enemies and has achieved EMPEROR. Congratulations!  (ours: 67)
+  4f62 45  has destroyed all enemies.  Congratulations!                         (missing)
+  4f9c 21  Select an alignment.                                                 (missing)
+  500d 29  Select the character's name.                                         (missing)
+  505a  9  Keep %s.                                                             (missing)
+
+The text already exists inside `stmiss.c`'s `s_absentBlob`, but a blob has no symbols, so
+the layout can never match.  They are now declared individually, in DGROUP order, as
+`undefined NAME[exact_len]` with bytes copied from the image - the same form as the
+218-byte fix.
+
+Measured after re-dumping the rebuilt image:
+
+                                   before        after
+grep_checks                        39,229        39,228
+diff_dgroup matched                 1,447         1,449     (+2)
+diff_dgroup deltas                     82            80     (-2)
+compare_runtime identical           1,548         1,549     (+1)
+compare_runtime different              11            11
+compare_state                     1,627/0/0     1,627/0/0
+
+`stmiss.c`'s blob is deliberately left untouched: its duplicates sit after all
+st_globals*.o data, so they cannot shift the symbols being aligned, and removing them is a
+separate refactor.
+
+  grep_checks 39,229 -> 39,228; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
