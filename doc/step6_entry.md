@@ -12220,3 +12220,52 @@ No split was needed and no expression changed.
   grep_checks 37,644 -> 37,590; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
   compare_runtime 1,615 symbols matched, 1,605 identical / 10 different
+
+### link order: globals before the recovered CRT (sum|delta| 276,979 -> 238,507)
+link order: the globals modules precede the recovered CRT (sum|delta| 276,979 -> 238,507)
+
+DGROUP order is decided by link order, and the original's game data begins at
+DGROUP:0x0000 (`_DATA` first, then the C0 header block, then the strings at 0x0094).
+Ours did not: `res` was sorted alphabetically, so `CRTL.OBJ` came before `GLOB*.OBJ`
+and the recovered CRT's own copy of the C0 startup data landed in front of the game
+data.
+
+One change in scripts/link_standalone.py:
+
+    res.sort(key=lambda n: (n.upper() == "CRTL.OBJ", n))
+
+which keeps every module resident and only moves `CRTL.OBJ` to the end of the resident
+list.  Our own `_DATA`/`__C0_ASM_CopyRight`/`s_divide_error`/`GSTARTX_SavedVectors`/
+`DosVersion` copy moves from 0x00C6 to 0x00AA, and the string block from 0x014A to
+0x012E.
+
+MEASURED (HEAD 2f876e52 -> this commit)
+
+                                     before        after
+  grep_checks                        37,590        37,590
+  compare_state                   1,627/0/0     1,627/0/0
+  diff_dgroup matched                1,450         1,450
+  diff_dgroup delta runs                71            71
+  diff_dgroup sum|delta|           276,979       238,507   (-38,472; mean 191 -> 164)
+  compare_runtime symbols matched    1,615         1,615
+  compare_runtime identical state    1,605         1,605
+  compare_runtime DIFFERENT state       10            10
+
+Every run shifts by the same 28 bytes:
+
+    before:  +182 at 0x0094, +138 at 0x291e, +147 at 0x1f0c
+    after:   +154 at 0x0094, +110 at 0x291e, +119 at 0x1f0c
+
+MEASURED AND REJECTED: also moving C0M.OBJ itself to the end of the link (so the game
+data would start at 0x0000 exactly) fails with
+
+    Error: Group DGROUP exceeds 64K
+
+because DGROUP is already near the 64 KiB limit and the reordering adds segment
+alignment padding.  That variant was reverted.
+
+The remaining +154 is the startup's own data: DGROUP:0x0000..0x00A9 is C0M's
+`DATASEG@`, interrupt vectors, `__C0ARGC`/`__ENV*`/`__PSP`/`__OS*` and `_errno`,
+`_StartTime`, the heap variables.  The original keeps those at 0x0081..0x0091 instead,
+interleaved after its C0 header block.  Closing that needs the startup's data to fit in
+the space the original gives it - a size question, not an ordering one.

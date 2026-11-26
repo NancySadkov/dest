@@ -158,6 +158,12 @@ def main():
 
     res = [o for o in objs if is_resident(o)]
     ovl = [o for o in objs if not is_resident(o)]
+    # Link order decides DGROUP order.  The original's game data begins at
+    # DGROUP:0x0000 (_DATA first), so the globals modules are linked before the
+    # recovered CRT: crtl.c's own copy of the C0 startup data then lands after the
+    # game data instead of in front of it.  Measured: sum|delta| 276,979 -> 238,507
+    # with match count and runtime sample unchanged.
+    res.sort(key=lambda n: (n.upper() == "CRTL.OBJ", n))
     # C0M.OBJ supplies the startup's data symbols (_psp, errno, _StartTime, the
     # heap variables, _terminate) that CM.LIB and OVERLAY.LIB expect.  The
     # original's entry is startx (CRTL), not C0's _startup, so the linked EXE's
