@@ -433,75 +433,76 @@ int __cdecl16far ovc27_usesRandBelow4(byte level,byte threshold)
 uint __cdecl16far ovc27_compute2(agnt_t far *agnt,int param,uint16_t arg3,uint16_t arg4)
 
 {
-  uint in_AX;
-  uint uVar2;
-  uint16_t uVar3;
+  uint rollResult;
+  uint slotOfs;
+  uint result;
+  uint16_t firstRoll;
   byte mode;
-  byte bStack_3;
+  byte threshold;
   
   mode = (byte)param;
   if ((((agntG_t far *)agnt->gdata)->flags & 2) == 0) {
     if ((((agntG_t far *)agnt->gdata)->flags & 1) == 0) {
       if (((((((agntG_t far *)agnt->gdata)->flags & 0x800) != 0) &&
-           (in_AX = ovc27_rollAgainstStat(agnt,mode,5,0), (char)in_AX != '\0')) &&
-          (in_AX = param * 0x34, (Agnts[param].flags & 0x7e0) == 0)) &&
-         ((in_AX = param * 0x34,
+           (rollResult = ovc27_rollAgainstStat(agnt,mode,5,0), (char)rollResult != '\0')) &&
+          (slotOfs = param * 0x34, (Agnts[param].flags & 0x7e0) == 0)) &&
+         ((slotOfs = param * 0x34,
           (Agnts[param].gdata->flags3 & 0x80) == 0 &&
-          (in_AX = param * 0x34,
+          (slotOfs = param * 0x34,
           (Agnts[param].gdata->flags & 4) != 0)))) {
-        return CONCAT11((char)(in_AX >> 8),1);
+        return CONCAT11((char)(slotOfs >> 8),1);
       }
-      uVar2 = in_AX & 0xff00;
+      result = slotOfs & 0xff00;
     }
     else {
-      uVar3 = ovc27_usesRandBelow3((agnt_t far *)CONCAT22(param,agnt),0x900108,param);
-      if ((char)uVar3 == '\0') {
-        uVar2 = ovc27_usesRandBelow3((agnt_t far *)CONCAT22(param,agnt),0x90014a,param);
-        if ((char)uVar2 == '\0') {
-          return uVar2 & 0xff00;
+      firstRoll = ovc27_usesRandBelow3((agnt_t far *)CONCAT22(param,agnt),0x900108,param);
+      if ((char)firstRoll == '\0') {
+        result = ovc27_usesRandBelow3((agnt_t far *)CONCAT22(param,agnt),0x90014a,param);
+        if ((char)result == '\0') {
+          return result & 0xff00;
         }
-        bStack_3 = 10;
+        threshold = 10;
       }
       else {
-        bStack_3 = 4;
+        threshold = 4;
       }
-      uVar2 = ovc27_usesRandBelow4((((entity_t *)agnt->entity)->base).level,bStack_3);
-      if ((uVar2 & 0xff) == 0) {
-        uVar2 = 0;
+      result = ovc27_usesRandBelow4((((entity_t *)agnt->entity)->base).level,threshold);
+      if ((result & 0xff) == 0) {
+        result = 0;
       }
       else {
-        uVar2 = ovc27_rollAgainstStat(agnt,mode,2,0);
-        if ((uVar2 & 0xff) == 0) {
-          uVar2 = 0;
+        result = ovc27_rollAgainstStat(agnt,mode,2,0);
+        if ((result & 0xff) == 0) {
+          result = 0;
         }
         else {
-          uVar2 = 1;
+          result = 1;
         }
       }
     }
   }
   else {
-    uVar2 = ovc27_usesRandBelow4((((entity_t *)agnt->entity)->base).level,1);
-    if ((uVar2 & 0xff) == 0) {
-      uVar2 = 0;
+    result = ovc27_usesRandBelow4((((entity_t *)agnt->entity)->base).level,1);
+    if ((result & 0xff) == 0) {
+      result = 0;
     }
     else {
       if (((Agnts[param].gdata->flags2 & 0x10) == 0) ||
          (2 < (((entity_t *)agnt->entity)->base).level)) {
-        uVar2 = ovc27_rollAgainstStat(agnt,mode,1,0);
-        if ((uVar2 & 0xff) == 0) {
-          uVar2 = 0;
+        result = ovc27_rollAgainstStat(agnt,mode,1,0);
+        if ((result & 0xff) == 0) {
+          result = 0;
         }
         else {
-          uVar2 = 1;
+          result = 1;
         }
       }
       else {
-        uVar2 = param * 0x34 & 0xff00;
+        result = param * 0x34 & 0xff00;
       }
     }
   }
-  return uVar2;
+  return result;
 }
 
 

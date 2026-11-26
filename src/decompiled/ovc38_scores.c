@@ -187,21 +187,21 @@ void __cdecl16far ovc38_showAchievements(void)
 int16_t __cdecl16far ovc38_scan1(char *s1,char *s2)
 
 {
-  char cVar1;
-  byte bVar4;
-  int16_t iVar2;
-  uint uVar3;
-  uint uVar5;
+  char firstDigit;
+  byte segHi;
+  int16_t result;
+  uint parsedNumber;
+  uint parsedCount;
   
-  bVar4 = (byte)(((uint)(char *)s2 | (*(uint16_t *)((uint8_t *)&(s2) + 2))) >> 8);
+  segHi = (byte)(((uint)(char *)s2 | (*(uint16_t *)((uint8_t *)&(s2) + 2))) >> 8);
   if (((uint)(char *)s2 | (*(uint16_t *)((uint8_t *)&(s2) + 2))) == 0) {
-    iVar2 = 0;
+    result = 0;
   }
   else if ((byte)*s1 < (byte)*s2) {
-    iVar2 = CONCAT11(bVar4,1);
+    result = CONCAT11(segHi,1);
   }
   else if ((byte)*s2 < (byte)*s1) {
-    iVar2 = (uint)bVar4 << 8;
+    result = (uint)segHi << 8;
   }
   else {
     while ((*s2 != '\0' && (*s2 != '@'))) {
@@ -210,27 +210,27 @@ int16_t __cdecl16far ovc38_scan1(char *s1,char *s2)
     if (*s2 == '@') {
       s2 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(s2) + 2)),(char *)s2 + 1);
     }
-    uVar3 = (uint)*s2;
-    uVar5 = 0;
-    if ((((byte *)_ctype + 1)[uVar3] & 2) != 0) {
-      cVar1 = *s2;
+    parsedNumber = (uint)*s2;
+    parsedCount = 0;
+    if ((((byte *)_ctype + 1)[parsedNumber] & 2) != 0) {
+      firstDigit = *s2;
       s2 = (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(s2) + 2)),(char *)s2 + 1);
-      uVar3 = (uint)*s2;
-      uVar5 = (int)cVar1 - 0x30U;
-      if ((((byte *)_ctype + 1)[uVar3] & 2) != 0) {
-        uVar3 = (((int)cVar1 - 0x30U) * 10 + (int)*s2) - 0x30;
-        uVar5 = uVar3;
+      parsedNumber = (uint)*s2;
+      parsedCount = (int)firstDigit - 0x30U;
+      if ((((byte *)_ctype + 1)[parsedNumber] & 2) != 0) {
+        parsedNumber = (((int)firstDigit - 0x30U) * 10 + (int)*s2) - 0x30;
+        parsedCount = parsedNumber;
       }
     }
-    bVar4 = (byte)(uVar3 >> 8);
-    if (strongholdsDestroyed < uVar5) {
-      iVar2 = CONCAT11(bVar4,1);
+    segHi = (byte)(parsedNumber >> 8);
+    if (strongholdsDestroyed < parsedCount) {
+      result = CONCAT11(segHi,1);
     }
     else {
-      iVar2 = (uint)bVar4 << 8;
+      result = (uint)segHi << 8;
     }
   }
-  return iVar2;
+  return result;
 }
 
 

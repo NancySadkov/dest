@@ -11387,3 +11387,33 @@ Renaming and one split; no expression changed.
   grep_checks 38,250 -> 38,214; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
   compare_runtime 1,605 identical / 10 different
+
+### ovc27_compute2 and ovc38_scan1 named (38,214 -> 38,147)
+ovc27_compute2 and ovc38_scan1 named (38,214 -> 38,147)
+
+ovc27_compute2 - the `in_AX` scratch is a section-5 `in_REG` name and held two
+unrelated values:
+
+  in_AX     ovc27_rollAgainstStat(...) result           -> rollResult  (1)
+  in_AX     param * 0x34, the target slot offset        -> slotOfs     (6)
+  uVar2     the accumulator finally returned            -> result      (21)
+  uVar3     the first ovc27_usesRandBelow3(...) result  -> firstRoll   (3)
+  bStack_3  the difficulty threshold (4 or 10)          -> threshold   (4)
+
+ovc38_scan1 - a digit parse whose locals are all single-role:
+
+  bVar4    high byte of the pointer                     -> segHi        (7)
+  iVar2    the value returned                           -> result       (7)
+  uVar3    (uint)*s2, then the two-digit number         -> parsedNumber (8)
+  uVar5    the number compared with strongholdsDestroyed-> parsedCount  (5)
+  cVar1    the first digit character                    -> firstDigit   (4)
+
+Noted but not changed: ovc38_scan1's body rebuilds `s2` with
+`CONCAT22((*(uint16_t *)((uint8_t *)&(s2) + 2)), s2 + 1)` - it treats the parameter
+as a far pointer while the signature says `char *s2`, and the callers pass
+`CONCAT22(seg, ofs)`.  The parameter should be `char far *`; that changes the
+signature and every call site, so it belongs in its own pass.
+
+  grep_checks 38,214 -> 38,147; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
+  compare_runtime 1,605 identical / 10 different
