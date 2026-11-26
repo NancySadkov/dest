@@ -12047,3 +12047,46 @@ palette pointer's real segment, not a cast.
 indexed, so `peVar3[entityIndex].base.destX` is a DS-relative read of a record that
 lives in the Entities segment.  Fixing it means near -> far plus edits at the
 `(int)&peVar3[...]` and `MK_FP(entitiesSeg, peVar3 + i)` sites; that is its own pass.
+
+### ovc15_removeEntity: peVar3 is a far pointer
+ovc15_removeEntity: `peVar3` is an `entity_t far *`, not a near one
+
+    entity_t *peVar3;
+    peVar3 = Entities;
+    x = peVar3[entityIndex].base.destX;
+    ...
+    _fmemmove((char far *)MK_FP(entitiesSeg,peVar3 + entityIndex), ...
+
+`Entities` is `entity_t far *`, so assigning it to a near `entity_t *` keeps only the
+offset: `destX`, `destY`, `gindex` and the byte at `entity+3` were all read from DGROUP.
+The `MK_FP(entitiesSeg, peVar3 + i)` arguments were the export working around its own
+truncation.
+
+`peVar3` is now `entity_t far *entities` and the four fix-ups follow:
+
+    x / y / gindex                     read through the far pointer
+    *(char *)((int)&peVar3[..].base.entity + 3)
+        -> *((char far *)&entities[..].base.entity + 3)
+    MK_FP(entitiesSeg, peVar3 + i)     -> (char far *)(entities + i)
+    (uint16_t)(peVar3)                 -> far_ofs_u32(entities)
+
+`entitiesSeg` then had no reader and is removed.
+
+VERIFIED in the listing - the four record reads are all ES-relative now, with the far
+pointer loaded once and the 0x37-stride offset added:
+
+    mov  ax,di
+    mov  dx,55          ; sizeof(entity_t)
+    imul dx
+    les  bx,dword ptr [bp-12]
+    add  bx,ax
+    mov  ax,word ptr es:[bx+8]     ; destX
+    mov  word ptr [bp-6],ax
+    ...
+    mov  al,byte ptr es:[bx+26]    ; entity + 3
+
+es:[bx+8] destX, es:[bx+10] destY, es:[bx+13] gindex, es:[bx+26] entity+3.
+
+  grep_checks 37,766 unchanged; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different

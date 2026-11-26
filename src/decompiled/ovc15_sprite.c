@@ -531,9 +531,8 @@ void __cdecl16far ovc15_removeEntity(uint entityIndex)
   char partyIndex;
   uint16_t x;
   uint16_t y;
-  entity_t *peVar3;
+  entity_t far *entities;
   uint agntIdx;
-  uint16_t entitiesSeg;
   
   if (AgntFlag1) {
     for (agntIdx = 0; agntIdx < AgntCount; agntIdx = agntIdx + 1) {
@@ -544,15 +543,14 @@ void __cdecl16far ovc15_removeEntity(uint entityIndex)
       }
     }
   }
-  entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
-  peVar3 = Entities;
-  x = peVar3[entityIndex].base.destX;
-  y = peVar3[entityIndex].base.destY;
-  aiValue = AgntGs[(uint)peVar3[entityIndex].base.gindex].ai;
-  partyIndex = *(char *)((int)&peVar3[entityIndex].base.entity + 3);
+  entities = Entities;
+  x = entities[entityIndex].base.destX;
+  y = entities[entityIndex].base.destY;
+  aiValue = AgntGs[(uint)entities[entityIndex].base.gindex].ai;
+  partyIndex = *((char far *)&entities[entityIndex].base.entity + 3);
   if (entityIndex < EntityCount - 1U) {
-    _fmemmove((char far *)MK_FP(entitiesSeg,peVar3 + entityIndex),
-              (char far *)MK_FP(entitiesSeg,peVar3 + entityIndex + 1),
+    _fmemmove((char far *)(entities + entityIndex),
+              (char far *)(entities + entityIndex + 1),
               ((EntityCount + -1) - entityIndex) * 0x37);
   }
   if (AgntFlag1 != false) {
@@ -560,9 +558,9 @@ void __cdecl16far ovc15_removeEntity(uint entityIndex)
       if (entityIndex < Agnts[agntIdx].owner) {
         ownerPtr = (int *)&Agnts[agntIdx].owner;
         *ownerPtr = *ownerPtr + -1;
-        peVar3 = Entities + Agnts[agntIdx].owner;
+        entities = Entities + Agnts[agntIdx].owner;
         AGNT_WORD(&Agnts[agntIdx], entity, 2) = DAT_2000_d190;
-        AGNT_WORD(&Agnts[agntIdx], entity, 0) =(uint16_t)( peVar3);
+        AGNT_WORD(&Agnts[agntIdx], entity, 0) =far_ofs_u32(entities);
       }
     }
   }
