@@ -70,8 +70,7 @@ void __cdecl16far unit_usesAlignUp4(void)
               ((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),(short (*) [60] [148])GMapFlags),0,0,0x93,0x3b,0xfff7,0,0);
     for (index = 0; index < EntityCount; index = index + 1) {
       uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar5 = (int)Entities;
-      uVar3 = (uint)((entity_t *)iVar5)[index].base.gindex;
+      uVar3 = (uint)((entity_t far *)Entities)[index].base.gindex;
       if (AgntGs[uVar3].ai == '\0') {
         if (uVar3 == 3) {
           extent = 0xf;
@@ -82,8 +81,8 @@ void __cdecl16far unit_usesAlignUp4(void)
         else {
           extent = 5;
         }
-        iVar4 = *(int *)((entity_t *)iVar5 + index);
-        rowBottom = ((entity_t *)iVar5)[index].base.y;
+        iVar4 = *(int *)((entity_t far *)Entities + index);
+        rowBottom = ((entity_t far *)Entities)[index].base.y;
         uVar3 = ovr_alignUp4(iVar4 + extent * -2,0,0);
         colLeft = uVar3 - 2;
         uVar3 = ovr_alignUp4(iVar4 + extent * 2,0,0);
@@ -324,7 +323,6 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   byte *pbVar7;
   byte *pbVar8;
   uint16_t textSeg;
-  int entitiesOfs;
   int textWidth;   /* ovr_ovc45_compute9() result */
   uint entityIdx;
   uint16_t unaff_DI;
@@ -523,12 +521,11 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         matchCount = 0;
         for (entityIdx = 0; entityIdx < EntityCount; entityIdx = entityIdx + 1) {
           entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
-          entitiesOfs = (int)Entities;
           if ((((AGNT_FIELD(&(Entities)[entityIdx], base.entity, 3) == partyIdx) &&
-               (pbStack_22 <= (byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx))) &&
-              ((byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx) <= pbStack_26)) &&
-             ((pbStack_24 <= (byte *)((entity_t *)entitiesOfs)[entityIdx].base.y &&
-              ((byte *)((entity_t *)entitiesOfs)[entityIdx].base.y <= pbStack_28)))) {
+               (pbStack_22 <= (byte *)*(uint *)((entity_t far *)Entities + entityIdx))) &&
+              ((byte *)*(uint *)((entity_t far *)Entities + entityIdx) <= pbStack_26)) &&
+             ((pbStack_24 <= (byte *)((entity_t far *)Entities)[entityIdx].base.y &&
+              ((byte *)((entity_t far *)Entities)[entityIdx].base.y <= pbStack_28)))) {
             matchCount = matchCount + 1;
           }
         }
@@ -587,20 +584,19 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       for (entityIdx = 0; entityIdx < EntityCount; entityIdx = entityIdx + 1) {
         pbVar8 = (byte *)((char *)0x2410);
         entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
-        entitiesOfs = (int)Entities;
         if (((AGNT_FIELD(&(Entities)[entityIdx], base.entity, 3) == partyIdx) &&
             (pbVar8 = (byte *)((char *)0x2410),
-            pbStack_22 <= (byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx))) &&
+            pbStack_22 <= (byte *)*(uint *)((entity_t far *)Entities + entityIdx))) &&
            ((pbVar8 = (byte *)((char *)0x2410),
-            (byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx) <= pbStack_26 &&
+            (byte *)*(uint *)((entity_t far *)Entities + entityIdx) <= pbStack_26 &&
             ((pbVar8 = (byte *)((char *)0x2410),
-             pbStack_24 <= (byte *)((entity_t *)entitiesOfs)[entityIdx].base.y &&
+             pbStack_24 <= (byte *)((entity_t far *)Entities)[entityIdx].base.y &&
              (pbVar8 = (byte *)((char *)0x2410),
-             (byte *)((entity_t *)entitiesOfs)[entityIdx].base.y <= pbStack_28)))))) {
+             (byte *)((entity_t far *)Entities)[entityIdx].base.y <= pbStack_28)))))) {
           if (input < 2) {
             pbVar8 = (byte *)((char *)0x2410);
-            unit_usesAlignUp42(menuIndex,*(uint16_t *)((entity_t *)entitiesOfs + entityIdx),
-                               ((entity_t *)entitiesOfs)[entityIdx].base.y);
+            unit_usesAlignUp42(menuIndex,*(uint16_t *)((entity_t far *)Entities + entityIdx),
+                               ((entity_t far *)Entities)[entityIdx].base.y);
           }
           else {
             unit_usesEntities(input,entityIdx,(uint16_t)&unitFlags,(uint16_t)_SS);

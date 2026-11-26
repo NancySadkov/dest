@@ -715,7 +715,6 @@ void ovc25_usesAlignUp47(void)
   uVar2 = ovr_alignUp4(*(int *)((int)Entities + *(int *)(unaff_BP + -4) * 0x37),0,0);
   *(uint *)(unaff_BP + -6) = uVar2;
   uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-  iVar5 = (int)Entities;
   if (((*(int *)(iVar5 + *(int *)(unaff_BP + -4) * 0x37 + 8) == 0) &&
       (*(int *)(iVar5 + *(int *)(unaff_BP + -4) * 0x37 + 10) == 0)) &&
      ((*(byte *)(iVar5 + *(int *)(unaff_BP + -4) * 0x37 + 0x33) & 3) == 0)) {
@@ -730,15 +729,13 @@ void ovc25_usesAlignUp47(void)
     uVar3 = ovr_alignUp4((Entities)[uVar6].base.x,0,0);
     if (uVar3 == *(uint *)(unaff_BP + -6)) {
       uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar5 = (int)Entities;
-      if (((entity_t *)iVar5)[uVar6].base.y == *(int *)(iVar5 + *(int *)(unaff_BP + -4) * 0x37 + 2)
+      if (((entity_t far *)Entities)[uVar6].base.y == *(int *)(iVar5 + *(int *)(unaff_BP + -4) * 0x37 + 2)
          ) {
         AGNT_FIELD(&(Entities)[uVar6], base.entity, 2) = 1;
         uVar7 = (uint16_t)((ulong)Entities >> 0x10);
-        iVar5 = (int)Entities;
-        if (((((entity_t *)iVar5)[uVar6].base.destX == 0) && (((entity_t *)iVar5)[uVar6].base.destY == 0)
+        if (((((entity_t far *)Entities)[uVar6].base.destX == 0) && (((entity_t far *)Entities)[uVar6].base.destY == 0)
             ) && ((AGNT_FIELD(&(Entities)[uVar6], base.entity, 1) == '\0' &&
-                  ((AgntGs[(uint)((entity_t *)iVar5)[uVar6].base.gindex].ai ==
+                  ((AgntGs[(uint)((entity_t far *)Entities)[uVar6].base.gindex].ai ==
                     *(char *)(unaff_BP + -0xd) &&
                    (*(int *)(unaff_BP + -0x10) = *(int *)(unaff_BP + -0x10) + 1,
                    (*((uint8_t far *)&(Entities)[uVar6].base.flags32 + 1) & 3) == 0)))))) {

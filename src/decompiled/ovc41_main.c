@@ -830,10 +830,9 @@ void __cdecl16far dbgPromoteEnemy(void)
   
   for (i = 0; i < EntityCount; i = i + 1) {
     uVar3 = (uint16_t)((ulong)Entities >> 0x10);
-    iVar2 = (int)Entities;
-    if (((GfxRndSeed - 2U <= *(uint *)((entity_t *)iVar2 + i)) &&
-        (*(uint *)((entity_t *)iVar2 + i) <= GfxRndSeed + 1U)) &&
-       (((entity_t *)iVar2)[i].base.y == GfxRndSeed2)) {
+    if (((GfxRndSeed - 2U <= *(uint *)((entity_t far *)Entities + i)) &&
+        (*(uint *)((entity_t far *)Entities + i) <= GfxRndSeed + 1U)) &&
+       (((entity_t far *)Entities)[i].base.y == GfxRndSeed2)) {
       pcVar1 = (char *)((uint8_t *)&(Entities)[i] + 0xd);
       *pcVar1 = *pcVar1 + '\x01';
       uVar3 = (uint16_t)((ulong)Entities >> 0x10);
@@ -2453,12 +2452,11 @@ switchD_6000_ca06_caseD_1:
           iStack_a = 0;
           for (uVar16 = 0; uVar16 < EntityCount; uVar16 = uVar16 + 1) {
             uVar22 = (uint16_t)((ulong)Entities >> 0x10);
-            iVar12 = (int)Entities;
             if ((((AGNT_FIELD(&(Entities)[uVar16], base.entity, 3) == bStack_3c) &&
-                 (paStack_22 <= (agnt_t far *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
-                ((agnt_t far *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26)) &&
-               ((paStack_24 <= (agnt_t far *)((entity_t *)iVar12)[uVar16].base.y &&
-                ((agnt_t far *)((entity_t *)iVar12)[uVar16].base.y <= paStack_28)))) {
+                 (paStack_22 <= (agnt_t far *)*(uint *)((entity_t far *)Entities + uVar16))) &&
+                ((agnt_t far *)*(uint *)((entity_t far *)Entities + uVar16) <= paStack_26)) &&
+               ((paStack_24 <= (agnt_t far *)((entity_t far *)Entities)[uVar16].base.y &&
+                ((agnt_t far *)((entity_t far *)Entities)[uVar16].base.y <= paStack_28)))) {
               iStack_a = iStack_a + 1;
             }
           }
@@ -2526,15 +2524,14 @@ L_ui_unit_order_6616_0689_1054:
         iStack_a = 0;
         for (uVar16 = 0; uVar16 < EntityCount; uVar16 = uVar16 + 1) {
           uVar22 = (uint16_t)((ulong)Entities >> 0x10);
-          iVar12 = (int)Entities;
           if (((AGNT_FIELD(&(Entities)[uVar16], base.entity, 3) == bStack_3c) &&
-              (paStack_22 <= (agnt_t far *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
-             (((agnt_t far *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26 &&
-              ((paStack_24 <= (agnt_t far *)((entity_t *)iVar12)[uVar16].base.y &&
-               ((agnt_t far *)((entity_t *)iVar12)[uVar16].base.y <= paStack_28)))))) {
+              (paStack_22 <= (agnt_t far *)*(uint *)((entity_t far *)Entities + uVar16))) &&
+             (((agnt_t far *)*(uint *)((entity_t far *)Entities + uVar16) <= paStack_26 &&
+              ((paStack_24 <= (agnt_t far *)((entity_t far *)Entities)[uVar16].base.y &&
+               ((agnt_t far *)((entity_t far *)Entities)[uVar16].base.y <= paStack_28)))))) {
             if (bStack_3b < 2) {
-              unit_usesAlignUp42((byte)agntPtr,*(uint16_t *)((entity_t *)iVar12 + uVar16),
-                                 ((entity_t *)iVar12)[uVar16].base.y);
+              unit_usesAlignUp42((byte)agntPtr,*(uint16_t *)((entity_t far *)Entities + uVar16),
+                                 ((entity_t far *)Entities)[uVar16].base.y);
             }
             else {
               pcStack_13e = (char *)0x6fdf;

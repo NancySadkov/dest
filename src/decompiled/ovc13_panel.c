@@ -145,7 +145,6 @@ void __cdecl16far ovc13_drawPanelEntitiesAll(void)
   int rowY;
   int entX;
   int entY;
-  int entitiesOfs;
   uint entityIndex;
   uint16_t pixelResult;
   int xPix;
@@ -157,12 +156,11 @@ void __cdecl16far ovc13_drawPanelEntitiesAll(void)
   byte y;
 
   for (entityIndex = 0; entityIndex < EntityCount; entityIndex = entityIndex + 1) {
-    entitiesOfs = (int)Entities;
-    entX = *(int *)((entity_t *)entitiesOfs + entityIndex);
-    entY = ((entity_t *)entitiesOfs)[entityIndex].base.y;
+    entX = *(int *)((entity_t far *)Entities + entityIndex);
+    entY = ((entity_t far *)Entities)[entityIndex].base.y;
     rowY = entY + 1;
     firstPart = (AGNT_FIELD(&(Entities)[entityIndex], base.entity, 1) != '\0') ||
-                (AgntGs[(uint)((entity_t *)entitiesOfs)[entityIndex].base.gindex].ai == '\0') ||
+                (AgntGs[(uint)((entity_t far *)Entities)[entityIndex].base.gindex].ai == '\0') ||
                 (DebugVerbose != false) ||
                 (((*(short (*) [60] [148])GMapFlags)[entY][entX] & 8U) != 0);
     inPanel = ((entX <= PanelGridX + 0x22) && (PanelGridY <= rowY) &&
@@ -177,12 +175,11 @@ void __cdecl16far ovc13_drawPanelEntitiesAll(void)
       spanX = xPix + 0xef;
       pixelResult = ovc13_readPixel(spanX,rowY,BlitRects + 3);
       pixel = (uint8_t)pixelResult;
-      entitiesOfs = (int)Entities;
       if (AGNT_FIELD(&(Entities)[entityIndex], base.entity, 1) == '\0') {
         if ((AGNT_WORD(&(Entities)[entityIndex], base.frames, 1) & 1) == 0) {
           if ((AGNT_FIELD(&(Entities)[entityIndex], base.flags32, 1) & 1) == 0) {
             if (((pixel != 0xef) && (pixel != 0xee)) && (pixel != 0xeb)) {
-              if (AgntGs[(uint)((entity_t *)entitiesOfs)[entityIndex].base.gindex].ai == '\0') {
+              if (AgntGs[(uint)((entity_t far *)Entities)[entityIndex].base.gindex].ai == '\0') {
                 pixel = 0xff;
               }
               else {
@@ -225,7 +222,6 @@ void __cdecl16far ovc13_drawPanelEntities(void)
   int rowY;
   int entX;
   int entY;
-  int entitiesOfs;
   uint entIdx;
   int xPix;
   int spanX;
@@ -235,12 +231,11 @@ void __cdecl16far ovc13_drawPanelEntities(void)
 
   if (unitTypeFilter == -1) {
     for (entIdx = 0; entIdx < EntityCount; entIdx = entIdx + 1) {
-      entitiesOfs = (int)Entities;
-      entX = *(int *)((entity_t *)entitiesOfs + entIdx);
-      entY = ((entity_t *)entitiesOfs)[entIdx].base.y;
+      entX = *(int *)((entity_t far *)Entities + entIdx);
+      entY = ((entity_t far *)Entities)[entIdx].base.y;
       rowY = entY + 1;
       if (((((AGNT_FIELD(&(Entities)[entIdx], base.entity, 1) != '\0') ||
-            (AgntGs[(uint)((entity_t *)entitiesOfs)[entIdx].base.gindex].ai == '\0')) ||
+            (AgntGs[(uint)((entity_t far *)Entities)[entIdx].base.gindex].ai == '\0')) ||
            (((*(short (*) [60] [148])GMapFlags)[entY][entX] & 8U) != 0)) &&
           ((PanelGridX <= entX && (entX <= PanelGridX + 0x22)))) &&
          ((PanelGridY <= rowY && (rowY <= PanelGridY + 0xf)))) {
@@ -249,12 +244,11 @@ void __cdecl16far ovc13_drawPanelEntities(void)
         spanX = xPix + 0xef;
         pixelResult = ovc13_readPixel(spanX,rowY,BlitRects + 3);
         pixel = (uint8_t)pixelResult;
-        entitiesOfs = (int)Entities;
         if (AGNT_FIELD(&(Entities)[entIdx], base.entity, 1) == '\0') {
           if ((AGNT_WORD(&(Entities)[entIdx], base.frames, 1) & 1) == 0) {
             if ((AGNT_FIELD(&(Entities)[entIdx], base.flags32, 1) & 1) == 0) {
               if (((pixel != 0xef) && (pixel != 0xee)) && (pixel != 0xeb)) {
-                if (AgntGs[(uint)((entity_t *)entitiesOfs)[entIdx].base.gindex].ai == '\0') {
+                if (AgntGs[(uint)((entity_t far *)Entities)[entIdx].base.gindex].ai == '\0') {
                   pixel = 0xff;
                 }
                 else {
@@ -564,7 +558,6 @@ void __cdecl16far ovc13_usesScreenY2(void)
   int xPix;
   int xPix2;
   int spanX2;
-  int entitiesOfs;
   uint entIdx;
   uint16_t pixelResult;
   byte pixel;
@@ -572,12 +565,11 @@ void __cdecl16far ovc13_usesScreenY2(void)
 
   if (unitTypeFilter == -1) {
     for (entIdx = 0; entIdx < EntityCount; entIdx = entIdx + 1) {
-      entitiesOfs = (int)Entities;
-      entX = *(uint *)((entity_t *)entitiesOfs + entIdx);
-      entY = ((entity_t *)entitiesOfs)[entIdx].base.y;
+      entX = *(uint *)((entity_t far *)Entities + entIdx);
+      entY = ((entity_t far *)Entities)[entIdx].base.y;
       entY1 = entY + 1;
       if (((((AGNT_FIELD(&(Entities)[entIdx], base.entity, 1) != '\0') ||
-            (AgntGs[(uint)((entity_t *)entitiesOfs)[entIdx].base.gindex].ai == '\0')) ||
+            (AgntGs[(uint)((entity_t far *)Entities)[entIdx].base.gindex].ai == '\0')) ||
            (DebugVerbose != false)) ||
           (((*(short (*) [60] [148])GMapFlags)[entY][entX] & 8U) != 0)) &&
          (((Seed_2000_d110 <= (int)entX && (entX <= Seed_2000_d110 + 0x69U)) &&
@@ -588,12 +580,11 @@ void __cdecl16far ovc13_usesScreenY2(void)
         xPix2 = xPix + 0xc;
         pixelResult = ovc13_readPixel(xPix2,screenY,BlitRects);
         pixel = (uint8_t)pixelResult;
-        entitiesOfs = (int)Entities;
         if (AGNT_FIELD(&(Entities)[entIdx], base.entity, 1) == '\0') {
           if ((AGNT_WORD(&(Entities)[entIdx], base.frames, 1) & 1) == 0) {
             if ((AGNT_FIELD(&(Entities)[entIdx], base.flags32, 1) & 1) == 0) {
               if (((pixel != 0xef) && (pixel != 0xee)) && (pixel != 0xeb)) {
-                if (AgntGs[(uint)((entity_t *)entitiesOfs)[entIdx].base.gindex].ai == '\0') {
+                if (AgntGs[(uint)((entity_t far *)Entities)[entIdx].base.gindex].ai == '\0') {
                   pixel = 0xff;
                 }
                 else {
@@ -638,12 +629,11 @@ int __cdecl16far ovc13_usesEntities(int entityIndex)
   byte bVar2;
   uint16_t uVar3;
   
-  iVar1 = (int)Entities;
   uVar3 = (uint16_t)((ulong)Entities >> 0x10);
   if (unitTypeFilter == 0xfe) {
 L_OVC13_3d16_1045_10C4:
     if (partyFilter == -1) {
-      if (AgntGs[(uint)((entity_t *)iVar1)[entityIndex].base.gindex].ai == '\0') {
+      if (AgntGs[(uint)((entity_t far *)Entities)[entityIndex].base.gindex].ai == '\0') {
         iVar1 = 1;
       }
       else {
@@ -662,8 +652,8 @@ L_OVC13_3d16_1045_10C4:
   }
   else {
     if ((byte)((undefined1 *)&LevelRangeMin)[unitTypeFilter] <=
-        ((entity_t *)iVar1)[entityIndex].base.level) {
-      if (((entity_t *)iVar1)[entityIndex].base.level <=
+        ((entity_t far *)Entities)[entityIndex].base.level) {
+      if (((entity_t far *)Entities)[entityIndex].base.level <=
           (byte)((undefined1 *)&LevelRangeMax)[unitTypeFilter]) goto L_OVC13_3d16_1045_10C4;
     }
     iVar1 = 0;
@@ -695,7 +685,6 @@ void __cdecl16far ovc13_drawWindowEntities(void)
   int xPix;
   int spanX1;
   int spanX2;
-  int entitiesOfs;
   uint entityIndex;
   uint16_t pixelResult;
   uint16_t usesResult;
@@ -705,12 +694,11 @@ void __cdecl16far ovc13_drawWindowEntities(void)
   bool inPanel;
 
   for (entityIndex = 0; entityIndex < (int)(uint)EntityCount; entityIndex = entityIndex + 1) {
-    entitiesOfs = (int)Entities;
-    entX = *(uint *)((entity_t *)entitiesOfs + entityIndex);
-    entY = ((entity_t *)entitiesOfs)[entityIndex].base.y;
+    entX = *(uint *)((entity_t far *)Entities + entityIndex);
+    entY = ((entity_t far *)Entities)[entityIndex].base.y;
     entY1 = entY + 1;
     firstPart = (AGNT_FIELD(&(Entities)[entityIndex], base.entity, 1) != '\0') ||
-                (AgntGs[(uint)((entity_t *)entitiesOfs)[entityIndex].base.gindex].ai == '\0') ||
+                (AgntGs[(uint)((entity_t far *)Entities)[entityIndex].base.gindex].ai == '\0') ||
                 (DebugVerbose != false) ||
                 (((*(short (*) [60] [148])GMapFlags)[entY][entX] & 8U) != 0);
     usesResult = 0;
@@ -726,12 +714,11 @@ void __cdecl16far ovc13_drawWindowEntities(void)
       spanX2 = xPix + 0xd;
       pixelResult = ovc13_readPixel(spanX1,screenY,BlitRects);
       pixel = (uint8_t)pixelResult;
-      entitiesOfs = (int)Entities;
       if (AGNT_FIELD(&(Entities)[entityIndex], base.entity, 1) == '\0') {
         if ((AGNT_WORD(&(Entities)[entityIndex], base.frames, 1) & 1) == 0) {
           if ((AGNT_FIELD(&(Entities)[entityIndex], base.flags32, 1) & 1) == 0) {
             if (((pixel != 0xef) && (pixel != 0xee)) && (pixel != 0xeb)) {
-              if (AgntGs[(uint)((entity_t *)entitiesOfs)[entityIndex].base.gindex].ai == '\0') {
+              if (AgntGs[(uint)((entity_t far *)Entities)[entityIndex].base.gindex].ai == '\0') {
                 pixel = 0xff;
               }
               else {

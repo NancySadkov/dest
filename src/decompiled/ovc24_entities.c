@@ -20,7 +20,6 @@ void __cdecl16far ovc24_usesAlignUp4(void)
   char aiType;
   uint entAlignedX;
   uint otherAlignedX;
-  int entitiesOfs;
   int j;
   int entY;
   uint i;
@@ -33,16 +32,14 @@ void __cdecl16far ovc24_usesAlignUp4(void)
     if (EntityCount <= i) {
       return;
     }
-    entitiesOfs = (int)Entities;
     if (AGNT_FIELD(&(Entities)[i], base.entity, 1) == '\0') {
-      aiType = AgntGs[(uint)((entity_t *)entitiesOfs)[i].base.gindex].ai;
-      entAlignedX = alignUp4(*(int *)((entity_t *)entitiesOfs + i),0,0);
+      aiType = AgntGs[(uint)((entity_t far *)Entities)[i].base.gindex].ai;
+      entAlignedX = alignUp4(*(int *)((entity_t far *)Entities + i),0,0);
       entY = (Entities)[i].base.y;
       for (j = 0; j < EntityCount; j = j + 1) {
-        entitiesOfs = (int)Entities;
-        if (((((entity_t *)entitiesOfs)[j].base.y == entY) &&
-            (AgntGs[(uint)((entity_t *)entitiesOfs)[j].base.gindex].ai != aiType)) &&
-           (otherAlignedX = alignUp4(*(int *)((entity_t *)entitiesOfs + j),0,0),
+        if (((((entity_t far *)Entities)[j].base.y == entY) &&
+            (AgntGs[(uint)((entity_t far *)Entities)[j].base.gindex].ai != aiType)) &&
+           (otherAlignedX = alignUp4(*(int *)((entity_t far *)Entities + j),0,0),
             otherAlignedX == entAlignedX)) {
           AGNT_FIELD(&(Entities)[i], base.entity, 1) = 1;
           AGNT_FIELD(&(Entities)[j], base.entity, 1) = 1;
@@ -431,11 +428,10 @@ void __cdecl16far ovc24_removeOtherEntities(uint8_t far *reportedOut)
     }
     for (ent = 0; ent < EntityCount; ent = ent + 1) {
       uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar3 = (int)Entities;
       if ((AGNT_FIELD(&(Entities)[ent], base.entity, 1) != '\0') &&
          (AGNT_FIELD(&(Entities)[ent], base.entity, 2) == '\0')) {
-        if ((GOngoingBattle == '\0') && (((entity_t *)iVar3)[ent].base.y == GfxRndSeed2)) {
-          uVar1 = alignUp4(*(int *)((entity_t *)iVar3 + ent),0,0);
+        if ((GOngoingBattle == '\0') && (((entity_t far *)Entities)[ent].base.y == GfxRndSeed2)) {
+          uVar1 = alignUp4(*(int *)((entity_t far *)Entities + ent),0,0);
           uVar2 = alignUp4(GfxRndSeed,0,0);
           if (uVar1 == uVar2) goto L_OVC24_5943_0d5a_0E37;
         }
@@ -448,11 +444,10 @@ L_OVC24_5943_0d5a_0E37:
     ent = EntityCount;
     while (ent = ent - 1, -1 < (int)ent) {
       uVar5 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar3 = (int)Entities;
-      if (((entity_t *)iVar3)[ent].base.animFrame == '\0') {
+      if (((entity_t far *)Entities)[ent].base.animFrame == '\0') {
         if ((GOngoingBattle == '\0') &&
            (uVar5 = ovr_ovc23_isCursorAt
-                              (*(uint16_t *)((entity_t *)iVar3 + ent),((entity_t *)iVar3)[ent].base.y,0), (char)uVar5 != '\0')) {
+                              (*(uint16_t *)((entity_t far *)Entities + ent),((entity_t far *)Entities)[ent].base.y,0), (char)uVar5 != '\0')) {
           uVar1 = (uint)AgntCount;
           do {
             uVar1 = uVar1 - 1;
@@ -875,19 +870,17 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
   int entY;
   int dirOfs;
   int gindexOfs;
-  int entitiesOfs;
   char *msg;
   uint scanIdx;
 
   if ((AGNT_WORD(&(Entities)[entityIndex], base.frames, 1) & 1) != 0) {
     alignedX = alignUp4((Entities)[entityIndex].base.x,0,0);
-    entitiesOfs = (int)Entities;
-    entY = ((entity_t *)entitiesOfs)[entityIndex].base.y;
+    entY = ((entity_t far *)Entities)[entityIndex].base.y;
     if (AGNT_FIELD(&(Entities)[entityIndex], base.entity, 1) == '\0') {
       found = false;
       for (scanIdx = 0; scanIdx < EntityCount; scanIdx = scanIdx + 1) {
-        if (((AgntGs[(uint)((entity_t *)entitiesOfs)[scanIdx].base.gindex].flags & 1) != 0) &&
-           (5 < ((entity_t *)entitiesOfs)[scanIdx].base.level)) {
+        if (((AgntGs[(uint)((entity_t far *)Entities)[scanIdx].base.gindex].flags & 1) != 0) &&
+           (5 < ((entity_t far *)Entities)[scanIdx].base.level)) {
           found = true;
           break;
         }
@@ -922,14 +915,13 @@ void __cdecl16far ovc24_intelUnitReport(int entityIndex)
     if ((randPick & 0xff) == 0) {
       sporeIdx = 0;
       while( true ) {
-        entitiesOfs = (int)Entities;
         if ((EntityCount <= sporeIdx) ||
-           ((AgntGs[(uint)((entity_t *)entitiesOfs)[sporeIdx].base.gindex].flags2 & 4) != 0)) break;
+           ((AgntGs[(uint)((entity_t far *)Entities)[sporeIdx].base.gindex].flags2 & 4) != 0)) break;
         sporeIdx = sporeIdx + 1;
       }
       if (sporeIdx < EntityCount) {
-        alignUp4(*(int *)((entity_t *)entitiesOfs + entityIndex),
-                 ((entity_t *)entitiesOfs)[entityIndex].base.y,0xa000);
+        alignUp4(*(int *)((entity_t far *)Entities + entityIndex),
+                 ((entity_t far *)Entities)[entityIndex].base.y,0xa000);
         gindexOfs = (uint)(Entities)[entityIndex].base.gindex * 0x95;
         msg = ovr_fmVsprintf("Intelligence reports %s unit succombs to blast spore disease. (%d, %d)"
                                 ,(char *)CONCAT22(*(uint16_t *)

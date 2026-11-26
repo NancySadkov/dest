@@ -10746,3 +10746,28 @@ deleted lines were 62 occurrences of `iVar17`, which the `[iusbc]Var` pattern co
   grep_checks 39,020 -> 38,958; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### Collapsing V = (int)Entities temporaries (38,958 -> 38,916)
+collapse `V = (int)Entities` temporaries: 151 casts (38,958 -> 38,916)
+
+The last fix generalised: a temporary that exists only to hold the lost segment of a far array.
+32 functions had
+
+    entitiesOfs = (int)Entities;
+    entX = *(int *)((entity_t *)entitiesOfs + entityIndex);
+    entY = ((entity_t *)entitiesOfs)[entityIndex].base.y;
+
+so every one of those reads was DS-relative.  Now each `(T *)V` is `(T far *)<FarArray>`, the
+assignment is gone, and V's declaration is dropped when V is no longer mentioned in the function.
+
+151 casts across 32 functions (ovc13_panel 5 functions, ovc14_attact, ovc15_sprite,
+ovc24_entities, ovc25_intel, ovc34_unit, ovc41_main, ovc49_agents, ...).
+
+One mistake, caught by the compiler: the first version deleted V's declaration unconditionally,
+which broke six functions where V still held other values ("Undefined symbol 'iVar5'",
+'bottomIdx', 'iVar3', 'iVar2', 'iVar1').  Reverted with `git checkout -- src` and re-run with the
+declaration removed only when V is genuinely unused; that version builds clean.
+
+  grep_checks 38,958 -> 38,916; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different

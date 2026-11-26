@@ -601,7 +601,6 @@ void __stdcall16far attact_usesGMapFlags3(void)
      by the flags32 low byte, with a sound when the cursor is on it.  Finally the game state is
      set to 0x3d, DebugVerbose prints it, and the OVC23 entry runs. */
   uint16_t *flagWord;
-  int entitiesOfs;
   int entX;
   int entY;
   int alignedX;
@@ -616,21 +615,19 @@ void __stdcall16far attact_usesGMapFlags3(void)
 
   ovr_driver_clearMapFlagsRect((uint32_t)GMapFlags,0,0,0x93,0x3b,0xcfff,0,0);
   for (entIdx = 0; entIdx < (int)(uint)EntityCount; entIdx = entIdx + 1) {
-    entitiesOfs = (int)Entities;
     flagWord = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[
-                                ((entity_t *)entitiesOfs)[entIdx].base.y]
-                            + *(int *)((entity_t *)entitiesOfs + entIdx));
+                                ((entity_t far *)Entities)[entIdx].base.y]
+                            + *(int *)((entity_t far *)Entities + entIdx));
     *flagWord = *flagWord |
-                0x1000 << (AgntGs[(uint)((entity_t *)entitiesOfs)[entIdx].base.gindex].ai &
+                0x1000 << (AgntGs[(uint)((entity_t far *)Entities)[entIdx].base.gindex].ai &
                            0x1f);
   }
   soundChoice = ovr_ovc15_usesAlignUp42();
   sawGdataZero = 0;
   sawGdataOther = 0;
   for (entIdx = 0; entIdx < (int)(uint)EntityCount; entIdx = entIdx + 1) {
-    entitiesOfs = (int)Entities;
-    entX = *(int *)((entity_t *)entitiesOfs + entIdx);
-    entY = ((entity_t *)entitiesOfs)[entIdx].base.y;
+    entX = *(int *)((entity_t far *)Entities + entIdx);
+    entY = ((entity_t far *)Entities)[entIdx].base.y;
     alignedX = ovr_alignUp4(entX,0,0);
     flagAcc = 0;
     for (k = 0; k < 4; k = k + 1) {

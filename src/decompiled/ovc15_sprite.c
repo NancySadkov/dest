@@ -464,10 +464,9 @@ void __cdecl16far ovc15_usesAgntIndex(void)
   count = 0;
   for (i = 0; i < EntityCount; i = i + 1) {
     entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
-    bottomIdx = (int)Entities;
-    if (((GfxRndSeed - 2U <= *(uint *)((entity_t *)bottomIdx + i)) &&
-        (*(uint *)((entity_t *)bottomIdx + i) <= GfxRndSeed + 1U)) &&
-       (((entity_t *)bottomIdx)[i].base.y == GfxRndSeed2)) {
+    if (((GfxRndSeed - 2U <= *(uint *)((entity_t far *)Entities + i)) &&
+        (*(uint *)((entity_t far *)Entities + i) <= GfxRndSeed + 1U)) &&
+       (((entity_t far *)Entities)[i].base.y == GfxRndSeed2)) {
       *(uint *)(&agentIndices + count * 2) = i;
       count = count + 1;
     }
@@ -607,10 +606,9 @@ uint __cdecl16far ovc15_usesAlignUp4(uint16_t x,uint16_t y)
       return 0;
     }
     entOfs = i * 0x37;
-    entitiesOfs = (int)Entities;
     if ((((*(byte *)(entitiesOfs + entOfs + 0x33) & 2) != 0) &&
-        (targetY = ((entity_t *)entitiesOfs)[i].base.targetY, targetY == y)) &&
-       (targetAlignedX = ovr_alignUp4(((entity_t *)entitiesOfs)[i].base.targetX,0,0),
+        (targetY = ((entity_t far *)Entities)[i].base.targetY, targetY == y)) &&
+       (targetAlignedX = ovr_alignUp4(((entity_t far *)Entities)[i].base.targetX,0,0),
         targetAlignedX == alignedX)) {
       entOfs = i * 0x37;
       if ((*(char *)((int)Entities + entOfs + 0x1a) != -1) &&
@@ -2150,7 +2148,6 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
      flags32 high byte has bits 0-1 clear).  Falls back to a plain random index. */
   uint16_t randPick;
   uint cursorFree;
-  int entitiesOfs;
   uint entIdx;
   byte activeLeader;
   byte ownLeader;
@@ -2178,11 +2175,10 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
     randPick = ovr_randBelow(EntityCount,0);
     entIdx = randPick & 0xff;
     do {
-      entitiesOfs = (int)Entities;
       if ((AGNT_FIELD(&(Entities)[entIdx], base.entity, 3) == activeLeader) &&
          (cursorFree = ovr_ovc23_isCursorAt
-                         (*(uint16_t *)((entity_t *)entitiesOfs + entIdx),
-                          ((entity_t *)entitiesOfs)[entIdx].base.y),
+                         (*(uint16_t *)((entity_t far *)Entities + entIdx),
+                          ((entity_t far *)Entities)[entIdx].base.y),
           (cursorFree & 0xff) == 0)) {
         return entIdx;
       }
@@ -2196,11 +2192,10 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
     randPick = ovr_randBelow(EntityCount,0);
     entIdx = randPick & 0xff;
     do {
-      entitiesOfs = (int)Entities;
       if (((AGNT_FIELD(&(Entities)[entIdx], base.entity, 3) == ownLeader) &&
           (cursorFree = ovr_ovc23_isCursorAt
-                          (*(uint16_t *)((entity_t *)entitiesOfs + entIdx),
-                           ((entity_t *)entitiesOfs)[entIdx].base.y),
+                          (*(uint16_t *)((entity_t far *)Entities + entIdx),
+                           ((entity_t far *)Entities)[entIdx].base.y),
            (cursorFree & 0xff) == 0)) &&
          ((*((uint8_t far *)&(Entities)[entIdx].base.flags32 + 1) & 3) == 0)) {
         return entIdx;

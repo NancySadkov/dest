@@ -4181,10 +4181,9 @@ L_OVC49_8699_1e09_3CF7:
         return;
       }
       uVar13 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar17 = (int)Entities;
-    } while ((((entity_t *)iVar17)[uVar10].base.animFrame != '\0') ||
-            (iVar14 = ((entity_t *)iVar17)[uVar10].base.y,
-            uVar13 = ovr_ovc23_isCursorAt(*(uint16_t *)((entity_t *)iVar17 + uVar10),iVar14,(char)iVar14)
+    } while ((((entity_t far *)Entities)[uVar10].base.animFrame != '\0') ||
+            (iVar14 = ((entity_t far *)Entities)[uVar10].base.y,
+            uVar13 = ovr_ovc23_isCursorAt(*(uint16_t *)((entity_t far *)Entities + uVar10),iVar14,(char)iVar14)
             , (char)uVar13 == '\0'));
     agentIndex = (uint)AgntCount;
     do {
