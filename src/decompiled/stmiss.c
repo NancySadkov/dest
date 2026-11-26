@@ -224,7 +224,6 @@ char s_absentBlob[] =
   "\0"
   "getcache %d  SIZESTASH %d  \r"
   "\0"
-  "%s: Owned by %s. Active party is %s the %s.\0"
   " Salvage value %d gold.\0"
   " Repair costs %d gp.\0"
   " Upgrade costs %d gp.\0"

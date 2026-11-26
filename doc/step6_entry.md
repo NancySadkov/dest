@@ -14620,3 +14620,34 @@ residual byte difference rather than an absent string.
 Fixing it means renaming that whole family to the offset scheme (13 renames plus their
 externs), which is a different kind of change from the additions that closed 0x8080..0x80f0,
 and it should be measured on its own.
+
+### layout: -47 at 0x7aa5 closed (runs 39 -> 38)
+layout: the -47 at 0x7aa5 was a blob-only string plus a 1-byte MiceClick (runs 39 -> 38)
+
+My earlier note said this step was a naming problem.  It was not: renaming the band's strings to
+`_2410_<offset>` keys made diff_dgroup *worse* (matched 1,619 -> 1,602) because those originals
+carry plain names like `s_excavate` with no offset suffix, so the offset key removed their exact
+match.  That rename was reverted.
+
+The real cause, found by comparing each string's length against its original span:
+
+  * 0x7a79  44  "%s: Owned by %s. Active party is %s the %s."
+        existed only as an entry in stmiss.c's s_absentBlob (line 227), so 44 bytes were simply
+        absent.  Now declared between the 0x7a45 string and 0x7aa5, blob entry removed.
+  * 0x78e2   2  MiceClick
+        was `undefined1 MiceClick = 0x00;` - one byte short of the original's 00 00.  Widened to
+        uint16_t.
+
+MEASURED (HEAD 83e57205 -> this commit)
+
+  diff_dgroup runs              39 -> 38
+  diff_dgroup sum|delta|   200,634 -> 195,963  (-4,671)
+  diff_dgroup matched        1,619 -> 1,620
+  compare_runtime matched    1,673 -> 1,674
+  compare_runtime identical  1,664 -> 1,665
+  compare_state              1,627/0/0
+  grep_checks               35,715 -> 35,716
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The band is now flat: -104 at 0x7581 for 34 symbols, then -107 and -131, with no local step at
+0x7aa5 any more.

@@ -1719,7 +1719,7 @@ extern char s_income_created_is[];
 extern char s_empty_2410_78df[];
 extern undefined1 MiceProcessed;
 extern undefined1 MiceNeedsUpdate;
-extern undefined1 MiceClick;
+extern uint16_t MiceClick;
 extern far_t far_t_2410_78e4;
 extern char s_Done_2410_78e8[];
 extern char s_s_d_complete_owned_by_s[];
@@ -2353,3 +2353,6 @@ extern char s__s__Trades_d_food_2410_7e30[];
 /* 0x769b / 0x76a8 */
 extern char s_change_party_2410_769b[];
 extern char s_done_2410_76a8[];
+
+/* 0x7a79 */
+extern char s_s_Owned_by_s_2410_7a79[44];
