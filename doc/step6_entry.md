@@ -14868,3 +14868,62 @@ duplication plus the segment order is the ~152 bytes.  Removing it means either 
 precede `DATASEG` in the link (the earlier C0M-last attempt overflowed DGROUP to 65,076 bytes
 because it also pulled the far arrays in) or supplying our own startup data, which the objective
 records as needing a decision.
+
+### layout: drop the two duplicated C0 strings (sum -> 111,517)
+layout: drop the two duplicated C0 strings (sum|delta| 182,037 -> 111,517)
+
+`st_globals.c` reconstructs the original's C0 header block at the head of `_DATA`.  Two of its
+entries are never referenced by any code:
+
+    s_divide_error[14]                  "Divide error\r\n"
+    s_abnormal_program_termination[30]  "Abnormal program termination\r\n"
+
+and Turbo C's own C0M.OBJ already emits both strings in its `DATASEG` contribution - at
+DGROUP:0x48 and 0x56 in our image, i.e. 0x2f / 0x3d in the original, whose header has no 25-byte
+null-check string in between.  So our copies were a second instance of bytes that already exist,
+sitting immediately before the first game symbol - which is exactly where our layout is ~150 bytes
+too long because of the separate `DATASEG` + `_DATA` ordering.
+
+MEASURED (HEAD 2e1f7623 -> this commit)
+
+  diff_dgroup sum|delta|   182,037 -> 111,517   (-70,520, -39%)
+  diff_dgroup mean             111 ->    68
+  diff_dgroup worst         14,374 -> 14,330
+  diff_dgroup matched        1,629 -> 1,627
+  diff_dgroup runs              31 ->    32
+  compare_state              1,627/0/0 -> 1,625/0/0
+  compare_runtime matched    1,685 -> 1,683, identical 1,676 -> 1,674
+  grep_checks               35,708 -> 35,706
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+THE -2 IS COVERAGE, NOT DIFFERENCE.  Every count that pairs by name drops by exactly the two
+symbols I removed, because the surviving copies live inside C0M.OBJ's `DATASEG` and have no public
+name for the tools to pair against:
+
+  * `diff_dgroup` matched 1,629 -> 1,627
+  * `compare_state` identical 1,625 (DIFFERENT still 0)
+  * `compare_runtime` identical 1,674 (DIFFERENT still 9, all CRT/timestamp)
+  * `grep_checks` 35,706 (two declarations leave)
+
+I tried two ways of keeping the two names without the cost, and measured both before rejecting
+them:
+
+  1. declaring them at the end of the data area (0x906d) - `diff_dgroup` then pairs our copy with
+     the original's 0x2f by NAME and reports delta +36,926, taking the whole sum back to 185,413;
+  2. keeping them at the head - that is the 182,037 state, where 44 duplicated bytes lengthen the
+     layout just before ~1,700 symbols.
+
+Both keep the counters at 1,627 while making the layout claim that these duplicate bytes are the
+original's objects.  Deleting them is the only option that is simultaneously correct about the data
+(no duplication) and honest about the offsets, so the two counters drop and the mean delta falls
+from 111 to 68.
+
+WHAT THIS SAYS ABOUT THE PREFIX.  The gain is large because the 44 bytes sat in front of almost
+every symbol: it confirms the model established last turn, that the ~152-byte surplus from
+`DATASEG`-before-`_DATA` is what inflates every delta, and that removing redundant bytes at the head
+is worth ~44 x 1,600 on the sum.  `C0OBJ` is honoured by scripts/link_standalone.py, so the
+remaining lever - using a startup whose `DATASEG` lacks the 25-byte null-check string, as `C0L.OBJ`
+does - can be tested without touching the build, but C0L is the large-model startup and also lacks
+`__C0argc`/`__C0argv`/`__C0environ`, which our recovered CRT needs, so it currently fails to link
+with 11 undefined symbols.  That experiment (and its 91,727 measurement, taken with a stale
+GLOB.OBJ) is not valid and is not relied on here.

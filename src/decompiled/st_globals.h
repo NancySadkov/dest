@@ -86,8 +86,8 @@ extern uint32_t ovrAuxSlot;
 extern char s_vdisk_fake[];
 extern uint32_t _DATA;
 extern byte __C0_ASM_CopyRight[43];
-extern char s_divide_error[];
-extern char s_abnormal_program_termination[];
+
+
 extern far_t GSTARTX_SavedVectors[4];
 extern uint16_t __C0argc;
 extern uint16_t __C0argv;
