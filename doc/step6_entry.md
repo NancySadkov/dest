@@ -9975,3 +9975,20 @@ be guessing about rather than measuring.
   grep_checks 39,495 -> 39,458; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### uiMainMenuLoop: change flag and far-pointer halves (39,458 -> 39,437)
+uiMainMenuLoop: the change flag and four far-pointer halves (39,458 -> 39,437)
+
+  bVar1      the "menu choice changed" flag, set in two branches -> changed       (9)
+  uStack_2e  _DS, segment half of the "Save Game" label          -> saveMenuSeg   (3)
+  uStack_30  &s_Save_Game_2410_27f4, its offset half             -> saveMenuOfs   (3)
+  uStack_16  _DS, segment half of the "Begin Play" label         -> beginMenuSeg  (3)
+  uStack_18  &s_Begin_Play_2410_283f, its offset half            -> beginMenuOfs  (3)
+
+`uVar10` (7 uses) is now the only §5-named local left in uiMainMenuLoop and it is the one
+deliberately not renamed: it holds `savesSeg` at 1416 and `GSPEmpty.ofs` from 1483, then is
+stored into a `.seg` at 1509/1517 and into a `.ofs` at 1623.
+
+  grep_checks 39,458 -> 39,437; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

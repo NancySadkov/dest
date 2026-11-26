@@ -1360,7 +1360,7 @@ void __cdecl16far uiMainMenuLoop(void)
   far_t handle;
   far_t handle_00;
   far_t handle_01;
-  bool bVar1;
+  bool changed;
   bool again;
   uint16_t emptyOfs;
   uint16_t emptySeg;
@@ -1386,10 +1386,10 @@ void __cdecl16far uiMainMenuLoop(void)
   uint16_t saveOk;
   uint16_t menuCount;
   char far *menu[8];   /* 8 far string pointers = 0x20 bytes; the frame is sub sp,0x32 */
-  uint16_t uStack_30;
-  uint16_t uStack_2e;
-  uint16_t uStack_18;
-  uint16_t uStack_16;
+  uint16_t saveMenuOfs;
+  uint16_t saveMenuSeg;
+  uint16_t beginMenuOfs;
+  uint16_t beginMenuSeg;
   byte pmenuIdx;
   char yesno [9];
   uint8_t yes_picked;
@@ -1421,20 +1421,20 @@ void __cdecl16far uiMainMenuLoop(void)
   again = false;
   do {
     if (SaveAuto == '\0') {
-      uStack_2e = 0;
-      uStack_30 = 0;
+      saveMenuSeg = 0;
+      saveMenuOfs = 0;
     }
     else {
-      uStack_2e = _DS;
-      uStack_30 = (uint16_t)&s_Save_Game_2410_27f4;
+      saveMenuSeg = _DS;
+      saveMenuOfs = (uint16_t)&s_Save_Game_2410_27f4;
     }
     if ((GGameInProgress == '\0') && (SaveAuto != '\0')) {
-      uStack_16 = _DS;
-      uStack_18 = (uint16_t)&s_Begin_Play_2410_283f;
+      beginMenuSeg = _DS;
+      beginMenuOfs = (uint16_t)&s_Begin_Play_2410_283f;
     }
     else {
-      uStack_16 = 0;
-      uStack_18 = 0;
+      beginMenuSeg = 0;
+      beginMenuOfs = 0;
     }
     pmenu = (uint16_t)&menu;
     items.seg = _SS;
@@ -1447,9 +1447,9 @@ void __cdecl16far uiMainMenuLoop(void)
              *(uint16_t *)((char *)0x25bd6 + (uint)pmenuIdx * 2)) {
       case 288826:
         saveui_blitPanel();
-        bVar1 = false;
+        changed = false;
         if ((SaveAuto == '\0') || (GWantsExit2 == '\0')) {
-          bVar1 = true;
+          changed = true;
         }
         else {
           pcVar9 = yesno;
@@ -1457,11 +1457,11 @@ void __cdecl16far uiMainMenuLoop(void)
           items_00.ofs = (uint16_t)pcVar9;
           uiMenu((char far *)"Game not saved: Are you sure?",items_00,2);
           if ((char)pcVar9 == '\x01') {
-            bVar1 = true;
+            changed = true;
           }
         }
         saveui_blitPanel();
-        if (bVar1) {
+        if (changed) {
           ovr_copyProtectionCheck();
           saveui_configureNewWorld();
         }
@@ -1577,9 +1577,9 @@ void __cdecl16far uiMainMenuLoop(void)
         uiMenu((char far *)"Load Game:",items_02,saveCount);
         saveui_usesBlitLoadRleGfx4();
         if (hasLast != '\0') {
-          bVar1 = false;
+          changed = false;
           if ((SaveAuto == '\0') || (GWantsExit2 == '\0')) {
-            bVar1 = true;
+            changed = true;
           }
           else {
             saveui_blitPanel();
@@ -1588,11 +1588,11 @@ void __cdecl16far uiMainMenuLoop(void)
             items_03.ofs = (uint16_t)pcVar9;
             uiMenu((char far *)"Game not saved: Are you sure?",items_03,2);
             if ((char)pcVar9 == '\x01') {
-              bVar1 = true;
+              changed = true;
             }
           }
           saveui_blitPanel();
-          if (bVar1) {
+          if (changed) {
             ovr_save_loadGameFile();
             GWantsExit2 = '\0';
           }
