@@ -8466,3 +8466,47 @@ now a register-specific operand search).  A one-function probe is cheaper than a
   grep_checks 40,071 -> 40,067; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### Segment 0x80: the stride decodes, the declaration is missing
+
+MEASURED: segment 0x80 is a [class][37] far-pointer table that our tree does not declare
+
+Chasing segment 0x80 (the per-class table `stats_usesAlignUp42` indexes) produced two concrete results.
+
+1. THE STRIDE DECODES AS 37 FAR POINTERS.  The index is
+
+     piVar12 = (int *)((uint)classId * 0x94 + level * 4);
+
+   0x94 = 148 = 37 * 4, and the level index is clamped to 0x24 (36) inclusive just before the walk, so
+   the second dimension is exactly levels 0..36 = 37 entries.  Each entry is a far pointer: the null test
+   is `*piVar12 == 0 && piVar12[1] == 0` and LUDIV_at_ is handed `*piVar4, piVar4[1]`.  So the table is
+
+     far_t <something>[nClasses][37]
+
+   read through `mov ax,0x80 / mov es,ax`.
+
+2. THAT DECLARATION IS ABSENT FROM THE TREE.  `grep '\[37\]' st_globals*.h` finds nothing, and the
+   `far far` list (mapSquare*, columnScreenY, AudioHandles, Agnts, AgntArrayA/B, SquareRecs,
+   EntityTypeSeg, BuildingTypes, AgntGs, BldFlags, BldGfxRuins/Normal, Stsh*, AudioSeg, expThresholds,
+   miceTileTail) contains no such array.  That is why the export fell back to a near read at DS offset
+   `classId*0x94 + level*4` instead of a segment-relative one - the base symbol it should have used does
+   not exist in our tree.
+
+   Adding it needs **nClasses**, which nothing in the body gives.  Declaring
+   `far_t far far X[8][37]` and hoping would fix the addressing but invent the size, and a `far far`
+   array's own segment is exactly the thing being modelled, so the wrong size is not a harmless guess.
+
+NOT FIXED, and not guessed.  The two near reads in stats_usesAlignUp42 stay as they are; they are already
+commented in the body as blocked on this.
+
+SEPARATE BUG FOUND WHILE LOOKING.  ovc09_init.c has a dozen sites of the form
+
+  psVar9 = (stg_tmp_t *)(row * 0x94);
+
+but `stg_tmp_t` is `{ uint8_t cmap[768]; far_t aptr; far_t bptr; }` = 0x308, not 0x94.  So either the
+record type is wrong or the stride is - either way those sites have the same near-pointer shape and are
+worth their own pass: `grep '(stg_tmp_t \*)(row \* 0x94)' *.c`.
+
+  grep_checks 40,067 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
