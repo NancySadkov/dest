@@ -1367,13 +1367,15 @@ void __cdecl16far uiMainMenuLoop(void)
   uint16_t slotWord;
   uint16_t ssVal;
   int cmpResult;
-  char *pcVar9;
+  char *yesnoSel;
+  char *entryName;
   char *title;
-  uint16_t uVar10;
+  uint16_t segCopy;
+  uint16_t ofsCopy;
   uint far *puVar11;
-  uint16_t far *puVar12;
-  uint16_t far *puVar13;
-  int far *piVar14;
+  uint16_t far *slotPtr;
+  uint16_t far *clearPtr;
+  int far *lastSlotPtr;
   uint saveCount;
   uint saveIndex;
   uint lastIndex;
@@ -1408,7 +1410,7 @@ void __cdecl16far uiMainMenuLoop(void)
   entries_05 = ovr_stshAlloc(400);
   savesSeg = SEG_OF(entries_05);
   saves = (far_t far *)entries_05;
-  uVar10 = savesSeg;
+  segCopy = savesSeg;
   _fsetmem(MK_FP(savesSeg,far_ofs_u32(entries_05)),400,0);
   saveCount = 0;
   again = false;
@@ -1445,11 +1447,11 @@ void __cdecl16far uiMainMenuLoop(void)
           changed = true;
         }
         else {
-          pcVar9 = yesno;
+          yesnoSel = yesno;
           items_00.seg = _SS;
-          items_00.ofs = (uint16_t)pcVar9;
+          items_00.ofs = (uint16_t)yesnoSel;
           uiMenu((char far *)"Game not saved: Are you sure?",items_00,2);
-          if ((char)pcVar9 == '\x01') {
+          if ((char)yesnoSel == '\x01') {
             changed = true;
           }
         }
@@ -1471,19 +1473,19 @@ void __cdecl16far uiMainMenuLoop(void)
           puVar11 = (uint far *)&saves[saveIndex];
           slotWord = *puVar11 | puVar11[1];
           if (slotWord == 0) {
-            puVar12 = (uint16_t far *)&saves[saveIndex];
-            puVar12[1] = GSPEmpty.seg;
-            *puVar12 = emptyOfs;
+            slotPtr = (uint16_t far *)&saves[saveIndex];
+            slotPtr[1] = GSPEmpty.seg;
+            *slotPtr = emptyOfs;
             slotWord = emptySeg;
-            uVar10 = emptyOfs;
+            ofsCopy = emptyOfs;
           }
         }
         if (saveCount < 100) {
-          puVar12 = (uint16_t far *)&saves[saveCount];
-          puVar12[1] = GSPEmpty.seg;
-          *puVar12 = emptyOfs;
+          slotPtr = (uint16_t far *)&saves[saveCount];
+          slotPtr[1] = GSPEmpty.seg;
+          *slotPtr = emptyOfs;
           slotWord = emptySeg;
-          uVar10 = emptyOfs;
+          ofsCopy = emptyOfs;
         }
         slotNo = (byte)slotWord;
         saveCount = saveCount + 1;
@@ -1499,18 +1501,18 @@ void __cdecl16far uiMainMenuLoop(void)
           if (cmpResult == 0) {
             saveui_blitPanel();
             saveui_drawCancel();
-            pcVar9 = uiReadString((char *)"Name this save:  (Esc to cancel)",_DS,0,(char *)0x0,0,0)
+            entryName = uiReadString((char *)"Name this save:  (Esc to cancel)",_DS,0,(char *)0x0,0,0)
             ;
-            saves[(uint)slotNo - 1].seg = uVar10;
-            saves[(uint)slotNo - 1].ofs =(uint16_t)( pcVar9);
+            saves[(uint)slotNo - 1].seg = segCopy;
+            saves[(uint)slotNo - 1].ofs =(uint16_t)( entryName);
             saveui_usesBlitLoadRleGfx4();
           }
           else {
             saveui_blitPanel();
             saveui_drawCancel();
-            pcVar9 = uiReadString((char *)"Name for this save:  (Esc to cancel)",_DS,0,(char *)saves[(uint)slotNo - 1].ofs,saves[(uint)slotNo - 1].seg,0);
-            saves[(uint)slotNo - 1].seg = uVar10;
-            saves[(uint)slotNo - 1].ofs =(uint16_t)( pcVar9);
+            entryName = uiReadString((char *)"Name for this save:  (Esc to cancel)",_DS,0,(char *)saves[(uint)slotNo - 1].ofs,saves[(uint)slotNo - 1].seg,0);
+            saves[(uint)slotNo - 1].seg = segCopy;
+            saves[(uint)slotNo - 1].ofs =(uint16_t)( entryName);
             saveui_usesBlitLoadRleGfx4();
           }
           if ((saves[(uint)slotNo - 1].ofs != 0 ||
@@ -1535,18 +1537,18 @@ void __cdecl16far uiMainMenuLoop(void)
               GWantsExit2 = '\0';
             }
             for (saveIndex = 0; saveIndex < saveCount; saveIndex = saveIndex + 1) {
-              puVar13 = (uint16_t far *)&saves[saveIndex];
-              cmpResult = strcmp((char *)CONCAT22(puVar13[1],(char *)*puVar13),
+              clearPtr = (uint16_t far *)&saves[saveIndex];
+              cmpResult = strcmp((char *)CONCAT22(clearPtr[1],(char *)*clearPtr),
                              (char *)CONCAT22(GSPEmpty.seg,GSPEmpty.ofs));
               if (cmpResult == 0) {
-                puVar13 = (uint16_t far *)&saves[saveIndex];
-                puVar13[1] = 0;
-                *puVar13 = 0;
+                clearPtr = (uint16_t far *)&saves[saveIndex];
+                clearPtr[1] = 0;
+                *clearPtr = 0;
               }
             }
             while ((saveCount != 0 &&
-                   (piVar14 = (int far *)&saves[saveCount - 1],
-                   *piVar14 == 0 && piVar14[1] == 0))) {
+                   (lastSlotPtr = (int far *)&saves[saveCount - 1],
+                   *lastSlotPtr == 0 && lastSlotPtr[1] == 0))) {
               saveCount = saveCount - 1;
             }
             entries_00.seg = savesSeg;
@@ -1576,11 +1578,11 @@ void __cdecl16far uiMainMenuLoop(void)
           }
           else {
             saveui_blitPanel();
-            pcVar9 = yesno;
+            yesnoSel = yesno;
             items_03.seg = _SS;
-            items_03.ofs = (uint16_t)pcVar9;
+            items_03.ofs = (uint16_t)yesnoSel;
             uiMenu((char far *)"Game not saved: Are you sure?",items_03,2);
-            if ((char)pcVar9 == '\x01') {
+            if ((char)yesnoSel == '\x01') {
               changed = true;
             }
           }
@@ -1608,14 +1610,14 @@ void __cdecl16far uiMainMenuLoop(void)
         if (slotNo != 0) {
           saveui_blitPanel();
           menuCount = 2;
-          pcVar9 = yesno;
+          yesnoSel = yesno;
           ssVal = _SS;
           title = ovr_fmVsprintf("Delete %s: Are you sure?",
                                  (char *)CONCAT22(saves[(uint)slotNo - 1].seg,
                                                   (char *)saves[(uint)slotNo - 1].ofs)
                                 );
-          items_05.seg = (uint16_t)pcVar9;
-          items_05.ofs = uVar10;
+          items_05.seg = (uint16_t)yesnoSel;
+          items_05.ofs = ofsCopy;
           uiMenu(title,items_05,menuCount);
           if ((char)title == '\x01') {
             ovr_save_deleteGameFile();
@@ -1625,8 +1627,8 @@ void __cdecl16far uiMainMenuLoop(void)
             saves[(uint)slotNo - 1].seg = 0;
             saves[(uint)slotNo - 1].ofs = 0;
             while ((saveCount != 0 &&
-                   (piVar14 = (int far *)&saves[saveCount - 1],
-                   *piVar14 == 0 && piVar14[1] == 0))) {
+                   (lastSlotPtr = (int far *)&saves[saveCount - 1],
+                   *lastSlotPtr == 0 && lastSlotPtr[1] == 0))) {
               saveCount = saveCount - 1;
             }
           }

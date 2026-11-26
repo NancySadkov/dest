@@ -14270,3 +14270,32 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (47 runs, sum|delta| 193,093, mean 122, worst 14,562)
   compare_runtime 1,630 matched, 1,621 identical / 9 different
+
+### uiMainMenuLoop: five names, two needing explicit line lists (35,837 -> 35,762)
+uiMainMenuLoop: five names, two needing explicit line lists (35,837 -> 35,762)
+
+    pcVar9   1448,1450,1452,1579,1581,1583,1611,1617  the `yesno` answer -> yesnoSel   (8)
+    pcVar9   1502, 1505, 1511, 1513  uiReadString's result               -> entryName  (4)
+    uVar10   1411, 1504, 1512  a copy of `savesSeg` reused 90 lines later -> segCopy    (3)
+    uVar10   1478, 1486, 1618  a copy of `emptyOfs`                       -> ofsCopy    (3)
+    puVar12  1474..1476, 1482..1484  &saves[saveIndex] / &saves[saveCount] -> slotPtr   (6)
+    puVar13  1538, 1539, 1542..1544  &saves[saveIndex], read then cleared  -> clearPtr  (6)
+    piVar14  1548, 1549, 1628, 1629  &saves[saveCount - 1]                 -> lastSlotPtr (6)
+
+This is the case that defeats "most recent assignment" targeting: `uVar10` is set to
+`savesSeg` at 1411 and first used at 1504, but `emptyOfs` is written into the same slot at
+1478 and 1486 in between, and used at 1618.  A positional rule would label 1504/1512
+`ofsCopy`.  Only the use sites distinguish a long-lived value from a transient one, so this
+one is keyed on explicit line lists with a per-line assertion each.
+
+Three of the intended names were already taken by existing locals in the same function
+(`savesSeg`, `emptyOfs`, and `strength` in the previous commit) - the pre-check caught each
+one before anything was written, which is why the copies carry `Copy` names rather than
+shadowing the originals.
+
+No expression changed.
+
+  grep_checks 35,837 -> 35,762; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (47 runs, sum|delta| 193,093, mean 122, worst 14,562)
+  compare_runtime 1,630 matched, 1,621 identical / 9 different
