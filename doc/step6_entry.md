@@ -10708,3 +10708,41 @@ is gate-neutral rather than a regression.
   grep_checks 39,020 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### upd_usesAlignUp4: 26 far accumulator reads (39,020 -> 38,958)
+upd_usesAlignUp4: 26 sheet accumulator reads made far, 19 dead stores removed (39,020 -> 38,958)
+
+    iVar17 = (int)(uint32_t)GLeaderSheets[idx];
+    accLo = (uint *)(iVar17 + 0x56);
+    *accLo = *accLo + uVar36;
+    accHi = (int *)(iVar17 + 0x58);
+    *accHi = *accHi + ((int)uVar36 >> 0xf) + (uint)CARRY2(uVar12,uVar36);
+
+`GLeaderSheets[idx]` is already a `char_sheet_t far *`; going through (uint32_t) then (int) kept
+only the offset, so every accumulator access was DS-relative.  +0x56/+0x58 are the low and high
+words of `char_sheet_t.gold`; +0x60/+0x62 are `.foodStored`.
+
+Rewritten so each access reads through the sheet itself:
+
+    accLo = (uint far *)((uint8_t far *)GLeaderSheets[idx] + 0x56);
+    accHi = (int far *)((uint8_t far *)GLeaderSheets[idx] + 0x58);
+
+`accLo`/`accHi` are now far pointers, and the 19 `iVar17 = (int)(uint32_t)GLeaderSheets[idx]`
+stores that existed only to compute those offsets are gone.
+
+Verified in the emitted listing (the function does list, 3366 instructions):
+
+    mov  bx,word ptr DGROUP:_GLeaderSheets[bx]
+    mov  ax,word ptr es:[bx+86]        ; gold low word at 0x56
+    xor  dx,dx
+    add  ax,word ptr [bp-72]
+    adc  dx,0                          ; the 32-bit accumulator, through the sheet's segment
+
+es:[bx+86] (0x56) x7, es:[bx+88] (0x58) x7, es:[bx+96] (0x60) x2, es:[bx+98] (0x62) x2.
+
+This is also the first turn in four that moves the counter, and the reason is mechanical: the 62
+deleted lines were 62 occurrences of `iVar17`, which the `[iusbc]Var` pattern counts.
+
+  grep_checks 39,020 -> 38,958; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different
