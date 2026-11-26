@@ -788,33 +788,33 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
 void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot)
 
 {
-  uint8_t *puVar1;
-  uint *puVar2;
+  uint8_t *frameBytes;
+  uint8_t *healthBytes;
+  uint *fieldFlags;
   byte gindexCopy;
-  uint16_t uVar5;
   entity_t *peVar6;
   uint randVal;
-  uint16_t uVar8;
+  uint16_t animRand;
+  uint16_t panVal;
   entity_t *peVar9;
   far_t far *frameTab;
   int agnt;
-  bool bVar14;
+  bool frameFlag;
   long lVar15;
   
   if (partySlot != -1) {
     mapDirty = 1;
     peVar6 = Entities;
-    uVar5 = (uint16_t)((ulong)Entities >> 0x10);
     Entities[entityIndex].base.target = 0xff;
     peVar6[entityIndex].base.gindex = gindex;
     peVar6[entityIndex].base.level =
          AgntGs[(uint)gindex].shortName[0];
-    puVar1 = &peVar6[entityIndex].base.frameIndex;
-    puVar1[0] = 0x0;
-    puVar1[1] = 0x0;
-    puVar1 = &peVar6[entityIndex].base.health;
-    puVar1[0] = 0x64;
-    puVar1[1] = 0x0;
+    frameBytes = &peVar6[entityIndex].base.frameIndex;
+    frameBytes[0] = 0x0;
+    frameBytes[1] = 0x0;
+    healthBytes = &peVar6[entityIndex].base.health;
+    healthBytes[0] = 0x64;
+    healthBytes[1] = 0x0;
     *(uint16_t *)((int)&peVar6[entityIndex].base.frames + 1) = 0;
     *(uint16_t *)((int)&peVar6[entityIndex].base.frames + 3) = 0;
     *(char *)((int)&peVar6[entityIndex].base.entity + 3) = partySlot;
@@ -827,8 +827,8 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
     lVar15 = LDIV_at_(CONCAT22(((int)randVal >> 0xf) << 1 | (uint)((int)randVal < 0),randVal << 1),lVar15)
     ;
     if ((int)lVar15 == 0) {
-      puVar2 = (uint *)((int)&peVar6[entityIndex].base.frames + 3);
-      *puVar2 = *puVar2 | 1;
+      fieldFlags = (uint *)((int)&peVar6[entityIndex].base.frames + 3);
+      *fieldFlags = *fieldFlags | 1;
     }
     ovr_attact_usesGMapFlags3();
     if (AgntFlag1 != false) {
@@ -845,29 +845,29 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
             Agnts[agnt].strength =
                  *(undefined1 *)((int)&peVar6[entityIndex].base.state + 1);
             Agnts[agnt].strengthMax = (char)peVar6[entityIndex].base.flags32;
-            bVar14 = (*(uint *)((int)&peVar6[entityIndex].base.frames + 3) & 1) != 0;
+            frameFlag = (*(uint *)((int)&peVar6[entityIndex].base.frames + 3) & 1) != 0;
             /* The sprite-stash pick is a chained far read in the original:
                  0229  les bx, ptr es:[bx + 0x1d]   ; Agnts[agnt].gdata
-                 022E  add bx, ax                   ; + bVar14 * 0xc
+                 022E  add bx, ax                   ; + frameFlag * 0xc
                  0231  mov ax, word ptr es:[bx + 0xd]   ; sprs[k].seg
                  0235  mov dx, word ptr es:[bx + 0xb]   ; sprs[k].ofs
-               with the byte offsets 3 / 7 / 0xb (and +0xc when bVar14 is set), i.e. the three
-               entries gdata->sprs[bVar14 * 3 + band] for the level bands <4, 4..9, >=10.  The
+               with the byte offsets 3 / 7 / 0xb (and +0xc when frameFlag is set), i.e. the three
+               entries gdata->sprs[frameFlag * 3 + band] for the level bands <4, 4..9, >=10.  The
                export copied `gdata` into a uint32_t, cast it to (int) and dereferenced DS-relative,
                which drops the segment - fatal, because AgntGs has its own. */
             if (peVar6[entityIndex].base.level < 10) {
               if (peVar6[entityIndex].base.level < 4) {
                 Agnts[agnt].frames =
-                     (far_t far *)Agnts[agnt].gdata->sprs[bVar14 * 3];
+                     (far_t far *)Agnts[agnt].gdata->sprs[frameFlag * 3];
               }
               else {
                 Agnts[agnt].frames =
-                     (far_t far *)Agnts[agnt].gdata->sprs[bVar14 * 3 + 1];
+                     (far_t far *)Agnts[agnt].gdata->sprs[frameFlag * 3 + 1];
               }
             }
             else {
               Agnts[agnt].frames =
-                   (far_t far *)Agnts[agnt].gdata->sprs[bVar14 * 3 + 2];
+                   (far_t far *)Agnts[agnt].gdata->sprs[frameFlag * 3 + 2];
             }
             Agnts[agnt].animFrame = 0xff;
             /* 0310  les bx, ptr es:[bx + 0x1d]  ; gdata, then `mov al, es:[bx]` = agntG_t.ai */
@@ -885,11 +885,11 @@ void __cdecl16far ovc15_usesLDIV_at_2(int entityIndex,byte gindex,char partySlot
               }
             }
             else {
-              uVar8 = ovr_randBelow(2,0);
-              Agnts[agnt].animVariant = (char)uVar8;
+              animRand = ovr_randBelow(2,0);
+              Agnts[agnt].animVariant = (char)animRand;
             }
-            uVar8 = ovr_audio_panFromX((agnt_t far *)&Agnts[agnt].x,0);
-            ovr_play_sfxU(0x1b,0,uVar8,0,0);
+            panVal = ovr_audio_panFromX((agnt_t far *)&Agnts[agnt].x,0);
+            ovr_play_sfxU(0x1b,0,panVal,0,0);
           }
         }
       }

@@ -13350,3 +13350,33 @@ and the result goes to a different slot ([bp-8]), so the two roles are genuinely
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### ovc15_usesLDIV_at_2: five counted names, one dead store (37,007 -> 36,970)
+ovc15_usesLDIV_at_2: five counted names, one dead segment store (37,007 -> 36,970)
+
+  puVar1  812..814  &entity.frameIndex, two bytes           -> frameBytes  (3)
+  puVar1  815..817  &entity.health, two bytes               -> healthBytes (3)
+  puVar2  830, 831  (uint *)&entity.frames + 3              -> fieldFlags  (3)
+  uVar8   888, 889  ovr_randBelow(2,0) result               -> animRand    (2)
+  uVar8   891, 892  ovr_audio_panFromX(...) result          -> panVal      (2)
+  bVar14  801,848,851,854,855,861,865,870  frames & 1       -> frameFlag   (8)
+  uVar5   794, 807  (uint16_t)((ulong)Entities >> 0x10), assigned and
+                    never read                             -> removed
+
+The two names on `puVar1` are genuinely distinct objects: `frameIndex` is a byte pair and
+`health` is a byte pair, written immediately after one another.  `bVar14` is renamed in the
+two comments at 851..855 as well, because they explain the original's
+`sprs[bVar14 * 3 + band]` indexing and would otherwise refer to a variable that no longer
+exists.
+
+`uVar5` was a dead store: declaration plus one assignment and no read, so both lines go
+(this time not the pointless `Ident + 0 * 0x...` pattern, so nothing is dropped from an
+emitted address).
+
+`peVar6`, `peVar9` and `lVar15` are left alone - their first letter falls outside the
+section-5 character class, so they are not counted, and renaming them would be churn.
+
+  grep_checks 37,007 -> 36,970; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
