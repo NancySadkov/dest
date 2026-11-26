@@ -11779,3 +11779,19 @@ sweep, not a counter or layout change.
 
 The 43 x 64 = 2,752 bytes added to DGROUP land in their modules' data, after the
 measured globals, so the matched layout is untouched.
+
+### agnt_usesAgntSaved: memcpy result and scan index (37,901 -> 37,880)
+agnt_usesAgntSaved: name the memcpy result, scan index and high bytes (37,901 -> 37,880)
+
+  pvVar2   memcpy(...) return                 -> copyResult (5)
+  iVar5    the scan index over Agnts          -> scanIdx    (13)
+  bVar3    (byte)((uint)copyResult >> 8)      -> copyHiB    (3)
+  uVar4    the same value in the other branch -> copyHiA    (3)
+
+`uVar1` is deliberately left: it holds `AgntCount`, then a neighbour's `y`, then the
+value returned - three roles in one export variable, so naming it after any one of
+them would be wrong.
+
+  grep_checks 37,901 -> 37,880; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different
