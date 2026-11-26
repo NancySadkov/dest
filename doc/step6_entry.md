@@ -11996,3 +11996,54 @@ Names:
   grep_checks 37,824 -> 37,799; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
   compare_runtime 1,605 identical / 10 different
+
+### CONCAT13 far cast: legal but segmentless; ovc15_removeEntity named
+CONCAT13 far cast: legal, but the expression carries no segment - not converted
+
+Probe (tmp/buildsrc/probe.c) answered the open language question:
+
+    char far *p = (char far *)v;             ->  les bx,dword ptr [bp-4]
+    char far *q = (char far *)CONCAT22(s,o); ->  les bx,dword ptr [bp-4]
+
+Turbo C does accept a long -> far pointer cast, so the five `(char *)CONCAT13(...)`
+memcpy sites could be typed far.
+
+Then the emitted code for `run_demo` showed why they must not be.  The destination
+`(char far *)CONCAT13(ssHi,CONCAT12(uVar5,palette))` compiles to
+
+    mov  al,byte ptr [bp-156]
+    mov  ah,0
+    shl  ax,8
+    lea  dx,word ptr [bp-940]
+    or   ax,dx
+    mov  dl,byte ptr [bp-161]
+    mov  dh,0
+    shl  ax,8
+    or   ax,dx
+    push 0
+    push ax
+
+i.e. the pushed segment is the literal 0 and the offset is a 16-bit mix of palette
+bytes.  The CONCAT13 expression does not actually carry a segment - it is the export's
+rendering of a near pointer plus stray high bytes.  Typing it far therefore produced
+`0000:ofs` instead of the previous `DS:ofs`, which is strictly worse (segment 0 is the
+interrupt vector table).
+
+All 11 conversions were reverted.  The correct treatment for these sites needs the
+palette pointer's real segment, not a cast.
+
+  build 65/65; LINK.LOG 65 bytes / 0 problems; grep_checks 37,799 unchanged
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different
+
+### ovc15_removeEntity: scan index, segment and two scratch values (37,799 -> 37,766)
+
+  uVar4    the Agnts scan index in both loops   -> agntIdx     (12)
+  uVar5    (uint16_t)((ulong)Entities >> 0x10)  -> entitiesSeg (4)
+  cVar2    AgntGs[gindex].ai                    -> aiValue     (3)
+  piVar1   &Agnts[i].owner                      -> ownerPtr    (3)
+
+`peVar3` is left: it is an `entity_t *` (near) assigned from the far `Entities` and then
+indexed, so `peVar3[entityIndex].base.destX` is a DS-relative read of a record that
+lives in the Entities segment.  Fixing it means near -> far plus edits at the
+`(int)&peVar3[...]` and `MK_FP(entitiesSeg, peVar3 + i)` sites; that is its own pass.

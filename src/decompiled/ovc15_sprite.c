@@ -526,48 +526,48 @@ void __cdecl16far ovc15_usesAgntIndex(void)
 void __cdecl16far ovc15_removeEntity(uint entityIndex)
 
 {
-  int *piVar1;
-  char cVar2;
+  int *ownerPtr;
+  char aiValue;
   char partyIndex;
   uint16_t x;
   uint16_t y;
   entity_t *peVar3;
-  uint uVar4;
-  uint16_t uVar5;
+  uint agntIdx;
+  uint16_t entitiesSeg;
   
   if (AgntFlag1) {
-    for (uVar4 = 0; uVar4 < AgntCount; uVar4 = uVar4 + 1) {
-      if ((Agnts[uVar4].owner == entityIndex) &&
-         (Agnts[uVar4].combatState != '\x02')) {
-        Agnts[uVar4].combatState = 2;
-        Agnts[uVar4].targetY = 0;
+    for (agntIdx = 0; agntIdx < AgntCount; agntIdx = agntIdx + 1) {
+      if ((Agnts[agntIdx].owner == entityIndex) &&
+         (Agnts[agntIdx].combatState != '\x02')) {
+        Agnts[agntIdx].combatState = 2;
+        Agnts[agntIdx].targetY = 0;
       }
     }
   }
-  uVar5 = (uint16_t)((ulong)Entities >> 0x10);
+  entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
   peVar3 = Entities;
   x = peVar3[entityIndex].base.destX;
   y = peVar3[entityIndex].base.destY;
-  cVar2 = AgntGs[(uint)peVar3[entityIndex].base.gindex].ai;
+  aiValue = AgntGs[(uint)peVar3[entityIndex].base.gindex].ai;
   partyIndex = *(char *)((int)&peVar3[entityIndex].base.entity + 3);
   if (entityIndex < EntityCount - 1U) {
-    _fmemmove((char far *)MK_FP(uVar5,peVar3 + entityIndex),
-              (char far *)MK_FP(uVar5,peVar3 + entityIndex + 1),
+    _fmemmove((char far *)MK_FP(entitiesSeg,peVar3 + entityIndex),
+              (char far *)MK_FP(entitiesSeg,peVar3 + entityIndex + 1),
               ((EntityCount + -1) - entityIndex) * 0x37);
   }
   if (AgntFlag1 != false) {
-    for (uVar4 = 0; uVar4 < AgntCount; uVar4 = uVar4 + 1) {
-      if (entityIndex < Agnts[uVar4].owner) {
-        piVar1 = (int *)&Agnts[uVar4].owner;
-        *piVar1 = *piVar1 + -1;
-        peVar3 = Entities + Agnts[uVar4].owner;
-        AGNT_WORD(&Agnts[uVar4], entity, 2) = DAT_2000_d190;
-        AGNT_WORD(&Agnts[uVar4], entity, 0) =(uint16_t)( peVar3);
+    for (agntIdx = 0; agntIdx < AgntCount; agntIdx = agntIdx + 1) {
+      if (entityIndex < Agnts[agntIdx].owner) {
+        ownerPtr = (int *)&Agnts[agntIdx].owner;
+        *ownerPtr = *ownerPtr + -1;
+        peVar3 = Entities + Agnts[agntIdx].owner;
+        AGNT_WORD(&Agnts[agntIdx], entity, 2) = DAT_2000_d190;
+        AGNT_WORD(&Agnts[agntIdx], entity, 0) =(uint16_t)( peVar3);
       }
     }
   }
   EntityCount = EntityCount + -1;
-  if ((cVar2 == '\0') && ((x != 0 || (y != 0)))) {
+  if ((aiValue == '\0') && ((x != 0 || (y != 0)))) {
     ovr_attact_usesAlignUp4(x,y,partyIndex,0,partyIndex);
   }
   ovr_attact_usesGMapFlags3();
