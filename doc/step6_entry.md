@@ -9180,3 +9180,46 @@ than re-deriving it.
   grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### ovc27_textTakesHalfDamage3: seven statusText argument lists fixed
+ovc27_textTakesHalfDamage3: the seven agnt_statusText argument lists are correct now
+
+Applied the decoded signature.  The original at 5ded:10ea pushes, right-to-left:
+
+  26 ff 36 f7 8f   push word ptr es:[0x8ff7]     ; GSavedBlitSeg  -> arg3
+  16               push ss
+  8d 86 2e ff      lea  ax,[bp - 0xd2]           ; far text buffer -> arg2
+  50               push ax
+  ff 76 f8         push word ptr [bp - 8]        ; agntRec.seg    -> arg1
+  ff 76 f6         push word ptr [bp - 0xa]      ; agntRec.ofs
+  9a 2f 00 48 01   lcall 0x148, 0x2f
+
+so it is `agnt_statusText(agnt_t far *agnt, char far *buf, uint16_t blitSeg)`.  The export had arg2 as a
+hand-built far pointer over the fabricated `ptrSeg` and arg3 as the literal 0.
+
+Rewritten (4 argument expressions + 5 third arguments, at all 7 sites):
+
+  (char *)CONCAT13((char)((uint)&textN >> 8),CONCAT12((char)&textN,ptrSeg))
+  (char *)CONCAT22(&textN,ptrSeg)
+      ->  (char far *)MK_FP(_SS,&textN)
+  ...,0)  ->  ...,(uint16_t)GSavedBlitSeg)
+
+Verified in the emitted listing - the rebuilt call now has the original's shape:
+
+  push  word ptr DGROUP:_GSavedBlitSeg
+  lea   ax,word ptr [bp-19]
+  push  ss
+  push  ax
+  push  word ptr [bp-22]
+  push  word ptr [bp-24]
+  call  far ptr _ovr_agnt_statusText
+
+  instructions 623  calls 50  les 17  _GSavedBlitSeg refs 9   (extent: 345 / 36)
+
+NOT done: `agntSeg` and `ptrSeg` still exist because they also feed `lcall 0x140,0x2f` (7 sites) and
+`lcall 0x140,0x48` (2), which I have not decoded; those remain `(char)agntSeg` / `(char)ptrSeg` in the
+argument lists.  Deleting them now would break the build.
+
+  grep_checks 39,962 (unchanged - this is an argument-list fix, not a naming one)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
