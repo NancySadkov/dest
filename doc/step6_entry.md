@@ -15044,3 +15044,36 @@ draw_toolbarLabels
   compare_state 1,625/0/0 (DIFFERENT 0)
   diff_dgroup 1,626/1,805 matched, 31 runs, sum|delta| 88,497, mean 54, worst 14,314
   compare_runtime 1,682 matched, 1,673 identical / 9 different
+
+### abilitiesDlg: three real buffers (35,616 -> 35,585)
+abilitiesDlg: three real buffers, not scratch (35,616 -> 35,585)
+
+    abStack_17[5]   byte       the stat index chosen for each menu position: written from the class
+                               map (711, 727), from the first menu's answer (753), from the stat
+                               loop (761), and read back as an index into sheet->stats
+                               (777-780)                                  -> statChoices
+    auStack_28[7]   uint16_t   the segment halves of the menu's far pointers, parallel to the offset
+                               words stored at `&menuItems + itemIndex*4`  -> entrySegs
+    puVar3          uint8_t *  `&classStatMap2 + sheet->cls`, later stored as a word into entrySegs
+                                                                          -> stat2Entry
+
+All three have a single role across every use, so they are whole-function substitutions with the
+declarations renamed in the same pass; the script asserts the resulting forms are
+`uint16_t entrySegs[7]` and `byte statChoices[5]`.
+
+Because each was already a readable name-free buffer this adds no risk: no expression changed, only
+identifiers.
+
+  grep_checks 35,616 -> 35,585; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0 (DIFFERENT 0)
+  diff_dgroup 1,626/1,805 matched, 31 runs, sum|delta| 88,497, mean 54, worst 14,314
+  compare_runtime 1,682 matched, 1,673 identical / 9 different
+
+REJECTED CANDIDATES, with reasons recorded so they are not re-examined:
+
+  * ovc13_usesAlignUp4's `uVar3`/`uVar4` (11 and 10 uses): both are byte/word scratch slots the
+    compiler reuses within one iteration - `uVar3` holds a corner byte, then a constr_compute1
+    result, then the colour 0x3f - so any name would assert a meaning the code contradicts.
+  * ovc26_usesStExit's `peVar11` (28 uses) is not a section-5 name, and the section-5 part is
+    `uVar5` (21 uses) spread over 138 lines of loop scratch.
+  * ovc41_textParalyzed is down to `in_DX` alone, which is the ABI register.

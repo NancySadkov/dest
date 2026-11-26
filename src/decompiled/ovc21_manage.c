@@ -673,7 +673,7 @@ uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
   far_t dst_00;
   byte selectable;
   undefined1 extraout_AH;
-  uint8_t *puVar3;
+  uint8_t *stat2Entry;
   char *inputResult;
   uint itemIndex;
   far_t entries;
@@ -681,11 +681,11 @@ uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
   undefined1 ssLo;
   undefined1 ssHi;
   uint8_t menuItems;
-  uint16_t auStack_28 [7];
+  uint16_t entrySegs [7];
   char inputCode;
   byte itemCount;
   uint8_t statIndex;
-  byte abStack_17 [5];
+  byte statChoices [5];
   uint8_t classStatMap2;
   uint8_t classStatMap1;
   
@@ -701,43 +701,43 @@ uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
   F_SCOPY(far_from_u32((uint32_t)(0x241049e4)),dst_00,7);
   while( true ) {
     _fsetmem(MK_FP(_SS,&menuItems),0x10,0);
-    auStack_28[0] = 0x2410;
+    entrySegs[0] = 0x2410;
     menuItems = 0x4d9b;
     itemCount = 1;
     selectable = manage_statSelectable
                       ((&classStatMap1)[((char_sheet_t *)sheet)->cls],
                        (char_sheet_t *)CONCAT22(0x4d9b,(*(uint16_t *)((uint8_t *)&(sheet) + 2))));
     if (selectable != 0) {
-      abStack_17[itemCount] = (&classStatMap1)[((char_sheet_t *)sheet)->cls];
+      statChoices[itemCount] = (&classStatMap1)[((char_sheet_t *)sheet)->cls];
       labelOfs = ((far_t far *)GStatsLabels + (&classStatMap1)[((char_sheet_t *)sheet)->cls])->ofs;
       itemIndex = (uint)itemCount;
-      auStack_28[itemIndex * 2] =
+      entrySegs[itemIndex * 2] =
            *(uint16_t *)
             ((int)&GStatsLabels[0].seg + (uint)(&classStatMap1)[((char_sheet_t *)sheet)->cls] * 4);
       *(uint16_t *)(&menuItems + itemIndex * 4) = labelOfs;
       itemCount = itemCount + 1;
     }
-    puVar3 = &classStatMap2 + ((char_sheet_t *)sheet)->cls;
-    if (*puVar3 != 0xff) {
+    stat2Entry = &classStatMap2 + ((char_sheet_t *)sheet)->cls;
+    if (*stat2Entry != 0xff) {
       selectable = manage_statSelectable
                         ((&classStatMap2)[((char_sheet_t *)sheet)->cls],
                          (char_sheet_t *)CONCAT22(menuItems,(*(uint16_t *)((uint8_t *)&(sheet) + 2))));
-      puVar3 = (uint8_t *)CONCAT11(extraout_AH,selectable);
+      stat2Entry = (uint8_t *)CONCAT11(extraout_AH,selectable);
       if (selectable != 0) {
-        abStack_17[itemCount] = (&classStatMap2)[((char_sheet_t *)sheet)->cls];
-        puVar3 = (uint8_t *)
+        statChoices[itemCount] = (&classStatMap2)[((char_sheet_t *)sheet)->cls];
+        stat2Entry = (uint8_t *)
                  *(uint16_t *)
                   ((int)&GStatsLabels[0].seg +
                   (uint)(&classStatMap2)[((char_sheet_t *)sheet)->cls] * 4);
         labelOfs = ((far_t far *)GStatsLabels + (&classStatMap2)[((char_sheet_t *)sheet)->cls])->ofs;
         itemIndex = (uint)itemCount;
-        auStack_28[itemIndex * 2] =(uint16_t)( puVar3);
+        entrySegs[itemIndex * 2] =(uint16_t)( stat2Entry);
         *(uint16_t *)(&menuItems + itemIndex * 4) = labelOfs;
         itemCount = itemCount + 1;
       }
     }
     if (itemCount == 1) {
-      return CONCAT11((char)((uint)puVar3 >> 8),1);
+      return CONCAT11((char)((uint)stat2Entry >> 8),1);
     }
     ovr_drawString((char *)
                    "You may raise a primary ability by trading two points of another ability. Select ability to increase."
@@ -750,18 +750,18 @@ uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
       return 0;
     }
     if (inputCode == '\x01') break;
-    abStack_17[0] = abStack_17[((uint)inputResult & 0xff) - 1];
+    statChoices[0] = statChoices[((uint)inputResult & 0xff) - 1];
     ovr_drawString((char *)"Select ability to adjust downwards by two points.",0x2410,0x10);
     _fsetmem(MK_FP(_SS,&menuItems),0x10,0);
-    auStack_28[0] = 0x2410;
+    entrySegs[0] = 0x2410;
     menuItems = 0x4e3a;
     itemCount = 1;
     for (statIndex = 0x0; statIndex < 3; statIndex = statIndex + 0x1) {
-      if ((10 < ((char_sheet_t *)sheet)->stats[statIndex]) && (abStack_17[0] != statIndex)) {
-        abStack_17[itemCount] = statIndex;
+      if ((10 < ((char_sheet_t *)sheet)->stats[statIndex]) && (statChoices[0] != statIndex)) {
+        statChoices[itemCount] = statIndex;
         labelOfs = ((far_t far *)GStatsLabels + statIndex)->ofs;
         itemIndex = (uint)itemCount;
-        auStack_28[itemIndex * 2] = *(uint16_t *)((int)&GStatsLabels[0].seg + (uint)statIndex * 4);
+        entrySegs[itemIndex * 2] = *(uint16_t *)((int)&GStatsLabels[0].seg + (uint)statIndex * 4);
         *(uint16_t *)(&menuItems + itemIndex * 4) = labelOfs;
         itemCount = itemCount + 1;
       }
@@ -774,10 +774,10 @@ uint16_t __cdecl16far abilitiesDlg(char_sheet_t *sheet)
       return 0;
     }
     if (inputCode != '\x01') {
-      ((char_sheet_t *)sheet)->stats[abStack_17[0]] =
-           ((char_sheet_t *)sheet)->stats[abStack_17[0]] + 1;
-      ((char_sheet_t *)sheet)->stats[abStack_17[((uint)inputResult & 0xff) - 1]] =
-           ((char_sheet_t *)sheet)->stats[abStack_17[((uint)inputResult & 0xff) - 1]] - 2;
+      ((char_sheet_t *)sheet)->stats[statChoices[0]] =
+           ((char_sheet_t *)sheet)->stats[statChoices[0]] + 1;
+      ((char_sheet_t *)sheet)->stats[statChoices[((uint)inputResult & 0xff) - 1]] =
+           ((char_sheet_t *)sheet)->stats[statChoices[((uint)inputResult & 0xff) - 1]] - 2;
       manage_openTalkWindow();
       manage_usesLitoa10(sheet);
     }
