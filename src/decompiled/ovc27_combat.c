@@ -198,38 +198,38 @@ uint __cdecl16far ovc27_compute1(agnt_t far *agnt,int param,uint16_t arg3,uint16
 
 {
   uint in_AX;
-  byte bVar3;
-  undefined1 uVar4;
-  uint uVar2;
+  byte ptrHi2;
+  undefined1 ptrHi1;
+  uint result;
   
   if ((((agntG_t far *)agnt->gdata)->flags & 2) != 0) {
-    bVar3 = (byte)((uint)(param * 0x34) >> 8);
+    ptrHi2 = (byte)((uint)(param * 0x34) >> 8);
     if (((Agnts[param].gdata->flags2 & 0x10) != 0) &&
        ((((entity_t *)agnt->entity)->base).level < 3)) {
-      return (uint)bVar3 << 8;
+      return (uint)ptrHi2 << 8;
     }
-    return CONCAT11(bVar3,1);
+    return CONCAT11(ptrHi2,1);
   }
   if ((((agntG_t far *)agnt->gdata)->flags & 1) != 0) {
     in_AX = param * 0x34;
-    uVar4 = (undefined1)(in_AX >> 8);
+    ptrHi1 = (undefined1)(in_AX >> 8);
     if (((Agnts[param].gdata->flags & 4) != 0) &&
        (3 < (((entity_t *)agnt->entity)->base).level)) {
-      return CONCAT11(uVar4,1);
+      return CONCAT11(ptrHi1,1);
     }
     if (9 < (((entity_t *)agnt->entity)->base).level) {
-      return CONCAT11(uVar4,1);
+      return CONCAT11(ptrHi1,1);
     }
   }
   if (((((agntG_t far *)agnt->gdata)->flags & 0x800) == 0) ||
      (in_AX = param * 0x34,
      (Agnts[param].gdata->flags & 4) == 0)) {
-    uVar2 = in_AX & 0xff00;
+    result = in_AX & 0xff00;
   }
   else {
-    uVar2 = CONCAT11((char)(in_AX >> 8),1);
+    result = CONCAT11((char)(in_AX >> 8),1);
   }
-  return uVar2;
+  return result;
 }
 
 

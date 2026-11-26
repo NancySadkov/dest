@@ -253,27 +253,28 @@ uint16_t __cdecl16far ovc45_textChoosePartyBuild(uint16_t x,uint16_t y,int *enti
 int __cdecl16far ovc45_usesGMapFlags(int x,int y)
 
 {
-  short *psVar1;
-  short sVar2;
-  int iVar3;
-  byte bVar4;
+  short *rowPtr;
+  short unitIdx;
+  int bldOfs;
+  int result;
+  byte ofsHi;
   
-  psVar1 = (*(short (*) [60] [148])GMapFlags)[y] + x;
-  if ((psVar1[0x94] & 3U) == 0) {
-    sVar2 = ovc45_getUnitIndex(x,y);
-    iVar3 = (uint)(GUnits + sVar2)->bldType * 0x27;
-    bVar4 = (byte)((uint)iVar3 >> 8);
-    if ((*(uint *)(iVar3 + 0x121) & 0x18) == 0) {
-      iVar3 = (uint)bVar4 << 8;
+  rowPtr = (*(short (*) [60] [148])GMapFlags)[y] + x;
+  if ((rowPtr[0x94] & 3U) == 0) {
+    unitIdx = ovc45_getUnitIndex(x,y);
+    bldOfs = (uint)(GUnits + unitIdx)->bldType * 0x27;
+    ofsHi = (byte)((uint)bldOfs >> 8);
+    if ((*(uint *)(bldOfs + 0x121) & 0x18) == 0) {
+      result = (uint)ofsHi << 8;
     }
     else {
-      iVar3 = CONCAT11(bVar4,1);
+      result = CONCAT11(ofsHi,1);
     }
   }
   else {
-    iVar3 = CONCAT11((char)((uint)psVar1 >> 8),1);
+    result = CONCAT11((char)((uint)rowPtr >> 8),1);
   }
-  return iVar3;
+  return result;
 }
 
 
@@ -4329,29 +4330,27 @@ int __cdecl16far ovc45_usesGMapFlags4(int x,int y)
 
 {
   int in_AX;
-  int iVar1;
-  byte bVar2;
-  uint16_t uVar3;
+  int result;
+  byte hiByte;
   
   if ((((x < 0) || (y < 0)) || (in_AX = x + 1, 0x93 < in_AX)) || (in_AX = y + 1, 0x3b < in_AX)) {
-    iVar1 = CONCAT11((char)((uint)in_AX >> 8),2);
+    result = CONCAT11((char)((uint)in_AX >> 8),2);
   }
   else {
-    uVar3 = (uint16_t)((ulong)GMapFlags >> 0x10);
     if (((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) == 3) {
-      iVar1 = 2;
+      result = 2;
     }
     else {
-      bVar2 = (byte)((uint)(x * 2) >> 8);
+      hiByte = (byte)((uint)(x * 2) >> 8);
       if (((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) == 0) {
-        iVar1 = (uint)bVar2 << 8;
+        result = (uint)hiByte << 8;
       }
       else {
-        iVar1 = CONCAT11(bVar2,1);
+        result = CONCAT11(hiByte,1);
       }
     }
   }
-  return iVar1;
+  return result;
 }
 
 

@@ -13671,3 +13671,49 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### four GMapFlags-shaped functions: nine names, one dead store (36,507 -> 36,443)
+four GMapFlags-shaped functions: nine names, one dead store (36,507 -> 36,443)
+
+attact_usesGMapFlags2 (24 lines)
+    uVar1   the value returned                        -> result  (5)
+    psVar2  (...)[y] + x, a short * into the row       -> rowPtr  (4)
+    bVar3   the pointer's high byte                    -> ptrHi   (4)
+    in_AX   left: the export assigns it inside the guard expression
+
+ovc45_usesGMapFlags (25 lines)
+    psVar1  (...)[y] + x                               -> rowPtr  (4)
+    sVar2   ovc45_getUnitIndex(x,y)                    -> unitIdx (3)
+    iVar3   (GUnits + unitIdx)->bldType * 0x27         -> bldOfs  (3)
+    iVar3   the value returned                         -> result  (4)
+    bVar4   the offset's high byte                     -> ofsHi   (4)
+
+ovc45_usesGMapFlags4 (28 lines)
+    iVar1   the value returned                         -> result  (5)
+    bVar2   (byte)((uint)(x*2) >> 8)                   -> hiByte  (4)
+    uVar3   (uint16_t)((ulong)GMapFlags >> 0x10)       -> removed
+    in_AX   left: assigned inside the guard expression
+
+ovc27_compute1 (37 lines)
+    bVar3   206  (byte)((uint)(param*0x34) >> 8)       -> ptrHi2  (4)
+    uVar4   215  (undefined1)(in_AX >> 8)              -> ptrHi1  (4)
+    uVar2   the value returned                         -> result  (4)
+    in_AX   left: assigned inside the conditions
+
+`iVar3` in ovc45_usesGMapFlags needed a split: 264..266 hold
+`(GUnits + unitIdx)->bldType * 0x27` (an offset, read at +0x121), while 267..276 hold the
+result built from that offset's high byte.  Two roles, so two names and a declaration split.
+
+That offset's high byte was first named `ptrHi` to match the sibling function, but here the
+value is a *byte offset*, not a pointer, so it was corrected to `ofsHi` before the commit -
+a name that is merely plausible is worse than one that is correct.
+
+`ovc45_usesGMapFlags4` carried the same write-only `(uint16_t)((ulong)GMapFlags >> 0x10)`
+store seen in three earlier functions: one assignment, no read, so both lines go.
+
+No expression changed.
+
+  grep_checks 36,507 -> 36,443; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
