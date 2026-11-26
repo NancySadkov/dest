@@ -138,7 +138,7 @@ void __cdecl16far init_paths(void)
        getcwd(DGROUP:[0x44])                     ; the current directory
        strcpy(&GWorkDir, GOriginalDir)           ; same buffer
        ensure_tail_slash(&GWorkDir, 0x2410)
-       strcat(&GWorkDir, "strong.sav\\")
+       strcat(&GWorkDir, (char *)GSaveFileName)
        append_name_to_path(exe path, work dir) ; chdir to the exe's directory
 
      The decompiled form addressed the original image's data segment (0x2410) for the
@@ -149,7 +149,7 @@ void __cdecl16far init_paths(void)
   getcwd((char *)&GOriginalDir,68);
   strcpy((char *)&GWorkDir,(char *)&GOriginalDir);
   ensure_tail_slash((char *)&GWorkDir,0);
-  strcat((char *)&GWorkDir,"strong.sav\\");
+  strcat((char *)&GWorkDir,(char *)GSaveFileName);
   return;
 }
 
@@ -195,13 +195,13 @@ void __cdecl16far init_cfg(void)
   
   crlf = GCrLf;
   bVar1 = false;
-  /* Recovered address pair: the format at DGROUP:0x5BC is "%sgame.cfg" (verified in
+  /* Recovered address pair: the format at DGROUP:0x5BC is (char *)GCfgFileName (verified in
      audit/dgroup_2410.bin) and the argument was the buffer at 0x2410:0x8C6C,
      which is empty at startup and has no symbol - it is the data-path prefix,
-     and every other file call in the recovered code uses "strong.sav\\".
+     and every other file call in the recovered code uses (char *)GSaveFileName.
      Building it here keeps the same result without the original image's
      segment. */
-  sprintf(lbuf,"%sgame.cfg",(char *)&GWorkDir);
+  sprintf(lbuf,(char *)GCfgFileName,(char *)&GWorkDir);
   cfgPath = (uint16_t)lbuf;
   fh = ovr_open_wait_unlock_and_disk((char *)cfgPath,in_DX);
   if ((int)fh < 0) {
@@ -263,7 +263,7 @@ void __cdecl16far init_cfg(void)
   }
   close(fh);
   if (bVar1) {
-    sprintf(lbuf,"%sgame.cfg",(char *)&GWorkDir);
+    sprintf(lbuf,(char *)GCfgFileName,(char *)&GWorkDir);
   path = (char *)lbuf;
     iVar3 = ovr_creat_wait_unlock_and_disk(path,in_DX);
     if (iVar3 < 0) {
@@ -1237,7 +1237,7 @@ void __cdecl16far init_computeMaxSquares(void)
   do {
     if (row < '\0') {
       if (GMaxSquare != 0x1b0) {
-        printf("NEW MAXSQUARE %d \r");
+        printf((char *)s_new_maxsquare_d);
         ovr_gameProcessKey();
       }
       GSMaxSquare = 0;
@@ -1245,7 +1245,7 @@ void __cdecl16far init_computeMaxSquares(void)
       do {
         if (row < '\0') {
           if (GSMaxSquare != 0x24) {
-            printf("NEW SMAXSQUARE %d \r");
+            printf((char *)s_new_smaxsquare_d);
             ovr_gameProcessKey();
           }
           return;
@@ -2120,7 +2120,7 @@ void __cdecl16far copyProtectionCheck(void)
       ovr_blitText(pcVar2,(byte *)CONCAT22(uVar1,in_DX),uVar3,uVar4);
       TextBlitX = 0x16;
       TextBlitY = 0x57;
-      ovr_blitText((char *)"Enter the first word.",
+      ovr_blitText((char *)(char *)s_enter_the_first_word,
                    (byte *)CONCAT22(Font03.ofs,(char *)0x26510),Font03.seg,0xde);
       pbStack_a = (byte *)0x0;
       input = 0;

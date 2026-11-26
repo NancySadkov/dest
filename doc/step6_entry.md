@@ -10803,3 +10803,36 @@ fixed in an earlier commit), not a char_sheet field.
   grep_checks 38,916 (unchanged - no name changes); build 65/65 clean
   LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,449/1,868 (74 deltas); compare_runtime 1,549 identical / 11 different
+
+### ovc09_init.c literals -> DGROUP symbols: measured, no layout gain
+ovc09_init.c: use the DGROUP symbols instead of duplicate literals (no gate movement)
+
+The first attempt at the documented diff_dgroup blocker: the module's string literals replaced by
+the symbols that already hold the same text at their original offsets.
+
+  "strong.sav\\"         x3  ->  (char *)GSaveFileName          (st_globals4, +0x5b0)
+  "%sgame.cfg"           x3  ->  (char *)GCfgFileName           (+0x5bc)
+  "NEW MAXSQUARE %d \r"  x1  ->  (char *)s_new_maxsquare_d      (+0x5d2)
+  "NEW SMAXSQUARE %d \r" x1  ->  (char *)s_new_smaxsquare_d     (+0x5e5)
+  "Enter the first word." x1 ->  (char *)s_enter_the_first_word (+0x712)
+
+Each literal was a duplicate copy emitted inside the module's own data; the symbol already exists
+at the original's offset.  Confirmed in the emitted listing for o09:
+
+  _GSaveFileName 2 refs, _GCfgFileName 3, _s_new_maxsquare_d 2, _s_enter_the_first_word 2
+
+MEASURED RESULT - the layout did not improve:
+
+  grep_checks      38,916 (unchanged)
+  diff_dgroup      1,449/1,868 matched, 74 deltas (unchanged)
+  compare_runtime  1,549 identical / 11 different (unchanged)
+  REBUILT.EXE      537,500 -> 537,448 bytes (the duplicate literals are gone)
+
+So removing duplicates from ONE module is not enough to move a delta: the deltas are boundaries in
+a cumulative offset, and the module's data sits after all of st_globals' data, so deleting 52 bytes
+there changes nothing upstream of the first mismatch.  The method is sound but its effect is
+invisible until the symbols that are MISSING from st_globals are placed in original order - that is
+the real work, and it is a different operation from replacing existing symbols.
+
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,449/1,868 (74 deltas); compare_runtime 1,549 identical / 11 different
