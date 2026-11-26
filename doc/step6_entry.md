@@ -9730,3 +9730,34 @@ against the original's `mov ax,0x70 / mov es,ax / les bx,ptr es:[bx]` + field re
   grep_checks 39,953 -> 39,915; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### ovc39_textHalflingCastle: income reads and the iVar6 split (39,915 -> 39,892)
+ovc39_textHalflingCastle: the +0x54 income reads, and iVar6 split into rowOffset/storedHi (39,915 -> 39,892)
+
+Two follow-ups in the same function, after the first ten near table reads.
+
+1. The income checks at +0x54 (five sites) were the same near table read:
+
+     if (*(uint *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x54) <
+         (uint)((GLeaderSheets[partyIndex])->population << 1)) {
+
+   0x54 is char_sheet_t.income, pinned by probe as `mov ax,word ptr es:[bx+84]`.
+   They became `(uint)/(int)(GLeaderSheets[partyIndex])->income`, and the helper
+
+     nameOfs = (char *)((uint)partyIndex << 2);   /* used only to be cast back */
+
+   disappeared together with the `((char_sheet_t *)(nameOfs))->population` cast it fed.
+   ovc39_archive.c now contains no `partyIndex << 2` at all.
+
+   Emitted: `cmp word ptr es:[bx+84],ax` against a `shl ax,1` of es:[si+77] (population).
+
+2. `iVar6` had two roles after the previous edit and is now split:
+
+     lines 146/147/149/207  loop counter -2..1 around seedAligned   -> rowOffset (5 uses)
+     lines 270-296          high word of the foodStored comparison -> storedHi  (15 uses)
+
+   Renaming only; the emitted code is unchanged (`mov ax,es:[bx+98] / cwd` per site).
+
+  grep_checks 39,915 -> 39,892; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
