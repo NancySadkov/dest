@@ -12360,3 +12360,56 @@ pass, with the ovc31 literal replaced by the symbol - the same shape as the earl
     diff_dgroup 1,450/1,805 matched, 68 runs, sum|delta| 229,747, mean 158
     compare_state 1,627 identical / 0 different / 0 missing
     compare_runtime 1,615 symbols matched, 1,605 identical / 10 different
+
+### Step 6: INT 16h auto-answer TSR; _INIT_CFG compares on both sides
+Step 6: an INT 16h auto-answer TSR reaches past init_base - _INIT_CFG now compares on both sides
+
+NEW TOOL: tmp/make_keytsr.py builds a 57-byte resident .COM that answers the BIOS
+keyboard interrupt, and tmp/dump_at.py loads it before the game in every run:
+
+    INT 16h AH=00  ->  AX = 0D0Dh (ENTER), iret
+    INT 16h AH=01  ->  AX = 0, ZF = 1 (no key), iret
+    anything else  ->  jmp far cs:[old vector]
+
+AH=01 has to report "no key" so that init_base's opening drain loop
+(`while (biosKeyAvail()) biosReadKey();`) terminates; AH=00 returns ENTER so the prompt
+takes the "previous configuration" branch.  No game code is patched: the original's
+biosReadKey is reached through a VROOMM thunk and its on-disk copy is compressed, which is
+why patching could not work.
+
+Two things had to be measured rather than assumed:
+
+  * residency via INT 27h hangs the calling batch - the next command never runs.  INT 21h
+    AH=31h with DX=0x24 paragraphs works.  Bisected with tmp/keytest_variant.py: a .COM
+    that installs the same handler and exits via INT 20h also works, so the handler and
+    the hook are fine and only the TSR call was wrong.
+  * the .COM must not fall through from the installer into the handler.  The first layout
+    did exactly that and locked the machine; the installer now ends with `jmp short` over
+    the handler.
+
+MEASURED, dumping at _INIT_CFG (both images, --force-config):
+
+    _INIT_CFG      original 3381:024D, ours 10C7:0246      both dump 65,535 bytes
+    compare_runtime  1,615 symbols matched, 1,605 identical, 10 different
+
+Also still reachable with the TSR in place: _INIT_GAME (1,606 identical / 9 different) and
+_INIT_STRONG_SAV.  _INIT_CFG is called *after* init_paths, so this is the first post-init
+sample that exists on both sides by the same mechanism.
+
+The ten differences at _INIT_CFG are nine CRT/timestamp entries (the same set as at main
+entry) plus one new, real one:
+
+    s_Fighter_2410_0169   want "Fighter\0"   got 51 00 c3 00 64 65 72 00
+
+i.e. our DGROUP at that symbol holds what looks like patched far pointers (0x0051,
+0x00C3, ...) instead of the string.  The original keeps the string there, so some table we
+declare is overlapping it, or a far-pointer repair writes over it.  That is a concrete
+lead for the next pass, found only because the sample is now past init.
+
+STILL BLOCKED, measured: _INIT_PATHS yields no dump in either image while _INIT_CFG - the
+function called immediately after it - does.  So the stop is in the patch of that one
+entry point, not in the program's progress.  _INIT_ASSETS stops later still: the original
+prints "Bad 'game.cfg' file. Please reconfigure." (106 bytes) because the synthetic
+strong.sav/game.cfg the harness writes ("111") is not a complete config; the rebuilt image
+stops before writing anything.  Both need a real game.cfg, which the repository does not
+contain (game/STRONG.SAV is a 1-byte file, not the directory the game expects).
