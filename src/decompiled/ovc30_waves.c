@@ -320,7 +320,7 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
         spawnY = spawnY & 0xff;
         for (scanIdx = 0; scanIdx < (int)(uint)GLeaderCount; scanIdx = scanIdx + 1) {
           if ((((GLeaderSheets[scanIdx])->active != '\0') &&
-              (*(char *)((int)*(uint32_t *)(scanIdx << 2) + 0x3f) != '\0')) &&
+              (*((char far *)GLeaderSheets[scanIdx] + 0x3f) != '\0')) &&
              (dx = (GLeaderSheets[scanIdx])->x - spawnX,
              dxSign = (int)dx >> 0xf,
              dy = (GLeaderSheets[scanIdx])->y - spawnY,
@@ -331,7 +331,7 @@ byte __cdecl16far ovc30_textDivideError(byte gindex,int frames,char mode,byte pe
             break;
           }
           if ((((GLeaderSheets[scanIdx])->active != '\0') &&
-              (*(char *)((int)*(uint32_t *)(scanIdx << 2) + 0x3f) == '\0')) &&
+              (*((char far *)GLeaderSheets[scanIdx] + 0x3f) == '\0')) &&
              (dx = (GLeaderSheets[scanIdx])->x - spawnX,
              dxSign = (int)dx >> 0xf,
              dy = (GLeaderSheets[scanIdx])->y - spawnY,

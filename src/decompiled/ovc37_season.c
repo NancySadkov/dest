@@ -22,7 +22,7 @@ bool __cdecl16far season_textMainCastle(void)
       return true;
     }
     if (((GLeaderSheets[iVar1])->active != '\0') &&
-       (*(char *)((int)*(uint32_t *)(iVar1 << 2) + 0x3f) != '\0')) break;
+       (*((char far *)GLeaderSheets[iVar1] + 0x3f) != '\0')) break;
     iVar1 = iVar1 + 1;
   }
   return false;

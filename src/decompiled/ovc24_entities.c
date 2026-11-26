@@ -571,7 +571,7 @@ void __cdecl16far ovc24_checkStrongholds(void)
     for (leaderIndex = 0; (int)leaderIndex < (int)(uint)GLeaderCount; leaderIndex = leaderIndex + 1) {
       if ((GLeaderSheets[leaderIndex])->active != '\0') {
         leaderClass = (GLeaderSheets[leaderIndex])->classStr;
-        side = *(byte *)((int)*(uint32_t *)(leaderIndex << 2) + 0x3f);
+        side = *((byte far *)GLeaderSheets[leaderIndex] + 0x3f);
         ownMask = 0x1000 << (1U - (side != 0) & 0x1f);
         enemyMask = '\0' << (side & 0x1f);
         cellX = alignUp4((GLeaderSheets[leaderIndex])->x,0,0);
@@ -640,7 +640,7 @@ L_OVC24_5943_112e_1255:
           if ((uVar6 & 0xff) == 0) {
             for (probeOfs = 0; probeOfs < (int)(uint)GLeaderCount; probeOfs = probeOfs + 1) {
               if ((GLeaderSheets[probeOfs])->active != '\0') {
-                (&excludedFlags)[*(byte *)((int)*(uint32_t *)(probeOfs << 2) + 0x3f)] = 0x1;
+                (&excludedFlags)[*((byte far *)GLeaderSheets[probeOfs] + 0x3f)] = 0x1;
               }
             }
             if ((((cStack_11 == '\0') && (1 < PlayerIndex)) && (GHighScoreSaved == '\0')) &&
@@ -670,7 +670,7 @@ L_OVC24_5943_112e_15E7:
       _fmemset(MK_FP(_SS, &flagMask), 0, 2);
       for (leaderIndex = 0; (int)leaderIndex < (int)(uint)GLeaderCount; leaderIndex = leaderIndex + 1) {
         if ((GLeaderSheets[leaderIndex])->active != '\0') {
-          (&excludedFlags)[*(byte *)((int)*(uint32_t *)(leaderIndex << 2) + 0x3f)] = 0x1;
+          (&excludedFlags)[*((byte far *)GLeaderSheets[leaderIndex] + 0x3f)] = 0x1;
         }
       }
       if ((firstLeader == 0xff) ||

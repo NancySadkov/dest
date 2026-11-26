@@ -398,10 +398,10 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
                               (GLeaderSheets[uStack_a])->y,'\0');
           (GLeaderSheets[uStack_a])->reportState = 1;
         }
-        if ((*(char *)((int)*(uint32_t *)(uStack_a << 2) + 0x49) == -1) ||
+        if ((*((char far *)GLeaderSheets[uStack_a] + 0x49) == -1) ||
            (((GLeaderSheets[uStack_a])->flags5d & 1) == 0)) break;
         ovc25_usesEntityCount((byte)uStack_a);
-        bVar9 = *(byte *)((int)*(uint32_t *)(uStack_a << 2) + 0x49);
+        bVar9 = *((byte far *)GLeaderSheets[uStack_a] + 0x49);
         if (0xe < (GLeaderSheets[uStack_a])->unitsOnTile) {
           ovc25_usesAlignUp42((byte)uStack_a,10,
                               (GLeaderSheets[bVar9])->x,

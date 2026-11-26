@@ -10771,3 +10771,35 @@ declaration removed only when V is genuinely unused; that version builds clean.
   grep_checks 38,958 -> 38,916; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### GLeaderSheets index reads: 46 sites
+last level of the far-pointer class: 46 GLeaderSheets index reads
+
+`GLeaderSheets` is a DGROUP array of far pointers, so `*(uint32_t *)(IDX << 2)` reads DGROUP at
+IDX*4 rather than the array entry.  Three composite forms (46 sites, 5 files):
+
+  *((char|byte|uint|int|uint8_t|undefined1) *)((int)*(uint32_t *)(IDX << 2) + F)
+        ->  *((T far *)GLeaderSheets[IDX] + F)                        field   19
+  (uint16_t)((ulong)*(uint32_t *)(IDX << 2) >> 0x10)
+        ->  (uint16_t)SEG_OF(GLeaderSheets[IDX])                      segment 13
+  (int)*(uint32_t *)(IDX << 2)
+        ->  (int)far_ofs_u32(GLeaderSheets[IDX])                      offset  14
+
+Per file: ovc22_classes 35, ovc24_entities 3, ovc23_bldrec 2, ovc30_waves 2, ovc21_manage 3,
+ovc37_season 1.
+
+Verified in the emitted listing (upd_usesAlignUp4, which contains the leader-scan loop):
+
+    mov  bx,word ptr [bp-126]
+    shl  bx,2
+    mov  bx,word ptr DGROUP:_GLeaderSheets[bx]
+    mov  al,byte ptr es:[bx+63]        ; char_sheet_t at +0x3f, through its own segment
+
+`es:` operands in that function went 178 -> 183; es:[bx+63] x4.
+
+Deliberately skipped: ovc20_stash.c's `i << 2`, which indexes AudioHandles (offset +5 of a handle,
+fixed in an earlier commit), not a char_sheet field.
+
+  grep_checks 38,916 (unchanged - no name changes); build 65/65 clean
+  LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,449/1,868 (74 deltas); compare_runtime 1,549 identical / 11 different

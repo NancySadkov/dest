@@ -307,7 +307,7 @@ uint __cdecl16far manage_usesGLeaderCount(void)
   activeCount = 0;
   for (leaderIdx = 0; leaderIdx < (int)(uint)GLeaderCount; leaderIdx = leaderIdx + 1) {
     if (((GLeaderSheets[leaderIdx])->active != '\0') &&
-       (*(char *)((int)*(uint32_t *)((leaderIdx << 2)) + 0x3f) == '\0')) {
+       (*((char far *)GLeaderSheets[leaderIdx] + 0x3f) == '\0')) {
       sum = sum + (GLeaderSheets[leaderIdx])->popularity;
       activeCount = activeCount + 1;
     }
@@ -1116,8 +1116,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
          (uVar13 = 0x2410, (GLeaderSheets[iVar23])->y == GfxRndSeed2))
       {
         if (GCharLevelsInc != '\0') {
-          uVar12 = (uint16_t)((ulong)*(uint32_t *)(iVar23 << 2) >> 0x10);
-          iVar24 = (int)*(uint32_t *)(iVar23 << 2);
+          uVar12 = (uint16_t)SEG_OF(GLeaderSheets[iVar23]);
+          iVar24 = (int)far_ofs_u32(GLeaderSheets[iVar23]);
           puVar3 = (uint *)(iVar24 + 0x56);
           uVar14 = *puVar3;
           *puVar3 = *puVar3 + 10000;
