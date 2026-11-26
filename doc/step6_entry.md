@@ -14026,6 +14026,11 @@ Note that "+2 leather armor" also exists as an anonymous literal in ovc33_stats.
 fixing 0x623b properly means pointing that call at `s_leather_armor_2410_623b + 31` instead,
 or the bytes would exist twice.
 
+**CORRECTION (measured):** the paragraph above predicted that widening these would raise
+sum|delta|.  It was wrong - the fix took 198,185 -> 193,093 and 52 -> 47 runs - because
+the added bytes also pull the NEGATIVE tail toward zero, which the local argument ignored.
+The five were widened in commit 4e6bytes' successor; see the next entry.
+
 There ARE no genuine over-declarations to remove in exchange: every entry in the "ours
 longer" list is an artefact of the original's `.ofs` / `.hi` sub-labels (e.g. `IdFORM` and
 `IdFORM.hi` are two original labels for one four-byte far pointer, so the original span is 2
@@ -14059,3 +14064,43 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (52 runs, sum|delta| 198,185, mean 125, worst 14,494)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### layout: widen the five shortfalls (198,185 -> 193,093)
+layout: widen the five shortfalls (198,185 -> 193,093) - my previous prediction was wrong
+
+The last turn's analysis predicted that fixing these would raise `sum|delta|` by tens of
+thousands, because our layout carries a positive ≈+152-byte prefix and adding bytes makes
+positive deltas more positive.  That reasoning was incomplete: it ignored the NEGATIVE tail.
+The added bytes land before it and pull it toward zero, and the measured result is a clear
+win in both directions.
+
+    0x6210  s_normal_weaponry   16 -> 34   "normal weaponry\\0+%d ring of prot."
+    0x623b  s_leather_armor     14 -> 48   "leather armor\\0+1 leather armor\\0+2 leather armor"
+    0x62a1  s_plate_and_shield  17 -> 37   "plate and shield\\0plate and shield +1"
+    0x6365  s_damaged__s        11 -> 18   "damaged %s\\0+%d %s"
+    0x7153  spawnGindexTable     1 ->  8   00 01 02 03 05 08 0a 0b
+
+Each is one original label covering one coherent run, so the bytes come from
+audit/dgroup_2410.bin and the script asserts the literal it writes decodes to exactly the
+image bytes before writing anything.
+
+"+2 leather armor" also existed as an anonymous literal at ovc33_stats.c:367.  It is inside
+the 48-byte object at offset 31, so that call now reads
+`(s_leather_armor_2410_623b + 31)` and the bytes exist once, in the object.
+
+MEASURED (HEAD 395a0a91 -> this commit)
+
+  diff_dgroup matched        1,581 -> 1,581   (unchanged)
+  diff_dgroup delta runs        52 ->    47   (-5)
+  diff_dgroup sum|delta|   198,185 -> 193,093 (-5,092)
+  diff_dgroup mean             125 ->   122
+  diff_dgroup worst         14,494 -> 14,562   (the single mis-paired _doserrno entry)
+  grep_checks              36,016 -> 36,016
+  compare_state            1,627/0/0 unchanged
+  compare_runtime          1,630 matched, 1,620 identical / 10 different
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+LESSON: a delta profile is not monotone, so "adding bytes always hurts while the prefix is
+positive" is false.  The correct test is the change in the sum over *all* following symbols,
+including the negative tail, and only measurement settles it.  The previous doc entry drew
+the wrong conclusion from a local argument and is corrected in place.

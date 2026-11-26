@@ -1647,7 +1647,7 @@ extern char s_s_drains_all_energy_from_s[];
 extern char s_s_drains_two_levels_from_s[];
 extern bool GameRunning;
 extern undefined1 unitTypeTable[14];
-extern undefined spawnGindexTable;
+extern undefined1 spawnGindexTable[8];
 extern brect_t lowerScreenRect;
 extern char s_demo_cancelled[];
 extern char s_nasher[];

@@ -364,7 +364,7 @@ far_t * __cdecl16far stats_textRingProt(char *dst,uint16_t src,uint16_t term,far
     uVar20 = (int)(char)bVar28 - 6;
     if (4 < uVar20) {
       strcpy((char *)CONCAT13(uVar47,CONCAT12(uVar11,CONCAT11(in_stack_00000005,in_stack_00000004)))
-             ,"+2 leather armor");
+             ,(s_leather_armor_2410_623b + 31));
       return (far_t far *)CONCAT11(in_stack_00000005,in_stack_00000004);
     }
     cVar22 = '`';
