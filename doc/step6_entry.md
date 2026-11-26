@@ -11690,3 +11690,51 @@ VERIFIED in the listing:
   grep_checks 37,985 -> 37,951; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
   compare_runtime 1,605 identical / 10 different
+
+### Two functions named, and the missing-symbol batch measured as a regression
+Two functions named, and a fourth near-buffer defect fixed (37,951 -> 37,901)
+
+ovc45_usesGfxRndSeed2
+  bStack_4  the 0..3 downward scan offset       -> scanDown (7)
+  bStack_3  the cell type read from the grid     -> cellType (8)
+  bVar1     BuildingTypes[cellType].size        -> bldSize  (4)
+  uVar2     the value returned                  -> result   (5)
+
+  `in_AX` is left: it is read on the early-return path before any assignment, so it
+  is the incoming ABI register, not a result.
+
+attact_updateAttractEntry
+  uStack_6    menuItemRow[itemIndex], a count        -> rowValue   (10)
+  menuEnabled MenuItemEnabled[itemIndex]             -> itemId     (4)
+  entryIdx    sheet byte +0x2f (char_sheet_t.cls)    -> entryClass (5)
+  iVar1       ovr_ovc23_findClearColumn(...) result  -> column     (3)
+  uVar2       sub_OVC21_manage_c_24B1(...) result    -> subResult  (6)
+  uVar3       ovr_ovc41_pluralSuffix(...) result     -> plural     (3)
+  uVar4       _DS                                    -> textSeg    (3)
+
+  Its `uint8_t msg` was passed as `(char *)&msg` to `ovr_stsprintf` - the same
+  near-buffer defect already fixed three times in ovc38_scores.c - and is now
+  `static char msg[64]` used directly.
+
+  grep_checks 37,951 -> 37,901; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different
+
+ALSO MEASURED AND REVERTED: the missing-symbol insertion batch.  Running the v4
+selector for offsets below 0x3000 inserted 25 declarations:
+
+    matched 1,450 -> 1,468 (+18)   but
+    delta runs  71 -> 99 (+28),  sum|delta| 276,979 -> 759,615 (+483k)
+
+so it is a large layout regression despite the higher match count.  Inspecting the
+output showed why: 16 of the 25 were `.seg` / `.hi` labels of 4-byte objects that
+already exist, i.e. their bytes are the high word of an object we already declare.
+A v5 selector (tmp/insert_missing4.py) skips exactly those and leaves 9 candidates;
+measured on its own it still regressed (matched 1,452, runs 80, sum|delta| 708,833),
+and after also replacing the 5 duplicate literals in the code modules it was
+unchanged (708,673).  Reverted; the tree is back at 1,450 / 71 / 276,979.
+
+The conclusion is now measured three times over: inserting a symbol whose text our
+image already carries somewhere else cannot be made layout-neutral, because the
+bytes exist twice and the anchor positions in those regions are too sparse to place
+the copy where the original has it.

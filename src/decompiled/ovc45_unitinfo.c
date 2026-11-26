@@ -4288,33 +4288,33 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
 uint __cdecl16far ovc45_usesGfxRndSeed2(int far *x)
 
 {
-  byte bVar1;
+  byte bldSize;
   uint in_AX;
   undefined1 extraout_AH;
-  uint uVar2;
-  byte bStack_4;
-  byte bStack_3;
+  uint result;
+  byte scanDown;
+  byte cellType;
   
-  bStack_4 = 0;
+  scanDown = 0;
   while( true ) {
-    if (3 < bStack_4) {
+    if (3 < scanDown) {
       return in_AX & 0xff00;
     }
-    bStack_3 = ovc45_getUnitType(*x - (uint)bStack_4,GfxRndSeed2);
-    in_AX = CONCAT11(extraout_AH,bStack_3);
-    if (bStack_3 != 0) break;
-    bStack_4 = bStack_4 + 1;
+    cellType = ovc45_getUnitType(*x - (uint)scanDown,GfxRndSeed2);
+    in_AX = CONCAT11(extraout_AH,cellType);
+    if (cellType != 0) break;
+    scanDown = scanDown + 1;
   }
-  bVar1 = BuildingTypes[bStack_3].size;
-  uVar2 = CONCAT11((char)((uint)bStack_3 * 0x27 >> 8),bVar1);
-  if (bStack_4 < bVar1) {
-    uVar2 = (uint)bStack_4;
-    *x = *x - uVar2;
+  bldSize = BuildingTypes[cellType].size;
+  result = CONCAT11((char)((uint)cellType * 0x27 >> 8),bldSize);
+  if (scanDown < bldSize) {
+    result = (uint)scanDown;
+    *x = *x - result;
   }
   else {
-    bStack_3 = 0;
+    cellType = 0;
   }
-  return CONCAT11((char)(uVar2 >> 8),bStack_3);
+  return CONCAT11((char)(result >> 8),cellType);
 }
 
 

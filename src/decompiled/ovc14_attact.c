@@ -984,46 +984,46 @@ L_attact_3f0b_1082_1477:
 void __cdecl16far attact_updateAttractEntry(int itemIndex,int force)
 
 {
-  int iVar1;
-  uint uVar2;
-  uint16_t uVar3;
+  int column;
+  uint subResult;
+  uint16_t plural;
   char *txt;
-  uint16_t uVar4;
+  uint16_t textSeg;
   uint16_t dst;
-  uint8_t msg;
-  uint uStack_6;
-  byte menuEnabled;
-  byte entryIdx;
+  static char msg[64];   /* DGROUP so the near buffer is valid */
+  uint rowValue;
+  byte itemId;
+  byte entryClass;
   
   if ((itemIndex < 5) &&
-     ((uStack_6 = (uint)((uint8_t *)menuItemRow)[itemIndex], force != 0 ||
-      (PrevMenuValue != uStack_6)))) {
-    PrevMenuValue = uStack_6;
+     ((rowValue = (uint)((uint8_t *)menuItemRow)[itemIndex], force != 0 ||
+      (PrevMenuValue != rowValue)))) {
+    PrevMenuValue = rowValue;
     ovr_resetTextBlitCycle();
-    menuEnabled = ((uint8_t *)MenuItemEnabled)[itemIndex];
-    if (menuEnabled != 0xff) {
-      iVar1 = ovr_ovc23_findClearColumn(GfxRndSeed,GfxRndSeed2);
-      if (iVar1 < 0) {
+    itemId = ((uint8_t *)MenuItemEnabled)[itemIndex];
+    if (itemId != 0xff) {
+      column = ovr_ovc23_findClearColumn(GfxRndSeed,GfxRndSeed2);
+      if (column < 0) {
         ovr_drawTextAt((char *)"You cannot attract units to this location.",0x2410,0xa000);
         ((uint8_t *)menuItemRow)[itemIndex] = 0x0;
       }
       else {
-        uVar2 = sub_OVC21_manage_c_24B1(0x236f,itemIndex & 0xff);
-        callResultTemp = uVar2;
-        if (uVar2 < uStack_6) {
-          (*(uint8_t *)((uint8_t *)&(uStack_6))) = (uint8_t)uVar2;
-          ((uint8_t *)menuItemRow)[itemIndex] = (uint8_t)uStack_6;
-          uStack_6 = uVar2;
+        subResult = sub_OVC21_manage_c_24B1(0x236f,itemIndex & 0xff);
+        callResultTemp = subResult;
+        if (subResult < rowValue) {
+          (*(uint8_t *)((uint8_t *)&(rowValue))) = (uint8_t)subResult;
+          ((uint8_t *)menuItemRow)[itemIndex] = (uint8_t)rowValue;
+          rowValue = subResult;
         }
-        uVar4 = _DS;
-        entryIdx = *(byte *)((int)*(uint32_t *)((uint)menuEnabled << 2) + 0x2f);
-        if (entryIdx != 0xff) {
-          uVar3 = ovr_ovc41_pluralSuffix(uStack_6,0xa000);
+        textSeg = _DS;
+        entryClass = *(byte *)((int)*(uint32_t *)((uint)itemId << 2) + 0x2f);
+        if (entryClass != 0xff) {
+          plural = ovr_ovc41_pluralSuffix(rowValue,0xa000);
           dst = 0x2410;
-          txt = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x921,_SS),
-                              (char *)CONCAT22(uStack_6,(char *)0x26510),callResultTemp,
-                              *(uint16_t *)((uint)entryIdx * 4 + 0x13f),
-                              *(uint16_t *)((uint)entryIdx * 4 + 0x141),uVar3,uVar4);
+          txt = ovr_stsprintf(msg,(char *)CONCAT22(0x921,_SS),
+                              (char *)CONCAT22(rowValue,(char *)0x26510),callResultTemp,
+                              *(uint16_t *)((uint)entryClass * 4 + 0x13f),
+                              *(uint16_t *)((uint)entryClass * 4 + 0x141),plural,textSeg);
           ovr_drawTextAt(txt,dst,0);
         }
       }
