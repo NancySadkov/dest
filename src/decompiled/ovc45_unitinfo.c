@@ -443,8 +443,8 @@ int __cdecl16far ovc45_compute3(byte partyIndex)
   uint16_t uVar2;
   int iVar3;
   
-  uVar2 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-  iVar1 = (int)*(uint32_t *)((uint)partyIndex << 2);
+  uVar2 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+  iVar1 = (int)(uint32_t)GLeaderSheets[partyIndex];
   iVar3 = *(int *)(iVar1 + 0x56);
   iVar1 = ovc45_usesLDIV_at_(partyIndex,iVar3,*(uint16_t *)(iVar1 + 0x58));
   return iVar3 + iVar1;
@@ -478,15 +478,15 @@ void __cdecl16far ovc45_usesGPopulationLo(byte partyIndex,uint goldLo,int goldHi
   int sheetHi;
   bool borrow;
 
-  partyOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+  partyOfs = (int)(uint32_t)GLeaderSheets[partyIndex];
   sheetHi = *(int *)(partyOfs + 0x58);
   if ((sheetHi < goldHi) || ((sheetHi == goldHi && (*(uint *)(partyOfs + 0x56) < goldLo)))) {
-    partyOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+    partyOfs = (int)(uint32_t)GLeaderSheets[partyIndex];
     oldLo = *(uint *)(partyOfs + 0x56);
     costLo = goldLo - oldLo;
     costHi = (goldHi - *(int *)(partyOfs + 0x58)) - (uint)(goldLo < oldLo);
     dsValue = _DS;
-    partyOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+    partyOfs = (int)(uint32_t)GLeaderSheets[partyIndex];
     *(uint16_t *)(partyOfs + 0x58) = 0;
     *(uint16_t *)(partyOfs + 0x56) = 0;
     availLo = ovc45_usesLDIV_at_(partyIndex,0,0);
@@ -502,7 +502,7 @@ void __cdecl16far ovc45_usesGPopulationLo(byte partyIndex,uint goldLo,int goldHi
     }
   }
   else {
-    partyOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+    partyOfs = (int)(uint32_t)GLeaderSheets[partyIndex];
     goldLoPtr = (uint *)(partyOfs + 0x56);
     oldLo = *goldLoPtr;
     *goldLoPtr = *goldLoPtr - goldLo;
@@ -4416,7 +4416,7 @@ uint __cdecl16far ovc45_compute8(byte partyIndex)
     uVar2 = in_AX & 0xff00;
   }
   else {
-    uVar1 = *(uint32_t *)((uint)partyIndex << 2);
+    uVar1 = (uint32_t)GLeaderSheets[partyIndex];
     bVar3 = (byte)(((uint)partyIndex << 2) >> 8);
     if (*(char *)((int)uVar1 + 0x3f) == '\0') {
       uVar2 = CONCAT11(bVar3,1);

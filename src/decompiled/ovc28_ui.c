@@ -343,8 +343,8 @@ void __cdecl16far ovc28_drawGold(byte partyIndex)
   TextBlitY = 0x9c;
   ovr_blitText((char *)"Gold",(byte *)CONCAT22(Font03.ofs,(char *)0x26510),Font03.seg,0x3f
                ,0xed);
-  goldSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-  sheetOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+  goldSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+  sheetOfs = (int)(uint32_t)GLeaderSheets[partyIndex];
   ovr_litoa10((char *)&numText,(long)CONCAT22(*(uint16_t *)(sheetOfs + 0x56),_SS),
               *(uint16_t *)(sheetOfs + 0x58),0);
   width = ovr_font_textWidth((char *)&numText,(char *)CONCAT22(Font03.ofs,_SS),Font03.seg,0,0);

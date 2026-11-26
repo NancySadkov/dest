@@ -8625,3 +8625,50 @@ NOT DONE, and deliberately: the 13 sites in functions that do NOT mention GLeade
   grep_checks 40,045 (unchanged - `*(uint32_t *)` and `(int)(uint32_t)` are not section-5 patterns)
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
+
+### GLeaderSheets sweep finished: 14 more near tables
+finish the GLeaderSheets sweep: 14 more near tables fixed in six modules
+
+The 13 remaining `*(uint32_t *)((uint)partyIndex << 2)` sites were confirmed against their disassembly
+before conversion.  Two of them, in full because they are short:
+
+  ovc45_compute3 (77eb:09c1)          bldng_getClass (676c:0000)
+    000B shl ax,2                       000A shl ax,2
+    000E mov dx,0x70                    000D mov dx,0x70
+    0011 mov bx,ax                      0010 mov bx,ax
+    0013 mov es,dx                      0012 mov es,dx
+    0015 les bx,ptr es:[bx]             0014 les bx,ptr es:[bx]
+    001A mov ax,es:[bx+0x58]            0019 cmp byte ptr es:[bx+0x2f],0xff
+    001E mov dx,es:[bx+0x56]            0037 mov al,es:[bx+0x2f]
+
+i.e. the same `mov dx,0x70 / mov es,dx / les` chain as GLeaderSheets, with the field offsets
+(0x56/0x58, 0x2f) that char_sheet_t defines.  `manage_usesGLeaderCount3` (4d05:1b51) likewise loads
+0x70 into ES.
+
+Converted, base and far field dereference both:
+
+  ovc15_sprite.c    1 base, 1 deref
+  ovc21_manage.c    1 base, 1 deref
+  ovc28_ui.c        2 base, 0 deref
+  ovc35_bldng.c     2 base, 1 deref
+  ovc37_season.c    1 base, 1 deref
+  ovc45_unitinfo.c  7 base, 0 deref
+
+Verified in the emitted listing for ovc45_compute3:
+
+  mov  al,byte ptr [bp+6] / mov ah,0 / shl ax,2 / mov bx,ax
+  mov  ax,word ptr DGROUP:_GLeaderSheets[bx+2]
+  ...
+
+where the export previously read DS:partyIndex*4.
+
+Two modules (ovc28_ui.c, ovc45_unitinfo.c) got the base fix but no field-deref conversion: their reads
+use a different cast shape (`*(uint *)`), which the regex did not match.  The base is right; the field
+reads remain DS-relative there and are a follow-up.
+
+Still outstanding by the same grep: 34 lines tree-wide, but with index expressions other than
+`partyIndex` (which is why they were not in this queue).
+
+  grep_checks 40,045 (unchanged - these are not section-5 patterns)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry

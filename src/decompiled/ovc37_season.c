@@ -497,7 +497,7 @@ int __cdecl16far season_usesAlignUp42(int unitIndex,byte partyIndex)
             ((short (*) [60] [148])GMapFlags)[-1][((unit_t *)GUnits)[unitIndex].y + 0x3b]
             [alignedX + k + 0x92] & 0x3000U;
   }
-  expected = 0x1000 << (*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) & 0x1f);
+  expected = 0x1000 << (*((byte far *)GLeaderSheets[partyIndex] + 0x3f) & 0x1f);
   if (expected == flags) {
     return 1;
   }

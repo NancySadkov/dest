@@ -17,11 +17,11 @@ int __cdecl16far bldng_getClass(byte partyIndex)
   uint32_t uVar1;
   int iVar2;
   
-  if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x2f) == -1) {
+  if (*((char far *)GLeaderSheets[partyIndex] + 0x2f) == -1) {
     iVar2 = (uint)(partyIndex >> 6) << 8;
   }
   else {
-    uVar1 = *(uint32_t *)((uint)partyIndex << 2);
+    uVar1 = (uint32_t)GLeaderSheets[partyIndex];
     iVar2 = CONCAT11((char)(((uint)partyIndex << 2) >> 8),*(undefined1 *)((int)uVar1 + 0x2f));
   }
   return iVar2;

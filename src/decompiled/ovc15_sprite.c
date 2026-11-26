@@ -688,7 +688,7 @@ ovc15_usesLDIV_at_(uint16_t x,uint16_t y,uint16_t destX,uint16_t destY,byte gind
          AgntGs[(uint)gindex].strength;
     *(undefined1 *)&((entity_t *)Entities)[EntityCount].base.flags32 =
          AgntGs[(uint)gindex].strength;
-    if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x2f) != -1) {
+    if (*((char far *)GLeaderSheets[partyIndex] + 0x2f) != -1) {
       uVar5 = (uint)AgntGs[(uint)gindex].strength;
       uVar8 = ovr_agnt_abilityModifier(partyIndex,4);
       iStack_6 = uVar5 + (int)(char)uVar8;

@@ -2096,7 +2096,7 @@ byte __cdecl16far manage_usesGLeaderCount3(byte partyIndex)
        (*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3d) != '\0')) {
       sheetRef = *(uint32_t *)((uint)leaderIdx << 2);
       if (*(char *)((int)sheetRef + 0x3f) ==
-          *(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f)) {
+          *((char far *)GLeaderSheets[partyIndex] + 0x3f)) {
         return leaderIdx;
       }
     }
