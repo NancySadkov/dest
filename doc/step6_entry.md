@@ -12621,3 +12621,33 @@ unchanged: 229,747/1,450 = 158.4 and (247,309-17,562)/1,450 = 158.4.
 
 So `matched` is the honest number here and it improved; sum|delta| is not comparable
 across a change in the measured set.
+
+### attact_usesAgntFlag1: recomputed / cmpResult / agntIdx / recOfs (37,483 -> 37,460)
+attact_usesAgntFlag1: `recomputed`, `cmpResult`, `agntIdx`/`recOfs` (37,483 -> 37,460)
+
+  bVar3   ovr_ovc15_usesAlignUp42() result          -> recomputed (3)
+  iVar4   memcmp(&SquareRecX, ...) result           -> cmpResult  (5)
+  iVar5   the 0..AgntCount-1 loop index             -> agntIdx    (7)
+  iVar5   SquareRecCount * 0x13, the record offset  -> recOfs     (2)
+
+No expression changed.
+
+RECORDED, not changed - a real defect this function exposes:
+
+    memcmp((char *)&SquareRecX,(char *)0x24109074,0x13)
+
+`0x24109074` is a *long* constant cast to a NEAR `char *`, so it truncates to offset
+0x9074 and the comparison reads whatever our DGROUP holds there.  In the original,
+0x2410:9074 is a DGROUP address, but audit/symbols.tsv has no label at offset 0x9074, and
+our `_SQUARERECX` is at 0x0906 - so the operand is neither the original's object nor one
+of ours.  Making it `&SquareRecX` would turn the call into a self-comparison (always 0)
+and change which branch runs, so it needs evidence about what the original object is
+rather than a guess.
+
+The same function's `_fmemmove((char *)CONCAT22(0x17f8,...))` at lines 375-377 is the
+near-cast form that the `_fmemmove` sweep fixed elsewhere; it is listed here because this
+function still carries it.
+
+  grep_checks 37,483 -> 37,460; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,473/1,805 (69 runs, sum|delta| 247,309)
+  compare_runtime 1,615 matched, 1,605 identical / 10 different
