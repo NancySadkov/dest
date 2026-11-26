@@ -13976,3 +13976,57 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (52 runs, sum|delta| 198,185, mean 125, worst 14,494)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### layout analysis: the metric now rewards being short
+layout: why the remaining size deficits must NOT be "fixed" while the prefix exists
+
+Measured fact that changes the strategy: `sum|delta|` is minimised here by being *short*, not
+by being faithful.
+
+Our DGROUP carries a fixed ≈+152-byte prefix - C0M.OBJ's DATASEG contribution
+(0x0000..0x00A9) sits in front of `_DATA`, whereas the original puts `_DATA` at 0x0000 and
+interleaves its C0 data at 0x002f..0x0091.  Every game symbol therefore starts ~170 bytes
+late, and the delta profile shows it: +170 at `_DATA`, +152 from 0x0094 onward for 206
+symbols, +108 for 624 symbols.
+
+Against a positive delta, ADDING bytes makes the metric worse and REMOVING bytes makes it
+better.  Concretely, `s_leather_armor` is declared 14 bytes and the original has 48 (the
+"leather armor" / "+1 leather armor" / "+2 leather armor" run, one label in the original).
+Fixing it adds 34 bytes at 0x623b, which raises the delta by +34 for every one of the ~1,100
+symbols that follow - roughly +37,000 on `sum|delta|`, for a genuinely more faithful image.
+
+That is also the real explanation for the earlier result that deleting the 20 duplicate
+declarations made `sum|delta|` worse: those duplicates were ~1,100 bytes of accidental
+compensation for the prefix.  They were still wrong, and removing them was correct.
+
+So there are exactly two honest options on this axis, and the cheap one is exhausted:
+
+  1. remove the prefix, by making `_DATA` the first DGROUP contribution.  Attempted with
+     C0M.OBJ moved last in the link order and measured: `Error: Group DGROUP exceeds 64K`.
+     The map from that attempt showed the far arrays (`_AGNTS`, `_SQUARERECS`,
+     `_MAPSQUARE*`) being pulled into DGROUP, growing the segment from 52,948 to 65,076
+     bytes.  DGROUP has only grown since (the two data fixes this turn added ~280 bytes), so
+     this is now further out of reach, not closer.
+
+  2. fix the remaining shortfalls for fidelity and accept that `sum|delta|` rises by tens of
+     thousands until option 1 is possible.  That is a correctness-over-metric trade the
+     objective's "keep only if sum falls" rule forbids, so it is recorded here rather than
+     done silently.
+
+Genuine shortfalls still open (each is one original label covering a coherent run, so the
+bytes are recoverable from audit/dgroup_2410.bin):
+
+    0x6210  s_normal_weaponry   16 -> 34   "normal weaponry\0+%d ring of prot."
+    0x623b  s_leather_armor     14 -> 48   three armour names in one object
+    0x62a1  s_plate_and_shield  17 -> 37   two names in one object
+    0x6365  s_damaged__s        11 -> 18   "damaged %s\0+%d %s"
+    0x7153  spawnGindexTable     1 ->  8   00 01 02 03 05 08 0a 0b
+
+Note that "+2 leather armor" also exists as an anonymous literal in ovc33_stats.c:367, so
+fixing 0x623b properly means pointing that call at `s_leather_armor_2410_623b + 31` instead,
+or the bytes would exist twice.
+
+There ARE no genuine over-declarations to remove in exchange: every entry in the "ours
+longer" list is an artefact of the original's `.ofs` / `.hi` sub-labels (e.g. `IdFORM` and
+`IdFORM.hi` are two original labels for one four-byte far pointer, so the original span is 2
+and ours is 4).
