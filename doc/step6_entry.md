@@ -11621,3 +11621,36 @@ the declaration and both stores are removed.
   grep_checks 38,019 -> 37,985; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
   compare_runtime 1,605 identical / 10 different
+
+### ovc38_scores.c: the other two uint8_t msg buffers
+ovc38_scores.c: the other two `uint8_t msg` buffers fixed
+
+`ovc38_loadHighScores` (line 23) and `ovc38_saveHighScores` (line 63) had the same
+defect as `ovc38_usesStshAlloc`, three lines removed:
+
+    uint8_t msg;
+    filename = ovr_stsprintf((char *)&msg, ...);
+
+`stsprintf` is declared `char * __cdecl16far stsprintf(char *buf,char *fmt,
+char *arg1,...)` - a NEAR buffer - and the probe listing for the same construct shows
+Turbo C pushes the bare frame offset with no segment, so the callee writes at
+DS:offset while the buffer is on the stack.
+
+Both are now `static char msg[64]` used directly.  Verified in the listing, the
+destination is a DGROUP offset:
+
+    push ss
+    push offset DGROUP:b@w+0
+    call far ptr _ovr_stsprintf
+
+Measured layout-neutral, like the first one: the two 64-byte statics changed no
+matched symbol and no runtime sample.
+
+  grep_checks 37,985 unchanged; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different
+
+The remaining open point in these three functions is the same one recorded for
+ovc38_usesStshAlloc: the format strings are present but their variable arguments are
+not, so the produced text cannot yet be right.  That is a decompilation gap, not a
+buffer question.

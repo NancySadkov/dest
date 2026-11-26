@@ -20,9 +20,9 @@ void __cdecl16far ovc38_loadHighScores(far_t entries)
   uint16_t in_DX;
   uint16_t *puVar3;
   int iVar4;
-  uint8_t msg;
+  static char msg[64];   /* file path; DGROUP so the near buffer is valid */
   
-  filename = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6a89,_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410)
+  filename = ovr_stsprintf(msg,(char *)CONCAT22(0x6a89,_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410)
   ;
   iVar1 = ovr_open_wait_unlock_and_disk(filename,in_DX);
   if (iVar1 < 0) {
@@ -60,9 +60,9 @@ void __cdecl16far ovc38_saveHighScores(far_t entries)
   uint16_t *puVar2;
   int iVar3;
   uint16_t uVar4;
-  uint8_t msg;
+  static char msg[64];   /* file path; DGROUP so the near buffer is valid */
   
-  path = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6a89,_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410);
+  path = ovr_stsprintf(msg,(char *)CONCAT22(0x6a89,_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410);
   handle = ovr_creat_wait_unlock_and_disk(path,in_DX);
   if (-1 < handle) {
     for (iVar3 = 0; iVar3 < 6; iVar3 = iVar3 + 1) {
