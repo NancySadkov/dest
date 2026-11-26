@@ -9654,3 +9654,33 @@ ovr_manage_findFirstLeader, compared to 0xff and used only to index GLeaderSheet
   grep_checks 39,962 -> 39,953; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### Five more GLeaderSheets near reads
+five more GLeaderSheets near reads: `(uint)bVarN * 4` and `(uint)charIndex * 4`
+
+Swept the remaining `((int *)((uint)X * 4))` sites in the two modules whose enclosing functions already
+use `GLeaderSheets` (7 such sites tree-wide; the two in ovc11_audio.c do not, so they were left):
+
+  ovc37_season.c 250/256   bVar1 = ovr_manage_findFirstLeader();  ... 0xff sentinel ...
+      *(byte *)(*(int *)((uint)bVar1 * 4) + 0x86)
+   -> *((uint8_t far *)GLeaderSheets[bVar1] + 0x86)
+
+  ovc37_season.c 277/282   bVar3 = ovr_manage_findFirstLeader();  ... 0xff sentinel ...
+      iVar1 = ((int *)((uint)bVar3 * 4))[1];
+      iVar2 = *(int *)((uint)bVar3 * 4);
+   -> iVar1 = (int)SEG_OF(GLeaderSheets[bVar3]);
+      iVar2 = (int)far_ofs_u32(GLeaderSheets[bVar3]);
+
+  ovc21_manage.c 3401/3402
+      fontSeg = (uint16_t)((char *)((int *)((uint)charIndex * 4))[1]);
+      iStack_12 = *(int *)((uint)charIndex * 4);
+   -> fontSeg = (uint16_t)SEG_OF(GLeaderSheets[charIndex]);
+      iStack_12 = (int)far_ofs_u32(GLeaderSheets[charIndex]);
+
+The identifying evidence is the same in both files: the index comes straight from
+`ovr_manage_findFirstLeader()` with a 0xff sentinel, and the same functions read
+`(GLeaderSheets[x])->field` elsewhere - so the near form is the table, read without its segment.
+
+  grep_checks 39,953 (unchanged - this is addressing, not naming)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry

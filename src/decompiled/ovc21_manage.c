@@ -3398,8 +3398,8 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
       ovr_say((char *)"The damaged structures belonging to all leaders are highlighted in red.",0);
       return pcVar17;
     }
-    fontSeg =(uint16_t)( (char *)((int *)((uint)charIndex * 4))[1]);
-    iStack_12 = *(int *)((uint)charIndex * 4);
+    fontSeg = (uint16_t)SEG_OF(GLeaderSheets[charIndex]);
+    iStack_12 = (int)far_ofs_u32(GLeaderSheets[charIndex]);
     uVar5 = Font02.ofs;
     ovr_ovc45_compute9(acStack_1b6,(char *)CONCAT22(iStack_12,_SS),
                        (char *)CONCAT22(Font02.ofs,fontSeg),Font02.seg,'K');

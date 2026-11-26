@@ -253,7 +253,7 @@ int __cdecl16far season_usesGPromotableCount2(void)
   }
   else {
     iVar2 = GPromotableCount;
-    if (*(byte *)(*(int *)((uint)bVar1 * 4) + 0x86) < 9) {
+    if (*((uint8_t far *)GLeaderSheets[bVar1] + 0x86) < 9) {
       iVar2 = (uint)promotionCount * 0x32 + 0x32;
     }
   }
@@ -279,8 +279,8 @@ char __cdecl16far season_usesDifficulty(void)
     cVar4 = 'd';
   }
   else {
-    iVar1 = ((int *)((uint)bVar3 * 4))[1];
-    iVar2 = *(int *)((uint)bVar3 * 4);
+    iVar1 = (int)SEG_OF(GLeaderSheets[bVar3]);
+    iVar2 = (int)far_ofs_u32(GLeaderSheets[bVar3]);
     if (*(byte *)(iVar2 + 0x86) < 9) {
       if (Difficulty == '\x01') {
         if (*(byte *)(iVar2 + 0x86) < 5) {
