@@ -13223,3 +13223,31 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### ovc27_textTakesHalfDamage3: two pointer names (37,151 -> 37,105)
+ovc27_textTakesHalfDamage3: two pointer names, 32 occurrences (37,151 -> 37,105)
+
+  pcVar6  the status string returned by ovr_agnt_statusText, handed to
+          ovr_ovc15_usesStshRealloc and replaced by ovr_stsprintf's result
+          and then passed to ovr_uiNotify                            -> statusText (23)
+  bufPtr  the block ovr_ovc15_usesStshRealloc returns, used as
+          ovr_stsprintf's `%s` argument                              -> stashPtr   (9)
+
+Both are single-role: `pcVar6` is *the text being built* at every one of its 23
+occurrences (read as an argument, then reassigned to the formatted result), and `bufPtr` is
+always the stash block.  The function is six repetitions of
+
+    statusText = ovr_agnt_statusText(agntRec,(char far *)MK_FP(_SS,&text2),(uint16_t)GSavedBlitSeg);
+    stashPtr = ovr_ovc15_usesStshRealloc(statusText);
+    statusText = ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5c0a),stashPtr);
+    ovr_uiNotify(statusText,agntSeg,(char)agntSeg);
+
+`grep_checks` counts these 32 occurrences as 46 because a `p?VarN` name matches both
+`[iusbc]Var` and `p[iusbc]Var`.
+
+No expression changed.
+
+  grep_checks 37,151 -> 37,105; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
