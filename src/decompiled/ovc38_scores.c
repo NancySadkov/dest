@@ -15,31 +15,32 @@ void __cdecl16far ovc38_loadHighScores(far_t entries)
 
 {
   char *filename;
-  int iVar1;
-  uint16_t uVar2;
+  int fileHnd;
+  int entryIdx;
+  uint16_t lineOfs;
   uint16_t in_DX;
-  uint16_t *puVar3;
-  int iVar4;
+  uint16_t *entryPtr;
+  int slotIdx;
   static char msg[64];   /* file path; DGROUP so the near buffer is valid */
   
   filename = ovr_stsprintf(msg,(char *)CONCAT22(0x6a89,_SS),(char *)MK_FP(0x2410, 0x8c6c),0x2410)
   ;
-  iVar1 = ovr_open_wait_unlock_and_disk(filename,in_DX);
-  if (iVar1 < 0) {
-    for (iVar1 = 0; iVar1 < 6; iVar1 = iVar1 + 1) {
-      puVar3 = (uint16_t *)(entries.ofs + iVar1 * 4);
-      puVar3[1] = 0;
-      *puVar3 = 0;
+  fileHnd = ovr_open_wait_unlock_and_disk(filename,in_DX);
+  if (fileHnd < 0) {
+    for (entryIdx = 0; entryIdx < 6; entryIdx = entryIdx + 1) {
+      entryPtr = (uint16_t *)(entries.ofs + entryIdx * 4);
+      entryPtr[1] = 0;
+      *entryPtr = 0;
     }
   }
   else {
-    for (iVar4 = 0; iVar4 < 6; iVar4 = iVar4 + 1) {
-      uVar2 = ovr_saveui_readLine(iVar1);
-      puVar3 = (uint16_t *)(entries.ofs + iVar4 * 4);
-      puVar3[1] = in_DX;
-      *puVar3 = uVar2;
+    for (slotIdx = 0; slotIdx < 6; slotIdx = slotIdx + 1) {
+      lineOfs = ovr_saveui_readLine(fileHnd);
+      entryPtr = (uint16_t *)(entries.ofs + slotIdx * 4);
+      entryPtr[1] = in_DX;
+      *entryPtr = lineOfs;
     }
-    close(iVar1);
+    close(fileHnd);
   }
   return;
 }

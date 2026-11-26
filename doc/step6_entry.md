@@ -13251,3 +13251,28 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### ovc38_loadHighScores: four names, one two-phase (37,105 -> 37,072)
+ovc38_loadHighScores: four names, one two-phase (37,105 -> 37,072)
+
+  iVar1  the handle from open (27, 28, 37, 42)              -> fileHnd   (4)
+  iVar1  the 0..5 counter of the zeroing loop (29, 30)      -> entryIdx  (5)
+  uVar2  ovr_saveui_readLine's result (37, 40)              -> lineOfs   (2)
+  puVar3 entries.ofs + i*4, a uint16 pair (30..32, 38..40)  -> entryPtr  (6)
+  iVar4  the 0..5 counter of the reading loop (36, 38)      -> slotIdx   (5)
+
+The two loops use different counters, which is why `iVar1` had to be split by range: the
+zeroing loop reuses the handle slot as its index.  The first attempt missed line 30
+(`entries.ofs + iVar1 * 4`), and the script's post-rename assertion caught it before the
+file was written - the same guard that caught the truncated listings in the last two
+turns.
+
+`in_DX` is left: it is the segment half that `ovr_saveui_readLine` returns, never assigned
+here.
+
+No expression changed.
+
+  grep_checks 37,105 -> 37,072; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
