@@ -8543,3 +8543,47 @@ different base pointers into one table, and is worth keeping in mind when the ar
   grep_checks 40,067 -> 40,064; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### 83 near table reads are GLeaderSheets (40,064 -> 40,045)
+ovc22_classes: 83 near table reads are GLeaderSheets; rename seasonalIncome (40,064 -> 40,045)
+
+THE TABLE.  `ovc22_usesRandBelow` (5087:4576) turned out to contain the same near-table defect already
+fixed in ovc22_usesLUDIV_at_, repeated: 83 sites of
+
+  *(uint32_t *)((uint)partyIndex << 2)
+
+i.e. a reading of DS offset partyIndex*4 where the original reads a far-pointer array.  The function's
+own disassembly proves which array:
+
+  014D  mov bx, 0x70 / mov es, bx        ; segment 0x70 = GLeaderSheets
+  0018  mov bx,ax / mov es,dx / les bx, ptr es:[bx]
+
+and the same expression at line 4429 already reads `(GLeaderSheets[partyIndex])->flags5d` correctly, two
+lines before the first broken one.
+
+All 83 sites in ovc22_classes.c became `(uint32_t)GLeaderSheets[partyIndex]`.  Verified in the emitted
+listing for ovc22_usesRandBelow:
+
+  mov  al,byte ptr [bp+6] / mov ah,0 / shl ax,2 / mov bx,ax
+  les  bx,dword ptr DGROUP:_GLeaderSheets[bx]
+  test byte ptr es:[bx+93],2            ; 0x5d = flags5d
+
+20 references to the symbol in that function.
+
+WHAT THIS DOES NOT FIX: the surrounding `(int)` truncations (`(int)*(uint32_t *)...` then
+`*(int *)(iVar4 + 0x56)`) still drop the segment, so those reads remain DS-relative.  The table base is
+now right, which is a strict improvement, but the per-field far reads in this function are a separate
+pass.
+
+RENAME.  ovc22_seasonalIncome had exactly one exported temporary, `uVar1` (18 occurrences), which is the
+function's accumulated return value - it is the income figure at every use.  Renamed to `income`.
+
+STILL OUTSTANDING, same shape, verified by count only (not yet by disassembly):
+  ovc15_sprite.c 1, ovc21_manage.c 1, ovc23_bldrec.c 2, ovc25_intel.c 10, ovc28_ui.c 2,
+  ovc35_bldng.c 2, ovc37_season.c 1, ovc39_archive.c 24, ovc45_unitinfo.c 7
+  -> still `*(uint32_t *)((uint)partyIndex << 2)`.  Each module needs the same 0x70 check before the
+     sweep; ovc39_archive.c (24) is the next largest.
+
+  grep_checks 40,064 -> 40,045; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

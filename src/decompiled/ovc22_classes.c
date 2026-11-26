@@ -65,7 +65,7 @@ char * __cdecl16far ovc22_className(byte partyIndex,uint16_t arg2)
   byte bVar1;
   char *pcVar2;
   
-  bVar1 = *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x2f);
+  bVar1 = *(byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x2f);
   if (bVar1 < 7) {
     pcVar2 = (char *)*(uint16_t *)((uint)bVar1 * 4 + 0x123);
   }
@@ -84,7 +84,7 @@ char * __cdecl16far ovc22_className(byte partyIndex,uint16_t arg2)
 uint __cdecl16far ovc22_compute1(byte partyIndex,uint value)
 
 {
-  if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x2f) == '\x04') {
+  if (*(char *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x2f) == '\x04') {
     value = value >> 1;
   }
   return value;
@@ -110,7 +110,7 @@ int __cdecl16far ovc22_applyRankBonus(byte partyIndex,int cost)
   else {
     cost = cost << 1;
   }
-  if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x2f) == '\x06') {
+  if (*(char *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x2f) == '\x06') {
     cost = (int)(((long)cost * 0x96 & 0xffffU) / 100);
   }
   return cost;
@@ -349,43 +349,43 @@ code_r0x0005ff56:
 uint __cdecl16far ovc22_seasonalIncome(byte bldType,uint8_t partyIndex,uint16_t arg3,uint16_t arg4,uint16_t arg5)
 
 {
-  uint uVar1;
+  uint income;
   
   if (BuildingTypes[bldType].income == 0) {
-    uVar1 = 0;
+    income = 0;
   }
   else if (BuildingTypes[bldType].unitType == '\x19') {
-    uVar1 = BuildingTypes[bldType].income;
+    income = BuildingTypes[bldType].income;
     if (GSeason == '\0') {
       if (GTimeLo < 0xf) {
-        uVar1 = uVar1 >> 2;
+        income = income >> 2;
       }
       else {
-        uVar1 = uVar1 >> 1;
+        income = income >> 1;
       }
     }
     else if (GSeason == '\x02') {
-      uVar1 = uVar1 + (uVar1 >> 2);
+      income = income + (income >> 2);
     }
   }
   else if ((BuildingTypes[bldType].flags2 & 0x20) == 0) {
     if ((BuildingTypes[bldType].flags2 & 0x80) == 0) {
-      uVar1 = BuildingTypes[bldType].income;
+      income = BuildingTypes[bldType].income;
     }
     else {
-      uVar1 = ovc22_applyRankBonus(partyIndex,BuildingTypes[bldType].income);
+      income = ovc22_applyRankBonus(partyIndex,BuildingTypes[bldType].income);
       if (GSeason == '\x01') {
-        uVar1 = uVar1 + ((int)uVar1 >> 2);
+        income = income + ((int)income >> 2);
       }
       else if (GSeason == '\x02') {
-        uVar1 = (int)uVar1 >> 2;
+        income = (int)income >> 2;
       }
     }
   }
   else {
-    uVar1 = ovc22_compute1(partyIndex,BuildingTypes[bldType].income);
+    income = ovc22_compute1(partyIndex,BuildingTypes[bldType].income);
   }
-  return uVar1;
+  return income;
 }
 
 
@@ -581,26 +581,26 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
       pbVar2 = &((unit_t *)GUnits)[(int)uStack_14].flags;
       *pbVar2 = *pbVar2 & 0xfd;
     }
-    bVar17 = *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f);
+    bVar17 = *(byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x3f);
     uVar23 = CONCAT11(uVar19,bVar17);
     uStack_e =(uint16_t)( (uint *)(0x1000 << (bVar17 & 0x1f)));
-    *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xad) = 0;
+    *(undefined1 *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0xad) = 0;
     _fmemset(MK_FP(GUnitDescriptions[partyIndex].seg, GUnitDescriptions[partyIndex].ofs + 0xaa), 0, 3);
     iVar30 = CONCAT11(uVar69,uVar67);
-    if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0') {
-      pbVar2 = (uint16_t)((byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d));
+    if (*(char *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x3f) == '\0') {
+      pbVar2 = (uint16_t)((byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x5d));
       *pbVar2 = *pbVar2 | 4;
     }
     else {
-      pbVar2 = (uint16_t)((byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d));
+      pbVar2 = (uint16_t)((byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x5d));
       *pbVar2 = *pbVar2 & 0xf9;
     }
-    pbVar2 = (uint16_t)((byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d));
+    pbVar2 = (uint16_t)((byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x5d));
     *pbVar2 = *pbVar2 & 0xf7;
     (GLeaderSheets[partyIndex])->maxTrade = 0;
-    *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa6) = 0;
-    *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa5) = 0;
-    *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa9) = 0;
+    *(undefined1 *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0xa6) = 0;
+    *(undefined1 *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0xa5) = 0;
+    *(undefined1 *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0xa9) = 0;
     bVar17 = (GLeaderSheets[partyIndex])->classStr;
     (*(uint16_t *)((uint8_t *)&(uStack_6))) =(uint16_t)( (far_t far *)CONCAT11(bVar17,(byte)uStack_6));
     if (AgntGs[(uint)bVar17].shortName[3] == '\x01') {
@@ -619,7 +619,7 @@ far_t * __cdecl16far ovc22_textRingProt(byte partyIndex)
     else {
       uStack_6 = (far_t far *)(ulong)uVar12;
     }
-    *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8) = 0;
+    *(undefined1 *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0xa8) = 0;
     GCanPromote = '\0';
     puVar49 = (uint *)&GUnitDescriptions[3].ofs;
     while (puVar50 = puVar49, puVar49 = (uint *)((int)puVar50 + 1), puVar49 < GUnitCount) {
@@ -1056,8 +1056,8 @@ L_OVC22_5087_4975_4ABE:
                       puStack_a = (uint *)(GLeaderSheets[partyIndex])->x;
                       scratch = (GLeaderSheets[partyIndex])->y;
                     }
-                    uVar53 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-                    iVar29 = (int)*(uint32_t *)((uint)partyIndex << 2);
+                    uVar53 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+                    iVar29 = (int)(uint32_t)GLeaderSheets[partyIndex];
                     iVar30 = *(int *)(iVar29 + 0x58);
                     if ((iVar30 < 1) && ((iVar30 < 0 || (*(uint *)(iVar29 + 0x56) < 10)))) {
                       (*(uint32_t *)((uint8_t *)&(uStack_6))) = CONCAT12(1,(far_t far *)uStack_6);
@@ -1074,7 +1074,7 @@ L_OVC22_5087_4975_4ABE:
                     if (((GLeaderSheets[partyIndex])->flags5d & 2) != 0) {
                       uStack_6 = (far_t far *)((ulong)uStack_6 | 0x1000000);
                     }
-                    uVar11 = *(uint32_t *)((uint)partyIndex << 2);
+                    uVar11 = (uint32_t)GLeaderSheets[partyIndex];
                     if ((*(byte *)((int)uVar11 + 0x5d) & 4) != 0) {
                       uStack_6 = (far_t far *)((ulong)uStack_6 | 0x2000000);
                     }
@@ -1098,24 +1098,24 @@ L_OVC22_5087_4975_4ABE:
                       else {
                         if ((BuildingTypes[uStack_e].flags2 & 0x60) == 0) {
                           uVar53 = (uint16_t)
-                                   ((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-                          iVar29 = (int)*(uint32_t *)((uint)partyIndex << 2);
+                                   ((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+                          iVar29 = (int)(uint32_t)GLeaderSheets[partyIndex];
                           iVar30 = *(int *)(iVar29 + 0x58);
                           if ((iVar30 < 0) ||
                              ((iVar30 == 0 &&
                               (*(uint *)(iVar29 + 0x56) < BuildingTypes[uStack_e].cost)))
                              ) {
                             uVar53 = (uint16_t)
-                                     ((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-                            iVar30 = (int)*(uint32_t *)((uint)partyIndex << 2);
+                                     ((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+                            iVar30 = (int)(uint32_t)GLeaderSheets[partyIndex];
                             *(uint16_t *)(iVar30 + 0x58) = 0;
                             *(uint16_t *)(iVar30 + 0x56) = 0;
                           }
                           else {
                             uVar22 = BuildingTypes[uStack_e].cost;
                             uVar53 = (uint16_t)
-                                     ((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-                            iVar30 = (int)*(uint32_t *)((uint)partyIndex << 2);
+                                     ((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+                            iVar30 = (int)(uint32_t)GLeaderSheets[partyIndex];
                             puVar3 = (uint *)(iVar30 + 0x56);
                             uVar23 = *puVar3;
                             *puVar3 = *puVar3 - uVar22;
@@ -1126,7 +1126,7 @@ L_OVC22_5087_4975_4ABE:
                         ovr_createConstructionRecordFar((byte)uStack_e,0,0,0,0,0,0,0,0);
                       }
                     }
-                    if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0') {
+                    if (*(char *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x3f) == '\0') {
                       if ((GLeaderSheets[partyIndex])->housing <
                           (GLeaderSheets[partyIndex])->population) {
                         pfVar20 = (far_t far *)ovr_ovc18_textTypeLen(partyIndex,0,0,0,0,0);
@@ -1766,8 +1766,8 @@ L_OVC22_5087_0234_32B8:
             iVar30 = iVar30 + uVar22;
           }
           if (((BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].flags2 & 1) != 0) &&
-             (((*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x2f) == -1 ||
-               (bVar17 = *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x2f),
+             (((*(char *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x2f) == -1 ||
+               (bVar17 = *(byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x2f),
                uVar23 = CONCAT11((char)(uVar23 >> 8),bVar17),
                (1 << (bVar17 & 0x1f) & (uint)BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].type) != 0))
               && (BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStack_1a) + 1))].resource < 4)))) {
@@ -1788,31 +1788,31 @@ L_OVC22_5087_0234_32B8:
         uStack_1e = uStack_1e + ((entity_t *)Entities)[(int)uStack_14].base.animFrame;
       }
     }
-    bStack_1b = *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xad);
+    bStack_1b = *(byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0xad);
     for (iVar29 = 2; -1 < iVar29; iVar29 = iVar29 + -1) {
-      if (bStack_1b < *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + iVar29 + 0xaa)) {
-        *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + iVar29 + 0xaa) = bStack_1b;
+      if (bStack_1b < *(byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + iVar29 + 0xaa)) {
+        *(byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + iVar29 + 0xaa) = bStack_1b;
         bStack_1b = 0;
       }
       else {
         bStack_1b = bStack_1b -
-                    *(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + iVar29 + 0xaa);
+                    *(char *)((int)(uint32_t)GLeaderSheets[partyIndex] + iVar29 + 0xaa);
       }
     }
     iVar29 = 0;
     for (iVar52 = 0; iVar52 < 3; iVar52 = iVar52 + 1) {
-      iVar29 = iVar29 + (uint)*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + iVar52 + 0xaa)
+      iVar29 = iVar29 + (uint)*(byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + iVar52 + 0xaa)
                         * (iVar52 + 1) * 3;
     }
     if (iVar29 < 0x32) {
-      *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xaa) = (char)iVar29;
+      *(undefined1 *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0xaa) = (char)iVar29;
     }
     else {
-      *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xaa) = 0x32;
+      *(undefined1 *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0xaa) = 0x32;
     }
-    *(uint16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x94) = scratch;
-    *(uint16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x96) =(uint16_t)( puStack_a);
-    *(uint16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x98) = uStack_8;
+    *(uint16_t *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x94) = scratch;
+    *(uint16_t *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x96) =(uint16_t)( puStack_a);
+    *(uint16_t *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x98) = uStack_8;
     uStack_24 = in_stack_0000ffbe;
     if (5 < in_stack_0000ffbe) {
       uStack_24 = 5;
@@ -1827,29 +1827,29 @@ L_OVC22_5087_0234_32B8:
     if (in_stack_0000ffc2 == (agnt_t far *)0x0) {
       if (in_stack_0000ffc0 == 0) {
         if (in_stack_0000ffbe == 0) {
-          *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x53) = 4;
+          *(undefined1 *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x53) = 4;
         }
         else {
-          *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x53) = 8;
+          *(undefined1 *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x53) = 8;
         }
       }
       else {
-        *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x53) = 0xc;
+        *(undefined1 *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x53) = 0xc;
       }
     }
     else {
-      *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x53) = 0xff;
+      *(undefined1 *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x53) = 0xff;
     }
     (GLeaderSheets[partyIndex])->reserved_82 = 0;
     if ((resourceTotals[0] < 0) || (resourceTotals[0] < 1)) {
-      uVar53 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-      iVar29 = (int)*(uint32_t *)((uint)partyIndex << 2);
+      uVar53 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+      iVar29 = (int)(uint32_t)GLeaderSheets[partyIndex];
       *(int16_t *)(iVar29 + 0x80) = resourceTotals[0];
       *(uint *)(iVar29 + 0x7e) = uStack_34;
     }
     else {
-      uVar53 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-      iVar29 = (int)*(uint32_t *)((uint)partyIndex << 2);
+      uVar53 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+      iVar29 = (int)(uint32_t)GLeaderSheets[partyIndex];
       *(uint16_t *)(iVar29 + 0x80) = 0;
       *(uint16_t *)(iVar29 + 0x7e) = 0xffff;
     }
@@ -1857,22 +1857,22 @@ L_OVC22_5087_0234_32B8:
     (GLeaderSheets[partyIndex])->population = uStack_1e;
     (GLeaderSheets[partyIndex])->foodProd = (int)uStack_20;
     (GLeaderSheets[partyIndex])->income = iVar30;
-    uVar53 = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-    iVar30 = (int)*(uint32_t *)((uint)partyIndex << 2);
+    uVar53 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+    iVar30 = (int)(uint32_t)GLeaderSheets[partyIndex];
     *(int *)(iVar30 + 0x8c) = iStack_36;
     *(uint *)(iVar30 + 0x8a) = uStack_38;
-    *(int16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 100) = animStep;
-    *(uint16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x66) = uStack_28;
-    *(uint16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x68) = uStack_26;
+    *(int16_t *)((int)(uint32_t)GLeaderSheets[partyIndex] + 100) = animStep;
+    *(uint16_t *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x66) = uStack_28;
+    *(uint16_t *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x68) = uStack_26;
     (GLeaderSheets[partyIndex])->ringBudgetIn[0] = resourceTotals[1];
-    *(int16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x72) = resourceTotals[2];
-    *(int16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x74) = resourceTotals[3];
+    *(int16_t *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x72) = resourceTotals[2];
+    *(int16_t *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x74) = resourceTotals[3];
     (GLeaderSheets[partyIndex])->rank = iStack_3c;
     if (uStack_24 < 0x100) {
-      *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x52) = (undefined1)uStack_24;
+      *(undefined1 *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x52) = (undefined1)uStack_24;
     }
     else {
-      *(undefined1 *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x52) = 0xff;
+      *(undefined1 *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x52) = 0xff;
     }
     uVar23 = ovr_ovc36_usesLDIV_at_(partyIndex);
     (GLeaderSheets[partyIndex])->popularity = (char)uVar23;
@@ -2698,10 +2698,10 @@ uint16_t __cdecl16far ovc22_usesPlayerCount(byte partyIndex)
   char baseCount;
   int sheetOfs;
 
-  if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0') {
+  if (*(char *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x3f) == '\0') {
     baseCount = (char)((ulong)(GLeaderSheets[partyIndex])->unitCount / 10);
     count = baseCount + 2;
-    sheetOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+    sheetOfs = (int)(uint32_t)GLeaderSheets[partyIndex];
     if ((uint)(*(int *)(sheetOfs + 0x4d) * 2 + *(int *)(sheetOfs + 0x4d)) >> 1 <=
         (GLeaderSheets[partyIndex])->foodProd) {
       count = baseCount + 4;
@@ -2713,7 +2713,7 @@ uint16_t __cdecl16far ovc22_usesPlayerCount(byte partyIndex)
   if (10 < count) {
     count = 10;
   }
-  *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa4) = count;
+  *(byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0xa4) = count;
   return count;
 }
 
@@ -4035,7 +4035,7 @@ uint __cdecl16far ovc22_usesGUnitGrid2(int x,int y,byte partyIndex)
           uVar1 = 0;
         }
         else if (*(char *)((uint8_t *)&BuildingTypes[uVar1] + 35) == '\0') {
-          if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x2f) == '\x05') {
+          if (*(char *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x2f) == '\x05') {
             uVar1 = uVar1 + 0x18;
           }
           else {
@@ -4428,18 +4428,18 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
   
   if ((((GLeaderSheets[partyIndex])->flags5d & 2) == 0) ||
      (((GLeaderSheets[partyIndex])->flags5d & 4) == 0)) {
-    if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0') {
+    if (*(char *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x3f) == '\0') {
       bldType = ovc22_usesGUnitGrid2(x,y,partyIndex);
       if ((*(uint *)((uint8_t *)&BuildingTypes[bldType] + 19) & 0x20) == 0) {
         if (((GLeaderSheets[partyIndex])->flags5d & 2) == 0) {
-          sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-          iVar4 = (int)*(uint32_t *)((uint)partyIndex << 2);
+          sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+          iVar4 = (int)(uint32_t)GLeaderSheets[partyIndex];
           if (*(int *)(iVar4 + 0x56) == 0 && *(int *)(iVar4 + 0x58) == 0) {
             bldType = 0;
           }
           else {
-            sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-            iVar4 = (int)*(uint32_t *)((uint)partyIndex << 2);
+            sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+            iVar4 = (int)(uint32_t)GLeaderSheets[partyIndex];
             if ((GLeaderSheets[partyIndex])->foodProd <
                 (uint)(*(int *)(iVar4 + 0x4d) * 2 + *(int *)(iVar4 + 0x4d)) >> 2) {
               bldType = 0;
@@ -4448,8 +4448,8 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
               iVar4 = ovr_bldng_getClass(partyIndex);
               bldType = ovr_bldng_usesRandBelow((byte)iVar4);
               bldType = bldType & 0xff;
-              sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-              sheetBase = (int)*(uint32_t *)((uint)partyIndex << 2);
+              sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+              sheetBase = (int)(uint32_t)GLeaderSheets[partyIndex];
               iVar4 = *(int *)(sheetBase + 0x58);
               if ((iVar4 < 0) ||
                  ((iVar4 == 0 && (*(uint *)(sheetBase + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[bldType] + 23))))) {
@@ -4486,8 +4486,8 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
             if ((roll & 0xff) == 0) {
               roll = ovr_randBelow(3,0);
               bldType = (roll & 0xff) + 0x2b;
-              sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-              sheetBase = (int)*(uint32_t *)((uint)partyIndex << 2);
+              sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+              sheetBase = (int)(uint32_t)GLeaderSheets[partyIndex];
               iVar4 = *(int *)(sheetBase + 0x58);
               if (-1 < iVar4) {
                 if (iVar4 != 0) {
@@ -4502,8 +4502,8 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
             if ((roll & 0xff) == 0) {
               roll = ovr_randBelow(3,0);
               bldType = (roll & 0xff) + 0xec;
-              sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-              sheetBase = (int)*(uint32_t *)((uint)partyIndex << 2);
+              sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+              sheetBase = (int)(uint32_t)GLeaderSheets[partyIndex];
               iVar4 = *(int *)(sheetBase + 0x58);
               if (-1 < iVar4) {
                 if (iVar4 != 0) {
@@ -4518,8 +4518,8 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
             roll = ovr_randBelow(3,0);
             bldType = (roll & 0xff) +
                     (uint)*(byte *)((int)&worldMenuLabels[0xb].ofs + 1 + (uint)bVar1 * 0x95);
-            sheetSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-            sheetBase = (int)*(uint32_t *)((uint)partyIndex << 2);
+            sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+            sheetBase = (int)(uint32_t)GLeaderSheets[partyIndex];
             iVar4 = *(int *)(sheetBase + 0x58);
             if ((iVar4 < 0) ||
                ((iVar4 == 0 && (*(uint *)(sheetBase + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[bldType] + 23))))) {
@@ -4582,13 +4582,13 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
   byte bStack_3;
   
   listIndex = ListCount;
-  if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8) != '\0') {
+  if (*(char *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0xa8) != '\0') {
     randPick = ovr_randBelow(100,0);
     roll = (undefined1)randPick;
     if ((randPick & 0xff) <
-        ((uint)*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8) * 100) /
-        (*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8) + 1)) {
-      randPick = ovr_randBelow((uint)*(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0xa8),0);
+        ((uint)*(byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0xa8) * 100) /
+        (*(byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0xa8) + 1)) {
+      randPick = ovr_randBelow((uint)*(byte *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0xa8),0);
       targetIdx = (char)randPick;
       matchIdx = '\0';
       for (listIndex = 0; listIndex < ListCount; listIndex = listIndex + 1) {
@@ -4610,8 +4610,8 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
     x = (GLeaderSheets[partyIndex])->x;
     y = (GLeaderSheets[partyIndex])->y;
   }
-  unitsSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-  sheetOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+  unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+  sheetOfs = (int)(uint32_t)GLeaderSheets[partyIndex];
   unitCount = *(int *)(sheetOfs + 0x58);
   if ((unitCount < 1) && ((unitCount < 0 || (*(uint *)(sheetOfs + 0x56) < 10)))) {
     hasUnits = 1;
@@ -4629,7 +4629,7 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
   if (((GLeaderSheets[partyIndex])->flags5d & 2) != 0) {
     bStack_3 = bStack_3 | 1;
   }
-  uVar5 = *(uint32_t *)((uint)partyIndex << 2);
+  uVar5 = (uint32_t)GLeaderSheets[partyIndex];
   if ((*(byte *)((int)uVar5 + 0x5d) & 4) != 0) {
     bStack_3 = bStack_3 | 2;
   }
@@ -4648,20 +4648,20 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
     }
     else {
       if ((*(uint *)((uint8_t *)&BuildingTypes[uVar7] + 19) & 0x60) == 0) {
-        unitsSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-        sheetOfs = (int)*(uint32_t *)((uint)partyIndex << 2);
+        unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+        sheetOfs = (int)(uint32_t)GLeaderSheets[partyIndex];
         unitCount = *(int *)(sheetOfs + 0x58);
         if ((unitCount < 0) ||
            ((unitCount == 0 && (*(uint *)(sheetOfs + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[uVar7] + 23))))) {
-          unitsSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-          unitCount = (int)*(uint32_t *)((uint)partyIndex << 2);
+          unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+          unitCount = (int)(uint32_t)GLeaderSheets[partyIndex];
           *(uint16_t *)(unitCount + 0x58) = 0;
           *(uint16_t *)(unitCount + 0x56) = 0;
         }
         else {
           uVar4 = *(uint *)((uint8_t *)&BuildingTypes[uVar7] + 23);
-          unitsSeg = (uint16_t)((ulong)*(uint32_t *)((uint)partyIndex << 2) >> 0x10);
-          unitCount = (int)*(uint32_t *)((uint)partyIndex << 2);
+          unitsSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
+          unitCount = (int)(uint32_t)GLeaderSheets[partyIndex];
           puVar1 = (uint *)(unitCount + 0x56);
           uVar3 = *puVar1;
           *puVar1 = *puVar1 - uVar4;
@@ -4676,7 +4676,7 @@ void __cdecl16far ovc22_usesRandBelow2(byte partyIndex,uint16_t outFlag,uint16_t
                  partyIndex,unaff_SI,(char)y,(char)outFlag,(char)outFlagSeg);
     }
   }
-  if (*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x3f) == '\0') {
+  if (*(char *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x3f) == '\0') {
     if ((GLeaderSheets[partyIndex])->housing <
         (GLeaderSheets[partyIndex])->population) {
       ovr_ovc18_textTypeLen(partyIndex,x,y,0x1,(char)x,(char)y);
