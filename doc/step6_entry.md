@@ -10434,3 +10434,34 @@ the pattern is always `off = index * sizeof(rec)` followed by `*(T *)(off + fiel
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### ovc22_usesEntities3: party sheet near table read (39,078 -> 39,071)
+ovc22_usesEntities3: the party sheet was read as a near table (39,078 -> 39,071)
+
+    gdataPtr = *(uint32_t *)((uint)bVar2 << 2);
+    if ((*(int *)((int)gdataPtr + budgetIdx * 2 + 0x76) != 0) ...
+    budgetPtr = (int *)((int)gdataPtr + budgetIdx * 2 + 0x76);
+
+`bVar2` at that point is the party slot (entity record byte 3) and `0x76` is
+`char_sheet_t.ringBudget[0]` in the layout that `flags5d` (+0x5d) already pinned - so the table
+is `GLeaderSheets`, the DGROUP array of far pointers, and the near read at DS:slot*4 was reading
+our own DGROUP.
+
+    sheet = GLeaderSheets[slot];
+    if (((int)sheet->ringBudget[(uint)budgetIdx] != 0) ...
+    budgetPtr = (int far *)&sheet->ringBudget[(uint)budgetIdx];
+
+`budgetPtr` becomes an `int far *` because the target really is in the sheet's segment.
+`bVar2` had two roles and is split: `slot` (the party slot) and `gidx` (`base.gindex`).
+
+Verified in the emitted listing:
+
+    les  bx,dword ptr [bp-8]          ; GLeaderSheets[slot] cached on the stack
+    add  bx,ax
+    cmp  word ptr es:[bx+118],0       ; ringBudget[0] at 0x76, read through ES
+
+`les` sites: 1, GLeaderSheets references: 2.
+
+  grep_checks 39,078 -> 39,071; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different

@@ -2951,9 +2951,10 @@ void __cdecl16far ovc22_usesEntities2(int entityIndex)
 void __cdecl16far ovc22_usesEntities3(int entityIndex)
 
 {
-  int *budgetPtr;
-  byte bVar2;
-  uint32_t gdataPtr;
+  int far *budgetPtr;
+  char_sheet_t far *sheet;
+  byte slot;
+  byte gidx;
   byte dirLevel;
   char innerDir;
   uint16_t entSeg;
@@ -2963,24 +2964,23 @@ void __cdecl16far ovc22_usesEntities3(int entityIndex)
   entSeg = (uint16_t)((ulong)Entities >> 0x10);
   if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) != -1) {
     dirLevel = ovr_agnt_compute10((agnt_t far *)((uint8_t *)&((entity_t *)Entities)[entityIndex]),entSeg);
-    bVar2 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+    slot = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
     for (budgetIdx = '\0'; budgetIdx < '\x04'; budgetIdx = budgetIdx + '\x01') {
-      gdataPtr = *(uint32_t *)((uint)bVar2 << 2);
-      if ((*(int *)((int)gdataPtr + budgetIdx * 2 + 0x76) != 0) && ((int)(char)dirLevel < budgetIdx + 1)) {
+      sheet = GLeaderSheets[slot];
+      if (((int)sheet->ringBudget[(uint)budgetIdx] != 0) && ((int)(char)dirLevel < budgetIdx + 1)) {
         chosenIdx = budgetIdx;
-        gdataPtr = *(uint32_t *)((uint)bVar2 << 2);
-        budgetPtr = (int *)((int)gdataPtr + budgetIdx * 2 + 0x76);
+        budgetPtr = (int far *)&sheet->ringBudget[(uint)budgetIdx];
         *budgetPtr = *budgetPtr + -1;
         entSeg = (uint16_t)((ulong)Entities >> 0x10);
         ((entity_t *)Entities)[entityIndex].dir =
              ((entity_t *)Entities)[entityIndex].dir +
              (char)(((ulong)((entity_t *)Entities)[entityIndex].dir / 6) % 6) * -6;
-        bVar2 = ((entity_t *)Entities)[entityIndex].base.gindex;
-        if ((AgntGs[(uint)bVar2].shortName[3] == '\x03') &&
+        gidx = ((entity_t *)Entities)[entityIndex].base.gindex;
+        if ((AgntGs[(uint)gidx].shortName[3] == '\x03') &&
            ('\x01' < budgetIdx)) {
           chosenIdx = '\x01';
         }
-        if ((AgntGs[(uint)bVar2].shortName[3] == '\x01') &&
+        if ((AgntGs[(uint)gidx].shortName[3] == '\x01') &&
            ('\x02' < chosenIdx)) {
           chosenIdx = '\x02';
         }
