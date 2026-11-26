@@ -13428,3 +13428,28 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### manage_applyUnitFilter: three names, one two-phase (36,905 -> 36,871)
+manage_applyUnitFilter: three names, one two-phase (36,905 -> 36,871)
+
+  pcVar1  3736, 3741, 3754, 3759   ovr_ovc22_className's result,
+                                   passed to stsprintf               -> className (4)
+  pcVar1  3738, 3742, 3747, 3750,
+          3756, 3760               ovr_stsprintf's result, passed
+                                   to ovr_say                        -> sayText   (6)
+  uVar2   3737, 3742, 3755, 3760   _DS, the ovr_say segment argument -> saySeg    (4)
+  uVar3   3735, 3741, 3746, 3750,
+          3753, 3759               savedSeed copied for stsprintf    -> seedCopy  (6)
+
+`className` is read on the *continuation* lines 3741 / 3759 of the two `ovr_stsprintf`
+calls, so a split keyed only on "the assignment line and the call line" would have missed
+half of it and left the argument reading the previous branch's `sayText`.  The per-line
+assertions caught nothing this time because the lines were enumerated explicitly, but that
+is exactly the shape of the mistake that hit ovc27_spellHalfDamage.
+
+No expression changed.
+
+  grep_checks 36,905 -> 36,871; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
