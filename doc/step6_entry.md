@@ -8672,3 +8672,42 @@ Still outstanding by the same grep: 34 lines tree-wide, but with index expressio
   grep_checks 40,045 (unchanged - these are not section-5 patterns)
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
+
+### Nine more GLeaderSheets sites (panelIdx, leaderIdx, partySlot)
+nine more GLeaderSheets sites: panelIdx, leaderIdx and the partySlot expression
+
+The 34 remaining `uint32_t *)(... << 2)` lines were grouped by index expression.  Twelve are party-slot
+lookups in one of three spellings, and five of those files already use `GLeaderSheets` nearby:
+
+  panelIdx     2  ovc13_panel.c      (line 310-312 already read (GLeaderSheets[panelIdx])->active/x/y)
+  leaderIdx    6  ovc15_sprite.c 2, ovc21_manage.c 2, ovc24_entities.c 2
+  partySlot    2  ovc14_attact.c 1, ovc16_saveui.c 1
+                 *(uint32_t *)((uint)*(byte *)((int)&(peVar14->base).entity + 3) << 2)
+
+Converted, base and far field dereference:
+
+  ovc13_panel.c    2 base, 2 deref
+  ovc15_sprite.c   2 base, 2 deref
+  ovc21_manage.c   2 base, 1 deref
+  ovc24_entities.c 2 base, 2 deref
+  ovc14_attact.c   1 base, 0 deref        (the partySlot spelling)
+
+ovc16_saveui.c's partySlot site was NOT touched: that file contains no reference to GLeaderSheets at all,
+so the table there is not confirmed and would need its own disassembly check.
+
+Result in ovc13_panel.c, where the surrounding lines make it self-evident:
+
+  310  if ((GLeaderSheets[panelIdx])->active != '\0') {
+  311    leaderX = (GLeaderSheets[panelIdx])->x;
+  313    if ((((*((char far *)GLeaderSheets[panelIdx] + 0x3f) == '\0') ||
+
+i.e. line 313 now reads the same sheet the two lines above it use, instead of DS offset panelIdx*4.
+
+Not converted for lack of confirmation: `menuEnabled` (ovc14_attact.c 1) and `unitType`
+(ovc13_panel.c 1) index different tables, and the ~500 remaining `uint32_t *)(` expressions in the tree
+use other index expressions entirely - a much larger family than the party-slot one, and each needs its
+own base identified.
+
+  grep_checks 40,045 (unchanged - not section-5 patterns)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry

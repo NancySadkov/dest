@@ -799,7 +799,7 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
   if (*(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f) == '\0') {
     for (leaderIdx = 0; leaderIdx < GLeaderCount; leaderIdx = leaderIdx + 1) {
       if ((((GLeaderSheets[leaderIdx])->active != '\0') &&
-          (*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3f) ==
+          (*((char far *)GLeaderSheets[leaderIdx] + 0x3f) ==
            *(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f))) &&
          (uVar1 = (GLeaderSheets[leaderIdx])->x -
                   (GLeaderSheets[leaderIndex])->x,
@@ -816,7 +816,7 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
   else {
     for (leaderIdx = 0; leaderIdx < GLeaderCount; leaderIdx = leaderIdx + 1) {
       if ((((GLeaderSheets[leaderIdx])->active != '\0') &&
-          (*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3f) == '\0')) &&
+          (*((char far *)GLeaderSheets[leaderIdx] + 0x3f) == '\0')) &&
          (uVar1 = (GLeaderSheets[leaderIdx])->x -
                   (GLeaderSheets[leaderIndex])->x,
          uVar4 = (int)uVar1 >> 0xf,

@@ -903,7 +903,7 @@ L_attact_3f0b_1082_1477:
           defByte = 0xff;
         }
         else {
-          uVar3 = *(uint32_t *)((uint)*(byte *)((int)&(peVar14->base).entity + 3) << 2);
+          uVar3 = (uint32_t)GLeaderSheets[*(byte *)((int)&(peVar14->base).entity + 3)];
           defByte = *(byte *)((int)uVar3 + 0x89);
         }
         if (defByte != 0xff) {

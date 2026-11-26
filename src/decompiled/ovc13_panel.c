@@ -310,7 +310,7 @@ void __cdecl16far ovc13_drawPanelLeaders(void)
     if ((GLeaderSheets[panelIdx])->active != '\0') {
       leaderX = (GLeaderSheets[panelIdx])->x;
       leaderY = (GLeaderSheets[panelIdx])->y;
-      if ((((*(char *)((int)*(uint32_t *)((uint)panelIdx << 2) + 0x3f) == '\0') ||
+      if ((((*((char far *)GLeaderSheets[panelIdx] + 0x3f) == '\0') ||
            (DebugVerbose != false)) ||
           (((*(short (*) [60] [148])GMapFlags)[leaderY][leaderX] & 8U) != 0)) &&
          (((PanelGridX <= leaderX && (leaderX <= PanelGridX + 0x22)) &&
@@ -783,7 +783,7 @@ void __cdecl16far ovc13_drawPanelHighlight(void)
       if ((GLeaderSheets[panelIdx])->active != '\0') {
         leaderX = (GLeaderSheets[panelIdx])->x;
         leaderY = (GLeaderSheets[panelIdx])->y;
-        if ((((*(char *)((int)*(uint32_t *)((uint)panelIdx << 2) + 0x3f) == '\0') ||
+        if ((((*((char far *)GLeaderSheets[panelIdx] + 0x3f) == '\0') ||
              (DebugVerbose != false)) ||
             (((*(short (*) [60] [148])GMapFlags)[leaderY][leaderX] & 8U) != 0)) &&
            (((Seed_2000_d110 <= (int)leaderX && (leaderX <= Seed_2000_d110 + 0x69U)) &&

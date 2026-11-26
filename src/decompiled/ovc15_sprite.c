@@ -2160,12 +2160,12 @@ uint __cdecl16far ovc15_usesRandBelow2(void)
   bestActiveCount = 0;
   activeLeader = 0xff;
   for (leaderIdx = 0; leaderIdx < GLeaderCount; leaderIdx = leaderIdx + 1) {
-    if ((*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3f) == '\0') &&
+    if ((*((char far *)GLeaderSheets[leaderIdx] + 0x3f) == '\0') &&
        (bestOwnCount < (GLeaderSheets[leaderIdx])->unitCount)) {
       ownLeader = leaderIdx;
       bestOwnCount = (GLeaderSheets[leaderIdx])->unitCount;
     }
-    if ((*(char *)((int)*(uint32_t *)((uint)leaderIdx << 2) + 0x3f) != '\0') &&
+    if ((*((char far *)GLeaderSheets[leaderIdx] + 0x3f) != '\0') &&
        (bestActiveCount < (GLeaderSheets[leaderIdx])->unitCount)) {
       activeLeader = leaderIdx;
       bestActiveCount = (GLeaderSheets[leaderIdx])->unitCount;
