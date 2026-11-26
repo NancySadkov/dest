@@ -10950,3 +10950,55 @@ string symbols align.  That needs its own measurement.
   grep_checks 38,916 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 runs, sum|delta| 3,223,256)
   compare_runtime 1,577 identical / 10 different
+
+### DGROUP: C0 header and arrays put in the original order (sum|delta| 3.22M -> 0.41M)
+DGROUP: put the C0 header block and the arrays in the original's order (sum|delta| 3,223,256 -> 411,815)
+
+The +2,405 that `diff_dgroup` reported at `s__2410_0094` was a declaration-order
+problem, not missing data.  Measured against `audit/symbols.tsv` and the map:
+
+  * the original's game data starts at DGROUP:0x0094, immediately after its C0
+    header block, which is at
+        _DATA 0x0000, __C0_ASM_CopyRight 0x0004, s_divide_error 0x002f,
+        s_abnormal_program_termination 0x003d, GSTARTX_SavedVectors 0x005b,
+        __C0argc 0x006b ... DosVersion 0x007d;
+  * our image had nothing at 0x0004 at all - the only copy of that block was in
+    st_globals4.c at 0x97e, i.e. *after* the arrays and just before the strings;
+  * StshNames, GLeaderSheets, MiceSaveBuf, ovrAuxSlot, s_vdisk_fake,
+    miceHandlerStack and GfxRndBytes appear NOWHERE in the original DGROUP.
+    They are ours, and ours sat in front of the strings.
+
+Two moves, both symbol-preserving (nothing references these by address):
+
+  1. the 14-declaration C0 header block -> top of st_globals.c (after the includes,
+     so the types exist); it now lands at 0xC6 instead of 0x97E;
+  2. StshNames (1,088 B), GLeaderSheets (320 B), MiceSaveBuf (289 B),
+     ovrAuxSlot, s_vdisk_fake, miceHandlerStack (256 B) and GfxRndBytes (256 B)
+     -> end of st_globals9.c.
+
+MEASURED (fresh dump, HEAD 1bccc5a2 -> this commit)
+
+                                     before        after
+  grep_checks                        38,916        38,916
+  compare_state                   1,627/0/0     1,627/0/0
+  diff_dgroup matched                1,449         1,449
+  diff_dgroup delta runs                74            72     (-2)
+  diff_dgroup sum|delta|         3,223,256       411,815     (-2,811,441; mean 2224 -> 284)
+  compare_runtime symbols matched    1,587         1,587
+  compare_runtime identical state    1,577         1,577
+  compare_runtime DIFFERENT state       10            10
+
+The offset profile now tracks the original instead of drifting:
+
+  before:  +2405 at 0x0094, +2355 at 0x4f8f, +2386 at 0x1e1d ...
+  after:    +182 at 0x0094,  +138 at 0x291e, +147 at 0x1f0c ...
+
+i.e. the mean per-symbol offset error is down from 2,224 bytes (12% of a 32 KiB
+region) to 284 bytes (1.5%).  The residual +182 is the C0 block itself: C0M.OBJ's
+startup scalars (_StartTime, _brklvl, _heaptop) are linked before GLOB.OBJ's data,
+while the original puts the C0 header block first; changing that means moving the
+block into the CRT object, which AGENTS.md treats as supplied-by-toolchain.
+
+  grep_checks 38,916 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (72 runs, sum|delta| 411,815)
+  compare_runtime 1,577 identical / 10 different
