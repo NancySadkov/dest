@@ -12105,3 +12105,41 @@ font_usesMiceBlitRect: result, blit flag and three temporaries (37,766 -> 37,743
   grep_checks 37,766 -> 37,743; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
   compare_runtime 1,605 identical / 10 different
+
+### ovc27_usesRandBelow3: four multi-role locals split (37,743 -> 37,707)
+ovc27_usesRandBelow3: split the four multi-role locals (37,743 -> 37,707)
+
+  bVar1     *(uint8_t far *)(entity + 0xf)          -> entityLevel  (4)
+  bVar5     (byte)(result >> 8)                     -> retHi        (8)
+  uVar3     *(byte far *)(rec + 0x13)               -> flagsMask    (2)
+  uVar3     *(uint far *)(rec + 0x15/0x19/0x1d/0x1f/0x11) -> mask   (6)
+  uVar3     *(byte far *)(rec + 0x14)               -> maskByte     (3)
+  uVar4     CONCAT11(retHi,entityLevel)             -> packed       (1)
+  uVar4     ovr_randBelow(100,0) result             -> roll         (3)
+
+`paVar7 = (agnt_t far *)agnt;` was a no-op cast of a parameter that is already
+`agnt_t far *`: the declaration and the assignment are removed and its five uses go
+through `agnt`.
+
+Two of the split boundaries had to be checked by hand rather than by the expression on
+the line.  The automatic rule keyed on `rec + 0x13` / `rec + 0x14`, but the two reads
+that *use* those values sit on later lines:
+
+    flagsMask = (uint)*(byte far *)(rec + 0x13);
+    if ((*(uint far *)(entity + 0x14) & flagsMask) == 0)        <- was left as `mask`
+
+    (maskByte = (uint)*(byte far *)(rec + 0x14),
+     (*(uint far *)(entity + 0x14) & maskByte) != 0) ...
+    retHi = (byte)(maskByte >> 8);                              <- was left as `mask`
+
+Leaving them as `mask` would have read an uninitialised local, so both are corrected to
+the variable that was just assigned.  The `>> 8` is faithful to the export: the operand
+is a byte, so `retHi` is 0 on that path, exactly as before the split.
+
+VERIFIED in the listing: 475 instructions, 39 `les` sites, and every record read is
+ES-relative - es:[reg+8] (level marker), +9 (class index), +0xd/+0xe (level and roll
+threshold), +0xf, +0x11, +0x13, +0x14, +0x15, +0x17, +0x19, +0x1b, +0x1d, +0x1f.
+
+  grep_checks 37,743 -> 37,707; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different

@@ -273,14 +273,16 @@ int __cdecl16far ovc27_rollAgainstStat(agnt_t far *agnt,byte mode,uint16_t arg3,
 uint __cdecl16far ovc27_usesRandBelow3(agnt_t far *agnt,uint32_t reqRecord,int agntIndex)
 
 {
-  byte bVar1;
+  byte entityLevel;
   uint result;
-  byte bVar5;
-  uint uVar3;
-  uint16_t uVar4;
+  byte retHi;
+  uint flagsMask;
+  uint mask;
+  uint maskByte;
+  uint16_t packed;
+  uint16_t roll;
   far_t reqFar;
   uint8_t far *rec;
-  agnt_t far *paVar7;
   far_t dst;
   far_t dst_00;
   uint8_t reqLevel2;
@@ -294,75 +296,74 @@ uint __cdecl16far ovc27_usesRandBelow3(agnt_t far *agnt,uint32_t reqRecord,int a
   F_SCOPY(far_from_u32((uint32_t)(0x241059b4)),dst_00,11);
   reqFar = far_from_u32(reqRecord);
   rec = (uint8_t far *)MK_FP(reqFar.seg,reqFar.ofs);
-  paVar7 = (agnt_t far *)agnt;
   if (*(char far *)(rec + 8) == '\0') {
-    if ((((agntG_t far *)paVar7->gdata)->flags & 2) == 0) {
+    if ((((agntG_t far *)agnt->gdata)->flags & 2) == 0) {
       return result & 0xff00;
     }
-    if ((((entity_t *)paVar7->entity)->base).level < (&reqLevel1)[*(byte far *)(rec + 9)]) {
+    if ((((entity_t *)agnt->entity)->base).level < (&reqLevel1)[*(byte far *)(rec + 9)]) {
       return (uint)(&reqLevel1 + *(byte far *)(rec + 9)) & 0xff00;
     }
   }
   else {
-    bVar5 = (byte)(result >> 8);
+    retHi = (byte)(result >> 8);
     if (*(char far *)(rec + 8) == '\x01') {
-      if ((((agntG_t far *)paVar7->gdata)->flags & 1) == 0) {
-        return (uint)bVar5 << 8;
+      if ((((agntG_t far *)agnt->gdata)->flags & 1) == 0) {
+        return (uint)retHi << 8;
       }
-      if ((((entity_t *)paVar7->entity)->base).level < (&reqLevel2)[*(byte far *)(rec + 9)]) {
+      if ((((entity_t *)agnt->entity)->base).level < (&reqLevel2)[*(byte far *)(rec + 9)]) {
         return (uint)(&reqLevel2 + *(byte far *)(rec + 9)) & 0xff00;
       }
     }
-    else if ((*(char far *)(rec + 8) == '\x02') && ((((agntG_t far *)paVar7->gdata)->flags & 0x800) == 0))
+    else if ((*(char far *)(rec + 8) == '\x02') && ((((agntG_t far *)agnt->gdata)->flags & 0x800) == 0))
     {
-      return (uint)bVar5 << 8;
+      return (uint)retHi << 8;
     }
   }
   if ((Agnts[agntIndex].gdata->flags & *(uint far *)(rec + 0x15)) == 0) {
     if ((Agnts[agntIndex].gdata->flags2 & *(uint far *)(rec + 0x19)) == 0) {
       if ((Agnts[agntIndex].gdata->flags3 & *(uint far *)(rec + 0x1d)) == 0) {
         if (((uint)Agnts[agntIndex].flags & *(uint far *)(rec + 0xf)) == 0) {
-          uVar3 = (uint)*(byte far *)(rec + 0x13);
-          if ((*(uint far *)((uint8_t far *)Agnts[agntIndex].entity + 0x14) & uVar3) == 0) {
+          flagsMask = (uint)*(byte far *)(rec + 0x13);
+          if ((*(uint far *)((uint8_t far *)Agnts[agntIndex].entity + 0x14) & flagsMask) == 0) {
             if ((*(int far *)(rec + 0x17) != 0) &&
-               (uVar3 = *(uint far *)(rec + 0x17),
-               (Agnts[agntIndex].gdata->flags & uVar3) == 0)) {
-              return uVar3 & 0xff00;
+               (mask = *(uint far *)(rec + 0x17),
+               (Agnts[agntIndex].gdata->flags & mask) == 0)) {
+              return mask & 0xff00;
             }
             if ((*(int far *)(rec + 0x1b) != 0) &&
-               (uVar3 = *(uint far *)(rec + 0x1b),
-               (Agnts[agntIndex].gdata->flags2 & uVar3) == 0)) {
-              return uVar3 & 0xff00;
+               (mask = *(uint far *)(rec + 0x1b),
+               (Agnts[agntIndex].gdata->flags2 & mask) == 0)) {
+              return mask & 0xff00;
             }
             if ((*(int far *)(rec + 0x1f) != 0) &&
-               (uVar3 = *(uint far *)(rec + 0x1f),
-               (Agnts[agntIndex].gdata->flags3 & uVar3) == 0)) {
-              return uVar3 & 0xff00;
+               (mask = *(uint far *)(rec + 0x1f),
+               (Agnts[agntIndex].gdata->flags3 & mask) == 0)) {
+              return mask & 0xff00;
             }
             if ((*(int far *)(rec + 0x11) != 0) &&
-               (uVar3 = *(uint far *)(rec + 0x11), ((uint)Agnts[agntIndex].flags & uVar3) == 0)) {
-              return uVar3 & 0xff00;
+               (mask = *(uint far *)(rec + 0x11), ((uint)Agnts[agntIndex].flags & mask) == 0)) {
+              return mask & 0xff00;
             }
             if ((*(char far *)(rec + 0x14) == '\0') ||
-               (uVar3 = (uint)*(byte far *)(rec + 0x14),
-               (*(uint far *)((uint8_t far *)Agnts[agntIndex].entity + 0x14) & uVar3) != 0)) {
-              bVar5 = (byte)(uVar3 >> 8);
+               (maskByte = (uint)*(byte far *)(rec + 0x14),
+               (*(uint far *)((uint8_t far *)Agnts[agntIndex].entity + 0x14) & maskByte) != 0)) {
+              retHi = (byte)(maskByte >> 8);
               if ((*(char far *)(rec + 0xc) == '\0') || (Agnts[agntIndex].animVariant == '\0')) {
-                bVar1 = *(uint8_t far *)((uint8_t far *)Agnts[agntIndex].entity + 0xf);
-                uVar4 = CONCAT11(bVar5,bVar1);
-                if (bVar1 < *(byte far *)(rec + 0xe)) {
+                entityLevel = *(uint8_t far *)((uint8_t far *)Agnts[agntIndex].entity + 0xf);
+                packed = CONCAT11(retHi,entityLevel);
+                if (entityLevel < *(byte far *)(rec + 0xe)) {
                   if ((*(byte far *)(rec + 0xd) < 100) &&
-                     (uVar4 = ovr_randBelow(100,0), *(byte far *)(rec + 0xd) <= (byte)uVar4)) {
-                    return uVar4 & 0xff00;
+                     (roll = ovr_randBelow(100,0), *(byte far *)(rec + 0xd) <= (byte)roll)) {
+                    return roll & 0xff00;
                   }
-                  result = CONCAT11((char)(uVar4 >> 8),1);
+                  result = CONCAT11((char)(packed >> 8),1);
                 }
                 else {
-                  result = (uint)bVar5 << 8;
+                  result = (uint)retHi << 8;
                 }
               }
               else {
-                result = (uint)bVar5 << 8;
+                result = (uint)retHi << 8;
               }
             }
             else {
