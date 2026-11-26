@@ -10551,3 +10551,43 @@ Also the four agent-record reads that went through `uVar2 = agntIndex * 0x34`:
   grep_checks 39,071 -> 39,044; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### ovc27_compute3: 21 view-record accesses, and why 0x95 was left
+ovc27_compute3: 21 view-record accesses restored (39,044 -> 39,042)
+
+    viewIdx = (int)view;                  /* `view` is a far pointer held in a uint32_t */
+    ... *(char *)(viewIdx + 0xf) / *(byte *)(viewIdx + 0x31) / *(uint16_t *)(viewIdx + 0x12) ...
+
+Sixteen reads and five writes went to DGROUP at that offset.  Now:
+
+    viewFar = far_from_u32(view);
+    viewRec = (uint8_t far *)MK_FP(viewFar.seg,viewFar.ofs);
+    ... *(char far *)(viewRec + 0xf) ...
+
+`uVar6 = view >> 0x10` was the segment half, assigned and never read - removed.
+
+Verified in the emitted listing - `les` sites 11, and the record is read through ES:
+
+    les  bx,dword ptr [bp-12]
+    cmp  byte ptr es:[bx+15],0        ; frames count at 0xf
+
+es:[bx+15] x6, es:[bx+49] (0x31) x6, es:[bx+50] (0x32) x5, es:[bx+13] (0xd) x1.
+
+ABOUT THE 0x95 / 0x94 STRIDE the objective named.  I inspected all three sites and did not
+change them, because they are not the same table and neither is safe to name:
+
+  * ovc23_bldrec.c 539/546/573/574/580/583/613 - `*(uint16_t *)((int)&worldMenuLabels[1].ofs
+    + 1 + gindex * 0x95)`.  That adds to the ADDRESS of a far_t field, so it is string-table
+    arithmetic inside worldMenuLabels, not a record layout; the 0x95 stride does not correspond
+    to any record in the tree.
+  * ovc22_classes.c 3878-3884 (upd_usesAlignUp4) - the same worldMenuLabels expression.
+  * ovc22_classes.c 1664-1666 in ovc27_compute3 - `iVar4 = * 0x94 + ...` then
+    `*(uint16_t *)(iVar4 + -2)` / `(-4)`, i.e. the [class][37] table at segment 0x80 that was
+    measured as read-only and unnamed earlier.
+
+Guessing a base symbol for any of these would be the kind of change this session has had to
+revert before, so they are recorded rather than "fixed".
+
+  grep_checks 39,044 -> 39,042; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different

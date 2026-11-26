@@ -1622,50 +1622,50 @@ uint16_t __cdecl16far ovc27_compute3(uint32_t view,char frames)
   uint16_t uVar2;
   byte bVar3;
   int iVar4;
-  int viewIdx;
-  uint16_t uVar6;
+  far_t viewFar;
+  uint8_t far *viewRec;
   bool bVar7;
   byte bStack_6;
   uint uStack_4;
   
   uStack_4 = 0;
   while( true ) {
-    viewIdx = (int)view;
-    uVar6 = (uint16_t)(view >> 0x10);
-    if ((frames == '\0') || (*(char *)(viewIdx + 0xf) == '\0')) break;
+    viewFar = far_from_u32(view);
+    viewRec = (uint8_t far *)MK_FP(viewFar.seg,viewFar.ofs);
+    if ((frames == '\0') || (*(char far *)(viewRec + 0xf) == '\0')) break;
     bVar3 = ovr_ovc15_textView(view);
     uStack_4 = uStack_4 + bVar3;
-    *(char *)(viewIdx + 0xf) = *(char *)(viewIdx + 0xf) + -1;
+    *(char far *)(viewRec + 0xf) = *(char far *)(viewRec + 0xf) + -1;
     frames = frames + -1;
   }
-  bVar7 = *(char *)(viewIdx + 0xf) == '\0';
+  bVar7 = *(char far *)(viewRec + 0xf) == '\0';
   if (bVar7) {
-    *(undefined1 *)(viewIdx + 0xf) = 1;
+    *(undefined1 far *)(viewRec + 0xf) = 1;
   }
-  if (uStack_4 < *(byte *)(viewIdx + 0x32)) {
-    *(char *)(viewIdx + 0x32) = *(char *)(viewIdx + 0x32) - (char)uStack_4;
-  }
-  else {
-    *(undefined1 *)(viewIdx + 0x32) = 1;
-  }
-  if (uStack_4 < *(byte *)(viewIdx + 0x31)) {
-    *(char *)(viewIdx + 0x31) = *(char *)(viewIdx + 0x31) - (char)uStack_4;
+  if (uStack_4 < *(byte far *)(viewRec + 0x32)) {
+    *(char far *)(viewRec + 0x32) = *(char far *)(viewRec + 0x32) - (char)uStack_4;
   }
   else {
-    *(undefined1 *)(viewIdx + 0x31) = 1;
+    *(undefined1 far *)(viewRec + 0x32) = 1;
   }
-  if (*(byte *)(viewIdx + 0x32) < *(byte *)(viewIdx + 0x31)) {
-    *(undefined1 *)(viewIdx + 0x31) = *(undefined1 *)(viewIdx + 0x32);
+  if (uStack_4 < *(byte far *)(viewRec + 0x31)) {
+    *(char far *)(viewRec + 0x31) = *(char far *)(viewRec + 0x31) - (char)uStack_4;
   }
-  bStack_6 = AgntGs[(uint)*(byte *)(viewIdx + 0xd)].shortName[3];
+  else {
+    *(undefined1 far *)(viewRec + 0x31) = 1;
+  }
+  if (*(byte far *)(viewRec + 0x32) < *(byte far *)(viewRec + 0x31)) {
+    *(undefined1 far *)(viewRec + 0x31) = *(undefined1 far *)(viewRec + 0x32);
+  }
+  bStack_6 = AgntGs[(uint)*(byte far *)(viewRec + 0xd)].shortName[3];
   if (bStack_6 == 0xff) {
     bStack_6 = 0;
   }
-  iVar4 = (uint)bStack_6 * 0x94 + (uint)*(byte *)(viewIdx + 0xf) * 4;
+  iVar4 = (uint)bStack_6 * 0x94 + (uint)*(byte far *)(viewRec + 0xf) * 4;
   uVar1 = *(uint16_t *)(iVar4 + -2);
   uVar2 = *(uint16_t *)(iVar4 + -4);
-  *(uint16_t *)(viewIdx + 0x12) = uVar1;
-  *(uint16_t *)(viewIdx + 0x10) = uVar2;
+  *(uint16_t far *)(viewRec + 0x12) = uVar1;
+  *(uint16_t far *)(viewRec + 0x10) = uVar2;
   return CONCAT11((char)((uint)uVar1 >> 8),bVar7);
 }
 
