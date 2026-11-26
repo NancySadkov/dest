@@ -1695,7 +1695,6 @@ char s_this_location_is_unsuita_1464[] = "This location is unsuitable for buildi
 char s_it_will_cost_s_the_s_d_gp[] = " It will cost %s the %s %d gp. ";
 char s_place[] = "Place";
 char s_change_building[] = "Change Building";
-char s_change_party[] = "Change Party";
 char s_party_member_s_doesn_t_h_25d2[] = "Party member %s doesn't have enough gold to construct a %s.";
 char s_too_many_construction_sites[] = "Too many construction sites.";
 char s_excavate[] = "Excavate";
@@ -1767,11 +1766,12 @@ undefined s__s___s__d_gold_2410_805a[16] = { 0x25, 0x73, 0x3A, 0x20, 0x25, 0x73,
 char s_salvage[] = "Salvage";
 char s_demolish[] = "Demolish";
 char s_repair[] = "Repair";
+char s_Repair_costs_2410_809a[21] = " Repair costs %d gp.";
 char s_upgrade[] = "Upgrade";
+char s_Upgrade_costs_2410_80b7[22] = " Upgrade costs %d gp.";
 char s_information[] = "Information";
 char s_new_owner[] = "New Owner";
-char s_get_rid_of_s_permanently_1c0b[] = "Get rid of %s permanently. Are you sure?";
-char s_ld_experience_obtained_l_a1d8[] = "%ld experience obtained. %ld experience given to each unit. %ld gold recovered.";
+char s_change_party[] = "Change Party";
 /* GTxtFiles' file names, recovered from the original DGROUP at 0x82B4..0x8417
    (the original stores them in 10- or 11-byte slots).  Uniform rows of 11 keep
    the addressing simple; each row is one NUL-terminated name. */

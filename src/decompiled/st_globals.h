@@ -1746,8 +1746,8 @@ extern char s_repair[];
 extern char s_upgrade[];
 extern char s_information[];
 extern char s_new_owner[];
-extern char s_get_rid_of_s_permanently_1c0b[];
-extern char s_ld_experience_obtained_l_a1d8[];
+
+
 extern far_t GTxtFiles[34];
 
 extern brect_t agentClipRect;
@@ -2340,3 +2340,7 @@ extern char s_cflow2_txt_2410_83eb[11];
 extern char s_cflow3_txt_2410_83f6[11];
 extern char s_cflow4_txt_2410_8401[11];
 extern char s_cflow5_txt_2410_840c[11];
+
+/* repair/upgrade cost lines */
+extern char s_Repair_costs_2410_809a[];
+extern char s_Upgrade_costs_2410_80b7[];

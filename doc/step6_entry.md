@@ -14484,3 +14484,40 @@ Moving the block to after `s_ld_experience_ob_2410_81dc` cuts that step to +108 
 The remaining +108 at 0x80f0 is the two " Repair costs %d gp." (21) / " Upgrade costs %d gp."
 (22) strings plus s_change_party, which follow s_new_owner in the original but are absent from
 our layout; that is the next identifiable gap in this band.
+
+### layout: +108 step at 0x80f0 closed (runs 44 -> 42)
+layout: close the +108 step at 0x80f0 (runs 44 -> 42, matched 1,615 -> 1,617)
+
+Two duplicate declarations and three missing strings, all in the 0x8080..0x80f0 band:
+
+    removed  s_get_rid_of_s_permanently_1c0b   41   duplicate of s_get_rid_of_s_per_2410_811f
+    removed  s_ld_experience_obtained_l_a1d8   80   duplicate of s_ld_experience_ob_2410_81dc
+    added    s_Repair_costs_2410_809a          21   " Repair costs %d gp."
+    added    s_Upgrade_costs_2410_80b7         22   " Upgrade costs %d gp."
+    moved    s_change_party                    13   "Change Party" (0x80e3), was declared at line
+                                                     1698 - far too early in the file
+
+41 + 80 - 13 = 108, which is exactly the step: the interval 0x80cd..0x80f0 held 12+10+41+80 =
+143 bytes where the original has 12+10+13 = 35.
+
+Neither duplicate was referenced by code (only by its own declaration and extern).
+
+MEASURED (HEAD 5c7689fd -> this commit)
+
+  diff_dgroup matched        1,615 -> 1,617
+  diff_dgroup runs              44 -> 42
+  diff_dgroup sum|delta|   209,477 -> 218,578
+  compare_runtime matched    1,666 -> 1,668
+  compare_runtime identical  1,657 -> 1,659
+  compare_state              1,627/0/0
+  grep_checks               35,737 (unchanged)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The profile from 0x808a onward is now a uniform -349 across 49 symbols instead of stepping
+between -24, -21, -22, +108 and +599.  That is the useful result: the remaining shortfall in
+this part of DGROUP is entirely UPSTREAM of 0x808a, i.e. the -155 step at 0x7e65 and the -47 at
+0x7aa5, and nothing in this band is misplaced any more.
+
+`sum|delta|` rose again because the two duplicate removals shortened our layout by 121 bytes in
+a region whose delta is already negative.  `matched` and `runs` are the honest measures of how
+much of the layout is verifiable; `sum|delta|` currently rewards leaving duplicates in place.
