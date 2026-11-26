@@ -603,7 +603,7 @@ extern char s_message_delay_is_now_d[];
 extern char s_decrease_message_delay[];
 extern char s_increase_message_delay[];
 extern char s_test[];
-extern char s_done[];
+extern char s_done_2410_6ab4[5];
 extern char s_change_message_delay[];
 extern char s_this_message_appears_at__ec7e[];
 extern char s_cancel[];
@@ -2373,3 +2373,7 @@ extern char s_adventure_2410_6d41[11];
 extern char s_of_adventure_2410_6d97[24];
 extern char s_s_for_valor_2410_6dce[25];
 extern char s_s_for_city_2410_6de7[25];
+
+/* 0x690b / 0x6a50 */
+extern char s_Building_is_now_2410_690b[46];
+extern char s_The_season_has_2410_6a50[30];

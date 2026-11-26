@@ -211,8 +211,6 @@ char s_absentBlob[] =
   "%d %s%s readied.\0"
   "%d %s%s homed.\0"
   "Region selection aborted.\0"
-  "Building is now %s.  Select type of building.\0"
-  "The season has changed to %s.\0"
   "kill 4\r"
   "\0"
   "Enemy %s.\0"

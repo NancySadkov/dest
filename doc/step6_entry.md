@@ -14817,3 +14817,54 @@ MEASURED (HEAD 9a420422 -> this commit)
 neighbours moved; the coverage measures (matched +4, runtime identical +4) both improved and the
 residual sum fell by 15,678, which is the honest direction.  The next band to scan is 0x6939..0x6d41,
 where the profile still steps by -46 at s_empty_2410_6939 and -30 at s_d_building_s_repaired.
+
+### layout: close the -46, -30 and -5 steps in 0x6939..0x6ab9
+layout: close the -46, -30 and -5 steps in 0x6939..0x6ab9
+
+Three causes, one per step:
+
+    0x690b  46  "Building is now %s.  Select type of building."
+                 (between s_armory at 0x6903 and s_empty_2410_6939 -> the -46 step)
+    0x6a50  30  "The season has changed to %s."
+                 (between the 34-byte summer string and s_d_building_s_repaired -> the -30 step)
+    0x6ab4   5  "Done"
+                 (between s_enemies and s_c_s_s_d -> the -5 step)
+
+The first two existed only as stmiss.c blob entries; they are declared in place and the blob
+entries removed, so the bytes are moved rather than duplicated.
+
+The third is a genuine misplacement rather than a missing object: we already had `s_done`, but it
+sat at DGROUP:0x280D, and its only code reference carried the address in its own comment -
+
+    menuItems[7].ofs = (uint16_t)s_done;        /* 0x6AB4 */
+
+so the comment was right and the declaration was wrong.  It is now `s_done_2410_6ab4` at its
+documented position, with ovc38_scores.c repointed.
+
+MEASURED (HEAD 490e28fc -> this commit)
+
+  diff_dgroup matched        1,628 -> 1,629
+  diff_dgroup runs              30 -> 31
+  diff_dgroup sum|delta|   177,701 -> 182,037   (+4,336)
+  compare_runtime matched    1,683 -> 1,685
+  compare_runtime identical  1,674 -> 1,676
+  compare_state              1,627/0/0
+  grep_checks               35,706 -> 35,708
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+HONEST READING: this is the trade-off the earlier entries kept running into.  Our DGROUP is
+still ~152 bytes too long before the first game symbol, so ADDING the 46 and 30 bytes the original
+has pushes an already-positive delta further positive, and sum|delta| rises even though the layout
+is now factually closer to the original.  `matched`, `runs` and the runtime comparison are the
+coverage measures, and two of the three improved; sum|delta| cannot improve again until the
+upstream surplus is removed.
+
+WHERE THE SURPLUS IS, now measured concretely.  Our DGROUP opens with a 116-byte `DATASEG`
+segment and then 54 bytes of C0 variables, with `_DATA` at 0x00aa; the original has `_DATA` at
+0x0000 with the same copyright/error strings inside its first 148 bytes.  Worse, the same strings
+appear TWICE in our image: once in `DATASEG` (copyright at 0x0004, "Divide error" as C0's private
+copy) and again in `_DATA` at 0x00ae (`__C0_ASM_COPYRIGHT`, the one crtl.c addresses).  That
+duplication plus the segment order is the ~152 bytes.  Removing it means either making `_DATA`
+precede `DATASEG` in the link (the earlier C0M-last attempt overflowed DGROUP to 65,076 bytes
+because it also pulled the far arrays in) or supplying our own startup data, which the objective
+records as needing a decision.

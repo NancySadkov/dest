@@ -170,7 +170,7 @@ void __cdecl16far ovc38_showAchievements(void)
     }
   }
   _fmemset(MK_FP(_SS, menuItems), 0, 0x28);
-  menuItems[7].ofs = (uint16_t)s_done;        /* 0x6AB4 */
+  menuItems[7].ofs = (uint16_t)s_done_2410_6ab4;        /* 0x6AB4 */
   menuItems[7].seg = (uint16_t)_DS;
   ovr_uiMenu(0, 0, (uint16_t)menuItems, (uint16_t)_SS, 8);
   ovc38_usesStshFree(block);
