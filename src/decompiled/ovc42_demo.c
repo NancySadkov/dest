@@ -58,10 +58,9 @@ uint16_t __cdecl16far ovc42_usesMiceBlitRect(byte timeoutTicks)
 
 {
   bool housingFlag;
-  undefined1 extraout_AH;
-  ulong *puVar2;
-  undefined1 uVar3;
-  uint16_t uVar4;
+  ulong *elapsed;
+  undefined1 resultHi;
+  uint16_t tickLo;
   ulong prevTick;
   
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
@@ -79,29 +78,28 @@ uint16_t __cdecl16far ovc42_usesMiceBlitRect(byte timeoutTicks)
     housingFlag = ovr_draw_textProvidesMoreHousing();
   } while (housingFlag);
   while( true ) {
-    uVar3 = (undefined1)(prevTick >> 0x18);
-    uVar4 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+    resultHi = (undefined1)(prevTick >> 0x18);
+    tickLo = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
     if ((*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != InputEventTime.hi) ||
-       (uVar4 != InputEventTime.lo)) {
+       (tickLo != InputEventTime.lo)) {
       InputEventTime.hi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-      uVar4 = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
-      InputEventTime.lo = uVar4;
+      tickLo = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
+      InputEventTime.lo = tickLo;
       ovr_draw_usesPrintf();
     }
     housingFlag = ovr_draw_textProvidesMoreHousing();
-    puVar2 = (ulong *)CONCAT11(extraout_AH,housingFlag);
-    prevTick = (ulong)CONCAT11(uVar3,housingFlag) << 0x10;
+    prevTick = (ulong)CONCAT11(resultHi,housingFlag) << 0x10;
     if (housingFlag) break;
-    prevTick = CONCAT22(CONCAT11(uVar3,housingFlag),(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));
-    puVar2 = ovr_attact_usesBDADailyTimeCounter((ulong *)TextBlitCycle,prevTick,0);
-    if ((uVar4 != 0) || ((ulong *)(uint)timeoutTicks <= puVar2)) break;
+    prevTick = CONCAT22(CONCAT11(resultHi,housingFlag),(*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)));
+    elapsed = ovr_attact_usesBDADailyTimeCounter((ulong *)TextBlitCycle,prevTick,0);
+    if ((tickLo != 0) || ((ulong *)(uint)timeoutTicks <= elapsed)) break;
   }
-  uVar3 = (undefined1)((uint)puVar2 >> 8);
+  resultHi = (undefined1)((uint)elapsed >> 8);
   if ((char)(prevTick >> 0x18) != '\0') {
     prevTick = CONCAT22((int)(prevTick >> 0x10),0x2410);
     ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0);
   }
-  return CONCAT11(uVar3,(char)(prevTick >> 0x10));
+  return CONCAT11(resultHi,(char)(prevTick >> 0x10));
 }
 
 

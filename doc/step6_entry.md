@@ -15012,3 +15012,35 @@ VERIFIED IN THE LISTING (tmp/make_fn_probe.py, 240 instructions, 3 `_ovr_stsprin
   compare_state 1,625/0/0 (DIFFERENT 0)
   diff_dgroup 1,626/1,805 matched, 31 runs, sum|delta| 88,497, mean 54, worst 14,314
   compare_runtime 1,682 matched, 1,673 identical / 9 different
+
+### ovc42_usesMiceBlitRect and draw_toolbarLabels (35,658 -> 35,616)
+ovc42_usesMiceBlitRect and draw_toolbarLabels (35,658 -> 35,616)
+
+ovc42_usesMiceBlitRect
+    uVar4   83, 85, 87, 88, 97   the BDA daily-tick word              -> tickLo   (5)
+    uVar3   82, 93, 95, 99, 104  the high byte that reaches the return -> resultHi (5)
+    puVar2  92, 96, 97, 99       ovr_attact_usesBDADailyTimeCounter's
+                                 result, compared and shifted         -> elapsed  (4)
+                                 its initialisation at 92 is overwritten at 96 before any read,
+                                 so that statement is deleted
+    extraout_AH  only used by that dead store                           -> declaration removed
+
+    `prevTick` is left alone on purpose: one slot the compiler reuses as the tick accumulator, as a
+    packed return value and as a shift source, so naming it would assert a meaning the export does
+    not have.  `uVar3` needed the extra site on line 95 (`CONCAT11(uVar3,housingFlag)` inside the
+    second prevTick rebuild); the first attempt missed it and the post-rename assertion caught it.
+
+draw_toolbarLabels
+    pvVar1  1212, 1214, 1270  ovr_stshAlloc's block                     -> blitBuf   (3)
+    puVar2  1255, 1259, 1260  the *4-scaled MenuItemEnabled entry      -> menuEntry (3)
+    uVar3   1215, 1217, 1221, 1257, 1262  a segment word in both phases -> segWord  (5)
+    pbVar4  1256, 1262   the 0x2627a offset inside the font segment     -> textOfs  (2)
+
+    `pvVar1` also had a third use (`ptr.ofs = (uint16_t)pvVar1;`) that the first pass missed; the
+    "name gone from the body" assertion refused the write, the list was corrected and the counts
+    re-asserted.
+
+  grep_checks 35,658 -> 35,616; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0 (DIFFERENT 0)
+  diff_dgroup 1,626/1,805 matched, 31 runs, sum|delta| 88,497, mean 54, worst 14,314
+  compare_runtime 1,682 matched, 1,673 identical / 9 different

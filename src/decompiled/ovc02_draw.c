@@ -1193,12 +1193,12 @@ void __cdecl16far draw_toolbarLabels(void)
   far_t gfx;
   far_t gfx_00;
   far_t gfx_01;
-  void *pvVar1;
-  uint16_t *puVar2;
+  void *blitBuf;
+  uint16_t *menuEntry;
   char *text;
   uint16_t in_DX;
-  uint16_t uVar3;
-  byte *pbVar4;
+  uint16_t segWord;
+  byte *textOfs;
   uint16_t seg;
   uint8_t term;
   far_t ptr;
@@ -1209,16 +1209,16 @@ void __cdecl16far draw_toolbarLabels(void)
   char textBuf [44];
   
   if (!GameRunning) {
-    pvVar1 = ovr_stshAlloc(0xfa0f);
+    blitBuf = ovr_stshAlloc(0xfa0f);
     ptr.seg = in_DX;
-    ptr.ofs = (uint16_t)pvVar1;
-    uVar3 = in_DX;
+    ptr.ofs = (uint16_t)blitBuf;
+    segWord = in_DX;
     ovr_alignToSeg(ptr);
-    dst.seg = uVar3;
+    dst.seg = segWord;
     dst.ofs = 0x4826;
     gfx.seg = nwpanel1Cut1Seg;
     gfx.ofs = nwpanel1Cut1Ofs;
-    TextBlitDstSeg = uVar3;
+    TextBlitDstSeg = segWord;
     ovr_blitLoadRleGfx(gfx,dst,0);
     if (GMenuItem == 5) {
       dst_00.seg = TextBlitDstSeg;
@@ -1252,14 +1252,14 @@ void __cdecl16far draw_toolbarLabels(void)
       TextBlitX = 0xea;
       TextBlitY = 0x62;
       term = 0x3f;
-      puVar2 = (uint16_t *)((uint)((uint8_t *)MenuItemEnabled)[GMenuItem] * 4);
-      pbVar4 = (byte *)((char *)0x2627a);
-      uVar3 = Font03.ofs;
+      menuEntry = (uint16_t *)((uint)((uint8_t *)MenuItemEnabled)[GMenuItem] * 4);
+      textOfs = (byte *)((char *)0x2627a);
+      segWord = Font03.ofs;
       seg = Font03.seg;
-      text = (char *)ovr_ovc45_compute9(textBuf,(char *)CONCAT22(*puVar2,_SS),
-                                        (char *)CONCAT22(Font03.ofs,(char *)puVar2[1]),Font03.seg,
+      text = (char *)ovr_ovc45_compute9(textBuf,(char *)CONCAT22(*menuEntry,_SS),
+                                        (char *)CONCAT22(Font03.ofs,(char *)menuEntry[1]),Font03.seg,
                                         'T',3);
-      ovr_blitText(text,(byte *)CONCAT22(uVar3,pbVar4),seg,term);
+      ovr_blitText(text,(byte *)CONCAT22(segWord,textOfs),seg,term);
       draw_menuCursor((int)(char)((undefined *)&menuCursorX)[GMenuItem],
                       (int)(char)((undefined *)&menuCursorY)[GMenuItem]);
       draw_usesFillRect2((uint)((uint8_t *)menuItemRow)[GMenuItem],TextBlitDstSeg);
@@ -1267,7 +1267,7 @@ void __cdecl16far draw_toolbarLabels(void)
     ovr_blitRaw(0xe6,0x39,0x13a,0x71,TextBlitDstSeg,0xa000);
     TextBlitDstSeg = 0xa000;
     handle.seg = in_DX;
-    handle.ofs = (uint16_t)pvVar1;
+    handle.ofs = (uint16_t)blitBuf;
     ovr_stshFree(handle);
   }
   return;
