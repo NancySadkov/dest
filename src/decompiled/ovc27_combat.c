@@ -875,13 +875,13 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
 
 {
   byte roll;
-  uint uVar2;
+  uint damage;
   uint16_t uVar3;
   uint16_t uVar4;
   int iVar5;
   char *pcVar6;
   uint8_t *bufPtr;
-  uint16_t uVar8;
+  uint16_t agntSeg;
   undefined1 uVar9;
   undefined1 uVar10;
   undefined1 uVar11;
@@ -892,26 +892,26 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
   char *ptrSeg;
   int levelBonus;
   
-  uVar8 = (uint16_t)((ulong)((long)agntIndex * 0x34) >> 0x10);
+  agntSeg = (uint16_t)((ulong)((long)agntIndex * 0x34) >> 0x10);
   paStack_c = (agnt_t *)((long)agntIndex * 0x34);
   ptrSeg = (char *)((int)&AgntAnms[0x75].halfWidth + 1);
   if (agnt->variant == 0x1) {
     if ((((agntG_t far *)agnt->gdata)->flags3 & 1) == 0) {
       roll = ovr_manage_rollDice((((entity_t *)agnt->entity)->base).level,'\x06');
-      uVar2 = (uint)roll;
+      damage = (uint)roll;
       uVar3 = ovc27_spellHalfDamage
                         ((agnt_t far *)
                          CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)))
       ;
       if ((char)uVar3 != '\0') {
-        uVar2 = (int)uVar2 >> 1;
+        damage = (int)damage >> 1;
       }
     }
     else {
-      uVar2 = (uint)agnt->strength;
+      damage = (uint)agnt->strength;
       uVar3 = ovc27_breathHalfDamage(paStack_c,0x26);
       if ((char)uVar3 != '\0') {
-        uVar2 = (int)uVar2 >> 1;
+        damage = (int)damage >> 1;
       }
     }
     if ((((agntG_t far *)paStack_c->gdata)->flags3 & 1) == 0) {
@@ -919,13 +919,13 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
                         (CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)),
                          3);
       if ((char)iVar5 != '\0') {
-        uVar2 = (int)uVar2 >> 1;
+        damage = (int)damage >> 1;
       }
       ovr_ovc41_textParalyzed
                 ((agnt_t far *)CONCAT22(agntIndex,agnt),
                  (agnt_t far *)
-                 CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)),uVar2,
-                 (char)paStack_c,(char)ptrSeg,(char)uVar2);
+                 CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)),damage,
+                 (char)paStack_c,(char)ptrSeg,(char)damage);
       *(undefined1 *)&paStack_c->state = 0xb;
       *(undefined1 *)((int)&paStack_c->state + 1) = 0;
       emptyFunction();
@@ -934,28 +934,28 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     uVar9 = (undefined1)GSavedBlitSeg;
     pcVar6 = ovr_agnt_statusText(paStack_c,(char *)CONCAT13((char)((uint)&text2 >> 8),
                                                   CONCAT12((char)&text2,ptrSeg)),0);
-    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,(char)uVar8,uVar9,0,0,0,0,0);
+    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,(char)agntSeg,uVar9,0,0,0,0,0);
     pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c0a,_SS),
                            (char *)CONCAT13((char)((uint)bufPtr >> 8),CONCAT12((char)bufPtr,0x2410))
-                           ,(char)bufPtr,(char)uVar8);
-    ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
+                           ,(char)bufPtr,(char)agntSeg);
+    ovr_uiNotify(pcVar6,agntSeg,(char)agntSeg);
     emptyFunction();
     return;
   }
   if (agnt->variant == 0x2) {
     levelBonus = ((((entity_t *)agnt->entity)->base).level / 5) * 2 + 1;
     roll = ovr_manage_rollDice((char)levelBonus,'\x06');
-    uVar2 = (uint)roll + levelBonus;
+    damage = (uint)roll + levelBonus;
     uVar3 = ovc27_spellHalfDamage
                       ((agnt_t far *)
                        CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)));
     if ((char)uVar3 != '\0') {
-      uVar2 = (int)uVar2 >> 1;
+      damage = (int)damage >> 1;
     }
     ovr_ovc41_textParalyzed
               ((agnt_t far *)CONCAT22(agntIndex,agnt),
                (agnt_t far *)CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)),
-               uVar2,(char)paStack_c,(char)ptrSeg,(char)uVar2);
+               damage,(char)paStack_c,(char)ptrSeg,(char)damage);
     *(undefined1 *)&paStack_c->state = 0xb;
     *(undefined1 *)((int)&paStack_c->state + 1) = 0;
     emptyFunction();
@@ -968,37 +968,37 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     }
     uVar4 = ovr_randBelow(3,0);
     if (((uVar4 & 0xff) == 0) &&
-       (uVar2 = ovc27_rollToHitEntity
+       (damage = ovc27_rollToHitEntity
                           (CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,paStack_c)
-                                   ),3), (uVar2 & 0xff) == 0)) {
+                                   ),3), (damage & 0xff) == 0)) {
       uVar11 = (undefined1)GSavedBlitSeg;
       pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&text1 >> 8),
                                                          CONCAT12((char)&text1,agntIndex)),0);
-      uVar10 = (undefined1)uVar8;
+      uVar10 = (undefined1)agntSeg;
       uVar9 = SUB21(pcVar6,0);
       pcVar6 = ovr_agnt_statusText(paStack_c,(char *)CONCAT22(&text2,ptrSeg),0);
-      bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11,0,0,0);
+      bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,agntSeg,uVar9,uVar10,uVar11,0,0,0);
       pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,_SS),
-                             (char *)CONCAT22(bufPtr,(char *)0x26510),uVar8);
-      ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
+                             (char *)CONCAT22(bufPtr,(char *)0x26510),agntSeg);
+      ovr_uiNotify(pcVar6,agntSeg,(char)agntSeg);
       ovr_OVC41_6a8f_01e7_entry(paStack_c,(char)ptrSeg);
       paStack_c->faction = agnt->faction;
       paStack_c->flags = paStack_c->flags | 0x20;
-      uVar8 = ovr_audio_panFromX(paStack_c,(char)ptrSeg);
-      ovr_play_sfxU(0x1b,0,uVar8,0,(char)uVar8);
+      agntSeg = ovr_audio_panFromX(paStack_c,(char)ptrSeg);
+      ovr_play_sfxU(0x1b,0,agntSeg,0,(char)agntSeg);
       emptyFunction();
       return;
     }
     uVar11 = (undefined1)GSavedBlitSeg;
     pcVar6 = ovr_agnt_statusText(paStack_c,(char *)CONCAT13((char)((uint)&text1 >> 8),
                                                   CONCAT12((char)&text1,ptrSeg)),0);
-    uVar10 = (undefined1)uVar8;
+    uVar10 = (undefined1)agntSeg;
     uVar9 = SUB21(pcVar6,0);
     pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text2,agntIndex),0);
-    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11,0,0,0);
+    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,agntSeg,uVar9,uVar10,uVar11,0,0,0);
     pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c44,_SS),
-                           (char *)CONCAT22(bufPtr,(char *)0x26510),uVar8);
-    ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
+                           (char *)CONCAT22(bufPtr,(char *)0x26510),agntSeg);
+    ovr_uiNotify(pcVar6,agntSeg,(char)agntSeg);
     paStack_c->flags = paStack_c->flags | 0x400;
     emptyFunction();
     return;
@@ -1016,18 +1016,18 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     uVar11 = (undefined1)GSavedBlitSeg;
     pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&text1 >> 8),
                                                        CONCAT12((char)&text1,agntIndex)),0);
-    uVar10 = (undefined1)uVar8;
+    uVar10 = (undefined1)agntSeg;
     uVar9 = SUB21(pcVar6,0);
     pcVar6 = ovr_agnt_statusText(paStack_c,(char *)CONCAT22(&text2,ptrSeg),0);
-    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,uVar8,uVar9,uVar10,uVar11,0,0,0);
+    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,agntSeg,uVar9,uVar10,uVar11,0,0,0);
     pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,_SS),
-                           (char *)CONCAT22(bufPtr,(char *)0x26510),uVar8);
-    ovr_uiNotify(pcVar6,uVar8,(char)uVar8);
+                           (char *)CONCAT22(bufPtr,(char *)0x26510),agntSeg);
+    ovr_uiNotify(pcVar6,agntSeg,(char)agntSeg);
     paStack_c->faction = agnt->faction;
     ovr_OVC41_6a8f_01e7_entry(paStack_c,(char)ptrSeg);
     paStack_c->flags = paStack_c->flags | 0x20;
-    uVar8 = ovr_audio_panFromX(paStack_c,(char)ptrSeg);
-    ovr_play_sfxU(0x1b,0,uVar8,0,(char)uVar8);
+    agntSeg = ovr_audio_panFromX(paStack_c,(char)ptrSeg);
+    ovr_play_sfxU(0x1b,0,agntSeg,0,(char)agntSeg);
     emptyFunction();
     return;
   }

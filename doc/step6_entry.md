@@ -8914,3 +8914,32 @@ knowing before treating those names as gate-bearing.
   grep_checks 40,045 (unchanged, as explained above); build 65/65 clean
   LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### ovc27_textTakesHalfDamage3: two renames (40,045 -> 40,000)
+ovc27_textTakesHalfDamage3: rename two single-role locals (40,045 -> 40,000)
+
+ovc27_textTakesHalfDamage3 (5ded:10ea, 163 lines, 129 section-5 matches, no in_stack_/unaff_ blockers)
+carries two locals whose roles are unambiguous from their use:
+
+  uVar8  = (uint16_t)((ulong)((long)agntIndex * 0x34) >> 0x10);
+       -> the HIGH WORD of the agent record address, i.e. its segment.  It is paired with
+          paStack_c (the low word) in every CONCAT13/CONCAT12 construction in the function.
+       -> agntSeg                                                        (27 uses)
+
+  uVar2  = (uint)roll;  ...  uVar2 = (int)uVar2 >> 1;
+       -> the damage figure: assigned from the rolled dice (or from agnt->strength on the breath path)
+          and halved when the half-damage roll succeeds.
+       -> damage                                                          (18 uses)
+
+Both names were checked for collision in the function first (its parameters are agnt/agntIndex/arg3/arg4
+and no local is called agntSeg or damage).  Renaming only: no expression changed.
+
+  grep_checks 40,045 -> 40,000; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
+
+Remaining in this function: uVar9/uVar10/uVar11 (undefined1 temporaries, 7 uses each), uVar3 (the
+half-damage roll result, 7), iVar5 (5), uVar4 (3).  The body is still structurally garbled around
+`paStack_c = (agnt_t *)((long)agntIndex * 0x34)` - a near pointer built from an offset - and the
+`CONCAT13((char)((uint)ptrSeg >> 8), CONCAT12((char)ptrSeg, paStack_c))` shuffles, so the rest needs a
+re-derivation against the disassembly rather than more renaming.
