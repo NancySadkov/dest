@@ -258,15 +258,16 @@ void __cdecl16far ovc42_populateArea(byte partyIndex)
   uint16_t x;
   uint16_t y;
   uint16_t randPick;
-  uint uVar2;
-  uint uVar3;
+  uint alignedX;
+  uint mapOk;
+  uint alignedX48;
   far_t dst;
   far_t dst_00;
-  uint32_t uVar4;
+  uint32_t spawnArg;
   uint8_t unitTypeMap;
   uint8_t spawnGindexMap;
-  int iStack_6;
-  int iStack_4;
+  int colOfs;
+  int rowOfs;
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&unitTypeMap;
@@ -274,36 +275,36 @@ void __cdecl16far ovc42_populateArea(byte partyIndex)
   dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&spawnGindexMap;
   F_SCOPY(far_from_u32((uint32_t)(0x24107153)),dst_00,8);
-  iStack_4 = -0x14;
+  rowOfs = -0x14;
   do {
-    if (10 < iStack_4) {
+    if (10 < rowOfs) {
       return;
     }
-    for (iStack_6 = -0x14; iStack_6 < 3; iStack_6 = iStack_6 + 1) {
-      x = GfxRndSeed + iStack_4;
-      y = GfxRndSeed2 + iStack_6;
-      if ((-0xb < iStack_4) || (randPick = ovr_randBelow(3,0), (randPick & 0xff) == 0)) {
+    for (colOfs = -0x14; colOfs < 3; colOfs = colOfs + 1) {
+      x = GfxRndSeed + rowOfs;
+      y = GfxRndSeed2 + colOfs;
+      if ((-0xb < rowOfs) || (randPick = ovr_randBelow(3,0), (randPick & 0xff) == 0)) {
         if (y == 0x24) {
-          uVar2 = ovr_alignUp4(x,0,0);
-          uVar3 = ovr_alignUp4(0x48,0,0);
-          if (uVar2 == uVar3) goto L_OVC42_6d7a_04f2_0627;
+          alignedX = ovr_alignUp4(x,0,0);
+          alignedX48 = ovr_alignUp4(0x48,0,0);
+          if (alignedX == alignedX48) goto L_OVC42_6d7a_04f2_0627;
         }
         if ((((GfxRndSeed2 != y) || ((int)x < GfxRndSeed + -1)) || (GfxRndSeed + 1 < (int)x)) &&
-           (uVar2 = ovr_constr_usesGMapFlags(x,y,0), (char)uVar2 != '\0')) {
+           (mapOk = ovr_constr_usesGMapFlags(x,y,0), (char)mapOk != '\0')) {
           randPick = ovr_randBelow(0xe,0);
           (*(short (*) [148] [60])GUnitGrid)[x][y] = (uint)(&unitTypeMap)[randPick & 0xff];
           randPick = ovr_randBelow(5,0);
           if ((randPick & 0xff) == 0) {
-            uVar4 = CONCAT22((uint)partyIndex,1);
+            spawnArg = CONCAT22((uint)partyIndex,1);
             randPick = ovr_randBelow(8,0);
             ovr_ovc15_usesLDIV_at_
-                      (x,y,x,y,(&spawnGindexMap)[randPick & 0xff],(uint8_t)uVar4,(byte)((ulong)uVar4 >> 0x10),0,0,0,0);
+                      (x,y,x,y,(&spawnGindexMap)[randPick & 0xff],(uint8_t)spawnArg,(byte)((ulong)spawnArg >> 0x10),0,0,0,0);
           }
         }
       }
 L_OVC42_6d7a_04f2_0627:
     }
-    iStack_4 = iStack_4 + 1;
+    rowOfs = rowOfs + 1;
   } while( true );
 }
 

@@ -11907,3 +11907,17 @@ REMAINING, same class and not touched: `memcpy` itself is declared with near par
 and about 30 call sites still pass `(char *)CONCAT22(seg,ofs)` to it, where the segment
 matters.  Those need the same per-site decision (far copy vs a DGROUP-resident object),
 so they are left for their own pass rather than converted blind.
+
+### ovc42_populateArea: scan offsets and alignment temporaries (37,849 -> 37,824)
+ovc42_populateArea: scan offsets and alignment temporaries (37,849 -> 37,824)
+
+  iStack_4  outer offset, -0x14..10                -> rowOfs     (6)
+  iStack_6  inner offset, -0x14..2                 -> colOfs     (3)
+  uVar2     ovr_alignUp4(x,0,0)                    -> alignedX   (2)
+  uVar2     ovr_constr_usesGMapFlags(x,y,0)        -> mapOk      (2)
+  uVar3     ovr_alignUp4(0x48,0,0)                 -> alignedX48 (3)
+  uVar4     CONCAT22(partyIndex,1)                 -> spawnArg   (3)
+
+  grep_checks 37,849 -> 37,824; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different
