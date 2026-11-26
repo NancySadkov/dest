@@ -10515,3 +10515,39 @@ Verified in the emitted listing - `les` sites went 22 -> 30, and the state read 
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### ovc27_usesRandBelow3: 34 record reads restored (39,071 -> 39,044)
+ovc27_usesRandBelow3: 30 record reads and 4 agent reads restored (39,071 -> 39,044)
+
+The requirement record arrived as a far pointer in a `uint32_t` parameter and was immediately
+truncated:
+
+    recIdx = (int)reqRecord;
+    ... *(char *)(recIdx + 8) / *(uint *)(recIdx + 0x15) / *(int *)(recIdx + 0x1f) ...
+
+All thirty reads went to DGROUP at that offset.  Now:
+
+    reqFar = far_from_u32(reqRecord);
+    rec = (uint8_t far *)MK_FP(reqFar.seg,reqFar.ofs);
+    ... *(char far *)(rec + 8) ...
+
+Verified in the emitted listing:
+
+    les  bx,dword ptr [bp-16]        ; the record far pointer
+    cmp  byte ptr es:[bx+8],0
+
+`les` sites in the function: 39.
+
+Also the four agent-record reads that went through `uVar2 = agntIndex * 0x34`:
+
+    *(uint *)(uVar2 + 0x2b)              -> (uint)Agnts[agntIndex].flags
+    *(char *)(uVar2 + 0x11)              -> Agnts[agntIndex].animVariant
+    *(uint  *)((int)*(uint32_t *)(uVar2 + 0x17) + 0x14) -> entity + 0x14, read far
+    *(byte  *)((int)*(uint32_t *)(uVar2 + 0x17) + 0xf)  -> entity + 0xf,  read far
+
+`uVar2` held both that offset and the return value; with the offset gone it is just `result`.
+`uStack_10`, `uVar8` and `uVar9` were declared, assigned once and never read - removed.
+
+  grep_checks 39,071 -> 39,044; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different

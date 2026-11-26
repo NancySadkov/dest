@@ -277,18 +277,16 @@ uint __cdecl16far ovc27_usesRandBelow3(agnt_t far *agnt,uint32_t reqRecord,int a
 
 {
   byte bVar1;
-  uint uVar2;
+  uint result;
   byte bVar5;
   uint uVar3;
   uint16_t uVar4;
-  int recIdx;
+  far_t reqFar;
+  uint8_t far *rec;
   agnt_t far *paVar7;
-  uint16_t uVar8;
-  uint16_t uVar9;
   far_t dst;
   far_t dst_00;
   uint8_t reqLevel2;
-  uint uStack_10;
   uint16_t uStack_e;
   uint8_t reqLevel1;
   
@@ -298,106 +296,103 @@ uint __cdecl16far ovc27_usesRandBelow3(agnt_t far *agnt,uint32_t reqRecord,int a
   dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&reqLevel2;
   F_SCOPY(far_from_u32((uint32_t)(0x241059b4)),dst_00,11);
-  uVar2 = agntIndex * 0x34;
-  uStack_10 = CONCAT22(SEG_OF(Agnts),uVar2);
-  uVar8 = (uint16_t)(reqRecord >> 0x10);
-  recIdx = (int)reqRecord;
+  reqFar = far_from_u32(reqRecord);
+  rec = (uint8_t far *)MK_FP(reqFar.seg,reqFar.ofs);
   paVar7 = (agnt_t far *)agnt;
-  uVar9 = (uint16_t)((ulong)agnt >> 0x10);
-  if (*(char *)(recIdx + 8) == '\0') {
+  if (*(char far *)(rec + 8) == '\0') {
     if ((((agntG_t far *)paVar7->gdata)->flags & 2) == 0) {
-      return uVar2 & 0xff00;
+      return result & 0xff00;
     }
-    if ((((entity_t *)paVar7->entity)->base).level < (&reqLevel1)[*(byte *)(recIdx + 9)]) {
-      return (uint)(&reqLevel1 + *(byte *)(recIdx + 9)) & 0xff00;
+    if ((((entity_t *)paVar7->entity)->base).level < (&reqLevel1)[*(byte far *)(rec + 9)]) {
+      return (uint)(&reqLevel1 + *(byte far *)(rec + 9)) & 0xff00;
     }
   }
   else {
-    bVar5 = (byte)(uVar2 >> 8);
-    if (*(char *)(recIdx + 8) == '\x01') {
+    bVar5 = (byte)(result >> 8);
+    if (*(char far *)(rec + 8) == '\x01') {
       if ((((agntG_t far *)paVar7->gdata)->flags & 1) == 0) {
         return (uint)bVar5 << 8;
       }
-      if ((((entity_t *)paVar7->entity)->base).level < (&reqLevel2)[*(byte *)(recIdx + 9)]) {
-        return (uint)(&reqLevel2 + *(byte *)(recIdx + 9)) & 0xff00;
+      if ((((entity_t *)paVar7->entity)->base).level < (&reqLevel2)[*(byte far *)(rec + 9)]) {
+        return (uint)(&reqLevel2 + *(byte far *)(rec + 9)) & 0xff00;
       }
     }
-    else if ((*(char *)(recIdx + 8) == '\x02') && ((((agntG_t far *)paVar7->gdata)->flags & 0x800) == 0))
+    else if ((*(char far *)(rec + 8) == '\x02') && ((((agntG_t far *)paVar7->gdata)->flags & 0x800) == 0))
     {
       return (uint)bVar5 << 8;
     }
   }
-  if ((Agnts[agntIndex].gdata->flags & *(uint *)(recIdx + 0x15)) == 0) {
-    if ((Agnts[agntIndex].gdata->flags2 & *(uint *)(recIdx + 0x19)) == 0) {
-      if ((Agnts[agntIndex].gdata->flags3 & *(uint *)(recIdx + 0x1d)) == 0) {
-        if ((*(uint *)(uVar2 + 0x2b) & *(uint *)(recIdx + 0xf)) == 0) {
-          uVar3 = (uint)*(byte *)(recIdx + 0x13);
-          if ((*(uint *)((int)*(uint32_t *)(uVar2 + 0x17) + 0x14) & uVar3) == 0) {
-            if ((*(int *)(recIdx + 0x17) != 0) &&
-               (uVar3 = *(uint *)(recIdx + 0x17),
+  if ((Agnts[agntIndex].gdata->flags & *(uint far *)(rec + 0x15)) == 0) {
+    if ((Agnts[agntIndex].gdata->flags2 & *(uint far *)(rec + 0x19)) == 0) {
+      if ((Agnts[agntIndex].gdata->flags3 & *(uint far *)(rec + 0x1d)) == 0) {
+        if (((uint)Agnts[agntIndex].flags & *(uint far *)(rec + 0xf)) == 0) {
+          uVar3 = (uint)*(byte far *)(rec + 0x13);
+          if ((*(uint far *)((uint8_t far *)Agnts[agntIndex].entity + 0x14) & uVar3) == 0) {
+            if ((*(int far *)(rec + 0x17) != 0) &&
+               (uVar3 = *(uint far *)(rec + 0x17),
                (Agnts[agntIndex].gdata->flags & uVar3) == 0)) {
               return uVar3 & 0xff00;
             }
-            if ((*(int *)(recIdx + 0x1b) != 0) &&
-               (uVar3 = *(uint *)(recIdx + 0x1b),
+            if ((*(int far *)(rec + 0x1b) != 0) &&
+               (uVar3 = *(uint far *)(rec + 0x1b),
                (Agnts[agntIndex].gdata->flags2 & uVar3) == 0)) {
               return uVar3 & 0xff00;
             }
-            if ((*(int *)(recIdx + 0x1f) != 0) &&
-               (uVar3 = *(uint *)(recIdx + 0x1f),
+            if ((*(int far *)(rec + 0x1f) != 0) &&
+               (uVar3 = *(uint far *)(rec + 0x1f),
                (Agnts[agntIndex].gdata->flags3 & uVar3) == 0)) {
               return uVar3 & 0xff00;
             }
-            if ((*(int *)(recIdx + 0x11) != 0) &&
-               (uVar3 = *(uint *)(recIdx + 0x11), (*(uint *)(uVar2 + 0x2b) & uVar3) == 0)) {
+            if ((*(int far *)(rec + 0x11) != 0) &&
+               (uVar3 = *(uint far *)(rec + 0x11), ((uint)Agnts[agntIndex].flags & uVar3) == 0)) {
               return uVar3 & 0xff00;
             }
-            if ((*(char *)(recIdx + 0x14) == '\0') ||
-               (uVar3 = (uint)*(byte *)(recIdx + 0x14),
-               (*(uint *)((int)*(uint32_t *)(uVar2 + 0x17) + 0x14) & uVar3) != 0)) {
+            if ((*(char far *)(rec + 0x14) == '\0') ||
+               (uVar3 = (uint)*(byte far *)(rec + 0x14),
+               (*(uint far *)((uint8_t far *)Agnts[agntIndex].entity + 0x14) & uVar3) != 0)) {
               bVar5 = (byte)(uVar3 >> 8);
-              if ((*(char *)(recIdx + 0xc) == '\0') || (*(char *)(uVar2 + 0x11) == '\0')) {
-                bVar1 = *(byte *)((int)*(uint32_t *)(uVar2 + 0x17) + 0xf);
+              if ((*(char far *)(rec + 0xc) == '\0') || (Agnts[agntIndex].animVariant == '\0')) {
+                bVar1 = *(uint8_t far *)((uint8_t far *)Agnts[agntIndex].entity + 0xf);
                 uVar4 = CONCAT11(bVar5,bVar1);
-                if (bVar1 < *(byte *)(recIdx + 0xe)) {
-                  if ((*(byte *)(recIdx + 0xd) < 100) &&
-                     (uVar4 = ovr_randBelow(100,0), *(byte *)(recIdx + 0xd) <= (byte)uVar4)) {
+                if (bVar1 < *(byte far *)(rec + 0xe)) {
+                  if ((*(byte far *)(rec + 0xd) < 100) &&
+                     (uVar4 = ovr_randBelow(100,0), *(byte far *)(rec + 0xd) <= (byte)uVar4)) {
                     return uVar4 & 0xff00;
                   }
-                  uVar2 = CONCAT11((char)(uVar4 >> 8),1);
+                  result = CONCAT11((char)(uVar4 >> 8),1);
                 }
                 else {
-                  uVar2 = (uint)bVar5 << 8;
+                  result = (uint)bVar5 << 8;
                 }
               }
               else {
-                uVar2 = (uint)bVar5 << 8;
+                result = (uint)bVar5 << 8;
               }
             }
             else {
-              uVar2 = 0;
+              result = 0;
             }
           }
           else {
-            uVar2 = 0;
+            result = 0;
           }
         }
         else {
-          uVar2 = *(uint *)(recIdx + 0xf) & 0xff00;
+          result = *(uint far *)(rec + 0xf) & 0xff00;
         }
       }
       else {
-        uVar2 = *(uint *)(recIdx + 0x1d) & 0xff00;
+        result = *(uint far *)(rec + 0x1d) & 0xff00;
       }
     }
     else {
-      uVar2 = *(uint *)(recIdx + 0x19) & 0xff00;
+      result = *(uint far *)(rec + 0x19) & 0xff00;
     }
   }
   else {
-    uVar2 = *(uint *)(recIdx + 0x15) & 0xff00;
+    result = *(uint far *)(rec + 0x15) & 0xff00;
   }
-  return uVar2;
+  return result;
 }
 
 
