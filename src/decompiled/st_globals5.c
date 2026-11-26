@@ -1547,6 +1547,7 @@ char s_gaming_hall[] = "@gaming hall";
 char s_scribery[] = "@scribery";
 char s_magic_mill[] = "@magic mill";
 char s_armory[] = "@armory";
+char s_Building_is_now_2410_690b[46] = "Building is now %s.  Select type of building.";
 char s_empty_2410_6939[] = "";
 undefined1 GSeason = 0x00;
 undefined1 SeasonPalettes[135] = {      0x43, 0x8B, 0x27, 0x3F, 0x7F, 0x2F, 0x43, 0x73, 0x37, 0x43, 0x67, 0x3B, 0x43, 0x5F, 0x3F,
@@ -1609,7 +1610,6 @@ char s_of_adventure_2410_6d97[24] = "of adventure and glory.";
 char s_that__s_shall_hold__2410_6daf[] = "that %s shall hold the rank of";
 char s_s_for_valor_2410_6dce[25] = "%s, for valor in battle.";
 char s_s_for_city_2410_6de7[25] = "%s, for city management.";
-char s_Building_is_now_2410_690b[46] = "Building is now %s.  Select type of building.";
 undefined1 xOfsTable[56] = {
       0x36, 0x00, 0x27, 0x00, 0x1D, 0x00, 0x10, 0x00, 0x01, 0x02, 0x03, 0x03, 0x00, 0x05, 0x04,
       0x07, 0x07, 0x08, 0x09, 0x00, 0x04, 0x00, 0x01, 0x02, 0x06, 0x04, 0x06, 0x08, 0x09, 0x0A,

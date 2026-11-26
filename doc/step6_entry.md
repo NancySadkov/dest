@@ -15192,3 +15192,64 @@ by a suffix would read as a mistake.  The pre-check caught the collision before 
   compare_state 1,625/0/0 (DIFFERENT 0)
   diff_dgroup 1,626/1,805 matched, 31 runs, sum|delta| 88,497, mean 54, worst 14,314
   compare_runtime 1,682 matched, 1,673 identical / 9 different
+
+### second runtime sample point: init_game, after _INIT_CFG
+second runtime sample point: init_game, after _INIT_CFG
+
+`tmp/dump_at.py` could already sample any routine present in both images, but its fallback lookup was
+broken: the second regex required the literal `idle ` marker,
+
+    r"([0-9A-F]{4}):([0-9A-F]{4})\s+(?:idle\s+)_" + name
+
+so a symbol that is actually referenced in the build (not marked `idle`) was reported as
+"not in REBUILT.MAP".  Making that group optional is what lets ordinary functions be sampled.
+
+With that fixed, `python tmp/dump_at.py init_game` runs both images through DOSBox and writes
+tmp/dgrun2_{orig,ours}/DGR.BIN, so `scripts/compare_runtime.py` samples DGROUP **after**
+`_INIT_CFG` instead of only at main's entry.  `init_game` is resident in the original at
+3381:0579 and its file offset is the one the tool documents as verified.
+
+MEASURED, same build, two sample points:
+
+    main entry    symbols matched 1,682, identical 1,673, DIFFERENT  9
+    init_game     symbols matched 1,682, identical 1,672, DIFFERENT 10
+
+The extra difference is `GTxtFiles` (0x822c): the original's entries hold 1cXX:82b4/82be/82c8...
+while ours hold 77ff:82a8/82b2/82bc.  Two separate facts come out of that:
+
+  * our filename block really is 6 bytes early (our symbol `_S_HELP0_TXT_2410_82B4` is at 0x82ae,
+    the original's at 0x82b4), which is the residual layout delta in this band;
+  * our runtime value is 6 bytes *below our own symbol*, i.e. 0x82a8 rather than 0x82ae.  That is
+    a defect in crtl.c's GTxtFiles fixup:
+
+        GTxtFiles[gi].ofs = (uint16_t)(&s_help0_txt_2410_82b4[0]) + (origOfs - 0x82B4);
+
+    It reads the entry's initialiser back and adds the difference from 0x82B4, so if the
+    initialiser is not exactly 0x82B4 the result is wrong by that difference - here 6.  The
+    clean form is to make the 34 initialisers symbol references
+    (`{ (uint16_t)&s_help0_txt_2410_82b4, 0x2410 }`), let TLINK relocate them, and delete the
+    loop; `fixFarTable(GTxtFiles, 34)` still supplies the segment.  Not changed here, because it
+    is a separate measured change.
+
+ALSO IN THIS COMMIT - a misplacement I introduced earlier and only now measured:
+
+Commit 2e1f7623 put `s_Building_is_now_2410_690b` (46 bytes) immediately before `xOfsTable` in
+st_globals5.c, on the assumption that the anchor line was DGROUP:0x690b.  It is not: source order
+is link order and `xOfsTable` is at 0x6e00, so the string landed at 0x6de2 - **1239 bytes late**.
+diff_dgroup showed it as `+1239 from s_Building_is_now..._690b` followed by `-1269 from
+s_empty_2410_6939`, a one-symbol outlier plus a 30-byte plateau behind it.
+
+The original's band is `s_magic_mill` 12, `s_armory` 8, then this string, then
+`s_empty_2410_6939`; our source has `s_armory` at line 1549 immediately followed by
+`s_empty_2410_6939`, so the string belongs between those two lines.  Moving it there:
+
+    diff_dgroup sum|delta|   88,497 -> 86,658
+    diff_dgroup runs              31 -> 28
+    diff_dgroup mean              54 -> 53
+    diff_dgroup matched        1,626 -> 1,626
+    compare_state              1,625/0/0 (unchanged)
+    grep_checks               35,567 (unchanged)
+    build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The band 0x6601..0x6f63 is now a uniform +16 instead of +1239/-30, which is what the previous
+report claimed but had not achieved.
