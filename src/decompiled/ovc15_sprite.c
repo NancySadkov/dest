@@ -1200,100 +1200,103 @@ int __cdecl16far ovc15_usesRandBelow(agnt_t far *agnt,int xSide,char keepPos,cha
 {
   char *pcVar1;
   far_t dst;
-  uint16_t uVar2;
-  uint16_t uVar3;
-  uint uVar4;
-  byte bVar6;
-  int iVar5;
+  uint16_t randY;
+  uint16_t prevX;
+  uint16_t randY2;
+  uint computeRes;
+  byte retHi;
+  int xIndex;
+  int exitRes;
+  int agntLoop;
   agnt_t far *agnt_00;
-  uint16_t uVar7;
+  uint16_t agntSeg;
   uint16_t xOffsets [4];
-  int iStack_6;
-  int iStack_4;
+  int dirSign;
+  int agntIndex;
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)xOffsets;
   F_SCOPY(far_from_u32((uint32_t)(0x24101d09)),dst,8);
   agnt_00 = (agnt_t far *)agnt;
-  uVar7 = (uint16_t)((ulong)agnt >> 0x10);
+  agntSeg = (uint16_t)((ulong)agnt >> 0x10);
   if (keepPos == '\0') {
     if (xSide < 0) {
       agnt->x = 0;
-      uVar2 = ovr_randBelow(0x14,0);
-      agnt_00->y = uVar2 & 0xff;
+      randY = ovr_randBelow(0x14,0);
+      agnt_00->y = randY & 0xff;
     }
     else if (xSide < 1) {
-      iVar5 = ((agnt_00->entity->base).x - GfxRndSeed) + 2;
-      if (iVar5 < 0) {
-        iVar5 = 0;
+      xIndex = ((agnt_00->entity->base).x - GfxRndSeed) + 2;
+      if (xIndex < 0) {
+        xIndex = 0;
       }
-      if (3 < iVar5) {
-        iVar5 = 3;
+      if (3 < xIndex) {
+        xIndex = 3;
       }
-      agnt->x = xOffsets[iVar5];
+      agnt->x = xOffsets[xIndex];
       if (randomY == '\0') {
         agnt_00->y = 0x20;
       }
       else {
-        uVar2 = ovr_randBelow(0x14,0);
-        agnt_00->y = uVar2 & 0xff;
+        randY = ovr_randBelow(0x14,0);
+        agnt_00->y = randY & 0xff;
       }
     }
     else {
       agnt->x = 0xd2;
-      uVar2 = ovr_randBelow(0x14,0);
-      agnt_00->y = uVar2 & 0xff;
+      randY = ovr_randBelow(0x14,0);
+      agnt_00->y = randY & 0xff;
     }
   }
-  uVar2 = agnt->x;
-  if ((int)uVar2 < 0x6a) {
-    iStack_6 = 1;
+  prevX = agnt->x;
+  if ((int)prevX < 0x6a) {
+    dirSign = 1;
   }
   else {
-    iStack_6 = -1;
+    dirSign = -1;
   }
-  ovr_ovc49_body1(agnt_00,uVar7);
+  ovr_ovc49_body1(agnt_00,agntSeg);
   do {
     if (agnt_00->animVariant == 0x0) {
-      uVar4 = ovr_ovc49_compute1(agnt->x);
-      bVar6 = (byte)(uVar4 >> 8);
-      if ((char)uVar4 == '\0') goto L_OVC15_4207_1ffe_2193;
+      computeRes = ovr_ovc49_compute1(agnt->x);
+      retHi = (byte)(computeRes >> 8);
+      if ((char)computeRes == '\0') goto L_OVC15_4207_1ffe_2193;
     }
     else {
 L_OVC15_4207_1ffe_2193:
-      iVar5 = ovr_ovc49_usesStExit(agnt_00,uVar7);
-      bVar6 = (byte)((uint)iVar5 >> 8);
-      if ((char)iVar5 == '\0') {
+      exitRes = ovr_ovc49_usesStExit(agnt_00,agntSeg);
+      retHi = (byte)((uint)exitRes >> 8);
+      if ((char)exitRes == '\0') {
         if (agnt_00->y == 0x20) {
-          uVar4 = ovc15_compute1(&agnt->x);
-          agnt_00->y = uVar4 & 0xff;
+          computeRes = ovc15_compute1(&agnt->x);
+          agnt_00->y = computeRes & 0xff;
         }
-        iStack_4 = 0;
-        while ((iStack_4 < (int)(uint)AgntCount && (Agnts[iStack_4].y < (int)agnt_00->y)
+        agntIndex = 0;
+        while ((agntIndex < (int)(uint)AgntCount && (Agnts[agntIndex].y < (int)agnt_00->y)
                )) {
-          iStack_4 = iStack_4 + 1;
+          agntIndex = agntIndex + 1;
         }
-        if (iStack_4 < (int)(uint)AgntCount) {
-          _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[iStack_4 + 1].x),
-                    (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[iStack_4].x),
-                    ((uint)AgntCount - iStack_4) * 0x34);
+        if (agntIndex < (int)(uint)AgntCount) {
+          _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex + 1].x),
+                    (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x),
+                    ((uint)AgntCount - agntIndex) * 0x34);
         }
         agnt_00->visited = 0x1;
-        memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[iStack_4].x),(char *)agnt,0x34);
-        ovr_agnt_usesAgntCount5(iStack_4 + 1);
-        ovr_ovc49_fillGridCells((char)iStack_4 + 1,(agnt_t far *)&Agnts[iStack_4].x,SEG_OF(Agnts),0);
+        memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x),(char *)agnt,0x34);
+        ovr_agnt_usesAgntCount5(agntIndex + 1);
+        ovr_ovc49_fillGridCells((char)agntIndex + 1,(agnt_t far *)&Agnts[agntIndex].x,SEG_OF(Agnts),0);
         AgntCount = AgntCount + 1;
-        for (iVar5 = 0; iVar5 < (int)(uint)AgntCount; iVar5 = iVar5 + 1) {
-          if ((Agnts[iVar5].target != -1) &&
-             (iStack_4 <= (int)(uint)Agnts[iVar5].target)) {
-            pcVar1 = (char *)&Agnts[iVar5].target;
+        for (agntLoop = 0; agntLoop < (int)(uint)AgntCount; agntLoop = agntLoop + 1) {
+          if ((Agnts[agntLoop].target != -1) &&
+             (agntIndex <= (int)(uint)Agnts[agntLoop].target)) {
+            pcVar1 = (char *)&Agnts[agntLoop].target;
             *pcVar1 = *pcVar1 + '\x01';
           }
         }
         return 1;
       }
     }
-    if (iStack_6 < 0) {
+    if (dirSign < 0) {
       if (agnt->x == 0) {
         agnt->x = 0xd2;
       }
@@ -1307,17 +1310,17 @@ L_OVC15_4207_1ffe_2193:
     else {
       agnt->x = agnt->x + 1;
     }
-    if (agnt->x == uVar2) {
-      return (uint)bVar6 << 8;
+    if (agnt->x == prevX) {
+      return (uint)retHi << 8;
     }
     if ((xSide == 0) && (randomY == '\0')) {
       agnt_00->y = 0x20;
     }
     else {
-      uVar3 = ovr_randBelow(0x14,0);
-      agnt_00->y = uVar3 & 0xff;
+      randY2 = ovr_randBelow(0x14,0);
+      agnt_00->y = randY2 & 0xff;
     }
-    ovr_ovc49_body1(agnt_00,uVar7);
+    ovr_ovc49_body1(agnt_00,agntSeg);
   } while( true );
 }
 

@@ -10012,3 +10012,65 @@ Renaming and splitting only; no expression changed.
   grep_checks 39,437 -> 39,372; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### diff_dgroup vs compare_runtime (measured), and ovc15_usesRandBelow
+
+### MEASURED: diff_dgroup and compare_runtime are coupled - adding exact data improves one and breaks the other
+
+First attempt at `diff_dgroup` this session, and it produced a result worth recording.
+
+`audit/dgroup_data.csv` jumps from `s_Define_region_to_command__s_loya_2410_648f` (0x648f, 41
+bytes) straight to `strangeTableData` (0x6592), but the original image has **218 bytes** in
+between, verified by reading STRONG.EXE at `DGROUP_base + 0x64b8`:
+
+```
+64b8  %d %s%s loyal to %s found. Left click: set triangles. R: ready. U: unassign.
+      H: home. Right click: abort.                                     (106)
+6522  Priorities adjusted for %d %s%s.                                 (33)
+6543  %d %s%s unassigned.                                              (20)
+6557  %d %s%s readied.                                                 (17)
+6568  %d %s%s homed.                                                   (15)
+6577  Region selection aborted.                                        (27, double-NUL)
+```
+
+They are absent from our tree, which is exactly why the layout runs 218 bytes short there. I
+added them as six `char NAME[exact_len]` declarations with the bytes taken from the EXE, at
+the right position (after the neighbouring string, before `strangeTableData`), and renamed
+that string to its full original name so the name key matches. `tmp/add_dgroup_64b8.py`
+reproduces it.
+
+Result:
+
+```
+                          before          after
+grep_checks               39,372          39,378     (+6 - one char[]= "..." per string)
+diff_dgroup matched        1,444           1,447     (+3)
+diff_dgroup deltas            83              82     (-1)
+compare_runtime            1,545           1,371     (-174)
+```
+
+**Reverted.** A `diff_dgroup` gain of 3 symbols is not worth 174 runtime states: AGENTS.md
+step 6 is functional parity, and `compare_runtime` is the only measure of it that exists.
+That the two move in opposite directions is the finding - the runtime state map evidently
+keys on original-to-rebuilt offsets derived from the DGROUP correspondence, so changing the
+layout perturbs which runtime variables it can still pair up.
+
+**Consequence for the plan:** `diff_dgroup` cannot be improved by "add the missing data"
+until the state map is keyed on names rather than layout. That is a tooling change, not a
+data reconstruction, and it should be done before any further DGROUP byte work - otherwise
+every data fix will silently regress the thing AGENTS.md actually asks for.
+
+### ovc15_usesRandBelow: six named, two split (39,372 -> 39,308)
+
+  iStack_4  the AgntCount/fmemmove agent index        -> agntIndex  (12)
+  uVar7     (uint16_t)((ulong)agnt >> 0x10)           -> agntSeg    (5)
+  bVar6     the accumulated high return byte          -> retHi      (4)
+  iStack_6  1 / -1, tested with `< 0`                 -> dirSign    (4)
+  uVar3     the fallback randBelow(0x14,0) result     -> randY2     (3)
+  uVar4     ovc49_compute1 / ovc15_compute1 results   -> computeRes (6)
+
+  iVar5  -> xIndex (6, the `xOffsets[]` index) / exitRes (3) / agntLoop (4, AgntCount loop)
+  uVar2  -> randY  (6, randBelow result)        / prevX (3, the saved agnt->x)
+
+  grep_checks 39,372 -> 39,308; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868; compare_runtime 1,545/12
