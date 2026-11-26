@@ -14558,3 +14558,35 @@ Turn total on this axis: runs 45 -> 40, matched 1,583 -> 1,619, runtime identica
 1,662, sum|delta| 198,159 -> 203,010 (the sum rose because 36 more symbols are now measured
 and duplicates were removed in negative-delta regions; matched and runs are the honest
 coverage measures).
+
+### layout: restore the 0x769b and 0x76a8 strings (runs 40 -> 39)
+layout: restore the 0x769b and 0x76a8 strings (runs 40 -> 39, sum -2,376)
+
+The 0x76xx band was missing two strings, 13 + 5 = 18 bytes, which is exactly the -18 step
+diff_dgroup reported at s_too_many_construction_sites (0x76e9):
+
+    0x769b  13  s_change_party  "Change Party"   (one of four such labels in the original:
+                                                  0x769b and 0x80e3 capital-P, 0x7716 and
+                                                  0x7971 lower-case)
+    0x76a8   5  s_done          "Done"
+
+Both declared after `s_change_building`, where the original has them.
+
+`s_done` is declared as `s_done_2410_76a8` rather than `s_done` on purpose: our existing
+`s_done` is a stray at DGROUP:0x280D, and its only code reference is
+`menuItems[7].ofs = (uint16_t)s_done;  /* 0x6AB4 */` in ovc38_scores.c - so it belongs at
+0x6AB4, a separate misplacement left alone here.
+
+MEASURED (HEAD 9dd222db -> this commit)
+
+  diff_dgroup runs              40 -> 39
+  diff_dgroup sum|delta|   203,010 -> 200,634  (-2,376)
+  diff_dgroup matched        1,619 -> 1,619   (the two new symbols pair; one earlier
+                                               pairing in the same band is consumed)
+  compare_runtime matched    1,671 -> 1,673
+  compare_runtime identical  1,662 -> 1,664
+  compare_state              1,627/0/0
+  grep_checks               35,740 -> 35,742
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The next step in the profile is now the -47 at 0x7aa5 with nothing between 0x76e9 and it.

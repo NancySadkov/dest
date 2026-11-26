@@ -2349,3 +2349,7 @@ extern char s_Upgrade_costs_2410_80b7[];
 extern char s__s__Costs__d_gold_2410_7dca[];
 extern char s__s__Costs__d_gold_2410_7df8[];
 extern char s__s__Trades_d_food_2410_7e30[];
+
+/* 0x769b / 0x76a8 */
+extern char s_change_party_2410_769b[];
+extern char s_done_2410_76a8[];
