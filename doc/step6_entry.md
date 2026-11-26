@@ -13405,3 +13405,26 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### rle_line: four single-role names (36,938 -> 36,905)
+rle_line: four single-role names (36,938 -> 36,905)
+
+  puVar1  556, 587, 589, 597, 599   the byte read from src      -> curByte    (5)
+  puVar2  557, 602, 605             the output byte slot        -> outBytePtr (3)
+  uVar3   558, 571..573, 578        the candidate run length    -> runLen     (5)
+  iVar4   559, 583..586, 594..596   the literal-run length      -> litLen     (12)
+
+`iVar4` carries the same role in both branches - `ps - (int)src`, the number of literal bytes
+to copy before the run marker - so it is one name, not a split.
+
+Because the per-line occurrence counts vary with the compound `for` headers
+(`for (; pd = pd + 1, litLen != 0; litLen = litLen + -1)` contains three), the script
+asserts that each old name is *gone from the body* rather than predicting a total; the
+printed counts are the observed ones and they sum to 25 occurrences.
+
+No expression changed.
+
+  grep_checks 36,938 -> 36,905; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different

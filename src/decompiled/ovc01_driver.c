@@ -553,10 +553,10 @@ int16_t __cdecl16far countRunLength(char far *src, uint16_t avail, uint16_t maxR
 int __cdecl16far rle_line(uint8_t far *src, uint8_t far *dst, uint16_t npixels)
 
 {
-  uint8_t *puVar1;
-  uint8_t *puVar2;
-  uint uVar3;
-  int iVar4;
+  uint8_t *curByte;
+  uint8_t *outBytePtr;
+  uint runLen;
+  int litLen;
   uint16_t end;
   uint16_t pps;
   uint16_t c;
@@ -568,41 +568,41 @@ int __cdecl16far rle_line(uint8_t far *src, uint8_t far *dst, uint16_t npixels)
   pd = (uint16_t)(*(uint16_t *)((uint8_t *)&(dst) + 2));
 L_rle_line_0343:
   do {
-    uVar3 = end - ps;
-    if (0x7f < uVar3) {
-      uVar3 = 0x80;
+    runLen = end - ps;
+    if (0x7f < runLen) {
+      runLen = 0x80;
     }
     pps = ps;
     do {
       pps = pps + 1;
-      if ((uint8_t *)(ps + uVar3) <= pps) break;
+      if ((uint8_t *)(ps + runLen) <= pps) break;
     } while (*(uint8_t *)ps == *(uint8_t *)pps);
     c = pps - ps;
     if (c < 3) {
       ps = ps + 1;
-      iVar4 = ps - (int)src;
-      if (((byte)iVar4 < 0x80) && (ps < end)) goto L_rle_line_0343;
-      *(byte *)pd = (byte)iVar4 - 1;
-      for (; pd = pd + 1, iVar4 != 0; iVar4 = iVar4 + -1) {
-        puVar1 = src;
+      litLen = ps - (int)src;
+      if (((byte)litLen < 0x80) && (ps < end)) goto L_rle_line_0343;
+      *(byte *)pd = (byte)litLen - 1;
+      for (; pd = pd + 1, litLen != 0; litLen = litLen + -1) {
+        curByte = src;
         src = src + 1;
-        *(uint8_t *)pd = *puVar1;
+        *(uint8_t *)pd = *curByte;
       }
     }
     else {
       if (src != (uint8_t *)ps) {
-        iVar4 = ps - (int)src;
-        *(uint8_t *)pd = (char)iVar4 + 0xff;
-        for (; pd = pd + 1, ps = (uint16_t)src, iVar4 != 0; iVar4 = iVar4 + -1) {
-          puVar1 = src;
+        litLen = ps - (int)src;
+        *(uint8_t *)pd = (char)litLen + 0xff;
+        for (; pd = pd + 1, ps = (uint16_t)src, litLen != 0; litLen = litLen + -1) {
+          curByte = src;
           src = src + 1;
-          *(uint8_t *)pd = *puVar1;
+          *(uint8_t *)pd = *curByte;
         }
       }
-      puVar2 = (uint8_t *)(pd + 1);
+      outBytePtr = (uint8_t *)(pd + 1);
       *(char *)pd = '\x01' - (char)c;
       pd = pd + 2;
-      *puVar2 = *(uint8_t *)ps;
+      *outBytePtr = *(uint8_t *)ps;
       src = (uint8_t *)(ps + c);
     }
     ps = (uint16_t)src;
