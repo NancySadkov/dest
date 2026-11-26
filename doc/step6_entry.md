@@ -14219,3 +14219,54 @@ What the layout axis has achieved without it:
 
 all from data fidelity (the 0x5906 object, SeasonPalettes, six 1-byte tables, five string
 runs), with no size shortfalls or surpluses left to correct.
+
+### ovc49_textLongerParalyzed: eight names, three multi-role (35,886 -> 35,837)
+ovc49_textLongerParalyzed: eight names, three of them multi-role (35,886 -> 35,837)
+
+    bVar3   ovr_agnt_usesAgntCount2's result                    -> countOk    (5)
+    uVar12  agnt->strength copied for the realloc               -> strengthCopy (3)
+    uVar11  the low byte of the record offset                   -> slotByte   (4)
+    uVar7   the result of each helper call, tested immediately  -> checkOk    (9)
+    uVar10  ovr_randBelow(0x40,0)                               -> randChance (2)
+    uVar10  ovr_audio_panFromX's result                         -> panVal     (2)
+    iVar9   ovr_ovc27_rollAgainstStat's result                  -> rollOk     (8)
+    iVar9   (uint)agntIndex * 0x34 - 0x34                       -> recOfs     (3)
+    uVar8   GSavedBlitSeg                                       -> blitSeg    (6)
+    uVar8   ovc49_agentIsActive's result                        -> activeOk   (2)
+    uVar8   ovr_agnt_acquireTarget's result                     -> targetOk   (2)
+
+`in_DX` is left alone: read at six places and never assigned, so it is a register value
+carried in from the caller rather than something this function gives meaning to.
+
+METHOD, because this function is 435 lines and absolute line numbers were the wrong tool: my
+first attempt keyed the ranges on line numbers taken from an earlier dump and every one of
+them was two lines out (the function starts at 323, not 325).  The script now resolves each
+role by tracking the name's most recent *assigning statement* and applying it to every line
+until the next assignment.  That is also what makes the multi-line expressions correct - the
+`ovr_agnt_acquireTarget` call spans lines 400-403 with its result read on the last one, and a
+line-number range would have split the assignment from its test.
+
+`strengthCopy` rather than `strength`: `agnt_00->strength` appears 20 lines later, and a
+local of the same name next to it would read as a mistake.
+
+VERIFIED in the listing (tmp/make_fn_probe.py, 2,035 instructions, 91 `les` sites): the
+blit-segment path is emitted as
+
+    mov  ax,word ptr DGROUP:_GSavedBlitSeg
+    mov  word ptr [bp-12],ax
+    ...
+    lea  ax,word ptr [bp-34]
+    mov  ah,0
+    shl  ax,8
+    or   ax,di
+    lea  dx,word ptr [bp-34]
+
+i.e. the far pointer is still assembled from the stack byte and the segment register - the
+rename did not disturb the CONCAT13/CONCAT12 chains.
+
+No expression changed.
+
+  grep_checks 35,886 -> 35,837; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (47 runs, sum|delta| 193,093, mean 122, worst 14,562)
+  compare_runtime 1,630 matched, 1,621 identical / 9 different

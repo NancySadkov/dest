@@ -324,20 +324,24 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
 
 {
   char ok;
-  bool bVar3;
+  bool countOk;
   uint16_t roll;
   char *textPtr;
   uint8_t *stashOfs;
-  uint uVar7;
-  uint16_t uVar8;
-  int iVar9;
-  uint16_t uVar10;
+  uint checkOk;
+  uint16_t blitSeg;
+  uint16_t activeOk;
+  uint16_t targetOk;
+  int rollOk;
+  int recOfs;
+  uint16_t randChance;
+  uint16_t panVal;
   uint16_t in_DX;
   agnt_t far *agnt_00;
   uint16_t *agntSeg;
   byte mode;
-  undefined1 uVar11;
-  uint8_t uVar12;
+  undefined1 slotByte;
+  uint8_t strengthCopy;
   uint8_t text;
   static char msg[64];   /* DGROUP-backed formatting buffer */
   uint8_t dirY;
@@ -350,10 +354,10 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
   if ((agnt_00->combatState == 0x0) && (agnt_00->animFrame == 0xff)) {
     if (((agnt_00->flags & 0x200) != 0) && (roll = ovr_randBelow(0xc,0), (roll & 0xff) == 0)) {
       agnt_00->flags = agnt_00->flags & 0xfdff;
-      uVar8 = GSavedBlitSeg;
+      blitSeg = GSavedBlitSeg;
       textPtr = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
                                                             CONCAT12((char)&text,agntSeg)),0);
-      stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)in_DX,uVar8,0,0,0,0,0);
+      stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)in_DX,blitSeg,0,0,0,0,0);
       textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x8436,_SS),
                              (char *)CONCAT13((char)((uint)stashOfs >> 8),
                                               CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,
@@ -367,10 +371,10 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
         (((((agntG_t far *)agnt_00->gdata)->flags3 & 0x2000) != 0 &&
          (roll = ovr_randBelow(0x20,0), (roll & 0xff) == 0)))))) {
       agnt_00->flags = agnt_00->flags & 0xfeff;
-      uVar8 = GSavedBlitSeg;
+      blitSeg = GSavedBlitSeg;
       textPtr = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
                                                             CONCAT12((char)&text,agntSeg)),0);
-      stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)in_DX,uVar8,0,0,0,0,0);
+      stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)in_DX,blitSeg,0,0,0,0,0);
       textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x8451,_SS),
                              (char *)CONCAT13((char)((uint)stashOfs >> 8),
                                               CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,
@@ -382,9 +386,9 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
     }
     if ((agnt_00->flags & 0xbc0) == 0) {
       if (((*(char *)((int)&agnt_00->targetX + 1) < '\0') || ((int)agnt_00->y < 0x15)) ||
-         (uVar7 = ovc49_agentIsActive(agnt), (uVar7 & 0xff) != 0)) {
-        uVar8 = ovc49_agentIsActive(agnt);
-        if ((char)uVar8 == '\0') {
+         (checkOk = ovc49_agentIsActive(agnt), (checkOk & 0xff) != 0)) {
+        activeOk = ovc49_agentIsActive(agnt);
+        if ((char)activeOk == '\0') {
           mode = (byte)((ulong)agnt >> 0x10);
           if ((agnt_00->animVariant == 0x0) ||
              (ok = ovr_agnt_usesAnimFrame2(agnt_00,agntSeg), ok == '\0')) {
@@ -392,14 +396,14 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
                  (ok = ovr_agnt_usesAnimFrame2(agnt_00,agntSeg), ok != '\0')) &&
                 (agnt_00->moveState == 0x0)) && (agnt_00->animFrame == 0xff)) {
               if ((((((agntG_t far *)agnt_00->gdata)->flags & 1) == 0) ||
-                  (iVar9 = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,2), (char)iVar9 == '\0')) ||
-                 (uVar8 = ovr_agnt_acquireTarget
+                  (rollOk = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,2), (char)rollOk == '\0')) ||
+                 (targetOk = ovr_agnt_acquireTarget
                                     (agnt_00,(char *)CONCAT13((char)((uint)&agntIndex >> 8),
                                                               CONCAT12((char)&agntIndex,agntSeg)),
-                                     mode), (char)uVar8 == '\0')) {
+                                     mode), (char)targetOk == '\0')) {
                 if ((((((agntG_t far *)agnt_00->gdata)->flags & 1) == 0) ||
                     ((((entity_t *)agnt_00->entity)->base).level < 2)) ||
-                   ((iVar9 = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,2), (char)iVar9 == '\0' ||
+                   ((rollOk = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,2), (char)rollOk == '\0' ||
                     (ok = ovr_agnt_usesStrengthMax
                                        (agnt_00,(byte *)CONCAT13((char)((uint)&agntIndex >> 8),
                                                                  CONCAT12((char)&agntIndex,agntSeg)
@@ -409,10 +413,10 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
                       (ok = ovc49_usesFrameIndex(agnt,(byte *)CONCAT22(_SS,&agntIndex)),
                       ok == '\0')) ||
                      ((0x14 < Agnts[agntIndex - 1].y ||
-                      (uVar7 = ovr_ovc27_compute2(agnt_00,(int)agntSeg,mode,agntIndex - 1),
-                      (char)uVar7 == '\0')))) {
+                      (checkOk = ovr_ovc27_compute2(agnt_00,(int)agntSeg,mode,agntIndex - 1),
+                      (char)checkOk == '\0')))) {
                     if (((int)agnt_00->y < 0x15) &&
-                       (iVar9 = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,3), (char)iVar9 != '\0')
+                       (rollOk = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,3), (char)rollOk != '\0')
                        ) {
                       ok = ovc49_usesFrameIndex2(agnt,(byte *)CONCAT22(_SS,&agntIndex));
                       if ((ok == '\0') || (0x14 < Agnts[agntIndex - 1].y)) {
@@ -503,12 +507,12 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
                              ((((ok = ovc49_usesFrameIndex
                                                    (agnt,(byte *)CONCAT22(_SS,&agntIndex)),
                                 ok != '\0' &&
-                                (iVar9 = (uint)agntIndex * 0x34 + -0x34, uVar11 = (undefined1)iVar9,
-                                uVar7 = ovr_agnt_compute12(agnt_00,(agnt_t far *)
-                                                                   CONCAT13((char)((uint)iVar9 >> 8)
-                                                                            ,CONCAT12(uVar11,
-                                                  agntSeg)),mode,uVar11,SEG_OF(Agnts)),
-                                (char)uVar7 != '\0')) &&
+                                (recOfs = (uint)agntIndex * 0x34 + -0x34, slotByte = (undefined1)recOfs,
+                                checkOk = ovr_agnt_compute12(agnt_00,(agnt_t far *)
+                                                                   CONCAT13((char)((uint)recOfs >> 8)
+                                                                            ,CONCAT12(slotByte,
+                                                  agntSeg)),mode,slotByte,SEG_OF(Agnts)),
+                                (char)checkOk != '\0')) &&
                                ((Agnts[agntIndex - 1].flags & 0x800) == 0)) &&
                               ((Agnts[agntIndex - 1].gdata->flags & 4) != 0)))))) {
                       roll = ovr_audio_panFromX((agnt_t far *)&Agnts[param].x,SEG_OF(Agnts));
@@ -520,7 +524,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
                     }
                     else if ((((((agntG_t far *)agnt_00->gdata)->flags3 & 0x200) == 0) ||
                              (roll = (uint16_t)agnt_00->strengthMax, roll < agnt_00->strength + 3)
-                             ) || (uVar10 = ovr_randBelow(0x40,0), (uVar10 & 0xff) != 0)) {
+                             ) || (randChance = ovr_randBelow(0x40,0), (randChance & 0xff) != 0)) {
                       if (((((char)agnt_00->targetX == '\0') &&
                            (*(char *)((int)&agnt_00->targetX + 1) == '\0')) ||
                           (roll = ovr_randBelow(8,0), (roll & 0xff) == 0)) &&
@@ -540,10 +544,10 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
                           }
                         }
                         else {
-                          bVar3 = ovr_agnt_usesAgntCount2
+                          countOk = ovr_agnt_usesAgntCount2
                                             (agnt_00,(uint16_t *)CONCAT22(&dx,agntSeg),
                                              (uint16_t *)CONCAT22(&dirY,_SS));
-                          if (bVar3) {
+                          if (countOk) {
                             *(uint8_t *)((int)&agnt_00->targetX + 1) = dirY;
                             if ((distance < 0x6e) &&
                                ((((agntG_t far *)agnt_00->gdata)->flags3 & 0x10) != 0)) {
@@ -616,12 +620,12 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
                     }
                     else {
                       agnt_00->strength = agnt_00->strength + 0x3;
-                      uVar10 = ovr_audio_panFromX(agnt_00,agntSeg);
-                      ovr_play_sfxU(0x4a,0,uVar10,0,0);
-                      uVar12 = agnt_00->strength;
-                      uVar8 = GSavedBlitSeg;
+                      panVal = ovr_audio_panFromX(agnt_00,agntSeg);
+                      ovr_play_sfxU(0x4a,0,panVal,0,0);
+                      strengthCopy = agnt_00->strength;
+                      blitSeg = GSavedBlitSeg;
                       textPtr = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,agntSeg),0);
-                      stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)roll,uVar12,uVar8,0,0,0,0);
+                      stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)roll,strengthCopy,blitSeg,0,0,0,0);
                       textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x846c,_SS),
                                              (char *)CONCAT22(stashOfs,(char *)0x26510),
                                              (char)roll);
@@ -655,10 +659,10 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
                     ((0x14 < (int)agnt_00->y ||
                      (ok = ovc49_usesFrameIndex(agnt,(byte *)CONCAT22(_SS,&agntIndex)),
                      ok == '\0')))) || (0x14 < Agnts[agntIndex - 1].y)) ||
-                  (uVar7 = ovr_ovc27_compute2(agnt_00,(int)agntSeg,mode,agntIndex - 1),
-                  (char)uVar7 == '\0')) {
+                  (checkOk = ovr_ovc27_compute2(agnt_00,(int)agntSeg,mode,agntIndex - 1),
+                  (char)checkOk == '\0')) {
             if (((((int)agnt_00->y < 0x15) &&
-                 (iVar9 = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,3), (char)iVar9 != '\0')) &&
+                 (rollOk = ovr_ovc27_rollAgainstStat(agnt_00,mode,mode,3), (char)rollOk != '\0')) &&
                 (ok = ovc49_usesFrameIndex2(agnt,(byte *)CONCAT22(_SS,&agntIndex)),
                 ok != '\0')) && (Agnts[agntIndex - 1].y < 0x15)) {
               agnt_00->health = 0x2;
@@ -682,10 +686,10 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
                 if (((('\0' < (char)agnt_00->targetX) && (0xaa < (int)agnt->x)) ||
                     (((char)agnt_00->targetX < '\0' && ((int)agnt->x < 0x34)))) &&
                    (roll = ovr_randBelow(8,0), (roll & 0xff) == 0)) {
-                  bVar3 = ovr_agnt_usesAgntCount2
+                  countOk = ovr_agnt_usesAgntCount2
                                     (agnt_00,(uint16_t *)CONCAT22(&dx,agntSeg),
                                      (uint16_t *)CONCAT22(&dirY,_SS));
-                  if (bVar3) {
+                  if (countOk) {
                     *(uint8_t *)((int)&agnt_00->targetX + 1) = dirY;
                   }
                   else {
