@@ -10465,3 +10465,53 @@ Verified in the emitted listing:
   grep_checks 39,078 -> 39,071; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### Detector for record-offset-as-pointer, and frame/state reads fixed
+detector for the record-offset-as-pointer class, plus ovc27_usesBlitGfxRect's frame/state reads
+
+NEW TOOL: tmp/find_off_ptr.py scans every function for the two shapes that have now been fixed
+by hand six times:
+
+  A.  V = <index> * <stride>;        a record offset into some array's segment
+      ... *(T *)(V + field)          read at DS:V+field - the wrong segment
+
+  B.  V = (int)<FarArray>;           only the offset of a far array
+      ... ((T *)V)[i] / *(T *)(V + ...)
+
+Result: **50 functions, 348 reads**, with the top entries being
+
+    46  ovc41_main.c   ovc41_usesBiosKeyAvail    (iVar14/iVar15 from backdropRec*)
+    36  ovc27_combat.c ovc27_usesRandBelow3      (recIdx / * 0x34)
+    26  ovc22_classes.c upd_usesAlignUp4         (* 0x95)
+    18  ovc49_agents.c ovc49_drawAgents          (recPtr)
+    16  ovc27_combat.c ovc27_compute3            (viewIdx)
+
+Note the first entry is a FALSE POSITIVE and a useful calibration: `backdropRec2` comes from the
+`_backdropIndex` table, which is DGROUP-resident (measured two turns ago), so a near read there is
+correct.  Shape B is only a defect when the source is a `far far` array; the detector reports the
+source name so that can be decided per site.
+
+FIXED THIS TURN - ovc27_usesBlitGfxRect's frame and state records:
+
+    framesSeg = *(uint16_t *)((int)&agnt->frames + 2);
+    framesOfs = *(int *)&agnt->frames;
+    ... stateSeg = *(uint16_t *)(framesOfs + 0xe); stateOfs = *(int *)(framesOfs + 0xc);
+    ... *(int *)(stateOfs + 0x13) / (stateOfs + 0x15)
+
+`framesSeg` and `stateSeg` were assigned and never read - itself the proof that the reads went to
+DGROUP.  Now:
+
+    frames = (uint8_t far *)MK_FP(framesSeg,(uint16_t)framesOfs);
+    stateEntry = *(far_t far *)(frames + 0xc);      /* +0x10 in the other branch */
+    state = (uint8_t far *)MK_FP(stateEntry.seg,stateEntry.ofs);
+    ... *(int far *)(state + 0x13) / (state + 0x15)
+
+Verified in the emitted listing - `les` sites went 22 -> 30, and the state read is far:
+
+    les  bx,dword ptr [bp-22]
+    add  ax,word ptr es:[bx+19]      ; state + 0x13
+
+  grep_checks 39,071 (unchanged - these are not section-5 names)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different

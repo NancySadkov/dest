@@ -693,29 +693,30 @@ void __cdecl16far ovc27_usesBlitGfxRect(int agntIndex,brect_t *rect,uint16_t typ
   agnt_t far *agnt;
   uint xPos;
   int framesOfs;
+  uint8_t far *frames;
+  far_t stateEntry;
+  uint8_t far *state;
   int aimX;
   stg_tmp_t *stash;
   uint16_t spriteSeg;
   uint16_t *spritePtr;
   far_t gfx;
   far_t gfx_00;
-  int stateOfs;
-  uint16_t stateSeg;
   
   agnt = (agnt_t far *)&Agnts[agntIndex].x;
   if (((agnt->combatState == 0x0) && (agnt->target != 0xff)) && (agnt->animFrame != 0xff)) {
     framesSeg = *(uint16_t *)((int)&agnt->frames + 2);
     framesOfs = *(int *)&agnt->frames;
+    frames = (uint8_t far *)MK_FP(framesSeg,(uint16_t)framesOfs);
     if (agnt->animVariant == 0x0) {
-      stateSeg = *(uint16_t *)(framesOfs + 0xe);
-      stateOfs = *(int *)(framesOfs + 0xc);
+      stateEntry = *(far_t far *)(frames + 0xc);
     }
     else {
-      stateSeg = *(uint16_t *)(framesOfs + 0x12);
-      stateOfs = *(int *)(framesOfs + 0x10);
+      stateEntry = *(far_t far *)(frames + 0x10);
     }
+    state = (uint8_t far *)MK_FP(stateEntry.seg,stateEntry.ofs);
     if (agnt->level == 0x0) {
-      xPos = agnt->screenX + *(int *)(stateOfs + 0x13);
+      xPos = agnt->screenX + *(int far *)(state + 0x13);
       if ((uint)Agnts[agnt->target].screenX <= xPos) {
         agnt->animFrame = 0xff;
         agnt->variant = 0x0;
@@ -723,7 +724,7 @@ void __cdecl16far ovc27_usesBlitGfxRect(int agntIndex,brect_t *rect,uint16_t typ
       }
     }
     else {
-      xPos = agnt->screenX - *(int *)(stateOfs + 0x13);
+      xPos = agnt->screenX - *(int far *)(state + 0x13);
       if (xPos <= (uint)Agnts[agnt->target].screenX) {
         agnt->animFrame = 0xff;
         agnt->variant = 0x0;
@@ -737,7 +738,7 @@ void __cdecl16far ovc27_usesBlitGfxRect(int agntIndex,brect_t *rect,uint16_t typ
       if (agnt->variant == 0x1) {
         if (agnt->animFrame < 0xfc) {
           ovc27_intelAttackingNotice
-                    (xPos,*(int *)(stateOfs + 0x15) + agnt->screenY,(int)Agnts[agnt->target].screenX,
+                    (xPos,*(int far *)(state + 0x15) + agnt->screenY,(int)Agnts[agnt->target].screenX,
                      (int)Agnts[agnt->target].screenY - (*(int *)(spriteSeg + 0xd) >> 1),
                      (int *)CONCAT22(type,rect));
         }
@@ -756,7 +757,7 @@ void __cdecl16far ovc27_usesBlitGfxRect(int agntIndex,brect_t *rect,uint16_t typ
           aimX = (int)Agnts[agnt->target].screenX + 8;
         }
         if (agnt->animFrame < 0xfb) {
-          ovc27_usesRandBelow(xPos,*(int *)(stateOfs + 0x15) + agnt->screenY,aimX,
+          ovc27_usesRandBelow(xPos,*(int far *)(state + 0x15) + agnt->screenY,aimX,
                               (int)Agnts[agnt->target].screenY + -6,(brect_t *)CONCAT22(type,rect),
                               agnt->animFrame << 1);
         }
