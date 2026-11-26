@@ -28,6 +28,7 @@ absent_path = (sys.argv[sys.argv.index("--list-absent") + 1]
 
 # ---- original DGROUP symbols -------------------------------------------------
 orig = []          # (address, name)
+interior = []      # "name+N" labels: inside the object above them, not symbols
 for line in io.open(SYMS, encoding="utf-8"):
     f = line.rstrip("\n").split("\t")
     if len(f) < 4:
@@ -38,6 +39,10 @@ for line in io.open(SYMS, encoding="utf-8"):
     if kind not in ("Label",):
         continue
     if "[" in name:            # element labels collide with the array base
+        continue
+    if "+" in name:            # interior label of the object above it ("s_x+3")
+        if ":" in addr:
+            interior.append((int(addr.split(":")[1], 16), name))
         continue
     if name.startswith(("__C0", "_argc", "_argv", "_environ", "_env", "_psp",
                         "DosVersion", "errno", "__brklvl", "_heapbase",
@@ -164,6 +169,8 @@ if why:
 
     buckets = {}
     variants = []
+    if interior:
+        buckets.setdefault("interior label (+N) - not a symbol", []).extend(interior)
     for off, name, reason in unmatched:
         if "+" in name:
             cls = "interior label (+N) - not a symbol"
