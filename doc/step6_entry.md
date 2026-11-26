@@ -15164,3 +15164,31 @@ Only `__C0argc` (2 bytes, identical name and meaning) and `DosVersion` (2 bytes,
 `__osversion` covers major+minor) are semantic matches; together they would save 4 bytes
 (~6,400 on sum) but `_envSize_at_` is written as a 4-byte store that currently spills into
 `DosVersion`, so removing it needs that defect fixed first.  Not attempted here.
+
+### ovc41_textParalyzed: pcVar6 is three objects (35,585 -> 35,567)
+ovc41_textParalyzed: pcVar6 is three objects (35,585 -> 35,567)
+
+    victimSegWord  1971, 1991, 2011, 2067  (char *)((ulong)victim >> 0x10)
+    statusText     2066, 2068              ovr_agnt_statusText's result, handed to the realloc
+    notifyText     2069, 2072              ovr_stsprintf's result, handed to ovr_uiNotify
+
+Lines 2066-2067 are one statement
+
+    statusText = ovr_agnt_statusText(agnt, CONCAT13(..., CONCAT12((char)&sourceName, pcVar6)), 0);
+
+so the `pcVar6` on the continuation line is the *previous* value (the victim's segment) while the
+assignment target is the new one.  Renaming 2067 with the result's other uses would make the call
+read its own unassigned result - the ovc27_spellHalfDamage defect - so it is listed with
+`victimSegWord` and the script asserts
+
+    2067  CONCAT12((char)&sourceName,victimSegWord)),0);
+    2068  stashOfs = ovr_ovc15_usesStshRealloc(statusText,...);
+
+`victimSegWord` rather than `victimSeg`: the function already has a `victimSeg` byte (1978, used at
+1983/1996/1998/2017/2027) which is the low byte of the same segment, and two names differing only
+by a suffix would read as a mistake.  The pre-check caught the collision before writing.
+
+  grep_checks 35,585 -> 35,567; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0 (DIFFERENT 0)
+  diff_dgroup 1,626/1,805 matched, 31 runs, sum|delta| 88,497, mean 54, worst 14,314
+  compare_runtime 1,682 matched, 1,673 identical / 9 different

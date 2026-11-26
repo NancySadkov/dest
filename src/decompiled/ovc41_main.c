@@ -1954,7 +1954,9 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
   uint16_t in_DX;
   agnt_t far *agnt;
   agnt_t far *agnt_00;
-  char *pcVar6;
+  char *victimSegWord;
+  char *statusText;
+  char *notifyText;
   uint16_t sourceSeg;
   undefined1 textLo;
   undefined1 panHi;
@@ -1968,7 +1970,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
   undefined1 resolved;
   
   resolved = 0;
-  pcVar6 = (char *)((ulong)victim >> 0x10);
+  victimSegWord = (char *)((ulong)victim >> 0x10);
   agnt = (agnt_t far *)victim;
   if ((agnt->flags & 0x80) != 0) {
     strength = (uint)agnt->strength;
@@ -1988,7 +1990,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
                                                             CONCAT12((char)&victimName,sourceSeg)),0);
       textLo = SUB21(textPtr,0);
       stashSeg = in_DX;
-      textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&sourceName,pcVar6),0);
+      textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&sourceName,victimSegWord),0);
       stashOfs = ovr_ovc15_usesStshRealloc(textPtr,in_DX,textLo,stashSeg,savedSeg,0,0,0);
       textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6f63,_SS),
                              (char *)CONCAT22(stashOfs,(char *)0x26510),in_DX);
@@ -2008,7 +2010,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
                                                             CONCAT12((char)&victimName,sourceSeg)),0);
       textLo = SUB21(textPtr,0);
       stashSeg = in_DX;
-      textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&sourceName,pcVar6),0);
+      textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&sourceName,victimSegWord),0);
       stashOfs = ovr_ovc15_usesStshRealloc(textPtr,in_DX,textLo,stashSeg,savedSeg,0,0,0);
       textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6f7a,_SS),
                              (char *)CONCAT22(stashOfs,(char *)0x26510),in_DX);
@@ -2063,13 +2065,13 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
     if ((agnt_00->flags & 0x20) != 0) {
       agnt_00->flags = agnt_00->flags & 0xffdf;
       blitSegLo = (undefined1)GSavedBlitSeg;
-      pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&sourceName >> 8),
-                                                         CONCAT12((char)&sourceName,pcVar6)),0);
-      stashOfs = ovr_ovc15_usesStshRealloc(pcVar6,in_DX,blitSegLo,0,0,0,0,0);
-      pcVar6 = ovr_stsprintf(msg,(char *)CONCAT22(0x6f8e,_SS),
+      statusText = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&sourceName >> 8),
+                                                         CONCAT12((char)&sourceName,victimSegWord)),0);
+      stashOfs = ovr_ovc15_usesStshRealloc(statusText,in_DX,blitSegLo,0,0,0,0,0);
+      notifyText = ovr_stsprintf(msg,(char *)CONCAT22(0x6f8e,_SS),
                              (char *)CONCAT13((char)((uint)stashOfs >> 8),
                                               CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,in_DX);
-      ovr_uiNotify(pcVar6,in_DX,0);
+      ovr_uiNotify(notifyText,in_DX,0);
       agnt_00->faction = agnt_00->gdata->ai;
       ovc41_advanceAnimFrame(agnt_00,(char)((ulong)source >> 0x10));
       ovr_attact_usesLDIV_at_2();
