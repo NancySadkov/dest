@@ -1024,28 +1024,29 @@ uint16_t __cdecl16far gameProcessKey(void)
 uint16_t __cdecl16far draw_usesGameProcessKey(void)
 
 {
-  bool bVar1;
-  int iVar2;
-  int iVar3;
-  byte bVar4;
-  uint16_t uVar5;
-  uint16_t uVar6;
+  bool firstPass;
+  int startX;
+  int startY;
+  byte miceResult;
+  uint16_t keyAvail;
+  uint16_t key;
+  uint16_t drainKey;
   undefined1 extraout_AH;
-  int iStack_a;
-  int iStack_8;
+  int lastCounterLo;
+  int lastCounterHi;
   
-  iStack_8 = -1;
-  iStack_a = -1;
+  lastCounterHi = -1;
+  lastCounterLo = -1;
   ovr_miceBlitRect((brect_t *)(BlitRects + 1),0x2410);
-  iVar3 = MouseY;
-  iVar2 = MouseX;
-  bVar1 = false;
+  startY = MouseY;
+  startX = MouseX;
+  firstPass = false;
   MouseMoved = 0;
   while( true ) {
-    if ((*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != iStack_8) ||
-       (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) != iStack_a)) {
-      iStack_8 = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
-      iStack_a = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
+    if ((*(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != lastCounterHi) ||
+       (*(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) != lastCounterLo)) {
+      lastCounterHi = *(int far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
+      lastCounterLo = *(int far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
       draw_usesPrintf();
       if (GGameInProgress != '\0') {
         ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x2410);
@@ -1053,14 +1054,14 @@ uint16_t __cdecl16far draw_usesGameProcessKey(void)
         return 0;
       }
     }
-    uVar5 = ovr_biosKeyAvail();
-    if ((char)uVar5 != '\0') break;
-    bVar4 = ovr_init2_usesCFGMice((uint16_t *)&MouseX,(uint16_t *)&MouseY,0x2410);
-    if (CONCAT11(extraout_AH,bVar4) == 0) {
-      bVar1 = true;
+    keyAvail = ovr_biosKeyAvail();
+    if ((char)keyAvail != '\0') break;
+    miceResult = ovr_init2_usesCFGMice((uint16_t *)&MouseX,(uint16_t *)&MouseY,0x2410);
+    if (CONCAT11(extraout_AH,miceResult) == 0) {
+      firstPass = true;
     }
-    else if (((bVar1) || (iVar2 != MouseX)) || (iVar3 != MouseY)) {
-      if (!bVar1) {
+    else if (((firstPass) || (startX != MouseX)) || (startY != MouseY)) {
+      if (!firstPass) {
         MouseMoved = 1;
       }
       ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x2410);
@@ -1079,17 +1080,17 @@ uint16_t __cdecl16far draw_usesGameProcessKey(void)
   }
   ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0x2410);
   draw_usesResetTextBlitCycle();
-  uVar5 = gameProcessKey();
-  while (uVar6 = ovr_biosKeyAvail(), (char)uVar6 != '\0') {
-    uVar5 = gameProcessKey();
+  key = gameProcessKey();
+  while (drainKey = ovr_biosKeyAvail(), (char)drainKey != '\0') {
+    key = gameProcessKey();
   }
   GGameState = 0x35;
   if (DebugVerbose == false) {
     GGameState = 0x35;
-    return uVar5;
+    return key;
   }
   printf("%d \r");
-  return uVar5;
+  return key;
 }
 
 

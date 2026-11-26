@@ -12168,3 +12168,27 @@ rather than guessed at.
   grep_checks 37,707 -> 37,676; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
   compare_runtime 1,605 identical / 10 different
+
+### draw_usesGameProcessKey: key roles split (37,676 -> 37,644)
+draw_usesGameProcessKey: counter snapshot, mouse edge and the two key roles (37,676 -> 37,644)
+
+  iStack_8  saved BDA time-counter high word      -> lastCounterHi (4)
+  iStack_a  saved BDA time-counter low word       -> lastCounterLo (4)
+  bVar1     "first poll since the mouse moved"    -> firstPass    (5)
+  bVar4     ovr_init2_usesCFGMice(...) result     -> miceResult   (3)
+  iVar2     MouseX snapshot before the loop       -> startX       (3)
+  iVar3     MouseY snapshot before the loop       -> startY       (3)
+  uVar6     the drain-loop ovr_biosKeyAvail()     -> drainKey     (2)
+  uVar5     ovr_biosKeyAvail() up to the ESC path,
+            then gameProcessKey() from there      -> keyAvail / key (split)
+
+The `uVar5` split is placed at the first `uVar5 = gameProcessKey();`.  Before that the
+variable only ever holds `ovr_biosKeyAvail()`'s result and is tested for zero; after it
+the variable is the key the game should act on, and it is what the function returns on
+all three exits.  Two names because they are two different questions.
+
+No expression changed.
+
+  grep_checks 37,676 -> 37,644; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different
