@@ -51,12 +51,13 @@ int __cdecl16far unit_usesGUnits(int unitIndex)
 void __cdecl16far unit_usesAlignUp4(void)
 
 {
-  byte bVar1;
+  byte gunitType;
   uint32_t typePtr;
-  uint uVar3;
-  int iVar4;
-  int iVar5;
-  uint16_t uVar6;
+  uint agntIdx;
+  uint alignedX;
+  int entX;
+  int halfExtent;
+  int unitX;
   int extent;
   int rowBottom;
   int rowTop;
@@ -69,24 +70,23 @@ void __cdecl16far unit_usesAlignUp4(void)
     ovr_driver_clearMapFlagsRect
               ((uint32_t)CONCAT22((*(uint16_t *)((uint8_t *)&(GMapFlags) + 2)),(short (*) [60] [148])GMapFlags),0,0,0x93,0x3b,0xfff7,0,0);
     for (index = 0; index < EntityCount; index = index + 1) {
-      uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-      uVar3 = (uint)((entity_t far *)Entities)[index].base.gindex;
-      if (AgntGs[uVar3].ai == '\0') {
-        if (uVar3 == 3) {
+      agntIdx = (uint)((entity_t far *)Entities)[index].base.gindex;
+      if (AgntGs[alignedX].ai == '\0') {
+        if (alignedX == 3) {
           extent = 0xf;
         }
-        else if (uVar3 == 0xb) {
+        else if (alignedX == 0xb) {
           extent = 8;
         }
         else {
           extent = 5;
         }
-        iVar4 = *(int *)((entity_t far *)Entities + index);
+        entX = *(int *)((entity_t far *)Entities + index);
         rowBottom = ((entity_t far *)Entities)[index].base.y;
-        uVar3 = ovr_alignUp4(iVar4 + extent * -2,0,0);
-        colLeft = uVar3 - 2;
-        uVar3 = ovr_alignUp4(iVar4 + extent * 2,0,0);
-        colRight = uVar3 + 1;
+        alignedX = ovr_alignUp4(entX + extent * -2,0,0);
+        colLeft = alignedX - 2;
+        alignedX = ovr_alignUp4(entX + extent * 2,0,0);
+        colRight = alignedX + 1;
         if (colLeft < 0) {
           colLeft = 0;
         }
@@ -107,26 +107,24 @@ void __cdecl16far unit_usesAlignUp4(void)
       }
     }
     for (index = 0xf8; index < GUnitCount; index = index + 1) {
-      uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
       if (((BuildingTypes[(uint)(GUnits + index)->bldType].sight != 0) &&
-          (bVar1 = (GUnits)[index].unitType, bVar1 != 0xff)) &&
-         (typePtr = *(uint32_t *)((uint)bVar1 << 2), *(char *)((int)typePtr + 0x3f) == '\0')) {
-        iVar4 = unit_usesGUnits(index);
-        uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
-        iVar5 = (GUnits)[index].x;
+          (gunitType = (GUnits)[index].unitType, gunitType != 0xff)) &&
+         (typePtr = *(uint32_t *)((uint)gunitType << 2), *(char *)((int)typePtr + 0x3f) == '\0')) {
+        halfExtent = unit_usesGUnits(index);
+        unitX = (GUnits)[index].x;
         rowBottom = (GUnits)[index].y;
-        uVar3 = ovr_alignUp4(iVar5 + iVar4 * -2,0,0);
-        colLeft = uVar3 - 2;
-        uVar3 = ovr_alignUp4(iVar5 + iVar4 * 2,0,0);
-        colRight = uVar3 + 1;
+        alignedX = ovr_alignUp4(unitX + halfExtent * -2,0,0);
+        colLeft = alignedX - 2;
+        alignedX = ovr_alignUp4(unitX + halfExtent * 2,0,0);
+        colRight = alignedX + 1;
         if (colLeft < 0) {
           colLeft = 0;
         }
         if (0x93 < colRight) {
           colRight = 0x93;
         }
-        rowTop = rowBottom - iVar4;
-        rowBottom = rowBottom + iVar4;
+        rowTop = rowBottom - halfExtent;
+        rowBottom = rowBottom + halfExtent;
         if (rowTop < 0) {
           rowTop = 0;
         }

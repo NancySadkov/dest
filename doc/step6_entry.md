@@ -11509,3 +11509,27 @@ value the source never sets.
   grep_checks 38,118 -> 38,066; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
   compare_runtime 1,605 identical / 10 different
+
+### unit_usesAlignUp4: two shadow rectangles named (38,066 -> 38,032)
+unit_usesAlignUp4: two shadow rectangles' inputs named, dead segment removed (38,066 -> 38,032)
+
+The function builds the same shadow rectangle twice - once over `Entities` and once
+over `GUnits` - which is why two temporaries carry two roles each:
+
+  uVar3   (uint)Entities[index].base.gindex        -> agntIdx    (1)
+  uVar3   ovr_alignUp4(...) results                -> alignedX   (7)
+  iVar4   Entities[index] x (first loop)           -> entX       (3)
+  iVar4   unit_usesGUnits(index) / extent (second) -> halfExtent (5)
+  iVar5   (GUnits)[index].x                        -> unitX      (4)
+  bVar1   (GUnits)[index].unitType                 -> gunitType  (3)
+
+`uVar6` was assigned three times - `(uint16_t)((ulong)Entities >> 0x10)` and the same
+for `GUnits` - and never read, so the declaration and all three stores are removed.
+
+Two names had to differ from the obvious choice because the field names are already
+in the same expressions: the local for `.unitType` is `gunitType`, and for
+`.base.gindex` it is `agntIdx`.
+
+  grep_checks 38,066 -> 38,032; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
+  compare_runtime 1,605 identical / 10 different
