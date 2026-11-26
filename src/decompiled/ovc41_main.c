@@ -300,29 +300,30 @@ char * __cdecl16far ovc41_isAre(int count)
 void __cdecl16far ovc41_unitStatusText(byte menuIndex)
 
 {
-  char *pcVar1;
-  uint16_t *puVar2;
-  uint16_t uVar3;
+  char *isAreText;
+  char *statusText;
+  uint16_t *itemPtr;
+  uint16_t agntSeg;
   uint16_t dst;
-  uint uVar4;
+  uint agntIdx;
   int count;
   far_t pctOut;
   far_t remainderOut;
-  ulong uVar5;
+  ulong packedValue;
   far_t partOut;
-  uint32_t uVar6;
+  uint32_t screenAddr;
   static char msg[64];   /* DGROUP-backed formatting buffer */
   uint8_t part;
   uint8_t remainder;
   uint8_t pct;
   
-  uVar3 = 0x2410;
+  agntSeg = 0x2410;
   if (((uint8_t *)MenuItemEnabled)[menuIndex] != 0xff) {
     count = 0;
-    for (uVar4 = 0; uVar4 < AgntCount; uVar4 = uVar4 + 1) {
-      uVar3 = SEG_OF(Agnts);
+    for (agntIdx = 0; agntIdx < AgntCount; agntIdx = agntIdx + 1) {
+      agntSeg = SEG_OF(Agnts);
       if (((uint8_t *)MenuItemEnabled)[menuIndex] ==
-          AGNT_FIELD(Agnts[uVar4].entity, base.entity, 3)) {
+          AGNT_FIELD(Agnts[agntIdx].entity, base.entity, 3)) {
         count = count + 1;
       }
     }
@@ -333,15 +334,15 @@ void __cdecl16far ovc41_unitStatusText(byte menuIndex)
     pctOut.seg = (uint16_t)_SS;
     pctOut.ofs = (uint16_t)&pct;
     ovr_attact_compute2(CONCAT11((char)((uint)&pct >> 8),menuIndex),pctOut,remainderOut,partOut);
-    uVar6 = CONCAT22(0xa000,(uint)pct);
-    uVar5 = (ulong)CONCAT12(remainder,(uint)part);
-    pcVar1 = ovc41_isAre(count);
-    puVar2 = (uint16_t *)((uint)((uint8_t *)MenuItemEnabled)[menuIndex] * 4);
+    screenAddr = CONCAT22(0xa000,(uint)pct);
+    packedValue = (ulong)CONCAT12(remainder,(uint)part);
+    isAreText = ovc41_isAre(count);
+    itemPtr = (uint16_t *)((uint)((uint8_t *)MenuItemEnabled)[menuIndex] * 4);
     dst = _DS;
-    uVar3 = ovc41_pluralSuffix(count,*puVar2,puVar2[1],pcVar1,uVar3,uVar5,uVar6);
-    pcVar1 = ovr_stsprintf(msg,(char *)CONCAT22(0x6e86,_SS),
-                           (char *)CONCAT22(count,(char *)0x26510),uVar3,dst);
-    ovr_drawTextAt(pcVar1,dst,0);
+    ovc41_pluralSuffix(count,*itemPtr,itemPtr[1],isAreText,agntSeg,packedValue,screenAddr);
+    statusText = ovr_stsprintf(msg,(char *)CONCAT22(0x6e86,_SS),
+                           (char *)CONCAT22(count,(char *)0x26510),agntSeg,dst);
+    ovr_drawTextAt(statusText,dst,0);
   }
   return;
 }

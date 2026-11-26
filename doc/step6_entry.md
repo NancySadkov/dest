@@ -13276,3 +13276,36 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### ovc41_unitStatusText: five renames and one dead assignment (37,072 -> 37,036)
+ovc41_unitStatusText: five renames and one dead assignment (37,072 -> 37,036)
+
+  pcVar1  338, 341   ovc41_isAre(count) result              -> isAreText  (2)
+  pcVar1  342, 344   ovr_stsprintf's result                 -> statusText (2)
+  puVar2  339, 341   &MenuItemEnabled[menuIndex], a pair     -> itemPtr    (3)
+  uVar4   322, 325   the Agnts loop index                    -> agntIdx    (5)
+  uVar5   337, 341   CONCAT12(remainder, part) as a ulong    -> packedValue(2)
+  uVar6   336, 341   CONCAT22(0xa000, pct)                   -> screenAddr (2)
+  uVar3   319,323,341,343  the 0x2410 / SEG_OF(Agnts) value  -> agntSeg    (4)
+
+`uVar3` also receives `ovc41_pluralSuffix`'s return value at 341 and that value is never
+read, so the assignment is dropped and the call kept - the same cleanup as the dead-store
+sweeps, with the side effects preserved.
+
+TWO MISTAKES CAUGHT, both worth recording:
+
+1. a first attempt removed the six placeholder declarations file-wide (`char *pcVar1;`
+   appears in a dozen other functions of ovc41_main.c) and broke five of them -
+   `Undefined symbol 'uVar3' in function ovc41_usesMenuItemEnabled`.  The script now
+   requires each declaration match to be inside the function span and asserts exactly one
+   hit.
+
+2. two occurrences were missed on the first pass because the per-line listing was
+   truncated: `pcVar1` is an argument on line 341 and `uVar3` on line 343 (inside the
+   `ovr_stsprintf` argument list).  The post-rename assertion failed on both, so the file
+   was never written with a half-done rename.
+
+  grep_checks 37,072 -> 37,036; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
