@@ -1785,7 +1785,7 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
 /* 6386:1837 */
 
 /* WARNING: Globals starting with '_' overlap smaller symbols at the same address */
-/* Formats the "%s can now be called away from home." notice. */
+/* Formats the (char *)s_s_can_now_be_cal_2410_644e notice. */
 
 void __cdecl16far stats_calledAwayNotice(byte agntIndex)
 

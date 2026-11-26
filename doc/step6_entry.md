@@ -12959,3 +12959,49 @@ does beat the target on sum|delta| (219,507 vs 251,810)**; what blocks keeping i
 compare_runtime pairs six fewer symbols, and that is a naming/pairing consequence of the
 deleted duplicates, not a data difference.  Fixing it means completing variant C properly
 (declaration + header extern + every code reference), which is the next step.
+
+### layout: duplicates replaced by the correctly-placed originals (251,810 -> 235,338)
+layout: duplicates replaced by their correctly-placed originals (sum|delta| 251,810 -> 235,338; runtime 1,605 -> 1,620)
+
+Completes the variant C that failed its build last turn.  Three coordinated edits:
+
+1. delete the 20 misplaced duplicate declarations at the end of the 0x5E block
+   (original 0x5100..0x5D82).  The 21st, `s_intelligence_rep_2410_5906`, is binary
+   ("Intelligence reports %s attacking." followed by a small table) and is kept;
+
+2. rename the 20 correctly-placed copies, which sat under hash-suffixed names with no
+   offset, to `<truncated-original-name>_2410_<offset>` so they pair by offset:
+
+       s_s_will_now_build_homes_a_cbae   -> s_s_will_now_build_2410_5100
+       s_all_units_loyal_to_s_the_e8c5   -> s_all_units_loyal_2410_5538
+       s_intelligence_reports_s_u_ff09   -> s_intelligence_rep_2410_5680
+       ... 20 in total, externs moved in st_globals.h
+
+3. the one code reference that broke: `ovc14_attact.c:641` used
+   `s_intelligence_reports_s_u_2410`, which was the declaration holding the
+   *drained of energy* text and has just been renamed `s_intelligence_rep_2410_5700`.
+   The call passes (name, alignedX, entY), which matches "(%s, %d, %d)" - so pointing it at
+   the 0x5700 string is what the call wants; the "attacking" string at 0x5906 takes no
+   arguments.
+
+On top of that, the sound run 0x5F00..0x6047 is migrated and interleaved, and the 8
+symbols of 0x606F..0x648E are declared (three of them by renaming their existing
+declarations rather than adding copies).
+
+MEASURED (HEAD b5939067 -> this commit)
+
+  diff_dgroup matched        1,569 -> 1,581   (+12)
+  diff_dgroup delta runs        74 ->    64   (-10)
+  diff_dgroup sum|delta|   251,810 -> 235,338 (-16,472)
+  diff_dgroup mean             160 ->   148
+  diff_dgroup worst         15,444 -> 14,252
+  compare_runtime matched    1,615 -> 1,630   (+15)
+  compare_runtime identical  1,605 -> 1,620   (+15)
+  compare_runtime different     10 ->    10
+  grep_checks               37,415 -> 37,415
+  compare_state            1,627/0/0 unchanged
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The mid-region deltas are now constant across the migrated run (+61/+59/+57/+55/+53 at
+0x5F00..0x6000) instead of oscillating by +/-120..250, and no bytes were duplicated: the
+deleted declarations' texts still exist exactly once, in the renamed originals.

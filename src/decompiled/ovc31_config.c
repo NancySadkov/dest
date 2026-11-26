@@ -315,8 +315,8 @@ void __cdecl16far init_base(void)
     }
   }
   clrscr();
-  printf("Sound (1. PC Speaker  2. Sound Blaster  3. Pro Audio Spectrum\n");
-  printf("       4. Adlib       5. Roland         6. Off):");
+  printf((char *)s_Sound__1__PC_Spe_2410_5f00);
+  printf((char *)s_4__Adlib_5__Rola_2410_5f3f);
   irq = 0x30;
   do {
     while (key = ovr_biosKeyAvail(), (char)key != '\0') {
@@ -340,27 +340,27 @@ void __cdecl16far init_base(void)
     }
     if ((key & 0xff) == 0x32) {
       clrscr();
-      printf("Sound Blaster (1. Original  2.  Pro Type 2  3. Pro Type 1):");
+      printf((char *)s_Sound_Blaster__1_2410_5f72);
       goto setup_soundblaster;
     }
                     /* 3 = Pro Audio Spectrum */
     if ((key & 0xff) == 0x33) {
       clrscr();
-      printf("Pro Audio Spectrum (1. Plus  2. Spectrum 16):");
+      printf((char *)s_Pro_Audio_Spectr_2410_5fb0);
       goto setup_pro_audio_spectrum;
     }
                     /* 4 = Adlib */
     if ((key & 0xff) == 0x34) {
       clrscr();
-      printf("Adlib (1. Original  2. Gold):");
+      printf((char *)s_Adlib__1__Origin_2410_5fe0);
       goto setup_adlib;
     }
                     /* Roland */
     if ((key & 0xff) == 0x35) {
       mus = 0x42;
       clrscr();
-      printf("Sound Effects (1. PC Speaker  2. Sound Blaster  3. Pro Audio Spectrum\n");
-      printf("               4. Adlib       5. None):");
+      printf((char *)s_Sound_Effects__1_2410_6000);
+      printf((char *)s_4__Adlib_5__None_2410_6047);
       goto pick_sfx_card;
     }
   } while ((key & 0xff) != 0x36);
@@ -439,17 +439,17 @@ setup_adlib:
   while( true ) {
     if ((key & 0xff) == 0x32) {
       clrscr();
-      printf("Sound Blaster (1. Original  2.  Pro):");
+      printf((char *)s_Sound_Blaster__1_2410_6071);
       goto pick_sb_type;
     }
     if ((key & 0xff) == 0x33) {
       clrscr();
-      printf("Pro Audio Spectrum (1. Plus  2. Spectrum 16):");
+      printf((char *)s_Pro_Audio_Spectr_2410_5fb0);
       goto pick_spectrum_type;
     }
     if ((key & 0xff) == 0x34) {
       clrscr();
-      printf("Adlib (1. Original  2. Gold):");
+      printf((char *)s_Adlib__1__Origin_2410_5fe0);
       goto pick_adlib_type;
     }
     if ((key & 0xff) == 0x35) break;
