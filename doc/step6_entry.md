@@ -9992,3 +9992,23 @@ stored into a `.seg` at 1509/1517 and into a `.ofs` at 1623.
   grep_checks 39,458 -> 39,437; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### ovc25_spyReportNotice: five locals named, two split (39,437 -> 39,372)
+ovc25_spyReportNotice: five locals named, two split (39,437 -> 39,372)
+
+  uVar8  (uint16_t)((ulong)Entities >> 0x10)          -> entitiesSeg  (5)
+  uVar5  (int)uVar2 >> 0xf, the sign-fill of the dx   -> distSign     (9)
+  uVar6  (int)dy >> 0xf                               -> dySign       (9)
+
+  uVar2  the dx difference, then the Manhattan distance
+         `(int)((uVar2 ^ uVar5) - uVar5) / 2 + ((dy ^ uVar6) - uVar6)` -> dist   (17)
+  uVar2  ovr_alignUp4(...) results                                  -> alignX (3)
+
+  iVar7  (int)Entities, used as `(entity_t *)iVar7`                 -> entitiesOfs (6)
+  iVar7  classStr * 0x95, the worldMenuLabels record stride         -> labelOfs    (3)
+
+Renaming and splitting only; no expression changed.
+
+  grep_checks 39,437 -> 39,372; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

@@ -363,15 +363,17 @@ void __cdecl16far ovc25_spyReportNotice(void)
 
 {
   int *piVar1;
-  uint uVar2;
+  uint dist;
+  uint alignX;
   uint dy;
   char *msg;
   uint16_t randPick;
-  uint uVar5;
-  uint uVar6;
-  int iVar7;
+  uint distSign;
+  uint dySign;
+  int entitiesOfs;
+  int labelOfs;
   uint enemyIdx;
-  uint16_t uVar8;
+  uint16_t entitiesSeg;
   uint16_t curSeg = _SS;
   uint8_t text;
   byte classIdx;
@@ -397,44 +399,44 @@ void __cdecl16far ovc25_spyReportNotice(void)
       enemyIdx = 0xffff;
       leaderX = ovr_alignUp4((GLeaderSheets[leaderIdx])->x,0,0);
       for (idx = 0; idx < EntityCount; idx = idx + 1) {
-        uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-        iVar7 = (int)Entities;
+        entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
+        entitiesOfs = (int)Entities;
         if (AGNT_FIELD(&((entity_t *)Entities)[idx], base.entity, 3) == leaderIdx) {
-          uVar2 = (GLeaderSheets[leaderIdx])->x -
-                  *(int *)((entity_t *)iVar7 + idx);
-          uVar5 = (int)uVar2 >> 0xf;
+          dist = (GLeaderSheets[leaderIdx])->x -
+                  *(int *)((entity_t *)entitiesOfs + idx);
+          distSign = (int)dist >> 0xf;
           dy = (GLeaderSheets[leaderIdx])->y -
-                  ((entity_t *)iVar7)[idx].base.y;
-          uVar6 = (int)dy >> 0xf;
+                  ((entity_t *)entitiesOfs)[idx].base.y;
+          dySign = (int)dy >> 0xf;
           piVar1 = (int *)((int)(uint32_t)GLeaderSheets[leaderIdx] + 0x45);
           *piVar1 = *piVar1 + 1;
-          if ((int)((uVar2 ^ uVar5) - uVar5) / 2 + ((dy ^ uVar6) - uVar6) < 10) {
+          if ((int)((dist ^ distSign) - distSign) / 2 + ((dy ^ dySign) - dySign) < 10) {
             piVar1 = (int *)((int)(uint32_t)GLeaderSheets[leaderIdx] + 0x41);
             *piVar1 = *piVar1 + 1;
-            uVar8 = (uint16_t)((ulong)Entities >> 0x10);
+            entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
             if (((GLeaderSheets[leaderIdx])->y ==
                  ((entity_t *)Entities)[idx].base.y) &&
-               (uVar2 = ovr_alignUp4(((entity_t *)Entities)[idx].base.x,0,0), uVar2 == leaderX
+               (alignX = ovr_alignUp4(((entity_t *)Entities)[idx].base.x,0,0), alignX == leaderX
                )) {
               piVar1 = (int *)((int)(uint32_t)GLeaderSheets[leaderIdx] + 0x47);
               *piVar1 = *piVar1 + 1;
             }
           }
         }
-        else if (AgntGs[(uint)((entity_t *)iVar7)[idx].base.gindex].ai !=
+        else if (AgntGs[(uint)((entity_t *)entitiesOfs)[idx].base.gindex].ai !=
                  *((char far *)GLeaderSheets[leaderIdx] + 0x3f)) {
-          uVar2 = (GLeaderSheets[leaderIdx])->x -
-                  *(int *)((entity_t *)iVar7 + idx);
-          uVar5 = (int)uVar2 >> 0xf;
+          dist = (GLeaderSheets[leaderIdx])->x -
+                  *(int *)((entity_t *)entitiesOfs + idx);
+          distSign = (int)dist >> 0xf;
           dy = (GLeaderSheets[leaderIdx])->y -
-                  ((entity_t *)iVar7)[idx].base.y;
-          uVar6 = (int)dy >> 0xf;
-          uVar2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((dy ^ uVar6) - uVar6);
-          if (uVar2 < enemyDist) {
+                  ((entity_t *)entitiesOfs)[idx].base.y;
+          dySign = (int)dy >> 0xf;
+          dist = (int)((dist ^ distSign) - distSign) / 2 + ((dy ^ dySign) - dySign);
+          if (dist < enemyDist) {
             enemyIdx = idx;
-            enemyDist = uVar2;
+            enemyDist = dist;
           }
-          if (uVar2 < 10) {
+          if (dist < 10) {
             piVar1 = (int *)((int)(uint32_t)GLeaderSheets[leaderIdx] + 0x43);
             *piVar1 = *piVar1 + 1;
           }
@@ -447,15 +449,15 @@ void __cdecl16far ovc25_spyReportNotice(void)
         for (idx = 0; (int)idx < (int)(uint)GLeaderCount; idx = idx + 1) {
           if ((*((char far *)GLeaderSheets[idx] + 0x3f) !=
                *((char far *)GLeaderSheets[leaderIdx] + 0x3f)) &&
-             (uVar2 = (GLeaderSheets[leaderIdx])->x -
+             (dist = (GLeaderSheets[leaderIdx])->x -
                       (GLeaderSheets[idx])->x,
-             uVar5 = (int)uVar2 >> 0xf,
+             distSign = (int)dist >> 0xf,
              dy = (GLeaderSheets[leaderIdx])->y -
-                     (GLeaderSheets[idx])->y, uVar6 = (int)dy >> 0xf
-             , uVar2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((dy ^ uVar6) - uVar6),
-             uVar2 < otherDist)) {
+                     (GLeaderSheets[idx])->y, dySign = (int)dy >> 0xf
+             , dist = (int)((dist ^ distSign) - distSign) / 2 + ((dy ^ dySign) - dySign),
+             dist < otherDist)) {
             otherIdx = (undefined1)idx;
-            otherDist = uVar2;
+            otherDist = dist;
           }
         }
       }
@@ -471,14 +473,14 @@ void __cdecl16far ovc25_spyReportNotice(void)
       }
       else {
         enemyIdx = (GLeaderSheets[leaderIdx])->nearestEnemy;
-        uVar8 = (uint16_t)((ulong)Entities >> 0x10);
-        uVar2 = (GLeaderSheets[leaderIdx])->x -
+        entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
+        dist = (GLeaderSheets[leaderIdx])->x -
                 ((entity_t *)Entities)[enemyIdx].base.x;
-        uVar5 = (int)uVar2 >> 0xf;
+        distSign = (int)dist >> 0xf;
         dy = (GLeaderSheets[leaderIdx])->y -
                 ((entity_t *)Entities)[enemyIdx].base.y;
-        uVar6 = (int)dy >> 0xf;
-        enemyDist2 = (int)((uVar2 ^ uVar5) - uVar5) / 2 + ((dy ^ uVar6) - uVar6);
+        dySign = (int)dy >> 0xf;
+        enemyDist2 = (int)((dist ^ distSign) - distSign) / 2 + ((dy ^ dySign) - dySign);
       }
       if (((GLeaderSheets[leaderIdx])->enemiesNear == 0) || (9 < enemyDist2)) {
         if ((*((char far *)GLeaderSheets[leaderIdx] + 0x49) == -1) ||
@@ -526,14 +528,14 @@ void __cdecl16far ovc25_spyReportNotice(void)
                                 (GLeaderSheets[leaderIdx])->x,
                                 (GLeaderSheets[leaderIdx])->y);
             if ((GLeaderSheets[leaderIdx])->reportState != '\x02') {
-              uVar2 = ovr_alignUp4((GLeaderSheets[otherLeaderIdx])->x,
+              alignX = ovr_alignUp4((GLeaderSheets[otherLeaderIdx])->x,
                                    (GLeaderSheets[otherLeaderIdx])->y,0xa000);
-              iVar7 = (uint)(GLeaderSheets[leaderIdx])->classStr * 0x95;
+              labelOfs = (uint)(GLeaderSheets[leaderIdx])->classStr * 0x95;
               msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58c0,curSeg),
                                   (char *)CONCAT22(*(uint16_t *)
-                                                    ((int)&worldMenuLabels[0].seg + 1 + iVar7),
+                                                    ((int)&worldMenuLabels[0].seg + 1 + labelOfs),
                                                    (char *)0x26510),
-                                  *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + iVar7),uVar2);
+                                  *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + labelOfs),alignX);
               asm { mov randPick,dx };
               ovr_uiNotify(msg,randPick,0);
             }
@@ -547,7 +549,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
       else {
         ovc25_usesEntityCount((byte)leaderIdx);
         if (9 < (GLeaderSheets[leaderIdx])->unitsOnTile) {
-          uVar8 = (uint16_t)((ulong)Entities >> 0x10);
+          entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
           ovc25_usesAlignUp43((byte)leaderIdx,5,((entity_t *)Entities)[enemyIdx].base.x,
                               ((entity_t *)Entities)[enemyIdx].base.y,'\x01');
         }
