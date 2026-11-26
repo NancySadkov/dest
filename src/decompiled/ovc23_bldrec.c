@@ -2061,7 +2061,7 @@ byte __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int record
      directly instead of relying on a memset over three adjacent stack slots in declaration
      order; the return is a byte because the original sets only AL - the exported
      CONCAT11((char)((uint)iVar4 >> 8), uStack_8) was modelling a stale AH; and the repeated
-     `*(uint32_t *)((uint)partyIndex << 2)` reads collapse to one local. */
+     `(uint32_t)GLeaderSheets[partyIndex]` reads collapse to one local. */
   byte kind4Count;
   byte kind8Count;
   byte kind10Count;
@@ -2086,7 +2086,7 @@ byte __cdecl16far ovc23_usesGRecordCount3(byte amount,byte partyIndex,int record
       }
     }
   }
-  sheetRef = *(uint32_t *)((uint)partyIndex << 2);
+  sheetRef = (uint32_t)GLeaderSheets[partyIndex];
   if (*(byte *)((int)sheetRef + 0x9c) > kind10Count) {
     value = (byte)((uint)value * 7 / 10);
     GRecords[recordIndex].kind = GRecords[recordIndex].kind | 0x10;

@@ -8587,3 +8587,41 @@ STILL OUTSTANDING, same shape, verified by count only (not yet by disassembly):
   grep_checks 40,064 -> 40,045; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### 91 GLeaderSheets field reads become far
+ovc22_classes/ovc25_intel/ovc39_archive: 91 GLeaderSheets field reads become far
+
+Continued the near-table sweep.  A source-level check (`tmp/check70b.py`) grouped the remaining 49
+`*(uint32_t *)((uint)partyIndex << 2)` sites by function and found that 36 of them sit in functions which
+ALREADY use `GLeaderSheets[...]`, so the table needs no disassembly to confirm:
+
+  ovc39_archive.c  ovc39_textHalflingCastle   24   (uses GLeaderSheets)
+  ovc25_intel.c    ovc25_intelAttackingNotice  6   (uses GLeaderSheets)
+  ovc25_intel.c    ovc25_attackingNotice       4   (uses GLeaderSheets)
+  ovc23_bldrec.c   ovc23_usesGRecordCount3     2   (uses GLeaderSheets)
+
+Those 36 were swept (36 sites, three files).  Then the field dereferences were fixed too, because fixing
+only the base leaves the read DS-relative:
+
+  before   *(char *)((int)(uint32_t)GLeaderSheets[partyIndex] + 0x3f)
+  after    *((char far *)GLeaderSheets[partyIndex] + 0x3f)
+
+77 sites in ovc22_classes.c were converted this way (the earlier 83-site base sweep had already fixed the
+base there, so its remaining truncations were the field reads).
+
+Verified in ovc22_usesRandBelow:
+
+  mov  al,byte ptr [bp+6] / mov ah,0 / shl ax,2 / mov bx,ax
+  les  bx,dword ptr DGROUP:_GLeaderSheets[bx]
+  test byte ptr es:[bx+93],2            ; 0x5d = flags5d, now through ES
+
+`les` sites in that function went 0 -> 6 and `es:[bx+93]` appears 3 times, where before the field reads
+were `cmp byte ptr [bx+63],0` with no segment at all.
+
+NOT DONE, and deliberately: the 13 sites in functions that do NOT mention GLeaderSheets
+(ovc45_unitinfo.c 7, ovc28_ui.c 2, ovc35_bldng.c 2, ovc21_manage.c 1, ovc37_season.c 1).  Each needs the
+`mov es,0x70` check against its own disassembly first; the source-level grouping cannot settle it.
+
+  grep_checks 40,045 (unchanged - `*(uint32_t *)` and `(int)(uint32_t)` are not section-5 patterns)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
