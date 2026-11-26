@@ -9777,3 +9777,32 @@ its 32-bit foodStored comparisons keep the original's high/low split, and its si
   grep_checks 39,892 -> 39,878; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### manage_usesLitoa10: five-role iVar7 split (39,878 -> 39,839)
+manage_usesLitoa10: split the five-role iVar7, name fontSegment and leaderCount (39,878 -> 39,839)
+
+`iVar7` held five unrelated values in one 282-line body:
+
+  392-401  loop index over the six stats              -> statIndex
+  419-421  ovc45_compute9 result, used as a char      -> titleResult
+  441-446  sheet->cls * 4, base of the name table     -> classOfs
+  511-549  foodSold / income fed to litoa10           -> statValue
+  634-636  season_usesGPromotableCount2 result        -> promotableCount
+
+Both remaining §5-named locals were single-role and are simply renamed:
+
+  uVar10 = Font02.seg, 7 uses                         -> fontSegment
+  uVar5  = manage_usesGLeaderCount(), 4 uses          -> leaderCount
+
+Renaming and splitting only; no expression changed and the emitted code is unchanged.
+The splits are the same treatment `land_info` and `ovc39_textHalflingCastle` received: one
+name that the export reused across scopes becomes one name per role.
+
+Not touched: line 445/446 read a 4-byte far_t table at DGROUP offset 0xeb + cls*4 with a
+NEAR read (`*(uint16_t *)(classOfs + 0xed)` / `+ 0xeb`).  That is a base-symbol problem like
+`_backdropIndex`: our DGROUP layout differs from the original's, so the literal 0xeb is not
+meaningful in the rebuilt image and the table has no declaration in the tree.
+
+  grep_checks 39,878 -> 39,839; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
