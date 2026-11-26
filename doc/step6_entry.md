@@ -8232,3 +8232,43 @@ directly as a DS pointer), so the read or write went to DGROUP instead of the re
   grep_checks 40,122 -> 40,099; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### MEASURED: the `in_stack_` phantom class does not batch, with four verified examples
+
+`stats_readyStatusText` worked because its phantom happened to be a declared byte parameter at exactly
+bp+6.  Scanning every phantom (`tmp/phantom_clean.py`, 99 phantom locals in 75 functions) and checking
+four of them by hand shows that is the exception:
+
+| function | phantom -> slot | what the slot really is |
+|---|---|---|
+| `agnt_advanceAnimFrame(agnt_t far *agnt, uint16_t arg2)` | `in_stack_00000006` -> bp+8 | **the segment word of `agnt`** (bp+6..9); `arg2` is at bp+0xa, so the real shift is **+4** |
+| `attact_usesAlignUp44(int *xPtr, int y, uint8_t dir)` | `in_stack_0000000c` -> bp+0xe | **past the last parameter** (dir ends at bp+0xa) - a fifth argument the caller passes and the prototype omits |
+| `ovc15_capitalize(char *text)` | bp+8, bp+0xa, bp+0xc | the body is `strcpy(CONCAT22(in_stack_00000006,text), CONCAT22(in_stack_0000000a,in_stack_00000008))`, i.e. **two far pointers** the export split into halves around a near `text` |
+| `miceBlitRect(brect_t *br, uint16_t arg2)` | `in_stack_00000006` -> bp+8 | the prologue is `les bx, ptr [bp + 6]`, so `br` is **far** (bp+6..9) and `arg2` is at bp+0xa - the declared *near* `brect_t *` is itself wrong |
+
+So the `+2` shift is not a rule, the signature is often what is wrong rather than the name, and the
+"collision" rejection used earlier was detecting exactly this.  Every phantom needs its own prologue
+read, and in two of the four cases the fix is a **signature** change (near/far or a missing argument),
+which needs the callers too.
+
+### ovc22_usesLUDIV_at_ (40,099 -> 40,097)
+
+Opened with
+
+```c
+uVar6 = (uint16_t)((ulong)entity >> 0x10);
+peVar5 = (entity_t *)entity;
+```
+
+`uVar6` (the segment half of `entity`) is never read again - dead.  `peVar5` is a straight alias for the
+`entity` parameter, used three times.  Both removed.
+
+**Found and not fixed:** `uVar1 = *(uint32_t *)(uVar2 << 2)` reads a 32-bit value from the **near**
+address `uVar2 << 2` - DS offset partySlot*4 - which cannot be right; it needs the table base from
+`5087:197d`.  Note this is *not* the truncated-far class (that scanner looks for `(uint32_t far *)`), so
+it is a separate bug of the same family and worth a pass of its own:
+`grep 'uint32_t \*)([a-zA-Z_]* << 2)' *.c` should find the rest.
+
+  grep_checks 40,099 -> 40,097; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

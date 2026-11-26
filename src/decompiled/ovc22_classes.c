@@ -2856,17 +2856,13 @@ void __cdecl16far ovc22_usesLUDIV_at_(entity_t *entity)
   uint uVar2;
   uint uVar3;
   int *piVar4;
-  entity_t *peVar5;
-  uint16_t uVar6;
   byte bStack_3;
   
-  uVar6 = (uint16_t)((ulong)entity >> 0x10);
-  peVar5 = (entity_t *)entity;
-  uVar2 = (uint)*(byte *)((int)&(peVar5->base).entity + 3);
+  uVar2 = (uint)*(byte *)((int)&(entity->base).entity + 3);
   uVar1 = *(uint32_t *)(uVar2 << 2);
   uVar3 = *(byte *)((int)uVar1 + 0x52) + 1;
-  if ((peVar5->base).level < uVar3) {
-    uVar3 = (uint)(peVar5->base).level;
+  if ((entity->base).level < uVar3) {
+    uVar3 = (uint)(entity->base).level;
   }
   if (0x24 < uVar3) {
     uVar3 = 0x24;
