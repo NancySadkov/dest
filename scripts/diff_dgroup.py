@@ -62,7 +62,6 @@ for line in io.open(MAP, encoding="latin-1", errors="replace"):
 def key(name):
     k = name.upper().lstrip("_")
     k = re.sub(r"\[[0-9]+\]$", "", k)
-    k = re.sub(r"_[0-9]$", "", k)
     # Some original DGROUP labels are not legal C identifiers ("s_bighous1.lbm",
     # "s_Mouse_error.", "s_anim\2rdrag0.lbm"), so the build necessarily emits them with
     # '_' in place of the illegal character.  Apply the same sanitiser to both sides;
@@ -70,6 +69,18 @@ def key(name):
     # and the mis-pairing also derails the constant-delta runs.
     k = re.sub(r"[^A-Z0-9_]", "_", k)
     return k
+
+
+def loose_key(name):
+    """`key()` without the trailing digit.
+
+    The trailing `_N` is only dropped as a *fallback*: `s_kill_3` and `s_kill_4`
+    are two different strings six bytes apart, and stripping the digit up front
+    made them collide, which paired `s_kill_3` with `s_kill_4`'s address and
+    produced a bogus +6178 delta.  Exact keys are tried first, loose ones only for
+    originals that have no exact candidate left.
+    """
+    return re.sub(r"_[0-9]$", "", key(name))
 
 # our DGROUP segment: the map's _DATA segment (all our near data lives there)
 dgroup_seg = None
@@ -81,12 +92,16 @@ if dgroup_seg is None:
 print("rebuilt DGROUP segment: %04x" % dgroup_seg if dgroup_seg else "DGROUP not found")
 
 ours_by_key = {}
+ours_by_loose = {}
 for name, (seg, ofs) in ours.items():
     if seg != dgroup_seg:
         continue
     ours_by_key.setdefault(key(name), []).append((ofs, name))
+    ours_by_loose.setdefault(loose_key(name), []).append((ofs, name))
 for k in ours_by_key:
     ours_by_key[k].sort()
+for k in ours_by_loose:
+    ours_by_loose[k].sort()
 
 matched = []
 unmatched = []      # (off, name, reason)
@@ -95,6 +110,9 @@ used = set()
 for off, name in orig:
     k = key(name)
     cands = ours_by_key.get(k)
+    if not cands:
+        # fallback: allow the trailing `_N` to differ (see loose_key)
+        cands = ours_by_loose.get(loose_key(name))
     if not cands:
         unmatched.append((off, name, "no name with this key"))
         continue
