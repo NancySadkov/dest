@@ -16,12 +16,12 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
 {
   int cellX;
   int cellY;
-  int *piVar1;
-  uint16_t uVar2;
-  int *piVar3;
-  uint16_t uVar4;
-  int *piVar5;
-  int *piVar6;
+  int *savedCurY;
+  uint16_t nextYSeg;
+  int *savedCurX;
+  uint16_t nextXSeg;
+  int *savedNextY;
+  int *savedNextX;
   int xOfs;
   int yOfs;
   uint blockedFlag;
@@ -32,13 +32,13 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
   uint8_t fillQueueY;
   uint8_t fillQueueX;
   byte depth;
-  int *piStack_1e;
-  uint16_t uVar11;
-  int *piStack_1a;
-  uint16_t uVar12;
-  int *piStack_12;
-  uint16_t uVar13;
-  int *piStack_e;
+  int *curYQueue;
+  uint16_t curYSeg;
+  int *curXQueue;
+  uint16_t curXSeg;
+  int *nextYQueue;
+  uint16_t yQueueSeg;
+  int *nextXQueue;
   int queueLen;
   int queueIndex;
   
@@ -46,78 +46,78 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
   xOfs = 0x50 - x;
   yOfs = 0x50 - y;
   queueLen = 1;
-  piStack_1a = (int *)CONCAT22(curSeg,&fillQueueX);
-  piStack_1e = (int *)CONCAT22(curSeg,&fillQueueY);
-  piStack_e = (int *)&nextQueueX;
-  piStack_12 = (int *)&nextQueueY;
+  curXQueue = (int *)CONCAT22(curSeg,&fillQueueX);
+  curYQueue = (int *)CONCAT22(curSeg,&fillQueueY);
+  nextXQueue = (int *)&nextQueueX;
+  nextYQueue = (int *)&nextQueueY;
   *(undefined1 *)((int)FillGrid + (x + xOfs) * 0xa1 + y + yOfs) = 1;
-  *piStack_1a = x;
-  *piStack_1e = y;
+  *curXQueue = x;
+  *curYQueue = y;
   depth = 2;
-  uVar13 = curSeg;
+  yQueueSeg = curSeg;
   while( true ) {
-    piVar6 = piStack_e;
-    piVar5 = piStack_12;
-    piVar3 = piStack_1a;
+    savedNextX = nextXQueue;
+    savedNextY = nextYQueue;
+    savedCurX = curXQueue;
     if (0x50 < depth) {
       return;
     }
     nextCount = 0;
     queueIndex = 0;
     while( true ) {
-      piVar1 = piStack_1e;
-      piStack_1a = (int *)piVar3;
-      uVar12 = (uint16_t)((ulong)piVar3 >> 0x10);
-      uVar4 = uVar12;
-      uVar11 = (uint16_t)((ulong)piStack_1e >> 0x10);
-      uVar2 = uVar11;
+      savedCurY = curYQueue;
+      curXQueue = (int *)savedCurX;
+      curXSeg = (uint16_t)((ulong)savedCurX >> 0x10);
+      nextXSeg = curXSeg;
+      curYSeg = (uint16_t)((ulong)curYQueue >> 0x10);
+      nextYSeg = curYSeg;
       if (queueLen <= queueIndex) break;
-      cellX = piStack_1a[queueIndex];
-      cellY = piStack_1e[queueIndex];
-      piStack_1e = piVar1;
+      cellX = curXQueue[queueIndex];
+      cellY = curYQueue[queueIndex];
+      curYQueue = savedCurY;
       if (((*(char *)((cellX + xOfs) * 0xa1 + (int)FillGrid + cellY + yOfs + -0xa1) == '\0') &&
           (blockedFlag = ovr_attact_usesSCARRY2(cellX,cellY,3,ignoreBlocked,0,0), (blockedFlag & 0xff) == 0)) &&
          (nextCount < 300)) {
         *(byte *)((cellX + xOfs) * 0xa1 + (int)FillGrid + cellY + yOfs + -0xa1) = depth;
-        piStack_e[nextCount] = cellX + -1;
-        piStack_12[nextCount] = cellY;
+        nextXQueue[nextCount] = cellX + -1;
+        nextYQueue[nextCount] = cellY;
         nextCount = nextCount + 1;
       }
       if (((*(char *)((cellX + xOfs) * 0xa1 + (int)FillGrid + cellY + yOfs + 0xa1) == '\0') &&
           (blockedFlag = ovr_attact_usesSCARRY2(cellX,cellY,1,ignoreBlocked,0,0), (blockedFlag & 0xff) == 0)) &&
          (nextCount < 300)) {
         *(byte *)((cellX + xOfs) * 0xa1 + (int)FillGrid + cellY + yOfs + 0xa1) = depth;
-        piStack_e[nextCount] = cellX + 1;
-        piStack_12[nextCount] = cellY;
+        nextXQueue[nextCount] = cellX + 1;
+        nextYQueue[nextCount] = cellY;
         nextCount = nextCount + 1;
       }
       if (((*(char *)((int)FillGrid + (cellX + xOfs) * 0xa1 + cellY + yOfs + -1) == '\0') &&
           (blockedFlag = ovr_attact_usesSCARRY2(cellX,cellY,0,ignoreBlocked,0,0), (blockedFlag & 0xff) == 0)) &&
          (nextCount < 300)) {
         *(byte *)((int)FillGrid + (cellX + xOfs) * 0xa1 + cellY + yOfs + -1) = depth;
-        piStack_e[nextCount] = cellX;
-        piStack_12[nextCount] = cellY + -1;
+        nextXQueue[nextCount] = cellX;
+        nextYQueue[nextCount] = cellY + -1;
         nextCount = nextCount + 1;
       }
       if (((*(char *)((int)FillGrid + (cellX + xOfs) * 0xa1 + cellY + yOfs + 1) == '\0') &&
           (blockedFlag = ovr_attact_usesSCARRY2(cellX,cellY,2,ignoreBlocked,0,0), (blockedFlag & 0xff) == 0)) &&
          (nextCount < 300)) {
         *(byte *)((int)FillGrid + (cellX + xOfs) * 0xa1 + cellY + yOfs + 1) = depth;
-        piStack_e[nextCount] = cellX;
-        piStack_12[nextCount] = cellY + 1;
+        nextXQueue[nextCount] = cellX;
+        nextYQueue[nextCount] = cellY + 1;
         nextCount = nextCount + 1;
       }
       queueIndex = queueIndex + 1;
     }
     if (nextCount == 0) break;
-    piStack_e = piStack_1a;
-    piStack_1a = (int *)CONCAT22(curSeg,piVar6);
-    piStack_12 = piStack_1e;
-    piStack_1e = (int *)CONCAT22(uVar13,piVar5);
+    nextXQueue = curXQueue;
+    curXQueue = (int *)CONCAT22(curSeg,savedNextX);
+    nextYQueue = curYQueue;
+    curYQueue = (int *)CONCAT22(yQueueSeg,savedNextY);
     depth = depth + 1;
     queueLen = nextCount;
-    curSeg = uVar4;
-    uVar13 = uVar2;
+    curSeg = nextXSeg;
+    yQueueSeg = nextYSeg;
   }
   return;
 }
