@@ -12143,3 +12143,28 @@ threshold), +0xf, +0x11, +0x13, +0x14, +0x15, +0x17, +0x19, +0x1b, +0x1d, +0x1f.
   grep_checks 37,743 -> 37,707; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
   compare_runtime 1,605 identical / 10 different
+
+### ovc27_compute3: seven single-role locals (37,707 -> 37,676)
+ovc27_compute3: seven single-role locals (37,707 -> 37,676)
+
+  uStack_4  accumulated ovr_ovc15_textView() total   -> total      (7)
+  bVar3     ovr_ovc15_textView(view) result          -> advance    (3)
+  bVar7     *(viewRec + 0xf) == '\0'                 -> exhausted  (4)
+  bStack_6  AgntGs[viewRec[0xd]].shortName[3]        -> rampIdx    (5)
+  iVar4     rampIdx * 0x94 + viewRec[0xf] * 4        -> rampOfs    (4)
+  uVar1     *(uint16_t *)(rampOfs - 2)               -> segWord    (4)
+  uVar2     *(uint16_t *)(rampOfs - 4)               -> ofsWord    (3)
+
+No split was needed - every local here has exactly one role - and no expression
+changed.
+
+The function walks a view record (0xf = frames remaining, 0x31/0x32 = two decremented
+counters, 0xd = class index) through the far pointer `viewRec`, then stores the two
+halves of a 0x94-stride table entry into viewRec+0x10/+0x12.  Those two reads,
+`*(uint16_t *)(rampOfs - 2)` and `*(uint16_t *)(rampOfs - 4)`, are still DS-relative:
+the table has no symbol in either image (the unnamed 0x80 segment), so it is recorded
+rather than guessed at.
+
+  grep_checks 37,707 -> 37,676; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different
