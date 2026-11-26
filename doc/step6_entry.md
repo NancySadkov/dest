@@ -12794,3 +12794,53 @@ No expression changed.
   grep_checks 37,437 -> 37,415; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,569/1,805 (74 runs, sum|delta| 251,810)
   compare_runtime 1,615 matched, 1,605 identical / 10 different
+
+### MEASURED AND REVERTED: duplicates cannot go before the tail content
+MEASURED AND REVERTED: the 0x5100 duplicates cannot be removed without the tail content
+
+Followed the objective's coupled change exactly: delete the 21 duplicate declarations *and*
+migrate the 0x5F00..0x6047 sound-menu run in the same change (7 symbols declared, 6 blob
+copies removed, all 7 code literals in ovc31_config.c replaced), then interleave the run so
+that the two-byte "\n" separators sit between the strings as in the original:
+
+    0x5EFE Newline1 | 0x5F00 Sound(...) | 0x5F3F 4.Adlib 5.Roland | 0x5F70 Newline2
+    0x5F72 SoundBlaster(...) | 0x5FAE \n | 0x5FB0 ProAudio(...) | 0x5FDE \n
+    0x5FE0 Adlib(...) | 0x5FFE \n | 0x6000 SoundEffects(...) | 0x6047 4.Adlib 5.None
+
+The mid-region fix works exactly as intended - the deltas there become constant:
+
+    0x5F00 +61 | 0x5F72 +59 | 0x5FB0 +57 | 0x5FE0 +55 | 0x6000 +53
+
+oscillating only by the missing separator sizes before the interleave, and constant after.
+
+But the total is worse, so it was reverted:
+
+                                     HEAD        coupled change
+  diff_dgroup matched                1,569       1,576   (+7)
+  diff_dgroup delta runs                74          68
+  diff_dgroup sum|delta|           251,810     289,150   (+37,340)
+  worst                             15,444      14,044
+
+Why: the 20 duplicates were ~1100 bytes of *compensation*.  With them gone and the sound
+run correctly placed, the drift after 0x606F goes negative and stays there:
+
+    -31 at 0x60C7, -61 at 0x60E7, -115 at 0x6140, -133 at 0x6232, -167 at 0x626B,
+    -187 at 0x62C6, -196 at 0x6313, -203 at 0x6377
+
+i.e. our tail is ~1100 bytes shorter than the original's.  That is the second half of the
+coupled change and it is not a reordering problem: the content is missing.
+
+What is missing, measured with tmp/tail_gap.py (text spans in 0x606F..0x7A00):
+
+  * most of them ARE declared in st_globals5.c (`shield`, `scale armor`, `chain mail`,
+    `Armor class %d`, `Hit Points %d/%d`, ...) and simply cannot reach their offsets while
+    the cumulative size is short;
+  * a few are genuinely absent from the tree: `0x6099` "Pro Audio Spectrum (1. Plus  2.
+    Spectrum 16)" (a second copy of 0x5FB0), `0x60C9` "Adlib (1. Original  2. Gold):"
+    (a second copy of 0x5FE0), `0x60E9` "Sound IRQ is %c (...)", `0x6158` "Largest
+    executable program size is only %s bytes", `0x618B` "Stronghold requires 585,000
+    bytes.", `0x630A` "L. to %s".
+
+So the coupled change needs the missing-text pass first (the same declare-and-dedupe
+treatment applied to 0x606F..0x648E), and only then does removing the duplicates pay off.
+Doing the two halves in the other order is what these measurements rule out.
