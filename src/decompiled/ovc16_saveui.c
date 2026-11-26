@@ -765,35 +765,36 @@ char * __cdecl16far saveui_readLine(int fd)
 uint __cdecl16far saveui_readSavesList(int entries,uint16_t entriesSeg)
 
 {
-  char *pcVar1;
+  char *path;
+  char *linePtr;
   int fd;
-  uint16_t uVar2;
+  uint16_t lineOfs;
   uint16_t in_DX;
-  uint16_t uVar3;
-  uint16_t *puVar4;
-  uint uVar5;
+  uint16_t lineSeg;
+  uint16_t *entryPtr;
+  uint entryIdx;
   far_t handle;
-  uint16_t uStack_4;
+  uint16_t entryCount;
   
-  uStack_4 = 0;
-  pcVar1 = ovr_fmVsprintf("%ssaves.txt",&GWorkDir);
-  fd = ovr_open_wait_unlock_and_disk(pcVar1,0);
+  entryCount = 0;
+  path = ovr_fmVsprintf("%ssaves.txt",&GWorkDir);
+  fd = ovr_open_wait_unlock_and_disk(path,0);
   if (-1 < fd) {
-    pcVar1 = (char *)saveui_readLine(fd);
-    uVar3 = in_DX;
-    uStack_4 = _atol((char *)CONCAT22(in_DX,pcVar1));
+    linePtr = (char *)saveui_readLine(fd);
+    lineSeg = in_DX;
+    entryCount = _atol((char *)CONCAT22(in_DX,linePtr));
     handle.seg = in_DX;
-    handle.ofs = (uint16_t)pcVar1;
+    handle.ofs = (uint16_t)linePtr;
     ovr_stshFree(handle);
-    for (uVar5 = 0; uVar5 < uStack_4; uVar5 = uVar5 + 1) {
-      uVar2 =(uint16_t)( saveui_readLine(fd));
-      puVar4 = (uint16_t *)(entries + uVar5 * 4);
-      puVar4[1] = uVar3;
-      *puVar4 = uVar2;
+    for (entryIdx = 0; entryIdx < entryCount; entryIdx = entryIdx + 1) {
+      lineOfs =(uint16_t)( saveui_readLine(fd));
+      entryPtr = (uint16_t *)(entries + entryIdx * 4);
+      entryPtr[1] = lineSeg;
+      *entryPtr = lineOfs;
     }
     close(fd);
   }
-  return uStack_4;
+  return entryCount;
 }
 
 

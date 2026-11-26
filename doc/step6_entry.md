@@ -13005,3 +13005,26 @@ MEASURED (HEAD b5939067 -> this commit)
 The mid-region deltas are now constant across the migrated run (+61/+59/+57/+55/+53 at
 0x5F00..0x6000) instead of oscillating by +/-120..250, and no bytes were duplicated: the
 deleted declarations' texts still exist exactly once, in the renamed originals.
+
+### saveui_readSavesList: path/linePtr/entryCount/entryIdx (37,415 -> 37,378)
+saveui_readSavesList: path / linePtr / entryCount / entryIdx (37,415 -> 37,378)
+
+  uStack_4  the count read with _atol, also returned       -> entryCount (5)
+  uVar2     the offset half of saveui_readLine(fd)          -> lineOfs    (3)
+  uVar3     the segment half, copied from in_DX             -> lineSeg    (3)
+  uVar5     the entry loop index                            -> entryIdx   (3)
+  puVar4    &entries[i], a uint16 pair                      -> entryPtr   (4)
+  pcVar1    the formatted "<workdir>saves.txt" path, then
+            the line pointer from saveui_readLine           -> path (3) / linePtr (3)
+
+`in_DX` is deliberately left: this routine never assigns it, so it is the register the
+callee returns the pointer's segment in, not a value the function gives meaning to.
+Renaming it would be inventing a name for an ABI register, which is the one thing the
+section-5 names are actually honest about.
+
+No expression changed.
+
+  grep_checks 37,415 -> 37,378; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
