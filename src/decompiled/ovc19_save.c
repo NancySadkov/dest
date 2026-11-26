@@ -61,20 +61,20 @@ void __cdecl16far save_usesCalcSeasonPalette(void)
 
   resetCount = 0;
   for (entIdx = 0; entIdx < EntityCount; entIdx = entIdx + 1) {
-    if (100 < ((entity_t *)Entities)[entIdx].base.animFrame) {
-      ((entity_t *)Entities)[entIdx].base.animFrame = 0xf;
+    if (100 < (Entities)[entIdx].base.animFrame) {
+      (Entities)[entIdx].base.animFrame = 0xf;
       resetCount = resetCount + 1;
     }
   }
   if (resetCount == 0) {
     for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
-      units = (unit_t *)GUnits;
+      units = GUnits;
       if ((BuildingTypes[(uint)(units + unitIdx)->bldType].flags & 3) != 0) {
         ovr_ovc23_rebuildDirectionFlags(units[unitIdx].x,units[unitIdx].y);
-        ovr_ovc23_rebuildDirectionFlags(((unit_t *)GUnits)[unitIdx].x + -1,
-                                        ((unit_t *)GUnits)[unitIdx].y);
-        ovr_ovc23_rebuildDirectionFlags(((unit_t *)GUnits)[unitIdx].x,
-                                        ((unit_t *)GUnits)[unitIdx].y + 1);
+        ovr_ovc23_rebuildDirectionFlags((GUnits)[unitIdx].x + -1,
+                                        (GUnits)[unitIdx].y);
+        ovr_ovc23_rebuildDirectionFlags((GUnits)[unitIdx].x,
+                                        (GUnits)[unitIdx].y + 1);
       }
     }
     ovr_attact_usesGMapFlags3();
@@ -161,7 +161,7 @@ uint __cdecl16far stLoad(int handle)
                                            unaff_DI,unaff_SI), (readOk & 0xff) != 0)) &&
                   ((readOk = save_readBlock(-0x7667,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
                    (readOk & 0xff) != 0 &&
-                   ((readOk = save_readBlock((int)(unit_t *)GUnits,
+                   ((readOk = save_readBlock((int)GUnits,
                                             (void *)CONCAT22(GUnitCount * 9,(*(uint16_t *)((uint8_t *)&(GUnits) + 2))),unaff_DI,
                                             unaff_SI), (readOk & 0xff) != 0 &&
                     (readOk = save_readBlock(0x2f3,(void *)MK_FP(0x2410, 0x1),unaff_DI,unaff_SI),
@@ -398,7 +398,7 @@ int __cdecl16far stSave(void)
                (writeOk = save_writeBlock(-0x7667,(void *)((char *)&_DATA + 2),unaff_DI,unaff_SI),
                (writeOk & 0xff) != 0)) {
               in_DX = (uint16_t)((ulong)((long)GUnitCount * 9) >> 0x10);
-              writeOk = save_writeBlock((int)(unit_t *)GUnits,
+              writeOk = save_writeBlock((int)GUnits,
                                       (void *)CONCAT22((int)((long)GUnitCount * 9),(*(uint16_t *)((uint8_t *)&(GUnits) + 2))),
                                       unaff_DI,unaff_SI);
               if ((((writeOk & 0xff) != 0) &&

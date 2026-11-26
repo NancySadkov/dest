@@ -10591,3 +10591,52 @@ revert before, so they are recorded rather than "fixed".
   grep_checks 39,044 -> 39,042; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### (T *)FarArray truncates: 653 casts removed (39,042 -> 39,020)
+`(T *)FarArray` truncates a far pointer: 653 casts removed tree-wide (39,042 -> 39,020)
+
+`st_globals.h` declares
+
+    extern entity_t far *Entities;
+    extern unit_t   far *GUnits;
+
+so `(entity_t *)Entities` is a cast to a NEAR pointer: it drops the segment, and every field
+access after it is DS-relative.  I verified that on one function before changing anything else -
+in ovc25_spyReportNotice, removing the cast turned
+
+    mov  bx,word ptr DGROUP:_Entities
+    add  bx,ax
+    mov  al,byte ptr [bx+26]          ; DS-relative
+
+into
+
+    les  bx,dword ptr DGROUP:_Entities
+    add  bx,ax
+    mov  al,byte ptr es:[bx+26]       ; the array's own segment
+
+`les` sites in that function went 30 -> 40 and `es:` operands 56 -> 66.
+
+Then applied tree-wide: **653 casts** (`(entity_t *)Entities` x ~510, `(unit_t *)GUnits` x
+~143) removed, build clean 65/65 with no errors or warnings.  This is the largest single
+correctness change of the session: every one of those accesses was reading DGROUP instead of the
+Entities / GUnits segment.
+
+Also this turn:
+  * ovc41_compute3 - 15 view-record accesses restored (`viewOfs = (int)view` -> MK_FP(...))
+  * eight functions had `V = (int)Entities` collapsed into direct `Entities` use
+    (attact_countPartyUnits, attact_usesEntityCount2, manage_usesEntities,
+     manage_usesEntities2, ovc25_textArena, ovc25_spyReportNotice, ovc42_usesEntityCount,
+     ovc45_usesAlignUp4) - 25 accesses
+
+Measured after re-dumping:
+
+  grep_checks 39,042 -> 39,020   (-22, from the dead `(int)Entities` locals going away)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different
+
+Left alone: ovc49_drawAgents' `recPtr`, which is declared `uint16_t` but assigned
+`CONCAT22(sprEntry[1],*sprEntry)` - a 32-bit far pointer squeezed into 16 bits - and its eight
+halves are used separately (`(ulong)recPtr >> 0x10`).  Changing its type interacts with those
+extractions inside a 1400-line function that cannot even be listed (compiler table limit), so it
+needs its own careful pass.

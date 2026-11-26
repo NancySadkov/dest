@@ -23,7 +23,7 @@ int __cdecl16far unit_usesGUnits(int unitIndex)
   unit_t *units;
   int value;
 
-  units = (unit_t *)GUnits;
+  units = GUnits;
   value = BuildingTypes[(uint)(units + unitIndex)->bldType].sight;
   quality = ovr_constr_usesGMapFlags2(units[unitIndex].x,units[unitIndex].y);
   if ((quality & 0xff) == 3) {
@@ -32,7 +32,7 @@ int __cdecl16far unit_usesGUnits(int unitIndex)
   else if ((quality & 0xff) == 4) {
     value = value << 1;
   }
-  unitType = ((unit_t *)GUnits)[unitIndex].unitType;
+  unitType = (GUnits)[unitIndex].unitType;
   if ((unitType != 0xff) &&
      (sheetRef = *(uint32_t *)((uint)unitType << 2),
       (*(byte *)((int)sheetRef + 0x5d) & 8) != 0)) {
@@ -109,13 +109,13 @@ void __cdecl16far unit_usesAlignUp4(void)
     }
     for (index = 0xf8; index < GUnitCount; index = index + 1) {
       uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
-      if (((BuildingTypes[(uint)((unit_t *)GUnits + index)->bldType].sight != 0) &&
-          (bVar1 = ((unit_t *)GUnits)[index].unitType, bVar1 != 0xff)) &&
+      if (((BuildingTypes[(uint)(GUnits + index)->bldType].sight != 0) &&
+          (bVar1 = (GUnits)[index].unitType, bVar1 != 0xff)) &&
          (typePtr = *(uint32_t *)((uint)bVar1 << 2), *(char *)((int)typePtr + 0x3f) == '\0')) {
         iVar4 = unit_usesGUnits(index);
         uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
-        iVar5 = ((unit_t *)GUnits)[index].x;
-        rowBottom = ((unit_t *)GUnits)[index].y;
+        iVar5 = (GUnits)[index].x;
+        rowBottom = (GUnits)[index].y;
         uVar3 = ovr_alignUp4(iVar5 + iVar4 * -2,0,0);
         colLeft = uVar3 - 2;
         uVar3 = ovr_alignUp4(iVar5 + iVar4 * 2,0,0);
@@ -524,7 +524,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         for (entityIdx = 0; entityIdx < EntityCount; entityIdx = entityIdx + 1) {
           entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
           entitiesOfs = (int)Entities;
-          if ((((AGNT_FIELD(&((entity_t *)Entities)[entityIdx], base.entity, 3) == partyIdx) &&
+          if ((((AGNT_FIELD(&(Entities)[entityIdx], base.entity, 3) == partyIdx) &&
                (pbStack_22 <= (byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx))) &&
               ((byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx) <= pbStack_26)) &&
              ((pbStack_24 <= (byte *)((entity_t *)entitiesOfs)[entityIdx].base.y &&
@@ -588,7 +588,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         pbVar8 = (byte *)((char *)0x2410);
         entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
         entitiesOfs = (int)Entities;
-        if (((AGNT_FIELD(&((entity_t *)Entities)[entityIdx], base.entity, 3) == partyIdx) &&
+        if (((AGNT_FIELD(&(Entities)[entityIdx], base.entity, 3) == partyIdx) &&
             (pbVar8 = (byte *)((char *)0x2410),
             pbStack_22 <= (byte *)*(uint *)((entity_t *)entitiesOfs + entityIdx))) &&
            ((pbVar8 = (byte *)((char *)0x2410),
@@ -768,22 +768,22 @@ unit_usesEntities(char state,int entityIndex,uint16_t unitFlags,uint16_t unitFla
   byte *flagsPtr;
   uint16_t entY;
 
-  flagsPtr = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
+  flagsPtr = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
   *flagsPtr = *flagsPtr & 0xf8;
   if (state != '\x02') {
     if (state == '\x03') {
-      flagsPtr = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
+      flagsPtr = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
       *flagsPtr = *flagsPtr | 1;
       ovr_attact_usesEntities(entityIndex,0,0,unitFlags,unitFlagsSeg,0,0,0,0);
     }
     else if (state == '\x04') {
-      flagsPtr = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
+      flagsPtr = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
       *flagsPtr = *flagsPtr | 2;
-      entY = ((entity_t *)Entities)[entityIndex].base.y;
-      ((entity_t *)Entities)[entityIndex].base.targetX =
-          ((entity_t *)Entities)[entityIndex].base.x;
-      ((entity_t *)Entities)[entityIndex].base.targetY = entY;
-      flagsPtr = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
+      entY = (Entities)[entityIndex].base.y;
+      (Entities)[entityIndex].base.targetX =
+          (Entities)[entityIndex].base.x;
+      (Entities)[entityIndex].base.targetY = entY;
+      flagsPtr = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
       *flagsPtr = *flagsPtr & 0xfa;
       ovr_attact_usesEntities(entityIndex,0,0,unitFlags,unitFlagsSeg,0,0,0,0);
     }

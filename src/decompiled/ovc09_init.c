@@ -784,7 +784,7 @@ stg_tmp_t * __cdecl16far init_textFilename(void)
                    (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags2(col), (char)psVar9 == '\x02')
                    ) {
                   unitIdx = ((short (*) [148] [60])GUnitGrid)[-1][col + 0x92][row];
-                  bldType = ((unit_t *)GUnits + unitIdx)->bldType;
+                  bldType = (GUnits + unitIdx)->bldType;
                   psVar9 = (stg_tmp_t *)((uint)bldType * 0x27);
                   if ((psVar9->cmap[0x11b] < 2) &&
                      (psVar9 = (stg_tmp_t *)ovr_constr_usesGMapFlags2(col), (byte)psVar9 < 3)) {
@@ -1170,9 +1170,9 @@ void __cdecl16far init_initGUnits(void)
   int iVar1;
   
   for (iVar1 = 0; iVar1 < 0xf8; iVar1 = iVar1 + 1) {
-    ((unit_t *)GUnits + iVar1)->bldType = (byte)iVar1;
-    ((unit_t *)GUnits)[iVar1].level = 0xff;
-    ((unit_t *)GUnits)[iVar1].unitType = 0xff;
+    (GUnits + iVar1)->bldType = (byte)iVar1;
+    (GUnits)[iVar1].level = 0xff;
+    (GUnits)[iVar1].unitType = 0xff;
   }
   return;
 }

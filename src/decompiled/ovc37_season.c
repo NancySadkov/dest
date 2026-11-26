@@ -184,7 +184,7 @@ void __cdecl16far season_countPromotable(void)
 
   GPromotableCount = 0;
   for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
-    units = (unit_t *)GUnits;
+    units = GUnits;
     if ((((BuildingTypes[(uint)(units + unitIdx)->bldType].flags2 & 0x60) == 0) &&
         (units[unitIdx].unitType != 0xff)) &&
        (sheetRef = *(uint32_t *)((uint)units[unitIdx].unitType << 2),
@@ -489,11 +489,11 @@ int __cdecl16far season_usesAlignUp42(int unitIndex,byte partyIndex)
   uint expected;
   int k;
 
-  alignedX = ovr_alignUp4(((unit_t *)GUnits)[unitIndex].x,0,0);
+  alignedX = ovr_alignUp4((GUnits)[unitIndex].x,0,0);
   flags = 0;
   for (k = 0; k < 4; k = k + 1) {
     flags = flags |
-            ((short (*) [60] [148])GMapFlags)[-1][((unit_t *)GUnits)[unitIndex].y + 0x3b]
+            ((short (*) [60] [148])GMapFlags)[-1][(GUnits)[unitIndex].y + 0x3b]
             [alignedX + k + 0x92] & 0x3000U;
   }
   expected = 0x1000 << (*((byte far *)GLeaderSheets[partyIndex] + 0x3f) & 0x1f);
@@ -533,13 +533,13 @@ void __cdecl16far season_repairBuildings(byte rank)
       for (unitIndex = 0xf8; unitIndex < GUnitCount; unitIndex = unitIndex + 1) {
         dst = (char *)0x26510;
         uVar2 = (uint16_t)((ulong)GUnits >> 0x10);
-        if (((unit_t *)GUnits)[unitIndex].unitType == bStack_7) {
+        if ((GUnits)[unitIndex].unitType == bStack_7) {
           dst = (char *)0x26510;
-          if (((unit_t *)GUnits)[unitIndex].level < 8) {
+          if ((GUnits)[unitIndex].level < 8) {
             iVar1 = season_usesAlignUp42(unitIndex,bStack_7);
             if ((char)iVar1 != '\0') {
               dst = (char *)0x26510;
-              ((unit_t *)GUnits)[unitIndex].level = 8;
+              (GUnits)[unitIndex].level = 8;
               count = count + 1;
             }
           }

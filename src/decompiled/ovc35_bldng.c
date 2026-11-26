@@ -57,8 +57,8 @@ bool __cdecl16far bldng_textArena(byte bldType,char partyIndex)
   if ((BuildingTypes[bldType].flags3 & 0x80) == 0) {
     for (entityIndex = 0; entityIndex < (int)(uint)EntityCount;
          entityIndex = entityIndex + 1) {
-      if ((AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) == partyIndex) &&
-         (reqLevel <= ((entity_t *)Entities)[entityIndex].base.level)) {
+      if ((AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) == partyIndex) &&
+         (reqLevel <= (Entities)[entityIndex].base.level)) {
         return true;
       }
     }

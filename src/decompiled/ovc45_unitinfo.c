@@ -19,7 +19,7 @@ byte __cdecl16far ovc45_getUnitType(int x,int y)
   byte bVar1;
   
   if ((((x < 0x94) && (-1 < x)) && (y < 0x3c)) && (-1 < y)) {
-    bVar1 = ((unit_t *)GUnits + (*(short (*) [148] [60])GUnitGrid)[x][y])->bldType;
+    bVar1 = (GUnits + (*(short (*) [148] [60])GUnitGrid)[x][y])->bldType;
   }
   else {
     bVar1 = 0;
@@ -62,7 +62,6 @@ uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIn
 
 {
   uint uVar1;
-  int iVar2;
   uint uVar3;
   uint16_t uVar4;
   uint *in_stack_0000000a;
@@ -70,15 +69,14 @@ uint __cdecl16far ovc45_usesAlignUp4(int slotMin,int x,uint16_t y,uint *entityIn
   
   bStack_3 = 0xff;
   for (uVar3 = 0; uVar3 < EntityCount; uVar3 = uVar3 + 1) {
-    uVar1 = ovr_alignUp4(((entity_t *)Entities)[uVar3].base.x,0,0);
+    uVar1 = ovr_alignUp4((Entities)[uVar3].base.x,0,0);
     if (uVar1 == x) {
       uVar4 = (uint16_t)((ulong)Entities >> 0x10);
-      iVar2 = (int)Entities;
-      if ((((((entity_t *)iVar2)[uVar3].base.y == y) &&
-           (AgntGs[(uint)((entity_t *)iVar2)[uVar3].base.gindex].ai == '\0')) &&
-          (slotMin < (int)(uint)AGNT_FIELD(&((entity_t *)Entities)[uVar3], base.entity, 3))) &&
-         (AGNT_FIELD(&((entity_t *)Entities)[uVar3], base.entity, 3) < bStack_3)) {
-        bStack_3 = AGNT_FIELD(&((entity_t *)Entities)[uVar3], base.entity, 3);
+      if (((((Entities)[uVar3].base.y == y) &&
+           (AgntGs[(uint)(Entities)[uVar3].base.gindex].ai == '\0')) &&
+          (slotMin < (int)(uint)AGNT_FIELD(&(Entities)[uVar3], base.entity, 3))) &&
+         (AGNT_FIELD(&(Entities)[uVar3], base.entity, 3) < bStack_3)) {
+        bStack_3 = AGNT_FIELD(&(Entities)[uVar3], base.entity, 3);
         *(uint *)CONCAT22((uint *)entityIndexOut,in_stack_0000000a) = uVar3;
       }
     }
@@ -124,7 +122,7 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
   fallbackIdx = 0xffff;
   lastParty = 0xffff;
   for (entIdx = 0; entIdx < EntityCount; entIdx = entIdx + 1) {
-    entAlignedX = ovr_alignUp4(((entity_t *)Entities)[entIdx].base.x,0,0);
+    entAlignedX = ovr_alignUp4((Entities)[entIdx].base.x,0,0);
     if (entAlignedX == alignedX) {
       entitiesOfs = (int)Entities;
       if (((entity_t *)entitiesOfs)[entIdx].base.y == y) {
@@ -133,19 +131,19 @@ ovc45_findEntityAt(uint16_t x,uint16_t y,uint *foundIndex,uint8_t *foundFlagOut,
           return (char *)(grpOfs & 0xff00);
         }
         if ((AgntGs[(uint)((entity_t *)entitiesOfs)[entIdx].base.gindex].shortName[3] != -1) &&
-           (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) != -1)) {
-          if (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) == foundFlag) {
+           (AGNT_FIELD(&(Entities)[entIdx], base.entity, 3) != -1)) {
+          if (AGNT_FIELD(&(Entities)[entIdx], base.entity, 3) == foundFlag) {
             *foundIndex = entIdx;
           }
-          else if (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) ==
+          else if (AGNT_FIELD(&(Entities)[entIdx], base.entity, 3) ==
                    selectedPartyIndex) {
             selIdx = entIdx;
           }
           if ((lastParty != 0xffff) &&
-             (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) != lastParty)) {
+             (AGNT_FIELD(&(Entities)[entIdx], base.entity, 3) != lastParty)) {
             *foundFlagOut = 1;
           }
-          lastParty = (uint)AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3);
+          lastParty = (uint)AGNT_FIELD(&(Entities)[entIdx], base.entity, 3);
           fallbackIdx = entIdx;
         }
       }
@@ -263,7 +261,7 @@ int __cdecl16far ovc45_usesGMapFlags(int x,int y)
   psVar1 = (*(short (*) [60] [148])GMapFlags)[y] + x;
   if ((psVar1[0x94] & 3U) == 0) {
     sVar2 = ovc45_getUnitIndex(x,y);
-    iVar3 = (uint)((unit_t *)GUnits + sVar2)->bldType * 0x27;
+    iVar3 = (uint)(GUnits + sVar2)->bldType * 0x27;
     bVar4 = (byte)((uint)iVar3 >> 8);
     if ((*(uint *)(iVar3 + 0x121) & 0x18) == 0) {
       iVar3 = (uint)bVar4 << 8;
@@ -626,8 +624,8 @@ bool __cdecl16far ovc45_textArena2(byte bldType)
 
   if (BuildingTypes[bldType].unitType == '\x17') {
     for (idx = 0xf8; idx < GUnitCount; idx = idx + 1) {
-      unitType = ((unit_t *)GUnits)[idx].unitType;
-      if (((BuildingTypes[(uint)((unit_t *)GUnits + idx)->bldType].unitType == '\x17') &&
+      unitType = (GUnits)[idx].unitType;
+      if (((BuildingTypes[(uint)(GUnits + idx)->bldType].unitType == '\x17') &&
           (unitType != 0xff)) &&
          (sheetRef = *(uint32_t *)((uint)unitType << 2),
           *(char *)((int)sheetRef + 0x3f) == '\0')) {
@@ -952,7 +950,7 @@ ovc45_buildPlacementMessage
   bStack_13 = grab - ((char)uVar9 + -2);
   do {
     uStack_f = 0;
-    bStack_11 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+    bStack_11 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
     uVar9 = ovr_bldng_usesGStrangeTable
                       ((GLeaderSheets[bStack_11])->buildType[0]);
     bStack_12 = (byte)uVar9;
@@ -1037,7 +1035,7 @@ ovc45_buildPlacementMessage
                 }
                 else {
                   uVar26 = 0x10;
-                  pcVar11 = ovr_ovc22_className(AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),
+                  pcVar11 = ovr_ovc22_className(AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),
                                                 (char)BuildingTypes[bStack_12].cost);
                   uVar16 = _DS;
                   iVar18 = ovc45_compute9((char *)&text,
@@ -3871,11 +3869,11 @@ uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
   uint16_t uVar6;
   
   uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-  if (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3) == -1) {
+  if (*(char *)((int)&(Entities)[entityIndex].base.entity + 3) == -1) {
     uVar3 = entityIndex * 0x37 & 0xff00;
   }
   else {
-    uVar2 = *(uint32_t *)((uint)AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) << 2);
+    uVar2 = *(uint32_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) << 2);
     cVar1 = *(char *)((int)uVar2 + 0x2f);
     if (cVar1 == '\x04') {
       randDraw = ovr_randBelow(5,0);
@@ -3975,8 +3973,8 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
   cStack_16 = '\0';
   do {
     uVar11 = 0x10;
-    pcVar2 = ovr_ovc22_className(AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),0);
-    puVar3 = (uint16_t *)((uint)AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) * 4);
+    pcVar2 = ovr_ovc22_className(AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),0);
+    puVar3 = (uint16_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) * 4);
     uVar8 = _DS;
     iVar4 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar3,_SS),
                            (char *)CONCAT13((char)(Font03.ofs >> 8),
@@ -3989,7 +3987,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
                             asm { mov uVar9,dx };
     strcpy((char *)CONCAT22(_SS,&msg),
            (char *)CONCAT13((char)((uint)uVar9 >> 8),CONCAT12((char)uVar9,pcVar2)));
-    goldPartyIndex = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+    goldPartyIndex = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
     uVar11 = SUB21(_SS,0);
     uVar12 = (undefined1)((uint)_SS >> 8);
     puVar5 = &menuItems;
@@ -4010,7 +4008,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
       if ((uVar6 & 0xff) == 0) {
         ovr_play_sfx(47,0,0);
         ovr_say((char *)"No minerals were found.",0x10);
-        bVar1 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+        bVar1 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
         ovr_createConstructionRecordFar
                   (0,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,(char)unaff_DI,(char)GfxRndSeed2,bVar1,0);
       }
@@ -4019,7 +4017,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
         if ((uVar7 & 0xff) == 0) {
           ovr_play_sfx(42,0,0);
           ovr_say((char *)"Gems discovered.",0x10);
-          bVar1 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+          bVar1 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
           ovr_createConstructionRecordFar
                     (0x72,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,(char)unaff_DI,(char)GfxRndSeed2,bVar1,0);
         }
@@ -4028,14 +4026,14 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
           if ((char)uVar7 == '\0') {
             ovr_play_sfx(43,0,0);
             ovr_say((char *)"Gold discovered.",0x10);
-            bVar1 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+            bVar1 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
             ovr_createConstructionRecordFar
                       (0x71,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,(char)unaff_DI,(char)GfxRndSeed2,bVar1,0);
           }
           else {
             ovr_play_sfx(42,0,0);
             ovr_say((char *)"Iron deposits discovered.",0x10);
-            bVar1 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+            bVar1 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
             ovr_createConstructionRecordFar
                       (0x70,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,(char)unaff_DI,(char)GfxRndSeed2,bVar1,0);
           }
@@ -4066,7 +4064,7 @@ ovc45_textDone(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t o
       ovr_ovc28_compute2(entries_00,2,hint_00,0,0);
       cStack_15 = (char)puVar5;
       if (cStack_15 == '\x01') {
-        bVar1 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+        bVar1 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
         ovr_createConstructionRecordFar
                   (0,x_00,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar1,(char)unaff_DI,(char)GfxRndSeed2,bVar1,0);
       }
@@ -4168,8 +4166,8 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
   cStack_e = '\0';
   do {
     uVar14 = 0x10;
-    pcVar4 = ovr_ovc22_className(AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),0);
-    puVar5 = (uint16_t *)((uint)AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) * 4);
+    pcVar4 = ovr_ovc22_className(AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),0);
+    puVar5 = (uint16_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) * 4);
     uVar15 = 0x7a;
     uVar8 = puVar5[1];
     iVar6 = ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar5,_SS),
@@ -4186,7 +4184,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
     uVar15 = (undefined1)((uint)_SS >> 8);
     strcpy((char *)CONCAT13(uVar15,CONCAT12(uVar14,&msg)),
            (char *)CONCAT13((char)((uint)uVar8 >> 8),CONCAT12((char)uVar8,pcVar4)));
-    goldPartyIndex = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+    goldPartyIndex = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
     puVar7 = &menuLabels;
     (*(uint8_t *)((uint8_t *)&(entries.seg))) = uVar14;
     entries.ofs = (uint16_t)puVar7;
@@ -4203,7 +4201,7 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
     if (menuActions == 0x1) {
       ovr_play_sfx(86,0,0);
       if (BuildingTypes[bldType].resource == '\0') {
-        if (AgntGs[(uint)((entity_t *)Entities)[entityIndex].base.gindex].shortName[3] == '\x05') {
+        if (AgntGs[(uint)(Entities)[entityIndex].base.gindex].shortName[3] == '\x05') {
           bStack_11 = bldType + 0x18;
         }
         else {
@@ -4219,12 +4217,12 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
                 (bStack_11,agnt,GfxRndSeed2,(uint8_t *)outFlag,(char)outFlagSeg,(char)agnt,
                  (char)outFlag,(char)outFlagSeg,
                  CONCAT11((char)((uint)(entityIndex * 0x37) >> 8),
-                          AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3)),0);
+                          AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3)),0);
       BuildingTypes[bStack_11].expinc = (undefined1)uStack_14;
-      bVar3 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+      bVar3 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
       pcStack_16 = ovr_ovc22_textPOPULATION(bStack_11,bVar3,(agnt_t far *)agnt,bVar3,(char)GfxRndSeed2);
       uVar14 = 0x10;
-      partyIndex = *(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3);
+      partyIndex = *(char *)((int)&(Entities)[entityIndex].base.entity + 3);
       uStack_18 = ovr_ovc22_seasonalIncome(bStack_11,partyIndex,partyIndex,agnt,(char)GfxRndSeed2);
       ovc45_compute6((uint16_t)pcStack_16);
       pcVar4 = ovr_fmVsprintf("Forest claimed. This forest creates %d gold of income and feeds %d %s."
@@ -4236,12 +4234,12 @@ ovc45_textDone2(char foundFlag,byte bldType,int entityIndex,uint16_t x,uint16_t 
     }
     else if (menuActions == 0x2) {
       ovr_play_sfx(48,0,0);
-      bVar3 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+      bVar3 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
       ovr_createConstructionRecordFar
                 (0,agnt,GfxRndSeed2,(uint8_t *)CONCAT22(outFlagSeg,outFlag),bVar3,(char)unaff_DI,
                  (char)GfxRndSeed2,(char)outFlag,bVar3);
       cStack_e = '\x01';
-      bStack_10 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+      bStack_10 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
       uVar8 = (uint16_t)((ulong)*(uint32_t *)((uint)bStack_10 << 2) >> 0x10);
       iVar6 = (int)*(uint32_t *)((uint)bStack_10 << 2);
       puVar1 = (uint *)(iVar6 + 0x56);

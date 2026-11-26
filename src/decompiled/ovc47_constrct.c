@@ -112,8 +112,8 @@ void __cdecl16far land_info(byte tileOffset)
   bldType = (byte)tileVal;
   unitIdx = ovr_ovc45_getUnitIndex(tileX,GfxRndSeed2);
   gUnitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
-  if (((unit_t *)GUnits)[unitIdx].unitType != 0xff) {
-    unitType = ((unit_t *)GUnits)[unitIdx].unitType;
+  if ((GUnits)[unitIdx].unitType != 0xff) {
+    unitType = (GUnits)[unitIdx].unitType;
   }
   if (GTileRecords[tileOffset] != -1) {
     if (*(char *)(GTileRecords[tileOffset] * 0x12 + 0xc) == '\0') {
@@ -123,7 +123,7 @@ void __cdecl16far land_info(byte tileOffset)
     unitType = *(byte *)(GTileRecords[tileIdx] * 0x12 + 9);
   }
   if (((BuildingTypes[bldType].flags2 & 0x80) == 0) &&
-     (((unit_t *)GUnits)[unitIdx].level < 3)) {
+     ((GUnits)[unitIdx].level < 3)) {
     type = 0;
     sfxRoll = ovr_randBelow(2,0);
     ovr_play_sfx(CONCAT11((char)(sfxRoll >> 8),(char)sfxRoll + '?'),type,0);
@@ -141,7 +141,7 @@ void __cdecl16far land_info(byte tileOffset)
     if (resultCode == '\0') {
       if (tileIdx == 0xff) {
         gUnitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
-        puVar10 = (unit_t *)GUnits;
+        puVar10 = GUnits;
         if (puVar10[unitIdx].unitType == 0xff) {
           if (bldType == 0) {
             mapFlag = ovr_ovc45_usesGMapFlags4(tileX,GfxRndSeed2);
@@ -266,8 +266,8 @@ void __cdecl16far land_info(byte tileOffset)
       do {
         entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
         if (bldType == 0) {
-          textMsg = ovr_ovc22_className(AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),0);
-          puVar5 = (uint16_t *)((uint)AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) * 4);
+          textMsg = ovr_ovc22_className(AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),0);
+          puVar5 = (uint16_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) * 4);
           msgSeg = _DS;
           computed = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT13((char)(Font03.ofs >> 8),
@@ -287,8 +287,8 @@ void __cdecl16far land_info(byte tileOffset)
           strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(pctRemaining,textMsg));
         }
         else {
-          textMsg = ovr_ovc22_className(AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),0);
-          puVar5 = (uint16_t *)((uint)AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3) * 4);
+          textMsg = ovr_ovc22_className(AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),0);
+          puVar5 = (uint16_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) * 4);
           msgSeg = _DS;
           computed = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT13((char)(Font03.ofs >> 8),
@@ -311,7 +311,7 @@ void __cdecl16far land_info(byte tileOffset)
                                   (char *)CONCAT22(retSeg,stashOfs));
           strcpy((char *)CONCAT22(_SS,&msg),(char *)CONCAT22(retSeg,textMsg));
         }
-        goldPartyIndex = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+        goldPartyIndex = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
         hint_00.seg = (uint16_t)_SS;
         hint_00.ofs = (uint16_t)&msg;
         stashOfs = &menuItems;
@@ -430,7 +430,7 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
   uint16_t count;
   
   lVar17 = CONCAT22((int)((ulong)in_stack_0000ff5e >> 0x10),unaff_SI);
-  bVar3 = AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3);
+  bVar3 = AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3);
   if ((partyIndex != 0xff) && (bVar3 != 0xff)) {
     bVar4 = (GLeaderSheets[partyIndex])->classStr;
     iVar9 = AGNT_WORD(&AgntGs[(uint)bVar4], shortName, 5);
@@ -439,9 +439,9 @@ void __cdecl16far constrct_usesLDIV_at_(byte partyIndex,int entityIndex)
     for (uVar12 = 0; uVar12 < EntityCount; uVar12 = uVar12 + 1) {
       uVar14 = (uint16_t)((ulong)Entities >> 0x10);
       uVar14 = ovr_ovc23_isCursorAt
-                         (((entity_t *)Entities)[uVar12].base.x,((entity_t *)Entities)[uVar12].base.y,0);
+                         ((Entities)[uVar12].base.x,(Entities)[uVar12].base.y,0);
       if (((char)uVar14 != '\0') &&
-         (AgntGs[(uint)((entity_t *)Entities)[uVar12].base.gindex].ai == '\0')) {
+         (AgntGs[(uint)(Entities)[uVar12].base.gindex].ai == '\0')) {
         iVar13 = iVar13 + 1;
       }
     }
@@ -514,7 +514,7 @@ byte __cdecl16far constrct_unitFlagsClear(int unitIndex)
   uint flags;
   int k;
 
-  units = (unit_t *)GUnits;
+  units = GUnits;
   if (units[unitIndex].unitType == 0xff) {
     return 0;
   }
@@ -523,7 +523,7 @@ byte __cdecl16far constrct_unitFlagsClear(int unitIndex)
     return 0;
   }
   alignedX = ovr_alignUp4(units[unitIndex].x,0,0);
-  entY = ((unit_t *)GUnits)[unitIndex].y;
+  entY = (GUnits)[unitIndex].y;
   flags = 0;
   for (k = 0; k < 4; k = k + 1) {
     flagWord = ((short (*) [60] [148])GMapFlags)[-1][entY + 0x3b][alignedX + k + 0x92] &

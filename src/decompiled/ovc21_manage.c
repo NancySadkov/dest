@@ -1313,8 +1313,8 @@ char * __cdecl16far chargen_switch(uint16_t index)
       *unaff_SI = *unaff_SI + (char)(uVar14 >> 8) + ((undefined1 *)0xfff3 < &stk_fff2);
       ((dos_psp_t *)((entity_t **)&Entities + uVar14))->jft[0] = 0;
       uVar12 = (uint16_t)((ulong)Entities >> 0x10);
-      *(undefined1 *)((int)&((entity_t *)Entities)[(int)unaff_SI].base.state + 1) =
-           (char)((entity_t *)Entities)[(int)unaff_SI].base.flags32;
+      *(undefined1 *)((int)&(Entities)[(int)unaff_SI].base.state + 1) =
+           (char)(Entities)[(int)unaff_SI].base.flags32;
       if (unaff_SI + 1 < EntityCount) {
         pcVar16 = (char *)0x1e6;
         ovr_say((char *)"The damaged structures belonging to all leaders are highlighted in red.",0);
@@ -2195,7 +2195,6 @@ void manage_usesEntities(void)
 
 {
   char in_CL;
-  int iVar1;
   int unaff_BP;
   int unaff_SI;
   uint16_t uVar2;
@@ -2205,14 +2204,13 @@ void manage_usesEntities(void)
     return;
   }
   uVar2 = (uint16_t)((ulong)Entities >> 0x10);
-  iVar1 = (int)Entities;
-  if (((AgntGs[(uint)((entity_t *)iVar1)[unaff_SI].base.gindex].ai == '\0') &&
-      (*(byte *)(unaff_BP + 8) <= ((entity_t *)iVar1)[unaff_SI].base.level)) &&
-     (((entity_t *)iVar1)[unaff_SI].base.level <= *(byte *)(unaff_BP + 10))) {
+  if (((AgntGs[(uint)(Entities)[unaff_SI].base.gindex].ai == '\0') &&
+      (*(byte *)(unaff_BP + 8) <= (Entities)[unaff_SI].base.level)) &&
+     ((Entities)[unaff_SI].base.level <= *(byte *)(unaff_BP + 10))) {
     *(int *)*(uint32_t *)(unaff_BP + 0xc) = *(int *)*(uint32_t *)(unaff_BP + 0xc) + 1;
     *(int *)*(uint32_t *)(unaff_BP + 0x10) =
          *(int *)*(uint32_t *)(unaff_BP + 0x10) +
-         (uint)((entity_t *)Entities)[unaff_SI].base.animFrame;
+         (uint)(Entities)[unaff_SI].base.animFrame;
   }
   if (EntityCount <= unaff_SI + 1U) {
     return;
@@ -2232,20 +2230,18 @@ void __cdecl16far manage_usesEntities2(void)
 
 {
   char in_CL;
-  int iVar1;
   int unaff_BP;
   int unaff_SI;
   uint16_t uVar2;
   
   uVar2 = (uint16_t)((ulong)Entities >> 0x10);
-  iVar1 = (int)Entities;
-  if (((AGNT_FIELD(&((entity_t *)Entities)[unaff_SI], base.entity, 3) == in_CL) &&
-      (*(byte *)(unaff_BP + 8) <= ((entity_t *)iVar1)[unaff_SI].base.level)) &&
-     (((entity_t *)iVar1)[unaff_SI].base.level <= *(byte *)(unaff_BP + 10))) {
+  if (((AGNT_FIELD(&(Entities)[unaff_SI], base.entity, 3) == in_CL) &&
+      (*(byte *)(unaff_BP + 8) <= (Entities)[unaff_SI].base.level)) &&
+     ((Entities)[unaff_SI].base.level <= *(byte *)(unaff_BP + 10))) {
     *(int *)*(uint32_t *)(unaff_BP + 0xc) = *(int *)*(uint32_t *)(unaff_BP + 0xc) + 1;
     *(int *)*(uint32_t *)(unaff_BP + 0x10) =
          *(int *)*(uint32_t *)(unaff_BP + 0x10) +
-         (uint)((entity_t *)Entities)[unaff_SI].base.animFrame;
+         (uint)(Entities)[unaff_SI].base.animFrame;
   }
   if (unaff_SI + 1U < EntityCount) {
     manage_usesEntities();
@@ -2272,7 +2268,7 @@ uint16_t __cdecl16far sub_OVC21_manage_c_23C2()
     *(int *)*(uint32_t *)(unaff_BP + 0xc) = *(int *)*(uint32_t *)(unaff_BP + 0xc) + 1;
     *(int *)*(uint32_t *)(unaff_BP + 0x10) =
          *(int *)*(uint32_t *)(unaff_BP + 0x10) +
-         (uint)((entity_t *)Entities)[unaff_SI].base.animFrame;
+         (uint)(Entities)[unaff_SI].base.animFrame;
   }
   if (unaff_SI + 1U < EntityCount) {
     manage_usesEntities();
@@ -2340,7 +2336,7 @@ manage_usesGUnitCount
     }
     if (partyIndex != -1) break;
     uVar7 = (uint16_t)((ulong)GUnits >> 0x10);
-    puVar5 = (unit_t *)GUnits;
+    puVar5 = GUnits;
     if (((puVar5[uVar6].unitType != 0xff) &&
         (uVar3 = *(uint32_t *)((uint)puVar5[uVar6].unitType << 2),
         *(char *)((int)uVar3 + 0x3f) == '\0')) &&
@@ -2431,7 +2427,7 @@ uint16_t __cdecl16far sub_OVC21_manage_c_24B1()
         return uVar3;
       }
       uVar3 = (uint16_t)((ulong)GUnits >> 0x10);
-      puVar5 = (unit_t *)GUnits;
+      puVar5 = GUnits;
     } while ((puVar5[unaff_SI].unitType == 0xff) ||
             (uVar2 = *(uint32_t *)((uint)puVar5[unaff_SI].unitType << 2),
             *(char *)((int)uVar2 + 0x3f) != '\0'));
@@ -2458,8 +2454,8 @@ uint16_t __cdecl16far manage_usesGUnits(void)
   uint16_t uVar5;
   
   uVar5 = (uint16_t)((ulong)GUnits >> 0x10);
-  if ((((unit_t *)GUnits)[unaff_SI].unitType == *(byte *)(unaff_BP + 6)) &&
-     (bVar1 = ((unit_t *)GUnits + unaff_SI)->bldType,
+  if (((GUnits)[unaff_SI].unitType == *(byte *)(unaff_BP + 6)) &&
+     (bVar1 = (GUnits + unaff_SI)->bldType,
      BuildingTypes[bVar1].unitType == *(char *)(unaff_BP + 8))) {
     *(int *)(unaff_BP + -2) = *(int *)(unaff_BP + -2) + 1;
     if (BuildingTypes[bVar1].resource == '\x01') {
@@ -2502,7 +2498,7 @@ uint16_t __cdecl16far manage_usesGUnits(void)
     }
     if (*(char *)(unaff_BP + 6) != -1) break;
     uVar5 = (uint16_t)((ulong)GUnits >> 0x10);
-    puVar3 = (unit_t *)GUnits;
+    puVar3 = GUnits;
     if (((puVar3[unaff_SI].unitType != 0xff) &&
         (uVar2 = *(uint32_t *)((uint)puVar3[unaff_SI].unitType << 2),
         *(char *)((int)uVar2 + 0x3f) == '\0')) &&
@@ -3360,8 +3356,8 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
       *pcVar17 = *pcVar17 + (char)(uVar6 >> 8) + ((undefined1 *)0xfff3 < &stk_fe3a);
       ((dos_psp_t *)((entity_t **)&Entities + uVar6))->jft[0] = 0;
       uVar18 = (uint16_t)((ulong)Entities >> 0x10);
-      *(undefined1 *)((int)&((entity_t *)Entities)[(int)pcVar17].base.state + 1) =
-           (char)((entity_t *)Entities)[(int)pcVar17].base.flags32;
+      *(undefined1 *)((int)&(Entities)[(int)pcVar17].base.state + 1) =
+           (char)(Entities)[(int)pcVar17].base.flags32;
       if (EntityCount <= pcVar17 + 1) {
         if ((acStack_e[0] != '\0') || (acStack_e[1] != '\0')) {
           if ((*(uint8_t *)((uint8_t *)&(packedByte) + 1)) == '\0') {

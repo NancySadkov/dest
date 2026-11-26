@@ -557,7 +557,7 @@ L_attact_3f0b_26bd_2767:
               if (EntityCount <= uVar11) {
                 return (char *)0x26510;
               }
-              uVar13 = ovr_ovc23_isCursorAt(((entity_t *)Entities)[uVar11].base.x,0,0);
+              uVar13 = ovr_ovc23_isCursorAt((Entities)[uVar11].base.x,0,0);
             } while ((char)uVar13 == '\0');
             destY = manage_usesLitoa103();
           }
@@ -819,13 +819,13 @@ void __cdecl16far ovc18_checkFortressPlacement(char strongholdKind)
   F_SCOPY(far_from_u32((uint32_t)(0x241045b9)),dst,12);
   for (entityIndex = 0; partyIndex = (char)unaff_DI, entityIndex < EntityCount; entityIndex = entityIndex + 1) {
     uVar10 = (uint16_t)((ulong)Entities >> 0x10);
-    if (AgntGs[(uint)((entity_t *)Entities)[entityIndex].base.gindex].ai != '\0') {
-      uVar3 = ovr_alignUp4(((entity_t *)Entities)[entityIndex].base.x,0,0);
+    if (AgntGs[(uint)(Entities)[entityIndex].base.gindex].ai != '\0') {
+      uVar3 = ovr_alignUp4((Entities)[entityIndex].base.x,0,0);
       xLo = (undefined1)uVar3;
       xHi = (undefined1)(uVar3 >> 8);
       uVar3 = ovr_alignUp4(GfxRndSeed,0,0);
       if ((CONCAT11(xHi,xLo) == uVar3) &&
-         (((entity_t *)Entities)[entityIndex].base.y == GfxRndSeed2)) {
+         ((Entities)[entityIndex].base.y == GfxRndSeed2)) {
         ovr_stats_openCastlePanel();
         ovr_say((char *)"A fortress cannot be placed among enemy units.",0x10);
         MsgShown = 1;
@@ -987,9 +987,9 @@ uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,uin
     }
     else {
       unaff_SI = (*paasVar4)[x][y];
-      ((unit_t *)GUnits + unaff_SI)->bldType = 0;
-      ((unit_t *)GUnits)[unaff_SI].level = 8;
-      ((unit_t *)GUnits)[unaff_SI].unitType = 0xff;
+      (GUnits + unaff_SI)->bldType = 0;
+      (GUnits)[unaff_SI].level = 8;
+      (GUnits)[unaff_SI].unitType = 0xff;
       (*(short (*) [148] [60])GUnitGrid)[x][y] = 0;
     }
     puVar1 = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
@@ -998,7 +998,7 @@ uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,uin
   else {
     if ((uint)(*paasVar4)[x][y] < 0xf8) {
       unaff_SI = 0xf8;
-      while ((unaff_SI < GUnitCount && (((unit_t *)GUnits + unaff_SI)->bldType != 0))) {
+      while ((unaff_SI < GUnitCount && ((GUnits + unaff_SI)->bldType != 0))) {
         unaff_SI = unaff_SI + 1;
       }
       if (GUnitCount <= unaff_SI) {
@@ -1032,32 +1032,32 @@ uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,uin
     else {
       unaff_SI = (*paasVar4)[x][y];
     }
-    ((unit_t *)GUnits + unaff_SI)->bldType = bldType;
-    ((unit_t *)GUnits)[unaff_SI].level = 8;
-    ((unit_t *)GUnits)[unaff_SI].unitType = unitType;
-    ((unit_t *)GUnits)[unaff_SI].x = x;
-    ((unit_t *)GUnits)[unaff_SI].y = y;
+    (GUnits + unaff_SI)->bldType = bldType;
+    (GUnits)[unaff_SI].level = 8;
+    (GUnits)[unaff_SI].unitType = unitType;
+    (GUnits)[unaff_SI].x = x;
+    (GUnits)[unaff_SI].y = y;
     (*(short (*) [148] [60])GUnitGrid)[x][y] = unaff_SI;
     uVar6 = (uint16_t)((ulong)GMapFlags >> 0x10);
     (*(short (*) [60] [148])GMapFlags)[y][x] =
          (*(short (*) [60] [148])GMapFlags)[y][x] & 0x3fffU |
          (uint)BuildingTypes[bldType].flags << 0xe;
     if ((BuildingTypes[bldType].flags2 & 0x40) == 0) {
-      ((unit_t *)GUnits)[unaff_SI].timer = 0;
+      (GUnits)[unaff_SI].timer = 0;
     }
     else {
       uVar2 = ovr_constr_usesGMapFlags2(x,y);
       if ((uVar2 & 0xff) == 3) {
         randDraw = ovr_randBelow(0x28,0);
-        ((unit_t *)GUnits)[unaff_SI].timer = (char)randDraw + 0x1e;
+        (GUnits)[unaff_SI].timer = (char)randDraw + 0x1e;
       }
       else if ((uVar2 & 0xff) == 4) {
         randDraw = ovr_randBelow(0x50,0);
-        ((unit_t *)GUnits)[unaff_SI].timer = (char)randDraw + 0x3c;
+        (GUnits)[unaff_SI].timer = (char)randDraw + 0x3c;
       }
       else {
         randDraw = ovr_randBelow(0x14,0);
-        ((unit_t *)GUnits)[unaff_SI].timer = (char)randDraw + 0xf;
+        (GUnits)[unaff_SI].timer = (char)randDraw + 0xf;
       }
     }
   }
@@ -1084,8 +1084,8 @@ bool __cdecl16far ovc18_textArena(uint16_t x,uint16_t y)
     if (EntityCount <= uVar3) {
       return false;
     }
-    uVar2 = ovr_alignUp4(((entity_t *)Entities)[uVar3].base.x,0,0);
-    if ((uVar2 == uVar1) && (((entity_t *)Entities)[uVar3].base.y == y)) break;
+    uVar2 = ovr_alignUp4((Entities)[uVar3].base.x,0,0);
+    if ((uVar2 == uVar1) && ((Entities)[uVar3].base.y == y)) break;
     uVar3 = uVar3 + 1;
   }
   return true;
@@ -1123,11 +1123,11 @@ byte __cdecl16far ovc18_usesAlignUp4(void)
     return 0;
   }
   for (leaderIdx = 0; leaderIdx < (int)(uint)EntityCount; leaderIdx = leaderIdx + 1) {
-    if (AgntGs[(uint)((entity_t *)Entities)[leaderIdx].base.gindex].ai != '\0') {
-      entAlignedX = ovr_alignUp4(((entity_t *)Entities)[leaderIdx].base.x,0,0);
+    if (AgntGs[(uint)(Entities)[leaderIdx].base.gindex].ai != '\0') {
+      entAlignedX = ovr_alignUp4((Entities)[leaderIdx].base.x,0,0);
       cursorAlignedX = ovr_alignUp4(GfxRndSeed,0,0);
       if ((entAlignedX == cursorAlignedX) &&
-         ((uint)((entity_t *)Entities)[leaderIdx].base.y == (uint)GfxRndSeed2)) {
+         ((uint)(Entities)[leaderIdx].base.y == (uint)GfxRndSeed2)) {
         return 0;
       }
     }

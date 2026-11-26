@@ -127,7 +127,7 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     uVar7 = (ulong)uStack_6;
     uStack_8 =(uint16_t)(unsigned long)(byte *)CONCAT11(bVar11,(byte)(uint16_t)(unsigned long)(uStack_8));
     uVar26 = (uint16_t)((ulong)GUnits >> 0x10);
-    puVar23 = (unit_t *)GUnits;
+    puVar23 = GUnits;
     bVar9 = puVar23[uVar15].unitType;
     (*(uint32_t *)((uint8_t *)&(uStack_6))) = CONCAT12(bVar9,(byte *)uStack_6);
     uStack_6 = (byte *)(ulong)(uint3)uStack_6;
@@ -286,10 +286,10 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
     return (byte *)((char *)0x2410);
   case (byte *)0x2:
     pbVar14 = (byte *)(partyIndex * 0x37);
-    if (*(char *)((int)&((entity_t *)Entities)[partyIndex].base.entity + 3) != -1) {
-      bVar9 = ovr_agnt_compute10(&((entity_t *)Entities)[partyIndex].base,0);
+    if (*(char *)((int)&(Entities)[partyIndex].base.entity + 3) != -1) {
+      bVar9 = ovr_agnt_compute10(&(Entities)[partyIndex].base,0);
       (*(uint32_t *)((uint8_t *)&(uStack_6))) = (uint3)bVar9 << 8;
-      uVar27 = *(undefined1 *)((int)&((entity_t *)Entities)[partyIndex].base.entity + 3);
+      uVar27 = *(undefined1 *)((int)&(Entities)[partyIndex].base.entity + 3);
       pbVar14 = (byte *)CONCAT11((char)(partyIndex * 0x37 >> 8),uVar27);
       uStack_6 = (byte *)CONCAT13(uVar27,(uint3)uStack_6);
       while (cVar10 = (char)uStack_6, (char)uStack_6 < '\x04') {
@@ -302,10 +302,10 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
                             0x76);
             *piVar2 = *piVar2 + -1;
             uVar26 = (uint16_t)((ulong)Entities >> 0x10);
-            peVar22 = (entity_t *)Entities;
+            peVar22 = Entities;
             peVar22[partyIndex].dir =
                  peVar22[partyIndex].dir + (char)(((ulong)peVar22[partyIndex].dir / 6) % 6) * -6;
-            bVar9 = ((entity_t *)Entities)[partyIndex].base.gindex;
+            bVar9 = (Entities)[partyIndex].base.gindex;
             (*(uint32_t *)((uint8_t *)&(uStack_6))) = CONCAT12(bVar9,(byte *)uStack_6);
             if ((AgntGs[(uint)bVar9].shortName[3] == '\x03') &&
                ('\x01' < cVar10)) {
@@ -317,8 +317,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
             }
             cVar10 = ovc22_compute3((*(uint8_t *)((uint8_t *)&(uStack_8) + 1)) + '\x01');
             uVar26 = (uint16_t)((ulong)Entities >> 0x10);
-            bVar9 = ((entity_t *)Entities)[partyIndex].dir + cVar10 * '\x06';
-            ((entity_t *)Entities)[partyIndex].dir = bVar9;
+            bVar9 = (Entities)[partyIndex].dir + cVar10 * '\x06';
+            (Entities)[partyIndex].dir = bVar9;
             return (byte *)CONCAT11((char)(partyIndex * 0x37 >> 8),bVar9);
           }
         }
@@ -379,10 +379,10 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
             iVar24 = (GLeaderSheets[uStack_a])->nearestEnemy;
             uVar26 = (uint16_t)((ulong)Entities >> 0x10);
             uVar15 = (GLeaderSheets[uStack_a])->x -
-                     (((entity_t *)Entities + iVar24)->base).x;
+                     ((Entities + iVar24)->base).x;
             uVar20 = (int)uVar15 >> 0xf;
             uVar18 = (GLeaderSheets[uStack_a])->y -
-                     ((entity_t *)Entities)[iVar24].base.y;
+                     (Entities)[iVar24].base.y;
             uVar21 = (int)uVar18 >> 0xf;
             uVar15 = (int)((uVar15 ^ uVar20) - uVar20) / 2 + ((uVar18 ^ uVar21) - uVar21);
           }
@@ -390,8 +390,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
           ovc25_usesEntityCount((byte)uStack_a);
           if (9 < (GLeaderSheets[uStack_a])->unitsOnTile) {
             uVar26 = (uint16_t)((ulong)Entities >> 0x10);
-            ovc25_usesAlignUp43((byte)uStack_a,5,(((entity_t *)Entities + iVar24)->base).x,
-                                ((entity_t *)Entities)[iVar24].base.y,'\x01');
+            ovc25_usesAlignUp43((byte)uStack_a,5,((Entities + iVar24)->base).x,
+                                (Entities)[iVar24].base.y,'\x01');
           }
           ovc25_usesAlignUp43((byte)uStack_a,10,
                               (GLeaderSheets[uStack_a])->x,
@@ -425,8 +425,8 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
   case (byte *)0x4:
     if ((byte)uStack_8 < ListCount) {
       uVar26 = (uint16_t)((ulong)GUnits >> 0x10);
-      uStack_a = ((unit_t *)GUnits)[*(int *)(((uint)uStack_8 & 0xff) * 2 + -0x6d44)].x;
-      uStack_c = ((unit_t *)GUnits)[*(int *)(((uint)uStack_8 & 0xff) * 2 + -0x6d44)].y;
+      uStack_a = (GUnits)[*(int *)(((uint)uStack_8 & 0xff) * 2 + -0x6d44)].x;
+      uStack_c = (GUnits)[*(int *)(((uint)uStack_8 & 0xff) * 2 + -0x6d44)].y;
     }
     else {
       sheetPtr = *(uint32_t *)((partyIndex & 0xff) << 2);
@@ -532,10 +532,10 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
           ovr_attact_usesRandBelow(&Entities[uStack_a].base,(byte)((ulong)Entities >> 0x10),0,0);
           ovr_attact_usesEntities(uStack_a,0,0,0,0,0,0,0,0);
           uVar26 = (uint16_t)((ulong)Entities >> 0x10);
-          bVar9 = ((entity_t *)Entities)[uStack_a].base.gindex;
+          bVar9 = (Entities)[uStack_a].base.gindex;
           pbVar14 = (byte *)(uint)AgntGs[(uint)bVar9].ai;
           if (pbVar14 == (byte *)0x0) {
-            alignUp4((((entity_t *)Entities + iVar24)->base).x,0,0);
+            alignUp4(((Entities + iVar24)->base).x,0,0);
             uVar26 = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + (uint)bVar9 * 0x95);
             pbVar14 = (byte *)ovr_fmVsprintf("Intelligence reports %s unit fleeing from battle. (%d, %d)"
                                              ,(char *)CONCAT13((char)((uint)uVar26 >> 8),
@@ -554,12 +554,12 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
           Entities[iVar25].base.animFrame = Entities[iVar25].base.animFrame - (byte)uStack_8;
           ovr_ovc41_compute4(&Entities[iVar25].base,(byte)((ulong)Entities >> 0x10),0,0,0,0,0,0);
           ovr_ovc25_attackingNotice
-                    (*(byte *)((int)&((entity_t *)Entities)[iVar25].base.entity + 3));
+                    (*(byte *)((int)&(Entities)[iVar25].base.entity + 3));
           pbVar14 = (byte *)(iVar25 * 0x37);
-          if (((entity_t *)Entities)[iVar25].base.animFrame != 0x0) {
+          if ((Entities)[iVar25].base.animFrame != 0x0) {
             ovc24_usesLDIV_at_(iVar25);
             uVar26 = (uint16_t)((ulong)Entities >> 0x10);
-            peVar22 = (entity_t *)Entities;
+            peVar22 = Entities;
             if ((((AgntGs[(uint)peVar22[uStack_a].base.gindex].flags2 & 4) != 0) &&
                 ((*(uint *)((int)&peVar22[iVar25].base.frames + 1) & 1) == 0)) &&
                (uVar15 = ovr_ovc27_rollToHitAgent
@@ -567,10 +567,10 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
                                              CONCAT12((char)((ulong)Entities >> 0x10),
                                                       peVar22 + iVar25)),0), (uVar15 & 0xff) == 0))
             {
-              puVar1 = (uint *)((int)&((entity_t *)Entities)[iVar25].base.frames + 1);
+              puVar1 = (uint *)((int)&(Entities)[iVar25].base.frames + 1);
               *puVar1 = *puVar1 | 1;
-              alignUp4((((entity_t *)Entities + iVar24)->base).x,0,0);
-              iVar12 = (uint)((entity_t *)Entities)[iVar25].base.gindex * 0x95;
+              alignUp4(((Entities + iVar24)->base).x,0,0);
+              iVar12 = (uint)(Entities)[iVar25].base.gindex * 0x95;
               uVar26 = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + iVar12);
               pcVar19 = ovr_fmVsprintf("Intelligence reports %s unit infected with disease. (%d, %d)"
                                        ,(char *)CONCAT13((char)((uint)uVar26 >> 8),
@@ -580,15 +580,15 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
                                                                    + iVar12))));
               ovr_uiNotify(pcVar19,0,0);
             }
-            pbVar14 = (byte *)((uint)((entity_t *)Entities)[uStack_a].base.gindex * 0x95);
+            pbVar14 = (byte *)((uint)(Entities)[uStack_a].base.gindex * 0x95);
             if ((*(uint *)(pbVar14 + 0x2714) & 0xc00) != 0) {
               uVar15 = ovr_ovc27_rollToHitAgent
                                  (CONCAT13((char)((ulong)Entities >> 0x18),
                                            CONCAT12((char)((ulong)Entities >> 0x10),
-                                                    (entity_t *)Entities + iVar25)),3);
+                                                    Entities + iVar25)),3);
               pbVar14 = (byte *)(uVar15 & 0xff);
               if (pbVar14 == (byte *)0x0) {
-                if ((AgntGs[(uint)((entity_t *)Entities)[uStack_a].base.gindex].flags2 & 0x800)
+                if ((AgntGs[(uint)(Entities)[uStack_a].base.gindex].flags2 & 0x800)
                     == 0) {
                   cVar10 = '\x01';
                 }
@@ -597,20 +597,20 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
                 }
                 uVar26 = ovr_ovc27_compute3(CONCAT13((char)((ulong)Entities >> 0x18),
                                                      CONCAT12((char)((ulong)Entities >> 0x10),
-                                                              (entity_t *)Entities + iVar25)),
+                                                              Entities + iVar25)),
                                             cVar10);
                 if ((char)uVar26 != '\0') {
                   if (DebugVerbose != false) {
                     printf("kill 3\r");
                   }
                   uVar26 = (uint16_t)((ulong)Entities >> 0x10);
-                  if (((entity_t *)Entities)[iVar25].base.animFrame != 0x0) {
-                    puVar3 = &((entity_t *)Entities)[iVar25].base.animFrame;
+                  if ((Entities)[iVar25].base.animFrame != 0x0) {
+                    puVar3 = &(Entities)[iVar25].base.animFrame;
                     *puVar3 = *puVar3 + 0xff;
                   }
                 }
-                alignUp4((((entity_t *)Entities + iVar24)->base).x,0,0);
-                iVar24 = (uint)((entity_t *)Entities)[iVar25].base.gindex * 0x95;
+                alignUp4(((Entities + iVar24)->base).x,0,0);
+                iVar24 = (uint)(Entities)[iVar25].base.gindex * 0x95;
                 uVar26 = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + iVar24);
                 pbVar14 = (byte *)ovr_fmVsprintf("Intelligence reports %s unit drained of energy. (%d, %d)"
                                                  ,(char *)CONCAT13((char)((uint)uVar26 >> 8),
@@ -632,20 +632,20 @@ byte * __cdecl16far ovc23_textAdlibNone(uint partyIndex,uint16_t outFlag,agnt_t 
        (pbVar14 = (byte *)alignUp4(((Entities + iVar24)->base).x,0,0),
        pbVar14 != (byte *)CONCAT11(uVar30,uVar29))) goto L_OVC24_5943_026e_08A7;
     uVar26 = (uint16_t)((ulong)Entities >> 0x10);
-    peVar22 = (entity_t *)Entities;
+    peVar22 = Entities;
     if (AgntGs[(uint)peVar22[iVar24].base.gindex].ai ==
         (char)uStack_10) {
       if (peVar22[iVar24].base.level < bStackY_2d) {
 L_OVC24_5943_026e_0772:
         uVar26 = (uint16_t)((ulong)Entities >> 0x10);
-        bVar9 = ((entity_t *)Entities)[iVar24].base.gindex;
+        bVar9 = (Entities)[iVar24].base.gindex;
         if ((((AgntGs[(uint)bVar9].flags3 & 0x40) == 0) ||
             (pbVar14 = &stk_ffde + (uStack_10 ^ 1), '\x01' < (char)*pbVar14)) &&
            ((((AgntGs[(uint)bVar9].flags2 & 8) == 0 ||
              (pbVar14 = &stk_ffde + (uStack_10 ^ 1), '\0' < (char)*pbVar14)) &&
             (((AgntGs[(uint)bVar9].flags2 & 0x10) == 0 ||
              (pbVar14 = &stk_ffdc + (uStack_10 ^ 1), -1 < (char)*pbVar14)))))) {
-          bStackY_2d = ((entity_t *)Entities)[iVar24].base.level;
+          bStackY_2d = (Entities)[iVar24].base.level;
           pbVar14 = (byte *)CONCAT11((char)((uint)(iVar24 * 0x37) >> 8),bStackY_2d);
           iVar25 = iVar24;
         }
@@ -662,7 +662,7 @@ L_OVC24_5943_026e_0772:
     }
     else if (bStackY_2e < peVar22[iVar24].base.level) {
 L_OVC24_5943_026e_088A:
-      bStackY_2e = ((entity_t *)Entities)[iVar24].base.level;
+      bStackY_2e = (Entities)[iVar24].base.level;
       pbVar14 = (byte *)CONCAT11((char)((uint)(iVar24 * 0x37) >> 8),bStackY_2e);
       uStack_a = iVar24;
     }
@@ -907,7 +907,7 @@ int __cdecl16far ovc23_isLargeBuilding(int x,int y)
   int iVar1;
   byte bVar2;
   
-  iVar1 = (uint)((unit_t *)GUnits + ((short (*) [148] [60])GUnitGrid)[-1][x + 0x93][y])->bldType *
+  iVar1 = (uint)(GUnits + ((short (*) [148] [60])GUnitGrid)[-1][x + 0x93][y])->bldType *
           0x27;
   bVar2 = (byte)((uint)iVar1 >> 8);
   if (*(byte *)(iVar1 + 0x11b) < 2) {
@@ -962,28 +962,28 @@ uint __cdecl16far ovc23_usesAlignUp43(int x,int y,byte dir)
   switch(dir) {
   case 0:
     idx = (*(short (*) [148] [60])GUnitGrid)[x][y + -1];
-    bldType = ((unit_t *)GUnits + idx)->bldType;
+    bldType = (GUnits + idx)->bldType;
     if ((bldType < 0xf8) && ((BuildingTypes[(uint)bldType].flags & 1) != 0)) {
       return 1;
     }
     break;
   case 1:
     idx = (*(short (*) [148] [60])GUnitGrid)[x + 1][y];
-    bldType = ((unit_t *)GUnits + idx)->bldType;
+    bldType = (GUnits + idx)->bldType;
     if ((bldType < 0xf8) && ((BuildingTypes[(uint)bldType].flags & 2) != 0)) {
       return 1;
     }
     break;
   case 2:
     idx = (*(short (*) [148] [60])GUnitGrid)[x][y];
-    bldType = ((unit_t *)GUnits + idx)->bldType;
+    bldType = (GUnits + idx)->bldType;
     if ((bldType < 0xf8) && ((BuildingTypes[(uint)bldType].flags & 1) != 0)) {
       return 1;
     }
     break;
   case 3:
     idx = (*(short (*) [148] [60])GUnitGrid)[x][y];
-    bldType = ((unit_t *)GUnits + idx)->bldType;
+    bldType = (GUnits + idx)->bldType;
     if ((bldType < 0xf8) && ((BuildingTypes[(uint)bldType].flags & 2) != 0)) {
       return 1;
     }
@@ -1026,7 +1026,7 @@ bool __cdecl16far ovc23_textConstructionAbandoned(int x,int y,byte dir)
   default:
     return false;
   }
-  bldType = ((unit_t *)GUnits + idx)->bldType;
+  bldType = (GUnits + idx)->bldType;
   if (0xf8 <= bldType) {
     return false;
   }
@@ -1096,7 +1096,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
   uint newUnitIdx;
   
   unitIdx = (*(short (*) [148] [60])GUnitGrid)[x][y];
-  cellBldType = ((unit_t *)GUnits + unitIdx)->bldType;
+  cellBldType = (GUnits + unitIdx)->bldType;
   if ((BuildingTypes[cellBldType].flags2 & 4) != 0) {
     strongholdCheckPending = 1;
   }
@@ -1123,14 +1123,14 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
   }
   if (BuildingTypes[bldType].kind == '\x02') {
     if (((*(short (*) [60] [148])GMapFlags)[y + 1][x] & 3U) != 0) {
-      unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
+      unitFlagsPtr = &(GUnits)[newUnitIdx].flags;
       *unitFlagsPtr = *unitFlagsPtr | 4;
       flagPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x);
       *flagPtr = *flagPtr & 0xfffc;
     }
     if ((BuildingTypes[bldType].flags & 4) != 0) {
       if (((*(short (*) [60] [148])GMapFlags)[y][x + 0x93] & 3U) != 0) {
-        unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
+        unitFlagsPtr = &(GUnits)[newUnitIdx].flags;
         *unitFlagsPtr = *unitFlagsPtr | 8;
         flagPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x + 0x93);
         *flagPtr = *flagPtr & 0xfffc;
@@ -1139,7 +1139,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
         ovc23_rebuildDirectionFlags(x + -1,y + 1);
       }
       if (((*(short (*) [60] [148])GMapFlags)[y + 1][x + 1] & 3U) != 0) {
-        unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
+        unitFlagsPtr = &(GUnits)[newUnitIdx].flags;
         *unitFlagsPtr = *unitFlagsPtr | 0x10;
         flagPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y + 1] + x + 1);
         *flagPtr = *flagPtr & 0xfffc;
@@ -1150,7 +1150,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
     }
     if ((BuildingTypes[bldType].flags & 8) != 0) {
       if (((*(short (*) [60] [148])GMapFlags)[y][x] & 3U) != 0) {
-        unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
+        unitFlagsPtr = &(GUnits)[newUnitIdx].flags;
         *unitFlagsPtr = *unitFlagsPtr | 8;
         flagPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y] + x);
         *flagPtr = *flagPtr & 0xfffc;
@@ -1159,7 +1159,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
         ovc23_rebuildDirectionFlags(x,y + -2);
       }
       if (((*(short (*) [60] [148])GMapFlags)[y + 2][x] & 3U) != 0) {
-        unitFlagsPtr = &((unit_t *)GUnits)[newUnitIdx].flags;
+        unitFlagsPtr = &(GUnits)[newUnitIdx].flags;
         *unitFlagsPtr = *unitFlagsPtr | 0x10;
         flagPtr = (uint16_t *)((*(short (*) [60] [148])GMapFlags)[y + 2] + x);
         *flagPtr = *flagPtr & 0xfffc;
@@ -1176,12 +1176,12 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
   }
   if (BuildingTypes[cellBldType].kind == '\x02') {
     ovc23_usesGfxRndSeed2(x,y);
-    if ((((unit_t *)GUnits)[unitIdx].flags & 4) != 0) {
+    if (((GUnits)[unitIdx].flags & 4) != 0) {
       ovc23_drownUnitsAt(x,y);
     }
     if (BuildingTypes[cellBldType].flags == '\x04') {
       cellType = ovr_ovc45_getUnitType(x + -1,y);
-      if ((cellType == 0) && ((((unit_t *)GUnits)[unitIdx].flags & 8) != 0)) {
+      if ((cellType == 0) && (((GUnits)[unitIdx].flags & 8) != 0)) {
         ovc23_usesGfxRndSeed2(x + -1,y);
         ovc23_drownUnitsAt(x - 1,y);
         ovc23_rebuildDirectionFlags(x + -1,y + -1);
@@ -1189,7 +1189,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
         ovc23_rebuildDirectionFlags(x + -2,y);
       }
       cellType = ovr_ovc45_getUnitType(x + 1,y);
-      if ((cellType == 0) && ((((unit_t *)GUnits)[unitIdx].flags & 0x10) != 0))
+      if ((cellType == 0) && (((GUnits)[unitIdx].flags & 0x10) != 0))
       {
         ovc23_usesGfxRndSeed2(x + 1,y);
         ovc23_drownUnitsAt(x + 1,y);
@@ -1200,7 +1200,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
     }
     else if (BuildingTypes[cellBldType].flags == '\b') {
       cellType = ovr_ovc45_getUnitType(x,y + -1);
-      if ((cellType == 0) && ((((unit_t *)GUnits)[unitIdx].flags & 8) != 0)) {
+      if ((cellType == 0) && (((GUnits)[unitIdx].flags & 8) != 0)) {
         ovc23_usesGfxRndSeed2(x,y + -1);
         ovc23_drownUnitsAt(x,y - 1);
         ovc23_rebuildDirectionFlags(x + -1,y + -1);
@@ -1208,7 +1208,7 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
         ovc23_rebuildDirectionFlags(x,y + -2);
       }
       cellType = ovr_ovc45_getUnitType(x,y + 1);
-      if ((cellType == 0) && ((((unit_t *)GUnits)[unitIdx].flags & 0x10) != 0))
+      if ((cellType == 0) && (((GUnits)[unitIdx].flags & 0x10) != 0))
       {
         ovc23_usesGfxRndSeed2(x,y + 1);
         ovc23_drownUnitsAt(x,y + 1);
@@ -1351,10 +1351,10 @@ createConstructionRecord(byte bldType,int x,int y,uint8_t *outFlag,char partyInd
     uVar5 = (uint16_t)((ulong)GUnitGrid >> 0x10);
     uVar9 = (uint16_t)((ulong)GUnits >> 0x10);
     if ((char)iVar4 == '\0') {
-      bStack_5 = ((unit_t *)GUnits + (*(short (*) [148] [60])GUnitGrid)[x][y])->bldType;
+      bStack_5 = (GUnits + (*(short (*) [148] [60])GUnitGrid)[x][y])->bldType;
     }
     else {
-      bStack_5 = ((unit_t *)GUnits + ((short (*) [148] [60])GUnitGrid)[-1][x + 0x93][y])->bldType;
+      bStack_5 = (GUnits + ((short (*) [148] [60])GUnitGrid)[-1][x + 0x93][y])->bldType;
     }
     bStack_3 = BuildingTypes[bStack_5].buildTime;
     uVar3 = BuildingTypes[bStack_5].size;
@@ -2005,12 +2005,12 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
   entityIndex = EntityCount;
   while (entityIndex = entityIndex - 1, -1 < (int)entityIndex) {
     uVar3 = (uint16_t)((ulong)Entities >> 0x10);
-    if ((((entity_t *)Entities)[entityIndex].base.x == x) &&
-       (((entity_t *)Entities)[entityIndex].base.y == y)) {
+    if (((Entities)[entityIndex].base.x == x) &&
+       ((Entities)[entityIndex].base.y == y)) {
       clearCol = ovc23_findClearColumn(x,y);
       uVar3 = (uint16_t)((ulong)Entities >> 0x10);
       if (clearCol < 0) {
-        gindex = ((entity_t *)Entities)[entityIndex].base.gindex;
+        gindex = (Entities)[entityIndex].base.gindex;
         if (AgntGs[(uint)gindex].ai == '\0') {
           uVar3 = 0xa000;
           dst = 0x195d;
@@ -2025,7 +2025,7 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
         ovr_ovc15_removeEntity(entityIndex);
       }
       else {
-        ((entity_t *)Entities)[entityIndex].base.x = clearCol;
+        (Entities)[entityIndex].base.x = clearCol;
       }
     }
   }

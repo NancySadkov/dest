@@ -950,7 +950,7 @@ L_OVC27_2288:
               return GUnitCount;
             }
             uVar43 = (uint16_t)((ulong)GUnits >> 0x10);
-            puVar35 = (unit_t *)GUnits;
+            puVar35 = GUnits;
           } while ((((BuildingTypes[(uint)(puVar35 + (int)pfVar18)->bldType].flags2 & 0x60) != 0
                     ) || (puVar35[(int)pfVar18].unitType == 0xff)) ||
                   (uVar46 = *(uint32_t *)((uint)puVar35[(int)pfVar18].unitType << 2),
@@ -961,7 +961,7 @@ L_OVC27_2288:
           uVar20 = ovr_alignUp4(puVar35[(int)pfVar18].x,0,0);
           in_stack_0000fff8 = (byte)uVar20;
           in_stack_0000fff9 = (undefined1)(uVar20 >> 8);
-          in_stack_0000fff6 = ((unit_t *)GUnits)[CONCAT11(in_stack_0000fffb,in_stack_0000fffa)].y;
+          in_stack_0000fff6 = (GUnits)[CONCAT11(in_stack_0000fffb,in_stack_0000fffa)].y;
           unaff_DI = (byte *)0x0;
           unaff_SI = (far_t far *)0x0;
         }
@@ -1622,8 +1622,8 @@ void __cdecl16far stats_usesEntityCount(char partyIndex)
   
   for (uVar2 = 0; uVar2 < EntityCount; uVar2 = uVar2 + 1) {
     uVar3 = (uint16_t)((ulong)Entities >> 0x10);
-    if (*(char *)((int)&((entity_t *)Entities)[uVar2].base.entity + 3) == partyIndex) {
-      pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[uVar2] + 0x33);
+    if (*(char *)((int)&(Entities)[uVar2].base.entity + 3) == partyIndex) {
+      pbVar1 = (byte *)((uint8_t *)&(Entities)[uVar2] + 0x33);
       *pbVar1 = *pbVar1 & 0xfb;
     }
   }
@@ -1718,10 +1718,10 @@ uint __cdecl16far stats_usesAlignUp4(int entityIndex)
   uint cursorAligned;
   entity_t *ent;
 
-  if ((*((uint8_t far *)&((entity_t *)Entities)[entityIndex].base.flags32 + 1) & 2) == 0) {
+  if ((*((uint8_t far *)&(Entities)[entityIndex].base.flags32 + 1) & 2) == 0) {
     return 0;
   }
-  ent = (entity_t *)Entities;
+  ent = Entities;
   alignedX = ovr_alignUp4(ent[entityIndex].base.x,0,0);
   cursorAligned = ovr_alignUp4(GfxRndSeed,0,0);
   if (alignedX != cursorAligned) {
@@ -1773,16 +1773,16 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   uStack_a = AGNT_WORD(&Agnts[agntIndex], gdata, 2);
   agntData = AGNT_WORD(&Agnts[agntIndex], gdata, 0);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
-  ((entity_t *)Entities)[entityIndex].base.x = iVar2;
-  ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
+  (Entities)[entityIndex].base.x = iVar2;
+  (Entities)[entityIndex].base.y = GfxRndSeed2;
   uVar4 = (uint16_t)((ulong)Entities >> 0x10);
-  ((entity_t *)Entities)[entityIndex].base.targetX =
-       ((entity_t *)Entities)[entityIndex].base.x;
-  ((entity_t *)Entities)[entityIndex].base.targetY = GfxRndSeed2;
-  pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
+  (Entities)[entityIndex].base.targetX =
+       (Entities)[entityIndex].base.x;
+  (Entities)[entityIndex].base.targetY = GfxRndSeed2;
+  pbVar1 = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
   *pbVar1 = *pbVar1 | 2;
   widths = 0x2410;
-  pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
+  pbVar1 = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
   *pbVar1 = *pbVar1 & 0xfa;
   ovr_attact_usesEntities(entityIndex,0,0,(uint16_t)&unitFlags,(uint16_t)_SS,0,0,0,0);
   ovr_alignUp4(GfxRndSeed,GfxRndSeed2,0);
@@ -1821,14 +1821,14 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
   uStack_a = AGNT_WORD(&Agnts[agntIndex], gdata, 2);
   agntData = AGNT_WORD(&Agnts[agntIndex], gdata, 0);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
-  ((entity_t *)Entities)[entityIndex].base.x = iVar2;
-  ((entity_t *)Entities)[entityIndex].base.y = GfxRndSeed2;
+  (Entities)[entityIndex].base.x = iVar2;
+  (Entities)[entityIndex].base.y = GfxRndSeed2;
   uVar4 = (uint16_t)((ulong)Entities >> 0x10);
-  ((entity_t *)Entities)[entityIndex].base.targetX =
-       ((entity_t *)Entities)[entityIndex].base.x;
-  ((entity_t *)Entities)[entityIndex].base.targetY = GfxRndSeed2;
+  (Entities)[entityIndex].base.targetX =
+       (Entities)[entityIndex].base.x;
+  (Entities)[entityIndex].base.targetY = GfxRndSeed2;
   widths = 0x2410;
-  pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
+  pbVar1 = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
   *pbVar1 = *pbVar1 & 0xfd;
   ovr_attact_usesEntities(entityIndex,0,0,(uint16_t)&unitFlags,(uint16_t)_SS,0,0,0,0);
   puVar3 = ovr_ovc15_usesStshRealloc
@@ -1922,7 +1922,7 @@ void __cdecl16far stats_openAgentDetail(int agntIndex)
   ScreenMode = 2;
   drawAgntStats((agnt_t far *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
   drawString((char *)0x620f,0x2410,0);
-  bVar1 = ((entity_t *)Entities)[iVar2].base.gindex;
+  bVar1 = (Entities)[iVar2].base.gindex;
   if (AgntGs[(uint)bVar1].ai == '\0') {
     if ((AgntGs[(uint)bVar1].shortName[3] == '\0') ||
        (AgntGs[(uint)bVar1].shortName[3] == '\x04')) {
@@ -2053,8 +2053,8 @@ L_stats_6386_1c9f_1E1D:
   iVar14 = Agnts[agntIndex].owner;
   stats_openAgentDetail((uint)agntIndex);
   uVar16 = (uint16_t)((ulong)Entities >> 0x10);
-  if (((entity_t *)Entities)[iVar14].base.targetY == GfxRndSeed2) {
-    uVar5 = ovr_alignUp4(((entity_t *)Entities)[iVar14].base.targetX,0,0);
+  if ((Entities)[iVar14].base.targetY == GfxRndSeed2) {
+    uVar5 = ovr_alignUp4((Entities)[iVar14].base.targetX,0,0);
     uVar17 = (undefined1)uVar5;
     uVar18 = (undefined1)(uVar5 >> 8);
     uVar5 = ovr_alignUp4(GfxRndSeed,0,0);
@@ -2241,8 +2241,8 @@ switchD_6000_58bf_caseD_5:
           iVar14 = Agnts[agntIndex].owner;
           stats_openAgentDetail((uint)agntIndex);
           uVar16 = (uint16_t)((ulong)Entities >> 0x10);
-          if (((entity_t *)Entities)[iVar14].base.targetY == GfxRndSeed2) {
-            uVar5 = ovr_alignUp4(((entity_t *)Entities)[iVar14].base.targetX,0,0);
+          if ((Entities)[iVar14].base.targetY == GfxRndSeed2) {
+            uVar5 = ovr_alignUp4((Entities)[iVar14].base.targetX,0,0);
             uVar17 = (undefined1)uVar5;
             uVar18 = (undefined1)(uVar5 >> 8);
             uVar5 = ovr_alignUp4(GfxRndSeed,0,0);

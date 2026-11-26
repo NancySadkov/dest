@@ -1274,7 +1274,7 @@ L_OVC49_8699_18c4_1CA7:
       uVar7 = (undefined1)in_stack_0000ffe4;
       iVar14 = 0;
       uVar27 = (uint16_t)((ulong)GUnits >> 0x10);
-      puVar23 = (unit_t *)GUnits;
+      puVar23 = GUnits;
       pcVar10 = (char *)((int)(((long)BuildingTypes[(uint)(*(uint8_t *)((uint8_t *)&(uStackY_22) + 1))].cost *
                                 (long)(int)(uint)puVar23[uStackY_26].level & 0xffffU) / 0x18) + 1);
       uVar15 = (uint)((ulong)in_stack_0000ffe0 >> 0x10);
@@ -1311,11 +1311,11 @@ L_OVC49_8699_18c4_1CA7:
         iVar14 = 1;
       }
       uVar22 = 0x23f1;
-      uVar15 = ovr_ovc45_compute8(((unit_t *)GUnits)[uStackY_26].unitType);
+      uVar15 = ovr_ovc45_compute8((GUnits)[uStackY_26].unitType);
       uVar27 = (uint16_t)((ulong)GUnits >> 0x10);
-      if (((char)uVar15 == '\0') || (7 < ((unit_t *)GUnits)[uStackY_26].level)) {
+      if (((char)uVar15 == '\0') || (7 < (GUnits)[uStackY_26].level)) {
         uVar22 = 0x23f1;
-        uVar15 = ovr_ovc45_compute8(((unit_t *)GUnits)[uStackY_26].unitType);
+        uVar15 = ovr_ovc45_compute8((GUnits)[uStackY_26].unitType);
         if (((char)uVar15 != '\0') && (*(char *)(((uint)uStackY_22 >> 8) * 0x27 + 300) != '\0')) {
           (&stk_ffec)[iVar14] = 3;
           auStackY_2f2[iVar14 * 2 + 1] =(uint16_t)(unsigned long)(unsigned long)( (char *)0x26510);
@@ -1351,7 +1351,7 @@ L_OVC49_8699_18c4_1CA7:
                  (char *)CONCAT13((char)(uVar20 >> 8),CONCAT12((char)uVar20,pcVar10)));
         }
       }
-      bVar9 = ((unit_t *)GUnits)[uStackY_26].unitType;
+      bVar9 = (GUnits)[uStackY_26].unitType;
       uStackY_24 = CONCAT11((*(uint8_t *)((uint8_t *)&(uStackY_24) + 1)),bVar9);
       if ((((BuildingTypes[((uint)uStackY_22 >> 8)].flags2 & 0x400) == 0) && (bVar9 != 0xff)) &&
          (*(char *)((int)*(uint32_t *)((uint)bVar9 << 2) + 0x3f) == '\0')) {
@@ -3413,9 +3413,9 @@ L_OVC49_8699_1e09_3CF7:
   uVar20 = EntityCount - 1;
   for (uVar15 = uVar20; -1 < (int)uVar15; uVar15 = uVar15 - 1) {
     uVar27 = (uint16_t)((ulong)Entities >> 0x10);
-    uVar20 = (uint)((entity_t *)Entities)[uVar15].base.animFrame;
+    uVar20 = (uint)(Entities)[uVar15].base.animFrame;
     if ((uVar20 == 0) &&
-       (uVar20 = ovr_ovc23_isCursorAt(((entity_t *)Entities)[uVar15].base.x,0,0),
+       (uVar20 = ovr_ovc23_isCursorAt((Entities)[uVar15].base.x,0,0),
        (char)uVar20 != '\0')) {
       uVar20 = AgntCount - 1;
       uStackY_22 = (cte_t *)uVar20;

@@ -61,36 +61,38 @@ void __cdecl16far ovc41_compute3(uint32_t view,...)
      otherwise the stored position is compared and, when it is behind the cursor, the
      cursor steps forward and ovc15_textView's delta is added to view[0x31]/view[0x32]. */
   uint16_t ownerIdx;
-  int viewOfs;
+  far_t viewFar;
+  uint8_t far *viewRec;
   uint16_t entryOfs;
   int *entry;
   uint entryLo;
   char panDelta;
 
-  viewOfs = (int)view;
-  ownerIdx = AgntGs[(uint)*(byte *)(viewOfs + 0xd)].shortName[3];
+  viewFar = far_from_u32(view);
+  viewRec = (uint8_t far *)MK_FP(viewFar.seg,viewFar.ofs);
+  ownerIdx = AgntGs[(uint)*(byte far *)(viewRec + 0xd)].shortName[3];
   if (ownerIdx == 0xff) {
     ownerIdx = 0;
   }
-  entryOfs = (uint)ownerIdx * 0x94 + (uint)*(byte *)(viewOfs + 0xf) * 4;
+  entryOfs = (uint)ownerIdx * 0x94 + (uint)*(byte far *)(viewRec + 0xf) * 4;
   entry = (int *)entryOfs;
   if (*entry == 0 && entry[1] == 0) {
     entryLo = *(uint *)(entryOfs + -4);
-    *(int *)(viewOfs + 0x12) = *(int *)(entryOfs + -2) + (uint)(0xfffe < entryLo);
-    *(int *)(viewOfs + 0x10) = entryLo + 1;
+    *(int far *)(viewRec + 0x12) = *(int *)(entryOfs + -2) + (uint)(0xfffe < entryLo);
+    *(int far *)(viewRec + 0x10) = entryLo + 1;
   }
   else {
     entryLo = entry[1];
-    if ((entryLo <= *(uint *)(viewOfs + 0x12)) &&
-       ((entryLo != *(uint *)(viewOfs + 0x12)) ||
-        ((uint)*entry <= *(uint *)(viewOfs + 0x10)))) {
+    if ((entryLo <= *(uint far *)(viewRec + 0x12)) &&
+       ((entryLo != *(uint far *)(viewRec + 0x12)) ||
+        ((uint)*entry <= *(uint far *)(viewRec + 0x10)))) {
       entryLo = (uint)*entry;
-      *(int *)(viewOfs + 0x12) = entry[1] + (uint)(0xfffe < entryLo);
-      *(int *)(viewOfs + 0x10) = entryLo + 1;
-      *(char *)(viewOfs + 0xf) = *(char *)(viewOfs + 0xf) + '\x01';
+      *(int far *)(viewRec + 0x12) = entry[1] + (uint)(0xfffe < entryLo);
+      *(int far *)(viewRec + 0x10) = entryLo + 1;
+      *(char far *)(viewRec + 0xf) = *(char far *)(viewRec + 0xf) + '\x01';
       panDelta = ovr_ovc15_textView(view);
-      *(char *)(viewOfs + 0x31) = *(char *)(viewOfs + 0x31) + panDelta;
-      *(char *)(viewOfs + 0x32) = *(char *)(viewOfs + 0x32) + panDelta;
+      *(char far *)(viewRec + 0x31) = *(char far *)(viewRec + 0x31) + panDelta;
+      *(char far *)(viewRec + 0x32) = *(char far *)(viewRec + 0x32) + panDelta;
     }
   }
   return;
@@ -794,11 +796,11 @@ void __cdecl16far ovc41_buildingNotice(char delta)
   iVar1 = ((short (*) [148] [60])GUnitGrid)[-1][GfxRndSeed + 0x93][GfxRndSeed2];
   if (0xf7 < iVar1) {
     uVar2 = (uint16_t)((ulong)GUnits >> 0x10);
-    bStack_3 = ((unit_t *)GUnits + iVar1)->bldType + delta;
+    bStack_3 = (GUnits + iVar1)->bldType + delta;
     if (0xf7 < bStack_3) {
       bStack_3 = 0;
     }
-    ((unit_t *)GUnits + iVar1)->bldType = bStack_3;
+    (GUnits + iVar1)->bldType = bStack_3;
     ovr_constr_flushDirtyRects();
     msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6f23,_SS),
                         (char *)(ulong)CONCAT12(bStack_3,(char *)0x26510),
@@ -832,13 +834,13 @@ void __cdecl16far dbgPromoteEnemy(void)
     if (((GfxRndSeed - 2U <= *(uint *)((entity_t *)iVar2 + i)) &&
         (*(uint *)((entity_t *)iVar2 + i) <= GfxRndSeed + 1U)) &&
        (((entity_t *)iVar2)[i].base.y == GfxRndSeed2)) {
-      pcVar1 = (char *)((uint8_t *)&((entity_t *)Entities)[i] + 0xd);
+      pcVar1 = (char *)((uint8_t *)&(Entities)[i] + 0xd);
       *pcVar1 = *pcVar1 + '\x01';
       uVar3 = (uint16_t)((ulong)Entities >> 0x10);
-      if (0x29 < ((entity_t *)Entities)[i].base.gindex) {
-        ((entity_t *)Entities)[i].base.gindex = 0;
+      if (0x29 < (Entities)[i].base.gindex) {
+        (Entities)[i].base.gindex = 0;
       }
-      iVar2 = (uint)((entity_t *)Entities)[i].base.gindex * 0x95;
+      iVar2 = (uint)(Entities)[i].base.gindex * 0x95;
       msg = ovr_stsprintf(buf,(char *)CONCAT22(0x6f33,_SS),
                           (char *)CONCAT22(*(uint16_t *)((int)&AgntGs[0].name + iVar2),
                                            (char *)((int)&BuildingTypes[0xe5].halfWidth + 1)),
@@ -1125,7 +1127,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
     cVar4 = *(char *)((int)pcVar12 * 2 + 0x3f);
     do {
       if (((cVar4 == '\0') && (0xf7 < (int)unaff_SI)) &&
-         (in_DX = 0x2410, ((unit_t *)GUnits)[(int)unaff_SI].level < 8)) {
+         (in_DX = 0x2410, (GUnits)[(int)unaff_SI].level < 8)) {
         if ((BuildingTypes[(uVar11 >> 8)].flags2 & 0x80) == 0) {
           ovc39_loadArchiveEntry(8);
         }
@@ -1491,8 +1493,8 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
         uVar7 = CONCAT11(uVar20,uVar18);
         backdropSeg = (uint16_t)((ulong)GUnits >> 0x10);
         in_DX = 0x2410;
-        bVar19 = ((unit_t *)GUnits)[(int)unaff_SI].unitType;
-        uVar11 = CONCAT11(((unit_t *)GUnits + (int)unaff_SI)->bldType,bVar19);
+        bVar19 = (GUnits)[(int)unaff_SI].unitType;
+        uVar11 = CONCAT11((GUnits + (int)unaff_SI)->bldType,bVar19);
       } while (bVar22 != 0);
       in_DX = _DS;
       backdropRec = *(uint32_t *)((uint)bVar19 << 2);
@@ -1514,9 +1516,9 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
         for (uVar11 = 0xf8; uVar11 < GUnitCount; uVar11 = uVar11 + 1) {
           pcVar12 = 0x2410;   /* hand fix: segment-half slot */
           uVar16 = (uint16_t)((ulong)GUnits >> 0x10);
-          if (((unit_t *)GUnits)[uVar11].unitType == bVar22) {
+          if ((GUnits)[uVar11].unitType == bVar22) {
             pcVar12 = 0x2410;   /* hand fix: segment-half slot */
-            if (((unit_t *)GUnits)[uVar11].level < 8) {
+            if ((GUnits)[uVar11].level < 8) {
               *(uint16_t *)(iVar14 + -4) = (uint16_t)(CONCAT11((char)(uVar11 * 9 >> 8),bVar22));
               *(uint *)(iVar14 + -6) = uVar11;
               *(uint16_t *)(iVar14 + -8) = (uint16_t)(0x6000);
@@ -1524,7 +1526,7 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
               iVar5 = season_usesAlignUp42(*(int *)(iVar14 + -6),*(byte *)(iVar14 + -4));
               if ((char)iVar5 != '\0') {
                 pcVar12 = 0x2410;   /* hand fix: segment-half slot */
-                ((unit_t *)GUnits)[uVar11].level = 8;
+                (GUnits)[uVar11].level = 8;
                 iVar15 = iVar15 + 1;
               }
             }
@@ -2452,7 +2454,7 @@ switchD_6000_ca06_caseD_1:
           for (uVar16 = 0; uVar16 < EntityCount; uVar16 = uVar16 + 1) {
             uVar22 = (uint16_t)((ulong)Entities >> 0x10);
             iVar12 = (int)Entities;
-            if ((((AGNT_FIELD(&((entity_t *)Entities)[uVar16], base.entity, 3) == bStack_3c) &&
+            if ((((AGNT_FIELD(&(Entities)[uVar16], base.entity, 3) == bStack_3c) &&
                  (paStack_22 <= (agnt_t far *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
                 ((agnt_t far *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26)) &&
                ((paStack_24 <= (agnt_t far *)((entity_t *)iVar12)[uVar16].base.y &&
@@ -2525,7 +2527,7 @@ L_ui_unit_order_6616_0689_1054:
         for (uVar16 = 0; uVar16 < EntityCount; uVar16 = uVar16 + 1) {
           uVar22 = (uint16_t)((ulong)Entities >> 0x10);
           iVar12 = (int)Entities;
-          if (((AGNT_FIELD(&((entity_t *)Entities)[uVar16], base.entity, 3) == bStack_3c) &&
+          if (((AGNT_FIELD(&(Entities)[uVar16], base.entity, 3) == bStack_3c) &&
               (paStack_22 <= (agnt_t far *)*(uint *)((entity_t *)iVar12 + uVar16))) &&
              (((agnt_t far *)*(uint *)((entity_t *)iVar12 + uVar16) <= paStack_26 &&
               ((paStack_24 <= (agnt_t far *)((entity_t *)iVar12)[uVar16].base.y &&

@@ -300,13 +300,13 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
   else {
     uVar5 = (uint)((entity_t *)iVar9)[entityIndex].base.gindex * 0x95;
     if ((*(uint *)((int)&worldMenuLabels[6].seg + 1 + uVar5) & 0x80) == 0) {
-      if (AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 1) == '\0') {
+      if (AGNT_FIELD(&(Entities)[entityIndex], base.entity, 1) == '\0') {
         iVar2 = *(int *)((entity_t *)iVar9 + entityIndex);
         iVar3 = ((entity_t *)iVar9)[entityIndex].base.y;
         destX = ((entity_t *)iVar9)[entityIndex].base.destX;
         destY = ((entity_t *)iVar9)[entityIndex].base.destY;
         iVar9 = ovr_ovc07_signum(((entity_t *)iVar9)[entityIndex].base.destX - iVar2);
-        psStack_c = (short *)ovr_ovc07_signum(((entity_t *)Entities)[entityIndex].base.destY -
+        psStack_c = (short *)ovr_ovc07_signum((Entities)[entityIndex].base.destY -
                                               iVar3);
         psVar6 = psStack_c;
         if ((iVar9 != 0) &&
@@ -341,18 +341,18 @@ ovc26_usesRandBelow(int entityIndex,uint16_t outFlag,uint16_t outFlagSeg,uint16_
           bVar4 = ovr_ovc45_getUnitType(iVar2 + iVar9,iVar3 + (int)psStack_c);
           if ((BuildingTypes[bVar4].flags & 0xc) == 0) {
             ovr_createConstructionRecordFar
-                      (bStack_7,iVar2 + iVar9,iVar3 + (int)psStack_c,(uint8_t *)CONCAT22(outFlagSeg,outFlag),AGNT_FIELD(&((entity_t *)Entities)[entityIndex], base.entity, 3),unaff_DI,0,0,0);
+                      (bStack_7,iVar2 + iVar9,iVar3 + (int)psStack_c,(uint8_t *)CONCAT22(outFlagSeg,outFlag),AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),unaff_DI,0,0,0);
             ovr_attact_usesEntities
                       (entityIndex,iVar2 + iVar9,iVar3 + (int)psStack_c,flagsOfs,flagsSeg,0,0,0,0);
-            ((entity_t *)Entities)[entityIndex].base.targetX = iVar2 + iVar9;
-            ((entity_t *)Entities)[entityIndex].base.targetY = iVar3 + (int)psStack_c;
-            pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
+            (Entities)[entityIndex].base.targetX = iVar2 + iVar9;
+            (Entities)[entityIndex].base.targetY = iVar3 + (int)psStack_c;
+            pbVar1 = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
             *pbVar1 = *pbVar1 | 2;
-            pbVar1 = (byte *)((uint8_t *)&((entity_t *)Entities)[entityIndex] + 0x33);
+            pbVar1 = (byte *)((uint8_t *)&(Entities)[entityIndex] + 0x33);
             *pbVar1 = *pbVar1 & 0xfa;
             uVar8 = (undefined1)((uint)(entityIndex * 0x37) >> 8);
             ovr_ovc25_usesAlignUp44
-                      (*(char *)((int)&((entity_t *)Entities)[entityIndex].base.entity + 3),1,destX,destY);
+                      (*(char *)((int)&(Entities)[entityIndex].base.entity + 3),1,destX,destY);
             uVar5 = CONCAT11(uVar8,1);
           }
           else {

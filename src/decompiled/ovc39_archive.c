@@ -149,7 +149,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
         recordIdx = ovr_ovc23_findRecordAt(seedAligned + rowOffset,GfxRndSeed2,(char)GfxRndSeed2);
         if (recordIdx == 0xffff) {
           unitIndex = ovc39_findBuildingAt(seedAligned + rowOffset,GfxRndSeed2);
-          units = (unit_t *)GUnits;
+          units = GUnits;
           unitBldType = (units + unitIndex)->bldType;
           nameOfs = (char *)0x26510;
           unitType = units[unitIndex].unitType;

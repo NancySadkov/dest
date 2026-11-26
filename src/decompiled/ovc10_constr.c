@@ -96,10 +96,10 @@ byte __cdecl16far constr_setHighlightAtOffset(int dx,int dy,uint16_t arg3)
     uVar2 = (uint16_t)((ulong)GUnitGrid >> 0x10);
     uVar3 = (uint16_t)((ulong)GUnits >> 0x10);
     HighlightLevel =
-         (uint)((unit_t *)GUnits)
+         (uint)(GUnits)
                [*(int *)((int)(short (*) [148] [60])GUnitGrid +
                         (GfxRndSeed2 - dy) * 2 + (dx + GfxRndSeed) * 0x78)].level;
-    bVar1 = ((unit_t *)GUnits +
+    bVar1 = (GUnits +
             *(int *)((int)(short (*) [148] [60])GUnitGrid +
                     (GfxRndSeed2 - dy) * 2 + (dx + GfxRndSeed) * 0x78))->bldType;
   }
