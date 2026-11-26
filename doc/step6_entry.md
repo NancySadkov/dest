@@ -10258,3 +10258,39 @@ Gates after re-dumping:
   grep_checks 39,228 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### constr_usesScreenOriginY (39,228 -> 39,186) and the diff_dgroup ceiling
+constr_usesScreenOriginY: name the square index and split uVar6 (39,228 -> 39,186)
+
+  uVar5  the map-square loop index over mapSquareRightX/LeftX (333-366) AND the column
+         taken from mapSquareColumn[] at 371-375 - both are square indices into the same
+         mapSquare* arrays, so one name fits both                       -> sq   (14)
+  uVar6  mapSquareColumn[sq], passed to getCellAtOffset / usesSmoothPrev / getFlagsAtOffset
+         / usesGMapFlags                                                -> col  (7)
+  uVar6  the second loop's own square index at 370-383                  -> sq2  (6)
+
+Renaming and one split; no expression changed.
+
+ALSO MEASURED - the ceiling on the remaining diff_dgroup deltas.  Every one of the 74 is in
+the DGROUP *string* region, and its cause is structural rather than a wrong declaration:
+
+  * the original's string literals ARE DGROUP symbols (`s_Newline1`, `s_strong.sav\game.cfg`,
+    `s_Sound_(1._PC_Speaker...`), emitted by the compiler in the order the code uses them;
+  * our build emits literals inside the code modules, so the same text lands wherever that
+    module's data goes, and only the strings we explicitly declared appear as symbols;
+  * `stmiss.c`'s `s_absentBlob` was the earlier workaround - one blob with no symbols at all,
+    which is why those strings can never pair with an original offset.
+
+Consequently the per-region method (s_OK, ditherPlane, GWorkDir) can only recover the
+declarations we hold individually.  Closing the remaining 74 deltas needs the literals
+declared as named symbols in original DGROUP order and the code switched to reference them -
+a structural change to how string data is emitted, not another data patch.
+
+A machine check backs this up: `tmp/len_mismatch.py` compares every top-level declaration's
+length against `audit/dgroup_data.csv`.  Only the tables already fixed
+(ditherPlane*, reqLevelRow*, GWorkDir) and a handful of 1-3 byte string differences remain,
+and the CSV itself has length 1 for several real tables, so it cannot drive the work alone.
+
+  grep_checks 39,228 -> 39,186; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different

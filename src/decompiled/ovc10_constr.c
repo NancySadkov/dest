@@ -320,8 +320,9 @@ void __cdecl16far constr_usesScreenOriginY(uint16_t rect,uint16_t type,uint16_t 
   int smoothR;
   uint uVar4;
   undefined1 extraout_AH;
-  uint16_t uVar5;
-  uint16_t uVar6;
+  uint16_t sq;
+  uint16_t col;
+  uint16_t sq2;
   far_t gfx;
   uint fillColor;
   uint8_t cellNext;
@@ -330,57 +331,57 @@ void __cdecl16far constr_usesScreenOriginY(uint16_t rect,uint16_t type,uint16_t 
   int cellL2;
   int bldIndex;
   
-  for (uVar5 = rowMapSquareFirst[0]; uVar6 = rowMapSquareFirst[0],
-      (int)uVar5 < (int)rowMapSquareEnd[0]; uVar5 = uVar5 + 1) {
-    if ((0xb < *(int *)(&mapSquareRightX[uVar5])) && (*(int *)(&mapSquareLeftX[uVar5]) < 0xdf)) {
-      uVar6 = *(uint16_t *)(&mapSquareColumn[uVar5]);
-      cellL2 = constr_getCellAtOffset(uVar6,-2);
-      cellR2 = constr_getCellAtOffset(uVar6 + 1,-2);
-      smoothL = constr_usesSmoothPrev(uVar6,-1,(int *)&cell,0,0);
-      smoothR = constr_usesSmoothPrev(uVar6 + 1,-1,(int *)&cellNext,0,0);
-      uVar4 = constr_getFlagsAtOffset(uVar6,-1);
+  for (sq = rowMapSquareFirst[0]; sq2 = rowMapSquareFirst[0],
+      (int)sq < (int)rowMapSquareEnd[0]; sq = sq + 1) {
+    if ((0xb < *(int *)(&mapSquareRightX[sq])) && (*(int *)(&mapSquareLeftX[sq]) < 0xdf)) {
+      col = *(uint16_t *)(&mapSquareColumn[sq]);
+      cellL2 = constr_getCellAtOffset(col,-2);
+      cellR2 = constr_getCellAtOffset(col + 1,-2);
+      smoothL = constr_usesSmoothPrev(col,-1,(int *)&cell,0,0);
+      smoothR = constr_usesSmoothPrev(col + 1,-1,(int *)&cellNext,0,0);
+      uVar4 = constr_getFlagsAtOffset(col,-1);
       flags = (byte)uVar4;
       if ((uVar4 & 4) == 0) {
         fillColor = constr_compute2(cell,cellNext,(uint8_t)cellR2,flags,2);
         fillColor = fillColor & 0xff;
         ovr_ovc07_usesBiosReadKey
-                  (*(int *)(&mapSquareLeftX[uVar5]),ScreenOriginY[0] - smoothL,*(int *)(&mapSquareRightX[uVar5]),ScreenOriginY[0] - smoothR,*(int *)(&mapSquareRightX[uVar5]),0x96,fillColor,(brect_t *)CONCAT22(type,rect),0,0,0,0,0,0);
+                  (*(int *)(&mapSquareLeftX[sq]),ScreenOriginY[0] - smoothL,*(int *)(&mapSquareRightX[sq]),ScreenOriginY[0] - smoothR,*(int *)(&mapSquareRightX[sq]),0x96,fillColor,(brect_t *)CONCAT22(type,rect),0,0,0,0,0,0);
         uVar4 = constr_compute2((uint8_t)cellL2,(uint8_t)cellR2,cell,flags,1);
         ovr_ovc07_usesBiosReadKey
-                  (*(int *)(&mapSquareLeftX[uVar5]),ScreenOriginY[0] - smoothL,*(int *)(&mapSquareLeftX[uVar5]),0x96,*(int *)(&mapSquareRightX[uVar5]),0x96,uVar4 & 0xff,(brect_t *)CONCAT22(type,rect),0,0,0,0,0,0);
+                  (*(int *)(&mapSquareLeftX[sq]),ScreenOriginY[0] - smoothL,*(int *)(&mapSquareLeftX[sq]),0x96,*(int *)(&mapSquareRightX[sq]),0x96,uVar4 & 0xff,(brect_t *)CONCAT22(type,rect),0,0,0,0,0,0);
       }
       else {
         fillColor = constr_compute2(cell,cellNext,(uint8_t)cellL2,flags,1);
         fillColor = fillColor & 0xff;
         ovr_ovc07_usesBiosReadKey
-                  (*(int *)(&mapSquareLeftX[uVar5]),ScreenOriginY[0] - smoothL,*(int *)(&mapSquareRightX[uVar5]),ScreenOriginY[0] - smoothR,*(int *)(&mapSquareLeftX[uVar5]),0x96,fillColor,(brect_t *)CONCAT22(type,rect),0,0,0,0,0,0);
+                  (*(int *)(&mapSquareLeftX[sq]),ScreenOriginY[0] - smoothL,*(int *)(&mapSquareRightX[sq]),ScreenOriginY[0] - smoothR,*(int *)(&mapSquareLeftX[sq]),0x96,fillColor,(brect_t *)CONCAT22(type,rect),0,0,0,0,0,0);
         uVar4 = constr_compute2((uint8_t)cellL2,(uint8_t)cellR2,cellNext,flags,2);
         ovr_ovc07_usesBiosReadKey
-                  (*(int *)(&mapSquareRightX[uVar5]),ScreenOriginY[0] - smoothR,*(int *)(&mapSquareLeftX[uVar5]),0x96,*(int *)(&mapSquareRightX[uVar5]),0x96,uVar4 & 0xff,(brect_t *)CONCAT22(type,rect),0,0,0,0,0,0);
+                  (*(int *)(&mapSquareRightX[sq]),ScreenOriginY[0] - smoothR,*(int *)(&mapSquareLeftX[sq]),0x96,*(int *)(&mapSquareRightX[sq]),0x96,uVar4 & 0xff,(brect_t *)CONCAT22(type,rect),0,0,0,0,0,0);
       }
-      uVar4 = constr_usesGMapFlags(uVar6 + GfxRndSeed,GfxRndSeed2,0);
+      uVar4 = constr_usesGMapFlags(col + GfxRndSeed,GfxRndSeed2,0);
       if ((char)uVar4 != '\0') {
         ovr_ovc07_usesLDIV_at_
-                  (*(int *)(&mapSquareLeftX[uVar5]),ScreenOriginY[0] - smoothL,*(int *)(&mapSquareRightX[uVar5]),ScreenOriginY[0] - smoothR,(char)fillColor + 0xfe,(brect_t *)rect,0);
+                  (*(int *)(&mapSquareLeftX[sq]),ScreenOriginY[0] - smoothL,*(int *)(&mapSquareRightX[sq]),ScreenOriginY[0] - smoothR,(char)fillColor + 0xfe,(brect_t *)rect,0);
         ovr_ovc07_usesLDIV_at_
-                  (*(int *)(&mapSquareLeftX[uVar5]),(ScreenOriginY[0] - smoothL) + 1,*(int *)(&mapSquareRightX[uVar5]),(ScreenOriginY[0] - smoothR) + 1,(char)fillColor + 0xff,(brect_t *)rect,0);
+                  (*(int *)(&mapSquareLeftX[sq]),(ScreenOriginY[0] - smoothL) + 1,*(int *)(&mapSquareRightX[sq]),(ScreenOriginY[0] - smoothR) + 1,(char)fillColor + 0xff,(brect_t *)rect,0);
       }
     }
   }
-  for (; (int)uVar6 < (int)rowMapSquareEnd[0]; uVar6 = uVar6 + 1) {
-    uVar5 = *(uint16_t *)(&mapSquareColumn[uVar6]);
-    flags = constr_setHighlightAtOffset(uVar5,0,0);
+  for (; (int)sq2 < (int)rowMapSquareEnd[0]; sq2 = sq2 + 1) {
+    sq = *(uint16_t *)(&mapSquareColumn[sq2]);
+    flags = constr_setHighlightAtOffset(sq,0,0);
     bldIndex = CONCAT11(extraout_AH,flags);
     if ((bldIndex != 0) &&
-       (smoothL = constr_usesSmoothPrev(uVar5,-1,(int *)&cell,0,0),
+       (smoothL = constr_usesSmoothPrev(sq,-1,(int *)&cell,0,0),
        (*(byte *)((uint8_t *)&BuildingTypes[bldIndex] + 16) & 2) != 0)) {
       gfx.seg = *(uint16_t *)
                  ((char *)0x28ed6 + bldIndex * 0xc);
       gfx.ofs = *(uint16_t *)
                  ((char *)0x28ed4 + bldIndex * 0xc);
       ovr_blit_usesBlitGfxN
-                (gfx,*(int16_t *)(&mapSquareLeftX[uVar6]),(uint)bandOrigin[0] - smoothL,0x10,99,0x10,(brect_t *)rect,type,0,0,0,0,0,0,0);
-      ovr_ovc15_fillGridColumn(*(int *)(&mapSquareLeftX[uVar6]) - 0xc);
+                (gfx,*(int16_t *)(&mapSquareLeftX[sq2]),(uint)bandOrigin[0] - smoothL,0x10,99,0x10,(brect_t *)rect,type,0,0,0,0,0,0,0);
+      ovr_ovc15_fillGridColumn(*(int *)(&mapSquareLeftX[sq2]) - 0xc);
     }
   }
   return;
