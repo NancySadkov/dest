@@ -13198,3 +13198,28 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### ovc28_drawButton: two names worth 44 (37,195 -> 37,151)
+ovc28_drawButton: two names, 13 uses, 44 counted matches (37,195 -> 37,151)
+
+  pcVar1  the pointer ovr_ovc45_compute9(text, ...) returns   -> labelText (13)
+  pbVar2  (byte *)((char *)0x26510), the fixed blit offset    -> blitOfs   (13)
+
+Worth recording why this is worth 44 and not 26: `grep_checks` counts `pcVar1` twice, once
+for `[iusbc]Var` (the `cVar1` substring) and once for `p[iusbc]Var`.  Any `p?VarN` name
+therefore costs two points per occurrence, which makes these two-name functions the
+cheapest remaining wins in the queue.
+
+The function is six repetitions of
+
+    labelText = (char *)ovr_ovc45_compute9(text,(char *)CONCAT22((char *)label + 1,_SS), ...);
+    ovr_blitLabel(labelText,(byte *)CONCAT22(fontOfs,blitOfs),fontSeg,color);
+
+so both names are single-role throughout.
+
+No expression changed.
+
+  grep_checks 37,195 -> 37,151; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different

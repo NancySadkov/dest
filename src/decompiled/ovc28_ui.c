@@ -389,8 +389,8 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
 {
   far_t gfx;
   far_t gfx_00;
-  char *pcVar1;
-  byte *pbVar2;
+  char *labelText;
+  byte *blitOfs;
   uint16_t fontOfs;
   uint16_t fontSeg;
   uint8_t color;
@@ -405,33 +405,33 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
   ovr_blitLoadRleGfx(gfx,dst,0);
   TextBlitX = x + 6;
   TextBlitY = y + 2;
-  pbVar2 = (byte *)((char *)0x26510);
+  blitOfs = (byte *)((char *)0x26510);
   if (*label == '%') {
     BlitLetterType = 2;
     color = 0x3f;
     fontOfs = Font01.ofs;
     fontSeg = Font01.seg;
-    pcVar1 = (char *)ovr_ovc45_compute9(text,(char *)CONCAT22((char *)label + 1,_SS),
+    labelText = (char *)ovr_ovc45_compute9(text,(char *)CONCAT22((char *)label + 1,_SS),
                                         (char *)CONCAT22(Font01.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),Font01.seg,'E',3);
-    ovr_blitLabel(pcVar1,(byte *)CONCAT22(fontOfs,pbVar2),fontSeg,color);
+    ovr_blitLabel(labelText,(byte *)CONCAT22(fontOfs,blitOfs),fontSeg,color);
     BlitLetterType = 0;
   }
   else if (*label == '@') {
     color = 0x3f;
     fontOfs = Font01.ofs;
     fontSeg = Font01.seg;
-    pcVar1 = (char *)ovr_ovc45_compute9(text,(char *)CONCAT22((char *)label + 1,_SS),
+    labelText = (char *)ovr_ovc45_compute9(text,(char *)CONCAT22((char *)label + 1,_SS),
                                         (char *)CONCAT22(Font01.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),Font01.seg,'E',3);
-    ovr_blitLabel(pcVar1,(byte *)CONCAT22(fontOfs,pbVar2),fontSeg,color);
+    ovr_blitLabel(labelText,(byte *)CONCAT22(fontOfs,blitOfs),fontSeg,color);
   }
   else {
     color = 0x3f;
     fontOfs = Font01.ofs;
     fontSeg = Font01.seg;
-    pcVar1 = (char *)ovr_ovc45_compute9(text,(char *)CONCAT22((char *)label,_SS),
+    labelText = (char *)ovr_ovc45_compute9(text,(char *)CONCAT22((char *)label,_SS),
                                         (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
-    ovr_blitText(pcVar1,(byte *)CONCAT22(fontOfs,pbVar2),fontSeg,color);
+    ovr_blitText(labelText,(byte *)CONCAT22(fontOfs,blitOfs),fontSeg,color);
   }
   ovc28_usesBDADailyTimeCounter(3);
   dst_00.seg = 0xa000;
@@ -441,35 +441,35 @@ void __cdecl16far ovc28_drawButton(int x,int y,char *label)
   ovr_blitLoadRleGfx(gfx_00,dst_00,0);
   TextBlitX = x + 6;
   TextBlitY = y + 2;
-  pbVar2 = (byte *)((char *)0x26510);
+  blitOfs = (byte *)((char *)0x26510);
   if (*label == '%') {
     BlitLetterType = 2;
     color = 0x3f;
     fontOfs = FontMain.ofs;
     fontSeg = FontMain.seg;
-    pcVar1 = (char *)ovr_ovc45_compute9(text,(char *)CONCAT22((char *)label + 1,_SS),
+    labelText = (char *)ovr_ovc45_compute9(text,(char *)CONCAT22((char *)label + 1,_SS),
                                         (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
-    ovr_blitLabel(pcVar1,(byte *)CONCAT22(fontOfs,pbVar2),fontSeg,color);
+    ovr_blitLabel(labelText,(byte *)CONCAT22(fontOfs,blitOfs),fontSeg,color);
     BlitLetterType = 0;
   }
   else if (*label == '@') {
     color = 0x3f;
     fontOfs = FontMain.ofs;
     fontSeg = FontMain.seg;
-    pcVar1 = (char *)ovr_ovc45_compute9(text,(char *)CONCAT22((char *)label + 1,_SS),
+    labelText = (char *)ovr_ovc45_compute9(text,(char *)CONCAT22((char *)label + 1,_SS),
                                         (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
-    ovr_blitLabel(pcVar1,(byte *)CONCAT22(fontOfs,pbVar2),fontSeg,color);
+    ovr_blitLabel(labelText,(byte *)CONCAT22(fontOfs,blitOfs),fontSeg,color);
   }
   else {
     color = 0x3f;
     fontOfs = FontMain.ofs;
     fontSeg = FontMain.seg;
-    pcVar1 = (char *)ovr_ovc45_compute9(text,(char *)CONCAT22((char *)label,_SS),
+    labelText = (char *)ovr_ovc45_compute9(text,(char *)CONCAT22((char *)label,_SS),
                                         (char *)CONCAT22(FontMain.ofs,(*(uint16_t *)((uint8_t *)&(label) + 2))),FontMain.seg,'E',
                                         3);
-    ovr_blitText(pcVar1,(byte *)CONCAT22(fontOfs,pbVar2),fontSeg,color);
+    ovr_blitText(labelText,(byte *)CONCAT22(fontOfs,blitOfs),fontSeg,color);
   }
   return;
 }
