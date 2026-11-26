@@ -9065,3 +9065,39 @@ and drew a structural conclusion from it.
   grep_checks 40,000 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### ovc27_textTakesHalfDamage3: paStack_c now far (28 refs)
+ovc27_textTakesHalfDamage3: paStack_c was a NEAR copy of the agent record; now far (28 refs)
+
+`paStack_c` was declared `agnt_t *` - a NEAR pointer - and initialised from the integer
+`agntIndex * 0x34`:
+
+  agnt_t far *paStack_c;
+  paStack_c = (agnt_t *)((long)agntIndex * 0x34);
+
+so every `paStack_c->field` read went to DS offset `agntIndex*0x34`, while the record lives in the Agnts
+segment.  The prologue decodes as {seg: 0x50, ofs: agntIndex*0x34} (0016/001B), and last commit's
+`agntRec` already carries exactly that:
+
+  agntRec = (agnt_t far *)MK_FP(SEG_OF(Agnts),(uint16_t)(agntIndex * 0x34));
+
+All 28 remaining `paStack_c` references became `agntRec` and the near declaration/assignment are gone.
+That fixes, among others:
+
+  paStack_c->gdata / ->state / ->flags / ->faction
+  ovc27_breathHalfDamage(paStack_c,...)         now passes the far record
+  ovc27_rollToHitEntity((uint32_t)MK_FP(SEG_OF(Agnts), paStack_c), 3)
+                                                MK_FP's offset argument is the record's offset either way
+
+Verified in the emitted listing (extent 956 bytes / 36 calls from audit/functions_real.tsv - see last
+turn's correction; the earlier "104" was a window that spanned four functions):
+
+  instructions:      639   (original 345 - the usual C-vs-hand-assembly overhead)
+  call instructions:  50   (original 36 - extra because helpers the original inlined become calls)
+  les sites:          17   (was 13 before this change: the record's field reads are far now)
+  seg _Agnts refs:     2
+
+  grep_checks 40,000 (unchanged - `paStack_c` is not a section-5 pattern: the classes are
+  `p[iusc]Stack_` with one of i/u/s/c, and this name has `a` there)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
