@@ -10317,3 +10317,44 @@ Renaming and splitting only; no expression changed.
   grep_checks 39,186 -> 39,147; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### season_textHalflingCastle: truncated sheet pointer, and why the blob migration would not help
+season_textHalflingCastle: the leader sheet was a truncated offset (39,147 -> 39,106)
+
+Line 65 kept only the OFFSET of the leader sheet:
+
+    iVar1 = (int)far_ofs_u32(GLeaderSheets[leaderIdx]);
+
+and every later use dereferenced it as a NEAR pointer, so
+
+    *(byte *)(iVar1 + 0x86)      read DGROUP at that offset, not the sheet's segment
+    *(byte *)(iVar1 + 0x34)      same
+
+It is now `char_sheet_t far *sheet = GLeaderSheets[leaderIdx];`, and the two fields are named:
++0x86 = char_sheet_t.titleIndex, +0x34 = char_sheet_t.gender.  The old form was a genuine
+wrong-segment read of two leader fields, in the function that awards the title.
+
+Renames: uVar3 -> result, uVar8 -> packed, uVar6 -> retHi, cStack_4 -> mayContinue,
+bVar2 -> isMain; `uStack_6` was declared and never used and is gone.
+
+ALSO MEASURED - why the s_absentBlob migration would not help on its own.  `tmp/locate_blob.py`
+walks every literal in `stmiss.c`'s blob and finds it in `audit/dgroup_2410.bin`: 208 of 264
+locate, 193 of those at a named original symbol start.  But the text is *already present* in
+our image, just at the wrong offset:
+
+    text                    ours      original
+    anim\2rdrag0.lbm        0x347f    0x2ad3
+    build\rock01.lbm        0x34b4    0x2b08
+    fighters' residence     0x9273    0x1e09
+    Peaceful                0xa950    0x2915
+
+Our literals live in whichever code module uses them, so they land at the end of that module's
+data.  Declaring them again would simply duplicate the bytes - DGROUP would grow and the
+offsets would still be wrong.  Closing the remaining 74 deltas therefore needs the code to
+*reference* named DGROUP symbols instead of embedding literals, with those symbols declared in
+original order.  That is a change to the emission of string data across the codebase, and it is
+the real blocker - not a missing data patch.
+
+  grep_checks 39,147 -> 39,106; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different

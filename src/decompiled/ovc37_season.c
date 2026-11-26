@@ -37,42 +37,41 @@ bool __cdecl16far season_textMainCastle(void)
 uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
 
 {
-  int iVar1;
-  bool bVar2;
+  char_sheet_t far *sheet;
+  bool isMain;
   byte extraout_AH;
-  uint uVar3;
+  uint result;
   size_t sVar4;
   char *capText;
   undefined1 extraout_AH_00;
   undefined1 extraout_AH_01;
-  undefined1 uVar6;
+  undefined1 retHi;
   uint8_t *capTextSeg;
   uint8_t *puVar7;
-  ulong uVar8;
+  ulong packed;
   uint8_t text;
   uint8_t text2;
   int iStack_8;
-  uint uStack_6;
-  char cStack_4;
+  char mayContinue;
   byte leaderIdx;
   
   leaderIdx = ovr_manage_findFirstLeader();
   if (leaderIdx == 0xff) {
-    uVar3 = (uint)extraout_AH << 8;
+    result = (uint)extraout_AH << 8;
   }
   else {
-    uVar3 = (uint16_t)SEG_OF(GLeaderSheets[leaderIdx]);
-    iVar1 = (int)far_ofs_u32(GLeaderSheets[leaderIdx]);
-    iStack_8 = CONCAT22(uVar3,iVar1);
-    if (*(byte *)(iVar1 + 0x86) < 9) {
-      *(char *)(iVar1 + 0x86) = *(char *)(iVar1 + 0x86) + '\x01';
+    result = (uint16_t)SEG_OF(GLeaderSheets[leaderIdx]);
+    sheet = GLeaderSheets[leaderIdx];
+    iStack_8 = CONCAT22(result,far_ofs_u32(sheet));
+    if (sheet->titleIndex < 9) {
+      sheet->titleIndex = sheet->titleIndex + '\x01';
       strcpy((char *)CONCAT22(_SS,&text),
              (char *)CONCAT22(*(uint16_t *)
                                ((int)&GStatsLabels[4].seg +
-                               (uint)*(byte *)(iVar1 + 0x86) * 8 + (uint)*(byte *)(iVar1 + 0x34) * 4
+                               (uint)sheet->titleIndex * 8 + (uint)sheet->gender * 4
                                ),(char *)((far_t *)(GStatsLabels + 4) +
-                                         (uint)*(byte *)(iVar1 + 0x34) +
-                                         (uint)*(byte *)(iVar1 + 0x86) * 2)->ofs));
+                                         (uint)sheet->gender +
+                                         (uint)sheet->titleIndex * 2)->ofs));
       sVar4 = strlen((char *)CONCAT22(_SS,&text));
       capTextSeg = &text;
       capTextSeg[sVar4 - 1] = 0x0;
@@ -80,36 +79,36 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
          ((((1 < PlayerIndex &&
             (capTextSeg = (uint8_t *)((char *)0x2627a),
             (GLeaderSheets[leaderIdx])->alignment == '\x02')) &&
-           (bVar2 = season_textMainCastle(), bVar2)) ||
+           (isMain = season_textMainCastle(), isMain)) ||
           ((capTextSeg = (uint8_t *)((char *)0x2627a),
            8 < (GLeaderSheets[leaderIdx])->titleIndex &&
            ((capTextSeg = (uint8_t *)((char *)0x2627a),
             (GLeaderSheets[leaderIdx])->alignment == '\0' ||
             ((capTextSeg = (uint8_t *)((char *)0x2627a),
              (GLeaderSheets[leaderIdx])->alignment == '\x01' &&
-             (bVar2 = season_textMainCastle(), bVar2)))))))))) {
-        cStack_4 = '\x01';
+             (isMain = season_textMainCastle(), isMain)))))))))) {
+        mayContinue = '\x01';
       }
       else {
-        cStack_4 = '\0';
+        mayContinue = '\0';
       }
-      if (cStack_4 == '\0') {
-        uVar8 = (ulong)CONCAT12(formatIndex,_SS);
+      if (mayContinue == '\0') {
+        packed = (ulong)CONCAT12(formatIndex,_SS);
         puVar7 = &text;
         capText = ovr_ovc15_capitalize((char *)&text2);
         ovr_ovc40_usesAlignToSeg
-                  ('\0',capText,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)uVar8,(byte)(uVar8 >> 0x10),0,0,0,0);
-        uVar6 = extraout_AH_01;
+                  ('\0',capText,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)packed,(byte)(packed >> 0x10),0,0,0,0);
+        retHi = extraout_AH_01;
       }
       else {
-        uVar8 = (ulong)CONCAT12(formatIndex,_SS);
+        packed = (ulong)CONCAT12(formatIndex,_SS);
         puVar7 = &text;
         capText = ovr_ovc15_capitalize((char *)&text2);
         ovr_ovc40_usesAlignToSeg
-                  ('\x02',capText,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)uVar8,(byte)(uVar8 >> 0x10),0,0,0,0);
-        uVar6 = extraout_AH_00;
+                  ('\x02',capText,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)packed,(byte)(packed >> 0x10),0,0,0,0);
+        retHi = extraout_AH_00;
       }
-      if (cStack_4 != '\0') {
+      if (mayContinue != '\0') {
         ovr_stop_audio();
         CurMusicType = 0x54;
         ovr_play_sfx(84,0,0);
@@ -122,16 +121,16 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
         ovr_ovc41_usesGMenuItem();
         ovr_miceBlitRect((brect_t *)(BlitRects + 1),0);
         ovr_stop_audio();
-        uVar6 = 0x24;
+        retHi = 0x24;
         CurMusicType = 0xff;
       }
-      uVar3 = CONCAT11(uVar6,1);
+      result = CONCAT11(retHi,1);
     }
     else {
-      uVar3 = uVar3 & 0xff00;
+      result = result & 0xff00;
     }
   }
-  return uVar3;
+  return result;
 }
 
 
