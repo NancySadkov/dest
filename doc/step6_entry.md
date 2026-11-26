@@ -9132,3 +9132,51 @@ Not done, and why:
   grep_checks 40,000 -> 39,962; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### DECODED: the variadic argument lists in ovc27_textTakesHalfDamage3
+DECODED: the variadic argument lists in ovc27_textTakesHalfDamage3
+
+Read the push sequences for `lcall 0x148,0x2f` (ovc27_agnt_statusText) inside the 956-byte extent:
+
+  00A4  16          push ss
+  00A5  8d 86 2e ff lea  ax,[bp - 0xd2]
+  00A9  50          push ax
+  00AA  ff 76 f8    push word ptr [bp - 8]      ; agntRec.seg
+  00AD  ff 76 f6    push word ptr [bp - 0xa]    ; agntRec.ofs
+  00B0  9a 2f 00 48 01 lcall 0x148, 0x2f
+  preceded by: 26 ff 36 f7 8f  push word ptr es:[0x8ff7]
+
+  0201  ff 76 f8    push word ptr [bp - 8]
+  0204  ff 76 f6    push word ptr [bp - 0xa]
+  0207  9a 2f 00 48 01 lcall 0x148, 0x2f
+  preceded by: push dx / push ax  (a returned far pointer), push ss / lea ax,[bp-0xd2] / push ax
+
+cdecl pushes right-to-left, so the parameters are:
+
+  arg1 = [bp-8]/[bp-0xa]  = agntRec            (far agent)
+  arg2 = ss:[bp-0xd2] or the returned far ptr  (far TEXT BUFFER, built as MK_FP(_SS, &text))
+  arg3 = es:[0x8ff7]                           (a single WORD - this is GSavedBlitSeg; 0x8ff7 sits
+                                                just below AgntCount at 0x8ffe in DGROUP)
+
+So the real signature is `agnt_statusText(agnt_t far *agnt, char far *buf, uint16_t blitSeg)` and the
+export's
+
+  ovr_agnt_statusText(agntRec,(char *)CONCAT13((char)((uint)&text2 >> 8),
+                                               CONCAT12((char)&text2,ptrSeg)),0)
+
+is wrong in two ways: the second argument is a far pointer built from `(char *)&text2` and the fabricated
+`ptrSeg` instead of `MK_FP(_SS,&text2)`, and the third is the literal `0` instead of `GSavedBlitSeg`.
+That also explains `blitSegLo = (undefined1)GSavedBlitSeg` and `segLo = (undefined1)agntSeg` - the export
+split the same values in some places and passed them whole in others.
+
+The same reading has to be done for `lcall 0x140,0x2f` and `lcall 0x140,0x48` (seven and two sites), and
+then the seven `agnt_statusText` sites each need their own buffer (`[bp-0xd2]` vs `[bp-0x122]` vs a
+returned far pointer) - which is why this is a pass rather than a substitution.
+
+NOT APPLIED: I had budget to decode but not to rewrite seven call sites, re-verify the emitted call count
+and offsets, and run the five gates. Recording it so the next attempt starts from the signature rather
+than re-deriving it.
+
+  grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
