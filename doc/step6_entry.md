@@ -14391,3 +14391,19 @@ offset - a measured change of its own, not a one-line move.
   compare_state 1,627/0/0
   diff_dgroup 1,581 -> 1,583 matched, 47 -> 45 runs, sum|delta| 198,159
   compare_runtime 1,633 matched, 1,624 identical / 9 different
+
+MEASURED AND REVERTED: moving GTxtFiles before s_txtFileNames
+
+The swap described above was tried on its own (GTxtFiles lifted in front of the array, and the
+duplicate \s_house1_txt\ deleted, which is entry 15 of that array):
+
+    matched    1,583 -> 1,582   (-1: the original s_house1_txt label loses its partner)
+    sum|delta| 198,159 -> 200,025  (+1,866)
+
+Reverted.  The swap alone cannot help because the array is still the wrong *shape*: the real
+strings are 10 and 11 bytes long, so a rectangular [34][11] block is 2 bytes short and the
+entries after the first ten are all at the wrong stride.  The useful change is to model the 34
+strings individually at their real lengths and to recompute crtl.c's
+\GTxtFiles[gi].ofs\ from the initialiser's own original offset
+(\&s_txtFileNames[0] + (origOfs - 0x82B4)\), which needs no extra DGROUP data.  That is the
+next measured step, not a one-line move.
