@@ -311,7 +311,7 @@ void __cdecl16far ovc41_unitStatusText(byte menuIndex)
   ulong uVar5;
   far_t partOut;
   uint32_t uVar6;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   uint8_t part;
   uint8_t remainder;
   uint8_t pct;
@@ -339,7 +339,7 @@ void __cdecl16far ovc41_unitStatusText(byte menuIndex)
     puVar2 = (uint16_t *)((uint)((uint8_t *)MenuItemEnabled)[menuIndex] * 4);
     dst = _DS;
     uVar3 = ovc41_pluralSuffix(count,*puVar2,puVar2[1],pcVar1,uVar3,uVar5,uVar6);
-    pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6e86,_SS),
+    pcVar1 = ovr_stsprintf(msg,(char *)CONCAT22(0x6e86,_SS),
                            (char *)CONCAT22(count,(char *)0x26510),uVar3,dst);
     ovr_drawTextAt(pcVar1,dst,0);
   }
@@ -652,7 +652,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t far *agnt)
   uint16_t notifyValue;
   uint32_t extraArg;
   uint8_t text;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   byte targetRank;
   byte hitCount;
   char spotResult;
@@ -680,7 +680,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t far *agnt)
     textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&text >> 8),
                                                         CONCAT12((char)&text,textPtr)),0);
     allocPtr = ovr_ovc15_usesStshRealloc(textPtr,roll,0,0,0,0,0,0);
-    textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ed6,_SS),
+    textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6ed6,_SS),
                             (char *)CONCAT13((char)((uint)allocPtr >> 8),
                                              CONCAT12((char)allocPtr,0x2410)),(char)allocPtr,roll
                            );
@@ -742,7 +742,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t far *agnt)
     textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&text >> 8),
                                                         CONCAT12((char)&text,textPtr)),0);
     allocPtr = ovr_ovc15_usesStshRealloc(textPtr,notifyValue,0,0,0,0,0,0);
-    textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ee8,_SS),
+    textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6ee8,_SS),
                             (char *)CONCAT13((char)((uint)allocPtr >> 8),
                                              CONCAT12((char)allocPtr,0x2410)),(char)allocPtr,
                             notifyValue);
@@ -753,7 +753,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t far *agnt)
       extraArg = CONCAT22(GSavedBlitSeg,(uint)hitCount);
       textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text,textPtr),0);
       allocPtr = ovr_ovc15_usesStshRealloc(textPtr,(char)notifyValue,extraArg,0,0,0,0,0);
-      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6f0f,_SS),
+      textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6f0f,_SS),
                               (char *)CONCAT22(allocPtr,(char *)0x26510),(char)notifyValue
                              );
       ovr_uiNotify(textPtr,notifyValue,0);
@@ -762,7 +762,7 @@ int __cdecl16far ovc41_turnUndeadNotice(agnt_t far *agnt)
       extraArg = CONCAT22(GSavedBlitSeg,(uint)hitCount);
       textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text,textPtr),0);
       allocPtr = ovr_ovc15_usesStshRealloc(textPtr,(char)notifyValue,extraArg,0,0,0,0,0);
-      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ef8,_SS),
+      textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6ef8,_SS),
                               (char *)CONCAT22(allocPtr,(char *)0x26510),(char)notifyValue
                              );
       ovr_uiNotify(textPtr,notifyValue,0);
@@ -786,7 +786,7 @@ void __cdecl16far ovc41_buildingNotice(char delta)
   int iVar1;
   char *msg;
   uint16_t uVar2;
-  uint8_t text;
+  static char text[64];   /* DGROUP-backed formatting buffer */
   byte bStack_3;
   
   iVar1 = ((short (*) [148] [60])GUnitGrid)[-1][GfxRndSeed + 0x93][GfxRndSeed2];
@@ -798,7 +798,7 @@ void __cdecl16far ovc41_buildingNotice(char delta)
     }
     (GUnits + iVar1)->bldType = bStack_3;
     ovr_constr_flushDirtyRects();
-    msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6f23,_SS),
+    msg = ovr_stsprintf(text,(char *)CONCAT22(0x6f23,_SS),
                         (char *)(ulong)CONCAT12(bStack_3,(char *)0x26510),
                         BLD_WORD(&BuildingTypes[bStack_3], name, 0),
                         BLD_WORD(&BuildingTypes[bStack_3], name, 2));
@@ -1958,7 +1958,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
   undefined1 uVar10;
   uint8_t victimName;
   uint8_t sourceName;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   undefined1 resolved;
   
   resolved = 0;
@@ -1984,7 +1984,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
       uVar5 = in_DX;
       textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&sourceName,pcVar6),0);
       stashOfs = ovr_ovc15_usesStshRealloc(textPtr,in_DX,uVar8,uVar5,savedSeg,0,0,0);
-      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6f63,_SS),
+      textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6f63,_SS),
                              (char *)CONCAT22(stashOfs,(char *)0x26510),in_DX);
       ovr_uiNotify(textPtr,in_DX,0);
       uVar5 = ovr_audio_panFromX(agnt,uVar10);
@@ -2004,7 +2004,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
       uVar5 = in_DX;
       textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&sourceName,pcVar6),0);
       stashOfs = ovr_ovc15_usesStshRealloc(textPtr,in_DX,uVar8,uVar5,savedSeg,0,0,0);
-      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6f7a,_SS),
+      textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6f7a,_SS),
                              (char *)CONCAT22(stashOfs,(char *)0x26510),in_DX);
       ovr_uiNotify(textPtr,in_DX,0);
       agnt->flags = agnt->flags | 0x800;
@@ -2060,7 +2060,7 @@ undefined1 __cdecl16far ovc41_textParalyzed(agnt_t far *source,agnt_t far *victi
       pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&sourceName >> 8),
                                                          CONCAT12((char)&sourceName,pcVar6)),0);
       stashOfs = ovr_ovc15_usesStshRealloc(pcVar6,in_DX,uVar10,0,0,0,0,0);
-      pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6f8e,_SS),
+      pcVar6 = ovr_stsprintf(msg,(char *)CONCAT22(0x6f8e,_SS),
                              (char *)CONCAT13((char)((uint)stashOfs >> 8),
                                               CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,in_DX);
       ovr_uiNotify(pcVar6,in_DX,0);
@@ -2150,7 +2150,7 @@ byte * __cdecl16far ovc41_textOnlyPlaceSingle(agnt_t far *agntPtr,int agntIndex)
   undefined1 segHi;
   uint16_t handle;
   uint8_t text;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   char acStack_80 [62];
   char acStack_42 [6];
   byte bStack_3c;
@@ -2626,7 +2626,7 @@ L_ui_unit_order_6616_0689_1054:
       (*(uint16_t *)((uint8_t *)&(drawPtr) + 2)) = 0x2322;
       (*(uint16_t *)((uint8_t *)&(drawPtr))) = (uint16_t)(agnt_t far *)0xcba4;
       paVar9 = (agnt_t far *)
-               ovr_stsprintf((char *)&msg,(char *)CONCAT13(0x6f,CONCAT12(0xeb,_SS)),
+               ovr_stsprintf(msg,(char *)CONCAT13(0x6f,CONCAT12(0xeb,_SS)),
                              (char *)CONCAT22(puVar11,(char *)0x2410));
       ovr_uiNotify((char *)paVar9,(uint16_t)puVar14,0);
     }
@@ -2659,7 +2659,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
   undefined1 uVar16;
   uint8_t actorName;
   uint8_t targetName;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   agnt_t far *agntPtr;   /* was uint32_t: assigned agnt_t far * values */
   char resolved;
   
@@ -2725,7 +2725,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
                 uVar12 = SUB21(textPtr,0);
                 textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex),0);
                 stashOfs = ovr_ovc15_usesStshRealloc(textPtr,uVar10,uVar12,uVar15,uVar16,0,0,0);
-                textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x70b5,_SS),
+                textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x70b5,_SS),
                                        (char *)CONCAT22(stashOfs,(char *)0x2410),uVar10);
                 ovr_uiNotify(textPtr,uVar10,(char)uVar10);
                 uVar9 = ovr_audio_panFromX(agnt,uVar13);
@@ -2747,7 +2747,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
                   uVar13 = SUB21(textPtr,0);
                   textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex),0);
                   stashOfs = ovr_ovc15_usesStshRealloc(textPtr,uVar10,uVar13,uVar14,uVar12,0,0,0);
-                  textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x70c4,_SS),
+                  textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x70c4,_SS),
                                          (char *)CONCAT22(stashOfs,(char *)0x2410),uVar10);
                   ovr_uiNotify(textPtr,uVar10,(char)uVar10);
                   uVar9 = ovr_audio_panFromX((agnt_t far *)agntPtr,(char)((ulong)agntPtr >> 0x10));
@@ -2772,7 +2772,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
                   uVar14 = SUB21(textPtr,0);
                   textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex),0);
                   stashOfs = ovr_ovc15_usesStshRealloc(textPtr,uVar10,uVar14,uVar12,uVar13,0,0,0);
-                  textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x7107,_SS),
+                  textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x7107,_SS),
                                          (char *)CONCAT22(stashOfs,(char *)0x2410),uVar10);
                   ovr_uiNotify(textPtr,uVar10,(char)uVar10);
                 }
@@ -2784,7 +2784,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
                   uVar14 = SUB21(textPtr,0);
                   textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex),0);
                   stashOfs = ovr_ovc15_usesStshRealloc(textPtr,uVar10,uVar14,uVar12,uVar13,0,0,0);
-                  textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x70ec,_SS),
+                  textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x70ec,_SS),
                                          (char *)CONCAT22(stashOfs,(char *)0x2410),uVar10);
                   ovr_uiNotify(textPtr,uVar10,(char)uVar10);
                 }
@@ -2804,7 +2804,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
                   uVar14 = SUB21(textPtr,0);
                   textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex),0);
                   stashOfs = ovr_ovc15_usesStshRealloc(textPtr,uVar10,uVar14,uVar12,uVar13,0,0,0);
-                  textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x7107,_SS),
+                  textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x7107,_SS),
                                          (char *)CONCAT22(stashOfs,(char *)0x2410),uVar10);
                   ovr_uiNotify(textPtr,uVar10,(char)uVar10);
                 }
@@ -2816,7 +2816,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
                   uVar14 = SUB21(textPtr,0);
                   textPtr = ovr_agnt_statusText(agnt,(char *)CONCAT22(&targetName,targetIndex),0);
                   stashOfs = ovr_ovc15_usesStshRealloc(textPtr,uVar10,uVar14,uVar12,uVar13,0,0,0);
-                  textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x7125,_SS),
+                  textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x7125,_SS),
                                          (char *)CONCAT22(stashOfs,(char *)0x2410),uVar10);
                   ovr_uiNotify(textPtr,uVar10,(char)uVar10);
                 }
@@ -2827,7 +2827,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
               textPtr = ovr_agnt_statusText((agnt_t far *)agntPtr,(char *)CONCAT13((char)((uint)&targetName >> 8),
                                                             CONCAT12((char)&targetName,uVar5)),0);
               stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)uVar10,uVar13,0,0,0,0,0);
-              textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x708c,_SS),
+              textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x708c,_SS),
                                      (char *)CONCAT13((char)((uint)stashOfs >> 8),
                                                       CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,
                                      (char)uVar10);
@@ -2842,7 +2842,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
                                                           CONCAT12((char)&targetName,(*(uint16_t *)((uint8_t *)&(agntPtr) + 2)))
                                                          ),0);
             stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)uVar10,uVar13,0,0,0,0,0);
-            textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x705e,_SS),
+            textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x705e,_SS),
                                    (char *)CONCAT13((char)((uint)stashOfs >> 8),
                                                     CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,
                                    (char)uVar10);
@@ -2857,7 +2857,7 @@ void __cdecl16far ovc41_specialAttack(agnt_t far *agnt,int targetIndex,uint16_t 
                                                         CONCAT12((char)&targetName,(*(uint16_t *)((uint8_t *)&(agntPtr) + 2)))),0)
           ;
           stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)uVar10,uVar13,0,0,0,0,0);
-          textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x7031,_SS),
+          textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x7031,_SS),
                                  (char *)CONCAT13((char)((uint)stashOfs >> 8),
                                                   CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,
                                  (char)uVar10);

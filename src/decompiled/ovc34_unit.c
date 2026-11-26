@@ -328,8 +328,8 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   undefined1 uVar13;
   undefined1 uVar14;
   bool type;
-  uint8_t text;
-  uint8_t msg;
+  static char text[64];   /* DGROUP-backed formatting buffer */
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   uint8_t unitFlags;
   byte sheetByte;
   byte partyIdx;
@@ -375,7 +375,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
   uVar6 = 0x2410;
   sheetEntry = *(uint16_t *)((uint)sheetByte * 4 + 0x107);
   uVar13 = (undefined1)sheetEntry;
-  textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x648f,_SS),
+  textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x648f,_SS),
                          (char *)CONCAT13((char)((uint)sheetEntry >> 8),CONCAT12(uVar13,0x2410)),uVar13,
                          (char)*(uint16_t *)((uint)sheetByte * 4 + 0x109),
                          (char)*(uint16_t *)((uint)partyIdx * 4),
@@ -529,7 +529,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
         }
         ovr_resetTextBlitCycle();
         uVar14 = 0x7a;
-        textWidth = ovr_ovc45_compute9((char *)&text,
+        textWidth = ovr_ovc45_compute9(text,
                                     (char *)CONCAT22(*(uint16_t *)((uint)partyIdx * 4),_SS),
                                     (char *)CONCAT22(Font03.ofs,
                                                      (char *)((uint16_t *)((uint)partyIdx * 4))
@@ -537,7 +537,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
                                     0x43,3,0xa000);
         suffix = ovr_ovc41_pluralSuffix(matchCount,(char)textWidth,uVar14);
         uVar6 = 0x2410;
-        textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x64b8,_SS),
+        textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x64b8,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                *(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                *(uint16_t *)((uint)sheetByte * 4 + 0x141),suffix,uVar14);
@@ -612,7 +612,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       if (input == 0x1) {
         suffix = ovr_ovc41_pluralSuffix(matchCount);
         textSeg = _DS;
-        textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6522,_SS),
+        textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6522,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
@@ -622,7 +622,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       else if (input == 0x2) {
         suffix = ovr_ovc41_pluralSuffix(matchCount);
         textSeg = _DS;
-        textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6543,_SS),
+        textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6543,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
@@ -632,7 +632,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       else if (input == 0x3) {
         suffix = ovr_ovc41_pluralSuffix(matchCount);
         textSeg = _DS;
-        textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6557,_SS),
+        textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6557,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8
@@ -642,7 +642,7 @@ void __cdecl16far ui_textDefineRegionCommand(byte menuIndex)
       else if (input == 0x4) {
         suffix = ovr_ovc41_pluralSuffix(matchCount);
         textSeg = _DS;
-        textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6568,_SS),
+        textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x6568,_SS),
                                (char *)CONCAT22(matchCount,(char *)0x2410),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x13f),
                                (char)*(uint16_t *)((uint)sheetByte * 4 + 0x141),(char)suffix,pbVar8

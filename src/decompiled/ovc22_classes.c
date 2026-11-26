@@ -146,7 +146,7 @@ char * __cdecl16far ovc22_textPOPULATION(byte bldType,byte partyIndex,agnt_t far
   uint16_t in_stack_0000000a;
   uint16_t in_stack_0000000c;
   uint16_t in_stack_0000000e;
-  uint8_t numBuf;
+  static char numBuf[64];   /* DGROUP-backed formatting buffer */
   uint16_t auStackY_11a [66];
   uint8_t labelPtrs;
   uint8_t menuItems;
@@ -296,19 +296,19 @@ code_r0x0005ff56:
             suffix = (char *)0x263c4;
             labelOfs = 0x1b7;
             ovc27_textCharmed();
-            ovr_stsprintf((char *)&numBuf);
-            iVar4 = ovr_font_textWidth((char *)&numBuf,0,0,0,0);
+            ovr_stsprintf(numBuf);
+            iVar4 = ovr_font_textWidth(numBuf,0,0,0,0);
             TextBlitX = 0x89 - iVar4;
             suffix = (char *)0x2431a;
-            ovr_blitLabel((char *)&numBuf);
-            ovr_stsprintf((char *)&numBuf);
-            iVar4 = ovr_font_textWidth((char *)&numBuf,0,0,0,0);
+            ovr_blitLabel(numBuf);
+            ovr_stsprintf(numBuf);
+            iVar4 = ovr_font_textWidth(numBuf,0,0,0,0);
             uVar9 = 0xd4 - iVar4;
             cVar3 = (char)Font02.ofs;
             bVar11 = (byte)(Font02.ofs >> 8);
             suffix = (char *)0x27d;
             TextBlitX = uVar9;
-            ovr_blitLabel((char *)&numBuf);
+            ovr_blitLabel(numBuf);
           }
           CurSfxType3 = 0x3c;
           entries.seg = _SS;

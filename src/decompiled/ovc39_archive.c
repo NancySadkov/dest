@@ -129,7 +129,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   unit_t *units;
   int rowOffset;
   int storedHi;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   byte bStack_f;
   byte bStack_e;
   byte bStack_d;
@@ -166,7 +166,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             }
             name = nameOfs;
             textPtr = ovc39_lordOrLady();
-            textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+            textPtr = ovr_stsprintf(msg,(char *)CONCAT22(archEntry,_SS),
                                    (char *)CONCAT22(textPtr,name),(char)nameOfs);
             ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
             (*(uint8_t *)((uint8_t *)&(handle.seg))) = (char)name;
@@ -181,7 +181,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             archEntry = ovc39_loadArchiveEntry(10);
             name = nameOfs;
             textPtr = ovc39_lordOrLady();
-            textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+            textPtr = ovr_stsprintf(msg,(char *)CONCAT22(archEntry,_SS),
                                    (char *)CONCAT22(textPtr,name),(char)nameOfs);
             ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
             (*(uint8_t *)((uint8_t *)&(handle_00.seg))) = (char)name;
@@ -196,7 +196,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             archEntry = ovc39_loadArchiveEntry(0xb);
             name = nameOfs;
             textPtr = ovc39_lordOrLady();
-            textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+            textPtr = ovr_stsprintf(msg,(char *)CONCAT22(archEntry,_SS),
                                    (char *)CONCAT22(textPtr,name),(char)nameOfs);
             ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
             (*(uint8_t *)((uint8_t *)&(handle_01.seg))) = (char)name;
@@ -211,7 +211,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             archEntry = ovc39_loadArchiveEntry(0xc);
             name = nameOfs;
             textPtr = ovc39_lordOrLady();
-            textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+            textPtr = ovr_stsprintf(msg,(char *)CONCAT22(archEntry,_SS),
                                    (char *)CONCAT22(textPtr,name),(char)nameOfs);
             ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
             (*(uint8_t *)((uint8_t *)&(handle_02.seg))) = (char)name;
@@ -226,7 +226,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             archEntry = ovc39_loadArchiveEntry(0xd);
             name = nameOfs;
             textPtr = ovc39_lordOrLady();
-            textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+            textPtr = ovr_stsprintf(msg,(char *)CONCAT22(archEntry,_SS),
                                    (char *)CONCAT22(textPtr,name),(char)nameOfs);
             ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
             (*(uint8_t *)((uint8_t *)&(handle_03.seg))) = (char)name;
@@ -389,7 +389,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
       if ((bStack_e == 0) || (bStack_e < bStack_d)) {
         if (bStack_d == 0) {
           textPtr = ovc39_lordOrLady();
-          textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(msgFormat.ofs,_SS),
+          textPtr = ovr_stsprintf(msg,(char *)CONCAT22(msgFormat.ofs,_SS),
                                  (char *)CONCAT22(textPtr,msgFormat.seg),(char)nameOfs);
           ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
         }
@@ -397,7 +397,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
           archEntry = ovc39_loadArchiveEntry(bStack_d + 0x17);
           name = nameOfs;
           textPtr = ovc39_lordOrLady();
-          textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+          textPtr = ovr_stsprintf(msg,(char *)CONCAT22(archEntry,_SS),
                                  (char *)CONCAT22(textPtr,name),(char)nameOfs);
           ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
           (*(uint8_t *)((uint8_t *)&(handle_06.seg))) = (char)name;
@@ -410,7 +410,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
         archEntry = ovc39_loadArchiveEntry(bStack_e + 0xd);
         name = nameOfs;
         textPtr = ovc39_lordOrLady();
-        textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+        textPtr = ovr_stsprintf(msg,(char *)CONCAT22(archEntry,_SS),
                                (char *)CONCAT22(textPtr,name),(char)nameOfs);
         ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
         (*(uint8_t *)((uint8_t *)&(handle_05.seg))) = (char)name;
@@ -423,7 +423,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
       archEntry = ovc39_loadArchiveEntry(bStack_c + 0x12);
       name = nameOfs;
       textPtr = ovc39_lordOrLady();
-      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(archEntry,_SS),
+      textPtr = ovr_stsprintf(msg,(char *)CONCAT22(archEntry,_SS),
                              (char *)CONCAT22(textPtr,name),(char)nameOfs);
       ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
       (*(uint8_t *)((uint8_t *)&(handle_04.seg))) = (char)name;

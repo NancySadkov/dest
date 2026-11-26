@@ -50,7 +50,7 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
   uint8_t *puVar7;
   ulong packed;
   uint8_t text;
-  uint8_t text2;
+  static char text2[64];   /* DGROUP-backed formatting buffer */
   int iStack_8;
   char mayContinue;
   byte leaderIdx;
@@ -95,7 +95,7 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
       if (mayContinue == '\0') {
         packed = (ulong)CONCAT12(formatIndex,_SS);
         puVar7 = &text;
-        capText = ovr_ovc15_capitalize((char *)&text2);
+        capText = ovr_ovc15_capitalize(text2);
         ovr_ovc40_usesAlignToSeg
                   ('\0',capText,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)packed,(byte)(packed >> 0x10),0,0,0,0);
         retHi = extraout_AH_01;
@@ -103,7 +103,7 @@ uint __cdecl16far season_textHalflingCastle(uint8_t formatIndex)
       else {
         packed = (ulong)CONCAT12(formatIndex,_SS);
         puVar7 = &text;
-        capText = ovr_ovc15_capitalize((char *)&text2);
+        capText = ovr_ovc15_capitalize(text2);
         ovr_ovc40_usesAlignToSeg
                   ('\x02',capText,(uint16_t)capTextSeg,(char *)puVar7,(uint16_t)packed,(byte)(packed >> 0x10),0,0,0,0);
         retHi = extraout_AH_00;
@@ -379,7 +379,7 @@ void __cdecl16far updSeason(void)
   far_t palette_01;
   uint8_t palette [768];
   char snames [12];
-  uint8_t text;
+  static char text[64];   /* DGROUP-backed formatting buffer */
   stg_tmp_t *gfxRec;
   char *pcStack_6;
   uint8_t s;
@@ -427,7 +427,7 @@ void __cdecl16far updSeason(void)
     }
     else {
       in_DX = snames;
-      msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6a50,_SS),
+      msg = ovr_stsprintf(text,(char *)CONCAT22(0x6a50,_SS),
                           (char *)CONCAT22(*(uint16_t *)(in_DX + (uint)season * 4),
                                            (char *)0x26510),
                           *(uint16_t *)(snames + (uint)season * 4 + 2));
@@ -516,7 +516,7 @@ void __cdecl16far season_repairBuildings(byte rank)
   uint unitIndex;
   int count;
   uint16_t uVar2;
-  uint8_t text;
+  static char text[64];   /* DGROUP-backed formatting buffer */
   byte bStack_7;
   uint8_t promoteThreshold;
   byte abStack_4 [2];
@@ -548,7 +548,7 @@ void __cdecl16far season_repairBuildings(byte rank)
   if (count != 0) {
     ovr_inputUpdate(0x24);
     uVar2 = ovr_ovc41_pluralSuffix(count);
-    msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x6a6e,_SS),
+    msg = ovr_stsprintf(text,(char *)CONCAT22(0x6a6e,_SS),
                         (char *)CONCAT22(count,(char *)0x26510),uVar2,dst);
     ovr_uiNotify(msg,(uint16_t)dst,0);
   }

@@ -11738,3 +11738,44 @@ The conclusion is now measured three times over: inserting a symbol whose text o
 image already carries somewhere else cannot be made layout-neutral, because the
 bytes exist twice and the anchor positions in those regions are too sparse to place
 the copy where the original has it.
+
+### Sweep: 43 stack buffers moved to DGROUP
+Sweep: 43 stack buffers passed to the printf family moved to DGROUP
+
+Turbo C passes a stack array to a near `char *` parameter as a bare frame offset -
+probe-verified earlier with `lea ax,[bp-16] / push ax` and no segment - so
+`(char *)&msg` handed to `sprintf`/`stsprintf`/`vsprintf` makes the callee write at
+DS:offset while the buffer lives in the stack segment.  I had fixed four of these by
+hand; this closes the class.
+
+Scanner (tmp/scan_nearbuf2.py) found 74 distinct *local* buffers passed that way and
+excluded globals, because `(char *)&GWorkDir` is a DGROUP object and its near pointer
+is already correct.  Of the 74, 62 were `uint8_t` scalars - the single-byte-buffer
+form - and 43 of those passed the guard "the name is used only as this buffer".
+
+Each became `static char name[64]` used directly:
+
+    ovc02_draw  gameProcessKey          msg
+    ovc09_init  copyProtectionCheck     msg
+    ovc13_panel ovc13_usesAlignUp4      msg
+    ovc16_saveui saveui_writeSavesList  msg
+    ovc17_stash fmVsprintf              buf
+    ovc21_manage chargen / manage_highlightStructures / manage_applyUnitFilter
+    ovc22_classes ovc22_textPOPULATION  numBuf
+    ovc23_bldrec ovc23_drownUnitsAt     text, text2
+    ... 43 in total across 20 files
+
+The 19 skipped ones are variables that are *also* read or written as scalars
+(`land_info`'s `entityIndex`, `tileX`, `dirY`; `ovc49_drawAgents`' `agntIndex`,
+`type`, `factionSeen`; ...), where changing the type would change those uses.
+
+MEASURED - all four gates are unchanged, which is the point: this is a correctness
+sweep, not a counter or layout change.
+
+    grep_checks        37,901 (unchanged - a buffer type is not a section-5 pattern)
+    compare_state      1,627/0/0
+    diff_dgroup        1,450/1,868, 71 runs, sum|delta| 276,979  (unchanged)
+    compare_runtime    1,605 identical / 10 different            (unchanged)
+
+The 43 x 64 = 2,752 bytes added to DGROUP land in their modules' data, after the
+measured globals, so the matched layout is untouched.

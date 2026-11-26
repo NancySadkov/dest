@@ -571,7 +571,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
   uint16_t uVar11;
   uint16_t uVar12;
   long lVar13;
-  uint8_t text;
+  static char text[64];   /* DGROUP-backed formatting buffer */
   byte variant;
   int iStack_12;
   int iStack_e;
@@ -617,7 +617,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
                           *(uint16_t *)(iVar6 + -0x21),*(uint16_t *)(iVar6 + -0x1f),
                           *(uint16_t *)(iVar5 + -0x1d),*(uint16_t *)(iVar5 + -0x1b),
                           far_ofs_u32(Agnts[agnt->target].gdata->name),(uint16_t)SEG_OF(Agnts[agnt->target].gdata->name));
-      msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5ba4,_SS),
+      msg = ovr_stsprintf(text,(char *)CONCAT22(0x5ba4,_SS),
                           (char *)CONCAT22(puVar7,(char *)0x26510),uVar2);
       ovr_uiNotify(msg,uVar2,0);
       agnt->variant = variant;
@@ -787,7 +787,7 @@ uint __cdecl16far ovc27_spellHalfDamage(agnt_t far *agnt)
   char *pcVar3;
   uint16_t uVar4;
   uint8_t text;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   
   pcVar3 = (char *)((ulong)agnt >> 0x10);
   agnt_00 = (agnt_t far *)agnt;
@@ -798,7 +798,7 @@ uint __cdecl16far ovc27_spellHalfDamage(agnt_t far *agnt)
     uVar4 = GSavedBlitSeg;
     pcVar3 = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,pcVar3),0);
     puVar1 = ovr_ovc15_usesStshRealloc(pcVar3,in_DX,uVar4,0,0,0,0,0);
-    pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5bbf,_SS),
+    pcVar3 = ovr_stsprintf(msg,(char *)CONCAT22(0x5bbf,_SS),
                            (char *)CONCAT22(puVar1,(char *)0x26510),in_DX);
     ovr_uiNotify(pcVar3,in_DX,0);
     uVar2 = CONCAT11((char)((uint)pcVar3 >> 8),1);
@@ -826,7 +826,7 @@ uint __cdecl16far ovc27_breathHalfDamage(agnt_t far *agnt,uint16_t arg2)
   char *in_stack_00000006;
   uint16_t uVar4;
   uint8_t text;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   
   if (((((agntG_t far *)agnt->gdata)->shortName[3] == '\x05') &&
       (0xd < (((entity_t *)agnt->entity)->base).level)) ||
@@ -835,7 +835,7 @@ uint __cdecl16far ovc27_breathHalfDamage(agnt_t far *agnt,uint16_t arg2)
     uVar4 = GSavedBlitSeg;
     pcVar1 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text,in_stack_00000006),0);
     puVar2 = ovr_ovc15_usesStshRealloc(pcVar1,in_DX,uVar4,0,0,0,0,0);
-    pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5be1,_SS),
+    pcVar1 = ovr_stsprintf(msg,(char *)CONCAT22(0x5be1,_SS),
                            (char *)CONCAT22(puVar2,(char *)0x26510),in_DX);
     ovr_uiNotify(pcVar1,in_DX,0);
     uVar3 = CONCAT11((char)((uint)pcVar1 >> 8),1);

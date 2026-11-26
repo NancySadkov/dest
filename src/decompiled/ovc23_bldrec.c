@@ -1995,8 +1995,8 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
   uint16_t uVar3;
   uint16_t uVar4;
   uint16_t uVar5;
-  uint8_t text2;
-  uint8_t text;
+  static char text2[64];   /* DGROUP-backed formatting buffer */
+  static char text[64];   /* DGROUP-backed formatting buffer */
   int clearCol;
   byte gindex;
   
@@ -2016,8 +2016,8 @@ void __cdecl16far ovc23_drownUnitsAt(uint16_t x,uint16_t y)
           dst = 0x195d;
           uVar4 = x;
           uVar5 = y;
-          pcVar2 = ovr_ovc15_capitalize((char *)&text2);
-          pcVar2 = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5665,_SS),
+          pcVar2 = ovr_ovc15_capitalize(text2);
+          pcVar2 = ovr_stsprintf(text,(char *)CONCAT22(0x5665,_SS),
                                  (char *)CONCAT22(pcVar2,(char *)0x26510),dst,uVar4,uVar5,
                                  uVar3);
           ovr_uiNotify(pcVar2,dst,0);

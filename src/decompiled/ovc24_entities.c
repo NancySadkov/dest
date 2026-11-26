@@ -547,9 +547,9 @@ void __cdecl16far ovc24_checkStrongholds(void)
   uint16_t uVar7;
   int probeOfs;
   uint16_t unaff_DI;
-  uint8_t text;
+  static char text[64];   /* DGROUP-backed formatting buffer */
   char sbuf [120];
-  uint8_t outFlag;
+  static char outFlag[64];   /* DGROUP-backed formatting buffer */
   uint8_t excludedFlags;
   char cStack_11;
   uint flagMask;
@@ -605,7 +605,7 @@ L_OVC24_5943_112e_1255:
         uVar7 = 0x195d;
         if ((AgntGs[(uint)leaderClass].flags3 & 0x800) == 0) {
           aligned = alignUp4((GLeaderSheets[leaderIndex])->x,uVar6,0);
-          pcVar5 = ovr_ovc15_capitalize((char *)&text);
+          pcVar5 = ovr_ovc15_capitalize(text);
           pcVar5 = ovr_stsprintf(sbuf,(char *)CONCAT22(0x578d,_SS),
                                  (char *)CONCAT22(pcVar5,(char *)0x26510),uVar7,aligned);
           ovr_uiNotify(pcVar5,uVar7,0);
@@ -618,11 +618,11 @@ L_OVC24_5943_112e_1255:
         }
         if (firstLeader == leaderIndex) {
           ovr_createConstructionRecordFar
-                    (0,(GLeaderSheets[leaderIndex])->x + -2,uVar6,(uint8_t *)CONCAT22(_SS,&outFlag),0xff,(char)unaff_DI,0xff,0,0);
+                    (0,(GLeaderSheets[leaderIndex])->x + -2,uVar6,(uint8_t *)outFlag,0xff,(char)unaff_DI,0xff,0,0);
         }
         else {
           ovr_createConstructionRecordFar
-                    (0,(GLeaderSheets[leaderIndex])->x + -1,uVar6,(uint8_t *)CONCAT22(_SS,&outFlag),0xff,(char)unaff_DI,0xff,0,0);
+                    (0,(GLeaderSheets[leaderIndex])->x + -1,uVar6,(uint8_t *)outFlag,0xff,(char)unaff_DI,0xff,0,0);
         }
         CurSfxType3 = 0xff;
         (GLeaderSheets[leaderIndex])->active = 0;

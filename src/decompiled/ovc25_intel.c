@@ -372,7 +372,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
   uint enemyIdx;
   uint16_t entitiesSeg;
   uint16_t curSeg = _SS;
-  uint8_t text;
+  static char text[64];   /* DGROUP-backed formatting buffer */
   byte classIdx;
   undefined1 otherIdx;
   byte otherLeaderIdx;
@@ -527,7 +527,7 @@ void __cdecl16far ovc25_spyReportNotice(void)
               alignX = ovr_alignUp4((GLeaderSheets[otherLeaderIdx])->x,
                                    (GLeaderSheets[otherLeaderIdx])->y,0xa000);
               labelOfs = (uint)(GLeaderSheets[leaderIdx])->classStr * 0x95;
-              msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58c0,curSeg),
+              msg = ovr_stsprintf(text,(char *)CONCAT22(0x58c0,curSeg),
                                   (char *)CONCAT22(*(uint16_t *)
                                                     ((int)&worldMenuLabels[0].seg + 1 + labelOfs),
                                                    (char *)0x26510),
@@ -922,7 +922,7 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex)
   char *msg;
   uint uVar4;
   uint16_t curSeg = _SS;
-  uint8_t text;
+  static char text[64];   /* DGROUP-backed formatting buffer */
   byte partyClass;
   
   if (((partyIndex != 0xff) &&
@@ -940,7 +940,7 @@ void __cdecl16far ovc25_attackingNotice(byte partyIndex)
       uVar2 = _DS;
       puVar3 = ovr_ovc15_usesStshRealloc
                          ((char *)*(uint16_t *)((uint)partyIndex * 4),((uint16_t *)((uint)partyIndex * 4))[1],GSavedBlitSeg,0,0,0,0,0);
-      msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x58f5,curSeg),
+      msg = ovr_stsprintf(text,(char *)CONCAT22(0x58f5,curSeg),
                           (char *)CONCAT22(puVar3,(char *)0x26510),uVar2);
       ovr_uiNotify(msg,uVar2,0);
       pbVar1 = (byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d);
@@ -979,7 +979,7 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
   uint8_t *puVar4;
   char *msg;
   uint16_t curSeg = _SS;
-  uint8_t text;
+  static char text[64];   /* DGROUP-backed formatting buffer */
   byte partyClass;
   int classCount;
   
@@ -1011,7 +1011,7 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
       uVar3 = _DS;
       puVar4 = ovr_ovc15_usesStshRealloc
                          ((char *)*(uint16_t *)((uint)partyIndex * 4),((uint16_t *)((uint)partyIndex * 4))[1],GSavedBlitSeg,0,0,0,0,0);
-      msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5906,curSeg),
+      msg = ovr_stsprintf(text,(char *)CONCAT22(0x5906,curSeg),
                           (char *)CONCAT22(puVar4,(char *)0x26510),uVar3);
       ovr_uiNotify(msg,uVar3,0);
       pbVar1 = (byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d);

@@ -1688,7 +1688,7 @@ char_sheet_t * __cdecl16far chargen(void)
   char acStack_9d [11];
   uint8_t menuItems;
   uint16_t auStack_90 [21];
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   char_sheet_t *sheet;
   uint sheetSeg;
   int statIdx;
@@ -1850,7 +1850,7 @@ L_chargen_1661:
             handle.ofs = (uint16_t)pcStack_e;
             (*(uint8_t *)((uint8_t *)&(handle.seg) + 1)) = (char)(widSeg >> 8);
             ovr_stshFree(handle);
-            pcVar3 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x505a,_SS),
+            pcVar3 = ovr_stsprintf(msg,(char *)CONCAT22(0x505a,_SS),
                                    (char *)CONCAT22(sheet,(char *)0x26510),
                                    (char)sheetSeg);
             ovr_drawString(pcVar3,widths,(char)widths);
@@ -3148,7 +3148,7 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
   uint16_t saySeg;
   int structIdx;
   int nameOfs;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   uint16_t savedSeed;
   uint16_t savedSeed2;
   
@@ -3175,7 +3175,7 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
       seedArg = savedSeed;
       pcVar1 = ovr_ovc22_className(partyIndex,0);
       saySeg = _DS;
-      pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x535b,_SS),
+      pcVar1 = ovr_stsprintf(msg,(char *)CONCAT22(0x535b,_SS),
                              (char *)CONCAT22(*(uint16_t *)((uint)partyIndex * 4),
                                               (char *)0x26510),
                              ((uint16_t *)((uint)partyIndex * 4))[1],pcVar1,seedArg);
@@ -3194,7 +3194,7 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
       if (partyIndex == 0xff) {
         strSeg = (uint16_t)((ulong)((long)structIdx * 6) >> 0x10);
         nameOfs = (int)((long)nameOfs * 6);
-        pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5323,_SS),
+        pcVar1 = ovr_stsprintf(msg,(char *)CONCAT22(0x5323,_SS),
                                (char *)CONCAT22(*(uint16_t *)((int)&GStructures[0].name + nameOfs),
                                                 (char *)0x26510),
                                *(uint16_t *)((int)&GStructures[0].name + 2 + nameOfs));
@@ -3204,7 +3204,7 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
         pcVar1 = ovr_ovc22_className(partyIndex,0);
         saySeg = (uint16_t)((ulong)((long)structIdx * 6) >> 0x10);
         nameOfs = (int)((long)nameOfs * 6);
-        pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x52ed,_SS),
+        pcVar1 = ovr_stsprintf(msg,(char *)CONCAT22(0x52ed,_SS),
                                (char *)CONCAT22(*(uint16_t *)((int)&GStructures[0].name + nameOfs),
                                                 (char *)0x26510),
                                *(uint16_t *)((int)&GStructures[0].name + 2 + nameOfs),
@@ -3708,7 +3708,7 @@ void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,ch
   char *pcVar1;
   uint16_t uVar2;
   uint16_t uVar3;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   uint16_t savedSeed;
   uint16_t savedSeed3;
   
@@ -3734,7 +3734,7 @@ void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,ch
       uVar3 = savedSeed;
       pcVar1 = ovr_ovc22_className(partyIndex,0);
       uVar2 = _DS;
-      pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5538,_SS),
+      pcVar1 = ovr_stsprintf(msg,(char *)CONCAT22(0x5538,_SS),
                              (char *)CONCAT22(*(uint16_t *)((uint)partyIndex * 4),
                                               (char *)0x26510),
                              ((uint16_t *)((uint)partyIndex * 4))[1],pcVar1,uVar3);
@@ -3743,7 +3743,7 @@ void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,ch
   }
   else if (partyIndex == 0xff) {
     uVar3 = savedSeed;
-    pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x55b0,_SS),
+    pcVar1 = ovr_stsprintf(msg,(char *)CONCAT22(0x55b0,_SS),
                            (char *)CONCAT22((char *)unitName,(char *)0x26510),
                            (*(uint16_t *)((uint8_t *)&(unitName) + 2)));
     ovr_say(pcVar1,uVar3);
@@ -3752,7 +3752,7 @@ void __cdecl16far manage_applyUnitFilter(uint8_t partyIndex,uint16_t unitType,ch
     uVar3 = savedSeed;
     pcVar1 = ovr_ovc22_className(partyIndex,0);
     uVar2 = _DS;
-    pcVar1 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x557d,_SS),
+    pcVar1 = ovr_stsprintf(msg,(char *)CONCAT22(0x557d,_SS),
                            (char *)CONCAT22((char *)unitName,(char *)0x26510),
                            (*(uint16_t *)((uint8_t *)&(unitName) + 2)),*(uint16_t *)((uint)partyIndex * 4),
                            ((uint16_t *)((uint)partyIndex * 4))[1],pcVar1,uVar3);

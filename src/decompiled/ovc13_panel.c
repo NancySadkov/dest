@@ -827,7 +827,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
   int colIdx;
   uint16_t fontOfs;
   uint16_t drawSeg;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   uint16_t flags2;
   uint16_t flags;
   int spanH;
@@ -954,7 +954,7 @@ void __cdecl16far ovc13_usesAlignUp4(void)
     drawSeg = Font02.seg;
     fontOfs = Font02.ofs;
     alignResult = ovr_alignUp4(GfxRndSeed,GfxRndSeed2,0);
-    text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x864,_SS),
+    text = ovr_stsprintf(msg,(char *)CONCAT22(0x864,_SS),
                          (char *)CONCAT22(alignResult,(char *)0x26510));
     ovr_blitText(text,(byte *)CONCAT22(fontOfs,rowCellPtr),drawSeg,uVar3,uVar4);
   }

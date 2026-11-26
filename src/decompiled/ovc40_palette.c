@@ -130,20 +130,20 @@ stg_tmp_t * __cdecl16far ovc40_usesStshLoadGfx(byte backdropIndex)
   far_t handle_02;
   uint16_t in_DX;
   uint16_t uVar1;
-  uint8_t cmapBackupB;
-  uint8_t cmapBackupA;
+  static char cmapBackupB[64];   /* DGROUP-backed formatting buffer */
+  static char cmapBackupA[64];   /* DGROUP-backed formatting buffer */
   stg_tmp_t *gfxRec;
   uint16_t uStack_4;
   
   handle.seg = marbleCut1Seg;
   handle.ofs = marbleCut1Ofs;
   gfxRec = ovr_stshLoadGfx(handle);
-  _fmemmove((char *)CONCAT22(_SS,&cmapBackupB),(char *)CONCAT22(in_DX,gfxRec->cmap + 0x231),
+  _fmemmove(cmapBackupB,(char *)CONCAT22(in_DX,gfxRec->cmap + 0x231),
             0xcf);
   handle_00.seg = Lbm_nwpanel1.seg;
   handle_00.ofs = Lbm_nwpanel1.ofs;
   gfxRec = ovr_stshLoadGfx(handle_00);
-  _fmemmove((char *)CONCAT22(_SS,&cmapBackupA),(char *)CONCAT22(in_DX,gfxRec->cmap + 0x2ac),
+  _fmemmove(cmapBackupA,(char *)CONCAT22(in_DX,gfxRec->cmap + 0x2ac),
             0xc);
   if (backdropIndex == 4) {
     handle_01.seg = youlose1Cut1Seg;
@@ -159,7 +159,7 @@ stg_tmp_t * __cdecl16far ovc40_usesStshLoadGfx(byte backdropIndex)
     uStack_4 = uVar1;
   }
   _fmemmove((char *)CONCAT22(uStack_4,gfxRec->cmap + 0x231),
-            (char *)CONCAT22(_SS,&cmapBackupB),0xcf);
+            cmapBackupB,0xcf);
   return gfxRec;
 }
 

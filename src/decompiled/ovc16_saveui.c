@@ -809,13 +809,13 @@ void __cdecl16far saveui_writeSavesList(far_t entries,uint count)
   uint16_t in_DX;
   uint16_t *puVar1;
   uint uVar2;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   
   path = ovr_fmVsprintf("%ssaves.txt",&GWorkDir);
   handle = ovr_creat_wait_unlock_and_disk(path,in_DX);
   if (-1 < handle) {
-    sprintf((char *)CONCAT22(_SS,&msg),"%u");
-    saveui_writeLine(handle,(char *)&msg,_SS);
+    sprintf(msg,"%u");
+    saveui_writeLine(handle,msg,_SS);
     for (uVar2 = 0; uVar2 < count; uVar2 = uVar2 + 1) {
       puVar1 = (uint16_t *)(entries.ofs + uVar2 * 4);
       saveui_writeLine(handle,(char *)*puVar1,puVar1[1]);

@@ -1158,7 +1158,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
   uint16_t uVar26;
   char palbuf [768];
   char buf [80];
-  uint8_t text;
+  static char text[64];   /* DGROUP-backed formatting buffer */
   uint8_t line;
   uint8_t field_index;
   byte bStack_4;
@@ -1297,7 +1297,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
       fontOfs = Font02.ofs;
       uVar20 = uVar14;
       uVar22 = uVar16;
-      textPtr = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x62fe,_SS),
+      textPtr = ovr_stsprintf(text,(char *)CONCAT22(0x62fe,_SS),
                              (char *)CONCAT22(*strRef,(char *)0x26510),strRef[1]);
       textPtr = (char *)ovr_ovc45_compute9((char *)&line,(char *)CONCAT22(textPtr,_SS),
                                           (char *)CONCAT13(fontHi,CONCAT12(byteLo,in_DX)),
@@ -1316,7 +1316,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
       fontOfs = Font02.ofs;
       uVar20 = uVar14;
       uVar22 = uVar16;
-      textPtr = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x630a,_SS),
+      textPtr = ovr_stsprintf(text,(char *)CONCAT22(0x630a,_SS),
                              (char *)CONCAT22(*strRef,(char *)0x26510),strRef[1]);
       textPtr = (char *)ovr_ovc45_compute9((char *)&line,(char *)CONCAT22(textPtr,_SS),
                                           (char *)CONCAT13(fontHi,CONCAT12(byteLo,in_DX)),
@@ -1398,7 +1398,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
       uVar25 = 0xe0;
       uVar23 = 0xde;
       fontOfs = Font02.ofs;
-      textPtr = ovr_litoa10((char *)&text,0,0,0);
+      textPtr = ovr_litoa10(text,0,0,0);
       textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT13(99,CONCAT12(7,_SS)),
                              (char *)CONCAT13((char)((uint)textPtr >> 8),
                                               CONCAT12((char)textPtr,0x2410)),7,0x10,(char)textPtr,
@@ -1423,7 +1423,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
       uVar25 = *(uint16_t *)&(peVar12->base).frameIndex;
       puVar18 = nameOfs;
       textPtr = stats_formatThousands
-                         ((char *)CONCAT22(_SS,&text),
+                         (text,
                           CONCAT13((char)((uint)uVar25 >> 8),
                                    CONCAT12((char)uVar25,*(uint16_t *)&(peVar12->base).health)));
       textPtr = ovr_stsprintf((char *)&line,(char *)CONCAT22(0x6342,_SS),
@@ -1752,7 +1752,7 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   uint8_t *puVar3;
   char *text;
   uint16_t widths;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   int agntData;
   uint8_t unitFlags;
   
@@ -1773,7 +1773,7 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   ovr_alignUp4(GfxRndSeed,GfxRndSeed2,0);
   puVar3 = ovr_ovc15_usesStshRealloc
                      ((char *)*(uint16_t *)(agntData + 0x24),*(uint16_t *)(agntData + 0x26),0,0,0,0,0,0);
-  text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6406,_SS),
+  text = ovr_stsprintf(msg,(char *)CONCAT22(0x6406,_SS),
                        (char *)CONCAT22(puVar3,(char *)0x26510),widths);
   drawString(text,widths,0);
   drawAgntStats((agnt_t far *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);
@@ -1796,7 +1796,7 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
   uint8_t *puVar3;
   char *text;
   uint16_t widths;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   int agntData;
   uint8_t unitFlags;
   
@@ -1814,7 +1814,7 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
   ovr_attact_usesEntities(entityIndex,0,0,(uint16_t)&unitFlags,(uint16_t)_SS,0,0,0,0);
   puVar3 = ovr_ovc15_usesStshRealloc
                      ((char *)*(uint16_t *)(agntData + 0x24),*(uint16_t *)(agntData + 0x26),0,0,0,0,0,0);
-  text = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x644e,_SS),
+  text = ovr_stsprintf(msg,(char *)CONCAT22(0x644e,_SS),
                        (char *)CONCAT22(puVar3,(char *)0x26510),widths);
   drawString(text,widths,0);
   drawAgntStats((agnt_t far *)&Agnts[agntIndex].x,far_from_u32((uint32_t)(SEG_OF(Agnts))),0);

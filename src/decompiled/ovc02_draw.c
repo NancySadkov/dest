@@ -935,7 +935,7 @@ uint16_t __cdecl16far gameProcessKey(void)
   uint16_t uVar1;
   char *msgPtr;
   undefined1 in_DL;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   
   key = ovr_biosReadKey();
   if (key == 0x320d) {
@@ -986,7 +986,7 @@ uint16_t __cdecl16far gameProcessKey(void)
       destroyLatchSide0 = 1;
     }
     else if (key == 0x2300) {
-      msgPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x286,_SS),
+      msgPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x286,_SS),
                              (char *)CONCAT22(GSeed,(char *)0x26510),(char)SeedHi);
       ovr_say(msgPtr,in_DL);
     }
@@ -998,7 +998,7 @@ uint16_t __cdecl16far gameProcessKey(void)
     }
     else if (key == 0x2600) {
       GCharLevelsInc = GCharLevelsInc + '\x01';
-      msgPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x297,_SS),
+      msgPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x297,_SS),
                              (char *)(ulong)CONCAT12(GCharLevelsInc,0x2410));
       ovr_say(msgPtr,in_DL);
     }

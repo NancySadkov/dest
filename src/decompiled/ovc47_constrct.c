@@ -67,8 +67,8 @@ void __cdecl16far land_info(byte tileOffset)
   far_t hint;
   far_t hint_00;
   far_t hint_01;
-  uint8_t text2;
-  uint8_t text1;
+  static char text2[64];   /* DGROUP-backed formatting buffer */
+  static char text1[64];   /* DGROUP-backed formatting buffer */
   uint8_t menuItems;
   uint16_t segTable [19];
   uint8_t msg;
@@ -193,7 +193,7 @@ void __cdecl16far land_info(byte tileOffset)
         entrySeg = puVar5[1];
         entrySeg = *puVar5;
         entryLo = (undefined1)entrySeg;
-        computed = ovr_ovc45_compute9((char *)&text1,
+        computed = ovr_ovc45_compute9(text1,
                                    (char *)CONCAT13((char)((uint)entrySeg >> 8),
                                                     CONCAT12(entryLo,_SS)),
                                    (char *)CONCAT13((char)(Font03.ofs >> 8),
@@ -266,14 +266,14 @@ void __cdecl16far land_info(byte tileOffset)
           textMsg = ovr_ovc22_className(AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),0);
           puVar5 = (uint16_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) * 4);
           msgSeg = _DS;
-          computed = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,_SS),
+          computed = ovr_ovc45_compute9(text2,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT13((char)(Font03.ofs >> 8),
                                                       CONCAT12((char)Font03.ofs,puVar5[1])),
                                      Font03.seg,'J',(char)Font03.ofs,(char)Font03.seg,0x4a,3,textMsg)
           ;
           puVar5 = (uint16_t *)
                    ((uint)*(byte *)(GTileRecords[tileIdx] * 0x12 + 9) * 4);
-          computed = ovr_ovc45_compute9((char *)&text1,(char *)CONCAT22(*puVar5,_SS),
+          computed = ovr_ovc45_compute9(text1,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT22(Font03.ofs,(char *)puVar5[1]),Font03.seg,'J',
                                      0x4a,2,(char)computed,msgSeg);
           pctRemaining = 100 - ((uint)*(byte *)(GTileRecords[tileIdx] * 0x12 + 0xb) * 100
@@ -287,7 +287,7 @@ void __cdecl16far land_info(byte tileOffset)
           textMsg = ovr_ovc22_className(AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3),0);
           puVar5 = (uint16_t *)((uint)AGNT_FIELD(&(Entities)[entityIndex], base.entity, 3) * 4);
           msgSeg = _DS;
-          computed = ovr_ovc45_compute9((char *)&text2,(char *)CONCAT22(*puVar5,_SS),
+          computed = ovr_ovc45_compute9(text2,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT13((char)(Font03.ofs >> 8),
                                                       CONCAT12((char)Font03.ofs,puVar5[1])),
                                      Font03.seg,'_',(char)Font03.ofs,(char)Font03.seg,0x5f,3,textMsg)
@@ -295,7 +295,7 @@ void __cdecl16far land_info(byte tileOffset)
           puVar5 = (uint16_t *)
                    ((uint)*(byte *)(GTileRecords[tileIdx] * 0x12 + 9) * 4);
           delayArg = 0x7a;
-          computed = ovr_ovc45_compute9((char *)&text1,(char *)CONCAT22(*puVar5,_SS),
+          computed = ovr_ovc45_compute9(text1,(char *)CONCAT22(*puVar5,_SS),
                                      (char *)CONCAT22(Font03.ofs,(char *)puVar5[1]),Font03.seg,'_',
                                      0x5f,2,(char)computed,msgSeg);
           stashOfs = ovr_ovc15_usesStshRealloc

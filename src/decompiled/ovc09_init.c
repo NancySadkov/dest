@@ -2074,7 +2074,7 @@ void __cdecl16far copyProtectionCheck(void)
   uint16_t uVar3;
   uint8_t uVar4;
   far_t handle;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   uint16_t input;
   byte *pbStack_a;
   char *uStack_8;   /* hand fix: *uStack_8 deref */
@@ -2103,7 +2103,7 @@ void __cdecl16far copyProtectionCheck(void)
       uVar4 = 0xde;
       uVar1 = Font03.ofs;
       uVar3 = Font03.seg;
-      pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6cd,_SS),
+      pcVar2 = ovr_stsprintf(msg,(char *)CONCAT22(0x6cd,_SS),
                              (char *)(ulong)CONCAT12(*(undefined1 *)(codes + 0x51a),0x2410));
       ovr_blitText(pcVar2,(byte *)CONCAT22(uVar1,in_DX),uVar3,uVar4);
       TextBlitX = 0x16;
@@ -2111,7 +2111,7 @@ void __cdecl16far copyProtectionCheck(void)
       uVar4 = 0xde;
       uVar1 = Font03.ofs;
       uVar3 = Font03.seg;
-      pcVar2 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x6ed,_SS),
+      pcVar2 = ovr_stsprintf(msg,(char *)CONCAT22(0x6ed,_SS),
                              (char *)(ulong)CONCAT12(*(undefined1 *)(codes + 0x533),0x2410));
       ovr_blitText(pcVar2,(byte *)CONCAT22(uVar1,in_DX),uVar3,uVar4);
       TextBlitX = 0x16;

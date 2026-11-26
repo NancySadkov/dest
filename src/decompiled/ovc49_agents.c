@@ -342,7 +342,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
   undefined1 uVar11;
   uint8_t uVar12;
   uint8_t text;
-  uint8_t msg;
+  static char msg[64];   /* DGROUP-backed formatting buffer */
   uint8_t dirY;
   uint8_t dx;
   uint8_t agntIndex;
@@ -357,7 +357,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
       textPtr = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
                                                             CONCAT12((char)&text,agntSeg)),0);
       stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)in_DX,uVar8,0,0,0,0,0);
-      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x8436,_SS),
+      textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x8436,_SS),
                              (char *)CONCAT13((char)((uint)stashOfs >> 8),
                                               CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,
                              (char)in_DX);
@@ -374,7 +374,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
       textPtr = ovr_agnt_statusText(agnt_00,(char *)CONCAT13((char)((uint)&text >> 8),
                                                             CONCAT12((char)&text,agntSeg)),0);
       stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)in_DX,uVar8,0,0,0,0,0);
-      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x8451,_SS),
+      textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x8451,_SS),
                              (char *)CONCAT13((char)((uint)stashOfs >> 8),
                                               CONCAT12((char)stashOfs,0x2410)),(char)stashOfs,
                              (char)in_DX);
@@ -625,7 +625,7 @@ void __cdecl16far ovc49_textLongerParalyzed(agnt_t far *agnt,byte param)
                       uVar8 = GSavedBlitSeg;
                       textPtr = ovr_agnt_statusText(agnt_00,(char *)CONCAT22(&text,agntSeg),0);
                       stashOfs = ovr_ovc15_usesStshRealloc(textPtr,(char)roll,uVar12,uVar8,0,0,0,0);
-                      textPtr = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x846c,_SS),
+                      textPtr = ovr_stsprintf(msg,(char *)CONCAT22(0x846c,_SS),
                                              (char *)CONCAT22(stashOfs,(char *)0x26510),
                                              (char)roll);
                       ovr_uiNotify(textPtr,roll,(char)roll);
