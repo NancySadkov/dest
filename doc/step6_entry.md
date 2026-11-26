@@ -9274,3 +9274,51 @@ and `agntSeg` in `usesStshRealloc` / `uiNotify` / `stsprintf` - the `lcall 0x160
   grep_checks 39,962 (unchanged - argument lists, not names)
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
+
+### DECODED: the last two call shapes in ovc27_textTakesHalfDamage3
+DECODED: the last two call shapes in ovc27_textTakesHalfDamage3
+
+  lcall 0x160,0x25   (4 sites)
+
+    00B0  9a 2f 00 48 01 lcall 0x148, 0x2f   ; ovr_agnt_statusText
+    00B5  83 c4 08      add sp, 8
+    00B8  52            push dx               ; the far result's segment
+    00B9  50            push ax               ; ... and offset
+    00BA  9a 25 00 60 01 lcall 0x160, 0x25
+    00BF  83 c4 04      add sp, 4
+
+    Four bytes in, four out = ONE far-pointer argument, namely whatever `agnt_statusText` returned in
+    DX:AX.  So `agnt_statusText` returns a `char far *`, and the export's `char *pcVar6` truncates it -
+    which is why `(char)agntSeg` had to be invented as a second argument.
+
+  lcall 0x170,0x7a   (4 sites)
+
+    00C4  1e          push ds
+    00C5  68 0a 5c    push 0x5c0a           ; a DGROUP string constant, DS:0x5c0a
+    00C8  16          push ss
+    00C9  8d 86 7e ff lea  ax,[bp - 0x82]   ; the output buffer, SS:[bp-0x82]
+    00CD  50          push ax
+    00CE  9a 7a 00 70 01 lcall 0x170, 0x7a
+    00D3  83 c4 0c    add sp, 0xc           ; 12 bytes = 6 words
+
+    Three far-pointer arguments: `stsprintf(MK_FP(_SS,&buf), MK_FP(_DS,0x5c0a), <far vararg>)`, the
+    vararg being the far pointer pushed at 00C2/00C3.  The export's
+
+      ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5ba4,_SS),
+                    (char *)CONCAT22(bufPtr,(char *)0x26510),agntSeg)
+
+    has the buffer and format in the wrong order and pads the tail with the fabricated `agntSeg`.
+
+Together with the four shapes decoded in earlier turns, that accounts for every `agntSeg` / `ptrSeg` use:
+each was invented to fill out an argument list for a call whose return value the export had truncated to a
+near pointer.
+
+WHY NOT APPLIED: the fix is not a substitution.  It requires retyping three locals to far pointers -
+`pcVar6` (char far *), `bufPtr` (char far *), `msg` - and rewriting three argument lists at 4 sites each,
+then re-verifying the emitted call count and offsets.  With a small budget left I would be shipping an
+unverified type change across four call sites, which is exactly the kind of edit that has had to be
+reverted three times this session.  The shape is now fully known, so the next pass is mechanical.
+
+  grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
