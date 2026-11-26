@@ -9761,3 +9761,19 @@ Two follow-ups in the same function, after the first ten near table reads.
   grep_checks 39,915 -> 39,892; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### ovc39_textHalflingCastle: unitIndex, recordIdx/nearFlag (39,892 -> 39,878)
+ovc39_textHalflingCastle: name unitIndex, split uVar1 into recordIdx/nearFlag (39,892 -> 39,878)
+
+  iVar2 = ovc39_findBuildingAt(...)   index into GUnits, single role   -> unitIndex (8 uses)
+  uVar1 = ovr_ovc23_findRecordAt(...), compared with 0xffff            -> recordIdx (3 uses)
+  uVar1 = ovr_ovc45_compute4(...), tested with (char)uVar1 != '\0'     -> nearFlag  (2 uses)
+
+Renaming and one split; no expression changed.  The function has now been worked in full:
+its ten +0x54 income reads and ten +0x4d population reads go through the leader-sheet segment,
+its 32-bit foodStored comparisons keep the original's high/low split, and its six temporaries
+(rowOffset, storedHi, recordIdx, nearFlag, unitIndex, uVar1-free) are single-role.
+
+  grep_checks 39,892 -> 39,878; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

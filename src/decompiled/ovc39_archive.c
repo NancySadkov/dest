@@ -121,8 +121,9 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   far_t handle_04;
   far_t handle_05;
   far_t handle_06;
-  uint uVar1;
-  int iVar2;
+  uint recordIdx;
+  uint nearFlag;
+  int unitIndex;
   char *textPtr;
   char *nameOfs;
   unit_t *units;
@@ -145,17 +146,17 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
     seedAligned = ovr_alignUp4(GfxRndSeed,0,0);
     for (bStack_b = 0; bStack_b < 4; bStack_b = bStack_b + 1) {
       for (rowOffset = -2; rowOffset < 2; rowOffset = rowOffset + 1) {
-        uVar1 = ovr_ovc23_findRecordAt(seedAligned + rowOffset,GfxRndSeed2,(char)GfxRndSeed2);
-        if (uVar1 == 0xffff) {
-          iVar2 = ovc39_findBuildingAt(seedAligned + rowOffset,GfxRndSeed2);
+        recordIdx = ovr_ovc23_findRecordAt(seedAligned + rowOffset,GfxRndSeed2,(char)GfxRndSeed2);
+        if (recordIdx == 0xffff) {
+          unitIndex = ovc39_findBuildingAt(seedAligned + rowOffset,GfxRndSeed2);
           units = (unit_t *)GUnits;
-          unitBldType = (units + iVar2)->bldType;
+          unitBldType = (units + unitIndex)->bldType;
           nameOfs = (char *)0x26510;
-          unitType = units[iVar2].unitType;
+          unitType = units[unitIndex].unitType;
           if ((((bStack_b == 0) &&
                (nameOfs = (char *)0x2627a,
                *(char *)((int)*(uint32_t *)((uint)unitType << 2) + 0x3f) == '\0')) &&
-              (0xf7 < iVar2)) && (nameOfs = (char *)0x26510, units[iVar2].level < 8)) {
+              (0xf7 < unitIndex)) && (nameOfs = (char *)0x26510, units[unitIndex].level < 8)) {
             nameOfs = (char *)&AgntAnms[0x88].missileDy;
             if ((BuildingTypes[unitBldType].flags2 & 0x80) == 0) {
               archEntry = ovc39_loadArchiveEntry(8);
@@ -174,7 +175,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             ovr_stshFree(handle);
             return;
           }
-          if (((bStack_b == 1) && (iVar2 < 0xf8)) &&
+          if (((bStack_b == 1) && (unitIndex < 0xf8)) &&
              (nameOfs = (char *)&AgntAnms[0x88].missileDy,
              (BuildingTypes[unitBldType].flags2 & 2) != 0)) {
             archEntry = ovc39_loadArchiveEntry(10);
@@ -189,7 +190,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             ovr_stshFree(handle_00);
             return;
           }
-          if (((bStack_b == 2) && (iVar2 < 0xf8)) &&
+          if (((bStack_b == 2) && (unitIndex < 0xf8)) &&
              (nameOfs = (char *)&AgntAnms[0x88].missileDy,
              (BuildingTypes[unitBldType].flags2 & 0x20) != 0)) {
             archEntry = ovc39_loadArchiveEntry(0xb);
@@ -205,8 +206,8 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             return;
           }
           if ((bStack_b == 3) &&
-             (uVar1 = ovr_ovc45_compute4(seedAligned + rowOffset,GfxRndSeed2,(char)GfxRndSeed2),
-             (char)uVar1 != '\0')) {
+             (nearFlag = ovr_ovc45_compute4(seedAligned + rowOffset,GfxRndSeed2,(char)GfxRndSeed2),
+             (char)nearFlag != '\0')) {
             archEntry = ovc39_loadArchiveEntry(0xc);
             name = nameOfs;
             textPtr = ovc39_lordOrLady();
@@ -219,7 +220,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             ovr_stshFree(handle_02);
             return;
           }
-          if (((bStack_b == 4) && (iVar2 < 0xf8)) &&
+          if (((bStack_b == 4) && (unitIndex < 0xf8)) &&
              (nameOfs = (char *)&AgntAnms[0x88].missileDy,
              (BuildingTypes[unitBldType].flags2 & 0x400) != 0)) {
             archEntry = ovc39_loadArchiveEntry(0xd);
