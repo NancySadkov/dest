@@ -50,7 +50,7 @@ heapMemmove(uint8_t *dstOfs,uint16_t dstSeg,uint8_t *srcOfs,uint16_t srcSeg,uint
       count = 0xff00;
     }
     in_DX = uVar4;
-    _fmemmove((char *)CONCAT22(uVar3,puVar1),(char *)CONCAT22(uVar4,puVar2),count);
+    _fmemmove((char far *)MK_FP(uVar3,puVar1),(char far *)MK_FP(uVar4,puVar2),count);
     dstOfs = (uint8_t *)((int)puVar1 + count);
     srcOfs = (uint8_t *)CONCAT22(uVar4,(uint8_t *)((int)puVar2 + count));
     countLo = countLo - (srcSeg < count);

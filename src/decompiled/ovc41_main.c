@@ -229,8 +229,8 @@ void __cdecl16far ovc41_removeAgent(uint agntIndex,int notify,uint16_t arg3)
     }
   }
   if ((int)(agntIndex + 1) < (int)(uint)AgntCount) {
-    _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x),
-              (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex + 1].x),
+    _fmemmove((char far *)MK_FP(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x),
+              (char far *)MK_FP(SEG_OF(Agnts),(char *)&Agnts[agntIndex + 1].x),
               ((AgntCount - agntIndex) + -1) * 0x34);
   }
   AgntCount = AgntCount - 1;

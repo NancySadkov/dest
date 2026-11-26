@@ -155,7 +155,7 @@ void * __cdecl16far memcpy(char *dst,char *src,word size);
 void __cdecl16far _fsetmem(void far *dest,uint16_t len,uint16_t val);
 void far * __cdecl16far _fmemset(void far *ptr,uint16_t v,uint16_t count);
 void * __cdecl16far __fmovmem(char *src,char *dst,word count);
-void * __cdecl16far _fmemmove(char *dst,char *src,word count);
+void far * __cdecl16far _fmemmove(void far *dst,const void far *src,word count);
 int __cdecl16far _open(char *pathname,int access);
 void __cdecl16far printf(char *fmt,...);
 void __cdecl16far _fputc(char c,int *stream);

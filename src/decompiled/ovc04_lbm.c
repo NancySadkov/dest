@@ -140,7 +140,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
         uVar6 = (undefined1)(dstline.seg >> 8);
         if (format == LBM_PBM) {
           uVar4 = 0x1000;
-          _fmemmove((char *)CONCAT22(dstline.seg,dstline.ofs),srcline,len);
+          _fmemmove((char far *)MK_FP(dstline.seg,dstline.ofs),srcline,len);
         }
         else {
           uVar4 = 0x22a6;
@@ -152,7 +152,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
         if (sx <= y) {
           if (in_stack_00000004 == '\0') {
             uVar4 = 0x1000;
-            _fmemmove((char *)CONCAT22(uVar2,dst_ofs),
+            _fmemmove((char far *)MK_FP(uVar2,dst_ofs),
                       (char *)CONCAT13(uVar6,CONCAT12(uVar5,dstline.ofs + x)),npixels);
           }
           else if (x == 0) {
@@ -170,7 +170,7 @@ lbm_decode_body(lbm_type_t format,int8_t encoding,uint8_t nplanes,uint8_t mask,f
             dst_01.ofs = bsrcline.ofs;
             ovr_lbm_combine_bitplanes(src_02,dst_01,sy,encoding,plane_sz,encoding);
             uVar4 = 0x1000;
-            _fmemmove((char *)CONCAT22(uVar2,dst_ofs),
+            _fmemmove((char far *)MK_FP(uVar2,dst_ofs),
                       (char *)CONCAT13((char)(bsrcline.seg >> 8),
                                        CONCAT12((char)bsrcline.seg,bsrcline.ofs + x)),npixels);
           }

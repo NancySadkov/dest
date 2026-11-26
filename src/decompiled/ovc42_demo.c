@@ -355,8 +355,8 @@ void __cdecl16far ovc42_copy1(char *buf)
   byte bVar1;
   byte *pbVar2;
   
-  _fmemmove((char *)CONCAT22((*(uint16_t *)((uint8_t *)&(buf) + 2)),(char *)buf + 0x210),
-            (char *)CONCAT22((*(uint16_t *)((uint8_t *)&(buf) + 2)),(char *)buf + 0xf0),0xf0);
+  _fmemmove((char far *)MK_FP((*(uint16_t *)((uint8_t *)&(buf) + 2)),(char *)buf + 0x210),
+            (char far *)MK_FP((*(uint16_t *)((uint8_t *)&(buf) + 2)),(char *)buf + 0xf0),0xf0);
   for (pbVar2 = (byte *)0x0; pbVar2 < (byte *)0xfa00; pbVar2 = pbVar2 + 1) {
     bVar1 = *pbVar2;
     if ((0x4f < bVar1) && (bVar1 < 0xa0)) {

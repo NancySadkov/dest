@@ -2132,12 +2132,12 @@ char * __cdecl16far litoa10(char *buf,long n,uint16_t arg3,uint16_t arg4)
     textLen = strlen((char *)CONCAT22((uint16_t)n,buf));
     if ((textLen & 3) == 3) {
       textLen = strlen((char *)CONCAT22((uint16_t)n,buf));
-      _fmemmove((char *)CONCAT22((uint16_t)n,buf + 1),(char *)CONCAT22((uint16_t)n,buf),len + 1)
+      _fmemmove((char far *)MK_FP((uint16_t)n,buf + 1),(char far *)MK_FP((uint16_t)n,buf),len + 1)
       ;
       *(char *)CONCAT22((uint16_t)n,buf) = ',';
     }
     textLen = strlen((char *)CONCAT22((uint16_t)n,buf));
-    _fmemmove((char *)CONCAT22((uint16_t)n,buf + 1),(char *)CONCAT22((uint16_t)n,buf),len + 1)
+    _fmemmove((char far *)MK_FP((uint16_t)n,buf + 1),(char far *)MK_FP((uint16_t)n,buf),len + 1)
     ;
     dividend = LDIV_at_(dividend,10);
     lVar4 = LMOD_at_(dividend,10);
@@ -2145,7 +2145,7 @@ char * __cdecl16far litoa10(char *buf,long n,uint16_t arg3,uint16_t arg4)
   }
   if (bVar1) {
     textLen = strlen((char *)CONCAT22((uint16_t)n,buf));
-    _fmemmove((char *)CONCAT22((uint16_t)n,buf + 1),(char *)CONCAT22((uint16_t)n,buf),len + 1)
+    _fmemmove((char far *)MK_FP((uint16_t)n,buf + 1),(char far *)MK_FP((uint16_t)n,buf),len + 1)
     ;
     *(char *)CONCAT22((uint16_t)n,buf) = '-';
   }

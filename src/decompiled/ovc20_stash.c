@@ -33,7 +33,7 @@ void __cdecl16far stshUniqueColorsRemap(stg_tmp_t *gfx,uint16_t arg2)
     }
     *(uint8_t *)((gfx->aptr).ofs + i) = c;
   }
-  _fmemmove((char *)CONCAT22(_SS,cmap),(char *)CONCAT22(in_stack_00000006,gfx),0x300);
+  _fmemmove((char far *)MK_FP(_SS,cmap),(char far *)MK_FP(in_stack_00000006,gfx),0x300);
   for (uVar1 = 0; uVar1 < 0x100; uVar1 = uVar1 + 1) {
     if ((uVar1 < 0x50) || (0x9f < uVar1)) {
       si = uVar1;

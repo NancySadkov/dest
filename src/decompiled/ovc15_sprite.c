@@ -551,8 +551,8 @@ void __cdecl16far ovc15_removeEntity(uint entityIndex)
   cVar2 = AgntGs[(uint)peVar3[entityIndex].base.gindex].ai;
   partyIndex = *(char *)((int)&peVar3[entityIndex].base.entity + 3);
   if (entityIndex < EntityCount - 1U) {
-    _fmemmove((char *)CONCAT22(uVar5,peVar3 + entityIndex),
-              (char *)CONCAT22(uVar5,peVar3 + entityIndex + 1),
+    _fmemmove((char far *)MK_FP(uVar5,peVar3 + entityIndex),
+              (char far *)MK_FP(uVar5,peVar3 + entityIndex + 1),
               ((EntityCount + -1) - entityIndex) * 0x37);
   }
   if (AgntFlag1 != false) {
@@ -1261,8 +1261,8 @@ L_OVC15_4207_1ffe_2193:
           agntIndex = agntIndex + 1;
         }
         if (agntIndex < (int)(uint)AgntCount) {
-          _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex + 1].x),
-                    (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x),
+          _fmemmove((char far *)MK_FP(SEG_OF(Agnts),(char *)&Agnts[agntIndex + 1].x),
+                    (char far *)MK_FP(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x),
                     ((uint)AgntCount - agntIndex) * 0x34);
         }
         agnt_00->visited = 0x1;
@@ -1342,8 +1342,8 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
             return (char *)((int)(uint32_t *)&_DATA + 1);
           }
         }
-        _fmemmove((char *)CONCAT22(_SS,&agntCopy),
-                  (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[uStack_8].x),0x34);
+        _fmemmove((char far *)MK_FP(_SS,&agntCopy),
+                  (char far *)MK_FP(SEG_OF(Agnts),(char *)&Agnts[uStack_8].x),0x34);
         agntCopy.target = 0xff;
         ovr_ovc41_removeAgent(uStack_8,0,0);
         pcVar4 = (char *)ovc15_usesRandBelow((agnt_t far *)MK_FP(_SS,&agntCopy),

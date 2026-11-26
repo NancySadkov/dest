@@ -339,7 +339,7 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
   dst_02.seg = _SS;
   dst_02.ofs = (uint16_t)&colorC;
   F_SCOPY(far_from_u32((uint32_t)(0x241069c8)),dst_02,3);
-  _fmemmove((char *)CONCAT22(dstSeg,dstOfs),(char *)CONCAT22(srcSeg,srcOfs),0x300);
+  _fmemmove((char far *)MK_FP(dstSeg,dstOfs),(char far *)MK_FP(srcSeg,srcOfs),0x300);
   uStack_16 = ((uint16_t *)&l1Cut2Seg)[((uint)seasonGroupBase + (uint)GSeason) * 2];
   uVar1 = ((uint16_t *)&l1Cut2Ofs)[((uint)seasonGroupBase + (uint)GSeason) * 2];
   handle.seg = uStack_16;
@@ -347,15 +347,15 @@ calcSeasonPalette(uint8_t *srcOfs,uint16_t srcSeg,uint8_t *dstOfs,uint16_t dstSe
   uStack_18 = uVar1;
   psStack_6 = ovr_stshLoadGfx(handle);
   uStack_4 = uVar1;
-  _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x1e0),(char *)CONCAT22(uVar1,psStack_6),0x90);
-  _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2d0),
-            (char *)CONCAT22(_SS,&seasonPalette + (uint)GSeason * 0x2d),0x2d);
+  _fmemmove((char far *)MK_FP(dstSeg,dstOfs + 0x1e0),(char far *)MK_FP(uVar1,psStack_6),0x90);
+  _fmemmove((char far *)MK_FP(dstSeg,dstOfs + 0x2d0),
+            (char far *)MK_FP(_SS,&seasonPalette + (uint)GSeason * 0x2d),0x2d);
   if (GameRunning == false) {
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2ac),(char *)CONCAT22(_SS,&colorA),3);
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2af),(char *)CONCAT22(_SS,&colorA),3);
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2b2),(char *)CONCAT22(_SS,&colorB),3);
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2b5),(char *)CONCAT22(_SS,&colorB),3);
-    _fmemmove((char *)CONCAT22(dstSeg,dstOfs + 0x2be),(char *)CONCAT22(_SS,&colorC),3);
+    _fmemmove((char far *)MK_FP(dstSeg,dstOfs + 0x2ac),(char far *)MK_FP(_SS,&colorA),3);
+    _fmemmove((char far *)MK_FP(dstSeg,dstOfs + 0x2af),(char far *)MK_FP(_SS,&colorA),3);
+    _fmemmove((char far *)MK_FP(dstSeg,dstOfs + 0x2b2),(char far *)MK_FP(_SS,&colorB),3);
+    _fmemmove((char far *)MK_FP(dstSeg,dstOfs + 0x2b5),(char far *)MK_FP(_SS,&colorB),3);
+    _fmemmove((char far *)MK_FP(dstSeg,dstOfs + 0x2be),(char far *)MK_FP(_SS,&colorC),3);
   }
   for (bStack_13 = 0; bStack_13 < 0x2d; bStack_13 = bStack_13 + 1) {
     dstOfs[bStack_13 + 0x2d0] = (uint8_t)((int)(uint)dstOfs[bStack_13 + 0x2d0] >> 2);

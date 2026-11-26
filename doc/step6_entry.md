@@ -11859,3 +11859,51 @@ layout confirmed, not a rename.
   grep_checks 37,880 -> 37,849; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
   compare_runtime 1,605 identical / 10 different
+
+### _fmemmove: far prototype, 31 far copies restored
+`_fmemmove` was declared with near parameters, so 31 far copies were truncating
+
+    void * __cdecl16far _fmemmove(char *dst,char *src,word count);
+
+Turbo C's `_fmemmove` is a FAR copy: `void far * _fmemmove(void far *, const void far *, size_t)`.
+With this declaration every call passed a near pointer, and the tree's idiom
+`(char *)CONCAT22(seg,ofs)` truncates the 32-bit value to its offset *before* the call
+and then widens it again with DS - so the copy ran at DS:offset instead of seg:ofs.
+That is the defect the buffer sweep exposed and could not fix from the call side.
+
+Two changes:
+
+1. prototype -> far parameters:
+       void far * __cdecl16far _fmemmove(void far *dst,const void far *src,word count);
+
+2. inside every `_fmemmove(...)` argument list (paren-balanced, 27 call sites across 11
+   modules) `(char *)CONCAT22(a,b)` became `(char far *)MK_FP(a,b)` - the idiom
+   `_fmemset` already uses in this tree.
+
+   ovc04_lbm 3, ovc11_audio 1, ovc12_agnt 2, ovc15_sprite 3, ovc20_stash 1,
+   ovc21_manage 3, ovc32_heap 1, ovc37_season 8, ovc40_palette 3, ovc41_main 1,
+   ovc42_demo 1
+
+3. agnt_usesAgntSaved's four 0x34-byte record copies were `memcpy` - a near-buffer
+   function - between the DGROUP buffer and the `Agnts` array, so the Agnts side was
+   truncated.  They are `_fmemmove` with `(char far *)MK_FP(...)` on both sides.
+
+VERIFIED in the listing (agnt_usesAgntSaved) - the copy now pushes a real segment pair:
+
+    add  ax,offset _Agnts
+    push seg _Agnts
+    push ax
+    push ds
+    push offset DGROUP:b@w+0
+    call far ptr __fmemmove
+
+MEASURED - unchanged, as intended for a correctness fix:
+
+    grep_checks 37,849 | compare_state 1,627/0/0
+    diff_dgroup 1,450/1,868, 71 runs, sum|delta| 276,979
+    compare_runtime 1,605 identical / 10 different
+
+REMAINING, same class and not touched: `memcpy` itself is declared with near parameters
+and about 30 call sites still pass `(char *)CONCAT22(seg,ofs)` to it, where the segment
+matters.  Those need the same per-site decision (far copy vs a DGROUP-resident object),
+so they are left for their own pass rather than converted blind.
