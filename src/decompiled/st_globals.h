@@ -1695,7 +1695,7 @@ extern char s_this_location_is_unsuita_1464[];
 extern char s_it_will_cost_s_the_s_d_gp[];
 extern char s_place[];
 extern char s_change_building[];
-extern char s_change_party[];
+extern char s_change_party_2410_80e3[];
 extern char s_party_member_s_doesn_t_h_25d2[];
 extern char s_too_many_construction_sites[];
 extern char s_excavate[];
@@ -2344,3 +2344,8 @@ extern char s_cflow5_txt_2410_840c[11];
 /* repair/upgrade cost lines */
 extern char s_Repair_costs_2410_809a[];
 extern char s_Upgrade_costs_2410_80b7[];
+
+/* 0x7dca/0x7df8/0x7e30 - moved out of the blob */
+extern char s__s__Costs__d_gold_2410_7dca[];
+extern char s__s__Costs__d_gold_2410_7df8[];
+extern char s__s__Trades_d_food_2410_7e30[];

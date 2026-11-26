@@ -14521,3 +14521,40 @@ this part of DGROUP is entirely UPSTREAM of 0x808a, i.e. the -155 step at 0x7e65
 `sum|delta|` rose again because the two duplicate removals shortened our layout by 121 bytes in
 a region whose delta is already negative.  `matched` and `runs` are the honest measures of how
 much of the layout is verifiable; `sum|delta|` currently rewards leaving duplicates in place.
+
+### layout: 0x7dca/0x7df8/0x7e30 moved out of the blob (runs 42 -> 40)
+layout: the three 0x7dca/0x7df8/0x7e30 strings were only in the blob (runs 42 -> 40)
+
+The -155 step at 0x7e65 was three strings that existed only as entries in stmiss.c's
+s_absentBlob reservoir, so nothing occupied that part of DGROUP:
+
+   0x7dca  46  "%s: Costs %d gold. Claim trees automatically."
+   0x7df8  56  "%s: Costs %d gold. Repairs buildings at season changes."
+   0x7e30  53  "%s: Trades %d food for gold. Total trade is %d food."
+
+46 + 56 + 53 = 155, exactly the step.  They are now declared between the 0x7d94 string and
+0x7e65, and their three blob entries are removed so the bytes exist once.
+
+Also in this band: the "Change Party" string (0x80e3) was declared at line 1698, far too early.
+Moving it next to s_new_owner was not enough on its own - under its bare name it then paired
+with the original's *0x769b* s_change_party and produced a +2,438 delta - so it is now
+`s_change_party_2410_80e3`, which pairs on the offset instead.  That costs one name match (the
+0x769b entry) and saves 2,438 on the sum.
+
+MEASURED (HEAD 6b86eb41 -> this commit)
+
+  diff_dgroup matched        1,617 -> 1,619
+  diff_dgroup runs              42 -> 40
+  diff_dgroup sum|delta|   218,578 -> 203,010   (-15,568)
+  compare_runtime matched    1,668 -> 1,671
+  compare_runtime identical  1,659 -> 1,662
+  compare_state              1,627/0/0
+  grep_checks               35,737 -> 35,740  (three new string declarations)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+VERIFIED: all three strings are present in the static image (searched REBUILT.EXE for each).
+
+Turn total on this axis: runs 45 -> 40, matched 1,583 -> 1,619, runtime identical 1,624 ->
+1,662, sum|delta| 198,159 -> 203,010 (the sum rose because 36 more symbols are now measured
+and duplicates were removed in negative-delta regions; matched and runs are the honest
+coverage measures).
