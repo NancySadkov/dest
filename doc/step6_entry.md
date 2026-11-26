@@ -8711,3 +8711,46 @@ own base identified.
   grep_checks 40,045 (unchanged - not section-5 patterns)
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
+
+### MEASURED: the 504 *(uint32_t *)(EXPR) sites, grouped
+MEASURED: the 504 `*(uint32_t *)(EXPR)` sites group into 113 index expressions
+
+`tmp/group_u32.py` extracts each `*(uint32_t *)(EXPR)` cast with balanced-paren matching and groups by the
+inner expression, because one disassembly per EXPRESSION settles a whole group:
+
+  distinct index expressions: 113, total sites: 504
+
+  sites  expression                              files
+  98     (int)uStack_16 << 2                     ovc22_classes.c
+  38     ((uint)_backdropIndex & 0xff) << 2      ovc41_main.c
+  34     (uint)partyIndex << 2                   ovc25_intel.c, ovc39_archive.c
+  14     (partyIndex & 0xff) << 2                ovc23_bldrec.c
+  13     unaff_BP + -10                          ovc27_combat.c
+  11     leaderIdx << 2                          ovc25_intel.c
+  10     (uint8_t *)&(uStack_6)                  ovc22_classes.c, ovc23_bldrec.c
+  10     (uint)bVar16 << 2                       ovc22_classes.c
+  10     (uint)bVar5 << 2                        ovc22_classes.c
+  10     (uint)bStack_10 << 2                    ovc45_unitinfo.c
+  10     (uint)bVar3 << 2                        ovc47_constrct.c
+   9     leaderIdxB << 2                         ovc22_classes.c
+   8     (uint)PartyCount * 4 + -4               ovc15_sprite.c, ovc18_leaderview.c
+   8     (uint)charIndex << 2                    ovc21_manage.c
+
+So the party-slot family is NOT finished: `(uint)partyIndex << 2` still has 34 sites in the two modules
+already swept, and `(partyIndex & 0xff) << 2` adds 14 more in ovc23_bldrec.c.  The earlier exact-string
+replace matched only the spelling I had before me; these are different spellings of the same read.
+
+`(int)uStack_16 << 2` (98 sites, ovc22_classes.c) is the same table: line 1036 of that file already casts
+it to `char_sheet_t *`, and lines 1966/1967/1970/1971 do the same via
+`((char_sheet_t *)(((int)uStack_16 << 2)))->{active,foodSold,foodProd,population}` - i.e. `uStack_16` is a
+party slot and the table is GLeaderSheets.
+
+ATTEMPTED AND REVERTED.  Sweeping all 98 `uStack_16` sites plus 30 far field-dereferences compiled to 28
+errors ("Nonportable pointer conversion"), because the same file also contains the near-pointer form
+`(char_sheet_t *)(((int)uStack_16 << 2))` which my regexes did not rewrite - so the file is left in a
+mixed state where some reads are far and its siblings are still near casts of an int.  Those two forms
+have to be converted together, which is more than one mechanical pass; reverted to HEAD, tree green.
+
+  grep_checks 40,045 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
