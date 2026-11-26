@@ -120,7 +120,7 @@ void __cdecl16far constr_usesSmoothPrev2(void)
 {
   int iVar1;
   int smoothVal;
-  uint8_t cell;
+  static char cell[64];
   int iStack_4;
   
   SmoothPrev = 0;

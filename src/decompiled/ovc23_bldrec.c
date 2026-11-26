@@ -752,10 +752,10 @@ int __cdecl16far ovc23_usesCornerBR(int x,int bldType)
   uint shadeBias;
   int cornerSampleBR;
   int cornerSample;
-  uint8_t cornerBR;
-  uint8_t cornerBL;
-  uint8_t cornerTR;
-  uint8_t cornerTL;
+  static char cornerBR[64];
+  static char cornerBL[64];
+  static char cornerTR[64];
+  static char cornerTL[64];
   int minShade;
   
   smoothTL = ovr_constr_usesSmoothPrev(x,-1,(int *)&cornerTL,0,0);
@@ -803,10 +803,10 @@ int __cdecl16far ovc23_usesCornerBR2(int x,int step)
   int cornerSampleTL;
   int iVar2;
   int iStack_12;
-  uint8_t cornerBR;
-  uint8_t cornerBL;
-  uint8_t cornerTR;
-  uint8_t cornerTL;
+  static char cornerBR[64];
+  static char cornerBL[64];
+  static char cornerTR[64];
+  static char cornerTL[64];
   int cornerSampleBR;
   int cornerSampleTR;
   int cornerSampleBL;

@@ -11795,3 +11795,49 @@ them would be wrong.
   grep_checks 37,901 -> 37,880; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
   compare_runtime 1,605 identical / 10 different
+
+### Second near-buffer sweep: 11 non-printf call sites
+Second near-buffer sweep: 11 non-printf call sites moved to DGROUP
+
+The first sweep covered only `sprintf`/`stsprintf`/`vsprintf`.  The same defect occurs
+wherever a local object is passed by address to a *near-pointer* parameter:
+
+    strcpy((char *)CONCAT22(_SS,&text), ...)          destination is a stack byte
+    strcmp((char *)CONCAT22(_SS,&header), ...)        source is a stack byte
+    memcpy((char *)CONCAT22(_SS,&rec), ..., 0x13)     destination is a stack byte
+    ovr_litoa10((char *)&numText, ...)                destination is byte[80] on the stack
+    ovr_constr_usesSmoothPrev(..., (int *)&cornerTL, ...)   output goes to the stack
+
+Uniform fix - make the object `static` so it lives in DGROUP (the near pointer is then
+valid) and use `_DS` instead of `_SS` in the CONCAT22 forms.  Guard unchanged: only
+objects whose every mention is the declaration or one of those address expressions.
+
+Converted (11):
+
+    ovc10_constr  constr_usesSmoothPrev2   cell                        (uint8_t -> static char[64])
+    ovc12_agnt    agnt_usesAgntSaved       agntSaved                   (agnt_t  -> static)
+    ovc23_bldrec  ovc23_usesCornerBR       cornerTL/BL/TR/BR           (uint8_t -> static char[64])
+    ovc23_bldrec  ovc23_usesCornerBR2      cornerTL/BL/TR/BR
+    ovc28_ui      ovc28_drawGold           numText                     (byte[80] -> static)
+
+REVERTED ON PURPOSE: `ovc26_usesFillGrid`'s `nextQueueX`/`nextQueueY` were converted by
+the automatic pass and immediately reverted, because that function seeds its queue
+segment from `_SS` (`uint16_t curSeg = _SS;`) and hands the pair to
+`CONCAT22(curSeg,&nextQueueX)`; moving the buffers to DGROUP without also changing
+`curSeg` would make the segment disagree with the buffer.  The pass only rewrites
+`CONCAT22(_SS,&x)`, so it cannot see that case - a reminder that these sweeps need the
+callee's segment convention checked, not just the call form.
+
+VERIFIED in the listing (ovc23_usesCornerBR): the output parameter is now a DGROUP
+address and no frame address is pushed:
+
+    push offset DGROUP:b@w+192
+    call far ptr _ovr_constr_usesSmoothPrev
+
+`lea [bp-...]` address pushes: 0.
+
+MEASURED - unchanged, as intended for a correctness sweep:
+
+    grep_checks 37,880 | compare_state 1,627/0/0
+    diff_dgroup 1,450/1,868, 71 runs, sum|delta| 276,979
+    compare_runtime 1,605 identical / 10 different

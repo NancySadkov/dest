@@ -329,7 +329,7 @@ void __cdecl16far ovc28_drawGold(byte partyIndex)
   uint width;
   char *text;
   byte *textXPtr;
-  byte numText [80];
+  static byte numText[80];
   uint goldResult;
   uint16_t goldSeg;
   int sheetOfs;

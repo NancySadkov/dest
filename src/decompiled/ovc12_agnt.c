@@ -1054,7 +1054,7 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
   void *copyResult;
   int scanIdx;
   int toIndex;
-  agnt_t agntSaved;
+  static agnt_t agntSaved;
   undefined1 copyHiA;
   
   if ((agntIndex < 1) ||
@@ -1068,13 +1068,13 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
         if ((int)(uint)AgntCount <= scanIdx + 2) break;
         scanIdx = toIndex;
       } while (Agnts[toIndex + 1].y < Agnts[agntIndex].y);
-      memcpy((char *)CONCAT22(_SS,&agntSaved),
+      memcpy((char *)CONCAT22(_DS,&agntSaved),
              (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x),0x34);
       _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x),
                 (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex + 1].x),
                 (toIndex - agntIndex) * 0x34);
       copyResult = memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[toIndex].x),
-                      (char *)CONCAT22(_SS,&agntSaved),0x34);
+                      (char *)CONCAT22(_DS,&agntSaved),0x34);
       copyHiA = (undefined1)((uint)copyResult >> 8);
       agnt_remapGridRefs(agntIndex,toIndex);
       uVar1 = CONCAT11(copyHiA,1);
@@ -1088,12 +1088,12 @@ uint __cdecl16far agnt_usesAgntSaved(int agntIndex)
       scanIdx = scanIdx + -1;
       if (scanIdx < 1) break;
     } while (Agnts[agntIndex].y < Agnts[scanIdx - 1].y);
-    memcpy((char *)CONCAT22(_SS,&agntSaved),(char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x)
+    memcpy((char *)CONCAT22(_DS,&agntSaved),(char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x)
            ,0x34);
     _fmemmove((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[scanIdx + 1].x),
               (char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[scanIdx].x),(agntIndex - scanIdx) * 0x34);
     copyResult = memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[scanIdx].x),
-                    (char *)CONCAT22(_SS,&agntSaved),0x34);
+                    (char *)CONCAT22(_DS,&agntSaved),0x34);
     copyHiB = (byte)((uint)copyResult >> 8);
     agnt_remapGridRefs(agntIndex,scanIdx);
     uVar1 = (uint)copyHiB << 8;
