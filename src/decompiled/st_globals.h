@@ -2356,3 +2356,6 @@ extern char s_done_2410_76a8[];
 
 /* 0x7a79 */
 extern char s_s_Owned_by_s_2410_7a79[44];
+
+/* 0x8072 */
+extern char s_Salvage_value_d_gold_2410_8072[24];

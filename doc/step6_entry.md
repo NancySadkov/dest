@@ -14651,3 +14651,35 @@ MEASURED (HEAD 83e57205 -> this commit)
 
 The band is now flat: -104 at 0x7581 for 34 symbols, then -107 and -131, with no local step at
 0x7aa5 any more.
+
+### layout: close the -24 at 0x808a (runs 38 -> 37)
+layout: close the -24 at 0x808a, a blob-only string (runs 38 -> 37)
+
+`tmp/band2.py` (new, generalised from the 0x7aa5 scan) compares every object's *declared size*
+against its original span, matching byte-array declarations by their `_2410_<offset>` suffix as
+well as string declarations by text - the first attempt could only size string literals and so
+reported the whole "Costs %d gold" family as absent.
+
+For 0x7aa5..0x808a it found exactly one object:
+
+    0x8072  24  " Salvage value %d gold."
+
+present only as an stmiss.c blob entry (line 227) plus a literal in ovc49_agents.c:1291 - and
+O49 is excluded from the link, so that literal contributes nothing to DGROUP.  Declared after
+`s_salvage`, blob entry removed: the bytes are moved, not duplicated.
+
+MEASURED (HEAD 87544704 -> this commit)
+
+  diff_dgroup runs              38 -> 37
+  diff_dgroup sum|delta|   195,963 -> 194,150  (-1,813)
+  diff_dgroup matched        1,620 -> 1,621
+  compare_runtime matched    1,674 -> 1,675
+  compare_runtime identical  1,665 -> 1,666
+  compare_state              1,627/0/0
+  grep_checks               35,716 -> 35,717
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The same scan over 0x6e00..0x7aa5 finds no further under-sized or missing objects, so the
+accumulated -104..-139 offset in the tail does not come from this range: it predates 0x6e00.
+The visible steps above 0x6e00 are still the game-data ones (-21 at agentClipRect, -5 at
+StatsTabPtrs, -5 at _atexitcnt), i.e. a few bytes each rather than a missing object.
