@@ -250,7 +250,7 @@ void __cdecl16far ovc38_usesStshAlloc(void)
   far_t handle;
   far_t entries_00;
   far_t handle_00;
-  uint8_t msg;
+  static char msg[64];   /* formatted "name@score"; DGROUP so the near buffer is valid */
   void *pvStack_8;
   uint8_t far *blk;
   uint16_t blkSeg;
@@ -273,10 +273,10 @@ void __cdecl16far ovc38_usesStshAlloc(void)
                (uint16_t)SEG_OF(GLeaderSheets[leaderIdx]),far_ofs_u32(GLeaderSheets[leaderIdx]),
                (uint16_t)SEG_OF(GLeaderSheets[leaderIdx]));
     slotWord = _DS;
-    sprintf((char *)CONCAT22(_SS,&msg),"%c%s%s@%d");
+    sprintf(msg,"%c%s%s@%d");
     slotIdx = 5;
     while ((0 < slotIdx &&
-           (scanResult = ovc38_scan1((char far *)MK_FP(_SS,(uint16_t)&msg),
+           (scanResult = ovc38_scan1((char far *)msg,
                                 (char far *)MK_FP(
                                     *(uint16_t far *)(blk + slotIdx * 4 - 2),
                                     *(uint16_t far *)(blk + slotIdx * 4 - 4))),
@@ -287,13 +287,13 @@ void __cdecl16far ovc38_usesStshAlloc(void)
       *slotPtr = slotWord;
       slotIdx = slotIdx + -1;
     }
-    nameLen = strlen((char *)CONCAT22(_SS,&msg));
+    nameLen = strlen(msg);
     nameBlk = ovr_stshAlloc((ulong)(nameLen + 1));
     slotPtr = (uint16_t far *)(blk + slotIdx * 4);
     slotPtr[1] = slotWord;
     *slotPtr = (uint16_t)nameBlk;   /* hand fix: 2-byte slot */
     slotPtr = (uint16_t far *)(blk + slotIdx * 4);
-    strcpy((char *)CONCAT22(slotPtr[1],(char *)*slotPtr),(char *)CONCAT22(_SS,&msg));
+    strcpy((char *)CONCAT22(slotPtr[1],(char *)*slotPtr),msg);
     entries_00.seg = blkSeg;
     entries_00.ofs = (uint16_t)pvStack_8;
     ovc38_saveHighScores(entries_00);

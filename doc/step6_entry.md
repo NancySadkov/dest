@@ -11550,3 +11550,57 @@ locals whose whole lifetime is one role.
   grep_checks 38,032 -> 38,019; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
   compare_runtime 1,605 identical / 10 different
+
+### ovc38_usesStshAlloc: message buffer was one byte and DS-invalid
+ovc38_usesStshAlloc: the formatted message buffer was one byte and DS-invalid
+
+Two defects in the same line:
+
+    uint8_t msg;                                        /* one byte */
+    sprintf((char *)CONCAT22(_SS,&msg), "%c%s%s@%d");     /* formatted string */
+
+1. The object is a single byte, so any output overflows it.
+
+2. `sprintf` is declared `void __cdecl16far sprintf(char *buf,char *fmt,...)` - the
+   buffer is a NEAR `char *`.  I verified what Turbo C does with a stack array by
+   compiling a probe and reading the listing:
+
+       lea  ax,word ptr [bp-16]
+       push ax
+       call far ptr _sprintf
+
+   No segment is pushed: the callee writes at DS:offset while the buffer lives in the
+   stack segment.  Casting SS:&msg in the source cannot change that, because the cast
+   is truncated to the offset before the call.
+
+So the buffer is now `static char msg[64]` - DGROUP-resident, sized, and therefore
+valid for a near pointer - and the four uses address it directly:
+
+    sprintf(msg,"%c%s%s@%d");
+    ovc38_scan1((char far *)msg, ...);
+    strlen(msg);
+    strcpy(..., msg);
+
+VERIFIED in the listing, the destination is now a DGROUP offset rather than a
+frame offset:
+
+    push offset DGROUP:s@
+    push offset DGROUP:b@w+0
+    call far ptr _sprintf
+
+`lea [bp-...]` buffer pushes: 0.
+
+MEASURED: layout-neutral.  The 64 static bytes changed no matched symbol
+(diff_dgroup 1,450/1,868, 71 runs, sum|delta| 276,979) and no runtime sample
+(1,605 identical / 10 different) - O38's data lands after the measured globals.
+
+STILL OPEN in this function, recorded not guessed: the `sprintf` call has NO variable
+arguments - the format is "%c%s%s@%d" and none of the four values is present.  The
+export dropped them, so the string this produces cannot yet be right; recovering
+them is a separate decompilation gap, not a buffer question.  Two other functions in
+the same file (`ovc38_scores.c:23` and `:63`) declare `uint8_t msg;` and pass
+`(char *)&msg` to `ovr_stsprintf`, which is the same defect twice more.
+
+  grep_checks 38,019 unchanged; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
+  compare_runtime 1,605 identical / 10 different
