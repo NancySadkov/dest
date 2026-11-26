@@ -12461,3 +12461,29 @@ Layout-neutral, as expected for an initialiser value:
   grep_checks 37,590 | compare_state 1,627/0/0
   diff_dgroup 1,450/1,805, 68 runs, sum|delta| 229,747
   compare_runtime (main entry) 1,615 matched, 1,605 identical / 10 different
+
+### keyprocessor_usesBiosKeyAvail: uVar1 split into key and coord (37,590 -> 37,528)
+keyprocessor_usesBiosKeyAvail: `uVar1` split into key code and cursor scratch (37,590 -> 37,528)
+
+The function is a 144-line key dispatch, so `uVar1` was doing two jobs:
+
+  key        the BIOS key code examined by the dispatch    (37 uses: 0x4900, 0x4f00,
+             0x4d00, 0x4737, 0x2368, ... and the two returns)
+  coord      cursor-clamping arithmetic, always assigned then read within the next two
+             lines                                          (23 uses)
+  keyCheck   the drain loop's `ovr_biosKeyAvail()`          (3 uses)
+
+The scratch uses are enumerated as exact statements rather than by line range, and two
+of them are *dead stores*: `coord = (*cursorY - 7) / 3;` is assigned and then the value is
+recomputed inline on the next line (`*cursorY = (*cursorY - 7) % 3 + 7;`).  Naming them
+`coord` keeps the code honest without pretending the value matters.
+
+Each pair was matched and replaced individually (8 assignment statements, 5 read
+patterns, with counts asserted: 2+1+2+1+2+1+2+1 assignments and 2 each for the reads), so
+no `key` comparison was accidentally renamed.
+
+No expression changed.
+
+  grep_checks 37,590 -> 37,528; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,805 (68 runs, sum|delta| 229,747)
+  compare_runtime 1,615 matched, 1,605 identical / 10 different

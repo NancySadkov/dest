@@ -149,20 +149,21 @@ void __cdecl16far unit_usesAlignUp4(void)
 uint __cdecl16far keyprocessor_usesBiosKeyAvail(uint16_t *cursorX,uint16_t *cursorY,uint8_t *input)
 
 {
-  uint uVar1;
-  uint16_t uVar2;
+  uint key;
+  uint coord;
+  uint16_t keyCheck;
   
   ovr_ovc13_usesMiceBlitRect();
-  uVar1 = ovr_biosKeyAvail();
-  if ((char)uVar1 == '\0') goto L_keyprocessor_6616_03bd_0684;
-  uVar1 = ovr_gameProcessKey();
-  while (uVar2 = ovr_biosKeyAvail(), (char)uVar2 != '\0') {
-    uVar1 = ovr_gameProcessKey();
+  key = ovr_biosKeyAvail();
+  if ((char)key == '\0') goto L_keyprocessor_6616_03bd_0684;
+  key = ovr_gameProcessKey();
+  while (keyCheck = ovr_biosKeyAvail(), (char)keyCheck != '\0') {
+    key = ovr_gameProcessKey();
   }
-  if (uVar1 == 0x4900) {
+  if (key == 0x4900) {
 L_keyprocessor_6616_03bd_059D:
     if ((int)*cursorY < 0x20) {
-      uVar1 = (*cursorY - 7) / 3;
+      coord = (*cursorY - 7) / 3;
       *cursorY = (*cursorY - 7) % 3 + 7;
     }
     else {
@@ -170,90 +171,90 @@ L_keyprocessor_6616_03bd_059D:
     }
     goto L_keyprocessor_6616_03bd_0684;
   }
-  if (0x4900 < uVar1) {
-    if (uVar1 == 0x4f00) {
+  if (0x4900 < key) {
+    if (key == 0x4f00) {
 L_keyprocessor_6616_03bd_0633:
-      uVar1 = *cursorX + 0x20;
-      if ((int)uVar1 < 0xde) {
+      coord = *cursorX + 0x20;
+      if ((int)coord < 0xde) {
         *cursorX = *cursorX + 0x20;
       }
       else {
-        uVar1 = 0xde - *cursorX & 7;
-        *cursorX = 0xde - uVar1;
+        coord = 0xde - *cursorX & 7;
+        *cursorX = 0xde - coord;
       }
     }
     else {
-      if (uVar1 < 0x4f01) {
-        if (uVar1 != 0x4b34) {
-          if (0x4b34 < uVar1) {
-            if ((uVar1 == 0x4d00) || (uVar1 == 0x4d36)) {
-              uVar1 = *cursorX + 8;
-              if ((int)uVar1 < 0xde) {
+      if (key < 0x4f01) {
+        if (key != 0x4b34) {
+          if (0x4b34 < key) {
+            if ((key == 0x4d00) || (key == 0x4d36)) {
+              coord = *cursorX + 8;
+              if ((int)coord < 0xde) {
                 *cursorX = *cursorX + 8;
               }
               else {
-                uVar1 = 0xde - *cursorX & 7;
-                *cursorX = 0xde - uVar1;
+                coord = 0xde - *cursorX & 7;
+                *cursorX = 0xde - coord;
               }
               goto L_keyprocessor_6616_03bd_0684;
             }
             goto L_keyprocessor_6616_03bd_0680;
           }
-          if (uVar1 == 0x4939) goto L_keyprocessor_6616_03bd_059D;
-          if (uVar1 != 0x4b00) goto L_keyprocessor_6616_03bd_0680;
+          if (key == 0x4939) goto L_keyprocessor_6616_03bd_059D;
+          if (key != 0x4b00) goto L_keyprocessor_6616_03bd_0680;
         }
         if ((int)*cursorX < 0x15) {
-          uVar1 = (*cursorX - 0xc & 7) + 0xc;
-          *cursorX = uVar1;
+          coord = (*cursorX - 0xc & 7) + 0xc;
+          *cursorX = coord;
         }
         else {
           *cursorX = *cursorX - 8;
         }
         goto L_keyprocessor_6616_03bd_0684;
       }
-      if (uVar1 != 0x5032) {
-        if (0x5032 < uVar1) {
-          if ((uVar1 == 0x5100) || (uVar1 == 0x5133)) {
-            uVar1 = *cursorY + 0x18;
-            if ((int)uVar1 < 0x96) {
+      if (key != 0x5032) {
+        if (0x5032 < key) {
+          if ((key == 0x5100) || (key == 0x5133)) {
+            coord = *cursorY + 0x18;
+            if ((int)coord < 0x96) {
               *cursorY = *cursorY + 0x18;
             }
             else {
-              uVar1 = 0x96 - (0x96 - *cursorY) % 3;
-              *cursorY = uVar1;
+              coord = 0x96 - (0x96 - *cursorY) % 3;
+              *cursorY = coord;
             }
             goto L_keyprocessor_6616_03bd_0684;
           }
           goto L_keyprocessor_6616_03bd_0680;
         }
-        if (uVar1 == 0x4f31) goto L_keyprocessor_6616_03bd_0633;
-        if (uVar1 != 0x5000) goto L_keyprocessor_6616_03bd_0680;
+        if (key == 0x4f31) goto L_keyprocessor_6616_03bd_0633;
+        if (key != 0x5000) goto L_keyprocessor_6616_03bd_0680;
       }
-      uVar1 = *cursorY + 3;
-      if ((int)uVar1 < 0x96) {
+      coord = *cursorY + 3;
+      if ((int)coord < 0x96) {
         *cursorY = *cursorY + 3;
       }
       else {
-        uVar1 = 0x96 - (0x96 - *cursorY) % 3;
-        *cursorY = uVar1;
+        coord = 0x96 - (0x96 - *cursorY) % 3;
+        *cursorY = coord;
       }
     }
     goto L_keyprocessor_6616_03bd_0684;
   }
-  if (uVar1 == 0x2348) {
+  if (key == 0x2348) {
 L_keyprocessor_6616_03bd_066E:
     *input = 0x4;
   }
   else {
-    if (uVar1 < 0x2349) {
-      if (uVar1 != 0x1655) {
-        if (uVar1 < 0x1656) {
-          if ((uVar1 != 0x1352) && (uVar1 != 0x1372)) goto L_keyprocessor_6616_03bd_0680;
+    if (key < 0x2349) {
+      if (key != 0x1655) {
+        if (key < 0x1656) {
+          if ((key != 0x1352) && (key != 0x1372)) goto L_keyprocessor_6616_03bd_0680;
           *input = 0x3;
           goto L_keyprocessor_6616_03bd_0684;
         }
-        if (uVar1 != 0x1675) {
-          if (uVar1 != 0x1c0d) goto L_keyprocessor_6616_03bd_0680;
+        if (key != 0x1675) {
+          if (key != 0x1c0d) goto L_keyprocessor_6616_03bd_0680;
           *input = 0x1;
           goto L_keyprocessor_6616_03bd_0684;
         }
@@ -261,11 +262,11 @@ L_keyprocessor_6616_03bd_066E:
       *input = 0x2;
       goto L_keyprocessor_6616_03bd_0684;
     }
-    if (uVar1 != 0x4737) {
-      if (0x4737 < uVar1) {
-        if ((uVar1 == 0x4800) || (uVar1 == 0x4838)) {
+    if (key != 0x4737) {
+      if (0x4737 < key) {
+        if ((key == 0x4800) || (key == 0x4838)) {
           if ((int)*cursorY < 0xb) {
-            uVar1 = (*cursorY - 7) / 3;
+            coord = (*cursorY - 7) / 3;
             *cursorY = (*cursorY - 7) % 3 + 7;
           }
           else {
@@ -274,21 +275,21 @@ L_keyprocessor_6616_03bd_066E:
           goto L_keyprocessor_6616_03bd_0684;
         }
 L_keyprocessor_6616_03bd_0680:
-        return CONCAT11((char)(uVar1 >> 8),1);
+        return CONCAT11((char)(key >> 8),1);
       }
-      if (uVar1 == 0x2368) goto L_keyprocessor_6616_03bd_066E;
-      if (uVar1 != 0x4700) goto L_keyprocessor_6616_03bd_0680;
+      if (key == 0x2368) goto L_keyprocessor_6616_03bd_066E;
+      if (key != 0x4700) goto L_keyprocessor_6616_03bd_0680;
     }
     if ((int)*cursorX < 0x2d) {
-      uVar1 = (*cursorX - 0xc & 7) + 0xc;
-      *cursorX = uVar1;
+      coord = (*cursorX - 0xc & 7) + 0xc;
+      *cursorX = coord;
     }
     else {
       *cursorX = *cursorX - 0x20;
     }
   }
 L_keyprocessor_6616_03bd_0684:
-  return uVar1 & 0xff00;
+  return key & 0xff00;
 }
 
 
