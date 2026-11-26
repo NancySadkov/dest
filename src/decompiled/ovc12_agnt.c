@@ -433,7 +433,7 @@ void __cdecl16far agnt_advanceAnimFrame(agnt_t far *agnt,uint16_t arg2)
 
 /* Builds the agent's status text from its flags (charmed / diseased / held / paralyzed). */
 
-char * __cdecl16far agnt_statusText(agnt_t far *agnt,char *text,uint16_t arg3)
+char far * __cdecl16far agnt_statusText(agnt_t far *agnt,char *text,uint16_t arg3)
 
 {
   char *pcVar1;

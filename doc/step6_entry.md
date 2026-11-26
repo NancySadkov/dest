@@ -9365,3 +9365,54 @@ gates run at the end - not a per-function edit.
   grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### agnt_statusText returns char far * - prototype fixed
+agnt_statusText returns char far * - prototype fixed, and the far result now survives
+
+The overlay thunk was the real problem.  `lcall 0x160,0x25` pushes DX:AX (the whole return of
+`ovr_agnt_statusText`), but the tree declared
+
+  undefined ovr_agnt_statusText();
+  char * __cdecl16far agnt_statusText(agnt_t far *agnt,char *text,uint16_t arg3);
+
+Both were unprototyped/near, so the compiler kept only AX and every caller rebuilt the segment by hand -
+which is what `agntSeg`, `ptrSeg` and the `CONCAT22(...,0x26510)` tails were for.
+
+Changed:
+
+  st_functions.h   char far * __cdecl16far agnt_statusText(...)
+  st_functions.h   char far * ovr_agnt_statusText();
+  ovc12_agnt.c     char far * __cdecl16far agnt_statusText(...)     (the definition)
+
+All 52 call sites still compile: Turbo C accepts a far-to-near assignment as a nonportable conversion, so
+the change is additive - callers that want the segment now get it, callers that truncate still do.
+
+Then in ovc27_textTakesHalfDamage3:
+
+  char *pcVar6          -> char far *pcVar6
+  uint8_t *bufPtr       -> uint8_t far *bufPtr
+  ovr_ovc15_usesStshRealloc(pcVar6,(char)agntSeg,ptrLo,0,0,0,0,0)          -> (pcVar6)   x1
+  ovr_ovc15_usesStshRealloc(pcVar6,agntSeg,ptrLo,segLo,blitSegLo,0,0,0)    -> (pcVar6)   x3
+  one ovr_stsprintf(...) rebuilt as
+    ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5c44),bufPtr)
+
+Verified in the emitted listing - the near truncation is gone:
+
+  call  far ptr _ovr_agnt_statusText
+  add   sp,10
+  mov   word ptr [bp-12],dx          ; the SEGMENT the export used to invent
+  mov   word ptr [bp-14],ax
+  push  word ptr [bp-12]
+  push  ax
+  call  far ptr _ovr_ovc15_usesStshRealloc
+
+against the original's `push dx / push ax / lcall 0x160,0x25`.  instructions 554 (was 609), calls 50,
+les 17.
+
+Still to do in this function: two of the three `stsprintf` sites have a different line layout and were not
+matched by the regex, and `agntSeg`/`ptrSeg` remain (20 and 8 uses) feeding `ovr_uiNotify` and those two
+`stsprintf` calls.
+
+  grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

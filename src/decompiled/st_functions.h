@@ -447,7 +447,7 @@ bool __cdecl16far agnt_usesAgntCount2(agnt_t far *agnt,uint16_t *xDir,uint16_t *
 void __cdecl16far agnt_usesAnimFrame(agnt_t far *agnt,...);
 void __cdecl16far agnt_compute5(agnt_t far *agnt);
 void __cdecl16far agnt_advanceAnimFrame(agnt_t far *agnt,uint16_t arg2);
-char * __cdecl16far agnt_statusText(agnt_t far *agnt,char *text,uint16_t arg3);
+char far * __cdecl16far agnt_statusText(agnt_t far *agnt,char *text,uint16_t arg3);
 uint16_t __cdecl16far agnt_abilityModifier(byte partyIndex,byte abilityIndex);
 byte __cdecl16far agnt_compute8(agnt_t far *agnt,uint16_t arg2);
 byte __cdecl16far agnt_compute9(agnt_t far *agnt,uint16_t arg2);
@@ -1173,7 +1173,7 @@ undefined ovr_musInit();
 undefined ovr_agnt_usesAlignToSeg();
 undefined ovr_agnt_usesFmFreeAudio();
 undefined ovr_agnt_usesAgntCount6();
-undefined ovr_agnt_statusText();
+char far * ovr_agnt_statusText();
 undefined ovr_agnt_usesAnimFrame();
 undefined ovr_agnt_clampX();
 undefined ovr_agnt_abilityModifier();

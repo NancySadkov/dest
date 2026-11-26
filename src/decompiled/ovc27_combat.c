@@ -879,8 +879,8 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
   uint16_t halfRoll;
   uint16_t randRoll;
   int hitRoll;
-  char *pcVar6;
-  uint8_t *bufPtr;
+  char far *pcVar6;
+  uint8_t far *bufPtr;
   uint16_t agntSeg;
   undefined1 ptrLo;
   undefined1 segLo;
@@ -934,10 +934,8 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     }
     ptrLo = (undefined1)GSavedBlitSeg;
     pcVar6 = ovr_agnt_statusText(agntRec,(char far *)MK_FP(_SS,&text2),(uint16_t)GSavedBlitSeg);
-    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,(char)agntSeg,ptrLo,0,0,0,0,0);
-    pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c0a,_SS),
-                           (char *)CONCAT13((char)((uint)bufPtr >> 8),CONCAT12((char)bufPtr,0x2410))
-                           ,(char)bufPtr,(char)agntSeg);
+    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6);
+    pcVar6 = ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5c0a),bufPtr);
     ovr_uiNotify(pcVar6,agntSeg,(char)agntSeg);
     emptyFunction();
     return;
@@ -977,7 +975,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
       segLo = (undefined1)agntSeg;
       ptrLo = SUB21(pcVar6,0);
       pcVar6 = ovr_agnt_statusText(agntRec,(char far *)MK_FP(_SS,&text2),(uint16_t)GSavedBlitSeg);
-      bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,agntSeg,ptrLo,segLo,blitSegLo,0,0,0);
+      bufPtr = ovr_ovc15_usesStshRealloc(pcVar6);
       pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,_SS),
                              (char *)CONCAT22(bufPtr,(char *)0x26510),agntSeg);
       ovr_uiNotify(pcVar6,agntSeg,(char)agntSeg);
@@ -994,7 +992,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     segLo = (undefined1)agntSeg;
     ptrLo = SUB21(pcVar6,0);
     pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text2,agntIndex),(uint16_t)GSavedBlitSeg);
-    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,agntSeg,ptrLo,segLo,blitSegLo,0,0,0);
+    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6);
     pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c44,_SS),
                            (char *)CONCAT22(bufPtr,(char *)0x26510),agntSeg);
     ovr_uiNotify(pcVar6,agntSeg,(char)agntSeg);
@@ -1018,7 +1016,7 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     segLo = (undefined1)agntSeg;
     ptrLo = SUB21(pcVar6,0);
     pcVar6 = ovr_agnt_statusText(agntRec,(char far *)MK_FP(_SS,&text2),(uint16_t)GSavedBlitSeg);
-    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,agntSeg,ptrLo,segLo,blitSegLo,0,0,0);
+    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6);
     pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,_SS),
                            (char *)CONCAT22(bufPtr,(char *)0x26510),agntSeg);
     ovr_uiNotify(pcVar6,agntSeg,(char)agntSeg);
