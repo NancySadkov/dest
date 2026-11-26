@@ -168,22 +168,22 @@ undefined1 __cdecl16far ovc30_compute1(byte level)
 uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
 
 {
-  uint16_t uVar1;
-  uint uVar2;
-  uint16_t uVar3;
-  far_t far *pfVar4;
+  uint16_t labelWord;
+  uint newIdx;
+  uint16_t genderRoll;
+  far_t far *ringText;
   uint in_DX;
   byte partyIndex;
   uint count;
   char_sheet_t *sheet;
-  uint uStack_4;
+  uint sheetSeg;
   
   count = 0;
   while ((count < GLeaderCount && ((GLeaderSheets[count])->statMask != '\0'))) {
     count = count + 1;
   }
   if (count < GLeaderCount) {
-    uStack_4 = ((uint16_t *)(count * 4))[1];
+    sheetSeg = ((uint16_t *)(count * 4))[1];
     sheet = (char_sheet_t *)*(uint16_t *)(count * 4);
   }
   else {
@@ -196,18 +196,18 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
     }
     sheet = ovr_stshAlloc(0xae);
     count = (uint)GLeaderCount;
-    uVar2 = (uint)GLeaderCount;
-    ((uint16_t *)(uVar2 * 4))[1] = in_DX;
-    *(uint16_t *)(uVar2 * 4) = (uint16_t)sheet;   /* hand fix: store of the far pointer's offset half */
+    newIdx = (uint)GLeaderCount;
+    ((uint16_t *)(newIdx * 4))[1] = in_DX;
+    *(uint16_t *)(newIdx * 4) = (uint16_t)sheet;   /* hand fix: store of the far pointer's offset half */
     GLeaderCount = GLeaderCount + 1;
-    uStack_4 = in_DX;
+    sheetSeg = in_DX;
   }
-  _fmemset(MK_FP(uStack_4, (uint16_t)sheet), 0, 0xae);
+  _fmemset(MK_FP(sheetSeg, (uint16_t)sheet), 0, 0xae);
   partyIndex = (byte)count;
-  uVar1 = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + (uint)gindex * 0x95);
-  strcpy((char *)CONCAT22(uStack_4,sheet),
-         (char *)CONCAT13((char)((uint)uVar1 >> 8),
-                          CONCAT12((char)uVar1,
+  labelWord = *(uint16_t *)((int)&worldMenuLabels[1].ofs + 1 + (uint)gindex * 0x95);
+  strcpy((char *)CONCAT22(sheetSeg,sheet),
+         (char *)CONCAT13((char)((uint)labelWord >> 8),
+                          CONCAT12((char)labelWord,
                                    *(uint16_t *)
                                     ((int)&worldMenuLabels[0].seg + 1 + (uint)gindex * 0x95))));
   sheet->active = 1;
@@ -216,9 +216,9 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
   sheet->classStr = gindex;
   sheet->cls = 0xff;
   sheet->race = 3;
-  uVar3 = ovr_randBelow(1,0);
-  sheet->gender = (byte)uVar3;
-  ovr_manage_rollStats(sheet,(char)uStack_4);
+  genderRoll = ovr_randBelow(1,0);
+  sheet->gender = (byte)genderRoll;
+  ovr_manage_rollStats(sheet,(char)sheetSeg);
   if (*(char *)((int)&worldMenuLabels[0xc].seg + (uint)gindex * 0x95) != -1) {
     sheet->stats[1] = *(byte *)((int)&worldMenuLabels[0xc].seg + (uint)gindex * 0x95);
   }
@@ -234,8 +234,8 @@ uint __cdecl16far ovc30_createLeader(byte gindex,uint16_t x,uint16_t y)
   *(uint16_t *)((int)&sheet->gold + 2) = 0;
   *(uint16_t *)&sheet->gold = 100;
   sheet->partySlot = 0xff;
-  pfVar4 = ovr_ovc22_textRingProt(partyIndex);
-  return CONCAT11((char)((uint)pfVar4 >> 8),partyIndex);
+  ringText = ovr_ovc22_textRingProt(partyIndex);
+  return CONCAT11((char)((uint)ringText >> 8),partyIndex);
 }
 
 

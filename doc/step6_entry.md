@@ -14134,3 +14134,49 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (47 runs, sum|delta| 193,093, mean 122, worst 14,562)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### ovc30_createLeader, ovc49_usesFrameIndex and main (35,954 -> 35,886)
+ovc30_createLeader, ovc49_usesFrameIndex and main (35,954 -> 35,886)
+
+ovc30_createLeader (72 lines)
+    uVar1    171, 207, 209, 210  the word read from worldMenuLabels -> labelWord  (4)
+    uVar2    172, 199..201       (uint)GLeaderCount, the new slot    -> newIdx     (4)
+    uVar3    173, 219, 220       ovr_randBelow(1,0)                 -> genderRoll (3)
+    pfVar4   174, 237, 238       ovr_ovc22_textRingProt's result     -> ringText   (3)
+    uStack_4 179, 186, 203, 205, 208, 221  the new sheet's segment  -> sheetSeg   (6)
+    in_DX    left: the ABI register ovr_stshAlloc returns the segment in
+
+ovc49_usesFrameIndex (98 lines)
+    paVar6  22, 31..59, 77   `paVar6 = (agnt_t far *)agnt;` a no-op alias -> removed (14 uses)
+    piVar7  23, 38..40       (int *)(frames + frameIndex * 4)           -> framePtr (4)
+    iVar3   19, 40, 51, 58   *piVar7, the frame data offset             -> frameOfs (4)
+    iVar5   21, 37           framePtr[1], the frames pointer's high word,
+                             never read before being overwritten        -> frameSeg (2)
+    iVar5   79..98           row + radius * side, the candidate row      -> testRow  (13)
+    uVar2   18, 35           *(uint16_t *)((int)&agnt->frames + 2), one
+                             assignment and no read                     -> removed
+
+    The first attempt renamed every `iVar5` to `frameSeg`, which was wrong for the thirteen
+    uses from line 79 on - those are the candidate row compared against AgntArrayA/B.  The
+    split is keyed on the assignment that starts the second role
+    (`frameSeg = row + radius * side;`), and the correction was applied and re-measured
+    before the build.  The dead-looking store at 37 is kept and named `frameSeg` rather than
+    dropped, so that a lost use would stay visible.
+
+main (311 lines)
+    psVar5  19, 31..40   `psVar5 = (str_t *)argv;` a no-op alias          -> removed (3 uses)
+    bVar1   99, 100, 101, 107, 109  the 0..4 menu slot from a function key -> slot      (6)
+    bVar2   218 (twice)  ovr_ovc15_usesAlignUp42's result                 -> battleFlag (3)
+    uVar3   44, 45       ovr_run_demo's result                            -> demoResult (3)
+
+MEASURED (HEAD 9cf744b6 -> this commit)
+
+  grep_checks              35,954 -> 35,886 (-68)
+  compare_runtime             10 -> 9 different, 1,620 -> 1,621 identical
+  compare_state            1,627/0/0 unchanged
+  diff_dgroup              1,581/1,805, 47 runs, sum|delta| 193,093 (unchanged)
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+The runtime change is incidental, not the point of the commit: `_doserrno` left the
+DIFFERENT list (it now reads 0 on both sides).  The eight remaining entries plus
+`_StartTime` are the CRT/timestamp state recorded in doc/step6_entry.md.

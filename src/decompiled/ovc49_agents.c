@@ -15,12 +15,11 @@ undefined1 __cdecl16far ovc49_usesFrameIndex(agnt_t far *agnt,byte *out)
 
 {
   uint8_t faction;
-  uint16_t uVar2;
-  int iVar3;
+  int frameOfs;
   bool ok;
-  int iVar5;
-  agnt_t far *paVar6;
-  int *piVar7;
+  int frameSeg;
+  int testRow;
+  int *framePtr;
   char side;
   char step;
   int xEnd;
@@ -28,38 +27,36 @@ undefined1 __cdecl16far ovc49_usesFrameIndex(agnt_t far *agnt,byte *out)
   int radius;
   int row;
   
-  paVar6 = (agnt_t far *)agnt;
-  if (((agntG_t far *)paVar6->gdata)->extents[1][1] == 0) {
+  if (((agntG_t far *)agnt->gdata)->extents[1][1] == 0) {
     *out = 0;
   }
   else {
-    faction = paVar6->faction;
-    uVar2 = *(uint16_t *)((int)&paVar6->frames + 2);
-    piVar7 = (int *)(*(int *)&paVar6->frames + (uint)paVar6->frameIndex * 4);
-    iVar5 = piVar7[1];
-    iVar3 = *piVar7;
-    row = (int)paVar6->y >> 1;
+    faction = agnt->faction;
+    framePtr = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
+    frameSeg = framePtr[1];
+    frameOfs = *framePtr;
+    row = (int)agnt->y >> 1;
     if (row < 0) {
       row = 0;
     }
     if (9 < row) {
       row = 9;
     }
-    if (paVar6->level == 0x0) {
+    if (agnt->level == 0x0) {
       step = '\x01';
-      x = ((int)((int)(*(((agntG_t far *)paVar6->gdata)->extents + 1))[0] +
-                        *(int *)(iVar3 + 0x17) + agnt->x) >> 1) + -1;
+      x = ((int)((int)(*(((agntG_t far *)agnt->gdata)->extents + 1))[0] +
+                        *(int *)(frameOfs + 0x17) + agnt->x) >> 1) + -1;
       xEnd = x +
-                 ((int)((agntG_t far *)paVar6->gdata)->extents[1][1] -
-                  (int)(*(((agntG_t far *)paVar6->gdata)->extents + 1))[0] >> 1);
+                 ((int)((agntG_t far *)agnt->gdata)->extents[1][1] -
+                  (int)(*(((agntG_t far *)agnt->gdata)->extents + 1))[0] >> 1);
     }
     else {
       step = -1;
-      x = ((int)((-*(int *)(iVar3 + 0x17) -
-                        (int)(*(((agntG_t far *)paVar6->gdata)->extents + 1))[0]) + agnt->x) >> 1) + 1;
+      x = ((int)((-*(int *)(frameOfs + 0x17) -
+                        (int)(*(((agntG_t far *)agnt->gdata)->extents + 1))[0]) + agnt->x) >> 1) + 1;
       xEnd = x -
-                 ((int)((agntG_t far *)paVar6->gdata)->extents[1][1] -
-                  (int)(*(((agntG_t far *)paVar6->gdata)->extents + 1))[0] >> 1);
+                 ((int)((agntG_t far *)agnt->gdata)->extents[1][1] -
+                  (int)(*(((agntG_t far *)agnt->gdata)->extents + 1))[0] >> 1);
     }
     if (x < 0) {
       x = 0;
@@ -74,30 +71,30 @@ undefined1 __cdecl16far ovc49_usesFrameIndex(agnt_t far *agnt,byte *out)
       xEnd = 0x68;
     }
     for (; x != xEnd; x = x + step) {
-      for (radius = 0; radius <= (int)((agntG_t far *)paVar6->gdata)->extents[1][2] >> 1;
+      for (radius = 0; radius <= (int)((agntG_t far *)agnt->gdata)->extents[1][2] >> 1;
           radius = radius + 1) {
         side = -1;
         while (((side < '\x02' && (radius != 0)) || ((side == -1 && (radius == 0))))) {
-          iVar5 = row + radius * side;
-          if ((-1 < iVar5) && (iVar5 < 10)) {
-            if ((AgntArrayA[iVar5][x] != '\0') &&
-               (((AgntArrayA[iVar5][x] <= AgntCount &&
-                 (Agnts[AgntArrayA[iVar5][x] - 1].faction !=
+          testRow = row + radius * side;
+          if ((-1 < testRow) && (testRow < 10)) {
+            if ((AgntArrayA[testRow][x] != '\0') &&
+               (((AgntArrayA[testRow][x] <= AgntCount &&
+                 (Agnts[AgntArrayA[testRow][x] - 1].faction !=
                   faction)) &&
-                (Agnts[AgntArrayA[iVar5][x] - 1].combatState == '\0')
+                (Agnts[AgntArrayA[testRow][x] - 1].combatState == '\0')
                 ))) {
-              *out = AgntArrayA[iVar5][x];
+              *out = AgntArrayA[testRow][x];
               ok = ovr_agnt_compute4((char *)out);
               if (ok) {
                 return *out;
               }
             }
-            if (((AgntArrayB[iVar5][x] != '\0') &&
-                (AgntArrayB[iVar5][x] <= AgntCount)) &&
-               ((Agnts[AgntArrayB[iVar5][x] - 1].faction != faction
-                && (Agnts[AgntArrayB[iVar5][x] - 1].combatState ==
+            if (((AgntArrayB[testRow][x] != '\0') &&
+                (AgntArrayB[testRow][x] <= AgntCount)) &&
+               ((Agnts[AgntArrayB[testRow][x] - 1].faction != faction
+                && (Agnts[AgntArrayB[testRow][x] - 1].combatState ==
                     '\0')))) {
-              *out = AgntArrayB[iVar5][x];
+              *out = AgntArrayB[testRow][x];
               return *out;
             }
           }

@@ -12,11 +12,10 @@
 int __cdecl16far main(int argc,str_t *argv,str_t *envp)
 
 {
-  byte bVar1;
-  bool bVar2;
-  uint uVar3;
+  byte slot;
+  bool battleFlag;
+  uint demoResult;
   uint16_t key;
-  str_t *psVar5;
   byte keyByte;
 
   /* Far-pointer tables initialised with the original image link-time DGROUP must be
@@ -28,21 +27,20 @@ int __cdecl16far main(int argc,str_t *argv,str_t *envp)
    *   CMP word [BP+6],2                                      -> argc
    *   LES BX,[BP+8] ; MOV AX,ES:[BX+6] ; MOV DX,ES:[BX+4]     -> argv[1]
    * so the second argument is argv (not envp), and the count is argc. */
-  psVar5 = (str_t *)argv;
-  GGameExe.seg = psVar5->seg;
+  GGameExe.seg = argv->seg;
   GGameExe.ofs = (uint16_t)argv->ptr;
   if (argc < 2) {
     GExeArg.seg = _DS;
     GExeArg.ofs = 0x94;
   }
   else {
-    GExeArg.seg = psVar5[1].seg;
-    GExeArg.ofs = (uint16_t)(psVar5 + 1)->ptr;
+    GExeArg.seg = argv[1].seg;
+    GExeArg.ofs = (uint16_t)(argv + 1)->ptr;
   }
   ovr_init_game();
   do {
-    uVar3 = ovr_run_demo();
-  } while ((uVar3 & 0xff) == 0);
+    demoResult = ovr_run_demo();
+  } while ((demoResult & 0xff) == 0);
   suppressLoadError = 1;
   ovr_save_loadGameFile();
   suppressLoadError = 0;
@@ -96,17 +94,17 @@ L_main_081F:
           if (key == 0x433) {
 L_main_0532:
             keyByte = (byte)key;
-            bVar1 = (keyByte & 0xf) - 1;
-            if (((uint8_t *)MenuItemEnabled)[bVar1] != 0xff) {
-              if ((GMenuItem == bVar1) && (MenuMode == '\x01')) {
+            slot = (keyByte & 0xf) - 1;
+            if (((uint8_t *)MenuItemEnabled)[slot] != 0xff) {
+              if ((GMenuItem == slot) && (MenuMode == '\x01')) {
                 MenuMode = '\x02';
               }
               else {
                 MenuMode = '\x01';
               }
-              GMenuItem = bVar1;
+              GMenuItem = slot;
               if (MenuMode == '\x02') {
-                ovr_attact_updateAttractEntry((uint)bVar1,1);
+                ovr_attact_updateAttractEntry((uint)slot,1);
               }
               ovr_draw_toolbarLabels();
               ovr_draw_textTalkwin9Lbm();
@@ -215,7 +213,7 @@ L_main_0780:
     }
     else if (key < 0x4801) {
       if (key == 0x3920) {
-        if ((GOngoingBattle == '\0') && (bVar2 = ovr_ovc15_usesAlignUp42(), bVar2)) {
+        if ((GOngoingBattle == '\0') && (battleFlag = ovr_ovc15_usesAlignUp42(), battleFlag)) {
           ovr_drawTextAt((char *)"Sorry, you may not pass time during a battle.",0x2410,0xa000);
         }
         else {
