@@ -4404,12 +4404,11 @@ ovc22_searchCellsAround(uint *xPtr,uint *yPtr,byte yOutOfs,byte yOutSeg,char par
 uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
 
 {
-  byte bVar1;
+  byte classStr;
   uint bldType;
   uint16_t roll;
-  int iVar4;
-  int sheetBase;
-  uint16_t sheetSeg;
+  int goldHi;
+  int classId;
   
   if ((((GLeaderSheets[partyIndex])->flags5d & 2) == 0) ||
      (((GLeaderSheets[partyIndex])->flags5d & 4) == 0)) {
@@ -4417,27 +4416,21 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
       bldType = ovc22_usesGUnitGrid2(x,y,partyIndex);
       if ((*(uint *)((uint8_t *)&BuildingTypes[bldType] + 19) & 0x20) == 0) {
         if (((GLeaderSheets[partyIndex])->flags5d & 2) == 0) {
-          sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
-          iVar4 = (int)(uint32_t)GLeaderSheets[partyIndex];
-          if (*(int *)(iVar4 + 0x56) == 0 && *(int *)(iVar4 + 0x58) == 0) {
+          if ((int)(uint16_t)((GLeaderSheets[partyIndex])->gold) == 0 && (int)((GLeaderSheets[partyIndex])->gold >> 16) == 0) {
             bldType = 0;
           }
           else {
-            sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
-            iVar4 = (int)(uint32_t)GLeaderSheets[partyIndex];
             if ((GLeaderSheets[partyIndex])->foodProd <
-                (uint)(*(int *)(iVar4 + 0x4d) * 2 + *(int *)(iVar4 + 0x4d)) >> 2) {
+                (uint)((int)((GLeaderSheets[partyIndex])->population) * 2 + (int)((GLeaderSheets[partyIndex])->population)) >> 2) {
               bldType = 0;
             }
             else {
-              iVar4 = ovr_bldng_getClass(partyIndex);
-              bldType = ovr_bldng_usesRandBelow((byte)iVar4);
+              classId = ovr_bldng_getClass(partyIndex);
+              bldType = ovr_bldng_usesRandBelow((byte)classId);
               bldType = bldType & 0xff;
-              sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
-              sheetBase = (int)(uint32_t)GLeaderSheets[partyIndex];
-              iVar4 = *(int *)(sheetBase + 0x58);
-              if ((iVar4 < 0) ||
-                 ((iVar4 == 0 && (*(uint *)(sheetBase + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[bldType] + 23))))) {
+              goldHi = (int)((GLeaderSheets[partyIndex])->gold >> 16);
+              if ((goldHi < 0) ||
+                 ((goldHi == 0 && ((uint16_t)((GLeaderSheets[partyIndex])->gold) < *(uint *)((uint8_t *)&BuildingTypes[bldType] + 23))))) {
                 bldType = 0;
               }
             }
@@ -4471,14 +4464,12 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
             if ((roll & 0xff) == 0) {
               roll = ovr_randBelow(3,0);
               bldType = (roll & 0xff) + 0x2b;
-              sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
-              sheetBase = (int)(uint32_t)GLeaderSheets[partyIndex];
-              iVar4 = *(int *)(sheetBase + 0x58);
-              if (-1 < iVar4) {
-                if (iVar4 != 0) {
+              goldHi = (int)((GLeaderSheets[partyIndex])->gold >> 16);
+              if (-1 < goldHi) {
+                if (goldHi != 0) {
                   return bldType;
                 }
-                if (*(uint *)((uint8_t *)&BuildingTypes[bldType] + 23) <= *(uint *)(sheetBase + 0x56)) {
+                if (*(uint *)((uint8_t *)&BuildingTypes[bldType] + 23) <= (uint16_t)((GLeaderSheets[partyIndex])->gold)) {
                   return bldType;
                 }
               }
@@ -4487,28 +4478,24 @@ uint __cdecl16far ovc22_usesRandBelow(byte partyIndex,uint16_t x,uint16_t y)
             if ((roll & 0xff) == 0) {
               roll = ovr_randBelow(3,0);
               bldType = (roll & 0xff) + 0xec;
-              sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
-              sheetBase = (int)(uint32_t)GLeaderSheets[partyIndex];
-              iVar4 = *(int *)(sheetBase + 0x58);
-              if (-1 < iVar4) {
-                if (iVar4 != 0) {
+              goldHi = (int)((GLeaderSheets[partyIndex])->gold >> 16);
+              if (-1 < goldHi) {
+                if (goldHi != 0) {
                   return bldType;
                 }
-                if (*(uint *)((uint8_t *)&BuildingTypes[bldType] + 23) <= *(uint *)(sheetBase + 0x56)) {
+                if (*(uint *)((uint8_t *)&BuildingTypes[bldType] + 23) <= (uint16_t)((GLeaderSheets[partyIndex])->gold)) {
                   return bldType;
                 }
               }
             }
-            bVar1 = (GLeaderSheets[partyIndex])->classStr;
+            classStr = (GLeaderSheets[partyIndex])->classStr;
             roll = ovr_randBelow(3,0);
             bldType = (roll & 0xff) +
-                    (uint)*(byte *)((int)&worldMenuLabels[0xb].ofs + 1 + (uint)bVar1 * 0x95);
-            sheetSeg = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
-            sheetBase = (int)(uint32_t)GLeaderSheets[partyIndex];
-            iVar4 = *(int *)(sheetBase + 0x58);
-            if ((iVar4 < 0) ||
-               ((iVar4 == 0 && (*(uint *)(sheetBase + 0x56) < *(uint *)((uint8_t *)&BuildingTypes[bldType] + 23))))) {
-              bldType = (uint)*(byte *)((int)&worldMenuLabels[0xb].ofs + 1 + (uint)bVar1 * 0x95);
+                    (uint)*(byte *)((int)&worldMenuLabels[0xb].ofs + 1 + (uint)classStr * 0x95);
+            goldHi = (int)((GLeaderSheets[partyIndex])->gold >> 16);
+            if ((goldHi < 0) ||
+               ((goldHi == 0 && ((uint16_t)((GLeaderSheets[partyIndex])->gold) < *(uint *)((uint8_t *)&BuildingTypes[bldType] + 23))))) {
+              bldType = (uint)*(byte *)((int)&worldMenuLabels[0xb].ofs + 1 + (uint)classStr * 0x95);
             }
           }
         }

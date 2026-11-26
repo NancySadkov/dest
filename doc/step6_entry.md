@@ -11969,3 +11969,30 @@ MEASURED - unchanged, as intended:
 
 STILL OPEN: 15 memcpy calls classified `ds` are left alone (their only segment is `_DS`
 or they pass plain DGROUP objects), plus the five CONCAT13 sites above.
+
+### ovc22_usesRandBelow: truncated leader sheet (37,824 -> 37,799)
+ovc22_usesRandBelow: the leader sheet was read through a truncated offset (37,824 -> 37,799)
+
+    iVar4 = (int)(uint32_t)GLeaderSheets[partyIndex];
+    if (*(int *)(iVar4 + 0x56) == 0 && *(int *)(iVar4 + 0x58) == 0)
+
+`GLeaderSheets[partyIndex]` is already a `char_sheet_t far *`; going through (uint32_t)
+then (int) keeps only the offset, so +0x56/+0x58 (the two halves of `gold`) and +0x4d
+(`population`) were read from DGROUP.  `sheetBase` was the same truncation repeated.
+
+The split comparisons are kept split - gold's low word unsigned, high word signed -
+because that is how a signed 32-bit compare is written with 16-bit registers:
+
+    (int)(uint16_t)((GLeaderSheets[partyIndex])->gold)
+    (int)((GLeaderSheets[partyIndex])->gold >> 16)
+
+Also removed: `sheetSeg`, assigned six times and never read.
+
+Names:
+  iVar4  -> goldHi  (the gold high word)
+  iVar4  -> classId (ovr_bldng_getClass result)
+  bVar1  -> classStr
+
+  grep_checks 37,824 -> 37,799; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different
