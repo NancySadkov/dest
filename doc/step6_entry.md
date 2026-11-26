@@ -12192,3 +12192,31 @@ No expression changed.
   grep_checks 37,676 -> 37,644; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
   compare_runtime 1,605 identical / 10 different
+
+### ovc39_textHalflingCastle: five severity levels (37,644 -> 37,590)
+ovc39_textHalflingCastle: five single-role severity levels (37,644 -> 37,590)
+
+Each `bStack_` byte is assigned 0..5 by exactly one comparison ladder and consumed a few
+lines later, so all five are single-role:
+
+  bStack_b  the 0..3 building-slot loop index                     -> slot            (7)
+  bStack_c  foodProd   ladder (source lines 241..270)             -> foodProdLevel   (11)
+  bStack_f  foodStored ladder (source lines 272..318)             -> foodStoredLevel (9)
+  bStack_e  housing    ladder (source lines 323..352)             -> housingLevel    (10)
+  bStack_d  income     ladder (source lines 354..387)             -> incomeLevel     (11)
+
+The names were taken from the field each ladder compares, not from the variable's
+position in the declaration list - and the two disagree: `bStack_f` sits *below*
+`bStack_c` yet measures `foodStored`, while `bStack_c` measures `foodProd`.  Reading the
+ladders rather than the order is what keeps those two from being swapped, and swapping
+them would have silently changed which archive entry is loaded (`foodProdLevel + 0x12`
+vs `foodStoredLevel + 0x17`).
+
+`slot` is the outer 0..3 loop over building slots; it is read in the four early-return
+guards (`slot == 0/1/2`) that pick a message per slot.
+
+No split was needed and no expression changed.
+
+  grep_checks 37,644 -> 37,590; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,615 symbols matched, 1,605 identical / 10 different

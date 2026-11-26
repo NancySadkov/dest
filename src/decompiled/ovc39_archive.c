@@ -130,11 +130,11 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   int rowOffset;
   int storedHi;
   static char msg[64];   /* DGROUP-backed formatting buffer */
-  byte bStack_f;
-  byte bStack_e;
-  byte bStack_d;
-  byte bStack_c;
-  byte bStack_b;
+  byte foodStoredLevel;
+  byte housingLevel;
+  byte incomeLevel;
+  byte foodProdLevel;
+  byte slot;
   byte unitType;
   byte unitBldType;
   uint seedAligned;
@@ -144,7 +144,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
   if ((partyIndex != 0xff) &&
      (*((char far *)GLeaderSheets[partyIndex] + 0x3f) == '\0')) {
     seedAligned = ovr_alignUp4(GfxRndSeed,0,0);
-    for (bStack_b = 0; bStack_b < 4; bStack_b = bStack_b + 1) {
+    for (slot = 0; slot < 4; slot = slot + 1) {
       for (rowOffset = -2; rowOffset < 2; rowOffset = rowOffset + 1) {
         recordIdx = ovr_ovc23_findRecordAt(seedAligned + rowOffset,GfxRndSeed2,(char)GfxRndSeed2);
         if (recordIdx == 0xffff) {
@@ -153,7 +153,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
           unitBldType = (units + unitIndex)->bldType;
           nameOfs = (char *)0x26510;
           unitType = units[unitIndex].unitType;
-          if ((((bStack_b == 0) &&
+          if ((((slot == 0) &&
                (nameOfs = (char *)0x2627a,
                *(char *)((int)*(uint32_t *)((uint)unitType << 2) + 0x3f) == '\0')) &&
               (0xf7 < unitIndex)) && (nameOfs = (char *)0x26510, units[unitIndex].level < 8)) {
@@ -175,7 +175,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             ovr_stshFree(handle);
             return;
           }
-          if (((bStack_b == 1) && (unitIndex < 0xf8)) &&
+          if (((slot == 1) && (unitIndex < 0xf8)) &&
              (nameOfs = (char *)&AgntAnms[0x88].missileDy,
              (BuildingTypes[unitBldType].flags2 & 2) != 0)) {
             archEntry = ovc39_loadArchiveEntry(10);
@@ -190,7 +190,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             ovr_stshFree(handle_00);
             return;
           }
-          if (((bStack_b == 2) && (unitIndex < 0xf8)) &&
+          if (((slot == 2) && (unitIndex < 0xf8)) &&
              (nameOfs = (char *)&AgntAnms[0x88].missileDy,
              (BuildingTypes[unitBldType].flags2 & 0x20) != 0)) {
             archEntry = ovc39_loadArchiveEntry(0xb);
@@ -205,7 +205,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             ovr_stshFree(handle_01);
             return;
           }
-          if ((bStack_b == 3) &&
+          if ((slot == 3) &&
              (nearFlag = ovr_ovc45_compute4(seedAligned + rowOffset,GfxRndSeed2,(char)GfxRndSeed2),
              (char)nearFlag != '\0')) {
             archEntry = ovc39_loadArchiveEntry(0xc);
@@ -220,7 +220,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             ovr_stshFree(handle_02);
             return;
           }
-          if (((bStack_b == 4) && (unitIndex < 0xf8)) &&
+          if (((slot == 4) && (unitIndex < 0xf8)) &&
              (nameOfs = (char *)&AgntAnms[0x88].missileDy,
              (BuildingTypes[unitBldType].flags2 & 0x400) != 0)) {
             archEntry = ovc39_loadArchiveEntry(0xd);
@@ -248,26 +248,26 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
               (GLeaderSheets[partyIndex])->population >> 1) {
             if ((GLeaderSheets[partyIndex])->foodProd <
                 (GLeaderSheets[partyIndex])->population >> 2) {
-              bStack_c = 5;
+              foodProdLevel = 5;
             }
             else {
-              bStack_c = 4;
+              foodProdLevel = 4;
             }
           }
           else {
-            bStack_c = 3;
+            foodProdLevel = 3;
           }
         }
         else {
-          bStack_c = 2;
+          foodProdLevel = 2;
         }
       }
       else {
-        bStack_c = 1;
+        foodProdLevel = 1;
       }
     }
     else {
-      bStack_c = 0;
+      foodProdLevel = 0;
     }
     storedHi = (int)((GLeaderSheets[partyIndex])->foodStored >> 16);
     if ((storedHi < 0) ||
@@ -296,29 +296,29 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
                 ((uint16_t)(GLeaderSheets[partyIndex])->foodStored <
                  (uint)((GLeaderSheets[partyIndex])->population * 0x14) >> 2)))
                ) {
-              bStack_f = 5;
+              foodStoredLevel = 5;
             }
             else {
-              bStack_f = 4;
+              foodStoredLevel = 4;
             }
           }
           else {
-            bStack_f = 3;
+            foodStoredLevel = 3;
           }
         }
         else {
-          bStack_f = 2;
+          foodStoredLevel = 2;
         }
       }
       else {
-        bStack_f = 1;
+        foodStoredLevel = 1;
       }
     }
     else {
-      bStack_f = 0;
+      foodStoredLevel = 0;
     }
-    if (bStack_f < bStack_c) {
-      bStack_c = bStack_f;
+    if (foodStoredLevel < foodProdLevel) {
+      foodProdLevel = foodStoredLevel;
     }
     if ((GLeaderSheets[partyIndex])->housing <
         (uint)((int)(GLeaderSheets[partyIndex])->population * 2 + (int)(GLeaderSheets[partyIndex])->population) >> 1) {
@@ -330,26 +330,26 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
               (GLeaderSheets[partyIndex])->population >> 1) {
             if ((GLeaderSheets[partyIndex])->housing <
                 (GLeaderSheets[partyIndex])->population >> 2) {
-              bStack_e = 5;
+              housingLevel = 5;
             }
             else {
-              bStack_e = 4;
+              housingLevel = 4;
             }
           }
           else {
-            bStack_e = 3;
+            housingLevel = 3;
           }
         }
         else {
-          bStack_e = 2;
+          housingLevel = 2;
         }
       }
       else {
-        bStack_e = 1;
+        housingLevel = 1;
       }
     }
     else {
-      bStack_e = 0;
+      housingLevel = 0;
     }
     nameOfs = (char *)0x2627a;
     if ((uint)(GLeaderSheets[partyIndex])->income <
@@ -364,37 +364,37 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
             nameOfs = (char *)0x2627a;
             if ((uint)(GLeaderSheets[partyIndex])->income <
                 (uint)-(GLeaderSheets[partyIndex])->population) {
-              bStack_d = 5;
+              incomeLevel = 5;
             }
             else {
-              bStack_d = 4;
+              incomeLevel = 4;
             }
           }
           else {
-            bStack_d = 3;
+            incomeLevel = 3;
           }
         }
         else {
-          bStack_d = 2;
+          incomeLevel = 2;
         }
       }
       else {
-        bStack_d = 1;
+        incomeLevel = 1;
       }
     }
     else {
-      bStack_d = 0;
+      incomeLevel = 0;
     }
-    if (((bStack_c == 0) || (bStack_c < bStack_e)) || (bStack_c < bStack_d)) {
-      if ((bStack_e == 0) || (bStack_e < bStack_d)) {
-        if (bStack_d == 0) {
+    if (((foodProdLevel == 0) || (foodProdLevel < housingLevel)) || (foodProdLevel < incomeLevel)) {
+      if ((housingLevel == 0) || (housingLevel < incomeLevel)) {
+        if (incomeLevel == 0) {
           textPtr = ovc39_lordOrLady();
           textPtr = ovr_stsprintf(msg,(char *)CONCAT22(msgFormat.ofs,_SS),
                                  (char *)CONCAT22(textPtr,msgFormat.seg),(char)nameOfs);
           ovr_drawString(textPtr,(uint16_t)nameOfs,(char)nameOfs);
         }
         else {
-          archEntry = ovc39_loadArchiveEntry(bStack_d + 0x17);
+          archEntry = ovc39_loadArchiveEntry(incomeLevel + 0x17);
           name = nameOfs;
           textPtr = ovc39_lordOrLady();
           textPtr = ovr_stsprintf(msg,(char *)CONCAT22(archEntry,_SS),
@@ -407,7 +407,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
         }
       }
       else {
-        archEntry = ovc39_loadArchiveEntry(bStack_e + 0xd);
+        archEntry = ovc39_loadArchiveEntry(housingLevel + 0xd);
         name = nameOfs;
         textPtr = ovc39_lordOrLady();
         textPtr = ovr_stsprintf(msg,(char *)CONCAT22(archEntry,_SS),
@@ -420,7 +420,7 @@ void __cdecl16far ovc39_textHalflingCastle(byte partyIndex)
       }
     }
     else {
-      archEntry = ovc39_loadArchiveEntry(bStack_c + 0x12);
+      archEntry = ovc39_loadArchiveEntry(foodProdLevel + 0x12);
       name = nameOfs;
       textPtr = ovc39_lordOrLady();
       textPtr = ovr_stsprintf(msg,(char *)CONCAT22(archEntry,_SS),
