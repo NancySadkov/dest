@@ -10399,3 +10399,38 @@ three more fixes: entities far pointer, GUnitGrid2 locals, spellNotice target re
   grep_checks 39,106 -> 39,078; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### ovc27_usesBlitGfxRect: sixteen target reads restored
+ovc27_usesBlitGfxRect: sixteen target reads restored to the Agnts segment
+
+    targetOfs = (uint)agnt->target * 0x34;
+    ... *(uint    *)(targetOfs + 0x26)
+        *(int     *)(targetOfs + 0x28)
+        *(int     *)(targetOfs + 0x13)
+        *(byte    *)(targetOfs + 0x12)
+
+`targetOfs` is an offset into the Agnts segment, so all sixteen reads went to DGROUP while the
+record lives in its own segment.  Field offsets from audit/symbols.tsv:
+
+    Agnts[0].screenX    +0x26
+    Agnts[0].screenY    +0x28
+    Agnts[0].frames     +0x13
+    Agnts[0].frameIndex +0x12
+
+Now written as `Agnts[agnt->target].screenX` / `.screenY` / `.frames` / `.frameIndex`, and the
+temporary is gone.  Verified in the emitted listing - the target record is loaded far and read
+through ES:
+
+    les  si,dword ptr [bp-8]
+    mov  ax,word ptr es:[si+38]      ; screenX (0x26)
+    sub  ax,word ptr [bx+19]
+
+`les` sites in the function: 22; screenY reads: 2 at es:[bx+40] (0x28).
+
+This is the third function in a row whose "garbled" body was really a truncated record pointer;
+the pattern is always `off = index * sizeof(rec)` followed by `*(T *)(off + field)`.
+
+  grep_checks 39,078 (unchanged - `targetOfs` is not a section-5 name)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different
