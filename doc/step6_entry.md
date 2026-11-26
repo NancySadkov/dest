@@ -9937,3 +9937,20 @@ Renaming only; no expression changed.
   grep_checks 39,630 -> 39,574; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### uiMainMenuLoop: saveCount / slotNo / uVar16 split (39,574 -> 39,495)
+uiMainMenuLoop: name saveCount / slotNo, split uVar16 (39,574 -> 39,495)
+
+  uVar15  saveui_readSavesList() result - incremented when a save is added, decremented
+          when one is deleted                                        -> saveCount  (28)
+  bVar5   (byte) of the selected slot, always used as `saves[slotNo - 1]`
+                                                                     -> slotNo     (30)
+  uVar16  loop index over `saves[]`                                  -> saveIndex  (8)
+  uVar16  a copy of saveCount, truncated with (char)/(byte) for display
+                                                                     -> lastIndex  (4)
+
+Renaming and one split; no expression changed.
+
+  grep_checks 39,574 -> 39,495; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
