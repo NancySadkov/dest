@@ -591,34 +591,34 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
   int iStack_c;
   int targetOfs;
   uint16_t uStack_8;
-  agnt_t far *paStack_6;
+  agnt_t far *agnt;
   uint16_t agntSeg;
   
-  paStack_6 = (agnt_t far *)&Agnts[agntIndex].x;
+  agnt = (agnt_t far *)&Agnts[agntIndex].x;
   agntSeg = SEG_OF(Agnts);
-  bVar1 = (byte)((uint)paStack_6 >> 8);
-  if ((((agntG_t far *)paStack_6->gdata)->flags & 0x803) == 0) {
+  bVar1 = (byte)((uint)agnt >> 8);
+  if ((((agntG_t far *)agnt->gdata)->flags & 0x803) == 0) {
     return (uint)bVar1 << 8;
   }
-  if (paStack_6->animFrame == 0xff) {
-    targetOfs = (uint)paStack_6->target * 0x34;
+  if (agnt->animFrame == 0xff) {
+    targetOfs = (uint)agnt->target * 0x34;
     uStack_8 = SEG_OF(Agnts);
     uVar11 = uStack_8;
     uStack_8 = SEG_OF(Agnts);
     uVar12 = uVar11;
-    if (((((((agntG_t far *)paStack_6->gdata)->flags & 0x1000) != 0) &&
-         (uVar12 = uStack_8, (Agnts[paStack_6->target].gdata->flags2 & 0x10) == 0))
-        && ((uStack_8 = uVar11, (Agnts[paStack_6->target].gdata->flags2 & 8) == 0
-            || (bVar1 = ovr_agnt_compute9(paStack_6,0), uVar12 = uStack_8, '\0' < (char)bVar1)))) &&
+    if (((((((agntG_t far *)agnt->gdata)->flags & 0x1000) != 0) &&
+         (uVar12 = uStack_8, (Agnts[agnt->target].gdata->flags2 & 0x10) == 0))
+        && ((uStack_8 = uVar11, (Agnts[agnt->target].gdata->flags2 & 8) == 0
+            || (bVar1 = ovr_agnt_compute9(agnt,0), uVar12 = uStack_8, '\0' < (char)bVar1)))) &&
        (uVar2 = ovr_randBelow(2,0), uVar12 = uStack_8, (uVar2 & 0xff) == 0)) {
       return 0;
     }
     uStack_8 = uVar12;
-    uVar3 = ovc27_usesRandBelow5((agnt_t far *)MK_FP(agntSeg,paStack_6));
+    uVar3 = ovc27_usesRandBelow5((agnt_t far *)MK_FP(agntSeg,agnt));
     variant = (byte)uVar3;
     uVar4 = uVar3 & 0xff;
     if (uVar4 == 0) {
-      ovr_agnt_usesAnimFrame(paStack_6);
+      ovr_agnt_usesAnimFrame(agnt);
       uVar4 = uVar4 & 0xff00;
     }
     else {
@@ -627,8 +627,8 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
       iVar5 = (uVar3 & 0xff) * 0x21;
       iVar6 = (uVar3 & 0xff) * 0x21;
       uVar2 = 0x90;
-      uVar12 = (uint16_t)((ulong)paStack_6->gdata >> 0x10);
-      paVar9 = (agntG_t far *)paStack_6->gdata;
+      uVar12 = (uint16_t)((ulong)agnt->gdata >> 0x10);
+      paVar9 = (agntG_t far *)agnt->gdata;
                     /* WARNING: Load size is inaccurate */
       puVar7 = ovr_ovc15_usesStshRealloc
                          (paVar9->name,*(uint16_t *)((int)&paVar9->name + 2),
@@ -638,25 +638,25 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
       msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5ba4,_SS),
                           (char *)CONCAT22(puVar7,(char *)0x26510),uVar2);
       ovr_uiNotify(msg,uVar2,0);
-      paStack_6->variant = variant;
+      agnt->variant = variant;
       if (*(char *)((uint)variant * 0x21 + -0x17) == '9') {
-        uVar3 = ovr_audio_panFromX(paStack_6,0);
+        uVar3 = ovr_audio_panFromX(agnt,0);
         lVar13 = (ulong)uVar3 << 0x10;
         uVar2 = ovr_randBelow(2,0);
         ovr_play_sfxU((char)uVar2 + 0x39,(int)lVar13,(uint16_t)((ulong)lVar13 >> 0x10),0,0);
       }
       else {
-        uVar2 = ovr_audio_panFromX(paStack_6,0);
+        uVar2 = ovr_audio_panFromX(agnt,0);
         ovr_play_sfxU(*(byte *)((uint)variant * 0x21 + -0x17),0,uVar2,0,0);
       }
       if (*(char *)((uint)variant * 0x21 + -0x16) == '\0') {
-        paStack_6->animFrame = 0xf5;
+        agnt->animFrame = 0xf5;
         uVar4 = 1;
       }
       else {
-        uVar11 = *(uint16_t *)((int)&paStack_6->frames + 2);
-        iStack_12 = CONCAT22(uVar11,*(int *)&paStack_6->frames);
-        piVar10 = (int *)(*(int *)&paStack_6->frames + (uint)paStack_6->frameIndex * 4);
+        uVar11 = *(uint16_t *)((int)&agnt->frames + 2);
+        iStack_12 = CONCAT22(uVar11,*(int *)&agnt->frames);
+        piVar10 = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
         iVar5 = piVar10[1];
         iVar6 = *piVar10;
         iStack_e = CONCAT22(iVar5,iVar6);
@@ -664,17 +664,17 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
                     /* WARNING: Subroutine does not return */
           ovr_stExit(0x42);
         }
-        paStack_6->animFrame = 0x0;
-        *(char *)&paStack_6->destY = *(char *)(iVar6 + 0x15) + (char)paStack_6->screenY;
-        if (paStack_6->level == 0x0) {
-          uVar2 = *(int *)(iVar6 + 0x13) + paStack_6->screenX;
-          paStack_6->destX = uVar2;
+        agnt->animFrame = 0x0;
+        *(char *)&agnt->destY = *(char *)(iVar6 + 0x15) + (char)agnt->screenY;
+        if (agnt->level == 0x0) {
+          uVar2 = *(int *)(iVar6 + 0x13) + agnt->screenX;
+          agnt->destX = uVar2;
         }
         else {
-          uVar2 = paStack_6->screenX - *(int *)(iVar6 + 0x13);
-          paStack_6->destX = uVar2;
+          uVar2 = agnt->screenX - *(int *)(iVar6 + 0x13);
+          agnt->destX = uVar2;
         }
-        *(uint8_t *)((int)&paStack_6->destY + 1) = paStack_6->level;
+        *(uint8_t *)((int)&agnt->destY + 1) = agnt->level;
         uVar4 = CONCAT11((char)(uVar2 >> 8),1);
       }
     }

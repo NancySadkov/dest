@@ -8894,3 +8894,23 @@ symbol, which is data work rather than an addressing fix.
   grep_checks 40,045 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### ovc27_spellNotice rename, and a correction about the Stack_ patterns
+ovc27_spellNotice: rename the agent pointer (32 uses); and a correction about the pattern
+
+`paStack_6` is `(agnt_t far *)&Agnts[agntIndex].x` - the agent this notice is about - and it is a
+single-role local used 32 times.  Renamed to `agnt`.  No name collision in the function (its only
+parameter is `agntIndex`).
+
+CORRECTION: I expected this to reduce a section-5 class and it does not.  The patterns are
+`p[iusc]Stack_` and `[iusc]Stack_`, i.e. `p` followed by one of i/u/s/c, or one of i/u/s/c followed by
+`Stack_`.  `paStack_6` is `p`+`a`+`Stack_`, and `a` is in neither character class, so this name was never
+counted.  grep_checks stayed at 40,045, which is the correct outcome and confirms the reading.
+
+That also means the `paStack_*` / `pbStack_*` / `pcStack_*` family throughout the tree is NOT part of the
+`Stack_` classes at all - only `p[iusc]Stack_*` (single character between `p` and `Stack_`) is.  Worth
+knowing before treating those names as gate-bearing.
+
+  grep_checks 40,045 (unchanged, as explained above); build 65/65 clean
+  LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
