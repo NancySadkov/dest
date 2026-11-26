@@ -13844,3 +13844,58 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### layout: the 0x5906 object and SeasonPalettes (235,338 -> 215,492)
+layout: the 0x5906 object and SeasonPalettes (235,338 -> 215,492)
+
+Three data defects, all found by reading the delta steps rather than guessing.
+
+## 0x5906 was declared in two pieces, one of them 0x600 bytes late
+
+The original has ONE object there (`s_intelligence_reports_s_attacking`, 68 bytes): the
+34-character "Intelligence reports %s attacking." string, four NUL bytes of padding, then a
+30-byte attack table.  We had
+
+  * `char s_intelligence_reports_s_a_eb5e[38]` at the right place - so the layout was 30
+    bytes SHORT from ditherPlane0 onward (the -30 step at 0x594a), and
+  * `undefined s_intelligence_rep_2410_5906[68]` declared ~0x600 bytes later in the 0x5E
+    block, which pushed every following symbol by +68 (the +68 step at 0x5EA3).
+
+It is now a single 68-byte initialiser at the right position, and the late duplicate is
+deleted.  Both steps disappear from the profile.
+
+## SeasonPalettes was 1 byte, the original has 135
+
+`undefined SeasonPalettes = 0x43;` against 135 bytes at 0x693b (45 RGB triples, 3 seasons x
+15 colours), and the three `paletteColor*` were single bytes against 3-byte RGB triples each
+(`0x22 0x24 0x3f`, `0x29 0x2c 0x3f`, `0x3f 0x00 0x00`).  That is the -134 step at
+paletteColorA.  Nothing in the tree references any of the four, so they are pure data and
+the sizes come straight from audit/dgroup_2410.bin.
+
+## TLINK truncates external identifiers at 32 characters - a real trap
+
+I first named the 0x5906 object `s_intelligence_reports_a_2410_5906` (34 characters).  The
+build and link both succeeded, but the name lost its suffix in the map:
+
+    _S_INTELLIGENCE_REPORTS_A_2410_59        <- truncated, no offset to pair on
+
+and compare_runtime dropped from 1,630 to 1,629 matched symbols, because its
+`OFS_%04X` pass only pairs an original offset with a *our* name that still ends in
+`_2410_<offset>`.  Renaming to the established short scheme
+(`s_intelligence_rep_2410_5906`, 28 characters) restored 1,630.  The general rule: our
+generated names must stay under 32 characters or the pairing silently degrades - and
+because it degrades a *measurement* rather than the build, nothing else catches it.
+
+MEASURED (HEAD fd2c5714 -> this commit)
+
+  diff_dgroup matched        1,581 -> 1,581   (unchanged)
+  diff_dgroup delta runs        64 ->    58   (-6)
+  diff_dgroup sum|delta|   235,338 -> 215,492 (-19,846)
+  diff_dgroup mean             148 ->   136
+  diff_dgroup worst         14,252 -> 14,354   (the single mis-paired _doserrno entry)
+  compare_state            1,627/0/0 unchanged
+  compare_runtime          1,630 matched, 1,620 identical / 10 different (restored)
+  grep_checks              36,184 -> 36,183
+  build 65/65, LINK.LOG 65 bytes / 0 problems
+
+Excluding the known `_doserrno` mis-pairing, sum|delta| is about 201,100.
