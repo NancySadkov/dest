@@ -11159,3 +11159,36 @@ MEASURED (HEAD 65ecb0fa -> 38,385)
   compare_runtime    1,604 identical / 10 different unchanged
 
 Layout and runtime are untouched because none of this changes DGROUP contents.
+
+### dgroup: StshFileName was at the string literal offset
+dgroup: StshFileName was at the string literal's offset (matched 1,449 -> 1,450, sum|delta| -18,469)
+
+diff_dgroup reported StshFileName at ours 0x2B06 against original 0x747E (-18,808).
+It was not a pairing artefact: the tree had
+
+    char StshFileName[] = "strong.dat";
+
+at the position of the string *literal* (the original keeps `s_strong.dat_2410_2a7c`
+there), while the original also has a separate StshFileName global at 0x747e.
+
+  * the 0x2a7c slot now holds `undefined1 s_strong_dat_2410_2a7c[11]` with the same
+    bytes, so that symbol matches at its own offset;
+  * `StshFileName` moved next to `s_empty_2410_747d`, i.e. between it and
+    StshFileSize, which is where the original has it.
+
+Also measured, and NOT changed: `_doserrno` (ours 0xC430, original 0x87E4, +15,436)
+is defined by the C runtime library, not by our tree - no st_globals declares it -
+so its offset is toolchain-determined and out of scope.
+
+One trap found: renaming `StshFileSizeVar` to its original name `StshFileSize` makes
+the compiler happy but breaks the link -
+
+    Error: _STSHFILESIZE defined in module GLOB5.C is duplicated in module O17.C
+
+because TLINK matches external symbols case-insensitively and `stshFilesize` is a
+function in ovc17_stash.c.  The rename was reverted; the `Var` suffix stays.
+
+  grep_checks 38,385 unchanged; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,450/1,868, 71 delta runs, sum|delta| 276,979 (was 295,448)
+  compare_runtime 1,605 identical / 10 different (was 1,604)

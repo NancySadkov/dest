@@ -453,8 +453,9 @@ far_t StshBuf = { 0x0, 0x0 };
 far_t FMRingBuf[8] = { { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 }, { 0x0, 0x0 },
      { 0x0, 0x0 }, { 0x0, 0x0 } };
 uint8_t FMRingIndex = 0x0;
-/* 2a7c: 11 bytes - the stash file name */
-char StshFileName[] = "strong.dat";
+/* 2a7c: 11 bytes - the stash file name as a string literal (the original has
+   the same text twice: this literal and the StshFileName global at 0x747e). */
+undefined1 s_strong_dat_2410_2a7c[11] = { 0x73, 0x74, 0x72, 0x6F, 0x6E, 0x67, 0x2E, 0x64, 0x61, 0x74, 0x00 };
 /* 2a87..4228: the resource filename table (generated from the original
    symbol table; each label body is the string and the next symbol's
    address gives the size).  s_build_clebath2_lbm at 0x4228 is 12 bytes
@@ -1667,6 +1668,7 @@ char s_if_you_lead_with_wisdom__bac4[] = "If you lead with wisdom and cunning...
 char s_if_you_fight_with_valor__377f[] = "If you fight with valor and guile...";
 char s_you_will_truly_be_master_74a8[] = "You will truly be master of your...";
 char s_empty_2410_747d[] = "";
+char StshFileName[] = "strong.dat";
 uint32_t StshFileSizeVar = 0x0;
 char s_getcache__d_SIZESTA_2410_748e[30] = "getcache %d  SIZESTASH %d  \r";
 undefined1 selectedPartyIndex = 0xFF;
