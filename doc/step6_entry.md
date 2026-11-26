@@ -10135,3 +10135,30 @@ Next deltas, measured and not yet attacked (all are layout, not naming):
   * `s__2410_0094` - our CRT-area data is 2,496 bytes LONGER than the original's;
   * `s_kill_3` - one symbol 4,766 bytes longer in ours (probably a wrong declared size);
   * `s_OK_2410_4f8f` -52, `s_Place_2410_5063` -38, `EntityScanPos` -6: short strings/locals.
+
+### ovc24_usesGLeaderCount: two near reads + seven locals (39,274 -> 39,229)
+ovc24_usesGLeaderCount: fix two near table reads and name the locals (39,274 -> 39,229)
+
+The function read the leader sheet through a NEAR pointer at two sites:
+
+    *(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f)
+
+while line 802 in the same expression already used the correct
+`*((char far *)GLeaderSheets[leaderIdx] + 0x3f)`.  Both are now the far form.
+
+Then seven locals:
+
+  uVar1 -> dist   (the dx/dy Manhattan expression, 9 uses)
+           entIdx (the EntityCount loop over Entities[], 5 uses)
+  uVar2 -> dy     (6)
+  uVar4 -> xSign  ((int)dist >> 0xf, 5)
+  uVar5 -> ySign  ((int)dy   >> 0xf, 4)
+  uVar6 -> entitiesSeg ((ulong)Entities >> 0x10, 2)
+           unitsSeg    ((ulong)GUnits   >> 0x10, 1)
+
+Verified after re-dumping the rebuilt image (tmp/dump_dgroup_stdout.py), since compare_runtime
+reads a stored DGR.BIN rather than the current EXE:
+
+  grep_checks 39,274 -> 39,229; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,447/1,868 (82 deltas)
+  compare_runtime 1,548 identical / 11 different

@@ -780,12 +780,14 @@ void __cdecl16far ovc24_usesLDIV_at_(int entityIndex)
 void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
 
 {
-  uint uVar1;
-  uint uVar2;
+  uint dist;
+  uint entIdx;
+  uint dy;
   byte leaderIdx;
-  uint uVar4;
-  uint uVar5;
-  uint16_t uVar6;
+  uint xSign;
+  uint ySign;
+  uint16_t entitiesSeg;
+  uint16_t unitsSeg;
   uint bestOtherDist;
   uint bestDist;
   byte bestOtherIdx;
@@ -796,19 +798,19 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
   bestOtherDist = 0xffff;
   bestSameIdx = 0xff;
   bestOtherIdx = 0xff;
-  if (*(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f) == '\0') {
+  if (*((char far *)GLeaderSheets[leaderIndex] + 0x3f) == '\0') {
     for (leaderIdx = 0; leaderIdx < GLeaderCount; leaderIdx = leaderIdx + 1) {
       if ((((GLeaderSheets[leaderIdx])->active != '\0') &&
           (*((char far *)GLeaderSheets[leaderIdx] + 0x3f) ==
-           *(char *)((int)*(uint32_t *)((uint)leaderIndex << 2) + 0x3f))) &&
-         (uVar1 = (GLeaderSheets[leaderIdx])->x -
+           *((char far *)GLeaderSheets[leaderIndex] + 0x3f))) &&
+         (dist = (GLeaderSheets[leaderIdx])->x -
                   (GLeaderSheets[leaderIndex])->x,
-         uVar4 = (int)uVar1 >> 0xf,
-         uVar2 = (GLeaderSheets[leaderIdx])->y -
+         xSign = (int)dist >> 0xf,
+         dy = (GLeaderSheets[leaderIdx])->y -
                  (GLeaderSheets[leaderIndex])->y,
-         uVar5 = (int)uVar2 >> 0xf, uVar1 = ((uVar1 ^ uVar4) - uVar4) + ((uVar2 ^ uVar5) - uVar5),
-         uVar1 < bestDist)) {
-        bestDist = uVar1;
+         ySign = (int)dy >> 0xf, dist = ((dist ^ xSign) - xSign) + ((dy ^ ySign) - ySign),
+         dist < bestDist)) {
+        bestDist = dist;
         bestSameIdx = leaderIdx;
       }
     }
@@ -817,30 +819,30 @@ void __cdecl16far ovc24_usesGLeaderCount(byte leaderIndex)
     for (leaderIdx = 0; leaderIdx < GLeaderCount; leaderIdx = leaderIdx + 1) {
       if ((((GLeaderSheets[leaderIdx])->active != '\0') &&
           (*((char far *)GLeaderSheets[leaderIdx] + 0x3f) == '\0')) &&
-         (uVar1 = (GLeaderSheets[leaderIdx])->x -
+         (dist = (GLeaderSheets[leaderIdx])->x -
                   (GLeaderSheets[leaderIndex])->x,
-         uVar4 = (int)uVar1 >> 0xf,
-         uVar2 = (GLeaderSheets[leaderIdx])->y -
+         xSign = (int)dist >> 0xf,
+         dy = (GLeaderSheets[leaderIdx])->y -
                  (GLeaderSheets[leaderIndex])->y,
-         uVar5 = (int)uVar2 >> 0xf,
-         uVar1 = ((uVar1 ^ uVar4) - uVar4) + ((uVar2 ^ uVar5) - uVar5) * 2, uVar1 < bestOtherDist)) {
-        bestOtherDist = uVar1;
+         ySign = (int)dy >> 0xf,
+         dist = ((dist ^ xSign) - xSign) + ((dy ^ ySign) - ySign) * 2, dist < bestOtherDist)) {
+        bestOtherDist = dist;
         bestOtherIdx = leaderIdx;
       }
     }
   }
-  for (uVar1 = 0; uVar1 < EntityCount; uVar1 = uVar1 + 1) {
-    uVar6 = (uint16_t)((ulong)Entities >> 0x10);
-    if ((AGNT_FIELD(&((entity_t *)Entities)[uVar1], base.entity, 3) == leaderIndex) &&
-       (AGNT_FIELD(&((entity_t *)Entities)[uVar1], base.entity, 3) = bestSameIdx, bestOtherIdx != 0xff)) {
-      ((entity_t *)Entities)[uVar1].base.destX =
+  for (entIdx = 0; entIdx < EntityCount; entIdx = entIdx + 1) {
+    entitiesSeg = (uint16_t)((ulong)Entities >> 0x10);
+    if ((AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) == leaderIndex) &&
+       (AGNT_FIELD(&((entity_t *)Entities)[entIdx], base.entity, 3) = bestSameIdx, bestOtherIdx != 0xff)) {
+      ((entity_t *)Entities)[entIdx].base.destX =
            (GLeaderSheets[bestOtherIdx])->x;
-      ((entity_t *)Entities)[uVar1].base.destY =
+      ((entity_t *)Entities)[entIdx].base.destY =
            (GLeaderSheets[bestOtherIdx])->y;
     }
   }
   for (unitIdx = 0xf8; unitIdx < GUnitCount; unitIdx = unitIdx + 1) {
-    uVar6 = (uint16_t)((ulong)GUnits >> 0x10);
+    unitsSeg = (uint16_t)((ulong)GUnits >> 0x10);
     if (((unit_t *)GUnits)[unitIdx].unitType == leaderIndex) {
       ((unit_t *)GUnits)[unitIdx].unitType = 0xff;
     }
