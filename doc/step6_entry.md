@@ -12413,3 +12413,51 @@ prints "Bad 'game.cfg' file. Please reconfigure." (106 bytes) because the synthe
 strong.sav/game.cfg the harness writes ("111") is not a complete config; the rebuilt image
 stops before writing anything.  Both need a real game.cfg, which the repository does not
 contain (game/STRONG.SAV is a 1-byte file, not the directory the game expects).
+
+### fix: _streams near self-pointers corrupted DGROUP:0x0201 at the first printf
+fix: `_streams` carried the original image's near self-pointers, and printf wrote through them
+
+The `_streams[20]` initialiser was byte-copied from the original DGROUP, so the last
+field of each entry still held the *original* address of that same entry:
+
+    entry 0   0x8626  (-31194 as int16_t)   = original &_streams[0]
+    entry 1   0x863A  (-31174)              = original &_streams[1]  (+0x14)
+    entry 2   0x864E  (-31154)
+    entry 3   0x8662  (-31134)
+    entry 4   0x8676  (-31114)
+
+In the rebuilt image `_streams` is at 0x8603, so every one of those pointed 0x23 bytes
+off, into the middle of the array - not at an entry boundary.
+
+HOW IT WAS FOUND, measured with the new _INIT_CFG sample point:
+
+    dump_at.py _INIT_STRONG_SAV   -> DGROUP:0x0201 "Fighter\0"      (clean)
+    dump_at.py _INIT_CFG          -> DGROUP:0x0201 51 00 c3 00 64... (corrupt)
+
+so the writer runs inside init_base.  Bisecting by patching routine entries with `retf`:
+
+    --skip GETCWD   -> still corrupt
+    --skip CLRSCR   -> still corrupt
+    --skip PRINTF   -> clean
+
+i.e. the first `printf` after startup was the trigger: that is when CM.LIB's stdio first
+walks `_streams`.  A full DGROUP diff between the two samples showed only 23 changed runs,
+of which the string was the only one not accounted for by init_cfg/init_paths.
+
+FIX: initialise the field with the address of the entry in *our* array:
+
+    { 0, 0x209, 0, 0, 0, 0, 0, 0, (int16_t)(uint16_t)&_streams[0] },
+    ...
+
+which is a link-time constant, so it costs no code and no data bytes.
+
+MEASURED at _INIT_CFG after the fix: DGROUP:0x0201 is "Fighter\0" again, and
+compare_runtime's DIFFERENT list loses `s_Fighter_2410_0169`.  The remaining ten are all
+runtime-owned: `_StartTime`, `_brklvl`, `_exitbuf`, `_exitfopen`, `_exitopen`, `_streams`,
+`_doserrno`, `_video`, `brk_normalize_xsize`, `__setargv_SavedReturn`.
+
+Layout-neutral, as expected for an initialiser value:
+
+  grep_checks 37,590 | compare_state 1,627/0/0
+  diff_dgroup 1,450/1,805, 68 runs, sum|delta| 229,747
+  compare_runtime (main entry) 1,615 matched, 1,605 identical / 10 different
