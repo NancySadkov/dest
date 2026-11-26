@@ -451,36 +451,36 @@ uint16_t __cdecl16far inputUpdate(ulong msg_delay)
 uint __cdecl16far font_usesMiceBlitRect(byte msgDelay)
 
 {
-  bool bVar1;
-  bool bVar2;
-  uint uVar3;
-  uint16_t uVar4;
+  bool blitted;
+  bool moreHousing;
+  uint result;
+  uint16_t inputResult;
   undefined1 extraout_AH;
-  undefined1 uVar5;
+  undefined1 retHi;
   undefined1 housing;
   
   rightButtonLatch = 0;
-  uVar3 = ovr_ovr_midGetSequenceStatus_entry();
-  if ((uVar3 & 0xff) == 0) {
+  result = ovr_ovr_midGetSequenceStatus_entry();
+  if ((result & 0xff) == 0) {
     (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
     (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs);
-    uVar4 = inputUpdate((ulong)msgDelay);
-    uVar3 = uVar4 & 0xff00;
+    inputResult = inputUpdate((ulong)msgDelay);
+    result = inputResult & 0xff00;
   }
   else {
     if (MiceNeedsUpdate == '\0') {
-      bVar1 = false;
+      blitted = false;
     }
     else {
       ovr_miceBlitRect((brect_t *)(BlitRects + 1),0);
-      bVar1 = true;
+      blitted = true;
     }
     do {
-      bVar2 = ovr_draw_textProvidesMoreHousing();
-    } while (bVar2);
+      moreHousing = ovr_draw_textProvidesMoreHousing();
+    } while (moreHousing);
     do {
-      uVar3 = ovr_ovr_midGetSequenceStatus_entry();
-      if ((char)uVar3 == '\0') break;
+      result = ovr_ovr_midGetSequenceStatus_entry();
+      if ((char)result == '\0') break;
       if ((*(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2) != InputEventTime.hi) ||
          (*(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) != InputEventTime.lo)) {
         InputEventTime.hi = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
@@ -488,15 +488,15 @@ uint __cdecl16far font_usesMiceBlitRect(byte msgDelay)
         ovr_draw_usesBlitLoadRleGfx();
       }
       housing = ovr_draw_textProvidesMoreHousing();
-      uVar3 = CONCAT11(extraout_AH,housing);
+      result = CONCAT11(extraout_AH,housing);
     } while (!(bool)housing);
-    uVar5 = (undefined1)(uVar3 >> 8);
-    if (bVar1) {
+    retHi = (undefined1)(result >> 8);
+    if (blitted) {
       ovr_miceRestoreArea((brect_t *)(BlitRects + 1),0);
     }
-    uVar3 = CONCAT11(uVar5,housing);
+    result = CONCAT11(retHi,housing);
   }
-  return uVar3;
+  return result;
 }
 
 

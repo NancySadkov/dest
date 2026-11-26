@@ -12090,3 +12090,18 @@ es:[bx+8] destX, es:[bx+10] destY, es:[bx+13] gindex, es:[bx+26] entity+3.
   grep_checks 37,766 unchanged; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
   compare_runtime 1,605 identical / 10 different
+
+### font_usesMiceBlitRect: result and blit flag (37,766 -> 37,743)
+font_usesMiceBlitRect: result, blit flag and three temporaries (37,766 -> 37,743)
+
+  bVar1    "miceBlitRect called" flag                 -> blitted     (4)
+  bVar2    ovr_draw_textProvidesMoreHousing() result  -> moreHousing (3)
+  uVar3    the value returned                         -> result      (10)
+  uVar4    inputUpdate(msgDelay) result               -> inputResult (3)
+  uVar5    (undefined1)(uVar3 >> 8), the high byte    -> retHi       (3)
+
+`housing` keeps its name - it is the same "more housing" flag on its second read.
+
+  grep_checks 37,766 -> 37,743; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different
