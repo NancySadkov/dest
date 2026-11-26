@@ -2852,30 +2852,35 @@ void __cdecl16far ovc22_usesGUnits(int unitIndex,uint8_t *outFlag)
 void __cdecl16far ovc22_usesLUDIV_at_(entity_t *entity)
 
 {
-  uint32_t uVar1;
-  uint uVar2;
-  uint uVar3;
+  char_sheet_t far *sheet;
+  uint partySlot;
+  uint lvlIdx;
   int *piVar4;
-  byte bStack_3;
-  
-  uVar2 = (uint)*(byte *)((int)&(entity->base).entity + 3);
-  uVar1 = *(uint32_t *)(uVar2 << 2);
-  uVar3 = *(byte *)((int)uVar1 + 0x52) + 1;
-  if ((entity->base).level < uVar3) {
-    uVar3 = (uint)(entity->base).level;
+  byte classId;
+
+  /* 0008-001D: the leader sheet for this slot.  The original loads it from a far-pointer array at
+     DGROUP-relative segment 0x70 - `mov ax,0x70 / mov es,ax / les bx,ptr es:[bx]` with
+     bx = partySlot*4 - which is GLeaderSheets.  The export read DS:partySlot*4 instead. */
+  partySlot = (uint)*(byte *)((int)&(entity->base).entity + 3);
+  sheet = GLeaderSheets[partySlot];
+  lvlIdx = *((uint8_t far *)sheet + 0x52) + 1;
+  if ((entity->base).level < lvlIdx) {
+    lvlIdx = (uint)(entity->base).level;
   }
-  if (0x24 < uVar3) {
-    uVar3 = 0x24;
+  if (0x24 < lvlIdx) {
+    lvlIdx = 0x24;
   }
-  uVar1 = *(uint32_t *)(uVar2 << 2);
-  bStack_3 = *(byte *)((int)uVar1 + 0x2f);
-  if (bStack_3 == 0xff) {
-    bStack_3 = 0;
+  /* 004B-005A: char_sheet_t.cls at +0x2f, with 0xff meaning "no class". */
+  classId = sheet->cls;
+  if (classId == 0xff) {
+    classId = 0;
   }
-  for (; (piVar4 = (int *)((uint)bStack_3 * 0x94 + uVar3 * 4), *piVar4 == 0 && piVar4[1] == 0 &&
-         (uVar3 != 0)); uVar3 = uVar3 - 1) {
+  /* The per-class table these two indices walk lives at segment 0x80 and stays a near read: no symbol
+     in the tree or in audit/symbols.tsv identifies that segment. */
+  for (; (piVar4 = (int *)((uint)classId * 0x94 + lvlIdx * 4), *piVar4 == 0 && piVar4[1] == 0 &&
+         (lvlIdx != 0)); lvlIdx = lvlIdx - 1) {
   }
-  piVar4 = (int *)((uint)bStack_3 * 0x94 + uVar3 * 4);
+  piVar4 = (int *)((uint)classId * 0x94 + lvlIdx * 4);
   LUDIV_at_(*piVar4,piVar4[1],0x1e,0);
   return;
 }

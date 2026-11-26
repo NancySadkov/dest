@@ -8272,3 +8272,59 @@ it is a separate bug of the same family and worth a pass of its own:
   grep_checks 40,099 -> 40,097; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### The near-table class: `*(uint32_t *)(X << 2)` is an array index, not an address (40,097 -> 40,071)
+
+`ovc22_usesLUDIV_at_` (`5087:18b6`) was the example.  The original:
+
+```
+0008  les bx, ptr [bp + 6]              ; the entity record
+000B  mov al, byte ptr es:[bx + 0x1a]   ; base.entity byte 3 = the party slot
+0013  mov bx, di / shl bx, 2            ; partySlot * 4
+0018  mov ax, 0x70 / mov es, ax         ; segment 0x70
+001D  les bx, ptr es:[bx]               ; far pointer at table[partySlot]
+0022  mov al, byte ptr es:[bx + 0x52]
+004B  mov bx, di / shl bx, 2            ; same slot again
+0050  mov ax, 0x70 / mov es, ax
+0055  les bx, ptr es:[bx]
+005A  mov al, byte ptr es:[bx + 0x2f]
+```
+
+The table is a far-pointer array at DGROUP-relative segment **0x70**, indexed by party slot, which is
+`extern char_sheet_t far *GLeaderSheets[80]`.  The export emitted `*(uint32_t *)(uVar2 << 2)` - a *near*
+read at DS offset `partySlot*4` - and then dereferenced the value it found there.  Now:
+
+```c
+partySlot = (uint)*(byte *)((int)&(entity->base).entity + 3);
+sheet = GLeaderSheets[partySlot];
+lvlIdx = *((uint8_t far *)sheet + 0x52) + 1;
+...
+classId = sheet->cls;                  /* char_sheet_t.cls at +0x2f, 0xff = none */
+```
+
+`+0x2f` is `char_sheet_t.cls`, playing exactly the role `agntG_t.shortName[3]` plays in
+`stats_usesAlignUp42`: a class index with a 0xff sentinel that indexes the 0x94-stride table.  `+0x52`
+sits inside `char_sheet_t.income` (a short at 0x52), so it stays an explicit byte offset rather than a
+field name.
+
+Emitted, matching the original's shape:
+
+```
+mov  al,byte ptr [bx+26]                        ; partySlot
+shl  bx,2
+mov  ax,word ptr DGROUP:_GLeaderSheets[bx+2]
+mov  dx,word ptr DGROUP:_GLeaderSheets[bx]
+les  bx,dword ptr [bp-4]
+mov  al,byte ptr es:[bx+82]                     ; 0x52
+```
+
+**The same shape elsewhere:** `grep '*(uint32_t *)(X << 2)' *.c` finds
+`ovc18_leaderview.c:72,73,898,1166` and `ovc20_stash.c:613,614,615,618`.  Those are the queue for this
+class.
+
+**Found, not changed:** the parameter is declared `entity_t *entity` (near) while the original does
+`les bx, ptr [bp + 6]` - `entity` is far.  That is a signature change and needs the callers read.
+
+  grep_checks 40,097 -> 40,071; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
