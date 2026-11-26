@@ -133,7 +133,6 @@ void __cdecl16far saveui_usesBlitLoadRleGfx2(far_t textTable,int rowIndex,int it
   far_t gfx;
   far_t gfx_00;
   uint16_t *puVar1;
-  uint16_t uVar2;
   far_t dst;
   far_t dst_00;
   
@@ -144,7 +143,6 @@ void __cdecl16far saveui_usesBlitLoadRleGfx2(far_t textTable,int rowIndex,int it
   ovr_blitLoadRleGfx(gfx,dst,0);
   TextBlitX = 0x2a;
   TextBlitY = rowIndex * 0xf + 0x1d;
-  uVar2 = textTable.seg;
   puVar1 = (uint16_t *)(textTable.ofs + (rowIndex + itemOffset) * 4);
   ovr_blitText((char *)*puVar1,(byte *)CONCAT22(Font03.ofs,(byte *)puVar1[1]),Font03.seg,0xde);
   ovr_ovc28_usesBDADailyTimeCounter(3);
@@ -232,15 +230,11 @@ void __cdecl16far saveui_usesBlitGfx10(far_t gfx,char *text,byte *widths,uint *c
   uint16_t in_stack_00000004;
   far_t dst;
   uint8_t rect;
-  int iStack_a;
-  int iStack_6;
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)&rect;
   F_SCOPY(far_from_u32((uint32_t)(0x241026ad)),dst,10);
   rect = *(uint *)CONCAT22((byte *)widths,(*(uint16_t *)((uint8_t *)&(text) + 2)));
-  iStack_a = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
-  iStack_6 = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x28;
   uVar1 = (*(uint16_t *)((uint8_t *)&(widths) + 2)) * 0xf + 0x1d;
   gfx_00.seg = gfx.ofs;
   gfx_00.ofs = in_stack_00000004;
@@ -1392,7 +1386,6 @@ void __cdecl16far uiMainMenuLoop(void)
   uint16_t beginMenuSeg;
   byte pmenuIdx;
   char yesno [9];
-  uint8_t yes_picked;
   
   far_t src;
 

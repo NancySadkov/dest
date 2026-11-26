@@ -688,69 +688,69 @@ uint __cdecl16far agnt_compute12(agnt_t far *a,agnt_t far *b,uint16_t arg3,uint1
 void __cdecl16far agnt_usesStExit(agnt_t far *agnt, anm_t far *anim, stg_tmp_t *sprite, uint16_t arg4, uint16_t arg5, uint16_t arg6, uint16_t arg7)
 
 {
-  int iVar1;
-  int iVar2;
-  int iVar3;
-  uint uVar4;
-  uint uVar5;
-  uint uVar6;
-  int *piVar7;
-  uint uStack_10;
+  int frameSeg;
+  int frameOfs;
+  uint8_t far *frameRec;
+  uint dx;
+  uint dyStep;
+  uint dxSign;
+  int *framePtr;
+  uint dy;
   
-  iVar3 = (uint)agnt->target * 0x34;
-  piVar7 = (int *)(*(int *)(iVar3 + 0x13) + (uint)*(byte *)(iVar3 + 0x12) * 4);
-  iVar1 = piVar7[1];
-  iVar2 = *piVar7;
-  if (iVar2 == 0 && iVar1 == 0) {
+  framePtr = (int *)(*(int *)&Agnts[agnt->target].frames + (uint)Agnts[agnt->target].frameIndex * 4);
+  frameSeg = framePtr[1];
+  frameOfs = *framePtr;
+  frameRec = (uint8_t far *)MK_FP(frameSeg,frameOfs);
+  if (frameOfs == 0 && frameSeg == 0) {
                     /* WARNING: Subroutine does not return */
     ovr_stExit(0x12);
   }
-  uVar4 = *(int *)(iVar3 + 0x26) - agnt->destX;
-  uStack_10 = (*(int *)(iVar3 + 0x28) - (uint)(byte)agnt->destY) - (*(int *)(iVar2 + 0xd) >> 1);
-  if (((int)((uVar4 ^ (int)uVar4 >> 0xf) - ((int)uVar4 >> 0xf)) < 4) &&
-     ((int)((uStack_10 ^ (int)uStack_10 >> 0xf) - ((int)uStack_10 >> 0xf)) < 4)) {
+  dx = (int)Agnts[agnt->target].screenX - agnt->destX;
+  dy = ((int)Agnts[agnt->target].screenY - (uint)(byte)agnt->destY) - (*(int far *)(frameRec + 0xd) >> 1);
+  if (((int)((dx ^ (int)dx >> 0xf) - ((int)dx >> 0xf)) < 4) &&
+     ((int)((dy ^ (int)dy >> 0xf) - ((int)dy >> 0xf)) < 4)) {
     ovr_ovc41_resolveSpecialAttack((agnt_t far *)CONCAT22((anm_t *)anim,agnt),(uint)agnt->target);
     animBranchCode = 3;
     agnt_usesAnimFrame(agnt,(anm_t *)anim);
   }
   else {
-    if (-uStack_10 == *(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x11) || -*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x11) < (int)uStack_10)
+    if (-dy == *(int *)(SEG_OF(anim) + 0x11) || -*(int *)(SEG_OF(anim) + 0x11) < (int)dy)
     {
-      if (*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x11) < (int)uStack_10) {
-        uStack_10 = *(uint *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x11);
+      if (*(int *)(SEG_OF(anim) + 0x11) < (int)dy) {
+        dy = *(uint *)(SEG_OF(anim) + 0x11);
       }
     }
     else {
-      uStack_10 = -*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x11);
+      dy = -*(int *)(SEG_OF(anim) + 0x11);
     }
-    if (*(char *)((*(uint16_t *)((uint8_t *)&(sprite) + 2)) + 5) != '\0') {
-      *(char *)&agnt->destY = (char)agnt->destY + (char)uStack_10;
+    if (*(char *)(SEG_OF(sprite) + 5) != '\0') {
+      *(char *)&agnt->destY = (char)agnt->destY + (char)dy;
     }
-    if (*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf) < (int)uVar4) {
-      uVar4 = *(uint *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf);
+    if (*(int *)(SEG_OF(anim) + 0xf) < (int)dx) {
+      dx = *(uint *)(SEG_OF(anim) + 0xf);
     }
-    else if (-uVar4 != *(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf) && (int)uVar4 <= -*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf)) {
-      uVar4 = -*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf);
+    else if (-dx != *(int *)(SEG_OF(anim) + 0xf) && (int)dx <= -*(int *)(SEG_OF(anim) + 0xf)) {
+      dx = -*(int *)(SEG_OF(anim) + 0xf);
     }
-    if (((*(byte *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x1c) & 4) == 0) &&
-       (((*(int *)(iVar3 + 0x28) - (uint)(byte)agnt->destY != *(int *)(iVar2 + 0xd) >> 1 ||
-         ((*(char *)((int)&agnt->destY + 1) == '\0' && ((int)uVar4 < 0)))) ||
-        ((*(char *)((int)&agnt->destY + 1) != '\0' && (0 < (int)uVar4)))))) {
+    if (((*(byte *)(SEG_OF(anim) + 0x1c) & 4) == 0) &&
+       ((((int)Agnts[agnt->target].screenY - (uint)(byte)agnt->destY != *(int far *)(frameRec + 0xd) >> 1 ||
+         ((*(char *)((int)&agnt->destY + 1) == '\0' && ((int)dx < 0)))) ||
+        ((*(char *)((int)&agnt->destY + 1) != '\0' && (0 < (int)dx)))))) {
       if (*(char *)((int)&agnt->destY + 1) == '\0') {
-        uVar4 = *(uint *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf);
+        dx = *(uint *)(SEG_OF(anim) + 0xf);
       }
       else {
-        uVar4 = -*(int *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0xf);
+        dx = -*(int *)(SEG_OF(anim) + 0xf);
       }
     }
-    if (*(char *)((*(uint16_t *)((uint8_t *)&(sprite) + 2)) + 5) != '\0') {
-      agnt->destX = agnt->destX + uVar4;
+    if (*(char *)(SEG_OF(sprite) + 5) != '\0') {
+      agnt->destX = agnt->destX + dx;
     }
-    uVar4 = *(int *)(iVar3 + 0x26) - agnt->destX;
-    uVar5 = (*(int *)(iVar3 + 0x28) - (uint)(byte)agnt->destY) - (*(int *)(iVar2 + 0xd) >> 1);
-    uVar6 = (int)uVar4 >> 0xf;
-    if (((int)((uVar4 ^ uVar6) - uVar6) < 4) &&
-       (uVar4 = (int)uVar5 >> 0xf, (int)((uVar5 ^ uVar4) - uVar4) < 4)) {
+    dx = (int)Agnts[agnt->target].screenX - agnt->destX;
+    dyStep = ((int)Agnts[agnt->target].screenY - (uint)(byte)agnt->destY) - (*(int far *)(frameRec + 0xd) >> 1);
+    dxSign = (int)dx >> 0xf;
+    if (((int)((dx ^ dxSign) - dxSign) < 4) &&
+       (dx = (int)dyStep >> 0xf, (int)((dyStep ^ dx) - dx) < 4)) {
       ovr_ovc41_resolveSpecialAttack((agnt_t far *)CONCAT22((anm_t *)anim,agnt),(uint)agnt->target);
       animBranchCode = 5;
       agnt_usesAnimFrame(agnt,(anm_t *)anim);
@@ -761,13 +761,13 @@ void __cdecl16far agnt_usesStExit(agnt_t far *agnt, anm_t far *anim, stg_tmp_t *
     }
     else {
       agnt->animFrame = agnt->animFrame + 0x1;
-      if (*(byte *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x1b) <= agnt->animFrame) {
-        if (*(char *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x1a) == -1) {
+      if (*(byte *)(SEG_OF(anim) + 0x1b) <= agnt->animFrame) {
+        if (*(char *)(SEG_OF(anim) + 0x1a) == -1) {
           agnt_usesAnimFrame(agnt,(anm_t *)anim);
           animBranchCode = 6;
         }
         else {
-          agnt->animFrame = *(uint8_t *)((*(uint16_t *)((uint8_t *)&(anim) + 2)) + 0x1a);
+          agnt->animFrame = *(uint8_t *)(SEG_OF(anim) + 0x1a);
         }
       }
     }
@@ -797,9 +797,7 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
   uint16_t framesOfs;
   uint16_t framesSeg;
   int frameOfs;
-  int frameSeg;
   int stateFrameOfs;
-  int stateFrameSeg;
   stg_tmp_t *stash;
   int offsetY;
   int y;
@@ -809,14 +807,12 @@ void __cdecl16far agnt_drawSpriteFrame(byte index,brect_t *rect,uint16_t type)
   agnt = (agnt_t far *)&Agnts[index].x;
   framesSeg = *(uint16_t *)((int)&agnt->frames + 2);
   framesOfs = *(uint16_t *)&agnt->frames;
-  frameSeg = *(int *)(framesOfs + (uint)agnt->frameIndex * 4 + 2);
   frameOfs = *(int *)(framesOfs + (uint)agnt->frameIndex * 4);
   if ((*(int *)(framesOfs + (uint)(byte)agnt->state * 4) == 0) &&
      (*(int *)(framesOfs + (uint)(byte)agnt->state * 4 + 2) == 0)) {
     framesOfs = SprProjectiles.ofs;
     framesSeg = SprProjectiles.seg;
   }
-  stateFrameSeg = *(int *)(framesOfs + (uint)(byte)agnt->state * 4 + 2);
   stateFrameOfs = *(int *)(framesOfs + (uint)(byte)agnt->state * 4);
   stash = ovr_stash_usesStExit(
               (stg_tmp_t *)*(uint16_t *)(framesOfs + (uint)(byte)agnt->state * 4 + 0x58),
@@ -1298,7 +1294,6 @@ int __cdecl16far agnt_compute15(byte rank,uint8_t level)
 uint __cdecl16far agnt_acquireTarget(agnt_t far *agnt,char *agntIndex,uint16_t arg3)
 
 {
-  uint32_t uVar1;
   uint in_AX;
   uint uVar2;
   int iVar3;

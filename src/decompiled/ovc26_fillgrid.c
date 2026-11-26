@@ -26,7 +26,6 @@ void __cdecl16far ovc26_usesFillGrid(int x,int y,uint8_t ignoreBlocked)
   int yOfs;
   uint blockedFlag;
   int nextCount;
-  uint16_t unaff_DI;
   uint16_t curSeg = _SS;
   uint8_t nextQueueY;
   uint8_t nextQueueX;
@@ -140,7 +139,6 @@ uint __cdecl16far ovc26_usesStExit(int entityIndex)
   uint dySign;
   entity_t far *peVar11;
   char *fillGrid;
-  uint16_t unaff_DI;
   uint16_t fillGridSeg;
   uint16_t curSeg = _SS;
   uint8_t pathDirs [80];

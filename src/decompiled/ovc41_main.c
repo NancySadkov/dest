@@ -147,12 +147,10 @@ void __cdecl16far ovc41_markAgentDead(agnt_t far *agnt)
 {
   uint8_t *puVar1;
   entity_t *peVar2;
-  uint16_t uVar3;
   
   if (DebugVerbose) {
     printf("kill 4\r");
   }
-  uVar3 = (uint16_t)((ulong)agnt >> 0x10);
   peVar2 = ((agnt_t far *)agnt)->entity;
   if ((((entity_t *)peVar2)->base).animFrame != 0x0) {
     peVar2 = ((agnt_t far *)agnt)->entity;
@@ -391,9 +389,7 @@ uint __cdecl16far ovc41_settleAgentCombat(agnt_t far *a,agnt_t far *b,uint16_t a
   int iVar2;
   byte bVar3;
   agnt_t far *agnt;
-  uint16_t uVar4;
   
-  uVar4 = (uint16_t)((ulong)b >> 0x10);
   agnt = (agnt_t far *)b;
   if (agnt->combatState == 0x2) {
     uVar1 = in_AX & 0xff00;
@@ -1055,7 +1051,6 @@ char * __cdecl16far ovc41_usesBiosKeyAvail(char backdropIndex,uint16_t arg2)
   char cStack_1e;
   char cStack_1d;
   stg_tmp_t *palRec;
-  uint16_t uStack_1a;
   uint16_t uStack_18;
   uint16_t uStack_16;
   undefined1 auStack_14 [2];
@@ -1738,7 +1733,6 @@ L_OVC40_69c8_04c6_0AF0:
   (*(uint8_t *)((uint8_t *)&(palette.seg))) = (char)backdropSeg;
   palette.ofs = (uint16_t)palRec;
   (*(uint8_t *)((uint8_t *)&(palette.seg) + 1)) = (char)((uint)backdropSeg >> 8);
-  uStack_1a = backdropSeg;
   ovc40_usesVgaSetPalette8bit(palette);
   ovr_stop_audio();
   CurMusicType = 0xff;

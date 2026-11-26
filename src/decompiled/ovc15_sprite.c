@@ -14,7 +14,6 @@ spr_t * __cdecl16far stshRleAnims(uint8_t *src,anm_t *anms,uint16_t nanims)
   uint uVar1;
   uint16_t anim_height;
   uint16_t row;
-  uint16_t panms;
   int *piVar2;
   uint16_t i;
   uint16_t unaff_DI;
@@ -22,11 +21,8 @@ spr_t * __cdecl16far stshRleAnims(uint8_t *src,anm_t *anms,uint16_t nanims)
   far_t dst;
   frm_t *frm;
   far_t far *in_stack_00000004;
-  uint16_t pdst;
-  uint16_t sdst;
   uint32_t prev_next;
   frm_t *pfStack_20;
-  uint16_t frm_seg;
   uint16_t xx;
   uint16_t exx;
   uint16_t sxx;
@@ -36,7 +32,6 @@ spr_t * __cdecl16far stshRleAnims(uint8_t *src,anm_t *anms,uint16_t nanims)
   uint16_t ex;
   uint16_t sy;
   uint16_t sx;
-  uint8_t index;
   
   if (0x4e < StshSprIndex) {
                     /* WARNING: Subroutine does not return */
@@ -1013,18 +1008,12 @@ void __cdecl16far stshStoreSprite(spr_t *spr,anm_t *anms,int16_t nanims)
   uint16_t uVar2;
   bool bVar3;
   uint16_t index;
-  uint16_t pofs;
   uint16_t o;
   int iVar4;
   uint16_t i;
-  uint16_t pseg;
   uint32_t cte;
   int in_stack_00000004;
   far_t pframe;
-  uint8_t frmid;
-  uint8_t first_frame;
-  uint16_t next_ofs;
-  uint16_t next_seg;
   
   i = 0;
   while( true ) {
@@ -1335,7 +1324,6 @@ char * __cdecl16far ovc15_textArena(int owner,uint16_t arg2,uint16_t arg3)
   entity_t *peVar5;
   agntG_t far *paVar6;
   far_t far *pfVar7;
-  uint16_t unaff_DI;
   uint16_t uVar8;
   uint16_t uVar9;
   int in_stack_00000006;

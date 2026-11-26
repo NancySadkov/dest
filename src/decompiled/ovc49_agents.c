@@ -21,7 +21,6 @@ undefined1 __cdecl16far ovc49_usesFrameIndex(agnt_t far *agnt,byte *out)
   int iVar5;
   agnt_t far *paVar6;
   int *piVar7;
-  uint16_t uVar8;
   char side;
   char step;
   int xEnd;
@@ -29,7 +28,6 @@ undefined1 __cdecl16far ovc49_usesFrameIndex(agnt_t far *agnt,byte *out)
   int radius;
   int row;
   
-  uVar8 = (uint16_t)((ulong)agnt >> 0x10);
   paVar6 = (agnt_t far *)agnt;
   if (((agntG_t far *)paVar6->gdata)->extents[1][1] == 0) {
     *out = 0;
@@ -128,7 +126,6 @@ undefined1 __cdecl16far ovc49_usesFrameIndex2(agnt_t far *agnt,byte *out)
   int iVar5;
   agnt_t far *paVar6;
   int *piVar7;
-  uint16_t uVar8;
   char side;
   char step;
   int xEnd;
@@ -136,7 +133,6 @@ undefined1 __cdecl16far ovc49_usesFrameIndex2(agnt_t far *agnt,byte *out)
   int radius;
   int row;
   
-  uVar8 = (uint16_t)((ulong)agnt >> 0x10);
   paVar6 = (agnt_t far *)agnt;
   if (((agntG_t far *)paVar6->gdata)->extents[0][1] == 0) {
     *out = 0;
@@ -800,17 +796,14 @@ void * __cdecl16far ovc49_fillGridCells(byte count,agnt_t far *agnt,uint16_t arg
 
 {
   uint16_t row;
-  int iVar2;
   int iVar3;
   int colStart;
   void *pvVar5;
   int *piVar6;
-  uint16_t unaff_DI;
   int colEnd;
   
   row = *(uint16_t *)((int)&agnt->frames + 2);
   piVar6 = (int *)(*(int *)&agnt->frames + (uint)agnt->frameIndex * 4);
-  iVar2 = piVar6[1];
   iVar3 = *piVar6;
   colStart = (int)(agnt->x - *(int *)(iVar3 + 0x17)) >> 1;
   colEnd = (int)(agnt->x + *(int *)(iVar3 + 0x17)) >> 1;
@@ -3470,7 +3463,6 @@ void __cdecl16far ovc49_drawAgents(void)
   int iVar17;
   int *entryPtr;
   uint16_t *puVar19;
-  uint16_t unaff_DI;
   uint16_t uVar21;
   far_t gfx_03;
   far_t gfx_04;
@@ -3495,7 +3487,6 @@ void __cdecl16far ovc49_drawAgents(void)
   char cStack_13;
   uint32_t recPtr;
   uint8_t far *rec;
-  uint16_t uStack_10;
   uint32_t scanPtr;
   uint32_t sprPtr;
   char cStack_6;

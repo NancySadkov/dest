@@ -17,7 +17,6 @@ int __cdecl16far main(int argc,str_t *argv,str_t *envp)
   uint uVar3;
   uint16_t key;
   str_t *psVar5;
-  uint16_t uVar6;
   byte keyByte;
 
   /* Far-pointer tables initialised with the original image link-time DGROUP must be
@@ -29,7 +28,6 @@ int __cdecl16far main(int argc,str_t *argv,str_t *envp)
    *   CMP word [BP+6],2                                      -> argc
    *   LES BX,[BP+8] ; MOV AX,ES:[BX+6] ; MOV DX,ES:[BX+4]     -> argv[1]
    * so the second argument is argv (not envp), and the count is argc. */
-  uVar6 = (uint16_t)((ulong)argv >> 0x10);
   psVar5 = (str_t *)argv;
   GGameExe.seg = psVar5->seg;
   GGameExe.ofs = (uint16_t)argv->ptr;

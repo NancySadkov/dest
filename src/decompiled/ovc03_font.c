@@ -33,7 +33,6 @@ far_t * __cdecl16far stshProcessFontSub(far_t *retStorage,far_t hndl,uint16_t ar
 {
   far_t *pfVar1;
   uint16_t in_DX;
-  uint8_t *psrc;
   int16_t line;
   uint16_t o;
   int16_t unaff_DI;
@@ -47,7 +46,6 @@ far_t * __cdecl16far stshProcessFontSub(far_t *retStorage,far_t hndl,uint16_t ar
   uint16_t j;
   uint16_t i;
   uint32_t r;
-  uint16_t xx;
   
   height = 0;
   for (line = 320; *(char *)((int)&retStorage->ofs + line) != -1; line = line + 0x140) {

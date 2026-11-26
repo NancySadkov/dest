@@ -231,7 +231,6 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_
   void *pvVar14;
   uint32_t *puVar15;
   uint16_t uVar16;
-  uint16_t ppgfx;
   uint16_t i;
   uint16_t unaff_DI;
   bool bVar17;
@@ -243,24 +242,10 @@ stg_tmp_t far * __cdecl16far grabLbm(int16_t file_id,int16_t x,int16_t y,uint16_
   lbm_bmhd_t hd;
   uint16_t h;
   uint16_t w;
-  uint16_t dst_seg;
-  bool got_header;
   lbm_type_t lbm_type;
   uint32_t sz;
   uint32_t chnk_sz;
   DW tmp;
-  uint16_t IdFORM1;
-  uint16_t IdILBM0;
-  uint16_t IdILBM1;
-  uint16_t IdBMHD1;
-  uint16_t IdBMHD0;
-  uint16_t IdBODY0;
-  uint16_t IdBODY1;
-  uint16_t IdCMAP1;
-  uint16_t IdCMAP0;
-  uint16_t IdPBM_1;
-  uint16_t IdPBM_0;
-  uint8_t got_hdr;
   
   uVar12 = IdPBM_.hi;
   uVar11 = IdPBM_.lo;

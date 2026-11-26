@@ -186,7 +186,6 @@ void __cdecl16far init_assets2(bool grab)
   far_t src_73;
   far_t src_74;
   stg_tmp_t *lbmFar;
-  uint8_t *puStack_8;
   
   if (grab) {
     grabBldLbm2(218,509,510,0xfe);
@@ -1735,7 +1734,6 @@ void __cdecl16far grabBldLbm2(int16_t index,int16_t normal,int16_t ruin,uint16_t
   uint16_t in_DX;
   uint16_t segArg;
   uint16_t resSeg;
-  uint16_t uVar6;
   int16_t unaff_SI;
   far_t pixels;
   far_t pixels_00;
@@ -1900,7 +1898,6 @@ void __cdecl16far stshAllocBldStubs2(int16_t index)
 {
   far_t *pfVar1;
   uint16_t segArg;
-  uint16_t segArg2;
   far_t *unaff_SI;
   
   pfVar1 = ovr_stshAllocStub(unaff_SI);

@@ -178,15 +178,12 @@ void __cdecl16far init_cfg(void)
   uint16_t fh;
   char *path;
   int iVar3;
-  uint16_t wrsz;
   int iVar4;
   int iVar5;
   int iVar6;
   int iVar7;
   uint16_t in_DX;
   char lbuf [80];
-  uint8_t goterr;
-  uint8_t update;
   /* static: write() takes a near buffer (BC30 io.h, _FAR is empty for the
      medium model), so the two bytes it writes must live in DGROUP. */
   static uint16_t crlf;
@@ -2013,7 +2010,6 @@ void __cdecl16far init_grayscale_palette(void)
   far_t handle;
   char buf [12];
   stg_tmp_t *pgfx;
-  uint32_t gfx;
   
   dst.seg = _SS;
   dst.ofs = (uint16_t)buf;

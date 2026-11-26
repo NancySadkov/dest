@@ -101,7 +101,6 @@ uint __cdecl16far stLoad(int handle)
   uint readOk;
   int iVar2;
   void *pvVar3;
-  undefined1 uVar4;
   uint16_t uVar5;
   uint unaff_SI;
   uint16_t unaff_DI;
@@ -335,8 +334,6 @@ int __cdecl16far stSave(void)
   char *path;
   int iVar2;
   uint writeOk;
-  undefined1 uVar4;
-  byte bVar5;
   uint16_t in_DX;
   uint16_t unaff_SI;
   uint16_t unaff_DI;

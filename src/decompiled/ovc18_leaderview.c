@@ -55,7 +55,6 @@ void __cdecl16far ovc18_showLeaderView(void)
   char *msg;
   uint uVar3;
   char *pcVar4;
-  uint16_t unaff_SI;
   int iVar5;
   uint8_t partyCounts;
   char *pcStack_6;
@@ -974,13 +973,11 @@ uint __cdecl16far ovc18_usesRandBelow(int x,int y,byte bldType,byte unitType,uin
   uint16_t randDraw;
   short (*paasVar4) [148] [60];
   uint unaff_SI;
-  uint16_t uVar5;
   uint16_t uVar6;
   uint uStack_6;
   
   paasVar4 = (short (*) [148] [60])GUnitGrid;
   uVar6 = (uint16_t)((ulong)GUnitGrid >> 0x10);
-  uVar5 = (uint16_t)((ulong)GUnits >> 0x10);
   if (bldType == 0) {
     if ((uint)(*paasVar4)[x][y] < 0xf8) {
       (*paasVar4)[x][y] = 0;

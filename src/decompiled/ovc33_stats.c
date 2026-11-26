@@ -16,9 +16,7 @@ char __cdecl16far stats_compute1(agnt_t far *agnt)
 {
   char cVar1;
   agnt_t far *paVar2;
-  uint16_t uVar3;
   
-  uVar3 = (uint16_t)((ulong)agnt >> 0x10);
   paVar2 = (agnt_t far *)agnt;
   if ((((agntG_t far *)paVar2->gdata)->shortName[3] == '\x04') &&
      (0xb < (((entity_t *)paVar2->entity)->base).level)) {
@@ -49,9 +47,7 @@ uint8_t __cdecl16far stats_compute2(agnt_t far *agnt)
 {
   uint8_t uVar1;
   agnt_t far *paVar2;
-  uint16_t uVar3;
   
-  uVar3 = (uint16_t)((ulong)agnt >> 0x10);
   paVar2 = (agnt_t far *)agnt;
   if ((((agntG_t far *)paVar2->gdata)->shortName[3] == '\x04') &&
      (0xc < (((entity_t *)paVar2->entity)->base).level)) {
@@ -103,9 +99,7 @@ undefined1 __cdecl16far stats_compute3(agnt_t far *agnt)
 {
   undefined1 result;
   agnt_t far *paVar2;
-  uint16_t uVar3;
   
-  uVar3 = (uint16_t)((ulong)agnt >> 0x10);
   paVar2 = (agnt_t far *)agnt;
   if ((((agntG_t far *)paVar2->gdata)->shortName[3] == '\x04') &&
      (0xb < (((entity_t *)paVar2->entity)->base).level)) {
@@ -139,7 +133,6 @@ void __cdecl16far stats_drawPortrait(agntG_t far *gdata,byte portraitIndex,int p
   stg_tmp_t *gfxRec;
   uint16_t in_DX;
   agntG_t far *paVar2;
-  uint16_t uVar3;
   uint16_t in_stack_0000000c;
   far_t gfx;
   undefined1 uVar4;
@@ -149,7 +142,6 @@ void __cdecl16far stats_drawPortrait(agntG_t far *gdata,byte portraitIndex,int p
   gfxRec = ovr_stshLoadGfx(handle);
   ovr_calcSeasonPalette
             (gfxRec->cmap,in_DX,(uint8_t *)palette,in_stack_0000000c,(char)in_DX,(char)palette);
-  uVar3 = (uint16_t)((ulong)gdata >> 0x10);
   paVar2 = (agntG_t *)gdata;
   if (((paVar2->prts + portraitIndex)->ofs != 0 || paVar2->prts[portraitIndex].seg != 0) &&
      ((paVar2->prtpals + portraitIndex)->ofs != 0 || paVar2->prtpals[portraitIndex].seg != 0)) {
@@ -188,7 +180,6 @@ char * __cdecl16far agntCopyNthField(uint8_t filed_index,char *dst,char *src)
   uint8_t in_stack_00000004;
   undefined1 in_stack_00000007;
   uint8_t j;
-  uint8_t found;
   
   packed = CONCAT11(in_stack_00000007,filed_index);
   j = 0x0;
@@ -1149,9 +1140,7 @@ void __cdecl16far drawAgntStats(agnt_t far *agnt,far_t cmap,uint16_t arg3)
   far_t *text_00;
   uint8_t *in_DX;
   uint8_t *nameOfs;
-  uint16_t agnt_o;
   entity_t *peVar12;
-  uint16_t agnt_s;
   uint16_t uVar13;
   char *in_stack_0000000a;
   undefined1 uVar14;
@@ -1763,19 +1752,15 @@ void __cdecl16far stats_setAgentBase(byte agntIndex)
   uint8_t *puVar3;
   char *text;
   uint16_t widths;
-  uint16_t uVar4;
   uint8_t msg;
   int agntData;
-  uint16_t uStack_a;
   uint8_t unitFlags;
   
   entityIndex = Agnts[agntIndex].owner;
-  uStack_a = AGNT_WORD(&Agnts[agntIndex], gdata, 2);
   agntData = AGNT_WORD(&Agnts[agntIndex], gdata, 0);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
   (Entities)[entityIndex].base.x = iVar2;
   (Entities)[entityIndex].base.y = GfxRndSeed2;
-  uVar4 = (uint16_t)((ulong)Entities >> 0x10);
   (Entities)[entityIndex].base.targetX =
        (Entities)[entityIndex].base.x;
   (Entities)[entityIndex].base.targetY = GfxRndSeed2;
@@ -1811,19 +1796,15 @@ void __cdecl16far stats_calledAwayNotice(byte agntIndex)
   uint8_t *puVar3;
   char *text;
   uint16_t widths;
-  uint16_t uVar4;
   uint8_t msg;
   int agntData;
-  uint16_t uStack_a;
   uint8_t unitFlags;
   
   entityIndex = Agnts[agntIndex].owner;
-  uStack_a = AGNT_WORD(&Agnts[agntIndex], gdata, 2);
   agntData = AGNT_WORD(&Agnts[agntIndex], gdata, 0);
   iVar2 = ovr_ovc23_compute2(GfxRndSeed,GfxRndSeed2);
   (Entities)[entityIndex].base.x = iVar2;
   (Entities)[entityIndex].base.y = GfxRndSeed2;
-  uVar4 = (uint16_t)((ulong)Entities >> 0x10);
   (Entities)[entityIndex].base.targetX =
        (Entities)[entityIndex].base.x;
   (Entities)[entityIndex].base.targetY = GfxRndSeed2;
@@ -2395,7 +2376,6 @@ void __cdecl16far drawString(char *text,uint16_t widths,uint16_t arg3)
   far_t gfx;
   uint8_t rect;
   uint16_t uStack_a;
-  int16_t iStack_8;
   int16_t iStack_6;
   
   memcpy((char *)CONCAT22(_SS,&rect),(char *)(BlitRects + 1),10);
@@ -2413,7 +2393,6 @@ void __cdecl16far drawString(char *text,uint16_t widths,uint16_t arg3)
     }
   }
   rect = 19;
-  iStack_8 = 215;
   TextBlitFlag = 1;
   TextBlitDstSeg = 0xa000;
   gfx.seg = talkwin9Cut4Seg;

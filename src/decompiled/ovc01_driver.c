@@ -283,13 +283,11 @@ uint8_t __cdecl16far vgaSetPalette(uint8_t *paletteOfs,uint8_t paletteSeg,int st
 
 {
   uint8_t *puVar1;
-  uint16_t uVar2;
   undefined1 uStack0007;
   int in_stack_0000000a;
   
   paletteOfs = CONCAT13(uStack0007,CONCAT12(paletteSeg,paletteOfs));
   out(0x3c8,(undefined1)startIndex);
-  uVar2 = (uint16_t)((ulong)paletteOfs >> 0x10);
   do {
     out(0x3c9,*paletteOfs);
     puVar1 = paletteOfs + 2;
@@ -368,55 +366,49 @@ uint8_t __cdecl16far vgaSetPalette8bit(uint8_t far *pal, uint16_t arg2)
 int __cdecl16far unrle(far_t src,far_t dst,uint16_t len,uint16_t arg4,uint16_t arg5)
 
 {
-  undefined1 *puVar1;
-  byte bVar2;
-  undefined1 uVar3;
-  undefined1 *puVar4;
-  undefined1 *puVar5;
-  uint uVar6;
+  undefined1 *srcByte;
+  byte ctrl;
+  undefined1 runVal;
+  undefined1 *dstByte;
+  undefined1 *srcCursor;
+  uint litCount;
   uint16_t i;
   uint16_t end;
   uint16_t pps;
   uint16_t s;
   uint16_t d;
-  uint16_t uVar7;
-  uint32_t ps;
-  uint8_t val;
-  uint32_t pd;
-  uint8_t run_val;
   
-  uVar7 = src.seg;
   d = dst.ofs;
   end = len + d;
-  puVar5 = (undefined1 *)src.ofs;
+  srcCursor = (undefined1 *)src.ofs;
   do {
     do {
-      pps = (uint16_t)puVar5;
+      pps = (uint16_t)srcCursor;
       s = pps + 1;
-      bVar2 = *(byte *)pps;
-      puVar5 = (undefined1 *)s;
-    } while (bVar2 == 0x80);
-    if (bVar2 < 0x80) {
-      for (uVar6 = (uint)(byte)(bVar2 + 1); uVar6 != 0; uVar6 = uVar6 - 1) {
-        puVar4 = (undefined1 *)d;
+      ctrl = *(byte *)pps;
+      srcCursor = (undefined1 *)s;
+    } while (ctrl == 0x80);
+    if (ctrl < 0x80) {
+      for (litCount = (uint)(byte)(ctrl + 1); litCount != 0; litCount = litCount - 1) {
+        dstByte = (undefined1 *)d;
         d = d + 1;
-        puVar1 = (undefined1 *)s;
+        srcByte = (undefined1 *)s;
         s = s + 1;
-        *puVar4 = *puVar1;
+        *dstByte = *srcByte;
       }
     }
     else {
-      (*(uint8_t *)((uint8_t *)&(i))) = (bVar2 ^ 0xff) + 2;
-      puVar1 = (undefined1 *)s;
+      (*(uint8_t *)((uint8_t *)&(i))) = (ctrl ^ 0xff) + 2;
+      srcByte = (undefined1 *)s;
       s = pps + 2;
-      uVar3 = *puVar1;
+      runVal = *srcByte;
       for (i = (uint16_t)(byte)i; i != 0; i = i - 1) {
-        puVar1 = (undefined1 *)d;
+        srcByte = (undefined1 *)d;
         d = d + 1;
-        *puVar1 = uVar3;
+        *srcByte = runVal;
       }
     }
-    puVar5 = (undefined1 *)s;
+    srcCursor = (undefined1 *)s;
   } while (d < end);
   return s - src.ofs;
 }
@@ -427,56 +419,54 @@ int __cdecl16far unrle(far_t src,far_t dst,uint16_t len,uint16_t arg4,uint16_t a
 int __cdecl16far rle_blit_decode(byte far *src, byte far *dst, uint16_t sz)
 
 {
-  char *pcVar1;
-  byte bVar2;
-  char cVar3;
-  byte *pbVar4;
-  uint uVar5;
+  char *srcByte;
+  byte ctrl;
+  char runVal;
+  byte *srcCursor;
+  uint litCount;
   uint16_t i;
   uint16_t end;
   uint16_t ps;
   uint16_t s;
-  uint16_t d;
-  uint32_t q;
   
   end = sz + (int)dst;
-  pbVar4 = src;
+  srcCursor = src;
   do {
     do {
-      ps = (uint16_t)pbVar4;
+      ps = (uint16_t)srcCursor;
       s = ps + 1;
-      bVar2 = *(byte *)ps;
-      pbVar4 = (byte *)(char *)s;
-    } while (bVar2 == 0x80);
-    if (bVar2 < 0x80) {
-      uVar5 = (uint)(byte)(bVar2 + 1);
+      ctrl = *(byte *)ps;
+      srcCursor = (byte *)(char *)s;
+    } while (ctrl == 0x80);
+    if (ctrl < 0x80) {
+      litCount = (uint)(byte)(ctrl + 1);
       do {
-        pcVar1 = (char *)s;
+        srcByte = (char *)s;
         s = s + 1;
-        if (*pcVar1 != '\0') {
-          *(byte *)(*(uint16_t *)((uint8_t *)&(dst) + 2))   /* hand fix: the segment half is used as an address; make the indirection legal */ = *pcVar1;
+        if (*srcByte != '\0') {
+          *(byte *)(*(uint16_t *)((uint8_t *)&(dst) + 2))   /* hand fix: the segment half is used as an address; make the indirection legal */ = *srcByte;
         }
         (*(uint16_t *)((uint8_t *)&(dst) + 2)) = (*(uint16_t *)((uint8_t *)&(dst) + 2)) + 1;
-        uVar5 = uVar5 - 1;
-      } while (uVar5 != 0);
+        litCount = litCount - 1;
+      } while (litCount != 0);
     }
     else {
-      i = (uint16_t)(byte)((bVar2 ^ 0xff) + 2);
-      pcVar1 = (char *)s;
+      i = (uint16_t)(byte)((ctrl ^ 0xff) + 2);
+      srcByte = (char *)s;
       s = ps + 2;
-      cVar3 = *pcVar1;
-      if (cVar3 == '\0') {
+      runVal = *srcByte;
+      if (runVal == '\0') {
         (*(uint16_t *)((uint8_t *)&(dst) + 2)) = (*(uint16_t *)((uint8_t *)&(dst) + 2)) + i;
       }
       else {
         for (; i != 0; i = i - 1) {
-          pcVar1 = (*(uint16_t *)((uint8_t *)&(dst) + 2));
+          srcByte = (*(uint16_t *)((uint8_t *)&(dst) + 2));
           (*(uint16_t *)((uint8_t *)&(dst) + 2)) = (*(uint16_t *)((uint8_t *)&(dst) + 2)) + 1;
-          *pcVar1 = cVar3;
+          *srcByte = runVal;
         }
       }
     }
-    pbVar4 = (byte *)s;
+    srcCursor = (byte *)s;
   } while ((*(uint16_t *)((uint8_t *)&(dst) + 2)) < end);
   return s - (int)src;
 }
@@ -510,8 +500,6 @@ void __cdecl16far masked_memcpy(char *dst,char *src,int skip,int src_sz,int dst_
 {
   uint16_t edst;
   uint16_t erc;
-  uint16_t psrc;
-  uint16_t pdst;
   uint in_stack_00000012;
   
   erc = dst_sz + (int)(*(uint16_t *)((uint8_t *)&(src) + 2));
@@ -664,19 +652,16 @@ L_rle_line_0343:
 int __cdecl16far unrle_mirror(byte far *src, byte far *dst, int len)
 
 {
-  undefined1 *puVar1;
-  byte bVar2;
-  undefined1 uVar3;
-  undefined1 *puVar4;
+  undefined1 *srcByte;
+  byte ctrl;
+  undefined1 runVal;
+  undefined1 *dstByte;
   byte *pbVar5;
   uint16_t cnt;
-  uint uVar6;
+  uint litCount;
   uint16_t ppsrc;
   uint16_t psrc;
   uint16_t pdst;
-  uint32_t pd;
-  uint32_t ps;
-  uint8_t b;
   
   pdst = (int)dst + len + -1;
   pbVar5 = src;
@@ -684,28 +669,28 @@ int __cdecl16far unrle_mirror(byte far *src, byte far *dst, int len)
     do {
       ppsrc = (uint16_t)pbVar5;
       psrc = ppsrc + 1;
-      bVar2 = *(byte *)ppsrc;
+      ctrl = *(byte *)ppsrc;
       pbVar5 = (undefined1 *)psrc;
-    } while (bVar2 == 0x80);
-    if (bVar2 < 0x80) {
-      cnt = (uint16_t)(byte)(bVar2 + 1);
+    } while (ctrl == 0x80);
+    if (ctrl < 0x80) {
+      cnt = (uint16_t)(byte)(ctrl + 1);
       do {
-        puVar1 = (undefined1 *)psrc;
+        srcByte = (undefined1 *)psrc;
         psrc = psrc + 1;
-        puVar4 = (undefined1 *)pdst;
+        dstByte = (undefined1 *)pdst;
         pdst = pdst + -1;
-        *puVar4 = *puVar1;
+        *dstByte = *srcByte;
         cnt = cnt - 1;
       } while (cnt != 0);
     }
     else {
-      puVar1 = (undefined1 *)psrc;
+      srcByte = (undefined1 *)psrc;
       psrc = ppsrc + 2;
-      uVar3 = *puVar1;
-      for (uVar6 = (uint)(byte)((bVar2 ^ 0xff) + 2); uVar6 != 0; uVar6 = uVar6 - 1) {
-        puVar1 = (undefined1 *)pdst;
+      runVal = *srcByte;
+      for (litCount = (uint)(byte)((ctrl ^ 0xff) + 2); litCount != 0; litCount = litCount - 1) {
+        srcByte = (undefined1 *)pdst;
         pdst = pdst + -1;
-        *puVar1 = uVar3;
+        *srcByte = runVal;
       }
     }
     pbVar5 = (byte *)psrc;
@@ -1155,9 +1140,7 @@ bool __cdecl16far digIsInstalled(void)
   code *pcVar1;
   bool bVar2;
   int iVar3;
-  uint16_t uVar4;
   
-  uVar4 = (uint16_t)((ulong)DriverEntry >> 0x10);
   iVar3 = (int)DriverEntry;
   if (iVar3 == 0) {
 return_false:
@@ -1255,9 +1238,7 @@ bool __cdecl16far midIsLoaded(void)
 {
   bool bVar1;
   int iVar2;
-  uint16_t uVar3;
   
-  uVar3 = (uint16_t)((ulong)DriverEntry >> 0x10);
   iVar2 = (int)DriverEntry;
   if (((iVar2 == 0) || (*(int *)(iVar2 + -6) != 0x494d)) || (*(int *)(iVar2 + -4) != 0x4944)) {
     bVar1 = false;

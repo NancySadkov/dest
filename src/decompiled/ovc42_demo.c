@@ -378,7 +378,6 @@ void __cdecl16far ovc42_drawTextRow(char *text,byte row)
   far_t handle;
   uint8_t dst;
   stg_tmp_t *gfxRec;
-  int16_t iStack_4;
   
   dst_00.seg = _SS;
   dst_00.ofs = (uint16_t)&dst;
@@ -395,7 +394,6 @@ void __cdecl16far ovc42_drawTextRow(char *text,byte row)
   handle.ofs = demfont1FontOfs;
   gfxRec = ovr_stshLoadGfx(handle);
   TextBlitDstSeg = 0xa000;
-  iStack_4 = max_width;
   ovr_blitLabel((char *)text,(uint8_t *)CONCAT22(gfxRec,(*(uint16_t *)((uint8_t *)&(text) + 2))),max_width,0x3f);
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle) + 2)) = *(uint16_t far *)((uint8_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs) +  2);
   (*(uint16_t *)((uint8_t *)&(TextBlitCycle))) = *(uint16_t far *)MK_FP(BDA_DailyTimeCounter.seg, BDA_DailyTimeCounter.ofs)   /* hand fix: the offset half is the address, not the far_t struct */;
@@ -476,7 +474,6 @@ uint16_t __cdecl16far run_demo(void)
   uint8_t *pal;
   uint16_t uVar6;
   int iVar7;
-  uint16_t unaff_DI;
   int iVar8;
   undefined1 ssHi;
   uint8_t palette[0x300];   /* palette buffer, cleared at 6d7a:0cc6 */

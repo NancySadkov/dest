@@ -77,7 +77,6 @@ uint __cdecl16far stshRead(void)
   uint leftHi;
   uint chunkLo;
   uint16_t chunkHi;
-  uint32_t snbytes;
   
   uVar3 = in_stack_0000000a;
   srcPtr = CONCAT22(pbuf,unaff_SI);
@@ -360,10 +359,8 @@ void * __cdecl16far stshAlloc(uint32_t nbytes)
   uint uVar1;
   uint16_t ofs_00;
   uint32_t r;
-  uint32_t result;
   uint16_t ofs;
   uint16_t seg;
-  uint32_t newbuf;
   
   if (nbytes == 0xfa0f) {
     (*(uint16_t *)((uint8_t *)&(r))) =(uint16_t) (far_t far *)StshBuf.ofs;
@@ -558,7 +555,6 @@ void __cdecl16far clean_ring_buffer(void)
 void __cdecl16far initStshTables(void)
 
 {
-  uint16_t unaff_SI;
   uint16_t i;
   
   _fmemset(MK_FP(0x1ef4, 0x0880), 0, 0x220);

@@ -92,18 +92,12 @@ uint __cdecl16far attact_isTerrainFlat(int x,int y)
   int minHeight;
   int k;
   uint8_t maxHeight;
-  int h1;
-  int h2;
-  int h3;
 
   if ((((x < 0) || (y < 0)) || (0x93 < x + 1)) || (0x3b < y + 1)) {
     return 0;
   }
   cells = (byte (*) [59] [148])GMapCells;
   maxHeight = (int)(char)(*cells)[y][x];
-  h1 = (int)(char)(*cells)[y][x + 1];
-  h2 = (int)(char)(*cells)[y + 1][x];
-  h3 = (int)(char)(*cells)[y + 1][x + 1];
   minHeight = maxHeight;
   for (k = 1; k < 4; k = k + 1) {
     if (*(int *)(&maxHeight + k * 2) < minHeight) {
@@ -717,7 +711,6 @@ void __cdecl16far attact_usesAlignUp42(void)
   uint uVar11;
   char *pcVar12;
   entity_t *peVar14;
-  uint16_t unaff_DI;
   uint16_t index;
   uint16_t segArg;
   entity_t *destEnt;   /* hand fix: dereferenced as destEnt->base */
@@ -1436,7 +1429,6 @@ void __cdecl16far attact_usesRandBelow(agnt_t far *agnt,byte dir,uint16_t arg3,u
   uint16_t uVar1;
   uint uVar2;
   int iVar3;
-  uint16_t uVar4;
   undefined1 uStack0007;
   byte in_stack_00000008;
   uint16_t agntX;   /* hand fix: [BP-6] is a WORD copy of agnt->x (3f0b:246f) */
@@ -1444,7 +1436,6 @@ void __cdecl16far attact_usesRandBelow(agnt_t far *agnt,byte dir,uint16_t arg3,u
   int iStack_4;
   
   agnt = (int *)CONCAT13(uStack0007,CONCAT12(dir,agnt));
-  uVar4 = (uint16_t)((ulong)agnt >> 0x10);
   if (in_stack_00000008 == 0xff) {
     uVar1 = ovr_randBelow(4,AgntGs[(uint)agnt->gindex].ai);
     in_stack_00000008 = (byte)uVar1;

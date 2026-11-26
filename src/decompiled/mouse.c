@@ -88,8 +88,6 @@ void __cdecl16far blitTillAlpha(far_t dst,far_t src,uint16_t size)
   char *pcVar2;
   uint16_t s;
   uint16_t d;
-  uint32_t pd;
-  uint32_t ps;
   
   s = src.ofs;
   d = dst.ofs;

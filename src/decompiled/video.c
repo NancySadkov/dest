@@ -194,8 +194,6 @@ void __cdecl16far videoMiceEvent(uint16_t x,uint16_t y,uint16_t mask)
   uint16_t dx;
   uint16_t dy;
   far_t src;
-  uint16_t px;
-  uint16_t py;
   
   uVar2 = MiceX;
   uVar1 = MiceY;

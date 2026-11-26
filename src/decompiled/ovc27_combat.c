@@ -20,7 +20,6 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
   int iVar4;
   int iVar5;
   int *piVar6;
-  uint16_t uVar7;
   byte in_stack_00000010;
   far_t dst;
   uint8_t yOffset;
@@ -47,7 +46,6 @@ void __cdecl16far ovc27_intelAttackingNotice(int x1,int y1,int x2,int y2,int *re
   if (x1 < *rectOfs) {
     x1 = *rectOfs;
   }
-  uVar7 = (uint16_t)((ulong)rectOfs >> 0x10);
   piVar6 = (int *)rectOfs;
   if (piVar6[2] < x2) {
     x2 = piVar6[2];
@@ -199,7 +197,6 @@ void __cdecl16far ovc27_usesRandBelow(int x1,int y1,int x2,int y2,brect_t *rect,
 uint __cdecl16far ovc27_compute1(agnt_t far *agnt,int param,uint16_t arg3,uint16_t arg4)
 
 {
-  uint32_t uVar1;
   uint in_AX;
   byte bVar3;
   undefined1 uVar4;
@@ -287,7 +284,6 @@ uint __cdecl16far ovc27_usesRandBelow3(agnt_t far *agnt,uint32_t reqRecord,int a
   far_t dst;
   far_t dst_00;
   uint8_t reqLevel2;
-  uint16_t uStack_e;
   uint8_t reqLevel1;
   
   dst.seg = _SS;
@@ -437,7 +433,6 @@ int __cdecl16far ovc27_usesRandBelow4(byte level,byte threshold)
 uint __cdecl16far ovc27_compute2(agnt_t far *agnt,int param,uint16_t arg3,uint16_t arg4)
 
 {
-  uint32_t uVar1;
   uint in_AX;
   uint uVar2;
   uint16_t uVar3;
@@ -523,12 +518,10 @@ uint __cdecl16far ovc27_usesRandBelow5(agnt_t far *agnt)
   uint uVar1;
   uint16_t uVar2;
   uint16_t uVar3;
-  uint16_t uVar4;
   uint8_t indexMap;
   byte bStack_4;
   byte bStack_3;
   
-  uVar4 = (uint16_t)((ulong)agnt >> 0x10);
   if (((agnt_t far *)agnt)->target == 0xff) {
     uVar1 = in_AX & 0xff00;
   }
@@ -572,7 +565,6 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
   int iVar6;
   uint8_t *puVar7;
   char *msg;
-  int iVar8;
   agntG_t far *paVar9;
   int *piVar10;
   uint16_t uVar11;
@@ -581,9 +573,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
   uint8_t text;
   byte variant;
   int iStack_12;
-  uint16_t uStack_10;
   int iStack_e;
-  int iStack_c;
   uint16_t uStack_8;
   agnt_t far *agnt;
   uint16_t agntSeg;

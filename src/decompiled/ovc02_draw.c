@@ -1636,7 +1636,6 @@ void __stdcall16far draw_textGoldProvidesHousing(void)
   undefined1 *puVar21;
   uint uVar22;
   byte *pbVar23;
-  uint16_t unaff_ES;
   uint16_t uStack_4;
   
   uVar6 = CONCAT11((char)((uint)in_AX >> 8),(char)in_AX + -0x3a);

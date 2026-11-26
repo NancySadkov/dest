@@ -14,7 +14,6 @@ void __cdecl16far miceRestoreArea(brect_t far *br, uint16_t arg2)
 {
   int dst_x;
   int dst_y;
-  uint16_t pbr;
   
   if ((((CFG_Mice != 0) && (br->seg == 0xa000)) &&
       (MiceNeedsUpdate = 1,
@@ -49,7 +48,6 @@ void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br,uint16_t arg4)
 {
   uint16_t uVar1;
   char *pcVar2;
-  uint16_t pbr;
   uint16_t j;
   uint16_t src;
   uint16_t h;
@@ -127,7 +125,6 @@ void __cdecl16far miceBlitRect(brect_t *br,uint16_t arg2)
 {
   uint16_t dst_x;
   uint16_t dst_y;
-  uint16_t pbr;
   uint16_t in_stack_00000006;
   far_t src;
   

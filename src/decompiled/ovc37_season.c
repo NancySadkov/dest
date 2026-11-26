@@ -380,7 +380,6 @@ void __cdecl16far updSeason(void)
   uint8_t palette [768];
   char snames [12];
   uint8_t text;
-  uint8_t seaon2;
   stg_tmp_t *gfxRec;
   char *pcStack_6;
   uint8_t s;
@@ -389,7 +388,6 @@ void __cdecl16far updSeason(void)
   dst.seg = (uint16_t)_SS;
   dst.ofs = (uint16_t)snames;
   F_SCOPY(far_from_u32((uint32_t)(0x241069cb)),dst,12);
-  seaon2 = GSeason;
   season = GSeason;
   GTimeLo = GTimeLo + 1;
   if (((GTimeHi != '\0') && (GSeason == 0x0)) && (GTimeLo < 0xf)) {

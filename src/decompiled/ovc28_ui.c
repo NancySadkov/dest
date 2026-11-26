@@ -140,22 +140,22 @@ void __cdecl16far ovc28_usesBlitGfxRect2(void)
 void __cdecl16far ovc28_textHalflingCastle(void)
 
 {
-  uint32_t uVar1;
+  uint32_t sheetWord;
   far_t gfx;
   far_t gfx_00;
   far_t gfx_01;
-  uint16_t *puVar2;
-  int iVar3;
-  char *text_00;
-  byte *pbVar4;
-  int iVar5;
-  uint16_t uVar6;
-  uint16_t seg;
+  uint16_t *itemPtr;
+  int titleLen;
+  char *titleText;
+  byte *labelPtr;
+  int itemIdx;
+  uint16_t fontOfs;
+  uint16_t fontSeg;
   uint8_t term;
   uint8_t msg;
   uint8_t text;
-  char cStack_4;
-  byte bStack_3;
+  char initial;
+  byte cls;
   
   ovr_ovc18_blitPanelIfNotRunning();
   gfx.seg = fullScreenGfxSeg;
@@ -168,30 +168,30 @@ void __cdecl16far ovc28_textHalflingCastle(void)
     gfx_01.seg = trianglsCut5Seg;
     gfx_01.ofs = trianglsCut5Ofs;
     ovr_blitLoadRleGfx(gfx_01,far_from_u32((uint32_t)(0xa000e249)),0);
-    for (iVar5 = 0; iVar5 < 5; iVar5 = iVar5 + 1) {
-      if (((uint8_t *)MenuItemEnabled)[iVar5] != 0xff) {
+    for (itemIdx = 0; itemIdx < 5; itemIdx = itemIdx + 1) {
+      if (((uint8_t *)MenuItemEnabled)[itemIdx] != 0xff) {
         TextBlitX = 0xea;
-        TextBlitY = iVar5 * 0xd + 0x87;
-        uVar1 = *(uint32_t *)((uint)((uint8_t *)MenuItemEnabled)[iVar5] << 2);
-        bStack_3 = *(byte *)((int)uVar1 + 0x2f);
-        if (bStack_3 == 0xff) {
-          cStack_4 = 'F';
+        TextBlitY = itemIdx * 0xd + 0x87;
+        sheetWord = *(uint32_t *)((uint)((uint8_t *)MenuItemEnabled)[itemIdx] << 2);
+        cls = *(byte *)((int)sheetWord + 0x2f);
+        if (cls == 0xff) {
+          initial = 'F';
         }
         else {
-          cStack_4 = *(char *)*(uint32_t *)((uint)bStack_3 * 4 + 0xeb);
+          initial = *(char *)*(uint32_t *)((uint)cls * 4 + 0xeb);
         }
         term = 0x3f;
-        puVar2 = (uint16_t *)((uint)((uint8_t *)MenuItemEnabled)[iVar5] * 4);
-        pbVar4 = (byte *)((char *)0x2627a);
-        uVar6 = Font03.ofs;
-        seg = Font03.seg;
-        iVar3 = ovr_ovc45_compute9((char *)&text,(char *)CONCAT22(*puVar2,_SS),
-                                   (char *)CONCAT22(Font03.ofs,(char *)puVar2[1]),Font03.seg,'*',
-                                   0x2a,3,(int)cStack_4);
-        text_00 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5cff,_SS),
-                                (char *)CONCAT13((char)((uint)iVar3 >> 8),
-                                                 CONCAT12((char)iVar3,0x2410)),(char)iVar3,pbVar4);
-        ovr_blitText(text_00,(byte *)CONCAT22(uVar6,pbVar4),seg,term);
+        itemPtr = (uint16_t *)((uint)((uint8_t *)MenuItemEnabled)[itemIdx] * 4);
+        labelPtr = (byte *)((char *)0x2627a);
+        fontOfs = Font03.ofs;
+        fontSeg = Font03.seg;
+        titleLen = ovr_ovc45_compute9((char *)&text,(char *)CONCAT22(*itemPtr,_SS),
+                                   (char *)CONCAT22(Font03.ofs,(char *)itemPtr[1]),Font03.seg,'*',
+                                   0x2a,3,(int)initial);
+        titleText = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5cff,_SS),
+                                (char *)CONCAT13((char)((uint)titleLen >> 8),
+                                                 CONCAT12((char)titleLen,0x2410)),(char)titleLen,labelPtr);
+        ovr_blitText(titleText,(byte *)CONCAT22(fontOfs,labelPtr),fontSeg,term);
       }
     }
     update_pause_button();

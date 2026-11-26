@@ -627,9 +627,7 @@ int __cdecl16far ovc13_usesEntities(int entityIndex)
 {
   int iVar1;
   byte bVar2;
-  uint16_t uVar3;
   
-  uVar3 = (uint16_t)((ulong)Entities >> 0x10);
   if (unitTypeFilter == 0xfe) {
 L_OVC13_3d16_1045_10C4:
     if (partyFilter == -1) {

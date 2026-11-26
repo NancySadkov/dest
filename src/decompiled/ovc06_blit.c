@@ -169,7 +169,6 @@ void __cdecl16far blitGfx10(far_t gfx,uint16_t x,uint16_t y,brect_t *dst,bool ty
   far_t src;
   int iVar1;
   uint16_t in_DX;
-  uint16_t pdst;
   int iVar2;
   uint16_t uVar3;
   uint16_t uVar4;
@@ -390,9 +389,7 @@ void __cdecl16far blitGfxN(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t ty
   char buf [320];
   uint16_t pdst;
   uint16_t h;
-  uint16_t sx;
   uint16_t pd;
-  uint16_t srcsz;
   uint16_t skip;
   uint uStack_8;
   code *pcStack_6;

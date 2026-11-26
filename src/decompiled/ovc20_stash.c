@@ -340,18 +340,14 @@ spr_t * __cdecl16far stshSpriteStub(anm_t *anms,uint16_t nanims)
 
 {
   uint16_t k;
-  uint16_t psrc;
   uint16_t pd;
   int iVar1;
   uint16_t j;
   far_t *unaff_DI;
   uint16_t i;
-  uint16_t ssrc;
   far_t dst;
   far_t pstub;
   uint in_stack_00000008;
-  uint16_t pdst;
-  uint16_t sdst;
   
   if (StshSprIndex < 0x4f) {
     dst.seg = (uint16_t)((spr_t far *)StshSprites + StshSprIndex);
@@ -457,7 +453,6 @@ cte_t * __cdecl16far stshStoreFile(uint8_t *data,uint16_t arg2)
   DW sz;
   uint16_t uStack_6;
   uint16_t in_stack_0000fffc;
-  uint16_t ofs_lo;
   uint16_t ofs;
   
   if (5 < *data) {
@@ -576,7 +571,6 @@ void __cdecl16far stshInitAudioAssets(char grab)
   voc_t voc;
   uint uStack_a;
   uint uStack_8;
-  uint32_t sz;
   
   AudioAssetsReady1 = 1;
   AudioAssetsReady2 = 1;
@@ -826,10 +820,8 @@ far_t * __cdecl16far stshStoreFile_2(far_t *retStorage,char *filename,uint16_t f
 void __cdecl16far init_special_graphics(char *gfxBlock)
 
 {
-  uint16_t uVar1;
   far_t handle;
   
-  uVar1 = (uint16_t)((ulong)gfxBlock >> 0x10);
   if (*(int *)((char *)gfxBlock + 0x11) != 0 || *(int *)((char *)gfxBlock + 0x13) != 0) {
     handle.seg = *(uint16_t *)((char *)gfxBlock + 0x13);
     handle.ofs = *(uint16_t *)((char *)gfxBlock + 0x11);

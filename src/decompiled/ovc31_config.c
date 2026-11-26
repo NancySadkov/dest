@@ -232,9 +232,7 @@ byte __cdecl16far init_strong_sav(void)
   uint16_t result;
   char *path;
   uint16_t in_DX;
-  uint16_t unaff_SI;
   char path_buffer [81];
-  uint8_t b;
   
   do {
     file = file_open_rdonly("strong.sav\\game.cfg");

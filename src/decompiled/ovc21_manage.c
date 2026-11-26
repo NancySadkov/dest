@@ -174,9 +174,7 @@ byte __cdecl16far manage_compute2(char_sheet_t far *sheet)
 {
   byte bVar1;
   char_sheet_t far *pcVar2;
-  uint16_t uVar3;
   
-  uVar3 = (uint16_t)((ulong)sheet >> 0x10);
   pcVar2 = sheet;
   if ((pcVar2->cls == 4) && (0xc < pcVar2->race)) {
     bVar1 = 0xc;
@@ -204,9 +202,7 @@ byte __cdecl16far manage_compute3(char_sheet_t far *sheet)
 {
   byte bVar1;
   char_sheet_t far *pcVar2;
-  uint16_t uVar3;
   
-  uVar3 = (uint16_t)((ulong)sheet >> 0x10);
   pcVar2 = sheet;
   if ((pcVar2->cls == 4) && (0xb < pcVar2->race)) {
     bVar1 = 1;
@@ -234,9 +230,7 @@ byte __cdecl16far manage_compute4(char_sheet_t far *sheet)
 {
   byte bVar1;
   char_sheet_t far *pcVar2;
-  uint16_t uVar3;
   
-  uVar3 = (uint16_t)((ulong)sheet >> 0x10);
   pcVar2 = sheet;
   if ((pcVar2->cls == 4) && (0xb < pcVar2->race)) {
     bVar1 = pcVar2->race + 0x37;
@@ -805,7 +799,6 @@ uint16_t __cdecl16far alignmentDlg(char_sheet_t *sheet)
   byte *pbVar1;
   uint16_t widths;
   far_t dst;
-  uint8_t done;
   char *inputResult;
   uint uVar3;
   uint16_t uVar4;
@@ -991,7 +984,6 @@ char * __cdecl16far chargen_switch(uint16_t index)
   uint16_t uVar29;
   char *in_stack_00000000;
   agnt_t far *paStack0008;
-  uint16_t uStack000a;
   char acStack_1b6 [120];
   char acStack_13e [36];
   uint16_t auStack_11a [66];
@@ -1692,7 +1684,6 @@ char_sheet_t * __cdecl16far chargen(void)
   uint dlgResult;
   uint in_DX;
   uint16_t widths;
-  uint16_t unaff_SI;
   int entryIdx;
   char acStack_9d [11];
   uint8_t menuItems;
@@ -2123,7 +2114,6 @@ char * __cdecl16far litoa10(char *buf,long n,uint16_t arg3,uint16_t arg4)
   long dividend;
   long lVar4;
   int in_stack_0000000a;
-  uint8_t sign;
   
   if ((in_stack_0000000a < 1) && (in_stack_0000000a < 0)) {
     bVar1 = true;
@@ -2197,13 +2187,11 @@ void manage_usesEntities(void)
   char in_CL;
   int unaff_BP;
   int unaff_SI;
-  uint16_t uVar2;
   
   if (in_CL != -1) {
     manage_usesEntities2();
     return;
   }
-  uVar2 = (uint16_t)((ulong)Entities >> 0x10);
   if (((AgntGs[(uint)(Entities)[unaff_SI].base.gindex].ai == '\0') &&
       (*(byte *)(unaff_BP + 8) <= (Entities)[unaff_SI].base.level)) &&
      ((Entities)[unaff_SI].base.level <= *(byte *)(unaff_BP + 10))) {
@@ -2232,9 +2220,7 @@ void __cdecl16far manage_usesEntities2(void)
   char in_CL;
   int unaff_BP;
   int unaff_SI;
-  uint16_t uVar2;
   
-  uVar2 = (uint16_t)((ulong)Entities >> 0x10);
   if (((AGNT_FIELD(&(Entities)[unaff_SI], base.entity, 3) == in_CL) &&
       (*(byte *)(unaff_BP + 8) <= (Entities)[unaff_SI].base.level)) &&
      ((Entities)[unaff_SI].base.level <= *(byte *)(unaff_BP + 10))) {
@@ -3270,7 +3256,6 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
   uint8_t bandLabels;
   uint16_t auStack_94 [23];
   undefined1 auStack_66 [10];
-  uint16_t uStack_5c;
   entity_t *peStack_1e;
   char cStack_1a;
   char cStack_19;
@@ -3319,7 +3304,6 @@ char * __cdecl16far manage_textTotalPopulation(byte charIndex,short arg6,char_sh
   (*(uint16_t *)((uint8_t *)&(auStack_66) + 6)) = 0x2410;
   (*(uint16_t *)((uint8_t *)&(auStack_66) + 4)) = 0x54e5;
   peVar15 = (entity_t *)(auStack_66 + 8);
-  uStack_5c = 0x2410;
   (*(uint16_t *)((uint8_t *)&(auStack_66) + 8)) = 0x54ed;
   count = (char *)((int)(uint32_t *)&_DATA + 3);
   for (pcVar17 = (char *)0x0; (int)pcVar17 < (int)(uint)(byte)acStack_e[3]; pcVar17 = pcVar17 + 1) {

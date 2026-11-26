@@ -11061,3 +11061,58 @@ means moving the block into the CRT object, which AGENTS.md treats as supplied.
   grep_checks 38,916 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (72 runs, sum|delta| 295,448)
   compare_runtime 1,604 identical / 10 different
+
+### grep_checks 38,916 -> 38,578: agnt_usesStExit, ovc28/driver renames, dead-local sweeps
+grep_checks 38,916 -> 38,578: agnt_usesStExit record fix, ovc28/driver renames, dead-local sweeps
+
+Four changes, all verified with the full gate suite.
+
+1. agnt_usesStExit (ovc12_agnt.c) - the target agent record was addressed by a
+   bare Agnts offset, exactly like ovc27_usesBlitGfxRect last session:
+
+     iVar3 = (uint)agnt->target * 0x34;
+     ... *(int  *)(iVar3 + 0x13)   frames
+         *(byte *)(iVar3 + 0x12)   frameIndex
+         *(int  *)(iVar3 + 0x26)   screenX
+         *(int  *)(iVar3 + 0x28)   screenY
+
+   All eight reads went to DGROUP.  Now Agnts[agnt->target].frames / .frameIndex /
+   .screenX / .screenY.  The animation-frame entry `piVar7 = frames.ofs + idx*4`
+   was also a truncation: the entry's ofs/seg are a far pointer, so the +0xd read
+   is now `*(int far *)(frameRec + 0xd)`.  The export's
+   `(*(uint16_t *)((uint8_t *)&(anim) + 2))` is just the segment half of the far
+   pointer and is written as SEG_OF(anim) (same value).
+
+   Verified in the listing: `mov es,dx / mov ax,word ptr es:_Agnts[bx+40]` for
+   screenY, `mov dx,word ptr es:[bx+13]` for the frame record; les sites 19.
+   Names: dx, dy, dyStep, dxSign, framePtr, frameSeg, frameOfs, frameRec.
+
+2. ovc28_textHalflingCastle - ten single-role locals named: itemIdx, titleLen,
+   sheetWord, cls (+0x2f = char_sheet_t.cls), initial, fontOfs, fontSeg, itemPtr,
+   labelPtr, titleText.  `seg` was replaced with a whole-identifier match so it
+   would not touch `.seg` fields.
+
+3. unrle / unrle_mirror / rle_blit_decode (ovc01_driver.c) - the RLE decoders:
+   ctrl, litCount, runVal, srcByte, dstByte, srcCursor, plus nine dead locals
+   removed (ps, val, pd, run_val, b, d, q, uVar7).
+
+4. Two tree-wide sweeps (tmp/drop_dead_locals.py, tmp/drop_dead_stores.py):
+   a local whose identifier occurs once in its function is a dead declaration;
+   one that occurs exactly twice (declaration + one plain assignment) is write-only.
+   Removing both lines cannot change behaviour.  91 + 45 = 136 locals removed
+   across 35 files.
+
+MEASURED (HEAD 65ecb0fa -> this commit)
+
+  grep_checks        38,916 -> 38,578   (-338)
+  build              65/65 clean, 0 errors
+  LINK.LOG           65 bytes / 0 problems
+  compare_state      1,627/0/0 unchanged
+  diff_dgroup        1,449/1,868, 72 delta runs unchanged
+  compare_runtime    1,604 identical / 10 different unchanged
+
+The layout and runtime gates are untouched because nothing here changes DGROUP
+contents - these are name and record-addressing changes only.  grep_checks was flat
+for the previous four turns while layout moved; this turn is the reverse.
+
+Re-running both dead-local sweeps a second time finds 0, so that vein is exhausted.

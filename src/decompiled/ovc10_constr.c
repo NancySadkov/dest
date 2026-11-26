@@ -181,7 +181,6 @@ void __cdecl16far constr_usesGOngoingBattle(void)
 void __cdecl16far blitRect(brect_t *br,uint16_t arg2)
 
 {
-  uint16_t pbr;
   
   ovr_blitRaw(br->x,br->y,br->w,br->h,br->seg,0xa000);
   return;

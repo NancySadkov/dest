@@ -1244,8 +1244,6 @@ void __cdecl16far ovc23_placeBuilding(int x,int y,byte bldType,uint8_t unitType)
 void __cdecl16far ovc23_removeRecord(int recordIndex)
 
 {
-  uint16_t unaff_BP;
-  uint unaff_SI;
   agnt_t far *in_stack_00000000;
   
   if (recordIndex + 1U < GRecordCount) {

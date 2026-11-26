@@ -208,7 +208,6 @@ void bldng_selectBuildingType(byte partyIndex)
   uint16_t auStack_190 [97];
   char acStack_ce [200];
   int iStack_6;
-  char cStack_4;
   byte bitMask;
   
   bitMask = '\x01' << (AgntGs[(uint)(GLeaderSheets[in_stack_00000004])->classStr].shortName[3] & 0x1f);
@@ -256,7 +255,6 @@ void bldng_selectBuildingType(byte partyIndex)
   hint.ofs = (uint16_t)pcVar5;
   (*(uint8_t *)((uint8_t *)&(hint.seg) + 1)) = (char)((uint)uVar7 >> 8);
   ovr_ovc28_compute2(entries,count,hint,(char)pcVar5,0);
-  cStack_4 = (char)puVar6;
   if ((char)puVar6 != '\0') {
     (GLeaderSheets[in_stack_00000004])->buildType[0] =
          (&stk_fe0a)[((uint)puVar6 & 0xff) * 2];

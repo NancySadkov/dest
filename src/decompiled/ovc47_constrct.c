@@ -57,7 +57,6 @@ void __cdecl16far land_info(byte tileOffset)
   uint16_t gUnitsSeg;
   uint16_t entitiesSeg;
   uint16_t mapFlag;
-  uint16_t compute7Result;
   uint16_t msgSeg;
   uint16_t choice;
   undefined1 entryLo;
@@ -86,14 +85,12 @@ void __cdecl16far land_info(byte tileOffset)
   char itemCode;
   uint8_t tileX;
   uint8_t gfxOfs;
-  uint16_t blitSeg;
   undefined1 auStack_14 [10];
   uint8_t menuLabel;
   uint16_t tableOfs;
   uint16_t arg2Pair;
   uint16_t tableSeg;
   
-  blitSeg = far_t_2410_78e4.seg;
   gfxOfs = far_t_2410_78e4.ofs;
   ovr_attact_usesAgntFlag1();
   savedMenuItem = GMenuItem;

@@ -439,10 +439,8 @@ int __cdecl16far ovc45_compute3(byte partyIndex)
 
 {
   int iVar1;
-  uint16_t uVar2;
   int iVar3;
   
-  uVar2 = (uint16_t)((ulong)(uint32_t)GLeaderSheets[partyIndex] >> 0x10);
   iVar1 = (int)(uint32_t)GLeaderSheets[partyIndex];
   iVar3 = *(int *)(iVar1 + 0x56);
   iVar1 = ovc45_usesLDIV_at_(partyIndex,iVar3,*(uint16_t *)(iVar1 + 0x58));
@@ -3866,9 +3864,7 @@ uint __cdecl16far ovc45_usesRandBelow(int entityIndex)
   uint uVar3;
   byte bVar5;
   uint16_t randDraw;
-  uint16_t uVar6;
   
-  uVar6 = (uint16_t)((ulong)Entities >> 0x10);
   if (*(char *)((int)&(Entities)[entityIndex].base.entity + 3) == -1) {
     uVar3 = entityIndex * 0x37 & 0xff00;
   }
