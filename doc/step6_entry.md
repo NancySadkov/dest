@@ -14979,3 +14979,36 @@ same way.
     difference.
 
 So those 43 bytes stay until the C0 startup itself is replaced.
+
+### ovc25_spyReportNotice and manage_highlightStructures (35,706 -> 35,658)
+ovc25_spyReportNotice and manage_highlightStructures (35,706 -> 35,658)
+
+ovc25_spyReportNotice
+    piVar1  13 occurrences  `(int *)((int)(uint32_t)GLeaderSheets[i] + 0x45|0x41|0x47|0x43)`
+                            followed by `*piVar1 = *piVar1 + 1`   -> counterPtr
+        One role at every site - a pointer to whichever per-leader counter is being incremented -
+        so one name covers all four offsets.
+
+manage_highlightStructures
+    pcVar1  3175, 3180, 3203, 3211  ovr_ovc22_className's result      -> className (4)
+    pcVar1  3177, 3181, 3196, 3200,
+            3206, 3212              ovr_stsprintf's result, passed
+                                    to ovr_say                      -> sayText   (6)
+
+THE OVERLAP, HANDLED EXPLICITLY.  Lines 3177-3180 are a single statement:
+
+    sayText = ovr_stsprintf(msg, ..., className, seedArg);
+
+so the value read on the continuation line 3181 is the *previous* one (the class name) while the
+assignment target is the new one; the same shape appears at 3206-3212.  A "the assignment line and
+the next line" split would have produced `sayText = stsprintf(..., sayText, ...)` - the defect that
+reached the build in ovc27_spellHalfDamage.
+
+VERIFIED IN THE LISTING (tmp/make_fn_probe.py, 240 instructions, 3 `_ovr_stsprintf` calls):
+`className` lives at `[bp-2]` and is pushed from there in both calls, while the result is stored in
+`[bp-4]` (`sayText`) - distinct slots, so the call cannot read its own not-yet-assigned result.
+
+  grep_checks 35,706 -> 35,658; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,625/0/0 (DIFFERENT 0)
+  diff_dgroup 1,626/1,805 matched, 31 runs, sum|delta| 88,497, mean 54, worst 14,314
+  compare_runtime 1,682 matched, 1,673 identical / 9 different

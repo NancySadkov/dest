@@ -3141,7 +3141,8 @@ uint16_t __cdecl16far manage_usesCurSfxType32()
 void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
 
 {
-  char *pcVar1;
+  char *className;
+  char *sayText;
   uint16_t seedArg;
   uint16_t strSeg;
   uint16_t saySeg;
@@ -3172,13 +3173,13 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
     }
     else {
       seedArg = savedSeed;
-      pcVar1 = ovr_ovc22_className(partyIndex,0);
+      className = ovr_ovc22_className(partyIndex,0);
       saySeg = _DS;
-      pcVar1 = ovr_stsprintf(msg,(char *)CONCAT22(0x535b,_SS),
+      sayText = ovr_stsprintf(msg,(char *)CONCAT22(0x535b,_SS),
                              (char *)CONCAT22(*(uint16_t *)((uint)partyIndex * 4),
                                               (char *)0x26510),
-                             ((uint16_t *)((uint)partyIndex * 4))[1],pcVar1,seedArg);
-      ovr_say(pcVar1,saySeg);
+                             ((uint16_t *)((uint)partyIndex * 4))[1],className,seedArg);
+      ovr_say(sayText,saySeg);
     }
   }
   else {
@@ -3193,23 +3194,23 @@ void __cdecl16far manage_highlightStructures(uint8_t partyIndex,int structType)
       if (partyIndex == 0xff) {
         strSeg = (uint16_t)((ulong)((long)structIdx * 6) >> 0x10);
         nameOfs = (int)((long)nameOfs * 6);
-        pcVar1 = ovr_stsprintf(msg,(char *)CONCAT22(0x5323,_SS),
+        sayText = ovr_stsprintf(msg,(char *)CONCAT22(0x5323,_SS),
                                (char *)CONCAT22(*(uint16_t *)((int)&GStructures[0].name + nameOfs),
                                                 (char *)0x26510),
                                *(uint16_t *)((int)&GStructures[0].name + 2 + nameOfs));
-        ovr_say(pcVar1,strSeg);
+        ovr_say(sayText,strSeg);
       }
       else {
-        pcVar1 = ovr_ovc22_className(partyIndex,0);
+        className = ovr_ovc22_className(partyIndex,0);
         saySeg = (uint16_t)((ulong)((long)structIdx * 6) >> 0x10);
         nameOfs = (int)((long)nameOfs * 6);
-        pcVar1 = ovr_stsprintf(msg,(char *)CONCAT22(0x52ed,_SS),
+        sayText = ovr_stsprintf(msg,(char *)CONCAT22(0x52ed,_SS),
                                (char *)CONCAT22(*(uint16_t *)((int)&GStructures[0].name + nameOfs),
                                                 (char *)0x26510),
                                *(uint16_t *)((int)&GStructures[0].name + 2 + nameOfs),
                                *(uint16_t *)((uint)partyIndex * 4),
-                               ((uint16_t *)((uint)partyIndex * 4))[1],pcVar1,strSeg);
-        ovr_say(pcVar1,saySeg);
+                               ((uint16_t *)((uint)partyIndex * 4))[1],className,strSeg);
+        ovr_say(sayText,saySeg);
       }
     }
   }
