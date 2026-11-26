@@ -10294,3 +10294,26 @@ and the CSV itself has length 1 for several real tables, so it cannot drive the 
   grep_checks 39,228 -> 39,186; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### ovc22 helpers: three small functions (39,186 -> 39,147)
+ovc22 helpers: three small functions named (39,186 -> 39,147)
+
+ovc22_usesGUnitGrid and ovc22_buildingTypeAt have the same shape, so they were done together:
+
+  uVar1 = GUnitGrid[x][y]                    -> gridVal (2 each)
+  uVar1 = ((unit_t *)GUnits + i)->bldType    -> btype   (the local is `btype`, not
+                                                `bldType`, because `.bldType` is a field)
+  uVar1 = the returned 0-or-bldType          -> result
+  uVar2 = ovr_ovc23_findRecordAt(x,y,0)      -> recIdx
+
+ovc22_testMapFlags:
+
+  bVar1 = ovc22_textArena(x,y)               -> isArena
+  bVar3 = (byte)(mask >> 8)                  -> maskHi
+  iVar2 = the returned word                  -> result
+
+Renaming and splitting only; no expression changed.
+
+  grep_checks 39,186 -> 39,147; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different

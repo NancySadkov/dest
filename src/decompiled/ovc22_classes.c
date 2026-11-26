@@ -3990,27 +3990,29 @@ uint __cdecl16far ovc22_usesAlignUp4(int x,int y,byte unitType,uint mask)
 uint __cdecl16far ovc22_usesGUnitGrid(int x,int y)
 
 {
-  uint uVar1;
-  uint uVar2;
+  uint gridVal;
+  uint btype;
+  uint result;
+  uint recIdx;
   
-  uVar1 = (*(short (*) [148] [60])GUnitGrid)[x][y];
-  if (uVar1 < 0xf8) {
-    uVar2 = ovr_ovc23_findRecordAt(x,y,0);
-    if (uVar2 == 0xffff) {
-      uVar1 = (uint)((unit_t *)GUnits + uVar1)->bldType;
-      if (((*(uint *)((uint8_t *)&BuildingTypes[uVar1] + 19) & 2) == 0) &&
-         ((*(uint *)((uint8_t *)&BuildingTypes[uVar1] + 19) & 0x20) == 0)) {
-        uVar1 = 0;
+  gridVal = (*(short (*) [148] [60])GUnitGrid)[x][y];
+  if (gridVal < 0xf8) {
+    recIdx = ovr_ovc23_findRecordAt(x,y,0);
+    if (recIdx == 0xffff) {
+      btype = (uint)((unit_t *)GUnits + btype)->bldType;
+      if (((*(uint *)((uint8_t *)&BuildingTypes[btype] + 19) & 2) == 0) &&
+         ((*(uint *)((uint8_t *)&BuildingTypes[btype] + 19) & 0x20) == 0)) {
+        result = 0;
       }
     }
     else {
-      uVar1 = 0;
+      result = 0;
     }
   }
   else {
-    uVar1 = 0;
+    result = 0;
   }
-  return uVar1;
+  return result;
 }
 
 
@@ -4066,26 +4068,28 @@ uint __cdecl16far ovc22_usesGUnitGrid2(int x,int y,byte partyIndex)
 uint __cdecl16far ovc22_buildingTypeAt(int x,int y)
 
 {
-  uint uVar1;
-  uint uVar2;
+  uint gridVal;
+  uint btype;
+  uint result;
+  uint recIdx;
   
-  uVar1 = (*(short (*) [148] [60])GUnitGrid)[x][y];
-  if (uVar1 < 0xf8) {
-    uVar2 = ovr_ovc23_findRecordAt(x,y,0);
-    if (uVar2 == 0xffff) {
-      uVar1 = (uint)((unit_t *)GUnits + uVar1)->bldType;
-      if ((*(uint *)((uint8_t *)&BuildingTypes[uVar1] + 19) & 0x20) == 0) {
-        uVar1 = 0;
+  gridVal = (*(short (*) [148] [60])GUnitGrid)[x][y];
+  if (gridVal < 0xf8) {
+    recIdx = ovr_ovc23_findRecordAt(x,y,0);
+    if (recIdx == 0xffff) {
+      btype = (uint)((unit_t *)GUnits + btype)->bldType;
+      if ((*(uint *)((uint8_t *)&BuildingTypes[btype] + 19) & 0x20) == 0) {
+        result = 0;
       }
     }
     else {
-      uVar1 = 0;
+      result = 0;
     }
   }
   else {
-    uVar1 = 0;
+    result = 0;
   }
-  return uVar1;
+  return result;
 }
 
 
@@ -4097,24 +4101,24 @@ uint __cdecl16far ovc22_buildingTypeAt(int x,int y)
 int __cdecl16far ovc22_testMapFlags(int x,int y,uint mask)
 
 {
-  bool bVar1;
-  int iVar2;
-  byte bVar3;
+  bool isArena;
+  int result;
+  byte maskHi;
   
-  bVar1 = ovc22_textArena(x,y);
-  if (bVar1) {
-    bVar3 = (byte)(mask >> 8);
+  isArena = ovc22_textArena(x,y);
+  if (isArena) {
+    maskHi = (byte)(mask >> 8);
     if (((*(short (*) [60] [148])GMapFlags)[y][x] & mask) == 0) {
-      iVar2 = CONCAT11(bVar3,1);
+      result = CONCAT11(maskHi,1);
     }
     else {
-      iVar2 = (uint)bVar3 << 8;
+      result = (uint)maskHi << 8;
     }
   }
   else {
-    iVar2 = 0;
+    result = 0;
   }
-  return iVar2;
+  return result;
 }
 
 
