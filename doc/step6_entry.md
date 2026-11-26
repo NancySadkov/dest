@@ -11289,3 +11289,20 @@ which is the next prerequisite for sampling during play.
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
   compare_runtime 1,605 identical / 10 different at main entry (gate definition)
+
+### draw_usesToggle_pause: menu cursor names (38,295 -> 38,250)
+draw_usesToggle_pause: name the menu cursor arithmetic (38,295 -> 38,250)
+
+  uVar2     (MouseY - 0x86) / 0xd                      -> menuRow
+  uVar3     (MouseY - 0x86) % 0xd, compared with 9/0xb  -> menuCol
+  uVar3     (MouseY - 0x86) / 0xd from the `== 0xb` test on -> menuRow2
+  bStack_4  (byte) of the row, stored into GMenuItem    -> menuItem
+  cStack_6  the sub-menu choice 0..3                    -> choice
+  bVar1     draw_textArena() / selectAgentAt() result   -> ok
+  uVar4     draw_compute4(MouseBkgPixel) result         -> hit
+
+Renaming and one split; no expression changed.
+
+  grep_checks 38,295 -> 38,250; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
+  compare_runtime 1,605 identical / 10 different

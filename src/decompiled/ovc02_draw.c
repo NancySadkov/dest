@@ -1397,14 +1397,15 @@ uint16_t __cdecl16far draw_compute4(byte type)
 void __cdecl16far draw_usesToggle_pause(void)
 
 {
-  bool bVar1;
+  bool ok;
   uint16_t value;
-  uint uVar2;
-  uint uVar3;
-  uint16_t uVar4;
+  uint menuRow;
+  uint menuCol;
+  uint16_t hit;
   int dstSeg;
-  char cStack_6;
-  byte bStack_4;
+  uint menuRow2;
+  char choice;
+  byte menuItem;
   
   GGameState = 0x36;
   if (DebugVerbose) {
@@ -1415,33 +1416,33 @@ void __cdecl16far draw_usesToggle_pause(void)
     if ((MouseMoved == 0) &&
        ((((0xde < MouseX && (MouseX < 0xee)) && ((7 < MouseY && (MouseY < 0x33)))) ||
         ((((GOngoingBattle != '\0' && (0xee < MouseX)) && (MouseX < 0x135)) &&
-         (((6 < MouseY && (MouseY < 0x37)) && (bVar1 = draw_textArena(), bVar1)))))))) {
+         (((6 < MouseY && (MouseY < 0x37)) && (ok = draw_textArena(), ok)))))))) {
       ovr_ovc41_cannotSeeTerrainNotice();
     }
     else if ((((MouseMoved != 0) || (MouseX < 0xef)) ||
              ((0x134 < MouseX || ((MouseY < 7 || (0x36 < MouseY)))))) ||
-            ((GOngoingBattle != '\0' && (bVar1 = draw_textArena(), bVar1)))) {
+            ((GOngoingBattle != '\0' && (ok = draw_textArena(), ok)))) {
       if ((((MouseX < 9) || (0x18 < MouseX)) || (MouseY < 0xb5)) ||
          ((0xc4 < MouseY || (MouseMoved != 0)))) {
         if ((((trianglesShown == '\0') || ((MouseX < 10 || (0x16 < MouseX)))) || (MouseY < 0x9e)) ||
            ((0xaa < MouseY || (MouseMoved != 0)))) {
           if ((GMenuItem == 5) &&
              ((((0xf4 < MouseX && (0x39 < MouseY)) && (MouseX < 0x128)) &&
-              ((MouseY < 0x65 && (uVar4 = draw_compute4(MouseBkgPixel), (char)uVar4 != '\0')))))) {
-            cStack_6 = '\0';
+              ((MouseY < 0x65 && (hit = draw_compute4(MouseBkgPixel), (char)hit != '\0')))))) {
+            choice = '\0';
             MenuMode = '\x01';
             if ((int)(MouseX - 0xf5) <= (int)(MouseY - 0x36)) {
-              cStack_6 = '\x02';
+              choice = '\x02';
             }
             if ((int)(0x2e - (MouseY - 0x3a)) < (int)(MouseX - 0xf5)) {
-              if (cStack_6 == '\0') {
-                cStack_6 = '\x01';
+              if (choice == '\0') {
+                choice = '\x01';
               }
             }
-            else if (cStack_6 == '\x02') {
-              cStack_6 = '\x03';
+            else if (choice == '\x02') {
+              choice = '\x03';
             }
-            ovr_ovc41_usesBiosKeyAvail(cStack_6,0);
+            ovr_ovc41_usesBiosKeyAvail(choice,0);
             draw_textTalkwin9Lbm();
           }
           else if (((GMenuItem < 5) &&
@@ -1456,15 +1457,15 @@ void __cdecl16far draw_usesToggle_pause(void)
           else if ((((MouseX < 0xea) || (0x13a < MouseX)) || (MouseY < 0x6d)) ||
                   ((0x6f < MouseY || (4 < GMenuItem)))) {
             if (((0x123 < MouseX) && ((MouseX < 0x139 && (0x85 < MouseY)))) && (MouseY < 200)) {
-              uVar3 = (MouseY - 0x86) % 0xd;
-              if ((uVar3 < 9) &&
-                 ((((MouseX < 0x12f && (0x12e - MouseX <= uVar3)) ||
-                   ((0x12e < MouseX && (MouseX - 0x12e <= uVar3)))) &&
-                  ((uVar2 = (MouseY - 0x86) / 0xd, uVar2 < 5 &&
-                   (((uint8_t *)MenuItemEnabled)[uVar2] != 0xff)))))) {
-                bStack_4 = (byte)uVar2;
-                if (GMenuItem != uVar2) {
-                  GMenuItem = bStack_4;
+              menuCol = (MouseY - 0x86) % 0xd;
+              if ((menuCol < 9) &&
+                 ((((MouseX < 0x12f && (0x12e - MouseX <= menuCol)) ||
+                   ((0x12e < MouseX && (MouseX - 0x12e <= menuCol)))) &&
+                  ((menuRow = (MouseY - 0x86) / 0xd, menuRow < 5 &&
+                   (((uint8_t *)MenuItemEnabled)[menuRow] != 0xff)))))) {
+                menuItem = (byte)menuRow;
+                if (GMenuItem != menuRow) {
+                  GMenuItem = menuItem;
                   MenuMode = 1;
                   draw_toolbarLabels();
                   ovr_ovc41_unitStatusText(GMenuItem);
@@ -1472,7 +1473,7 @@ void __cdecl16far draw_usesToggle_pause(void)
                   return;
                 }
                 if (GOngoingBattle != '\0') {
-                  ovr_ui_textDefineRegionCommand(bStack_4);
+                  ovr_ui_textDefineRegionCommand(menuItem);
                   return;
                 }
                 MenuMode = 1;
@@ -1481,13 +1482,13 @@ void __cdecl16far draw_usesToggle_pause(void)
                 ovr_ovc41_unitStatusText(GMenuItem);
                 return;
               }
-              if (uVar3 == 0xb) {
-                uVar3 = (MouseY - 0x86) / 0xd;
-                if (((uint8_t *)MenuItemEnabled)[uVar3] == 0xff) {
+              if (menuRow2 == 0xb) {
+                menuRow2 = (MouseY - 0x86) / 0xd;
+                if (((uint8_t *)MenuItemEnabled)[menuRow2] == 0xff) {
                   return;
                 }
-                bStack_4 = (byte)uVar3;
-                GMenuItem = bStack_4;
+                menuItem = (byte)menuRow2;
+                GMenuItem = menuItem;
                 MenuMode = 2;
                 draw_toolbarLabels();
                 draw_textTalkwin9Lbm();
@@ -1496,12 +1497,12 @@ void __cdecl16far draw_usesToggle_pause(void)
               }
             }
             if ((((MouseX < 0xea) || (0x123 < MouseX)) || (MouseY < 0x86)) ||
-               (((199 < MouseY || (uVar3 = (MouseY - 0x86) / 0xd, 8 < (MouseY - 0x86) % 0xd)) ||
-                ((4 < uVar3 || (((uint8_t *)MenuItemEnabled)[uVar3] == 0xff)))))) {
+               (((199 < MouseY || (menuRow2 = (MouseY - 0x86) / 0xd, 8 < (MouseY - 0x86) % 0xd)) ||
+                ((4 < menuRow2 || (((uint8_t *)MenuItemEnabled)[menuRow2] == 0xff)))))) {
               if (((MouseX < 0x125) || (0x137 < MouseX)) ||
                  ((MouseY < 0x72 ||
                   (((0x82 < MouseY || (MouseMoved != 0)) ||
-                   (uVar4 = draw_compute4(MouseBkgPixel), (char)uVar4 == '\0')))))) {
+                   (hit = draw_compute4(MouseBkgPixel), (char)hit == '\0')))))) {
                 if (((MouseMoved == 0) && (0xea < MouseX)) &&
                    ((MouseX < 0x115 && ((0x73 < MouseY && (MouseY < 0x80)))))) {
                   ovr_toggle_pause();
@@ -1516,7 +1517,7 @@ void __cdecl16far draw_usesToggle_pause(void)
               }
             }
             else {
-              ovr_manage_showSettlementScreen(((uint8_t *)MenuItemEnabled)[uVar3]);
+              ovr_manage_showSettlementScreen(((uint8_t *)MenuItemEnabled)[menuRow2]);
             }
           }
           else {
@@ -1547,8 +1548,8 @@ void __cdecl16far draw_usesToggle_pause(void)
     }
   }
   else if (GOngoingBattle == '\0') {
-    bVar1 = ovr_stats_selectAgentAt(MouseX - 0xc,MouseY - 7);
-    if (!bVar1) {
+    ok = ovr_stats_selectAgentAt(MouseX - 0xc,MouseY - 7);
+    if (!ok) {
       ovr_ovc45_showLandInfo(MouseX - 0xc,MouseY - 7);
     }
   }
