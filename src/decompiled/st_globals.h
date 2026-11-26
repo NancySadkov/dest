@@ -1600,7 +1600,7 @@ extern char s_enemies[];
 extern char s_c_s_s_d[];
 extern char s_empty_2410_6ac3[];
 extern far_t msgFormat;
-extern char s_my_s_we_in_this_neighbor_b984[103];
+extern char s_my_s_neigh_2410_6ac8[103];
 extern char s_empty_2410_6b39[];
 extern far_t RankMsgPtrs[19];
 extern brect_t fullWidthRect;
@@ -2300,3 +2300,7 @@ extern undefined1 s_4__Adlib_5__None_2410_6047[];
 
 /* Migrated DGROUP strings */
 extern undefined1 s_Sound_Blaster__1_2410_6071[];
+
+/* restored from audit/dgroup_2410.bin */
+extern char s_of_nobility_2410_6cb7[42];
+extern char s_of_your_2410_6ce1[11];

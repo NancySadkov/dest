@@ -213,7 +213,6 @@ char s_absentBlob[] =
   "Region selection aborted.\0"
   "Building is now %s.  Select type of building.\0"
   "The season has changed to %s.\0"
-  "of nobility. You will truly be the master\0"
   "adventure.\0"
   "of adventure and glory.\0"
   "%s, for valor in battle.\0"

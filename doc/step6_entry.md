@@ -14336,3 +14336,58 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (47 runs, sum|delta| 193,093, mean 122, worst 14,562)
   compare_runtime 1,630 matched, 1,621 identical / 9 different
+
+### layout: duplicate 103-byte string removed, two missing strings restored
+layout: remove a duplicate 103-byte string and restore two missing ones
+
+(matced 1,581 -> 1,583, runs 47 -> 45, runtime identical 1,621 -> 1,624;
+ sum|delta| 193,093 -> 198,159, which I explain below)
+
+## The duplicate
+
+`diff_dgroup` showed a +103 step at `s_empty_2410_6b39`.  The original has ONE 103-byte object
+at 0x6ac8 ("My %s, we in this neighborhood are doing well. ..."); we declared it twice:
+
+  * `s_my_s_we_in_this_neighbor_b984[103]`, which lands at 0x6ac8 and is the copy the code in
+    ovc22_classes.c reads (`..._b984[0x4c]`),
+  * `s_my_s_we_in_this_neigh_2410_6ac8[]`, a string copy that lands at 0x6b2f - 103 bytes
+    late, shifting `s_lord`, `s_lady`, `RankMsgPtrs` and everything after it.
+
+The late copy is deleted and the surviving one takes a 23-character name ending `_2410_6ac8`
+(the 35-character form was being truncated to 32 by TLINK, which had already broken its
+`OFS_6AC8` pairing).  The declaration is now a string literal rather than a `{ 'M', 'y', ...
+}` list: `compare_state.py` splits initialiser lists on commas, so the `','` element inside it
+made the tool report a false mismatch on a declaration whose bytes were correct.
+
+## The two missing strings
+
+Our layout jumped straight from the 0x6c8c string to the 0x6cec one, so 0x6cb7
+("of nobility. You will truly be the master", 42 bytes) and 0x6ce1 ("of your...", 11 bytes)
+were absent - the -53 step at 0x6cec.  Both are restored from audit/dgroup_2410.bin, and
+"of nobility. ..." is removed from stmiss.c's s_absentBlob reservoir so those bytes exist
+once, at the position the original has them.
+
+## Why sum|delta| rose
+
+Removing the duplicate shortened our layout by 103 bytes from 0x6b2f on; restoring the two
+strings added 53 back.  The net -50 lands in a region whose delta is already negative, and the
+tail therefore got ~50 more negative, which `sum|delta|` scores as worse.  `matched` (+2),
+`runs` (-2) and `compare_runtime` (+3 identical) all improved, and those measure how much of
+the layout we can verify rather than how far the residual is from zero.
+
+## Identified next target, not attempted here
+
+The remaining oscillation in the tail comes from a modelling error around the help-text
+filenames: the original has `GTxtFiles` (136 bytes = 34 far pointers) at 0x822c FOLLOWED by
+the 34 filename strings at 0x82b4..0x842c, but we declare `s_txtFileNames[34][11]` (374 bytes)
+BEFORE `GTxtFiles`, and we also carry a separate `s_house1_txt` that duplicates one entry of
+that array.  That single swap is the +482 / -140 / -225 steps.  Fixing it properly needs the
+individual strings modelled at their real lengths (they are 10 and 11 bytes, so the
+rectangular stride is wrong too) and `crtl.c`'s fixup recomputed from each entry's original
+offset - a measured change of its own, not a one-line move.
+
+  grep_checks 35,702 -> 35,704  (two new string declarations in the char-string class)
+  build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581 -> 1,583 matched, 47 -> 45 runs, sum|delta| 198,159
+  compare_runtime 1,633 matched, 1,624 identical / 9 different

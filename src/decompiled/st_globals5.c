@@ -1579,15 +1579,9 @@ char s_enemies[] = "Enemies";
 char s_c_s_s_d[] = "%c%s%s@%d";
 char s_empty_2410_6ac3[] = "";
 far_t msgFormat = { 0x6AC8, 0x2410 };
-char s_my_s_we_in_this_neighbor_b984[103] = { 'M', 'y', ' ', '%', 's', ',', ' ', 'w', 'e',
-     ' ', 'i', 'n', ' ', 't', 'h', 'i', 's', ' ', 'n', 'e', 'i', 'g', 'h', 'b', 'o', 'r', 'h', 'o', 'o',
-     'd', ' ', 'a', 'r', 'e', ' ', 'd', 'o', 'i', 'n', 'g', ' ', 'w', 'e', 'l', 'l', '.', ' ', 'W', 'e',
-     ' ', 't', 'h', 'a', 'n', 'k', ' ', 'y', 'o', 'u', ' ', 'f', 'o', 'r', ' ', 'a', 'l', 'l', ' ', 'y',
-     'o', 'u', ' ', 'h', 'a', 'v', 'e', ' ', 'd', 'o', 'n', 'e', ' ', 't', 'o', ' ', 'h', 'e', 'l', 'p',
-     ' ', 'y', 'o', 'u', 'r', ' ', 'p', 'e', 'o', 'p', 'l', 'e', '.' };
+char s_my_s_neigh_2410_6ac8[103] = "My %s, we in this neighborhood are doing well. We thank you for all you have done to help your people.";
 /* 6b2f/6b34: the lower-case twins of s_lord/s_lady (0x4c6x) */
 /* 6ac8: 103 bytes, immediately before s_lord at 0x6b2f */
-char s_my_s_we_in_this_neigh_2410_6ac8[] = "My %s, we in this neighborhood are doing well. We thank you for all you have done to help your people.";
 char s_lord_2410_6b2f[] = "lord";
 char s_lady_2410_6b34[] = "lady";
 char s_empty_2410_6b39[] = "";
@@ -1603,6 +1597,8 @@ char s__s__in_recognition__2410_6c1c[] = "%s, in recognition for city management
 char s_Your_desire_to_dest_2410_6c44[] = "Your desire to destroy him and";
 char s_gain_revenge_inspir_2410_6c63[] = "gain revenge inspires you to new heights";
 char s_You_will_be_promote_2410_6c8c[] = "You will be promoted to ever-greater ranks";
+char s_of_nobility_2410_6cb7[42] = "of nobility. You will truly be the master";
+char s_of_your_2410_6ce1[11] = "of your...";
 char s_Your_desire_to_dest_2410_6cec[] = "Your desire to destroy him and gain revenge";
 char s_inspired_you_to_see_2410_6d18[] = "inspired you to seek a life of glory and";
 char s__s_stronghold_destr_2410_6d4c[] = "%s stronghold destroyed";
