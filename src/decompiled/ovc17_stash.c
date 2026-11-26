@@ -846,17 +846,17 @@ undefined1 * __cdecl16far stash_loadFromStrongDat(far_t entry)
           bVar3 = false;
         }
         else {
-          memcpy((char *)CONCAT22(*(uint16_t *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1),
+          _fmemmove((char far *)MK_FP(*(uint16_t *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1),
                                   (char *)*(uint16_t *)
                                            ((int)&((far_t far *)(entry.ofs + 0x10))->ofs + 1)),
-                 (char *)CONCAT22(uVar6,pfVar4),*(word *)((int)&((far_t far *)(entry.ofs + 4))->ofs + 1)
+                 (char far *)MK_FP(uVar6,pfVar4),*(word *)((int)&((far_t far *)(entry.ofs + 4))->ofs + 1)
                 );
           bVar3 = true;
         }
       }
       else {
-        memcpy((char *)CONCAT22(uVar6,pfVar4),
-               (char *)CONCAT22(*(uint16_t *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1),
+        _fmemmove((char far *)MK_FP(uVar6,pfVar4),
+               (char far *)MK_FP(*(uint16_t *)((int)&((far_t far *)(entry.ofs + 0x10))->seg + 1),
                                 (char *)*(uint16_t *)
                                          ((int)&((far_t far *)(entry.ofs + 0x10))->ofs + 1)),
                *(word *)((int)&((far_t far *)(entry.ofs + 4))->ofs + 1));

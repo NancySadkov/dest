@@ -15,8 +15,8 @@ void __cdecl16far stshCopyFontChar(uint8_t *src,uint8_t *dst,int16_t width,int16
   char *in_stack_00000004;
   
   while (width != 0) {
-    memcpy((char *)CONCAT22((uint8_t *)dst,(*(uint16_t *)((uint8_t *)&(src) + 2))),
-           (char *)CONCAT22((uint8_t *)src,in_stack_00000004),(*(uint16_t *)((uint8_t *)&(dst) + 2)));
+    _fmemmove((char far *)MK_FP((uint8_t *)dst,(*(uint16_t *)((uint8_t *)&(src) + 2))),
+           (char far *)MK_FP((uint8_t *)src,in_stack_00000004),(*(uint16_t *)((uint8_t *)&(dst) + 2)));
     src = (uint8_t *)CONCAT22((*(uint16_t *)((uint8_t *)&(src) + 2)) + (*(uint16_t *)((uint8_t *)&(dst) + 2)),(uint8_t *)src);
     in_stack_00000004 = in_stack_00000004 + 0x140;
     width = width + -1;

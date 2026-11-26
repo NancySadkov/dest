@@ -149,9 +149,9 @@ void __cdecl16far stats_drawPortrait(agntG_t far *gdata,byte portraitIndex,int p
     handle_00.ofs = (paVar2->prtpals + portraitIndex)->ofs;
     gfxRec = ovr_stshLoadGfx(handle_00);
     uVar4 = (undefined1)(in_DX >> 8);
-    memcpy((char *)CONCAT22(in_stack_0000000c,(char *)(palette + 3)),
+    _fmemmove((char far *)MK_FP(in_stack_0000000c,(char *)(palette + 3)),
            (char *)CONCAT13(uVar4,CONCAT12((char)in_DX,gfxRec->cmap + 3)),0xed);
-    memcpy((char *)CONCAT22(in_stack_0000000c,(char *)(palette + 0x1e0)),
+    _fmemmove((char far *)MK_FP(in_stack_0000000c,(char *)(palette + 0x1e0)),
            (char *)CONCAT13(uVar4,CONCAT12((char)in_DX,gfxRec->cmap + 0x1e0)),0x90);
   }
   if (GameRunning == false) {
@@ -2378,7 +2378,7 @@ void __cdecl16far drawString(char *text,uint16_t widths,uint16_t arg3)
   uint16_t uStack_a;
   int16_t iStack_6;
   
-  memcpy((char *)CONCAT22(_SS,&rect),(char *)(BlitRects + 1),10);
+  _fmemmove((char far *)MK_FP(_SS,&rect),(char *)(BlitRects + 1),10);
   if (ScreenMode == '\x01') {
     uStack_a = 0x9c;
     iStack_6 = 190;

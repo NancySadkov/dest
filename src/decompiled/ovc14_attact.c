@@ -329,7 +329,7 @@ void __cdecl16far attact_usesSquareRecCount2(void)
     if (SquareRecCount <= uVar1) {
       SquareRecX = GfxRndSeed;
       SquareRecY = GfxRndSeed2;
-      memcpy((char *)0x24109074,(char *)&SquareRecX,0x13);
+      _fmemmove((char far *)MK_FP(0x2410,0x9074),(char *)&SquareRecX,0x13);
       SquareRecIndex = SquareRecCount;
       return;
     }
@@ -337,7 +337,7 @@ void __cdecl16far attact_usesSquareRecCount2(void)
     break;
     uVar1 = uVar1 + 1;
   }
-  memcpy((char *)0x24109074,(char *)CONCAT22(0x17f8,(char *)(uVar1 * 0x13)),0x13);
+  _fmemmove((char far *)MK_FP(0x2410,0x9074),(char far *)MK_FP(0x17f8,(char *)(uVar1 * 0x13)),0x13);
   SquareRecIndex = uVar1;
   return;
 }
@@ -394,7 +394,7 @@ void __cdecl16far attact_usesAgntFlag1(void)
       SquareRecCount = 299;
     }
   }
-  memcpy((char *)CONCAT22(0x17f8,(char *)(SquareRecCount * 0x13)),(char *)0x24109074,0x13);
+  _fmemmove((char far *)MK_FP(0x17f8,(char *)(SquareRecCount * 0x13)),(char far *)MK_FP(0x2410,0x9074),0x13);
   iVar5 = SquareRecCount * 0x13;
   SquareRecCount = SquareRecCount + 1;
   sub_OVC04_0001(0x1000,iVar5,0x17f8);

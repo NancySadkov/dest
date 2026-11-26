@@ -700,7 +700,7 @@ void __cdecl16far unit_usesAlignUp42(byte menuIndex,uint16_t x,int y)
     if (SquareRecCount <= recIdx) {
 L_unit_6616_10d5_1152:
       if (SquareRecCount <= recIdx) {
-        memcpy((char *)CONCAT22(_SS,&rec),(char *)&SquareRecX,0x13);
+        _fmemmove((char far *)MK_FP(_SS,&rec),(char *)&SquareRecX,0x13);
       }
       rec = GfxRndSeed;
       recY = GfxRndSeed2;
@@ -730,14 +730,14 @@ L_unit_6616_10d5_1152:
       }
       recY = y;
       rec = alignedX;
-      memcpy((char *)CONCAT22(0x17f8,(char *)(SquareRecCount * 0x13)),
-             (char *)CONCAT22(_SS,&rec),0x13);
+      _fmemmove((char far *)MK_FP(0x17f8,(char *)(SquareRecCount * 0x13)),
+             (char far *)MK_FP(_SS,&rec),0x13);
       SquareRecCount = SquareRecCount + 1;
       return;
     }
     recAlignedX = ovr_alignUp4(*(int *)(recIdx * 0x13),0,0);
     if ((recAlignedX == alignedX) && (*(int *)((uint8_t *)&SquareRecs[recIdx] + 2) == y)) {
-      memcpy((char *)CONCAT22(_SS,&rec),(char *)CONCAT22(0x17f8,(char *)(recIdx * 0x13)),0x13);
+      _fmemmove((char far *)MK_FP(_SS,&rec),(char far *)MK_FP(0x17f8,(char *)(recIdx * 0x13)),0x13);
       goto L_unit_6616_10d5_1152;
     }
     recIdx = recIdx + 1;

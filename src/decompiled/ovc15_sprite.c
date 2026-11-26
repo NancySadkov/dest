@@ -915,8 +915,8 @@ void __cdecl16far ovc15_usesStExit(int entityIndex)
   
   if (EntityCount < 0x259) {
     if (EntityCount != 600) {
-      memcpy((char *)CONCAT22(DAT_2000_d190,Entities + EntityCount),
-             (char *)CONCAT22(DAT_2000_d190,Entities + entityIndex),0x37);
+      _fmemmove((char far *)MK_FP(DAT_2000_d190,Entities + EntityCount),
+             (char far *)MK_FP(DAT_2000_d190,Entities + entityIndex),0x37);
       (Entities)[EntityCount].base.animFrame =
            (uint8_t)((int)(uint)(Entities)[entityIndex].base.animFrame >> 1);
       animFramePtr = &(Entities)[entityIndex].base.animFrame;
@@ -1266,7 +1266,7 @@ L_OVC15_4207_1ffe_2193:
                     ((uint)AgntCount - agntIndex) * 0x34);
         }
         agnt_00->visited = 0x1;
-        memcpy((char *)CONCAT22(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x),(char *)agnt,0x34);
+        _fmemmove((char far *)MK_FP(SEG_OF(Agnts),(char *)&Agnts[agntIndex].x),(char *)agnt,0x34);
         ovr_agnt_usesAgntCount5(agntIndex + 1);
         ovr_ovc49_fillGridCells((char)agntIndex + 1,(agnt_t far *)&Agnts[agntIndex].x,SEG_OF(Agnts),0);
         AgntCount = AgntCount + 1;

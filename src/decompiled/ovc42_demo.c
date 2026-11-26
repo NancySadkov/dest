@@ -205,7 +205,7 @@ ovc42_showAgentStats(byte gindex,uint8_t partyIndex,char flag,far_t cmap,byte le
   int16_t iStack_6;
   
   ovr_draw_freeRingBuffers();
-  memcpy((char *)CONCAT22(_SS,&rect),(char *)(BlitRects + 1),10);
+  _fmemmove((char far *)MK_FP(_SS,&rect),(char *)(BlitRects + 1),10);
   iStack_6 = 150;
   gfx.seg = talkwin9Cut1Seg;
   gfx.ofs = talkwin9Cut1Ofs;

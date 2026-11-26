@@ -134,8 +134,8 @@ void __cdecl16far video_copyScreenTile(uint16_t srcSeg,int x,int y)
     height = 0x11;
   }
   for (row = 0; row < height; row = row + 1) {
-    memcpy((char *)CONCAT22(0x224a,dstOfs),
-           (char *)CONCAT22(srcSeg,(char *)(x + y * 0x140 + srcOfs)),width);
+    _fmemmove((char far *)MK_FP(0x224a,dstOfs),
+           (char far *)MK_FP(srcSeg,(char *)(x + y * 0x140 + srcOfs)),width);
     srcOfs = srcOfs + 0x140;
     dstOfs = dstOfs + 0x11;
   }

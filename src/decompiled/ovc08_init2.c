@@ -94,7 +94,7 @@ void __cdecl16far miceSaveArea(uint x,uint y,brect_t *br,uint16_t arg4)
       h = 0x11;
     }
     for (j = 0; j < h; j = j + 1) {
-      memcpy((char *)CONCAT22(0x224a,pcVar2),(char *)CONCAT22(uVar1,src),w);
+      _fmemmove((char far *)MK_FP(0x224a,pcVar2),(char far *)MK_FP(uVar1,src),w);
       src = src + 0x140;
       pcVar2 = pcVar2 + 0x11;
     }

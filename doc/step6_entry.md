@@ -11921,3 +11921,51 @@ ovc42_populateArea: scan offsets and alignment temporaries (37,849 -> 37,824)
   grep_checks 37,849 -> 37,824; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
   compare_runtime 1,605 identical / 10 different
+
+### memcpy: 23 crossing call sites converted to _fmemmove
+memcpy: the 23 call sites that cross a segment are now _fmemmove
+
+`memcpy` is declared `void * __cdecl16far memcpy(char *dst,char *src,word)` - near
+pointers.  `(char *)CONCAT22(seg,ofs)` therefore keeps only the offset, and the copy
+runs at DS:offset.  Unlike `_fmemmove` this cannot be fixed uniformly, because a call
+whose only segment is `_DS` is already correct.
+
+tmp/scan_memcpy.py enumerated all 38 call sites and classified each by the segments in
+its arguments.  23 genuinely cross a segment and are now `_fmemmove` with
+`(char far *)MK_FP(seg,ofs)`:
+
+  * a stack buffer            `CONCAT22(_SS,&rect)`, `&rec`        (ovc34_unit x3, ovc42_demo)
+  * the far SquareRecs table  `CONCAT22(0x17f8,...)`               (ovc14_attact x3, ovc34_unit)
+  * a DGROUP literal used far `(char *)0x24109074` truncated to 0x9074, and the same
+    for `0x24106e08`/`0x6e14`/`0x6e20`/`0x6e2c`                    (ovc14_attact, ovc41_main x4)
+  * a named segment           dstSeg, srcSeg, DAT_2000_d190, SEG_OF(Agnts), uVar1/uVar3/
+                              uVar6, psStack_8, in_stack_*, 0x224a   (ovc06_blit, ovc08_init2,
+                              ovc15_sprite x2, ovc17_stash x2, ovc33_stats x2, ovc39_archive,
+                              video.c)
+
+REVERTED ON PURPOSE: five calls whose arguments are built with
+`(char *)CONCAT13(a,CONCAT12(b,x))` (ovc09_init 1, ovc42_demo 4) had been renamed to
+_fmemmove by the pass but their pointer type was not rewritten - the CONCAT13 form was
+outside the rewrite.  A near argument to a far parameter is widened with DS, which is
+exactly what memcpy did, so those were neutral at best and unverified; they are back to
+`memcpy` until the CONCAT13 form itself is understood.
+
+VERIFIED in the listing (unit_usesAlignUp42) - the stack destination is passed with its
+own segment, not DS:
+
+    push  19
+    push  ds
+    push  offset DGROUP:_SquareRecX
+    lea   ax,word ptr [bp-5]
+    push  ss
+    push  ax
+    call  far ptr __fmemmove
+
+MEASURED - unchanged, as intended:
+
+    grep_checks 37,824 | compare_state 1,627/0/0
+    diff_dgroup 1,450/1,868, 71 runs, sum|delta| 276,979
+    compare_runtime 1,605 identical / 10 different
+
+STILL OPEN: 15 memcpy calls classified `ds` are left alone (their only segment is `_DS`
+or they pass plain DGROUP objects), plus the five CONCAT13 sites above.

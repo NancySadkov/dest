@@ -44,7 +44,7 @@ int __cdecl16far ovc39_loadArchiveEntry(byte fileId)
     }
     psStack_8 = psVar2;
     buf = ovr_stshAlloc(CONCAT22(iStack_c,wStack_e));
-    memcpy((char *)CONCAT22(psStack_8,buf),(char *)CONCAT22(uVar3,psVar2),wStack_e);
+    _fmemmove((char far *)MK_FP(psStack_8,buf),(char far *)MK_FP(uVar3,psVar2),wStack_e);
   }
   else {
     buf = ovr_stshAlloc(1);

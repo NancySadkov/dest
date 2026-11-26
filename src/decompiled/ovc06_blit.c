@@ -357,8 +357,8 @@ void __cdecl16far blit_usesDrawGfx(far_t gfx, int x, int y, brect_t far *rect)
           rowLen = ovr_unrle(src,dst_00,*(uint16_t *)(gfx.ofs + 5),(char)*(uint16_t *)(gfx.ofs + 5),0);
           srcOfs = srcOfs + rowLen;
           if (rectY <= row + y) {
-            memcpy((char *)CONCAT22(dstSeg,dstOfs),
-                   (char *)CONCAT22(_SS,&rowBuf + xSkip),copyW);
+            _fmemmove((char far *)MK_FP(dstSeg,dstOfs),
+                   (char far *)MK_FP(_SS,&rowBuf + xSkip),copyW);
             dstOfs = dstOfs + 0x140;
           }
         }

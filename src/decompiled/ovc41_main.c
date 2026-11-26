@@ -1849,10 +1849,10 @@ void __cdecl16far uiMainMenu(void)
 void __cdecl16far ovc41_initIndexPerms(void)
 
 {
-  memcpy(&IndexPermD,(char *)0x24106e08,0xc);
-  memcpy(&IndexPermC,(char *)0x24106e14,0xc);
-  memcpy(&IndexPermB,(char *)0x24106e20,0xc);
-  memcpy(&IndexPermA,(char *)0x24106e2c,0xc);
+  _fmemmove(&IndexPermD,(char far *)MK_FP(0x2410,0x6e08),0xc);
+  _fmemmove(&IndexPermC,(char far *)MK_FP(0x2410,0x6e14),0xc);
+  _fmemmove(&IndexPermB,(char far *)MK_FP(0x2410,0x6e20),0xc);
+  _fmemmove(&IndexPermA,(char far *)MK_FP(0x2410,0x6e2c),0xc);
   return;
 }
 
