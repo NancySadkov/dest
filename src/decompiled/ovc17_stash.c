@@ -490,27 +490,27 @@ far_t * __cdecl16far fmMalloc(far_t *retStorage,uint32_t nbytes)
 char * __cdecl16far fmVsprintf(char *fmt,char *arg)
 
 {
-  uint8_t *puVar1;
-  char *pcVar2;
-  int iVar3;
-  uint uVar4;
+  uint8_t *allocPtr;
+  char *copyPtr;
+  int lenHi;
+  uint ringIdx;
   uint8_t *src;
   static char buf[64];   /* DGROUP-backed formatting buffer */
   int16_t vlen;
-  char **ppcStack_6;
+  char **ap;
   
   FMRingIndex = FMRingIndex + 1 & 7;
-  ppcStack_6 = &arg;
-  vlen = vsprintf(buf,fmt,(uint16_t)ppcStack_6);
+  ap = &arg;
+  vlen = vsprintf(buf,fmt,(uint16_t)ap);
   src = (uint8_t *)buf;
-  iVar3 = vlen + 1 >> 0xf;
-  puVar1 = stshRealloc(CONCAT22(*(uint16_t *)((int)&FMRingBuf[0].seg + (uint)FMRingIndex * 4),
+  lenHi = vlen + 1 >> 0xf;
+  allocPtr = stshRealloc(CONCAT22(*(uint16_t *)((int)&FMRingBuf[0].seg + (uint)FMRingIndex * 4),
                                 ((far_t *)FMRingBuf + FMRingIndex)->ofs),(long)(vlen + 1));
                     /* Copy sprintfed string to dst */
-  pcVar2 = strcpy((char *)CONCAT22(iVar3,puVar1),(char *)src);
-  uVar4 = (uint)FMRingIndex;
-  *(int *)((int)&FMRingBuf[0].seg + uVar4 * 4) = iVar3;
-  ((far_t *)FMRingBuf + uVar4)->ofs = (uint16_t)pcVar2;
+  copyPtr = strcpy((char *)CONCAT22(lenHi,allocPtr),(char *)src);
+  ringIdx = (uint)FMRingIndex;
+  *(int *)((int)&FMRingBuf[0].seg + ringIdx * 4) = lenHi;
+  ((far_t *)FMRingBuf + ringIdx)->ofs = (uint16_t)copyPtr;
   return (char *)((far_t *)FMRingBuf + FMRingIndex)->ofs;
 }
 

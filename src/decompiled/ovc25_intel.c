@@ -971,10 +971,11 @@ int __cdecl16far ovc25_compute1(byte gindex)
 void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
 
 {
-  byte *pbVar1;
-  char cVar2;
-  uint16_t uVar3;
-  uint8_t *puVar4;
+  byte *flagPtr;
+  char roll;
+  uint16_t randRoll;
+  uint16_t notifySeg;
+  uint8_t *stashPtr;
   char *msg;
   uint16_t curSeg = _SS;
   static char text[64];   /* DGROUP-backed formatting buffer */
@@ -990,30 +991,30 @@ void __cdecl16far ovc25_intelAttackingNotice(byte partyIndex)
       ((*(char *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x49) != -1 &&
        ((partyClass = *(byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x49),
         (GLeaderSheets[partyClass])->unitCount < 0x50 ||
-        (uVar3 = ovr_randBelow(0x28,0), (char)uVar3 == '\0')))))) &&
+        (randRoll = ovr_randBelow(0x28,0), (char)randRoll == '\0')))))) &&
      (8 < ((agnt_t far *)(((uint)partyIndex << 2)))->teamCode)) {
     if ((GLeaderSheets[partyClass])->unitCount < 0x28) {
       if ((GLeaderSheets[partyClass])->unitCount < 0x14) {
         return;
       }
-      uVar3 = ovr_randBelow(0x78,0);
-      cVar2 = (char)uVar3;
+      randRoll = ovr_randBelow(0x78,0);
+      roll = (char)randRoll;
     }
     else {
-      uVar3 = ovr_randBelow(0x50,0);
-      cVar2 = (char)uVar3;
+      randRoll = ovr_randBelow(0x50,0);
+      roll = (char)randRoll;
     }
-    if (cVar2 == '\0') {
+    if (roll == '\0') {
       ovr_play_sfx(82,0,0);
       *(uint16_t *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5e) = 0x19;
-      uVar3 = _DS;
-      puVar4 = ovr_ovc15_usesStshRealloc
+      notifySeg = _DS;
+      stashPtr = ovr_ovc15_usesStshRealloc
                          ((char *)*(uint16_t *)((uint)partyIndex * 4),((uint16_t *)((uint)partyIndex * 4))[1],GSavedBlitSeg,0,0,0,0,0);
       msg = ovr_stsprintf(text,(char *)CONCAT22(0x5906,curSeg),
-                          (char *)CONCAT22(puVar4,(char *)0x26510),uVar3);
-      ovr_uiNotify(msg,uVar3,0);
-      pbVar1 = (byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d);
-      *pbVar1 = *pbVar1 | 1;
+                          (char *)CONCAT22(stashPtr,(char *)0x26510),notifySeg);
+      ovr_uiNotify(msg,notifySeg,0);
+      flagPtr = (byte *)((int)*(uint32_t *)((uint)partyIndex << 2) + 0x5d);
+      *flagPtr = *flagPtr | 1;
     }
   }
   return;

@@ -13717,3 +13717,37 @@ No expression changed.
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### ovc25_intelAttackingNotice and fmVsprintf (36,443 -> 36,389)
+ovc25_intelAttackingNotice and fmVsprintf (36,443 -> 36,389)
+
+ovc25_intelAttackingNotice (50 lines)
+    pbVar1  974, 1015, 1016   &(leader + 0x5d) read-modify-write  -> flagPtr   (4)
+    cVar2   975, 1000, 1004, 1006  the randBelow low byte tested   -> roll      (4)
+    uVar3   before 1009 (993, 999, 1003)  ovr_randBelow results    -> randRoll  (7)
+    uVar3   from 1009 (1009, 1013, 1014)  _DS, the uiNotify segment-> notifySeg (3)
+    puVar4  977, 1010, 1013  ovr_ovc15_usesStshRealloc's result    -> stashPtr  (3)
+
+The `uVar3` split is positional, not pattern-based: every use before line 1009 is a
+`ovr_randBelow` result - including the two occurrences forced inside the giant guard at 993
+- and every use at or after 1009 is the segment passed to `ovr_stsprintf` / `ovr_uiNotify`.
+Splitting on the line number is what keeps 993's pair together; a pattern rule would have
+separated the assignment from the `(char)randRoll == '\0'` test that consumes it.
+
+fmVsprintf (26 lines)
+    puVar1      493, 507, 510  stshRealloc's result                -> allocPtr (3)
+    pcVar2      494, 510, 513  strcpy's result                     -> copyPtr  (3)
+    iVar3       495, 506, 510, 512  (vlen + 1) >> 15, the high word -> lenHi    (4)
+    uVar4       496, 511, 512  (uint)FMRingIndex                   -> ringIdx  (3)
+    ppcStack_6  500, 503, 504  &arg, the vsprintf argument list    -> ap       (3)
+
+`lenHi` is named for what it is: `>>` binds looser than `+`, so `vlen + 1 >> 0xf` is
+`(vlen + 1) >> 15`, the high word of the byte count, which is then used as the segment half
+of `CONCAT22(lenHi, allocPtr)`.
+
+No expression changed.
+
+  grep_checks 36,443 -> 36,389; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
