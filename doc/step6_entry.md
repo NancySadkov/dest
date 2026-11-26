@@ -10074,3 +10074,23 @@ every data fix will silently regress the thing AGENTS.md actually asks for.
 
   grep_checks 39,372 -> 39,308; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868; compare_runtime 1,545/12
+
+### ovc45_compute1: uVar2 split (39,308 -> 39,275)
+ovc45_compute1: split uVar2 into mapRes / bldOfs (39,308 -> 39,275)
+
+uVar2 was the only section-5 name in the function and carried two roles:
+
+  mapRes  ovc45_usesGMapFlags / ovc45_cellBelowBlocked results, every one tested with
+          `& 0xff`                                          (lines 336-338, 346-348, 354-356, 364-372)
+  bldOfs  (uint)bldType * 0x27, the record offset read at +0x121        (352-353)
+
+Renaming and splitting only; no expression changed.
+
+Found and not touched: line 353 reads `*(uint *)(bldOfs + 0x121)` - a near read of a table
+whose base is 0x121 in the ORIGINAL DGROUP, i.e. the same base-symbol class as
+`_backdropIndex` and `sideOfs + 0x4230`: our DGROUP layout differs, so the literal offset is
+not meaningful in the rebuilt image.
+
+  grep_checks 39,308 -> 39,275; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

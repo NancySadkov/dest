@@ -330,12 +330,13 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
 
 {
   bool flag;
-  uint uVar2;
+  uint mapRes;
+  uint bldOfs;
   
   if ((BuildingTypes[bldType].flags2 & 0x10) != 0) {
-    uVar2 = ovc45_usesGMapFlags(x,y + 1);
-    if ((((uVar2 & 0xff) == 0) && (uVar2 = ovc45_usesGMapFlags(x,y), (uVar2 & 0xff) == 0)) &&
-       (uVar2 = ovc45_usesGMapFlags(x,y + -1), (uVar2 & 0xff) == 0)) {
+    mapRes = ovc45_usesGMapFlags(x,y + 1);
+    if ((((mapRes & 0xff) == 0) && (mapRes = ovc45_usesGMapFlags(x,y), (mapRes & 0xff) == 0)) &&
+       (mapRes = ovc45_usesGMapFlags(x,y + -1), (mapRes & 0xff) == 0)) {
       return 0;
     }
     flag = ovc45_usesGMapFlags2(x,y + 1);
@@ -343,17 +344,17 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
        (flag = ovc45_usesGMapFlags2(x,y + -1), flag)) {
       return 0;
     }
-    uVar2 = ovc45_cellBelowBlocked(x,y + 1);
-    if ((((uVar2 & 0xff) == 0) && (uVar2 = ovc45_cellBelowBlocked(x,y), (uVar2 & 0xff) == 0)) &&
-       (uVar2 = ovc45_cellBelowBlocked(x,y + -1), (uVar2 & 0xff) == 0)) {
+    mapRes = ovc45_cellBelowBlocked(x,y + 1);
+    if ((((mapRes & 0xff) == 0) && (mapRes = ovc45_cellBelowBlocked(x,y), (mapRes & 0xff) == 0)) &&
+       (mapRes = ovc45_cellBelowBlocked(x,y + -1), (mapRes & 0xff) == 0)) {
       return 0;
     }
   }
-  uVar2 = (uint)bldType * 0x27;
-  if ((*(uint *)(uVar2 + 0x121) & 8) != 0) {
-    uVar2 = ovc45_usesGMapFlags(x,y);
-    if ((((uVar2 & 0xff) == 0) && (uVar2 = ovc45_usesGMapFlags(x + -1,y), (uVar2 & 0xff) == 0)) &&
-       (uVar2 = ovc45_usesGMapFlags(x + 1,y), (uVar2 & 0xff) == 0)) {
+  bldOfs = (uint)bldType * 0x27;
+  if ((*(uint *)(bldOfs + 0x121) & 8) != 0) {
+    mapRes = ovc45_usesGMapFlags(x,y);
+    if ((((mapRes & 0xff) == 0) && (mapRes = ovc45_usesGMapFlags(x + -1,y), (mapRes & 0xff) == 0)) &&
+       (mapRes = ovc45_usesGMapFlags(x + 1,y), (mapRes & 0xff) == 0)) {
       return 0;
     }
     flag = ovc45_usesGMapFlags2(x,y);
@@ -361,15 +362,15 @@ uint __cdecl16far ovc45_compute1(byte bldType,int x,int y)
        (flag = ovc45_usesGMapFlags2(x + 1,y), flag)) {
       return 0;
     }
-    uVar2 = ovc45_cellBelowBlocked(x,y);
-    uVar2 = uVar2 & 0xff;
-    if (uVar2 == 0) {
-      uVar2 = ovc45_cellBelowBlocked(x + -1,y);
-      uVar2 = uVar2 & 0xff;
-      if (uVar2 == 0) {
-        uVar2 = ovc45_cellBelowBlocked(x + 1,y);
-        uVar2 = uVar2 & 0xff;
-        if (uVar2 == 0) {
+    mapRes = ovc45_cellBelowBlocked(x,y);
+    mapRes = mapRes & 0xff;
+    if (mapRes == 0) {
+      mapRes = ovc45_cellBelowBlocked(x + -1,y);
+      mapRes = mapRes & 0xff;
+      if (mapRes == 0) {
+        mapRes = ovc45_cellBelowBlocked(x + 1,y);
+        mapRes = mapRes & 0xff;
+        if (mapRes == 0) {
           return 0;
         }
       }
