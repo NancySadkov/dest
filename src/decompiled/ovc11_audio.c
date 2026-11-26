@@ -257,10 +257,12 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,uint16_t arg4,uint16_
 {
   bool playing;
   uint8_t *puVar2;
-  uint16_t uVar3;
-  uint16_t uVar4;
+  uint16_t stashSeg;
+  uint16_t recOfs;
+  uint16_t blockSize;
+  uint16_t blockSeg;
   far_t entry;
-  uint uStack_a;
+  uint sampleLen;
   
   if ((!GameRunning) && (fid != 0xff)) {
     if ((0x89 < fid) || (*(int *)((uint)fid * 4) == 0 && ((int *)((uint)fid * 4))[1] == 0)) {
@@ -290,36 +292,36 @@ void __cdecl16far play_sfxU(byte fid,int type,uint16_t unk,uint16_t arg4,uint16_
       }
       DIGHandle.ofs = 0;
       DIGHandle.seg = 0;
-      uVar3 = 0x1703;
+      stashSeg = 0x1703;
       entry.seg = ((uint16_t *)((uint)fid * 4))[1];
       entry.ofs = *(uint16_t *)((uint)fid * 4);
       DIGHandle.ofs = (uint16_t)ovr_stash_loadFromStrongDat(entry);
-      DIGHandle.seg = uVar3;
+      DIGHandle.seg = stashSeg;
       audioBusy = 0;
-      if ((undefined1 *)DIGHandle.ofs != (undefined1 *)0x0 || uVar3 != 0) {
+      if ((undefined1 *)DIGHandle.ofs != (undefined1 *)0x0 || stashSeg != 0) {
         if (((CFG_Sfx == '1') || (CFG_Sfx == '4')) || (CFG_Sfx == '9')) {
-          uStack_a = *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5);
-          if (30000 < uStack_a) {
-            uStack_a = 30000;
+          sampleLen = *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5);
+          if (30000 < sampleLen) {
+            sampleLen = 30000;
           }
         }
         else {
-          uStack_a = *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5);
+          sampleLen = *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5);
         }
-        uVar4 = uStack_a + 0xd;
-        puVar2 = ovr_stshRealloc((uint32_t)CONCAT22(uVar3,DIGHandle.ofs),
-                                 CONCAT22((uint)(0xfff1 < uStack_a) - (uint)(uStack_a == 0xfff2),
-                                          uVar4));
-        DIGHandle.seg = uVar4;
+        blockSize = sampleLen + 0xd;
+        puVar2 = ovr_stshRealloc((uint32_t)CONCAT22(stashSeg,DIGHandle.ofs),
+                                 CONCAT22((uint)(0xfff1 < sampleLen) - (uint)(sampleLen == 0xfff2),
+                                          blockSize));
+        DIGHandle.seg = blockSize;
         DIGHandle.ofs = (uint16_t)puVar2;
         DIG_2410_07a8 = 0;
-        *(uint16_t *)(puVar2 + 3) = uVar4;
+        *(uint16_t *)(puVar2 + 3) = blockSize;
         *(uint8_t **)(puVar2 + 1) = puVar2 + 0xd;
-        uVar4 = DIGHandle.seg;
-        uVar3 = DIGHandle.ofs;
-        *(uint16_t *)(uVar3 + 9) = 0x2410;   /* hand fix: 2-byte segment-half slot; the literal offset is that DGROUP segment value */
-        *(uint16_t *)(uVar3 + 7) = 0x8f92;
-        *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5) = uStack_a;
+        blockSeg = DIGHandle.seg;
+        recOfs = DIGHandle.ofs;
+        *(uint16_t *)(recOfs + 9) = 0x2410;   /* hand fix: 2-byte segment-half slot; the literal offset is that DGROUP segment value */
+        *(uint16_t *)(recOfs + 7) = 0x8f92;
+        *(uint far *)((uint8_t far *)MK_FP(DIGHandle.seg, DIGHandle.ofs) +  5) = sampleLen;
         ovr_digPreformatSound();
         ovr_digPlayPreformatedSound();
         ovr_digSetSterioPanning();

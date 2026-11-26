@@ -12730,3 +12730,43 @@ offset actually reaches 0x5100, which is a different anchor and its own measurem
   grep_checks 37,460 | compare_state 1,627/0/0
   diff_dgroup 1,569/1,805 matched, 74 runs, sum|delta| 251,810
   compare_runtime 1,615 matched, 1,605 identical / 10 different
+
+### play_sfxU renamed; the 0x5100 run measured as a duplicate
+play_sfxU: sampleLen / stashSeg / recOfs / blockSize / blockSeg (37,460 -> 37,437)
+
+  uStack_a  the sample length read from the stash header (+5), capped at 30000 and
+            written back after the realloc                      -> sampleLen (9)
+  uVar3     the 0x1703 stash segment, then DIGHandle.ofs       -> stashSeg (5) / recOfs (3)
+  uVar4     sampleLen + 0xd (the realloc'd block size), then
+            DIGHandle.seg                                      -> blockSize (5) / blockSeg (1)
+
+Split by the statement each occurrence belongs to, with no expression changed.  Worth
+recording: `DIGHandle.seg = blockSize;` at line 315 stores the *size* into the segment
+field, and `blockSeg` is then read back from it - the export looks wrong there, but the
+rename only names what the statements do.
+
+## MEASURED AND REVERTED: the 0x5100..0x5D82 run is a duplicate
+
+With the OFS keying in place I checked that run's 21 declarations against the rest of the
+tree: **20 of them duplicate a string the tree already declares** - in st_globals5.c under
+a hash-suffixed name (`s_s_will_now_build_homes_a_cbae`) or as a literal inside the module
+that uses it (ovc22/ovc23/ovc24/ovc27/ovc28).  Only `s_intelligence_rep_2410_5906` has no
+other copy.
+
+So they are ~1100 bytes of surplus sitting at our 0x5ED8 where the original has them at
+0x5100...0x5D82.  Deleting them does collapse the step, but to the *other* side:
+
+    before:  +1144 at 0x5EA3  decaying to  +528 at 0x648E
+    after:    -59 at 0x5F70  decaying to  -563 at 0x648E
+
+and total sum|delta| rose 251,810 -> 387,286 (delta_rank: -564x37 at GStrangeTable,
+-983x19, -1031x14, -1150x10 at StatsTabPtrs).  Reverted.
+
+The honest conclusion: our game-data region carries ~1100 bytes of duplicated strings and
+our tail region is ~1100 bytes short, and the duplicates were masking the shortage.  Fixing
+either alone worsens the profile; they have to be done together (remove the duplicates AND
+place the missing tail content), which is a larger, single-measurement job.
+
+  grep_checks 37,460 -> 37,437; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,569/1,805 (74 runs, sum|delta| 251,810)
+  compare_runtime 1,615 matched, 1,605 identical / 10 different
