@@ -351,22 +351,23 @@ void __cdecl16far attact_usesSquareRecCount2(void)
 void __cdecl16far attact_usesAgntFlag1(void)
 
 {
-  bool bVar3;
-  int16_t iVar4;
-  int iVar5;
+  bool recomputed;
+  int16_t cmpResult;
+  int agntIdx;
+  int recOfs;
   
   if (AgntFlag1) {
-    bVar3 = ovr_ovc15_usesAlignUp42();
-    if (bVar3) {
-      for (iVar5 = 0; iVar5 < (int)(uint)AgntCount; iVar5 = iVar5 + 1) {
-        *(uint8_t far *)((uint8_t far *)&Agnts[iVar5].entity->base.state + 1) =
-             Agnts[iVar5].strength;
+    recomputed = ovr_ovc15_usesAlignUp42();
+    if (recomputed) {
+      for (agntIdx = 0; agntIdx < (int)(uint)AgntCount; agntIdx = agntIdx + 1) {
+        *(uint8_t far *)((uint8_t far *)&Agnts[agntIdx].entity->base.state + 1) =
+             Agnts[agntIdx].strength;
       }
     }
     else {
-      for (iVar5 = 0; iVar5 < (int)(uint)AgntCount; iVar5 = iVar5 + 1) {
-        *(uint8_t far *)((uint8_t far *)&Agnts[iVar5].entity->base.state + 1) =
-             *(uint8_t far *)&Agnts[iVar5].entity->base.flags32;
+      for (agntIdx = 0; agntIdx < (int)(uint)AgntCount; agntIdx = agntIdx + 1) {
+        *(uint8_t far *)((uint8_t far *)&Agnts[agntIdx].entity->base.state + 1) =
+             *(uint8_t far *)&Agnts[agntIdx].entity->base.flags32;
       }
     }
   }
@@ -377,15 +378,15 @@ void __cdecl16far attact_usesAgntFlag1(void)
                 ((SquareRecCount - SquareRecIndex) + -1) * 0x13);
     }
     SquareRecCount = SquareRecCount - 1;
-    iVar4 = memcmp((char *)&SquareRecX,(char *)0x24109074,0x13);
-    if (iVar4 == 0) {
+    cmpResult = memcmp((char *)&SquareRecX,(char *)0x24109074,0x13);
+    if (cmpResult == 0) {
       sub_OVC04_0001(0x1000,0x9074,0x2410);
       return;
     }
   }
   else {
-    iVar4 = memcmp((char *)&SquareRecX,(char *)0x24109074,0x13);
-    if (iVar4 == 0) {
+    cmpResult = memcmp((char *)&SquareRecX,(char *)0x24109074,0x13);
+    if (cmpResult == 0) {
       sub_OVC04_0001(0x1000,0x9074,0x2410);
       return;
     }
@@ -395,9 +396,9 @@ void __cdecl16far attact_usesAgntFlag1(void)
     }
   }
   _fmemmove((char far *)MK_FP(0x17f8,(char *)(SquareRecCount * 0x13)),(char far *)MK_FP(0x2410,0x9074),0x13);
-  iVar5 = SquareRecCount * 0x13;
+  recOfs = SquareRecCount * 0x13;
   SquareRecCount = SquareRecCount + 1;
-  sub_OVC04_0001(0x1000,iVar5,0x17f8);
+  sub_OVC04_0001(0x1000,recOfs,0x17f8);
   return;
 }
 
