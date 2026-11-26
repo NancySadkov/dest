@@ -66,6 +66,13 @@ for line in io.open(MAP, encoding="latin-1", errors="replace"):
 
 def key(name):
     k = name.upper().lstrip("_")
+    # Both sides carry generated names of the form `<text>_2410_<orig-offset>` (the
+    # audit's names for truncated/unnamed strings, and ours for the same objects).  The
+    # offset is the object's identity, so pair on it directly - names are truncated at
+    # different lengths on each side and cannot be compared as text.
+    m = re.search(r"_2410_([0-9A-F]{4})$", k)
+    if m:
+        return "OFS_" + m.group(1)
     k = re.sub(r"\[[0-9]+\]$", "", k)
     # Some original DGROUP labels are not legal C identifiers ("s_bighous1.lbm",
     # "s_Mouse_error.", "s_anim\2rdrag0.lbm"), so the build necessarily emits them with
@@ -129,41 +136,49 @@ matched = []
 unmatched = []      # (off, name, reason)
 last = -1
 used = set()
+def pick_candidate(cands, used, last):
+    """First unused candidate, preferring one that keeps the address order."""
+    for oofs, oname in cands:
+        if oofs not in used and oofs > last:
+            return (oofs, oname)
+    for oofs, oname in cands:
+        if oofs not in used:
+            return (oofs, oname)
+    return None
+
+
 for off, name in orig:
     k = key(name)
-    # exact key first, then the two fallbacks; a candidate list that is merely
-    # exhausted must still fall through to the next table, so concatenate.
-    cands = []
+    # Priority, strictest first: the exact key, then names differing by a trailing
+    # `_N`, then our generated names with the `_2410_XXXX` suffix removed.  A table is
+    # only consulted when the previous one has no *unused* candidate - concatenating
+    # them let `s_kill_3` fall through to our `_S_KILL_4` because the loose key of both
+    # is `S_KILL`.
+    tag = "_2410_%04X" % off
+    pick = None
+    had = False
     for tbl, kk in ((ours_by_key, k),
                     (ours_by_loose, loose_key(name)),
                     (ours_by_variant, variant_key(name))):
-        for entry in tbl.get(kk, ()):
-            if entry not in cands:
-                cands.append(entry)
-    # a generated name carries the *original* offset (`_2410_01DA`), so when one of
-    # those is a candidate, prefer the one whose suffix is this symbol's offset - that
-    # pairing is exact by construction, not a guess.
-    tagged = (("_2410_%04X" % off),)
-    exact = [c for c in cands if c[1].upper().endswith(tagged[0])]
-    if exact:
-        cands = exact + [c for c in cands if c not in exact]
-    if not cands:
-        unmatched.append((off, name, "no name with this key"))
-        continue
-    # duplicate names (the original reuses s_mage for "Mage" and "mage"):
-    # consume the next public in address order so each maps once
-    pick = None
-    for oofs, oname in cands:
-        if (seg_ok := True) and oofs not in used and oofs > last:
-            pick = (oofs, oname)
+        cands = list(tbl.get(kk, ()))
+        if not cands:
+            continue
+        had = True
+        # a generated name carries the original offset, so that pairing is exact by
+        # construction - try it before anything else in this table
+        cands.sort(key=lambda c: (not c[1].upper().endswith(tag), c[0]))
+        pick = pick_candidate(cands, used, last)
+        if pick is not None:
             break
+        # this table has candidates but none is free: do NOT fall through to a looser
+        # key.  The original really can carry the same name twice (`s_kill_3` at 0x55E5
+        # and 0x56F8); falling through paired the second one with `_S_KILL_4` and
+        # invented a +6176 delta.
+        break
     if pick is None:
-        for oofs, oname in cands:
-            if oofs not in used:
-                pick = (oofs, oname)
-                break
-    if pick is None:
-        unmatched.append((off, name, "candidate already consumed"))
+        unmatched.append((off, name,
+                          "candidate already consumed" if had
+                          else "no name with this key"))
         continue
     used.add(pick[0])
     last = pick[0]

@@ -12651,3 +12651,82 @@ function still carries it.
   grep_checks 37,483 -> 37,460; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,473/1,805 (69 runs, sum|delta| 247,309)
   compare_runtime 1,615 matched, 1,605 identical / 10 different
+
+### diff_dgroup: OFS_XXXX keying (matched 1,473 -> 1,569) + strong.sav reorder
+diff_dgroup: pair generated `_2410_XXXX` names on the offset (matched 1,473 -> 1,569); strong.sav strings back in place
+
+## The tool: names that carry the original offset pair on it
+
+Both sides carry generated names of the form `<text>_2410_<orig-offset>` — the audit's
+names for truncated or unnamed strings, and ours for the same objects.  The names are
+truncated at different lengths on the two sides, so they can never be compared as text
+(`s_Sound_(1._PC_Speaker_2._Sound_Bl_2410_5f00` vs `s_Sound__1__PC_Spe_2410_5f00`), but the
+suffix is the object's identity.  `key()` now returns `OFS_XXXX` for such names.
+
+Two related corrections while doing it:
+
+  * the candidate tables (exact, loose, variant) are consulted with *strict priority*
+    instead of being concatenated;
+  * a table that has candidates but none free no longer falls through to a looser key.
+    The original genuinely carries `s_kill_3` twice (0x55E5 and 0x56F8); falling through
+    paired the second one with `_S_KILL_4` and invented a **+6176** delta.
+
+MEASURED (HEAD 35d46065 -> this commit)
+
+  diff_dgroup matched  1,473 -> 1,569   (+96)
+  diff_dgroup runs        76 -> 74
+  diff_dgroup worst   15,444 -> 15,444  (the +6,176 artifact is gone)
+
+sum|delta| is not comparable across this change: 96 symbols that were previously excluded
+from the profile are now measured.
+
+## The data: six `strong.sav` strings were declared ~1100 bytes late
+
+diff_dgroup showed one run:
+
+    delta +1153 from s_strong.sav_2410_5e30 (5e30), 2 symbols   <-- +1100 bytes here
+    delta   +22 from s__2410_5e4f (5e4f), 3 symbols             <-- -1131 bytes here
+
+st_globals5.c mostly follows the original's offset order, but the six `strong.sav`
+declarations (original 0x5E30..0x5EA3) sat *after* the 0x5F00+ menu strings.  Moved them
+before `s__2410_5e4f`, and then interleaved them the way the original has them:
+
+    0x5E30 11 "strong.sav"
+    0x5E3B 20 "strong.sav\\game.cfg"
+    0x5E4F  2 "\\n"   0x5E51 3 "\\b \\b"   0x5E55 4 "%c"
+    0x5E58 20 "strong.sav\\game.cfg"
+    0x5E6C 11 "strong.sav"
+    0x5E77 22 "strong.sav\\strong.$$$"      0x5E8D 22 (same)
+
+Two of the names also carried a doubled suffix (`s_strong_sav_2410_2410_5e30`); normalised.
+
+MEASURED with the same tool, before -> after this move:
+
+  diff_dgroup sum|delta|  258,281 -> 251,810   (-6,471)
+  diff_dgroup runs             76 -> 74
+  delta at 0x5E4F           +1153 -> +128
+
+## MEASURED AND REVERTED: the 0x5F00..0x6047 migration
+
+Done in full (7 symbols declared, 6 blob copies removed, all 7 code literals in
+ovc31_config.c replaced - net -297 bytes, no duplication) it produced:
+
+  matched 1,569 -> 1,576 (+7)
+  sum|delta| 258,281 -> 356,966 (+98,685)
+
+because the bytes land at 0x5F00 where our layout is already +1100 late, so every symbol
+after them inherits the shift.  Reverted: the objective's own criterion (that the run
+shrink the +527..+152 steps) is not met until the +1091 step at 0x5EA3 is fixed, and that
+step is a misplaced *earlier* block, not this one.
+
+## MEASURED AND REVERTED: moving the 0x5100..0x5D82 run
+
+Those 21 declarations are also out of order (they were appended after the 0x5E8D string
+while their offsets are 0x5100..0x5D82).  Moving them before `lowIntelEnemies` took
+sum|delta| 251,810 -> 273,630, because our layout at that point is not at 0x5100 either -
+the region 0x5100..0x5DC7 already holds other content.  They need to be placed where our
+offset actually reaches 0x5100, which is a different anchor and its own measurement.
+
+  grep_checks 37,460 | compare_state 1,627/0/0
+  diff_dgroup 1,569/1,805 matched, 74 runs, sum|delta| 251,810
+  compare_runtime 1,615 matched, 1,605 identical / 10 different
