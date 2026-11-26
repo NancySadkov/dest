@@ -11306,3 +11306,69 @@ Renaming and one split; no expression changed.
   grep_checks 38,295 -> 38,250; build 65/65; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,450/1,868 (71 runs)
   compare_runtime 1,605 identical / 10 different
+
+### Step 6: the init stall is init_base s config prompt
+Step 6: the init stall is `init_base`'s interactive config prompt
+
+Located precisely, and the rebuilt side can now be sampled past it.
+
+`init_base` (ovc31_config.c:279) is the only interactive step in startup:
+
+    init_check_mem();
+    getcwd(...);
+    haveConfig = init_strong_sav();
+    if (haveConfig != 0) {
+      while (key = biosKeyAvail(), ...) biosReadKey();
+      while (true) {
+        clrscr();
+        printf("ENTER: use previous configuration, SPACE: reconfigure, ESC: quit");
+        key = biosReadKey();           <- blocks here forever headless
+        if ((key & 0xff) == 0x1b) exit(0);
+        if ((key & 0xff) == 0x20) break;
+        if ((key & 0xff) == 0x0d) { clrscr(); return; }
+      }
+    }
+    ... printf("Sound (1. PC Speaker ...");   <- the no-config path, also interactive
+
+So there is no non-interactive startup path; a dump point anywhere after `init_base`
+requires that key read to answer itself.  Bisected with tmp/dump_at.py:
+
+    _INIT_GAME        dumps in both images   (entered)
+    _INIT_CHECK_MEM   dumps in both images   (entered)
+    _INIT_STRONG_SAV  dumps in both images   (entered)
+    _INIT_PATHS       reached only after the prompt is answered
+
+tmp/dump_at.py grew two patch options, both applied to *both* images so the
+comparison stays symmetric:
+
+    --enter          writes `mov ax,0D0Dh ; retf` over biosReadKey
+                     (so the ENTER branch is taken)
+    --force-config   writes `mov al,1 ; retf` over init_strong_sav
+                     (so haveConfig is 1 without needing a readable game.cfg)
+    --skip-base      writes `retf` at init_base's entry (too destructive: both
+                     images then fail, original dumping 42 bytes)
+
+MEASURED: `_INIT_PATHS --enter --force-config`
+
+    rebuilt dump   61,440 bytes   (the full sample)
+    original dump     512 bytes   (only its prompt text reached stdout)
+
+The rebuilt image is now sampled **after** init_base.  The original is not: its
+`biosReadKey` (2d63:0030) is an overlay routine, and neither address formula
+reaches its on-disk copy - the resident formula lands on bytes that *are*
+`55 8B EC 32 E4 CD 16 5D CB` (verified), yet patching them changes nothing,
+while the overlay-block formula lands inside a `:OVY` block at 0x2D660 whose bytes
+are unrelated.  So the original still blocks at the prompt and only the 512 bytes
+of prompt text are captured.  Making the original answer its own prompt needs the
+overlay's true on-disk location (or DOS keystroke injection), not another file
+offset guess.
+
+TOOL CORRECTION: tmp/dump_at.py now uses the resident formula
+`(seg - 0x1000) * 16 + ofs` for the original, verified three ways against the
+image: main 1301:000c -> 0x301C, init_game 3381:0579 -> 0x23D89, biosReadKey
+2d63:0030 -> 0x1D660 (`55 8B EC 32 E4 CD 16 5D CB`).  The earlier overlay-block
+table lookup was wrong for these addresses and is disabled.
+
+  build 65/65; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,450/1,868 (71 runs, sum|delta| 276,979)
+  compare_runtime 1,605 identical / 10 different at main entry (gate definition)
