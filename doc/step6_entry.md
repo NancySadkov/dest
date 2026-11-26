@@ -12269,3 +12269,94 @@ The remaining +154 is the startup's own data: DGROUP:0x0000..0x00A9 is C0M's
 `_StartTime`, the heap variables.  The original keeps those at 0x0081..0x0091 instead,
 interleaved after its C0 header block.  Closing that needs the startup's data to fit in
 the space the original gives it - a size question, not an ordering one.
+
+### turn summary: link order, diff_dgroup pairing, ovc39 (37,590 / 229,747)
+2026-11-26  turn summary: three layout/tool fixes and one function (37,644 -> 37,590, sum|delta| 276,979 -> 229,747)
+
+Commits this turn:
+
+  2f876e52  ovc39_textHalflingCastle: five single-role severity levels (37,644 -> 37,590)
+  0b859f90  link order: globals before the recovered CRT (sum|delta| 276,979 -> 238,507)
+  79d608b9  data: the two CRT message strings are exactly the original's bytes
+  f72d90b8  diff_dgroup: pair on the exact key first, digit-stripped key as fallback
+  ef771309  diff_dgroup: interior "name+N" labels are not symbols
+
+## ovc39_textHalflingCastle
+
+Five `bStack_` bytes, each assigned 0..5 by one comparison ladder:
+
+    bStack_b  the 0..3 building-slot index     -> slot
+    bStack_c  foodProd   ladder                -> foodProdLevel
+    bStack_f  foodStored ladder                -> foodStoredLevel
+    bStack_e  housing    ladder                -> housingLevel
+    bStack_d  income     ladder                -> incomeLevel
+
+`bStack_f` sits *below* `bStack_c` in the declaration list yet measures `foodStored`
+while `bStack_c` measures `foodProd`; the names come from the ladders that write them, not
+from their order.  Swapping them would change which archive entry is loaded
+(`foodProdLevel + 0x12` vs `foodStoredLevel + 0x17`).
+
+## Link order: CRTL.OBJ last among the resident objects
+
+`res` was sorted alphabetically, so `CRTL.OBJ` preceded `GLOB*.OBJ` and crtl.c's copy of
+the C0 header block landed *in front of* the game data.  The original's game data begins
+at DGROUP:0x0000.  One line:
+
+    res.sort(key=lambda n: (n.upper() == "CRTL.OBJ", n))
+
+Our `_DATA` moves 0x00C6 -> 0x00AA and the string block 0x014A -> 0x012E.  Every delta
+drops by the same 28 bytes: +182/+138/+147 -> +154/+110/+119.
+
+MEASURED AND REJECTED: also moving C0M.OBJ to the end (game data at 0x0000 exactly) fails
+with `Error: Group DGROUP exceeds 64K`.  The map from that attempt shows why: the far
+arrays (`_AGNTS`, `_SQUARERECS`, `_AGNTARRAYA/B`, `_MAPSQUARE*`) move into DGROUP and the
+segment grows from 52,948 to 65,076 bytes.  Reordered, reverted.
+
+## The two CRT message strings
+
+DGROUP:0x002F is 14 bytes and 0x003D is 30 bytes - both stored *without* a NUL
+terminator, so `char x[] = "..."` was one byte too long each.  Now
+`char s_divide_error[14] = ...` and `char s_abnormal_program_termination[30] = ...`.
+`__C0_ASM_CopyRight[43]` was already exact; the original's `PSPEnv` label at 0x002C is a
+label *inside* that string ("l.\0"), not an object.
+
+## diff_dgroup: two pairing bugs
+
+1. `key()` stripped a trailing `_<digit>`, so `s_kill_3` and `s_kill_4` (six bytes apart)
+   collided and the tool paired the original's `s_kill_3` with our `s_kill_4` - a bogus
+   +6,178 delta.  Exact keys are now tried first and the digit-stripped key is only a
+   fallback.
+2. Interior labels (`s_divide_error+1`, `_DATA+2`, ...) were treated as symbols.  They can
+   never match, so they fell through to the content matcher and one of them
+   (`_DATA+2`, two zero bytes) paired with an empty-string symbol of ours at 0x012A,
+   adding a +296 delta on a non-symbol.  They are now excluded from `orig` and reported
+   in their own `--why` bucket (64 of them).
+
+The denominator therefore drops 1,868 -> 1,805.  Both ratios: 1,451/1,868 = 77.7%
+before, 1,450/1,805 = 80.3% after.
+
+## MEASURED AND REJECTED: the missing sound-menu strings (0x5F72..0x6047)
+
+`diff_dgroup` showed a +1,122 step at `s_Newline1`.  The cause is a run of text symbols
+our tree does not declare - each `s_*_2410_5fNN[] = "\n"` of ours is followed in the
+original by a 30..71-byte menu string:
+
+    0x5f72 60  "Sound Blaster (1. Original  2.  Pro Type 2  3. Pro Type 1):"
+    0x5fb0 46  "Pro Audio Spectrum (1. Plus  2. Spectrum 16):"
+    0x5fe0 30  "Adlib (1. Original  2. Gold):"
+    0x6000 71  "Sound Effects (1. PC Speaker  2. Sound Blaster ..."
+    0x6047 40  "               4. Adlib       5. None):"
+
+`tmp/migrate_run.py 5f00 5f70` plus declaring those took sum|delta| 229,747 -> 250,345,
+so it was reverted: the text already exists elsewhere (stmiss.c's blob and one literal in
+ovc31_config.c), and only one of the two pieces migrated from 0x5F00 was actually in the
+blob.  Doing this correctly needs the whole 0x5F72..0x6047 run moved out of the blob in one
+pass, with the ovc31 literal replaced by the symbol - the same shape as the earlier
+0x5100-0x5EA3 migration, and it needs its own measurement.
+
+## Gates at the end of the turn
+
+    grep_checks 37,590        build 65/65        LINK.LOG 65 bytes / 0 problems
+    diff_dgroup 1,450/1,805 matched, 68 runs, sum|delta| 229,747, mean 158
+    compare_state 1,627 identical / 0 different / 0 missing
+    compare_runtime 1,615 symbols matched, 1,605 identical / 10 different
