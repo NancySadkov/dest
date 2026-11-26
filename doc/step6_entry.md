@@ -10880,3 +10880,73 @@ well-defined change (de-duplicate by identifier, prefer the lowest offset) and i
   grep_checks 38,916 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### DGROUP: migrate string runs out of the blob; move the driver block (runtime 1,549 -> 1,577)
+DGROUP: migrate three string runs out of the blob, move the driver block out of the front (runtime 1,549 -> 1,577)
+
+Two changes, both measured with a fresh runtime dump.
+
+1. NEW TOOL: tmp/migrate_run.py moves a contiguous run of DGROUP strings out of
+   stmiss.c's s_absentBlob and declares each at its original position:
+
+     * remove the run's literals from the blob (no duplicated bytes),
+     * delete the unreferenced s_absentOfs table (its indices shift),
+     * declare each as `undefined NAME[len] = { bytes };` immediately before the
+       next already-declared symbol.
+
+   The blob is dead weight - s_absentBlob and s_absentOfs are referenced nowhere -
+   so moving text out of it is the only way to give it a symbol AND keep the bytes.
+
+   Three runs migrated: 0x7af9 (12 symbols, 679 B), 0x7fb5 (5, 181 B),
+   0x80f0 (10, 316 B).  Names are `s_<first-18-chars>_2410_<offset>` because
+   Turbo C keeps only a limited number of significant identifier characters and
+   these strings share a 32-character prefix; compare_runtime identifies a symbol
+   by the `_2410_XXXX` suffix, so the offset identity is exact.
+
+   Where the same text was also embedded in a code module, the literal was
+   replaced by the symbol and an `extern` added (tmp/dedupe_run_literals.py,
+   20 symbols in ovc24/ovc28/ovc42/ovc45/ovc47/ovc49).
+
+2. tmp/move_driver_block.py moves the 44 driver/allocator declarations that opened
+   st_globals.c (DriverEntry .. __setargv_SavedDS) to the end of st_globals9.c.
+   None of those names exists anywhere in the original DGROUP, and keeping them
+   first pushed every game symbol late - the `+2496 bytes here` jump diff_dgroup
+   reports at s__2410_0094.
+
+MEASURED (fresh dump, HEAD 163be7b3 -> this commit)
+
+                                     before      after
+  grep_checks                        38,916      38,916
+  compare_state                   1,627/0/0   1,627/0/0
+  diff_dgroup matched                1,449       1,449
+  diff_dgroup delta runs                74          74
+  diff_dgroup sum|delta|         3,350,920   3,223,256   (-127,664, mean 2312 -> 2224)
+  compare_runtime symbols matched    1,560       1,587   (+27)
+  compare_runtime identical state    1,549       1,577   (+28)
+  compare_runtime DIFFERENT state       11          10   (-1)
+
+The runtime gain is the meaningful part: 28 more DGROUP objects are now present at
+a verified position, and one state that differed now matches.
+
+Delta-run count is NOT monotone: relocating a string necessarily inserts a new
+step boundary in the offset profile even when every individual error shrinks.
+sum|delta| is the honest measure and it fell by 127,664.
+
+NEXT TARGET, measured: our DGROUP places three of its own arrays in front of the
+game strings, so the strings start at 0x9f9 instead of 0x94:
+
+  0x02ca StshNames[544] (near pointers, 1,088 B)
+  0x070a GLeaderSheets[80] (far pointers, 320 B)
+  0x084a MiceSaveBuf[289] (289 B)
+  0x096b ovrAuxSlot / s_vdisk_fake
+  0x097e a second copy of the C0 startup block (__C0_ASM_CopyRight, s_divide_error,
+         GSTARTX_SavedVectors, DosVersion) - 123 B
+
+Moving those to the end of the last globals module would put the strings at 0x94
+and remove the remaining +2,405.  It is a trade: each of those symbols is currently
+matched by name at its present offset, so their own deltas may grow while ~1,200
+string symbols align.  That needs its own measurement.
+
+  grep_checks 38,916 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 runs, sum|delta| 3,223,256)
+  compare_runtime 1,577 identical / 10 different
