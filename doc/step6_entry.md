@@ -10237,3 +10237,24 @@ compare_state                     1,627/0/0     1,627/0/0
 
 Note these were real data bugs, not only layout ones: a 32-byte dither table declared as one
 byte means any indexed read past element 0 was reading a neighbouring symbol.
+
+### DGROUP: GWorkDir was one byte, original has 80
+dgroup: GWorkDir was declared as one byte; the original has an 80-byte buffer
+
+Found by inverting the ditherPlane check: scan every `undefined NAME = 0x..;` declaration
+whose original length (audit/dgroup_data.csv, matched by the same key rules) is larger.
+
+  GWorkDir @0x9212  original 80 bytes   ours: 1 byte
+
+It is the DOS working-directory buffer, so a one-byte declaration was a genuine data bug, not
+only a layout one: any code writing a path into it was scribbling over the next symbol.
+Now `undefined GWorkDir[80]` with the bytes from STRONG.EXE, and the stale
+`extern undefined GWorkDir;` in st_globals.h resized to match.
+
+Only two hits existed tree-wide; the other (`_DATA`) is already `uint32_t` and correct.
+
+Gates after re-dumping:
+
+  grep_checks 39,228 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different

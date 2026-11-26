@@ -1940,7 +1940,7 @@ extern char CFG_Irq;
 extern char CFG_Mus;
 extern char CFG_Sfx;
 extern char GOriginalDir[68];
-extern undefined GWorkDir;
+extern undefined GWorkDir[80];
 extern uint16_t rowBandSquareEnd[3];
 extern uint16_t rowBandSquareFirst[3];
 extern uint16_t RowScreenY[3];
