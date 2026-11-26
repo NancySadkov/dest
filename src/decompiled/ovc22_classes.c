@@ -2956,7 +2956,6 @@ void __cdecl16far ovc22_usesEntities3(int entityIndex)
   uint32_t gdataPtr;
   byte dirLevel;
   char innerDir;
-  int iVar6;
   uint16_t entSeg;
   char chosenIdx;
   char budgetIdx;
@@ -2973,10 +2972,9 @@ void __cdecl16far ovc22_usesEntities3(int entityIndex)
         budgetPtr = (int *)((int)gdataPtr + budgetIdx * 2 + 0x76);
         *budgetPtr = *budgetPtr + -1;
         entSeg = (uint16_t)((ulong)Entities >> 0x10);
-        iVar6 = (int)Entities;
-        ((entity_t *)iVar6)[entityIndex].dir =
-             ((entity_t *)iVar6)[entityIndex].dir +
-             (char)(((ulong)((entity_t *)iVar6)[entityIndex].dir / 6) % 6) * -6;
+        ((entity_t *)Entities)[entityIndex].dir =
+             ((entity_t *)Entities)[entityIndex].dir +
+             (char)(((ulong)((entity_t *)Entities)[entityIndex].dir / 6) % 6) * -6;
         bVar2 = ((entity_t *)Entities)[entityIndex].base.gindex;
         if ((AgntGs[(uint)bVar2].shortName[3] == '\x03') &&
            ('\x01' < budgetIdx)) {
@@ -4024,39 +4022,41 @@ uint __cdecl16far ovc22_usesGUnitGrid(int x,int y)
 uint __cdecl16far ovc22_usesGUnitGrid2(int x,int y,byte partyIndex)
 
 {
-  uint uVar1;
-  uint uVar2;
+  uint gridVal;
+  uint btype;
+  uint result;
+  uint recIdx;
   
   if (((GLeaderSheets[partyIndex])->flags5d & 4) == 0) {
-    uVar1 = (*(short (*) [148] [60])GUnitGrid)[x][y];
-    if (uVar1 < 0xf8) {
-      uVar2 = ovr_ovc23_findRecordAt(x,y,0);
-      if (uVar2 == 0xffff) {
-        uVar1 = (uint)((unit_t *)GUnits + uVar1)->bldType;
-        if ((*(uint *)((uint8_t *)&BuildingTypes[uVar1] + 19) & 0x20) == 0) {
-          uVar1 = 0;
+    gridVal = (*(short (*) [148] [60])GUnitGrid)[x][y];
+    if (gridVal < 0xf8) {
+      recIdx = ovr_ovc23_findRecordAt(x,y,0);
+      if (recIdx == 0xffff) {
+        btype = (uint)((unit_t *)GUnits + btype)->bldType;
+        if ((*(uint *)((uint8_t *)&BuildingTypes[btype] + 19) & 0x20) == 0) {
+          result = 0;
         }
-        else if (*(char *)((uint8_t *)&BuildingTypes[uVar1] + 35) == '\0') {
+        else if (*(char *)((uint8_t *)&BuildingTypes[btype] + 35) == '\0') {
           if (*((char far *)GLeaderSheets[partyIndex] + 0x2f) == '\x05') {
-            uVar1 = uVar1 + 0x18;
+            result = result + 0x18;
           }
           else {
-            uVar1 = uVar1 + 6;
+            result = result + 6;
           }
         }
       }
       else {
-        uVar1 = 0;
+        result = 0;
       }
     }
     else {
-      uVar1 = 0;
+      result = 0;
     }
   }
   else {
-    uVar1 = 0;
+    result = 0;
   }
-  return uVar1;
+  return result;
 }
 
 

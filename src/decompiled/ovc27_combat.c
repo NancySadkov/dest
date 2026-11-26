@@ -589,7 +589,6 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
   uint16_t uStack_10;
   int iStack_e;
   int iStack_c;
-  int targetOfs;
   uint16_t uStack_8;
   agnt_t far *agnt;
   uint16_t agntSeg;
@@ -601,7 +600,6 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
     return (uint)bVar1 << 8;
   }
   if (agnt->animFrame == 0xff) {
-    targetOfs = (uint)agnt->target * 0x34;
     uStack_8 = SEG_OF(Agnts);
     uVar11 = uStack_8;
     uStack_8 = SEG_OF(Agnts);
@@ -622,8 +620,6 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
       uVar4 = uVar4 & 0xff00;
     }
     else {
-      uVar11 = (uint16_t)((ulong)*(uint32_t *)(targetOfs + 0x1d) >> 0x10);
-      iVar8 = (int)*(uint32_t *)(targetOfs + 0x1d);
       iVar5 = (uVar3 & 0xff) * 0x21;
       iVar6 = (uVar3 & 0xff) * 0x21;
       uVar2 = 0x90;
@@ -634,7 +630,7 @@ uint __cdecl16far ovc27_spellNotice(int agntIndex)
                          (paVar9->name,*(uint16_t *)((int)&paVar9->name + 2),
                           *(uint16_t *)(iVar6 + -0x21),*(uint16_t *)(iVar6 + -0x1f),
                           *(uint16_t *)(iVar5 + -0x1d),*(uint16_t *)(iVar5 + -0x1b),
-                          *(uint16_t *)(iVar8 + 0x24),*(uint16_t *)(iVar8 + 0x26));
+                          far_ofs_u32(Agnts[agnt->target].gdata->name),(uint16_t)SEG_OF(Agnts[agnt->target].gdata->name));
       msg = ovr_stsprintf((char *)&text,(char *)CONCAT22(0x5ba4,_SS),
                           (char *)CONCAT22(puVar7,(char *)0x26510),uVar2);
       ovr_uiNotify(msg,uVar2,0);

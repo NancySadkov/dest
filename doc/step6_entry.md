@@ -10358,3 +10358,44 @@ the real blocker - not a missing data patch.
   grep_checks 39,147 -> 39,106; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### entities far pointer, GUnitGrid2 locals, spellNotice target record (39,106 -> 39,078)
+three more fixes: entities far pointer, GUnitGrid2 locals, spellNotice target record (39,106 -> 39,078)
+
+1. ovc22_usesEntities3 - the far Entities array was fetched as an offset and then indexed:
+
+     iVar6 = (int)Entities;
+     ((entity_t *)iVar6)[entityIndex].dir = ...
+
+   so all three accesses read DGROUP at that offset instead of the Entities segment.
+   Replaced with `((entity_t *)Entities)[entityIndex]`; the temporary is gone.
+
+2. ovc22_usesGUnitGrid2 - same shape as ovc22_usesGUnitGrid, named the same way:
+
+     uVar1 = GUnitGrid[x][y]                  -> gridVal
+     uVar1 = ((unit_t *)GUnits + i)->bldType  -> btype
+     uVar1 = the returned value               -> result
+     uVar2 = ovr_ovc23_findRecordAt(x,y,0)    -> recIdx
+
+3. ovc27_spellNotice - the target's agntG record was read through a truncated offset:
+
+     targetOfs = (uint)agnt->target * 0x34;
+     uVar11 = (uint16_t)((ulong)*(uint32_t *)(targetOfs + 0x1d) >> 0x10);
+     iVar8 = (int)*(uint32_t *)(targetOfs + 0x1d);
+     ... *(uint16_t *)(iVar8 + 0x24), *(uint16_t *)(iVar8 + 0x26)
+
+   Both dereferences read DGROUP.  They are now
+   `far_ofs_u32(Agnts[agnt->target].gdata->name)` and
+   `(uint16_t)SEG_OF(Agnts[agnt->target].gdata->name)`, and the dead `uVar11` store plus the
+   `targetOfs`/`iVar8` temporaries are gone.
+
+   Verified in the emitted listing - the original's far chain is back:
+
+     les  bx,dword ptr es:_Agnts[bx+29]     ; gdata at 0x1d
+     push word ptr es:[bx+36]               ; name.ofs at 0x24
+
+   `les` sites in the function: 17.
+
+  grep_checks 39,106 -> 39,078; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different
