@@ -9101,3 +9101,34 @@ turn's correction; the earlier "104" was a window that spanned four functions):
   `p[iusc]Stack_` with one of i/u/s/c, and this name has `a` there)
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
+
+### ovc27_textTakesHalfDamage3: six renames (40,000 -> 39,962)
+ovc27_textTakesHalfDamage3: name the six remaining temporaries (40,000 -> 39,962)
+
+Each of the six had a single role visible from its assignment:
+
+  uVar3  = ovc27_spellHalfDamage(...) / ovc27_breathHalfDamage(...)   -> halfRoll   (9)
+  uVar4  = ovr_randBelow(3,0)                                          -> randRoll   (3)
+  iVar5  = ovc27_rollToHitEntity(...)                                  -> hitRoll    (5)
+  uVar9  = SUB21(pcVar6,0)                                             -> ptrLo      (9)
+  uVar10 = (undefined1)agntSeg                                         -> segLo      (7)
+  uVar11 = (undefined1)GSavedBlitSeg                                   -> blitSegLo  (7)
+
+38 occurrences.  Names checked for collision in the function first.  Renaming only.
+
+Emitted shape is unchanged by a rename, and re-measured to confirm nothing drifted:
+
+  instructions: 639   calls: 50   les: 17      (original extent 956 bytes / 345 instrs / 36 calls)
+
+Not done, and why:
+
+* `agntSeg` = `(uint16_t)((ulong)((long)agntIndex * 0x34) >> 0x10)` is provably always 0, and `ptrSeg` =
+  `(char *)((int)&AgntAnms[0x75].halfWidth + 1)` is a fabricated pointer.  Deleting them means rewriting
+  the argument lists they feed - `ovr_agnt_statusText`, `ovr_ovc15_usesStshRealloc`, `ovr_uiNotify` - and
+  the fact that `segLo` is literally `(undefined1)agntSeg` (i.e. a byte of a value that is always 0) shows
+  those argument lists are split far pointers the export never reconstructed.  Rebuilding them requires
+  the .ASM push sequences for three variadic calls, which is a separate pass, not a rename.
+
+  grep_checks 40,000 -> 39,962; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry

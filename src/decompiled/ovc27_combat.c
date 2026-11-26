@@ -876,15 +876,15 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
 {
   byte roll;
   uint damage;
-  uint16_t uVar3;
-  uint16_t uVar4;
-  int iVar5;
+  uint16_t halfRoll;
+  uint16_t randRoll;
+  int hitRoll;
   char *pcVar6;
   uint8_t *bufPtr;
   uint16_t agntSeg;
-  undefined1 uVar9;
-  undefined1 uVar10;
-  undefined1 uVar11;
+  undefined1 ptrLo;
+  undefined1 segLo;
+  undefined1 blitSegLo;
   uint8_t text1;
   uint8_t text2;
   uint8_t msg;
@@ -900,26 +900,26 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     if ((((agntG_t far *)agnt->gdata)->flags3 & 1) == 0) {
       roll = ovr_manage_rollDice((((entity_t *)agnt->entity)->base).level,'\x06');
       damage = (uint)roll;
-      uVar3 = ovc27_spellHalfDamage
+      halfRoll = ovc27_spellHalfDamage
                         ((agnt_t far *)
                          agntRec)
       ;
-      if ((char)uVar3 != '\0') {
+      if ((char)halfRoll != '\0') {
         damage = (int)damage >> 1;
       }
     }
     else {
       damage = (uint)agnt->strength;
-      uVar3 = ovc27_breathHalfDamage(agntRec,0x26);
-      if ((char)uVar3 != '\0') {
+      halfRoll = ovc27_breathHalfDamage(agntRec,0x26);
+      if ((char)halfRoll != '\0') {
         damage = (int)damage >> 1;
       }
     }
     if ((((agntG_t far *)agntRec->gdata)->flags3 & 1) == 0) {
-      iVar5 = ovc27_rollToHitEntity
+      hitRoll = ovc27_rollToHitEntity
                         ((uint32_t)agntRec,
                          3);
-      if ((char)iVar5 != '\0') {
+      if ((char)hitRoll != '\0') {
         damage = (int)damage >> 1;
       }
       ovr_ovc41_textParalyzed
@@ -932,10 +932,10 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
       emptyFunction();
       return;
     }
-    uVar9 = (undefined1)GSavedBlitSeg;
+    ptrLo = (undefined1)GSavedBlitSeg;
     pcVar6 = ovr_agnt_statusText(agntRec,(char *)CONCAT13((char)((uint)&text2 >> 8),
                                                   CONCAT12((char)&text2,ptrSeg)),0);
-    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,(char)agntSeg,uVar9,0,0,0,0,0);
+    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,(char)agntSeg,ptrLo,0,0,0,0,0);
     pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c0a,_SS),
                            (char *)CONCAT13((char)((uint)bufPtr >> 8),CONCAT12((char)bufPtr,0x2410))
                            ,(char)bufPtr,(char)agntSeg);
@@ -947,10 +947,10 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     levelBonus = ((((entity_t *)agnt->entity)->base).level / 5) * 2 + 1;
     roll = ovr_manage_rollDice((char)levelBonus,'\x06');
     damage = (uint)roll + levelBonus;
-    uVar3 = ovc27_spellHalfDamage
+    halfRoll = ovc27_spellHalfDamage
                       ((agnt_t far *)
                        agntRec);
-    if ((char)uVar3 != '\0') {
+    if ((char)halfRoll != '\0') {
       damage = (int)damage >> 1;
     }
     ovr_ovc41_textParalyzed
@@ -967,18 +967,18 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
       emptyFunction();
       return;
     }
-    uVar4 = ovr_randBelow(3,0);
-    if (((uVar4 & 0xff) == 0) &&
+    randRoll = ovr_randBelow(3,0);
+    if (((randRoll & 0xff) == 0) &&
        (damage = ovc27_rollToHitEntity
                           (CONCAT13((char)((uint)ptrSeg >> 8),CONCAT12((char)ptrSeg,agntRec)
                                    ),3), (damage & 0xff) == 0)) {
-      uVar11 = (undefined1)GSavedBlitSeg;
+      blitSegLo = (undefined1)GSavedBlitSeg;
       pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&text1 >> 8),
                                                          CONCAT12((char)&text1,agntIndex)),0);
-      uVar10 = (undefined1)agntSeg;
-      uVar9 = SUB21(pcVar6,0);
+      segLo = (undefined1)agntSeg;
+      ptrLo = SUB21(pcVar6,0);
       pcVar6 = ovr_agnt_statusText(agntRec,(char *)CONCAT22(&text2,ptrSeg),0);
-      bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,agntSeg,uVar9,uVar10,uVar11,0,0,0);
+      bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,agntSeg,ptrLo,segLo,blitSegLo,0,0,0);
       pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,_SS),
                              (char *)CONCAT22(bufPtr,(char *)0x26510),agntSeg);
       ovr_uiNotify(pcVar6,agntSeg,(char)agntSeg);
@@ -990,13 +990,13 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
       emptyFunction();
       return;
     }
-    uVar11 = (undefined1)GSavedBlitSeg;
+    blitSegLo = (undefined1)GSavedBlitSeg;
     pcVar6 = ovr_agnt_statusText(agntRec,(char *)CONCAT13((char)((uint)&text1 >> 8),
                                                   CONCAT12((char)&text1,ptrSeg)),0);
-    uVar10 = (undefined1)agntSeg;
-    uVar9 = SUB21(pcVar6,0);
+    segLo = (undefined1)agntSeg;
+    ptrLo = SUB21(pcVar6,0);
     pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT22(&text2,agntIndex),0);
-    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,agntSeg,uVar9,uVar10,uVar11,0,0,0);
+    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,agntSeg,ptrLo,segLo,blitSegLo,0,0,0);
     pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c44,_SS),
                            (char *)CONCAT22(bufPtr,(char *)0x26510),agntSeg);
     ovr_uiNotify(pcVar6,agntSeg,(char)agntSeg);
@@ -1012,15 +1012,15 @@ void __cdecl16far ovc27_textTakesHalfDamage3(agnt_t far *agnt,uint16_t agntIndex
     emptyFunction();
     return;
   }
-  iVar5 = ovc27_rollToHitEntity((uint32_t)MK_FP(SEG_OF(Agnts), agntRec),3);
-  if ((char)iVar5 == '\0') {
-    uVar11 = (undefined1)GSavedBlitSeg;
+  hitRoll = ovc27_rollToHitEntity((uint32_t)MK_FP(SEG_OF(Agnts), agntRec),3);
+  if ((char)hitRoll == '\0') {
+    blitSegLo = (undefined1)GSavedBlitSeg;
     pcVar6 = ovr_agnt_statusText(agnt,(char *)CONCAT13((char)((uint)&text1 >> 8),
                                                        CONCAT12((char)&text1,agntIndex)),0);
-    uVar10 = (undefined1)agntSeg;
-    uVar9 = SUB21(pcVar6,0);
+    segLo = (undefined1)agntSeg;
+    ptrLo = SUB21(pcVar6,0);
     pcVar6 = ovr_agnt_statusText(agntRec,(char *)CONCAT22(&text2,ptrSeg),0);
-    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,agntSeg,uVar9,uVar10,uVar11,0,0,0);
+    bufPtr = ovr_ovc15_usesStshRealloc(pcVar6,agntSeg,ptrLo,segLo,blitSegLo,0,0,0);
     pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,_SS),
                            (char *)CONCAT22(bufPtr,(char *)0x26510),agntSeg);
     ovr_uiNotify(pcVar6,agntSeg,(char)agntSeg);
