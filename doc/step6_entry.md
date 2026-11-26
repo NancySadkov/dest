@@ -10196,3 +10196,44 @@ st_globals*.o data, so they cannot shift the symbols being aligned, and removing
 separate refactor.
 
   grep_checks 39,229 -> 39,228; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+
+### DGROUP: 6-byte table + five 1-byte tables (80 -> 74 deltas)
+dgroup: recover a 6-byte table and five 1-byte-declared tables (deltas 80 -> 74)
+
+Two more layout regions, both measured with the validated method.
+
+1. `EntityScanPos` (-6).  The original has six bytes we did not declare:
+
+     55b0  "Only units of %s are displayed.\0"  (30)
+     55c8  05 00 0A 00 14 00                    (6, three anonymous words = 5, 10, 20)
+     55d6  EntityScanPos
+
+   Added as `undefined w_entityScanCosts[6]`.
+
+2. `ditherPlane0/1/2` and `reqLevelRow1/2` were declared as SINGLE BYTES
+   (`undefined ditherPlane0 = 0x00;`) while the original has:
+
+     594a 32  ditherPlane0
+     596a 32  ditherPlane1
+     598a 32  ditherPlane2
+     59aa 10  reqLevelRow1
+     59b4 11  reqLevelRow2
+     59bf 78  rampRow0        (ours was already correct)
+
+   That is exactly the -31/-31/-31/-9/-10 the report showed.  They are now
+   `undefined NAME[N]` with the bytes from STRONG.EXE, and the matching `extern`
+   declarations in st_globals.h were resized (a scalar extern against an array
+   definition is a redeclaration error, which the compiler caught immediately).
+
+Measured after re-dumping the rebuilt image:
+
+                                   before        after
+grep_checks                        39,228        39,228
+diff_dgroup matched                 1,449         1,449
+diff_dgroup deltas                     80            74     (-6)
+compare_runtime identical           1,549         1,549
+compare_runtime different              11            11
+compare_state                     1,627/0/0     1,627/0/0
+
+Note these were real data bugs, not only layout ones: a 32-byte dither table declared as one
+byte means any indexed read past element 0 was reading a neighbouring symbol.
