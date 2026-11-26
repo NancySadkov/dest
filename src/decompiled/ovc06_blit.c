@@ -380,19 +380,19 @@ void __cdecl16far blit_usesDrawGfx(far_t gfx, int x, int y, brect_t far *rect)
 void __cdecl16far blitGfxN(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t type,bool mirror)
 
 {
-  uint uVar1;
-  uint uVar2;
-  char *pcVar3;
+  uint dstY;
+  uint dstH;
+  char *dstSeg;
   uint mask;
   uint16_t in_DX;
-  uint uVar4;
+  uint bitMask;
   char buf [320];
   uint16_t pdst;
   uint16_t h;
   uint16_t pd;
   uint16_t skip;
-  uint uStack_8;
-  code *pcStack_6;
+  uint row;
+  code *unrleFn;
   code *pcStack_4;
   
   if ((gfx.ofs != 0 || gfx.seg != 0) && (type != 0x0)) {
@@ -406,8 +406,8 @@ void __cdecl16far blitGfxN(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t ty
     }
     if (type < 0x10) {
       pd = dst->x;
-      uVar1 = ((brect_t *)dst)->y;
-      uVar2 = ((brect_t *)dst)->h;
+      dstY = ((brect_t *)dst)->y;
+      dstH = ((brect_t *)dst)->h;
       if (x < (int)pd) {
         skip = pd - x;
       }
@@ -418,32 +418,32 @@ void __cdecl16far blitGfxN(far_t gfx,int16_t x,int16_t y,brect_t *dst,uint8_t ty
       mask = (((brect_t *)dst)->w - pd) + 1;
       if (0 < (int)mask) {
         pdst = pd + y * 0x140;
-        pcVar3 = (char *)((brect_t *)dst)->seg;
-        uVar4 = 1;
+        dstSeg = (char *)((brect_t *)dst)->seg;
+        bitMask = 1;
         if (mirror) {
-          pcStack_6 = (code *)ovr_unrle_mirror;
+          unrleFn = (code *)ovr_unrle_mirror;
         }
         else {
-          pcStack_6 = (code *)ovr_unrle;
+          unrleFn = (code *)ovr_unrle;
         }
         pcStack_4 = (code *)0x22a6;
-        uStack_8 = 0;
-        while ((uStack_8 < *(uint *)(gfx.ofs + 7) && ((uint)y <= uVar2))) {
-          (*pcStack_6)();
-          if ((*(uint *)((uint)type * 2 + 0x470) & uVar4) != 0) {
-            if (uVar1 <= (uint)y) {
-              ovr_masked_memcpy((char *)pdst,(char *)CONCAT22(buf,pcVar3),_SS,skip,*(int *)(gfx.ofs + 5),mask,0);
+        row = 0;
+        while ((row < *(uint *)(gfx.ofs + 7) && ((uint)y <= dstH))) {
+          (*unrleFn)();
+          if ((*(uint *)((uint)type * 2 + 0x470) & bitMask) != 0) {
+            if (dstY <= (uint)y) {
+              ovr_masked_memcpy((char *)pdst,(char *)CONCAT22(buf,dstSeg),_SS,skip,*(int *)(gfx.ofs + 5),mask,0);
             }
             pdst = pdst + 0x140;
             y = y + 1;
           }
-          if (uVar4 == 0x8000) {
-            uVar4 = 1;
+          if (bitMask == 0x8000) {
+            bitMask = 1;
           }
           else {
-            uVar4 = uVar4 << 1;
+            bitMask = bitMask << 1;
           }
-          uStack_8 = uStack_8 + 1;
+          row = row + 1;
         }
       }
     }

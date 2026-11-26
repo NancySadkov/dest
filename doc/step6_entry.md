@@ -13380,3 +13380,28 @@ section-5 character class, so they are not counted, and renaming them would be c
   compare_state 1,627/0/0
   diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
   compare_runtime 1,630 matched, 1,620 identical / 10 different
+
+### blitGfxN: six single-role names (36,970 -> 36,938)
+blitGfxN: six single-role names (36,970 -> 36,938)
+
+  uVar1    383, 409, 434   ((brect_t *)dst)->y                -> dstY      (3)
+  uVar2    384, 410, 431   ((brect_t *)dst)->h                -> dstH      (3)
+  pcVar3   385, 421, 435   (char *)((brect_t *)dst)->seg      -> dstSeg    (3)
+  uVar4    388,422,433,440,441,444   the 1 -> 0x8000 bit walk -> bitMask   (7)
+  uStack_8 394, 430, 431, 446  the row counter                -> row       (5)
+  pcStack_6 395,424,427,432  unrle / unrle_mirror selection   -> unrleFn   (4)
+
+`pcStack_4` is deliberately left as it is.  It is written once (`= (code *)0x22a6;`) and
+never read, and it occupies the slot immediately after `pcStack_6`, so it looks like the
+segment half of a far function pointer the decompiler split in two rather than a variable
+with a meaning.  Renaming it would entrench that; it needs a dedicated fix.
+
+`in_DX` is left: it is the register `ovr_stshLoadGfx` returns its segment in and this
+routine never assigns it.
+
+No expression changed.
+
+  grep_checks 36,970 -> 36,938; build 65/65; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0
+  diff_dgroup 1,581/1,805 (64 runs, sum|delta| 235,338, mean 148, worst 14,252)
+  compare_runtime 1,630 matched, 1,620 identical / 10 different
