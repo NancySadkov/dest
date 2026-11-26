@@ -9954,3 +9954,24 @@ Renaming and one split; no expression changed.
   grep_checks 39,574 -> 39,495; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### uiMainMenuLoop: seven more locals (39,495 -> 39,458)
+uiMainMenuLoop: seven more locals named, two split (39,495 -> 39,458)
+
+  uVar3   GSPEmpty.ofs                                -> emptyOfs   (6)
+  uVar4   GSPEmpty.seg                                -> emptySeg   (4)
+  uVar7   the word later truncated to slotNo          -> slotWord   (7)
+  uVar7   _SS at the delete-confirm call              -> ssVal      (1)
+  iVar8   strcmp() results                            -> cmpResult  (7)
+  uVar17  ovr_stSave() result                         -> saveOk     (3)
+  uVar17  2, the confirm menu's item count            -> menuCount  (2)
+  bVar2   the do/while continue flag                  -> again      (4)
+  cVar6   (char)lastIndex                             -> hasLast    (3)
+
+`uVar10` is deliberately not renamed: it holds `savesSeg` at 1416 and `GSPEmpty.ofs` from
+1483, then is stored into `.seg` at 1509/1517 and into `.ofs` at 1623 - a role clash I would
+be guessing about rather than measuring.
+
+  grep_checks 39,495 -> 39,458; build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,444/1,868
+  compare_runtime 1,545/12 main entry
