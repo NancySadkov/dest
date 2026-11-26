@@ -10677,3 +10677,34 @@ is correct.
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
   compare_runtime 1,549 identical / 11 different
+
+### ovc49_drawAgents: recPtr retyped, 11 record reads made far
+ovc49_drawAgents: recPtr held a 32-bit far pointer in a uint16_t
+
+    uint16_t recPtr;
+    recPtr = CONCAT22(sprEntry[1],*sprEntry);   /* {seg:sprEntry[1], ofs:*sprEntry} */
+
+The stored value was truncated to its offset half, so `(ulong)recPtr >> 0x10` was always 0 and
+the eleven `*(T *)((int)recPtr + N)` reads went to DGROUP.
+
+Now:
+  * `recPtr` is uint32_t, and `_fmemset(..., 0, 2)` becomes 4 bytes because the object is;
+  * a real `uint8_t far *rec` is built at each of the three assignment sites, from the same
+    halves - `MK_FP((uint16_t)(recPtr >> 0x10),(uint16_t)recPtr)`;
+  * the eleven reads at +0xd / +0x19 / +0x1b / +0x1d are `*(T far *)(rec + N)`.
+
+ovc49_agents.c cannot be listed ("Compiler table limit exceeded"), so the shape was pinned with
+a two-function probe of the same expressions:
+
+    probe_rec_d  : les bx,dword ptr [bp-4] / mov ax,word ptr es:[bx+13]     ; +0xd
+    probe_rec_1b : les bx,dword ptr [bp-4] / mov al,byte ptr es:[bx+27]     ; +0x1b
+
+A note on the measurement: my first version of this change inserted the record expression a
+second time (`MK_FP(sprEntry[1],*sprEntry)`), which added three occurrences of names the grep
+counts (`puVar19`, `uVar12`) and moved the total 39,020 -> 39,023.  Building `rec` from the
+already-stored halves removes those duplicates, and the total is back to 39,020 - so this change
+is gate-neutral rather than a regression.
+
+  grep_checks 39,020 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
+  compare_state 1,627/0/0; diff_dgroup 1,449/1,868 (74 deltas)
+  compare_runtime 1,549 identical / 11 different
