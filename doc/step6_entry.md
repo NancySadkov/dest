@@ -9416,3 +9416,46 @@ matched by the regex, and `agntSeg`/`ptrSeg` remain (20 and 8 uses) feeding `ovr
   grep_checks 39,962 (unchanged); build 65/65 clean; LINK.LOG 65 bytes / 0 problems
   compare_state 1,627/0/0; diff_dgroup 1,444/1,868
   compare_runtime 1,545/12 main entry
+
+### ovc27_textTakesHalfDamage3: all four stsprintf sites correct
+ovc27_textTakesHalfDamage3: all four stsprintf sites now have the original's argument shape
+
+The two sites the earlier regex missed had a different line layout:
+
+  pcVar6 = ovr_stsprintf((char *)&msg,(char *)CONCAT22(0x5c2f,_SS),
+                         (char *)CONCAT22(bufPtr,(char *)0x26510),agntSeg);
+
+`CONCAT22(0x5c2f,_SS)` puts the offset in the HIGH word, i.e. it is segment 0x5c2f / offset _SS - the
+argument is reversed as well as fabricated.  Both now read
+
+  ovr_stsprintf((char far *)MK_FP(_SS,&msg),(char far *)MK_FP(_DS,0x5c2f),bufPtr);
+
+(and 0x5c44 at the other site), matching the decoded `lcall 0x170,0x7a`:
+
+  push dx / push ax            ; the far vararg (the usesStshRealloc result)
+  push ds / push 0x5c0a        ; the format string in DGROUP
+  push ss / lea ax,[bp-0x82] / push ax   ; the output buffer
+
+Verified in the emitted listing for all four calls:
+
+  push word ptr [bp-16]
+  push ax
+  xor  ax,ax / or ax,23562      ; 0x5c0a
+  push ds
+  push ax
+  lea  ax,word ptr [bp-26]
+  push ss
+  push ax
+  call far ptr _ovr_stsprintf
+
+  instructions 560  calls 50  les 17
+
+`agntSeg` and `ptrSeg` are now used only by `ovr_uiNotify`, whose push sequence has not been decoded (it is
+one of `0x230,0xa2` / `0x230,0xc5` / `0x190,0x57` / `0xf8,0x39`); deleting them still needs that reading.
+
+The `undefined ovr_*();` class turned out to be 459 declarations, so sweeping it needs a per-call
+detector (push DX:AX before the lcall) rather than a blind prototype change - noted for the next pass.
+
+  grep_checks 39,962 (unchanged - argument lists, not names)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
