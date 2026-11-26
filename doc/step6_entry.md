@@ -9459,3 +9459,45 @@ detector (push DX:AX before the lcall) rather than a blind prototype change - no
   grep_checks 39,962 (unchanged - argument lists, not names)
   build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
   diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
+
+### MEASURED: 425 call sites rebuild a truncated ovr_* return
+MEASURED: 425 call sites rebuild a truncated ovr_* return, across 47 thunks
+
+New detector `tmp/find_far_returns.py`: a variable assigned from an `ovr_*` call whose value then appears
+inside a CONCAT13/CONCAT22 cast to a far pointer.  That is the exact shape found by hand in
+ovc27_textTakesHalfDamage3 (`CONCAT22(bufPtr,0x26510)`,
+`CONCAT13((char)((uint)x >> 8),CONCAT12((char)x,<seg>))`): the caller is rebuilding the segment that the
+unprototyped thunk discarded.
+
+  425 sites, 47 thunks
+
+  ovr_stsprintf                    146   ovc02_draw, ovc09_init, ovc10_constr, ...
+  ovr_agnt_statusText               43   ovc27_combat, ovc33_stats, ovc41_main
+  ovr_grabLbmTR                     31   ovc45_unitinfo, ovc48_assets2
+  ovr_ovc15_usesStshRealloc         30   ovc27_combat, ovc41_main, ovc49_agents
+  ovr_ovc45_compute9                22   ovc02_draw, ovc21_manage, ovc28_ui
+  ovr_fmVsprintf                    18   ovc16_saveui, ovc18_leaderview, ovc19_save
+  ovr_font_textWidth                16   ovc16_saveui, ovc21_manage, ovc22_classes
+  ovr_grabLbm                       15   ovc45_unitinfo, ovc48_assets2
+  ovr_stshLoadGfx                   13   ovc20_stash, ovc33_stats, ovc37_season
+  ...
+
+Prototypes corrected this commit (each verified to compile with all existing callers):
+
+  char far * ovr_stsprintf();            (146 sites)
+  char far * ovr_agnt_statusText();      (already done, 43 sites)
+  char far * ovc15_usesStshRealloc();    (30 sites)
+  char far * ovr_fmVsprintf();           (18 sites)
+
+`ovr_litoa10` was tried and REVERTED: one caller assigns its result to a `uint16_t` lvalue
+(ovc33_stats.c:1113, `(*(uint16_t *)(...)) = ovr_litoa10(...)`), so it must stay `undefined` until that
+site is understood.
+
+Why the prototypes matter even before the call sites are retyped: Turbo C accepts a far-to-near
+assignment as a nonportable conversion, so nothing breaks, and each caller that wants the segment now
+receives it instead of only AX.  That is the precondition for deleting the 425 CONCAT reconstructions in a
+later pass.
+
+  grep_checks 39,962 (unchanged - prototypes are not section-5 patterns)
+  build 65/65 clean; LINK.LOG 65 bytes / 0 problems; compare_state 1,627/0/0
+  diff_dgroup 1,444/1,868; compare_runtime 1,545/12 main entry
